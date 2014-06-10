@@ -1,6 +1,6 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl" >
 
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/d3.v3.min.js'></script>
@@ -15,9 +15,11 @@
 	$(document).ready(function() {
 		 $( "#tabs" ).tabs();
 	  		//help, menu
-			$( "#selectable" ).selectable( "option", "distance", 18);
 			loadHelp("${ambit_root}","qmap");
 			downloadForm("${ambit_request}");
+			jQuery("#breadCrumb ul").append('<li><a href="http://toxmatch.sourceforge.net/index.htm#background" title="Click for background and more information">ToxMatch: Chemical Landscape Analysis</a></li>');
+			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/qmap" title="Quantitative Structure-Activity-Similarity Maps (QMaps)">Browse QMaps</a></li>');
+			jQuery("#breadCrumb ul").append('<li><a href="${ambit_request}" title="Quantitative Structure-Activity-Similarity Maps (QMaps)">QMap</a></li>');
 			
 	  	//	var oTable = qmap.defineMetadataTable("${ambit_root}","${ambit_request_json}",true);
 	  		var oTable = qmap.defineNodesTable("${ambit_root}","${ambit_request_json}",function(root,result,nodesTable){
@@ -55,36 +57,10 @@
 <div class="container" style="margin:0;padding:0;">
 
 <form method='GET' name='searchform' id='searchform' action='${ambit_root}/qmap' style='padding:0;margin:0;'>
-<!-- banner -->
-<div class="row remove-bottom" id="header">
-	<#include "/toplinks.ftl">
-</div>
-<div class="row remove-bottom">
-		<#include "/logo.ftl">
-		<div class="thirteen columns remove-bottom" id="query">
-		<div class="ten columns alpha">
-			<div class="remove-bottom h3">
-				ToxMatch 2
-			</div>
-		    <div class='help'>
-		    	Interactive visualisation of Quantitative Structure-Activity-Similarity Maps (QMaps) 
-	    		<br/>
-	    		Background and more information at <a href="http://toxmatch.sf.net" class='qxternal' target=_blank title="Click for more information">http://toxmatch.sf.net</a>
-		    </div>			
-		</div>
-		<div class="six columns omega">
-			<div class="remove-bottom h3">&nbsp;</div>
-			<div>
-		    	<a href="${ambit_root}/qmap">Browse the available QMaps</a>
-		    </div>	
-		</div>	
-		</div>
-</div>		
-<div class="row remove-bottom" >
-	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
-</div>
 
-</form>
+<!-- banner -->
+<#include "/banner_crumbs.ftl">
+
 
 <!-- Top -->
 

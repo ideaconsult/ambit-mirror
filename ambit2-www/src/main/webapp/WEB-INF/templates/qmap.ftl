@@ -1,6 +1,6 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl" >
 
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/qmap.js'></script>
@@ -15,76 +15,29 @@
 <script type='text/javascript'>
 
 $(document)
-		.ready(
-				function() {
-					$( "#selectable" ).selectable( "option", "distance", 18);
-						loadHelp("${ambit_root}","qmap");
-						downloadForm("${ambit_request}");
-				});
+	.ready(
+		function() {
+			loadHelp("${ambit_root}","qmap");
+			downloadForm("${ambit_request}");
+			jQuery("#breadCrumb ul").append('<li><a href="http://toxmatch.sourceforge.net/index.htm#background" title="Click for background and more information">ToxMatch: Chemical Landscape Analysis</a></li>');
+			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/qmap" title="Quantitative Structure-Activity-Similarity Maps (QMaps)">Browse QMaps</a></li>');
+			<#if qmapid??>
+			jQuery("#breadCrumb ul").append('<li><a href="${ambit_request}" title="Quantitative Structure-Activity-Similarity Maps (QMaps)">QMap${qmapid}</a></li>');
+			</#if>
+		});
 </script>
 
 </head>
 <body>
 
-
 <div class="container" style="margin:0;padding:0;">
 
-<form method='GET' name='searchform' id='searchform' action='${ambit_root}/qmap' style='padding:0;margin:0;'>
 <!-- banner -->
-<div class="row remove-bottom" id="header">
-	<#include "/toplinks.ftl">
-</div>
-<div class="row remove-bottom">
-		<#include "/logo.ftl">
-		<div class="thirteen columns remove-bottom" id="query">
-		<div class="ten columns alpha">
-			<div class="remove-bottom h3">
-					Quantitative Structure-Activity-Similarity Maps (QMaps)
-			</div>
-		    <div class='help'>
-		    	Chemical Landscape Analysis with OpenTox. 
-		    	<br/>
-		    	Background and more information at <a href="http://toxmatch.sf.net" target=_blank title="Click for more information">http://toxmatch.sf.net</a>
-		    </div>			
-		</div>
-		<div class="four columns omega">
-			<div class="remove-bottom h3">
-				&nbsp;
-			</div>
-		    <div class='h6'>
-		    <!--
-		    	<input type='text'  id='search' name='search' value='' tabindex='1' >
-		    	-->
-		    </div>			
-		</div>		
-		<div class="two columns omega">
-			<div class="remove-bottom h3">
-				&nbsp;
-			</div>
-		    <div class='h6'>
-		    <!--
-		    	<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
-		    	-->
-		    </div>			
-		</div>	
-		</div>
-</div>		
-<div class="row remove-bottom" >
-	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
-</div>
+<#include "/banner_crumbs.ftl">
 
-</form>
-<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
+<div class="column">&nbsp;</div>
 
-<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-	<a href='#' id='uri'><img src='${ambit_root}/images/link.png' alt='text/uri-list' title='Download as URI list'></a>
-	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
-	</div>
-</div>
-
-
-<div class="eleven columns remove-bottom" style="padding:0;" >
+<div class="thirteen columns remove-bottom" style="padding:0;" >
 
 
 		<!-- Page Content
