@@ -5,7 +5,7 @@
 	<a href="${ambit_root}/ui"><img class='scale-with-grid' border='0' src='${ambit_root}/images/ambit-logo-small.png' title='Home' alt='AMBIT logo'></a>
 	</div>
 	<div class="fourteen columns remove-bottom">
-		<#include "/menu/smartmenu.ftl">
+		<#include "/menu/profile/default/smartmenu.ftl">
 	</div>
 </div>
 <div class="row remove-bottom" id="header">
