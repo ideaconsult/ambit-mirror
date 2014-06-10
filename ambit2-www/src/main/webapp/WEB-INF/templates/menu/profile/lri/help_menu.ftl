@@ -15,11 +15,10 @@
 			</ul>
 		</li>
 	</ul>
-	<li><a href="${ambit_root}/admin">Admin</a>
-		<#if openam_token??>
-			<#include "/menu/admin_menu.ftl">
-		</#if>
-	</li>	
+	<li>
+		<a href="${ambit_root}/depict">Demo</a>
+		<#include "/menu/profile/lri/demo_menu.ftl">
+	</li>		
 	<li><a href="#">About</a>
 		<ul>
 		<li><a href="#">Version</a>

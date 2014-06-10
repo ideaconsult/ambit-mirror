@@ -1,7 +1,7 @@
 <ul id="menu_substance">
 
 	<li ><a href="${ambit_root}/substance?page=0&pagesize=100" title="Mono-constituent, multiconstituent, additives, impurities.">All substances</a></li>
-	<li ><a href="${ambit_root}/substance?type=CompTox&search=Ambit+Transfer" title='Substances with external identifier set to "other:CompTox=Ambit Transfer"'>Substances with CompTox label</a>
+	<li ><a href="${ambit_root}/substance?type=CompTox&search=Ambit+Transfer" title='Substances with external identifier set to "other:CompTox=Ambit Transfer"'>Substances with CompTox label</a></li>
 	<li ><a href="${ambit_root}/ui/uploadsubstance">Import substance</a>
 		<ul>
 			<li ><a href="${ambit_root}/ui/uploadsubstance">Multiple files upload</a>
