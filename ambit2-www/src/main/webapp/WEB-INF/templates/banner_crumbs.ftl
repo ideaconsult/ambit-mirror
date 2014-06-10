@@ -1,16 +1,22 @@
 
 <!-- banner -->
 <div class="row half-bottom" id="header" style="padding-top:5px">
-	<div class="two columns">
-	<a href="${ambit_root}/ui"><img class='scale-with-grid' border='0' src='${ambit_root}/images/ambit-logo-small.png' title='Home' alt='AMBIT logo'></a>
-	</div>
-	<div class="fourteen columns remove-bottom">
-		<#if menu_profile??>
+	<#if menu_profile??>
+		<div class="two columns">
+			<a href="${ambit_root}/ui"><img class='scale-with-grid' border='0' src='${ambit_root}/images/profile/${menu_profile}/logo.png' title='Home' alt='AMBIT logo'></a>
+		</div>
+		<div class="fourteen columns remove-bottom">
 			<#include "/menu/profile/${menu_profile}/smartmenu.ftl">
-		<#else>
+		</div>
+	<#else>
+		<div class="two columns">
+			<a href="${ambit_root}/ui"><img class='scale-with-grid' border='0' src='${ambit_root}/images/profile/default/logo.png' title='Home' alt='AMBIT logo'></a>
+		</div>
+		<div class="fourteen columns remove-bottom">
 			<#include "/menu/profile/default/smartmenu.ftl">
-		</#if>
-	</div>
+		</div>
+	</#if>
+
 </div>
 <div class="row remove-bottom" id="header">
 	<#include "/toplinks.ftl">
