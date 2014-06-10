@@ -39,7 +39,7 @@ var qmap = {
 		    					"fnRender" : function(o,val) {
 		    						var sOut = (val.title==""?val.URI:val.title);
 		    						sOut += " <a href='"+ val.URI+"/metadata' target=_blank title='Dataset metadata' >Metadata</a>";
-		    						sOut += "| <a href='"+ val.URI+"?max=1000' target=_blank title='Browse the dataset' >Browse</a>";
+		    						sOut += "| <a href='" + root + "/ui/_dataset?dataset_uri=" + encodeURIComponent(val.URI)+"' target=_blank title='Browse the dataset' >Browse</a>";
 		    						return sOut;
 		    					}
 		    				},	    
@@ -88,7 +88,7 @@ var qmap = {
 		    					"bUseRendered" : false,	
 		    					"fnRender" : function(o,val) {
 		    						var sOut =  "<a href='"+root+"/toxmatch?qmap_uri="+ val+"' target=_blank title='Interactive visualisation'>This QMap</a>"; 
-		    						sOut += "| <a href='"+ val+"' target=_blank title='Ranked compounds'>Compounds</a>";
+		    						sOut += "| <a href='" + root + "/ui/_dataset?dataset_uri=" + encodeURIComponent(val) +"' target=_blank title='Ranked compounds'>Compounds</a>";
 		    						return sOut;
 		    					}
 		    				},
