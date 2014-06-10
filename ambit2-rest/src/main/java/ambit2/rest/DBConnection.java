@@ -63,12 +63,6 @@ public class DBConnection {
 		}
 	}	
 	
-	public String getMenuProfile() {
-		loadProperties();
-		String prefix = properties.getProperty("ambit.profile");
-		if (prefix == null || prefix.contains("${")) prefix = "default";
-		return prefix;
-	}
 	public LoginInfo getLoginInfo() {
 		loadProperties();
 		LoginInfo li = new LoginInfo();

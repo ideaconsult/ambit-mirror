@@ -72,6 +72,7 @@ public class FreeMarkerSupport implements IFreeMarkerSupport {
         map.put(AMBITConfig.ambit_root.name(),request.getRootRef());
 	    map.put(AMBITConfig.ambit_version_short.name(),app.getVersionShort());
 	    map.put(AMBITConfig.ambit_version_long.name(),app.getVersionLong());
+	    map.put(AMBITConfig.menu_profile.name(),app.getProfile());
 	}
 		
 }

@@ -14,5 +14,6 @@ public enum AMBITConfig {
 	users_dbname,
 	secret,
 	sessiontimeout,
-	ambit_reg_confirmed
+	ambit_reg_confirmed,
+	menu_profile
 }

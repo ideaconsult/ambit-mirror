@@ -199,6 +199,7 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
         map.put(AMBITConfig.ambit_root.name(),getRequest().getRootRef().toString());		
 	    map.put(AMBITConfig.ambit_version_short.name(),app.getVersionShort());
 	    map.put(AMBITConfig.ambit_version_short.name(),app.getVersionLong());
+	    map.put(AMBITConfig.menu_profile.name(),app.getProfile());
 
 	}
 }
