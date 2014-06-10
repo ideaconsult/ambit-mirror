@@ -143,6 +143,14 @@ var config_dataset = {
 	    	    	}
 	    	    	groups["Substances"] = [ "http://www.opentox.org/api/1.1#CompositionInfo" ];
 	    	    	groups["Calculated"] = null;
+	    	        groups["Data"] = function (name, miniset) {
+	    	            var arr = [];
+	    	            for (var f in miniset.feature) {
+	    	              if (!miniset.feature[f].used && !miniset.feature[f].basic)
+	    	                arr.push(f);
+	    	            }
+	    	            return arr;
+	    	          }	    	    	
 	    	    	return groups;
         }
     
