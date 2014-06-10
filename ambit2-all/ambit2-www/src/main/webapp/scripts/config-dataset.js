@@ -152,6 +152,9 @@ var config_dataset = {
 	    	            return arr;
 	    	          }	    	    	
 	    	    	return groups;
-        }
+        },
+    	"handlers": {
+    		"checked": onSelectedUpdate
+    	}
     
 }
