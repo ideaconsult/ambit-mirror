@@ -6,7 +6,7 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
-<script type='text/javascript' src='${ambit_root}/scripts/config-dataset.js'></script>
+
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
 
 
@@ -34,7 +34,16 @@
         
 	});
 	</script>
-
+<script language="JavaScript">
+    
+    function onSelectedUpdate(el) {
+      var par = $(el).parents('.jtox-foldable')[0];
+    	var tEl = $('.title', par)[0];
+    	var v = $('input[type="checkbox"]:checked', par).length;
+    	tEl.innerHTML = tEl.innerHTML.replace(/(.+)\((\d+)\/(\d+)(.*)?/, '$1(' + v + '/$3$4');;
+    }
+</script>
+<script type='text/javascript' src='${ambit_root}/scripts/config-dataset.js'></script>    
 </head>
 <body>
 
