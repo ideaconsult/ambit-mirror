@@ -39,7 +39,7 @@ $(document)
     function onDetailedRow(row, data, index) {
       var el = $('.jtox-details-composition', row);
       var uri = $(el).data('uri');
-      uri = this.settings.baseUrl + '/substance?compound_uri=' + encodeURIComponent(uri);
+      uri = this.settings.baseUrl + '/substance?type=related&compound_uri=' + encodeURIComponent(uri);
       el = $(el).parents('table')[0];
       el = el.parentNode;
       $(el).empty();
