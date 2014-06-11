@@ -79,7 +79,8 @@ public class UIResource extends FreeMarkerResource {
 				public boolean editorServices() {
 					return true;
 				};				
-			};
+			},
+			toxtree;
 			public boolean enablePOST() {
 				return false;
 			}

@@ -2,6 +2,7 @@
   ================================================== -->
 	<title>AMBIT</title>
 	<meta name="robots" content="index,follow"><META NAME="GOOGLEBOT" CONTENT="index,FOLLOW">
+	<meta charset="utf-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="description" content="AMBIT">
 	<meta name="author" content="${creator}">
