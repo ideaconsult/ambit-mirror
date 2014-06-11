@@ -39,7 +39,8 @@ public class HelpResource extends CatalogResource<String>  {
 		login,
 		register,
 		myprofile,
-		pwd_forgotten
+		pwd_forgotten,
+		toxtree
 	}
 	public HelpResource() {
 		super();
