@@ -66,6 +66,6 @@ BEGIN
    
 
 END;
-DELIMITER;
+DELIMITER ;
 
 insert into version (idmajor,idminor,comment) values (8,2,"AMBIT2 schema");
