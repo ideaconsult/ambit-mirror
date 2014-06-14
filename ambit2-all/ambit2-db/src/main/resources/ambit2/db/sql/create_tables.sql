@@ -2439,7 +2439,6 @@ CREATE TABLE `qsasmap4` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP PROCEDURE IF EXISTS `g2counts`;
-
 DELIMITER $$
 
 CREATE PROCEDURE `g2counts`(IN dataset INT, IN property INT, IN dactivity DOUBLE, IN simthreshold DOUBLE,IN laplacek DOUBLE)
@@ -2452,7 +2451,7 @@ BEGIN
 	sum(IF ((act>=dactivity) and (sim>=simthreshold),1,0)) a,
 	sum(IF ((act>=dactivity) and (sim<simthreshold),1,0)) b,
 	sum(IF ((act<dactivity) and (sim>=simthreshold),1,0)) c,
-	sum(IF ((act<dactivity) and (sim<simthreshold),1,0)) d,0,0
+	sum(IF ((act<dactivity) and (sim<simthreshold),1,0)) d,0,0,null
 	from 
 	(
 	select null,@idsasmap,s1.idchemical,
@@ -2484,9 +2483,17 @@ BEGIN
     	  (a+@laplacek)* ln((a+@laplacek)*((c+@laplacek)+(d+@laplacek))/((c+@laplacek)*((a+@laplacek)+(b+@laplacek))))+
   		  (b+@laplacek)* ln((b+@laplacek)*((c+@laplacek)+(d+@laplacek))/((d+@laplacek)*((a+@laplacek)+(b+@laplacek))))
   		  where idsasmap=@idsasmap;
+   -- assign rank		  
+   SET @rownum := 0;
+   insert into qsasmap4 
+       (SELECT idsasmap,idchemical,a,b,c,d,fisher,g2,(@rownum := @rownum + 1) AS rank FROM qsasmap4 WHERE idsasmap=@idsasmap ORDER BY g2 DESC
+        ) on duplicate key  update  g2rank=values(g2rank);
+          		  
    -- return sasmap id
    SELECT idsasmap,threshold_dact,threshold_sim,id_srcdataset,idproperty,p.name,p.comments,p.units,d.name 
    from qsasheader join src_dataset d using(id_srcdataset) join properties p using(idproperty) where idsasmap=@idsasmap;   
+   
+
 END;
 
 
