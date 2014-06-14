@@ -108,8 +108,15 @@ var config_dataset = {
 				"render" : function(data, type, full) {
 					return (type != "details") ? "-" : '<span class="jtox-details-composition" data-URI="' + data + '"></span>';
 				}
-		}        
-
+		},        
+		"http://www.opentox.org/api/1.1#Similarity" : {
+			"title": "Similarity",
+			"data" : "compound.metric", // you need to point where is the information located
+			"accumulate": true,
+			"render" : function(data, type, full) {
+				return data;
+			}
+		}
 	    },
 	    "groups": function createGroups(miniset, kit) {
 	    	 var groups = {
@@ -130,7 +137,9 @@ var config_dataset = {
 	                    "http://www.opentox.org/api/1.1#InChI",
 	                    "http://www.opentox.org/api/1.1#REACHRegistrationDate"
  		  	],
- 			 "Substances": [ "http://www.opentox.org/api/1.1#CompositionInfo" ]
+ 		  	"Similarity": [ "http://www.opentox.org/api/1.1#Similarity" ],
+ 			"Substances": [ "http://www.opentox.org/api/1.1#CompositionInfo" ]
+
 	    	 };
 	    	 	for (var fId in miniset.feature) {
 	    	      	var src = miniset.feature[fId].source;
