@@ -111,9 +111,19 @@ To skip the tests, use -DskipTests=true option
 
 ----------------------------------------------------------------------
 CHANGELOG
-AMBIT2 2.5.6-SNAPSHOT
+
+AMBIT2 2.5.7-SNAPSHOT
 Current version at trunk
 
+AMBIT2 2.5.6
+ambit2-www: Configurable drop down menus at the top
+ambit2-www: JS library (jsToxKit) updated 
+ambit2-www: Substances import via custom 12 line header CSV (as described in https://github.com/ideaconsult/Protein_Corona)
+ambit2-db: Database schema 8.2
+ambit2-db: Database schema 8.1
+ambit2-db: Substance studies serialization by OpenTox Dataset API (ARFF and JSON)
+
+ambit2-tautomers: 
 
 AMBIT2 2.5.5
 ambit2-db: Database schema 8.0. User table cleaned. 
