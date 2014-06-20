@@ -1,6 +1,6 @@
 package ambit2.groupcontribution;
 
-public class GroupContributionModelBuilder 
+public class Learner 
 {
 
 }
