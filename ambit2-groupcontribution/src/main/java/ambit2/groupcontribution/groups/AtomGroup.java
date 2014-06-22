@@ -44,4 +44,16 @@ public class AtomGroup implements IGroup
 		this.localDescriptors = localDescriptors;
 	}
 
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getContribution() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
