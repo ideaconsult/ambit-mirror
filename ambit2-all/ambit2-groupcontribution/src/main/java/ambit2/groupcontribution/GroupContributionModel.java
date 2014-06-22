@@ -1,8 +1,14 @@
 package ambit2.groupcontribution;
 
+import java.util.ArrayList;
+
+import ambit2.groupcontribution.descriptors.ILocalDescriptor;
+
+
 public class GroupContributionModel 
 {
-	private String modelName = "";	
+	private String modelName = "";
+	private ArrayList<ILocalDescriptor> localDescriptors = new ArrayList<ILocalDescriptor>();
 	
 	
 	public String getModelName()
@@ -13,5 +19,13 @@ public class GroupContributionModel
 	public void setModelName(String modelName)
 	{
 		this.modelName = modelName;
+	}
+
+	public ArrayList<ILocalDescriptor> getLocalDescriptors() {
+		return localDescriptors;
+	}
+
+	public void setLocalDescriptors(ArrayList<ILocalDescriptor> localDescriptors) {
+		this.localDescriptors = localDescriptors;
 	}
 }
