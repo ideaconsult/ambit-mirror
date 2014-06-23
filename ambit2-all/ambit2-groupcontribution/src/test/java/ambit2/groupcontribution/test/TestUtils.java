@@ -12,9 +12,8 @@ public class TestUtils
 	
 	public static void main(String[] args) throws Exception
 	{
-		testLD("CCCOCCCCNCC");
-		
-		
+		testLD("CCCOCCCCNC=O");
+		//testLD("c1ccccc1");
 	}
 	
 	public static void testLD(String smiles) throws Exception
@@ -22,7 +21,8 @@ public class TestUtils
 		System.out.println("Testing LDs for " + smiles);		
 		testLocalDescriptor(smiles, new LDAtomSymbol());
 		testLocalDescriptor(smiles, new LDHNum());
-		
+		testLocalDescriptor(smiles, new LDAtomFormalCharge());			
+		testLocalDescriptor(smiles, new LDAtomHybridization());
 	}
 	
 	public static void testLocalDescriptor(String smiles, ILocalDescriptor ld) throws Exception
@@ -33,7 +33,7 @@ public class TestUtils
 		for (IAtom at : mol.atoms())
 		{	
 			int descrVal = ld.calcForAtom(at, mol);
-			System.out.print("  " + ld.getDesignation(descrVal));
+			System.out.print("\t" + ld.getDesignation(descrVal));
 		}	
 		System.out.println();
 	}
