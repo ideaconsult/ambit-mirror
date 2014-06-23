@@ -77,7 +77,7 @@ public class SLNExpressionToken
 		return "*";
 	}
 
-	private String attributeToString()
+	private String atomAttributeToString()
 	{
 
 		switch (type)
@@ -99,22 +99,36 @@ public class SLNExpressionToken
 
 		case SLNConst.A_ATTR_USER_DEFINED:			
 			return "(" +SLNConst.atomAttributeToSLNString(type) + ")" +attrName + "=" + stringParam;
-			
+		
+		}
+		return "attrib=undef";
+	}
+	
+	
+	private String bondAttributeToString()
+	{
+		switch (type)
+		{	
 		case SLNConst.B_ATTR_type:
 			return  SLNConst.bondAttributeToSLNString(type) + "=" + SLNConst.bondTypeAttributeToSLNString(param);
 			
-	//	case SLNConst.B_ATTR_s:
-	//		return SLNConst.bondAttributeToSLNString(type) + "=" + SLNConst.bondStereoChemistryAttributeToSLNString(param);
+		case SLNConst.B_ATTR_s:
+			return SLNConst.bondAttributeToSLNString(type) + "=" + SLNConst.bondStereoChemistryAttributeToSLNString(param);
 		}
-		return "a=b";
+		return "attrib=undef";
 	}
 
-	public String toString()
+	public String toString(boolean isAtomAttr)
 	{
 		if (isLogicalOperation())
 			return logOperationToString();
 		else
-			return attributeToString();
+		{	
+			if (isAtomAttr)
+				return atomAttributeToString();
+			else
+				return " ";
+		}	
 	}
 
 }

@@ -17,7 +17,7 @@ public class SLNBond extends SMARTSBond
 		return false;
 	}
 
-	String getBTString()
+	public String getBTString()
 	{
 		switch(bondType)
 		{
@@ -32,18 +32,16 @@ public class SLNBond extends SMARTSBond
 		case SLNConst.B_TYPE_aromatic:	//aromatic bond
 			return "aromatic";
 
-		default:
-		{
+		default:		
 			return "userDeff";
-		}
 		}
 	}
 
 	public String toString()
 	{
 		if (bondExpression == null)	
-			return (getBTString());
+			return (SLNConst.bondTypeAttributeToSLNString(bondType));
 		else
-			return(getBTString() + bondExpression.toString());
+			return(SLNConst.bondTypeAttributeToSLNString(bondType) + bondExpression.toString());
 	}
 }
