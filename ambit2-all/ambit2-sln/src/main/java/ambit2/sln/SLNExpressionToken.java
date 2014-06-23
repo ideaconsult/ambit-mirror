@@ -99,6 +99,12 @@ public class SLNExpressionToken
 
 		case SLNConst.A_ATTR_USER_DEFINED:			
 			return "(" +SLNConst.atomAttributeToSLNString(type) + ")" +attrName + "=" + stringParam;
+			
+		case SLNConst.B_ATTR_type:
+			return  SLNConst.bondAttributeToSLNString(type) + "=" + SLNConst.bondTypeAttributeToSLNString(param);
+			
+	//	case SLNConst.B_ATTR_s:
+	//		return SLNConst.bondAttributeToSLNString(type) + "=" + SLNConst.bondStereoChemistryAttributeToSLNString(param);
 		}
 		return "a=b";
 	}

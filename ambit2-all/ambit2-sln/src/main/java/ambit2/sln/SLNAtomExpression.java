@@ -3,8 +3,6 @@ package ambit2.sln;
 import java.util.ArrayList;
 import org.openscience.cdk.interfaces.IAtom;
 
-import ambit2.smarts.SmartsExpressionToken;
-
 
 public class SLNAtomExpression 
 {

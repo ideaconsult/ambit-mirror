@@ -191,7 +191,7 @@ public class SLNConst
 		case B_TYPE_3:
 			return "#";
 		case B_TYPE_aromatic:
-			return "aromatic";
+			return ":";
 
 		case B_TYPE_USER_DEFINED:
 			return "userDef";
@@ -199,6 +199,22 @@ public class SLNConst
 		default:
 			return "";
 		}
+	}
+	
+	public static int SLNStringToBondTypeAttr(String type)
+	{
+		if (type.equals("any")|| type.equals("~") || type.equals(""))
+			return B_TYPE_ANY;		
+		if (type.equals("-"))
+			return B_TYPE_1;
+		if (type.equals("="))
+			return B_TYPE_2;
+		if (type.equals("#"))
+			return B_TYPE_3;
+		if (type.equals(":"))
+			return B_TYPE_aromatic;
+
+		return -1;
 	}
 
 	//Bond stereo-chemistry values (for attribute s)
@@ -211,7 +227,7 @@ public class SLNConst
 	public static final int B_STEREO_U = 6; // Unknown, structure might represent single, mixture or both config.
 	public static final int B_STEREO_U_= 7; // unknown, structure represent single configuration
 
-	public static String bondStereoChemistryAttributeToNameString(int attr)
+	public static String bondStereoChemistryAttributeToSLNString(int attr)
 	{
 		switch (attr)
 		{
@@ -236,18 +252,32 @@ public class SLNConst
 			return "";
 		}
 	}
+	
+	public static int SLNStringToBondStereoChemAttr(String type)
+	{
+		if (type.equals("C"))
+			return B_STEREO_C;		
+		if (type.equals("T"))
+			return B_STEREO_T;
+		if (type.equals("E"))
+			return B_STEREO_E;
+		if (type.equals("Z"))
+			return B_STEREO_Z;
+		if (type.equals("N"))
+			return B_STEREO_N;
+		if (type.equals("I"))
+			return B_STEREO_I;
+		if (type.equals("U"))
+			return B_STEREO_U;
+		if (type.equals("U*"))
+			return B_STEREO_U_;
+
+		return -1;
+	}
 
 	//Bond types
 	public static char BondChars[] = {'~','-','=','#',':'};
 
-	/*  //left-out from SMARTS parser could be removed
-	public static final int BT_ANY = 0;
-	public static final int BT_SINGLE = 1;
-	public static final int BT_DOUBLE = 2;
-	public static final int BT_TRIPLE = 3;
-	public static final int BT_AROMATIC = 4;
-	public static final int BT_UNDEFINED = 100;
-	 */
 
 	public static int getBondCharNumber (char ch)
 	{
