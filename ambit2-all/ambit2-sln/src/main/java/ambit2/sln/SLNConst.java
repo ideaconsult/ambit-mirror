@@ -183,7 +183,7 @@ public class SLNConst
 		switch (attr)
 		{
 		case B_TYPE_ANY:
-			return "any";
+			return "~";
 		case B_TYPE_1:
 			return "-";
 		case B_TYPE_2:
@@ -195,7 +195,6 @@ public class SLNConst
 
 		case B_TYPE_USER_DEFINED:
 			return "userDef";
-
 		default:
 			return "";
 		}
@@ -213,6 +212,25 @@ public class SLNConst
 			return B_TYPE_3;
 		if (type.equals(":"))
 			return B_TYPE_aromatic;
+
+		return -1;
+	}
+	
+	public static int SLNCharToBondTypeAttr(char symbol)
+	{
+		switch (symbol)
+		{
+		case '~':
+			return B_TYPE_ANY;
+		case '-':
+			return B_TYPE_1;
+		case '=':
+			return B_TYPE_2;
+		case '#':
+			return B_TYPE_3;
+		case ':':
+			return B_TYPE_aromatic;
+		}
 
 		return -1;
 	}
@@ -275,9 +293,9 @@ public class SLNConst
 		return -1;
 	}
 
+	/*
 	//Bond types
 	public static char BondChars[] = {'~','-','=','#',':'};
-
 
 	public static int getBondCharNumber (char ch)
 	{
@@ -287,7 +305,8 @@ public class SLNConst
 				return (i);
 		}
 		return(-1);
-	}	
+	}
+	*/	
 
 	//Atom and Bond attributes used only in query Q_ATTR_*    ???collect them to atom and bond attributes???
 	public static final int Q_ATTR_mapNum = 100; // #1,#2,... map number to an atom "a"

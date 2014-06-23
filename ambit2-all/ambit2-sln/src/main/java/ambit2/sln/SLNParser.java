@@ -568,16 +568,18 @@ public class SLNParser
 		case '-':	//single bond
 		case '=':	//double bond
 		case '#':	//triple bond
-		case ':':	//aromatic bond
-		case '.':	//new part of the structure		
-
-		case '!':	// logical "not"
-		case '&':	// logical "and"
-		case '|':	// logical "or"
-		case ';':	// low-binding version of "and"		
-		case '@':	// ring closure
+		case ':':	//aromatic bond		
 			parseBond();
-			break;		
+			break;
+
+		case '.':	//zero order bond - disconnection (new part of the structure)
+			curChar++;
+			curBond = null;
+			break;
+			
+		case '@':	//ring closure
+			parseRingClosure();
+			break;	
 
 		case '(':							
 			if (prevAtom == null)
@@ -624,80 +626,52 @@ public class SLNParser
 
 	void addBond(SLNAtom atom0, SLNAtom atom1)
 	{	
-		SLNBond newBond = new SLNBond();
 		IAtom[] atoms = new SLNAtom[2];
 		atoms[0] = atom0;
 		atoms[1] = atom1;
-		container.addAtom(atom0);
-		container.addAtom(atom1);
-
-		newBond.setAtoms(atoms);
-		container.addBond(newBond);
-		//nullify info to read next bond
+		if (curBond != null)
+		{	
+			curBond.setAtoms(atoms);
+			container.addBond(curBond);
+		}
+		
+		//default bond is set to be single bond
+		SLNBond newBond = new SLNBond();
 		curBond = newBond;
-		//System.out.println("+++++" + curBond +" ");
+		curBond.bondType = SLNConst.B_TYPE_1;
+		
 	}
 
 
 	void parseBond()
 	{	
-		int bo = SLNConst.getBondCharNumber(sln.charAt(curChar));
-		int curBondType = -1;		
-		if (bo != -1)
+		if (curChar == 0)
 		{
-			curChar++;
-			if (curChar == nChars)
-			{
-				newError("SLN string ends incorrectly with a bond expression", curChar,"");				
-				return;
-			}
-			SLNBond  newBond = new SLNBond();
-			newBond.bondType = curBondType;
-			//Read bond symbols
-	/*	switch (bo)
-			{
-			//Bond symbols - bond types 
-			case '~':	//any bond
-				curBondType = SLNConst.B_TYPE_ANY;
-			case '-':	//single bond
-				curBondType = SLNConst.B_TYPE_1;
-			case '=':	//double bond
-				curBondType = SLNConst.B_TYPE_2;
-			case '#':	//triple bond
-				curBondType = SLNConst.B_TYPE_3;
-			case ':':	//aromatic bond
-				curBondType = SLNConst.B_TYPE_aromatic;
-			default:
-			{
-				curBondType = SLNConst.B_TYPE_USER_DEFINED;
-			}
-		*/	 
-				
-			if (bo == 0)
-				curBondType = SLNConst.B_TYPE_ANY;
-			if (bo == 1)
-				curBondType = SLNConst.B_TYPE_1;
-			if (bo == 2)
-				curBondType = SLNConst.B_TYPE_2;
-			if (bo == 3)
-				curBondType = SLNConst.B_TYPE_3;
-			if (bo == 4)
-				curBondType = SLNConst.B_TYPE_aromatic;
-			else
-				curBondType = SLNConst.B_TYPE_USER_DEFINED;
-		 	
-			if (curChar < nChars)
-				if (sln.charAt(curChar) == '[')
-				{	
-					String bondExpression = extractBondExpression();				
-					analyzeBondExpression(bondExpression);				
-				}
-			}
-		System.out.println(" bo**** = " + bo+ " " +SLNConst.bondTypeAttributeToSLNString(bo));
-	//	System.out.println("+_+" +SLNConst.bondTypeAttributeToSLNString(curBondType));
+			newError("SLN string starts incorrectly with a bond expression", curChar,"");				
+			return;
 		}
-	
-
+		
+		char boChar = sln.charAt(curChar);		
+		curChar++;
+		if (curChar == nChars)
+		{
+			newError("SLN string ends incorrectly with a bond expression", curChar,"");				
+			return;
+		}
+			
+		if (curBond == null)
+			curBond = new SLNBond();
+		
+		curBond.bondType = SLNConst.SLNCharToBondTypeAttr(boChar);
+			
+		 	
+		if (curChar < nChars)
+			if (sln.charAt(curChar) == '[')
+			{	
+				String bondExpression = extractBondExpression();				
+				analyzeBondExpression(bondExpression);				
+			}
+	}	
 
 
 	String extractBondExpression()
@@ -881,6 +855,12 @@ public class SLNParser
 		//By default it is an user defined attribute
 		SLNExpressionToken token = new SLNExpressionToken(name,value);
 		return token;
+	}
+	
+	void parseRingClosure()
+	{			
+		curChar++;
+		//TODO
 	}
 
 	int extractInteger(String valueString)

@@ -27,7 +27,7 @@ public class SLNAtomExpression
     			sb.append(":");
     	}
     	for (int i=0; i < tokens.size(); i++)
-    		sb.append(tokens.get(i).toString());
+    		sb.append(tokens.get(i).toString(true));
     	sb.append("]");
     	return sb.toString();
     }

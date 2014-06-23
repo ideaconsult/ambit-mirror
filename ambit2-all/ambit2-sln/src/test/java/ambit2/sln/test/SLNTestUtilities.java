@@ -15,6 +15,7 @@ public class SLNTestUtilities
 		SLNTestUtilities tu = new SLNTestUtilities();
 		
 		tu.testSLN("CH2=CH[5:ccor=z;!fcharge=-5.3](OCH(CH3)CH3)CH3[7]");
+		//tu.testSLN("CH2=[a=b]CHCH3");
 		
 	}
 	
@@ -24,7 +25,7 @@ public class SLNTestUtilities
 		SLNContainer container = slnpar.parse(sln);
 		if (!slnpar.getErrorMessages().equals(""))
 		{
-			System.out.println("Original sln: " + sln); 
+			System.out.println("Original sln:    " + sln); 
 			System.out.println("SLN Parser errors:\n" + slnpar.getErrorMessages());			
 			return;
 		}
