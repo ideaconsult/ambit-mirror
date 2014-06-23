@@ -6,6 +6,9 @@ import java.util.Stack;
 import java.util.TreeMap;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
+
+import ambit2.smarts.SmartsConst;
 
 
 public class SLNParser 
@@ -621,32 +624,25 @@ public class SLNParser
 
 	void addBond(SLNAtom atom0, SLNAtom atom1)
 	{	
-		SLNBond newBond;
-		if (curBond == null)
-		{	
-			newBond = new SLNBond();
-			newBond.bondType = SLNConst.B_TYPE_ANY;
-			newBond.bondType = SLNConst.B_TYPE_1;
-			newBond.bondType = SLNConst.B_TYPE_2;
-			newBond.bondType = SLNConst.B_TYPE_3;
-			newBond.bondType = SLNConst.B_TYPE_aromatic;
-		}
-		else
-			newBond = curBond;
-
+		SLNBond newBond = new SLNBond();
 		IAtom[] atoms = new SLNAtom[2];
 		atoms[0] = atom0;
 		atoms[1] = atom1;
+		container.addAtom(atom0);
+		container.addAtom(atom1);
+
 		newBond.setAtoms(atoms);
 		container.addBond(newBond);
-
 		//nullify info to read next bond
-		curBond = null;
+		curBond = newBond;
+		//System.out.println("+++++" + curBond +" ");
 	}
+
 
 	void parseBond()
 	{	
-		int bo = SLNConst.getBondCharNumber(sln.charAt(curChar));		
+		int bo = SLNConst.getBondCharNumber(sln.charAt(curChar));
+		int curBondType = -1;		
 		if (bo != -1)
 		{
 			curChar++;
@@ -656,48 +652,53 @@ public class SLNParser
 				return;
 			}
 			SLNBond  newBond = new SLNBond();
-			newBond.bondType = bo;
-
+			newBond.bondType = curBondType;
 			//Read bond symbols
-			if (curChar < nChars)
-				//TODO
-				switch (sln.charAt(curChar))
-				{
-				//Bond symbols - bond types 
-				case '~':	//any bond
-					bo = SLNConst.B_TYPE_ANY;
-					break;
-				case '-':	//single bond
-					bo = SLNConst.B_TYPE_1;
-					break;
-				case '=':	//double bond
-					bo = SLNConst.B_TYPE_2;
-					break;
-				case '#':	//triple bond
-					bo = SLNConst.B_TYPE_3;
-					break;
-				case ':':	//aromatic bond
-					bo = SLNConst.B_TYPE_aromatic;
-					break;
-
-				default:
-				{
-					newError("Incorrect bond symbol  '"+ bo +"' ",curChar,"");
-					return;
-				}	
-				}
-
-
-
+	/*	switch (bo)
+			{
+			//Bond symbols - bond types 
+			case '~':	//any bond
+				curBondType = SLNConst.B_TYPE_ANY;
+			case '-':	//single bond
+				curBondType = SLNConst.B_TYPE_1;
+			case '=':	//double bond
+				curBondType = SLNConst.B_TYPE_2;
+			case '#':	//triple bond
+				curBondType = SLNConst.B_TYPE_3;
+			case ':':	//aromatic bond
+				curBondType = SLNConst.B_TYPE_aromatic;
+			default:
+			{
+				curBondType = SLNConst.B_TYPE_USER_DEFINED;
+			}
+		*/	 
+				
+			if (bo == 0)
+				curBondType = SLNConst.B_TYPE_ANY;
+			if (bo == 1)
+				curBondType = SLNConst.B_TYPE_1;
+			if (bo == 2)
+				curBondType = SLNConst.B_TYPE_2;
+			if (bo == 3)
+				curBondType = SLNConst.B_TYPE_3;
+			if (bo == 4)
+				curBondType = SLNConst.B_TYPE_aromatic;
+			else
+				curBondType = SLNConst.B_TYPE_USER_DEFINED;
+		 	
 			if (curChar < nChars)
 				if (sln.charAt(curChar) == '[')
 				{	
 					String bondExpression = extractBondExpression();				
 					analyzeBondExpression(bondExpression);				
 				}
+			}
+		System.out.println(" bo**** = " + bo+ " " +SLNConst.bondTypeAttributeToSLNString(bo));
+	//	System.out.println("+_+" +SLNConst.bondTypeAttributeToSLNString(curBondType));
 		}
+	
 
-	}
+
 
 	String extractBondExpression()
 	{
@@ -720,9 +721,10 @@ public class SLNParser
 
 	public void analyzeBondExpression(String bondExpr)
 	{
+		System.out.println("BondExpr " + bondExpr);
 		if (bondExpr.trim().equals(""))
 		{
-			newError("Empty atom expression", curChar+1,"");
+			newError("Empty bond expression", curChar+1,"");
 			return;
 		}
 		curBondExp = new SLNBondExpression();
@@ -754,7 +756,7 @@ public class SLNParser
 					if (Character.isLetter(bondExpr.charAt(pos)))
 						pos++;
 					else 
-						break;		
+						break;
 				}
 
 				String attrName = bondExpr.substring(startPos, pos);
@@ -819,7 +821,7 @@ public class SLNParser
 
 			default:
 			{
-				newError("Incorrect symbol in atom expression '"+bondExpr.charAt(pos)+"' ",curChar,"");
+				newError("Incorrect symbol in bond expression '"+bondExpr.charAt(pos)+"' ",curChar,"");
 				return;
 			}
 			}
@@ -835,7 +837,46 @@ public class SLNParser
 		else
 			System.out.println("Attribute " + name + " = " + value);
 		//TODO
-
+		//Handle type attribute
+		if (name.equals("type"))
+		{
+			if (extractError.equals(""))
+			{
+				int param = SLNConst.SLNStringToBondTypeAttr(value);
+				if (param == -1)
+				{
+					newError("Incorrect bond type value " + value, curChar,"");
+					return null;
+				}
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.B_ATTR_type,param);
+				return token;
+			}
+			else
+			{
+				newError("Incorrect bond type value " + value, curChar,"");
+				return null;
+			}
+		}
+		//Handle stereo-chemistry bond attribute
+		if (name.equals("s"))
+		{
+			if (extractError.equals(""))
+			{
+				int param = SLNConst.SLNStringToBondStereoChemAttr(value);
+				if (param == -1)
+				{
+					newError("Incorrect bond stereochemistry value " + value, curChar,"");
+					return null;
+				}
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.B_ATTR_s,param);
+				return token;
+			}
+			else
+			{
+				newError("Incorrect bond type value " + value, curChar,"");
+				return null;
+			}
+		}
 
 		//By default it is an user defined attribute
 		SLNExpressionToken token = new SLNExpressionToken(name,value);
@@ -879,6 +920,4 @@ public class SLNParser
 			return 0.0;
 		}
 	}
-
-
 }
