@@ -17,7 +17,7 @@ public class SLNBond extends SMARTSBond
 		return false;
 	}
 
-	public String getBTString()
+/*	public String getBTString()
 	{
 		switch(bondType)
 		{
@@ -36,7 +36,7 @@ public class SLNBond extends SMARTSBond
 			return "userDeff";
 		}
 	}
-
+*/
 	public String toString()
 	{
 		if (bondExpression == null)	
