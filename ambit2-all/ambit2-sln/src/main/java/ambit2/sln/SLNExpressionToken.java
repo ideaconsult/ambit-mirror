@@ -114,6 +114,9 @@ public class SLNExpressionToken
 			
 		case SLNConst.B_ATTR_s:
 			return SLNConst.bondAttributeToSLNString(type) + "=" + SLNConst.bondStereoChemistryAttributeToSLNString(param);
+			
+		case SLNConst.B_ATTR_USER_DEFINED:			
+			return "(" +SLNConst.bondAttributeToSLNString(type) + ")" +attrName + "=" + stringParam;
 		}
 		return "attrib=undef";
 	}
@@ -127,7 +130,7 @@ public class SLNExpressionToken
 			if (isAtomAttr)
 				return atomAttributeToString();
 			else
-				return " ";
+				return bondAttributeToString();
 		}	
 	}
 

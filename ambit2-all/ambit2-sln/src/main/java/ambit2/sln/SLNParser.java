@@ -6,9 +6,6 @@ import java.util.Stack;
 import java.util.TreeMap;
 
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IBond;
-
-import ambit2.smarts.SmartsConst;
 
 
 public class SLNParser 
@@ -79,7 +76,6 @@ public class SLNParser
 		curChar = 0;
 		brackets.clear();
 		curBond = null;
-		//curBondType = SLNConst.BT_UNDEFINED;
 		indexes.clear();
 	}
 
@@ -650,7 +646,7 @@ public class SLNParser
 			newError("SLN string starts incorrectly with a bond expression", curChar,"");				
 			return;
 		}
-		
+
 		char boChar = sln.charAt(curChar);		
 		curChar++;
 		if (curChar == nChars)
@@ -658,18 +654,18 @@ public class SLNParser
 			newError("SLN string ends incorrectly with a bond expression", curChar,"");				
 			return;
 		}
-			
+
 		if (curBond == null)
 			curBond = new SLNBond();
-		
+
 		curBond.bondType = SLNConst.SLNCharToBondTypeAttr(boChar);
-			
-		 	
+
 		if (curChar < nChars)
 			if (sln.charAt(curChar) == '[')
 			{	
 				String bondExpression = extractBondExpression();				
-				analyzeBondExpression(bondExpression);				
+				analyzeBondExpression(bondExpression);
+				curBond.bondExpression = curBondExp;
 			}
 	}	
 
@@ -695,7 +691,7 @@ public class SLNParser
 
 	public void analyzeBondExpression(String bondExpr)
 	{
-		System.out.println("BondExpr " + bondExpr);
+	//	System.out.println("**BondExpr " + bondExpr);
 		if (bondExpr.trim().equals(""))
 		{
 			newError("Empty bond expression", curChar+1,"");
@@ -703,8 +699,6 @@ public class SLNParser
 		}
 		curBondExp = new SLNBondExpression();
 		int pos = 0;
-
-
 
 		//Handle all attributes and logical operations
 		while (pos < bondExpr.length())
@@ -727,7 +721,8 @@ public class SLNParser
 				int startPos = pos;
 				while (pos < bondExpr.length())
 				{
-					if (Character.isLetter(bondExpr.charAt(pos)))
+					if (Character.isLetter(bondExpr.charAt(pos))||
+							Character.isDigit(bondExpr.charAt(pos)))
 						pos++;
 					else 
 						break;
@@ -738,17 +733,10 @@ public class SLNParser
 				{
 					if(bondExpr.charAt(pos) == '=')
 						pos++;
-					else
-					{	
-						//Register attribute without value (it is allowed by the SLN syntax 
-						SLNExpressionToken newToken =  analyzeBondAttribute(attrName, null);
-						curBondExp.tokens.add(newToken);
-						continue;
-					}
 				}
 				if(pos >= bondExpr.length())				
 				{
-					//'=' is found but the end of atom expression is reached.
+					//'=' is found but the end of bond expression is reached.
 					newError("Missing value for attribute " + attrName + " ",curChar,"");
 					return;
 				}
@@ -758,7 +746,8 @@ public class SLNParser
 				while (pos < bondExpr.length())
 				{
 					if (Character.isLetter(bondExpr.charAt(pos)) ||
-							Character.isDigit(bondExpr.charAt(pos)))
+							Character.isDigit(bondExpr.charAt(pos))||
+							(bondExpr.charAt(pos) == '*'))
 						pos++;
 					else
 						break;
@@ -806,23 +795,24 @@ public class SLNParser
 
 	SLNExpressionToken analyzeBondAttribute (String name, String value)
 	{
-		if (value == null)
-			System.out.println("Attribute " + name);
+	/*	if (value == null)
+			System.out.println("Attribute" + name);
 		else
 			System.out.println("Attribute " + name + " = " + value);
+	*/
 		//TODO
-		//Handle type attribute
+		//Handle bond type attribute
 		if (name.equals("type"))
 		{
+			int typeParam = SLNConst.SLNStringToBondTypeAttr(value);
 			if (extractError.equals(""))
 			{
-				int param = SLNConst.SLNStringToBondTypeAttr(value);
-				if (param == -1)
+				if (typeParam == -1)
 				{
 					newError("Incorrect bond type value " + value, curChar,"");
 					return null;
 				}
-				SLNExpressionToken token = new SLNExpressionToken(SLNConst.B_ATTR_type,param);
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.B_ATTR_type,typeParam);
 				return token;
 			}
 			else
@@ -834,20 +824,15 @@ public class SLNParser
 		//Handle stereo-chemistry bond attribute
 		if (name.equals("s"))
 		{
+			int param = SLNConst.SLNStringToBondStereoChemAttr(value);
 			if (extractError.equals(""))
 			{
-				int param = SLNConst.SLNStringToBondStereoChemAttr(value);
-				if (param == -1)
-				{
-					newError("Incorrect bond stereochemistry value " + value, curChar,"");
-					return null;
-				}
 				SLNExpressionToken token = new SLNExpressionToken(SLNConst.B_ATTR_s,param);
 				return token;
 			}
 			else
 			{
-				newError("Incorrect bond type value " + value, curChar,"");
+				newError("Incorrect bond stereo-chemistry value " + value, curChar,"");
 				return null;
 			}
 		}
