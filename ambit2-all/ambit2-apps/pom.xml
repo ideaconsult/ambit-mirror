@@ -32,7 +32,7 @@
     <!-- https://github.com/ideaconsult/i5 -->
     <i5.version>0.0.6</i5.version>
     <restnet.version>1.0.2</restnet.version>
-     <net.idea.loom.version>1.0.1</net.idea.loom.version>
+    <net.idea.loom.version>1.0.1</net.idea.loom.version>
   </properties>
   <description>AmbitXT and Ambit REST web services </description>
   <inceptionYear>2008</inceptionYear>
@@ -118,9 +118,9 @@
           <configuration>
             <source>1.6</source>
             <target>1.6</target>
-             <compilerArgument>-Xlint:all</compilerArgument>
-              <showWarnings>true</showWarnings>
-        	 <showDeprecation>true</showDeprecation>
+            <compilerArgument>-Xlint:all</compilerArgument>
+            <showWarnings>true</showWarnings>
+            <showDeprecation>true</showDeprecation>
           </configuration>
         </plugin>
         <plugin>
@@ -197,16 +197,6 @@
             </execution>
           </executions>
         </plugin>
-        <!-- 
-			<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-site-plugin</artifactId>
-        		<version>2.0-beta-6</version>
-        		<configuration>
-          			<locales>en</locales>
-        		</configuration>
-      		</plugin>
-      		 -->
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>buildnumber-maven-plugin</artifactId>
@@ -230,10 +220,22 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>2.3</version>
+          <version>3.3</version>
           <configuration>
             <locales>en</locales>
           </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>lt.velykis.maven.skins</groupId>
+              <artifactId>reflow-velocity-tools</artifactId>
+              <version>1.1.1</version>
+            </dependency>
+            <dependency>
+         	 <groupId>org.apache.velocity</groupId>
+         	 <artifactId>velocity</artifactId>
+        	  <version>1.7</version>
+        	</dependency>
+          </dependencies>
         </plugin>
         <!--  generates PDF from the site-->
         <plugin>
@@ -312,14 +314,13 @@
   </reporting>
   <modules>
     <module>../ambit2-www</module>
-    <module>../ambit2-dbi5</module>    
+    <module>../ambit2-dbi5</module>
     <!--
     <module>../ambit2-ambitxt</module>    
     <module>../ambit2-taglibs</module>
     <module>../ambit2-i5rest</module>    
-        -->    
+        -->
     <module>ambit2-user</module>
-
   </modules>
   <dependencies>
     <!--  Ambit -->
@@ -477,7 +478,7 @@
   </repositories>
   <profiles>
     <profile>
-      <!-- conditional modules doesn't work; use -pl ambit:ambit2-www to compile only single module -->	
+      <!-- conditional modules doesn't work; use -pl ambit:ambit2-www to compile only single module -->
       <id>webonly</id>
       <modules>
         <module>../ambit2-www</module>
