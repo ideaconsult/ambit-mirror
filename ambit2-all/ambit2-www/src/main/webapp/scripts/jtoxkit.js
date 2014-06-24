@@ -3180,7 +3180,7 @@ var jToxStudy = (function () {
       var self = this;
       
       var compoRoot = jT.$('.jtox-compo-tab', self.rootElement)[0];
-      var ds = new jToxComposition(compoRoot);
+      var ds = new jToxComposition(compoRoot,{ showDiagrams: true } );
       ds.queryComposition(compositionURI);
     },
     
