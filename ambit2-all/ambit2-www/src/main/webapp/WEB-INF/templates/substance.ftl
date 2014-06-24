@@ -28,7 +28,7 @@
 	  	loadHelp("${ambit_root}","substance");
 	  	downloadForm("${ambit_request}");		
 	  		
- 		var ds = new jToxSubstance($(".jtox-toolkit")[0], {crossDomain: true, selectionHandler: "query" } );
+ 		var ds = new jToxSubstance($(".jtox-toolkit")[0], {crossDomain: true, selectionHandler: "query", embedComposition: true, showDiagrams: true } );
         ds.querySubstance('${ambit_request_json}');	  		
 
 
@@ -67,7 +67,7 @@
 		<div class="jtox-toolkit" data-kit="substance" data-manual-init="true"></div>
   	<div class="jtox-template">
 <!--[[ jT.templates['all-substance'] -->
-	  <div id="jtox-substance" class="jtox-substance">
+	  <div id="jtox-substance" class="jtox-substance" data-show-diagrams="true">
 	    <div class="jtox-controls">
 	      Showing from <span class="data-field from-field" data-field="pagestart"> ? </span> to <span class="data-field" data-field="pageend"> ? </span> in pages of <select class="data-field" data-field="pagesize">
           <option value="10" selected="yes">10</option>
