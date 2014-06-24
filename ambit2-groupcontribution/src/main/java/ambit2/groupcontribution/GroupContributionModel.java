@@ -28,4 +28,9 @@ public class GroupContributionModel
 	public void setLocalDescriptors(ArrayList<ILocalDescriptor> localDescriptors) {
 		this.localDescriptors = localDescriptors;
 	}
+	
+	public void addLocalDescriptor(ILocalDescriptor localDescr)
+	{
+		//TODO
+	}
 }

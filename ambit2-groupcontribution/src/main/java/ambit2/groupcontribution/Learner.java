@@ -1,5 +1,7 @@
 package ambit2.groupcontribution;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+
 public class Learner 
 {
 	private GroupContributionModel model = null;
@@ -19,6 +21,11 @@ public class Learner
 	}
 	
 	public void validate()
+	{
+		//TODO
+	}
+	
+	public void fragmentMolecule(IAtomContainer mol)
 	{
 		//TODO
 	}

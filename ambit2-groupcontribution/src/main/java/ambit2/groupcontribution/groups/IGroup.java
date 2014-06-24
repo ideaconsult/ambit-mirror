@@ -1,13 +1,16 @@
 package ambit2.groupcontribution.groups;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
 
 public interface IGroup 
 {
-	public int getCount();   
+	public enum Type{
+		ATOM,BOND,B_GROUP,D_GROUP,L_GROUP
+	}
+	   
 	public double getContribution();
-	public String getDesignation();
-	public String getName();
-	public String getInfo();
+	public String getDesignation();	
+	public GroupInfo getInfo();
 	public IGroupSet getGroupSet();
+	public Type getType();
+	//public ArrayList<GroupInstance> getInstances();
 }
