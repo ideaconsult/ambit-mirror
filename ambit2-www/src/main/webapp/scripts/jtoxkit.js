@@ -522,14 +522,14 @@ window.jT = window.jToxKit = {
     if (urlObj.params['pagesize'] !== undefined) {
       var sz = parseInt(urlObj.params['pagesize']);
       if (sz > 0)
-        kit.settings.pageSize = sz;
+        kit.settings.pageSize = kit.pageSize = sz;
       url = ccLib.removeParameter(url, 'pagesize');
     }
     
     if (urlObj.params['page'] !== undefined) {
       var beg = parseInt(urlObj.params['page']);
       if (beg >= 0)
-        kit.settings.pageStart = beg * kit.settings.pageSize;
+        kit.settings.pageStart = kit.pageStart = beg * kit.settings.pageSize;
       url = ccLib.removeParameter(url, 'page');
     }
     
@@ -706,8 +706,31 @@ window.jT.ui = {
       return '<span class="ui-icon ui-icon-star jtox-inline" title="' + title + '"></span>' + stars;
     }
   },
+  
+  updateCounter: function (str, count, total) {
+    var re = null;
+    var add = '';
+    if (count == null)
+      count = 0;
+    if (total == null) {
+      re = /([^(]*)\(([\d\?]+)\)/;
+      add = '' + count;
+    }
+    else {
+      re = /([^(]*)\(([\d\?]+\/[\d\?\+-]+)\)/;
+      add = '' + count + '/' + total;
+    }
     
-  putControls: function (kit, handlers) {
+    // now the addition    
+    if (!str.match(re))
+      str += ' (' + add + ')';
+    else
+      str = str.replace(re, "$1(" + add + ")");
+    
+    return str;
+  },
+    
+  bindControls: function (kit, handlers) {
     var pane = jT.$('.jtox-controls', kit.rootElement)[0];
     if (kit.settings.showControls) {
       ccLib.fillTree(pane, { "pagesize": kit.settings.pageSize });
@@ -824,7 +847,7 @@ var jToxQuery = (function () {
     configuration: {
       // this is the main thing to be configured
       handlers: { 
-        query: function (el, query) { query.query(); },
+        query: function (e, query) { query.query(); },
       }
     }
   };
@@ -873,12 +896,12 @@ var jToxQuery = (function () {
       var fireHandler = function (e) {
         var handler = self.settings.configuration.handlers[jT.$(this).data('handler')];
         if (!!handler)
-          ccLib.fireCallback(handler, this, this, self);
+          ccLib.fireCallback(handler, this, e, self);
         else
           console.log("jToxQuery: referring unknown handler: " + jT.$(this).data('handler'));
       };
       
-      jT.$(document).on('change', '.jtox-handler', fireHandler);
+      jT.$(document).on('change', 'input.jtox-handler', fireHandler);
       jT.$(document).on('click', 'button.jtox-handler', fireHandler);
     },
     
@@ -1327,22 +1350,25 @@ var jToxCompound = (function () {
       self.suspendEqualization = false;
       self.orderList = [];
       self.usedFeatures = [];
+      self.pageStart = self.settings.pageStart;
+      self.pageSize = self.settings.pageSize;
       
       if (!self.settings.noInterface) {
         self.rootElement.appendChild(jT.getTemplate('#jtox-compound'));
         
-        jT.ui.putControls(self, { 
+        jT.ui.bindControls(self, { 
           nextPage: function () { self.nextPage(); },
           prevPage: function () { self.prevPage(); },
-          sizeChange: function() { self.queryEntries(self.settings.pageStart, parseInt(jT.$(this).val())); },
+          sizeChange: function() { self.queryEntries(self.pageStart, parseInt(jT.$(this).val())); },
           filter: function () { self.updateTables() }
         });
       }
     },
     
     clearDataset: function () {
-      if (this.usedFeatures !== undefined) {      
-        jT.$(this.rootElement).empty();
+      if (this.usedFeatures !== undefined) {
+        if (!this.settings.noInterface)     
+          jT.$(this.rootElement).empty();
         for (var i = 0, fl = this.usedFeatures.length; i < fl; ++i) {
           var fid = this.usedFeatures[i];
           this.feature[fid].used = false;
@@ -1479,6 +1505,26 @@ var jToxCompound = (function () {
       return this.feature[fId].URI || fId;
     },
     
+    featureData: function (entry, set) {
+      var self = this;
+      var data = [];
+      ccLib.enumObject(set, function (fId, idx, level) {
+        var feat = jT.$.extend({}, self.feature[fId]);
+        var vis = feat['visibility'];
+        if (!!vis && vis != 'details')
+          return;
+        var title = feat.title;
+        feat.value = self.featureValue(fId, entry, 'details');
+        if (!!title && (!self.settings.hideEmptyDetails || !! feat.value)) {
+          data.push(feat)
+          if (!feat.value)
+            feat.value = '-';
+        }
+      });
+      
+      return data;
+    },
+    
     prepareTables: function() {
       var self = this;
       var varCols = [];
@@ -1565,24 +1611,9 @@ var jToxCompound = (function () {
           tabRoot.appendChild(detDiv);
           
           self.prepareTabs(detDiv, false, function (parent, gr) {
-            var empty = true;            
-            var data = [];
-            ccLib.enumObject(self.groups[gr], function (fId, idx, level) {
-              var feat = jT.$.extend({}, self.feature[fId]);
-              var vis = feat['visibility'];
-              if (!!vis && vis != 'details')
-                return;
-              var title = feat.title;
-              feat.value = self.featureValue(fId, entry, 'details');
-              if (!!title && (!self.settings.hideEmptyDetails || !! feat.value)) {
-                data.push(feat)
-                empty = false;
-                if (!feat.value)
-                  feat.value = '-';
-              }
-            });
+            var data = self.featureData(entry, self.groups[gr]);
             
-            if (!empty || !self.settings.hideEmpty) {
+            if (data.length > 0 || !self.settings.hideEmpty) {
               jT.$(parent).addClass('jtox-details-table');
               var tabTable = document.createElement('table');
               parent.appendChild(tabTable);
@@ -1598,7 +1629,8 @@ var jToxCompound = (function () {
               jT.$(tabTable).dataTable().fnAddData(data);
               jT.$(tabTable).dataTable().fnAdjustColumnSizing();
             }
-            return empty;
+            
+            return data.length == 0;
           });
           
           jT.$(cell).height(detDiv.offsetHeight);
@@ -1619,9 +1651,8 @@ var jToxCompound = (function () {
       // now proceed to enter all other columns
       for (var gr in self.groups) {
         ccLib.enumObject(self.groups[gr], function (fId, idx, level) {
-          if (idx == "name") {
+          if (idx == "name")
             return;
-          }
             
           var feature = self.feature[fId];
           if (feature.visibility == 'details')
@@ -1831,43 +1862,35 @@ var jToxCompound = (function () {
     // These two are shortcuts for calling the queryEntries routine
     nextPage: function() {
       var self = this;
-      if (self.entriesCount == null || self.settings.pageStart + self.settings.pageSize < self.entriesCount)
-        self.queryEntries(self.settings.pageStart + self.settings.pageSize);
+      if (self.entriesCount == null || self.pageStart + self.pageSize < self.entriesCount)
+        self.queryEntries(self.pageStart + self.pageSize);
     },
     
     prevPage: function() {
       var self = this;
-      if (self.settings.pageStart > 0)
-        self.queryEntries(self.settings.pageStart - self.settings.pageSize);
+      if (self.pageStart > 0)
+        self.queryEntries(self.pageStart - self.pageSize);
     },
     
     updateControls: function (qStart, qSize) {
       var self = this;
-
-      // first initialize the counters.
-      qStart = self.settings.pageStart = qStart * self.settings.pageSize;
-      if (qSize < self.settings.pageSize) // we've reached the end!!
-        self.entriesCount = qStart + qSize;
+      var pane = jT.$('.jtox-controls', self.rootElement)[0];
+      ccLib.fillTree(pane, {
+        "pagestart": qStart + 1,
+        "pageend": qStart + qSize,
+      });
       
-      if (self.settings.showControls && !self.settings.noInterface){
-        var pane = jT.$('.jtox-controls', self.rootElement)[0];
-        ccLib.fillTree(pane, {
-          "pagestart": qStart + 1,
-          "pageend": qStart + qSize,
-        });
+      var nextBut = jT.$('.next-field', pane);
+      if (self.entriesCount == null || qStart + qSize < self.entriesCount)
+        jT.$(nextBut).addClass('paginate_enabled_next').removeClass('paginate_disabled_next');
+      else
+        jT.$(nextBut).addClass('paginate_disabled_next').removeClass('paginate_enabled_next');
         
-        var nextBut = jT.$('.next-field', pane);
-        if (self.entriesCount == null || qStart + qSize < self.entriesCount)
-          jT.$(nextBut).addClass('paginate_enabled_next').removeClass('paginate_disabled_next');
-        else
-          jT.$(nextBut).addClass('paginate_disabled_next').removeClass('paginate_enabled_next');
-          
-        var prevBut = jT.$('.prev-field', pane);
-        if (qStart > 0)
-          jT.$(prevBut).addClass('paginate_enabled_previous').removeClass('paginate_disabled_previous');
-        else
-          jT.$(prevBut).addClass('paginate_disabled_previous').removeClass('paginate_enabled_previous');
-      }
+      var prevBut = jT.$('.prev-field', pane);
+      if (qStart > 0)
+        jT.$(prevBut).addClass('paginate_enabled_previous').removeClass('paginate_disabled_previous');
+      else
+        jT.$(prevBut).addClass('paginate_disabled_previous').removeClass('paginate_enabled_previous');
     },
     
     // make the actual query for the (next) portion of data.
@@ -1876,29 +1899,35 @@ var jToxCompound = (function () {
       if (from < 0)
         from = 0;
       if (size == null)
-        size = self.settings.pageSize;
+        size = self.pageSize;
         
       // setup the size, as well
       jT.$('.jtox-controls select', self.rootElement).val(size);
-      self.settings.pageSize = size;
       
       var qStart = Math.floor(from / size);
       var qUri = ccLib.addParameter(self.datasetUri, "page=" + qStart + "&pagesize=" + size);
+      self.dataset = null;
 
       jT.call(self, qUri, function(dataset){
         if (!!dataset){
-          // then, preprocess the dataset
-          self.dataset = cls.processDataset(dataset, self.feature, self.settings.fnAccumulate, self.settings.pageStart);
+          // first, arrange the page markers
+          self.pageSize = size;
+          qStart = self.pageStart = qStart * size;
+          if (dataset.dataEntry.length < size) // we've reached the end!!
+            self.entriesCount = qStart + dataset.dataEntry.length;
+          
+          // then process the dataset
+          self.dataset = cls.processDataset(dataset, self.feature, self.settings.fnAccumulate, self.pageStart);
           if (!self.settings.noInterface) {
             // ok - go and update the table, filtering the entries, if needed            
             self.updateTables();
+            if (self.settings.showControls)
+              // finally - go and update controls if they are visible
+              self.updateControls(qStart, dataset.dataEntry.length);
           }
-  
-          // finally - go and update controls if they are visible
-          self.updateControls(qStart, dataset.dataEntry.length);
 
           // time to call the supplied function, if any.
-          ccLib.fireCallback(self.settings.onLoaded, self, dataset);
+          ccLib.fireCallback(self.settings.onLoaded, self, dataset, self);
         }
       });
     },
@@ -1964,9 +1993,9 @@ var jToxCompound = (function () {
             
             self.prepareTables(); // prepare the tables - we need features to build them - we have them!
             self.equalizeTables(); // to make them nicer, while waiting...
-            ccLib.fireCallback(self.settings.onPrepared, self, dataset);
+            ccLib.fireCallback(self.settings.onPrepared, self, dataset, self);
           }
-          self.queryEntries(self.settings.pageStart, self.settings.pageSize); // and make the query for actual data
+          self.queryEntries(self.pageStart, self.pageSize); // and make the query for actual data
         }
       });
     },
@@ -2377,10 +2406,11 @@ var jToxModel = (function () {
 
 var jToxSubstance = (function () {
   var defaultSettings = { // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
-    showControls: true,
-    selectionHandler: null,
-    onDetails: null,
-    onLoaded: null,
+    showControls: true,       // show navigation controls or not
+    selectionHandler: null,   // if given - this will be the name of the handler, which will be invoked by jToxQuery when the attached selection box has changed...
+    embedComposition: false,  // embed composition listing as details for each substance - it valid only if onDetails is not given.
+    onDetails: null,          // called when a details row is about to be openned. If null - no details handler is attached at all.
+    onLoaded: null,           // called when the set of substances (for this page) is loaded.
   
     pageStart: 0,
     pageSize: 10,
@@ -2419,6 +2449,16 @@ var jToxSubstance = (function () {
     
     self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings);
     
+    if (self.settings.embedComposition && self.settings.onDetails == null) {
+      self.settings.onDetails = function (root, data, event) {
+        var comp = new jToxComposition(root, self.settings);
+        comp.queryComposition(data + '/composition');
+      };
+    }
+    
+    self.pageStart = self.settings.pageStart;
+    self.pageSize = self.settings.pageSize;
+    
     self.rootElement.appendChild(jT.getTemplate('#jtox-substance'));
     self.init();
         
@@ -2444,10 +2484,10 @@ var jToxSubstance = (function () {
         return (type != 'display') ? data : '<a target="_blank" href="' + self.settings.baseUrl + '/substanceowner/' + full.ownerUUID + '/substance">' + data + '</a>';
       };
         
-      jT.ui.putControls(self, { 
+      jT.ui.bindControls(self, { 
         nextPage: function () { self.nextPage(); },
         prevPage: function () { self.prevPage(); },
-        sizeChange: function() { self.queryEntries(self.settings.pageStart, parseInt(jT.$(this).val())); },
+        sizeChange: function() { self.queryEntries(self.pageStart, parseInt(jT.$(this).val())); },
         filter: function () { jT.$(self.table).dataTable().fnFilter(jT.$(this).val()); }
       });
       
@@ -2487,7 +2527,7 @@ var jToxSubstance = (function () {
         from = 0;
         
       if (!size || size < 0)
-        size = self.settings.pageSize;
+        size = self.pageSize;
         
       var qStart = Math.floor(from / size);
       var qUri = ccLib.addParameter(self.substanceUri, "page=" + qStart + "&pagesize=" + size);
@@ -2495,8 +2535,8 @@ var jToxSubstance = (function () {
         if (!!result) {
           jT.$(self.table).dataTable().fnClearTable();
         
-          self.settings.pageSize = size;
-          self.settings.pageStart = from;
+          self.pageSize = size;
+          self.pageStart = from;
         
           for (var i = 0, rl = result.substance.length; i < rl; ++i)
             result.substance[i].index = i + from + 1;
@@ -2515,7 +2555,7 @@ var jToxSubstance = (function () {
       self.substanceUri = jT.grabPaging(self, uri);
       if (ccLib.isNull(self.settings.baseUrl))
         self.settings.baseUrl = jT.grabBaseUrl(uri);
-      self.queryEntries(self.settings.pageStart);
+      self.queryEntries(self.pageStart);
     },   
     
     query: function (uri) {
@@ -2542,7 +2582,7 @@ var jToxComposition = (function () {
     showBanner: true,         // whether to show a banner of composition info before each compounds-table
     showDiagrams: false,      // whether to show diagram for each compound in the composition
     sDom: "rt<Ffp>",          // compounds (ingredients) table sDom
-    oLanguage: {},
+    oLanguage: null,
     onLoaded: null,
     
     /* compositionUri */
@@ -2627,7 +2667,7 @@ var jToxComposition = (function () {
 				"bAutoWidth": false,
         "bServerSide": false,
         "sDom" : self.settings.sDom,
-        "oLanguage": self.settings.oLanguage,
+        "oLanguage": jT.$.extend(true, {}, self.settings.oLanguage),
         "aoColumns": cols,
       });
       
@@ -2786,10 +2826,7 @@ var jToxStudy = (function () {
             if (!!study) {
               jT.$(table).removeClass('unloaded folded');
               jT.$(table).addClass('loaded');
-/*
-              if (study.study[0].protocol.category.code == issue_study.study[0].protocol.category.code)
-                study = issue_study;
-*/
+
               self.processStudies(panel, study.study, false);
               ccLib.fireCallback(self.settings.onStudy, self, study.study);
             }
@@ -2838,12 +2875,6 @@ var jToxStudy = (function () {
       return theCat;
     },
   
-    updateCount: function(str, count) {
-      if (count === undefined)
-        count = 0;
-      return str.replace(/(.+)\s\(([0-9]+)\)/, "$1 (" + count + ")");
-    },
-    
     // modifies the column title, according to configuration and returns "null" if it is marked as "invisible".
     ensureTable: function (tab, study) {
       var self = this;
@@ -2853,7 +2884,7 @@ var jToxStudy = (function () {
 	      var defaultColumns = [
 	        { "sTitle": "Name", "sClass": "center middle", "sWidth": "20%", "mData": "protocol.endpoint" }, // The name (endpoint)
 	        { "sTitle": "Endpoint", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData": "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, "endpoint");  } },   // Effects columns
-	        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return formatLoHigh(data.result, type) }); } },
+	        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return formatValue(data.result, type) }); } },
 	        { "sTitle": "Text", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return !!data.result.textValue  ? data.result.textValue : '-'; }); } },
 	        { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "-"  },    // Protocol columns
 	        { "sTitle": "Owner", "sClass": "center middle shortened", "sWidth": "15%", "mData": "citation.owner", "sDefaultContent": "-" },
@@ -2895,9 +2926,14 @@ var jToxStudy = (function () {
         };
         
         // some value formatting functions
-        var formatLoHigh = function (data, type) {
+        var formatValue = function (data, unit, type) {
           var out = "";
-          if (!ccLib.isNull(data)) {
+          if (typeof data == 'string') {
+            out += ccLib.trim(data).replace(/ /g, "&nbsp;");
+            if (!!unit)
+              out += '&nbsp;<span class="units">' + unit.replace(/ /g, "&nbsp;") + '</span>';
+          }
+          else if (typeof data == 'object' && data != null) {
             data.loValue = ccLib.trim(data.loValue);
             data.upValue = ccLib.trim(data.upValue);
             if (!ccLib.isEmpty(data.loValue) && !ccLib.isEmpty(data.upValue)) {
@@ -2919,19 +2955,16 @@ var jToxStudy = (function () {
                 out += '-';
             }
             
+            out = out.replace(/ /g, "&nbsp;");
             data.unit = ccLib.trim(data.unit);
             if (!ccLib.isNull(data.unit))
-              out += ' <span class="units">' + data.unit + '</span>';
+              out += '&nbsp;<span class="units">' + data.unit.replace(/ /g, "&nbsp;") + '</span>';
           }
-          return out.replace(/ /g, "&nbsp;").replace("span&nbsp;", "span ");
+          else
+            out += '-';
+          return out;
         };
         
-        var formatUnits = function(data, unit) {
-          data = ccLib.trim(data);
-          unit = ccLib.trim(unit);
-          return !ccLib.isNull(data) ? (data + (!!unit ? '&nbsp;<span class="units">' + unit + '</span>': "")) : "-";
-        };
-
         putDefaults(0, 1, "main");
         
         // use it to put parameters...
@@ -2950,10 +2983,7 @@ var jToxStudy = (function () {
           if (col == null)
             return null;
           
-          col["mRender"] = (!ccLib.isNull(study.parameters[p]) && study.parameters[p].loValue !== undefined) ?
-            function (data, type, full) { return formatLoHigh(data, type); } :
-            function (data, type, full) { return formatUnits(data, full[p + " unit"]); };
-          
+          col["mRender"] = function (data, type, full) { return formatValue(data, full[p + " unit"], type); };
           return col;
         });
         // .. and conditions
@@ -2968,11 +2998,11 @@ var jToxStudy = (function () {
           if (col == null)
             return null;
           
-          var rnFn = (!ccLib.isNull(study.effects[0].conditions[c]) && study.effects[0].conditions[c].loValue !== undefined) ? 
-            function(data, type) { return formatLoHigh(data.conditions[c], type); } :
-            function(data, type) { return formatUnits(data.conditions[c],  data.conditions[c + " unit"]); };
-            
-          col["mRender"] = function(data, type, full) { return self.renderMulti(data, type, full, rnFn); };
+          col["mRender"] = function(data, type, full) {
+            return self.renderMulti(data, type, full, function(data, type) { 
+              return formatValue(data.conditions[c], data.conditions[c + " unit"], type); 
+            }); 
+          };
           return col;
         });
         
@@ -3001,7 +3031,7 @@ var jToxStudy = (function () {
           "aoColumns": colDefs,
           "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
             var el = jT.$('.title .data-field', jT.$(this).parents('.jtox-study'))[0];
-            el.innerHTML = self.updateCount(el.innerHTML, iTotal);
+            el.innerHTML = jT.ui.updateCounter(el.innerHTML, iTotal);
             return sPre;
           },
           "fnCreatedRow": function( nRow, aData, iDataIndex ) {
@@ -3074,7 +3104,7 @@ var jToxStudy = (function () {
         if (!!data){
           var cnt = typeSummary[data];
           var el = jT.$(this)[0];
-          el.innerHTML = (self.updateCount(el.innerHTML, cnt));
+          el.innerHTML = jT.ui.updateCounter(el.innerHTML, cnt);
         }
       });
       
@@ -3180,7 +3210,7 @@ var jToxStudy = (function () {
       var self = this;
       
       var compoRoot = jT.$('.jtox-compo-tab', self.rootElement)[0];
-      var ds = new jToxComposition(compoRoot,{ showDiagrams: true } );
+      var ds = new jToxComposition(compoRoot, self.settings);
       ds.queryComposition(compositionURI);
     },
     
@@ -3256,7 +3286,7 @@ jT.templates['widget-search']  =
 "  			    <select name=\"smarts\" title =\"Predefined functional groups\"></select>" +
 "  			  </div>" +
 "  			  <div class=\"jtox-inline\">" +
-"            <input type=\"text\" name=\"searchbox\" class=\"jtox-handler\"/>" +
+"            <input type=\"text\" name=\"searchbox\"/>" +
 "            <button name=\"searchbutton\" class=\"jtox-handler\" title=\"Search/refresh\" data-handler=\"query\"><span class=\"ui-icon ui-icon-search\"/></button>" +
 "            <button name=\"drawbutton\" title=\"Draw the (sub)structure\"><span class=\"ui-icon ui-icon-pencil\"/></button>" +
 "  			  </div>" +

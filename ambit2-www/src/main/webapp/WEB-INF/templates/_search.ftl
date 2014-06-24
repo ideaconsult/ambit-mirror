@@ -44,10 +44,16 @@ $(document)
       $(el).empty();
       var div = document.createElement('div');
       el.appendChild(div);
-      var ds = new jToxSubstance(div, {crossDomain: true, substanceUri: uri, showControls: false, onDetails: function (root, data, event) {
-        var comp = new jToxStudy(root);
-        comp.querySubstance(data);
-      } } );
+      var ds = new jToxSubstance(div, {
+      			crossDomain: true, 
+      			substanceUri: uri, 
+      			showControls: false,
+      			showDiagrams: true , 
+      			onDetails: function (root, data, event) {
+        			var comp = new jToxStudy(root);
+        			comp.querySubstance(data);
+      			} 
+      		} );
     }
     
     $(document).ready(function(){
