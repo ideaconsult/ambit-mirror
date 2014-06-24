@@ -279,10 +279,17 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>2.3</version>
+          <version>3.3</version>
           <configuration>
             <locales>en</locales>
           </configuration>
+          <dependencies>
+            <dependency>
+          <groupId>lt.velykis.maven.skins</groupId>
+          <artifactId>reflow-velocity-tools</artifactId>
+          <version>1.1.1</version>
+        </dependency>
+          </dependencies>
         </plugin>
       </plugins>
     </pluginManagement>
