@@ -5,7 +5,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 public class LDAtomHybridization implements ILocalDescriptor
 {
-
+	private boolean FlagUsed = true;
+	
 	@Override
 	public int calcForAtom(IAtom atom, IAtomContainer mol) {
 		// TODO Auto-generated method stub
@@ -59,6 +60,16 @@ public class LDAtomHybridization implements ILocalDescriptor
 			hybridizationType = -1;
 		}
 		return hybridizationType;
+	}
+	
+	@Override
+	public boolean isUsed() {
+		return FlagUsed;
+	}
+
+	@Override
+	public void setIsUsed(boolean used) {
+		FlagUsed = used;
 	}
 
 }

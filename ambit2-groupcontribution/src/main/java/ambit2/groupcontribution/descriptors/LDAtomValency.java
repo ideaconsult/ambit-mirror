@@ -3,8 +3,11 @@ package ambit2.groupcontribution.descriptors;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-public class LDAtomValency implements ILocalDescriptor {
+public class LDAtomValency implements ILocalDescriptor 
+{
 
+	private boolean FlagUsed = true;
+	
 	@Override
 	public int calcForAtom(IAtom atom, IAtomContainer mol) {
 		return atom.getValency();
@@ -33,6 +36,16 @@ public class LDAtomValency implements ILocalDescriptor {
 	@Override
 	public Type getType() {
 		return Type.PREDEFINED;
+	}
+	
+	@Override
+	public boolean isUsed() {
+		return FlagUsed;
+	}
+
+	@Override
+	public void setIsUsed(boolean used) {
+		FlagUsed = used;
 	}
 
 }
