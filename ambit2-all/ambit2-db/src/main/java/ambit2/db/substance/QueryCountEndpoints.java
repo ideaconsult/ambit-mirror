@@ -24,7 +24,7 @@ public class QueryCountEndpoints  extends QueryCount {
 	 */
 	
 	protected static String sql = 
-		"SELECT e.endpoint,count(*),group_concat(distinct(unit)),e.endpointhash FROM substance_experiment e group by e.endpoint,e.hash with rollup";
+		"SELECT e.endpoint,count(*),group_concat(distinct(unit)),hex(e.endpointhash) FROM substance_experiment e group by e.endpoint,e.endpointhash with rollup";
 	@Override
 	public String getSQL() throws AmbitException {
 		return sql;
