@@ -5,6 +5,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 public class LDAtomFormalCharge implements ILocalDescriptor {
 
+	private boolean FlagUsed = true;
+	
 	@Override
 	public int calcForAtom(IAtom atom, IAtomContainer mol) {
 		return atom.getFormalCharge();
@@ -33,5 +35,15 @@ public class LDAtomFormalCharge implements ILocalDescriptor {
 	@Override
 	public Type getType() {
 		return Type.PREDEFINED;
+	}
+
+	@Override
+	public boolean isUsed() {
+		return FlagUsed;
+	}
+
+	@Override
+	public void setIsUsed(boolean used) {
+		FlagUsed = used;
 	}
 }

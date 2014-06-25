@@ -16,4 +16,6 @@ public interface ILocalDescriptor
 	public String getName();
 	public String getInfo();
 	public Type getType();
+	public boolean isUsed();
+	public void setIsUsed(boolean used);
 }
