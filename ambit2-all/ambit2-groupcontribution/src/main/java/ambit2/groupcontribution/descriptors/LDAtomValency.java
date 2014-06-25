@@ -3,35 +3,36 @@ package ambit2.groupcontribution.descriptors;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-public class LDAtomFormalCharge implements ILocalDescriptor {
+public class LDAtomValency implements ILocalDescriptor {
 
 	@Override
 	public int calcForAtom(IAtom atom, IAtomContainer mol) {
-		return atom.getFormalCharge();
+		return atom.getValency();
 	}
 
 	@Override
 	public String getDesignation(int value) {
-		return "FC" + value;
+		return "Val" + value;
 	}
 
 	@Override
 	public String getShortName() {
-		return "FC";
+		return "Val";
 	}
 
 	@Override
 	public String getName() {
-		return "FormalCharge";
+		return "Valency";
 	}
 
 	@Override
 	public String getInfo() {
-		return "Formal Charge";
+		return "Valency";
 	}
 
 	@Override
 	public Type getType() {
 		return Type.PREDEFINED;
 	}
+
 }

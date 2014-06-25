@@ -12,7 +12,7 @@ public class TestUtils
 	
 	public static void main(String[] args) throws Exception
 	{
-		testLD("CCCOCCCCNC=O");
+		testLD("CC(NC=C)COC(S(=O)(=O)O)CCNC=O");
 		//testLD("c1ccccc1");
 	}
 	
@@ -22,7 +22,8 @@ public class TestUtils
 		testLocalDescriptor(smiles, new LDAtomSymbol());
 		testLocalDescriptor(smiles, new LDHNum());
 		testLocalDescriptor(smiles, new LDAtomFormalCharge());			
-		testLocalDescriptor(smiles, new LDAtomHybridization());
+		testLocalDescriptor(smiles, new LDAtomHybridization());		
+		testLocalDescriptor(smiles, new LDAtomValency());
 	}
 	
 	public static void testLocalDescriptor(String smiles, ILocalDescriptor ld) throws Exception
