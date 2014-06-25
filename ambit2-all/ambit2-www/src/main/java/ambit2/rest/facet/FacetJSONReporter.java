@@ -65,13 +65,7 @@ public class FacetJSONReporter<Q extends IQueryRetrieval<IFacet>> extends QueryR
 			String subcategory = null;
 			if ((uriReporter!=null) && (uriReporter.getBaseReference()!=null))
 				subcategory = uriReporter.getBaseReference().toString();
-			output.write(String.format("\n\t{\n\t\"value\":%s,\n\t\"count\":%d,\n\t\"uri\":%s,\n\t\"subcategory\":%s,\t\"subcategoryuri\":%s\n\t}",
-					item.getValue()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getValue().toString())),
-					item.getCount(),
-					item==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(uriReporter.getURI(item))),
-					JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSubcategoryTitle())),	
-					JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSubCategoryURL(subcategory)))
-					));
+			output.write(item.toJSON(item==null?null:uriReporter.getURI(item),subcategory));
 			comma = ",";
 		} catch (Exception x) {
 			logger.log(Level.WARNING,x.getMessage(),x);
