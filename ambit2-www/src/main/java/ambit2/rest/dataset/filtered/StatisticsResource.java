@@ -18,6 +18,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.db.model.QueryCountModels;
+import ambit2.db.reporters.QueryReporter;
 import ambit2.db.substance.QueryCountEndpoints;
 import ambit2.db.substance.QueryCountProtocolApplications;
 import ambit2.db.substance.QueryCountSubstances;
@@ -81,10 +82,16 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 			public String getURL() {
 				return "/substance";
 			}
+			public String getTemplateName() {
+				return "facets/protocol_applications.ftl";
+			}			
 		};
 		
 		public String getURL() {
 			return null;
+		}
+		public String getTemplateName() {
+			return "facet_statistics.ftl";
 		}
 	}
 	public StatisticsResource() {
@@ -94,7 +101,7 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 	
 	@Override
 	public String getTemplateName() {
-		return "facet_statistics.ftl";
+		return mode.getTemplateName();
 	}
 	
 	@Override
@@ -103,7 +110,6 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 		return super.createConvertor(variant); 	
 	}
 
-	
 	@Override
 	protected Q createQuery(Context context,
 			Request request, Response response) throws ResourceException {

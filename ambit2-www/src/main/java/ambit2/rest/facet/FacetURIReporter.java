@@ -96,7 +96,7 @@ public class FacetURIReporter <Q extends IQueryRetrieval<IFacet>> extends QueryU
 			if (item!=null && item.getValue()!=null) {
 				return String.format("%s%s?type=endpointcategory&search=%s",
 							root,
-							SubstanceResource.substance,item.getValue().toString()
+							SubstanceResource.substance,((SubstanceByCategoryFacet)item).getEndpoint().name()
 						    );			
 			} else return "";
 		

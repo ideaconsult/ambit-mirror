@@ -12,4 +12,5 @@ public interface IFacet<T> extends Serializable {
 	String getResultsURL(String ... params);
 	String getSubCategoryURL(String ... params);
 	String getSubcategoryTitle();
+	public String toJSON(String uri,String subcategory);
 }

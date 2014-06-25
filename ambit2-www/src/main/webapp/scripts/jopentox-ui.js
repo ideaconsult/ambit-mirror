@@ -1410,6 +1410,68 @@ function defineFacetsTable(root,url,selector) {
 }
 
 
+function defineStudySearchFacets(root,url,selector) {
+	var oTable = $(selector).dataTable( {
+		"sAjaxDataProp" : "facet",
+		"bProcessing": true,
+		"bServerSide": false,
+		"bStateSave": false,
+		"aaSorting": [[1, 'asc']],
+		"aoColumnDefs": [
+		  	{ "mData": "subcategory" , 
+				  "asSorting": [ "asc", "desc" ],
+				  "aTargets": [0],
+				  "sWidth" : "20%",					  
+				  "bSearchable" : true,
+				  "bUseRendered" : false,
+				  "bSortable" : true,
+				  "fnRender" : function(o,val) {
+					  return val;
+				  }
+				},						                 
+ 				{ "mData": "value" , 
+ 				  "asSorting": [ "asc", "desc" ],
+				  "aTargets": [ 1 ],	
+				  "bSearchable" : true,
+				  "bUseRendered" : false,
+				  "sClass" : "details-control",
+				  "bSortable" : true,
+				  "fnRender" : function(o,val) {
+					  var cBox = "<input type='checkbox' name='category' value='"+o.aData["subcategory"]+"."+o.aData["endpoint"]+"'>";
+					  var sOut = (o.aData["value"]===undefined)? o.aData["uri"]:o.aData["value"];
+					  sOut =
+						  "<span class='ui-icon ui-icon-folder-collapsed' style='float: left; margin: .1em;' title='Click to show endpoints'></span>"+
+						  cBox + " <a href='"+o.aData["uri"]+"' title='Click to view substances'>"+sOut+"</a> ("+o.aData["count"] +")";
+					  return sOut;
+				  }
+				}			
+			],
+		"sDom" : '<"help remove-bottom"><"help">Trt<"help"lfpi>',
+		"bJQueryUI" : true,
+		"bPaginate" : true,
+		"sPaginationType": "full_numbers",
+		"sPaginate" : ".dataTables_paginate _paging",
+		"bDeferRender": true,
+		"bSearchable": true,
+		"sAjaxSource": url,
+		"oLanguage": {
+				"sSearch": "Filter:",
+				"sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
+	            "sLoadingRecords": "No records found."
+	    }
+	} );
+	return oTable;
+}
+
+function endpointFormatDetails( oTable, nTr ,root ) {
+    var model = oTable.fnGetData( nTr );
+    var sOut = '<div class="ui-widget" >';
+    sOut += 'endpoints';
+    sOut += '</div>';
+     
+    return sOut;
+}
+
 
 function loadMetadata(root,dataseturi) {
 $.ajax({

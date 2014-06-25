@@ -4,8 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import ambit2.base.data.study.Protocol._categories;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.facet.IFacet;
+import ambit2.base.json.JSONUtils;
 import ambit2.db.search.QueryParam;
 import ambit2.db.substance.study.facet.SubstanceByCategoryFacet;
 import ambit2.db.update.dataset.QueryCount;
@@ -55,4 +56,6 @@ public class QueryCountProtocolApplications   extends QueryCount<SubstanceByCate
 			throw new AmbitException(x);
 		}
 	}
+	
+
 }
