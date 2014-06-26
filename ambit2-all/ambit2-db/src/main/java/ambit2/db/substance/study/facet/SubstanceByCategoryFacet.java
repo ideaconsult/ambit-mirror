@@ -12,7 +12,16 @@ public class SubstanceByCategoryFacet extends AbstractFacet<String> {
 	private static final long serialVersionUID = 3229573174462112181L;
 	protected String subcategory;
 	protected _categories endpoint;
+	protected int substancesCount = 0;
 	
+	public int getSubstancesCount() {
+		return substancesCount;
+	}
+
+	public void setSubstancesCount(int substancesCount) {
+		this.substancesCount = substancesCount;
+	}
+
 	public _categories getEndpoint() {
 		return endpoint;
 	}
@@ -59,10 +68,10 @@ public class SubstanceByCategoryFacet extends AbstractFacet<String> {
 	
 	@Override
 	public String toJSON(String uri,String subcategory) {
-		return String.format("\n\t{\n\t\"value\":%s,\t\"endpoint\":%s,\n\t\"count\":%d,\n\t\"uri\":%s,\n\t\"subcategory\":%s,\t\"subcategoryuri\":%s\n\t}",
+		return String.format("\n\t{\n\t\"value\":%s,\t\"endpoint\":%s,\n\t\"count\":%d,\n\t\"substancescount\":%d,\n\t\"uri\":%s,\n\t\"subcategory\":%s,\t\"subcategoryuri\":%s\n\t}",
 			getValue()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getValue().toString())),
 			JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint.name())),
-			getCount(),
+			getCount(),getSubstancesCount(),
 			uri==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(uri)),
 			JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubcategoryTitle())),	
 			JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubCategoryURL(subcategory)))

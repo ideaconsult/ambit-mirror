@@ -1,5 +1,6 @@
 package ambit2.rest.substance;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.idea.restnet.i.task.ITask;
@@ -23,12 +24,14 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.study.Protocol;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.processors.CallableSubstanceI5Query;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.DeleteSubstance;
+import ambit2.db.substance.FacetedSearchSubstance;
 import ambit2.db.substance.ReadByReliabilityFlags;
 import ambit2.db.substance.ReadSubstance;
 import ambit2.db.substance.ReadSubstanceByExternalIDentifier;
@@ -139,10 +142,30 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 				} else 
 					throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			}
-		
+			String type = form.getFirstValue("type");
+			if ("facet".equals(type)) {
+				List<Protocol> protocols = new ArrayList<Protocol>();
+				for (String value : form.getValuesArray("category")) try {
+					String[] categories = value.split("\\.");
+					Protocol protocol = new Protocol(null);
+					protocol.setCategory(Protocol._categories.valueOf(categories[1]).name());
+					protocol.setTopCategory(categories[0]);
+					protocols.add(protocol);
+				} catch (IllegalArgumentException x) {	
+					//invalid category, ignoring
+				} catch (Exception x) {
+					//ignoring
+				}
+				if (protocols.size()>0) {
+					FacetedSearchSubstance q = new FacetedSearchSubstance();
+					q.setFieldname(protocols);
+					return (Q)q;
+				} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}
+			
 			String search = form.getFirstValue(QueryResource.search_param);
 			if (search!=null) {
-				String type = form.getFirstValue("type");
+
 				//search by study				
 				try {
 					ReadSubstanceByStudy._studysearchmode byStudy = null;
