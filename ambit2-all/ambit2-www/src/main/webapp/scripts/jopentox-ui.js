@@ -1436,7 +1436,6 @@ function defineStudySearchFacets(root,url,selector) {
 				  "sClass" : "details-control",
 				  "bSortable" : true,
 				  "fnRender" : function(o,val) {
-					  var cBox = "<input type='checkbox' name='category' value='"+o.aData["subcategory"]+"."+o.aData["endpoint"]+"'>";
 					  var sOut = (o.aData["value"]===undefined)? o.aData["uri"]:o.aData["value"];
 					  sOut =
 						  "<span class='ui-icon ui-icon-folder-collapsed' style='float:left;margin: .1em;' title='Click to show endpoints'></span>"+
@@ -1506,3 +1505,4 @@ $.ajax({
   });
 
 }	
+
