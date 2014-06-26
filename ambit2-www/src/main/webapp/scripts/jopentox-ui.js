@@ -1418,17 +1418,16 @@ function defineStudySearchFacets(root,url,selector) {
 		"bStateSave": false,
 		"aaSorting": [[1, 'asc']],
 		"aoColumnDefs": [
-		  	{ "mData": "subcategory" , 
-				  "asSorting": [ "asc", "desc" ],
-				  "aTargets": [0],
-				  "sWidth" : "20%",					  
-				  "bSearchable" : true,
-				  "bUseRendered" : false,
-				  "bSortable" : true,
-				  "fnRender" : function(o,val) {
-					  return val;
-				  }
-				},						                 
+		        {
+		        	"mData": "value" ,
+		        	"aTargets": [ 0 ],	
+		        	"bSortable" : false,
+		        	"bSearchable" : false,
+		        	"bUseRendered" : false,
+		        	 "fnRender" : function(o,val) {
+		        		 return "<input type='checkbox' name='category' value='"+o.aData["subcategory"]+"."+o.aData["endpoint"]+"'>"; 
+		        	 }
+		        },         
  				{ "mData": "value" , 
  				  "asSorting": [ "asc", "desc" ],
 				  "aTargets": [ 1 ],	
@@ -1440,13 +1439,13 @@ function defineStudySearchFacets(root,url,selector) {
 					  var cBox = "<input type='checkbox' name='category' value='"+o.aData["subcategory"]+"."+o.aData["endpoint"]+"'>";
 					  var sOut = (o.aData["value"]===undefined)? o.aData["uri"]:o.aData["value"];
 					  sOut =
-						  "<span class='ui-icon ui-icon-folder-collapsed' style='float: left; margin: .1em;' title='Click to show endpoints'></span>"+
-						  cBox + " <a href='"+o.aData["uri"]+"' title='Click to view substances'>"+sOut+"</a> ("+o.aData["count"] +")";
+						  "<span class='ui-icon ui-icon-folder-collapsed' style='float:left;margin: .1em;' title='Click to show endpoints'></span>"+
+						  sOut + " (<a href='"+o.aData["uri"]+"' title='Click to view substances'>"+o.aData["count"] +"</a>)" ;
 					  return sOut;
 				  }
 				}			
 			],
-		"sDom" : '<"help remove-bottom"><"help">Trt<"help"lfpi>',
+		"sDom" : '<"help remove-bottom"><"help">Trt<"help">',
 		"bJQueryUI" : true,
 		"bPaginate" : true,
 		"sPaginationType": "full_numbers",
@@ -1454,12 +1453,32 @@ function defineStudySearchFacets(root,url,selector) {
 		"bDeferRender": true,
 		"bSearchable": true,
 		"sAjaxSource": url,
+		"iDisplayLength" : -1,
+		"fnDrawCallback" : function() {
+			    $(selector + " thead").remove();
+	    },
 		"oLanguage": {
 				"sSearch": "Filter:",
 				"sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
 	            "sLoadingRecords": "No records found."
 	    }
 	} );
+	
+	$(selector + ' tbody').on('click','td.details-control span',function() {
+		var nTr = $(this).parents('tr')[0];
+		if (oTable.fnIsOpen(nTr)) {
+			$(this).removeClass("ui-icon-folder-open");
+			$(this).addClass("ui-icon-folder-collapsed");
+			this.title='Click to show endpoints';
+			oTable.fnClose(nTr);
+		} else {
+			$(this).removeClass("ui-icon-folder-collapsed");
+			$(this).addClass("ui-icon-folder-open");
+			this.title='Click to close endpoints';
+			oTable.fnOpen(nTr, endpointFormatDetails(oTable,nTr,"${ambit_root}"),	'details');
+									       
+		}
+	});	
 	return oTable;
 }
 

@@ -2,6 +2,7 @@ package ambit2.db.substance;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.study.Protocol._categories;
@@ -31,9 +32,14 @@ public class QueryCountProtocolApplications   extends QueryCount<SubstanceByCate
 	
 	protected static String sql = 
 		"SELECT topcategory,count(*),endpointcategory FROM substance_protocolapplication group by topcategory,endpointcategory";
+	
+	protected static String sql_topcategory = 
+		"SELECT topcategory,count(*),endpointcategory FROM substance_protocolapplication where topcategory=? group by topcategory,endpointcategory";
+	
+		
 	@Override
 	public String getSQL() throws AmbitException {
-		return sql;
+		return (getFieldname()==null)?sql:sql_topcategory;
 	}
 	
 	@Override
@@ -42,7 +48,10 @@ public class QueryCountProtocolApplications   extends QueryCount<SubstanceByCate
 	}
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
-		return null;
+		if (getFieldname()==null) return null;
+		List<QueryParam> params = new ArrayList<QueryParam>();
+		params.add(new QueryParam<String>(String.class, getFieldname().toString()));
+		return params;
 	}
 	@Override
 	public SubstanceByCategoryFacet getObject(ResultSet rs) throws AmbitException {
