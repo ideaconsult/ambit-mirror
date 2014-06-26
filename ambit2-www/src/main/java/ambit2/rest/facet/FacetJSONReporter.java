@@ -61,6 +61,7 @@ public class FacetJSONReporter<Q extends IQueryRetrieval<IFacet>> extends QueryR
 	@Override
 	public Object processItem(IFacet item) throws AmbitException {
 		try {
+			if (item==null) return item;
 			if (comma!=null) getOutput().write(comma);
 			String subcategory = null;
 			if ((uriReporter!=null) && (uriReporter.getBaseReference()!=null))

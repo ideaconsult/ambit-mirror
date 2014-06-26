@@ -31,10 +31,10 @@ public class QueryCountProtocolApplications   extends QueryCount<SubstanceByCate
 	 */
 	
 	protected static String sql = 
-		"SELECT topcategory,count(*),endpointcategory FROM substance_protocolapplication group by topcategory,endpointcategory";
+		"SELECT topcategory,count(*),endpointcategory,count(distinct(concat(substance_prefix,substance_uuid))) FROM substance_protocolapplication group by topcategory,endpointcategory";
 	
 	protected static String sql_topcategory = 
-		"SELECT topcategory,count(*),endpointcategory FROM substance_protocolapplication where topcategory=? group by topcategory,endpointcategory";
+		"SELECT topcategory,count(*),endpointcategory,count(distinct(concat(substance_prefix,substance_uuid)))  FROM substance_protocolapplication where topcategory=? group by topcategory,endpointcategory";
 	
 		
 	@Override
@@ -59,6 +59,7 @@ public class QueryCountProtocolApplications   extends QueryCount<SubstanceByCate
 			facet.setSubcategoryTitle(rs.getString(1));
 			facet.setValue(rs.getString(3));
 			facet.setCount(rs.getInt(2));
+			facet.setSubstancesCount(rs.getInt(4));
 			
 			return facet;
 		} catch (SQLException x) {

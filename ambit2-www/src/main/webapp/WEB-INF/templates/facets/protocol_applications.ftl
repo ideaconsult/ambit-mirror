@@ -12,16 +12,16 @@
 
 <script type='text/javascript'>
 $(document).ready(function() {
-	defineStudySearchFacets("${ambit_root}",
+	facet.defineStudySearchFacets("${ambit_root}",
 				"${ambit_root}/admin/stats/protocol_applications?topcategory=P-CHEM&media=application/json",
 				"#facet_pchem");
-	defineStudySearchFacets("${ambit_root}",
+	facet.defineStudySearchFacets("${ambit_root}",
 			"${ambit_root}/admin/stats/protocol_applications?topcategory=TOX&media=application/json",
 			"#facet_tox");
-	defineStudySearchFacets("${ambit_root}",
+	facet.defineStudySearchFacets("${ambit_root}",
 			"${ambit_root}/admin/stats/protocol_applications?topcategory=ECOTOX&media=application/json",
 			"#facet_ecotox");
-	defineStudySearchFacets("${ambit_root}",
+	facet.defineStudySearchFacets("${ambit_root}",
 			"${ambit_root}/admin/stats/protocol_applications?topcategory=ENV%20FATE&media=application/json",
 			"#facet_envfate");	
 
@@ -34,9 +34,11 @@ $(document).ready(function() {
 	//ds.querySubstance('${ambit_root}/substance');	  	
 	
 	downloadForm("${ambit_request}");
+	/*
 	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/admin" title="Admin">Admin</a></li>');
 	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/admin/stats" title="Statistics">Statistics</a></li>');
-	jQuery("#breadCrumb ul").append('<li><a href="#" onClick="facet.searchStudy()">Search</a></li>');
+	*/
+	jQuery("#breadCrumb ul").append('<li><a href="#" onClick="facet.searchStudy()">Search substances by study</a></li>');
 	jQuery("#submit").show();
 
 });
@@ -44,6 +46,20 @@ $(document).ready(function() {
 <style>
 	#accordion .ui-accordion-content { padding: 2px; }
 </style>
+
+<style>
+	#sidebar {
+  	background-color: #fafafa;
+  	border: 1px solid #ccc;
+  	-moz-transition: left 0.5s ease;
+  	-webkit-transition: left 0.5s ease;
+  	-o-transition: left 0.5s ease;
+  	border-radius: 7px;
+  	box-shadow: 3px 3px 7px #999;
+	}
+
+
+	</style>
 </head>
 <body>
 
@@ -53,7 +69,7 @@ $(document).ready(function() {
 <#include "/banner_crumbs.ftl">
 
 <form action='${ambit_root}/substance' id='fsearchForm' name='fsearchForm' method='GET' autocomplete='off'>
-<div class="four columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+<div class="four columns" id="sidebar" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 
 	<div id="accordion" style="padding:0;margin:0;font-size:80%">
 		<h3>P-Chem</h3>
