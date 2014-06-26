@@ -7,28 +7,31 @@
 
 <script type='text/javascript'>
 $(document).ready(function() {
-	var oTable = defineStudySearchFacets("${ambit_root}","${ambit_request_json}","#facet");
-	$('#facet tbody').on('click','td.details-control span',function() {
-					var nTr = $(this).parents('tr')[0];
-					if (oTable.fnIsOpen(nTr)) {
-						$(this).removeClass("ui-icon-folder-open");
-						$(this).addClass("ui-icon-folder-collapsed");
-						this.title='Click to show endpoints';
-						oTable.fnClose(nTr);
-					} else {
-						$(this).removeClass("ui-icon-folder-collapsed");
-						$(this).addClass("ui-icon-folder-open");
-						this.title='Click to close endpoints';
-						oTable.fnOpen(nTr, endpointFormatDetails(oTable,nTr,"${ambit_root}"),	'details');
-												       
-					}
-			});
+	defineStudySearchFacets("${ambit_root}",
+				"${ambit_root}/admin/stats/protocol_applications?topcategory=P-CHEM&media=application/json",
+				"#facet_pchem");
+	defineStudySearchFacets("${ambit_root}",
+			"${ambit_root}/admin/stats/protocol_applications?topcategory=TOX&media=application/json",
+			"#facet_tox");
+	defineStudySearchFacets("${ambit_root}",
+			"${ambit_root}/admin/stats/protocol_applications?topcategory=ECOTOX&media=application/json",
+			"#facet_ecotox");
+	defineStudySearchFacets("${ambit_root}",
+			"${ambit_root}/admin/stats/protocol_applications?topcategory=ENV%20FATE&media=application/json",
+			"#facet_envfate");	
+
+	$( "#accordion" ).accordion( {
+		heightStyle: "content"
+	});	
 	downloadForm("${ambit_request}");
 	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/admin" title="Admin">Admin</a></li>');
 	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/admin/stats" title="Statistics">Statistics</a></li>');
 	jQuery("#breadCrumb ul").append('<li><a href="${ambit_request}" title="${facet_tooltip}">${ambit_request}</a></li>');
 });
 </script>
+<style>
+	#accordion .ui-accordion-content { padding: 2px; }
+</style>
 </head>
 <body>
 
@@ -36,24 +39,39 @@ $(document).ready(function() {
 <!-- banner -->
 <#include "/banner_crumbs.ftl">
 
-<div class="six columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+<div class="five columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 
 <form action='${ambit_root}/substance' method='GET'>
-		<input class='half-bottom' type='submit' value='Search'>
-		<table id='facet' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
-		<thead>	
-		<tr>
-		<th ></th>
-		<th >Endpoint</th>
-		</tr>
-		</thead>
-		<tbody></tbody>
-		</table>
+	<input class='half-bottom' type='submit' value='Search'>
+	<div id="accordion" style="padding:0;margin:0">
+		<h3>P-Chem</h3>
+		  <table id='facet_pchem' class='facet .jtox-toolkit' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+			<thead><tr><th ></th><th ></th></tr></thead>
+			<tbody></tbody>
+		   </table>
+		<h3>Env Fate</h3>
+		  <table id='facet_envfate' class='facet .jtox-toolkit' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+			<thead><tr><th ></th><th ></th></tr></thead>
+			<tbody></tbody>
+		   </table>
+		<h3>Eco Tox</h3>
+		  <table id='facet_ecotox' class='facet .jtox-toolkit' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+			<thead><tr><th ></th><th ></th></tr></thead>
+			<tbody></tbody>
+		   </table>
+		<h3>Tox</h3>
+		  <table id='facet_tox' class='facet .jtox-toolkit' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+			<thead><tr><th ></th><th ></th></tr></thead>
+			<tbody></tbody>
+		   </table>
+		</div>
+		
+		
 </form>			
 			
 </div>
  		
-		<div class="ten columns remove-bottom" style="padding:0;" >
+		<div class="eleven columns remove-bottom" style="padding:0;" >
 
 		Show here the substances
 		</div> 

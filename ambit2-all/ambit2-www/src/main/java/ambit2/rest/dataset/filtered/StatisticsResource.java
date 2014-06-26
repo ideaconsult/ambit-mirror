@@ -155,10 +155,15 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 			return (Q)new QueryCountSubstances(mode.getURL());
 		}		
 		case experiment_endpoints: {
-			return (Q)new QueryCountEndpoints(mode.getURL());
+			QueryCountEndpoints q = new QueryCountEndpoints(mode.getURL());
+			q.setFieldname(getParams().getFirstValue("topcategory"));
+			q.setValue(getParams().getFirstValue("endpointcategory"));
+			return (Q)q;
 		}		
 		case protocol_applications: {
-			return (Q) new QueryCountProtocolApplications(mode.getURL());
+			QueryCountProtocolApplications q = new QueryCountProtocolApplications(mode.getURL());
+			q.setFieldname(getParams().getFirstValue("topcategory"));
+			return (Q)q;
 		}
 		case chemicals_in_dataset: {
 			QueryCountChemicalInDataset q = null;
