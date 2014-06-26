@@ -1,7 +1,7 @@
 var facet = {
 		root: null,
 		substanceComponent : null,
-		searchStudy : function () {
+		searchStudy : function (event) {
 			var selected = $("input[name^='category']:checked:enabled",'#fsearchForm');
 			var params = [{'name' : 'type', 'value' : 'facet'}];
 			$.each(selected,function(index,value) {
@@ -14,6 +14,7 @@ var facet = {
 				var substanceQuery =  this.root + '/substance?' + jQuery.param(params);
 				this.substanceComponent.querySubstance(substanceQuery);
 			}	
+			if (event!=null) event.preventDefault();
 		},
 		defineStudySearchFacets : function (root,url,selector) {
 			var oTable = $(selector).dataTable( {
