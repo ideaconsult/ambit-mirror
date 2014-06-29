@@ -125,23 +125,7 @@ div#header {
 	height: 1.5em;
 	background: url("../../images/header-background.png") repeat-x scroll left top;
 }
-ul.topLinks {
-	position: absolute;
-	top: 0;
-	right: 0;
-	height: auto;
-	margin: 0;
-	padding: 0.5em 1em 0 0;
-	text-align: right;
-}
 
-li.topLinks {
-	display: inline;
-}
-
-a.topLinks {
-	font-weight: normal !important;
-}
 
 .logo_top-left {
 	border: 0;
@@ -324,55 +308,3 @@ a.qxternal {
 	text-align: center;
 }
 
-#footer {
-	position: fixed;
-	height: 40px;
-	width: 18%;
-	left: 82%;
-	bottom: -17px;
-	padding: 10px 0 0 0;
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: -30px;
-	-webkit-border-radius: 20px;
-	-khtml-border-radius: 20px;
-	-moz-border-radius: 20px;
-	border-radius: 20px;
-	color: white;
-	background-color: #729203;
-	text-align: center;
-}
-
-#footer p {
-	margin: 0;
-	font-size: 1.5em;
-	text-align: center;
-}
-
-#footer-in {
-	position: fixed;
-	height: 45px;
-	width: 60%;
-	left: 20%;
-	bottom: -5px;
-}
-
-#footer-out {
-	position: fixed;
-	height: 60px;
-	width: 54%;
-	left: 23%;
-	bottom: -5px;
-}
-
-a.footerLink, a.footerLink:active, a.footerLink:visited {
-	color: white !important;
-	font-weight: bold !important;
-}
-
-a.footerLink:hover {
-	color: white !important;
-	font-weight: bold !important;
-	cursor: pointer !important;
-	text-decoration: overline !important;
-}

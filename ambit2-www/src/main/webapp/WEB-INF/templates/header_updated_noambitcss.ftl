@@ -17,6 +17,7 @@
 	<link rel="stylesheet" href="${ambit_root}/style/skeleton/base.css" type="text/css">
 	<link rel="stylesheet" href="${ambit_root}/style/skeleton/skeleton-fluid.css" type="text/css">
 	<link rel="stylesheet" href="${ambit_root}/style/skeleton/layout.css" type="text/css">
+	<link rel="stylesheet" href="${ambit_root}/style/skeleton/toplinks.css" type="text/css">
 
 	<!--[if lt IE 9]>
 		<script src="${ambit_root}/jquery/html5.js"></script>
@@ -36,9 +37,6 @@
 	<link rel="stylesheet" href="${ambit_root}/style/jquery.ui.theme.css" type="text/css">
 	
 	<link rel="stylesheet" href="${ambit_root}/style/jquery.dataTables.css" type="text/css">
-	<link rel="stylesheet" href="${ambit_root}/style/skeleton/ambit2.css" type="text/css">
-	<link rel="stylesheet" href="${ambit_root}/style/skeleton/toplinks.css" type="text/css">
-	<link rel="stylesheet" href="${ambit_root}/style/skeleton/table.css" type="text/css">
 		
 	<!-- Favicons
 	================================================== -->
