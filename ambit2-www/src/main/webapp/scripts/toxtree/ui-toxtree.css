@@ -129,7 +129,7 @@ div.tt-algorithm div.tt-classification {
 }
 
 .tt-toggle.loading {
-  background: url(../images/waiting_small.gif) center top no-repeat;
+  background: url(../../images/waiting_small.gif) center top no-repeat;
   background-size: 16px 16px;
   text-fill-color: rgba(0, 0, 0, 0);
   color: rgba(0, 0, 0, 0);
