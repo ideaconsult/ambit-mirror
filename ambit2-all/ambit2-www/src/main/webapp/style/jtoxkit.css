@@ -1,5 +1,6 @@
 /* jtoxkit.css - Styling for all jToxKit parts
 */
+.jtox-panel,
 .jtox-foldable {
 	background: #eee; /* Old browsers */
 	background: -moz-linear-gradient(top, rgba(255,255,255,.5) 0%, rgba(200,200,200,.5) 100%); /* FF3.6+ */
@@ -13,7 +14,9 @@
   border-left: 1px solid #ccc; 
   -moz-border-radius: 7px;
   -webkit-border-radius: 7px;
-  border-radius: 7px; 
+  border-radius: 7px;
+  padding-top: 7px;
+  padding-bottom: 3px;
 }
 
 .jtox-foldable:hover {
@@ -242,7 +245,6 @@ img.jtox-smalldiagram {
 
 .jtox-search .search-pane .dynamic.hidden {
   opacity: 0.0;
-  width: 0px;
 }
 
 .jtox-search .ketcher {
@@ -250,9 +252,9 @@ img.jtox-smalldiagram {
   height: auto;
   position: relative;
   left: 0px;
-  -moz-transition: left 0.5s ease, opacity 0.2s;
-  -webkit-transition: left 0.5s ease, opacity 0.2s;
-  transition: left 0.5s ease, opacity 0.2s;
+  -moz-transition: all 0.5s ease, opacity 0.2s;
+  -webkit-transition: all 0.5s ease, opacity 0.2s;
+  transition: all 0.5s ease, opacity 0.2s;
 }
 
 .jtox-search .ketcher.shrinken {

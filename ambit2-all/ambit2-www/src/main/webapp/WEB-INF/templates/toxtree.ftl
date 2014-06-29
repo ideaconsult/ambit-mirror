@@ -1,11 +1,19 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header_updated.ftl" >
-<link rel="stylesheet" href="${ambit_root}/style/toxtree.css"/>
+<#include "/header_updated_noambitcss.ftl" >
 
-<script type='text/javascript' src='${ambit_root}/scripts/toxtree/common.js'></script>
-<script type='text/javascript' src='${ambit_root}/scripts/toxtree/dataset.js'></script>
-<script type='text/javascript' src='${ambit_root}/scripts/toxtree/toxtree.js'></script>
+<link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
+<link rel="stylesheet" href="${ambit_root}/style/ketcher.css"/>
+<link rel="stylesheet" href='${ambit_root}/scripts/toxtree/ui-toxtree.css'/>
+
+<script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/oecdcategories.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/ketcher.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/toxtree/ui-toxtree.js'></script>
+  
+
 
 <script>
 	$(document).ready(function() {
@@ -14,7 +22,6 @@
 			$("#query-needle").attr('value',url.params.search);
 		} catch (err) { $("#query-needle").attr('value','');}
 		
-		initToxtree("${ambit_root}");
 		jQuery("#breadCrumb ul").append('<li><a href="#" title="Demo">Demo</a></li>');
 		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/toxtree" title="Toxtree - Toxic Hazard Estimation by decision tree approach">Toxtree - Toxic Hazard Estimation by decision tree approach</a></li>');
 		loadHelp("${ambit_root}","toxtree");
@@ -24,66 +31,86 @@
 </script>
 </head>
 <body>
-	<div class="container" style="margin:0;padding:0;">
 
-	<!-- banner -->
-	<#include "/banner_crumbs.ftl">
-	<div class="row remove-bottom">
-		<div class="column"><img title='Toxtree logo' src="http://toxtree.sourceforge.net/images/toxtree-logo.gif"></div>
-		<div class="eleven columns">
-			<input id="query-needle" placeholder="Identifier (CAS, Name, EINECS) or SMILES or InChI" title="Enter any identifier (CAS, Name, EINECS) or SMILES or InChI. Toxtree will guess the input type automatically."/>
-		</div>
-		<div class="two columns">
-			<button id="query-button">QUERY</button>
-		</div>
-		<div class="two columns">&nbsp</div>
-	</div>	
-	<div class="row">
-		<div class="column">&nbsp</div>
-		<div class="five columns">
-			<h5>Available structure attributes</h5>
-			<div class="toxtree-features panel">
-				<table>
-					<tbody class="body"></tbody>
-					<tfoot class="template">
-						<tr class="row-blank">
-							<td class="two columns nomargin data-field" data-field="name"> _key_ </td>
-							<td class="separator"></td>
-							<td class="three columns nomargin data-field" data-field="value"> _value_ </td>
-						</tr>
-						<tr class="header-blank">
-							<td colspan="3"><strong class="data-field" data-field="header"> _header_ </strong></td>
-						</tr>
-					</tfoot>
-				</table>
-			</div>
-			<h5>Structure diagram</h5>
-			<div class="panel"><img class="toxtree-diagram" src="${ambit_root}/images/empty.png" alt="Compoung diagram"/></div>
-		</div>
-		<div class="eight columns">
-			<h5>Toxicity prediction modules</h5>
-			<div class="toxtree-models">
-				<ul class="body">
-					<li class="row-blank template panel-hovering">
-						<div class="inlined show-hide">
-							<h5 class="data-field" data-field="name"> _name_ </h5>
-						</div>
-						<div class="inlined"><input class="auto" type="checkbox"/>Auto</div>
-						<div class="inlined"><button class="imaged run"><img src="${ambit_root}/images/toxtree/run.png" alt="Run prediction"/></button></div>
-						<div class="inlined class-result"><div class="class-blank template"><span class="data-field" data-field="name"></span><span class="data-field go-right" data-field="answer"></span></div></div>
-						<div class="info hidden">
-							<div class="explanation"> _explanation_ </div>
-						</div>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<#include "/chelp.ftl">
-	</div>	
-		<#include "/footer.ftl" >
-	</div>
-	<div class="status-bar">
-		<h6><span id="connection-baseuri"></span> : <img src="${ambit_root}/images/ok.png" id="connection-status" alt="Ok"/> <span id="connection-error"></span></h6>
-	</div>
+<!-- any of these break the layout ...
+
+<div class="container" style="margin:0;padding:0;">
+<#include "/banner_crumbs.ftl">
+<div class="sixteen columns remove-bottom" style="padding:0;" >
+	
+-->
+
+<!-- toxtree starts -->
+<div class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="config_toxtree" data-base-url="${ambit_root}">
+<div id="tt-searchbar" class="jtox-toolkit jtox-widget" data-kit="search"></div>
+<div id="tt-bigpane" class="cc-flex">
+  <div>
+    <div id="tt-browser-panel">
+			<div id="tt-features" class="cc-flex">
+  			<div class="jtox-inline"><h5 class="counter-field">Available structure attributes </h5></div>
+  			<div class="jtox-inline tt-controls"><a class="paginate_disabled_previous prev-field" tabindex="0" role="button">Previous</a><a class="paginate_disabled_next next-field" tabindex="0" role="button">Next</a></div>
+  			<div class="list jtox-panel cc-flex"></div>
+  		</div>
+			<div id="tt-diagram" class="jtox-foldable">
+			  <h5 class="title">Structure diagram</h5>
+			  <div class="content">
+          <img class="toxtree-diagram" alt="Compoung diagram"/>
+			  </div>
+      </div>
+    </div>
+    <div id="tt-models-panel">
+      <div>
+        <div class="title jtox-inline"><h5>Toxicity prediction modules (0/0)</h5></div>
+        <div class="jtox-inline selections"><a href="#" class="select-unselect" title="(Un)select all algorithms" data-other="unselect">select</a>&nbsp;<a href="#" class="expand-collapse" title="Expand/collapse all algorithm panes" data-other="collapse">expand</a>&nbsp;<a href="#" class="run-selected" title="Run predictions for all selected algorithms">run</a>&nbsp;<a href="#" class="show-hide" data-other="show" title="Hide/show unselected algorithms">hide</a></div>
+      </div>
+      <div class="jtox-toolkit jtox-widget cc-flex" data-kit="model" data-algorithms="true" data-no-interface="true" data-on-loaded="onAlgoLoaded" data-algorithm-needle="ToxTree"></div>
+    </div>
+    <div id="tt-table" class="jtox-toolkit jtox-panel" data-kit="compound" data-manual-init="true" data-pre-details="onTableDetails" data-show-tabs="false" data-on-loaded="onDataLoaded" data-selection-handler="checked"></div>
+  </div>
+</div>
+<div id="sidebar">
+  <div class="side-title">
+    <div data-mode="table">Table view mode</div>
+    <div data-mode="single">Single view mode</div>
+  </div>
+</div>
+</div>
+
+<div class="jtox-template">
+<div id="tt-feature" class="tt-feature">
+  <div class="data-field tt-name" data-field="title"></div><div class="data-field tt-value" data-field="value"></div>
+</div>
+<div id="tt-class" class="tt-class">
+  <span class="data-field" data-field="title"></span><span class="ui-icon ui-icon-check"></span>
+</div>
+<div id="tt-algorithm" class="tt-algorithm jtox-foldable folded">
+  <div class="title" >
+    <a target="_blank" class="data-field attribute" data-field="uri" data-attribute="href"><span class="ui-icon ui-icon-link jtox-inline"></span></a>
+    <span class="data-field" data-field="name" data-format="formatAlgoName">?</span>
+    <div class="jtox-inline float-right">
+      <button class="tt-toggle jtox-handler predict" data-handler="runPredict" title="Run prediction with the algorithm on current compound">R</button>
+      <button class="tt-toggle jtox-handler model" data-handler="makeModel" title="Prepare the model for this algorithm">M</button>
+      <button class="tt-toggle jtox-handler auto" data-handler="markAuto" title="Run automatically on new queries">A</button>
+    </div>
+    <div class="tt-classification">
+    </div>
+  </div>
+  <div class="content">
+    <div class="tt-explanation"></div>
+  </div>
+</div>
+</div>
+
+
+<!-- toxtree ends -->
+
+<!-- uncomment when layout breakup is solved ..
+</div>
+<#include "/footer.ftl" >
+</div>
+-->
+
 </body>
+
+
 </html>
