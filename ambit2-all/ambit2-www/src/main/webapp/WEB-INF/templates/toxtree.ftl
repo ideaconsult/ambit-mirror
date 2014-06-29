@@ -35,7 +35,7 @@
 <!-- any of these break the layout ...
 
 <div class="container" style="margin:0;padding:0;">
-<#include "/banner_crumbs.ftl">
+ include "/banner_crumbs.ftl" 
 <div class="sixteen columns remove-bottom" style="padding:0;" >
 	
 -->
