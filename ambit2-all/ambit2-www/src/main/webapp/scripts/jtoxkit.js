@@ -2552,25 +2552,37 @@ var jToxModel = (function () {
     runPrediction: function (datasetUri, modelUri, callback) {
       var self = this;
       var q = ccLib.addParameter(datasetUri, 'feature_uris[]=' + encodeURIComponent(modelUri + '/predicted'));
-      
+
+      var createIt = function () {
+        jT.call(self, modelUri, { method: "POST", data: { dataset_uri: datasetUri } }, function (task, jhr) {
+          if (!task)
+            ccLib.fireCallback(callback, self, null, jhr);
+          else
+            jT.pollTask(self, task, function (task, jhr) {
+              if (!task || !!task.error)
+                ccLib.fireCallback(callback, self, null, jhr);
+              else
+                jT.call(self, task.result, callback);
+            });
+        });
+      };     
       jT.call(self, q, function (result, jhr) {
         if (!result)
           ccLib.fireCallback(callback, self, null, jhr);
-        else if (result.dataEntry.length > 0)
-          ccLib.fireCallback(callback, self, result, jhr);
-        else { // we need to create it
-          jT.call(self, modelUri, { method: "POST", data: { dataset_uri: datasetUri } }, function (task, jhr) {
-            if (!task)
-              ccLib.fireCallback(callback, self, null, jhr);
-            else
-              jT.pollTask(self, task, function (task, jhr) {
-                if (!task || !!task.error)
-                  ccLib.fireCallback(callback, self, null, jhr);
-                else
-                  jT.call(self, task.result, callback);
-              });
-          });
+        else if (!self.settings.forceCreate && result.dataEntry.length > 0) {
+          var empty = true;
+          for (var i = 0, rl = result.dataEntry.length; i < rl; ++i)
+            if (!jT.$.isEmptyObject(result.dataEntry[i].values)) {
+              empty = false;
+              break;
+            }
+          if (empty)
+            createIt();
+          else
+            ccLib.fireCallback(callback, self, result, jhr)  
         }
+        else
+          createIt();
       });
     },
     
