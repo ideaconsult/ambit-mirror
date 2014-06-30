@@ -1,5 +1,6 @@
 package ambit2.rest.substance;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,7 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.processors.CallableSubstanceI5Query;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.reporters.ImageReporter;
 import ambit2.db.substance.DeleteSubstance;
 import ambit2.db.substance.FacetedSearchSubstance;
 import ambit2.db.substance.ReadByReliabilityFlags;
@@ -39,6 +41,7 @@ import ambit2.db.substance.ReadSubstanceByName;
 import ambit2.db.substance.ReadSubstanceByOwner;
 import ambit2.db.substance.ReadSubstanceByStudy;
 import ambit2.db.update.AbstractUpdate;
+import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
@@ -81,7 +84,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 				MediaType.APPLICATION_JSON,
 				MediaType.APPLICATION_JAVA_OBJECT,
 				MediaType.APPLICATION_JAVASCRIPT,
-
+				MediaType.IMAGE_PNG
 				});
 				
 	}
@@ -90,6 +93,14 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 			throws AmbitException, ResourceException {
 		/* workaround for clients not being able to set accept headers */
 		Form acceptform = getResourceRef(getRequest()).getQueryAsForm();
+		Dimension d = new Dimension(250,250);
+		try {
+			d.width = Integer.parseInt(acceptform.getFirstValue("w").toString());
+		} catch (Exception x) {}
+		try {
+			d.height = Integer.parseInt(acceptform.getFirstValue("h").toString());
+		} catch (Exception x) {}		
+		
 		String media = acceptform.getFirstValue("accept-header");
 		if (media != null) variant.setMediaType(new MediaType(media));
 
@@ -99,6 +110,10 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 			r.setDelimiter("\n");
 			return new StringConvertor(
 					r,MediaType.TEXT_URI_LIST,filenamePrefix);
+		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
+			return new ImageConvertor(
+					new ImageReporter(variant.getMediaType().getMainType(),variant.getMediaType().getSubType(),d),
+					variant.getMediaType());
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");

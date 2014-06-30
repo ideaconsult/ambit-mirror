@@ -6,6 +6,7 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import ambit2.base.data.SubstanceRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.db.exceptions.DbAmbitException;
@@ -52,6 +53,8 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 		try {
 			if (STRUC_TYPE.NANO.equals(item.getType())) {
 				return new JustTheImage(depict.createDefaultImage("NanoMaterial"),null);
+			} else if (item instanceof SubstanceRecord) {
+				return new JustTheImage(depict.createDefaultImage(((SubstanceRecord)item).getSubstancetype()),null);
 			} else {
 				imageWrapper.setImage(null);
 				imageWrapper.setProperty(null);
