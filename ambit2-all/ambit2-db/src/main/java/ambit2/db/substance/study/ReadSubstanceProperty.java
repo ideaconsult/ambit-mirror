@@ -23,7 +23,7 @@ public class ReadSubstanceProperty extends AbstractPropertyRetrieval<String, Pro
 	
 	private static String sql = 
 		//"select idproperty,name,units,title,url,idreference,comments,null,islocal,type from properties join catalog_references using(idreference) %s";
-	"select topcategory,endpointcategory,guidance,hex(endpointhash) hash,e.endpoint effectendpoint,unit,conditions from\n"+ 
+	"select p.topcategory,p.endpointcategory,guidance,hex(endpointhash) hash,e.endpoint effectendpoint,unit,conditions from\n"+ 
 	"substance_protocolapplication p join substance_experiment e on p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"+
 	"where endpointhash=unhex(?) limit 1";
 	
