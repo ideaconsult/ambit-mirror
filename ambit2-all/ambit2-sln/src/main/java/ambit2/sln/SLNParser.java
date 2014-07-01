@@ -1,7 +1,6 @@
 package ambit2.sln;
 
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
@@ -101,16 +100,6 @@ public class SLNParser
 		//Treat unclosed brackets
 		if (!brackets.empty())		
 			newError("There are unclosed brackets",-1, "");
-
-		//Treat incorrectly used indexes
-		if (indexes.size() != 0)
-		{				
-			newError("There are unclosed ring indices",-1, "");
-			Set<Integer> keys = indexes.keySet();
-
-			for (Integer key : keys)
-				newError("Ring index " + key + " is unclosed",-1, "");
-		}
 
 	}
 
@@ -230,7 +219,7 @@ public class SLNParser
 
 	public void analyzeAtomExpression(String atomExpr)
 	{
-		System.out.println("***** AtExpr " + atomExpr);
+	//	System.out.println("***** AtExpr " + atomExpr);
 
 		if (atomExpr.trim().equals(""))
 		{
@@ -384,11 +373,11 @@ public class SLNParser
 
 	SLNExpressionToken analyzeAtomAttribute(String name, String value)
 	{
-		if (value == null)
+		/*		if (value == null)
 			System.out.println("Attribute " + name);
 		else
 			System.out.println("Attribute " + name + "=" + value);
-
+		 */
 		//Handle charge attribute
 		if (name.equals("charge"))
 		{
@@ -572,7 +561,7 @@ public class SLNParser
 			curChar++;
 			curBond = null;
 			break;
-			
+
 		case '@':	//ring closure
 			parseRingClosure();
 			break;	
@@ -630,12 +619,12 @@ public class SLNParser
 			curBond.setAtoms(atoms);
 			container.addBond(curBond);
 		}
-		
+
 		//default bond is set to be single bond
 		SLNBond newBond = new SLNBond();
 		curBond = newBond;
 		curBond.bondType = SLNConst.B_TYPE_1;
-		
+
 	}
 
 
@@ -691,7 +680,7 @@ public class SLNParser
 
 	public void analyzeBondExpression(String bondExpr)
 	{
-	//	System.out.println("**BondExpr " + bondExpr);
+		//	System.out.println("**BondExpr " + bondExpr);
 		if (bondExpr.trim().equals(""))
 		{
 			newError("Empty bond expression", curChar+1,"");
@@ -795,11 +784,11 @@ public class SLNParser
 
 	SLNExpressionToken analyzeBondAttribute (String name, String value)
 	{
-	/*	if (value == null)
+		/*	if (value == null)
 			System.out.println("Attribute" + name);
 		else
 			System.out.println("Attribute " + name + " = " + value);
-	*/
+		 */
 		//TODO
 		//Handle bond type attribute
 		if (name.equals("type"))
@@ -841,11 +830,32 @@ public class SLNParser
 		SLNExpressionToken token = new SLNExpressionToken(name,value);
 		return token;
 	}
-	
+
 	void parseRingClosure()
-	{			
+	{	
 		curChar++;
-		//TODO
+		if (sln.charAt(curChar)==' ')			
+		{
+			newError("Missing ring closure value " , curChar,"");
+		}
+
+		curChar++;
+		getAtomByID();
+		curBond.atoms();
+		container.addBond(curBond);
+	}
+
+	String getAtomByID()
+	{
+		for (int i = 0; i < container.getAtomCount(); i++)
+		{
+			SLNAtom idAtom = (SLNAtom) container.getAtom(i);
+			if(!(idAtom.atomID == 0))
+				return idAtom.atomName;
+			else
+				newError("Missing atom ID value " , curChar,"");	
+		}
+		return null;
 	}
 
 	int extractInteger(String valueString)
