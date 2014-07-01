@@ -1,6 +1,7 @@
 <div class='helptitle' style='font-weight:bold;'>Help: Import structures</div>
 <div class='helpcontent'>
 This page allows to upload a file with chemical structures and properties.
+Supported formats are SDF, MOL, SMI, CSV, TXT, XLS, ToxML (.xml).
 In order to add a single chemical structure instead, use <a href="${ambit_root}/ui/createstruc">Add a new structure</a>
 </div>
 
