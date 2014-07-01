@@ -5,9 +5,11 @@
 <script type='text/javascript'>
 
 $(document)
-		.ready(
-				function() {
-					$( "#selectable" ).selectable( "option", "distance", 18);
+		.ready(function() {
+			jQuery("#breadCrumb ul").append('<li>Error status</li>');
+			jQuery("#breadCrumb ul").append('<li>An error has occured while accessing the web page requested</li>');
+			jQuery("#breadCrumb").jBreadCrumb();
+			jQuery("#welcome").html("");	
 				});
 </script>
 
@@ -17,30 +19,13 @@ $(document)
 
 <div class="container" style="margin:0;padding:0;">
 
-<!-- banner -->
-<div class="row remove-bottom" id="header">
-	<#include "/toplinks.ftl">
-</div>
-<div class="row remove-bottom">
-		<#include "/logo.ftl">
-		<div class="thirteen columns remove-bottom" id="query">
-		<div class="seven columns alpha">
-			<div class="remove-bottom h3">
-					Error
-			</div>
-		    <div class='h6'>An error has occured while accessing the web page requested</div>			
-		</div>
-		</div>
-</div>		
-<div class="row remove-bottom" >
-	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
+
+<#include "/banner_crumbs.ftl">
+
+<div class="one column remove-bottom" style="padding:0;" >&nbsp;
 </div>
 
-<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
-</div>
-
-<div class="eleven columns remove-bottom" style="padding:0;" >
+<div class="twelve columns remove-bottom" style="padding:0;" >
 <#escape x as x?html>
 		<div class="ui-widget-header ui-corner-top">
 		<span class='ui-icon ui-icon-alert' style='float: left; margin-right: .3em;' title='' id='status_name'>${status_name}</span>
@@ -66,10 +51,10 @@ $(document)
 		
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
-<div class="two columns" style="margin:0;padding:0;" >
+
+<div class="three columns" style="margin:0;padding:0;" >
 <#include "/help.ftl" >
 </div>
-
 
 
 <#include "/footer.ftl" >
