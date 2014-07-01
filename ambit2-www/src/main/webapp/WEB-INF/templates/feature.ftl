@@ -34,10 +34,6 @@ $(document)
 <div class="container" style="margin:0;padding:0;">
 
 
-
-<div class="container" style="margin:0;padding:0;">
-
-
 <#include "/banner_crumbs.ftl">
 
 <div class="three columns remove-bottom" style="padding:0;" >
