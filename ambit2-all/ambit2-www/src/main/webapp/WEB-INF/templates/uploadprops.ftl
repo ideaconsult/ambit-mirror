@@ -1,13 +1,17 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl">
 
 <script type='text/javascript'>
 
 $(document)
 		.ready(
 				function() {
-					$( "#selectable" ).selectable( "option", "distance", 18);
+			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/dataset" title="Datasets">Datasets</a></li>');
+			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/uploadstruc" title="Import">Import</a></li>');
+		    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/uploadprops" title="Properties import">Import properties for compounds already in the database</a></li>');
+		    jQuery("#breadCrumb").jBreadCrumb();
+			jQuery("#welcome").text("Import properties");
 					loadHelp("${ambit_root}","uploadprops");
 				});
 </script>
@@ -18,35 +22,13 @@ $(document)
 
 <div class="container" style="margin:0;padding:0;">
 
-<!-- banner -->
-<div class="row remove-bottom" id="header">
-	<#include "/toplinks.ftl">
-</div>
-<div class="row remove-bottom">
-		<#include "/logo.ftl">
-		<div class="thirteen columns remove-bottom" id="query">
-		<div class="alpha">
-			<div class="remove-bottom h3">
-					Properties import	
-			</div>
-		    <div class='h6'>Import properties for compounds already in the database</div>			
-		</div>
-		</div>
-</div>		
-<div class="row remove-bottom" >
-	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
+
+<#include "/banner_crumbs.ftl">
+
+<div class="one column remove-bottom" style="padding:0;" >&nbsp;
 </div>
 
-<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
-<ul>
-<li class="ui-selectee">
-<a href="${ambit_root}/admin"><span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>Admin</a>
-</li>
-</ul>
-</div>
-
-<div class="eleven columns remove-bottom" style="padding:0;" >
+<div class="ten columns remove-bottom" style="padding:0;" >
 
 <div class='ui-widget-header ui-corner-top'>&nbsp;Import properties</div>
 <div class='ui-widget-content ui-corner-bottom'>	
@@ -113,9 +95,16 @@ $(document)
 </div>			
 </div>
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
-</div>
+</div> 
 
-<#include "/chelp.ftl" >
+<!-- help -->
+<div class="five columns" style='padding:0;margin:0;'>
+<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
+<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
+</div>
+<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
+</div>		
+</div>
 
 
 

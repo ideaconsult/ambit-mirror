@@ -1,6 +1,7 @@
 <div class='helptitle' style='font-weight:bold;'>Help: Import properties</div>
 <div class='helpcontent'>
 This page allows to import properties to structures already in the database.
+Supported formats are SDF, MOL, SMI, CSV, TXT, XLS, ToxML (.xml).
 </div>
 
 <div id="keys" style="display:none;">
