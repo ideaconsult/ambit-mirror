@@ -8,10 +8,13 @@ var facet = {
 				var item = {};
 				item['name']  = $(value).attr('name');
 				item['value'] = $(value).attr('value');
+				
+				console.log($("#endpoint."+item['value']));
 				params.push(item);
 			});
 			if (this.substanceComponent != undefined && this.substanceComponent!= null)  {
 				var substanceQuery =  this.root + '/substance?' + jQuery.param(params);
+				console.log(substanceQuery);
 				this.substanceComponent.querySubstance(substanceQuery);
 			}	
 			if (event!=null) event.preventDefault();
@@ -82,7 +85,7 @@ var facet = {
 					$(this).removeClass("ui-icon-folder-collapsed");
 					$(this).addClass("ui-icon-folder-open");
 					this.title='Click to close endpoints';
-					oTable.fnOpen(nTr, this.endpointFormatDetails(oTable,nTr,"${ambit_root}"),	'details');
+					oTable.fnOpen(nTr, facet.endpointFormatDetails(oTable,nTr,"${ambit_root}"),	'details');
 											       
 				}
 			});	
@@ -92,8 +95,11 @@ var facet = {
 
 		endpointFormatDetails : function ( oTable, nTr ,root ) {
 		    var model = oTable.fnGetData( nTr );
-		    var sOut = '<div class="ui-widget" >';
-		    sOut += 'endpoints';
+		    console.log(model);
+		    var sOut = '<div class="ui-widget remove-bottom" >';
+		    var id = model.subcategory+"."+model.endpoint;
+		    sOut += '<label>Endpoint</label><input type="text" name="endpoint.'+id+'"  id="endpoint.'+id+'">';
+		    sOut += '<label>Value</label><input type="text" name="endpointvalue.'+id+'" id="endpointvalue.'+id+'">';
 		    sOut += '</div>';
 		     
 		    return sOut;
