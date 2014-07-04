@@ -585,6 +585,6 @@
     <!-- cdk 1.4.11 is regular version, deployed to ambit repository; used since ambit 2.4.7-SNAPSHOT -->
     <cdk.version>1.4.11</cdk.version>
     <net.idea.loom.version>1.0.1</net.idea.loom.version>
-    <restnet.version>1.0.2</restnet.version>
+    <restnet.version>1.0.3-SNAPSHOT</restnet.version>
   </properties>
 </project>
