@@ -18,7 +18,7 @@ CREATE TABLE `policy` (
   CONSTRAINT `fkrole1` FOREIGN KEY (`role_name`) REFERENCES `roles` (`role_name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-insert into roles value("ambit_dataset_mgr");
+insert into roles value("ambit_datasetmgr");
 insert into roles value("ambit_modeller");
 insert into roles value("ambit_model_user");
 
