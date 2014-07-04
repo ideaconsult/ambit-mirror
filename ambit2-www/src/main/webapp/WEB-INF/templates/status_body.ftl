@@ -11,8 +11,7 @@
 
 $(document)
 		.ready(function() {
-			jQuery("#breadCrumb ul").append('<li>Error status</li>');
-			jQuery("#breadCrumb ul").append('<li>An error has occurred while accessing the web page requested</li>');
+			jQuery("#breadCrumb ul").append('<li>Error</li>');
 			jQuery("#breadCrumb").jBreadCrumb();
 			jQuery("#welcome").html("");	
 				});
@@ -30,7 +29,7 @@ $(document)
 <div class="two columns remove-bottom" style="padding:0;" >&nbsp;
 </div>
 
-<div class="nine columns remove-bottom" style="padding:0;" >
+<div class="ten columns remove-bottom" style="padding:0;" >
 <#escape x as x?html>
 		<div class="ui-widget-header ui-corner-top">
 		<span class='ui-icon ui-icon-alert' style='float: left; margin-right: .3em;' title='' id='status_name'>${status_name}</span>
@@ -59,9 +58,7 @@ $(document)
 </div>
 
 <div class="one column">&nbsp;</div>
-<div class="three columns" style="margin:0;padding:0;" >
-<#include "/help.ftl" >
-</div>
+<#include "/chelp.ftl" >
 
 
 <#include "/footer.ftl" >
