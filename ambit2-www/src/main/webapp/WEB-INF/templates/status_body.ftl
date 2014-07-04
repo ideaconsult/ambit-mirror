@@ -3,7 +3,9 @@
 <#include "/header_updated.ftl" >
 
 <#if status_code == 403>
-	<#assign status_error_description="You are not authorized to view this page">
+	<#assign status_error_description="You are not allowed to view this page">
+<#elseif status_code == 401>
+	<#assign status_error_description="You are not allowed to view this page">
 </#if>
 				
 <script type='text/javascript' src="${ambit_root}/scripts/jopentox.js"></script>
