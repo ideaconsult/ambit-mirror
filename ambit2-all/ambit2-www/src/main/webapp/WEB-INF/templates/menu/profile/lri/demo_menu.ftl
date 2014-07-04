@@ -6,6 +6,9 @@
 	<a href="${ambit_root}/depict/tautomer?search=NC%3D1N%3DCN%3DC2N%3DCNC2%3D1" title="Generate tautomers with different software">Ambit Tautomers</a>
 </li>
 <li >
+	<a href="${ambit_root}/query/relation" title="Structure relations">Structure relations</a>
+</li>
+<li >
 	<a href="${ambit_root}/depict/reaction?search=c1ccccc1" title="Apply SMIRKS reaction to a structure">Ambit Smirks: Reactions</a>
 </li>
 <li >

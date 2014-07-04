@@ -6,6 +6,9 @@
 	<a href="${ambit_root}/depict/tautomer?search=NC%3D1N%3DCN%3DC2N%3DCNC2%3D1">Tautomers</a>
 </li>
 <li >
+	<a href="${ambit_root}/query/relation" title="Structure relations">Structure relations</a>
+</li>
+<li >
 	<a href="${ambit_root}/depict/reaction?search=c1ccccc1">Reactions</a>
 </li>
 <li >
@@ -17,4 +20,5 @@
 <li >
 	<a href="${ambit_root}/ui/toxtree" title="Toxtree web release">Toxtree</a>
 </li>
+
 </ul>
