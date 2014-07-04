@@ -50,14 +50,25 @@ import ambit2.rest.task.FactoryTaskConvertor;
  */
 public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 	public static final String resource = "policy";
-
+	protected List<Policy> policiesList = null;
+	@Override
+	public String getTemplateName() {
+		return "a/policy_openam.ftl";
+	}
+	@Override
+	public boolean isHtmlbyTemplate() {
+		return true;
+	}
 	@Override
 	protected Iterator<Policy> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
-		List<Policy> p = new ArrayList<Policy>();
+		
+		if (policiesList!=null) return policiesList.iterator();
+		policiesList = new ArrayList<Policy>();
+		
 		Form form = getResourceRef(request).getQueryAsForm();
-		String uri = form.getFirstValue(search_param);
-		if (uri==null) return p.iterator(); //throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Parameter missing: ?search=<uri-to-retrieve-policy-for>");
+		final String uri = form.getFirstValue(search_param);
+		if (uri==null) return policiesList.iterator(); //throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Parameter missing: ?search=<uri-to-retrieve-policy-for>");
 		
 		User user = request.getClientInfo().getUser();
 		if (user == null) {
@@ -97,10 +108,12 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 				
 				Enumeration<String> e = policies.keys();
 				while (e.hasMoreElements()) {
-					p.add(new Policy(e.nextElement()));
+					Policy ssoPolicy = new Policy(e.nextElement());
+					ssoPolicy.setUri(uri);
+					policiesList.add(ssoPolicy);
 					
 				}
-				return p.iterator();
+				return policiesList.iterator();
 					
 			} catch (ResourceException x) {
 				throw x;
@@ -116,8 +129,16 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 			Variant variant) throws AmbitException, ResourceException {
 
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new StringConvertor(
-					createHTMLReporter(),MediaType.TEXT_HTML);
+			return new StringConvertor(createHTMLReporter(),MediaType.TEXT_HTML);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+			PolicyJSONReporter r = new PolicyJSONReporter(getRequest(),null);
+			return new StringConvertor(r,MediaType.APPLICATION_JSON);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
+			Form params = getResourceRef(getRequest()).getQueryAsForm();
+			String jsonpcallback = params.getFirstValue("jsonp");
+			if (jsonpcallback==null) jsonpcallback = params.getFirstValue("callback");
+			PolicyJSONReporter r = new PolicyJSONReporter(getRequest(),jsonpcallback);
+			return new StringConvertor(	r,MediaType.APPLICATION_JAVASCRIPT);		
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	new PolicyURIReporter(getRequest(),getDocumentation()),MediaType.TEXT_URI_LIST);
 			
