@@ -4,12 +4,10 @@
 		<li class='topLinks'>
 		[<a class='topLinks login' title='My profile' href='${ambit_root}/myaccount'><b>${username}</b></a>]
 		</li>
-		<#if ambit_curator?? && ambit_curator>
-		<!--
+		<#if ambit_datasetmgr?? && ambit_datasetmgr>
 			<li class='topLinks'>
-				&nbsp;|<a class='topLinks curator' href='${ambit_root}/curator' title='Click to view uncurated structures'>Curator</a>
+				&nbsp;|<a class='topLinks curator' href='${ambit_root}/dataset' title='Click to view datasets'>Datasets</a>
 			</li>
-		-->				
 		</#if>
 		<#if ambit_admin?? && ambit_admin>
 			<li class='topLinks'>

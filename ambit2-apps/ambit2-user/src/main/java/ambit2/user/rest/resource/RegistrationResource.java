@@ -69,7 +69,7 @@ public class RegistrationResource extends CatalogResource<DBUser> {
 	    	map.put(AMBITConfig.menu_profile.name(),app.getProfile());
         } catch (Exception x) {}
 		map.put(AMBITDBRoles.ambit_admin.name(), Boolean.FALSE);
-		map.put(AMBITDBRoles.ambit_curator.name(), Boolean.FALSE);
+		map.put(AMBITDBRoles.ambit_datasetmgr.name(), Boolean.FALSE);
 		
 		if (getClientInfo()!=null) {
 			if (getClientInfo().getUser()!=null)
@@ -77,8 +77,8 @@ public class RegistrationResource extends CatalogResource<DBUser> {
 			if (getClientInfo().getRoles()!=null) {
 				if (DBRoles.isAdmin(getClientInfo().getRoles()))
 					map.put(AMBITDBRoles.ambit_admin.name(), Boolean.TRUE);
-				if (DBRoles.isCurator(getClientInfo().getRoles()))
-					map.put(AMBITDBRoles.ambit_curator.name(), Boolean.TRUE);
+				if (DBRoles.isDatasetManager(getClientInfo().getRoles()))
+					map.put(AMBITDBRoles.ambit_datasetmgr.name(), Boolean.TRUE);
 				if (DBRoles.isUser(getClientInfo().getRoles()))
 					map.put(AMBITDBRoles.ambit_user.name(), Boolean.TRUE);	
 			}

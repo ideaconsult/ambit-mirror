@@ -6,7 +6,7 @@ The link will be valid for 48h.
 
 <div id="keys" style="display:none;">
   <ul>
-    <li><a href="#hcurator">Available as a curator</a></li>
+    <li><a href="#hcurator">Data manager: data upload enabled</a></li>
      <li><a href="#hkeywords">Keywords</a></li>
      <li><a href="#horganisation">Affiliation</a></li>
      <li><a href="#husername">User name</a></li>

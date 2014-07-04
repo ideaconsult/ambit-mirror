@@ -15,7 +15,9 @@
 			<li ><a href="${ambit_root}/admin/policy">View/Define access rights</a></li>
 		<#else>
 			<li ><a href="${ambit_root}/myaccount">My account</a></li>
-			<li ><a href="${ambit_root}/user">User management</a></li>	
+			<#if ambit_admin?? && ambit_admin>
+				<li ><a href="${ambit_root}/user">User management</a></li>
+			</#if>		
 		</#if>
 	</#if>
 

@@ -119,10 +119,10 @@ function defineUsersTable(root,url,selector) {
 					  "sWidth" : "10%",
 					  "fnRender" : function(o,val) {
 						  //return "<input type='checkbox' id='"+o.aData["id"]+"' disabled='disabled' "+ (val?"checked":"") +">";
-						  return (val>=0)?"<span class='ui-icon ui-icon-check' title='Available as a curator'></span>":"";
+						  return (val>=0)?"<span class='ui-icon ui-icon-check' title='Able to upload data'></span>":"";
 					  }
 				},
-				{ 	  "mDataProp": "roles.ambit_curator",
+				{ 	  "mDataProp": "roles.ambit_datasetmgr",
 				  	  "asSorting": [ "asc", "desc" ],
 					  "aTargets": [ 6 ],
 					  "bSearchable" : true,
@@ -134,8 +134,8 @@ function defineUsersTable(root,url,selector) {
 						  if (val==null) return not;
 						  if (typeof val === 'string') 
 						  try {
-							  if (val.indexOf("Revoke Curator role")>=0) return not;
-							  else if (val.indexOf("Grant Curator role")>=0)  return yes;
+							  if (val.indexOf("Revoke Data manager role")>=0) return not;
+							  else if (val.indexOf("Grant Data manager role")>=0)  return yes;
 							  else return not;
 						  } catch (err) { }
 						  return (val===true)?yes:not;
@@ -201,10 +201,10 @@ function makeEditableUsersTable(root,oTable) {
               {
                   type:'select'	,
                   loadtext: 'loading...',
-                  indicator: 'Updating curator role ...',
-                  tooltip: 'Double click to edit the curator role',
+                  indicator: 'Updating Data manager role ...',
+                  tooltip: 'Double click to edit the data manager role',
                   loadtext: 'loading...',
-                  data: "{'':'Please select...', true:'Grant Curator role',false:'Revoke Curator role'}",
+                  data: "{'':'Please select...', true:'Grant Data manager role',false:'Revoke Data manager role'}",
                   onblur: 'cancel',
                   submit: 'Save changes'
               },
@@ -219,7 +219,7 @@ function makeEditableUsersTable(root,oTable) {
                   submit: 'Save changes'
               }     
 		 ],
-	     sUpdateURL: root+"/provider/role?method=PUT"
+	     sUpdateURL: root+"/admin/role?method=PUT"
 	});
 }
 

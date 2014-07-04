@@ -53,8 +53,8 @@ jQuery(document).ready(function()
 		<th>e-mail</th>
 		<th>Affiliation</th>
 		<th>Keywords</th>
-		<th>Available as a Curator<a href='#' class='chelp hcurator'></a></th>
-		<th>Curator Role</th>
+		<th>Would like data upload enabled<a href='#' class='chelp hcurator'></a></th>
+		<th>Data manager Role</th>
 		<th>Admin Role</th>
 		</tr>
 		</thead>
