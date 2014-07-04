@@ -1,7 +1,8 @@
-package ambit2.db.processors.test;
+package ambit2.dbsubstance.test;
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 
 import junit.framework.Assert;
@@ -16,32 +17,35 @@ import ambit2.core.io.IRawReader;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
 import ambit2.db.processors.DBSubstanceWriter;
+import ambit2.db.processors.test.DbUnitTest;
 
 public class NanoWikiRDFTest  extends DbUnitTest {
     @Test
 	public void test() throws Exception {
 	}
-
+    @Test
 	public void testRead() throws Exception {
 		NanoWikiRDFReader reader = null;
+		int records = 0;
 		try {
-			reader = new NanoWikiRDFReader(new FileReader(new File("D:/src-other/nanowiki/backup_public.rdf")));
+			reader = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(new File("D:/src-other/nanowiki/backup_public.rdf")),"UTF-8"));
 			while (reader.hasNext()) {
 				IStructureRecord record = reader.nextRecord();
 				Assert.assertTrue(record instanceof SubstanceRecord);
-				//if (((SubstanceRecord)record).getMeasurements()!=null) System.out.println(((SubstanceRecord)record).getMeasurements());
+				System.out.println(((SubstanceRecord)record).getPublicName());
+				records++;
 			}
 		} finally {
 			reader.close();
 		}
 	}
-	
+	@Test
 	public void testWriteNanoWikiRDF() throws Exception {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
         IDatabaseConnection c = getConnection();
         IRawReader<IStructureRecord> parser = null;
         try {
-	        parser = new NanoWikiRDFReader(new FileReader(new File("D:/src-other/nanowiki/backup_public.rdf")));
+	        parser = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(new File("D:/src-other/nanowiki/backup_public.rdf")),"UTF-8"));
 	        write(parser,c.getConnection(),new ReferenceSubstanceUUID(),false);
 	        
         } finally {
