@@ -1410,6 +1410,68 @@ function defineFacetsTable(root,url,selector) {
 }
 
 
+function definePolicyTable(root,url,selector) {
+	var oTable = $(selector).dataTable( {
+		"sAjaxDataProp" : "policy",
+		"bProcessing": true,
+		"bServerSide": false,
+		"bStateSave": false,
+		"aoColumnDefs": [
+ 				{ "mData": "uri" , 
+ 				  "asSorting": [ "asc", "desc" ],
+				  "aTargets": [ 0 ],	
+				  "bSearchable" : true,
+				  "bUseRendered" : false,
+				  "bSortable" : true,
+				  "fnRender" : function(o,val) {
+					  return val;
+				  }
+				},
+ 				{ "mData": "id" , 
+	 				  "asSorting": [ "asc", "desc" ],
+					  "aTargets": [1 ],
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "bSortable" : true,
+					  "fnRender" : function(o,val) {
+						  return "<a href='"+root+"/admin/policy/"+ encodeURIComponent(val)+"'>"+val + "</a>";
+					  }
+					},				
+				{ "mDataProp": "xml" ,
+				  "aTargets": [ 2 ],
+				  "sWidth" : "10%",
+				  "bSortable" : false,
+				  "bSearchable" : true
+				},
+				{ "mData": null , 
+	 				  "asSorting": [ "asc", "desc" ],
+					  "aTargets": [3 ],
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "bSortable" : true,
+					  "fnRender" : function(o,val) {
+						  return "<form action='"+root+"/admin/policy/"+o.aData['id']+"?method=DELETE' method='POST'><input type='submit' value='Delete policy'></a>";
+					  }
+					}					
+			],
+		"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',	
+		"bJQueryUI" : true,
+		"bPaginate" : true,
+		"sPaginationType": "full_numbers",
+		"sPaginate" : ".dataTables_paginate _paging",
+		"bDeferRender": true,
+		"bSearchable": true,
+		"sAjaxSource": url,
+		"oLanguage": {
+				"sSearch": "Filter:",
+				"sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
+	            "sLoadingRecords": "No policies found."
+	    }
+	} );
+	return oTable;
+}
+
+
 function loadMetadata(root,dataseturi) {
 $.ajax({
     url: dataseturi,

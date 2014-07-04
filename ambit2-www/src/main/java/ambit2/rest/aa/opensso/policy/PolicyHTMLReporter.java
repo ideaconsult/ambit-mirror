@@ -29,6 +29,7 @@ public class PolicyHTMLReporter extends PolicyURIReporter {
 		this.collapsed = collapsed;
 	}
 	
+
 	/*
 PolicyParser parser = new PolicyParser(policies.get(input));
 	 */
@@ -88,7 +89,8 @@ PolicyParser parser = new PolicyParser(policies.get(input));
 			String uri = form.getFirstValue("search");
 			if (uri!=null)
 				output.write(String.format("<h4>Policies for <a href='%s'>%s</a></h4>",uri,uri));
-			}  else output.write("<h6>Use ?search=<URI> , or a search box above to retrieve policies of a given URI</h6>");
+			}  
+			else output.write("<h6>Use ?search=<URI> , or a search box above to retrieve policies of a given URI</h6>");
 		} catch (Exception x) {
 			
 		} 
