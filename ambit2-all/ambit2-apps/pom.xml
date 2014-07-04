@@ -32,7 +32,7 @@
     <!-- https://github.com/ideaconsult/i5 -->
     <i5.version>0.0.7-SNAPSHOT</i5.version>
     <restnet.version>1.0.3-SNAPSHOT</restnet.version>
-    <net.idea.loom.version>1.0.1</net.idea.loom.version>
+    <net.idea.loom.version>1.0.2-SNAPSHOT</net.idea.loom.version>
   </properties>
   <description>AmbitXT and Ambit REST web services </description>
   <inceptionYear>2008</inceptionYear>
