@@ -87,15 +87,15 @@ public abstract class AmbitDBQueryResource<Q extends IQueryRetrieval<T>,T extend
 	        } catch (Exception x) {}
 		    
 			map.put(AMBITDBRoles.ambit_admin.name(), Boolean.FALSE);
-			map.put(AMBITDBRoles.ambit_curator.name(), Boolean.FALSE);
+			map.put(AMBITDBRoles.ambit_datasetmgr.name(), Boolean.FALSE);
 			if (getClientInfo()!=null) {
 				if (getClientInfo().getUser()!=null)
 					map.put("username", getClientInfo().getUser().getIdentifier());
 				if (getClientInfo().getRoles()!=null) {
 					if (DBRoles.isAdmin(getClientInfo().getRoles()))
 						map.put(AMBITDBRoles.ambit_admin.name(),Boolean.TRUE);
-					if (DBRoles.isCurator(getClientInfo().getRoles()))
-						map.put(AMBITDBRoles.ambit_curator.name(), Boolean.TRUE);
+					if (DBRoles.isDatasetManager(getClientInfo().getRoles()))
+						map.put(AMBITDBRoles.ambit_datasetmgr.name(), Boolean.TRUE);
 					if (DBRoles.isUser(getClientInfo().getRoles()))
 						map.put(AMBITDBRoles.ambit_user.name(), Boolean.TRUE);	
 				}

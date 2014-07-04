@@ -27,7 +27,15 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer {
 		},
 		model,
 		substance,
+		//substanceowner,
 		admin,
+		user,
+		myaccount {
+			@Override
+			boolean isProtected(Method method) {
+				return false;
+			}
+		},
 		login {
 			@Override
 			boolean isProtected(Method method) {

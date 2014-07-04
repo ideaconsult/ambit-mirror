@@ -18,50 +18,51 @@ CREATE TABLE `policy` (
   CONSTRAINT `fkrole1` FOREIGN KEY (`role_name`) REFERENCES `roles` (`role_name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-insert into policy values(null,"ambit_admin","","/model",1,1,1,1)
+insert into roles value("ambit_dataset_mgr");
+insert into roles value("ambit_modeller");
+insert into roles value("ambit_model_user");
 
+insert into policy values(null,"ambit_admin","","/model",1,1,1,1)
 on duplicate key update 
 mget=values(mget),mpost=values(mpost),
 mput=values(mput),mdelete=values(mdelete);
 
 insert into policy values(null,"ambit_admin","","/dataset",1,1,1,1)
-
 on duplicate key update 
 mget=values(mget),mpost=values(mpost),
 mput=values(mput),mdelete=values(mdelete);
-
-
 
 insert into policy values(null,"ambit_user","","/dataset",1,0,0,0)
-
 on duplicate key update 
 mget=values(mget),mpost=values(mpost),
 mput=values(mput),mdelete=values(mdelete);
-
-
 
 insert into policy values(null,"ambit_user","","/model",1,0,0,0)
-
 on duplicate key update 
 mget=values(mget),mpost=values(mpost),
 mput=values(mput),mdelete=values(mdelete);
 
-
-
 insert into policy values(null,"ambit_user","","/substance",1,0,0,0)
-
 on duplicate key update 
 mget=values(mget),mpost=values(mpost),
 mput=values(mput),mdelete=values(mdelete);
 
 insert into policy values(null,"ambit_admin","","/substance",1,1,1,1)
-
 on duplicate key update 
 mget=values(mget),mpost=values(mpost),
 mput=values(mput),mdelete=values(mdelete);
 
 insert into policy values(null,"ambit_admin","","/ui/uploadsubstance",1,1,1,1)
+on duplicate key update 
+mget=values(mget),mpost=values(mpost),
+mput=values(mput),mdelete=values(mdelete);
 
+insert into policy values(null,"ambit_admin","","/user",1,1,1,1)
+on duplicate key update 
+mget=values(mget),mpost=values(mpost),
+mput=values(mput),mdelete=values(mdelete);
+
+insert into policy values(null,"ambit_admin","","/admin/role",1,1,1,1)
 on duplicate key update 
 mget=values(mget),mpost=values(mpost),
 mput=values(mput),mdelete=values(mdelete);

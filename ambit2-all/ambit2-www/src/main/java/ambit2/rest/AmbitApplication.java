@@ -582,11 +582,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				 router.attach(String.format("%s%s", ambit2.user.rest.resource.Resources.forgotten, ambit2.user.rest.resource.Resources.failed), PwdForgottenFailedResource.class);				 
 	 
 				 Router protectedRouter = new MyRouter(getContext());
-				 protectedRouter.attach("/roles", AMBITLoginFormResource.class);
+				 //protectedRouter.attach("/roles", AMBITLoginFormResource.class);
 				 protectedRouter.attach(String.format("/%s", UserLoginPOSTResource.resource),AMBITLoginPOSTResource.class);
 				 protectedRouter.attach(String.format("/%s", UserLogoutPOSTResource.resource),AMBITLogoutPOSTResource.class);
 				 //protectedRouter.attach(NotificationResource.resourceKey, NotificationResource.class);
-				 protectedRouter.attach(Resources.role, RoleDBResource.class);
 					
 				 router.attach("/provider", protectedRouter);
 					

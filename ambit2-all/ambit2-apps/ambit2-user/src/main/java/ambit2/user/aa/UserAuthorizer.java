@@ -28,7 +28,7 @@ public class UserAuthorizer extends RoleAuthorizer {
 	public UserAuthorizer() {
 		super();
 		getAuthorizedRoles().add(DBRoles.adminRole);
-		getAuthorizedRoles().add(DBRoles.curatorRole);
+		getAuthorizedRoles().add(DBRoles.datasetManager);
 	}
 
 	@Override

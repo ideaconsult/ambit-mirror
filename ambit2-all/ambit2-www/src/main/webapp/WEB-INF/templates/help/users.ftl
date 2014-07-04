@@ -7,7 +7,7 @@ admin<a href='#' class='chelp hadmin'></a> and curator<a href='#' class='chelp h
 
 <div id="keys" style="display:none;">
   <ul>
-  	<li><a href="#hcurator">Curator</a></li>
+  	<li><a href="#hcurator">Data manager</a></li>
     <li><a href="#hadmin">Admin</a></li>
     <li><a href="#roles">Roles</a></li>
   </ul>
@@ -21,10 +21,10 @@ admin<a href='#' class='chelp hadmin'></a> and curator<a href='#' class='chelp h
   </div>  
   <div id="hadmin">
     <p>
-    The admin could assign and revoke curator and admin roles as well.
+    The admin could assign and revoke data manager and admin roles as well.
     </p>
   </div>    
     <div id="roles">
-    <p>AMBIT user access is role-based. There are three roles: normal user, curator and admin.</p>
+    <p>AMBIT user access is role-based. There are three roles: normal user, data manager and admin.</p>
   </div>
 </div>

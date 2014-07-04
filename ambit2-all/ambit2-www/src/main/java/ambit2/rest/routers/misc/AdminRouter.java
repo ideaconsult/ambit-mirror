@@ -12,6 +12,8 @@ import ambit2.rest.admin.fingerprints.FingerprintResource;
 import ambit2.rest.admin.fingerprints.StructuresByFingerprintResource;
 import ambit2.rest.dataset.filtered.StatisticsResource;
 import ambit2.rest.routers.MyRouter;
+import ambit2.user.rest.resource.Resources;
+import ambit2.user.rest.resource.RoleDBResource;
 
 /**
  * /admin 
@@ -48,6 +50,7 @@ public class AdminRouter extends MyRouter {
 		attach(String.format("%s/{%s}",StatisticsResource.resource,StatisticsResource.resourceKey),
 				StatisticsResource.class);	
 		
+		attach(Resources.role, RoleDBResource.class);
 
 	}
 

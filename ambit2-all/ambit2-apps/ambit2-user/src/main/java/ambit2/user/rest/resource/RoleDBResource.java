@@ -71,7 +71,7 @@ public class RoleDBResource extends AmbitDBQueryResource<ReadUserRoles,String> {
 			
 			if (columnName!=null)  try {
 				DBRole role = null;
-				if ("curator role".equals(columnName.toLowerCase())) role = DBRoles.curatorRole;
+				if ("data manager role".equals(columnName.toLowerCase())) role = DBRoles.datasetManager;
 				else if ("admin role".equals(columnName.toLowerCase())) role = DBRoles.adminRole;
 				else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Unknown role "+columnName);
 				AbstractUpdate<DBRole,IUser> query = null;
