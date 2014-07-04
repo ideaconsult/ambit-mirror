@@ -75,28 +75,14 @@
       <artifactId>iuclid_5-ws</artifactId>
       <version>${i5.version}</version>
     </dependency>
-<!--
-    <dependency>
-      <groupId>net.ideaconsult</groupId>
-      <artifactId>loom-nm</artifactId>
-      <version>${net.idea.loom.version}</version>
-      <type>jar</type>
-      <scope>compile</scope>
-    </dependency>    
--->
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>    
-    <dependency>
-    	<groupId>net.ideaconsult</groupId>
-    	<artifactId>loom-nm</artifactId>
-    	<version>${net.idea.loom.version}</version>
-    	<type>jar</type>
-    	<scope>compile</scope>
-    </dependency>
+
   </dependencies>
   <description>Substance import</description>
   <build>
