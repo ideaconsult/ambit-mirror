@@ -1,13 +1,18 @@
 <#include "/html.ftl" >
 <head>
 <#include "/header_updated.ftl" >
+
+<#if status_code == 403>
+	<#assign status_error_description="You are not authorized to view this page">
+</#if>
+				
 <script type='text/javascript' src="${ambit_root}/scripts/jopentox.js"></script>
 <script type='text/javascript'>
 
 $(document)
 		.ready(function() {
 			jQuery("#breadCrumb ul").append('<li>Error status</li>');
-			jQuery("#breadCrumb ul").append('<li>An error has occured while accessing the web page requested</li>');
+			jQuery("#breadCrumb ul").append('<li>An error has occurred while accessing the web page requested</li>');
 			jQuery("#breadCrumb").jBreadCrumb();
 			jQuery("#welcome").html("");	
 				});
@@ -22,10 +27,10 @@ $(document)
 
 <#include "/banner_crumbs.ftl">
 
-<div class="one column remove-bottom" style="padding:0;" >&nbsp;
+<div class="two columns remove-bottom" style="padding:0;" >&nbsp;
 </div>
 
-<div class="twelve columns remove-bottom" style="padding:0;" >
+<div class="nine columns remove-bottom" style="padding:0;" >
 <#escape x as x?html>
 		<div class="ui-widget-header ui-corner-top">
 		<span class='ui-icon ui-icon-alert' style='float: left; margin-right: .3em;' title='' id='status_name'>${status_name}</span>
@@ -41,10 +46,11 @@ $(document)
 			</div>
 			<div class='row help' style='display: none;text-align:right;margin:10px;' id='details'>
 				<#if status_details??>
-				<span id='details_description'>[${status_code}]&nbsp;<a href="${status_uri}" target=_blank>${status_details}</a></span>
-				<#else>
-				<span id='details_description'>[${status_code}]&nbsp;<a href="${status_uri}" target=_blank>${status_name}</a></span>
+					<span id='details_description'>[${status_code}]&nbsp;<a href="${status_uri}" target=_blank>${status_details}</a></span>
+					<#else>
+					<span id='details_description'>[${status_code}]&nbsp;<a href="${status_uri}" target=_blank>${status_name}</a></span>
 				</#if>
+
 			</div>
 		</div>
 </#escape>
@@ -52,6 +58,7 @@ $(document)
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
 
+<div class="one column">&nbsp;</div>
 <div class="three columns" style="margin:0;padding:0;" >
 <#include "/help.ftl" >
 </div>
