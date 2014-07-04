@@ -21,6 +21,7 @@ import ambit2.base.config.AMBITConfig;
 import ambit2.user.aa.AMBITLoginFormResource;
 import ambit2.user.aa.AMBITLoginPOSTResource;
 import ambit2.user.aa.AMBITLogoutPOSTResource;
+import ambit2.user.aa.AmbitPolicyAuthorizer;
 import ambit2.user.groups.OrganisationRouter;
 import ambit2.user.groups.ProjectRouter;
 import ambit2.user.rest.resource.AMBITRegistrationNotifyResource;
@@ -133,4 +134,10 @@ public class UserRouter extends MyRouter {
 		return cookieAuth;
 	}
 
+	public static Filter createPolicyAuthorizer(Context context,String default_userdb, String config ) {
+		String usersdbname = context.getParameters().getFirstValue(AMBITConfig.users_dbname.name());
+		if (usersdbname==null) usersdbname = "ambit_users";
+		 return new AmbitPolicyAuthorizer(context,config,usersdbname);
+	}
+	
 }

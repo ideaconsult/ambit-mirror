@@ -25,6 +25,7 @@ import javax.net.ssl.X509TrustManager;
 
 import net.idea.restnet.aa.local.UserLoginPOSTResource;
 import net.idea.restnet.aa.local.UserLogoutPOSTResource;
+import net.idea.restnet.db.aalocal.policy.PolicyAuthorizer;
 import net.idea.restnet.i.task.ICallableTask;
 import net.idea.restnet.i.task.ITaskResult;
 
@@ -148,7 +149,6 @@ import ambit2.rest.ui.UIResource;
 import ambit2.user.aa.AMBITLoginFormResource;
 import ambit2.user.aa.AMBITLoginPOSTResource;
 import ambit2.user.aa.AMBITLogoutPOSTResource;
-import ambit2.user.aa.UserAuthorizer;
 import ambit2.user.groups.OrganisationRouter;
 import ambit2.user.groups.ProjectRouter;
 import ambit2.user.rest.UserRouter;
@@ -591,7 +591,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				 router.attach("/provider", protectedRouter);
 					
 				 Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(),  "ambit_users", "ambit2/rest/config/config.prop", secret, sessionLength);
-				 UserAuthorizer authz = new UserAuthorizer();
+				 //UserAuthorizer authz = new UserAuthorizer();
+				 Filter authz = UserRouter.createPolicyAuthorizer(getContext(),  "ambit_users", "ambit2/rest/config/config.prop");
 				 dbAuth.setNext(authz);
 				 authz.setNext(router);
 		    	 return addOriginFilter(dbAuth);					

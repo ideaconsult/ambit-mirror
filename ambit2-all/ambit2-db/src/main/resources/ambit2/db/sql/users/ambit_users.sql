@@ -76,20 +76,20 @@ CREATE TABLE `user_registration` (
 DROP TABLE IF EXISTS `policy`;
 CREATE TABLE `policy` (
   `idpolicy` int(11) NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'ambit_guest',
   `prefix` varchar(255) NOT NULL,
   `resource` varchar(255) NOT NULL,
-  `role_name` varchar(16) NOT NULL,
-  `get` tinyint(4) DEFAULT NULL,
-  `put` tinyint(4) DEFAULT NULL,
-  `post` tinyint(4) DEFAULT NULL,
-  `delete` tinyint(4) DEFAULT NULL,
+  `mget` tinyint(1) NOT NULL DEFAULT '0',
+  `mput` tinyint(1) NOT NULL DEFAULT '0',
+  `mpost` tinyint(1) NOT NULL DEFAULT '0',
+  `mdelete` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idpolicy`),
+  UNIQUE KEY `uri` (`resource`,`prefix`,`role_name`),
   KEY `fkrole1_idx` (`role_name`),
-  KEY `get` (`get`),
-  KEY `put` (`put`),
-  KEY `post` (`post`),
-  KEY `delete` (`delete`),
-  KEY `uri` (`prefix`,`resource`,`role_name`),
+  KEY `get` (`mget`),
+  KEY `put` (`mput`),
+  KEY `post` (`mpost`),
+  KEY `delete` (`mdelete`),
   CONSTRAINT `fkrole1` FOREIGN KEY (`role_name`) REFERENCES `roles` (`role_name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -161,7 +161,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (2,0,"AMBITDB users");
+insert into version (idmajor,idminor,comment) values (2,1,"AMBITDB users");
 
 -- -----------------------------------------------------
 -- Default user
