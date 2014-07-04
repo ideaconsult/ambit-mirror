@@ -35,6 +35,7 @@ $().ready(function() {
 <script type="text/javascript">
 jQuery(document).ready(function()
 {
+	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/login" title="AMBIT log in">Log in</a></li>');
     jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/register" title="AMBIT password reset">Request password reset</a></li>');
     jQuery("#breadCrumb").jBreadCrumb();
     loadHelp("${ambit_root}","pwd_forgotten");
@@ -47,32 +48,11 @@ jQuery(document).ready(function()
 
 <div class="container" style="margin:0;padding:0;">
 
-<!-- banner -->
-<div class="row remove-bottom" id="header">
-	<#include "/toplinks.ftl">
-</div>
-<div class="row remove-bottom">
-		<#include "/logo.ftl">
-		<div class="thirteen columns remove-bottom" id="query">
-			<div class="half-bottom h3">
-				AMBIT log in
-			</div>
-			<div id="breadCrumb" class="row breadCrumb module remove-bottom">
-                    <ul>
-                        <li>
-                            <a href="${ambit_root}" title="AMBIT Home">Home</a>
-                        </li>
-                    </ul>
-			</div>			    
-		</div>
-</div>	
-<div class="row remove-bottom" >
-	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
+<#include "/banner_crumbs.ftl">
+
+<div class="two columns remove-bottom" style="padding:0;" >&nbsp;
 </div>
 
-<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
-</div>
 		
 		<!-- Page Content
 		================================================== -->
@@ -109,7 +89,6 @@ jQuery(document).ready(function()
 		</div>
 		
 		
-		<!-- Right column and footer
 
 <#include "/chelp.ftl" >
 

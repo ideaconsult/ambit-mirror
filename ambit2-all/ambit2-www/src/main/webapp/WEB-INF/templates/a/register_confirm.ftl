@@ -43,6 +43,7 @@ $(document).ready(function() {
 <script type="text/javascript">
 jQuery(document).ready(function()
 {
+	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/login" title="AMBIT log in">Log in</a></li>');
     jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/register" title="AMBIT registration">Register</a></li>');
     jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/register/confirm" title="AMBIT confirm registration">Confirm</a></li>');
     jQuery("#breadCrumb").jBreadCrumb();
@@ -57,8 +58,8 @@ jQuery(document).ready(function()
 <!-- banner -->
 <#include "/banner_crumbs.ftl">
 
-<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
+<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+&nbsp;
 </div>
 
 		<!-- Page Content

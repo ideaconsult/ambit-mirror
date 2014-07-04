@@ -7,7 +7,7 @@
 jQuery(document).ready(function()
 {
 	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/admin" title="AMBIT admin">Admin</a></li>');
-    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/login" title="AMBIT Database">Database</a></li>');
+    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/admin/database" title="AMBIT Database">Database</a></li>');
     jQuery("#breadCrumb").jBreadCrumb();
     loadHelp("${ambit_root}","admin_db");
     loadDBInfo("${ambit_root}");

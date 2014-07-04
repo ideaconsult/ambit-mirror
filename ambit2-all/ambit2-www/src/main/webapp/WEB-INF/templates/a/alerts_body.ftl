@@ -15,6 +15,7 @@ $(document).ready(function() {
 <script type="text/javascript">
        jQuery(document).ready(function()
        {
+      		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/myaccount" title="My AMBIT profile">My profile</a></li>');
            jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/myaccount/alert" title="AMBIT Home">Alerts</a></li>');
            jQuery("#breadCrumb").jBreadCrumb();
            loadHelp("${ambit_root}","alert");
@@ -29,8 +30,8 @@ $(document).ready(function() {
 <!-- banner -->
 <#include "/banner_crumbs.ftl">
 
-<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
+<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+&nbsp;
 </div>
 
 		

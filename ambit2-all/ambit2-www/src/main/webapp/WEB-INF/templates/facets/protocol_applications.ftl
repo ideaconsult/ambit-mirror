@@ -28,7 +28,10 @@ $(document).ready(function() {
 	$( "#accordion" ).accordion( {
 		heightStyle: "content"
 	});	
-	var ds = new jToxSubstance($(".jtox-toolkit")[0], {crossDomain: true, selectionHandler: "query", embedComposition: true, showDiagrams: true } );
+	var ds = new jToxSubstance($(".jtox-toolkit")[0], {
+								crossDomain: false, selectionHandler: "query",
+								timeout: 30000, 
+								embedComposition: true, showDiagrams: true } );
 	facet.substanceComponent = ds;
 	facet.root = "${ambit_root}";
 	//ds.querySubstance('${ambit_root}/substance');	  	
