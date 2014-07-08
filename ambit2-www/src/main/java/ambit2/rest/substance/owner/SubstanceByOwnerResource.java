@@ -1,5 +1,7 @@
 package ambit2.rest.substance.owner;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -25,7 +27,7 @@ public class SubstanceByOwnerResource extends SubstanceResource<ReadSubstanceByO
 	protected ReadSubstanceByOwner createQuery(Context context, Request request, Response response) throws ResourceException {
 		Object owneruuid = request.getAttributes().get(OwnerSubstanceFacetResource.idowner);
 		return new ReadSubstanceByOwner(ReadSubstanceByOwner._ownersearchmode.owner_uuid,owneruuid.toString()) {
-			public ambit2.base.data.SubstanceRecord getObject(java.sql.ResultSet rs) throws ambit2.base.exceptions.AmbitException {
+			public ambit2.base.data.SubstanceRecord getObject(java.sql.ResultSet rs) throws AmbitException {
 				ambit2.base.data.SubstanceRecord record = super.getObject(rs);
 				record.setProperty(new SubstancePublicName(),record.getPublicName());
 				record.setProperty(new SubstanceName(),record.getCompanyName());

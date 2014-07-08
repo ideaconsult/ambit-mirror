@@ -3,13 +3,14 @@ package ambit2.rest.model.predictor;
 import java.io.StringWriter;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;

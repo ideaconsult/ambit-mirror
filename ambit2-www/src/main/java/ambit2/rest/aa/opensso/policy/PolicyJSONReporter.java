@@ -5,7 +5,6 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import net.idea.modbcum.i.exceptions.DbAmbitException;
-import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -39,11 +38,28 @@ public class PolicyJSONReporter extends CatalogURIReporter<Policy> {
 		setRequest(request);
 		this.jsonpCallback = jsonpcallback==null?null:JSONUtils.jsonSanitizeCallback(jsonpcallback);
 		
-	}	
-
+	}
+	/**
+	 *  inspired from 
+	 *  https://github.com/lgriffin/JSONPL/blob/master/Resources/JSONPL/1-req.json 
+	 */
+	
 
 	private static String format = "\n{\n\t\"id\":%s,\n\t\"uri\": %s,\n\t\"xml\": %s\n}";
-
+	/*
+			"{\n"+
+			"   \"subject\": {\n"+
+			"       \"category\": \"access-subject\",\n"+
+			"       \"role\": %s\n"+
+			"   },\n\"+
+			"   \"resource\": {\n"+
+			"       \"resource-id\": %s\n"+
+			"   },\n\"+
+			"   \"action\": {\n"+
+			"       \"action-type\": \"write\"\n"+
+			"   }\n"+
+			"}";
+			*/
 	@Override
 	public void processItem(Policy item, Writer output) {
 		try {

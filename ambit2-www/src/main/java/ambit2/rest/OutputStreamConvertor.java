@@ -3,6 +3,8 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
@@ -26,7 +28,7 @@ public class OutputStreamConvertor <T,Q extends IQueryRetrieval<T>>  extends Que
 		super(reporter,mediaType,fileNamePrefix);
 	}
 	
-	public Representation process(final Q query) throws ambit2.base.exceptions.AmbitException {
+	public Representation process(final Q query) throws AmbitException {
 		Representation rep = new OutputRepresentation(mediaType) {
 	            @Override
 	            public void write(OutputStream stream) throws IOException {

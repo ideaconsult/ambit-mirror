@@ -5,17 +5,17 @@ import java.util.logging.Level;
 
 import javax.xml.stream.XMLStreamWriter;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.restlet.Request;
-import org.restlet.data.MediaType;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.DbReader;
 import ambit2.db.DbReaderStructure;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;

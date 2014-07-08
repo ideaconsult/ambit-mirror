@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ITaskApplication;
 import net.idea.restnet.i.task.ITaskStorage;
@@ -18,8 +20,6 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.config.AMBITConfig;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.aa.opensso.OpenSSOUser;

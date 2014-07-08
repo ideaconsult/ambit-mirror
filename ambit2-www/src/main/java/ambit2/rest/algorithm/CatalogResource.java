@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.reporter.Reporter;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ICallableTask;
 import net.idea.restnet.i.task.ITask;
@@ -26,9 +29,6 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.config.AMBITConfig;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
-import ambit2.base.processors.Reporter;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;

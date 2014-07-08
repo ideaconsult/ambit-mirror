@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskResult;
 import net.idea.restnet.i.task.ITaskStorage;
@@ -16,7 +17,6 @@ import net.idea.restnet.i.task.TaskStatus;
 import org.restlet.Context;
 import org.restlet.Request;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.DisplayMode;

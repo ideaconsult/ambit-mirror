@@ -28,8 +28,6 @@ import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.property.annotations.PropertyAnnotationResource;
-import ambit2.rest.query.QueryResource;
-import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.reference.ReferenceURIReporter;
 import ambit2.rest.test.ResourceTest;
 

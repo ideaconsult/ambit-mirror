@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.relation.SimilarityRelation;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;

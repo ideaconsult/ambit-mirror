@@ -2,6 +2,8 @@ package ambit2.rest.task;
 
 import java.io.File;
 
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -10,10 +12,9 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.processors.DescriptorsCalculator;
 import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.rest.model.predictor.DescriptorPredictor;

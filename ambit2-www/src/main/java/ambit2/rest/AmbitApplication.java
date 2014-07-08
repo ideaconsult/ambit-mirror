@@ -25,7 +25,6 @@ import javax.net.ssl.X509TrustManager;
 
 import net.idea.restnet.aa.local.UserLoginPOSTResource;
 import net.idea.restnet.aa.local.UserLogoutPOSTResource;
-import net.idea.restnet.db.aalocal.policy.PolicyAuthorizer;
 import net.idea.restnet.i.task.ICallableTask;
 import net.idea.restnet.i.task.ITaskResult;
 
@@ -162,7 +161,6 @@ import ambit2.user.rest.resource.PwdResetResource;
 import ambit2.user.rest.resource.RegistrationConfirmResource;
 import ambit2.user.rest.resource.RegistrationResource;
 import ambit2.user.rest.resource.Resources;
-import ambit2.user.rest.resource.RoleDBResource;
 
 /**
  * AMBIT implementation of OpenTox REST services as described in http://opentox.org/development/wiki/

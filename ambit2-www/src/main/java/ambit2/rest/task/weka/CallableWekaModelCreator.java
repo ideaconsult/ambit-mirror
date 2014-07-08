@@ -2,6 +2,8 @@ package ambit2.rest.task.weka;
 
 import java.sql.Connection;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -11,7 +13,6 @@ import org.restlet.resource.ResourceException;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.WekaException;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.UpdateExecutor;

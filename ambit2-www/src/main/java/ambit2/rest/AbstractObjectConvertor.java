@@ -1,9 +1,10 @@
 package ambit2.rest;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 

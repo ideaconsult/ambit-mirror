@@ -13,6 +13,9 @@ import java.io.ObjectInputStream;
 import java.io.StringReader;
 import java.util.Iterator;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -27,14 +30,12 @@ import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.IStructureDiagramHighlights;
-import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.core.data.model.IEvaluation.EVType;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.AbstractDBProcessor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.model.evaluation.EvaluationStats;
 import ambit2.rendering.CompoundImageTools;

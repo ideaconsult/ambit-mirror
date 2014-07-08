@@ -3,6 +3,9 @@ package ambit2.rest.model;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.opentox.dsl.task.ClientResourceWrapper;
@@ -13,11 +16,9 @@ import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.io.MyIteratingMDLReader;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.ChemicalMediaType;

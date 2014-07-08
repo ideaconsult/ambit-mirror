@@ -31,7 +31,6 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
-import ambit2.rest.TaskApplication;
 import ambit2.rest.structure.ConformerURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableFileImport;

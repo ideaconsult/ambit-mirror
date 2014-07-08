@@ -4,6 +4,8 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.opentox.aa.opensso.OpenSSOToken;
@@ -20,13 +22,10 @@ import org.restlet.resource.ResourceException;
 import org.restlet.security.User;
 
 import ambit2.base.config.AMBITConfig;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.algorithm.CatalogResource;
-import ambit2.rest.freemarker.FreeMarkerApplication;
 
 public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
 	public static final String resource = "opentoxuser";

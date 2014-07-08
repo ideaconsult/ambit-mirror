@@ -9,6 +9,8 @@ import java.io.Writer;
 
 import javax.imageio.ImageIO;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -21,7 +23,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.AbstractReporter;
 import ambit2.rendering.CompoundImageTools.Mode2D;
 import ambit2.rest.AmbitResource;

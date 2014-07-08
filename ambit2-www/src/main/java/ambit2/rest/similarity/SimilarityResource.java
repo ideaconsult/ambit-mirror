@@ -2,6 +2,8 @@ package ambit2.rest.similarity;
 
 import java.util.BitSet;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -12,7 +14,6 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.readers.IQueryRetrieval;

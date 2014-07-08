@@ -2,6 +2,8 @@ package ambit2.rest.property;
 
 import java.io.Writer;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.opentox.rdf.OT;
 import org.restlet.Request;
 import org.restlet.data.Reference;
@@ -9,7 +11,6 @@ import org.restlet.data.Reference;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.json.JSONUtils;
 import ambit2.db.readers.IQueryRetrieval;
 

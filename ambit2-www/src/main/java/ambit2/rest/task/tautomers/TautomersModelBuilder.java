@@ -1,15 +1,16 @@
 package ambit2.rest.task.tautomers;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
-import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.SimpleModelBuilder;

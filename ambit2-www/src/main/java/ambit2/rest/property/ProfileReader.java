@@ -4,15 +4,16 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.restlet.Context;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.db.AbstractDBProcessor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryTemplateReporter;
 import ambit2.db.search.property.AbstractPropertyRetrieval;

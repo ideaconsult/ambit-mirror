@@ -4,6 +4,10 @@ import java.io.StringReader;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.NullNode;
@@ -24,13 +28,10 @@ import ambit2.base.data.substance.SubstanceName;
 import ambit2.base.data.substance.SubstanceProperty;
 import ambit2.base.data.substance.SubstancePublicName;
 import ambit2.base.data.substance.SubstanceUUID;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
-import ambit2.db.search.IQueryCondition;
 import ambit2.db.substance.ReadSubstanceByOwner;
 import ambit2.db.substance.study.ReadEffectRecordBySubstance;
 import ambit2.rest.ChemicalMediaType;

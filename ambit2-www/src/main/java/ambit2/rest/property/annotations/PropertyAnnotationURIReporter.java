@@ -3,14 +3,11 @@ package ambit2.rest.property.annotations;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
-import ambit2.base.data.Dictionary;
-import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.template.OntologyResource;
 
 /**
  * Generates uri of {@link PropertyResource}

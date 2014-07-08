@@ -2,12 +2,13 @@ package ambit2.rest.dataset;
 
 import java.util.Collections;
 
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.restlet.Request;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.ARFFReporter;

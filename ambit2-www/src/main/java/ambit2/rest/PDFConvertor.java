@@ -3,12 +3,14 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.reporter.Reporter;
+
 import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 
-import ambit2.base.processors.Reporter;
 import ambit2.db.readers.IQueryRetrieval;
 
 import com.lowagie.text.Document;
@@ -37,7 +39,7 @@ public class PDFConvertor<T,Q extends IQueryRetrieval<T>,R extends Reporter<Q,Do
 	public PDFConvertor(R reporter,String fileNamePrefix) {
 		super(reporter,MediaType.APPLICATION_PDF,fileNamePrefix);
 	}
-	public Representation process(final Q query) throws ambit2.base.exceptions.AmbitException {
+	public Representation process(final Q query) throws AmbitException {
 		Representation rep = new OutputRepresentation(MediaType.APPLICATION_PDF) {
 	            @Override
 	            public void write(OutputStream stream) throws IOException {

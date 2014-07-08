@@ -1,5 +1,8 @@
 package ambit2.rest.property.annotations;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.opentox.rdf.OT;
 import org.opentox.rdf.OT.OTClass;
 import org.restlet.Request;
@@ -7,10 +10,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.PropertyAnnotation;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.ICategory;
-import ambit2.base.interfaces.ICategory.CategoryType;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;

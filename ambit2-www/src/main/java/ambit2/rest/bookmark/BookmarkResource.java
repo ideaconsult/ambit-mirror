@@ -1,5 +1,7 @@
 package ambit2.rest.bookmark;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -13,7 +15,6 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Bookmark;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.bookmark.CreateBookmark;

@@ -4,17 +4,18 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IParameterizedQuery;
+import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Request;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.ExternalIdentifier;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.json.JSONUtils;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.IParameterizedQuery;
-import ambit2.db.search.IQueryCondition;
 import ambit2.db.substance.ids.ReadSubstanceIdentifiers;
 import ambit2.rest.ResourceDoc;
 

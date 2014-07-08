@@ -2,10 +2,11 @@ package ambit2.rest.admin.fingerprints;
 
 import java.io.Writer;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.restlet.Request;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.db.update.fp.IFingerprint;
 import ambit2.db.update.fp.QueryFingerprints;

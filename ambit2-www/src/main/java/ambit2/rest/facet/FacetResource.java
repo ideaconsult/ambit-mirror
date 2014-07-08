@@ -3,6 +3,8 @@ package ambit2.rest.facet;
 import java.sql.Connection;
 import java.util.Map;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Request;
@@ -15,9 +17,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.facet.IFacet;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;

@@ -7,7 +7,6 @@ import ambit2.rest.aa.opensso.policy.OpenSSOPoliciesResource;
 import ambit2.rest.aa.opensso.policy.OpenSSOPolicyResource;
 import ambit2.rest.admin.AdminResource;
 import ambit2.rest.admin.DatabaseResource;
-import ambit2.rest.admin.PolicyResource;
 import ambit2.rest.admin.fingerprints.FingerprintResource;
 import ambit2.rest.admin.fingerprints.StructuresByFingerprintResource;
 import ambit2.rest.dataset.filtered.StatisticsResource;

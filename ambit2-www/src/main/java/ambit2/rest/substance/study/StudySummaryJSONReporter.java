@@ -3,14 +3,14 @@ package ambit2.rest.substance.study;
 import java.io.Writer;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
-
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.facet.IFacet;
 import ambit2.base.json.JSONUtils;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.db.substance.study.facet.SubstanceStudyFacet;

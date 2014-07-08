@@ -1,11 +1,12 @@
 package ambit2.rest.bookmark;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 
 import ambit2.base.data.Bookmark;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;

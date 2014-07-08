@@ -10,12 +10,8 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.opentox.dsl.OTDataset;
-import org.opentox.dsl.OTModel;
-import org.opentox.dsl.OTSuperModel;
-import org.opentox.dsl.task.RemoteTask;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 

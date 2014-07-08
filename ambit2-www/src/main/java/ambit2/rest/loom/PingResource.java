@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.idea.i5.cli.I5LightClient;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.reporter.Reporter;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskResult;
 import net.idea.restnet.i.task.Task;
@@ -24,7 +27,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.processors.Reporter;
 import ambit2.rest.DBConnection;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.algorithm.CatalogResource;
@@ -101,8 +103,8 @@ public class PingResource extends CatalogResource<ITask<ITaskResult, String>> {
 		return tasks.iterator();
 	}
 	@Override
-	public ambit2.base.interfaces.IProcessor<Iterator<ITask<ITaskResult, String>>, Representation> createConvertor(
-			Variant variant) throws ambit2.base.exceptions.AmbitException,
+	public IProcessor<Iterator<ITask<ITaskResult, String>>, Representation> createConvertor(
+			Variant variant) throws AmbitException,
 			ResourceException {
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {

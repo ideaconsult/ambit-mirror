@@ -3,19 +3,20 @@ package ambit2.rest.model.predictor;
 import java.awt.image.BufferedImage;
 import java.sql.Connection;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.IStructureDiagramHighlights;
-import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.AbstractDBProcessor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.AbstractDescriptorCalculator;
 import ambit2.db.processors.DescriptorsCalculator;
 import ambit2.descriptors.processors.DescriptorsFactory;
@@ -76,7 +77,13 @@ public class DescriptorPredictor<C extends AbstractDBProcessor<IStructureRecord,
 
 	@Override
 	public Object predict(IStructureRecord target) throws AmbitException {
-		return calculator.process(target);
+		try {
+			return calculator.process(target);
+		} catch (AmbitException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new AmbitException(x); 
+		}
 	}
 	@Override
 	public String toString() {

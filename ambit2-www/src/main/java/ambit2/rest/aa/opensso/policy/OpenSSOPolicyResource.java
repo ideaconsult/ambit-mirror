@@ -6,6 +6,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.reporter.Reporter;
+
 import org.opentox.aa.opensso.OpenSSOPolicy;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Context;
@@ -19,9 +23,6 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.security.User;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
-import ambit2.base.processors.Reporter;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.aa.opensso.OpenSSOUser;

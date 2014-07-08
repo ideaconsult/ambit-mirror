@@ -3,11 +3,9 @@ package ambit2.rest.routers.opentox;
 import org.restlet.Context;
 import org.restlet.routing.Router;
 
-import ambit2.rest.propertyvalue.PropertyTemplateResource;
 import ambit2.rest.routers.MyRouter;
 import ambit2.rest.routers.misc.DataEntryRouter;
 import ambit2.rest.structure.CompoundResource;
-import ambit2.rest.structure.ConformerResource;
 
 /**
  * OpenTox compound

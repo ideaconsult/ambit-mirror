@@ -3,10 +3,11 @@ package ambit2.rest.admin;
 import java.io.Writer;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.restlet.Request;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.db.version.AmbitDBVersion;
 import ambit2.db.version.DBVersionQuery;

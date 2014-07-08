@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.util.Hashtable;
 import java.util.Iterator;
 
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -12,7 +14,6 @@ import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.ModelQueryResults;

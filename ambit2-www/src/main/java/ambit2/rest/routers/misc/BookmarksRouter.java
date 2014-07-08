@@ -1,11 +1,7 @@
 package ambit2.rest.routers.misc;
 
 import org.restlet.Context;
-import org.restlet.routing.Filter;
-import org.restlet.routing.Router;
 
-import ambit2.rest.aa.opensso.BookmarksAuthorizer;
-import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
 import ambit2.rest.bookmark.BookmarkResource;
 import ambit2.rest.bookmark.BookmarkTopicsResource;
 import ambit2.rest.routers.MyRouter;

@@ -6,12 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.Bookmark;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.bookmark.ReadBookmark;
 import ambit2.rest.DisplayMode;

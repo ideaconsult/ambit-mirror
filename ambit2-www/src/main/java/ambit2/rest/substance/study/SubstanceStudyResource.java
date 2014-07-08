@@ -2,6 +2,8 @@ package ambit2.rest.substance.study;
 
 import java.util.Map;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
@@ -16,8 +18,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.study.ReadSubstanceStudy;
 import ambit2.rest.OpenTox;

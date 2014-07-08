@@ -2,6 +2,8 @@ package ambit2.rest.model.builder;
 
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
@@ -10,10 +12,9 @@ import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
-import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
