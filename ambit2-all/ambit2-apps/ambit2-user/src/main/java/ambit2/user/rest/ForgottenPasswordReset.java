@@ -24,7 +24,7 @@ public class ForgottenPasswordReset extends AbstractUpdate<UserCredentials,DBUse
 	@Override
 	public String[] getSQL() throws AmbitException {
 		return new String[] {
-				String.format("update %s.user_registration r, users x set r.code=?,r.created=now() where r.user_name=x.username and r.status='confirmed' and x.username=? and x.email=?",getDatabaseName())
+				String.format("update %s.user_registration r, users x set r.code=?,r.created=now() where r.user_name=x.user_name and r.status='confirmed' and x.user_name=? and x.email=?",getDatabaseName())
 		};
 	}
 
