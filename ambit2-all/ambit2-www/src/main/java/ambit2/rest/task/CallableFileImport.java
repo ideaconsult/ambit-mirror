@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.apache.commons.fileupload.FileItem;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
@@ -31,10 +34,8 @@ import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IBatchStatistics.RECORDS_STATS;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;

@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
 
-import org.omg.CORBA.ParameterMode;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.opentox.dsl.OTDataset;
 import org.opentox.dsl.OTFeature;
 import org.restlet.Context;
@@ -15,9 +17,7 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.base.processors.search.AbstractFinder;

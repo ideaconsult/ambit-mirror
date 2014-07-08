@@ -1,12 +1,11 @@
 package ambit2.rest.model;
 
-import java.io.Writer;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;

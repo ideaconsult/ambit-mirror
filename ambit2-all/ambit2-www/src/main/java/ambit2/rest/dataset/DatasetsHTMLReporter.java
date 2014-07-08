@@ -5,6 +5,8 @@ import java.io.Writer;
 import java.net.URLEncoder;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -13,7 +15,6 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.IStructureKey.Matcher;
 import ambit2.db.readers.IQueryRetrieval;

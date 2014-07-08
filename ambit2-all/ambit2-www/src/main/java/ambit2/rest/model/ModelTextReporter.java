@@ -1,8 +1,9 @@
 package ambit2.rest.model;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Request;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.model.predictor.ModelPredictor;

@@ -1,7 +1,8 @@
 package ambit2.rest.propertyvalue;
 
-import java.io.File;
 import java.io.Serializable;
+
+import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -15,7 +16,6 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveFieldPropertyValue;

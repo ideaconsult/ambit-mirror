@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -12,7 +14,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.SessionID;

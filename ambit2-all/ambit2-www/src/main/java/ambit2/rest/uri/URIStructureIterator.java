@@ -6,17 +6,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.util.Iterator;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ResourceException;
-
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
 
 import ambit2.base.data.StructureRecord;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.db.processors.AbstractBatchProcessor;

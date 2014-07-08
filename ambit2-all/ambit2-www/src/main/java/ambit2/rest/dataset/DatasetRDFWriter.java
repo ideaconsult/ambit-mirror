@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.opentox.rdf.OT;
 import org.opentox.rdf.OT.DataProperty;
 import org.opentox.rdf.OT.OTClass;
@@ -19,7 +21,6 @@ import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.db.readers.IQueryRetrieval;

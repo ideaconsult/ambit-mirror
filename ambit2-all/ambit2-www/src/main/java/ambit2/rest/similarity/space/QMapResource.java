@@ -1,5 +1,8 @@
 package ambit2.rest.similarity.space;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -13,8 +16,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.simiparity.space.QMap;
 import ambit2.db.simiparity.space.QueryQMap;

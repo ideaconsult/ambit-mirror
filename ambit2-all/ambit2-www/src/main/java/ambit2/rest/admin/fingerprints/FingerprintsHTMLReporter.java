@@ -1,8 +1,9 @@
 package ambit2.rest.admin.fingerprints;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Request;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.update.fp.IFingerprint;
 import ambit2.db.update.fp.QueryFingerprints;
 import ambit2.descriptors.processors.BitSetGenerator.FPTable;

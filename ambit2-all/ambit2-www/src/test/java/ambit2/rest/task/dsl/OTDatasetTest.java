@@ -1,7 +1,5 @@
 package ambit2.rest.task.dsl;
 
-import java.util.Hashtable;
-
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Assert;
@@ -14,7 +12,6 @@ import org.opentox.rdf.iterators.RDFFeaturesIterator;
 import org.restlet.data.Reference;
 
 import ambit2.rest.OpenTox;
-import ambit2.rest.rdf.sparql.RDFFeatureIterator;
 import ambit2.rest.test.ResourceTest;
 
 public class OTDatasetTest extends ResourceTest {

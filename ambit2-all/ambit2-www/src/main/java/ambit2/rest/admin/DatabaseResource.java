@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -22,9 +25,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.StringBean;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.LoginInfo;
 import ambit2.db.pool.DatasourceFactory;

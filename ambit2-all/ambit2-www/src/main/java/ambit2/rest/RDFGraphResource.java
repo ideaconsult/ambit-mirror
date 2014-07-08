@@ -6,6 +6,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.opentox.dsl.task.ClientResourceWrapper;
 import org.opentox.rdf.OT;
 import org.restlet.Context;
@@ -20,8 +23,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.model.AbstractModel;

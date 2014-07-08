@@ -5,6 +5,8 @@ import java.util.logging.Level;
 
 import javax.vecmath.Point2d;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
@@ -12,7 +14,6 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;

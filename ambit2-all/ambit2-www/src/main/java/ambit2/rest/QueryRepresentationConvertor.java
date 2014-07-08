@@ -1,9 +1,11 @@
 package ambit2.rest;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 
-import ambit2.base.interfaces.IProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryAbstractReporter;
 
@@ -37,7 +39,7 @@ public abstract class QueryRepresentationConvertor<T,Q extends IQueryRetrieval<T
 	
 
 	@Override
-	public abstract Representation process(Q query) throws ambit2.base.exceptions.AmbitException;
+	public abstract Representation process(Q query) throws AmbitException;
 	
 	
 	@Override

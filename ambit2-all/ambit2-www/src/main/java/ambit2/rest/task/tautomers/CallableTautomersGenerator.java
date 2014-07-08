@@ -2,13 +2,14 @@ package ambit2.rest.task.tautomers;
 
 import java.sql.Connection;
 
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.rest.task.CallableModelPredictor;
 import ambit2.rest.task.TaskResult;

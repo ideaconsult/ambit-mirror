@@ -1,5 +1,8 @@
 package ambit2.rest.structure.quality;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -15,8 +18,6 @@ import ambit2.base.data.AmbitUser;
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;
 import ambit2.base.data.StructureRecord;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.qlabel.QueryQLabel;
 import ambit2.db.update.AbstractUpdate;

@@ -1,5 +1,7 @@
 package ambit2.rest.reference;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -12,7 +14,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.reference.CreateReference;

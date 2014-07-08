@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.sql.SQLException;
 import java.util.Iterator;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.data.Reference;
 
 import weka.core.Attribute;
@@ -15,7 +17,6 @@ import weka.core.Instances;
 import weka.core.converters.ArffLoader.ArffReader;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.rest.OpenTox;

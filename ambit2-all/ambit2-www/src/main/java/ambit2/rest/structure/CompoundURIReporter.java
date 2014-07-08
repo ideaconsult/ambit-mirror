@@ -1,5 +1,7 @@
 package ambit2.rest.structure;
 
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -8,7 +10,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.db.DbReader;
 import ambit2.db.DbReaderStructure;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;

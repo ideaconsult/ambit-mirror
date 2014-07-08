@@ -2,6 +2,8 @@ package ambit2.rest.task;
 
 import java.sql.Connection;
 
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -12,7 +14,6 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.DbReaderStructure;
 import ambit2.db.processors.AbstractBatchProcessor;

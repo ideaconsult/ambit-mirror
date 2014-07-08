@@ -1,9 +1,10 @@
 package ambit2.rest.links;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.data.Reference;
 
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 
 /**
  * Generates property object give an Reference

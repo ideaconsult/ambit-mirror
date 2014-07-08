@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.util.Map;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
@@ -18,11 +19,10 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryTemplateReporter;
 import ambit2.db.search.StringCondition;

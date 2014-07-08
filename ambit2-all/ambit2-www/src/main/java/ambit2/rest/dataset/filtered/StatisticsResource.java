@@ -3,6 +3,8 @@ package ambit2.rest.dataset.filtered;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
@@ -14,11 +16,8 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.facet.IFacet;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.db.model.QueryCountModels;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.db.substance.QueryCountEndpoints;
 import ambit2.db.substance.QueryCountProtocolApplications;
 import ambit2.db.substance.QueryCountSubstances;

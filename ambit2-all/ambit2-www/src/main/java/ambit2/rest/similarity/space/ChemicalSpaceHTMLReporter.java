@@ -3,12 +3,13 @@ package ambit2.rest.similarity.space;
 import java.io.IOException;
 import java.io.Writer;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.pairwise.ChemSpaceCell;
 import ambit2.db.search.structure.pairwise.ChemicalSpaceQuery;

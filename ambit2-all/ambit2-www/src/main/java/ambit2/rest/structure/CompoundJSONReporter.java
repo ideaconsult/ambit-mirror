@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.SDFWriter;
 import org.restlet.Request;
@@ -18,7 +21,6 @@ import org.restlet.Request;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
@@ -31,7 +33,6 @@ import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.reporters.CSVReporter;
-import ambit2.db.search.IQueryCondition;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyJSONReporter;
 

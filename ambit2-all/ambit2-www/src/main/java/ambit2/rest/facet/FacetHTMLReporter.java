@@ -3,12 +3,12 @@ package ambit2.rest.facet;
 import java.io.Writer;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Request;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.facet.IFacet;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.AmbitResource;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;

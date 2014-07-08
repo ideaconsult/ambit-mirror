@@ -2,11 +2,12 @@ package ambit2.rest.model.predictor;
 
 import java.util.Iterator;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.model.numeric.DataCoverage;

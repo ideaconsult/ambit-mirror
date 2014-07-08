@@ -2,10 +2,11 @@ package ambit2.rest.reference;
 
 import java.io.Writer;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Request;
 
 import ambit2.base.data.ILiteratureEntry;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;

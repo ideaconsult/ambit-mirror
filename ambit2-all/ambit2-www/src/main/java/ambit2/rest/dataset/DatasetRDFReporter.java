@@ -7,6 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.opentox.rdf.OT;
 import org.opentox.rdf.OT.OTProperty;
 import org.restlet.Context;
@@ -17,13 +20,11 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.DbReader;
 import ambit2.db.DbReaderStructure;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
@@ -50,7 +51,6 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
-import com.hp.hpl.jena.vocabulary.RDF;
 
 /**
  * RDF/XML

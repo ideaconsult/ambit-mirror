@@ -3,13 +3,14 @@ package ambit2.rest.model.builder;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.rest.algorithm.AlgorithmURIReporter;

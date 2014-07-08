@@ -6,6 +6,8 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.UUID;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.apache.xerces.impl.dv.util.Base64;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -20,7 +22,6 @@ import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.rest.algorithm.AlgorithmURIReporter;

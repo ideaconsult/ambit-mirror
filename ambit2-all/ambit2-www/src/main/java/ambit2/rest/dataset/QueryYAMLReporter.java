@@ -1,9 +1,10 @@
 package ambit2.rest.dataset;
 
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.ho.yaml.YamlEncoder;
 import org.restlet.Request;
 
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.QueryURIReporter;

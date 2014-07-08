@@ -8,6 +8,10 @@ import java.sql.Connection;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.codehaus.stax2.XMLOutputFactory2;
 import org.opentox.dsl.task.RemoteTask;
 import org.restlet.Context;
@@ -23,13 +27,10 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.AbstractDBProcessor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.processors.PropertyValuesWriter;
 import ambit2.db.readers.RetrieveStructure;

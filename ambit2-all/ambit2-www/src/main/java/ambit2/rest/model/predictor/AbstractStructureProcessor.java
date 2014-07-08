@@ -4,14 +4,15 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.UpdateExecutor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.update.structure.UpdateStructure;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.property.PropertyURIReporter;

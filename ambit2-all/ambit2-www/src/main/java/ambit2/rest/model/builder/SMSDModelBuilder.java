@@ -4,17 +4,18 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.UUID;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.model.Algorithm;
-import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;

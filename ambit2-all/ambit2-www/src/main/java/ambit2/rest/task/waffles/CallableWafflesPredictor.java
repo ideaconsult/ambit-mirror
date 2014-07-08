@@ -3,6 +3,8 @@ package ambit2.rest.task.waffles;
 import java.io.File;
 import java.net.HttpURLConnection;
 
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -11,7 +13,6 @@ import org.restlet.data.Reference;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.io.DownloadTool;
 import ambit2.base.processors.ProcessorsChain;

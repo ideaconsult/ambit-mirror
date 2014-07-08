@@ -2,6 +2,8 @@ package ambit2.rest.property;
 
 import java.io.Writer;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -9,7 +11,6 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;

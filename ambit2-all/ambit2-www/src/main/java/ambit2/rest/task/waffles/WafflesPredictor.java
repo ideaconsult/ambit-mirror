@@ -4,13 +4,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.engine.util.Base64;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.predictor.ModelPredictor;

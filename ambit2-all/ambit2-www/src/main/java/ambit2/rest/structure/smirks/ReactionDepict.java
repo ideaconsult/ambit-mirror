@@ -9,11 +9,10 @@ import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
-import dk.smartcyp.smirks.SMARTCYPReaction;
-
 import ambit2.rest.AmbitResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
+import dk.smartcyp.smirks.SMARTCYPReaction;
 
 public class ReactionDepict extends AbstractDepict {
 	public static final String resource = "/reaction";
