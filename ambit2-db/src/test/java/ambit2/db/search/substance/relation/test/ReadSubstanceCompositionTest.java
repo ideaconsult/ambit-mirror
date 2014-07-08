@@ -3,9 +3,7 @@ package ambit2.db.search.substance.relation.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
-import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.search.test.QueryTest;

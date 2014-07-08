@@ -4,12 +4,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.I5Utils;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.facet.AbstractFacet;
-import ambit2.base.facet.IFacet;
 import ambit2.db.facets.AbstractFacetQuery;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 public class OwnerSubstanceStats  extends AbstractFacetQuery<String,String,StringCondition,OwnerFacet> {

@@ -3,10 +3,10 @@ package ambit2.db.search.structure;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.ILiteratureEntry;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.BooleanCondition;
-import ambit2.db.search.QueryParam;
 
 /**
  * reads structures, for each there are / or there are not (depending on getCondition) descriptors with given idname and reference title.

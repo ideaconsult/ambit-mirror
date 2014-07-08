@@ -1,17 +1,16 @@
 package ambit2.rest;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.reporter.Reporter;
 
 import org.restlet.data.CharacterSet;
 import org.restlet.data.Language;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
-
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.processors.Reporter;
 
 /**
  * Converts query results to string
@@ -46,7 +45,7 @@ public class StringConvertor<T,Q, R extends Reporter<Q,Writer> >  extends Repres
 			setDisposition(rep);
 	
 	        return rep;
-		} catch (IOException x) {
+		} catch (Exception x) {
 			throw new AmbitException(x);
 		} finally {
 			try { reporter.close(); } catch (Exception x) {}

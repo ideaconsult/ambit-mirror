@@ -37,9 +37,9 @@ import java.util.Iterator;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import net.idea.modbcum.i.IDBProcessor;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IAmbitEditor;
-import ambit2.db.IDBProcessor;
 import ambit2.db.results.DictionaryRows;
 import ambit2.db.search.DictionaryObjectQuery;
 import ambit2.db.search.DictionaryQuery;

@@ -4,12 +4,12 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.AmbitUser;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SessionID;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 /**

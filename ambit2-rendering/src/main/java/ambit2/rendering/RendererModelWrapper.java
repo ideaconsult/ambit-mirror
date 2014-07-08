@@ -3,7 +3,6 @@ package ambit2.rendering;
 import java.awt.Color;
 
 import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.color.CDK2DAtomColors;
 import org.openscience.cdk.renderer.color.IAtomColorer;
 import org.openscience.cdk.renderer.generators.AtomNumberGenerator;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;

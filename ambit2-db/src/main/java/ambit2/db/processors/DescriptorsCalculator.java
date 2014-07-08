@@ -32,19 +32,19 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
-import ambit2.db.SessionID;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.descriptors.processors.DescriptorValue2Property;
 import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.descriptors.processors.PropertyCalculationProcessor;
@@ -145,12 +145,7 @@ public class DescriptorsCalculator extends AbstractDescriptorCalculator<IAtomCon
 		super.setConnection(connection);
 		writer.setConnection(connection);
 	}
-	@Override
-	public void setSession(SessionID sessionID) {
-
-		super.setSession(sessionID);
-		writer.setSession(sessionID);
-	}
+	
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();

@@ -1,11 +1,12 @@
 package ambit2.rest;
 
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.reporter.Reporter;
+
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.AbstractRepresentationConvertor;
-import ambit2.base.processors.Reporter;
 
 /**
  * An abstract {@link IProcessor} , converting between arbitrary Content and restlet Representation.

@@ -2,9 +2,9 @@ package ambit2.core.data;
 
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 
 public interface IObject2Properties<D extends Object> extends IProcessor<D, List<Property>> {
 	@Override

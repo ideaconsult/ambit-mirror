@@ -3,6 +3,7 @@ package ambit2.namestructure;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
 import nu.xom.Element;
 import nu.xom.Serializer;
 
@@ -12,7 +13,6 @@ import org.openscience.cdk.interfaces.IMolecule;
 import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
 import uk.ac.cam.ch.wwmm.opsin.OpsinResult;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.data.MoleculeTools;
 

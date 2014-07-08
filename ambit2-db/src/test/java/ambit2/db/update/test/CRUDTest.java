@@ -30,6 +30,7 @@
 package ambit2.db.update.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.After;
@@ -38,7 +39,6 @@ import org.junit.Test;
 
 import ambit2.db.UpdateExecutor;
 import ambit2.db.processors.test.DbUnitTest;
-import ambit2.db.update.IQueryUpdate;
 
 public abstract class CRUDTest<G,T> extends DbUnitTest {
 	protected UpdateExecutor<IQueryUpdate<G,T>> executor;

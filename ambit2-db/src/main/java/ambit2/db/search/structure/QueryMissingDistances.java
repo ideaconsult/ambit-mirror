@@ -3,11 +3,12 @@ package ambit2.db.search.structure;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
+
 import org.openscience.cdk.interfaces.IBond;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.NumberCondition;
-import ambit2.db.search.QueryParam;
 
 /**
  * Reads structures without precalculated pairwise atom distances from the database.

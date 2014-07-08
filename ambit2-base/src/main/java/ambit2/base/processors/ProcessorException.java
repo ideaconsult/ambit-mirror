@@ -29,8 +29,8 @@
 
 package ambit2.base.processors;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 
 public class ProcessorException extends AmbitException {
 	protected IProcessor processor;

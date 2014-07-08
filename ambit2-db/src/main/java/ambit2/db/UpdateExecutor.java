@@ -36,9 +36,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.search.QueryParam;
-import ambit2.db.update.IQueryUpdate;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.IQueryUpdate;
+import net.idea.modbcum.i.query.QueryParam;
 
 @SuppressWarnings("unchecked")
 public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q, Integer> {

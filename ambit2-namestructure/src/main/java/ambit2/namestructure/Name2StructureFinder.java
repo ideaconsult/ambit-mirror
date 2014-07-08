@@ -1,11 +1,11 @@
 package ambit2.namestructure;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
 import nu.xom.Element;
 import uk.ac.cam.ch.wwmm.opsin.OpsinResult;
 import uk.ac.cam.ch.wwmm.opsin.OpsinResult.OPSIN_RESULT_STATUS;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.search.AbstractFinder;
 

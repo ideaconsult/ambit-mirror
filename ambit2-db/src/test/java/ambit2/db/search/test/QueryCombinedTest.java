@@ -5,6 +5,7 @@ import java.util.BitSet;
 import java.util.List;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.QueryParam;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;
@@ -16,7 +17,6 @@ import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryCombined;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDataset;

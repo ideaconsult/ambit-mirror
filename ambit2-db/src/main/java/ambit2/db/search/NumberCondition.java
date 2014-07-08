@@ -3,6 +3,8 @@ package ambit2.db.search;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.IQueryCondition;
+
 //TODO refactor with enums
 public class NumberCondition implements IQueryCondition{
 	private static List<NumberCondition> instances = null;

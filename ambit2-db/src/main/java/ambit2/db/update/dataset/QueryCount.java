@@ -4,11 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.facet.AbstractFacet;
 import ambit2.base.facet.IFacet;
 import ambit2.db.facets.AbstractFacetQuery;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 /**

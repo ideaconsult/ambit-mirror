@@ -31,13 +31,13 @@ package ambit2.db.update.test;
 
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
 import ambit2.base.data.Dictionary;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.dictionary.CreateDictionary;
 import ambit2.db.update.dictionary.DeleteDictionary;
 import ambit2.db.update.dictionary.UpdateDictionary;

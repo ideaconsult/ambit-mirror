@@ -1,13 +1,13 @@
 package ambit2.db.update.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 
 import ambit2.base.data.AmbitUser;
 import ambit2.db.SessionID;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.assessment.CreateAssessment;
 import ambit2.db.update.assessment.DeleteAssessment;
 import ambit2.db.update.assessment.UpdateAssessment;

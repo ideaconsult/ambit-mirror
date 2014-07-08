@@ -38,10 +38,10 @@ import java.util.logging.Level;
 
 import javax.naming.OperationNotSupportedException;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.StringCondition;
 import ambit2.db.update.dataset.DatasetAddStructure;
 import ambit2.db.update.dataset.ReadDataset;

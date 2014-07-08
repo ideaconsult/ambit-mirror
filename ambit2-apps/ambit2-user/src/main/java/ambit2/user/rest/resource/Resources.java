@@ -2,7 +2,6 @@ package ambit2.user.rest.resource;
 
 import net.idea.restnet.aa.local.UserLoginFormResource;
 import net.idea.restnet.aa.resource.AdminResource;
-import net.idea.restnet.c.resource.TaskResource;
 
 public class Resources {
 	public static final String BASE_URL = "BASE_URL";

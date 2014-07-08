@@ -3,12 +3,12 @@ package ambit2.db.update.dataset;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.PropertyValue;
-import ambit2.db.search.IQueryCondition;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.structure.AbstractStructureQuery;
 
 public abstract class DatasetQueryFieldGeneric<T, C extends IQueryCondition> extends AbstractStructureQuery<ISourceDataset, PropertyValue<T>, IQueryCondition> {

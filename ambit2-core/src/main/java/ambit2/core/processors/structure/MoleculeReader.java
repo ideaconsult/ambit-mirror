@@ -31,6 +31,8 @@ package ambit2.core.processors.structure;
 
 import java.lang.reflect.Method;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
@@ -38,7 +40,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.processors.CASProcessor;

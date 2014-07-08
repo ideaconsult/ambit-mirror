@@ -1,11 +1,10 @@
 package ambit2.tautomers.test;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.io.FileReader;
-import java.util.Vector;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;

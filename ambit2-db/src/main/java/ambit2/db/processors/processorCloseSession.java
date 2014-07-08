@@ -28,11 +28,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.SessionID;
-import ambit2.db.exceptions.DbAmbitException;
 
 /**
  * Closes session designated by {@link SessionID} by updating the field "completed" in "sessions" table

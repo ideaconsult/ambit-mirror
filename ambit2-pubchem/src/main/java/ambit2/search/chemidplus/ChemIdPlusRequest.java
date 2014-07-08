@@ -7,9 +7,9 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.openscience.cdk.index.CASNumber;
+import net.idea.modbcum.i.exceptions.AmbitException;
 
-import ambit2.base.exceptions.AmbitException;
+import org.openscience.cdk.index.CASNumber;
 
 public class ChemIdPlusRequest extends AbstractSearchRequest<String> {
 

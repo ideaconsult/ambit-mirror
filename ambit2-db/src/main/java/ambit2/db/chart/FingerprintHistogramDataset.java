@@ -8,6 +8,9 @@ import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
@@ -16,8 +19,6 @@ import org.jfree.ui.RectangleInsets;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.exceptions.DbAmbitException;
 
 public class FingerprintHistogramDataset extends ChartGenerator<ISourceDataset> {
 

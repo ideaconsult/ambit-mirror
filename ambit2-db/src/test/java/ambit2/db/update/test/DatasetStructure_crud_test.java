@@ -30,6 +30,7 @@
 package ambit2.db.update.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -38,7 +39,6 @@ import org.junit.Test;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.dataset.DatasetAddStructure;
 import ambit2.db.update.dataset.DatasetDeleteStructure;
 

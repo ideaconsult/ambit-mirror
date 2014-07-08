@@ -2,7 +2,8 @@ package ambit2.db.processors;
 
 import javax.naming.OperationNotSupportedException;
 
-import ambit2.db.update.IQueryUpdate;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 /**
  * Generic processor to execute IQueryUpdate<Group,Target>
@@ -74,8 +75,7 @@ public class AbstractUpdateProcessor<Group,Target> extends AbstractRepositoryWri
 	}
 
 	protected Target execute(Group group, IQueryUpdate<Group, Target> query) 
-	throws java.sql.SQLException ,javax.naming.OperationNotSupportedException ,
-		ambit2.base.exceptions.AmbitException {
+	throws java.sql.SQLException ,javax.naming.OperationNotSupportedException ,	AmbitException {
 		if (query == null) throw new OperationNotSupportedException();
 		query.setGroup(group);
 		query.setObject(getTarget());
@@ -83,16 +83,15 @@ public class AbstractUpdateProcessor<Group,Target> extends AbstractRepositoryWri
 		return query.getObject();
 	};	
 	public Target create(Group group) 
-		throws java.sql.SQLException ,javax.naming.OperationNotSupportedException ,
-		ambit2.base.exceptions.AmbitException {
+		throws java.sql.SQLException ,javax.naming.OperationNotSupportedException ,	AmbitException {
 		return execute(group, queryCreate);
 	};
 	public Target delete(Group group) 
-	throws java.sql.SQLException ,javax.naming.OperationNotSupportedException ,ambit2.base.exceptions.AmbitException {
+	throws java.sql.SQLException ,javax.naming.OperationNotSupportedException ,AmbitException {
 		return execute(group, queryDelete);
 	};
 	public Target update(Group group) 
-	throws java.sql.SQLException ,javax.naming.OperationNotSupportedException ,ambit2.base.exceptions.AmbitException {
+	throws java.sql.SQLException ,javax.naming.OperationNotSupportedException ,AmbitException {
 	return execute(group, queryUpdate);	
 	};
 }

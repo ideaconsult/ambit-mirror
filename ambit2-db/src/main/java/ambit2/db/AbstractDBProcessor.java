@@ -29,11 +29,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IDBProcessor;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.db.exceptions.DbAmbitException;
-import ambit2.db.processors.IRepositoryAccess;
 
-public abstract class AbstractDBProcessor<Target,Result> extends DefaultAmbitProcessor<Target, Result> implements IDBProcessor<Target,Result>, IRepositoryAccess {
+public abstract class AbstractDBProcessor<Target,Result> extends DefaultAmbitProcessor<Target, Result> implements IDBProcessor<Target,Result> {
     /**
 	 * 
 	 */
@@ -59,6 +59,7 @@ public abstract class AbstractDBProcessor<Target,Result> extends DefaultAmbitPro
 	public Connection getConnection() {
 		return connection;
 	}
+	
 
 	public void setConnection(Connection connection) throws DbAmbitException {
 		if ((this.connection != null) && (this.connection != connection) && isCloseConnection()) try {
@@ -75,12 +76,6 @@ public abstract class AbstractDBProcessor<Target,Result> extends DefaultAmbitPro
     		connection = null;
 	}
 	
-	public SessionID getSession() {
-		return sessionID;
-	}
-	public void setSession(SessionID sessionID) {
-		this.sessionID = sessionID;
-	}
 }
 
 

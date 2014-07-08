@@ -3,7 +3,7 @@ package ambit2.base.processors;
 import java.io.Serializable;
 import java.io.Writer;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
 
 /**
  * Provides means of accumulating results from processing multiple compounds by  {@link ambit2.processors.IAmbitProcessor}

@@ -2,7 +2,8 @@ package ambit2.base.interfaces;
 
 import java.util.Iterator;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 import ambit2.base.processors.ProcessorsChain;
 
 public interface IBatchProcessor<Target,ItemInput,Result> {

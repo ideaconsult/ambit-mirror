@@ -32,16 +32,15 @@ import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
-import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.core.processors.StructureNormalizer;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.NoneKey;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.structure.AbstractStructureQuery.FIELD_NAMES;
 import ambit2.db.search.structure.QueryByIdentifierWithStructureFallback;
 

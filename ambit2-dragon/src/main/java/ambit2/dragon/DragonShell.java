@@ -12,10 +12,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
 import ambit2.core.io.DelimitedFileFormat;

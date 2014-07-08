@@ -31,9 +31,10 @@ package ambit2.db.processors;
 
 import java.io.IOException;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 
 public class ProcessorCloseReader extends DefaultAmbitProcessor<IIteratingChemObjectReader, IOException> {

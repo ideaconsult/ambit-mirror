@@ -29,6 +29,7 @@
 
 package ambit2.core.processors.structure;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
 import net.sf.jniinchi.INCHI_RET;
 
 import org.openscience.cdk.exception.CDKException;
@@ -36,7 +37,6 @@ import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 
 public class InchiProcessor extends DefaultAmbitProcessor<IAtomContainer, InChIGenerator> {

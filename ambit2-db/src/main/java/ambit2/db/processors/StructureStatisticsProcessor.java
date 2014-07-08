@@ -1,6 +1,6 @@
 package ambit2.db.processors;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 
 public class StructureStatisticsProcessor  extends ConnectionStatisticsProcessor<IStructureRecord> {

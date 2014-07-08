@@ -2,12 +2,13 @@ package ambit2.rest.dataset;
 
 import java.io.Writer;
 
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
@@ -50,9 +51,10 @@ public class DatasetURIReporter<Q extends IQueryRetrieval<ISourceDataset>> exten
 	public void footer(Writer output, Q query) {};
 	public void header(Writer output, Q query) {};
 	
+	@Override
 	public void open() throws DbAmbitException {
-		// TODO Auto-generated method stub
-		
+
+		super.open();
 	}
 	
 }	

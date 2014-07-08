@@ -32,6 +32,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.i.query.IQueryUpdate;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -45,12 +49,10 @@ import ambit2.base.data.ProfileListModel;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.TypedListModel;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
 import ambit2.db.SessionID;
 import ambit2.db.UpdateExecutor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorCreateQuery;
 import ambit2.db.processors.StructureStatisticsProcessor;
 import ambit2.db.readers.IQueryRetrieval;
@@ -65,7 +67,6 @@ import ambit2.db.search.qlabel.QueryQLabel;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QuerySimilarityStructure;
 import ambit2.db.search.structure.QueryStoredResults;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.storedquery.SelectStoredQuery;
 import ambit2.db.update.storedquery.UpdateSelectedRecords;
 
@@ -185,7 +186,6 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 
 		ProcessorCreateQuery p = new ProcessorCreateQuery();
 		try {
-			p.setSession(session);
 			IMoleculeSet set = MoleculeTools.newMoleculeSet(SilentChemObjectBuilder.getInstance());
 			IStructureRecord record =  getRecord(row, col);
 			set.addAtomContainer(getAtomContainer(record));		

@@ -31,7 +31,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
 
 import com.jgoodies.binding.beans.Model;
 

@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
 import ambit2.db.search.NumberCondition;
-import ambit2.db.search.QueryParam;
 
 /**
  * First bitset is from structural keys, second from fingerprints

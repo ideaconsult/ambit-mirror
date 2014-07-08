@@ -32,9 +32,9 @@ package ambit2.db.update.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractObjectUpdate;
 
 public class DeleteStructure extends AbstractObjectUpdate<IStructureRecord> {

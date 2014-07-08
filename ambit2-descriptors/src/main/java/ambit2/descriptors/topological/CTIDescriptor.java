@@ -1,19 +1,19 @@
 package ambit2.descriptors.topological;
 
+import java.util.List;
+
+import org.openscience.cdk.charges.GasteigerMarsiliPartialCharges;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.graph.PathTools;
+import org.openscience.cdk.graph.matrix.ConnectionMatrix;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
-import org.openscience.cdk.charges.GasteigerMarsiliPartialCharges;
-import org.openscience.cdk.graph.PathTools;
-import org.openscience.cdk.graph.matrix.ConnectionMatrix;
 
 import ambit2.base.data.Property;
-
-import java.util.List;
 
 
 /**

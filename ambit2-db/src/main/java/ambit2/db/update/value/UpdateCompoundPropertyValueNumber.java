@@ -3,12 +3,12 @@ package ambit2.db.update.value;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.processors.AbstractPropertyWriter.mode;
 import ambit2.db.processors.ValueWriter;
 import ambit2.db.readers.PropertyValue;
-import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
 
 public class UpdateCompoundPropertyValueNumber  extends AbstractUpdate<IStructureRecord, PropertyValue<Double>> {

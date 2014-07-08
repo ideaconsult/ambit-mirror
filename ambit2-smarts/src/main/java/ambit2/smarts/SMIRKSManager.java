@@ -2,6 +2,8 @@ package ambit2.smarts;
 
 import java.util.Vector;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.CDKConstants;
@@ -12,10 +14,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.tools.CDKHydrogenAdder;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.AtomConfigurator;
 

@@ -1,12 +1,12 @@
 package ambit2.db.update.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 
 import ambit2.base.data.Bookmark;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.bookmark.CreateBookmark;
 import ambit2.db.update.bookmark.DeleteBookmark;
 import ambit2.db.update.bookmark.UpdateBookmark;

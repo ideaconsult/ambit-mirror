@@ -3,6 +3,7 @@ package ambit2.db.update.test;
 import java.util.BitSet;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -12,7 +13,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.fp.CreateFingerprint;
 
 public class Fingerprint_crud_test extends CRUDTest<IStructureRecord,BitSet> {

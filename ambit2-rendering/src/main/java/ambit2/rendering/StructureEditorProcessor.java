@@ -2,6 +2,8 @@ package ambit2.rendering;
 
 import java.io.StringWriter;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -12,7 +14,6 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;

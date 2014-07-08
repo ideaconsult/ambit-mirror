@@ -30,6 +30,7 @@
 package ambit2.db.update.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -39,7 +40,6 @@ import ambit2.db.SessionID;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryStructureByID;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.storedquery.CreateStoredQuery;
 import ambit2.db.update.storedquery.DeleteStoredQuery;
 import ambit2.db.update.storedquery.UpdateStoredQuery;

@@ -3,7 +3,7 @@ package ambit2.db.processors;
 import java.util.Iterator;
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 
 public class BatchStructuresListProcessor extends AbstractBatchProcessor<List<IStructureRecord>,IStructureRecord> {

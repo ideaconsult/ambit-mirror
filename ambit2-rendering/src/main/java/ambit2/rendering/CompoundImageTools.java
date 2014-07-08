@@ -23,6 +23,9 @@ import java.util.logging.Logger;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
@@ -63,8 +66,6 @@ import org.openscience.cdk.tools.SaturationChecker;
 import org.openscience.cdk.tools.SmilesValencyChecker;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.MoleculeTools;

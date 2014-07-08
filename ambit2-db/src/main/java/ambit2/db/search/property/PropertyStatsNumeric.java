@@ -34,12 +34,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyStats;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 public class PropertyStatsNumeric extends AbstractQuery<Property,String, StringCondition,PropertyStats> 

@@ -1,15 +1,11 @@
 package ambit2.tautomers;
 
 import java.util.Vector;
-import java.util.List;
-
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
-
-import ambit2.smarts.SmartsHelper;
 
 public class RuleInstance implements IRuleInstance
 {

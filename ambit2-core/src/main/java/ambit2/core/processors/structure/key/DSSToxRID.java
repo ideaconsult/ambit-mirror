@@ -1,8 +1,6 @@
 package ambit2.core.processors.structure.key;
 
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IStructureRecord;
 
 public class DSSToxRID extends DSSToxID {
 	/**

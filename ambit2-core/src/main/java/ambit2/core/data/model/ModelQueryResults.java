@@ -1,5 +1,7 @@
 package ambit2.core.data.model;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+
 
 /**
  * Training and test instances are available via {@link IQueryRetrieval}

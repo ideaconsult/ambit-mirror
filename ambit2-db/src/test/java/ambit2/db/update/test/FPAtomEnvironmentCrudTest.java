@@ -1,6 +1,7 @@
 package ambit2.db.update.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -8,7 +9,6 @@ import org.dbunit.dataset.ITable;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.fpae.CreateAtomEnvironment;
 import ambit2.db.update.fpae.DeleteAtomEnvironment;
 import ambit2.descriptors.processors.AtomEnvironmentGenerator;

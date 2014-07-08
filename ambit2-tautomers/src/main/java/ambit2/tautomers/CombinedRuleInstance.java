@@ -1,6 +1,7 @@
 package ambit2.tautomers;
 
 import java.util.Vector;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 //This class currently is not used since the combined states generate

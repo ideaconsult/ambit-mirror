@@ -1,8 +1,8 @@
 package ambit2.tautomers;
 
-import java.util.Vector;
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.util.Vector;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;

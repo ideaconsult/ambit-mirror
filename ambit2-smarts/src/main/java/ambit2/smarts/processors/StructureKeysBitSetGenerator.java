@@ -3,6 +3,8 @@ package ambit2.smarts.processors;
 import java.util.BitSet;
 import java.util.Vector;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
@@ -12,7 +14,6 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.smarts.IsomorphismTester;

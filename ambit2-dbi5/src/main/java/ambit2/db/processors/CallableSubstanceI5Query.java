@@ -13,6 +13,7 @@ import net.idea.i5.cli.QueryToolClient.PredefinedQuery;
 import net.idea.i5.io.I5ZReader;
 import net.idea.i5.io.IQASettings;
 import net.idea.i5.io.QASettings;
+import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.opentox.cli.IIdentifiableResource;
 
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
@@ -25,7 +26,6 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;

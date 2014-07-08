@@ -3,11 +3,9 @@ package ambit2.core.io;
 import java.io.Reader;
 
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.formats.MDLV2000Format;
 
-import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 

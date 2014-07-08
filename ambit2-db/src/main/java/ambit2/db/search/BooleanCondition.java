@@ -31,7 +31,8 @@ package ambit2.db.search;
 
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.logging.Level;
+
+import net.idea.modbcum.i.IQueryCondition;
 
 public class BooleanCondition implements IQueryCondition {
 	private static Map<String,BooleanCondition> instances = null;

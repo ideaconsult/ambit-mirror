@@ -2,13 +2,14 @@ package ambit2.smarts.processors;
 
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.AbstractPropertyGenerator;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.smarts.CMLUtilities;

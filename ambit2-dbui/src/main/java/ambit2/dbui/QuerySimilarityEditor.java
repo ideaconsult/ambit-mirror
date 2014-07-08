@@ -35,12 +35,13 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 
 import ambit2.base.data.ClassHolder;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.structure.QuerySimilarityStructure;
 

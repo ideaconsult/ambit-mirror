@@ -32,6 +32,7 @@ package ambit2.db.update.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -43,7 +44,6 @@ import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.structure.QueryStructure;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.structure.CreateStructure;
 import ambit2.db.update.structure.DeleteStructure;
 import ambit2.db.update.structure.UpdateStructure;

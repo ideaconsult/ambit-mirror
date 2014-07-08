@@ -38,10 +38,11 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.IStatement;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.processors.ProcessorException;
-import ambit2.db.exceptions.DbAmbitException;
-import ambit2.db.search.QueryParam;
 
 
 public abstract class StatementExecutor<Q extends IStatement,Results> extends AbstractDBProcessor<Q,Results> {

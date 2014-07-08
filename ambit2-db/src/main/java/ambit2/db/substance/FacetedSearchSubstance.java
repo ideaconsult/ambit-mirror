@@ -3,10 +3,10 @@ package ambit2.db.substance;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.Protocol;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.search.QueryParam;
 
 
 public class FacetedSearchSubstance  extends AbstractReadSubstance<List<Protocol>,String> {

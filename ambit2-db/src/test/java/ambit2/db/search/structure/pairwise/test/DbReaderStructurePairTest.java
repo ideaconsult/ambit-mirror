@@ -30,6 +30,7 @@
 package ambit2.db.search.structure.pairwise.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.processors.IProcessor;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -37,11 +38,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.DbReader;

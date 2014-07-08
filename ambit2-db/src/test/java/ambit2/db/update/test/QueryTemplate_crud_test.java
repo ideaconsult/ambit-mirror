@@ -1,6 +1,7 @@
 package ambit2.db.update.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -8,7 +9,6 @@ import org.dbunit.dataset.ITable;
 import ambit2.base.data.Template;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.StoredQuery;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.storedquery.QueryAddTemplate;
 import ambit2.db.update.storedquery.QueryDeleteTemplate;
 

@@ -1,9 +1,9 @@
 package ambit2.chebi;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.ChebiWebServiceFault_Exception;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.search.AbstractFinder;
 

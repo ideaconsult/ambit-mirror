@@ -5,8 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.DSSToxCID;
@@ -20,7 +21,6 @@ import ambit2.core.processors.structure.key.PropertyNameKey;
 import ambit2.core.processors.structure.key.PubchemCID;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.IStoredProcStatement;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 /**

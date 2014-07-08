@@ -33,10 +33,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.PropertyTemplateStats;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.NumberCondition;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 public class QueryFunctionalGroups  extends AbstractStructureQuery<List<PropertyTemplateStats>,Boolean,StringCondition> {

@@ -6,20 +6,12 @@
  */
 package ambit2.descriptors.test;
 
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.TreeMap;
-
 import junit.framework.Assert;
 
 import org.junit.Test;
 import org.openscience.cdk.Bond;
-import org.openscience.cdk.atomtype.IAtomTypeMatcher;
 import org.openscience.cdk.atomtype.SybylAtomTypeMatcher;
 import org.openscience.cdk.config.AtomTypeFactory;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.graph.PathTools;
-import org.openscience.cdk.graph.matrix.AdjacencyMatrix;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
@@ -28,7 +20,6 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.smiles.SmilesParserWrapper;

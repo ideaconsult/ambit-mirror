@@ -2,8 +2,8 @@ package ambit2.db.search.structure.byproperty;
 
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.search.QueryParam;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.db.search.structure.QueryStructureByID;
 
 public class QueryStructureByPropertyInCompounds  extends	QueryStructureByProperty<QueryStructureByID> {

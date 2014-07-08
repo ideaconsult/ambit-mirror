@@ -35,11 +35,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
 import ambit2.core.data.MoleculeTools;

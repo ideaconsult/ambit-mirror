@@ -26,7 +26,6 @@
       <artifactId>restnet-a</artifactId>
       <version>${restnet.version}</version>
     </dependency> 
-    <!--    
     <dependency>
       <groupId>ambit</groupId>
       <artifactId>ambit2-db</artifactId>
@@ -35,6 +34,6 @@
       <type>jar</type>
       <scope>test</scope>
     </dependency>
-     -->    
+
 </dependencies>  
 </project>

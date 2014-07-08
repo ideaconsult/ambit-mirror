@@ -31,10 +31,10 @@ package ambit2.db.search.structure;
 
 import java.util.Iterator;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.IQueryObject;
 

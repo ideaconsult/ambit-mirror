@@ -586,5 +586,6 @@
     <cdk.version>1.4.11</cdk.version>
     <net.idea.loom.version>1.0.1</net.idea.loom.version>
     <restnet.version>1.0.3-SNAPSHOT</restnet.version>
+    <modbcum.version>1.0.1-SNAPSHOT</modbcum.version>
   </properties>
 </project>

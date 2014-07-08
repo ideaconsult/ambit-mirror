@@ -33,64 +33,74 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.logging.Logger;
 
-import ambit2.base.interfaces.IProcessor;
+import net.idea.modbcum.i.processors.IProcessor;
 
 /**
  * Default (empty) implementation of {@link IProcessor}
- * @author Nina Jeliazkova nina@acad.bg
- * <b>Modified</b> 2006-4-15
+ * 
+ * @author Nina Jeliazkova nina@acad.bg <b>Modified</b> 2006-4-15
  */
-public abstract  class DefaultAmbitProcessor<Target,Result> implements IProcessor<Target,Result> {
+public abstract class DefaultAmbitProcessor<Target, Result> implements	IProcessor<Target, Result> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4959472085664049891L;
 	protected PropertyChangeSupport propertyChangeSupport = null;
 	protected Logger logger = Logger.getLogger(getClass().getName());
-    protected boolean enabled=true;
-    
-    /**
+	protected boolean enabled = true;
+
+	/**
      * 
      */
-    public DefaultAmbitProcessor() {
-        super();
-        propertyChangeSupport=new PropertyChangeSupport(this);
-    }
+	public DefaultAmbitProcessor() {
+		super();
+		propertyChangeSupport = new PropertyChangeSupport(this);
+	}
 
+	public String toString() {
+		return "Default processor";
+	}
 
-    public String toString() {
-    	return "Default processor";
-    }
-    public synchronized boolean isEnabled() {
-        return enabled;
-    }
-    public synchronized void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-    public void addPropertyChangeListener(final String propertyName,
-    	      final PropertyChangeListener listener)
-   {
-    	    propertyChangeSupport.addPropertyChangeListener(propertyName,
-    	                                                    listener);
-   }
-    public void removePropertyChangeListener(final String propertyName,
-    	      final PropertyChangeListener listener)
-    {
-    	    propertyChangeSupport.removePropertyChangeListener(propertyName,
-    	                                                       listener);
-    }
-    public void addPropertyChangeListener(final PropertyChangeListener listener)
- {
-  	    propertyChangeSupport.addPropertyChangeListener(listener);
- }
-  public void removePropertyChangeListener(final PropertyChangeListener listener)
-  {
-  	    propertyChangeSupport.removePropertyChangeListener( listener);
-  }
-  
-	  public long getID() {
-	  	return serialVersionUID;
-	  }
+	public synchronized boolean isEnabled() {
+		return enabled;
+	}
 
+	public synchronized void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
+	public void addPropertyChangeListener(final String propertyName,
+			final PropertyChangeListener listener) {
+		propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
+	}
+
+	public void removePropertyChangeListener(final String propertyName,
+			final PropertyChangeListener listener) {
+		propertyChangeSupport.removePropertyChangeListener(propertyName,
+				listener);
+	}
+
+	public void addPropertyChangeListener(final PropertyChangeListener listener) {
+		propertyChangeSupport.addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(
+			final PropertyChangeListener listener) {
+		propertyChangeSupport.removePropertyChangeListener(listener);
+	}
+
+	public long getID() {
+		return serialVersionUID;
+	}
+
+	@Override
+	public void close() throws Exception {
+
+	}
+
+	@Override
+	public void open() throws Exception {
+
+	}
+	
 }

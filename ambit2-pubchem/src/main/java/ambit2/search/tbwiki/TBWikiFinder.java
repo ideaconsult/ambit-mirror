@@ -1,13 +1,12 @@
 package ambit2.search.tbwiki;
 
 import net.idea.loom.common.ICallBack;
+import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.tbwiki.CompoundInformation;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
-import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.search.AbstractFinder;
 

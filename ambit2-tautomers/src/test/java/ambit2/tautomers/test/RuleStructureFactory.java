@@ -1,21 +1,18 @@
 package ambit2.tautomers.test;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.Molecule;
-import org.openscience.cdk.Bond;
-
 import java.io.File;
 import java.io.RandomAccessFile;
-import java.util.HashMap;
 import java.util.ArrayList;
+
+import org.openscience.cdk.Molecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesParser;
+
+import ambit2.mopac.MopacUtilities;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.SmartsHelper;
-import ambit2.mopac.MopacUtilities;
 
 
 /**

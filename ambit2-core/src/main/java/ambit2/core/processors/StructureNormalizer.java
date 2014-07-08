@@ -32,30 +32,26 @@ package ambit2.core.processors;
 import java.io.StringWriter;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
 import net.sf.jniinchi.INCHI_RET;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.dx.DXParser;
 import ambit2.core.processors.structure.InchiProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
-import ambit2.core.processors.structure.MoleculeWriter;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.core.processors.structure.key.InchiPropertyKey;
 import ambit2.core.processors.structure.key.SmilesKey;

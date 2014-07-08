@@ -6,22 +6,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.ReadChemicalIds;
-import ambit2.db.readers.RetrieveGroupedValuesByAlias;
-import ambit2.db.readers.RetrieveProfileValues;
-import ambit2.db.readers.RetrieveProfileValues.SearchMode;
-import ambit2.db.search.QuerySmilesByID;
 
 public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryHeaderReporter<Q, Writer> {
 

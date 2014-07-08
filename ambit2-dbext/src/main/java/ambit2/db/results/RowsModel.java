@@ -35,8 +35,8 @@ import java.sql.SQLException;
 
 import javax.swing.AbstractListModel;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.data.TypedListModel;
-import ambit2.base.exceptions.AmbitException;
 
 public class RowsModel<T> extends AbstractListModel implements TypedListModel<T>, PropertyChangeListener {
 	/**

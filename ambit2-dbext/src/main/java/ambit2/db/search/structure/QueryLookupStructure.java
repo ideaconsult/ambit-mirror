@@ -31,14 +31,14 @@ package ambit2.db.search.structure;
 
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.search.EQCondition;
-import ambit2.db.search.QueryParam;
 
 /**
  * This is a wrapper around {@link QueryStructure} , allowing to use IStructureRecord as a parameter

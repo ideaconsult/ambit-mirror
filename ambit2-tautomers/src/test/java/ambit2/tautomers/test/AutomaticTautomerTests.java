@@ -3,8 +3,8 @@ package ambit2.tautomers.test;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
-import java.util.Vector;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -16,9 +16,9 @@ import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
+import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerRanking;
-import ambit2.tautomers.TautomerConst;
 
 
 

@@ -29,6 +29,8 @@
 
 package ambit2.base.exceptions;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 /**
  * Thrown if there are no results from a query
  * @author nina

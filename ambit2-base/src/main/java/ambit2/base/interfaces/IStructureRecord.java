@@ -29,7 +29,6 @@
 
 package ambit2.base.interfaces;
 
-import java.util.List;
 import java.util.Map;
 
 import ambit2.base.data.ILiteratureEntry;

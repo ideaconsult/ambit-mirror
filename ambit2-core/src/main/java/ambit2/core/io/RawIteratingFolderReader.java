@@ -30,7 +30,6 @@
 package ambit2.core.io;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 
 import org.openscience.cdk.index.CASNumber;
