@@ -72,19 +72,26 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer {
 		boolean expectPolicies4IndividualResource() {
 			return false;
 		}
+		int getMaxLevel() {
+			return 2;
+		}
 	}
 	
 	
 	@Override
 	public boolean authorizeSpecialCases(Request request, Response response,StringBuilder uri) {
-		if (request.getResourceRef().getSegments().size()==1) return true; //home page
-		for (int i=1; i < request.getResourceRef().getSegments().size(); i++) {
+		int depth = request.getResourceRef().getSegments().size();
+		if (depth==1) return true; //home page
+		if (depth > 2) depth = 3;
+		for (int i=1; i < depth; i++) {
 			String segment = request.getResourceRef().getSegments().get(i);
 			uri.append("/");
 			uri.append(segment);
 			if (i==1) try {
 				_resources s = _resources.valueOf(segment);
-				if (!s.isProtected(request.getMethod())) return true;
+				if (!s.isProtected(request.getMethod())) {
+					return true;
+				}
 				if (!s.expectPolicies4IndividualResource()) {
 					break;
 				}
