@@ -1,6 +1,7 @@
 package ambit2.db.update.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -9,7 +10,6 @@ import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.model.CreateModel;
 import ambit2.db.update.model.DeleteModel;
 import ambit2.db.update.model.UpdateModel;

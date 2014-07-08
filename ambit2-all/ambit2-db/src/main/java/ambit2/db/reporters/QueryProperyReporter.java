@@ -1,14 +1,14 @@
 package ambit2.db.reporters;
 
+import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.PropertyAnnotations;
 import ambit2.db.DbReader;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.IQueryCondition;
 import ambit2.db.update.propertyannotations.ReadPropertyAnnotations;
 
 public abstract class QueryProperyReporter<Q extends IQueryRetrieval<Property>,Output> extends QueryReporter<Property, Q, Output> {

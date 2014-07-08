@@ -33,10 +33,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.AbstractDBProcessor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IMultiRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveStructure;

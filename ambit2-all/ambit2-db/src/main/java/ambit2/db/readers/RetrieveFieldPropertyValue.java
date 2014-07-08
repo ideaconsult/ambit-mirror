@@ -3,9 +3,9 @@ package ambit2.db.readers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 
 /**
  * Retrive property-value pairs

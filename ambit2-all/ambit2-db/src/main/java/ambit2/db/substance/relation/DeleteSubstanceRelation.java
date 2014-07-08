@@ -31,13 +31,13 @@ package ambit2.db.substance.relation;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.SubstanceRecord;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.Proportion;
 import ambit2.db.chemrelation.AbstractUpdateStructureRelation;
-import ambit2.db.search.QueryParam;
 
 /**
  * Deletes row from substance_relation table

@@ -33,8 +33,8 @@ import java.sql.Connection;
 
 import javax.swing.JOptionPane;
 
+import net.idea.modbcum.i.IDBProcessor;
 import ambit2.base.interfaces.IAmbitEditor;
-import ambit2.db.IDBProcessor;
 import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.ui.EditorPreferences;
 

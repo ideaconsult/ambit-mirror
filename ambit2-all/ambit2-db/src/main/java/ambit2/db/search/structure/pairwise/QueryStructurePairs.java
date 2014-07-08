@@ -3,8 +3,8 @@ package ambit2.db.search.structure.pairwise;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.data.StructureRecord;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;

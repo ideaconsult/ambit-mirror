@@ -29,7 +29,7 @@
 
 package ambit2.db.chemrelation;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 
 public class DeleteStructureRelation extends AbstractUpdateStructureRelation<IStructureRecord,IStructureRecord,String,Double> {

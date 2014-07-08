@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
 
 public class ConnectionStatisticsProcessor<T> extends ConnectionStatusProcessor<T> {
 	protected boolean metadata = true;

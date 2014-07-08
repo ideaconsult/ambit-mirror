@@ -4,14 +4,15 @@ import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.jdbc.JDBCXYDataset;
 
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.IStoredQuery;
 
 public class Numeric2SimilarityChartGenerator extends ChartGenerator<IStoredQuery> {

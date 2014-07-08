@@ -3,10 +3,10 @@ package ambit2.db.search.structure.pairwise;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.IStoredQuery;
-import ambit2.db.search.QueryParam;
 
 public class QueryStructurePairsMixed extends QueryStructurePairs<SourceDataset, IStoredQuery> {
 

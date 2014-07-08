@@ -29,14 +29,16 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Iterator;
 
+import net.idea.modbcum.i.IDBProcessor;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.AmbitIOException;
 import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
@@ -44,7 +46,6 @@ import ambit2.core.io.RawIteratingFolderReader;
 import ambit2.core.io.RawIteratingMOLReader;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.io.RawIteratingWrapper;
-import ambit2.db.IDBProcessor;
 
 /**
  * Reads file 

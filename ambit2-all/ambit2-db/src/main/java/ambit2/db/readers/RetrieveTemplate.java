@@ -5,12 +5,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
-import ambit2.db.search.QueryParam;
 
 
 public class RetrieveTemplate<ResultType> extends AbstractQuery<Template,IStructureRecord,EQCondition,ResultType> 

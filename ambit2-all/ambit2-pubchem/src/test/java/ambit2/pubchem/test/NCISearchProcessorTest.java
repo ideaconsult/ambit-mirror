@@ -11,8 +11,8 @@ import org.junit.Test;
 
 import ambit2.pubchem.FileNotFoundException;
 import ambit2.pubchem.NCISearchProcessor;
-import ambit2.pubchem.SearchApplication;
 import ambit2.pubchem.NCISearchProcessor.METHODS;
+import ambit2.pubchem.SearchApplication;
 
 public class NCISearchProcessorTest {
 	protected NCISearchProcessor processor;

@@ -1,6 +1,6 @@
 package ambit2.pubchem;
 
-import ambit2.base.interfaces.IProcessor;
+import net.idea.modbcum.i.processors.IProcessor;
 import ambit2.base.processors.ProcessorException;
 
 public class FileNotFoundException extends ProcessorException {

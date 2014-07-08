@@ -4,14 +4,14 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.index.CASNumber;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.EINECS;
 import ambit2.search.chemidplus.AbstractSearchRequest;
 

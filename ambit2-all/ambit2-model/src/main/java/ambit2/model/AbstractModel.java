@@ -4,7 +4,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.featureselection.IAttributeSelection;
 
 public abstract class AbstractModel<ID,Features,ResultType extends Comparable<?>> implements 

@@ -2,9 +2,9 @@ package ambit2.core.processors.structure.key;
 
 import java.util.UUID;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 
 public class ReferenceSubstanceUUID extends PropertyKey<String> {

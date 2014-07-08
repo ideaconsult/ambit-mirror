@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 /**

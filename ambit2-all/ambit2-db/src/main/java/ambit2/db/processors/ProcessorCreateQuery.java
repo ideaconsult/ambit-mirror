@@ -34,25 +34,26 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.i.query.IQueryUpdate;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.config.Preferences;
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.AbstractDBProcessor;
+import ambit2.db.SessionID;
 import ambit2.db.UpdateExecutor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryStructureReporter;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryExecutor;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryStoredResults;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.dictionary.TemplateAddProperty;
 import ambit2.db.update.storedquery.CreateStoredQuery;
 import ambit2.db.update.storedquery.QueryAddTemplate;
@@ -77,7 +78,14 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 	protected UpdateExecutor<IQueryUpdate> exec;
 	protected QueryExecutor qexec = new QueryExecutor();	
 	protected String queryName = null;
-    public String getQueryName() {
+	protected SessionID session;
+    public SessionID getSession() {
+		return session;
+	}
+	public void setSession(SessionID session) {
+		this.session = session;
+	}
+	public String getQueryName() {
 		return queryName;
 	}
 	public void setQueryName(String queryName) {
@@ -138,7 +146,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 				//read by name and folder title
 				ReadStoredQuery findIfExists = new ReadStoredQuery();
 				findIfExists.setValue(result);
-				findIfExists.setFieldname(getSession().getName());
+				findIfExists.setFieldname(getSession().getName()); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 				ResultSet found = null;
 				try {
 					found = qexec.process(findIfExists);

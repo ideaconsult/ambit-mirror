@@ -3,7 +3,6 @@ package ambit2.loom.descriptors;
 import java.util.Properties;
 
 import junit.framework.Assert;
-
 import net.idea.ops.cli.OPSClient;
 
 import org.junit.AfterClass;

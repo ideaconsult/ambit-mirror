@@ -1,8 +1,8 @@
 package ambit2.search;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.search.AbstractFinder;
 import ambit2.search.csls.CSLSStringRequest;
 
@@ -20,7 +20,13 @@ public class AllSourcesFinder  extends AbstractFinder<IProcessor<String, String>
 	}
 	@Override
 	protected String query(String value) throws AmbitException {
-		return request.process(value);
+		try {
+			return request.process(value);
+		} catch (AmbitException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
 	}
 	/*
 	@Override

@@ -38,6 +38,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -54,7 +55,6 @@ import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.base.config.Preferences;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.io.DelimitedFileWriter;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.processors.structure.AtomConfigurator;

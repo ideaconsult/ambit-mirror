@@ -3,6 +3,8 @@ package ambit2.db.search;
 import java.util.Hashtable;
 import java.util.Map;
 
+import net.idea.modbcum.i.IQueryCondition;
+
 public class StringCondition implements IQueryCondition {
 	private static Map<String,StringCondition> instances = null;
 	public static final String C_EQ="=";

@@ -33,7 +33,6 @@ import java.sql.SQLException;
 
 import org.openscience.cdk.qsar.DescriptorValue;
 
-import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
 import ambit2.descriptors.processors.DescriptorValue2Property;
 

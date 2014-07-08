@@ -3,9 +3,9 @@ package ambit2.db.update.dataset;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.facet.AbstractFacet;
-import ambit2.db.search.QueryParam;
 
 public class QueryCountChemicalInDataset extends QueryCount<AbstractFacet<String>> {
 

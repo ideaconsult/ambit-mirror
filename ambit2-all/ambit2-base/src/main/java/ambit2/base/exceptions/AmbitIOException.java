@@ -4,6 +4,8 @@
  */
 package ambit2.base.exceptions;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 /**
  * TODO add description
  * @author Nina Jeliazkova nina@acad.bg

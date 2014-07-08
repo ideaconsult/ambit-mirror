@@ -34,6 +34,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.io.formats.PubChemFormat;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,7 +44,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import ambit2.base.data.StructureRecord;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.processors.ProcessorException;

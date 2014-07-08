@@ -31,9 +31,10 @@ package ambit2.core.processors.structure;
 
 import java.io.StringWriter;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 
 public class MoleculeWriter extends DefaultAmbitProcessor<IAtomContainer,String> {

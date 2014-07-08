@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
 import ambit2.db.processors.FP1024Writer;
 import ambit2.db.processors.FP1024Writer.FP1024_status;
-import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
 
 /**

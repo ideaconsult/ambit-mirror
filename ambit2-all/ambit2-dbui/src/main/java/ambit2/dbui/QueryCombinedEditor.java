@@ -10,13 +10,13 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
+import net.idea.modbcum.i.IDBProcessor;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.AbstractDBProcessor;
-import ambit2.db.IDBProcessor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryCombined.COMBINE;
 import ambit2.db.search.structure.QueryCombinedStructure;

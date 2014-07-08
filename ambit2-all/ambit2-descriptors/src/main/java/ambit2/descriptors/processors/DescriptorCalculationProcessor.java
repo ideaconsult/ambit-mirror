@@ -7,12 +7,13 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.core.data.IStructureDiagramHighlights;
 

@@ -3,10 +3,10 @@ package ambit2.db.search.structure;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.search.IQueryCondition;
 import ambit2.db.search.property.AbstractPropertyRetrieval.SearchMode;
 
 public abstract class QueryFieldAbstract<T,C extends IQueryCondition,NC extends IQueryCondition> extends AbstractStructureQuery<Property,T, C> {

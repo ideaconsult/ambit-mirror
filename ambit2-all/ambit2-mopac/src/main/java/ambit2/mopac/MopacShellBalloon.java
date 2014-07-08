@@ -1,10 +1,11 @@
 package ambit2.mopac;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.balloon.ShellBalloon;
 import ambit2.balloon.ShellBalloonWeb;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.external.ShellException;
 
 public class MopacShellBalloon extends AbstractMopacShell {

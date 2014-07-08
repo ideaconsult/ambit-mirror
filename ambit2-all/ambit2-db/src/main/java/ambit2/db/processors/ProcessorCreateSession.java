@@ -32,11 +32,11 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.logging.Level;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.SessionID;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.update.assessment.CreateAssessment;
 
 public class ProcessorCreateSession extends AbstractDBProcessor<SessionID, SessionID> {

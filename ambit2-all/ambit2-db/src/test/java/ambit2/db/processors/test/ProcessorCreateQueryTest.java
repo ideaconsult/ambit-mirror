@@ -20,7 +20,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 
 package ambit2.db.processors.test;
 
@@ -37,36 +37,32 @@ import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.structure.QueryStructureByID;
 
-
 public class ProcessorCreateQueryTest extends DbUnitTest {
-	
+
 	@Test
 	public void test() throws Exception {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
-		IQueryObject q = new QueryStructureByID(100211,100215); 
+		IQueryObject q = new QueryStructureByID(100211, 100215);
 		q.setPageSize(1000);
 		IDatabaseConnection c = getConnection();
 		ProcessorCreateSession ps = new ProcessorCreateSession();
 		ps.setConnection(c.getConnection());
 		SessionID s = new SessionID();
 		s = ps.process(s);
-	
 
-		
 		c = getConnection();
 		ProcessorCreateQuery pq = new ProcessorCreateQuery();
 		pq.setSession(s);
 		pq.setConnection(c.getConnection());
 		IStoredQuery storedQuery = pq.process(q);
 		c = getConnection();
-		ITable table = 	c.createQueryTable("EXPECTED",
-				String.format("SELECT idsessions,title from sessions where title='%s'",s.getName()));
-		Assert.assertEquals(1,table.getRowCount());		
-		Assert.assertEquals(s.getName(),table.getValue(0,"title").toString());
-		
-		Assert.assertEquals(3,storedQuery.getRows());
+		ITable table = c.createQueryTable("EXPECTED", String.format(
+				"SELECT idsessions,title from sessions where title='%s'",
+				s.getName()));
+		Assert.assertEquals(1, table.getRowCount());
+		Assert.assertEquals(s.getName(), table.getValue(0, "title").toString());
+
+		Assert.assertEquals(3, storedQuery.getRows());
 		c.close();
 	}
 }
-
-

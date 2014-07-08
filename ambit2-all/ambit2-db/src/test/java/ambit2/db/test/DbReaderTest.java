@@ -30,6 +30,8 @@
 package ambit2.db.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -37,9 +39,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.processors.structure.AtomConfigurator;
@@ -52,14 +52,15 @@ import ambit2.descriptors.FunctionalGroup;
 import ambit2.descriptors.VerboseDescriptorResult;
 
 public class DbReaderTest extends DbUnitTest {
-	
-	DbReader<IStructureRecord> batch ;
+
+	DbReader<IStructureRecord> batch;
 
 	int count = 0;
+
 	@Before
 	public void setUp() throws Exception {
 		batch = new DbReader<IStructureRecord>();
-	
+
 	}
 
 	@After
@@ -68,78 +69,108 @@ public class DbReaderTest extends DbUnitTest {
 
 	@Test
 	public void testReadRecordsOnly() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
-        IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(3,names.getRowCount());
-		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
-		Assert.assertEquals(0,values.getRowCount());
-		
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		IDatabaseConnection c = getConnection();
+		ITable names = c.createQueryTable("EXPECTED_NAMES",
+				"SELECT * FROM properties");
+		Assert.assertEquals(3, names.getRowCount());
+		ITable values = c.createQueryTable("EXPECTED_VALUES",
+				"SELECT * FROM property_values");
+		Assert.assertEquals(0, values.getRowCount());
+
 		QueryStructureByID query = new QueryStructureByID(100215);
 		batch.setConnection(c.getConnection());
 		batch.open();
 		IBatchStatistics stats = batch.process(query);
-		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ));
-		Assert.assertEquals(0,stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_PROCESSED));
+		Assert.assertEquals(1,
+				stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ));
+		Assert.assertEquals(0, stats
+				.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_PROCESSED));
 	}
 
 	@Test
 	public void testProcess() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
-        IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(3,names.getRowCount());
-		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
-		Assert.assertEquals(0,values.getRowCount());
-		
-		
-		ProcessorsChain<IStructureRecord, IBatchStatistics,IProcessor>  p = 
-				new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>();
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		IDatabaseConnection c = getConnection();
+		ITable names = c.createQueryTable("EXPECTED_NAMES",
+				"SELECT * FROM properties");
+		Assert.assertEquals(3, names.getRowCount());
+		ITable values = c.createQueryTable("EXPECTED_VALUES",
+				"SELECT * FROM property_values");
+		Assert.assertEquals(0, values.getRowCount());
+
+		ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> p = new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>();
 
 		p.add(new ProcessorStructureRetrieval());
 		p.add(new IProcessor<IStructureRecord, IStructureRecord>() {
 			public boolean isEnabled() {
 				return true;
 			}
+
 			public IStructureRecord process(IStructureRecord target)
 					throws AmbitException {
-				//System.out.println(target.getContent());
+				// System.out.println(target.getContent());
 				return target;
 			}
+
 			public void setEnabled(boolean value) {
 			}
+
 			public long getID() {
 				return 0;
 			}
+
+			@Override
+			public void open() throws Exception {
+			}
+
+			@Override
+			public void close() throws Exception {
+			}
 		});
-				
+
 		p.add(new MoleculeReader());
-		
+
 		p.add(new AtomConfigurator());
-		p.add(new FunctionalGroup("Test","P","Test"));
-		p.add(new IProcessor<VerboseDescriptorResult,String>() {
-			public String process(VerboseDescriptorResult target) throws AmbitException {
-				Assert.assertEquals("1",target.getResult().toString());
+		p.add(new FunctionalGroup("Test", "P", "Test"));
+		p.add(new IProcessor<VerboseDescriptorResult, String>() {
+			public String process(VerboseDescriptorResult target)
+					throws AmbitException {
+				Assert.assertEquals("1", target.getResult().toString());
 				return target.toString();
 			}
-			public boolean isEnabled() {return true;}
 
-			public void setEnabled(boolean value) {}
+			public boolean isEnabled() {
+				return true;
+			}
+
+			public void setEnabled(boolean value) {
+			}
+
 			public long getID() {
 				return 0;
 			}
 
+			@Override
+			public void open() throws Exception {
+			}
+
+			@Override
+			public void close() throws Exception {
+			}
 		});
-		
+
 		batch.setProcessorChain(p);
-		
+
 		QueryStructureByID query = new QueryStructureByID(100215);
 		batch.setConnection(c.getConnection());
 		batch.open();
 		IBatchStatistics stats = batch.process(query);
-		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ));
-		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_PROCESSED));
-		//C20H20BrP
+		Assert.assertEquals(1,
+				stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ));
+		Assert.assertEquals(1, stats
+				.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_PROCESSED));
+		// C20H20BrP
 	}
-	
+
 }

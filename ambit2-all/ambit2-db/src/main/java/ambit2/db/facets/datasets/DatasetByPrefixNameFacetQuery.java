@@ -3,9 +3,9 @@ package ambit2.db.facets.datasets;
 import java.util.List;
 import java.util.logging.Level;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.search.QueryParam;
 
 /**
  * getFieldname - prefix length

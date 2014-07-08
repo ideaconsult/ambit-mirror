@@ -1,6 +1,8 @@
 package ambit2.base.processors;
 
-import ambit2.base.interfaces.IProcessor;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.reporter.Reporter;
 
 /**
  * An abstract {@link IProcessor} , converting between arbitrary Content and arbitrary Representation.
@@ -56,7 +58,7 @@ public abstract class AbstractRepresentationConvertor<Item,Content,Output,R,Medi
 		setMediaType(media);
 		this.fileNamePrefix = fileNamePrefix;
 	}
-	public abstract R process(Content query) throws ambit2.base.exceptions.AmbitException;
+	public abstract R process(Content query) throws AmbitException;
 	
-	protected void close() {}
+	public void close() {}
 }

@@ -40,6 +40,8 @@ import java.util.EventObject;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -47,7 +49,6 @@ import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.interfaces.IAmbitEditor;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.core.data.MoleculeTools;
 import ambit2.rendering.CompoundImageTools;
 

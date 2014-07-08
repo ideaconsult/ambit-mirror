@@ -28,9 +28,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.apache.poi.hssf.record.formula.functions.T;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.featureselection.IAttributeSelection;
 import ambit2.similarity.AbstractSimilarityModel;
 import ambit2.similarity.measure.DistanceComparable;

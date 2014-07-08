@@ -1,17 +1,17 @@
 package ambit2.db.reporters;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
-import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
+import ambit2.db.readers.RetrieveStructure;
 
 public abstract class AbstractStructureRecordReporter<Result> extends QueryStructureReporter<IQueryRetrieval<IStructureRecord>, Result> {
 	/**

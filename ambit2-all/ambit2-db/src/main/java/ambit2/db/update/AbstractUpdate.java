@@ -31,6 +31,8 @@ package ambit2.db.update;
 
 import java.util.logging.Logger;
 
+import net.idea.modbcum.i.query.IQueryUpdate;
+
 public abstract class AbstractUpdate<Group,Target>  implements IQueryUpdate<Group,Target> {
 	protected static Logger logger = Logger.getLogger(AbstractUpdate.class.getName());
 	protected Target object;

@@ -3,6 +3,7 @@ package ambit2.db.update.test;
 import java.util.UUID;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -15,7 +16,6 @@ import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.base.relation.composition.Proportion;
 import ambit2.db.substance.relation.DeleteSubstanceRelation;
 import ambit2.db.substance.relation.UpdateSubstanceRelation;
-import ambit2.db.update.IQueryUpdate;
 
 public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,IStructureRecord>{
 

@@ -1,5 +1,7 @@
 package ambit2.db.update.test;
 
+import net.idea.modbcum.i.query.IQueryUpdate;
+
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Assert;
@@ -10,7 +12,6 @@ import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Params;
 import ambit2.db.substance.study.DeleteEffectRecords;
 import ambit2.db.substance.study.UpdateEffectRecords;
-import ambit2.db.update.IQueryUpdate;
 
 public class EffectRecord_crud_test  extends CRUDTest<String,EffectRecord> {
 

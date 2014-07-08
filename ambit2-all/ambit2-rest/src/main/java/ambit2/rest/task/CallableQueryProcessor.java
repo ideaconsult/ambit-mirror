@@ -5,6 +5,8 @@ import java.net.HttpURLConnection;
 import java.sql.Connection;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.opentox.dsl.OTDataset;
 import org.opentox.dsl.OTFeature;
 import org.opentox.dsl.task.ClientResourceWrapper;
@@ -14,7 +16,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.DbReaderStructure;
 import ambit2.db.processors.AbstractBatchProcessor;

@@ -31,11 +31,11 @@ import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
+import ambit2.tautomers.CACTVSRanking;
 import ambit2.tautomers.KnowledgeBase;
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerRanking;
-import ambit2.tautomers.CACTVSRanking;
 
 
 public class TestTautomers 

@@ -36,7 +36,6 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.db.search.structure.QueryLookupStructure;
-import ambit2.db.search.test.QueryTest;
 
 public class QueryLookupStructureTest  extends QueryTest<QueryLookupStructure> {
 

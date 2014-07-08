@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;

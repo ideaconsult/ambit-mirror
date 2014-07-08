@@ -5,10 +5,10 @@ import java.util.logging.Level;
 
 import javax.naming.OperationNotSupportedException;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.IQueryUpdate;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.processors.AbstractUpdateProcessor;
-import ambit2.db.update.IQueryUpdate;
 
 public class AtomEnvironmentWriter<S> extends AbstractUpdateProcessor<IStructureRecord, S> {
 	protected CreateAtomEnvironment g = new CreateAtomEnvironment();

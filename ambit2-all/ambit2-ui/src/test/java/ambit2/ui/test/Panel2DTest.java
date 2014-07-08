@@ -20,7 +20,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 
 package ambit2.ui.test;
 
@@ -36,6 +36,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.Molecule;
@@ -46,73 +49,91 @@ import org.openscience.cdk.renderer.selection.SingleSelection;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.rendering.CompoundImageTools;
 import ambit2.ui.Panel2D;
 
-
 public class Panel2DTest {
 	protected IMolecule mol;
-	@Before
-	public void setup() throws Exception  {
-		//String smiles="CCc1ccccc1.C1CCCC1.C1CCC1.[Na+].CCCCCCCCCCCCCCCCC(CCCCCCCCC)CCCCCCCCCCCC";
-		String smiles = "NCCCCCCCCC";
-        SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());
-        mol = sp.parseSmiles(smiles);		
 
-		for (int i=0; i < mol.getBondCount();i++)
-			mol.getBond(i).setID(Integer.toString(i+1));
-	
+	@Before
+	public void setup() throws Exception {
+		// String
+		// smiles="CCc1ccccc1.C1CCCC1.C1CCC1.[Na+].CCCCCCCCCCCCCCCCC(CCCCCCCCC)CCCCCCCCCCCC";
+		String smiles = "NCCCCCCCCC";
+		SmilesParser sp = new SmilesParser(
+				SilentChemObjectBuilder.getInstance());
+		mol = sp.parseSmiles(smiles);
+
+		for (int i = 0; i < mol.getBondCount(); i++)
+			mol.getBond(i).setID(Integer.toString(i + 1));
+
 	}
-	protected IProcessor<IAtomContainer, IChemObjectSelection> getSelector(IAtomContainer mol) {
+
+	protected IProcessor<IAtomContainer, IChemObjectSelection> getSelector(
+			IAtomContainer mol) {
 		return new IProcessor<IAtomContainer, IChemObjectSelection>() {
 			public IChemObjectSelection process(IAtomContainer mol)
 					throws AmbitException {
 				Molecule selected = new Molecule();
-				for (int i=0; i < 2 ;i++) {
+				for (int i = 0; i < 2; i++) {
 					selected.addAtom(mol.getBond(i).getAtom(0));
 					selected.addAtom(mol.getBond(i).getAtom(1));
-					selected.addBond(mol.getBond(i));			
-				}	
+					selected.addBond(mol.getBond(i));
+				}
 				return new SingleSelection<Molecule>(selected);
 			}
-			public boolean isEnabled() { return true;	}
-			public void setEnabled(boolean value) {}
+
+			public boolean isEnabled() {
+				return true;
+			}
+
+			public void setEnabled(boolean value) {
+			}
+
 			public long getID() {
 				return 0;
 			}
+
+			@Override
+			public void open() throws Exception {
+			}
+
+			@Override
+			public void close() throws Exception {
+			}
 		};
-		
+
 	}
+
 	@Test
 	public void testHighlight() throws Exception {
 		Panel2D panel = new Panel2D();
-		
-		panel.setPreferredSize(new Dimension(400,400));
+
+		panel.setPreferredSize(new Dimension(400, 400));
 
 		panel.setAtomContainer(mol);
-		panel.setSelector(getSelector(mol));	
-		JOptionPane.showMessageDialog(null,
-				new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-						new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,panel,new JPanel()),
-						new JButton("?") {
+		panel.setSelector(getSelector(mol));
+		JOptionPane.showMessageDialog(null, new JSplitPane(
+				JSplitPane.VERTICAL_SPLIT, new JSplitPane(
+						JSplitPane.HORIZONTAL_SPLIT, panel, new JPanel()),
+				new JButton("?") {
 					@Override
 					public boolean action(Event evt, Object what) {
 						return true;
-						
+
 					}
-				
-				})
-				);
+
+				}));
 	}
+
 	@Test
 	public void testImage() throws Exception {
 
 		CompoundImageTools tools = new CompoundImageTools();
-		tools.setImageSize(new Dimension(300,300));
-		BufferedImage image = tools.getImage(mol,getSelector(mol),false,false);
-		
+		tools.setImageSize(new Dimension(300, 300));
+		BufferedImage image = tools.getImage(mol, getSelector(mol), false,
+				false);
+
 		File file = new File("image.png");
 		FileOutputStream out = new FileOutputStream(file);
 		System.out.println(file.getAbsolutePath());

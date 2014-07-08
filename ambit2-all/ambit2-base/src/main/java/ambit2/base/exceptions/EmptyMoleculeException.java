@@ -1,5 +1,7 @@
 package ambit2.base.exceptions;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 
 public class EmptyMoleculeException extends AmbitException {
 

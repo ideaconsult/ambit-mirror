@@ -32,10 +32,10 @@ package ambit2.db.search.structure;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.NumberCondition;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.property.AbstractPropertyRetrieval.SearchMode;
 
 public class QueryFieldNumeric extends AbstractStructureQuery<Property,Number,NumberCondition> {

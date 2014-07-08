@@ -3,15 +3,14 @@ package ambit2.descriptors.processors;
 import java.util.BitSet;
 import java.util.logging.Level;
 
-import org.openscience.cdk.CDKConstants;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.processors.structure.AbstractPropertyGenerator;
@@ -230,7 +229,13 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 	@Override
 	protected BitSet generateProperty(IAtomContainer atomContainer)
 			throws AmbitException {
-		return processor.process(atomContainer);
+		try {
+			return processor.process(atomContainer);
+		} catch (AmbitException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
 	}
 	@Override
 	protected IAtomContainer getAtomContainer(IStructureRecord target)

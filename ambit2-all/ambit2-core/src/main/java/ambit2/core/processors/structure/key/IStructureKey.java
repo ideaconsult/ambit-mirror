@@ -29,7 +29,7 @@
 
 package ambit2.core.processors.structure.key;
 
-import ambit2.base.interfaces.IProcessor;
+import net.idea.modbcum.i.processors.IProcessor;
 
 public interface IStructureKey<Target, Result> extends IProcessor<Target, Result>{
 	public Object getKey();

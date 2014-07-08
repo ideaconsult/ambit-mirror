@@ -1,21 +1,14 @@
 package ambit2.chebi.test;
 
-import java.util.Iterator;
-
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.chebi.ChEBIClient;
-import ambit2.core.io.FileInputState;
-import ambit2.core.io.IteratingDelimitedFileReader;
-import ambit2.core.io.RawIteratingWrapper;
 
 public class ChEBIClientTest {
 	@Test

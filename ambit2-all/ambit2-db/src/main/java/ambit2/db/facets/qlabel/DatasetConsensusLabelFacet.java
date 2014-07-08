@@ -2,7 +2,6 @@ package ambit2.db.facets.qlabel;
 
 import java.net.URLEncoder;
 
-import ambit2.base.data.ConsensusLabel.CONSENSUS_LABELS;
 import ambit2.base.data.ConsensusLabel;
 import ambit2.base.data.SourceDataset;
 import ambit2.db.facets.propertyvalue.PropertyDatasetFacet;

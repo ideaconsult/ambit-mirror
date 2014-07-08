@@ -3,6 +3,9 @@ package ambit2.rest;
 import java.io.Serializable;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -15,9 +18,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.exception.RResourceException;
 import ambit2.rest.freemarker.FreeMarkerResource;
 

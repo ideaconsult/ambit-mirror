@@ -6,10 +6,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.index.CASNumber;
 
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.ProcessorException;
 
 

@@ -7,22 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.i.query.IQueryUpdate;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.AmbitUser;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.cache.QueryCachedResultsBoolean;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryExecutor;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.AbstractStructureQuery;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.storedquery.CreateStoredQuery;
 
 /**

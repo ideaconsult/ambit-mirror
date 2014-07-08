@@ -5,18 +5,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.relation.AbstractRelation;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.StructureRelation;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.BooleanCondition;
-import ambit2.db.search.QueryParam;
 
 /**
  * Similar to {@link ReadStructureRelation} , but retrieves the related compounds for the entire dataset

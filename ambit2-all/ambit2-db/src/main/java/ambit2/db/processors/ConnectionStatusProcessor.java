@@ -3,9 +3,9 @@ package ambit2.db.processors;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.db.AbstractDBProcessor;
-import ambit2.db.exceptions.DbAmbitException;
 
 
 public class ConnectionStatusProcessor<T> extends AbstractDBProcessor<T,StringBuffer> {

@@ -1,6 +1,6 @@
 package ambit2.base.processors;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
 
 /**
  * Transform a string to CAS number format XXXXX-XX-X  

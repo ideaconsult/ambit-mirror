@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 
 import junit.framework.Assert;
 import ambit2.base.data.QLabel;
-import ambit2.base.data.StructureRecord;
 import ambit2.base.data.QLabel.QUALITY;
+import ambit2.base.data.StructureRecord;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.qlabel.QueryQLabel;
 

@@ -10,9 +10,9 @@ import org.openscience.cdk.qsar.result.DoubleArrayResult;
 
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
+import ambit2.mopac.AbstractMopacShell;
 import ambit2.mopac.DescriptorMopacShell;
 import ambit2.mopac.Mopac7Reader;
-import ambit2.mopac.AbstractMopacShell;
 
 public class DescriptorMopacShellTest {
 	protected SmilesParserWrapper parser;

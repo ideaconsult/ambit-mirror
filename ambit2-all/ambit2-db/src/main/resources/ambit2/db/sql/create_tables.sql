@@ -4,7 +4,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
 -- -----------------------------------------------------
 -- Table `users` Users
--- If registered, 'username' points to ambit_users.users table
+-- If registered, 'user_name' points to ambit_users.users table
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (

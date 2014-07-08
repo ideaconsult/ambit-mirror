@@ -7,10 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.Context;
 
 import ambit2.base.config.Preferences;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.LoginInfo;
 import ambit2.db.pool.DatasourceFactory;
 

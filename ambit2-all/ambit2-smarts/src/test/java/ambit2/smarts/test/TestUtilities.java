@@ -34,7 +34,6 @@ import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.io.MDLV2000Writer;
-//import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
@@ -46,19 +45,17 @@ import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.isomorphism.mcss.RMap;
 import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesGenerator;
+import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-
 import org.openscience.cdk.validate.BasicValidator;
 import org.openscience.cdk.validate.CDKValidator;
 import org.openscience.cdk.validate.ValidationReport;
 import org.openscience.cdk.validate.ValidatorEngine;
-import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.smiles.SmilesGenerator;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.MyIteratingMDLReader;
-import ambit2.core.io.MDLWriter;
 import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.ChemObjectToSmiles;
@@ -76,7 +73,6 @@ import ambit2.smarts.SmartsScreeningKeys;
 import ambit2.smarts.SmartsToChemObject;
 import ambit2.smarts.StructInfo;
 import ambit2.smarts.StructureSetAnalyzer;
-import ambit2.smarts.SmartsAtomExpression;
 
 
 

@@ -4,11 +4,11 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
-import ambit2.db.search.QueryParam;
 
 public class ReadChemicalIds  extends AbstractQuery<Object,IStructureRecord,EQCondition,IStructureRecord> implements IQueryRetrieval<IStructureRecord>  {
 	private static String sql = "select idchemical,inchi,smiles,formula,inchikey,label,lastmodified from chemicals where idchemical=?";

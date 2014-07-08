@@ -2,13 +2,13 @@ package ambit2.db.update.model;
 
 import java.sql.ResultSet;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 public abstract class AbstractModelQuery<F,V>  extends AbstractQuery<F, V, StringCondition, ModelQueryResults>  implements IQueryRetrieval<ModelQueryResults> {

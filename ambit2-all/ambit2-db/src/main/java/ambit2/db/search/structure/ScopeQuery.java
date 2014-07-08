@@ -32,12 +32,12 @@ package ambit2.db.search.structure;
 import java.sql.ResultSet;
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
-import ambit2.db.search.QueryParam;
 
 /**
  * A convenience class for a query used to restrict the scope of other queries

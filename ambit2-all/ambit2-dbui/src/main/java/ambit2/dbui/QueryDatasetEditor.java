@@ -36,12 +36,13 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.ListModel;
 
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.results.RowsModel;

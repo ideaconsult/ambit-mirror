@@ -34,7 +34,8 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.IDBProcessor;
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.readers.IQueryRetrieval;

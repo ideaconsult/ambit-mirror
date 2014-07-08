@@ -36,9 +36,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListModel;
 
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.data.PropertyTemplateStats;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryFunctionalGroups;
 

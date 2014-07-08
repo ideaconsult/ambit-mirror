@@ -2,7 +2,8 @@ package ambit2.db.search;
 
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 
 public class QueryAquire extends QueryExperiment {
 	   protected static final String sql = "select distinct(cas),Chemical_Name,Endpoint from chemicals join aquire on chemicals.cas=aquire.TestCAS join species_data on species_data.SpeciesID=aquire.SpeciesNumber ";

@@ -4,6 +4,9 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.UUID;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.reporter.Reporter;
 import net.idea.restnet.i.task.ITaskStorage;
 
 import org.restlet.Request;
@@ -15,9 +18,6 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
-import ambit2.base.processors.Reporter;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
@@ -99,7 +99,7 @@ public class FactoryTaskConvertor<USERID> {
 			IProcessor<Iterator<UUID>,Representation> p = createTaskConvertor(variant,request,doc,DisplayMode.singleitem);
 
 			return p.process(new SingleTaskIterator<USERID>(task));
-		} catch (AmbitException x) {
+		} catch (Exception x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
 	}
@@ -111,8 +111,7 @@ public class FactoryTaskConvertor<USERID> {
 			if (tasks==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			IProcessor<Iterator<UUID>,Representation> p = createTaskConvertor(variant,request,doc,DisplayMode.table);
 			return p.process(tasks);
-		} catch (AmbitException x) {
-			x.printStackTrace();
+		} catch (Exception x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
 	}	

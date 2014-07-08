@@ -33,6 +33,7 @@ import java.sql.ResultSet;
 import java.util.List;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.QueryParam;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +41,6 @@ import org.junit.Test;
 import ambit2.base.data.Dictionary;
 import ambit2.db.search.DictionaryQuery;
 import ambit2.db.search.DictionarySubjectQuery;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 public class DictionaryQuerySubjectTest extends QueryTest<DictionaryQuery<Dictionary>> {

@@ -10,14 +10,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.SingleSelection;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.MoleculeTools;
 import ambit2.rendering.CompoundImageTools;
@@ -170,6 +171,16 @@ public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagr
 					3+h/2+h*(i-someindex.aliphaticHydroxylation.ordinal()));
 		}
 		return buffer;
+	}
+	@Override
+	public void close() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void open() throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

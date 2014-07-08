@@ -1,6 +1,7 @@
 package ambit2.db.update.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -9,7 +10,6 @@ import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.PropertyValue;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.value.UpdateStructurePropertyIDString;
 
 public class StructurePropertyValueString_crud_test extends CRUDTest<IStructureRecord,PropertyValue<String>> {

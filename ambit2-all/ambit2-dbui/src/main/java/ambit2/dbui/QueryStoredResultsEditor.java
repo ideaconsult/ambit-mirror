@@ -36,8 +36,8 @@ import java.sql.Connection;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.results.RowsModel;
 import ambit2.db.search.EQCondition;

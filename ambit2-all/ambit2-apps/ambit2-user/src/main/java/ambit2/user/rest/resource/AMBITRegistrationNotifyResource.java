@@ -2,10 +2,11 @@ package ambit2.user.rest.resource;
 
 import java.util.Map;
 
-import org.restlet.Request;
-
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.user.resource.RegistrationNotifyResource;
+
+import org.restlet.Request;
+
 import ambit2.base.config.AMBITConfig;
 
 public class AMBITRegistrationNotifyResource  extends RegistrationNotifyResource {

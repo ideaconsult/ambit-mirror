@@ -1,5 +1,7 @@
 package ambit2.db.search;
 
+import net.idea.modbcum.i.IQueryCondition;
+
 
 
 public class SetCondition  implements IQueryCondition {

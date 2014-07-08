@@ -2,8 +2,10 @@ package ambit2.db.search;
 
 import java.util.logging.Logger;
 
+import net.idea.modbcum.i.IParameterizedQuery;
+import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.config.Preferences;
-import ambit2.base.exceptions.AmbitException;
 
 import com.jgoodies.binding.beans.Model;
 

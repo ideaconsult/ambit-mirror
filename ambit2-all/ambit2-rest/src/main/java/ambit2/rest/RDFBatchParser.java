@@ -2,11 +2,12 @@ package ambit2.rest;
 
 import java.util.Iterator;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.rest.rdf.RDFObjectIterator;
 

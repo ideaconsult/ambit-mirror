@@ -3,6 +3,9 @@ package ambit2.db.search.structure;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
+
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -13,14 +16,12 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.groups.SuppleAtomContainer;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.search.BooleanCondition;
-import ambit2.db.search.QueryParam;
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.descriptors.VerboseDescriptorResult;
 import ambit2.smarts.CMLUtilities;

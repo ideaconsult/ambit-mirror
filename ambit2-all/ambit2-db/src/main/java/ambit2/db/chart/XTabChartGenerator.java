@@ -7,6 +7,9 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
@@ -17,8 +20,6 @@ import org.jfree.data.jdbc.JDBCCategoryDataset;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.exceptions.DbAmbitException;
 
 /**
 <pre>

@@ -2,17 +2,16 @@ package ambit2.db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.exceptions.DbAmbitException;
-import ambit2.db.search.QueryParam;
-import ambit2.db.update.IQueryUpdate;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.i.query.IQueryUpdate;
+import net.idea.modbcum.i.query.QueryParam;
 
 public class PreparedStatementBatchExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q, int[]> {
 

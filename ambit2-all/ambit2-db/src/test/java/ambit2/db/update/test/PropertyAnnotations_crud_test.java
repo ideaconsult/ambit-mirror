@@ -1,6 +1,7 @@
 package ambit2.db.update.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -8,7 +9,6 @@ import org.dbunit.dataset.ITable;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.PropertyAnnotations;
-import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.propertyannotations.CreatePropertyAnnotations;
 
 public class PropertyAnnotations_crud_test  extends CRUDTest<Property,PropertyAnnotations> {

@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
@@ -14,7 +16,6 @@ import org.jfree.ui.RectangleInsets;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.exceptions.AmbitException;
 
 public class BarChartGeneratorDataset extends BarChartGenerator<ISourceDataset> {
 

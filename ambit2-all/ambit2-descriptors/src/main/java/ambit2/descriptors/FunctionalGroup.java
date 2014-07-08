@@ -20,12 +20,15 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 
 package ambit2.descriptors;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
@@ -39,14 +42,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import ambit2.base.data.AmbitBean;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.smarts.query.ISmartsPattern;
 import ambit2.smarts.query.SMARTSException;
 import ambit2.smarts.query.SmartsPatternFactory;
 
-public class FunctionalGroup extends AmbitBean implements 
-				IProcessor<IAtomContainer,VerboseDescriptorResult> {
+public class FunctionalGroup extends AmbitBean implements
+		IProcessor<IAtomContainer, VerboseDescriptorResult> {
 
 	/**
 	 * 
@@ -58,38 +59,49 @@ public class FunctionalGroup extends AmbitBean implements
 	protected static final String t_hint = "hint";
 	protected static final String t_family = "family";
 	protected static final String t_example = "example";
-	protected Hashtable<String,String> properties;
+	protected Hashtable<String, String> properties;
 	protected ISmartsPattern<IAtomContainer> query = null;
+
 	public ISmartsPattern<IAtomContainer> getQuery() {
 		return query;
 	}
+
 	public long getID() {
 		return 0;
 	}
-	public void setQuery(ISmartsPattern<IAtomContainer> query) throws SMARTSException {
+
+	public void setQuery(ISmartsPattern<IAtomContainer> query)
+			throws SMARTSException {
 		this.query = query;
 		query.setSmarts(getSmarts());
 	}
+
 	protected boolean enabled = true;
 	protected boolean verboseMatch = false;
 
 	public boolean isVerboseMatch() {
 		return verboseMatch;
 	}
+
 	public void setVerboseMatch(boolean verboseMatch) {
 		this.verboseMatch = verboseMatch;
 	}
+
 	public boolean isEnabled() {
 		return enabled;
 	}
+
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
+
 	public FunctionalGroup() {
-		this("","","");
-		
+		this("", "", "");
+
 	}
-	public FunctionalGroup(String name,String smarts,String hint,String family) {
+
+	public FunctionalGroup(String name, String smarts, String hint,
+			String family) {
 		super();
 		properties = new Hashtable<String, String>();
 		setFamily(family);
@@ -97,100 +109,131 @@ public class FunctionalGroup extends AmbitBean implements
 		setName(name);
 		setHint(hint);
 		setExample(smarts);
-	}		
-	public FunctionalGroup(String name,String smarts,String hint,String family,String example) {
-		this(name,smarts,hint,family);
+	}
+
+	public FunctionalGroup(String name, String smarts, String hint,
+			String family, String example) {
+		this(name, smarts, hint, family);
 		setExample(example);
-	}		
-	public FunctionalGroup(String name,String smarts,String hint) {
-		this(name,smarts,hint,"");
-	}	
-	
+	}
+
+	public FunctionalGroup(String name, String smarts, String hint) {
+		this(name, smarts, hint, "");
+	}
+
 	public void clear() {
 		properties.clear();
 	}
+
 	public String getFamily() {
 		return properties.get(t_family);
-	}	
+	}
+
 	public String getHint() {
 		return properties.get(t_hint);
 	}
+
 	public String getName() {
 		return properties.get(t_name);
 	}
+
 	public String getSmarts() {
 		return properties.get(t_smarts);
 	}
+
 	public String getExample() {
 		return properties.get(t_example);
-	}	
-	public void setName(String name) {
-		properties.put(t_name,name);
 	}
+
+	public void setName(String name) {
+		properties.put(t_name, name);
+	}
+
 	public void setExample(String name) {
-		properties.put(t_example,name==null?getSmarts():name);
-	}	
+		properties.put(t_example, name == null ? getSmarts() : name);
+	}
+
 	public void setSmarts(String smarts) {
 		try {
-			//This is a HACK to deal with kekule structures!
-			//Find out if this is a valid smiles ,
-			SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
+			// This is a HACK to deal with kekule structures!
+			// Find out if this is a valid smiles ,
+			SmilesParser parser = new SmilesParser(
+					SilentChemObjectBuilder.getInstance());
 			IMolecule mol = parser.parseSmiles(smarts);
-			for (IAtom atom: mol.atoms()) 
+			for (IAtom atom : mol.atoms())
 				if (atom.getFlag(CDKConstants.ISAROMATIC)) {
 					SmilesGenerator g = new SmilesGenerator();
 					g.setUseAromaticityFlag(true);
-					smarts = g.createSMILES(mol);					
+					smarts = g.createSMILES(mol);
 					break;
 				}
 		} catch (Exception x) {
-			//not a valid smiles, so we keep the original smarts
+			// not a valid smiles, so we keep the original smarts
 		}
-		properties.put(t_smarts,smarts);
+		properties.put(t_smarts, smarts);
 		query = null;
 	}
+
 	public void setHint(String hint) {
-		properties.put(t_hint,hint);
-	}	
+		properties.put(t_hint, hint);
+	}
+
 	public void setFamily(String family) {
-		properties.put(t_family,family);
-	}		
+		properties.put(t_family, family);
+	}
+
 	@Override
 	public String toString() {
-		return String.format("%s %s",getFamily(),getName());
+		return String.format("%s %s", getFamily(), getName());
 	}
-    public Element toXML(Document document) throws AmbitException {
-        Element element = document.createElement(t_group);
-        Enumeration<String> keys = properties.keys();
-        while (keys.hasMoreElements()) {
-        	String key = keys.nextElement();
-        	element.setAttribute(key,properties.get(key));
-        }	
-        return element;
-    }
-	public VerboseDescriptorResult process(IAtomContainer target) throws AmbitException {
+
+	public Element toXML(Document document) throws AmbitException {
+		Element element = document.createElement(t_group);
+		Enumeration<String> keys = properties.keys();
+		while (keys.hasMoreElements()) {
+			String key = keys.nextElement();
+			element.setAttribute(key, properties.get(key));
+		}
+		return element;
+	}
+
+	public VerboseDescriptorResult process(IAtomContainer target)
+			throws AmbitException {
 		if (query == null)
 			query = SmartsPatternFactory.createSmartsPattern(
-					SmartsPatternFactory.SmartsParser.smarts_nk, getSmarts(), false);
+					SmartsPatternFactory.SmartsParser.smarts_nk, getSmarts(),
+					false);
 		int hits = 0;
-		IAtomContainer match = null;		
-		if (isVerboseMatch()) 
+		IAtomContainer match = null;
+		if (isVerboseMatch())
 			try {
 				match = query.getMatchingStructure(target);
-				hits = (match.getAtomCount()>0) ?1:0;
-				return new VerboseDescriptorResult<IAtomContainer,IntegerResult>(new IntegerResult(hits),match);
+				hits = (match.getAtomCount() > 0) ? 1 : 0;
+				return new VerboseDescriptorResult<IAtomContainer, IntegerResult>(
+						new IntegerResult(hits), match);
 			} catch (UnsupportedOperationException x) {
 				hits = query.match(target);
-				return new VerboseDescriptorResult<String,IntegerResult>(new IntegerResult(hits),null);				
+				return new VerboseDescriptorResult<String, IntegerResult>(
+						new IntegerResult(hits), null);
 			} catch (SMARTSException x) {
 				match = null;
 				hits = 0;
-				return new VerboseDescriptorResult<String,IntegerResult>(new IntegerResult(hits),x.getMessage());
+				return new VerboseDescriptorResult<String, IntegerResult>(
+						new IntegerResult(hits), x.getMessage());
 			}
 		else {
 			hits = query.match(target);
-			return new VerboseDescriptorResult<String,IntegerResult>(new IntegerResult(hits),null);
-		}	
-	}	
-    
+			return new VerboseDescriptorResult<String, IntegerResult>(
+					new IntegerResult(hits), null);
+		}
+	}
+
+	@Override
+	public void open() throws Exception {
+	}
+
+	@Override
+	public void close() throws Exception {
+	}
+
 }

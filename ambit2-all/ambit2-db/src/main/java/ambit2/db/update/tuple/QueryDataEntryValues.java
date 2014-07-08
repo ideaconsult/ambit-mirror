@@ -4,9 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 
 public class QueryDataEntryValues extends QueryDataEntry {

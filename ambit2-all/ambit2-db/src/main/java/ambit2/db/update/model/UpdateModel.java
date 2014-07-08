@@ -3,9 +3,9 @@ package ambit2.db.update.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractObjectUpdate;
 
 /**

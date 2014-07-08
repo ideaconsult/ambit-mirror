@@ -52,6 +52,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.exception.CDKException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -61,7 +63,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import ambit2.base.data.StructureRecord;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.io.SimpleErrorHandler;
 import ambit2.base.processors.DefaultAmbitProcessor;

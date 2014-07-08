@@ -32,8 +32,9 @@ package ambit2.db.search;
 import java.io.Serializable;
 import java.util.List;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.IStatement;
+import net.idea.modbcum.i.IStatement;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 
 /**
  * 

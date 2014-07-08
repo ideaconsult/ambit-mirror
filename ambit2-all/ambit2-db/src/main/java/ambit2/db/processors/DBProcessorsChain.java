@@ -25,15 +25,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.db.processors;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IDBProcessor;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.processors.ProcessorsChain;
-import ambit2.db.IDBProcessor;
 import ambit2.db.SessionID;
-import ambit2.db.exceptions.DbAmbitException;
 
-public class DBProcessorsChain<Target,Result,P extends IDBProcessor> extends ProcessorsChain<Target,Result,P> implements IDBProcessor<Target,Result> {
+public class DBProcessorsChain<Target,Result,P extends IDBProcessor<Target, Result>> extends ProcessorsChain<Target,Result,P> implements IDBProcessor<Target,Result> {
 	/**
 	 * 
 	 */
@@ -54,7 +53,6 @@ public class DBProcessorsChain<Target,Result,P extends IDBProcessor> extends Pro
 	public void add(int index, P element) {
 		try {
 			element.setConnection(getConnection());
-			element.setSession(getSession());
 			} catch (DbAmbitException x) {
 				logger.log(Level.WARNING,x.getMessage(),x);
 			}
@@ -64,7 +62,6 @@ public class DBProcessorsChain<Target,Result,P extends IDBProcessor> extends Pro
 	public boolean add(P o) {
 		try {
 		o.setConnection(getConnection());
-		o.setSession(getSession());
 		} catch (DbAmbitException x) {
 			logger.log(Level.WARNING,x.getMessage(),x);
 		}
@@ -75,24 +72,23 @@ public class DBProcessorsChain<Target,Result,P extends IDBProcessor> extends Pro
 	}
 
 	public void open() throws DbAmbitException {
-		for (int i=0; i < size();i++)
+		for (int i=0; i < size();i++) try {
 			get(i).open();
+		} catch (Exception x) {
+			throw new DbAmbitException(x);
+		}
 
 	}
 	@Override
 	public void close() {
 		for (int i=0; i < size();i++)
 			try {
-			get(i).close();
-			} catch (SQLException x) {
+				get(i).close();
+			} catch (Exception x) {
 				logger.log(Level.WARNING,x.getMessage(),x);
 			}
 		super.close();
 	}
-	public void setSession(SessionID session) {
-		sessionID = session;
-		for (int i=0; i < size();i++)
-			get(i).setSession(session);
-	}
+
 
 }

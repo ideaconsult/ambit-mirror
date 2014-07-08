@@ -32,6 +32,8 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.logging.Logger;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
@@ -40,7 +42,6 @@ import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.external.ShellException;
 import ambit2.core.data.ArrayResult;
 import ambit2.core.data.IStructureDiagramHighlights;

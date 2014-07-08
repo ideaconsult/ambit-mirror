@@ -30,14 +30,14 @@ import java.util.logging.Level;
 
 import javax.naming.OperationNotSupportedException;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.i.query.IQueryUpdate;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.UpdateExecutor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
-import ambit2.db.update.IQueryUpdate;
 
 public abstract class AbstractRepositoryWriter<Target,Result> extends AbstractDBProcessor<Target, Result>  {
 	public enum OP {CREATE,READ,UPDATE,DELETE};

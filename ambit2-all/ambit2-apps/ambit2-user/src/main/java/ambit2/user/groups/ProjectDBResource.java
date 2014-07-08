@@ -2,7 +2,6 @@ package ambit2.user.groups;
 
 import java.sql.Connection;
 
-import net.idea.restnet.c.html.HTMLBeauty;
 import net.idea.restnet.c.task.CallableProtectedTask;
 import net.idea.restnet.db.DBConnection;
 import net.idea.restnet.groups.CallableGroupCreator;

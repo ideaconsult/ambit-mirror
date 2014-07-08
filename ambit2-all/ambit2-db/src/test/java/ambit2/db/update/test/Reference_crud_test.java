@@ -30,14 +30,14 @@
 package ambit2.db.update.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 
 import ambit2.base.data.ILiteratureEntry;
-import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.ILiteratureEntry._type;
-import ambit2.db.update.IQueryUpdate;
+import ambit2.base.data.LiteratureEntry;
 import ambit2.db.update.reference.CreateReference;
 import ambit2.db.update.reference.DeleteReference;
 import ambit2.db.update.reference.UpdateReference;

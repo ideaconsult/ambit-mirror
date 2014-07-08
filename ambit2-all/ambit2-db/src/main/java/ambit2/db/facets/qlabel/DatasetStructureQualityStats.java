@@ -4,13 +4,12 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.facet.IFacet;
 import ambit2.db.facets.AbstractFacetQuery;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 public class DatasetStructureQualityStats extends AbstractFacetQuery<QLabel,SourceDataset,StringCondition,DatasetStructureQLabelFacet> {

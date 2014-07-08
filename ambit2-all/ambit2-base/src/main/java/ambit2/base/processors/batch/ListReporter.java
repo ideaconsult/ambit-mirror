@@ -2,7 +2,7 @@ package ambit2.base.processors.batch;
 
 import java.util.Iterator;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 
 public abstract class ListReporter<Item,Output> extends BatchReporter<Item, Iterator<Item>, Output> {

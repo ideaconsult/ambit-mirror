@@ -3,11 +3,11 @@ package ambit2.db.search.structure;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.BooleanCondition;
-import ambit2.db.search.QueryParam;
 
 public class QueryMissingProperty extends AbstractStructureQuery<ISourceDataset,Property,BooleanCondition> {
     /**

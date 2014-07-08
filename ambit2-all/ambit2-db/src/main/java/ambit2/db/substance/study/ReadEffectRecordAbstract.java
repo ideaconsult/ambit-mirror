@@ -2,12 +2,12 @@ package ambit2.db.substance.study;
 
 import java.sql.ResultSet;
 
+import net.idea.modbcum.i.IParameterizedQuery;
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.data.study.EffectRecord;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
-import ambit2.db.search.IParameterizedQuery;
 
 public abstract class ReadEffectRecordAbstract<F> extends AbstractQuery<F,EffectRecord<String, String, String>, EQCondition, EffectRecord<String, String, String>> 
 															implements IQueryRetrieval<EffectRecord<String, String, String>>,

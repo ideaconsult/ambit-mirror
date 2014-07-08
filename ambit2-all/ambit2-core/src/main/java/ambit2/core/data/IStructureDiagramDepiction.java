@@ -2,9 +2,9 @@ package ambit2.core.data;
 
 import java.awt.Dimension;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
+import net.idea.modbcum.i.exceptions.AmbitException;
 
-import ambit2.base.exceptions.AmbitException;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 public interface IStructureDiagramDepiction<OUTPUT> {
 	OUTPUT getImage(IAtomContainer mol,String ruleID,int width,int height,boolean atomnumbers)  throws AmbitException;

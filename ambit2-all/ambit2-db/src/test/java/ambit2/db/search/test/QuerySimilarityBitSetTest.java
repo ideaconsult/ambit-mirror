@@ -4,13 +4,13 @@ import java.sql.ResultSet;
 import java.util.List;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.QueryParam;
 
 import org.junit.Test;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.db.search.NumberCondition;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.structure.QuerySimilarityBitset;
 
 /**

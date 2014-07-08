@@ -34,16 +34,15 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.logging.Level;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.IDBProcessor;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 import ambit2.base.interfaces.IBatchProcessor;
 import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.base.processors.batch.DefaultBatchStatistics;
 import ambit2.db.AbstractDBProcessor;
-import ambit2.db.IDBProcessor;
-import ambit2.db.SessionID;
-import ambit2.db.exceptions.DbAmbitException;
 
 /**
  * 
@@ -160,8 +159,9 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 	public void open() throws DbAmbitException {
 		if (getProcessorChain()!=null)
 		for (IProcessor p : getProcessorChain())
-			if (p instanceof IDBProcessor)
+			if (p instanceof IDBProcessor) try {
 				((IDBProcessor)p).open();
+			} catch (Exception x) {}
 		
 	}
 	public void onError(ItemInput input, Object output,
@@ -185,14 +185,7 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 		now = System.currentTimeMillis();
 		
 	}	
-	@Override
-	public void setSession(SessionID sessionID) {
-		super.setSession(sessionID);
-		if (getProcessorChain() != null)
-		for (IProcessor p : getProcessorChain())
-			if (p instanceof IDBProcessor)
-				((IDBProcessor)p).setSession(sessionID);
-	}
+
 	@Override
 	public void setConnection(Connection connection) throws DbAmbitException {
 		super.setConnection(connection);

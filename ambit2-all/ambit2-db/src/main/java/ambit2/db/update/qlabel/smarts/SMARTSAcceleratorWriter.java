@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import javax.naming.OperationNotSupportedException;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.processors.AbstractUpdateProcessor;
 

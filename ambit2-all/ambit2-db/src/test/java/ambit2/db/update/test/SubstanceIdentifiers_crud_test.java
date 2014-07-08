@@ -3,6 +3,7 @@ package ambit2.db.update.test;
 import java.util.ArrayList;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -11,7 +12,6 @@ import ambit2.base.data.I5Utils;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.ExternalIdentifier;
 import ambit2.db.substance.ids.UpdateSubstanceIdentifiers;
-import ambit2.db.update.IQueryUpdate;
 
 public class SubstanceIdentifiers_crud_test extends CRUDTest<Object,SubstanceRecord>{
 	private static final String example_uuid =    "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734";

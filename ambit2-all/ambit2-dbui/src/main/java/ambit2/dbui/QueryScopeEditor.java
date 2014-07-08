@@ -32,11 +32,11 @@ package ambit2.dbui;
 import javax.swing.AbstractListModel;
 import javax.swing.JComponent;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.IDBProcessor;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.AbstractDBProcessor;
-import ambit2.db.IDBProcessor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.structure.SCOPE;
 import ambit2.db.search.structure.ScopeQuery;
 import ambit2.ui.EditorPreferences;

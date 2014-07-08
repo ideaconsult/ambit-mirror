@@ -2,12 +2,12 @@ package ambit2.db.processors;
 
 import java.sql.Connection;
 
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.UpdateExecutor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.update.dictionary.CreateDictionary;
 import ambit2.db.update.dictionary.DeleteDictionary;
 import ambit2.db.update.dictionary.TemplateAddProperty;

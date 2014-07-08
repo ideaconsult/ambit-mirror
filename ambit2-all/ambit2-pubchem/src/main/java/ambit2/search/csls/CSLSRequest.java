@@ -3,7 +3,7 @@ package ambit2.search.csls;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import ambit2.base.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.pubchem.NCISearchProcessor;
 import ambit2.search.chemidplus.AbstractSearchRequest;
 

@@ -20,7 +20,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.rest.OpenTox;
 import ambit2.rest.ProtectedResource;
-import ambit2.rest.TaskApplication;
 
 public class LauncherResource extends ProtectedResource {
 	protected String dataset_uri;
