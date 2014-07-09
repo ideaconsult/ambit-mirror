@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <users user_name="guest" password="084e0343a0486ff05530df6c705c8bb4" email="guest" registration_status="confirmed" registration_date="2008-10-29 06:32:21.0" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" webpage="http://ambit.acad.bg" affiliation="&quot;&quot;" keywords="guest" reviewer="false"/>
+  <users user_name="guest" password="084e0343a0486ff05530df6c705c8bb4" email="guest" registration_status="confirmed" registration_date="2008-10-29 06:32:21.0" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" webpage="http://ambit.acad.bg" affiliation="&quot;&quot;" keywords="guest" reviewer="0"/>
   <substance_experiment idresult="7" document_prefix="IUC4" document_uuid="etsNA/abMqme/oa0qFd4kw==" endpoint="LC50" conditions="{&quot;Exposure&quot;:&quot;96&quot;}" unit="mg/L" loValue="83.1"/>
   <substance_experiment idresult="19" document_prefix="IUC4" document_uuid="L2SrJ9K+NS652E8CdP1mMw==" endpoint="log Pow" conditions="{&quot;Temperature&quot;:&quot;25 &#176;C&quot;}" loValue="0.35"/>
   <substance_experiment idresult="30" document_prefix="IUC4" document_uuid="HXXwHDsrNfWE8c4j4itscw==" endpoint="% Degradation" conditions="{&quot;Time point&quot;:&quot;28 d&quot;}" unit="%" loValue="90.0"/>

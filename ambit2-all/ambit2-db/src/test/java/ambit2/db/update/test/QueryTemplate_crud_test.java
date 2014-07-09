@@ -1,5 +1,7 @@
 package ambit2.db.update.test;
 
+import java.math.BigInteger;
+
 import junit.framework.Assert;
 import net.idea.modbcum.i.query.IQueryUpdate;
 
@@ -45,7 +47,7 @@ public class QueryTemplate_crud_test  extends  CRUDTest<IStoredQuery,Template> {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery,idtemplate from query join template using(idtemplate) where idquery=1 and template.name='Endpoints'");
 		Assert.assertEquals(1,table.getRowCount());
-		Assert.assertEquals(85,table.getValue(0,"idtemplate"));
+		Assert.assertEquals(new BigInteger("85"),table.getValue(0,"idtemplate"));
 		c.close();
 	}
 

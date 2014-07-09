@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <users user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.sourceforge.net" institute="&quot;&quot;" keywords="guest" reviewer="false"/>
-  <users user_name="admin" email="admin" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default admin" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.sourceforge.net" institute="&quot;&quot;" keywords="admin" reviewer="false"/>
+  <users user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.sourceforge.net" institute="&quot;&quot;" keywords="guest" reviewer="0"/>
+  <users user_name="admin" email="admin" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default admin" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.sourceforge.net" institute="&quot;&quot;" keywords="admin" reviewer="0"/>
   <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org"/>
   <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org"/>
   <catalog_references idreference="3" title="einecs_structures_V13Apr07.sdf" url="http://ecb.jrc.ec.europa.eu/esis/index.php?PGM=ein"/>
@@ -11857,380 +11857,380 @@
   <structure idstructure="102251" preference="100" idchemical="2050" structure="/QMAAHicrVNJDsMgDLzzCn8gCDsY8Lnpse2t/39KHaDZiFSJxrKiYTIeOY4xsIQLxG5ER0QToBJo&#xA;3Rzl5RYbA+jmhEp8QQ0RgTep3Ohh0NIUYkU+o2oHt6V4m2tHJfcuWiuMfOoy/nYRT6Eg9oJdvWhF&#xA;jLmDa1x00J6T751L/aJrXAa0HCj9O5dLXICsrst2X14d+zKQdYGppxf9sZSf65oXdjxlfZbvWD1z&#xA;q1U2tKyaxtZBTVOrVVNptTHfyaM2ZXavfQDcn9MHaf+Z2A==" format="SDF" user_name="guest" type_structure="SMILES" atomproperties="MDQzMTA2MDAsMDMzMCwwMzIxMDYwMCwwMzIxMDYwMCwwMzIwLDAxMTAsMDMyMTA2MDAsMDMyMTA2&#xA;MDAsMDIxMCwwMzIxMDYwMCwKMCwxLDEsMCwwLDEsMSwwLDEsMSw="/>
   <structure idstructure="178427" preference="100" idchemical="2050" structure="lgcAAHiclZW9TgMxEIT7PIVfINH+ee0tESDR8FPRo7SUiOdnbW8E5A6Jja6wJue5b8b23a09IDwf&#xA;bl4+zu/nt/PHJygDGKp0vitQSoETjF8p3+NDORSCcZX9y8zKK8075yxjbWOEPl9taa0Lldvyl8XP&#xA;K1y01+FydD+nW6PapGdc6ES9XVi4BosYJV2AtQcLWrB0Vcy5dF4s3mtjWC7MVBMuR/ReUNaIueHK&#xA;RtVSieCEXC8sKNELVcgkOnoioyAAqv3Si2vPmUSR4zhYZs/OUtW7SrEg9ciBQLr8Ghjk2q1dZLl4&#xA;zbFziJzlIdNuhWZrbquqayTsVCkXqGaLqhFL7L/R+P9dvBdAjpVRbrr8pDfIuAx6gehZu0ZK812X&#xA;ckHoLfyI6zoV2JlyiZpo5GBdr6qRyCTTLvlJXgToK40Uby6w1ErTyVGCRds8C2MPIXDGhf0cMcaa&#xA;m8ZZqAoJFq/V9wpeqTj/oCuVpnp9rxWErap/+fJWdV/ZPq1P32vVp9etKlPdIcM9hrFqWwbckjnA&#xA;eGdus+HO01zVXXWnMy7Yt6oU3Omszi/ob/WxlPunuy8KsC7L" format="SDF" user_name="guest" type_structure="SMILES" atomproperties="MTQzMTA2MDAsMTQzMTA2MDAsMTQzMTA2MDAsMTQzMTA2MDAsMTQzMTA2MDAsMzQ0MCwwNDMxMDYw&#xA;MCwwMjEwLDE0NDAsMTQzMCwwMTEwLDAxMTAsMDExMCwwMTEwLDAxMTAsMDExMCwwMTEwLDAxMTAs&#xA;MDExMCwwMTEwLAowLDEsMSwwLDAsMSwxLDAsMSwxLDAsMCwwLDAsMCwwLDAsMCwwLDAs"/>
   <structure idstructure="256627" preference="100" idchemical="2050" structure="xAcAAHic7ZVBCsIwEEX3Ae/wlxXEzkTTNIKrVBBEu/MCvf8dnNRNsb+4FKHhL8LL9OWTTftzztVQ&#xA;DbZ0a8kOyN0NtmLtQy1pp/Hkg3PwUgKelBKeXkRc+VT2thO667GkmGbzTZNXzar5nea6albNP2gU&#xA;8GMmJ4UbOYynM67KuA0fOVdZ4J5xkwTWx3hi8zbccK60vw1H5m+gtL8Nt5xrYLwde879LZT2TNBI&#xA;uD2asnsLZ++g73/vJ78Dl0f3AuEnKnA=" format="SDF" user_name="guest" type_structure="SMILES" atomproperties="MDIxMCwxNDMwLDE0NDAsMDQzMTA2MDAsMTQzMTA2MDAsMTQzMTA2MDAsMTQzMTA2MDAsMTQzMTA2&#xA;MDAsMTQzMTA2MDAsMzQ0MCwwMTEwLDAxMTAsMDExMCwwMTEwLDAxMTAsMDExMCwwMTEwLDAxMTAs&#xA;MDExMCwwMTEwLAowLDAsMCwwLDAsMCwxLDEsMSwwLDEsMCwxLDAsMSwwLDAsMCwwLDAs"/>
-  <properties idproperty="1" idreference="3" name="MF" units="" comments="MF" islocal="false"/>
-  <properties idproperty="2" idreference="3" name="Name" units="" comments="Names" islocal="false"/>
-  <properties idproperty="3" idreference="3" name="GENERATED_SMILES_Quality" units="" comments="SMILES" islocal="false"/>
-  <properties idproperty="4" idreference="3" name="GENERATED_MF" units="" comments="GENERATED_MF" islocal="false"/>
-  <properties idproperty="5" idreference="3" name="EC" units="" comments="EC" islocal="false"/>
-  <properties idproperty="6" idreference="3" name="CAS" units="" comments="CasRN" islocal="false"/>
-  <properties idproperty="7" idreference="3" name="Title" units="" comments="Names" islocal="false"/>
-  <properties idproperty="8" idreference="3" name="GENERATED_MW" units="" comments="GENERATED_MW" islocal="false"/>
-  <properties idproperty="9" idreference="3" name="GENERATED_IUPAC_EN" units="" comments="IUPAC Name" islocal="false"/>
-  <properties idproperty="10" idreference="3" name="Inventories" units="" comments="Inventories" islocal="false"/>
-  <properties idproperty="11" idreference="3" name="GENERATED_SMILES" units="" comments="SMILES" islocal="false"/>
-  <properties idproperty="12" idreference="3" name="ID" units="" comments="ID" islocal="false"/>
-  <properties idproperty="13" idreference="3" name="GENERATED_InChI" units="" comments="InChI" islocal="false"/>
-  <properties idproperty="14" idreference="5" name="CasRN" units="" comments="CasRN" islocal="false"/>
-  <properties idproperty="15" idreference="6" name="Title" units="" comments="Names" islocal="false"/>
-  <properties idproperty="16" idreference="6" name="Remark" units="" comments="Remark" islocal="false"/>
-  <properties idproperty="17" idreference="6" name="CAS" units="" comments="CasRN" islocal="false"/>
-  <properties idproperty="11386" idreference="11376" name="Title" units="" comments="Names" islocal="false"/>
-  <properties idproperty="11387" idreference="11376" name="Remark" units="" comments="Remark" islocal="false"/>
-  <properties idproperty="11388" idreference="11377" name="TPSA" units="" comments="TPSA" islocal="false"/>
-  <properties idproperty="11389" idreference="11378" name="XLogP" units="" comments="XLogP" islocal="false"/>
-  <properties idproperty="11390" idreference="11379" name="LipinksiFailures" units="" comments="LipinksiFailures" islocal="false"/>
-  <properties idproperty="11391" idreference="11380" name="MW" units="" comments="MW" islocal="false"/>
-  <properties idproperty="11392" idreference="11378" name="org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor" units="" comments="org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor" islocal="false"/>
-  <properties idproperty="11393" idreference="11379" name="org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor" units="" comments="org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor" islocal="false"/>
-  <properties idproperty="11394" idreference="11380" name="ambit2.descriptors.MolecularWeight" units="" comments="ambit2.descriptors.MolecularWeight" islocal="false"/>
-  <properties idproperty="11395" idreference="11377" name="org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor" units="" comments="org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor" islocal="false"/>
-  <properties idproperty="11853" idreference="11839" name="Erythema (rabbit 3)-1d" units="" comments="Erythema (rabbit 3)-1d" islocal="false"/>
-  <properties idproperty="11854" idreference="11839" name="Oedema (rabbit 1)-1h" units="" comments="Oedema (rabbit 1)-1h" islocal="false"/>
-  <properties idproperty="11855" idreference="11839" name="InChI" units="" comments="InChI" islocal="false"/>
-  <properties idproperty="11856" idreference="11839" name="Oedema (rabbit 3)-1h" units="" comments="Oedema (rabbit 3)-1h" islocal="false"/>
-  <properties idproperty="11857" idreference="11839" name="Oedema (rabbit 1)-3d" units="" comments="Oedema (rabbit 1)-3d" islocal="false"/>
-  <properties idproperty="11858" idreference="11839" name="Oedema (rabbit 3)-3d" units="" comments="Oedema (rabbit 3)-3d" islocal="false"/>
-  <properties idproperty="11859" idreference="11839" name="Mean oedema-7d" units="" comments="Mean oedema-7d" islocal="false"/>
-  <properties idproperty="11860" idreference="11839" name="Erythema (rabbit 2)-1h" units="" comments="Erythema (rabbit 2)-1h" islocal="false"/>
-  <properties idproperty="11861" idreference="11839" name="Oedema (rabbit 1)-2d" units="" comments="Oedema (rabbit 1)-2d" islocal="false"/>
-  <properties idproperty="11862" idreference="11839" name="Erythema (rabbit 4)-1h" units="" comments="Erythema (rabbit 4)-1h" islocal="false"/>
-  <properties idproperty="11863" idreference="11839" name="Oedema (rabbit 3)-2d" units="" comments="Oedema (rabbit 3)-2d" islocal="false"/>
-  <properties idproperty="11864" idreference="11839" name="Mean erythema-1h" units="" comments="Mean erythema-1h" islocal="false"/>
-  <properties idproperty="11865" idreference="11839" name="Erythema (rabbit 2)-3d" units="" comments="Erythema (rabbit 2)-3d" islocal="false"/>
-  <properties idproperty="11866" idreference="11839" name="Erythema (rabbit 1)-7d" units="" comments="Erythema (rabbit 1)-7d" islocal="false"/>
-  <properties idproperty="11867" idreference="11839" name="Erythema (rabbit 4)-3d" units="" comments="Erythema (rabbit 4)-3d" islocal="false"/>
-  <properties idproperty="11868" idreference="11839" name="FW" units="" comments="FW" islocal="false"/>
-  <properties idproperty="11869" idreference="11839" name="Oedema (rabbit 1)-1d" units="" comments="Oedema (rabbit 1)-1d" islocal="false"/>
-  <properties idproperty="11870" idreference="11839" name="Erythema (rabbit 3)-7d" units="" comments="Erythema (rabbit 3)-7d" islocal="false"/>
-  <properties idproperty="11871" idreference="11839" name="Animals" units="" comments="Animals" islocal="false"/>
-  <properties idproperty="11872" idreference="11839" name="Mean erythema-3d" units="" comments="Mean erythema-3d" islocal="false"/>
-  <properties idproperty="11873" idreference="11839" name="Oedema (rabbit 3)-1d" units="" comments="Oedema (rabbit 3)-1d" islocal="false"/>
-  <properties idproperty="11874" idreference="11839" name="PII" units="" comments="PII" islocal="false"/>
-  <properties idproperty="11875" idreference="11839" name="Erythema (rabbit 2)-2d" units="" comments="Erythema (rabbit 2)-2d" islocal="false"/>
-  <properties idproperty="11876" idreference="11839" name="Erythema (rabbit 4)-2d" units="" comments="Erythema (rabbit 4)-2d" islocal="false"/>
-  <properties idproperty="11877" idreference="11839" name="Formula" units="" comments="Formula" islocal="false"/>
-  <properties idproperty="11878" idreference="11839" name="Mean erythema-2d" units="" comments="Mean erythema-2d" islocal="false"/>
-  <properties idproperty="11879" idreference="11839" name="Erythema (rabbit 2)-1d" units="" comments="Erythema (rabbit 2)-1d" islocal="false"/>
-  <properties idproperty="11880" idreference="11839" name="Erythema (rabbit 4)-1d" units="" comments="Erythema (rabbit 4)-1d" islocal="false"/>
-  <properties idproperty="11881" idreference="11839" name="Mean oedema-1h" units="" comments="Mean oedema-1h" islocal="false"/>
-  <properties idproperty="11882" idreference="11839" name="Oedema (rabbit 2)-1h" units="" comments="Oedema (rabbit 2)-1h" islocal="false"/>
-  <properties idproperty="11883" idreference="11839" name="No" units="" comments="No" islocal="false"/>
-  <properties idproperty="11884" idreference="11839" name="Oedema (rabbit 4)-1h" units="" comments="Oedema (rabbit 4)-1h" islocal="false"/>
-  <properties idproperty="11885" idreference="11839" name="Mean erythema-1d" units="" comments="Mean erythema-1d" islocal="false"/>
-  <properties idproperty="11886" idreference="11839" name="IUPAC_Name" units="" comments="IUPAC Name" islocal="false"/>
-  <properties idproperty="11887" idreference="11839" name="Oedema (rabbit 2)-3d" units="" comments="Oedema (rabbit 2)-3d" islocal="false"/>
-  <properties idproperty="11888" idreference="11839" name="Erythema (rabbit 4)7d" units="" comments="Erythema (rabbit 4)7d" islocal="false"/>
-  <properties idproperty="11889" idreference="11839" name="Mean oedema-3d" units="" comments="Mean oedema-3d" islocal="false"/>
-  <properties idproperty="11890" idreference="11839" name="Oedema (rabbit 4)-3d" units="" comments="Oedema (rabbit 4)-3d" islocal="false"/>
-  <properties idproperty="11891" idreference="11839" name="Erythema (rabbit 1)-1h" units="" comments="Erythema (rabbit 1)-1h" islocal="false"/>
-  <properties idproperty="11892" idreference="11839" name="Name" units="" comments="Names" islocal="false"/>
-  <properties idproperty="11893" idreference="11839" name="CAS" units="" comments="CasRN" islocal="false"/>
-  <properties idproperty="11894" idreference="11839" name="Erythema (rabbit 3)-1h" units="" comments="Erythema (rabbit 3)-1h" islocal="false"/>
-  <properties idproperty="11895" idreference="11839" name="Oedema (rabbit 2)-2d" units="" comments="Oedema (rabbit 2)-2d" islocal="false"/>
-  <properties idproperty="11896" idreference="11839" name="Mean oedema-2d" units="" comments="Mean oedema-2d" islocal="false"/>
-  <properties idproperty="11897" idreference="11839" name="smiles" units="" comments="SMILES" islocal="false"/>
-  <properties idproperty="11898" idreference="11839" name="Oedema (rabbit 4)-2d" units="" comments="Oedema (rabbit 4)-2d" islocal="false"/>
-  <properties idproperty="11899" idreference="11839" name="Erythema (rabbit 1)-3d" units="" comments="Erythema (rabbit 1)-3d" islocal="false"/>
-  <properties idproperty="11900" idreference="11839" name="Erythema (rabbit 3)-3d" units="" comments="Erythema (rabbit 3)-3d" islocal="false"/>
-  <properties idproperty="11901" idreference="11839" name="Erythema (rabbit 2)-7d" units="" comments="Erythema (rabbit 2)-7d" islocal="false"/>
-  <properties idproperty="11902" idreference="11839" name="Class" units="" comments="Class" islocal="false"/>
-  <properties idproperty="11903" idreference="11839" name="Mean oedema-1d" units="" comments="Mean oedema-1d" islocal="false"/>
-  <properties idproperty="11904" idreference="11839" name="Oedema (rabbit 2)-1d" units="" comments="Oedema (rabbit 2)-1d" islocal="false"/>
-  <properties idproperty="11905" idreference="11839" name="C/NC" units="" comments="C/NC" islocal="false"/>
-  <properties idproperty="11906" idreference="11839" name="Oedema (rabbit 4)-1d" units="" comments="Oedema (rabbit 4)-1d" islocal="false"/>
-  <properties idproperty="11907" idreference="11839" name="Erythema (rabbit 1)-2d" units="" comments="Erythema (rabbit 1)-2d" islocal="false"/>
-  <properties idproperty="11908" idreference="11839" name="Mean erythema-7d" units="" comments="Mean erythema-7d" islocal="false"/>
-  <properties idproperty="11909" idreference="11839" name="Erythema (rabbit 3)-2d" units="" comments="Erythema (rabbit 3)-2d" islocal="false"/>
-  <properties idproperty="11910" idreference="11839" name="Erythema (rabbit 1)-1d" units="" comments="Erythema (rabbit 1)-1d" islocal="false"/>
-  <properties idproperty="11911" idreference="11839" name="Oedema (rabbit 2)-7d" units="" comments="Oedema (rabbit 2)-7d" islocal="false"/>
-  <properties idproperty="11912" idreference="11839" name="Oedema (rabbit 4)-7d" units="" comments="Oedema (rabbit 4)-7d" islocal="false"/>
-  <properties idproperty="11913" idreference="11839" name="Oedema (rabbit 1)-7d" units="" comments="Oedema (rabbit 1)-7d" islocal="false"/>
-  <properties idproperty="11914" idreference="11839" name="Oedema (rabbit 3)-7d" units="" comments="Oedema (rabbit 3)-7d" islocal="false"/>
-  <properties idproperty="11915" idreference="11839" name="Comment" units="" comments="Comment" islocal="false"/>
-  <properties idproperty="11916" idreference="11839" name="Oedema (rabbit 5)-3d" units="" comments="Oedema (rabbit 5)-3d" islocal="false"/>
-  <properties idproperty="11917" idreference="11839" name="Erythema (rabbit 5)-1h" units="" comments="Erythema (rabbit 5)-1h" islocal="false"/>
-  <properties idproperty="11918" idreference="11839" name="Oedema (rabbit 5)-2d" units="" comments="Oedema (rabbit 5)-2d" islocal="false"/>
-  <properties idproperty="11919" idreference="11839" name="Oedema (rabbit 6)-7d" units="" comments="Oedema (rabbit 6)-7d" islocal="false"/>
-  <properties idproperty="11920" idreference="11839" name="Oedema (rabbit 5)-1d" units="" comments="Oedema (rabbit 5)-1d" islocal="false"/>
-  <properties idproperty="11921" idreference="11839" name="Oedema (rabbit 6)-3d" units="" comments="Oedema (rabbit 6)-3d" islocal="false"/>
-  <properties idproperty="11922" idreference="11839" name="Erythema (rabbit 6)-1h" units="" comments="Erythema (rabbit 6)-1h" islocal="false"/>
-  <properties idproperty="11923" idreference="11839" name="Oedema (rabbit 6)-2d" units="" comments="Oedema (rabbit 6)-2d" islocal="false"/>
-  <properties idproperty="11924" idreference="11839" name="Oedema (rabbit 6)-1d" units="" comments="Oedema (rabbit 6)-1d" islocal="false"/>
-  <properties idproperty="11925" idreference="11839" name="Oedema (rabbit 5)-1h" units="" comments="Oedema (rabbit 5)-1h" islocal="false"/>
-  <properties idproperty="11926" idreference="11839" name="Erythema (rabbit 5)-7d" units="" comments="Erythema (rabbit 5)-7d" islocal="false"/>
-  <properties idproperty="11927" idreference="11839" name="Oedema (rabbit 6)-1h" units="" comments="Oedema (rabbit 6)-1h" islocal="false"/>
-  <properties idproperty="11928" idreference="11839" name="Erythema (rabbit 5)-3d" units="" comments="Erythema (rabbit 5)-3d" islocal="false"/>
-  <properties idproperty="11929" idreference="11839" name="Erythema (rabbit 6)-7d" units="" comments="Erythema (rabbit 6)-7d" islocal="false"/>
-  <properties idproperty="11930" idreference="11839" name="Erythema (rabbit 5)-2d" units="" comments="Erythema (rabbit 5)-2d" islocal="false"/>
-  <properties idproperty="11931" idreference="11839" name="Erythema (rabbit 5)-1d" units="" comments="Erythema (rabbit 5)-1d" islocal="false"/>
-  <properties idproperty="11932" idreference="11839" name="Erythema (rabbit 6)-3d" units="" comments="Erythema (rabbit 6)-3d" islocal="false"/>
-  <properties idproperty="11933" idreference="11839" name="Erythema (rabbit 6)-2d" units="" comments="Erythema (rabbit 6)-2d" islocal="false"/>
-  <properties idproperty="11934" idreference="11839" name="Erythema (rabbit 6)-1d" units="" comments="Erythema (rabbit 6)-1d" islocal="false"/>
-  <properties idproperty="11935" idreference="11839" name="Oedema (rabbit 5)-7d" units="" comments="Oedema (rabbit 5)-7d" islocal="false"/>
-  <properties idproperty="11936" idreference="11840" name="Reaction domain (verbose)" units="" comments="Reaction domain (verbose)" islocal="false"/>
-  <properties idproperty="11937" idreference="11840" name="eHOMO" units="" comments="eHOMO" islocal="false"/>
-  <properties idproperty="11938" idreference="11840" name="Max Diam" units="" comments="Max Diam" islocal="false"/>
-  <properties idproperty="11939" idreference="11840" name="MolWeight" units="" comments="MolWeight" islocal="false"/>
-  <properties idproperty="11940" idreference="11840" name="Total Energy" units="" comments="Total Energy" islocal="false"/>
-  <properties idproperty="11941" idreference="11840" name="FINAL HEAT OF FORMATION" units="" comments="FINAL HEAT OF FORMATION" islocal="false"/>
-  <properties idproperty="11942" idreference="11840" name="Title" units="" comments="Names" islocal="false"/>
-  <properties idproperty="11943" idreference="11840" name="eLUMO" units="" comments="eLUMO" islocal="false"/>
-  <properties idproperty="11944" idreference="11840" name="Names" units="" comments="Names" islocal="false"/>
-  <properties idproperty="11945" idreference="11840" name="Electronic Energy" units="" comments="Electronic Energy" islocal="false"/>
-  <properties idproperty="11946" idreference="11840" name="HAcc" units="" comments="HAcc" islocal="false"/>
-  <properties idproperty="11947" idreference="11840" name="LogP" units="" comments="LogP" islocal="false"/>
-  <properties idproperty="11948" idreference="11840" name="ReactionDomain" units="" comments="ReactionDomain" islocal="false"/>
-  <properties idproperty="11949" idreference="11840" name="SMILES" units="" comments="SMILES" islocal="false"/>
-  <properties idproperty="11950" idreference="11840" name="TPSA" units="" comments="TPSA" islocal="false"/>
-  <properties idproperty="11951" idreference="11840" name="LLNA EC3 %" units="" comments="LLNA EC3 %" islocal="false"/>
-  <properties idproperty="11952" idreference="11840" name="CasRN" units="" comments="CasRN" islocal="false"/>
-  <properties idproperty="11953" idreference="11840" name="Ionization Potential" units="" comments="Ionization Potential" islocal="false"/>
-  <properties idproperty="11954" idreference="11840" name="Eff Diam" units="" comments="Eff Diam" islocal="false"/>
-  <properties idproperty="11955" idreference="11842" name="REFERENCE" units="" comments="REFERENCE" islocal="false"/>
-  <properties idproperty="11956" idreference="11843" name="fish age" units="" comments="fish age" islocal="false"/>
-  <properties idproperty="11957" idreference="11843" name="ref" units="" comments="ref" islocal="false"/>
-  <properties idproperty="11958" idreference="11843" name="CAS" units="" comments="CasRN" islocal="false"/>
-  <properties idproperty="11959" idreference="11843" name="elimination phase duration" units="d" comments="elimination phase duration" islocal="false"/>
-  <properties idproperty="11960" idreference="11843" name="BCFss ww" units=" Cf/Cw (L/kg)" comments="BCFss ww" islocal="false"/>
-  <properties idproperty="11961" idreference="11843" name="BCFss ww op" units="" comments="BCFss ww op" islocal="false"/>
-  <properties idproperty="11962" idreference="11843" name="flow-through/static/renewal" units="S/FT/R/nd" comments="flow-through/static/renewal" islocal="false"/>
-  <properties idproperty="11963" idreference="11843" name="uptake&gt;T80" units="y/n/prob" comments="uptake&gt;T80" islocal="false"/>
-  <properties idproperty="11964" idreference="11843" name="reliability score" units="" comments="reliability score" islocal="false"/>
-  <properties idproperty="11965" idreference="11843" name="lipid" units="method" comments="lipid" islocal="false"/>
-  <properties idproperty="11966" idreference="11843" name="BCFk lipid" units="BCFk ww/lipid%" comments="BCFk lipid" islocal="false"/>
-  <properties idproperty="11967" idreference="11843" name="BCFss lipid op" units="" comments="BCFss lipid op" islocal="false"/>
-  <properties idproperty="11968" idreference="11843" name="k2" units="d-1" comments="k2" islocal="false"/>
-  <properties idproperty="11969" idreference="11843" name="uptake phase duration" units="d" comments="uptake phase duration" islocal="false"/>
-  <properties idproperty="11970" idreference="11843" name="T80" units="d" comments="T80" islocal="false"/>
-  <properties idproperty="11971" idreference="11843" name="exposure concentration" units="mg/L" comments="exposure concentration" islocal="false"/>
-  <properties idproperty="11972" idreference="11843" name="sex" units="M/F/MF/nd" comments="sex" islocal="false"/>
-  <properties idproperty="11973" idreference="11843" name="temperature" units="°C" comments="temperature" islocal="false"/>
-  <properties idproperty="11974" idreference="11843" name="substance common name" units="" comments="Names" islocal="false"/>
-  <properties idproperty="11975" idreference="11843" name="fresh/marine" units="" comments="fresh/marine" islocal="false"/>
-  <properties idproperty="11976" idreference="11843" name="TOC" units="mg/L" comments="TOC" islocal="false"/>
-  <properties idproperty="11977" idreference="11843" name="pH" units="" comments="pH" islocal="false"/>
-  <properties idproperty="11978" idreference="11843" name="tissue analyzed" units="" comments="tissue analyzed" islocal="false"/>
-  <properties idproperty="11979" idreference="11843" name="Reason for reliability 3/4" units="" comments="Reason for reliability 3/4" islocal="false"/>
-  <properties idproperty="11980" idreference="11843" name="T95" units="d" comments="T95" islocal="false"/>
-  <properties idproperty="11981" idreference="11843" name="species scientific name" units="" comments="Species" islocal="false"/>
-  <properties idproperty="11982" idreference="11843" name="species common name" units="" comments="Species" islocal="false"/>
-  <properties idproperty="11983" idreference="11843" name="elimination&gt;5xT50" units="y/n/prob" comments="elimination&gt;5xT50" islocal="false"/>
-  <properties idproperty="11984" idreference="11843" name="fish weight" units="g" comments="fish weight" islocal="false"/>
-  <properties idproperty="11985" idreference="11843" name="k1" units="d-1" comments="k1" islocal="false"/>
-  <properties idproperty="11986" idreference="11843" name="BCFss lipid" units="Cf lipid/Cw (L/k" comments="BCFss lipid" islocal="false"/>
-  <properties idproperty="11987" idreference="11843" name="BCFk ww" units="k1/k2" comments="BCFk ww" islocal="false"/>
-  <properties idproperty="11988" idreference="11843" name="fish length" units="cm" comments="fish length" islocal="false"/>
-  <properties idproperty="11989" idreference="11843" name="statistics" units="" comments="statistics" islocal="false"/>
-  <properties idproperty="11990" idreference="11843" name="T50,elim" units="" comments="T50,elim" islocal="false"/>
-  <properties idproperty="11991" idreference="11843" name="remarks" units="" comments="remarks" islocal="false"/>
-  <properties idproperty="11992" idreference="11844" name="Carbonyl group. Low specificity" units="" comments="Carbonyl group. Low specificity" islocal="false"/>
-  <properties idproperty="11993" idreference="11844" name="Carbonyl group" units="" comments="Carbonyl group" islocal="false"/>
-  <properties idproperty="11994" idreference="11844" name="A Nitrogen." units="" comments="A Nitrogen." islocal="false"/>
-  <properties idproperty="11995" idreference="11844" name="Halogen" units="" comments="Halogen" islocal="false"/>
-  <properties idproperty="11996" idreference="11844" name="Three_halides groups" units="" comments="Three_halides groups" islocal="false"/>
-  <properties idproperty="11997" idreference="11844" name="Acid" units="" comments="Acid" islocal="false"/>
-  <properties idproperty="11998" idreference="11844" name="Alkyl Carbon" units="" comments="Alkyl Carbon" islocal="false"/>
-  <properties idproperty="11999" idreference="11844" name="Vinylic Carbon" units="" comments="Vinylic Carbon" islocal="false"/>
-  <properties idproperty="12000" idreference="11844" name="Carbonyl with Carbon" units="" comments="Carbonyl with Carbon" islocal="false"/>
-  <properties idproperty="12001" idreference="11844" name="Ketone" units="" comments="Ketone" islocal="false"/>
-  <properties idproperty="12002" idreference="11844" name="Any carbon attached to any halogen" units="" comments="Any carbon attached to any halogen" islocal="false"/>
-  <properties idproperty="12003" idreference="11844" name="Carbonyl with Oxygen." units="" comments="Carbonyl with Oxygen." islocal="false"/>
-  <properties idproperty="12004" idreference="11844" name="Ester Also hits anhydrides" units="" comments="Ester Also hits anhydrides" islocal="false"/>
-  <properties idproperty="12005" idreference="11844" name="Ether" units="" comments="Ether" islocal="false"/>
-  <properties idproperty="12006" idreference="11844" name="Carbonyl with Nitrogen." units="" comments="Carbonyl with Nitrogen." islocal="false"/>
-  <properties idproperty="12007" idreference="11844" name="Amide" units="" comments="Amide" islocal="false"/>
-  <properties idproperty="12008" idreference="11844" name="Carbamate." units="" comments="Carbamate." islocal="false"/>
-  <properties idproperty="12009" idreference="11844" name="Carbamic ester" units="" comments="Carbamic ester" islocal="false"/>
-  <properties idproperty="12010" idreference="11844" name="Enamine" units="" comments="Enamine" islocal="false"/>
-  <properties idproperty="12011" idreference="11844" name="Enamine or Aniline Nitrogen" units="" comments="Enamine or Aniline Nitrogen" islocal="false"/>
-  <properties idproperty="12012" idreference="11844" name="Substituted dicarboximide" units="" comments="Substituted dicarboximide" islocal="false"/>
-  <properties idproperty="12013" idreference="11844" name="Phosphoric_acid groups." units="" comments="Phosphoric_acid groups." islocal="false"/>
-  <properties idproperty="12014" idreference="11844" name="Phosphoric_ester groups." units="" comments="Phosphoric_ester groups." islocal="false"/>
-  <properties idproperty="12015" idreference="11844" name="Phosphoric_Acid" units="" comments="Phosphoric_Acid" islocal="false"/>
-  <properties idproperty="12016" idreference="11844" name="Hydrazine H2NNH2" units="" comments="Hydrazine H2NNH2" islocal="false"/>
-  <properties idproperty="12017" idreference="11844" name="Thioamide" units="" comments="Thioamide" islocal="false"/>
-  <properties idproperty="12018" idreference="11844" name="Thiol, Sulfide or Disulfide Sulfur" units="" comments="Thiol, Sulfide or Disulfide Sulfur" islocal="false"/>
-  <properties idproperty="12019" idreference="11844" name="Sulfide" units="" comments="Sulfide" islocal="false"/>
-  <properties idproperty="12020" idreference="11844" name="Mono-sulfide" units="" comments="Mono-sulfide" islocal="false"/>
-  <properties idproperty="12021" idreference="11844" name="Two Sulfides" units="" comments="Two Sulfides" islocal="false"/>
-  <properties idproperty="12022" idreference="11844" name="Sulfone. Low specificity." units="" comments="Sulfone. Low specificity." islocal="false"/>
-  <properties idproperty="12023" idreference="11844" name="Sulfuric acid ester (sulfate ester) Low specificity." units="" comments="Sulfuric acid ester (sulfate ester) Low specificity." islocal="false"/>
-  <properties idproperty="12024" idreference="11844" name="Di-sulfide" units="" comments="Di-sulfide" islocal="false"/>
-  <properties idproperty="12025" idreference="11844" name="Carboxylate Ion." units="" comments="Carboxylate Ion." islocal="false"/>
-  <properties idproperty="12026" idreference="11844" name="Carboxylic acid or conjugate base." units="" comments="Carboxylic acid or conjugate base." islocal="false"/>
-  <properties idproperty="12027" idreference="11844" name="Iminium" units="" comments="Iminium" islocal="false"/>
-  <properties idproperty="12028" idreference="11844" name="Nitro group" units="" comments="Nitro group" islocal="false"/>
-  <properties idproperty="12029" idreference="11844" name="Aldehyde" units="" comments="Aldehyde" islocal="false"/>
-  <properties idproperty="12030" idreference="11844" name="Substituted imine" units="" comments="Substituted imine" islocal="false"/>
-  <properties idproperty="12031" idreference="11844" name="Substituted or un-substituted imine " units="" comments="Substituted or un-substituted imine " islocal="false"/>
-  <properties idproperty="12032" idreference="11844" name="Sulfate" units="" comments="Sulfate" islocal="false"/>
-  <properties idproperty="12033" idreference="11844" name="Acetylenic Carbon" units="" comments="Acetylenic Carbon" islocal="false"/>
-  <properties idproperty="12034" idreference="11844" name="Carbo-Thioester" units="" comments="Carbo-Thioester" islocal="false"/>
-  <properties idproperty="12035" idreference="11844" name="Nitrile" units="" comments="Nitrile" islocal="false"/>
-  <properties idproperty="12036" idreference="11844" name="Sulfur with at-least one hydrogen." units="" comments="Sulfur with at-least one hydrogen." islocal="false"/>
-  <properties idproperty="12037" idreference="11844" name="Sulfonamide." units="" comments="Sulfonamide." islocal="false"/>
-  <properties idproperty="12038" idreference="11844" name="Sulfonamide" units="" comments="Sulfonamide" islocal="false"/>
-  <properties idproperty="12039" idreference="11844" name="Nitrate group" units="" comments="Nitrate group" islocal="false"/>
-  <properties idproperty="12040" idreference="11844" name="Nitrate Anion " units="" comments="Nitrate Anion " islocal="false"/>
-  <properties idproperty="12041" idreference="11844" name="Hydrazone C=NNH2" units="" comments="Hydrazone C=NNH2" islocal="false"/>
-  <properties idproperty="12042" idreference="11844" name="Alanine side chain" units="" comments="Alanine side chain" islocal="false"/>
-  <properties idproperty="12043" idreference="11844" name="Azo Nitrogen. Low specificity." units="" comments="Azo Nitrogen. Low specificity." islocal="false"/>
-  <properties idproperty="12044" idreference="11844" name="Azo Nitrogen.diazene" units="" comments="Azo Nitrogen.diazene" islocal="false"/>
-  <properties idproperty="12045" idreference="11844" name="Nitroso-group" units="" comments="Nitroso-group" islocal="false"/>
-  <properties idproperty="12046" idreference="11844" name="Sulfonate" units="" comments="Sulfonate" islocal="false"/>
-  <properties idproperty="12047" idreference="11844" name="Amidinium" units="" comments="Amidinium" islocal="false"/>
-  <properties idproperty="12048" idreference="11844" name="Anhydride" units="" comments="Anhydride" islocal="false"/>
-  <properties idproperty="12049" idreference="11844" name="N-Oxide" units="" comments="N-Oxide" islocal="false"/>
-  <properties idproperty="12050" idreference="11844" name="Sulfoxide Low specificity." units="" comments="Sulfoxide Low specificity." islocal="false"/>
-  <properties idproperty="12051" idreference="11844" name="Sulfoxide High specificity" units="" comments="Sulfoxide High specificity" islocal="false"/>
-  <properties idproperty="12052" idreference="11844" name="Carboxylic acid" units="" comments="Carboxylic acid" islocal="false"/>
-  <properties idproperty="12053" idreference="11844" name="Aspartate (or Aspartic acid) side chain." units="" comments="Aspartate (or Aspartic acid) side chain." islocal="false"/>
-  <properties idproperty="12054" idreference="11844" name="Hydroxyl" units="" comments="Hydroxyl" islocal="false"/>
-  <properties idproperty="12055" idreference="11844" name="Hydroxyl in Alcohol" units="" comments="Hydroxyl in Alcohol" islocal="false"/>
-  <properties idproperty="12056" idreference="11844" name="Hydroxyl in Carboxylic Acid" units="" comments="Hydroxyl in Carboxylic Acid" islocal="false"/>
-  <properties idproperty="12057" idreference="11844" name="Hydroxyl_acidic" units="" comments="Hydroxyl_acidic" islocal="false"/>
-  <properties idproperty="12058" idreference="11844" name="Sulfonic acid. High specificity." units="" comments="Sulfonic acid. High specificity." islocal="false"/>
-  <properties idproperty="12059" idreference="11844" name="Sulfonic Acid. High specificity." units="" comments="Sulfonic Acid. High specificity." islocal="false"/>
-  <properties idproperty="12060" idreference="11844" name="Primary or secondary amine, not amide." units="" comments="Primary or secondary amine, not amide." islocal="false"/>
-  <properties idproperty="12061" idreference="11844" name="Primary amine, not amide" units="" comments="Primary amine, not amide" islocal="false"/>
-  <properties idproperty="12062" idreference="11844" name="Generic amino acid: low specificity" units="" comments="Generic amino acid: low specificity" islocal="false"/>
-  <properties idproperty="12063" idreference="11844" name="Sulfuric Acid Diester." units="" comments="Sulfuric Acid Diester." islocal="false"/>
-  <properties idproperty="12064" idreference="11844" name="Acyl Halide" units="" comments="Acyl Halide" islocal="false"/>
-  <properties idproperty="12065" idreference="11844" name="Sulfone. High specificity." units="" comments="Sulfone. High specificity." islocal="false"/>
-  <properties idproperty="12066" idreference="11844" name="Amino Acid " units="" comments="Amino Acid " islocal="false"/>
-  <properties idproperty="12067" idreference="11844" name="Peroxide groups." units="" comments="Peroxide groups." islocal="false"/>
-  <properties idproperty="12068" idreference="11844" name="Glutamate (or Glutamic acid) side chain." units="" comments="Glutamate (or Glutamic acid) side chain." islocal="false"/>
-  <properties idproperty="12069" idreference="11844" name="Carbonic Acid or Carbonic Ester" units="" comments="Carbonic Acid or Carbonic Ester" islocal="false"/>
-  <properties idproperty="12070" idreference="11844" name="Carbonic Acid or Carbonic Acid-Ester" units="" comments="Carbonic Acid or Carbonic Acid-Ester" islocal="false"/>
-  <properties idproperty="12071" idreference="11844" name="Carbonic Ester (carbonic acid diester)" units="" comments="Carbonic Ester (carbonic acid diester)" islocal="false"/>
-  <properties idproperty="12072" idreference="11844" name="Enol" units="" comments="Enol" islocal="false"/>
-  <properties idproperty="12073" idreference="11844" name="Enol or Phenol" units="" comments="Enol or Phenol" islocal="false"/>
-  <properties idproperty="12074" idreference="11844" name="Thio analog of carbonyl" units="" comments="Thio analog of carbonyl" islocal="false"/>
-  <properties idproperty="12075" idreference="11844" name="Sulfamic Acid." units="" comments="Sulfamic Acid." islocal="false"/>
-  <properties idproperty="12076" idreference="11844" name="Diazo Nitrogen" units="" comments="Diazo Nitrogen" islocal="false"/>
-  <properties idproperty="12077" idreference="11844" name="Sulfinate" units="" comments="Sulfinate" islocal="false"/>
-  <properties idproperty="12078" idreference="11844" name="Unsubstituted dicarboximide" units="" comments="Unsubstituted dicarboximide" islocal="false"/>
-  <properties idproperty="12079" idreference="11844" name="Hydroxyl in H-O-P-" units="" comments="Hydroxyl in H-O-P-" islocal="false"/>
-  <properties idproperty="12080" idreference="11844" name="Cyanamide" units="" comments="Cyanamide" islocal="false"/>
-  <properties idproperty="12081" idreference="11844" name="Sulfinic Acid" units="" comments="Sulfinic Acid" islocal="false"/>
-  <properties idproperty="12082" idreference="11844" name="Allenic Carbon" units="" comments="Allenic Carbon" islocal="false"/>
-  <properties idproperty="12083" idreference="11844" name="Isonitrile " units="" comments="Isonitrile " islocal="false"/>
-  <properties idproperty="12084" idreference="11844" name="Azide group." units="" comments="Azide group." islocal="false"/>
-  <properties idproperty="12085" idreference="11844" name="Sulfenate." units="" comments="Sulfenate." islocal="false"/>
-  <properties idproperty="12086" idreference="11844" name="Carbamic acid." units="" comments="Carbamic acid." islocal="false"/>
-  <properties idproperty="12087" idreference="11844" name="Sulfamate." units="" comments="Sulfamate." islocal="false"/>
-  <properties idproperty="12088" idreference="11844" name="Carbo-azosulfone" units="" comments="Carbo-azosulfone" islocal="false"/>
-  <properties idproperty="12089" idreference="11844" name="Azide ion." units="" comments="Azide ion." islocal="false"/>
-  <properties idproperty="12090" idreference="11844" name="Thiol" units="" comments="Thiol" islocal="false"/>
-  <properties idproperty="12091" idreference="11844" name="Cysteine side chain." units="" comments="Cysteine side chain." islocal="false"/>
-  <properties idproperty="12092" idreference="11844" name="Arginine side chain." units="" comments="Arginine side chain." islocal="false"/>
-  <properties idproperty="12093" idreference="11845" name="pKa-SMARTS" units="" comments="pKa-SMARTS" islocal="false"/>
-  <properties idproperty="12094" idreference="11846" name="Michael Acceptors" units="" comments="Michael Acceptors" islocal="false"/>
-  <properties idproperty="12095" idreference="11846" name="michaelacceptors.MichaelAcceptorRules" units="" comments="michaelacceptors.MichaelAcceptorRules" islocal="false"/>
-  <properties idproperty="12096" idreference="11848" name="Sum(Ea)/Alpha" units="" comments="Sum(Ea)/Alpha" islocal="false"/>
-  <properties idproperty="12097" idreference="11848" name="VAMP Surface Area (Whole Molecule)" units="" comments="VAMP Surface Area (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12098" idreference="11848" name="6-membered aromatic rings (Whole Molecule)" units="" comments="6-membered aromatic rings (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12099" idreference="11848" name="Max(Ea)*Max(Ed)" units="" comments="Max(Ea)*Max(Ed)" islocal="false"/>
-  <properties idproperty="12100" idreference="11848" name="Kappa2 index (Whole Molecule)" units="" comments="Kappa2 index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12101" idreference="11848" name="Sum(Q-)/Alpha" units="" comments="Sum(Q-)/Alpha" islocal="false"/>
-  <properties idproperty="12102" idreference="11848" name="Sum(Ca(o))" units="" comments="Sum(Ca(o))" islocal="false"/>
-  <properties idproperty="12103" idreference="11848" name="Name" units="" comments="Names" islocal="false"/>
-  <properties idproperty="12104" idreference="11848" name="Sum(Q+)/Alpha" units="" comments="Sum(Q+)/Alpha" islocal="false"/>
-  <properties idproperty="12105" idreference="11848" name="KAlpha1 index (Whole Molecule)" units="" comments="KAlpha1 index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12106" idreference="11848" name="Kier Chi4 (cluster) index (Whole Molecule)" units="" comments="Kier Chi4 (cluster) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12107" idreference="11848" name="Rotatable Bonds (Whole Molecule)" units="" comments="Rotatable Bonds (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12108" idreference="11848" name="Kier Chi0 (atoms) index (Whole Molecule)" units="" comments="Kier Chi0 (atoms) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12109" idreference="11848" name="Sum(Ead)" units="" comments="Sum(Ead)" islocal="false"/>
-  <properties idproperty="12110" idreference="11848" name="Group count for aldehyde (Whole Molecule)" units="" comments="Group count for aldehyde (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12111" idreference="11848" name="Group count for Amino (Whole Molecule)" units="" comments="Group count for Amino (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12112" idreference="11848" name="Sum(Cad(o))/Alpha" units="" comments="Sum(Cad(o))/Alpha" islocal="false"/>
-  <properties idproperty="12113" idreference="11848" name="VAMP LUMO (Whole Molecule)" units="" comments="VAMP LUMO (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12114" idreference="11848" name="Kier Chi4 (path/cluster) index (Whole Molecule)" units="" comments="Kier Chi4 (path/cluster) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12115" idreference="11848" name="Sum(Ead)/Alpha" units="" comments="Sum(Ead)/Alpha" islocal="false"/>
-  <properties idproperty="12116" idreference="11848" name="Number of Halogen Atoms (Whole Molecule)" units="" comments="Number of Halogen Atoms (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12117" idreference="11848" name="Max(Ca(o))" units="" comments="Max(Ca(o))" islocal="false"/>
-  <properties idproperty="12118" idreference="11848" name="Group count for Hydroxyl (Whole Molecule)" units="" comments="Group count for Hydroxyl (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12119" idreference="11848" name="Kier Chi1 (bonds) index (Whole Molecule)" units="" comments="Kier Chi1 (bonds) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12120" idreference="11848" name="Kier Chiv4 (path/cluster) index (Whole Molecule)" units="" comments="Kier Chiv4 (path/cluster) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12121" idreference="11848" name="Kier ChiV1 (bonds) index (Whole Molecule)" units="" comments="Kier ChiV1 (bonds) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12122" idreference="11848" name="Kier ChiV0 (atoms) index (Whole Molecule)" units="" comments="Kier ChiV0 (atoms) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12123" idreference="11848" name="Molecular Surface Area (Whole Molecule)" units="" comments="Molecular Surface Area (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12124" idreference="11848" name="Sum(Cd)" units="" comments="Sum(Cd)" islocal="false"/>
-  <properties idproperty="12125" idreference="11848" name="VAMP HOMO (Whole Molecule)" units="" comments="VAMP HOMO (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12126" idreference="11848" name="6-membered aliphatic rings (Whole Molecule)" units="" comments="6-membered aliphatic rings (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12127" idreference="11848" name="Sum(Ca(o))/Alpha" units="" comments="Sum(Ca(o))/Alpha" islocal="false"/>
-  <properties idproperty="12128" idreference="11848" name="Kappa1 index (Whole Molecule)" units="" comments="Kappa1 index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12129" idreference="11848" name="Sum(Ed)" units="" comments="Sum(Ed)" islocal="false"/>
-  <properties idproperty="12130" idreference="11848" name="Sum(Ca)" units="" comments="Sum(Ca)" islocal="false"/>
-  <properties idproperty="12131" idreference="11848" name="Sum(Q-)" units="" comments="Sum(Q-)" islocal="false"/>
-  <properties idproperty="12132" idreference="11848" name="Ellipsoidal Volume (Whole Molecule)" units="" comments="Ellipsoidal Volume (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12133" idreference="11848" name="Sum(Cd)/Alpha" units="" comments="Sum(Cd)/Alpha" islocal="false"/>
-  <properties idproperty="12134" idreference="11848" name="Kier ChiV3 (cluster) index (Whole Molecule)" units="" comments="Kier ChiV3 (cluster) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12135" idreference="11848" name="Sum(Ea)" units="" comments="Sum(Ea)" islocal="false"/>
-  <properties idproperty="12136" idreference="11848" name="Sum(Cad(o))" units="" comments="Sum(Cad(o))" islocal="false"/>
-  <properties idproperty="12137" idreference="11848" name="Sum(Q+)" units="" comments="Sum(Q+)" islocal="false"/>
-  <properties idproperty="12138" idreference="11848" name="Sum(|Q|)]" units="" comments="Sum(|Q|)]" islocal="false"/>
-  <properties idproperty="12139" idreference="11848" name="Sum(Ed)/Alpha" units="" comments="Sum(Ed)/Alpha" islocal="false"/>
-  <properties idproperty="12140" idreference="11848" name="Max(Ca)*Max(Cd)" units="" comments="Max(Ca)*Max(Cd)" islocal="false"/>
-  <properties idproperty="12141" idreference="11848" name="KAlpha3 index (Whole Molecule)" units="" comments="KAlpha3 index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12142" idreference="11848" name="VAMP Total Dipole (Whole Molecule)" units="" comments="VAMP Total Dipole (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12143" idreference="11848" name="Sum(Cad)/Alpha" units="" comments="Sum(Cad)/Alpha" islocal="false"/>
-  <properties idproperty="12144" idreference="11848" name="TPSA(NO) (DRAGON)" units="" comments="TPSA(NO) (DRAGON)" islocal="false"/>
-  <properties idproperty="12145" idreference="11848" name="Sum(Cad)" units="" comments="Sum(Cad)" islocal="false"/>
-  <properties idproperty="12146" idreference="11848" name="Title" units="" comments="Names" islocal="false"/>
-  <properties idproperty="12147" idreference="11848" name="VAMP Total Energy (Whole Molecule)" units="" comments="VAMP Total Energy (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12148" idreference="11848" name="Cosmic Total Energy (Whole Molecule)" units="" comments="Cosmic Total Energy (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12149" idreference="11848" name="Wskowwin Solubility (log molar)" units="" comments="Wskowwin Solubility (log molar)" islocal="false"/>
-  <properties idproperty="12150" idreference="11848" name="LLNA_Binary_Class" units="" comments="LLNA_Binary_Class" islocal="false"/>
-  <properties idproperty="12151" idreference="11848" name="Kier Chi3 (cluster) index (Whole Molecule)" units="" comments="Kier Chi3 (cluster) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12152" idreference="11848" name="CAS number" units="" comments="CasRN" islocal="false"/>
-  <properties idproperty="12153" idreference="11848" name="Shape Flexibility index (Whole Molecule)" units="" comments="Shape Flexibility index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12154" idreference="11848" name="Kier ChiV6 (ring) index (Whole Molecule)" units="" comments="Kier ChiV6 (ring) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12155" idreference="11848" name="Kier ChiV5 (ring) index (Whole Molecule)" units="" comments="Kier ChiV5 (ring) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12156" idreference="11848" name="Kier ChiV6 (path) index (Whole Molecule)" units="" comments="Kier ChiV6 (path) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12157" idreference="11848" name="Kier ChiV4 (ring) index (Whole Molecule)" units="" comments="Kier ChiV4 (ring) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12158" idreference="11848" name="Kier ChiV5 (path) index (Whole Molecule)" units="" comments="Kier ChiV5 (path) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12159" idreference="11848" name="Kier ChiV3 (ring) index (Whole Molecule)" units="" comments="Kier ChiV3 (ring) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12160" idreference="11848" name="Kier ChiV4 (path) index (Whole Molecule)" units="" comments="Kier ChiV4 (path) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12161" idreference="11848" name="Kier ChiV3 (path) index (Whole Molecule)" units="" comments="Kier ChiV3 (path) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12162" idreference="11848" name="Group count for nitro (Whole Molecule)" units="" comments="Group count for nitro (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12163" idreference="11848" name="Kier ChiV2 (path) index (Whole Molecule)" units="" comments="Kier ChiV2 (path) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12164" idreference="11848" name="Max(Ca(o))*Max(Cd(o))" units="" comments="Max(Ca(o))*Max(Cd(o))" islocal="false"/>
-  <properties idproperty="12165" idreference="11848" name="Kappa3 index (Whole Molecule)" units="" comments="Kappa3 index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12166" idreference="11848" name="Group count for Methyl (Whole Molecule)" units="" comments="Group count for Methyl (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12167" idreference="11848" name="Number of H-bond Donors (Whole Molecule)" units="" comments="Number of H-bond Donors (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12168" idreference="11848" name="TPSA(Tot) (DRAGON)" units="" comments="TPSA(Tot) (DRAGON)" islocal="false"/>
-  <properties idproperty="12169" idreference="11848" name="Max(Cd)" units="" comments="Max(Cd)" islocal="false"/>
-  <properties idproperty="12170" idreference="11848" name="6-membered rings (Whole Molecule)" units="" comments="6-membered rings (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12171" idreference="11848" name="Number of H-bond Acceptors (Whole Molecule)" units="" comments="Number of H-bond Acceptors (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12172" idreference="11848" name="Molecular Mass (Whole Molecule)" units="" comments="Molecular Mass (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12173" idreference="11848" name="KAlpha2 index (Whole Molecule)" units="" comments="KAlpha2 index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12174" idreference="11848" name="Kier Chi6 (ring) index (Whole Molecule)" units="" comments="Kier Chi6 (ring) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12175" idreference="11848" name="Molecular Volume (Whole Molecule)" units="" comments="Molecular Volume (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12176" idreference="11848" name="max(Q-)" units="" comments="max(Q-)" islocal="false"/>
-  <properties idproperty="12177" idreference="11848" name="Kier Chi5 (ring) index (Whole Molecule)" units="" comments="Kier Chi5 (ring) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12178" idreference="11848" name="Kier Chi6 (path) index (Whole Molecule)" units="" comments="Kier Chi6 (path) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12179" idreference="11848" name="Kier Chi4 (ring) index (Whole Molecule)" units="" comments="Kier Chi4 (ring) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12180" idreference="11848" name="Kier Chi5 (path) index (Whole Molecule)" units="" comments="Kier Chi5 (path) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12181" idreference="11848" name="Kier Chi3 (ring) index (Whole Molecule)" units="" comments="Kier Chi3 (ring) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12182" idreference="11848" name="Kier Chi4 (path) index (Whole Molecule)" units="" comments="Kier Chi4 (path) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12183" idreference="11848" name="LLNA EC3" units="" comments="LLNA EC3" islocal="false"/>
-  <properties idproperty="12184" idreference="11848" name="Kier Chi3 (path) index (Whole Molecule)" units="" comments="Kier Chi3 (path) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12185" idreference="11848" name="Alpha" units="" comments="Alpha" islocal="false"/>
-  <properties idproperty="12186" idreference="11848" name="Kier Chi2 (path) index (Whole Molecule)" units="" comments="Kier Chi2 (path) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12187" idreference="11848" name="Max(Ed)" units="" comments="Max(Ed)" islocal="false"/>
-  <properties idproperty="12188" idreference="11848" name="LLNA Class" units="" comments="LLNA Class" islocal="false"/>
-  <properties idproperty="12189" idreference="11848" name="SMILES" units="" comments="SMILES" islocal="false"/>
-  <properties idproperty="12190" idreference="11848" name="max(Q+)" units="" comments="max(Q+)" islocal="false"/>
-  <properties idproperty="12191" idreference="11848" name="Max(Ca)" units="" comments="Max(Ca)" islocal="false"/>
-  <properties idproperty="12192" idreference="11848" name="Group count for Ethyl (Whole Molecule)" units="" comments="Group count for Ethyl (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12193" idreference="11848" name="Max(Ea)" units="" comments="Max(Ea)" islocal="false"/>
-  <properties idproperty="12194" idreference="11848" name="Kier ChiV4 (cluster) index (Whole Molecule)" units="" comments="Kier ChiV4 (cluster) index (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12195" idreference="11848" name="Sum(Ca)/Alpha" units="" comments="Sum(Ca)/Alpha" islocal="false"/>
-  <properties idproperty="12196" idreference="11848" name="Total Dipole Moment (Whole Molecule)" units="" comments="Total Dipole Moment (Whole Molecule)" islocal="false"/>
-  <properties idproperty="12197" idreference="11848" name="SRC Kowwin log P" units="" comments="SRC Kowwin log P" islocal="false"/>
-  <properties idproperty="12198" idreference="11849" name="nB" units="" comments="nB" islocal="false"/>
-  <properties idproperty="12199" idreference="11850" name="nAtom" units="" comments="nAtom" islocal="false"/>
+  <properties idproperty="1" idreference="3" name="MF" units=" " comments="MF" islocal="0"/>
+  <properties idproperty="2" idreference="3" name="Name" units=" " comments="Names" islocal="0"/>
+  <properties idproperty="3" idreference="3" name="GENERATED_SMILES_Quality" units=" " comments="SMILES" islocal="0"/>
+  <properties idproperty="4" idreference="3" name="GENERATED_MF" units=" " comments="GENERATED_MF" islocal="0"/>
+  <properties idproperty="5" idreference="3" name="EC" units=" " comments="EC" islocal="0"/>
+  <properties idproperty="6" idreference="3" name="CAS" units=" " comments="CasRN" islocal="0"/>
+  <properties idproperty="7" idreference="3" name="Title" units=" " comments="Names" islocal="0"/>
+  <properties idproperty="8" idreference="3" name="GENERATED_MW" units=" " comments="GENERATED_MW" islocal="0"/>
+  <properties idproperty="9" idreference="3" name="GENERATED_IUPAC_EN" units=" " comments="IUPAC Name" islocal="0"/>
+  <properties idproperty="10" idreference="3" name="Inventories" units=" " comments="Inventories" islocal="0"/>
+  <properties idproperty="11" idreference="3" name="GENERATED_SMILES" units=" " comments="SMILES" islocal="0"/>
+  <properties idproperty="12" idreference="3" name="ID" units=" " comments="ID" islocal="0"/>
+  <properties idproperty="13" idreference="3" name="GENERATED_InChI" units=" " comments="InChI" islocal="0"/>
+  <properties idproperty="14" idreference="5" name="CasRN" units=" " comments="CasRN" islocal="0"/>
+  <properties idproperty="15" idreference="6" name="Title" units=" " comments="Names" islocal="0"/>
+  <properties idproperty="16" idreference="6" name="Remark" units=" " comments="Remark" islocal="0"/>
+  <properties idproperty="17" idreference="6" name="CAS" units=" " comments="CasRN" islocal="0"/>
+  <properties idproperty="11386" idreference="11376" name="Title" units=" " comments="Names" islocal="0"/>
+  <properties idproperty="11387" idreference="11376" name="Remark" units=" " comments="Remark" islocal="0"/>
+  <properties idproperty="11388" idreference="11377" name="TPSA" units=" " comments="TPSA" islocal="0"/>
+  <properties idproperty="11389" idreference="11378" name="XLogP" units=" " comments="XLogP" islocal="0"/>
+  <properties idproperty="11390" idreference="11379" name="LipinksiFailures" units=" " comments="LipinksiFailures" islocal="0"/>
+  <properties idproperty="11391" idreference="11380" name="MW" units=" " comments="MW" islocal="0"/>
+  <properties idproperty="11392" idreference="11378" name="org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor" units=" " comments="org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor" islocal="0"/>
+  <properties idproperty="11393" idreference="11379" name="org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor" units=" " comments="org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor" islocal="0"/>
+  <properties idproperty="11394" idreference="11380" name="ambit2.descriptors.MolecularWeight" units=" " comments="ambit2.descriptors.MolecularWeight" islocal="0"/>
+  <properties idproperty="11395" idreference="11377" name="org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor" units=" " comments="org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor" islocal="0"/>
+  <properties idproperty="11853" idreference="11839" name="Erythema (rabbit 3)-1d" units=" " comments="Erythema (rabbit 3)-1d" islocal="0"/>
+  <properties idproperty="11854" idreference="11839" name="Oedema (rabbit 1)-1h" units=" " comments="Oedema (rabbit 1)-1h" islocal="0"/>
+  <properties idproperty="11855" idreference="11839" name="InChI" units=" " comments="InChI" islocal="0"/>
+  <properties idproperty="11856" idreference="11839" name="Oedema (rabbit 3)-1h" units=" " comments="Oedema (rabbit 3)-1h" islocal="0"/>
+  <properties idproperty="11857" idreference="11839" name="Oedema (rabbit 1)-3d" units=" " comments="Oedema (rabbit 1)-3d" islocal="0"/>
+  <properties idproperty="11858" idreference="11839" name="Oedema (rabbit 3)-3d" units=" " comments="Oedema (rabbit 3)-3d" islocal="0"/>
+  <properties idproperty="11859" idreference="11839" name="Mean oedema-7d" units=" " comments="Mean oedema-7d" islocal="0"/>
+  <properties idproperty="11860" idreference="11839" name="Erythema (rabbit 2)-1h" units=" " comments="Erythema (rabbit 2)-1h" islocal="0"/>
+  <properties idproperty="11861" idreference="11839" name="Oedema (rabbit 1)-2d" units=" " comments="Oedema (rabbit 1)-2d" islocal="0"/>
+  <properties idproperty="11862" idreference="11839" name="Erythema (rabbit 4)-1h" units=" " comments="Erythema (rabbit 4)-1h" islocal="0"/>
+  <properties idproperty="11863" idreference="11839" name="Oedema (rabbit 3)-2d" units=" " comments="Oedema (rabbit 3)-2d" islocal="0"/>
+  <properties idproperty="11864" idreference="11839" name="Mean erythema-1h" units=" " comments="Mean erythema-1h" islocal="0"/>
+  <properties idproperty="11865" idreference="11839" name="Erythema (rabbit 2)-3d" units=" " comments="Erythema (rabbit 2)-3d" islocal="0"/>
+  <properties idproperty="11866" idreference="11839" name="Erythema (rabbit 1)-7d" units=" " comments="Erythema (rabbit 1)-7d" islocal="0"/>
+  <properties idproperty="11867" idreference="11839" name="Erythema (rabbit 4)-3d" units=" " comments="Erythema (rabbit 4)-3d" islocal="0"/>
+  <properties idproperty="11868" idreference="11839" name="FW" units=" " comments="FW" islocal="0"/>
+  <properties idproperty="11869" idreference="11839" name="Oedema (rabbit 1)-1d" units=" " comments="Oedema (rabbit 1)-1d" islocal="0"/>
+  <properties idproperty="11870" idreference="11839" name="Erythema (rabbit 3)-7d" units=" " comments="Erythema (rabbit 3)-7d" islocal="0"/>
+  <properties idproperty="11871" idreference="11839" name="Animals" units=" " comments="Animals" islocal="0"/>
+  <properties idproperty="11872" idreference="11839" name="Mean erythema-3d" units=" " comments="Mean erythema-3d" islocal="0"/>
+  <properties idproperty="11873" idreference="11839" name="Oedema (rabbit 3)-1d" units=" " comments="Oedema (rabbit 3)-1d" islocal="0"/>
+  <properties idproperty="11874" idreference="11839" name="PII" units=" " comments="PII" islocal="0"/>
+  <properties idproperty="11875" idreference="11839" name="Erythema (rabbit 2)-2d" units=" " comments="Erythema (rabbit 2)-2d" islocal="0"/>
+  <properties idproperty="11876" idreference="11839" name="Erythema (rabbit 4)-2d" units=" " comments="Erythema (rabbit 4)-2d" islocal="0"/>
+  <properties idproperty="11877" idreference="11839" name="Formula" units=" " comments="Formula" islocal="0"/>
+  <properties idproperty="11878" idreference="11839" name="Mean erythema-2d" units=" " comments="Mean erythema-2d" islocal="0"/>
+  <properties idproperty="11879" idreference="11839" name="Erythema (rabbit 2)-1d" units=" " comments="Erythema (rabbit 2)-1d" islocal="0"/>
+  <properties idproperty="11880" idreference="11839" name="Erythema (rabbit 4)-1d" units=" " comments="Erythema (rabbit 4)-1d" islocal="0"/>
+  <properties idproperty="11881" idreference="11839" name="Mean oedema-1h" units=" " comments="Mean oedema-1h" islocal="0"/>
+  <properties idproperty="11882" idreference="11839" name="Oedema (rabbit 2)-1h" units=" " comments="Oedema (rabbit 2)-1h" islocal="0"/>
+  <properties idproperty="11883" idreference="11839" name="No" units=" " comments="No" islocal="0"/>
+  <properties idproperty="11884" idreference="11839" name="Oedema (rabbit 4)-1h" units=" " comments="Oedema (rabbit 4)-1h" islocal="0"/>
+  <properties idproperty="11885" idreference="11839" name="Mean erythema-1d" units=" " comments="Mean erythema-1d" islocal="0"/>
+  <properties idproperty="11886" idreference="11839" name="IUPAC_Name" units=" " comments="IUPAC Name" islocal="0"/>
+  <properties idproperty="11887" idreference="11839" name="Oedema (rabbit 2)-3d" units=" " comments="Oedema (rabbit 2)-3d" islocal="0"/>
+  <properties idproperty="11888" idreference="11839" name="Erythema (rabbit 4)7d" units=" " comments="Erythema (rabbit 4)7d" islocal="0"/>
+  <properties idproperty="11889" idreference="11839" name="Mean oedema-3d" units=" " comments="Mean oedema-3d" islocal="0"/>
+  <properties idproperty="11890" idreference="11839" name="Oedema (rabbit 4)-3d" units=" " comments="Oedema (rabbit 4)-3d" islocal="0"/>
+  <properties idproperty="11891" idreference="11839" name="Erythema (rabbit 1)-1h" units=" " comments="Erythema (rabbit 1)-1h" islocal="0"/>
+  <properties idproperty="11892" idreference="11839" name="Name" units=" " comments="Names" islocal="0"/>
+  <properties idproperty="11893" idreference="11839" name="CAS" units=" " comments="CasRN" islocal="0"/>
+  <properties idproperty="11894" idreference="11839" name="Erythema (rabbit 3)-1h" units=" " comments="Erythema (rabbit 3)-1h" islocal="0"/>
+  <properties idproperty="11895" idreference="11839" name="Oedema (rabbit 2)-2d" units=" " comments="Oedema (rabbit 2)-2d" islocal="0"/>
+  <properties idproperty="11896" idreference="11839" name="Mean oedema-2d" units=" " comments="Mean oedema-2d" islocal="0"/>
+  <properties idproperty="11897" idreference="11839" name="smiles" units=" " comments="SMILES" islocal="0"/>
+  <properties idproperty="11898" idreference="11839" name="Oedema (rabbit 4)-2d" units=" " comments="Oedema (rabbit 4)-2d" islocal="0"/>
+  <properties idproperty="11899" idreference="11839" name="Erythema (rabbit 1)-3d" units=" " comments="Erythema (rabbit 1)-3d" islocal="0"/>
+  <properties idproperty="11900" idreference="11839" name="Erythema (rabbit 3)-3d" units=" " comments="Erythema (rabbit 3)-3d" islocal="0"/>
+  <properties idproperty="11901" idreference="11839" name="Erythema (rabbit 2)-7d" units=" " comments="Erythema (rabbit 2)-7d" islocal="0"/>
+  <properties idproperty="11902" idreference="11839" name="Class" units=" " comments="Class" islocal="0"/>
+  <properties idproperty="11903" idreference="11839" name="Mean oedema-1d" units=" " comments="Mean oedema-1d" islocal="0"/>
+  <properties idproperty="11904" idreference="11839" name="Oedema (rabbit 2)-1d" units=" " comments="Oedema (rabbit 2)-1d" islocal="0"/>
+  <properties idproperty="11905" idreference="11839" name="C/NC" units=" " comments="C/NC" islocal="0"/>
+  <properties idproperty="11906" idreference="11839" name="Oedema (rabbit 4)-1d" units=" " comments="Oedema (rabbit 4)-1d" islocal="0"/>
+  <properties idproperty="11907" idreference="11839" name="Erythema (rabbit 1)-2d" units=" " comments="Erythema (rabbit 1)-2d" islocal="0"/>
+  <properties idproperty="11908" idreference="11839" name="Mean erythema-7d" units=" " comments="Mean erythema-7d" islocal="0"/>
+  <properties idproperty="11909" idreference="11839" name="Erythema (rabbit 3)-2d" units=" " comments="Erythema (rabbit 3)-2d" islocal="0"/>
+  <properties idproperty="11910" idreference="11839" name="Erythema (rabbit 1)-1d" units=" " comments="Erythema (rabbit 1)-1d" islocal="0"/>
+  <properties idproperty="11911" idreference="11839" name="Oedema (rabbit 2)-7d" units=" " comments="Oedema (rabbit 2)-7d" islocal="0"/>
+  <properties idproperty="11912" idreference="11839" name="Oedema (rabbit 4)-7d" units=" " comments="Oedema (rabbit 4)-7d" islocal="0"/>
+  <properties idproperty="11913" idreference="11839" name="Oedema (rabbit 1)-7d" units=" " comments="Oedema (rabbit 1)-7d" islocal="0"/>
+  <properties idproperty="11914" idreference="11839" name="Oedema (rabbit 3)-7d" units=" " comments="Oedema (rabbit 3)-7d" islocal="0"/>
+  <properties idproperty="11915" idreference="11839" name="Comment" units=" " comments="Comment" islocal="0"/>
+  <properties idproperty="11916" idreference="11839" name="Oedema (rabbit 5)-3d" units=" " comments="Oedema (rabbit 5)-3d" islocal="0"/>
+  <properties idproperty="11917" idreference="11839" name="Erythema (rabbit 5)-1h" units=" " comments="Erythema (rabbit 5)-1h" islocal="0"/>
+  <properties idproperty="11918" idreference="11839" name="Oedema (rabbit 5)-2d" units=" " comments="Oedema (rabbit 5)-2d" islocal="0"/>
+  <properties idproperty="11919" idreference="11839" name="Oedema (rabbit 6)-7d" units=" " comments="Oedema (rabbit 6)-7d" islocal="0"/>
+  <properties idproperty="11920" idreference="11839" name="Oedema (rabbit 5)-1d" units=" " comments="Oedema (rabbit 5)-1d" islocal="0"/>
+  <properties idproperty="11921" idreference="11839" name="Oedema (rabbit 6)-3d" units=" " comments="Oedema (rabbit 6)-3d" islocal="0"/>
+  <properties idproperty="11922" idreference="11839" name="Erythema (rabbit 6)-1h" units=" " comments="Erythema (rabbit 6)-1h" islocal="0"/>
+  <properties idproperty="11923" idreference="11839" name="Oedema (rabbit 6)-2d" units=" " comments="Oedema (rabbit 6)-2d" islocal="0"/>
+  <properties idproperty="11924" idreference="11839" name="Oedema (rabbit 6)-1d" units=" " comments="Oedema (rabbit 6)-1d" islocal="0"/>
+  <properties idproperty="11925" idreference="11839" name="Oedema (rabbit 5)-1h" units=" " comments="Oedema (rabbit 5)-1h" islocal="0"/>
+  <properties idproperty="11926" idreference="11839" name="Erythema (rabbit 5)-7d" units=" " comments="Erythema (rabbit 5)-7d" islocal="0"/>
+  <properties idproperty="11927" idreference="11839" name="Oedema (rabbit 6)-1h" units=" " comments="Oedema (rabbit 6)-1h" islocal="0"/>
+  <properties idproperty="11928" idreference="11839" name="Erythema (rabbit 5)-3d" units=" " comments="Erythema (rabbit 5)-3d" islocal="0"/>
+  <properties idproperty="11929" idreference="11839" name="Erythema (rabbit 6)-7d" units=" " comments="Erythema (rabbit 6)-7d" islocal="0"/>
+  <properties idproperty="11930" idreference="11839" name="Erythema (rabbit 5)-2d" units=" " comments="Erythema (rabbit 5)-2d" islocal="0"/>
+  <properties idproperty="11931" idreference="11839" name="Erythema (rabbit 5)-1d" units=" " comments="Erythema (rabbit 5)-1d" islocal="0"/>
+  <properties idproperty="11932" idreference="11839" name="Erythema (rabbit 6)-3d" units=" " comments="Erythema (rabbit 6)-3d" islocal="0"/>
+  <properties idproperty="11933" idreference="11839" name="Erythema (rabbit 6)-2d" units=" " comments="Erythema (rabbit 6)-2d" islocal="0"/>
+  <properties idproperty="11934" idreference="11839" name="Erythema (rabbit 6)-1d" units=" " comments="Erythema (rabbit 6)-1d" islocal="0"/>
+  <properties idproperty="11935" idreference="11839" name="Oedema (rabbit 5)-7d" units=" " comments="Oedema (rabbit 5)-7d" islocal="0"/>
+  <properties idproperty="11936" idreference="11840" name="Reaction domain (verbose)" units=" " comments="Reaction domain (verbose)" islocal="0"/>
+  <properties idproperty="11937" idreference="11840" name="eHOMO" units=" " comments="eHOMO" islocal="0"/>
+  <properties idproperty="11938" idreference="11840" name="Max Diam" units=" " comments="Max Diam" islocal="0"/>
+  <properties idproperty="11939" idreference="11840" name="MolWeight" units=" " comments="MolWeight" islocal="0"/>
+  <properties idproperty="11940" idreference="11840" name="Total Energy" units=" " comments="Total Energy" islocal="0"/>
+  <properties idproperty="11941" idreference="11840" name="FINAL HEAT OF FORMATION" units=" " comments="FINAL HEAT OF FORMATION" islocal="0"/>
+  <properties idproperty="11942" idreference="11840" name="Title" units=" " comments="Names" islocal="0"/>
+  <properties idproperty="11943" idreference="11840" name="eLUMO" units=" " comments="eLUMO" islocal="0"/>
+  <properties idproperty="11944" idreference="11840" name="Names" units=" " comments="Names" islocal="0"/>
+  <properties idproperty="11945" idreference="11840" name="Electronic Energy" units=" " comments="Electronic Energy" islocal="0"/>
+  <properties idproperty="11946" idreference="11840" name="HAcc" units=" " comments="HAcc" islocal="0"/>
+  <properties idproperty="11947" idreference="11840" name="LogP" units=" " comments="LogP" islocal="0"/>
+  <properties idproperty="11948" idreference="11840" name="ReactionDomain" units=" " comments="ReactionDomain" islocal="0"/>
+  <properties idproperty="11949" idreference="11840" name="SMILES" units=" " comments="SMILES" islocal="0"/>
+  <properties idproperty="11950" idreference="11840" name="TPSA" units=" " comments="TPSA" islocal="0"/>
+  <properties idproperty="11951" idreference="11840" name="LLNA EC3 %" units=" " comments="LLNA EC3 %" islocal="0"/>
+  <properties idproperty="11952" idreference="11840" name="CasRN" units=" " comments="CasRN" islocal="0"/>
+  <properties idproperty="11953" idreference="11840" name="Ionization Potential" units=" " comments="Ionization Potential" islocal="0"/>
+  <properties idproperty="11954" idreference="11840" name="Eff Diam" units=" " comments="Eff Diam" islocal="0"/>
+  <properties idproperty="11955" idreference="11842" name="REFERENCE" units=" " comments="REFERENCE" islocal="0"/>
+  <properties idproperty="11956" idreference="11843" name="fish age" units=" " comments="fish age" islocal="0"/>
+  <properties idproperty="11957" idreference="11843" name="ref" units=" " comments="ref" islocal="0"/>
+  <properties idproperty="11958" idreference="11843" name="CAS" units=" " comments="CasRN" islocal="0"/>
+  <properties idproperty="11959" idreference="11843" name="elimination phase duration" units="d" comments="elimination phase duration" islocal="0"/>
+  <properties idproperty="11960" idreference="11843" name="BCFss ww" units=" Cf/Cw (L/kg)" comments="BCFss ww" islocal="0"/>
+  <properties idproperty="11961" idreference="11843" name="BCFss ww op" units=" " comments="BCFss ww op" islocal="0"/>
+  <properties idproperty="11962" idreference="11843" name="flow-through/static/renewal" units="S/FT/R/nd" comments="flow-through/static/renewal" islocal="0"/>
+  <properties idproperty="11963" idreference="11843" name="uptake&gt;T80" units="y/n/prob" comments="uptake&gt;T80" islocal="0"/>
+  <properties idproperty="11964" idreference="11843" name="reliability score" units=" " comments="reliability score" islocal="0"/>
+  <properties idproperty="11965" idreference="11843" name="lipid" units="method" comments="lipid" islocal="0"/>
+  <properties idproperty="11966" idreference="11843" name="BCFk lipid" units="BCFk ww/lipid%" comments="BCFk lipid" islocal="0"/>
+  <properties idproperty="11967" idreference="11843" name="BCFss lipid op" units=" " comments="BCFss lipid op" islocal="0"/>
+  <properties idproperty="11968" idreference="11843" name="k2" units="d-1" comments="k2" islocal="0"/>
+  <properties idproperty="11969" idreference="11843" name="uptake phase duration" units="d" comments="uptake phase duration" islocal="0"/>
+  <properties idproperty="11970" idreference="11843" name="T80" units="d" comments="T80" islocal="0"/>
+  <properties idproperty="11971" idreference="11843" name="exposure concentration" units="mg/L" comments="exposure concentration" islocal="0"/>
+  <properties idproperty="11972" idreference="11843" name="sex" units="M/F/MF/nd" comments="sex" islocal="0"/>
+  <properties idproperty="11973" idreference="11843" name="temperature" units="°C" comments="temperature" islocal="0"/>
+  <properties idproperty="11974" idreference="11843" name="substance common name" units=" " comments="Names" islocal="0"/>
+  <properties idproperty="11975" idreference="11843" name="fresh/marine" units=" " comments="fresh/marine" islocal="0"/>
+  <properties idproperty="11976" idreference="11843" name="TOC" units="mg/L" comments="TOC" islocal="0"/>
+  <properties idproperty="11977" idreference="11843" name="pH" units=" " comments="pH" islocal="0"/>
+  <properties idproperty="11978" idreference="11843" name="tissue analyzed" units=" " comments="tissue analyzed" islocal="0"/>
+  <properties idproperty="11979" idreference="11843" name="Reason for reliability 3/4" units=" " comments="Reason for reliability 3/4" islocal="0"/>
+  <properties idproperty="11980" idreference="11843" name="T95" units="d" comments="T95" islocal="0"/>
+  <properties idproperty="11981" idreference="11843" name="species scientific name" units=" " comments="Species" islocal="0"/>
+  <properties idproperty="11982" idreference="11843" name="species common name" units=" " comments="Species" islocal="0"/>
+  <properties idproperty="11983" idreference="11843" name="elimination&gt;5xT50" units="y/n/prob" comments="elimination&gt;5xT50" islocal="0"/>
+  <properties idproperty="11984" idreference="11843" name="fish weight" units="g" comments="fish weight" islocal="0"/>
+  <properties idproperty="11985" idreference="11843" name="k1" units="d-1" comments="k1" islocal="0"/>
+  <properties idproperty="11986" idreference="11843" name="BCFss lipid" units="Cf lipid/Cw (L/k" comments="BCFss lipid" islocal="0"/>
+  <properties idproperty="11987" idreference="11843" name="BCFk ww" units="k1/k2" comments="BCFk ww" islocal="0"/>
+  <properties idproperty="11988" idreference="11843" name="fish length" units="cm" comments="fish length" islocal="0"/>
+  <properties idproperty="11989" idreference="11843" name="statistics" units=" " comments="statistics" islocal="0"/>
+  <properties idproperty="11990" idreference="11843" name="T50,elim" units=" " comments="T50,elim" islocal="0"/>
+  <properties idproperty="11991" idreference="11843" name="remarks" units=" " comments="remarks" islocal="0"/>
+  <properties idproperty="11992" idreference="11844" name="Carbonyl group. Low specificity" units=" " comments="Carbonyl group. Low specificity" islocal="0"/>
+  <properties idproperty="11993" idreference="11844" name="Carbonyl group" units=" " comments="Carbonyl group" islocal="0"/>
+  <properties idproperty="11994" idreference="11844" name="A Nitrogen." units=" " comments="A Nitrogen." islocal="0"/>
+  <properties idproperty="11995" idreference="11844" name="Halogen" units=" " comments="Halogen" islocal="0"/>
+  <properties idproperty="11996" idreference="11844" name="Three_halides groups" units=" " comments="Three_halides groups" islocal="0"/>
+  <properties idproperty="11997" idreference="11844" name="Acid" units=" " comments="Acid" islocal="0"/>
+  <properties idproperty="11998" idreference="11844" name="Alkyl Carbon" units=" " comments="Alkyl Carbon" islocal="0"/>
+  <properties idproperty="11999" idreference="11844" name="Vinylic Carbon" units=" " comments="Vinylic Carbon" islocal="0"/>
+  <properties idproperty="12000" idreference="11844" name="Carbonyl with Carbon" units=" " comments="Carbonyl with Carbon" islocal="0"/>
+  <properties idproperty="12001" idreference="11844" name="Ketone" units=" " comments="Ketone" islocal="0"/>
+  <properties idproperty="12002" idreference="11844" name="Any carbon attached to any halogen" units=" " comments="Any carbon attached to any halogen" islocal="0"/>
+  <properties idproperty="12003" idreference="11844" name="Carbonyl with Oxygen." units=" " comments="Carbonyl with Oxygen." islocal="0"/>
+  <properties idproperty="12004" idreference="11844" name="Ester Also hits anhydrides" units=" " comments="Ester Also hits anhydrides" islocal="0"/>
+  <properties idproperty="12005" idreference="11844" name="Ether" units=" " comments="Ether" islocal="0"/>
+  <properties idproperty="12006" idreference="11844" name="Carbonyl with Nitrogen." units=" " comments="Carbonyl with Nitrogen." islocal="0"/>
+  <properties idproperty="12007" idreference="11844" name="Amide" units=" " comments="Amide" islocal="0"/>
+  <properties idproperty="12008" idreference="11844" name="Carbamate." units=" " comments="Carbamate." islocal="0"/>
+  <properties idproperty="12009" idreference="11844" name="Carbamic ester" units=" " comments="Carbamic ester" islocal="0"/>
+  <properties idproperty="12010" idreference="11844" name="Enamine" units=" " comments="Enamine" islocal="0"/>
+  <properties idproperty="12011" idreference="11844" name="Enamine or Aniline Nitrogen" units=" " comments="Enamine or Aniline Nitrogen" islocal="0"/>
+  <properties idproperty="12012" idreference="11844" name="Substituted dicarboximide" units=" " comments="Substituted dicarboximide" islocal="0"/>
+  <properties idproperty="12013" idreference="11844" name="Phosphoric_acid groups." units=" " comments="Phosphoric_acid groups." islocal="0"/>
+  <properties idproperty="12014" idreference="11844" name="Phosphoric_ester groups." units=" " comments="Phosphoric_ester groups." islocal="0"/>
+  <properties idproperty="12015" idreference="11844" name="Phosphoric_Acid" units=" " comments="Phosphoric_Acid" islocal="0"/>
+  <properties idproperty="12016" idreference="11844" name="Hydrazine H2NNH2" units=" " comments="Hydrazine H2NNH2" islocal="0"/>
+  <properties idproperty="12017" idreference="11844" name="Thioamide" units=" " comments="Thioamide" islocal="0"/>
+  <properties idproperty="12018" idreference="11844" name="Thiol, Sulfide or Disulfide Sulfur" units=" " comments="Thiol, Sulfide or Disulfide Sulfur" islocal="0"/>
+  <properties idproperty="12019" idreference="11844" name="Sulfide" units=" " comments="Sulfide" islocal="0"/>
+  <properties idproperty="12020" idreference="11844" name="Mono-sulfide" units=" " comments="Mono-sulfide" islocal="0"/>
+  <properties idproperty="12021" idreference="11844" name="Two Sulfides" units=" " comments="Two Sulfides" islocal="0"/>
+  <properties idproperty="12022" idreference="11844" name="Sulfone. Low specificity." units=" " comments="Sulfone. Low specificity." islocal="0"/>
+  <properties idproperty="12023" idreference="11844" name="Sulfuric acid ester (sulfate ester) Low specificity." units=" " comments="Sulfuric acid ester (sulfate ester) Low specificity." islocal="0"/>
+  <properties idproperty="12024" idreference="11844" name="Di-sulfide" units=" " comments="Di-sulfide" islocal="0"/>
+  <properties idproperty="12025" idreference="11844" name="Carboxylate Ion." units=" " comments="Carboxylate Ion." islocal="0"/>
+  <properties idproperty="12026" idreference="11844" name="Carboxylic acid or conjugate base." units=" " comments="Carboxylic acid or conjugate base." islocal="0"/>
+  <properties idproperty="12027" idreference="11844" name="Iminium" units=" " comments="Iminium" islocal="0"/>
+  <properties idproperty="12028" idreference="11844" name="Nitro group" units=" " comments="Nitro group" islocal="0"/>
+  <properties idproperty="12029" idreference="11844" name="Aldehyde" units=" " comments="Aldehyde" islocal="0"/>
+  <properties idproperty="12030" idreference="11844" name="Substituted imine" units=" " comments="Substituted imine" islocal="0"/>
+  <properties idproperty="12031" idreference="11844" name="Substituted or un-substituted imine " units=" " comments="Substituted or un-substituted imine " islocal="0"/>
+  <properties idproperty="12032" idreference="11844" name="Sulfate" units=" " comments="Sulfate" islocal="0"/>
+  <properties idproperty="12033" idreference="11844" name="Acetylenic Carbon" units=" " comments="Acetylenic Carbon" islocal="0"/>
+  <properties idproperty="12034" idreference="11844" name="Carbo-Thioester" units=" " comments="Carbo-Thioester" islocal="0"/>
+  <properties idproperty="12035" idreference="11844" name="Nitrile" units=" " comments="Nitrile" islocal="0"/>
+  <properties idproperty="12036" idreference="11844" name="Sulfur with at-least one hydrogen." units=" " comments="Sulfur with at-least one hydrogen." islocal="0"/>
+  <properties idproperty="12037" idreference="11844" name="Sulfonamide." units=" " comments="Sulfonamide." islocal="0"/>
+  <properties idproperty="12038" idreference="11844" name="Sulfonamide" units=" " comments="Sulfonamide" islocal="0"/>
+  <properties idproperty="12039" idreference="11844" name="Nitrate group" units=" " comments="Nitrate group" islocal="0"/>
+  <properties idproperty="12040" idreference="11844" name="Nitrate Anion " units=" " comments="Nitrate Anion " islocal="0"/>
+  <properties idproperty="12041" idreference="11844" name="Hydrazone C=NNH2" units=" " comments="Hydrazone C=NNH2" islocal="0"/>
+  <properties idproperty="12042" idreference="11844" name="Alanine side chain" units=" " comments="Alanine side chain" islocal="0"/>
+  <properties idproperty="12043" idreference="11844" name="Azo Nitrogen. Low specificity." units=" " comments="Azo Nitrogen. Low specificity." islocal="0"/>
+  <properties idproperty="12044" idreference="11844" name="Azo Nitrogen.diazene" units=" " comments="Azo Nitrogen.diazene" islocal="0"/>
+  <properties idproperty="12045" idreference="11844" name="Nitroso-group" units=" " comments="Nitroso-group" islocal="0"/>
+  <properties idproperty="12046" idreference="11844" name="Sulfonate" units=" " comments="Sulfonate" islocal="0"/>
+  <properties idproperty="12047" idreference="11844" name="Amidinium" units=" " comments="Amidinium" islocal="0"/>
+  <properties idproperty="12048" idreference="11844" name="Anhydride" units=" " comments="Anhydride" islocal="0"/>
+  <properties idproperty="12049" idreference="11844" name="N-Oxide" units=" " comments="N-Oxide" islocal="0"/>
+  <properties idproperty="12050" idreference="11844" name="Sulfoxide Low specificity." units=" " comments="Sulfoxide Low specificity." islocal="0"/>
+  <properties idproperty="12051" idreference="11844" name="Sulfoxide High specificity" units=" " comments="Sulfoxide High specificity" islocal="0"/>
+  <properties idproperty="12052" idreference="11844" name="Carboxylic acid" units=" " comments="Carboxylic acid" islocal="0"/>
+  <properties idproperty="12053" idreference="11844" name="Aspartate (or Aspartic acid) side chain." units=" " comments="Aspartate (or Aspartic acid) side chain." islocal="0"/>
+  <properties idproperty="12054" idreference="11844" name="Hydroxyl" units=" " comments="Hydroxyl" islocal="0"/>
+  <properties idproperty="12055" idreference="11844" name="Hydroxyl in Alcohol" units=" " comments="Hydroxyl in Alcohol" islocal="0"/>
+  <properties idproperty="12056" idreference="11844" name="Hydroxyl in Carboxylic Acid" units=" " comments="Hydroxyl in Carboxylic Acid" islocal="0"/>
+  <properties idproperty="12057" idreference="11844" name="Hydroxyl_acidic" units=" " comments="Hydroxyl_acidic" islocal="0"/>
+  <properties idproperty="12058" idreference="11844" name="Sulfonic acid. High specificity." units=" " comments="Sulfonic acid. High specificity." islocal="0"/>
+  <properties idproperty="12059" idreference="11844" name="Sulfonic Acid. High specificity." units=" " comments="Sulfonic Acid. High specificity." islocal="0"/>
+  <properties idproperty="12060" idreference="11844" name="Primary or secondary amine, not amide." units=" " comments="Primary or secondary amine, not amide." islocal="0"/>
+  <properties idproperty="12061" idreference="11844" name="Primary amine, not amide" units=" " comments="Primary amine, not amide" islocal="0"/>
+  <properties idproperty="12062" idreference="11844" name="Generic amino acid: low specificity" units=" " comments="Generic amino acid: low specificity" islocal="0"/>
+  <properties idproperty="12063" idreference="11844" name="Sulfuric Acid Diester." units=" " comments="Sulfuric Acid Diester." islocal="0"/>
+  <properties idproperty="12064" idreference="11844" name="Acyl Halide" units=" " comments="Acyl Halide" islocal="0"/>
+  <properties idproperty="12065" idreference="11844" name="Sulfone. High specificity." units=" " comments="Sulfone. High specificity." islocal="0"/>
+  <properties idproperty="12066" idreference="11844" name="Amino Acid " units=" " comments="Amino Acid " islocal="0"/>
+  <properties idproperty="12067" idreference="11844" name="Peroxide groups." units=" " comments="Peroxide groups." islocal="0"/>
+  <properties idproperty="12068" idreference="11844" name="Glutamate (or Glutamic acid) side chain." units=" " comments="Glutamate (or Glutamic acid) side chain." islocal="0"/>
+  <properties idproperty="12069" idreference="11844" name="Carbonic Acid or Carbonic Ester" units=" " comments="Carbonic Acid or Carbonic Ester" islocal="0"/>
+  <properties idproperty="12070" idreference="11844" name="Carbonic Acid or Carbonic Acid-Ester" units=" " comments="Carbonic Acid or Carbonic Acid-Ester" islocal="0"/>
+  <properties idproperty="12071" idreference="11844" name="Carbonic Ester (carbonic acid diester)" units=" " comments="Carbonic Ester (carbonic acid diester)" islocal="0"/>
+  <properties idproperty="12072" idreference="11844" name="Enol" units=" " comments="Enol" islocal="0"/>
+  <properties idproperty="12073" idreference="11844" name="Enol or Phenol" units=" " comments="Enol or Phenol" islocal="0"/>
+  <properties idproperty="12074" idreference="11844" name="Thio analog of carbonyl" units=" " comments="Thio analog of carbonyl" islocal="0"/>
+  <properties idproperty="12075" idreference="11844" name="Sulfamic Acid." units=" " comments="Sulfamic Acid." islocal="0"/>
+  <properties idproperty="12076" idreference="11844" name="Diazo Nitrogen" units=" " comments="Diazo Nitrogen" islocal="0"/>
+  <properties idproperty="12077" idreference="11844" name="Sulfinate" units=" " comments="Sulfinate" islocal="0"/>
+  <properties idproperty="12078" idreference="11844" name="Unsubstituted dicarboximide" units=" " comments="Unsubstituted dicarboximide" islocal="0"/>
+  <properties idproperty="12079" idreference="11844" name="Hydroxyl in H-O-P-" units=" " comments="Hydroxyl in H-O-P-" islocal="0"/>
+  <properties idproperty="12080" idreference="11844" name="Cyanamide" units=" " comments="Cyanamide" islocal="0"/>
+  <properties idproperty="12081" idreference="11844" name="Sulfinic Acid" units=" " comments="Sulfinic Acid" islocal="0"/>
+  <properties idproperty="12082" idreference="11844" name="Allenic Carbon" units=" " comments="Allenic Carbon" islocal="0"/>
+  <properties idproperty="12083" idreference="11844" name="Isonitrile " units=" " comments="Isonitrile " islocal="0"/>
+  <properties idproperty="12084" idreference="11844" name="Azide group." units=" " comments="Azide group." islocal="0"/>
+  <properties idproperty="12085" idreference="11844" name="Sulfenate." units=" " comments="Sulfenate." islocal="0"/>
+  <properties idproperty="12086" idreference="11844" name="Carbamic acid." units=" " comments="Carbamic acid." islocal="0"/>
+  <properties idproperty="12087" idreference="11844" name="Sulfamate." units=" " comments="Sulfamate." islocal="0"/>
+  <properties idproperty="12088" idreference="11844" name="Carbo-azosulfone" units=" " comments="Carbo-azosulfone" islocal="0"/>
+  <properties idproperty="12089" idreference="11844" name="Azide ion." units=" " comments="Azide ion." islocal="0"/>
+  <properties idproperty="12090" idreference="11844" name="Thiol" units=" " comments="Thiol" islocal="0"/>
+  <properties idproperty="12091" idreference="11844" name="Cysteine side chain." units=" " comments="Cysteine side chain." islocal="0"/>
+  <properties idproperty="12092" idreference="11844" name="Arginine side chain." units=" " comments="Arginine side chain." islocal="0"/>
+  <properties idproperty="12093" idreference="11845" name="pKa-SMARTS" units=" " comments="pKa-SMARTS" islocal="0"/>
+  <properties idproperty="12094" idreference="11846" name="Michael Acceptors" units=" " comments="Michael Acceptors" islocal="0"/>
+  <properties idproperty="12095" idreference="11846" name="michaelacceptors.MichaelAcceptorRules" units=" " comments="michaelacceptors.MichaelAcceptorRules" islocal="0"/>
+  <properties idproperty="12096" idreference="11848" name="Sum(Ea)/Alpha" units=" " comments="Sum(Ea)/Alpha" islocal="0"/>
+  <properties idproperty="12097" idreference="11848" name="VAMP Surface Area (Whole Molecule)" units=" " comments="VAMP Surface Area (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12098" idreference="11848" name="6-membered aromatic rings (Whole Molecule)" units=" " comments="6-membered aromatic rings (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12099" idreference="11848" name="Max(Ea)*Max(Ed)" units=" " comments="Max(Ea)*Max(Ed)" islocal="0"/>
+  <properties idproperty="12100" idreference="11848" name="Kappa2 index (Whole Molecule)" units=" " comments="Kappa2 index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12101" idreference="11848" name="Sum(Q-)/Alpha" units=" " comments="Sum(Q-)/Alpha" islocal="0"/>
+  <properties idproperty="12102" idreference="11848" name="Sum(Ca(o))" units=" " comments="Sum(Ca(o))" islocal="0"/>
+  <properties idproperty="12103" idreference="11848" name="Name" units=" " comments="Names" islocal="0"/>
+  <properties idproperty="12104" idreference="11848" name="Sum(Q+)/Alpha" units=" " comments="Sum(Q+)/Alpha" islocal="0"/>
+  <properties idproperty="12105" idreference="11848" name="KAlpha1 index (Whole Molecule)" units=" " comments="KAlpha1 index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12106" idreference="11848" name="Kier Chi4 (cluster) index (Whole Molecule)" units=" " comments="Kier Chi4 (cluster) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12107" idreference="11848" name="Rotatable Bonds (Whole Molecule)" units=" " comments="Rotatable Bonds (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12108" idreference="11848" name="Kier Chi0 (atoms) index (Whole Molecule)" units=" " comments="Kier Chi0 (atoms) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12109" idreference="11848" name="Sum(Ead)" units=" " comments="Sum(Ead)" islocal="0"/>
+  <properties idproperty="12110" idreference="11848" name="Group count for aldehyde (Whole Molecule)" units=" " comments="Group count for aldehyde (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12111" idreference="11848" name="Group count for Amino (Whole Molecule)" units=" " comments="Group count for Amino (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12112" idreference="11848" name="Sum(Cad(o))/Alpha" units=" " comments="Sum(Cad(o))/Alpha" islocal="0"/>
+  <properties idproperty="12113" idreference="11848" name="VAMP LUMO (Whole Molecule)" units=" " comments="VAMP LUMO (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12114" idreference="11848" name="Kier Chi4 (path/cluster) index (Whole Molecule)" units=" " comments="Kier Chi4 (path/cluster) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12115" idreference="11848" name="Sum(Ead)/Alpha" units=" " comments="Sum(Ead)/Alpha" islocal="0"/>
+  <properties idproperty="12116" idreference="11848" name="Number of Halogen Atoms (Whole Molecule)" units=" " comments="Number of Halogen Atoms (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12117" idreference="11848" name="Max(Ca(o))" units=" " comments="Max(Ca(o))" islocal="0"/>
+  <properties idproperty="12118" idreference="11848" name="Group count for Hydroxyl (Whole Molecule)" units=" " comments="Group count for Hydroxyl (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12119" idreference="11848" name="Kier Chi1 (bonds) index (Whole Molecule)" units=" " comments="Kier Chi1 (bonds) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12120" idreference="11848" name="Kier Chiv4 (path/cluster) index (Whole Molecule)" units=" " comments="Kier Chiv4 (path/cluster) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12121" idreference="11848" name="Kier ChiV1 (bonds) index (Whole Molecule)" units=" " comments="Kier ChiV1 (bonds) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12122" idreference="11848" name="Kier ChiV0 (atoms) index (Whole Molecule)" units=" " comments="Kier ChiV0 (atoms) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12123" idreference="11848" name="Molecular Surface Area (Whole Molecule)" units=" " comments="Molecular Surface Area (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12124" idreference="11848" name="Sum(Cd)" units=" " comments="Sum(Cd)" islocal="0"/>
+  <properties idproperty="12125" idreference="11848" name="VAMP HOMO (Whole Molecule)" units=" " comments="VAMP HOMO (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12126" idreference="11848" name="6-membered aliphatic rings (Whole Molecule)" units=" " comments="6-membered aliphatic rings (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12127" idreference="11848" name="Sum(Ca(o))/Alpha" units=" " comments="Sum(Ca(o))/Alpha" islocal="0"/>
+  <properties idproperty="12128" idreference="11848" name="Kappa1 index (Whole Molecule)" units=" " comments="Kappa1 index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12129" idreference="11848" name="Sum(Ed)" units=" " comments="Sum(Ed)" islocal="0"/>
+  <properties idproperty="12130" idreference="11848" name="Sum(Ca)" units=" " comments="Sum(Ca)" islocal="0"/>
+  <properties idproperty="12131" idreference="11848" name="Sum(Q-)" units=" " comments="Sum(Q-)" islocal="0"/>
+  <properties idproperty="12132" idreference="11848" name="Ellipsoidal Volume (Whole Molecule)" units=" " comments="Ellipsoidal Volume (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12133" idreference="11848" name="Sum(Cd)/Alpha" units=" " comments="Sum(Cd)/Alpha" islocal="0"/>
+  <properties idproperty="12134" idreference="11848" name="Kier ChiV3 (cluster) index (Whole Molecule)" units=" " comments="Kier ChiV3 (cluster) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12135" idreference="11848" name="Sum(Ea)" units=" " comments="Sum(Ea)" islocal="0"/>
+  <properties idproperty="12136" idreference="11848" name="Sum(Cad(o))" units=" " comments="Sum(Cad(o))" islocal="0"/>
+  <properties idproperty="12137" idreference="11848" name="Sum(Q+)" units=" " comments="Sum(Q+)" islocal="0"/>
+  <properties idproperty="12138" idreference="11848" name="Sum(|Q|)]" units=" " comments="Sum(|Q|)]" islocal="0"/>
+  <properties idproperty="12139" idreference="11848" name="Sum(Ed)/Alpha" units=" " comments="Sum(Ed)/Alpha" islocal="0"/>
+  <properties idproperty="12140" idreference="11848" name="Max(Ca)*Max(Cd)" units=" " comments="Max(Ca)*Max(Cd)" islocal="0"/>
+  <properties idproperty="12141" idreference="11848" name="KAlpha3 index (Whole Molecule)" units=" " comments="KAlpha3 index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12142" idreference="11848" name="VAMP Total Dipole (Whole Molecule)" units=" " comments="VAMP Total Dipole (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12143" idreference="11848" name="Sum(Cad)/Alpha" units=" " comments="Sum(Cad)/Alpha" islocal="0"/>
+  <properties idproperty="12144" idreference="11848" name="TPSA(NO) (DRAGON)" units=" " comments="TPSA(NO) (DRAGON)" islocal="0"/>
+  <properties idproperty="12145" idreference="11848" name="Sum(Cad)" units=" " comments="Sum(Cad)" islocal="0"/>
+  <properties idproperty="12146" idreference="11848" name="Title" units=" " comments="Names" islocal="0"/>
+  <properties idproperty="12147" idreference="11848" name="VAMP Total Energy (Whole Molecule)" units=" " comments="VAMP Total Energy (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12148" idreference="11848" name="Cosmic Total Energy (Whole Molecule)" units=" " comments="Cosmic Total Energy (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12149" idreference="11848" name="Wskowwin Solubility (log molar)" units=" " comments="Wskowwin Solubility (log molar)" islocal="0"/>
+  <properties idproperty="12150" idreference="11848" name="LLNA_Binary_Class" units=" " comments="LLNA_Binary_Class" islocal="0"/>
+  <properties idproperty="12151" idreference="11848" name="Kier Chi3 (cluster) index (Whole Molecule)" units=" " comments="Kier Chi3 (cluster) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12152" idreference="11848" name="CAS number" units=" " comments="CasRN" islocal="0"/>
+  <properties idproperty="12153" idreference="11848" name="Shape Flexibility index (Whole Molecule)" units=" " comments="Shape Flexibility index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12154" idreference="11848" name="Kier ChiV6 (ring) index (Whole Molecule)" units=" " comments="Kier ChiV6 (ring) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12155" idreference="11848" name="Kier ChiV5 (ring) index (Whole Molecule)" units=" " comments="Kier ChiV5 (ring) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12156" idreference="11848" name="Kier ChiV6 (path) index (Whole Molecule)" units=" " comments="Kier ChiV6 (path) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12157" idreference="11848" name="Kier ChiV4 (ring) index (Whole Molecule)" units=" " comments="Kier ChiV4 (ring) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12158" idreference="11848" name="Kier ChiV5 (path) index (Whole Molecule)" units=" " comments="Kier ChiV5 (path) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12159" idreference="11848" name="Kier ChiV3 (ring) index (Whole Molecule)" units=" " comments="Kier ChiV3 (ring) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12160" idreference="11848" name="Kier ChiV4 (path) index (Whole Molecule)" units=" " comments="Kier ChiV4 (path) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12161" idreference="11848" name="Kier ChiV3 (path) index (Whole Molecule)" units=" " comments="Kier ChiV3 (path) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12162" idreference="11848" name="Group count for nitro (Whole Molecule)" units=" " comments="Group count for nitro (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12163" idreference="11848" name="Kier ChiV2 (path) index (Whole Molecule)" units=" " comments="Kier ChiV2 (path) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12164" idreference="11848" name="Max(Ca(o))*Max(Cd(o))" units=" " comments="Max(Ca(o))*Max(Cd(o))" islocal="0"/>
+  <properties idproperty="12165" idreference="11848" name="Kappa3 index (Whole Molecule)" units=" " comments="Kappa3 index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12166" idreference="11848" name="Group count for Methyl (Whole Molecule)" units=" " comments="Group count for Methyl (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12167" idreference="11848" name="Number of H-bond Donors (Whole Molecule)" units=" " comments="Number of H-bond Donors (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12168" idreference="11848" name="TPSA(Tot) (DRAGON)" units=" " comments="TPSA(Tot) (DRAGON)" islocal="0"/>
+  <properties idproperty="12169" idreference="11848" name="Max(Cd)" units=" " comments="Max(Cd)" islocal="0"/>
+  <properties idproperty="12170" idreference="11848" name="6-membered rings (Whole Molecule)" units=" " comments="6-membered rings (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12171" idreference="11848" name="Number of H-bond Acceptors (Whole Molecule)" units=" " comments="Number of H-bond Acceptors (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12172" idreference="11848" name="Molecular Mass (Whole Molecule)" units=" " comments="Molecular Mass (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12173" idreference="11848" name="KAlpha2 index (Whole Molecule)" units=" " comments="KAlpha2 index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12174" idreference="11848" name="Kier Chi6 (ring) index (Whole Molecule)" units=" " comments="Kier Chi6 (ring) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12175" idreference="11848" name="Molecular Volume (Whole Molecule)" units=" " comments="Molecular Volume (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12176" idreference="11848" name="max(Q-)" units=" " comments="max(Q-)" islocal="0"/>
+  <properties idproperty="12177" idreference="11848" name="Kier Chi5 (ring) index (Whole Molecule)" units=" " comments="Kier Chi5 (ring) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12178" idreference="11848" name="Kier Chi6 (path) index (Whole Molecule)" units=" " comments="Kier Chi6 (path) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12179" idreference="11848" name="Kier Chi4 (ring) index (Whole Molecule)" units=" " comments="Kier Chi4 (ring) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12180" idreference="11848" name="Kier Chi5 (path) index (Whole Molecule)" units=" " comments="Kier Chi5 (path) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12181" idreference="11848" name="Kier Chi3 (ring) index (Whole Molecule)" units=" " comments="Kier Chi3 (ring) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12182" idreference="11848" name="Kier Chi4 (path) index (Whole Molecule)" units=" " comments="Kier Chi4 (path) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12183" idreference="11848" name="LLNA EC3" units=" " comments="LLNA EC3" islocal="0"/>
+  <properties idproperty="12184" idreference="11848" name="Kier Chi3 (path) index (Whole Molecule)" units=" " comments="Kier Chi3 (path) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12185" idreference="11848" name="Alpha" units=" " comments="Alpha" islocal="0"/>
+  <properties idproperty="12186" idreference="11848" name="Kier Chi2 (path) index (Whole Molecule)" units=" " comments="Kier Chi2 (path) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12187" idreference="11848" name="Max(Ed)" units=" " comments="Max(Ed)" islocal="0"/>
+  <properties idproperty="12188" idreference="11848" name="LLNA Class" units=" " comments="LLNA Class" islocal="0"/>
+  <properties idproperty="12189" idreference="11848" name="SMILES" units=" " comments="SMILES" islocal="0"/>
+  <properties idproperty="12190" idreference="11848" name="max(Q+)" units=" " comments="max(Q+)" islocal="0"/>
+  <properties idproperty="12191" idreference="11848" name="Max(Ca)" units=" " comments="Max(Ca)" islocal="0"/>
+  <properties idproperty="12192" idreference="11848" name="Group count for Ethyl (Whole Molecule)" units=" " comments="Group count for Ethyl (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12193" idreference="11848" name="Max(Ea)" units=" " comments="Max(Ea)" islocal="0"/>
+  <properties idproperty="12194" idreference="11848" name="Kier ChiV4 (cluster) index (Whole Molecule)" units=" " comments="Kier ChiV4 (cluster) index (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12195" idreference="11848" name="Sum(Ca)/Alpha" units=" " comments="Sum(Ca)/Alpha" islocal="0"/>
+  <properties idproperty="12196" idreference="11848" name="Total Dipole Moment (Whole Molecule)" units=" " comments="Total Dipole Moment (Whole Molecule)" islocal="0"/>
+  <properties idproperty="12197" idreference="11848" name="SRC Kowwin log P" units=" " comments="SRC Kowwin log P" islocal="0"/>
+  <properties idproperty="12198" idreference="11849" name="nB" units=" " comments="nB" islocal="0"/>
+  <properties idproperty="12199" idreference="11850" name="nAtom" units=" " comments="nAtom" islocal="0"/>
   <template idtemplate="84"/>
   <template idtemplate="7" name="Acute dermal toxicity"/>
   <template idtemplate="8" name="Acute inhalation toicity"/>

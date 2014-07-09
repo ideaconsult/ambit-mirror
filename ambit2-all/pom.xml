@@ -587,5 +587,6 @@
     <net.idea.loom.version>1.0.2-SNAPSHOT</net.idea.loom.version>
     <restnet.version>1.0.3-SNAPSHOT</restnet.version>
     <modbcum.version>1.0.1-SNAPSHOT</modbcum.version>
+    <dbunit.version>2.4.9</dbunit.version>
   </properties>
 </project>

@@ -25,6 +25,7 @@
     </site>
   </distributionManagement>
   <properties>
+  	<net.idea.loom.version>1.0.2-SNAPSHOT</net.idea.loom.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <toxtree.version>2.6.7-SNAPSHOT</toxtree.version>
     <ambit.version>2.5.7-SNAPSHOT</ambit.version>
@@ -32,7 +33,7 @@
     <!-- https://github.com/ideaconsult/i5 -->
     <i5.version>0.0.7-SNAPSHOT</i5.version>
     <restnet.version>1.0.3-SNAPSHOT</restnet.version>
-
+	<dbunit.version>2.4.9</dbunit.version>
   </properties>
   <description>AmbitXT and Ambit REST web services </description>
   <inceptionYear>2008</inceptionYear>
