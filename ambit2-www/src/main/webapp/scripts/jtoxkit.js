@@ -1018,9 +1018,10 @@ var jToxQuery = (function () {
 */
 var jToxSearch = (function () {
   var defaultSettings = { // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
-    defaultSmiles: '50-00-0',     // which is the default search string, if empty one is provided
+    defaultNeedle: '50-00-0',     // which is the default search string, if empty one is provided
     smartsList: 'funcgroups',     // which global JS variable to seek for smartsList
     hideOptions: '',              // comma separated list of search options to hide
+    contextUri: null,             // a search limitting contextUri - added as dataset_uri parameter
     configuration: {
       handlers: { }
     }
@@ -1223,13 +1224,16 @@ var jToxSearch = (function () {
       else {
         params.search = form.searchbox.value;
         if (!params.search)
-          params.search = this.settings.defaultSmiles;
+          params.search = this.settings.defaultNeedle;
           this.setAuto(params.search);
       }
         
       if (type == 'similarity')
         params.threshold = form.threshold.value;
       
+      if (!!this.settings.contextUri)
+        params['dataset_uri'] = this.settings.contextUri;
+
       return ccLib.addParameter(res, $.param(params));
     },
     
