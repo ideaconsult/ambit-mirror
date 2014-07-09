@@ -1,6 +1,8 @@
 package ambit2.rest.similarity;
 
 import java.util.BitSet;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
@@ -12,13 +14,17 @@ import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
+import org.restlet.routing.Template;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.search.NumberCondition;
+import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.ChemicalByAssessment;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QuerySimilarityBitset;
@@ -26,6 +32,8 @@ import ambit2.db.update.structure.ChemicalByDataset;
 import ambit2.rest.OpenTox;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetResource;
+import ambit2.rest.dataset.DatasetStructuresResource;
+import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.StructureQueryResource;
 
@@ -111,12 +119,32 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 				setTemplate(createTemplate(context, request, response));
 				return (Q)qc;
 			} else {
-				QueryCombinedStructure qc= null;
-				try {
-					qc = new QueryCombinedStructure();
+				Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
+				ISourceDataset srcdataset = null; 
+				if (datasetURI!=null) try {
+					srcdataset = getDataset(datasetURI.toString());
+					QueryCombinedStructure qc = new QueryCombinedStructure();
 					qc.add(q);
 					qc.setChemicalsOnly(true);
+					if (srcdataset instanceof SourceDataset) {
+						ChemicalByDataset  cd = new ChemicalByDataset(new Integer(srcdataset.getID()));
+						qc.setScope(cd);
+						setTemplate(createTemplate(context, request, response));
+						return (Q)qc;
+					} else {
+						//TODO, resort to all db
+					}
+				} catch (Exception x) {
+					srcdataset = null;
+				}
+				
+				QueryCombinedStructure qc= null;
+				try {
+					
 					this.dataset_id = Reference.decode(getRequest().getAttributes().get(DatasetResource.datasetKey).toString());
+					qc = new QueryCombinedStructure();
+					qc.add(q);
+					qc.setChemicalsOnly(true);					
 					ChemicalByDataset  cd = new ChemicalByDataset(new Integer(dataset_id));
 					qc.setScope(cd);
 					setTemplate(createTemplate(context, request, response));
@@ -137,5 +165,34 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 		return gen.process(molecule);
 	}
 
+	protected ISourceDataset getDataset(String uri) throws InvalidResourceIDException {
+		Map<String, Object> vars = new HashMap<String, Object>();
+		Template template = OpenTox.URI.dataset.getTemplate(getRequest().getRootRef());
+		String id = null;
+		try {
+			template.parse(uri, vars);
+			id = vars.get(OpenTox.URI.dataset.getKey()).toString();
+		} catch (Exception x) { return null; }
 		
+		if (id != null)  try {
+			Integer idnum = new Integer(Reference.decode(id.toString()));
+			SourceDataset dataset = new SourceDataset();
+			dataset.setID(idnum);
+			return dataset;
+		} catch (NumberFormatException x) {
+			if (id.toString().startsWith(DatasetStructuresResource.QR_PREFIX)) {
+				String key = id.toString().substring(DatasetStructuresResource.QR_PREFIX.length());
+				try {
+					ISourceDataset dataset = new StoredQuery();
+					dataset.setID(Integer.parseInt(key.toString()));
+					return dataset;
+				} catch (NumberFormatException xx) {
+					throw new InvalidResourceIDException(id);
+				}
+			}
+		} catch (Exception x) {
+			throw new InvalidResourceIDException(id);
+		}
+		return null;
+	}		
 }

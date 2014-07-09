@@ -1,6 +1,8 @@
 package ambit2.rest.query;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
@@ -13,12 +15,16 @@ import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
+import org.restlet.routing.Template;
 
 import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
+import ambit2.base.data.ISourceDataset;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.ChemicalByAssessment;
 import ambit2.db.search.structure.FreeTextQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
@@ -28,6 +34,8 @@ import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetResource;
+import ambit2.rest.dataset.DatasetStructuresResource;
+import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.structure.CompoundResource;
 
@@ -171,7 +179,30 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 					setTemplate(createTemplate(context, request, response));
 					return combined;
 				}
-				
+				/**
+				 * restriction to a dataset: ?dataset_uri=  
+				 */
+				Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
+				ISourceDataset srcdataset = null; 
+				if (datasetURI!=null) try {
+					srcdataset = getDataset(datasetURI.toString());
+
+					if (srcdataset instanceof SourceDataset) {
+						QueryDatasetByID scope = new QueryDatasetByID();
+						setTemplate(createTemplate(context, request, response));
+						scope.setValue(srcdataset.getID());
+						QueryCombinedStructure combined = new DatasetQueryCombined();
+						combined.setCombine_as_and(true);
+						combined.add(query);
+						combined.setScope(scope);
+						return combined;						
+					} else {
+						//TODO, resort to all db
+					}
+				} catch (Exception x) {
+					srcdataset = null;
+				}
+
 				Object datasetid = request.getAttributes().get(DatasetResource.datasetKey);
 				if (datasetid != null) {
 					QueryDatasetByID scope = new QueryDatasetByID();
@@ -226,6 +257,36 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 		}
 	}		
 
+	protected ISourceDataset getDataset(String uri) throws InvalidResourceIDException {
+		Map<String, Object> vars = new HashMap<String, Object>();
+		Template template = OpenTox.URI.dataset.getTemplate(getRequest().getRootRef());
+		String id = null;
+		try {
+			template.parse(uri, vars);
+			id = vars.get(OpenTox.URI.dataset.getKey()).toString();
+		} catch (Exception x) { return null; }
+		
+		if (id != null)  try {
+			Integer idnum = new Integer(Reference.decode(id.toString()));
+			SourceDataset dataset = new SourceDataset();
+			dataset.setID(idnum);
+			return dataset;
+		} catch (NumberFormatException x) {
+			if (id.toString().startsWith(DatasetStructuresResource.QR_PREFIX)) {
+				String key = id.toString().substring(DatasetStructuresResource.QR_PREFIX.length());
+				try {
+					ISourceDataset dataset = new StoredQuery();
+					dataset.setID(Integer.parseInt(key.toString()));
+					return dataset;
+				} catch (NumberFormatException xx) {
+					throw new InvalidResourceIDException(id);
+				}
+			}
+		} catch (Exception x) {
+			throw new InvalidResourceIDException(id);
+		}
+		return null;
+	}	
 	
 	protected String inchi2smiles(String inchi) {
 		try {
