@@ -51,4 +51,9 @@ public class PwdForgottenResource extends RegistrationResource {
 	    	map.put(AMBITConfig.menu_profile.name(),app.getProfile());
         } catch (Exception x) {}
 	}
+	
+	@Override
+	public String getConfigFile() {
+		return "ambit2/rest/config/ambit2.pref";
+	}
 }
