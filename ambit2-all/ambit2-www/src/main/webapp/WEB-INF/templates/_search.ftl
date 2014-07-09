@@ -2,7 +2,7 @@
 <head>
   <#include "/header_updated.ftl">
   
-<link rel="stylesheet" href="${ambit_root}/style/sidebar.css"/>
+<link rel="stylesheet" href="${ambit_root}/scripts/dataset/ui-query.css"/>
 <link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
 <link rel="stylesheet" href="${ambit_root}/style/ketcher.css"/>
 
@@ -10,7 +10,8 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/ketcher.js'></script>
 
-<script type='text/javascript' src='${ambit_root}/scripts/dataset/dataset-details.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/dataset/ui-query.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/dataset/config-dataset.js'></script>
 
 <script type='text/javascript'>  
 $(document)
@@ -22,27 +23,6 @@ $(document)
     					loadHelp("${ambit_root}","search");
 				});
 </script>  
- <script language="JavaScript">
-
-    $(document).ready(function(){
-      var toggleBar = function () {
-        $(this).parents('#sidebar').toggleClass('hidden');
-      };
-      $('#sidebar span.ui-icon').on('click', toggleBar);
-      $('#sidebar div.side-title').on('click', toggleBar);
-      
-      $('#sidebar a.select-all').on('click', function () {
-        $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = true;});
-        onSelectedUpdate(this);
-      });
-      $('#sidebar a.unselect-all').on('click', function () {
-        $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = false;});
-        onSelectedUpdate(this);
-      });
-    });
-</script>
-  
-<script type='text/javascript' src='${ambit_root}/scripts/config-dataset.js'></script>
 
 </head>
 <body>
@@ -85,7 +65,7 @@ $(document)
         </div>
       </div>
     </div>
-	  <div id="browser" class="jtox-toolkit" data-kit="compound" data-remember-checks="true" data-on-details="onDetailedRow" data-details-height="500px" data-tabs-folded="true"></div>
+	  <div id="browser" class="jtox-toolkit" data-kit="compound" data-remember-checks="true" data-hide-empty="true" data-details-height="500px" data-tabs-folded="true" data-on-details="onDetailedRow" data-show-diagrams="true"></div>
   </div>
 
    </div>
