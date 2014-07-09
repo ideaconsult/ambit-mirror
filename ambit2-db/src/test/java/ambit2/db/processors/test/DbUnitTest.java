@@ -38,10 +38,12 @@ import java.sql.Statement;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.ext.mysql.MySqlDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Before;
 
@@ -102,7 +104,6 @@ public abstract class DbUnitTest {
 	@Before
 	public void setUp() throws Exception {
 		IDatabaseConnection c = getConnection(getHost(),"mysql",getPort(),getAdminUser(),getAdminPWD());
-		
 		boolean dbExists = false;
 		Statement st = null;
 		ResultSet rs = null;
@@ -140,7 +141,11 @@ public abstract class DbUnitTest {
                 		host,port,db,Boolean.toString(isProfileSQL()))
                 , user,pass);
 //SET NAMES utf8	        
-	   return new DatabaseConnection(jdbcConnection);
+        IDatabaseConnection c = new DatabaseConnection(jdbcConnection);
+		DatabaseConfig dbConfig = c.getConfig();
+		dbConfig.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
+		return c;
+
 	}	
 	protected boolean isProfileSQL() {
 		return false;

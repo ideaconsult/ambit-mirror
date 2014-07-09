@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <users user_name="guest"  email="guest"  title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="false"/>
+  <users user_name="guest"  email="guest"  title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="0"/>
   <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org"/>
   <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org"/>
   <catalog_references idreference="3" title="XLogP" url="XLogP reference"/>
@@ -70,9 +70,9 @@ sXhCUTdsR14v8i7RGiVpnjBHW+3AI9GlFx7QIhcVUCSt0Yc04xRx2JB0eh2z/22pnsPrFqbvkC1S
 Lf/AViB7IYdSfChwK8oKdH0Uk0Et1En4pAYL5iThDQ+Mnh/hqX7R5q8+M3Sknsze2AY+Hzzj4MZW
 QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
 96B/xsDkzg==" format="SDF" updated="2008-10-29 06:35:33.0" user_name="guest" type_structure="NA"/>
-   <properties idproperty="1" idreference="8" name="Property 1" units="" comments="" islocal="false"/>
-  <properties idproperty="2" idreference="8" name="Property 2" units="" comments="" islocal="false"/>
-  <properties idproperty="3" idreference="8" name="Property 3" units="" comments="" islocal="false"/>
+   <properties idproperty="1" idreference="8" name="Property 1" units=" " comments="" islocal="0"/>
+  <properties idproperty="2" idreference="8" name="Property 2" units=" " comments="" islocal="0"/>
+  <properties idproperty="3" idreference="8" name="Property 3" units=" " comments="" islocal="0"/>
   <template idtemplate="1" name="BCF"/>
   <template_def idtemplate="1" idproperty="1"/>
   <template_def idtemplate="1" idproperty="2"/>

@@ -1,6 +1,7 @@
 package ambit2.db.search.test;
 
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
@@ -63,7 +64,7 @@ public class QuerySmartsTest extends QueryTest<QuerySMARTS> {
 		Assert.assertEquals(1, fp.getRowCount());
 		fp = c.createQueryTable("EXPECTED_query","select idchemical,idstructure from query_results where idquery="+sq.getId());
 		Assert.assertEquals(1, fp.getRowCount());
-		Assert.assertEquals(2050,fp.getValue(0,"idchemical"));
+		Assert.assertEquals(new BigInteger("2050"),fp.getValue(0,"idchemical"));
 		
 		c.close();
 	}
