@@ -15,7 +15,6 @@
 <template/>
 <template_def/>
 <dictionary/>
-<models/>
 <src_dataset/>
 <tuples/>
 <property_values/>
@@ -29,6 +28,7 @@
 <sessions/>
 <query/>
 <query_results/>
+<models/>
 <funcgroups/>
 <struc_fgroups/>
 <fp1024/>
