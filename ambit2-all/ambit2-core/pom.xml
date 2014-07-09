@@ -111,11 +111,6 @@
     </dependency>
     <dependency>
       <groupId>org.openscience.cdk</groupId>
-      <artifactId>cdk-ionpot</artifactId>
-      <version>${cdk.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.openscience.cdk</groupId>
       <artifactId>cdk-qsarionpot</artifactId>
       <version>${cdk.version}</version>
     </dependency>
@@ -128,12 +123,6 @@
     <dependency>
       <groupId>org.openscience.cdk</groupId>
       <artifactId>cdk-standard</artifactId>
-      <version>${cdk.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openscience.cdk</groupId>
-      <artifactId>cdk-isomorphism</artifactId>
       <version>${cdk.version}</version>
       <scope>compile</scope>
     </dependency>
@@ -157,12 +146,6 @@
     </dependency>
     <dependency>
       <groupId>org.openscience.cdk</groupId>
-      <artifactId>cdk-pdb</artifactId>
-      <version>${cdk.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openscience.cdk</groupId>
       <artifactId>cdk-log4j</artifactId>
       <version>${cdk.version}</version>
       <scope>compile</scope>
@@ -176,12 +159,6 @@
     <dependency>
       <groupId>org.openscience.cdk</groupId>
       <artifactId>cdk-data</artifactId>
-      <version>${cdk.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openscience.cdk</groupId>
-      <artifactId>cdk-interfaces</artifactId>
       <version>${cdk.version}</version>
       <scope>compile</scope>
     </dependency>
