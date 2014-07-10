@@ -15,7 +15,7 @@ public class AtomGroup implements IGroup
 		return atomDesignation;
 	}
 	
-
+	
 	@Override
 	public IGroupSet getGroupSet() {		
 		return null;

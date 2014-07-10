@@ -1,16 +1,27 @@
 package ambit2.groupcontribution;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
+import ambit2.groupcontribution.groups.IGroup;
 
 
 public class GroupContributionModel 
 {
+	enum Type {
+		ATOMIC, BOND_BASED, LARGE_GROUPS
+	}
+	
+	
 	private String modelName = "";
 	private ArrayList<ILocalDescriptor> localDescriptors = new ArrayList<ILocalDescriptor>();	
 	private ArrayList<ICorrectionFactor> correctionFactors = new ArrayList<ICorrectionFactor>();
+	private Map<String,IGroup> groups = new HashMap<String,IGroup>();
+	private Type modelType = Type.ATOMIC;
+	
 	
 	public String getModelName()
 	{
@@ -46,5 +57,28 @@ public class GroupContributionModel
 	public void addCorrectionFactor(ICorrectionFactor corrFactor)
 	{
 		correctionFactors.add(corrFactor);
+	}
+
+	public Map<String,IGroup> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(Map<String,IGroup> groups) {
+		this.groups = groups;
+	}
+	
+	public void addGroup(IGroup group)
+	{
+		String key = group.getDesignation();
+		if (!groups.containsKey(key))
+			groups.put(key, group);
+	}
+
+	public Type getModelType() {
+		return modelType;
+	}
+
+	public void setModelType(Type modelType) {
+		this.modelType = modelType;
 	}
 }
