@@ -8,6 +8,7 @@ public interface IGroup
 	}
 	   
 	public double getContribution();
+	public void setContribution(double contribution);
 	public String getDesignation();	
 	public GroupInfo getInfo();
 	public IGroupSet getGroupSet();

@@ -3,11 +3,16 @@ package ambit2.groupcontribution.groups;
 
 public class AtomGroup implements IGroup 
 {	
-
+	private String atomDesignation = "";
+	private double contribution = 0.0;
+	
+	public void setAtomDesignation(String atomDesignation) {		
+		this.atomDesignation = atomDesignation;
+	}
+	
 	@Override
-	public String getDesignation() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getDesignation() {		
+		return atomDesignation;
 	}
 	
 
@@ -19,14 +24,17 @@ public class AtomGroup implements IGroup
 
 	@Override
 	public double getContribution() {
-		
-		return 0;
+		return contribution;
+	}
+	
+	@Override
+	public void setContribution(double contribution) {
+		this.contribution = contribution;
 	}
 
 
 	@Override
-	public GroupInfo getInfo() {
-		// TODO Auto-generated method stub
+	public GroupInfo getInfo() {		
 		return null;
 	}
 
@@ -34,6 +42,6 @@ public class AtomGroup implements IGroup
 	@Override
 	public Type getType() {
 		return Type.ATOM;
-	}
+	}	
 
 }
