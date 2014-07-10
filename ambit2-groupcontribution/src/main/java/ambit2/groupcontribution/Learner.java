@@ -25,10 +25,4 @@ public class Learner
 		//TODO
 	}
 	
-	public void fragmentMolecule(IAtomContainer mol)
-	{
-		//TODO
-	}
-	
-	
 }
