@@ -12,6 +12,11 @@
 
 <script type='text/javascript' src='${ambit_root}/scripts/dataset/ui-query.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/dataset/config-dataset.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/config-study.js'></script>
+
+<script language="JavaScript">
+  var common_config = $.extend({}, config_dataset, config_study);
+</script>
 
 <script type='text/javascript'>  
 $(document)
@@ -36,7 +41,7 @@ $(document)
 		================================================== -->
 	<div class="sixteen columns remove-bottom" style="padding:0;" >
 
-  <div class="jtox-toolkit" data-kit="query" data-initial-query="yes" data-cross-domain="true" data-configuration="config_dataset" 
+  <div class="jtox-toolkit" data-kit="query" data-initial-query="yes" data-cross-domain="true" data-configuration="common_config" 
   		data-base-url="${ambit_root}">
     <div id="searchbar" class="jtox-toolkit jtox-widget" data-kit="search"></div>
     <div id="sidebar" class="hidden">
