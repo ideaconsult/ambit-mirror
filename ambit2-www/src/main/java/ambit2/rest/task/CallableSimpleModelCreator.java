@@ -17,6 +17,7 @@ import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.ModelBuilder;
 import ambit2.rest.model.builder.SimpleModelBuilder;
+import ambit2.rest.model.predictor.DescriptorPredictor;
 
 public class CallableSimpleModelCreator<Result,USERID> extends CallableModelCreator<Object,Result,ModelBuilder<Object,Algorithm, ModelQueryResults>,USERID> {
 	
@@ -44,6 +45,16 @@ public class CallableSimpleModelCreator<Result,USERID> extends CallableModelCrea
 				token
 		);
 	}	
+	@Override
+	protected void processForm(Reference applicationRootReference, Form form) {
+		super.processForm(applicationRootReference, form);
+		Object mopac_commands = form.getFirstValue("mopac_commands");
+		if (mopac_commands!=null && !"".equals(mopac_commands.toString().trim()))
+			try {
+				if (builder instanceof OptimizerModelBuilder) 
+				((OptimizerModelBuilder)builder).setMopac_commands(mopac_commands.toString().trim());
+		    } catch (Exception x) {}
+	}
 	@Override
 	protected ProcessorsChain<Result, IBatchStatistics, IProcessor> createProcessors()
 			throws Exception {

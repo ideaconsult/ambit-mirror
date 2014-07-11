@@ -21,6 +21,15 @@ public class OptimizerModelBuilder extends SimpleModelBuilder {
 	 * 
 	 */
 	private static final long serialVersionUID = 1576610802954465728L;
+	protected String mopac_commands;
+	public String getMopac_commands() {
+		return mopac_commands;
+	}
+
+	public void setMopac_commands(String mopac_commands) {
+		this.mopac_commands = mopac_commands;
+	}
+	
 	public OptimizerModelBuilder(Reference applicationRootReference,
 			ModelURIReporter model_reporter,
 			AlgorithmURIReporter alg_reporter)  {
@@ -42,6 +51,8 @@ public class OptimizerModelBuilder extends SimpleModelBuilder {
 			mr.setContent(algorithm.getContent().toString());
 			mr.setAlgorithm(alg_reporter.getURI(algorithm));
 			mr.setPredictors(algorithm.getInput());
+			if (mopac_commands!=null)
+				mr.setParameters(new String[]{mopac_commands});
 
 			Template dependent = new Template("Empty");
 			mr.setDependent(dependent);

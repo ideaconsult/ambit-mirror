@@ -29,6 +29,16 @@ public class CallableDescriptorCalculator<USERID> extends CallableModelPredictor
 	}
 
 	@Override
+	protected void processForm(Reference applicationRootReference, Form form) {
+		super.processForm(applicationRootReference, form);
+		Object mopac_commands = form.getFirstValue("mopac_commands");
+		if (mopac_commands!=null && !"".equals(mopac_commands.toString().trim()))
+			try {
+				predictor.setMopac_commands(mopac_commands.toString().trim());
+		    } catch (Exception x) {}
+	}
+	
+	@Override
 	protected IProcessor<IStructureRecord, IStructureRecord> getWriter() throws Exception {
 		if (foreignInputDataset) {
 			File file = File.createTempFile("dresult_",".rdf");

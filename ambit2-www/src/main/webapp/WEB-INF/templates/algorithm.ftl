@@ -44,6 +44,9 @@
 $(document)
 	.ready(function() {
 	    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/algorithm" title="Algorithms">Algorithms</a></li>');
+	    <#if algid??>
+	    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/algorithm/${algid}" title="Algorithms">${algid}</a></li>');
+	    </#if>
 		jQuery("#breadCrumb").jBreadCrumb();
  		loadHelp("${ambit_root}","algorithm");
 	

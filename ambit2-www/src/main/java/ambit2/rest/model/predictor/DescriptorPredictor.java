@@ -28,6 +28,15 @@ public class DescriptorPredictor<C extends AbstractDBProcessor<IStructureRecord,
 	 * 
 	 */
 	private static final long serialVersionUID = -8106073411946010587L;
+	protected String mopac_commands;
+	public String getMopac_commands() {
+		return mopac_commands;
+	}
+
+	public void setMopac_commands(String mopac_commands) {
+		this.mopac_commands = mopac_commands;
+	}
+	
 	protected C calculator;
 	public DescriptorPredictor(
 			Reference applicationRootReference,
@@ -71,7 +80,6 @@ public class DescriptorPredictor<C extends AbstractDBProcessor<IStructureRecord,
 	}
 	@Override
 	public String getCompoundURL(IStructureRecord target) throws AmbitException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
