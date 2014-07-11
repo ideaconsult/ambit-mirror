@@ -36,6 +36,34 @@
 	
 	
 <#switch algid>
+	<#case 'ambit2.mopac.MopacShell'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="mopac_commands">MOPAC options</label>
+		<input class='eight columns alpha half-bottom' type="text" id='mopac_commands' value='PM3 NOINTER MMOK BONDS MULLIK GNORM=1.0 T=30.00M' name='mopac_commands' title='Enter MOPAC options'>
+		<div class='three columns omega'><a href='#' class='chelp hmopac'>?</a></div>
+	</div>
+
+	  <#break>	  
+	<#case 'ambit2.mopac.MopacShellBalloon'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="mopac_commands">MOPAC options</label>
+		<input class='eight columns alpha half-bottom' type="text" id='mopac_commands' value='PM3 NOINTER MMOK BONDS MULLIK GNORM=1.0 T=30.00M' name='mopac_commands' title='Enter MOPAC options'>
+		<div class='three columns omega'><a href='#' class='chelp hmopac'>?</a></div>
+	</div>
+	<div class='row remove-bottom'>
+		<a href='${ambit_root}/algorithm?type=Structure'>MOPAC with different starting structure generators</a>
+	</div>	    	
+	  <#break>	  
+	<#case 'ambit2.mopac.MopacShellOB'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="mopac_commands">MOPAC options</label>
+		<input class='eight columns alpha half-bottom' type="text" id='mopac_commands' value='PM3 NOINTER MMOK BONDS MULLIK GNORM=1.0 T=30.00M' name='mopac_commands' title='Enter MOPAC options'>
+		<div class='three columns omega'><a href='#' class='chelp hmopac'>?</a></div>
+	</div>
+	<div class='row remove-bottom'>
+		<a href='${ambit_root}/algorithm?type=Structure'>MOPAC with different starting structure generators</a>
+	</div>	    	
+	  <#break>	  	  
   <#case 'finder'>
     <div id='finder'>
 	<div class='row remove-bottom' id='requiresDataset'>
@@ -321,6 +349,13 @@
 	</div>	
 	  <#break>
 	  
+	<#case 'ambit2.mopac.MopacOriginalStructure'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="mopac_commands">MOPAC options</label>
+		<input class='eight columns alpha half-bottom' type="text" id='mopac_commands' value='PM3 NOINTER MMOK BONDS MULLIK GNORM=1.0 T=30.00M' name='mopac_commands' title='Enter MOPAC options'>
+		<div class='three columns omega'><a href='#' class='chelp hmopac'>?</a></div>
+	</div>	
+		  
   <#default>
 	
 	<div class='row remove-bottom' id='requiresDataset'>
@@ -333,7 +368,9 @@
 		<label class='five columns alpha' for="prediction_feature">Enter URI of the target variable</label>
 		<input class='eight columns alpha half-bottom featureuri' type="text" id='prediction_feature' value='' name='prediction_feature' title='Enter feature uri'>
 		<div class='three columns omega'><a href='#' class='chelp htarget'>?</a></div>
-	</div>		
+	</div>
+	
+			
 </#switch>
 
 	

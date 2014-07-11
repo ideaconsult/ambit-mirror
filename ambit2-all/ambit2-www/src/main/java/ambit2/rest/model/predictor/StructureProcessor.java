@@ -30,6 +30,7 @@ public class StructureProcessor  extends	AbstractStructureProcessor<AbstractMopa
 	protected transient AbstractMopacShell mopacshell;
 	protected transient StructureTypeProcessor stype = new StructureTypeProcessor();
 	protected transient MoleculeReader reader = new MoleculeReader();
+	protected String mopac_commands;
 	
 	public StructureProcessor(
 			Reference applicationRootReference,
@@ -42,7 +43,15 @@ public class StructureProcessor  extends	AbstractStructureProcessor<AbstractMopa
 		valuesRequired = false;
 	}
 	
+	public String getMopac_commands() {
+		return mopac_commands;
+	}
 
+	public void setMopac_commands(String mopac_commands) {
+		this.mopac_commands = mopac_commands;
+	}
+
+	
 	@Override
 	public synchronized AbstractMopacShell createPredictor(ModelQueryResults model)
 			throws ResourceException {
@@ -50,6 +59,9 @@ public class StructureProcessor  extends	AbstractStructureProcessor<AbstractMopa
 				Class clazz = this.getClass().getClassLoader().loadClass( model.getContent().toString());
 				mopacshell = (AbstractMopacShell) clazz.newInstance();
 				mopacshell.setErrorIfDisconnected(false);
+				if (mopac_commands!=null) {
+					mopacshell.setMopac_commands(mopac_commands);
+				}
 				return mopacshell;
 			} catch (ClassNotFoundException x) {
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
