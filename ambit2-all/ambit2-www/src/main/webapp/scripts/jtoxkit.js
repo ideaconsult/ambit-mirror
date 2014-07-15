@@ -414,8 +414,8 @@ window.jT = window.jToxKit = {
 
   	// we need to traverse up, to collect some parent's settings...
   	self.$(self.$(element).parents('.jtox-toolkit').toArray().reverse()).each(function(){
-    	if (!self.$(this).hasClass('jtox-widget')) {
-      	topSettings = self.$.extend(true, topSettings, self.$(this).data());
+    	if (!self.$(this).hasClass('jtox-widget') && self.kit(this) != null) {
+      	topSettings = self.$.extend(true, topSettings, self.kit(this).settings);
     	}
   	});
   	
@@ -456,8 +456,10 @@ window.jT = window.jToxKit = {
   	  });
 	  }
 	  else {
-	    if (!ccLib.isNull(dataParams.configuration) && typeof dataParams.configuration == "string" && !ccLib.isNull(window[dataParams.configuration]))
-	      dataParams.configuration = window[dataParams.configuration];
+	    if (!!dataParams.configuration && typeof dataParams.configuration == "string" && !!window[dataParams.configuration]) {
+	      var config = window[dataParams.configuration];
+	      dataParams.configuration = (typeof config != 'function' ? config : config(kit));
+	     }
   	  
       jT.$(element).data('jtKit', realInit(dataParams));
 	  }
@@ -1447,7 +1449,7 @@ var jToxCompound = (function () {
       self.featureStates = {};
 
     // finally make the query, if Uri is provided      
-    if (self.settings['datasetUri'] !== undefined){
+    if (self.settings['datasetUri'] != null){
       self.queryDataset(self.settings['datasetUri']);
     }
   };
@@ -2264,7 +2266,7 @@ var jToxDataset = (function () {
       columns : {
         dataset: {
           'Id': { iOrder: 0, sTitle: "Id", mData: "URI", sWidth: "50px", mRender: function (data, type, full) {
-            var num = parseInt(data.match(/http:\/\/.*\/dataset\/(\d+).*/)[1]);
+            var num = parseInt(data.match(/https{0,1}:\/\/.*\/dataset\/(\d+).*/)[1]);
             if (type != 'display')
               return num;
             return '<a target="_blank" href="' + data + '"><span class="ui-icon ui-icon-link jtox-inline"></span> D' + num + '</a>';
@@ -2341,12 +2343,14 @@ var jToxDataset = (function () {
       if (!self.settings.noInterface)
         jT.$(self.table).dataTable().fnClearTable();
       jT.call(self, uri, function (result) {
-        self.dataset = result.dataset;
         if (!!result) {
+          self.dataset = result.dataset;
           if (!self.settings.noInterface)
             jT.$(self.table).dataTable().fnAddData(result.dataset);
           ccLib.fireCallback(self.settings.onLoaded, self, result);
         }
+        else
+          self.dataset = null;
       });
     },
     
@@ -2432,7 +2436,7 @@ var jToxModel = (function () {
     }
         
     // finally, wait a bit for everyone to get initialized and make a call, if asked to
-    if (self.settings.modelUri !== undefined || self.settings.algorithmNeedle !== undefined || self.settings.loadOnInit)
+    if (self.settings.modelUri != null || self.settings.algorithmNeedle != null || self.settings.loadOnInit)
       self.query();
   };
   
@@ -2448,7 +2452,7 @@ var jToxModel = (function () {
         }
 
         self.settings.configuration.columns.model.Algorithm.mRender = function (data, type, full) { 
-          var name = data.URI.match(/http:\/\/.*\/algorithm\/(\w+).*/)[1];
+          var name = data.URI.match(/https{0,1}:\/\/.*\/algorithm\/(\w+).*/)[1];
           if (type != 'display')
             return name;
           var res = '<a target="_blank" href="' + data.URI + '">' + 
@@ -2667,8 +2671,12 @@ var jToxSubstance = (function () {
     if (!self.settings.noInterface) {
       if (self.settings.embedComposition && self.settings.onDetails == null) {
         self.settings.onDetails = function (root, data, event) {
-          var comp = new jToxComposition(root, jT.$.extend({}, self.settings, (typeof self.settings.embedComposition == 'object' ? self.settings.embedComposition : jT.blankSettings)));
-          comp.queryComposition(data + '/composition');
+          new jToxComposition(root, jT.$.extend(
+            {}, 
+            self.settings, 
+            (typeof self.settings.embedComposition == 'object' ? self.settings.embedComposition : jT.blankSettings), 
+            { compositionUri : data + '/composition' }
+          ));
         };
       }
 
@@ -3034,7 +3042,7 @@ var jToxStudy = (function () {
     });
     
     // when all handlers are setup - make a call, if needed.    
-    if (self.settings['substanceUri'] !== undefined) {
+    if (self.settings['substanceUri'] != null) {
       self.querySubstance(self.settings['substanceUri']);
     }
   };
@@ -3431,11 +3439,7 @@ var jToxStudy = (function () {
     },
     
     insertComposition: function(compositionURI) {
-      var self = this;
-      
-      var compoRoot = jT.$('.jtox-compo-tab', self.rootElement)[0];
-      var ds = new jToxComposition(compoRoot, jT.$.extend({}, self.settings, jT.blankSettings));
-      ds.queryComposition(compositionURI);
+      new jToxComposition(jT.$('.jtox-compo-tab', this.rootElement)[0], jT.$.extend({}, this.settings, jT.blankSettings, {'compositionUri': compositionURI}));
     },
     
     querySubstance: function(substanceURI) {
@@ -3444,7 +3448,6 @@ var jToxStudy = (function () {
       // re-initialize us on each of these calls.
       self.baseUrl = ccLib.isNull(self.settings.baseUrl) ? jT.grabBaseUrl(substanceURI) : self.settings.baseUrl;
       
-      var rootTab = jT.$('.jtox-substance', self.rootElement)[0];
       jT.call(self, substanceURI, function(substance){
         if (!!substance && !!substance.substance && substance.substance.length > 0){
           substance = substance.substance[0];
@@ -3463,7 +3466,7 @@ var jToxStudy = (function () {
           jT.call(self, substance.referenceSubstance.uri, function (dataset){
             if (!!dataset) {
               jToxCompound.processDataset(dataset, null, fnDatasetValue);
-              ccLib.fillTree(rootTab, dataset.dataEntry[0]);
+              ccLib.fillTree(jT.$('.jtox-substance', self.rootElement)[0], dataset.dataEntry[0]);
             }
           });
            
