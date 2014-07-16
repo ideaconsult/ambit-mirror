@@ -608,7 +608,10 @@ function renderModel(entry,root,err) {
 		$("#model_training").html("N/A");
 	} else {
 		$("#model_training").html(entry["trainingDataset"]);
-		$("#model_training").prop('href',entry["trainingDataset"]);
+		$("#model_training").prop('href',
+				root + "/ui/_dataset?dataset_uri=",
+				encodeURIComponent(entry["trainingDataset"])
+		);
 	}
 	
 	$("#model_img").prop('src',root + entry["algorithm"]["img"]);
