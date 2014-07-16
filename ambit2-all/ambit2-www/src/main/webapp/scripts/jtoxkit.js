@@ -211,22 +211,16 @@ var ccLib = {
     var $ = jQuery;
     $('.cc-flex', root).each(function () {
       var el = this;
-      var getter = 'offsetHeight';
-      var setter = 'height';
-      var starter = 'offsetTop';
-      if ($(el).hasClass('horizontal')) {
-        getter = 'offsetWidth';
-        setter = 'width';
-        starter = 'offsetLeft';
-      }
-      
-      var others = el[starter];
-      $(el).parent().children().each(function () {
-        var pos = $(this).css('position');
-        if (el[starter] < this[starter] && pos != 'absolute' && pos != 'fixed')
-          others += this[getter]; 
+      var sum = 0;
+      var horiz = $(el).hasClass('horizontal');
+      $('.cc-fixed', el.offsetParent).each (function () {
+        for (var fixed = this; fixed != el.offsetParent; fixed = fixed.parentNode)
+          if ($(fixed).hasClass('cc-flex'))
+            break;
+        if (fixed == el.offsetParent)
+          sum += horiz ? this.offsetWidth : this.offsetHeight;
       });
-      el.style[setter] = (el.parentNode[getter] - others) + 'px';
+      el.style[horiz ? 'width' : 'height'] = (this.offsetParent[horiz ? 'clientWidth' : 'clientHeight'] - sum) + 'px';
     });
   },
 	 
@@ -1059,10 +1053,18 @@ var jToxSearch = (function () {
       }
     }
 
+    if (!!form.searchcontext) {
+      form.searchcontext.value = self.settings.contextUri;
+      $(form.searchcontext).on('change', function (e) {
+        self.settings.contextUri = this.value;
+      });
+    }
+
     jT.$(form.searchbox)
     .on('focus', function () {
       var gap = jT.$(form).width() - jT.$(radios).width() - 30 - jT.$('.search-pane').width();
-      var oldSize = $(this).width();
+      var oldSize = $(this).data('oldSize') || $(this).width();
+      $(this).data('oldSize', oldSize);
       jT.$(this).css('width', '' + (oldSize + gap) + 'px');
     })
     .on('blur', function () {
@@ -1844,6 +1846,9 @@ var jToxCompound = (function () {
           "sEmptyTable" : '<span id="jtox-ds-message-' + self.instanceNo + '">Loading data...</span>',
         }
       }))[0];
+
+      if (varCols.length == 1) // i.e. we _don't_ have other then hidden ID column.. add blank one.
+        varCols.push({ "sClass": "center", "mData": "index", "mRender": function(data, type, full) { return type != 'display' ? data : '...'; }  });
 
       self.varTable = (jT.$(".jtox-ds-variable table", self.rootElement).dataTable({
         "bPaginate": false,
@@ -3491,8 +3496,8 @@ jT.templates['widget-search']  =
 "			    <label for=\"searchsimilarity\" title=\"Enter SMILES or draw structure\">Similarity</label>" +
 "  			  <input type=\"radio\" id=\"searchsmarts\" value=\"smarts\" name=\"searchtype\" data-placeholder=\"Enter SMARTS_\"/>" +
 "			    <label for=\"searchsmarts\" title=\"Enter or draw a SMARTS query\">Substructure</label>" +
-"  			  <input type=\"radio\" id=\"searchurl\" value=\"url\" name=\"searchtype\" data-placeholder=\"Enter Dataset URL_\"/>" +
-"			    <label for=\"searchurl\" title=\"Enter dataset URL\">Dataset</label>" +
+"  			  <input type=\"radio\" id=\"searchurl\" value=\"url\" name=\"searchtype\" data-placeholder=\"Enter URL to be examined...\"/>" +
+"			    <label for=\"searchurl\" title=\"Enter dataset URL\">URL</label>" +
 "  			</div>" +
 "    		<div class=\"jtox-inline float-right search-pane\">" +
 "  			  <div class=\"dynamic auto-hide searchsimilarity hidden jtox-inline\">" +
@@ -3511,11 +3516,14 @@ jT.templates['widget-search']  =
 "  			  <div class=\"dynamic auto-hide searchsmarts hidden jtox-inline\">" +
 "  			    <select name=\"smarts\" title =\"Predefined functional groups\"></select>" +
 "  			  </div>" +
-"  			  <div class=\"jtox-inline\">" +
+"  			  <div class=\"jtox-inline float-right\">" +
 "            <input type=\"text\" name=\"searchbox\"/>" +
 "            <button name=\"searchbutton\" class=\"jtox-handler\" title=\"Search/refresh\" data-handler=\"query\"><span class=\"ui-icon ui-icon-search\"/></button>" +
 "            <button name=\"drawbutton\" class=\"dynamic\" title=\"Draw the (sub)structure\"><span class=\"ui-icon ui-icon-pencil\"/></button>" +
 "  			  </div>" +
+"    		</div>" +
+"    		<div id=\"searchcontext\" class=\"size-full\">" +
+"    		  <input type=\"text\" name=\"searchcontext\" placeholder=\"Restrict the search within given dataset_\"/>" +
 "    		</div>" +
 "      </form>" +
 "      <div class=\"ketcher shrinken\"></div>" +
