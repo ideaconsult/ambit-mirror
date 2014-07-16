@@ -11,6 +11,7 @@ import ambit2.rest.admin.fingerprints.FingerprintResource;
 import ambit2.rest.admin.fingerprints.StructuresByFingerprintResource;
 import ambit2.rest.dataset.filtered.StatisticsResource;
 import ambit2.rest.routers.MyRouter;
+import ambit2.user.rest.resource.AmbitRESTPolicyResource;
 import ambit2.user.rest.resource.Resources;
 import ambit2.user.rest.resource.RoleDBResource;
 
@@ -50,6 +51,8 @@ public class AdminRouter extends MyRouter {
 				StatisticsResource.class);	
 		
 		attach(Resources.role, RoleDBResource.class);
+		attach(Resources.restpolicy, AmbitRESTPolicyResource.class);
+		attach(String.format("%s/{%s}",Resources.restpolicy,AmbitRESTPolicyResource.resourceid),AmbitRESTPolicyResource.class);
 
 	}
 
