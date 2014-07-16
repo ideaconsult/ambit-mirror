@@ -1,20 +1,24 @@
-    function onSideLoaded(result) {
-    	var tEl = $('.title', $(this.rootElement).parents('.jtox-foldable')[0])[0];
-    	var set = result.dataset || result.model;
-    	tEl.innerHTML = tEl.innerHTML.replace(/(.+)\((\d+)\/(\d+)(.*)?/, '$1($2/' + set.length + '$4');;
-    }
-    
-    
-    function onSelectedUpdate(el) {
-      var par = $(el).parents('.jtox-foldable')[0];
-    	var tEl = $('.title', par)[0];
-    	var v = $('input[type="checkbox"]:checked', par).length;
-    	tEl.innerHTML = tEl.innerHTML.replace(/(.+)\((\d+)\/(\d+)(.*)?/, '$1(' + v + '/$3$4');;
-    }
-    
+var jTConfig = {};
 
-    
-    function onDetailedRow(row, data, index) {
+function onSideLoaded(result) {
+	var tEl = $('.title', $(this.rootElement).parents('.jtox-foldable')[0])[0];
+	var set = (result.model || result.dataset);
+	$(tEl).data('total', set.length);
+	tEl.innerHTML = jT.ui.updateCounter(tEl.innerHTML, 0, set.length);
+}
+
+function onSelectedUpdate(e) {
+  var par = $(this).parents('.jtox-foldable')[0];
+	var tEl = $('.title', par)[0];
+	var v = $('input[type="checkbox"]:checked', par).length;
+	tEl.innerHTML = jT.ui.updateCounter(tEl.innerHTML, v, $(tEl).data('total'));
+}
+
+function jTConfigurator(kit) {
+  return jTConfig.dataset;
+}
+
+function onDetailedRow(row, data, event) {
       var el = $('.jtox-details-composition', row);
       var uri = $(el).data('uri');
       el = $(el).parents('table')[0];
@@ -22,15 +26,7 @@
       $(el).empty();
       var div = document.createElement('div');
       el.appendChild(div);
-      var ds = new jToxSubstance(div, {
-      			crossDomain: true, 
-      			substanceUri: uri, 
-      			showControls: false,
-      			showDiagrams: true , 
-      			onDetails: function (root, data, event) {
-        			var comp = new jToxStudy(root);
-        			comp.querySubstance(data);
-      			} 
-      		} );
-    }
-    
+  var ds = new jToxSubstance(div, $.extend(true, {}, this.settings, {crossDomain: true, selectionHandler: null, substanceUri: uri, showControls: false, onDetails: function (root, data, event) {
+    new jToxStudy(root, $.extend({}, this.settings, {substanceUri: data}));
+  } } ) );
+}
