@@ -1,3 +1,5 @@
+var jTConfig = {};
+
 function onSideLoaded(result) {
 	var tEl = $('.title', $(this.rootElement).parents('.jtox-foldable')[0])[0];
 	var set = (result.model || result.dataset);
@@ -13,8 +15,14 @@ function onSelectedUpdate(e) {
 	tEl.innerHTML = jT.ui.updateCounter(tEl.innerHTML, v, $(tEl).data('total'));
 }
 
-function onDetailedRow(row, data, index) {
-  var el = $('.jtox-details-composition', row);
+function jTConfigurator(kit) {
+  return jTConfig.dataset;
+}
+
+function onDetailedRow(row, data, event) {
+  var el = $('.jtox-details-composition', row)[0];
+  if (!el)
+    return;
   var uri = $(el).data('uri');
   uri = this.settings.baseUrl + '/substance?compound_uri=' + encodeURIComponent(uri);
   el = $(el).parents('table')[0];
@@ -24,8 +32,7 @@ function onDetailedRow(row, data, index) {
   var div = document.createElement('div');
   el.appendChild(div);
   var ds = new jToxSubstance(div, $.extend(true, {}, this.settings, {crossDomain: true, selectionHandler: null, substanceUri: uri, showControls: false, onDetails: function (root, data, event) {
-    var comp = new jToxStudy(root, this.settings);
-    comp.querySubstance(data);
+    new jToxStudy(root, $.extend({}, this.settings, {substanceUri: data}));
   } } ) );
 }
 
@@ -77,19 +84,19 @@ function createGroups(miniset, kit) {
 }
 
 $(document).ready(function(){
-  var toggleBar = function () {
-    $(this).parents('#sidebar').toggleClass('hidden');
-  };
-  $('#sidebar span.ui-icon').on('click', toggleBar);
-  $('#sidebar div.side-title').on('click', toggleBar);
-  $('#sidebar').on('mouseover', function () { $(this).removeClass('hidden'); }).on('mouseout', function () { $(this).addClass('hidden');});
-  
-  $('#sidebar a.select-all').on('click', function (e) {
-    $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = true;});
-    onSelectedUpdate.call(this, e);
-  });
-  $('#sidebar a.unselect-all').on('click', function (e) {
-    $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = false;});
-    onSelectedUpdate.call(this, e);
-  });
+	  var toggleBar = function () {
+		    $(this).parents('#sidebar').toggleClass('hidden');
+		  };
+		  $('#sidebar span.ui-icon').on('click', toggleBar);
+		  $('#sidebar div.side-title').on('click', toggleBar);
+		  $('#sidebar').on('mouseover', function () { $(this).removeClass('hidden'); }).on('mouseout', function () { $(this).addClass('hidden');});
+		  
+		  $('#sidebar a.select-all').on('click', function (e) {
+		    $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = true;});
+		    onSelectedUpdate.call(this, e);
+		  });
+		  $('#sidebar a.unselect-all').on('click', function (e) {
+		    $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = false;});
+		    onSelectedUpdate.call(this, e);
+		  });
 });
