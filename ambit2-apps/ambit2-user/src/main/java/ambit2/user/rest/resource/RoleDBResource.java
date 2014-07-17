@@ -2,6 +2,7 @@ package ambit2.user.rest.resource;
 
 import java.sql.Connection;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.query.IQueryUpdate;
@@ -11,7 +12,9 @@ import net.idea.restnet.db.DBConnection;
 import net.idea.restnet.db.aalocal.DBRole;
 import net.idea.restnet.db.aalocal.user.DeleteUserRole;
 import net.idea.restnet.db.aalocal.user.IUser;
-import net.idea.restnet.db.aalocal.user.ReadUserRoles;
+import net.idea.restnet.db.aalocal.user.ReadRole;
+import net.idea.restnet.db.aalocal.user.RoleJSONReporter;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 import net.idea.restnet.user.DBUser;
 
 import org.restlet.Context;
@@ -28,29 +31,33 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.config.AMBITConfig;
 import ambit2.user.rest.CreateUserRole;
 
-public class RoleDBResource extends AmbitDBQueryResource<ReadUserRoles,String> {
+public class RoleDBResource extends AmbitDBQueryResource<IQueryRetrieval<String>,String> {
 
 	
 	@Override
-	public IProcessor<ReadUserRoles, Representation> createConvertor(
+	public IProcessor<IQueryRetrieval<String>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
-		return null;
-	}
+			
+		if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
+			String jsonpcallback = getParams().getFirstValue("jsonp");
+			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
+			return new OutputWriterConvertor(
+					new RoleJSONReporter(getRequest().getResourceRef().toString(),jsonpcallback),
+					MediaType.APPLICATION_JAVASCRIPT);				
+		} else // if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+			return new OutputWriterConvertor(
+					new RoleJSONReporter(getRequest().getResourceRef().toString()),
+					MediaType.APPLICATION_JSON);		
+	}	
 
 	@Override
-	protected ReadUserRoles createQuery(Context context, Request request,
+	protected IQueryRetrieval<String> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
-		return null;
+		IQueryRetrieval<String> q = new ReadRole();
+		return q;
 	}
 
-	@Override
-	protected Representation get(Variant variant) throws ResourceException {
-		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
-	}
-	@Override
-	protected Representation get() throws ResourceException {
-		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
-	}
+	
 
 	@Override
 	protected Representation put(Representation entity, Variant variant)
