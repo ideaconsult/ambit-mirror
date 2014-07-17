@@ -29,6 +29,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.relation.composition.CompositionRelation;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.processors.CallableSubstanceI5Query;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.ImageReporter;
@@ -242,7 +243,17 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 		return null;
 	}
 	protected QueryURIReporter getURIReporter() {
-		return new SubstanceURIReporter<Q>(getRequest(),getDocumentation());
+		return new SubstanceURIReporter<Q>(getRequest(),getDocumentation()) {
+			@Override
+			public Object processItem(SubstanceRecord item)
+					throws AmbitException {
+				super.processItem(item);
+				try {
+					output.write('\n');
+				} catch (Exception x) {}
+				return item;
+			}
+		};
 	}
 	
 	@Override
