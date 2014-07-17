@@ -184,6 +184,31 @@
   border: 0px;
 }
 
+.jtox-toolkit input[type="password"].jt-inlineaction, 
+.jtox-toolkit input[type="search"].jt-inlineaction, 
+.jtox-toolkit input[type="text"].jt-inlineaction, 
+.jtox-toolkit select.jt-inlineaction {
+  margin: 1px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.jtox-toolkit input.jt-inlineaction {
+  border: 0px;
+  border-radius: 3px;
+  background-color: transparent;
+}
+
+.jtox-toolkit input.jt-inlineaction:focus,
+.jtox-toolkit input.jt-inlineaction:hover {
+  border: inherit;
+  margin: 0px;
+}
+
+.jtox-toolkit input.jt-inlineaction:focus {
+  background-color: #fefefe;
+}
+
 .jtox-diagram span.ui-icon {
   position: absolute;
   bottom: 0px;
