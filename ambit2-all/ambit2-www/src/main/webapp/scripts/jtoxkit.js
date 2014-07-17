@@ -401,8 +401,8 @@ window.jT = window.jToxKit = {
   	timeout: 15000,                 // the timeout an call to the server should be wait before the attempt is considered error.
   	pollDelay: 250,                 // after how many milliseconds a new attempt should be made during task polling.
   	onConnect: function(s){ },		  // function (service): called when a server request is started - for proper visualization. Part of settings.
-  	onSuccess: function(s, c, m) { },	// function (code, mess): called on server request successful return. It is called along with the normal processing. Part of settings.
-  	onError: function (s, c, m) { if (!!console && !!console.log) console.log("jToxKit call error (" + c + "): " + m + " from request: [" + s + "]"); },		// function (code, mess): called on server reques error. Part of settings.
+  	onSuccess: function(s, c, j) { },	// function (code, mess): called on server request successful return. It is called along with the normal processing. Part of settings.
+  	onError: function (s, c, j) { if (!!console && !!console.log) console.log("jT call error [" + c + "]: " + j.responseText + " from request: [" + s + "]"); },		// function (code, mess): called on server reques error. Part of settings.
   },
   
   // these are used in setting inheritance, so that non-inheritable settings are blanked...
@@ -667,11 +667,11 @@ window.jT = window.jToxKit = {
 			data: params.data,
 			jsonp: settings.jsonp ? 'callback' : false,
 			error: function(jhr, status, error){
-			  ccLib.fireCallback(settings.onError, kit, service, status, error);
+			  ccLib.fireCallback(settings.onError, kit, service, status, jhr);
 				callback(null, jhr);
 			},
 			success: function(data, status, jhr){
-			  ccLib.fireCallback(settings.onSuccess, kit, service, status, jhr.statusText);
+			  ccLib.fireCallback(settings.onSuccess, kit, service, status, jhr);
 				callback(data, jhr);
 			}
 		});

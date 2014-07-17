@@ -184,6 +184,13 @@
   border: 0px;
 }
 
+.jtox-toolkit .loading {
+  background: url(../images/waiting_small.gif) right top no-repeat;
+  background-size: 16px 16px;
+  text-fill-color: rgba(0, 0, 0, 0);
+  color: rgba(0, 0, 0, 0);
+}
+
 .jtox-toolkit input[type="password"].jt-inlineaction, 
 .jtox-toolkit input[type="search"].jt-inlineaction, 
 .jtox-toolkit input[type="text"].jt-inlineaction, 
