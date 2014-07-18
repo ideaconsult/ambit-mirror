@@ -570,7 +570,7 @@ window.jT = window.jToxKit = {
 	*/
 	pollTask : function(kit, task, callback, jhr) {
 		var self = this;
-		if (task == null || task.task == null || task.task.length < 1){
+		if (task == null || task.task == null || task.task.length < 1 || !!task.task.error){
 		  ccLib.fireCallback(callback, kit, task, jhr);
 			return;
 		}
