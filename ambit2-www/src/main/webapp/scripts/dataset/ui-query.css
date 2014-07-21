@@ -47,8 +47,12 @@
   -ms-transform: rotate(270deg);  	
 }
 	
-#browser, #searchbar .ketcher {
-  margin-left: 30px;
+#browser, #searchbar {
+  margin-left: 35px;
+}
+
+#browser {
+  margin-top: 40px;
 }
 
 #browser {

@@ -84,19 +84,19 @@ function createGroups(miniset, kit) {
 }
 
 $(document).ready(function(){
-	  var toggleBar = function () {
-		    $(this).parents('#sidebar').toggleClass('hidden');
-		  };
-		  $('#sidebar span.ui-icon').on('click', toggleBar);
-		  $('#sidebar div.side-title').on('click', toggleBar);
-		  $('#sidebar').on('mouseover', function () { $(this).removeClass('hidden'); }).on('mouseout', function () { $(this).addClass('hidden');});
-		  
-		  $('#sidebar a.select-all').on('click', function (e) {
-		    $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = true;});
-		    onSelectedUpdate.call(this, e);
-		  });
-		  $('#sidebar a.unselect-all').on('click', function (e) {
-		    $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = false;});
-		    onSelectedUpdate.call(this, e);
-		  });
+  var toggleBar = function () {
+    $(this).parents('#sidebar').toggleClass('hidden');
+  };
+  $('#sidebar span.ui-icon').on('click', toggleBar);
+  $('#sidebar div.side-title').on('click', toggleBar);
+  $('#sidebar').on('mouseover', function () { $(this).removeClass('hidden'); }).on('mouseout', function () { $(this).addClass('hidden');});
+  
+  $('#sidebar a.select-all').on('click', function (e) {
+    $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = true;});
+    onSelectedUpdate.call(this, e);
+  });
+  $('#sidebar a.unselect-all').on('click', function (e) {
+    $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = false;});
+    onSelectedUpdate.call(this, e);
+  });
 });
