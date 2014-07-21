@@ -41,7 +41,9 @@ $(document)
 		================================================== -->
 	<div class="sixteen columns remove-bottom" style="padding:0;" >
 
-  <div class="jtox-toolkit" data-kit="query" data-initial-query="yes" data-cross-domain="true" data-configuration="common_config" 
+  <div class="jtox-toolkit" data-kit="query" data-initial-query="yes" data-cross-domain="false" 
+  		data-configuration="common_config"  
+  		data-hide-options="context"
   		data-base-url="${ambit_root}">
     <div id="searchbar" class="jtox-toolkit jtox-widget" data-kit="search"></div>
     <div id="sidebar" class="hidden">
@@ -70,7 +72,9 @@ $(document)
         </div>
       </div>
     </div>
-	  <div id="browser" class="jtox-toolkit" data-kit="compound" data-remember-checks="true" data-hide-empty="true" data-details-height="500px" data-tabs-folded="true" data-on-details="onDetailedRow" data-show-diagrams="true"></div>
+	  <div id="browser" class="jtox-toolkit" data-kit="compound" data-remember-checks="true" 
+	  data-hide-empty="true" data-details-height="500px" data-tabs-folded="true" 
+	  data-on-details="onDetailedRow" data-show-diagrams="true"></div>
   </div>
 
    </div>
