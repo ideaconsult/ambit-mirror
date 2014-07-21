@@ -14,7 +14,7 @@ body>div {
 	background-color: #fafafa;
 	border: 1px solid #ccc;
   width: 40px;
-  top: 50px;
+  top: 80px;
   left: -25px;
 	bottom: 0px;
 	z-index: 100;
@@ -45,6 +45,10 @@ body>div {
   border-radius: 7px;
 }
 
+.ketcher {
+  margin-left: 45px;
+}
+
 #sidebar .side-title>div:hover,
 #sidebar .side-title>div.pressed {
   background: #e6e6e6;
@@ -57,6 +61,7 @@ body>div {
   box-sizing: border-box;
   padding-left: 45px;
   padding-right: 5px;
+  padding-top: 20px;
   overflow: scroll;
 }
 
@@ -126,13 +131,6 @@ div.tt-algorithm div.tt-classification {
   padding: 2px;
   font-weight: bold;
   margin: 0px;
-}
-
-.tt-toggle.loading {
-  background: url(../../images/waiting_small.gif) center top no-repeat;
-  background-size: 16px 16px;
-  text-fill-color: rgba(0, 0, 0, 0);
-  color: rgba(0, 0, 0, 0);
 }
 
 .tt-toggle:hover,
@@ -239,11 +237,11 @@ div.tt-class  {
 	text-align: center;
 	border: solid 1px #333;
 	border-radius: 5px;
-	opacity: 0.5;
+	opacity: 0.6;
 	margin-top: 1px;
 	padding: 0px 5px 0px 5px;
 	width: 95%;
-	color: #333;
+	color: #000;
 	font-size: 90%;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -251,7 +249,6 @@ div.tt-class  {
 
 div.tt-class.active {
 	opacity: 1.0;
-	color: #000;
 	font-weight: bold;
 }
 

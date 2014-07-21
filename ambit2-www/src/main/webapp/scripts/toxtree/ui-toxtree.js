@@ -110,6 +110,8 @@ function runPredict (el, algoId, all) {
     makeModel(null, algoId, function (result) { 
       if (!!result)
         runIt(result);
+      else
+        $(el).removeClass('loading');
     });
   }
   else
