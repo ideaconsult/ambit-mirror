@@ -44,9 +44,14 @@ jQuery(document).ready(function()
 	<!-- banner -->
 	<#include "/banner_crumbs.ftl">
 	
+
+<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+	<#include "/searchmenu/menu_admin.ftl">
+</div>
+	
 		<!-- Page Content
 		================================================== -->
-		<div class="thirteen columns add-bottom" style="padding:0;" >
+		<div class="twelve columns add-bottom" style="padding:0;" >
 
 	<div class="jtox-toolkit" data-kit="policy" data-base-url="${ambit_root}" data-load-on-init="true" data-on-error="errorHandler"></div>
   <div class="jtox-template">
