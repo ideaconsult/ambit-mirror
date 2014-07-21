@@ -108,6 +108,14 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 			Variant variant) throws AmbitException, ResourceException {
 		return super.createConvertor(variant); 	
 	}
+	
+	protected StatsMode getSearchMode() {
+		try {
+			return StatsMode.valueOf(getRequest().getAttributes().get(resourceKey).toString());
+		} catch (Exception x) {
+			return StatsMode.dataset;
+		}
+	}
 
 	@Override
 	protected Q createQuery(Context context,
@@ -116,11 +124,7 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 		String[] datasetsURI =  getParams().getValuesArray(OpenTox.params.dataset_uri.toString());
 		Template t = new Template(String.format("%s%s/{%s}",getRequest().getRootRef(),DatasetStructuresResource.dataset,DatasetStructuresResource.datasetKey));
 		setStatus(Status.SUCCESS_OK);
-		try {
-			mode = StatsMode.valueOf(getRequest().getAttributes().get(resourceKey).toString());
-		} catch (Exception x) {
-			mode = StatsMode.dataset;
-		}
+		mode = getSearchMode();
 		switch (mode) {
 		case dataset_intersection: {
 			QueryCountDatasetIntersection q = null;
