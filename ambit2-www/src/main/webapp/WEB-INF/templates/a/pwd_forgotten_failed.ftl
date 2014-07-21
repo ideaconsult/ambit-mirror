@@ -25,7 +25,7 @@ jQuery(document).ready(function()
 		
 		<!-- Page Content
 		================================================== -->
-		<div class="twelve columns add-bottom" style="padding:0;" >	
+		<div class="eleven columns add-bottom" style="padding:0;" >	
 		
 		<div class='ui-widget-header ui-corner-top'>&nbsp;AMBIT password reset failed</div>
 	    <div class='ui-widget-content ui-corner-bottom'>	

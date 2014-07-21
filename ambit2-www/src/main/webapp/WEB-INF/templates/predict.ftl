@@ -25,7 +25,7 @@ $(document)
 
 </div>
 
-<div class="twelve columns remove-bottom" style="padding:0;" >
+<div class="eleven columns remove-bottom" style="padding:0;" >
 
 <div class='ui-widget-header ui-corner-top'>&nbsp;How to run predictive models</div>
 <div class='ui-widget-content ui-corner-bottom'>	
