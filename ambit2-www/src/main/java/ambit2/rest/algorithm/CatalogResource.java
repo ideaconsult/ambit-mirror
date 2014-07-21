@@ -37,6 +37,8 @@ import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.FactoryTaskConvertor;
+import ambit2.user.rest.resource.AMBITDBRoles;
+import ambit2.user.rest.resource.DBRoles;
 
 /**
  * Algorithms as per http://opentox.org/development/wiki/Algorithms
@@ -200,14 +202,29 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 	@Override
 	public void configureTemplateMap(Map<String, Object> map, Request request,
 			IFreeMarkerApplication app) {
-        if (getClientInfo().getUser()!=null) 
-        	map.put("username", getClientInfo().getUser().getIdentifier());
+        
+		map.put(AMBITDBRoles.ambit_admin.name(), Boolean.FALSE);
+		map.put(AMBITDBRoles.ambit_datasetmgr.name(), Boolean.FALSE);
+		if (getClientInfo()!=null) {
+			if (getClientInfo().getUser()!=null)
+				map.put("username", getClientInfo().getUser().getIdentifier());
+			if (getClientInfo().getRoles()!=null) {
+				if (DBRoles.isAdmin(getClientInfo().getRoles()))
+					map.put(AMBITDBRoles.ambit_admin.name(),Boolean.TRUE);
+				if (DBRoles.isDatasetManager(getClientInfo().getRoles()))
+					map.put(AMBITDBRoles.ambit_datasetmgr.name(), Boolean.TRUE);
+				if (DBRoles.isUser(getClientInfo().getRoles()))
+					map.put(AMBITDBRoles.ambit_user.name(), Boolean.TRUE);	
+			}
+		}
+		
         map.put(AMBITConfig.creator.name(),"IdeaConsult Ltd.");
         map.put(AMBITConfig.ambit_root.name(),getRequest().getRootRef().toString());
         map.put(AMBITConfig.ambit_version_short.name(),app.getVersionShort());
 	    map.put(AMBITConfig.ambit_version_long.name(),app.getVersionLong());
 	    map.put(AMBITConfig.menu_profile.name(),app.getProfile());
 
+	    
         //remove paging
         Form query = getRequest().getResourceRef().getQueryAsForm();
         //query.removeAll("page");query.removeAll("pagesize");query.removeAll("max");

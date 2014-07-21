@@ -101,10 +101,10 @@ public abstract class AmbitDBQueryResource<Q extends IQueryRetrieval<T>,T extend
 				}
 			}
 
-				map.put(AMBITConfig.creator.name(),"IdeaConsult Ltd.");
-		        map.put(AMBITConfig.ambit_root.name(),getRequest().getRootRef().toString());
-		        getRequest().getResourceRef().addQueryParameter("media",MediaType.APPLICATION_JSON.toString());
-		        map.put(AMBITConfig.ambit_request.name(),getRequest().getResourceRef().toString());
+			map.put(AMBITConfig.creator.name(),"IdeaConsult Ltd.");
+		    map.put(AMBITConfig.ambit_root.name(),getRequest().getRootRef().toString());
+		    getRequest().getResourceRef().addQueryParameter("media",MediaType.APPLICATION_JSON.toString());
+		    map.put(AMBITConfig.ambit_request.name(),getRequest().getResourceRef().toString());
 		        
 		        //remove paging
 		        Form query = getRequest().getResourceRef().getQueryAsForm();
