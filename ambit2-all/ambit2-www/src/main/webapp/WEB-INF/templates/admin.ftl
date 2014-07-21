@@ -19,13 +19,15 @@ $(document)
 <div class="container" style="margin:0;padding:0;">
 	<!-- banner -->
 	<#include "/banner_crumbs.ftl">
+
+<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+	<#include "/searchmenu/menu_admin.ftl">
+</div>
+
 	
-	<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-	&nbsp;
-	</div>
 	
 
-<div class="eleven columns remove-bottom" style="padding:0;" >
+<div class="twelve columns remove-bottom" style="padding:0;" >
 
 <div class='ui-widget-header ui-corner-top'>&nbsp;Admin</div>
 <div class='ui-widget-content ui-corner-bottom'>	
