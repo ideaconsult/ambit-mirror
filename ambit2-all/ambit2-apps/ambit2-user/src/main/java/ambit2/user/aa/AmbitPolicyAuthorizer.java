@@ -1,5 +1,7 @@
 package ambit2.user.aa;
 
+import java.util.List;
+
 import net.idea.restnet.db.aalocal.policy.PolicyAuthorizer;
 
 import org.restlet.Context;
@@ -24,9 +26,26 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer {
 			boolean isProtected(Method method) {
 				return true;
 			}
+			@Override
+			int getMaxLevel() {
+				return 3;
+			}
+			@Override
+			boolean expectPolicies4IndividualResource() {
+				return true;
+			}
 		},
 		model,
-		substance,
+		substance {
+			@Override
+			int getMaxLevel() {
+				return 3;
+			}
+			@Override
+			boolean expectPolicies4IndividualResource() {
+				return true;
+			}
+		},
 		//substanceowner,
 		admin,
 		user,
@@ -79,14 +98,17 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer {
 	
 	
 	@Override
-	public boolean authorizeSpecialCases(Request request, Response response,StringBuilder uri) {
+	public boolean authorizeSpecialCases(Request request, Response response,List<String> uri) {
 		int depth = request.getResourceRef().getSegments().size();
 		if (depth==1) return true; //home page
 		if (depth > 2) depth = 3;
-		for (int i=1; i < depth; i++) {
+		StringBuilder resource = new StringBuilder();
+		for (int i=0; i < depth; i++) {
 			String segment = request.getResourceRef().getSegments().get(i);
-			uri.append("/");
-			uri.append(segment);
+			resource.append("/");resource.append(segment);
+			if (i>0) {
+				uri.add(resource.toString());	
+			}
 			if (i==1) try {
 				_resources s = _resources.valueOf(segment);
 				if (!s.isProtected(request.getMethod())) {
