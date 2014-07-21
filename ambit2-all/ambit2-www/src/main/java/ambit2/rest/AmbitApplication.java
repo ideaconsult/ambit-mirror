@@ -78,6 +78,7 @@ import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.MissingFeatureValuesResource;
 import ambit2.rest.dataset.filtered.FilteredDatasetResource;
+import ambit2.rest.dataset.filtered.StudySearchResource;
 import ambit2.rest.facet.CompoundsByPropertyValueInDatasetResource;
 import ambit2.rest.facet.DatasetChemicalsQualityStatsResource;
 import ambit2.rest.facet.DatasetStrucTypeStatsResource;
@@ -727,6 +728,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		queryRouter.attach(DatasetStructureQualityStatsResource.resource,DatasetStructureQualityStatsResource.class);
 		queryRouter.attach(DatasetChemicalsQualityStatsResource.resource,DatasetChemicalsQualityStatsResource.class);
 		queryRouter.attach(DatasetStrucTypeStatsResource.resource,DatasetStrucTypeStatsResource.class);
+		
+		queryRouter.attach(StudySearchResource.resource,StudySearchResource.class);
+		
 		
 		/**
 		 * Missing features

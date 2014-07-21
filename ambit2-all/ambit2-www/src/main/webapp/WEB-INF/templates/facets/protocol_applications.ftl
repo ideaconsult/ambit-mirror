@@ -13,16 +13,16 @@
 <script type='text/javascript'>
 $(document).ready(function() {
 	facet.defineStudySearchFacets("${ambit_root}",
-				"${ambit_root}/admin/stats/protocol_applications?topcategory=P-CHEM&media=application/json",
+				"${ambit_root}/query/study?topcategory=P-CHEM&media=application/json",
 				"#facet_pchem");
 	facet.defineStudySearchFacets("${ambit_root}",
-			"${ambit_root}/admin/stats/protocol_applications?topcategory=TOX&media=application/json",
+			"${ambit_root}/query/study?topcategory=TOX&media=application/json",
 			"#facet_tox");
 	facet.defineStudySearchFacets("${ambit_root}",
-			"${ambit_root}/admin/stats/protocol_applications?topcategory=ECOTOX&media=application/json",
+			"${ambit_root}/query/study?topcategory=ECOTOX&media=application/json",
 			"#facet_ecotox");
 	facet.defineStudySearchFacets("${ambit_root}",
-			"${ambit_root}/admin/stats/protocol_applications?topcategory=ENV%20FATE&media=application/json",
+			"${ambit_root}/query/study?topcategory=ENV%20FATE&media=application/json",
 			"#facet_envfate");	
 
 	$( "#accordion" ).accordion( {
@@ -37,10 +37,7 @@ $(document).ready(function() {
 	//ds.querySubstance('${ambit_root}/substance');	  	
 	
 	downloadForm("${ambit_request}");
-	/*
-	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/admin" title="Admin">Admin</a></li>');
-	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/admin/stats" title="Statistics">Statistics</a></li>');
-	*/
+
 	jQuery("#breadCrumb ul").append('<li><a href="#" onClick="facet.searchStudy();">Search substances by study</a></li>');
 	jQuery("#submit").show();
 
@@ -73,7 +70,7 @@ $(document).ready(function() {
 
 <form action='${ambit_root}/substance' id='fsearchForm' name='fsearchForm' method='GET' autocomplete='off' >
 <div class="four columns" id="sidebar" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-
+	<input type='button' class='remove-bottom' value='Update results' onClick='facet.searchStudy();'>
 	<div id="accordion" style="padding-top:0;padding-left:1px;padding-right:1px;padding-bottom:2px;margin:0;font-size:80%">
 		<h3>P-Chem</h3>
 		  <table id='facet_pchem' class='facet .jtox-toolkit' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
@@ -96,7 +93,7 @@ $(document).ready(function() {
 			<tbody></tbody>
 		   </table>
 		</div>
-		<input type='button' value='Update results' onClick='facet.searchStudy();'>
+		<input type='button' class='remove-bottom'  value='Update results' onClick='facet.searchStudy();'>
 		
 </form>			
 			
