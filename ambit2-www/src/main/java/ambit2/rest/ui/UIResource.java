@@ -32,6 +32,8 @@ import ambit2.rest.freemarker.FreeMarkerResource;
 import ambit2.rest.substance.CallableSubstanceImporter;
 import ambit2.rest.substance.SubstanceURIReporter;
 import ambit2.rest.task.TaskResult;
+import ambit2.user.rest.resource.AMBITDBRoles;
+import ambit2.user.rest.resource.DBRoles;
 
 public class UIResource extends FreeMarkerResource {
 	private static final String key = "key";
@@ -126,8 +128,20 @@ public class UIResource extends FreeMarkerResource {
 	}
 	protected Representation getHTMLByTemplate(Variant variant) throws ResourceException {
         Map<String, Object> map = new HashMap<String, Object>();
-        if (getClientInfo().getUser()!=null) 
-        	map.put("username", getClientInfo().getUser().getIdentifier());
+
+		if (getClientInfo()!=null) {
+			if (getClientInfo().getUser()!=null)
+				map.put("username", getClientInfo().getUser().getIdentifier());
+			if (getClientInfo().getRoles()!=null) {
+				if (DBRoles.isAdmin(getClientInfo().getRoles()))
+					map.put(AMBITDBRoles.ambit_admin.name(),Boolean.TRUE);
+				if (DBRoles.isDatasetManager(getClientInfo().getRoles()))
+					map.put(AMBITDBRoles.ambit_datasetmgr.name(), Boolean.TRUE);
+				if (DBRoles.isUser(getClientInfo().getRoles()))
+					map.put(AMBITDBRoles.ambit_user.name(), Boolean.TRUE);	
+			}
+		}
+		
 		if (getClientInfo().getUser() == null) {
 			OpenSSOUser ou = new OpenSSOUser();
 			ou.setUseSecureCookie(useSecureCookie(getRequest()));
