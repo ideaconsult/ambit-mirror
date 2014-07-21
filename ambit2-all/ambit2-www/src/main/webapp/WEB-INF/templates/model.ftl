@@ -81,7 +81,7 @@ $(document)
 </div>
 
 
-<div class="thirteen columns remove-bottom" style="padding:0;" >
+<div class="twelve columns remove-bottom" style="padding:0;" >
 
 		<!-- Page Content
 		================================================== -->

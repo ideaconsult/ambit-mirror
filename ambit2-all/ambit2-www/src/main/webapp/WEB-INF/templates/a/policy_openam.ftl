@@ -37,7 +37,7 @@ $(document)
 		
 		<!-- Page Content
 		================================================== -->
-<div class="twelve columns remove-bottom" style="padding:0;" >
+<div class="eleven columns remove-bottom" style="padding:0;" >
 		
 	<div class="row remove-bottom ui-widget-header ui-corner-top">&nbsp;Policies</div>
 	<div class="ui-widget-content ui-corner-bottom add-bottom ">
