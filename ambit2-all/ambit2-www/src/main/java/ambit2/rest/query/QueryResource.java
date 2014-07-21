@@ -67,6 +67,8 @@ import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.rest.task.TaskCreator;
+import ambit2.user.rest.resource.AMBITDBRoles;
+import ambit2.user.rest.resource.DBRoles;
 
 /**
  * Abstract parent class for all resources , which retrieves something from the database
@@ -632,9 +634,18 @@ Then, when the "get(Variant)" method calls you back,
 
 	protected Representation getHTMLByTemplate(Variant variant) throws ResourceException {
         Map<String, Object> map = new HashMap<String, Object>();
-        if (getClientInfo().getUser()!=null) 
+   
+        if (getClientInfo().getUser()!=null){ 
         	map.put("username", getClientInfo().getUser().getIdentifier());
-        else {
+        	if (getClientInfo().getRoles()!=null) {
+				if (DBRoles.isAdmin(getClientInfo().getRoles()))
+					map.put(AMBITDBRoles.ambit_admin.name(),Boolean.TRUE);
+				if (DBRoles.isDatasetManager(getClientInfo().getRoles()))
+					map.put(AMBITDBRoles.ambit_datasetmgr.name(), Boolean.TRUE);
+				if (DBRoles.isUser(getClientInfo().getRoles()))
+					map.put(AMBITDBRoles.ambit_user.name(), Boolean.TRUE);	
+			}
+        } else {
 			OpenSSOUser ou = new OpenSSOUser();
 			ou.setUseSecureCookie(useSecureCookie(getRequest()));
 			getClientInfo().setUser(ou);
