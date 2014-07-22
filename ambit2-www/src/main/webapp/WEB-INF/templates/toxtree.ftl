@@ -41,7 +41,7 @@
 -->
 
 <!-- toxtree starts -->
- <div class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="config_toxtree" data-base-url="http://apps.ideaconsult.net:8080/biodeg">
+ <div class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="config_toxtree" data-base-url="${ambit_root}">
     <div id="tt-searchbar" class="jtox-toolkit jtox-widget cc-fixed" data-kit="search"></div>
     <div id="tt-bigpane" class="cc-flex">
       <div>
