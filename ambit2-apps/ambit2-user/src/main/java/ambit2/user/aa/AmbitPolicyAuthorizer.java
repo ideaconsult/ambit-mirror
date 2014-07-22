@@ -131,11 +131,4 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer {
 		return false;
 	}
 
-	@Override
-	public boolean authorize(Request request, Response response) {
-		boolean ok = super.authorize(request, response);
-		if (!ok)
-			System.out.println(ok + "\t"+request.getResourceRef());
-		return ok;
-	}
 }
