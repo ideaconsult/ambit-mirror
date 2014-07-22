@@ -1,4 +1,11 @@
 <div class="sixteen  columns add-bottom">&nbsp;</div>
+
+<div class='row add-bottom' >
+	<div class="five columns alpha ">&nbsp;</div>
+	<div class="ten columns omega ui-state-error " id='log' style='display:none;' >&nbsp;</div> 
+</div>
+
+
 		<div id='footer-out' class="sixteen columns">
 		<div id='footer-in'>
 		<div id='footer'>
@@ -17,3 +24,11 @@
 	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 		
+  <script language="JavaScript">
+  function errorHandler(service, status, jhr) {
+  	try {
+  		jQuery("#log").show();
+    	jQuery("#log").text(" error on [" + service + "]: " + status + " " + jhr.statusText);
+    } catch (e) {}
+  }
+  </script>

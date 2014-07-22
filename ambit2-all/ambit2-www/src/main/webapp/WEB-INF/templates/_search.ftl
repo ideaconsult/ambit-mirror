@@ -17,6 +17,7 @@
 <script language="JavaScript">
   var common_config = $.extend({}, config_dataset, config_study);
 </script>
+<link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
 
 <script type='text/javascript'>  
 $(document)
@@ -44,6 +45,7 @@ $(document)
   <div class="jtox-toolkit" data-kit="query" data-initial-query="yes" data-cross-domain="false" 
   		data-configuration="common_config"  
   		data-hide-options="context"
+  		data-on-error="errorHandler" 
   		data-base-url="${ambit_root}">
     <div id="searchbar" class="jtox-toolkit jtox-widget" data-kit="search"></div>
     <div id="sidebar" class="hidden">
@@ -74,6 +76,7 @@ $(document)
     </div>
 	  <div id="browser" class="jtox-toolkit" data-kit="compound" data-remember-checks="true" 
 	  data-hide-empty="true" data-details-height="500px" data-tabs-folded="true" 
+	  data-on-error="errorHandler" 
 	  data-on-details="onDetailedRow" data-show-diagrams="true"></div>
   </div>
 
@@ -81,6 +84,9 @@ $(document)
 
 		
 <div class='row add-bottom'>&nbsp;</div>
+
+
+
 <#include "/footer.ftl" >
 </div> <!-- container -->
 </body>

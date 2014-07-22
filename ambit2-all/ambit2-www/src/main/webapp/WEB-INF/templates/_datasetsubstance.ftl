@@ -48,6 +48,7 @@
 	data-on-details="onDetailedRow"
 	data-dataset-uri="${ambit_request}"
 	data-tabs-folded="true"
+	data-on-error="errorHandler" 
 	data-jsonp="false">
 	</div>
 </div>

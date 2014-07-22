@@ -2,12 +2,18 @@
 <head>
 <#include "/header_updated.ftl" >
 
+<link rel="stylesheet" href="${ambit_root}/scripts/dataset/ui-query.css"/>
+<link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
+
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
 
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
+
+<script type='text/javascript' src='${ambit_root}/scripts/dataset/ui-query.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/dataset/config-dataset.js'></script>
 
 
 <link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
@@ -20,7 +26,6 @@
         jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/dataset?page=0&pagesize=100" title="Datasets">Datasets</a></li>');
         jQuery("#breadCrumb ul").append('<li><a href="${ambit_request}" title="Dataset browser">Dataset browser</a></li>');
         jQuery("#breadCrumb ul").append("<li><a href='#' id='current' title='Old view mode'>Old view mode</a></li>");
-
 	
 		var duri = dataset_uri;
 		if (duri.length>60) duri = duri.substring(0,60) + "...";
@@ -34,16 +39,7 @@
         
 	});
 	</script>
-<script language="JavaScript">
     
-    function onSelectedUpdate(el) {
-      var par = $(el).parents('.jtox-foldable')[0];
-    	var tEl = $('.title', par)[0];
-    	var v = $('input[type="checkbox"]:checked', par).length;
-    	tEl.innerHTML = tEl.innerHTML.replace(/(.+)\((\d+)\/(\d+)(.*)?/, '$1(' + v + '/$3$4');;
-    }
-</script>
-<script type='text/javascript' src='${ambit_root}/scripts/config-dataset.js'></script>    
 </head>
 <body>
 
@@ -63,14 +59,14 @@
 	data-manual-init="yes" 
 	data-show-features="yes" 
 	data-cross-domain="false"	
-	data-show-export="yes" 
+	data-show-export="yes"
+	data-on-details="onDetailedRow" data-show-diagrams="true"
+	data-on-error="errorHandler" 
 	data-jsonp="false"></div>
-
 </div>
 
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
-
 
 
 <#include "/footer.ftl" >
