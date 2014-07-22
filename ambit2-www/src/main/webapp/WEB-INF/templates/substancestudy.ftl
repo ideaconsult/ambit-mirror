@@ -62,6 +62,7 @@
 	data-substance-uri="${ambit_root}/substance/${substanceUUID}"
 	data-cross-domain="false"
 	data-configuration="config_study"	
+	data-on-error="errorHandler" 
 	data-jsonp="false"></div>
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>

@@ -41,7 +41,9 @@
 -->
 
 <!-- toxtree starts -->
- <div class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="config_toxtree" data-base-url="${ambit_root}">
+ <div class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="config_toxtree"
+ 	data-on-error="errorHandler"  
+ 	data-base-url="${ambit_root}">
     <div id="tt-searchbar" class="jtox-toolkit jtox-widget cc-fixed" data-kit="search"></div>
     <div id="tt-bigpane" class="cc-flex">
       <div>
@@ -109,6 +111,11 @@
 <#include "/footer.ftl" >
 </div>
 -->
+
+<div class='row add-bottom' >
+	<div class="five columns alpha ">&nbsp;</div>
+	<div class="ten columns omega ui-state-error " id='log' style='display:none;' >&nbsp;</div> 
+</div>
 
 </body>
 
