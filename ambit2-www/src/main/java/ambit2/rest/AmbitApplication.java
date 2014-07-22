@@ -478,8 +478,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		}
 		router.attach("/name2structure",Name2StructureResource.class);	
 	
-		router.attach(OntologyResource.resource,createRDFPlayground());
-		
 		/**
 		 * Images, styles, favicons, applets
 		 */
@@ -836,20 +834,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		//sameIPguard.setNext(adminRouter);
 		return adminRouter;
 	}
-	/**
-	 *  /ontology RDF playground, not used currently
-	 * @return
-	 */
-	protected Restlet createRDFPlayground() {
-		//test removed, there is ontology service
-		//router.attach(RDFGraphResource.resource,RDFGraphResource.class);
-		//router.attach(RDFGraphResource.resource+"/test",OntologyPlayground.class);
-		Router router = new MyRouter(getContext());
-		router.attachDefault(OntologyResource.class);
-		router.attach(OntologyResource.resourceID, OntologyResource.class);
-		router.attach(OntologyResource.resourceTree, OntologyResource.class);
-		return router;
-	}
+
 	/**
 	 * An attempt to retrieve datasets by an optimized query
 	 * Not used currently 
