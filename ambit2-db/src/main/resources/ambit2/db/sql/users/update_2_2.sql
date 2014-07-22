@@ -24,6 +24,9 @@ insert into roles value("ambit_datasetmgr");
 insert into roles value("ambit_modeller");
 insert into roles value("ambit_model_user");
 
+delete from user_roles where role_name="ambit_curator";
+delete from roles where role_name="ambit_curator"
+
 insert ignore into policy values(null,"ambit_admin","/ambit2","/admin",1,1,1,1,1);
 insert ignore into policy values(null,"ambit_admin","/ambit2","/user",1,1,1,1,1);
 insert ignore into policy values(null,"ambit_admin","/ambit2","/algorithm",1,1,1,1,1);
