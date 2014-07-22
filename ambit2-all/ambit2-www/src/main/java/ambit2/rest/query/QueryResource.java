@@ -564,9 +564,10 @@ Then, when the "get(Variant)" method calls you back,
 			Template profile = new Template(null);
 			profile.setId(-1);				
 			
-			ProfileReader reader = new ProfileReader(getRequest().getRootRef(),profile,getApplication().getContext());
+			ProfileReader reader = new ProfileReader(getRequest().getRootRef(),profile,getApplication().getContext(),
+										getToken(),getRequest().getCookies(),
+										getRequest().getClientInfo()==null?null:getRequest().getClientInfo().getAgent());
 			reader.setCloseConnection(false);
-			
 			
 
 			DBConnection dbc = new DBConnection(getContext());

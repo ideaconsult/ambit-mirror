@@ -1,6 +1,9 @@
 package ambit2.rest.task;
 
 import java.io.ObjectInputStream;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.net.HttpURLConnection;
 import java.sql.Connection;
 import java.util.logging.Level;
@@ -134,17 +137,23 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 	protected abstract ProcessorsChain<Result, IBatchStatistics, IProcessor> createProcessors() throws Exception;
 	//protected abstract QueryURIReporter createURIReporter(Request request); 
 	
-
 	public static Object getQueryObject(Reference reference, Reference applicationRootReference, Context context) throws Exception {
-		
+		return getQueryObject(reference, applicationRootReference, context,null,null);
+	}
+	public static Object getQueryObject(Reference reference, Reference applicationRootReference, Context context,
+			String cookies,String agent) throws Exception {
+		CookieHandler.setDefault( new CookieManager( null, CookiePolicy.ACCEPT_ORIGINAL_SERVER) );
 		if (!applicationRootReference.isParent(reference)) throw 
 			new Exception(String.format("Remote reference %s %s",applicationRootReference,reference));
 		ObjectInputStream in = null;
 		HttpURLConnection connection = null;
 		try {
 			connection = 
-ClientResourceWrapper.getHttpURLConnection(reference.toString(),"GET",MediaType.APPLICATION_JAVA_OBJECT.toString());
+				ClientResourceWrapper.getHttpURLConnection(reference.toString(),"GET",MediaType.APPLICATION_JAVA_OBJECT.toString());
 			connection.setFollowRedirects(true);
+			if (agent!=null) connection.setRequestProperty("User-Agent", agent);
+			if (cookies!=null)
+				connection.setRequestProperty("Cookie", cookies);
 			if (HttpURLConnection.HTTP_OK== connection.getResponseCode()) {
 				in = new ObjectInputStream(connection.getInputStream());
 				Object object = in.readObject();

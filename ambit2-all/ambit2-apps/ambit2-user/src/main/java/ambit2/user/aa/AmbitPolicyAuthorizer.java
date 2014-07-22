@@ -20,6 +20,12 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer {
 	 * the resources not in this list are publicly readable (GET) and require user login for POST 
 	 */
 	enum _resources {
+		feature {
+			@Override
+			boolean isProtected(Method method) {
+				return false;
+			}
+		},
 		algorithm,
 		dataset {
 			@Override
@@ -99,6 +105,7 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer {
 	
 	@Override
 	public boolean authorizeSpecialCases(Request request, Response response,List<String> uri) {
+		if ("riap".equals(request.getResourceRef().getScheme())) return true;
 		int depth = request.getResourceRef().getSegments().size();
 		if (depth==1) return true; //home page
 		if (depth > 2) depth = 3;
@@ -124,4 +131,11 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer {
 		return false;
 	}
 
+	@Override
+	public boolean authorize(Request request, Response response) {
+		boolean ok = super.authorize(request, response);
+		if (!ok)
+			System.out.println(ok + "\t"+request.getResourceRef());
+		return ok;
+	}
 }

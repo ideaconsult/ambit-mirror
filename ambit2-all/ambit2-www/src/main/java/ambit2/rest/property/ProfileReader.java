@@ -8,7 +8,9 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 
 import org.restlet.Context;
+import org.restlet.data.Cookie;
 import org.restlet.data.Reference;
+import org.restlet.util.Series;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
@@ -28,14 +30,27 @@ public class ProfileReader extends AbstractDBProcessor<Reference, Template> {
 	protected Reference applicationReference;
 	protected QueryTemplateReporter<IQueryRetrieval<Property>> reporter;
 	protected Context context;
+	protected StringBuilder cookies;
+	protected String agent;
 	
-	public ProfileReader(Reference applicationReference, Template profile,Context context) throws AmbitException {
+	public ProfileReader(Reference applicationReference, Template profile,Context context,
+				String token,
+				Series<Cookie> cookies,
+				String agent) throws AmbitException {
 		super();
 		setApplicationReference(applicationReference);
 		setProfile(profile==null?new Template():profile);
 		reporter = new QueryTemplateReporter<IQueryRetrieval<Property>>(getProfile());
 		reporter.setCloseConnection(false);
 		this.context = context;
+		if (cookies!=null) for (Cookie cookie : cookies) {
+			if (this.cookies==null) this.cookies=new StringBuilder();
+			else this.cookies.append(";");
+			this.cookies.append(cookie.getName());
+			this.cookies.append("=");
+			this.cookies.append(cookie.getValue());
+		}
+		this.agent=agent;
 	}
 	@Override
 	public void setConnection(Connection connection) throws DbAmbitException {
@@ -83,7 +98,8 @@ security.provider.certpath.SunCertPathBuilderException: unable to find valid cer
 		if (uri==null) return profile;
 		Object q;
 		try {
-			q = CallableQueryProcessor.getQueryObject(uri, applicationReference,context);
+			q = CallableQueryProcessor.getQueryObject(uri, 
+					applicationReference,context,cookies==null?null:cookies.toString(),agent);
 			if ((q!=null) && (q instanceof AbstractPropertyRetrieval)) {
 				
 				try {
