@@ -161,6 +161,16 @@ public class SLNParser
 				String atomExpression = extractAtomExpression();				
 				analyzeAtomExpression(atomExpression);
 				newAtom.atomExpression = curAtExp;
+				
+				//Transfer the id info from AtomExpression to SLNAtom object (this information is duplicated)
+				newAtom.atomID = newAtom.atomExpression.atomID;				
+				
+				//Check id for duplication:
+				SLNAtom prevIDAtom = getAtomByID(newAtom.atomID);
+				if (prevIDAtom != null)
+				{
+					newError("Duplicated atom id " + newAtom.atomID + ".", curChar,"");
+				}
 			}
 
 		if (curChar < nChars)
@@ -263,8 +273,8 @@ public class SLNParser
 				newError("Incorrect atom ID - too big",curChar,"");
 				return;
 			}
-
 		}
+		
 		//Handle all attributes and logical operations
 		while (pos < atomExpr.length())
 		{
@@ -834,26 +844,53 @@ public class SLNParser
 	void parseRingClosure()
 	{	
 		curChar++;
-		if (sln.charAt(curChar)==' ')			
+		
+		if (curChar >= nChars)
 		{
 			newError("Missing ring closure value " , curChar,"");
+			return;
 		}
-
-		curChar++;
-		getAtomByID();
-		curBond.atoms();
-		container.addBond(curBond);
+		
+		int id = -1;
+		if (Character.isDigit(sln.charAt(curChar)))			
+		{
+			int startPos = curChar;
+			while (curChar < nChars)
+			{
+				if (Character.isDigit(sln.charAt(curChar)))
+					curChar++;
+				else
+					break;
+			}
+			
+			String idString = sln.substring(startPos, curChar);
+			id = extractInteger(idString);
+		}
+		else
+		{	
+			newError("Missing ring closure value " , curChar,"");
+			return;
+		}			
+		
+		//System.out.println("@id = " + id);
+		
+		SLNAtom idAtom = getAtomByID(id);
+		if (idAtom == null)
+		{
+			newError("Incorrect ring closure value " +  id + ". No such atom id!" , curChar,"");
+			return;
+		}
+		
+		addBond(prevAtom, idAtom);
 	}
 
-	String getAtomByID()
+	SLNAtom getAtomByID(int id)
 	{
 		for (int i = 0; i < container.getAtomCount(); i++)
 		{
 			SLNAtom idAtom = (SLNAtom) container.getAtom(i);
-			if(!(idAtom.atomID == 0))
-				return idAtom.atomName;
-			else
-				newError("Missing atom ID value " , curChar,"");	
+			if(idAtom.atomID == id)
+				return idAtom;
 		}
 		return null;
 	}
