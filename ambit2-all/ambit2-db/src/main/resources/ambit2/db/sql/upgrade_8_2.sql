@@ -64,8 +64,8 @@ BEGIN
    SELECT idsasmap,threshold_dact,threshold_sim,id_srcdataset,idproperty,p.name,p.comments,p.units,d.name 
    from qsasheader join src_dataset d using(id_srcdataset) join properties p using(idproperty) where idsasmap=@idsasmap;   
    
+END$$
 
-END;
 DELIMITER ;
 
 insert into version (idmajor,idminor,comment) values (8,2,"AMBIT2 schema");
