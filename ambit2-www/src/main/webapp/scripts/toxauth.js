@@ -47,7 +47,12 @@ var jToxPolicy = (function () {
       self.rootElement.appendChild(jT.getTemplate('#jtox-policy'));
       self.settings.configuration.columns.policy.Id.sTitle = '';
       self.settings.configuration.columns.policy.Role.mRender = function (data, type, full) {
-        return type != 'display' ? (data || '') : '<select class="jt-inlineaction" data-data="role" value="' + (data || '') + '">' + self.roleOptions + '</select>';
+    	  var options= "";
+    	  $.each(self.roleOptions,function(index,object) {
+    		  options += "<option "+(object == data?"selected ":"")+">"+object+"</option>";
+    	  });
+          var sOut = type != 'display' ? (data || '') : '<select class="jt-inlineaction" data-data="role" value="' + (data || '') + '">' + options + '</select>';
+          return sOut;
       };
       
       var alerter = function (el, icon, task) {
@@ -184,10 +189,9 @@ var jToxPolicy = (function () {
           self.roles = roles;
           realLoader();
           if (!self.settings.noInterface) {
-            var optList = '';
+            self.roleOptions = [];
             for (var i = 0, rl = roles.roles.length; i < rl; ++i)
-              optList += '<option>' + roles.roles[i] + '</option>';
-            self.roleOptions = optList;
+            	self.roleOptions.push(roles.roles[i]);
           }
         }
       });
