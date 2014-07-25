@@ -25,13 +25,13 @@
     </site>
   </distributionManagement>
   <properties>
-  	<net.idea.loom.version>1.0.2-SNAPSHOT</net.idea.loom.version>
+  	<net.idea.loom.version>1.0.2</net.idea.loom.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <toxtree.version>2.6.7-SNAPSHOT</toxtree.version>
     <ambit.version>2.5.7-SNAPSHOT</ambit.version>
     <junit.version>4.8.1</junit.version>
     <!-- https://github.com/ideaconsult/i5 -->
-    <i5.version>0.0.7-SNAPSHOT</i5.version>
+    <i5.version>0.0.7</i5.version>
     <restnet.version>1.0.3-SNAPSHOT</restnet.version>
 	<dbunit.version>2.4.9</dbunit.version>
   </properties>
@@ -316,6 +316,7 @@
   <modules>
     <module>../ambit2-www</module>
     <module>../ambit2-dbi5</module>
+    <module>../ambit2-loom</module>
     <!--
     <module>../ambit2-ambitxt</module>    
     <module>../ambit2-taglibs</module>
@@ -344,12 +345,6 @@
     <dependency>
       <groupId>ambit</groupId>
       <artifactId>ambit2-mopac</artifactId>
-      <version>${ambit.version}</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>ambit2-loom</artifactId>
       <version>${ambit.version}</version>
       <type>jar</type>
     </dependency>
