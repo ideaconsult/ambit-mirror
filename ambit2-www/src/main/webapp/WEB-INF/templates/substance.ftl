@@ -24,7 +24,7 @@
 	    });
 	    
 		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/substance" title="Substances: Mono-constituent, multiconstituent, additives, impurities.">Substances</a></li>');
-	  	
+	  	jQuery("#breadCrumb").jBreadCrumb();
 	  	loadHelp("${ambit_root}","substance");
 	  	downloadForm("${ambit_request}");		
 	  		

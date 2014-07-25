@@ -63,7 +63,7 @@ $(document).ready(function() {
 		});
 	
 	/* event listener  */
-	   $('.modeltable tbody td .zoommodel img').live( 'click', function () {
+	   $('.modeltable tbody').live( 'click','td .zoommodel img', function () {
 		   try {
 		        var nTr = $(this).parents('tr')[0];
 		        if ( mTable.fnIsOpen(nTr) ) {

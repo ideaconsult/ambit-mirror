@@ -28,6 +28,7 @@ public class HelpResource extends CatalogResource<String>  {
 		predict,
 		query,
 		compound,
+		dataset,
 		algorithm,
 		model,
 		feature,

@@ -40,6 +40,7 @@ $(document).ready(function() {
 
 	jQuery("#breadCrumb ul").append('<li><a href="#" onClick="facet.searchStudy();">Search substances by study</a></li>');
 	jQuery("#submit").show();
+	jQuery("#breadCrumb").jBreadCrumb();
 
 });
 </script>

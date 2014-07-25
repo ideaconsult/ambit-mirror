@@ -24,6 +24,7 @@ $(document)
 			<#if qmapid??>
 			jQuery("#breadCrumb ul").append('<li><a href="${ambit_request}" title="Quantitative Structure-Activity-Similarity Maps (QMaps)">QMap${qmapid}</a></li>');
 			</#if>
+			jQuery("#breadCrumb").jBreadCrumb();
 		});
 </script>
 

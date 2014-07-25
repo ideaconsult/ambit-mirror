@@ -176,7 +176,7 @@ var substance = {
 			 	  "aaSorting": [[1, 'desc']]
 				});
 				
-		    	$(selector + ' tbody td .zoomstruc').live('click',function() {
+		    	$(selector + ' tbody').live('click','td .zoomstruc',function() {
 					var nTr = $(this).parents('tr')[0];
 					if (oTable.fnIsOpen(nTr)) {
 						$(this).removeClass("ui-icon-folder-open");
@@ -581,7 +581,7 @@ var substance = {
 			 	  "aaSorting": [[1, 'desc']]
 				});
 
-		    	$(selector + ' tbody td .zoomstruc').live('click',function() {
+		    	$(selector + ' tbody').live('click','td .zoomstruc',function() {
 					var nTr = $(this).parents('tr')[0];
 					if (oTable.fnIsOpen(nTr)) {
 						$(this).removeClass("ui-icon-folder-open");

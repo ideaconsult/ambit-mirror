@@ -1,6 +1,6 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl" >
 
 <link href="${ambit_root}/style/simspace.css" rel="stylesheet" type="text/css">
 <script type='text/javascript' src='${ambit_root}/scripts/d3.v3.min.js'></script>

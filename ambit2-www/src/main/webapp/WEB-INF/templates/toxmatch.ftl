@@ -20,6 +20,7 @@
 			jQuery("#breadCrumb ul").append('<li><a href="http://toxmatch.sourceforge.net/index.htm#background" title="Click for background and more information">ToxMatch: Chemical Landscape Analysis</a></li>');
 			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/qmap" title="Quantitative Structure-Activity-Similarity Maps (QMaps)">Browse QMaps</a></li>');
 			jQuery("#breadCrumb ul").append('<li><a href="${ambit_request}" title="Quantitative Structure-Activity-Similarity Maps (QMaps)">QMap</a></li>');
+			jQuery("#breadCrumb").jBreadCrumb();
 			
 	  	//	var oTable = qmap.defineMetadataTable("${ambit_root}","${ambit_request_json}",true);
 	  		var oTable = qmap.defineNodesTable("${ambit_root}","${ambit_request_json}",function(root,result,nodesTable){

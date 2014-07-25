@@ -324,7 +324,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 						}
 					});
 	
-	$('#structures tbody td .zoomstruc').live('click',
+	$('#structures tbody').on('click','td .zoomstruc',
 			function() {
 				var nTr = $(this).parents('tr')[0];
 				if (oTable.fnIsOpen(nTr)) {
