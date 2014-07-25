@@ -336,7 +336,6 @@
     <module>ambit2-sln</module>
     <module>ambit2-structure2name</module>
     <module>ambit2-groupcontribution</module>
-    <module>ambit2-loom</module>
   </modules>
   <distributionManagement>
     <!-- 
@@ -584,9 +583,8 @@
     <!-- cdk 1.4.10 is regular version, deployed to ambit repository; used since ambit 2.4.7-SNAPSHOT -->
     <!-- cdk 1.4.11 is regular version, deployed to ambit repository; used since ambit 2.4.7-SNAPSHOT -->
     <cdk.version>1.4.11</cdk.version>
-    <net.idea.loom.version>1.0.2-SNAPSHOT</net.idea.loom.version>
-    <restnet.version>1.0.3-SNAPSHOT</restnet.version>
-    <modbcum.version>1.0.1-SNAPSHOT</modbcum.version>
+    <restnet.version>1.0.3</restnet.version>
+    <modbcum.version>1.0.1</modbcum.version>
     <dbunit.version>2.4.9</dbunit.version>
     <rdf.jena.version>2.6.4</rdf.jena.version>
     <rdf.arq.version>2.8.8</rdf.arq.version>
