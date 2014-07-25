@@ -1,12 +1,5 @@
 
 <ul>
-<li class="ui-selectee">
-<a href="${ambit_root}/ui"><span class="ui-icon ui-icon-home" style="float: left; margin-right: .3em;"></span>Home</a>
-</li>
-
-<li class="ui-selectee">
-<a href="${ambit_root}/ui/_search"><span class="ui-icon ui-icon-search" style="float: left; margin-right: .3em;"></span>Structure search</a>
-</li>
 
 <li class="ui-selectee">
 	<a href="${ambit_root}/ui/query?option=similarity&amp;type=url&amp;pagesize=10&amp;threshold=0.75&amp;search=${ambit_request?url('UTF-8')}">

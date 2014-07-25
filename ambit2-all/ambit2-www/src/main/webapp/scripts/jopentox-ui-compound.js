@@ -212,8 +212,7 @@ $(document)
 								    }
 									});
 					
-					$('.compoundtable tbody td .zoomstruc img').live(
-							'click',
+					$('.compoundtable tbody').on('click','td .zoomstruc img',
 							function() {
 								var nTr = $(this).parents('tr')[0];
 								if (opentox.oTable.fnIsOpen(nTr)) {

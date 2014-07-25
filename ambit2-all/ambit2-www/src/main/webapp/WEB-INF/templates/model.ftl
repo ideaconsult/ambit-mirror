@@ -1,6 +1,6 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl" >
     
     <!-- smartmenus
 	================================================== -->
@@ -31,7 +31,7 @@
 	  	var oTable = defineModelTable("${ambit_root}","${ambit_request_json}");
 	  		/* event listener  */
 	    <!-- Details panel -->	
-		$('.modeltable tbody td .zoomstruc').live('click',function() {
+	    $('.modeltable tbody').on('click','td .zoomstruc',function() {
 					var nTr = $(this).parents('tr')[0];
 					if (oTable.fnIsOpen(nTr)) {
 						$(this).removeClass("ui-icon-folder-open");
@@ -64,6 +64,7 @@ $(document)
 					<#if modelid??>
 					jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/model/${modelid}" title="This model">M${modelid}</a></li>');
 					</#if>
+					jQuery("#breadCrumb").jBreadCrumb();
 				});
 </script>
 

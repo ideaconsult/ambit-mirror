@@ -1,11 +1,9 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl" >
 
 <#assign w=250/>
 <#assign h=250/>
-<script src="${ambit_root}/jquery/jquery.imagemapster.min.js" type="text/javascript"></script>
-<script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui-atoms.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jcompound.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
@@ -20,11 +18,18 @@ function atomNumber(num) {
 $(document)
 	.ready(function() {
 			$( "#tabs" ).tabs();
+			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/_search" title="AMBIT Structure search">Structure search</a></li>');
+			
 			var cmpURI = "${ambit_root}/compound/${cmpid}";
+			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/compound/${cmpid}" title="Compound.">Compound ${cmpid}</a></li>');			
 			<#if strucid??>
 				cmpURI = "${ambit_root}/compound/${cmpid}/conformer/${strucid}";
+				jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/compound/${cmpid}/conformer/${strucid}" title="Compound.">Structure ${strucid}</a></li>');
 			</#if>
 
+    		jQuery("#breadCrumb").jBreadCrumb();
+    		jQuery("#welcome").html("&nbsp;");
+    		
 			$.ajax({
 				  url: "${ambit_root}/query/compound/url/all?headless=true&media=text/html&search=" + encodeURIComponent(cmpURI),
 				  dataType:"html",
@@ -45,7 +50,8 @@ $(document)
 			
 			$('#structype_${cmpid}').load(cmpURI + '/comparison');
 			$('#consensus_${cmpid}').load(cmpURI + '/consensus');
-			loadHelp("${ambit_root}","algorithm");
+			loadHelp("${ambit_root}","about");
+
 			modelVarsAutocomplete(".modeluri","${ambit_root}/model",100);
 
 	 });
@@ -59,11 +65,6 @@ $(document)
 			$( "#selectable" ).selectable( "option", "distance", 18);
 	 });
 	 
-$(window).load(function() {
-	//get image/json only after the images are loaded; otherwise json may not have been generated!
-	var cmpURI_json = "${ambit_root}/compound/${cmpid}/imagejson";
-	createImageMap(cmpURI_json, '${cmpid}', '#i${cmpid}', '#m${cmpid}');
-});	 
 </script>
 
 </head>
@@ -72,45 +73,13 @@ $(window).load(function() {
 
 <div class="container" style="margin:0;padding:0;">
 
-<form method='GET' name='searchform' id='searchform' action='${ambit_root}/ui/query' style='padding:0;margin:0;'>
-<!-- banner -->
-<div class="row remove-bottom" id="header">
-	<#include "/toplinks.ftl">
-</div>
-<div class="row remove-bottom">
-		<#include "/logo.ftl">
-		<div class="thirteen columns remove-bottom" id="query">
-		<div class="ten columns alpha">
-			<div class="remove-bottom h3">
-					Chemical compound
-			</div>
-		    <div class='h6'><a href='${ambit_root}/compound/${cmpid}'>${ambit_root}/compound/${cmpid}</a></div>			
-		</div>
-		<div class="four columns omega">
-			<div class="remove-bottom h3">
-				&nbsp;
-			</div>
-		    <div class='h6'>
-		    	<input type='text'  id='search' name='search' value='' tabindex='1' >
-		    </div>			
-		</div>		
-		<div class="two columns omega">
-			<div class="remove-bottom h3">
-				&nbsp;
-			</div>
-		    <div class='h6'>
-		    	<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
-		    </div>			
-		</div>	
-		</div>
-</div>		
-<div class="row remove-bottom" >
-	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
-</div>
 
-</form>
+<!-- banner -->
+<#include "/banner_crumbs.ftl">
+
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/compound_menu.ftl">
+	<#include "/compound_menu.ftl">
+
 </div>
 
 <div class="thirteen columns remove-bottom" style="padding:0;" >

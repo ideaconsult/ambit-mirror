@@ -23,6 +23,7 @@
 	  		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/substance/${substanceUUID}" title="Substance">${substanceUUID}</a></li>');
 	  	</#if>	  	
 	  	jQuery("#breadCrumb ul").append('<li><a href="${ambit_request}" title="Composition.">Composition</a></li>');
+	  	jQuery("#breadCrumb").jBreadCrumb();
 	});
 	</script>
 </#if>
