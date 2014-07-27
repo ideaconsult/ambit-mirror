@@ -112,14 +112,32 @@ To skip the tests, use -DskipTests=true option
 ----------------------------------------------------------------------
 CHANGELOG
 
-AMBIT2 2.5.7-SNAPSHOT
+AMBIT2 2.5.8-SNAPSHOT
 Current version at trunk
+
+AMBIT2 2.5.7
+ambit2-db: Database schema 8.2
+ambit2-db: Mysql Connector/J 5.1.31
+ambit2-db: DBUnit 2.4.9
+ambit2-loom: moved as modeule of ambit2-apps
+ambit2-loom: loom 1.0.2 dependency
+ambit2-users: functional local user management with role-based policies, users db 2.2.
+ambit2-sln: updated SLN parser
+ambit2-groupcontribution: updated, under development
+ambit2-namestructure : OPSIN 1.6
+ambit2-dbsubstance: non IUCLID5 substance importers moved to a separate module
+all: refactored to use interfaces from modbcum-i package https://github.com/vedina/modbcum
+ambit2-www: more pages updated to use recent jQueryui and drop down menu
+ambit2-www: JS library (jsToxKit) updated 
+ambit2-www: updated query page
+ambit2-www: updated toxtree prediction page /ui/toxtree
+ambit2-www: /query/similarity & /query/smarts now support ?dataset_uri parameter
+ambit2-www: Substances by (multiple) endpoint search
 
 AMBIT2 2.5.6
 ambit2-www: Configurable drop down menus at the top
 ambit2-www: JS library (jsToxKit) updated 
 ambit2-www: Substances import via custom 12 line header CSV (as described in https://github.com/ideaconsult/Protein_Corona)
-ambit2-db: Database schema 8.2
 ambit2-db: Database schema 8.1
 ambit2-db: Substance studies serialization by OpenTox Dataset API (ARFF and JSON)
 
