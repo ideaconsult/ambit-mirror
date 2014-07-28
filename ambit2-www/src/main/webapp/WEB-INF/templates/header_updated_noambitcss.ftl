@@ -25,9 +25,9 @@
 	
 	<!-- JQuery
 	================================================== -->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-
+	<script src="${ambit_root}/jquery/jquery-1.10.2.js"></script>
+	<script src="${ambit_root}/jquery/jquery-ui-1.10.4.custom.min.js"></script>
+	
 	<script type="text/javascript" src="${ambit_root}/jquery/jquery.cookie.js"></script>
 	<script type='text/javascript' src='${ambit_root}/jquery/jquery.validate.min.js'></script>
 	<script type='text/javascript' charset='utf8' src='${ambit_root}/jquery/jquery.dataTables-1.9.4.min.js'></script>
