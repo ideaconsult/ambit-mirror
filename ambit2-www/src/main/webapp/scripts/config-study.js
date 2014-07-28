@@ -2573,6 +2573,34 @@ var config_study = {
                     "bVisible": false
                 }
             }
-        }
+        },
+        "UNKNOWN_TOXICITY_SECTION" : {
+            "effects": {
+                "text": {
+                    "bVisible": true
+                }
+            }       	
+        },
+        "UNKNOWN_TOXICITY_SECTION_SUMMARY" : {
+            "effects": {
+                "text": {
+                    "bVisible": true
+                }
+            }       	
+        },        
+        "CELL_VIABILITY_ASSAY_SECTION" : {
+            "effects": {
+                "text": {
+                    "bVisible": true
+                }
+            }         	
+        },
+        "PROTEIN_SMALLMOLECULE_INTERACTION_SECTION" : {
+            "effects": {
+                "text": {
+                    "bVisible": true
+                }
+            }         	
+        }        
     }
 }
