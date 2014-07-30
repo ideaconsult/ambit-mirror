@@ -28,6 +28,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.Protocol;
+import ambit2.base.json.JSONUtils;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.processors.CallableSubstanceI5Query;
@@ -269,6 +270,12 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 	            try {
 		            List<FileItem> items = upload.parseRequest(getRequest());
 					String token = getToken();
+					for (FileItem file : items) {
+						if (file.isFormField()) continue;
+						String ext = file.getName().toLowerCase();
+						if (ext.endsWith(".i5z") || ext.endsWith(".csv") || ext.endsWith(".rdf") ) {
+						} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Unsupported format "+ext);		
+					}	
 					CallableSubstanceImporter<String> callable = new CallableSubstanceImporter<String>(
 								items, 
 								"files[]",
@@ -276,7 +283,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 								getContext(),
 								new SubstanceURIReporter(getRequest().getRootRef(), null),
 								new DatasetURIReporter(getRequest().getRootRef(), null),
-								token,true); //assumes i5z split record!
+								token);
 					ITask<Reference,Object> task =  ((ITaskApplication)getApplication()).addTask(
 								"Substance import",
 								callable,
