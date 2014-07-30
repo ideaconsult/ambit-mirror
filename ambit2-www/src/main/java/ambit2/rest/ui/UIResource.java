@@ -260,8 +260,6 @@ public class UIResource extends FreeMarkerResource {
 					String ext = file.getName().toLowerCase();
 					if (ext.endsWith(".i5z") || ext.endsWith(".csv") || ext.endsWith(".rdf") ) {
 						String img = "i5z.png";
-						boolean splitRecord = false;
-						if (ext.endsWith(".i5z")) splitRecord = true;
 						if (ext.endsWith(".csv")) img = "csv64.png"; 
 						if (ext.endsWith(".rdf")) img = "rdf64.png";
 						try {
@@ -274,7 +272,7 @@ public class UIResource extends FreeMarkerResource {
 									getContext(),
 									new SubstanceURIReporter(getRequest().getRootRef(), null),
 									new DatasetURIReporter(getRequest().getRootRef(), null),
-									null,splitRecord);
+									null);
 							callable.setClearMeasurements(clearMeasurements);
 							callable.setQASettings(qa);
 							TaskResult result = callable.call();

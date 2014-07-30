@@ -60,7 +60,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 	private File file;
 	protected String fileDescription;
 	protected boolean clearMeasurements=true;
-	protected boolean splitRecord = true;
+	protected DBSubstanceWriter writer; 
 	
 	public boolean isClearMeasurements() {
 		return clearMeasurements;
@@ -96,13 +96,12 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 				Context context,
 				SubstanceURIReporter substanceReporter,
 				DatasetURIReporter datasetURIReporter,
-				USERID token,
-				boolean splitRecord) throws Exception {
+				USERID token) throws Exception {
 		super(applicationRootReference,null,  context,  token);
 		try { processForm(items, fileUploadField); } catch (Exception x) {}
 		this.substanceReporter = substanceReporter;
 		this.datasetURIReporter = datasetURIReporter;
-		this.splitRecord = splitRecord;
+
 	}
 	@Override
 	protected void processForm(Reference applicationRootReference, Form form) {
@@ -148,11 +147,14 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 					File file = ((FileInputState) target).getFile();
 					String ext = file.getName().toLowerCase();
 					if (ext.endsWith(FileInputState.extensions[FileInputState.I5Z_INDEX])) {
+						writer.setSplitRecord(true);
 						reader = new I5ZReader(file);
 						((I5ZReader)reader).setQASettings(getQASettings());
-					} else if (ext.endsWith(FileInputState.extensions[FileInputState.CSV_INDEX])) { 
+					} else if (ext.endsWith(FileInputState.extensions[FileInputState.CSV_INDEX])) {
+						writer.setSplitRecord(false);
 						reader = new ProteinCoronaSubstanceReader(new ProteinCoronaPaperReader(new FileReader(file)));
 					} else if (ext.endsWith(".rdf")) {
+						writer.setSplitRecord(false);
 						reader = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(file),"UTF-8"));
 					} else {
 						throw new AmbitException("Unsupported format "+file);
@@ -191,8 +193,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 		DBProcessorsChain chain = new DBProcessorsChain();
 		dataset = DBSubstanceWriter.datasetMeta();
 		importedRecord = new SubstanceRecord();
-		DBSubstanceWriter writer = new DBSubstanceWriter(dataset,importedRecord,clearMeasurements);
-		writer.setSplitRecord(splitRecord);
+		writer = new DBSubstanceWriter(dataset,importedRecord,clearMeasurements);
 		chain.add(writer);
 		return chain;
 	}
