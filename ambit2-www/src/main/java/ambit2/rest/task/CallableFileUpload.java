@@ -74,7 +74,7 @@ public abstract class CallableFileUpload implements Callable<Reference> {
                             	file.deleteOnExit();
                             }	
                             fi.write(file);
-                            processFile(file,description);
+                            processFile(fi.getName(),file,description);
                         }
                     }    
                     processProperties(properties);
@@ -99,6 +99,9 @@ public abstract class CallableFileUpload implements Callable<Reference> {
     	
 	}
 	protected void processFile(File file,String description) throws Exception { };
+	protected void processFile(String originalname,File file,String description) throws Exception { 
+		processFile(file,description);
+	};
 	protected void processProperties(Hashtable<String, String> properties) throws Exception { };
 	public abstract Reference createReference() ;
 	

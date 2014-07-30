@@ -5,8 +5,8 @@ import java.io.FileReader;
 import java.sql.Connection;
 
 import junit.framework.Assert;
-import net.idea.loom.nm.csv.ProteinCoronaPaperReader;
-import net.idea.loom.nm.csv.ProteinCoronaSubstanceReader;
+import net.idea.loom.nm.csv.CSV12Reader;
+import net.idea.loom.nm.csv.CSV12SubstanceReader;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;
@@ -32,9 +32,9 @@ public class ProteinCoronaPaperReaderTest  extends DbUnitTest {
 			LiteratureEntry entry = new LiteratureEntry("Protein Corona","http://dx.doi.org/10.1021/nn406018q");
     		entry.setType(_type.Dataset);
     		
-			ProteinCoronaPaperReader chemObjectReader = new ProteinCoronaPaperReader(new FileReader(
+			CSV12Reader chemObjectReader = new CSV12Reader(new FileReader(
 					new File("D:/src-ideaconsult/Protein_Corona/MergedSheets.csv")),entry,"PRCR-");
-			reader = new ProteinCoronaSubstanceReader(chemObjectReader);
+			reader = new CSV12SubstanceReader(chemObjectReader);
 			int r = 0;
 			while (reader.hasNext()) {
 				IStructureRecord mol = reader.nextRecord();
@@ -58,9 +58,9 @@ public class ProteinCoronaPaperReaderTest  extends DbUnitTest {
     		LiteratureEntry entry = new LiteratureEntry("Protein Corona","http://dx.doi.org/10.1021/nn406018q");
     		entry.setType(_type.Dataset);
     		
-    		ProteinCoronaPaperReader chemObjectReader = new ProteinCoronaPaperReader(new FileReader(
+    		CSV12Reader chemObjectReader = new CSV12Reader(new FileReader(
 					new File("D:/src-ideaconsult/Protein_Corona/MergedSheets.csv")),entry,"PRCR-");
-			parser = new ProteinCoronaSubstanceReader(chemObjectReader);
+			parser = new CSV12SubstanceReader(chemObjectReader);
 	        write(parser,c.getConnection(),new ReferenceSubstanceUUID(),false);
 	        
         } finally {
@@ -81,9 +81,9 @@ public class ProteinCoronaPaperReaderTest  extends DbUnitTest {
         	LiteratureEntry entry = new LiteratureEntry("ITS-2 lipid Training set","ITS-2 lipid TrainingSets Oct 1 2013_format 200514.csv");
     		entry.setType(_type.Dataset);
 
-    		ProteinCoronaPaperReader chemObjectReader = new ProteinCoronaPaperReader(new FileReader(
+    		CSV12Reader chemObjectReader = new CSV12Reader(new FileReader(
 					new File("D:/src-ideaconsult/LLNA/ITS-2 lipid TrainingSets Oct 1 2013_format 200514.csv")),entry,"LLNA-");
-			parser = new ProteinCoronaSubstanceReader(chemObjectReader);
+			parser = new CSV12SubstanceReader(chemObjectReader);
 	        write(parser,c.getConnection(),new ReferenceSubstanceUUID(),false);
 	        
         } finally {
