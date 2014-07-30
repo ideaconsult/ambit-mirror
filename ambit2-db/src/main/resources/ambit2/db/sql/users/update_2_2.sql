@@ -18,14 +18,14 @@ CREATE TABLE `policy` (
   KEY `delete` (`mdelete`),
   KEY `fk_resource` (`resource`),
   CONSTRAINT `fkrole1` FOREIGN KEY (`role_name`) REFERENCES `roles` (`role_name`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 insert into roles value("ambit_datasetmgr");
 insert into roles value("ambit_modeller");
 insert into roles value("ambit_model_user");
 
 delete from user_roles where role_name="ambit_curator";
-delete from roles where role_name="ambit_curator"
+delete from roles where role_name="ambit_curator";
 
 insert ignore into policy values(null,"ambit_admin","/ambit2","/admin",1,1,1,1,1);
 insert ignore into policy values(null,"ambit_admin","/ambit2","/user",1,1,1,1,1);
