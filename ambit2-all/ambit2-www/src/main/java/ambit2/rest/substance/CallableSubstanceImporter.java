@@ -13,8 +13,8 @@ import java.util.List;
 import net.idea.i5.io.I5ZReader;
 import net.idea.i5.io.IQASettings;
 import net.idea.i5.io.QASettings;
-import net.idea.loom.nm.csv.ProteinCoronaPaperReader;
-import net.idea.loom.nm.csv.ProteinCoronaSubstanceReader;
+import net.idea.loom.nm.csv.CSV12Reader;
+import net.idea.loom.nm.csv.CSV12SubstanceReader;
 import net.idea.loom.nm.nanowiki.NanoWikiRDFReader;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
@@ -27,6 +27,7 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.interfaces.IBatchStatistics;
@@ -57,6 +58,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 	protected DatasetURIReporter datasetURIReporter;
 	protected SubstanceRecord importedRecord;
 	protected SourceDataset dataset;
+	private String originalname;
 	private File file;
 	protected String fileDescription;
 	protected boolean clearMeasurements=true;
@@ -84,7 +86,8 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 	}
 
 	
-	protected void setFile(File file,String description) {
+	protected void setFile(String originalName,File file,String description) {
+		this.originalname = originalName;
 		this.file = file;
 		this.fileDescription = description;
 	}
@@ -118,7 +121,12 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 
 			@Override
 			protected void processFile(File file,String description) throws Exception {
-				setFile(file,description);
+				setFile(file.getName(),file,description);
+			}
+			@Override
+			protected void processFile(String originalname, File file,
+					String description) throws Exception {
+				setFile(originalname,file,description);
 			}
 			@Override
 			protected void processProperties(
@@ -152,7 +160,8 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 						((I5ZReader)reader).setQASettings(getQASettings());
 					} else if (ext.endsWith(FileInputState.extensions[FileInputState.CSV_INDEX])) {
 						writer.setSplitRecord(false);
-						reader = new ProteinCoronaSubstanceReader(new ProteinCoronaPaperReader(new FileReader(file)));
+						LiteratureEntry reference = new LiteratureEntry(originalname,originalname);
+						reader = new CSV12SubstanceReader(new CSV12Reader(new FileReader(file),reference,"FCSV-"));
 					} else if (ext.endsWith(".rdf")) {
 						writer.setSplitRecord(false);
 						reader = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(file),"UTF-8"));
