@@ -51,17 +51,28 @@ public class Calculator
 		case ATOMIC:
 			for (IAtom at : mol.atoms())
 			{
-				//TODO -- calcAtomGroup
+				IGroup group = calcAtomGroup(at, mol,  model);				
+				registerGroup(groups, group);
 			}
 			break;
 		case BOND_BASED:
 			//TODO
 			break;
+			
 		default:
 			break;
 		}
 		
 		return groups;
+	}
+	
+	public static void registerGroup(Map<IGroup,Integer> groups, IGroup group)
+	{
+		if (groups.containsKey(group))	
+			groups.put(group, groups.get(group) + 1);
+		
+		else
+			groups.put(group, new Integer(1));
 	}
 	
 	public static AtomGroup calcAtomGroup(IAtom a, IAtomContainer mol, GroupContributionModel model)
