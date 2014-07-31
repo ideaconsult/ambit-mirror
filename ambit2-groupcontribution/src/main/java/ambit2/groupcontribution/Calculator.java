@@ -5,9 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtom;
+
+
+
+import org.openscience.cdk.interfaces.IBond;
 
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
+import ambit2.groupcontribution.descriptors.ILocalDescriptor;
+import ambit2.groupcontribution.groups.BondGroup;
 import ambit2.groupcontribution.groups.IGroup;
+import ambit2.groupcontribution.groups.AtomGroup;
 
 
 public class Calculator 
@@ -38,9 +46,46 @@ public class Calculator
 	public static Map<IGroup,Integer> getGroupsCount(IAtomContainer mol, GroupContributionModel model)
 	{
 		Map<IGroup,Integer> groups = new HashMap<IGroup,Integer>();
-		//TODO
+		switch (model.getModelType())
+		{
+		case ATOMIC:
+			for (IAtom at : mol.atoms())
+			{
+				//TODO -- calcAtomGroup
+			}
+			break;
+		case BOND_BASED:
+			//TODO
+			break;
+		default:
+			break;
+		}
+		
 		return groups;
 	}
+	
+	public static AtomGroup calcAtomGroup(IAtom a, IAtomContainer mol, GroupContributionModel model)
+	{
+		AtomGroup atGrp = new AtomGroup();
+		StringBuffer des = new StringBuffer();
+		for (ILocalDescriptor ld : model.getLocalDescriptors())
+		{
+			int descrVal = ld.calcForAtom(a, mol);
+			des.append(ld.getDesignation(descrVal));
+		}
+		
+		atGrp.setAtomDesignation(des.toString());
+		return atGrp;
+	}
+	
+	public static BondGroup calcBondGroup(IBond b, IAtomContainer mol, GroupContributionModel model)
+	{
+		BondGroup boGrp = new BondGroup();
+		//TODO
+		return boGrp;
+	}
+	
+	
 	
 	public static Map<ICorrectionFactor,Integer> getCorrectionFactorsCount(IAtomContainer mol, GroupContributionModel model)
 	{
