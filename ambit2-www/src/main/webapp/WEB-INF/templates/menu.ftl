@@ -27,7 +27,7 @@
 
 
 <li class="ui-selectee">
-	<a href="${ambit_root}/substance?page=0&amp;pagesize=100">
+	<a href="${ambit_root}/substance?page=0&amp;pagesize=10">
 	<span class="ui-icon ui-icon-document" style="float: left; margin-right: .3em;"></span>Substances</a>
 </li> 
 

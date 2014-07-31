@@ -71,7 +71,40 @@ $(document)
 
 <#include "/chelp.ftl" >
 
-<div class='row add-bottom'>&nbsp;</div>
+	<div class='row add-bottom'>&nbsp;</div>
+
+		<div class="row half-bottom" >		
+			<div class='five columns alpha'>&nbsp;</div>
+			<div class='six columns omega chelp ' style="box-shadow: 3px 3px 7px #999;border: 1px solid #ccc;padding: 25px 25px 25px 25px;background-color: #fafafa;"> 
+			<span style='font-weight:bold;'>The open source chemoinformatic system AMBIT provides the following functions:</span>
+			<br/>
+			<ul>
+			<li><a href='${ambit_root}/ui/_search'>Search</a> for structure(s) and meta data</li>
+			<li>Assessment tools for read-across and category formation</li>
+			<li>Assessment tools for read-across and category formation</li>
+			<li>Prediction tools: <a href='${ambit_root}/ui/toxtree'>Cramer rules</a>, 
+			<a href='${ambit_root}/ui/toxtree'>Protein binding</a>,
+			<a href='${ambit_root}/ui/toxtree'>Carcinogenicity and mutagenicity</a>,
+			<a href='${ambit_root}/algorithm/pka'>pKa</a>,
+			<a href='${ambit_root}/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor'>Log Kow</a>, 
+			<a href='${ambit_root}/model'>etc.</a></li>
+			<li>Tools for data analysis: <a href='${ambit_root}/algorithm?type=Regression'>regression</a>,
+			<a href='${ambit_root}/algorithm?type=Classification'>classification</a>, 
+			<a href='${ambit_root}/algorithm?type=Clustering'>clustering</a>,
+			<a href='${ambit_root}/algorithm'>etc.</a>
+			</li>
+			<li>Meta data management: <a href='${ambit_root}/substance'>substances data</a>, flexible creation of dataset with chemical structures and properties by 
+			<a href='${ambit_root}/ui/uploadstruc'>import</a>,
+			<a href='${ambit_root}/dataset?page=0&pagesize=100'>etc.</a>, 
+			
+			</li>
+			<li>Data exchange: manual or automated (<a href='http://ambit.sourceforge.net/api.html'  class='qxternal'>OpenTox API</a> 
+			<a href='http://ambit.sourceforge.net/rest.html' class='qxternal'>REST</a> Web services)</li>
+			</ul>
+		
+			</div>
+		</div>		
+		
 <#include "/footer.ftl" >
 </div> <!-- container -->
 </body>

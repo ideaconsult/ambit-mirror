@@ -10,6 +10,6 @@
 		</ul>
 	</li>
 	<li ><a href="${ambit_root}/substanceowner">Substance owners</a></li>
-	<li><a href="${ambit_root}/query/study" title="Search all IUC substances with defined parameters hit list shows IUC substances composition and structure">Experiments</a></li>  
+ 
 	<li ><a href="${ambit_root}/admin/stats/experiment_endpoints">Endpoints</a></li>	  
 </ul>
