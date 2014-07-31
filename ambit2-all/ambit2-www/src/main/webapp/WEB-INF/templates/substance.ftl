@@ -23,7 +23,7 @@
 	          if ($(this).val() == typeToSelect ) $(this).attr("selected", "selected");
 	    });
 	    
-		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/substance" title="Substances: Mono-constituent, multiconstituent, additives, impurities.">Substances</a></li>');
+		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/substance" title="Substances: Mono-constituent, multiconstituent, additives, impurities.">Search substances by identifiers</a></li>');
 	  	jQuery("#breadCrumb").jBreadCrumb();
 	  	loadHelp("${ambit_root}","substance");
 	  	downloadForm("${ambit_request}");		

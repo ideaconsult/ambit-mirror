@@ -38,7 +38,7 @@ $(document).ready(function() {
 	
 	downloadForm("${ambit_request}");
 
-	jQuery("#breadCrumb ul").append('<li><a href="#" onClick="facet.searchStudy();">Search substances by study</a></li>');
+	jQuery("#breadCrumb ul").append('<li><a href="#" onClick="facet.searchStudy();">Search substances by endpoint data</a></li>');
 	jQuery("#submit").show();
 	jQuery("#breadCrumb").jBreadCrumb();
 

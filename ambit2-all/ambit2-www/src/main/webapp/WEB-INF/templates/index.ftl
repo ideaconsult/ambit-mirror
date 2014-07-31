@@ -35,26 +35,46 @@ $(document)
 		
 			<div class="fifteen columns remove-bottom" id="query">
 			<div class="alpha">
-				<div class="remove-bottom h3">
+				<div class="remove-bottom h2">
 						Welcome to AMBIT 
 				</div>
-			    <div class='h6'>Chemical structures database, properties prediction & machine learning with OpenTox REST web services API</div>			
+			    <div class='help'>Chemical structures database, properties prediction & machine learning with OpenTox REST web services API</div>			
 			</div>
 			</div>
 	</div>	
 		
-	<div class="row add-bottom">	
+	<div class="row add-bottom">&nbsp;</div>	
 	
-	<form action="${ambit_root}/ui/_search?option=auto" id="searchForm"  method="GET" >		
+	<div class="row add-bottom">
+		<form action="${ambit_root}/ui/_search?option=auto" id="searchForm"  method="GET" >	
+			<div class="fifteen columns remove-bottom" id="query">
+			<div class="alpha">
+				<div class="remove-bottom h4">
+						Simple search
+				</div>
+			    <div class='chelp'>Enter chemical name, identifiers, SMILES, InChI</div>			
+			</div>
+			</div>
+		<div class='row add-bottom'>
 	
-	<div class='row add-bottom'>
-		<input class='eight columns omega half-bottom' type="text" id='search' value='' name='search'>
-		<input class='three columns omega submit' type='submit' value='Search'>
-	</div>
-	</form>	
+			<input class='eight columns omega half-bottom' type="text" id='search' value='' name='search'>
+			<input class='three columns omega submit' type='submit' value='Search'>
+		</div>
+
+		<div class="fifteen columns remove-bottom" id="query">
+			<div class="alpha">
+			    <div class='chelp'>Advanced: 
+			    <a href='${ambit_root}/ui/_search'>Structure search</a> |
+			    <a href='${ambit_root}/substance'>Search substances by identifiers</a> |
+			    <a href='${ambit_root}/query/study'>Search substances by endpoint data</a> 
+			    
+			    </div>			
+		</div>
+		</div>		
+	</form>				
+	</div>	
+
 	
-	
-    </div>	
     
     
 

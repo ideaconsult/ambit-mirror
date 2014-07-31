@@ -23,7 +23,7 @@
 $(document)
 		.ready(
 				function() {
-					    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/_search" title="AMBIT Structure search">Structure search</a></li>');
+					    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/_search" title="AMBIT Structure search">Search structures and associated data</a></li>');
     					jQuery("#breadCrumb").jBreadCrumb();
     					jQuery("#welcome").html("&nbsp;");
     					loadHelp("${ambit_root}","search");
