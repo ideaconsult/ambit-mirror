@@ -11,8 +11,8 @@ import ambit2.groupcontribution.groups.IGroup;
 
 public class GroupContributionModel 
 {
-	enum Type {
-		ATOMIC, BOND_BASED, LARGE_GROUPS
+	public enum Type {
+		ATOMIC, BOND_BASED, LARGE_GROUPS, CORRECTION_FACTORS_ONLY
 	}
 	
 	
