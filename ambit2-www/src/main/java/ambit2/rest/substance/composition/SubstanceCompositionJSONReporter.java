@@ -105,6 +105,7 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 					"\n\t\"%s\": {\"URI\" : %s }," + 
 					"\n\t\"%s\": \t%s ," +
 					"\n\t\"%s\":%s," +
+					"\n\t\"%s\":%s," +
 					"\n\t\"%s\":%s," + 
 					"\n\t\"%s\":%s" + //metric
 					"\n}",
@@ -112,6 +113,7 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 					CompositionRelation.jsonFeature.component.jsonname(),
 					w.toString(),
 					CompositionRelation.jsonFeature.compositionUUID.jsonname(),JSONUtils.jsonQuote(item.getCompositionUUID()),
+					CompositionRelation.jsonFeature.name.jsonname(),JSONUtils.jsonQuote(item.getName()),
 					CompositionRelation.jsonFeature.relation.jsonname(),JSONUtils.jsonQuote(item.getRelationType().name()),
 					CompositionRelation.jsonFeature.proportion.jsonname(),item.getRelation().toJSON()
 					));
