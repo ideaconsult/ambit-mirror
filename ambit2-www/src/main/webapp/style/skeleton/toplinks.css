@@ -16,6 +16,14 @@ a.topLinks {
 	font-weight: normal !important;
 }
 
+#footer_logo {
+	background-color: white;
+	position: fixed;
+	height: 130x;
+	left: 5%;
+	bottom: 60px;
+}
+
 #footer {
 	position: fixed;
 	height: 40px;
