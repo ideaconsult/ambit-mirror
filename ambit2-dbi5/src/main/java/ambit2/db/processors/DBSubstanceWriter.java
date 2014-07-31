@@ -22,6 +22,7 @@ import ambit2.db.AbstractDBProcessor;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.substance.CreateSubstance;
 import ambit2.db.substance.ids.UpdateSubstanceIdentifiers;
+import ambit2.db.substance.relation.DeleteSubstanceRelation;
 import ambit2.db.substance.relation.UpdateSubstanceRelation;
 import ambit2.db.substance.study.DeleteEffectRecords;
 import ambit2.db.substance.study.DeleteStudy;
@@ -46,10 +47,20 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
     private DeleteEffectRecords deffr;
     private UpdateExecutor x;
     private DeleteStudy deleteStudy;
+    private DeleteSubstanceRelation deleteComposition;
     private RepositoryWriter writer;
     protected boolean clearMeasurements;
+    protected boolean clearComposition;
     
-    protected boolean splitRecord = true;
+    public boolean isClearComposition() {
+		return clearComposition;
+	}
+
+	public void setClearComposition(boolean clearComposition) {
+		this.clearComposition = clearComposition;
+	}
+
+	protected boolean splitRecord = true;
     
 	public boolean isSplitRecord() {
 		return splitRecord;
@@ -74,12 +85,13 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 		return writer.getDataset();
 	}
 
-	public DBSubstanceWriter(SourceDataset dataset,SubstanceRecord importedRecord,boolean clearMeasurements) {
+	public DBSubstanceWriter(SourceDataset dataset,SubstanceRecord importedRecord,boolean clearMeasurements, boolean clearComposition) {
 		super();
 	    q = new CreateSubstance();
 	    qids = new UpdateSubstanceIdentifiers();
 	    qr = new UpdateSubstanceRelation();
 	    deleteStudy = new DeleteStudy();
+	    deleteComposition = new DeleteSubstanceRelation();
 	    x = new UpdateExecutor();
 	    x.setCloseConnection(false);
 	    writer = new RepositoryWriter();
@@ -90,6 +102,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 		writer.setBuild2D(true);
 		this.importedRecord = importedRecord;
 		this.clearMeasurements = clearMeasurements;
+		this.clearComposition = clearComposition;
 	}
 	
 	public static SourceDataset datasetMeta() {
@@ -143,7 +156,15 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
      	x.process(qids);
  		importedRecord.setCompanyUUID(substance.getCompanyUUID());
  		importedRecord.setIdsubstance(substance.getIdsubstance());
-     	if (substance.getRelatedStructures()!=null)
+
+ 		if (clearComposition) try {
+ 			deleteComposition.setGroup(importedRecord);
+     		x.process(deleteComposition);
+ 		} catch (Exception x) {
+ 			x.printStackTrace();
+ 			logger.log(Level.WARNING,x.getMessage());
+ 		} 		
+     	if (substance.getRelatedStructures()!=null) {
          	for (CompositionRelation rel : substance.getRelatedStructures()) {
          		Object i5uuid = rel.getSecondStructure().getProperty(Property.getI5UUIDInstance());
 
@@ -154,6 +175,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
          		qr.setCompositionRelation(rel);
          		x.process(qr);
          	}
+     	} 	
      
      	if (clearMeasurements) try {
      		deleteStudy.setGroup(substance.getCompanyUUID());

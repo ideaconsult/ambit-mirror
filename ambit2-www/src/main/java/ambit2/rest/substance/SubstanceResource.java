@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.i5.io.IQASettings;
+import net.idea.i5.io.QASettings;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.restnet.i.task.ITask;
@@ -28,9 +30,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.Protocol;
-import ambit2.base.json.JSONUtils;
 import ambit2.base.relation.composition.CompositionRelation;
-import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.processors.CallableSubstanceI5Query;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.ImageReporter;
@@ -270,11 +270,50 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 	            try {
 		            List<FileItem> items = upload.parseRequest(getRequest());
 					String token = getToken();
+					QASettings qa = new QASettings();
+					qa.clear(); //sets enabled to false and clears all flags
+					boolean clearMeasurements = false;
+					boolean clearComposition = false;					
 					for (FileItem file : items) {
-						if (file.isFormField()) continue;
-						String ext = file.getName().toLowerCase();
-						if (ext.endsWith(".i5z") || ext.endsWith(".csv") || ext.endsWith(".rdf") ) {
-						} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Unsupported format "+ext);		
+						if (file.isFormField()) {
+							if ("qaenabled".equals(file.getFieldName())) try {
+								if ("on".equals(file.getString())) qa.setEnabled(true);
+								if ("yes".equals(file.getString())) qa.setEnabled(true);
+								if ("checked".equals(file.getString())) qa.setEnabled(true);
+							} catch (Exception x) {
+								qa.setEnabled(true);
+							} else if ("clearMeasurements".equals(file.getFieldName())) {
+								try {
+									clearMeasurements = false;
+									String cm = file.getString();
+									if ("on".equals(cm)) clearMeasurements = true;
+									else if ("yes".equals(cm)) clearMeasurements = true;
+									else if ("checked".equals(cm)) clearMeasurements = true;
+								} catch (Exception x) {
+									clearMeasurements = false;
+								}							
+							
+							} else if ("clearComposition".equals(file.getFieldName())) {
+								try {
+									clearComposition = false;
+									String cm = file.getString();
+									if ("on".equals(cm)) clearComposition = true;
+									else if ("yes".equals(cm)) clearComposition = true;
+									else if ("checked".equals(cm)) clearComposition = true;
+								} catch (Exception x) {
+									clearComposition = false;
+								}								
+							} else
+							for (IQASettings.qa_field f : IQASettings.qa_field.values()) 
+								if (f.name().equals(file.getFieldName())) try {
+									String value = file.getString("UTF-8");
+									f.addOption(qa, "null".equals(value)?null:value==null?null:value.toString());
+								} catch (Exception x) {}							
+						} else {
+							String ext = file.getName().toLowerCase();
+							if (ext.endsWith(".i5z") || ext.endsWith(".csv") || ext.endsWith(".rdf") ) {
+							} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Unsupported format "+ext);
+						}
 					}	
 					CallableSubstanceImporter<String> callable = new CallableSubstanceImporter<String>(
 								items, 
@@ -284,6 +323,9 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 								new SubstanceURIReporter(getRequest().getRootRef(), null),
 								new DatasetURIReporter(getRequest().getRootRef(), null),
 								token);
+					callable.setClearComposition(clearComposition);
+					callable.setClearMeasurements(clearMeasurements);
+					callable.setQASettings(qa);					
 					ITask<Reference,Object> task =  ((ITaskApplication)getApplication()).addTask(
 								"Substance import",
 								callable,

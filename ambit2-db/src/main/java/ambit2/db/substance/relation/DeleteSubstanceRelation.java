@@ -33,6 +33,7 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import ambit2.base.data.I5Utils;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.STRUCTURE_RELATION;
@@ -48,6 +49,8 @@ public class DeleteSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 
 
 	public static final String[] delete_sql = {"delete from substance_relation where idsubstance=? and idchemical=? and relation=?"};
+	
+	public static final String[] delete_composition = {"delete r from substance_relation r, substance s where s.idsubstance=r.idsubstance and s.prefix =? and hex(s.uuid) =?"};
 
 	public DeleteSubstanceRelation() {
 		this(null,null,null);
@@ -57,17 +60,27 @@ public class DeleteSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 	}
 	
 	public String[] getSQL() throws AmbitException {
-		return delete_sql;
+		if (getObject()!=null) 
+			return delete_sql;
+		else return delete_composition;
 	}
 	public void setID(int index, int id) {
 		
 	}
 	@Override
 	public List<QueryParam> getParameters(int index) throws AmbitException {
-		List<QueryParam> params1 = new ArrayList<QueryParam>();
-		params1.add(new QueryParam<Integer>(Integer.class, getGroup().getIdsubstance()));
-		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
-		params1.add(new QueryParam<String>(String.class, getRelation().name()));
-		return params1;
+		List<QueryParam> params = new ArrayList<QueryParam>();
+		
+		if (getObject()!=null) {
+			params.add(new QueryParam<Integer>(Integer.class, getGroup().getIdsubstance()));
+			params.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
+			params.add(new QueryParam<String>(String.class, getRelation().name()));
+		} else {
+			String[] uuid = new String[]{null,getGroup().getCompanyUUID()};
+			uuid = I5Utils.splitI5UUID(getGroup().getCompanyUUID());
+			params.add(new QueryParam<String>(String.class, uuid[0]));
+			params.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
+		}
+		return params;
 	}
 }
