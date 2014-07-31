@@ -62,6 +62,15 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 	private File file;
 	protected String fileDescription;
 	protected boolean clearMeasurements=true;
+	protected boolean clearComposition=true;
+	
+	public boolean isClearComposition() {
+		return clearComposition;
+	}
+	public void setClearComposition(boolean clearComposition) {
+		this.clearComposition = clearComposition;
+	}
+
 	protected DBSubstanceWriter writer; 
 	
 	public boolean isClearMeasurements() {
@@ -202,7 +211,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 		DBProcessorsChain chain = new DBProcessorsChain();
 		dataset = DBSubstanceWriter.datasetMeta();
 		importedRecord = new SubstanceRecord();
-		writer = new DBSubstanceWriter(dataset,importedRecord,clearMeasurements);
+		writer = new DBSubstanceWriter(dataset,importedRecord,clearMeasurements,clearComposition);
 		chain.add(writer);
 		return chain;
 	}

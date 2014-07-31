@@ -163,7 +163,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 	}
 	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key, boolean splitRecord) throws Exception  {
 		
-		DBSubstanceWriter writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord(),true);
+		DBSubstanceWriter writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord(),true,true);
 		writer.setSplitRecord(splitRecord);
 		writer.setConnection(connection);
         writer.open();

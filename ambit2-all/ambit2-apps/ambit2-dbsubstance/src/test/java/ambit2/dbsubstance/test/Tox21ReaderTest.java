@@ -35,6 +35,7 @@ public class Tox21ReaderTest extends DbUnitTest {
 			if (files[i].getName().endsWith(".csv")) {
 				System.out.println(files[i].getAbsolutePath());
 				c = getConnection();
+				Connection conn = c.getConnection();
 		        Tox21SubstanceReader parser = null;
 		        try {
 		    		LiteratureEntry entry = new LiteratureEntry("Tox21","???");
@@ -43,12 +44,12 @@ public class Tox21ReaderTest extends DbUnitTest {
 		    		parser = new Tox21SubstanceReader(
 		    				files[i]
 		    				);
-			        write(parser,c.getConnection(),new ReferenceSubstanceUUID(),false,5);
+			        write(parser,conn,new ReferenceSubstanceUUID(),false,2);
 		        } catch (Exception x) {
 		        	x.printStackTrace();
 		        } finally {
 		        	parser.close();
-		        	if (c!=null) c.close();	
+		        	conn.close();
 		        }
 			}
 	}
@@ -62,7 +63,7 @@ public class Tox21ReaderTest extends DbUnitTest {
 		dataset.setrightsHolder(null);
 		
 		
-		DBSubstanceWriter writer = new DBSubstanceWriter(dataset,new SubstanceRecord(),false);
+		DBSubstanceWriter writer = new DBSubstanceWriter(dataset,new SubstanceRecord(),false,false);
 		writer.setCloseConnection(false);
 		writer.setSplitRecord(splitRecord);
 		writer.setConnection(connection);

@@ -102,7 +102,7 @@ public class ProteinCoronaPaperReaderTest  extends DbUnitTest {
 		dataset.setrightsHolder(null);
 		
 		
-		DBSubstanceWriter writer = new DBSubstanceWriter(dataset,new SubstanceRecord(),true);
+		DBSubstanceWriter writer = new DBSubstanceWriter(dataset,new SubstanceRecord(),true,true);
 		writer.setSplitRecord(splitRecord);
 		writer.setConnection(connection);
         writer.open();

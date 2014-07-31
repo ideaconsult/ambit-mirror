@@ -223,7 +223,8 @@ public class UIResource extends FreeMarkerResource {
 				String delimiter = "";
 				QASettings qa = new QASettings();
 				qa.clear(); //sets enabled to false and clears all flags
-				boolean clearMeasurements = true;
+				boolean clearMeasurements = false;
+				boolean clearComposition = false;
 				for (FileItem file : items) if (file.isFormField()) {
 					if ("qaenabled".equals(file.getFieldName())) try {
 						if ("on".equals(file.getString())) qa.setEnabled(true);
@@ -234,12 +235,24 @@ public class UIResource extends FreeMarkerResource {
 					} else if ("clearMeasurements".equals(file.getFieldName())) {
 						try {
 							clearMeasurements = false;
-							if ("on".equals(file.getString())) clearMeasurements = true;
-							else if ("yes".equals(file.getString())) clearMeasurements = true;
-							else if ("checked".equals(file.getString())) clearMeasurements = true;
+							String cm = file.getString();
+							if ("on".equals(cm)) clearMeasurements = true;
+							else if ("yes".equals(cm)) clearMeasurements = true;
+							else if ("checked".equals(cm)) clearMeasurements = true;
 						} catch (Exception x) {
-							clearMeasurements = true;
+							clearMeasurements = false;
 						}							
+					
+					} else if ("clearComposition".equals(file.getFieldName())) {
+						try {
+							clearComposition = false;
+							String cm = file.getString();
+							if ("on".equals(cm)) clearComposition = true;
+							else if ("yes".equals(cm)) clearComposition = true;
+							else if ("checked".equals(cm)) clearComposition = true;
+						} catch (Exception x) {
+							clearComposition = false;
+						}								
 					} else
 					for (IQASettings.qa_field f : IQASettings.qa_field.values()) 
 						if (f.name().equals(file.getFieldName())) try {
@@ -273,6 +286,7 @@ public class UIResource extends FreeMarkerResource {
 									new SubstanceURIReporter(getRequest().getRootRef(), null),
 									new DatasetURIReporter(getRequest().getRootRef(), null),
 									null);
+							callable.setClearComposition(clearComposition);
 							callable.setClearMeasurements(clearMeasurements);
 							callable.setQASettings(qa);
 							TaskResult result = callable.call();
