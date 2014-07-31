@@ -11,4 +11,7 @@ public interface IStructureRelation<RELATION_TYPE,RELATION_METRIC,FIRSTSTRUC ext
 	SECONDSTRUC getSecondStructure();
 	void setFirstStructure(FIRSTSTRUC struc);
 	void setSecondStructure(SECONDSTRUC struc);
+	public String getName();
+	public void setName(String name);
+
 }

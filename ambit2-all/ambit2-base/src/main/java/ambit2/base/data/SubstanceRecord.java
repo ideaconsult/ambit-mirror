@@ -6,6 +6,7 @@ import java.util.List;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.substance.ExternalIdentifier;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRelation;
 import ambit2.base.json.JSONUtils;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
@@ -105,12 +106,13 @@ public class SubstanceRecord extends StructureRecord {
 		if (relatedStructures==null) relatedStructures = new ArrayList<CompositionRelation>();
 		relatedStructures.add(relation);
 	}
-	public void addStructureRelation(String compositionUUID,IStructureRecord record, STRUCTURE_RELATION relation, Proportion value) {
+	public IStructureRelation addStructureRelation(String compositionUUID,IStructureRecord record, STRUCTURE_RELATION relation, Proportion value) {
 		if (relatedStructures==null) relatedStructures = new ArrayList<CompositionRelation>();
 		CompositionRelation r = new CompositionRelation(this,record,value);
 		r.setCompositionUUID(compositionUUID);
 		r.setRelationType(relation);
 		relatedStructures.add(r);
+		return r;
 	}	
 	
 	public int getIdsubstance() {
