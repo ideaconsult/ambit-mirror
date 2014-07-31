@@ -21,7 +21,16 @@ public class AbstractRelation<RELATION_TYPE,RELATION_METRIC extends Serializable
 	private SECONDSTRUC structure2;
 	private RELATION_METRIC relation;
 	private RELATION_TYPE relationType;
+	protected String name;
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public AbstractRelation(FIRSTSTRUC structure1,SECONDSTRUC structure2, RELATION_METRIC relation) {
 		super();
 		setFirstStructure(structure1);
