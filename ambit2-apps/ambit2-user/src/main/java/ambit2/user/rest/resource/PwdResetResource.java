@@ -62,6 +62,10 @@ public class PwdResetResource<T> extends MyAccountResource<T> {
 				getClientInfo().getUser().getIdentifier().equals(item.getUserName())
 				) {
 				String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
+				boolean enableEmailVerification  = true;
+				try {
+					enableEmailVerification = Boolean.parseBoolean(getContext().getParameters().getFirstValue(AMBITConfig.enableEmailVerification.name()));
+				} catch (Exception x) {}
 
 				UserURIReporter reporter = new UserURIReporter(getRequest(),"");
 				DBConnection dbc = new DBConnection(getApplication().getContext(),getConfigFile());
@@ -75,6 +79,7 @@ public class PwdResetResource<T> extends MyAccountResource<T> {
 							conn,
 							getToken(),
 							true,
+							enableEmailVerification,
 							usersdbname==null?getDefaultUsersDB():usersdbname
 							);
 			} 
