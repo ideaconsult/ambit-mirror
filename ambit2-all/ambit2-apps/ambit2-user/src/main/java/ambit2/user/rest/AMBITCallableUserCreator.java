@@ -22,8 +22,9 @@ public class AMBITCallableUserCreator extends CallableUserCreator {
 						Connection connection,
 						String token,
 						boolean passwordChange,
+						boolean enableEmailVerification,
 						String usersdbname)  {
-		super(method,item,reporter, input,baseReference, connection,token,passwordChange,usersdbname);
+		super(method,item,reporter, input,baseReference, connection,token,passwordChange,enableEmailVerification,usersdbname);
 		subject = "AMBIT User Confirmation";
 	}
 

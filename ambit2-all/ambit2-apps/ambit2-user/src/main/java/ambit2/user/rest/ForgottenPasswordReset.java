@@ -27,8 +27,8 @@ public class ForgottenPasswordReset extends
 	@Override
 	public String[] getSQL() throws AmbitException {
 		return new String[] { String
-				.format("update %s.user_registration r, users x set r.code=?,r.created=now() where r.user_name=x.user_name and r.status='confirmed' and x.user_name=? and x.email=?",
-						getDatabaseName()) };
+				.format("update %s.user_registration r, %s.user x set r.code=?,r.created=now() where r.user_name=x.username and r.status='confirmed' and x.username=? and x.email=?",
+						getDatabaseName(),getDatabaseName()) };
 	}
 
 	@Override

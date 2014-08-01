@@ -109,11 +109,17 @@ public class RegistrationResource extends CatalogResource<DBUser> {
 		Connection conn = null;
 		try {
 			String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
+			boolean enableEmailVerification  = true;
+			try {
+				enableEmailVerification = Boolean.parseBoolean(getContext().getParameters().getFirstValue(AMBITConfig.enableEmailVerification.name()));
+			} catch (Exception x) {}
+			
 			UserURIReporter reporter = new UserURIReporter(getRequest(),"");
 			DBConnection dbc = new DBConnection(getApplication().getContext(),getConfigFile());
 			conn = dbc.getConnection();
 			return new AMBITCallableUserCreator(method,item,reporter, form,getRequest().getRootRef().toString(),
-					conn,getToken(),false,usersdbname==null?getDefaultUsersDB():usersdbname);
+					conn,getToken(),false,
+					enableEmailVerification,usersdbname==null?getDefaultUsersDB():usersdbname);
 		} catch (Exception x) {
 			try { conn.close(); } catch (Exception xx) {}
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);

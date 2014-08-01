@@ -15,5 +15,6 @@ public enum AMBITConfig {
 	secret,
 	sessiontimeout,
 	ambit_reg_confirmed,
-	menu_profile
+	menu_profile,
+	enableEmailVerification
 }

@@ -32,8 +32,9 @@ public class CallablePasswordReset extends AMBITCallableUserCreator implements I
 						String baseReference,
 						Connection connection,
 						String token,
+						boolean enableEmailVerification,
 						String usersdbname)  {
-		super(method,null,reporter, input,baseReference, connection,token,true,usersdbname);
+		super(method,null,reporter, input,baseReference, connection,token,true,enableEmailVerification,usersdbname);
 		subject = "AMBIT password reset";
 		this.registration = reg;
 		emailContent = 

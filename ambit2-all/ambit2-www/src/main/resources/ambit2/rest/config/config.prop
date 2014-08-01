@@ -45,3 +45,4 @@ mail.host=${notification.mail.host}
 mail.user=${notification.mail.user}
 mail.password=${notification.mail.password}
 notification.admin.email=${notification.admin.email}
+enableEmailVerification=${enableEmailVerification}
