@@ -629,6 +629,37 @@ function renderModel(entry,root,err) {
 	
 }
 
+function loadDatasetMeta(root,url,deleteVisible) {
+		
+    $.ajax({
+        url: url + "?media=application/json",
+        dataType: "json",
+        data: {
+          media:"application/json"	            	
+        },
+        success: function( data ) {
+        	$.each(data.dataset,function(index,value) {
+
+        		$("#title").val(value.title);
+        		$("#rightsHolder").val(value.rightsHolder);
+
+        		$("#license_type").text(value.rights.type);
+        		$("#seealso").text(value.seeAlso);
+        		if ((value.source != null) && (value.source.indexOf('http')==0))
+        			$("#source").html("<a href='"+value.source+"'>"+value.source+"</a>");
+        		else	
+        			$("#source").text(value.source);
+        		
+        		$("#license").val(value.rights.URI);
+        		 $('[name=licenseOptions] option').filter(function() { 
+        		        return ($(this).val() == value.rights.URI); 
+        		    }).prop('selected', true);
+        	});
+        	
+        }
+      });
+}
+
 function defineDatasetsTable(root,url,deleteVisible) {
 	var oTable = $('.datasetstable').dataTable( {
 	"sAjaxDataProp" : "dataset",

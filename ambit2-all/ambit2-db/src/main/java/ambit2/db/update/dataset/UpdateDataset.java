@@ -39,15 +39,15 @@ import ambit2.db.update.AbstractObjectUpdate;
 
 public class UpdateDataset extends AbstractObjectUpdate<SourceDataset> {
 	public static final String MSG_EMPTY = "No name, license or rightsHolder to update!";
-	public static final String update_sql = 
+	private static final String update_sql = 
 
 		"update src_dataset set %s, user_name=SUBSTRING_INDEX(user(),'@',1) where id_srcdataset=?"
 	;
-	public static final String _license = "licenseURI=?";
+	private static final String _license = "licenseURI=?";
 	
-	public static final String _name = "name=?";
+	private static final String _name = "name=?";
 	
-	public static final String _rightsHolder = "rightsHolder=?";
+	private static final String _rightsHolder = "rightsHolder=?";
 	
 	public UpdateDataset(SourceDataset dataset) {
 		super(dataset);
