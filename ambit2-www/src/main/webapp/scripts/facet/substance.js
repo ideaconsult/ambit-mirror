@@ -8,14 +8,12 @@ var facet = {
 				var item = {};
 				item['name']  = $(value).attr('name');
 				item['value'] = $(value).attr('value');
-				
-				console.log($("#endpoint."+item['value']));
 				params.push(item);
 			});
 			if (this.substanceComponent != undefined && this.substanceComponent!= null)  {
 				var substanceQuery =  this.root + '/substance?' + jQuery.param(params);
-				console.log(substanceQuery);
 				this.substanceComponent.querySubstance(substanceQuery);
+				$("#hits").show();
 			}	
 			if (event!=null) event.preventDefault();
 		},
