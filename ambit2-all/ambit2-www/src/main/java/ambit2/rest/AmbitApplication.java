@@ -144,7 +144,6 @@ import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.task.TaskStorage;
 import ambit2.rest.task.WarmupTask;
-import ambit2.rest.template.OntologyResource;
 import ambit2.rest.ui.UIResource;
 import ambit2.user.aa.AMBITLoginFormResource;
 import ambit2.user.aa.AMBITLoginPOSTResource;
@@ -200,6 +199,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String attachSubstance = "attach.substance";
 	static final String attachToxmatch = "attach.toxmatch";
 	static final String config_changeLineSeparators = "changeLineSeparators";
+	static final String googleAnalytics = "google.analytics";
 	
 	protected boolean standalone = false;
 	protected boolean openToxAAEnabled = false;
@@ -208,7 +208,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected boolean warmupEnabled = false;
 	protected boolean changeLineSeparators = false; 
 
-	
+
 	public boolean isChangeLineSeparators() {
 		return changeLineSeparators;
 	}
@@ -225,6 +225,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		changeLineSeparators = getConfigChangeLineSeparator();
 		versionShort = readVersionShort();
 		versionLong = readVersionLong();
+		gaCode = readGACode();
 		setProfile(getMenuProfile());
 		
 		setName("AMBIT REST services");
@@ -1066,6 +1067,13 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			String v3 = getProperty(version_timestamp,ambitProperties);
 			return String.format("%s r%s built %s",v1,v2,new Date(Long.parseLong(v3)));
 		} catch (Exception x) {return "Unknown"; }
+	}
+	public synchronized String readGACode()  {
+		try {
+			String ga = getProperty(googleAnalytics,ambitProperties);
+			if ("".equals(ga)) return null;
+			return ga;
+		} catch (Exception x) {return null; }
 	}
 	protected synchronized String getAllowedOrigins()  {
 		try {

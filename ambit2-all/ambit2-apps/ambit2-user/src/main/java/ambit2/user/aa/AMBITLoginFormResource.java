@@ -72,6 +72,7 @@ public class AMBITLoginFormResource extends UserLoginFormResource<User> {
 		        	map.put(AMBITConfig.ambit_version_short.name(),((IFreeMarkerApplication)getApplication()).getVersionShort());
 			    	map.put(AMBITConfig.ambit_version_long.name(),((IFreeMarkerApplication)getApplication()).getVersionLong());
 		        } catch (Exception x) {}
+		        map.put(AMBITConfig.googleAnalytics.name(),((IFreeMarkerApplication)getApplication()).getGACode());
 			    map.put(AMBITConfig.creator.name(),"IdeaConsult Ltd.");
 			    map.put(AMBITConfig.ambit_root.name(),getRequest().getRootRef().toString());
 

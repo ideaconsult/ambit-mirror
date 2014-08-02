@@ -85,3 +85,4 @@
 	});
  </script>
  -->
+ <#include "/ga.ftl" >

@@ -83,6 +83,7 @@ public abstract class AmbitDBQueryResource<Q extends IQueryRetrieval<T>,T extend
 	        try {
 	        	map.put(AMBITConfig.ambit_version_short.name(),((IFreeMarkerApplication)getApplication()).getVersionShort());
 		    	map.put(AMBITConfig.ambit_version_long.name(),((IFreeMarkerApplication)getApplication()).getVersionLong());
+		    	map.put(AMBITConfig.googleAnalytics.name(),((IFreeMarkerApplication)getApplication()).getGACode());
 		    	map.put(AMBITConfig.menu_profile.name(),((IFreeMarkerApplication)getApplication()).getProfile());
 	        } catch (Exception x) {}
 		    
