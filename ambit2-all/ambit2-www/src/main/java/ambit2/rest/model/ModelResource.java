@@ -35,7 +35,6 @@ import ambit2.rest.DBConnection;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
-import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
@@ -117,10 +116,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
 	String filenamePrefix = getRequest().getResourceRef().getPath();		
-	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-		return new OutputWriterConvertor(
-				new ModelHTMLReporter(getRequest(),_dmode,getDocumentation()),MediaType.TEXT_HTML);
-	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
+	if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()) {
 			@Override
 			public Object processItem(ModelQueryResults dataset) throws AmbitException  {
@@ -171,8 +167,8 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		return new ImageConvertor<ModelQueryResults, IQueryRetrieval<ModelQueryResults>>(
 				new ModelImageReporter(getRequest(), getResourceRef(getRequest()).getQueryAsForm(), d,getDocumentation()),variant.getMediaType());			
 	} else//html
-		return new OutputWriterConvertor(
-				new ModelHTMLReporter(getRequest(),_dmode,getDocumentation()),MediaType.TEXT_HTML);
+		return new StringConvertor(	new ModelJSONReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),null),
+				MediaType.APPLICATION_JSON);	
 	}
 	
 	@Override
