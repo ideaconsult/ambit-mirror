@@ -39,6 +39,7 @@ $(document).ready(function() {
 	downloadForm("${ambit_request}");
 
 	jQuery("#breadCrumb ul").append('<li><a href="#" onClick="facet.searchStudy();">Search substances by endpoint data</a></li>');
+	jQuery("#breadCrumb ul").append('<li id="hits" style="display:none"><a href="#" onClick="facet.searchStudy();">Hit list</a></li>');
 	jQuery("#submit").show();
 	jQuery("#breadCrumb").jBreadCrumb();
 
@@ -105,10 +106,10 @@ $(document).ready(function() {
  		
 		<!-- Page Content
 		================================================== -->
-		<div class="jtox-toolkit" data-kit="substance" data-manual-init="true"></div>
+		<div class="jtox-toolkit" data-kit="substance" data-manual-init="true" data-on-error="errorHandler" ></div>
   	<div class="jtox-template">
 <!--[[ jT.templates['all-substance'] -->
-	  <div id="jtox-substance" class="jtox-substance" data-show-diagrams="true">
+	  <div id="jtox-substance" class="jtox-substance" data-show-diagrams="true" data-on-error="errorHandler" >
 	    <div class="jtox-controls">
 	      Showing from <span class="data-field from-field" data-field="pagestart"> ? </span> to <span class="data-field" data-field="pageend"> ? </span> in pages of <select class="data-field" data-field="pagesize">
           <option value="10" selected="yes">10</option>
