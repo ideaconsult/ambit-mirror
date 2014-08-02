@@ -26,13 +26,14 @@ public class Calculator
 		double modelValue = 0.0;
 		
 		//Group contributions
-		Map<IGroup,Integer> groups = getGroupsCount(mol, model);			
+		Map<String,Integer> groups = getGroupsCount(mol, model);			
 		Map<String, IGroup> modelGroups = model.getGroups(); 		
-		for (Map.Entry<IGroup,Integer> entry : groups.entrySet())
+		
+		for (Map.Entry<String,Integer> entry : groups.entrySet())
 		{
-			IGroup group = entry.getKey();
-			if (modelGroups.containsKey(group.getDesignation()));
-				modelValue += group.getContribution() * entry.getValue(); 
+			String grpDes = entry.getKey();
+			if (modelGroups.containsKey(grpDes));
+				modelValue += modelGroups.get(grpDes).getContribution() * entry.getValue(); 
 		}
 		
 		//Correction factors
@@ -43,9 +44,9 @@ public class Calculator
 		return modelValue;
 	}	
 	
-	public static Map<IGroup,Integer> getGroupsCount(IAtomContainer mol, GroupContributionModel model)
+	public static Map<String,Integer> getGroupsCount(IAtomContainer mol, GroupContributionModel model)
 	{
-		Map<IGroup,Integer> groups = new HashMap<IGroup,Integer>();
+		Map<String,Integer> groups = new HashMap<String,Integer>();
 		switch (model.getModelType())
 		{
 		case ATOMIC:
@@ -66,13 +67,14 @@ public class Calculator
 		return groups;
 	}
 	
-	public static void registerGroup(Map<IGroup,Integer> groups, IGroup group)
+	public static void registerGroup(Map<String,Integer> groups, IGroup group)
 	{
-		if (groups.containsKey(group))	
-			groups.put(group, groups.get(group) + 1);
+		String grpDes = group.getDesignation(); 
+		if (groups.containsKey(grpDes))	
+			groups.put(grpDes, groups.get(grpDes) + 1);
 		
 		else
-			groups.put(group, new Integer(1));
+			groups.put(grpDes, new Integer(1));
 	}
 	
 	public static AtomGroup calcAtomGroup(IAtom a, IAtomContainer mol, GroupContributionModel model)
