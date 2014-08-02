@@ -5,23 +5,24 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 
-<#if algid??>
-	<script type='text/javascript'>
-		var algorithm = readDataset("${ambit_root}","${ambit_request_json}");
-	</script>
-<#else>
-	<script type='text/javascript'>
+<script type='text/javascript'>
 	
 	$(document).ready(function() {
 		loadHelp("${ambit_root}","dataset");
 		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/dataset" title="Datasets">Datasets</a></li>');
-		jQuery("#breadCrumb").jBreadCrumb();
-		jQuery("#welcome").text("Dataseta");
+
 		downloadForm("${ambit_request}");
-	  	var oTable = defineDatasetsTable("${ambit_root}","${ambit_request_json}",true);
+		<#if datasetid??>
+			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/_dataset?dataset_uri=${ambit_root}/dataset/${datasetid}" title="${ambit_root}/dataset/${datasetid}">/dataset/${datasetid}</a></li>');
+			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/dataset/${datasetid}/metadata" title="${ambit_root}/dataset/${datasetid}/metadata">Metadata</a></li>');
+			loadDatasetMeta("${ambit_root}","${ambit_root}/dataset/${datasetid}/metadata",true);
+		<#else>
+	  		var oTable = defineDatasetsTable("${ambit_root}","${ambit_request_json}",true);
+	  	</#if>
+		jQuery("#breadCrumb").jBreadCrumb();
+		jQuery("#welcome").text("Dataset");	  	
 	});
-	</script>
-</#if>
+</script>
 
 
 </head>
@@ -75,21 +76,21 @@
 
 <div class="thirteen columns remove-bottom" style="padding:0;" >
 
- 		<div class="row remove-bottom ui-widget-header ui-corner-top">
- 		&nbsp;
- 		</div>
-
 		<!-- Page Content
 		================================================== -->
 		<#if datasetid??>
 		<div class="row" style="padding:0;" >			
-			<div class="ui-widget-header ui-corner-top">Dataset at <a href='${ambit_root}/dataset/${datasetid}'>${ambit_root}/dataset/${datasetid}</a></div>
-			<div class="ui-widget-content ui-corner-bottom">
-				<div style="margin:5px;padding:5px;">	
-					<#include "/dataset_one.ftl">
-				</div>
+			<div class="row remove-bottom ui-widget-header ui-corner-top">
+			Dataset at <a href='${ambit_root}/dataset/${datasetid}'>${ambit_root}/dataset/${datasetid}</a>
 			</div>
+			
+			<#include "/dataset_one.ftl">
+			
 		<#else>
+ 		<div class="row remove-bottom ui-widget-header ui-corner-top">
+ 		&nbsp;
+ 		</div>
+		
 		<div class="row " style="padding:0;" >
 			<table id='datasets' class='datasetstable ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>

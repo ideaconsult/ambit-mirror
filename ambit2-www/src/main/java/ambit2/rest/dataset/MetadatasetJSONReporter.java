@@ -66,19 +66,22 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> 
 					"\n{"+
 					"\n\t\"%s\":\"%s\"," + //uri
 					"\n\t\"type\":\"Dataset\"," + //uri
-					"\n\t\"%s\":\"%s\"," + //title
+					"\n\t\"%s\":%s," + //title
 					"\n\t\"%s\":%d," + //stars
-					"\n\t\"%s\":\"%s\"," + //rightsHolder
-					"\n\t\"%s\":\"%s\"," + //seeAlso
-					"\n\t\"%s\":{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
+					"\n\t\"%s\":%s," + //stars
+					"\n\t\"%s\":%s," + //rightsHolder
+					"\n\t\"%s\":%s," + //seeAlso
+					"\n\t\"%s\":{\n\t\t\"URI\":%s,\n\t\t\"type\":%s\n\t}" + 					//source
 					"\n}",
 					jsonFeature.URI.jsonname(),uri,
-					jsonFeature.title.jsonname(),item.getName()==null?"":JSONUtils.jsonEscape(item.getName()),
+					jsonFeature.title.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getName())),
 					jsonFeature.stars.jsonname(),item.getStars(),
-					jsonFeature.rightsHolder.jsonname(),item.getrightsHolder()==null?"":JSONUtils.jsonEscape(item.getrightsHolder()),
-					jsonFeature.seeAlso.jsonname(),item instanceof SourceDataset?JSONUtils.jsonEscape(((SourceDataset) item).getURL()):"",
-					jsonFeature.rights.jsonname(),item.getLicenseURI()==null?"":JSONUtils.jsonEscape(item.getLicenseURI()),
-							JSONUtils.jsonEscape(rights)
+					jsonFeature.source.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSource())),
+					jsonFeature.rightsHolder.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getrightsHolder())),
+					jsonFeature.seeAlso.jsonname(),item instanceof SourceDataset?JSONUtils.jsonQuote(JSONUtils.jsonEscape(((SourceDataset) item).getURL())):"",
+					jsonFeature.rights.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getLicenseURI())),
+							JSONUtils.jsonQuote(JSONUtils.jsonEscape(rights))
+
 					));
 			comma = ",";
 		} catch (Exception x) {

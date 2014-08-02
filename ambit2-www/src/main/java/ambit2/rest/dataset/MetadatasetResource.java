@@ -1,8 +1,10 @@
 package ambit2.rest.dataset;
 
 import java.sql.Connection;
+import java.util.Map;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -42,6 +44,7 @@ import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.RDFMetaDatasetIterator;
 import ambit2.rest.rdf.RDFObjectIterator;
+import ambit2.user.rest.resource.AMBITDBRoles;
 
 public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDataset>, ISourceDataset> {
 	protected SourceDataset dataset;
@@ -95,6 +98,12 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 	public MetadatasetResource() {
 		super();
 		_dmode = DisplayMode.singleitem;
+		setHtmlbyTemplate(true);
+	}
+	
+	@Override
+	public String getTemplateName() {
+		return "datasets.ftl";
 	}
 	@Override
 	protected void doInit() throws ResourceException {
@@ -233,6 +242,19 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 		return query;
 	}
 	
+	@Override
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
+		super.configureTemplateMap(map, request, app);
+		if (dataset!=null) {
+			if (dataset instanceof SourceDataset) {
+				map.put("datasetid",dataset.getId());
+			} else {
+				map.put("datasetid","R"+ dataset.getId());
+			}
+			
+		}
+	}
 	protected IStructureRecord getStructureParameter() {
 		String uri = getParams().getFirstValue(OpenTox.params.compound_uri.toString());
 
