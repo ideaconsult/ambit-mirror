@@ -12,7 +12,15 @@ import freemarker.template.ObjectWrapper;
 
 public class FreeMarkerApplication<USERID> extends TaskApplication<USERID> implements IFreeMarkerApplication<Configuration> {
 	   private Configuration configuration;
-		protected String profile = "default";
+
+		protected String gaCode = null;
+
+		
+		public String getGACode() {
+			return gaCode;
+		}
+		
+	   protected String profile = "default";
 
 		public String getProfile() {
 			return profile;

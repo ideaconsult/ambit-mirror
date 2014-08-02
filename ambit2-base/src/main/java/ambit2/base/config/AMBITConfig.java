@@ -16,5 +16,6 @@ public enum AMBITConfig {
 	sessiontimeout,
 	ambit_reg_confirmed,
 	menu_profile,
-	enableEmailVerification
+	enableEmailVerification,
+	googleAnalytics;
 }

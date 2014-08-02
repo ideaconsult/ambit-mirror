@@ -87,3 +87,4 @@
 	});
  </script>
  -->
+ <#include "/ga.ftl" >

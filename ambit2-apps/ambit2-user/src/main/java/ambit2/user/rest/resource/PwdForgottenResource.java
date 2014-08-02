@@ -53,6 +53,7 @@ public class PwdForgottenResource extends RegistrationResource {
         	
         	map.put(AMBITConfig.ambit_version_short.name(),app.getVersionShort());
 	    	map.put(AMBITConfig.ambit_version_long.name(),app.getVersionLong());
+	    	map.put(AMBITConfig.googleAnalytics.name(),app.getGACode());
 	    	map.put(AMBITConfig.menu_profile.name(),app.getProfile());
         } catch (Exception x) {}
 	}

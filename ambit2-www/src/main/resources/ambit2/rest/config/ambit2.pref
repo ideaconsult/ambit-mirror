@@ -80,3 +80,5 @@ i5.user=${i5.user}
 i5.pass=${i5.pass}
 #target url for iuclid5 services 
 i5.server=${i5.server}
+#google.analytics code (UA-XXXX-Y) if not set GA will be disabled
+google.analytics=${google.analytics}
