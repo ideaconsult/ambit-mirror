@@ -2,7 +2,7 @@ Manifest-version: 1.0
 Package: ambit2.namestructure
 
 Name: ambit2/namestructure/
-Specification-Title: OPSIN wrapper
+Specification-Title: OPSIN ${opsin.version} wrapper
 Specification-Version: ${project.version}
 Specification-Vendor: Ideaconsult LTD
 Implementation-Title: ambit2.namestructure
