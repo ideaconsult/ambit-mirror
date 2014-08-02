@@ -99,12 +99,31 @@ public class UserDBResource<T>	extends AmbitDBQueryResource<ReadUser<T>,DBUser> 
 			return new OutputWriterConvertor(
 					new UserCSVReporter<IQueryRetrieval<DBUser>>(getRequest()),
 					MediaType.TEXT_CSV);
-		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
+				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
+				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) 
+				) {
+			return new RDFJenaConvertor<DBUser, IQueryRetrieval<DBUser>>(
+					new UserRDFReporter<IQueryRetrieval<DBUser>>(
+							getRequest(),variant.getMediaType(),getDocumentation())
+					,variant.getMediaType(),filenamePrefix) {
+				@Override
+				protected String getDefaultNameSpace() {
+					return TOXBANK.URI;
+				}					
+			};			
+		} else {
 			String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
 			final ReadUserRoles query = new ReadUserRoles();
 			query.setDatabaseName(usersdbname==null?getDefaultUsersDB():usersdbname);
+			String regDBName = null;
+			if ((getClientInfo()!=null) && (getClientInfo().getUser()!=null) && 
+					(getClientInfo().getRoles()!=null) && (DBRoles.isAdmin(getClientInfo().getRoles()))) {
+				regDBName = query.getDatabaseName();				
+			}		  			
 			return new OutputWriterConvertor(
-					new UserJSONReporter<IQueryRetrieval<DBUser>>(getRequest()) {
+					new UserJSONReporter<IQueryRetrieval<DBUser>>(getRequest(),regDBName) {
 						@Override
 						protected ReadUserRoles createUserRolesQuery() {
 							return query;
@@ -122,25 +141,8 @@ public class UserDBResource<T>	extends AmbitDBQueryResource<ReadUser<T>,DBUser> 
 						}
 					},
 					MediaType.APPLICATION_JSON);			
-		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
-					variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
-					variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
-					variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) 
-					) {
-				return new RDFJenaConvertor<DBUser, IQueryRetrieval<DBUser>>(
-						new UserRDFReporter<IQueryRetrieval<DBUser>>(
-								getRequest(),variant.getMediaType(),getDocumentation())
-						,variant.getMediaType(),filenamePrefix) {
-					@Override
-					protected String getDefaultNameSpace() {
-						return TOXBANK.URI;
-					}					
-				};
-		} else //html should be rendered by FTL
-			return new OutputWriterConvertor(
-					new UserJSONReporter<IQueryRetrieval<DBUser>>(getRequest()),
-					MediaType.APPLICATION_JSON);		
 
+		} 
 	}
 	
 	@Override
