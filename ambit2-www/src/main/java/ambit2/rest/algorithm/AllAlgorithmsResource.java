@@ -140,13 +140,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	public IProcessor<Iterator<Algorithm<String>>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
 		String filenamePrefix = getRequest().getResourceRef().getPath();
-		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new StringConvertor(
-					new AlgorithmHTMLReporter(getRequest(),
-							getRequest().getAttributes().get(algorithmKey)==null,
-							getDocumentation()
-							),MediaType.TEXT_HTML);
-		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
+
+		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			AlgorithmURIReporter r = new AlgorithmURIReporter(getRequest(),getDocumentation()) {
 				@Override
 				public void processItem(Algorithm item, Writer output) {
