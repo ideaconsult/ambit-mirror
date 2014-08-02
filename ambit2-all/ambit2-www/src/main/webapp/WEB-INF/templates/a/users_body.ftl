@@ -57,6 +57,7 @@ jQuery(document).ready(function()
 		<th>Would like data upload enabled<a href='#' class='chelp hcurator'></a></th>
 		<th>Data manager Role</th>
 		<th>Admin Role</th>
+		<th>Status</th>
 		</tr>
 		</thead>
 		<tbody></tbody>

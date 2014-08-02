@@ -159,7 +159,15 @@ function defineUsersTable(root,url,selector) {
 						  } catch (err) { }
 						  return (val===true)?yes:not;
 					  }
-				}					
+				},
+				{ 	  "mDataProp": "status",
+					  "asSorting": [ "asc", "desc" ],
+					  "aTargets": [ 8 ],
+					  "bSearchable" : true,
+					  "bSortable" : true,
+					  "bUseRendered" : false,
+					  "sWidth" : "5%"
+				}						
 			],
 		"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
 		"bJQueryUI" : true,
@@ -217,7 +225,17 @@ function makeEditableUsersTable(root,oTable) {
                   data: "{'':'Please select...', true:'Grant Admin role',false:'Revoke Admin role'}",
                   onblur: 'cancel',
                   submit: 'Save changes'
-              }     
+              },
+              {
+                  type:'select'	,
+                  loadtext: 'loading...',
+                  indicator: 'Updating user account status ...',
+                  tooltip: 'Double click to disable or enable user account',
+                  loadtext: 'loading...',
+                  data: "{'':'Please select...', 'disabled':'disabled','confirmed':'confirmed'}",
+                  onblur: 'cancel',
+                  submit: 'Save changes'
+              }               
 		 ],
 	     sUpdateURL: root+"/admin/role?method=PUT"
 	});

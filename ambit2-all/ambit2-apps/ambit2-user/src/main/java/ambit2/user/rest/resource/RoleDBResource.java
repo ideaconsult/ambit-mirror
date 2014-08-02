@@ -15,6 +15,8 @@ import net.idea.restnet.db.aalocal.user.IUser;
 import net.idea.restnet.db.aalocal.user.ReadRole;
 import net.idea.restnet.db.aalocal.user.RoleJSONReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
+import net.idea.restnet.u.RegistrationStatus;
+import net.idea.restnet.u.db.UpdateRegistrationStatus;
 import net.idea.restnet.user.DBUser;
 
 import org.restlet.Context;
@@ -77,26 +79,41 @@ public class RoleDBResource extends AmbitDBQueryResource<IQueryRetrieval<String>
 			String columnName = form.getFirstValue("columnName");
 			
 			if (columnName!=null)  try {
-				DBRole role = null;
-				if ("data manager role".equals(columnName.toLowerCase())) role = DBRoles.datasetManager;
-				else if ("admin role".equals(columnName.toLowerCase())) role = DBRoles.adminRole;
-				else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Unknown role "+columnName);
-				AbstractUpdate<DBRole,IUser> query = null;
-				Boolean value = Boolean.parseBoolean(form.getFirstValue("value"));
-				String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
-				if (value) {
-					CreateUserRole q = new CreateUserRole(role, user);
-					q.setDatabaseName(usersdbname==null?getDefaultUsersDB():usersdbname);
-					query = q;
+				String cname = columnName.toLowerCase();
+				if ("status".equals(cname)) {
+					try {
+						String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
+						String value = form.getFirstValue("value");
+						UpdateRegistrationStatus q = new UpdateRegistrationStatus(user,
+								RegistrationStatus.valueOf(value));
+						q.setDatabaseName(usersdbname==null?getDefaultUsersDB():usersdbname);
+						execUpdate(q);
+						return new StringRepresentation(value.toString(),MediaType.TEXT_PLAIN);
+					} catch (Exception x) {
+						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,columnName);
+					}
 				} else {
-					DeleteUserRole q = new DeleteUserRole();
-					q.setGroup(role);
-					q.setObject(user);
-					q.setDatabaseName(usersdbname==null?getDefaultUsersDB():usersdbname);
-					query = q;
+					DBRole role = null;
+					if ("data manager role".equals(cname)) role = DBRoles.datasetManager;
+					else if ("admin role".equals(cname)) role = DBRoles.adminRole;
+					else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Unknown role "+columnName);
+					AbstractUpdate<DBRole,IUser> query = null;
+					Boolean value = Boolean.parseBoolean(form.getFirstValue("value"));
+					String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
+					if (value) {
+						CreateUserRole q = new CreateUserRole(role, user);
+						q.setDatabaseName(usersdbname==null?getDefaultUsersDB():usersdbname);
+						query = q;
+					} else {
+						DeleteUserRole q = new DeleteUserRole();
+						q.setGroup(role);
+						q.setObject(user);
+						q.setDatabaseName(usersdbname==null?getDefaultUsersDB():usersdbname);
+						query = q;
+					}
+					execUpdate(query);
+					return new StringRepresentation(value.toString(),MediaType.TEXT_PLAIN);
 				}
-				execUpdate(query);
-				return new StringRepresentation(value.toString(),MediaType.TEXT_PLAIN);
 			} catch (ResourceException x) {
 				throw x;
 			} catch (Exception x) {
