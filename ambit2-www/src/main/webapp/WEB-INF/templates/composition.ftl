@@ -39,10 +39,14 @@
 
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 	<#include "/searchmenu/menu_substance.ftl">
-
+	<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
+	<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
+	</div>
+	<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
+	</div>		
 </div>
 
-<div class="eleven columns remove-bottom" style="padding:0;" >
+<div class="thirteen columns remove-bottom" style="padding:0;" >
 
  		<div class="row remove-bottom ui-widget-header ui-corner-top">
  		&nbsp;
@@ -75,8 +79,6 @@
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
 
-
-<#include "/chelp.ftl" >
 
 <#include "/footer.ftl" >
 </div> <!-- container -->

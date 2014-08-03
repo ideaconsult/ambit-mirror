@@ -113,7 +113,7 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 					CompositionRelation.jsonFeature.component.jsonname(),
 					w.toString(),
 					CompositionRelation.jsonFeature.compositionUUID.jsonname(),JSONUtils.jsonQuote(item.getCompositionUUID()),
-					CompositionRelation.jsonFeature.name.jsonname(),JSONUtils.jsonQuote(item.getName()),
+					CompositionRelation.jsonFeature.compositionName.jsonname(),JSONUtils.jsonQuote(item.getName()),
 					CompositionRelation.jsonFeature.relation.jsonname(),JSONUtils.jsonQuote(item.getRelationType().name()),
 					CompositionRelation.jsonFeature.proportion.jsonname(),item.getRelation().toJSON()
 					));

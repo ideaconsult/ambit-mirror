@@ -43,6 +43,13 @@ import ambit2.base.relation.composition.Proportion;
 import ambit2.db.chemrelation.AbstractUpdateStructureRelation;
 
 public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<SubstanceRecord,IStructureRecord,STRUCTURE_RELATION,Proportion> {
+	protected String compositionName;
+	public String getCompositionName() {
+		return compositionName;
+	}
+	public void setCompositionName(String compositionName) {
+		this.compositionName = compositionName;
+	}
 	protected String compositionUUID;
 	
 	public String getCompositionUUID() {
@@ -52,10 +59,10 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 		this.compositionUUID = compositionUUID;
 	}
 	public static final String[] create_sql = {
-		"INSERT INTO substance_relation (cmp_prefix,cmp_uuid,idchemical,relation,`function`, " +
+		"INSERT INTO substance_relation (cmp_prefix,cmp_uuid,name,idchemical,relation,`function`, " +
 		"proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,\n"+
 		"proportion_typical,proportion_typical_value,proportion_typical_unit,rs_prefix,rs_uuid,idsubstance)\n"+
-		"values(?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,?,?,unhex(replace(?,'-','')),?) on duplicate key update\n"+
+		"values(?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,?,?,?,unhex(replace(?,'-','')),?) on duplicate key update\n"+
 		"cmp_prefix=values(cmp_prefix),cmp_uuid=values(cmp_uuid),\n"+
 		"proportion_real_lower=values(proportion_real_lower),proportion_real_lower_value=values(proportion_real_lower_value)," +
 		"proportion_real_upper=values(proportion_real_upper),proportion_real_upper_value=values(proportion_real_upper_value)," +
@@ -65,10 +72,10 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 	};
 	
 	public static final String[] create_sql_uuid = {
-		"INSERT INTO substance_relation (cmp_prefix,cmp_uuid,idchemical,relation,`function`, " +
+		"INSERT INTO substance_relation (cmp_prefix,cmp_uuid,name,idchemical,relation,`function`, " +
 		"proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,\n"+
 		"proportion_typical,proportion_typical_value,proportion_typical_unit,rs_prefix,rs_uuid,idsubstance)\n"+
-		"SELECT ?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,?,?,unhex(replace(?,'-','')),idsubstance from substance where prefix=? and uuid=unhex(?)\n" +
+		"SELECT ?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,?,?,?,unhex(replace(?,'-','')),idsubstance from substance where prefix=? and uuid=unhex(?)\n" +
 		"on duplicate key update\n"+
 		"cmp_prefix=values(cmp_prefix),cmp_uuid=values(cmp_uuid),\n"+
 		"proportion_real_lower=values(proportion_real_lower),proportion_real_lower_value=values(proportion_real_lower_value)," +
@@ -80,6 +87,7 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 	public UpdateSubstanceRelation(CompositionRelation relation) {
 		this(relation.getFirstStructure(),relation.getSecondStructure(),relation.getRelationType(),relation.getRelation());
 		setCompositionUUID(relation.getCompositionUUID());
+		setCompositionName(relation.getName());
 	}
 	
 	public UpdateSubstanceRelation() {
@@ -93,6 +101,7 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 	}
 	public void setCompositionRelation(CompositionRelation relation) {
 		setCompositionUUID(relation.getCompositionUUID());
+		setCompositionName(relation.getName());
 		setGroup(relation.getFirstStructure());
 		setObject(relation.getSecondStructure());
 		setMetric(relation.getRelation());
@@ -119,7 +128,11 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 		if (o_uuid!=null) 
 			cmp_uuid = I5Utils.splitI5UUID(o_uuid.toString());
 		params1.add(new QueryParam<String>(String.class, cmp_uuid[0]));
-		params1.add(new QueryParam<String>(String.class, cmp_uuid[1]));		
+		params1.add(new QueryParam<String>(String.class, cmp_uuid[1]));
+		
+		String name = getCompositionName();
+		if (name!=null && name.length()>128) name = name.substring(0,127);
+		params1.add(new QueryParam<String>(String.class,name));	
 
 		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
 		params1.add(new QueryParam<String>(String.class, getRelation().name()));
