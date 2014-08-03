@@ -37,6 +37,7 @@ public class ReadSubstanceCompositionTest extends QueryTest<ReadSubstanceComposi
 			Assert.assertEquals("=",record.getRelation().getTypical());
 			Assert.assertEquals("%",record.getRelation().getTypical_unit());
 			Assert.assertNotNull(record.getCompositionUUID());
+			Assert.assertEquals("composition name 12345",record.getName());
 			count++;
 		}
 		Assert.assertEquals(1,count);

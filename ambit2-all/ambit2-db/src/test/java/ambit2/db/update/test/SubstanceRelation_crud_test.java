@@ -36,6 +36,7 @@ public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,IStruc
 		p.setTypical_unit("%");
 		CompositionRelation r = new CompositionRelation(c1,c2,STRUCTURE_RELATION.HAS_CONSTITUENT,p);
 		r.setCompositionUUID(String.format("L-%s", UUID.randomUUID().toString()));
+		r.setName("Composition name 789");
 		return new UpdateSubstanceRelation(r);
 	}
 
@@ -44,7 +45,7 @@ public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,IStruc
 			throws Exception {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
-		"SELECT idsubstance,idchemical,relation,proportion_real_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_typical,proportion_typical_value,proportion_typical_unit FROM substance_relation where idsubstance=1 and idchemical=10 and relation='HAS_CONSTITUENT'");
+		"SELECT idsubstance,idchemical,name,relation,proportion_real_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_typical,proportion_typical_value,proportion_typical_unit FROM substance_relation where idsubstance=1 and idchemical=10 and relation='HAS_CONSTITUENT'");
 		Assert.assertEquals(1,table.getRowCount());
 		Assert.assertEquals(">=",table.getValue(0,"proportion_real_lower"));
 		Assert.assertEquals(5.0,table.getValue(0,"proportion_real_lower_value"));
@@ -54,6 +55,7 @@ public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,IStruc
 		Assert.assertEquals("c.a.",table.getValue(0,"proportion_typical"));
 		Assert.assertEquals(10.0,table.getValue(0,"proportion_typical_value"));
 		Assert.assertEquals("%",table.getValue(0,"proportion_typical_unit"));
+		Assert.assertEquals("Composition name 789",table.getValue(0,"name"));
 		c.close();
 	}
 

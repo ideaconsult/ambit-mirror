@@ -148,14 +148,15 @@ CREATE TABLE `substance_relation` (
   `proportion_typical_unit` varchar(16) COLLATE utf8_bin DEFAULT NULL,
   `rs_prefix` varchar(6) COLLATE utf8_bin DEFAULT NULL COMMENT 'ReferenceSubstance UUID (prefix)',
   `rs_uuid` varbinary(16) DEFAULT NULL COMMENT 'ReferenceSubstance UUID',
+  `name` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT 'composition name',
   PRIMARY KEY (`cmp_prefix`,`cmp_uuid`,`idsubstance`,`idchemical`,`relation`) USING BTREE,
   KEY `chemicalkey` (`idchemical`),
   KEY `relation-x` (`relation`),
   KEY `crs-uuid-x` (`rs_uuid`,`rs_prefix`),
   KEY `cmp-uuid-x` (`cmp_prefix`,`cmp_uuid`),
-  KEY `idsubstance_idx` (`idsubstance`),
-  CONSTRAINT `idsubstance` FOREIGN KEY (`idsubstance`) REFERENCES `substance` (`idsubstance`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `chemicalkey` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `idsubstance` (`idsubstance`),
+  CONSTRAINT `chemicalkey` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idsubstance` FOREIGN KEY (`idsubstance`) REFERENCES `substance` (`idsubstance`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Dossier to chemicals relation';
 
 
@@ -1165,7 +1166,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (8,2,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (8,3,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

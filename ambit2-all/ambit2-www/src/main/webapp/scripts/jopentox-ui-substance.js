@@ -248,11 +248,14 @@ var substance = {
 									"sClass" : "left",
 									"bSortable" : true,
 									"bSearchable" : true,
+									"sWidth" : "20%",
 									"mDataProp" : "compositionUUID",
 									"bUseRendered" : false,	
 									"fnRender" : function(o,val) {
 										var s = val.split("-");
-										return "<span title='"+val+"'>" + s[1] + "</span>";
+										return "<span title='"+val+"' style='font-weight:bold;'>" + s[1] + "</span> <br/>" + 
+											   "<span title='Composition name'>" + o.aData["compositionName"] + "</span> " ;
+										
 									}
 								},	
 			    				{ //1

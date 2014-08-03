@@ -28,7 +28,7 @@ public class CompositionRelation extends AbstractRelation<STRUCTURE_RELATION, Pr
 		substance,
 		component,
 		compositionUUID,
-		name,
+		compositionName,
 		relation,
 		proportion
 		;
