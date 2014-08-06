@@ -28,7 +28,10 @@ var config_dataset = {
   	"model": { 
     	'Info': { bVisible: false },
     	'Algorithm': { bVisible: false }
-  	}
+  	},
+  	"substance": {
+    	'Relation': { iOrder: 20, mData: "composition", sTitle: "Relation", mRender: renderRelation }
+  	}  	
 	},
 	"handlers": {
   	"checked": onSelectedUpdate
