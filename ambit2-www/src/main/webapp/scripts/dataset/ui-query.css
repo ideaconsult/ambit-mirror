@@ -37,7 +37,9 @@
 
 #sidebar .side-title {
   position: absolute;
-  right: -32px;
+  font-size: 110%;
+  font-weight: bold;
+  right: -105px;
   bottom: 50%;
   text-align: center;
 	transform: rotate(270deg);
@@ -52,7 +54,7 @@
 }
 
 #browser {
-  margin-top: 40px;
+  margin-top: 15px;
 }
 
 #browser {

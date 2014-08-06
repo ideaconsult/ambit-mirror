@@ -51,7 +51,7 @@ $(document)
     <div id="sidebar" class="hidden">
       <div>
         <span class="side-open-close ui-icon ui-icon-carat-2-e-w"></span>
-        <div class="side-title">Data sources</div>
+        <div class="side-title">Select data sources/models</div>
       </div>
       <div class="content">
         <div class="jtox-foldable folded">
