@@ -246,7 +246,7 @@ img.jtox-smalldiagram {
   -moz-transition: width 0.3s ease-out;
   -webkit-transition: width 0.3s ease-out;
   transition: width 0.3s ease-out;
-  margin-bottom: 0px
+  margin-bottom: 0px;
 }
 
 #searchcontext input {

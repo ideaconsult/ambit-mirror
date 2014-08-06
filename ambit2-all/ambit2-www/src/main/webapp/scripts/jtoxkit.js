@@ -775,6 +775,7 @@ window.jT.ui = {
   inlineRowFn: function (on) {
     return function( nRow, aData, iDataIndex ) {
       $('.jt-inlineaction', nRow).each(function () {
+        ccLib.fireCallback(on.init, this, aData, iDataIndex);
         var action = $(this).data('action') || 'change';
         if (this.tagName == 'INPUT' || this.tagName == 'SELECT' || this.tagName == "TEXTAREA")
           $(this).on('change', on[action]).on('keydown', jT.ui.enterBlur);
@@ -2901,7 +2902,7 @@ var jToxComposition = (function () {
 					'Typical concentration': { sTitle: "Typical concentration", sClass: "center", sWidth: "15%", mData: "proportion.typical", mRender: function(val, type, full) { return type != 'display' ? '' + val.value : jToxComposition.formatConcentration(val.precision, val.value, val.unit); } },
 					'Concentration ranges': { sTitle: "Concentration ranges", sClass : "center colspan-2", sWidth : "20%", mData : "proportion.real", mRender : function(val, type, full) { return type != 'display' ? '' + val.lowerValue : jToxComposition.formatConcentration(val.lowerPrecision, val.lowerValue, val.unit); } },
 					'Upper range': { sTitle: 'Upper range', sClass: "center", sWidth: "20%", mData: "proportion.real", mRender: function(val, type, full) { return type != 'display' ? '' + val.upperValue : jToxComposition.formatConcentration(val.upperPrecision, val.upperValue, val.unit); } },
-					'Also': { sTitle: "Also", sClass: "center", bSortable: false, mData: "component.compound.URI", mRender: function(val, type, full) { return !val ? '' : '<a href="' + (jT.settings.baseUrl || self.baseUrl) + '/substance?type=related&compound_uri=' + encodeURIComponent(val) + '" target="_blank">Also contained in...</span></a>'; } }
+					'Also': { sTitle: "Also", sClass: "center", bSortable: false, mData: "component.compound.URI", sDefaultContent: "-" }
 				}
       }
     }
@@ -2943,6 +2944,8 @@ var jToxComposition = (function () {
       for (var i = 0, cl = cols.length; i < cl; ++i)
         if (cols[i].sTitle == 'Also') {
           cols[i].sTitle = '';
+          // we need to do this here, because 'self' is not defined up there...
+          cols[i].mRender = function(val, type, full) { return !val ? '' : '<a href="' + (self.settings.baseUrl || self.baseUrl) + '/substance?type=related&compound_uri=' + encodeURIComponent(val) + '" target="_blank">Also contained in...</a>'; };
           break;
         }
         
@@ -2981,6 +2984,7 @@ var jToxComposition = (function () {
     queryComposition: function (uri) {
       var self = this;
       self.compositionUri = uri;
+      self.baseUrl = jT.grabBaseUrl(uri);
       jT.call(self, uri, function (json) {
         if (!!json && !!json.composition) {
           // clear the old tabs, if any.
@@ -3000,9 +3004,15 @@ var jToxComposition = (function () {
               substances[cmp.compositionUUID] = theSubs = { name: "", purity: "", maxvalue: 0, uuid: cmp.compositionUUID, composition: [] };
             
             theSubs.composition.push(cmp);
+            if (cmp.compositionName != '' && cmp.compositionName != null)
+              theSubs.name = cmp.compositionName;
+              
             var val = cmp.proportion.typical;
-            if (cmp.relation == 'HAS_CONSTITUENT' && (theSubs.maxvalue < val.value || theSubs.name == '')) {
+            if (cmp.relation == 'HAS_CONSTITUENT' && theSubs.name == '') {
               theSubs.name = cmp.component.compound['name'] + ' (' + jToxComposition.formatConcentration(val.precision, val.value, val.unit) + ')';
+            }
+            
+            if (cmp.relation == 'HAS_CONSTITUENT' && theSubs.maxvalue < val.value) {
               theSubs.maxvalue = val.value;
               val = cmp.proportion.real;
               theSubs.purity = jToxComposition.formatConcentration(null, val.lowerValue + '-' + val.upperValue, val.unit);
@@ -3551,7 +3561,215 @@ var jToxStudy = (function () {
   
   return cls;
 })();
-jT.templates['widget-search']  = 
+/* toxauth.js - Several kits for querying/manipulating authorization-related stuff: policies, roles, users
+ *
+ * Copyright 2012-2014, IDEAconsult Ltd. http://www.ideaconsult.net/
+ * Created by Ivan Georgiev
+**/
+
+/* jToxPolicy - manages connection between user roles and permitted actions on specified services
+*/
+var jToxPolicy = (function () {
+  var defaultSettings = { // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
+    loadOnInit: false,      // whether to make initial load upon initializing the kit
+    noInterface: false,     // whether to have interface... at all.
+    sDom: "rt",
+    configuration: { 
+      columns : {
+        policy: {
+          'Id': { iOrder: 0, sClass: "center", sDefaultContent: '', bSortable: false, sTitle: "Id", mData: "uri", sWidth: "50px", mRender: function (data, type, full) {
+            if (type == 'sort')
+              return !!data ? '0' : '1';
+            else if (type != 'display')
+              return data || '';
+            else if (!data)
+              return '<span class="ui-icon ui-icon-plusthick jt-inlineaction jtox-inline jtox-hidden" data-action="add"></span>';
+            else
+              return '<span class="ui-icon ui-icon-closethick jt-inlineaction jtox-inline" data-action="remove"></span>';
+          }},
+          'Role': { iOrder: 1, sTitle: "Role", sDefaultContent: '', sWidth: "20%", mData: "role", mRender: jT.ui.inlineChanger('role', 'select', '-- Role --') },
+          'Service': {iOrder: 3, sTitle: "Service", sDefaultContent: '', mData: "resource", sWidth: "40%", mRender: jT.ui.inlineChanger('resource', 'text', 'Service_') },
+          'Get': { iOrder: 4, sClass: "center", sTitle: "Get", bSortable: false, sDefaultContent: false, mData: "methods.get", mRender: jT.ui.inlineChanger('methods.get', 'checkbox') },
+          'Post': { iOrder: 5, sClass: "center", sTitle: "Post", bSortable: false, sDefaultContent: false, mData: "methods.post", mRender: jT.ui.inlineChanger('methods.post', 'checkbox') },
+          'Put': { iOrder: 6, sClass: "center", sTitle: "Put", bSortable: false, sDefaultContent: false, mData: "methods.put", mRender: jT.ui.inlineChanger('methods.put', 'checkbox') },
+          'Delete': { iOrder: 7, sClass: "center", sTitle: "Delete", bSortable: false, sDefaultContent: false, mData: "methods.delete", mRender: jT.ui.inlineChanger('methods.delete', 'checkbox') },
+        }
+      }
+    }
+  };
+  
+  var cls = function (root, settings) {
+    var self = this;
+    self.rootElement = root;
+    jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even when manually initialized
+    
+    self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings);
+    self.policies = null;
+    
+    if (!self.settings.noInterface) {
+      self.rootElement.appendChild(jT.getTemplate('#jtox-policy'));
+      self.settings.configuration.columns.policy.Id.sTitle = '';
+      self.settings.configuration.columns.policy.Role.mRender = function (data, type, full) {
+        return type != 'display' ? (data || '') : '<select class="jt-inlineaction" data-data="role">' + self.roleOptions + '</select>';
+      };
+      
+      var alerter = function (el, icon, task) {
+        var mess = (!!task ? task.error : "Unknown error");
+        $(el).removeClass(icon).addClass('ui-icon-alert').attr('title', mess);
+        setTimeout(function () {
+          $(el).addClass(icon).removeClass('ui-icon-alert');
+          $(el).removeAttr('title');
+        }, 3500);
+      };
+      
+      var dataEnumer = function (data) {
+        var out = {};
+        ccLib.enumObject(data, function (val, name) {
+          out[name] = val;
+        });
+        return out;
+      };
+      
+      var inlineHandlers = {
+        init: function (data) {
+          if (this.tagName == 'SELECT')
+            $(this).val(data[$(this).data('data')]);
+        },
+        change: function (e) {
+          var data = jT.ui.rowData(this);
+          if (!!data.uri) {
+            // Initiate a change in THIS field.
+            var el = this;
+            var myData = $(el).data('data');
+            var myObj = {};
+            ccLib.setJsonValue(myObj, myData, ccLib.getObjValue(el));
+
+            $(el).addClass('loading');
+            // now make the update call...
+            jT.call(self, data.uri, { method: 'PUT', data: dataEnumer(myObj) }, function (task) {
+              jT.pollTask(self, task, function (task) {
+                $(el).removeClass('loading');
+                if (!task || !!task.error) {
+                  ccLib.setObjValue(el, ccLib.getJsonValue(data, myData)); // i.e. revert the old value
+                  alerter(el, '', task);
+                }
+                else {
+                  // we need to update the value... in our internal 'policies' array...
+                  var idx = $(self.table).dataTable().fnGetPosition($(el).closest('tr')[0]);
+                  ccLib.setJsonValue(self.policies[idx], myData, ccLib.getObjValue(el));
+                }
+              });
+            });
+          }
+          else {
+            // collect and validate and react
+            var row = $(this).closest('tr');
+            var inline = jT.ui.rowInline(row);
+            if (!inline.role || !inline.resource)
+              $('span.ui-icon-plusthick', row).addClass('jtox-hidden');
+            else
+              $('span.ui-icon-plusthick', row).removeClass('jtox-hidden');
+          }
+        },
+        remove: function (e) {
+          if (!window.confirm("Do you really want to delete this policy?"))
+            return;
+          var el = this;
+          var data = jT.ui.rowData(this);
+          $(el).addClass('loading');
+          jT.call(self, data.uri, { method: "DELETE" }, function (task, jhr) {
+            jT.pollTask(self, task, function (task) {
+              $(el).removeClass('loading');
+              if (!task || !!task.error)
+                alerter(el, 'ui-icon-closethick', task)
+              else // i.e. - on success - reload them!
+                self.loadPolicies();
+            }, jhr);
+          });
+        },
+        add: function (e) {
+          var data = jT.ui.rowInline(this, jT.ui.rowData(this));
+          delete data['uri'];
+          var el = this;
+          $(el).addClass('loading');
+          jT.call(self, '/admin/restpolicy', { method: "POST", data: dataEnumer(data)}, function (task) {
+            jT.pollTask(self, task, function (task) {
+              $(el).removeClass('loading');
+              if (!task || !!task.error)
+                alerter(el, 'ui-icon-plusthick', task)
+              else // i.e. - on success - reload them!
+                self.loadPolicies();
+            });
+          });
+        },
+      };
+      
+      self.table = jT.$('table', self.rootElement).dataTable({
+        "bPaginate": false,
+        "bLengthChange": false,
+				"bAutoWidth": false,
+        "sDom" : self.settings.sDom,
+        "aoColumns": jT.ui.processColumns(self, 'policy'),
+        "aaSortingFixed": [[0, 'asc']],
+        "fnCreatedRow": jT.ui.inlineRowFn(inlineHandlers),
+				"oLanguage": jT.$.extend({
+          "sLoadingRecords": "No policies found.",
+          "sZeroRecords": "No policies found.",
+          "sEmptyTable": "No policies available.",
+          "sInfo": "Showing _TOTAL_ policy(s) (_START_ to _END_)"
+        }, self.settings.oLanguage)
+      });
+      
+      jT.$(self.table).dataTable().fnAdjustColumnSizing();
+    }
+        
+    // finally, wait a bit for everyone to get initialized and make a call, if asked to
+    if (self.settings.loadOnInit)
+      self.loadPolicies();
+  };
+
+  cls.prototype.loadPolicies = function (force) {
+    var self = this;
+    $(self.table).dataTable().fnClearTable();
+    
+    // The real policy loader...
+    var realLoader = function () {
+      jT.call(self, '/admin/restpolicy', function (result) { 
+        if (!!result) {
+          self.policies = result.policy;  
+          if (!self.settings.noInterface)
+            $(self.table).dataTable().fnAddData(result.policy.concat({  }));
+        }
+      });
+    };
+    
+    // we need to load roles first, if not before, or if forces to...
+    if (!self.roles || force) {
+      jT.call(self, '/admin/role', function (roles) {
+        if (!!roles) {
+          // remember and prepare roles for select presenting...
+          self.roles = roles;
+          realLoader();
+          if (!self.settings.noInterface) {
+            var optList = '';
+            for (var i = 0, rl = roles.roles.length; i < rl; ++i)
+              optList += '<option>' + roles.roles[i] + '</option>';
+            self.roleOptions = optList;
+          }
+        }
+      });
+    }
+    else
+      realLoader();
+  };
+  
+  cls.prototype.query = function () {
+    this.loadPolicies();
+  }
+  
+  return cls;
+})();
+  jT.templates['widget-search']  = 
 "    <div id=\"jtox-search\" class=\"jtox-search\">" +
 "      <form>" +
 "  	  	<div class=\"jq-buttonset jtox-inline\">" +
@@ -3581,7 +3799,7 @@ jT.templates['widget-search']  =
 "  			  <div class=\"dynamic auto-hide searchsmarts hidden jtox-inline\">" +
 "  			    <select name=\"smarts\" title =\"Predefined functional groups\"></select>" +
 "  			  </div>" +
-"  			  <div class=\"jtox-inline float-right\">" +
+"  			  <div class=\"jtox-inline\">" +
 "            <input type=\"text\" name=\"searchbox\"/>" +
 "            <button name=\"searchbutton\" class=\"jtox-handler\" title=\"Search/refresh\" data-handler=\"query\"><span class=\"ui-icon ui-icon-search\"/></button>" +
 "            <button name=\"drawbutton\" class=\"dynamic\" title=\"Draw the (sub)structure\"><span class=\"ui-icon ui-icon-pencil\"/></button>" +
@@ -3795,4 +4013,10 @@ jT.templates['one-study']  =
 "      </div>" +
 "    </div>" +
 ""; // end of #jtox-study 
+
+jT.templates['policy']  = 
+"	  <div id=\"jtox-policy\">" +
+"      <table></table>" +
+"	  </div>" +
+""; // end of #jtox-model 
 
