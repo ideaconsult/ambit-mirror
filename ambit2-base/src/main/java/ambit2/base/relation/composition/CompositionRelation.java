@@ -220,7 +220,7 @@ public class CompositionRelation extends AbstractRelation<STRUCTURE_RELATION, Pr
 		return super.clone();
 	}
 
-	public String toJSON(String substanceURI,String structureURI) {
+	public String toJSON(String substanceURI,String component) {
 		return String.format(
 				"\n{"+
 				"\n\t\"%s\": {\"URI\" : %s }," + 
@@ -232,7 +232,7 @@ public class CompositionRelation extends AbstractRelation<STRUCTURE_RELATION, Pr
 				"\n}",
 				CompositionRelation.jsonFeature.substance.jsonname(),JSONUtils.jsonQuote(substanceURI),
 				CompositionRelation.jsonFeature.component.jsonname(),
-				structureURI,
+				component,
 				CompositionRelation.jsonFeature.compositionUUID.jsonname(),JSONUtils.jsonQuote(getCompositionUUID()),
 				CompositionRelation.jsonFeature.compositionName.jsonname(),JSONUtils.jsonQuote(getName()),
 				CompositionRelation.jsonFeature.relation.jsonname(),JSONUtils.jsonQuote(getRelationType().name()),

@@ -17,7 +17,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 
-public class ReadSubstanceComposition extends AbstractQuery<STRUCTURE_RELATION,SubstanceRecord, EQCondition, CompositionRelation> implements IQueryRetrieval<CompositionRelation>{
+public class ReadSubstanceComposition extends AbstractQuery<CompositionRelation,SubstanceRecord, EQCondition, CompositionRelation> implements IQueryRetrieval<CompositionRelation>{
 
 	/**
 	 * 
@@ -25,13 +25,16 @@ public class ReadSubstanceComposition extends AbstractQuery<STRUCTURE_RELATION,S
 	private static final long serialVersionUID = -1980335091441168568L;
 	protected CompositionRelation record = new CompositionRelation(new SubstanceRecord(), new StructureRecord(), new Proportion());
 	private final static String sql = 
-		"select cmp_prefix,hex(cmp_uuid) cmp_huuid,r.name,idsubstance,idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,r.rs_prefix,hex(r.rs_uuid) from substance_relation r ";
+		"select cmp_prefix,hex(cmp_uuid) cmp_huuid,r.name as compositionname,idsubstance,idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,r.rs_prefix as refstruc,hex(r.rs_uuid) as refstrucuuid from substance_relation r ";
 	
 	private static String  q_idsubstance = "idsubstance=?";
 	private static String  q_uuid = "prefix=? and hex(uuid)=?";
+	private static String  q_compound = "idcompound=?";
 	
 	private final static String sql_id = sql + " where " + q_idsubstance;
 	private final static String sql_uuid =sql + " join substance using(idsubstance) where " + q_uuid;
+	
+
 
 	
 	@Override
@@ -48,27 +51,40 @@ public class ReadSubstanceComposition extends AbstractQuery<STRUCTURE_RELATION,S
 
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
-		List<QueryParam> params = new ArrayList<QueryParam>();
+		List<QueryParam> params = null;
 		if (getValue()!=null) {
 			if (getValue().getIdsubstance()>0) {
+				params = new ArrayList<QueryParam>();
 				params.add(new QueryParam<Integer>(Integer.class,getValue().getIdsubstance()));
-				return params;
 			} else if (getValue().getCompanyUUID()!= null) {
 				String o_uuid = getValue().getCompanyUUID();
 				if (o_uuid==null) throw new AmbitException("Empty substance id");
 				String[] uuid = new String[]{null,o_uuid==null?null:o_uuid.toString()};
 				if (o_uuid!=null) 
 					uuid = I5Utils.splitI5UUID(o_uuid.toString());
+				params = new ArrayList<QueryParam>();				
 				params.add(new QueryParam<String>(String.class, uuid[0]));
 				params.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
-				return params;
 			}
-		}	
-		throw new AmbitException("Empty ID");
+		}
+		/*
+		if ((params!=null) && (getFieldname()!=null) && getFieldname().)
+			
+		}
+		*/
+		if (params==null)
+			throw new AmbitException("Empty ID");
+		else return params;
 	}
 
 	@Override
 	public CompositionRelation getObject(ResultSet rs) throws AmbitException {
+		record.clear();
+		return readCompositionRelation(record,rs);
+	}
+	
+
+	public static CompositionRelation readCompositionRelation(CompositionRelation record,ResultSet rs) throws AmbitException {
 		record.clear();
 		try {
             try {
@@ -78,7 +94,7 @@ public class ReadSubstanceComposition extends AbstractQuery<STRUCTURE_RELATION,S
             } catch (Exception xx) {
             	record.setCompositionUUID(null);
             }
-            record.setName(rs.getString("name"));
+            record.setName(rs.getString("compositionname"));
 			record.getFirstStructure().setIdsubstance(rs.getInt("idsubstance"));
 			record.getSecondStructure().setIdchemical(rs.getInt("idchemical"));
 			record.setRelationType(STRUCTURE_RELATION.valueOf(rs.getString("relation")));
@@ -93,8 +109,8 @@ public class ReadSubstanceComposition extends AbstractQuery<STRUCTURE_RELATION,S
 			record.getRelation().setReal_uppervalue(rs.getDouble("proportion_real_upper_value"));
 			
             try {
-	            String uuid = rs.getString("rs_prefix") + "-" + 
-	            		I5Utils.addDashes(rs.getString("rs_huuid")).toLowerCase();
+	            String uuid = rs.getString("refstruc") + "-" + 
+	            		I5Utils.addDashes(rs.getString("refstrucuuid")).toLowerCase();
 	            record.setProperty(Property.getI5UUIDInstance(),uuid);
             } catch (Exception xx) {
             	record.removeProperty(Property.getI5UUIDInstance());
