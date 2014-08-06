@@ -100,23 +100,7 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 			cmpReporter.setComma(null);
 			cmpReporter.processItem(item.getSecondStructure());
 			
-			getOutput().write(String.format(
-					"\n{"+
-					"\n\t\"%s\": {\"URI\" : %s }," + 
-					"\n\t\"%s\": \t%s ," +
-					"\n\t\"%s\":%s," +
-					"\n\t\"%s\":%s," +
-					"\n\t\"%s\":%s," + 
-					"\n\t\"%s\":%s" + //metric
-					"\n}",
-					CompositionRelation.jsonFeature.substance.jsonname(),JSONUtils.jsonQuote(substanceReporter.getURI(item.getFirstStructure())),
-					CompositionRelation.jsonFeature.component.jsonname(),
-					w.toString(),
-					CompositionRelation.jsonFeature.compositionUUID.jsonname(),JSONUtils.jsonQuote(item.getCompositionUUID()),
-					CompositionRelation.jsonFeature.compositionName.jsonname(),JSONUtils.jsonQuote(item.getName()),
-					CompositionRelation.jsonFeature.relation.jsonname(),JSONUtils.jsonQuote(item.getRelationType().name()),
-					CompositionRelation.jsonFeature.proportion.jsonname(),item.getRelation().toJSON()
-					));
+			getOutput().write(item.toJSON(substanceReporter.getURI(item.getFirstStructure()),w.toString()));
 			comma = ",";
 		} catch (Exception x) {
 			logger.log(Level.WARNING,x.getMessage(),x);
