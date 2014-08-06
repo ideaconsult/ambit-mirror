@@ -7,6 +7,7 @@ import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.json.JSONUtils;
 import ambit2.base.relation.AbstractRelation;
 import ambit2.base.relation.STRUCTURE_RELATION;
 
@@ -219,5 +220,23 @@ public class CompositionRelation extends AbstractRelation<STRUCTURE_RELATION, Pr
 		return super.clone();
 	}
 
-
+	public String toJSON(String substanceURI,String structureURI) {
+		return String.format(
+				"\n{"+
+				"\n\t\"%s\": {\"URI\" : %s }," + 
+				"\n\t\"%s\": \t%s ," +
+				"\n\t\"%s\":%s," +
+				"\n\t\"%s\":%s," +
+				"\n\t\"%s\":%s," + 
+				"\n\t\"%s\":%s" + //metric
+				"\n}",
+				CompositionRelation.jsonFeature.substance.jsonname(),JSONUtils.jsonQuote(substanceURI),
+				CompositionRelation.jsonFeature.component.jsonname(),
+				structureURI,
+				CompositionRelation.jsonFeature.compositionUUID.jsonname(),JSONUtils.jsonQuote(getCompositionUUID()),
+				CompositionRelation.jsonFeature.compositionName.jsonname(),JSONUtils.jsonQuote(getName()),
+				CompositionRelation.jsonFeature.relation.jsonname(),JSONUtils.jsonQuote(getRelationType().name()),
+				CompositionRelation.jsonFeature.proportion.jsonname(),getRelation().toJSON()
+				);
+	}
 }
