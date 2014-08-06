@@ -23,15 +23,14 @@ function onDetailedRow(row, data, event) {
   var el = $('.jtox-details-composition', row)[0];
   if (!el)
     return;
-  var uri = $(el).data('uri');
-  uri = this.settings.baseUrl + '/substance?compound_uri=' + encodeURIComponent(uri);
+  var uri = this.settings.baseUrl + '/substance?type=related&compound_uri=' + encodeURIComponent(data.compound.URI);
   el = $(el).parents('table')[0];
   el = el.parentNode;
   $(el).empty();
   $(el).addClass('paddingless');
   var div = document.createElement('div');
   el.appendChild(div);
-  var ds = new jToxSubstance(div, $.extend(true, {}, this.settings, {crossDomain: true, selectionHandler: null, substanceUri: uri, showControls: false, onDetails: function (root, data, event) {
+  new jToxSubstance(div, $.extend(true, {}, this.settings, {crossDomain: true, selectionHandler: null, substanceUri: uri, showControls: false, onDetails: function (root, data, event) {
     new jToxStudy(root, $.extend({}, this.settings, {substanceUri: data}));
   } } ) );
 }
