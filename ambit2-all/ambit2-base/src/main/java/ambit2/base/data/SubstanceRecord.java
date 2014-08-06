@@ -38,7 +38,8 @@ public class SubstanceRecord extends StructureRecord {
 		substanceType,
 		referenceSubstance,
 		ownerUUID,
-		ownerName;
+		ownerName,
+		composition;
 		public String jsonname() {
 			return name();
 		}
@@ -184,6 +185,15 @@ public class SubstanceRecord extends StructureRecord {
 						baseReference+"/query/compound/search/all?search="+getReferenceSubstanceUUID()
 						))
 				));
+		builder.append(String.format("\t\t\"%s\":[\n",jsonSubstance.composition.name()));		
+		if (getRelatedStructures()!=null) {
+			for (CompositionRelation relation : getRelatedStructures()) {
+				builder.append(relation.toJSON(uri, 
+						String.format("{\"compound\": { \"URI\": \"%s/compound/%d\"}}",
+								baseReference,relation.getSecondStructure().getIdchemical())));
+			}
+		}
+		builder.append("\t],\n");
 		builder.append(String.format("\t\t\"%s\":[\n",jsonSubstance.externalIdentifiers.name()));
 		if (getExternalids()!=null) {
 			String d = "";

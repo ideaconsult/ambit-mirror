@@ -77,11 +77,13 @@ public class SubstanceCompositionResource<Q extends IQueryRetrieval<CompositionR
 		if (key==null) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		} else {
-			STRUCTURE_RELATION relation = null;
+			CompositionRelation relation = null;
 			try {
-				if (cmp!=null)
-					relation = STRUCTURE_RELATION.valueOf(cmp.toString());
-			} catch (Exception x) { relation = null;}
+				if (cmp!=null) {
+					STRUCTURE_RELATION srelation = STRUCTURE_RELATION.valueOf(cmp.toString());
+					relation = new CompositionRelation(null,null,srelation,null);
+				}	
+			} catch (Exception x) { }
 			ReadSubstanceComposition q = null;
 			try {
 				q = new ReadSubstanceComposition();
