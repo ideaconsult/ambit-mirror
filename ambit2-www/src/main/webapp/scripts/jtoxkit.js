@@ -42,6 +42,13 @@ var ccLib = {
     return base;
   },
   
+  joinDeep: function (data, field, jn) {
+    var arr = [];
+    for (var i = 0, dl = data.length;i < dl; ++i)
+      arr.push(this.getJsonValue(data[i], field));
+    return arr.join(jn);
+  },
+  
   fireCallback: function (callback, self) {
     if (!jQuery.isArray(callback))
       callback = [callback];
@@ -2360,12 +2367,12 @@ var jToxDataset = (function () {
     var self = this;
     self.rootElement = root;
     jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even when manually initialized
-    
+
     self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings);
-    
+        
     if (!self.settings.noInterface) {
       self.rootElement.appendChild(jT.getTemplate('#jtox-dataset'));
-      self.init();
+      self.init(settings);
     }
         
     // finally, wait a bit for everyone to get initialized and make a call, if asked to
@@ -2374,21 +2381,25 @@ var jToxDataset = (function () {
   };
   
   cls.prototype = {
-    init: function () {
+    init: function (settings) {
       var self = this;
       
       // arrange certain things on the columns first - like dealing with short/long stars
-      self.settings.configuration.columns.dataset.Stars.mRender = function (data, type, full) {
+      defaultSettings.configuration.columns.dataset.Stars.mRender = function (data, type, full) {
         return type != 'display' ? data : jT.ui.putStars(self, data, "Dataset quality stars rating (worst) 1-10 (best)");
       };
+      
       if (self.settings.shortStars)
-        self.settings.configuration.columns.dataset.Stars.sWidth = "40px";
+        defaultSettings.configuration.columns.dataset.Stars.sWidth = "40px";
       
       // deal if the selection is chosen
       if (!!self.settings.selectionHandler || !!self.settings.onDetails) {
-        jT.ui.putActions(self, self.settings.configuration.columns.dataset.Id, { selection: self.settings.selectionHandler, details: !!self.settings.onDetails });
-        self.settings.configuration.columns.dataset.Id.sWidth = "60px";
+        jT.ui.putActions(self, defaultSettings.configuration.columns.dataset.Id, { selection: self.settings.selectionHandler, details: !!self.settings.onDetails });
+        defaultSettings.configuration.columns.dataset.Id.sWidth = "60px";
       }
+      
+      // again , so that changed defaults can be taken into account.
+      self.settings.configuration = jT.$.extend(true, {}, defaultSettings.configuration, settings.configuration);
       
       // READYY! Go and prepare THE table.
       self.table = jT.$('table', self.rootElement).dataTable({
@@ -2507,7 +2518,7 @@ var jToxModel = (function () {
     
     if (!self.settings.noInterface) {
       self.rootElement.appendChild(jT.getTemplate('#jtox-model'));
-      self.init();
+      self.init(settings);
     }
         
     // finally, wait a bit for everyone to get initialized and make a call, if asked to
@@ -2516,17 +2527,16 @@ var jToxModel = (function () {
   };
   
   cls.prototype = {
-    init: function () {
+    init: function (settings) {
       var self = this;
       
       // but before given it up - make a small sorting..
       if (!self.settings.algorithms) {
-        self.settings.configuration.columns.model.Stars.mRender = function (data, type, full) { return type != 'display' ? data : jT.ui.putStars(self, data, "Model star rating (worst) 1 - 10 (best)"); };
-        if (self.settings.shortStars) {
-          self.settings.configuration.columns.model.Stars.sWidth = "40px";
-        }
+        defaultSettings.configuration.columns.model.Stars.mRender = function (data, type, full) { return type != 'display' ? data : jT.ui.putStars(self, data, "Model star rating (worst) 1 - 10 (best)"); };
+        if (self.settings.shortStars)
+          defaultSettings.configuration.columns.model.Stars.sWidth = "40px";
 
-        self.settings.configuration.columns.model.Algorithm.mRender = function (data, type, full) { 
+        defaultSettings.configuration.columns.model.Algorithm.mRender = function (data, type, full) { 
           var name = data.URI.match(/https{0,1}:\/\/.*\/algorithm\/(\w+).*/)[1];
           if (type != 'display')
             return name;
@@ -2545,9 +2555,12 @@ var jToxModel = (function () {
       var cat = self.settings.algorithms ? 'algorithm' : 'model';
       // deal if the selection is chosen
       if (!!self.settings.selectionHandler || !!self.settings.onDetails) {
-        jT.ui.putActions(self, self.settings.configuration.columns[cat].Id, { selection: self.settings.selectionHandler, details: !!self.settings.onDetails});
-        self.settings.configuration.columns[cat].Id.sWidth = "60px";
+        jT.ui.putActions(self, defaultSettings.configuration.columns[cat].Id, { selection: self.settings.selectionHandler, details: !!self.settings.onDetails});
+        defaultSettings.configuration.columns[cat].Id.sWidth = "60px";
       }
+      
+      // again , so that changed defaults can be taken into account.
+      self.settings.configuration = jT.$.extend(true, {}, defaultSettings.configuration, settings.configuration);
       
       // READYY! Go and prepare THE table.
       self.table = jT.$('table', self.rootElement).dataTable({
@@ -2716,12 +2729,8 @@ var jToxSubstance = (function () {
             return (type != 'display') ? data.i5uuid : jT.ui.shortenedData('<a target="_blank" href="' + data.uri + '">' + data.i5uuid + '</a>', "Press to copy the UUID in the clipboard", data.i5uuid);
           } },
           'Owner': { sTitle: "Owner", mData: "ownerName", sDefaultContent: '-'},
-          'Info': { sTitle: "Info", mData: "externalIdentifiers", mRender: function (data, type, full) {
-            var arr = [];
-            for (var i = 0, dl = data.length;i < dl; ++i)
-              arr.push(data[i].type);
-            return arr.join(', ');
-          } }
+          'Info': { sTitle: "Info", mData: "externalIdentifiers", mRender: function (data, type, full) { return ccLib.joinDeep(data, 'type', ', '); }
+          }
         }
       }
     }
@@ -2750,7 +2759,7 @@ var jToxSubstance = (function () {
       }
 
       self.rootElement.appendChild(jT.getTemplate('#jtox-substance'));
-      self.init();
+      self.init(settings);
     }    
         
     // finally, if provided - make the query
@@ -2759,19 +2768,18 @@ var jToxSubstance = (function () {
   };
   
   cls.prototype = {
-    init: function () {
+    init: function (settings) {
       var self = this;
       
       // deal if the selection is chosen
-      
-      var colId = self.settings.configuration.columns.substance['Id'];
+      var colId = defaultSettings.configuration.columns.substance['Id'];
       jT.ui.putActions(self, colId, { 
         selection: self.settings.selectionHandler,
         details: !!self.settings.onDetails
       });
       colId.sTitle = '';
       
-      self.settings.configuration.columns.substance['Owner'].mRender = function (data, type, full) {
+      defaultSettings.configuration.columns.substance['Owner'].mRender = function (data, type, full) {
         return (type != 'display') ? data : '<a target="_blank" href="' + self.settings.baseUrl + '/substanceowner/' + full.ownerUUID + '/substance">' + data + '</a>';
       };
       
@@ -2785,6 +2793,9 @@ var jToxSubstance = (function () {
       }
       else
         jT.$('.jtox-controls', self.rootElement).remove();
+      
+      // again , so that changed defaults can be taken into account.
+      self.settings.configuration = jT.$.extend(true, {}, defaultSettings.configuration, settings.configuration);
       
       // READYY! Go and prepare THE table.
       self.table = jT.$('table', self.rootElement).dataTable({
@@ -2892,7 +2903,7 @@ var jToxComposition = (function () {
 					  if (type != 'display')
 					    return '' + val;
 					  var func = ("HAS_ADDITIVE" == val) ? full.proportion.function_as_additive : "";
-					  return '<span class="camelCase">' +  val.replace("HAS_", "").toLowerCase() + '</span>' + ((func === undefined || func === null || func == '') ? "" : " (" + func + ")");
+					  return '<span class="camelCase">' +  val.substr(4).toLowerCase() + '</span>' + ((func === undefined || func === null || func == '') ? "" : " (" + func + ")");
           } },
           'Name': { sTitle: "Name", sClass: "camelCase left", sWidth: "15%", mData: "component.compound.name", mRender: function(val, type, full) {
 						return (type != 'display') ? '' + val : 
@@ -3606,128 +3617,136 @@ var jToxPolicy = (function () {
     self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings);
     self.policies = null;
     
-    if (!self.settings.noInterface) {
-      self.rootElement.appendChild(jT.getTemplate('#jtox-policy'));
-      self.settings.configuration.columns.policy.Id.sTitle = '';
-      self.settings.configuration.columns.policy.Role.mRender = function (data, type, full) {
-        return type != 'display' ? (data || '') : '<select class="jt-inlineaction" data-data="role">' + self.roleOptions + '</select>';
-      };
-      
-      var alerter = function (el, icon, task) {
-        var mess = (!!task ? task.error : "Unknown error");
-        $(el).removeClass(icon).addClass('ui-icon-alert').attr('title', mess);
-        setTimeout(function () {
-          $(el).addClass(icon).removeClass('ui-icon-alert');
-          $(el).removeAttr('title');
-        }, 3500);
-      };
-      
-      var dataEnumer = function (data) {
-        var out = {};
-        ccLib.enumObject(data, function (val, name) {
-          out[name] = val;
-        });
-        return out;
-      };
-      
-      var inlineHandlers = {
-        init: function (data) {
-          if (this.tagName == 'SELECT')
-            $(this).val(data[$(this).data('data')]);
-        },
-        change: function (e) {
-          var data = jT.ui.rowData(this);
-          if (!!data.uri) {
-            // Initiate a change in THIS field.
-            var el = this;
-            var myData = $(el).data('data');
-            var myObj = {};
-            ccLib.setJsonValue(myObj, myData, ccLib.getObjValue(el));
-
-            $(el).addClass('loading');
-            // now make the update call...
-            jT.call(self, data.uri, { method: 'PUT', data: dataEnumer(myObj) }, function (task) {
-              jT.pollTask(self, task, function (task) {
-                $(el).removeClass('loading');
-                if (!task || !!task.error) {
-                  ccLib.setObjValue(el, ccLib.getJsonValue(data, myData)); // i.e. revert the old value
-                  alerter(el, '', task);
-                }
-                else {
-                  // we need to update the value... in our internal 'policies' array...
-                  var idx = $(self.table).dataTable().fnGetPosition($(el).closest('tr')[0]);
-                  ccLib.setJsonValue(self.policies[idx], myData, ccLib.getObjValue(el));
-                }
-              });
-            });
-          }
-          else {
-            // collect and validate and react
-            var row = $(this).closest('tr');
-            var inline = jT.ui.rowInline(row);
-            if (!inline.role || !inline.resource)
-              $('span.ui-icon-plusthick', row).addClass('jtox-hidden');
-            else
-              $('span.ui-icon-plusthick', row).removeClass('jtox-hidden');
-          }
-        },
-        remove: function (e) {
-          if (!window.confirm("Do you really want to delete this policy?"))
-            return;
-          var el = this;
-          var data = jT.ui.rowData(this);
-          $(el).addClass('loading');
-          jT.call(self, data.uri, { method: "DELETE" }, function (task, jhr) {
-            jT.pollTask(self, task, function (task) {
-              $(el).removeClass('loading');
-              if (!task || !!task.error)
-                alerter(el, 'ui-icon-closethick', task)
-              else // i.e. - on success - reload them!
-                self.loadPolicies();
-            }, jhr);
-          });
-        },
-        add: function (e) {
-          var data = jT.ui.rowInline(this, jT.ui.rowData(this));
-          delete data['uri'];
-          var el = this;
-          $(el).addClass('loading');
-          jT.call(self, '/admin/restpolicy', { method: "POST", data: dataEnumer(data)}, function (task) {
-            jT.pollTask(self, task, function (task) {
-              $(el).removeClass('loading');
-              if (!task || !!task.error)
-                alerter(el, 'ui-icon-plusthick', task)
-              else // i.e. - on success - reload them!
-                self.loadPolicies();
-            });
-          });
-        },
-      };
-      
-      self.table = jT.$('table', self.rootElement).dataTable({
-        "bPaginate": false,
-        "bLengthChange": false,
-				"bAutoWidth": false,
-        "sDom" : self.settings.sDom,
-        "aoColumns": jT.ui.processColumns(self, 'policy'),
-        "aaSortingFixed": [[0, 'asc']],
-        "fnCreatedRow": jT.ui.inlineRowFn(inlineHandlers),
-				"oLanguage": jT.$.extend({
-          "sLoadingRecords": "No policies found.",
-          "sZeroRecords": "No policies found.",
-          "sEmptyTable": "No policies available.",
-          "sInfo": "Showing _TOTAL_ policy(s) (_START_ to _END_)"
-        }, self.settings.oLanguage)
-      });
-      
-      jT.$(self.table).dataTable().fnAdjustColumnSizing();
-    }
+    if (!self.settings.noInterface)
+      self.init(settings);
         
     // finally, wait a bit for everyone to get initialized and make a call, if asked to
     if (self.settings.loadOnInit)
       self.loadPolicies();
   };
 
+  cls.prototype.init = function (settings) {
+    var self = this;
+    self.rootElement.appendChild(jT.getTemplate('#jtox-policy'));
+    defaultSettings.configuration.columns.policy.Id.sTitle = '';
+    defaultSettings.configuration.columns.policy.Role.mRender = function (data, type, full) {
+      return type != 'display' ? (data || '') : '<select class="jt-inlineaction" data-data="role">' + self.roleOptions + '</select>';
+    };
+    
+    var alerter = function (el, icon, task) {
+      var mess = (!!task ? task.error : "Unknown error");
+      $(el).removeClass(icon).addClass('ui-icon-alert').attr('title', mess);
+      setTimeout(function () {
+        $(el).addClass(icon).removeClass('ui-icon-alert');
+        $(el).removeAttr('title');
+      }, 3500);
+    };
+    
+    var dataEnumer = function (data) {
+      var out = {};
+      ccLib.enumObject(data, function (val, name) {
+        out[name] = val;
+      });
+      return out;
+    };
+    
+    var inlineHandlers = {
+      init: function (data) {
+        if (this.tagName == 'SELECT')
+          $(this).val(data[$(this).data('data')]);
+      },
+      change: function (e) {
+        var data = jT.ui.rowData(this);
+        if (!!data.uri) {
+          // Initiate a change in THIS field.
+          var el = this;
+          var myData = $(el).data('data');
+          var myObj = {};
+          ccLib.setJsonValue(myObj, myData, ccLib.getObjValue(el));
+
+          $(el).addClass('loading');
+          // now make the update call...
+          jT.call(self, data.uri, { method: 'PUT', data: dataEnumer(myObj) }, function (task) {
+            jT.pollTask(self, task, function (task) {
+              $(el).removeClass('loading');
+              if (!task || !!task.error) {
+                ccLib.setObjValue(el, ccLib.getJsonValue(data, myData)); // i.e. revert the old value
+                alerter(el, '', task);
+              }
+              else {
+                // we need to update the value... in our internal 'policies' array...
+                var idx = $(self.table).dataTable().fnGetPosition($(el).closest('tr')[0]);
+                ccLib.setJsonValue(self.policies[idx], myData, ccLib.getObjValue(el));
+              }
+            });
+          });
+        }
+        else {
+          // collect and validate and react
+          var row = $(this).closest('tr');
+          var inline = jT.ui.rowInline(row);
+          if (!inline.role || !inline.resource)
+            $('span.ui-icon-plusthick', row).addClass('jtox-hidden');
+          else
+            $('span.ui-icon-plusthick', row).removeClass('jtox-hidden');
+        }
+      },
+      remove: function (e) {
+        if (!window.confirm("Do you really want to delete this policy?"))
+          return;
+        var el = this;
+        var data = jT.ui.rowData(this);
+        $(el).addClass('loading');
+        jT.call(self, data.uri, { method: "DELETE" }, function (task, jhr) {
+          jT.pollTask(self, task, function (task) {
+            $(el).removeClass('loading');
+            if (!task || !!task.error)
+              alerter(el, 'ui-icon-closethick', task)
+            else // i.e. - on success - reload them!
+              self.loadPolicies();
+          }, jhr);
+        });
+      },
+      add: function (e) {
+        var data = jT.ui.rowInline(this, jT.ui.rowData(this));
+        delete data['uri'];
+        var el = this;
+        $(el).addClass('loading');
+        jT.call(self, '/admin/restpolicy', { method: "POST", data: dataEnumer(data)}, function (task) {
+          jT.pollTask(self, task, function (task) {
+            $(el).removeClass('loading');
+            if (!task || !!task.error)
+              alerter(el, 'ui-icon-plusthick', task)
+            else // i.e. - on success - reload them!
+              self.loadPolicies();
+          });
+        });
+      },
+    };
+    
+    // again , so that changed defaults can be taken into account.
+    self.settings.configuration = jT.$.extend(true, {}, defaultSettings.configuration, settings.configuration);
+ 
+    self.table = jT.$('table', self.rootElement).dataTable({
+      "bPaginate": false,
+      "bLengthChange": false,
+			"bAutoWidth": false,
+      "sDom" : self.settings.sDom,
+      "aoColumns": jT.ui.processColumns(self, 'policy'),
+      "aaSortingFixed": [[0, 'asc']],
+      "fnCreatedRow": jT.ui.inlineRowFn(inlineHandlers),
+			"oLanguage": jT.$.extend({
+        "sLoadingRecords": "No policies found.",
+        "sZeroRecords": "No policies found.",
+        "sEmptyTable": "No policies available.",
+        "sInfo": "Showing _TOTAL_ policy(s) (_START_ to _END_)"
+      }, self.settings.oLanguage)
+    });
+    
+    jT.$(self.table).dataTable().fnAdjustColumnSizing();
+    
+  };
+  
   cls.prototype.loadPolicies = function (force) {
     var self = this;
     $(self.table).dataTable().fnClearTable();
