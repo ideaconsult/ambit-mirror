@@ -39,9 +39,10 @@
   position: absolute;
   font-size: 110%;
   font-weight: bold;
-  right: -85px;
+  right: -180px;
+  width: 100%;
   bottom: 50%;
-  text-align: center;
+  text-align: right;
 	transform: rotate(270deg);
   -webkit-transform: rotate(270deg);
   -moz-transform: rotate(270deg);   
