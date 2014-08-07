@@ -103,12 +103,15 @@ function updateFormValidation(formName) {
 		<input class='four columns alpha half-bottom' type="text" name='extidvalue' title='External identifier value' size="30" value="Ambit Transfer">
 		<div class='nine columns omega'></div>
 	</div>
-		<div class='row remove-bottom'>
-			<label class='six columns alpha' title='Uncheck to add or replace study records, retaining existing where relevant'>Clear existing study records</label>
-		   	<input class='one column alpha half-bottom' type="checkbox" id="clearMeasurements" name="clearMeasurements" class="toggle" checked>
-		   	<span class='five columns alpha half-bottom' >&nbsp;</span>
-		   	<div class='four columns omega'></div>
-		</div>	  
+	  
+	<div class='row remove-bottom'>
+			<label class='four columns alpha' title='Uncheck to add or replace study records, retaining existing where relevant'>Clear existing study records</label>
+		   	<input class='one column omega half-bottom' type="checkbox" id="clearMeasurements" name="clearMeasurements" class="toggle" checked>
+		   	<label class='four columns omega' title='Uncheck to add or replace compositions'>Clear existing composition records</label>
+		   	<input class='one column omega half-bottom' type="checkbox" id="clearComposition" name="clearComposition" class="toggle" checked>
+		   	<div class='six columns omega'></div>
+		</div>	  	    
+		
 			
 	<div class='row remove-bottom'>
 		<label class='six columns alpha' title='Use predefined filtering criteria'>Import only high quality study records</label>
