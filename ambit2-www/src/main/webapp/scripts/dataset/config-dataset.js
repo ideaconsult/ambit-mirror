@@ -35,7 +35,7 @@ var config_dataset = {
     	'Stars': { sWidth: "30%" }
   	},
   	"substance": {
-    	'Relation': { iOrder: 20, mData: "composition", sTitle: "Relation", mRender: renderRelation }
+    	'Relation': { iOrder: 20, mData: "composition", sTitle: "Contained in as", mRender: renderRelation }
   	}
 	},
 	"handlers": {
