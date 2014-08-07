@@ -15,7 +15,7 @@
 <script type='text/javascript' src='${ambit_root}/scripts/config-study.js'></script>
 
 <script language="JavaScript">
-  var common_config = $.extend({}, config_dataset, config_study);
+  var common_config = $.extend(true,{}, config_dataset, config_study);
 </script>
 <link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
 
