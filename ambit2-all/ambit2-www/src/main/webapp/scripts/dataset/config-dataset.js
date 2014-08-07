@@ -18,20 +18,25 @@ var config_dataset = {
 				return data;
 			}
 		}
-
   },
   "groups": createGroups,
 	"columns": {
   	"dataset": {
-    	'Info': { bVisible: false }
+    	'Info': { bVisible: false },
+    	'Id': { sWidth: "25%" },
+    	'Title': { sWidth: "45%" },
+    	'Stars': { sWidth: "30%" }
   	},
   	"model": { 
     	'Info': { bVisible: false },
-    	'Algorithm': { bVisible: false }
+    	'Algorithm': { bVisible: false },
+    	'Id': { sWidth: "25%" },
+    	'Title': { sWidth: "45%" },
+    	'Stars': { sWidth: "30%" }
   	},
   	"substance": {
     	'Relation': { iOrder: 20, mData: "composition", sTitle: "Relation", mRender: renderRelation }
-  	}  	
+  	}
 	},
 	"handlers": {
   	"checked": onSelectedUpdate
