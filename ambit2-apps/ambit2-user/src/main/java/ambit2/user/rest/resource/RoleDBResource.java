@@ -36,6 +36,14 @@ import ambit2.user.rest.CreateUserRole;
 public class RoleDBResource extends AmbitDBQueryResource<IQueryRetrieval<String>,String> {
 
 	
+	public RoleDBResource() {
+		super();
+		setHtmlbyTemplate(true);
+	}
+	@Override
+	public String getTemplateName() {
+		return "a/roles.ftl";
+	}
 	@Override
 	public IProcessor<IQueryRetrieval<String>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
