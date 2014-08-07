@@ -4,6 +4,7 @@ function getMyAccount(root,url,readonly,username) {
     $.ajax({
         dataType: "json",
         url: url,
+        "cache": false,
         success: function(data, status, xhr) {
         	$.each(data["user"],function(index, entry) {
         		$("#username").text(entry["username"]);
