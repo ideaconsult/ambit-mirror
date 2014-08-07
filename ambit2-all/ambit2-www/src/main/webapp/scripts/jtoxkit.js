@@ -2385,21 +2385,21 @@ var jToxDataset = (function () {
       var self = this;
       
       // arrange certain things on the columns first - like dealing with short/long stars
-      defaultSettings.configuration.columns.dataset.Stars.mRender = function (data, type, full) {
+      self.settings.configuration.columns.dataset.Stars.mRender = function (data, type, full) {
         return type != 'display' ? data : jT.ui.putStars(self, data, "Dataset quality stars rating (worst) 1-10 (best)");
       };
       
       if (self.settings.shortStars)
-        defaultSettings.configuration.columns.dataset.Stars.sWidth = "40px";
+        self.settings.configuration.columns.dataset.Stars.sWidth = "40px";
       
       // deal if the selection is chosen
       if (!!self.settings.selectionHandler || !!self.settings.onDetails) {
-        jT.ui.putActions(self, defaultSettings.configuration.columns.dataset.Id, { selection: self.settings.selectionHandler, details: !!self.settings.onDetails });
-        defaultSettings.configuration.columns.dataset.Id.sWidth = "60px";
+        jT.ui.putActions(self, self.settings.configuration.columns.dataset.Id, { selection: self.settings.selectionHandler, details: !!self.settings.onDetails });
+        self.settings.configuration.columns.dataset.Id.sWidth = "60px";
       }
       
       // again , so that changed defaults can be taken into account.
-      self.settings.configuration = jT.$.extend(true, {}, defaultSettings.configuration, settings.configuration);
+      self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
       
       // READYY! Go and prepare THE table.
       self.table = jT.$('table', self.rootElement).dataTable({
@@ -2532,11 +2532,11 @@ var jToxModel = (function () {
       
       // but before given it up - make a small sorting..
       if (!self.settings.algorithms) {
-        defaultSettings.configuration.columns.model.Stars.mRender = function (data, type, full) { return type != 'display' ? data : jT.ui.putStars(self, data, "Model star rating (worst) 1 - 10 (best)"); };
+        self.settings.configuration.columns.model.Stars.mRender = function (data, type, full) { return type != 'display' ? data : jT.ui.putStars(self, data, "Model star rating (worst) 1 - 10 (best)"); };
         if (self.settings.shortStars)
-          defaultSettings.configuration.columns.model.Stars.sWidth = "40px";
+          self.settings.configuration.columns.model.Stars.sWidth = "40px";
 
-        defaultSettings.configuration.columns.model.Algorithm.mRender = function (data, type, full) { 
+        self.settings.configuration.columns.model.Algorithm.mRender = function (data, type, full) { 
           var name = data.URI.match(/https{0,1}:\/\/.*\/algorithm\/(\w+).*/)[1];
           if (type != 'display')
             return name;
@@ -2555,12 +2555,12 @@ var jToxModel = (function () {
       var cat = self.settings.algorithms ? 'algorithm' : 'model';
       // deal if the selection is chosen
       if (!!self.settings.selectionHandler || !!self.settings.onDetails) {
-        jT.ui.putActions(self, defaultSettings.configuration.columns[cat].Id, { selection: self.settings.selectionHandler, details: !!self.settings.onDetails});
-        defaultSettings.configuration.columns[cat].Id.sWidth = "60px";
+        jT.ui.putActions(self, self.settings.configuration.columns[cat].Id, { selection: self.settings.selectionHandler, details: !!self.settings.onDetails});
+        self.settings.configuration.columns[cat].Id.sWidth = "60px";
       }
       
       // again , so that changed defaults can be taken into account.
-      self.settings.configuration = jT.$.extend(true, {}, defaultSettings.configuration, settings.configuration);
+      self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
       
       // READYY! Go and prepare THE table.
       self.table = jT.$('table', self.rootElement).dataTable({
@@ -2772,14 +2772,14 @@ var jToxSubstance = (function () {
       var self = this;
       
       // deal if the selection is chosen
-      var colId = defaultSettings.configuration.columns.substance['Id'];
+      var colId = self.settings.configuration.columns.substance['Id'];
       jT.ui.putActions(self, colId, { 
         selection: self.settings.selectionHandler,
         details: !!self.settings.onDetails
       });
       colId.sTitle = '';
       
-      defaultSettings.configuration.columns.substance['Owner'].mRender = function (data, type, full) {
+      self.settings.configuration.columns.substance['Owner'].mRender = function (data, type, full) {
         return (type != 'display') ? data : '<a target="_blank" href="' + self.settings.baseUrl + '/substanceowner/' + full.ownerUUID + '/substance">' + data + '</a>';
       };
       
@@ -2795,7 +2795,7 @@ var jToxSubstance = (function () {
         jT.$('.jtox-controls', self.rootElement).remove();
       
       // again , so that changed defaults can be taken into account.
-      self.settings.configuration = jT.$.extend(true, {}, defaultSettings.configuration, settings.configuration);
+      self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
       
       // READYY! Go and prepare THE table.
       self.table = jT.$('table', self.rootElement).dataTable({
@@ -3628,8 +3628,8 @@ var jToxPolicy = (function () {
   cls.prototype.init = function (settings) {
     var self = this;
     self.rootElement.appendChild(jT.getTemplate('#jtox-policy'));
-    defaultSettings.configuration.columns.policy.Id.sTitle = '';
-    defaultSettings.configuration.columns.policy.Role.mRender = function (data, type, full) {
+    self.settings.configuration.columns.policy.Id.sTitle = '';
+    self.settings.configuration.columns.policy.Role.mRender = function (data, type, full) {
       return type != 'display' ? (data || '') : '<select class="jt-inlineaction" data-data="role">' + self.roleOptions + '</select>';
     };
     
@@ -3725,7 +3725,7 @@ var jToxPolicy = (function () {
     };
     
     // again , so that changed defaults can be taken into account.
-    self.settings.configuration = jT.$.extend(true, {}, defaultSettings.configuration, settings.configuration);
+    self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
  
     self.table = jT.$('table', self.rootElement).dataTable({
       "bPaginate": false,
