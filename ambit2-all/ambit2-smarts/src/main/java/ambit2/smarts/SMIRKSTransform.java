@@ -8,4 +8,9 @@ public class SMIRKSTransform
 	{	
 	}
 	
+	public static void dummy()
+	{
+		System.out.println("dummy function");
+	}
+	
 }
