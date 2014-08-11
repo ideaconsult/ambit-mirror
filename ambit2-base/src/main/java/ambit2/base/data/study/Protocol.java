@@ -1025,6 +1025,66 @@ public class Protocol {
 				return "TOX";
 			}			
 		},
+		PUBCHEM_CONFIRMATORY_SECTION {
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+		},
+		PUBCHEM_SUMMARY_SECTION {
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+		},
+		PUBCHEM_SCREENING_SECTION {
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+		},
+		PUBCHEM_CELLBASED_SECTION {
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+		},	
+		PUBCHEM_DOSERESPONSE_SECTION {
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+		},		
+		PUBCHEM_PANEL_SECTION {
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+		},		
+		PUBCHEM_BIOCHEMICAL_SECTION {
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+		},		
+		PUBCHEM_INVIVO_SECTION {
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+		},		
+		PUBCHEM_ACTIVECONCENTRATIONSPECIFIED_SECTION {
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+		},			
+		PUBCHEM_INVITRO_SECTION {
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+		},					
 		PROTEOMICS_SECTION {
 			@Override
 			public String toString() {
@@ -1050,8 +1110,11 @@ public class Protocol {
 			return "P-CHEM";
 		}
 		public String getNumber() {
-			return "";
-		}
+			return String.format("10.%d",ordinal());
+		}	
+		public String toString() {
+			return name().replace("_"," ");
+		}				
 		public int getSortingOrder() {
 			return 10000;
 		}

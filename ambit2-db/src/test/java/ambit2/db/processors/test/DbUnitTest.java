@@ -134,11 +134,15 @@ public abstract class DbUnitTest {
 
 	}
 	protected IDatabaseConnection getConnection(String host,String db,String port,String user, String pass) throws Exception {
-		  
+		return getConnection( host, db, port, user,  pass,false);
+	}
+	protected IDatabaseConnection getConnection(String host,String db,String port,String user, String pass,boolean debug) throws Exception {
+		String debugConnection = "&useUsageAdvisor=true&dontTrackOpenResources=false";		  
         Class.forName("com.mysql.jdbc.Driver");
         Connection jdbcConnection = DriverManager.getConnection(
-                String.format("jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8&profileSQL=%s",
-                		host,port,db,Boolean.toString(isProfileSQL()))
+                String.format("jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8&profileSQL=%s%s",
+                		host,port,db,Boolean.toString(isProfileSQL()),(debug?debugConnection:"")
+                		)
                 , user,pass);
 //SET NAMES utf8	        
         IDatabaseConnection c = new DatabaseConnection(jdbcConnection);
@@ -149,6 +153,9 @@ public abstract class DbUnitTest {
 	}	
 	protected boolean isProfileSQL() {
 		return false;
+	}
+	protected IDatabaseConnection getConnection(boolean debug) throws Exception {
+		   return getConnection(getHost(),getDatabase(),getPort(),getUser(),getPWD(),debug);
 	}
 	protected IDatabaseConnection getConnection() throws Exception {
 	   return getConnection(getHost(),getDatabase(),getPort(),getUser(),getPWD());

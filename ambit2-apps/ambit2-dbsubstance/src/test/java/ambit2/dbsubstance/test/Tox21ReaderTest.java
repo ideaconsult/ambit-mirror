@@ -1,9 +1,15 @@
 package ambit2.dbsubstance.test;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URL;
 import java.sql.Connection;
 
 import junit.framework.Assert;
+import net.idea.loom.pubchem.rest.PubChemAIDMetadata;
+import net.idea.loom.pubchem.rest.PubChemAIDReader;
 import net.idea.loom.tox21.Tox21SubstanceReader;
 
 import org.dbunit.database.IDatabaseConnection;
@@ -23,31 +29,54 @@ import ambit2.db.processors.test.DbUnitTest;
 
 public class Tox21ReaderTest extends DbUnitTest {
 	
+	@Override
+	protected boolean isProfileSQL() {
+		return false;
+	}
 	@Test
 	public void testWriteTox21() throws Exception {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
         
         
 		File dir = new File("F:/Downloads/Chemical data/TOXCAST/Tox21/");
-		File[] files = dir.listFiles();
+		//File[] files = dir.listFiles();
+
+		File[] files = new File[] {
+				new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_720681_data.csv"),
+				new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_743228_data.csv"),
+				//new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_743210_data.csv"),
+				//new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_743209_data.csv"),
+				new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_720687_data.csv"),
+				new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_720685_data.csv"),
+				new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_720678_data.csv")
+		};
+
 		IDatabaseConnection c = null;
 			for (int i=0; i < files.length; i++) 
 			if (files[i].getName().endsWith(".csv")) {
 				System.out.println(files[i].getAbsolutePath());
-				c = getConnection();
+				c = getConnection(true);
 				Connection conn = c.getConnection();
-		        Tox21SubstanceReader parser = null;
+		        PubChemAIDReader parser = null;
+		        InputStream jsonmeta = null;
 		        try {
 		    		LiteratureEntry entry = new LiteratureEntry("Tox21","???");
 		    		entry.setType(_type.Dataset);
 		    		
-		    		parser = new Tox21SubstanceReader(
-		    				files[i]
+		    		String key = files[i].getName().replace(".csv", "").replace("_data","");
+		    		URL meta = this.getClass().getClassLoader().getResource(String.format("net/idea/loom/tox21/%s.json",key));
+		    		if (meta==null) throw new FileNotFoundException(key);
+		    		jsonmeta = new FileInputStream(meta.getFile());
+		    		if (jsonmeta==null) throw new FileNotFoundException(meta.getFile());
+		    		
+		    		parser = new PubChemAIDReader(
+		    				files[i],jsonmeta
 		    				);
-			        write(parser,conn,new ReferenceSubstanceUUID(),false,2);
+			        write(parser,conn,new ReferenceSubstanceUUID(),false,20000);
 		        } catch (Exception x) {
 		        	x.printStackTrace();
 		        } finally {
+		        	if (jsonmeta!=null) jsonmeta.close();
 		        	parser.close();
 		        	conn.close();
 		        }
@@ -71,11 +100,12 @@ public class Tox21ReaderTest extends DbUnitTest {
 		int records = 0;
 		while (reader.hasNext()) {
             Object record = reader.next();
+            
             if (record==null) continue;
-            if (records>=max) break;
             Assert.assertTrue(record instanceof IStructureRecord);
             writer.process((IStructureRecord)record);
             records++;
+            if (records>=max) break;
 		}
 		writer.close();
 		return records;

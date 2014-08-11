@@ -2587,7 +2587,78 @@ var config_study = {
                     "bVisible": true
                 }
             }       	
+        },      
+        "PUBCHEM_SUMMARY_SECTION" : {
+            "effects": {
+                "text": {
+                    "bVisible": true
+                }
+            },
+            "parameters": {
+                "Target gene": {
+                	"bVisible": true
+                }                
+            },
+            "conditions": {
+            	"replicate": {
+            		"bVisible": true
+                },
+              	"doses/concentrations": {
+              		"bVisible": true,
+                    "sTitle": "Concentration"
+                },
+                "emission wavelength": {
+                	"bVisible": true
+                }                
+            },            
+            "protocol": {
+           	 "citation": {
+                    "bVisible": true,
+                    "sTitle": "Reference",
+                    "mRender" : function(data,type,full) {
+                    	return  data["title"];
+                    }
+                }             
+           }
+            
         },        
+        "PUBCHEM_CONFIRMATORY_SECTION" : {
+            "effects": {
+                "text": {
+                    "bVisible": true
+                }
+            },
+            "conditions": {
+            	"replicate": {
+            		"bVisible": true
+                },
+              	"doses/concentrations": {
+              		"bVisible": true,
+                    "sTitle": "Concentration"
+                },
+                "emission wavelength": {
+                	"bVisible": true
+                }
+                
+            },
+            "protocol": {
+            	 "citation": {
+                     "bVisible": true,
+                     "sTitle": "Reference",
+                     "mRender" : function(data,type,full) {
+                     	return  data["title"];
+                     }
+                 }             
+            },
+            "interpretation": {
+                "result": {
+                	"bVisible": false
+                },
+                "criteria": {
+                	"bVisible": false
+                }
+            }            
+        },         
         "CELL_VIABILITY_ASSAY_SECTION" : {
             "effects": {
                 "text": {

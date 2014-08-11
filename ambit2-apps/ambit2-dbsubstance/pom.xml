@@ -50,7 +50,14 @@
     	<artifactId>loom-tox21</artifactId>
     	<version>${net.idea.loom.version}</version>
     	<type>jar</type>
-    </dependency>        
+    </dependency>
+    <dependency>
+    	<groupId>net.ideaconsult</groupId>
+    	<artifactId>loom-pubchemrest-cli</artifactId>
+    	<version>${net.idea.loom.version}</version>
+    	<type>jar</type>
+    </dependency>
+            
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
