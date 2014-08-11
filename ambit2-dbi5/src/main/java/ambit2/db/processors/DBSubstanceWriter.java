@@ -93,6 +93,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	    deleteStudy = new DeleteStudy();
 	    deleteComposition = new DeleteSubstanceRelation();
 	    x = new UpdateExecutor();
+	    x.setUseCache(true);
 	    x.setCloseConnection(false);
 	    writer = new RepositoryWriter();
 	    writer.setCloseConnection(false);
