@@ -17,7 +17,11 @@
 	</ul>
 	<li><a href="${ambit_root}/admin">Admin</a>
 		<#if openam_token??>
-			<#include "/menu/admin_menu.ftl">
+			<#if menu_profile??>
+				<#include "/menu/profile/${menu_profile}/admin_menu.ftl">
+			<#else>
+				<#include "/menu/profile/default/admin_menu.ftl">
+			</#if>
 		</#if>
 	</li>	
 	<li><a href="#">About</a>

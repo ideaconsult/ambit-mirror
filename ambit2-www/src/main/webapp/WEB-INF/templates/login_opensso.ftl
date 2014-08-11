@@ -19,7 +19,6 @@ $(document)
 <div class="container" style="margin:0;padding:0;">
 
 <!-- banner -->
-<!-- banner -->
 <#include "/banner_crumbs.ftl">
 
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
