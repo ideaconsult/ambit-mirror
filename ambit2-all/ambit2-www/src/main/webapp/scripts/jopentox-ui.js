@@ -118,11 +118,11 @@ function defineAlgorithmTable(root,url,viscols) {
 				}
 					
 			],
-		"sSearch": "Filter:",
 		"bJQueryUI" : true,
 		"bSearchable": true,
 		"sAjaxSource": url,
-		"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
+		"sDom" : '<"help remove-bottom"lf><"help remove-bottom">Trt<"help remove-bottom"lp>',
+		"sSearch": "Filter:",
 		"bPaginate" : true,
 		"sPaginationType": "full_numbers",
 		"sPaginate" : ".dataTables_paginate _paging",
@@ -1500,6 +1500,77 @@ function definePolicyTable(root,url,selector) {
 				"sSearch": "Filter:",
 				"sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
 	            "sLoadingRecords": "No policies found."
+	    }
+	} );
+	return oTable;
+}
+
+function defineRolesTable(root,url,selector) {
+	var oTable = $(selector).dataTable( {
+		"sAjaxDataProp" : "roles",
+		"bProcessing": true,
+		"bServerSide": false,
+		"bStateSave": false,
+		"aoColumnDefs": [
+ 				{ 
+ 				  "mData": "role" ,  						
+ 				  "asSorting": [ "asc", "desc" ],
+				  "aTargets": [ 0 ],	
+				  "bSearchable" : true,
+				  "bUseRendered" : false,
+				  "bSortable" : true,
+				  "fnRender" : function(o,val) {
+					  return val;
+				  }
+				}
+ 								
+			],
+		"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',	
+		"bJQueryUI" : true,
+		"bPaginate" : true,
+		"sPaginationType": "full_numbers",
+		"sPaginate" : ".dataTables_paginate _paging",
+		"bDeferRender": true,
+		"bSearchable": true,
+		"sAjaxSource": url,
+		"oLanguage": {
+				"sSearch": "Filter:",
+				"sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
+	            "sLoadingRecords": "No roles found."
+	    },
+	    "fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
+			oSettings.jqXHR = $.ajax({
+				"type" : "GET",
+				"url" : sSource,
+				"data" : aoData,
+				"dataType" : "json",
+				"contentType" : "application/json",
+				"cache" : true,
+				"success": function(result) {
+						var roles = $.map( result.roles, function( value,key ) {
+							 	return {"role" : value};
+							});
+						console.log(roles);
+						fnCallback({"roles" : roles});
+				},
+				"error" : function(xhr, textStatus, error) {
+					switch (xhr.status) {
+					case 403: {
+			        	alert("Restricted access. You are not authorized to access the requested algorithms.");
+						break;
+					}
+					case 404: {
+						//not found
+						break;
+					}
+					default: {
+						//console.log(xhr.status + " " + xhr.statusText + " " + xhr.responseText);
+			        	alert("Error loading algorithms " + xhr.status + " " + error);
+					}
+					}
+					oSettings.oApi._fnProcessingDisplay(oSettings, false);
+				}
+			});
 	    }
 	} );
 	return oTable;
