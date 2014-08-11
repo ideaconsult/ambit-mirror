@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <description>Exposes  AMBIT 2 database search and other functionality by REST style web services.</description>
   <modelVersion>4.0.0</modelVersion>
@@ -179,6 +179,42 @@
           <version>${project.version}</version>
         </dependency>
       </dependencies>
+    </profile>
+    <profile>
+      <id>menu-lri</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <ambit.profile>lri</ambit.profile>
+      </properties>
+    </profile>
+    <profile>
+      <id>menu-enanomapper</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <ambit.profile>enanomapper</ambit.profile>
+      </properties>
+    </profile>
+    <profile>
+      <id>menu-default</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <ambit.profile>default</ambit.profile>
+      </properties>
+    </profile>
+    <profile>
+      <id>menu-toxmatch</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <ambit.profile>toxmatch</ambit.profile>
+      </properties>
     </profile>
   </profiles>
   <build>
@@ -418,26 +454,25 @@
       <version>1.0.5-SNAPSHOT</version>
       <type>jar</type>
     </dependency>
-     <dependency>
+    <dependency>
       <groupId>ambit</groupId>
       <artifactId>ambit2-dbi5</artifactId>
       <version>${ambit.version}</version>
     </dependency>
-     <dependency>
+    <dependency>
       <groupId>ambit</groupId>
       <artifactId>ambit2-dbsubstance</artifactId>
       <version>${ambit.version}</version>
     </dependency>
-    
     <dependency>
       <groupId>ambit</groupId>
       <artifactId>ambit2-user</artifactId>
       <version>${ambit.version}</version>
     </dependency>
     <dependency>
-    <groupId>ambit</groupId>
-  		<artifactId>ambit2-loom</artifactId>
-  		<version>${ambit.version}</version>
+      <groupId>ambit</groupId>
+      <artifactId>ambit2-loom</artifactId>
+      <version>${ambit.version}</version>
     </dependency>
   </dependencies>
   <repositories>
