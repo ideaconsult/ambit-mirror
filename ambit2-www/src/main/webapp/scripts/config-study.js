@@ -2622,6 +2622,54 @@ var config_study = {
            }
             
         },        
+        "PUBCHEM_DOSERESPONSE_SECTION" : {
+            "effects": {
+            	"endpoint" : {
+            		"iOrder" : -7
+            	},
+                "result": {
+                    "sTitle": "Response",
+                    "iOrder" : -5
+                },
+                "text": {
+                    "bVisible": false
+                }
+            },
+            "conditions": {
+            	"replicate": {
+            		"bVisible": true,
+            		"iOrder" : -8
+                },
+              	"doses/concentrations": {
+              		"bVisible": true,
+                    "sTitle": "Concentration",
+                    "iOrder" : -6
+                },
+                "emission wavelength": {
+                	"bVisible": true,
+                	"iOrder" : -9
+                }
+                
+            },
+            "protocol": {
+            	 "citation": {
+                     "bVisible": true,
+                     "sTitle": "Reference",
+                     "mRender" : function(data,type,full) {
+                     	return  data["title"];
+                     },
+            		 "iOrder" : -10
+                 }             
+            },
+            "interpretation": {
+                "result": {
+                	"bVisible": false
+                },
+                "criteria": {
+                	"bVisible": false
+                }
+            }            	
+        },
         "PUBCHEM_CONFIRMATORY_SECTION" : {
             "effects": {
                 "text": {
