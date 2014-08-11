@@ -304,7 +304,10 @@ function runAlgorithms(root,statusSelector) {
 	"toxtreeeye","toxtreeskinirritation","toxtreemic","toxtreeames",
 	"toxtreeskinsens","toxtreednabinding","toxtreeproteinbinding",
 	"toxtreecarc","toxtreebiodeg","toxtreesmartcyp","pka","ambit2.descriptors.MolecularWeight",
-	"org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"     ];
+	"org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",
+	"org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor",
+	"org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor",
+	"tautomers"    ];
 	$.each(algs,function(index,alg) {
 		$.ajax({
 			contentType :'application/x-www-form-urlencoded; charset=UTF-8',
