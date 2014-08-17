@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <users user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="false"/>
+  <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org"/>
+  <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org"/>
+
+  <chemicals/>
+  <structure/>
+  <properties/>
+  <template/>
+  <template_def/>
+  <tuples/>
+  <property_string/>
+  <property_values/>
+  <property_tuples/>
+  <src_dataset/>
+  <struc_dataset/>
+  <fp1024/>
+</dataset>

@@ -1,0 +1,13 @@
+Manifest-version: 1.0
+Package: ambit2.dbisatab
+
+Name: ambit2/dbisatab/
+Specification-Title: ambit2.dbisatab
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.dbisatab
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.dbisatab
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.
