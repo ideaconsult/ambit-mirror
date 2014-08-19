@@ -24,6 +24,7 @@ import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
 import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.ProtocolEffectRecord;
 import ambit2.base.data.substance.SubstanceName;
 import ambit2.base.data.substance.SubstanceProperty;
 import ambit2.base.data.substance.SubstancePublicName;
@@ -119,13 +120,13 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 	}	
 	
 	protected IProcessor getPropertyProcessors(final boolean removeIdentifiers, final boolean removeStringProperties) {
-		IQueryRetrieval<EffectRecord<String, String, String>> queryP = new ReadEffectRecordBySubstance(); 
-		MasterDetailsProcessor<SubstanceRecord,EffectRecord<String, String, String>,IQueryCondition> effectReader = 
-							new MasterDetailsProcessor<SubstanceRecord,EffectRecord<String, String, String>,IQueryCondition>(
+		IQueryRetrieval<ProtocolEffectRecord<String, String, String>> queryP = new ReadEffectRecordBySubstance(); 
+		MasterDetailsProcessor<SubstanceRecord,ProtocolEffectRecord<String, String, String>,IQueryCondition> effectReader = 
+							new MasterDetailsProcessor<SubstanceRecord,ProtocolEffectRecord<String, String, String>,IQueryCondition>(
 									new ReadEffectRecordBySubstance()) {
 			@Override
 			protected SubstanceRecord processDetail(SubstanceRecord master,
-					EffectRecord<String, String, String> detail) throws Exception {
+					ProtocolEffectRecord<String, String, String> detail) throws Exception {
 				if (detail != null) {
 					if (detail.getTextValue() != null && detail.getTextValue().toString().startsWith("{")) {
 
@@ -138,7 +139,8 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 							SubstanceProperty key = new SubstanceProperty(val.getKey(),detail.getSampleID());
 							key.setIdentifier(detail.getSampleID()+"/" + val.getKey());
 							key.setUnits(detail.getUnit());
-							key.setLabel(detail.getEndpoint());
+							key.setLabel(String.format("http://www.opentox.org/echaEndpoints.owl#%s",
+									detail.getProtocol().getEndpoint().replace("_SECTION", "")));
 							groupProperties.add(key);
 							if (val.getValue().get("loValue")!=null) {
 								master.setProperty(key, val.getValue().get("loValue").asInt());

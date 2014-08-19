@@ -9,8 +9,10 @@ import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.Protocol;
+import ambit2.base.data.study.ProtocolEffectRecord;
 
-public class ReadEffectRecordBySubstance extends ReadEffectRecordAbstract<SubstanceRecord> {
+public class ReadEffectRecordBySubstance extends ReadEffectRecordAbstract<SubstanceRecord,ProtocolEffectRecord<String, String, String>> {
 
 	/**
 	 * 
@@ -25,7 +27,7 @@ public class ReadEffectRecordBySubstance extends ReadEffectRecordAbstract<Substa
 	private String sql = 
 			"select p.document_prefix,hex(p.document_uuid) u,\n"+
 			"p.topcategory,p.endpointcategory,guidance,params,reference,idresult,\n"+
-			"e.endpoint as effectendpoint,hex(endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier\n"+ 
+			"e.endpoint as effectendpoint,hex(endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint\n"+ 
 			"from substance s join substance_protocolapplication p on s.prefix=p.substance_prefix and s.uuid=p.substance_uuid\n"+
 			"join substance_experiment e on p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"+
 			"where p.substance_prefix =? and hex(p.substance_uuid) =?\n"+
@@ -48,10 +50,19 @@ public class ReadEffectRecordBySubstance extends ReadEffectRecordAbstract<Substa
 	}
 
 	@Override
-	public EffectRecord<String, String, String> getObject(ResultSet rs)
+	protected ProtocolEffectRecord<String, String, String> createEffectRecord() {
+		return new ProtocolEffectRecord<String, String, String>();
+	}
+	@Override
+	public ProtocolEffectRecord<String, String, String> getObject(ResultSet rs)
 			throws AmbitException {
-		EffectRecord<String, String, String> effect = super.getObject(rs);
+		ProtocolEffectRecord<String, String, String> effect = super.getObject(rs);
 		try {
+			Protocol protocol = new Protocol(rs.getString("pendpoint"));
+			protocol.addGuideline(rs.getString("guidance"));
+			protocol.setCategory(rs.getString("endpointcategory"));
+			protocol.setTopCategory(rs.getString("topcategory"));
+			effect.setProtocol(protocol);
 			/*
 			String topcategory = rs.getString("topcategory");
 			String endpointcategory = rs.getString("endpointcategory");

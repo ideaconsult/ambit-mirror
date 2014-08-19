@@ -9,9 +9,8 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 
-public abstract class ReadEffectRecordAbstract<F> extends AbstractQuery<F,EffectRecord<String, String, String>, EQCondition, EffectRecord<String, String, String>> 
-															implements IQueryRetrieval<EffectRecord<String, String, String>>,
-															IParameterizedQuery<F, EffectRecord<String, String, String>, EQCondition>{
+public abstract class ReadEffectRecordAbstract<F,ER extends EffectRecord<String, String, String>> extends AbstractQuery<F,ER, EQCondition, ER> 
+										implements IQueryRetrieval<ER>,	IParameterizedQuery<F, ER, EQCondition>{
 
 
 	/**
@@ -26,10 +25,14 @@ public abstract class ReadEffectRecordAbstract<F> extends AbstractQuery<F,Effect
 	public String getSQL() throws AmbitException {
 		return sql;
 	}
+	
+	protected ER createEffectRecord() {
+		return (ER) new EffectRecord<String, String, String>();
+	}
 	@Override
-	public EffectRecord<String, String, String> getObject(ResultSet rs)
+	public ER getObject(ResultSet rs)
 			throws AmbitException {
-		EffectRecord<String, String, String> record = new EffectRecord<String, String, String>();
+		ER record = createEffectRecord();
 		try {
 			record.setSampleID(rs.getString("hash"));
 			record.setEndpoint(rs.getString("effectendpoint"));
@@ -53,7 +56,7 @@ public abstract class ReadEffectRecordAbstract<F> extends AbstractQuery<F,Effect
 	}
 	
 	@Override
-	public double calculateMetric(EffectRecord<String, String, String> object) {
+	public double calculateMetric(ER object) {
 		return 1;
 	}
 	@Override
