@@ -140,7 +140,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 							key.setIdentifier(detail.getSampleID()+"/" + val.getKey());
 							key.setUnits(detail.getUnit());
 							key.setLabel(String.format("http://www.opentox.org/echaEndpoints.owl#%s",
-									detail.getProtocol().getEndpoint().replace("_SECTION", "")));
+									detail.getProtocol().getCategory().replace("_SECTION", "")));
 							groupProperties.add(key);
 							if (val.getValue().get("loValue")!=null) {
 								master.setProperty(key, val.getValue().get("loValue").asInt());
@@ -192,7 +192,8 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 						key.setIdentifier(detail.getSampleID());
 						key.setUnits(detail.getUnit());
 						key.setAnnotations(ann);
-						key.setLabel(detail.getEndpoint());
+						key.setLabel(String.format("http://www.opentox.org/echaEndpoints.owl#%s",
+								detail.getProtocol().getCategory().replace("_SECTION", "")));
 						groupProperties.add(key);
 						if (detail.getLoValue() == null) {
 							master.setProperty(key, detail.getTextValue());
