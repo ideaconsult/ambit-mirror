@@ -1113,7 +1113,7 @@ public class Protocol {
 			return String.format("10.%d",ordinal());
 		}	
 		public String toString() {
-			return name().replace("_"," ");
+			return name().replace("_"," ").replace("SECTION", "");
 		}				
 		public int getSortingOrder() {
 			return 10000;
