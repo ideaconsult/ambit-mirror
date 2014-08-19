@@ -211,20 +211,33 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 					
 					List<IIdentifiableResource<String>> queryResults = cli.executeQuery(PredefinedQuery.query_by_it_identifier,extIDType,extIDValue);
 					
-					connection = dbc.getConnection();
-					writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord(),clearMeasurements,clearComposition);		
-					writer.setCloseConnection(false);
-					writer.setConnection(connection);
-			        writer.open();
-	
-			        ContainerClient ccli = i5.getContainerClient();				
-					for (IIdentifiableResource<String> item : queryResults) try {
-							logger.log(Level.INFO,item.getResourceIdentifier());
-							List<IIdentifiableResource<String>> container = ccli.get(item.getResourceIdentifier());
-							processContainer(container, writer);					
-						} catch (Exception x) {
-							logger.log(Level.SEVERE,x.getMessage());
+					if (queryResults != null && queryResults.size()>0) {
+						connection = dbc.getConnection();
+						writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord(),clearMeasurements,clearComposition);		
+						writer.setCloseConnection(false);
+						writer.setConnection(connection);
+				        writer.open();
+		
+				        ContainerClient ccli = i5.getContainerClient();				
+				        int imported = 0;
+				        Exception importError = null;
+						for (IIdentifiableResource<String> item : queryResults) try {
+								logger.log(Level.INFO,item.getResourceIdentifier());
+								List<IIdentifiableResource<String>> container = ccli.get(item.getResourceIdentifier());
+								processContainer(container, writer);			
+								imported++;
+							} catch (Exception x) {
+								logger.log(Level.SEVERE,x.getMessage());
+								importError = x;
+							}
+						logger.log(Level.INFO,String.format("Found %d substances, imported %d substances.",queryResults.size(),imported));
+						if (imported == 0) {
+							if (importError!=null) throw importError;
+							else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No substances imported.");
 						}
+					} else {
+						throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,"No substances found.");
+					}
 				} else throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,"IUCLID5 server login failed ["+server+"].");
 			}
 			return createReference(connection);
