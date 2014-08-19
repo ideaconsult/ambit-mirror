@@ -41,7 +41,12 @@ function runTask(modelURI, datasetURI, resultDOM, statusDOM, imgRunning, imgRead
 				break;
 			}
 	};
-	
+	request.onerror = function() {
+		document.getElementById(resultDOM).innerHTML = request.status + ' ' + request.statusText;
+		document.getElementById(statusDOM).src = imgError;
+		document.getElementById(resultDOM).style.display = 'inline';
+		document.getElementById(statusDOM).style.display = 'inline';		
+	}
 	request.send(reqBody);
 }
 
@@ -159,7 +164,6 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 				break;
 		}
 	};
-	
 	request.send(null);
 }
 
@@ -176,7 +180,7 @@ function renderTask(entry,root) {
 		break;
 	}
 	case "Error" : {
-		img = "error.png";
+		img = "cross.png";
 		break;
 	}
 	default : {
@@ -186,6 +190,7 @@ function renderTask(entry,root) {
 	$("#status").prop("src",root + "/images/" + img);
 	$("#task_errorreport").text(entry["error"]);
 }
+
 function readTask(root,url) {
 	  $.ajax({
 	        dataType: "json",
@@ -199,8 +204,9 @@ function readTask(root,url) {
 	        	try {
 	        		if (xhr.responseText != undefined) {
 			        	var task = jQuery.parseJSON(xhr.responseText);
-			        	if (task.length > 0) {
-			        		renderTask(task[0],root);
+			        	if (task["task"].length > 0) {
+			        		
+			        		renderTask(task["task"][0],root);
 			        	}
 	        		}
 	        	} catch (err) {
