@@ -84,11 +84,11 @@ public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
 		params1.add(new QueryParam<String>(String.class, uuid[0]));
 		params1.add(new QueryParam<String>(String.class, uuid[1]));
 		params1.add(new QueryParam<String>(String.class, "Substance"));
-		params1.add(new QueryParam<String>(String.class, getObject().getFormat()));		
+		params1.add(new QueryParam<String>(String.class, getObject().getFormat()==null?null:truncate(getObject().getFormat().toString(),6)));		
 		params1.add(new QueryParam<String>(String.class, getObject().getCompanyName()));
 		params1.add(new QueryParam<String>(String.class, getObject().getPublicName()));
 		params1.add(new QueryParam<String>(String.class, getObject().getContent()));
-		params1.add(new QueryParam<String>(String.class, getObject().getSubstancetype()));
+		params1.add(new QueryParam<String>(String.class, getObject().getSubstancetype()==null?null:truncate(getObject().getSubstancetype(),45)));
 		String rs_uuid = getObject().getReferenceSubstanceUUID();
 		uuid = new String[]{null,rs_uuid};
 		if (rs_uuid!=null) 
