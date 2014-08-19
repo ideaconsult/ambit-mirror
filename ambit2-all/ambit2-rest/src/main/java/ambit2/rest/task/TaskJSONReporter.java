@@ -1,6 +1,8 @@
 package ambit2.rest.task;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.UUID;
@@ -9,9 +11,13 @@ import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskResult;
 import net.idea.restnet.i.task.ITaskStorage;
 
+import org.opentox.rdf.OT;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Reference;
+import org.restlet.resource.ResourceException;
+
+import com.hp.hpl.jena.ontology.Individual;
 
 import ambit2.base.json.JSONUtils;
 import ambit2.rest.ResourceDoc;
@@ -33,7 +39,7 @@ public class TaskJSONReporter<USERID> extends TaskURIReporter<USERID> {
 		super(storage,baseRef,doc);
 	}	
 
-	private static String format = "\n{\n\t\"uri\":\"%s\",\n\t\"id\": \"%s\",\n\t\"name\": \"%s\",\n\t\"error\": \"%s\",\n\t\"policyError\": \"%s\",\n\t\"status\": \"%s\",\n\t\"started\": %d,\n\t\"completed\": %d,\n\t\"result\": \"%s\",\n\t\"user\": \"%s\"\n}";
+	private static String format = "\n{\n\t\"uri\":\"%s\",\n\t\"id\": \"%s\",\n\t\"name\": \"%s\",\n\t\"error\": \"%s\",\n\t\"policyError\": \"%s\",\n\t\"status\": \"%s\",\n\t\"started\": %d,\n\t\"completed\": %d,\n\t\"result\": \"%s\",\n\t\"user\": \"%s\",\n\t\"errorCause\": %s\n}";
 
 	@Override
 	public void processItem(UUID item, Writer output) {
@@ -43,6 +49,18 @@ public class TaskJSONReporter<USERID> extends TaskURIReporter<USERID> {
 			ITask<ITaskResult,USERID> task = storage.findTask(item);
 			String uri = task.getUri()==null?null:task.getUri().toString();
 			
+			StringWriter errorTrace = null;
+			if (task.getError()!=null) {
+				try {
+					ResourceException exception = task.getError();
+			    	errorTrace = new StringWriter();
+			    	if (exception.getCause()==null)
+			    		exception.printStackTrace(new PrintWriter(errorTrace));
+			    	else exception.getCause().printStackTrace(new PrintWriter(errorTrace));
+				} catch (Exception x) {
+					
+				}
+			}			
 			output.write(String.format(format,
 					uri,
 					item.toString(),
@@ -53,7 +71,8 @@ public class TaskJSONReporter<USERID> extends TaskURIReporter<USERID> {
 					task.getStarted(),
 					task.getTimeCompleted(),
 					task.getUri()==null?"":task.getUri(),
-					task.getUserid()==null?"":task.getUserid()
+					task.getUserid()==null?"":task.getUserid(),
+					errorTrace==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(errorTrace.toString()))		
 					));
 			comma = ",";
 		} catch (IOException x) {
