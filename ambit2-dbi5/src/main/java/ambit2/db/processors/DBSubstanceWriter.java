@@ -50,7 +50,15 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
     private DeleteSubstanceRelation deleteComposition;
     private RepositoryWriter writer;
     protected boolean clearMeasurements;
-    protected boolean clearComposition;
+    public boolean isClearMeasurements() {
+		return clearMeasurements;
+	}
+
+	public void setClearMeasurements(boolean clearMeasurements) {
+		this.clearMeasurements = clearMeasurements;
+	}
+
+	protected boolean clearComposition;
     
     public boolean isClearComposition() {
 		return clearComposition;
