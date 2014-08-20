@@ -11,11 +11,13 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.db.readers.IQueryRetrieval;
@@ -84,13 +86,27 @@ public class SubstanceStudyResource<Q extends IQueryRetrieval<ProtocolApplicatio
 				Form form = getRequest().getResourceRef().getQueryAsForm();
 				String topCategory = form.getFirstValue("top");
 				String category = form.getFirstValue("category");
+				String property = form.getFirstValue("property");
+				String property_uri = form.getFirstValue("property_uri");
 				ReadSubstanceStudy q = new ReadSubstanceStudy();
 				q.setFieldname(substanceUUID);
-				if (topCategory!=null || category!=null) {
+				if (topCategory!=null || category!=null || property != null || property_uri!=null) {
 					Protocol p = new ambit2.base.data.study.Protocol("");
 					p.setTopCategory(topCategory);
 					p.setCategory(category);
-					q.setValue(new ProtocolApplication(p));
+					ProtocolApplication papp = new ProtocolApplication(p);
+					if (property_uri!=null) try {
+						//not nice REST style, but easiest to parse the URI
+						Reference puri = new Reference(property_uri);
+						property=puri.getLastSegment();
+					} catch (Exception x) {}
+					if (property!=null) {
+						EffectRecord effect = new EffectRecord();
+						effect.setSampleID(property);
+						papp.addEffect(effect);
+					}
+					q.setValue(papp);
+					
 				}
 				//q.setValue(new SubstanceRecord(Integer.parseInt(key.toString())));
 				//q.setFieldname(relation);

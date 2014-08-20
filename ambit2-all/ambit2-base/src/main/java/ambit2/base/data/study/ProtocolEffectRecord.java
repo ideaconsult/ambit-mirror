@@ -16,6 +16,15 @@ public class ProtocolEffectRecord<ENDPOINT, CONDITIONS, UNIT> extends
 	 */
 	private static final long serialVersionUID = 7123248041424144730L;
 	protected Protocol protocol;
+	protected String documentUUID;
+
+	public String getDocumentUUID() {
+		return documentUUID;
+	}
+
+	public void setDocumentUUID(String documentUUID) {
+		this.documentUUID = documentUUID;
+	}
 
 	public Protocol getProtocol() {
 		return protocol;

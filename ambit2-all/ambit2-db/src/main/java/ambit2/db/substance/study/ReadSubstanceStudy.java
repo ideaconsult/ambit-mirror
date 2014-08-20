@@ -32,9 +32,9 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
 		"left join substance s on s.prefix=p.substance_prefix and s.uuid=p.substance_uuid\n"+
 		"where substance_prefix =? and hex(substance_uuid) =? ";
 
-
 	private final static String whereTopCategory = "\nand topcategory=?";
 	private final static String whereCategory = "\nand endpointcategory=?";
+	private final static String whereProperty = "\nand document_uuid in (select document_uuid from substance_experiment where hex(endpointhash) =?)";
 	@Override
 	public String getSQL() throws AmbitException {
 		if ((getValue()!=null) && (getValue().getProtocol()!=null)) {
@@ -43,6 +43,10 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
 				wsql += whereTopCategory;
 			if (getValue().getProtocol().getCategory()!=null) 
 				wsql += whereCategory;
+			if (getValue().getEffects()!= null && getValue().getEffects().get(0)!=null && getValue().getEffects().get(0).getSampleID()!=null) {
+				wsql += whereProperty;
+			}
+			
 			return wsql;
 		} else return sql;
 	}
@@ -60,7 +64,10 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
 			if (getValue().getProtocol().getTopCategory()!=null) 
 				params.add(new QueryParam<String>(String.class, getValue().getProtocol().getTopCategory()));
 			if (getValue().getProtocol().getCategory()!=null) 
-				params.add(new QueryParam<String>(String.class, getValue().getProtocol().getCategory()));				
+				params.add(new QueryParam<String>(String.class, getValue().getProtocol().getCategory()));
+			if (getValue().getEffects()!= null && getValue().getEffects().get(0)!=null && getValue().getEffects().get(0).getSampleID()!=null) {
+				params.add(new QueryParam<String>(String.class, getValue().getEffects().get(0).getSampleID()));
+			}
 		}
 		return params;
 	}
