@@ -17,10 +17,12 @@ public class SubstanceStudyFacetQuery  extends AbstractFacetQuery<String,String,
 	 * 
 	 */
 	private static final long serialVersionUID = -8910197148842469398L;
-	protected String sql = 
-		"select topcategory,endpointcategory,count(*) from substance_protocolapplication %s group by topcategory,endpointcategory with rollup";
+	private final static String sql = 
+		"select topcategory,endpointcategory,count(*) from substance_protocolapplication\n";
+	private final static String group = "group by topcategory,endpointcategory with rollup";
 	
-	private static String  substance_uuid = " substance_prefix=? and hex(substance_uuid)=?";
+	private final static String substance_uuid = " substance_prefix=? and hex(substance_uuid)=?\n";
+	private final static String endpointhash = " document_uuid in (select document_uuid from substance_experiment where hex(endpointhash) =?)\n";
 	
 	protected SubstanceStudyFacet record;
 	
@@ -45,8 +47,20 @@ public class SubstanceStudyFacetQuery  extends AbstractFacetQuery<String,String,
 
 	@Override
 	public String getSQL() throws AmbitException {
-		if (getFieldname()==null) return sql;
-		else return String.format(sql,"\nwhere" + substance_uuid);
+		StringBuilder b = new StringBuilder();
+		b.append(sql);
+		String c = "\nwhere ";
+		if (getFieldname()!=null) {
+			b.append(c);
+			b.append(substance_uuid);
+			c = "\nand ";
+		}
+		if (getValue()!=null) {
+			b.append(c);
+			b.append(endpointhash);
+		}
+		b.append(group);
+		return b.toString();
 	}
 
 	protected String[] getSubstanceUUID() {
@@ -56,13 +70,20 @@ public class SubstanceStudyFacetQuery  extends AbstractFacetQuery<String,String,
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
 		
-		List<QueryParam> params1 = new ArrayList<QueryParam>();
+		List<QueryParam> params1 = null;
 		if (getFieldname()!=null) {
 			String[] uuid = getSubstanceUUID();
+			if (params1==null) params1 = new ArrayList<QueryParam>();
 			params1.add(new QueryParam<String>(String.class, uuid[0]));
 			params1.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
-			return params1;
-		} else return null;		
+			
+		}
+		if (getValue()!=null) {
+			String[] uuid = getSubstanceUUID();
+			if (params1==null) params1 = new ArrayList<QueryParam>();
+			params1.add(new QueryParam<String>(String.class, getValue()));
+		} 		
+		return params1;
 	}
 
 	@Override

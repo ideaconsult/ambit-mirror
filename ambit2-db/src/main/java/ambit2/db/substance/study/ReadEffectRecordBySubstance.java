@@ -58,11 +58,17 @@ public class ReadEffectRecordBySubstance extends ReadEffectRecordAbstract<Substa
 			throws AmbitException {
 		ProtocolEffectRecord<String, String, String> effect = super.getObject(rs);
 		try {
+            try {
+            	effect.setDocumentUUID(rs.getString("document_prefix") + "-" + I5Utils.addDashes(rs.getString("u").toString().toLowerCase()));
+            } catch (Exception xx) {
+            	effect.setDocumentUUID(null);
+            }				
 			Protocol protocol = new Protocol(rs.getString("pendpoint"));
 			protocol.addGuideline(rs.getString("guidance"));
 			protocol.setCategory(rs.getString("endpointcategory"));
 			protocol.setTopCategory(rs.getString("topcategory"));
 			effect.setProtocol(protocol);
+			
 			/*
 			String topcategory = rs.getString("topcategory");
 			String endpointcategory = rs.getString("endpointcategory");
