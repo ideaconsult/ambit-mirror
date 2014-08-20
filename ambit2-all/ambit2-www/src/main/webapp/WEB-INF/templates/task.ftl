@@ -44,45 +44,57 @@ $(document)
 <div class="one column remove-bottom" style="padding:0;" >&nbsp;
 </div>
 	
-<div class="thirteen columns remove-bottom" style="padding:0;" >
+<div class="twelve columns remove-bottom" style="padding:0;" >
 
 
 		<!-- Page Content
 		================================================== -->
 		<#if taskid??>
-		<div class="row" style="padding:0;" >			
-			<div class="ui-widget-header ui-corner-top"><a href='${ambit_root}/task/${taskid}'>Job</a> started <span id=task_started></span> &nbsp;</div>
-			<div class="ui-widget-content ui-corner-bottom">
-			<span id=task_status>
-			<script>
-				checkTask('${ambit_root}/task/${taskid}','result', 'status', '${ambit_root}/images/tick.png', '${ambit_root}/images/cross.png');
-			</script>
-			</span>
-			<p>Name:&nbsp;<strong id=task_name></strong></p>
-			<p>Status:&nbsp;<a href='#' id='result'></a>&nbsp;<img src='${ambit_root}/images/24x24_ambit.gif' id='status'>
-			<span id="task_errorreport"></span>
-			</p>
+			<div class="row" style="padding:0;" >			
+				<div class="ui-widget-header ui-corner-top"><a href='${ambit_root}/task/${taskid}'>Job</a> started <span id=task_started></span> &nbsp;</div>
+				<div class="ui-widget-content ui-corner-bottom">
+					<span id=task_status>
+					<script>
+						checkTask('${ambit_root}/task/${taskid}','result', 'status', '${ambit_root}/images/tick.png', '${ambit_root}/images/cross.png');
+					</script>
+					</span>
+					<p>Name:&nbsp;<strong id=task_name></strong></p>
+					<p>Status:&nbsp;<a href='#' id='result'></a>&nbsp;<img src='${ambit_root}/images/24x24_ambit.gif' id='status'>
+					<br/>
+					<span id="task_errorreport"></span>
+					<br/>
+					<#if username??>
+						<#if openam_token??>
+							<textarea id="task_json"  cols='40' style="display:none;height: auto;"></textarea>
+						<#else>
+							<#if ambit_admin?? && ambit_admin>
+								<textarea id="task_json" cols='40' style="display:none;height: auto;"></textarea>
+							</#if>		
+						</#if>
+					</#if>	
+					</p>
+				</div>
 			</div>
 		<#else>
- 		<div class="row remove-bottom ui-widget-header ui-corner-top">
- 		&nbsp;
- 		</div>		
-		<div class="row " style="padding:0;" >
-			<table id='task' class='ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
-			<thead>
-			<tr>
-			<th>Job status</th>
-			<th>Description</th>
-			<th>Started at</th>
-			<th>Completed at</th>
-			</tr>
-			</thead>
-			<tbody></tbody>
-			</table>
-		
+	 		<div class="row remove-bottom ui-widget-header ui-corner-top">
+	 		&nbsp;
+	 		</div>		
+			<div class="row " style="padding:0;" >
+				<table id='task' class='ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+				<thead>
+				<tr>
+				<th>Job status</th>
+				<th>Description</th>
+				<th>Started at</th>
+				<th>Completed at</th>
+				</tr>
+				</thead>
+				<tbody></tbody>
+				</table>
+			</div>
 		</#if>
 		
-		</div>
+		
 </div>		
 
 <div class="two columns remove-bottom" style="padding:0;" >

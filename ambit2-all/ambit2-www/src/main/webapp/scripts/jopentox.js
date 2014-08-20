@@ -129,7 +129,7 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 			case 500: 
 				if (dResult!=null) {
 					dResult.innerHTML = getResponseTitle(request,request.status + " " + request.statusText );
-					dResult.href = taskURI+"?media=text/n3";
+					dResult.href = taskURI;
 					dResult.target = "error";
 					dResult.style.display = 'inline';
 				}
@@ -141,7 +141,7 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 			case 502:
 				if (dResult!=null) {
 					dResult.innerHTML = getResponseTitle(request,request.status + " " + request.statusText );
-					dResult.href = taskURI+"?media=text/n3";
+					dResult.href = taskURI;
 					dResult.target = "error";
 					dResult.style.display = 'inline';
 				}
@@ -153,7 +153,7 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 			default:
 				if (dResult!=null) {
 					dResult.innerHTML = getResponseTitle(request,request.status + " " + request.statusText);
-					dResult.href = taskURI+"?media=text/n3";
+					dResult.href = taskURI;
 					dResult.target = "error";
 					dResult.style.display = 'inline';
 				}
@@ -168,6 +168,7 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 }
 
 function renderTask(entry,root) {
+
 	try {
 		$("#task_started").text(new Date(entry["started"]).toUTCString());} 
 	catch (error) {}
@@ -189,9 +190,17 @@ function renderTask(entry,root) {
 	}
 	$("#status").prop("src",root + "/images/" + img);
 	$("#task_errorreport").text(entry["error"]);
+	if (entry["errorCause"]!=null) {
+		$("#task_json").text(entry["errorCause"]);
+		$("#task_json").show();
+	} else {
+		$("#task_json").text("");
+		$("#task_json").hide();
+	}
 }
 
 function readTask(root,url) {
+
 	  $.ajax({
 	        dataType: "json",
 	        url: url,
@@ -205,7 +214,6 @@ function readTask(root,url) {
 	        		if (xhr.responseText != undefined) {
 			        	var task = jQuery.parseJSON(xhr.responseText);
 			        	if (task["task"].length > 0) {
-			        		
 			        		renderTask(task["task"][0],root);
 			        	}
 	        		}
