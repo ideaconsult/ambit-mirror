@@ -1,4 +1,4 @@
-ALTER TABLE `ambit-test`.`substance_experiment` ADD COLUMN `topcategory` VARCHAR(32) NULL  AFTER `document_uuid` , ADD COLUMN `endpointcategory` VARCHAR(45) NULL  AFTER `topcategory` , ADD COLUMN `substance_prefix` VARCHAR(6) NULL  AFTER `err` , ADD COLUMN `substance_uuid` VARBINARY(16) NULL  AFTER `substance_prefix` 
+ALTER TABLE `substance_experiment` ADD COLUMN `topcategory` VARCHAR(32) NULL  AFTER `document_uuid` , ADD COLUMN `endpointcategory` VARCHAR(45) NULL  AFTER `topcategory` , ADD COLUMN `substance_prefix` VARCHAR(6) NULL  AFTER `err` , ADD COLUMN `substance_uuid` VARBINARY(16) NULL  AFTER `substance_prefix` 
 , ADD INDEX `category-x` (`topcategory` ASC, `endpointcategory` ASC, `endpoint` ASC, `endpointhash` ASC) 
 , ADD INDEX `substance-x` (`substance_prefix` ASC, `substance_uuid` ASC) ;
 
@@ -33,7 +33,7 @@ name,publicname,content,substanceType,
 rs_prefix,rs_uuid,
 owner_prefix,owner_uuid,owner_name,
 p.document_prefix,p.document_uuid,
-topcategory,endpointcategory,p.endpoint,
+p.topcategory,p.endpointcategory,p.endpoint,
 guidance,
 reliability,isRobustStudy,purposeFlag,studyResultType,
 params,interpretation_result,interpretation_criteria,
