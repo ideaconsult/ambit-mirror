@@ -28,7 +28,7 @@ public class SLNHelper
 			SLNAtom at1 = (SLNAtom)bo.getAtom(1);
 			int at0_num = container.getAtomNumber(at0);
 			int at1_num = container.getAtomNumber(at1);
-			sb.append("  #" + i + " atoms (" + at0_num + "," + at1_num + ") with order "  + bo.toString());
+			sb.append("  #" + i + " atoms (" + at0_num + "," + at1_num + ") order "  + bo.toString());
 
 			sb.append("\n");
 		}

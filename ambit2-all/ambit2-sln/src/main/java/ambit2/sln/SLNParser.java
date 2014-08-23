@@ -2,7 +2,6 @@ package ambit2.sln;
 
 import java.util.ArrayList;
 import java.util.Stack;
-import java.util.TreeMap;
 
 import org.openscience.cdk.interfaces.IAtom;
 
@@ -16,7 +15,7 @@ public class SLNParser
 	SLNDictionary globalDictionary = null;
 	Stack<SLNAtom> brackets = new Stack<SLNAtom>();
 	ArrayList<SLNParserError> errors = new ArrayList<SLNParserError>();
-	TreeMap<Integer,RingClosure> indexes = new TreeMap<Integer,RingClosure>();
+	//	TreeMap<Integer,RingClosure> indexes = new TreeMap<Integer,RingClosure>();
 
 	//Work variables for Component Level Grouping (inspired from SMARTS)
 	boolean FlagComponentLevelGrouping = false; 
@@ -32,6 +31,7 @@ public class SLNParser
 	SLNBond curBond;
 	SLNAtomExpression curAtExp;
 	SLNBondExpression curBondExp;
+	SLNContainerAttributes curMolExp;
 	String extractError ="";
 
 
@@ -75,7 +75,8 @@ public class SLNParser
 		curChar = 0;
 		brackets.clear();
 		curBond = null;
-		indexes.clear();
+		//		indexes.clear();
+		//TODO
 	}
 
 	void parse()
@@ -161,10 +162,10 @@ public class SLNParser
 				String atomExpression = extractAtomExpression();				
 				analyzeAtomExpression(atomExpression);
 				newAtom.atomExpression = curAtExp;
-				
+
 				//Transfer the id info from AtomExpression to SLNAtom object (this information is duplicated)
 				newAtom.atomID = newAtom.atomExpression.atomID;				
-				
+
 				//Check id for duplication:
 				SLNAtom prevIDAtom = getAtomByID(newAtom.atomID);
 				if (prevIDAtom != null)
@@ -229,7 +230,7 @@ public class SLNParser
 
 	public void analyzeAtomExpression(String atomExpr)
 	{
-	//	System.out.println("***** AtExpr " + atomExpr);
+		//	System.out.println("***** AtExpr " + atomExpr);
 
 		if (atomExpr.trim().equals(""))
 		{
@@ -274,7 +275,7 @@ public class SLNParser
 				return;
 			}
 		}
-		
+
 		//Handle all attributes and logical operations
 		while (pos < atomExpr.length())
 		{
@@ -482,16 +483,142 @@ public class SLNParser
 			}
 		}
 
+		//Handle query atom attribute mapNum
+		if (name.equals("mapNum"))
+		{
+			int mapNum = extractInteger(value);
+			if (extractError.equals(""))
+			{
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.QA_ATTR_mapNum, mapNum);
+				return token;
+			}
+			else
+			{
+				newError("Incorrect map number value " + value, curChar,"");
+				return null;
+			}
+		}
+
+		//Handle query atom attribute "convered"- c
+		if (name.equals("c"))
+		{
+			if (extractError.equals(""))
+			{
+				int c = SLNConst.SLNStringToCoverageQueryAttr(value);
+				if (c == -1)
+				{
+					newError("Incorrect coverage value " + value, curChar,"");
+					return null;
+				}
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.QA_ATTR_c,c);
+				return token;
+			}
+			else
+			{
+				newError("Incorrect coverage value " + value, curChar,"");
+				return null;
+			}
+		}
+
+		//Handle query atom attribute f- filled  valences
+		if (name.equals("f"))
+		{
+			int f = extractInteger(value);
+			if (extractError.equals(""))
+			{
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.QA_ATTR_f,f);
+				return token;
+			}
+			else
+			{
+				newError("Incorrect f value " + value, curChar,"");
+				return null;
+			}
+		}
+
+		//TODO Handle query atom attribute is
+		if (name.equals("is"))
+		{
+			int is = extractInteger(value);
+			if (extractError.equals(""))
+			{
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.QA_ATTR_is,is);
+				return token;
+			}
+			else
+			{
+				newError("Incorrect is value " + value, curChar,"");
+				return null;
+			}
+		}
+
+		//TODO Handle query atom attribute n - noncovering
+		if (name.equals("n"))
+		{
+			int n = extractInteger(value);
+			if (extractError.equals(""))
+			{
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.QA_ATTR_n,n);
+				return token;
+			}
+			else
+			{
+				newError("Incorrect n value " + value, curChar,"");
+				return null;
+			}
+		}
+
+		//TODO Handle query atom attribute not
+		if (name.equals("not"))
+		{
+			int not = extractInteger(value);
+			if (extractError.equals(""))
+			{
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.QA_ATTR_not,not);
+				return token;
+			}
+			else
+			{
+				newError("Incorrect not value " + value, curChar,"");
+				return null;
+			}
+		}
+
+		//TODO Handle query atom attribute r
+		if (name.equals("r"))
+		{
+			int r = extractInteger(value);
+			if (extractError.equals(""))
+			{
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.QA_ATTR_r,r);
+				return token;
+			}
+			else
+			{
+				newError("Incorrect r value " + value, curChar,"");
+				return null;
+			}
+		}
+
+		//TODO Handle query atom attribute v -  Markush and macro atom valence information
+		if (name.equals("v"))
+		{
+			int v = extractInteger(value);
+			if (extractError.equals(""))
+			{
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.QA_ATTR_v,v);
+				return token;
+			}
+			else
+			{
+				newError("Incorrect v value " + value, curChar,"");
+				return null;
+			}
+		}
 
 		//By default it is an user defined attribute
 		SLNExpressionToken token = new SLNExpressionToken(name,value);
 		return token;
-	}
-
-	void parseAtomIndex()   //!!!  ???????
-	{	
-		if (Character.isDigit(sln.charAt(curChar)))
-			registerIndex(getInteger());
 	}
 
 	int getInteger()
@@ -515,12 +642,6 @@ public class SLNParser
 		}
 		return(n);
 	}
-
-	void registerIndex(int n)
-	{
-		//TODO
-	}
-
 
 	void newError(String msg, int pos, String param)
 	{
@@ -799,7 +920,6 @@ public class SLNParser
 		else
 			System.out.println("Attribute " + name + " = " + value);
 		 */
-		//TODO
 		//Handle bond type attribute
 		if (name.equals("type"))
 		{
@@ -822,35 +942,231 @@ public class SLNParser
 		}
 		//Handle stereo-chemistry bond attribute
 		if (name.equals("s"))
-		{
-			int param = SLNConst.SLNStringToBondStereoChemAttr(value);
+		{	
 			if (extractError.equals(""))
 			{
-				SLNExpressionToken token = new SLNExpressionToken(SLNConst.B_ATTR_s,param);
+				int s = SLNConst.SLNStringToBondStereoChemAttr(value);
+				if (s == -1)
+				{
+					newError("Incorrect stereo-chemistry bond value " + value, curChar,"");
+					return null;
+				}
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.B_ATTR_s,s);
 				return token;
 			}
 			else
 			{
-				newError("Incorrect bond stereo-chemistry value " + value, curChar,"");
+				newError("Incorrect stereo-chemistry bond value " + value, curChar,"");
 				return null;
+			}
+		}
+
+		//Handle heavy atom count bond attribute
+		if (name.equals("hac"))
+		{	
+			if (extractError.equals(""))
+			{
+				int hac = extractInteger(value);
+				if (extractError.equals(""))
+				{
+					SLNExpressionToken token = new SLNExpressionToken(SLNConst.QB_ATTR_hac,hac);
+					return token;
+				}
+				else
+				{
+					newError("Incorrect heavy atom count value " + value, curChar,"");
+					return null;
+				} 
+			}
+		}
+
+		//Handle hydrogen count bond attribute
+		if (name.equals("hc"))
+		{	
+			if (extractError.equals(""))
+			{
+				int hc = extractInteger(value);
+				if (extractError.equals(""))
+				{
+					SLNExpressionToken token = new SLNExpressionToken(SLNConst.QB_ATTR_hc,hc);
+					return token;
+				}
+				else
+				{
+					newError("Incorrect hydrogen count value " + value, curChar,"");
+					return null;
+				} 
+			}
+		}
+
+		//Handle heteroatom count bond attribute
+		if (name.equals("htc"))
+		{	
+			if (extractError.equals(""))
+			{
+				int htc = extractInteger(value);
+				if (extractError.equals(""))
+				{
+					SLNExpressionToken token = new SLNExpressionToken(SLNConst.QB_ATTR_htc,htc);
+					return token;
+				}
+				else
+				{
+					newError("Incorrect hetero atom count value " + value, curChar,"");
+					return null;
+				} 
+			}
+		}
+
+		//Handle query bond attribute molecular weight attribute
+		if (name.equals("mw"))
+		{	
+			if (extractError.equals(""))
+			{
+				double mw = extractDouble(value);
+				if (extractError.equals(""))
+				{
+					SLNExpressionToken token = new SLNExpressionToken(SLNConst.QB_ATTR_mw,mw);
+					return token;
+				}
+				else
+				{
+					newError("Incorrect molecular weight value " + value, curChar,"");
+					return null;
+				} 
+			}
+		}
+		
+		//Handle query bond attribute ntc - number of nonterminal atoms
+		if (name.equals("ntc"))
+		{	
+			if (extractError.equals(""))
+			{
+				int ntc = extractInteger(value);
+				if (extractError.equals(""))
+				{
+					SLNExpressionToken token = new SLNExpressionToken(SLNConst.QB_ATTR_ntc,ntc);
+					return token;
+				}
+				else
+				{
+					newError("Incorrect ntc value " + value, curChar,"");
+					return null;
+				} 
+			}
+		}
+
+		//Handle query bond attribute rbc - ring bond count
+		if (name.equals("rbc"))
+		{	
+			if (extractError.equals(""))
+			{
+				int rbc = extractInteger(value);
+				if (extractError.equals(""))
+				{
+					SLNExpressionToken token = new SLNExpressionToken(SLNConst.QB_ATTR_rbc,rbc);
+					return token;
+				}
+				else
+				{
+					newError("Incorrect rbc value " + value, curChar,"");
+					return null;
+				} 
+			}
+		}
+
+		//Handle query bond attribute src - the smallest ring count
+		if (name.equals("src"))
+		{	
+			if (extractError.equals(""))
+			{
+				int src = extractInteger(value);
+				if (extractError.equals(""))
+				{
+					SLNExpressionToken token = new SLNExpressionToken(SLNConst.QB_ATTR_src,src);
+					return token;
+				}
+				else
+				{
+					newError("Incorrect src value " + value, curChar,"");
+					return null;
+				} 
+			}
+		}
+
+		//Handle query bond attribute tac - total number of atoms attached to the qualified atom
+		if (name.equals("tac"))
+		{	
+			if (extractError.equals(""))
+			{
+				int tac = extractInteger(value);
+				if (extractError.equals(""))
+				{
+					SLNExpressionToken token = new SLNExpressionToken(SLNConst.QB_ATTR_tac,tac);
+					return token;
+				}
+				else
+				{
+					newError("Incorrect tac value " + value, curChar,"");
+					return null;
+				} 
+			}
+		}
+
+		//Handle query bond attribute tbo - total bond order of an atom
+		if (name.equals("tbo"))
+		{	
+			if (extractError.equals(""))
+			{
+				int tbo = extractInteger(value);
+				if (extractError.equals(""))
+				{
+					SLNExpressionToken token = new SLNExpressionToken(SLNConst.QB_ATTR_tbo,tbo);
+					return token;
+				}
+				else
+				{
+					newError("Incorrect tbo value " + value, curChar,"");
+					return null;
+				} 
+			}
+		}
+		
+		//Handle query bond attribute type - bond type specified by the bond character
+		if (name.equals("type"))
+		{	
+			if (extractError.equals(""))
+			{
+				int type = extractInteger(value);
+				if (extractError.equals(""))
+				{
+					SLNExpressionToken token = new SLNExpressionToken(SLNConst.QB_ATTR_type,type);
+					return token;
+				}
+				else
+				{
+					newError("Incorrect query type value " + value, curChar,"");
+					return null;
+				} 
 			}
 		}
 
 		//By default it is an user defined attribute
 		SLNExpressionToken token = new SLNExpressionToken(name,value);
 		return token;
+
 	}
 
 	void parseRingClosure()
 	{	
 		curChar++;
-		
+
 		if (curChar >= nChars)
 		{
 			newError("Missing ring closure value " , curChar,"");
 			return;
 		}
-		
+
 		int id = -1;
 		if (Character.isDigit(sln.charAt(curChar)))			
 		{
@@ -862,7 +1178,7 @@ public class SLNParser
 				else
 					break;
 			}
-			
+
 			String idString = sln.substring(startPos, curChar);
 			id = extractInteger(idString);
 		}
@@ -871,16 +1187,16 @@ public class SLNParser
 			newError("Missing ring closure value " , curChar,"");
 			return;
 		}			
-		
+
 		//System.out.println("@id = " + id);
-		
+
 		SLNAtom idAtom = getAtomByID(id);
 		if (idAtom == null)
 		{
 			newError("Incorrect ring closure value " +  id + ". No such atom id!" , curChar,"");
 			return;
 		}
-		
+
 		addBond(prevAtom, idAtom);
 	}
 

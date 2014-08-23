@@ -4,7 +4,7 @@ public class SLNConst
 {	
 
 	//Logical operations
-//	public static char LogOperationChars[] = {'!', '&', '|', ';'};
+	//	public static char LogOperationChars[] = {'!', '&', '|', ';'};
 	public static final int LO_NOT = 0;
 	public static final int LO_AND = 1;
 	public static final int LO_OR = 2;
@@ -22,6 +22,16 @@ public class SLNConst
 	//boolean  - the attribute's name is specified, as in C[backbone]
 	//valued - the name is specified, followed by an equal sign and the value, as in C-[chemshift=7.2]
 
+	//Query Atom Attributes used only in query QA_ATTR_*
+	public static final int QA_ATTR_mapNum = 100; // #1,#2,... map number to an atom "a"
+	public static final int QA_ATTR_c = 101; // control how atoms in the target are matched "convered"  by pattern atoms "a"
+	public static final int QA_ATTR_f = 102; // boolean attribute indicating that the atom is filled "a"
+	public static final int QA_ATTR_is = 103; // Specifies patterns that the qualified atom in a query must match if it is to match the query atom "a"
+	public static final int QA_ATTR_n = 104; // atom that matches a query atom from being covered "a"
+	public static final int QA_ATTR_not = 105; // Specifies patterns that the qualified atom in a query must not match "a"
+	public static final int QA_ATTR_r = 106;// Boolean attribute used to specify that a bond or atom is in a ring "a"
+	public static final int QA_ATTR_v = 107; // Conveys Markush and macro atom valence information
+
 
 	public static String atomAttributeToSLNString(int attr)
 	{
@@ -37,8 +47,26 @@ public class SLNConst
 			return "s";
 		case A_ATTR_spin:
 			return "spin";
+
 		case A_ATTR_USER_DEFINED:
 			return "userDef";
+
+		case QA_ATTR_mapNum:
+			return "#";
+		case QA_ATTR_c:
+			return "c";
+		case QA_ATTR_f:
+			return "f";	
+		case QA_ATTR_is:
+			return "is";
+		case QA_ATTR_n:
+			return "n";
+		case QA_ATTR_not:
+			return "not";
+		case QA_ATTR_r:
+			return "r";
+		case QA_ATTR_v:
+			return "v";
 
 		default:
 			return "";
@@ -147,11 +175,57 @@ public class SLNConst
 		return -1;
 	}
 
+	//Values of coverage attribute
+	public static final int QA_COVERED_n = 0; // atom must not have been matched previously
+	public static final int QA_COVERED_o = 1; // atom's coverage flags are ignored
+	public static final int QA_COVERED_y = 2; // atom must be covered by previous search
+
+	public static String coverageQueryAttributeToSLNString(int attr)
+	{
+		switch (attr)
+		{
+		case QA_COVERED_n:
+			return "n";
+		case QA_COVERED_o:
+			return "o";
+		case QA_COVERED_y:
+			return "y";
+
+		default:
+			return "";
+		}
+	}
+
+	public static int SLNStringToCoverageQueryAttr(String c)
+	{
+		if (c.equals("n"))
+			return QA_COVERED_n;
+		if (c.equals("o"))
+			return QA_COVERED_o;
+		if (c.equals("y"))
+			return QA_COVERED_y;
+
+		return -1;
+	}
+
 	//Bond Attributes (predefined)   B_ATTR_*
 	public static final int B_ATTR_type = 0; // overrides the type specified by the bond character
 	public static final int B_ATTR_s = 1;	//indicates stereo-chemistry about a double bond
 
 	public static final int B_ATTR_USER_DEFINED = 500;
+
+	//Query Bond Attributes QB_ATTR_*
+	public static final int QB_ATTR_hac = 100; // heavy atom count "b"
+	public static final int QB_ATTR_hc = 101; // hydrogen count "b"
+	public static final int QB_ATTR_htc = 102; // hetero atom count "b"
+	public static final int QB_ATTR_mw = 103; // The molecular weight attribute is used with group atoms (R, X, and Rx)to specify the cumulative atomic weights that atoms that match the group atom to match the query "b"
+	public static final int QB_ATTR_ntc = 104; // number of nonterminal atoms "b"
+	public static final int QB_ATTR_rbc = 105; // ring bond count "b"
+	public static final int QB_ATTR_src = 106; // the smallest ring count "b"
+	public static final int QB_ATTR_tac = 107; // total number of atoms attached to the qualified atom "b"
+	public static final int QB_ATTR_tbo = 108; // total bond order of an atom "b"
+	public static final int QB_ATTR_type = 109; // bond type specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
+
 
 	public static String bondAttributeToSLNString(int attr)
 	{
@@ -161,8 +235,30 @@ public class SLNConst
 			return "type";
 		case B_ATTR_s:
 			return "s";
+
 		case B_ATTR_USER_DEFINED:
 			return "userDef";
+
+		case QB_ATTR_hac:
+			return "hac";
+		case QB_ATTR_hc:
+			return "hc";
+		case QB_ATTR_htc:
+			return "htc";
+		case QB_ATTR_mw:
+			return "mw";
+		case QB_ATTR_ntc:
+			return "ntc";
+		case QB_ATTR_rbc:
+			return "rbc";
+		case QB_ATTR_src:
+			return "src";
+		case QB_ATTR_tac:
+			return "tac";
+		case QB_ATTR_tbo:
+			return "tbo";
+		case QB_ATTR_type:
+			return "type"; // specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
 
 		default:
 			return "";
@@ -199,7 +295,7 @@ public class SLNConst
 			return "";
 		}
 	}
-	
+
 	public static int SLNStringToBondTypeAttr(String type)
 	{
 		if (type.equals("any")|| type.equals("~") || type.equals(""))
@@ -215,7 +311,7 @@ public class SLNConst
 
 		return -1;
 	}
-	
+
 	public static int SLNCharToBondTypeAttr(char symbol)
 	{
 		switch (symbol)
@@ -270,7 +366,7 @@ public class SLNConst
 			return "";
 		}
 	}
-	
+
 	public static int SLNStringToBondStereoChemAttr(String type)
 	{
 		if (type.equals("C"))
@@ -306,95 +402,18 @@ public class SLNConst
 		}
 		return(-1);
 	}
-	*/	
+	 */	
 
-	//Atom and Bond attributes used only in query Q_ATTR_*    ???collect them to atom and bond attributes???
-	public static final int Q_ATTR_mapNum = 100; // #1,#2,... map number to an atom "a"
-	public static final int Q_ATTR_c = 101; // control how atoms in the target are matched "convered"  by pattern atoms "a"
-	public static final int Q_ATTR_f = 102; // boolean attribute indicating that the atom is filled "a"
-	public static final int Q_ATTR_hac = 103; // heavy atom count "b"
-	public static final int Q_ATTR_hc = 104; // hydrogen count "b"
-	public static final int Q_ATTR_htc = 105; // hetero atom count "b"
-	public static final int Q_ATTR_is = 106; // Specifies patterns that the qualified atom in a query must match if it is to match the query atom "a"
-	public static final int Q_ATTR_mw = 107; // The molecular weight attribute is used with group atoms (R, X, and Rx)to specify the cumulative atomic weights that atoms that match the group atom to match the query "b"
-	public static final int Q_ATTR_n = 108; // atom that matches a query atom from being covered "a"
-	public static final int Q_ATTR_not = 109; // Specifies patterns that the qualified atom in a query must not match "a"
-	public static final int Q_ATTR_ntc = 110; // number of nonterminal atoms "b"
-	public static final int Q_ATTR_r = 111; // Boolean attribute used to specify that a bond or atom is in a ring "a"
-	public static final int Q_ATTR_rbc = 112; // ring bond count "b"
-	public static final int Q_ATTR_src = 113; // the smallest ring count "b"
-	public static final int Q_ATTR_tac = 114; // total number of atoms attached to the qualified atom "b"
-	public static final int Q_ATTR_tbo = 115; // total bond order of an atom "b"
-	public static final int Q_ATTR_type = 116; // bond type specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
-	public static final int Q_ATTR_v = 117; // Conveys Markush and macro atom valence information
-
-
-	public static String queryAttributeToSLNString(int attr)
+	/*	public static String queryAttributeToSLNString(int attr)
 	{
 		switch (attr)
 		{
-		case Q_ATTR_mapNum:
-			return "#";
-		case Q_ATTR_c:
-			return "c";
-		case Q_ATTR_f:
-			return "f";	
-		case Q_ATTR_hac:
-			return "hac";
-		case Q_ATTR_hc:
-			return "hc";
-		case Q_ATTR_htc:
-			return "htc";
-		case Q_ATTR_is:
-			return "is";
-		case Q_ATTR_mw:
-			return "mw";
-		case Q_ATTR_n:
-			return "n";
-		case Q_ATTR_not:
-			return "not";
-		case Q_ATTR_ntc:
-			return "ntc";
-		case Q_ATTR_r:
-			return "r";
-		case Q_ATTR_rbc:
-			return "rbc";
-		case Q_ATTR_src:
-			return "src";
-		case Q_ATTR_tac:
-			return "tac";
-		case Q_ATTR_tbo:
-			return "tbo";
-		case Q_ATTR_type:
-			return "type"; // specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
-		case Q_ATTR_v:
-			return "v";
-
 		default:
 			return "";
 		}
 	}
+	 */
 
-	//Values of coverage attribute
-	public static final int Q_COVERED_n = 0; // atom must not have been matched previously
-	public static final int Q_COVERED_o = 1; // atom's coverage flags are ignored
-	public static final int Q_COVERED_y = 2; // atom must be covered by previous search
-
-	public static String coverageQueryAttributeToSLNString(int attr)
-	{
-		switch (attr)
-		{
-		case Q_COVERED_n:
-			return "n";
-		case Q_COVERED_o:
-			return "o";
-		case Q_COVERED_y:
-			return "y";
-
-		default:
-			return "";
-		}
-	}
 	//Matrix with the operation priorities {pij}
 	//p[i][j] < 0 means that priority(i) < priority(j)
 	//p[i][j] = 0 means that priority(i) = priority(j)
