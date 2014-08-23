@@ -18,6 +18,15 @@ import ambit2.rest.query.StructureQueryResource;
 
 public class QueryTautomersResource <Q extends IQueryRetrieval<IStructureRecord>> extends StructureQueryResource<IQueryRetrieval<IStructureRecord>> {
 	
+	public QueryTautomersResource() {
+		super();
+		setHtmlbyTemplate(true);
+	}
+	@Override
+	public String getTemplateName() {
+		return "relation_compound.ftl";
+	}
+	
 	@Override
 	protected Q createQuery(Context context, Request request,Response response) throws ResourceException {
 		try {

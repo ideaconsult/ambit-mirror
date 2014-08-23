@@ -41,7 +41,7 @@
 <!-- banner -->
 <#include "/banner_crumbs.ftl">
 
-<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 	<#include "/searchmenu/menu_substance.ftl">
 
 <!-- help-->		
@@ -52,7 +52,7 @@
 	</div>		
 </div>
 
-<div class="thirteen columns remove-bottom" style="padding:0;" >
+<div class="fourteen columns remove-bottom" style="padding:0;" >
 
 
 		<!-- Page Content
