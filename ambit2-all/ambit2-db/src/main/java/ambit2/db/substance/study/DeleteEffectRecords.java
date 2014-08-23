@@ -7,6 +7,9 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.Params;
+import ambit2.base.data.study.Protocol;
+import ambit2.base.data.study.ProtocolApplication;
 import ambit2.db.update.AbstractUpdate;
 
 /**
@@ -14,22 +17,22 @@ import ambit2.db.update.AbstractUpdate;
  * @author nina
  *
  */
-public class DeleteEffectRecords extends AbstractUpdate<String,EffectRecord> {
+public class DeleteEffectRecords extends AbstractUpdate<ProtocolApplication<Protocol, Params,String,Params,String>,EffectRecord> {
 
 	public static final String[] delete_sql = {"delete from substance_experiment where document_prefix =? and hex(document_uuid) =?"};
 
-	public DeleteEffectRecords(String documentuuid) {
+	public DeleteEffectRecords(ProtocolApplication<Protocol, Params,String,Params,String> papp) {
 		super(null);
-		setGroup(documentuuid);
+		setGroup(papp);
 	}
 	public DeleteEffectRecords() {
 		this(null);
 	}		
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		if (getGroup()!=null)  {
-			String[] uuid = new String[]{null,getGroup()};
-			uuid = I5Utils.splitI5UUID(getGroup());
+		if (getGroup()!=null && getGroup().getDocumentUUID()!=null)  {
+			String[] uuid = new String[]{null,getGroup().getDocumentUUID()};
+			uuid = I5Utils.splitI5UUID(getGroup().getDocumentUUID());
 			params.add(new QueryParam<String>(String.class, uuid[0]));
 			params.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
 		} else

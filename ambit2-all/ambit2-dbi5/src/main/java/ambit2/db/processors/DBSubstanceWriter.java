@@ -146,14 +146,17 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
  			x.process(qss);
  			//delete effects records for this document, if any
  			if (deffr==null) deffr = new DeleteEffectRecords();
- 			deffr.setGroup(papp.getDocumentUUID());
+ 			deffr.setGroup(papp);
  			x.process(deffr);
  			//and add the new ones
  			if ( papp.getEffects()!=null)
  			for (Object effect : papp.getEffects()) 
  				if (effect instanceof EffectRecord) {
- 					if (qeffr==null) qeffr = new UpdateEffectRecords(papp.getDocumentUUID(),(EffectRecord)effect);
- 					else {qeffr.setGroup(papp.getDocumentUUID()); qeffr.setObject((EffectRecord)effect);}
+ 					if (qeffr==null) qeffr = new UpdateEffectRecords(importedRecord.getCompanyUUID(),papp,(EffectRecord)effect);
+ 					else {
+ 						qeffr.setSubstanceUUID(importedRecord.getCompanyUUID());
+ 						qeffr.setGroup(papp); qeffr.setObject((EffectRecord)effect);
+ 					}
  					x.process(qeffr);
  				}
  		}		
