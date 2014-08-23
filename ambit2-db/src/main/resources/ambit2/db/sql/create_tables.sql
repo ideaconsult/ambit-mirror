@@ -198,13 +198,15 @@ CREATE TABLE `substance_protocolapplication` (
 
 -- -----------------------------------------------------
 -- Table `substance_experiment`
+-- this is intentionally denormalized table
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `substance_experiment`;
-
 CREATE TABLE `substance_experiment` (
   `idresult` int(11) NOT NULL AUTO_INCREMENT,
   `document_prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `document_uuid` varbinary(16) NOT NULL,
+  `topcategory` varchar(32) DEFAULT NULL,
+  `endpointcategory` varchar(45) DEFAULT NULL,
   `endpointhash` varbinary(20) DEFAULT NULL COMMENT 'SHA1 over endpoint, unit and conditions',
   `endpoint` varchar(64) DEFAULT NULL,
   `conditions` text,
@@ -216,15 +218,17 @@ CREATE TABLE `substance_experiment` (
   `textValue` text,
   `errQualifier` varchar(6) DEFAULT NULL,
   `err` double DEFAULT NULL,
+  `substance_prefix` varchar(6) DEFAULT NULL,
+  `substance_uuid` varbinary(16) DEFAULT NULL,
   PRIMARY KEY (`idresult`),
   KEY `document_id` (`document_uuid`,`document_prefix`),
   KEY `endpoint` (`endpoint`),
   KEY `document-x` (`document_prefix`,`document_uuid`),
   KEY `hash-x` (`endpointhash`),
+  KEY `category-x` (`topcategory`,`endpointcategory`,`endpoint`,`endpointhash`),
+  KEY `substance-x` (`substance_prefix`,`substance_uuid`),
   CONSTRAINT `document-x` FOREIGN KEY (`document_prefix`, `document_uuid`) REFERENCES `substance_protocolapplication` (`document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 
 -- -----------------------------------------------------
 -- Table `structure`
@@ -1166,7 +1170,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (8,3,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (8,4,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
@@ -1625,12 +1629,12 @@ SELECT idtemplate,template.name as template,idproperty,properties.name as proper
 -- -----------------------------------------------------
 
 CREATE  OR REPLACE VIEW `substance_study_view` AS
-select idsubstance,substance_prefix,substance_uuid,documentType,format,
+select idsubstance,p.substance_prefix,p.substance_uuid,documentType,format,
 name,publicname,content,substanceType,
 rs_prefix,rs_uuid,
 owner_prefix,owner_uuid,owner_name,
 p.document_prefix,p.document_uuid,
-topcategory,endpointcategory,p.endpoint,
+p.topcategory,p.endpointcategory,p.endpoint,
 guidance,
 reliability,isRobustStudy,purposeFlag,studyResultType,
 params,interpretation_result,interpretation_criteria,
