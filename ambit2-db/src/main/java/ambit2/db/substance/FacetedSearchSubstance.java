@@ -73,6 +73,7 @@ public class FacetedSearchSubstance  extends AbstractReadSubstance<List<Protocol
 	private static final String where_endpoint_lovalue = " and (e%d.lovalue %s ? || e%d.upvalue %s ?)\n";
 	private static final String where_endpoint_upvalue = " and (e%d.lovalue %s ? || e%d.upvalue %s ?)\n";
 	private static final String where_endpoint_textvalue = " and e%d.textvalue=?\n";
+	private static final String where_units = " and e%d.unit=?\n";
 	
 	private static final String join_category  = "join substance_protocolapplication e%d on (`e1`.`substance_prefix` = `e%d`.`substance_prefix`) and (`e1`.`substance_uuid` = `e%d`.`substance_uuid`)\n";
 	private static final String join_experiment  = "join substance_experiment e%d on (`e1`.`substance_prefix` = `e%d`.`substance_prefix`) and (`e1`.`substance_uuid` = `e%d`.`substance_uuid`)\n";
@@ -119,6 +120,10 @@ public class FacetedSearchSubstance  extends AbstractReadSubstance<List<Protocol
 				where.append(String.format(where_endpoint,index));
 				added = true;
 			}
+			if (effect.getUnit()!=null) {
+				where.append(String.format(where_units,index));
+				added = true;
+			}
 			if (effect.getLoValue()!=null) {
 				where.append(String.format(where_endpoint_lovalue,
 						index,effect.getLoQualifier()==null?">=":effect.getLoQualifier(),
@@ -153,6 +158,9 @@ public class FacetedSearchSubstance  extends AbstractReadSubstance<List<Protocol
 					EffectRecord<String,Params,String> effect = getFieldname().get(i).getEffects().get(j);
 					if (effect.getEndpoint()!=null) {
 						params.add(new QueryParam<String>(String.class,effect.getEndpoint()));		
+					}
+					if (effect.getUnit()!=null) {
+						params.add(new QueryParam<String>(String.class,effect.getUnit()));		
 					}
 					if (effect.getLoValue()!=null) {
 						params.add(new QueryParam<Double>(Double.class,effect.getLoValue()));

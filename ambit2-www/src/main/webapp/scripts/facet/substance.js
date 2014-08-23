@@ -16,7 +16,13 @@ var facet = {
 				if ((val != undefined) && (val != null) && ("" != val))
 					params.push({"name" : name , "value" : val});
 				
-				var name = 'lovalue.' +item['value'];
+				name = 'unit.' +item['value'];
+				var unitsBox = $("input[name^='"+name+"']",'#fsearchForm');
+				var val = unitsBox.val();
+				if ((val != undefined) && (val != null) && ("" != val))
+					params.push({"name" : name , "value" : val});
+				
+				name = 'lovalue.' +item['value'];
 				var endpointvalueBox = $("input[name^='"+name+"']",'#fsearchForm');
 				val = endpointvalueBox.val();
 				if ((val != undefined) && (val != null) && ("" != val))
@@ -125,10 +131,16 @@ var facet = {
 		    var div = $('<div style="margin:0" />');
 		    var id = model.subcategory+"."+model.endpoint;
 		    
-		    div.append($('<label>Endpoint name</label>'));
-		    var endpointBox = $('<input class="sizteen columns" type="text" title="Endpoint name, optional">');
+		    div.append($('<label class="twelve columns alpha" >Endpoint name</label>'));
+		    div.append($('<label class="four columns omega" >Units</label>'));
+		    var endpointBox = $('<input class="eleven columns alpha" type="text" title="Endpoint name, optional">');
 		    endpointBox.attr("id", "endpoint."+id).attr("name", "endpoint."+id);
 		    div.append(endpointBox);
+		    
+		    var unitBox = $('<input class="four columns omega" type="text" title="Units, optional" >');
+		    unitBox.attr("id", "unit."+id).attr("name", "unit."+id);
+		    div.append(unitBox);
+		    
 		    div.append($('<label class="sixteen columns">Enter endpoint value</label>'));
 		    
 		    var loQualifierBox = $('<select class="three columns alpha"><option value=">=" selected>&gt;=</option><option value=">">&gt;</option><option value="=">=</option><option value="<=">&lt;=</option></select>');
