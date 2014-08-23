@@ -175,9 +175,10 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 					String effectEndpoint = form.getFirstValue("endpoint."+value);
 					String effectloValue = form.getFirstValue("lovalue."+value);
 					String effectupValue = form.getFirstValue("upvalue."+value);
-					String effectloQualifier = form.getFirstValue("endpointloq."+value);
-					String effectupQualifier = form.getFirstValue("endpointupq."+value);
-					
+					String effectloQualifier = form.getFirstValue("loqlf."+value);
+					String effectupQualifier = form.getFirstValue("upqlf."+value);
+
+					final String[] qlfs = new String[] {"<=","<",">=",">","="};
 					EffectRecord<String,Params,String> effect = null;
 					if (effectEndpoint!=null) {
 						effect = new EffectRecord<String,Params,String>();
@@ -191,7 +192,14 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 						} catch (Exception x) {
 							effect.setTextValue(effectloValue);
 						}
-						effect.setLoQualifier(effectloQualifier);
+						effect.setLoQualifier(">=");
+						for (String qlf : qlfs) {
+							if (qlf.equals(effectloQualifier)) {
+								effect.setLoQualifier(effectloQualifier);
+								break;
+							}
+						}
+						
 					}
 					if (effectupValue!=null) {
 						if (effect==null) {effect = new EffectRecord<String,Params,String>();papp.addEffect(effect);}
@@ -199,7 +207,14 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 							effect.setUpValue(Double.parseDouble(effectupValue));
 						} catch (Exception x) {
 						}
-						effect.setUpQualifier(effectupQualifier);
+						effect.setUpQualifier("<=");
+						for (String qlf : qlfs) {
+							if (qlf.equals(effectupQualifier)) {
+								effect.setUpQualifier(effectupQualifier);
+								break;
+							}
+						}
+						
 					}
 				} catch (IllegalArgumentException x) {	
 					//invalid category, ignoring

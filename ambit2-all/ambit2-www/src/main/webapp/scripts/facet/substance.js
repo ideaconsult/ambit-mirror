@@ -28,6 +28,16 @@ var facet = {
 				if ((val != undefined) && (val != null) && ("" != val))
 					params.push({"name" : name , "value" : val});				
 
+				name = 'loqlf.' +item['value'];
+				val = $("select[name^='" + name+"']").val();
+				if ((val != undefined) && (val != null) && ("" != val))
+					params.push({"name" : name , "value" : val});		
+				
+				name = 'upqlf.' +item['value'];
+				val = $("select[name^='" + name+"']").val();
+				if ((val != undefined) && (val != null) && ("" != val))
+					params.push({"name" : name , "value" : val});		
+				
 			});
 			if (this.substanceComponent != undefined && this.substanceComponent!= null)  {
 				var substanceQuery =  this.root + '/substance?' + jQuery.param(params);
@@ -112,18 +122,28 @@ var facet = {
 
 		endpointFormatDetails : function ( oTable, nTr ,root ) {
 		    var model = oTable.fnGetData( nTr );
-		    var div = $('<div class="ui-widget remove-bottom" />');
+		    var div = $('<div style="margin:0" />');
 		    var id = model.subcategory+"."+model.endpoint;
 		    
-		    div.append($('<label>Endpoint</label>'));
-		    var endpointBox = $('<input type="text">');
+		    div.append($('<label>Endpoint name</label>'));
+		    var endpointBox = $('<input class="sizteen columns" type="text" title="Endpoint name, optional">');
 		    endpointBox.attr("id", "endpoint."+id).attr("name", "endpoint."+id);
 		    div.append(endpointBox);
-		    div.append($('<label>Value</label>'));
-		    var endpointvalueBox = $('<input type="text" size="20">');
+		    div.append($('<label class="sixteen columns">Enter endpoint value</label>'));
+		    
+		    var loQualifierBox = $('<select class="three columns alpha"><option value=">=" selected>&gt;=</option><option value=">">&gt;</option><option value="=">=</option><option value="<=">&lt;=</option></select>');
+		    loQualifierBox.attr("id", "loqlf."+id).attr("name", "loqlf."+id);
+		    div.append(loQualifierBox);
+
+		    var endpointvalueBox = $('<input class="four columns omega" type="text" title="lower value or exact value. Number or text" >');
 		    endpointvalueBox.attr("id", "lovalue."+id).attr("name", "lovalue."+id);
 		    div.append(endpointvalueBox);
-		    endpointvalueBox = $('<input type="text" size="20">');
+		    
+		    var upQualifierBox = $('<select class="three columns omega"><option value="<=" selected>&lt;=</option><option value="<">&lt;</option><option value="=">=</option></select>');
+		    upQualifierBox.attr("id", "upqlf."+id).attr("name", "upqlf."+id);
+		    div.append(upQualifierBox);
+
+		    endpointvalueBox = $('<input class="four columns omega" type="text" title="Upper value. Number expected">');
 		    endpointvalueBox.attr("id", "upvalue."+id).attr("name", "upvalue."+id);
 		    div.append(endpointvalueBox);
 		    return div;
