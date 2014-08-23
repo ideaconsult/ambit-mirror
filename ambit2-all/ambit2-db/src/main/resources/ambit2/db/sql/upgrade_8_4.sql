@@ -2,7 +2,7 @@ ALTER TABLE `substance_experiment` ADD COLUMN `topcategory` VARCHAR(32) NULL  AF
 , ADD INDEX `category-x` (`topcategory` ASC, `endpointcategory` ASC, `endpoint` ASC, `endpointhash` ASC) 
 , ADD INDEX `substance-x` (`substance_prefix` ASC, `substance_uuid` ASC) ;
 
-insert into version (idmajor,idminor,comment) values (8,4,"AMBIT2 schema (substance_experiment denormalized)");
+insert into version (idmajor,idminor,comment) values (8,4,"AMBIT2 schema (substance_experiment)");
 
 -- add the values into the denormalized table
 insert into substance_experiment
