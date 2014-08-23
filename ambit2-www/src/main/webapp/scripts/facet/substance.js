@@ -9,6 +9,25 @@ var facet = {
 				item['name']  = $(value).attr('name');
 				item['value'] = $(value).attr('value');
 				params.push(item);
+			
+				var name = 'endpoint.' +item['value'];
+				var endpointBox = $("input[name^='"+name+"']",'#fsearchForm');
+				var val = endpointBox.val();
+				if ((val != undefined) && (val != null) && ("" != val))
+					params.push({"name" : name , "value" : val});
+				
+				var name = 'lovalue.' +item['value'];
+				var endpointvalueBox = $("input[name^='"+name+"']",'#fsearchForm');
+				val = endpointvalueBox.val();
+				if ((val != undefined) && (val != null) && ("" != val))
+					params.push({"name" : name , "value" : val});
+				
+				name = 'upvalue.' +item['value'];
+				var endpointvalueBox = $("input[name^='"+name+"']",'#fsearchForm');
+				val = endpointvalueBox.val();
+				if ((val != undefined) && (val != null) && ("" != val))
+					params.push({"name" : name , "value" : val});				
+
 			});
 			if (this.substanceComponent != undefined && this.substanceComponent!= null)  {
 				var substanceQuery =  this.root + '/substance?' + jQuery.param(params);
@@ -93,14 +112,21 @@ var facet = {
 
 		endpointFormatDetails : function ( oTable, nTr ,root ) {
 		    var model = oTable.fnGetData( nTr );
-		    console.log(model);
-		    var sOut = '<div class="ui-widget remove-bottom" >';
+		    var div = $('<div class="ui-widget remove-bottom" />');
 		    var id = model.subcategory+"."+model.endpoint;
-		    sOut += '<label>Endpoint</label><input type="text" name="endpoint.'+id+'"  id="endpoint.'+id+'">';
-		    sOut += '<label>Value</label><input type="text" name="endpointvalue.'+id+'" id="endpointvalue.'+id+'">';
-		    sOut += '</div>';
-		     
-		    return sOut;
+		    
+		    div.append($('<label>Endpoint</label>'));
+		    var endpointBox = $('<input type="text">');
+		    endpointBox.attr("id", "endpoint."+id).attr("name", "endpoint."+id);
+		    div.append(endpointBox);
+		    div.append($('<label>Value</label>'));
+		    var endpointvalueBox = $('<input type="text" size="20">');
+		    endpointvalueBox.attr("id", "lovalue."+id).attr("name", "lovalue."+id);
+		    div.append(endpointvalueBox);
+		    endpointvalueBox = $('<input type="text" size="20">');
+		    endpointvalueBox.attr("id", "upvalue."+id).attr("name", "upvalue."+id);
+		    div.append(endpointvalueBox);
+		    return div;
 		}
 }
 

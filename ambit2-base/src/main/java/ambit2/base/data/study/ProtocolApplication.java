@@ -203,7 +203,7 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		//params
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.parameters.name())));
 		b.append(":\t");		
-		b.append(getParameters().toString());
+		b.append(getParameters()==null?"{}":getParameters().toString());
 		b.append(",\n");
 		//reliability
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.reliability.name())));
