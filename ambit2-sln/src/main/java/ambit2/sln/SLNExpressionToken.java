@@ -96,9 +96,34 @@ public class SLNExpressionToken
 
 		case SLNConst.A_ATTR_spin:			
 			return SLNConst.atomAttributeToSLNString(type) + "=" + SLNConst.atomSpinAttrToSLNString(param);	
+			
+		case SLNConst.QA_ATTR_mapNum:			
+			return SLNConst.atomAttributeToSLNString(type)  + "=" + param;	
+			
+		case SLNConst.QA_ATTR_c:
+			return SLNConst.atomAttributeToSLNString(type) + "=" + SLNConst.coverageQueryAttributeToSLNString(param);
+			
+		case SLNConst.QA_ATTR_f:
+			return SLNConst.atomAttributeToSLNString(type) + "=" + param;
+			
+		case SLNConst.QA_ATTR_is:
+			return SLNConst.atomAttributeToSLNString(type) + "=" + param;
+			
+		case SLNConst.QA_ATTR_n:
+			return SLNConst.atomAttributeToSLNString(type) + "=" + param;
+			
+		case SLNConst.QA_ATTR_not:
+			return SLNConst.atomAttributeToSLNString(type) + "=" + param;
+			
+		case SLNConst.QA_ATTR_r:
+			return SLNConst.atomAttributeToSLNString(type) + "=" + param;
+			
+		case SLNConst.QA_ATTR_v:
+			return SLNConst.atomAttributeToSLNString(type) + "=" + param;
+		
 
 		case SLNConst.A_ATTR_USER_DEFINED:			
-			return "(" +SLNConst.atomAttributeToSLNString(type) + ")" +attrName + "=" + stringParam;
+			return attrName + "=" + stringParam;
 		
 		}
 		return "attrib=undef";
@@ -115,8 +140,30 @@ public class SLNExpressionToken
 		case SLNConst.B_ATTR_s:
 			return SLNConst.bondAttributeToSLNString(type) + "=" + SLNConst.bondStereoChemistryAttributeToSLNString(param);
 			
+		case SLNConst.QB_ATTR_hac:
+			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+		case SLNConst.QB_ATTR_hc:
+			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+		case SLNConst.QB_ATTR_htc:
+			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+		case SLNConst.QB_ATTR_mw:
+			return SLNConst.bondAttributeToSLNString(type) + "=" + doubleParam;
+		case SLNConst.QB_ATTR_ntc:
+			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+		case SLNConst.QB_ATTR_rbc:
+			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+		case SLNConst.QB_ATTR_src:
+			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+		case SLNConst.QB_ATTR_tac:
+			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+		case SLNConst.QB_ATTR_tbo:
+			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+		case SLNConst.QB_ATTR_type:
+			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+			
+			
 		case SLNConst.B_ATTR_USER_DEFINED:			
-			return "(" +SLNConst.bondAttributeToSLNString(type) + ")" +attrName + "=" + stringParam;
+			return attrName + "=" + stringParam;
 		}
 		return "attrib=undef";
 	}
