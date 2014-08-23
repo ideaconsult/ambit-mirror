@@ -29,7 +29,10 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
+import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.processors.CallableSubstanceI5Query;
 import ambit2.db.readers.IQueryRetrieval;
@@ -161,13 +164,43 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 			}
 			String type = form.getFirstValue("type");
 			if ("facet".equals(type)) {
-				List<Protocol> protocols = new ArrayList<Protocol>();
+				List<ProtocolApplication<Protocol, Params, String, Params,String>> protocols = new ArrayList<ProtocolApplication<Protocol, Params, String, Params,String>>();
 				for (String value : form.getValuesArray("category")) try {
 					String[] categories = value.split("\\.");
 					Protocol protocol = new Protocol(null);
 					protocol.setCategory(Protocol._categories.valueOf(categories[1]).name());
 					protocol.setTopCategory(categories[0]);
-					protocols.add(protocol);
+					ProtocolApplication<Protocol, Params, String, Params,String> papp = new ProtocolApplication<Protocol, Params, String, Params,String>(protocol);
+					protocols.add(papp);
+					String effectEndpoint = form.getFirstValue("endpoint."+value);
+					String effectloValue = form.getFirstValue("lovalue."+value);
+					String effectupValue = form.getFirstValue("upvalue."+value);
+					String effectloQualifier = form.getFirstValue("endpointloq."+value);
+					String effectupQualifier = form.getFirstValue("endpointupq."+value);
+					
+					EffectRecord<String,Params,String> effect = null;
+					if (effectEndpoint!=null) {
+						effect = new EffectRecord<String,Params,String>();
+						papp.addEffect(effect);
+						effect.setEndpoint(effectEndpoint);
+					}
+					if (effectloValue!=null) {
+						if (effect==null) {effect = new EffectRecord<String,Params,String>();papp.addEffect(effect);}
+						try {
+							effect.setLoValue(Double.parseDouble(effectloValue));
+						} catch (Exception x) {
+							effect.setTextValue(effectloValue);
+						}
+						effect.setLoQualifier(effectloQualifier);
+					}
+					if (effectupValue!=null) {
+						if (effect==null) {effect = new EffectRecord<String,Params,String>();papp.addEffect(effect);}
+						try {
+							effect.setUpValue(Double.parseDouble(effectupValue));
+						} catch (Exception x) {
+						}
+						effect.setUpQualifier(effectupQualifier);
+					}
 				} catch (IllegalArgumentException x) {	
 					//invalid category, ignoring
 				} catch (Exception x) {
