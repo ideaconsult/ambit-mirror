@@ -476,10 +476,10 @@ window.jT = window.jToxKit = {
   	  });
 	  }
 	  else {
-	    if (!!dataParams.configuration && typeof dataParams.configuration == "string" && !!window[dataParams.configuration]) {
+	    if (!!window[dataParams.configuration] && typeof dataParams.configuration == "string") {
 	      var config = window[dataParams.configuration];
 	      dataParams.configuration = (typeof config != 'function' ? config : config(kit));
-	     }
+      }
   	  
       jT.$(element).data('jtKit', realInit(dataParams));
 	  }
@@ -712,6 +712,34 @@ window.jT.ui = {
       el.id = id;
       jT.$(this).attr('href', '#' + id);
     })  
+  },
+  
+  addTab: function(root, name, id, content) {
+    // first try to see if there is same already...
+    if (document.getElementById(id) != null)
+      return;
+  
+    // first, create and add li/a element
+    var li = document.createElement('li');
+    var a = document.createElement('a');
+    li.appendChild(a);
+    a.href = '#' + id;
+    a.innerHTML = name;
+    jT.$('ul', root)[0].appendChild(li);
+    
+    // then proceed with the panel, itself...
+    if (typeof content == 'function')
+      content = content(root);
+    else if (typeof content == 'string') {
+      var div = document.createElement('div');
+      div.innerHTML = content;
+      content = div;
+    }
+      
+    content.id = id;
+    root.appendChild(content);
+    $(root).tabs('refresh');
+    return { 'tab': a, 'content': content };
   },
   
   modifyColDef: function (kit, col, category, group) {
@@ -1366,7 +1394,9 @@ var jToxCompound = (function () {
     "tabsFolded": false,      // should present the feature-selection tabs folded initially
     "showExport": true,       // should we add export tab up there
     "showControls": true,     // should we show the pagination/navigation controls.
+    "showUnits": true,        // should we show units in the column title.
     "hideEmpty": false,       // whether to hide empty groups instead of making them inactive
+    "groupSelection": true,   // wether to show select all / unselect all links in each group
     "hasDetails": true,       // whether browser should provide the option for per-item detailed info rows.
     "hideEmptyDetails": true, // hide feature values, when they are empty (only in detailed view)
     "detailsHeight": "fill",  // what is the tabs' heightStyle used for details row
@@ -1604,6 +1634,19 @@ var jToxCompound = (function () {
         var divEl = document.createElement('div');
         divEl.id = grId;
         all.appendChild(divEl);
+        // add the group check multi-change
+        if (self.settings.groupSelection) {
+          var sel = jT.getTemplate("#jtox-ds-selection");
+          divEl.appendChild(sel);
+          jT.$('.multi-select', sel).on('click', function (e) {
+            var par = jT.$(this).closest('.ui-tabs-panel')[0];
+            var doSel = jT.$(this).hasClass('select');
+            $('input', par).each(function () {
+              this.checked = doSel;
+              jT.$(this).trigger('change');
+            });
+          });
+        }
         
         if (groupFn(divEl, gr)) {
           if (self.settings.hideEmpty) {
@@ -1752,10 +1795,15 @@ var jToxCompound = (function () {
       var fnShowColumn = function() {
         var dt = $(this).data();
         var cells = jT.$(dt.sel + ' table tr>*:nth-child(' + (dt.idx + 1) + ')', self.rootElement);
-        if (this.checked)
+        if (this.checked) {
           jT.$(cells).show();
-        else
+          jT.$("table tr .blank-col", self.rootElement).addClass('jtox-hidden');
+        }
+        else {
           jT.$(cells).hide();
+          if (jT.$(dt.sel + " table tr *:visible", self.rootElement).length == 0)
+            jT.$("table tr .blank-col", self.rootElement).removeClass('jtox-hidden');
+        }
         if (self.settings.rememberChecks)
           self.featureStates[dt.id] = this.checked;
         self.equalizeTables();
@@ -1777,7 +1825,7 @@ var jToxCompound = (function () {
         var idx = jT.$(row).data('jtox-index');
         
         if (self.settings.preDetails != null && !ccLib.fireCallback(self.settings.preDetails, self, idx, cell) || !cell)
-          return; // that !cell  means you've forgotten to add #DetailedInfoRow feature somewhere.
+          return; // the !cell  means you've forgotten to add #DetailedInfoRow feature somewhere.
         jT.$(row).toggleClass('jtox-detailed-row');
         var toShow = jT.$(row).hasClass('jtox-detailed-row');
 
@@ -1858,7 +1906,7 @@ var jToxCompound = (function () {
             
           // now we now we should show this one.
           var col = {
-            "sTitle": feature.title.replace(/_/g, ' ') + (ccLib.isNull(feature.units) ? "" : feature.units),
+            "sTitle": feature.title.replace(/_/g, ' ') + (!self.settings.showUnits || ccLib.isNull(feature.units) ? "" : feature.units),
             "sDefaultContent": "-",
           };
           
@@ -1924,8 +1972,8 @@ var jToxCompound = (function () {
         }
       }))[0];
 
-      if (varCols.length == 1) // i.e. we _don't_ have other then hidden ID column.. add blank one.
-        varCols.push({ "sClass": "center", "mData": "index", "mRender": function(data, type, full) { return type != 'display' ? data : '...'; }  });
+      // we need to put a fake column to stay, when there is no other column here, or when everything is hidden..
+      varCols.push({ "sClass": "center blank-col" + (varCols.length > 1 ? " jtox-hidden" : ""), "mData": "index", "mRender": function(data, type, full) { return type != 'display' ? data : '...'; }  });
 
       self.varTable = (jT.$(".jtox-ds-variable table", self.rootElement).dataTable({
         "bPaginate": false,
@@ -2077,7 +2125,7 @@ var jToxCompound = (function () {
       var self = this;
       var pane = jT.$('.jtox-controls', self.rootElement)[0];
       ccLib.fillTree(pane, {
-        "pagestart": qStart + 1,
+        "pagestart": qSize > 0 ? qStart + 1 : 0,
         "pageend": qStart + qSize,
       });
       
@@ -2226,12 +2274,13 @@ var jToxCompound = (function () {
       
       // if applicable - location the feature value to a specific location whithin the entry
       if (!!feature.accumulate && newVal !== undefined && feature.data !== undefined) {
+        var fn = typeof feature.accumulate == 'function' ? feature.accumulate : fnValue;
         var accArr = feature.data;
         if (!jT.$.isArray(accArr))
           accArr = [accArr];
         
         for (var v = 0; v < accArr.length; ++v)
-          ccLib.setJsonValue(entry, accArr[v], ccLib.fireCallback(fnValue, this, fid,  /* oldVal */ ccLib.getJsonValue(entry, accArr[v]), newVal, features));
+          ccLib.setJsonValue(entry, accArr[v], ccLib.fireCallback(fn, this, fid,  /* oldVal */ ccLib.getJsonValue(entry, accArr[v]), newVal, features));
       }
       
       if (feature.process !== undefined)
@@ -3097,7 +3146,7 @@ var jToxStudy = (function () {
   var cls = function (root, settings) {
     var self = this;
     self.rootElement = root;
-    var suffix = '_' + instanceCount++;
+    self.instanceNo = instanceCount++;
     jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even in manual initialization.
     
     self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings); // i.e. defaults from jToxStudy
@@ -3108,16 +3157,7 @@ var jToxStudy = (function () {
     // There should be no overlap, because already-added instances will have their IDs changed already...
     var tree = jT.getTemplate('#jtox-studies');
     root.appendChild(tree);
-    jT.ui.changeTabsIds(tree, suffix);
-    jT.$('div.jtox-study-tab div button', tree).on('click', function (e) {
-    	var par = jT.$(this).parents('.jtox-study-tab')[0];
-	    if (jT.$(this).hasClass('expand-all')) {
-		    jT.$('.jtox-foldable', par).removeClass('folded');
-	    }
-	    else if (jT.$(this).hasClass('collapse-all')) {
-		    jT.$('.jtox-foldable', par).addClass('folded');
-	    }
-    });
+    jT.ui.changeTabsIds(tree, '_' + self.instanceNo);
     
     // initialize the tab structure for several versions of tabs.
     self.tabs = jT.$(tree).tabs({
@@ -3140,19 +3180,17 @@ var jToxStudy = (function () {
   cls.prototype = {
     loadPanel: function(panel){
       var self = this;
-      if (panel){
-        jT.$('.jtox-study.unloaded', panel).each(function(i){
-          var table = this;
-          jT.call(self, jT.$(table).data('jtox-uri'), function(study){
-            if (!!study) {
-              jT.$(table).removeClass('unloaded folded');
-              jT.$(table).addClass('loaded');
+      if (jT.$(panel).hasClass('unloaded')){
+        var uri = self.addParameters(jT.$(panel).data('jtox-uri'));
+        jT.call(self, uri, function(study){
+          if (!!study) {
+            jT.$('.jtox-study.folded', panel).removeClass('folded');
+            jT.$(panel).removeClass('unloaded').addClass('loaded');
 
-              self.processStudies(panel, study.study, false);
-              ccLib.fireCallback(self.settings.onStudy, self, study.study);
-            }
-          });  
-        });
+            self.processStudies(panel, study.study, true);
+            ccLib.fireCallback(self.settings.onStudy, self, study.study);
+          }
+        });  
       }
     },
     
@@ -3195,7 +3233,19 @@ var jToxStudy = (function () {
       
       return theCat;
     },
-  
+    
+    addParameters: function (summaryURI) {
+      var self = this;
+      var pars = ["property_uri", "top", "category"];
+      for (var i = 0; i < pars.length; ++i) {
+        var p = pars[i];
+        if (!!self.settings[p])
+          summaryURI = ccLib.addParameter(summaryURI, p + "=" + self.settings[p]);
+      }
+      
+      return summaryURI;
+    },
+    
     // modifies the column title, according to configuration and returns "null" if it is marked as "invisible".
     ensureTable: function (tab, study) {
       var self = this;
@@ -3385,7 +3435,8 @@ var jToxStudy = (function () {
     
     processSummary: function (summary) {
       var self = this;
-      var typeSummary = [];
+      var typeSummary = {};
+      var knownNames = { "P-CHEM": "P-Chem", "ENV_FATE" : "Env Fate", "ECOTOX" : "Eco Tox", "TOX" : "Tox"};
       
       // first - clear all existing tabs
 			jT.$('.jtox-study', self.rootElement).remove();
@@ -3398,8 +3449,37 @@ var jToxStudy = (function () {
       		return -1;
       	if (valB == null)
       		return 1;
+        if (valA == valB)
+          return 0;
 	      return (valA < valB) ? -1 : 1;
       });
+      
+      var tabRoot = $('ul', self.rootElement).parent()[0];
+      var added = 0;
+      var lastAdded = null;
+      var addStudyTab = function (top, sum) {
+        var tab = jT.getTemplate('#jtox-study-tab');
+        var link = jT.ui.addTab(tabRoot, (knownNames[top] || sum.topcategory.title) + " (0)", "jtox-" + top.toLowerCase() + '_' + self.instanceNo, tab).tab;
+        jT.$(link).data('type', top);
+        
+        jT.$(tab).addClass(top).data('jtox-uri', sum.topcategory.uri);
+        ccLib.fillTree(tab, self.substance);
+        
+        added++;
+        lastAdded = top;
+      
+        jT.$('div.jtox-study-tab div button', tabRoot).on('click', function (e) {
+        	var par = jT.$(this).parents('.jtox-study-tab')[0];
+    	    if (jT.$(this).hasClass('expand-all')) {
+    		    jT.$('.jtox-foldable', par).removeClass('folded');
+    	    }
+    	    else if (jT.$(this).hasClass('collapse-all')) {
+    		    jT.$('.jtox-foldable', par).addClass('folded');
+    	    }
+        });
+        
+        return tab;
+      };
       
       for (var si = 0, sl = summary.length; si < sl; ++si) {
         var sum = summary[si];
@@ -3408,17 +3488,20 @@ var jToxStudy = (function () {
           continue;
         var top = top.replace(/ /g, "_");
         var tab = jT.$('.jtox-study-tab.' + top, self.rootElement)[0];
+        if (!tab)
+          tab = addStudyTab(top, sum);
         
         var catname = sum.category.title;
-        if (!catname) {
+        if (!catname)
           typeSummary[top] = sum.count;
-        }
-        else {
-          var cat = self.createCategory(tab, catname);
-          jT.$(cat).data('jtox-uri', sum.category.uri);
-        }
+        else
+          self.createCategory(tab, catname);
       }
-      
+
+      // a small hack to force openning of this, later in the querySummary()      
+      if (added == 1)
+        self.settings.tab = lastAdded;
+
       // update the number in the tabs...
       jT.$('ul li a', self.rootElement).each(function (i){
         var data = jT.$(this).data('type');
@@ -3455,6 +3538,7 @@ var jToxStudy = (function () {
     processStudies: function (tab, study, map) {
       var self = this;
       var cats = {};
+      var cntCats = 0;
       
       // first swipe to map them to different categories...
       if (!map){
@@ -3466,8 +3550,9 @@ var jToxStudy = (function () {
         for (var i = 0, slen = study.length; i < slen; ++i) {
           var ones = study[i];
           if (map) {
-            if (cats[ones.protocol.category] === undefined) {
+            if (cats[ones.protocol.category.code] === undefined) {
               cats[ones.protocol.category.code] = [ones];
+              cntCats++;
             }
             else {
               cats[ones.protocol.category.code].push(ones);
@@ -3496,7 +3581,8 @@ var jToxStudy = (function () {
         var theTable = self.ensureTable(tab, study);
         jT.$(theTable).dataTable().fnAddData(onec);
         jT.$(theTable).colResizable({ minWidth: 30, liveDrag: true });
-        jT.$(theTable).parents('.jtox-study').addClass('folded');
+        if (cntCats > 1)
+          jT.$(theTable).parents('.jtox-study').addClass('folded');
 
         // we need to fix columns height's because of multi-cells
         jT.$('#' + theTable.id + ' .jtox-multi').each(function(index){
@@ -3508,13 +3594,14 @@ var jToxStudy = (function () {
     querySummary: function(summaryURI) {
       var self = this;
       
+      summaryURI = self.addParameters(summaryURI);      
       jT.call(self, summaryURI, function(summary) {
         if (!!summary && !!summary.facet)
           self.processSummary(summary.facet);
           ccLib.fireCallback(self.settings.onSummary, self, summary.facet);
           // check if there is an initial tab passed so we switch to it
           if (!!self.settings.tab) {
-            var div = jT.$('.jtox-study-tab.' + decodeURIComponent(self.settings.tab).replace(/ /g, '_'), self.root)[0];
+            var div = jT.$('.jtox-study-tab.' + decodeURIComponent(self.settings.tab).replace(/ /g, '_').toUpperCase(), self.root)[0];
             if (!!div) {
               for (var idx = 0, cl = div.parentNode.children.length; idx < cl; ++idx)
                 if (div.parentNode.children[idx].id == div.id)
@@ -3551,6 +3638,7 @@ var jToxStudy = (function () {
             flags += substance.externalIdentifiers[i].id || '';
           }
           substance["IUCFlags"] = flags;
+          self.substance = substance;
             
           ccLib.fillTree(self.rootElement, substance);
           // go and query for the reference query
@@ -3567,6 +3655,10 @@ var jToxStudy = (function () {
           self.insertComposition(substance.URI + "/composition");
         }
       });
+    },
+    
+    query: function (uri) {
+      this.querySubstance(uri);
     }
   }; // end of prototype
   
@@ -3862,6 +3954,12 @@ jT.templates['all-compound']  =
 "	  </div>" +
 ""; // end of #jtox-dataset 
 
+jT.templates['compound-one-tab']  = 
+"    <div id=\"jtox-ds-selection\" class=\"jtox-selection\">" +
+"      <a href=\"#\" class=\"multi-select select\">select all</a>&nbsp;<a href=\"#\" class=\"multi-select unselect\">unselect all</a>" +
+"    </div>" +
+""; // end of #compound-one-tab 
+
 jT.templates['compound-one-feature']  = 
 "    <div id=\"jtox-ds-feature\" class=\"jtox-ds-feature\"><input type=\"checkbox\" checked=\"yes\" class=\"jtox-checkbox\" /><span class=\"data-field jtox-title\" data-field=\"title\"> ? </span><sup><a target=\"_blank\" class=\"data-field attribute\" data-attribute=\"href\" data-field=\"uri\">?</a></sup></div>" +
 ""; // end of #jtox-ds-feature 
@@ -3929,10 +4027,6 @@ jT.templates['all-studies']  =
 "	    <ul>" +
 "	      <li><a href=\"#jtox-substance\">IUC Substance</a></li>" +
 "	      <li><a href=\"#jtox-compo-tab\">Composition</a></li>" +
-"	      <li><a href=\"#jtox-pchem\" data-type=\"P-CHEM\">P-Chem (0)</a></li>" +
-"	      <li><a href=\"#jtox-envfate\" data-type=\"ENV_FATE\">Env Fate (0)</a></li>" +
-"	      <li><a href=\"#jtox-ecotox\" data-type=\"ECOTOX\">Eco Tox (0)</a></li>" +
-"	      <li><a href=\"#jtox-tox\" data-type=\"TOX\">Tox (0)</a></li>" +
 "	    </ul>" +
 "	    <div id=\"jtox-substance\" class=\"jtox-substance\">" +
 "	      <table class=\"dataTable\">" +
@@ -3993,39 +4087,21 @@ jT.templates['all-studies']  =
 "	      </table>" +
 "	    </div>" +
 "	    <div id=\"jtox-compo-tab\" class=\"jtox-compo-tab\"></div>" +
-"	    <div id=\"jtox-pchem\" class=\"jtox-study-tab P-CHEM\">" +
-"	    	<div class=\"float-right\">" +
-"	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
-"	    	</div>" +
-"	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
-"	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
-"      </div>" +
-"	    <div id=\"jtox-envfate\" class=\"jtox-study-tab ENV_FATE\">" +
-"	    	<div class=\"float-right\">" +
-"	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
-"	    	</div>" +
-"	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
-"	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
-"	    </div>" +
-"	    <div id=\"jtox-ecotox\" class=\"jtox-study-tab ECOTOX\">" +
-"	    	<div class=\"float-right\">" +
-"	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
-"	    	</div>" +
-"	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
-"	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
-"	    </div>" +
-"	    <div id=\"jtox-tox\" class=\"jtox-study-tab TOX\">" +
-"	    	<div class=\"float-right\">" +
-"	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
-"	    	</div>" +
-"	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
-"	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
-"	    </div>" +
 "	  </div>" +
 ""; // end of #jtox-studies 
 
+jT.templates['one-category']  = 
+"    <div id=\"jtox-study-tab\" class=\"jtox-study-tab unloaded\">" +
+"    	<div class=\"float-right\">" +
+"      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
+"    	</div>" +
+"      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
+"      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
+"    </div>" +
+""; // end of #jtox-category 
+
 jT.templates['one-study']  = 
-"    <div id=\"jtox-study\" class=\"jtox-study jtox-foldable folded unloaded\">" +
+"    <div id=\"jtox-study\" class=\"jtox-study jtox-foldable folded\">" +
 "      <div class=\"title\"><p class=\"data-field\" data-field=\"title\">? (0)</p></div>" +
 "      <div class=\"content\">" +
 "        <table class=\"jtox-study-table content\"></table>" +
