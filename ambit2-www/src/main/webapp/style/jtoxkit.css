@@ -357,6 +357,12 @@ img.jtox-smalldiagram {
   overflow: hidden;
 }
 
+.jtox-selection {
+  font-size: 80%;
+  float: right;
+  vertical-align: top;
+}
+
 .jtox-ds-tables {
   position: relative;  
 }
@@ -475,13 +481,12 @@ div.jtox-substance {
   margin-bottom: 45px;  
 }
 
-div.jtox-study.unloaded div.title,
-div.jtox-study.unloaded.folded div.title {
-  background: url(../images/waiting_small.gif) right top no-repeat;
-  background-size: 16px 16px;
+div.jtox-study-tab.unloaded  {
+  background: url(../images/waiting_big.gif) center center no-repeat;
+  background-size: 30px 30px;
 }
 
-div.jtox-study.unloaded table {
+div.jtox-study-tab.unloaded div.jtox-study {
   display: none;
 }
 
