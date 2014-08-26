@@ -48,22 +48,22 @@ function renderRelation(data, type, full) {
 
 function createGroups(miniset, kit) {
   var groups = {
-    "Identifiers" : [
-      "http://www.opentox.org/api/1.1#Diagram", 
-      "#DetailedInfoRow",
-      "http://www.opentox.org/api/1.1#CASRN", 
-      "http://www.opentox.org/api/1.1#EINECS",
-      "http://www.opentox.org/api/1.1#IUCLID5_UUID"
+    "Structure Diagram" : [
+      "http://www.opentox.org/api/1.1#Diagram",
+      "#DetailedInfoRow"      
     ],
-    "Names": [
-      "http://www.opentox.org/api/1.1#ChemicalName",
-      "http://www.opentox.org/api/1.1#TradeName",
-      "http://www.opentox.org/api/1.1#IUPACName",
-      "http://www.opentox.org/api/1.1#SMILES",
-      "http://www.opentox.org/api/1.1#InChIKey",
-      "http://www.opentox.org/api/1.1#InChI",
-      "http://www.opentox.org/api/1.1#REACHRegistrationDate"
-	  ]
+    "Identifiers" : [
+                     "http://www.opentox.org/api/1.1#CASRN", 
+                     "http://www.opentox.org/api/1.1#EINECS",
+                     "http://www.opentox.org/api/1.1#IUCLID5_UUID",
+                     "http://www.opentox.org/api/1.1#ChemicalName",
+                     "http://www.opentox.org/api/1.1#TradeName",
+                     "http://www.opentox.org/api/1.1#IUPACName",
+                     "http://www.opentox.org/api/1.1#SMILES",
+                     "http://www.opentox.org/api/1.1#InChIKey",
+                     "http://www.opentox.org/api/1.1#InChI",
+                     "http://www.opentox.org/api/1.1#REACHRegistrationDate"  
+    ]
 	};
 	for (var fId in miniset.feature) {
 	  var feat = miniset.feature[fId]; 
@@ -79,7 +79,7 @@ function createGroups(miniset, kit) {
 	}
 	groups["Substances"] = [ "http://www.opentox.org/api/1.1#CompositionInfo" ];
 	groups["Calculated"] = null;
-	groups["Other"] = function (name, miniset) {
+	groups["Datasets"] = function (name, miniset) {
     var arr = [];
     for (var f in miniset.feature) {
       if (!miniset.feature[f].used && !miniset.feature[f].basic) {
