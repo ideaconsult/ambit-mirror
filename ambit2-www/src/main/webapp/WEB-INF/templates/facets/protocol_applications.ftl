@@ -5,6 +5,7 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/facet/substance.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/config-study.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
 
 <link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
