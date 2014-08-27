@@ -128,36 +128,86 @@ var facet = {
 
 		endpointFormatDetails : function ( oTable, nTr ,root ) {
 		    var model = oTable.fnGetData( nTr );
+		    
+		    if (model["config"] === undefined) {
+		    	model["config"] = $.extend(true,{}, config_study.columns["_"], config_study.columns[model.endpoint]);
+		    }
+		    var endpointValueName = "Enter endpoint value";
+		    try {
+		    	if (model.config.effects.result.sTitle!=undefined)
+		    		endpointValueName = model.config.effects.result.sTitle;
+		    } catch (err) {}
+		    endpointName = "Endpoint name";
+		    try {
+		    	if (model.config.effects.endpoint.sTitle!=undefined)
+		    		endpointName = model.config.effects.endpoint.sTitle;
+		    } catch (err) {} 
+		    
+		    var valueVisible = true;
+		    try {
+		    	valueVisible = model.config.effects.result.bVisible==undefined || model.config.effects.result.bVisible;
+		    } catch (err) { }
+		    
+		    var endpointVisible = true;
+		    try {
+		    	endpointVisible = model.config.effects.endpoint.bVisible==undefined || model.config.effects.endpoint.bVisible;
+		    } catch (err) { }
+		    
+		    var textVisible = true;
+		    try {
+		    	textVisible = model.config.effects.text.bVisible==undefined || model.config.effects.text.bVisible;
+		    } catch (err) { }
+		    if (textVisible) {
+			    try {
+			    	if (model.config.effects.text.sTitle!=undefined)
+			    		endpointValueName = model.config.effects.text.sTitle;
+			    } catch (err) {}
+		    }
+		    
 		    var div = $('<div style="margin:0" />');
 		    var id = model.subcategory+"."+model.endpoint;
 		    
-		    div.append($('<label class="twelve columns alpha" >Endpoint name</label>'));
-		    div.append($('<label class="four columns omega" >Units</label>'));
-		    var endpointBox = $('<input class="eleven columns alpha" type="text" title="Endpoint name, optional">');
-		    endpointBox.attr("id", "endpoint."+id).attr("name", "endpoint."+id);
-		    div.append(endpointBox);
+		    if (endpointVisible) {
+		    	div.append($('<label class="twelve columns alpha" >'+endpointName+'</label>'));
+		    }
+		    if (valueVisible) {
+		    	div.append($('<label class="four columns omega" >Units</label>'));
+		    }
+		    if (endpointVisible) {
+			    var endpointBox = $('<input class="eleven columns alpha" type="text" title="Endpoint name, optional">');
+			    endpointBox.attr("id", "endpoint."+id).attr("name", "endpoint."+id);
+			    div.append(endpointBox);
+		    }
 		    
-		    var unitBox = $('<input class="four columns omega" type="text" title="Units, optional" >');
-		    unitBox.attr("id", "unit."+id).attr("name", "unit."+id);
-		    div.append(unitBox);
+		    if (valueVisible) {
+			    var unitBox = $('<input class="four columns omega" type="text" title="Units, optional" >');
+			    unitBox.attr("id", "unit."+id).attr("name", "unit."+id);
+			    div.append(unitBox);
 		    
-		    div.append($('<label class="sixteen columns">Enter endpoint value</label>'));
+			    div.append($('<label class="sixteen columns">'+endpointValueName+'</label>'));
 		    
-		    var loQualifierBox = $('<select class="three columns alpha"><option value=">=" selected>&gt;=</option><option value=">">&gt;</option><option value="=">=</option><option value="<=">&lt;=</option></select>');
-		    loQualifierBox.attr("id", "loqlf."+id).attr("name", "loqlf."+id);
-		    div.append(loQualifierBox);
+			    var loQualifierBox = $('<select class="three columns alpha"><option value=">=" selected>&gt;=</option><option value=">">&gt;</option><option value="=">=</option><option value="<=">&lt;=</option></select>');
+			    loQualifierBox.attr("id", "loqlf."+id).attr("name", "loqlf."+id);
+			    div.append(loQualifierBox);
 
-		    var endpointvalueBox = $('<input class="four columns omega" type="text" title="lower value or exact value. Number or text" >');
-		    endpointvalueBox.attr("id", "lovalue."+id).attr("name", "lovalue."+id);
-		    div.append(endpointvalueBox);
-		    
-		    var upQualifierBox = $('<select class="three columns omega"><option value="<=" selected>&lt;=</option><option value="<">&lt;</option><option value="=">=</option></select>');
-		    upQualifierBox.attr("id", "upqlf."+id).attr("name", "upqlf."+id);
-		    div.append(upQualifierBox);
-
-		    endpointvalueBox = $('<input class="four columns omega" type="text" title="Upper value. Number expected">');
-		    endpointvalueBox.attr("id", "upvalue."+id).attr("name", "upvalue."+id);
-		    div.append(endpointvalueBox);
+			    var endpointvalueBox = $('<input class="four columns omega" type="text" title="lower value or exact value. Number expected" >');
+			    endpointvalueBox.attr("id", "lovalue."+id).attr("name", "lovalue."+id);
+			    div.append(endpointvalueBox);
+    
+			    var upQualifierBox = $('<select class="three columns omega"><option value="<=" selected>&lt;=</option><option value="<">&lt;</option><option value="=">=</option></select>');
+			    upQualifierBox.attr("id", "upqlf."+id).attr("name", "upqlf."+id);
+			    div.append(upQualifierBox);
+	
+			    endpointvalueBox = $('<input class="four columns omega" type="text" title="Upper value. Number expected">');
+			    endpointvalueBox.attr("id", "upvalue."+id).attr("name", "upvalue."+id);
+			    div.append(endpointvalueBox);
+		    }
+			if (textVisible) {
+				div.append($('<label class="sixteen columns">'+endpointValueName+'</label>'));
+				var endpointvalueBox = $('<input class="sixtteen columns" type="text" title="Text expected" >');
+			    endpointvalueBox.attr("id", "lovalue."+id).attr("name", "lovalue."+id);
+			    div.append(endpointvalueBox);
+			}
 		    return div;
 		}
 }
