@@ -26,14 +26,12 @@ public class SubstanceByEndpointFacet extends SubstanceByCategoryFacet {
 	}
 	@Override
 	public String toJSON(String uri, String subcategory) {
-		return String.format("\n\t{\n\t\"value\":%s,\t\"endpoint\":%s,\n\t\"count\":%d,\n\t\"uri\":%s,\n\t\"subcategory\":%s,\t\"subcategoryuri\":%s\n,\"effect\":%s\t}",
-				getValue()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getValue().toString())),
-				JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint.name())),
-				getCount(),
-				uri==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(uri)),
+		return String.format("\n\t{\n\t\"top\":%s,\n\t\"category\":%s,\n\t\"value\":%s,\n\t\"endpoint\":%s,\n\t\"count\":%d\n\t}",
 				JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubcategoryTitle())),	
-				JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubCategoryURL(subcategory))),
-				effect.toString()
+				JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint.name())),
+				getValue()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getValue().toString())),
+				JSONUtils.jsonQuote(JSONUtils.jsonEscape(effect.getEndpoint())),
+				getCount()
 				);
 	}
 	

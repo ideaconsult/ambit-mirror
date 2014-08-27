@@ -159,8 +159,9 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 		}		
 		case experiment_endpoints: {
 			QueryCountEndpoints q = new QueryCountEndpoints(mode.getURL());
-			q.setFieldname(getParams().getFirstValue("topcategory"));
-			q.setValue(getParams().getFirstValue("endpointcategory"));
+			q.setFieldname(getParams().getFirstValue("top"));
+			q.setValue(getParams().getFirstValue("category"));
+			q.setEndpoint(getParams().getFirstValue("endpoint"));
 			return (Q)q;
 		}		
 		case protocol_applications: {

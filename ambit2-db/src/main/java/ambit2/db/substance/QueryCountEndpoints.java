@@ -16,6 +16,13 @@ public class QueryCountEndpoints  extends QueryCount<SubstanceByEndpointFacet> {
 	 * 
 	 */
 	private static final long serialVersionUID = -3168195512257461022L;
+	protected String endpoint;
+	public String getEndpoint() {
+		return endpoint;
+	}
+	public void setEndpoint(String endpoint) {
+		this.endpoint = endpoint;
+	}
 	public QueryCountEndpoints(String facetURL) {
 		super(facetURL);
 		setPageSize(Integer.MAX_VALUE);
@@ -28,22 +35,27 @@ public class QueryCountEndpoints  extends QueryCount<SubstanceByEndpointFacet> {
 	 * 
 	 */
 	
-	protected static String sql = 
-		//"SELECT e.endpoint,count(*),group_concat(distinct(unit)),hex(e.endpointhash) FROM substance_experiment e group by e.endpoint,e.endpointhash";
-		"SELECT topcategory,count(*),endpointcategory," +
-		"e.endpoint,hex(e.endpointhash),group_concat(distinct(unit)),group_concat(distinct(conditions)) FROM substance_experiment e \n"+
-		"where topcategory=? and endpointcategory=?\n"+
-		"group by e.endpoint,e.endpointhash";
+	private static String sql = 
+		"SELECT topcategory,count(*),endpointcategory,endpoint FROM substance_experiment e\n" +
+		"where topcategory=? %s %s\n"+
+		"group by topcategory,endpointcategory,endpoint";
+	private static String sql_endpointcategory = "and endpointcategory=?";
+	private static String sql_endpoint = "and endpoint regexp ?";
 	@Override
 	public String getSQL() throws AmbitException {
-		return sql;
+		return String.format(sql,
+				getValue()==null?"":sql_endpointcategory,
+				getEndpoint()==null?"":sql_endpoint);
 	}
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
-		if (getFieldname()==null || getValue()==null) throw new AmbitException("Endpoints not defined");
+		if (getFieldname()==null) setFieldname("TOX");
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<String>(String.class, getFieldname().toString()));
-		params.add(new QueryParam<String>(String.class, getValue().toString()));
+		if (getValue()!=null)
+			params.add(new QueryParam<String>(String.class, getValue().toString()));
+		if (getEndpoint()!=null)
+			params.add(new QueryParam<String>(String.class, "^"+getEndpoint()));
 		return params;
 	}
 	@Override
@@ -51,9 +63,9 @@ public class QueryCountEndpoints  extends QueryCount<SubstanceByEndpointFacet> {
 		try {
 			facet.getEffect().clear();
 			facet.getEffect().setEndpoint(rs.getString(4));
-			facet.getEffect().setSampleID(rs.getString(5));
-			facet.getEffect().setUnit(rs.getString(6));
-			facet.getEffect().setConditions(rs.getString(7));
+			//facet.getEffect().setSampleID(rs.getString(5));
+			//facet.getEffect().setUnit(rs.getString(6));
+			//facet.getEffect().setConditions(rs.getString(7));
 			
 			facet.setSubcategoryTitle(rs.getString(1));
 			facet.setValue(rs.getString(3));

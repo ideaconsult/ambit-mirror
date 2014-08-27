@@ -1,6 +1,46 @@
 var facet = {
 		root: null,
 		substanceComponent : null,
+		endpointAutocomplete : function(tag,endpointquery,maxhits) {
+			tag.autocomplete({
+			      source: function( request, response ) {
+			          $.ajax({
+			            url: endpointquery,
+			            dataType: "json",
+			            data: {
+			              media:"application/json",	            	
+			              max: maxhits,
+			              endpoint: request.term
+			            },
+			            success: function( data ) {
+			              response( $.map( data.facet, function( item ) {
+			                return {
+			                  label: item.endpoint,
+			                  value: item.endpoint
+			                }
+			              }));
+			            }
+			          });
+			        },
+			        minLength: 0,
+			        open: function() {
+				        $('.ui-autocomplete').css('width', '450px');
+				    } 	        
+			        /*
+			        select: function( event, ui ) {
+			          console.log( ui.item ?
+			            "Selected: " + ui.item.label :
+			            "Nothing selected, input was " + this.value);
+			        },
+			        open: function() {
+			          $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+			        },
+			        close: function() {
+			          $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+			        }	
+			        */		        		
+			});			
+		},
 		searchStudy : function (event) {
 			var selected = $("input[name^='category']:checked:enabled",'#fsearchForm');
 			var params = [{'name' : 'type', 'value' : 'facet'}];
@@ -118,7 +158,7 @@ var facet = {
 					$(this).removeClass("ui-icon-folder-collapsed");
 					$(this).addClass("ui-icon-folder-open");
 					this.title='Click to close endpoints';
-					oTable.fnOpen(nTr, facet.endpointFormatDetails(oTable,nTr,"${ambit_root}"),	'details');
+					oTable.fnOpen(nTr, facet.endpointFormatDetails(oTable,nTr,facet.root),	'details');
 											       
 				}
 			});	
@@ -177,9 +217,18 @@ var facet = {
 		    	div.append($('<label class="four columns omega" >Units</label>'));
 		    }
 		    if (endpointVisible) {
-			    var endpointBox = $('<input class="eleven columns alpha" type="text" title="Endpoint name, optional">');
+			    var endpointBox = $('<input class="eleven columns alpha endpointname" type="text" title="Endpoint name, optional">');
 			    endpointBox.attr("id", "endpoint."+id).attr("name", "endpoint."+id);
 			    div.append(endpointBox);
+			    
+
+				var params = {
+						'top'	: model.subcategory,
+						'category':model.endpoint	
+						};
+				
+				var qurl = root+"/admin/stats/experiment_endpoints?" +  $.param(params,false);
+				facet.endpointAutocomplete(endpointBox,qurl,10);
 		    }
 		    
 		    if (valueVisible) {
