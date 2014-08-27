@@ -137,11 +137,7 @@ var facet = {
 		    	if (model.config.effects.result.sTitle!=undefined)
 		    		endpointValueName = model.config.effects.result.sTitle;
 		    } catch (err) {}
-		    endpointName = "Endpoint name";
-		    try {
-		    	if (model.config.effects.endpoint.sTitle!=undefined)
-		    		endpointName = model.config.effects.endpoint.sTitle;
-		    } catch (err) {} 
+
 		    
 		    var valueVisible = true;
 		    try {
@@ -157,17 +153,24 @@ var facet = {
 		    try {
 		    	textVisible = model.config.effects.text.bVisible==undefined || model.config.effects.text.bVisible;
 		    } catch (err) { }
+		    
 		    if (textVisible) {
 			    try {
 			    	if (model.config.effects.text.sTitle!=undefined)
 			    		endpointValueName = model.config.effects.text.sTitle;
 			    } catch (err) {}
 		    }
+
 		    
-		    var div = $('<div style="margin:0" />');
+		    var div = $('<div style="margin:0px;border-style: solid;border-width: 0px;border-color: gray;" />');
 		    var id = model.subcategory+"."+model.endpoint;
 		    
 		    if (endpointVisible) {
+			    var endpointName = "Endpoint name";
+			    try {
+			    	if (model.config.effects.endpoint.sTitle!=undefined)
+			    		endpointName = model.config.effects.endpoint.sTitle;
+			    } catch (err) {} 		    	
 		    	div.append($('<label class="twelve columns alpha" >'+endpointName+'</label>'));
 		    }
 		    if (valueVisible) {
@@ -207,6 +210,27 @@ var facet = {
 				var endpointvalueBox = $('<input class="sixtteen columns" type="text" title="Text expected" >');
 			    endpointvalueBox.attr("id", "lovalue."+id).attr("name", "lovalue."+id);
 			    div.append(endpointvalueBox);
+			}
+			
+		    //interpretation
+		    var interpretationVisible = true;
+		    try {
+		    	interpretationVisible = 
+		    		model.config.interpretation.result == undefined ||
+		    		model.config.interpretation.result.bVisible==undefined || 
+		    		model.config.interpretation.result.bVisible;
+		    } catch (err) { }
+		    
+			if(interpretationVisible) {
+				var interpretationResultName = "Interpretation of the results";
+			    try {
+			    	if (model.config.interpretation.result.sTitle!=undefined)
+			    		interpretationResultName = model.config.interpretation.result.sTitle;
+			    } catch (err) {} 					
+				div.append($('<label class="sixteen columns">'+interpretationResultName+'</label>'));
+				var interpretationResult = $('<input class="sixtteen columns" type="text" title="Text expected" >');
+				interpretationResult.attr("id", "iresult."+id).attr("name", "iresult."+id);
+			    div.append(interpretationResult);
 			}
 		    return div;
 		}
