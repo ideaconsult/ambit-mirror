@@ -178,7 +178,8 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 					String effectloQualifier = form.getFirstValue("loqlf."+value);
 					String effectupQualifier = form.getFirstValue("upqlf."+value);
 					String units = form.getFirstValue("unit."+value);
-
+					String interpretationResult = form.getFirstValue("iresult."+value);
+					
 					final String[] qlfs = new String[] {"<=","<",">=",">","="};
 					EffectRecord<String,Params,String> effect = null;
 					if (effectEndpoint!=null) {
@@ -219,7 +220,11 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 					if (units!=null) {
 						if (effect==null) {effect = new EffectRecord<String,Params,String>();papp.addEffect(effect);}
 						effect.setUnit(units);
-					}					
+					}		
+					
+					if (interpretationResult!=null) {
+						papp.setInterpretationResult(interpretationResult);
+					}		
 				} catch (IllegalArgumentException x) {	
 					//invalid category, ignoring
 				} catch (Exception x) {
