@@ -7,10 +7,11 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
-import ambit2.db.substance.study.facet.SubstanceByEndpointFacet;
+import ambit2.base.data.study.EffectRecord;
+import ambit2.db.substance.study.facet.ResultsCountFacet;
 import ambit2.db.update.dataset.QueryCount;
 
-public class QueryCountEndpoints  extends QueryCount<SubstanceByEndpointFacet> {
+public class QueryCountEndpoints<E extends EffectRecord<String,Object,String>>  extends QueryCount<ResultsCountFacet<E>> {
 
 	/**
 	 * 
@@ -28,8 +29,8 @@ public class QueryCountEndpoints  extends QueryCount<SubstanceByEndpointFacet> {
 		setPageSize(Integer.MAX_VALUE);
 	}
 	@Override
-	protected SubstanceByEndpointFacet createFacet(String facetURL) {
-		return new SubstanceByEndpointFacet(facetURL);
+	protected ResultsCountFacet createFacet(String facetURL) {
+		return new ResultsCountFacet(facetURL, new EffectRecord<String,Object,String>());
 	}
 	/**
 	 * 
@@ -59,10 +60,10 @@ public class QueryCountEndpoints  extends QueryCount<SubstanceByEndpointFacet> {
 		return params;
 	}
 	@Override
-	public SubstanceByEndpointFacet getObject(ResultSet rs) throws AmbitException {
+	public ResultsCountFacet getObject(ResultSet rs) throws AmbitException {
 		try {
-			facet.getEffect().clear();
-			facet.getEffect().setEndpoint(rs.getString(4));
+			facet.getResult().clear();
+			facet.getResult().setEndpoint(rs.getString(4));
 			//facet.getEffect().setSampleID(rs.getString(5));
 			//facet.getEffect().setUnit(rs.getString(6));
 			//facet.getEffect().setConditions(rs.getString(7));

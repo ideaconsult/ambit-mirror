@@ -190,7 +190,7 @@ CREATE TABLE `substance_protocolapplication` (
   KEY `substance` (`substance_prefix`,`substance_uuid`),
   KEY `endpoint` (`endpoint`),
   KEY `category` (`endpointcategory`),
-  KEY `topcategory` (`topcategory`,`endpointcategory`),
+  KEY `topcategory` (`topcategory`,`endpointcategory`,`interpretation_result`) USING BTREE,
   KEY `reference_owner` (`reference_owner`),
   KEY `reference-x` (`reference`(255)),
   CONSTRAINT `substance-x` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE CASCADE ON UPDATE CASCADE
