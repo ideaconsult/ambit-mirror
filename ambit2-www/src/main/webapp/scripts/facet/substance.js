@@ -98,6 +98,11 @@ var facet = {
 				if ((val != undefined) && (val != null) && ("" != val))
 					params.push({"name" : name , "value" : val});		
 				
+				name = 'iresult.' +item['value'];
+				var iresultBox = $("input[name^='"+name+"']",'#fsearchForm');
+				var val = iresultBox.val();
+				if ((val != undefined) && (val != null) && ("" != val))
+					params.push({"name" : name , "value" : val});
 			});
 			if (this.substanceComponent != undefined && this.substanceComponent!= null)  {
 				var substanceQuery =  this.root + '/substance?' + jQuery.param(params);
