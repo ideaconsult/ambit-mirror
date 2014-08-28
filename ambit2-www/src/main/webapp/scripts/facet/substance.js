@@ -10,12 +10,12 @@ var facet = {
 			            data: {
 			              media:"application/json",	            	
 			              max: maxhits,
-			              endpoint: request.term
+			              search: request.term
 			            },
 			            success: function( data ) {
 			              response( $.map( data.facet, function( item ) {
 			                return {
-			                  label: item.endpoint,
+			                  label: item.endpoint + " ["+item.count+"]",
 			                  value: item.endpoint
 			                }
 			              }));
@@ -24,23 +24,37 @@ var facet = {
 			        },
 			        minLength: 0,
 			        open: function() {
-				        $('.ui-autocomplete').css('width', '450px');
+				        //$('.ui-autocomplete').css('width', '450px');
 				    } 	        
-			        /*
-			        select: function( event, ui ) {
-			          console.log( ui.item ?
-			            "Selected: " + ui.item.label :
-			            "Nothing selected, input was " + this.value);
-			        },
-			        open: function() {
-			          $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-			        },
-			        close: function() {
-			          $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
-			        }	
-			        */		        		
 			});			
 		},
+		interpretationAutocomplete : function(tag,interpretationquery,maxhits) {
+			tag.autocomplete({
+			      source: function( request, response ) {
+			          $.ajax({
+			            url: interpretationquery,
+			            dataType: "json",
+			            data: {
+			              media:"application/json",	            	
+			              max: maxhits,
+			              search: request.term
+			            },
+			            success: function( data ) {
+			              response( $.map( data.facet, function( item ) {
+			                return {
+			                  label: item.interpretation_result + " ["+item.count+"]",
+			                  value: item.interpretation_result
+			                }
+			              }));
+			            }
+			          });
+			        },
+			        minLength: 0,
+			        open: function() {
+				        //$('.ui-autocomplete').css('width', '450px');
+				    } 	        
+			});			
+		},		
 		searchStudy : function (event) {
 			var selected = $("input[name^='category']:checked:enabled",'#fsearchForm');
 			var params = [{'name' : 'type', 'value' : 'facet'}];
@@ -220,7 +234,6 @@ var facet = {
 			    var endpointBox = $('<input class="eleven columns alpha endpointname" type="text" title="Endpoint name, optional">');
 			    endpointBox.attr("id", "endpoint."+id).attr("name", "endpoint."+id);
 			    div.append(endpointBox);
-			    
 
 				var params = {
 						'top'	: model.subcategory,
@@ -280,6 +293,15 @@ var facet = {
 				var interpretationResult = $('<input class="sixtteen columns" type="text" title="Text expected" >');
 				interpretationResult.attr("id", "iresult."+id).attr("name", "iresult."+id);
 			    div.append(interpretationResult);
+			    
+				var params = {
+						'top'	: model.subcategory,
+						'category':model.endpoint	
+						};
+				
+				var qurl = root+"/admin/stats/interpretation_result?" +  $.param(params,false);
+				facet.interpretationAutocomplete(interpretationResult,qurl,10);
+			    
 			}
 		    return div;
 		}

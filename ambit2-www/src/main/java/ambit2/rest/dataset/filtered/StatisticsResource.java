@@ -19,6 +19,7 @@ import org.restlet.routing.Template;
 import ambit2.base.facet.IFacet;
 import ambit2.db.model.QueryCountModels;
 import ambit2.db.substance.QueryCountEndpoints;
+import ambit2.db.substance.QueryCountInterpretationResults;
 import ambit2.db.substance.QueryCountProtocolApplications;
 import ambit2.db.substance.QueryCountSubstances;
 import ambit2.db.update.dataset.QueryCount;
@@ -84,7 +85,15 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 			public String getTemplateName() {
 				return "facets/protocol_applications.ftl";
 			}			
-		};
+		},
+		interpretation_result {
+			@Override
+			public String getURL() {
+				return "/substance";
+			}
+	
+		}
+		;
 		
 		public String getURL() {
 			return null;
@@ -161,7 +170,7 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 			QueryCountEndpoints q = new QueryCountEndpoints(mode.getURL());
 			q.setFieldname(getParams().getFirstValue("top"));
 			q.setValue(getParams().getFirstValue("category"));
-			q.setEndpoint(getParams().getFirstValue("endpoint"));
+			q.setEndpoint(getParams().getFirstValue("search"));
 			return (Q)q;
 		}		
 		case protocol_applications: {
@@ -169,6 +178,13 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 			q.setFieldname(getParams().getFirstValue("topcategory"));
 			return (Q)q;
 		}
+		case interpretation_result: {
+			QueryCountInterpretationResults q = new QueryCountInterpretationResults(mode.getURL());
+			q.setFieldname(getParams().getFirstValue("top"));
+			q.setValue(getParams().getFirstValue("category"));
+			q.setInterpretation_result(getParams().getFirstValue("search"));
+			return (Q)q;
+		}		
 		case chemicals_in_dataset: {
 			QueryCountChemicalInDataset q = null;
 			for (int i=0; i < datasetsURI.length;i++ ) {

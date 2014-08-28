@@ -2,6 +2,9 @@ ALTER TABLE `substance_experiment` ADD COLUMN `topcategory` VARCHAR(32) NULL  AF
 , ADD INDEX `category-x` (`topcategory` ASC, `endpointcategory` ASC, `endpoint` ASC, `endpointhash` ASC) 
 , ADD INDEX `substance-x` (`substance_prefix` ASC, `substance_uuid` ASC) ;
 
+ALTER TABLE `substance_protocolapplication` DROP INDEX `topcategory`,
+ ADD INDEX `topcategory` USING BTREE(`topcategory`, `endpointcategory`, `interpretation_result`);
+
 insert into version (idmajor,idminor,comment) values (8,4,"AMBIT2 schema (substance_experiment)");
 
 -- add the values into the denormalized table
