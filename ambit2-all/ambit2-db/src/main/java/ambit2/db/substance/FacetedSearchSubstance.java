@@ -75,6 +75,8 @@ public class FacetedSearchSubstance  extends AbstractReadSubstance<List<Protocol
 	private static final String where_endpoint_textvalue = " and e%d.textvalue=?\n";
 	private static final String where_units = " and e%d.unit=?\n";
 	
+	private static final String where_interpretationresult = " and e%d.interpretation_result=?\n";
+	
 	private static final String join_category  = "join substance_protocolapplication e%d on (`e1`.`substance_prefix` = `e%d`.`substance_prefix`) and (`e1`.`substance_uuid` = `e%d`.`substance_uuid`)\n";
 	private static final String join_experiment  = "join substance_experiment e%d on (`e1`.`substance_prefix` = `e%d`.`substance_prefix`) and (`e1`.`substance_uuid` = `e%d`.`substance_uuid`)\n";
 	@Override
@@ -88,22 +90,31 @@ public class FacetedSearchSubstance  extends AbstractReadSubstance<List<Protocol
 				where.append(String.format(where_category,(i+1),(i+1)));
 				if (getFieldname().get(i).getEffects()!=null)
 					endpoint = addEndpointValueSQL(getFieldname().get(i), where, i+1);
+				else if (getFieldname().get(i).getInterpretationResult()!=null) {
+					where.append(String.format(where_interpretationresult,(i+1)));
+					endpoint = false;
+				}
 				b = new StringBuilder();
 				if (endpoint)
 					b.append(subselect_experiment);
-				else
+				else {
 					b.append(subselect);
+				}	
 				
 			}  else { 
 				where.append("and ");
 				where.append(String.format(where_category,(i+1),(i+1)));
 				if (getFieldname().get(i).getEffects()!=null)
 					endpoint = addEndpointValueSQL(getFieldname().get(i), where, i+1);
-				
+				else if (getFieldname().get(i).getInterpretationResult()!=null) {
+					where.append(String.format(where_interpretationresult,(i+1)));
+					endpoint = false;
+				}				
 				if (endpoint)
 					b.append(String.format(join_experiment,(i+1),(i+1),(i+1)));
-				else
+				else {
 					b.append(String.format(join_category,(i+1),(i+1),(i+1)));
+				}
 			}	
 			
 		}
@@ -153,7 +164,7 @@ public class FacetedSearchSubstance  extends AbstractReadSubstance<List<Protocol
 			Protocol p = getFieldname().get(i).getProtocol();
 			params.add(new QueryParam<String>(String.class,p.getTopCategory()));
 			params.add(new QueryParam<String>(String.class,p.getCategory()));
-			if (getFieldname().get(i).getEffects()!=null)
+			if (getFieldname().get(i).getEffects()!=null) {
 				for (int j=0; j < getFieldname().get(i).getEffects().size(); j++) {
 					EffectRecord<String,Params,String> effect = getFieldname().get(i).getEffects().get(j);
 					if (effect.getEndpoint()!=null) {
@@ -174,6 +185,9 @@ public class FacetedSearchSubstance  extends AbstractReadSubstance<List<Protocol
 						params.add(new QueryParam<String>(String.class,effect.getTextValue().toString()));
 					}
 				}
+			} else if (getFieldname().get(i).getInterpretationResult() !=null) {
+				params.add(new QueryParam<String>(String.class,getFieldname().get(i).getInterpretationResult()));
+			}
 		}
 		return params;
 	}
