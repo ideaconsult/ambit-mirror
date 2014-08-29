@@ -187,6 +187,8 @@ function formatClassification(root, mapRes, all) {
 }
 
 function onSelectedUpdate(e) {
+  if (tt.modelKit.algorithm == null)
+    return;
 	var tEl = $('#tt-models-panel .title')[0];
 	var v = $('button.tt-toggle.auto.active', tt.modelKit.rootElement).length;
 	tEl.innerHTML = jT.ui.updateCounter(tEl.innerHTML, v, tt.modelKit.algorithm.length);;
@@ -198,29 +200,31 @@ function onDataLoaded(result) {
 }
 
 function onAlgoLoaded(result) {
-  var idx = 0;
-  ccLib.populateData(tt.modelKit.rootElement, '#tt-algorithm', result.algorithm, function (data) {
-    tt.algoMap[data.id] = { 
-      index: idx,
-      dom: this,
-      results: {},
-    };
-    
-    $(this).data('algoId', data.id);
-    config_toxtree.groups.ToxTree.push(data.uri);
-    config_toxtree.baseFeatures[data.uri] = {
-  	  title: formatAlgoName(data.name), 
-  	  search: false,
-  	  data: "index",
-  	  column: { sClass: data.id },
-  	  render: (function (aId) { return function(data, type, full) {
-  	    return (type != 'display') ? data : 
-  	      '<button class="tt-toggle jtox-handler predict" data-algo-id="' + aId + '" data-index="' + data + '" data-handler="runPredict" title="Run prediction with the algorithm on current compound">▶︎</button>';
-        };
-      })(data.id)
-    };
-    idx++;
-  });
+  if (!!result) {
+    var idx = 0;
+    ccLib.populateData(tt.modelKit.rootElement, '#tt-algorithm', result.algorithm, function (data) {
+      tt.algoMap[data.id] = { 
+        index: idx,
+        dom: this,
+        results: {},
+      };
+      
+      $(this).data('algoId', data.id);
+      config_toxtree.groups.ToxTree.push(data.uri);
+      config_toxtree.baseFeatures[data.uri] = {
+    	  title: formatAlgoName(data.name), 
+    	  search: false,
+    	  data: "index",
+    	  column: { sClass: data.id },
+    	  render: (function (aId) { return function(data, type, full) {
+    	    return (type != 'display') ? data : 
+    	      '<button class="tt-toggle jtox-handler predict" data-algo-id="' + aId + '" data-index="' + data + '" data-handler="runPredict" title="Run prediction with the algorithm on current compound">▶︎</button>';
+          };
+        })(data.id)
+      };
+      idx++;
+    });
+  }
   
   onSelectedUpdate(null);
   // not it's time to create the browser table
