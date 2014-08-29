@@ -14,35 +14,14 @@
   
 
 
-<script>
-	$(document).ready(function() {
-		try {
-			var url = parseURL(document.location);
-			$("#query-needle").attr('value',url.params.search);
-		} catch (err) { $("#query-needle").attr('value','');}
-		
-		jQuery("#breadCrumb ul").append('<li><a href="#" title="Demo">Demo</a></li>');
-		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/toxtree" title="Toxtree - Toxic Hazard Estimation by decision tree approach">Toxtree - Toxic Hazard Estimation by decision tree approach</a></li>');
-		loadHelp("${ambit_root}","toxtree");
-
-	});
-
-</script>
 </head>
 <body>
-
-<!-- any of these break the layout ...
-
-<div class="container" style="margin:0;padding:0;">
- include "/banner_crumbs.ftl" 
-<div class="sixteen columns remove-bottom" style="padding:0;" >
-	
--->
-
-<!-- toxtree starts -->
- <div class="jtox-toolkit" data-kit="query" data-cross-domain="false" data-configuration="config_toxtree"
- 	data-on-error="errorHandler"  
- 	data-base-url="${ambit_root}">
+  <div class="jtox-toolkit" 
+	data-kit="query" 
+	data-cross-domain="false" 
+	data-configuration="config_toxtree" 
+	data-on-error="errorHandler"  
+	data-base-url="${ambit_root}">
     <div id="tt-searchbar" class="jtox-toolkit jtox-widget cc-fixed" data-kit="search"></div>
     <div id="tt-bigpane" class="cc-flex">
       <div>
@@ -89,7 +68,7 @@
         <a target="_blank" class="data-field attribute" data-field="uri" data-attribute="href"><span class="ui-icon ui-icon-link jtox-inline"></span></a>
         <span class="data-field" data-field="name" data-format="formatAlgoName">?</span>
         <div class="jtox-inline float-right">
-          <button class="tt-toggle jtox-handler predict" data-handler="runPredict" title="Run prediction with the algorithm on current compound">R</button>
+          <button class="tt-toggle jtox-handler predict" data-handler="runPredict" title="Run prediction with the algorithm on current compound">▶︎</button>
           <button class="tt-toggle jtox-handler model" data-handler="makeModel" title="Prepare the model for this algorithm">M</button>
           <button class="tt-toggle jtox-handler auto" data-handler="markAuto" title="Run automatically on new queries">A</button>
         </div>
@@ -115,8 +94,5 @@
 	<div class="five columns alpha ">&nbsp;</div>
 	<div class="ten columns omega ui-state-error " id='log' style='display:none;' >&nbsp;</div> 
 </div>
-
 </body>
-
-
 </html>

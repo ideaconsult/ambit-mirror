@@ -3,7 +3,7 @@ html, body {
   height: 100%;  
 }
 
-body>div {
+body>div.jtox-toolkit {
   height: 100%;
   width: 100%;
   position: relative;
