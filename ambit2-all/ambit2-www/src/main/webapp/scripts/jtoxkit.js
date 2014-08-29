@@ -879,6 +879,17 @@ window.jT.ui = {
     return info;
   },
   
+  renderRelation: function (data, type, full) {
+    if (type != 'display')
+      return ccLib.joinDeep(data, 'relation', ',');
+      
+    var res = '';
+    for (var i = 0, il = data.length; i < il; ++i)
+      res += '<span>' + data[i].relation.substring(4).toLowerCase() + '</span><sup><a target="_blank" href="' + (full.URI + '/composition') + '" title="' + data[i].compositionName + '(' + data[i].compositionUUID + ')">?</a></sup>';
+  
+    return res;
+  },
+  
   putStars: function (kit, stars, title) {
     if (!kit.settings.shortStars) {
       var res = '<div title="' + title + '">';
@@ -1485,6 +1496,7 @@ var jToxCompound = (function () {
       	  title: "Diagram", 
       	  search: false,
         	visibility: "main",
+        	primary: true,
       	  process: function(entry, fId, features) {
             entry.compound.diagramUri = entry.compound.URI.replace(/(.+)(\/conformer.*)/, "$1") + "?media=image/png";
       	  },
@@ -1499,6 +1511,7 @@ var jToxCompound = (function () {
       	  search: false,
       	  data: "compound.URI",
       	  basic: true,
+      	  primary: true,
       	  column: { sClass: "jtox-hidden jtox-ds-details paddingless", sWidth: "0px"},
         	visibility: "none",
         	render: function(data, type, full) { return ''; }
@@ -1522,19 +1535,19 @@ var jToxCompound = (function () {
   'data' can be an array, which results in adding value to several places.
   */
   var baseFeatures = {
-    "http://www.opentox.org/api/1.1#REACHRegistrationDate" : { title: "REACH Date", data: "compound.reachdate", accumulate: true, basic: true},
-    "http://www.opentox.org/api/1.1#CASRN" : { title: "CAS", data: "compound.cas", accumulate: true, basic: true},
-  	"http://www.opentox.org/api/1.1#ChemicalName" : { title: "Name", data: "compound.name", accumulate: true, basic: true},
+    "http://www.opentox.org/api/1.1#REACHRegistrationDate" : { title: "REACH Date", data: "compound.reachdate", accumulate: true, basic: true },
+    "http://www.opentox.org/api/1.1#CASRN" : { title: "CAS", data: "compound.cas", accumulate: true, basic: true, primary: true },
+  	"http://www.opentox.org/api/1.1#ChemicalName" : { title: "Name", data: "compound.name", accumulate: true, basic: true },
   	"http://www.opentox.org/api/1.1#TradeName" : {title: "Trade Name", data: "compound.tradename", accumulate: true, basic: true},
-  	"http://www.opentox.org/api/1.1#IUPACName": {title: "IUPAC Name", data: ["compound.name", "compound.iupac"], accumulate: true, basic: true},
-  	"http://www.opentox.org/api/1.1#EINECS": {title: "EINECS", data: "compound.einecs", accumulate: true, basic: true},
+  	"http://www.opentox.org/api/1.1#IUPACName": {title: "IUPAC Name", data: ["compound.name", "compound.iupac"], accumulate: true, basic: true },
+  	"http://www.opentox.org/api/1.1#EINECS": {title: "EINECS", data: "compound.einecs", accumulate: true, basic: true, primary: true },
     "http://www.opentox.org/api/1.1#InChI": {title: "InChI", data: "compound.inchi", shorten: true, accumulate: true, basic: true},
   	"http://www.opentox.org/api/1.1#InChI_std": {title: "InChI", data: "compound.inchi", shorten: true, accumulate: true, sameAs: "http://www.opentox.org/api/1.1#InChI", basic: true},
     "http://www.opentox.org/api/1.1#InChIKey": {title: "InChI Key", data: "compound.inchikey", accumulate: true, basic: true},
   	"http://www.opentox.org/api/1.1#InChIKey_std": {title: "InChI Key", data: "compound.inchikey", accumulate: true, sameAs: "http://www.opentox.org/api/1.1#InChIKey", basic: true},
     "http://www.opentox.org/api/1.1#InChI_AuxInfo": {title: "InChI Aux", data: "compound.inchiaux", accumulate: true, basic: true},
   	"http://www.opentox.org/api/1.1#InChI_AuxInfo_std": {title: "InChI Aux", data: "compound.inchiaux", accumulate: true, sameAs: "http://www.opentox.org/api/1.1#InChI_AuxInfo", basic: true},
-  	"http://www.opentox.org/api/1.1#IUCLID5_UUID": {title: "IUCLID5 UUID", data: "compound.i5uuid", shorten: true, accumulate: true, basic: true},
+  	"http://www.opentox.org/api/1.1#IUCLID5_UUID": {title: "IUCLID5 UUID", data: "compound.i5uuid", shorten: true, accumulate: true, basic: true, primary: true },
   	"http://www.opentox.org/api/1.1#SMILES": {title: "SMILES", data: "compound.smiles", shorten: true, accumulate: true, basic: true},
   	"http://www.opentox.org/api/dblinks#CMS": {title: "CMS", accumulate: true, basic: true},
   	"http://www.opentox.org/api/dblinks#ChEBI": {title: "ChEBI", accumulate: true, basic: true},
@@ -1771,9 +1784,6 @@ var jToxCompound = (function () {
       var varCols = [];
       var fixCols = [];
       
-      var colList = fixCols;
-      // enter the first column - the number.
-      
       fixCols.push({
           "mData": "number",
           "sClass": "middle",
@@ -1933,17 +1943,12 @@ var jToxCompound = (function () {
             col["mRender"] = feature.render;
           
           // finally - assign column switching to the checkbox of main tab.
-          jT.$().each(function () {
-            
-          });
-          jT.$('.jtox-ds-features input.jtox-checkbox[value="' + fId + '"]', self.rootElement).data({ sel: colList == fixCols ? '.jtox-ds-fixed' : '.jtox-ds-variable', idx: colList.length, id: fId}).on('change', fnShowColumn)
+          var colList = !!feature.primary ? fixCols : varCols;
+          jT.$('.jtox-ds-features input.jtox-checkbox[value="' + fId + '"]', self.rootElement).data({ sel: !!feature.primary ? '.jtox-ds-fixed' : '.jtox-ds-variable', idx: colList.length, id: fId}).on('change', fnShowColumn)
           
           // and push it into the proper list.
           colList.push(col);
         });
-        
-        // after the first one we switch to variable table's columns.
-        colList = varCols;
       }
       
       // now - create the tables...
