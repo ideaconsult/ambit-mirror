@@ -39,12 +39,10 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.YAMLConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.RDFMetaDatasetIterator;
 import ambit2.rest.rdf.RDFObjectIterator;
-import ambit2.user.rest.resource.AMBITDBRoles;
 
 public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDataset>, ISourceDataset> {
 	protected SourceDataset dataset;
@@ -110,7 +108,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 		super.doInit();
 		customizeVariants(new MediaType[] {
 				MediaType.TEXT_HTML,
-				MediaType.TEXT_URI_LIST,ChemicalMediaType.TEXT_YAML,
+				MediaType.TEXT_URI_LIST,
 				ChemicalMediaType.CHEMICAL_SMILES,
 				ChemicalMediaType.CHEMICAL_CML,
 				ChemicalMediaType.CHEMICAL_MDLSDF,
@@ -131,9 +129,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
 	String filenamePrefix = getRequest().getResourceRef().getPath();
-	if (variant.getMediaType().equals(ChemicalMediaType.TEXT_YAML)) {
-			return new YAMLConvertor(new DatasetYamlReporter(getRequest(),getDocumentation()),ChemicalMediaType.TEXT_YAML,filenamePrefix);
-	} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+	if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			return new OutputWriterConvertor(new MetadatasetJSONReporter<IQueryRetrieval<ISourceDataset>>(getRequest()),MediaType.APPLICATION_JSON);			
 	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(

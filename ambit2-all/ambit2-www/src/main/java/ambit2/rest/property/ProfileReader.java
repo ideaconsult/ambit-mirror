@@ -6,6 +6,7 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.i.exceptions.NotFoundException;
 
 import org.restlet.Context;
 import org.restlet.data.Cookie;
@@ -14,7 +15,6 @@ import org.restlet.util.Series;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.NotFoundException;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryTemplateReporter;
