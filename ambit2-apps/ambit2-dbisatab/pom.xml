@@ -7,9 +7,11 @@
   </parent>
   <groupId>ambit</groupId>
   <artifactId>ambit2-dbisatab</artifactId>
+  <name>ambit2-dbisatab</name>
   <version>2.5.8-SNAPSHOT</version>
 
-<dependencies>
+  <description>ISA-TAB import tools</description>
+  <dependencies>
  <dependency>
       <groupId>org.dbunit</groupId>
       <artifactId>dbunit</artifactId>
