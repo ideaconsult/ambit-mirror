@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.NotFoundException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.reporter.Reporter;
 import net.idea.restnet.i.task.ICallableTask;
@@ -32,7 +33,6 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.security.User;
 
-import ambit2.base.exceptions.NotFoundException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.aa.opensso.OpenSSOUser;

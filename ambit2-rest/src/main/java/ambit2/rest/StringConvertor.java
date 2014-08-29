@@ -45,6 +45,8 @@ public class StringConvertor<T,Q, R extends Reporter<Q,Writer> >  extends Repres
 			setDisposition(rep);
 	
 	        return rep;
+		} catch (AmbitException x) {
+			throw x;
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		} finally {

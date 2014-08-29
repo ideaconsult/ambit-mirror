@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.NotFoundException;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -19,7 +20,6 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.pubchem.EntrezSearchProcessor;
 import ambit2.rest.AmbitResource;

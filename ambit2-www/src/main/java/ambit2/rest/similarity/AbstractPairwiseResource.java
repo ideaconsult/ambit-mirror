@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.io.Serializable;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.NotFoundException;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -17,7 +18,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;

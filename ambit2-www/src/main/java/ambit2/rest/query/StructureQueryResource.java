@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.NotFoundException;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -38,7 +39,6 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.MoleculeTools;

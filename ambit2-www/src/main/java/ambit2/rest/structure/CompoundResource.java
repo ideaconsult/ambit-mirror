@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.util.Map;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.NotFoundException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ITask;
@@ -26,7 +27,6 @@ import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.CASProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
