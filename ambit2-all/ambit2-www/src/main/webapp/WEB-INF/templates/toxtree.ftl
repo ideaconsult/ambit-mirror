@@ -7,7 +7,6 @@
 <link rel="stylesheet" href='${ambit_root}/scripts/toxtree/ui-toxtree.css'/>
 
 <script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js'></script>
-<script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/oecdcategories.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/ketcher.js'></script>
