@@ -41,7 +41,7 @@
 -->
 
 <!-- toxtree starts -->
- <div class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="config_toxtree"
+ <div class="jtox-toolkit" data-kit="query" data-cross-domain="false" data-configuration="config_toxtree"
  	data-on-error="errorHandler"  
  	data-base-url="${ambit_root}">
     <div id="tt-searchbar" class="jtox-toolkit jtox-widget cc-fixed" data-kit="search"></div>
