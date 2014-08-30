@@ -165,6 +165,8 @@ var ccLib = {
   // If prefix is given AND json has id property - the root's id set to to prefix + json.id
   fillTree: function (root, json, prefix, filter) {
     var self = this;
+    if (json == null)
+      return;
   	if (!filter)
   		filter = 'data-field';
   	
@@ -400,16 +402,16 @@ window.jT = window.jToxKit = {
 	/* SETTINGS. The following parametes can be passed in settings object to jT.init(), or as data-XXX - with the same names. Values set here are the defaults.
 	*/
 	settings: {
-	  plainText: false,               // whether to expect result as plain text, and not JSON. Used in special cases like ketcher.
-  	jsonp: false,                   // whether to use JSONP approach, instead of JSON.
-  	crossDomain: false,             // should it expect cross-domain capabilities for the queries.
-  	baseUrl: null,                  // the baseUrl for the server that loaded the page.
-  	fullUrl: null,                  // the url as it is on loading the page - this is parsed one, i.e. parseUrl() processed.
-  	timeout: 15000,                 // the timeout an call to the server should be wait before the attempt is considered error.
-  	pollDelay: 250,                 // after how many milliseconds a new attempt should be made during task polling.
-  	onConnect: function(s){ },		  // function (service): called when a server request is started - for proper visualization. Part of settings.
-  	onSuccess: function(s, c, j) { },	// function (code, mess): called on server request successful return. It is called along with the normal processing. Part of settings.
-  	onError: function (s, c, j) { if (!!console && !!console.log) console.log("jT call error [" + c + "]: " + j.responseText + " from request: [" + s + "]"); },		// function (code, mess): called on server reques error. Part of settings.
+	  plainText: false,     // whether to expect result as plain text, and not JSON. Used in special cases like ketcher.
+  	jsonp: false,         // whether to use JSONP approach, instead of JSON.
+  	crossDomain: false,   // should it expect cross-domain capabilities for the queries.
+  	baseUrl: null,        // the baseUrl for the server that loaded the page.
+  	fullUrl: null,        // the url as it is on loading the page - this is parsed one, i.e. parseUrl() processed.
+  	timeout: 15000,       // the timeout an call to the server should be wait before the attempt is considered error.
+  	pollDelay: 250,       // after how many milliseconds a new attempt should be made during task polling.
+  	onConnect: null,		  // function (service): called when a server request is started - for proper visualization. Part of settings.
+  	onSuccess: null,	    // function (code, mess): called on server request successful return. It is called along with the normal processing. Part of settings.
+  	onError: function (s, c, j) { if (!!console && !!console.log) console.log("jT call error [" + c + "]: " + j.responseText + " from request: [" + s + "]"); },		// called on server request error.
   },
   
   // these are used in setting inheritance, so that non-inheritable settings are blanked...
@@ -1629,7 +1631,7 @@ var jToxCompound = (function () {
 
       var createATab = function(grId, name) {
         var liEl = document.createElement('li');
-        liEl.title = "Select which " + name + "(s) to be displayed";
+        liEl.title = "Select which columns to be displayed";
         ulEl.appendChild(liEl);
         var aEl = document.createElement('a');
         aEl.href = "#" + grId;
@@ -2687,9 +2689,7 @@ var jToxModel = (function () {
         createIt();
       else 
         jT.call(self, self.settings.baseUrl + '/model?algorithm=' + encodeURIComponent(algoUri), function (result, jhr) {
-          if (!result)
-            ccLib.fireCallback(callback, self, null, jhr);
-          else if (result.model.length == 0)
+          if (!result || result.model.length == 0)
             createIt();
           else // we have it!
             ccLib.fireCallback(callback, self, result.model[0].URI, jhr);
@@ -3886,7 +3886,196 @@ var jToxPolicy = (function () {
   
   return cls;
 })();
-  jT.templates['widget-search']  = 
+  /* toxlog.js - An activity logger, especially - an error reporter
+ *
+ * Copyright 2012-2014, IDEAconsult Ltd. http://www.ideaconsult.net/
+ * Created by Ivan Georgiev
+**/
+
+var jToxLog = (function () {
+  var defaultSettings = { // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
+    statusDelay: 1500,      // number of milliseconds to keep success / error messages before fading out
+    lineHeight: "20px",     // the height of each status line
+    background: "#ffffff",  // the background property as set for both the status icon and the list
+    rightSide: false,       // put the status icon on the right side
+    hasDetails: true,       // whether to have the ability to open each line, to show it's details
+    resendEvents: true,     // whether received onConnect, onSuccess and onError events are passed back to original jToxKit one's.
+    onStatus: null,         // a callback, when new status has arrived: function (newstatus, oldstatus)
+    onLine: null,           // a new line callback: function (service, status)
+    
+    // line formatting function - function (service, params, status, jhr) -> { header: "", details: "" }
+    formatLine: function (service, params, status, jhr) {
+      if (params != null)
+        return { 
+          header: params.method.toUpperCase() + ": " + service,
+          details: "..."
+        };
+      else if (jhr != null)
+        // by returning only the details part, we leave the header as it is.
+        return {
+          details: jhr.status + " " + jhr.statusText + '<br/>' + jhr.getAllResponseHeaders()
+        };
+      else
+        return null;
+    }       
+  };
+  
+  var cls = function (root, settings) {
+    var self = this;
+    self.rootElement = root;
+    jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even when manually initialized
+
+    self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings);
+    self.rootElement.appendChild(jT.getTemplate('#jtox-logger'));
+    
+    if (typeof self.settings.lineHeight == "number")
+      self.settings.lineHeight = self.settings.lineHeight.toString() + 'px';
+      
+    // now the actual UI manipulation functions...
+    jT.$('.status,.list-wrap', self.rootElement).css('background', self.settings.background);
+    var listRoot = $('.list-root', self.rootElement)[0];
+    var statusEl = $('.status', self.rootElement)[0];
+
+    if (!!self.settings.rightSide) {
+      statusEl.style.right = '0px';
+      jT.$('.list-wrap', self.rootElement).addClass('right-side');
+    }
+    else
+      statusEl.style.left = '0px';
+    
+    var setIcon = function (root, status) {
+      if (status == "error")
+        jT.$(root).addClass('ui-state-error');
+      else
+        jT.$(root).removeClass('ui-state-error');
+
+      if (status == "error")
+        jT.$('.icon', root).addClass('ui-icon ui-icon-alert').removeClass('loading ui-icon-check');
+      else if (status == "success")
+        jT.$('.icon', root).addClass('ui-icon ui-icon-check').removeClass('loading ui-icon-alert');
+      else {
+        jT.$('.icon', root).removeClass('ui-icon ui-icon-check ui-icon-alert');
+        if (status == "connecting")
+          jT.$('.icon', root).addClass('loading');
+      }
+    };
+    
+    var setStatus = function (status) {
+      $(".icon", statusEl).removeClass("jt-faded");
+      setIcon (statusEl, status);
+      if (status == "error" || status == "success") {
+        setTimeout(function () { 
+          jT.$('.icon', statusEl).addClass('jt-faded');
+          var hasConnect = false;
+          jT.$('.logline', listRoot).each(function () {
+            if (jT.$(this).data('status') == "connecting")
+              hasConnect = true;
+          });
+          if (hasConnect)
+            setStatus("connecting");
+        }, self.settings.statusDelay);
+      }
+      ccLib.fireCallback(self.settings.onStatus, self, status, self.theStatus);
+      self.theStatus = status;
+    };
+    
+    var addLine = function (data) {
+      var el = jT.getTemplate("#jtox-logline");
+      el.style.height = '0px';
+      listRoot.insertBefore(el, listRoot.firstElementChild);
+      ccLib.fillTree(el, data);
+      setTimeout(function () { el.style.height = self.settings.lineHeight; }, 150);
+      if (!!self.settings.hasDetails) {
+        jT.$('.icon', el).on('click', function (e) {
+          jT.$(el).toggleClass('openned');
+          if (jT.$(el).hasClass("openned")) {
+            var height = 0;
+            jT.$('.data-field', el).each(function () {
+              height += this.offsetHeight;
+            });
+            el.style.height = (height + 6) + 'px';
+          }
+          else
+            el.style.height = self.settings.lineHeight;
+        });
+      }
+      return el;
+    };
+    
+    setStatus('');
+    
+    // this is the queue of events - indexes by the passed service
+    self.events = {};
+    
+    var onConnect = function (service, params) {
+      setStatus("connecting");
+      var line = addLine(ccLib.fireCallback(self.settings.formatLine, this, service, params, null, null));
+      self.events[service] = line;
+      setIcon(line, 'connecting');
+      jT.$(line).data('status', "connecting");
+      if (!!self.settings.resendEvents && this._originals != null)
+        ccLib.fireCallback(this._originals.onConnect, this, service, params);
+    };
+    
+    var onSuccess = function (service, status, jhr) {
+      setStatus("success");
+      var line = self.events[service];
+      if (!line) {
+        console.log("jToxLog: missing line for:" + service);
+        return;
+      }
+      delete self.events[service];
+      setIcon(line, 'success');
+      ccLib.fillTree(line, ccLib.fireCallback(self.settings.formatLine, this, service, null, status, jhr));
+      jT.$(line).data('status', "success");
+      if (!!self.settings.resendEvents && this._originals != null)
+        ccLib.fireCallback(this._originals.onSuccess, this, service, status, jhr);
+    };
+    
+    var onError = function (service, status, jhr) {
+      setStatus("error");
+      var line = self.events[service];
+      if (!line) {
+        console.log("jToxLog: missing line for:" + service + "(" + status + ")");
+        return;
+      }
+      delete self.events[service];
+      setIcon(line, 'error');
+      ccLib.fillTree(line, ccLib.fireCallback(self.settings.formatLine, this, service, null, status, jhr));
+      jT.$(line).data('status', "error");
+      if (!!self.settings.resendEvents && this._originals != null)
+        ccLib.fireCallback(this._originals.onError, this, service, status, jhr);
+    };
+    
+    // now, finally swipe through everybody and install me...
+    var installHnd = function (kit) {
+      if (kit == null || kit == self)
+        return;
+        
+      if (!!self.settings.resendEvents) {
+        kit._originals = {
+          onConnect: kit.settings.onConnect,
+          onError: kit.settings.onError,
+          onSuccess: kit.settings.onSuccess
+        };
+      }
+      
+      kit.settings.onConnect = onConnect;
+      kit.settings.onError = onError;
+      kit.settings.onSuccess = onSuccess;
+    };
+    
+    jT.$('.jtox-toolkit').each (function () { installHnd(jT.kit(this)); });
+    installHnd(jT);
+  };
+  
+  cls.prototype.modifyUri = function (uri) { 
+    return uri;
+  };
+  
+  return cls;
+})();
+jT.templates['widget-search']  = 
 "    <div id=\"jtox-search\" class=\"jtox-search\">" +
 "      <form>" +
 "  	  	<div class=\"jq-buttonset jtox-inline\">" +
@@ -4120,4 +4309,21 @@ jT.templates['policy']  =
 "      <table></table>" +
 "	  </div>" +
 ""; // end of #jtox-model 
+
+jT.templates['logger']  = 
+"	  <div id=\"jtox-logger\" class=\"jtox-logger\">" +
+"	    <div class=\"list-wrap\">" +
+"	      <div class=\"list-root\"></div>" +
+"	    </div>" +
+"	    <div class=\"status\"><div class=\"icon jtox-fadable\"></div></div>" +
+"	  </div>" +
+""; // end of #jtox-logger 
+
+jT.templates['logline']  = 
+"	  <div id=\"jtox-logline\" class=\"logline\">" +
+"  	    <div class=\"icon\"></div>" +
+"  	    <span class=\"content data-field\" data-field=\"header\"></span>" +
+"  	    <div class=\"details data-field\" data-field=\"details\"></div>" +
+"	  </div>" +
+""; // end of #jtox-logline 
 

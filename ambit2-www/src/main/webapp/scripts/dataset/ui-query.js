@@ -1,6 +1,8 @@
 var jTConfig = {};
 
 function onSideLoaded(result) {
+  if (!result)
+    return;
 	var tEl = $('.title', $(this.rootElement).parents('.jtox-foldable')[0])[0];
 	var set = (result.model || result.dataset);
 	$(tEl).data('total', set.length);
@@ -54,6 +56,7 @@ function createGroups(miniset, kit) {
       "http://www.opentox.org/api/1.1#CASRN", 
       "http://www.opentox.org/api/1.1#EINECS",
       "http://www.opentox.org/api/1.1#IUCLID5_UUID",
+      // Names
       "http://www.opentox.org/api/1.1#ChemicalName",
       "http://www.opentox.org/api/1.1#TradeName",
       "http://www.opentox.org/api/1.1#IUPACName",
@@ -61,7 +64,7 @@ function createGroups(miniset, kit) {
       "http://www.opentox.org/api/1.1#InChIKey",
       "http://www.opentox.org/api/1.1#InChI",
       "http://www.opentox.org/api/1.1#REACHRegistrationDate"
-	  ]  
+    ]
 	};
 	for (var fId in miniset.feature) {
 	  var feat = miniset.feature[fId]; 
@@ -93,7 +96,7 @@ function createGroups(miniset, kit) {
 
 $(document).ready(function(){
   var toggleBar = function () {
-    $(this).parents('#sidebar').toggleClass('hidden');
+    $('#sidebar').toggleClass('hidden');
   };
   $('#sidebar span.ui-icon').on('click', toggleBar);
   $('#sidebar div.side-title').on('click', toggleBar);
@@ -107,4 +110,5 @@ $(document).ready(function(){
     $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = false;});
     onSelectedUpdate.call(this, e);
   });
+  $('#logger').on('mouseover', function () { $(this).removeClass('hidden'); }).on('mouseout', function () { $(this).addClass('hidden');});
 });

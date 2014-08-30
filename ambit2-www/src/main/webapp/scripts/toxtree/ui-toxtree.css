@@ -45,6 +45,24 @@ body>div.jtox-toolkit {
   border-radius: 7px;
 }
 
+#logger {
+  position: fixed;
+	height: 144px;
+  width: 95%;
+  right: 5px;
+	bottom: 0px;
+	z-index: 100;
+	transition: bottom 0.5s ease;
+	-moz-transition: bottom 0.5s ease;
+	-webkit-transition: bottom 0.5s ease;
+	-o-transition: bottom 0.5s ease;
+	box-shadow: 3px 7px 7px #999;
+}
+
+#logger.hidden {
+  bottom: -120px;
+}
+
 .ketcher {
   margin-left: 45px;
 }

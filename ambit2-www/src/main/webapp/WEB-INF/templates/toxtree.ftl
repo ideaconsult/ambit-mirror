@@ -20,8 +20,8 @@
 	data-kit="query" 
 	data-cross-domain="false" 
 	data-configuration="config_toxtree" 
-	data-on-error="errorHandler"  
 	data-base-url="${ambit_root}">
+	<div id="logger" class="jtox-toolkit jtox-widget hidden" data-kit="log" data-resend-events="false" data-right-side="true"></div>	
     <div id="tt-searchbar" class="jtox-toolkit jtox-widget cc-fixed" data-kit="search"></div>
     <div id="tt-bigpane" class="cc-flex">
       <div>
@@ -90,9 +90,5 @@
 </div>
 -->
 
-<div class='row add-bottom' >
-	<div class="five columns alpha ">&nbsp;</div>
-	<div class="ten columns omega ui-state-error " id='log' style='display:none;' >&nbsp;</div> 
-</div>
 </body>
 </html>

@@ -45,8 +45,8 @@ $(document)
   <div class="jtox-toolkit" data-kit="query" data-initial-query="yes" data-cross-domain="false" 
   		data-configuration="common_config"  
   		data-hide-options="context"
-  		data-on-error="errorHandler" 
   		data-base-url="${ambit_root}">
+	<div id="logger" class="jtox-toolkit jtox-widget hidden" data-kit="log" data-resend-events="false"></div>  		
     <div id="searchbar" class="jtox-toolkit jtox-widget" data-kit="search"></div>
     <div id="sidebar" class="hidden">
       <div>
@@ -85,9 +85,8 @@ $(document)
 		
 <div class='row add-bottom'>&nbsp;</div>
 
-
-
 <#include "/footer.ftl" >
+
 </div> <!-- container -->
 </body>
 </html>
