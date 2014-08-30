@@ -245,60 +245,6 @@ img.jtox-smalldiagram {
   width: 125px;
   height: 125px;
 }
-
-/* Some jTLogger stuff
-*/
-.jtox-logger div.icon {
-  display: inline-block;
-  vertical-align: middle;
-  color: rgba(0, 0, 0, 0);
-  width: 16px;
-  height: 16px;
-}
-
-.jtox-logger .status {
-  width: 24px;
-  height: 16px;
-  text-align: center;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-  border-left: 1px solid black;
-  border-top: 1px solid black;
-  border-right: 1px solid black;
-  border-bottom: 0px;
-  background: inherit;
-}
-
-.jtox-logger .borderer {
-  border-collapse: collapse;
-  border-top: 1px solid #222;
-  width: 100%;
-  margin-left: 25px;
-}
-
-.jtox-logger .jt-faded {
-  opacity: 0.2;
-}
-
-.jtox-logger .list-root {
-  border-collapse: collapse;
-  border-top: 0px;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  min-height: 50px;
-  max-height: 120px;
-  overflow: scroll;
-}
-
-.jtox-logger .logline {
-  line-height: 150%;
-  margin-top: 2px;
-  background: inherit;
-  border: 0px;
-}
 /* toxtstudy.css - Styling for toxstudy engine
 */
 
@@ -610,4 +556,78 @@ td.jtox-multi table tr:first-child td {
 td.jtox-multi table {
   height: 100%;
   width: 100%;
+}
+.jtox-logger div.icon {
+  display: inline-block;
+  vertical-align: middle;
+  color: rgba(0, 0, 0, 0);
+  width: 16px;
+  height: 16px;
+}
+
+.jtox-logger .status {
+  position: absolute;
+  top: 1px;
+  width: 32px;
+  height: 24px;
+  text-align: center;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+  border-right: 1px solid black;
+  border-bottom: 0px;
+}
+
+.jtox-logger .jt-faded {
+  opacity: 0.2;
+}
+
+.jtox-logger .list-wrap {
+  position: absolute;
+  box-sizing: border-box;
+  top: 0px;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 5px;
+  border-top-left-radius: 0px;
+  min-height: 50px;
+  height: 100%;
+  overflow: scroll;
+  margin-top: 25px;
+  padding-left: 8px;
+}
+
+.jtox-logger .list-wrap.right-side {
+  border-top-right-radius: 0px;
+  border-top-left-radius: 5px;
+}
+
+.jtox-logger .list-root {
+  margin-bottom: 24px;
+  margin-right: 8px;
+}
+
+.jtox-logger .logline {
+  margin-top: 2px;
+  background: inherit;
+  border: 0px;
+  font-style: italic;
+  font-size: 90%;
+  overflow: hidden;
+
+  -moz-transition: height ease 300ms;
+  -ms-transition: height ease 300ms;
+  -o-transition: height ease 300ms;
+  -webkit-transition: height ease 300ms;
+  transition: height ease 300ms;
+}
+
+.jtox-logger .logline .content {
+  vertical-align: middle;
+}
+
+.jtox-logger .logline .details {
+  margin-left: 18px;
+  vertical-align: top;
 }
