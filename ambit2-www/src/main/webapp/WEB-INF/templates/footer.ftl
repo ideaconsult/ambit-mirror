@@ -19,8 +19,7 @@
 	    <form id='logoutForm' name='logoutForm'  action='${ambit_root}/provider/signout?targetUri=${ambit_root}&method=DELETE' method='POST'><input type='hidden' value="${username}"></input></form>
 </#if>
 
-<!--
-						
+	
   <script language="JavaScript">
   function errorHandler(service, status, jhr) {
   	try {
@@ -31,5 +30,4 @@
   </script>
   
   
--->		
   

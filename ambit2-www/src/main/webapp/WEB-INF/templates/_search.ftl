@@ -46,7 +46,7 @@ $(document)
   		data-configuration="common_config"  
   		data-hide-options="context"
   		data-base-url="${ambit_root}">
-	<div id="logger" class="jtox-toolkit jtox-widget hidden" data-kit="log" data-resend-events="false"></div>  		
+ 		
     <div id="searchbar" class="jtox-toolkit jtox-widget" data-kit="search"></div>
     <div id="sidebar" class="hidden">
       <div>
