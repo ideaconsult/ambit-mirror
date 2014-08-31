@@ -12,10 +12,16 @@
 <script type='text/javascript' src='${ambit_root}/scripts/ketcher.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/toxtree/ui-toxtree.js'></script>
   
-
-
 </head>
 <body>
+<div class="remove-bottom h5"  style="padding-top:0px">
+    <#if menu_profile??>
+			<a href="${ambit_root}/ui"><img class='scale-with-grid' border='0' src='${ambit_root}/images/profile/${menu_profile}/logo.png' title='Home' alt='AMBIT logo'></a>
+	<#else>
+			<a href="${ambit_root}/ui"><img class='scale-with-grid' border='0' src='${ambit_root}/images/profile/default/logo.png' title='Home' alt='AMBIT logo'></a>
+	</#if>
+</div>
+
   <div class="jtox-toolkit" 
 	data-kit="query" 
 	data-cross-domain="false" 
