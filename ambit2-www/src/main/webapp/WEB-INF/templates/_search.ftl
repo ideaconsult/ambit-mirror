@@ -19,6 +19,11 @@
 </script>
 <link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
 
+<style>
+.ui-icon {
+        zoom: 1.25;
+}
+</style>
 <script type='text/javascript'>  
 $(document)
 		.ready(
