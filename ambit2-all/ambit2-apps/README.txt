@@ -44,3 +44,12 @@ This enables usage of more than one Ambit instance under the same Tomcat.
 Solves http://sourceforge.net/tracker/index.php?func=detail&aid=3215942&group_id=191756&atid=938657
 
 
+GRANT ALL ON `ambit2`.* TO 'guest'@'localhost' IDENTIFIED BY 'guest';
+GRANT ALL ON `ambit2`.* TO 'guest'@'127.0.0.1' IDENTIFIED BY 'guest';
+GRANT ALL ON `ambit2`.* TO 'guest'@'::1' IDENTIFIED BY 'guest';
+GRANT TRIGGER ON `ambit2`.* TO 'guest'@'localhost';
+GRANT TRIGGER ON `ambit2`.* TO 'guest'@'127.0.0.1';
+GRANT TRIGGER ON `ambit2`.* TO 'guest'@'::1';
+GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'localhost';
+GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'127.0.0.1';
+GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'::1';
