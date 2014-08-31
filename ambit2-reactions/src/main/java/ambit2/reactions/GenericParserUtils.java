@@ -14,7 +14,7 @@ public class GenericParserUtils
 	Object targetObj = null;
 	GenericRuleMetaInfo metaInfo = null;
 	
-	ArrayList<String> getErrors()
+	public ArrayList<String> getErrors()
 	{
 		return errors;
 	}
