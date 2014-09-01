@@ -978,7 +978,7 @@ window.jT.ui = {
         if (typeof defs.details == 'function')
           html += defs.details(data, type, full);
         else if (!!defs.details)
-          html += '<span class="jtox-details-toggle ui-icon ui-icon-folder-collapsed" data-data="' + data +'" title="Press to open/close detailed info for this entry"></span>';
+          html += '<span class="jtox-details-toggle ui-icon ui-icon-folder" data-data="' + data +'" title="Press to open/close detailed info for this entry"></span>';
 
         // post content adding
         if (typeof defs.post == 'function')
@@ -1802,7 +1802,7 @@ var jToxCompound = (function () {
               '' + data : 
               "&nbsp;-&nbsp;" + data + "&nbsp;-&nbsp;<br/>" + 
                 (self.settings.hasDetails ?              
-                  '<span class="jtox-details-open ui-icon ui-icon-circle-triangle-e" title="Press to open/close detailed info for this compound"></span>'
+                  '<span class="jtox-details-open ui-icon ui-icon-folder-collapsed" title="Press to open/close detailed info for this compound"></span>'
                   : '');
           }
         },
@@ -1855,8 +1855,8 @@ var jToxCompound = (function () {
         fnExpandCell(varCell, toShow);
         
         var iconCell = jT.$('.jtox-details-open', row);
-        jT.$(iconCell).toggleClass('ui-icon-folder-collapsed');
         jT.$(iconCell).toggleClass('ui-icon-folder-open');
+        jT.$(iconCell).toggleClass('ui-icon-folder-collapsed');
         
         if (toShow) {
           // i.e. we need to show it - put the full sized diagram in the fixed part and the tabs in the variable one...
@@ -3904,13 +3904,12 @@ var jToxPolicy = (function () {
 var jToxLog = (function () {
   var defaultSettings = { // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
     statusDelay: 1500,      // number of milliseconds to keep success / error messages before fading out
+    keepMessages: 50,       // how many messages to keep in the queue
     lineHeight: "20px",     // the height of each status line
-    background: "#ffffff",  // the background property as set for both the status icon and the list
     rightSide: false,       // put the status icon on the right side
     hasDetails: true,       // whether to have the ability to open each line, to show it's details
     resendEvents: true,     // whether received onConnect, onSuccess and onError events are passed back to original jToxKit one's.
     onStatus: null,         // a callback, when new status has arrived: function (newstatus, oldstatus)
-    onLine: null,           // a new line callback: function (service, status)
     
     // line formatting function - function (service, params, status, jhr) -> { header: "", details: "" }
     formatLine: function (service, params, status, jhr) {
@@ -3939,9 +3938,10 @@ var jToxLog = (function () {
     
     if (typeof self.settings.lineHeight == "number")
       self.settings.lineHeight = self.settings.lineHeight.toString() + 'px';
+    if (typeof self.settings.keepMessages != "number")
+      self.settings.keepMessages = parseInt(self.settings.keepMessages);
       
     // now the actual UI manipulation functions...
-    jT.$('.status,.list-wrap', self.rootElement).css('background', self.settings.background);
     var listRoot = $('.list-root', self.rootElement)[0];
     var statusEl = $('.status', self.rootElement)[0];
 
@@ -4008,6 +4008,10 @@ var jToxLog = (function () {
             el.style.height = self.settings.lineHeight;
         });
       }
+      
+      while (listRoot.childNodes.length > self.settings.keepMessages)
+        listRoot.removeChild(listRoot.lastElementChild);
+
       return el;
     };
     

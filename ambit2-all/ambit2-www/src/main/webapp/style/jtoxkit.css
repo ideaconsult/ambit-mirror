@@ -566,6 +566,7 @@ td.jtox-multi table {
 }
 
 .jtox-logger .status {
+  background: #fff;
   position: absolute;
   top: 1px;
   width: 32px;
@@ -584,6 +585,7 @@ td.jtox-multi table {
 }
 
 .jtox-logger .list-wrap {
+  background: #fff;
   position: absolute;
   box-sizing: border-box;
   top: 0px;
