@@ -978,7 +978,7 @@ window.jT.ui = {
         if (typeof defs.details == 'function')
           html += defs.details(data, type, full);
         else if (!!defs.details)
-          html += '<span class="jtox-details-toggle ui-icon ui-icon-folder" data-data="' + data +'" title="Press to open/close detailed info for this entry"></span>';
+          html += '<span class="jtox-details-toggle ui-icon ui-icon-folder-collapsed" data-data="' + data +'" title="Press to open/close detailed info for this entry"></span>';
 
         // post content adding
         if (typeof defs.post == 'function')
