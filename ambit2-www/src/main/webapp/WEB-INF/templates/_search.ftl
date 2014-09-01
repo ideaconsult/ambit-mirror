@@ -21,7 +21,10 @@
 <link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
 
 <style>
-.ui-icon {
+.ui-icon-folder-collapsed {
+        zoom: 1.25;
+}
+.ui-icon-folder-open {
         zoom: 1.25;
 }
 </style>
