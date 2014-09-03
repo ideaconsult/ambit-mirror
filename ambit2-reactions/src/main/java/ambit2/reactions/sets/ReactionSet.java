@@ -33,5 +33,15 @@ public class ReactionSet
 		this.name = name;
 	}
 	
+	public void addNewGroup()
+	{
+		//TODO
+	}
+	
+	public void addNewReaction()
+	{
+		//TODO
+	}
+	
 	
 }

@@ -13,6 +13,12 @@ public class ReactionData
 	private String subGroup = null;
 	private String subSubGroup = null;
 	//private HashMap<String,String> properties = null;
+	
+	@Override
+	public String toString()
+	{
+		return name;
+	}
 
 	public String getSmirks() {
 		return smirks;
