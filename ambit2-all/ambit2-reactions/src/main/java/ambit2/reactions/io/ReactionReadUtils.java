@@ -4,6 +4,7 @@ package ambit2.reactions.io;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import ambit2.reactions.GenericParserUtils;
 import ambit2.reactions.GenericRuleMetaInfo;
@@ -13,11 +14,32 @@ public class ReactionReadUtils
 {
 	private static GenericRuleMetaInfo reactionMetaInfo = null;
 	
-	private class ReactionDataObject{
-		String name = null;
-		String set = null;
-		String info = null;
-		String type = null;
+	public class ReactionDataObject
+	{		
+		public String set = null;
+		public String name = null;
+		public String group = null;
+		public String smirks = null;
+		public String info = null;
+		public String type = null;
+		
+		public String toString()
+		{
+			StringBuffer sb = new StringBuffer();
+			if (set != null)
+				sb.append(" set = " + set);
+			if (name != null)
+				sb.append(" name = " + name);
+			if (group != null)
+				sb.append(" group = " + group);
+			if (smirks != null)
+				sb.append(" smirks = " + smirks);
+			if (info != null)
+				sb.append(" info = " + info);
+			if (type != null)
+				sb.append(" type = " + type);
+			return sb.toString();
+		}
 	}
 	
 	ArrayList<String> errors = new ArrayList<String>();
@@ -33,18 +55,22 @@ public class ReactionReadUtils
 			GenericRuleMetaInfo mi = new GenericRuleMetaInfo();
 			mi.keyWord.add("NAME");
 			mi.objectFieldName.add("name");
-			mi.keyWordRequired.add(new Boolean(true));
-
+			mi.keyWordRequired.add(new Boolean(false));
+			
 			mi.keyWord.add("TYPE");
 			mi.objectFieldName.add("type");
 			mi.keyWordRequired.add(new Boolean(false));
 
 			mi.keyWord.add("SMIRKS");
 			mi.objectFieldName.add("smirks");
-			mi.keyWordRequired.add(new Boolean(true));		
+			mi.keyWordRequired.add(new Boolean(false));		
 
 			mi.keyWord.add("INFO");
 			mi.objectFieldName.add("info");
+			mi.keyWordRequired.add(new Boolean(false));
+			
+			mi.keyWord.add("SET");
+			mi.objectFieldName.add("set");
 			mi.keyWordRequired.add(new Boolean(false));
 						
 			reactionMetaInfo = mi;
@@ -54,43 +80,54 @@ public class ReactionReadUtils
 	}
 	
 	
-	public ReactionSet loadReactionsFromRuleFormat(String fileName) throws Exception
+	public ArrayList<ReactionSet> loadReactionsFromRuleFormat(String fileName) throws Exception
 	{
 		errors.clear();
-		GenericParserUtils genericParserUtils = new GenericParserUtils(); 
+		GenericParserUtils parser = new GenericParserUtils();
+		parser.setMetaInfo(getReactionsMetaInfo());
 		
 		File file = new File(fileName);
 		RandomAccessFile f = new RandomAccessFile(file,"r");			
 		long length = f.length();
 		
-		ReactionSet reactionSet = new ReactionSet(); 
+		ArrayList<ReactionSet> reactionSets = new ArrayList<ReactionSet>(); 
 		
-		int lineNum = 0;
 		while (f.getFilePointer() < length)
 		{	
-			lineNum++;
 			String line = f.readLine();
 			String ruleString = line.trim();
 			if (!ruleString.isEmpty())
 			{	
 				ReactionDataObject rdo = new ReactionDataObject();
-				genericParserUtils.parseRule(ruleString, rdo);
-				if (genericParserUtils.getErrors().size() > 0)
-					errors.addAll(genericParserUtils.getErrors());
+				parser.parseRule(ruleString, rdo);
+				if (parser.getErrors().size() > 0)
+					errors.addAll(parser.getErrors());
 				else
-					addReaction(reactionSet, rdo);
+					addReaction(reactionSets, rdo);
 			}	
 		}
 		f.close();
 		
-		return reactionSet;
+		if (!errors.isEmpty())
+			throw new Exception("There are reaction errors: \n" + getAllErrors());
+		
+		return reactionSets;
 	}
 	
-	private void addReaction(ReactionSet reactionSet, ReactionDataObject rdo)
+	private void addReaction(ArrayList<ReactionSet> reactionSets, ReactionDataObject rdo)
 	{
+		//System.out.println(rdo.toString());
+		HashMap<String, ReactionSet> sets = new  HashMap<String, ReactionSet>();
+		
 		//TODO
 	}
 	
-	
+	private String getAllErrors()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < errors.size(); i++)
+			sb.append(errors.get(i) + "\n");
+		return sb.toString();
+	}
 	
 }
