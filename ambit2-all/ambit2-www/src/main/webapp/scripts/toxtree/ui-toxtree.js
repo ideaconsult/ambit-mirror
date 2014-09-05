@@ -25,10 +25,7 @@ var config_toxtree = {
 	"handlers": {
   	"query": function (e, query) {
   	  clearSlate(true);
-      query.query();
-    },
-    "checked": function (e, query) {
-      // TODO: initiate the single compound browser to work on selected only
+      jT.parentKit(jToxQuery, this).query();
     },
     "markAuto": function (e) {
       $(this).toggleClass('active');
@@ -45,16 +42,13 @@ var config_toxtree = {
       "http://www.opentox.org/api/1.1#EINECS",
       "http://www.opentox.org/api/1.1#IUCLID5_UUID"
 	  ],
-  	"Names" : null,
-  	"Calculated": null,
-  	"Other": null,
   	"ToxTree": []   // to be expanded upon algorithm loading
 	}
 };
 
 function makeModel(el, algoId, callback) {
   if (!el)
-    el = $('button.tt-toggle.model', tt.algoMap[algoId].dom)[0];
+    el = $('button.jt-toggle.model', tt.algoMap[algoId].dom)[0];
   else
     algoId = $(el).parents('.tt-algorithm').data('algoId');
   
@@ -73,7 +67,7 @@ function makeModel(el, algoId, callback) {
 
 function runPredict (el, algoId, all) {
   if (!el)
-    el = $('button.tt-toggle.predict', tt.algoMap[algoId].dom)[0];
+    el = $('button.jt-toggle.predict', tt.algoMap[algoId].dom)[0];
   else {
     algoId = $(el).data('algoId');
     if (algoId == null) 
@@ -119,7 +113,7 @@ function runPredict (el, algoId, all) {
 }
 
 function runSelected() {
-  $('#tt-models-panel button.tt-toggle.auto.active').each(function () {
+  $('#tt-models-panel button.jt-toggle.auto.active').each(function () {
     var tEl = $(this).parents('.tt-algorithm');
     runPredict(null, tEl.data('algoId'), true);
   });  
@@ -190,7 +184,7 @@ function onSelectedUpdate(e) {
   if (tt.modelKit.algorithm == null)
     return;
 	var tEl = $('#tt-models-panel .title')[0];
-	var v = $('button.tt-toggle.auto.active', tt.modelKit.rootElement).length;
+	var v = $('button.jt-toggle.auto.active', tt.modelKit.rootElement).length;
 	tEl.innerHTML = jT.ui.updateCounter(tEl.innerHTML, v, tt.modelKit.algorithm.length);;
 }
 
@@ -218,16 +212,18 @@ function onAlgoLoaded(result) {
     	  column: { sClass: data.id },
     	  render: (function (aId) { return function(data, type, full) {
     	    return (type != 'display') ? data : 
-    	      '<button class="tt-toggle jtox-handler predict" data-algo-id="' + aId + '" data-index="' + data + '" data-handler="runPredict" title="Run prediction with the algorithm on current compound">▶︎</button>';
+    	      '<button class="jt-toggle jtox-handler predict" data-algo-id="' + aId + '" data-index="' + data + '" data-handler="runPredict" title="Run prediction with the algorithm on current compound">▶︎</button>';
           };
         })(data.id)
       };
       idx++;
     });
+    
+    jT.ui.installHandlers(tt.modelKit);
   }
   
   onSelectedUpdate(null);
-  // not it's time to create the browser table
+  // now it's time to create the browser table
   jT.initKit($('#tt-table')[0]);
   tt.browserKit = jToxCompound.kits[0];
 }
@@ -406,9 +402,9 @@ $(document).ready(function(){
     $(this).data('other', this.innerHTML);
     this.innerHTML = alt;
     if (alt != 'select')
-      $('#tt-models-panel button.tt-toggle.auto').addClass('active');
+      $('#tt-models-panel button.jt-toggle.auto').addClass('active');
     else
-      $('#tt-models-panel button.tt-toggle.auto.active').removeClass('active');
+      $('#tt-models-panel button.jt-toggle.auto.active').removeClass('active');
     
     onSelectedUpdate.call(this);
   });
@@ -426,11 +422,11 @@ $(document).ready(function(){
   });
   $('#tt-models-panel a.show-hide').on('click', function () {
     var alt = $(this).data('other');
-    if ($('#tt-models-panel button.tt-toggle.auto.active').length == 0 && alt != 'hide')
+    if ($('#tt-models-panel button.jt-toggle.auto.active').length == 0 && alt != 'hide')
       return;
     $(this).data('other', this.innerHTML);
     this.innerHTML = alt;
-    $('#tt-models-panel button.tt-toggle.auto').each(function () {
+    $('#tt-models-panel button.jt-toggle.auto').each(function () {
       var par = $(this).parents('.tt-algorithm');
       var aId = $(par).data('algoId');
       if (alt != 'show'){ // i.e. we need to show

@@ -37,17 +37,6 @@ function onDetailedRow(row, data, event) {
   } } ) );
 }
 
-function renderRelation(data, type, full) {
-  if (type != 'display')
-    return ccLib.joinDeep(data, 'relation', ',');
-    
-  var res = '';
-  for (var i = 0, il = data.length; i < il; ++i)
-    res += '<span class="camelCase">' + data[i].relation.substring(4).toLowerCase() + '</span><sup><a target="_blank" href="' + (full.URI + '/composition') + '" title="' + data[i].compositionName + '(' + data[i].compositionUUID + ')">?</a></sup>';
-
-  return res;
-}
-
 function createGroups(miniset, kit) {
   var groups = {
     "Identifiers" : [
@@ -79,8 +68,7 @@ function createGroups(miniset, kit) {
     groups[src].push(fId);
 	}
 	groups["Substances"] = [ "http://www.opentox.org/api/1.1#CompositionInfo" ];
-	groups["Calculated"] = null;
-	groups["Datasets"] = function (name, miniset) {
+	groups["Other"] = function (name, miniset) {
     var arr = [];
     for (var f in miniset.feature) {
       if (!miniset.feature[f].used && !miniset.feature[f].basic) {
@@ -101,14 +89,6 @@ $(document).ready(function(){
   $('#sidebar span.ui-icon').on('click', toggleBar);
   $('#sidebar div.side-title').on('click', toggleBar);
   $('#sidebar').on('mouseover', function () { $(this).removeClass('hidden'); }).on('mouseout', function () { $(this).addClass('hidden');});
-  
-  $('#sidebar a.select-all').on('click', function (e) {
-    $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = true;});
-    onSelectedUpdate.call(this, e);
-  });
-  $('#sidebar a.unselect-all').on('click', function (e) {
-    $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = false;});
-    onSelectedUpdate.call(this, e);
-  });
+  jT.ui.installMultiSelect($('#sidebar')[0], onSelectedUpdate);
   $('#logger').on('mouseover', function () { $(this).removeClass('hidden'); }).on('mouseout', function () { $(this).addClass('hidden');});
 });

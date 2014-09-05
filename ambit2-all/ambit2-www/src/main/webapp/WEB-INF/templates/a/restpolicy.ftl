@@ -56,7 +56,7 @@ jQuery(document).ready(function()
 	<div class="jtox-toolkit" data-kit="policy" data-base-url="${ambit_root}" data-load-on-init="true" data-on-error="errorHandler"></div>
   <div class="jtox-template">
 <!--[[ jT.templates['all-model'] -->
-	  <div id="jtox-policy">
+	  <div id="jtox-policy"  class="jtox-auth">
       <table></table>
 	  </div>
 <!-- // end of #jtox-model ]]-->

@@ -2720,6 +2720,14 @@ var config_study = {
                     "bVisible": true
                 }
             }         	
-        }        
+        },
+        "TRANSCRIPTION_PROFILING" : {
+            "effects": {
+                "text": {
+                    "bVisible": true,
+                    "sTitle" : "File"
+                }
+            }         	
+        }         
     }
 }
