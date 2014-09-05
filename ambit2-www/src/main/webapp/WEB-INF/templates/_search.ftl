@@ -69,7 +69,7 @@ $(document)
           </div>
           <div class="content">
             <a href="#" class="select-all">select all</a>&nbsp;<a href="#" class="unselect-all">unselect all</a>
-            <div class="jtox-toolkit jtox-widget" data-kit="dataset" data-short-stars="true" data-s-dom="rt" data-selectable="true" data-selection-handler="checked" data-on-loaded="onSideLoaded" data-load-on-init="true"></div>
+            <div class="jtox-toolkit jtox-widget" data-kit="dataset" data-short-stars="true" data-s-dom="rt" data-selectable="true" data-selection-handler="onSelectedUpdate" data-on-loaded="onSideLoaded" data-load-on-init="true"></div>
           </div>
         </div>
         <div class="jtox-foldable folded">
@@ -78,7 +78,7 @@ $(document)
           </div>
           <div class="content">
             <a href="#" class="select-all">select all</a>&nbsp;<a href="#" class="unselect-all">unselect all</a>
-            <div class="jtox-toolkit jtox-widget" data-kit="model" data-short-stars="true" data-s-dom="rt" data-selectable="true" data-selection-handler="checked" data-on-loaded="onSideLoaded" data-load-on-init="true" ></div>
+            <div class="jtox-toolkit jtox-widget" data-kit="model" data-short-stars="true" data-s-dom="rt" data-selectable="true" data-selection-handler="onSelectedUpdate" data-on-loaded="onSideLoaded" data-load-on-init="true" ></div>
           </div>
         </div>
       </div>
