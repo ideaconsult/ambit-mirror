@@ -1561,6 +1561,8 @@ var jToxCompound = (function () {
           }
       	},
       	'#IdRow': {
+      	  used: true,
+      	  basic: true,
       	  data: "number",
       	  column: { "sClass": "middle"}
       	},
