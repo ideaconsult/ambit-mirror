@@ -14,6 +14,8 @@
   
 </head>
 <body>
+<div id="logger" class="jtox-toolkit jtox-widget hidden" data-kit="log" data-resend-events="false" data-right-side="true"></div>
+	
 <div class="remove-bottom h5"  style="padding-top:0px">
     <#if menu_profile??>
 			<a href="${ambit_root}/ui"><img class='scale-with-grid' border='0' src='${ambit_root}/images/profile/${menu_profile}/logo.png' title='Home' alt='AMBIT logo'></a>
@@ -27,7 +29,7 @@
 	data-cross-domain="false" 
 	data-configuration="config_toxtree" 
 	data-base-url="${ambit_root}">
-	<div id="logger" class="jtox-toolkit jtox-widget hidden" data-kit="log" data-resend-events="false" data-right-side="true"></div>	
+
     <div id="tt-searchbar" class="jtox-toolkit jtox-widget cc-fixed" data-kit="search"></div>
     <div id="tt-bigpane" class="cc-flex">
       <div>
