@@ -29,6 +29,11 @@
 	background: linear-gradient(top, rgba(255,255,255,.2) 0%,rgba(200,200,200,.2) 100%); /* W3C */
 }
 
+
+.jtox-foldable {
+  padding: 5px;
+}
+
 .jtox-foldable.folded>.content {
   display: none;
 }
@@ -192,11 +197,24 @@
   border: 0px;
 }
 
+.jtox-toolkit a.select-all,
+.jtox-toolkit a.unselect-all {
+  text-decoration: underline;
+}
+
 .jtox-toolkit .loading {
   background: url(../images/waiting_small.gif) right top no-repeat;
   background-size: 16px 16px;
   text-fill-color: rgba(0, 0, 0, 0);
   color: rgba(0, 0, 0, 0);
+}
+
+.jtox-toolkit input[type="password"],
+.jtox-toolkit input[type="search"],
+.jtox-toolkit input[type="text"],
+textarea,
+select {
+  margin-bottom: 10px;
 }
 
 .jtox-toolkit input[type="password"].jt-inlineaction, 
@@ -244,6 +262,10 @@
 img.jtox-smalldiagram {
   width: 125px;
   height: 125px;
+}
+
+.jtox-endpoint thead {
+  display: none;
 }
 /* toxtstudy.css - Styling for toxstudy engine
 */
@@ -423,7 +445,7 @@ div.jtox-details-table {
 }
 
 .jtox-controls {
-  padding: 10px 10px 0px 10px;
+  padding: 10px;
   vertical-align: baseline;
 }
 
@@ -557,7 +579,7 @@ td.jtox-multi table {
   height: 100%;
   width: 100%;
 }
-.jtox-logger div.icon {
+.jtox-log div.icon {
   display: inline-block;
   vertical-align: middle;
   color: rgba(0, 0, 0, 0);
@@ -565,7 +587,7 @@ td.jtox-multi table {
   height: 16px;
 }
 
-.jtox-logger .status {
+.jtox-log .status {
   background: #fff;
   position: absolute;
   top: 1px;
@@ -580,11 +602,11 @@ td.jtox-multi table {
   border-bottom: 0px;
 }
 
-.jtox-logger .jt-faded {
+.jtox-log .jt-faded {
   opacity: 0.2;
 }
 
-.jtox-logger .list-wrap {
+.jtox-log .list-wrap {
   background: #fff;
   position: absolute;
   box-sizing: border-box;
@@ -600,17 +622,17 @@ td.jtox-multi table {
   padding-left: 8px;
 }
 
-.jtox-logger .list-wrap.right-side {
+.jtox-log .list-wrap.right-side {
   border-top-right-radius: 0px;
   border-top-left-radius: 5px;
 }
 
-.jtox-logger .list-root {
+.jtox-log .list-root {
   margin-bottom: 24px;
   margin-right: 8px;
 }
 
-.jtox-logger .logline {
+.jtox-log .logline {
   margin-top: 2px;
   background: inherit;
   border: 0px;
@@ -625,11 +647,11 @@ td.jtox-multi table {
   transition: height ease 300ms;
 }
 
-.jtox-logger .logline .content {
+.jtox-log .logline .content {
   vertical-align: middle;
 }
 
-.jtox-logger .logline .details {
+.jtox-log .logline .details {
   margin-left: 18px;
   vertical-align: top;
 }
