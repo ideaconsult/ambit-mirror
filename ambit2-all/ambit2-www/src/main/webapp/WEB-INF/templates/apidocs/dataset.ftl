@@ -11,8 +11,7 @@
         "chemical/x-daylight-smiles",
         "chemical/x-inchi",
         "text/x-arff",
-        "text/x-arff-3col",
-        "text/html"
+        "text/x-arff-3col"
     ],		
     "resourcePath": "/dataset",
 	"apis": [
@@ -26,7 +25,17 @@
 			            "type": "Datasets",
 			            "nickname": "getAllDatasets",
 			            "authorizations": {},
-			            "parameters": [],
+			            "parameters": [
+							{
+							    "name": "search",
+							    "description": "Name",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "query",
+							    "allowMultiple": false
+							},			            
+							<#include "/apidocs/parameters_page.ftl" >			            
+			            ],
 			            "responseMessages": [
 			                {
 			                    "code": 404,

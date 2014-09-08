@@ -57,7 +57,9 @@ public class APIdocsResource extends FreeMarkerResource {
 			page2 = apidoc.valueOf(k2.toString());
 		} catch (Exception x) {
 		}
-		return page1==null?"apidocs/api.ftl":String.format("apidocs/%s.ftl", page1.name());
+		return page1==null?"apidocs/api.ftl":
+			   page2==null?String.format("apidocs/%s.ftl", page1.name()):
+			   String.format("apidocs/%s_%s.ftl", page1.name(),page2.name());
 	}
 	
 	@Override

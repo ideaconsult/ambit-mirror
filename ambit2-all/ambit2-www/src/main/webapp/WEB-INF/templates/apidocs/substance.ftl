@@ -7,8 +7,7 @@
     "resourcePath": "/substance",
     "produces": [
         "application/json",
-        "text/n3",
-        "text/html"
+        "text/n3"
     ],
     "apis": [
         {
@@ -23,13 +22,14 @@
                     "authorizations": {},
                     "parameters": [
                         {
-                            "name": "substanceId",
-                            "description": "ID of substance that needs to be fetched",
+                            "name": "substanceUUID",
+                            "description": "UUID of substance that needs to be fetched",
                             "required": true,
                             "type": "string",
                             "paramType": "path",
                             "allowMultiple": false
-                        }
+                        },
+                        <#include "/apidocs/parameters_page.ftl" >                        
                     ],
                     "responseMessages": [
                         {
