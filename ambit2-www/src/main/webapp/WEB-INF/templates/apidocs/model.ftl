@@ -4,8 +4,7 @@
                  "application/json",
                  "text/n3",
                  "application/rdf+xml",
-                 "text/uri-list",
-                 "text/html"
+                 "text/uri-list"
              ],		
     "resourcePath": "/model",
 	"apis": [
@@ -20,6 +19,15 @@
                     "nickname": "getAllModels",
                     "authorizations": {},
                     "parameters": [
+						{
+						    "name": "search",
+						    "description": "Name",
+						    "required": false,
+						    "type": "string",
+						    "paramType": "query",
+						    "allowMultiple": false
+						},                                 
+                       <#include "/apidocs/parameters_page.ftl" >                                   
                     ],
                     "responseMessages": [
                         {

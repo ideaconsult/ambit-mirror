@@ -13,7 +13,6 @@
         "chemical/x-inchi",
         "text/x-arff",
         "text/x-arff-3col",
-        "text/html",
         "text/uri-list"
     ],		
     "resourcePath": "/compound",

@@ -4,28 +4,28 @@
         "application/json",
         "text/n3",
         "application/rdf+xml",
-        "text/uri-list",
-        "text/html"
+        "text/uri-list"
     ],		
     "resourcePath": "/query",
 	"apis": [
      	{
-            "path": "/query/compound/search/all",
+            "path": "study",
             "operations": [
                 {
                     "method": "GET",
-                    "summary": "Exact compound search",
-                    "notes": "Returns all models",
-                    "type": "Search compound",
-                    "nickname": "searchByIdentifier",
+                    "summary": "Search substances by endpoint data",
+                    "notes": "Returns substances list",
+                    "type": "Search substance",
+                    "nickname": "searchSubstancesByEndpoint",
                     "authorizations": {},
                     "parameters": [
-                  
+
+						<#include "/apidocs/parameters_page.ftl" >				            			            
                     ],
                     "responseMessages": [
                         {
                             "code": 404,
-                            "message": "Compounds not found"
+                            "message": "Substances not found"
                         }
                     ]
                 }
