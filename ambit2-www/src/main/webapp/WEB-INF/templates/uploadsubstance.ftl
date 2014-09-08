@@ -23,11 +23,23 @@ $(document)
 		    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/uploadsubstance" title="Upload substances as defined in multiple IUCLID 5 .i5d or .i5z files">Multiple .i5z files upload</a></li>');
 		    jQuery("#breadCrumb").jBreadCrumb();
 			jQuery("#welcome").text("Substance Import");
-			 $('#fileupload').fileupload({
+			var form = $('#fileupload'); 
+			 form.fileupload({
 			        // Uncomment the following to send cross-domain cookies:
 			        //xhrFields: {withCredentials: true},
 			        url: '${ambit_root}/ui/uploadsubstance'
 		    });
+			 form.bind('fileuploadalways', function (e, data) {
+				console.log(e);
+			 });
+			 form.bind('chunkfail', function (e, data) {
+					console.log(e);
+		     });
+			 form.bind('fileuploadsubmit', function (e, data) {
+					console.log(e);
+		     });
+			 
+			 
 		    _i5.getQAOptions(_i5.qaSettings);
 });
 </script>

@@ -308,7 +308,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		};		
 		router.attach("/help", AmbitResource.class);
 		
-		router.attach("/api",new APIDocsRouter(getContext()));
+		router.attach("/api-docs",new APIDocsRouter(getContext()));
 		
 		/**
 		 *  Points to the Ontology service
@@ -1234,8 +1234,7 @@ class APIDocsRouter extends MyRouter {
 	}
 	protected void init() {
 		attachDefault(APIdocsResource.class);
-		attach("/api-docs/", APIdocsResource.class);
-		attach("/api-docs/{key1}", APIdocsResource.class);
-		attach("/api-docs/{key1}/{key2}", APIdocsResource.class);
+		attach("/{key1}", APIdocsResource.class);
+		attach("/{key1}/{key2}", APIdocsResource.class);
 	}
 }

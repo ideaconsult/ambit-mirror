@@ -1,4 +1,4 @@
-    "apiVersion": "2.5.9-SNAPSHOT",
+    "apiVersion": "${ambit_version_short}",
     "swaggerVersion": "1.2",
     "basePath": "${ambit_root}/api/api-docs",
     "produces": [
@@ -6,3 +6,4 @@
         "text/n3",
         "text/html"
     ],
+    
