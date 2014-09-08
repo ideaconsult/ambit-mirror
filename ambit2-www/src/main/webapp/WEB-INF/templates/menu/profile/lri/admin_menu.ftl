@@ -1,13 +1,15 @@
 <ul>
 	<li ><a href="${ambit_root}/substanceowner">Display substance owners</a></li>
 	
-	<li ><a href="${ambit_root}/ui/uploadsubstance">Import substance</a>
-		<ul>
-			<li ><a href="${ambit_root}/ui/uploadsubstance">Multiple files upload</a>
-			<li ><a href="${ambit_root}/ui/uploadsubstance1">Single file upload</a>
-			<li ><a href="${ambit_root}/ui/updatesubstancei5">Retrieve substance(s) from IUCLID5 server</a>
-		</ul>
-	</li>
+	<#if (ambit_datasetmgr?? && ambit_datasetmgr) || (ambit_admin?? && ambit_admin)>
+		<li ><a href="${ambit_root}/ui/uploadsubstance">Import substance</a>
+			<ul>
+				<li ><a href="${ambit_root}/ui/uploadsubstance">Multiple files upload</a>
+				<li ><a href="${ambit_root}/ui/uploadsubstance1">Single file upload</a>
+				<li ><a href="${ambit_root}/ui/updatesubstancei5">Retrieve substance(s) from IUCLID5 server</a>
+			</ul>
+		</li>
+	</#if>		
 		
 	<#if username??>
 		<#if openam_token??>
