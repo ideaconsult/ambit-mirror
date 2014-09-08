@@ -144,6 +144,7 @@ import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.task.TaskStorage;
 import ambit2.rest.task.WarmupTask;
+import ambit2.rest.ui.APIdocsResource;
 import ambit2.rest.ui.UIResource;
 import ambit2.user.aa.AMBITLoginFormResource;
 import ambit2.user.aa.AMBITLoginPOSTResource;
@@ -264,7 +265,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		getMetadataService().addExtension("cml", ChemicalMediaType.CHEMICAL_CML, true);
 		getMetadataService().addExtension("smiles", ChemicalMediaType.CHEMICAL_SMILES, true);
 
-
+		
 	}
 
 
@@ -306,6 +307,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			};
 		};		
 		router.attach("/help", AmbitResource.class);
+		
+		router.attach("/api",new APIDocsRouter(getContext()));
 		
 		/**
 		 *  Points to the Ontology service
@@ -437,8 +440,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		/**  /task  */
 		router.attach(TaskResource.resource, new TaskRouter(getContext()));
 		
-		router.attach("/ui",createAuthenticatedOpenResource(new UIRouter(getContext())));		
-
+		router.attach("/ui",createAuthenticatedOpenResource(new UIRouter(getContext())));
+		
 		/**
 		 * Queries
 		 *  /query
@@ -633,6 +636,11 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	     getLogger().info("CORS: Origin filter attached:\t"+allowedOrigins);			
 		 OriginFilter originFilter = new OriginFilter(getContext(),allowedOrigins); 
 		 originFilter.setNext(router); 
+		 /*
+		 StringWriter w = new StringWriter();
+		 printRoutes(router,"\t",w);
+		 System.out.println(w);
+		 */		 
 		 return originFilter;
 	}
 	protected Filter getBasicAuthFilter(Router router) {
@@ -1215,4 +1223,19 @@ class UpdateAuthorizer extends RoleAuthorizer {
 		return super.authorize(request, response);
 	}
 	
+}
+
+
+class APIDocsRouter extends MyRouter {
+
+	public APIDocsRouter(Context context) {
+		super(context);
+		init();
+	}
+	protected void init() {
+		attachDefault(APIdocsResource.class);
+		attach("/api-docs/", APIdocsResource.class);
+		attach("/api-docs/{key1}", APIdocsResource.class);
+		attach("/api-docs/{key1}/{key2}", APIdocsResource.class);
+	}
 }
