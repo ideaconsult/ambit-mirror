@@ -1,5 +1,12 @@
 {
 	<#include "/apidocs/version.ftl" >
+    "produces": [
+                 "application/json",
+                 "text/n3",
+                 "application/rdf+xml",
+                 "text/uri-list",
+                 "text/html"
+             ],		
     "resourcePath": "/model",
 	"apis": [
      	{
