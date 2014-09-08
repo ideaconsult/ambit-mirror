@@ -1,6 +1,6 @@
     "info": {
-        "title": "AMBIT",
-        "description": "AMBIT REST web services.  More \n    at <a href=\"http://ambit.sf.net\">http://ambit.sf.net</a> ",
+        "title": "AMBIT ",
+        "description": "AMBIT REST web services.  More \n    at <a href=\"${ambit_root}\">${ambit_root}</a> ",
         "termsOfServiceUrl": "http://ambit.sf.net",
         "contact": "jeliazkova.nina@gmail.com",
         "license": "License",
