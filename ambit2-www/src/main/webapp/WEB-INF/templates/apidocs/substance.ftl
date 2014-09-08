@@ -1,5 +1,9 @@
 {
 	<#include "/apidocs/version.ftl" >	
+    "produces": [
+                 "application/json",
+                 "text/html"
+             ],		
     "resourcePath": "/substance",
     "produces": [
         "application/json",

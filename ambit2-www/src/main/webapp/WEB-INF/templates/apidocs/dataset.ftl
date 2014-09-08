@@ -1,7 +1,41 @@
 {
 	<#include "/apidocs/version.ftl" >
+    "produces": [
+        "application/json",
+        "text/n3",
+        "application/rdf+xml",
+        "text/csv",
+        "text/plain",
+        "chemical/x-mdl-sdfile",
+        "chemical/x-cml",
+        "chemical/x-daylight-smiles",
+        "chemical/x-inchi",
+        "text/x-arff",
+        "text/x-arff-3col",
+        "text/html"
+    ],		
     "resourcePath": "/dataset",
 	"apis": [
+			{
+			    "path": "/dataset",
+			    "operations": [
+			        {
+			            "method": "GET",
+			            "summary": "List datasets",
+			            "notes": "Returns all datasets",
+			            "type": "Datasets",
+			            "nickname": "getAllDatasets",
+			            "authorizations": {},
+			            "parameters": [],
+			            "responseMessages": [
+			                {
+			                    "code": 404,
+			                    "message": "Datasets not found"
+			                }
+			            ]
+			        }
+			    ]
+			}	
     ],
 	<#include "/apidocs/info.ftl" >  
 }
