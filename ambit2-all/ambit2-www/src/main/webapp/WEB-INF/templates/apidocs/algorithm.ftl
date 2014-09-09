@@ -94,6 +94,10 @@
 							} 		            
 			            ],
 			            "responseMessages": [
+			         		{
+			        		   "code": 400,
+			        		   "message": "Invalid algorithm identifier"
+			        		},				                                 
 			                {
 			                    "code": 404,
 			                    "message": "Algorithm not found"
