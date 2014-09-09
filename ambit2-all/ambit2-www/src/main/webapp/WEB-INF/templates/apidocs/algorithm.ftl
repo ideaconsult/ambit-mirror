@@ -105,7 +105,7 @@
 			        {
 	                    "method": "POST",
 	                    "summary": "Apply the algorithm. Returns a task.",
-			            "notes": "Apply the algorithm <a href='http://opentox.org/dev/apis/api-1.2/Algorithm' target='opentox'>OpenTox Algorithm API</a>",
+			            "notes": "Applies the algorithm to a dataset and returns a task with the result (dataset or model) <a href='http://opentox.org/dev/apis/api-1.2/Algorithm' target='opentox'>OpenTox Algorithm API</a>. See the Task service how to query the task.",
 	                    "type": "void",
 	                    "nickname": "applyAlgorithm",
 	                    "consumes": [
