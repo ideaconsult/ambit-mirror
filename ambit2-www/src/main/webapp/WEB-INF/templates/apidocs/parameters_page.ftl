@@ -5,6 +5,7 @@
 			              "type": "int",
 			              "paramType": "query",
 			              "allowMultiple"  : false,
+			              "defaultValue" : "0",
                           "minimum": "0",
                           "maximum": "10000"			              
 			            },
@@ -15,6 +16,7 @@
 			              "type": "int",
 			              "paramType": "query",
 			              "allowMultiple"  : false,
+			              "defaultValue" : "10",
                           "minimum": "1",
                           "maximum": "10000"			              
 			            }	
