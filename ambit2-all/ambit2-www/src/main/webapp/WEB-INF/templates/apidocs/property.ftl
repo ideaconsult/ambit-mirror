@@ -14,7 +14,7 @@
                     "notes": "Get property",
                     "type": "Property",
                     "nickname": "getPropertyByUUID",
-                    "authorizations": {},
+                     <#include "/apidocs/authz.ftl" >
                     "parameters": [
                         {
                             "name": "property_uuid",

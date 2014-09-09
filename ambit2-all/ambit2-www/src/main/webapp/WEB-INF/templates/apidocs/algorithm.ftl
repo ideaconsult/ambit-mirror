@@ -17,7 +17,7 @@
 			            "notes": "Returns all algorithms <a href='http://opentox.org/dev/apis/api-1.2/Algorithm' target='opentox'>OpenTox Algorithm API</a>",
 			            "type": "Algorithm",
 			            "nickname": "getAllAlgorithms",
-			            "authorizations": {},
+			            <#include "/apidocs/authz.ftl" >
 			            "parameters": [
 							{
 							    "name": "search",
@@ -81,7 +81,7 @@
 			            "notes": "Returns algorithm representation <a href='http://opentox.org/dev/apis/api-1.2/Algorithm' target='opentox'>OpenTox Algorithm API</a>",
 			            "type": "Algorithm",
 			            "nickname": "getAlgorithmByID",
-			            "authorizations": {},
+			            <#include "/apidocs/authz.ftl" >
 			            "parameters": [
 							{
 							    "name": "algorithm_id",
@@ -115,8 +115,7 @@
 	                    "consumes": [
 	                        "application/x-www-form-urlencoded"
 	                    ],
-	                    "authorizations": {
-	                    },
+	                    <#include "/apidocs/authz.ftl" >
 	                    "parameters": [
 	                        {
 	                            "name": "algorithm_id",

@@ -24,7 +24,7 @@
                     "notes": "Returns compounds found",
                     "type": "Search compound",
                     "nickname": "searchByIdentifier",
-                    "authorizations": {},
+                     <#include "/apidocs/authz.ftl" >
                     "parameters": [
 			            {
 			              "name": "search",
@@ -56,7 +56,7 @@
                     "notes": "Returns similar compounds",
                     "type": "Search similar compounds",
                     "nickname": "searchBySimilarity",
-                    "authorizations": {},
+                     <#include "/apidocs/authz.ftl" >
                     "parameters": [
 			            {
 			              "name": "search",
@@ -96,7 +96,7 @@
                     "notes": "Returns compounds with the specified substructure",
                     "type": "Search substructure",
                     "nickname": "searchBySmarts",
-                    "authorizations": {},
+                     <#include "/apidocs/authz.ftl" >
                     "parameters": [
 			            {
 			              "name": "search",
