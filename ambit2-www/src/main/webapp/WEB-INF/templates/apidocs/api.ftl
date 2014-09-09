@@ -35,6 +35,10 @@
             "description": "Chemical Substances service"
         },
         {
+            "path": "/substanceowner",
+            "description": "Substance owners"
+        },        
+        {
             "path": "/property",
             "description": "Chemical substances Properties service"
         },      

@@ -31,7 +31,8 @@ public class APIdocsResource extends FreeMarkerResource {
 		substance,
 		property,
 		study,
-		query
+		query,
+		substanceowner
 	}
 	public APIdocsResource() {
 		super();
