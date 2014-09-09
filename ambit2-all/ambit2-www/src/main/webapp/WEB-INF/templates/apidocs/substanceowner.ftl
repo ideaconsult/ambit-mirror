@@ -3,7 +3,9 @@
     "produces": [
         "application/json",
         "application/x-javascript",
-        "text/x-arff"
+        "text/x-arff",
+        "text/x-arff-3col",
+        "text/csv"
     ],		
     "resourcePath": "/substanceowner",
 	"apis": [
@@ -168,5 +170,6 @@
 			}			
 				
     ],
+
 	<#include "/apidocs/info.ftl" >  
 }

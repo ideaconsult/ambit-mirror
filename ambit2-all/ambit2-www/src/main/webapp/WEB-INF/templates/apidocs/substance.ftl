@@ -129,7 +129,7 @@
 			            "method": "GET",
 			            "summary": "Get study summary for the substance",
 			            "notes": "Study summary",
-			            "type": "StudySummary",
+			            "type": "StudySummaryFacet",
 			            "nickname": "getSubstanceStudySummary",
 			            <#include "/apidocs/authz.ftl" >
 			            "parameters": [
@@ -323,5 +323,10 @@
 			}
 				
     ],
+    "models" : {
+    	"StudySummaryFacet" : {
+    		
+    	}
+    },
 	<#include "/apidocs/info.ftl" >  
 }
