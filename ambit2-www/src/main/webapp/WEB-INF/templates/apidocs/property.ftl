@@ -6,22 +6,32 @@
     "resourcePath": "/property",
 	"apis": [
      	{
-            "path": "/property",
+            "path": "/property/{property_uuid}",
             "operations": [
                 {
                     "method": "GET",
-                    "summary": "List properties",
-                    "notes": "Returns all properties",
+                    "summary": "Get property",
+                    "notes": "Get property",
                     "type": "Property",
-                    "nickname": "getAllProperties",
+                    "nickname": "getPropertyByUUID",
                     "authorizations": {},
                     "parameters": [
+                        {
+                            "name": "property_uuid",
+                            "description": "Property UUID",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        }
                     ],
                     "responseMessages": [
                         {
                             "code": 404,
-                            "message": "Properties not found"
-                        }
+                            "message": "Property not found"
+                        },
+						<#include "/apidocs/error_aa.ftl" >,
+						<#include "/apidocs/error_500.ftl" >                        
                     ]
                 }
             ]
