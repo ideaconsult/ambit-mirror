@@ -33,7 +33,9 @@
 			                {
 			                    "code": 404,
 			                    "message": "Feature not found"
-			                }
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
 			            ]
 			        }
 			    ]

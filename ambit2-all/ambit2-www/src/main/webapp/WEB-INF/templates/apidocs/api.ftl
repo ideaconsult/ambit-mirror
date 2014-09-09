@@ -4,7 +4,7 @@
     "apis": [
         {
             "path": "/compound",
-            "description": "Chemical compounds with a unique and defined chemical structure"
+            "description": "Chemical compounds service"
         },
  		{
             "path": "/query/compound",
@@ -12,11 +12,11 @@
         },           
         {
             "path": "/feature",
-            "description": "A Feature is an object,representing any kind of property, assigned to a Compound"
+            "description": "Feature service"
         },
         {
             "path": "/dataset",
-            "description": "Sets of chemical compounds and their features"
+            "description": "Dataset service"
         },   
         {
             "path": "/algorithm",
@@ -28,11 +28,11 @@
         },
         {
             "path": "/task",
-            "description": "Asynchronous jobs are handled via an intermediate Task resource"
+            "description": "Task service (asynchronous jobs)"
         },  
         {
             "path": "/substance",
-            "description": "Operations about substances"
+            "description": "Chemical substances service"
         },
         {
             "path": "/property",

@@ -26,7 +26,9 @@
                         {
                             "code": 404,
                             "message": "Substances not found"
-                        }
+                        },
+						<#include "/apidocs/error_aa.ftl" >,
+						<#include "/apidocs/error_500.ftl" >                            
                     ]
                 }
             ]

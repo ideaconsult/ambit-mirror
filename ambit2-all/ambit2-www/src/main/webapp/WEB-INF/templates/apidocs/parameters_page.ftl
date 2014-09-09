@@ -4,7 +4,9 @@
 			              "required": false,
 			              "type": "int",
 			              "paramType": "query",
-			              "allowMultiple"  : false
+			              "allowMultiple"  : false,
+                          "minimum": "0",
+                          "maximum": "10000"			              
 			            },
             			{
 			              "name": "pagesize",
@@ -12,5 +14,7 @@
 			              "required": false,
 			              "type": "int",
 			              "paramType": "query",
-			              "allowMultiple"  : false
+			              "allowMultiple"  : false,
+                          "minimum": "1",
+                          "maximum": "10000"			              
 			            }	
