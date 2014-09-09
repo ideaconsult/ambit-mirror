@@ -22,7 +22,8 @@
                             "required": true,
                             "type": "string",
                             "paramType": "path",
-                            "allowMultiple": false
+                            "allowMultiple": false,
+                            "defaultValue" : "C41308FA2D27C9F34E5B3C2DA86074C524DA8F3D"
                         }
                     ],
                     "responseMessages": [
