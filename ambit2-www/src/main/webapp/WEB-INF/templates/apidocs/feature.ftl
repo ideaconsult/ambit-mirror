@@ -202,5 +202,10 @@
 			    ]
 			}			
     ],
+    "models" : {
+    	"Feature" : {
+    		
+    	}
+    },    
 	<#include "/apidocs/info.ftl" >  
 }
