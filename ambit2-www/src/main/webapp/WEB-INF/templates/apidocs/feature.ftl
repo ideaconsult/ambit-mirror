@@ -4,7 +4,8 @@
         "application/json",
         "text/n3",
         "application/rdf+xml",
-        "text/uri-list"
+        "text/uri-list",
+        "application/x-javascript"
     ],		
     "resourcePath": "/feature",
 	"apis": [
@@ -26,7 +27,15 @@
 							    "type": "string",
 							    "paramType": "query",
 							    "allowMultiple": false
-							},			            
+							},		
+							{
+							    "name": "sameas",
+							    "description": "Endpoint URI",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "query",
+							    "allowMultiple": false
+							},									
 							<#include "/apidocs/parameters_page.ftl" >			            
 			            ],
 			            "responseMessages": [

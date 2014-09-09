@@ -1,258 +1,327 @@
 {
-	<#include "/apidocs/version.ftl" >	
-    "produces": [
-                 "application/json",
-                 "text/html"
-             ],		
-    "resourcePath": "/substance",
+	<#include "/apidocs/version.ftl" >
     "produces": [
         "application/json",
-        "text/n3"
+        "text/uri-list",
+        "image/png",
+        "application/x-javascript"
+    ],		
+    "resourcePath": "/substance",
+	"apis": [
+			{
+			    "path": "/substance",
+			    "operations": [
+			        {
+			            "method": "GET",
+			            "summary": "List substances",
+			            "notes": "Returns a list of substances, according to the search criteria",
+			            "type": "Substance",
+			            "nickname": "getSubstances",
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+							{
+							    "name": "search",
+							    "description": "Search parameter",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "query",
+							    "allowMultiple": false,
+							    "defaultValue": "formaldehyde"
+							},
+							{
+							    "name": "type",
+							    "description": "Query type",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "query",
+							    "allowMultiple": false,
+							    "defaultValue": "name",
+							    "enum" : [
+							       "name",
+							       "uuid",
+							       "CompTox",
+							       "DOI",
+							       "reliability",
+							       "purposeFlag",
+							       "studyResultType",
+							       "isRobustStudy",
+							       "citation",
+							       "topcategory",
+							       "endpointcategory",
+							       "params",
+							       "owner_name",
+							       "owner_uuid",
+							       "related",
+							       "reference",
+							       "facet"
+							    ]
+							},	
+							{
+							    "name": "compound_uri",
+							    "description": "If type=related finds all substances containing this compound; if type=reference - finds all substances with this compound as reference structure",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "query",
+							    "allowMultiple": false
+							},							
+							<#include "/apidocs/parameters_page.ftl" >			            
+			            ],
+			            "responseMessages": [
+			     			{
+			     				"code": 200,
+			     				 "message": "OK. Substance(s) found"
+			     			},				                                 
+			                {
+			                    "code": 404,
+			                    "message": "Substances not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }
+			    ]
+			},
+			{
+			    "path": "/substance/{uuid}",
+			    "operations": [
+			        {
+			            "method": "GET",
+			            "summary": "Get a substance",
+			            "notes": "Returns substance representation",
+			            "type": "Substance",
+			            "nickname": "getSubstanceByUUID",
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+			                <#include "/apidocs/parameter_substance_uuid.ftl" >
+			                ,
+							{
+							    "name": "property_uris[]",
+							    "description": "Property URIs",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "query",
+							    "allowMultiple": true
+							}							
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Invalid substance identifier"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Substance not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }
+			    ]
+			},
+			{
+			    "path": "/substance/{uuid}/studysummary",
+			    "operations": [
+			        {
+			            "method": "GET",
+			            "summary": "Get study summary for the substance",
+			            "notes": "Study summary",
+			            "type": "StudySummary",
+			            "nickname": "getSubstanceStudySummary",
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+			                  <#include "/apidocs/parameter_substance_uuid.ftl" >,
+								{
+								    "name": "top",
+								    "description": "Top endpoint category",
+								    "required": false,
+								    "type": "string",
+								    "paramType": "query",
+								    "allowMultiple": false,
+								    "enum" : ["P-CHEM","ENV FATE","ECOTOX","TOX"]
+								},
+								{
+								    "name": "category",
+								    "description": "Endpoint category (The value in the facet.category.title field)",
+								    "required": false,
+								    "type": "string",
+								    "paramType": "query",
+								    "allowMultiple": false,
+								    "defaultValue" :""
+								},
+								{
+								    "name": "property",
+								    "description": "Property UUID,  see Property service",
+								    "required": false,
+								    "type": "string",
+								    "paramType": "query",
+								    "allowMultiple": false
+								},
+								{
+								    "name": "property_uri",
+								    "description": "Property URI ${ambit_root}/property/{UUID} , see Property service",
+								    "required": false,
+								    "type": "string",
+								    "paramType": "query",
+								    "allowMultiple": false
+								}			                  
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Invalid substance identifier"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Substance not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }
+			    ]
+			},
+			{
+			    "path": "/substance/{uuid}/study",
+			    "operations": [
+			        {
+			            "method": "GET",
+			            "summary": "Get substance study",
+			            "notes": "Substance study",
+			            "type": "SubstanceStudy",
+			            "nickname": "getSubstanceStudy",
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+			                  <#include "/apidocs/parameter_substance_uuid.ftl" >,
+								{
+								    "name": "top",
+								    "description": "Top endpoint category",
+								    "required": false,
+								    "type": "string",
+								    "paramType": "query",
+								    "allowMultiple": false,
+								    "enum" : ["P-CHEM","ENV FATE","ECOTOX","TOX"]
+								},
+								{
+								    "name": "category",
+								    "description": "Endpoint category (The value in the protocol.category.code field)",
+								    "required": false,
+								    "type": "string",
+								    "paramType": "query",
+								    "allowMultiple": false,
+								    "defaultValue" :""
+								},
+								{
+								    "name": "property",
+								    "description": "Property UUID",
+								    "required": false,
+								    "type": "string",
+								    "paramType": "query",
+								    "allowMultiple": false
+								},
+								{
+								    "name": "property_uri",
+								    "description": "Property URI ${ambit_root}/property/{UUID} , see Property service",
+								    "required": false,
+								    "type": "string",
+								    "paramType": "query",
+								    "allowMultiple": false
+								},
+								<#include "/apidocs/parameters_page.ftl" >			            
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Invalid substance identifier"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Substance not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }
+			    ]
+			},			
+			{
+			    "path": "/substance/{uuid}/composition",
+			    "operations": [
+			        {
+			            "method": "GET",
+			            "summary": "Get substance composition",
+			            "notes": "Substance composition",
+			            "type": "SubstanceComposition",
+			            "nickname": "getSubstanceComposition",
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+			                  <#include "/apidocs/parameter_substance_uuid.ftl" >,
+							  <#include "/apidocs/parameters_page.ftl" >			            
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Invalid substance identifier"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Substance not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }
+			    ]
+			},
+			{
+			    "path": "/substance/{uuid}/structures",
+			    "operations": [
+			        {
+			            "method": "GET",
+			            "summary": "Get substance composition as a dataset",
+			            "notes": "Substance composition",
+			            "type": "Dataset",
+			            "nickname": "getSubstanceComposition",
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+			                  <#include "/apidocs/parameter_substance_uuid.ftl" >,
+  							  <#include "/apidocs/parameters_page.ftl" >			            
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Invalid substance identifier"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Substance not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }
+			    ]
+			}
+				
     ],
-    "apis": [
-        {
-            "path": "/substance/{substanceID}",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "Find substance by ID",
-                    "notes": "Returns a substance based on ID",
-                    "type": "Substance",
-                    "nickname": "getSubstanceById",
-                     <#include "/apidocs/authz.ftl" >
-                    "parameters": [
-                        {
-                            "name": "substanceUUID",
-                            "description": "UUID of substance that needs to be fetched",
-                            "required": true,
-                            "type": "string",
-                            "paramType": "path",
-                            "allowMultiple": false
-                        },
-                        <#include "/apidocs/parameters_page.ftl" >                        
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 400,
-                            "message": "Invalid ID supplied"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Substance not found"
-                        }
-                    ]
-                },
-                {
-                    "method": "POST",
-                    "summary": "Updates a substance in the store with form data",
-                    "notes": "",
-                    "type": "void",
-                    "nickname": "updateSubstanceWithForm",
-                    "consumes": [
-                        "application/x-www-form-urlencoded"
-                    ],
-                    "authorizations": {
-                        "oauth2": [
-                            {
-                                "scope": "write:substances",
-                                "description": "modify substances in your account"
-                            }
-                        ]
-                    },
-                    "parameters": [
-                        {
-                            "name": "substanceID",
-                            "description": "ID of substance that needs to be updated",
-                            "required": true,
-                            "type": "string",
-                            "paramType": "path",
-                            "allowMultiple": false
-                        },
-                        {
-                            "name": "name",
-                            "description": "Updated name of the substance",
-                            "required": false,
-                            "type": "string",
-                            "paramType": "form",
-                            "allowMultiple": false
-                        },
-                        {
-                            "name": "status",
-                            "description": "Updated status of the substance",
-                            "required": false,
-                            "type": "string",
-                            "paramType": "form",
-                            "allowMultiple": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 405,
-                            "message": "Invalid input"
-                        }
-                    ]
-                },
-                {
-                    "method": "DELETE",
-                    "summary": "Deletes a substance",
-                    "notes": "",
-                    "type": "void",
-                    "nickname": "deleteSubstance",
-                    <#include "/apidocs/authz.ftl" >
-                    "parameters": [
-                        {
-                            "name": "substanceID",
-                            "description": "Substance id to delete",
-                            "required": true,
-                            "type": "string",
-                            "paramType": "path",
-                            "allowMultiple": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 400,
-                            "message": "Invalid substance value"
-                        }
-                    ]
-                }
-                
-            ]
-        },
-        {
-            "path": "/substance",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "Add a new substance(s)",
-                    "notes": "",
-                    "type": "void",
-                    "nickname": "addSubstance",
-                    "consumes": [
-                        "application/json",
-                        "text/csv"
-                    ],
-                     <#include "/apidocs/authz.ftl" >
-                    "parameters": [
-                        {
-                            "name": "body",
-                            "description": "substance object that needs to be added to the store",
-                            "required": true,
-                            "type": "substance",
-                            "paramType": "body",
-                            "allowMultiple": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 405,
-                            "message": "Invalid input"
-                        }
-                    ]
-                },
-                {
-                    "method": "PUT",
-                    "summary": "Update an existing substance",
-                    "notes": "",
-                    "type": "void",
-                    "nickname": "updatesubstance",
-                     <#include "/apidocs/authz.ftl" >
-                    "parameters": [
-                        {
-                            "name": "body",
-                            "description": "substance object that needs to be updated in the store",
-                            "required": true,
-                            "type": "substance",
-                            "paramType": "body",
-                            "allowMultiple": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 400,
-                            "message": "Invalid ID supplied"
-                        },
-                        {
-                            "code": 404,
-                            "message": "substance not found"
-                        },
-                        {
-                            "code": 405,
-                            "message": "Validation exception"
-                        }
-                    ]
-                }
-            ]
-        }
-    ],
-    "models": {
-        "Tag": {
-            "id": "Tag",
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "substance": {
-            "id": "substance",
-            "required": [
-                "id",
-                "name"
-            ],
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "format": "int64",
-                    "description": "unique identifier for the substance",
-                    "minimum": "0.0",
-                    "maximum": "100.0"
-                },
-                "category": {
-                    "$ref": "Category"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "photoUrls": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "tags": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "Tag"
-                    }
-                },
-                "status": {
-                    "type": "string",
-                    "description": "substance status",
-                    "enum": [
-                        "available",
-                        "pending",
-                        "sold"
-                    ]
-                }
-            }
-        },
-        "Category": {
-            "id": "Category",
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        }
-    },
-    	<#include "/apidocs/info.ftl" >  
+	<#include "/apidocs/info.ftl" >  
 }
