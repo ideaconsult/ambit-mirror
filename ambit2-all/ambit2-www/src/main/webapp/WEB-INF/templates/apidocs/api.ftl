@@ -4,7 +4,7 @@
     "apis": [
         {
             "path": "/compound",
-            "description": "Chemical compounds service"
+            "description": "OpenTox Chemical Compounds service"
         },
  		{
             "path": "/query/compound",
@@ -12,31 +12,31 @@
         },           
         {
             "path": "/feature",
-            "description": "Feature service"
+            "description": "OpenTox Feature service"
         },
         {
             "path": "/dataset",
-            "description": "Dataset service"
+            "description": "OpenTox Dataset service"
         },   
         {
             "path": "/algorithm",
-            "description": "OpenTox algorithms"
+            "description": "OpenTox Algorithms service"
         },
         {
             "path": "/model",
-            "description": "OpenTox prediction models"
+            "description": "OpenTox Prediction Models service"
         },
         {
             "path": "/task",
-            "description": "Task service (asynchronous jobs)"
+            "description": "OpenTox Task service (asynchronous jobs)"
         },  
         {
             "path": "/substance",
-            "description": "Chemical substances service"
+            "description": "Chemical Substances service"
         },
         {
             "path": "/property",
-            "description": "Operations about properties"
+            "description": "Chemical substances Properties service"
         },      
         {
             "path": "/query",
@@ -44,8 +44,6 @@
         }
                                  
     ],
-    "authorizations": {
-       
-    },
+	<#include "/apidocs/authz.ftl" >
 	<#include "/apidocs/info.ftl" >  
 }
