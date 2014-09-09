@@ -19,7 +19,7 @@
                     "notes": "Returns a substance based on ID",
                     "type": "Substance",
                     "nickname": "getSubstanceById",
-                    "authorizations": {},
+                     <#include "/apidocs/authz.ftl" >
                     "parameters": [
                         {
                             "name": "substanceUUID",
@@ -98,14 +98,7 @@
                     "notes": "",
                     "type": "void",
                     "nickname": "deleteSubstance",
-                    "authorizations": {
-                        "oauth2": [
-                            {
-                                "scope": "write:substances",
-                                "description": "modify substances in your account"
-                            }
-                        ]
-                    },
+                    <#include "/apidocs/authz.ftl" >
                     "parameters": [
                         {
                             "name": "substanceID",
@@ -139,14 +132,7 @@
                         "application/json",
                         "text/csv"
                     ],
-                    "authorizations": {
-                        "oauth2": [
-                            {
-                                "scope": "write:substances",
-                                "description": "modify substances in your account"
-                            }
-                        ]
-                    },
+                     <#include "/apidocs/authz.ftl" >
                     "parameters": [
                         {
                             "name": "body",
@@ -170,7 +156,7 @@
                     "notes": "",
                     "type": "void",
                     "nickname": "updatesubstance",
-                    "authorizations": {},
+                     <#include "/apidocs/authz.ftl" >
                     "parameters": [
                         {
                             "name": "body",

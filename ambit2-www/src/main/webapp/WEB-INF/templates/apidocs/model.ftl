@@ -17,7 +17,7 @@
 		            "notes": "Returns list of models <a href='http://opentox.org/dev/apis/api-1.2/Model' target='opentox'>OpenTox Model API</a>",                    
                     "type": "Model",
                     "nickname": "getModels",
-                    "authorizations": {},
+                    <#include "/apidocs/authz.ftl" >
                     "parameters": [
 						{
 						    "name": "search",
@@ -70,7 +70,7 @@
 		            "notes": "Returns model representation <a href='http://opentox.org/dev/apis/api-1.2/Model' target='opentox'>OpenTox Model API</a>",
 		            "type": "Model",
 		            "nickname": "getModelByID",
-		            "authorizations": {},
+		            <#include "/apidocs/authz.ftl" >
 		            "parameters": [
 						{
 						    "name": "id",
@@ -109,8 +109,7 @@
                     "consumes": [
                         "application/x-www-form-urlencoded"
                     ],
-                    "authorizations": {
-                    },
+                    <#include "/apidocs/authz.ftl" >
                     "parameters": [
                         {
                             "name": "id",
@@ -170,8 +169,7 @@
                     "consumes": [
                          "application/x-www-form-urlencoded"                                 
                     ],
-                    "authorizations": {
-                    },
+                    <#include "/apidocs/authz.ftl" >
                     "parameters": [
                         {
                             "name": "id",
@@ -208,7 +206,7 @@
 	            "notes": "Returns list of features used as independent variables <a href='http://opentox.org/dev/apis/api-1.2/Model' target='opentox'>OpenTox Model API</a>",
 	            "type": "Feature",
 	            "nickname": "getModelIndependentVariables",		   		
-		   		"authorizations": {},
+	            <#include "/apidocs/authz.ftl" >
 	            "parameters": [
 	               			{
 							    "name": "id",
@@ -250,7 +248,7 @@
 	            "notes": "Returns list of features used as dependent variables <a href='http://opentox.org/dev/apis/api-1.2/Model' target='opentox'>OpenTox Model API</a>",
 	            "type": "Feature",
 	            "nickname": "getModelDependentVariables",		   		
-		   		"authorizations": {},
+	            <#include "/apidocs/authz.ftl" >
 	            "parameters": [
 	               			{
 							    "name": "id",
@@ -292,7 +290,7 @@
 	            "notes": "Returns list of features used as predicted variables <a href='http://opentox.org/dev/apis/api-1.2/Model' target='opentox'>OpenTox Model API</a>",
 	            "type": "Feature",
 	            "nickname": "getModelPredictedVariables",		   		
-		   		"authorizations": {},
+	            <#include "/apidocs/authz.ftl" >
 	            "parameters": [
 	               			{
 							    "name": "id",

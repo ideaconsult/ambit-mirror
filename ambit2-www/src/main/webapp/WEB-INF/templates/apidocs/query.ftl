@@ -17,7 +17,7 @@
                     "notes": "Returns substances list",
                     "type": "Search substance",
                     "nickname": "searchSubstancesByEndpoint",
-                    "authorizations": {},
+                     <#include "/apidocs/authz.ftl" >
                     "parameters": [
 
 						<#include "/apidocs/parameters_page.ftl" >				            			            
