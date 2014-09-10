@@ -11,7 +11,10 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.ILiteratureEntry;
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.data.substance.SubstanceProperty;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.study.ReadSubstanceProperty;
 import ambit2.rest.ChemicalMediaType;
@@ -41,6 +44,9 @@ public class SubstancePropertyResource extends QueryResource<IQueryRetrieval<Pro
 
 	public final static String substanceproperty = "/property";
 	public final static String substancepropertyid = "idproperty";
+	public final static String topcategory = "topcategory";
+	public final static String endpointcategory = "endpointcategory";
+	public final static String endpoint = "endpoint";
 	
 	public SubstancePropertyResource() {
 		super();
@@ -95,11 +101,19 @@ public class SubstancePropertyResource extends QueryResource<IQueryRetrieval<Pro
 	@Override
 	protected IQueryRetrieval<Property> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
+		Object topcategory = request.getAttributes().get(SubstancePropertyResource.topcategory);
+		Object endpointcategory = request.getAttributes().get(SubstancePropertyResource.endpointcategory);
+		Object endpoint = request.getAttributes().get(SubstancePropertyResource.endpoint);
 		Object key = request.getAttributes().get(substancepropertyid);
-		if (key==null)
+		if (topcategory==null || endpointcategory==null || endpoint==null || key==null)
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		
+		ILiteratureEntry ref = LiteratureEntry.getInstance(endpoint.toString(),"DEFAULT");
+		SubstanceProperty p = new SubstanceProperty(topcategory.toString(),
+						endpointcategory.toString(),endpoint.toString(),null,ref);
+		p.setIdentifier(key.toString());
 		ReadSubstanceProperty query = new ReadSubstanceProperty();
-		query.setFieldname(key.toString());
+		query.setFieldname(p);
 		return query;
 	}
 	
