@@ -82,11 +82,12 @@
 			        {
 			            "method": "POST",
 			            "summary": "Import substance(s) and studies",
-			            "notes": "Import substance(s) and studies",
+			            "notes": "Import substance(s) and studies. Supports IUCLID5 <a href='http://iuclid.eu/index.php?fuseaction=home.format'>*.i5z</a> files and custom <a href='https://github.com/ideaconsult/Protein_Corona'>12 line header</a> CSV files",
 			            "type": "Task",
 			            "nickname": "uploadSubstance",
 		                "consumes": [
-		                       "multipart/form-data"
+		                       "multipart/form-data",
+		                       "application/x-www-form-urlencoded"
 		                ],			            
 			            <#include "/apidocs/authz.ftl" >
 			            "parameters": [
@@ -140,7 +141,7 @@
 							    "required": false,
 							    "type": "string",
 							    "paramType": "form",
-							    "allowMultiple": false,
+							    "allowMultiple": true,
 							    "defaultValue": "name",
 							    "enum" : [
 							       "921","1590","1661","8108","NOT_SPECIFIED","null"	
@@ -152,7 +153,7 @@
 							    "required": false,
 							    "type": "string",
 							    "paramType": "form",
-							    "allowMultiple": false,
+							    "allowMultiple": true,
 							    "defaultValue": "name",
 							    "enum" : [
 							       "1895","1896","2303","2304","14","1342","1173","NOT_SPECIFIED","null"						       
@@ -164,7 +165,7 @@
 							    "required": false,
 							    "type": "string",
 							    "paramType": "form",
-							    "allowMultiple": false,
+							    "allowMultiple": true,
 							    "defaultValue": "name",
 							    "enum" : [
 							       "2480","2158","NOT_SPECIFIED","null"						       
@@ -176,7 +177,7 @@
 							    "required": false,
 							    "type": "string",
 							    "paramType": "form",
-							    "allowMultiple": false,
+							    "allowMultiple": true,
 							    "defaultValue": "name",
 							    "enum" : [
 							       "16","18","22","24","1342","NOT_SPECIFIED", "null"							       
@@ -188,7 +189,7 @@
 							    "required": false,
 							    "type": "string",
 							    "paramType": "form",
-							    "allowMultiple": false,
+							    "allowMultiple": true,
 							    "defaultValue": "name",
 							    "enum" : [
 							         "1586","266","1433","1486","1542","811","1342","NOT_SPECIFIED","null"
@@ -280,7 +281,8 @@
 								    "type": "string",
 								    "paramType": "query",
 								    "allowMultiple": false,
-								    "defaultValue" :""
+								    "defaultValue" :"",
+								    <#include "/apidocs/parameter_endpointcategory_enum.ftl" >
 								},
 								{
 								    "name": "property",
@@ -346,7 +348,8 @@
 								    "type": "string",
 								    "paramType": "query",
 								    "allowMultiple": false,
-								    "defaultValue" :""
+								    "defaultValue" :"",
+								    <#include "/apidocs/parameter_endpointcategory_enum.ftl" >
 								},
 								{
 								    "name": "property",
