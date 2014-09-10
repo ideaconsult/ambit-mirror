@@ -19,4 +19,9 @@ public class ReactionGroup
 	public void setReactions(ArrayList<ReactionData> reactions) {
 		this.reactions = reactions;
 	}
+	
+	public void addNewReaction(ReactionData rData)
+	{
+		reactions.add(rData);
+	}
 }

@@ -33,14 +33,22 @@ public class ReactionSet
 		this.name = name;
 	}
 	
-	public void addNewGroup()
+	public void addNewGroup(ReactionData rData)
 	{
 		//TODO
 	}
 	
-	public void addNewReaction()
+	public void addNewReaction(ReactionData rData)
 	{
 		//TODO
+	}
+	
+	private boolean containsGroup(String group)
+	{
+		for (int i = 0; i < reactionGroups.size(); i++)
+			if (group.equals(reactionGroups.get(i).getName()))
+				return true;
+		return false;
 	}
 	
 	
