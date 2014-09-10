@@ -6,6 +6,7 @@ public class ReactionSet
 {	
 	
 	private String name = null;
+	private String info = null;
 	private ArrayList<ReactionData> reactions = new ArrayList<ReactionData>();
 	private ArrayList<ReactionGroup> reactionGroups = new ArrayList<ReactionGroup>();
 
@@ -33,22 +34,65 @@ public class ReactionSet
 		this.name = name;
 	}
 	
-	public void addNewGroup(ReactionData rData)
-	{
-		//TODO
-	}
-	
+	/**
+	 * 
+	 * @param rData
+	 * This function analyses rData object and creates group or fill group info if needed
+	 * Also reaction data is added into the proper group and default reaction set.
+	 */
 	public void addNewReaction(ReactionData rData)
-	{
-		//TODO
+	{	
+		if (rData.getSmirks() == null) //rdo object contains info for a set or a group within a set
+		{	
+			if (rData.getGroup() == null)
+			{
+				info = rData.getInfo();
+			}
+			else
+			{
+				//This is info for an existing group or new group is created
+				ReactionGroup group = findReactionGroup(rData.getGroup());
+				if (group == null)
+				{
+					group = new ReactionGroup();
+					reactionGroups.add(group);
+				}
+				
+				group.setInfo(rData.getInfo());
+			}
+		}
+		else //Adding new reaction
+		{
+			if (rData.getGroup() == null)
+				reactions.add(rData);
+			else
+			{
+				ReactionGroup group = findReactionGroup(rData.getGroup());
+				if (group == null)
+				{
+					group = new ReactionGroup();
+					reactionGroups.add(group);
+				}
+				group.addNewReaction(rData);
+			}
+		}
+		
 	}
 	
-	private boolean containsGroup(String group)
+	private ReactionGroup findReactionGroup(String groupName)
 	{
-		for (int i = 0; i < reactionGroups.size(); i++)
-			if (group.equals(reactionGroups.get(i).getName()))
-				return true;
-		return false;
+		for (ReactionGroup group : reactionGroups)
+			if (group.getName().equals(groupName))
+				return group;
+		return null;
+	}
+
+	public String getInfo() {
+		return info;
+	}
+
+	public void setInfo(String info) {
+		this.info = info;
 	}
 	
 	

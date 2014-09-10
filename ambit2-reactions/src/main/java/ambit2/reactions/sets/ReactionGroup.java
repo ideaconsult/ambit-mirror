@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 public class ReactionGroup 
 {
-	private String name = "";
+	private String name = null;
+	private String info = null;
 	private ArrayList<ReactionData> reactions = new ArrayList<ReactionData>();
 	
 	public String getName() {
@@ -18,6 +19,12 @@ public class ReactionGroup
 	}
 	public void setReactions(ArrayList<ReactionData> reactions) {
 		this.reactions = reactions;
+	}
+	public String getInfo() {
+		return info;
+	}
+	public void setInfo(String info) {
+		this.info = info;
 	}
 	
 	public void addNewReaction(ReactionData rData)
