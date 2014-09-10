@@ -6,7 +6,7 @@
     "resourcePath": "/property",
 	"apis": [
      	{
-            "path": "/property/{property_uuid}",
+            "path": "/property/{topcategory}/{endpointcategory}/{endpoint}/{property_uuid}",
             "operations": [
                 {
                     "method": "GET",
@@ -16,6 +16,35 @@
                     "nickname": "getPropertyByUUID",
                      <#include "/apidocs/authz.ftl" >
                     "parameters": [
+   								{
+								    "name": "topcategory",
+								    "description": "Top endpoint category",
+								    "required": false,
+								    "type": "string",
+								    "paramType": "path",
+								    "allowMultiple": false,
+								    "defaultValue" : "ECOTOX",
+								    "enum" : ["P-CHEM","ENV FATE","ECOTOX","TOX"]
+								},
+								{
+								    "name": "endpointcategory",
+								    "description": "Endpoint category",
+								    "required": false,
+								    "type": "string",
+								    "paramType": "path",
+								    "allowMultiple": false,
+								    "defaultValue" :"EC_FISHTOX_SECTION",
+								    <#include "/apidocs/parameter_endpointcategorysection_enum.ftl" >
+								},       
+								{
+								    "name": "endpoint",
+								    "description": "Endpoint name",
+								    "required": false,
+								    "type": "string",
+								    "paramType": "path",
+								    "allowMultiple": false,
+								    "defaultValue" :"LC50"
+								},    								
                         {
                             "name": "property_uuid",
                             "description": "Property UUID",
