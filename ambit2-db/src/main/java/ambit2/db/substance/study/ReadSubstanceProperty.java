@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import ambit2.base.data.I5Utils;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
@@ -15,7 +16,7 @@ import ambit2.base.data.substance.SubstanceProperty;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.AbstractPropertyRetrieval;
 
-public class ReadSubstanceProperty extends AbstractPropertyRetrieval<String, Profile<Property>, StringCondition> {
+public class ReadSubstanceProperty extends AbstractPropertyRetrieval<SubstanceProperty, Profile<Property>, StringCondition> {
 	/**
 	 * 
 	 */
@@ -24,7 +25,7 @@ public class ReadSubstanceProperty extends AbstractPropertyRetrieval<String, Pro
 	private static String sql = 
 	"select p.topcategory,p.endpointcategory,guidance,hex(endpointhash) hash,e.endpoint effectendpoint,unit,conditions from\n"+ 
 	"substance_protocolapplication p join substance_experiment e on p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"+
-	"where endpointhash=unhex(?) limit 1";
+	"where p.topcategory=? and p.endpointcategory=? and e.endpoint=? and endpointhash=unhex(?) limit 1";
 	
 	
 	@Override
@@ -34,21 +35,30 @@ public class ReadSubstanceProperty extends AbstractPropertyRetrieval<String, Pro
 
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
+		if ((getFieldname()==null) ||
+			(getFieldname().getTopcategory()==null) ||
+			(getFieldname().getEndpointcategory()==null) ||
+			(getFieldname().getTitle()==null) ||
+			(getFieldname().getIdentifier()==null)
+			) throw new AmbitException("Empty property id");
+		
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<String>(String.class, getFieldname()));
+		params.add(new QueryParam<String>(String.class, getFieldname().getTopcategory()));
+		params.add(new QueryParam<String>(String.class, getFieldname().getEndpointcategory()));
+		params.add(new QueryParam<String>(String.class, getFieldname().getTitle()));
+		params.add(new QueryParam<String>(String.class, getFieldname().getIdentifier()));
 		return params;
 	}
 	
 	@Override
 	public Property getObject(ResultSet rs) throws AmbitException {
 		try {
-			LiteratureEntry ref = new LiteratureEntry(rs.getString(3), rs.getString(4));
+			LiteratureEntry ref = new LiteratureEntry(rs.getString(5), rs.getString(3));
 			ref.setType(_type.Substance);
-			SubstanceProperty p = new SubstanceProperty(rs.getString(5), rs.getString(6), ref);
+			SubstanceProperty p = new SubstanceProperty(
+					rs.getString(1),rs.getString(2),
+					rs.getString(5), rs.getString(6), ref);
 			p.setIdentifier(rs.getString(4));
-			
-			p.setLabel(String.format("http://www.opentox.org/echaEndpoints.owl#%s",rs.getString(2).replace("_SECTION", "")));
-			//p.setLabel(Property.rs.getString(1)+"/"+rs.getString(2));
 			return p;
 		} catch (SQLException x) {
 			throw new AmbitException(x);

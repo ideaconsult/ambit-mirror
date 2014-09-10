@@ -378,7 +378,13 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			 *  /property/{id}
 			 */
 			router.attach(SubstancePropertyResource.substanceproperty,SubstancePropertyResource.class);
-			router.attach(String.format("%s/{%s}",SubstancePropertyResource.substanceproperty,SubstancePropertyResource.substancepropertyid),SubstancePropertyResource.class);
+			router.attach(String.format("%s/{%s}/{%s}/{%s}/{%s}",
+					SubstancePropertyResource.substanceproperty,
+					SubstancePropertyResource.topcategory,
+					SubstancePropertyResource.endpointcategory,
+					SubstancePropertyResource.endpoint,
+					SubstancePropertyResource.substancepropertyid),
+					SubstancePropertyResource.class);
 			
 			/**
 			 * /substance/

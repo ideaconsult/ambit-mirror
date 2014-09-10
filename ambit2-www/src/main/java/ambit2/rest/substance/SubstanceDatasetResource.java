@@ -2,6 +2,7 @@ package ambit2.rest.substance;
 
 import java.io.StringReader;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import net.idea.modbcum.i.IQueryCondition;
@@ -17,13 +18,14 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.ILiteratureEntry;
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
-import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.ProtocolEffectRecord;
 import ambit2.base.data.substance.SubstanceName;
 import ambit2.base.data.substance.SubstanceProperty;
@@ -131,16 +133,22 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 					if (detail.getTextValue() != null && detail.getTextValue().toString().startsWith("{")) {
 
 						JsonNode node = dx.readTree(new StringReader(detail.getTextValue().toString()));
+
+						List<String> guideline = detail.getProtocol().getGuideline();
+						ILiteratureEntry ref = LiteratureEntry.getInstance(detail.getEndpoint(),
+								guideline==null?null:guideline.size()==0?null:guideline.get(0));
 						
 						Iterator<Entry<String,JsonNode>> i = node.getFields();
 						while (i.hasNext()) {
 							Entry<String,JsonNode> val = i.next();
 							
-							SubstanceProperty key = new SubstanceProperty(val.getKey(),detail.getSampleID());
+							SubstanceProperty key = new SubstanceProperty(
+									detail.getProtocol().getTopCategory(),
+									detail.getProtocol().getCategory(),
+									val.getKey(),detail.getUnit(),
+									ref);
 							key.setIdentifier(detail.getSampleID()+"/" + val.getKey());
-							key.setUnits(detail.getUnit());
-							key.setLabel(String.format("http://www.opentox.org/echaEndpoints.owl#%s",
-									detail.getProtocol().getCategory().replace("_SECTION", "")));
+
 							groupProperties.add(key);
 							if (val.getValue().get("loValue")!=null) {
 								master.setProperty(key, val.getValue().get("loValue").asInt());
@@ -188,12 +196,17 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 							
 						}
 
-						SubstanceProperty key = new SubstanceProperty(b.toString(),detail.getSampleID());
+						List<String> guideline = detail.getProtocol().getGuideline();
+						ILiteratureEntry ref = LiteratureEntry.getInstance(detail.getEndpoint(),
+								guideline==null?null:guideline.size()==0?null:guideline.get(0));
+						
+						SubstanceProperty key = new SubstanceProperty(
+								detail.getProtocol().getTopCategory(),
+								detail.getProtocol().getCategory(),
+								b.toString(),detail.getUnit(),ref
+								);
 						key.setIdentifier(detail.getSampleID());
-						key.setUnits(detail.getUnit());
 						key.setAnnotations(ann);
-						key.setLabel(String.format("http://www.opentox.org/echaEndpoints.owl#%s",
-								detail.getProtocol().getCategory().replace("_SECTION", "")));
 						groupProperties.add(key);
 						if (detail.getLoValue() == null) {
 							master.setProperty(key, detail.getTextValue());
