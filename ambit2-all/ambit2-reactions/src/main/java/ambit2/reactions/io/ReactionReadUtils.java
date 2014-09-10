@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import ambit2.reactions.GenericParserUtils;
 import ambit2.reactions.GenericRuleMetaInfo;
+import ambit2.reactions.sets.ReactionData;
 import ambit2.reactions.sets.ReactionSet;
 
 public class ReactionReadUtils 
@@ -42,6 +43,8 @@ public class ReactionReadUtils
 		}
 	}
 	
+	
+	String curLine = "";
 	ArrayList<String> errors = new ArrayList<String>();
 	HashMap<String, ReactionSet> workSets = new  HashMap<String, ReactionSet>();
 	
@@ -97,11 +100,11 @@ public class ReactionReadUtils
 		while (f.getFilePointer() < length)
 		{	
 			String line = f.readLine();
-			String ruleString = line.trim();
-			if (!ruleString.isEmpty())
+			curLine = line.trim();
+			if (!curLine.isEmpty())
 			{	
 				ReactionDataObject rdo = new ReactionDataObject();
-				parser.parseRule(ruleString, rdo);
+				parser.parseRule(curLine, rdo);
 				if (parser.getErrors().size() > 0)
 					errors.addAll(parser.getErrors());
 				else
@@ -121,17 +124,41 @@ public class ReactionReadUtils
 		//TODO
 		return null;
 	}
-	
+		
 	private void addReaction(ArrayList<ReactionSet> reactionSets, ReactionDataObject rdo)
 	{
 		System.out.println(rdo.toString());
 		
-		if (rdo.smirks == null) //it is info for a set or group with a set
-		{
-			
+		if (rdo.set == null)
+		{	
+			errors.add("Missing keyword SET in line: " + curLine);
+			return;
 		}
 		
-		//TODO
+		//Create and register new reaction set if this set is handled for the first time
+		ReactionSet s = workSets.get(rdo.set);
+		if (s==null)
+		{	
+			s = new ReactionSet();
+			s.setName(rdo.set);
+			reactionSets.add(s);
+			workSets.put(rdo.set, s);
+		}
+		
+		//Adding new reaction / set info / group info	
+		s.addNewReaction(getReactionData(rdo));
+		
+	}
+	
+	ReactionData getReactionData(ReactionDataObject rdo)
+	{
+		ReactionData rd = new ReactionData();
+		rd.setName(rdo.name);
+		rd.setGroup(rdo.group);
+		rd.setSmirks(rdo.smirks);
+		rd.setType(rdo.type);
+		rd.setInfo(rdo.info);
+		return rd;
 	}
 	
 	private String getAllErrors()
