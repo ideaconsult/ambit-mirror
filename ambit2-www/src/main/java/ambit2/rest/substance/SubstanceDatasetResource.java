@@ -159,7 +159,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 							}
 						}
 					} else {
-						boolean isTextValue = (detail.getLoValue() == null);
+						boolean isTextValue = ((detail.getLoValue() == null) && (detail.getUpValue()==null));
 						if (isTextValue && removeStringProperties) return master;
 						
 						JsonNode conditions = dx.readTree(new StringReader(detail.getConditions()));
@@ -208,11 +208,11 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 						key.setIdentifier(detail.getSampleID());
 						key.setAnnotations(ann);
 						groupProperties.add(key);
-						if (detail.getLoValue() == null) {
+						if ((detail.getLoValue()) == null && (detail.getUpValue()==null)) {
 							master.setProperty(key, detail.getTextValue());
 							key.setClazz(String.class);
 						} else {
-							master.setProperty(key, detail.getLoValue());
+							master.setProperty(key, detail.getLoValue()==null?detail.getUpValue():detail.getLoValue());
 							key.setClazz(Number.class);
 						}	
 					}
