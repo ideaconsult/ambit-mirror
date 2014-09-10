@@ -43,6 +43,7 @@ public class ReactionReadUtils
 	}
 	
 	ArrayList<String> errors = new ArrayList<String>();
+	HashMap<String, ReactionSet> workSets = new  HashMap<String, ReactionSet>();
 	
 	
 	/*
@@ -83,6 +84,7 @@ public class ReactionReadUtils
 	public ArrayList<ReactionSet> loadReactionsFromRuleFormat(String fileName) throws Exception
 	{
 		errors.clear();
+		workSets.clear();
 		GenericParserUtils parser = new GenericParserUtils();
 		parser.setMetaInfo(getReactionsMetaInfo());
 		
@@ -114,10 +116,20 @@ public class ReactionReadUtils
 		return reactionSets;
 	}
 	
+	public ArrayList<ReactionSet> loadReactionsFromTabulatedText(String fileName) throws Exception
+	{
+		//TODO
+		return null;
+	}
+	
 	private void addReaction(ArrayList<ReactionSet> reactionSets, ReactionDataObject rdo)
 	{
-		//System.out.println(rdo.toString());
-		HashMap<String, ReactionSet> sets = new  HashMap<String, ReactionSet>();
+		System.out.println(rdo.toString());
+		
+		if (rdo.smirks == null) //it is info for a set or group with a set
+		{
+			
+		}
 		
 		//TODO
 	}
