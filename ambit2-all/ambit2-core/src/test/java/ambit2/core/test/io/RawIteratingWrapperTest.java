@@ -1,5 +1,8 @@
 package ambit2.core.test.io;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Iterator;
@@ -18,6 +21,7 @@ import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.io.RawIteratingWrapper;
 import ambit2.core.io.ToxcastAssayReader;
+import ambit2.core.io.ZipReader;
 import ambit2.core.io.dx.DXParser;
 import ambit2.core.processors.StructureNormalizer;
 
@@ -99,5 +103,43 @@ public class RawIteratingWrapperTest {
 		}
 		Assert.assertEquals(1,count);
 		reader.close();
-	}	
+	}
+	
+	public static void main(String[] args) {
+		if (args==null || args.length==0) System.exit(-1);
+		
+		File file = new File(args[0]);
+		RawIteratingSDFReader reader = null;
+		try {
+			reader = new RawIteratingSDFReader(new FileReader(file));
+			int count = 0;
+			
+			long start = System.currentTimeMillis();
+			long now = System.currentTimeMillis();
+			long startRead = start;
+			while (reader.hasNext()) {
+				IStructureRecord mol = reader.nextRecord();
+				
+			//System.out.println(mol.getContent());
+				
+				count++;
+				if ((count % 1000)==0) {
+					now = System.currentTimeMillis();
+					System.out.print(count);
+					System.out.print("\t");
+					System.out.println((now-start)/100.0);
+					start = now;		
+				}
+			}
+			now = System.currentTimeMillis();
+			System.out.println(count);
+			System.out.print(now-startRead);
+			System.out.println(" msec");
+		} catch (Exception x) {
+			x.printStackTrace();
+		} finally {
+			try {if (reader != null) reader.close();} catch(Exception x) {}
+		}
+		
+	}
 }
