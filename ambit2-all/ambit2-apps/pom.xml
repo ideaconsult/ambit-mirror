@@ -325,6 +325,7 @@
     <module>ambit2-user</module>
     <module>ambit2-dbsubstance</module>
     <module>ambit2-dbisatab</module>
+    <module>ambit2-dbcli</module>
   </modules>
   <dependencies>
     <!--  Ambit -->
