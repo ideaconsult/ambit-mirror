@@ -1,4 +1,4 @@
-package ambit2.db.update.assessment;
+package ambit2.db.update.queryfolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,15 +10,15 @@ import ambit2.db.SessionID;
 import ambit2.db.update.AbstractUpdate;
 
 /**
- * Delete an assessment
+ * Delete an entire query folder
  * @author nina
  *
  */
-public class DeleteAssessment extends AbstractUpdate<AmbitUser, SessionID> {
+public class DeleteQueryFolder extends AbstractUpdate<AmbitUser, SessionID> {
 	public static final String sql = "delete from sessions where user_name=? and idsessions=?";
 	public static final String sql_current_user = "delete from sessions where user_name=(SUBSTRING_INDEX(user(),'@',1)) and idsessions=?";
 	
-	public DeleteAssessment(AmbitUser user, SessionID id) {
+	public DeleteQueryFolder(AmbitUser user, SessionID id) {
 		super();
 		setGroup(user);
 		setObject(id);

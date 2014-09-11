@@ -23,7 +23,7 @@ import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
-import ambit2.db.update.assessment.CreateAssessment;
+import ambit2.db.update.queryfolder.CreateQueryFolder;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
@@ -146,11 +146,11 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 			SessionID session = new SessionID();
 			session.setName(folder);
 			
-			CreateAssessment assessment = new CreateAssessment();
-			assessment.setObject(session);
+			CreateQueryFolder qfolder = new CreateQueryFolder();
+			qfolder.setObject(session);
 
 			xx.setConnection(connection);
-			xx.process(assessment);
+			xx.process(qfolder);
 			 
 			ProcessorCreateQuery p = new ProcessorCreateQuery();
 			p.setQueryName(queryName==null?UUID.randomUUID().toString():queryName);

@@ -1,4 +1,4 @@
-package ambit2.db.update.assessment;
+package ambit2.db.update.queryfolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,23 +10,22 @@ import ambit2.db.SessionID;
 import ambit2.db.update.AbstractUpdate;
 
 /**
- * TODO Session class to be renamed to Assessment
  * @author nina
  *
  */
-public class CreateAssessment extends AbstractUpdate<AmbitUser,SessionID> {
+public class CreateQueryFolder extends AbstractUpdate<AmbitUser,SessionID> {
 	public static final String sql = "insert into sessions (idsessions,user_name,title,completed) values (?,?,?,current_timestamp) on duplicate key update completed=current_timestamp";
 	public static final String sql_current_user = "insert into sessions (idsessions,user_name,title,completed) values (?,SUBSTRING_INDEX(user(),'@',1),?,current_timestamp)  on duplicate key update completed=current_timestamp";
 	
-	public CreateAssessment(AmbitUser user,SessionID id) {
+	public CreateQueryFolder(AmbitUser user,SessionID id) {
 		super();
 		setGroup(user);
 		setObject(id);
 	}	
-	public CreateAssessment(AmbitUser user) {
+	public CreateQueryFolder(AmbitUser user) {
 		this(user,null);
 	}
-	public CreateAssessment() {
+	public CreateQueryFolder() {
 		this(null);
 	}	
 	public List<QueryParam> getParameters(int index) throws AmbitException {

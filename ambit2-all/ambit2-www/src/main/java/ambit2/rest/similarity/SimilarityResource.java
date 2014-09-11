@@ -25,7 +25,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.StoredQuery;
-import ambit2.db.search.structure.ChemicalByAssessment;
+import ambit2.db.search.structure.ChemicalByQueryFolder;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QuerySimilarityBitset;
 import ambit2.db.update.structure.ChemicalByDataset;
@@ -111,7 +111,7 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 		try {
 			q.setValue(getBitset(mol));
 			if ((folders!=null) && (folders.length>0)) {
-				ChemicalByAssessment qa = new ChemicalByAssessment(folders);
+				ChemicalByQueryFolder qa = new ChemicalByQueryFolder(folders);
 				QueryCombinedStructure qc = new QueryCombinedStructure();
 				qc.add(q);
 				qc.setChemicalsOnly(true);
