@@ -30,6 +30,7 @@
 package ambit2.db.processors.test;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -63,6 +64,7 @@ import ambit2.core.processors.structure.key.EINECSKey;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.InchiKey;
 import ambit2.core.processors.structure.key.NameKey;
+import ambit2.core.processors.structure.key.NoneKey;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.PubchemCID;
 import ambit2.core.processors.structure.key.SmilesKey;
@@ -565,7 +567,10 @@ delete from struc_dataset where idstructure>3
 	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key) throws Exception  {
 		return write(reader, connection, key, false);
 	}
-	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key, boolean iseExistingStructure) throws Exception  {	
+	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key, boolean iseExistingStructure) throws Exception  {
+		return write(reader,connection,key,iseExistingStructure,-1);
+	}
+	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key, boolean iseExistingStructure, int maxrecords) throws Exception  {	
 		RepositoryWriter writer = new RepositoryWriter();
 		if (key != null)
 			writer.setPropertyKey(key);
@@ -577,6 +582,8 @@ delete from struc_dataset where idstructure>3
             IStructureRecord record = reader.nextRecord();
 			writer.write(record);
 			records ++;
+			if (maxrecords<=0 || (records <= maxrecords)) continue;
+			else break;
 			
 
 		}
@@ -1282,4 +1289,29 @@ delete from struc_dataset where idstructure>3
         c.close();		
 
 	}				
+	
+	public static void main(String[] args) {
+		if (args==null || args.length==0) System.exit(-1);
+		RepositoryWriterTest w = new RepositoryWriterTest();
+		File file = new File(args[0]);
+		RawIteratingSDFReader reader = null;
+		IDatabaseConnection c = null;
+		long now = System.currentTimeMillis();
+		try {
+			w.setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+	        c = w.getConnection();			
+			reader = new RawIteratingSDFReader(new FileReader(file));
+			reader.setReference(LiteratureEntry.getInstance(file.getName()));
+			w.write(reader,c.getConnection(), new NoneKey(),false,1000000);
+	        c.close();
+		} catch (Exception x) {
+			x.printStackTrace();
+		} finally {
+			try {if (reader != null) reader.close();} catch(Exception x) {}
+			try {if (c != null) c.close();} catch(Exception x) {}
+			System.out.print("Elapsed ");
+			System.out.println(System.currentTimeMillis()-now);
+		}
+		
+	}
 }
