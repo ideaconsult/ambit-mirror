@@ -25,7 +25,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StoredQuery;
-import ambit2.db.search.structure.ChemicalByAssessment;
+import ambit2.db.search.structure.ChemicalByQueryFolder;
 import ambit2.db.search.structure.FreeTextQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDatasetByID;
@@ -219,7 +219,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 				} 
 				folders = form.getValuesArray("folder");
 				if ((folders!=null) && (folders.length>0)) {
-					ChemicalByAssessment qa = new ChemicalByAssessment(folders);
+					ChemicalByQueryFolder qa = new ChemicalByQueryFolder(folders);
 					QueryCombinedStructure qc = new QueryCombinedStructure();
 					qc.add(query);
 					qc.setChemicalsOnly(true);

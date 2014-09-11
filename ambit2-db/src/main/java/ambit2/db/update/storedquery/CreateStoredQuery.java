@@ -38,28 +38,28 @@ import ambit2.base.data.AmbitUser;
 import ambit2.db.SessionID;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.update.AbstractUpdate;
-import ambit2.db.update.assessment.CreateAssessment;
+import ambit2.db.update.queryfolder.CreateQueryFolder;
 
 public class CreateStoredQuery extends AbstractUpdate<SessionID,IStoredQuery> {
-	protected CreateAssessment assessment;
+	protected CreateQueryFolder queryFolder;
 	public static final String sql_byname = "insert ignore into query (idquery,idsessions,name,content) select ?,idsessions,?,? from sessions where title=?";
 	public static final String sql_byid = "insert ignore into query (idquery,idsessions,name,content) select ?,idsessions,?,? from sessions where idsessions=?";
 
 	
 	public CreateStoredQuery() {
 		super();
-		assessment = new CreateAssessment();
+		queryFolder = new CreateQueryFolder();
 	}
 	@Override
 	public void setGroup(SessionID id) {
 		super.setGroup(id);
-		assessment.setObject(id);
-		assessment.setGroup(null);
+		queryFolder.setObject(id);
+		queryFolder.setGroup(null);
 	}
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		switch (index) {
 		case 0:{
-			return assessment.getParameters(0);
+			return queryFolder.getParameters(0);
 		}
 		case 1:{
 			List<QueryParam> params = new ArrayList<QueryParam>();
@@ -90,7 +90,7 @@ public class CreateStoredQuery extends AbstractUpdate<SessionID,IStoredQuery> {
 
 	public String[] getSQL() throws AmbitException {
 		return new String[] {
-				assessment.getSQL()[0],
+				queryFolder.getSQL()[0],
 				(getGroup()==null)||(getGroup().getId()==null)?sql_byname:sql_byid,
 				getObject().getSQL()
 		};
@@ -103,8 +103,8 @@ public class CreateStoredQuery extends AbstractUpdate<SessionID,IStoredQuery> {
 			SessionID s = getGroup()==null?new SessionID(id):getGroup();
 			s.setId(id);
 			setGroup(s);
-			assessment.setObject(s);
-			assessment.setID(0,id);
+			queryfolder.setObject(s);
+			queryfolder.setID(0,id);
 			*/ 
 			break;
 		}
@@ -113,10 +113,10 @@ public class CreateStoredQuery extends AbstractUpdate<SessionID,IStoredQuery> {
 	}
 	
 	public AmbitUser getUser() {
-		return assessment.getGroup();
+		return queryFolder.getGroup();
 	}
 	public void setUser(AmbitUser user) {
-		assessment.setGroup(user);
+		queryFolder.setGroup(user);
 	}	
 
 }

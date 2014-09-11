@@ -1,4 +1,4 @@
-package ambit2.db.update.assessment;
+package ambit2.db.update.queryfolder;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -13,11 +13,11 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.StringCondition;
 
 /**
- * Retrieve assessment header by id or name
+ * Retrieve query folder header by id or name
  * @author nina
  *
  */
-public class ReadAssessment  extends AbstractQuery<AmbitUser, SessionID, StringCondition, SessionID>  implements IQueryRetrieval<SessionID> {
+public class ReadQueryFolder  extends AbstractQuery<AmbitUser, SessionID, StringCondition, SessionID>  implements IQueryRetrieval<SessionID> {
 	protected static String sql = "select idsessions,title from sessions %s";
 	protected static String whereID = "idsessions = ?";
 	protected static String whereName = "title %s ?";
@@ -27,13 +27,13 @@ public class ReadAssessment  extends AbstractQuery<AmbitUser, SessionID, StringC
 	 */
 	private static final long serialVersionUID = -8595708937489941431L;
 
-	public ReadAssessment(AmbitUser user, SessionID id) {
+	public ReadQueryFolder(AmbitUser user, SessionID id) {
 		super();
 		setValue(id);
 		setFieldname(user);
 		setCondition(StringCondition.getInstance("like"));
 	}
-	public ReadAssessment() {
+	public ReadQueryFolder() {
 		this(null,null);
 	}
 		
@@ -94,6 +94,6 @@ public class ReadAssessment  extends AbstractQuery<AmbitUser, SessionID, StringC
 	}
 	@Override
 	public String toString() {
-		return getValue()==null?"Assessment":String.format("Assessmen %s",getValue().getName());
+		return getValue()==null?"QueryFolder":String.format("QueryFolder %s",getValue().getName());
 	}
 }

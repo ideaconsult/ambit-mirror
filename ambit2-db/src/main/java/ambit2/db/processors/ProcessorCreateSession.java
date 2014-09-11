@@ -37,7 +37,7 @@ import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.SessionID;
-import ambit2.db.update.assessment.CreateAssessment;
+import ambit2.db.update.queryfolder.CreateQueryFolder;
 
 public class ProcessorCreateSession extends AbstractDBProcessor<SessionID, SessionID> {
 
@@ -58,7 +58,7 @@ public class ProcessorCreateSession extends AbstractDBProcessor<SessionID, Sessi
 			try {
 				connection.setAutoCommit(false);
 				
-				PreparedStatement s = c.prepareStatement(CreateAssessment.sql_current_user,Statement.RETURN_GENERATED_KEYS);
+				PreparedStatement s = c.prepareStatement(CreateQueryFolder.sql_current_user,Statement.RETURN_GENERATED_KEYS);
 				s.setNull(1,Types.INTEGER);
 				s.setString(2,target.getName());
 				boolean ok = s.execute();
