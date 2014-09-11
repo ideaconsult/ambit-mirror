@@ -1,0 +1,22 @@
+{
+    "commands": {
+  		"dataset": {
+        	"name" : "dataset",
+        	"description" : "Dataset import",
+        	"connection" : "config/ambit.properties"
+        },            
+        "help" : {
+        	"name" : "API help",
+        	"description" : "Show API commands",
+        	"help" : {
+        		"description" : "Displays all available commands"
+        	},
+        	"json" : {
+        		"description" : "Displays JSON configuration of API commands"
+        	},
+        	"html" : {
+        		"description" : "Generates HTML documentation for all API commands and runs examples"
+        	}
+        }                        
+    }
+}
