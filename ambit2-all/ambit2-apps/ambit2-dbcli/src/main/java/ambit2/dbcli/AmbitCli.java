@@ -51,7 +51,7 @@ public class AmbitCli {
 			reader.setReference(LiteratureEntry.getInstance(file.getName()));
 			SourceDataset dataset = new SourceDataset(file.getName(),
 					LiteratureEntry.getInstance("File", file.getName()));
-			return write(reader, c, new NoneKey(), dataset, 1000000);
+			return write(reader, c, new NoneKey(), dataset, -1);
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -105,10 +105,18 @@ public class AmbitCli {
 		writer.setConnection(connection);
 		writer.open();
 		long records = 0;
+		long now = System.currentTimeMillis();
+		long start = now;
 		while (reader.hasNext()) {
 			IStructureRecord record = reader.nextRecord();
 			writer.write(record);
 			records++;
+			
+			if ((records % 1000)==0) {
+				now = System.currentTimeMillis();
+				logger.log(Level.INFO,String.format("Records read %d ; %f msec per record\t",records,((now-start)/1000.0)));
+				start = now;		
+			}			
 			if (maxrecords <= 0 || (records <= maxrecords))
 				continue;
 			else
