@@ -3,8 +3,22 @@
   		"dataset": {
         	"name" : "dataset",
         	"description" : "Dataset import",
-        	"connection" : "config/ambit.properties"
+        	"connection" : "config/ambit.properties",
+        	"post"  : {
+        		"params" : {
+        		}
+        	}        	
         },            
+  		"split": {
+        	"name" : "split",
+        	"description" : "Splits an SDF into records of predefined size",
+        	"connection" : "config/ambit.properties",
+        	"post"  : {
+        		"params" : {
+        			":chunk" : { "mandatory" : false,  "type" : "Integer", "value" : 1000}
+        		}
+        	}
+        },                    
         "help" : {
         	"name" : "API help",
         	"description" : "Show API commands",

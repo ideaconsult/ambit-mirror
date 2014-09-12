@@ -198,7 +198,7 @@ public class CliOptions {
 			    		return false;			    		
 			    	}
 			    	default: {
-			    		setSQLParams(getData(line, options));
+			    		setParams(getData(line, options));
 			    	}
 			    	}
 			    } catch (Exception x) {
@@ -291,7 +291,7 @@ public class CliOptions {
 	public ObjectNode getCommand() {
 		return command;
 	}
-	public void setSQLParams(String[] params) throws Exception {
+	public void setParams(String[] params) throws Exception {
 		if (command==null) throw new InvalidCommand("(Not specified)");
 		if (params==null) return;
 		try {
@@ -364,6 +364,21 @@ public class CliOptions {
         .withDescription("Input SDF file")        
         .create( "i" );  
 
+    	Option output   = OptionBuilder
+        .hasArg()
+        .withLongOpt("output")
+        .withArgName("file")
+        .withDescription("Output file")        
+        .create( "o" );
+    	
+    	Option data   = OptionBuilder
+        .hasArgs()
+        .withValueSeparator('=')        
+        .withLongOpt("data")
+        .withArgName("data")
+        .withDescription("Command parameters, e.g. -d \"chunk=1000000\"")
+        .create( "d" );  
+    	
     	Option config   = OptionBuilder
         .hasArg()
         .withLongOpt("config")
@@ -386,6 +401,8 @@ public class CliOptions {
     	options.addOption(command);
     	options.addOption(subcommand);
     	options.addOption(input);
+    	options.addOption(output);
+    	options.addOption(data);
     	options.addOption(restartConnection);
     	options.addOption(config);
     	options.addOption(help);

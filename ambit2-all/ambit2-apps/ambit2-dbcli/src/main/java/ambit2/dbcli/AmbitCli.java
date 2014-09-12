@@ -3,8 +3,10 @@ package ambit2.dbcli;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Writer;
 import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,6 +19,8 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.db.DBConnection;
 import net.idea.restnet.db.MySQLSingleConnection;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.ObjectNode;
 import org.restlet.Context;
 
 import ambit2.base.data.LiteratureEntry;
@@ -60,25 +64,95 @@ public class AmbitCli {
 	
 	public long go(String command,String subcommand) throws Exception {
 		long now = System.currentTimeMillis();
-		RawIteratingSDFReader reader = null;
-
-		try {
-			File file = new File(options.input);
-
-			reader = new RawIteratingSDFReader(new FileReader(file));
-			reader.setReference(LiteratureEntry.getInstance(file.getName()));
-			SourceDataset dataset = new SourceDataset(file.getName(),
-					LiteratureEntry.getInstance("File", file.getName()));
-			return write(reader, new NoneKey(), dataset, -1);
-		} catch (Exception x) {
-			throw x;
-		} finally {
-			logger.info("Elapsed "+(System.currentTimeMillis() - now) + " msec.");
-			try {if (reader != null)	reader.close();	} catch (Exception x) {}
-			if (options.output!=null) {
-				logger.log(Level.INFO,"Results written to "+options.output);
+		if ("dataset".equals(command)) {
+			RawIteratingSDFReader reader = null;
+			try {
+				File file = new File(options.input);
+	
+				reader = new RawIteratingSDFReader(new FileReader(file));
+				reader.setReference(LiteratureEntry.getInstance(file.getName()));
+				SourceDataset dataset = new SourceDataset(file.getName(),
+						LiteratureEntry.getInstance("File", file.getName()));
+				return write(reader, new NoneKey(), dataset, -1);
+			} catch (Exception x) {
+				throw x;
+			} finally {
+				logger.info("Elapsed "+(System.currentTimeMillis() - now) + " msec.");
+				try {if (reader != null)	reader.close();	} catch (Exception x) {}
+				if (options.output!=null) {
+					logger.log(Level.INFO,"Results written to "+options.output);
+				}
 			}
+		} else if ("split".equals(command)) {
+			RawIteratingSDFReader reader = null;
+			Writer writer = null;
+			long chunksize= 10000;
+			
+			JsonNode scmd = options.command.get(subcommand);
+			try {
+				JsonNode scommand = scmd.get("params");
+				JsonNode chunkNode = scommand.get(":chunk");
+				chunksize = Long.parseLong(chunkNode.get("value").getTextValue());
+			} catch (Exception x) {
+				logger.log(Level.WARNING,x.getMessage(),x);
+			}
+
+			int chunk = 1;
+			long chunk_started=System.currentTimeMillis();
+			try {
+				File file = new File(options.input);
+				File outdir = new File(options.output);
+				logger.info(String.format("Splitting %s into files of size %d records into directory %s",
+						file.getAbsoluteFile(),
+						chunksize,
+						outdir.getAbsolutePath()
+				));	
+				
+				if (outdir.exists() && outdir.isDirectory()) {
+					reader = new RawIteratingSDFReader(new FileReader(file));
+					File outfile = new File(outdir,String.format("%d_%s",chunk,file.getName()));
+					chunk_started=System.currentTimeMillis();
+					logger.info(String.format("Writing chunk %d:\t%s ...",chunk,outfile.getAbsolutePath()));
+					writer = new FileWriter(outfile);
+					int records = 0;
+					while (reader.hasNext()) {
+						if (records >= chunksize) {
+							System.out.println();
+							try {if (writer != null)	writer.close();	} catch (Exception x) {}
+							logger.info(String.format("Chunk %d written in %d msec.",chunk,(System.currentTimeMillis()-chunk_started)));
+							chunk++;
+							outfile = new File(outdir,String.format("%d_%s",chunk,file.getName()));
+							writer = new FileWriter(outfile);
+							records = 0;
+							chunk_started=System.currentTimeMillis();
+
+							logger.info(String.format("Writing chunk %d:\t%s ...",chunk,outfile.getAbsolutePath()));	
+						}
+						IStructureRecord record = reader.nextRecord();
+						writer.write(record.getContent());
+						if ((records % 10000)==0) {
+							System.out.print('.');
+							writer.flush();
+						}									
+						records++;
+					}
+					return chunk;
+				} else throw new Exception(String.format("ERROR: %s is not an existing directory.",options.output));
+			} catch (Exception x) {
+				throw x;
+			} finally {
+				logger.info("Elapsed "+(System.currentTimeMillis() - now) + " msec.");
+				try {if (reader != null)	reader.close();	} catch (Exception x) {}
+				try {
+					if (writer != null)	writer.close();
+					logger.info(String.format("Chunk %d written in %d msec.",chunk,(System.currentTimeMillis()-chunk_started)));
+				} catch (Exception x) {}
+				if (options.output!=null) {
+					logger.log(Level.INFO,"Results written to "+options.output);
+				}
+			}			
 		}
+		return -1;
 	}
 	
 	public static void main(String[] args) {
@@ -103,7 +177,7 @@ public class AmbitCli {
 			logger.log(Level.SEVERE,"SQL error");
 			System.exit(-1);		
 		} catch (Exception x ) {
-			logger.log(Level.WARNING,x.getMessage());
+			logger.log(Level.WARNING,x.getMessage(),x);
 			System.exit(-1);
 		} finally {
 			logger.info(String.format("Completed in %s msec", (System.currentTimeMillis()-now)));
@@ -253,4 +327,7 @@ public class AmbitCli {
 			}
 		}
 	}
+	
+
+
 }
