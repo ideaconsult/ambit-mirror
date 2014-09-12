@@ -32,7 +32,7 @@ public class CliOptions {
 	public String getCmd() {
 		return cmd;
 	}
-
+	long connectionLifeTime = 3600000; //1h
 	private ObjectMapper mapper;
 	protected ObjectNode api;
 	protected String delimiter;
@@ -77,6 +77,7 @@ public class CliOptions {
 		    output = getOutput(line);
 		    media = getMedia(line);
 		    delimiter = getDelimiter(line);
+		    connectionLifeTime =  	 	getConnectionLifeTime(line);
 		    setConfig(getConfig(line));
 		    if (line.hasOption("h")) {
 		    	printHelp(options,null);
@@ -229,6 +230,11 @@ public class CliOptions {
 	    	return line.getOptionValues('d');
 	    } else return null;
 	}	
+	protected static long getConnectionLifeTime(CommandLine line) {
+	    if( line.hasOption( 'r' ) ) 
+	    	return Long.parseLong(line.getOptionValue( 'r' ).trim());
+	    else return 60*60*1000;
+	}
 	protected static String getDelimiter(CommandLine line) {
 	    if( line.hasOption( 'l' ) ) 
 	    	return line.getOptionValue( 'l' ).trim();
@@ -365,7 +371,13 @@ public class CliOptions {
         .withDescription("Config file (DB connection parameters)")        
         .create( "c" );     
 
-
+    	Option restartConnection   = OptionBuilder
+        .hasArg()
+        .withLongOpt("restartConnection")
+        .withArgName("msec")
+        .withDescription("Restart SQL connection every ? msec (default 1h= 3600000 msec)")        
+        .create( "r" );     
+    	
     	Option help   = OptionBuilder
         .withLongOpt("help")
         .withDescription("This help")              
@@ -374,7 +386,7 @@ public class CliOptions {
     	options.addOption(command);
     	options.addOption(subcommand);
     	options.addOption(input);
-    	
+    	options.addOption(restartConnection);
     	options.addOption(config);
     	options.addOption(help);
 
