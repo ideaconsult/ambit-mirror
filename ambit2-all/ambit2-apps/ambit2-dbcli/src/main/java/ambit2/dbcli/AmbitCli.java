@@ -6,12 +6,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import net.idea.modbcum.i.config.Preferences;
@@ -32,6 +30,11 @@ import ambit2.db.processors.RepositoryWriter;
 
 import com.mysql.jdbc.CommunicationsException;
 
+/**
+ * 
+ * @author nina
+ *
+ */
 public class AmbitCli {
 	static Logger logger = Logger.getLogger(AmbitCli.class.getName());
 	static final String loggingProperties = "config/logging.prop";
@@ -40,19 +43,19 @@ public class AmbitCli {
 	
 	public AmbitCli(CliOptions options) {
 		this.options = options;
+		/*
 		InputStream in = null;
 		try {
 			in = getClass().getClassLoader().getResourceAsStream(loggingProperties);
 //			System.setProperty("java.util.logging.config.file", url.getFile());
 			LogManager.getLogManager().readConfiguration(in);
-			
 			System.out.println(String.format("Logging configuration loaded from %s",loggingProperties));
-			System.out.println(LogManager.getLogManager().getProperty("org.openscience.cdk"));
 		} catch (Exception x) {
 			System.err.println("logging configuration failed "+ x.getMessage());
 		} finally {
 			try { if (in!=null) in.close(); } catch (Exception x) {}
-		}		
+		}
+		*/		
 	}
 	
 	public long go(String command,String subcommand) throws Exception {
@@ -70,8 +73,7 @@ public class AmbitCli {
 		} catch (Exception x) {
 			throw x;
 		} finally {
-			System.out.print("Elapsed ");
-			System.out.println(System.currentTimeMillis() - now);
+			logger.info("Elapsed "+(System.currentTimeMillis() - now) + " msec.");
 			try {if (reader != null)	reader.close();	} catch (Exception x) {}
 			if (options.output!=null) {
 				logger.log(Level.INFO,"Results written to "+options.output);
@@ -113,13 +115,13 @@ public class AmbitCli {
 
 		try {
 			if (writer!=null) {
-				logger.log(Level.INFO,"Closing the connection ...");
+				logger.log(Level.FINE,"Closing the connection ...");
 				writer.close();
 			}
 			writer = null;
 		} catch (Exception xx) { logger.log(Level.WARNING,xx.getMessage(),xx);}
 		
-		logger.log(Level.INFO,"Opening a new connection ...");		
+		logger.log(Level.FINE,"Opening a new connection ...");		
 		
 		Connection c = null;
 		DBConnection dbc = null;
@@ -133,7 +135,7 @@ public class AmbitCli {
 		writer.setConnection(c);
 		writer.setCloseConnection(true);
 		writer.open();
-		logger.log(Level.INFO,"Connection opened.");
+		logger.log(Level.FINE,"Connection opened.");
 		return writer;
 	}
 
@@ -178,7 +180,7 @@ public class AmbitCli {
 					
 				if ((records % 1000)==0) {
 					now = System.currentTimeMillis();
-					System.out.println(String.format("Records read %d ; %f msec per record\t",records,((now-start)/1000.0)));
+					logger.info(String.format("Records read %d ; %f msec per record\t",records,((now-start)/1000.0)));
 					start = now;		
 				}			
 				if (maxrecords <= 0 || (records <= maxrecords)) {
