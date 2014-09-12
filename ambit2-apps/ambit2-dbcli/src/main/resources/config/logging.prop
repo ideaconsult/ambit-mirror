@@ -1,6 +1,4 @@
-#This is AMBIT ${project.version} web services Java logging configuration file
-#For AMBIT ${project.version} web services configuration please see ambit2.pref
-#For Authentication and authorization config please see config.prop file
+#This is AMBIT ${project.version}Java logging configuration file
 #See http://docs.oracle.com/javase/1.5.0/docs/api/index.html?java/util/logging/LogManager.html
 # This defines a whitespace separated list of class names for handler classes to load and register as handlers on the root Logger (the Logger named "").
 #Console logging will end up in e.g. Apache TomCat logs, if executed in a servlet environment  
@@ -19,6 +17,7 @@ java.util.logging.ConsoleHandler.level = INFO
 ambit2.mopac.level = WARNING
 ambit2.smi23d.level = WARNING
 ambit2.db.level = INFO
+ambit2.core.level = SEVERE
 ambit2.core.processors.structure.level = SEVERE
 #Toxtree http://toxtree.sourceforge.net/
 toxtree.level = WARNING
@@ -26,4 +25,4 @@ mutant.level = WARNING
 #Restlet http://www.restlet.org/
 #org.restlet.engine.level = WARNING
 #Inchi
-org.openscience.cdk.level = WARNING
+org.openscience.cdk.level = SEVERE

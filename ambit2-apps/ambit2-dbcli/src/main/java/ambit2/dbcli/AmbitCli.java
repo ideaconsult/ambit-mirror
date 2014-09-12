@@ -6,10 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import net.idea.modbcum.i.config.Preferences;
@@ -32,33 +34,45 @@ import com.mysql.jdbc.CommunicationsException;
 
 public class AmbitCli {
 	static Logger logger = Logger.getLogger(AmbitCli.class.getName());
+	static final String loggingProperties = "config/logging.prop";
+	
 	CliOptions options;
 	
 	public AmbitCli(CliOptions options) {
 		this.options = options;
+		InputStream in = null;
+		try {
+			in = getClass().getClassLoader().getResourceAsStream(loggingProperties);
+//			System.setProperty("java.util.logging.config.file", url.getFile());
+			LogManager.getLogManager().readConfiguration(in);
+			
+			System.out.println(String.format("Logging configuration loaded from %s",loggingProperties));
+			System.out.println(LogManager.getLogManager().getProperty("org.openscience.cdk"));
+		} catch (Exception x) {
+			System.err.println("logging configuration failed "+ x.getMessage());
+		} finally {
+			try { if (in!=null) in.close(); } catch (Exception x) {}
+		}		
 	}
 	
 	public long go(String command,String subcommand) throws Exception {
 		long now = System.currentTimeMillis();
 		RawIteratingSDFReader reader = null;
-		Connection c = null;
-		DBConnection dbc = null;
+
 		try {
 			File file = new File(options.input);
-			dbc = getConnection(options.getSQLConfig());
-			c = dbc.getConnection();
+
 			reader = new RawIteratingSDFReader(new FileReader(file));
 			reader.setReference(LiteratureEntry.getInstance(file.getName()));
 			SourceDataset dataset = new SourceDataset(file.getName(),
 					LiteratureEntry.getInstance("File", file.getName()));
-			return write(reader, c, new NoneKey(), dataset, -1);
+			return write(reader, new NoneKey(), dataset, -1);
 		} catch (Exception x) {
 			throw x;
 		} finally {
 			System.out.print("Elapsed ");
 			System.out.println(System.currentTimeMillis() - now);
 			try {if (reader != null)	reader.close();	} catch (Exception x) {}
-			try {if (c != null)	c.close();} catch (Exception x) {}
 			if (options.output!=null) {
 				logger.log(Level.INFO,"Results written to "+options.output);
 			}
@@ -94,37 +108,91 @@ public class AmbitCli {
 			logger.info("Done.");
 		}
 	}
+	
+	protected RepositoryWriter initWriter(RepositoryWriter writer, PropertyKey key,SourceDataset dataset) throws Exception  {
 
-	public long write(IRawReader<IStructureRecord> reader,
-			Connection connection, PropertyKey key, SourceDataset dataset,
-			int maxrecords) throws Exception {
-		RepositoryWriter writer = new RepositoryWriter();
+		try {
+			if (writer!=null) {
+				logger.log(Level.INFO,"Closing the connection ...");
+				writer.close();
+			}
+			writer = null;
+		} catch (Exception xx) { logger.log(Level.WARNING,xx.getMessage(),xx);}
+		
+		logger.log(Level.INFO,"Opening a new connection ...");		
+		
+		Connection c = null;
+		DBConnection dbc = null;
+		dbc = getConnection(options.getSQLConfig());
+		c = dbc.getConnection();		
+		c.setAutoCommit(true);
+		writer = new RepositoryWriter();
 		if (key != null)
 			writer.setPropertyKey(key);
 		writer.setDataset(dataset);
-		writer.setConnection(connection);
+		writer.setConnection(c);
+		writer.setCloseConnection(true);
 		writer.open();
+		logger.log(Level.INFO,"Connection opened.");
+		return writer;
+	}
+
+	public long write(IRawReader<IStructureRecord> reader,
+			PropertyKey key, SourceDataset dataset,
+			int maxrecords) throws Exception {
+		
+		RepositoryWriter writer = null;
 		long records = 0;
 		long now = System.currentTimeMillis();
 		long start = now;
-		while (reader.hasNext()) {
-			IStructureRecord record = reader.nextRecord();
-			writer.write(record);
-			records++;
-			
-			if ((records % 1000)==0) {
-				now = System.currentTimeMillis();
-				logger.log(Level.INFO,String.format("Records read %d ; %f msec per record\t",records,((now-start)/1000.0)));
-				start = now;		
-			}			
-			if (maxrecords <= 0 || (records <= maxrecords))
-				continue;
-			else
-				break;
-
+		long connectionOpened = now;
+		try {
+			writer = initWriter(writer, key, dataset);
+			while (reader.hasNext()) {
+				IStructureRecord record = reader.nextRecord();
+				
+				try {
+					writer.write(record);
+				} catch (SQLException x) {	
+	
+					try {
+						writer = initWriter(writer, key, dataset);
+						connectionOpened = System.currentTimeMillis();
+					} catch (Exception xx) {
+						writer = null;
+						throw xx;
+					}
+				} catch (Exception x) {
+					if (writer==null) throw x;
+				}
+				records++;
+				
+				if ((System.currentTimeMillis()-connectionOpened)> options.connectionLifeTime) //restart the connection
+					try {
+						writer = initWriter(writer, key, dataset);
+						connectionOpened = System.currentTimeMillis();
+					} catch (Exception xx) {
+						writer = null;
+						throw xx;
+					}
+					
+				if ((records % 1000)==0) {
+					now = System.currentTimeMillis();
+					System.out.println(String.format("Records read %d ; %f msec per record\t",records,((now-start)/1000.0)));
+					start = now;		
+				}			
+				if (maxrecords <= 0 || (records <= maxrecords)) {
+					continue;
+				} else
+					break;
+			}
+		} catch (Exception x) {
+			throw x;
+		} finally {
+			try {reader.close();} catch (Exception x)  {}
+			try {writer.close();} catch (Exception x) {}
 		}
-		reader.close();
-		writer.close();
+
 		return records;
 	}
 
