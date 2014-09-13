@@ -14,22 +14,33 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.idea.modbcum.i.batch.IBatchStatistics;
+import net.idea.modbcum.i.batch.IBatchStatistics.RECORDS_STATS;
 import net.idea.modbcum.i.config.Preferences;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.restnet.db.DBConnection;
 import net.idea.restnet.db.MySQLSingleConnection;
 
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ObjectNode;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.Context;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.base.processors.ProcessorsChain;
+import ambit2.core.io.FileInputState;
 import ambit2.core.io.IRawReader;
 import ambit2.core.io.RawIteratingSDFReader;
+import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.core.processors.structure.key.NoneKey;
 import ambit2.core.processors.structure.key.PropertyKey;
+import ambit2.db.processors.BatchDBProcessor;
+import ambit2.db.processors.DbStructureWriter;
 import ambit2.db.processors.RepositoryWriter;
 
 import com.mysql.jdbc.CommunicationsException;
@@ -64,7 +75,78 @@ public class AmbitCli {
 	
 	public long go(String command,String subcommand) throws Exception {
 		long now = System.currentTimeMillis();
-		if ("dataset".equals(command)) {
+		if ("import".equals(command)) {
+			File file = new File(options.input);
+			
+			final BatchDBProcessor<IStructureRecord> batch = new BatchDBProcessor<IStructureRecord>() {
+				@Override
+				public void onItemRead(IStructureRecord input,
+						IBatchStatistics stats) {
+					super.onItemRead(input, stats);
+					if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 100) == 0)
+						logger.log(Level.INFO,stats.toString());
+				};
+				@Override
+				public void onError(IStructureRecord input, Object output,
+						IBatchStatistics stats, Exception x) {
+					super.onError(input, output, stats, x);
+					logger.log(Level.SEVERE,x.getMessage());
+				}
+
+			};
+
+
+			ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> processor = new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>();
+
+			processor.add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
+				protected transient MoleculeReader reader = new MoleculeReader();
+				protected transient StructureTypeProcessor strucType = new StructureTypeProcessor();
+				@Override
+				public IStructureRecord process(IStructureRecord record)
+						throws Exception {
+					try {
+						IAtomContainer molecule = reader.process(record);
+						/*
+						if ((molecule != null) && (molecule.getProperties()!=null))
+							record.addProperties(molecule.getProperties());
+						*/
+						record.setType(strucType.process(molecule));					
+						return record;
+					} catch (Exception x) {
+						record.setType(STRUC_TYPE.NA);
+						return record;
+					}
+				}
+			});
+			 
+			SourceDataset dataset = new SourceDataset(file.getName(),
+					LiteratureEntry.getInstance("File", file.getName()));
+			processor.add(new DbStructureWriter(dataset));
+			
+			batch.setProcessorChain(processor);
+
+			Connection c = null;
+			DBConnection dbc = null;
+			dbc = getConnection(options.getSQLConfig());
+			c = dbc.getConnection();		
+			c.setAutoCommit(true);
+			batch.setCloseConnection(true);
+			batch.setConnection(c);
+			
+
+			FileInputState in = new FileInputState(file);
+			IBatchStatistics stats = null;
+			try {
+				stats = batch.process(in);
+			} catch (Exception x) {
+				logger.log(Level.WARNING,x.getMessage(),x);
+			} finally {
+				try {if (batch!=null) batch.close();} catch (Exception x) { logger.warning(x.getMessage());}
+				if (stats!=null) 
+					logger.log(Level.INFO,stats.toString());
+			}
+			
+		} else if ("dataset".equals(command)) {
 			RawIteratingSDFReader reader = null;
 			try {
 				File file = new File(options.input);
@@ -174,7 +256,7 @@ public class AmbitCli {
 			logger.log(Level.SEVERE,"Can't connect to MySQL server!");
 			System.exit(-1);
 		} catch (SQLException x) {
-			logger.log(Level.SEVERE,"SQL error");
+			logger.log(Level.SEVERE,"SQL error",x);
 			System.exit(-1);		
 		} catch (Exception x ) {
 			logger.log(Level.WARNING,x.getMessage(),x);
@@ -328,6 +410,5 @@ public class AmbitCli {
 		}
 	}
 	
-
-
+	
 }

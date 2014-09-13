@@ -7,6 +7,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Iterator;
 
+import net.idea.modbcum.i.processors.IProcessor;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -22,6 +24,7 @@ import org.codehaus.jackson.map.ObjectWriter;
 import org.codehaus.jackson.node.ObjectNode;
 import org.restlet.data.Reference;
 
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.dbcli.exceptions.InvalidCommand;
 
 public class CliOptions {
@@ -642,5 +645,20 @@ public class CliOptions {
 			 
 		 }
 	}
-	
+
+	public IProcessor<IStructureRecord,IStructureRecord> getProcessor() throws Exception {
+		if (command==null) return null;
+		try {
+			JsonNode sc = command.get(subcommand.name());
+			JsonNode proc = sc.get(_fields.processor.name());
+			if (proc==null) return null;
+			String className = proc.asText();
+			Class clazz = Class.forName(className);
+			IProcessor<IStructureRecord,IStructureRecord> p = (IProcessor<IStructureRecord,IStructureRecord>)clazz.newInstance();
+
+			return p;
+		} catch (Exception x) {
+			throw x;
+		}
+	}	
 }

@@ -18,7 +18,17 @@
         			":chunk" : { "mandatory" : false,  "type" : "Integer", "value" : 1000}
         		}
         	}
-        },                    
+        },    
+        "import": {
+        	"name" : "import",
+        	"description" : "Import file",
+        	"connection" : "config/ambit.properties",
+        	"post"  : {
+        		"params" : {
+        			":chunk" : { "mandatory" : false,  "type" : "Integer", "value" : 1000}
+        		}
+        	}
+        }, 
         "help" : {
         	"name" : "API help",
         	"description" : "Show API commands",
