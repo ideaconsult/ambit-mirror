@@ -6,13 +6,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
-import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.processors.ProcessorsChain;

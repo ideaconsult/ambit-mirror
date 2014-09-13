@@ -2,8 +2,8 @@ package ambit2.base.processors.batch;
 
 import java.util.Iterator;
 
+import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
-import ambit2.base.interfaces.IBatchStatistics;
 
 public abstract class ListReporter<Item,Output> extends BatchReporter<Item, Iterator<Item>, Output> {
 
@@ -30,13 +30,13 @@ public abstract class ListReporter<Item,Output> extends BatchReporter<Item, Iter
 				header(output, target);
 				
 			}
-			public void onItemRead(Item input, ambit2.base.interfaces.IBatchStatistics result) {
+			public void onItemRead(Item input, IBatchStatistics result) {
 				
 			};
-			public void onItemProcessed(Item input, Object output, ambit2.base.interfaces.IBatchStatistics result) {
+			public void onItemProcessed(Item input, Object output, IBatchStatistics result) {
 				
 			};
-			public void onError(Item input, Object output, ambit2.base.interfaces.IBatchStatistics result, Exception x) {
+			public void onError(Item input, Object output, IBatchStatistics result, Exception x) {
 				
 			};
 			@Override

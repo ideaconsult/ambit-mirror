@@ -60,8 +60,10 @@ public class DbStructureWriter extends AbstractRepositoryWriter<IStructureRecord
 	 */
 	private static final long serialVersionUID = -5831358598266151159L;
 
-	public DbStructureWriter() {
+	public DbStructureWriter(SourceDataset dataset) {
+		super();
 		propertyWriter = new PropertyValuesWriter();
+		setDataset(dataset);
 	}
 
 	@Override

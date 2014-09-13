@@ -2,7 +2,8 @@ package ambit2.base.processors.batch;
 
 import java.util.Observable;
 
-import ambit2.base.interfaces.IBatchStatistics;
+import net.idea.modbcum.i.batch.IBatchStatistics;
+import net.idea.modbcum.i.batch.IBatchStatistics.RECORDS_STATS;
 
 /**
  * 

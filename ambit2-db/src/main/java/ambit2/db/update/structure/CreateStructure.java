@@ -82,6 +82,8 @@ public class CreateStructure extends AbstractObjectUpdate<IStructureRecord> {
 		}
 		
 	}
+	
+
 	@Override
 	public void setObject(IStructureRecord object) {
 		super.setObject(object);

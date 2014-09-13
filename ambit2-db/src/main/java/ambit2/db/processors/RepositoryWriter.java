@@ -89,7 +89,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	
 	public RepositoryWriter() {
 		super();
-		structureWriter = new DbStructureWriter();
+		structureWriter = new DbStructureWriter(null);
 		query = new QueryByIdentifierWithStructureFallback();
 		setPropertyKey(new CASKey());
 		queryexec.setCache(true);

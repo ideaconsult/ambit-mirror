@@ -2,6 +2,8 @@ package ambit2.rest.task.dbpreprocessing;
 
 import java.sql.Connection;
 
+import net.idea.modbcum.i.batch.IBatchStatistics;
+import net.idea.modbcum.i.batch.IBatchStatistics.RECORDS_STATS;
 import net.idea.modbcum.i.processors.IProcessor;
 
 import org.restlet.Context;
@@ -11,8 +13,6 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.AmbitUser;
-import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IBatchStatistics.RECORDS_STATS;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.data.model.Algorithm;

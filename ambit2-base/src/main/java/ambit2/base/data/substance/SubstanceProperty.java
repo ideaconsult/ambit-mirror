@@ -1,7 +1,6 @@
 package ambit2.base.data.substance;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.ref.Reference;
 import java.net.URLEncoder;
 import java.util.UUID;
 
