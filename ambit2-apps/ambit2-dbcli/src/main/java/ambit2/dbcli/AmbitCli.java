@@ -14,20 +14,25 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.naming.OperationNotSupportedException;
+
+import net.idea.modbcum.i.IParameterizedQuery;
+import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.batch.IBatchStatistics.RECORDS_STATS;
 import net.idea.modbcum.i.config.Preferences;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.query.IQueryUpdate;
 import net.idea.restnet.db.DBConnection;
 import net.idea.restnet.db.MySQLSingleConnection;
 
 import org.codehaus.jackson.JsonNode;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.Context;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
+import ambit2.base.interfaces.IChemical;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
@@ -35,13 +40,19 @@ import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IRawReader;
 import ambit2.core.io.RawIteratingSDFReader;
-import ambit2.core.processors.structure.MoleculeReader;
-import ambit2.core.processors.structure.StructureTypeProcessor;
+import ambit2.core.processors.StructureNormalizer;
 import ambit2.core.processors.structure.key.NoneKey;
 import ambit2.core.processors.structure.key.PropertyKey;
-import ambit2.db.processors.BatchDBProcessor;
-import ambit2.db.processors.DbStructureWriter;
+import ambit2.db.DbReader;
+import ambit2.db.processors.AbstractRepositoryWriter.OP;
+import ambit2.db.processors.AbstractUpdateProcessor;
+import ambit2.db.processors.MasterDetailsProcessor;
+import ambit2.db.processors.QuickImportBatchProcessor;
 import ambit2.db.processors.RepositoryWriter;
+import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveStructure;
+import ambit2.db.search.structure.MissingInChIsQuery;
+import ambit2.db.update.chemical.UpdateChemical;
 
 import com.mysql.jdbc.CommunicationsException;
 
@@ -78,13 +89,18 @@ public class AmbitCli {
 		if ("import".equals(command)) {
 			File file = new File(options.input);
 			
-			final BatchDBProcessor<IStructureRecord> batch = new BatchDBProcessor<IStructureRecord>() {
+			final QuickImportBatchProcessor batch = new QuickImportBatchProcessor(file) {
 				@Override
 				public void onItemRead(IStructureRecord input,
 						IBatchStatistics stats) {
 					super.onItemRead(input, stats);
-					if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 100) == 0)
-						logger.log(Level.INFO,stats.toString());
+					if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 10000) == 0)
+						try {
+							logger.log(Level.INFO,stats.toString());
+							getConnection().commit();
+						} catch (Exception x) {
+							logger.log(Level.WARNING,x.getMessage());	
+						}
 				};
 				@Override
 				public void onError(IStructureRecord input, Object output,
@@ -92,48 +108,16 @@ public class AmbitCli {
 					super.onError(input, output, stats, x);
 					logger.log(Level.SEVERE,x.getMessage());
 				}
-
 			};
-
-
-			ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> processor = new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>();
-
-			processor.add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
-				protected transient MoleculeReader reader = new MoleculeReader();
-				protected transient StructureTypeProcessor strucType = new StructureTypeProcessor();
-				@Override
-				public IStructureRecord process(IStructureRecord record)
-						throws Exception {
-					try {
-						IAtomContainer molecule = reader.process(record);
-						/*
-						if ((molecule != null) && (molecule.getProperties()!=null))
-							record.addProperties(molecule.getProperties());
-						*/
-						record.setType(strucType.process(molecule));					
-						return record;
-					} catch (Exception x) {
-						record.setType(STRUC_TYPE.NA);
-						return record;
-					}
-				}
-			});
-			 
-			SourceDataset dataset = new SourceDataset(file.getName(),
-					LiteratureEntry.getInstance("File", file.getName()));
-			processor.add(new DbStructureWriter(dataset));
-			
-			batch.setProcessorChain(processor);
 
 			Connection c = null;
 			DBConnection dbc = null;
 			dbc = getConnection(options.getSQLConfig());
 			c = dbc.getConnection();		
-			c.setAutoCommit(true);
+			c.setAutoCommit(false);
 			batch.setCloseConnection(true);
 			batch.setConnection(c);
 			
-
 			FileInputState in = new FileInputState(file);
 			IBatchStatistics stats = null;
 			try {
@@ -141,10 +125,119 @@ public class AmbitCli {
 			} catch (Exception x) {
 				logger.log(Level.WARNING,x.getMessage(),x);
 			} finally {
+				try {batch.getConnection().commit();} catch (Exception x) { logger.warning(x.getMessage());}
 				try {if (batch!=null) batch.close();} catch (Exception x) { logger.warning(x.getMessage());}
 				if (stats!=null) 
 					logger.log(Level.INFO,stats.toString());
 			}
+		} else if ("preprocessing".equals(command)) {
+			
+			DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>() {
+				@Override
+				public void onItemRead(IStructureRecord input,
+						IBatchStatistics stats) {
+					super.onItemRead(input, stats);
+					if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 10000) == 0)
+						try {
+							logger.log(Level.INFO,stats.toString());
+							getConnection().commit();
+						} catch (Exception x) {
+							logger.log(Level.WARNING,x.getMessage());	
+						}
+						
+				};
+				@Override
+				public void onError(IStructureRecord input, Object output,
+						IBatchStatistics stats, Exception x) {
+					super.onError(input, output, stats, x);
+					logger.log(Level.SEVERE,x.getMessage());
+				}
+			};
+			batch.setProcessorChain(new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>());
+			
+			/*structure*/
+			RetrieveStructure queryP = new RetrieveStructure(true);
+			queryP.setFieldname(true);
+			queryP.setPageSize(1);	queryP.setPage(0);
+
+			MasterDetailsProcessor<IStructureRecord,IStructureRecord,IQueryCondition> strucReader = new MasterDetailsProcessor<IStructureRecord,IStructureRecord,IQueryCondition>(queryP) {
+				@Override
+				protected void configureQuery(
+						IStructureRecord target,
+						IParameterizedQuery<IStructureRecord, IStructureRecord, IQueryCondition> query)
+						throws AmbitException {
+					query.setValue(target);
+					super.configureQuery(target, query);
+				}
+				@Override
+				protected IStructureRecord processDetail(IStructureRecord master,
+						IStructureRecord detail) throws Exception {
+					
+					master.setContent(detail.getContent());
+					master.setFormat(detail.getFormat());
+					master.setType(detail.getType());
+					return master;
+				}
+			};
+			strucReader.setCloseConnection(false);
+			batch.getProcessorChain().add(strucReader);
+			//preprocessing itself
+			batch.getProcessorChain().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
+				protected transient StructureNormalizer normalizer = new StructureNormalizer();
+				@Override
+				public IStructureRecord process(IStructureRecord record)
+						throws Exception {
+					try {
+						/*
+						if ((molecule != null) && (molecule.getProperties()!=null))
+							record.addProperties(molecule.getProperties());
+						*/
+						normalizer.process(record);			
+						return record;
+					} catch (Exception x) {
+						record.setType(STRUC_TYPE.NA);
+						return record;
+					}
+				}
+			});
+			
+			//CreateChemical
+			
+			batch.setHandlePrescreen(false);
+			batch.getProcessorChain().add(new AbstractUpdateProcessor<Object,IChemical>(OP.CREATE,new UpdateChemical()) {
+				@Override
+				protected IChemical execute(Object group,
+						IQueryUpdate<Object, IChemical> query)
+						throws SQLException, OperationNotSupportedException,
+						AmbitException {
+					if (group instanceof IChemical)
+						query.setObject((IChemical)group);
+					return super.execute(group, query);
+				}
+			});
+			
+			Connection c = null;
+			DBConnection dbc = null;
+			dbc = getConnection(options.getSQLConfig());
+			c = dbc.getConnection();		
+			c.setAutoCommit(false);
+			batch.setCloseConnection(true);
+			batch.setConnection(c);
+			
+			IBatchStatistics stats = null;
+			try {
+				IQueryRetrieval<IStructureRecord> query = new MissingInChIsQuery("UNKNOWN");
+				query.setPageSize(1000000);
+				stats = batch.process(query);
+			} catch (Exception x) {
+				logger.log(Level.WARNING,x.getMessage(),x);
+			} finally {
+				try {batch.getConnection().commit();} catch (Exception x) { logger.warning(x.getMessage());}
+				try {if (batch!=null) batch.close();} catch (Exception x) { logger.warning(x.getMessage());}
+				if (stats!=null) 
+					logger.log(Level.INFO,stats.toString());
+			}
+
 			
 		} else if ("dataset".equals(command)) {
 			RawIteratingSDFReader reader = null;
