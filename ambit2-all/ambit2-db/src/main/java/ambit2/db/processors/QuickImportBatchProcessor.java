@@ -53,17 +53,5 @@ public class QuickImportBatchProcessor extends BatchDBProcessor<IStructureRecord
 		processor.add(new DbStructureWriter(dataset));
 		setProcessorChain(processor);
 	}
-	@Override
-	public void onItemRead(IStructureRecord input,
-			IBatchStatistics stats) {
-		super.onItemRead(input, stats);
-		if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 100) == 0)
-			logger.log(Level.INFO,stats.toString());
-	};
-	@Override
-	public void onError(IStructureRecord input, Object output,
-			IBatchStatistics stats, Exception x) {
-		super.onError(input, output, stats, x);
-		logger.log(Level.SEVERE,x.getMessage());
-	}
+
 }

@@ -21,14 +21,25 @@
         },    
         "import": {
         	"name" : "import",
-        	"description" : "Import file",
+        	"description" : "Quick import file",
         	"connection" : "config/ambit.properties",
         	"post"  : {
         		"params" : {
-        			":chunk" : { "mandatory" : false,  "type" : "Integer", "value" : 1000}
         		}
         	}
-        }, 
+        },
+        "preprocessing": {
+        	"name" : "index",
+        	"description" : "Indexing file",
+        	"connection" : "config/ambit.properties",
+        	"post"  : {
+        		"params" : {
+        			":inchi" : { "mandatory" : false,  "type" : "Boolean", "value" : true},
+        			":similarity" : { "mandatory" : false,  "type" : "Boolean", "value" : true},
+        			":smarts" : { "mandatory" : false,  "type" : "Boolean", "value" : false}
+        		}
+        	}
+        },          
         "help" : {
         	"name" : "API help",
         	"description" : "Show API commands",
