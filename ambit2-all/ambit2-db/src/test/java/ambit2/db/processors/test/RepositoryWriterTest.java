@@ -1288,7 +1288,12 @@ delete from struc_dataset where idstructure>3
 		Assert.assertEquals(47,property_values.getRowCount());	
         c.close();		
 
-	}				
+	}
+	@Test
+	public void testEmpty() throws Exception {
+		
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+	}	
 	
 	public static void main(String[] args) {
 		if (args==null || args.length==0) System.exit(-1);

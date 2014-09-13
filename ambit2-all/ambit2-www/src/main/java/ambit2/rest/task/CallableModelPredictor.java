@@ -8,6 +8,7 @@ import java.sql.Connection;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
+import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
@@ -27,7 +28,6 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
-import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.AbstractDBProcessor;

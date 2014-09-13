@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.sql.Connection;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.processors.IProcessor;
 
 import org.opentox.dsl.OTDataset;
@@ -18,7 +19,6 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
-import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.DbReaderStructure;
 import ambit2.db.processors.AbstractBatchProcessor;

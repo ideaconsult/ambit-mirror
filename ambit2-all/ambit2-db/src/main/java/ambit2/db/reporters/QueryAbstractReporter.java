@@ -1,10 +1,10 @@
 package ambit2.db.reporters;
 
+import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.reporter.Reporter;
-import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.DbReader;

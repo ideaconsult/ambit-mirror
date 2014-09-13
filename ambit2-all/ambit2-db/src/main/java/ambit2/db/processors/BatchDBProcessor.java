@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import net.idea.modbcum.i.IDBProcessor;
+import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 
@@ -38,7 +39,6 @@ import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitIOException;
-import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
@@ -53,7 +53,7 @@ import ambit2.core.io.RawIteratingWrapper;
  *
  * @param <ItemOutput>
  */
-public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String> 	{
+public class BatchDBProcessor<ITEMTYPE> extends AbstractBatchProcessor<IInputState,ITEMTYPE> 	{
 
 	/**
 	 * 
@@ -69,11 +69,11 @@ public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String>
 	}
 	public BatchDBProcessor() {
 	}
-	public BatchDBProcessor(ProcessorsChain<String,IBatchStatistics,IProcessor> processor) {
+	public BatchDBProcessor(ProcessorsChain<ITEMTYPE,IBatchStatistics,IProcessor> processor) {
 		super(processor);
 
 	}	
-	public Iterator<String> getIterator(IInputState target)
+	public Iterator<ITEMTYPE> getIterator(IInputState target)
 			throws AmbitException {
 		if (target instanceof FileInputState)
 			try {
@@ -120,7 +120,7 @@ public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String>
 	}
 	@Override
 	public void afterProcessing(IInputState target,
-			Iterator<String> iterator) throws AmbitException {
+			Iterator<ITEMTYPE> iterator) throws AmbitException {
 		
 		try {
 			if (iterator instanceof IIteratingChemObjectReader)
