@@ -29,13 +29,13 @@
         	}
         },
         "preprocessing": {
-        	"name" : "index",
-        	"description" : "Indexing file",
+        	"name" : "preprocessing",
+        	"description" : "Preprocessing (depends on options, default inchi)",
         	"connection" : "config/ambit.properties",
         	"post"  : {
         		"params" : {
         			":inchi" : { "mandatory" : false,  "type" : "Boolean", "value" : true},
-        			":similarity" : { "mandatory" : false,  "type" : "Boolean", "value" : true},
+        			":fp1024" : { "mandatory" : false,  "type" : "Boolean", "value" : true},
         			":smarts" : { "mandatory" : false,  "type" : "Boolean", "value" : false}
         		}
         	}

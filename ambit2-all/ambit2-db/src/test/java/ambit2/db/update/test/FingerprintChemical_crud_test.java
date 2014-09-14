@@ -13,14 +13,15 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.update.fp.CreateFingerprint;
+import ambit2.db.update.fp.CreateFingerprintChemical;
+import ambit2.db.update.fp.CreateFingerprintStructure;
 
-public class Fingerprint_crud_test extends CRUDTest<IStructureRecord,BitSet> {
+public class FingerprintChemical_crud_test extends CRUDTest<IStructureRecord,BitSet> {
 
 	@Override
 	protected IQueryUpdate<IStructureRecord, BitSet> createQuery()
 			throws Exception {
-		CreateFingerprint q = new CreateFingerprint();
+		CreateFingerprintChemical q = new CreateFingerprintChemical();
 		IStructureRecord record = new StructureRecord(7,100211,null,null);
 		
 		IDatabaseConnection c = getConnection();	
@@ -37,7 +38,7 @@ public class Fingerprint_crud_test extends CRUDTest<IStructureRecord,BitSet> {
 	@Override
 	protected IQueryUpdate<IStructureRecord, BitSet> createQueryNew()
 			throws Exception {
-		CreateFingerprint q = new CreateFingerprint();
+		CreateFingerprintChemical q = new CreateFingerprintChemical();
 
 		return q;
 	}
@@ -47,7 +48,7 @@ public class Fingerprint_crud_test extends CRUDTest<IStructureRecord,BitSet> {
 			throws Exception {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
-				String.format("SELECT * from fp1024_struc where idstructure=%d ",query.getGroup().getIdstructure()));
+				String.format("SELECT * from fp1024 where idchemical=%d ",query.getGroup().getIdchemical()));
 		Assert.assertEquals(1,table.getRowCount());
 		
 
@@ -65,7 +66,7 @@ public class Fingerprint_crud_test extends CRUDTest<IStructureRecord,BitSet> {
 	@Override
 	protected IQueryUpdate<IStructureRecord, BitSet> deleteQuery()
 			throws Exception {
-		CreateFingerprint q = new CreateFingerprint();
+		CreateFingerprintStructure q = new CreateFingerprintStructure();
 
 		return q;
 	}
@@ -80,7 +81,7 @@ public class Fingerprint_crud_test extends CRUDTest<IStructureRecord,BitSet> {
 	@Override
 	protected IQueryUpdate<IStructureRecord, BitSet> updateQuery()
 			throws Exception {
-		CreateFingerprint q = new CreateFingerprint();
+		CreateFingerprintChemical q = new CreateFingerprintChemical();
 
 		return q;
 	}

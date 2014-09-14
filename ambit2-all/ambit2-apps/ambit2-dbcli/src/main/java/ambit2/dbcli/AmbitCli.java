@@ -10,6 +10,7 @@ import java.io.Writer;
 import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,15 +47,24 @@ import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.db.DbReader;
 import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.processors.AbstractUpdateProcessor;
+import ambit2.db.processors.FP1024Writer;
 import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.processors.QuickImportBatchProcessor;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveStructure;
+import ambit2.db.search.structure.MissingFingerprintsQuery;
 import ambit2.db.search.structure.MissingInChIsQuery;
+import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.chemical.UpdateChemical;
+import ambit2.db.update.fp.CreateFingerprintChemical;
+import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
+import ambit2.descriptors.processors.BitSetGenerator;
+import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.smarts.processors.SMARTSPropertiesGenerator;
 
 import com.mysql.jdbc.CommunicationsException;
+
 
 /**
  * 
@@ -131,13 +141,27 @@ public class AmbitCli {
 					logger.log(Level.INFO,stats.toString());
 			}
 		} else if ("preprocessing".equals(command)) {
+			FPTable preprocessingOption = FPTable.inchi;
+			try {
+				if ((Boolean)options.getParam(":inchi")) preprocessingOption = FPTable.inchi;
+			} catch (Exception x) {}
+			
+			try {
+				if ((Boolean)options.getParam(":fp1024")) preprocessingOption = FPTable.fp1024;
+			} catch (Exception x) {
+				x.printStackTrace();
+			}
+			
+			try {
+				if ((Boolean)options.getParam(":smarts")) preprocessingOption = FPTable.sk1024;
+			} catch (Exception x) {}
 			
 			DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>() {
 				@Override
 				public void onItemRead(IStructureRecord input,
 						IBatchStatistics stats) {
 					super.onItemRead(input, stats);
-					if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 10000) == 0)
+					if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 5000) == 0)
 						try {
 							logger.log(Level.INFO,stats.toString());
 							getConnection().commit();
@@ -167,7 +191,7 @@ public class AmbitCli {
 						IParameterizedQuery<IStructureRecord, IStructureRecord, IQueryCondition> query)
 						throws AmbitException {
 					query.setValue(target);
-					super.configureQuery(target, query);
+					//super.configureQuery(target, query);
 				}
 				@Override
 				protected IStructureRecord processDetail(IStructureRecord master,
@@ -182,40 +206,68 @@ public class AmbitCli {
 			strucReader.setCloseConnection(false);
 			batch.getProcessorChain().add(strucReader);
 			//preprocessing itself
-			batch.getProcessorChain().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
-				protected transient StructureNormalizer normalizer = new StructureNormalizer();
-				@Override
-				public IStructureRecord process(IStructureRecord record)
-						throws Exception {
-					try {
-						/*
-						if ((molecule != null) && (molecule.getProperties()!=null))
-							record.addProperties(molecule.getProperties());
-						*/
-						normalizer.process(record);			
-						return record;
-					} catch (Exception x) {
-						record.setType(STRUC_TYPE.NA);
-						return record;
-					}
-				}
-			});
 			
-			//CreateChemical
+			//query
+			IQueryRetrieval<IStructureRecord> query = null;
+			AbstractUpdate updateQuery = null;
+			switch (preprocessingOption) {
+			case inchi : {
+				query = new MissingInChIsQuery("UNKNOWN");
+				updateQuery = new UpdateChemical();
+				batch.getProcessorChain().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
+					protected transient StructureNormalizer normalizer = new StructureNormalizer();
+					@Override
+					public IStructureRecord process(IStructureRecord record)
+							throws Exception {
+						try {
+							normalizer.process(record);			
+							return record;
+						} catch (Exception x) {
+							record.setType(STRUC_TYPE.NA);
+							return record;
+						}
+					}
+				});				
+				batch.getProcessorChain().add(new AbstractUpdateProcessor<Object,IChemical>(OP.CREATE,updateQuery) {
+					@Override
+					protected IChemical execute(Object group,
+							IQueryUpdate<Object, IChemical> query)
+							throws SQLException, OperationNotSupportedException,
+							AmbitException {
+						if (group instanceof IChemical)
+							query.setObject((IChemical)group);
+						return super.execute(group, query);
+					}
+				});				
+				break;
+			}
+			case fp1024: {
+				query =  new MissingFingerprintsQuery(preprocessingOption);
+				//updateQuery = new CreateFingerprintChemical(FPTable.fp1024);
+				batch.getProcessorChain().add(new BitSetGenerator(FPTable.fp1024));
+				batch.getProcessorChain().add(new FP1024Writer(FPTable.fp1024));		
+				break;
+			}
+			case sk1024: {
+				query =  new MissingFingerprintsQuery(preprocessingOption);
+				//updateQuery = new CreateFingerprintChemical(FPTable.sk1024);
+				batch.getProcessorChain().add(new BitSetGenerator(FPTable.sk1024));
+				batch.getProcessorChain().add(new FP1024Writer(FPTable.sk1024));			
+				break;
+			}
+			case smarts_accelerator: {
+				batch.getProcessorChain().add(new SMARTSPropertiesGenerator());
+				batch.getProcessorChain().add(new SMARTSAcceleratorWriter());
+				break;
+			}
+			default: {
+				updateQuery = new UpdateChemical();
+				query = new MissingInChIsQuery("UNKNOWN");
+			}
+			}			
 			
 			batch.setHandlePrescreen(false);
-			batch.getProcessorChain().add(new AbstractUpdateProcessor<Object,IChemical>(OP.CREATE,new UpdateChemical()) {
-				@Override
-				protected IChemical execute(Object group,
-						IQueryUpdate<Object, IChemical> query)
-						throws SQLException, OperationNotSupportedException,
-						AmbitException {
-					if (group instanceof IChemical)
-						query.setObject((IChemical)group);
-					return super.execute(group, query);
-				}
-			});
-			
+
 			Connection c = null;
 			DBConnection dbc = null;
 			dbc = getConnection(options.getSQLConfig());
@@ -223,16 +275,22 @@ public class AmbitCli {
 			c.setAutoCommit(false);
 			batch.setCloseConnection(true);
 			batch.setConnection(c);
+			batch.open();
 			
 			IBatchStatistics stats = null;
 			try {
-				IQueryRetrieval<IStructureRecord> query = new MissingInChIsQuery("UNKNOWN");
-				query.setPageSize(1000000);
+				query.setPageSize(100000);
+				
+				try {disableIndices(batch.getConnection());} catch (Exception x) { logger.warning(x.getMessage());}
+				
 				stats = batch.process(query);
 			} catch (Exception x) {
 				logger.log(Level.WARNING,x.getMessage(),x);
 			} finally {
 				try {batch.getConnection().commit();} catch (Exception x) { logger.warning(x.getMessage());}
+				
+				try {enableIndices(batch.getConnection());} catch (Exception x) { logger.warning(x.getMessage());}
+				
 				try {if (batch!=null) batch.close();} catch (Exception x) { logger.warning(x.getMessage());}
 				if (stats!=null) 
 					logger.log(Level.INFO,stats.toString());
@@ -504,4 +562,38 @@ public class AmbitCli {
 	}
 	
 	
+    protected void disableIndices(Connection connection) throws SQLException {
+    	Statement t = null;
+    	try {
+    		logger.log(Level.INFO,"Disabling indexes ...");
+	        t = connection.createStatement();
+	        t.addBatch("SET FOREIGN_KEY_CHECKS = 0;");
+	        t.addBatch("SET UNIQUE_CHECKS = 0;");
+	        t.addBatch("SET AUTOCOMMIT = 0;");
+	        t.executeBatch();
+	        logger.log(Level.INFO,"Indexes disabled.");
+    	} catch (SQLException x) {
+    		throw x;
+    	} finally {
+    		try {if (t!=null) t.close();} catch (Exception x) {}
+    	}
+    }     
+
+    protected void enableIndices(Connection connection) throws SQLException {
+    	Statement t = null;
+    	try {
+    		logger.log(Level.INFO,"Enabling indices ...");
+	        t = connection.createStatement();
+	        t.addBatch("SET UNIQUE_CHECKS = 1;");
+	        t.addBatch("SET FOREIGN_KEY_CHECKS = 1;");
+	        t.executeBatch();
+	        connection.commit();
+	        logger.log(Level.INFO,"Indexes enabled.");
+    	} catch (SQLException x) {	
+    		throw x;
+    	} finally {
+    		try {if (t!=null) t.close();} catch (Exception x) {}
+    	}
+    }     
+
 }
