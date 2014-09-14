@@ -95,6 +95,7 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 		IBatchStatistics result = getResult(target);		
 		ProcessorsChain<ItemInput, IBatchStatistics,IProcessor> processor = getProcessorChain(); 
 		Iterator<ItemInput> i = getIterator(target);
+		logger.log(Level.INFO, "Processing started");
 		cancelled = false;
 		while (i.hasNext() && !cancelled) {
 			

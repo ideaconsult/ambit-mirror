@@ -57,7 +57,6 @@ import ambit2.db.search.structure.MissingFingerprintsQuery;
 import ambit2.db.search.structure.MissingInChIsQuery;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.chemical.UpdateChemical;
-import ambit2.db.update.fp.CreateFingerprintChemical;
 import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
 import ambit2.descriptors.processors.BitSetGenerator;
 import ambit2.descriptors.processors.BitSetGenerator.FPTable;
@@ -279,10 +278,10 @@ public class AmbitCli {
 			
 			IBatchStatistics stats = null;
 			try {
-				query.setPageSize(100000);
-				
+				query.setPageSize(20000000);
+				logger.fine(query.getSQL());
 				try {disableIndices(batch.getConnection());} catch (Exception x) { logger.warning(x.getMessage());}
-				
+				logger.info("Query submitted");
 				stats = batch.process(query);
 			} catch (Exception x) {
 				logger.log(Level.WARNING,x.getMessage(),x);
@@ -565,7 +564,6 @@ public class AmbitCli {
     protected void disableIndices(Connection connection) throws SQLException {
     	Statement t = null;
     	try {
-    		logger.log(Level.INFO,"Disabling indexes ...");
 	        t = connection.createStatement();
 	        t.addBatch("SET FOREIGN_KEY_CHECKS = 0;");
 	        t.addBatch("SET UNIQUE_CHECKS = 0;");
@@ -573,6 +571,8 @@ public class AmbitCli {
 	        t.executeBatch();
 	        logger.log(Level.INFO,"Indexes disabled.");
     	} catch (SQLException x) {
+    		logger.log(Level.WARNING,"Error disabling indexes ...");
+
     		throw x;
     	} finally {
     		try {if (t!=null) t.close();} catch (Exception x) {}
@@ -582,14 +582,14 @@ public class AmbitCli {
     protected void enableIndices(Connection connection) throws SQLException {
     	Statement t = null;
     	try {
-    		logger.log(Level.INFO,"Enabling indices ...");
 	        t = connection.createStatement();
 	        t.addBatch("SET UNIQUE_CHECKS = 1;");
 	        t.addBatch("SET FOREIGN_KEY_CHECKS = 1;");
 	        t.executeBatch();
 	        connection.commit();
 	        logger.log(Level.INFO,"Indexes enabled.");
-    	} catch (SQLException x) {	
+    	} catch (SQLException x) {
+    		logger.log(Level.WARNING,"Error enabling indexes ...");
     		throw x;
     	} finally {
     		try {if (t!=null) t.close();} catch (Exception x) {}

@@ -34,8 +34,8 @@
         	"connection" : "config/ambit.properties",
         	"post"  : {
         		"params" : {
-        			":inchi" : { "mandatory" : false,  "type" : "Boolean", "value" : true},
-        			":fp1024" : { "mandatory" : false,  "type" : "Boolean", "value" : true},
+        			":inchi" : { "mandatory" : false,  "type" : "Boolean", "value" : false},
+        			":fp1024" : { "mandatory" : false,  "type" : "Boolean", "value" : false},
         			":smarts" : { "mandatory" : false,  "type" : "Boolean", "value" : false}
         		}
         	}
