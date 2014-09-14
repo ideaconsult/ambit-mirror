@@ -36,7 +36,8 @@
         		"params" : {
         			":inchi" : { "mandatory" : false,  "type" : "Boolean", "value" : false},
         			":fp1024" : { "mandatory" : false,  "type" : "Boolean", "value" : false},
-        			":smarts" : { "mandatory" : false,  "type" : "Boolean", "value" : false}
+        			":smarts" : { "mandatory" : false,  "type" : "Boolean", "value" : false},
+        			":pagesize" : { "mandatory" : false,  "type" : "Integer", "value" : 5000000}
         		}
         	}
         },          

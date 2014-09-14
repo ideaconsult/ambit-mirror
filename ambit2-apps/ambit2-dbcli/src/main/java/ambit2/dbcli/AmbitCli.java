@@ -140,6 +140,12 @@ public class AmbitCli {
 					logger.log(Level.INFO,stats.toString());
 			}
 		} else if ("preprocessing".equals(command)) {
+			int pagesize= 5000000;
+			try {
+				pagesize = (Integer)options.getParam(":pagesize");
+			} catch (Exception x) {}
+
+			
 			FPTable preprocessingOption = FPTable.inchi;
 			try {
 				if ((Boolean)options.getParam(":inchi")) preprocessingOption = FPTable.inchi;
@@ -278,10 +284,10 @@ public class AmbitCli {
 			
 			IBatchStatistics stats = null;
 			try {
-				query.setPageSize(20000000);
+				query.setPageSize(pagesize);
 				logger.fine(query.getSQL());
 				try {disableIndices(batch.getConnection());} catch (Exception x) { logger.warning(x.getMessage());}
-				logger.info("Query submitted");
+				logger.info(String.format("Query submitted [pagesize %d]",pagesize));
 				stats = batch.process(query);
 			} catch (Exception x) {
 				logger.log(Level.WARNING,x.getMessage(),x);
