@@ -25,6 +25,7 @@ package ambit2.base.processors.batch;
 
 import java.util.Iterator;
 
+import net.idea.modbcum.i.batch.DefaultBatchStatistics;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
@@ -71,7 +72,7 @@ public abstract class BatchProcessor<INPUT,Target> extends DefaultAmbitProcessor
 		try {
 			DefaultBatchStatistics stats = new DefaultBatchStatistics();
 			stats.setResultCaption("Read");
-			stats.frequency = 1;
+			stats.setFrequency(1);
 
 			Iterator reader = getIterator(target);
 			ProcessorsChain<Target,IBatchStatistics,IProcessor> processor = getProcessorChain();
@@ -79,7 +80,7 @@ public abstract class BatchProcessor<INPUT,Target> extends DefaultAmbitProcessor
 				throw new AmbitException("Processor not defined");
 			long started = System.currentTimeMillis();
 			while (reader.hasNext() && !cancelled) {
-				if ((stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ) % stats.frequency)==0)
+				if ((stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ) % stats.getFrequency())==0)
 					propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS,null,stats);				
 				Object object= null;
 				long ms = System.currentTimeMillis();

@@ -35,13 +35,13 @@ import java.util.Iterator;
 import java.util.logging.Level;
 
 import net.idea.modbcum.i.IDBProcessor;
+import net.idea.modbcum.i.batch.DefaultBatchStatistics;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import ambit2.base.interfaces.IBatchProcessor;
 import ambit2.base.processors.ProcessorsChain;
-import ambit2.base.processors.batch.DefaultBatchStatistics;
 import ambit2.db.AbstractDBProcessor;
 
 /**
