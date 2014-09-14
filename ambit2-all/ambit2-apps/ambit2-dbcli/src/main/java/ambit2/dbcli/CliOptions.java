@@ -302,7 +302,14 @@ public class CliOptions {
     		for (int i=0; i < params.length;i+=2) try {
     			ObjectNode param = (ObjectNode)command.get(subcommand.name()).
     								get(_fields.params.name()).get(":"+params[i]);
-    			if (param!=null) param.put(_fields.value.name(), params[i+1]);
+    			if (param!=null) {
+    				if ("Integer".equals(param.get("type").getTextValue()))
+    					param.put(_fields.value.name(), Integer.parseInt(params[i+1]));
+    				else if ("Boolean".equals(param.get("type").getTextValue()))
+    					param.put(_fields.value.name(), Boolean.parseBoolean(params[i+1]));
+    				else 
+    					param.put(_fields.value.name(), params[i+1]);
+    			}
     		} catch (Exception x) {
     			//ignore
     		}
@@ -380,7 +387,7 @@ public class CliOptions {
         .withValueSeparator('=')        
         .withLongOpt("data")
         .withArgName("data")
-        .withDescription("Command parameters, e.g. -d \"chunk=1000000\"")
+        .withDescription("Command parameters, e.g. -d \"chunk=1000000\" \"-d inchi=false\" \"-d fp1024=true\" \"-d pagesize=5000000\"")
         .create( "d" );  
     	
     	Option config   = OptionBuilder
@@ -670,6 +677,8 @@ public class CliOptions {
 			JsonNode chunkNode = scommand.get(name);
 			if ("Boolean".equals(chunkNode.get("type").getTextValue()))
 				return chunkNode.get("value").getBooleanValue();
+			else if ("Integer".equals(chunkNode.get("type").getTextValue()))
+				return chunkNode.get("value").getIntValue();			
 			else	
 				return chunkNode.get("value").getTextValue();
 		} catch (Exception x) {
