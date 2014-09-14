@@ -155,14 +155,19 @@ public class AmbitCli {
 			} catch (Exception x) {}
 			
 			try {
+				if ((Boolean)options.getParam(":smarts_accelerator")) preprocessingOption = FPTable.smarts_accelerator;
+			} catch (Exception x) {}
+			
+			try {
 				if ((Boolean)options.getParam(":fp1024")) preprocessingOption = FPTable.fp1024;
 			} catch (Exception x) {
 				x.printStackTrace();
 			}
 			
 			try {
-				if ((Boolean)options.getParam(":smarts")) preprocessingOption = FPTable.sk1024;
+				if ((Boolean)options.getParam(":sk1024")) preprocessingOption = FPTable.sk1024;
 			} catch (Exception x) {}
+
 			
 			DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>() {
 				@Override
@@ -264,6 +269,7 @@ public class AmbitCli {
 				break;
 			}
 			case smarts_accelerator: {
+				query= new MissingFingerprintsQuery(FPTable.smarts_accelerator);
 				batch.getProcessorChain().add(new SMARTSPropertiesGenerator());
 				batch.getProcessorChain().add(new SMARTSAcceleratorWriter());
 				break;
