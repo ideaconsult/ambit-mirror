@@ -156,12 +156,13 @@ public class AmbitCli {
 			try {
 				if ((Boolean)options.getParam(":inchi")) preprocessingOption.add(FPTable.inchi);
 			} catch (Exception x) {}
-			
+			/*
 			try {
 				if ((Boolean)options.getParam(":pubchemfp")) preprocessingOption.add(FPTable.pc1024);
 			} catch (Exception x) {
 				x.printStackTrace();
 			}
+			*/
 			
 			try {
 				if ((Boolean)options.getParam(":atomprops")) preprocessingOption.add(FPTable.smarts_accelerator);
@@ -441,7 +442,7 @@ public class AmbitCli {
 			CliOptions options = new CliOptions();
 			if (options.parse(args)) {
 				AmbitCli navigator = new AmbitCli(options);
-				logger.info(String.format("Running %s (%s)\tSubcommand:\t%s:%s",
+				logger.info(String.format("Running %s (%s)\nSubcommand:\t%s:%s",
 						options.getCommand().get("name"),options.getCommand().get("connection"),
 						options.getSubcommand(),options.getCommand().get(options.getSubcommand().name())));
 				navigator.go(options.getCmd(),options.getSubcommand().name());
