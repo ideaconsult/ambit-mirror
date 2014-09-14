@@ -12,6 +12,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -149,25 +151,46 @@ public class AmbitCli {
 			}
 
 			
-			FPTable preprocessingOption = FPTable.inchi;
+			Set<FPTable> preprocessingOption = new TreeSet<FPTable>();
+			//FPTable.inchi;
 			try {
-				if ((Boolean)options.getParam(":inchi")) preprocessingOption = FPTable.inchi;
+				if ((Boolean)options.getParam(":inchi")) preprocessingOption.add(FPTable.inchi);
 			} catch (Exception x) {}
 			
 			try {
-				if ((Boolean)options.getParam(":smarts_accelerator")) preprocessingOption = FPTable.smarts_accelerator;
-			} catch (Exception x) {}
-			
-			try {
-				if ((Boolean)options.getParam(":fp1024")) preprocessingOption = FPTable.fp1024;
+				if ((Boolean)options.getParam(":pubchemfp")) preprocessingOption.add(FPTable.pc1024);
 			} catch (Exception x) {
 				x.printStackTrace();
 			}
 			
 			try {
-				if ((Boolean)options.getParam(":sk1024")) preprocessingOption = FPTable.sk1024;
+				if ((Boolean)options.getParam(":atomprops")) preprocessingOption.add(FPTable.smarts_accelerator);
 			} catch (Exception x) {}
 
+			try {
+				if ((Boolean)options.getParam(":fp1024")) preprocessingOption.add(FPTable.fp1024);
+			} catch (Exception x) {
+				x.printStackTrace();
+			}
+			
+			try {
+				if ((Boolean)options.getParam(":sk1024")) preprocessingOption.add(FPTable.sk1024);
+			} catch (Exception x) {}
+
+			try {
+				if ((Boolean)options.getParam(":smarts")) {
+					preprocessingOption.add(FPTable.smarts_accelerator);
+					preprocessingOption.add(FPTable.fp1024);
+					preprocessingOption.add(FPTable.sk1024);
+				}
+			} catch (Exception x) {}
+
+			try {
+				if ((Boolean)options.getParam(":similarity")) {
+					preprocessingOption.add(FPTable.smarts_accelerator);
+					preprocessingOption.add(FPTable.fp1024);
+				}
+			} catch (Exception x) {}
 			
 			DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>() {
 				@Override
@@ -223,8 +246,9 @@ public class AmbitCli {
 			//query
 			IQueryRetrieval<IStructureRecord> query = null;
 			AbstractUpdate updateQuery = null;
-			switch (preprocessingOption) {
-			case inchi : {
+			if (preprocessingOption.isEmpty()) preprocessingOption.add(FPTable.inchi);
+			
+			if (preprocessingOption.contains(FPTable.inchi)) {
 				query = new MissingInChIsQuery("UNKNOWN");
 				updateQuery = new UpdateChemical();
 				batch.getProcessorChain().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
@@ -252,34 +276,43 @@ public class AmbitCli {
 						return super.execute(group, query);
 					}
 				});				
-				break;
+			} else {
+				//add generators
+				if (preprocessingOption.contains(FPTable.smarts_accelerator)) {
+					query= new MissingFingerprintsQuery(FPTable.smarts_accelerator);
+					batch.getProcessorChain().add(new SMARTSPropertiesGenerator());
+				}
+				if (preprocessingOption.contains(FPTable.fp1024)) {
+					query =  new FingerprintsByStatus(FPTable.fp1024);
+					//updateQuery = new CreateFingerprintChemical(FPTable.fp1024);
+					batch.getProcessorChain().add(new BitSetGenerator(FPTable.fp1024));
+				}
+				if (preprocessingOption.contains(FPTable.sk1024)) {
+					query =  new FingerprintsByStatus(FPTable.sk1024);
+					batch.getProcessorChain().add(new BitSetGenerator(FPTable.sk1024));
+				}
+				
+				//add writers
+				if (preprocessingOption.contains(FPTable.smarts_accelerator)) {
+					batch.getProcessorChain().add(new SMARTSAcceleratorWriter());					
+				}
+				if (preprocessingOption.contains(FPTable.fp1024)) {
+					batch.getProcessorChain().add(new FP1024Writer(FPTable.fp1024));		
+				}
+				if (preprocessingOption.contains(FPTable.sk1024)) {
+					batch.getProcessorChain().add(new FP1024Writer(FPTable.sk1024));			
+				}
+				
+				/*
+				if (preprocessingOption.contains(FPTable.pc1024)) {
+					query =  new FingerprintsByStatus(FPTable.pc1024);
+					batch.getProcessorChain().add(new BitSetGenerator(FPTable.pc1024));
+					batch.getProcessorChain().add(new FP1024Writer(FPTable.pc1024));			
+				}
+				*/
 			}
-			case fp1024: {
-				query =  new FingerprintsByStatus(preprocessingOption);
-				//updateQuery = new CreateFingerprintChemical(FPTable.fp1024);
-				batch.getProcessorChain().add(new BitSetGenerator(FPTable.fp1024));
-				batch.getProcessorChain().add(new FP1024Writer(FPTable.fp1024));		
-				break;
-			}
-			case sk1024: {
-				query =  new FingerprintsByStatus(preprocessingOption);
-				//updateQuery = new CreateFingerprintChemical(FPTable.sk1024);
-				batch.getProcessorChain().add(new BitSetGenerator(FPTable.sk1024));
-				batch.getProcessorChain().add(new FP1024Writer(FPTable.sk1024));			
-				break;
-			}
-			case smarts_accelerator: {
-				query= new MissingFingerprintsQuery(FPTable.smarts_accelerator);
-				batch.getProcessorChain().add(new SMARTSPropertiesGenerator());
-				batch.getProcessorChain().add(new SMARTSAcceleratorWriter());
-				break;
-			}
-			default: {
-				updateQuery = new UpdateChemical();
-				query = new MissingInChIsQuery("UNKNOWN");
-			}
-			}			
 			
+	
 			batch.setHandlePrescreen(false);
 
 			Connection c = null;
