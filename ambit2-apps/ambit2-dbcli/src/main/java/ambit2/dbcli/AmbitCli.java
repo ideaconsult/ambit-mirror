@@ -53,6 +53,7 @@ import ambit2.db.processors.QuickImportBatchProcessor;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveStructure;
+import ambit2.db.search.structure.FingerprintsByStatus;
 import ambit2.db.search.structure.MissingFingerprintsQuery;
 import ambit2.db.search.structure.MissingInChIsQuery;
 import ambit2.db.update.AbstractUpdate;
@@ -143,7 +144,9 @@ public class AmbitCli {
 			int pagesize= 5000000;
 			try {
 				pagesize = (Integer)options.getParam(":pagesize");
-			} catch (Exception x) {}
+			} catch (Exception x) {
+				x.printStackTrace();
+			}
 
 			
 			FPTable preprocessingOption = FPTable.inchi;
@@ -247,14 +250,14 @@ public class AmbitCli {
 				break;
 			}
 			case fp1024: {
-				query =  new MissingFingerprintsQuery(preprocessingOption);
+				query =  new FingerprintsByStatus(preprocessingOption);
 				//updateQuery = new CreateFingerprintChemical(FPTable.fp1024);
 				batch.getProcessorChain().add(new BitSetGenerator(FPTable.fp1024));
 				batch.getProcessorChain().add(new FP1024Writer(FPTable.fp1024));		
 				break;
 			}
 			case sk1024: {
-				query =  new MissingFingerprintsQuery(preprocessingOption);
+				query =  new FingerprintsByStatus(preprocessingOption);
 				//updateQuery = new CreateFingerprintChemical(FPTable.sk1024);
 				batch.getProcessorChain().add(new BitSetGenerator(FPTable.sk1024));
 				batch.getProcessorChain().add(new FP1024Writer(FPTable.sk1024));			
