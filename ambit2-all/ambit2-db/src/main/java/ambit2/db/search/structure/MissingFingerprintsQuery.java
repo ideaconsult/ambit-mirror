@@ -91,7 +91,7 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 		
 		"select ? as idquery, structure.idchemical,idstructure,1 as selected,1 as metric,null as text\n"+
 		"from structure\n"+
-		"where (structure.type_structure != 'NA')  and atomproperties is null order by idchemical ";
+		"where (structure.type_structure != 'NA')  and atomproperties is null";
 		
 	public final static String sqlINCHI =
 			"select ? as idquery, idchemical,-1,1 as selected,1 as metric,null as text from chemicals " +
