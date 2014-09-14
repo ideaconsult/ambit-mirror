@@ -37,7 +37,10 @@
         			":inchi" : { "mandatory" : false,  "type" : "Boolean", "value" : false},
         			":fp1024" : { "mandatory" : false,  "type" : "Boolean", "value" : false},
         			":sk1024" : { "mandatory" : false,  "type" : "Boolean", "value" : false},
-        			":smarts_accelerator" : { "mandatory" : false,  "type" : "Boolean", "value" : false}, 
+        			":pubchemfp" : { "mandatory" : false,  "type" : "Boolean", "value" : false},
+        			":atomprops" : { "mandatory" : false,  "type" : "Boolean", "value" : false},
+        			":smarts" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment" : "atomprops,fp1024,sk1024"},
+        			":similarity" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment" : "atomprops,fp1024"}, 
         			":pagesize" : { "mandatory" : false,  "type" : "Integer", "value" : 5000000}
         		}
         	}
