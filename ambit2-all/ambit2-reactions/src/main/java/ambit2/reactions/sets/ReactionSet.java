@@ -71,6 +71,7 @@ public class ReactionSet
 				if (group == null)
 				{
 					group = new ReactionGroup();
+					group.setName(rData.getGroup());
 					reactionGroups.add(group);
 				}
 				group.addNewReaction(rData);

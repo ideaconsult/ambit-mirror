@@ -18,18 +18,20 @@ public class ReactionTestUtils
 	{
 		ReactionReadUtils rru = new ReactionReadUtils();
 		ArrayList<ReactionSet> reactionSets =  rru.loadReactionsFromRuleFormat(fileName);
-		
+		for (int i = 0; i < reactionSets.size(); i++)
+			System.out.println(reactionSetToString(reactionSets.get(i)));
 	}
 	
 	public static String reactionSetToString(ReactionSet rs)
 	{
 		StringBuffer sb = new StringBuffer();
 		
+		sb.append("Reaction set:  " + rs.getName() + "\n");
 		for (ReactionData rdata: rs.getReactions())
-			sb.append(rdata.getName() + "  " + rdata.getSmirks() + "  " + rdata.getInfo());
+			sb.append(rdata.getName() + "  " + rdata.getSmirks() + "  " + rdata.getInfo() + "\n");
 		
 		for (ReactionGroup group : rs.getReactionGroups())
-			;
+			sb.append(reactionGroupToString(group) + "\n");
 		
 		return (sb.toString());
 	}
@@ -37,8 +39,9 @@ public class ReactionTestUtils
 	public static String reactionGroupToString(ReactionGroup rg)
 	{
 		StringBuffer sb = new StringBuffer();
+		sb.append("  Group: " + rg.getName() + "\n");
 		for (ReactionData rdata: rg.getReactions())
-			sb.append(rdata.getName() + "  " + rdata.getSmirks() + "  " + rdata.getInfo());
+			sb.append("  " + rdata.getName() + "  " + rdata.getSmirks() + "  " + rdata.getInfo() + "\n");
 		
 		return (sb.toString());
 	}

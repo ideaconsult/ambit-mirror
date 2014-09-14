@@ -76,6 +76,10 @@ public class ReactionReadUtils
 			mi.keyWord.add("SET");
 			mi.objectFieldName.add("set");
 			mi.keyWordRequired.add(new Boolean(false));
+			
+			mi.keyWord.add("GROUP");
+			mi.objectFieldName.add("group");
+			mi.keyWordRequired.add(new Boolean(false));
 						
 			reactionMetaInfo = mi;
 		}
@@ -127,7 +131,7 @@ public class ReactionReadUtils
 		
 	private void addReaction(ArrayList<ReactionSet> reactionSets, ReactionDataObject rdo)
 	{
-		System.out.println(rdo.toString());
+		//System.out.println(rdo.toString());
 		
 		if (rdo.set == null)
 		{	
