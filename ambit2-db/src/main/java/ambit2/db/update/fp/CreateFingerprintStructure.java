@@ -18,7 +18,7 @@ import ambit2.db.update.AbstractUpdate;
  * @author nina
  *
  */
-public class CreateFingerprint extends AbstractUpdate<IStructureRecord,BitSet> {
+public class CreateFingerprintStructure extends AbstractUpdate<IStructureRecord,BitSet> {
 	
 	protected BigInteger[] h16 = new BigInteger[16];	
 	protected static String[] sql = { 

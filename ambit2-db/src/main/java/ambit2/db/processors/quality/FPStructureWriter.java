@@ -13,7 +13,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.processors.AbstractUpdateProcessor;
-import ambit2.db.update.fp.CreateFingerprint;
+import ambit2.db.update.fp.CreateFingerprintStructure;
 
 public class FPStructureWriter extends AbstractUpdateProcessor<IStructureRecord, BitSet> {
 	protected MoleculeReader molReader = new MoleculeReader();
@@ -24,7 +24,7 @@ public class FPStructureWriter extends AbstractUpdateProcessor<IStructureRecord,
 	private static final long serialVersionUID = -5985642442961325777L;
 	
 	public FPStructureWriter() {
-		setQueryCreate(new CreateFingerprint());
+		setQueryCreate(new CreateFingerprintStructure());
 	}
 	@Override
 	public BitSet create(IStructureRecord record) throws SQLException,

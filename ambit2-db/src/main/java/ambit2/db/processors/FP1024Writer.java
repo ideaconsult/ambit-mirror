@@ -36,6 +36,7 @@ import ambit2.descriptors.processors.BitSetGenerator.FPTable;
 
 /**
  * Writes fingerprints, taken from IStructureRecord.getProperties().get(AmbitCONSTANTS.Fingerprint).
+ * TODO to be replaced by @{link CreateFingerprintChemical}
  * @author nina
  *
  */

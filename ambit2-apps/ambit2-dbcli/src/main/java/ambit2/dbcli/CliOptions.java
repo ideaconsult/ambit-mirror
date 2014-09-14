@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.logging.Level;
 
 import net.idea.modbcum.i.processors.IProcessor;
 
@@ -660,5 +661,19 @@ public class CliOptions {
 		} catch (Exception x) {
 			throw x;
 		}
-	}	
+	}
+	
+	public Object getParam(String name) {
+		try {
+			JsonNode scmd = command.get(subcommand.name());
+			JsonNode scommand = scmd.get("params");
+			JsonNode chunkNode = scommand.get(name);
+			if ("Boolean".equals(chunkNode.get("type").getTextValue()))
+				return chunkNode.get("value").getBooleanValue();
+			else	
+				return chunkNode.get("value").getTextValue();
+		} catch (Exception x) {
+			return null;
+		}
+	}
 }

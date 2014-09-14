@@ -64,11 +64,13 @@ public abstract class AbstractRepositoryWriter<Target,Result> extends AbstractDB
 	public void setOperation(OP operation)  {
 		this.operation = operation;
 	}
+	@Override
 	public synchronized void setConnection(Connection connection)  throws DbAmbitException  {
         super.setConnection(connection);
         exec.setConnection(connection);
         queryexec.setConnection(connection);
     }       
+	@Override
     public void open() throws DbAmbitException {
         try {
             prepareStatement(getConnection());
@@ -77,7 +79,7 @@ public abstract class AbstractRepositoryWriter<Target,Result> extends AbstractDB
         }
     }
    
-
+	
     protected void prepareStatement(Connection connection) throws SQLException {
        
     }
