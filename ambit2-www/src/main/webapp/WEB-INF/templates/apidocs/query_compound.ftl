@@ -16,7 +16,7 @@
     "resourcePath": "/query",
 	"apis": [
      	{
-            "path": "/query/compound/search/all",
+            "path": "/query/compound/search/{term}/{representation}",
             "operations": [
                 {
                     "method": "GET",
@@ -27,14 +27,54 @@
                      <#include "/apidocs/authz.ftl" >
                     "parameters": [
 			            {
+			              "name": "term",
+			              "description": "",
+			              "required": true,
+			              "type": "string",
+			              "enum" : ["search", "url", "inchikey"],
+			              "defaultValue" : "search",
+			              "paramType": "path",
+			              "allowMultiple"  : false
+			            },      
+			            {
+			              "name": "representation",
+			              "description": "",
+			              "required": false,
+			              "type": "string",
+			              "enum" : ["all","smiles","reach","stdinchi","stdinchikey","names","iupac_name","synonym","cas","einecs"],
+			              "defaultValue" : "all",
+			              "paramType": "path",
+			              "allowMultiple"  : false
+			            },
+			            {
 			              "name": "search",
-			              "description": "Compound identifier",
+			              "description": "Compound identifier (SMILES, InChI, name, registry identifiers)",
 			              "required": true,
 			              "type": "string",
 			              "paramType": "query",
 			              "allowMultiple"  : false
 			            },
-						<#include "/apidocs/parameters_page.ftl" >				            			            
+			            {
+			              "name": "b64search",
+			              "description": "Base64 encoded mol file; if included, will be used instead of the 'search' parameter",
+			              "required": false,
+			              "type": "string",
+			              "paramType": "query",
+			              "allowMultiple"  : false
+			            },			            
+			            {
+			              "name": "casesens",
+			              "description": "Case sensitivy search if yes",
+			              "required": false,
+			              "type": "string",
+			              "enum" : ["true","false"],
+			              "defaultValue" : "false",
+			              "paramType": "query",
+			              "allowMultiple"  : false
+			            },
+			            
+			            <#include "/apidocs/parameters_mol.ftl" >,				            
+						<#include "/apidocs/parameters_page.ftl" >
                     ],
                     "responseMessages": [
                         {
@@ -58,14 +98,7 @@
                     "nickname": "searchBySimilarity",
                      <#include "/apidocs/authz.ftl" >
                     "parameters": [
-			            {
-			              "name": "search",
-			              "description": "SMILES, InChI, chemical name",
-			              "required": true,
-			              "type": "string",
-			              "paramType": "query",
-			              "allowMultiple"  : false
-			            },
+						<#include "/apidocs/parameter_structuresearch.ftl" >,						            
 			            {
 			              "name": "threshold",
 			              "description": "Similarity threshold",
@@ -74,6 +107,7 @@
 			              "paramType": "query",
 			              "allowMultiple"  : false
 			            },			            
+						<#include "/apidocs/parameters_mol.ftl" >,					            
 						<#include "/apidocs/parameters_page.ftl" >				            			            
                     ],
                     "responseMessages": [
@@ -98,14 +132,8 @@
                     "nickname": "searchBySmarts",
                      <#include "/apidocs/authz.ftl" >
                     "parameters": [
-			            {
-			              "name": "search",
-			              "description": "SMARTS, InChI",
-			              "required": true,
-			              "type": "string",
-			              "paramType": "query",
-			              "allowMultiple"  : false
-			            },
+			            <#include "/apidocs/parameter_structuresearch.ftl" >,
+						<#include "/apidocs/parameters_mol.ftl" >,		
 						<#include "/apidocs/parameters_page.ftl" >				            			            
                     ],
                     "responseMessages": [
