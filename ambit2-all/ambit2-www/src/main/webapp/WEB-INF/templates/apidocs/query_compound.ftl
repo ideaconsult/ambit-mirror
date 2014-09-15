@@ -98,6 +98,14 @@
                     "nickname": "searchBySimilarity",
                      <#include "/apidocs/authz.ftl" >
                     "parameters": [
+			            {
+			              "name": "search",
+			              "description": "SMILES, InChI, IUPAC name",
+			              "required": true,
+			              "type": "string",
+			              "paramType": "query",
+			              "allowMultiple"  : false
+			            },                    
 						<#include "/apidocs/parameter_structuresearch.ftl" >,						            
 			            {
 			              "name": "threshold",
@@ -106,7 +114,15 @@
 			              "type": "double",
 			              "paramType": "query",
 			              "allowMultiple"  : false
-			            },			            
+			            },		
+			            {
+			              "name": "dataset_uri",
+			              "description": "Restrict the search within the AMBIT dataset specified with the URI",
+			              "required": false,
+			              "type": "string",
+			              "paramType": "query",
+			              "allowMultiple"  : false
+			            },				            	            
 						<#include "/apidocs/parameters_mol.ftl" >,					            
 						<#include "/apidocs/parameters_page.ftl" >				            			            
                     ],
@@ -132,7 +148,23 @@
                     "nickname": "searchBySmarts",
                      <#include "/apidocs/authz.ftl" >
                     "parameters": [
+			            {
+			              "name": "search",
+			              "description": "SMARTS, InChI",
+			              "required": true,
+			              "type": "string",
+			              "paramType": "query",
+			              "allowMultiple"  : false
+			            },                    
 			            <#include "/apidocs/parameter_structuresearch.ftl" >,
+			            {
+			              "name": "dataset_uri",
+			              "description": "Restrict the search within the AMBIT dataset specified with the URI",
+			              "required": false,
+			              "type": "string",
+			              "paramType": "query",
+			              "allowMultiple"  : false
+			            },				            
 						<#include "/apidocs/parameters_mol.ftl" >,		
 						<#include "/apidocs/parameters_page.ftl" >				            			            
                     ],
