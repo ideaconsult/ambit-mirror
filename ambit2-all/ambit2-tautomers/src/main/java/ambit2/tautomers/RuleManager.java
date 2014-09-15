@@ -1,8 +1,8 @@
 package ambit2.tautomers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.Vector;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
@@ -18,13 +18,13 @@ import ambit2.smarts.SmartsHelper;
 public class RuleManager 
 {
 	TautomerManager tman;
-	Vector<IRuleInstance> extendedRuleInstances;
-	Vector<IRuleInstance> ruleInstances;
-	Vector<Rule> generatedRules;
-	Vector<IRuleInstance> unprocessedInstances = new Vector<IRuleInstance>();
+	List<IRuleInstance> extendedRuleInstances;
+	List<IRuleInstance> ruleInstances;
+	List<Rule> generatedRules;
+	List<IRuleInstance> unprocessedInstances = new ArrayList<IRuleInstance>();
 	
 	
-	//Vector<TautomerIncrementStep> incSteps = new Vector<TautomerIncrementStep>(); 
+	//List<TautomerIncrementStep> incSteps = new ArrayList<TautomerIncrementStep>(); 
 	Stack<TautomerIncrementStep> stackIncSteps = new Stack<TautomerIncrementStep>();
 		
 	
@@ -123,7 +123,7 @@ public class RuleManager
 	}
 	
 	
-	public static boolean overlaps(RuleInstance r, Vector<IRuleInstance> group)
+	public static boolean overlaps(RuleInstance r, List<IRuleInstance> group)
 	{	
 		for (IRuleInstance ri : group)
 			if (overlaps(r, (RuleInstance)ri))
@@ -158,9 +158,9 @@ public class RuleManager
 	
 	
 	
-	Vector<IAtom> getOverlappedAtoms(RuleInstance r1, RuleInstance r2)
+	List<IAtom> getOverlappedAtoms(RuleInstance r1, RuleInstance r2)
 	{
-		Vector<IAtom> oa = new Vector<IAtom>();		
+		List<IAtom> oa = new ArrayList<IAtom>();		
 		for (int i = 0; i < r1.atoms.size(); i++)
 			if (r2.atoms.contains(r1.atoms.get(i)))
 				oa.add(r1.atoms.get(i));
@@ -168,9 +168,9 @@ public class RuleManager
 		return (oa);
 	}
 	
-	Vector<IBond> getOverlappedBonds(RuleInstance r1, RuleInstance r2)
+	List<IBond> getOverlappedBonds(RuleInstance r1, RuleInstance r2)
 	{
-		Vector<IBond> ob = new Vector<IBond>();		
+		List<IBond> ob = new ArrayList<IBond>();		
 		for (int i = 0; i < r1.bonds.size(); i++)
 			if (r2.bonds.contains(r1.bonds.get(i)))
 				ob.add(r1.bonds.get(i));
@@ -188,12 +188,12 @@ public class RuleManager
 			for (int j = 0; j < n; j++)
 			if ( i != j)
 			{
-				Vector<IAtom> va = getOverlappedAtoms(r, cri.instances.get(j));
+				List<IAtom> va = getOverlappedAtoms(r, cri.instances.get(j));
 				for (int k = 0; k < va.size(); k++)
 					if (!r.overlappedAtoms.contains(va.get(k))) //This check is needed since an could be part of two overlapping
 						r.overlappedAtoms.add(va.get(k));
 				
-				Vector<IBond> vb = getOverlappedBonds(r, cri.instances.get(j));
+				List<IBond> vb = getOverlappedBonds(r, cri.instances.get(j));
 				for (int k = 0; k < vb.size(); k++)
 					if (!r.overlappedBonds.contains(vb.get(k))) 
 						r.overlappedBonds.add(vb.get(k));
@@ -228,7 +228,7 @@ public class RuleManager
 	{
 		RuleInstance r1 = (RuleInstance)ir1;
 		RuleInstance r2 = (RuleInstance)ir2;
-		Vector<int[]> combStates = new Vector<int[]>(); 
+		List<int[]> combStates = new ArrayList<int[]>(); 
 		
 		//Checking of all possible combined states in order to generate a new combined rule. 
 		for (int i = 0; i < r1.getNumberOfStates(); i++)
@@ -383,7 +383,7 @@ public class RuleManager
 	{	
 		//curIncStep objects fields are not preserved since it will no longer be used in the 
 		//depth-first search algorithm
-		RuleInstance ri = curIncStep.unUsedRuleInstances.lastElement();
+		RuleInstance ri = curIncStep.unUsedRuleInstances.get(curIncStep.unUsedRuleInstances.size() - 1);
 		curIncStep.unUsedRuleInstances.remove(ri);
 		
 		//System.out.println("Used rule: " + ri.rule.OriginalRuleString);
@@ -443,7 +443,7 @@ public class RuleManager
 		}
 		
 		//Cloning all rule instances
-		Vector<RuleInstance> cloneInstances = new Vector<RuleInstance>();
+		List<RuleInstance> cloneInstances = new ArrayList<RuleInstance>();
 		for (int i = 0; i < incStep.usedRuleInstances.size(); i++)
 		{	
 			RuleInstance oldRI = incStep.usedRuleInstances.get(i);
@@ -452,7 +452,7 @@ public class RuleManager
 		}	
 		incStep.usedRuleInstances = cloneInstances;	
 		
-		cloneInstances = new Vector<RuleInstance>();
+		cloneInstances = new ArrayList<RuleInstance>();
 		for (int i = 0; i < incStep.unUsedRuleInstances.size(); i++)
 		{	
 			RuleInstance oldRI = incStep.unUsedRuleInstances.get(i);
@@ -479,7 +479,7 @@ public class RuleManager
 		
 		//(a) All unused instances that overlap with the current rule instance newRI 
 		//are removed. Operation is performed in terms of cloned structure. 		
-		Vector<RuleInstance> checkedInstances = new Vector<RuleInstance>();
+		List<RuleInstance> checkedInstances = new ArrayList<RuleInstance>();
 		for (int i = 0; i < incStep.unUsedRuleInstances.size(); i++)
 		{
 			RuleInstance unusedRI = incStep.unUsedRuleInstances.get(i);
@@ -495,7 +495,7 @@ public class RuleManager
 		//(b) new instances are searched in several topological layers 
 		//around the atoms from the current instance. This operation is performed in terms of the new atoms
 				
-		Vector<RuleInstance> newInstances = new Vector<RuleInstance>();
+		List<RuleInstance> newInstances = new ArrayList<RuleInstance>();
 		IAtomContainer fragment = generateFragmentShell(incStep.struct, newRI, 2);		//TODO 2 to be changed ????
 		//System.out.print("  fragment: " +SmartsHelper.moleculeToSMILES(fragment));
 		for (int i = 0; i < tman.knowledgeBase.rules.size(); i++)
@@ -503,7 +503,7 @@ public class RuleManager
 			if (!tman.knowledgeBase.rules.get(i).isRuleActive)
 				continue;
 			
-			Vector<IRuleInstance> instances = tman.knowledgeBase.rules.get(i).applyRule(fragment); 
+			List<IRuleInstance> instances = tman.knowledgeBase.rules.get(i).applyRule(fragment); 
 			for (int k = 0; k < instances.size(); k++)
 			{	
 				RuleInstance genRI = (RuleInstance)instances.get(k);
@@ -515,7 +515,7 @@ public class RuleManager
 		//(c) Filter new instances so that they do not duplicate 
 		//used and unused rule instances. 
 		//Otherwise infinite recursion loops are obtained.  
-		Vector<RuleInstance> filteredNewInstances = new Vector<RuleInstance>();
+		List<RuleInstance> filteredNewInstances = new ArrayList<RuleInstance>();
 		for (int i = 0; i < newInstances.size(); i++)
 		{
 			RuleInstance testedRI = newInstances.get(i);
@@ -805,7 +805,7 @@ public class RuleManager
 		//are removed. Operation is performed in terms of the atoms from prevStruct. 		
 		
 		//System.out.println("check 3.1");
-		Vector<RuleInstance> checkedInstances = new Vector<RuleInstance>();
+		List<RuleInstance> checkedInstances = new ArrayList<RuleInstance>();
 		for (int i = 0; i < incStep.unUsedRuleInstances.size(); i++)
 		{
 			RuleInstance unusedRI = incStep.unUsedRuleInstances.get(i);
@@ -824,7 +824,7 @@ public class RuleManager
 		
 		//(3.3)Also new instances are searched in several topological layers 
 		//around the atoms from the current instance. This operation is performed in terms of the new atoms
-		Vector<RuleInstance> newInstances = new Vector<RuleInstance>();
+		List<RuleInstance> newInstances = new ArrayList<RuleInstance>();
 		IAtomContainer fragment = generateFragmentShell(incStep.struct, newRI, 2);		
 		System.out.print("  fragment: " +SmartsHelper.moleculeToSMILES(fragment));
 		for (int i = 0; i < tman.knowledgeBase.rules.size(); i++)
@@ -833,7 +833,7 @@ public class RuleManager
 				continue;
 			
 			//System.out.println("$$ "  + i);
-			Vector<IRuleInstance> instances = tman.knowledgeBase.rules.get(i).applyRule(fragment); 
+			List<IRuleInstance> instances = tman.knowledgeBase.rules.get(i).applyRule(fragment); 
 			for (int k = 0; k < instances.size(); k++)
 			{	
 				RuleInstance genRI = (RuleInstance)instances.get(k);
@@ -850,7 +850,7 @@ public class RuleManager
 		//(3.4)Filter new instances so that they do not duplicate 
 		//used and unused rule instances. 
 		//Otherwise infinite recursion loops are obtained.  
-		Vector<RuleInstance> filteredNewInstances = new Vector<RuleInstance>();
+		List<RuleInstance> filteredNewInstances = new ArrayList<RuleInstance>();
 		for (int i = 0; i < newInstances.size(); i++)
 		{
 			RuleInstance testedRI = newInstances.get(i);
@@ -909,8 +909,8 @@ public class RuleManager
 		//System.out.print("initial fragment: " + SmartsHelper.moleculeToSMILES(fragment)); 
 		
 		//adding several layers around initial fragment
-		Vector<IAtom> terminalAtoms = null;
-		Vector<IAtom> layerAtoms = null;
+		List<IAtom> terminalAtoms = null;
+		List<IAtom> layerAtoms = null;
 		for (int i = 0; i < nLayers; i++)
 		{	
 			layerAtoms = addLayerToFragment(mol, fragment, terminalAtoms);
@@ -922,15 +922,15 @@ public class RuleManager
 	}
 	
 	
-	Vector<IAtom> addLayerToFragment(IAtomContainer mol, IAtomContainer fragment, Vector<IAtom> terminalAtoms)
+	List<IAtom> addLayerToFragment(IAtomContainer mol, IAtomContainer fragment, List<IAtom> terminalAtoms)
 	{
 		
-		Vector<IAtom> termAtoms;		
-		Vector<IAtom> layerAtoms = new Vector<IAtom>();
+		List<IAtom> termAtoms;		
+		List<IAtom> layerAtoms = new ArrayList<IAtom>();
 		
 		if (terminalAtoms == null) //all atoms are treated as terminal ones
 		{
-			termAtoms = new Vector<IAtom>();
+			termAtoms = new ArrayList<IAtom>();
 			for (int i = 0; i < fragment.getAtomCount(); i++)
 				termAtoms.add(fragment.getAtom(i));
 		}

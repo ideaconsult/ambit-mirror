@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -245,7 +245,7 @@ public class AutomaticTautomerTests
 			return(0);
 		}	
 		
-		Vector<CmdOption> options = extractOptions(args);
+		List<CmdOption> options = extractOptions(args);
 		
 		System.out.println("AutomaticTautomerTests  started with options:");
 		for (int i = 0; i < options.size(); i++)
@@ -688,10 +688,10 @@ public class AutomaticTautomerTests
 	
 	
 	
-	public Vector<CmdOption> extractOptions(String[] args)
+	public List<CmdOption> extractOptions(String[] args)
 	{		
 		CmdOption curOption = null;		
-		Vector<CmdOption> v = new Vector<CmdOption>();
+		List<CmdOption> v = new ArrayList<CmdOption>();
 		if (args.length == 0)
 			return(v);
 		
@@ -740,7 +740,7 @@ public class AutomaticTautomerTests
 	}
 	
 	
-	CmdOption getOption(String opt, Vector<CmdOption> options)
+	CmdOption getOption(String opt, List<CmdOption> options)
 	{
 		for (int i = 0; i < options.size(); i++)
 		{
@@ -1106,7 +1106,7 @@ public class AutomaticTautomerTests
 	int processNCILine(String line)
 	{
 		//System.out.println(line);
-		Vector<String> tokens = filterTokens(line.split(" "));
+		List<String> tokens = filterTokens(line.split(" "));
 		
 		if (tokens.size() < 2)
 		{	
@@ -1241,7 +1241,7 @@ public class AutomaticTautomerTests
 			mol = sp.parseSmiles(line.trim());
 			
 			tman.setStructure(mol);
-			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+			List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 			IAtomContainer can_t = TautomerManager.getCanonicTautomer(resultTautomers);
 			
 			output("" + curLine + "   " + line + "  " + resultTautomers.size() + "  " +  
@@ -1264,7 +1264,7 @@ public class AutomaticTautomerTests
 			mol = sp.parseSmiles(line.trim());
 			
 			tman.setStructure(mol);
-			Vector<IAtomContainer> resultTautomers = tman.generateTautomers();
+			List<IAtomContainer> resultTautomers = tman.generateTautomers();
 			//IAtomContainer can_t = TautomerManager.getCanonicTautomer(resultTautomers);
 			
 			output("" + curLine + "   " + line + "  " + resultTautomers.size() + endLine);   
@@ -1287,7 +1287,7 @@ public class AutomaticTautomerTests
 			mol = sp.parseSmiles(line.trim());
 			
 			tman.setStructure(mol);
-			Vector<IAtomContainer> resultTautomers = tman.generateTautomers_ImprovedCombApproach();
+			List<IAtomContainer> resultTautomers = tman.generateTautomers_ImprovedCombApproach();
 			//IAtomContainer can_t = TautomerManager.getCanonicTautomer(resultTautomers);
 			
 			output("" + curLine + "   " + line + "  " + resultTautomers.size() + endLine);   
@@ -1312,7 +1312,7 @@ public class AutomaticTautomerTests
 			
 			setTautomerManager();
 			tman.setStructure(mol);
-			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+			List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 			
 			if (resultTautomers.size() < minNumOfTautomerForChecking)
 				return 0;
@@ -1346,9 +1346,9 @@ public class AutomaticTautomerTests
 		return (0);
 	}
 	
-	int checkTautomerEquivalence(Vector<IAtomContainer> tautomers) throws Exception
+	int checkTautomerEquivalence(List<IAtomContainer> tautomers) throws Exception
 	{
-		//Vector<String> codes = new Vector<String>();
+		//List<String> codes = new List<String>();
 		//for (int i = 0; i < tautomers.size(); i++)
 		//	codes.add(TautomerManager.getTautomerCodeString(tautomers.get(i)));
 		
@@ -1361,7 +1361,7 @@ public class AutomaticTautomerTests
 				break;
 			
 			tman.setStructure(tautomers.get(i));
-			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+			List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 					
 			//boolean FlagOK = compareTautomerSets(codes, resultTautomers);
 			int numOfDiffTautomers = compareTautomerSetsIsomorphismCheck(tautomers, resultTautomers);
@@ -1379,7 +1379,7 @@ public class AutomaticTautomerTests
 		return numErr;
 	}
 	
-	boolean compareTautomerSets(Vector<String> codes, Vector<IAtomContainer> tautomers)
+	boolean compareTautomerSets(List<String> codes, List<IAtomContainer> tautomers)
 	{
 		//This check is very simple and give wrong results when there are 
 		//isomorphic tautomers (typically filtered in the results) 
@@ -1406,7 +1406,7 @@ public class AutomaticTautomerTests
 	}
 	
 	
-	int compareTautomerSetsIsomorphismCheck(Vector<IAtomContainer> tautomers0, Vector<IAtomContainer> tautomers)
+	int compareTautomerSetsIsomorphismCheck(List<IAtomContainer> tautomers0, List<IAtomContainer> tautomers)
 	{
 		//if (tautomers0.size() != tautomers.size())
 		//	return false;
@@ -1535,7 +1535,7 @@ public class AutomaticTautomerTests
 			mol = sp.parseSmiles(line.trim());
 			
 			tman.setStructure(mol);			
-			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+			List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 			
 			switch (FlagGenerationAlgorithm)
 			{
@@ -2372,7 +2372,7 @@ public class AutomaticTautomerTests
 	{	
 		try
 		{
-			Vector<String> tokens = filterTokens(line.split(" "));
+			List<String> tokens = filterTokens(line.split(" "));
 			int n = tokens.size();
 			
 			if (n != 4)
@@ -2546,8 +2546,8 @@ public class AutomaticTautomerTests
 	int processLines_CompareAlgorithms(String line, String line2, 
 			int diffBins[], int freqDiff[], double relBins[], int freqRel[] )
 	{		
-		Vector<String> tokens = filterTokens(line.split(separator1));
-		Vector<String> tokens2 = filterTokens(line2.split(separator2));
+		List<String> tokens = filterTokens(line.split(separator1));
+		List<String> tokens2 = filterTokens(line2.split(separator2));
 		
 		//System.out.println(line);System.out.println(line2);
 		//System.out.println(" #### " + tokens.size() + "  " + tokens2.size());
@@ -2907,9 +2907,9 @@ public class AutomaticTautomerTests
 	
 	//--------------------------------------------------------
 	
-	public Vector<String> filterTokens(String tokens[])
+	public List<String> filterTokens(String tokens[])
 	{	
-		Vector<String> v = new Vector<String>();
+		List<String> v = new ArrayList<String>();
 		for (int i = 0; i < tokens.length; i++)
 			if (!tokens[i].equals(""))
 				v.add(tokens[i]);

@@ -1,6 +1,6 @@
 package ambit2.tautomers;
 
-import java.util.Vector;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -41,7 +41,7 @@ public class TautomerRanking
 	}
 	
 	
-	public double[] getProbabilityDistribution(Vector<IAtomContainer> tautomers)
+	public double[] getProbabilityDistribution(List<IAtomContainer> tautomers)
 	{
 		double distr[] = new double [tautomers.size()];
 		double sum = 0;

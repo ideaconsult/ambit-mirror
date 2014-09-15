@@ -1,17 +1,14 @@
 package ambit2.reactions;
 
-import org.openscience.cdk.graph.ConnectivityChecker;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import java.util.Stack;
-import java.util.ArrayList;
-import java.util.Vector;
-
 import ambit2.smarts.SMIRKSManager;
-import ambit2.smarts.SMIRKSReaction;
 import ambit2.smarts.SmartsParser;
 
 public class RetroSynthesis 
@@ -179,7 +176,7 @@ public class RetroSynthesis
 				
 		smrkMan.getIsomorphismTester().setQuery(rule.reaction.reactant);
 		SmartsParser.prepareTargetForSMARTSSearch(rule.reaction.reactantFlags, str);
-		Vector<Vector<IAtom>> rMaps = smrkMan.getNonOverlappingMappings(str);		
+		List<List<IAtom>> rMaps = smrkMan.getNonOverlappingMappings(str);		
 		
 		for (int i = 0; i < rMaps.size(); i++)
 		{

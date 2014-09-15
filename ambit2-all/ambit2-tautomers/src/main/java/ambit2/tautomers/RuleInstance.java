@@ -1,6 +1,7 @@
 package ambit2.tautomers;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -21,8 +22,8 @@ public class RuleInstance implements IRuleInstance
 	boolean FlagOverlapMode = false; //This is true when this instance overlaps with another one i.e. it is a part from combination
 	boolean FlagGoToStateSpecialOK = true;
 	
-	Vector<IAtom> atoms = new  Vector<IAtom>();
-	Vector<IBond> bonds = new  Vector<IBond>();
+	List<IAtom> atoms = new  ArrayList<IAtom>();
+	List<IBond> bonds = new  ArrayList<IBond>();
 	
 	
 	public RuleInstance()

@@ -1026,7 +1026,7 @@ public class SmartsParser
 	{
 		if (curAtExpr.tokens.size()==0)
 			return(-1);
-		SmartsExpressionToken tok = (SmartsExpressionToken) curAtExpr.tokens.lastElement();
+		SmartsExpressionToken tok = (SmartsExpressionToken) (curAtExpr.tokens.get(curAtExpr.tokens.size()-1));
 		return(tok.type);
 	}
 	
@@ -1266,7 +1266,7 @@ public class SmartsParser
 		{
 			if (curAtExpr.tokens.size() > 0)
 			{	
-				SmartsExpressionToken tok = curAtExpr.tokens.lastElement();
+				SmartsExpressionToken tok =  curAtExpr.tokens.get(curAtExpr.tokens.size()-1);
 				if (tok.type == SmartsConst.AP_Mass)
 					return(true);
 			}	

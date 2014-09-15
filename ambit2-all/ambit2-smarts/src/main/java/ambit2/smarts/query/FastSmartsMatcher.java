@@ -1,6 +1,6 @@
 package ambit2.smarts.query;
 
-import java.util.Vector;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -43,7 +43,7 @@ public class FastSmartsMatcher extends AbstractSmartsPattern<IAtomContainer> {
 			throws SMARTSException {
 		if (query == null) return null;
 		isoTester.setQuery(query);
-		Vector<IAtom> index = isoTester.getIsomorphismMapping(mol);
+		List<IAtom> index = isoTester.getIsomorphismMapping(mol);
 		if (index ==null) return null;
 		IAtomContainer match = MoleculeTools.newAtomContainer(SilentChemObjectBuilder.getInstance());
 		

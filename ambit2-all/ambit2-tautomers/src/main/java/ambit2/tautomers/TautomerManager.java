@@ -1,6 +1,7 @@
 package ambit2.tautomers;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,13 +18,13 @@ public class TautomerManager
 	KnowledgeBase knowledgeBase; 
 	IAtomContainer originalMolecule;
 	IAtomContainer molecule;
-	Vector<IRuleInstance> extendedRuleInstances = new Vector<IRuleInstance>(); 
-	Vector<IRuleInstance> ruleInstances = new Vector<IRuleInstance>();
-	Vector<Vector<IRuleInstance>> subCombinationsRI = new Vector<Vector<IRuleInstance>>();
-	Vector<Rule> generatedRules = new Vector<Rule>(); 
-	Vector<IAtomContainer> resultTautomers;	
-	Vector<String> resultTatomerStringCodes = new Vector<String>(); 
-	Vector<String> errors = new Vector<String>(); 
+	List<IRuleInstance> extendedRuleInstances = new ArrayList<IRuleInstance>(); 
+	List<IRuleInstance> ruleInstances = new ArrayList<IRuleInstance>();
+	List<List<IRuleInstance>> subCombinationsRI = new ArrayList<List<IRuleInstance>>();
+	List<Rule> generatedRules = new ArrayList<Rule>(); 
+	List<IAtomContainer> resultTautomers;	
+	List<String> resultTatomerStringCodes = new ArrayList<String>(); 
+	List<String> errors = new ArrayList<String>(); 
 	public FilterTautomers tautomerFilter = new FilterTautomers(this);
 	int originalValencySum;
 		
@@ -80,12 +81,12 @@ public class TautomerManager
 	
 	
 	
-	public Vector<IAtomContainer> generateTautomers() throws Exception
+	public List<IAtomContainer> generateTautomers() throws Exception
 	{
 		searchAllRulePositions();
 		//handleOverlapedInstances();    Currently does nothing. Incorrect tautomers are filtered out by FilterTautomers
 		
-		resultTautomers = new Vector<IAtomContainer>();
+		resultTautomers = new ArrayList<IAtomContainer>();
 		if (ruleInstances.isEmpty())
 		{	
 			resultTautomers.add(molecule);
@@ -107,10 +108,10 @@ public class TautomerManager
 	 * @throws Exception
 	 * Approach 01: improved combinatorial approach
 	 */	 
-	public Vector<IAtomContainer> generateTautomers_ImprovedCombApproach() throws Exception
+	public List<IAtomContainer> generateTautomers_ImprovedCombApproach() throws Exception
 	{
 		searchAllRulePositions();
-		resultTautomers = new Vector<IAtomContainer>();		
+		resultTautomers = new ArrayList<IAtomContainer>();		
 		if (extendedRuleInstances.isEmpty())
 		{	
 			resultTautomers.add(molecule);
@@ -122,7 +123,7 @@ public class TautomerManager
 		
 		
 		//iterating all sub combinations
-		for (Vector<IRuleInstance> subComb : subCombinationsRI)
+		for (List<IRuleInstance> subComb : subCombinationsRI)
 		{
 			//printRIGroup(subComb, "working with combination");
 			
@@ -148,7 +149,7 @@ public class TautomerManager
 	 * Approach 02 (basic one) based on first depth search algorithm
 	 */
 	//
-	public Vector<IAtomContainer> generateTautomersIncrementaly() throws Exception
+	public List<IAtomContainer> generateTautomersIncrementaly() throws Exception
 	{
 		//An approach for generation of tautomers
 		//based on incremental steps of analysis with first-depth approach
@@ -156,7 +157,7 @@ public class TautomerManager
 		//and the other rule instances are revised and accordingly 
 		//appropriate rule-instance sets are supported (derived from extendedRuleInstance)
 		
-		resultTautomers = new Vector<IAtomContainer>();	
+		resultTautomers = new ArrayList<IAtomContainer>();	
 		resultTatomerStringCodes.clear();
 		
 		searchAllRulePositions();
@@ -174,8 +175,8 @@ public class TautomerManager
 		if (FlagRecurseBackResultTautomers)
 		{
 			//Apply special filter before recursing back the result tautomers
-			Vector<IAtomContainer> filtered = preRecursionFiltration(resultTautomers);			
-			Vector<IAtomContainer> res = generateTautomersFromMultipleTargets(filtered);
+			List<IAtomContainer> filtered = preRecursionFiltration(resultTautomers);			
+			List<IAtomContainer> res = generateTautomersFromMultipleTargets(filtered);
 			resultTautomers = res;
 		}
 		else
@@ -188,9 +189,9 @@ public class TautomerManager
 	}
 	
 	//Combined approach (00, 01, 02) - not implemented!
-	public Vector<IAtomContainer> generateTautomersCombinedApproach() throws Exception
+	public List<IAtomContainer> generateTautomersCombinedApproach() throws Exception
 	{
-		resultTautomers = new Vector<IAtomContainer>();	
+		resultTautomers = new ArrayList<IAtomContainer>();	
 		resultTatomerStringCodes.clear();
 		//TODO
 		return(resultTautomers);
@@ -219,7 +220,7 @@ public class TautomerManager
 	}
 	
 	
-	Vector<IAtomContainer> preRecursionFiltration(Vector<IAtomContainer> tautomers) throws Exception 
+	List<IAtomContainer> preRecursionFiltration(List<IAtomContainer> tautomers) throws Exception 
 	{
 		//Save original filtration flags
 		boolean F_ApplyDuplicationCheckInChI = tautomerFilter.FlagApplyDuplicationCheckInChI;
@@ -240,7 +241,7 @@ public class TautomerManager
 		tautomerFilter.FlagFilterIncorrectValencySumStructures = true;
 		
 		//Performing filtration
-		Vector<IAtomContainer> res = tautomerFilter.filter(tautomers);
+		List<IAtomContainer> res = tautomerFilter.filter(tautomers);
 		
 		//Restore original filtration flags
 		tautomerFilter.FlagApplyDuplicationCheckInChI = F_ApplyDuplicationCheckInChI;
@@ -254,17 +255,17 @@ public class TautomerManager
 		return res;
 	}
 	
-	Vector<IAtomContainer> generateTautomersFromMultipleTargets(Vector<IAtomContainer> targets) throws Exception 
+	List<IAtomContainer> generateTautomersFromMultipleTargets(List<IAtomContainer> targets) throws Exception 
 	{
 		IAtomContainer tmpOrgMolecule = originalMolecule;
 		IAtomContainer tmpMolecule = molecule;
 		
-		Vector<IAtomContainer> summarizedResult = new Vector<IAtomContainer>();
+		List<IAtomContainer> summarizedResult = new ArrayList<IAtomContainer>();
 		
 		for (int i = 0; i < targets.size(); i++) 
 		{
 			setStructure(targets.get(i));
-			resultTautomers = new Vector<IAtomContainer>();	
+			resultTautomers = new ArrayList<IAtomContainer>();	
 			searchAllRulePositions();
 			
 			if (extendedRuleInstances.isEmpty())
@@ -297,7 +298,7 @@ public class TautomerManager
 		for (int i = 0; i < knowledgeBase.rules.size(); i++)
 			if (knowledgeBase.rules.get(i).isRuleActive) {
 				try {
-					Vector<IRuleInstance> instances = knowledgeBase.rules.get(i).applyRule(molecule); 
+					List<IRuleInstance> instances = knowledgeBase.rules.get(i).applyRule(molecule); 
 					if ((instances!=null) && (instances.size()>0))
 						extendedRuleInstances.addAll(instances);
 				} catch (Exception x) {
@@ -363,14 +364,14 @@ public class TautomerManager
 	}
 	
 	
-	Vector<Vector<IRuleInstance>> generateSubCombinations()
+	List<List<IRuleInstance>> generateSubCombinations()
 	{
 		//Determination of  groups (clusters) of overlapping rule instances 
-		Vector<Vector<IRuleInstance>> riGroups = new Vector<Vector<IRuleInstance>>(); 
+		List<List<IRuleInstance>> riGroups = new ArrayList<List<IRuleInstance>>(); 
 		for (IRuleInstance ri : extendedRuleInstances)
 		{
 			boolean FlagRIOverlaps = false;
-			for (Vector<IRuleInstance> group : riGroups)
+			for (List<IRuleInstance> group : riGroups)
 			{
 				if (RuleManager.overlaps((RuleInstance)ri, group))
 				{	
@@ -383,7 +384,7 @@ public class TautomerManager
 			if (!FlagRIOverlaps)
 			{
 				//a new group is created
-				Vector<IRuleInstance> group = new Vector<IRuleInstance>();
+				List<IRuleInstance> group = new ArrayList<IRuleInstance>();
 				group.add(ri);
 				riGroups.add(group);
 			}
@@ -391,14 +392,14 @@ public class TautomerManager
 		
 		 
 		//The groups are sorted 
-		Vector<IRuleInstance> defaultGroup = new Vector<IRuleInstance>();
-		Vector<Vector<IRuleInstance>> bigGroups = new Vector<Vector<IRuleInstance>>();
+		List<IRuleInstance> defaultGroup = new ArrayList<IRuleInstance>();
+		List<List<IRuleInstance>> bigGroups = new ArrayList<List<IRuleInstance>>();
 		
-		for (Vector<IRuleInstance> group: riGroups)
+		for (List<IRuleInstance> group: riGroups)
 		{			
 			//printRIGroup(group,"group"); System.out.println();
 			if (group.size() == 1)
-				defaultGroup.add(group.firstElement());
+				defaultGroup.add(group.get(0));
 			else
 				bigGroups.add(group);
 		}		
@@ -419,13 +420,13 @@ public class TautomerManager
 		}
 		
 		//Generation of all sub-combinations from clusters
-		Vector<Vector<IRuleInstance>> subCombs = new Vector<Vector<IRuleInstance>>();	
+		List<List<IRuleInstance>> subCombs = new ArrayList<List<IRuleInstance>>();	
 		 
 		long curComb = 0;
 		while (curComb < numOfCombinations)
 		{	
 			//Create a combination
-			Vector<IRuleInstance> combination  = new Vector<IRuleInstance>();
+			List<IRuleInstance> combination  = new ArrayList<IRuleInstance>();
 			combination.addAll(defaultGroup);
 			for (int i = 0; i < gpos.length; i++)
 				combination.add(bigGroups.get(i).get(gpos[i]));
@@ -448,7 +449,7 @@ public class TautomerManager
 	}
 	
 	//small helper
-	void printRIGroup(Vector<IRuleInstance> group, String info)
+	void printRIGroup(List<IRuleInstance> group, String info)
 	{
 		logger.info(info);
 		for (IRuleInstance ri : group)
@@ -521,12 +522,12 @@ public class TautomerManager
 			
 	}
 	
-	public static IAtomContainer getCanonicTautomer(Vector<IAtomContainer> tautomers)
+	public static IAtomContainer getCanonicTautomer(List<IAtomContainer> tautomers)
 	{	
 		if (tautomers.size() == 1)
-			return tautomers.firstElement();
+			return tautomers.get(0);
 		
-		IAtomContainer can_t = tautomers.firstElement();
+		IAtomContainer can_t = tautomers.get(0);
 		double rank = ((Double)can_t.getProperty("TAUTOMER_RANK")).doubleValue();
 		
 		for (IAtomContainer t : tautomers)
@@ -560,7 +561,7 @@ public class TautomerManager
 			
 	}
 	
-	public static void calcCACTVSEnergyRanks(Vector<IAtomContainer> tautomers)
+	public static void calcCACTVSEnergyRanks(List<IAtomContainer> tautomers)
 	{
 		for (IAtomContainer mol: tautomers)
 		{

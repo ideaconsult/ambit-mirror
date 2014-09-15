@@ -1,6 +1,6 @@
 package ambit2.smarts.test;
 
-import java.util.Vector;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -60,7 +60,7 @@ public class TestIsomorphismTester extends TestCase
 		
 		isoTester.setQuery(query);
 		sp.setSMARTSData(mol);
-		Vector<Integer> pos = isoTester.getIsomorphismPositions(mol);
+		List<Integer> pos = isoTester.getIsomorphismPositions(mol);
 		mappingPosCount = pos.size();
 	}
 	

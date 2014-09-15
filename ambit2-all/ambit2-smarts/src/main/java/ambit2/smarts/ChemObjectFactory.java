@@ -5,9 +5,9 @@ import java.io.FileReader;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.Stack;
-import java.util.Vector;
 
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Bond;
@@ -30,10 +30,10 @@ import ambit2.core.io.MyIteratingMDLReader;
  * chemical objects: molecules, fragments, queries */
 public class ChemObjectFactory 
 {	
-	public Vector<SequenceElement> sequence = new Vector<SequenceElement>();
-	Vector<IAtom> sequencedAtoms = new Vector<IAtom>();
-	Vector<IAtom> sequencedBondAt1 = new Vector<IAtom>();
-	Vector<IAtom> sequencedBondAt2 = new Vector<IAtom>();
+	public List<SequenceElement> sequence = new ArrayList<SequenceElement>();
+	List<IAtom> sequencedAtoms = new ArrayList<IAtom>();
+	List<IAtom> sequencedBondAt1 = new ArrayList<IAtom>();
+	List<IAtom> sequencedBondAt2 = new ArrayList<IAtom>();
 	//MoleculeAndAtomsHashing molHash = new MoleculeAndAtomsHashing();
 	SmartsManager man;
 	SmartsParser parser = new SmartsParser();
@@ -190,7 +190,7 @@ public class ChemObjectFactory
 	}
 	
 	
-	boolean containsAtom(Vector<IAtom> v, IAtom atom)
+	boolean containsAtom(List<IAtom> v, IAtom atom)
 	{
 		for(int i = 0; i < v.size(); i++)
 			if (v.get(i) == atom)
@@ -289,7 +289,7 @@ public class ChemObjectFactory
 	
 	//This function generates a Carbon skeleton from a query atom sequence
 	//It is used mainly for testing purposes
-	public IAtomContainer getCarbonSkelleton(Vector<QuerySequenceElement> sequence)
+	public IAtomContainer getCarbonSkelleton(List<QuerySequenceElement> sequence)
 	{
 		IAtomContainer mol = builder.newInstance(IAtomContainer.class);
 		HashMap<IAtom,IAtom> m = new HashMap<IAtom,IAtom>();		
@@ -372,7 +372,7 @@ public class ChemObjectFactory
 	
 		
 	
-	public void produceStructuresExhaustively (IAtomContainer mol, Vector<StructInfo> vStr, 
+	public void produceStructuresExhaustively (IAtomContainer mol, List<StructInfo> vStr, 
 				int maxNumSeqSteps, int maxStrSize) throws Exception
 	{	
 		ChemObjectToSmiles cots = new ChemObjectToSmiles();
@@ -403,7 +403,7 @@ public class ChemObjectFactory
 		}
 	}
 	
-	public void produceStructuresRandomly(IAtomContainer mol, Vector<StructInfo> vStr, 
+	public void produceStructuresRandomly(IAtomContainer mol, List<StructInfo> vStr, 
 			int maxNumSeqSteps, int numStructs, int minGenStrSize)
 	{	
 		Random random = new Random();
@@ -440,7 +440,7 @@ public class ChemObjectFactory
 	}
 	
 	
-	boolean checkForDuplication(String smarts, Vector<StructInfo> vStr) throws Exception
+	boolean checkForDuplication(String smarts, List<StructInfo> vStr) throws Exception
 	{	
 		man.setQuery(smarts);
 		for (int i = 0; i < vStr.size(); i++)
@@ -466,7 +466,7 @@ public class ChemObjectFactory
 	}
 	
 	public void produceStructsFromMDL(String mdlFile, int maxNumSeqSteps, int maxNumRecord, int maxStrSize,
-				Vector<StructInfo> vStr, String outFile) throws Exception
+				List<StructInfo> vStr, String outFile) throws Exception
 	{	
 
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),builder);
@@ -497,7 +497,7 @@ public class ChemObjectFactory
 	}
 	
 	public void produceRandomStructsFromMDL(String mdlFile, int maxNumSeqSteps, int minGenStrSize,  int maxNumRecord,
-			Vector<StructInfo> vStr, String outFile) throws Exception
+			List<StructInfo> vStr, String outFile) throws Exception
 	{	
 
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),builder);
@@ -528,7 +528,7 @@ public class ChemObjectFactory
 		saveStructs(vStr,outFile);
 	}
 	
-	void saveStructs(Vector<StructInfo> vStr, String fName) throws Exception
+	void saveStructs(List<StructInfo> vStr, String fName) throws Exception
 	{
 			File file = new File(fName);
 			RandomAccessFile f = new RandomAccessFile(file,"rw");
@@ -539,7 +539,7 @@ public class ChemObjectFactory
 
 	}
 	
-	void saveStructStatistics(Vector<String> smiles, Vector<Integer> stat, String fName) throws Exception
+	void saveStructStatistics(List<String> smiles, List<Integer> stat, String fName) throws Exception
 	{
 			File file = new File(fName);
 			RandomAccessFile f = new RandomAccessFile(file,"rw");
@@ -560,9 +560,9 @@ public class ChemObjectFactory
 			RandomAccessFile f = new RandomAccessFile(file,"r");			
 			long length = f.length();
 			
-			Vector<String> smiles = new Vector<String>();
-			Vector<String> allSmiles = new Vector<String>();
-			Vector<Integer> allStat = new Vector<Integer>();
+			List<String> smiles = new ArrayList<String>();
+			List<String> allSmiles = new ArrayList<String>();
+			List<Integer> allStat = new ArrayList<Integer>();
 			int n = 0;
 			while (f.getFilePointer() < length)
 			{	
@@ -573,7 +573,7 @@ public class ChemObjectFactory
 				if (smiles.size() % portionSize == 0)
 				{
 					System.out.println("Stattistics " + n);
-					Vector<Integer> stat = doStatisticsForStructs(smiles, mdlFile, nUsedStr);
+					List<Integer> stat = doStatisticsForStructs(smiles, mdlFile, nUsedStr);
 					for (int i = 0; i < smiles.size(); i++)
 					{
 						allSmiles.add(smiles.get(i));
@@ -587,7 +587,7 @@ public class ChemObjectFactory
 			//What left from smiles vector is processed as well
 			if (!smiles.isEmpty())
 			{	
-				Vector<Integer> stat = doStatisticsForStructs(smiles, mdlFile, nUsedStr);
+				List<Integer> stat = doStatisticsForStructs(smiles, mdlFile, nUsedStr);
 				for (int i = 0; i < smiles.size(); i++)
 				{
 					allSmiles.add(smiles.get(i));
@@ -599,10 +599,10 @@ public class ChemObjectFactory
 
 	}
 	
-	Vector<Integer> doStatisticsForStructs(Vector<String> smiles, String mdlFile, int nUsedStr) throws Exception
+	List<Integer> doStatisticsForStructs(List<String> smiles, String mdlFile, int nUsedStr) throws Exception
 	{	
 		System.out.print(" queries ..." );
-		Vector<IQueryAtomContainer> queries = new Vector<IQueryAtomContainer> ();
+		List<IQueryAtomContainer> queries = new ArrayList<IQueryAtomContainer> ();
 		int n = smiles.size();
 		int frequency[] = new int[n];
 		for (int i = 0; i < n; i++)
@@ -659,7 +659,7 @@ public class ChemObjectFactory
 		}	
 		
 		
-		Vector<Integer> stat = new Vector<Integer>();
+		List<Integer> stat = new ArrayList<Integer>();
 		for (int i = 0; i < n; i++)
 			stat.add(new Integer(frequency[i]));
 		
