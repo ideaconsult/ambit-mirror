@@ -22,7 +22,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.IParams;
-import ambit2.rest.OutputWriterConvertor;
 
 public class SubstanceCategoryProperty extends CatalogResource<EffectRecord<String,IParams, String>> {
 	protected List<EffectRecord<String, IParams, String>> effects;
@@ -30,6 +29,11 @@ public class SubstanceCategoryProperty extends CatalogResource<EffectRecord<Stri
 	public SubstanceCategoryProperty() {
 		super();
 		effects = null;
+		setHtmlbyTemplate(true);
+	}
+	@Override
+	public String getTemplateName() {
+		return "jsonplaceholder.ftl";
 	}
 	@Override
 	protected Iterator<EffectRecord<String, IParams, String>> createQuery(
@@ -49,7 +53,15 @@ public class SubstanceCategoryProperty extends CatalogResource<EffectRecord<Stri
 					String.format("Expected /property/%s/%s_SECTION",category.getTopCategory(),category.name()));
 		}
 		effects = new ArrayList<EffectRecord<String, IParams, String>>();
-		effects.add(category.createEffectRecord());
+		
+		if (category.getEndpoints()!=null && category.getEndpoints().length>0)
+			for (String endpoint : category.getEndpoints()) {
+				EffectRecord record = category.createEffectRecord();
+				record.setEndpoint(endpoint);
+				effects.add(record);
+			}
+		else 
+			effects.add(category.createEffectRecord());
 		return effects.iterator();
 	}
 	protected Form getParams() {
