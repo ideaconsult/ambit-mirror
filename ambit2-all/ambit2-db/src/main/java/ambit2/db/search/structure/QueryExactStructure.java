@@ -36,6 +36,7 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -89,7 +90,7 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 		reader = new MoleculeReader();
 		configurator = new AtomConfigurator();
 		bondPropertiesReader = new SMARTSPropertiesReader();
-		fpGenerator = new FingerprintGenerator();
+		fpGenerator = new FingerprintGenerator(new Fingerprinter());
 		skGenerator = new StructureKeysBitSetGenerator();
 	}
 
@@ -121,7 +122,7 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 				screening.setPage(0);
 				screening.setPageSize(0);
 				IAtomContainer atomContainer = getValue();
-				if (fpGenerator==null) fpGenerator = new FingerprintGenerator();
+				if (fpGenerator==null) fpGenerator = new FingerprintGenerator(new Fingerprinter());
 				if (skGenerator == null) skGenerator = new StructureKeysBitSetGenerator();
 				screening.setValue(fpGenerator.process(atomContainer));
 				screening.setFieldname(skGenerator.process(atomContainer));

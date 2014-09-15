@@ -7,6 +7,7 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
@@ -89,7 +90,7 @@ public class QuerySMARTS extends
 	public QuerySMARTS(IChemObjectBuilder builder) throws Exception {
 		super();
 		skGenerator = new StructureKeysBitSetGenerator();
-		fpGenerator = new FingerprintGenerator();
+		fpGenerator = new FingerprintGenerator(new Fingerprinter());
 		screening = new QueryPrescreenBitSet();
 		setChemicalsOnly(false);
 		setValue(null);

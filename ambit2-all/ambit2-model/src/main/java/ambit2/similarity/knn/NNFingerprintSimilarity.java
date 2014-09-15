@@ -31,6 +31,8 @@ package ambit2.similarity.knn;
 
 import java.util.BitSet;
 
+import org.openscience.cdk.fingerprint.Fingerprinter;
+
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.similarity.measure.FingerprintDistance;
 import ambit2.similarity.measure.IDistanceFunction;
@@ -50,7 +52,7 @@ public class NNFingerprintSimilarity<ID> extends NearestNeighborsSimilarity<ID,B
 
     public NNFingerprintSimilarity(IDistanceFunction<BitSet> distanceFunction, int knn) {
         super(distanceFunction, knn);
-        generator = new FingerprintGenerator();
+        generator = new FingerprintGenerator(new Fingerprinter());
         generator.setHydrogens(false);
 
     }

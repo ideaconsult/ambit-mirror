@@ -7,6 +7,7 @@ import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
+import org.openscience.cdk.fingerprint.Fingerprinter;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
@@ -28,7 +29,7 @@ public class FingerprintChemical_crud_test extends CRUDTest<IStructureRecord,Bit
 		ProcessorStructureRetrieval p = new ProcessorStructureRetrieval();
 		p.setConnection(c.getConnection());
 		MoleculeReader molReader = new MoleculeReader();
-		FingerprintGenerator g = new FingerprintGenerator();
+		FingerprintGenerator g = new FingerprintGenerator(new Fingerprinter());
 		q.setObject(g.process(molReader.process(p.process(record))));
 		q.setGroup(record);
 		c.close();

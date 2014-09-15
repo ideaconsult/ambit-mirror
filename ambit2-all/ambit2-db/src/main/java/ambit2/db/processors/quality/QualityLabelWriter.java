@@ -6,6 +6,7 @@ import javax.naming.OperationNotSupportedException;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
+import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.interfaces.IStructureRecord;
@@ -20,7 +21,7 @@ public class QualityLabelWriter extends AbstractRepositoryWriter<IStructureRecor
 	protected CreateQLabelFingerprints query = new CreateQLabelFingerprints();
 	protected SmilesUniquenessCheck querySmiles = new SmilesUniquenessCheck();
 	protected MoleculeReader molReader = new MoleculeReader();
-	protected FingerprintGenerator g = new FingerprintGenerator();
+	protected FingerprintGenerator g = new FingerprintGenerator(new Fingerprinter());
 	protected SmilesKey smilesKey = new SmilesKey();
 	/**
 	 * 

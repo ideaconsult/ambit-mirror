@@ -37,6 +37,7 @@ import java.util.logging.Level;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 
+import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
@@ -67,7 +68,7 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 	public QuerySimilarityStructure() {
 		super();
 		query = new QuerySimilarityBitset();
-		g = new FingerprintGenerator();
+		g = new FingerprintGenerator(new Fingerprinter());
 		setCondition(NumberCondition.getInstance(">="));	
 		setThreshold(0.75);		
 	}

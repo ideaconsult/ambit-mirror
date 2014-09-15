@@ -7,6 +7,7 @@ import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 
+import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -60,7 +61,7 @@ public class CallableFingerprintsModelCreator<USERID> extends CallableStructures
 
 		p1.add(new ProcessorStructureRetrieval());
 		p1.add(new MoleculeReader());
-		p1.add(new FingerprintGenerator());
+		p1.add(new FingerprintGenerator(new Fingerprinter()));
 		p1.add(new DefaultAmbitProcessor<BitSet,BitSet>() {
 			public BitSet process(BitSet target) throws AmbitException {
 				builder.getTrainingData().add(target);

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
+import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -161,7 +162,7 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 	}
 
 	public BitSet getBitset(IAtomContainer molecule) throws AmbitException {
-		FingerprintGenerator gen = new FingerprintGenerator();
+		FingerprintGenerator gen = new FingerprintGenerator(new Fingerprinter());
 		return gen.process(molecule);
 	}
 

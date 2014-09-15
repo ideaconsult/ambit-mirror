@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.fingerprint.EStateFingerprinter;
 import org.openscience.cdk.fingerprint.ExtendedFingerprinter;
+import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.fingerprint.HybridizationFingerprinter;
 import org.openscience.cdk.fingerprint.MACCSFingerprinter;
 import org.openscience.cdk.fingerprint.PubchemFingerprinter;
@@ -67,7 +68,7 @@ public class FingerPrintGeneratorTest {
 		};
 		
 		MoleculeReader molreader = new MoleculeReader();
-		FingerprintGenerator gen = new FingerprintGenerator();
+		FingerprintGenerator gen = new FingerprintGenerator(new Fingerprinter());
 		InputStream in = FingerPrintGeneratorTest.class.getClassLoader().getResourceAsStream("ambit2/core/data/fp/fptest.mol");
 		RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(in));
 		while (reader.hasNext()) {
@@ -94,7 +95,7 @@ public class FingerPrintGeneratorTest {
 	@Test
 	public void testPolyAromatics() throws Exception {
 		MoleculeReader molreader = new MoleculeReader();
-		FingerprintGenerator gen = new FingerprintGenerator();
+		FingerprintGenerator gen = new FingerprintGenerator(new Fingerprinter());
 		InputStream in = FingerPrintGeneratorTest.class.getClassLoader().getResourceAsStream("ambit2/core/data/fp/polyaromatics.sdf");
 		RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(in));
 		while (reader.hasNext()) {
