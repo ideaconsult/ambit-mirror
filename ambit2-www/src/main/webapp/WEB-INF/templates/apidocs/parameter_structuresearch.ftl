@@ -1,12 +1,4 @@
 			            {
-			              "name": "search",
-			              "description": "SMARTS, InChI",
-			              "required": true,
-			              "type": "string",
-			              "paramType": "query",
-			              "allowMultiple"  : false
-			            },
-			            {
 			              "name": "b64search",
 			              "description": "Base64 encoded SMILES or mol file; if included, will be used instead of the 'search' parameter",
 			              "required": false,
