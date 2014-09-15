@@ -3,7 +3,7 @@
  -----
  Nina Jeliazkova
  -----
- 2011/08/20
+ 2014/09/15
  -----
 
 {AMBIT libraries} 
@@ -11,7 +11,7 @@
 	AMBIT is implemented in Java, uses a MySQL database as backend, and relies on {{{http://cdk.sf.net}The Chemistry Development Kit}} 
 	for cheminformatics functionality. 
 	
-	The OpenTox API implementation introduces two additional major dependencies, namely, the {{{http://www.restlet.org/}Restlet}} library 
+	The {{{./api.html}OpenTox API}} implementation introduces two additional major dependencies, namely, the {{{http://www.restlet.org/}Restlet}} library 
 	for implementation of REST services, and the {{{http://jena.sourceforge.net/}Jena}} RDF API. 
 	{{{http://maven.apache.org/}Apache Maven}} is used for software project management 
 	(organizing dependencies and building of executables). 
@@ -27,16 +27,15 @@
 	On the other hand, Toxtree itself a dependency of the end user applications and web services, in which it has been incorporated, 
 	such as {{{./download_ambitxt.html}AmbitXT}} and {{{./download_ambitrest.html}AMBIT REST web services}}.
 	
-	More details about ({{{./AMBIT2-LIBS/apidocs}javadoc}}, code examples) at {{{./AMBIT2-LIBS}ambit modules}} web pages. 
+	More details about ({{{./AMBIT2-LIBS/apidocs}javadoc}}, code examples) at {{{https://github.com/ideaconsult/examples-ambit}GitHub}}. 
 
 *License
 
 	[LGPL] {{{http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt}http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt}}
 
 	[]
-	
-	<Please note the license of AMBIT Applications and web services is GPL>
-	
+
+
 *The code
 	
 	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all}Libraries}} (multi-module Maven project) 
@@ -49,13 +48,23 @@
    		
    		{{{http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases/ambit/}http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases/ambit/}}
    		
-   		Artifacts
+   		Snapshots
    		
 +---------------------------------    
 <dependency>
   <groupId>ambit</groupId>
   <artifactId>ambit2-*</artifactId>
-  <version>2.4.2</version>
+  <version>2.5.9-SNAPSHOT</version>
+</dependency>
++---------------------------------   		
+   		
+   		Release
+   		
++---------------------------------    
+<dependency>
+  <groupId>ambit</groupId>
+  <artifactId>ambit2-*</artifactId>
+  <version>2.5.8</version>
 </dependency>
 +---------------------------------
 
@@ -68,11 +77,6 @@
     </repository>
 +--------------------------------- 	
 
-*Publications
- 	
-    [AMBIT REST] Jeliazkova N., Jeliazkov V. {{{http://www.jcheminf.com/content/3/1/18} AMBIT RESTful web services: an implementation of the OpenTox application programming interface}}, Journal of Cheminformatics <<2011>>, 3:18, {{{http://dx.doi.org/10.1186/1758-2946-3-18}doi:10.1186/1758-2946-3-18}}.
-    
-    [AMBIT Substructure search] Jeliazkova N., Kochev N. Ambit-SMARTS: Efficient Searching Of Chemical Structures And Fragments, {{{http://onlinelibrary.wiley.com/journal/10.1002/(ISSN)1611-0218}Mol. Inf.}},  <<2011>>, 30, 2 - 15 (in print)
-  
-    [AMBIT, AMBITXT] Jeliazkova N., Jaworska J., Worth A. (2010) Chapter 17. Open Source Tools for Read-Across and Category Formation, In M. Cronin, & Madden J. (Eds.), {{{http://www.amazon.com/Silico-Toxicology-Principles-Applications-Issues/dp/1849730040}In Silico Toxicology : Principles and Applications}} (pp. 408-445). Cambridge, UK: RSC Publishing
-    
+*How to use AMBIT modules (examples)
+
+	{{{https://github.com/ideaconsult/examples-ambit}https://github.com/ideaconsult/examples-ambit}}
