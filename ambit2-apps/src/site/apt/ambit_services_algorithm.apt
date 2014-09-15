@@ -7,27 +7,4 @@
 
 Algorithm
 
- {{GET}} {{POST}} {{PUT}} {{DELETE}}
-
-*{GET}
-~~~~~~~
- * Get the representation of an algorithm
-   
-------
-curl http://apps.ideaconsult.net:8080/ambit2/algorithm/1
-------   
-   
-*{POST}
-~~~~~~~~~~
-
- * Not supported
-	
-*{PUT}
-~~~~~~~~~~
-
- * Not supported
-   
-*{DELETE}
-~~~~~~~~~~
-
- * Not supported
+	{{{http://ideaconsult.github.io/examples-ambit/apidocs/#!/algorithm}Algorithm API}}

@@ -7,27 +7,4 @@
 
 Dataset
 
- {{GET}} {{POST}} {{PUT}} {{DELETE}}
-
-*{GET}
-~~~~~~~
- * Get the representation of chemical compound
-   
-------
-curl http://apps.ideaconsult.net:8080/ambit2/compound/100
-------   
-   
-*{POST}
-~~~~~~~~~~
-
- * Create a new chemical compound
-	
-*{PUT}
-~~~~~~~~~~
-
- * Update the representation of chemical compound
-   
-*{DELETE}
-~~~~~~~~~~
-
- * Remove chemical compound
+ {{{http://ideaconsult.github.io/examples-ambit/apidocs/#!/dataset}}Dataset API}}

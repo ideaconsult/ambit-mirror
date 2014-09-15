@@ -170,3 +170,7 @@ curl -H "Accept:application/rdf+xml" http://apps.ideaconsult.net:8080/ambit2/dat
 curl -H "Accept:text/n3" http://apps.ideaconsult.net:8080/ambit2/dataset/9
 +---------------------------------------
   
+ ** Example 5. Dataset comparison demo  
+
+  {{{./demo_datacomparison.html}Datasets comparison demo}}
+ 

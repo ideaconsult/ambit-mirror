@@ -72,9 +72,14 @@
 	
    * Asynchronous Task {{{http://opentox.org/dev/apis/api-1.2/AsyncTask}API}} {{{./api_task.html}Examples}}
 	
-   * Ontology service {{{http://opentox.org/dev/apis/api-1.2/Ontology}API}}
+   * Ontology service {{{http://opentox.org/dev/apis/api-1.2/Ontology}API}} {{{./api_ontology.html}Examples}}
 	
    * Authentication and authorization  {{{http://opentox.org/dev/apis/api-1.2/AA}API}}
+
+[AMBIT OpenTox API implementation]
+
+   * Chemical compound structure {{{./ambit_services.html}Examples}}
+
 
  []
 

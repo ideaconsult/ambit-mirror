@@ -1,30 +1,31 @@
  -----
  How to cite AMBIT
  -----
- Nina Jeliazkova
+ Ideaconsult Ltd.
  -----
- 2011/08/18
+ 2014/09/15
  -----
 
 
-AMBIT publications
+Publications
 
+  * Kochev N., Paskaleva V., Jeliazkova N.,  {{{http://onlinelibrary.wiley.com/doi/10.1002/minf.201200133/abstract}Ambit-Tautomer: An Open Source Tool for Tautomer Generation}}, {{{http://onlinelibrary.wiley.com/journal/10.1002/(ISSN)1611-0218}Molecular Informatics}},  <<2013>>, 32(5-6):481-504. {{{http://dx.doi.org/10.1002/minf.201200133}doi:10.1002/minf.201200133}}
+    
+  * Jeliazkova, N., Jeliazkov V., {{{http://www.ncbi.nlm.nih.gov/pubmed/23110534}Chemical Landscape Analysis with the Opentox Framework}}, {{{http://www.ingentaconnect.com/content/ben/ctmc}Current Topics in Medicinal Chemistry}}, <<2012>>, 12(18);1987-2001(15).
    
-  [AMBIT Web services] Jeliazkova N., Jeliazkov V. {{{http://www.jcheminf.com/content/3/1/18} AMBIT RESTful web services: an implementation of the OpenTox application programming interface}}, Journal of Cheminformatics <<2011>>, 3:18, {doi:10.1186/1758-2946-3-18}.
+  * Jeliazkova N., Jeliazkov V. {{{http://www.jcheminf.com/content/3/1/18} AMBIT RESTful web services: an implementation of the OpenTox application programming interface}}, Journal of Cheminformatics <<2011>>, 3:18, {{{http://dx.doi.org/10.1186/1758-2946-3-18} doi:10.1186/1758-2946-3-18}}.
 
-  [AMBIT Substructure search] Jeliazkova N., Kochev N. {{{http://onlinelibrary.wiley.com/doi/10.1002/minf.201100028/abstract}Ambit-SMARTS:}} Efficient Searching Of Chemical Structures And Fragments, {{{http://onlinelibrary.wiley.com/journal/10.1002/(ISSN)1611-0218}Mol. Inf.}},  <<2011>>;30(8):707-720
-  
-  [AMBIT, AMBITXT] Jeliazkova N., Jaworska J., Worth A. (2010) Chapter 17. Open Source Tools for Read-Across and Category Formation, In M. Cronin, & Madden J. (Eds.), {{{http://www.amazon.com/Silico-Toxicology-Principles-Applications-Issues/dp/1849730040}In Silico Toxicology : Principles and Applications}} (pp. 408-445). Cambridge, UK: RSC Publishing
+  * Jeliazkova N., Kochev N. {{{http://onlinelibrary.wiley.com/doi/10.1002/minf.201100028/abstract}Ambit-SMARTS:}} Efficient Searching Of Chemical Structures And Fragments, {{{http://onlinelibrary.wiley.com/journal/10.1002/(ISSN)1611-0218}Molecular Informatics}},  <<2011>>;30(8):707-720. {{{http://dx.doi.org/10.1002/minf.201100028}doi:10.1002/minf.201100028}}
 
-  [AMBIT Discovery] Joanna Jaworska, Nina Nikolova-Jeliazkova, {{{http://www.ncbi.nlm.nih.gov/pubmed/17514565}How can structural similarity analysis help in category formation}}, SAR and QSAR in Environmental Research, vol 18, 3-4 (2007)
+  * Jeliazkova N., Jaworska J., Worth A. Chapter 17. Open Source Tools for Read-Across and Category Formation, In M. Cronin, & Madden J. (Eds.), {{{http://www.rsc.org/publishing/ebooks/2010/9781849730044.asp} In Silico Toxicology : Principles and Applications}} (pp. 408-445). Cambridge, UK: RSC Publishing ,<<2010>>
+    
+  * Joanna Jaworska, Nina Nikolova-Jeliazkova, {{{./publications/2007/similarity_lyon.pdf}How can structural similarity analysis help in category formation}},  SAR and QSAR in Environmental Research, vol 18, 3-4 (<<2007>>)
   
-  []
  
- or/and  these web sites:
+Web sites
 
  [AMBIT site] {{{http://ambit.sourceforge.net}http://ambit.sourceforge.net}}
  
  [AMBIT Web services] {{{http://apps.ideaconsult.net:8080/ambit2}http://apps.ideaconsult.net:8080/ambit2}}
  
- []
  
