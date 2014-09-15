@@ -1,6 +1,8 @@
 <ul>
 	<li><a href="#">OpenTox API</a>
 	<ul>
+		<li><a href='${ambit_root}/api-docs' target=_blank title="API documentation in Swagger JSON format">API Documentation</a></li>
+		<li><a href='http://ideaconsult.github.io/examples-ambit/apidocs/' class="qxternal" target=_blank title="API documentation via swagger-ui">API Documentation (public services)</a></li>
 		<li><a href="${ambit_root}/compound" title="Chemical compound">Compound</a></li>
 		<li><a href="${ambit_root}/dataset">Datasets</a></li>
 		<li><a href="${ambit_root}/feature" title="Features (identifiers, measured and calculated properties)">Features</a></li>
@@ -15,6 +17,7 @@
 			</ul>
 		</li>
 	</ul>
+	</li>
 	<li><a href="${ambit_root}/admin">Admin</a>
 		<#if openam_token??>
 			<#if menu_profile??>

@@ -39,7 +39,9 @@ Admin<a href='#' class='chelp admin'>?</a>
 		<a href='${ambit_root}/algorithm' target='_blank'>Algorithms</a> |
 		<a href='${ambit_root}/model' target='_blank'>Models</a> |
 		<a href='${ambit_root}/task' target='_blank'>Tasks</a> |
-		<a href='${ambit_root}/help' target=_blank>More API Help</a><br>
+				
+		<a href='${ambit_root}/api-docs' target=_blank title="API documentation in Swagger JSON format">API Documentation</a><br>
+		<a href='http://ideaconsult.github.io/examples-ambit/apidocs/' target=_blank title="API documentation in Swagger JSON format">API Documentation (public services)</a><br>
   </div>
 	<div id='queryapi'>		
 		<a href='${ambit_root}/query/compound/search/all' target='_blank'>Exact search</a> |
