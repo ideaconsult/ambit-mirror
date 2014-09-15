@@ -1,6 +1,7 @@
 package ambit2.smarts;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
@@ -30,7 +31,7 @@ public class SMIRKSManager
 	EquivalenceTester eqTester = new EquivalenceTester();
 	
 	
-	Vector<String> parserErrors = new Vector<String>();
+	List<String> parserErrors = new ArrayList<String>();
 	
 	public int FlagSSMode = SmartsConst.SSM_NON_OVERLAPPING; 
 	public boolean FlagFilterEquivalentMappings = false;
@@ -172,7 +173,7 @@ public class SMIRKSManager
 	
 	
 	public IQueryAtomContainer parseComponent(String smarts, String compType, SmartsFlags flags,
-			Vector<IQueryAtomContainer> fragments, Vector<Integer> CLG)
+			List<IQueryAtomContainer> fragments, List<Integer> CLG)
 	{
 		IQueryAtomContainer fragment = parser.parse(smarts);
 		parser.setNeededDataFlags();
@@ -224,7 +225,7 @@ public class SMIRKSManager
 		
 		if (FlagSSMode ==  SmartsConst.SSM_NON_IDENTICAL)
 		{	
-			Vector<Vector<IAtom>> rMaps = getNonIdenticalMappings(target);
+			List<List<IAtom>> rMaps = getNonIdenticalMappings(target);
 			if (rMaps.size()==0) return false;
 			
 			if (FlagFilterEquivalentMappings)
@@ -258,7 +259,7 @@ public class SMIRKSManager
 		
 		if (FlagSSMode ==  SmartsConst.SSM_NON_IDENTICAL_FIRST)
 		{	
-			Vector<Vector<IAtom>> rMaps = getNonIdenticalMappings(target);
+			List<List<IAtom>> rMaps = getNonIdenticalMappings(target);
 			if (rMaps.size()==0) return false;
 			
 			//Map filtering here is not needed
@@ -290,7 +291,7 @@ public class SMIRKSManager
 		
 		if (FlagSSMode ==  SmartsConst.SSM_NON_OVERLAPPING)
 		{	
-			Vector<Vector<IAtom>> rMaps = getNonOverlappingMappings(target);
+			List<List<IAtom>> rMaps = getNonOverlappingMappings(target);
 			if (rMaps.size()==0) return false;
 			
 			//Map filtering here is applied here (it should be not needed)
@@ -327,18 +328,18 @@ public class SMIRKSManager
 		
 		isoTester.setQuery(reaction.reactant);
 		
-		Vector<Vector<IAtom>> rMaps0 = getNonIdenticalMappings(target);
+		List<List<IAtom>> rMaps0 = getNonIdenticalMappings(target);
 		if (rMaps0.size()==0) 
 			return null;
 		
-		Vector<Vector<IAtom>> rMaps;
+		List<List<IAtom>> rMaps;
 		
 		//Preliminary filtration by means of IAcceptable
 		if (selection == null)
 			rMaps = rMaps0;
 		else
 		{
-			rMaps = new Vector<Vector<IAtom>>(); 
+			rMaps = new ArrayList<List<IAtom>>(); 
 			for (int i = 0; i < rMaps0.size(); i++)
 			{
 				if (selection.accept(rMaps0.get(i)))
@@ -379,7 +380,7 @@ public class SMIRKSManager
 		
 		
 		//Make mapping clusters/groups 
-		Vector<Vector<Integer>> clusterIndexes = isoTester.getOverlappedMappingClusters(rMaps);
+		List<List<Integer>> clusterIndexes = isoTester.getOverlappedMappingClusters(rMaps);
 		
 		//printMappingClusters(clusterIndexes, target);	
 		
@@ -394,7 +395,7 @@ public class SMIRKSManager
 		do 
 		{
 			//Prepare current combination
-			Vector<Vector<IAtom>> combMaps = new Vector<Vector<IAtom>>();
+			List<List<IAtom>> combMaps = new ArrayList<List<IAtom>>();
 			for (int i = 0; i < comb.length; i++)
 			{	
 				int index = clusterIndexes.get(i).get(comb[i]).intValue();				
@@ -437,18 +438,18 @@ public class SMIRKSManager
 		
 		isoTester.setQuery(reaction.reactant);
 		
-		Vector<Vector<IAtom>> rMaps0 = getNonIdenticalMappings(target);
+		List<List<IAtom>> rMaps0 = getNonIdenticalMappings(target);
 		if (rMaps0.size()==0) 
 			return null;
 		
-		Vector<Vector<IAtom>> rMaps;
+		List<List<IAtom>> rMaps;
 		
 		//Preliminary filtration by means of IAcceptable
 		if (selection == null)
 			rMaps = rMaps0;
 		else
 		{
-			rMaps = new Vector<Vector<IAtom>>(); 
+			rMaps = new ArrayList<List<IAtom>>(); 
 			for (int i = 0; i < rMaps0.size(); i++)
 			{
 				if (selection.accept(rMaps0.get(i)))
@@ -470,7 +471,7 @@ public class SMIRKSManager
 		
 		for (int i = 0; i < rMaps.size(); i++)
 		{	
-			Vector<Vector<IAtom>> vMaps = new Vector<Vector<IAtom>>(); 
+			List<List<IAtom>> vMaps = new ArrayList<List<IAtom>>(); 
 			vMaps.add(rMaps.get(i));
 			IAtomContainer product = applyTransformationsAtLocationsWithCloning(target, vMaps, reaction);  
 			if (FlagPreprocessResultStructures)
@@ -482,32 +483,32 @@ public class SMIRKSManager
 	}
 	
 	
-	public Vector<Vector<IAtom>> getNonOverlappingMappings(IAtomContainer target)
+	public List<List<IAtom>> getNonOverlappingMappings(IAtomContainer target)
 	{
 		//Special treatment for fragmented reactants
 		//TODO
 		
-		Vector<Vector<IAtom>> rMaps = isoTester.getNonOverlappingMappings(target);
+		List<List<IAtom>> rMaps = isoTester.getNonOverlappingMappings(target);
 		return(rMaps);
 	}
 	
-	public Vector<Vector<IAtom>> getNonIdenticalMappings(IAtomContainer target)
+	public List<List<IAtom>> getNonIdenticalMappings(IAtomContainer target)
 	{
 		//Special treatment for fragmented reactants 
 		//TODO
 		
-		Vector<Vector<IAtom>> rMaps = isoTester.getNonIdenticalMappings(target);
+		List<List<IAtom>> rMaps = isoTester.getNonIdenticalMappings(target);
 		return(rMaps);
 	}
 	
 	
 	
-	public void applyTransformAtLocation(IAtomContainer target, Vector<IAtom> rMap, SMIRKSReaction reaction)
+	public void applyTransformAtLocation(IAtomContainer target, List<IAtom> rMap, SMIRKSReaction reaction)
 	{	
 		//printSSMap(target,rMap);
 		
 		//Create Non Existing Atoms
-		Vector<IAtom> newAtoms = new Vector<IAtom>();
+		List<IAtom> newAtoms = new ArrayList<IAtom>();
 		for (int i = 0; i < reaction.productNotMappedAt.size(); i++)
 		{	
 			int pAtNum = reaction.productNotMappedAt.get(i).intValue();
@@ -640,13 +641,13 @@ public class SMIRKSManager
 	
 		
 	public IAtomContainer applyTransformationsAtLocationsWithCloning(IAtomContainer target, 
-															Vector<Vector<IAtom>> rMaps, SMIRKSReaction reaction) throws Exception
+															List<List<IAtom>> rMaps, SMIRKSReaction reaction) throws Exception
 	{	
 		//Create a target clone 
 		IAtomContainer clone =  getCloneStructure(target);
 		
 		//Create mappings clones (according to the new atoms of the clone)
-		Vector<Vector<IAtom>> cloneMaps = new Vector<Vector<IAtom>>(); 
+		List<List<IAtom>> cloneMaps = new ArrayList<List<IAtom>>(); 
 		for (int i = 0; i < rMaps.size(); i++)
 			cloneMaps.add(getCloneMapping(target, clone, rMaps.get(i)));
 		
@@ -704,9 +705,9 @@ public class SMIRKSManager
 	}
 	
 	
-	Vector<IAtom> getCloneMapping(IAtomContainer target, IAtomContainer clone, Vector<IAtom> map)
+	List<IAtom> getCloneMapping(IAtomContainer target, IAtomContainer clone, List<IAtom> map)
 	{
-		Vector<IAtom> cloneMap = new Vector<IAtom>();
+		List<IAtom> cloneMap = new ArrayList<IAtom>();
 		for (int i = 0; i < map.size(); i++)
 		{
 			IAtom at = map.get(i);
@@ -717,9 +718,9 @@ public class SMIRKSManager
 		return(cloneMap);
 	}
 	
-	public Vector<SmartsAtomExpression> getRecursiveAtoms(IQueryAtomContainer query)
+	public List<SmartsAtomExpression> getRecursiveAtoms(IQueryAtomContainer query)
 	{
-		Vector<SmartsAtomExpression> recursiveAtoms = new Vector<SmartsAtomExpression>() ;
+		List<SmartsAtomExpression> recursiveAtoms = new ArrayList<SmartsAtomExpression>() ;
 		for (int i = 0; i < query.getAtomCount(); i++)
 		{
 			if (query.getAtom(i) instanceof SmartsAtomExpression)
@@ -737,22 +738,22 @@ public class SMIRKSManager
 		return recursiveAtoms;
 	}
 	
-	public void mapRecursiveAtomsAgainstTarget(Vector<SmartsAtomExpression> recursiveAtoms, IAtomContainer target)
+	public void mapRecursiveAtomsAgainstTarget(List<SmartsAtomExpression> recursiveAtoms, IAtomContainer target)
 	{	
 		//Reset for new mapping
 		for (int i = 0; i < recursiveAtoms.size(); i++)
-			recursiveAtoms.get(i).recSmartsMatches = new Vector<Vector<IAtom>>();
+			recursiveAtoms.get(i).recSmartsMatches = new ArrayList<List<IAtom>>();
 		
 		//The mapping info is stored "inside" each recursive atom
-		Vector<IQueryAtomContainer> vRecCon;				
+		List<IQueryAtomContainer> vRecCon;				
 		for (int i = 0; i < recursiveAtoms.size(); i++)
 		{	
 			vRecCon = recursiveAtoms.get(i).recSmartsContainers;
 			for (int j = 0; j < vRecCon.size(); j++)				
 			{	
 				isoTester.setQuery(vRecCon.get(j));
-				Vector<Integer> pos = isoTester.getIsomorphismPositions(target);		
-				Vector<IAtom> v = new Vector<IAtom>();
+				List<Integer> pos = isoTester.getIsomorphismPositions(target);		
+				List<IAtom> v = new ArrayList<IAtom>();
 				
 				for (int k = 0; k < pos.size(); k++)
 					v.add(target.getAtom(pos.get(k).intValue()));
@@ -764,7 +765,7 @@ public class SMIRKSManager
 	
 	//Helper functions
 	
-	public void printSSMap(IAtomContainer target, Vector<IAtom> rMap)
+	public void printSSMap(IAtomContainer target, List<IAtom> rMap)
 	{	
 		System.out.print("Map: ");
 		for (int i = 0; i < rMap.size(); i++)
@@ -775,12 +776,12 @@ public class SMIRKSManager
 		System.out.println();
 	}	
 	
-	public void printMappingClusters(Vector<Vector<Integer>> clusterIndexes, IAtomContainer target)
+	public void printMappingClusters(List<List<Integer>> clusterIndexes, IAtomContainer target)
 	{
 		for (int i = 0; i < clusterIndexes.size(); i++)
 		{
 			System.out.print("Cluster #" + i + " : ");
-			Vector<Integer> v = clusterIndexes.get(i);
+			List<Integer> v = clusterIndexes.get(i);
 			for (int k = 0; k < v.size(); k++)
 				System.out.print(v.get(k) + " ");
 			System.out.println();

@@ -11,7 +11,6 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
-import java.util.Vector;
 
 import org.junit.Test;
 import org.openscience.cdk.Atom;
@@ -311,7 +310,7 @@ public class TestUtilities
 			System.out.println("# " + n);
 			System.out.print("  bond mapping: " + bondMappingToString((List)aBondMapping,mol));
 						
-			Vector<IAtom> atomMapping = man.generateFullAtomMapping((List)aBondMapping, mol, man.getQueryContaner());
+			List<IAtom> atomMapping = man.generateFullAtomMapping((List)aBondMapping, mol, man.getQueryContaner());
 			System.out.print("  atom mapping: ");
 			for (int i = 0; i < atomMapping.size(); i++)
 			{
@@ -441,7 +440,7 @@ public class TestUtilities
 		
 		isoTester.setQuery(query);
 		sp.setSMARTSData(mol);
-		Vector<Integer> pos = isoTester.getIsomorphismPositions(mol);
+		List<Integer> pos = isoTester.getIsomorphismPositions(mol);
 		System.out.println("Isomorphism Positions: " + smarts  + "  in  " + smiles);
 		for (int i = 0; i < pos.size(); i++)
 			System.out.print("  " + pos.get(i).intValue());
@@ -449,9 +448,9 @@ public class TestUtilities
 	}
 	
 	//helper function
-	public String getBondMapping(IMolecule mol, Vector<IAtom> amap) 
+	public String getBondMapping(IMolecule mol, List<IAtom> amap) 
 	{
-		Vector<IBond> v = isoTester.generateBondMapping(mol,amap);
+		List<IBond> v = isoTester.generateBondMapping(mol,amap);
 		StringBuffer sb = new StringBuffer();		
 		for (int i = 0; i < v.size(); i++)		
 			sb.append(" "+mol.getBondNumber(v.get(i)));
@@ -475,7 +474,7 @@ public class TestUtilities
 		}						
 		
 		isoTester.setQuery(query);
-		Vector<IAtom> map = isoTester.getIsomorphismMapping(mol);
+		List<IAtom> map = isoTester.getIsomorphismMapping(mol);
 		System.out.println("Isomorphism Mapping: " + smarts  + "  in  " + smiles);
 		for (int i = 0; i < map.size(); i++)
 		{	
@@ -504,11 +503,11 @@ public class TestUtilities
 		}						
 		
 		isoTester.setQuery(query);
-		Vector<Vector<IAtom>> allmaps = isoTester.getAllIsomorphismMappings(mol);
+		List<List<IAtom>> allmaps = isoTester.getAllIsomorphismMappings(mol);
 		System.out.println("Isomorphism Mapping: " + smarts  + "  in  " + smiles);
 		for (int i = 0; i < allmaps.size(); i++)
 		{	
-			Vector<IAtom> map = allmaps.get(i);
+			List<IAtom> map = allmaps.get(i);
 			for (int j = 0; j < map.size(); j++)
 			{	
 				IAtom a = map.get(j);
@@ -593,7 +592,7 @@ public class TestUtilities
 	}
 		
 	
-	public boolean checkSequence(IQueryAtomContainer query, Vector<QuerySequenceElement> sequence)
+	public boolean checkSequence(IQueryAtomContainer query, List<QuerySequenceElement> sequence)
 	{
 		ChemObjectFactory factory = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 		IAtomContainer skelleton = factory.getCarbonSkelleton(sequence);		
@@ -702,7 +701,7 @@ public class TestUtilities
 	
 	public void testWithFile(String fname, String testType)
 	{
-		Vector<String> failSmiles = new Vector<String>(); 
+		List<String> failSmiles = new ArrayList<String>(); 
 		if ((!testType.equals("ExtractAtomContainer")))
 		{	
 			System.out.println("Incorrect test type: " + testType);
@@ -786,7 +785,7 @@ public class TestUtilities
 			System.out.println(man.getErrors());
 			return;
 		}
-		Vector<IAtom> atoms = man.getFirstPosAtomMappings(mol);
+		List<IAtom> atoms = man.getFirstPosAtomMappings(mol);
 		System.out.println(smarts + " mapped against " + smiles + 
 						" gave " + atoms.size()+" atoms:");
 		for (int i = 0; i < atoms.size(); i++)
@@ -1113,7 +1112,7 @@ public class TestUtilities
 	{
 		System.out.println("Producing structs form " + smiles+ "   maxNumSteps = " + maxNumSteps);
 		System.out.println("-------------------------------");
-		Vector<StructInfo> vStr = new Vector<StructInfo>();
+		List<StructInfo> vStr = new ArrayList<StructInfo>();
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		
 		if (FlagTargetPreprocessing)
@@ -1144,7 +1143,7 @@ public class TestUtilities
 	void produceStructures() throws Exception
 	{
 		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
-		Vector<StructInfo> vStr = new Vector<StructInfo>();
+		List<StructInfo> vStr = new ArrayList<StructInfo>();
 		cof.produceStructsFromMDL("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 
 					5, 50000, 8, vStr, "/java_frags.txt");
 		
@@ -1153,7 +1152,7 @@ public class TestUtilities
 	void produceRandomStructures() throws Exception
 	{
 		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
-		Vector<StructInfo> vStr = new Vector<StructInfo>();
+		List<StructInfo> vStr = new ArrayList<StructInfo>();
 		cof.produceRandomStructsFromMDL("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 
 					30, 5, 50000, vStr, "/java_random_frags.txt");
 	}
@@ -1168,7 +1167,7 @@ public class TestUtilities
 	
 	void filterStructsBySize(String inputSmilesFile, String outSmilesFile, int maxNumAtoms)	
 	{
-		Vector<String> outSmiles = new Vector<String>();
+		List<String> outSmiles = new ArrayList<String>();
 		try
 		{	
 			File file = new File(inputSmilesFile);
@@ -1213,7 +1212,7 @@ public class TestUtilities
 	void testSmartsSreeningKeys() throws Exception
 	{
 		SmartsScreeningKeys smKeys = new SmartsScreeningKeys();
-		Vector<String> keys = smKeys.getKeys();
+		List<String> keys = smKeys.getKeys();
 		for (int i = 0; i < keys.size(); i++)
 			System.out.println(" " + (i+1) + "  " + keys.get(i));
 	}
@@ -1283,9 +1282,9 @@ public class TestUtilities
 	}
 	
 	
-	Vector<IAtomContainer> getContainersFromMDL(String mdlFile)
+	List<IAtomContainer> getContainersFromMDL(String mdlFile)
 	{	
-		Vector<IAtomContainer> structures = new Vector<IAtomContainer>();
+		List<IAtomContainer> structures = new ArrayList<IAtomContainer>();
 		
 		try
 		{
@@ -1329,7 +1328,7 @@ public class TestUtilities
 	void compareIsoTesterMulti() throws Exception
 	{
 		SmartsScreeningKeys smKeys = new SmartsScreeningKeys();
-		Vector<String> keys = smKeys.getKeys();
+		List<String> keys = smKeys.getKeys();
 		for (int i = 0; i < keys.size(); i++)
 			compareIsoTester (keys.get(i), null);
 	}
@@ -1368,7 +1367,7 @@ public class TestUtilities
 	
 	void testScreeningKeys(String target, String queryString) throws Exception
 	{		
-		Vector<String> myKeys = new Vector<String>(); 
+		List<String> myKeys = new ArrayList<String>(); 
 		myKeys.add("CCC");
 		myKeys.add("CCN");
 		myKeys.add("CCO");
@@ -1595,33 +1594,33 @@ public class TestUtilities
 	
 	public void testCombinations()
 	{
-		Vector<Vector<Integer>> clusterIndexes = new Vector<Vector<Integer>>(); 
-		Vector<Integer> vInt;
+		List<List<Integer>> clusterIndexes = new ArrayList<List<Integer>>(); 
+		List<Integer> vInt;
 		
-		vInt = new Vector<Integer>();
+		vInt = new ArrayList<Integer>();
 		vInt.add(new Integer(0));
 		vInt.add(new Integer(1));
 		vInt.add(new Integer(2));
 		clusterIndexes.add(vInt);
 		
-		vInt = new Vector<Integer>();
+		vInt = new ArrayList<Integer>();
 		vInt.add(new Integer(0));
 		vInt.add(new Integer(1));
 		vInt.add(new Integer(2));
 		vInt.add(new Integer(3));
 		clusterIndexes.add(vInt);
 		
-		vInt = new Vector<Integer>();
+		vInt = new ArrayList<Integer>();
 		vInt.add(new Integer(0));
 		vInt.add(new Integer(1));
 		clusterIndexes.add(vInt);
 		
-		vInt = new Vector<Integer>();
+		vInt = new ArrayList<Integer>();
 		vInt.add(new Integer(0));
 		vInt.add(new Integer(1));
 		clusterIndexes.add(vInt);
 		
-		vInt = new Vector<Integer>();
+		vInt = new ArrayList<Integer>();
 		vInt.add(new Integer(0));
 		vInt.add(new Integer(1));
 		clusterIndexes.add(vInt);
@@ -2269,7 +2268,7 @@ public class TestUtilities
 		//tu.test_IBond_Order();
 		
 		
-		//Vector<Integer> pos = SmartsHelper.getSmartsPositions("[*;r4,r5,r6,r7,r8](=*)=*", 
+		//List<Integer> pos = SmartsHelper.getSmartsPositions("[*;r4,r5,r6,r7,r8](=*)=*", 
 		//		SmartsHelper.getMoleculeFromSmiles("N1=C=C=CNN1"));
 		//System.out.println(pos.size());
 		

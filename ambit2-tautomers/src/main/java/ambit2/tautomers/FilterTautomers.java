@@ -1,6 +1,7 @@
 package ambit2.tautomers;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -37,11 +38,11 @@ public class FilterTautomers
 	
 	
 	public TautomerManager tman;
-	public Vector<IAtomContainer> removedTautomers = new Vector<IAtomContainer>();
-	public Vector<Vector<Integer>> warnFilters = new Vector<Vector<Integer>>();  // Vector< "<FilterNumber> <Number_of_positions> <Pos1> <Pos2> ..."  x n >
-	public Vector<Vector<Integer>> excludeFilters = new Vector<Vector<Integer>>();
-	public Vector<Vector<Integer>> warnFiltersOriginalPos = new Vector<Vector<Integer>>();
-	public Vector<Vector<Integer>> excludeFiltersOriginalPos = new Vector<Vector<Integer>>();
+	public List<IAtomContainer> removedTautomers = new ArrayList<IAtomContainer>();
+	public List<List<Integer>> warnFilters = new ArrayList<List<Integer>>();  // List< "<FilterNumber> <Number_of_positions> <Pos1> <Pos2> ..."  x n >
+	public List<List<Integer>> excludeFilters = new ArrayList<List<Integer>>();
+	public List<List<Integer>> warnFiltersOriginalPos = new ArrayList<List<Integer>>();
+	public List<List<Integer>> excludeFiltersOriginalPos = new ArrayList<List<Integer>>();
 	
 	IsomorphismTester isoTester = new IsomorphismTester();
 	
@@ -54,13 +55,13 @@ public class FilterTautomers
 	}
 		
 	
-	public Vector<IAtomContainer> filter(Vector<IAtomContainer> tautomers) throws Exception 
+	public List<IAtomContainer> filter(List<IAtomContainer> tautomers) throws Exception 
 	{	
 		getOriginalPositions();
 		//System.out.println("generated " + tautomers.size() + " strctures");
 		removedTautomers.clear();
-		Vector<IAtomContainer> filteredTautomers = new Vector<IAtomContainer>();		
-		Vector<IAtomContainer> uniqueTautomers;
+		List<IAtomContainer> filteredTautomers = new ArrayList<IAtomContainer>();		
+		List<IAtomContainer> uniqueTautomers;
 		
 		
 		//Remove duplications based on double bond positions as expressed in the tautomer string code 
@@ -78,7 +79,7 @@ public class FilterTautomers
 		
 		if (FlagFilterIncorrectValencySumStructures)
 		{
-			Vector<IAtomContainer> tempTautomers = filterIncorrectValencySumStructs(uniqueTautomers);
+			List<IAtomContainer> tempTautomers = filterIncorrectValencySumStructs(uniqueTautomers);
 			uniqueTautomers = tempTautomers;
 		}
 		
@@ -102,13 +103,13 @@ public class FilterTautomers
 		{			
 			//System.out.println("Tautomer #" + i + "  " + SmartsHelper.moleculeToSMILES(uniqueTautomers.get(i)));
 			
-			Vector<Integer> vWarnF;
+			List<Integer> vWarnF;
 			if (FlagApplyWarningFilter)
 				vWarnF = getWarnFilters(uniqueTautomers.get(i));
 			else
 				vWarnF = null;
 			
-			Vector<Integer> vExcludF;
+			List<Integer> vExcludF;
 			if (FlagApplyExcludeFilter)
 				vExcludF = getExcludeFilters(uniqueTautomers.get(i));
 			else
@@ -152,7 +153,7 @@ public class FilterTautomers
 		
 		if (FlagApplyDuplicationCheckIsomorphism)
 		{
-			Vector<IAtomContainer> filteredTautomers2 = duplicationFilterBasedOnIsomorphism(filteredTautomers);
+			List<IAtomContainer> filteredTautomers2 = duplicationFilterBasedOnIsomorphism(filteredTautomers);
 			filteredTautomers = filteredTautomers2;
 		}
 		
@@ -163,7 +164,7 @@ public class FilterTautomers
 		if (FlagApplyDuplicationCheckInChI)
 		{	
 			try{
-				Vector<IAtomContainer> filteredTautomers2 = duplicationFilterBasedOnInChI(filteredTautomers);
+				List<IAtomContainer> filteredTautomers2 = duplicationFilterBasedOnInChI(filteredTautomers);
 				filteredTautomers = filteredTautomers2;
 			}
 			catch(Exception e)
@@ -177,10 +178,10 @@ public class FilterTautomers
 	}
 	
 	
-	Vector<IAtomContainer> dubplicationFilter(Vector<IAtomContainer> tautomers)
+	List<IAtomContainer> dubplicationFilter(List<IAtomContainer> tautomers)
 	{	
-		Vector<IAtomContainer> uniqueTautomers0 = new Vector<IAtomContainer>();
-		Vector<String> tCodes = new Vector<String> ();
+		List<IAtomContainer> uniqueTautomers0 = new ArrayList<IAtomContainer>();
+		List<String> tCodes = new ArrayList<String> ();
 		
 		for (int i = 0; i < tautomers.size(); i++)
 		{
@@ -207,10 +208,10 @@ public class FilterTautomers
 		return uniqueTautomers0;
 	}
 	
-	Vector<IAtomContainer> filterIncorrectValencySumStructs(Vector<IAtomContainer> tautomers)
+	List<IAtomContainer> filterIncorrectValencySumStructs(List<IAtomContainer> tautomers)
 	{	
 		int vsum = getValencySum(tman.originalMolecule);
-		Vector<IAtomContainer> filtrated = new Vector<IAtomContainer>();
+		List<IAtomContainer> filtrated = new ArrayList<IAtomContainer>();
 		
 		for (int i = 0; i < tautomers.size(); i++)
 		{
@@ -223,11 +224,11 @@ public class FilterTautomers
 	}	
 	
 	
-	Vector<IAtomContainer> duplicationFilterBasedOnInChI(Vector<IAtomContainer> tautomers) throws Exception
+	List<IAtomContainer> duplicationFilterBasedOnInChI(List<IAtomContainer> tautomers) throws Exception
 	{
 		InChIGeneratorFactory igf = InChIGeneratorFactory.getInstance();
-		Vector<IAtomContainer> uniqueTautomers = new Vector<IAtomContainer>();
-		Vector<String> tKeys = new Vector<String> ();
+		List<IAtomContainer> uniqueTautomers = new ArrayList<IAtomContainer>();
+		List<String> tKeys = new ArrayList<String> ();
 		
 		for (int i = 0; i < tautomers.size(); i++)
 		{	
@@ -260,10 +261,10 @@ public class FilterTautomers
 		return uniqueTautomers;
 	}
 	
-	Vector<IAtomContainer> duplicationFilterBasedOnIsomorphism(Vector<IAtomContainer> tautomers) throws Exception
+	List<IAtomContainer> duplicationFilterBasedOnIsomorphism(List<IAtomContainer> tautomers) throws Exception
 	{
 		
-		Vector<IAtomContainer> filtered = new Vector<IAtomContainer> ();
+		List<IAtomContainer> filtered = new ArrayList<IAtomContainer> ();
 		
 		//preparing each tautomer molecule for sss seaching
 		for (int i = 0; i < tautomers.size(); i++)
@@ -282,7 +283,7 @@ public class FilterTautomers
 		return (filtered);
 	}
 	
-	boolean checkIsomorphismEquivalence(IAtomContainer target, Vector<IAtomContainer> structs)
+	boolean checkIsomorphismEquivalence(IAtomContainer target, List<IAtomContainer> structs)
 	{
 		if (structs.isEmpty())
 			return (false);
@@ -350,9 +351,9 @@ public class FilterTautomers
 		}
 	}
 	
-	public Vector<Integer> getWarnFilters(IAtomContainer tautomer) throws Exception
+	public List<Integer> getWarnFilters(IAtomContainer tautomer) throws Exception
 	{	
-		Vector<Integer> v = new Vector<Integer>(); 
+		List<Integer> v = new ArrayList<Integer>(); 
 		for (int i = 0; i < tman.knowledgeBase.warningFilters.size(); i++)
 		{			
 			Filter f = tman.knowledgeBase.warningFilters.get(i);
@@ -366,9 +367,9 @@ public class FilterTautomers
 					flags.mNeedParentMoleculeData, tautomer);
 			
 			isoTester.setQuery(f.fragmentQuery);			
-			Vector<Integer> pos =  isoTester.getIsomorphismPositions(tautomer);
-			Vector<Integer> orgPos = warnFiltersOriginalPos.get(i);
-			Vector<Integer> notOriginalPos = new Vector<Integer>();
+			List<Integer> pos =  isoTester.getIsomorphismPositions(tautomer);
+			List<Integer> orgPos = warnFiltersOriginalPos.get(i);
+			List<Integer> notOriginalPos = new ArrayList<Integer>();
 			
 			for (int k = 0; k < pos.size(); k++)
 			{
@@ -404,11 +405,11 @@ public class FilterTautomers
 	}
 	
 	
-	public Vector<Integer> getExcludeFilters(IAtomContainer tautomer) throws Exception
+	public List<Integer> getExcludeFilters(IAtomContainer tautomer) throws Exception
 	{	
 		//System.out.print("tautomer target: " +  SmartsHelper.moleculeToSMILES(tautomer));
 		
-		Vector<Integer> v = new Vector<Integer>(); 
+		List<Integer> v = new ArrayList<Integer>(); 
 		for (int i = 0; i < tman.knowledgeBase.excludeFilters.size(); i++)
 		{			
 			Filter f = tman.knowledgeBase.excludeFilters.get(i);
@@ -423,10 +424,10 @@ public class FilterTautomers
 					flags.mNeedParentMoleculeData, tautomer);
 			
 			isoTester.setQuery(f.fragmentQuery);
-			Vector<Integer> pos =  isoTester.getIsomorphismPositions(tautomer);
+			List<Integer> pos =  isoTester.getIsomorphismPositions(tautomer);
 			
-			Vector<Integer> orgPos = excludeFiltersOriginalPos.get(i);
-			Vector<Integer> notOriginalPos = new Vector<Integer>();
+			List<Integer> orgPos = excludeFiltersOriginalPos.get(i);
+			List<Integer> notOriginalPos = new ArrayList<Integer>();
 			//System.out.println("filter: " + f.fragmentSmarts + "  " + pos.size());			
 					
 			for (int k = 0; k < pos.size(); k++)

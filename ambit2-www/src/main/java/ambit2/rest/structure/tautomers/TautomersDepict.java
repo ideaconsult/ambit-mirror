@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
@@ -234,7 +233,7 @@ public class TautomersDepict extends AbstractDepict {
 	}
 	protected String generateTautomersAmbit(IAtomContainer mol) throws ResourceException {
 		StringBuilder b = new StringBuilder();
-		Vector<IAtomContainer> resultTautomers=null;
+		List<IAtomContainer> resultTautomers=null;
 		TautomerManager tman = new TautomerManager();
 		try {
 			

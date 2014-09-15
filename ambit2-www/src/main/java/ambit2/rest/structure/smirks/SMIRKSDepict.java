@@ -3,7 +3,7 @@ package ambit2.rest.structure.smirks;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.List;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtom;
@@ -62,7 +62,7 @@ public class SMIRKSDepict extends CDKDepictVariants implements IAcceptable {
 	}
 
 	@Override
-	public boolean accept(Vector<IAtom> atoms) {
+	public boolean accept(List<IAtom> atoms) {
 		return true;
 	}
 }

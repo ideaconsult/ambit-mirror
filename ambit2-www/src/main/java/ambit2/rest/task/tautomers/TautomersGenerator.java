@@ -4,7 +4,6 @@ import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
@@ -113,7 +112,7 @@ public class TautomersGenerator  extends	AbstractStructureProcessor<TautomerMana
 				mol = AtomContainerManipulator.removeHydrogens(mol);
 				CDKHydrogenAdder.getInstance(mol.getBuilder()).addImplicitHydrogens(mol);
 				
-				Vector<IAtomContainer> resultTautomers=null;
+				List<IAtomContainer> resultTautomers=null;
 				predictor.setStructure(mol);
 				resultTautomers = predictor.generateTautomersIncrementaly();
 				double bestRank = 0;

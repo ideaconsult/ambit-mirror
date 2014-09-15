@@ -24,8 +24,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.smarts;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -67,7 +68,7 @@ public class SmartsHelper
 	//Work container - list with the processed atom nodes
 	HashMap<IAtom,AtomSmartsNode> nodes = new HashMap<IAtom,AtomSmartsNode>();
 	HashMap<IAtom,String> atomIndexes = new HashMap<IAtom,String>();
-	Vector<IBond> ringClosures = new Vector<IBond>();
+	List<IBond> ringClosures = new ArrayList<IBond>();
 	
 	int nAtom;
 	int nBond;
@@ -506,7 +507,7 @@ public class SmartsHelper
 		StringBuffer sb = new StringBuffer();
 		TopLayer afs = firstSphere.get(atom);
 		AtomSmartsNode curNode = nodes.get(atom);
-		Vector<String> branches = new Vector<String>();
+		List<String> branches = new ArrayList<String>();
 		for (int i=0; i<afs.atoms.size(); i++)
 		{
 			IAtom neighborAt = afs.atoms.get(i);
@@ -553,7 +554,8 @@ public class SmartsHelper
 		
 		for(int i = 0; i < branches.size()-1; i++)
 			sb.append("("+branches.get(i).toString()+")");
-		sb.append(branches.lastElement().toString());
+		
+		sb.append(branches.get(branches.size() - 1).toString());
 		return(sb.toString());
 	}
 	
@@ -679,7 +681,7 @@ public class SmartsHelper
 	
 	
 	
-	static public Vector<Integer> getSmartsPositions(String smartsQuery, IAtomContainer target, 
+	static public List<Integer> getSmartsPositions(String smartsQuery, IAtomContainer target, 
 					boolean FlagSupportDoubleBondAromaticityNotSpecified) throws Exception
 	{	
 		SmartsParser sp = new SmartsParser();

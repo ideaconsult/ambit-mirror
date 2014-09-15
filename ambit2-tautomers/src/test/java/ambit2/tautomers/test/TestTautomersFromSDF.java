@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Vector;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -44,7 +44,7 @@ public class TestTautomersFromSDF {
 		InputStream in = new FileInputStream(new File(uri.getFile()));
 		Assert.assertNotNull(in);
 		
-		Vector<IAtomContainer> tautomersSDF = null;
+		List<IAtomContainer> tautomersSDF = null;
 		try {
 			IIteratingChemObjectReader<IAtomContainer> reader = FileInputState.getReader(in,".sdf");
 			while (reader.hasNext()) {
@@ -71,10 +71,10 @@ public class TestTautomersFromSDF {
 		SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		
 		IMolecule mol = parser.parseSmiles(warfarin1);
-		Vector<IAtomContainer> tautomers1 = testTautomerGeneration(mol);
+		List<IAtomContainer> tautomers1 = testTautomerGeneration(mol);
 		//6 tautomers
 		mol = parser.parseSmiles(warfarin2);
-		Vector<IAtomContainer> tautomers2 = testTautomerGeneration(mol);
+		List<IAtomContainer> tautomers2 = testTautomerGeneration(mol);
 		//18 tautomers
 		Assert.assertEquals(tautomers1.size(),tautomersSDF.size());
 		Assert.assertEquals(tautomers2.size(),tautomersSDF.size());
@@ -83,7 +83,7 @@ public class TestTautomersFromSDF {
 	}
 	
 
-	public Vector<IAtomContainer>  testTautomerGeneration(IAtomContainer mol) throws Exception {
+	public List<IAtomContainer>  testTautomerGeneration(IAtomContainer mol) throws Exception {
 		boolean aromatic = false;
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 		for (IBond bond : mol.bonds()) if (bond.getFlag(CDKConstants.ISAROMATIC)) {aromatic = true; break;}

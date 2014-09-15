@@ -1,6 +1,6 @@
 package ambit2.reactions;
 
-import java.util.Vector;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -8,7 +8,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 public interface IRetroSynthRuleInstance 
 {	
-	public Vector<IAtom> getAtoms();
+	public List<IAtom> getAtoms();
 	public IRetroSynthRule getRule();
 	public IAtomContainer getContainer();
 	public double getScore();

@@ -1,6 +1,7 @@
 package ambit2.smarts;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
@@ -16,8 +17,8 @@ public class SMIRKSReaction
 	public SmartsFlags reactantFlags = new SmartsFlags();
 	public SmartsFlags agentFlags = new SmartsFlags();
 	public SmartsFlags productFlags = new SmartsFlags();
-	public Vector<SmartsAtomExpression> reactantRecursiveAtoms = null;  
-	public Vector<SmartsAtomExpression> productRecursiveAtoms = null;
+	public List<SmartsAtomExpression> reactantRecursiveAtoms = null;  
+	public List<SmartsAtomExpression> productRecursiveAtoms = null;
 	
 	//Single container representation 
 	public IQueryAtomContainer reactant = new QueryAtomContainer();
@@ -25,16 +26,16 @@ public class SMIRKSReaction
 	public IQueryAtomContainer product = new QueryAtomContainer();
 	
 	//Multi-container representation
-	public Vector<IQueryAtomContainer> reactants = new Vector<IQueryAtomContainer>();
-	public Vector<IQueryAtomContainer> agents = new Vector<IQueryAtomContainer>();
-	public Vector<IQueryAtomContainer> products = new Vector<IQueryAtomContainer>();
+	public List<IQueryAtomContainer> reactants = new ArrayList<IQueryAtomContainer>();
+	public List<IQueryAtomContainer> agents = new ArrayList<IQueryAtomContainer>();
+	public List<IQueryAtomContainer> products = new ArrayList<IQueryAtomContainer>();
 	
-	public Vector<Integer> reactantCLG = new Vector<Integer>();
-	public Vector<Integer> agentsCLG = new Vector<Integer>();
-	public Vector<Integer> productsCLG = new Vector<Integer>();
+	public List<Integer> reactantCLG = new ArrayList<Integer>();
+	public List<Integer> agentsCLG = new ArrayList<Integer>();
+	public List<Integer> productsCLG = new ArrayList<Integer>();
 	
 		
-	public  Vector<String> mapErrors = new Vector<String>(); 
+	public  List<String> mapErrors = new ArrayList<String>(); 
 	//HashMap<Integer, Integer> mapping = new HashMap<Integer, Integer>();
 	
 	//Mapping data
@@ -42,33 +43,33 @@ public class SMIRKSReaction
 	//1.<Global atom numbers> i.e. regardless of the reactant/product fragmentation
 	//2.<Frag Num>  + <Local atom Num> 
 	
-	Vector<Integer> reactantMapIndex = new Vector<Integer>();  //Container with the mapping indexes as they appeared in the SMIRKS
-	Vector<Integer> reactantFragAtomNum = new Vector<Integer>(); //local atom fragment number
-	Vector<Integer> reactantAtomNum = new Vector<Integer>(); //global atom number
-	Vector<Integer> reactantFragmentNum = new Vector<Integer>();
-	Vector<Integer> reactantNotMappedAt = new Vector<Integer>(); //The global numbers of not-mapped atoms
+	List<Integer> reactantMapIndex = new ArrayList<Integer>();  //Container with the mapping indexes as they appeared in the SMIRKS
+	List<Integer> reactantFragAtomNum = new ArrayList<Integer>(); //local atom fragment number
+	List<Integer> reactantAtomNum = new ArrayList<Integer>(); //global atom number
+	List<Integer> reactantFragmentNum = new ArrayList<Integer>();
+	List<Integer> reactantNotMappedAt = new ArrayList<Integer>(); //The global numbers of not-mapped atoms
 	
-	Vector<Integer> productMapIndex = new Vector<Integer>();
-	Vector<Integer> productFragAtomNum = new Vector<Integer>(); //local atom fragment number
-	Vector<Integer> productAtomNum = new Vector<Integer>(); //global atom number
-	Vector<Integer> productFragmentNum = new Vector<Integer>();
-	Vector<Integer> productNotMappedAt = new Vector<Integer>(); //The global numbers of not-mapped atoms
+	List<Integer> productMapIndex = new ArrayList<Integer>();
+	List<Integer> productFragAtomNum = new ArrayList<Integer>(); //local atom fragment number
+	List<Integer> productAtomNum = new ArrayList<Integer>(); //global atom number
+	List<Integer> productFragmentNum = new ArrayList<Integer>();
+	List<Integer> productNotMappedAt = new ArrayList<Integer>(); //The global numbers of not-mapped atoms
 	
 		
 	//Transformation Data is described in terms of global numbers	
 	//Atom transformation is designated for the mapped atoms
-	Vector<Integer> reactantAtCharge = new Vector<Integer>();
-	Vector<Integer> productAtCharge = new Vector<Integer>();
-	//Vector<Integer> reactantAtChirality
-	//Vector<Integer> productAtChirality	
+	List<Integer> reactantAtCharge = new ArrayList<Integer>();
+	List<Integer> productAtCharge = new ArrayList<Integer>();
+	//List<Integer> reactantAtChirality
+	//List<Integer> productAtChirality	
 	
 	//Bond transformation
-	Vector<Integer> reactAt1 = new Vector<Integer>();
-	Vector<Integer> reactAt2 = new Vector<Integer>();	
-	Vector<IBond.Order> reactBo = new Vector<IBond.Order>();
-	Vector<Integer> prodAt1 = new Vector<Integer>();
-	Vector<Integer> prodAt2 = new Vector<Integer>();
-	Vector<IBond.Order> prodBo = new Vector<IBond.Order>();
+	List<Integer> reactAt1 = new ArrayList<Integer>();
+	List<Integer> reactAt2 = new ArrayList<Integer>();	
+	List<IBond.Order> reactBo = new ArrayList<IBond.Order>();
+	List<Integer> prodAt1 = new ArrayList<Integer>();
+	List<Integer> prodAt2 = new ArrayList<Integer>();
+	List<IBond.Order> prodBo = new ArrayList<IBond.Order>();
 	
 	protected IChemObjectBuilder builder;
 	
@@ -178,8 +179,8 @@ public class SMIRKSReaction
 	
 	
 	void registerMappings(String compType, IQueryAtomContainer globalContainer, IQueryAtomContainer fragment, 
-			int curFragNum, Vector<Integer> mapIndex, Vector<Integer> notMappedAt, 
-			Vector<Integer> atFragNum, Vector<Integer> atGlobalNum, Vector<Integer> fragNum)
+			int curFragNum, List<Integer> mapIndex, List<Integer> notMappedAt, 
+			List<Integer> atFragNum, List<Integer> atGlobalNum, List<Integer> fragNum)
 	{
 		for (int i = 0; i < fragment.getAtomCount(); i++)
 		{						
@@ -458,7 +459,7 @@ public class SMIRKSReaction
 	}
 	
 	
-	boolean containsInteger(Vector<Integer> v, Integer iObj)
+	boolean containsInteger(List<Integer> v, Integer iObj)
 	{
 		for (int i = 0; i < v.size(); i++)
 			if (iObj.intValue() == v.get(i).intValue())
@@ -467,7 +468,7 @@ public class SMIRKSReaction
 		return false;
 	}
 	
-	int getIntegerObjectIndex(Vector<Integer> v, Integer iObj)
+	int getIntegerObjectIndex(List<Integer> v, Integer iObj)
 	{
 		for (int i = 0; i < v.size(); i++)
 		{	

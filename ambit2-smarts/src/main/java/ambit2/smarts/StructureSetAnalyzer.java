@@ -1,6 +1,7 @@
 package ambit2.smarts;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -20,9 +21,9 @@ public class StructureSetAnalyzer
 	
 	
 	
-	public Vector<IAtomContainer> structures = new Vector<IAtomContainer>();
+	public List<IAtomContainer> structures = new ArrayList<IAtomContainer>();
 	public double factor = 0.50; //This is the weight of the frequency
-	public Vector<CharStructInfo> charStructInfo = new Vector<CharStructInfo>();
+	public List<CharStructInfo> charStructInfo = new ArrayList<CharStructInfo>();
 	public int hitListSize = 100;
 	public int maxSizeOfSequence = 0; //by default no restriction
 	public int maxHitStructSize = 0;  //by default no restriction

@@ -1,7 +1,8 @@
 package ambit2.smarts;
 
+import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Vector;
+import java.util.List;
 
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -20,9 +21,9 @@ public class Screening
 	boolean FlagUseStrKeys = true;
 	int nKeys;
 	
-	Vector<String> smartsKeys;
-	Vector<IQueryAtomContainer> smartsQueries = new Vector<IQueryAtomContainer>();	
-	Vector<Vector<QuerySequenceElement>> sequences = new Vector<Vector<QuerySequenceElement>>(); 
+	List<String> smartsKeys;
+	List<IQueryAtomContainer> smartsQueries = new ArrayList<IQueryAtomContainer>();	
+	List<List<QuerySequenceElement>> sequences = new ArrayList<List<QuerySequenceElement>>(); 
 	
 	/**
 	 * Screening by fingerprints and structural keys
@@ -53,7 +54,7 @@ public class Screening
 	 * structural keys by external file
 	 * @param externalSmartsKeys
 	 */
-	public Screening(Vector<String> externalSmartsKeys)	
+	public Screening(List<String> externalSmartsKeys)	
 	{
 		FlagUseStrKeys = true;
 		smartsKeys = externalSmartsKeys;
@@ -172,7 +173,7 @@ public class Screening
 			
 			//parser.setNeededDataFlags();       --> This should not be needed for the key smarts queries
 			isoTester.setQuery(query);
-			Vector<QuerySequenceElement> sequence = isoTester.transferSequenceToOwner();
+			List<QuerySequenceElement> sequence = isoTester.transferSequenceToOwner();
 			sequences.add(sequence);
 			smartsQueries.add(query);
 		}

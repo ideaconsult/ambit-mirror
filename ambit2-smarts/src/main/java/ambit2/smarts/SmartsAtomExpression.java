@@ -24,8 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.smarts;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
@@ -42,15 +42,15 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 public class SmartsAtomExpression extends SMARTSAtom 
 {
 	private static final long serialVersionUID = -123453467895564563L;
-	public Vector<SmartsExpressionToken> tokens = new Vector<SmartsExpressionToken>();
+	public List<SmartsExpressionToken> tokens = new ArrayList<SmartsExpressionToken>();
 	//Each recursive Smarts is represented with a string and a separate QueryAtomContainer 
-	public Vector<String> recSmartsStrings = new Vector<String>();
-	public Vector<IQueryAtomContainer> recSmartsContainers = new Vector<IQueryAtomContainer>();
+	public List<String> recSmartsStrings = new ArrayList<String>();
+	public List<IQueryAtomContainer> recSmartsContainers = new ArrayList<IQueryAtomContainer>();
 	
 	//This data must be filled from outside for each different target 
 	//in order to be used for mathching. 
 	//If this data is not filled (i.e. null pointer) the current token is assumed to be 'TRUE' 
-	public Vector<Vector<IAtom>> recSmartsMatches = null;
+	public List<List<IAtom>> recSmartsMatches = null;
 	
 	public SmartsAtomExpression() {
     }
@@ -73,7 +73,7 @@ public class SmartsAtomExpression extends SMARTSAtom
     
     public SmartsExpressionToken getLastToken()
     {
-    	return(tokens.lastElement());
+    	return(tokens.get(tokens.size()-1));
     }
     
     boolean getArgument(SmartsExpressionToken tok, IAtom atom)
@@ -231,7 +231,7 @@ public class SmartsAtomExpression extends SMARTSAtom
 			else
 			{	
 				//System.out.println("recSmartsMatches.size()=" + recSmartsMatches.size());
-				Vector<IAtom> atomMaps = recSmartsMatches.get(tok.param);				
+				List<IAtom> atomMaps = recSmartsMatches.get(tok.param);				
 				for (int i = 0; i < atomMaps.size(); i++)
 					if (atomMaps.get(i) == atom)
 						return(true);

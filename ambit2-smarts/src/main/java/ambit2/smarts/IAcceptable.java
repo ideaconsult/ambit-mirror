@@ -1,9 +1,9 @@
 package ambit2.smarts;
 
-import java.util.Vector;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
 
 public interface IAcceptable {
-	boolean accept( Vector<IAtom> atoms);
+	boolean accept( List<IAtom> atoms);
 }

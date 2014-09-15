@@ -1,6 +1,7 @@
 package ambit2.tautomers;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -9,8 +10,8 @@ public class TautomerIncrementStep
 	public static int counter = 0;
 	int ID = 0;
 	int parentID = 0;
-	Vector<RuleInstance> usedRuleInstances = new Vector<RuleInstance>();
-	Vector<RuleInstance> unUsedRuleInstances = new Vector<RuleInstance>();
+	List<RuleInstance> usedRuleInstances = new ArrayList<RuleInstance>();
+	List<RuleInstance> unUsedRuleInstances = new ArrayList<RuleInstance>();
 		
 	//Struct container is a virtual molecule which describes the current state of the 
 	//structure at this incremental step

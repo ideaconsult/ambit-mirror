@@ -2,7 +2,7 @@ package ambit2.tautomers;
 
 import java.io.File;
 import java.io.RandomAccessFile;
-import java.util.Vector;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -64,7 +64,7 @@ public class Tautomer2DescriptorUtils
 			mol = sp.parseSmiles(targetSmiles);
 			
 			tman.setStructure(mol);
-			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+			List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 			
 			output("" + strNum + "   " + targetSmiles + "  " + resultTautomers.size() + "  "  +  endLineSymb);
 			System.out.println("    -->  " + resultTautomers.size() + " tautomers");

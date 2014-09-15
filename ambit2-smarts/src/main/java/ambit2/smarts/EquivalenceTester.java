@@ -2,7 +2,6 @@ package ambit2.smarts;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -55,7 +54,7 @@ public class EquivalenceTester
 	}
 	
 	
-	public boolean equivalentMaps(Vector<IAtom> map1, Vector<IAtom> map2)
+	public boolean equivalentMaps(List<IAtom> map1, List<IAtom> map2)
 	{
 		if (map1.size() != map2.size())
 			return false;
@@ -71,12 +70,12 @@ public class EquivalenceTester
 	}
 	
 	
-	public Vector<Vector<IAtom>> filterEquivalentMappings(Vector<Vector<IAtom>> maps)
+	public List<List<IAtom>> filterEquivalentMappings(List<List<IAtom>> maps)
 	{	
 		if (maps.size() == 0)
 			return (maps);
 		
-		Vector<Vector<IAtom>> res = new Vector<Vector<IAtom>>();
+		List<List<IAtom>> res = new ArrayList<List<IAtom>>();
 		res.add(maps.get(0));
 		
 		for (int i = 1; i < maps.size(); i++)

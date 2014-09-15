@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.Molecule;
@@ -213,7 +212,7 @@ public class TestTautomers
 		System.out.println("Testing0(combinatorial aproach)0: " + smi);
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
 		tman.setStructure(mol);
-		Vector<IAtomContainer> resultTautomers = tman.generateTautomers();			
+		List<IAtomContainer> resultTautomers = tman.generateTautomers();			
 	}
 	
 	
@@ -222,10 +221,10 @@ public class TestTautomers
 		System.out.println("Testing: " + smi);
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
 		tman.setStructure(mol);
-		//Vector<IAtomContainer> resultTautomers = tman.generateTautomers();
+		//List<IAtomContainer> resultTautomers = tman.generateTautomers();
 		
 		
-		Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+		List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 		for (int i = 0; i < resultTautomers.size(); i++)		
 			System.out.println("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i), false));
 			
@@ -238,15 +237,15 @@ public class TestTautomers
 		
 		
 		tman.setStructure(mol);
-		//Vector<IAtomContainer> resultTautomers = tman.generateTautomers();
+		//List<IAtomContainer> resultTautomers = tman.generateTautomers();
 		
 		
-		Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+		List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 		double distr[] = tautomerRanking.getProbabilityDistribution(resultTautomers);
 		tman.printDebugInfo();
 		
 		System.out.println("\n  Result tautomers: ");
-		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
+		List<IAtomContainer> v = new ArrayList<IAtomContainer>();
 		v.add(mol);
 		v.add(null);
 		for (int i = 0; i < resultTautomers.size(); i++)		
@@ -280,7 +279,7 @@ public class TestTautomers
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi,FlagExplicitHydrogens);
 						
 		tman.setStructure(mol);
-		Vector<IAtomContainer> resultTautomers;
+		List<IAtomContainer> resultTautomers;
 		
 		switch (algorithmType)
 		{
@@ -306,7 +305,7 @@ public class TestTautomers
 		tman.printDebugInfo();
 		
 		System.out.println("\n  Result tautomers: ");
-		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
+		List<IAtomContainer> v = new ArrayList<IAtomContainer>();
 		v.add(mol);
 		v.add(null);
 		for (int i = 0; i < resultTautomers.size(); i++)		
@@ -344,11 +343,11 @@ public class TestTautomers
 		
 		
 		
-		Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+		List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 		tman.printDebugInfo();
 		
 		System.out.println("\n  Result tautomers: ");
-		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
+		List<IAtomContainer> v = new ArrayList<IAtomContainer>();
 		v.add(mol);
 		v.add(null);
 		for (int i = 0; i < resultTautomers.size(); i++)		
@@ -388,7 +387,7 @@ public class TestTautomers
 	}
 	
 	
-	void preProcessStructures(Vector<IAtomContainer> v) throws Exception
+	void preProcessStructures(List<IAtomContainer> v) throws Exception
 	{
 		for (int i = 0; i < v.size(); i++)
 		{
@@ -441,10 +440,10 @@ public class TestTautomers
 		System.out.println("Testing: " + smi);
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
 		tman.setStructure(mol);
-		//Vector<IAtomContainer> resultTautomers = tman.generateTautomers();
+		//List<IAtomContainer> resultTautomers = tman.generateTautomers();
 		
 		
-		Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+		List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 		if (FlagPrintTautomers)
 			for (int i = 0; i < resultTautomers.size(); i++)		
 				System.out.println("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i), false));
@@ -465,7 +464,7 @@ public class TestTautomers
 	
 	
 	//helper utilities for the tests
-	public int checkResultTautomerSet(Vector<IAtomContainer> resultStr, String expectedStr[]) throws Exception
+	public int checkResultTautomerSet(List<IAtomContainer> resultStr, String expectedStr[]) throws Exception
 	{
 		//preProcessStructures(resultStr); this is done inside TautomerGenerattor
 		
@@ -625,7 +624,7 @@ public class TestTautomers
 	public int testTautomerEquivalence(IAtomContainer ac) throws Exception 
 	{
 		tman.setStructure(ac);
-		Vector<IAtomContainer> initialTautomers = tman.generateTautomersIncrementaly();
+		List<IAtomContainer> initialTautomers = tman.generateTautomersIncrementaly();
 		String expectedTautomers[] = new String[initialTautomers.size()];
 		
 		for (int i = 0; i < initialTautomers.size(); i++)		
@@ -636,7 +635,7 @@ public class TestTautomers
 		for (int i = 0; i < initialTautomers.size(); i++)
 		{
 			tman.setStructure(initialTautomers.get(i));
-			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+			List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 			try
 			{
 				int res = checkResultTautomerSet(resultTautomers, expectedTautomers);
@@ -699,7 +698,7 @@ public class TestTautomers
 		IAtomContainer mol1 = SmartsHelper.getMoleculeFromSmiles(smi1);
 		IAtomContainer mol2 = SmartsHelper.getMoleculeFromSmiles(smi2);
 		
-		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
+		List<IAtomContainer> v = new ArrayList<IAtomContainer>();
 		v.add(mol1);
 		v.add(mol2);
 		IAtomContainer newStr = cof.connectStructures(smi1, numAt1, smi2, numAt2, order);
@@ -716,7 +715,7 @@ public class TestTautomers
 		IAtomContainer mol1 = SmartsHelper.getMoleculeFromSmiles(smi1);
 		IAtomContainer mol2 = SmartsHelper.getMoleculeFromSmiles(smi2);
 		
-		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
+		List<IAtomContainer> v = new ArrayList<IAtomContainer>();
 		v.add(mol1);
 		v.add(mol2);
 		IAtomContainer newStr = cof.condenseStructures(smi1, str1At0, str1At1, smi2, str2At0, str2At1);
@@ -737,7 +736,7 @@ public class TestTautomers
 		String smiles2 = SmartsHelper.moleculeToSMILES(mol,true);
 		System.out.println(smiles2);
 		
-		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
+		List<IAtomContainer> v = new ArrayList<IAtomContainer>();
 		v.add(mol);
 		
 		//TestStrVisualizer tsv = new TestStrVisualizer(v);

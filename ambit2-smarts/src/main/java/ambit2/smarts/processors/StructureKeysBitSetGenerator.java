@@ -1,7 +1,8 @@
 package ambit2.smarts.processors;
 
+import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Vector;
+import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
@@ -28,9 +29,9 @@ import ambit2.smarts.SmartsScreeningKeys;
  */
 public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomContainer, BitSet> {
 	protected IsomorphismTester isoTester = new IsomorphismTester(); 
-	protected static Vector<IQueryAtomContainer> smartsQueries = null;	
-	protected static Vector<Vector<QuerySequenceElement>> sequences = null; 
-	protected static Vector<String> smartsKeys; //not really needed, except for printing structure keys
+	protected static List<IQueryAtomContainer> smartsQueries = null;	
+	protected static List<List<QuerySequenceElement>> sequences = null; 
+	protected static List<String> smartsKeys; //not really needed, except for printing structure keys
 	protected static int nKeys;
 	protected AtomConfigurator cfg = new AtomConfigurator();
 	protected CDKHueckelAromaticityDetector aromaticDetector = new CDKHueckelAromaticityDetector();
@@ -48,23 +49,23 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 	
 	public StructureKeysBitSetGenerator() throws Exception {
 		if ((smartsQueries==null) || (sequences==null)) {
-			smartsQueries = new Vector<IQueryAtomContainer>();
-			sequences = new Vector<Vector<QuerySequenceElement>>();
+			smartsQueries = new ArrayList<IQueryAtomContainer>();
+			sequences = new ArrayList<List<QuerySequenceElement>>();
 			SmartsScreeningKeys smartsScrKeys = new SmartsScreeningKeys(); 
 			nKeys = smartsScrKeys.nKeys;
 			prepareKeySequences(smartsScrKeys.getKeys(),smartsScrKeys.nKeys);			
 		}
 
 	}	
-	public StructureKeysBitSetGenerator(Vector<String> externalSmartsKeys)	throws Exception
+	public StructureKeysBitSetGenerator(List<String> externalSmartsKeys)	throws Exception
 	{
 		setSmartsKeys(externalSmartsKeys);
 
 	}	
-	public void setSmartsKeys(Vector<String> smartsKeys) {
+	public void setSmartsKeys(List<String> smartsKeys) {
 		prepareKeySequences(smartsKeys,smartsKeys.size());		
 	}
-	protected synchronized void prepareKeySequences(Vector<String> keys, int nKeys)
+	protected synchronized void prepareKeySequences(List<String> keys, int nKeys)
 	{
 		smartsKeys = keys; 
 		IQueryAtomContainer query;
@@ -77,7 +78,7 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 			
 			//parser.setNeededDataFlags();       --> This should not be needed for the key smarts queries
 			isoTester.setQuery(query);
-			Vector<QuerySequenceElement> sequence = isoTester.transferSequenceToOwner();
+			List<QuerySequenceElement> sequence = isoTester.transferSequenceToOwner();
 			sequences.add(sequence);
 			smartsQueries.add(query);
 		}

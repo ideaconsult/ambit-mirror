@@ -25,9 +25,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.smarts;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.Vector;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
@@ -73,7 +73,7 @@ public class SmartsManager
 	IQueryAtomContainer query;
 	
 	//The recursive atoms
-	Vector<SmartsAtomExpression> recAtoms = new Vector<SmartsAtomExpression>();	
+	List<SmartsAtomExpression> recAtoms = new ArrayList<SmartsAtomExpression>();	
 	
 	//Pointers to the new atoms that substitute the original recursive atoms in the 
 	//generated sub queries
@@ -82,16 +82,16 @@ public class SmartsManager
 	int recAtomNumSubSmarts[];
 	int recAtomLastLoAnd[];
 	int curComb[];
-	Vector<IQueryAtomContainer> subQueryList = new Vector<IQueryAtomContainer>();	
+	List<IQueryAtomContainer> subQueryList = new ArrayList<IQueryAtomContainer>();	
 	
 	//The atoms connected to the recursive atoms and the corresponding bond orders.
 	//The bonds between two recursive atoms are not put in topLayers.
 	//The atom indexes for such bonds are stored separately in bondRecAt1 and bondRecAt2
 	TopLayer topLayers[];  
-	Vector<Integer> bondRecAt1 = new Vector<Integer>();
-	Vector<Integer> bondRecAt2 = new Vector<Integer>();
-	Vector<IBond> bondRecBo = new Vector<IBond>(); //It contains actually a bond expression
-	Vector<Integer> compFrags = new Vector<Integer>(); //The indexes of the query frags which are in a component
+	List<Integer> bondRecAt1 = new ArrayList<Integer>();
+	List<Integer> bondRecAt2 = new ArrayList<Integer>();
+	List<IBond> bondRecBo = new ArrayList<IBond>(); //It contains actually a bond expression
+	List<Integer> compFrags = new ArrayList<Integer>(); //The indexes of the query frags which are in a component
 	boolean fragMaps[][];
 	int components[];
 	IQueryAtomContainer baseStr;	
@@ -767,7 +767,7 @@ public class SmartsManager
 			
 			if (query.getAtomCount() == 1)
 			{
-				Vector<IAtom> v =  getAtomMappingsFor1AtomQuery(target, query);
+				List<IAtom> v =  getAtomMappingsFor1AtomQuery(target, query);
 				for (int i = 0; i< v.size(); i++)
 				{
 					IMolecule c = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
@@ -822,7 +822,7 @@ public class SmartsManager
 		return(mappingIn(target));		
 	}
 	
-	public Vector<IAtom> getFirstPosAtomMappings(IAtomContainer target) throws Exception
+	public List<IAtom> getFirstPosAtomMappings(IAtomContainer target) throws Exception
 	{				
 		if (query == null)
 			return(null);		
@@ -869,18 +869,18 @@ public class SmartsManager
 	void clearQueryRecMatches()
 	{
 		for (int i = 0; i < recAtoms.size(); i++)
-			recAtoms.get(i).recSmartsMatches = new Vector<Vector<IAtom>>();
+			recAtoms.get(i).recSmartsMatches = new ArrayList<List<IAtom>>();
 	}
 	
 	void getQueryRecMatches(IAtomContainer target) throws Exception
 	{
-		Vector<IQueryAtomContainer> vRecCon;				
+		List<IQueryAtomContainer> vRecCon;				
 		for (int i = 0; i < recAtoms.size(); i++)
 		{	
 			vRecCon = recAtoms.get(i).recSmartsContainers;
 			for (int j = 0; j < vRecCon.size(); j++)				
 			{	
-				Vector<IAtom> v ;
+				List<IAtom> v ;
 				if (FlagUseCDKIsomorphismTester)
 					v = getFirstPosAtomMappings(target,vRecCon.get(j));
 				else
@@ -896,7 +896,7 @@ public class SmartsManager
 		}		
 	}
 	
-	public String matchesToString(IAtomContainer target, Vector<IAtom> atomMaps)
+	public String matchesToString(IAtomContainer target, List<IAtom> atomMaps)
 	{
 		StringBuffer sb = new StringBuffer(); 
 		for (IAtom at : atomMaps)		
@@ -905,12 +905,12 @@ public class SmartsManager
 	}
 	
 	
-	Vector<IAtom> getFirstPosAtomMappings_CurrentIsoTester(IAtomContainer target,IQueryAtomContainer recQuery)
+	List<IAtom> getFirstPosAtomMappings_CurrentIsoTester(IAtomContainer target,IQueryAtomContainer recQuery)
 	{
 		//This function is based on the IsoTester from this package
 		isoTester.setQuery(recQuery);
-		Vector<Integer> pos = isoTester.getIsomorphismPositions(target);		
-		Vector<IAtom> v = new Vector<IAtom>();
+		List<Integer> pos = isoTester.getIsomorphismPositions(target);		
+		List<IAtom> v = new ArrayList<IAtom>();
 		
 		for (int i = 0; i < pos.size(); i++)
 			v.add(target.getAtom(pos.get(i).intValue()));		
@@ -921,7 +921,7 @@ public class SmartsManager
 	
 	//The following functions are based on the CDK Isomorphism tester ----------------
 	
-	Vector<IAtom> getFirstPosAtomMappings(IAtomContainer target, IAtomContainer recQuery) throws Exception
+	List<IAtom> getFirstPosAtomMappings(IAtomContainer target, IAtomContainer recQuery) throws Exception
 	{
 		List bondMaps;		  
 
@@ -938,19 +938,19 @@ public class SmartsManager
 
 	}
 	
-	Vector<IAtom> getAtomMappingsFor1AtomQuery(IAtomContainer target, IAtomContainer recQuery) 
+	List<IAtom> getAtomMappingsFor1AtomQuery(IAtomContainer target, IAtomContainer recQuery) 
 	{
 		SMARTSAtom qAtom = (SMARTSAtom)recQuery.getAtom(0);
-		Vector<IAtom> atomMaps  = new Vector<IAtom>();
+		List<IAtom> atomMaps  = new ArrayList<IAtom>();
 		for (int i = 0; i < target.getAtomCount(); i++)
 			if (qAtom.matches(target.getAtom(i)))
 				atomMaps.add(target.getAtom(i));
 		return(atomMaps);
 	}
 	
-	Vector<IAtom> getFirstPosAtomMappingsFor2AtomQuery(IAtomContainer target, IAtomContainer recQuery)
+	List<IAtom> getFirstPosAtomMappingsFor2AtomQuery(IAtomContainer target, IAtomContainer recQuery)
 	{
-		Vector<IAtom> atomMaps  = new Vector<IAtom>();
+		List<IAtom> atomMaps  = new ArrayList<IAtom>();
 		if (recQuery.getBondCount() == 0)
 			return(atomMaps); //The two atoms must be connected otherwise substr. search returns no matches
 		
@@ -1030,7 +1030,7 @@ public class SmartsManager
 	 * This function is a helper utility for the CDK isomorphism algorithm
 	 **/
 	
-	Vector<IAtom> getAtomMapsFromBondMaps(List bondMapping, IAtomContainer target, IAtomContainer recQuery)
+	List<IAtom> getAtomMapsFromBondMaps(List bondMapping, IAtomContainer target, IAtomContainer recQuery)
 	{
 		//The query must contain  at least 3 atoms and 2 bonds.
 		//The first bond is always 0-1
@@ -1039,7 +1039,7 @@ public class SmartsManager
 		//  a0(-a1)-a2   (e.g. C(C)C)
 		//So the common atom  of bonds 0 and 1 is either atom 1 or atom 0
 		//The latter assumptions are based on the way recursive SMARTS are parsed
-		Vector<IAtom> atomMaps  = new Vector<IAtom>();
+		List<IAtom> atomMaps  = new ArrayList<IAtom>();
 		if (recQuery.getBondCount() < 2)
 			return(atomMaps);
 		
@@ -1102,11 +1102,11 @@ public class SmartsManager
 	/** 
 	 * This function generates full Atom Mapping from a Bond mapping (result from the CDK isomorphism
 	 **/
-	public Vector<IAtom> generateFullAtomMapping(List bondMapList, IAtomContainer target, IAtomContainer queryStr)
+	public List<IAtom> generateFullAtomMapping(List bondMapList, IAtomContainer target, IAtomContainer queryStr)
 	{
 		//The query must contain  at least 3 atoms and 2 bonds.
 		//Otherwise this function will not work
-		Vector<IAtom> atomMaps  = new Vector<IAtom>();
+		List<IAtom> atomMaps  = new ArrayList<IAtom>();
 		if ((queryStr.getAtomCount()<3) || (queryStr.getBondCount() < 2))
 			return(atomMaps);
 		
@@ -1162,7 +1162,7 @@ public class SmartsManager
 	
 	public IAtomContainer generateFullIsomorphismMapping(List bondMapList, IAtomContainer target, IAtomContainer queryStr)
 	{	
-		Vector<IAtom> v = generateFullAtomMapping(bondMapList, target, queryStr);
+		List<IAtom> v = generateFullAtomMapping(bondMapList, target, queryStr);
 		IMolecule ac = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 		for (int i = 0; i < v.size(); i++)
 			ac.addAtom(v.get(i));

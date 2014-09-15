@@ -23,9 +23,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 package ambit2.smarts;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.Vector;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -46,13 +46,13 @@ public class IsomorphismTester
 	IAtomContainer target;
 	boolean isomorphismFound;
 	boolean FlagStoreIsomorphismNode = false;
-	Vector<Node> isomorphismNodes = new Vector<Node>(); 
+	List<Node> isomorphismNodes = new ArrayList<Node>(); 
 	Stack<Node> stack = new Stack<Node>();
-	Vector<IAtom> targetAt = new Vector<IAtom>(); //a work container
-	Vector<QuerySequenceElement> sequence = new Vector<QuerySequenceElement>();
-	Vector<IQueryAtom> sequencedAtoms = new Vector<IQueryAtom>();
-	Vector<IQueryAtom> sequencedBondAt1 = new Vector<IQueryAtom>();
-	Vector<IQueryAtom> sequencedBondAt2 = new Vector<IQueryAtom>();
+	List<IAtom> targetAt = new ArrayList<IAtom>(); //a work container
+	List<QuerySequenceElement> sequence = new ArrayList<QuerySequenceElement>();
+	List<IQueryAtom> sequencedAtoms = new ArrayList<IQueryAtom>();
+	List<IQueryAtom> sequencedBondAt1 = new ArrayList<IQueryAtom>();
+	List<IQueryAtom> sequencedBondAt2 = new ArrayList<IQueryAtom>();
 	
 	
 	public void setQuery(IQueryAtomContainer container)
@@ -62,21 +62,21 @@ public class IsomorphismTester
 		setQueryAtomSequence(null);
 	}
 	
-	public Vector<QuerySequenceElement> getSequence()
+	public List<QuerySequenceElement> getSequence()
 	{
 		return(sequence);
 	}
 	
-	public void setSequence(IQueryAtomContainer queryContainer, Vector<QuerySequenceElement> externalSequence) 
+	public void setSequence(IQueryAtomContainer queryContainer, List<QuerySequenceElement> externalSequence) 
 	{
 		query = queryContainer;
 		sequence = externalSequence;
 	}
 	
-	public Vector<QuerySequenceElement> transferSequenceToOwner()
+	public List<QuerySequenceElement> transferSequenceToOwner()
 	{
-		Vector<QuerySequenceElement> ownerSeq = sequence;
-		sequence = new Vector<QuerySequenceElement>();
+		List<QuerySequenceElement> ownerSeq = sequence;
+		sequence = new ArrayList<QuerySequenceElement>();
 		return(ownerSeq);
 	}
 	
@@ -85,7 +85,7 @@ public class IsomorphismTester
 		IQueryAtom firstAtom;
 		QuerySequenceElement seqEl;
 		TopLayer topLayer;
-		//Vector<IQueryAtom> curAddedAtoms = new Vector<IQueryAtom>();  
+		//List<IQueryAtom> curAddedAtoms = new List<IQueryAtom>();  
 		int n;
 		
 		if (firstAt == null)
@@ -184,7 +184,7 @@ public class IsomorphismTester
 			sequence.get(i).setAtomNums(query);
 	}
 		
-	boolean containsAtom(Vector<IQueryAtom> v, IQueryAtom atom)
+	boolean containsAtom(List<IQueryAtom> v, IQueryAtom atom)
 	{
 		for(int i = 0; i < v.size(); i++)
 			if (v.get(i) == atom)
@@ -254,13 +254,13 @@ public class IsomorphismTester
 		return(isomorphismFound);
 	}
 	
-	public Vector<Integer> getIsomorphismPositions(IAtomContainer container)
+	public List<Integer> getIsomorphismPositions(IAtomContainer container)
 	{	
 		target = container;	
 		FlagStoreIsomorphismNode = false;
 		isomorphismNodes.clear();
 		
-		Vector<Integer> v = new Vector<Integer>(); 
+		List<Integer> v = new ArrayList<Integer>(); 
 		if (query.getAtomCount() == 1)
 		{	
 			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);			
@@ -287,7 +287,7 @@ public class IsomorphismTester
 	 * @param container
 	 * @return
 	 */
-	public Vector<IAtom> getIsomorphismMapping(IAtomContainer container)
+	public List<IAtom> getIsomorphismMapping(IAtomContainer container)
 	{
 		if (query == null) return null;
 		target = container;	
@@ -301,7 +301,7 @@ public class IsomorphismTester
 			{	
 				if (qa.matches(target.getAtom(i)))
 				{	
-					Vector<IAtom> v = new Vector<IAtom>();
+					List<IAtom> v = new ArrayList<IAtom>();
 					v.add(target.getAtom(i));
 					return(v);
 				}	
@@ -317,7 +317,7 @@ public class IsomorphismTester
 		{	
 			//Getting the data from the Node
 			Node node = isomorphismNodes.get(0);
-			Vector<IAtom> v = new Vector<IAtom>();
+			List<IAtom> v = new ArrayList<IAtom>();
 			for (int i = 0; i < node.atoms.length; i++)
 				v.add(node.atoms[i]);
 			
@@ -327,12 +327,12 @@ public class IsomorphismTester
 			return (null);
 	}
 	
-	public Vector<IBond> generateBondMapping(IAtomContainer container, Vector<IAtom> atomMapping)
+	public List<IBond> generateBondMapping(IAtomContainer container, List<IAtom> atomMapping)
 	{
 		if (query == null) 
 			return null;
 		
-		Vector<IBond> v  = new Vector<IBond>();
+		List<IBond> v  = new ArrayList<IBond>();
 		for (int i = 0; i < query.getBondCount(); i++)
 		{
 			IAtom qa0 = query.getBond(i).getAtom(0);
@@ -352,13 +352,13 @@ public class IsomorphismTester
 	 * @param container
 	 * @return
 	 */
-	public Vector<Vector<IAtom>> getAllIsomorphismMappings(IAtomContainer container)
+	public List<List<IAtom>> getAllIsomorphismMappings(IAtomContainer container)
 	{
 		if (query == null) return null;
 		target = container;	
 		FlagStoreIsomorphismNode = true;
 		isomorphismNodes.clear();
-		Vector<Vector<IAtom>> result = new Vector<Vector<IAtom>>(); 
+		List<List<IAtom>> result = new ArrayList<List<IAtom>>(); 
 		
 		
 		if (query.getAtomCount() == 1)
@@ -368,7 +368,7 @@ public class IsomorphismTester
 			{	
 				if (qa.matches(target.getAtom(i)))
 				{	
-					Vector<IAtom> v = new Vector<IAtom>();
+					List<IAtom> v = new ArrayList<IAtom>();
 					v.add(target.getAtom(i));
 					result.add(v);
 				}	
@@ -386,7 +386,7 @@ public class IsomorphismTester
 			for (int k = 0; k < isomorphismNodes.size(); k++)
 			{	
 				Node node = isomorphismNodes.get(k);
-				Vector<IAtom> v = new Vector<IAtom>();
+				List<IAtom> v = new ArrayList<IAtom>();
 				for (int i = 0; i < node.atoms.length; i++)
 					v.add(node.atoms[i]);
 				result.add(v);
@@ -395,17 +395,17 @@ public class IsomorphismTester
 		return result;		
 	}
 	
-	public Vector<Vector<IAtom>> getNonIdenticalMappings(IAtomContainer container)
+	public List<List<IAtom>> getNonIdenticalMappings(IAtomContainer container)
 	{
-		Vector<Vector<IAtom>> result = new Vector<Vector<IAtom>>();
-		Vector<Vector<IAtom>> allMaps = getAllIsomorphismMappings(container);
+		List<List<IAtom>> result = new ArrayList<List<IAtom>>();
+		List<List<IAtom>> allMaps = getAllIsomorphismMappings(container);
 		if (allMaps.isEmpty())
 			return(result);
 		
 		int nMaps = allMaps.size();
 		int nAtoms = allMaps.get(0).size();
-		Vector<IAtom> map;
-		Vector<IAtom> map1;
+		List<IAtom> map;
+		List<IAtom> map1;
 		boolean FlagOK;
 		boolean FlagOneFifferent;
 		
@@ -443,17 +443,17 @@ public class IsomorphismTester
 	}
 	
 	
-	public Vector<Vector<IAtom>> getNonOverlappingMappings(IAtomContainer container)
+	public List<List<IAtom>> getNonOverlappingMappings(IAtomContainer container)
 	{
-		Vector<Vector<IAtom>> result = new Vector<Vector<IAtom>>();
-		Vector<Vector<IAtom>> allMaps = getAllIsomorphismMappings(container);
+		List<List<IAtom>> result = new ArrayList<List<IAtom>>();
+		List<List<IAtom>> allMaps = getAllIsomorphismMappings(container);
 		if (allMaps.isEmpty())
 			return(result);
 		
 		int nMaps = allMaps.size();
 		int nAtoms = allMaps.get(0).size();
-		Vector<IAtom> map;
-		Vector<IAtom> map1;
+		List<IAtom> map;
+		List<IAtom> map1;
 		boolean FlagOK;
 		
 		for (int i = 0; i < nMaps; i++)
@@ -489,15 +489,15 @@ public class IsomorphismTester
 	/*
 	 * returns a set of groups (arrays with indexes) of overlapped mappings
 	 */
-	public Vector<Vector<Integer>> getOverlappedMappingClusters(Vector<Vector<IAtom>> maps)
+	public List<List<Integer>> getOverlappedMappingClusters(List<List<IAtom>> maps)
 	{
-		Vector<Vector<Integer>>  v = new Vector<Vector<Integer>>();
+		List<List<Integer>>  v = new ArrayList<List<Integer>>();
 		if (maps.size() == 0)
 			return (v);
 		
 		//The first cluster is created
-		Vector<Integer> vInt;
-		vInt = new Vector<Integer>();
+		List<Integer> vInt;
+		vInt = new ArrayList<Integer>();
 		vInt.add(new Integer(0));
 		v.add(vInt);
 		
@@ -508,7 +508,7 @@ public class IsomorphismTester
 		//The case with more than 1  mapping
 		for (int i = 1; i < maps.size(); i++)
 		{
-			Vector<IAtom> map = maps.get(i);
+			List<IAtom> map = maps.get(i);
 			
 			boolean FlagOverlap = false;
 			for (int k = 0; k < v.size(); k++)
@@ -524,7 +524,7 @@ public class IsomorphismTester
 			if (!FlagOverlap)
 			{
 				//New cluster is created
-				vInt = new Vector<Integer>();
+				vInt = new ArrayList<Integer>();
 				vInt.add(new Integer(i));
 				v.add(vInt);
 			}
@@ -533,12 +533,12 @@ public class IsomorphismTester
 		return v;
 	}
 	
-	boolean overlapsWithCluster(Vector<IAtom> map, Vector<Integer> cluster, Vector<Vector<IAtom>> maps)
+	boolean overlapsWithCluster(List<IAtom> map, List<Integer> cluster, List<List<IAtom>> maps)
 	{
 		for (int i = 0; i < cluster.size(); i++)
 		{
 			int mapNum = cluster.get(i).intValue();
-			Vector<IAtom> clMap = maps.get(mapNum);
+			List<IAtom> clMap = maps.get(mapNum);
 			for (int k = 0; k < map.size(); k++)
 				if (clMap.contains(map.get(k)))
 					return true;

@@ -1,8 +1,8 @@
 package ambit2.tautomers;
 
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -40,10 +40,10 @@ public class Rule
 	IBond.Order  ringClosureBondOrder = IBond.Order.SINGLE;
 	
 	
-	public Vector<IRuleInstance>  applyRule(IAtomContainer mol) throws Exception
+	public List<IRuleInstance>  applyRule(IAtomContainer mol) throws Exception
 	{
 		IsomorphismTester isoTester = new IsomorphismTester(); 
-		Vector<IRuleInstance> instances = new Vector<IRuleInstance>();
+		List<IRuleInstance> instances = new ArrayList<IRuleInstance>();
 		for (int i = 0; i < stateQueries.length; i++)
 		{
 			IQueryAtomContainer query = stateQueries[i];			
@@ -57,10 +57,10 @@ public class Rule
 				flags.mNeedParentMoleculeData, mol);	
 			
 			isoTester.setQuery(query);
-			Vector<Vector<IAtom>> maps = isoTester.getAllIsomorphismMappings(mol);		
+			List<List<IAtom>> maps = isoTester.getAllIsomorphismMappings(mol);		
 			for (int k = 0; k < maps.size(); k++)
 			{
-				Vector<IAtom> amap = maps.get(k);
+				List<IAtom> amap = maps.get(k);
 				//This check currently is done only for one mobile group
 				int mobCheck = checkMobileGroup(0, i, amap, mol); 
 				if (mobCheck == -1)
@@ -94,7 +94,7 @@ public class Rule
 		return instances;
 	}
 	
-	int checkMobileGroup(int mobGroupNum, int curState, Vector<IAtom> amap, IAtomContainer mol) throws Exception
+	int checkMobileGroup(int mobGroupNum, int curState, List<IAtom> amap, IAtomContainer mol) throws Exception
 	{
 
 		int pos = mobileGroupPos[mobGroupNum][curState];

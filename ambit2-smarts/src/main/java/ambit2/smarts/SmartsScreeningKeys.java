@@ -3,17 +3,18 @@ package ambit2.smarts;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SmartsScreeningKeys 
 {
 	public int nKeys = 1024;
 	boolean mKeysLoaded = false;
-	Vector<String> mSmartsKeys = new Vector<String>();
+	List<String> mSmartsKeys = new ArrayList<String>();
 	
 	
-	public Vector<String> getKeys() throws Exception
+	public List<String> getKeys() throws Exception
 	{
 		if (!mKeysLoaded)
 			loadKeysFromResource();
