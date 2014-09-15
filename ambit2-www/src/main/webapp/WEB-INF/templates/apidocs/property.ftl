@@ -65,7 +65,54 @@
                     ]
                 }
             ]
-     	}	
+     	},
+    	{
+            "path": "/property/{topcategory}/{endpointcategory}",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Effectrecord placeholder",
+                    "notes": "Get JSON representation of an empty effect record, with placeholders for the required condition fields",
+                    "type": "Property",
+                    "nickname": "getEffectRecordByEndpointCategory",
+                     <#include "/apidocs/authz.ftl" >
+                    "parameters": [
+   								{
+								    "name": "topcategory",
+								    "description": "Top endpoint category",
+								    "required": false,
+								    "type": "string",
+								    "paramType": "path",
+								    "allowMultiple": false,
+								    "defaultValue" : "ECOTOX",
+								    "enum" : ["P-CHEM","ENV FATE","ECOTOX","TOX"]
+								},
+								{
+								    "name": "endpointcategory",
+								    "description": "Endpoint category",
+								    "required": false,
+								    "type": "string",
+								    "paramType": "path",
+								    "allowMultiple": false,
+								    "defaultValue" :"EC_FISHTOX_SECTION",
+								    <#include "/apidocs/parameter_endpointcategorysection_enum.ftl" >
+								}
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Property not found"
+                        },
+                        {
+                            "code": 400,
+                            "message": "Bad request for unsupported categories"
+                        },                        
+						<#include "/apidocs/error_aa.ftl" >,
+						<#include "/apidocs/error_500.ftl" >                        
+                    ]
+                }
+            ]
+     	}	     	
     ],
 	<#include "/apidocs/info.ftl" >  
 }
