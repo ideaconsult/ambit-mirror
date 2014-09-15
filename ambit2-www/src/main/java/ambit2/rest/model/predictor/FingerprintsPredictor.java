@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
+import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
@@ -32,7 +33,7 @@ public class FingerprintsPredictor extends	CoveragePredictor<IStructureRecord,Li
 			throws ResourceException {
 		super(applicationRootReference, model, modelReporter, propertyReporter,
 				targetURI);
-		fpgen = new FingerprintGenerator();
+		fpgen = new FingerprintGenerator(new Fingerprinter());
 		setStructureRequired(true);
 		setValuesRequired(false);
 	}

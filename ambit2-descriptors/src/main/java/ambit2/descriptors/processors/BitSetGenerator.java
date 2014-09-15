@@ -7,6 +7,8 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.fingerprint.Fingerprinter;
+import org.openscience.cdk.fingerprint.PubchemFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.config.Preferences;
@@ -33,19 +35,19 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 		fp1024 {
 			@Override
 			public String getProperty() {
-				return AmbitCONSTANTS.Fingerprint;
+				return name();
 			}
 			@Override
 			public String getStatusProperty() {
-				return AmbitCONSTANTS.FingerprintSTATUS;
+				return name()+".status";
 			}
 			@Override
 			public String getTimeProperty() {
-				return AmbitCONSTANTS.FingerprintTIME;
+				return name()+".time";
 			}
 			@Override
 			public IProcessor<IAtomContainer, BitSet> getGenerator() throws Exception {
-				return new FingerprintGenerator();
+				return new FingerprintGenerator(new Fingerprinter(1024));
 			}
 			@Override
 			public String getTable() {
@@ -72,7 +74,7 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 			}
 			@Override
 			public IProcessor<IAtomContainer, BitSet> getGenerator() throws Exception {
-				return new FingerprintGenerator();
+				return new FingerprintGenerator(new Fingerprinter(1024));
 			}
 			@Override
 			public String getTable() {
@@ -87,15 +89,15 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 		sk1024 {
 			@Override
 			public String getProperty() {
-				return AmbitCONSTANTS.StructuralKey;
+				return name();
 			}
 			@Override
 			public String getTimeProperty() {
-				return AmbitCONSTANTS.StructuralKey_TIME;
+				return name()+".time";
 			}
 			@Override
 			public String getStatusProperty() {
-				return AmbitCONSTANTS.StructuralKey_STATUS;
+				return name()+".status";
 			}
 			@Override
 			public IProcessor<IAtomContainer, BitSet> getGenerator() throws Exception{
@@ -189,6 +191,32 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 			public String toString() {
 				return "InChI in chemicals table";
 			}
+		},
+		pc1024 {
+			@Override
+			public String getProperty() {
+				return name();
+			}
+			@Override
+			public String getTimeProperty() {
+				return name()+".time";
+			}
+			@Override
+			public String getStatusProperty() {
+				return name()+".status";
+			}
+			@Override
+			public IProcessor<IAtomContainer, BitSet> getGenerator() throws Exception{
+				return new FingerprintGenerator(new PubchemFingerprinter());
+			}
+			@Override
+			public String getTable() {
+				return "pc1024";
+			}
+			@Override
+			public String toString() {
+				return "PubChem fingerprints";
+			}				
 		};			
 		abstract public String getProperty();
 		abstract public String getTimeProperty();

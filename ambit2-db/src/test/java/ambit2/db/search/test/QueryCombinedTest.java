@@ -9,6 +9,7 @@ import net.idea.modbcum.i.query.QueryParam;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;
+import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.base.data.Property;
@@ -38,7 +39,7 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		QueryCombined qc = new QueryCombinedStructure();
 		qc.setId(55);
 		QuerySimilarityBitset q = new QuerySimilarityBitset();
-		FingerprintGenerator gen = new FingerprintGenerator();
+		FingerprintGenerator gen = new FingerprintGenerator(new Fingerprinter());
 		BitSet bitset = gen.process(MoleculeFactory.makeAlkane(10));
 		q.setValue(bitset);
 		

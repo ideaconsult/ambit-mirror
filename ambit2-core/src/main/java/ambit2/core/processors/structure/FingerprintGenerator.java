@@ -5,6 +5,7 @@ import java.util.BitSet;
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.openscience.cdk.fingerprint.Fingerprinter;
+import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -23,25 +24,22 @@ import ambit2.core.config.AmbitCONSTANTS;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 30, 2006
  */
-public class FingerprintGenerator extends DefaultAmbitProcessor<IAtomContainer,BitSet>  {
+public class FingerprintGenerator<FGenerator extends IFingerprinter> extends DefaultAmbitProcessor<IAtomContainer,BitSet>  {
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 3905797414723139887L;
 
 	protected int FPLength = 1024;
-	protected Fingerprinter fingerprinter;
+	protected FGenerator fingerprinter;
     protected boolean hydrogens = false;
     protected CDKHydrogenAdder hAdder = null;
 	protected AtomConfigurator config = new AtomConfigurator();
 	
-    public FingerprintGenerator()  {
-		this(1024);
-	}
-	public FingerprintGenerator(int length) {
+	public FingerprintGenerator(FGenerator fingerprinter) {
 		super();
-		this.FPLength = length;
-		fingerprinter = new Fingerprinter(length);
+		this.FPLength = 1024;
+		this.fingerprinter = fingerprinter;
 	}
 	
 

@@ -5,6 +5,7 @@ import java.util.BitSet;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 
+import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.smiles.SmilesGenerator;
 
 import ambit2.base.data.Property;
@@ -117,7 +118,7 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 	protected QueryPrescreenBitSet createQuerySubstructure(QueryInfo target) throws AmbitException {
 		if (QueryInfo.METHOD_SUBSTRUCTURE.equals(target.getMethod())) {
 			if (target.getMolecule() == null) return null;
-			FingerprintGenerator g = new FingerprintGenerator();
+			FingerprintGenerator g = new FingerprintGenerator(new Fingerprinter());
 			BitSet bitset = g.process(target.getMolecule());
 			QueryPrescreenBitSet qs = new QueryPrescreenBitSet();
 			qs.setValue(bitset);
@@ -127,7 +128,7 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 	protected QuerySimilarityBitset createQuerySimilarity(QueryInfo target) throws AmbitException {
 		if (QueryInfo.METHOD_SIMILARITY.equals(target.getMethod())) {
 			if (target.getMolecule() == null) return null;
-			FingerprintGenerator g = new FingerprintGenerator();
+			FingerprintGenerator g = new FingerprintGenerator(new Fingerprinter());
 			BitSet bitset = g.process(target.getMolecule());
 			QuerySimilarityBitset qs = new QuerySimilarityBitset();
 			qs.setValue(bitset);

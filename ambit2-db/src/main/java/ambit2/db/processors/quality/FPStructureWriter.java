@@ -7,6 +7,7 @@ import javax.naming.OperationNotSupportedException;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
+import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.interfaces.IStructureRecord;
@@ -17,7 +18,7 @@ import ambit2.db.update.fp.CreateFingerprintStructure;
 
 public class FPStructureWriter extends AbstractUpdateProcessor<IStructureRecord, BitSet> {
 	protected MoleculeReader molReader = new MoleculeReader();
-	protected FingerprintGenerator g = new FingerprintGenerator();
+	protected FingerprintGenerator g = new FingerprintGenerator(new Fingerprinter());
 	/**
 	 * 
 	 */
