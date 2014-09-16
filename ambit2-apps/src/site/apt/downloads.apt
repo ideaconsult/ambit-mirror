@@ -6,14 +6,19 @@
  2014/09/16
  -----
 
-AMBIT Web application and web services
+Web services
 ~~~~~~~~~~
 
-  [AMBIT REST Web services] {{{./download_ambitrest.html}Web application archive (ambit2.war)}}
+  [ambit2.war 2.5.8] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.5.8/ambit2-www-2.5.8.war/download}Download}}
+  
+  [ambit2.war 2.5.7] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.5.7/ambit2-www-2.5.7.war/download}Download}}
 
-  [AMBIT REST API] {{{http://ideaconsult.github.io/examples-ambit/apidocs/}API documentation (live)}}
+API
+~~~~~~~~~~
 
-AMBIT standalone applications
+  {{{http://ideaconsult.github.io/examples-ambit/apidocs/}AMBIT REST API documentation (live)}}  
+
+Standalone applications
 ~~~~~~~~~~
 
  [Applicability domain] {{{./download_ambitdiscovery.html}AMBIT Discovery}}
@@ -23,15 +28,19 @@ AMBIT standalone applications
  [Molbrowser] {{{https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example}Converts SDF file to a static web page}}
  
  
-AMBIT libraries and examples
+Libraries
 ~~~~~~~~~~
 
  [AMBIT libraries] {{{./download_ambitlibs.html} AMBIT libraries}}
  
- [Example: tautomers] {{{https://github.com/ideaconsult/examples-ambit/tree/master/tautomers-example}Examples how to use ambit2-tautomer package}}
+
+Source code examples
+~~~~~~~~~~
+
+ {{{https://github.com/ideaconsult/examples-ambit/tree/master/tautomers-example}How to use ambit2-tautomer package}}
  
- [Example: SMIRKS] {{{https://github.com/ideaconsult/examples-ambit/tree/master/smirks-example}Examples how to use AMBIT SMIRKS implementation}}
+ {{{https://github.com/ideaconsult/examples-ambit/tree/master/smirks-example}How to use AMBIT SMIRKS implementation}}
   
- [Example: applicability domain] {{{https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example}Examples how to use applicability domain methods in AMBIT}}
+ {{{https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example}How to use applicability domain methods in AMBIT}}
  
  

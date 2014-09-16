@@ -33,7 +33,7 @@
       ]]></name>
 				<href>http://ambit.sf.net</href>
 			</brand>
-			<slogan>Web services cheminformatics</slogan>
+			<slogan></slogan>
 			<titleTemplate>%2$s | %1$s</titleTemplate>
 			<toc></toc>
 			<topNav></topNav>
@@ -48,9 +48,10 @@
 			</bottomDescription>
 			<pages>
 				<index>
+					<shortTitle></shortTitle>
 					<bannerRight>
 						<name></name>
-						<href>index.html</href>
+						<href></href>
 					</bannerRight>
 
 					<shortTitle></shortTitle>
@@ -140,7 +141,7 @@
 
 		<menu name="Docs">
 			<item name="Installation" href="./install_ambitrest.html" />
-			<item name="Usage" href="./usage.html" />
+			<item name="Usage" href="./intro.html" />
 			<item name="AMBIT API" href="http://ideaconsult.github.io/examples-ambit/apidocs" />
 		</menu>
 
@@ -151,7 +152,7 @@
 			<item name="ONS Melting point 33"
 				href="http://apps.ideaconsult.net:8080/data/ui/_dataset?dataset_uri=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fdata%2Fdataset%2F45"
 				target="_blank" />
-			<item name="Structure search" href="http://apps.ideaconsult.net:8080/biodeg/ui/_search"
+			<item name="Structure search" href="http://apps.ideaconsult.net:8080/data/ui/_search"
 				target="_blank" />
 			<item name="Substances" href="http://apps.ideaconsult.net:8080/data/substances"
 				target="_blank" />

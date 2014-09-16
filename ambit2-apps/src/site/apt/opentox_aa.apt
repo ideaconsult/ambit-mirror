@@ -1,0 +1,50 @@
+ -----
+ AA
+ -----
+ Nina Jeliazkova
+ -----
+ 2011/08/20
+ -----
+	 
+{Protected AMBIT web services}
+
+	Access to AMBIT web services can be controlled via 
+	{{{http://opentox.org/dev/apis/api-1.2/AA}OpenTox Authentication and Authorization}} infrastructure. 
+	Security tokens are obtained after log in into the {{{http://forgerock.com/openam.html}OpenAM}} service at <http://opensso.in-silico.ch/auth/authenticate>.
+
+*Code
+
+    Java OpenTox AA client library is {{{./download_aaclient.html}available}}.
+
+*Accounts    
+
+	OpenTox user accounts can be obtained via free registration at {{{http://opentox.org/join_form}OpenTox site}}.
+	
+* Logging in
+	
++---------------------------
+	curl -X POST -d "username=YOUR-OPENTOX-USER" -d "password=YOUR-OPENTOX-PASSWORD" \
+		http://opensso.in-silico.ch/auth/authenticate 
++---------------------------
+
+	AMBIT services offer log in via its {{{http://apps.ideaconsult.net:8080/ambit2/opentoxuser}web page}}.
+	
+	The relevant link for a local installation is {{{http://localhost:8080/ambit2/opentoxuser}http://yourhost:8080/ambit2/opentoxuser}}.
+
+[./images/login.png] Log in web page	
+	
+ 	 
+*Protecting resources
+
+	After deploying AA enabled AMBIT services, <</dataset>> resources are not accessible. An access policy has to be defined, as explained below.
+
+	Navigate to {{{http://localhost:8080/ambit2/admin/policy}http://localhost:8080/ambit2/admin/policy}} and use the web interface to create new policies.
+	Replace <<http://localhost:8080>> with your real URI!
+	
+[./images/create_policy.png] Create access policy for an URI. 
+	
+	Alternatively, use {{{http://opentox.org/dev/apis/api-1.2/AA}OpenTox API}} or the Java library above.
+ 	 
+	On data upload the new datasets are assigned a default policy, allowing read write access only to the user, who has uploaded the dataset.
+	Additional policies can be defined as above.
+	
