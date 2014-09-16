@@ -67,6 +67,12 @@
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
 			        }
+			        ,
+			         {
+			            "method": "DELETE",
+			              "summary": "Delete all substance by a substance owner",
+			            "notes": "Not (yet) implemented"
+			         }   
 			    ]
 			},
 {

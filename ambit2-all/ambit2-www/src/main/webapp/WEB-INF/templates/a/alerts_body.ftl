@@ -15,7 +15,7 @@ $(document).ready(function() {
 <script type="text/javascript">
        jQuery(document).ready(function()
        {
-      		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/myaccount" title="My AMBIT profile">My profile</a></li>');
+      		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/myaccount" title="My AMBIT account">My account</a></li>');
            jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/myaccount/alert" title="AMBIT Home">Alerts</a></li>');
            jQuery("#breadCrumb").jBreadCrumb();
            loadHelp("${ambit_root}","alert");

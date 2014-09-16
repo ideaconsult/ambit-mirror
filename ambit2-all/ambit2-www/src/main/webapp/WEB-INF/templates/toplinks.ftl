@@ -2,7 +2,7 @@
 	<ul class='topLinks remove-bottom'>
 	<#if username??>
 		<li class='topLinks'>
-		[<a class='topLinks login' title='My profile' href='${ambit_root}/myaccount'><b>${username}</b></a>]
+		[<a class='topLinks login' title='My account' href='${ambit_root}/myaccount'><b>${username}</b></a>]
 		</li>
 		<#if ambit_datasetmgr?? && ambit_datasetmgr>
 			<li class='topLinks'>

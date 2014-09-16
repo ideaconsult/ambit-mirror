@@ -8,7 +8,7 @@ jQuery(document).ready(function()
 {
 	<#if myprofile>
 		setAutocompleteOrgs("${ambit_root}","#affiliation");
-		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/myaccount" title="My AMBIT profile">My profile</a></li>');
+		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/myaccount" title="My AMBIT account">My account</a></li>');
 	<#else>
 		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/users" title="All Users">Users</a></li>');
 	    jQuery("#breadCrumb ul").append('<li><a href="${ambit_request}" id="breadCrumbUser" title="User">User</a></li>');
