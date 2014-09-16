@@ -76,7 +76,7 @@ Please note that modern web browsers (e.g. Firefox 10, Chrome, Internet Explorer
 
 - The following option specifies the MySQL database configuration. Modify only if your setup differs from the default.
 
->IMPORTANT: The user should have grants set as per STEP 4
+>IMPORTANT: The guide assumes the user should have grants set as per database installation step above
 
 ````
 	#MySQL Database config
@@ -98,3 +98,6 @@ Please note that modern web browsers (e.g. Firefox 10, Chrome, Internet Explorer
 
 >IMPORTANT: You must restart Tomcat to make sure that the configuration	changes you've made become effective.
 
+#User guide
+
+	[Quick user guide](./usage.html)	 
