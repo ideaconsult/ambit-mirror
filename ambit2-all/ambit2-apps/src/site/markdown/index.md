@@ -6,17 +6,17 @@
 
 ## Web services
 
-AMBIT offers chemoinformatics functionality via [REST](rest.html) web services [OpenTox API](api.html) compliant. 
+AMBIT offers chemoinformatics functionality via [*OpenTox API*](api.html) compliant [*REST*](rest.html) web services. 
 
-- Chemical compounds and data storage in [MySQL](http://mysql.com) database; 
+- Chemical compounds and data storage in [*MySQL*](http://mysql.com) database; 
 
-- Substructure, similarity and other queries;
+- Substructure, similarity and other queries ([*The CDK*](http://cdk.sf.net); [*AMBIT SMARTS, SMIRKS, tautomers*](pubs_citeambit.html));
 
-- Descriptor calculation and predictive models building.
+- Descriptor calculation and predictive models building ([*Weka*](http://www.cs.waikato.ac.nz/ml/weka/), [*Toxtree*](http://toxtree.sf.net)).
 
 ## Libraries
 
-AMBIT consists of multiple [Maven modules](http://maven.apache.org/) with well defined dependencies, which can be used in a stand alone mode or embedded in other applications.
+AMBIT consists of multiple [*Maven modules*](http://maven.apache.org/) with well defined dependencies, which can be used in a stand alone mode or embedded in other applications.
    
 - [Download AMBIT libraries](./download_ambitlibs.html)
 
@@ -56,14 +56,15 @@ Browse and try AMBIT REST API
 
 Acknowledgements
 
--   [**CEFIC LRI**](http://www.cefic-lri.org/lri-toolbox/ambit)
--   [**FP7 OpenTox**](http://opentox.org/)
+>[**CEFIC LRI**](http://www.cefic-lri.org/)
+
+>[**FP7 OpenTox**](http://opentox.org/)
 
 Related pages
 
- [Toxtree](http://toxtree.sf.net/) | [Toxmatch](http://toxmatch.sf.net/) |  [(Q)MRF](http://qmrf.sf.net/) | 
+> [Toxtree](http://toxtree.sf.net/) | [Toxmatch](http://toxmatch.sf.net/) |  [(Q)MRF](http://qmrf.sf.net/) | 
  [AMBIT/OpenTox API client library](https://github.com/ideaconsult/opentox-cli) | [OpenTox AA client library](https://github.com/vedina/opentox-aa-cli) | 
- [ToxPredict](http://toxpredict.org) |
+ [jToxKit](https://github.com/ideaconsult/Toxtree.js) | [I5 library](https://github.com/ideaconsult/i5) | [ToxPredict](http://toxpredict.org) |
  [FP7 ToxBank](http://toxbank.net) | [FP7 eNanoMapper](http://enanomapper.net)
 
 **Social**
