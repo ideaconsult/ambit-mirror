@@ -649,9 +649,9 @@ CREATE TABLE  `property_tuples` (
 -- Table `history` removed
 -- -----------------------------------------------------
 
---DROP TABLE IF EXISTS `history`;
+-- DROP TABLE IF EXISTS `history`;
 
---CREATE TABLE  `history` (
+-- CREATE TABLE  `history` (
 --  `version` int(11) NOT NULL auto_increment,
 --  `idstructure` int(11) unsigned NOT NULL,
 --  `structure` blob NOT NULL,
@@ -665,7 +665,7 @@ CREATE TABLE  `property_tuples` (
 --  KEY `f_idstructure` (`idstructure`),
 --  KEY `FK_history_1` (`user_name`),
 --  CONSTRAINT `FK_history_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
---) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
 -- -----------------------------------------------------
@@ -2501,13 +2501,15 @@ BEGIN
    from qsasheader join src_dataset d using(id_srcdataset) join properties p using(idproperty) where idsasmap=@idsasmap;   
    
 
-END;
+END$$
 
+DELIMITER ;
 
 -- profile all properties in a template
+
 DROP procedure if exists `g2profile`;
 
-delimiter $$
+DELIMITER $$
 
 CREATE PROCEDURE `g2profile`(IN dataset INT, IN template INT, IN simthreshold DOUBLE,IN laplacek DOUBLE)
 BEGIN
