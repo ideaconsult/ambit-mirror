@@ -1,12 +1,12 @@
  -----
- AMBIT modules
+ AMBIT libraries
  -----
  Nina Jeliazkova
  -----
  2014/09/15
  -----
 
-{AMBIT libraries} 
+AMBIT libraries 
 
 	AMBIT is implemented in Java, uses a MySQL database as backend, and relies on {{{http://cdk.sf.net}The Chemistry Development Kit}} 
 	for cheminformatics functionality. 
@@ -29,14 +29,14 @@
 	
 	More details about ({{{./AMBIT2-LIBS/apidocs}javadoc}}, code examples) at {{{https://github.com/ideaconsult/examples-ambit}GitHub}}. 
 
-*License
+License
 
 	[LGPL] {{{http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt}http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt}}
 
 	[]
 
 
-*The code
+The code
 	
 	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all}Libraries}} (multi-module Maven project) 
 	
@@ -44,7 +44,7 @@
 	
 	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/tags}tags}} 
 	
-*{{{http://maven.apache.org/}Maven}} artifacts 
+{{{http://maven.apache.org/}Maven}} artifacts 
    		
    		{{{http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases/ambit/}http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases/ambit/}}
    		
@@ -77,6 +77,12 @@
     </repository>
 +--------------------------------- 	
 
-*How to use AMBIT modules (examples)
 
-	{{{https://github.com/ideaconsult/examples-ambit}https://github.com/ideaconsult/examples-ambit}}
+AMBIT Examples
+
+ [Example: tautomers] {{{https://github.com/ideaconsult/examples-ambit/tree/master/tautomers-example}Examples how to use ambit2-tautomer package}}
+ 
+ [Example: SMIRKS] {{{https://github.com/ideaconsult/examples-ambit/tree/master/smirks-example}Examples how to use AMBIT SMIRKS implementation}}
+  
+ [Example: applicability domain] {{{https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example}Examples how to use applicability domain methods in AMBIT}}
+	

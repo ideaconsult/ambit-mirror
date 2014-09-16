@@ -1,0 +1,28 @@
+ -----
+ OpenTox Downloads
+ -----
+ Nina Jeliazkova
+ -----
+ 2014/09/16
+ -----
+ 
+Clients
+~~~~~~~~~~
+
+ [OpenTox client] {{{https://github.com/ideaconsult/opentox-cli}OpenTox Java client library}}
+ 
+ [OpenTox Authentication and Authorization client library] {{{https://github.com/vedina/opentox-aa-cli } source code (Java)}} 
+ 
+Services
+~~~~~~~~~~
+
+ [OpenTox Policy service] {{{http://vedina.github.com/Pol/} source code (Java)}}
+ 
+ [OpenTox wrapper] {{{https://github.com/vedina/opentox-prediction}A wrapper for external toxicity prediction models as OpenTox algorithm and model services }}
+ 
+ [OpenTox Ontology service] {{{./download_ontologyservice.html}OpenTox Ontology service}}
+
+Applicatoins
+~~~~~~~~~~
+
+ [ToxPredict] {{{./download_toxpredict.html}ToxPredict demo application}}
