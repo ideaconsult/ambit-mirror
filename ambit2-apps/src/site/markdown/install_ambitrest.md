@@ -100,4 +100,4 @@ Please note that modern web browsers (e.g. Firefox 10, Chrome, Internet Explorer
 
 #User guide
 
-	[Quick user guide](./usage.html)	 
+[Quick user guide](./usage.html)	 

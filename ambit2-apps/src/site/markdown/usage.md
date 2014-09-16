@@ -26,7 +26,7 @@ The **Search/Search structures and associated data** menu, allows to search chem
 ![Similarity search](images/screenshots/search_bar_similarity.png "Similarity search")
 ![Substructure search](images/screenshots/search_bar_substructure.png "Substructure search")
 
-###Search by identifiers or exact search  
+####Search by identifiers or exact search  
 
 The exact search option accepts any chemical identifier (SMILES, InChI, chemical name, CAS, EINECS) or a structure drawn through the structure diagram editor (the rightmost buton with a pen icon). If the search string submitted is not a chemical identifier (this is automatically determined), AMBIT searches for available properties with value equal to this string. For example, it is possible to search for all the chemicals with REACH registration date 31.05.2018 by specifying *31.05.2018* as a search string. An example search by chemical name (e.g. *caffeine*) is shown below.
 
@@ -44,7 +44,7 @@ The substance details can be shown using the substance folder icon.
 
 ![Search results (substance details)](images/screenshots/search_structures_4.png "Search results (substance details)") 
 
-###Sidebar
+####Sidebar
 
 The vertical sidebar at the left is activated with mouse hover and allows collating information from multiple dataset and predictive models with the search results. 
 
@@ -62,7 +62,7 @@ Using the sidebar: Merging datasets and model predictions electing datasets and 
 
 ![Merging datasets and model predictions](images/screenshots/search_similarity_2.png "Merging datasets and model predictions")
 
-###Substructure search 
+####Substructure search 
 
 The substructure search query can be defined by drawing the structure, selecting a [*SMARTS*](http://www.daylight.com/dayhtml/doc/theory/theory.smarts.html) from the predefined *list of SMARTS*, or entering a *SMARTS*, *SMILES* or *chemical name* in the text box.
 
@@ -78,4 +78,14 @@ The [structure editor](http://ggasoftware.com/opensource/ketcher) is JavaScript 
 Substructure search, using a from a predefined *list of SMARTS*.
 
 ![Substructure search for acrylamides SMARTS](images/screenshots/search_substructure_2.png "Substructure search for acrylamides SMARTS")
+
+###Export
+
+The search results can be downloaded as files in various file formats (SDF ,CML , SMI, InChI, CSV, TXT, ARFF , RDF , JSON ), together with the selected columns.
+
+![Search results export](images/screenshots/search_export.png "Search results export")
+
+###Substances search
+
+[Quick user guide (substance search)](usage_substance.html)	 
  
