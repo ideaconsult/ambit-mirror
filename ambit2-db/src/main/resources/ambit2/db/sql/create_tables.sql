@@ -255,14 +255,14 @@ CREATE TABLE  `structure` (
   CONSTRAINT `fk_idchemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
---DELIMITER $
---CREATE TRIGGER copy_history BEFORE UPDATE ON structure
+-- DELIMITER $
+-- CREATE TRIGGER copy_history BEFORE UPDATE ON structure
 -- FOR EACH ROW BEGIN
 --   INSERT INTO history (idstructure,structure,format,updated,user_name,type_structure,label)
 --        SELECT idstructure,structure,format,updated,user_name,type_structure,label FROM structure
 --        WHERE structure.idstructure = OLD.idstructure;
 --  END $
---DELIMITER ;
+-- DELIMITER ;
 
 -- -----------------------------------------------------
 -- Procedure to move structures from one chemical to another
@@ -1374,6 +1374,7 @@ DELIMITER ;
 -- ------------------------------------------------------------------------------------------------------
 
 DROP PROCEDURE IF EXISTS `copy_dataset_features`;
+
 DELIMITER $$
 CREATE PROCEDURE `copy_dataset_features`()
     READS SQL DATA
@@ -2361,6 +2362,7 @@ DELIMITER ;
 
 
 -- 
+
 DROP PROCEDURE IF EXISTS `saliorder`;
 DELIMITER $$
 
@@ -2575,7 +2577,7 @@ insert into catalog_references (idreference,title,url) values (2,"IUPAC name","h
 -- GRANT ALL PRIVILEGES ON ambit2.* TO 'admin'@'localhost' WITH GRANT OPTION;
 -- GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON ambit2.* TO 'guest'@'localhost' IDENTIFIED BY PASSWORD '*11DB58B0DD02E290377535868405F11E4CBEFF58';
 -- GRANT EXECUTE ON FUNCTION sortstring TO 'guest'@'localhost'
---- GRANT CREATE TEMPORARY TABLEs on ambit2.* to 'guest'@'%'
+-- GRANT CREATE TEMPORARY TABLEs on ambit2.* to 'guest'@'%'
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
