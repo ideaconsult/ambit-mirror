@@ -93,7 +93,7 @@
 				<publications>
 					<shortTitle>AMBIT | publications</shortTitle>
 					<sections>
-						<thumbs>2</thumbs>
+						<body/>
 					</sections>
 				</publications>
 				<support>
@@ -102,7 +102,14 @@
 						<thumbs>3</thumbs>
 					</sections>
 				</support>
-
+				<usage>
+					<shortTitle>User guide</shortTitle>
+					<toc>true</toc>
+					<sections>
+						<columns>1</columns>
+						<sidebar/>
+					</sections>
+				</usage>
 			</pages>
 		</reflowSkin>
 	</custom>
@@ -178,6 +185,7 @@
 		</menu>
 
 		<menu name="Maven documentation" ref="reports" inherit="bottom" />
+		
 		<!-- <menu ref="modules" /> <menu ref="parent"/> -->
 	</body>
 </project>

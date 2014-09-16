@@ -25,4 +25,12 @@ Main features at a glance
 	
 	*	Support for experimental data, assigned to substances;
 	
-	*	Experimental data import from {{{{http://iuclid.eu/}IUCLID5}} *.i5z files and IUCLID5 web services(SOAP) 
+	*	Experimental data import from {{{{http://iuclid.eu/}IUCLID5}} *.i5z files and IUCLID5 web services(SOAP)
+	
+* Installation
+
+	{{{./install_ambitrest.html}See installation guide}}
+	
+* User guide
+
+	{{{./usage.html}Quick user guide}}	 
