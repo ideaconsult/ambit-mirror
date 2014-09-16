@@ -1,192 +1,182 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project name="AMBIT2">
-  <bannerLeft>
-    <name></name>
-  </bannerLeft>
-  <bannerRight>
-  	<name>AMBIT</name>
-  	<href>index.html</href>
-  </bannerRight>
-  
-  <publishDate position="bottom" format="yyyy-MM-dd" />
-  <version position="bottom" />
-  <body>
-    <head>
-      <link rel="author" href="https://plus.google.com/+NinaJeliazkova" />
-      <!-- Google Analytics - Start -->
-      <script type="text/javascript">
-      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-      </script>
-      <script type="text/javascript">
-      try {
-      var pageTracker = _gat._getTracker("UA-25223944-1");
-      pageTracker._trackPageview();
-      } catch(err) {}</script>
-      <!-- Google Analytics - End -->
-      <meta name="description" content="AMBIT" />
-      <meta name="keywords" content="AMBIT,web services,REST,API,QSAR,chemical similarity,Toxtree,Toxmatch,Ambit,SMARTS,databases, substructure search" />
-      <meta name="author" content="Nina Jeliazkova" />
-      <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    </head>
-    <links>
-      <item name="Home" href="/index.html" />
-      <item name="Downloads" href="/downloads.html" />
-      <item name="Documentation" href="/install_ambitrest.html" />
-      <item name="Publications" href="/pubs_citeambit.html" />
-      <item name="Support" href="/support.html" />
-    </links>
-    <menu name="Home">
-      <item name="Welcome" href="/index.html" />
-      <item name="REST" href="/rest.html"/>
-      <item name="RDF" href="/rdf.html"/>
-	</menu>
-	
-  	<menu name="Downloads">
-  	    <item name="AMBIT Web services" href="./download_ambitrest.html" />
-        <item name="AMBIT Modules" href="./download_ambitlibs.html" />          	    
-        <item name="AMBIT Discovery" href="./download_ambitdiscovery.html" />
-  	</menu>   
-  	
-  	<menu name="OpenTox">
-  	    <item name="OpenTox API" href="./api.html" />
-        <item name="Client library" href="./download_otclient.html" />
-        <item name="AA client library" href="./download_aaclient.html" />
-        <item name="Policy service" href="./download_otpolicy.html" />        
-        <item name="Ontology service" href="./download_ontologyservice.html" />
-  	</menu>    	   
-    
-    <menu name="Docs">
-        <item name="Installation" href="./install_ambitrest.html" />
-        <item name="Usage" href="./usage.html" />        
-    	<item name="AMBIT API" href="http://ideaconsult.github.io/examples-ambit/apidocs" />
-    </menu>
-    
-        
-    <menu name="Demos">
-   		<item name="Wiki pathways" href="http://ideaconsult.github.io/Toxtree.js/" />
-   		<item name="ONS Melting point 33" href="http://apps.ideaconsult.net:8080/data/ui/_dataset?dataset_uri=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fdata%2Fdataset%2F45" />
-   		<item name="Structure search" href="http://apps.ideaconsult.net:8080/biodeg/ui/_search" />
-   		<item name="Substances" href="http://apps.ideaconsult.net:8080/data/substances" />
-   		<item name="Nanomaterials" href="http://apps.ideaconsult.net:8080/enanomapper/substance" />
-   		<item name="BCF Gold Standard Database" title="Bioconcentration factor (BCF) Gold Standard Database at http://www.cefic-lri.org/lri-toolbox/bcf" href="http://ambit.sourceforge.net/euras/" />
-   		<item name="ToxPredict" href="http://toxpredict.org" />
-    </menu>
-    
-    <menu name="Support">
-      <item name="Support and feedback" href="/support.html" />
-      <item name="Forum" href="http://sourceforge.net/projects/ambit/forums" />
-      <item name="Mailing lists" href="/mail-lists.html" />
-      <item name="Bug reports" href="/issue-tracking.html" />
-    </menu>
-    
-    <menu name="Acknowledgments">
-      <item name="CEFIC LRI" href="http://www.cefic-lri.org/lri-toolbox/ambit" />
-      <item name="OpenTox project" href="http://opentox.org/" />
-    </menu>    
-	    
-    <menu name="Maven documentation" ref="reports" inherit="bottom"/>
-    <!--
-    <menu name="AMBIT 2.0">
-      <item name="Introduction" href="/intro.html"/>
-      <item name="Download" href="/downloads.html"/>
-      <item name="Wiki" href="http://apps.sourceforge.net/mediawiki/ambit" />
-			<item name="Forum" href="http://sourceforge.net/forum/?group_id=191756" />
-			<item name="FAQs" href="/faq.html"/>
-    </menu>
+	<bannerLeft>
+		<name></name>
+	</bannerLeft>
+	<bannerRight>
+		<name>AMBIT</name>
+		<href>index.html</href>
+	</bannerRight>
+	<googleAnalyticsAccountId>UA-25223944-1</googleAnalyticsAccountId>
+	<publishDate position="bottom" format="yyyy-MM-dd" />
+	<version position="bottom" />
 
-    <menu ref="reports"/>
-    <menu ref="modules" />
-    <menu ref="parent"/>
+	<poweredBy>
+		<logo name="SourceForge" href="http://sourceforge.net/projects/ambit"
+			img="http://sflogo.sourceforge.net/sflogo.php?group_id=191756&amp;type=12" />
+	</poweredBy>
+	<skin>
+		<groupId>lt.velykis.maven.skins</groupId>
+		<artifactId>reflow-maven-skin</artifactId>
+		<version>1.1.1</version>
+	</skin>
+	<custom>
+		<reflowSkin>
+			<theme>bootswatch-readable</theme>
+			<highlightJs>true</highlightJs>
+			<smoothScroll>true</smoothScroll>
+			<highlightJsTheme>github</highlightJsTheme>
 
--->
-  </body>
-  <poweredBy>
-    <logo name="SourceForge" href="http://sourceforge.net/projects/ambit" img="http://sflogo.sourceforge.net/sflogo.php?group_id=191756&amp;type=12" />
-  </poweredBy>
-   <skin>
-  <groupId>lt.velykis.maven.skins</groupId>
-  <artifactId>reflow-maven-skin</artifactId>
-  <version>1.1.1</version>
-</skin>
-  <custom>
-    <reflowSkin>
-      <theme>bootswatch-readable</theme>
-      <highlightJs>true</highlightJs>
-      <smoothScroll>true</smoothScroll>
-      <highlightJsTheme>github</highlightJsTheme>
-      <brand>
-        <name><![CDATA[   
+			<brand>
+				<name><![CDATA[   
       <img src='images/ambit-logo.png'>
       ]]></name>
-        <href>index.html</href>
-      </brand>
-      <slogan></slogan>
-      <titleTemplate>%2$s | %1$s</titleTemplate>
-      <toc></toc>
-      <topNav></topNav>
-      <bottomNav>
-        <column>Downloads|OpenTox</column>
-        <column>Docs|reports</column>
-        <column>Demos</column>
-        <column>Support|Acknowledgements</column>
-      </bottomNav>
-      <bottomDescription>
-        AMBIT
-      </bottomDescription>
-      <pages>
-        <index>
-          <bannerRight>
-            <name></name>
-            <href>index.html</href>
-          </bannerRight>
-          <shortTitle></shortTitle>
-          <breadcrumbs>false</breadcrumbs>
-          <toc>false</toc>
-          <markPageHeader>false</markPageHeader>
-          <sections>
-			<body />
-          </sections>
-        </index>
-        <misc></misc>
-        <home>
-          <shortTitle>AMBIT | Home</shortTitle>
-          <sections>
-            <columns>2</columns>
-          </sections>
-        </home>
-        <downloads>
-          <shortTitle>AMBIT | Downloads</shortTitle>
-        	<sections>
-        		<thumbs>2</thumbs>
-        	</sections>          
-        </downloads>
-        <opentox>
-          <shortTitle>OpenTox | Downloads</shortTitle>
-        	<sections>
-        		<thumbs>2</thumbs>
-        	</sections>          
-        </opentox>        
-        <docs>
-          <shortTitle>AMBIT | Documentation</shortTitle>
-          <sections>
-            <thumbs>2</thumbs>
-          </sections>
-        </docs>
-        <publications>
-          <shortTitle>AMBIT | publications</shortTitle>
-          <sections>
-            <thumbs>2</thumbs>
-          </sections>
-        </publications>        
-        <support>
-          <shortTitle>AMBIT | Support</shortTitle>
-          <sections>
-            <thumbs>3</thumbs>
-          </sections>
-        </support>
+				<href>http://ambit.sf.net</href>
+			</brand>
+			<slogan>Web services cheminformatics</slogan>
+			<titleTemplate>%2$s | %1$s</titleTemplate>
+			<toc></toc>
+			<topNav></topNav>
+			<bottomNav>
+				<column>Downloads|OpenTox</column>
+				<column>Docs|reports</column>
+				<column>Demos</column>
+				<column>Support</column>
+			</bottomNav>
+			<bottomDescription>
+				AMBIT : web services cheminformatics
+			</bottomDescription>
+			<pages>
+				<index>
+					<bannerRight>
+						<name></name>
+						<href>index.html</href>
+					</bannerRight>
 
-      </pages>
-    </reflowSkin>
-  </custom>
+					<shortTitle></shortTitle>
+					<breadcrumbs>false</breadcrumbs>
+					<toc>false</toc>
+					<markPageHeader>false</markPageHeader>
+					<sections>
+						<columns>1</columns>
+						<columns>3</columns>
+						<body />
+						<sidebar />
+
+					</sections>
+				</index>
+				<home>
+					<shortTitle>AMBIT | Home</shortTitle>
+					<sections>
+						<columns>2</columns>
+					</sections>
+				</home>
+				<downloads>
+					<shortTitle>AMBIT | Downloads</shortTitle>
+					<sections>
+						<thumbs>2</thumbs>
+					</sections>
+				</downloads>
+				<opentox>
+					<shortTitle>OpenTox | Downloads</shortTitle>
+					<sections>
+						<thumbs>2</thumbs>
+					</sections>
+				</opentox>
+				<docs>
+					<shortTitle>AMBIT | Documentation</shortTitle>
+					<sections>
+						<thumbs>2</thumbs>
+					</sections>
+				</docs>
+				<publications>
+					<shortTitle>AMBIT | publications</shortTitle>
+					<sections>
+						<thumbs>2</thumbs>
+					</sections>
+				</publications>
+				<support>
+					<shortTitle>AMBIT | Support</shortTitle>
+					<sections>
+						<thumbs>3</thumbs>
+					</sections>
+				</support>
+
+			</pages>
+		</reflowSkin>
+	</custom>
+	<body>
+		<head>
+			<link rel="author" href="https://plus.google.com/+NinaJeliazkova" />
+			<meta name="description" content="AMBIT" />
+			<meta name="keywords"
+				content="AMBIT,web services,REST,API,QSAR,chemical similarity,Toxtree,Toxmatch,Ambit,SMARTS,databases, substructure search" />
+			<meta name="author" content="Nina Jeliazkova" />
+			<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+		</head>
+		<links>
+			<item name="Home" href="/index.html" />
+			<item name="Downloads" href="/downloads.html" />
+			<item name="Documentation" href="/install_ambitrest.html" />
+			<item name="Publications" href="/pubs_citeambit.html" />
+			<item name="Support" href="/support.html" />
+		</links>
+		<menu name="Home">
+			<item name="Welcome" href="/index.html" />
+			<item name="REST" href="/rest.html" />
+			<item name="RDF" href="/rdf.html" />
+		</menu>
+
+		<menu name="Downloads">
+			<item name="AMBIT Web services" href="./download_ambitrest.html" />
+			<item name="AMBIT Libraries" href="./download_ambitlibs.html" />
+			<item name="AMBIT Discovery" href="./download_ambitdiscovery.html" />
+		</menu>
+
+		<menu name="OpenTox">
+			<item name="OpenTox API" href="./api.html" />
+			<item name="Downloads" href="./download_opentox.html" />
+		</menu>
+
+		<menu name="Docs">
+			<item name="Installation" href="./install_ambitrest.html" />
+			<item name="Usage" href="./usage.html" />
+			<item name="AMBIT API" href="http://ideaconsult.github.io/examples-ambit/apidocs" />
+		</menu>
+
+
+		<menu name="Demos">
+			<item name="Wiki pathways" href="http://ideaconsult.github.io/Toxtree.js/"
+				target="_blank" />
+			<item name="ONS Melting point 33"
+				href="http://apps.ideaconsult.net:8080/data/ui/_dataset?dataset_uri=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fdata%2Fdataset%2F45"
+				target="_blank" />
+			<item name="Structure search" href="http://apps.ideaconsult.net:8080/biodeg/ui/_search"
+				target="_blank" />
+			<item name="Substances" href="http://apps.ideaconsult.net:8080/data/substances"
+				target="_blank" />
+			<item name="Nanomaterials"
+				href="http://apps.ideaconsult.net:8080/enanomapper/substance"
+				target="_blank" />
+			<item name="BCF Gold Standard Database"
+				title="Bioconcentration factor (BCF) Gold Standard Database"
+				href="http://www.cefic-lri.org/lri-toolbox/bcf" target="_blank" />
+		</menu>
+
+		<menu name="Support">
+			<item name="Support and feedback" href="/support.html" />
+			<item name="Forum" href="http://sourceforge.net/projects/ambit/forums"
+				target="_blank" />
+			<item name="Mailing lists" href="/mail-lists.html" />
+			<item name="Bug reports" href="/issue-tracking.html" />
+		</menu>
+
+		<menu name="Acknowledgments">
+			<item name="CEFIC LRI" href="http://www.cefic-lri.org/lri-toolbox/ambit" />
+			<item name="OpenTox project" href="http://opentox.org/" />
+		</menu>
+
+		<menu name="Maven documentation" ref="reports" inherit="bottom" />
+		<!-- <menu ref="modules" /> <menu ref="parent"/> -->
+	</body>
 </project>

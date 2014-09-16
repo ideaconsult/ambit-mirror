@@ -3,40 +3,35 @@
  -----
  Nina Jeliazkova
  -----
- 2011/08/19
+ 2014/09/16
  -----
 
-{AMBIT and OpenTox Downloads}
+AMBIT Web application and web services
+~~~~~~~~~~
 
+  [AMBIT REST Web services] {{{./download_ambitrest.html}Web application archive (ambit2.war)}}
 
-*Web {services}
-~~~~~~~~~~~~~
+  [AMBIT REST API] {{{http://ideaconsult.github.io/examples-ambit/apidocs/}API documentation (live)}}
 
-   * {{{./download_ambitrest.html}AMBIT REST Web services}}
-   
-   * {{{./download_ontologyservice.html}OpenTox Ontology service}}
-   
-   * {{{./download_otpolicy.html}OpenTox Policy web service}}
-   
-*Web {applications}
-~~~~~~~~~~~~~
+AMBIT standalone applications
+~~~~~~~~~~
 
-   * {{{./download_toxpredict.html}ToxPredict}}
-   
-*{Libraries}
-~~~~~~~~~~~~~
+ [Applicability domain] {{{./download_ambitdiscovery.html}AMBIT Discovery}}
 
-   * {{{.//download_otclient.html}OpenTox client library}}
-   
-   * {{{./download_aaclient.html} OpenTox Authentication and Authorization client library}}
-   
-   * {{{./download_ambitlibs.html} AMBIT modules}}
+ [QMRF Editor] {{{http://qmrf.sf.net}http://qmrf.sf.net}}
+ 
+ [Molbrowser] {{{https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example}Converts SDF file to a static web page}}
+ 
+ 
+AMBIT libraries and examples
+~~~~~~~~~~
 
-*Stand alone ({desktop}) applications
-~~~~~~~~~~~~~
-
-   * {{{./download_ambitxt.html}AMBIT XT}}
-   
-   * {{{./download_ambitdiscovery.html}AMBIT Discovery}}
-
-   * Note: The (Q)MRF Editor and XML schema moved to {{{http://qmrf.sf.net}qmrf.sf.net}}   
+ [AMBIT libraries] {{{./download_ambitlibs.html} AMBIT libraries}}
+ 
+ [Example: tautomers] {{{https://github.com/ideaconsult/examples-ambit/tree/master/tautomers-example}Examples how to use ambit2-tautomer package}}
+ 
+ [Example: SMIRKS] {{{https://github.com/ideaconsult/examples-ambit/tree/master/smirks-example}Examples how to use AMBIT SMIRKS implementation}}
+  
+ [Example: applicability domain] {{{https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example}Examples how to use applicability domain methods in AMBIT}}
+ 
+ 
