@@ -1,6 +1,19 @@
 #Quick user guide (Datasets)
 
-## Menu: Import
+## Menu: Datasets
+
+###Datasets
+
+The [datasets service](api_dataset.html) provides access to chemical compounds and their features (e.g. structural, physical-chemical, biological, toxicological properties). 
+Uploading a file of chemical structures and properties will result in the creation of a new dataset (**Datasets/Import a dataset**). 
+The list of datasets is available through the menu **Datasets/All datasets** or at http://host:port/ambit2/dataset.
+
+![Datasets](images/screenshots/datasets_all.png "Datasets")
+
+The dataset content can be downloaded in different formats (through the links in the right column). 
+Each dataset can be browsed via the **New view mode** link, which will display the dataset content in a similar mode as the [structure search results](usage.html) described in the previous sections.
+
+The dataset metadata (title, license, etc.) can be edited via the **Metadata** link. 
 
 ###Import a dataset
 
