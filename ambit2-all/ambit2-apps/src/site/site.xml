@@ -63,7 +63,6 @@
 						<columns>3</columns>
 						<body />
 						<sidebar />
-
 					</sections>
 				</index>
 				<home>
@@ -110,6 +109,17 @@
 						<sidebar/>
 					</sections>
 				</usage>
+				<usage_substance>
+					<shortTitle>User guide</shortTitle>
+					<toc>true</toc>
+					<sections>
+						<columns>1</columns>
+						<body/>
+						<body/>
+						<sidebar/>
+						<body/>						
+					</sections>
+				</usage_substance>				
 			</pages>
 		</reflowSkin>
 	</custom>
