@@ -81,7 +81,7 @@ Substructure search, using a from a predefined *list of SMARTS*.
 
 ###Export
 
-The search results can be downloaded as files in various file formats (SDF ,CML , SMI, InChI, CSV, TXT, ARFF , RDF , JSON ), together with the selected columns.
+The search results can be downloaded as files in various file formats ([SDF](http://en.wikipedia.org/wiki/Chemical_table_file#SDF) ,[CML](http://en.wikipedia.org/wiki/Chemical_Markup_Language) , SMI, InChI, CSV, TXT, [ARFF](http://en.wikipedia.org/wiki/Weka_(machine_learning)#ARFF_file) , [RDF](http://www.w3.org/RDF/) , [JSON](http://en.wikipedia.org/wiki/JSON) ), together with the selected columns.
 
 ![Search results export](images/screenshots/search_export.png "Search results export")
 

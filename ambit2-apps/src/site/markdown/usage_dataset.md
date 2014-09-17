@@ -28,5 +28,15 @@ The **Import/Import a dataset** page allows to upload a file with chemical struc
 
 The **Import/Import properties** page is similar as the **Import dataset** page, but is generally used to import properties only, which are assigned to existing structures in the database.
  
- 
-[Quick user guide (datasets)](usage_dataset.html)	  
+
+## Menu: Search
+
+###Search structures and associated data
+
+[Quick user guide](usage.html)
+
+###Substances search
+
+[Quick user guide (substance search)](usage_substance.html)	 
+
+	  

@@ -28,7 +28,7 @@ AMBIT REST web services are distributed as web archive (war file) and can be dep
 
 -   [**Install** web application](./install_ambitrest.html)
 
--   [**Import** data](./install_ambitrest.html)
+-   [**Import** data](./usage_dataset.html)
 
 ---
 
@@ -36,7 +36,7 @@ AMBIT REST web services are distributed as web archive (war file) and can be dep
 
 Try the public web services, datasets and models : 
 
--   Datasets: [**ONS Melting point 33**](http://apps.ideaconsult.net:8080/data/ui/_dataset?dataset_uri=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fdata%2Fdataset%2F45) | [**Wiki pathways structure browser**](http://ideaconsult.github.io/Toxtree.js) |  [Bioconcentration factor *(BCF)* Gold Standard Database](http://ambit.sourceforge.net/euras/)
+-   [Datasets](http://apps.ideaconsult.net:8080/data/dataset?pagesize=100) : [**ONS Melting point 33**](http://apps.ideaconsult.net:8080/data/ui/_dataset?dataset_uri=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fdata%2Fdataset%2F45) | [**CPDBAS**](http://apps.ideaconsult.net:8080/data/ui/_dataset?dataset_uri=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fdata%2Fdataset%2F10) | [**Tox21**](http://apps.ideaconsult.net:8080/data/ui/_dataset?dataset_uri=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fdata%2Fdataset%2F36) | [**Inventory of Cosmetic Ingredients**](http://apps.ideaconsult.net:8080/data/ui/_dataset?dataset_uri=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fdata%2Fdataset%2F1) | **WikiPathways structure browser**: at [*GitHub*](http://ideaconsult.github.io/Toxtree.js) and at [*BiGCaT Maastricht University*](http://www.bigcat.unimaas.nl/~egonw/wpm/) |  [Bioconcentration factor **(BCF) Gold Standard Database**](http://ambit.sourceforge.net/euras/)
      
 -   Search: [**Structure search**](http://apps.ideaconsult.net:8080/data/ui/_search) | [**Substances**](http://apps.ideaconsult.net:8080/data/substances) | [**Nanomaterials**](http://apps.ideaconsult.net:8080/enanomapper/substances) 
    
@@ -44,11 +44,17 @@ Try the public web services, datasets and models :
 
 Source code examples
 
--   Examples how to use: [**ambit2-tautomer** package](https://github.com/ideaconsult/examples-ambit/tree/master/tautomers-example) | [**AMBIT SMIRKS** implementation](https://github.com/ideaconsult/examples-ambit/tree/master/smirks-example) | [**applicability domain methods** in AMBIT](https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example)
+-   Examples how to use: [**ambit2-tautomer** package](https://github.com/ideaconsult/examples-ambit/tree/master/tautomers-example) | [**ambit2-SMIRKS** implementation](https://github.com/ideaconsult/examples-ambit/tree/master/smirks-example) | [**applicability domain methods** in AMBIT](https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example)
 
 Browse and try AMBIT REST API
 
 -   [**API-Docs**](http://ideaconsult.github.io/examples-ambit/apidocs/)	
+
+User guide
+
+-   [**Main features at a glance**](intro.html)
+
+-   Quick user guides: [**Structure search**](usage.html) | [**Substance search**](usage_substance.html) | [**Datasets**](usage_dataset.html)
 
 ---
 

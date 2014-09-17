@@ -164,7 +164,7 @@
 
 
 		<menu name="Demos">
-			<item name="Wiki pathways" href="http://ideaconsult.github.io/Toxtree.js/"
+			<item name="WikiPathways" href="http://ideaconsult.github.io/Toxtree.js/"
 				target="_blank" />
 			<item name="ONS Melting point 33"
 				href="http://apps.ideaconsult.net:8080/data/ui/_dataset?dataset_uri=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fdata%2Fdataset%2F45"
@@ -187,6 +187,8 @@
 				target="_blank" />
 			<item name="Mailing lists" href="/mail-lists.html" />
 			<item name="Bug reports" href="/issue-tracking.html" />
+			<item name="SourceForge" href="http://sourceforge.net/projects/ambit/" />			
+			
 		</menu>
 
 		<menu name="Acknowledgments">
