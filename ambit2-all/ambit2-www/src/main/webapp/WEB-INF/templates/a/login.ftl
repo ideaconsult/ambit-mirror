@@ -81,7 +81,6 @@ $(document)
 			<ul>
 			<li><a href='${ambit_root}/ui/_search'>Search</a> for structure(s) and meta data</li>
 			<li>Assessment tools for read-across and category formation</li>
-			<li>Assessment tools for read-across and category formation</li>
 			<li>Prediction tools: <a href='${ambit_root}/ui/toxtree'>Cramer rules</a>, 
 			<a href='${ambit_root}/ui/toxtree'>Protein binding</a>,
 			<a href='${ambit_root}/ui/toxtree'>Carcinogenicity and mutagenicity</a>,
