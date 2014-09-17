@@ -4,7 +4,7 @@
 
 ###Import a dataset
 
-The **Import/Import a dataset** page allows to upload a file with chemical structures and properties. The major chemical formats such as SDF, MOL (v2000), SMI, CML, ToXML are supported and accepted. Spreadsheet like files such as XLS (but not XSLX), CSV and TXT files are also supported. To import structures from these type of files, a column named SMILES, containing SMILES notation, or a column named InChI with the InChI representation of the chemical should be present in the file. 
+The **Import/Import a dataset** page allows to upload a file with chemical structures and properties. The major chemical formats such as [SDF](http://en.wikipedia.org/wiki/Chemical_table_file#SDF), [MOL (v2000)](http://en.wikipedia.org/wiki/Chemical_table_file#Molfile), SMI, [CML](http://en.wikipedia.org/wiki/Chemical_Markup_Language), [ToXML](http://toxml.org/) are supported and accepted. Spreadsheet like files such as XLS (but not XSLX), CSV and TXT files are also supported. To import structures from these type of files, a column named SMILES, containing SMILES notation, or a column named InChI with the InChI representation of the chemical should be present in the file. 
 
 -	Select the file for upload from your local computer.
 
