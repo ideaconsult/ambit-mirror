@@ -184,6 +184,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	public static final String WARMUP_ENABLED = "warmup.enabled";
 	public static final String ALLOWED_ORIGINS = "allowed.origins";
 	
+	public static final String AJAX_TIMEOUT = "ajax.timeout";
+	public static final String SIMILARITY_ORDER = "similarity.order";
+	
 	static final String identifierKey = "aa.local.admin.name";
 	static final String identifierPass = "aa.local.admin.pass";
 	static final String adminAAEnabled = "aa.admin";
@@ -209,6 +212,22 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected boolean dbAAEnabled = false;
 	protected boolean warmupEnabled = false;
 	protected boolean changeLineSeparators = false; 
+	
+	protected String ajaxTimeout = "10000"; //msec
+	public String getAjaxTimeout() {
+		return ajaxTimeout;
+	}
+	public void setAjaxTimeout(String ajaxTimeout) {
+		this.ajaxTimeout = ajaxTimeout;
+	}
+	public boolean isSimilarityOrder() {
+		return similarityOrder;
+	}
+	public void setSimilarityOrder(boolean similarityOrder) {
+		this.similarityOrder = similarityOrder;
+	}
+
+	protected boolean similarityOrder = true;
 
 
 	public boolean isChangeLineSeparators() {
@@ -228,6 +247,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		versionShort = readVersionShort();
 		versionLong = readVersionLong();
 		gaCode = readGACode();
+		
+		setSimilarityOrder(getSimilarityOrderOption());
+		ajaxTimeout = getAjaxTimeoutOption();
+		
 		setProfile(getMenuProfile());
 		
 		setName("AMBIT REST services");
@@ -1058,6 +1081,20 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			String warmup = getProperty(WARMUP_ENABLED,configProperties);
 			return warmup==null?null:Boolean.parseBoolean(warmup);
 		} catch (Exception x) {return false; }
+	}
+   
+   protected synchronized boolean getSimilarityOrderOption()  {
+		try {
+			String order = getProperty(SIMILARITY_ORDER,ambitProperties);
+			return order==null?true:Boolean.parseBoolean(order);
+		} catch (Exception x) {return true; }
+	}	
+
+   protected synchronized String getAjaxTimeoutOption()  {
+		try {
+			String order = getProperty(AJAX_TIMEOUT,ambitProperties);
+			return order==null?"10000":order.trim();
+		} catch (Exception x) {return "10000"; }
 	}	
    
 	protected synchronized SimpleGuards isSimpleGuardEnabled()  {

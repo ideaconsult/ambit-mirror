@@ -12,6 +12,7 @@ import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -21,11 +22,13 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.AMBITConfig;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.json.JSONUtils;
 import ambit2.rendering.StructureEditorProcessor;
+import ambit2.rest.AmbitApplication;
 import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.freemarker.FreeMarkerResource;
@@ -151,6 +154,14 @@ public class UIResource extends FreeMarkerResource {
         setTokenCookies(variant, useSecureCookie(getRequest()));
         configureTemplateMap(map,getRequest(),(IFreeMarkerApplication)getApplication());
         return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
+	}
+	@Override
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
+		super.configureTemplateMap(map, request, app);
+	    try {
+	        	map.put(AMBITConfig.ajaxtimeout.name(),((AmbitApplication)getApplication()).getAjaxTimeout());
+	    } catch (Exception x) { map.put(AMBITConfig.ajaxtimeout.name(), "10000");}		
 	}
 	
 	@Override

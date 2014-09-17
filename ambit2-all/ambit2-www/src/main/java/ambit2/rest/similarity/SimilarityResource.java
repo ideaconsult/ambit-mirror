@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -17,6 +18,7 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
+import ambit2.base.config.AMBITConfig;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
@@ -30,6 +32,7 @@ import ambit2.db.search.structure.ChemicalByQueryFolder;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QuerySimilarityBitset;
 import ambit2.db.update.structure.ChemicalByDataset;
+import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetResource;
@@ -109,6 +112,11 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 		q.setThreshold(threshold);
 		q.setCondition(NumberCondition.getInstance(">"));		
 		q.setName("Similarity");
+	    
+        try {
+        	q.setForceOrdering(((AmbitApplication)getApplication()).isSimilarityOrder());
+        } catch (Exception x) { q.setForceOrdering(true);}	
+        
 		try {
 			q.setValue(getBitset(mol));
 			if ((folders!=null) && (folders.length>0)) {
@@ -196,4 +204,5 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 		}
 		return null;
 	}		
+
 }

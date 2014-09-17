@@ -65,4 +65,14 @@ public class FreeMarkerApplication<USERID> extends TaskApplication<USERID> imple
 	        configuration.setTemplateLoader(mtl);
 	        configuration.setObjectWrapper(ObjectWrapper.BEANS_WRAPPER); 
 		}
+		/**
+		 * msec
+		 * @return
+		 */
+		public String getAjaxTimeout() {
+			return "10000";
+		}
+		public boolean isSimilarityOrder() {
+			return true;
+		}
 }

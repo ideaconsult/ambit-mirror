@@ -82,3 +82,7 @@ i5.pass=${i5.pass}
 i5.server=${i5.server}
 #google.analytics code (UA-XXXX-Y) if not set GA will be disabled
 google.analytics=${google.analytics}
+#AJAX query timeout
+ajax.timeout=${ajax.timeout}
+#Order by similarity
+similarity.order=${similarity.order}
