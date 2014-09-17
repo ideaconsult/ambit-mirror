@@ -46,6 +46,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.AMBITConfig;
 import ambit2.base.data.Template;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.UpdateExecutor;
@@ -651,6 +652,9 @@ Then, when the "get(Variant)" method calls you back,
 			ou.setUseSecureCookie(useSecureCookie(getRequest()));
 			getClientInfo().setUser(ou);
 		}
+	     try {
+	        	map.put(AMBITConfig.ajaxtimeout.name(),((AmbitApplication)getApplication()).getAjaxTimeout());
+        } catch (Exception x) { map.put(AMBITConfig.ajaxtimeout.name(), "10000");}
         setTokenCookies(variant, useSecureCookie(getRequest()));
         configureTemplateMap(map,getRequest(),(IFreeMarkerApplication)getApplication());
         return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);

@@ -62,6 +62,9 @@
 	data-show-export="yes"
 	data-on-details="onDetailedRow" data-show-diagrams="true"
 	data-on-error="errorHandler" 
+	<#if ajaxtimeout??>
+	  data-timeout="${ajaxtimeout}"
+	  </#if>		
 	data-jsonp="false"></div>
 </div>
 

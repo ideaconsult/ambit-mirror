@@ -580,5 +580,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return null;
 		}
 
-	}	
+	}
+	
+	
 }

@@ -17,5 +17,7 @@ public enum AMBITConfig {
 	ambit_reg_confirmed,
 	menu_profile,
 	enableEmailVerification,
+	ajaxtimeout,
+	similarityorder,
 	googleAnalytics;
 }

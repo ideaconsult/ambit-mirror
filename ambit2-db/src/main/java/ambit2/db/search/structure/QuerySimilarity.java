@@ -14,7 +14,7 @@ public abstract class QuerySimilarity<F,T,C extends IQueryCondition> extends Abs
 	 */
 	private static final long serialVersionUID = -3509155736213435907L;
 	protected double threshold = 0.5;
-	protected boolean forceOrdering = true;
+	protected boolean forceOrdering = false;
 	public boolean isForceOrdering() {
 		return forceOrdering;
 	}

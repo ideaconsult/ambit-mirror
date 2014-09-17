@@ -86,6 +86,9 @@ $(document)
 	  <div id="browser" class="jtox-toolkit" data-kit="compound" data-remember-checks="true" 
 	  data-hide-empty="true" data-details-height="500px" data-tabs-folded="true" 
 	  data-on-error="errorHandler" 
+	  <#if ajaxtimeout??>
+	  data-timeout="${ajaxtimeout}"	
+	  </#if>		  
 	  data-on-details="onDetailedRow" data-show-diagrams="true"></div>
   </div>
 
