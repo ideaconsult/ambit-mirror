@@ -62,7 +62,7 @@ Env. Autocomplete (biodegradation parameter). The number in the brackets is the 
 
 ###Search structures and associated data
 
-[Quick user guide (Substance search)](usage_substance.html)	
+[Quick user guide](usage.html)	
 
 ## Menu: Import
  

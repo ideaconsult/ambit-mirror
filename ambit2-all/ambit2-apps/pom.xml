@@ -52,43 +52,87 @@
         <role>System Architecture</role>
         <role>Java Developer</role>
         <role>Cheminformatics algorithms</role>
-        <role>Database developer</role>
+        <role>Database</role>
+        <role>Web services</role>
       </roles>
     </developer>
     <developer>
       <id>ntk73</id>
       <name>Nikolay Kochev</name>
+      <email>nick@uni-plovdiv.net</email>
       <roles>
         <role>Cheminformatics algorithms</role>
         <role>Java Developer</role>
       </roles>
+      <url>http://bg.linkedin.com/pub/nikolay-kochev/2/81b/507</url>
     </developer>
     <developer>
-      <id>JJ</id>
-      <name>Joanna Jaworska</name>
+      <id>lioni</id>
+      <name>Elena Urucheva</name>
+     	<email>elena.urucheva@gmail.com</email>
       <roles>
-        <role>Specification</role>
+        <role>Cheminformatics algorithms</role>
+        <role>Java Developer</role>
+      </roles>
+    </developer>  
+    <developer>
+      <id>oggy-bogy</id>
+      <name>Ognyan Pukalov</name>
+      <email>oggy@uni-plovdiv.net</email>
+      <roles>
+        <role>Cheminformatics algorithms</role>
+        <role>Java Developer</role>
+      </roles>
+    </developer>       
+    <developer>
+      <id>vjj</id>
+      <name>Vedrin Jeliazkov</name>
+      <url>https://plus.google.com/u/0/+VedrinJeliazkov</url>
+      <roles>
+        <role>Quality assurance</role>
+        <role>Installer development</role>
+        <role>Database</role>
+        <role>Servers</role>
       </roles>
     </developer>
+    <developer>
+      <id>luchesar</id>
+      <name>Luchesar Iliev</name>
+      <roles>
+        <role>Quality assurance</role>
+        <role>Design</role>
+        <role>Security</role>
+      </roles>
+      <url>http://bg.linkedin.com/in/luchesar</url>
+    </developer>    
+    <developer>
+      <id></id>
+      <name>Ivan Georgiev</name>
+      <roles>
+        <role>JavaScript developer</role>
+      </roles>
+      <url>https://github.com/thejonan</url>
+    </developer>    
     <developer>
       <id>martin.martinov</id>
       <name>Martin Martinov</name>
       <roles>
         <role>Java Developer</role>
       </roles>
-    </developer>
+    </developer>    
     <developer>
-      <id>vj</id>
-      <name>Vedrin Jeliazkov</name>
+      <id>JJ</id>
+      <name>Joanna Jaworska</name>
       <roles>
-        <role>Quality assurance</role>
-        <role>Installer development</role>
+        <role>Specification</role>
       </roles>
-    </developer>
+    </developer>    
   </developers>
+  <contributors>
+  </contributors>
   <scm>
     <connection>scm:svn:https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</connection>
-    <developerConnection>scm:svn+ssh://vedina@svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</developerConnection>
+    <developerConnection>scm:svn+ssh://USER@svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</developerConnection>
     <tag>scm:svn:https://svn.code.sf.net/p/ambit/code/tags</tag>
     <url>https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</url>
   </scm>
@@ -275,13 +319,6 @@
       <post>mailto:ambit-users@lists.sourceforge.net</post>
       <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=ambit-users</archive>
     </mailingList>
-    <mailingList>
-      <name>QMRF users list</name>
-      <subscribe>https://lists.sourceforge.net/lists/listinfo/ambit-qmrf</subscribe>
-      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/ambit-qmrf</unsubscribe>
-      <post>mailto:ambit-qmrf@lists.sourceforge.net</post>
-      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=ambit-qmrf</archive>
-    </mailingList>
   </mailingLists>
   <licenses>
     <license>
@@ -296,10 +333,11 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.4</version>
+        <version>2.6</version>
         <reportSets>
           <reportSet>
             <reports>
+              <report>summary</report>
               <report>license</report>
               <report>issue-tracking</report>
               <report>mailing-list</report>
