@@ -1,24 +1,29 @@
 package ambit2.groupcontribution.groups;
 
+
 public class AtomEnvironment implements IGroup 
 {
-
+	private Type envType = Type.ATOM_TOP_LAYER_1;
+	private String envDesignation = "";
+	private double contribution = 0.0;
+	
+	public void setEnvironmentDesignation(String envDesignation) {		
+		this.envDesignation = envDesignation;
+	}
+	
 	@Override
 	public double getContribution() {
-		// TODO Auto-generated method stub
-		return 0;
+		return contribution;
 	}
 
 	@Override
 	public void setContribution(double contribution) {
-		// TODO Auto-generated method stub
-		
+		this.contribution = contribution;
 	}
 
 	@Override
-	public String getDesignation() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getDesignation() {		
+		return envDesignation;
 	}
 
 	@Override
@@ -35,8 +40,11 @@ public class AtomEnvironment implements IGroup
 
 	@Override
 	public Type getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return envType;
+	}	
+
+	public void setEnviromentType(Type envType) {
+		this.envType = envType;
 	}
 
 }
