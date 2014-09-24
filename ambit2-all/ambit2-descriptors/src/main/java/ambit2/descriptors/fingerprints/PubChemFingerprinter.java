@@ -93,9 +93,9 @@ public class PubChemFingerprinter  {
 	 */
 	public static final int FP_SIZE = 881;
 	private byte[] m_bits;
-	private List<PubChemBitSubstructure> bitSubstructures = new ArrayList<PubChemBitSubstructure>();
-	private IsomorphismTester isoTester = new IsomorphismTester();
-	private SmartsParser parser = new SmartsParser();
+	private transient List<PubChemBitSubstructure> bitSubstructures = new ArrayList<PubChemBitSubstructure>();
+	private transient IsomorphismTester isoTester = new IsomorphismTester();
+	private transient SmartsParser parser = new SmartsParser();
 
 
 	public PubChemFingerprinter() {
