@@ -59,6 +59,10 @@
   font-size: 80%;
 }
 
+.jtox-toolkit sup.helper {
+  opacity: 0.7;
+}
+
 .jtox-toolkit sup {
   font-size: smaller;
   vertical-align: super;
@@ -127,6 +131,10 @@
 
 .jtox-toolkit .font-bigger {
   font-size: larger;
+}
+
+.jtox-toolkit .font-heavy {
+  font-weight: bold;
 }
 
 .jtox-toolkit .transparent {
@@ -264,8 +272,43 @@ img.jtox-smalldiagram {
   height: 125px;
 }
 
+.jtox-medium-box {
+  margin: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+  display: inline-block;
+  min-width: 220px;
+  height: auto;
+  vertical-align: top;  
+}
+
 .jtox-endpoint thead {
   display: none;
+}
+
+.jtox-toolkit li.tagit-choice a.tagit-close {
+  opacity: 0.4;
+}
+
+.jtox-toolkit li.tagit-choice.tag-value,
+.jtox-toolkit li.tagit-choice.tag-unit {
+  border: 0px;
+  background: inherit;
+  padding-right: 0px;
+}
+
+.jtox-toolkit li.tagit-choice.tag-value a.tagit-close,
+.jtox-toolkit li.tagit-choice.tag-unit a.tagit-close {
+  display: none;
+}
+
+.jtox-toolkit li.tagit-choice.tag-value {
+  font-weight: bold;
+}
+
+.jtox-toolkit li.tagit-choice.tag-unit {
+  font-size: 80%;
+  line-height: 1.2rem;
 }
 
 button.jt-toggle {
