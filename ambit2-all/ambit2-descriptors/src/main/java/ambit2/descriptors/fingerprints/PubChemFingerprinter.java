@@ -99,6 +99,7 @@ public class PubChemFingerprinter  {
 
 
 	public PubChemFingerprinter() {
+		 m_bits = new byte[(FP_SIZE + 7) >> 3];
 		initPubChemBitSubstructures();
 	}
 
@@ -1121,11 +1122,18 @@ public class PubChemFingerprinter  {
 	}
 
 	private void countSubstructures(byte[] fp, IAtomContainer mol) throws CDKException 
-	{
+	{	
+		//H info is needed for some keys
+		SmartsParser.setExplicitHAtomData(mol);
+		
 		//Calculates PubChem sections: 3,4,5,6,7 set up in 
+		boolean res;
 		for (PubChemBitSubstructure bs: bitSubstructures)
-		{
-			//TODO
+		{	
+			isoTester.setSequence(bs.getSmartsQuery(), bs.getSequence());
+			res = isoTester.hasIsomorphism(mol);
+			if (res)
+				fp[bs.getBitNum() >> 3] |= MASK[bs.getBitNum() % 8];
 		}	
 	}
 

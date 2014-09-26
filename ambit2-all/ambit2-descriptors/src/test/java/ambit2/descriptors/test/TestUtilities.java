@@ -1,6 +1,7 @@
 package ambit2.descriptors.test;
 
 import java.io.FileReader;
+import java.util.BitSet;
 
 import org.junit.Test;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -18,6 +19,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.descriptors.geometrical.CGIDescriptor;
 import ambit2.descriptors.topological.CTIDescriptor;
+import ambit2.descriptors.fingerprints.PubChemFingerprinter;
 import ambit2.smarts.SmartsHelper;
 
 public class TestUtilities 
@@ -41,11 +43,13 @@ public class TestUtilities
 		//calcCTI("NCCC", true);
 		//calcCTI("OC1CC(N)CCC1", true);
 		
-		calcCGI("/3D-str1-chair.mol", false);		
-		calcCTI("OC1CC(N)CCC1", false);
+		//calcCGI("/3D-str1-chair.mol", false);		
+		//calcCTI("OC1CC(N)CCC1", false);
 		
 		//calcCTI("NCCN");
 		//calcCTI("OC1=C(O)C2=C(C=C1)C3(OC(=O)C4=C3C=CC=C4)C5=C(O2)C(=C(O)C=C5)O");
+		
+		calcPubChemDescriptor("CCCCCCCCCN");
 	}
 	
 	public static void calcCTI(String smiles, boolean FlagPrintAtomAttrib) throws Exception
@@ -139,6 +143,32 @@ public class TestUtilities
 
 		return null;
 	}
+	
+	public static void calcPubChemDescriptor(String smiles) throws Exception
+	{
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		
+		PubChemFingerprinter pcfp = new PubChemFingerprinter();
+		BitSet bitSet = pcfp.getFingerprint(mol);
+		System.out.println("PubChem fp for " + smiles);
+		System.out.println(bitSet);
+		//System.out.println(getBitSetString(bitSet,881));
+	}
+	
+	public static String getBitSetString(BitSet bs, int size)
+	{	
+		StringBuffer buf = new StringBuffer();
+		for(int i = 1; i <= size; i++)
+		{	
+			if (bs.get(i))
+				buf.append("1");
+			else
+				buf.append("0");
+		}
+		return(buf.toString());
+	}
+	
+	
 	@Test
 	public void test() {
 		
