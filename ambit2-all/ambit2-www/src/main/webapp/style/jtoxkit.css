@@ -557,7 +557,7 @@ div.jtox-details-table {
   width: 25%;
 }
 
-.jtox-controls span {
+.jtox-controls span.high {
   font-weight: bold;
   font-size: 1.1em;
 }

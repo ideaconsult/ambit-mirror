@@ -148,8 +148,8 @@ var ccLib = {
   },
   
   getJsonValue: function (json, field){
-    var value = undefined;
-    if (field !== undefined) {
+    var value = json[field];
+    if (value === undefined && field != null) {
       try {
         eval("value = json." + field);
       } 
@@ -2219,6 +2219,10 @@ var jToxCompound = (function () {
       jT.$(self.fixTable).dataTable().fnAddData(dataFeed);
       jT.$(self.varTable).dataTable().fnAddData(dataFeed);
       jT.$('.jt-feeding', self.rootElement).html(self.settings.oLanguage.sZeroRecords || 'No records matching the filter.');
+
+      ccLib.fillTree(jT.$('.jtox-controls', self.rootElement)[0], {
+        "filtered-text": !needle ? " " : ' (filtered to <span class="high">' + dataFeed.length + '</span>) '
+      });
       
       if (self.settings.showTabs){
         self.suspendEqualization = true;
@@ -2248,7 +2252,7 @@ var jToxCompound = (function () {
       var pane = jT.$('.jtox-controls', self.rootElement)[0];
       ccLib.fillTree(pane, {
         "pagestart": qSize > 0 ? qStart + 1 : 0,
-        "pageend": qStart + qSize,
+        "pageend": qStart + qSize
       });
       
       var nextBut = jT.$('.next-field', pane);
@@ -4610,13 +4614,12 @@ jT.templates['all-compound']  =
 "	  <div id=\"jtox-compound\" class=\"jtox-compound\">" +
 "	    <div class=\"jtox-ds-features\"></div>" +
 "	    <div class=\"jtox-controls\">" +
-"	      Showing from <span class=\"data-field from-field\" data-field=\"pagestart\"> ? </span> to <span class=\"data-field\" data-field=\"pageend\"> ? </span> in pages of <select class=\"data-field\" data-field=\"pagesize\">" +
+"	      Showing from <span class=\"data-field high\" data-field=\"pagestart\">?</span> to <span class=\"data-field high\" data-field=\"pageend\">?</span><span class=\"data-field\" data-field=\"filtered-text\"> </span>in pages of <select class=\"data-field\" data-field=\"pagesize\">" +
 "          <option value=\"10\" selected=\"yes\">10</option>" +
 "          <option value=\"20\">20</option>" +
+"          <option value=\"30\">30</option>" +
 "          <option value=\"50\">50</option>" +
 "          <option value=\"100\">100</option>" +
-"          <option value=\"200\">200</option>" +
-"          <option value=\"500\">500</option>" +
 "        </select> entries" +
 "	      <a class=\"paginate_disabled_previous prev-field\" tabindex=\"0\" role=\"button\">Previous</a><a class=\"paginate_enabled_next next-field\" tabindex=\"0\" role=\"button\">Next</a>" +
 "	      <input type=\"text\" class=\"filterbox\" placeholder=\"Filter...\" />" +
@@ -4672,7 +4675,7 @@ jT.templates['all-model']  =
 jT.templates['all-substance']  = 
 "	  <div id=\"jtox-substance\" class=\"jtox-substance\">" +
 "	    <div class=\"jtox-controls\">" +
-"	      Showing from <span class=\"data-field from-field\" data-field=\"pagestart\"> ? </span> to <span class=\"data-field\" data-field=\"pageend\"> ? </span> in pages of <select class=\"data-field\" data-field=\"pagesize\">" +
+"	      Showing from <span class=\"data-field high\" data-field=\"pagestart\"> ? </span> to <span class=\"data-field high\" data-field=\"pageend\"> ? </span> in pages of <select class=\"data-field\" data-field=\"pagesize\">" +
 "          <option value=\"10\" selected=\"yes\">10</option>" +
 "          <option value=\"20\">20</option>" +
 "          <option value=\"50\">50</option>" +
