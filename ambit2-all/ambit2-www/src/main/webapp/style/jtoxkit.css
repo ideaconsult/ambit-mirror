@@ -467,18 +467,19 @@ button.jt-toggle.active {
 }
 
 .jtox-ds-tables .jt-processing {
-  position: absolute;
-  width: 400px;
-  left: 50%;
   text-align: center;
-  margin-left: -200px;
-  border: 1px solid black;
-  border-radius: 5px;
   display: none;
 }
 
-.jtox-ds-tables .jt-processing span {
-  vertical-align: middle;
+.jtox-ds-tables .jt-processing .message {
+  background: url("../images/waiting_big.gif") left center no-repeat;
+  background-size: 30px 30px;
+  width: auto;
+  min-height: 30px;
+  padding-left: 35px;
+  padding-top: 8px;
+  overflow: visible;
+  display: inline-block;
 }
 
 .jtox-ds-tables .jtox-details-box {

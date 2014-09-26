@@ -2087,7 +2087,7 @@ var jToxCompound = (function () {
             }, 50);
           });
         },
-        "oLanguage" : { "sEmptyTable": self.settings.oLanguage.sProcess || 'Feeding data...' }
+        "oLanguage" : { "sEmptyTable": '<span class="jt-feeding">' + (self.settings.oLanguage.sProcess || 'Feeding data...') + '</span>' }
       }))[0];
 
       // we need to put a fake column to stay, when there is no other column here, or when everything is hidden..
@@ -2121,7 +2121,7 @@ var jToxCompound = (function () {
           if (rlen > 0)
             jT.$(self.fixTable).dataTable().fnSort([[1, "asc"]]);
         },
-        "oLanguage" : {}
+        "oLanguage" : { "sEmptyTable": "-"}
       }))[0];
     },
 
@@ -2218,7 +2218,7 @@ var jToxCompound = (function () {
       jT.$(self.varTable).dataTable().fnClearTable();
       jT.$(self.fixTable).dataTable().fnAddData(dataFeed);
       jT.$(self.varTable).dataTable().fnAddData(dataFeed);
-      jT.$('#jtox-ds-message-' + self.instanceNo).html('No records matching the filter.');
+      jT.$('.jt-feeding', self.rootElement).html(self.settings.oLanguage.sZeroRecords || 'No records matching the filter.');
       
       if (self.settings.showTabs){
         self.suspendEqualization = true;
@@ -3365,8 +3365,8 @@ var jToxStudy = (function () {
 	        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return formatValue(data.result, type) }); } },
 	        { "sTitle": "Text", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return !!data.result.textValue  ? data.result.textValue : '-'; }); } },
 	        { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "-"  },    // Protocol columns
-	        { "sTitle": "Owner", "sClass": "center middle shortened", "sWidth": "15%", "mData": "citation.owner", "sDefaultContent": "-" },
-	        { "sTitle": "Citation", "sClass": "center middle shortened", "sWidth": "15%", "mData": "citation", "mRender": function (data, type, full) { return (data.title || "") + ' ' + (!!data.year && data.year.length > 1 ? data.year : ""); }  },
+	        { "sTitle": "Owner", "sClass": "center middle", "sWidth": "15%", "mData": "citation.owner", "sDefaultContent": "-" },
+	        { "sTitle": "Citation", "sClass": "center middle", "sWidth": "15%", "mData": "citation", "mRender": function (data, type, full) { return (data.title || "") + ' ' + (!!data.year && data.year.length > 1 ? data.year : ""); }  },
 	        { "sTitle": "UUID", "sClass": "center middle", "sWidth": "15%", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : jT.ui.shortenedData(data, "Press to copy the UUID in the clipboard"); } }
 	      ];
   
@@ -4623,7 +4623,7 @@ jT.templates['all-compound']  =
 "	    </div>" +
 "	    <div class=\"jtox-ds-tables\">" +
 "	      <div class=\"jt-processing\">	        " +
-"	        <span class=\"loading jtox-inline\"></span>&nbsp;<span class=\"message\">Loading compounds...</span>" +
+"          <span class=\"message\">Loading compounds...</span>" +
 "	      </div>" +
 "	      <div class=\"jtox-ds-fixed\">" +
 "	        <table></table>" +
