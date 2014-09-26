@@ -75,4 +75,8 @@ public class FreeMarkerApplication<USERID> extends TaskApplication<USERID> imple
 		public boolean isSimilarityOrder() {
 			return true;
 		}
+		
+		public boolean isEnableEmailVerification() {
+			return true;
+		}
 }

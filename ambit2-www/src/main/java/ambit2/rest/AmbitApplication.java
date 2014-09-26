@@ -214,6 +214,14 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected boolean changeLineSeparators = false; 
 	
 	protected String ajaxTimeout = "10000"; //msec
+	protected boolean enableEmailVerification = true;
+	
+	public boolean isEnableEmailVerification() {
+		return enableEmailVerification;
+	}
+	public void setEnableEmailVerification(boolean enableEmailVerification) {
+		this.enableEmailVerification = enableEmailVerification;
+	}
 	public String getAjaxTimeout() {
 		return ajaxTimeout;
 	}
@@ -250,6 +258,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		
 		setSimilarityOrder(getSimilarityOrderOption());
 		ajaxTimeout = getAjaxTimeoutOption();
+		setEnableEmailVerification(getEnableEmailVerificationOption());
 		
 		setProfile(getMenuProfile());
 		
@@ -1089,7 +1098,12 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			return order==null?true:Boolean.parseBoolean(order);
 		} catch (Exception x) {return true; }
 	}	
-
+   protected synchronized boolean getEnableEmailVerificationOption() {
+		try {
+			String order = getProperty(AMBITConfig.enableEmailVerification.name(),configProperties);
+			return order==null?true:Boolean.parseBoolean(order);
+		} catch (Exception x) {return true; }
+   }
    protected synchronized String getAjaxTimeoutOption()  {
 		try {
 			String order = getProperty(AJAX_TIMEOUT,ambitProperties);

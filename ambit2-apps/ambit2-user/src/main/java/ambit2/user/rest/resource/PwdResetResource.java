@@ -12,6 +12,7 @@ import net.idea.restnet.c.html.HTMLBeauty;
 import net.idea.restnet.c.task.CallableProtectedTask;
 import net.idea.restnet.c.task.FactoryTaskConvertor;
 import net.idea.restnet.db.DBConnection;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ITaskStorage;
 import net.idea.restnet.rdf.FactoryTaskConvertorRDF;
 import net.idea.restnet.user.DBUser;
@@ -64,7 +65,7 @@ public class PwdResetResource<T> extends MyAccountResource<T> {
 				String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
 				boolean enableEmailVerification  = true;
 				try {
-					enableEmailVerification = Boolean.parseBoolean(getContext().getParameters().getFirstValue(AMBITConfig.enableEmailVerification.name()));
+					enableEmailVerification  = ((IFreeMarkerApplication)getApplication()).isEnableEmailVerification();
 				} catch (Exception x) {}
 
 				UserURIReporter reporter = new UserURIReporter(getRequest(),"");

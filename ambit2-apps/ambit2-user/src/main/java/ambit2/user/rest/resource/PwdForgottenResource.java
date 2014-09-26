@@ -32,8 +32,9 @@ public class PwdForgottenResource extends RegistrationResource {
 			String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
 			boolean enableEmailVerification  = true;
 			try {
-				enableEmailVerification = Boolean.parseBoolean(getContext().getParameters().getFirstValue(AMBITConfig.enableEmailVerification.name()));
+				enableEmailVerification  = ((IFreeMarkerApplication)getApplication()).isEnableEmailVerification();
 			} catch (Exception x) {}
+
 			UserURIReporter reporter = new UserURIReporter(getRequest(),"");
 			DBConnection dbc = new DBConnection(getApplication().getContext(),getConfigFile());
 			conn = dbc.getConnection();

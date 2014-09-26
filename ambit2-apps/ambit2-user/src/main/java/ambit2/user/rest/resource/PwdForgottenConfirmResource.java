@@ -18,6 +18,7 @@ import net.idea.restnet.c.task.FactoryTaskConvertor;
 import net.idea.restnet.c.task.TaskCreator;
 import net.idea.restnet.db.DBConnection;
 import net.idea.restnet.db.convertors.QueryHTMLReporter;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ITaskStorage;
 import net.idea.restnet.rdf.FactoryTaskConvertorRDF;
 import net.idea.restnet.u.RegistrationJSONReporter;
@@ -125,8 +126,9 @@ public class PwdForgottenConfirmResource extends  AmbitDBQueryResource<ReadRegis
 			String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
 			boolean enableEmailVerification  = true;
 			try {
-				enableEmailVerification = Boolean.parseBoolean(getContext().getParameters().getFirstValue(AMBITConfig.enableEmailVerification.name()));
-			} catch (Exception x) {}			
+				enableEmailVerification  = ((IFreeMarkerApplication)getApplication()).isEnableEmailVerification();
+			} catch (Exception x) {}
+		
 			UserURIReporter reporter = new UserURIReporter(getRequest(),"");
 			DBConnection dbc = new DBConnection(getApplication().getContext(),getConfigFile());
 			conn = dbc.getConnection();
