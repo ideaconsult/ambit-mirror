@@ -45,6 +45,7 @@ import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryAbstractReporter;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.StringCondition.STRING_CONDITION;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldMultiple;
@@ -89,7 +90,14 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	protected static String INCHIKEY_as_id = "inchikey";
 	protected _searchtype searchType = null;
 	protected Form params;
+	protected String s_condition = null;
 
+	public String getCondition() {
+		return s_condition;
+	}
+	public void setCondition(String condition) {
+		this.s_condition = condition;
+	}
 	/**
 	 * SMILES, InChI, InChI key (lookup) , identifiers, names , MOL file
 	 */
@@ -143,6 +151,16 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 		try { headless = Boolean.parseBoolean(form.getFirstValue("headless")); } catch (Exception x) { headless=false;}		
 		boolean casesens = "true".equals(form.getFirstValue(QueryResource.caseSensitive))?true:false;
+		setCondition(form.getFirstValue(QueryResource.condition));
+		if (getCondition()!=null) 
+			for (STRING_CONDITION sc : STRING_CONDITION.values()) { 
+				if (getCondition().equals(sc.getSQL())) {
+					setCondition(sc.getSQL());
+					break;
+				}
+			}
+		else setCondition(StringCondition.C_EQ);
+			
 		boolean retrieveProperties = "true".equals(form.getFirstValue(QueryResource.returnProperties))?true:false;
 			
 		
@@ -302,7 +320,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
     	q_by_name.setRetrieveProperties(retrieveProperties);
     	q_by_name.setSearchByAlias(true);
     	q_by_name.setNameCondition(StringCondition.getInstance(StringCondition.C_EQ));
-    	q_by_name.setCondition(StringCondition.getInstance(StringCondition.C_EQ));
+    	q_by_name.setCondition(StringCondition.getInstance(getCondition()));
     	q_by_name.setChemicalsOnly(true);
     	q_by_name.setValue(value==null?null:value.toString());
 		return q_by_name;
