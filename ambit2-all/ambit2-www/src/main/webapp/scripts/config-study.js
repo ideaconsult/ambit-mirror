@@ -747,11 +747,23 @@ var config_study = {
                 "doses/concentrations": {
                     "iOrder": -8,
                     "sTitle": "Dose/concentrations"
-                }
+                },
+                "type of genotoxicity": {
+                	"bVisible" : false
+                },
+                "type of study": {
+                	"bVisible" : false
+                }                
             },
             "conditions": {
                 "effect type": {
                     "iOrder": -6
+                },
+                "sex": {
+                    "bVisible" : false
+                },
+                "toxicity": {
+                    "bVisible" : false
                 }
             },
             "effects": {
@@ -766,8 +778,11 @@ var config_study = {
             "protocol": {
                 "guideline": {
                     "iOrder": -1
-                }
-            },
+                },
+                "citation": {
+                    "bVisible": true
+                }                
+            },            
             "interpretation": {
                 "result": {
                     "iOrder": -3,
