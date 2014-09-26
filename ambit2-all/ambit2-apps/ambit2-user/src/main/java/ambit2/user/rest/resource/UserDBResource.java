@@ -23,6 +23,7 @@ import net.idea.restnet.db.aalocal.user.ReadUserRoles;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 import net.idea.restnet.db.convertors.QueryHTMLReporter;
 import net.idea.restnet.db.convertors.RDFJenaConvertor;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ITaskStorage;
 import net.idea.restnet.rdf.FactoryTaskConvertorRDF;
 import net.idea.restnet.user.DBUser;
@@ -241,9 +242,10 @@ public class UserDBResource<T>	extends AmbitDBQueryResource<ReadUser<T>,DBUser> 
 		Connection conn = null;
 		try {
 			String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
+			
 			boolean enableEmailVerification  = true;
 			try {
-				enableEmailVerification = Boolean.parseBoolean(getContext().getParameters().getFirstValue(AMBITConfig.enableEmailVerification.name()));
+				enableEmailVerification  = ((IFreeMarkerApplication)getApplication()).isEnableEmailVerification();
 			} catch (Exception x) {}
 			UserURIReporter reporter = new UserURIReporter(getRequest(),"");
 			DBConnection dbc = new DBConnection(getApplication().getContext(),getConfigFile());
