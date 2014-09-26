@@ -578,8 +578,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				 long sessionLength = 1000*60*45L; //45 min in milliseconds
 					try { sessionLength = Long.parseLong(getProperty(AMBITConfig.sessiontimeout.name(),configProperties)); } catch (Exception x) {}
 				 
-				 router.attach("/", UIResource.class);
-				 router.attach("", UIResource.class);
+				 router.attach("/", AMBITLoginFormResource.class);
+				 router.attach("", AMBITLoginFormResource.class);
 				 
 				 logger.log(Level.INFO,String.format("Property %s set, DB AA enabled.", DB_AA_ENABLED));
 		    		
