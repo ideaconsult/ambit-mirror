@@ -72,7 +72,16 @@
 			              "paramType": "query",
 			              "allowMultiple"  : false
 			            },
-			            
+			            {
+				              "name": "condition",
+				              "description": "Search condition",
+				              "required": false,
+				              "type": "string",
+				              "enum" : ["","=","regexp","!=","like","not like"],
+				              "defaultValue" : "false",
+				              "paramType": "query",
+				              "allowMultiple"  : false
+				        },			            
 			            <#include "/apidocs/parameters_mol.ftl" >,				            
 						<#include "/apidocs/parameters_page.ftl" >
                     ],
