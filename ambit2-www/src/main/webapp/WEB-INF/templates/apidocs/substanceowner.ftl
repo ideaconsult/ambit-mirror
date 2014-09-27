@@ -71,7 +71,28 @@
 			         {
 			            "method": "DELETE",
 			              "summary": "Delete all substance by a substance owner",
-			            "notes": "Not (yet) implemented"
+			            "notes": "Not (yet) implemented",
+			            "nickname": "deleteSubstanceOwnerByUUID",
+			            "parameters": [
+						                <#include "/apidocs/parameter_substanceowner_uuid.ftl" >
+						            ],			            
+			            "responseMessages": [
+			     			     			{
+			     			    			 "code": 200,
+			     			    			 "message": "OK"
+			     			    			},				                                 
+			     			     			{
+			     			     				"code": 400,
+			     			     			    "message": "Invalid substance owner identifier"
+			     			     			},						                                 
+			     			                {
+			     			                    "code": 404,
+			     			                    "message": "Substance owner not found"
+			     			                },
+			     							<#include "/apidocs/error_aa.ftl" >,
+			     							<#include "/apidocs/error_500.ftl" >			                
+			     			            ]
+			                                 
 			         }   
 			    ]
 			},
