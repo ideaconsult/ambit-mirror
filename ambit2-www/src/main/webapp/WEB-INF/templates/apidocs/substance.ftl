@@ -15,7 +15,10 @@
 			            "method": "GET",
 			            "summary": "List substances",
 			            "notes": "Returns a list of substances, according to the search criteria",
-			            "type": "Substance",
+	                    "type": "array",
+	                    "items": {
+	                        "$ref": "Substance"
+	                    },			            
 			            "nickname": "getSubstances",
 			            <#include "/apidocs/authz.ftl" >
 			            "parameters": [
@@ -219,7 +222,10 @@
 			            "method": "GET",
 			            "summary": "Get a substance",
 			            "notes": "Returns substance representation",
-			            "type": "Substance",
+	                    "type": "array",
+	                    "items": {
+	                        "$ref": "Substance"
+	                    },	
 			            "nickname": "getSubstanceByUUID",
 			            <#include "/apidocs/authz.ftl" >
 			            "parameters": [
@@ -327,7 +333,10 @@
 			            "method": "GET",
 			            "summary": "Get substance study",
 			            "notes": "Substance study",
-			            "type": "SubstanceStudy",
+	                    "type": "array",
+	                    "items": {
+	                        "$ref": "Study"
+	                    },	
 			            "nickname": "getSubstanceStudy",
 			            <#include "/apidocs/authz.ftl" >
 			            "parameters": [
@@ -457,9 +466,13 @@
 				
     ],
     "models" : {
-    	"StudySummaryFacet" : {
+      "Substance" : <#include "/apidocs/json_schema_substance.ftl" >,   	  
+      "Study"     : <#include "/apidocs/json_schema_study.ftl" >,   	  
+      "Effect"     : <#include "/apidocs/json_schema_effect.ftl" >,
+      "Result"     : <#include "/apidocs/json_schema_result.ftl" >,
+      "StudySummaryFacet" : {
     		
-    	}
+      }
     },
 	<#include "/apidocs/info.ftl" >  
 }
