@@ -11,7 +11,7 @@ My account pages lets you to modify account details, manage saved searches and b
      <li><a href="#pwd">Change password</a></li>
   </ul>
   <div id="pwd">
-    <p>TODO</p>
+    <p>Click to change your current password.</p>
   </div>  
   <div id="myprofile">
     <p></p>
@@ -19,7 +19,7 @@ My account pages lets you to modify account details, manage saved searches and b
 
   <div id="hcurator">
     <p>
-    TODO
+    Allows to request data manager role; subject to confirmation by the admin.
     </p>
   </div>  
 

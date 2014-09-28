@@ -13,7 +13,7 @@ The link will be valid for 48h.
   </ul>
   <div id="hcurator">
     <p>
-TODO
+Allows to request data manager role; subject to confirmation by the admin.
     </p>
   </div>  
   <div id="hkeywords">
