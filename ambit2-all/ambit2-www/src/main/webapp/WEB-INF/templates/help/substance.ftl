@@ -7,6 +7,7 @@ substances under REACH and CLP'>REACH guide</a>
 Mono-constituent<a href='#' class='chelp mono'>?</a> and multi-constituent <a href='#' class='chelp multi'>?</a> substances.
 Main constituent<a href='#' class='chelp main'>?</a>Additive<a href='#' class='chelp additive'>?</a>Impurity<a href='#' class='chelp impurity'>?</a>
 
+
 </div>
 
 <div id="keys" style="display:none;">
@@ -17,6 +18,12 @@ Main constituent<a href='#' class='chelp main'>?</a>Additive<a href='#' class='c
     <li><a href="#additive">Additive</a></li>
     <li><a href="#impurity">Impurity</a></li>
     <li><a href="#i5z">.i5z file</a></li>
+    <li><a href="#substancesearch">Substance search</a></li>
+    <li><a href="#category">Endpoint category</a></li>
+    <li><a href="#reliability">Reliability</a></li>
+    <li><a href="#studypurpose">Study purpose</a></li>
+    <li><a href="#robuststudy">Robust study</a></li>
+    <li><a href="#resulttype">Result type</a></li>
   </ul>
   <div id="mono">
   	A substance with one main constituent..
@@ -41,5 +48,54 @@ Main constituent<a href='#' class='chelp main'>?</a>Additive<a href='#' class='c
   	<br/>
     Only Substance (IUCLID 5.4, IUCLID 5.5) and ReferenceSubstance (IUCLID 5.0, IUCLID 5.4, IUCLID 5.5.) records
     (as defined by the <a href='http://iuclid.eu/index.php?fuseaction=home.format' class='qxternal'  target=_blank>IUCLID schema</a>) can be imported in this version of Ambit.
+  </div>  
+    <div id="substancesearch">
+    <ul>
+    <li><b>by Name</b>: Substance name or public name, starting with the specified string</li>
+    <li><b>by UUID</b>: Substance UUID</li>
+    <li><b>by External identifier</b>: Any external identifier (of all types), exact search</li>
+    <li><b>CompTox</b>: External identifier (of type CompTox), exact search</li>
+    </ul>
+  </div>    
+  <div id="category">
+  Retrieve all substances, having studies in the selected category : one of Phys-Chem, Ecotoxicity, Environmental Fate, Toxicity.
+  </div>      
+  <div id="reliability">
+  Retrieve all substances, having studies assigned the selected Klimish code:
+	  <ul>
+	  <li>1 (reliable without restriction)</li>
+	  <li>2 (reliable with restrictions)</li>
+	  <li>3 (not reliable)</li>
+	  <li>4 (not assignable)</li>
+	  <li>5 other</li>
+	  <li>6 empty (not specified)</li>
+	  </ul>
+  </div>        
+  <div id="studypurpose">
+  Retrieve all substances, having studies assigned the selected study purpose:
+	  <ul>
+	  <li>K: key study</li>
+	  <li>S: supporting study</li>
+	  <li>WoE: weight of evidence</li>
+	  <li>D: disregarded study</li>
+	  <li>N/A: Not specified</li>
+	  </ul>  
+  </div>
+  <div id="robuststudy">
+  Retrieve all substances, having studies assigned the robust study flag Yes or No.
+  </div>  
+  <div id="resulttype">
+  Retrieve all substances, having studies assigned with the selected result type:
+	  <ul>
+	  <li>E: experimental result</li>
+	  <li>EP: experimental study planned</li>
+	  <li>C: estimated by calculation</li>
+	  <li>RAg: read-across based on grouping of substances (category approach)</li>
+	  <li>RAa: read-across from supporting substance (structural analogue or surrogate)</li>
+	  <li>Q: (Q)SAR</li>
+	  <li>O: other</li>
+	  <li>ND: no data</li>
+	  <li>NA: not specified</li>
+	  </ul>   
   </div>  
 </div>      

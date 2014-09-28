@@ -9,7 +9,7 @@
 </#if>
 
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; font-style:bold;'>
-Substance search
+Substance search 	<a href='#' class='chelp substancesearch'></a>	
 </div>
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
 <form method='GET' name='searchform' id='searchform' action='${ambit_root}/substance' style='padding:0;margin:0;'>
@@ -30,14 +30,15 @@ Substance search
 			  <option value="owner_name">Owner name</option>
 			  <option value="owner_uuid">Owner UUID</option>
 		</select>
+
 	<input type='text'  id='search' name='search' value='' tabindex='1' >	
-	<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>			
+	<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
 </form>				
 </div>
 
 	
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-<span title='Filter substances by category'>Study: </span> 
+<span title='Filter substances by category'>Study<a href='#' class='chelp category'></a>:</span> 
 <a href='${ambit_root}/substance?type=topcategory&search=P-CHEM' title='Physicochemical'>P-Chem</a>
 <a href='${ambit_root}/substance?type=topcategory&search=ENV+FATE' title='Environmental fate'>ENV</a>
 <a href='${ambit_root}/substance?type=topcategory&search=ECOTOX' title='Ecotoxicity'>ECO</a>
@@ -45,7 +46,7 @@ Substance search
 </div>
 
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-<span title='Filter substances by Klimisch code'>Reliability: </span> 
+<span title='Filter substances by Klimisch code'>Reliability<a href='#' class='chelp reliability'></a>	: </span> 
 <a href='${ambit_root}/substance?type=reliability&search=1+%28reliable+without+restriction%29' title='1 (reliable without restriction)'>1</a> 
 <a href='${ambit_root}/substance?type=reliability&search=2+%28reliable+with+restrictions%29' title='2 (reliable with restrictions)'>2</a>
 <a href='${ambit_root}/substance?type=reliability&search=3+%28not+reliable%29' title='3 (not reliable)'>3</a>
@@ -55,7 +56,7 @@ Substance search
 </div>
 
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-<span title='Filter substances by purpose flag'>Study purpose:</span> 
+<span title='Filter substances by purpose flag'>Study purpose<a href='#' class='chelp studypurpose'></a>:</span> 
 <a href='${ambit_root}/substance?type=purposeFlag&search=key+study' title='key study'>K</a> 
 <a href='${ambit_root}/substance?type=purposeFlag&search=supporting+study' title='supporting study'>S</a>
 <a href='${ambit_root}/substance?type=purposeFlag&search=weight+of+evidence' title='weight of evidence'>WoE</a>
@@ -64,13 +65,13 @@ Substance search
 </div>
 
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-<span title='Filter substances by robust study flag'>Robust study:</span> 
+<span title='Filter substances by robust study flag'>Robust study<a href='#' class='chelp robuststudy'></a>:</span> 
 <a href='${ambit_root}/substance?type=isRobustStudy&search=1' title='Yes'>Yes</a> 
 <a href='${ambit_root}/substance?type=isRobustStudy&search=0' title='No'>No</a>
 </div>
 
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-<span title='Filter substances by study result type'>Result:</span> 
+<span title='Filter substances by study result type'>Result<a href='#' class='chelp resulttype'></a>:</span> 
 <a href='${ambit_root}/substance?type=studyResultType&search=experimental+result' title='experimental result'>E</a>
 <a href='${ambit_root}/substance?type=studyResultType&search=experimental+study+planned' title='experimental study planned'>EP</a>
 <a href='${ambit_root}/substance?type=studyResultType&search=estimated+by+calculation' title='estimated by calculation'>C</a>
