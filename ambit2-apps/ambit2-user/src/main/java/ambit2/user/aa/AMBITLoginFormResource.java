@@ -7,6 +7,7 @@ import net.idea.modbcum.i.reporter.Reporter;
 import net.idea.restnet.aa.local.UserLoginFormResource;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
+import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -51,8 +52,8 @@ public class AMBITLoginFormResource extends UserLoginFormResource<User> {
 	
 	@Override
 	protected Representation getHTMLByTemplate(Variant variant) throws ResourceException {
-
-		        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<String, Object>();
+			configureTemplateMap(map, getRequest(), (IFreeMarkerApplication)getApplication());
 		        
 				map.put(AMBITDBRoles.ambit_admin.name(), Boolean.FALSE);
 				map.put(AMBITDBRoles.ambit_datasetmgr.name(), Boolean.FALSE);
@@ -68,11 +69,6 @@ public class AMBITLoginFormResource extends UserLoginFormResource<User> {
 							map.put(AMBITDBRoles.ambit_user.name(), Boolean.TRUE);	
 					}
 				}		        
-		        try {
-		        	map.put(AMBITConfig.ambit_version_short.name(),((IFreeMarkerApplication)getApplication()).getVersionShort());
-			    	map.put(AMBITConfig.ambit_version_long.name(),((IFreeMarkerApplication)getApplication()).getVersionLong());
-		        } catch (Exception x) {}
-		        map.put(AMBITConfig.googleAnalytics.name(),((IFreeMarkerApplication)getApplication()).getGACode());
 			    map.put(AMBITConfig.creator.name(),"IdeaConsult Ltd.");
 			    map.put(AMBITConfig.ambit_root.name(),getRequest().getRootRef().toString());
 
@@ -81,4 +77,14 @@ public class AMBITLoginFormResource extends UserLoginFormResource<User> {
 		        return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
 
 	}
+	
+	@Override
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
+		super.configureTemplateMap(map,request, app);
+        map.put(AMBITConfig.ambit_version_short.name(),app.getVersionShort());
+	    map.put(AMBITConfig.ambit_version_long.name(),app.getVersionLong());
+	    map.put(AMBITConfig.googleAnalytics.name(),app.getGACode());
+	    map.put(AMBITConfig.menu_profile.name(),app.getProfile());
+	}	
 }

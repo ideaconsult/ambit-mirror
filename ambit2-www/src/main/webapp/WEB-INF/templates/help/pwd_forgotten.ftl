@@ -10,6 +10,6 @@ a link to reset the password. The link will be valid for 24h.
     <li><a href="#loginhelp">Login</a></li>
   </ul>
   <div id="loginhelp">
-    <p>TODO</p>
+    <p>email notification should be enabled server side</p>
   </div>
 </div>
