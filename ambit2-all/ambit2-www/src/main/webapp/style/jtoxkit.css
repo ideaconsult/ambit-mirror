@@ -641,6 +641,10 @@ div.jtox-study-tab .dataTables_wrapper {
   width: 100%;
 }
 
+.jtox-toolkit .jtox-study table td {
+  word-wrap: break-word;
+}
+
 /* Start of table-related classes */
 .jtox-toolkit table.dataTable td.jtox-multi {
   padding: 0px;
