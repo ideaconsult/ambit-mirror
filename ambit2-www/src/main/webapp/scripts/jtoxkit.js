@@ -2976,6 +2976,7 @@ var jToxSubstance = (function () {
         return (type != 'display') ? data : '<a target="_blank" href="' + self.settings.baseUrl + '/substanceowner/' + full.ownerUUID + '/substance">' + data + '</a>';
       };
       
+      var opts = {  "sDom": "rti" };
       if (self.settings.showControls) {
         jT.ui.bindControls(self, { 
           nextPage: function () { self.nextPage(); },
@@ -2983,6 +2984,12 @@ var jToxSubstance = (function () {
           sizeChange: function() { self.queryEntries(self.pageStart, parseInt(jT.$(this).val())); },
           filter: function () { jT.$(self.table).dataTable().fnFilter(jT.$(this).val()); }
         });
+        
+        opts['fnInfoCallback'] = function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
+          var needle = jT.$('.filterbox', self.rootElement).val();
+          jT.$('.filtered-text', self.rootElement).html(!needle ? ' ' : ' (filtered to <span class="high">' + iTotal + '</span>) ');
+          return '';
+        };
       }
       else
         jT.$('.jtox-controls', self.rootElement).remove();
@@ -2991,7 +2998,7 @@ var jToxSubstance = (function () {
       self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
       
       // READYY! Go and prepare THE table.
-      self.table = jT.ui.putTable(self, jT.$('table', self.rootElement)[0], 'substance', { "sDom": "rt" });
+      self.table = jT.ui.putTable(self, jT.$('table', self.rootElement)[0], 'substance', opts);
     },
     
     queryEntries: function(from, size) {
@@ -4675,7 +4682,7 @@ jT.templates['all-model']  =
 jT.templates['all-substance']  = 
 "	  <div id=\"jtox-substance\" class=\"jtox-substance\">" +
 "	    <div class=\"jtox-controls\">" +
-"	      Showing from <span class=\"data-field high\" data-field=\"pagestart\"> ? </span> to <span class=\"data-field high\" data-field=\"pageend\"> ? </span> in pages of <select class=\"data-field\" data-field=\"pagesize\">" +
+"	      Showing from <span class=\"data-field high\" data-field=\"pagestart\"> ? </span> to <span class=\"data-field high\" data-field=\"pageend\"> ? </span><span class=\"filtered-text\"> </span>in pages of <select class=\"data-field\" data-field=\"pagesize\">" +
 "          <option value=\"10\" selected=\"yes\">10</option>" +
 "          <option value=\"20\">20</option>" +
 "          <option value=\"50\">50</option>" +
