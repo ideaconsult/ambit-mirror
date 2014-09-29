@@ -56,6 +56,22 @@ User guide
 
 -   Quick user guides: [**Structure search**](usage.html) | [**Substance search**](usage_substance.html) | [**Datasets**](usage_dataset.html)
 
+## OpenTox Euro 2014 workshop [<sup>?</sup>](http://douglasconnect.com/abstract/workshop-data-ambit)
+
+CHEMICAL SUBSTANCES, NANOMATERIALS AND ENDPOINT DATA IN AMBIT 
+
+The exercises will be using http://apps.ideaconsult.net:8080/opentox/
+
+-   [**Structure search**](http://apps.ideaconsult.net:8080/opentox/ui/_search)
+
+-   [**Substance online**](http://apps.ideaconsult.net:8080/opentox/substance)
+
+-   [**Endpoint search**](http://apps.ideaconsult.net:8080/opentox/query/study)
+
+-   [**Run Toxtree predictions**](http://apps.ideaconsult.net:8080/opentox/ui/toxtree)
+
+-   Please [**provide feedback**](https://docs.google.com/forms/d/1ncsW59uGAJfEUgSv8tvfbiU0XRXIik9RuRJ376WnkB0/viewform) on the [**Read Across workflow user interface proposal**](http://ambit.sourceforge.net/RA/RA.pdf)
+
 ---
 
 ### About
