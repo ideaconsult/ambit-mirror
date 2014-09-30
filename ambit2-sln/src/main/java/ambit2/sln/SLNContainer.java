@@ -43,7 +43,7 @@ public class SLNContainer extends QueryAtomContainer
 		{
 			for (int j=0; j < container.bondCount; j++)
 			{
-				if (atomExpression != null || bondExpression != null)
+				if (atomExpression != null || bondExpression != null || attributes != null)
 					return false;	
 			}
 		}

@@ -536,7 +536,7 @@ public class SLNParser
 			}
 		}
 
-		//TODO Handle query atom attribute is
+		//Handle query atom attribute is
 		if (name.equals("is"))
 		{
 			int is = extractInteger(value);
@@ -552,7 +552,7 @@ public class SLNParser
 			}
 		}
 
-		//TODO Handle query atom attribute n - noncovering
+		//Handle query atom attribute n - noncovering
 		if (name.equals("n"))
 		{
 			int n = extractInteger(value);
@@ -568,7 +568,7 @@ public class SLNParser
 			}
 		}
 
-		//TODO Handle query atom attribute not
+		//Handle query atom attribute not
 		if (name.equals("not"))
 		{
 			int not = extractInteger(value);
@@ -584,7 +584,7 @@ public class SLNParser
 			}
 		}
 
-		//TODO Handle query atom attribute r
+		//Handle query atom attribute r
 		if (name.equals("r"))
 		{
 			int r = extractInteger(value);
@@ -600,7 +600,7 @@ public class SLNParser
 			}
 		}
 
-		//TODO Handle query atom attribute v -  Markush and macro atom valence information
+		//Handle query atom attribute v -  Markush and macro atom valence information
 		if (name.equals("v"))
 		{
 			int v = extractInteger(value);
@@ -671,8 +671,8 @@ public class SLNParser
 		{	
 			addBond(prevAtom, atom);
 		}
-
 		prevAtom = atom;
+		
 	}
 
 	void parseSpecialSymbol()
@@ -696,6 +696,11 @@ public class SLNParser
 		case '@':	//ring closure
 			parseRingClosure();
 			break;	
+			
+		case '<':	//molecule attributes
+			curChar++;
+			parseMoleculeAttributes();
+			break;
 
 		case '(':							
 			if (prevAtom == null)
@@ -777,7 +782,7 @@ public class SLNParser
 
 		if (curBond == null)
 			curBond = new SLNBond();
-
+			
 		curBond.bondType = SLNConst.SLNCharToBondTypeAttr(boChar);
 
 		if (curChar < nChars)
@@ -999,7 +1004,7 @@ public class SLNParser
 			}
 		}
 
-		//Handle heteroatom count bond attribute
+		//Handle hetero atom count bond attribute
 		if (name.equals("htc"))
 		{	
 			if (extractError.equals(""))
@@ -1210,7 +1215,187 @@ public class SLNParser
 		}
 		return null;
 	}
+	
+	void parseMoleculeAttributes()
+	{
+		if (curChar == 0)
+		{
+			newError("SLN string starts incorrectly with a molecule attributes", curChar,"");				
+			return;
+		}
+		
+		curChar++;
+		if (curChar == nChars)
+		{
+			newError("SLN string ends incorrectly with a molecule attributes", curChar,"");				
+			return;
+		}
 
+		if (curMolExp == null)
+			curMolExp = new SLNContainerAttributes();
+			
+
+		if (curChar < nChars)
+			if (sln.charAt(curChar) == '<')
+			{	
+				String moleculeAttributes = extractMoleculeAttributes();				
+				analyzeMoleculeAttributes(moleculeAttributes);
+			}
+	}
+	
+	String extractMoleculeAttributes()
+	{
+		curChar++;
+		int startPos = curChar;
+		int openBrackets = 1;
+		while ((curChar < nChars) && (openBrackets > 0) && (errors.size() == 0))
+		{
+			if (sln.charAt(curChar)=='<')			
+				openBrackets++;
+			else
+				if (sln.charAt(curChar)=='>')				
+					openBrackets--;
+
+			curChar++;
+		}
+
+		return sln.substring(startPos,curChar-1);
+	}
+
+	void analyzeMoleculeAttributes(String molAttr)
+	{
+		
+		System.out.println("**Molecule attr " +molAttr);
+			if (molAttr.trim().equals(""))
+			{
+				newError("Empty molecule attribute expression", curChar+1,"");
+				return;
+			}
+			curMolExp = new SLNContainerAttributes();
+			int pos = 0;
+
+			//Handle all attributes and logical operations
+			while (pos < molAttr.length())
+			{
+				if(molAttr.charAt(pos) == ' ')
+				{	
+					pos++;
+					if (FlagTolerateSpaces)
+						continue;
+					else
+					{
+						newError("Space symbol found: ", curChar, "");
+						break;
+					}	
+				}
+
+				if (Character.isLetter(molAttr.charAt(pos)))
+				{
+					//Read attribute name
+					int startPos = pos;
+					while (pos < molAttr.length())
+					{
+						if (Character.isLetter(molAttr.charAt(pos))||
+								Character.isDigit(molAttr.charAt(pos)))
+							pos++;
+						else 
+							break;
+					}
+
+					String attrName = molAttr.substring(startPos, pos);
+					if(pos < molAttr.length())
+					{
+						if(molAttr.charAt(pos) == '=')
+							pos++;
+					}
+					if(pos >= molAttr.length())				
+					{
+						//'=' is found but the end of bond expression is reached.
+						newError("Missing value for attribute " + attrName + " ",curChar,"");
+						return;
+					}
+
+					//Read attribute value (after '=')
+					startPos = pos;
+					while (pos < molAttr.length())
+					{
+						if (Character.isLetter(molAttr.charAt(pos)) ||
+								Character.isDigit(molAttr.charAt(pos))||
+								(molAttr.charAt(pos) == '*'))
+							pos++;
+						else
+							break;
+					}
+
+					String attrValue = molAttr.substring(startPos, pos);
+
+					//Register attribute with a value 
+					SLNContainerAttributes newToken =  analyzeMoleculeAttributes(attrName, attrValue);
+					curMolExp = newToken;
+					continue;
+				}
+
+				//Read special symbol
+				switch  (molAttr.charAt(pos))
+				{
+				case '!':
+					SLNExpressionToken newToken0 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_NOT);  
+					curBondExp.tokens.add(newToken0);
+					break;
+				case '&':
+					SLNExpressionToken newToken1 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_AND);  
+					curBondExp.tokens.add(newToken1);
+					break;
+				case '|':
+					SLNExpressionToken newToken2 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_OR);  
+					curBondExp.tokens.add(newToken2);				
+					break;
+				case ';':
+					SLNExpressionToken newToken3 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_ANDLO);  
+					curBondExp.tokens.add(newToken3);				
+					break;	
+
+				default:
+				{
+					newError("Incorrect symbol in molecule expression '"+molAttr.charAt(pos)+"' ",curChar,"");
+					return;
+				}
+				}
+
+				pos++;
+			}
+		}
+	
+	SLNContainerAttributes analyzeMoleculeAttributes(String name, String value)
+	{
+		if (value == null)
+			System.out.println("Attribute" + name);
+		else
+			System.out.println("Attribute " + name + " = " + value);
+
+		//Handle molecule attribute name
+		if (name.equals("name"))
+		{	
+			if (extractError.equals(""))
+			{
+				if (extractError.equals(""))
+				{
+					SLNContainerAttributes token = new SLNContainerAttributes();
+					return token;
+				}
+				else
+				{
+					newError("Incorrect name value " + value, curChar,"");
+					return null;
+				} 
+			}
+		}
+
+		//By default it is an user defined attribute
+		SLNContainerAttributes token = new SLNContainerAttributes();
+		return token;
+	}
+	
 	int extractInteger(String valueString)
 	{
 		extractError = "";
