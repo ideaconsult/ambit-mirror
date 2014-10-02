@@ -1,10 +1,30 @@
 package ambit2.sln;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
+
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
+import ambit2.smarts.TopLayer;
+
+
 
 public class SLNHelper 
 {
+	class AtomSLNNode
+	{
+		public IAtom parent;
+		public IAtom atom;
+		public int index;
+	}
 	
+	HashMap<IAtom,AtomSLNNode> nodes = new HashMap<IAtom,AtomSLNNode>();
+	HashMap<IAtom,TopLayer> firstSphere = new HashMap<IAtom,TopLayer>();
+	int nAtom;
+	int nBond;
+		
 	static public String getAtomsAttributes(SLNContainer container)
 	{
 		StringBuffer sb = new StringBuffer();	
@@ -64,14 +84,107 @@ public class SLNHelper
 	}
 	
 	
-	/*	public String toSLN(SLNContainer container)
+	public String toSLN(SLNContainer container)
+	{	
+		determineFirstSheres(container);
+		nodes.clear();
+		//atomIndexes.clear();
+		//ringClosures.clear();
+		//curIndex = 1;
+		AtomSLNNode node = new AtomSLNNode();
+		node.parent = null;
+		node.atom = container.getAtom(0);
+		nodes.put(node.atom, node);
+		return(nodeToString(node.atom));
+	}
+	
+	String nodeToString(IAtom atom)
 	{
-		//Temporary code
 		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < container.getAtomCount(); i++)
-			sb.append(container.getAtom(i).toString());
-		return sb.toString();	
-	}*/
+		TopLayer afs = firstSphere.get(atom);
+		AtomSLNNode curNode = nodes.get(atom);
+		List<String> branches = new ArrayList<String>();
+		for (int i=0; i<afs.atoms.size(); i++)
+		{
+			IAtom neighborAt = afs.atoms.get(i);
+			if (neighborAt == curNode.parent)
+				continue;
+			
+			AtomSLNNode neighborNode = nodes.get(neighborAt);
+			if (neighborNode == null) // This node has not been registered yet
+			{
+				//Registering a new Node and a new branch
+				AtomSLNNode newNode = new AtomSLNNode();
+				newNode.atom = neighborAt;
+				newNode.parent = atom;
+				nodes.put(newNode.atom, newNode); 
+				
+				/*
+				String bond_str = bondToString(afs.bonds.get(i));				
+				String newBranch = bond_str + nodeToString(neighborAt);
+				branches.add(newBranch);
+				*/
+			}
+			else
+			{
+				/*
+				//Handle ring closure: adding indexes to both atoms
+				IBond neighborBo = afs.bonds.get(i);
+				if (!ringClosures.contains(neighborBo))
+				{	
+					ringClosures.add(neighborBo);
+					String ind = ((curIndex>9)?"%":"") + curIndex;
+					addIndexToAtom(bondToString(neighborBo) + ind, atom);	
+					addIndexToAtom(ind, neighborAt);
+					curIndex++;
+				}
+				*/
+			}
+		}
+		/*
+		//Add atom from the current node
+		sb.append(atomToString((SMARTSAtom) atom));
+				
+		//Add indexes
+		if (atomIndexes.containsKey(atom))		
+			sb.append(atomIndexes.get(atom));
+		
+		*/
+		//Add branches
+		if (branches.size() == 0)
+			return(sb.toString());
+		
+		for(int i = 0; i < branches.size()-1; i++)
+			sb.append("("+branches.get(i).toString()+")");
+		
+		sb.append(branches.get(branches.size() - 1).toString());
+		return(sb.toString());
+	}
+	
+	void determineFirstSheres(SLNContainer container)
+	{
+		firstSphere.clear();
+		nAtom =  container.getAtomCount();
+		nBond =  container.getBondCount();
+		
+		for (int i = 0; i < nAtom; i++)
+		{				
+			firstSphere.put(container.getAtom(i), new TopLayer());
+		}	
+			
+		for (int i = 0; i < nBond; i++)
+		{
+			IBond bond = container.getBond(i);
+			IAtom at0 = bond.getAtom(0);
+			IAtom at1 = bond.getAtom(1);
+			firstSphere.get(at0).atoms.add(at1);
+			firstSphere.get(at0).bonds.add(bond);
+			firstSphere.get(at1).atoms.add(at0);
+			firstSphere.get(at1).bonds.add(bond);			
+		}
+	}
+	
+	
 	
 	
 }
