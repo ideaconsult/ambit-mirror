@@ -1,5 +1,7 @@
 package ambit2.sln;
 
+import java.util.Set;
+
 public class SLNHelper 
 {
 	
@@ -34,6 +36,33 @@ public class SLNHelper
 		}
 		return(sb.toString());
 	}
+	
+	static public String getMolAttributes(SLNContainer container)
+	{
+		SLNContainerAttributes attr = container.getAttributes();
+		if (attr.getNumOfAttributes() == 0)
+			return "";
+		
+		StringBuffer sb = new StringBuffer();
+		if (attr.name != null)
+			sb.append("   name = " + attr.name + "\n");
+		if (attr.regid != null)
+			sb.append("   regid = " + attr.regid + "\n");
+		if (attr.type != null)
+			sb.append("   type = " + attr.type + "\n");
+		
+		Set<String> keys = attr.userDefiendAttr.keySet();
+		for (String key : keys)
+		{	
+			sb.append("   " + key);
+			String value = attr.userDefiendAttr.get(key);
+			if (value != null)
+				sb.append(" = " + value);
+			sb.append("\n");
+		}	
+		return(sb.toString());
+	}
+	
 	
 	/*	public String toSLN(SLNContainer container)
 	{

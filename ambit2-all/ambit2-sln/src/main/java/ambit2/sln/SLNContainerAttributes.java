@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 
 public class SLNContainerAttributes
-{
+{	
 	public HashMap<String,String> userDefiendAttr = new HashMap<String,String>();
 
 	public String name = null;
@@ -17,6 +17,22 @@ public class SLNContainerAttributes
 	public String type = null;
 	public ArrayList<double[]> coord2d = null;
 	public ArrayList<double[]> coord3d = null;
+	
+	public int getNumOfAttributes()
+	{
+		int n = userDefiendAttr.size();
+		if (name != null)
+			n++;
+		if (regid != null)
+			n++;
+		if (type != null)
+			n++;
+		if (coord2d != null)
+			n++;
+		if (coord3d != null)
+			n++;
+		return n;
+	}
 	
 	public static String coord2dToString(ArrayList<double[]>coord2d)
 	{

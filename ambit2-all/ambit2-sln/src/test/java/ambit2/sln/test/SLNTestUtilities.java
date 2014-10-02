@@ -16,8 +16,8 @@ public class SLNTestUtilities
 		
 		//tu.testSLN("C[1:c=y]H2=[s=I;ftt=m]CH[5:ccor=z;!fcharge=-3.3](OCH(CH3)CH3)CH3[7]");
 		//tu.testSLN("CH2=C[1]HCH3[12]CH3=@1CCC@1CCCC@1");
-		tu.testSLN("CH3[1:I=13;is=2]CH(CH(CH3)CH3)CH2CH3");
-		
+		//tu.testSLN("CH3[1:I=13;is=2]CH(CH(CH3)CH3)CH2CH3");
+		tu.testSLN("CC<name=ethane;regid=234&a=b;a1=b1;name=wertwert>");
 	}
 	
 	public void testSLN(String sln)
@@ -36,6 +36,11 @@ public class SLNTestUtilities
 		System.out.println(SLNHelper.getAtomsAttributes(container));
 		System.out.println("Bond attributes:");
 		System.out.println(SLNHelper.getBondsAttributes(container));
+		if (container.getAttributes().getNumOfAttributes() > 0)
+		{
+			System.out.println("Molecule attributes:");
+			System.out.println(SLNHelper.getMolAttributes(container));
+		}
 		
 	}
 	

@@ -9,6 +9,7 @@ import org.openscience.cdk.interfaces.IAtom;
 public class SLNParser 
 {
 	private boolean FlagTolerateSpaces = false;
+	private boolean FlagLogExpressionInMolAttribute = false;  //Preserved for future use
 
 	String sln;
 	SLNContainer container;
@@ -31,7 +32,6 @@ public class SLNParser
 	SLNBond curBond;
 	SLNAtomExpression curAtExp;
 	SLNBondExpression curBondExp;
-	SLNContainerAttributes curMolExp;
 	String extractError ="";
 
 
@@ -46,13 +46,11 @@ public class SLNParser
 		this.globalDictionary = globalDictionary;
 	}
 
-	public boolean getTolerateSpaces()
-	{
+	public boolean getFlagTolerateSpaces()	{
 		return FlagTolerateSpaces;
 	}
 
-	public void setTolerateSpaces(boolean tolerateSpaces)
-	{
+	public void setFlagTolerateSpaces(boolean tolerateSpaces){
 		FlagTolerateSpaces = tolerateSpaces;
 	}
 
@@ -81,6 +79,10 @@ public class SLNParser
 
 	void parse()
 	{	
+		//default bond is set to be single bond
+		curBond = new SLNBond();
+		curBond.bondType = SLNConst.B_TYPE_1;
+		
 		while ((curChar < nChars) && (errors.size() == 0))
 		{
 
@@ -698,7 +700,6 @@ public class SLNParser
 			break;	
 			
 		case '<':	//molecule attributes
-			curChar++;
 			parseMoleculeAttributes();
 			break;
 
@@ -756,11 +757,10 @@ public class SLNParser
 			container.addBond(curBond);
 		}
 
-		//default bond is set to be single bond
+		//Default bond is set to be single bond.  
 		SLNBond newBond = new SLNBond();
 		curBond = newBond;
 		curBond.bondType = SLNConst.B_TYPE_1;
-
 	}
 
 
@@ -1217,30 +1217,21 @@ public class SLNParser
 	}
 	
 	void parseMoleculeAttributes()
-	{
-		if (curChar == 0)
+	{	
+		if (curChar == 0) //This restriction could be omitted 
 		{
 			newError("SLN string starts incorrectly with a molecule attributes", curChar,"");				
 			return;
-		}
+		}		
 		
-		curChar++;
-		if (curChar == nChars)
+		if (curChar == nChars-1)
 		{
-			newError("SLN string ends incorrectly with a molecule attributes", curChar,"");				
+			newError("Incorrect molecule attributes section at the end '<..'", curChar,"");				
 			return;
 		}
-
-		if (curMolExp == null)
-			curMolExp = new SLNContainerAttributes();
-			
-
-		if (curChar < nChars)
-			if (sln.charAt(curChar) == '<')
-			{	
-				String moleculeAttributes = extractMoleculeAttributes();				
-				analyzeMoleculeAttributes(moleculeAttributes);
-			}
+		
+		String moleculeAttributes = extractMoleculeAttributes();
+		analyzeMoleculeAttributes(moleculeAttributes);
 	}
 	
 	String extractMoleculeAttributes()
@@ -1263,137 +1254,163 @@ public class SLNParser
 	}
 
 	void analyzeMoleculeAttributes(String molAttr)
-	{
+	{	
+		if (molAttr.trim().equals(""))
+		{
+			newError("Empty molecule attribute expression", curChar+1,"");
+			return;
+		}
 		
-		System.out.println("**Molecule attr " +molAttr);
-			if (molAttr.trim().equals(""))
-			{
-				newError("Empty molecule attribute expression", curChar+1,"");
-				return;
-			}
-			curMolExp = new SLNContainerAttributes();
-			int pos = 0;
+		
+		int pos = 0;
 
-			//Handle all attributes and logical operations
-			while (pos < molAttr.length())
-			{
-				if(molAttr.charAt(pos) == ' ')
-				{	
-					pos++;
-					if (FlagTolerateSpaces)
-						continue;
-					else
-					{
-						newError("Space symbol found: ", curChar, "");
-						break;
-					}	
-				}
-
-				if (Character.isLetter(molAttr.charAt(pos)))
-				{
-					//Read attribute name
-					int startPos = pos;
-					while (pos < molAttr.length())
-					{
-						if (Character.isLetter(molAttr.charAt(pos))||
-								Character.isDigit(molAttr.charAt(pos)))
-							pos++;
-						else 
-							break;
-					}
-
-					String attrName = molAttr.substring(startPos, pos);
-					if(pos < molAttr.length())
-					{
-						if(molAttr.charAt(pos) == '=')
-							pos++;
-					}
-					if(pos >= molAttr.length())				
-					{
-						//'=' is found but the end of bond expression is reached.
-						newError("Missing value for attribute " + attrName + " ",curChar,"");
-						return;
-					}
-
-					//Read attribute value (after '=')
-					startPos = pos;
-					while (pos < molAttr.length())
-					{
-						if (Character.isLetter(molAttr.charAt(pos)) ||
-								Character.isDigit(molAttr.charAt(pos))||
-								(molAttr.charAt(pos) == '*'))
-							pos++;
-						else
-							break;
-					}
-
-					String attrValue = molAttr.substring(startPos, pos);
-
-					//Register attribute with a value 
-					SLNContainerAttributes newToken =  analyzeMoleculeAttributes(attrName, attrValue);
-					curMolExp = newToken;
+		//Handle all attributes and logical operations
+		while (pos < molAttr.length())
+		{
+			if(molAttr.charAt(pos) == ' ')
+			{	
+				pos++;
+				if (FlagTolerateSpaces)
 					continue;
+				else
+				{
+					newError("Space symbol found: ", curChar, "");
+					break;
+				}	
+			}
+
+			if (Character.isLetter(molAttr.charAt(pos)))
+			{
+				//Read attribute name
+				int startPos = pos;
+				while (pos < molAttr.length())
+				{
+					if (Character.isLetter(molAttr.charAt(pos))||
+							Character.isDigit(molAttr.charAt(pos)))
+						pos++;
+					else 
+						break;
 				}
+				
+				//TODO add check for ':=' and '^=' attribute  assignments 
 
-				//Read special symbol
-				switch  (molAttr.charAt(pos))
+				String attrName = molAttr.substring(startPos, pos);
+				if(pos < molAttr.length())
 				{
-				case '!':
-					SLNExpressionToken newToken0 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_NOT);  
-					curBondExp.tokens.add(newToken0);
-					break;
-				case '&':
-					SLNExpressionToken newToken1 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_AND);  
-					curBondExp.tokens.add(newToken1);
-					break;
-				case '|':
-					SLNExpressionToken newToken2 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_OR);  
-					curBondExp.tokens.add(newToken2);				
-					break;
-				case ';':
-					SLNExpressionToken newToken3 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_ANDLO);  
-					curBondExp.tokens.add(newToken3);				
-					break;	
-
-				default:
+					if(molAttr.charAt(pos) == '=')
+						pos++;
+				}
+				if(pos >= molAttr.length())				
 				{
-					newError("Incorrect symbol in molecule expression '"+molAttr.charAt(pos)+"' ",curChar,"");
+					//'=' is found but the end of bond expression is reached.
+					newError("Missing value for attribute " + attrName + " ",curChar,"");
 					return;
 				}
+
+				//Read attribute value (after '=')
+				startPos = pos;
+				while (pos < molAttr.length())
+				{
+					if (Character.isLetter(molAttr.charAt(pos)) ||
+							Character.isDigit(molAttr.charAt(pos))||
+							(molAttr.charAt(pos) == '*'))
+						pos++;
+					else
+						break;
 				}
 
-				pos++;
+				String attrValue = molAttr.substring(startPos, pos);
+				 
+				registerMoleculeAttribute(attrName, attrValue);
+				continue;
 			}
-		}
-	
-	SLNContainerAttributes analyzeMoleculeAttributes(String name, String value)
-	{
-		if (value == null)
-			System.out.println("Attribute" + name);
-		else
-			System.out.println("Attribute " + name + " = " + value);
 
-		//Handle molecule attribute name
-		if (name.equals("name"))
-		{	
-			if (extractError.equals(""))
+			//Read special symbol
+			switch  (molAttr.charAt(pos))
 			{
-				if (extractError.equals(""))
-				{
-					SLNContainerAttributes token = new SLNContainerAttributes();
-					return token;
+			case '!':
+				if (FlagLogExpressionInMolAttribute)
+				{	
+					SLNExpressionToken newToken0 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_NOT);  
+					//TODO  
 				}
 				else
 				{
-					newError("Incorrect name value " + value, curChar,"");
-					return null;
-				} 
+					newError("Logical expressions in molecule attribute section are not allowed!", curChar, "");
+					return;
+				}
+				break;
+			case '&':
+				//Logical expressions are not stored currently in SLNContainerAttributes so nothing is done
+				//SLNExpressionToken newToken1 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_AND);
+				break;
+			case '|':
+				if (FlagLogExpressionInMolAttribute)
+				{
+					SLNExpressionToken newToken2 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_OR);  
+					//TODO
+				}
+				else
+				{
+					newError("Logical expressions in molecule attribute section are not allowed!", curChar, "");
+					return;
+				}
+				break;
+			case ';':
+				//Logical expressions are not stored currently in SLNContainerAttributes so nothing is done 
+				//SLNExpressionToken newToken3 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_ANDLO);  
+
+				break;	
+
+			default:			
+				newError("Incorrect symbol in molecule expression '"+molAttr.charAt(pos)+"' ",curChar,"");
+				return;
 			}
+
+			pos++;
 		}
+	}
+
+	void  registerMoleculeAttribute(String name, String value)
+	{
+		//Handle predefined molecule attributes
+		if (name.equals("name"))
+		{	
+			container.getAttributes().name = value;
+			return;
+		}
+		
+		if (name.equals("regid") || name.equals("REGID"))
+		{	
+			container.getAttributes().regid = value;
+			return;
+		}
+		
+		if (name.equals("type"))
+		{	
+			container.getAttributes().type = value;
+			return;
+		}
+		
+		//TODO handle coord2d, coord3d
 
 		//By default it is an user defined attribute
-		SLNContainerAttributes token = new SLNContainerAttributes();
-		return token;
+		if (name.equals(""))
+		{
+			newError("Attribute name in molecule attr. section!",curChar,"");
+			return;
+		}
+		
+		if (container.getAttributes().userDefiendAttr.containsKey(name))
+		{
+			newError("Attribute " + name + " in molecule attr. section is repeated!",curChar,"");
+			return;
+		}
+		else
+		{	
+			container.getAttributes().userDefiendAttr.put(name, value);
+			System.out.println("put " + name + " = " + value);
+		}	
 	}
 	
 	int extractInteger(String valueString)
@@ -1433,4 +1450,6 @@ public class SLNParser
 			return 0.0;
 		}
 	}
+
+	
 }
