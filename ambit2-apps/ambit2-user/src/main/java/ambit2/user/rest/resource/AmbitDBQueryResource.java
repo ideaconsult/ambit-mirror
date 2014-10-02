@@ -68,14 +68,14 @@ public abstract class AmbitDBQueryResource<Q extends IQueryRetrieval<T>,T extend
 			return ((ITaskApplication)getApplication()).addTask(
 				String.format("%s %s %s",
 						callable.toString(),
-						item==null?"":item.toString(),
+						getItemName(item),
 						reference==null?"":" "),									
 				callable,
 				getRequest().getRootRef(),
 				getToken());		
 		
 	}
-	
+
 	protected Map<String, Object> getMap(Variant variant) throws ResourceException {
 		   Map<String, Object> map = new HashMap<String, Object>();
 
@@ -152,5 +152,9 @@ public abstract class AmbitDBQueryResource<Q extends IQueryRetrieval<T>,T extend
 
 	public String getDefaultUsersDB() {
 		return "ambit_users";
+	}
+	
+	protected String getItemName(T item) {
+		return item==null?"":item.toString();
 	}
 }

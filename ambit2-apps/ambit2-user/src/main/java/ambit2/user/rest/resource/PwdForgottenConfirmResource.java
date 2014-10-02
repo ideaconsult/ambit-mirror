@@ -180,4 +180,9 @@ public class PwdForgottenConfirmResource extends  AmbitDBQueryResource<ReadRegis
 	protected Representation delete(Variant variant) throws ResourceException {
 		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 	}
+	
+	@Override
+	protected String getItemName(UserRegistration item) {
+		return "forgotten password";
+	}
 }

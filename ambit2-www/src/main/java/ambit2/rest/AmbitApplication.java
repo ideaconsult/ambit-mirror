@@ -159,7 +159,7 @@ import ambit2.user.rest.resource.PwdForgottenConfirmResource;
 import ambit2.user.rest.resource.PwdForgottenFailedResource;
 import ambit2.user.rest.resource.PwdForgottenNotifyResource;
 import ambit2.user.rest.resource.PwdForgottenResource;
-import ambit2.user.rest.resource.PwdResetResource;
+import ambit2.user.rest.resource.MyAccountPwdResetResource;
 import ambit2.user.rest.resource.RegistrationConfirmResource;
 import ambit2.user.rest.resource.RegistrationResource;
 import ambit2.user.rest.resource.Resources;
@@ -609,7 +609,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 					
 				 MyRouter myAccountRouter = new MyRouter(getContext());
 				 myAccountRouter.attachDefault(MyAccountResource.class);
-				 myAccountRouter.attach(ambit2.user.rest.resource.Resources.reset,PwdResetResource.class);
+				 myAccountRouter.attach(ambit2.user.rest.resource.Resources.reset,MyAccountPwdResetResource.class);
 				 router.attach(ambit2.user.rest.resource.Resources.myaccount, myAccountRouter);
 				 router.attach(ambit2.user.rest.resource.Resources.user, new UserRouter(getContext(),org_router,projectRouter));
 				 router.attach(ambit2.user.rest.resource.Resources.register, RegistrationResource.class);

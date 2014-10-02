@@ -43,7 +43,7 @@ function getMyAccount(root,url,readonly,username) {
 }
 
 
-function defineUsersTable(root,url,selector) {
+function defineUsersTable(root,url,selector,isadmin) {
 	var not = "<span class='ui-icon ui-icon-closethick' title='NOT assigned'></span>";
 	var yes = "<span class='ui-icon ui-icon-check' title='Role assigned'></span>";
 	var oTable = $(selector).dataTable( {
@@ -60,7 +60,17 @@ function defineUsersTable(root,url,selector) {
 				  "bUseRendered" : false,
 				  "bSortable" : true,
 				  "fnRender" : function(o,val) {
-					  return "<a href='"+o.aData["uri"]+"' title='"+o.aData["uri"]+"'>"+val+"</a>";
+					  var name= "<a href='"+o.aData["uri"]+"' title='"+o.aData["uri"]+"'>"+val+"</a>";
+					  if (isadmin) {
+						  var sOut = "initAdminPwdForm(";
+						  sOut += '"' + o.aData["uri"] + '"';
+						  sOut += ",";
+						  sOut += '"' + o.aData["username"] + '"';
+						  sOut += ")";
+						  return name + " <a href='#' title='Password change' onClick='"+sOut+"'><span class='ui-icon ui-icon-person' style='float: right; margin-right: .3em;'></span></a>";
+					  }
+					  else 
+						  return name;
 				  }
 				},		                 
  				{ 
@@ -71,7 +81,7 @@ function defineUsersTable(root,url,selector) {
 				  "bUseRendered" : false,
 				  "bSortable" : true,
 				  "fnRender" : function(o,val) {
-					  return name = o.aData["firstname"] + " " + o.aData["lastname"];
+					  return o.aData["firstname"] + " " + o.aData["lastname"];
 				  }
 				},
 				{ "mDataProp": "email" , "asSorting": [ "asc", "desc" ],
@@ -168,7 +178,7 @@ function defineUsersTable(root,url,selector) {
 					  "bSortable" : true,
 					  "bUseRendered" : false,
 					  "sWidth" : "5%"
-				}						
+				}				
 			],
 		"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
 		"bJQueryUI" : true,
@@ -410,4 +420,53 @@ function setAutocompleteOrgs(root,id) {
 			},
             minLength: 2	            
         });
+}
+function initAdminPwdForm(uri,name) {
+	$(".pwdchange").show();
+	$("#uri").val(uri);
+	$("#username").val(name);
+	$("#pwd1").val("");
+	$("#pwd2").val("");
+	
+}
+function adminPwdForm(selector) {
+	$(selector).validate({
+		rules : {
+			'uri': {
+				required : true,
+				minlength: 6
+			},
+			'username': {
+				required : true,
+				minlength: 3
+			},					
+			'pwd1': {
+				required : true,
+				minlength: 6
+			},
+			'pwd2': {
+				required : true,
+				minlength: 6,
+				equalTo: "#pwd1"
+			}
+			
+		},
+		messages : {
+			'uri'   : {
+				required: "Please provide user URI"
+			},
+			'username'   : {
+				required: "Please provide user name"
+			},							
+			'pwd1'   : {
+				required: "Please provide a new password",
+				minlength: "Your password must be at least 6 characters long"
+			},
+			'pwd2'   : {
+				required: "Please provide a new password",
+				minlength: "Your password must be at least 6 characters long",
+				equalTo: "Please enter the same password as above"
+			}			
+		}
+	});
 }
