@@ -39,17 +39,18 @@ public class Tox21ReaderTest extends DbUnitTest {
         
         
 		File dir = new File("F:/Downloads/Chemical data/TOXCAST/Tox21/");
-		//File[] files = dir.listFiles();
-
+		File[] files = dir.listFiles();
+		/*
 		File[] files = new File[] {
 				new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_720681_data.csv"),
 				new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_743228_data.csv"),
-				//new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_743210_data.csv"),
-				//new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_743209_data.csv"),
+				new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_743210_data.csv"),
+				new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_743209_data.csv"),
 				new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_720687_data.csv"),
 				new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_720685_data.csv"),
 				new File("F:/Downloads/Chemical data/TOXCAST/Tox21/AID_720678_data.csv")
 		};
+		*/
 
 		IDatabaseConnection c = null;
 			for (int i=0; i < files.length; i++) 
@@ -72,7 +73,8 @@ public class Tox21ReaderTest extends DbUnitTest {
 		    		parser = new PubChemAIDReader(
 		    				files[i],jsonmeta
 		    				);
-			        write(parser,conn,new ReferenceSubstanceUUID(),false,20000);
+		    		parser.setReadPubchemScoreOnly(true);
+			        write(parser,conn,new ReferenceSubstanceUUID(),false,10);
 		        } catch (Exception x) {
 		        	x.printStackTrace();
 		        } finally {

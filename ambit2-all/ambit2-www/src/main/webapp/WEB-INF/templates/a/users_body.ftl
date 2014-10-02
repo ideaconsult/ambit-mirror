@@ -18,13 +18,16 @@ jQuery(document).ready(function()
     jQuery("#breadCrumb").jBreadCrumb();
     loadHelp("${ambit_root}","users");
     
-	var oTable = defineUsersTable("${ambit_root}","${ambit_request_json}","#users");	
 	<#if ambit_admin?? && ambit_admin>
+		var oTable = defineUsersTable("${ambit_root}","${ambit_request_json}","#users",true);
 		try {
-		makeEditableUsersTable("${ambit_root}",oTable);
+			makeEditableUsersTable("${ambit_root}",oTable);
 		} catch (err) {
 			console.log(err);
 		}
+		adminPwdForm("#adminPwdForm");
+	<#else>
+		var oTable = defineUsersTable("${ambit_root}","${ambit_request_json}","#users",false);
 	</#if>
 })
 </script>
@@ -62,6 +65,39 @@ jQuery(document).ready(function()
 		</thead>
 		<tbody></tbody>
 		</table>
+		
+		<br/>
+		<#if ambit_admin?? && ambit_admin>		
+		<div class='ui-widget-header ui-corner-top pwdchange' style="margin:5px;padding:5px;display:none;"> 
+			<span>Password change</span>
+			<a href="#" onClick="$('.pwdchange').hide();" style="float:right;"><span class="ui-icon ui-icon-close" style="float: right; margin-right: .3em;"></span></a>
+		</div>		
+	    <div class='ui-widget-content ui-corner-bottom pwdchange' style="margin:5px;padding:5px;display:none;">					
+			<form action="${ambit_root}/admin/user/reset?method=PUT" id="adminPwdForm"  method="POST" autocomplete="off">
+			<div class='row remove-bottom' style="margin:5px;padding:5px;"> 	
+				<label class='three columns omega' for="username">User name</label>
+				<input class="five columns omega" type='text' readonly size='40' id='username' name='username' value='' required/>
+				<input class="five columns omega" type='hidden' readonly size='40' id='uri' name='uri' value='' required/>
+			</div>	
+		
+			<div class='row remove-bottom' style="margin:5px;padding:5px;"> 	
+				<label class='three columns alpha' for="pwd1">New password</label>
+				<input class="five columns omega " type='password' size='40' id='pwd1' name='pwd1' value=''/>
+				<div class="eight columns omega">&nbsp;</div>
+			</div>		
+			<div class='row remove-bottom' style="margin:5px;padding:5px;"> 	
+				<label class='three columns alpha' for="pwd2">Confirm new password</label>
+				<input class="five columns omega"  type='password' size='40' id='pwd2' name='pwd2' value=''/>
+				<div class="eight columns omega">&nbsp;</div>
+			</div>		
+			<div class='row remove-bottom' style="margin:5px;padding:5px;"> 	
+				<label class='three columns alpha' >&nbsp;</label>
+				<input class="three columns omega" id='updatepwd' name='updatepwd' type='submit' class='submit' value='Update'>
+				<div class="eleven columns omega">&nbsp;</div>
+			</div>				
+			</form>		
+		</div>
+		</#if>				
 			
 		</div> 
 		
@@ -69,6 +105,8 @@ jQuery(document).ready(function()
 		================================================== -->
 		<#include "/chelp.ftl" >
 
+
+		
 <div class='row add-bottom'>&nbsp;</div>
 <#include "/footer.ftl" >
 </div> <!-- container -->

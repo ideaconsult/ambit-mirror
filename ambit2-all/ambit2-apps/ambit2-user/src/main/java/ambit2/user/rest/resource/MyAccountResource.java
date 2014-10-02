@@ -3,6 +3,7 @@ package ambit2.user.rest.resource;
 import java.util.Map;
 
 import net.idea.restnet.c.html.HTMLBeauty;
+import net.idea.restnet.user.DBUser;
 import net.idea.restnet.user.db.ReadUser;
 
 import org.restlet.Context;
@@ -83,4 +84,10 @@ public class MyAccountResource<T> extends UserDBResource<T> {
 		map.put("myprofile", true);
 		return map;
 	}
+	
+	
+	@Override
+	protected String getItemName(DBUser item) {
+		return item==null?"":item.getUserName()==null?"":item.getUserName();
+	}	
 }

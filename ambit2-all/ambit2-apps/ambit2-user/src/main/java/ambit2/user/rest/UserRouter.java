@@ -25,6 +25,7 @@ import ambit2.user.aa.AmbitPolicyAuthorizer;
 import ambit2.user.groups.OrganisationRouter;
 import ambit2.user.groups.ProjectRouter;
 import ambit2.user.rest.resource.AMBITRegistrationNotifyResource;
+import ambit2.user.rest.resource.MyAccountPwdResetResource;
 import ambit2.user.rest.resource.MyAccountResource;
 import ambit2.user.rest.resource.PwdForgottenConfirmResource;
 import ambit2.user.rest.resource.PwdForgottenFailedResource;
@@ -44,6 +45,7 @@ public class UserRouter extends MyRouter {
 		attach(String.format("/{%s}",UserDBResource.resourceKey), UserDBResource.class);
 		attach(String.format("/{%s}%s",UserDBResource.resourceKey,Resources.project),projectRouter);
 		attach(String.format("/{%s}%s",UserDBResource.resourceKey,Resources.organisation), orgRouter);
+		
 		/*
 		attach(String.format("/{%s}%s",UserDBResource.resourceKey,Resources.alert), alertRouter);
 		*/
@@ -64,7 +66,7 @@ public class UserRouter extends MyRouter {
 		myAccountRouter.attachDefault(MyAccountResource.class);
 		//AlertRouter alertRouter = new AlertRouter(context);
 		//myAccountRouter.attach(Resources.alert,alertRouter);
-		myAccountRouter.attach(Resources.reset,PwdResetResource.class);
+		myAccountRouter.attach(Resources.reset,MyAccountPwdResetResource.class);
 		//myAccountRouter.attach(Resources.protocol,MyObservationsResource.class);
 		setCookieUserRouter.attach(Resources.myaccount, myAccountRouter);
 		setCookieUserRouter.attach(Resources.user, new UserRouter(context,null,null));
