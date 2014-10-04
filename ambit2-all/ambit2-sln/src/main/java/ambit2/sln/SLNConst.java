@@ -295,6 +295,15 @@ public class SLNConst
 			return "";
 		}
 	}
+	
+	public static String bondTypeAttributeToSLNString(int attr, boolean FlagDefaultSingleBond)
+	{
+		if (FlagDefaultSingleBond)
+			if (attr == B_TYPE_1)
+				return "";
+		
+		return bondTypeAttributeToSLNString(attr);
+	}
 
 	public static int SLNStringToBondTypeAttr(String type)
 	{
