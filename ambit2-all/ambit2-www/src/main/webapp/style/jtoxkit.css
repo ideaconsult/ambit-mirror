@@ -59,10 +59,6 @@
   font-size: 80%;
 }
 
-.jtox-toolkit sup.helper {
-  opacity: 0.7;
-}
-
 .jtox-toolkit sup {
   font-size: smaller;
   vertical-align: super;
@@ -131,10 +127,6 @@
 
 .jtox-toolkit .font-bigger {
   font-size: larger;
-}
-
-.jtox-toolkit .font-heavy {
-  font-weight: bold;
 }
 
 .jtox-toolkit .transparent {
@@ -215,8 +207,6 @@
   background-size: 16px 16px;
   text-fill-color: rgba(0, 0, 0, 0);
   color: rgba(0, 0, 0, 0);
-  min-width: 16px;
-  min-height: 16px;
 }
 
 .jtox-toolkit input[type="password"],
@@ -274,43 +264,8 @@ img.jtox-smalldiagram {
   height: 125px;
 }
 
-.jtox-medium-box {
-  margin: 2px;
-  padding-left: 2px;
-  padding-right: 2px;
-  display: inline-block;
-  min-width: 220px;
-  height: auto;
-  vertical-align: top;  
-}
-
 .jtox-endpoint thead {
   display: none;
-}
-
-.jtox-toolkit li.tagit-choice a.tagit-close {
-  opacity: 0.4;
-}
-
-.jtox-toolkit li.tagit-choice.tag-value,
-.jtox-toolkit li.tagit-choice.tag-unit {
-  border: 0px;
-  background: inherit;
-  padding-right: 0px;
-}
-
-.jtox-toolkit li.tagit-choice.tag-value a.tagit-close,
-.jtox-toolkit li.tagit-choice.tag-unit a.tagit-close {
-  display: none;
-}
-
-.jtox-toolkit li.tagit-choice.tag-value {
-  font-weight: bold;
-}
-
-.jtox-toolkit li.tagit-choice.tag-unit {
-  font-size: 80%;
-  line-height: 1.2rem;
 }
 
 button.jt-toggle {
@@ -355,7 +310,7 @@ button.jt-toggle.active {
   font-size: 1.1em;
   margin-top: 2px;
   display: inline-block;
-  vertical-align: baseline;
+  vertical-align: top;
 }
 
 .jtox-search .search-pane .jtox-inline select {
@@ -383,10 +338,6 @@ button.jt-toggle.active {
 
 .jtox-search .searchsimilarity select {
   width: 5em;
-}
-
-.jtox-search .searchauto.dynamic>div {
-  white-space: nowrap;
 }
 
 .jtox-search .search-pane .dynamic {
@@ -466,22 +417,6 @@ button.jt-toggle.active {
   position: relative;  
 }
 
-.jtox-ds-tables .jt-processing {
-  text-align: center;
-  display: none;
-}
-
-.jtox-ds-tables .jt-processing .message {
-  background: url("../images/waiting_big.gif") left center no-repeat;
-  background-size: 30px 30px;
-  width: auto;
-  min-height: 30px;
-  padding-left: 35px;
-  padding-top: 8px;
-  overflow: visible;
-  display: inline-block;
-}
-
 .jtox-ds-tables .jtox-details-box {
   position: absolute;
   margin: 0px;
@@ -557,7 +492,7 @@ div.jtox-details-table {
   width: 25%;
 }
 
-.jtox-controls span.high {
+.jtox-controls span {
   font-weight: bold;
   font-size: 1.1em;
 }
@@ -639,10 +574,6 @@ div.jtox-study-tab div button {
 div.jtox-study-tab .dataTables_wrapper {
   overflow: hidden;  
   width: 100%;
-}
-
-.jtox-toolkit .jtox-study table td {
-  word-wrap: break-word;
 }
 
 /* Start of table-related classes */
