@@ -1,7 +1,16 @@
 <#include "/html.ftl">
 <head>
   <#include "/header_updated.ftl">
-  <script type='text/javascript'>
+  
+<script type='text/javascript'>
+
+function loginDefault() {
+	$("#user").val("guest");
+	$("#pwd").val("guest");
+	$("#ssoform").submit();
+}
+</script>  
+<script type='text/javascript'>
 
 $(document)
 		.ready(
@@ -39,7 +48,7 @@ $(document)
 	    </div>
     	<div class="ui-widget-content ui-corner-bottom">
 		<div style='margin:5px;padding:5px;'>
-		<form method='post' action='${ambit_root}/openssouser?targetUri=${ambit_root}/login' autocomplete='off'>
+		<form method='post' action='${ambit_root}/openssouser?targetUri=${ambit_root}/login' id='ssoform' autocomplete='off'>
 		
 		
 		
@@ -50,20 +59,23 @@ $(document)
 		</div>
 		<div class='three columns omega'>&nbsp;</div>
 		<div class='five columns omega'>
-			<a title='Register at OpenTox site' target=_blank href='http://opentox.org/join_form' class='h5 qxternal' >Create an OpenTox account</a>
+			<a title='Register at OpenTox site' target=_blank href='http://opentox.org/join_form' class='help qxternal' >Create an OpenTox account</a>
 		</div>
 		</div>
 		
 		<div class="row remove-bottom">		
 		<label class='three columns alpha'>OpenTox User name</label> 
 		<#if username??>
-		<div class='five columns omega add-bottom'>${username}</div>
+			<div class='five columns omega add-bottom'>${username}</div>
 		<#else>
-		<input class='five columns omega' type='text' size='40' name='user' value=''>
+			<input class='five columns omega' type='text' size='40' name='user' id='user' value=''>
+			<div class='three columns omega'>&nbsp;</div>
+			<div class='five columns omega'><a href="#" onClick="loginDefault();" class='h5 '>Login as guest</a></div>		
 		</#if>
-		
+
 		</div>
 		
+<!--		
 		<#if openam_token??>
 		<div class="row">		
 		<label class='three columns alpha'>OpenAM token</label> 
@@ -72,15 +84,29 @@ $(document)
 		</div>	
 		</div>
 		</#if>
+-->
 		
 		<#if username??>
+		
+		<div class="row remove-bottom">
+		
+		<label class='three columns alpha'>OpenTox profile</label> 
+	
+		<div class='thirteen columns omega'>
+			<a href="http://opentox.org/personalize_form" class="help qxternal">Personal preferences</a> 
+			<a href="http://opentox.org/password_form" class="help qxternal">Change password</a>
+		</div>
+		
+		</div>
+		
+		
 		<#else>
 		<div class="row remove-bottom">		
 		<label class='three columns alpha'>Password</label> 
-		<input class='five columns omega' type='password' size='40' name='password' value=''>
-		<!--
-		<div class='eight columns omega'><a href="${ambit_root}/forgotten">Forgotten password?</a></div>
-		-->
+		<input class='five columns omega' type='password' size='40' name='password' id='pwd' value=''>
+		<div class='three columns omega'>&nbsp;</div>
+		<div class='five columns omega'><a href="http://opentox.org/mail_password_form?userid=" class="help qxternal">Forgotten password?</a></div>
+		
 		</div>
 		</#if>
 
@@ -88,10 +114,11 @@ $(document)
 		<#else>
 		<div class="row half-bottom">		
 		<label class='three columns alpha'>&nbsp;</label>		
-		<div class='eight columns omega'>
+		<div class='five columns omega'>
 		<input type=CHECKBOX name='subjectid_secure' CHECKED>
 		Use secure cookie for the OpenSSO token
 		</div>
+		
 		</div>
 		
 		<div class="row half-bottom">		
@@ -111,7 +138,7 @@ $(document)
 		<!-- Right column and footer
 		================================================== -->
 
-<#include "/chelp.ftl" >
+
 
 <div class='row add-bottom'>&nbsp;</div>
 <#include "/footer.ftl" >
