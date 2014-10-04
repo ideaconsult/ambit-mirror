@@ -148,8 +148,8 @@ var ccLib = {
   },
   
   getJsonValue: function (json, field){
-    var value = json[field];
-    if (value === undefined && field != null) {
+    var value = undefined;
+    if (field !== undefined) {
       try {
         eval("value = json." + field);
       } 
@@ -389,7 +389,7 @@ function ccNonEmptyFilter(v) {
 window.jT = window.jToxKit = {
 	templateRoot: null,
 
-	/* A single place to hold all necessary queries. Parameters are marked with {id} and formatString() (ccLib.js) is used
+	/* A single place to hold all necessary queries. Parameters are marked with {id} and formatString() (common.js) is used
 	to prepare the actual URLs
 	*/
 	queries: {
@@ -407,7 +407,7 @@ window.jT = window.jToxKit = {
   	crossDomain: false,   // should it expect cross-domain capabilities for the queries.
   	baseUrl: null,        // the baseUrl for the server that loaded the page.
   	fullUrl: null,        // the url as it is on loading the page - this is parsed one, i.e. parseUrl() processed.
-  	timeout: 15000,       // the timeout of call to the server should be wait before the attempt is considered error.
+  	timeout: 15000,       // the timeout an call to the server should be wait before the attempt is considered error.
   	pollDelay: 250,       // after how many milliseconds a new attempt should be made during task polling.
   	onConnect: null,		  // function (service): called when a server request is started - for proper visualization. Part of settings.
   	onSuccess: null,	    // function (code, mess): called on server request successful return. It is called along with the normal processing. Part of settings.
@@ -448,7 +448,6 @@ window.jT = window.jToxKit = {
   	  parent = self;
   	  
     dataParams = self.$.extend(true, topSettings, self.blankSettings, dataParams);
-    dataParams.baseUrl = self.fixBaseUrl(dataParams.baseUrl);
 
 	  // the real initialization function
     var realInit = function (params) {
@@ -519,8 +518,6 @@ window.jT = window.jToxKit = {
   		var queryParams = url.params;
   		if (!queryParams.baseUrl)
   		  queryParams.baseUrl = self.formBaseUrl(url);
-  		else
-    		queryParams.baseUrl = self.fixBaseUrl(queryParams.baseUrl);
   	
       self.settings = self.$.extend(true, self.settings, queryParams); // merge with defaults
       root = document;
@@ -608,13 +605,6 @@ window.jT = window.jToxKit = {
   	  ccLib.fireCallback(callback, kit, task, jhr);
 	},
 	
-	/* Fix the baseUrl - remove the trailing slash if any
-	*/
-	fixBaseUrl: function (url) {
-    if (url != null && url.charAt(url.length - 1) == '/')
-      url = url.slice(0, -1);
-  	return url;
-	},
 	/* Deduce the baseUrl from a given Url - either if it is full url, of fallback to jToxKit's if it is local
 	Passed is the first "non-base" component of the path...
 	*/
@@ -692,7 +682,7 @@ window.jT = window.jToxKit = {
 			dataType: params.dataType || (settings.plainText ? "text": (settings.jsonp ? 'jsonp' : 'json')),
 			headers: { Accept: accType },
 			crossDomain: settings.crossDomain || settings.jsonp,
-			timeout: parseInt(settings.timeout),
+			timeout: settings.timeout,
 			type: params.method,
 			data: params.data,
 			jsonp: settings.jsonp ? 'callback' : false,
@@ -928,10 +918,6 @@ window.jT.ui = {
   },
   
   putTable: function (kit, root, config, settings) {
-    var onRow = kit.settings.onRow;
-    if (onRow === undefined && settings != null)
-      onRow = settings.onRow;
-      
     var opts = jT.$.extend({
       "bPaginate": false,
       "bProcessing": true,
@@ -942,9 +928,9 @@ window.jT.ui = {
       "bServerSide": false,
       "fnCreatedRow": function( nRow, aData, iDataIndex ) {
         // call the provided onRow handler, if any
-        if (typeof onRow == 'function') {
-          var res = ccLib.fireCallback(onRow, kit, nRow, aData, iDataIndex);
-          if (res === false)
+        if (typeof kit.settings.onRow == 'function') {
+          var res = ccLib.fireCallback(kit.settings.onRow, kit, nRow, aData, iDataIndex);
+          if (typeof res == 'boolean' && !res)
             return;
         }
         // handle a selection click.. if any
@@ -957,7 +943,7 @@ window.jT.ui = {
           jT.$('.jtox-details-toggle', nRow).on('click', function(e) {  
             var root = jT.ui.toggleDetails(e, nRow);
             if (!!root) {
-              ccLib.fireCallback(kit.settings.onDetails, kit, root, aData, this);
+              ccLib.fireCallback(kit.settings.onDetails, kit, root, jT.$(this).data('data'), e);
             }
           });
         }
@@ -980,7 +966,7 @@ window.jT.ui = {
       
     var res = '';
     for (var i = 0, il = data.length; i < il; ++i)
-      res += '<span>' + data[i].relation.substring(4).toLowerCase() + '</span><sup class="helper"><a target="_blank" href="' + (full.URI + '/composition') + '" title="' + data[i].compositionName + '(' + data[i].compositionUUID + ')">?</a></sup>';
+      res += '<span>' + data[i].relation.substring(4).toLowerCase() + '</span><sup><a target="_blank" href="' + (full.URI + '/composition') + '" title="' + data[i].compositionName + '(' + data[i].compositionUUID + ')">?</a></sup>';
   
     return res;
   },
@@ -999,16 +985,6 @@ window.jT.ui = {
     else { // i.e. short version
       return '<span class="ui-icon ui-icon-star jtox-inline" title="' + title + '"></span>' + stars;
     }
-  },
-  
-  valueWithUnits: function (val, unit) {
-    var out = '';
-    if (val != null) {
-      out += ccLib.trim(val.toString()).replace(/ /g, "&nbsp;");
-      if (!!unit)
-        out += '&nbsp;<span class="units">' + unit.replace(/ /g, "&nbsp;") + '</span>';
-    }
-    return out;
   },
   
   updateCounter: function (str, count, total) {
@@ -1424,9 +1400,7 @@ var jToxSearch = (function () {
           params.search = this.settings.defaultNeedle;
           this.setAuto(params.search);
       }
-
-      if (type == "auto" && form.regexp.checked)
-        params['condition'] = "regexp";        
+        
       if (type == 'similarity')
         params.threshold = form.threshold.value;
       
@@ -1499,7 +1473,6 @@ var jToxCompound = (function () {
     "onPrepared": null,       // invoked when the initial call for determining the tabs/columns is ready
     "onDetails": null,        // invoked when a details pane is openned
     "preDetails": null,       // invoked prior of details pane creation to see if it is going to happen at all
-    "oLanguage": {},          // some default language settings, which apply to first (static) table only
     "fnAccumulate": function(fId, oldVal, newVal, features) {
       if (ccLib.isNull(newVal))
         return oldVal;
@@ -1608,7 +1581,7 @@ var jToxCompound = (function () {
       },
       "columns": {
         "compound": {
-          "Name": { sTitle: "Name", mData: 'title', mRender: function (data, type, full) { return '<span>' + data + '</span><sup class="helper"><a target="_blank" href="' + full.URI + '">?</a></sup>'; } },
+          "Name": { sTitle: "Name", mData: 'title', mRender: function (data, type, full) { return '<span>' + data + '</span><sup><a target="_blank" href="' + full.URI + '">?</a></sup>'; } },
           "Value": { sTitle: "Value", mData: 'value', sDefaultContent: "-" },
           "SameAs": { sTitle: "SameAs", mData: 'sameAs', sDefaultContent: "-" },
           "Source": { sTitle: "Source", mData: 'source', sDefaultContent: "-", mRender: function (data, type, full) { return !data || !data.type ? '-' : '<a target="_blank" href="' + data.URI + '">' + data.type + '</a>'; } }
@@ -1846,9 +1819,10 @@ var jToxCompound = (function () {
       var self = this;
       var feature = self.feature[fId];
       var val = (feature.data !== undefined) ? (ccLib.getJsonValue(data, jT.$.isArray(feature.data) ? feature.data[0] : feature.data)) : data.values[fId];
-      return (typeof feature.render == 'function') ? 
-        feature.render(val, !!type ? type : 'filter', data) : 
-        jT.ui.valueWithUnits(val, !!feature.units && (type == 'display' || type == 'details') ? feature.units : null)
+      var res = (typeof feature.render == 'function') ? feature.render(val, !!type ? type : 'filter', data) : val;
+      if (!!feature.units && (type == 'display' || type == 'details'))
+        res += '<span class="units">' + feature.units + '</span>';
+      return res;
     },
     
     featureUri: function (fId) {
@@ -1862,12 +1836,12 @@ var jToxCompound = (function () {
       var data = [];
       ccLib.enumObject(set, function (fId, idx, level) {
         var feat = jT.$.extend({}, self.feature[fId]);
-        var vis = feat.visibility;
+        var vis = feat['visibility'];
         if (!!vis && vis != scope)
           return;
         var title = feat.title;
         feat.value = self.featureValue(fId, entry, scope);
-        if (!!title && (!self.settings.hideEmptyDetails || !!feat.value)) {
+        if (!!title && (!self.settings.hideEmptyDetails || !! feat.value)) {
           data.push(feat)
           if (!feat.value)
             feat.value = '-';
@@ -1884,7 +1858,7 @@ var jToxCompound = (function () {
         
       // now we now we should show this one.
       var col = {
-        "sTitle": !feature.title ? '' : jT.ui.valueWithUnits(feature.title.replace(/_/g, ' '), (!self.settings.showUnits ? null : feature.units)),
+        "sTitle": !feature.title ? '' : (feature.title.replace(/_/g, ' ') + (!self.settings.showUnits || ccLib.isNull(feature.units) ? "" : feature.units)),
         "sDefaultContent": "-",
       };
       
@@ -1909,8 +1883,6 @@ var jToxCompound = (function () {
       // finally - this one.          
       if (feature.render !== undefined)
         col["mRender"] = feature.render;
-      if (feature.order != null)
-        col["iOrder"] = feature.order;
       return col;
     },
     
@@ -1946,7 +1918,7 @@ var jToxCompound = (function () {
       // prepare the function for column switching...      
       var fnShowColumn = function() {
         var dt = $(this).data();
-        var cells = jT.$(dt.sel + ' table tr .' + dt.column, self.rootElement);
+        var cells = jT.$(dt.sel + ' table tr>*:nth-child(' + (dt.idx + 1) + ')', self.rootElement);
         if (this.checked) {
           jT.$(cells).show();
           jT.$("table tr .blank-col", self.rootElement).addClass('jtox-hidden');
@@ -1986,7 +1958,9 @@ var jToxCompound = (function () {
         var varCell = document.getElementById('jtox-var-' + self.instanceNo + '-' + idx).firstElementChild;
         fnExpandCell(varCell, toShow);
         
-        jT.$('.jtox-details-open', row).toggleClass('ui-icon-folder-open ui-icon-folder-collapsed');
+        var iconCell = jT.$('.jtox-details-open', row);
+        jT.$(iconCell).toggleClass('ui-icon-folder-open');
+        jT.$(iconCell).toggleClass('ui-icon-folder-collapsed');
         
         if (toShow) {
           // i.e. we need to show it - put the full sized diagram in the fixed part and the tabs in the variable one...
@@ -2030,7 +2004,7 @@ var jToxCompound = (function () {
           });
           
           jT.$(cell).height(detDiv.offsetHeight);
-          ccLib.fireCallback(self.settings.onDetails, self, detDiv, entry, cell);
+          ccLib.fireCallback(self.settings.onDetails, self, detDiv, entry, event);
           jT.$(cell).data('detailsDiv', detDiv);
           jT.$(detDiv).data('rootCell', cell);
         }
@@ -2057,32 +2031,28 @@ var jToxCompound = (function () {
           
           // finally - assign column switching to the checkbox of main tab.
           var colList = !!feature.primary ? fixCols : varCols;
-          var colId = 'col-' + colList.length;
-          col.sClass += ' ' + colId;
-
-          jT.$('.jtox-ds-features input.jtox-checkbox[value="' + fId + '"]', self.rootElement).data({ sel: !!feature.primary ? '.jtox-ds-fixed' : '.jtox-ds-variable', column: colId, id: fId}).on('change', fnShowColumn)
+          jT.$('.jtox-ds-features input.jtox-checkbox[value="' + fId + '"]', self.rootElement).data({ sel: !!feature.primary ? '.jtox-ds-fixed' : '.jtox-ds-variable', idx: colList.length, id: fId}).on('change', fnShowColumn)
           
           // and push it into the proper list.
           colList.push(col);
         });
       }
       
-      // now - sort columns and create the tables...
-      jT.ui.sortColDefs(fixCols);
+      // now - create the tables...
       self.fixTable = (jT.$(".jtox-ds-fixed table", self.rootElement).dataTable({
         "bPaginate": false,
+        "bProcessing": true,
         "bLengthChange": false,
 				"bAutoWidth": true,
         "sDom" : "rt",
         "aoColumns": fixCols,
         "bSort": false,
         "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+          jT.ui.installHandlers(self, nRow);
           // attach the click handling
           if (self.settings.hasDetails)
             jT.$('.jtox-details-open', nRow).on('click', function(e) { fnShowDetails(nRow, e); });
           jT.$(nRow).data('jtox-index', iDataIndex);
-          ccLib.fireCallback(self.settings.onRow, self, nRow, aData, iDataIndex);
-          jT.ui.installHandlers(self, nRow);
           jT.$('.jtox-diagram span.ui-icon', nRow).on('click', function () {
             setTimeout(function () {
               jT.$(self.fixTable).dataTable().fnAdjustColumnSizing();
@@ -2090,16 +2060,16 @@ var jToxCompound = (function () {
             }, 50);
           });
         },
-        "oLanguage" : { "sEmptyTable": '<span class="jt-feeding">' + (self.settings.oLanguage.sProcess || 'Feeding data...') + '</span>' }
+        "oLanguage" : {
+          "sEmptyTable" : '<span id="jtox-ds-message-' + self.instanceNo + '">Loading data...</span>',
+        }
       }))[0];
 
       // we need to put a fake column to stay, when there is no other column here, or when everything is hidden..
       varCols.push({ "sClass": "center blank-col" + (varCols.length > 1 ? " jtox-hidden" : ""), "mData": "index", "mRender": function(data, type, full) { return type != 'display' ? data : '...'; }  });
 
-      jT.ui.sortColDefs(varCols);
       self.varTable = (jT.$(".jtox-ds-variable table", self.rootElement).dataTable({
         "bPaginate": false,
-        "bProcessing": true,
         "bLengthChange": false,
 				"bAutoWidth": false,
         "sDom" : "rt",
@@ -2108,10 +2078,9 @@ var jToxCompound = (function () {
         "bScrollCollapse": true,
         "fnCreatedRow": function( nRow, aData, iDataIndex ) {
           nRow.id = 'jtox-var-' + self.instanceNo + '-' + iDataIndex;
+          jT.ui.installHandlers(self, nRow);
           jT.$(nRow).addClass('jtox-row');
           jT.$(nRow).data('jtox-index', iDataIndex);
-          ccLib.fireCallback(self.settings.onRow, self, nRow, aData, iDataIndex);
-          jT.ui.installHandlers(self, nRow);
         },
         "fnDrawCallback": function(oSettings) {
           // this is for synchro-sorting the two tables
@@ -2124,7 +2093,7 @@ var jToxCompound = (function () {
           if (rlen > 0)
             jT.$(self.fixTable).dataTable().fnSort([[1, "asc"]]);
         },
-        "oLanguage" : { "sEmptyTable": "-"}
+        "oLanguage" : { "sEmptyTable" : " - " }
       }))[0];
     },
 
@@ -2221,11 +2190,7 @@ var jToxCompound = (function () {
       jT.$(self.varTable).dataTable().fnClearTable();
       jT.$(self.fixTable).dataTable().fnAddData(dataFeed);
       jT.$(self.varTable).dataTable().fnAddData(dataFeed);
-      jT.$('.jt-feeding', self.rootElement).html(self.settings.oLanguage.sZeroRecords || 'No records matching the filter.');
-
-      ccLib.fillTree(jT.$('.jtox-controls', self.rootElement)[0], {
-        "filtered-text": !needle ? " " : ' (filtered to <span class="high">' + dataFeed.length + '</span>) '
-      });
+      jT.$('#jtox-ds-message-' + self.instanceNo).html('No records matching the filter.');
       
       if (self.settings.showTabs){
         self.suspendEqualization = true;
@@ -2255,7 +2220,7 @@ var jToxCompound = (function () {
       var pane = jT.$('.jtox-controls', self.rootElement)[0];
       ccLib.fillTree(pane, {
         "pagestart": qSize > 0 ? qStart + 1 : 0,
-        "pageend": qStart + qSize
+        "pageend": qStart + qSize,
       });
       
       var nextBut = jT.$('.next-field', pane);
@@ -2286,15 +2251,14 @@ var jToxCompound = (function () {
     },
     
     // make the actual query for the (next) portion of data.
-    queryEntries: function(from, size, dataset) {
+    queryEntries: function(from, size) {
       var self = this;
       var scope = { 'from': from, 'size': size };
       var qUri = self.queryUri(scope);
       jT.$('.jtox-controls select', self.rootElement).val(scope.size);
       self.dataset = null;
 
-      // the function for filling
-      var fillFn = function(dataset) {
+      jT.call(self, qUri, function(dataset){
         if (!!dataset){
           // first, arrange the page markers
           self.pageSize = scope.size;
@@ -2314,13 +2278,7 @@ var jToxCompound = (function () {
         }
         // time to call the supplied function, if any.
         ccLib.fireCallback(self.settings.onLoaded, self, dataset);
-      };
-  
-      // we may be passed dataset, if the initial, setup query was 404: Not Found - to avoid second such query...
-      if (dataset != null)
-        fillFn(dataset)
-      else 
-        jT.call(self, qUri, fillFn);
+      });
     },
     
     /* Makes a query to the server for particular dataset, asking for feature list first, so that the table(s) can be 
@@ -2338,20 +2296,8 @@ var jToxCompound = (function () {
       
       // remember the _original_ datasetUri and make a call with one size length to retrieve all features...
       self.datasetUri = (datasetUri.indexOf('http') !=0 ? self.settings.baseUrl : '') + datasetUri;
-      
-      var procDiv = jT.$('.jt-processing', self.rootElement).show()[0];
-      if (!!self.settings.oLanguage.sLoadingRecords)
-        jT.$('.message', procDiv).html(self.settings.oLanguage.sLoadingRecords);
 
-      jT.call(self, ccLib.addParameter(self.datasetUri, "page=0&pagesize=1"), function (dataset, jhr) {
-        var empty = false;
-        if (!dataset && jhr.status == 404) {
-          empty = true;
-          dataset = { feature: {}, dataEntry: [] }; // an empty set, to make it show the table...
-        }
-        
-        // remove the loading pane in anyways..
-        jT.$(procDiv).hide();
+      jT.call(self, ccLib.addParameter(self.datasetUri, "page=0&pagesize=1"), function (dataset) {
         if (!!dataset) {
           self.feature = dataset.feature;
           cls.processFeatures(self.feature, self.settings.configuration.baseFeatures);
@@ -2398,8 +2344,7 @@ var jToxCompound = (function () {
             self.equalizeTables(); // to make them nicer, while waiting...
             ccLib.fireCallback(self.settings.onPrepared, self, dataset, self);
           }
-          
-          self.queryEntries(self.pageStart, self.pageSize, empty ? dataset : null); // and make the query for actual data
+          self.queryEntries(self.pageStart, self.pageSize); // and make the query for actual data
         }
       });
     },
@@ -2537,10 +2482,11 @@ var jToxDataset = (function () {
     selectionHandler: null,   // selection handler to be attached on checkbox, for jToxQuery integration
     noInterface: false,       // run in interface-less mode, with data retrieval and callback calling only
     sDom: "<Fif>rt",          // passed with dataTable settings upon creation
+    oLanguage: null,          // passed with dataTable settings upon creation
     onLoaded: null,           // callback called when the is available
     loadOnInit: false,        // whether to make an (empty) call when initialized.
     oLanguage: {
-      "sLoadingRecords": "Loading dataset list.",
+      "sLoadingRecords": "No datasets found.",
       "sZeroRecords": "No datasets found.",
       "sEmptyTable": "No datasets available.",
       "sInfo": "Showing _TOTAL_ dataset(s) (_START_ to _END_)"
@@ -2553,7 +2499,7 @@ var jToxDataset = (function () {
             var num = parseInt(data.match(/https{0,1}:\/\/.*\/dataset\/(\d+).*/)[1]);
             if (type != 'display')
               return num;
-            return '<a target="_blank" href="' + data + '/metadata"><span class="ui-icon ui-icon-link jtox-inline"></span> D' + num + '</a>';
+            return '<a target="_blank" href="' + data + '"><span class="ui-icon ui-icon-link jtox-inline"></span> D' + num + '</a>';
           }},
           'Title': { iOrder: 1, sTitle: "Title", mData: "title", sDefaultContent: "-" },
           'Stars': { iOrder: 2, sTitle: "Stars", mData: "stars", sWidth: "160px" },
@@ -2616,9 +2562,7 @@ var jToxDataset = (function () {
       
       if (!self.settings.noInterface)
         jT.$(self.table).dataTable().fnClearTable();
-      jT.call(self, uri, function (result, jhr) {
-        if (!result && jhr.status == 404)
-          result = { dataset: [] }; // empty one...
+      jT.call(self, uri, function (result) {
         if (!!result) {
           self.dataset = result.dataset;
           if (!self.settings.noInterface)
@@ -2778,10 +2722,7 @@ var jToxModel = (function () {
       self.modelUri = uri;
       if (!self.settings.noInterface)
         jT.$(self.table).dataTable().fnClearTable();
-      jT.call(self, uri, function (result, jhr) {
-        if (!result && jhr.status == 404)
-          result = { model: [] }; // empty one
-          
+      jT.call(self, uri, function (result) {
         if (!!result) {
           self.models = result.model;
           if (!self.settings.noInterface)
@@ -2800,9 +2741,7 @@ var jToxModel = (function () {
         uri = ccLib.addParameter(uri, 'search=' + needle);
       if (!self.settings.noInterface)
         jT.$(self.table).dataTable().fnClearTable();
-      jT.call(self, uri, function (result, jhr) {
-        if (!result && jhr.status == 404)
-          result = { algorithm: [] }; // empty one
+      jT.call(self, uri, function (result) {
         if (!!result) {
           self.algorithm = result.algorithm;
           if (!self.settings.noInterface)
@@ -2947,12 +2886,12 @@ var jToxSubstance = (function () {
     
     if (!self.settings.noInterface) {
       if (self.settings.embedComposition && self.settings.onDetails == null) {
-        self.settings.onDetails = function (root, data, element) {
+        self.settings.onDetails = function (root, data, event) {
           new jToxComposition(root, jT.$.extend(
             {}, 
             self.settings, 
             (typeof self.settings.embedComposition == 'object' ? self.settings.embedComposition : jT.blankSettings), 
-            { compositionUri : data.URI + '/composition' }
+            { compositionUri : data + '/composition' }
           ));
         };
       }
@@ -2979,7 +2918,6 @@ var jToxSubstance = (function () {
         return (type != 'display') ? data : '<a target="_blank" href="' + self.settings.baseUrl + '/substanceowner/' + full.ownerUUID + '/substance">' + data + '</a>';
       };
       
-      var opts = {  "sDom": "rti" };
       if (self.settings.showControls) {
         jT.ui.bindControls(self, { 
           nextPage: function () { self.nextPage(); },
@@ -2987,12 +2925,6 @@ var jToxSubstance = (function () {
           sizeChange: function() { self.queryEntries(self.pageStart, parseInt(jT.$(this).val())); },
           filter: function () { jT.$(self.table).dataTable().fnFilter(jT.$(this).val()); }
         });
-        
-        opts['fnInfoCallback'] = function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-          var needle = jT.$('.filterbox', self.rootElement).val();
-          jT.$('.filtered-text', self.rootElement).html(!needle ? ' ' : ' (filtered to <span class="high">' + iTotal + '</span>) ');
-          return '';
-        };
       }
       else
         jT.$('.jtox-controls', self.rootElement).remove();
@@ -3001,7 +2933,7 @@ var jToxSubstance = (function () {
       self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
       
       // READYY! Go and prepare THE table.
-      self.table = jT.ui.putTable(self, jT.$('table', self.rootElement)[0], 'substance', opts);
+      self.table = jT.ui.putTable(self, jT.$('table', self.rootElement)[0], 'substance', { "sDom": "rt" });
     },
     
     queryEntries: function(from, size) {
@@ -3014,9 +2946,7 @@ var jToxSubstance = (function () {
         
       var qStart = Math.floor(from / size);
       var qUri = ccLib.addParameter(self.substanceUri, "page=" + qStart + "&pagesize=" + size);
-      jT.call(self, qUri, function (result, jhr) {
-        if (!result && jhr.status == 404)
-          result = { substabce: [] }; // empty one
+      jT.call(self, qUri, function (result) {
         if (!!result) {
           self.pageSize = size;
           self.pageStart = from;
@@ -3109,7 +3039,7 @@ var jToxComposition = (function () {
   };
   
   cls.formatConcentration = function (precision, val, unit) {
-  	return jT.ui.valueWithUnits((!precision || "=" == precision ? "" : precision) + val + " ", unit || '% (w/w)');
+  	return ((!precision || "=" == precision ? "" : precision) + val + " ").replace(/ /g, "&nbsp;") + '<span class="units">' + (unit || '% (w/w)').replace(/ /g, "&nbsp;") + '</span>';
   };
 
   var fnDatasetValue = function (fid, old, value, features){
@@ -3379,8 +3309,8 @@ var jToxStudy = (function () {
 	        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return formatValue(data.result, type) }); } },
 	        { "sTitle": "Text", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return !!data.result.textValue  ? data.result.textValue : '-'; }); } },
 	        { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "-"  },    // Protocol columns
-	        { "sTitle": "Owner", "sClass": "center middle", "sWidth": "15%", "mData": "citation.owner", "sDefaultContent": "-" },
-	        { "sTitle": "Citation", "sClass": "center middle", "sWidth": "15%", "mData": "citation", "mRender": function (data, type, full) { return (data.title || "") + ' ' + (!!data.year && data.year.length > 1 ? data.year : ""); }  },
+	        { "sTitle": "Owner", "sClass": "center middle shortened", "sWidth": "15%", "mData": "citation.owner", "sDefaultContent": "-" },
+	        { "sTitle": "Citation", "sClass": "center middle shortened", "sWidth": "15%", "mData": "citation", "mRender": function (data, type, full) { return (data.title || "") + ' ' + (!!data.year && data.year.length > 1 ? data.year : ""); }  },
 	        { "sTitle": "UUID", "sClass": "center middle", "sWidth": "15%", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : jT.ui.shortenedData(data, "Press to copy the UUID in the clipboard"); } }
 	      ];
   
@@ -3420,8 +3350,11 @@ var jToxStudy = (function () {
         // some value formatting functions
         var formatValue = function (data, unit, type) {
           var out = "";
-          if (typeof data == 'string')
-            out += jT.ui.valueWithUnits(data, unit);
+          if (typeof data == 'string') {
+            out += ccLib.trim(data).replace(/ /g, "&nbsp;");
+            if (!!unit)
+              out += '&nbsp;<span class="units">' + unit.replace(/ /g, "&nbsp;") + '</span>';
+          }
           else if (typeof data == 'object' && data != null) {
             data.loValue = ccLib.trim(data.loValue);
             data.upValue = ccLib.trim(data.upValue);
@@ -4008,13 +3941,12 @@ var jToxLog = (function () {
     lineHeight: "20px",     // the height of each status line
     rightSide: false,       // put the status icon on the right side
     hasDetails: true,       // whether to have the ability to open each line, to show it's details
-    noInterface: false,     // whether to have interface, or not - it can be used just as relay station
-    onEvent: null,          // a callback, when new event has arrived: function (logEvent). See README.md for more details
+    onStatus: null,         // a callback, when new status has arrived: function (newstatus, oldstatus)
     
-    // line formatting function - function (service, state, params, jhr) -> { header: "", details: "" }
-    formatEvent: function (service, state, params, jhr) {
+    // line formatting function - function (service, params, status, jhr) -> { header: "", details: "" }
+    formatLine: function (service, params, status, jhr) {
       if (params != null)
-        return {
+        return { 
           header: params.method.toUpperCase() + ": " + service,
           details: "..."
         };
@@ -4034,145 +3966,127 @@ var jToxLog = (function () {
     jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even when manually initialized
 
     self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings);
-    if (!self.settings.noInterface) {
-      self.rootElement.appendChild(jT.getTemplate('#jtox-logger'));
+    self.rootElement.appendChild(jT.getTemplate('#jtox-logger'));
+    
+    if (typeof self.settings.lineHeight == "number")
+      self.settings.lineHeight = self.settings.lineHeight.toString() + 'px';
+    if (typeof self.settings.keepMessages != "number")
+      self.settings.keepMessages = parseInt(self.settings.keepMessages);
       
-      if (typeof self.settings.lineHeight == "number")
-        self.settings.lineHeight = self.settings.lineHeight.toString() + 'px';
-      if (typeof self.settings.keepMessages != "number")
-        self.settings.keepMessages = parseInt(self.settings.keepMessages);
-        
-      // now the actual UI manipulation functions...
-      var listRoot = $('.list-root', self.rootElement)[0];
-      var statusEl = $('.status', self.rootElement)[0];
-  
-      if (!!self.settings.rightSide) {
-        statusEl.style.right = '0px';
-        jT.$('.list-wrap', self.rootElement).addClass('right-side');
-      }
+    // now the actual UI manipulation functions...
+    var listRoot = $('.list-root', self.rootElement)[0];
+    var statusEl = $('.status', self.rootElement)[0];
+
+    if (!!self.settings.rightSide) {
+      statusEl.style.right = '0px';
+      jT.$('.list-wrap', self.rootElement).addClass('right-side');
+    }
+    else
+      statusEl.style.left = '0px';
+    
+    var setIcon = function (root, status) {
+      if (status == "error")
+        jT.$(root).addClass('ui-state-error');
       else
-        statusEl.style.left = '0px';
+        jT.$(root).removeClass('ui-state-error');
+
+      if (status == "error")
+        jT.$('.icon', root).addClass('ui-icon ui-icon-alert').removeClass('loading ui-icon-check');
+      else if (status == "success")
+        jT.$('.icon', root).addClass('ui-icon ui-icon-check').removeClass('loading ui-icon-alert');
+      else {
+        jT.$('.icon', root).removeClass('ui-icon ui-icon-check ui-icon-alert');
+        if (status == "connecting")
+          jT.$('.icon', root).addClass('loading');
+      }
+    };
     
-      var setIcon = function (root, status) {
-        if (status == "error")
-          jT.$(root).addClass('ui-state-error');
-        else
-          jT.$(root).removeClass('ui-state-error');
-  
-        if (status == "error")
-          jT.$('.icon', root).addClass('ui-icon ui-icon-alert').removeClass('loading ui-icon-check');
-        else if (status == "success")
-          jT.$('.icon', root).addClass('ui-icon ui-icon-check').removeClass('loading ui-icon-alert');
-        else {
-          jT.$('.icon', root).removeClass('ui-icon ui-icon-check ui-icon-alert');
-          if (status == "connecting")
-            jT.$('.icon', root).addClass('loading');
-        }
-      };
-      
-      var setStatus = function (status) {
-        $(".icon", statusEl).removeClass("jt-faded");
-        setIcon (statusEl, status);
-        if (status == "error" || status == "success") {
-          setTimeout(function () { 
-            jT.$('.icon', statusEl).addClass('jt-faded');
-            var hasConnect = false;
-            jT.$('.logline', listRoot).each(function () {
-              if (jT.$(this).data('status') == "connecting")
-                hasConnect = true;
-            });
-            if (hasConnect)
-              setStatus("connecting");
-          }, self.settings.statusDelay);
-        }
-        ccLib.fireCallback(self.settings.onStatus, self, status, self.theStatus);
-        self.theStatus = status;
-      };
-      
-      var addLine = function (data) {
-        var el = jT.getTemplate("#jtox-logline");
-        el.style.height = '0px';
-        listRoot.insertBefore(el, listRoot.firstElementChild);
-        ccLib.fillTree(el, data);
-        setTimeout(function () { el.style.height = self.settings.lineHeight; }, 150);
-        if (!!self.settings.hasDetails) {
-          jT.$('.icon', el).on('click', function (e) {
-            jT.$(el).toggleClass('openned');
-            if (jT.$(el).hasClass("openned")) {
-              var height = 0;
-              jT.$('.data-field', el).each(function () {
-                height += this.offsetHeight;
-              });
-              el.style.height = (height + 6) + 'px';
-            }
-            else
-              el.style.height = self.settings.lineHeight;
-              
-            // to make sure other clickable handler won't take control.
-            e.stopPropagation();
+    var setStatus = function (status) {
+      $(".icon", statusEl).removeClass("jt-faded");
+      setIcon (statusEl, status);
+      if (status == "error" || status == "success") {
+        setTimeout(function () { 
+          jT.$('.icon', statusEl).addClass('jt-faded');
+          var hasConnect = false;
+          jT.$('.logline', listRoot).each(function () {
+            if (jT.$(this).data('status') == "connecting")
+              hasConnect = true;
           });
-        }
-        
-        while (listRoot.childNodes.length > self.settings.keepMessages)
-          listRoot.removeChild(listRoot.lastElementChild);
-  
-        return el;
-      };
-      
-      setStatus('');
-      
-      // this is the queue of events - indexes by the passed service
-      self.events = {};
-    } // noInterface if
+          if (hasConnect)
+            setStatus("connecting");
+        }, self.settings.statusDelay);
+      }
+      ccLib.fireCallback(self.settings.onStatus, self, status, self.theStatus);
+      self.theStatus = status;
+    };
     
-    // now the handlers - needed no matter if we have interface or not    
+    var addLine = function (data) {
+      var el = jT.getTemplate("#jtox-logline");
+      el.style.height = '0px';
+      listRoot.insertBefore(el, listRoot.firstElementChild);
+      ccLib.fillTree(el, data);
+      setTimeout(function () { el.style.height = self.settings.lineHeight; }, 150);
+      if (!!self.settings.hasDetails) {
+        jT.$('.icon', el).on('click', function (e) {
+          jT.$(el).toggleClass('openned');
+          if (jT.$(el).hasClass("openned")) {
+            var height = 0;
+            jT.$('.data-field', el).each(function () {
+              height += this.offsetHeight;
+            });
+            el.style.height = (height + 6) + 'px';
+          }
+          else
+            el.style.height = self.settings.lineHeight;
+        });
+      }
+      
+      while (listRoot.childNodes.length > self.settings.keepMessages)
+        listRoot.removeChild(listRoot.lastElementChild);
+
+      return el;
+    };
+    
+    setStatus('');
+    
+    // this is the queue of events - indexes by the passed service
+    self.events = {};
+    
     self.handlers = {
       onConnect: function (service, params) {
-        var info = ccLib.fireCallback(self.settings.formatEvent, this, service, "connecting", params, null);
-        ccLib.fireCallback(self.settings.onEvent, this, service, "connecting", info);
-        if (!self.settings.noInterface) {
-          setStatus("connecting");
-          var line = addLine(info);
-          self.events[service] = line;
-          setIcon(line, 'connecting');
-          jT.$(line).data('status', "connecting");
-        }
+        setStatus("connecting");
+        var line = addLine(ccLib.fireCallback(self.settings.formatLine, this, service, params, null, null));
+        self.events[service] = line;
+        setIcon(line, 'connecting');
+        jT.$(line).data('status', "connecting");
         if (!!self.settings.resend && this._handlers != null)
           ccLib.fireCallback(this._handlers.onConnect, this, service, params);
       },
       onSuccess: function (service, status, jhr) {
-        var info = ccLib.fireCallback(self.settings.formatEvent, this, service, "success", null, jhr);
-        ccLib.fireCallback(self.settings.onEvent, this, service, "success", info);
-        if (!self.settings.noInterface) {
-          setStatus("success");
-          var line = self.events[service];
-          if (!line) {
-            console.log("jToxLog: missing line for:" + service);
-            return;
-          }
-          delete self.events[service];
-          setIcon(line, 'success');
-          ccLib.fillTree(line, info);
-          jT.$(line).data('status', "success");
+        setStatus("success");
+        var line = self.events[service];
+        if (!line) {
+          console.log("jToxLog: missing line for:" + service);
+          return;
         }
+        delete self.events[service];
+        setIcon(line, 'success');
+        ccLib.fillTree(line, ccLib.fireCallback(self.settings.formatLine, this, service, null, status, jhr));
+        jT.$(line).data('status', "success");
         if (!!self.settings.resend && this._handlers != null)
           ccLib.fireCallback(this._handlers.onSuccess, this, service, status, jhr);
       },
       onError: function (service, status, jhr) {
-        var info = ccLib.fireCallback(self.settings.formatEvent, this, service, "error", null, jhr);
-        ccLib.fireCallback(self.settings.onEvent, this, service, "error", info);
-        if (!self.settings.noInterface) {
-          setStatus("error");
-          var line = self.events[service];
-          if (!line) {
-            console.log("jToxLog: missing line for:" + service + "(" + status + ")");
-            return;
-          }
-          delete self.events[service];
-          setIcon(line, 'error');
-          ccLib.fillTree(line, info);
-          jT.$(line).data('status', "error");
+        setStatus("error");
+        var line = self.events[service];
+        if (!line) {
+          console.log("jToxLog: missing line for:" + service + "(" + status + ")");
+          return;
         }
+        delete self.events[service];
+        setIcon(line, 'error');
+        ccLib.fillTree(line, ccLib.fireCallback(self.settings.formatLine, this, service, null, status, jhr));
+        jT.$(line).data('status', "error");
         if (!!self.settings.resend && this._handlers != null)
           ccLib.fireCallback(this._handlers.onError, this, service, status, jhr);
       }
@@ -4227,16 +4141,11 @@ var jToxEndpoint = (function () {
     noInterface: false,       // run in interface-less mode, with data retrieval and callback calling only
     heightStyle: "content",   // the accordition heightStyle
     hideFilter: false,        // if you don't want to have filter box - just hide it
-    maxHits: 10,              // max hits in autocomplete
     showMultiselect: true,    // whether to hide select all / unselect all buttons
-    showEditors: false,       // whether to show endpoint value editing fields as details
     sDom: "<i>rt",            // passed with dataTable settings upon creation
     oLanguage: null,          // passed with dataTable settings upon creation
     onLoaded: null,           // callback called when the is available
-    loadOnInit: false,        // whether to make an (empty) call when initialized.
-    units: ['uSv', 'kg', 'mg/l', 'mg/kg bw', '°C', 'mg/kg bw/day', 'ppm', '%'],
-    loTags: ['>', '>=', '='],
-    hiTags: ['<', '<='],
+    loadOnInit: false,        // whether to make an (empty) call when initialized. 
     oLanguage: {
       "sLoadingRecords": "No endpoints found.",
       "sZeroRecords": "No endpoints found.",
@@ -4273,133 +4182,9 @@ var jToxEndpoint = (function () {
       self.loadEndpoints(self.settings.endpointUri)
   };
   
-  // now the editors...
-  cls.linkEditors = function (kit, root, category, top, onchange) {
-    // get the configuration so we can setup the fields and their titles according to it
-    var config = jT.$.extend(true, {}, kit.settings.configuration.columns["_"], kit.settings.configuration.columns[category]);
-
-    var putAutocomplete = function (field, service, configEntry) {
-      // if we're not supposed to be visible - hide us.
-      var box = jT.$('div.box-' + field, root);
-      var v = ccLib.getJsonValue(config, configEntry + '.bVisible');
-      if (v !== undefined && !v) {
-        box.hide();
-        return false;
-      }
-      
-      // now deal with the title...
-      var t = ccLib.getJsonValue(config, configEntry + '.sTitle');
-      if (!!t)
-        jT.$('div', box[0]).html(t);
-        
-      // finally - deal with the autocomplete itself
-      jT.$('input', box[0])
-      .autocomplete({
-        minLength: 0,
-        change: function (e, ui) {
-          onchange(e, field, !ui.item ? '' : ui.item.value);
-        },
-        source: function( request, response ) {
-          jT.call(kit, service, { method: "GET", data: { 
-            'category': category,
-            'top': top,
-            'max': kit.settings.maxHits || defaultSettings.maxHits,
-            'search': request.term }
-          } , function (data) {
-            response( !data ? [] : jT.$.map( data.facet, function( item ) {
-              var val = item[field] || '';
-              return {
-                label: val + (!item.count ? '' : " [" + item.count + "]"),
-                value: val
-              }
-            }));
-          });
-        }
-  		});
-    };
-        
-    // deal with endpoint name itself
-    putAutocomplete('endpoint', '/admin/stats/experiment_endpoints', 'effects.endpoint');
-    putAutocomplete('interpretation_result', '/admin/stats/interpretation_result', 'interpretation.result');
-    
-    // now comes the tagging mechanism... first determine, if we need to show it at all
-    var v = ccLib.getJsonValue(config, 'effects.result.bVisible');
-    if (v !== undefined && !v)
-      jT.$('div.box-value', root).hide();
-    else {
-      var t = ccLib.getJsonValue(config, 'effects.text.sTitle') || ccLib.getJsonValue(config, 'effects.result.sTitle');
-      if (!!t)
-        jT.$('div.box-value div', root).html(t);
-        
-      var units = kit.settings.units || defaultSettings.units;
-      var sequence = [
-        { type: "tag-qualifier", field: "loQualifier", tags: kit.settings.loTags || defaultSettings.loTags, strict: true},
-        { type: "tag-value", field: "loValue", tags: null},
-        { type: "tag-unit", field: "unit", tags: units},
-        { type: "tag-qualifier", field: "hiQualifier", tags: kit.settings.hiTags || defaultSettings.hiTags, strict: true},
-        { type: "tag-value", field: "hiValue", tags: null},
-        { type: "tag-unit", field: "unit", tags: units}
-      ];
-  
-      var nowOn = 0;
-      var data = {};
-      
-      jT.$('.box-value input', root).tagit({
-        autocomplete: {
-          source: function (request, response) {
-            var tags = nowOn < sequence.length ? sequence[nowOn].tags : null;
-            if (!!tags) {
-              tags = tags.filter(function (item) {
-                return item.indexOf(request.term) == 0;
-              });
-            }
-            response(tags);
-          }
-        },
-        singleFieldDelimiter: ";",
-        allowSpaces: false,
-        allowDuplicates: true,
-        singleField: true,
-        removeConfirmation: false,
-        caseSensitive: false,
-        showAutocompleteOnFocus: true,
-        beforeTagAdded: function (e, ui) {
-          var cur = sequence[nowOn];
-          return !cur.strict || cur.tags.indexOf(ui.tagLabel) > -1;
-        },
-        afterTagAdded: function (e, ui) {
-          var cur = sequence[nowOn];
-          ui.tag.addClass(cur.type);
-          data[sequence[nowOn].field] = ui.tagLabel;
-          ++nowOn;
-          return true;
-        },
-        afterTagRemoved: function () {
-          --nowOn;
-          delete data[sequence[nowOn].field];
-          return true;
-        }
-      })
-      .on('change', function (e) {
-        onchange(e, 'value', data);      
-      });
-    }
-  };
-  
   cls.prototype = {
     init: function (settings) {
       var self = this;
-      
-      // we can redefine onDetails only if there is not one passed and we're asked to show editors at ll
-      if (!!self.settings.showEditors && !self.settings.onDetails) {
-        self.edittedValues = {};
-        self.settings.onDetails = function (root, data, element) {
-          self.edittedValues[data.endpoint] = {};
-          cls.linkEditors(self, root.appendChild(jT.getTemplate('#jtox-endeditor')), data.endpoint, data.subcategory, function (e, field, value) {
-            self.edittedValues[data.endpoint][field] = value;
-          }); 
-        };
-      }
       
       // deal if the selection is chosen
       if (!!self.settings.selectionHandler || !!self.settings.onDetails)
@@ -4423,10 +4208,7 @@ var jToxEndpoint = (function () {
         self.tables[name] = jT.ui.putTable(self, this, "endpoint", { 
           "aoColumns": cols, 
           "fnInfoCallback": self.updateStats(name),
-          "aaSortingFixed": [[1, 'asc']],
-          "onRow": function (nRow, aData, iDataIndex) {
-            jT.$(nRow).addClass(aData.endpoint);
-          }
+          "aaSortingFixed": [[1, 'asc']]
         });
       });
       
@@ -4454,31 +4236,6 @@ var jToxEndpoint = (function () {
         jT.$('h3 a', self.rootElement).remove();
       else
         jT.ui.installMultiSelect(self.rootElement, null, function (el) { return el.parentNode.parentNode.nextElementSibling; });
-    },
-    
-    getValues: function (needle) {
-      var self = this;
-      
-      var filter = null;
-      if (!needle)
-        filter = function (end) { return true; };
-      else if (typeof needle != 'function')
-        filter = function (end) { return end.indexOf(needle) >= 0; };
-      else 
-        filter = needle;
-
-      var data = {};
-      for (var endpoint in self.edittedValues) {
-        if (!filter(endpoint))
-          continue;
-        var edit = self.edittedValues[endpoint];
-        data[endpoint] = {
-          endpoint: edit.endpoint,
-          interpretation: edit.interpretation_result,
-          value: edit.value
-        };
-      }
-      return data;
     },
     
     updateStats: function (name) {
@@ -4536,9 +4293,7 @@ var jToxEndpoint = (function () {
         self.settings.baseUrl = jT.grabBaseUrl(uri);
 
       // make the call...
-      jT.call(self, uri, function (result, jhr) {
-        if (!result && jhr.status == 404)
-          result = { facet: [] }; // empty one
+      jT.call(self, uri, function (result) {
         if (!!result) {
           self.summary = result.facet;
           if (!self.settings.noInterface)
@@ -4563,7 +4318,7 @@ var jToxEndpoint = (function () {
       return uri;
     }
   };
-  
+    
   return cls;
 })();
 jT.templates['widget-search']  = 
@@ -4580,11 +4335,6 @@ jT.templates['widget-search']  =
 "			    <label for=\"searchurl\" title=\"Enter dataset URL\">URL</label>" +
 "  			</div>" +
 "    		<div class=\"jtox-inline float-right search-pane\">" +
-"  			  <div class=\"dynamic auto-hide searchauto hidden jtox-inline\">" +
-"  			    <div>" +
-"    			    <input type=\"checkbox\" name=\"regexp\" title=\"fadsfas\"/><span>Enable fragment search<sup class=\"helper\"><a target=\"_blank\" href=\"http://en.wikipedia.org/wiki/Regular_expression\">?</a></sup></span>" +
-"  			    </div>" +
-"  			  </div>" +
 "  			  <div class=\"dynamic auto-hide searchsimilarity hidden jtox-inline\">" +
 "      			<select name='threshold' title ='Tanimoto similarity threshold'>" +
 "    					<option value='0.9' selected=\"selected\">0.9</option>" +
@@ -4624,20 +4374,18 @@ jT.templates['all-compound']  =
 "	  <div id=\"jtox-compound\" class=\"jtox-compound\">" +
 "	    <div class=\"jtox-ds-features\"></div>" +
 "	    <div class=\"jtox-controls\">" +
-"	      Showing from <span class=\"data-field high\" data-field=\"pagestart\">?</span> to <span class=\"data-field high\" data-field=\"pageend\">?</span><span class=\"data-field\" data-field=\"filtered-text\"> </span>in pages of <select class=\"data-field\" data-field=\"pagesize\">" +
+"	      Showing from <span class=\"data-field from-field\" data-field=\"pagestart\"> ? </span> to <span class=\"data-field\" data-field=\"pageend\"> ? </span> in pages of <select class=\"data-field\" data-field=\"pagesize\">" +
 "          <option value=\"10\" selected=\"yes\">10</option>" +
 "          <option value=\"20\">20</option>" +
-"          <option value=\"30\">30</option>" +
 "          <option value=\"50\">50</option>" +
 "          <option value=\"100\">100</option>" +
+"          <option value=\"200\">200</option>" +
+"          <option value=\"500\">500</option>" +
 "        </select> entries" +
 "	      <a class=\"paginate_disabled_previous prev-field\" tabindex=\"0\" role=\"button\">Previous</a><a class=\"paginate_enabled_next next-field\" tabindex=\"0\" role=\"button\">Next</a>" +
 "	      <input type=\"text\" class=\"filterbox\" placeholder=\"Filter...\" />" +
 "	    </div>" +
 "	    <div class=\"jtox-ds-tables\">" +
-"	      <div class=\"jt-processing\">	        " +
-"          <span class=\"message\">Loading compounds...</span>" +
-"	      </div>" +
 "	      <div class=\"jtox-ds-fixed\">" +
 "	        <table></table>" +
 "	      </div><div class=\"jtox-ds-variable\">" +
@@ -4654,7 +4402,7 @@ jT.templates['compound-one-tab']  =
 ""; // end of #compound-one-tab 
 
 jT.templates['compound-one-feature']  = 
-"    <div id=\"jtox-ds-feature\" class=\"jtox-ds-feature\"><input type=\"checkbox\" checked=\"yes\" class=\"jtox-checkbox\" /><span class=\"data-field jtox-title\" data-field=\"title\"> ? </span><sup class=\"helper\"><a target=\"_blank\" class=\"data-field attribute\" data-attribute=\"href\" data-field=\"uri\">?</a></sup></div>" +
+"    <div id=\"jtox-ds-feature\" class=\"jtox-ds-feature\"><input type=\"checkbox\" checked=\"yes\" class=\"jtox-checkbox\" /><span class=\"data-field jtox-title\" data-field=\"title\"> ? </span><sup><a target=\"_blank\" class=\"data-field attribute\" data-attribute=\"href\" data-field=\"uri\">?</a></sup></div>" +
 ""; // end of #jtox-ds-feature 
 
 jT.templates['compound-download']  = 
@@ -4685,7 +4433,7 @@ jT.templates['all-model']  =
 jT.templates['all-substance']  = 
 "	  <div id=\"jtox-substance\" class=\"jtox-substance\">" +
 "	    <div class=\"jtox-controls\">" +
-"	      Showing from <span class=\"data-field high\" data-field=\"pagestart\"> ? </span> to <span class=\"data-field high\" data-field=\"pageend\"> ? </span><span class=\"filtered-text\"> </span>in pages of <select class=\"data-field\" data-field=\"pagesize\">" +
+"	      Showing from <span class=\"data-field from-field\" data-field=\"pagestart\"> ? </span> to <span class=\"data-field\" data-field=\"pageend\"> ? </span> in pages of <select class=\"data-field\" data-field=\"pagesize\">" +
 "          <option value=\"10\" selected=\"yes\">10</option>" +
 "          <option value=\"20\">20</option>" +
 "          <option value=\"50\">50</option>" +
@@ -4848,21 +4596,4 @@ jT.templates['all-endpoint']  =
 "	    </div>" +
 "	  </div>" +
 ""; // end of #jtox-endpoint 
-
-jT.templates['editor-endpoint']  = 
-"	  <div id=\"jtox-endeditor\" class=\"jt-endeditor\">" +
-"	    <div class=\"jtox-medium-box box-endpoint\">" +
-"  	    <div class=\"jtox-details font-heavy\">Endpoint name</div>" +
-"  	    <input type=\"text\" placeholder=\"Endpoint_\"/>" +
-"	    </div>" +
-"	    <div class=\"jtox-medium-box box-value\">" +
-"  	    <div class=\"jtox-details font-heavy\">Value range</div>" +
-"  	    <input type=\"text\"/>" +
-"	    </div>" +
-"      <div class=\"jtox-medium-box box-interpretation_result\">" +
-"  	    <div class=\"jtox-details font-heavy\">Intepretation of the results</div>" +
-"  	    <input type=\"text\" placeholder=\"Intepretation\"/>" +
-"      </div>" +
-"	  </div>" +
-""; // end of #jtox-end-editor 
 
