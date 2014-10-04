@@ -1444,6 +1444,78 @@ function defineFacetsTable(root,url,selector) {
 }
 
 
+function defineSubstanceOwnerTable(root,url,selector) {
+	var oTable = $(selector).dataTable( {
+		"sAjaxDataProp" : "facet",
+		"bProcessing": true,
+		"bServerSide": false,
+		"bStateSave": false,
+		"aoColumnDefs": [
+      
+ 				{ "mData": "subcategory" , 
+ 				  "asSorting": [ "asc", "desc" ],
+				  "aTargets": [ 0],	
+				  "bSearchable" : true,
+				  "bUseRendered" : false,
+				  "bSortable" : true,
+				  "fnRender" : function(o,val) {
+					  var sOut = (o.aData["subcategory"]===undefined)? o.aData["value"]:o.aData["subcategory"];
+					  return sOut;
+				  }
+				},
+ 				{ "mData": "value" , 
+	 				  "asSorting": [ "asc", "desc" ],
+					  "aTargets": [1 ],
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "bSortable" : true,
+					  "fnRender" : function(o,val) {
+						  return "<a href='" +root + "/substanceowner/" + val + "/substance' title='"+o.aData["uri"]+"'>Substances ["+o.aData["count"]+"]</a>";
+					  }
+					},			
+	 				{ "mData": "value" , 
+		 				  "asSorting": [ "asc", "desc" ],
+						  "aTargets": [2 ],
+						  "bSearchable" : true,
+						  "bUseRendered" : false,
+						  "bSortable" : true,
+						  "fnRender" : function(o,val) {
+							  return "<a href='" +root + "/substanceowner/" + val + "/dataset' title='"+o.aData["uri"]+"'>Substances and data</a><br/>" +
+							  		 "<a href='"+o.aData["uri"]+"' title='"+o.aData["uri"]+"'>Chemical structures</a>";
+						  }
+						}		,
+		 				{ "mData": "value" , 
+			 				  "asSorting": [ "asc", "desc" ],
+							  "aTargets": [3 ],	
+							  "bSearchable" : true,
+							  "bUseRendered" : false,
+							  "bSortable" : true,
+							  "fnRender" : function(o,val) {
+								  return "<a href='" +root + "/substanceowner/" + val + "' title='"+o.aData["uri"]+"'>"+val+"</a>" ;
+							  }
+							}								
+ 						
+			],
+		"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',	
+		"bJQueryUI" : true,
+		"bPaginate" : true,
+		"sPaginationType": "full_numbers",
+		"sPaginate" : ".dataTables_paginate _paging",
+		"bDeferRender": true,
+		"bSearchable": true,
+		"sAjaxSource": url,
+		"oLanguage": {
+				"sSearch": "Filter:",
+				"sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
+	            "sLoadingRecords": "No records found."
+	    }
+	} );
+	return oTable;
+}
+
+
+
+
 function definePolicyTable(root,url,selector) {
 	var oTable = $(selector).dataTable( {
 		"sAjaxDataProp" : "policy",
