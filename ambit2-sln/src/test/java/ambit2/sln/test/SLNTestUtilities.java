@@ -20,7 +20,8 @@ public class SLNTestUtilities
 		//tu.testSLN("CH3[1:I=13;is=2]CH(CH(CH3)CH3)CH2CH3");
 		//tu.testSLN("CC<name=ethane;regid=234&a=b;a1=b1;name=wertwert>");
 		
-		tu.testSLN2SLN("C-(-C)-C-CH3[3:a=b;a1=b1]");
+		
+		tu.testSLN2SLN("C-(-C)-C-CH3[a=b;a1=b1]");
 		
 	}
 	

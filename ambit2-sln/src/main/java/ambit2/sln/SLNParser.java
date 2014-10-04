@@ -169,11 +169,12 @@ public class SLNParser
 				newAtom.atomID = newAtom.atomExpression.atomID;				
 
 				//Check id for duplication:
-				SLNAtom prevIDAtom = getAtomByID(newAtom.atomID);
-				if (prevIDAtom != null)
-				{
-					newError("Duplicated atom id " + newAtom.atomID + ".", curChar,"");
-				}
+				if (newAtom.atomID != -1)
+				{	
+					SLNAtom prevIDAtom = getAtomByID(newAtom.atomID);
+					if (prevIDAtom != null)
+						newError("Duplicated atom id " + newAtom.atomID + ".", curChar,"");					
+				}	
 			}
 
 		if (curChar < nChars)
