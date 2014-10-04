@@ -40,7 +40,7 @@ public class SLNBond extends SMARTSBond
 	public String toString()
 	{
 		if (bondExpression == null)	
-			return (SLNConst.bondTypeAttributeToSLNString(bondType));
+			return (SLNConst.bondTypeAttributeToSLNString(bondType, true));
 		else
 			return(SLNConst.bondTypeAttributeToSLNString(bondType) + bondExpression.toString());
 	}

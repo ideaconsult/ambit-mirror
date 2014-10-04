@@ -8,7 +8,7 @@ import ambit2.sln.SLNHelper;
 
 public class SLNTestUtilities 
 {
-	static SLNParser slnpar = new SLNParser();
+	static SLNParser slnParser = new SLNParser();
 	static SLNHelper slnHelper = new SLNHelper();
 	
 	public static void main(String[] args) throws Exception
@@ -21,18 +21,18 @@ public class SLNTestUtilities
 		//tu.testSLN("CC<name=ethane;regid=234&a=b;a1=b1;name=wertwert>");
 		
 		
-		tu.testSLN2SLN("C-(-C)-C-CH3[a=b;a1=b1]");
+		tu.testSLN2SLN("C(C)CCH3[a=b;a1=b1]");
 		
 	}
 	
 	public void testSLN(String sln)
 	{
 		
-		SLNContainer container = slnpar.parse(sln);
-		if (!slnpar.getErrorMessages().equals(""))
+		SLNContainer container = slnParser.parse(sln);
+		if (!slnParser.getErrorMessages().equals(""))
 		{
 			System.out.println("Original sln:    " + sln); 
-			System.out.println("SLN Parser errors:\n" + slnpar.getErrorMessages());			
+			System.out.println("SLN Parser errors:\n" + slnParser.getErrorMessages());			
 			return;
 		}
 		 
@@ -52,11 +52,11 @@ public class SLNTestUtilities
 	public void testSLN2SLN(String sln)
 	{
 		
-		SLNContainer container = slnpar.parse(sln);
-		if (!slnpar.getErrorMessages().equals(""))
+		SLNContainer container = slnParser.parse(sln);
+		if (!slnParser.getErrorMessages().equals(""))
 		{
 			System.out.println("Original sln:    " + sln); 
-			System.out.println("SLN Parser errors:\n" + slnpar.getErrorMessages());			
+			System.out.println("SLN Parser errors:\n" + slnParser.getErrorMessages());			
 			return;
 		}
 		 
