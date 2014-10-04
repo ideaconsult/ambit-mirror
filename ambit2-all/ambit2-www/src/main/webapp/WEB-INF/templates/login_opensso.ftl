@@ -59,7 +59,7 @@ $(document)
 		</div>
 		<div class='three columns omega'>&nbsp;</div>
 		<div class='five columns omega'>
-			<a title='Register at OpenTox site' target=_blank href='http://opentox.org/join_form' class='help qxternal' >Create an OpenTox account</a>
+			<a title='Register at OpenTox site' target="opentox" href='http://opentox.org/join_form' class='help qxternal' >Create an OpenTox account</a>
 		</div>
 		</div>
 		
@@ -93,8 +93,8 @@ $(document)
 		<label class='three columns alpha'>OpenTox profile</label> 
 	
 		<div class='thirteen columns omega'>
-			<a href="http://opentox.org/personalize_form" class="help qxternal">Personal preferences</a> 
-			<a href="http://opentox.org/password_form" class="help qxternal">Change password</a>
+			<a href="http://opentox.org/personalize_form" target="opentox" class="help qxternal">Personal preferences</a> 
+			<a href="http://opentox.org/password_form" target="opentox" class="help qxternal">Change password</a>
 		</div>
 		
 		</div>
