@@ -111,9 +111,17 @@ public class UIResource extends FreeMarkerResource {
 		try {
 			//page = pages.valueOf(ui.toString());
 			//return ui==null?"index.ftl":String.format("%s.ftl", page.name());
-			return String.format("%s.ftl", page.name());
+			switch (page) {
+			case index : {
+				return String.format("menu/profile/%s/index.ftl",((AmbitApplication)getApplication()).getProfile());	
+			}
+			default: {
+				return String.format("%s.ftl", page.name());
+			}
+			}
+			
 		} catch (Exception x) {
-			return "index.ftl";
+			return String.format("menu/profile/%s/index.ftl",((AmbitApplication)getApplication()).getProfile());
 		}
 	}
 	
