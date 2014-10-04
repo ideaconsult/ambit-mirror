@@ -119,16 +119,16 @@ public class SLNHelper
 				newNode.parent = atom;
 				nodes.put(newNode.atom, newNode); 
 				
-				/*
-				String bond_str = bondToString(afs.bonds.get(i));				
+				String bond_str = afs.bonds.get(i).toString();				
 				String newBranch = bond_str + nodeToString(neighborAt);
 				branches.add(newBranch);
-				*/
+				
 			}
 			else
 			{
 				/*
 				//Handle ring closure: adding indexes to both atoms
+				//Because of the recursion approach the atoms are not yet added converted to strings
 				IBond neighborBo = afs.bonds.get(i);
 				if (!ringClosures.contains(neighborBo))
 				{	
@@ -141,15 +141,19 @@ public class SLNHelper
 				*/
 			}
 		}
+		
+		
 		/*
-		//Add atom from the current node
-		sb.append(atomToString((SMARTSAtom) atom));
-				
-		//Add indexes
+		//Add index
 		if (atomIndexes.containsKey(atom))		
 			sb.append(atomIndexes.get(atom));
-		
 		*/
+		
+		
+		//Add atom from the current node
+		sb.append(atom.toString());
+				
+		
 		//Add branches
 		if (branches.size() == 0)
 			return(sb.toString());
