@@ -27,6 +27,11 @@ public class OwnerSubstanceFacetResource  extends FacetResource<OwnerFacet,Owner
 
 	}
 	@Override
+	public String getTemplateName() {
+		return "substanceowner.ftl";
+	}
+	
+	@Override
 	protected OwnerSubstanceStats createQuery(Context context,
 			Request request, Response response) throws ResourceException {
 		
