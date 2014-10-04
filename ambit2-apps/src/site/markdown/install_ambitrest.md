@@ -23,7 +23,7 @@
 - Run the following commands in the MySQL console.
 
 ````
-	create database ambit2;
+	create database ambit2 character set utf8;
 	use ambit2;
 	source create_tables.sql;
 	GRANT ALL ON `ambit2`.* TO 'guest'@'localhost' IDENTIFIED BY 'guest';

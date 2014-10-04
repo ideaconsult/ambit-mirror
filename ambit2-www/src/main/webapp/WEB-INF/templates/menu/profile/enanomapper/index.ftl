@@ -112,7 +112,7 @@ h4, h5, h6 {
 
     	<div  id="footer_logo">
 
-			<a href='http://www.opentox.org' class='qxternal'  title='OpenTox' target=_blank><img src='${ambit_root}/images/logo.png' border='0' width='115' height='60' alt='Logo OpenTox'></a>
+			<a href='http://www.opentox.org' class='qxternal'  title='eNanoMapper leverages and extends OpenTox API and resources' target=_blank><img src='${ambit_root}/images/logo.png' border='0' width='115' height='60' alt='Logo OpenTox'></a>
 			
 			<a href='http://www.enanomapper.net' class='qxternal'  title='FP7 eNanoMapper web site' target=_blank><img src='${ambit_root}/images/profile/enanomapper/fp7_logo.png' border='0' width='440'  height='60' alt='Logo eNanoMapper'></a>
 		</div>
