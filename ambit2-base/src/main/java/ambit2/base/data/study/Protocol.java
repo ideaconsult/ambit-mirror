@@ -1102,6 +1102,24 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}				
+		},
+		BAO_0003009_SECTION {
+			@Override
+			public String toString() {
+				return "Cell Viability Assay";
+			}
+			@Override
+			public int getSortingOrder() {
+				return 800;
+			}
+			@Override
+			public String getNumber() {
+				return "8.100";
+			}	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}					
 		}
 		
 
