@@ -1711,6 +1711,15 @@ var config_study = {
             "protocol": {
                 "guideline": {
                     "iOrder": -10
+                },
+                "citation": {
+                    "bVisible": true,
+                    "sTitle": "Reference",
+                    "iOrder": -11,
+                    "mRender" : function(data,type,full) {
+                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                    }               	
                 }
             },
             "interpretation": {
@@ -1772,7 +1781,13 @@ var config_study = {
                     "iOrder": -10
                 },
                 "citation": {
-                    "bVisible": true
+                    "bVisible": true,
+                    "sTitle": "Reference",
+                    "iOrder": -11,
+                    "mRender" : function(data,type,full) {
+                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                    }
                 }
             },
             "interpretation": {
@@ -1845,7 +1860,13 @@ var config_study = {
                     "iOrder": -9
                  },
                 "citation": {
-                    "bVisible": true
+                    "bVisible": true,
+                    "sTitle": "Reference",
+                    "iOrder": -11,
+                    "mRender" : function(data,type,full) {
+                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                    }
                 }
             },
             "interpretation": {
@@ -1932,7 +1953,13 @@ var config_study = {
                     "iOrder": -10
                 },
                 "citation": {
-                    "bVisible": true
+                    "bVisible":true,
+                    "iOrder" : -11,
+                    "sTitle": "Reference",
+                    "mRender" : function(data,type,full) {
+                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                    }
                 }
             },
             "interpretation": {
@@ -2003,9 +2030,15 @@ var config_study = {
                     "iOrder": -9
                 },
                 "citation": {
-                    "bVisible": true
+                    "bVisible": true,
+                    "sTitle": "Reference",
+                    "iOrder": -11,
+                    "mRender" : function(data,type,full) {
+                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                    }
                 }
-            },
+            },            
             "interpretation": {
                 "result": {
                     "sTitle": "Conclusions",
@@ -2071,7 +2104,13 @@ var config_study = {
                     "iOrder": -10
                 },
                 "citation": {
-                    "bVisible": true
+                    "bVisible": true,
+                    "sTitle": "Reference",
+                    "iOrder": -11,
+                    "mRender" : function(data,type,full) {
+                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                    }
                 }
             },
             "interpretation": {
@@ -2131,7 +2170,13 @@ var config_study = {
                     "iOrder": -10
                 },
                 "citation": {
-                    "bVisible": true
+                    "bVisible": true,
+                    "sTitle": "Reference",
+                    "iOrder": -11,
+                    "mRender" : function(data,type,full) {
+                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                    }
                 }
             },
             "interpretation": {
@@ -2190,7 +2235,13 @@ var config_study = {
                     "iOrder": -10
                 },
                 "citation": {
-                    "bVisible": true
+                    "bVisible": true,
+                    "iOrder": -11,
+                    "sTitle": "Reference",
+                    "mRender" : function(data,type,full) {
+                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                    }
                 }
             },
             "interpretation": {
@@ -2254,7 +2305,13 @@ var config_study = {
                     "iOrder": -10
                 },
                 "citation": {
-                    "bVisible": true
+                    "bVisible": true,
+                    "iOrder": -11,
+                    "sTitle": "Reference",
+                    "mRender" : function(data,type,full) {
+                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                    }
                 }
             },
             "interpretation": {
@@ -2314,7 +2371,13 @@ var config_study = {
                     "iOrder": -10
                 },
                 "citation": {
-                    "bVisible": true
+                    "bVisible": true,
+                    "iOrder": -11,
+                    "sTitle": "Reference",
+                    "mRender" : function(data,type,full) {
+                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                    }
                 }
             },
             "interpretation": {
@@ -2373,7 +2436,12 @@ var config_study = {
                     "iOrder": -10
                 },
                 "citation": {
-                    "bVisible": true
+                    "bVisible": true,
+                    "sTitle": "Reference",
+                    "mRender" : function(data,type,full) {
+                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                    }
                 }
             },
             "interpretation": {
@@ -2383,6 +2451,7 @@ var config_study = {
                     "bVisible": true
                 },
                 "criteria": {
+                	"iOrder": -11,
                     "bVisible": false
                 }
             }
@@ -2432,7 +2501,13 @@ var config_study = {
                     "iOrder": -10
                 },
                 "citation": {
-                    "bVisible": true
+                    "bVisible": true,
+                    "sTitle": "Reference",
+                    "iOrder": -11,
+                    "mRender" : function(data,type,full) {
+                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                    }
                 }
             },
             "interpretation": {
@@ -2576,6 +2651,7 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": false
+                    
                 }
             },
             "interpretation": {
@@ -2631,7 +2707,8 @@ var config_study = {
                     "bVisible": true,
                     "sTitle": "Reference",
                     "mRender" : function(data,type,full) {
-                    	return  data["title"];
+                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
                     }
                 }             
            }
@@ -2671,7 +2748,8 @@ var config_study = {
                      "bVisible": true,
                      "sTitle": "Reference",
                      "mRender" : function(data,type,full) {
-                     	return  data["title"];
+                     	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                     	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
                      },
             		 "iOrder" : -10
                  }             
@@ -2743,6 +2821,29 @@ var config_study = {
                     "sTitle" : "File"
                 }
             }         	
-        }         
+        },
+        "BAO_0003009_SECTION" : {
+            "protocol": {
+                "citation": {
+                    "bVisible":true,
+                    "iOrder" : -30,
+                    "sTitle": "Reference",
+                    "mRender" : function(data,type,full) {
+                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                    }
+                }
+            },
+            "interpretation": {
+                "result": {
+                	"bVisible": true,
+                	"sTitle" : "Result (text)"
+                },
+                "criteria": {
+                	"bVisible": false
+                }
+            }   
+
+        }
     }
 }
