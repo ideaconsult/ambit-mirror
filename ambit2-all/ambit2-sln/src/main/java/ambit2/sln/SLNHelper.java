@@ -12,18 +12,23 @@ import ambit2.smarts.TopLayer;
 
 
 public class SLNHelper 
-{
+{	
+	public boolean FlagPreserveOriginalAtomID = true;
+	//public boolean FlagRingColusuresBeforeBrunches = true;
+	
 	class AtomSLNNode
 	{
 		public IAtom parent;
 		public IAtom atom;
-		public int index;
 	}
 	
-	HashMap<IAtom,AtomSLNNode> nodes = new HashMap<IAtom,AtomSLNNode>();
-	HashMap<IAtom,TopLayer> firstSphere = new HashMap<IAtom,TopLayer>();
-	int nAtom;
-	int nBond;
+	private HashMap<IAtom,AtomSLNNode> nodes = new HashMap<IAtom,AtomSLNNode>();
+	private HashMap<IAtom,TopLayer> firstSphere = new HashMap<IAtom,TopLayer>();
+	List<IBond> ringClosures = new ArrayList<IBond>();
+	private HashMap<IAtom,Integer> newAtomIDs = new HashMap<IAtom,Integer>();
+	private int maxAtomID = -1;
+	private int nAtom;
+	private int nBond;
 		
 	static public String getAtomsAttributes(SLNContainer container)
 	{
@@ -83,14 +88,59 @@ public class SLNHelper
 		return(sb.toString());
 	}
 	
+	static public void clearAtomIDs(SLNContainer container)
+	{
+		for (IAtom at : container.atoms())
+		{
+			SLNAtom a = (SLNAtom)at;
+			if (a.atomID != -1)
+			{
+				a.atomID = -1;
+				if (a.atomExpression != null)
+					a.atomExpression.atomID = -1;
+			}
+		}
+	}
+	
+	static public void setAtomID(SLNAtom at, int ID)
+	{
+		at.atomID = ID;
+		if (at.atomExpression != null)
+			at.atomExpression.atomID = ID;
+	}
+	
+	private void analyzeAtomIDs(SLNContainer container)
+	{
+		//Determine maxAtomID 
+		maxAtomID = -1;
+		int curID;
+		for (IAtom at : container.atoms())
+		{	
+			curID = ((SLNAtom)at).atomID;
+			if (maxAtomID < curID)
+				maxAtomID = curID;
+		}
+		
+		if (maxAtomID == -1)
+			maxAtomID = 0;
+	}
 	
 	public String toSLN(SLNContainer container)
 	{	
 		determineFirstSheres(container);
 		nodes.clear();
-		//atomIndexes.clear();
-		//ringClosures.clear();
-		//curIndex = 1;
+		ringClosures.clear();
+		newAtomIDs.clear();
+		maxAtomID = -1;
+		
+		if (FlagPreserveOriginalAtomID)
+			analyzeAtomIDs(container);
+		else
+		{	
+			clearAtomIDs(container);
+			maxAtomID = 0;
+		}	
+		
 		AtomSLNNode node = new AtomSLNNode();
 		node.parent = null;
 		node.atom = container.getAtom(0);
@@ -100,10 +150,14 @@ public class SLNHelper
 	
 	String nodeToString(IAtom atom)
 	{
+		//System.out.println("-->nodeToString for atom: " + curSLNContainer.getAtomNumber(atom));
+		
 		StringBuffer sb = new StringBuffer();
 		TopLayer afs = firstSphere.get(atom);
 		AtomSLNNode curNode = nodes.get(atom);
 		List<String> branches = new ArrayList<String>();
+		List<String> closureStrings = new ArrayList<String>();
+		
 		for (int i=0; i<afs.atoms.size(); i++)
 		{
 			IAtom neighborAt = afs.atoms.get(i);
@@ -122,46 +176,50 @@ public class SLNHelper
 				String bond_str = afs.bonds.get(i).toString();				
 				String newBranch = bond_str + nodeToString(neighborAt);
 				branches.add(newBranch);
-				
 			}
 			else
-			{
-				/*
-				//Handle ring closure: adding indexes to both atoms
-				//Because of the recursion approach the atoms are not yet added converted to strings
+			{	
 				IBond neighborBo = afs.bonds.get(i);
-				if (!ringClosures.contains(neighborBo))
-				{	
-					ringClosures.add(neighborBo);
-					String ind = ((curIndex>9)?"%":"") + curIndex;
-					addIndexToAtom(bondToString(neighborBo) + ind, atom);	
-					addIndexToAtom(ind, neighborAt);
-					curIndex++;
+				//This check is needed. Otherwise the ring closure will be described twice (for both atoms of the bond)
+				if (ringClosures.contains(neighborBo))  
+					continue;
+				
+				ringClosures.add(neighborBo);
+				
+				//Handle a new ring closure
+				//Set the ID of the first atom from the ring closure
+				//Because of the recursion approach the atoms are not yet added converted to strings
+				int neighID  = ((SLNAtom)neighborAt).atomID;
+				if (neighID == -1) //The neighbor atom does not have ID 
+				{
+					//A new atom ID is generated
+					maxAtomID++;
+					neighID = maxAtomID;
+					setAtomID((SLNAtom)neighborAt, neighID);
 				}
-				*/
+				String newClosure = afs.bonds.get(i).toString() + "@" + neighID;
+				closureStrings.add(newClosure);
+				
+				//System.out.println("  #add ring closure: atom " + curSLNContainer.getAtomNumber(atom) + " to atom " 
+				//		+ curSLNContainer.getAtomNumber(neighborAt) + " with ID " + neighID);
 			}
 		}
 		
-		
-		/*
-		//Add index
-		if (atomIndexes.containsKey(atom))		
-			sb.append(atomIndexes.get(atom));
-		*/
-		
-		
 		//Add atom from the current node
 		sb.append(atom.toString());
-				
+		
+		//Add ring closures
+		for (int i = 0; i < closureStrings.size(); i++)
+			sb.append(closureStrings.get(i));
 		
 		//Add branches
-		if (branches.size() == 0)
-			return(sb.toString());
-		
-		for(int i = 0; i < branches.size()-1; i++)
-			sb.append("("+branches.get(i).toString()+")");
-		
-		sb.append(branches.get(branches.size() - 1).toString());
+		if (branches.size() > 0)
+		{	
+			for(int i = 0; i < branches.size()-1; i++)
+				sb.append("("+branches.get(i).toString()+")");
+
+			sb.append(branches.get(branches.size() - 1).toString());
+		}
 		return(sb.toString());
 	}
 	
@@ -187,8 +245,6 @@ public class SLNHelper
 			firstSphere.get(at1).bonds.add(bond);			
 		}
 	}
-	
-	
 	
 	
 }
