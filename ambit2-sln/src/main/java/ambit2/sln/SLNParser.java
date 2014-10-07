@@ -10,21 +10,23 @@ public class SLNParser
 {
 	private boolean FlagTolerateSpaces = false;
 	private boolean FlagLogExpressionInMolAttribute = false;  //Preserved for future use
+	private boolean FlagAllowBondExpressionInRingClosure = true;
+	
 
 	String sln;
 	SLNContainer container;
 	SLNDictionary globalDictionary = null;
 	Stack<SLNAtom> brackets = new Stack<SLNAtom>();
 	ArrayList<SLNParserError> errors = new ArrayList<SLNParserError>();
-	//	TreeMap<Integer,RingClosure> indexes = new TreeMap<Integer,RingClosure>();
-
+	//TreeMap<Integer,RingClosure> indexes = new TreeMap<Integer,RingClosure>();
+	
 	//Work variables for Component Level Grouping (inspired from SMARTS)
 	boolean FlagComponentLevelGrouping = false; 
 	int curComponent;
 	public int numFragments;
 	public int maxCompNumber;
-
-
+	
+	
 	int curChar;	
 	SLNAtom prevAtom;
 	//int curBondType;
@@ -53,6 +55,15 @@ public class SLNParser
 	public void setFlagTolerateSpaces(boolean tolerateSpaces){
 		FlagTolerateSpaces = tolerateSpaces;
 	}
+	
+	public void setFlagAllowBondExpressionInRingClosure(
+			boolean flagAllowBondExpressionInRingClosure) {
+		FlagAllowBondExpressionInRingClosure = flagAllowBondExpressionInRingClosure;
+	}
+
+	public boolean getFlagAllowBondExpressionInRingClosure() {
+		return FlagAllowBondExpressionInRingClosure;
+	}
 
 
 	public SLNContainer parse(String sln)
@@ -73,8 +84,8 @@ public class SLNParser
 		curChar = 0;
 		brackets.clear();
 		curBond = null;
-		//		indexes.clear();
-		//TODO
+		//indexes.clear();
+		//TODO ?
 	}
 
 	void parse()
@@ -1451,6 +1462,8 @@ public class SLNParser
 			return 0.0;
 		}
 	}
+
+	
 
 	
 }
