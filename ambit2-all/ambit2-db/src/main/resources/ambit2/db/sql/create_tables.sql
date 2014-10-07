@@ -2360,58 +2360,6 @@ END $$
 
 DELIMITER ;
 
-
--- 
-
-DROP PROCEDURE IF EXISTS `saliorder`;
-DELIMITER $$
-
-CREATE PROCEDURE `saliorder`(IN property_id INT, IN dataset_id INT, IN maxpair INT, IN zero DOUBLE)
-BEGIN
-
-  set zero = ifnull(zero,0.000001);
-
-    select
-  f1.idchemical,f2.idchemical,s1.value_num,s2.value_num,
-      abs(s1.value_num-s2.value_num)/(1 + zero -
-     (bit_count(f1.fp1 & f2.fp1) + bit_count(f1.fp2 & f2.fp2) + bit_count(f1.fp3 & f2.fp3) + bit_count(f1.fp4 & f2.fp4) +
-     bit_count(f1.fp5 & f2.fp5) + bit_count(f1.fp6 & f2.fp6) + bit_count(f1.fp7 & f2.fp7) + bit_count(f1.fp8 & f2.fp8) +
-     bit_count(f1.fp9 & f2.fp9) + bit_count(f1.fp10 & f2.fp10) + bit_count(f1.fp11 & f2.fp11) + bit_count(f1.fp12 & f2.fp12) +
-     bit_count(f1.fp13 & f2.fp13) + bit_count(f1.fp14 & f2.fp14) + bit_count(f1.fp15 & f2.fp15) + bit_count(f1.fp16 & f2.fp16))
-     /(f1.bc + f2.bc -
-     (bit_count(f1.fp1 & f2.fp1) + bit_count(f1.fp2 & f2.fp2) + bit_count(f1.fp3 & f2.fp3) + bit_count(f1.fp4 & f2.fp4) +
-     bit_count(f1.fp5 & f2.fp5) + bit_count(f1.fp6 & f2.fp6) + bit_count(f1.fp7 & f2.fp7) + bit_count(f1.fp8 & f2.fp8) +
-     bit_count(f1.fp9 & f2.fp9) + bit_count(f1.fp10 & f2.fp10) + bit_count(f1.fp11 & f2.fp11) + bit_count(f1.fp12 & f2.fp12) +
-     bit_count(f1.fp13 & f2.fp13) + bit_count(f1.fp14 & f2.fp14) + bit_count(f1.fp15 & f2.fp15) + bit_count(f1.fp16 & f2.fp16))
-     )) as sali,
-     (bit_count(f1.fp1 & f2.fp1) + bit_count(f1.fp2 & f2.fp2) + bit_count(f1.fp3 & f2.fp3) + bit_count(f1.fp4 & f2.fp4) +
-     bit_count(f1.fp5 & f2.fp5) + bit_count(f1.fp6 & f2.fp6) + bit_count(f1.fp7 & f2.fp7) + bit_count(f1.fp8 & f2.fp8) +
-     bit_count(f1.fp9 & f2.fp9) + bit_count(f1.fp10 & f2.fp10) + bit_count(f1.fp11 & f2.fp11) + bit_count(f1.fp12 & f2.fp12) +
-     bit_count(f1.fp13 & f2.fp13) + bit_count(f1.fp14 & f2.fp14) + bit_count(f1.fp15 & f2.fp15) + bit_count(f1.fp16 & f2.fp16))
-     /(f1.bc + f2.bc -
-     (bit_count(f1.fp1 & f2.fp1) + bit_count(f1.fp2 & f2.fp2) + bit_count(f1.fp3 & f2.fp3) + bit_count(f1.fp4 & f2.fp4) +
-     bit_count(f1.fp5 & f2.fp5) + bit_count(f1.fp6 & f2.fp6) + bit_count(f1.fp7 & f2.fp7) + bit_count(f1.fp8 & f2.fp8) +
-     bit_count(f1.fp9 & f2.fp9) + bit_count(f1.fp10 & f2.fp10) + bit_count(f1.fp11 & f2.fp11) + bit_count(f1.fp12 & f2.fp12) +
-     bit_count(f1.fp13 & f2.fp13) + bit_count(f1.fp14 & f2.fp14) + bit_count(f1.fp15 & f2.fp15) + bit_count(f1.fp16 & f2.fp16))
-     ) as tanimoto
-  from struc_dataset d1
-  join struc_dataset d2
-  join property_values s1 on d1.idstructure=s1.idstructure
-  join property_values s2 on d2.idstructure=s2.idstructure
-  join fp1024 f1 on f1.idchemical=s1.idchemical
-  join fp1024 f2 on f2.idchemical=s2.idchemical
-  where d1.id_srcdataset=dataset_id
-  and d2.id_srcdataset= dataset_id
-  and s1.idproperty= property_id
-  and s2.idproperty= property_id
-  and d1.idstructure < d2.idstructure
-  order by sali desc limit maxpair
-  ;
-
-END $$
-
-DELIMITER ;
-
 -- ----------------------------
 -- Chemical space stats
 -- ----------------------------
@@ -2501,7 +2449,7 @@ BEGIN
    from qsasheader join src_dataset d using(id_srcdataset) join properties p using(idproperty) where idsasmap=@idsasmap;   
    
 
-END$$
+END $$
 
 DELIMITER ;
 
