@@ -3,12 +3,10 @@ package ambit2.sln.io;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.sln.SLNContainer;
+
 public class SLN2SMARTS 
-{
-	public enum NotationType{
-		SMILES, SMARTS, SMIRKS
-	}
-	
+{	
 	private List<String> conversionErrors = new ArrayList<String>();
 	private List<String> conversionWarnings = new ArrayList<String>();
 
@@ -26,11 +24,6 @@ public class SLN2SMARTS
 		for (int i = 0; i < conversionErrors.size(); i++)
 			sb.append(conversionErrors.get(i) + "\n");
 		return sb.toString();
-	}
-	
-	public NotationType getCompatibleNotation(String sln)	{
-		//TODO
-		return null;
 	}
 	
 	public String slnToSmiles(String sln)
@@ -67,6 +60,6 @@ public class SLN2SMARTS
 	{
 		//TODO
 		return null;
-	}
+	} 
 	
 }
