@@ -69,5 +69,4 @@ public class SLN2SMARTS
 		return null;
 	}
 	
-	
 }
