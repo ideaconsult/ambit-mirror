@@ -19,7 +19,7 @@ public class SLNBondExpression
 	public String toString() 
 	{
 		StringBuffer sb = new StringBuffer();
-		sb.append(" [");
+		sb.append("[");
 		for (int i = 0; i < tokens.size(); i++)
 			sb.append(tokens.get(i).toString(false));
 		sb.append("]");

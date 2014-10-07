@@ -25,6 +25,8 @@ public class SLNTestUtilities
 		//tu.testSLN2SLN("C(C)CCH3[a=b;a1=b1]");
 		
 		tu.testSLN2SLN("C[2]CCCC@2");
+		tu.testSLN2SLN("C[21]CC[3]CC=@21-[a=b]@3");
+		tu.testSLN2SLN("CCC-[a=b]CC");
 	}
 	
 	public void testSLN(String sln)
@@ -48,12 +50,10 @@ public class SLNTestUtilities
 			System.out.println("Molecule attributes:");
 			System.out.println(SLNHelper.getMolAttributes(container));
 		}
-		
 	}
 	
 	public void testSLN2SLN(String sln)
-	{
-		
+	{	
 		SLNContainer container = slnParser.parse(sln);
 		if (!slnParser.getErrorMessages().equals(""))
 		{
