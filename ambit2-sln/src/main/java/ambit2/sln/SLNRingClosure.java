@@ -1,9 +1,7 @@
 package ambit2.sln;
 
-public class RingClosure 
+public class SLNRingClosure 
 {
 	SLNAtom firstAtom;
 	SLNAtom secondAtom;
-	
-	
 }
