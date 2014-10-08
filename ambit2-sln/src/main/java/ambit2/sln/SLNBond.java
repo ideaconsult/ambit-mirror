@@ -14,7 +14,7 @@ public class SLNBond extends SMARTSBond
 	public boolean matches(IBond bond) 
 	{
 		//TODO
-		return false;
+		return true; //by default
 	}
 
 /*	public String getBTString()

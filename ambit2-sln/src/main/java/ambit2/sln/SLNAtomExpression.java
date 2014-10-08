@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import org.openscience.cdk.interfaces.IAtom;
 
 
+
+
 public class SLNAtomExpression 
 {
 	public int atomID = -1;
@@ -11,8 +13,28 @@ public class SLNAtomExpression
 	
 	public boolean matches(IAtom atom) 
 	{
-		//TODO
-		return false;
+		SLNLogicalExpression sle = new SLNLogicalExpression();
+		for (int i = 0; i< tokens.size(); i++)
+		{
+			SLNExpressionToken tok = tokens.get(i);
+			if (tok.type < SLNConst.LO)
+			{	
+				sle.addArgument(getArgument(tok, atom));
+			}	
+			else
+				sle.addLogOperation(tok.type - SLNConst.LO);
+		}
+		return (sle.getValue()); 
+		
+	}
+	
+	boolean getArgument(SLNExpressionToken tok, IAtom atom)
+	{
+		switch (tok.type)
+		{
+			//TODO
+		}
+		return true; //by default
 	}
 	
 	
