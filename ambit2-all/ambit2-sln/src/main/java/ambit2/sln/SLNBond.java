@@ -13,8 +13,22 @@ public class SLNBond extends SMARTSBond
 
 	public boolean matches(IBond bond) 
 	{
-		//TODO
-		return true; //by default
+		//1. Matching the bond type
+		boolean FlagMatchBondType = false;
+					
+		if (bondType == 0) //any bond
+			FlagMatchBondType = true;
+		else		
+			FlagMatchBondType = ((bond.getOrder().ordinal() + 1) == bondType);
+		
+		if (!FlagMatchBondType)
+			return false;
+		
+		//2. Matching the bond expression
+		if (bondExpression != null)
+			return bondExpression.matches(bond);
+		
+		return true;
 	}
 
 /*	public String getBTString()

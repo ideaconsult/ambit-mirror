@@ -12,7 +12,7 @@ public class SLNBondExpression
 	public boolean matches(IBond atom) 
 	{
 		//TODO
-		return false;
+		return true;
 	}
 
 

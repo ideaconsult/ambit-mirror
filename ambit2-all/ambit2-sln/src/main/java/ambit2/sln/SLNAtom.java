@@ -34,7 +34,7 @@ public class SLNAtom extends org.openscience.cdk.PseudoAtom implements IQueryAto
 		else		
 			if (atomType < SLNConst.GlobDictOffseet) //atomic symbol
 			{
-				//TODO
+				return SLNConst.elSymbols[atomType].equals(atom.getSymbol());
 			}
 			else
 				if (atomType < SLNConst.LocalDictOffseet) //It is a global dictionary definition
