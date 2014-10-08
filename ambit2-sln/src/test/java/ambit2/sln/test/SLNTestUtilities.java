@@ -24,9 +24,11 @@ public class SLNTestUtilities
 		
 		//tu.testSLN2SLN("C(C)CCH3[a=b;a1=b1]");
 		
-		tu.testSLN2SLN("C[2]CCCC@2");
-		tu.testSLN2SLN("C[21]CC[3]CC=@21-[a=b]@3");
-		tu.testSLN2SLN("CCC-[a=b]CC");
+		
+		//slnHelper.FlagPreserveOriginalAtomID = false;
+		tu.testSLN2SLN("C[2]CCCC(C)@2CC");
+		//tu.testSLN2SLN("C[21]CC[3]CC@21@3");
+		//tu.testSLN2SLN("CCC-[a=b]CC");
 	}
 	
 	public void testSLN(String sln)
