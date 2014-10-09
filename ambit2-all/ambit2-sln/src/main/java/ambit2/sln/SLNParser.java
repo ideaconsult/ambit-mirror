@@ -754,8 +754,14 @@ public class SLNParser
 				curComponent = 0;
 			curChar++;
 			break;
-
+		
+		default:
+			newError("Incorrect symbol '" +sln.charAt(curChar) +"'", curChar+1,"");
+			curChar++; 
 		}
+		
+		
+			
 	}
 
 	void addBond(SLNAtom atom0, SLNAtom atom1)

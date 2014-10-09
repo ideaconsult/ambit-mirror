@@ -37,7 +37,7 @@ public class SLNTestUtilities
 		//tu.testSLN2SLN("C[21]CC[3]CC@21@3");
 		//tu.testSLN2SLN("CCC-[a=b]CC");
 		
-		tu.testSLNIsomorphism("C[1]C~CC@1","C1C=CC1");
+		tu.testSLNIsomorphism("C[1]=CCC=@1","C1C=C=C1");
 		
 	}
 	
