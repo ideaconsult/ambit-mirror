@@ -4,17 +4,25 @@ import java.util.HashMap;
 
 public class SLNDictionary 
 {
-	HashMap<String,SLNContainer> nameSLN = new HashMap<String,SLNContainer>();
+	private HashMap<String,SLNDictionaryObject> objects = new HashMap<String,SLNDictionaryObject>();
 	
 		
-	public SLNContainer getSLNContainer(String atomName)
+	public SLNDictionaryObject getDictionaryObject(String name)
 	{	
-		return nameSLN.get(atomName);
+		return objects.get(name);
 	}
 	
-	public boolean containsAtomName(String atomName)
-	{	
-		return false;
+	public boolean containsObject(String name)
+	{
+		return objects.containsKey(name);
 	}
+	
+	public boolean containsObject(String name, SLNDictionaryObject.Type type)
+	{
+		return objects.containsKey(name);
+	}
+	
+	
+	
 	
 }

@@ -123,10 +123,8 @@ public class SLNParser
 		String atomName = extractAtomName();
 		int atomType = -1;
 
-
-
 		//analyze atomName
-		if (globalDictionary.containsAtomName(atomName))
+		if (globalDictionary.containsObject(atomName))
 		{
 			atomType = SLNConst.GlobDictOffseet;
 		}

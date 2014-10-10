@@ -4,6 +4,13 @@ public class PredefinedSLNDictionary
 {
 	public static SLNDictionary getDictionary()
 	{
-		return new SLNDictionary();
+		SLNDictionary dict = new SLNDictionary();
+		setPredefinedAtoms(dict);
+		return dict;
+	}
+	
+	static void setPredefinedAtoms(SLNDictionary dict)
+	{
+		//TODO
 	}
 }
