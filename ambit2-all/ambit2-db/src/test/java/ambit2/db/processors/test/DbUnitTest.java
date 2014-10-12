@@ -148,6 +148,9 @@ public abstract class DbUnitTest {
         IDatabaseConnection c = new DatabaseConnection(jdbcConnection);
 		DatabaseConfig dbConfig = c.getConfig();
 		dbConfig.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
+		/*
+		dbConn.getConfig().setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, new MySqlMetadataHandler());
+		 */
 		return c;
 
 	}	
