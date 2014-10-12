@@ -204,9 +204,11 @@ var ccLib = {
     for (var i = 0, dl = data.length; i < dl; ++i) {
       var el = temp.cloneNode(true);
       el.removeAttribute('id');
+      if (this.fireCallback(enumFn, el, data[i]) === false)
+        continue;
+    
       root.appendChild(el);
       this.fillTree(el, data[i]);
-      this.fireCallback(enumFn, el, data[i]);
     }
     
     root.style.display = oldDisp;
@@ -395,6 +397,8 @@ window.jT = window.jToxKit = {
 	queries: {
 		taskPoll: { method: 'GET', service: "/task/{id}" },
 	},
+	
+	callId: 0,
 	
 	templates: { },        // html2js routine will fill up this variable
 	tools: { },            // additional, external tools added with html2js
@@ -684,8 +688,9 @@ window.jT = window.jToxKit = {
 		// on some queries, like tasks, we DO have baseUrl at the beginning
 		if (service.indexOf("http") != 0)
 			service = settings.baseUrl + service;
-			
-		ccLib.fireCallback(settings.onConnect, kit, service, params);
+
+    var myId = self.callId++;
+		ccLib.fireCallback(settings.onConnect, kit, service, params, myId);
 			
 		// now make the actual call
 		self.$.ajax(service, {
@@ -697,11 +702,11 @@ window.jT = window.jToxKit = {
 			data: params.data,
 			jsonp: settings.jsonp ? 'callback' : false,
 			error: function(jhr, status, error){
-			  ccLib.fireCallback(settings.onError, kit, service, status, jhr);
+			  ccLib.fireCallback(settings.onError, kit, service, status, jhr, myId);
 				callback(null, jhr);
 			},
 			success: function(data, status, jhr){
-			  ccLib.fireCallback(settings.onSuccess, kit, service, status, jhr);
+			  ccLib.fireCallback(settings.onSuccess, kit, service, status, jhr, myId);
 				callback(data, jhr);
 			}
 		});
@@ -1017,11 +1022,11 @@ window.jT.ui = {
     if (count == null)
       count = 0;
     if (total == null) {
-      re = /([^(]*)\(([\d\?]+)\)/;
+      re = /\(([\d\?]+)\)$/;
       add = '' + count;
     }
     else {
-      re = /([^(]*)\(([\d\?]+\/[\d\?\+-]+)\)/;
+      re = /\(([\d\?]+\/[\d\?\+-]+)\)$/;
       add = '' + count + '/' + total;
     }
     
@@ -1029,7 +1034,7 @@ window.jT.ui = {
     if (!str.match(re))
       str += ' (' + add + ')';
     else
-      str = str.replace(re, "$1(" + add + ")");
+      str = str.replace(re, "(" + add + ")");
     
     return str;
   },
@@ -1289,8 +1294,8 @@ var jToxSearch = (function () {
     var radios = jT.$('.jq-buttonset', root).buttonset();
     var onTypeClicked = function () {
       form.searchbox.placeholder = jT.$(this).data('placeholder');
-      jT.$('.search-pane .auto-hide', self.rootElement).addClass('hidden').width(0);
-      jT.$('.search-pane .' + this.id, self.rootElement).removeClass('hidden').width('');
+      jT.$('.search-pane .auto-hide', self.rootElement).addClass('hidden');
+      jT.$('.search-pane .' + this.id, self.rootElement).removeClass('hidden');
       self.search.queryType = this.value;
       if (this.value == 'url') {
         jT.$(form.drawbutton).addClass('hidden');
@@ -1394,11 +1399,18 @@ var jToxSearch = (function () {
     });
 
     // finally - parse the URL-passed parameters and setup the values appropriately.
-    if (!!self.settings.b64search)
+    var doQuery = false;
+    if (!!self.settings.b64search) {
       self.setMol($.base64.decode(self.settings.b64search));
-    else if (!!self.settings.search)
+      doQuery = true;
+    }
+    else if (!!self.settings.search) {
       self.setAuto(self.settings.search);
-      
+      doQuery = true;
+    }
+
+    if (doQuery)
+      setTimeout(function () { self.queryKit.query(); }, 250);      
     // and very finally - install the handlers...
     jT.ui.installHandlers(self);
   };
@@ -2444,7 +2456,7 @@ var jToxCompound = (function () {
       var feat = jT.$.extend({}, features[fId]);
       feat.value = entry.values[fId];
       if (!!feat.title) {
-        if (ccLib.fireCallback(callback, null, feat, fId)) {
+        if (ccLib.fireCallback(callback, null, feat, fId) !== false) {
           if (!feat.value)
             feat.value = '-';
           data.push(feat);
@@ -2928,8 +2940,7 @@ var jToxSubstance = (function () {
             return (type != 'display') ? data.i5uuid : jT.ui.shortenedData('<a target="_blank" href="' + data.uri + '">' + data.i5uuid + '</a>', "Press to copy the UUID in the clipboard", data.i5uuid);
           } },
           'Owner': { sTitle: "Owner", mData: "ownerName", sDefaultContent: '-'},
-          'Info': { sTitle: "Info", mData: "externalIdentifiers", mRender: function (data, type, full) { return ccLib.joinDeep(data, 'type', ', '); }
-          }
+          'Info': { sTitle: "Info", mData: "externalIdentifiers", mRender: function (data, type, full) { return jToxSubstance.formatExtIdentifiers(data, type, full); } }
         }
       }
     }
@@ -2964,6 +2975,20 @@ var jToxSubstance = (function () {
     // finally, if provided - make the query
     if (!!self.settings.substanceUri)
       self.querySubstance(self.settings.substanceUri)
+  };
+  
+  // format the external identifiers column
+  cls.formatExtIdentifiers = function (data, type, full) {
+    if (type != 'display')
+      return ccLib.joinDeep(data, 'id', ', ');
+    
+    var html = '';
+    for (var i = 0;i < data.length;++i) {
+      if (i > 0)
+        html += '<br/>';
+      html += data[i].type + '&nbsp;=&nbsp;' + data[i].id;
+    }
+    return html;
   };
   
   cls.prototype = {
@@ -3025,11 +3050,15 @@ var jToxSubstance = (function () {
             result.substance[i].index = i + from + 1;
 
           self.substance = result.substance;
+          
+          if (result.substance.length < self.pageSize) // we've reached the end!!
+            self.entriesCount = from + result.substance.length;
+
           if (!self.settings.noInterface) {
             jT.$(self.table).dataTable().fnClearTable();
             jT.$(self.table).dataTable().fnAddData(result.substance);
             
-            self.updateControls(qStart, result.substance.length);
+            self.updateControls(from, result.substance.length);
           }
         }
         // time to call the supplied function, if any.
@@ -3749,13 +3778,7 @@ var jToxStudy = (function () {
           substance = substance.substance[0];
            
           substance["showname"] = substance.publicname || substance.name;
-          var flags = '';
-          for (var i = 0, iLen = substance.externalIdentifiers.length; i < iLen; ++i) {
-            if (i > 0)
-              flags += ', ';
-            flags += substance.externalIdentifiers[i].id || '';
-          }
-          substance["IUCFlags"] = flags;
+          substance["IUCFlags"] = jToxSubstance.formatExtIdentifiers(substance.externalIdentifiers, 'display', substance);
           self.substance = substance;
             
           ccLib.fillTree(self.rootElement, substance);
@@ -4127,25 +4150,27 @@ var jToxLog = (function () {
     
     // now the handlers - needed no matter if we have interface or not    
     self.handlers = {
-      onConnect: function (service, params) {
+      onConnect: function (service, params, id) {
         var info = ccLib.fireCallback(self.settings.formatEvent, this, service, "connecting", params, null);
         ccLib.fireCallback(self.settings.onEvent, this, service, "connecting", info);
         if (!self.settings.noInterface) {
           setStatus("connecting");
           var line = addLine(info);
-          self.events[service] = line;
+          self.events[id] = line;
           setIcon(line, 'connecting');
           jT.$(line).data('status', "connecting");
+          
+          console.log("Connecting [" + id + ": " + service);
         }
         if (!!self.settings.resend && this._handlers != null)
-          ccLib.fireCallback(this._handlers.onConnect, this, service, params);
+          ccLib.fireCallback(this._handlers.onConnect, this, service, params, id);
       },
-      onSuccess: function (service, status, jhr) {
+      onSuccess: function (service, status, jhr, id) {
         var info = ccLib.fireCallback(self.settings.formatEvent, this, service, "success", null, jhr);
         ccLib.fireCallback(self.settings.onEvent, this, service, "success", info);
         if (!self.settings.noInterface) {
           setStatus("success");
-          var line = self.events[service];
+          var line = self.events[id];
           if (!line) {
             console.log("jToxLog: missing line for:" + service);
             return;
@@ -4154,16 +4179,18 @@ var jToxLog = (function () {
           setIcon(line, 'success');
           ccLib.fillTree(line, info);
           jT.$(line).data('status', "success");
+
+          console.log("Success [" + id + ": " + service);
         }
         if (!!self.settings.resend && this._handlers != null)
-          ccLib.fireCallback(this._handlers.onSuccess, this, service, status, jhr);
+          ccLib.fireCallback(this._handlers.onSuccess, this, service, status, jhr, id);
       },
-      onError: function (service, status, jhr) {
+      onError: function (service, status, jhr, id) {
         var info = ccLib.fireCallback(self.settings.formatEvent, this, service, "error", null, jhr);
         ccLib.fireCallback(self.settings.onEvent, this, service, "error", info);
         if (!self.settings.noInterface) {
           setStatus("error");
-          var line = self.events[service];
+          var line = self.events[id];
           if (!line) {
             console.log("jToxLog: missing line for:" + service + "(" + status + ")");
             return;
@@ -4172,9 +4199,11 @@ var jToxLog = (function () {
           setIcon(line, 'error');
           ccLib.fillTree(line, info);
           jT.$(line).data('status', "error");
+
+          console.log("Error [" + id + ": " + service);
         }
         if (!!self.settings.resend && this._handlers != null)
-          ccLib.fireCallback(this._handlers.onError, this, service, status, jhr);
+          ccLib.fireCallback(this._handlers.onError, this, service, status, jhr, id);
       }
     };
     
@@ -4579,7 +4608,7 @@ jT.templates['widget-search']  =
 "  			  <input type=\"radio\" id=\"searchurl\" value=\"url\" name=\"searchtype\" data-placeholder=\"Enter URL to be examined...\"/>" +
 "			    <label for=\"searchurl\" title=\"Enter dataset URL\">URL</label>" +
 "  			</div>" +
-"    		<div class=\"jtox-inline float-right search-pane\">" +
+"    		<div class=\"float-right search-pane\">" +
 "  			  <div class=\"dynamic auto-hide searchauto hidden jtox-inline\">" +
 "  			    <div>" +
 "    			    <input type=\"checkbox\" name=\"regexp\" title=\"fadsfas\"/><span>Enable fragment search<sup class=\"helper\"><a target=\"_blank\" href=\"http://en.wikipedia.org/wiki/Regular_expression\">?</a></sup></span>" +

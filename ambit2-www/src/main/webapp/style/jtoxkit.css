@@ -55,6 +55,10 @@
   transition: opacity ease 300ms;
 }
 
+.jtox-toolkit {
+  clear: both;
+}
+
 .jtox-toolkit .jtox-details {
   font-size: 80%;
 }
@@ -387,16 +391,16 @@ button.jt-toggle.active {
 
 .jtox-search .searchauto.dynamic>div {
   white-space: nowrap;
+  padding-top: 10px;
 }
 
-.jtox-search .search-pane .dynamic {
-  -moz-transition: opacity 0.3s ease-out;
-  -webkit-transition: opacity 0.3s ease-out;
-  transition: opacity 0.3s ease-out;
+.jtox-search .search-pane div.dynamic {
+  min-height: 40px;
+  float: left;
 }
 
 .jtox-search .search-pane .dynamic.hidden {
-  opacity: 0.0;
+  display: none;
 }
 
 .jtox-search .ketcher {
