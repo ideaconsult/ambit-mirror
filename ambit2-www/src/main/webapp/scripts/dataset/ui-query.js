@@ -32,7 +32,7 @@ function onDetailedRow(row, data, element) {
   $(el).addClass('paddingless');
   var div = document.createElement('div');
   el.appendChild(div);
-  new jToxSubstance(div, $.extend(true, {}, this.settings, {crossDomain: true, selectionHandler: null, substanceUri: uri, showControls: false, onDetails: function (root, data, element) {
+  new jToxSubstance(div, $.extend(true, {}, this.settings, {crossDomain: true, selectionHandler: null, substanceUri: uri, showControls: true, onDetails: function (root, data, element) {
     new jToxStudy(root, $.extend({}, this.settings, {substanceUri: data.URI}));
   } } ) );
 }
@@ -71,7 +71,8 @@ function createGroups(miniset, kit) {
 	groups["Datasets"] = function (name, miniset) {
     var arr = [];
     for (var f in miniset.feature) {
-      if (!miniset.feature[f].used && !miniset.feature[f].basic) {
+      var feat = miniset.feature[f];
+      if (!feat.used && !feat.basic) {
         arr.push(f);
         if (feat.title.indexOf('explanation') > 0)
           feat.visibility = "details";
