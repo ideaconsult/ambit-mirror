@@ -4,6 +4,7 @@
 	<div class="row half-bottom">
 		<label class="three columns alpha">Dataset name</label>
 		<input class="ten columns omega" type='text' size='60' name='title' id='title' value='' >
+		<a href='#' class='chelp derek' id='derekhelp' style='display:none;'>?</a>
 	</div>
 	
 	<div class="row half-bottom">
