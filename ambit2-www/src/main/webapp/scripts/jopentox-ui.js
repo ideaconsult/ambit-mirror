@@ -639,7 +639,10 @@ function loadDatasetMeta(root,url,deleteVisible) {
         },
         success: function( data ) {
         	$.each(data.dataset,function(index,value) {
-
+        		
+        		try {
+        			if (value.title.toLowerCase().indexOf("derek")>=0) $("#derekhelp").show(); else $("#derekhelp").hide();
+        		} catch (err) { $("#derekhelp").hide();}
         		$("#title").val(value.title);
         		$("#rightsHolder").val(value.rightsHolder);
 
