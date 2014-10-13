@@ -32,7 +32,7 @@ var _i5 = {
 	        "Reference type": {
 	            "1586": {"title" :"study report", "selected" : true},	        	
 	            "266":  {"title" :"other company data"},
-	            "1433": {"title" :"publication", "selected" : true},
+	            "1443": {"title" :"publication", "selected" : true},
 	            "1486": {"title" :"review article or handbook", "selected" : true},
 	            "1542": {"title" :"secondary source"},
 	            "811": {"title" :"grey literature"},

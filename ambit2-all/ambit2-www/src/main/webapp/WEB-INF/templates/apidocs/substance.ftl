@@ -188,14 +188,14 @@
 							},	
 							{
 							    "name": "referencetype",
-							    "description": "Reference type: 1586 (study report); 266  (other company data; 1433 (publication); 1486 (review article or handbook);\n1542 (secondary source);811 (grey literature);1342 (title);NOT_SPECIFIED; null",						    
+							    "description": "Reference type: 1586 (study report); 266  (other company data; 1443 (publication); 1486 (review article or handbook);\n1542 (secondary source);811 (grey literature);1342 (title);NOT_SPECIFIED; null",						    
 							    "required": false,
 							    "type": "string",
 							    "paramType": "form",
 							    "allowMultiple": true,
 							    "defaultValue": "name",
 							    "enum" : [
-							         "1586","266","1433","1486","1542","811","1342","NOT_SPECIFIED","null"
+							         "1586","266","1443","1486","1542","811","1342","NOT_SPECIFIED","null"
 							    ]
 							}	            
 			            ],
