@@ -1132,10 +1132,10 @@ jT.$(document).ready(function(){
 
 var jToxQuery = (function () {
   var defaultSettings = { // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
-    scanDom: true,
-    initialQuery: false,
-    kitSelector: null,
-    dom: null,
+    scanDom: true,          // whether to scan the whole DOM for finding the main query kit
+    initialQuery: false,    // whether to perform an initial query, immediatly when loaded.
+    kitSelector: null,      // selector for the main kit, if outside, for example.
+    dom: null,              // an, all-prepared object with all sub-kits. Structure { kit: <main kit object>, widgets: { <kit type>: <widget kit object> } }
 
     configuration: {
       // this is the main thing to be configured
@@ -1212,6 +1212,7 @@ var jToxSearch = (function () {
     defaultNeedle: '50-00-0',     // which is the default search string, if empty one is provided
     smartsList: 'funcgroups',     // which global JS variable to seek for smartsList
     hideOptions: '',              // comma separated list of search options to hide
+    slideInput: false,            // whether to slide the input, when focussed
     contextUri: null,             // a search limitting contextUri - added as dataset_uri parameter
     configuration: {
       handlers: { }
@@ -1255,19 +1256,22 @@ var jToxSearch = (function () {
       });
     }
 
-    jT.$(form.searchbox)
-    .on('focus', function () {
-      var gap = jT.$(form).width() - jT.$(radios).width() - 30 - jT.$('.search-pane').width();
-      var oldSize = $(this).data('oldSize') || $(this).width();
-      $(this).data('oldSize', oldSize);
-      jT.$(this).css('width', '' + (oldSize + gap) + 'px');
-    })
-    .on('blur', function () {
-      jT.$(this).css('width', '');
-    })
-    .on('change', function () { // when we change the value here - all, possible MOL caches should be cleared.
+    // when we change the value here - all, possible MOL caches should be cleared.
+    jT.$(form.searchbox).on('change', function () { 
       self.setAuto();
     });
+    
+    if (self.settings.slideInput)
+      jT.$(form.searchbox)
+      .on('focus', function () {
+        var gap = jT.$(form).width() - jT.$(radios).width() - 30 - jT.$('.search-pane').width();
+        var oldSize = $(this).data('oldSize') || $(this).width();
+        $(this).data('oldSize', oldSize);
+        jT.$(this).css('width', '' + (oldSize + gap) + 'px');
+      })
+      .on('blur', function () {
+        jT.$(this).css('width', '');
+      });
     
     var hasAutocomplete = false;
     if (jT.$('#searchurl', self.rootElement).length > 0) {
@@ -2026,7 +2030,7 @@ var jToxCompound = (function () {
               var tabTable = document.createElement('table');
               parent.appendChild(tabTable);
               jT.$(tabTable).dataTable({
-                "bPaginate": true,
+                "bPaginate": false,
                 "bProcessing": true,
                 "bLengthChange": false,
         				"bAutoWidth": true,
