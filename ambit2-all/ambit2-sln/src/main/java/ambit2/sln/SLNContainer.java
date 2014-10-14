@@ -2,6 +2,8 @@ package ambit2.sln;
 
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
+import ambit2.sln.dictionary.SLNDictionary;
+
 public class SLNContainer extends QueryAtomContainer
 {
 	static final long serialVersionUID = 345274336895563284L;
