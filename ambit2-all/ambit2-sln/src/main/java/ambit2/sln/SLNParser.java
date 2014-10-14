@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import org.openscience.cdk.interfaces.IAtom;
 
+import ambit2.sln.dictionary.ISLNDictionaryObject;
 import ambit2.sln.dictionary.SLNDictionary;
 import ambit2.sln.dictionary.PredefinedSLNDictionary;
 
@@ -127,7 +128,7 @@ public class SLNParser
 		int atomType = -1;
 
 		//analyze atomName
-		if (globalDictionary.containsObject(atomName))
+		if (globalDictionary.containsObject(atomName, ISLNDictionaryObject.Type.ATOM))
 		{
 			atomType = SLNConst.GlobDictOffseet;
 		}
