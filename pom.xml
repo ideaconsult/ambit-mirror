@@ -295,47 +295,37 @@
     </pluginManagement>
   </build>
   <modules>
+  	<module>ambit2-balloon</module>
     <module>ambit2-base</module>
-    <module>ambit2-rest</module>
-    <module>ambit2-smarts</module>
+    <module>ambit2-chebi</module>
     <module>ambit2-core</module>
     <module>ambit2-db</module>
-    <module>ambit2-descriptors</module>
-    <module>ambit2-smi23d</module>
-    <module>ambit2-mopac</module>
-    <module>ambit2-model</module>
-    <module>ambit2-namestructure</module>
-    <module>ambit2-pubchem</module>
-    <module>ambit2-tautomers</module>
-    <module>ambit2-ui</module>
-    <module>ambit2-dbui</module>
-    <!-- 
-    <module>ambit2-workflow</module>
-    <module>ambit2-plugin-search</module>
-    <module>ambit2-plugin-analogs</module>
-    <module>ambit2-plugin-pbt</module>
-    <module>ambit2-plugin-dbtools</module>
-    <module>ambit2-plugin-usermgr</module>
-     -->
-    <module>ambit2-rendering</module>
-    <module>ambit2-jchempaint</module>
-    <module>ambit2-chebi</module>
-    <module>ambit2-some</module>
-    <!--     
-    <module>ambit2-taglibs</module>
-     -->
-    <module>ambit2-dragon</module>
     <module>ambit2-dbext</module>
-    <module>ambit2-waffles</module>
-    <module>ambit2-reactions</module>
+    <module>ambit2-dbui</module>
+    <module>ambit2-descriptors</module>
+    <module>ambit2-dragon</module>
+    <module>ambit2-groupcontribution</module>
+    
+    <module>ambit2-jchempaint</module>
     <module>ambit2-markush</module>
-    <module>ambit2-balloon</module>
+    <module>ambit2-model</module>
+    <module>ambit2-mopac</module>
+    <module>ambit2-namestructure</module>
     <!-- 
     <module>ambit2-nano</module>
      -->
+    <module>ambit2-pubchem</module>
+    <module>ambit2-reactions</module>
+    <module>ambit2-rendering</module>
+    <module>ambit2-rest</module>
     <module>ambit2-sln</module>
-    <module>ambit2-structure2name</module>
-    <module>ambit2-groupcontribution</module>
+    <module>ambit2-smarts</module>    
+    <module>ambit2-smi23d</module>
+    <module>ambit2-some</module>
+    <module>ambit2-structure2name</module>    
+    <module>ambit2-tautomers</module>
+    <module>ambit2-ui</module>
+    <module>ambit2-waffles</module>
   </modules>
   <distributionManagement>
     <!-- 
