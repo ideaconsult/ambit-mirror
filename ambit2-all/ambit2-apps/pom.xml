@@ -353,13 +353,12 @@
     </plugins>
   </reporting>
   <modules>
-    <module>../ambit2-www</module>
-    <module>../ambit2-dbi5</module>
-    <module>../ambit2-loom</module>
+    <module>ambit2-www</module>
+    <module>ambit2-dbi5</module>
+    <module>ambit2-loom</module>
     <!--
-    <module>../ambit2-ambitxt</module>    
-    <module>../ambit2-taglibs</module>
-    <module>../ambit2-i5rest</module>    
+    <module>ambit2-taglibs</module>
+    <module>ambit2-i5rest</module>    
         -->
     <module>ambit2-user</module>
     <module>ambit2-dbsubstance</module>
