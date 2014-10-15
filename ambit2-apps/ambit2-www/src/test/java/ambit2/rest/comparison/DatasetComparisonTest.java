@@ -463,11 +463,12 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 			int code = 0;
 			try {
 				ClientResourceWrapper.setTokenFactory(this);
-				uc = ClientResourceWrapper.getHttpURLConnection(uri, "GET", MediaType.TEXT_HTML.toString());
+				uc = ClientResourceWrapper.getHttpURLConnection(uri, "GET", MediaType.APPLICATION_JSON.toString());
 				
 				code = uc.getResponseCode();
 				if (HttpURLConnection.HTTP_OK == code) {
 					in = uc.getInputStream();		
+					
 					
 					BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 					String line = null;
