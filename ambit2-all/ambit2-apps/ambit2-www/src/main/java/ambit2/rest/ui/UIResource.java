@@ -86,7 +86,8 @@ public class UIResource extends FreeMarkerResource {
 				};				
 			},
 			toxtree,
-			taskpage;
+			taskpage,
+			dataset_comparison;
 			public boolean enablePOST() {
 				return false;
 			}
