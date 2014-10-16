@@ -38,7 +38,15 @@ public class SLNContainerAttributes
 	{
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < coord2d.size(); i++)
-			sb.append(coord2d.get(i));
+		{	
+			sb.append("(");
+			sb.append(coord2d.get(i)[0]);
+			sb.append(",");
+			sb.append(coord2d.get(i)[1]);
+			sb.append(")");
+			if(i < coord2d.size()-1)
+				sb.append(",");
+		}	
 		return sb.toString();
 	}
 
@@ -46,7 +54,17 @@ public class SLNContainerAttributes
 	{
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < coord3d.size(); i++)
-			sb.append(coord3d.get(i));
+		{	
+			sb.append("(");
+			sb.append(coord3d.get(i)[0]);
+			sb.append(",");
+			sb.append(coord3d.get(i)[1]);
+			sb.append(",");
+			sb.append(coord3d.get(i)[2]);
+			sb.append(")");
+			if(i < coord3d.size()-1)
+				sb.append(",");
+		}	
 		return sb.toString();
 	}
 
@@ -54,29 +72,39 @@ public class SLNContainerAttributes
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append("<");
-		if (name != null)
+		if (name != null)			
 			sb.append("name="+name);
 		
-		if (sb.length() > 1)
-			sb.append(";");
 		if (regid != null)
+		{	
+			if (sb.length() > 1)
+				sb.append(";");
 			sb.append("regid="+regid);
+		}	
 		
-		if (sb.length() > 1)
-			sb.append(";");
+		
 		if (type != null)
+		{	
+			if (sb.length() > 1)
+				sb.append(";");
 			sb.append("type="+type);
+		}
+			
 		
-		if (sb.length() > 1)
-			sb.append(";");
 		if (coord2d != null)
-			sb.append("coord2d="+coord2d);
+		{	
+			if (sb.length() > 1)
+				sb.append(";");
+			sb.append("coord2d="+coord2dToString(coord2d));
+		}
 		
-		if (sb.length() > 1)
-			sb.append(";");
+		
 		if (coord3d != null)
-			sb.append("coord3d="+coord3d);
-		
+		{	
+			if (sb.length() > 1)
+				sb.append(";");
+			sb.append("coord3d="+coord3dToString(coord3d));
+		}
 		
 		Set<Map.Entry<String,String>> set = userDefiendAttr.entrySet();		
 		Iterator<Map.Entry<String,String>> iterator = set.iterator();
@@ -90,7 +118,12 @@ public class SLNContainerAttributes
 			
 		}	
 		sb.append(">");
-		return sb.toString();
+		
+		String attr = sb.toString();
+		if (attr.equals("<>"))
+			return "";
+		else
+			return attr;
 	}
 	
 	

@@ -145,7 +145,8 @@ public class SLNHelper
 		node.parent = null;
 		node.atom = container.getAtom(0);
 		nodes.put(node.atom, node);
-		return(nodeToString(node.atom));
+		String attr = container.getAttributes().toString();
+		return(nodeToString(node.atom) + attr);
 	}
 	
 	String nodeToString(IAtom atom)

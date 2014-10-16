@@ -30,14 +30,16 @@ public class SLNTestUtilities
 		//tu.testSLN("C[1]CCC[2]CC@1@2");
 		//tu.testSLN("C[1]CCC-[a=b]@1");
 		
-		//tu.testSLN2SLN("C(C)CCH3[a=b;a1=b1]");
+		tu.testSLN2SLN("C(C)CCH3[a=b;a1=b1]<coord2d=(0,1),(1,1)>");
+		tu.testSLN2SLN("C(C)CCH3<coord2d=(1,2),(3,4);a1=b1>");
+		tu.testSLN2SLN("C(C)CCH3<coord3d=(1,2,4),(1,2,3);a1=b1>");
 		
 		//slnHelper.FlagPreserveOriginalAtomID = false;
 		//tu.testSLN2SLN("C[2]CCCC(C)@2CC");
 		//tu.testSLN2SLN("C[21]CC[3]CC@21@3");
 		//tu.testSLN2SLN("CCC-[a=b]CC");
 		
-		tu.testSLNIsomorphism("C[1]=CCC=@1","C1C=C=C1");
+		//tu.testSLNIsomorphism("C[1]=CCC=@1","C1C=C=C1");
 		
 	}
 	

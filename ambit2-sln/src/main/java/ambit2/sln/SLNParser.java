@@ -15,6 +15,7 @@ public class SLNParser
 	private boolean FlagTolerateSpaces = false;
 	private boolean FlagLogExpressionInMolAttribute = false;  //Preserved for future use
 	private boolean FlagAllowBondExpressionInRingClosure = true;
+	private boolean FlagCheckTheNumberOfCoordinates = false;
 	
 
 	String sln;
@@ -761,8 +762,6 @@ public class SLNParser
 			newError("Incorrect symbol '" +sln.charAt(curChar) +"'", curChar+1,"");
 			curChar++; 
 		}
-		
-		
 			
 	}
 
@@ -1277,11 +1276,9 @@ public class SLNParser
 	{	
 		if (molAttr.trim().equals(""))
 		{
-			newError("Empty molecule attribute expression", curChar+1,"");
+			//It is not considered as an error!
 			return;
 		}
-		
-		
 		int pos = 0;
 
 		//Handle all attributes and logical operations
@@ -1331,9 +1328,12 @@ public class SLNParser
 				startPos = pos;
 				while (pos < molAttr.length())
 				{
-					if (Character.isLetter(molAttr.charAt(pos)) ||
+					/* 
+					 if (Character.isLetter(molAttr.charAt(pos)) ||
 							Character.isDigit(molAttr.charAt(pos))||
 							(molAttr.charAt(pos) == '*'))
+					*/
+					if(molAttr.charAt(pos) != ';')
 						pos++;
 					else
 						break;
@@ -1377,9 +1377,8 @@ public class SLNParser
 				}
 				break;
 			case ';':
-				//Logical expressions are not stored currently in SLNContainerAttributes so nothing is done 
+				//Logical expressions currently are not stored in SLNContainerAttributes so nothing is done 
 				//SLNExpressionToken newToken3 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_ANDLO);  
-
 				break;	
 
 			default:			
@@ -1393,6 +1392,8 @@ public class SLNParser
 
 	void  registerMoleculeAttribute(String name, String value)
 	{
+		//System.out.println("Registering Molecule Attribute: " + name + "  " + value);
+		
 		//Handle predefined molecule attributes
 		if (name.equals("name"))
 		{	
@@ -1412,7 +1413,18 @@ public class SLNParser
 			return;
 		}
 		
-		//TODO handle coord2d, coord3d
+		if (name.equalsIgnoreCase("coord2d"))
+		{	
+			parser2DCoordinates(value);
+			return;
+		} 
+		
+		if (name.equalsIgnoreCase("coord3d"))
+		{	
+			parser3DCoordinates(value);
+			return;
+		}
+		
 
 		//By default it is an user defined attribute
 		if (name.equals(""))
@@ -1429,9 +1441,161 @@ public class SLNParser
 		else
 		{	
 			container.getAttributes().userDefiendAttr.put(name, value);
-			System.out.println("put " + name + " = " + value);
+			//System.out.println("put " + name + " = " + value);
 		}	
 	}
+	
+	void parser2DCoordinates(String coord)
+	{
+		container.getAttributes().coord2d = new ArrayList<double[]>();
+		int cPos = 0;
+		int nAtom = 0;
+		while (cPos < coord.length())
+		{	
+			String brackets = extractBracketsFromPosition(coord, cPos);
+			if (brackets == null)
+			{
+				newError("Incorrect 2D coordinates for atom #" + (nAtom+1) + "  " + extractError,curChar,"");
+				return;
+			}
+			
+			cPos+= brackets.length();
+			
+			String xystring = brackets.substring(1, brackets.length()-1); //removing: '(' and ')'
+			String tokens[] = xystring.split(",");
+			if (tokens.length != 2)
+			{
+				newError("Incorrect 2D coordinates for atom #" + (nAtom+1) + " : " + brackets ,curChar,"");
+				return;
+			}
+			
+			double c[] = new double[2];
+			c[0] = extractDouble(tokens[0]);
+			if (extractError != "")
+			{
+				newError("Incorrect 2D coordinates for atom #" + (nAtom+1) + " : " + brackets ,curChar,"");
+				return;
+			}
+			
+			c[1] = extractDouble(tokens[1]);
+			if (extractError != "")
+			{
+				newError("Incorrect 2D coordinates for atom #" + (nAtom+1) + " : " + brackets ,curChar,"");
+				return;
+			}
+			
+			nAtom++;
+			container.getAttributes().coord2d.add(c);
+			
+			//Handling the separator ',' for the next coordinates
+			if (cPos < coord.length())
+			{	
+				if (coord.charAt(cPos) != ',')
+				{
+					newError("Missing separator ',' in 2D coordinates after atom #" + nAtom ,curChar,"");
+					return;
+				}
+				else
+					cPos++;
+			}
+		}
+		
+		if (FlagCheckTheNumberOfCoordinates)
+			if (nAtom != container.getAtomCount())
+			{	
+				newError("The number of 2D coordinates is different from the atom count" ,curChar,"");
+				return;
+			}	
+	}
+	
+	
+	void parser3DCoordinates(String coord)
+	{	
+		container.getAttributes().coord3d = new ArrayList<double[]>();
+		int cPos = 0;
+		int nAtom = 0;
+		while (cPos < coord.length())
+		{	
+			String brackets = extractBracketsFromPosition(coord, cPos);
+			if (brackets == null)
+			{
+				newError("Incorrect 3D coordinates for atom #" + (nAtom+1) + "  " + extractError,curChar,"");
+				return;
+			}
+			
+			cPos+= brackets.length();
+			
+			String xyzstring = brackets.substring(1, brackets.length()-1); //removing: '(' and ')'
+			String tokens[] = xyzstring.split(",");
+			if (tokens.length != 3)
+			{
+				newError("Incorrect 3D coordinates for atom #" + (nAtom+1) + " : " + brackets ,curChar,"");
+				return;
+			}
+			
+			double c[] = new double[3];
+			
+			for (int i = 0; i < 3; i++)
+			{	
+				c[i] = extractDouble(tokens[i]);
+				if (extractError != "")
+				{
+					newError("Incorrect 3D coordinates for atom #" + (nAtom+1) + " : " + brackets ,curChar,"");
+					return;
+				}
+			}
+			
+			nAtom++;
+			container.getAttributes().coord3d.add(c);
+			
+			//Handling the separator ',' for the next coordinates
+			if (cPos < coord.length())
+			{	
+				if (coord.charAt(cPos) != ',')
+				{
+					newError("Missing separator ',' in 3D coordinates after atom #" + nAtom ,curChar,"");
+					return;
+				}
+				else
+					cPos++;
+			}
+		}
+		
+		if (FlagCheckTheNumberOfCoordinates)
+			if (nAtom != container.getAtomCount())
+			{	
+				newError("The number of 3D coordinates is different from the atom count" ,curChar,"");
+				return;
+			}	
+	}
+	
+	
+	
+	
+	String extractBracketsFromPosition(String target, int pos)
+	{	
+		if (target.charAt(pos) == '(')
+		{
+			int n = pos+1;
+			while (n < target.length())
+			{
+				if (target.charAt(n) == ')')
+					return target.substring(pos,n+1);
+				n++;
+			}
+			
+			extractError = "Missing closing bracket ')'";  
+			return null; //Error exit missing 
+		}
+		else 
+		{	
+			extractError = "Missing opening bracket '('";
+			return null;
+		}	
+	}
+	
+	
+	
 	
 	int extractInteger(String valueString)
 	{
