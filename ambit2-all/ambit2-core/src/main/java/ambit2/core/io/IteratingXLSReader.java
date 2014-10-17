@@ -34,10 +34,12 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -59,18 +61,24 @@ import ambit2.core.config.AmbitCONSTANTS;
  * <b>Modified</b> Aug 31, 2006
  */
 public class IteratingXLSReader extends IteratingFilesWithHeaderReader<Property> {
-	protected HSSFWorkbook workbook;
-	protected HSSFSheet sheet;
+	protected Workbook workbook;
+	protected Sheet sheet;
 	protected Iterator iterator;
 	protected  InputStream input;
 	protected int sheetIndex = 0;
 	//protected HSSFFormulaEvaluator evaluator;
+	protected boolean hssf = true;
 	
 	public IteratingXLSReader(InputStream input, int sheetIndex)  throws CDKException {
+		this(input,sheetIndex,true);
+	}
+	public IteratingXLSReader(InputStream input, int sheetIndex,boolean hssf)  throws CDKException {
 		super();
+		this.hssf = hssf;
 		this.sheetIndex = sheetIndex;
 		setReader(input);
 	}
+
 	@Override
 	protected ArrayList<Property> createHeader() {
 		return new ArrayList<Property>();
@@ -82,7 +90,7 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader<Property>
 	public void setReader(InputStream input) throws CDKException {
 		try {
 			this.input = input;
-			workbook = new HSSFWorkbook(input);
+			workbook = hssf?new HSSFWorkbook(input):new XSSFWorkbook(input);
 			sheet = workbook.getSheetAt(sheetIndex);
 			//evaluator = new HSSFFormulaEvaluator(sheet, workbook);
 		} catch (Exception x) {
@@ -100,10 +108,10 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader<Property>
 	public void processHeader() {
 		iterator = sheet.rowIterator();
 		//process first header line
-		processHeader((HSSFRow)iterator.next());
+		processHeader((Row)iterator.next());
 		//skip rest of header lines
 		for (int i=1; i < getNumberOfHeaderLines();i++)
-			processHeader((HSSFRow)iterator.next());
+			processHeader((Row)iterator.next());
 	}
 
 	public void close() throws IOException {
@@ -135,29 +143,29 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader<Property>
 		IAtomContainer mol = null;
 		Map properties = new Hashtable();
 		try {
-			HSSFRow row = (HSSFRow) iterator.next();
+			Row row = (Row) iterator.next();
 			
 			for (int col = 0; col < getNumberOfColumns(); col++ ) {
-				HSSFCell cell = row.getCell(col);
+				Cell cell = row.getCell(col);
 				Object value = null;
 				if (cell != null)				
 				switch (cell.getCellType()) {
-					case HSSFCell.CELL_TYPE_BOOLEAN:
+					case Cell.CELL_TYPE_BOOLEAN:
 				    	value = cell.getBooleanCellValue();
 				    	break;
-					case HSSFCell.CELL_TYPE_NUMERIC:
+					case Cell.CELL_TYPE_NUMERIC:
 				    	value = cell.getNumericCellValue();
 				    	break;
-					case HSSFCell.CELL_TYPE_STRING:
+					case Cell.CELL_TYPE_STRING:
 				    	value = cell.getStringCellValue();
 				    	break;
-					case HSSFCell.CELL_TYPE_BLANK:
+					case Cell.CELL_TYPE_BLANK:
 						value = "";
 				    	break;
-					case HSSFCell.CELL_TYPE_ERROR:
+					case Cell.CELL_TYPE_ERROR:
 						value = "";
 				    	break;
-					case HSSFCell.CELL_TYPE_FORMULA: 
+					case Cell.CELL_TYPE_FORMULA: 
 						try {
 							value = cell.getStringCellValue();
 					    	break;
@@ -199,12 +207,12 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader<Property>
 		
 	}
 	
-	protected void processHeader(HSSFRow row) {
+	protected void processHeader(Row row) {
 			
 			Iterator cols = row.cellIterator();
 			TreeMap columns = new TreeMap();
 			while (cols.hasNext()) {
-				HSSFCell cell = (HSSFCell) cols.next();
+				Cell cell = (Cell) cols.next();
 				String value = cell.getStringCellValue();
 
 				if (value.equals(defaultSMILESHeader))

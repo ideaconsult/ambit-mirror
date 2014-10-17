@@ -4,9 +4,9 @@ import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Iterator;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -23,10 +23,10 @@ public class EurasBCFReader extends IteratingXLSReader {
 		references = new Hashtable<Double, LiteratureEntry>();
 	}
 	protected void readReferences() {
-		HSSFSheet sheet = workbook.getSheetAt(1);
-		Iterator<HSSFRow> i = sheet.rowIterator();
+		Sheet sheet = workbook.getSheetAt(1);
+		Iterator<Row> i = sheet.rowIterator();
 		while (i.hasNext()) {
-			HSSFRow row = i.next();
+			Row row = i.next();
 			if (row.getRowNum()==0) continue;
 			//Object index = row.getCell(0).getStringCellValue();
 			Double index = row.getCell(0).getNumericCellValue();
@@ -35,7 +35,7 @@ public class EurasBCFReader extends IteratingXLSReader {
 			references.put(index,ref);
 		}
 	}
-	protected LiteratureEntry getCitation(HSSFRow row) {
+	protected LiteratureEntry getCitation(Row row) {
 		return LiteratureEntry.getInstance(
 		String.format("%s,\"%s\" %s %d-%s (%d): %s." , 
 				getAuthor(row),
@@ -49,30 +49,30 @@ public class EurasBCFReader extends IteratingXLSReader {
 				getJournal(row));
 		
 	}
-	protected String getAuthor(HSSFRow row) {
+	protected String getAuthor(Row row) {
 		return row.getCell(1).getStringCellValue();
 	}
-	protected String getTitle(HSSFRow row) {
+	protected String getTitle(Row row) {
 		return row.getCell(2).getStringCellValue();
 	}	
-	protected String getJournal(HSSFRow row) {
+	protected String getJournal(Row row) {
 		return row.getCell(3).getStringCellValue();
 	}	
-	protected int getYear(HSSFRow row) {
+	protected int getYear(Row row) {
 		Double d = row.getCell(4).getNumericCellValue();
 		return d.intValue();
 	}	
-	protected int getVolume(HSSFRow row) {
+	protected int getVolume(Row row) {
 		Double d = row.getCell(5).getNumericCellValue();
 		return d.intValue();
 	}	
-	protected String getIssue(HSSFRow row) {
+	protected String getIssue(Row row) {
 		if (row.getCell(6)==null) return "";
 		else 
 			return Integer.toString(((Double)row.getCell(6).getNumericCellValue()).intValue());
 
 	}		
-	protected String getPages(HSSFRow row) {
+	protected String getPages(Row row) {
 		try {
 			return row.getCell(7).getStringCellValue();
 		} catch (Exception x) {
@@ -84,11 +84,11 @@ public class EurasBCFReader extends IteratingXLSReader {
 		
 		iterator = sheet.rowIterator();
 		//process first header line
-		processHeader((HSSFRow)iterator.next());
+		processHeader((Row)iterator.next());
 		//skip rest of header lines
-		HSSFRow row = (HSSFRow)iterator.next();
+		Row row = (Row)iterator.next();
 		for (int i=0; i < getNumberOfColumns(); i++) {
-			HSSFCell cell = row.getCell(i);
+			Cell cell = row.getCell(i);
 			if (cell == null) continue;
 			getHeaderColumn(i).setUnits(cell.getStringCellValue());
 		}

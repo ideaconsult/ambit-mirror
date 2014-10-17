@@ -6,10 +6,11 @@ import java.io.InputStream;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.DatatypeProperty;
@@ -54,12 +55,12 @@ public class ToxCastOntologyBuilder {
 
 	}
 
-	protected void processRow(HSSFRow header, HSSFRow row) throws Exception {
+	protected void processRow(Row header, Row row) throws Exception {
 
 		Individual a = null;
-		Iterator<HSSFCell> cols = row.cellIterator();
+		Iterator<Cell> cols = row.cellIterator();
 		while (cols.hasNext()) {
-			HSSFCell cell = cols.next();
+			Cell cell = cols.next();
 			a = a == null ? getIndividual(NS, String.format("%s", row
 					.getCell(0).getStringCellValue()), assay) : a;
 			if (a == null)
@@ -67,13 +68,13 @@ public class ToxCastOntologyBuilder {
 
 			Object value = null;
 			if (cell != null) {
-				HSSFCell top = header.getCell(cell.getColumnIndex());
+				Cell top = header.getCell(cell.getColumnIndex());
 
 				switch (cell.getCellType()) {
-				case HSSFCell.CELL_TYPE_BOOLEAN:
+				case Cell.CELL_TYPE_BOOLEAN:
 					value = cell.getBooleanCellValue();
 					break;
-				case HSSFCell.CELL_TYPE_NUMERIC:
+				case Cell.CELL_TYPE_NUMERIC:
 					value = cell.getNumericCellValue();
 					/*
 					jenaModel.createLiteralStatement(a, hasValue, cell
@@ -87,7 +88,7 @@ public class ToxCastOntologyBuilder {
 					} else 
 						value = value.toString();
 					break;
-				case HSSFCell.CELL_TYPE_STRING:
+				case Cell.CELL_TYPE_STRING:
 					value = cell.getStringCellValue();
 					
 					if (top.getStringCellValue().equals("SOURCE_NAME_AID") && (!"NA".equals(value))) {
@@ -117,13 +118,13 @@ public class ToxCastOntologyBuilder {
 						}
 					} 					
 					break;
-				case HSSFCell.CELL_TYPE_BLANK:
+				case Cell.CELL_TYPE_BLANK:
 					value = "";
 					break;
-				case HSSFCell.CELL_TYPE_ERROR:
+				case Cell.CELL_TYPE_ERROR:
 					value = "";
 					break;
-				case HSSFCell.CELL_TYPE_FORMULA:
+				case Cell.CELL_TYPE_FORMULA:
 					try {
 						value = cell.getStringCellValue();
 						break;
@@ -198,8 +199,8 @@ public class ToxCastOntologyBuilder {
 
 	}
 
-	protected HSSFRow processHeader(HSSFRow row) throws Exception {
-		Iterator<HSSFCell> cols = row.cellIterator();
+	protected Row processHeader(Row row) throws Exception {
+		Iterator<Cell> cols = row.cellIterator();
 
 		OntClass superClass = jenaModel.createClass(String.format(_NS,
 				"AssayProperty"));
@@ -234,7 +235,7 @@ public class ToxCastOntologyBuilder {
 		hasValue.setDomain(superClass);
 
 		while (cols.hasNext()) {
-			HSSFCell cell = cols.next();
+			Cell cell = cols.next();
 			
 			if (cell.getStringCellValue().equals("SOURCE_NAME_AID")) continue;
 			if (cell.getStringCellValue().equals("ASSAY_CODE")) continue;
@@ -256,14 +257,14 @@ public class ToxCastOntologyBuilder {
 	}
 
 	protected void build(InputStream input) throws Exception {
-		HSSFWorkbook workbook = new HSSFWorkbook(input);
-		HSSFSheet sheet = workbook.getSheetAt(0);
+		Workbook workbook = new HSSFWorkbook(input);
+		Sheet sheet = workbook.getSheetAt(0);
 
 		int record = 0;
-		Iterator<HSSFRow> iterator = sheet.rowIterator();
-		HSSFRow header = null;
+		Iterator<Row> iterator = sheet.rowIterator();
+		Row header = null;
 		while (iterator.hasNext()) {
-			HSSFRow row = iterator.next();
+			Row row = iterator.next();
 			if (record == 0)
 				header = processHeader(row);
 			else

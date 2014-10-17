@@ -27,16 +27,17 @@ public class FileOutputState extends FileState implements IOutputState {
 	public transient static final int PDB_INDEX = 7;
 	public transient static final int XYZ_INDEX = 8;
 	public transient static final int XLS_INDEX = 9;
+	public transient static final int XLSX_INDEX = 10;
 	
-	public transient static final int HTML_INDEX = 10;
-	public transient static final int PDF_INDEX = 11;
-	public transient static final int SVG_INDEX = 12;
-	public transient static final int JPG_INDEX = 13;
-	public transient static final int PNG_INDEX = 14;
-	public transient static final int RTF_INDEX = 15;	
+	public transient static final int HTML_INDEX = 11;
+	public transient static final int PDF_INDEX = 12;
+	public transient static final int SVG_INDEX = 13;
+	public transient static final int JPG_INDEX = 14;
+	public transient static final int PNG_INDEX = 15;
+	public transient static final int RTF_INDEX = 16;	
 	
 	public transient static final String[] extensions = {".sdf",".csv",".smi",".txt",".cml",
-			".mol",".hin",".pdb",".xyz",".xls",
+			".mol",".hin",".pdb",".xyz",".xls",".xlsx",
 			".html",".pdf",".svg",".jpg",".png",".rtf"};
 	public transient static final String[] extensionDescription = 
 		{"SDF files with chemical compounds (*.sdf)",
@@ -49,7 +50,7 @@ public class FileOutputState extends FileState implements IOutputState {
 		"PDB files (*.pdb)",
 		"XYZ files (*.xyz)",
 		"Microsoft Office Excel Workbook (*.xls)",
-		
+		"Microsoft Office Excel Workbook (*.xlsx)",
 		"HTML (*.html)",
 		"Adobe PDF (*.pdf)",
 		"SVG (*.svg)",
@@ -121,8 +122,9 @@ public class FileOutputState extends FileState implements IOutputState {
 				writer = new SVGWriter(stream);
 				*/
 			else if ((fname.endsWith(extensions[XLS_INDEX]))) 
-				writer = new XLSFileWriter(stream);			
-						
+				writer = new XLSFileWriter(stream,true);			
+			else if ((fname.endsWith(extensions[XLSX_INDEX]))) 
+				writer = new XLSFileWriter(stream,false);						
 			else throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext);
 		} catch (Exception x) {
 			//logger.error(MSG_ERRORSAVE,filename);
