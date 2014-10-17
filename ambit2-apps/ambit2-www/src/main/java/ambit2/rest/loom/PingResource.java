@@ -15,7 +15,7 @@ import net.idea.restnet.i.task.Task;
 import net.idea.restnet.i.task.TaskResult;
 import net.idea.restnet.i.task.TaskStatus;
 
-import org.apache.poi.hssf.record.formula.functions.T;
+import org.apache.poi.ss.formula.functions.T;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;

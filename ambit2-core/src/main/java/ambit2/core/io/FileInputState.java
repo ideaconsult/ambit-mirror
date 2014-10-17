@@ -45,21 +45,22 @@ public class FileInputState extends FileState implements IInputState {
 	public transient static final int CML_INDEX = 7;
 	public transient static final int HIN_INDEX = 8;
 	public transient static final int PDB_INDEX = 9;
-	public transient static final int XLS_INDEX = 10;	
-	public transient static final int EURAS_INDEX = 11;
-	public transient static final int ECHAXML_INDEX = 12;
-	public transient static final int TOXML_INDEX = 13;
-	public transient static final int MALARIA_HTS_SHEETS = 14;
-	public transient static final int ZIP_INDEX = 15;
-	public transient static final int I5D_INDEX = 16;
-	public transient static final int I5Z_INDEX = 17;
-	public transient static final int NANOCMLx_INDEX = 18;
-	public transient static final int NANOCMLd_INDEX = 19;
+	public transient static final int XLS_INDEX = 10;
+	public transient static final int XLSX_INDEX = 11;
+	public transient static final int EURAS_INDEX = 12;
+	public transient static final int ECHAXML_INDEX = 13;
+	public transient static final int TOXML_INDEX = 14;
+	public transient static final int MALARIA_HTS_SHEETS = 15;
+	public transient static final int ZIP_INDEX = 16;
+	public transient static final int I5D_INDEX = 17;
+	public transient static final int I5Z_INDEX = 18;
+	public transient static final int NANOCMLx_INDEX = 19;
+	public transient static final int NANOCMLd_INDEX = 20;
 	
 	//TODO support for .xlsx 
 	public transient static final String[] extensions = {
 		".sdf",".csv",".smi",".txt",".mol",".ichi",".inchi",
-		".cml",".hin",".pdb",".xls",".xls",".echaxml",".xml",
+		".cml",".hin",".pdb",".xls",".xlsx",".xls",".echaxml",".xml",
 		".sht",".zip",".i5d",".i5z",".nmx",".nmd"};
 	public transient static final String[] extensionDescription = 
 		{"SDF files with chemical compounds (*.sdf)",
@@ -73,6 +74,7 @@ public class FileInputState extends FileState implements IInputState {
 		"HIN files (*.hin)",
 		"PDB files (*.pdb)",
 		"Microsoft Office Excel file (*.xls)",
+		"Microsoft Office Excel file (*.xlsx)",
 		"EURAS Excel file with BCF data (*.xls)",
 		"ECHA preregistration list XML format (*.echaxml)",
 		"Leadscope ToXML 3.08 (*.xml)",
@@ -213,7 +215,9 @@ public class FileInputState extends FileState implements IInputState {
 		} else if ((ext.toLowerCase().indexOf("euras")>=0) && (ext.endsWith(extensions[XLS_INDEX]))) {
 			return new EurasBCFReader(stream,0);			
 		} else if (ext.endsWith(extensions[XLS_INDEX])) {
-			return new IteratingXLSReader(stream,0);
+			return new IteratingXLSReader(stream,0,true);
+		} else if (ext.endsWith(extensions[XLSX_INDEX])) {
+			return new IteratingXLSReader(stream,0,false);			
 		} else if (ext.endsWith(extensions[ECHAXML_INDEX])) {
 			return new ECHAPreregistrationListReader(stream);
 		} else if (ext.endsWith(extensions[TOXML_INDEX])) {

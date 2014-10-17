@@ -29,12 +29,14 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.util.logging.Level;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -42,16 +44,16 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.formats.IResourceFormat;
 
 public class XLSFileWriter extends FileWithHeaderWriter {
-	protected HSSFWorkbook workbook;
-	protected HSSFSheet sheet;
-	protected HSSFDataFormat dataformat;
-	protected HSSFCellStyle style;
+	protected Workbook workbook;
+	protected Sheet sheet;
+	protected DataFormat dataformat;
+	protected CellStyle style;
 	protected OutputStream out;
 	protected boolean writingStarted = false;
 
-    public XLSFileWriter(OutputStream out) throws Exception {
+    public XLSFileWriter(OutputStream out,boolean hssf) throws Exception {
     	super();
-		workbook  = new HSSFWorkbook();
+		workbook  = hssf?new HSSFWorkbook():new XSSFWorkbook();
 		sheet = workbook.createSheet();
 		dataformat = workbook.createDataFormat();
 		style = workbook.createCellStyle();
@@ -62,7 +64,7 @@ public class XLSFileWriter extends FileWithHeaderWriter {
 
 
 	protected void writeHeader() throws IOException {
-		HSSFRow row     = sheet.createRow((short)0);
+		Row row     = sheet.createRow((short)0);
 		for (int i=0;i<header.size();i++) {
 			row.createCell((short)(i+1)).setCellValue(header.list.get(i).toString()); 
 		}
@@ -80,7 +82,7 @@ public class XLSFileWriter extends FileWithHeaderWriter {
     	        writeHeader();
     	        writingStarted = true;
         	}
-    		HSSFRow row     = sheet.createRow((short)(sheet.getLastRowNum()+1));
+    		Row row     = sheet.createRow((short)(sheet.getLastRowNum()+1));
         	String s;
         	for (int i =0; i< header.size(); i++) {
         		value = molecule.getProperty(header.list.get(i));
@@ -96,20 +98,20 @@ public class XLSFileWriter extends FileWithHeaderWriter {
         		} 
         	
         		if (value != null) {
-        			HSSFCell cell = row.createCell((short)(i+1));
+        			Cell cell = row.createCell((short)(i+1));
     				
         			if (value instanceof Number) {
         				cell.setCellStyle(style);
-        				cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+        				cell.setCellType(Cell.CELL_TYPE_NUMERIC);
         				cell.setCellValue(((Number)value).doubleValue());
         			} else {
         				try {
         					double d = Double.parseDouble(value.toString());
             				cell.setCellStyle(style);
-            				cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+            				cell.setCellType(Cell.CELL_TYPE_NUMERIC);
             				cell.setCellValue(d);        					
         				} catch (Exception x) {
-        					cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+        					cell.setCellType(Cell.CELL_TYPE_STRING);
         					cell.setCellValue(value.toString());
         				}
         			}

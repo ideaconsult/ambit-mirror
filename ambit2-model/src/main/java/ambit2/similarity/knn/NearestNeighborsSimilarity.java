@@ -30,7 +30,7 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
-import org.apache.poi.hssf.record.formula.functions.T;
+import org.apache.poi.ss.formula.functions.T;
 
 import ambit2.featureselection.IAttributeSelection;
 import ambit2.similarity.AbstractSimilarityModel;

@@ -39,11 +39,12 @@ import org.apache.poi.hssf.record.NumberRecord;
 import org.apache.poi.hssf.record.Record;
 import org.apache.poi.hssf.record.RowRecord;
 import org.apache.poi.hssf.record.SSTRecord;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -96,28 +97,28 @@ public class POItest {
 	}
 	@Test public void test1() throws Exception {
 			InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/core/data/misc/Debnath_smiles.xls");
-			HSSFWorkbook workbook = new HSSFWorkbook(in);
-			HSSFSheet sheet = workbook.getSheetAt(0);
+			Workbook workbook = new HSSFWorkbook(in);
+			Sheet sheet = workbook.getSheetAt(0);
 			//HSSFSheet sheet = workbook.getSheet("Sheet1");
 			
 			Iterator i = sheet.rowIterator();
 			while (i.hasNext()) {
 				Object o = i.next();
-				Assert.assertTrue(o instanceof HSSFRow);
-				Iterator j = ((HSSFRow) o).cellIterator();
+				Assert.assertTrue(o instanceof Row);
+				Iterator j = ((Row) o).cellIterator();
 				while (j.hasNext()) {
 					Object cell = j.next();
-					Assert.assertTrue(cell instanceof HSSFCell);
+					Assert.assertTrue(cell instanceof Cell);
 					//System.out.println(cell);
 	
 				}
-				
 			}
-
-		
 	}
 	@Test public void testIteratingXLSReader() throws Exception {
 		readXLS("ambit2/core/data/misc/Debnath_smiles.xls",88);		
+	}
+	@Test public void testIteratingXLSXReader() throws Exception {
+		readXLS("ambit2/core/data/misc/Debnath_smiles.xlsx",88);		
 	}
 	/* The BCF-example.xls file had been lost
 	@Test public void testFormulaReader() throws Exception {
