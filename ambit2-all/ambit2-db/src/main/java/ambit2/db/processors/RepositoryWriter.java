@@ -34,6 +34,7 @@ import javax.naming.OperationNotSupportedException;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
@@ -41,8 +42,11 @@ import ambit2.core.processors.StructureNormalizer;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.NoneKey;
+import ambit2.core.processors.structure.key.PubchemSID;
+import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.AbstractStructureQuery.FIELD_NAMES;
 import ambit2.db.search.structure.QueryByIdentifierWithStructureFallback;
+import ambit2.db.search.structure.QueryFieldNumeric;
 
 /**
 <pre>
@@ -59,6 +63,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
     private static final long serialVersionUID = 6530309499663693100L;
 	protected DbStructureWriter structureWriter;
 	protected QueryByIdentifierWithStructureFallback query;
+	protected QueryFieldNumeric queryNum;
 	//protected IStructureKey propertyKey;
 	protected static final String seek_dataset = "SELECT idstructure,uncompress(structure) as s,format FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name=? and idchemical=?";
 	protected PreparedStatement ps_seekdataset;		
@@ -91,6 +96,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		super();
 		structureWriter = new DbStructureWriter(null);
 		query = new QueryByIdentifierWithStructureFallback();
+		queryNum = new QueryFieldNumeric();
 		setPropertyKey(new CASKey());
 		queryexec.setCache(true);
 	}
@@ -121,13 +127,28 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	public void setDataset(SourceDataset dataset) {
 		structureWriter.setDataset(dataset);
 	}
+	
+	protected AbstractStructureQuery getQuery(IStructureRecord record) {
+		if (getPropertyKey() instanceof PubchemSID) {
+			PubchemSID psid = (PubchemSID)getPropertyKey();
+			queryNum.setFieldname((Property)psid.getKey());
+			queryNum.setSearchByAlias(false);
+			try {
+				queryNum.setValue(psid.process(record));
+				return queryNum;
+			} catch (Exception x) {}
+		}
+		
+		query.setValue(record);
+		query.setPageSize(1);
+		return query;
+	}
 	protected void findChemical(IStructureRecord record) throws SQLException, AmbitException {
 		if (record == null) return;
 		ResultSet rs = null;
 		try {
-			query.setValue(record);
-			query.setPageSize(1);
-			rs = queryexec.process(query);
+			AbstractStructureQuery chemQuery = getQuery(record);
+			rs = queryexec.process(chemQuery);
 			while (rs.next()) {
 				record.setIdchemical(rs.getInt(FIELD_NAMES.idchemical.name()));
 				if (useExistingStructure)  
@@ -173,34 +194,6 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 				findChemical(structure);
 			if (!structure.usePreferedStructure()) structure.setIdstructure(-1);
 		}
-		
-	/*
-        Object property = null;
-        try {
-        	property = propertyKey.process(structure);
-        	if (property!=null) {
-        		findChemical(query_property,propertyKey.getQueryKey(),property,structure);
-					 // if still not found, and not empty struc, fallback to structure match
-        			if (!(propertyKey instanceof NoneKey) && (structure.getType()!=STRUC_TYPE.NA)) 
-        					if (structure.getIdchemical() <= 0) findByStructure(structure);
-        		} else
-	        		if (structure.getIdchemical() <= 0) {
-            			findByStructure(structure);
-	        		}
-        	} catch (SQLException x) {
-        		throw x;
-        	} catch (Exception x) {
-        		//x.printStackTrace();
-        		logger.warn(x);
-            	//if not found, find by SMILES
-            	if (structure.getIdchemical()<=0)
-            		findByStructure(structure);
-        	}
-
-        }
-        */
-        //add a new idchemical if idchemical <=0
-
         return structureWriter.writeStructure(structure,OP.UPDATE==getOperation());
         
 	}

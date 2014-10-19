@@ -19,6 +19,7 @@ import ambit2.core.processors.structure.key.InchiKey;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.PropertyNameKey;
 import ambit2.core.processors.structure.key.PubchemCID;
+import ambit2.core.processors.structure.key.PubchemSID;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.IStoredProcStatement;
 import ambit2.db.search.StringCondition;
@@ -88,7 +89,9 @@ public class QueryByIdentifierWithStructureFallback  extends AbstractStructureQu
 		} else if (key instanceof DSSToxGenericSID) {
 			return storedproc_search_mode.name;					
 		} else if (key instanceof PubchemCID) {
-			return storedproc_search_mode.name;		
+			return storedproc_search_mode.name;
+		} else if (key instanceof PubchemSID) {
+			return storedproc_search_mode.name;
 		} else if (key instanceof PropertyNameKey) {
 			return storedproc_search_mode.any;			
 		} else if (key instanceof PropertyKey) {
@@ -133,5 +136,9 @@ public class QueryByIdentifierWithStructureFallback  extends AbstractStructureQu
 			throws SQLException {
 		
 	}
-	
+
+	@Override
+	protected boolean isPreferredStructure() {
+		return getFieldname().useExactStructureID();
+	}
 }

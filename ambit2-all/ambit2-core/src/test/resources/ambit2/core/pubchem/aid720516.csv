@@ -1,0 +1,4 @@
+PUBCHEM_SID,PUBCHEM_CID,PUBCHEM_ACTIVITY_OUTCOME,PUBCHEM_ACTIVITY_SCORE,PUBCHEM_ACTIVITY_URL,PUBCHEM_ASSAYDATA_COMMENT,1^Activity Summary^STRING^^^^,2^ATAD5 Activity^STRING^^^^,3^ATAD5 Potency (uM)^FLOAT^uM^AC^^,4^ATAD5 Efficacy (%)^FLOAT^%^^^,5^Viability Activity^STRING^^^^,6^Viability Potency (uM)^FLOAT^uM^^^,7^Viability Efficacy (%)^FLOAT^%^^^,8^Sample Source^STRING^^^^
+144203554,9403,Inactive,0,,,inactive,inactive,,0,inactive,,0,NCI
+144212135,9403,Inactive,0,,,inactive,inactive,,0,inconclusive antagonist,,-55.9015,SIGMA
+144205884,9403,Inactive,0,,,inactive,inactive,,0,inactive,,0,SIGMA
