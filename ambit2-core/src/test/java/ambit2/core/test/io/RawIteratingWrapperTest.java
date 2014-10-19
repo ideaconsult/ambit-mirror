@@ -1,7 +1,6 @@
 package ambit2.core.test.io;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,7 +20,6 @@ import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.io.RawIteratingWrapper;
 import ambit2.core.io.ToxcastAssayReader;
-import ambit2.core.io.ZipReader;
 import ambit2.core.io.dx.DXParser;
 import ambit2.core.processors.StructureNormalizer;
 
@@ -102,6 +100,39 @@ public class RawIteratingWrapperTest {
 			count++;
 		}
 		Assert.assertEquals(1,count);
+		reader.close();
+	}
+	
+	@Test
+	public void testPubChemSubstance() throws Exception {
+		InputStream in = RawIteratingWrapperTest.class.getClassLoader().getResourceAsStream("ambit2/core/pubchem/tox21_excerpt.sdf");
+		RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(in));
+		reader.setReference(LiteratureEntry.getInstance("tox21.sdf"));
+		Assert.assertTrue(reader != null);
+		StructureNormalizer normalizer = new StructureNormalizer();		
+		int count = 0;
+		int sid = 0;
+		while(reader.hasNext()) {
+			IStructureRecord record = (IStructureRecord) reader.next();
+
+			IStructureRecord normalized = normalizer.process(record);
+			for (Property p: normalized.getProperties()) {
+				if ("PUBCHEM_SID".equals(p.getName())) {
+						Assert.assertNotNull(normalized.getProperty(p));
+						sid++;
+				} else if ("PUBCHEM Name".equals(p.getName()))
+					Assert.assertNotNull(normalized.getProperty(p));
+				else if ("DSSTox_GSID".equals(p.getName()))
+					Assert.assertNotNull(normalized.getProperty(p));
+				else if ("CASRN".equals(p.getName()))
+					Assert.assertNotNull(normalized.getProperty(p));
+				else if ("DSSTox_RID".equals(p.getName()))
+					Assert.assertNotNull(normalized.getProperty(p));	
+			}
+			count++;
+		}
+		Assert.assertEquals(3,sid);
+		Assert.assertEquals(3,count);
 		reader.close();
 	}
 	

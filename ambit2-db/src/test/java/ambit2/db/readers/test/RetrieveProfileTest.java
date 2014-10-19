@@ -46,7 +46,7 @@ public class RetrieveProfileTest extends RetrieveTest<Property> {
 	@Override
 	protected IQueryRetrieval<Property> createQuery() {
 		Profile<Property> profile = new Profile<Property>();
-		Property p = Property.getInstance("PUBCHEM_COMPOUND_CID", LiteratureEntry.getInstance("pubchem"));
+		Property p = Property.getInstance("PUBCHEM_CID", LiteratureEntry.getInstance("pubchem"));
 		p.setEnabled(true);
 		profile.add(p);
 		p = Property.getInstance("Property 1", LiteratureEntry.getInstance("pubchem"));

@@ -150,7 +150,6 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 			Assert.assertEquals(query.getId().intValue(),rs.getInt(1));
 			Assert.assertEquals(11,rs.getInt(2));
 			Assert.assertEquals(100215,rs.getInt(3));
-			Assert.assertEquals(0,rs.getInt(4));
 			Assert.assertEquals(12.0,rs.getDouble(5));			
 
 		}

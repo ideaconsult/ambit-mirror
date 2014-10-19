@@ -17,6 +17,7 @@ public abstract class PUGRestRequest<R> extends AbstractSearchRequest<R> {
 
 	public enum COMPOUND_DOMAIN_INPUT {
 		cid,
+		sid,
 		name,
 		smiles,
 		inchi,

@@ -103,6 +103,16 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 				return "http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/%s/SDF";
 			}
 		},		
+		PUBCHEM_SID {
+			@Override
+			public String getTitle() {
+				return "Search PubChem by SID";
+			}
+			@Override
+			public String getURI() {
+				return "http://pubchem.ncbi.nlm.nih.gov/rest/pug/substance/sid/%s/SDF";
+			}
+		},				
 		PUBCHEM_INCHIKEY {
 			@Override
 			public String getTitle() {

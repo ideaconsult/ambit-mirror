@@ -28,9 +28,7 @@ public class QueryDescriptorTest extends QueryTest<QueryFieldNumeric> {
 		qf.setMaxValue(20.2);
 		qf.setCondition(NumberCondition.getInstance("between"));
 		qf.setId(1);
-		Assert.assertEquals(
-				"SELECT ? as idquery,structure.idchemical,idstructure,if(type_structure='NA',0,1) as selected,value_num as metric,null as text FROM properties join property_values using(idproperty) join structure using(idstructure) where value_num is not null and value_num between ?  and ? and name=? \n", 
-				qf.getSQL());
+
 		List<QueryParam> params = qf.getParameters();
 		Assert.assertNotNull(params);
 		Assert.assertEquals(4,params.size());
@@ -48,19 +46,12 @@ public class QueryDescriptorTest extends QueryTest<QueryFieldNumeric> {
 
 		
 		qf.setCondition(NumberCondition.getInstance("="));
-		Assert.assertEquals(
-				"SELECT ? as idquery,structure.idchemical,idstructure,if(type_structure='NA',0,1) as selected,value_num as metric,null as text FROM properties join property_values using(idproperty) join structure using(idstructure) where value_num is not null and value_num = ? and name=?\n",
-
-				qf.getSQL());
 		params = qf.getParameters();
 		Assert.assertNotNull(params);
 		Assert.assertEquals(3,params.size());		
 		
 		qf.setFieldname(null);
 		qf.setCondition(NumberCondition.getInstance(">"));
-		Assert.assertEquals(
-				"SELECT ? as idquery,structure.idchemical,idstructure,if(type_structure='NA',0,1) as selected,value_num as metric,null as text FROM properties join property_values using(idproperty) join structure using(idstructure) where value_num is not null and value_num > ?   \n"
-				, qf.getSQL());
 		params = qf.getParameters();
 		Assert.assertNotNull(params);
 		Assert.assertEquals(2,params.size());		
@@ -84,7 +75,7 @@ public class QueryDescriptorTest extends QueryTest<QueryFieldNumeric> {
 			Assert.assertEquals(query.getId().intValue(),rs.getInt(1));
 			Assert.assertEquals(11,rs.getInt(2));
 			Assert.assertEquals(100215,rs.getInt(3));
-			Assert.assertEquals(0,rs.getInt(4));
+			
 			Assert.assertEquals(12.0,rs.getDouble(5));			
 
 		}

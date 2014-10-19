@@ -67,6 +67,7 @@ import ambit2.core.processors.structure.key.NameKey;
 import ambit2.core.processors.structure.key.NoneKey;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.PubchemCID;
+import ambit2.core.processors.structure.key.PubchemSID;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.processors.PropertyImporter;
 import ambit2.db.processors.RepositoryWriter;
@@ -567,11 +568,13 @@ delete from struc_dataset where idstructure>3
 	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key) throws Exception  {
 		return write(reader, connection, key, false);
 	}
-	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key, boolean iseExistingStructure) throws Exception  {
-		return write(reader,connection,key,iseExistingStructure,-1);
+	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key, boolean useExistingStructure) throws Exception  {
+		return write(reader,connection,key,useExistingStructure,-1);
 	}
-	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key, boolean iseExistingStructure, int maxrecords) throws Exception  {	
+	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key, boolean useExistingStructure, int maxrecords) throws Exception  {	
 		RepositoryWriter writer = new RepositoryWriter();
+		
+		writer.setUseExistingStructure(useExistingStructure);
 		if (key != null)
 			writer.setPropertyKey(key);
 		writer.setDataset(new SourceDataset("TEST INPUT",LiteratureEntry.getInstance("File","file:input.sdf")));
@@ -967,6 +970,8 @@ delete from struc_dataset where idstructure>3
 		Assert.assertEquals(4,property.getRowCount());
 		ITable property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
 		Assert.assertEquals(4,property_values.getRowCount());
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values where idstructure=100215");
+		Assert.assertEquals(2,property_values.getRowCount());
 		
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/cid/property.csv");
 		Assert.assertNotNull(in);
@@ -988,13 +993,13 @@ delete from struc_dataset where idstructure>3
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
 		Assert.assertTrue(property.getRowCount()>=7);
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
-		Assert.assertTrue(property_values.getRowCount()>=10);		
+		Assert.assertEquals(4+5,property_values.getRowCount());		
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values where idstructure=100215");
-		Assert.assertTrue(property_values.getRowCount()>=5);			
+		Assert.assertEquals(4,property_values.getRowCount());			
 		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
 		Assert.assertEquals(2,tuples.getRowCount());			
 		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples join tuples using(idtuple) join src_dataset using(id_srcdataset) where name='Imported properties'");
-		Assert.assertTrue(p_tuples.getRowCount()>=6);				
+		Assert.assertEquals(5,p_tuples.getRowCount());				
 		c.close();
 		/**
 		 * Removing redundant properties
@@ -1032,11 +1037,14 @@ delete from struc_dataset where idstructure>3
 		
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/cid/712.sdf");
 		Assert.assertNotNull(in);
-		IIteratingChemObjectReader reader = FileInputState.getReader(in,".sdf");
+		//IIteratingChemObjectReader reader = FileInputState.getReader(in,".sdf");
 		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
 		Assert.assertEquals(0,tuples.getRowCount());	
 		
-		importProperties(reader,c.getConnection(),new PubchemCID());
+		IRawReader<IStructureRecord>  reader = new RawIteratingSDFReader(new InputStreamReader(in));
+		//reader.setReference("predictions.sdf");
+		write((RawIteratingSDFReader)reader,c.getConnection(),new PubchemCID(),true);
+		//importProperties(reader,c.getConnection(),new PubchemCID());
         c.close();
         
         c = getConnection();
@@ -1044,21 +1052,21 @@ delete from struc_dataset where idstructure>3
 		Assert.assertEquals(5,chemicals.getRowCount());
 		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
 		Assert.assertEquals(5,strucs.getRowCount());
-		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='Imported properties'");
+		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='TEST INPUT'");
 		Assert.assertEquals(1,srcdataset.getRowCount());
-		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset join src_dataset using(id_srcdataset) where name='Imported properties'");
+		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset join src_dataset using(id_srcdataset) where name='TEST INPUT'");
 		Assert.assertEquals(1,struc_src.getRowCount());
 		
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
-		Assert.assertEquals(43,property.getRowCount());
+		Assert.assertEquals(42,property.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
-		Assert.assertEquals(43,property_values.getRowCount());		
+		Assert.assertEquals(42,property_values.getRowCount());		
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values where idstructure=100215");
 		Assert.assertEquals(2,property_values.getRowCount());			
 		tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
 		Assert.assertEquals(3,tuples.getRowCount());			
-		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples join tuples using(idtuple) join src_dataset using(id_srcdataset) where name='Imported properties'");
-		Assert.assertEquals(66,p_tuples.getRowCount());				
+		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples join tuples using(idtuple) join src_dataset using(id_srcdataset) where name='TEST INPUT'");
+		Assert.assertEquals(63,p_tuples.getRowCount());				
 		c.close();
 		/**
 		 * Removing redundant properties
@@ -1286,6 +1294,98 @@ delete from struc_dataset where idstructure>3
 		Assert.assertEquals(31,property.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
 		Assert.assertEquals(47,property_values.getRowCount());	
+        c.close();		
+
+	}
+	
+	@Test
+	public void testImportTox21() throws Exception {
+		
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+        IDatabaseConnection c = getConnection();
+        
+		ITable chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+		Assert.assertEquals(0,chemicals.getRowCount());
+		ITable strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(0,strucs.getRowCount());
+		ITable srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset");
+		Assert.assertEquals(0,srcdataset.getRowCount());
+		ITable struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
+		Assert.assertEquals(0,struc_src.getRowCount());
+		ITable property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(0,property.getRowCount());
+		ITable property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(0,property_values.getRowCount());
+		
+		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/core/pubchem/tox21_excerpt.sdf");
+		Assert.assertNotNull(in);
+		IRawReader<IStructureRecord>  reader = new RawIteratingSDFReader(new InputStreamReader(in));
+		//reader.setReference("predictions.sdf");
+		write((RawIteratingSDFReader)reader,c.getConnection(),new CASKey());
+		reader.close();
+        c.close();		
+
+        
+        c = getConnection();
+		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+		Assert.assertEquals(1,chemicals.getRowCount());
+		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(3,strucs.getRowCount());
+		//srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='Imported properties'");
+		//Assert.assertEquals(1,srcdataset.getRowCount());
+		//struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset join src_dataset using(id_srcdataset) where name='Imported properties'");
+		//Assert.assertEquals(1,struc_src.getRowCount());
+		
+		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(19,property.getRowCount());
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(57,property_values.getRowCount());		
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values join properties using(idproperty) where name = 'PUBCHEM_SID'");
+		Assert.assertEquals(3,property_values.getRowCount());			
+
+//		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples join tuples using(idtuple) join src_dataset using(id_srcdataset) where name='Imported properties'");
+	//	Assert.assertEquals(66,p_tuples.getRowCount());				
+		c.close();
+		
+		c = getConnection();
+		
+		in = this.getClass().getClassLoader().getResourceAsStream("ambit2/core/pubchem/aid720516.csv");
+		Assert.assertNotNull(in);
+		reader = new RawIteratingWrapper<IIteratingChemObjectReader>(FileInputState.getReader(in, ".csv"));
+		//reader.setReference(LiteratureEntry.getDXReference());
+		write(reader,c.getConnection(),new PubchemSID(),true);
+		reader.close();
+		
+		
+		c = getConnection();
+		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		//Assert.assertEquals(3,strucs.getRowCount());
+		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(19+9,property.getRowCount()); //does not write another PUBCHEM_SID
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values join properties using(idproperty) where name = 'PUBCHEM_CID'");
+		Assert.assertEquals(3,property_values.getRowCount());
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values join properties using(idproperty) where name = 'PUBCHEM_ACTIVITY_OUTCOME'");
+		Assert.assertEquals(3,property_values.getRowCount());
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values join properties using(idproperty) where name = 'PUBCHEM_ACTIVITY_SCORE'");
+		Assert.assertEquals(3,property_values.getRowCount());
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values join properties using(idproperty) where name = '1^Activity Summary^STRING^^^^'");
+		Assert.assertEquals(3,property_values.getRowCount());
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values join properties using(idproperty) where name = '2^ATAD5 Activity^STRING^^^^'");
+		Assert.assertEquals(3,property_values.getRowCount());
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values join properties using(idproperty) where name = '3^ATAD5 Potency (uM)^FLOAT^uM^AC^^'");
+		Assert.assertEquals(0,property_values.getRowCount());		
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values join properties using(idproperty) where name = '4^ATAD5 Efficacy (%)^FLOAT^%^^^'");
+		Assert.assertEquals(3,property_values.getRowCount());		
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values join properties using(idproperty) where name = '5^Viability Activity^STRING^^^^'");
+		Assert.assertEquals(3,property_values.getRowCount());		
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values join properties using(idproperty) where name = '6^Viability Potency (uM)^FLOAT^uM^^^'");
+		Assert.assertEquals(0,property_values.getRowCount());		
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values join properties using(idproperty) where name = '7^Viability Efficacy (%)^FLOAT^%^^^'");
+		Assert.assertEquals(3,property_values.getRowCount());		
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values join properties using(idproperty) where name = '8^Sample Source^STRING^^^^'");
+		Assert.assertEquals(3,property_values.getRowCount());		
+		
+		//Assert.assertEquals(57+9*3,property_values.getRowCount());	
         c.close();		
 
 	}

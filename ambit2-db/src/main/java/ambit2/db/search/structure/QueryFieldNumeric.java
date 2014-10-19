@@ -45,7 +45,7 @@ public class QueryFieldNumeric extends AbstractStructureQuery<Property,Number,Nu
 	private static final long serialVersionUID = 1096544914170183549L;
 
 	public final static String sqlField = 
-		"SELECT ? as idquery,structure.idchemical,idstructure,if(type_structure='NA',0,1) as selected,value_num as metric,null as text FROM properties join property_values using(idproperty) join structure using(idstructure) ";
+		"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric,null as text FROM properties join property_values using(idproperty)\n";
 	public final String where_all = "where value_num is not null and value_num %s ? %s %s \n";
 	public final String where_equal = "where value_num is not null and value_num = ? %s\n";
 	public final String where_name = "and %s=?";

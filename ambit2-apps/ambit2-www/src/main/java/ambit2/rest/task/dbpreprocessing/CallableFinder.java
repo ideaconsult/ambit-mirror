@@ -144,6 +144,11 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 			le =  new LiteratureEntry(PUGRestRequest.PUGREST_URL,PUGRestRequest.PUGREST_COMPOUND_URL);
 			break;
 		}
+		case PUBCHEM_SID: {
+			p.add(new PubChemRestFinder(profile,mode,COMPOUND_DOMAIN_INPUT.sid));
+			le =  new LiteratureEntry(PUGRestRequest.PUGREST_URL,PUGRestRequest.PUGREST_COMPOUND_URL);
+			break;
+		}		
 		case PUBCHEM_NAME: {
 			p.add(new PubChemRestFinder(profile,mode,COMPOUND_DOMAIN_INPUT.name));
 			le =  new LiteratureEntry(PUGRestRequest.PUGREST_URL,PUGRestRequest.PUGREST_COMPOUND_URL);
