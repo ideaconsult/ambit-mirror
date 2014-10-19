@@ -94,6 +94,12 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
          				ac.getProperties().put("PUBCHEM_SID", sid);
          				ac.removeProperty("PUBCHEM_SUBSTANCE_ID");     
          			}
+         			Object cid = ac.getProperty("PUBCHEM_COMPOUND_CID");
+         			if (cid!=null) {
+         				ac.getProperties().put("PUBCHEM_CID", cid);
+         				ac.removeProperty("PUBCHEM_COMPOUND_CID");     
+         			}         			
+         			
          			Object synonyms = ac.getProperty("PUBCHEM_SUBSTANCE_SYNONYM");
          			if (synonyms != null) {
          			    BufferedReader reader = new BufferedReader(new StringReader( synonyms.toString()));
