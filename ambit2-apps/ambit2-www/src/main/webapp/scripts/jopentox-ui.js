@@ -723,12 +723,10 @@ function defineDatasetsTable(root,url,deleteVisible) {
   		        	    	var shortURI = o.aData.URI;
   		        	    	pos =  shortURI.lastIndexOf("/");
   		        	    	if (pos>=0) shortURI = shortURI.substring(pos+1); 
-    		        	    var sOut = "<a target='table' href='"+o.aData.URI +
-    		        	   		"?page=0&pagesize=100' title='Click to view the dataset at "+ o.aData.URI+" as atable'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;'></span>D"+
+  		        	    	var href = root + "/ui/_dataset?dataset_uri="+encodeURIComponent(o.aData.URI);
+    		        	    var sOut = "<a target='table' href='"+ href +
+    		        	   		"' title='Click to view the dataset at "+ o.aData.URI+" as a table'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;'></span>D"+
     		        	   		shortURI+"</a> " ;
-    		        	    
-    		        	    sOut += "<a target='table' href='" + root + "/ui/_dataset?dataset_uri="+encodeURIComponent(o.aData.URI) +
-		        	   		"' title='Click to view the dataset in the new dataset browser'>New view mode</a>";
     		        	    
     		        	    sOut += "<br/>"+val;
     		        	    
@@ -744,8 +742,8 @@ function defineDatasetsTable(root,url,deleteVisible) {
     		            	   else sOut += " | " + rights["URI"];
     		               }
     		               sOut += " | <a href='"+o.aData.URI +"/metadata'>Metadata</a>";
-   		                   sOut += "<br/><a href='"+root + "/ui/query?option=auto&type=url&search=" + encodeURIComponent(o.aData.URI) +"&page=0&pagesize=100'>Browse structures and properties</a>";
-   		                   sOut += " | <a href='"+o.aData.URI +"/compounds?page=0&pagesize=100'>Structures only</a>";
+   		                   sOut += "<br/><a href='"+href+"'>Browse structures and properties</a>";
+   		                   sOut += " | <a href='"+ root + "/ui/_dataset?dataset_uri="+encodeURIComponent(o.aData.URI+"/compounds") +"'>Structures only</a>";
    		                   sOut += " | <a href='"+o.aData.URI +"/feature'>Properties list</a>";
    		                   sOut += " | <a href='"+root +"/admin/policy?search="+ o.aData.URI  + "' target='policy'>OpenAM access rights</a>";
    		                   //sOut += " | <a href='"+root +"/algorithm/toxtreecramer?dataset_uri="+ o.aData.URI  + "' target='predict'>Predict</a>";
