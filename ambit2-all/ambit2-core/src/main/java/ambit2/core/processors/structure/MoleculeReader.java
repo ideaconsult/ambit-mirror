@@ -29,6 +29,8 @@
 
 package ambit2.core.processors.structure;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.lang.reflect.Method;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
@@ -85,8 +87,47 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
          					ac.setProperty(AmbitCONSTANTS.CASRN,casTransformer.process(title.toString()));
 	            			} catch (Exception x) {}
 	            			ac.removeProperty(CDKConstants.TITLE);
-	            		}
-	        	   		ac.removeProperty(CDKConstants.REMARK);          	
+	            	}
+         			/* !%&$* PubChem */ 
+         			Object sid = ac.getProperty("PUBCHEM_SUBSTANCE_ID");
+         			if (sid!=null) {
+         				ac.getProperties().put("PUBCHEM_SID", sid);
+         				ac.removeProperty("PUBCHEM_SUBSTANCE_ID");     
+         			}
+         			Object synonyms = ac.getProperty("PUBCHEM_SUBSTANCE_SYNONYM");
+         			if (synonyms != null) {
+         			    BufferedReader reader = new BufferedReader(new StringReader( synonyms.toString()));
+         			    String         line = null;
+         			    while( ( line = reader.readLine() ) != null ) {
+         			        
+         			    	String type = "PUBCHEM Name";
+	       					String value = line;
+	       					if (value.startsWith("DSSTox_RID_")) {
+	       						type = "DSSTox_RID";
+	       						value = value.substring(11);
+	       					} else if (value.startsWith("DSSTox_GSID_")) {
+	       						type = "DSSTox_GSID";
+	       						value = value.substring(12);
+	       					} else if (value.startsWith("DSSTox_CID_")) {
+	       						type = "DSSTox_CID";
+	       						value = value.substring(11);
+	       					} else if (value.startsWith("Tox21_")) {
+	       						type = "Tox21";
+	       						value = value.substring(6);
+	       					} else if (value.startsWith("CAS-")) {
+	       						type = "CASRN";
+	       						value = value.substring(4);
+	       					} else if (value.startsWith("NCGC")) {
+	       						type = "NCGC";
+	       					} else {
+	       						value = value.toLowerCase();
+	       					}
+	       					ac.getProperties().put(type,value);     
+         			    }
+         			    reader.close();
+         			   ac.removeProperty("PUBCHEM_SUBSTANCE_SYNONYM");        
+         			}
+	        	   	ac.removeProperty(CDKConstants.REMARK);          	
          		}
          		return ac;
              } catch (Exception x) {
