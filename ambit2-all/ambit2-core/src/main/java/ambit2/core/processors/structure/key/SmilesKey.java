@@ -84,6 +84,8 @@ public class SmilesKey extends DefaultAmbitProcessor<IAtomContainer,String> impl
 	public Class getType() {
 		return String.class;
 	}
-	
+	public boolean useExactStructureID() {
+		return false;
+	}	
 	
 }

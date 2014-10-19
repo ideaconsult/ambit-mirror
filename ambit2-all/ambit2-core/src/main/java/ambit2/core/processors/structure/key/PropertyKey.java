@@ -91,4 +91,8 @@ public abstract class PropertyKey<Result> extends DefaultAmbitProcessor<IStructu
 		return null;
 	}
 	public abstract Class getType();
+	@Override
+	public boolean useExactStructureID() {
+		return false;
+	}
 }

@@ -35,6 +35,7 @@ public interface IStructureKey<Target, Result> extends IProcessor<Target, Result
 	public Object getKey();
 	public Object getQueryKey();
 	public Class getType();
+	public boolean useExactStructureID();
 	
 	public enum Matcher {
 
@@ -58,7 +59,7 @@ public interface IStructureKey<Target, Result> extends IProcessor<Target, Result
 				return "Match by EINECS registry number";
 			}			
 		},
-		PubChemID {
+		PubChemCID {
 			@Override
 			public String getClassName() {
 				return "ambit2.core.processors.structure.key.PubchemCID";
@@ -68,6 +69,16 @@ public interface IStructureKey<Target, Result> extends IProcessor<Target, Result
 				return "Match by PubChem Compound ID (PUBCHEM_COMPOUND_CID)";
 			}			
 		},
+		PubChemSID {
+			@Override
+			public String getClassName() {
+				return "ambit2.core.processors.structure.key.PubchemSID";
+			}
+			@Override
+			public String getDescription() {
+				return "Match by PubChem Substance ID (PUBCHEM_COMPOUND_SID)";
+			}			
+		},		
 		DSSToxCID {
 			@Override
 			public String getClassName() {
