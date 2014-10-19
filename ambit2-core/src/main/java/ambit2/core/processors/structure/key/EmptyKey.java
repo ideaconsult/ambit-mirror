@@ -59,5 +59,7 @@ public class EmptyKey extends DefaultAmbitProcessor<IAtomContainer,String> imple
 	public Class getType() {
 		return String.class;
 	}
-	
+	public boolean useExactStructureID() {
+		return false;
+	}
 }

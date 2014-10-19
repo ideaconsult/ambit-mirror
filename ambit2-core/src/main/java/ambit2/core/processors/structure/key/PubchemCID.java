@@ -34,7 +34,7 @@ import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 
 /**
- * returns pubchem cid given the structure properties
+ * returns pubchem CID given the structure properties
  * @author nina
  *
  */
@@ -45,7 +45,7 @@ public class PubchemCID extends PropertyKey<Number> {
 	 */
 	private static final long serialVersionUID = -5172763951258433726L;
 	public PubchemCID() {
-		super(Property.getInstance("PUBCHEM_COMPOUND_CID","PUBCHEM", "http://pubchem.ncbi.nlm.nih.gov"));
+		super(Property.getInstance("PUBCHEM_CID","PUBCHEM", "http://pubchem.ncbi.nlm.nih.gov"));
 	}
 
 	@Override
