@@ -2680,16 +2680,26 @@ var config_study = {
             }       	
         },      
         "PUBCHEM_SUMMARY_SECTION" : {
-            "effects": {
-                "text": {
-                    "bVisible": true
-                }
-            },
             "parameters": {
-                "Target gene": {
-                	"bVisible": true
+                "target gene": {
+                	"bVisible": false,
+                	"iOrder": -14
                 }                
             },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -13,
+                    "bVisible": true
+                },
+                "text": {
+                    "bVisible": true,
+                    "iOrder": -11
+                },                
+                "result": {
+                    "bVisible": true,
+                    "iOrder": -12
+                }
+            },            
             "conditions": {
             	"replicate": {
             		"bVisible": true
@@ -2699,18 +2709,36 @@ var config_study = {
                     "sTitle": "Concentration"
                 },
                 "emission wavelength": {
-                	"bVisible": true
-                }                
+                	"bVisible": true,
+                	"iOrder": -5
+                },
+                "target gene": {
+                	"bVisible": false,
+                	"iOrder": -6
+                }                     
             },            
             "protocol": {
            	 "citation": {
                     "bVisible": true,
                     "sTitle": "Reference",
+                    "iOrder": -15,
                     "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                    	var sOut = (data["year"]==null || data["year"] == 0)?data["title"]:data["year"];
+                    	return "PubChem Assay: <a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
                     }
                 }             
+           },
+           "interpretation": {
+        	   "result" : {
+        		 "sTitle": "PubChem Activity Outcome",  
+        		 "iOrder": -4,
+        		 "bVisible": true
+        	   },
+               "criteria": {
+            	   "sTitle" : "Target",
+            	   "iOrder": -3,
+                   "bVisible": true
+               }
            }
             
         },        
