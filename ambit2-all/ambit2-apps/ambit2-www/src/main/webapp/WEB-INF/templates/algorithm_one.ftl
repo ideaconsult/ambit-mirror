@@ -82,6 +82,7 @@
 		<option value='CIR' selected  title='http://cactus.nci.nih.gov/chemical/structure'>Chemical Identifier Resolver</option>
 		<option value='CHEMIDPLUS'   title='http://chem.sis.nlm.nih.gov/chemidplus'>ChemIDplus</option>
 		<option value='PUBCHEM_NAME'   title='http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/%s/SDF'>Search PubChem by name</option>
+		<option value='PUBCHEM_SID'   title='http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/sid/%s/SDF'>Search PubChem by SID</option>
 		<option value='PUBCHEM_CID'   title='http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/%s/SDF'>Search PubChem by CID</option>
 		<option value='PUBCHEM_INCHIKEY'   title='http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/inchikey/%s/SDF'>Search PubChem by InChIKey</option>
 		<option value='NAME2STRUCTURE'   title='http://www-ucc.ch.cam.ac.uk/products/software/opsin'>Chemical Name to Structure converter (OPSIN) </option>
