@@ -282,6 +282,7 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends 
 	*/
 		public void extractRowKeyAndData(String line) {
 			
+			if (values!=null) for (int i=0; i < values.length; i++) values[i] = null;
 			QuotedTokenizer st = new QuotedTokenizer(line,format.getFieldDelimiter().charAt(0));
 				int fieldIndex = 0;
 				while (st.hasMoreTokens()) {
