@@ -56,10 +56,9 @@ public class Tox21ReaderTest extends DbUnitTest {
 			for (int i=0; i < files.length; i++) 
 			if (files[i].getName().endsWith(".csv")) {
 				System.out.println(files[i].getAbsolutePath());
-				c = getConnection(true);
-				Connection conn = c.getConnection();
 		        PubChemAIDReader parser = null;
 		        InputStream jsonmeta = null;
+		        Connection conn = null;
 		        try {
 		    		LiteratureEntry entry = new LiteratureEntry("Tox21","???");
 		    		entry.setType(_type.Dataset);
@@ -71,16 +70,19 @@ public class Tox21ReaderTest extends DbUnitTest {
 		    		if (jsonmeta==null) throw new FileNotFoundException(meta.getFile());
 		    		
 		    		parser = new PubChemAIDReader(
-		    				files[i],jsonmeta
+		    				files[i],jsonmeta,
+		    				new String[] {"summary"}
 		    				);
-		    		parser.setReadPubchemScoreOnly(true);
+					c = getConnection(true);
+					conn = c.getConnection();		    		
+		    		parser.setReadPubchemScoreOnly(false);
 			        write(parser,conn,new ReferenceSubstanceUUID(),false,10);
 		        } catch (Exception x) {
-		        	x.printStackTrace();
+		        	System.err.println(x.getMessage());
 		        } finally {
 		        	if (jsonmeta!=null) jsonmeta.close();
-		        	parser.close();
-		        	conn.close();
+		        	if (parser!=null) parser.close();
+		        	if (conn!=null) conn.close();
 		        }
 			}
 	}
@@ -107,7 +109,7 @@ public class Tox21ReaderTest extends DbUnitTest {
             Assert.assertTrue(record instanceof IStructureRecord);
             writer.process((IStructureRecord)record);
             records++;
-            if (records>=max) break;
+            if (max>0 && records>=max) break;
 		}
 		writer.close();
 		return records;
