@@ -2363,7 +2363,7 @@ DELIMITER ;
 -- ----------------------------
 -- Chemical space stats
 -- ----------------------------
-
+DROP TABLE IF EXISTS `qsasheader`;
 CREATE TABLE `qsasheader` (
   `idsasmap` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `threshold_dact` double NOT NULL,
@@ -2374,7 +2374,7 @@ CREATE TABLE `qsasheader` (
   PRIMARY KEY (`idsasmap`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
+DROP TABLE IF EXISTS `qsasmap4`;
 CREATE TABLE `qsasmap4` (
   `idsasmap` int(10) unsigned NOT NULL,
   `idchemical` int(10) unsigned NOT NULL,
@@ -2384,11 +2384,13 @@ CREATE TABLE `qsasmap4` (
   `d` int(10) unsigned NOT NULL,
   `fisher` double DEFAULT NULL,
   `g2` double unsigned NOT NULL,
+  `g2rank` int(11) DEFAULT NULL,
   PRIMARY KEY (`idsasmap`,`idchemical`),
   KEY `idsasmap_idx` (`idsasmap`),
   KEY `idchemical_idx` (`idchemical`),
   KEY `fisher_index` (`idsasmap`,`fisher`),
   KEY `g2_index` (`g2`,`idsasmap`),
+  KEY `g2rank` (`g2rank`),
   CONSTRAINT `idchemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `idsasmap` FOREIGN KEY (`idsasmap`) REFERENCES `qsasheader` (`idsasmap`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
