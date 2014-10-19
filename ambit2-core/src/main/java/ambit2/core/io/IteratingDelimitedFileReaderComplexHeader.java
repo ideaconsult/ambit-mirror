@@ -267,7 +267,7 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends 
 			char textDelimiter = format.getTextDelimiter();
 			String k = key.trim();
 			if (k.length() == 0)
-				return "";
+				return null;
 			if (k.charAt(0) == textDelimiter) {
 				k = k.substring(1);
 			}
