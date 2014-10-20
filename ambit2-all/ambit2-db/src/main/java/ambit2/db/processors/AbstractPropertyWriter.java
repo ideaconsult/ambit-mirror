@@ -40,6 +40,7 @@ import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.SourceDataset;
 import ambit2.db.search.property.RetrieveFieldNames;
+import ambit2.db.update.dictionary.DatasetTemplateAddProperty;
 import ambit2.db.update.property.CreateProperty;
 import ambit2.db.update.property.ReadProperty;
 import ambit2.db.update.propertyannotations.CreatePropertyAnnotation;
@@ -50,6 +51,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
 
 	protected CreatePropertyAnnotation annotationsWriter;
 	protected CreateProperty propertyWriter;
+	protected DatasetTemplateAddProperty templateDefWriter;
     protected SourceDataset dataset = null;
     protected RetrieveFieldNames selectField = new RetrieveFieldNames();
     protected ReadProperty readProperty = new ReadProperty();
@@ -60,6 +62,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
 		selectField.setPage(0);
 		selectField.setPageSize(1);
         propertyWriter = new CreateProperty();
+        templateDefWriter = new DatasetTemplateAddProperty();
 	}
 
 	public SourceDataset getDataset() {
@@ -139,6 +142,13 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     		if (property.getId()<=0) {
 		    	propertyWriter.setObject(property);
 		    	exec.process(propertyWriter);
+		    	
+		    	if (property.getId()>0 && dataset!=null && dataset.getID()>0) {
+		    		templateDefWriter.setGroup(dataset);
+		    		templateDefWriter.setObject(property);
+		    		exec.process(templateDefWriter);	
+		    	}
+		    	
 		    	
 		    	if (property.getAnnotations()!=null) try {
 		    		if (annotationsWriter==null) annotationsWriter=new CreatePropertyAnnotation();

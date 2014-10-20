@@ -69,7 +69,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	
 	public static final String onduplicate_number = " on duplicate key update value_num=values(value_num), status=values(status), idvalue_string=null,text=null,idtype='NUMERIC',user_name=values(user_name) ";
 	
-	protected static final String insert_tuple = "insert into property_tuples select ?,id from property_values where idproperty=? and idstructure=?";
+	//protected static final String insert_tuple = "insert into property_tuples select ?,id from property_values where idproperty=? and idstructure=?";
 	
 	//protected static final String insert_tuple  = "insert into tuples select null,id_srcdataset from src_dataset where name=?";
     protected PreparedStatement ps_descriptorvalue_string;
@@ -77,8 +77,8 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     
     protected PreparedStatement ps_insertstring;
     
-    protected PreparedStatement ps_inserttuplestring = null;
-    protected PreparedStatement ps_inserttuplenumber = null;
+    //protected PreparedStatement ps_inserttuplestring = null;
+    //protected PreparedStatement ps_inserttuplenumber = null;
     
     protected IStructureRecord structure;
     protected DatasetAddTuple tuple = new DatasetAddTuple();
@@ -147,18 +147,6 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	
     	try {
 	    	if (ps_descriptorvalue_string.executeUpdate()>0) { 
-	    		if (idtuple >0 ) {
-		        	if (ps_inserttuplestring == null) ps_inserttuplestring = connection.prepareStatement(insert_tuple);
-		        	ps_inserttuplestring.clearParameters();
-		        	ps_inserttuplestring.setInt(1,idtuple);
-		        	ps_inserttuplestring.setInt(2,property.getId());
-		        	ps_inserttuplestring.setInt(3,structure.getIdstructure());
-		        	//ps_inserttuplestring.setString(4,value);
-		        	//ps_inserttuplestring.setInt(5,0);
-		        	if (ps_inserttuplestring.executeUpdate()<=0)
-		        		logger.fine("Tuple not inserted "+property.getId()+ " "+value);
-	
-	    		} 
 	    	} else return false;
     	} catch (Exception x) {
     		logger.log(Level.WARNING,property.toString(),x);
@@ -188,21 +176,8 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
         
         if (ps_descriptorvalue_number.executeUpdate()>0) {
         	if (idtuple >0 ) {
-    	        	if (ps_inserttuplenumber == null) 
-    	        		ps_inserttuplenumber = connection.prepareStatement(insert_tuple);
-    	        	ps_inserttuplenumber.clearParameters();
-    	        	ps_inserttuplenumber.setInt(1,idtuple);
-    	        	ps_inserttuplenumber.setInt(2,property.getId());
-    	        	ps_inserttuplenumber.setInt(3,structure.getIdstructure());
-    	        	int ok = ps_inserttuplenumber.executeUpdate();
-    	        	if (ok<=0) {
-    	        		logger.fine("Tuple not inserted "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
 
-    	        	}
-
-        	} else {
-        		logger.fine("Tuple < 0 "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
-        	}
+        	} 
        	} else {
        		logger.fine("idtuple="+idtuple+" idproperty="+property.getId()+" value "+value);
        		return false;
@@ -230,22 +205,6 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
         //ps_descriptorvalue_number.setString(6, error.toString());     
         
         if (ps_descriptorvalue_number.executeUpdate()>0) {
-        	if (idtuple >0 ) {
-    	        	if (ps_inserttuplenumber == null) 
-    	        		ps_inserttuplenumber = connection.prepareStatement(insert_tuple);
-    	        	ps_inserttuplenumber.clearParameters();
-    	        	ps_inserttuplenumber.setInt(1,idtuple);
-    	        	ps_inserttuplenumber.setInt(2,property.getId());
-    	        	ps_inserttuplenumber.setInt(3,structure.getIdstructure());
-    	        	int ok = ps_inserttuplenumber.executeUpdate();
-    	        	if (ok<=0) {
-    	        	//	logger.warn("Tuple not inserted "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
-
-    	        	}
-
-        	} else {
-        		//logger.warn("Tuple < 0 "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
-        	}
        	} else {
        		//logger.warn("idtuple="+idtuple+" idproperty="+property.getId()+" value "+value);
        		return false;
@@ -283,10 +242,6 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
         if (ps_insertstring != null)	ps_insertstring.close();
         ps_insertstring = null;  
        
-        if (ps_inserttuplestring != null)	ps_inserttuplestring.close();
-        ps_inserttuplestring = null;  
-        if (ps_inserttuplenumber != null)	ps_inserttuplenumber.close();
-        ps_inserttuplenumber = null;  
         super.close();
     }
 }
