@@ -213,86 +213,8 @@ import ambit2.base.relation.STRUCTURE_RELATION;
                 },
                 "function_as_additive": null
             }
-        },
-        {
-            "substance": {
-                "URI": "http://apps.ideaconsult.net:8080/data/substance/1"
-            },
-            "component": {
-                "compound": {
-                    "URI": "http://apps.ideaconsult.net:8080/data/compound/21223/conformer/39742",
-                    "structype": "NA",
-                    "metric": null,
-                    "name": "",
-                    "cas": "",
-                    "einecs": ""
-                },
-                "values": {
-                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23ChemicalNameDefault": "iron|Iron|iron(2+)",
-                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23CASRNDefault": "7439-89-6",
-                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23EINECSDefault": "231-096-4"
-                },
-                "facets": []
-            },
-            "compositionUUID": "L-f2d0bc7e-a154-3f6d-babd-22ea28467466",
-            "compositionName": "",
-            "relation": "HAS_IMPURITY",
-            "proportion": {
-                "typical": {
-                    "precision": "&lt;=",
-                    "value": 0.0001,
-                    "unit": "% (w/w)"
-                },
-                "real": {
-                    "lowerPrecision": "",
-                    "lowerValue": 0,
-                    "upperPrecision": "",
-                    "upperValue": 0,
-                    "unit": ""
-                },
-                "function_as_additive": null
-            }
-        },
-        {
-            "substance": {
-                "URI": "http://apps.ideaconsult.net:8080/data/substance/1"
-            },
-            "component": {
-                "compound": {
-                    "URI": "http://apps.ideaconsult.net:8080/data/compound/21224/conformer/39743",
-                    "structype": "NA",
-                    "metric": null,
-                    "name": "",
-                    "cas": "",
-                    "einecs": ""
-                },
-                "values": {
-                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23ChemicalNameDefault": "formic acid",
-                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23CASRNDefault": "64-18-6",
-                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23EINECSDefault": "200-579-1",
-                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23TradeNameDefault": "Protectol|Aminic acid|Formylic acid|Formisoton|Ameisensäure|Hydrogen carboxylic acid|Formira|Formic acid (7CI, 8CI, 9CI)|Methanoic acid monomer|Methanoic acid|Myrmicyl|Ameisensaeure"
-                },
-                "facets": []
-            },
-            "compositionUUID": "L-f2d0bc7e-a154-3f6d-babd-22ea28467466",
-            "compositionName": "",
-            "relation": "HAS_IMPURITY",
-            "proportion": {
-                "typical": {
-                    "precision": "ca.",
-                    "value": 0.3,
-                    "unit": "% (w/w)"
-                },
-                "real": {
-                    "lowerPrecision": "",
-                    "lowerValue": 0,
-                    "upperPrecision": "",
-                    "upperValue": 0,
-                    "unit": ""
-                },
-                "function_as_additive": null
-            }
         }
+        
     ],
     "feature": {
         "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23IUPACNameDefault": {
@@ -321,54 +243,6 @@ import ambit2.base.relation.STRUCTURE_RELATION;
             "isModelPredictionFeature": false,
             "creator": "http://ambit.sourceforge.net",
             "order": 2,
-            "source": {
-                "URI": "http://apps.ideaconsult.net:8080/data/dataset/Default",
-                "type": "Dataset"
-            },
-            "annotation": []
-        },
-        "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23CASRNDefault": {
-            "type": "Feature",
-            "title": "CasRN",
-            "units": "",
-            "isNominal": "false",
-            "isNumeric": "false",
-            "sameAs": "http://www.opentox.org/api/1.1#CASRN",
-            "isModelPredictionFeature": false,
-            "creator": "http://ambit.sourceforge.net",
-            "order": 3,
-            "source": {
-                "URI": "http://apps.ideaconsult.net:8080/data/dataset/Default",
-                "type": "Dataset"
-            },
-            "annotation": []
-        },
-        "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23EINECSDefault": {
-            "type": "Feature",
-            "title": "EC number",
-            "units": "",
-            "isNominal": "false",
-            "isNumeric": "false",
-            "sameAs": "http://www.opentox.org/api/1.1#EINECS",
-            "isModelPredictionFeature": false,
-            "creator": "http://ambit.sourceforge.net",
-            "order": 4,
-            "source": {
-                "URI": "http://apps.ideaconsult.net:8080/data/dataset/Default",
-                "type": "Dataset"
-            },
-            "annotation": []
-        },
-        "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23TradeNameDefault": {
-            "type": "Feature",
-            "title": "Trade Name",
-            "units": "",
-            "isNominal": "false",
-            "isNumeric": "false",
-            "sameAs": "http://www.opentox.org/api/1.1#TradeName",
-            "isModelPredictionFeature": false,
-            "creator": "http://ambit.sourceforge.net",
-            "order": 5,
             "source": {
                 "URI": "http://apps.ideaconsult.net:8080/data/dataset/Default",
                 "type": "Dataset"
