@@ -32,11 +32,11 @@ Statistics
 </div>
 
 <div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-<a href="${ambit_root}/admin/stats/protocol_applications">Experiments</a>
+<a href="${ambit_root}/admin/stats/protocol_applications">Substances: Experiments</a>
 </div>
 
 <div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-<a href="${ambit_root}/admin/stats/experiment_endpoints">Endpoints</a>
+<a href="${ambit_root}/admin/stats/experiment_endpoints">Substances: Endpoints</a>
 </div>
 
 <div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
