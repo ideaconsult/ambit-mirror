@@ -383,7 +383,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.4</version>
+        <version>2.7</version>
         <reportSets>
           <reportSet>
             <reports>
@@ -415,7 +415,7 @@
         <!-- UML class diagrams  -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.7</version>
+        <version>2.10.1</version>
         <!-- <docletPath>/path/to/UmlGraph.jar</docletPath> -->
         <configuration>
           <source>1.5</source>
