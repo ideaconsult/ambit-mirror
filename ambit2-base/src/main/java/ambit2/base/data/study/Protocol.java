@@ -8,7 +8,6 @@ import ambit2.base.json.JSONUtils;
 
 /**
 <pre>
-<pre>
  	"protocol": {
         "topcategory": "TOX",
         "category": {
@@ -21,7 +20,7 @@ import ambit2.base.json.JSONUtils;
         ]
     }
 </pre>
-</pre>
+
  * @author nina
  *
  */
