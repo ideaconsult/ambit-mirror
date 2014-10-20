@@ -1,5 +1,11 @@
 package ambit2.base.data.study;
 
+/**
+ * Corresponds to Klimish codes
+ * @author nina
+ *
+ * @param <VALUE>
+ */
 
 public class ReliabilityParams<VALUE> extends Params<VALUE> {
 

@@ -8,9 +8,13 @@ import ambit2.base.json.JSONUtils;
  * Effect record. Modelled like IUCLID5 effects level
  * @author nina
  *
- * @param <ENDPOINT>
+ * @param <ENDPOINT>  S
  * @param <CONDITIONS>
  * @param <UNIT>
+ *
+ * To create new record use 
+ * 
+ * new EffectRecord<String,new ambit2.base.data.study.Params(),String)
  */
 public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 	/**

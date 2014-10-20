@@ -6,18 +6,119 @@ import java.util.List;
 
 import ambit2.base.json.JSONUtils;
 
+/**
+ * 
+ * @author nina
+ *
+ * @param <PROTOCOL>
+ * @param <PARAMS>
+ * @param <ENDPOINT>
+ * @param <CONDITIONS>
+ * @param <UNIT>
+ * 
+ * Typical use:
+ * new ProtocolApplication<{@link Protocol},{@link Params},String,{@link Params},String>
+ * 
+<pre>
+{
+    "uuid": "IUC4-0034ab78-402a-3c80-9455-54046c02469a",
+    "owner": {
+        "substance": {
+            "uuid": "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734"
+        },
+        "company": {
+            "uuid": "IUC4-44bf02d8-47c5-385d-b203-9a8f315911cb",
+            "name": "OECD/Paris/France"
+        }
+    },
+    "citation": {
+        "title": "Chang,J.C.F.etal.: Toxicol.Appl.Pharmacol.61,451-459|(1981)",
+        "year": "0",
+        "owner": ""
+    },
+    "protocol": {
+        "topcategory": "TOX",
+        "category": {
+            "code": "TO_ACUTE_INHAL_SECTION",
+            "title": "7.2.2Acutetoxicity-inhalation"
+        },
+        "endpoint": "Acutetoxicity: inhalation,IUC4#10/Ch.5.1.2",
+        "guideline": [
+            "Method: other: sensoryirritationaccordingtoAlarie,Y.;(nofurtherdata)"
+        ]
+    },
+    "parameters": {
+        "Species": "guinea pig",
+        "Type of method": null,
+        "Type of study": "CPA/FCA - Test"
+    },
+    "reliability": {
+        "r_isRobustStudy": "false",
+        "r_isUsedforClassification": "false",
+        "r_isUsedforMSDS": "false",
+        "r_purposeFlag": "",
+        "r_studyResultType": "",
+        "r_value": ""
+    },
+    "interpretation": {
+        "result": "",
+        "criteria": ""
+    },
+    "effects": [
+        {
+            "endpoint": "RD50",
+            "conditions": {
+                "Metabolic activation": "with and without",
+                "Species": "Salmonella typhimurium; no data on tester strain"
+            },
+            "result": {
+                "unit": "mg/Lair",
+                "loValue": 0.006
+            }
+        }
+    ]
+}
+</pre>
+ */
 public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 747315722852709360L;
+/**
+<pre>
+ "reliability": {}
+</pre>	
+ */
 	protected ReliabilityParams reliability = new ReliabilityParams();
+/**
+<pre>
+"interpretation": {}
+</pre>	
+ */
+	protected String interpretationResult;
 	protected String interpretationCriteria;
+	/**
+<pre>
+"parameters": {}
+</pre>
+	 */
 	protected PARAMS parameters;
 	protected Citation reference;
+/**
+<pre>
+ "effects": []
+</pre>
+ */
 	protected List<EffectRecord<ENDPOINT,CONDITIONS,UNIT>> effects;	
+	
 	protected String companyName;
+/**
+<pre>
+  "protocol": { ... }
+</pre>	
+ */
 	protected PROTOCOL protocol;
 	
 	
@@ -56,7 +157,7 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	public void setSubstanceUUID(String substanceUUID) {
 		this.substanceUUID = substanceUUID;
 	}
-	protected String interpretationResult;
+
 	public String getInterpretationResult() {
 		return interpretationResult;
 	}
@@ -89,7 +190,15 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	public ProtocolApplication(PROTOCOL protocol) {
 		setProtocol(protocol);
 	}
+
 	protected String documentUUID;
+	/**
+	 * in ProtocolApplication JSON:
+<pre>
+"uuid": "IUC4-0034ab78-402a-3c80-9455-54046c02469a",
+</pre>
+	 * @return
+	 */
 	public String getDocumentUUID() {
 		return documentUUID;
 	}
@@ -100,6 +209,22 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		else
 			this.documentUUID = documentUUID;
 	}
+	/**
+<pre>
+ 	"protocol": {
+        "topcategory": "TOX",
+        "category": {
+            "code": "TO_ACUTE_INHAL_SECTION",
+            "title": "7.2.2Acutetoxicity-inhalation"
+        },
+        "endpoint": "Acute toxicity: inhalation,IUC4#10/Ch.5.1.2",
+        "guideline": [
+            "Method: other: sensoryirritationaccordingtoAlarie,Y.;(nofurtherdata)"
+        ]
+    }
+</pre>
+	 * @return
+	 */
 	public PROTOCOL getProtocol() {
 		return protocol;
 	}
@@ -115,6 +240,16 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	public String getReference() {
 		return reference==null?null:reference.getTitle();
 	}
+	/**
+<pre>
+"citation": {
+        "title": "ABCDE",
+        "year": "2014",
+        "owner": ""
+    },
+</pre>
+	 * @param reference
+	 */
 	public void setReference(String reference) {
 		if (this.reference==null) this.reference = new Citation(reference); 
 		else this.reference.setTitle(reference);

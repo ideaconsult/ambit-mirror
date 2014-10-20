@@ -8,6 +8,15 @@ import java.util.TreeMap;
 
 import ambit2.base.json.JSONUtils;
 
+/**
+ * 
+ * @author nina
+ *
+ * @param <VALUE>
+ * 
+ * Typical use:
+ * new Params<IValue>
+ */
 public class Params<VALUE> implements IParams<VALUE> {
 	protected Map<String, VALUE> storage;
 	/**

@@ -1,13 +1,43 @@
 package ambit2.base.data.study;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.json.JSONUtils;
 
+/**
+<pre>
+<pre>
+ 	"protocol": {
+        "topcategory": "TOX",
+        "category": {
+            "code": "TO_ACUTE_INHAL_SECTION",
+            "title": "7.2.2Acutetoxicity-inhalation"
+        },
+        "endpoint": "Acute toxicity: inhalation,IUC4#10/Ch.5.1.2",
+        "guideline": [
+            "Method: other: sensoryirritationaccordingtoAlarie,Y.;(nofurtherdata)"
+        ]
+    }
+</pre>
+</pre>
+ * @author nina
+ *
+ */
 public class Protocol {
 	String category;
+	/**
+<pre>
+        "endpoint": "Acute toxicity: inhalation,IUC4#10/Ch.5.1.2", 
+</pre>
+	 */
 	String endpoint;
+	/**
+<pre>
+	"guideline" : []
+</pre>
+	 */
 	List<String> guideline;
 	//hack for IUCLID categories, as i can't find the exact titles in the schema :(
 	public enum _categories {
@@ -27,6 +57,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 401;
 			}
+			/**
+			 * net.idea.i5.io.I5_ROOT_OBJECTS
+			 * https://github.com/ideaconsult/i5/blob/master/iuclid_5_common/src/main/java/net/idea/i5/io/I5_ROOT_OBJECTS.java
+			 */
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
