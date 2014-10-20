@@ -2,6 +2,21 @@ package ambit2.base.data.study;
 
 import ambit2.base.json.JSONUtils;
 
+/**
+ * 
+ * @author nina
+ *
+ * @param <VALUE>
+<pre>
+{
+	"unit":	"mg/kg bw",
+	"loQualifier":	">=",,
+	"loValue":	100.0,
+	"upQualifier":	"<",
+	"upValue":	200.0
+	}
+</pre>
+ */
 public class Value<VALUE> implements IValue<VALUE, String, String> {
 	protected String units;
 	protected VALUE loValue;

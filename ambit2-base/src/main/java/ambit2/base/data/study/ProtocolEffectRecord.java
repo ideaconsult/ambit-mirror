@@ -8,6 +8,9 @@ package ambit2.base.data.study;
  * @param <ENDPOINT>
  * @param <CONDITIONS>
  * @param <UNIT>
+ * 
+ * TypicalUse:
+ * new {@link ProtocolEffectRecord<String,Params,String>}
  */
 public class ProtocolEffectRecord<ENDPOINT, CONDITIONS, UNIT> extends
 		EffectRecord<ENDPOINT, CONDITIONS, UNIT> {

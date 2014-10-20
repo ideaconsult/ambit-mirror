@@ -15,7 +15,62 @@ import ambit2.base.relation.composition.Proportion;
 /**
  * Same as the parent class, but with related structures
  * @author nina
- *
+ <pre>
+{
+    "substance": [
+        {
+            "URI": "http://apps.ideaconsult.net:8080/data/substance/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
+            "ownerUUID": "IUC4-44bf02d8-47c5-385d-b203-9a8f315911cb",
+            "ownerName": "OECD / Paris / France",
+            "i5uuid": "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
+            "name": "formaldehyde (IUC4 DSN 52)",
+            "publicname": "",
+            "format": "i5._5.",
+            "substanceType": "Existing Chemical",
+            "referenceSubstance": {
+                "i5uuid": "ECB5-053aa8c4-d29b-4aa5-b457-5cc3b47f7d8b",
+                "uri": "http://apps.ideaconsult.net:8080/data/query/compound/search/all?search=ECB5-053aa8c4-d29b-4aa5-b457-5cc3b47f7d8b"
+            },
+            "composition": [],
+            "externalIdentifiers": [
+                {
+                    "type": "IUCLID4",
+                    "id": "DSN 52"
+                }
+            ]
+        },
+        {
+            "URI": "http://apps.ideaconsult.net:8080/enanomapper/substance/NWKI-71060af4-1613-35cf-95ee-2a039be0388a",
+            "ownerUUID": "NWKI-9f4e86d0-c85d-3e83-8249-a856659087da",
+            "ownerName": "NanoWiki",
+            "i5uuid": "NWKI-71060af4-1613-35cf-95ee-2a039be0388a",
+            "name": "Kim2012 NM1",
+            "publicname": "CuO",
+            "format": "",
+            "substanceType": "MetalOxide",
+            "referenceSubstance": {
+                "i5uuid": "NWKI-71060af4-1613-35cf-95ee-2a039be0388a",
+                "uri": "http://apps.ideaconsult.net:8080/enanomapper/query/compound/search/all?search=NWKI-71060af4-1613-35cf-95ee-2a039be0388a"
+            },
+            "composition": [],
+            "externalIdentifiers": [
+                {
+                    "type": "Composition",
+                    "id": "CuO"
+                },
+                {
+                    "type": "DATASET",
+                    "id": "NanoWiki"
+                },
+                {
+                    "type": "Has_Identifier",
+                    "id": "139"
+                }
+            ]
+        }
+    ]
+}
+ </pre>
  */
 public class SubstanceRecord extends StructureRecord {
 	protected List<ExternalIdentifier> externalids;
@@ -55,21 +110,50 @@ public class SubstanceRecord extends StructureRecord {
 		if (this.measurements ==null) this.measurements = new ArrayList<ProtocolApplication>();
 		measurements.add(measurement);
 	}
+/**
+ * IUCLID5: monoconsituent, multiconstituent, UVCB (Unknown or Variable composition, Complex reaction products or Biological materials)
+ * http://echa.europa.eu/documents/10162/13643/nutshell_guidance_substance_en.pdf 
+<pre>
+"substanceType": "Existing Chemical"
+</pre>	
+To be extended for nanomaterials.
+ * @return
+ */
 	public String getSubstancetype() {
 		return substancetype;
 	}
+	/**
+	Substance name, as assigned by the owner 
+	<pre> 
+		"i5uuid": "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
+		"name": "formaldehyde (IUC4 DSN 52)",
+	</pre>		
+	 * @return
+	 */	
 	public String getCompanyName() {
 		return companyName;
 	}
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
+/**
+ * Public name of the substance 	
+ * @return
+ */
 	public String getPublicName() {
 		return publicName;
 	}
 	public void setPublicName(String publicname) {
 		this.publicName = publicname;
 	}
+/**
+Substance UUID, as assigned by the owner 
+<pre> 
+	"i5uuid": "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
+	"name": "formaldehyde (IUC4 DSN 52)",
+</pre>		
+ * @return
+ */
 	public String getCompanyUUID() {
 		return companyUUID;
 	}
@@ -97,6 +181,12 @@ public class SubstanceRecord extends StructureRecord {
 	}
 	protected List<CompositionRelation> relatedStructures;
 	
+/**
+ * {@link CompositionRelation}
+<pre>
+	"composition": []
+</pre>
+ */
 	public List<CompositionRelation> getRelatedStructures() {
 		return relatedStructures;
 	}
@@ -128,6 +218,10 @@ public class SubstanceRecord extends StructureRecord {
 			removeProperty(Property.getI5UUIDInstance());
 		else setProperty(Property.getI5UUIDInstance(),uuid);
 	}
+/**
+ referenceSubstance (link to reference structure).Typical use {@link IStructureRecord}	
+ * @return
+ */
 	public String getReferenceSubstanceUUID() {
 		Object name = getProperty(Property.getI5UUIDInstance());
 		return name==null?null:name.toString();
@@ -146,12 +240,28 @@ public class SubstanceRecord extends StructureRecord {
 	public String toString() {
 		return String.format("idsubstance=%d %s",getIdsubstance(),getCompanyUUID());
 	}
+	/**
+	 * UUID of the company, which is the substance owner (usually the substance manufacturer)
+<pre>
+            "ownerUUID": "IUC4-44bf02d8-47c5-385d-b203-9a8f315911cb",
+            "ownerName": "OECD / Paris / France",
+</pre>
+	 * @return
+	 */
 	public String getOwnerUUID() {
 		return ownerUUID;
 	}
 	public void setOwnerUUID(String ownerUUID) {
 		this.ownerUUID = ownerUUID;
 	}
+	/**
+	 * Name of the company, which is the substance owner (usually the substance manufacturer)
+<pre>
+            "ownerUUID": "IUC4-44bf02d8-47c5-385d-b203-9a8f315911cb",
+            "ownerName": "OECD / Paris / France",
+</pre>
+	 * @return
+	 */	
 	public String getOwnerName() {
 		return ownerName;
 	}

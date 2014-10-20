@@ -14,7 +14,370 @@ import ambit2.base.relation.STRUCTURE_RELATION;
 /**
  * Substance composition
  * @author nina
- *
+<pre>
+{
+    "composition": [
+        {
+            "substance": {
+                "URI": "http://apps.ideaconsult.net:8080/data/substance/1"
+            },
+            "component": {
+                "compound": {
+                    "URI": "http://apps.ideaconsult.net:8080/data/compound/21219/conformer/39738",
+                    "structype": "NA",
+                    "metric": null,
+                    "name": "",
+                    "cas": "",
+                    "einecs": ""
+                },
+                "values": {
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23ChemicalNameDefault": "formaldehyde|Formaldehyde",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23CASRNDefault": "50-00-0",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23EINECSDefault": "200-001-8",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23TradeNameDefault": "Formaldehyde, gas|Oxomethane|Methanal|Formaldehyde (8CI, 9CI)|Paraform|Formaldehyde solution|Methylene oxide|Formol|Formaldehyd|Formalin|Morbicid|Oxymethylene|Methyl aldehyde|Formic aldehyde|Formalith|Methaldehyde|TRA0001"
+                },
+                "facets": []
+            },
+            "compositionUUID": "L-340e87fb-e95f-3743-823d-1b9b25a94d56",
+            "compositionName": "other: pure",
+            "relation": "HAS_CONSTITUENT",
+            "proportion": {
+                "typical": {
+                    "precision": "",
+                    "value": 100,
+                    "unit": "% (w/w)"
+                },
+                "real": {
+                    "lowerPrecision": "",
+                    "lowerValue": 0,
+                    "upperPrecision": "",
+                    "upperValue": 0,
+                    "unit": ""
+                },
+                "function_as_additive": null
+            }
+        },
+        {
+            "substance": {
+                "URI": "http://apps.ideaconsult.net:8080/data/substance/1"
+            },
+            "component": {
+                "compound": {
+                    "URI": "http://apps.ideaconsult.net:8080/data/compound/21219/conformer/39738",
+                    "structype": "NA",
+                    "metric": null,
+                    "name": "",
+                    "cas": "",
+                    "einecs": ""
+                },
+                "values": {
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23ChemicalNameDefault": "formaldehyde|Formaldehyde",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23CASRNDefault": "50-00-0",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23EINECSDefault": "200-001-8",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23TradeNameDefault": "Formaldehyde, gas|Oxomethane|Methanal|Formaldehyde (8CI, 9CI)|Paraform|Formaldehyde solution|Methylene oxide|Formol|Formaldehyd|Formalin|Morbicid|Oxymethylene|Methyl aldehyde|Formic aldehyde|Formalith|Methaldehyde|TRA0001"
+                },
+                "facets": []
+            },
+            "compositionUUID": "L-cf10d721-b0e7-37cd-a233-e9a2483c4d3c",
+            "compositionName": "other: sales products in aqueous solution",
+            "relation": "HAS_CONSTITUENT",
+            "proportion": {
+                "typical": {
+                    "precision": "",
+                    "value": 0,
+                    "unit": ""
+                },
+                "real": {
+                    "lowerPrecision": "",
+                    "lowerValue": 0,
+                    "upperPrecision": "",
+                    "upperValue": 0,
+                    "unit": ""
+                },
+                "function_as_additive": null
+            }
+        },
+        {
+            "substance": {
+                "URI": "http://apps.ideaconsult.net:8080/data/substance/1"
+            },
+            "component": {
+                "compound": {
+                    "URI": "http://apps.ideaconsult.net:8080/data/compound/21220/conformer/39739",
+                    "structype": "NA",
+                    "metric": null,
+                    "name": "",
+                    "cas": "",
+                    "einecs": ""
+                },
+                "values": {
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23ChemicalNameDefault": "water|Water",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23CASRNDefault": "7732-18-5",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23EINECSDefault": "231-791-2"
+                },
+                "facets": []
+            },
+            "compositionUUID": "L-f2d0bc7e-a154-3f6d-babd-22ea28467466",
+            "compositionName": "",
+            "relation": "HAS_ADDITIVE",
+            "proportion": {
+                "typical": {
+                    "precision": "ca.",
+                    "value": 49,
+                    "unit": "% (w/w)"
+                },
+                "real": {
+                    "lowerPrecision": "",
+                    "lowerValue": 0,
+                    "upperPrecision": "",
+                    "upperValue": 0,
+                    "unit": ""
+                },
+                "function_as_additive": "solvent"
+            }
+        },
+        {
+            "substance": {
+                "URI": "http://apps.ideaconsult.net:8080/data/substance/1"
+            },
+            "component": {
+                "compound": {
+                    "URI": "http://apps.ideaconsult.net:8080/data/compound/21221/conformer/39740",
+                    "structype": "NA",
+                    "metric": null,
+                    "name": "",
+                    "cas": "",
+                    "einecs": ""
+                },
+                "values": {
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23ChemicalNameDefault": "6,6'-(m-phenylene)bis(1,3,5-triazine-2,4-diamine)",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23CASRNDefault": "5118-80-9",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23EINECSDefault": "225-859-0"
+                },
+                "facets": []
+            },
+            "compositionUUID": "L-f2d0bc7e-a154-3f6d-babd-22ea28467466",
+            "compositionName": "",
+            "relation": "HAS_ADDITIVE",
+            "proportion": {
+                "typical": {
+                    "precision": "",
+                    "value": 0,
+                    "unit": ""
+                },
+                "real": {
+                    "lowerPrecision": "",
+                    "lowerValue": 0,
+                    "upperPrecision": "",
+                    "upperValue": 0,
+                    "unit": ""
+                },
+                "function_as_additive": ""
+            }
+        },
+        {
+            "substance": {
+                "URI": "http://apps.ideaconsult.net:8080/data/substance/1"
+            },
+            "component": {
+                "compound": {
+                    "URI": "http://apps.ideaconsult.net:8080/data/compound/21222/conformer/39741",
+                    "structype": "NA",
+                    "metric": null,
+                    "name": "",
+                    "cas": "",
+                    "einecs": ""
+                },
+                "values": {
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23ChemicalNameDefault": "methanol|Methanol",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23CASRNDefault": "67-56-1",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23EINECSDefault": "200-659-6"
+                },
+                "facets": []
+            },
+            "compositionUUID": "L-f2d0bc7e-a154-3f6d-babd-22ea28467466",
+            "compositionName": "",
+            "relation": "HAS_IMPURITY",
+            "proportion": {
+                "typical": {
+                    "precision": "",
+                    "value": 0,
+                    "unit": ""
+                },
+                "real": {
+                    "lowerPrecision": "",
+                    "lowerValue": 0.5,
+                    "upperPrecision": "",
+                    "upperValue": 2,
+                    "unit": "% (w/w)"
+                },
+                "function_as_additive": null
+            }
+        },
+        {
+            "substance": {
+                "URI": "http://apps.ideaconsult.net:8080/data/substance/1"
+            },
+            "component": {
+                "compound": {
+                    "URI": "http://apps.ideaconsult.net:8080/data/compound/21223/conformer/39742",
+                    "structype": "NA",
+                    "metric": null,
+                    "name": "",
+                    "cas": "",
+                    "einecs": ""
+                },
+                "values": {
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23ChemicalNameDefault": "iron|Iron|iron(2+)",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23CASRNDefault": "7439-89-6",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23EINECSDefault": "231-096-4"
+                },
+                "facets": []
+            },
+            "compositionUUID": "L-f2d0bc7e-a154-3f6d-babd-22ea28467466",
+            "compositionName": "",
+            "relation": "HAS_IMPURITY",
+            "proportion": {
+                "typical": {
+                    "precision": "&lt;=",
+                    "value": 0.0001,
+                    "unit": "% (w/w)"
+                },
+                "real": {
+                    "lowerPrecision": "",
+                    "lowerValue": 0,
+                    "upperPrecision": "",
+                    "upperValue": 0,
+                    "unit": ""
+                },
+                "function_as_additive": null
+            }
+        },
+        {
+            "substance": {
+                "URI": "http://apps.ideaconsult.net:8080/data/substance/1"
+            },
+            "component": {
+                "compound": {
+                    "URI": "http://apps.ideaconsult.net:8080/data/compound/21224/conformer/39743",
+                    "structype": "NA",
+                    "metric": null,
+                    "name": "",
+                    "cas": "",
+                    "einecs": ""
+                },
+                "values": {
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23ChemicalNameDefault": "formic acid",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23CASRNDefault": "64-18-6",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23EINECSDefault": "200-579-1",
+                    "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23TradeNameDefault": "Protectol|Aminic acid|Formylic acid|Formisoton|Ameisensäure|Hydrogen carboxylic acid|Formira|Formic acid (7CI, 8CI, 9CI)|Methanoic acid monomer|Methanoic acid|Myrmicyl|Ameisensaeure"
+                },
+                "facets": []
+            },
+            "compositionUUID": "L-f2d0bc7e-a154-3f6d-babd-22ea28467466",
+            "compositionName": "",
+            "relation": "HAS_IMPURITY",
+            "proportion": {
+                "typical": {
+                    "precision": "ca.",
+                    "value": 0.3,
+                    "unit": "% (w/w)"
+                },
+                "real": {
+                    "lowerPrecision": "",
+                    "lowerValue": 0,
+                    "upperPrecision": "",
+                    "upperValue": 0,
+                    "unit": ""
+                },
+                "function_as_additive": null
+            }
+        }
+    ],
+    "feature": {
+        "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23IUPACNameDefault": {
+            "type": "Feature",
+            "title": "IUPAC name",
+            "units": "",
+            "isNominal": "false",
+            "isNumeric": "false",
+            "sameAs": "http://www.opentox.org/api/1.1#IUPACName",
+            "isModelPredictionFeature": false,
+            "creator": "http://ambit.sourceforge.net",
+            "order": 1,
+            "source": {
+                "URI": "http://apps.ideaconsult.net:8080/data/dataset/Default",
+                "type": "Dataset"
+            },
+            "annotation": []
+        },
+        "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23ChemicalNameDefault": {
+            "type": "Feature",
+            "title": "Names",
+            "units": "",
+            "isNominal": "false",
+            "isNumeric": "false",
+            "sameAs": "http://www.opentox.org/api/1.1#ChemicalName",
+            "isModelPredictionFeature": false,
+            "creator": "http://ambit.sourceforge.net",
+            "order": 2,
+            "source": {
+                "URI": "http://apps.ideaconsult.net:8080/data/dataset/Default",
+                "type": "Dataset"
+            },
+            "annotation": []
+        },
+        "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23CASRNDefault": {
+            "type": "Feature",
+            "title": "CasRN",
+            "units": "",
+            "isNominal": "false",
+            "isNumeric": "false",
+            "sameAs": "http://www.opentox.org/api/1.1#CASRN",
+            "isModelPredictionFeature": false,
+            "creator": "http://ambit.sourceforge.net",
+            "order": 3,
+            "source": {
+                "URI": "http://apps.ideaconsult.net:8080/data/dataset/Default",
+                "type": "Dataset"
+            },
+            "annotation": []
+        },
+        "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23EINECSDefault": {
+            "type": "Feature",
+            "title": "EC number",
+            "units": "",
+            "isNominal": "false",
+            "isNumeric": "false",
+            "sameAs": "http://www.opentox.org/api/1.1#EINECS",
+            "isModelPredictionFeature": false,
+            "creator": "http://ambit.sourceforge.net",
+            "order": 4,
+            "source": {
+                "URI": "http://apps.ideaconsult.net:8080/data/dataset/Default",
+                "type": "Dataset"
+            },
+            "annotation": []
+        },
+        "http://apps.ideaconsult.net:8080/data/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23TradeNameDefault": {
+            "type": "Feature",
+            "title": "Trade Name",
+            "units": "",
+            "isNominal": "false",
+            "isNumeric": "false",
+            "sameAs": "http://www.opentox.org/api/1.1#TradeName",
+            "isModelPredictionFeature": false,
+            "creator": "http://ambit.sourceforge.net",
+            "order": 5,
+            "source": {
+                "URI": "http://apps.ideaconsult.net:8080/data/dataset/Default",
+                "type": "Dataset"
+            },
+            "annotation": []
+        }
+    }
+}
+</pre>
  */
 public class CompositionRelation extends AbstractRelation<STRUCTURE_RELATION, Proportion,SubstanceRecord,IStructureRecord> implements IStructureRecord {
 
@@ -40,6 +403,10 @@ public class CompositionRelation extends AbstractRelation<STRUCTURE_RELATION, Pr
 	}
 	
 	protected String compositionUUID;
+	/**
+	 * Composition UUID
+	 * @return
+	 */
 	public String getCompositionUUID() {
 		return compositionUUID;
 	}
