@@ -50,6 +50,8 @@ public class CreateDataset extends AbstractObjectUpdate<SourceDataset> {
 	public CreateDataset() {
 		this(null);
 	}		
+	
+	
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		switch (index) {
 		case 0: {
@@ -74,6 +76,7 @@ public class CreateDataset extends AbstractObjectUpdate<SourceDataset> {
 		}
 		
 	}
+	@Override
 	public void setID(int index, int id) {
 		switch (index) {
 		case 0: {

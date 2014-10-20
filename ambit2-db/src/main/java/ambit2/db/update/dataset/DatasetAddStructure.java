@@ -40,7 +40,7 @@ import ambit2.db.update.AbstractUpdate;
 
 public class DatasetAddStructure extends AbstractUpdate<SourceDataset,IStructureRecord> {
 	protected CreateDataset createDataset = new CreateDataset();
-	
+	private boolean datasetExists = false; 
 	public static final String create_sql_byname = 
 		"insert ignore into struc_dataset (idstructure,id_srcdataset) SELECT ?,id_srcdataset from src_dataset where name=?";
 
@@ -60,12 +60,14 @@ public class DatasetAddStructure extends AbstractUpdate<SourceDataset,IStructure
 	public void setGroup(SourceDataset group) {
 		super.setGroup(group);
 		createDataset.setObject(group);
+		datasetExists = group==null?false:group.getID()>0;
 	}
+
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		if (getObject()==null || getObject().getIdstructure()<=0) throw new AmbitException("Structure not defined!");
 		if (getGroup()==null || getGroup().getName()==null) throw new AmbitException("Dataset not defined!");
 
-		if (createDataset.getObject().getID()<=0) { //create the dataset , if necessary
+		if (!datasetExists) { //create the dataset , if necessary
 			if (index < createDataset.getSQL().length) 
 				return createDataset.getParameters(index);
 			else  {
@@ -83,11 +85,14 @@ public class DatasetAddStructure extends AbstractUpdate<SourceDataset,IStructure
 		
 	}
 	public void setID(int index, int id) {
-	
+		if ((index==1) && !datasetExists) { 
+			createDataset.getObject().setId(id);
+		}
+
 	}
 
 	public String[] getSQL() throws AmbitException {
-		if (createDataset.getObject().getID()<=0) { 
+		if (!datasetExists) { 
 			String[] dataset = createDataset.getSQL();
 			String[] sql = new String[dataset.length+1];
 			for (int i=0; i < dataset.length;i++)
@@ -98,4 +103,8 @@ public class DatasetAddStructure extends AbstractUpdate<SourceDataset,IStructure
 			return new String[] {create_sql_byid};
 	}
 
+	@Override
+	public boolean returnKeys(int index) {
+		return true;
+	}
 }
