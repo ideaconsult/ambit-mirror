@@ -245,7 +245,7 @@ var facet = {
 						'category':model.endpoint	
 						};
 				
-				var qurl = root+"/admin/stats/experiment_endpoints?" +  $.param(params,false);
+				var qurl = root+"/query/experiment_endpoints?" +  $.param(params,false);
 				facet.endpointAutocomplete(endpointBox,qurl,10);
 		    }
 		    
@@ -304,7 +304,7 @@ var facet = {
 						'category':model.endpoint	
 						};
 				
-				var qurl = root+"/admin/stats/interpretation_result?" +  $.param(params,false);
+				var qurl = root+"/query/interpretation_result?" +  $.param(params,false);
 				facet.interpretationAutocomplete(interpretationResult,qurl,10);
 			    
 			}
