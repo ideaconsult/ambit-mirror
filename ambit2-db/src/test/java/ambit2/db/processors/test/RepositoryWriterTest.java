@@ -486,8 +486,6 @@ delete from struc_dataset where idstructure>3
 		Assert.assertEquals(7,property.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
 		Assert.assertEquals(53,property_values.getRowCount());		
-		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
-		Assert.assertEquals(12,tuples.getRowCount());			
 
 		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset join template_def using(idtemplate) where name='TEST INPUT'");
 		Assert.assertEquals(7,srcdataset.getRowCount());	
@@ -728,8 +726,7 @@ delete from struc_dataset where idstructure>3
 		Assert.assertEquals(1,property.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
 		Assert.assertEquals(3,property_values.getRowCount());		
-		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
-		Assert.assertEquals(3,tuples.getRowCount());			
+	
 		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset join template_def using(idtemplate) where name='TEST INPUT'");
 		Assert.assertEquals(1,srcdataset.getRowCount());					
 		ITable p_cas = 	c.createQueryTable("EXPECTED","SELECT idchemical,idstructure,value FROM property_values join property_string using(idvalue_string) join properties using(idproperty) where name=\"EC\"");

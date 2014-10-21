@@ -81,7 +81,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     //protected PreparedStatement ps_inserttuplenumber = null;
     
     protected IStructureRecord structure;
-    protected DatasetAddTuple tuple = new DatasetAddTuple();
+    //protected DatasetAddTuple tuple = new DatasetAddTuple();
     
     public synchronized IStructureRecord getStructure() {
         return structure;
@@ -91,6 +91,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     }
     @Override
     protected int getTuple(SourceDataset dataset) {
+    	/*
     	try {
     		if (dataset == null) return -1;
 	    	tuple.setGroup(dataset);
@@ -103,6 +104,8 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	} finally {
     		
     	}
+    	*/
+    	return -1;
      }
 
     protected boolean insertValue(String value, Property property, int idtuple, mode error) throws SQLException {
@@ -175,9 +178,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
         //ps_descriptorvalue_number.setString(6, error.toString());     
         
         if (ps_descriptorvalue_number.executeUpdate()>0) {
-        	if (idtuple >0 ) {
-
-        	} 
+ 
        	} else {
        		logger.fine("idtuple="+idtuple+" idproperty="+property.getId()+" value "+value);
        		return false;
