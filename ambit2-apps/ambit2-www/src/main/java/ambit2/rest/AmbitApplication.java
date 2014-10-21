@@ -77,7 +77,9 @@ import ambit2.rest.dataset.CollectionStructureResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.MissingFeatureValuesResource;
+import ambit2.rest.dataset.filtered.ExperimentsSearchResource;
 import ambit2.rest.dataset.filtered.FilteredDatasetResource;
+import ambit2.rest.dataset.filtered.InterpretationResultSearchResource;
 import ambit2.rest.dataset.filtered.StudySearchResource;
 import ambit2.rest.facet.CompoundsByPropertyValueInDatasetResource;
 import ambit2.rest.facet.DatasetChemicalsQualityStatsResource;
@@ -154,12 +156,12 @@ import ambit2.user.groups.OrganisationRouter;
 import ambit2.user.groups.ProjectRouter;
 import ambit2.user.rest.UserRouter;
 import ambit2.user.rest.resource.AMBITRegistrationNotifyResource;
+import ambit2.user.rest.resource.MyAccountPwdResetResource;
 import ambit2.user.rest.resource.MyAccountResource;
 import ambit2.user.rest.resource.PwdForgottenConfirmResource;
 import ambit2.user.rest.resource.PwdForgottenFailedResource;
 import ambit2.user.rest.resource.PwdForgottenNotifyResource;
 import ambit2.user.rest.resource.PwdForgottenResource;
-import ambit2.user.rest.resource.MyAccountPwdResetResource;
 import ambit2.user.rest.resource.RegistrationConfirmResource;
 import ambit2.user.rest.resource.RegistrationResource;
 import ambit2.user.rest.resource.Resources;
@@ -795,6 +797,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		queryRouter.attach(CompoundsByPropertyValueInDatasetResource.resource,CompoundsByPropertyValueInDatasetResource.class);
 		queryRouter.attach(DatasetsByEndpoint.resource,DatasetsByEndpoint.class);
 		queryRouter.attach(DatasetsByNamePrefixResource.resource,DatasetsByNamePrefixResource.class);
+		
+		queryRouter.attach(ExperimentsSearchResource.resource,ExperimentsSearchResource.class);
+		queryRouter.attach(InterpretationResultSearchResource.resource,InterpretationResultSearchResource.class);
 		
 		
 		/**

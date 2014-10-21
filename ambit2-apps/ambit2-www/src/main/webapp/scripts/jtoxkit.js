@@ -4352,8 +4352,8 @@ var jToxEndpoint = (function () {
     };
         
     // deal with endpoint name itself
-    putAutocomplete('endpoint', '/admin/stats/experiment_endpoints', 'effects.endpoint');
-    putAutocomplete('interpretation_result', '/admin/stats/interpretation_result', 'interpretation.result');
+    putAutocomplete('endpoint', '/query/experiment_endpoints', 'effects.endpoint');
+    putAutocomplete('interpretation_result', '/query/interpretation_result', 'interpretation.result');
     
     // now comes the tagging mechanism... first determine, if we need to show it at all
     var v = ccLib.getJsonValue(config, 'effects.result.bVisible');
