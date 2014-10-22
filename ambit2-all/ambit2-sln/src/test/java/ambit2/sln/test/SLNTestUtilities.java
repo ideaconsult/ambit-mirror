@@ -30,7 +30,7 @@ public class SLNTestUtilities
 		//tu.testSLN("C[1]CCC[2]CC@1@2");
 		//tu.testSLN("C[1]CCC-[a=b]@1");
 		
-		tu.testSLN2SLN("C(C)C~CH3[S=S*;a=b;a1=b1]<coord2d=(0,1),(1,1)>");
+		//tu.testSLN2SLN("C(C)C~CH3[S=S*;a=b;a1=b1]<coord2d=(0,1),(1,1)>");
 		//tu.testSLN2SLN("C(C)CCH3<coord2d=(1,2),(3,4);a1=b1>");
 		//tu.testSLN2SLN("C(C)CCH3<coord3d=(1,2,4),(1,2,3);a1=b1>");
 		
@@ -40,8 +40,8 @@ public class SLNTestUtilities
 		//tu.testSLN2SLN("CH2=CHCH2C[1]:CH:C[2]OCH2OC(@2):C(OCH3):CH:(@1)");
 		//tu.testSLN2SLN("CC[s=R]H(O)CC[s=S]H(O)N");
 		
-		//tu.testSLNIsomorphism("C[1]=CCC=@1","C1C=C=C1");
-		
+		//tu.testSLNIsomorphism("C[hac=3]","CCC(C)CC");
+		tu.testSLN("C[hac=3]");
 	}
 	
 	public void testSLN(String sln)
@@ -93,7 +93,7 @@ public class SLNTestUtilities
 		}
 		
 		isoTester.setQuery(query);
-		SmartsParser.prepareTargetForSMARTSSearch(true, false, false, false, false, false, mol); //flags are set temporary
+		SmartsParser.prepareTargetForSMARTSSearch(true, true, true, true, true, true, mol); //flags are set temporary
 		System.out.println("SLN Isomorphism: " + sln  + "  in  " + smiles + 
 				"   " + isoTester.hasIsomorphism(mol));
 	}
