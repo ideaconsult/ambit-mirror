@@ -18,7 +18,7 @@ public class SLNConst
 	public static final int A_ATTR_fcharge = 3;	// specifies a partial charge
 	public static final int A_ATTR_s = 4; 		//specifies stereo-chemistry at tetrahedral atoms 
 	public static final int A_ATTR_spin = 5;	//specifies that the atom is a radical 	
-	public static final int A_ATTR_USER_DEFINED = 500; //  == other= !!!
+	public static final int A_ATTR_USER_DEFINED = 500; //  == other
 	//boolean  - the attribute's name is specified, as in C[backbone]
 	//valued - the name is specified, followed by an equal sign and the value, as in C-[chemshift=7.2]
 
@@ -78,14 +78,36 @@ public class SLNConst
 	public static final int A_STEREO_S = 1; // CIP configurations
 	public static final int A_STEREO_N = 2; // normal with respect to atom ID sequence
 	public static final int A_STEREO_I = 3; // inverted with respect to atom ID sequence
-	public static final int A_STEREO_D = 4; // relative to glycer-aldehyde
+	public static final int A_STEREO_D = 4; // relative to glyceraldehyde
 	public static final int A_STEREO_L = 5; // relative to glyceraldehyde
 	public static final int A_STEREO_U = 6; // unknown
 	public static final int A_STEREO_E = 7; // explicit
-	public static final int A_STEREO_Rel = 8; // relative == * !!!
+	public static final int A_STEREO_Rel = 8; // relative == * 
 	public static final int A_STEREO_M = 9; // mixture
-	//TODO  Specifying Stereo-chemistry
-
+	public static final int A_STEREO_RE = 10; //absolute stereochemistry CIP configurations
+	public static final int A_STEREO_SE = 11; //absolute stereochemistry CIP configurations
+	public static final int A_STEREO_DE = 12; //Absolute stereochemistry is known and specified based on similarity of chiral center to D-glyceraldehyde.
+	public static final int A_STEREO_LE = 13; //Absolute stereochemistry is known and specified based on similarity of chiral center to D-glyceraldehyde.
+	public static final int A_STEREO_NE = 14; //Absolute stereochemistry is known and specified based on ordering of atoms in the SLN
+	public static final int A_STEREO_IE = 15; //Absolute stereochemistry is known and specified based on ordering of atoms in the SLN
+	public static final int A_STEREO_UE = 16; //Chirality of center is unknown. Compound may be a single stereoisomer or may be a mixture of stereoisomers.
+	public static final int A_STEREO_R_ = 17; //R* - Unresolved center. Represents single pure stereoisomer whose absolute configuration is unknown, 
+												//but configuration of one chiral center is known relative to another chiral center, specified using CIP rules
+	public static final int A_STEREO_S_ = 18; //S*
+	public static final int A_STEREO_D_ = 19; //D* - Unresolved center
+	public static final int A_STEREO_L_ = 20; //L* - Unresolved center
+	public static final int A_STEREO_N_ = 21; //N* - Unresolved center
+	public static final int A_STEREO_I_ = 22; //I* - Unresolved center
+	public static final int A_STEREO_U_ = 23; //U* - Unresolved center. Represents a single pure isomer but of unknown stereochemistry.
+	public static final int A_STEREO_RM = 24; // mixture of stereoisomers
+	public static final int A_STEREO_SM = 25; // mixture of stereoisomers
+	public static final int A_STEREO_DM = 26; // mixture of stereoisomers
+	public static final int A_STEREO_LM = 27; // mixture of stereoisomers
+	public static final int A_STEREO_NM = 28; // mixture of stereoisomers
+	public static final int A_STEREO_IM = 29; // mixture of stereoisomers
+	public static final int A_STEREO_UM = 30; // Unknown mixture - represents mixture of both possible orientations at this atom
+	
+	
 	public static String atomStereoChemAttrToSLNString(int attr)
 	{
 		switch (attr)
@@ -110,6 +132,48 @@ public class SLNConst
 			return "R*";  // or *
 		case A_STEREO_M:
 			return "M";
+		case A_STEREO_RE:
+			return "RE";
+		case A_STEREO_SE:
+			return "SE";
+		case A_STEREO_DE:
+			return "DE";
+		case A_STEREO_LE:
+			return "LE";
+		case A_STEREO_NE:
+			return "NE";
+		case A_STEREO_IE:
+			return "IE";
+		case A_STEREO_UE:
+			return "UE";
+		case A_STEREO_R_:
+			return "R*";
+		case A_STEREO_S_:
+			return "S*";
+		case A_STEREO_D_:
+			return "D*";
+		case A_STEREO_L_:
+			return "L*";
+		case A_STEREO_N_:
+			return "N*";
+		case A_STEREO_I_:
+			return "I*";
+		case A_STEREO_U_:
+			return "U*";
+		case A_STEREO_RM:
+			return "RM";
+		case A_STEREO_SM:
+			return "SM";
+		case A_STEREO_DM:
+			return "DM";
+		case A_STEREO_LM:
+			return "LM";
+		case A_STEREO_NM:
+			return "NM";
+		case A_STEREO_IM:
+			return "IM";
+		case A_STEREO_UM:
+			return "UM";
 
 		default:
 			return "";
@@ -138,6 +202,48 @@ public class SLNConst
 			return A_STEREO_Rel;
 		if (stereo.equals("M"))
 			return A_STEREO_M;
+		if (stereo.equals("RE"))
+			return A_STEREO_RE;
+		if (stereo.equals("SE"))
+			return A_STEREO_SE;
+		if (stereo.equals("DE"))
+			return A_STEREO_DE;
+		if (stereo.equals("LE"))
+			return A_STEREO_LE;
+		if (stereo.equals("NE"))
+			return A_STEREO_NE;
+		if (stereo.equals("IE"))
+			return A_STEREO_IE;
+		if (stereo.equals("UE"))
+			return A_STEREO_UE;
+		if (stereo.equals("R*"))
+			return A_STEREO_R_;
+		if (stereo.equals("S*"))
+			return A_STEREO_S_;
+		if (stereo.equals("D*"))
+			return A_STEREO_D_;
+		if (stereo.equals("L*"))
+			return A_STEREO_L_;
+		if (stereo.equals("N*"))
+			return A_STEREO_N_;
+		if (stereo.equals("I*"))
+			return A_STEREO_I_;
+		if (stereo.equals("U*"))
+			return A_STEREO_U_;
+		if (stereo.equals("RM"))
+			return A_STEREO_RM;
+		if (stereo.equals("SM"))
+			return A_STEREO_SM;
+		if (stereo.equals("DM"))
+			return A_STEREO_DM;
+		if (stereo.equals("LM"))
+			return A_STEREO_LM;
+		if (stereo.equals("NM"))
+			return A_STEREO_NM;
+		if (stereo.equals("IM"))
+			return A_STEREO_IM;
+		if (stereo.equals("UM"))
+			return A_STEREO_UM;
 
 		return -1;
 	}
