@@ -38,6 +38,16 @@ public class TestSLNParser extends TestCase
 		assertEquals(sln, sln1);
 	}
 	
+	public void slnParserError(String sln, String expectedError) throws Exception
+	{
+		SLNContainer container = slnParser.parse(sln);
+		String error = slnParser.getErrorMessages();
+		if (expectedError.equals(""))
+			assertEquals("",error);
+		else
+			assertEquals(error, true, error.startsWith(expectedError));
+	}
+	
 	
 	public void testSLN2SLN() throws Exception 
 	{
@@ -53,7 +63,8 @@ public class TestSLNParser extends TestCase
 	
 	public void testSLNParserErrors() throws Exception 
 	{
-		//TODO
+		slnParserError("CCC","");
+		slnParserError("CCC<","Incorrect molecule attributes section at the end");		
 	}
 	
 }
