@@ -38,7 +38,7 @@ import ambit2.base.interfaces.IStructureRecord;
 public class UpdateStructureRelation extends AbstractUpdateStructureRelation<IStructureRecord,IStructureRecord,String,Double> {
 
 	public static final String[] create_sql = {
-		"INSERT INTO chem_relation values(?,?,?,?) on duplicate key update metric=values(metric)"
+		"INSERT INTO chem_relation (idchemical1,idchemical2,relation,metric) values(?,?,?,?) on duplicate key update metric=values(metric)"
 	};
 	public UpdateStructureRelation() {
 		this(null,null,null,null);
