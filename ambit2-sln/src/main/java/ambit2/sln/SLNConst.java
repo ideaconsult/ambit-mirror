@@ -31,7 +31,15 @@ public class SLNConst
 	public static final int QA_ATTR_not = 105; // Specifies patterns that the qualified atom in a query must not match "a"
 	public static final int QA_ATTR_r = 106;// Boolean attribute used to specify that a bond or atom is in a ring "a"
 	public static final int QA_ATTR_v = 107; // Conveys Markush and macro atom valence information
-
+	public static final int QA_ATTR_hac = 108; // heavy atom count "b"
+	public static final int QA_ATTR_hc = 109; // hydrogen count "b"
+	public static final int QA_ATTR_htc = 110; // hetero atom count "b"
+	public static final int QA_ATTR_ntc = 111; // number of nonterminal atoms "b"
+	public static final int QA_ATTR_tac = 113; // total number of atoms attached to the qualified atom "b"
+	public static final int QA_ATTR_tbo = 114; // total bond order of an atom "b"
+	public static final int QA_ATTR_src = 115; // the smallest ring count "b"
+	public static final int QA_ATTR_mw = 116; // The molecular weight attribute is used with group atoms (R, X, and Rx)to specify the cumulative atomic weights that atoms that match the group atom to match the query "b"
+	
 
 	public static String atomAttributeToSLNString(int attr)
 	{
@@ -67,6 +75,22 @@ public class SLNConst
 			return "r";
 		case QA_ATTR_v:
 			return "v";
+		case QA_ATTR_hac:
+			return "hac";
+		case QA_ATTR_hc:
+			return "hc";
+		case QA_ATTR_htc:
+			return "htc";
+		case QA_ATTR_ntc:
+			return "ntc";
+		case QA_ATTR_tac:
+			return "tac";
+		case QA_ATTR_tbo:
+			return "tbo";
+		case QA_ATTR_src:
+			return "src";
+		case QA_ATTR_mw:
+			return "mw";
 
 		default:
 			return "";
@@ -321,18 +345,11 @@ public class SLNConst
 	public static final int B_ATTR_USER_DEFINED = 500;
 
 	//Query Bond Attributes QB_ATTR_*
-	public static final int QB_ATTR_hac = 100; // heavy atom count "b"
-	public static final int QB_ATTR_hc = 101; // hydrogen count "b"
-	public static final int QB_ATTR_htc = 102; // hetero atom count "b"
-	public static final int QB_ATTR_mw = 103; // The molecular weight attribute is used with group atoms (R, X, and Rx)to specify the cumulative atomic weights that atoms that match the group atom to match the query "b"
-	public static final int QB_ATTR_ntc = 104; // number of nonterminal atoms "b"
-	public static final int QB_ATTR_rbc = 105; // ring bond count "b"
-	public static final int QB_ATTR_src = 106; // the smallest ring count "b"
-	public static final int QB_ATTR_tac = 107; // total number of atoms attached to the qualified atom "b"
-	public static final int QB_ATTR_tbo = 108; // total bond order of an atom "b"
-	public static final int QB_ATTR_type = 109; // bond type specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
-
-
+	public static final int QB_ATTR_src = 100; // the smallest ring count "b"
+	public static final int QB_ATTR_type = 101; // bond type specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
+	public static final int QB_ATTR_r = 102;// Boolean attribute used to specify that a bond or atom is in a ring "a"
+	public static final int QB_ATTR_rbc = 103; // ring bond count "b"
+	
 	public static String bondAttributeToSLNString(int attr)
 	{
 		switch (attr)
@@ -345,27 +362,13 @@ public class SLNConst
 		case B_ATTR_USER_DEFINED:
 			return "userDef";
 
-		case QB_ATTR_hac:
-			return "hac";
-		case QB_ATTR_hc:
-			return "hc";
-		case QB_ATTR_htc:
-			return "htc";
-		case QB_ATTR_mw:
-			return "mw";
-		case QB_ATTR_ntc:
-			return "ntc";
-		case QB_ATTR_rbc:
-			return "rbc";
 		case QB_ATTR_src:
 			return "src";
-		case QB_ATTR_tac:
-			return "tac";
-		case QB_ATTR_tbo:
-			return "tbo";
 		case QB_ATTR_type:
 			return "type"; // specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
-
+		case QB_ATTR_rbc:
+			return "rbc";
+			
 		default:
 			return "";
 		}
