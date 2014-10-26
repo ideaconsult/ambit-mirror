@@ -32,7 +32,7 @@ public class SLNAtomExpression
 	{
 		switch (tok.type)
 		{
-		case SLNConst.QB_ATTR_hac:  // QB --> QA to be changed by Elena!!
+		case SLNConst.QA_ATTR_hac:  
 			if (tok.param == atom.getFormalNeighbourCount())
     			return(true);
     		else	
