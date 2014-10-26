@@ -37,8 +37,9 @@ public class SLNConst
 	public static final int QA_ATTR_ntc = 111; // number of nonterminal atoms "b"
 	public static final int QA_ATTR_tac = 113; // total number of atoms attached to the qualified atom "b"
 	public static final int QA_ATTR_tbo = 114; // total bond order of an atom "b"
-	public static final int QA_ATTR_src = 115; // the smallest ring count "b"
-	public static final int QA_ATTR_mw = 116; // The molecular weight attribute is used with group atoms (R, X, and Rx)to specify the cumulative atomic weights that atoms that match the group atom to match the query "b"
+	public static final int QA_ATTR_rbc = 115; // ring bond count "b"
+	public static final int QA_ATTR_src = 116; // the smallest ring count "b"
+	public static final int QA_ATTR_mw = 117; // The molecular weight attribute is used with group atoms (R, X, and Rx)to specify the cumulative atomic weights that atoms that match the group atom to match the query "b"
 	
 
 	public static String atomAttributeToSLNString(int attr)
@@ -87,6 +88,8 @@ public class SLNConst
 			return "tac";
 		case QA_ATTR_tbo:
 			return "tbo";
+		case QA_ATTR_rbc:
+			return "rbc";
 		case QA_ATTR_src:
 			return "src";
 		case QA_ATTR_mw:
