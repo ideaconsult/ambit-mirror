@@ -27,7 +27,6 @@ public class CompoundRouter extends MyRouter {
 
 	public CompoundRouter(Context context,
 			FeaturesRouter featuresRouter,
-			DataEntryRouter tupleRouter,
 			Router smartsRouter) {
 		super(context);
 		attachDefault();
@@ -49,7 +48,7 @@ public class CompoundRouter extends MyRouter {
 		Router conformersRouter = new MyRouter(getContext());
 		conformersRouter.attachDefault(ConformerResource.class);
 		conformersRouter.attach(String.format("/{%s}",ConformerResource.idconformer),
-						new ConformerRouter(getContext(),featuresRouter,templateRouter,tupleRouter));	
+						new ConformerRouter(getContext(),featuresRouter,templateRouter));	
 	
 		
 		/**
@@ -84,10 +83,6 @@ public class CompoundRouter extends MyRouter {
 		*  /compound/{id}/feature
 		*/
 		attach(PropertyResource.featuredef,featuresRouter);		
-		/**
-		* Data entries
-		*/
-		attach(DataEntryResource.resourceTag,tupleRouter);		
 		
 		/**
 		* SMARTS search, restricted to a compound (with highlighting)

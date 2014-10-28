@@ -109,7 +109,6 @@ import ambit2.rest.routers.MyRouter;
 import ambit2.rest.routers.misc.AdminRouter;
 import ambit2.rest.routers.misc.BookmarksRouter;
 import ambit2.rest.routers.misc.ChartRouter;
-import ambit2.rest.routers.misc.DataEntryRouter;
 import ambit2.rest.routers.misc.DepictDemoRouter;
 import ambit2.rest.routers.misc.UIRouter;
 import ambit2.rest.routers.opentox.AlgorithmRouter;
@@ -377,14 +376,14 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		/** filter */
 		router.attach(FilteredDatasetResource.resource,FilteredDatasetResource.class);
 		/** /dataEntry */ 
-		DataEntryRouter tupleRouter = new DataEntryRouter(getContext());
+		//DataEntryRouter tupleRouter = new DataEntryRouter(getContext());
 		/** Similarity search TODO: move it under /algorithm  */
 		Router similarityRouter = createSimilaritySearchRouter();
 		
 		/**  SMARTS search.  TODO: move it under /algorithm  */
 		Router smartsRouter = createSMARTSSearchRouter();
 		/**  /compound  */
-		CompoundsRouter compoundRouter = new CompoundsRouter(getContext(),featuresRouter,tupleRouter,smartsRouter);
+		CompoundsRouter compoundRouter = new CompoundsRouter(getContext(),featuresRouter,smartsRouter);
 		if (openToxAAEnabled) {
 			if (protectCompoundResource())
 				router.attach(CompoundResource.compound,createProtectedResource(compoundRouter,"compound"));
@@ -404,8 +403,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		router.attach(DatasetsResource.datasets, createProtectedResource(allDatasetsRouter,"datasets"));		
 
 		//can reuse CompoundRouter from above
-		CompoundInDatasetRouter cmpdRouter = new CompoundInDatasetRouter(getContext(), featuresRouter, tupleRouter, smartsRouter);
-		Router datasetRouter = new DatasetsRouter(getContext(),cmpdRouter, tupleRouter, smartsRouter, similarityRouter);
+		CompoundInDatasetRouter cmpdRouter = new CompoundInDatasetRouter(getContext(), featuresRouter,  smartsRouter);
+		Router datasetRouter = new DatasetsRouter(getContext(),cmpdRouter, null, smartsRouter, similarityRouter);
 		router.attach(DatasetResource.dataset,createProtectedResource(datasetRouter,"dataset"));
 
 		if (attachSubstanceRouter()) {
@@ -1234,9 +1233,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 String identifier = getProperty(identifierKey,configProperties);
 		 String pass = getProperty(identifierPass,configProperties);
 		 if ((identifier==null)||"".equals(identifier)||identifier.indexOf("${")>-1) 
-			 			throw new Exception(String.format("Property %s not set. The web applicaiton will be READ ONLY!",identifierKey));
+			 			throw new Exception(String.format("Property %s not set. The web application will be READ ONLY!",identifierKey));
 		 if ((pass==null)||"".equals(pass)||pass.indexOf("${")>-1) 
-	 			throw new Exception(String.format("Property %s not set. The web applicaiton will be READ ONLY!",identifierKey));
+	 			throw new Exception(String.format("Property %s not set. The web application will be READ ONLY!",identifierKey));
 		 ConcurrentMap<String, char[]> localSecrets = new ConcurrentHashMap<String, char[]>(); 
 		 localSecrets.put(identifier,pass.toCharArray());
 		 return localSecrets;

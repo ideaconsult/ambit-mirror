@@ -18,7 +18,7 @@ import ambit2.rest.structure.quality.QualityLabelResource;
 
 public class ConformerRouter extends MyRouter {
 
-	public ConformerRouter(Context context,FeaturesRouter featuresRouter,Router templateRouter,DataEntryRouter tupleRouter) {
+	public ConformerRouter(Context context,FeaturesRouter featuresRouter,Router templateRouter) {
 		super(context);
 		attachDefault(ConformerResource.class);
 		attach(String.format("%s",ConsensusLabelResource.resource),ConsensusLabelResource.class);
@@ -32,7 +32,6 @@ public class ConformerRouter extends MyRouter {
 		 */
 		attach(PropertyResource.featuredef,featuresRouter);
 		attach(PropertyTemplateResource.resource,templateRouter);
-		attach(DataEntryResource.resourceTag,tupleRouter);	
 
 	}
 }
