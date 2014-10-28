@@ -380,7 +380,7 @@ public class AlgorithmsPile {
 			{"smartsprop","Generate SMARTS accelerator data","smarts_accelerator",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#db_smartprop"},
 			{"inchi","Generate InChI","inchi",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#inchi"},
 			
-			{"mcss","Find maximum common substructures of a dataset","mcss",null,new String[] {AlgorithmType.SMSD.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#mcss"},
+			//{"mcss","Find maximum common substructures of a dataset","mcss",null,new String[] {AlgorithmType.SMSD.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#mcss"},
 			
 			{"superservice","Calls a remote service",null,null,new String[] {AlgorithmType.SuperService.toString()},null,null,"http://ambit.sourceforge.net/descriptors.owl#superservice"},
 			{"superbuilder","Builds a model with all dependencies",null,null,new String[] {AlgorithmType.SuperBuilder.toString()},null,null,"http://ambit.sourceforge.net/descriptors.owl#superbuilder"},
