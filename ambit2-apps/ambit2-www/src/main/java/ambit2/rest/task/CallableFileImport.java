@@ -261,7 +261,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		} finally {
 			try {if (connection!=null)connection.close();} catch (Exception x) {}
 			connection = null;			
-			try { if (file.exists()) file.delete(); } catch (Exception x) { logger.log(Level.WARNING,x.getMessage(),x);}
+			try { if (file!=null && file.exists()) file.delete(); } catch (Exception x) { logger.log(Level.WARNING,x.getMessage(),x);}
 		}
 	}
 
