@@ -34,7 +34,6 @@ import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.ExpertModelBuilder;
-import ambit2.rest.model.builder.SMSDModelBuilder;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.model.predictor.Structure2DProcessor;
 import ambit2.rest.property.PropertyURIReporter;
@@ -46,7 +45,6 @@ import ambit2.rest.task.CallableNumericalModelCreator;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.CallableSimpleModelCreator;
 import ambit2.rest.task.CallableStructureOptimizer;
-import ambit2.rest.task.CallableStructurePairsModelCreator;
 import ambit2.rest.task.OptimizerModelBuilder;
 import ambit2.rest.task.Structure2DModelBuilder;
 import ambit2.rest.task.TaskResult;
@@ -213,21 +211,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		
 		String token = getToken();
 		try {
-			if (algorithm.hasType(AlgorithmType.SMSD))  {
-				return new CallableStructurePairsModelCreator(
-						form,
-						getRequest().getRootRef(),
-						getContext(),
-						algorithm,
-						modelReporter,
-						algReporter,
-						new SMSDModelBuilder(
-								getRequest().getRootRef(),
-								modelReporter,
-								algReporter),
-						token
-						);
-			} else if (algorithm.hasType(AlgorithmType.Expert))  {
+			if (algorithm.hasType(AlgorithmType.Expert))  {
 				String userName = "guest";
 				try { userName = getRequest().getClientInfo().getUser().getIdentifier(); } catch (Exception x) { userName = "guest"; }
 				Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
