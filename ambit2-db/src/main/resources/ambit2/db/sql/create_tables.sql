@@ -309,15 +309,16 @@ CREATE TABLE  `properties` (
 -- Table `property_annotation` minimal ontology annotation for properties
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `property_annotation`;
-  CREATE TABLE  `property_annotation` (
+CREATE TABLE `property_annotation` (
   `idproperty` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'subject',
   `rdf_type` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Feature',
   `predicate` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT 'property',
-  `object` text CHARACTER SET utf8 NOT NULL COMMENT 'object',
-  PRIMARY KEY (`idproperty`,`rdf_type`,`predicate`,`object`(250)) USING BTREE,
-  KEY `Index_2` (`predicate`,`object`(250)) USING BTREE,
+  `object` varchar(180) CHARACTER SET utf8 NOT NULL COMMENT 'object',
+  PRIMARY KEY (`idproperty`,`rdf_type`,`predicate`,`object`) USING BTREE,
+  KEY `Index_2` (`predicate`,`object`) USING BTREE,
   CONSTRAINT `FK_property_annotation_1` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 -- -----------------------------------------------------
 -- Table `property_string` string values
@@ -1170,7 +1171,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (8,4,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (8,5,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
