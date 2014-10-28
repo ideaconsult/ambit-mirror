@@ -14,7 +14,7 @@ import ambit2.rest.structure.CompoundResource;
  */
 public class CompoundsRouter extends MyRouter {
 	
-	public CompoundsRouter(Context context,FeaturesRouter featuresRouter,DataEntryRouter tupleRouter,Router smartsRouter) {
+	public CompoundsRouter(Context context,FeaturesRouter featuresRouter,Router smartsRouter) {
 		super(context);
 		
 		/**
@@ -22,6 +22,6 @@ public class CompoundsRouter extends MyRouter {
 		 */
 		attachDefault(CompoundResource.class);
 		attach(String.format("/{%s}",CompoundResource.idcompound),
-					new CompoundRouter(getContext(),featuresRouter,tupleRouter,smartsRouter));
+					new CompoundRouter(getContext(),featuresRouter,smartsRouter));
 	}	
 }

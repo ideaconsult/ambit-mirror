@@ -11,9 +11,8 @@ public class CompoundInDatasetRouter extends CompoundRouter {
 	
 	public CompoundInDatasetRouter(Context context,
 			FeaturesRouter featuresRouter,
-			DataEntryRouter tupleRouter,
 			Router smartsRouter) {
-		super(context,  featuresRouter,  tupleRouter, smartsRouter);
+		super(context,  featuresRouter,   smartsRouter);
 	}
 	@Override
 	public void attachDefault() {
