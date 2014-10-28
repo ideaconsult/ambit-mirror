@@ -1,11 +1,9 @@
 package ambit2.rest.comparison;
 
 import java.awt.Color;
-import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -20,6 +18,9 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ArrayNode;
 import org.junit.Test;
 import org.opentox.dsl.OTAlgorithm;
 import org.opentox.dsl.OTDataset;
@@ -40,13 +41,19 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.vocabulary.DC;
 
 public class DatasetComparisonTest extends  ProtectedResourceTest  {
-	
+	ObjectMapper mapper = new ObjectMapper();
 	@Test
 	public void test() throws Exception {
+		/*
 		datasetsIntersectionHTML(
 				"https://ambit.uni-plovdiv.bg:8443/ambit2/dataset?max=100",
 				"https://ambit.uni-plovdiv.bg:8443/ambit2/dataset?max=100",
 				"https://ambit.uni-plovdiv.bg:8443/ambit2");
+				*/
+		datasetsIntersectionHTML(
+				"http://localhost:8080/ambit2/dataset?max=100",
+				"http://localhost:8080/ambit2/dataset?max=100",
+				"http://localhost:8080/ambit2");		
 	}
 	
 	@Test
@@ -456,7 +463,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 		 return (int) (Math.random()*100);
 	}	 
 	 public int read(String uri) throws Exception {
-		 
+		 	
 		 	StringBuffer b = new StringBuffer();
 			HttpURLConnection uc= null;
 			InputStream in= null;
@@ -469,17 +476,19 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 				if (HttpURLConnection.HTTP_OK == code) {
 					in = uc.getInputStream();		
 					
-					
-					BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-					String line = null;
-					while ((line = reader.readLine())!=null) {
-						line = line.trim();
-						if ("".equals(line)) continue;
-						b.append(line);
-					}		
+					try {
+						JsonNode node  = mapper.readTree(in);
+						return ((ArrayNode)node.get("facet")).get(0).get("count").getIntValue();
+						
+					} catch (Exception x) {
+						throw x;
+					} finally {
+						try {in.close();} catch (Exception x) {}	
+					}
+
 				}
-				System.out.println(b);
-				return Integer.parseInt(b.toString());
+				
+				return -1;
 			} catch (IOException x) {
 				if (code > 0) throw new ResourceException(new Status(code),x);
 				else throw x;
