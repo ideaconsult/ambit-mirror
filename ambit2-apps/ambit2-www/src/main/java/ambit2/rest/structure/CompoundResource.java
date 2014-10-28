@@ -101,15 +101,13 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	
 	public CompoundResource() {
 		super();
-		setDocumentation(new ResourceDoc("structure","Compound"));
-		setHtmlbyTemplate(DisplayMode.singleitem.equals(_dmode));
-	//	setHtmlbyTemplate(false);
+		setHtmlbyTemplate(true);
 	}
 	 
 	@Override
 	public String getTemplateName() {
 		// TODO Auto-generated method stub
-		return DisplayMode.singleitem.equals(_dmode)?"compound.ftl":super.getTemplateName();
+		return DisplayMode.singleitem.equals(_dmode)?"compound.ftl":"_compound.ftl";
 	}
 	@Override
 	protected void doInit() throws ResourceException {
