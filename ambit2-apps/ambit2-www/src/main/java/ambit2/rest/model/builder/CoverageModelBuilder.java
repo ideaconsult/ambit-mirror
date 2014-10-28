@@ -15,6 +15,8 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import weka.core.Instances;
+import weka.filters.Filter;
+import weka.filters.unsupervised.instance.RemoveWithValues;
 import Jama.Matrix;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
@@ -59,7 +61,17 @@ public class CoverageModelBuilder extends ModelBuilder<Instances,Algorithm,Model
 		Instances instances = trainingData;
 		if ((instances==null) || (instances.numInstances()==0) || (instances.numAttributes()==0)) 
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty dataset!");
-		
+		try {
+			RemoveWithValues removeMissingValues = new RemoveWithValues();
+			String[] options = new String[1];
+			options[0] = "-M";
+			removeMissingValues.setOptions(options);
+			removeMissingValues.setInputFormat(instances);
+			Instances newInstances = Filter.useFilter(instances, removeMissingValues);
+			instances = newInstances;
+		} catch (Exception x) {
+			//use unfiltered
+		}
 		//int numAttr = 0;
 		//for (int j=0; j < instances.numAttributes();j++)
 			//if (instances.attribute(j).isNumeric()) numAttr++;
