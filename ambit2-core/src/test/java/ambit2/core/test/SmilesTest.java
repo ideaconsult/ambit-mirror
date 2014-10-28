@@ -31,8 +31,6 @@ package ambit2.core.test;
 
 
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import junit.framework.Assert;
 
@@ -44,7 +42,6 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -322,6 +319,7 @@ public class SmilesTest {
 		}
 		
 	}
+	/*
 	@Test
 	public void testMCS() throws Exception {
 		 SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());
@@ -361,6 +359,7 @@ public class SmilesTest {
 	        System.out.println("mcs smiles: " + g.createSMILES(mcsmolecule));
 
 	}
+	*/
 	
 	
 	public void test() throws Exception {
