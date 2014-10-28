@@ -672,6 +672,9 @@ td.jtox-multi table {
   height: 100%;
   width: 100%;
 }
+/* jToxLog styling
+*/
+
 .jtox-log div.icon {
   display: inline-block;
   vertical-align: middle;
