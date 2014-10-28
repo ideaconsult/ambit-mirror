@@ -519,7 +519,7 @@ var qmap = {
 					"<a href='"+root+"/toxmatch?qmap_uri=" + qmapuri + "' title='" +qmapuri + "' target=_blank>QMap</a> : " +
 					"[" + map.name + "] " +
 					"Activity: <a href='" + map.activity.featureURI + "' title='" + map.activity.featureURI + "' target=_blank>"+ feature.title + " " + feature.units +"</a> " + 
-					"Dataset: <a href='" + map.dataset.URI + "' title='" + map.dataset.URI + "' target=_blank>"+map.dataset.URI +"</a> " 					
+					"Dataset: <a href='" + map.dataset.URI + "/metadata' title='" + map.dataset.URI + "' target=_blank>"+map.dataset.URI +"</a> " 					
 					
 					);
 			if ((map===undefined) || (map==null)) return;
