@@ -84,10 +84,18 @@
     	<version>1.5.6</version>
     	<scope>test</scope>
     </dependency>
+    <!-- consider replacing with 
+    <dependency>
+	<groupId>org.apache.commons</groupId>
+	<artifactId>commons-pool2</artifactId>
+	<version>2.2</version>
+</dependency>
+    
+     -->
     <dependency>
     	<groupId>commons-pool</groupId>
     	<artifactId>commons-pool</artifactId>
-    	<version>1.5.4</version>
+    	<version>1.6</version>
     </dependency>
     <dependency>
     	<groupId>jfree</groupId>
@@ -253,7 +261,7 @@
         <jdk>1.7</jdk>
       </activation>        
         <properties>
-          <dbcpVersion>1.4</dbcpVersion>
+          <dbcpVersion>1.6</dbcpVersion>
         </properties>
     </profile>
     
