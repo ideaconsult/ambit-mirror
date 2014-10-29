@@ -50,7 +50,6 @@ import org.restlet.routing.Template;
 import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.Enroler;
 import org.restlet.security.MapVerifier;
-import org.restlet.security.Role;
 import org.restlet.security.RoleAuthorizer;
 import org.restlet.service.TunnelService;
 import org.restlet.util.RouteList;
@@ -59,6 +58,7 @@ import org.restlet.util.Series;
 import ambit2.base.config.AMBITConfig;
 import ambit2.base.config.Preferences;
 import ambit2.rendering.StructureEditorProcessor;
+import ambit2.rest.aa.basic.UIBasicResource;
 import ambit2.rest.aa.opensso.BookmarksAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
 import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
@@ -155,6 +155,7 @@ import ambit2.user.groups.OrganisationRouter;
 import ambit2.user.groups.ProjectRouter;
 import ambit2.user.rest.UserRouter;
 import ambit2.user.rest.resource.AMBITRegistrationNotifyResource;
+import ambit2.user.rest.resource.DBRoles;
 import ambit2.user.rest.resource.MyAccountPwdResetResource;
 import ambit2.user.rest.resource.MyAccountResource;
 import ambit2.user.rest.resource.PwdForgottenConfirmResource;
@@ -173,7 +174,6 @@ import ambit2.user.rest.resource.Resources;
 
 public class AmbitApplication extends FreeMarkerApplication<String> {
 	public static final String BASE_URL = "BASE_URL";
-	public static final Role UPDATE_ALLOWED = new Role("AUTHOR","Update (PUT,POST,DELETE) allowed");
 	protected boolean insecure = true;
 	protected Logger logger = Logger.getLogger(AmbitApplication.class.getName());	 
 	protected Hashtable<String,Properties> properties = new Hashtable<String, Properties>();
@@ -355,7 +355,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 */
 		
 		Restlet adminRouter = createAdminRouter();
-		router.attach(String.format("/%s",AdminResource.resource),protectAdminResource()?createProtectedResource(adminRouter,"admin"):adminRouter);
+		if (openToxAAEnabled) {
+			router.attach(String.format("/%s",AdminResource.resource),protectAdminResource()?createProtectedResource(adminRouter,"admin"):adminRouter);
+		} else
+			router.attach(String.format("/%s",AdminResource.resource),adminRouter);
 
 		/** /policy - used for testing only  */
 		router.attach(String.format("/%s",PolicyResource.resource),PolicyResource.class);		
@@ -400,12 +403,20 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		Router allDatasetsRouter = new MyRouter(getContext());
 		allDatasetsRouter.attachDefault(DatasetsResource.class);
 		
-		router.attach(DatasetsResource.datasets, createProtectedResource(allDatasetsRouter,"datasets"));		
+		if (openToxAAEnabled) 
+			router.attach(DatasetsResource.datasets, createProtectedResource(allDatasetsRouter,"datasets"));
+		else	
+			router.attach(DatasetsResource.datasets, allDatasetsRouter);		
+		
 
 		//can reuse CompoundRouter from above
 		CompoundInDatasetRouter cmpdRouter = new CompoundInDatasetRouter(getContext(), featuresRouter,  smartsRouter);
 		Router datasetRouter = new DatasetsRouter(getContext(),cmpdRouter, null, smartsRouter, similarityRouter);
-		router.attach(DatasetResource.dataset,createProtectedResource(datasetRouter,"dataset"));
+		
+		if (openToxAAEnabled) 
+			router.attach(DatasetResource.dataset,createProtectedResource(datasetRouter,"dataset"));
+		else
+			router.attach(DatasetResource.dataset,datasetRouter);
 
 		if (attachSubstanceRouter()) {
 			/**
@@ -476,16 +487,30 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		//collections
 		MyRouter collectionRouter = new MyRouter(getContext());
 		collectionRouter.attach(String.format("/{%s}/{%s}",CollectionStructureResource.folderKey,CollectionStructureResource.datasetKey),CollectionStructureResource.class);
-		router.attach(CollectionStructureResource.collection,createProtectedResource(collectionRouter,"collection"));
+		if (openToxAAEnabled) {
+			router.attach(CollectionStructureResource.collection,createProtectedResource(collectionRouter,"collection"));			
+		} else
+			router.attach(CollectionStructureResource.collection,collectionRouter);
 
-		/**  /algorithm  */
-		router.attach(AllAlgorithmsResource.algorithm,createAuthenticatedOpenResource(new AlgorithmRouter(getContext())));
-		/**  /model  */
-		router.attach(ModelResource.resource,createAuthenticatedOpenResource(new ModelRouter(getContext())));
-		/**  /task  */
-		router.attach(TaskResource.resource, new TaskRouter(getContext()));
-		
-		router.attach("/ui",createAuthenticatedOpenResource(new UIRouter(getContext())));
+
+		if (openToxAAEnabled) {
+			/**  /algorithm  */
+			router.attach(AllAlgorithmsResource.algorithm,createAuthenticatedOpenResource(new AlgorithmRouter(getContext())));
+			/**  /model  */
+			router.attach(ModelResource.resource,createAuthenticatedOpenResource(new ModelRouter(getContext())));
+			/**  /task  */
+			router.attach(TaskResource.resource, new TaskRouter(getContext()));
+			router.attach("/ui",createAuthenticatedOpenResource(new UIRouter(getContext())));
+		} else {
+			/**  /algorithm  */
+			router.attach(AllAlgorithmsResource.algorithm,new AlgorithmRouter(getContext()));
+			/**  /model  */
+			router.attach(ModelResource.resource,new ModelRouter(getContext()));
+			/**  /task  */
+			router.attach(TaskResource.resource, new TaskRouter(getContext()));
+			router.attach("/ui",new UIRouter(getContext()));
+
+		}
 		
 		/**
 		 * Queries
@@ -647,6 +672,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				 router.attach("/", UIResource.class);
 				 router.attach("", UIResource.class);
 				 
+				 router.attach(ambit2.user.rest.resource.Resources.login, UIBasicResource.class);
+				 router.attach(ambit2.user.rest.resource.Resources.myaccount, UIBasicResource.class);
+				 router.attach("/provider/signout",UIBasicResource.class );
+				 
 				 logger.log(Level.INFO,String.format("Property %s set, local AA enabled.", LOCAL_AA_ENABLED));
 	    		 
 	    		 return addOriginFilter(getBasicAuthFilter(router));
@@ -708,13 +737,17 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 basicAuth.setEnroler(new Enroler() {
 			@Override
 			public void enrole(ClientInfo clientInfo) {
-				if (clientInfo.isAuthenticated()) 
-					clientInfo.getRoles().add(UPDATE_ALLOWED);
+				if (clientInfo.getUser()!=null && clientInfo.isAuthenticated()) { 
+					//clientInfo.getRoles().add(UPDATE_ALLOWED);
+					clientInfo.getRoles().add(DBRoles.adminRole);
+					clientInfo.getRoles().add(DBRoles.datasetManager);
+				}	
 			}
 		});
 
 		 UpdateAuthorizer authorizer = new UpdateAuthorizer();
-		 authorizer.getAuthorizedRoles().add(UPDATE_ALLOWED);
+		 authorizer.getAuthorizedRoles().add(DBRoles.adminRole);
+		 authorizer.getAuthorizedRoles().add(DBRoles.datasetManager);
 		 authorizer.setNext(router);
 		 basicAuth.setNext(authorizer);
 		 return basicAuth;
