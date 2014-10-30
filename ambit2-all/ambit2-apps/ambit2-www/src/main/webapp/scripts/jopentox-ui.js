@@ -1232,7 +1232,8 @@ function defineFeatureTable(root,url) {
 					  "sWidth" : "20%",
 					  "bSortable" : true,
 					  "fnRender" : function(o,val) {
-						  return "<a href='"+val+"' title='"+val+"' target='origin'>"+o.aData.feature.source.type+"</a>";
+						  var uri = (val.indexOf("dataset")>0)?(val+"/metadata"):val;
+						  return "<a href='"+uri+"' title='"+val+"' target='origin'>"+o.aData.feature.source.type+"</a>";
 					  }
 				},
 				{ "mDataProp": "feature.isNumeric" , "asSorting": [ "asc", "desc" ],
