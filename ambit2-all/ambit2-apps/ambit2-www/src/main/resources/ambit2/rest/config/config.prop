@@ -1,8 +1,9 @@
+############################################################
 #OpenTox Authentication and Authorization configuration for AMBIT ${project.version} web services
 #For AMBIT ${project.version} web services configuration please see ambit2.pref 
 #For fine tuning logging please see logging.prop file
 #If true, Ambit REST services are protected by OpenTox AA 
-#If false, Ambit REST services are not protected by OpenSSO, besides the /bookmark service
+#If false, Ambit REST services are not protected by OpenSSO,for alternative AA see below
 aa.enabled=${aa.enabled}
 #OpenTox OpenSSO server
 aa.opensso=${aa.opensso}
@@ -11,16 +12,27 @@ aa.policy=${aa.policy}
 #Test AA user, used for running tests only
 aa.user=${aa.user}
 aa.pass=${aa.pass}
+############################################################
 #Used to enable simple local HTTP Basic authz, in case OpenSSO AA is disabled
+#All resources are publicly readable, but user name and password are required for
+#importing data or running calculations (HTTP POST, PUT , DELETE are protected  
+#via HTTP BASIC scheme). The user and password are defined in the
+#aa.local.admin.name and aa.local.admin.pass properties.
+#
 aa.local.enabled=${aa.local.enabled}
 aa.local.admin.name=${aa.local.admin.name}
 aa.local.admin.pass=${aa.local.admin.pass}
+############################################################
 guard.enabled=${guard.enabled}
 guard.list=${guard.list}
 warmup.enabled=${warmup.enabled}
+############################################################
+#Cross-origin resource sharing (CORS) settings 
 allowed.origins=${allowed.origins}
 ############################################################
-#AMBIT local users database
+# AMBIT local users database
+# IMPORTANT: ambit_users database should exist at ambit.db.host
+#
 aa.db.enabled=${aa.db.enabled}
 #MySQL Database configuration
 Host=${ambit.db.host}
@@ -36,6 +48,9 @@ secret=${ambit.secret}
 sessiontimeout=${ambit.sessiontimeout}
 ############################################################
 #e-mail setup. Used for registration notifications
+#The eMail server is used to send confirmation emails to newly registered 
+#users,as well as confirmations for password resets.
+#Please define a valid SMTP server, the values below are just examples.
 mail.smtp.starttls.enable=${notification.mail.smtp.starttls.enable}
 mail.smtp.auth=${notification.mail.smtp.auth}
 mail.transport.protocol=${notification.mail.transport.protocol}
@@ -45,4 +60,8 @@ mail.host=${notification.mail.host}
 mail.user=${notification.mail.user}
 mail.password=${notification.mail.password}
 notification.admin.email=${notification.admin.email}
+############################################################
+#With email verification disabled everybody could register a new user; however
+#the user status have to be changed to 'confirmed' by an admin through the 
+#user management page. 
 enableEmailVerification=${enableEmailVerification}
