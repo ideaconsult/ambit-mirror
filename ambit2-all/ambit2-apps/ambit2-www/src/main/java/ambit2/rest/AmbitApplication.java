@@ -59,6 +59,7 @@ import ambit2.base.config.AMBITConfig;
 import ambit2.base.config.Preferences;
 import ambit2.rendering.StructureEditorProcessor;
 import ambit2.rest.aa.basic.UIBasicResource;
+import ambit2.rest.aa.basic.UINoAAResource;
 import ambit2.rest.aa.opensso.BookmarksAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
 import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
@@ -679,16 +680,21 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				 logger.log(Level.INFO,String.format("Property %s set, local AA enabled.", LOCAL_AA_ENABLED));
 	    		 
 	    		 return addOriginFilter(getBasicAuthFilter(router));
-	    	 }
-	    	 else {
+	    	 }  else {
+	    		 router.attach("/", UIResource.class);
+				 router.attach("", UIResource.class);
+				 
+				 router.attach(ambit2.user.rest.resource.Resources.login, UINoAAResource.class);
+				 router.attach(ambit2.user.rest.resource.Resources.myaccount, UINoAAResource.class);
+				 router.attach("/provider/signout",UINoAAResource.class );
+				 
 	    		 getLogger().warning("Warning: No AA protection! All resources are open for GET, POST, PUT and DELETE!");
 	    	 }
 	     
-	     
-		} else {} 		//OK, AA is already there
-	     
-	     // attach login
-	     
+		} else {
+			
+		     // attach login
+		     
 	 		Restlet login = createOpenSSOLoginRouter();
 			router.attach("/", login);
 			router.attach("", login);
@@ -700,6 +706,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			router.attach("/login",login );
 			router.attach("/myaccount",login );
 			router.attach("/provider/signout",login );
+			
+		} 		//OK, AA is already there
+	     
+
 			
 		 
 		 return addOriginFilter(router);

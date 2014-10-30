@@ -11,11 +11,11 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.rest.ui.UIResource;
 
-public class UIBasicResource extends UIResource {
+public class UINoAAResource extends UIResource {
 
 	@Override
 	public String getTemplateName() {
-		return "a/basic.ftl";
+		return "a/noaa.ftl";
 	}
 	@Override
 	public boolean isHtmlbyTemplate() {
@@ -27,27 +27,6 @@ public class UIBasicResource extends UIResource {
 	}
 	@Override
 	protected Representation delete() throws ResourceException {
-		return super.get();
-	}
-
-	@Override
-	protected Representation post(Representation entity)
-			throws ResourceException {
-		return super.get();
-	}
-	@Override
-	protected Representation post(Representation entity, Variant variant)
-			throws ResourceException {
-		return super.get();
-	}
-	@Override
-	protected Representation put(Representation representation)
-			throws ResourceException {
-		return super.get();
-	}
-	@Override
-	protected Representation put(Representation representation, Variant variant)
-			throws ResourceException {
 		return super.get();
 	}
 	@Override
