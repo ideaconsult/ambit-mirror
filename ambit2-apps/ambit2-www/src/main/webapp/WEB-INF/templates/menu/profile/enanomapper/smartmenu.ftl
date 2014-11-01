@@ -1,8 +1,8 @@
 <ul id='smartmenu' class="sm sm-mint">
 <li>
-	<a href="${ambit_root}/ui/_search?search=[Au]" title="Chemical structure search">Search</a>
+	<a href="${ambit_root}/ui/_search" title="Chemical structure search">Search</a>
 	<ul>
-		<li><a href="${ambit_root}/ui/_search?search=[Au]" title="Chemical structure search">Search structures and associated ENM and data</a></li>
+		<li><a href="${ambit_root}/ui/_search" title="Chemical structure search">Search structures and associated ENM and data</a></li>
 		<li ><a href="${ambit_root}/substance?page=0&pagesize=20" title="search for ENM with identifiers">Search nanomaterials</a></li>
 		<li><a href="${ambit_root}/query/study" title="Search substances by experimental data">Search nanomaterials by endpoint data</a></li>
 	</ul>
