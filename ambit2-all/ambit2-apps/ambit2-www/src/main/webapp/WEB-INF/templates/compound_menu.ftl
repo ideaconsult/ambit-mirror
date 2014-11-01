@@ -1,13 +1,19 @@
 
 <ul>
 
+
 <li class="ui-selectee">
-	<a href="${ambit_root}/ui/query?option=similarity&amp;type=url&amp;pagesize=10&amp;threshold=0.75&amp;search=${ambit_request?url('UTF-8')}">
+	<a href="${ambit_root}/ui/_search?option=url&amp;type=url&amp;search=${ambit_request?url('UTF-8')}">
+	<span class="ui-icon ui-icon-search" style="float: left; margin-right: .3em;"></span>Find substances</a>
+</li> 
+
+<li class="ui-selectee">
+	<a href="${ambit_root}/ui/_search?option=similarity&amp;type=url&amp;pagesize=10&amp;threshold=0.75&amp;search=${ambit_request?url('UTF-8')}">
 	<span class="ui-icon ui-icon-heart" style="float: left; margin-right: .3em;"></span>Find similar</a>
 </li> 
 
 <li class="ui-selectee">
-	<a href="${ambit_root}/ui/query?option=smarts&amp;type=url&amp;pagesize=10&amp;threshold=0.75&amp;search=${ambit_request?url('UTF-8')}">
+	<a href="${ambit_root}/ui/_search?option=smarts&amp;type=url&amp;pagesize=10&amp;threshold=0.75&amp;search=${ambit_request?url('UTF-8')}">
 	<span class="ui-icon ui-icon-search" style="float: left; margin-right: .3em;"></span>Find substructure</a>
 </li> 
 
