@@ -31,7 +31,7 @@
   	<ambit.version>2.7.1-SNAPSHOT</ambit.version>
     <junit.version>4.8.1</junit.version>
     <!-- https://github.com/ideaconsult/i5 -->
-    <i5.version>1.0.0</i5.version>
+    <i5.version>1.0.1-SNAPSHOT</i5.version>
     <restnet.version>1.0.6-SNAPSHOT</restnet.version>
     <dbunit.version>2.4.9</dbunit.version>
     
