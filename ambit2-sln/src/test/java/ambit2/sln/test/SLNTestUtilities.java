@@ -37,12 +37,12 @@ public class SLNTestUtilities
 		//slnHelper.FlagPreserveOriginalAtomID = false;
 		//tu.testSLN2SLN("C[2]CCCC(C)@2CC");
 		//tu.testSLN2SLN("C[21]CC[3]CC@21@3");
-		tu.testSLN2SLN("CH2=CHCH2C[1]:CH:C[2]OCH2OC(@2):C(OCH3):CH:(@1)");
-		tu.testSLN2SLN("CC[s=R]H(O)CC[s=S]H(O)N");
+		//tu.testSLN2SLN("CH2=CHCH2C[1]:CH:C[2]OCH2OC(@2):C(OCH3):CH:(@1)");
+		//tu.testSLN2SLN("CC[s=R]H(O)CC[s=S]H(O)N");
 		
-		//tu.testSLNIsomorphism("C[hac=3]","CCC(C)CC");
-		tu.testSLN("C[hac=3]");
-		tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
+		tu.testSLNIsomorphism("C[!hac=2]","C1CCCC1");
+		//tu.testSLN("C[hac=3]");
+		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
 	}
 	
 	public void testSLN(String sln)

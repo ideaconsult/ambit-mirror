@@ -16,7 +16,7 @@ public class SLNAtomExpression
 	public ArrayList<SLNExpressionToken> tokens = new ArrayList<SLNExpressionToken>(); 
 
 	public boolean matches(IAtom atom) 
-	{
+	{	
 		SLNLogicalExpression sle = new SLNLogicalExpression();
 		for (int i = 0; i< tokens.size(); i++)
 		{
