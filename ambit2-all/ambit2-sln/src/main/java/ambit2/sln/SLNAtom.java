@@ -2,13 +2,14 @@ package ambit2.sln;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 
 /**
  * Abstract sln atom.
  * 
  */
 
-public class SLNAtom extends org.openscience.cdk.PseudoAtom implements IQueryAtom
+public class SLNAtom extends SMARTSAtom 
 {
 	static final long serialVersionUID = 5327582562834894L;
 	
@@ -34,7 +35,7 @@ public class SLNAtom extends org.openscience.cdk.PseudoAtom implements IQueryAto
 		else		
 			if (atomType < SLNConst.GlobDictOffseet) //atomic symbol
 			{
-				return SLNConst.elSymbols[atomType].equals(atom.getSymbol());
+				FlagMatchAtomType = SLNConst.elSymbols[atomType].equals(atom.getSymbol());
 			}
 			else
 				if (atomType < SLNConst.LocalDictOffseet) //It is a global dictionary definition
