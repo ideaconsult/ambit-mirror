@@ -135,7 +135,7 @@ public class Protocol {
 		PC_PARTITION_SECTION {
 			@Override
 			public String toString() {
-				return "Partition coeffcicient";
+				return "Partition coefficient";
 			}
 			@Override
 			public String getNumber() {
