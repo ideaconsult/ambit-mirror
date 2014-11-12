@@ -37,7 +37,11 @@
         {
             "path": "/substanceowner",
             "description": "Substance owners"
-        },        
+        },  
+        {
+            "path": "/bundle",
+            "description": "Datasets of substances"
+        },              
         {
             "path": "/property",
             "description": "Chemical substances Properties service"
