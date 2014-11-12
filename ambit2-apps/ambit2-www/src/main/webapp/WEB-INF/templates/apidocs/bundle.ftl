@@ -26,6 +26,7 @@
 			            "type": "Bundle",
 			            "nickname": "getBundleByID",
 			            <#include "/apidocs/authz.ftl" >
+			        ,
 			            "parameters": [
 							{
 							    "name": "id",
