@@ -70,4 +70,4 @@ CREATE TABLE `bundle_substance` (
   CONSTRAINT `a_substance` FOREIGN KEY (`idsubstance`) REFERENCES `substance` (`idsubstance`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-insert into version (idmajor,idminor,comment) values (8,5,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (8,6,"AMBIT2 schema");
