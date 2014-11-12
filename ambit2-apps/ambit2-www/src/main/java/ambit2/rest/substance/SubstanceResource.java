@@ -33,6 +33,7 @@ import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.processors.CallableSubstanceI5Query;
 import ambit2.db.readers.IQueryRetrieval;
@@ -46,6 +47,7 @@ import ambit2.db.substance.ReadSubstanceByName;
 import ambit2.db.substance.ReadSubstanceByOwner;
 import ambit2.db.substance.ReadSubstanceByStudy;
 import ambit2.db.update.AbstractUpdate;
+import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
@@ -137,6 +139,16 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 
 	@Override
 	protected Q createQuery(Context context, Request request, Response response) throws ResourceException {
+		Object idbundle = request.getAttributes().get(OpenTox.URI.bundle.getKey());
+		if (idbundle != null)  try {
+			Integer idnum = new Integer(Reference.decode(idbundle.toString()));
+			ReadSubstancesByBundle q = new ReadSubstancesByBundle();
+			SubstanceEndpointsBundle b = new SubstanceEndpointsBundle();
+			b.setID(idnum);
+			q.setFieldname(b);
+			return (Q)q;
+		} catch (NumberFormatException x) {
+		}
 		Object key = request.getAttributes().get(idsubstance);
 		if (key==null) {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
