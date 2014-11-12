@@ -14,10 +14,12 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.ISourceDataset;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
+import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
@@ -29,10 +31,12 @@ import ambit2.rest.dataset.MetadataRDFReporter;
 import ambit2.rest.dataset.MetadatasetJSONReporter;
 import ambit2.rest.query.QueryResource;
 
-public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<ISourceDataset>, ISourceDataset> {
+import com.hp.hpl.jena.ontology.OntModel;
+
+public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<SourceDataset>, SourceDataset> {
 
 	@Override
-	public IProcessor<IQueryRetrieval<ISourceDataset>, Representation> createConvertor(
+	public IProcessor<IQueryRetrieval<SourceDataset>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
 
 		/*
@@ -45,7 +49,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 		return new OutputWriterConvertor(
 				new DatasetsHTMLReporter(getRequest(),DisplayMode.table,getDocumentation(),headless),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),getDocumentation()) {
+		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset>(getRequest(),getDocumentation()) {
 			@Override
 			public Object processItem(ISourceDataset dataset) throws AmbitException  {
 				super.processItem(dataset);
@@ -56,7 +60,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 			}
 		},MediaType.TEXT_URI_LIST,filenamePrefix);
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-		return new OutputWriterConvertor(new MetadatasetJSONReporter<IQueryRetrieval<ISourceDataset>>(getRequest()),MediaType.APPLICATION_JSON);			
+		return new OutputWriterConvertor(new MetadatasetJSONReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset>(getRequest()),MediaType.APPLICATION_JSON);			
 		
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
@@ -65,10 +69,12 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)
 			) {
-		return new RDFJenaConvertor<ISourceDataset, IQueryRetrieval<ISourceDataset>>(
-				new MetadataRDFReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),
-						getDocumentation(),
-						variant.getMediaType()),variant.getMediaType(),filenamePrefix);			
+		QueryReporter<SourceDataset,IQueryRetrieval<SourceDataset>,OntModel> reporter = new MetadataRDFReporter<SourceDataset,IQueryRetrieval<SourceDataset>>(getRequest(),getDocumentation(),	variant.getMediaType());
+		return 
+		new RDFJenaConvertor<SourceDataset, IQueryRetrieval<SourceDataset>>(
+				reporter
+				,variant.getMediaType(),filenamePrefix);
+		
 
 		
 	} else //html 	
@@ -76,7 +82,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 				new DatasetsHTMLReporter(getRequest(),DisplayMode.table,getDocumentation(),headless),MediaType.TEXT_HTML);
 	}
 	@Override
-	protected IQueryRetrieval<ISourceDataset> createQuery(Context context, Request request,
+	protected IQueryRetrieval<SourceDataset> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		try { 
 			Form form = request.getResourceRef().getQueryAsForm();

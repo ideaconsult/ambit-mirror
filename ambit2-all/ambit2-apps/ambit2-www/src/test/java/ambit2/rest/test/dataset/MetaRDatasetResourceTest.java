@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.ISourceDataset;
+import ambit2.base.data.SourceDataset;
 import ambit2.rest.rdf.RDFMetaDatasetIterator;
 import ambit2.rest.test.ResourceTest;
 
@@ -24,7 +25,12 @@ public class MetaRDatasetResourceTest extends ResourceTest {
 						port
 						));
 						
-		RDFMetaDatasetIterator iterator = new RDFMetaDatasetIterator(ref);
+		RDFMetaDatasetIterator<ISourceDataset> iterator = new RDFMetaDatasetIterator<ISourceDataset>(ref) {
+			@Override
+			protected ISourceDataset createRecord() {
+				return new SourceDataset();
+			};
+		};
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
 		int count = 0;
 		while (iterator.hasNext()) {

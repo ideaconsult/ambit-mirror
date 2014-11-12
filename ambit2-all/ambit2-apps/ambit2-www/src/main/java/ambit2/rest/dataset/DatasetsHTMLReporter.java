@@ -54,7 +54,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
-		return new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(request,doc);
+		return new DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset>(request,doc);
 	}
 	@Override
 	public void header(Writer w, IQueryRetrieval<ISourceDataset> query) {

@@ -105,21 +105,21 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 	protected Connection connection;
 	protected CallableFileUpload upload;
 
-	protected DatasetURIReporter<IQueryRetrieval<ISourceDataset>> reporter;
+	protected DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset> reporter;
 	protected ConformerURIReporter compoundReporter;
 
-	public DatasetURIReporter<IQueryRetrieval<ISourceDataset>> getReporter() {
+	public DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset> getReporter() {
 		return reporter;
 	}
 
 	public void setReporter(
-			DatasetURIReporter<IQueryRetrieval<ISourceDataset>> reporter) {
+			DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset> reporter) {
 		this.reporter = reporter;
 	}
 
 	public CallableFileImport(ClientInfo client, SourceDataset dataset,
 			File file, Connection connection,
-			DatasetURIReporter<IQueryRetrieval<ISourceDataset>> reporter,
+			DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset> reporter,
 			ConformerURIReporter compoundReporter,
 			boolean firstCompoundOnly,
 			USERID token) {
@@ -137,7 +137,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 	public CallableFileImport(ClientInfo client, SourceDataset dataset,
 			List<FileItem> items, String fileUploadField,
 			Connection connection,
-			DatasetURIReporter<IQueryRetrieval<ISourceDataset>> reporter,
+			DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset> reporter,
 			ConformerURIReporter compoundReporter,
 			boolean firstCompoundOnly,
 			USERID token) {
@@ -214,7 +214,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 
 	public CallableFileImport(ClientInfo client, SourceDataset dataset,
 			Representation input, Connection connection,
-			DatasetURIReporter<IQueryRetrieval<ISourceDataset>> reporter,
+			DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset> reporter,
 			ConformerURIReporter compoundReporter,
 			boolean firstCompoundOnly,
 			USERID token) {
@@ -414,7 +414,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 				x.setConnection(connection);
 				ResultSet rs = x.process(q);
 	
-				SourceDataset newDataset = null;
+				ISourceDataset newDataset = null;
 				while (rs.next()) {
 					newDataset = q.getObject(rs);
 					break;
@@ -424,7 +424,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 				if (newDataset == null)
 					throw new ResourceException(Status.SUCCESS_NO_CONTENT);
 				if (reporter == null)
-					reporter = new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>();
+					reporter = new DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset>();
 				try { batch.close();	} catch (Exception xx) {}
 				return new TaskResult(reporter.getURI(newDataset));
 			}

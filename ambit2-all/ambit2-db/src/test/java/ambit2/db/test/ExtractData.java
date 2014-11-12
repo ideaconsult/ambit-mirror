@@ -28,8 +28,6 @@ public class ExtractData {
         partialDataSet.addTable("substance_experiment", "SELECT * FROM substance_experiment");
         
         partialDataSet.addTable("substance_protocolapplication", "SELECT * FROM substance_protocolapplication");
-        partialDataSet.addTable("roles", "SELECT * FROM roles");
-        partialDataSet.addTable("user_roles", "SELECT * FROM user_roles WHERE user_name=\"guest\"");
         
         partialDataSet.addTable("catalog_references", "SELECT * FROM catalog_references");
 
@@ -43,7 +41,9 @@ public class ExtractData {
         partialDataSet.addTable("template","select * from template");
         partialDataSet.addTable("template_def","select idtemplate,idproperty from template_def");       
         
-        partialDataSet.addTable("dictionary", "SELECT * FROM dictionary");        
+        partialDataSet.addTable("dictionary", "SELECT * FROM dictionary");
+        
+        partialDataSet.addTable("bundle", "SELECT * FROM bundle");     
             
         partialDataSet.addTable("src_dataset", "SELECT id_srcdataset,name,user_name,idreference FROM src_dataset");
         partialDataSet.addTable("tuples",String.format("select * from tuples where idtuple in (select idtuple from property_tuples join property_values using(id) join structure using(idstructure) where structure.idchemical in %s)",ids)); 

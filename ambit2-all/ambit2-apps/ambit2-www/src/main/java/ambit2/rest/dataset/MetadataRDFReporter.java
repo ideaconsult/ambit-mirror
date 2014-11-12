@@ -30,7 +30,7 @@ import com.hp.hpl.jena.vocabulary.RDFS;
  *
  * @param <Q>
  */
-public class MetadataRDFReporter<Q extends IQueryRetrieval<ISourceDataset>> extends QueryRDFReporter<ISourceDataset,Q> {
+public class MetadataRDFReporter<M extends ISourceDataset,Q extends IQueryRetrieval<M>> extends QueryRDFReporter<M,Q> {
 
 	/**
 	 * 
@@ -43,21 +43,20 @@ public class MetadataRDFReporter<Q extends IQueryRetrieval<ISourceDataset>> exte
 	}
 	
 	@Override
-	protected QueryURIReporter<ISourceDataset, IQueryRetrieval<ISourceDataset>> createURIReporter(
+	protected QueryURIReporter<M, IQueryRetrieval<M>> createURIReporter(
 			Request req,ResourceDoc doc) {
-		return new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(req,doc);
+		return new DatasetURIReporter<IQueryRetrieval<M>,M>(req,doc);
 	}
 	public void header(com.hp.hpl.jena.ontology.OntModel output, Q query) {
 		OT.OTClass.Dataset.createOntClass(output);
 	};
 	@Override
-	public Object processItem(ISourceDataset item) throws AmbitException {
-		return addToModel(output, item, uriReporter);
+	public Object processItem(M item) throws AmbitException {
+		return addToModel(output,(ISourceDataset) item,  uriReporter.getURI(item));
 	}
 	
-	public static Individual addToModel(OntModel output,ISourceDataset item, 
-			QueryURIReporter<ISourceDataset, IQueryRetrieval<ISourceDataset>> uriReporter) throws AmbitException {
-		Individual dataset = output.createIndividual(uriReporter.getURI(item),
+	public static Individual addToModel(OntModel output,ISourceDataset item,String uri) throws AmbitException {
+		Individual dataset = output.createIndividual(uri,
 				OT.OTClass.Dataset.getOntClass(output));
 		
 		if (item.getName()!=null) dataset.addProperty(DC.title,item.getName());

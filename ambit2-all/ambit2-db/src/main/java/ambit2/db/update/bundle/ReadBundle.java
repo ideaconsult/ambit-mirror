@@ -1,26 +1,34 @@
-package ambit2.db.update.dataset;
+package ambit2.db.update.bundle;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.db.update.dataset.AbstractReadDataset;
 
 /**
  * Retrieve {@link SourceDataset} by id
  * @author nina
  *
  */
-public class ReadDataset extends AbstractReadDataset<String,SourceDataset>{
+public class ReadBundle extends AbstractReadDataset<String,SubstanceEndpointsBundle>{
 
-	public static final String select_datasets = "SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder,stars FROM src_dataset join catalog_references using(idreference) %s order by stars desc\n";
+	public static final String select_datasets = "SELECT idbundle as id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder,stars FROM bundle join catalog_references using(idreference) %s order by stars desc\n";
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5560670663328542819L;
 
-
+	@Override
+	protected SubstanceEndpointsBundle createObject(String title,LiteratureEntry le,String username) {
+		SubstanceEndpointsBundle d = new SubstanceEndpointsBundle(title,le);
+		d.setUsername(username);
+		return d;
+	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		if (getValue()==null) return null;	
 		List<QueryParam> params = new ArrayList<QueryParam>();
@@ -35,15 +43,15 @@ public class ReadDataset extends AbstractReadDataset<String,SourceDataset>{
 		return String.format(select_datasets,
 				getValue()==null?
 					"":
-					getValue().getId()>0?"where id_srcdataset=?":"where name=?");
+					getValue().getID()>0?"where idbundle=?":"where name=?");
 	}
 
 
 	@Override
 	public String toString() {
 		return (getValue()!=null?getValue().getID()>0
-				?String.format("/dataset/%d",getValue().getID())
-				:String.format("/dataset/%s",getValue().getName())
+				?String.format("/bundle/%d",getValue().getID())
+				:String.format("/bundle/%s",getValue().getName())
 				:"Datasets");
 	}
 

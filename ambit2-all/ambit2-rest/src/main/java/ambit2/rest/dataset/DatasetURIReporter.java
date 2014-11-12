@@ -9,13 +9,14 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 
 
-public class DatasetURIReporter<Q extends IQueryRetrieval<ISourceDataset>> extends QueryURIReporter<ISourceDataset, Q> {
+public class DatasetURIReporter<Q extends IQueryRetrieval<M>,M extends ISourceDataset> extends QueryURIReporter<M, Q> {
 	/**
 	 * 
 	 */
@@ -30,7 +31,7 @@ public class DatasetURIReporter<Q extends IQueryRetrieval<ISourceDataset>> exten
 	public DatasetURIReporter() {
 	}	
 	@Override
-	public String getURI(String ref, ISourceDataset dataset) {
+	public String getURI(String ref, M dataset) {
 		if (dataset == null) return null;
 		String id;
 		if (dataset instanceof SourceDataset) {
@@ -42,6 +43,11 @@ public class DatasetURIReporter<Q extends IQueryRetrieval<ISourceDataset>> exten
 				return String.format("%s/%s/%d", 
 						ref,
 						OpenTox.URI.dataset.name(),dataset==null?"":dataset.getID());
+		} else if (dataset instanceof SubstanceEndpointsBundle) {
+			return String.format("%s/%s/%d", 
+					ref,
+					OpenTox.URI.bundle.name(),dataset==null?"":dataset.getID());
+			
 		} else 
 			return String.format("%s/%s/R%d", 
 					ref,

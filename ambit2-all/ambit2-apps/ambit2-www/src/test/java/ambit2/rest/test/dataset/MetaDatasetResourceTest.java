@@ -39,7 +39,12 @@ public class MetaDatasetResourceTest extends ResourceTest {
 						port
 						));
 						
-		RDFMetaDatasetIterator iterator = new RDFMetaDatasetIterator(ref);
+		RDFMetaDatasetIterator<ISourceDataset> iterator = new RDFMetaDatasetIterator<ISourceDataset>(ref) {
+			@Override
+			protected ISourceDataset createRecord() {
+				return new SourceDataset();
+			};
+		};
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
 		int count = 0;
 		while (iterator.hasNext()) {
@@ -66,7 +71,8 @@ public class MetaDatasetResourceTest extends ResourceTest {
 		p.setLicenseURI(ISourceDataset.license.CC0_1_0.getURI());
 		
 		OntModel model = OT.createModel();
-		MetadataRDFReporter.addToModel(model,p,new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null));
+		DatasetURIReporter uriReporter = new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null);
+		MetadataRDFReporter.addToModel(model,p,uriReporter.getURI(p));
 		StringWriter writer = new StringWriter();
 		model.write(writer,"RDF/XML");
 		System.out.println(writer.toString());
@@ -101,7 +107,8 @@ public class MetaDatasetResourceTest extends ResourceTest {
 		p.setLicenseURI(rights);
 		
 		OntModel model = OT.createModel();
-		MetadataRDFReporter.addToModel(model,p,new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null));
+		DatasetURIReporter uriReporter = new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null);
+		MetadataRDFReporter.addToModel(model,p,uriReporter.getURI(p));
 		StringWriter writer = new StringWriter();
 		model.write(writer,"RDF/XML");
 		System.out.println(writer.toString());
@@ -133,7 +140,8 @@ public class MetaDatasetResourceTest extends ResourceTest {
 		p.setLicenseURI(ISourceDataset.license.CC0_1_0.getURI());
 		
 		OntModel model = OT.createModel();
-		MetadataRDFReporter.addToModel(model,p,new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null));
+		DatasetURIReporter uriReporter = new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null);
+		MetadataRDFReporter.addToModel(model,p,uriReporter.getURI(p));
 		StringWriter writer = new StringWriter();
 		model.write(writer,"N3");
 		System.out.println(writer.toString());
@@ -165,7 +173,8 @@ public class MetaDatasetResourceTest extends ResourceTest {
 		
 		
 		OntModel model = OT.createModel();
-		MetadataRDFReporter.addToModel(model,p,new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null));
+		DatasetURIReporter uriReporter = new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null);
+		MetadataRDFReporter.addToModel(model,p,uriReporter.getURI(p));
 		StringWriter writer = new StringWriter();
 		model.write(writer,"N3");
 		System.out.println(writer.toString());

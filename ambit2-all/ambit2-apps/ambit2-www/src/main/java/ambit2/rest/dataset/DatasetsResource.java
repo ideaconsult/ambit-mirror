@@ -9,7 +9,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.db.readers.IQueryRetrieval;
@@ -37,7 +36,7 @@ import ambit2.rest.query.QueryResource;
  * @author nina 
  *
  */
-public class DatasetsResource extends MetadatasetResource {
+public class DatasetsResource extends MetadatasetResource<SourceDataset> {
 	
 	public final static String datasets = "/datasets";	
 
@@ -68,10 +67,9 @@ public class DatasetsResource extends MetadatasetResource {
 		
 	}
 	@Override
-	protected IQueryRetrieval<ISourceDataset> createQuery(Context context,
+	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
-		
-		IQueryRetrieval<ISourceDataset> query = getQuery(context, request, response,true);
+		IQueryRetrieval<SourceDataset> query = getQuery(context, request, response,true);
 		
 		Form form = getResourceRef(request).getQueryAsForm();
 		Object key = form.getFirstValue(QueryResource.search_param);

@@ -1,14 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <users user_name="guest" password="084e0343a0486ff05530df6c705c8bb4" email="guest" registration_status="confirmed" registration_date="2008-10-29 06:32:21.0" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" webpage="http://ambit.acad.bg" affiliation="&quot;&quot;" keywords="guest" reviewer="0"/>
-  <substance_experiment idresult="7" document_prefix="IUC4" document_uuid="etsNA/abMqme/oa0qFd4kw==" endpoint="LC50" conditions="{&quot;Exposure&quot;:&quot;96&quot;}" unit="mg/L" loValue="83.1"/>
-  <substance_experiment idresult="19" document_prefix="IUC4" document_uuid="L2SrJ9K+NS652E8CdP1mMw==" endpoint="log Pow" conditions="{&quot;Temperature&quot;:&quot;25 &#176;C&quot;}" loValue="0.35"/>
-  <substance_experiment idresult="30" document_prefix="IUC4" document_uuid="HXXwHDsrNfWE8c4j4itscw==" endpoint="% Degradation" conditions="{&quot;Time point&quot;:&quot;28 d&quot;}" unit="%" loValue="90.0"/>
-  <substance_experiment idresult="38" document_prefix="IUC4" document_uuid="rmT8OyKkMXOTYpzOH/Yirg==" endpoint="LD50" conditions="{&quot;Temperature&quot;:&quot;25 &#176;C&quot;,&quot;Sex&quot;:&quot;male&quot;}" unit="mg/kg bw" loValue="260.0" upvalue="320.0"/>
-  <substance_protocolapplication document_prefix="IUC4" document_uuid="HXXwHDsrNfWE8c4j4itscw==" endpointcategory="TO_BIODEG_WATER_SCREEN_SECTION" endpoint="Biodegradation in water: screening tests, IUC4#1/Ch.3.5" guidance="OECD Guideline 301 D (Ready Biodegradability: Closed Bottle Test)" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{}" reference="reference" updated="2013-11-11 13:52:14.0"/>
-  <substance_protocolapplication document_prefix="IUC4" document_uuid="L2SrJ9K+NS652E8CdP1mMw==" endpointcategory="PC_PARTITION_SECTION" endpoint="Partition coefficient, IUC4#5/Ch.2.5" guidance="Method: other (measured)" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{}" reference="reference" updated="2013-11-11 13:32:38.0"/>
-  <substance_protocolapplication document_prefix="IUC4" document_uuid="etsNA/abMqme/oa0qFd4kw==" endpointcategory="EC_FISHTOX_SECTION" endpoint="Short-term toxicity to fish, IUC4#53/Ch.4.1" guidance="Method: other: acute toxicity test; &quot;static bioassay&quot;" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{&quot;Test organism&quot;:&quot;Lepomis cyanellus&quot;}" reference="reference" updated="2013-11-10 21:11:16.0"/>
-  <substance_protocolapplication document_prefix="IUC4" document_uuid="rmT8OyKkMXOTYpzOH/Yirg==" endpointcategory="TO_ACUTE_ORAL_SECTION" endpoint="Acute toxicity: oral, IUC4#2/Ch.5.1.1" guidance="Method: other: no data" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{&quot;Species&quot;:&quot;rat&quot;,&quot;Sex&quot;:&quot;male/female&quot;}" reference="Smyth, H. F. Seaton J., and Fischer L. (1941).|The single dose toxicity of some glycols and derivatives.|J. Ind. Hyg. Toxicol. 23, 259-268" updated="2013-11-11 14:15:35.0"/>
+  <users user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="false"/>
+  <substance_experiment/>
+  <substance_protocolapplication/>
   <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org" type="Dataset"/>
   <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org" type="Dataset"/>
   <catalog_references idreference="3" title="XLogP" url="XLogP reference" type="Dataset"/>
@@ -16,27 +10,34 @@
   <catalog_references idreference="5" title="Jonsson G, Bechmann RK, Bamber SD, Baussant T Bioconcentration, biotransformation, and elimination of polycyclic aromatic hydrocarbons in sheepshead minnows (Cyprinodon Variegatus) exposed to contaminated seawater Environmental Toxicology and Chemistry 20" url="EURAS.BE" type="Dataset"/>
   <catalog_references idreference="6" title="Satyanarayan S, Ramakant  Bioaccumulation kinetics and bioconcentration factor of chlorinated pesticides in tissue of Puntius ticto (Ham.) Journal of Environmental Science and Health B 2004 39 2 321-332" url="EURAS.BE" type="Dataset"/>
   <catalog_references idreference="7" title="EINECS" url="EINECS" type="Dataset"/>
-  <catalog_references idreference="8" title="Dummy reference" url="NA" type="Dataset"/>
-  <chemicals idchemical="11" inchi="InChI=1/C20H20P.BrH/c1-2-21(18-12-6-3-7-13-18,19-14-8-4-9-15-19)20-16-10-5-11-17-20;/h3-17H,2H2,1H3;1H/q+1;/p-1" smiles="[Br-].CC[P+](c1ccccc1)(c2ccccc2)c3ccccc3" label="UNKNOWN" lastmodified="2013-11-11 14:16:59.0"/>
-  <structure idstructure="100215" idchemical="11" structure="Pw4AAHicrVZtb+JGEP7uX+EP/QDKrtkZv+MWCZzk4HSh5JK7pDqdEAEnWAGc2tBe/n1n1wZsJ7mq&#xA;cS0SZp955vHMrPGsputX8/g6eojnwgVbeGBaLp5qmo6oo6nr4tWP7/v6VxRCaDpdaDiWh2Rw07BM&#xA;x5SYMMgr9ImuAt4Uyj9KBQxTeOarKqH+8/iSijAcB4VUsQzbBXyfimmYIFRFjuG56LxPxTIcgW5T&#xA;FdtAX3WD24Zrum7TXA5Wo7406e7xeWlSEfWFZKQKGPTU+g37so99Z1/QQb+pyrEvTSo67hHSLwqs&#xA;ps8LUm2+9z4VMHxXWE37cvhNN1QpYht19/h++V/60miP0PA8y8krsgS+syLX8EHFvnzvDlLFs/9V&#xA;BSgZ9b8CeS8gWWkNks2sQKjGRQWiKF85KpBdY9HaqbFo7dZYrsqrwvKUfJkFQge7ypIQ1FhUENZY&#xA;qEMte1rLsissS8lXWI6OUGM5OtSypzXUsqc11LP3VVfLLFpjNfsLXQ+HHxRLwmoLUT5K0nM2PtV6&#xA;+q9h/6qngW0KbiI5JHQ2Gp+FhCI4HNHkZgmdjmfrqKdF2+XzapvGT8to87y6T7L7ZBPv1vpdmqzj&#xA;RVQOuDjvaSGKIYqJMUiVZ/Rl0g/LSq2DVPtpmWT090JttFlEP4qYEofp1VQ420fpLehCu4gNl6Oe&#xA;pr5+g84xm2FnDhw5Qgs8DsgdbnKXg8nBY+BzsLjHLU6GzcFvo+DUERCcVsDB5SiCzpLI7pDhEBkM&#xA;zQCGnT9PIOg8Fb1U95w+Rs897ePwj/Ht7enl5fA6HH7kn89uhrc3v5/3bxXx6mL06Yya/m2Q8u9G&#xA;GH6bnHxvzWEuL2i35qgsbM9NZeR7crmbreLt8/TT7C5a9bT5Mpo/Rovp3fM0mt8pRjjbUJ/ms9X0&#xA;ah2vouw/3iBPv7/7MdrcJz2tMKiH0Bl3TYbMZgAMXGYxh4FgQF0gw2M+cxmQkzjk9xn102JIhACx&#xA;c9ZtmRRht1sO0SRZhlISMtyUTBlKOi5Bcicosh10ws9fuwiyu2m/izg5CV+5qLpOOuhmEGQYBJkV&#xA;LLgdZE6QweLEpYWVeUGgZSDIBiIBKheYci0ysCgIHLlwyfBypy/XTkb7TfcOu/kQZ8XLlIkgP9eW&#xA;ADlBWHGAomU+r1lxRiQgH70lID8BsuK0VGIU30eNg6jMQpNpHGLy4xIrht9RRKhweXxR5j79A20v&#xA;nQ+q0s3z+acKlMNMRavSpCFKCnm9dfpRMB9jrBhiBOQT6dgxLVDP23i3nva3yZqeU8QDMkmyeBv/&#xA;FRUeODjG0cPsVcd5OntYR5ut1DmAF9F2tiqo4oBebaM0St6AB8lmUYG/bB43yd+bN4Iq3hex1+ku&#xA;+nngG4zzJF3PVuFylj5EeyxMknRxGlORWZxs9mWOsnAZp7PVnnWRrKL5bjVLp1KDjP27eJBOaoSb&#xA;KH5Ybnua6YKBtrAdTfuFLu0fbiveOA==" format="SDF" user_name="guest" type_structure="2D with H" atomproperties="MDQ0MCwwMjIwLDAxMTAsMDMyMTA2MDIsMDMyMTA2MDIsMDMyMTA2MDIsMDMyMTA2MDIsMDQzMTA2&#xA;MDIsMDMyMTA2MDIsMDMyMTA2MDEsMDMyMTA2MDEsMDMyMTA2MDEsMDMyMTA2MDEsMDQzMTA2MDEs&#xA;MDMyMTA2MDEsMDMyMTA2MDAsMDMyMTA2MDAsMDMyMTA2MDAsMDMyMTA2MDAsMDQzMTA2MDAsMDMy&#xA;MTA2MDAsMDAwMCwKMCwwLDAsMCwwLDEsMSwxLDEsMSwxLDEsMSwxLDEsMSwxLDEsMSwxLDEsMSwx&#xA;LA=="/>
-  <substance idsubstance="1" prefix="ECB5" uuid="LJTjLDZiTeq6AEN4e4pv0w==" documentType="Substance" format="i5._4." name="testname" publicname="publictestname" content="dGVzdA==" substanceType="Monoconstituent" owner_prefix="ECB5" owner_uuid="LJTjLDZiTeq6AEN4e4pv0w=="/>
-  <properties idproperty="1" idreference="8" name="Property 1" units="" comments="" islocal="false"/>
-  <properties idproperty="2" idreference="8" name="Property 2" units="" comments="" islocal="false"/>
-  <properties idproperty="3" idreference="8" name="Property 3" units="" comments="" islocal="false"/>
-  <template idtemplate="84"/>
+  <catalog_references idreference="8" title="PUBCHEM" url="PUBCHEM" type="Dataset"/>
+  <catalog_references idreference="14" title="new_title" url="new_url" type="Dataset"/>
+  <chemicals idchemical="11" inchi="InChI=1/C20H20P.BrH/c1-2-21(18-12-6-3-7-13-18,19-14-8-4-9-15-19)20-16-10-5-11-17-20;/h3-17H,2H2,1H3;1H/q+1;/p-1" smiles="[Br-].CC[P+](c1ccccc1)(c2ccccc2)c3ccccc3" label="UNKNOWN" lastmodified="2014-11-12 07:45:56.0"/>
+  <structure idstructure="100215" idchemical="11" structure="Pw4AAHicrVZtb+JGEP7uX+EP/QDKrtkZv+MWCZzk4HSh5JK7pDqdEAEnWAGc2tBe/n1n1wZsJ7mq&#xA;cS0SZp955vHMrPGsputX8/g6eojnwgVbeGBaLp5qmo6oo6nr4tWP7/v6VxRCaDpdaDiWh2Rw07BM&#xA;x5SYMMgr9ImuAt4Uyj9KBQxTeOarKqH+8/iSijAcB4VUsQzbBXyfimmYIFRFjuG56LxPxTIcgW5T&#xA;FdtAX3WD24Zrum7TXA5Wo7406e7xeWlSEfWFZKQKGPTU+g37so99Z1/QQb+pyrEvTSo67hHSLwqs&#xA;ps8LUm2+9z4VMHxXWE37cvhNN1QpYht19/h++V/60miP0PA8y8krsgS+syLX8EHFvnzvDlLFs/9V&#xA;BSgZ9b8CeS8gWWkNks2sQKjGRQWiKF85KpBdY9HaqbFo7dZYrsqrwvKUfJkFQge7ypIQ1FhUENZY&#xA;qEMte1rLsissS8lXWI6OUGM5OtSypzXUsqc11LP3VVfLLFpjNfsLXQ+HHxRLwmoLUT5K0nM2PtV6&#xA;+q9h/6qngW0KbiI5JHQ2Gp+FhCI4HNHkZgmdjmfrqKdF2+XzapvGT8to87y6T7L7ZBPv1vpdmqzj&#xA;RVQOuDjvaSGKIYqJMUiVZ/Rl0g/LSq2DVPtpmWT090JttFlEP4qYEofp1VQ420fpLehCu4gNl6Oe&#xA;pr5+g84xm2FnDhw5Qgs8DsgdbnKXg8nBY+BzsLjHLU6GzcFvo+DUERCcVsDB5SiCzpLI7pDhEBkM&#xA;zQCGnT9PIOg8Fb1U95w+Rs897ePwj/Ht7enl5fA6HH7kn89uhrc3v5/3bxXx6mL06Yya/m2Q8u9G&#xA;GH6bnHxvzWEuL2i35qgsbM9NZeR7crmbreLt8/TT7C5a9bT5Mpo/Rovp3fM0mt8pRjjbUJ/ms9X0&#xA;ah2vouw/3iBPv7/7MdrcJz2tMKiH0Bl3TYbMZgAMXGYxh4FgQF0gw2M+cxmQkzjk9xn102JIhACx&#xA;c9ZtmRRht1sO0SRZhlISMtyUTBlKOi5Bcicosh10ws9fuwiyu2m/izg5CV+5qLpOOuhmEGQYBJkV&#xA;LLgdZE6QweLEpYWVeUGgZSDIBiIBKheYci0ysCgIHLlwyfBypy/XTkb7TfcOu/kQZ8XLlIkgP9eW&#xA;ADlBWHGAomU+r1lxRiQgH70lID8BsuK0VGIU30eNg6jMQpNpHGLy4xIrht9RRKhweXxR5j79A20v&#xA;nQ+q0s3z+acKlMNMRavSpCFKCnm9dfpRMB9jrBhiBOQT6dgxLVDP23i3nva3yZqeU8QDMkmyeBv/&#xA;FRUeODjG0cPsVcd5OntYR5ut1DmAF9F2tiqo4oBebaM0St6AB8lmUYG/bB43yd+bN4Iq3hex1+ku&#xA;+nngG4zzJF3PVuFylj5EeyxMknRxGlORWZxs9mWOsnAZp7PVnnWRrKL5bjVLp1KDjP27eJBOaoSb&#xA;KH5Ybnua6YKBtrAdTfuFLu0fbiveOA==" format="SDF" user_name="guest" type_structure="NA"/>
+  <substance/>
+  <properties idproperty="1" idreference="1" name="Property 1" units=" " comments="http://www.opentox.org/api/1.1#ChemicalName" islocal="false" ptype="NUMERIC"/>
+  <properties idproperty="2" idreference="1" name="Property 2" units=" " comments="http://www.opentox.org/api/1.1#CASRN" islocal="false" ptype="NUMERIC"/>
+  <properties idproperty="3" idreference="1" name="Property 3" units=" " comments="http://www.opentox.org/api/1.1#ChemicalName" islocal="false"/>
+  <properties idproperty="4" idreference="8" name="PUBCHEM_COMPOUND_CID" units=" " comments="ID" islocal="false" ptype="NUMERIC"/>
+  <properties idproperty="5" idreference="1" name="TO BE DELETED" units=" " comments="ID" islocal="false" ptype="NUMERIC"/>
+  <template idtemplate="2" name="All"/>
+  <template idtemplate="4" name="Another copy of Dataset 1"/>
+  <template idtemplate="128" name="Another dataset with the same properties as Dataset 1"/>
   <template idtemplate="1" name="BCF"/>
-  <template idtemplate="85" name="Endpoints"/>
-  <template idtemplate="44" name="Octanol-water partition coefficient (Kow)"/>
-  <template idtemplate="5" name="Physicochemical effects"/>
+  <template idtemplate="3" name="Dataset 1"/>
   <template_def idtemplate="1" idproperty="1"/>
+  <template_def idtemplate="4" idproperty="1"/>
   <template_def idtemplate="1" idproperty="2"/>
   <template_def idtemplate="1" idproperty="3"/>
-  <dictionary idsubject="44" relationship="is_a" idobject="5"/>
-  <dictionary idsubject="85" relationship="is_a" idobject="84"/>
-  <dictionary idsubject="5" relationship="is_a" idobject="85"/>
-  <src_dataset/>
+  <template_def idtemplate="3" idproperty="5"/>
+  <template_def idtemplate="4" idproperty="5"/>
+  <dictionary idsubject="1" relationship="is_a" idobject="2"/>
+  <bundle idbundle="3" name="ambit" user_name="guest" idreference="14" created="2014-11-12 07:45:56.0" licenseURI="http://creativecommons.org/publicdomain/zero/1.0/" rightsHolder="" maintainer="Unknown" stars="5"/>
+  <src_dataset id_srcdataset="1" name="Dataset 1" user_name="guest" idreference="7"/>
+  <src_dataset id_srcdataset="2" name="Another dataset with the same properties as Dataset 1" user_name="guest" idreference="7"/>
   <tuples/>
-  <struc_dataset/>
-  <fp1024 idchemical="11" fp1="0" fp2="140739637952512" fp3="9223380841537863680" fp4="11529215046070566914" fp5="17592186044416" fp6="0" fp7="0" fp8="0" fp9="4755801206503243777" fp10="11529215046085246976" fp11="4755801240862982144" fp12="288232300299192320" fp13="140737489403904" fp14="17314086912" fp15="2305843009222082560" fp16="524800" time="0" bc="37" status="valid"/>
-  <sk1024 idchemical="11" fp1="4127" fp2="128" fp3="0" fp4="0" fp5="0" fp6="536870912" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="0" fp13="0" fp14="0" fp15="0" fp16="0" time="0" bc="8" status="valid"/>
+  <struc_dataset idstructure="100215" id_srcdataset="1"/>
+  <struc_dataset idstructure="100215" id_srcdataset="2"/>
+  <fp1024/>
+  <sk1024/>
 </dataset>

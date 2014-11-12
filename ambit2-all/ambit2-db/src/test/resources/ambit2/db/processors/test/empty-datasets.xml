@@ -5,6 +5,8 @@
   <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org"/>
 
   <chemicals/>
+  <bundle_substance/>
+  <bundle/>
   <structure/>
   <properties/>
   <template/>

@@ -228,7 +228,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 					getRequest().getRootRef(),
 					getContext(),
 					dataset,
-					new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),getDocumentation()),
+					new DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset>(getRequest(),getDocumentation()),
 					token
 					);
 			((CallableUpdateDataset)callable).setClearPreviousContent(clearPreviousContent);
