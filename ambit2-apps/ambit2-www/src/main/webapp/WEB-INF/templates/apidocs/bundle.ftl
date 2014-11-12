@@ -26,7 +26,7 @@
 			            "type": "Bundle",
 			            "nickname": "getBundleByID",
 			            <#include "/apidocs/authz.ftl" >
-			        ,
+
 			            "parameters": [
 							{
 							    "name": "id",
@@ -35,7 +35,7 @@
 							    "type": "string",
 							    "paramType": "path",
 							    "allowMultiple": false
-							}
+							},
 							<#include "/apidocs/parameters_page.ftl" >									
 			            ],
 			            "responseMessages": [
