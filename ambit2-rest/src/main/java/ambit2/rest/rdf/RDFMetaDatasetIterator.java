@@ -13,7 +13,6 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
-import ambit2.base.data.AbstractDataset;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.rest.OpenTox;
@@ -33,7 +32,7 @@ import com.hp.hpl.jena.vocabulary.RDFS;
  * @author nina
  *
  */
-public class RDFMetaDatasetIterator extends RDFObjectIterator<ISourceDataset> {
+public abstract class RDFMetaDatasetIterator<M extends ISourceDataset> extends RDFObjectIterator<M> {
 	protected RDFReferenceIterator refIterator;
 	public RDFMetaDatasetIterator(Representation representation,MediaType mediaType) throws ResourceException {
 		super(representation,mediaType,OT.OTClass.Dataset.toString());
@@ -58,9 +57,7 @@ public class RDFMetaDatasetIterator extends RDFObjectIterator<ISourceDataset> {
 	}	
 
 	@Override
-	protected ISourceDataset createRecord() {
-		return new SourceDataset();
-	}
+	protected abstract M createRecord();
 
 	@Override
 	protected Template createTemplate() {
@@ -68,7 +65,7 @@ public class RDFMetaDatasetIterator extends RDFObjectIterator<ISourceDataset> {
 	}
 
 	@Override
-	protected void parseObjectURI(RDFNode uri, ISourceDataset record) {
+	protected void parseObjectURI(RDFNode uri, M record) {
 		Map<String, Object> vars = new HashMap<String, Object>();
 		
 		try {
@@ -77,9 +74,8 @@ public class RDFMetaDatasetIterator extends RDFObjectIterator<ISourceDataset> {
 		catch (Exception x) { record.setID(-1);};
 		
 	}
-
 	@Override
-	protected ISourceDataset parseRecord(RDFNode newEntry, ISourceDataset dataset) {
+	protected M parseRecord(RDFNode newEntry, M dataset) {
 		if (newEntry.isLiteral()) {
 			return dataset;
 		} else {
@@ -91,10 +87,10 @@ public class RDFMetaDatasetIterator extends RDFObjectIterator<ISourceDataset> {
 				dataset.setID(Integer.parseInt(vars.get(OpenTox.URI.dataset.getKey()).toString())); 
 			} catch (Exception x) { //we have these two types of datasets, stored in two different kind of tables
 				if (vars.get(OpenTox.URI.dataset.getKey()).toString().startsWith("R")) try {
-					dataset = new AbstractDataset();
+					dataset = createRecord();
 					dataset.setID(Integer.parseInt(vars.get(OpenTox.URI.dataset.getKey()).toString().substring(1)));
 				} catch (Exception xx) { 
-					dataset = new AbstractDataset();
+					dataset = createRecord();
 				}	
 			};
 			//end of inline parseObjectURI(newEntry, dataset);

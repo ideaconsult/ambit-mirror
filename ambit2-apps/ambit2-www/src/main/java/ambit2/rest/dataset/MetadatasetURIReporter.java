@@ -7,7 +7,7 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.ResourceDoc;
 
-public class MetadatasetURIReporter<Q extends IQueryRetrieval<ISourceDataset>> extends DatasetURIReporter<Q> {
+public class MetadatasetURIReporter<Q extends IQueryRetrieval<M>,M extends ISourceDataset> extends DatasetURIReporter<Q,M> {
 
 	/**
 	 * 
@@ -24,7 +24,7 @@ public class MetadatasetURIReporter<Q extends IQueryRetrieval<ISourceDataset>> e
 		super();
 	}	
 	@Override
-	public String getURI(String ref, ISourceDataset dataset) {
+	public String getURI(String ref, M dataset) {
 		return String.format("%s/metadata",super.getURI(ref, dataset));
 	}
 }

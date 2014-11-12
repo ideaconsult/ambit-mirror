@@ -113,6 +113,7 @@ import ambit2.rest.routers.misc.ChartRouter;
 import ambit2.rest.routers.misc.DepictDemoRouter;
 import ambit2.rest.routers.misc.UIRouter;
 import ambit2.rest.routers.opentox.AlgorithmRouter;
+import ambit2.rest.routers.opentox.BundleRouter;
 import ambit2.rest.routers.opentox.CompoundInDatasetRouter;
 import ambit2.rest.routers.opentox.CompoundsRouter;
 import ambit2.rest.routers.opentox.DatasetsRouter;
@@ -423,6 +424,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			/**
 			 *  /property/{id}
 			 */
+			router.attach("/bundle",new BundleRouter(getContext()));
+			
 			router.attach(SubstancePropertyResource.substanceproperty,SubstancePropertyResource.class);
 			router.attach(String.format("%s/{%s}/{%s}/{%s}/{%s}",
 					SubstancePropertyResource.substanceproperty,

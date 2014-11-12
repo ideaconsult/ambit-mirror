@@ -35,8 +35,9 @@ public class CallableTautomersGenerator<USERID> extends CallableModelPredictor<I
 				throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,"Datasets not on this server are not supported!");
 			} else {
 				TaskResult task = new TaskResult(
-						String.format("%s/query/relation/compound/HAS_TAUTOMER?dataset_uri=%s",
+						String.format("%s/query/relation/%s/HAS_TAUTOMER?dataset_uri=%s",
 						applicationRootReference,		
+						sourceReference.toString().indexOf("/dataset/")>0?"compound":"compound",
 						Reference.encode(sourceReference.toString()))
 						);
 				task.setNewResource(false);

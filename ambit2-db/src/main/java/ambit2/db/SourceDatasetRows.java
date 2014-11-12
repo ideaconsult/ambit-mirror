@@ -34,7 +34,13 @@ import java.sql.SQLException;
 import ambit2.base.data.ISourceDataset;
 import ambit2.db.results.AmbitRows;
 
-public class SourceDatasetRows extends AmbitRows<ISourceDataset> {
+/**
+ * TODO to be removed
+ * @author nina
+ *
+ * @param <M>
+ */
+public class SourceDatasetRows<M extends ISourceDataset> extends AmbitRows<M> {
     /**
      * 
      */

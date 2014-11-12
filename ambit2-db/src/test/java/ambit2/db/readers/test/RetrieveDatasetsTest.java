@@ -48,7 +48,7 @@ import ambit2.db.results.AmbitRows;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
 
-public class RetrieveDatasetsTest extends RetrieveTest<ISourceDataset> {
+public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 
 
 	@Test
@@ -157,7 +157,7 @@ public class RetrieveDatasetsTest extends RetrieveTest<ISourceDataset> {
 		c.close();
 	}		
 	@Override
-	protected void verifyRows(AmbitRows<ISourceDataset> rows) throws Exception {
+	protected void verifyRows(AmbitRows<SourceDataset> rows) throws Exception {
 		IDatabaseConnection c = getConnection();
 		Assert.assertNotNull(rows);
 		Assert.assertEquals(3,rows.size());
@@ -172,11 +172,11 @@ public class RetrieveDatasetsTest extends RetrieveTest<ISourceDataset> {
 		
 	}
 	@Override
-	protected AmbitRows<ISourceDataset> createRows() throws Exception {
+	protected AmbitRows<SourceDataset> createRows() throws Exception {
 		return new SourceDatasetRows();
 	}
 	@Override
-	protected IQueryRetrieval<ISourceDataset> createQuery() {
+	protected IQueryRetrieval<SourceDataset> createQuery() {
 		return new RetrieveDatasets();
 	}	
 }

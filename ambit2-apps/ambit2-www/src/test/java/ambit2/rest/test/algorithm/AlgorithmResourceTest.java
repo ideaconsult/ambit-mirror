@@ -643,7 +643,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 			
 		}
 	}
-	
+	/*
 	@Test
 	public void testSMSD() throws Exception {
 		Form headers = new Form();  
@@ -654,13 +654,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));
 		//prediction
-		/*
-		testAsyncTask(
-				String.format("http://localhost:%d/model/3", port),
-				headers, Status.SUCCESS_OK,
-				String.format("http://localhost:%d/dataset/1%s", port,
-						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
-		*/
+
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * from properties where name='CC'");
@@ -670,6 +664,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		c.close();
 		
 	}		
+*/
 
 
 //	http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R7798

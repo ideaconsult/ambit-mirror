@@ -5,11 +5,12 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.StringCondition;
 
-public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
+public class QueryDatasetByFeatures extends AbstractReadDataset<Property,ISourceDataset> {
 	protected IStructureRecord structure;
 	
 	public IStructureRecord getStructure() {

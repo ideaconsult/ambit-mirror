@@ -19,7 +19,7 @@ import ambit2.db.readers.IQueryRetrieval;
  *
  * @param <Q>
  */
-public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> extends DatasetURIReporter<Q> {
+public class MetadatasetJSONReporter<Q extends IQueryRetrieval<M>,M extends ISourceDataset> extends DatasetURIReporter<Q,M> {
 	/**
 	 * 
 	 */
@@ -45,7 +45,7 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> 
 		super(baseRef,null);
 	}
 	@Override
-	public Object processItem(ISourceDataset item) throws AmbitException {
+	public Object processItem(M item) throws AmbitException {
 		try {
 			String uri = getURI(item);
 			String rights = "rights";

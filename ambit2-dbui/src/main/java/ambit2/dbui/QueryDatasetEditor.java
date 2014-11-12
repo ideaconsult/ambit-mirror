@@ -61,10 +61,10 @@ public class QueryDatasetEditor extends QueryEditor<String,SourceDataset,StringC
 	 * 
 	 */
 	private static final long serialVersionUID = -3741781796086220256L;
-	protected AmbitRows<ISourceDataset> datasets;
+	protected AmbitRows<SourceDataset> datasets;
 	
 	public JComponent buildPanel() {
-		datasets = new AmbitRows<ISourceDataset>();
+		datasets = new AmbitRows<SourceDataset>();
 		FormLayout layout = new FormLayout(
 	            "75dlu,3dlu,125dlu,3dlu,125dlu",
 				"pref,pref");        
@@ -108,7 +108,7 @@ public class QueryDatasetEditor extends QueryEditor<String,SourceDataset,StringC
 
 	@Override
 	protected JComponent createValueComponent() {
-		ListModel fieldnames = new RowsModel<ISourceDataset>(datasets);		
+		ListModel fieldnames = new RowsModel<SourceDataset>(datasets);		
 		JComboBox box = BasicComponentFactory.createComboBox(
 				new SelectionInList<SourceDataset>(fieldnames, presentationModel.getModel("dataset")));
 		AutoCompleteDecorator.decorate(box);

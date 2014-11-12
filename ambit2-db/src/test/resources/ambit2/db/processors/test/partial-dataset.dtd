@@ -2,8 +2,6 @@
     users*,
     substance_experiment*,
     substance_protocolapplication*,
-    roles*,
-    user_roles*,
     catalog_references*,
     chemicals*,
     structure*,
@@ -12,6 +10,7 @@
     template*,
     template_def*,
     dictionary*,
+    bundle*,
     src_dataset*,
     tuples*,
     struc_dataset*,
@@ -21,18 +20,14 @@
 <!ELEMENT users EMPTY>
 <!ATTLIST users
     user_name CDATA #REQUIRED
-    password CDATA #REQUIRED
     email CDATA #REQUIRED
-    registration_status CDATA #REQUIRED
-    registration_date CDATA #REQUIRED
-    registration_id CDATA #IMPLIED
     title CDATA #REQUIRED
     firstname CDATA #REQUIRED
     lastname CDATA #REQUIRED
     address CDATA #REQUIRED
     country CDATA #REQUIRED
-    webpage CDATA #REQUIRED
-    affiliation CDATA #REQUIRED
+    homepage CDATA #REQUIRED
+    institute CDATA #REQUIRED
     keywords CDATA #IMPLIED
     reviewer CDATA #REQUIRED
 >
@@ -42,38 +37,46 @@
     idresult CDATA #REQUIRED
     document_prefix CDATA #REQUIRED
     document_uuid CDATA #REQUIRED
+    topcategory CDATA #IMPLIED
+    endpointcategory CDATA #IMPLIED
+    endpointhash CDATA #IMPLIED
     endpoint CDATA #IMPLIED
     conditions CDATA #IMPLIED
     unit CDATA #IMPLIED
     loQualifier CDATA #IMPLIED
     loValue CDATA #IMPLIED
     upQualifier CDATA #IMPLIED
-    upvalue CDATA #IMPLIED
+    upValue CDATA #IMPLIED
+    textValue CDATA #IMPLIED
+    errQualifier CDATA #IMPLIED
+    err CDATA #IMPLIED
+    substance_prefix CDATA #IMPLIED
+    substance_uuid CDATA #IMPLIED
 >
 
 <!ELEMENT substance_protocolapplication EMPTY>
 <!ATTLIST substance_protocolapplication
     document_prefix CDATA #REQUIRED
     document_uuid CDATA #REQUIRED
+    topcategory CDATA #IMPLIED
     endpointcategory CDATA #IMPLIED
     endpoint CDATA #IMPLIED
     guidance CDATA #IMPLIED
     substance_prefix CDATA #IMPLIED
     substance_uuid CDATA #IMPLIED
     params CDATA #REQUIRED
+    interpretation_result CDATA #IMPLIED
+    interpretation_criteria CDATA #IMPLIED
     reference CDATA #IMPLIED
+    reference_year CDATA #IMPLIED
+    reference_owner CDATA #IMPLIED
     updated CDATA #REQUIRED
->
-
-<!ELEMENT roles EMPTY>
-<!ATTLIST roles
-    role_name CDATA #REQUIRED
->
-
-<!ELEMENT user_roles EMPTY>
-<!ATTLIST user_roles
-    user_name CDATA #REQUIRED
-    role_name CDATA #REQUIRED
+    reliability CDATA #IMPLIED
+    isRobustStudy CDATA #IMPLIED
+    isUsedforClassification CDATA #IMPLIED
+    isUsedforMSDS CDATA #IMPLIED
+    purposeFlag CDATA #IMPLIED
+    studyResultType CDATA #IMPLIED
 >
 
 <!ELEMENT catalog_references EMPTY>
@@ -121,6 +124,7 @@
     rs_uuid CDATA #IMPLIED
     owner_prefix CDATA #IMPLIED
     owner_uuid CDATA #IMPLIED
+    owner_name CDATA #IMPLIED
 >
 
 <!ELEMENT properties EMPTY>
@@ -151,6 +155,19 @@
     idsubject CDATA #REQUIRED
     relationship CDATA #REQUIRED
     idobject CDATA #REQUIRED
+>
+
+<!ELEMENT bundle EMPTY>
+<!ATTLIST bundle
+    idbundle CDATA #REQUIRED
+    name CDATA #REQUIRED
+    user_name CDATA #IMPLIED
+    idreference CDATA #REQUIRED
+    created CDATA #REQUIRED
+    licenseURI CDATA #REQUIRED
+    rightsHolder CDATA #REQUIRED
+    maintainer CDATA #REQUIRED
+    stars CDATA #REQUIRED
 >
 
 <!ELEMENT src_dataset EMPTY>
