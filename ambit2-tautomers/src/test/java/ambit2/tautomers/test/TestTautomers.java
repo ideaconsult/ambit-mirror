@@ -140,7 +140,7 @@ public class TestTautomers
 		
 		//tt.visualTest("NC1=CC=CC=C1");
 		//tt.visualTest("N=C1C=CC=CC1");
-		tt.visualTest("N=C1C=CC=CC1",TautomerConst.GAT_Comb_Improved);
+		tt.visualTest("N=C1C=CC=CC1",TautomerConst.GAT_Comb_Pure);
 		
 		//tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
 		

@@ -84,7 +84,10 @@ public class TautomerManager
 	public List<IAtomContainer> generateTautomers() throws Exception
 	{
 		searchAllRulePositions();
-		//handleOverlapedInstances();    Currently does nothing. Incorrect tautomers are filtered out by FilterTautomers
+		
+		//handleOverlapedInstances();   //Currently does nothing. Incorrect tautomers are filtered out by FilterTautomers
+		ruleInstances.addAll(extendedRuleInstances);
+		
 		
 		resultTautomers = new ArrayList<IAtomContainer>();
 		if (ruleInstances.isEmpty())
