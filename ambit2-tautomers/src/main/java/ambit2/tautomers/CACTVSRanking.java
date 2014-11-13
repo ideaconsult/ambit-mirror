@@ -126,7 +126,7 @@ public class CACTVSRanking
 		//correction for C=O. It is not counted in C=X
 		nC2X = nC2X - nC2O;
 		
-		System.out.println(scoreFragmentsToString( nAromAt, nOximGroup, nC2O, nN2O, nP2O, nC2X, nCH3, nYH, nAciNitro));
+		//System.out.println(scoreFragmentsToString( nAromAt, nOximGroup, nC2O, nN2O, nP2O, nC2X, nCH3, nYH, nAciNitro));
 		
 		double rank = nAromAt*(100.0/6) + nOximGroup * 4 +  
 				 (nC2O + nN2O + nP2O)*2 + nC2X + nCH3 - nYH - 4*nAciNitro;
@@ -210,7 +210,7 @@ public class CACTVSRanking
 		String atSy = atom.getSymbol();
 		if (atSy.equals("P") || atSy.equals("S") || atSy.equals("Se") || atSy.equals("Te"))
 		{	
-			System.out.println("atom " + atSy + "  H" + getHNeighbours(atom, mol));
+			//System.out.println("atom " + atSy + "  H" + getHNeighbours(atom, mol));
 			return getHNeighbours(atom, mol); //Each H neigbour defined a bond Y-H (Y=P,S,Se,Te)
 		}	
 		return 0;
