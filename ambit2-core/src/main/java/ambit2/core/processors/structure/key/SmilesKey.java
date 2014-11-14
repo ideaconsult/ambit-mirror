@@ -30,14 +30,13 @@
 package ambit2.core.processors.structure.key;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-
-import ambit2.base.processors.DefaultAmbitProcessor;
 
 /**
  * Returns smiles, given the structure

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -23,7 +25,6 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.ChemicalByQueryFolder;
 import ambit2.db.search.structure.FreeTextQuery;

@@ -4,9 +4,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.IQueryObject;
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.ScopeQuery;
 
 /**

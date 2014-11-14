@@ -1,7 +1,11 @@
 package ambit2.rest.template;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -16,17 +20,14 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.DictionaryObjectQuery;
 import ambit2.db.search.DictionaryQuery;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.QueryOntology;
 import ambit2.db.update.dictionary.DeleteDictionary;
 import ambit2.rest.DisplayMode;
-import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.QueryResource;
@@ -142,7 +143,7 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 		
 	}
 	
-	protected ambit2.db.update.AbstractUpdate createDeleteObject(Property entry) throws ResourceException {
+	protected AbstractUpdate createDeleteObject(Property entry) throws ResourceException {
 		if (entry instanceof Dictionary) {
 			DeleteDictionary delete = new DeleteDictionary((Dictionary)entry);
 			return delete;

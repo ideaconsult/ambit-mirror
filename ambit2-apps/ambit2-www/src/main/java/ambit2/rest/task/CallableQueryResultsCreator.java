@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryObject;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -15,11 +17,9 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.SessionID;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.processors.ProcessorCreateQuery;
-import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;

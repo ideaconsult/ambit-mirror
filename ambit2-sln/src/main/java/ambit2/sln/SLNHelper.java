@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
+
 import ambit2.smarts.TopLayer;
 
 

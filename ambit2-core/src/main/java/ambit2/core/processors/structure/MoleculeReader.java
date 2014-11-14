@@ -34,6 +34,7 @@ import java.io.StringReader;
 import java.lang.reflect.Method;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
@@ -45,7 +46,6 @@ import org.openscience.cdk.smiles.SmilesParser;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.processors.CASProcessor;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.FileInputState;

@@ -5,10 +5,10 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.r.QueryReporter;
 
 import org.restlet.Request;
 
-import ambit2.db.reporters.QueryReporter;
 import ambit2.db.version.AmbitDBVersion;
 import ambit2.db.version.DBVersionQuery;
 import ambit2.rest.AmbitResource;

@@ -5,13 +5,13 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.r.QueryReporter;
 
 import org.restlet.Request;
 
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.db.simiparity.space.QMapSpace;
 import ambit2.rest.structure.CompoundURIReporter;
 

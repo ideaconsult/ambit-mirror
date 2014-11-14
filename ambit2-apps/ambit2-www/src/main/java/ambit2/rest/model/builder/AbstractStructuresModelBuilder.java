@@ -1,11 +1,12 @@
 package ambit2.rest.model.builder;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+
 import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 

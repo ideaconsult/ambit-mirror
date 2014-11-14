@@ -4,6 +4,7 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
@@ -12,7 +13,6 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.data.MoleculeTools;
 
 public class Structure2DBuilder extends DefaultAmbitProcessor<IAtomContainer, IAtomContainer>{

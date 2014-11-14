@@ -1,6 +1,7 @@
 package ambit2.rest.admin.fingerprints;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 
@@ -10,7 +11,6 @@ import ambit2.descriptors.processors.BitSetGenerator.FPTable;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 
 public class FingerprintsHTMLReporter extends QueryHTMLReporter<IFingerprint<FPTable, String>, QueryFingerprints> {
 

@@ -1,9 +1,10 @@
 package ambit2.rest.reference;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+
 import org.restlet.Request;
 
 import ambit2.base.data.ILiteratureEntry;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;
 
 /**

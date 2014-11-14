@@ -4,18 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
-
-
-
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
+import ambit2.groupcontribution.groups.AtomGroup;
 import ambit2.groupcontribution.groups.BondGroup;
 import ambit2.groupcontribution.groups.IGroup;
-import ambit2.groupcontribution.groups.AtomGroup;
 
 
 public class Calculator 

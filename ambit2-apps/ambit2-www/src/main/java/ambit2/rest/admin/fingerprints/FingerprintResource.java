@@ -2,6 +2,7 @@ package ambit2.rest.admin.fingerprints;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -16,7 +17,6 @@ import ambit2.db.update.fp.IFingerprint;
 import ambit2.db.update.fp.QueryFingerprints;
 import ambit2.db.update.fp.QueryFingerprints._order;
 import ambit2.descriptors.processors.BitSetGenerator.FPTable;
-import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.query.QueryResource;
 
 public class FingerprintResource  extends QueryResource<QueryFingerprints,IFingerprint<FPTable,String>>  {

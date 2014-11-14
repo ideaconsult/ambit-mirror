@@ -3,6 +3,7 @@ package ambit2.rest.substance.property;
 import java.io.Writer;
 import java.util.Iterator;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.restnet.c.reporters.CatalogURIReporter;
 
@@ -12,7 +13,6 @@ import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.IParams;
 import ambit2.base.json.JSONUtils;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.substance.SubstanceURIReporter;
 
 /**
@@ -33,7 +33,7 @@ public class EffectRecordJSONReporter extends CatalogURIReporter<EffectRecord<St
 	
 	public EffectRecordJSONReporter(Request request, String jsonpCallback) {
 		super();
-		substanceReporter = new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(request, null);
+		substanceReporter = new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(request);
 		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpCallback);
 				
 	}

@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.RandomAccessFile;
 import java.util.BitSet;
-import java.util.Date;
 
 import org.junit.Test;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.fingerprint.PubchemFingerprinter;
 import org.openscience.cdk.graph.PathTools;
 import org.openscience.cdk.graph.matrix.ConnectionMatrix;
 import org.openscience.cdk.interfaces.IAtom;
@@ -19,15 +19,11 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
-
-
 import ambit2.core.io.MyIteratingMDLReader;
+import ambit2.descriptors.fingerprints.PubChemFingerprinter;
 import ambit2.descriptors.geometrical.CGIDescriptor;
 import ambit2.descriptors.topological.CTIDescriptor;
-import ambit2.descriptors.fingerprints.PubChemFingerprinter;
 import ambit2.smarts.SmartsHelper;
-
-import org.openscience.cdk.fingerprint.PubchemFingerprinter;
 
 public class TestUtilities 
 {

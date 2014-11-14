@@ -34,6 +34,7 @@ import java.sql.Connection;
 import javax.swing.JOptionPane;
 
 import net.idea.modbcum.i.IDBProcessor;
+import net.idea.modbcum.i.IQueryRetrieval;
 
 import org.junit.After;
 import org.junit.Before;
@@ -42,7 +43,6 @@ import ambit2.base.data.Template;
 import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.processors.ProcessorCreateProfileQuery;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.ui.EditorPreferences;
 
 public class QueryFunctionalGroupsEditorTest extends RepositoryTest {

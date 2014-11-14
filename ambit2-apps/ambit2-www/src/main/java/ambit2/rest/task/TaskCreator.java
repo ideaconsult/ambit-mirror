@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.r.QueryReporter;
 import net.idea.restnet.i.task.ICallableTask;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskResult;
@@ -14,9 +16,6 @@ import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
-
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 
 /**
  * creates tasks by iterating over query results

@@ -34,13 +34,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryObject;
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.AbstractDBProcessor;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.AbstractDBProcessor;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
 
 public class ProcessorStructurePairsRetrieval extends AbstractDBProcessor<IStructureRecord[], IStructureRecord[]> {
@@ -104,7 +104,7 @@ public class ProcessorStructurePairsRetrieval extends AbstractDBProcessor<IStruc
 	}
 
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		try {exec.setConnection(null); } catch (Exception x) {}
 		super.close();
 	}

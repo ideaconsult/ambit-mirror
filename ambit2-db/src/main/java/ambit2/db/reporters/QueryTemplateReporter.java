@@ -1,9 +1,8 @@
 package ambit2.db.reporters;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.IQueryRetrieval;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.db.readers.IQueryRetrieval;
 
 /**
  * Adds Properties into a Template
@@ -17,12 +16,12 @@ public class QueryTemplateReporter<Q extends IQueryRetrieval<Property>> extends 
 	 * 
 	 */
 	private static final long serialVersionUID = -6474255197721950832L;
-	public QueryTemplateReporter(Template template)  throws AmbitException {
+	public QueryTemplateReporter(Template template)  throws Exception {
 		super();
 		setOutput(template);
 	}
 	@Override
-	public Object processItem(Property item) throws AmbitException {
+	public Object processItem(Property item) throws Exception {
 		if (item!=null) {
 			item.setEnabled(true);
 			return getOutput().add(item);

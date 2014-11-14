@@ -36,10 +36,10 @@ import javax.swing.JComponent;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.AbstractDBProcessor;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IAmbitEditor;
-import ambit2.db.AbstractDBProcessor;
 import ambit2.dbui.dictionary.DictionaryQueryPanel;
 
 public class ProfileEditor extends AbstractDBProcessor<Profile<Property>,Profile<Property>> implements IAmbitEditor<Profile<Property>> {
@@ -94,7 +94,7 @@ public class ProfileEditor extends AbstractDBProcessor<Profile<Property>,Profile
 		panel.setConnection(connection);
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		super.close();
 		panel.close();
 	}

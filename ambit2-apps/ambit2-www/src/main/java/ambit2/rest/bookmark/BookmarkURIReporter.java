@@ -1,11 +1,12 @@
 package ambit2.rest.bookmark;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.Request;
 
 import ambit2.base.data.Bookmark;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 
 public class BookmarkURIReporter <Q extends IQueryRetrieval<Bookmark>> extends QueryURIReporter<Bookmark, Q> {
 

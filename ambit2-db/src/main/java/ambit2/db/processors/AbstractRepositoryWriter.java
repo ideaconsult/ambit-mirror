@@ -30,13 +30,13 @@ import java.util.logging.Level;
 
 import javax.naming.OperationNotSupportedException;
 
+import net.idea.modbcum.i.IQueryObject;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.query.IQueryUpdate;
+import net.idea.modbcum.p.AbstractDBProcessor;
 import ambit2.base.processors.ProcessorException;
-import ambit2.db.AbstractDBProcessor;
 import ambit2.db.UpdateExecutor;
-import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
 
 public abstract class AbstractRepositoryWriter<Target,Result> extends AbstractDBProcessor<Target, Result>  {
@@ -52,7 +52,7 @@ public abstract class AbstractRepositoryWriter<Target,Result> extends AbstractDB
 		queryexec.setCache(true);
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		try {exec.close(); } catch (Exception x) { logger.log(Level.FINEST,x.getMessage(),x);}
 		try {queryexec.close(); } catch (Exception x) { logger.log(Level.FINEST,x.getMessage(),x);}
 		super.close();

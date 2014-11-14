@@ -5,10 +5,10 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.update.AbstractUpdate;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.processors.AbstractPropertyWriter.mode;
 import ambit2.db.readers.PropertyValue;
-import ambit2.db.update.AbstractUpdate;
 
 public class UpdateCompoundPropertyValueString extends AbstractUpdate<IStructureRecord, PropertyValue<String>> {
 	public static final String select_string_compound = "select null,?,idchemical,idstructure,idvalue_string,?,SUBSTRING_INDEX(user(),'@',1),?,null,'STRING' from property_string join structure where value=? and idchemical=? order by idstructure limit 1";

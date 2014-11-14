@@ -31,7 +31,6 @@ import ambit2.user.rest.resource.PwdForgottenConfirmResource;
 import ambit2.user.rest.resource.PwdForgottenFailedResource;
 import ambit2.user.rest.resource.PwdForgottenNotifyResource;
 import ambit2.user.rest.resource.PwdForgottenResource;
-import ambit2.user.rest.resource.PwdResetResource;
 import ambit2.user.rest.resource.RegistrationConfirmResource;
 import ambit2.user.rest.resource.RegistrationResource;
 import ambit2.user.rest.resource.Resources;

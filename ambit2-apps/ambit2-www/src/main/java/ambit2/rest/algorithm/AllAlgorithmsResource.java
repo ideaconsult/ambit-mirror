@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ICallableTask;
 
@@ -28,9 +30,7 @@ import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.core.data.model.AlgorithmType;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.data.model.Parameter;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.ExpertModelBuilder;

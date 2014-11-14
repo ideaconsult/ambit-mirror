@@ -1,12 +1,13 @@
 package ambit2.rest.similarity.space;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.simiparity.space.QMap;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 
 public class QMapURIReporter  extends QueryURIReporter<QMap, IQueryRetrieval<QMap>> {
 

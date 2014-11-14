@@ -3,13 +3,11 @@ package ambit2.rest.routers.opentox;
 import org.restlet.Context;
 import org.restlet.routing.Router;
 
-import ambit2.rest.dataEntry.DataEntryResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.PropertyTemplateResource;
 import ambit2.rest.query.SmartsQueryResource;
 import ambit2.rest.routers.MyRouter;
-import ambit2.rest.routers.misc.DataEntryRouter;
 import ambit2.rest.structure.CompoundImageJSONResource;
 import ambit2.rest.structure.CompoundImageResource;
 import ambit2.rest.structure.CompoundResource;

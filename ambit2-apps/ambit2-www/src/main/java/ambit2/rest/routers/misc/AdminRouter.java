@@ -15,7 +15,6 @@ import ambit2.user.rest.resource.AmbitRESTPolicyResource;
 import ambit2.user.rest.resource.PwdResetResource;
 import ambit2.user.rest.resource.Resources;
 import ambit2.user.rest.resource.RoleDBResource;
-import ambit2.user.rest.resource.UserDBResource;
 
 /**
  * /admin 

@@ -3,15 +3,15 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.reporter.Reporter;
+import net.idea.restnet.c.RepresentationConvertor;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
-
-import ambit2.db.readers.IQueryRetrieval;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.PageSize;

@@ -14,10 +14,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.batch.IBatchStatistics.RECORDS_STATS;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
 
 import org.apache.commons.fileupload.FileItem;
 import org.openscience.cdk.exception.CDKException;
@@ -37,14 +39,12 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.db.processors.BatchDBProcessor;
 import ambit2.db.processors.RepositoryWriter;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.ChemicalMediaType;

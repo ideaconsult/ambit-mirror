@@ -3,6 +3,7 @@ package ambit2.rest.facet;
 import java.io.Writer;
 import java.util.Map;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
@@ -15,7 +16,6 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.SourceDataset;
 import ambit2.db.facets.qlabel.DatasetChemicalsQualityStats;
 import ambit2.db.facets.qlabel.DatasetConsensusLabelFacet;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 
 public class DatasetChemicalsQualityStatsResource extends FacetResource<DatasetConsensusLabelFacet,DatasetChemicalsQualityStats> {

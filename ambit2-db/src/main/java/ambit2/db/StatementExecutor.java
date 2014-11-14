@@ -42,7 +42,9 @@ import net.idea.modbcum.i.IStatement;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.p.AbstractDBProcessor;
 import ambit2.base.processors.ProcessorException;
+
 
 
 public abstract class StatementExecutor<Q extends IStatement,Results> extends AbstractDBProcessor<Q,Results> {
@@ -149,7 +151,7 @@ public abstract class StatementExecutor<Q extends IStatement,Results> extends Ab
 	public void closeResults(Results rs) throws SQLException {
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		Iterator<PreparedStatement> p = cache.values().iterator();
 		while (p.hasNext())
 			try {

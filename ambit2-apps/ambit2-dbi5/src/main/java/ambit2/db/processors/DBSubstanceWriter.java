@@ -6,6 +6,7 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.AbstractDBProcessor;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
@@ -18,7 +19,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
-import ambit2.db.AbstractDBProcessor;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.substance.CreateSubstance;
 import ambit2.db.substance.ids.UpdateSubstanceIdentifiers;
@@ -129,7 +129,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 		writer.setConnection(connection);
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		try {x.close();} catch (Exception x) {}
 		try {writer.close();} catch (Exception x) {}
 		super.close();

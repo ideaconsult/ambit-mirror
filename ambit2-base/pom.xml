@@ -31,7 +31,12 @@
       <groupId>net.idea</groupId>
       <artifactId>modbcum-i</artifactId>
       <version>${modbcum.version}</version>
-    </dependency>   
+    </dependency>
+    <dependency>
+      <groupId>net.idea</groupId>
+      <artifactId>modbcum-p</artifactId>
+      <version>${modbcum.version}</version>
+    </dependency>          
   </dependencies>
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

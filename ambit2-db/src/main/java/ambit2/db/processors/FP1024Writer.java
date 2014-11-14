@@ -110,7 +110,7 @@ public class FP1024Writer extends AbstractRepositoryWriter<IStructureRecord, ISt
 		
 	}	
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		if (ps_bitset != null)
 			ps_bitset.close();
 		ps_bitset = null;

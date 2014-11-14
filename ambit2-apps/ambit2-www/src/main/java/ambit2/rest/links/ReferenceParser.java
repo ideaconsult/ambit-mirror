@@ -1,9 +1,9 @@
 package ambit2.rest.links;
 
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+
 import org.restlet.Application;
 import org.restlet.data.Reference;
-
-import ambit2.base.processors.DefaultAmbitProcessor;
 
 /**
  * Abstract class to parse into domain object, given a reference

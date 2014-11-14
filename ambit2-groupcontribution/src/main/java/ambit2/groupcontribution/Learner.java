@@ -1,7 +1,5 @@
 package ambit2.groupcontribution;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
-
 import ambit2.groupcontribution.dataset.DataSet;
 
 /**

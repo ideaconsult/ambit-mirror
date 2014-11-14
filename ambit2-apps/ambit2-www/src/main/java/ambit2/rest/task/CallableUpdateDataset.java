@@ -2,8 +2,11 @@ package ambit2.rest.task;
 
 import java.sql.Connection;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -14,11 +17,8 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
-import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.DbReaderStructure;
-import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.RepositoryWriter;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetURIReporter;

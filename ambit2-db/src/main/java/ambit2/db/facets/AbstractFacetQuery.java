@@ -1,8 +1,8 @@
 package ambit2.db.facets;
 
 import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.IQueryRetrieval;
 import ambit2.base.facet.IFacet;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 
 /**

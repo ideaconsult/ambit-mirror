@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 
 public class ARFF3ColReporter<Q extends IQueryRetrieval<IStructureRecord>> extends ARFFReporter<Q> {
 	/**

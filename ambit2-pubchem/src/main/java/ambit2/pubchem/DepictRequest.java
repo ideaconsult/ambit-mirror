@@ -13,8 +13,8 @@ import java.net.URLEncoder;
 import javax.imageio.ImageIO;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 import ambit2.base.exceptions.HttpException;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.processors.ProcessorException;
 
 public class DepictRequest extends DefaultAmbitProcessor<String,BufferedImage> {

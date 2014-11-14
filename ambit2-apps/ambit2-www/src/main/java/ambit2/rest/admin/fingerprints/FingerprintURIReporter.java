@@ -1,13 +1,14 @@
 package ambit2.rest.admin.fingerprints;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.fp.IFingerprint;
 import ambit2.descriptors.processors.BitSetGenerator.FPTable;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.admin.AdminResource;
 
 public class FingerprintURIReporter<Q extends IQueryRetrieval<IFingerprint<FPTable,String>>> extends QueryURIReporter<IFingerprint<FPTable,String>, Q>{

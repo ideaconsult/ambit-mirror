@@ -6,9 +6,9 @@ import java.util.List;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.IQueryUpdate;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.update.AbstractUpdate;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.update.AbstractUpdate;
 import ambit2.smarts.CMLUtilities;
 
 public class CreateSMARTSData extends AbstractUpdate<IStructureRecord,IStructureRecord> implements IQueryUpdate< IStructureRecord,IStructureRecord>{

@@ -4,7 +4,6 @@ import org.restlet.Context;
 import org.restlet.routing.Router;
 
 import ambit2.rest.routers.MyRouter;
-import ambit2.rest.routers.misc.DataEntryRouter;
 import ambit2.rest.structure.CompoundResource;
 
 /**

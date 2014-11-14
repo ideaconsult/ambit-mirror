@@ -1,6 +1,9 @@
 package ambit2.rest.substance.property;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -15,13 +18,10 @@ import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.substance.SubstanceProperty;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.study.ReadSubstanceProperty;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
-import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyJSONReporter;
 import ambit2.rest.property.PropertyRDFReporter;

@@ -5,11 +5,11 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.IQueryObject;
 import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.processors.QueryInfo2Query;
-import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryCombined;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.QueryInfo;

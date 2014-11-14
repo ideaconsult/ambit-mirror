@@ -34,11 +34,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.processors.ProcessorException;
 import ambit2.core.io.RawIteratingSDFReader;
 

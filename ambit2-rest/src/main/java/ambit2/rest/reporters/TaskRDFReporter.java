@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskResult;
 import net.idea.restnet.i.task.ITaskStorage;
@@ -17,7 +18,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.task.Task;
 

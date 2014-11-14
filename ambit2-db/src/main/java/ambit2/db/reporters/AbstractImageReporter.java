@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,10 +14,13 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.query.IQueryUpdate;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.modbcum.r.QueryReporter;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -26,13 +28,11 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import ambit2.base.data.AmbitUser;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.SessionID;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.cache.RetrieveStructureImagePath;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.AbstractStructureQuery;
@@ -115,7 +115,7 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 		cacheUpdater.setConnection(connection);
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		try {
 		cacheUpdater.setConnection(null);
 		} catch (Exception x) {};

@@ -6,8 +6,12 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.r.QueryAbstractReporter;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -33,13 +37,10 @@ import ambit2.base.data.substance.SubstancePublicName;
 import ambit2.base.data.substance.SubstanceUUID;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.processors.MasterDetailsProcessor;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.substance.ReadSubstanceByOwner;
 import ambit2.db.substance.study.ReadEffectRecordBySubstance;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.OutputWriterConvertor;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFF3ColResourceReporter;
 import ambit2.rest.dataset.ARFFResourceReporter;
@@ -98,7 +99,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			QueryURIReporter r = (QueryURIReporter)getURIReporter();
+			QueryURIReporter r = (QueryURIReporter)getURIReporter(getRequest());
 			r.setDelimiter("\n");
 			return new StringConvertor(
 					r,MediaType.TEXT_URI_LIST,filenamePrefix);
@@ -109,11 +110,15 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return createARFFReporter(filenamePrefix);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.THREECOL_ARFF)) {
-			return new OutputWriterConvertor<SubstanceRecord, ReadSubstanceByOwner>(
-					new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
-								String.format("%s%s",getRequest().getRootRef(),"")
-							),
-					ChemicalMediaType.THREECOL_ARFF,filenamePrefix);				
+			QueryAbstractReporter reporter = 
+					new ARFF3ColResourceReporter<IQueryRetrieval<IStructureRecord>>(
+					getTemplate(),getGroupProperties(),getRequest(),getDocumentation(), 
+					String.format("%s%s",getRequest().getRootRef(),"")
+					);			
+			return new OutputWriterConvertor(reporter, ChemicalMediaType.THREECOL_ARFF,filenamePrefix);	
+			
+
+							
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return createCSVReporter(filenamePrefix);
 		} else { //json by default

@@ -4,6 +4,7 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
@@ -18,7 +19,6 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
 import ambit2.db.facets.propertyvalue.PropertyDatasetFacet;
 import ambit2.db.facets.propertyvalue.PropertyDatasetFacetQuery;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 
 /**

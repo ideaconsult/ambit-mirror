@@ -32,10 +32,9 @@ package ambit2.core.data.distances;
 import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-
-import ambit2.base.processors.DefaultAmbitProcessor;
 
 
 public class AtomDistanceProcessor extends	DefaultAmbitProcessor<IAtomContainer,List<AtomDistance>> {

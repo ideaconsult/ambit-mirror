@@ -3,8 +3,10 @@ package ambit2.rest.similarity;
 import java.io.Writer;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.r.QueryReporter;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
@@ -13,8 +15,6 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.AbstractRelation;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.IStoredQuery;
 import ambit2.rest.OpenTox;

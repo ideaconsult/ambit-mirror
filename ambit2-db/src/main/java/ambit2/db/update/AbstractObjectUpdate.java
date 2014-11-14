@@ -29,6 +29,8 @@
 
 package ambit2.db.update;
 
+import net.idea.modbcum.q.update.AbstractUpdate;
+
 
 public abstract class AbstractObjectUpdate<Target> extends AbstractUpdate<Object,Target> {
 	public AbstractObjectUpdate(Target target) {

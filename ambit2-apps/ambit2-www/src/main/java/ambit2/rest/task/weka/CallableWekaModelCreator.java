@@ -2,7 +2,9 @@ package ambit2.rest.task.weka;
 
 import java.sql.Connection;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -16,8 +18,6 @@ import weka.core.WekaException;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.UpdateExecutor;
-import ambit2.db.processors.AbstractBatchProcessor;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.model.CreateModel;
 import ambit2.rest.OpenTox;
 import ambit2.rest.algorithm.AlgorithmURIReporter;

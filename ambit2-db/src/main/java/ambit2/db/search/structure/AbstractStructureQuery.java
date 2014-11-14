@@ -33,11 +33,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 
 public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition> 

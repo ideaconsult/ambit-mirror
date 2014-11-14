@@ -32,11 +32,11 @@ package ambit2.core.processors.structure.key;
 import java.util.Iterator;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.structure.InchiProcessor;
 
 /**

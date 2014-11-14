@@ -2,6 +2,8 @@ package ambit2.rest.propertyvalue;
 
 import java.io.Serializable;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -12,7 +14,6 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveTemplatePropertyValue;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;

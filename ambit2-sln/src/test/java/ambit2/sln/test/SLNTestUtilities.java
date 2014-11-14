@@ -3,8 +3,8 @@ package ambit2.sln.test;
 import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.sln.SLNContainer;
-import ambit2.sln.SLNParser;
 import ambit2.sln.SLNHelper;
+import ambit2.sln.SLNParser;
 import ambit2.sln.search.SLNSearchManager;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;

@@ -1,12 +1,13 @@
 package ambit2.rest.property;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
+import net.idea.modbcum.p.AbstractDBProcessor;
 
 import org.restlet.Context;
 import org.restlet.data.Cookie;
@@ -15,8 +16,6 @@ import org.restlet.util.Series;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.db.AbstractDBProcessor;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryTemplateReporter;
 import ambit2.db.search.property.AbstractPropertyRetrieval;
 import ambit2.rest.task.CallableQueryProcessor;
@@ -36,7 +35,7 @@ public class ProfileReader extends AbstractDBProcessor<Reference, Template> {
 	public ProfileReader(Reference applicationReference, Template profile,Context context,
 				String token,
 				Series<Cookie> cookies,
-				String agent) throws AmbitException {
+				String agent) throws Exception {
 		super();
 		setApplicationReference(applicationReference);
 		setProfile(profile==null?new Template():profile);
@@ -58,7 +57,7 @@ public class ProfileReader extends AbstractDBProcessor<Reference, Template> {
 		reporter.setConnection(connection);
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		reporter.close();
 		super.close();
 	}

@@ -9,7 +9,6 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.search.EQCondition;
 import ambit2.db.search.StringCondition;
 import ambit2.descriptors.processors.BitSetGenerator.FPTable;
 

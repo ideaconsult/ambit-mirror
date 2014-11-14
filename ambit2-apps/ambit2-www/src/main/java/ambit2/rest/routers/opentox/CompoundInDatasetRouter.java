@@ -4,7 +4,6 @@ import org.restlet.Context;
 import org.restlet.routing.Router;
 
 import ambit2.rest.dataset.DatasetCompoundResource;
-import ambit2.rest.routers.misc.DataEntryRouter;
 
 
 public class CompoundInDatasetRouter extends CompoundRouter {

@@ -3,9 +3,9 @@ package ambit2.base.processors.batch;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.i.reporter.Reporter;
-import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.base.processors.ProcessorsChain;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 /**
  * Batch reporter

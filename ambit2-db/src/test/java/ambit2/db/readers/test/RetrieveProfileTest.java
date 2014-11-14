@@ -30,6 +30,7 @@
 package ambit2.db.readers.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.IQueryRetrieval;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -37,7 +38,6 @@ import org.dbunit.dataset.ITable;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.search.property.RetrieveProfile;
 

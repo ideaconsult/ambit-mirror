@@ -1,7 +1,6 @@
 package ambit2.rest.model.predictor;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
@@ -39,7 +38,7 @@ public abstract class AbstractStructureProcessor<Predictor>  extends	ModelPredic
 		exec.setConnection(connection);
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		try {exec.close();} catch (Exception x) {}
 		super.close();
 	}

@@ -5,10 +5,10 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.update.AbstractUpdate;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.PropertyAnnotations;
-import ambit2.db.update.AbstractUpdate;
 
 public class CreatePropertyAnnotations  extends AbstractUpdate<Property,PropertyAnnotations> {
 	protected String sql_values = "(?,?,?,?)";

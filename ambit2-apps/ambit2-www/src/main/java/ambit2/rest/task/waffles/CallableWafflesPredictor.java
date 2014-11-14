@@ -5,6 +5,8 @@ import java.net.HttpURLConnection;
 
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
@@ -15,8 +17,6 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.io.DownloadTool;
-import ambit2.base.processors.ProcessorsChain;
-import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.PropertyValuesWriter;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.task.CallableModelPredictor;

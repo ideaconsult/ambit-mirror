@@ -1,8 +1,8 @@
 package ambit2.groupcontribution;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;

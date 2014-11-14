@@ -1,9 +1,9 @@
 package ambit2.markush;
 
-import ambit2.core.groups.*;
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.silent.PseudoAtom;
+
+import ambit2.core.groups.SuppleAtomContainer;
 
 public class MarkushHelpers 
 {

@@ -1,7 +1,10 @@
 package ambit2.rest.structure.dataset;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -17,12 +20,9 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
-import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.DatasetURIReporter;

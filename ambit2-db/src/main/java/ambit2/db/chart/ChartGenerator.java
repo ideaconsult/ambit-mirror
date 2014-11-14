@@ -2,7 +2,7 @@ package ambit2.db.chart;
 
 import java.awt.image.BufferedImage;
 
-import ambit2.db.AbstractDBProcessor;
+import net.idea.modbcum.p.AbstractDBProcessor;
 
 
 

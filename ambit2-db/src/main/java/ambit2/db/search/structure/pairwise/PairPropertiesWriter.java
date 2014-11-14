@@ -1,7 +1,6 @@
 package ambit2.db.search.structure.pairwise;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
@@ -29,7 +28,7 @@ public class PairPropertiesWriter extends AbstractRepositoryWriter<IStructureRec
 		writer.setCloseConnection(closeConnection);
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		try {writer.close(); } catch (Exception x) {}
 		super.close();
 	}

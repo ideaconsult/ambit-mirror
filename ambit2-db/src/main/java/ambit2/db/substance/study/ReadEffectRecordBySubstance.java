@@ -8,7 +8,6 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.SubstanceRecord;
-import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolEffectRecord;
 

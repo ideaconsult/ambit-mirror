@@ -4,10 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.sql.SQLException;
 import java.util.Iterator;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 import org.restlet.data.Reference;
 
@@ -18,7 +18,6 @@ import weka.core.converters.ArffLoader.ArffReader;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.RDFPropertyIterator;
 
@@ -124,7 +123,7 @@ public class ARFFIterator extends AbstractBatchProcessor<File[], IStructureRecor
 	}
 
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		try {input.close();} catch (Exception x) {}
 		try {results.close();} catch (Exception x) {}
 		super.close();

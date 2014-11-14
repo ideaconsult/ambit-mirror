@@ -33,13 +33,13 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
-import ambit2.db.readers.IQueryRetrieval;
 
 public class QuerySmilesByID extends AbstractQuery<String, IStructureRecord, NumberCondition, IStructureRecord> implements IQueryRetrieval<IStructureRecord> {
 

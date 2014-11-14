@@ -6,6 +6,7 @@ import java.util.List;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Context;
 import org.restlet.Request;

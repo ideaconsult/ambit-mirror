@@ -5,9 +5,9 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.update.AbstractUpdate;
 import ambit2.base.data.AmbitUser;
 import ambit2.db.SessionID;
-import ambit2.db.update.AbstractUpdate;
 
 public class UpdateQueryFolder extends AbstractUpdate<AmbitUser,SessionID> {
 	public static final String sql = "update sessions set title=? where idsessions=? and user_name=?" ;

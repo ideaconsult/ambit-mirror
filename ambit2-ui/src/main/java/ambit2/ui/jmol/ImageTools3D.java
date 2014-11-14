@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.jmol.api.JmolAdapter;
 import org.jmol.api.JmolViewer;
@@ -22,8 +23,6 @@ import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemSequence;
 import org.openscience.cdk.interfaces.IMoleculeSet;
-
-import ambit2.base.processors.DefaultAmbitProcessor;
 
 /**
  * JMol wrapper, used in {@link Panel3D}

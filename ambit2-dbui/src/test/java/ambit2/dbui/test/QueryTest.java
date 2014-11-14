@@ -3,7 +3,7 @@ package ambit2.dbui.test;
 import java.sql.Connection;
 import java.sql.ResultSet;
 
-import ambit2.db.search.IQueryObject;
+import net.idea.modbcum.i.IQueryObject;
 import ambit2.db.search.QueryExecutor;
 
 

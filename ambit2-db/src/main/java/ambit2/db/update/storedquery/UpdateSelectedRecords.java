@@ -34,9 +34,9 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.update.AbstractUpdate;
 import ambit2.base.data.ISelectableRecords;
 import ambit2.db.search.IStoredQuery;
-import ambit2.db.update.AbstractUpdate;
 
 public class UpdateSelectedRecords extends AbstractUpdate<IStoredQuery,ISelectableRecords.SELECTION_MODE> {
 

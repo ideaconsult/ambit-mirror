@@ -2,6 +2,8 @@ package ambit2.rest.dataset;
 
 import java.util.Map;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
@@ -19,9 +21,7 @@ import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StringCondition;
-import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.dataset.AbstractReadDataset;
 import ambit2.db.update.dataset.QueryDatasetByFeatures;
 import ambit2.db.update.dataset.ReadDataset;

@@ -2,6 +2,7 @@ package ambit2.rest.property;
 
 import java.io.Writer;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.opentox.rdf.OT;
@@ -12,7 +13,6 @@ import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.json.JSONUtils;
-import ambit2.db.readers.IQueryRetrieval;
 
 /**
  * JSON

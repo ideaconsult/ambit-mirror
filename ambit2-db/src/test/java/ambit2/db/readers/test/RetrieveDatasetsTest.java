@@ -32,6 +32,8 @@ package ambit2.db.readers.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.IQueryObject;
+import net.idea.modbcum.i.IQueryRetrieval;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -42,10 +44,8 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.SourceDatasetRows;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.results.AmbitRows;
-import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
 
 public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {

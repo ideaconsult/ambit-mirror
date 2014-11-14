@@ -2,7 +2,9 @@ package ambit2.rest.dataset;
 
 import java.io.Writer;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
@@ -10,10 +12,8 @@ import org.restlet.data.Reference;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 
 
 public class DatasetURIReporter<Q extends IQueryRetrieval<M>,M extends ISourceDataset> extends QueryURIReporter<M, Q> {

@@ -42,6 +42,7 @@ import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.ListModel;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 
@@ -50,7 +51,6 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyStats;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.results.RowsModel;
 import ambit2.db.search.NumberCondition;

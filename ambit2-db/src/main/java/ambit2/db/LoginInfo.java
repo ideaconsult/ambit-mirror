@@ -29,6 +29,8 @@ import java.sql.Connection;
 
 import ambit2.base.config.Preferences;
 
+
+
 public class LoginInfo {
 	protected String scheme;
 	protected String host;

@@ -29,9 +29,9 @@ import net.idea.modbcum.i.batch.DefaultBatchStatistics;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 import ambit2.base.interfaces.IBatchProcessor;
-import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.base.processors.ProcessorsChain;
 
 public abstract class BatchProcessor<INPUT,Target> extends DefaultAmbitProcessor<INPUT,IBatchStatistics> 
 					implements IBatchProcessor<INPUT,Target,IBatchStatistics> {

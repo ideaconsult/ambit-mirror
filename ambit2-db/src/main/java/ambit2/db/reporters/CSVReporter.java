@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.data.ISourceDataset;
@@ -15,7 +16,6 @@ import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.ReadChemicalIds;
 
 public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryHeaderReporter<Q, Writer> {
@@ -191,7 +191,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	}
 
 	@Override
-	public Object processItem(IStructureRecord item) throws AmbitException {
+	public Object processItem(IStructureRecord item) throws Exception {
 		Writer writer = getOutput();
 		try {
 			

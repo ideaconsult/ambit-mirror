@@ -1,7 +1,8 @@
 package ambit2.reactions;
 
+import java.util.ArrayList;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
-import java.util.ArrayList; 
 
 
 public class StartingMaterialsDataBase 

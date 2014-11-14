@@ -3,16 +3,16 @@ package ambit2.rest.facet;
 import java.io.Writer;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 
 import ambit2.base.facet.IFacet;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 
 public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<Facet, IQueryRetrieval<Facet>> {
 	/**

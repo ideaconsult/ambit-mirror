@@ -34,11 +34,9 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.update.tuple.DatasetAddTuple;
 import ambit2.db.update.value.UpdateStructurePropertyIDNumber;
 import ambit2.db.update.value.UpdateStructurePropertyIDString;
 
@@ -235,7 +233,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     };
     protected abstract Object getValue(Target target, Property propertyName, int index);
     
-    public void close() throws SQLException {
+    public void close() throws Exception {
         if (ps_descriptorvalue_number != null)ps_descriptorvalue_number.close();
         ps_descriptorvalue_number = null;
         if (ps_descriptorvalue_string != null)	ps_descriptorvalue_string.close();

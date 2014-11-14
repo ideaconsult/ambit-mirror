@@ -2,6 +2,7 @@ package ambit2.rest.structure;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
+import net.idea.restnet.c.RepresentationConvertor;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -11,7 +12,6 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.RepresentationConvertor;
 
 /**
  * /compound/{id}/imagejson

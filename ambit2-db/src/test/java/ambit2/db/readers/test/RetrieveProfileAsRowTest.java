@@ -1,10 +1,10 @@
 package ambit2.db.readers.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.IQueryRetrieval;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveProfileValuesAsRow;
 import ambit2.db.results.AmbitRows;
 

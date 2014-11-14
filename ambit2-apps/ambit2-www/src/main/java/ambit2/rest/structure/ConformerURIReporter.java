@@ -1,11 +1,12 @@
 package ambit2.rest.structure;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.ResourceDoc;
 
 /**
  * Generates conformer URI as /compound/{id}/conformer/{id}

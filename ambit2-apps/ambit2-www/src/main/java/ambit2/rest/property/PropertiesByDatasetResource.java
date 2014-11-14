@@ -1,5 +1,9 @@
 package ambit2.rest.property;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -11,14 +15,11 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.property.PropertiesByDataset;
 import ambit2.db.search.property.PropertiesByQuery;
-import ambit2.db.update.AbstractUpdate;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 

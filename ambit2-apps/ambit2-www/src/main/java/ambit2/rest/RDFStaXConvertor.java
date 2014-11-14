@@ -6,15 +6,13 @@ import java.io.OutputStream;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.r.QueryReporter;
 
 import org.codehaus.stax2.XMLOutputFactory2;
 import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
-
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 
 import com.sun.xml.txw2.output.IndentingXMLStreamWriter;
 
@@ -35,7 +33,7 @@ public class RDFStaXConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepr
 	}
 	
 	@Override
-	public Representation process(final Q query) throws AmbitException {
+	public Representation process(final Q query) throws Exception {
 		Representation rep = new OutputRepresentation(MediaType.APPLICATION_RDF_XML) {
 			 @Override
 			public void write(OutputStream out) throws IOException {

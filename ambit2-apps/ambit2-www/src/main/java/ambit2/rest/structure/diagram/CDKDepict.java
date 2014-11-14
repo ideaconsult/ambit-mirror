@@ -7,6 +7,7 @@ import java.io.Writer;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.r.AbstractReporter;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
@@ -23,7 +24,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.processors.AbstractReporter;
 import ambit2.core.data.MoleculeTools;
 import ambit2.rendering.CompoundImageTools;
 import ambit2.rendering.CompoundImageTools.Mode2D;

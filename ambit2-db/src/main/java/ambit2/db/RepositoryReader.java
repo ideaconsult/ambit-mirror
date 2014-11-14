@@ -31,8 +31,10 @@ import java.sql.SQLException;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.AbstractDBProcessor;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.processors.ProcessorException;
+
 /**
  * TODO parameterize
  * @author nina

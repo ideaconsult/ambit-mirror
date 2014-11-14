@@ -2,8 +2,10 @@ package ambit2.rest.substance.study;
 
 import java.util.Map;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
@@ -20,10 +22,8 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.study.ReadSubstanceStudy;
 import ambit2.rest.OpenTox;
-import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.substance.SubstanceResource;
 

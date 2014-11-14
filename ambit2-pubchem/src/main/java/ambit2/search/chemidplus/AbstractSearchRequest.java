@@ -5,8 +5,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 import ambit2.base.exceptions.HttpException;
-import ambit2.base.processors.DefaultAmbitProcessor;
 
 
 public abstract class AbstractSearchRequest<R> extends DefaultAmbitProcessor<String, R> {

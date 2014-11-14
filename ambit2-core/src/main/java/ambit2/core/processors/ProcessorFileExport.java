@@ -7,7 +7,7 @@ import java.io.OutputStream;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.reporter.Reporter;
-import ambit2.base.processors.DefaultAmbitProcessor;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 import ambit2.core.io.FileOutputState;
 
 import com.lowagie.text.Document;

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
@@ -17,7 +18,6 @@ import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 
 public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryHeaderReporter< Q, Writer> {
 	/**
@@ -54,7 +54,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 	}
 	
 	@Override
-	public void setOutput(Writer output) throws AmbitException {
+	public void setOutput(Writer output) throws Exception {
 		super.setOutput(output);
 		try {
 			tmpWriter = createTempWriter();

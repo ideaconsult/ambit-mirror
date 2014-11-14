@@ -2,12 +2,12 @@ package ambit2.db.reporters;
 
 import java.io.Writer;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.readers.IQueryRetrieval;
 
 /**
  * Very simple html reporter

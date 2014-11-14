@@ -43,6 +43,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.dbunit.database.IDatabaseConnection;
@@ -52,7 +53,6 @@ import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.db.processors.test.DbUnitTest;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveField;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.results.QueryChangeEvent;

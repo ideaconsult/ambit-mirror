@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.net.URLEncoder;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,8 +14,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -29,9 +31,7 @@ import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
@@ -41,7 +41,6 @@ import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.QueryResource;
@@ -134,7 +133,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	
 	}
 	@Override
-	public Writer getOutput() throws AmbitException {
+	public Writer getOutput() throws Exception {
 		Writer w = super.getOutput();
 		pReporter.setOutput(w);
 		uriReporter.setOutput(w);
@@ -967,7 +966,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	}		
 
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		super.close();
 	}
 	@Override

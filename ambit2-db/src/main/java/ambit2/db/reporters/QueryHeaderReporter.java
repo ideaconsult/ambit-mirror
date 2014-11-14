@@ -6,14 +6,14 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
@@ -104,7 +104,8 @@ public abstract class QueryHeaderReporter<Q extends IQueryRetrieval<IStructureRe
 		configurePropertyProcessors();
 		getProcessors().add(new ProcessorStructureRetrieval(new QuerySmilesByID()));		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
-			public IStructureRecord process(IStructureRecord target) throws AmbitException {
+			@Override
+			public IStructureRecord process(IStructureRecord target) throws Exception {
 				processItem(target);
 				return target;
 			};

@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.idea.restnet.c.ResourceDoc;
+
 import org.opentox.rdf.OT;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -13,7 +15,6 @@ import org.restlet.data.MediaType;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Parameter;
 import ambit2.rest.BO;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.rdf.OTA;
 import ambit2.rest.rdf.OTA.OTAClass;
 import ambit2.rest.reporters.CatalogRDFReporter;

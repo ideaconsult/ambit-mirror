@@ -10,6 +10,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceName;
 import ambit2.base.data.substance.SubstancePublicName;
 import ambit2.base.data.substance.SubstanceUUID;
@@ -21,7 +22,7 @@ import ambit2.rest.substance.SubstanceResource;
  * @author nina
  *
  */
-public class SubstanceByOwnerResource extends SubstanceResource<ReadSubstanceByOwner> {
+public class SubstanceByOwnerResource extends SubstanceResource<ReadSubstanceByOwner,SubstanceRecord> {
 	
 	@Override
 	protected ReadSubstanceByOwner createQuery(Context context, Request request, Response response) throws ResourceException {

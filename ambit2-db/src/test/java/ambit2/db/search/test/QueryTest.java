@@ -3,13 +3,13 @@ package ambit2.db.search.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.IQueryObject;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Before;
 import org.junit.Test;
 
 import ambit2.db.processors.test.DbUnitTest;
-import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
 
 

@@ -1,6 +1,9 @@
 package ambit2.rest.structure;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -10,10 +13,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.db.DbReader;
 import ambit2.db.DbReaderStructure;
-import ambit2.db.processors.AbstractBatchProcessor;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 
 /**
  * {@link MediaType.TEXT_URI_LIST}

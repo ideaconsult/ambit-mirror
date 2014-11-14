@@ -4,10 +4,11 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.logging.Level;
 
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.Request;
 
 import ambit2.rest.AmbitResource;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.algorithm.AllAlgorithmsResource;

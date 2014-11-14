@@ -63,11 +63,11 @@ import javax.sql.rowset.RowSetWarning;
 import javax.sql.rowset.spi.SyncProvider;
 import javax.sql.rowset.spi.SyncProviderException;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
-import ambit2.db.AbstractDBProcessor;
+import net.idea.modbcum.p.AbstractDBProcessor;
 import ambit2.db.CachedRowSetFactory;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryExecutor;
 
 public class AmbitRows<T> extends AbstractDBProcessor<T,IQueryRetrieval> implements 

@@ -203,7 +203,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
         try {
         	if (ps_seekdataset != null) {
         		ps_seekdataset.close();

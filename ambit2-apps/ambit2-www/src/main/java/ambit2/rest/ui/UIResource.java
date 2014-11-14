@@ -304,7 +304,7 @@ public class UIResource extends FreeMarkerResource {
 									"files[]",
 									getRootRef(),
 									getContext(),
-									new SubstanceURIReporter(getRequest().getRootRef(), null),
+									new SubstanceURIReporter(getRequest().getRootRef()),
 									new DatasetURIReporter(getRequest().getRootRef(), null),
 									null);
 							callable.setClearComposition(clearComposition);

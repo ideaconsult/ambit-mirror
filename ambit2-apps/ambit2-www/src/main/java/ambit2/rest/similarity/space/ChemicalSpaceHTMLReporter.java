@@ -3,20 +3,20 @@ package ambit2.rest.similarity.space;
 import java.io.IOException;
 import java.io.Writer;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.pairwise.ChemSpaceCell;
 import ambit2.db.search.structure.pairwise.ChemicalSpaceQuery;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.query.QueryResource;
 
 public class ChemicalSpaceHTMLReporter  extends QueryHTMLReporter<ChemSpaceCell, IQueryRetrieval<ChemSpaceCell>> {
@@ -41,7 +41,7 @@ public class ChemicalSpaceHTMLReporter  extends QueryHTMLReporter<ChemSpaceCell,
 		return null;
 	}
 	@Override
-	public void setOutput(Writer output) throws AmbitException {
+	public void setOutput(Writer output) throws Exception {
 		super.setOutput(output);
 		similarityJSONReporter.setOutput(output);
 	}

@@ -1,18 +1,17 @@
 package ambit2.markush.test;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.IChemObjectReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import java.io.InputStream;
-import java.io.FileInputStream;
-
 import ambit2.core.data.MoleculeTools;
+import ambit2.core.groups.SuppleAtomContainer;
 import ambit2.core.io.MDLV2000ReaderExtended;
-import ambit2.core.groups.*;
-
-import ambit2.markush.*;
+import ambit2.markush.MarkushHelpers;
 
 public class TestUtils 
 {

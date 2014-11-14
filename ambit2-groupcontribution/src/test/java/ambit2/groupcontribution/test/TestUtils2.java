@@ -1,20 +1,15 @@
 package ambit2.groupcontribution.test;
 
-import java.util.Map;
 import java.util.ArrayList;
+import java.util.Map;
 
-
-
-
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.groupcontribution.Calculator;
+import ambit2.groupcontribution.GroupContributionModel;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LDAtomSymbol;
 import ambit2.groupcontribution.descriptors.LDHNum;
-import ambit2.groupcontribution.groups.IGroup;
-import ambit2.groupcontribution.GroupContributionModel;
-import ambit2.groupcontribution.Calculator;
 import ambit2.smarts.SmartsHelper;
 
 

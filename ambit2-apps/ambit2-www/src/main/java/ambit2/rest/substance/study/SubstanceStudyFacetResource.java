@@ -2,6 +2,7 @@ package ambit2.rest.substance.study;
 
 import java.util.Map;
 
+import net.idea.modbcum.r.QueryReporter;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
@@ -11,8 +12,6 @@ import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.data.study.EffectRecord;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.db.substance.study.facet.SubstanceStudyFacet;
 import ambit2.db.substance.study.facet.SubstanceStudyFacetQuery;
 import ambit2.rest.facet.FacetResource;

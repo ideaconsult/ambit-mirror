@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Iterator;
-import java.util.logging.Level;
 
 import net.idea.modbcum.i.processors.IProcessor;
 

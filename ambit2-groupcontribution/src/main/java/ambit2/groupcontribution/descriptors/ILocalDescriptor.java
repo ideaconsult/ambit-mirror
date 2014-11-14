@@ -1,7 +1,7 @@
 package ambit2.groupcontribution.descriptors;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 
 public interface ILocalDescriptor 

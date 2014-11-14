@@ -1,13 +1,13 @@
 package ambit2.db.reporters;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
@@ -67,13 +67,13 @@ public abstract class AbstractStructureRecordReporter<Result> extends QueryStruc
 				}
 			});		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
-			public IStructureRecord process(IStructureRecord target) throws AmbitException {
+			public IStructureRecord process(IStructureRecord target) throws Exception {
 				processItem(target);
 				return target;
 			};
 		});			
 	}	
-	public void footer(Result output, ambit2.db.readers.IQueryRetrieval<IStructureRecord> query) {};
-	public void header(Result output, ambit2.db.readers.IQueryRetrieval<IStructureRecord> query) {};
+	public void footer(Result output, IQueryRetrieval<IStructureRecord> query) {};
+	public void header(Result output, IQueryRetrieval<IStructureRecord> query) {};
 	public void open() throws DbAmbitException {}
 }	

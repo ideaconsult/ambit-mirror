@@ -1,6 +1,6 @@
 package ambit2.model.builder;
 
-import ambit2.base.processors.DefaultAmbitProcessor;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.ModelQueryResults;
 

@@ -13,8 +13,10 @@ import java.io.ObjectInputStream;
 import java.io.StringReader;
 import java.util.Iterator;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.AbstractDBProcessor;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.Request;
@@ -35,8 +37,6 @@ import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.core.data.model.IEvaluation.EVType;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.db.AbstractDBProcessor;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.model.evaluation.EvaluationStats;
 import ambit2.rendering.CompoundImageTools;
 import ambit2.rest.OpenTox;

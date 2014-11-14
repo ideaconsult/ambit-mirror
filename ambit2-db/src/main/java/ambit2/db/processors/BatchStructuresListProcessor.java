@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 
 public class BatchStructuresListProcessor extends AbstractBatchProcessor<List<IStructureRecord>,IStructureRecord> {

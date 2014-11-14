@@ -3,14 +3,14 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.Writer;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryHeaderReporter;
 
 /**
@@ -67,7 +67,7 @@ public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStru
 		processors.add(valuesReader);
 		*/
 		processors.add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
-			public IStructureRecord process(IStructureRecord target) throws AmbitException {
+			public IStructureRecord process(IStructureRecord target) throws Exception {
 				processItem(target);
 				return target;
 			};

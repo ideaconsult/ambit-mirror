@@ -8,13 +8,14 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryObject;
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.IStoredProcStatement;
 import ambit2.db.StatementExecutor;
-import ambit2.db.readers.IQueryRetrieval;
 
 /**
  * Executes arbitrary {@link IQueryObject}

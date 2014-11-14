@@ -2,7 +2,6 @@ package ambit2.rest.task.tautomers;
 
 import java.io.StringWriter;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -71,7 +70,7 @@ public class TautomersGenerator  extends	AbstractStructureProcessor<TautomerMana
 		writer.setUseExistingStructure(true);
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		try {writer.setConnection(null);} catch (Exception x) {}
 		super.close();
 	}

@@ -5,6 +5,9 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
+
 import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -15,8 +18,6 @@ import weka.core.Instances;
 import Jama.Matrix;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.db.processors.AbstractBatchProcessor;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;

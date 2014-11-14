@@ -1,11 +1,12 @@
 package ambit2.rest.task.weka;
 
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
+
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
 import weka.core.Instance;
-import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.rest.dataset.RDFInstancesParser;
 import ambit2.rest.model.predictor.ModelPredictor;
 import ambit2.rest.task.CallableModelPredictor;

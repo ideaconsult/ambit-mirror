@@ -5,13 +5,13 @@ import java.util.UUID;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.reporter.Reporter;
+import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.i.task.ITaskStorage;
 
 import org.restlet.Request;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.DisplayMode;
-import ambit2.rest.ResourceDoc;
 
 /**
  * Same as parent class, with custom HTML reporter for Task object
