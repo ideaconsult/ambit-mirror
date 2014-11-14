@@ -32,15 +32,15 @@ package ambit2.db.readers.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.IQueryObject;
+import net.idea.modbcum.i.IQueryRetrieval;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
 import ambit2.base.data.Property;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.results.AmbitRows;
-import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.property.RetrieveFieldNames;
 

@@ -33,6 +33,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
@@ -40,8 +41,6 @@ import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
-
-import ambit2.base.processors.DefaultAmbitProcessor;
 
 /**
  * Prints {@link DescriptorValue} as a string

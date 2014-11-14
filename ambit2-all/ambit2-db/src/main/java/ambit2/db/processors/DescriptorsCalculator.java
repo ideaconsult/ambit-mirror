@@ -28,7 +28,6 @@ package ambit2.db.processors;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.logging.Level;
 
@@ -136,7 +135,7 @@ public class DescriptorsCalculator extends AbstractDescriptorCalculator<IAtomCon
 		writer.open();
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		super.close();
 		writer.close();
 	}

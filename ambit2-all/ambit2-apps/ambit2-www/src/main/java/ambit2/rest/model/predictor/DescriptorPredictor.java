@@ -5,6 +5,7 @@ import java.sql.Connection;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.AbstractDBProcessor;
 
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -16,7 +17,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.db.AbstractDBProcessor;
 import ambit2.db.processors.AbstractDescriptorCalculator;
 import ambit2.db.processors.DescriptorsCalculator;
 import ambit2.descriptors.processors.DescriptorsFactory;

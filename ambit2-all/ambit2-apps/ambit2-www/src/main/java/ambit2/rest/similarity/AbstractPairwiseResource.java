@@ -3,8 +3,12 @@ package ambit2.rest.similarity;
 import java.awt.Dimension;
 import java.io.Serializable;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
+import net.idea.modbcum.r.QueryAbstractReporter;
+import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -19,15 +23,11 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
-import ambit2.db.reporters.QueryAbstractReporter;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.property.QueryPairwiseTanimoto;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.OpenTox;
-import ambit2.rest.OutputWriterConvertor;
-import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;

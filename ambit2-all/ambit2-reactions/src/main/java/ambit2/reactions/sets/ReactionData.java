@@ -1,6 +1,5 @@
 package ambit2.reactions.sets;
 
-import java.util.HashMap;
 
 
 public class ReactionData 

@@ -20,10 +20,10 @@ import javax.swing.JList;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.AbstractDBProcessor;
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IAmbitEditor;
-import ambit2.db.AbstractDBProcessor;
 import ambit2.db.processors.ProcessorOntology;
 import ambit2.db.processors.ProcessorOntology.OP;
 import ambit2.db.processors.ProcessorOntology.SIDE;

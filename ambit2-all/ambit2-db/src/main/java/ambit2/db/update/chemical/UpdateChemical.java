@@ -34,8 +34,8 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.update.AbstractUpdate;
 import ambit2.base.interfaces.IChemical;
-import ambit2.db.update.AbstractUpdate;
 
 public class UpdateChemical<C extends IChemical> extends AbstractUpdate<C,C>  {
 	public static final String update_sql =	"update chemicals set %s,label=?,lastmodified=now() where idchemical=?";

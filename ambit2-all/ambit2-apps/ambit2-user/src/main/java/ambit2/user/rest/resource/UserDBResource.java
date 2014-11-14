@@ -220,7 +220,7 @@ public class UserDBResource<T>	extends AmbitDBQueryResource<ReadUser<T>,DBUser> 
 	} 
 
 	@Override
-	protected QueryURIReporter<DBUser, ReadUser<T>> getURUReporter(
+	protected QueryURIReporter<DBUser, ReadUser<T>> getURIReporter(
 			Request baseReference) throws ResourceException {
 		return new UserURIReporter(getRequest());
 	}

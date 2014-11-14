@@ -29,15 +29,18 @@
 
 package ambit2.core.processors.structure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.sf.jniinchi.INCHI_OPTION;
 import net.sf.jniinchi.INCHI_RET;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtomContainer;
-
-import ambit2.base.processors.DefaultAmbitProcessor;
 
 public class InchiProcessor extends DefaultAmbitProcessor<IAtomContainer, InChIGenerator> {
 	/**
@@ -54,7 +57,15 @@ public class InchiProcessor extends DefaultAmbitProcessor<IAtomContainer, InChIG
 	public InChIGenerator process(IAtomContainer target) throws AmbitException {
 		try {
 			// Get InChIGenerator
-			InChIGenerator gen = factory.getInChIGenerator(target);
+			List<net.sf.jniinchi.INCHI_OPTION> options = new ArrayList<net.sf.jniinchi.INCHI_OPTION>();
+			options.add(INCHI_OPTION.ChiralFlagON);
+			options.add(INCHI_OPTION.SUCF);
+			options.add(INCHI_OPTION.SRel);
+			options.add(INCHI_OPTION.SAbs);
+			options.add(INCHI_OPTION.SAsXYZ);
+			options.add(INCHI_OPTION.SPXYZ);
+			options.add(INCHI_OPTION.FixSp3Bug);
+			InChIGenerator gen = factory.getInChIGenerator(target,options);
 
 			INCHI_RET ret = gen.getReturnStatus();
 			if (ret == INCHI_RET.WARNING) {

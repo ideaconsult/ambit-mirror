@@ -33,6 +33,7 @@ import java.io.StringWriter;
 import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 import net.sf.jniinchi.INCHI_RET;
 
 import org.openscience.cdk.CDKConstants;
@@ -48,7 +49,6 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.io.dx.DXParser;
 import ambit2.core.processors.structure.InchiProcessor;
 import ambit2.core.processors.structure.MoleculeReader;

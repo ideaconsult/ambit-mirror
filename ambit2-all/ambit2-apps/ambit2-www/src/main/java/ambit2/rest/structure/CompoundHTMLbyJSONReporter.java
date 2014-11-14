@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -15,13 +17,11 @@ import org.restlet.data.Reference;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.query.QueryResource;
 
 public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureHTMLReporter<Q> {
@@ -46,7 +46,7 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 		return new CompoundURIReporter(request,doc);
 	}
 	@Override
-	public void setOutput(Writer output) throws AmbitException {
+	public void setOutput(Writer output) throws Exception {
 		super.setOutput(output);
 		cmp_reporter.setOutput(output);
 	}

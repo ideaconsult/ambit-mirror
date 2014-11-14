@@ -2,11 +2,12 @@ package ambit2.db;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryObject;
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.query.IQueryUpdate;
@@ -16,9 +17,7 @@ import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.cache.QueryCachedResultsBoolean;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveStructure;
-import ambit2.db.search.IQueryObject;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.StoredQuery;
@@ -72,7 +71,7 @@ public class DbReaderStructure extends DbReader<IStructureRecord> {
 		lookup.setCache(true);
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		retriever.close();
 		cacheUpdater.close();
 		lookup.close();

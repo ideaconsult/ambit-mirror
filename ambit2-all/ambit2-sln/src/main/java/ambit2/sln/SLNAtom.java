@@ -1,7 +1,6 @@
 package ambit2.sln;
 
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 
 /**

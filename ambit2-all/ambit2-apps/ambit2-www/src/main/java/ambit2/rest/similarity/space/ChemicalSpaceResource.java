@@ -3,14 +3,15 @@ package ambit2.rest.similarity.space;
 import java.awt.Dimension;
 import java.util.Iterator;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.r.QueryAbstractReporter;
+
 import org.restlet.data.Form;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
-import ambit2.db.reporters.QueryAbstractReporter;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.pairwise.ChemSpaceCell;
 import ambit2.db.search.structure.pairwise.ChemicalSpaceQuery;

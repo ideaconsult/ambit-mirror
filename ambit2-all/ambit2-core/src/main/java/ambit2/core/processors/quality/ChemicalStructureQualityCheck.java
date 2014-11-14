@@ -1,6 +1,7 @@
 package ambit2.core.processors.quality;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.IsomorphismTester;
@@ -8,7 +9,6 @@ import org.openscience.cdk.isomorphism.IsomorphismTester;
 import ambit2.base.data.AmbitUser;
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;
-import ambit2.base.processors.DefaultAmbitProcessor;
 
 /**
  * Verifies consistency between multiple structures, coming from different origins

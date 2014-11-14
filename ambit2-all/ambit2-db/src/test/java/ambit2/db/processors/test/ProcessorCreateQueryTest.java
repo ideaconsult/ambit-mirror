@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.db.processors.test;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.IQueryObject;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -33,7 +34,6 @@ import org.junit.Test;
 import ambit2.db.SessionID;
 import ambit2.db.processors.ProcessorCreateQuery;
 import ambit2.db.processors.ProcessorCreateSession;
-import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.structure.QueryStructureByID;
 

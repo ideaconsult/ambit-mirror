@@ -29,7 +29,7 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.IDBProcessor;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
-import ambit2.base.processors.ProcessorsChain;
+import net.idea.modbcum.i.processors.ProcessorsChain;
 import ambit2.db.SessionID;
 
 public class DBProcessorsChain<Target,Result,P extends IDBProcessor<Target, Result>> extends ProcessorsChain<Target,Result,P> implements IDBProcessor<Target,Result> {

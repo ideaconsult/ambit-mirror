@@ -7,20 +7,17 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.UUID;
 
+import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskResult;
 import net.idea.restnet.i.task.ITaskStorage;
 
-import org.opentox.rdf.OT;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
-import com.hp.hpl.jena.ontology.Individual;
-
 import ambit2.base.json.JSONUtils;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.reporters.TaskURIReporter;
 
 public class TaskJSONReporter<USERID> extends TaskURIReporter<USERID> {

@@ -43,13 +43,12 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-
-import ambit2.base.processors.DefaultAmbitProcessor;
 
 public class FuncGroupsDescriptorFactory extends DefaultAmbitProcessor<String,List<FunctionalGroup>>{
 	/**

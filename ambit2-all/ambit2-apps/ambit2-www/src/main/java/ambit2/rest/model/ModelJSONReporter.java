@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.restlet.Request;
@@ -20,7 +21,6 @@ import ambit2.core.data.model.IEvaluation;
 import ambit2.core.data.model.IEvaluation.EVStatsType;
 import ambit2.core.data.model.IEvaluation.EVType;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.model.evaluation.EvaluationStats;
 
 /**

@@ -31,7 +31,7 @@ package ambit2.db.results;
 
 import java.beans.PropertyChangeEvent;
 
-import ambit2.db.readers.IQueryRetrieval;
+import net.idea.modbcum.i.IQueryRetrieval;
 
 public class QueryChangeEvent<T> extends PropertyChangeEvent {
 

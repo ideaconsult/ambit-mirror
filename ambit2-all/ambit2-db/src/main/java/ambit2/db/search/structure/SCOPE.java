@@ -29,8 +29,8 @@
 
 package ambit2.db.search.structure;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 
 public enum SCOPE {
 	scope_entiredb {

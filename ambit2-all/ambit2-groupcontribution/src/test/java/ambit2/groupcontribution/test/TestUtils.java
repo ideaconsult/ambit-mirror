@@ -1,9 +1,15 @@
 package ambit2.groupcontribution.test;
 
-import ambit2.smarts.SmartsHelper;
-import ambit2.groupcontribution.descriptors.*;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+
+import ambit2.groupcontribution.descriptors.ILocalDescriptor;
+import ambit2.groupcontribution.descriptors.LDAtomFormalCharge;
+import ambit2.groupcontribution.descriptors.LDAtomHybridization;
+import ambit2.groupcontribution.descriptors.LDAtomSymbol;
+import ambit2.groupcontribution.descriptors.LDAtomValency;
+import ambit2.groupcontribution.descriptors.LDHNum;
+import ambit2.smarts.SmartsHelper;
 
 
 public class TestUtils 

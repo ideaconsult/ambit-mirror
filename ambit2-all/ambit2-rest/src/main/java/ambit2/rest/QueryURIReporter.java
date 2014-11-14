@@ -3,15 +3,15 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.Writer;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Reference;
-
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 
 /**
  * Reports query results in text/uri-list 

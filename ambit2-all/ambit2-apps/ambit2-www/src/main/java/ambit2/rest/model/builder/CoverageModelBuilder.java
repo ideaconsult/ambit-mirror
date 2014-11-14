@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.UUID;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.apache.xerces.impl.dv.util.Base64;
@@ -28,7 +29,6 @@ import ambit2.base.data.Template;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.model.numeric.DataCoverage;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;

@@ -1,29 +1,29 @@
 package ambit2.rest.dataset;
 
-import java.sql.SQLException;
 import java.util.logging.Level;
 
 import javax.xml.stream.XMLStreamWriter;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.DbReader;
 import ambit2.db.DbReaderStructure;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.rest.QueryStaXReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.structure.CompoundURIReporter;
 import ambit2.rest.structure.ConformerURIReporter;
@@ -106,12 +106,12 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 							new PropertyURIReporter(request,doc));
 	}
 	@Override
-	public void setOutput(XMLStreamWriter output) throws AmbitException {
+	public void setOutput(XMLStreamWriter output) throws Exception {
 		super.setOutput(output);
 		recordWriter.setOutput(output);
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		try {recordWriter.setOutput(null); } catch (Exception x) {}
 		super.close();
 	}
@@ -167,7 +167,7 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 	}
 	
 	
-	protected ambit2.db.processors.AbstractBatchProcessor<ambit2.db.readers.IQueryRetrieval<IStructureRecord>,IStructureRecord> createBatch(Q query) {
+	protected AbstractBatchProcessor<IQueryRetrieval<IStructureRecord>,IStructureRecord> createBatch(Q query) {
 		if (query.isPrescreen()) {
 			DbReader<IStructureRecord> reader = new DbReaderStructure();
 			reader.setHandlePrescreen(true);

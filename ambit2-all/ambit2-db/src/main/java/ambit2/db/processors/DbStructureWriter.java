@@ -125,7 +125,7 @@ public class DbStructureWriter extends AbstractRepositoryWriter<IStructureRecord
 	}	
 
 		
-	public void close() throws SQLException {
+	public void close() throws Exception {
         try {
 
         if (propertyWriter != null)

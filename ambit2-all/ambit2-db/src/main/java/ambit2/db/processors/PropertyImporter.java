@@ -114,7 +114,7 @@ public class PropertyImporter extends
 		propertyWriter.open();
 	}
 
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		try {
 
 			if (propertyWriter != null)

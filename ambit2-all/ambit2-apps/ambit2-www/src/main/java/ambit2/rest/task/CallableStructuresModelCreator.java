@@ -1,18 +1,18 @@
 package ambit2.rest.task;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.ModelBuilder;

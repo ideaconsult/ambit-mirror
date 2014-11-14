@@ -34,22 +34,22 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryObject;
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.query.IQueryUpdate;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.p.AbstractDBProcessor;
 import ambit2.base.config.Preferences;
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorException;
-import ambit2.db.AbstractDBProcessor;
 import ambit2.db.SessionID;
 import ambit2.db.UpdateExecutor;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryStructureReporter;
-import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.StoredQuery;
@@ -256,7 +256,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 		}
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		super.close();
 		try { if (exec != null) exec.close(); } catch (Exception x) {}
 		try { if (qexec != null) qexec.close(); } catch (Exception x) {}
@@ -268,7 +268,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 			new QueryStructureReporter<IQueryRetrieval<IStructureRecord>, IStructureRecord>() {
 			
 			@Override
-			public void close() throws SQLException {
+			public void close() throws Exception {
 				// TODO Auto-generated method stub
 				super.close();
 			}

@@ -4,7 +4,7 @@ import java.io.Writer;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
-import ambit2.db.reporters.QueryReporter;
+import net.idea.modbcum.r.QueryReporter;
 import ambit2.db.search.qlabel.QueryConsensus;
 
 public class ConsensusLabelReporter extends QueryReporter<String, QueryConsensus, Writer> {

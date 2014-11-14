@@ -1,6 +1,5 @@
 package ambit2.reactions.mapping;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtom;

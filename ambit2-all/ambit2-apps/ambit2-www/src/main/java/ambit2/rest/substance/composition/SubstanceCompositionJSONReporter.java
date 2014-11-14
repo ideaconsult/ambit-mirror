@@ -4,8 +4,12 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 
@@ -15,14 +19,10 @@ import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.json.JSONUtils;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.pubchem.NCISearchProcessor;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.structure.CompoundJSONReporter;
 import ambit2.rest.substance.SubstanceURIReporter;
 
@@ -49,7 +49,7 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 		Profile groupProperties = getGroupProperties();
 		cmpReporter = new CompoundJSONReporter(null,null,null,request,doc,request.getRootRef().toString(),false,null);
 		cmpReporter.setGroupProperties(groupProperties);
-		substanceReporter = new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(request, null);
+		substanceReporter = new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(request);
 		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpCallback);
 		getProcessors().clear();
 		getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(groupProperties)) {

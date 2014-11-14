@@ -2,6 +2,9 @@ package ambit2.rest.structure.tautomers;
 
 import java.awt.Dimension;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.r.QueryAbstractReporter;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -14,9 +17,7 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.StructureRelation;
 import ambit2.db.chemrelation.ReadDatasetRelation;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
-import ambit2.db.reporters.QueryAbstractReporter;
 import ambit2.db.search.StoredQuery;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetStructuresResource;

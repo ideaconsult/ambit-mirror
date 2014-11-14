@@ -2,13 +2,13 @@ package ambit2.rest.dataset;
 
 import javax.xml.stream.XMLStreamWriter;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.opentox.rdf.OT;
 import org.opentox.rdf.OT.OTClass;
 
-import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;
 
 import com.hp.hpl.jena.vocabulary.DC;

@@ -2,6 +2,7 @@ package ambit2.rest.structure.quality;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -16,7 +17,6 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.qlabel.QueryConsensus;
 import ambit2.rest.OpenTox;
-import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.query.QueryResource;
 
 public class ConsensusLabelResource extends QueryResource<QueryConsensus,String> {

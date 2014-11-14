@@ -3,9 +3,9 @@ package ambit2.db.search.dataset.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.IQueryRetrieval;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.test.QueryTest;
 

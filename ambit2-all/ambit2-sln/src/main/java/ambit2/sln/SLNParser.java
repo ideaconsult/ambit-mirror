@@ -6,8 +6,8 @@ import java.util.Stack;
 import org.openscience.cdk.interfaces.IAtom;
 
 import ambit2.sln.dictionary.ISLNDictionaryObject;
-import ambit2.sln.dictionary.SLNDictionary;
 import ambit2.sln.dictionary.PredefinedSLNDictionary;
+import ambit2.sln.dictionary.SLNDictionary;
 
 
 public class SLNParser 

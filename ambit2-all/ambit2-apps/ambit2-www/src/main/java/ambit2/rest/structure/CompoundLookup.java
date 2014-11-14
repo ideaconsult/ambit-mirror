@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.r.QueryAbstractReporter;
 import net.sf.jniinchi.INCHI_RET;
 
 import org.openscience.cdk.CDKConstants;
@@ -42,8 +44,6 @@ import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.EINECS;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.key.ExactStructureSearchMode;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryAbstractReporter;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.StringCondition.STRING_CONDITION;
 import ambit2.db.search.structure.AbstractStructureQuery;

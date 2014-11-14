@@ -7,9 +7,9 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.update.AbstractUpdate;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
-import ambit2.db.update.AbstractUpdate;
 
 public class CreateQLabelFingerprints extends AbstractUpdate<IStructureRecord, BitSet> {
 	protected static String[] sql = {

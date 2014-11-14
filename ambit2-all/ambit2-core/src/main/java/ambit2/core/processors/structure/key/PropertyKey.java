@@ -30,9 +30,9 @@
 package ambit2.core.processors.structure.key;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
 
 public abstract class PropertyKey<Result> extends DefaultAmbitProcessor<IStructureRecord,Result>
 		implements IStructureKey<IStructureRecord,Result> {

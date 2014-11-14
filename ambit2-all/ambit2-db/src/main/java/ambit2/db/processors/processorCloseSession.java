@@ -26,12 +26,11 @@ package ambit2.db.processors;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.AbstractDBProcessor;
 import ambit2.base.processors.ProcessorException;
-import ambit2.db.AbstractDBProcessor;
 import ambit2.db.SessionID;
 
 /**
@@ -56,7 +55,7 @@ public class processorCloseSession extends AbstractDBProcessor<SessionID,Session
 				close();
 				if (rows == 0) throw new ProcessorException(this,"Fails on closing session "+target);
 				return null;
-			} catch (SQLException x) {
+			} catch (Exception x) {
 				throw new ProcessorException(this,x);
 			}
 		}		

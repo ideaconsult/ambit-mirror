@@ -2,6 +2,9 @@ package ambit2.rest.similarity;
 
 import java.awt.Dimension;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.r.QueryAbstractReporter;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -11,9 +14,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.relation.SimilarityRelation;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
-import ambit2.db.reporters.QueryAbstractReporter;
 import ambit2.rest.DisplayMode;
 
 /**

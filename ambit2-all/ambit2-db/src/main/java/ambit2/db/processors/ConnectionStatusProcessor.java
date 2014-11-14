@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
-import ambit2.db.AbstractDBProcessor;
+import net.idea.modbcum.p.AbstractDBProcessor;
 
 
 public class ConnectionStatusProcessor<T> extends AbstractDBProcessor<T,StringBuffer> {

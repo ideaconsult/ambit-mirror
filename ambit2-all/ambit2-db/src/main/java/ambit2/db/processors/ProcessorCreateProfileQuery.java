@@ -31,14 +31,14 @@ package ambit2.db.processors;
 
 import java.util.ArrayList;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.AbstractDBProcessor;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyTemplateStats;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.AbstractDBProcessor;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.property.PropertyCount;

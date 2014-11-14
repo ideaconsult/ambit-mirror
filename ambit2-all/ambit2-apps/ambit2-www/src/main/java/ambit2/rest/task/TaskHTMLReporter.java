@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskResult;
 import net.idea.restnet.i.task.ITaskStorage;
@@ -20,7 +21,6 @@ import org.restlet.Request;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.DisplayMode;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.reporters.CatalogURIReporter;

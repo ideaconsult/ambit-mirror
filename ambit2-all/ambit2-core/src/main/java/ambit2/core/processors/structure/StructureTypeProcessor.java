@@ -5,12 +5,12 @@ import java.util.Iterator;
 import javax.vecmath.Point2d;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.groups.SuppleAtomContainer;
 
 public class StructureTypeProcessor extends DefaultAmbitProcessor<IAtomContainer, STRUC_TYPE> {

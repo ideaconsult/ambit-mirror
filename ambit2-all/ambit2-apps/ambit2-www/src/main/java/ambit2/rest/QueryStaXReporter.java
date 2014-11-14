@@ -2,10 +2,12 @@ package ambit2.rest;
 
 import javax.xml.stream.XMLStreamWriter;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.Request;
 
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.dataset.AbstractStaxRDFWriter;
 
 public abstract class QueryStaXReporter<T,Q extends IQueryRetrieval<T>,R extends AbstractStaxRDFWriter<T, T>> 

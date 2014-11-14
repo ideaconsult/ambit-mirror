@@ -33,6 +33,7 @@ import junit.framework.Assert;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -41,7 +42,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.DbReader;

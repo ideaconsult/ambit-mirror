@@ -3,9 +3,9 @@ package ambit2.db.facet.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.IQueryRetrieval;
 import ambit2.base.facet.IFacet;
 import ambit2.db.facets.datasets.DatasetByPrefixNameFacetQuery;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.test.QueryTest;
 
 public class DatasetPrefixFacet extends QueryTest<IQueryRetrieval<ambit2.db.facets.datasets.DatasetPrefixFacet>>  {

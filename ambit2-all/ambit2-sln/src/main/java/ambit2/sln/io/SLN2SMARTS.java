@@ -3,8 +3,6 @@ package ambit2.sln.io;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.sln.SLNContainer;
-
 public class SLN2SMARTS 
 {	
 	private List<String> conversionErrors = new ArrayList<String>();

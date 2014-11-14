@@ -32,7 +32,7 @@ public class PreparedStatementBatchExecutor<Q extends IQueryUpdate> extends Stat
 			}
 		if ((this.connection != null) && (this.connection != connection) && isCloseConnection()) try {
 			close();
-		} catch (SQLException x) {
+		} catch (Exception x) {
 			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
         }
 		this.connection = connection;

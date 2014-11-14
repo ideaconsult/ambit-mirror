@@ -37,12 +37,12 @@ import junit.framework.Assert;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.base.processors.ProcessorsChain;
 import ambit2.base.processors.batch.BatchProcessor;
 import ambit2.core.io.FileInputState;
 import ambit2.core.processors.structure.AtomConfigurator;

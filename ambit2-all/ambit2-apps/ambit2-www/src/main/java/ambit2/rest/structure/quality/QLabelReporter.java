@@ -4,8 +4,8 @@ import java.io.Writer;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.r.QueryReporter;
 import ambit2.base.data.QLabel;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.db.search.qlabel.QueryQLabel;
 
 public class QLabelReporter extends QueryReporter<QLabel, QueryQLabel, Writer> {

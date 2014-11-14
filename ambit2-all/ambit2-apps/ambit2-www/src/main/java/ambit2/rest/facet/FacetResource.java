@@ -4,8 +4,11 @@ import java.io.Writer;
 import java.sql.Connection;
 import java.util.Map;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Request;
@@ -20,11 +23,8 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
 import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
-import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.property.ProfileReader;
 import ambit2.rest.query.QueryResource;
 

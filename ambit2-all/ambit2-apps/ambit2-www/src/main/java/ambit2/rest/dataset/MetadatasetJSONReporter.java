@@ -3,6 +3,7 @@ package ambit2.rest.dataset;
 import java.io.Writer;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.restlet.Request;
@@ -11,7 +12,6 @@ import org.restlet.data.Reference;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.json.JSONUtils;
-import ambit2.db.readers.IQueryRetrieval;
 
 /**
  * JSON

@@ -7,6 +7,7 @@ import java.util.UUID;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.reporter.Reporter;
+import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.i.task.ITaskStorage;
 
 import org.restlet.Request;
@@ -19,17 +20,15 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.DisplayMode;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.reporters.TaskRDFReporter;
 import ambit2.rest.reporters.TaskURIReporter;
 
-public class FactoryTaskConvertor<USERID> {
+public class FactoryTaskConvertor<USERID> extends net.idea.restnet.c.task.FactoryTaskConvertor<USERID> {
 	
-	protected ITaskStorage<USERID> storage;
+
 	public FactoryTaskConvertor(ITaskStorage<USERID> storage) {
-		super();
-		this.storage = storage;
+		super(storage);
 	}
 	
 	public synchronized IProcessor<Iterator<UUID>, Representation> createTaskConvertor(
@@ -104,8 +103,11 @@ public class FactoryTaskConvertor<USERID> {
 		}
 	}
 	
-	public synchronized Representation createTaskRepresentation(Iterator<UUID> tasks, 
-			Variant variant, Request request, Response response,ResourceDoc doc) throws ResourceException {
+	@Override
+	public synchronized Representation createTaskRepresentation(
+			Iterator<UUID> tasks, Variant variant, Request request,
+			Response response, net.idea.restnet.c.ResourceDoc doc)
+			throws ResourceException {
 		try {
 
 			if (tasks==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
@@ -115,6 +117,7 @@ public class FactoryTaskConvertor<USERID> {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
 	}	
-
+	
+	
 }
 

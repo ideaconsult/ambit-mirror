@@ -1,16 +1,14 @@
 package ambit2.rest;
 
-import java.sql.SQLException;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.opentox.rdf.OT;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
-
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -49,7 +47,7 @@ public abstract class QueryRDFReporter<T,Q extends IQueryRetrieval<T>> extends Q
 	}
 	
 	@Override
-	public void setOutput(OntModel output) throws AmbitException {
+	public void setOutput(OntModel output) throws Exception {
 		super.setOutput(output);
 		if (output!=null)
 		try {
@@ -77,7 +75,7 @@ public abstract class QueryRDFReporter<T,Q extends IQueryRetrieval<T>> extends Q
 	public void header(OntModel output, Q query) {};
 	public void footer(OntModel output, Q query) {};
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		super.close();
 	}
 	

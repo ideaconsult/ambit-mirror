@@ -1,11 +1,12 @@
 package ambit2.rest.test.task;
 
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
 import ambit2.core.data.model.Algorithm;
 import ambit2.rest.AmbitApplication;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.task.TaskResult;

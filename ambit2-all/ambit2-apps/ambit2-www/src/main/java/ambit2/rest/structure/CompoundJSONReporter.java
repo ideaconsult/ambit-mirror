@@ -12,7 +12,10 @@ import java.util.Locale;
 import java.util.logging.Level;
 
 import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.SDFWriter;
@@ -25,15 +28,12 @@ import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.json.JSONUtils;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.facets.compounds.CollectionsByChemical;
 import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.reporters.CSVReporter;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyJSONReporter;
 
 /**
@@ -143,7 +143,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		getProcessors().add(facetReader);
 	}
 	@Override
-	public void setOutput(Writer output) throws AmbitException {
+	public void setOutput(Writer output) throws Exception {
 		super.setOutput(output);
 		propertyJSONReporter.setOutput(output);
 	}

@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
-import ambit2.base.processors.ProcessorsChain;
+import net.idea.modbcum.i.processors.ProcessorsChain;
 
 public interface IBatchProcessor<Target,ItemInput,Result> {
 	ProcessorsChain<ItemInput,Result,IProcessor> getProcessorChain();

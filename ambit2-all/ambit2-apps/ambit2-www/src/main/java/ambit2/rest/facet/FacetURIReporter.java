@@ -2,6 +2,8 @@ package ambit2.rest.facet;
 
 import java.net.URLEncoder;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
@@ -15,7 +17,6 @@ import ambit2.db.facets.propertyvalue.PropertyDatasetFacet;
 import ambit2.db.facets.qlabel.DatasetConsensusLabelFacet;
 import ambit2.db.facets.qlabel.DatasetStrucTypeFacet;
 import ambit2.db.facets.qlabel.DatasetStructureQLabelFacet;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.study.facet.OwnerFacet;
 import ambit2.db.substance.study.facet.SubstanceByCategoryFacet;
 import ambit2.rest.OpenTox;

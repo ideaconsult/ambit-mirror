@@ -4,8 +4,9 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -18,13 +19,11 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
-import ambit2.base.config.AMBITConfig;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.StoredQuery;
@@ -34,7 +33,6 @@ import ambit2.db.search.structure.QuerySimilarityBitset;
 import ambit2.db.update.structure.ChemicalByDataset;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.error.InvalidResourceIDException;

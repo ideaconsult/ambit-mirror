@@ -1,7 +1,9 @@
 package ambit2.rest.model;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.opentox.rdf.OT;
 import org.restlet.Context;
@@ -11,10 +13,8 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.Property;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.RDFPropertyIterator;
 

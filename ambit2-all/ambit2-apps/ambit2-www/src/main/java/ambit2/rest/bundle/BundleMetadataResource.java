@@ -2,6 +2,8 @@ package ambit2.rest.bundle;
 
 import java.util.Map;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
@@ -14,8 +16,6 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.bundle.ReadBundle;
 import ambit2.db.update.bundle.UpdateBundle;
 import ambit2.rest.rdf.RDFMetaDatasetIterator;

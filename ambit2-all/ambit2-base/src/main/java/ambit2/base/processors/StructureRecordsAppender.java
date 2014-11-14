@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 
-public class StructureRecordsAppender extends
-		DefaultAmbitProcessor<IStructureRecord, List<IStructureRecord>> {
+
+public class StructureRecordsAppender extends DefaultAmbitProcessor<IStructureRecord, List<IStructureRecord>> {
 	/**
 	 * 
 	 */

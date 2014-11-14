@@ -6,18 +6,17 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.IParameterizedQuery;
 import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.restlet.Request;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.ExternalIdentifier;
 import ambit2.base.json.JSONUtils;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.processors.MasterDetailsProcessor;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.ids.ReadSubstanceIdentifiers;
-import ambit2.rest.ResourceDoc;
 
 public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> extends SubstanceURIReporter<Q> {
 	protected String comma = null;
@@ -27,8 +26,8 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
 	 * 
 	 */
 	private static final long serialVersionUID = 2315457985592934727L;
-	public SubstanceJSONReporter(Request request, ResourceDoc doc,String jsonpCallback) {
-		super(request, doc);
+	public SubstanceJSONReporter(Request request, String jsonpCallback) {
+		super(request);
 		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpCallback);
 		
 		getProcessors().clear();

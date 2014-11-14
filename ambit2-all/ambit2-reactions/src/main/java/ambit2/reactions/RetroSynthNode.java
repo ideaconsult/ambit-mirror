@@ -2,6 +2,7 @@ package ambit2.reactions;
 
 
 import java.util.Stack;
+
 import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;

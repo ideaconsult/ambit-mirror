@@ -1,7 +1,9 @@
 package ambit2.rest.similarity.space;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -16,12 +18,10 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.simiparity.space.QMap;
 import ambit2.db.simiparity.space.QMapSpace;
 import ambit2.db.simiparity.space.QueryQMapSpace;
 import ambit2.rest.OpenTox;
-import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 

@@ -3,11 +3,12 @@ package ambit2.db.reporters;
 import java.io.InputStream;
 import java.util.Properties;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
+import net.idea.modbcum.r.QueryReporter;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.DbReader;
 import ambit2.db.DbReaderStructure;
-import ambit2.db.processors.AbstractBatchProcessor;
-import ambit2.db.readers.IQueryRetrieval;
 
 /**
  * Parent class for all reporters working with structure queries. Retrieves structure if pre-screening is necessary.

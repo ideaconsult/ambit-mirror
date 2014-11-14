@@ -34,7 +34,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
-import ambit2.base.processors.DefaultAmbitProcessor;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 import ambit2.base.processors.ProcessorException;
 
 public abstract class HTTPRequest<Target, Result> extends DefaultAmbitProcessor<Target, Result> {

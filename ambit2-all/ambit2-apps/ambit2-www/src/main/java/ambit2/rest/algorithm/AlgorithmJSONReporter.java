@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.Context;
 import org.restlet.Request;
 
 import ambit2.base.json.JSONUtils;
 import ambit2.core.data.model.Algorithm;
-import ambit2.rest.ResourceDoc;
 
 public class AlgorithmJSONReporter extends AlgorithmURIReporter {
 

@@ -52,12 +52,12 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.results.MemoryRowsModel;
 import ambit2.db.results.RowsModel;

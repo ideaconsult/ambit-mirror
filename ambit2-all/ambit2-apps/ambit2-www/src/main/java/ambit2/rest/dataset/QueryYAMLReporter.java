@@ -1,14 +1,14 @@
 package ambit2.rest.dataset;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.ho.yaml.YamlEncoder;
 import org.restlet.Request;
 
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 
 /**
  * 

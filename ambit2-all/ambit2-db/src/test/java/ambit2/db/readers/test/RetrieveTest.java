@@ -29,13 +29,14 @@
 
 package ambit2.db.readers.test;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.IRetrieval;
+
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Before;
 import org.junit.Test;
 
 import ambit2.db.processors.test.DbUnitTest;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.readers.IRetrieval;
 import ambit2.db.results.AmbitRows;
 
 

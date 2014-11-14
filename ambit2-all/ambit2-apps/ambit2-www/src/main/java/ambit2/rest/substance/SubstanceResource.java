@@ -1,13 +1,23 @@
 package ambit2.rest.substance;
 
 import java.awt.Dimension;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.idea.i5.io.IQASettings;
 import net.idea.i5.io.QASettings;
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.restnet.c.StringConvertor;
+import net.idea.restnet.c.TaskApplication;
+import net.idea.restnet.c.task.FactoryTaskConvertor;
+import net.idea.restnet.db.QueryResource;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskApplication;
 import net.idea.restnet.i.task.ITaskStorage;
@@ -33,10 +43,10 @@ import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
-import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.base.processors.ProcessorException;
 import ambit2.base.relation.composition.CompositionRelation;
+import ambit2.db.UpdateExecutor;
 import ambit2.db.processors.CallableSubstanceI5Query;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.substance.DeleteSubstance;
 import ambit2.db.substance.FacetedSearchSubstance;
@@ -46,18 +56,13 @@ import ambit2.db.substance.ReadSubstanceByExternalIDentifier;
 import ambit2.db.substance.ReadSubstanceByName;
 import ambit2.db.substance.ReadSubstanceByOwner;
 import ambit2.db.substance.ReadSubstanceByStudy;
-import ambit2.db.update.AbstractUpdate;
-import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
+import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
-import ambit2.rest.OutputWriterConvertor;
-import ambit2.rest.QueryURIReporter;
-import ambit2.rest.StringConvertor;
-import ambit2.rest.TaskApplication;
 import ambit2.rest.dataset.DatasetURIReporter;
-import ambit2.rest.query.QueryResource;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
-import ambit2.rest.task.FactoryTaskConvertor;
+import ambit2.user.rest.resource.AmbitDBQueryResource;
+
 
 /**
  * Substances (in the sense of IUCLID5) 
@@ -65,7 +70,7 @@ import ambit2.rest.task.FactoryTaskConvertor;
  *
  * @param <Q>
  */
-public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> extends QueryResource<Q,SubstanceRecord> {
+public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T extends SubstanceRecord> extends AmbitDBQueryResource<Q,SubstanceRecord> {
 	public final static String substance = OpenTox.URI.substance.getURI();
 	public final static String idsubstance = OpenTox.URI.substance.getKey();
 	public final static String substanceID = OpenTox.URI.substance.getResourceID();
@@ -81,6 +86,11 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 	@Override
 	public String getTemplateName() {
 		return "substance.ftl";
+	}
+	
+	@Override
+	public String getConfigFile() {
+		return "ambit2/rest/config/ambit2.pref";
 	}
 	@Override
 	protected void doInit() throws ResourceException {
@@ -113,7 +123,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			QueryURIReporter r = (QueryURIReporter)getURIReporter();
+			QueryURIReporter r = (QueryURIReporter)getURIReporter(getRequest());
 			r.setDelimiter("\n");
 			return new StringConvertor(
 					r,MediaType.TEXT_URI_LIST,filenamePrefix);
@@ -124,13 +134,13 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
-			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(),getDocumentation(),jsonpcallback);
+			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(),jsonpcallback);
 			return new OutputWriterConvertor<SubstanceRecord, Q>(
 					cmpreporter,
 					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);
 		} else { //json by default
 		//else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(),getDocumentation(),null);
+			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(),null);
 			return new OutputWriterConvertor<SubstanceRecord, Q>(
 					cmpreporter,
 					MediaType.APPLICATION_JSON,filenamePrefix);
@@ -139,16 +149,6 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 
 	@Override
 	protected Q createQuery(Context context, Request request, Response response) throws ResourceException {
-		Object idbundle = request.getAttributes().get(OpenTox.URI.bundle.getKey());
-		if (idbundle != null)  try {
-			Integer idnum = new Integer(Reference.decode(idbundle.toString()));
-			ReadSubstancesByBundle q = new ReadSubstancesByBundle();
-			SubstanceEndpointsBundle b = new SubstanceEndpointsBundle();
-			b.setID(idnum);
-			q.setFieldname(b);
-			return (Q)q;
-		} catch (NumberFormatException x) {
-		}
 		Object key = request.getAttributes().get(idsubstance);
 		if (key==null) {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
@@ -312,11 +312,13 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 		} 
 		return null;
 	}
-	protected QueryURIReporter getURIReporter() {
-		return new SubstanceURIReporter<Q>(getRequest(),getDocumentation()) {
+	
+	@Override
+	protected QueryURIReporter<SubstanceRecord, Q> getURIReporter(
+			Request baseReference) throws ResourceException {
+		return new SubstanceURIReporter<Q>(baseReference) {
 			@Override
-			public Object processItem(SubstanceRecord item)
-					throws AmbitException {
+			public Object processItem(SubstanceRecord item) throws Exception {
 				super.processItem(item);
 				try {
 					output.write('\n');
@@ -389,8 +391,8 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 								"files[]",
 								getRootRef(),
 								getContext(),
-								new SubstanceURIReporter(getRequest().getRootRef(), null),
-								new DatasetURIReporter(getRequest().getRootRef(), null),
+								new SubstanceURIReporter(getRequest().getRootRef()),
+								new DatasetURIReporter(getRequest().getRootRef(),null),
 								token);
 					callable.setClearComposition(clearComposition);
 					callable.setClearMeasurements(clearMeasurements);
@@ -429,7 +431,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 						getRootRef(),
 						form,
 						getContext(),
-						new SubstanceURIReporter(getRequest().getRootRef(), null),
+						new SubstanceURIReporter(getRequest().getRootRef()),
 						new DatasetURIReporter(getRequest().getRootRef(), null),
 						token);
 						ITask<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
@@ -472,11 +474,66 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 		}
 	}
 	
-	@Override
+
 	protected AbstractUpdate createDeleteObject(SubstanceRecord entry)
 			throws ResourceException {
 		DeleteSubstance c = new DeleteSubstance();
 		c.setObject(entry);
 		return c;
+	}
+	
+	/**
+	 * POST - create entity based on parameters in http header, creates a new entry in the databaseand returns an url to it
+	 */
+	public void executeUpdate(Representation entity, T entry, AbstractUpdate updateObject) throws ResourceException {
+
+		Connection c = null;
+		//TODO it is inefficient to instantiate executor in all classes
+		UpdateExecutor executor = new UpdateExecutor();
+		try {
+    		DBConnection dbc = new DBConnection(getContext());
+    		c = dbc.getConnection();			
+
+			executor.setConnection(c);
+			executor.open();
+			executor.process(updateObject);
+			
+			customizeEntry(entry, c);
+			
+			
+			QueryURIReporter uriReporter =  getURIReporter(getRequest());
+			if (uriReporter!=null) {
+				getResponse().setLocationRef(uriReporter.getURI(entry));
+				getResponse().setEntity(uriReporter.getURI(entry),MediaType.TEXT_HTML);
+			}
+			getResponse().setStatus(Status.SUCCESS_OK);
+			onUpdateSuccess();
+		} catch (SQLException x) {
+			Context.getCurrentLogger().severe(x.getMessage());
+			getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN,x,x.getMessage());			
+			getResponse().setEntity(null);			
+		} catch (ProcessorException x) {
+			Context.getCurrentLogger().severe(x.getMessage());
+			getResponse().setStatus((x.getCause() instanceof SQLException)?Status.CLIENT_ERROR_FORBIDDEN:Status.SERVER_ERROR_INTERNAL,
+					x,x.getMessage());			
+			getResponse().setEntity(null);			
+		} catch (Exception x) {
+			Context.getCurrentLogger().severe(x.getMessage());
+			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x,x.getMessage());			
+			getResponse().setEntity(null);
+		} finally {
+			try {executor.close();} catch (Exception x) {}
+			try {if(c != null) c.close();} catch (Exception x) {}
+		}
 	}	
+	
+	public void onUpdateSuccess() throws Exception {
+		
+	}
+	
+	
+	protected void customizeEntry(T entry, Connection conection) throws ResourceException {
+		
+	}
+		
 }

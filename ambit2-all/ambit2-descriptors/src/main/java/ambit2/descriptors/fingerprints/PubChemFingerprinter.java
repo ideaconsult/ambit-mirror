@@ -28,29 +28,24 @@
 package ambit2.descriptors.fingerprints;
 
 
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
+
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.annotations.TestClass;
-import org.openscience.cdk.annotations.TestMethod;
 import org.openscience.cdk.exception.CDKException;
-//import org.openscience.cdk.graph.Cycles;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.ringsearch.SSSRFinder;
-import org.openscience.cdk.smiles.smarts.SMARTSQueryTool;
 import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.QuerySequenceElement;
 import ambit2.smarts.SmartsParser;
-
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Generates a Pubchem fingerprint for a molecule.

@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import net.idea.modbcum.i.IParameterizedQuery;
 import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.IQueryObject;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.config.Preferences;
 

@@ -1,10 +1,12 @@
 package ambit2.reactions.fragmentation;
 
 import java.util.ArrayList;
-import ambit2.smarts.IsomorphismTester;
-import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
+
+import ambit2.smarts.IsomorphismTester;
 
 public class FragmentationRule 
 {

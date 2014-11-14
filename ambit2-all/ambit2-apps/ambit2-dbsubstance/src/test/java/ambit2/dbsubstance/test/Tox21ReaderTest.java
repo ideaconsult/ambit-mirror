@@ -8,9 +8,7 @@ import java.net.URL;
 import java.sql.Connection;
 
 import junit.framework.Assert;
-import net.idea.loom.pubchem.rest.PubChemAIDMetadata;
 import net.idea.loom.pubchem.rest.PubChemAIDReader;
-import net.idea.loom.tox21.Tox21SubstanceReader;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;

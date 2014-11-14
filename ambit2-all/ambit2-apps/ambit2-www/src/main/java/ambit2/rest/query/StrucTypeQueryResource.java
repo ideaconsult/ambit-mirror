@@ -1,5 +1,7 @@
 package ambit2.rest.query;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -10,7 +12,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryStructureType;

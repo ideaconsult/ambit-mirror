@@ -1,8 +1,9 @@
 package ambit2.rest.aa.opensso.users;
 
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.Request;
 
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.reporters.CatalogURIReporter;
 

@@ -8,6 +8,7 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.UUID;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.apache.xerces.impl.dv.util.Base64;
@@ -27,7 +28,6 @@ import ambit2.base.data.Template;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.model.structure.DataCoverageFingerprints;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;

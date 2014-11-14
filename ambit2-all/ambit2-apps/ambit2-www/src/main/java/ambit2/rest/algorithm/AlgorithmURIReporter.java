@@ -1,10 +1,11 @@
 package ambit2.rest.algorithm;
 
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.core.data.model.Algorithm;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.reporters.CatalogURIReporter;
 
 /**

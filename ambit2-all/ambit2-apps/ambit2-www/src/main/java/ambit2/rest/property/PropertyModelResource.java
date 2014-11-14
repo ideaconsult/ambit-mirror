@@ -1,5 +1,8 @@
 package ambit2.rest.property;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -12,10 +15,8 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.property.ModelTemplates;
 import ambit2.rest.DisplayMode;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.model.ModelResource;
 
 

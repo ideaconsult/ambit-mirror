@@ -3,6 +3,7 @@ package ambit2.rest.task.dbpreprocessing;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -10,7 +11,6 @@ import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.processors.ProcessorStructureRetrieval;

@@ -2,6 +2,7 @@ package ambit2.rest.dataset;
 
 import java.util.concurrent.Callable;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.restnet.i.task.ITaskResult;
 
 import org.restlet.Context;
@@ -16,7 +17,6 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryStoredResultsByName;

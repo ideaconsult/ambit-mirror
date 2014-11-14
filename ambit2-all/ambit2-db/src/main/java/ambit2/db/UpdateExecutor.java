@@ -48,7 +48,7 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 	 */
 	private static final long serialVersionUID = -4621464032598050969L;
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		super.close();
 		try { 
 		setConnection(null);

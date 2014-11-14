@@ -4,19 +4,19 @@ package ambit2.db.reporters;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.modbcum.r.QueryAbstractReporter;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.base.processors.ProcessorsChain;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveProfileValuesAsRow;
 import ambit2.db.search.QueryExecutor;
 
@@ -47,7 +47,7 @@ public abstract class QueryPacketReporter<Q extends IQueryRetrieval<IStructureRe
 	}
 	
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		exec.close();
 		super.close();
 	}

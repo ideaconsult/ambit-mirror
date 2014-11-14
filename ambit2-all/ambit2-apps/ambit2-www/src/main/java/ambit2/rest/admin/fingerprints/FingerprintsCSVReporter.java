@@ -4,14 +4,14 @@ import java.io.Writer;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 
-import ambit2.db.reporters.QueryReporter;
 import ambit2.db.update.fp.IFingerprint;
 import ambit2.db.update.fp.QueryFingerprints;
 import ambit2.descriptors.processors.BitSetGenerator.FPTable;
-import ambit2.rest.ResourceDoc;
 
 public class FingerprintsCSVReporter extends QueryReporter<IFingerprint<FPTable,String>,QueryFingerprints,Writer>  {
 

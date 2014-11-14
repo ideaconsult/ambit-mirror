@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -13,11 +15,9 @@ import org.restlet.data.Reference;
 
 import ambit2.base.relation.SimilarityRelation;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.query.QueryResource;
 
 public class PairwiseSimilarityHTMLReporter  extends QueryHTMLReporter<SimilarityRelation, IQueryRetrieval<SimilarityRelation>> {
@@ -43,7 +43,7 @@ public class PairwiseSimilarityHTMLReporter  extends QueryHTMLReporter<Similarit
 		return similarityJSONReporter.getCmpReporter();
 	}
 	@Override
-	public void setOutput(Writer output) throws AmbitException {
+	public void setOutput(Writer output) throws Exception {
 		super.setOutput(output);
 		similarityJSONReporter.setOutput(output);
 	}

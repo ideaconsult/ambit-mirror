@@ -7,8 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
+import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -21,10 +24,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryPacketReporter;
-import ambit2.rest.OutputWriterConvertor;
-import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.property.PropertyResource;
 
 public class FastDatasetStructuresResource extends DatasetStructuresResource<IQueryRetrieval<IStructureRecord>> {
@@ -160,7 +160,7 @@ class ChunkedCSVReporter extends QueryPacketReporter<IQueryRetrieval<IStructureR
 
 
 	@Override
-	public Object processItem(IStructureRecord item) throws AmbitException {
+	public Object processItem(IStructureRecord item) throws Exception {
 		Writer writer = getOutput();
 		try {
 			

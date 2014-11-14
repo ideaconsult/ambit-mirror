@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
+
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -23,8 +26,6 @@ import weka.filters.unsupervised.instance.SparseToNonSparse;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.UpdateExecutor;
-import ambit2.db.processors.AbstractBatchProcessor;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.model.CreateModel;
 import ambit2.rest.OpenTox;
 import ambit2.rest.algorithm.AlgorithmURIReporter;

@@ -35,11 +35,11 @@ import java.util.Iterator;
 import java.util.logging.Logger;
 
 import net.idea.modbcum.i.IDBProcessor;
+import net.idea.modbcum.i.IQueryObject;
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
-import ambit2.db.processors.AbstractBatchProcessor;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.IQueryObject;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 import ambit2.db.search.QueryExecutor;
 
 public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval<ResultType>, ResultType>
@@ -191,7 +191,7 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 	}
 	
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		try { if (resultSet!=null) {resultSet.close(); resultSet=null; }} catch (Exception x) {}
 		try { if (executor!=null) {executor.close(); executor=null; }} catch (Exception x) {}
 		super.close();

@@ -83,7 +83,7 @@ public class ValueWriterNew extends AbstractRepositoryWriter<IStructureRecord,IS
 	}
 	
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 		try { property_batchExecutor.close();} catch (Exception x) {}
 		try {pnum_batchExecutor.close(); } catch (Exception x) {}
 		try {pstring_batchExecutor.close();} catch (Exception x) {}

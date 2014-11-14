@@ -2,6 +2,8 @@ package ambit2.rest.query;
 
 import java.io.Serializable;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -9,7 +11,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 
 /**

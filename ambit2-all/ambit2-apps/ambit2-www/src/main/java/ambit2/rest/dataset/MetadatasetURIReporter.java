@@ -1,11 +1,12 @@
 package ambit2.rest.dataset;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.ISourceDataset;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.ResourceDoc;
 
 public class MetadatasetURIReporter<Q extends IQueryRetrieval<M>,M extends ISourceDataset> extends DatasetURIReporter<Q,M> {
 

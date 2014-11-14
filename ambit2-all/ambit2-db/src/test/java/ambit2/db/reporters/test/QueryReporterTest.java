@@ -2,12 +2,13 @@ package ambit2.db.reporters.test;
 
 import java.io.StringWriter;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+
 import org.junit.Test;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.db.processors.test.DbUnitTest;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryStructure;

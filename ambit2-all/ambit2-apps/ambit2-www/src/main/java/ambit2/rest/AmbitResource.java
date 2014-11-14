@@ -8,6 +8,7 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Request;

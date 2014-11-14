@@ -4,11 +4,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -16,10 +17,8 @@ import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
@@ -99,7 +98,7 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		});	
 	}
 	@Override
-	public void setOutput(Document pdfDoc) throws AmbitException {
+	public void setOutput(Document pdfDoc) throws Exception {
 		super.setOutput(pdfDoc);
 	}
 
@@ -116,7 +115,7 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
        
     }
     @Override
-    public void close() throws SQLException {
+    public void close() throws Exception {
     	try {
     		getOutput().close();
     	} catch (Exception x) {logger.log(Level.FINEST,x.getMessage(),x); }

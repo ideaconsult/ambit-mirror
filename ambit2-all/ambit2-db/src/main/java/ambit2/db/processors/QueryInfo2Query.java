@@ -2,8 +2,10 @@ package ambit2.db.processors;
 
 import java.util.BitSet;
 
+import net.idea.modbcum.i.IQueryObject;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.AbstractDBProcessor;
 
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.smiles.SmilesGenerator;
@@ -11,9 +13,7 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import ambit2.base.data.Property;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.key.ExactStructureSearchMode;
-import ambit2.db.AbstractDBProcessor;
 import ambit2.db.search.EQCondition;
-import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryInfo;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryCombinedStructure;

@@ -1,14 +1,15 @@
 package ambit2.rest.dataset;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.Request;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.ARFF3ColReporter;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyURIReporter;
 
 public class ARFF3ColResourceReporter<Q extends IQueryRetrieval<IStructureRecord>> extends ARFF3ColReporter<Q> {

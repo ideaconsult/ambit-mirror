@@ -139,4 +139,4 @@
 			}				
     ],
 	<#include "/apidocs/info.ftl" >  
-}
+}	

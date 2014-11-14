@@ -2,7 +2,6 @@ package ambit2.descriptors.utils;
 
 import java.util.List;
 
-
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;

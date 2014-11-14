@@ -1,5 +1,7 @@
 package ambit2.rest.dataset;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -10,7 +12,6 @@ import ambit2.base.data.AbstractDataset;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryCombined.COMBINE;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryStructureByID;

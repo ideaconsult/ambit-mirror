@@ -1,12 +1,12 @@
 package ambit2.rest.substance;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.restnet.db.QueryURIReporter;
+
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.SubstanceRecord;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 
 public class SubstanceURIReporter<Q extends IQueryRetrieval<SubstanceRecord>> extends QueryURIReporter<SubstanceRecord, Q> {
 
@@ -14,15 +14,17 @@ public class SubstanceURIReporter<Q extends IQueryRetrieval<SubstanceRecord>> ex
 	 * 
 	 */
 	private static final long serialVersionUID = 3811264823419677254L;
-	public SubstanceURIReporter(Reference rootRef,ResourceDoc doc) {
-		super(rootRef,doc);
+	
+	public SubstanceURIReporter(Request request) {
+		super(request,null);
 	}
-	public SubstanceURIReporter(Request request,ResourceDoc doc) {
-		super(request,doc);
+	public SubstanceURIReporter(Reference reference) {
+		super(reference,null);
 	}
 	@Override
 	public String getURI(String ref, SubstanceRecord item) {
 		return SubstanceRecord.getURI(ref, item);
 	}
 
+	
 }

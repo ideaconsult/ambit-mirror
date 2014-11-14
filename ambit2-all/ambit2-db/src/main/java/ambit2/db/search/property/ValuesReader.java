@@ -30,7 +30,6 @@
 package ambit2.db.search.property;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
@@ -77,7 +76,7 @@ public class ValuesReader extends ValuesByTemplateReader<IStructureRecord> {
 		return record != null?record:target;
 	}
 	@Override
-	public void close() throws SQLException {
+	public void close() throws Exception {
 
 		super.close();
 		if (reader != null) 	reader.close();

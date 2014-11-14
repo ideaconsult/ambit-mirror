@@ -1,6 +1,10 @@
 package ambit2.rest.bookmark;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -15,18 +19,14 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Bookmark;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.bookmark.CreateBookmark;
 import ambit2.db.update.bookmark.DeleteBookmark;
 import ambit2.db.update.bookmark.ReadBookmark;
 import ambit2.db.update.bookmark.UpdateBookmark;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
-import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
-import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.Annotea;

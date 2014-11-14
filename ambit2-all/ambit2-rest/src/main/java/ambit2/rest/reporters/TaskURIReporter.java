@@ -2,14 +2,13 @@ package ambit2.rest.reporters;
 
 import java.util.UUID;
 
+import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskResult;
 import net.idea.restnet.i.task.ITaskStorage;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
-
-import ambit2.rest.ResourceDoc;
 
 /**
  * URI of the task

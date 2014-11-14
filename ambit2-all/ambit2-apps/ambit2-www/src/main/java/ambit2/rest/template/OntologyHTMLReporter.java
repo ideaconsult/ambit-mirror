@@ -2,7 +2,9 @@ package ambit2.rest.template;
 
 import java.io.Writer;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -10,13 +12,11 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.MetadatasetResource.search_features;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.OTEE;

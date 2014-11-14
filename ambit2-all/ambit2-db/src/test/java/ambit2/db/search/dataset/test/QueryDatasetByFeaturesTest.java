@@ -2,9 +2,9 @@ package ambit2.db.search.dataset.test;
 
 import java.sql.ResultSet;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.test.QueryTest;
 import ambit2.db.update.dataset.QueryDatasetByFeatures;
 

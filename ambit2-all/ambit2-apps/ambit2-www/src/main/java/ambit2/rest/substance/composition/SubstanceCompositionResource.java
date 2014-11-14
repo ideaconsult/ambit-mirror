@@ -1,7 +1,9 @@
 package ambit2.rest.substance.composition;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -16,10 +18,8 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.relation.ReadSubstanceComposition;
 import ambit2.rest.OpenTox;
-import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.substance.SubstanceResource;
 

@@ -3,6 +3,7 @@ package ambit2.rendering;
 import java.io.StringWriter;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.MoleculeSet;
@@ -16,7 +17,6 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.MDLWriter;
 import ambit2.core.processors.structure.MoleculeReader;

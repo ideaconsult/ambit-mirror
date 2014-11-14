@@ -1,5 +1,7 @@
 package ambit2.rest.structure.tautomers;
 
+import net.idea.modbcum.i.IQueryRetrieval;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -11,7 +13,6 @@ import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.db.chemrelation.ReadStructureRelation;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.rest.OpenTox;
 import ambit2.rest.query.StructureQueryResource;

@@ -5,8 +5,12 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.IParameterizedQuery;
 import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 
@@ -14,12 +18,8 @@ import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.json.JSONUtils;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.processors.MasterDetailsProcessor;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.db.substance.study.ReadEffectRecord;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.substance.SubstanceURIReporter;
 
 /**
@@ -40,7 +40,7 @@ public class SubstanceStudyJSONReporter<Q extends IQueryRetrieval<ProtocolApplic
 	
 	public SubstanceStudyJSONReporter(Request request, ResourceDoc doc,String jsonpCallback) {
 		super();
-		substanceReporter = new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(request, null);
+		substanceReporter = new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(request);
 		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpCallback);
 		getProcessors().clear();
 		IQueryRetrieval<EffectRecord<String, String, String>> queryP = new ReadEffectRecord(); 

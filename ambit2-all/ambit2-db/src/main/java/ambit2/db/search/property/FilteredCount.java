@@ -5,12 +5,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyStats;
 import ambit2.base.data.Range;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.IStoredQuery;
 
 public abstract class FilteredCount<T extends Comparable<T>> implements IQueryRetrieval<PropertyStats<T>> {

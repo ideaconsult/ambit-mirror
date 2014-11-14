@@ -6,11 +6,11 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rendering.CachedImage;
 
 /**

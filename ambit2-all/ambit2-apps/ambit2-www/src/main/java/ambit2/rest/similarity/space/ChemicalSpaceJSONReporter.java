@@ -4,16 +4,16 @@ import java.io.Writer;
 import java.util.Map;
 import java.util.TreeMap;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.r.QueryReporter;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.structure.pairwise.ChemSpaceCell;
 import ambit2.db.search.structure.pairwise.ChemicalSpaceQuery;

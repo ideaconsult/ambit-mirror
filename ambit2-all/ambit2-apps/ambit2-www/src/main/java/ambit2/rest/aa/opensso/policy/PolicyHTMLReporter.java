@@ -4,11 +4,12 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.logging.Level;
 
+import net.idea.restnet.c.ResourceDoc;
+
 import org.restlet.Request;
 import org.restlet.data.Form;
 
 import ambit2.rest.AmbitResource;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.admin.AdminResource;
 
 /**

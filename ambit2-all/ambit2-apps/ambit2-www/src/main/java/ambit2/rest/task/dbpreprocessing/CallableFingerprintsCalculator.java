@@ -5,6 +5,8 @@ import java.sql.Connection;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.batch.IBatchStatistics.RECORDS_STATS;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -14,11 +16,9 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.AmbitUser;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.processors.StructureNormalizer;
 import ambit2.db.DbReaderStructure;
-import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.processors.AbstractUpdateProcessor;
 import ambit2.db.processors.FP1024Writer;

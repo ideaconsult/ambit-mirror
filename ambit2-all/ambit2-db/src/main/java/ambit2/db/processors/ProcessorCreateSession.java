@@ -34,8 +34,8 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.AbstractDBProcessor;
 import ambit2.base.processors.ProcessorException;
-import ambit2.db.AbstractDBProcessor;
 import ambit2.db.SessionID;
 import ambit2.db.update.queryfolder.CreateQueryFolder;
 
@@ -81,6 +81,8 @@ public class ProcessorCreateSession extends AbstractDBProcessor<SessionID, Sessi
 				} catch (SQLException xx) {
 					logger.log(Level.WARNING,x.getMessage(),x);
 				}
+				throw new ProcessorException(this,x);
+			} catch (Exception x) {
 				throw new ProcessorException(this,x);
 			}
 		}

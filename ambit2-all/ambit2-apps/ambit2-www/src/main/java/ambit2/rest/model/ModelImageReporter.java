@@ -3,8 +3,11 @@ package ambit2.rest.model;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ResourceDoc;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -19,11 +22,8 @@ import org.restlet.resource.ResourceException;
 import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.io.MyIteratingMDLReader;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.model.predictor.ModelPredictor;
 
 public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> extends QueryReporter<ModelQueryResults, Q,BufferedImage > {
@@ -59,7 +59,7 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 	}
 
 	@Override
-	public Object processItem(ModelQueryResults model) throws AmbitException {
+	public Object processItem(ModelQueryResults model) throws Exception {
 		ModelPredictor predictor = ModelPredictor.getPredictor(model,request);
 		String resultsURI = String.format("%s/%s",modelURIReporter.getURI(model),OpenTox.URI.feature);
 		setOutput(getImage(predictor,resultsURI));

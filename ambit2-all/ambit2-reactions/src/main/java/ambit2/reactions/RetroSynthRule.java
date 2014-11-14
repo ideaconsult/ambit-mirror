@@ -2,7 +2,6 @@ package ambit2.reactions;
 
 import java.util.ArrayList;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SMIRKSReaction;
 

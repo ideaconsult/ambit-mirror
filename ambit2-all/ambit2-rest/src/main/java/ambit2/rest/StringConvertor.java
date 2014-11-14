@@ -5,6 +5,7 @@ import java.io.Writer;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.reporter.Reporter;
+import net.idea.restnet.c.RepresentationConvertor;
 
 import org.restlet.data.CharacterSet;
 import org.restlet.data.Language;
