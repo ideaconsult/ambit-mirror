@@ -57,10 +57,14 @@ public class InchiProcessor extends DefaultAmbitProcessor<IAtomContainer, InChIG
 	public InChIGenerator process(IAtomContainer target) throws AmbitException {
 		try {
 			// Get InChIGenerator
+
 			List<net.sf.jniinchi.INCHI_OPTION> options = new ArrayList<net.sf.jniinchi.INCHI_OPTION>();
+			/*
 			options.add(INCHI_OPTION.ChiralFlagON);
 			options.add(INCHI_OPTION.SUCF);
 			options.add(INCHI_OPTION.SRel);
+			*/
+			
 			options.add(INCHI_OPTION.SAbs);
 			options.add(INCHI_OPTION.SAsXYZ);
 			options.add(INCHI_OPTION.SPXYZ);
