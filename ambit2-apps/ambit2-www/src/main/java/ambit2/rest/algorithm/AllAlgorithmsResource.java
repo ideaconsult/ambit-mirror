@@ -287,7 +287,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							getRequest().getRootRef(),
 							model,
 							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-							new PropertyURIReporter(getRequest(),null),
+							new PropertyURIReporter(getRequest()),
 							null
 							);					
 
@@ -361,7 +361,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							getRequest().getRootRef(),
 							model,
 							modelReporter,
-							new PropertyURIReporter(getRequest(),getDocumentation()),
+							new PropertyURIReporter(getRequest()),
 							null
 							);
 					return

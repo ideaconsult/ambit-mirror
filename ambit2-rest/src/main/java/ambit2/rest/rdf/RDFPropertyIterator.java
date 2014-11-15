@@ -7,9 +7,10 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.opentox.rdf.OT;
-import org.opentox.rdf.OT.OTClass;
-import org.opentox.rdf.OT.OTProperty;
+import net.idea.restnet.rdf.ns.OT;
+import net.idea.restnet.rdf.ns.OT.OTClass;
+import net.idea.restnet.rdf.ns.OT.OTProperty;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;

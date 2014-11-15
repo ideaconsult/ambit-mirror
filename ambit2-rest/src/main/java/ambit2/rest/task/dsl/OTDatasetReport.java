@@ -7,10 +7,11 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.restnet.c.task.ClientResourceWrapper;
+
 import org.opentox.dsl.OTDataset;
 import org.opentox.dsl.OTFeatures;
 import org.opentox.dsl.OTObject;
-import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;

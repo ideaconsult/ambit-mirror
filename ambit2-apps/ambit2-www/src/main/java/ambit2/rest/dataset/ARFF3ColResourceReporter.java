@@ -21,13 +21,13 @@ public class ARFF3ColResourceReporter<Q extends IQueryRetrieval<IStructureRecord
 
 	protected PropertyURIReporter reporter;
 
-	public ARFF3ColResourceReporter(Template template, Request request,ResourceDoc doc, String urlPrefix) {
-		this(template,null,request,doc,urlPrefix);
+	public ARFF3ColResourceReporter(Template template, Request request, String urlPrefix) {
+		this(template,null,request,urlPrefix);
 	}
-	public ARFF3ColResourceReporter(Template template,Profile groupedProperties, Request request,ResourceDoc doc, String urlPrefix) {
+	public ARFF3ColResourceReporter(Template template,Profile groupedProperties, Request request,String urlPrefix) {
 		super(template,groupedProperties);
 		setUrlPrefix(urlPrefix);
-		reporter = new PropertyURIReporter(request,doc);
+		reporter = new PropertyURIReporter(request);
 	}
 	@Override
 	protected String getRelationName() {

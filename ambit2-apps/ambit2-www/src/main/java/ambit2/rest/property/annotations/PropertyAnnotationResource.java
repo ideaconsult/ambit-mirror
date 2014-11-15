@@ -51,7 +51,6 @@ public class PropertyAnnotationResource  extends QueryResource<IQueryRetrieval<P
 
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 				PropertyAnnotationURIReporter r = new PropertyAnnotationURIReporter(getRequest(),getDocumentation());
-				r.setDelimiter("\n");
 				return new StringConvertor(r,MediaType.TEXT_URI_LIST);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||

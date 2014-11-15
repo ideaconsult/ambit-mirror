@@ -2,12 +2,12 @@ package ambit2.rest.property.annotations;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.PropertyAnnotation;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyResource;
 
 /**
@@ -41,9 +41,9 @@ public class PropertyAnnotationURIReporter extends QueryURIReporter<PropertyAnno
 	public String getURI(String ref, PropertyAnnotation record) {
 
 		if (record.getIdproperty()>0)
-			return String.format("%s%s/%d%s%s",ref,PropertyResource.featuredef,record.getIdproperty(),
-					isPropertyOnly()?"":PropertyAnnotationResource.annotation,
-					getDelimiter());
+			return String.format("%s%s/%d%s",ref,PropertyResource.featuredef,record.getIdproperty(),
+					isPropertyOnly()?"":PropertyAnnotationResource.annotation
+					);
 		else
 			return null;
 

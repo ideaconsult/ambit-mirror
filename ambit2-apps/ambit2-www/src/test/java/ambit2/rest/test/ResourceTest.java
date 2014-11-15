@@ -9,14 +9,14 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import junit.framework.Assert;
+import net.idea.restnet.c.task.ClientResourceWrapper;
+import net.idea.restnet.rdf.ns.OT;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.opentox.aa.opensso.OpenSSOToken;
-import org.opentox.dsl.task.ClientResourceWrapper;
 import org.opentox.dsl.task.RemoteTask;
-import org.opentox.rdf.OT;
 import org.restlet.Client;
 import org.restlet.Component;
 import org.restlet.Context;

@@ -12,10 +12,10 @@ import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
+import net.idea.restnet.c.task.ClientResourceWrapper;
 
 import org.opentox.dsl.OTDataset;
 import org.opentox.dsl.OTFeature;
-import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;

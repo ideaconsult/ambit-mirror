@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.logging.Level;
 
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.rdf.ns.OT;
 
-import org.opentox.rdf.OT;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 

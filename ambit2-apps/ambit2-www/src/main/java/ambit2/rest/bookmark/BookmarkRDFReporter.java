@@ -4,13 +4,13 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 
 import ambit2.base.data.Bookmark;
 import ambit2.rest.QueryRDFReporter;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.rdf.Annotea;
 
 import com.hp.hpl.jena.ontology.Individual;
@@ -28,8 +28,9 @@ public class BookmarkRDFReporter <Q extends IQueryRetrieval<Bookmark>> extends Q
 		super(request,mediaType,doc);
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Request reference,ResourceDoc doc) {
-		return new BookmarkURIReporter(reference,doc);
+	protected QueryURIReporter<Bookmark, IQueryRetrieval<Bookmark>> createURIReporter(
+			Request req, ResourceDoc doc) {
+		return new BookmarkURIReporter(req);
 	}
 	@Override
 	public Object processItem(Bookmark item) throws AmbitException {

@@ -4,8 +4,8 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.rdf.ns.OT;
 
-import org.opentox.rdf.OT;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;

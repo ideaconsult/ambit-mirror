@@ -4,9 +4,10 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import net.idea.restnet.c.task.ClientResourceWrapper;
+
 import org.junit.Assert;
 import org.junit.Test;
-import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;

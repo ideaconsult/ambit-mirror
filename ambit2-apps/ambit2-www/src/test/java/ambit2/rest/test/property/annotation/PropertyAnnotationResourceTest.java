@@ -6,12 +6,12 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 
 import junit.framework.Assert;
+import net.idea.restnet.rdf.ns.OT;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.opentox.dsl.OTFeature;
-import org.opentox.rdf.OT;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -211,7 +211,7 @@ public class PropertyAnnotationResourceTest extends ResourceTest {
 		p.setNominal(true);
 		PropertyRDFReporter.addToModel(model, 
 				p,
-				new PropertyURIReporter(),
+				new PropertyURIReporter(new Reference(String.format("http://localhost:%d%s", port))),
 				new ReferenceURIReporter());
 		StringWriter writer = new StringWriter();
 		model.write(writer,"RDF/XML");
@@ -240,7 +240,7 @@ public class PropertyAnnotationResourceTest extends ResourceTest {
 		p.setNominal(true);
 		OntModel model = OT.createModel();
 		PropertyRDFReporter.addToModel(model,p,
-				new PropertyURIReporter(),
+				new PropertyURIReporter(new Reference(String.format("http://localhost:%d%s", port))),
 				new ReferenceURIReporter());
 		StringWriter writer = new StringWriter();
 		model.write(writer,"RDF/XML");

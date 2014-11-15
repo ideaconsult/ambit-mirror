@@ -11,8 +11,8 @@ import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskResult;
 import net.idea.restnet.i.task.ITaskStorage;
+import net.idea.restnet.rdf.ns.OT;
 
-import org.opentox.rdf.OT;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;

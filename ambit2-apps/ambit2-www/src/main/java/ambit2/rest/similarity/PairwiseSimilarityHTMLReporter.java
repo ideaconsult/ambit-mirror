@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -17,7 +18,6 @@ import ambit2.base.relation.SimilarityRelation;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.query.QueryResource;
 
 public class PairwiseSimilarityHTMLReporter  extends QueryHTMLReporter<SimilarityRelation, IQueryRetrieval<SimilarityRelation>> {

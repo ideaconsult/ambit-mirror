@@ -2,13 +2,14 @@ package ambit2.rest.task;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.sql.Connection;
 import java.util.logging.Level;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
+import net.idea.restnet.c.task.ClientResourceWrapper;
 
-import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -16,6 +17,7 @@ import org.restlet.representation.Representation;
 
 import weka.core.Instances;
 import Jama.Matrix;
+import ambit2.base.io.DownloadTool;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.rest.ChemicalMediaType;
@@ -81,20 +83,19 @@ public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<
 
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
-		Representation r = null;
 		BufferedReader reader = null;
-		ClientResourceWrapper client = null;
+		HttpURLConnection client = null;
 		try {
-			client = new ClientResourceWrapper(reference);
-			r = client.get(ChemicalMediaType.WEKA_ARFF);
-			reader = new BufferedReader(new InputStreamReader(r.getStream()));
+			client = ClientResourceWrapper.getHttpURLConnection(reference.toString(), "GET", ChemicalMediaType.WEKA_ARFF.toString());
+			reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			return new Instances(reader);
 		} catch (Exception x) {
+			x.printStackTrace();
 			throw x;
 		} finally {
 			try {reader.close(); } catch (Exception x) {}
-			try {r.release(); } catch (Exception x) {}
-			try {if (client!=null) client.release(); } catch (Exception x) {}
+			try { if (client != null) client.getInputStream().close(); } catch (Exception x) {}
+			try { if (client != null) client.disconnect(); } catch (Exception x) {}
 		}
 	}
 	@Override

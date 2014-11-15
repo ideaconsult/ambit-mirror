@@ -343,7 +343,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 							request.getRootRef(),
 							model,
 							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
-							new PropertyURIReporter(request,null),
+							new PropertyURIReporter(request),
 							null);
 	
 				}
@@ -352,7 +352,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 						request.getRootRef(),
 						model,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
-						new PropertyURIReporter(request,null),
+						new PropertyURIReporter(request),
 						null						
 						) {
 					@Override
@@ -366,7 +366,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 						request.getRootRef(),
 						model,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
-						new PropertyURIReporter(request,null),
+						new PropertyURIReporter(request),
 						null
 						);					
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.MOPAC.getMediaType())) {
@@ -375,7 +375,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 						request.getRootRef(),
 						model,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
-						new PropertyURIReporter(request,null),
+						new PropertyURIReporter(request),
 						null
 						);	
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.TAUTOMERS.getMediaType())) {
@@ -384,7 +384,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 						request.getRootRef(),
 						model,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
-						new PropertyURIReporter(request,null),
+						new PropertyURIReporter(request),
 						null
 						);						
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
@@ -393,7 +393,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 						request.getRootRef(),
 						model,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
-						new PropertyURIReporter(request,null),
+						new PropertyURIReporter(request),
 						null
 						);
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.WWW_FORM.getMediaType())) {
@@ -402,7 +402,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 							request.getRootRef(),
 							model,
 							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
-							new PropertyURIReporter(request,null),
+							new PropertyURIReporter(request),
 							null
 							
 							);

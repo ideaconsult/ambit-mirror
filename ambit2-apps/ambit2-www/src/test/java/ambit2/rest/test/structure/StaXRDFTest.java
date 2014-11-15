@@ -2,9 +2,10 @@ package ambit2.rest.test.structure;
 
 import java.io.InputStream;
 
+import net.idea.restnet.c.task.ClientResourceWrapper;
+
 import org.junit.Assert;
 import org.junit.Test;
-import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;

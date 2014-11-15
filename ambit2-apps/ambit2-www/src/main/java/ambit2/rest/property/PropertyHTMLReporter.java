@@ -5,6 +5,7 @@ import java.io.Writer;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -16,7 +17,6 @@ import ambit2.base.data.PropertyAnnotation;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryHTMLReporter;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.annotations.PropertyAnnotationResource;
 import ambit2.rest.query.QueryResource;
 
@@ -36,7 +36,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
-		return new PropertyURIReporter(request,doc);
+		return new PropertyURIReporter(request);
 	}
 	
 	@Override

@@ -7,9 +7,11 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.BatchProcessingException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
 import net.idea.restnet.c.RepresentationConvertor;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
@@ -37,7 +39,6 @@ import ambit2.rest.DBConnection;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.predictor.DescriptorPredictor;
@@ -117,16 +118,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			throws AmbitException, ResourceException {
 	String filenamePrefix = getRequest().getResourceRef().getPath();		
 	if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()) {
-			@Override
-			public Object processItem(ModelQueryResults dataset) throws AmbitException  {
-				super.processItem(dataset);
-				try {
-				output.write('\n');
-				} catch (Exception x) {}
-				return null;
-			}
-		},MediaType.TEXT_URI_LIST);
+		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),MediaType.TEXT_URI_LIST);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 		return new StringConvertor(	new ModelTextReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
 				MediaType.TEXT_PLAIN);	
@@ -195,8 +187,10 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			//dependent
 			try {
 				reporter.process(query);
-			} catch (NotFoundException x) {
-				//this is ok
+			} catch (BatchProcessingException x) {
+				if (x.getCause() instanceof NotFoundException) { 
+					//	this is ok
+				} else throw x;	
 			}
 		
 
@@ -205,8 +199,10 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			reporter.setOutput(model.getPredictors());
 			try {
 				reporter.process(query);
-			} catch (NotFoundException x) {
-				//ok
+			} catch (BatchProcessingException x) {
+				if (x.getCause() instanceof NotFoundException) { 
+					//	this is ok
+				} else throw x;
 			}
 
 			query.setValue("predicted");
@@ -214,19 +210,23 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			reporter.setOutput(model.getPredicted());
 			try {
 				reporter.process(query);
-			} catch (NotFoundException x) {
-				//ok, it may change the structure only
+			} catch (BatchProcessingException x) {
+				if (x.getCause() instanceof NotFoundException) { 
+					//ok, it may change the structure only
+				} else throw x;
+
 			}			
 			
 		} catch (Exception x) {
-			getLogger().log(Level.WARNING,x.getMessage(),x);
+			getLogger().log(Level.FINE,x.getMessage(),x);
 		}
 		
 		try {
 			reporter.setCloseConnection(true);
-			reporter.close();
 		} catch (Exception x) {
 			getLogger().log(Level.WARNING,x.getMessage(),x);
+		} finally {
+			try {reporter.close();} catch (Exception x) {}
 		}
 		try {	connection.close(); 	} catch (Exception x) {}
 

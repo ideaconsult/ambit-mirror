@@ -10,6 +10,7 @@ import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 
@@ -23,7 +24,6 @@ import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.rest.QueryStaXReporter;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.structure.CompoundURIReporter;
 import ambit2.rest.structure.ConformerURIReporter;
@@ -103,7 +103,7 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 	protected DatasetRDFWriter createRecordWriter(Request request,ResourceDoc doc) {
 		return new DatasetRDFWriter(
 							new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(compoundInDatasetPrefix,request,doc),
-							new PropertyURIReporter(request,doc));
+							new PropertyURIReporter(request));
 	}
 	@Override
 	public void setOutput(XMLStreamWriter output) throws Exception {

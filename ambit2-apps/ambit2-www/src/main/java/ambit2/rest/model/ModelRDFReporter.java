@@ -4,8 +4,9 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.rdf.ns.OT;
 
-import org.opentox.rdf.OT;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -14,7 +15,6 @@ import org.restlet.data.Reference;
 import ambit2.base.data.Property;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.rest.QueryRDFReporter;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.RDFPropertyIterator;
 
@@ -36,7 +36,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 	protected PropertyURIReporter propertyReporter;
 	public ModelRDFReporter(Request request, MediaType mediaType,ResourceDoc doc) {
 		super(request,mediaType,doc);
-		propertyReporter = new PropertyURIReporter(request,doc);
+		propertyReporter = new PropertyURIReporter(request);
 	}
 	@Override
 	protected QueryURIReporter<ModelQueryResults, IQueryRetrieval<ModelQueryResults>> createURIReporter(

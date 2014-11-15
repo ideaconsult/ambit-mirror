@@ -10,6 +10,7 @@ import java.util.concurrent.Callable;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.i.task.ITaskResult;
 
 import org.restlet.Context;
@@ -41,7 +42,6 @@ import ambit2.db.update.storedquery.QueryDeleteStructure;
 import ambit2.db.update.structure.ChemicalByDataset;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.task.CallableQueryResultsCreator;
 import ambit2.rest.task.CallableUpdateDataset;
@@ -228,7 +228,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 					getRequest().getRootRef(),
 					getContext(),
 					dataset,
-					new DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset>(getRequest(),getDocumentation()),
+					new DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset>(getRequest()),
 					token
 					);
 			((CallableUpdateDataset)callable).setClearPreviousContent(clearPreviousContent);

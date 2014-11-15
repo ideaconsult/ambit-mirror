@@ -10,9 +10,9 @@ import java.util.UUID;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.restnet.rdf.ns.OT;
 
 import org.apache.xerces.impl.dv.util.Base64;
-import org.opentox.rdf.OT;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;

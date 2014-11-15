@@ -4,6 +4,7 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Request;
@@ -16,7 +17,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.DatasetStructuresResource;
@@ -66,16 +66,7 @@ abstract public class AbstractMetadataResource<M extends ISourceDataset>  extend
 	if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			return new OutputWriterConvertor(new MetadatasetJSONReporter<IQueryRetrieval<M>,M>(getRequest()),MediaType.APPLICATION_JSON);			
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<M>,M>(getRequest(),getDocumentation()) {
-			@Override
-			public Object processItem(M dataset) throws AmbitException  {
-				super.processItem(dataset);
-				try {
-				output.write('\n');
-				} catch (Exception x) {}
-				return null;
-			}
-		},MediaType.TEXT_URI_LIST,filenamePrefix);
+		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<M>,M>(getRequest()),MediaType.TEXT_URI_LIST,filenamePrefix);
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 			variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||

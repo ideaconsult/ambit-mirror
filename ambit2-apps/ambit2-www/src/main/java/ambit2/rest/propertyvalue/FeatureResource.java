@@ -5,6 +5,7 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.RepresentationConvertor;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
@@ -30,7 +31,6 @@ import ambit2.db.update.value.UpdateStructurePropertyIDNumber;
 import ambit2.db.update.value.UpdateStructurePropertyIDString;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DisplayMode;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;

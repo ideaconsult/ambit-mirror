@@ -4,11 +4,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
+import net.idea.restnet.c.task.ClientResourceWrapper;
+import net.idea.restnet.rdf.ns.OT;
+
 import org.opentox.dsl.OTDataset;
 import org.opentox.dsl.OTFeatures;
 import org.opentox.dsl.OTObject;
-import org.opentox.dsl.task.ClientResourceWrapper;
-import org.opentox.rdf.OT;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;

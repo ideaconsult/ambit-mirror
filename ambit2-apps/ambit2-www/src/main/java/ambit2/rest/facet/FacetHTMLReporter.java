@@ -6,13 +6,13 @@ import java.util.logging.Level;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 
 import ambit2.base.facet.IFacet;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;
-import ambit2.rest.QueryURIReporter;
 
 public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<Facet, IQueryRetrieval<Facet>> {
 	/**

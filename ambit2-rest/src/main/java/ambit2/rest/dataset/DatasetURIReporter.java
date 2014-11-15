@@ -4,7 +4,7 @@ import java.io.Writer;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
-import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
@@ -13,7 +13,6 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.rest.OpenTox;
-import ambit2.rest.QueryURIReporter;
 
 
 public class DatasetURIReporter<Q extends IQueryRetrieval<M>,M extends ISourceDataset> extends QueryURIReporter<M, Q> {
@@ -22,11 +21,11 @@ public class DatasetURIReporter<Q extends IQueryRetrieval<M>,M extends ISourceDa
 	 */
 	private static final long serialVersionUID = 3648376868814044783L;
 
-	public DatasetURIReporter(Request baseRef,ResourceDoc doc) {
-		super(baseRef,doc);
+	public DatasetURIReporter(Request baseRef) {
+		super(baseRef,null);
 	}
-	public DatasetURIReporter(Reference baseRef,ResourceDoc doc) {
-		super(baseRef,doc);
+	public DatasetURIReporter(Reference baseRef) {
+		super(baseRef,null);
 	}	
 	public DatasetURIReporter() {
 	}	

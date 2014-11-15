@@ -48,10 +48,10 @@ public class ConformerURIReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 
 	public String getURI(String ref, IStructureRecord item) {
 		if (item.getIdstructure()>0)
-		return String.format("%s%s%s/%d%s/%d%s",
+		return String.format("%s%s%s/%d%s/%d",
 				ref,
 				prefix,
-				CompoundResource.compound,item.getIdchemical(),ConformerResource.conformerKey,item.getIdstructure(),getDelimiter());
+				CompoundResource.compound,item.getIdchemical(),ConformerResource.conformerKey,item.getIdstructure());
 		else return super.getURI(ref, item);
 	}	
 }

@@ -2,8 +2,9 @@ package ambit2.rest.test;
 
 import java.io.InputStream;
 
+import net.idea.restnet.rdf.ns.OT;
+
 import org.junit.Test;
-import org.opentox.rdf.OT;
 import org.opentox.rest.HTTPClient;
 
 import com.hp.hpl.jena.ontology.OntModel;

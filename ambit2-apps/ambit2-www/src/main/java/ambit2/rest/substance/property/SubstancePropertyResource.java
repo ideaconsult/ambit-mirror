@@ -3,6 +3,7 @@ package ambit2.rest.substance.property;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
@@ -20,7 +21,6 @@ import ambit2.base.data.Property;
 import ambit2.base.data.substance.SubstanceProperty;
 import ambit2.db.substance.study.ReadSubstanceProperty;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyJSONReporter;
@@ -78,8 +78,7 @@ public class SubstancePropertyResource extends QueryResource<IQueryRetrieval<Pro
 			throws AmbitException, ResourceException {
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-				PropertyURIReporter r = new PropertyURIReporter(getRequest(),getDocumentation());
-				r.setDelimiter("\n");
+				PropertyURIReporter r = new PropertyURIReporter(getRequest());
 				return new StringConvertor(r,MediaType.TEXT_URI_LIST,filenamePrefix);
 						
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
@@ -91,8 +90,7 @@ public class SubstancePropertyResource extends QueryResource<IQueryRetrieval<Pro
 					new PropertyRDFReporter<IQueryRetrieval<Property>>(getRequest(),variant.getMediaType(),getDocumentation())
 					,variant.getMediaType(),filenamePrefix);		
 		} else {
-			PropertyURIReporter r = new PropertyURIReporter(getRequest(),getDocumentation());
-			r.setDelimiter("\n");
+			PropertyURIReporter r = new PropertyURIReporter(getRequest());
 			return new OutputWriterConvertor(new PropertyJSONReporter(getRequest()),MediaType.APPLICATION_JSON);
 		}	
 			
@@ -137,7 +135,7 @@ public class SubstancePropertyResource extends QueryResource<IQueryRetrieval<Pro
 	@Override
 	protected QueryURIReporter<Property, IQueryRetrieval<Property>> getURUReporter(
 			Request baseReference) throws ResourceException {
-		return new PropertyURIReporter(baseReference,getDocumentation());
+		return new PropertyURIReporter(baseReference);
 	}
 	
 

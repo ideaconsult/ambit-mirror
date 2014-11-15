@@ -3,10 +3,9 @@ package ambit2.rest.task;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import net.idea.restnet.c.task.ClientResourceWrapper;
+import net.idea.restnet.i.aa.IAuthToken;
 import net.idea.restnet.i.task.ICallableTask;
-
-import org.opentox.dsl.aa.IAuthToken;
-import org.opentox.dsl.task.ClientResourceWrapper;
 
 public abstract class CallableProtectedTask<USERID> implements ICallableTask, IAuthToken {
 	protected static Logger logger = Logger.getLogger(CallableProtectedTask.class.getName());

@@ -41,7 +41,6 @@ public class FingerprintResource  extends QueryResource<QueryFingerprints,IFinge
 			throws AmbitException, ResourceException {
 	    if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			FingerprintURIReporter reporter = 	new FingerprintURIReporter (getRequest(),getDocumentation());
-			reporter.setDelimiter("\n");
 			return new OutputWriterConvertor(reporter,MediaType.TEXT_URI_LIST);
 	    } else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 	    	return new OutputWriterConvertor(new FingerprintsCSVReporter(getRequest(),getDocumentation()),MediaType.TEXT_CSV);

@@ -1,12 +1,11 @@
 package ambit2.rest.bookmark;
 
 import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 
 import ambit2.base.data.Bookmark;
-import ambit2.rest.QueryURIReporter;
 
 public class BookmarkURIReporter <Q extends IQueryRetrieval<Bookmark>> extends QueryURIReporter<Bookmark, Q> {
 
@@ -14,12 +13,9 @@ public class BookmarkURIReporter <Q extends IQueryRetrieval<Bookmark>> extends Q
 	 * 
 	 */
 	private static final long serialVersionUID = 8868430033131766579L;
-	public BookmarkURIReporter(Request baseRef,ResourceDoc doc) {
-		super(baseRef,doc);
+	public BookmarkURIReporter(Request baseRef) {
+		super(baseRef,null);
 	}
-	public BookmarkURIReporter(ResourceDoc doc) {
-		this(null,doc);
-	}	
 
 	@Override
 	public String getURI(String ref, Bookmark item) {

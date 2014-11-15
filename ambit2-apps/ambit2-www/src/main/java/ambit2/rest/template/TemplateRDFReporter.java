@@ -4,6 +4,7 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -12,7 +13,6 @@ import org.restlet.data.Reference;
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
 import ambit2.rest.QueryRDFReporter;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.RDFPropertyIterator;
@@ -37,7 +37,7 @@ public class TemplateRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request reference,ResourceDoc doc) {
-		return new PropertyURIReporter(reference,doc);
+		return new PropertyURIReporter(reference);
 	}
 
 	@Override

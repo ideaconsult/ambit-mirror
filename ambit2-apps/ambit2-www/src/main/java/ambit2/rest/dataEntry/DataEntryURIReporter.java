@@ -32,23 +32,23 @@ public class DataEntryURIReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	@Override
 	public String getURI(String ref, IStructureRecord item) {
 		if ((item.getIdstructure()==-1) || (item.getType().equals(STRUC_TYPE.NA)))
-			return String.format("%s%s/%d%s/%s%s",
+			return String.format("%s%s/%d%s/%s",
 					ref,
 					CompoundResource.compound,
 					item.getIdchemical(),
 					DataEntryResource.resourceTag,
-					item.getDataEntryID()>0?Integer.toString(item.getDataEntryID()):"",
-					delimiter);
+					item.getDataEntryID()>0?Integer.toString(item.getDataEntryID()):""
+					);
 		else
-			return String.format("%s%s/%d%s/%d%s/%s%s",
+			return String.format("%s%s/%d%s/%d%s/%s",
 						ref,
 						CompoundResource.compound,
 						item.getIdchemical(),
 						ConformerResource.conformerKey,
 						item.getIdstructure(),
 						DataEntryResource.resourceTag,
-						item.getDataEntryID()>0?Integer.toString(item.getDataEntryID()):"",
-						getDelimiter());				
+						item.getDataEntryID()>0?Integer.toString(item.getDataEntryID()):""
+						);				
 		
 	}
 }

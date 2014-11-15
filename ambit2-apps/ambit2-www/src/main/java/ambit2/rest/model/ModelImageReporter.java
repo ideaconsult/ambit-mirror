@@ -8,10 +8,10 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.r.QueryReporter;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.c.task.ClientResourceWrapper;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;

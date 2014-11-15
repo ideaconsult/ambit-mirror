@@ -4,9 +4,10 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.rdf.ns.OT;
+import net.idea.restnet.rdf.ns.OT.OTClass;
 
-import org.opentox.rdf.OT;
-import org.opentox.rdf.OT.OTClass;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -14,7 +15,6 @@ import org.restlet.data.Reference;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.interfaces.ICategory;
 import ambit2.rest.QueryRDFReporter;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
 
 import com.hp.hpl.jena.ontology.Individual;

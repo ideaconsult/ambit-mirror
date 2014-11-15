@@ -4,6 +4,7 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -13,7 +14,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.db.DbReader;
 import ambit2.db.DbReaderStructure;
-import ambit2.rest.QueryURIReporter;
 
 /**
  * {@link MediaType.TEXT_URI_LIST}
@@ -67,12 +67,12 @@ public class CompoundURIReporter<Q extends IQueryRetrieval<IStructureRecord>> ex
 	@Override
 	public String getURI(String ref, IStructureRecord item) {
 		if ((item.getIdstructure()==-1) || (item.getType().equals(STRUC_TYPE.NA)))
-			return String.format("%s%s%s/%d%s",ref,prefix,CompoundResource.compound,item.getIdchemical(),delimiter);
+			return String.format("%s%s%s/%d",ref,prefix,CompoundResource.compound,item.getIdchemical());
 		else
-			return String.format("%s%s%s/%d%s/%d%s",
+			return String.format("%s%s%s/%d%s/%d",
 						ref,
 						prefix,
-						CompoundResource.compound,item.getIdchemical(),ConformerResource.conformerKey,item.getIdstructure(),getDelimiter());				
+						CompoundResource.compound,item.getIdchemical(),ConformerResource.conformerKey,item.getIdstructure());				
 		
 	}
 	@Override

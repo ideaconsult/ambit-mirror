@@ -8,8 +8,8 @@ import java.util.Iterator;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
+import net.idea.restnet.c.task.ClientResourceWrapper;
 
-import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.StructureRecord;

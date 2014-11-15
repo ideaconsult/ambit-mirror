@@ -3,6 +3,7 @@ package ambit2.rest.facet;
 import java.net.URLEncoder;
 
 import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
@@ -20,7 +21,6 @@ import ambit2.db.facets.qlabel.DatasetStructureQLabelFacet;
 import ambit2.db.substance.study.facet.OwnerFacet;
 import ambit2.db.substance.study.facet.SubstanceByCategoryFacet;
 import ambit2.rest.OpenTox;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.bookmark.BookmarkResource;
 import ambit2.rest.structure.ConformerURIReporter;
 import ambit2.rest.substance.SubstanceResource;

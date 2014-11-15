@@ -9,6 +9,7 @@ import net.idea.modbcum.i.exceptions.NotFoundException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ITask;
@@ -56,7 +57,6 @@ import ambit2.rest.DisplayMode;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.PDFConvertor;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFF3ColResourceReporter;
@@ -225,17 +225,16 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			QueryURIReporter r = (QueryURIReporter)getURIReporter();
-			r.setDelimiter("\n");
 			return new StringConvertor(
 					r,MediaType.TEXT_URI_LIST,filenamePrefix);
 			
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
+					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
 					ChemicalMediaType.WEKA_ARFF,filenamePrefix);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.THREECOL_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
+					new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
 					ChemicalMediaType.THREECOL_ARFF,filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,

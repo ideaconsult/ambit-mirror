@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -23,7 +24,6 @@ import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.facet.DatasetChemicalsQualityStatsResource;
 import ambit2.rest.facet.DatasetStrucTypeStatsResource;
 import ambit2.rest.facet.DatasetStructureQualityStatsResource;
@@ -54,7 +54,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
-		return new DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset>(request,doc);
+		return new DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset>(request);
 	}
 	@Override
 	public void header(Writer w, IQueryRetrieval<ISourceDataset> query) {

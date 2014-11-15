@@ -5,6 +5,7 @@ import java.io.Writer;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -16,7 +17,6 @@ import ambit2.rest.AmbitResource;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryHTMLReporter;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.dataset.MetadatasetResource.search_features;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.OTEE;
@@ -40,7 +40,7 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	}	
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
-		return new PropertyURIReporter(request,doc);
+		return new PropertyURIReporter(request);
 	}
 	
 	public String toURI(Property record) {

@@ -5,8 +5,9 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.Hashtable;
 
-import org.opentox.rdf.OT;
-import org.opentox.rdf.OT.OTClass;
+import net.idea.restnet.rdf.ns.OT;
+import net.idea.restnet.rdf.ns.OT.OTClass;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;

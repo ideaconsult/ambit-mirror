@@ -2,13 +2,13 @@ package ambit2.rest.property;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.template.OntologyResource;
 
 /**
@@ -23,15 +23,13 @@ public class PropertyURIReporter extends QueryURIReporter<Property, IQueryRetrie
 	 */
 	private static final long serialVersionUID = 711954935147788056L;
 
-	public PropertyURIReporter(Reference baseRef,ResourceDoc doc) {
-		super(baseRef,doc);
+	public PropertyURIReporter(Reference baseRef) {
+		super(baseRef,null);
 	}
-	public PropertyURIReporter(Request ref,ResourceDoc doc) {
-		super(ref,doc);
+	public PropertyURIReporter(Request ref) {
+		super(ref,null);
 	}
-	public PropertyURIReporter() {
-		this((Request)null,null);
-	}
+
 	@Override
 	public String getURI(String ref, Property record) {
 		
@@ -44,11 +42,10 @@ public class PropertyURIReporter extends QueryURIReporter<Property, IQueryRetrie
 					OntologyResource.resource,
 					record.getReference()==null?"All":
 					Reference.encode(record.getTitle()),
-					Reference.encode(record.getName()),
-					getDelimiter()
+					Reference.encode(record.getName())
 					);
 		} else
-			return String.format("%s%s%s",ref,record.getRelativeURI(),getDelimiter());
+			return String.format("%s%s",ref,record.getRelativeURI());
 
 	}
 

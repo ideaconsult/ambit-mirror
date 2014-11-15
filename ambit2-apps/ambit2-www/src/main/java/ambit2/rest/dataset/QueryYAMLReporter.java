@@ -4,11 +4,10 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.r.QueryReporter;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.ho.yaml.YamlEncoder;
 import org.restlet.Request;
-
-import ambit2.rest.QueryURIReporter;
 
 /**
  * 

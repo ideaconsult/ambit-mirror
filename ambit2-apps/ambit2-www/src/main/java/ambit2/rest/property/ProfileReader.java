@@ -5,6 +5,7 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.BatchProcessingException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
 import net.idea.modbcum.p.AbstractDBProcessor;
@@ -106,6 +107,10 @@ security.provider.certpath.SunCertPathBuilderException: unable to find valid cer
 					reporter.process((AbstractPropertyRetrieval)q);
 				} catch (NotFoundException x) {
 					//this is ok
+				} catch (BatchProcessingException x) {
+					if (x.getCause() instanceof NotFoundException) { //ok
+					} else
+						logger.log(Level.WARNING,x.getMessage(),x);
 				} catch(Exception x) {
 					logger.log(Level.WARNING,x.getMessage(),x);
 				} finally {

@@ -14,6 +14,7 @@ import junit.framework.Assert;
 import net.idea.opentox.cli.OTClient;
 import net.idea.opentox.cli.structure.Compound;
 import net.idea.opentox.cli.structure.CompoundClient;
+import net.idea.restnet.c.task.ClientResourceWrapper;
 
 import org.apache.http.HttpStatus;
 import org.dbunit.database.IDatabaseConnection;
@@ -22,7 +23,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opentox.dsl.OTDataset;
 import org.opentox.dsl.OTModel;
-import org.opentox.dsl.task.ClientResourceWrapper;
 import org.opentox.dsl.task.RemoteTask;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -928,11 +928,11 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Form headers = new Form();  
 		headers.add(OpenTox.params.dataset_uri.toString(), 
 				String.format("http://localhost:%d/dataset/1", port));
-		testAsyncTask(
+		Reference model = testAsyncTask(
 				String.format("http://localhost:%d/algorithm/fptanimoto", port),
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));
-
+		System.out.println(model);
 		testAsyncTask(
 				String.format("http://localhost:%d/model/3", port),
 				headers, Status.SUCCESS_OK,
@@ -1066,11 +1066,11 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Form headers = new Form();  
 		headers.add(OpenTox.params.dataset_uri.toString(), 
 				String.format("http://localhost:%d/dataset/1?max=3", port));
-		testAsyncTask(
+		Reference model = testAsyncTask(
 				String.format("http://localhost:%d/algorithm/leverage", port),
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));
-
+		System.out.println(model);
 		headers.removeAll(OpenTox.params.dataset_uri.toString());
 		headers.add(OpenTox.params.dataset_uri.toString(), 
 				String.format("http://localhost:%d/dataset/1", port));		
