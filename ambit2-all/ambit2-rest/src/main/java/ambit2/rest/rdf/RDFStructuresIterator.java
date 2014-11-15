@@ -11,8 +11,9 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.opentox.dsl.task.ClientResourceWrapper;
-import org.opentox.rdf.OT;
+import net.idea.restnet.c.task.ClientResourceWrapper;
+import net.idea.restnet.rdf.ns.OT;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;

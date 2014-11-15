@@ -77,6 +77,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 			
 			output.write("\n@data\n");
 		} catch (Exception x) {
+			x.printStackTrace();
 			logger.log(Level.WARNING,x.getMessage(),x);
 		} finally {
 		}

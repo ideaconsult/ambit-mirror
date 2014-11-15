@@ -29,17 +29,17 @@ public class ARFFResourceReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	private static final long serialVersionUID = 2627930277795024333L;
 	protected PropertyURIReporter reporter;
 
-	public ARFFResourceReporter(Template template, Request request,ResourceDoc doc, String urlPrefix) {
-		this(template,null,request,doc,urlPrefix);
+	public ARFFResourceReporter(Template template, Request request, String urlPrefix) {
+		this(template,null,request,urlPrefix);
 	}
-	public ARFFResourceReporter(Template template,Profile groupedProperties, Request request,ResourceDoc doc, String urlPrefix) {
-		this(template,groupedProperties,request,doc,urlPrefix,(IProcessor[]) null);
+	public ARFFResourceReporter(Template template,Profile groupedProperties, Request request, String urlPrefix) {
+		this(template,groupedProperties,request,urlPrefix,(IProcessor[]) null);
 	}
 	
-	public ARFFResourceReporter(Template template,Profile groupedProperties,Request request,ResourceDoc doc, String urlPrefix,IProcessor... processors) {
+	public ARFFResourceReporter(Template template,Profile groupedProperties,Request request, String urlPrefix,IProcessor... processors) {
 		super(template,groupedProperties,processors);
 		setUrlPrefix(urlPrefix);
-		reporter = new PropertyURIReporter(request,doc);
+		reporter = new PropertyURIReporter(request);
 	}
 	@Override
 	protected String getRelationName() {
@@ -70,6 +70,6 @@ public class ARFFResourceReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		return 
 		String.format("@attribute %s %s\n", 
 				reporter.getURI(p),
-				allowedValues!=null?allowedValues:p.getClazz()==Number.class?"numeric":"string");
+				allowedValues!=null?allowedValues.toString():p.getClazz()==Number.class?"numeric":"string");
 	}
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.BatchProcessingException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.restnet.c.ResourceDoc;
@@ -129,11 +130,18 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 			        	Representation r = convertor.process(queryObject);
 			        	
 			        	return r;
+			        	
 		        	} catch (NotFoundException x) {
 		        		Representation r = processNotFound(x,variant);
 		        		return r;
-
-		    			
+					} catch (BatchProcessingException x) {
+						if (x.getCause() instanceof NotFoundException) { 
+			        		Representation r = processNotFound((NotFoundException)x.getCause(),variant);
+			        		return r;
+						} else {
+							getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
+			    			return null;
+						}
 		        	} catch (RResourceException x) {
 		    			getResponse().setStatus(x.getStatus());
 		    			return x.getRepresentation();

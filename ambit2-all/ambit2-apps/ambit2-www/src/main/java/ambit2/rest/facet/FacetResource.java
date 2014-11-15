@@ -1,6 +1,5 @@
 package ambit2.rest.facet;
 
-import java.io.Writer;
 import java.sql.Connection;
 import java.util.Map;
 
@@ -85,18 +84,7 @@ public abstract class FacetResource<FACET extends IFacet<String>,Q extends IQuer
 						MediaType.APPLICATION_JSON,filenamePrefix);				
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 					return new OutputWriterConvertor(
-							new FacetURIReporter(getRequest()) {
-								@Override
-								public Object processItem(Object item)
-										throws AmbitException {
-									Object i = super.processItem(item);
-									try {
-										((Writer)output).write('\n');
-									} catch (Exception x) {}
-									return i;
-								}
-							},
-							MediaType.TEXT_URI_LIST,filenamePrefix);				
+							new FacetURIReporter(getRequest()),	MediaType.TEXT_URI_LIST,filenamePrefix);				
 			} else 
 				return new OutputWriterConvertor(
 						getHTMLReporter(getRequest()),

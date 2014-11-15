@@ -2,13 +2,13 @@ package ambit2.rest.propertyvalue;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.PropertyValue;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.structure.CompoundResource;
 

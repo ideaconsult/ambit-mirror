@@ -3,6 +3,7 @@ package ambit2.rest.structure.quality;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
@@ -24,7 +25,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.qlabel.QueryQLabel;
 import ambit2.db.update.qlabel.CreateStructureQLabel;
 import ambit2.rest.OpenTox;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.query.QueryResource;
 
 public class QualityLabelResource extends QueryResource<QueryQLabel, QLabel> {

@@ -4,6 +4,7 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
@@ -23,7 +24,6 @@ import ambit2.db.update.reference.ReadReference;
 import ambit2.db.update.reference.UpdateReference;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.propertyvalue.PropertyValueReporter;
@@ -57,16 +57,7 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 			
 			return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-				return new StringConvertor(	new ReferenceURIReporter<IQueryRetrieval<ILiteratureEntry>>(getRequest()) {
-					@Override
-					public Object processItem(ILiteratureEntry dataset) throws AmbitException  {
-						super.processItem(dataset);
-						try {
-							output.write('\n');
-						} catch (Exception x) {}
-						return null;
-					}
-				},MediaType.TEXT_URI_LIST);
+				return new StringConvertor(	new ReferenceURIReporter<IQueryRetrieval<ILiteratureEntry>>(getRequest()),MediaType.TEXT_URI_LIST);
 			} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 					variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 					variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||

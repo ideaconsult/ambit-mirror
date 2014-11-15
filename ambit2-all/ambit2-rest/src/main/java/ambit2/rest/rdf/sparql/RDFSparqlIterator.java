@@ -5,7 +5,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.Iterator;
 
-import org.opentox.rdf.OT;
+import net.idea.restnet.rdf.ns.OT;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;

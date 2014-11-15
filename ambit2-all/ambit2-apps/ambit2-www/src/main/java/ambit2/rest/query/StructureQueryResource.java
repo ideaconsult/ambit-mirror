@@ -271,7 +271,6 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			ConformerURIReporter<QueryStructureByID> reporter = 
 				new ConformerURIReporter<QueryStructureByID>(getCompoundInDatasetPrefix(),getRequest(),queryObject.isPrescreen(),getDocumentation());
-			reporter.setDelimiter("\n");
 			return new StringConvertor(reporter,MediaType.TEXT_URI_LIST,filenamePrefix);			
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
 			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
@@ -307,13 +306,13 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);				
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
+					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),
 								String.format("%s%s",getRequest().getRootRef(),getCompoundInDatasetPrefix())
 							),
 					ChemicalMediaType.WEKA_ARFF,filenamePrefix);	
 		} else if (variant.getMediaType().equals(ChemicalMediaType.THREECOL_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
+					new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),
 								String.format("%s%s",getRequest().getRootRef(),getCompoundInDatasetPrefix())
 							),
 					ChemicalMediaType.THREECOL_ARFF,filenamePrefix);				

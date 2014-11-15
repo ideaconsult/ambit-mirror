@@ -2,10 +2,11 @@ package ambit2.rest.test;
 
 import java.util.UUID;
 
+import net.idea.restnet.c.task.ClientResourceWrapper;
+import net.idea.restnet.i.aa.IAuthToken;
+
 import org.opentox.aa.opensso.OpenSSOPolicy;
 import org.opentox.aa.opensso.OpenSSOToken;
-import org.opentox.dsl.aa.IAuthToken;
-import org.opentox.dsl.task.ClientResourceWrapper;
 
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 

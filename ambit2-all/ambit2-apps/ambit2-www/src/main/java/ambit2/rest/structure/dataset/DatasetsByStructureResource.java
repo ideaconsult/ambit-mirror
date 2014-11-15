@@ -49,16 +49,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<S
 		return new OutputWriterConvertor(
 				new DatasetsHTMLReporter(getRequest(),DisplayMode.table,getDocumentation(),headless),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset>(getRequest(),getDocumentation()) {
-			@Override
-			public Object processItem(ISourceDataset dataset) throws AmbitException  {
-				super.processItem(dataset);
-				try {
-				output.write('\n');
-				} catch (Exception x) {}
-				return null;
-			}
-		},MediaType.TEXT_URI_LIST,filenamePrefix);
+		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset>(getRequest()),MediaType.TEXT_URI_LIST,filenamePrefix);
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 		return new OutputWriterConvertor(new MetadatasetJSONReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset>(getRequest()),MediaType.APPLICATION_JSON);			
 		

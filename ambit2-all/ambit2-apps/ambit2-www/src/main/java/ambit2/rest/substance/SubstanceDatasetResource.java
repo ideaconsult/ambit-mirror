@@ -100,7 +100,6 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			QueryURIReporter r = (QueryURIReporter)getURIReporter(getRequest());
-			r.setDelimiter("\n");
 			return new StringConvertor(
 					r,MediaType.TEXT_URI_LIST,filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
@@ -112,7 +111,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 		} else if (variant.getMediaType().equals(ChemicalMediaType.THREECOL_ARFF)) {
 			QueryAbstractReporter reporter = 
 					new ARFF3ColResourceReporter<IQueryRetrieval<IStructureRecord>>(
-					getTemplate(),getGroupProperties(),getRequest(),getDocumentation(), 
+					getTemplate(),getGroupProperties(),getRequest(), 
 					String.format("%s%s",getRequest().getRootRef(),"")
 					);			
 			return new OutputWriterConvertor(reporter, ChemicalMediaType.THREECOL_ARFF,filenamePrefix);	
@@ -232,7 +231,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 	protected IProcessor<ReadSubstanceByOwner, Representation> createARFFReporter(String filenamePrefix) {
 
 		return new OutputWriterConvertor<SubstanceRecord, ReadSubstanceByOwner>(
-				new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
+				new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),
 							String.format("%s%s",getRequest().getRootRef(),"")
 						) {
 					@Override
@@ -246,7 +245,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 	}
 	protected IProcessor<ReadSubstanceByOwner, Representation> createARFF3ColumnReporter(String filenamePrefix) {
 		return new OutputWriterConvertor<SubstanceRecord, ReadSubstanceByOwner>(
-				new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
+				new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),
 							String.format("%s%s",getRequest().getRootRef(),"")
 						) {
 					@Override

@@ -5,6 +5,7 @@ import java.io.Writer;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
@@ -15,7 +16,6 @@ import ambit2.db.readers.PropertyValue;
 import ambit2.db.search.AbstractQuery;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.structure.CompoundHTMLReporter;
@@ -50,7 +50,7 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 	
 		super(baseRef,DisplayMode.table,doc);
 		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(baseRef,doc,_dmode,true);
-		propertyURIReporter = new PropertyURIReporter(baseRef,doc);
+		propertyURIReporter = new PropertyURIReporter(baseRef);
 		this.editable = editable;
 	}
 	@Override

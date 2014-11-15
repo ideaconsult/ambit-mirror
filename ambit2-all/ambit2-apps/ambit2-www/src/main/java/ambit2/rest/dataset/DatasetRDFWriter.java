@@ -10,11 +10,12 @@ import java.util.logging.Level;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.rdf.ns.OT;
+import net.idea.restnet.rdf.ns.OT.DataProperty;
+import net.idea.restnet.rdf.ns.OT.OTClass;
+import net.idea.restnet.rdf.ns.OT.OTProperty;
 
-import org.opentox.rdf.OT;
-import org.opentox.rdf.OT.DataProperty;
-import org.opentox.rdf.OT.OTClass;
-import org.opentox.rdf.OT.OTProperty;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
@@ -26,7 +27,6 @@ import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.rest.OpenTox;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.structure.CompoundURIReporter;
 import ambit2.rest.structure.ConformerURIReporter;
@@ -87,12 +87,12 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 	}
 	public DatasetRDFWriter(Reference baseReference,ResourceDoc doc) {
 		this(new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(baseReference,doc),
-			new PropertyURIReporter(baseReference,doc),
+			new PropertyURIReporter(baseReference),
 			new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(baseReference,doc)
 		);
 	}
 	public DatasetRDFWriter(Request request,ResourceDoc doc) {
-		this(new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(request,doc),new PropertyURIReporter(request,doc));
+		this(new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(request,doc),new PropertyURIReporter(request));
 	}
 	public DatasetRDFWriter(CompoundURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter,
 			PropertyURIReporter propertyReporter) {

@@ -8,17 +8,17 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.r.QueryReporter;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 
 import ambit2.base.data.Bookmark;
-import ambit2.rest.QueryURIReporter;
 
 public class BookmarkCSVReporter<Q extends IQueryRetrieval<Bookmark>> extends QueryReporter<Bookmark, Q, Writer>  {
 	protected QueryURIReporter<Bookmark, IQueryRetrieval<Bookmark>> uriReporter;
 	public BookmarkCSVReporter(Request baseRef,ResourceDoc doc) {
 		super();
-		uriReporter = new BookmarkURIReporter<IQueryRetrieval<Bookmark>>(baseRef,null);
+		uriReporter = new BookmarkURIReporter<IQueryRetrieval<Bookmark>>(baseRef);
 	}
 	@Override
 	public void open() throws DbAmbitException {

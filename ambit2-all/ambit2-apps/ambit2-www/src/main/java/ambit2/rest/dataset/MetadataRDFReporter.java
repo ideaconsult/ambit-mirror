@@ -4,8 +4,9 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.rdf.ns.OT;
 
-import org.opentox.rdf.OT;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -13,7 +14,6 @@ import org.restlet.data.Reference;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.rest.QueryRDFReporter;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
 
 import com.hp.hpl.jena.ontology.Individual;
@@ -45,7 +45,7 @@ public class MetadataRDFReporter<M extends ISourceDataset,Q extends IQueryRetrie
 	@Override
 	protected QueryURIReporter<M, IQueryRetrieval<M>> createURIReporter(
 			Request req,ResourceDoc doc) {
-		return new DatasetURIReporter<IQueryRetrieval<M>,M>(req,doc);
+		return new DatasetURIReporter<IQueryRetrieval<M>,M>(req);
 	}
 	public void header(com.hp.hpl.jena.ontology.OntModel output, Q query) {
 		OT.OTClass.Dataset.createOntClass(output);

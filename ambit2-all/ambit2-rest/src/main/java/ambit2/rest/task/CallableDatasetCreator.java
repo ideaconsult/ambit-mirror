@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
+import net.idea.restnet.rdf.ns.OT;
+
 import org.opentox.dsl.task.RemoteTask;
 import org.opentox.dsl.task.RemoteTaskPool;
-import org.opentox.rdf.OT;
 import org.restlet.Context;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Form;

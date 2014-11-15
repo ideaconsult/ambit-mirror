@@ -11,13 +11,14 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import net.idea.restnet.c.task.ClientResourceWrapper;
+import net.idea.restnet.rdf.ns.OT;
+
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.formats.MDLV2000Format;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
-import org.opentox.dsl.task.ClientResourceWrapper;
-import org.opentox.rdf.OT;
 import org.restlet.data.Reference;
 import org.restlet.routing.Template;
 

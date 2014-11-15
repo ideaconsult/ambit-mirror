@@ -42,7 +42,6 @@ public class QMapResource extends QueryResource<IQueryRetrieval<QMap>, QMap> {
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 				QMapURIReporter r = new QMapURIReporter(getRequest(),getDocumentation());
-				r.setDelimiter("\n");
 				return new StringConvertor(r,MediaType.TEXT_URI_LIST,filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 					return new OutputWriterConvertor(new QMapJSONReporter(getRequest()),MediaType.APPLICATION_JSON);

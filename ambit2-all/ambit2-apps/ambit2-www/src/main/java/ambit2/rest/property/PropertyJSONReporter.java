@@ -4,8 +4,8 @@ import java.io.Writer;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.restnet.rdf.ns.OT;
 
-import org.opentox.rdf.OT;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
@@ -56,7 +56,7 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 		}
 	}
 	public PropertyJSONReporter(Request baseRef) {
-		super(baseRef,null);
+		super(baseRef);
 	}
 	@Override
 	public Object processItem(Property feature) throws AmbitException {

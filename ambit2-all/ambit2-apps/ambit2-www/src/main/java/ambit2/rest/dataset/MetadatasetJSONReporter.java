@@ -13,7 +13,6 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.json.JSONUtils;
-import ambit2.db.search.IStoredQuery;
 
 /**
  * JSON
@@ -44,7 +43,7 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<M>,M extends ISou
 	}
 	
 	public MetadatasetJSONReporter(Request baseRef) {
-		super(baseRef,null);
+		super(baseRef);
 	}
 	@Override
 	public Object processItem(M item) throws AmbitException {

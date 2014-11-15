@@ -1,11 +1,11 @@
 package ambit2.rest.reference;
 
 import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 
 import ambit2.base.data.ILiteratureEntry;
-import ambit2.rest.QueryURIReporter;
 
 /**
  * Generates URI for {@link ReferenceResource}

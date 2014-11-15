@@ -5,6 +5,7 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
@@ -26,7 +27,6 @@ import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.QueryOntology;
 import ambit2.db.update.dictionary.DeleteDictionary;
 import ambit2.rest.DisplayMode;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyURIReporter;
@@ -89,8 +89,7 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 				
 				
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-				PropertyURIReporter r = new PropertyURIReporter(getRequest(),null);
-				r.setDelimiter("\n");
+				PropertyURIReporter r = new PropertyURIReporter(getRequest());
 				return new StringConvertor(	r,MediaType.TEXT_URI_LIST,filenamePrefix);
 				
 		} else 
@@ -154,6 +153,6 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 	protected QueryURIReporter<Property, IQueryRetrieval<Property>> getURUReporter(
 			Request baseReference) throws ResourceException {
 		//return (QueryURIReporter) new OntologyURIReporter(getRequest());
-		return new PropertyURIReporter(getRequest(),getDocumentation());
+		return new PropertyURIReporter(getRequest());
 	}
 }

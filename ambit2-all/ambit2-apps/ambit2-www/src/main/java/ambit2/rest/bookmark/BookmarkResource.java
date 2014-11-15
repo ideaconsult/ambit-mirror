@@ -4,6 +4,7 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
@@ -25,7 +26,6 @@ import ambit2.db.update.bookmark.ReadBookmark;
 import ambit2.db.update.bookmark.UpdateBookmark;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
@@ -50,16 +50,7 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 			return new StringConvertor(new BookmarkCSVReporter<IQueryRetrieval<Bookmark>>(getRequest(),getDocumentation())
 					,MediaType.TEXT_CSV,filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-				return new StringConvertor(	new BookmarkURIReporter<IQueryRetrieval<Bookmark>>(getRequest(),getDocumentation()) {
-					@Override
-					public Object processItem(Bookmark dataset) throws AmbitException  {
-						super.processItem(dataset);
-						try {
-							output.write('\n');
-						} catch (Exception x) {}
-						return null;
-					}
-				},MediaType.TEXT_URI_LIST,filenamePrefix);
+				return new StringConvertor(	new BookmarkURIReporter<IQueryRetrieval<Bookmark>>(getRequest()),MediaType.TEXT_URI_LIST,filenamePrefix);
 				
 			} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 					variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
@@ -167,7 +158,7 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 	@Override
 	protected QueryURIReporter<Bookmark, ReadBookmark> getURUReporter(
 			Request baseReference) throws ResourceException {
-		return new BookmarkURIReporter<ReadBookmark>(baseReference,getDocumentation());
+		return new BookmarkURIReporter<ReadBookmark>(baseReference);
 	}
 	@Override
 	protected RDFObjectIterator<Bookmark> createObjectIterator(

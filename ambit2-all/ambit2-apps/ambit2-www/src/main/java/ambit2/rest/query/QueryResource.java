@@ -20,11 +20,13 @@ import net.idea.modbcum.i.IDBProcessor;
 import net.idea.modbcum.i.IQueryObject;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.BatchProcessingException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.reporter.Reporter;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ICallableTask;
 import net.idea.restnet.i.task.ITask;
@@ -58,7 +60,6 @@ import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.exception.RResourceException;
@@ -205,10 +206,20 @@ Then, when the "get(Variant)" method calls you back,
 		    			throw x;			        	
 		        	} catch (NotFoundException x) {
 		        		Representation r = processNotFound(x,retry);
+		        		retry++;
 		        		if (r!=null) return r;
-		    			
+					} catch (BatchProcessingException x) {
+						if (x.getCause() instanceof NotFoundException) { 
+							Representation r = processNotFound((NotFoundException)x.getCause(),retry);
+							retry++;
+			        		if (r!=null) return r;							
+						} else {
+							Context.getCurrentLogger().severe(x.getMessage());
+		    				throw new RResourceException(Status.SERVER_ERROR_INTERNAL,x,variant);
+						}
 		        	} catch (SQLException x) {
 		        		Representation r = processSQLError(x,retry,variant);
+		        		retry++;
 		        		if (r==null) continue; else return r;
 		        	} catch (Exception x) {
 		        		Context.getCurrentLogger().severe(x.getMessage());

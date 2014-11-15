@@ -1,7 +1,8 @@
 package ambit2.rest;
 
-import org.opentox.dsl.aa.IAuthToken;
-import org.opentox.dsl.task.ClientResourceWrapper;
+import net.idea.restnet.c.task.ClientResourceWrapper;
+import net.idea.restnet.i.aa.IAuthToken;
+
 import org.restlet.Request;
 import org.restlet.data.Cookie;
 import org.restlet.data.CookieSetting;

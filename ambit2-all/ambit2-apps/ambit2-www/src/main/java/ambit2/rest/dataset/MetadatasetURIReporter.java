@@ -16,10 +16,10 @@ public class MetadatasetURIReporter<Q extends IQueryRetrieval<M>,M extends ISour
 	private static final long serialVersionUID = -6706277580631778672L;
 
 	public MetadatasetURIReporter(Request baseRef,ResourceDoc doc) {
-		super(baseRef,doc);
+		super(baseRef);
 	}
 	public MetadatasetURIReporter(Reference baseRef,ResourceDoc doc) {
-		super(baseRef,doc);
+		super(baseRef);
 	}	
 	public MetadatasetURIReporter() {
 		super();

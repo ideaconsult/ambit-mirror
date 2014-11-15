@@ -9,9 +9,10 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.RepresentationConvertor;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
+import net.idea.restnet.rdf.ns.OT;
 
-import org.opentox.rdf.OT;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -40,7 +41,6 @@ import ambit2.db.update.property.UpdateProperty;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
@@ -115,12 +115,10 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 			throws AmbitException, ResourceException {
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-				PropertyURIReporter r = new PropertyURIReporter(getRequest(),getDocumentation());
-				r.setDelimiter("\n");
+				PropertyURIReporter r = new PropertyURIReporter(getRequest());
 				return new StringConvertor(r,MediaType.TEXT_URI_LIST,filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-					PropertyURIReporter r = new PropertyURIReporter(getRequest(),getDocumentation());
-					r.setDelimiter("\n");
+					PropertyURIReporter r = new PropertyURIReporter(getRequest());
 					return new OutputWriterConvertor(new PropertyJSONReporter(getRequest()),MediaType.APPLICATION_JSON);					
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
@@ -319,7 +317,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	@Override
 	protected QueryURIReporter<Property, IQueryRetrieval<Property>> getURUReporter(
 			Request baseReference) throws ResourceException {
-		return new PropertyURIReporter(baseReference,getDocumentation());
+		return new PropertyURIReporter(baseReference);
 	}
 	
 	@Override

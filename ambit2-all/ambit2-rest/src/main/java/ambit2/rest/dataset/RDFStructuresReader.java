@@ -1,6 +1,7 @@
 package ambit2.rest.dataset;
 
-import org.opentox.rdf.OT;
+import net.idea.restnet.rdf.ns.OT;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;

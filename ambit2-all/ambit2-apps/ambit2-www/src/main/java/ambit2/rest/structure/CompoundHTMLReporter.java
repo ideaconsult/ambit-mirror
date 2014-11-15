@@ -19,6 +19,7 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -40,7 +41,6 @@ import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryStructureHTMLReporter;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.QueryResource;
@@ -100,7 +100,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		if (urireporter != null) this.uriReporter = urireporter;
 		
 		hilightPredictions = request.getResourceRef().getQueryAsForm().getFirstValue("model_uri");
-			pReporter = new PropertyURIReporter(request,this.uriReporter==null?null:this.uriReporter.getDocumentation());
+			pReporter = new PropertyURIReporter(request);
 			
 		//table = isCollapsed();
 		this._dmode = headless?DisplayMode.properties:isCollapsed()?DisplayMode.table:_dmode;

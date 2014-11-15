@@ -2,6 +2,7 @@ package ambit2.rest.structure;
 
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -18,7 +19,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.structure.DeleteStructure;
 import ambit2.rest.OpenTox;
-import ambit2.rest.QueryURIReporter;
 
 /**
  * Conformer resource as in http://opentox.org/development/wiki/structure

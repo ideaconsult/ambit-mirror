@@ -124,7 +124,6 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			QueryURIReporter r = (QueryURIReporter)getURIReporter(getRequest());
-			r.setDelimiter("\n");
 			return new StringConvertor(
 					r,MediaType.TEXT_URI_LIST,filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
@@ -316,16 +315,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 	@Override
 	protected QueryURIReporter<SubstanceRecord, Q> getURIReporter(
 			Request baseReference) throws ResourceException {
-		return new SubstanceURIReporter<Q>(baseReference) {
-			@Override
-			public Object processItem(SubstanceRecord item) throws Exception {
-				super.processItem(item);
-				try {
-					output.write('\n');
-				} catch (Exception x) {}
-				return item;
-			}
-		};
+		return new SubstanceURIReporter<Q>(baseReference);
 	}
 	
 	@Override
@@ -392,7 +382,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 								getRootRef(),
 								getContext(),
 								new SubstanceURIReporter(getRequest().getRootRef()),
-								new DatasetURIReporter(getRequest().getRootRef(),null),
+								new DatasetURIReporter(getRequest().getRootRef()),
 								token);
 					callable.setClearComposition(clearComposition);
 					callable.setClearMeasurements(clearMeasurements);
@@ -432,7 +422,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 						form,
 						getContext(),
 						new SubstanceURIReporter(getRequest().getRootRef()),
-						new DatasetURIReporter(getRequest().getRootRef(), null),
+						new DatasetURIReporter(getRequest().getRootRef()),
 						token);
 						ITask<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
 						"Retrieve substance from IUCLID5 server",

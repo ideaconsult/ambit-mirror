@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -21,7 +22,6 @@ import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryStructureHTMLReporter;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.query.QueryResource;
 
 public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureHTMLReporter<Q> {

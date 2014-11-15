@@ -3,11 +3,11 @@ package ambit2.rest.test.dataset;
 import java.io.StringWriter;
 
 import junit.framework.Assert;
+import net.idea.restnet.rdf.ns.OT;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
-import org.opentox.rdf.OT;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -71,7 +71,7 @@ public class MetaDatasetResourceTest extends ResourceTest {
 		p.setLicenseURI(ISourceDataset.license.CC0_1_0.getURI());
 		
 		OntModel model = OT.createModel();
-		DatasetURIReporter uriReporter = new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null);
+		DatasetURIReporter uriReporter = new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)));
 		MetadataRDFReporter.addToModel(model,p,uriReporter.getURI(p));
 		StringWriter writer = new StringWriter();
 		model.write(writer,"RDF/XML");
@@ -107,7 +107,7 @@ public class MetaDatasetResourceTest extends ResourceTest {
 		p.setLicenseURI(rights);
 		
 		OntModel model = OT.createModel();
-		DatasetURIReporter uriReporter = new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null);
+		DatasetURIReporter uriReporter = new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)));
 		MetadataRDFReporter.addToModel(model,p,uriReporter.getURI(p));
 		StringWriter writer = new StringWriter();
 		model.write(writer,"RDF/XML");
@@ -140,7 +140,7 @@ public class MetaDatasetResourceTest extends ResourceTest {
 		p.setLicenseURI(ISourceDataset.license.CC0_1_0.getURI());
 		
 		OntModel model = OT.createModel();
-		DatasetURIReporter uriReporter = new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null);
+		DatasetURIReporter uriReporter = new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)));
 		MetadataRDFReporter.addToModel(model,p,uriReporter.getURI(p));
 		StringWriter writer = new StringWriter();
 		model.write(writer,"N3");
@@ -173,7 +173,7 @@ public class MetaDatasetResourceTest extends ResourceTest {
 		
 		
 		OntModel model = OT.createModel();
-		DatasetURIReporter uriReporter = new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null);
+		DatasetURIReporter uriReporter = new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)));
 		MetadataRDFReporter.addToModel(model,p,uriReporter.getURI(p));
 		StringWriter writer = new StringWriter();
 		model.write(writer,"N3");

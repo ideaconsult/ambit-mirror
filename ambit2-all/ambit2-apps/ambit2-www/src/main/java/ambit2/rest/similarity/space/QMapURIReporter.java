@@ -2,12 +2,12 @@ package ambit2.rest.similarity.space;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.db.simiparity.space.QMap;
-import ambit2.rest.QueryURIReporter;
 
 public class QMapURIReporter  extends QueryURIReporter<QMap, IQueryRetrieval<QMap>> {
 
@@ -27,7 +27,7 @@ public class QMapURIReporter  extends QueryURIReporter<QMap, IQueryRetrieval<QMa
 	@Override
 	public String getURI(String ref, QMap record) {
 		if (record.getId()>0)
-			return String.format("%s%s/%d%s",ref,QMapResource.qmap,record.getId(),getDelimiter());
+			return String.format("%s%s/%d",ref,QMapResource.qmap,record.getId());
 		else
 			return String.format("%s%s",ref,QMapResource.qmap);
 
