@@ -5,7 +5,7 @@
     <groupId>ambit</groupId>
     <version>2.7.1-SNAPSHOT</version>
   </parent>
-  <groupId>ambit2-sln</groupId>
+  <groupId>ambit</groupId>
   <artifactId>ambit2-sln</artifactId>
   <name>ambit2-sln</name>
   <version>2.7.1-SNAPSHOT</version>
