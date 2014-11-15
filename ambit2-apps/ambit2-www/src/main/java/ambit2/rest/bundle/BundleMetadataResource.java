@@ -83,16 +83,17 @@ public class BundleMetadataResource extends AbstractMetadataResource<SubstanceEn
 		ReadBundle query = null;
 		Object id = request.getAttributes().get("idbundle");
 		if (id != null)  try {
-			Integer idnum = new Integer(Reference.decode(id.toString()));
-			dataset = new SubstanceEndpointsBundle();
-			dataset.setID(idnum);
-			query = new ReadBundle();
-			query.setValue(dataset);
-			return query;
-		} catch (NumberFormatException x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-		}
-		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+				Integer idnum = new Integer(Reference.decode(id.toString()));
+				dataset = new SubstanceEndpointsBundle();
+				dataset.setID(idnum);
+				query = new ReadBundle();
+				query.setValue(dataset);
+				return query;
+			} catch (NumberFormatException x) {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}
+		else 
+			return new ReadBundle();	
 	}
 	
 }
