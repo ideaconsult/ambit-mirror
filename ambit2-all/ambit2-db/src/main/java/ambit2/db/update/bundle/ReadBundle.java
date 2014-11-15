@@ -52,7 +52,7 @@ public class ReadBundle extends AbstractReadDataset<String,SubstanceEndpointsBun
 		return (getValue()!=null?getValue().getID()>0
 				?String.format("/bundle/%d",getValue().getID())
 				:String.format("/bundle/%s",getValue().getName())
-				:"Datasets");
+				:"Bundle");
 	}
 
 }

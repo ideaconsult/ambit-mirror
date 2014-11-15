@@ -11,7 +11,9 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.json.JSONUtils;
+import ambit2.db.search.IStoredQuery;
 
 /**
  * JSON
@@ -61,6 +63,10 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<M>,M extends ISou
 				}
 			}
 
+			String url = null;
+			if (item instanceof SourceDataset) url = ((SourceDataset)item).getURL();
+			else if (item instanceof SubstanceEndpointsBundle) url = ((SubstanceEndpointsBundle)item).getURL();
+			
 			if (comma!=null) getOutput().write(comma);
 			getOutput().write(String.format(
 					"\n{"+
@@ -78,7 +84,8 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<M>,M extends ISou
 					jsonFeature.stars.jsonname(),item.getStars(),
 					jsonFeature.source.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSource())),
 					jsonFeature.rightsHolder.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getrightsHolder())),
-					jsonFeature.seeAlso.jsonname(),item instanceof SourceDataset?JSONUtils.jsonQuote(JSONUtils.jsonEscape(((SourceDataset) item).getURL())):"",
+					jsonFeature.seeAlso.jsonname(),
+						(url==null)?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(url)),
 					jsonFeature.rights.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getLicenseURI())),
 							JSONUtils.jsonQuote(JSONUtils.jsonEscape(rights))
 
