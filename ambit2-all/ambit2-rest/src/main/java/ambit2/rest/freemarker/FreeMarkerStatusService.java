@@ -105,7 +105,8 @@ public class FreeMarkerStatusService  extends StatusService implements IFreeMark
 			headers = new Form();
 			response.getAttributes().put("org.restlet.http.headers", headers);
 		}
-		headers.add("X-Frame-Options", "SAMEORIGIN");		
+		headers.add("X-Frame-Options", "SAMEORIGIN");
+		headers.removeAll("Server"); headers.add("Server", "Restlet");
 		StringWriter details = null;
 		if (status.getThrowable()!= null) {
 			if (REPORT_LEVEL.debug.equals(reportLevel)) {
