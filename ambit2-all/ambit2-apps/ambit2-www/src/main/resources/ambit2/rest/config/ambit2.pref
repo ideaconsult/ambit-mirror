@@ -74,7 +74,7 @@ atomtypes.stop=false
 MAXRECORDS=${ambit.query.maxrecords}
 ############################################################
 #ambit profile
-#Specifies which version of the menu will be used: default | lri | toxmatch
+#Specifies which version of the menu will be used: default | lri | toxmatch | qmrf
 ambit.profile=${ambit.profile}
 ############################################################
 #attach resources
