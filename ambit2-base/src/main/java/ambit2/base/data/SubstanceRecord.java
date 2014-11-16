@@ -19,7 +19,7 @@ import ambit2.base.relation.composition.Proportion;
 {
     "substance": [
         {
-            "URI": "http://apps.ideaconsult.net:8080/data/substance/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
+            "URI": "http://host:8080/data/substance/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
             "ownerUUID": "IUC4-44bf02d8-47c5-385d-b203-9a8f315911cb",
             "ownerName": "OECD / Paris / France",
             "i5uuid": "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
@@ -40,7 +40,7 @@ import ambit2.base.relation.composition.Proportion;
             ]
         },
         {
-            "URI": "http://apps.ideaconsult.net:8080/enanomapper/substance/NWKI-71060af4-1613-35cf-95ee-2a039be0388a",
+            "URI": "http://host:8080/enanomapper/substance/NWKI-71060af4-1613-35cf-95ee-2a039be0388a",
             "ownerUUID": "NWKI-9f4e86d0-c85d-3e83-8249-a856659087da",
             "ownerName": "NanoWiki",
             "i5uuid": "NWKI-71060af4-1613-35cf-95ee-2a039be0388a",
@@ -50,7 +50,7 @@ import ambit2.base.relation.composition.Proportion;
             "substanceType": "MetalOxide",
             "referenceSubstance": {
                 "i5uuid": "NWKI-71060af4-1613-35cf-95ee-2a039be0388a",
-                "uri": "http://apps.ideaconsult.net:8080/enanomapper/query/compound/search/all?search=NWKI-71060af4-1613-35cf-95ee-2a039be0388a"
+                "uri": "http://host:8080/enanomapper/query/compound/search/all?search=NWKI-71060af4-1613-35cf-95ee-2a039be0388a"
             },
             "composition": [],
             "externalIdentifiers": [
