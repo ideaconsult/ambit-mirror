@@ -14,6 +14,7 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.ServerInfo;
 import org.restlet.data.Status;
 import org.restlet.ext.freemarker.TemplateRepresentation;
 import org.restlet.representation.Representation;
@@ -106,7 +107,7 @@ public class FreeMarkerStatusService  extends StatusService implements IFreeMark
 			response.getAttributes().put("org.restlet.http.headers", headers);
 		}
 		headers.add("X-Frame-Options", "SAMEORIGIN");
-		headers.removeAll("Server"); headers.add("Server", "Restlet");
+		ServerInfo si = response.getServerInfo();si.setAgent("Restlet");response.setServerInfo(si);
 		StringWriter details = null;
 		if (status.getThrowable()!= null) {
 			if (REPORT_LEVEL.debug.equals(reportLevel)) {
