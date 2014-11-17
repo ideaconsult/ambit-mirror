@@ -207,5 +207,5 @@
     		
     	}
     },    
-	<#include "/apidocs/info.ftl" >  
+	<#include "/apidocs/profile/${menu_profile}/info.ftl" >  
 }
