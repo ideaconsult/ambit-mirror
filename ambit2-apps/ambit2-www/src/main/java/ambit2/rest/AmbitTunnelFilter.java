@@ -85,22 +85,25 @@ public class AmbitTunnelFilter extends Filter {
 
     @Override
     public int beforeHandle(Request request, Response response) {
-        if (getTunnelService().isUserAgentTunnel()) {
-            processUserAgent(request);
-        }
-
-        if (getTunnelService().isExtensionsTunnel()) {
-            processExtensions(request);
-        }
-
-        if (getTunnelService().isQueryTunnel()) {
-            processQuery(request);
-        }
-
-        if (getTunnelService().isHeadersTunnel()) {
-            processHeaders(request);
-        }
-
+    	try {
+	        if (getTunnelService().isUserAgentTunnel()) {
+	            processUserAgent(request);
+	        }
+	
+	        if (getTunnelService().isExtensionsTunnel()) {
+	            processExtensions(request);
+	        }
+	
+	        if (getTunnelService().isQueryTunnel()) {
+	            processQuery(request);
+	        }
+	
+	        if (getTunnelService().isHeadersTunnel()) {
+	            processHeaders(request);
+	        }
+    	} catch (Exception x) {
+    		getLogger().warning(x.getMessage());
+    	}
         return CONTINUE;
     }
 
