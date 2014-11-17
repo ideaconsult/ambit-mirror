@@ -25,6 +25,8 @@ public class TautomerManager
 	List<IAtomContainer> resultTautomers;	
 	List<String> resultTatomerStringCodes = new ArrayList<String>(); 
 	List<String> errors = new ArrayList<String>(); 
+	int numOfRegistrations = 0;
+	
 	public FilterTautomers tautomerFilter = new FilterTautomers(this);
 	int originalValencySum;
 		
@@ -42,7 +44,7 @@ public class TautomerManager
 	public boolean FlagPrintIcrementalStepDebugInfo = false;
 	
 	public int maxNumOfBackTracks = 100000;
-	//public int maxNumOfTautomerRegistrations = 100000;
+	public int maxNumOfTautomerRegistrations = 2000;  //Currently used only for the combinatorial algorithms
 	public boolean FlagProcessRemainingStackIncSteps = true;   //Typically this flag should be true 			
 	
 	public TautomerManager()
@@ -78,11 +80,10 @@ public class TautomerManager
 	 * It is the initial approach 00 based on binary combinations. 
 	 * n rule instances define 2^n combinations (binary number with n digits) 
 	 */
-	
-	
-	
 	public List<IAtomContainer> generateTautomers() throws Exception
 	{
+		numOfRegistrations = 0;
+		
 		searchAllRulePositions();
 		
 		//handleOverlapedInstances();   //Currently does nothing. Incorrect tautomers are filtered out by FilterTautomers
@@ -113,6 +114,8 @@ public class TautomerManager
 	 */	 
 	public List<IAtomContainer> generateTautomers_ImprovedCombApproach() throws Exception
 	{
+		numOfRegistrations = 0;
+		
 		searchAllRulePositions();
 		resultTautomers = new ArrayList<IAtomContainer>();		
 		if (extendedRuleInstances.isEmpty())
@@ -336,6 +339,9 @@ public class TautomerManager
 		int instNumber; 
 		
 		do 	{
+			if (numOfRegistrations > maxNumOfTautomerRegistrations)
+				break;
+			
 			registerTautomer00();
 			
 			n = ruleInstances.get(0).nextState();
@@ -357,6 +363,7 @@ public class TautomerManager
 	{	
 		IAtomContainer newTautomer = (IAtomContainer)molecule.clone();
 		resultTautomers.add(newTautomer);
+		numOfRegistrations++;
 		
 		//System.out.print("  tautomer: " + getTautomerCombination() +  "    " + SmartsHelper.moleculeToSMILES(molecule));		
 		
