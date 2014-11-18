@@ -107,6 +107,7 @@ public class FreeMarkerStatusService  extends StatusService implements IFreeMark
 			response.getAttributes().put("org.restlet.http.headers", headers);
 		}
 		headers.add("X-Frame-Options", "SAMEORIGIN");
+		headers.add("Cache-Control","max-age=2700, private");
 		ServerInfo si = response.getServerInfo();si.setAgent("Restlet");response.setServerInfo(si);
 		StringWriter details = null;
 		if (status.getThrowable()!= null) {
