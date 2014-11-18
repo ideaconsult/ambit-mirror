@@ -100,6 +100,7 @@ public abstract class ProtectedResource extends ServerResource implements IAuthT
 			getResponse().getAttributes().put("org.restlet.http.headers", headers);
 		}
 		headers.add("X-Frame-Options", value);
+		headers.add("Cache-Control","max-age=2700, private");
 		ServerInfo si = getResponse().getServerInfo();si.setAgent("Restlet");getResponse().setServerInfo(si);	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
