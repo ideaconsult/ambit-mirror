@@ -339,6 +339,7 @@ public class TautomerManager
 		int instNumber; 
 		
 		do 	{
+			
 			if (numOfRegistrations > maxNumOfTautomerRegistrations)
 				break;
 			
@@ -354,7 +355,9 @@ public class TautomerManager
 					break;
 				n = ruleInstances.get(instNumber).nextState();
 			}
+			
 		} while (instNumber < ruleInstances.size()); 
+		
 	}
 	
 	
@@ -364,6 +367,8 @@ public class TautomerManager
 		IAtomContainer newTautomer = (IAtomContainer)molecule.clone();
 		resultTautomers.add(newTautomer);
 		numOfRegistrations++;
+		
+		//if (numOfRegistrations%10 == 0) System.out.println("  "+ numOfRegistrations + " registered tautomers");
 		
 		//System.out.print("  tautomer: " + getTautomerCombination() +  "    " + SmartsHelper.moleculeToSMILES(molecule));		
 		
