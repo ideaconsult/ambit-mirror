@@ -73,6 +73,8 @@ public class TestTautomers
 		tt.tman.getKnowledgeBase().use17ShiftRules(false);
 		
 		tt.tman.maxNumOfBackTracks = 10000;
+		tt.tman.maxNumOfTautomerRegistrations = 2000;
+		
 		tt.tman.FlagProcessRemainingStackIncSteps = true;
 		tt.tman.FlagCalculateCACTVSEnergyRank = true;
 		
@@ -118,6 +120,10 @@ public class TestTautomers
 		//tetracyclin
 		//tt.visualTest("CN(C)C1=C(O)C(C(N)=O)=C(O)C2(O)C1CC1C(=C2O)C(=O)C2=C(C=CC=C2O)C1(C)O");
 		
+		tt.test("[H][C@@]12CCCN1C(=O)[C@H](NC(=O)[C@@H](NC(=O)C1=C3N=C4C(OC3=C(C)C=C1)=C(C)"
+				+ "C(=O)C(N)=C4C(=O)N[C@H]1[C@@H](C)OC(=O)[C@H](C(C)C)N(C)C(=O)CN(C)C(=O)[C@]3([H])CCCN3C(=O)[C@H](NC1=O)C(C)C)",
+				TautomerConst.GAT_Comb_Pure);
+		
 		//tt.visualTest("S=N1CC=CC=C1");
 		
 		//tt.visualTest("O1=CC=CN=C1");
@@ -140,7 +146,7 @@ public class TestTautomers
 		
 		//tt.visualTest("NC1=CC=CC=C1");
 		//tt.visualTest("N=C1C=CC=CC1");
-		tt.visualTest("N=C1C=CC=CC1",TautomerConst.GAT_Comb_Pure);
+		//tt.visualTest("N=C1C=CC=CC1",TautomerConst.GAT_Comb_Pure);
 		
 		//tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
 		
@@ -229,6 +235,58 @@ public class TestTautomers
 			System.out.println("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i), false));
 			
 	}
+	
+	public void test(String smi, int algorithmType) throws Exception
+	{
+		System.out.println("Algorithm type " + algorithmType	+ "   Testing: " + smi);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi,FlagExplicitHydrogens);
+						
+		tman.setStructure(mol);
+		List<IAtomContainer> resultTautomers;
+		
+		switch (algorithmType)
+		{
+		case TautomerConst.GAT_Comb_Pure:
+			resultTautomers = tman.generateTautomers();	
+			break;
+		
+		case TautomerConst.GAT_Incremental:
+			resultTautomers = tman.generateTautomersIncrementaly();
+			break;
+		
+		case TautomerConst.GAT_Comb_Improved:
+			resultTautomers = tman.generateTautomers_ImprovedCombApproach();
+			break;
+		
+		default:
+			System.out.println("Unsupported algorithm type!");
+			return;
+		}
+		
+		tman.printDebugInfo();
+		
+		System.out.println("\n  Result tautomers: ");
+		List<IAtomContainer> v = new ArrayList<IAtomContainer>();
+		
+		for (int i = 0; i < resultTautomers.size(); i++)		
+		{	
+			Double rank = (Double)resultTautomers.get(i).getProperty("TAUTOMER_RANK");
+			if (rank == null)
+				rank = new Double(999999);
+			
+			Double csRank = (Double)resultTautomers.get(i).getProperty("CACTVS_ENERGY_RANK");
+			if (csRank == null)
+				csRank = new Double(999999);
+			
+			System.out.println("   " + rank.toString() + "   CS_RANK = " + csRank.toString() + "   " + 
+					SmartsHelper.moleculeToSMILES(resultTautomers.get(i), false));
+			v.add(resultTautomers.get(i));
+		}
+		System.out.println();
+		
+		System.out.println("Generated: " + resultTautomers.size() + " tautomers.");
+		
+	} 
 	
 	public void visualTest(String smi) throws Exception
 	{
@@ -330,6 +388,8 @@ public class TestTautomers
 		TestStrVisualizer tsv = new TestStrVisualizer(v);
 		
 	} 
+	
+	
 	
 	public void visualTestFromFile(String sdfFile) throws Exception
 	{
