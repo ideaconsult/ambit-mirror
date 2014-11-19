@@ -28,6 +28,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.update.bundle.ReadBundle;
+import ambit2.rest.OpenTox;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.DatasetURIReporter;
@@ -38,7 +39,7 @@ import ambit2.user.rest.resource.AmbitDBQueryResource;
 
 public class BundleMetadataResource extends  AmbitDBQueryResource<IQueryRetrieval<SubstanceEndpointsBundle>,SubstanceEndpointsBundle> {
 	protected SubstanceEndpointsBundle dataset;
-	private final static String idbundle = "idbundle";
+
 	public BundleMetadataResource() {
 		super();
 		setHtmlbyTemplate(true);
@@ -60,7 +61,7 @@ public class BundleMetadataResource extends  AmbitDBQueryResource<IQueryRetrieva
 	protected IQueryRetrieval<SubstanceEndpointsBundle> createUpdateQuery(
 			Method method, Context context, Request request, Response response)
 			throws ResourceException {
-		Object id = request.getAttributes().get(idbundle);
+		Object id = request.getAttributes().get(OpenTox.URI.bundle.getKey());
 		if (Method.POST.equals(method)) {
 			if (id==null) return null;//post allowed only on /bundle level, not on /bundle/id
 		} else {
@@ -85,7 +86,7 @@ public class BundleMetadataResource extends  AmbitDBQueryResource<IQueryRetrieva
 			Context context, Request request, Response response)
 			throws ResourceException {
 		ReadBundle query = null;
-		Object id = request.getAttributes().get(idbundle);
+		Object id = request.getAttributes().get(OpenTox.URI.bundle.getKey());
 		if (id != null)  try {
 				Integer idnum = new Integer(Reference.decode(id.toString()));
 				dataset = new SubstanceEndpointsBundle();
@@ -105,7 +106,7 @@ public class BundleMetadataResource extends  AmbitDBQueryResource<IQueryRetrieva
 	protected CallableProtectedTask<String> createCallable(Method method,
 			Form form, SubstanceEndpointsBundle item) throws ResourceException {
 		SubstanceEndpointsBundle bundle = null;
-		Object id = getRequest().getAttributes().get(idbundle);	
+		Object id = getRequest().getAttributes().get(OpenTox.URI.bundle.getKey());	
 		if ((id!=null)) try {
 			bundle = new SubstanceEndpointsBundle(new Integer(Reference.decode(id.toString())));
 		} catch (Exception x) {}

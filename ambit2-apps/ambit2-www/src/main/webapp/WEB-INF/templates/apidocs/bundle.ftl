@@ -135,7 +135,7 @@
 			    ]
 			},
 			{
-			    "path": "/bundle/{id}",
+			    "path": "/bundle/{idbundle}",
 			    "operations": [
 			        {
 			            "method": "GET",
@@ -185,7 +185,7 @@
 
 			            "parameters": [
 			               {
-							   "name": "id",
+							   "name": "idbundle",
 							   "description": "Bundle identifier",
 							   "required": true,
 							   "type": "string",
@@ -260,7 +260,7 @@
 
 			            "parameters": [
 			               {
-							   "name": "id",
+							   "name": "idbundle",
 							   "description": "Bundle identifier",
 							   "required": true,
 							   "type": "string",
@@ -288,7 +288,7 @@
 			    ]
 			},
 			{
-			    "path": "/bundle/{id}/metadata",
+			    "path": "/bundle/{idbundle}/metadata",
 			    "operations": [
 			        {
 			            "method": "GET",
@@ -299,7 +299,7 @@
 			            <#include "/apidocs/authz.ftl" >
 			            "parameters": [
 							{
-							    "name": "id",
+							    "name": "idbundle",
 							    "description": "Bundle identifier",
 							    "required": true,
 							    "type": "string",
@@ -328,7 +328,7 @@
 			},
 			
 			{
-			    "path": "/bundle/{id}/substance",
+			    "path": "/bundle/{idbundle}/substance",
 			    "operations": [
 			        {
 			            "method": "GET",
@@ -339,7 +339,7 @@
 			            <#include "/apidocs/authz.ftl" >
 			            "parameters": [
 							{
-							    "name": "id",
+							    "name": "idbundle",
 							    "description": "Bundle identifier",
 							    "required": true,
 							    "type": "string",
@@ -364,7 +364,53 @@
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
-			        }
+			        },
+			        {
+			            "method": "POST",
+			            "summary": "Add a substance to the bundle",
+			            "notes": "Add a substance to the bundle",
+			            "type": "Substance",
+			            "nickname": "addSubstanceToBundle",
+		                "consumes": [
+				                       "application/x-www-form-urlencoded"
+		                ],					            
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+							{
+							    "name": "idbundle",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							},
+							{
+							    "name": "substance_uri",
+							    "description": "Substance URI",
+							    "defaultValue" : "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": true
+							}									
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Bad request"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Bundle not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }			        
 			    ]
 			}				
     ],
