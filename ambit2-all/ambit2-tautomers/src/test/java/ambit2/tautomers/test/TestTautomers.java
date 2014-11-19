@@ -62,7 +62,7 @@ public class TestTautomers
 		
 		tt.tman.FlagRecurseBackResultTautomers = false;
 		
-		tt.tman.FlagPrintTargetMoleculeInfo = false;
+		tt.tman.FlagPrintTargetMoleculeInfo = true;
 		tt.tman.FlagPrintExtendedRuleInstances = true;
 		tt.tman.FlagPrintIcrementalStepDebugInfo = false;
 		
@@ -72,8 +72,8 @@ public class TestTautomers
 		tt.tman.getKnowledgeBase().use15ShiftRules(true);
 		tt.tman.getKnowledgeBase().use17ShiftRules(false);
 		
-		tt.tman.maxNumOfBackTracks = 10000;
-		tt.tman.maxNumOfTautomerRegistrations = 2000;
+		tt.tman.maxNumOfBackTracks = 200;
+		tt.tman.maxNumOfTautomerRegistrations = 200;
 		
 		tt.tman.FlagProcessRemainingStackIncSteps = true;
 		tt.tman.FlagCalculateCACTVSEnergyRank = true;
@@ -120,9 +120,20 @@ public class TestTautomers
 		//tetracyclin
 		//tt.visualTest("CN(C)C1=C(O)C(C(N)=O)=C(O)C2(O)C1CC1C(=C2O)C(=O)C2=C(C=CC=C2O)C1(C)O");
 		
-		tt.test("[H][C@@]12CCCN1C(=O)[C@H](NC(=O)[C@@H](NC(=O)C1=C3N=C4C(OC3=C(C)C=C1)=C(C)"
-				+ "C(=O)C(N)=C4C(=O)N[C@H]1[C@@H](C)OC(=O)[C@H](C(C)C)N(C)C(=O)CN(C)C(=O)[C@]3([H])CCCN3C(=O)[C@H](NC1=O)C(C)C)",
-				TautomerConst.GAT_Comb_Pure);
+		//tt.test("[H][C@@]12CCCN1C(=O)[C@H](NC(=O)[C@@H](NC(=O)C1=C3N=C4C(OC3=C(C)C=C1)=C(C)"
+		//		+ "C(=O)C(N)=C4C(=O)N[C@H]1[C@@H](C)OC(=O)[C@H](C(C)C)N(C)C(=O)CN(C)C(=O)[C@]3([H])CCCN3C(=O)[C@H](NC1=O)C(C)C)",
+		//		TautomerConst.GAT_Comb_Pure);
+		
+		
+		//tt.visualTest("OC1=CC(=CC(O)=C1O)C(=O)OC1=CC(=CC(O)=C1O)C(=O)OC[C@H]1O[C@@H](OC(=O)C2=CC(O)=C(O)C(OC(=O)C3=CC(O)=C(O)"
+		//		+ "C(O)=C3)=C2)[C@H](OC(=O)C2=CC(O)=C(O)C(OC(=O)C3=CC(O)=C(O)C(O)=C3)=C2)[C@@H](OC(=O)C2=CC(O)=C(O)"
+		//		+ "C(OC(=O)C3=CC(O)=C(O)C(O)=C3)=C2)[C@@H]1OC(=O)C1=CC(O)=C(O)C(OC(=O)C2=CC(O)=C(O)C(O)=C2)=C1"/*, TautomerConst.GAT_Incremental*/);
+		
+		tt.visualTest("OC1=CC(=CC(O)=C1O)C(=O)OC1=CC(=CC(O)=C1O)C(=O)OC[C@H]1O[C@@H](OC(=O)C2=CC(O)=C(O)C(OC(=O)C3=CC(O)=C(O)"
+				+ "C(O)=C3)=C2)[C@H](OC(=O)C2=CC(O)=C(O)C(OC(=O)C3=CC(O)=C(O)C(O)=C3)=C2)[C@@H](OC(=O)C2=CC(O)=C(O)"
+				+ "C(OC(=O)C3=CC(O)=C(O)C(O)=C3)=C2)[C@@H]1OC(=O)C1=CC(O)=C(O)C(OC(=O)C2=CC(O)=C(O)C(O)=C2)=C1", TautomerConst.GAT_Comb_Improved);
+		
+		
 		
 		//tt.visualTest("S=N1CC=CC=C1");
 		
@@ -291,7 +302,13 @@ public class TestTautomers
 	public void visualTest(String smi) throws Exception
 	{
 		System.out.println("Visual Testing: " + smi);
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi, FlagExplicitHydrogens);
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi, FlagExplicitHydrogens);
+		
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		CDKHueckelAromaticityDetector.detectAromaticity(mol);
+		//implicit H count is NULL if read from InChI ...
+		mol = AtomContainerManipulator.removeHydrogens(mol);
+		CDKHydrogenAdder.getInstance(mol.getBuilder()).addImplicitHydrogens(mol);
 		
 		
 		tman.setStructure(mol);
