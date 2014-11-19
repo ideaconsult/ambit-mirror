@@ -1,3 +1,3 @@
 					"basicAuth":{
-						type: "basicAuth"
+						"type": "basicAuth"
 					}
