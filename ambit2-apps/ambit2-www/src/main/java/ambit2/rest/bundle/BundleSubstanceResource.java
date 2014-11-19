@@ -39,5 +39,9 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 	}	
 
 	
-
+	@Override
+	public String getConfigFile() {
+		return "ambit2/rest/config/ambit2.pref";
+	}
+	
 }

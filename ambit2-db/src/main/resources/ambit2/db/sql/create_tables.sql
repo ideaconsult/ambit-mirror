@@ -748,9 +748,13 @@ CREATE DEFINER = CURRENT_USER TRIGGER insert_dataset_template BEFORE INSERT ON s
     SET NEW.idtemplate = (SELECT idtemplate FROM template where template.name=NEW.name);
 END $
 
+DELIMITER ;
+
 -- -----------------------------------------------------
 -- Trigger to add property entry to template_def 
 -- -----------------------------------------------------
+DELIMITER $
+
 CREATE DEFINER = CURRENT_USER TRIGGER insert_property_tuple AFTER INSERT ON property_tuples
  FOR EACH ROW BEGIN
     INSERT IGNORE INTO template_def (idtemplate,idproperty,`order`) (
@@ -760,6 +764,7 @@ CREATE DEFINER = CURRENT_USER TRIGGER insert_property_tuple AFTER INSERT ON prop
       (SELECT idproperty from property_values WHERE id=NEW.id) b
     ) ;
  END $
+ 
 DELIMITER ;
  
 -- -----------------------------------------------------
@@ -1197,12 +1202,20 @@ CREATE DEFINER = CURRENT_USER TRIGGER insert_string_ci AFTER INSERT ON property_
  FOR EACH ROW BEGIN
     INSERT IGNORE INTO property_ci (value_ci) values (NEW.value);
  END $
+
+DELIMITER ;
+ 
+DELIMITER $
  
 CREATE DEFINER = CURRENT_USER TRIGGER update_string_ci AFTER UPDATE ON property_string
  FOR EACH ROW BEGIN
     UPDATE property_ci set value_ci=NEW.value where value_ci=OLD.value;
  END $
  
+DELIMITER ;
+ 
+DELIMITER $
+
  CREATE DEFINER = CURRENT_USER TRIGGER summary_chemical_prop_insert AFTER INSERT ON property_values
  FOR EACH ROW BEGIN
     UPDATE properties set ptype=CONCAT_WS(',',ptype,NEW.idtype)  where idproperty=NEW.idproperty;
@@ -1217,6 +1230,10 @@ CREATE DEFINER = CURRENT_USER TRIGGER update_string_ci AFTER UPDATE ON property_
 		and idstructure=NEW.idstructure
 		and idproperty=NEW.idproperty;   
  END $
+
+DELIMITER ;
+ 
+DELIMITER $ 
 
  CREATE DEFINER = CURRENT_USER TRIGGER summary_chemical_prop_update AFTER UPDATE ON property_values
  FOR EACH ROW BEGIN
@@ -1726,7 +1743,7 @@ p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid
 -- -----------------------------------------------------
 -- 50 bins
 -- -----------------------------------------------------
-create view bins50 as
+create OR REPLACE view bins50 as
   select 0 as d
   union select 1 as d union select 2 as d union select 3 as d union select 4 as d union select 5 as d
   union select 6 as d union select 7 as d union select 8 as d union select 9 as d union select 10 as d

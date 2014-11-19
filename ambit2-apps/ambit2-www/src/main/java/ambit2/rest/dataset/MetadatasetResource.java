@@ -214,15 +214,15 @@ public class MetadatasetResource<M extends ISourceDataset> extends AbstractMetad
 		Form form = new Form(entity);
 		//only name and license updated
 		SourceDataset dataset = new SourceDataset();
-		dataset.setName(form.getFirstValue("title"));
+		dataset.setName(form.getFirstValue(ISourceDataset.fields.title.name()));
 		String licenseOptions = form.getFirstValue("licenseOptions");
-		String license = form.getFirstValue("license");
+		String license = form.getFirstValue(ISourceDataset.fields.license.name());
 		if ((licenseOptions==null) || "Other".equals(licenseOptions))
 			dataset.setLicenseURI(license);
 		else 
 			dataset.setLicenseURI(licenseOptions);
 		
-		dataset.setrightsHolder(form.getFirstValue("rightsHolder"));
+		dataset.setrightsHolder(form.getFirstValue(ISourceDataset.fields.rightsHolder.name()));
 		return (M) dataset;
 	}
 	@Override
