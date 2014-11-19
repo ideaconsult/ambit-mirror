@@ -21,6 +21,12 @@ public class TautomerConst
 	public static final int GAT_Incremental = 1;
 	public static final int GAT_Comb_Improved = 2; //improved combinatorial approach (a set of combinations)
 	
+	//Rule Selection Method
+	public static final int RSM_ALL = 0;
+	public static final int RSM_RANDOM = 1;
+	public static final int RSM_INTELIGENT = 2;
+	
+	
 	public static final int IHA_INDEX = 1000000;
 	
 	

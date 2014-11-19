@@ -15,9 +15,10 @@ import ambit2.smarts.SmartsHelper;
 public class TautomerManager 
 {
 	protected static Logger logger = Logger.getLogger(TautomerManager.class.getName());
-	KnowledgeBase knowledgeBase; 
-	IAtomContainer originalMolecule;
-	IAtomContainer molecule;
+	KnowledgeBase knowledgeBase = null; 
+	IAtomContainer originalMolecule = null;
+	IAtomContainer molecule = null;
+	RuleSelector ruleSelector = null;
 	List<IRuleInstance> extendedRuleInstances = new ArrayList<IRuleInstance>(); 
 	List<IRuleInstance> ruleInstances = new ArrayList<IRuleInstance>();
 	List<List<IRuleInstance>> subCombinationsRI = new ArrayList<List<IRuleInstance>>();
@@ -44,7 +45,8 @@ public class TautomerManager
 	public boolean FlagPrintIcrementalStepDebugInfo = false;
 	
 	public int maxNumOfBackTracks = 100000;
-	public int maxNumOfTautomerRegistrations = 2000;  //Currently used only for the combinatorial algorithms
+	public int maxNumOfTautomerRegistrations = 2000;  //Used only for the combinatorial algorithms
+	public int maxNumOfSubCombinations = 100000; //Used only for the improved combinatorial algorithms
 	public boolean FlagProcessRemainingStackIncSteps = true;   //Typically this flag should be true 			
 	
 	public TautomerManager()
@@ -73,6 +75,18 @@ public class TautomerManager
 	{
 		return knowledgeBase;
 	}
+	
+	public RuleSelector getRuleSelector()
+	{
+		return ruleSelector;
+	}
+	
+	public void setRuleSelector(RuleSelector ruleSelector)
+	{
+		this.ruleSelector = ruleSelector;
+	}
+	
+	
 	
 	
 	/**
@@ -423,7 +437,7 @@ public class TautomerManager
 		//helper array contains the positions in each group
 		int gpos[] = new int[bigGroups.size()]; 
 		int gmax[] = new int[bigGroups.size()];
-		long numOfCombinations = 1;
+		long numOfSubCombinations = 1;
 		
 		//Initialization of the positions for each bigGroup 
 		//plus calculation of the total number of the number of combinations 
@@ -431,22 +445,24 @@ public class TautomerManager
 		{	
 			gpos[i] = 0;
 			gmax[i] = bigGroups.get(i).size();
-			numOfCombinations = numOfCombinations * gmax[i]; 
+			numOfSubCombinations = numOfSubCombinations * gmax[i]; 
 		}
+		
+		System.out.println("numOfSubCombinations = " + numOfSubCombinations);
 		
 		//Generation of all sub-combinations from clusters
 		List<List<IRuleInstance>> subCombs = new ArrayList<List<IRuleInstance>>();	
 		 
-		long curComb = 0;
-		while (curComb < numOfCombinations)
+		long curSComb = 0;
+		while ((curSComb < numOfSubCombinations) & (curSComb < maxNumOfSubCombinations))
 		{	
 			//Create a combination
-			List<IRuleInstance> combination  = new ArrayList<IRuleInstance>();
-			combination.addAll(defaultGroup);
+			List<IRuleInstance> subCombination  = new ArrayList<IRuleInstance>();
+			subCombination.addAll(defaultGroup);
 			for (int i = 0; i < gpos.length; i++)
-				combination.add(bigGroups.get(i).get(gpos[i]));
+				subCombination.add(bigGroups.get(i).get(gpos[i]));
 			
-			subCombs.add(combination);
+			subCombs.add(subCombination);
 						
 			//iterate to next combination
 			for (int i = 0; i < gpos.length; i++)
@@ -457,7 +473,7 @@ public class TautomerManager
 				else
 					gpos[i] = 0; //group position is set to zero and next group position is iterated
 			}
-			curComb++;
+			curSComb++;
 		}
 		
 		return subCombs;
