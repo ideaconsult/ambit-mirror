@@ -19,6 +19,10 @@ public class SubstanceEndpointsBundle implements ISourceDataset {
 	protected int id;
 	protected String userName;
 	
+	public SubstanceEndpointsBundle(int id) {
+		this("");
+		setID(id);
+	}
 	public SubstanceEndpointsBundle() {
 		this("");
 	}
@@ -116,5 +120,9 @@ public class SubstanceEndpointsBundle implements ISourceDataset {
 	}
 	public void setUsername(String name) {
 		this.userName = name;
+	}
+	@Override
+	public String toString() {
+		return name==null?getClass().getName():name;
 	}
 }

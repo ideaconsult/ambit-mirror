@@ -3,6 +3,7 @@ package ambit2.base.data;
 import java.io.Serializable;
 
 public interface ISourceDataset extends Serializable {
+	public enum fields {title,source,url,seeAlso,license, rightsHolder,maintainer,stars };
 	enum license {
 		Unknown {
 			@Override

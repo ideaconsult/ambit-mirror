@@ -49,6 +49,8 @@ public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 	
 	private static final String _rightsHolder = "rightsHolder=?";
 	
+	private static final String _maintainer = "maintainer=?";
+	
 	public UpdateBundle(SubstanceEndpointsBundle dataset) {
 		super(dataset);
 	}
@@ -57,16 +59,6 @@ public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 	}	
 	
 	public List<QueryParam> getParameters(int index) throws AmbitException {
-		/*
-		List<QueryParam> params1 = new ArrayList<QueryParam>();
-		params1.add(new QueryParam<String>(String.class, getObject().getTitle()));
-		params1.add(new QueryParam<String>(String.class, getObject().getURL()));		
-
-		List<QueryParam> params2 = new ArrayList<QueryParam>();
-		params2.add(new QueryParam<String>(String.class, getObject().getName()));
-		params2.add(new QueryParam<String>(String.class, getObject().getTitle()));
-		params2.add(new QueryParam<String>(String.class, getObject().getName()));	
-		*/
 		List<QueryParam> params3 = new ArrayList<QueryParam>();
 		if (getObject().getName()!=null)
 			params3.add(new QueryParam<String>(String.class, getObject().getName()));
@@ -76,6 +68,9 @@ public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 		
 		if (getObject().getrightsHolder()!=null)
 			params3.add(new QueryParam<String>(String.class, getObject().getrightsHolder()));
+
+		if (getObject().getMaintainer()!=null)
+			params3.add(new QueryParam<String>(String.class, getObject().getMaintainer()));
 		
 		if (params3.size()==0)
 			throw new AmbitException(UpdateDataset.MSG_EMPTY);
@@ -101,6 +96,12 @@ public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 		if (getObject().getrightsHolder()!=null) {
 			b.append(i>0?",":"");
 			b.append(_rightsHolder);
+			i++;
+		}
+		
+		if (getObject().getMaintainer()!=null) {
+			b.append(i>0?",":"");
+			b.append(_maintainer);
 			i++;
 		}
 			

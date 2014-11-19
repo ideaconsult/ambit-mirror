@@ -14,6 +14,7 @@ public class BundleRouter extends MyRouter {
 		super(context);
 		//attach(String.format("/{%s}",DatasetResource.datasetKey), new DatasetRouter(getContext(),cmpdRouter,tupleRouter, smartsRouter,similarityRouter));
 		attachDefault(BundleMetadataResource.class);
+		attach("/{idbundle}", BundleMetadataResource.class);
 		attach(String.format("/{idbundle}%s",MetadatasetResource.metadata), BundleMetadataResource.class);
 		attach(String.format("/{idbundle}%s",SubstanceResource.substance), BundleSubstanceResource.class);
 		

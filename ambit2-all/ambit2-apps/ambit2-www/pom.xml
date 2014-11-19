@@ -374,6 +374,13 @@
       <artifactId>org.restlet.ext.fileupload</artifactId>
       <version>${restlet.version}</version>
     </dependency>
+    <dependency>
+      <groupId>net.ideaconsult.restnet</groupId>
+      <artifactId>restnet-db</artifactId>
+      <version>${restnet.version}</version>
+	 <classifier>tests</classifier>
+      <scope>test</scope>
+    </dependency>    
     <!-- 
   	<dependency>
   	<groupId>net.bull.javamelody</groupId>
