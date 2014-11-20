@@ -17,6 +17,14 @@ public class ReadSubstancesByBundle  extends AbstractReadSubstance<SubstanceEndp
 	private static final long serialVersionUID = 661276311247312738L;
 	private static String sql = "select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid,owner_name from substance join bundle_substance using(idsubstance) where idbundle=?\n";
 	
+	public ReadSubstancesByBundle() {
+		super();
+	}
+	public ReadSubstancesByBundle(SubstanceEndpointsBundle bundle) {
+		super();
+		setFieldname(bundle);
+	}
+	
 	@Override
 	public String getSQL() throws AmbitException {
 		return sql;

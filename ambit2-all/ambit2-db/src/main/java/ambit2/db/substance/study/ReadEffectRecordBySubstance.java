@@ -29,8 +29,7 @@ public class ReadEffectRecordBySubstance extends ReadEffectRecordAbstract<Substa
 			"e.endpoint as effectendpoint,hex(endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint\n"+ 
 			"from substance s join substance_protocolapplication p on s.prefix=p.substance_prefix and s.uuid=p.substance_uuid\n"+
 			"join substance_experiment e on p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"+
-			"where p.substance_prefix =? and hex(p.substance_uuid) =?\n"+
-			"order by p.document_prefix,p.document_uuid";
+			"where p.substance_prefix =? and hex(p.substance_uuid) =?\n";
 	
 	@Override
 	public String getSQL() throws AmbitException {

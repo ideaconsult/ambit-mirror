@@ -47,7 +47,7 @@ import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.structure.CompoundJSONReporter;
 import ambit2.rest.substance.owner.SubstanceByOwnerResource;
 
-public class SubstanceDatasetResource extends SubstanceByOwnerResource {
+public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>> extends SubstanceByOwnerResource<Q> {
 	protected Template template;
 	protected Profile groupProperties;
 	protected String[] folders;
@@ -90,7 +90,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 	}
 	
 	@Override
-	public IProcessor<ReadSubstanceByOwner, Representation> createConvertor(
+	public IProcessor<Q, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
 		/* workaround for clients not being able to set accept headers */
 		Form acceptform = getResourceRef(getRequest()).getQueryAsForm();
@@ -125,11 +125,15 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 		}
 	}	
 	
+	protected IQueryRetrieval<ProtocolEffectRecord<String, String, String>> getEffectQuery() {
+		return new ReadEffectRecordBySubstance();
+	}
 	protected IProcessor getPropertyProcessors(final boolean removeIdentifiers, final boolean removeStringProperties) {
-		IQueryRetrieval<ProtocolEffectRecord<String, String, String>> queryP = new ReadEffectRecordBySubstance(); 
+		IQueryRetrieval<ProtocolEffectRecord<String, String, String>> queryP = getEffectQuery();
+		
 		MasterDetailsProcessor<SubstanceRecord,ProtocolEffectRecord<String, String, String>,IQueryCondition> effectReader = 
 							new MasterDetailsProcessor<SubstanceRecord,ProtocolEffectRecord<String, String, String>,IQueryCondition>(
-									new ReadEffectRecordBySubstance()) {
+									queryP) {
 			@Override
 			protected SubstanceRecord processDetail(SubstanceRecord master,
 					ProtocolEffectRecord<String, String, String> detail) throws Exception {
@@ -228,9 +232,9 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 		return effectReader;
 	}
 	
-	protected IProcessor<ReadSubstanceByOwner, Representation> createARFFReporter(String filenamePrefix) {
+	protected IProcessor<Q, Representation> createARFFReporter(String filenamePrefix) {
 
-		return new OutputWriterConvertor<SubstanceRecord, ReadSubstanceByOwner>(
+		return new OutputWriterConvertor<SubstanceRecord, Q>(
 				new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),
 							String.format("%s%s",getRequest().getRootRef(),"")
 						) {
@@ -243,8 +247,8 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 				ChemicalMediaType.WEKA_ARFF,filenamePrefix);				
 
 	}
-	protected IProcessor<ReadSubstanceByOwner, Representation> createARFF3ColumnReporter(String filenamePrefix) {
-		return new OutputWriterConvertor<SubstanceRecord, ReadSubstanceByOwner>(
+	protected IProcessor<Q, Representation> createARFF3ColumnReporter(String filenamePrefix) {
+		return new OutputWriterConvertor<SubstanceRecord, Q>(
 				new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),
 							String.format("%s%s",getRequest().getRootRef(),"")
 						) {
@@ -257,11 +261,11 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 				ChemicalMediaType.THREECOL_ARFF,filenamePrefix);				
 
 	}
-	protected IProcessor<ReadSubstanceByOwner, Representation> createCSVReporter(String filenamePrefix) {
+	protected IProcessor<Q, Representation> createCSVReporter(String filenamePrefix) {
 		groupProperties.add(new SubstancePublicName());
 		groupProperties.add(new SubstanceName());
 		groupProperties.add(new SubstanceUUID());
-		return new OutputWriterConvertor<SubstanceRecord, ReadSubstanceByOwner>(
+		return new OutputWriterConvertor<SubstanceRecord, Q>(
 				new CSVReporter(getTemplate(),groupProperties,
 						String.format("%s%s",getRequest().getRootRef(),"")
 						) {
@@ -275,7 +279,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 				MediaType.TEXT_CSV,filenamePrefix);				
 
 	}
-	protected IProcessor<ReadSubstanceByOwner, Representation> createJSONReporter(String filenamePrefix) {
+	protected IProcessor<Q, Representation> createJSONReporter(String filenamePrefix) {
 		groupProperties.add(new SubstancePublicName());
 		groupProperties.add(new SubstanceName());
 		groupProperties.add(new SubstanceUUID());

@@ -1,5 +1,6 @@
 package ambit2.rest.substance.owner;
 
+import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.restlet.Context;
@@ -22,12 +23,12 @@ import ambit2.rest.substance.SubstanceResource;
  * @author nina
  *
  */
-public class SubstanceByOwnerResource extends SubstanceResource<ReadSubstanceByOwner,SubstanceRecord> {
+public class SubstanceByOwnerResource<Q extends IQueryRetrieval<SubstanceRecord>> extends SubstanceResource<Q,SubstanceRecord> {
 	
 	@Override
-	protected ReadSubstanceByOwner createQuery(Context context, Request request, Response response) throws ResourceException {
+	protected Q createQuery(Context context, Request request, Response response) throws ResourceException {
 		Object owneruuid = request.getAttributes().get(OwnerSubstanceFacetResource.idowner);
-		return new ReadSubstanceByOwner(ReadSubstanceByOwner._ownersearchmode.owner_uuid,owneruuid.toString()) {
+		ReadSubstanceByOwner q = new ReadSubstanceByOwner(ReadSubstanceByOwner._ownersearchmode.owner_uuid,owneruuid.toString()) {
 			public ambit2.base.data.SubstanceRecord getObject(java.sql.ResultSet rs) throws AmbitException {
 				ambit2.base.data.SubstanceRecord record = super.getObject(rs);
 				record.setProperty(new SubstancePublicName(),record.getPublicName());
@@ -36,6 +37,7 @@ public class SubstanceByOwnerResource extends SubstanceResource<ReadSubstanceByO
 				return record;
 			}
 		};
+		return (Q)q;
 
 	}
 	@Override
