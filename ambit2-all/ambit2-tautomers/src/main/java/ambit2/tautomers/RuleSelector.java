@@ -36,7 +36,7 @@ public class RuleSelector
 		this.limitInterval = limitInterval;
 	}
 	
-	public int getSwitchToCombinatorial(){
+	public int getLimitSwitchToCombinatorial(){
 		return limitSwitchToCombinatorial;
 	}
 	

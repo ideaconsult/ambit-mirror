@@ -31,7 +31,8 @@ public class TautomerManager
 	
 	public FilterTautomers tautomerFilter = new FilterTautomers(this);
 	int originalValencySum;
-		
+	
+	public boolean FlagSwitchToCombinatorialOnReachingRuleLimit = true;
 	public boolean FlagRecurseBackResultTautomers = false;
 	public boolean FlagCalculateCACTVSEnergyRank = false;
 	
@@ -198,6 +199,25 @@ public class TautomerManager
 		//Rule selection (original extended list is kept in extendedRuleInstances0)
 		extendedRuleInstances = ruleSelector.selectRules(this, extendedRuleInstances);
 		
+		//This is the combinatorial algorithm when rule number limit is reached.
+		//This is needed because the incremental algorithms 'overcomes' the selection by finding   
+		//and reusing again the excluded rules by the ruleSelector
+		if (FlagSwitchToCombinatorialOnReachingRuleLimit)
+			if (ruleSelector.switchToCombinatorial())
+			{
+				//System.out.println("******* Switching to combinatorial!!");
+				numOfRegistrations = 0;
+				ruleInstances.addAll(extendedRuleInstances);
+				generateRuleInstanceCombinations();
+				resultTautomers = tautomerFilter.filter(resultTautomers);
+
+				if (FlagCalculateCACTVSEnergyRank)
+					calcCACTVSEnergyRanks(resultTautomers);
+
+				return(resultTautomers);
+			}
+		
+		//The incremental approach is performed here
 		RuleManager rman = new RuleManager(this);
 		rman.firstIncrementalStep();
 		rman.iterateIncrementalSteps();	
@@ -217,6 +237,7 @@ public class TautomerManager
 		
 		return(resultTautomers);
 	}
+	
 	
 	//Combined approach (00, 01, 02) - not implemented!
 	public List<IAtomContainer> generateTautomersCombinedApproach() throws Exception
@@ -392,7 +413,7 @@ public class TautomerManager
 		resultTautomers.add(newTautomer);
 		numOfRegistrations++;
 		
-		//if (numOfRegistrations%10 == 0) System.out.println("  "+ numOfRegistrations + " registered tautomers");
+		//if (numOfRegistrations%100 == 0) System.out.println("  "+ numOfRegistrations + " registered tautomers");
 		
 		//System.out.print("  tautomer: " + getTautomerCombination() +  "    " + SmartsHelper.moleculeToSMILES(molecule));		
 		
