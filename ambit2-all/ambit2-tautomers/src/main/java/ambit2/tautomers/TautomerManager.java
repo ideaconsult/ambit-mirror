@@ -20,6 +20,7 @@ public class TautomerManager
 	IAtomContainer molecule = null;
 	RuleSelector ruleSelector = null;
 	List<IRuleInstance> extendedRuleInstances = new ArrayList<IRuleInstance>(); 
+	List<IRuleInstance> extendedRuleInstances0; //The initial rules (pre-selection list)
 	List<IRuleInstance> ruleInstances = new ArrayList<IRuleInstance>();
 	List<List<IRuleInstance>> subCombinationsRI = new ArrayList<List<IRuleInstance>>();
 	List<Rule> generatedRules = new ArrayList<Rule>(); 
@@ -60,6 +61,8 @@ public class TautomerManager
 		
 		knowledgeBase.activateRingChainRules(knowledgeBase.FlagUseRingChainRules);
 		knowledgeBase.activateChlorineRules(knowledgeBase.FlagUseChlorineRules);
+		
+		ruleSelector = RuleSelector.getDefaultSelectorAll();
 	}
 	
 	
@@ -100,8 +103,9 @@ public class TautomerManager
 		
 		searchAllRulePositions();
 		
-		//handleOverlapedInstances();   //Currently does nothing. Incorrect tautomers are filtered out by FilterTautomers
-		ruleInstances.addAll(extendedRuleInstances);
+		//Overlapping instances are not handled. Incorrect tautomers are filtered out by FilterTautomers
+		//ruleInstances.addAll(extendedRuleInstances);
+		ruleInstances = ruleSelector.selectRules(this, extendedRuleInstances);      
 		
 		
 		resultTautomers = new ArrayList<IAtomContainer>();
@@ -137,6 +141,9 @@ public class TautomerManager
 			resultTautomers.add(molecule);
 			return(resultTautomers);
 		}
+		
+		//Rule selection (original extended list is kept in extendedRuleInstances0)
+		extendedRuleInstances = ruleSelector.selectRules(this, extendedRuleInstances);
 		
 		//Generating sub combinations
 		subCombinationsRI =  generateSubCombinations();
@@ -187,6 +194,9 @@ public class TautomerManager
 			resultTautomers.add(molecule);
 			return(resultTautomers);
 		}
+		
+		//Rule selection (original extended list is kept in extendedRuleInstances0)
+		extendedRuleInstances = ruleSelector.selectRules(this, extendedRuleInstances);
 		
 		RuleManager rman = new RuleManager(this);
 		rman.firstIncrementalStep();
@@ -324,14 +334,13 @@ public class TautomerManager
 				} catch (Exception x) {
 					logger.log(Level.WARNING,knowledgeBase.rules.get(i).name,x);
 				}
-			}	
+			}
+		
+		extendedRuleInstances0 = extendedRuleInstances;
 	}
 	
-	
-	
-	
 		
-	
+	/*
 	//This function is applied for approach 00 
 	void handleOverlapedInstances()
 	{			
@@ -342,6 +351,7 @@ public class TautomerManager
 		//RuleManager rman = new RuleManager(this);
 		//rman.handleOverlappingRuleInstances();
 	}
+	*/
 	
 	//This function is applied for approach 00 and as helper for approach 01
 	void generateRuleInstanceCombinations() throws Exception 
