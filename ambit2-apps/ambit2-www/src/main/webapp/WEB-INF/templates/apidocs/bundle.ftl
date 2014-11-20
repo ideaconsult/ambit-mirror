@@ -418,7 +418,7 @@
 			    "operations": [
 			        {
 			            "method": "GET",
-			            "summary": "Get a endpoints",
+			            "summary": "Get endpoints",
 			            "notes": "List of property uris ",
 			            "type": "Substance",
 			            "nickname": "getBundleProperties",
@@ -509,7 +509,47 @@
 			            ]
 			        }			        
 			    ]
-			}			
+			},
+			{
+			    "path": "/bundle/{idbundle}/dataset",
+			    "operations": [
+			        {
+			            "method": "GET",
+			            "summary": "Get substance dataset",
+			            "notes": "get substance dataset",
+			            "type": "SubstanceDataset",
+			            "nickname": "getBundleDataset",
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+							{
+							    "name": "idbundle",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							},
+							<#include "/apidocs/parameters_page.ftl" >									
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Invalid bundle identifier"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Bundle not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }		        
+			    ]
+			}					
     ],
 	<#include "/apidocs/profile/${menu_profile}/info.ftl" >  
 }	
