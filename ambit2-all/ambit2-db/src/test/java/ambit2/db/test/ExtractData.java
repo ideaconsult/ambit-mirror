@@ -43,7 +43,9 @@ public class ExtractData {
         
         partialDataSet.addTable("dictionary", "SELECT * FROM dictionary");
         
-        partialDataSet.addTable("bundle", "SELECT * FROM bundle");     
+        partialDataSet.addTable("bundle", "SELECT * FROM bundle");
+        partialDataSet.addTable("bundle_substance", "SELECT * FROM bundle_substance");
+        partialDataSet.addTable("bundle_endpoints", "SELECT * FROM bundle_endpoints");
             
         partialDataSet.addTable("src_dataset", "SELECT id_srcdataset,name,user_name,idreference FROM src_dataset");
         partialDataSet.addTable("tuples",String.format("select * from tuples where idtuple in (select idtuple from property_tuples join property_values using(id) join structure using(idstructure) where structure.idchemical in %s)",ids)); 

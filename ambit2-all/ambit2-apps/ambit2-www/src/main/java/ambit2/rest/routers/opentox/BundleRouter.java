@@ -2,6 +2,8 @@ package ambit2.rest.routers.opentox;
 
 import org.restlet.Context;
 
+import ambit2.rest.OpenTox;
+import ambit2.rest.bundle.BundleEndpointsResource;
 import ambit2.rest.bundle.BundleMetadataResource;
 import ambit2.rest.bundle.BundleSubstanceResource;
 import ambit2.rest.dataset.MetadatasetResource;
@@ -17,6 +19,8 @@ public class BundleRouter extends MyRouter {
 		attach("/{idbundle}", BundleMetadataResource.class);
 		attach(String.format("/{idbundle}%s",MetadatasetResource.metadata), BundleMetadataResource.class);
 		attach(String.format("/{idbundle}%s",SubstanceResource.substance), BundleSubstanceResource.class);
+		attach(String.format("/{idbundle}%s",OpenTox.URI.feature.getURI()), BundleEndpointsResource.class);
+		
 		
 	}
 

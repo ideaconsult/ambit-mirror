@@ -234,6 +234,7 @@ CREATE TABLE `substance_experiment` (
 -- A collection of substances and endpoints 
 -- metadata
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `bundle`;
 CREATE TABLE `bundle` (
   `idbundle` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT 'default',
@@ -254,8 +255,9 @@ CREATE TABLE `bundle` (
 
 
 -- -----------------------------------------------------
--- A collection of substances and endpoints 
+-- A collection of substances 
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `bundle_substance`;
 CREATE TABLE `bundle_substance` (
   `idsubstance` int(11) NOT NULL,
   `idbundle` int(10) unsigned NOT NULL,
@@ -265,6 +267,21 @@ CREATE TABLE `bundle_substance` (
   KEY `a_substance_idx` (`idsubstance`),
   CONSTRAINT `a_metadata` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `a_substance` FOREIGN KEY (`idsubstance`) REFERENCES `substance` (`idsubstance`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- -----------------------------------------------------
+-- A collection of endpoints 
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `bundle_endpoints`;
+CREATE TABLE `bundle_endpoints` (
+  `idbundle` int(10) unsigned NOT NULL,
+  `topcategory` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `endpointcategory` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `endpointhash` varbinary(20) DEFAULT NULL COMMENT 'SHA1 over endpoint, unit and conditions',
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idbundle`,`topcategory`,`endpointcategory`,`endpointhash`),
+  KEY `btopcategory` (`topcategory`,`endpointcategory`,`endpointhash`) USING BTREE,
+  CONSTRAINT `b_metadata` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
