@@ -84,4 +84,26 @@
   <substance_experiment idresult="19" document_prefix="IUC4" document_uuid="L2SrJ9K+NS652E8CdP1mMw==" topcategory="P-CHEM" endpointcategory="PC_PARTITION_SECTION" endpoint="log Pow" conditions="{&quot;Temperature&quot;:&quot;25 &#176;C&quot;}" loValue="0.35" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA=="/>
   <substance_experiment idresult="7" document_prefix="IUC4" document_uuid="etsNA/abMqme/oa0qFd4kw==" topcategory="ECOTOX" endpointcategory="EC_FISHTOX_SECTION" endpoint="LC50" conditions="{&quot;Exposure&quot;:&quot;96&quot;}" unit="mg/L" loValue="83.1" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA=="/>
   <bundle idbundle="1" name="Assessment" user_name="guest" idreference="9" created="2014-11-12 07:45:56.0" licenseURI="http://creativecommons.org/publicdomain/zero/1.0/" rightsHolder="xyz" maintainer="ABC" stars="8"/>
+  <bundle_endpoints idbundle="1" topcategory="ECOTOX" endpointcategory="EC_ALGAETOX_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="ECOTOX" endpointcategory="EC_BACTOX_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="ECOTOX" endpointcategory="EC_DAPHNIATOX_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="ECOTOX" endpointcategory="EC_FISHTOX_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="ENV FATE" endpointcategory="TO_BIODEG_WATER_SCREEN_SECTION" created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="ENV FATE" endpointcategory="TO_PHOTOTRANS_AIR_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="P-CHEM" endpointcategory="GI_GENERAL_INFORM_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="P-CHEM" endpointcategory="PC_BOILING_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="P-CHEM" endpointcategory="PC_MELTING_SECTION" created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="P-CHEM" endpointcategory="PC_VAPOUR_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="P-CHEM" endpointcategory="PC_WATER_SOL_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_ACUTE_DERMAL_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_ACUTE_INHAL_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_ACUTE_ORAL_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_GENETIC_IN_VITRO_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_GENETIC_IN_VIVO_SECTION" guidance="" created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_REPEATED_DERMAL_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_REPEATED_INHAL_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_REPEATED_ORAL_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_REPRODUCTION_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_SENSITIZATION_SECTION"  created="2014-11-20 09:41:19.0"/>
+  
 </dataset>

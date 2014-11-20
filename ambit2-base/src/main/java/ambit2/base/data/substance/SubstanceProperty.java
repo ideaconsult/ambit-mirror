@@ -39,11 +39,12 @@ public class SubstanceProperty extends Property {
 	@Override
 	public String getRelativeURI() {
 		try {
-		return String.format("/property/%s/%s/%s/%s",
+		return String.format("/property/%s/%s%s%s/%s",
 				URLEncoder.encode(topcategory==null?"TOX":topcategory,"UTF-8"),
 				URLEncoder.encode(						
 						endpointcategory==null?Protocol._categories.UNKNOWN_TOXICITY_SECTION.name():endpointcategory,
 						"UTF-8"),
+				getTitle()==null?"":"/",		
 				URLEncoder.encode(getTitle(),"UTF-8"),
 				identifier==null?
 						UUID.nameUUIDFromBytes((getName() + getTitle()).toString().getBytes()).toString()

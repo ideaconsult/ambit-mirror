@@ -58,6 +58,9 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 	public PropertyJSONReporter(Request baseRef) {
 		super(baseRef);
 	}
+	public PropertyJSONReporter(Request baseRef,String jsoncallback) {
+		this(baseRef);
+	}
 	@Override
 	public Object processItem(Property feature) throws AmbitException {
 		try {

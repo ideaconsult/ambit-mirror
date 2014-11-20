@@ -412,7 +412,104 @@
 			            ]
 			        }			        
 			    ]
-			}				
+			},
+			{
+			    "path": "/bundle/{idbundle}/feature",
+			    "operations": [
+			        {
+			            "method": "GET",
+			            "summary": "Get a endpoints",
+			            "notes": "List of property uris ",
+			            "type": "Substance",
+			            "nickname": "getBundleProperties",
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+							{
+							    "name": "idbundle",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							},
+							<#include "/apidocs/parameters_page.ftl" >									
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Invalid bundle identifier"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Bundle not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        },
+			        {
+			            "method": "POST",
+			            "summary": "Add a property to the bundle",
+			            "notes": "Add a property to the bundle",
+			            "type": "Substance",
+			            "nickname": "addPropertyToBundle",
+		                "consumes": [
+				               "application/x-www-form-urlencoded"
+		                ],					            
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+							{
+							    "name": "idbundle",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							},
+							{
+							    "name": "topcategory",
+							    "description": "Top endpoint category",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false,
+							    "defaultValue" : "ECOTOX",
+							    "enum" : ["P-CHEM","ENV FATE","ECOTOX","TOX"]
+							},
+							{
+							    "name": "endpointcategory",
+							    "description": "Endpoint category",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false,
+							    "defaultValue" :"EC_FISHTOX_SECTION",
+							    <#include "/apidocs/parameter_endpointcategorysection_enum.ftl">
+							}				
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Bad request"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Bundle not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }			        
+			    ]
+			}			
     ],
 	<#include "/apidocs/profile/${menu_profile}/info.ftl" >  
 }	
