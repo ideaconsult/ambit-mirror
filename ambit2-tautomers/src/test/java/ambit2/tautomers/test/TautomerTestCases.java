@@ -6,6 +6,8 @@ import junit.framework.TestSuite;
 
 import org.openscience.cdk.tools.LoggingTool;
 
+import ambit2.tautomers.TautomerConst;
+
 
 public class TautomerTestCases extends TestCase
 {
@@ -21,7 +23,6 @@ public class TautomerTestCases extends TestCase
 		tt = new TestTautomers();
 		tt.tman.getKnowledgeBase().use15ShiftRules(true);
 		tt.tman.getKnowledgeBase().use17ShiftRules(false);
-		
 	}
 
 	public static Test suite() {
