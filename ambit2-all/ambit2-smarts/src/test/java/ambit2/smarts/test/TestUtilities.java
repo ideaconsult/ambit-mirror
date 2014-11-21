@@ -1896,7 +1896,21 @@ public class TestUtilities
 	}
 	
 	
-	
+	public void testBug78() throws Exception
+	{
+		SMIRKSManager smrkMan = new SMIRKSManager(DefaultChemObjectBuilder.getInstance());
+		SMIRKSReaction reaction = smrkMan.parse("[H:3][C:1]#[C]>>[H:3][#6:1]=O");
+		if (!smrkMan.getErrors().equals(""))
+		{
+			System.out.println(smrkMan.getErrors());
+			return;
+		}
+		//IAtomContainer substrate = FormatConverter.fromSmiles("C#C");
+		IAtomContainer substrate = SmartsHelper.getMoleculeFromSmiles("C#C",true);
+		
+		System.out.println(smrkMan.applyTransformationWithSingleCopyForEachPos(substrate, null, reaction));
+		
+	}
 	
 	
 	
@@ -1904,6 +1918,10 @@ public class TestUtilities
 //-------------------------------------------------------------------------------
 	
 	
+	/**
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception
 	{
 		TestUtilities tu = new TestUtilities();
@@ -2145,8 +2163,8 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("C[H]","CC");
 		
 		//Stereo info testing
-		tu.testSmartsManagerBoolSearch("C[C@](O)(N)CCC","CC(O)(N)CCC");
-		tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C=C/C");
+		//tu.testSmartsManagerBoolSearch("C[C@](O)(N)CCC","CC(O)(N)CCC");
+		//tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C=C/C");
 		
 		//These examples with a great probability proof that there is a bug in the CDK isomorphism algorithm
 		//tu.testSmartsManagerBoolSearch("[N,$(C=S)]~[A,a]~[A,a]~[N,$(C=S)]","[S-]C(=S)N");
@@ -2285,7 +2303,7 @@ public class TestUtilities
 		//tu.testSmartsToQueryToSmarts("Cl/C=C/Cl");          //!!!!! CIS/TRANS info is missing
 		//tu.testSmartsToQueryToSmarts("C[C@](CO)(N)CC");   //!!!!! Bug in the SMARTS outputting --> C[C&@@](CO)(N)CC   
 		
-		
+		tu.testBug78();
 	}
 	
 }
