@@ -46,9 +46,9 @@ public class TautomerManager
 	public boolean FlagPrintExtendedRuleInstances = false;
 	public boolean FlagPrintIcrementalStepDebugInfo = false;
 	
-	public int maxNumOfBackTracks = 100000;
-	public int maxNumOfTautomerRegistrations = 2000;  //Used only for the combinatorial algorithms
-	public int maxNumOfSubCombinations = 100000; //Used only for the improved combinatorial algorithms
+	public int maxNumOfBackTracks = 100000; //Used only for the Incremental algorithm
+	public int maxNumOfTautomerRegistrations = 2000;  //Used for the combinatorial and improved combinatorial algorithms
+	public int maxNumOfSubCombinations = 10000; //Used only for the improved combinatorial algorithm
 	public boolean FlagProcessRemainingStackIncSteps = true;   //Typically this flag should be true 			
 	
 	public TautomerManager()
@@ -63,7 +63,7 @@ public class TautomerManager
 		knowledgeBase.activateRingChainRules(knowledgeBase.FlagUseRingChainRules);
 		knowledgeBase.activateChlorineRules(knowledgeBase.FlagUseChlorineRules);
 		
-		ruleSelector = RuleSelector.getDefaultSelectorAll();
+		ruleSelector = RuleSelector.getDefaultSelectorRandom();
 	}
 	
 	
@@ -204,18 +204,8 @@ public class TautomerManager
 		//and reusing again the excluded rules by the ruleSelector
 		if (FlagSwitchToCombinatorialOnReachingRuleLimit)
 			if (ruleSelector.switchToCombinatorial())
-			{
-				//System.out.println("******* Switching to combinatorial!!");
-				numOfRegistrations = 0;
-				ruleInstances.addAll(extendedRuleInstances);
-				generateRuleInstanceCombinations();
-				resultTautomers = tautomerFilter.filter(resultTautomers);
-
-				if (FlagCalculateCACTVSEnergyRank)
-					calcCACTVSEnergyRanks(resultTautomers);
-
-				return(resultTautomers);
-			}
+				return switchToCombinatorial();
+			
 		
 		//The incremental approach is performed here
 		RuleManager rman = new RuleManager(this);
@@ -235,6 +225,38 @@ public class TautomerManager
 		if (FlagCalculateCACTVSEnergyRank)
 			calcCACTVSEnergyRanks(resultTautomers);
 		
+		return(resultTautomers);
+	}
+	
+	List<IAtomContainer> switchToCombinatorial() throws Exception
+	{
+		logger.info("******* Switching from Incremental to combinatorial!!");
+		numOfRegistrations = 0;
+		
+		//Generating sub combinations
+		subCombinationsRI =  generateSubCombinations();
+
+		//iterating all sub combinations
+		for (List<IRuleInstance> subComb : subCombinationsRI)
+		{
+			//initialize molecule
+			restoreMolecule(molecule, originalMolecule);
+			ruleInstances = subComb;
+			generateRuleInstanceCombinations();
+		}
+		
+		
+		/*
+		ruleInstances.addAll(extendedRuleInstances);
+		generateRuleInstanceCombinations();
+		*/
+		
+		resultTautomers = tautomerFilter.filter(resultTautomers);
+
+		if (FlagCalculateCACTVSEnergyRank)
+			calcCACTVSEnergyRanks(resultTautomers);
+			
+
 		return(resultTautomers);
 	}
 	
@@ -479,7 +501,7 @@ public class TautomerManager
 			numOfSubCombinations = numOfSubCombinations * gmax[i]; 
 		}
 		
-		System.out.println("numOfSubCombinations = " + numOfSubCombinations);
+		logger.info("numOfSubCombinations = " + numOfSubCombinations);
 		
 		//Generation of all sub-combinations from clusters
 		List<List<IRuleInstance>> subCombs = new ArrayList<List<IRuleInstance>>();	

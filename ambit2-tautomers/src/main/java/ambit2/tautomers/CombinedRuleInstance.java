@@ -17,6 +17,9 @@ public class CombinedRuleInstance implements IRuleInstance
 	Vector<RuleInstance> instances = new Vector<RuleInstance>(); 
 	Vector<int[]> combinedStates = new Vector<int[]>(); 
 		
+	public Rule getRule(){
+		return null;
+	}
 	
 	public int firstState()
 	{	
