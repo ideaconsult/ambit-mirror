@@ -645,6 +645,10 @@ public class TautomerManager
 			
 	}
 	
+	public int getInitialRuleCount(){
+		return extendedRuleInstances0.size();
+	}
+	
 	public static void calcCACTVSEnergyRanks(List<IAtomContainer> tautomers)
 	{
 		for (IAtomContainer mol: tautomers)
