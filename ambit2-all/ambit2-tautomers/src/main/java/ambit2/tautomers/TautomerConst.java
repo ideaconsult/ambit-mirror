@@ -26,7 +26,12 @@ public class TautomerConst
 	public static final int RSM_NONE = 1;
 	public static final int RSM_RANDOM = 2;
 	public static final int RSM_RANDOM_NON_OVERLAPPING = 3;
-	public static final int RSM_RANDOM_DENSITY_BASED = 4;
+	public static final int RSM_RANDOM_OPTIMAL_DENSITY = 4;
+	
+	//Rule selection order
+	public static final int RULE_ORDER_NONE = 0;
+	public static final int RULE_ORDER_BY_SIZE = 1;
+	
 	
 	
 	public static final int IHA_INDEX = 1000000;

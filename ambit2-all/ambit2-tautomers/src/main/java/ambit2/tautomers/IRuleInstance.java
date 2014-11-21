@@ -6,5 +6,6 @@ public interface IRuleInstance
 	public int nextState();	
 	public int getNumberOfStates();
 	public int getCurrentState();
+	public Rule getRule();
 	
 }

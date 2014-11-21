@@ -45,6 +45,10 @@ public class RuleInstance implements IRuleInstance
 		//FlagGoToStateSpecialOK = prevRI.FlagGoToStateSpecialOK;
 	}
 	
+	public Rule getRule(){
+		return rule;
+	}
+	
 	public int firstState()
 	{	
 		gotoState(0);
