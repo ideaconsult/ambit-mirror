@@ -2,7 +2,9 @@ package ambit2.rest.freemarker;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,6 +14,7 @@ import net.idea.restnet.i.freemarker.IFreeMarkerSupport;
 
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.CacheDirective;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.ServerInfo;
@@ -107,7 +110,10 @@ public class FreeMarkerStatusService  extends StatusService implements IFreeMark
 			response.getAttributes().put("org.restlet.http.headers", headers);
 		}
 		headers.add("X-Frame-Options", "SAMEORIGIN");
-		headers.add("Cache-Control","max-age=2700, private");
+
+		List<CacheDirective> cache = new ArrayList<CacheDirective>();
+		cache.add(new CacheDirective("Cache-Control","max-age=2700, private"));
+		response.setCacheDirectives(cache);
 		ServerInfo si = response.getServerInfo();si.setAgent("Restlet");response.setServerInfo(si);
 		StringWriter details = null;
 		if (status.getThrowable()!= null) {

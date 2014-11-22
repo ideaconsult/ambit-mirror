@@ -1,9 +1,13 @@
 package ambit2.rest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.idea.restnet.c.task.ClientResourceWrapper;
 import net.idea.restnet.i.aa.IAuthToken;
 
 import org.restlet.Request;
+import org.restlet.data.CacheDirective;
 import org.restlet.data.Cookie;
 import org.restlet.data.CookieSetting;
 import org.restlet.data.Form;
@@ -100,7 +104,9 @@ public abstract class ProtectedResource extends ServerResource implements IAuthT
 			getResponse().getAttributes().put("org.restlet.http.headers", headers);
 		}
 		headers.add("X-Frame-Options", value);
-		headers.add("Cache-Control","max-age=2700, private");
+		List<CacheDirective> cache = new ArrayList<CacheDirective>();
+		cache.add(new CacheDirective("Cache-Control","max-age=2700, private"));
+		getResponse().setCacheDirectives(cache);
 		ServerInfo si = getResponse().getServerInfo();si.setAgent("Restlet");getResponse().setServerInfo(si);	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {

@@ -1,7 +1,9 @@
 package ambit2.rest;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
@@ -16,6 +18,7 @@ import net.idea.restnet.i.task.TaskStatus;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.CacheDirective;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -155,7 +158,10 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 			//response.setLocationRef(task.getReference());			
 			 * 
 			 */
-
+			List<CacheDirective> cache = new ArrayList<CacheDirective>();
+			cache.add(new CacheDirective("Cache-Control", "no-store, no-cache, must-revalidate"));
+			response.setCacheDirectives(cache);
+			
 			if (id == null) {
 				response_status = Status.SUCCESS_OK;
 				//turn  ((TaskApplication)getApplication()).getTaskStorage().getTasks();
