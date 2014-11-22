@@ -214,7 +214,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected boolean localAAEnabled = false;
 	protected boolean dbAAEnabled = false;
 	protected boolean warmupEnabled = false;
-	protected boolean changeLineSeparators = false; 
 	
 	protected String ajaxTimeout = "10000"; //msec
 	protected boolean enableEmailVerification = true;
@@ -241,9 +240,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected boolean similarityOrder = true;
 
 
-	public boolean isChangeLineSeparators() {
-		return changeLineSeparators;
-	}
 	public AmbitApplication() {
 		this(false);
 	}
