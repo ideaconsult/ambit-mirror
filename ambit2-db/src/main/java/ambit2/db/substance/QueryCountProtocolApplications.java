@@ -28,16 +28,24 @@ public class QueryCountProtocolApplications   extends QueryCount<SubstanceByCate
 	 * 
 	 */
 	
-	protected static String sql = 
-		"SELECT topcategory,count(*),endpointcategory,count(distinct(concat(substance_prefix,substance_uuid))) FROM substance_protocolapplication group by topcategory,endpointcategory";
+	private static final String sql = 
+		"SELECT topcategory,count(*),endpointcategory,count(distinct(concat(substance_prefix,substance_uuid)))  FROM substance_protocolapplication %s group by topcategory,endpointcategory";
 	
-	protected static String sql_topcategory = 
-		"SELECT topcategory,count(*),endpointcategory,count(distinct(concat(substance_prefix,substance_uuid)))  FROM substance_protocolapplication where topcategory=? group by topcategory,endpointcategory";
-	
+	private static final String w_topcategory = "topcategory=?";
+	private static final String w_endpointcategory = "endpointcategory=?";
 		
 	@Override
 	public String getSQL() throws AmbitException {
-		return (getFieldname()==null)?sql:sql_topcategory;
+		StringBuilder b = new StringBuilder();
+		String d = "\nwhere ";
+		if (getFieldname()!=null) { b.append(d); b.append(w_topcategory); d = " and ";}
+		if (getValue()!=null) { b.append(d); b.append(w_endpointcategory); d = " and ";}
+		return String.format(sql,b.toString());
+	}
+	@Override
+	public void setValue(String value) {
+		if (value!=null && !value.endsWith("_SECTION")) super.setValue(value+"_SECTION");
+		else super.setValue(value);
 	}
 	
 	@Override
@@ -46,9 +54,9 @@ public class QueryCountProtocolApplications   extends QueryCount<SubstanceByCate
 	}
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
-		if (getFieldname()==null) return null;
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<String>(String.class, getFieldname().toString()));
+		if (getFieldname()!=null) params.add(new QueryParam<String>(String.class, getFieldname().toString()));
+		if (getValue()!=null) params.add(new QueryParam<String>(String.class, getValue().toString()));
 		return params;
 	}
 	@Override
