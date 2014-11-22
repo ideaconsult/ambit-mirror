@@ -387,12 +387,67 @@
 							{
 							    "name": "substance_uri",
 							    "description": "Substance URI",
-							    "defaultValue" : "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
+							    "defaultValue" : "${ambit_root}/substance/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
 							    "required": true,
 							    "type": "string",
 							    "paramType": "form",
 							    "allowMultiple": true
 							}									
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Bad request"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Bundle not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        },
+			        {
+			            "method": "PUT",
+			            "summary": "Add or delete a substance to the bundle",
+			            "notes": "Add or delete a substance to the bundle",
+			            "type": "Substance",
+			            "nickname": "updateSubstanceInBundle",
+		                "consumes": [
+				               "application/x-www-form-urlencoded"
+		                ],					            
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+							{
+							    "name": "idbundle",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							},
+							{
+							    "name": "substance_uri",
+							    "description": "Substance URI",
+							    "defaultValue" : "${ambit_root}/substance/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": true
+							},
+							{
+							    "name": "command",
+							    "description": "Specify operation (add or delete)",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false,
+							    "enum" : ["add","delete"]
+							}										
 			            ],
 			            "responseMessages": [
 			     			{
@@ -549,7 +604,148 @@
 			            ]
 			        }		        
 			    ]
-			}					
+			},
+			{
+			    "path": "/bundle/{idbundle}/compound",
+			    "operations": [
+			        {
+			            "method": "GET",
+			            "summary": "Get chemical structures per bundle",
+			            "notes": "Get chemical structures per bundle",
+			            "type": "Dataset",
+			            "nickname": "getBundleCompounds",
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+							{
+							    "name": "idbundle",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							},
+							<#include "/apidocs/parameters_page.ftl" >									
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Invalid bundle identifier"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Bundle not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        },
+			        {
+			            "method": "POST",
+			            "summary": "Add a compound to the bundle",
+			            "notes": "Add a compound to the bundle",
+			            "type": "Dataset",
+			            "nickname": "addPropertyToBundle",
+		                "consumes": [
+				               "application/x-www-form-urlencoded"
+		                ],					            
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+							{
+							    "name": "idbundle",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							},
+							{
+							    "name": "compound_uri",
+							    "description": "Compound URI",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "form",
+							    "defaultValue" : "${ambit_root}/compound/1",
+							    "allowMultiple": false
+							}			
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Bad request"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Bundle not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        },
+					{
+			            "method": "PUT",
+			            "summary": "Add or delete a compound to the bundle",
+			            "notes": "Add or delete a compound to the bundle",
+			            "type": "Dataset",
+			            "nickname": "updateCompoundInBundle",
+		                "consumes": [
+				               "application/x-www-form-urlencoded"
+		                ],					            
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+							{
+							    "name": "idbundle",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							},
+							{
+							    "name": "compound_uri",
+							    "description": "Compound URI",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "form",
+							    "defaultValue" : "${ambit_root}/compound/1",
+							    "allowMultiple": false
+							},
+							{
+							    "name": "command",
+							    "description": "Specify operation (add or delete)",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false,
+							    "enum" : ["add","delete"]
+							}										
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Bad request"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Bundle not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }			        			        
+			    ]
+			}								
     ],
 	<#include "/apidocs/profile/${menu_profile}/info.ftl" >  
 }	

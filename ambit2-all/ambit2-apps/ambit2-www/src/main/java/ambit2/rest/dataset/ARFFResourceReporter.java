@@ -4,7 +4,6 @@ import java.util.Collections;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 
