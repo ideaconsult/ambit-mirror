@@ -3,6 +3,8 @@ package ambit2.tautomers;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -12,8 +14,8 @@ import org.openscience.cdk.smiles.SmilesParser;
 import ambit2.smarts.SmartsHelper;
 
 
-public class Tautomer2DescriptorUtils 
-{
+public class Tautomer2DescriptorUtils {
+	protected static final Logger logger = Logger.getLogger(TautomerManager.class.getName());
 	TautomerManager tman = new TautomerManager();	
 	String endLineSymb = System.getProperty("line.separator");
 	RandomAccessFile outFile = null;
@@ -28,35 +30,33 @@ public class Tautomer2DescriptorUtils
 	
 	int curLine; 
 		
-	public void generateFulltautomerInfo(String smilesFile, String outFileName) throws Exception
-	{	
-		openOutputFile(outFileName);
-		
-		RandomAccessFile inFile = new RandomAccessFile(smilesFile,"r");			
-		long length = inFile.length();
-		
-		int n = 0;		
-		while (inFile.getFilePointer() < length)
-		{	
-			n++;
-			curLine = n;
-			String line = inFile.readLine();
-			
-			if (n < startLineNum)
-				continue;
-			
-			if (n > endLineNum)
-				break;
-			
-			tautomerFullInfo(n, line.trim());
+	public void generateFulltautomerInfo(String smilesFile, String outFileName) throws Exception 	{
+		RandomAccessFile inFile  = null;
+		try {
+			openOutputFile(outFileName);
+			inFile = new RandomAccessFile(smilesFile,"r");
+			long length = inFile.length();
+			int n = 0;		
+			while (inFile.getFilePointer() < length) {	
+				n++;
+				curLine = n;
+				String line = inFile.readLine();
+				
+				if (n < startLineNum)
+					continue;
+				
+				if (n > endLineNum)
+					break;
+				
+				tautomerFullInfo(n, line.trim());
+			}
+		} finally {
+			try { closeOutputFile(); } catch (Exception x) {}
+			try {if (inFile != null) inFile.close();} catch (Exception x) {}
 		}
-		
-		closeOutputFile();
-		inFile.close();
 	}
 	
-	public int tautomerFullInfo(int strNum, String targetSmiles)
-	{	
+	public int tautomerFullInfo(int strNum, String targetSmiles) {	
 		try
 		{	
 			IMolecule mol = null;
@@ -67,7 +67,7 @@ public class Tautomer2DescriptorUtils
 			List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 			
 			output("" + strNum + "   " + targetSmiles + "  " + resultTautomers.size() + "  "  +  endLineSymb);
-			System.out.println("    -->  " + resultTautomers.size() + " tautomers");
+			logger.log(Level.FINE,"    -->  " + resultTautomers.size() + " tautomers");
 			
 			if (resultTautomers.size() > 1)  
 				for (int i = 0; i < resultTautomers.size(); i++)
@@ -79,7 +79,7 @@ public class Tautomer2DescriptorUtils
 				}
 		}	
 		catch(Exception e){
-			System.out.println(e.toString());
+			logger.log(Level.SEVERE,e.getMessage(),e);
 		}
 		
 		return 0;
@@ -136,7 +136,7 @@ public class Tautomer2DescriptorUtils
 		}
 		catch (Exception e)
 		{
-			System.out.println("output error: " + e.toString());
+			logger.log(Level.SEVERE,e.getMessage(),e);
 			return(-1);
 		}
 		return(0);

@@ -14,7 +14,7 @@ import ambit2.smarts.SmartsHelper;
 
 public class TautomerManager 
 {
-	protected static Logger logger = Logger.getLogger(TautomerManager.class.getName());
+	protected static final Logger logger = Logger.getLogger(TautomerManager.class.getName());
 	KnowledgeBase knowledgeBase = null; 
 	IAtomContainer originalMolecule = null;
 	IAtomContainer molecule = null;
@@ -584,24 +584,22 @@ public class TautomerManager
 	 */
 	public void printDebugInfo()
 	{
-		if (FlagPrintTargetMoleculeInfo)
-		{
-			System.out.println("Debug info - Target Atom atributes:");
+		if (FlagPrintTargetMoleculeInfo) {
+			logger.log(Level.FINE,"Debug info - Target Atom atributes:");
 			String s = SmartsHelper.getAtomsAttributes(molecule);
-			System.out.println(s + "\n");
-			System.out.println("Debug info - Target Bond atributes:");
+			logger.log(Level.FINE,s);
+			logger.log(Level.FINE,"Debug info - Target Bond atributes:");
 			String s2 = SmartsHelper.getBondAttributes(molecule);
-			System.out.println(s2 + "\n");
+			logger.log(Level.FINE,s2);
 		}
 		
 		
-		if (FlagPrintExtendedRuleInstances)
-		{	
-			System.out.println("Debug info - extendedRuleInstances:");
+		if (FlagPrintExtendedRuleInstances) 	{	
+			logger.log(Level.FINE,"Debug info - extendedRuleInstances:");
 			for (int i = 0; i < extendedRuleInstances.size(); i++)
-				System.out.println(((RuleInstance)extendedRuleInstances.get(i)).debugInfo(molecule));
+				logger.log(Level.FINE,((RuleInstance)extendedRuleInstances.get(i)).debugInfo(molecule));
 			if(extendedRuleInstances.isEmpty())
-				System.out.println("  NONE");
+				logger.log(Level.FINE,"  NONE");
 		}	
 			
 	}
