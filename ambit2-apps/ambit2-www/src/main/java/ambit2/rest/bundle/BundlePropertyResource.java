@@ -34,9 +34,9 @@ import ambit2.rest.property.PropertyJSONReporter;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
 
-public class BundleEndpointsResource<Q extends IQueryRetrieval<Property>> extends AmbitDBQueryResource<Q,Property> {
+public class BundlePropertyResource<Q extends IQueryRetrieval<Property>> extends AmbitDBQueryResource<Q,Property> {
 
-	public BundleEndpointsResource() {
+	public BundlePropertyResource() {
 		super();
 		setHtmlbyTemplate(true);
 	}
@@ -107,7 +107,7 @@ public class BundleEndpointsResource<Q extends IQueryRetrieval<Property>> extend
 		if (idbundle==null) throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 		
 		Object idsubstance = request.getAttributes().get(OpenTox.URI.substance.getKey());
-		if (Method.POST.equals(method)) {
+		if (Method.POST.equals(method) || Method.PUT.equals(method)) {
 			if (idsubstance==null) return null;//post allowed only on /bundle/{id}/substance level, not on /bundle/id/substance/{idsubstance}
 		} else {
 			if (idsubstance!=null) {

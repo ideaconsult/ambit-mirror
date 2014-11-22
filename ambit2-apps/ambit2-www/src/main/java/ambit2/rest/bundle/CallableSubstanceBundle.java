@@ -44,18 +44,6 @@ public class CallableSubstanceBundle extends CallableDBUpdateTask<SubstanceRecor
 			if (command != null) return record;
 			else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
-		/*
-		else if (Method.DELETE.equals(method)) { 
-			SubstanceRecord record = new SubstanceRecord();
-			parseForm(input, record);
-			return record;
-		}		
-				/*
-		} else if (Method.PUT.equals(method)) {
-			parseForm(input, bundle);
-			return bundle;
-		}
-		*/
 		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 	}
 

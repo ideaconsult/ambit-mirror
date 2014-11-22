@@ -469,7 +469,7 @@
 			    ]
 			},
 			{
-			    "path": "/bundle/{idbundle}/feature",
+			    "path": "/bundle/{idbundle}/property",
 			    "operations": [
 			        {
 			            "method": "GET",
@@ -506,6 +506,7 @@
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
 			        },
+			        
 			        {
 			            "method": "POST",
 			            "summary": "Add a property to the bundle",
@@ -528,7 +529,7 @@
 							{
 							    "name": "topcategory",
 							    "description": "Top endpoint category",
-							    "required": false,
+							    "required": true,
 							    "type": "string",
 							    "paramType": "form",
 							    "allowMultiple": false,
@@ -538,7 +539,7 @@
 							{
 							    "name": "endpointcategory",
 							    "description": "Endpoint category",
-							    "required": false,
+							    "required": true,
 							    "type": "string",
 							    "paramType": "form",
 							    "allowMultiple": false,
@@ -562,7 +563,73 @@
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
-			        }			        
+			        },
+			        {
+			            "method": "PUT",
+			            "summary": "Add / delete a property to the bundle",
+			            "notes": "Add a property to the bundle",
+			            "type": "Substance",
+			            "nickname": "updatePropertyInBundle",
+		                "consumes": [
+				               "application/x-www-form-urlencoded"
+		                ],					            
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+							{
+							    "name": "idbundle",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							},
+							{
+							    "name": "topcategory",
+							    "description": "Top endpoint category",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false,
+							    "defaultValue" : "ECOTOX",
+							    "enum" : ["P-CHEM","ENV FATE","ECOTOX","TOX"]
+							},
+							{
+							    "name": "endpointcategory",
+							    "description": "Endpoint category",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false,
+							    "defaultValue" :"EC_FISHTOX_SECTION",
+							    <#include "/apidocs/parameter_endpointcategorysection_enum.ftl">
+							},
+							{
+							    "name": "command",
+							    "description": "Specify operation (add or delete)",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false,
+							    "enum" : ["add","delete"]
+							}							
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Bad request"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Bundle not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }				        
 			    ]
 			},
 			{
