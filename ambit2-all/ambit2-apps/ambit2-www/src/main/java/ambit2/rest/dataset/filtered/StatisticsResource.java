@@ -176,6 +176,7 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 		case protocol_applications: {
 			QueryCountProtocolApplications q = new QueryCountProtocolApplications(mode.getURL());
 			q.setFieldname(getParams().getFirstValue("topcategory"));
+			q.setValue(getParams().getFirstValue("category"));
 			return (Q)q;
 		}
 		case interpretation_result: {
