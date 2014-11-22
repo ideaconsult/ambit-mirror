@@ -3,6 +3,8 @@ package ambit2.tautomers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
@@ -15,8 +17,8 @@ import ambit2.core.data.MoleculeTools;
 import ambit2.smarts.SmartsHelper;
 
 
-public class RuleManager 
-{
+public class RuleManager {
+	protected static final Logger logger = Logger.getLogger(TautomerManager.class.getName());
 	TautomerManager tman;
 	List<IRuleInstance> extendedRuleInstances;
 	List<IRuleInstance> ruleInstances;
@@ -265,7 +267,7 @@ public class RuleManager
 			incStep0.unUsedRuleInstances.add((RuleInstance)extendedRuleInstances.get(i));
 		
 		if (tman.FlagPrintIcrementalStepDebugInfo)
-			System.out.println(incStep0.debugInfo());
+			logger.log(Level.FINE,incStep0.debugInfo());
 		
 		stackIncSteps.push(incStep0);
 	}
@@ -282,17 +284,17 @@ public class RuleManager
 		{	
 			if (tman.FlagPrintIcrementalStepDebugInfo)
 			{
-				System.out.println("stack_size = " + stackIncSteps.size());
-				System.out.print(debugStack());
+				logger.log(Level.FINE,"stack_size = " + stackIncSteps.size());
+				logger.log(Level.FINE,debugStack());
 			}
 				
 			TautomerIncrementStep tStep = stackIncSteps.pop();
 			
 			if (tman.FlagPrintIcrementalStepDebugInfo)
 			{
-				System.out.println(tStep.debugInfo());
-				System.out.println("tStep.unusedRI  = " + tStep.unUsedRuleInstances.size());
-				System.out.print("  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct, false));
+				logger.log(Level.FINE,tStep.debugInfo());
+				logger.log(Level.FINE,"tStep.unusedRI  = " + tStep.unUsedRuleInstances.size());
+				logger.log(Level.FINE,"  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct, false));
 			}
 			
 			

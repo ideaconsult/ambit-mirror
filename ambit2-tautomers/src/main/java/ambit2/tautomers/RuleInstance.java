@@ -2,14 +2,16 @@ package ambit2.tautomers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
 
-public class RuleInstance implements IRuleInstance
-{
+public class RuleInstance implements IRuleInstance {
+	protected static Logger logger = Logger.getLogger(RuleInstance.class.getName());
 	Rule rule;
 	CombinedRuleInstance combRI;
 	IAtomContainer molecule;
@@ -149,10 +151,10 @@ public class RuleInstance implements IRuleInstance
 		//Handle ring closure (if present) for the new state
 		if (bondDistr.hasRingClosure)
 		{
-			System.out.println("*** rc rule instance");
+			logger.log(Level.FINE,"*** rc rule instance");
 			if (curState == rule.ringClosureState)
 			{
-				System.out.println("**  ring --> chain");
+				logger.log(Level.FINE,"**  ring --> chain");
 				//The closure bond must exist in the molecule. 
 				//And it is removed (ring --> chain)
 				IAtom a0 = molecule.getAtom(rule.ringClosureBondFA);
