@@ -22,10 +22,10 @@ public class DatasetURIReporter<Q extends IQueryRetrieval<M>,M extends ISourceDa
 	private static final long serialVersionUID = 3648376868814044783L;
 
 	public DatasetURIReporter(Request baseRef) {
-		super(baseRef,null);
+		super(baseRef);
 	}
 	public DatasetURIReporter(Reference baseRef) {
-		super(baseRef,null);
+		super(baseRef);
 	}	
 	public DatasetURIReporter() {
 	}	

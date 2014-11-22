@@ -1,7 +1,6 @@
 package ambit2.rest.dataset;
 
 import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 

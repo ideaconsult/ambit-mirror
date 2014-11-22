@@ -13,11 +13,9 @@ import net.idea.restnet.c.task.ClientResourceWrapper;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
-import org.restlet.representation.Representation;
 
 import weka.core.Instances;
 import Jama.Matrix;
-import ambit2.base.io.DownloadTool;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.rest.ChemicalMediaType;

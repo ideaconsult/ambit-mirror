@@ -85,4 +85,19 @@ CREATE TABLE `bundle_endpoints` (
   CONSTRAINT `b_metadata` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+-- -----------------------------------------------------
+-- A collection of chemicals
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `bundle_chemicals`;
+CREATE TABLE `bundle_chemicals` (
+  `idbundle` int(10) unsigned NOT NULL,
+  `idchemical` int(11) unsigned NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idchemical`,`idbundle`),
+  KEY `k_bundle` (`idbundle`),
+  KEY `k_substance_idx` (`idchemical`),
+  CONSTRAINT `c_metadata` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `c_chemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 insert into version (idmajor,idminor,comment) values (8,6,"AMBIT2 schema");

@@ -13,13 +13,13 @@ import org.restlet.data.Form;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 
-import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
-import ambit2.rest.bundle.CallableSubstanceBundle;
-import ambit2.rest.substance.SubstanceURIReporter;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.rest.bundle.CallableCompoundBundle;
+import ambit2.rest.structure.CompoundURIReporter;
 import ambit2.rest.test.CreateAmbitDatabaseProcessor;
 
-public class CallableSubstanceBundleTest extends DbUnitTest {
+public class CallableCompoundBundleTest extends DbUnitTest {
 	
 	@Test
 	public void testCreateBundle() throws Exception {
@@ -28,17 +28,17 @@ public class CallableSubstanceBundleTest extends DbUnitTest {
 		IDatabaseConnection c1 = getConnection();
 		
 		Form form  = new Form();
-		form.add("substance_uri","http://localhost:8081/ambit2/substance/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734");
+		form.add("compound_uri","http://localhost:8081/ambit2/compound/11");
 		
 		try {
 			SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(1);
-			SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>> reporter =
-					new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(new Reference("http://localhost:8081/ambit2"));
-			CallableSubstanceBundle callable = new CallableSubstanceBundle(
+			CompoundURIReporter<IQueryRetrieval<IStructureRecord>> reporter =
+					new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(new Reference("http://localhost:8081/ambit2"));
+			CallableCompoundBundle callable = new CallableCompoundBundle(
 					bundle,reporter,Method.POST,form,c.getConnection(),null
 					);
 			TaskResult task = callable.call();
-			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,idsubstance from bundle_substance"));
+			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,idchemical from bundle_chemicals where idchemical=11 and idbundle=1"));
 			Assert.assertEquals(1,table.getRowCount());
 			
 		} catch (Exception x) {
@@ -56,19 +56,19 @@ public class CallableSubstanceBundleTest extends DbUnitTest {
 		IDatabaseConnection c1 = getConnection();
 		
 		Form form  = new Form();
-		form.add("substance_uri","http://localhost:8081/ambit2/substance/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734");
+		form.add("compound_uri","http://localhost:8081/ambit2/compound/7");
 		form.add("command","delete");
 		
 		try {
 			SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(1);
-			SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>> reporter =
-					new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(new Reference("http://localhost:8081/ambit2"));
-			CallableSubstanceBundle callable = new CallableSubstanceBundle(
+			CompoundURIReporter<IQueryRetrieval<IStructureRecord>> reporter =
+					new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(new Reference("http://localhost:8081/ambit2"));
+			CallableCompoundBundle callable = new CallableCompoundBundle(
 					bundle,reporter,Method.PUT,form,c.getConnection(),null
 					);
 			TaskResult task = callable.call();
-			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,idsubstance from bundle_substance"));
-			Assert.assertEquals(1,table.getRowCount());
+			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,idchemical from bundle_chemicals where idchemical=7 and idbundle=1"));
+			Assert.assertEquals(0,table.getRowCount());
 			
 		} catch (Exception x) {
 			throw x;
@@ -85,19 +85,19 @@ public class CallableSubstanceBundleTest extends DbUnitTest {
 		IDatabaseConnection c1 = getConnection();
 		
 		Form form  = new Form();
-		form.add("substance_uri","http://localhost:8081/ambit2/substance/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734");
+		form.add("compound_uri","http://localhost:8081/ambit2/compound/11");
 		form.add("command","add");
 		
 		try {
 			SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(1);
-			SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>> reporter =
-					new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(new Reference("http://localhost:8081/ambit2"));
-			CallableSubstanceBundle callable = new CallableSubstanceBundle(
+			CompoundURIReporter<IQueryRetrieval<IStructureRecord>> reporter =
+					new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(new Reference("http://localhost:8081/ambit2"));
+			CallableCompoundBundle callable = new CallableCompoundBundle(
 					bundle,reporter,Method.PUT,form,c.getConnection(),null
 					);
 			TaskResult task = callable.call();
-			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,idsubstance from bundle_substance"));
-			Assert.assertEquals(0,table.getRowCount());
+			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,idchemical from bundle_chemicals where idchemical=11 and idbundle=1"));
+			Assert.assertEquals(1,table.getRowCount());
 			
 		} catch (Exception x) {
 			throw x;

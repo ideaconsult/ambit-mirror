@@ -35,28 +35,52 @@ public class CompoundURIReporter<Q extends IQueryRetrieval<IStructureRecord>> ex
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
 	}
+	public CompoundURIReporter(String prefix,Reference baseRef) {
+		super(baseRef);
+		setPrefix(prefix);
+	}
+	@Deprecated
 	public CompoundURIReporter(String prefix,Reference baseRef,ResourceDoc doc) {
 		super(baseRef,doc);
 		setPrefix(prefix);
 	}
+	public CompoundURIReporter(Reference baseRef) {
+		super(baseRef);
+		setPrefix("");
+	}
+	@Deprecated
 	public CompoundURIReporter(Reference baseRef,ResourceDoc doc) {
 		super(baseRef,doc);
 		setPrefix("");
 	}
-	public CompoundURIReporter(Request request,ResourceDoc doc) {
-		this("",request,false,doc);
-	}	
-	public CompoundURIReporter(String prefix,Request request,ResourceDoc doc) {
-		this(prefix,request,false,doc);
+	public CompoundURIReporter(Request request) {
+		this("",request,false);
 	}
+	
+	@Deprecated
+	public CompoundURIReporter(Request request,ResourceDoc doc) {
+		this("",request,false);
+	}	
+	@Deprecated
+	public CompoundURIReporter(String prefix,Request request,ResourceDoc doc) {
+		this(prefix,request,false);
+	}
+	@Deprecated
 	public CompoundURIReporter(String prefix,Request request,boolean readStructure,ResourceDoc doc) {
-		super(request,doc);
+		this(prefix,request,readStructure);
+	}
+	public CompoundURIReporter(String prefix,Request request,boolean readStructure) {
+		super(request);
 		setPrefix(prefix);
 		this.readStructure = readStructure;
 		
 	}
+	@Deprecated
 	public CompoundURIReporter(String prefix,ResourceDoc doc) {
-		this(prefix,null,false,doc);
+		this(prefix);
+	}
+	public CompoundURIReporter(String prefix) {
+		this(prefix,null,false);
 		
 	}	
 

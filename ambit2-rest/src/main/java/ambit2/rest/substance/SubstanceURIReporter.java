@@ -16,10 +16,10 @@ public class SubstanceURIReporter<Q extends IQueryRetrieval<SubstanceRecord>> ex
 	private static final long serialVersionUID = 3811264823419677254L;
 	
 	public SubstanceURIReporter(Request request) {
-		super(request,null);
+		super(request);
 	}
 	public SubstanceURIReporter(Reference reference) {
-		super(reference,null);
+		super(reference);
 	}
 	@Override
 	public String getURI(String ref, SubstanceRecord item) {

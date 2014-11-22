@@ -113,7 +113,7 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 		if (idbundle==null) throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 		
 		Object idsubstance = request.getAttributes().get(OpenTox.URI.substance.getKey());
-		if (Method.POST.equals(method)) {
+		if (Method.POST.equals(method) || Method.PUT.equals(method)) {
 			if (idsubstance==null) return null;//post allowed only on /bundle/{id}/substance level, not on /bundle/id/substance/{idsubstance}
 		} else {
 			if (idsubstance!=null) {
@@ -172,5 +172,6 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 					MediaType.APPLICATION_JSON,filenamePrefix);
 		}
 	}	
+
 	
 }
