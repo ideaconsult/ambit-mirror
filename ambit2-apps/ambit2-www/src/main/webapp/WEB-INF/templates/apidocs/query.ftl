@@ -37,7 +37,7 @@
 							    "allowMultiple": false,
 							    "defaultValue" :"",
 							    <#include "/apidocs/parameter_endpointcategory_enum.ftl" >
-						}                    
+						},                    
 						<#include "/apidocs/parameters_page.ftl" >				            			            
                     ],
                     "responseMessages": [

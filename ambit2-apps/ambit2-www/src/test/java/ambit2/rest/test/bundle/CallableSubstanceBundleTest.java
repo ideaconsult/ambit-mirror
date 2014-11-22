@@ -68,7 +68,7 @@ public class CallableSubstanceBundleTest extends DbUnitTest {
 					);
 			TaskResult task = callable.call();
 			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,idsubstance from bundle_substance"));
-			Assert.assertEquals(1,table.getRowCount());
+			Assert.assertEquals(0,table.getRowCount());
 			
 		} catch (Exception x) {
 			throw x;
@@ -97,7 +97,7 @@ public class CallableSubstanceBundleTest extends DbUnitTest {
 					);
 			TaskResult task = callable.call();
 			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,idsubstance from bundle_substance"));
-			Assert.assertEquals(0,table.getRowCount());
+			Assert.assertEquals(1,table.getRowCount());
 			
 		} catch (Exception x) {
 			throw x;

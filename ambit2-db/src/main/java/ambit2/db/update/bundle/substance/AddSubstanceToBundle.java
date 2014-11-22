@@ -37,9 +37,9 @@ import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 
 public class AddSubstanceToBundle extends AbstractUpdate<SubstanceEndpointsBundle,SubstanceRecord> {
-	private static final String[] update_sql =  {"insert ignore into bundle_substance values (?,?,now())"	};
+	private static final String[] update_sql =  {"insert into bundle_substance select idsubstance,?,now(),prefix,uuid from substance where idsubstance=? on duplicate key update substance_prefix=values(substance_prefix),substance_uuid=values(substance_uuid)"	};
 	
-	private static final String[] update_sql_uuid =  {"insert ignore into bundle_substance select idsubstance,?,now() from substance where prefix=? and hex(uuid)=?" }	;
+	private static final String[] update_sql_uuid =  {"insert into bundle_substance select idsubstance,?,now(),prefix,uuid from substance where prefix=? and hex(uuid)=? on duplicate key update substance_prefix=values(substance_prefix),substance_uuid=values(substance_uuid)"  }	;
 	
 	public AddSubstanceToBundle(SubstanceEndpointsBundle bundle,SubstanceRecord dataset) {
 		this(dataset);
@@ -58,7 +58,7 @@ public class AddSubstanceToBundle extends AbstractUpdate<SubstanceEndpointsBundl
 		
 		if (getGroup()==null || getGroup().getID()<=0) throw new AmbitException("Bundle not defined");
 		if (getObject() == null )  throw new AmbitException("Substance not defined");
-		
+
 		params.add(new QueryParam<Integer>(Integer.class, getGroup().getID()));
 		
 		if (getObject().getIdsubstance()>0) {

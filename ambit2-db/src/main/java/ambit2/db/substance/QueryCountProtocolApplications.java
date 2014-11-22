@@ -31,6 +31,15 @@ public class QueryCountProtocolApplications   extends QueryCount<SubstanceByCate
 	private static final String sql = 
 		"SELECT topcategory,count(*),endpointcategory,count(distinct(concat(substance_prefix,substance_uuid)))  FROM substance_protocolapplication %s group by topcategory,endpointcategory";
 	
+	/*
+select p.topcategory,p.endpointcategory,count(*) from substance_protocolapplication p, bundle_endpoints b 
+where p.topcategory=b.topcategory
+and p.endpointcategory=b.endpointcategory
+and idbundle=1
+group by p.topcategory,p.endpointcategory
+order by p.topcategory,p.endpointcategory
+ 
+	 */
 	private static final String w_topcategory = "topcategory=?";
 	private static final String w_endpointcategory = "endpointcategory=?";
 		
