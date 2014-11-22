@@ -3,8 +3,8 @@ package ambit2.rest.routers.opentox;
 import org.restlet.Context;
 
 import ambit2.rest.OpenTox;
-import ambit2.rest.bundle.BundleEndpointsResource;
 import ambit2.rest.bundle.BundleMetadataResource;
+import ambit2.rest.bundle.BundlePropertyResource;
 import ambit2.rest.bundle.BundleSubstanceResource;
 import ambit2.rest.bundle.dataset.BundleChemicalsResource;
 import ambit2.rest.bundle.dataset.BundleDatasetResource;
@@ -22,7 +22,7 @@ public class BundleRouter extends MyRouter {
 		attach("/{idbundle}", BundleMetadataResource.class);
 		attach(String.format("/{idbundle}%s",MetadatasetResource.metadata), BundleMetadataResource.class);
 		attach(String.format("/{idbundle}%s",SubstanceResource.substance), BundleSubstanceResource.class);
-		attach(String.format("/{idbundle}%s",OpenTox.URI.feature.getURI()), BundleEndpointsResource.class);
+		attach(String.format("/{idbundle}/property"), BundlePropertyResource.class);
 		attach(String.format("/{idbundle}%s",OpenTox.URI.dataset.getURI()), BundleDatasetResource.class);
 		attach(String.format("/{idbundle}%s",OpenTox.URI.compound.getURI()), BundleChemicalsResource.class);
 		attach(String.format("/{idbundle}/%s",SubstanceStudyFacetResource.resource), SubstanceStudyFacetResource.class);
