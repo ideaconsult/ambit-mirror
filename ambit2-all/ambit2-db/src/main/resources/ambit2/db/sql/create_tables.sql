@@ -190,9 +190,10 @@ CREATE TABLE `substance_protocolapplication` (
   KEY `substance` (`substance_prefix`,`substance_uuid`),
   KEY `endpoint` (`endpoint`),
   KEY `category` (`endpointcategory`),
-  KEY `topcategory` (`topcategory`,`endpointcategory`,`interpretation_result`) USING BTREE,
   KEY `reference_owner` (`reference_owner`),
   KEY `reference-x` (`reference`(255)),
+  KEY `topcategory` (`topcategory`,`endpointcategory`,`interpretation_result`),
+  KEY `xse` (`substance_prefix`,`substance_uuid`,`topcategory`,`endpointcategory`),
   CONSTRAINT `substance-x` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -262,7 +263,10 @@ CREATE TABLE `bundle_substance` (
   `idsubstance` int(11) NOT NULL,
   `idbundle` int(10) unsigned NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `substance_prefix` varchar(6) COLLATE utf8_bin DEFAULT NULL,
+  `substance_uuid` varbinary(16) DEFAULT NULL,
   PRIMARY KEY (`idsubstance`,`idbundle`),
+  UNIQUE KEY `u_sunstance_idx` (`substance_prefix`,`substance_uuid`,`idbundle`),
   KEY `s_bundle` (`idbundle`),
   KEY `a_substance_idx` (`idsubstance`),
   CONSTRAINT `a_metadata` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE,

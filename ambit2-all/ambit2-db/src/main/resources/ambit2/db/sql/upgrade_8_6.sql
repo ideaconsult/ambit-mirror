@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `pc1024`;
 CREATE TABLE `pc1024` (
   `idchemical` int(10) unsigned NOT NULL DEFAULT '0',
   `fp1` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -37,6 +38,7 @@ update structure set `hash`= unhex(sha1(uncompress(structure))) ;
 -- A collection of substances and endpoints 
 -- metadata
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `bundle`;
 CREATE TABLE `bundle` (
   `idbundle` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT 'default',
@@ -59,11 +61,15 @@ CREATE TABLE `bundle` (
 -- -----------------------------------------------------
 -- A collection of substances  
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `bundle_substance`;
 CREATE TABLE `bundle_substance` (
   `idsubstance` int(11) NOT NULL,
   `idbundle` int(10) unsigned NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `substance_prefix` varchar(6) COLLATE utf8_bin DEFAULT NULL,
+  `substance_uuid` varbinary(16) DEFAULT NULL,
   PRIMARY KEY (`idsubstance`,`idbundle`),
+  UNIQUE KEY `u_sunstance_idx` (`substance_prefix`,`substance_uuid`,`idbundle`),
   KEY `s_bundle` (`idbundle`),
   KEY `a_substance_idx` (`idsubstance`),
   CONSTRAINT `a_metadata` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -100,4 +106,7 @@ CREATE TABLE `bundle_chemicals` (
   CONSTRAINT `c_chemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-insert into version (idmajor,idminor,comment) values (8,6,"AMBIT2 schema");
+ALTER TABLE `substance_protocolapplication` 
+ ADD INDEX `xse` (`substance_prefix` ASC, `substance_uuid` ASC, `topcategory` ASC, `endpointcategory` ASC) ;
+
+insert into version (idmajor,idminor,comment) values (8,6,"AMBIT2 schema") on duplicate key update date=now();

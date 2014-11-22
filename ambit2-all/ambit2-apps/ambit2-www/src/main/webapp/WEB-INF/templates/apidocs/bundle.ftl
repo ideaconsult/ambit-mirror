@@ -606,6 +606,46 @@
 			    ]
 			},
 			{
+			    "path": "/bundle/{idbundle}/studysummary",
+			    "operations": [
+			        {
+			            "method": "GET",
+			            "summary": "Get study summary per bundle",
+			            "notes": "Get study summary per bundle",
+			            "type": "Facet",
+			            "nickname": "getBundleStudySummary",
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+							{
+							    "name": "idbundle",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							},
+							<#include "/apidocs/parameters_page.ftl" >									
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Invalid bundle identifier"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Bundle not found"
+			                },
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }		        
+			    ]
+			},			
+			{
 			    "path": "/bundle/{idbundle}/compound",
 			    "operations": [
 			        {

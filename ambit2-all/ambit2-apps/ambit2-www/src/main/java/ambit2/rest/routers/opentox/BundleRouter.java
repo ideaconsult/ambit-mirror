@@ -11,6 +11,7 @@ import ambit2.rest.bundle.dataset.BundleDatasetResource;
 import ambit2.rest.dataset.MetadatasetResource;
 import ambit2.rest.routers.MyRouter;
 import ambit2.rest.substance.SubstanceResource;
+import ambit2.rest.substance.study.SubstanceStudyFacetResource;
 
 public class BundleRouter extends MyRouter {
 
@@ -24,6 +25,8 @@ public class BundleRouter extends MyRouter {
 		attach(String.format("/{idbundle}%s",OpenTox.URI.feature.getURI()), BundleEndpointsResource.class);
 		attach(String.format("/{idbundle}%s",OpenTox.URI.dataset.getURI()), BundleDatasetResource.class);
 		attach(String.format("/{idbundle}%s",OpenTox.URI.compound.getURI()), BundleChemicalsResource.class);
+		attach(String.format("/{idbundle}/%s",SubstanceStudyFacetResource.resource), SubstanceStudyFacetResource.class);
+		
 	}
 
 }
