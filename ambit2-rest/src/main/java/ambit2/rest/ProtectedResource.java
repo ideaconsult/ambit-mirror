@@ -6,6 +6,7 @@ import java.util.List;
 import net.idea.restnet.c.task.ClientResourceWrapper;
 import net.idea.restnet.i.aa.IAuthToken;
 
+import org.owasp.encoder.Encode;
 import org.restlet.Request;
 import org.restlet.data.CacheDirective;
 import org.restlet.data.Cookie;
@@ -115,4 +116,8 @@ public abstract class ProtectedResource extends ServerResource implements IAuthT
 		setFrameOptions("SAMEORIGIN");
 		return super.get(variant);
 	}
+	
+	protected Reference cleanedResourceRef(Reference ref) {
+		return new Reference(Encode.forJavaScriptSource(ref.toString()));
+	}	
 }

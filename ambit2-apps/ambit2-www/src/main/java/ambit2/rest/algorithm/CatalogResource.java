@@ -19,6 +19,7 @@ import net.idea.restnet.i.task.ITaskApplication;
 import net.idea.restnet.i.task.ITaskResult;
 import net.idea.restnet.i.task.ITaskStorage;
 
+import org.owasp.encoder.Encode;
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -230,7 +231,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
         Form query = getRequest().getResourceRef().getQueryAsForm();
         //query.removeAll("page");query.removeAll("pagesize");query.removeAll("max");
         query.removeAll("media");
-        Reference r = getRequest().getResourceRef().clone();
+        Reference r = cleanedResourceRef(getRequest().getResourceRef());
         r.setQuery(query.getQueryString());
         
         map.put(AMBITConfig.ambit_request.name(),r.toString()) ;

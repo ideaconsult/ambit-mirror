@@ -92,7 +92,7 @@ public class AmbitRESTPolicyResource<Q extends IQueryRetrieval<IRESTPolicy<Integ
         Form query = getRequest().getResourceRef().getQueryAsForm();
         //query.removeAll("page");query.removeAll("pagesize");query.removeAll("max");
         query.removeAll("media");
-        Reference r = getRequest().getResourceRef().clone();
+        Reference r = cleanedResourceRef(getRequest().getResourceRef());
         r.setQuery(query.getQueryString());
         
         map.put(AMBITConfig.ambit_request.name(),r.toString()) ;
