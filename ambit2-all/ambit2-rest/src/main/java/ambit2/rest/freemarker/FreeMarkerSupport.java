@@ -5,6 +5,7 @@ import java.util.Map;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.freemarker.IFreeMarkerSupport;
 
+import org.owasp.encoder.Encode;
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -45,7 +46,7 @@ public class FreeMarkerSupport implements IFreeMarkerSupport {
         //query.removeAll("page");query.removeAll("pagesize");query.removeAll("max");
         query.removeAll("media");
         
-		Reference r = request.getResourceRef().clone();
+		Reference r = cleanedResourceRef(request.getResourceRef());
         r.setQuery(query.getQueryString());
         map.put(AMBITConfig.ambit_request.name(),r.toString()) ;
         if (query.size()>0)	map.put("ambit_query",query.getQueryString()) ;
@@ -74,5 +75,9 @@ public class FreeMarkerSupport implements IFreeMarkerSupport {
 	    map.put(AMBITConfig.ambit_version_long.name(),app.getVersionLong());
 	    map.put(AMBITConfig.menu_profile.name(),app.getProfile());
 	}
+	
+	protected Reference cleanedResourceRef(Reference ref) {
+		return new Reference(Encode.forJavaScriptSource(ref.toString()));
+	}	
 		
 }
