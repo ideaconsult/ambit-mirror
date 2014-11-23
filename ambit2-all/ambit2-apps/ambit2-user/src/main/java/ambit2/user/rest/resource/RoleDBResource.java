@@ -22,6 +22,7 @@ import net.idea.restnet.user.DBUser;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.CacheDirective;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -160,5 +161,9 @@ public class RoleDBResource extends AmbitDBQueryResource<IQueryRetrieval<String>
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
 		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+	}
+	@Override
+	protected void setCacheHeaders() {
+		getResponse().getCacheDirectives().add(CacheDirective.noCache());
 	}
 }

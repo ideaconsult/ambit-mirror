@@ -37,6 +37,7 @@ import net.toxbank.client.io.rdf.TOXBANK;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.CacheDirective;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -302,6 +303,10 @@ public class UserDBResource<T>	extends AmbitDBQueryResource<ReadUser<T>,DBUser> 
 		map.put("myprofile", false);
 		return map;
 	}
-	
+
+	@Override
+	protected void setCacheHeaders() {
+		getResponse().getCacheDirectives().add(CacheDirective.noCache());
+	}
 	
 }
