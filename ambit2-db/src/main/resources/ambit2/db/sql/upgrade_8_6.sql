@@ -38,6 +38,9 @@ update structure set `hash`= unhex(sha1(uncompress(structure))) ;
 -- A collection of substances and endpoints 
 -- metadata
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `bundle_chemicals`;
+DROP TABLE IF EXISTS `bundle_endpoints`;
+DROP TABLE IF EXISTS `bundle_substance`;
 DROP TABLE IF EXISTS `bundle`;
 CREATE TABLE `bundle` (
   `idbundle` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -61,7 +64,6 @@ CREATE TABLE `bundle` (
 -- -----------------------------------------------------
 -- A collection of substances  
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `bundle_substance`;
 CREATE TABLE `bundle_substance` (
   `idsubstance` int(11) NOT NULL,
   `idbundle` int(10) unsigned NOT NULL,
@@ -79,7 +81,6 @@ CREATE TABLE `bundle_substance` (
 -- -----------------------------------------------------
 -- A collection of endpoint categories 
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `bundle_endpoints`;
 CREATE TABLE `bundle_endpoints` (
   `idbundle` int(10) unsigned NOT NULL,
   `topcategory` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '',
@@ -94,7 +95,6 @@ CREATE TABLE `bundle_endpoints` (
 -- -----------------------------------------------------
 -- A collection of chemicals
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `bundle_chemicals`;
 CREATE TABLE `bundle_chemicals` (
   `idbundle` int(10) unsigned NOT NULL,
   `idchemical` int(11) unsigned NOT NULL,
