@@ -13,6 +13,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.restlet.Request;
+import org.restlet.Response;
+import org.restlet.data.CacheDirective;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -42,7 +44,13 @@ public class UIResource extends FreeMarkerResource {
 	private static final String key = "key";
 	protected pages page = pages.index;
 	private enum pages { 
-			index, query, 
+			index {
+				@Override
+				public void setCacheHeaders(Response response) {
+					response.getCacheDirectives().add(CacheDirective.publicInfo());
+				}
+			},
+			query,
 			uploadstruc, uploadprops, 
 			uploadsubstance {
 				@Override
@@ -53,14 +61,35 @@ public class UIResource extends FreeMarkerResource {
 			uploadsubstance1,
 			updatesubstancei5,
 			predict, 
-			login, register, myprofile, 
+			login {
+				@Override
+				public void setCacheHeaders(Response response) {
+					response.getCacheDirectives().add(CacheDirective.noCache());
+				}				
+			},
+			register {
+				@Override
+				public void setCacheHeaders(Response response) {
+					response.getCacheDirectives().add(CacheDirective.noCache());
+				}				
+			},
+			myprofile {
+				@Override
+				public void setCacheHeaders(Response response) {
+					response.getCacheDirectives().add(CacheDirective.noCache());
+				}
+			},
 			uploadstruc_register,uploadprops_batch,uploadprops_biodata,
 			createstruc,
 			dataprep,
 			_dataset,
 			_search,
-			
-			editor,
+			editor {
+				@Override
+				public void setCacheHeaders(Response response) {
+					response.getCacheDirectives().add(CacheDirective.publicInfo());
+				}				
+			},
 			knocknock {
 				@Override
 				public boolean editorServices() {
@@ -86,13 +115,22 @@ public class UIResource extends FreeMarkerResource {
 				};				
 			},
 			toxtree,
-			taskpage,
+			taskpage {
+				@Override
+				public void setCacheHeaders(Response response) {
+					response.getCacheDirectives().add(CacheDirective.noCache());
+				}				
+			},
 			dataset_comparison;
 			public boolean enablePOST() {
 				return false;
 			}
 			public boolean editorServices() {
 				return false;
+			}
+			public void setCacheHeaders(Response response) {
+				response.getCacheDirectives().add(CacheDirective.privateInfo());
+				response.getCacheDirectives().add(CacheDirective.maxAge(2700));		
 			}
 		}
 	public UIResource() {
@@ -173,6 +211,13 @@ public class UIResource extends FreeMarkerResource {
 	    } catch (Exception x) { map.put(AMBITConfig.ajaxtimeout.name(), "10000");}		
 	}
 	
+	@Override
+	protected void setCacheHeaders() {
+		if (page!=null) page.setCacheHeaders(getResponse());
+		else
+			super.setCacheHeaders();	
+		
+	}
 	@Override
 	protected Representation getRepresentation(Variant variant)
 			throws ResourceException {

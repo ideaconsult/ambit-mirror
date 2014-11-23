@@ -100,7 +100,9 @@ public class FreeMarkerStatusService  extends StatusService implements IFreeMark
         		MediaType.TEXT_HTML);
 	}	
 	
+	
 
+	
 	@Override
 	public Representation getRepresentation(Status status, Request request,
 			Response response) {
@@ -109,6 +111,7 @@ public class FreeMarkerStatusService  extends StatusService implements IFreeMark
 			headers = new Form();
 			response.getAttributes().put("org.restlet.http.headers", headers);
 		}
+		headers.removeAll("X-Frame-Options");
 		headers.add("X-Frame-Options", "SAMEORIGIN");
 
 		response.getCacheDirectives().add(CacheDirective.noCache());

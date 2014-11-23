@@ -29,6 +29,7 @@ import net.idea.restnet.user.resource.UserURIReporter;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.CacheDirective;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -184,5 +185,9 @@ public class PwdForgottenConfirmResource extends  AmbitDBQueryResource<ReadRegis
 	@Override
 	protected String getItemName(UserRegistration item) {
 		return "forgotten password";
+	}
+	@Override
+	protected void setCacheHeaders() {
+		getResponse().getCacheDirectives().add(CacheDirective.noCache());
 	}
 }

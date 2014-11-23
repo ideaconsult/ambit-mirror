@@ -98,16 +98,23 @@ public abstract class ProtectedResource extends ServerResource implements IAuthT
        
 	}	
 
+	
 	protected void setFrameOptions(String value) {
 		Form headers = (Form) getResponse().getAttributes().get("org.restlet.http.headers");
 		if (headers == null) {
 			headers = new Form();
 			getResponse().getAttributes().put("org.restlet.http.headers", headers);
 		}
+		headers.removeAll("X-Frame-Options");
 		headers.add("X-Frame-Options", value);
+		ServerInfo si = getResponse().getServerInfo();si.setAgent("Restlet");getResponse().setServerInfo(si);
+		setCacheHeaders();
+	}
+	
+	protected void setCacheHeaders() {
 		getResponse().getCacheDirectives().add(CacheDirective.privateInfo());
-		getResponse().getCacheDirectives().add(CacheDirective.maxAge(2700));
-		ServerInfo si = getResponse().getServerInfo();si.setAgent("Restlet");getResponse().setServerInfo(si);	}
+		getResponse().getCacheDirectives().add(CacheDirective.maxAge(2700));		
+	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
         

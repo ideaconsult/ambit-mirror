@@ -19,6 +19,7 @@ import net.idea.restnet.user.resource.UserURIReporter;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.CacheDirective;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -113,5 +114,8 @@ public class RegistrationConfirmResource extends  AmbitDBQueryResource<ReadRegis
 			Variant variant) throws Exception {
 		return null;
 	}
-
+	@Override
+	protected void setCacheHeaders() {
+		getResponse().getCacheDirectives().add(CacheDirective.noCache());
+	}
 }
