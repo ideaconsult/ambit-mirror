@@ -111,9 +111,7 @@ public class FreeMarkerStatusService  extends StatusService implements IFreeMark
 		}
 		headers.add("X-Frame-Options", "SAMEORIGIN");
 
-		List<CacheDirective> cache = new ArrayList<CacheDirective>();
-		cache.add(new CacheDirective("Cache-Control","max-age=2700, private"));
-		response.setCacheDirectives(cache);
+		response.getCacheDirectives().add(CacheDirective.noCache());
 		ServerInfo si = response.getServerInfo();si.setAgent("Restlet");response.setServerInfo(si);
 		StringWriter details = null;
 		if (status.getThrowable()!= null) {
