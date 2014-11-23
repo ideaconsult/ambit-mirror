@@ -105,9 +105,8 @@ public abstract class ProtectedResource extends ServerResource implements IAuthT
 			getResponse().getAttributes().put("org.restlet.http.headers", headers);
 		}
 		headers.add("X-Frame-Options", value);
-		List<CacheDirective> cache = new ArrayList<CacheDirective>();
-		cache.add(new CacheDirective("Cache-Control","max-age=2700, private"));
-		getResponse().setCacheDirectives(cache);
+		getResponse().getCacheDirectives().add(CacheDirective.privateInfo());
+		getResponse().getCacheDirectives().add(CacheDirective.maxAge(2700));
 		ServerInfo si = getResponse().getServerInfo();si.setAgent("Restlet");getResponse().setServerInfo(si);	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {

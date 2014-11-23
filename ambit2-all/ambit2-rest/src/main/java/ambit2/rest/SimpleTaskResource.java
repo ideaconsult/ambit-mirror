@@ -158,9 +158,7 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 			//response.setLocationRef(task.getReference());			
 			 * 
 			 */
-			List<CacheDirective> cache = new ArrayList<CacheDirective>();
-			cache.add(new CacheDirective("Cache-Control", "no-store, no-cache, must-revalidate"));
-			response.setCacheDirectives(cache);
+			response.getCacheDirectives().add(CacheDirective.noCache());
 			
 			if (id == null) {
 				response_status = Status.SUCCESS_OK;
