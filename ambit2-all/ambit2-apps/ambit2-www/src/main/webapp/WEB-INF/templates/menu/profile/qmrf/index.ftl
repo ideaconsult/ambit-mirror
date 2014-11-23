@@ -38,7 +38,7 @@ $(document)
 				<div class="remove-bottom h2">
 						QMRF chemical structure database
 				</div>
-			    <div class='help'>Chemical structrue support for QMRF</div>			
+			    <div class='help'>Chemical structure database for QMRF</div>			
 			</div>
 			</div>
 	</div>	
