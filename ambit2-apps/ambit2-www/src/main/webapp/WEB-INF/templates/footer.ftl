@@ -5,15 +5,10 @@
 	<div class="ten columns omega ui-state-error " id='log' style='display:none;' >&nbsp;</div> 
 </div>
 
+<#if menu_profile??>
+	<#include "/menu/profile/${menu_profile}/footer.ftl" >
+</#if>
 
-		<div id='footer-out' class="sixteen columns">
-		<div id='footer-in'>
-		<div id='footer'>
-			<a class='footerLink' href='http://www.ideaconsult.net/'>IdeaConsult Ltd.</a> 
-		</div>
-		</div>
-		</div>
-		
 		
 <#if username??>
 	    <form id='logoutForm' name='logoutForm'  action='${ambit_root}/provider/signout?targetUri=${ambit_root}&method=DELETE' method='POST'><input type='hidden' value="${username}"></input></form>

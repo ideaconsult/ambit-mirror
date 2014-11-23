@@ -111,12 +111,15 @@ h4, h5, h6 {
 <div class='row add-bottom' style="height:400px;">&nbsp;</div>
 
     	<div  id="footer_logo">
-
+<!--
 			<a href='http://www.opentox.org' class='qxternal'  title='eNanoMapper leverages and extends OpenTox API and resources' target=_blank><img src='${ambit_root}/images/logo.png' border='0' width='115' height='60' alt='Logo OpenTox'></a>
-			
-			<a href='http://www.enanomapper.net' class='qxternal'  title='FP7 eNanoMapper web site' target=_blank><img src='${ambit_root}/images/profile/enanomapper/fp7_logo.png' border='0' width='440'  height='60' alt='Logo eNanoMapper'></a>
+			-->
+			<a href='http://www.enanomapper.net' class='qxternal'  title='FP7 eNanoMapper web site' target=_blank><img src='${ambit_root}/images/profile/enanomapper/logo.png' border='0' alt='Logo eNanoMapper'></a>
+			<p  class='chelp'>
+			This project has received funding from the European Union's Seventh Framework Programme for research, technological development and demonstration under grant agreement no 604134.
+			</p>
 		</div>
-
+		
 
 <#include "/footer.ftl" >
 </div> <!-- container -->
