@@ -237,7 +237,7 @@ public class FilterTautomers
 			InChIGenerator ig = igf.getInChIGenerator(clone);
 			String inchi = ig.getInchi();
 			String inchiKey = ig.getInchiKey();
-			System.out.println("#" + i + "  " + inchi + "   "+ inchiKey + "  " + SmartsHelper.moleculeToSMILES(tautomers.get(i),false));
+			//System.out.println("#" + i + "  " + inchi + "   "+ inchiKey + "  " + SmartsHelper.moleculeToSMILES(tautomers.get(i),false));
 			
 			
 			boolean FlagDuplication = false;
