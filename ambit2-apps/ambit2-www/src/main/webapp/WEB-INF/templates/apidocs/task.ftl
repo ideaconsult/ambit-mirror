@@ -78,5 +78,8 @@
             ]
         }        
     ],
+    "models" : {
+      "Task" : <#include "/apidocs/json_schema_task.ftl" >   	  
+    },    
     <#include "/apidocs/profile/${menu_profile}/info.ftl" >  
 }
