@@ -992,6 +992,39 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		return null;
 	}
 	
+	 public enum _staticfile  {
+		 meta {
+			@Override
+			public String getWarPath() {
+				return  "war:///META-INF";
+			} 
+		 },
+		 images,
+		 jmol,
+		 jme,
+		 jquery,
+		 style,
+		 ui_editor {
+			@Override
+			public String getPath() {
+				return "/ui/png";
+			}
+			@Override
+			public String getWarPath() {
+				return "war:///editor/png";
+			}
+		 },
+		 scripts;
+		 public String getWarPath() {
+			 return String.format("war:///%s",name());
+		 }
+		 public Directory getDirectory(Context context) {
+			 return new Directory(context, getWarPath());	 
+		 }
+		 public String getPath() {
+			 return String.format("/%s/",name());
+		 }
+	 };
 		
 	/**
 	 * Images, styles, icons
@@ -999,6 +1032,11 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	 * @return
 	 */
 	protected void attachStaticResources(Router router) {
+
+		 for (_staticfile dir : _staticfile.values()) {
+			 router.attach(dir.getPath(),dir.getDirectory(getContext()));	 
+		 }
+		 /*
 		 Directory metaDir = new Directory(getContext(), "war:///META-INF");
 		 Directory imgDir = new Directory(getContext(), "war:///images");
 		 Directory jmolDir = new Directory(getContext(), "war:///jmol");
@@ -1016,6 +1054,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 router.attach("/jquery/", jquery);
 		 router.attach("/style/", styleDir);
  		 router.attach("/scripts/", scriptsDir);
+ 		 */
 
 	}
 
