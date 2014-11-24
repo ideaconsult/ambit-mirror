@@ -50,7 +50,7 @@
 			            "method": "POST",
 			            "summary": "Create bundle",
 			            "notes": "Create an empty bundle",
-			            "type": "Bundle",
+			            "type": "Task",
 			            "nickname": "createBundle",
 		                "consumes": [
 				                       "application/x-www-form-urlencoded"
@@ -176,7 +176,7 @@
 			            "method": "PUT",
 			            "summary": "Update bundle",
 			            "notes": "Update bundle",
-			            "type": "Bundle",
+			            "type": "Task",
 			            "nickname": "updateBundle",
 		                "consumes": [
 				                       "application/x-www-form-urlencoded"
@@ -254,7 +254,7 @@
 			            "method": "DELETE",
 			            "summary": "Delete bundle",
 			            "notes": "Delete bundle",
-			            "type": "Bundle",
+			            "type": "Task",
 			            "nickname": "deleteBundle",
 			            <#include "/apidocs/authz.ftl" >
 
@@ -369,7 +369,7 @@
 			            "method": "POST",
 			            "summary": "Add a substance to the bundle",
 			            "notes": "Add a substance to the bundle",
-			            "type": "Substance",
+			            "type": "Task",
 			            "nickname": "addSubstanceToBundle",
 		                "consumes": [
 				                       "application/x-www-form-urlencoded"
@@ -415,7 +415,7 @@
 			            "method": "PUT",
 			            "summary": "Add or delete a substance to the bundle",
 			            "notes": "Add or delete a substance to the bundle",
-			            "type": "Substance",
+			            "type": "Task",
 			            "nickname": "updateSubstanceInBundle",
 		                "consumes": [
 				               "application/x-www-form-urlencoded"
@@ -511,7 +511,7 @@
 			            "method": "POST",
 			            "summary": "Add a property to the bundle",
 			            "notes": "Add a property to the bundle",
-			            "type": "Substance",
+			            "type": "Task",
 			            "nickname": "addPropertyToBundle",
 		                "consumes": [
 				               "application/x-www-form-urlencoded"
@@ -568,7 +568,7 @@
 			            "method": "PUT",
 			            "summary": "Add / delete a property to the bundle",
 			            "notes": "Add a property to the bundle",
-			            "type": "Substance",
+			            "type": "Task",
 			            "nickname": "updatePropertyInBundle",
 		                "consumes": [
 				               "application/x-www-form-urlencoded"
@@ -754,7 +754,7 @@
 			            "method": "POST",
 			            "summary": "Add a compound to the bundle",
 			            "notes": "Add a compound to the bundle",
-			            "type": "Dataset",
+			            "type": "Task",
 			            "nickname": "addPropertyToBundle",
 		                "consumes": [
 				               "application/x-www-form-urlencoded"
@@ -800,7 +800,7 @@
 			            "method": "PUT",
 			            "summary": "Add or delete a compound to the bundle",
 			            "notes": "Add or delete a compound to the bundle",
-			            "type": "Dataset",
+			            "type": "Task",
 			            "nickname": "updateCompoundInBundle",
 		                "consumes": [
 				               "application/x-www-form-urlencoded"
