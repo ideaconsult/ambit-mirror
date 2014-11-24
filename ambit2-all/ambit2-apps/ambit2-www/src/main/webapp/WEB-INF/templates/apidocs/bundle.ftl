@@ -854,5 +854,15 @@
 			    ]
 			}								
     ],
+    "models" : {
+      "Substance" : <#include "/apidocs/json_schema_substance.ftl" >,   	  
+      "Study"     : <#include "/apidocs/json_schema_study.ftl" >,   	  
+      "Effect"     : <#include "/apidocs/json_schema_effect.ftl" >,
+      "Result"     : <#include "/apidocs/json_schema_result.ftl" >,
+      "StudySummaryFacet" : {
+    		
+      },
+      "Task" : <#include "/apidocs/json_schema_task.ftl" >
+    },    
 	<#include "/apidocs/profile/${menu_profile}/info.ftl" >  
 }	
