@@ -28,6 +28,7 @@ public class TautomerManager
 	List<String> resultTatomerStringCodes = new ArrayList<String>(); 
 	List<String> errors = new ArrayList<String>(); 
 	int numOfRegistrations = 0;
+	int status = TautomerConst.STATUS_NONE;
 	
 	public FilterTautomers tautomerFilter = new FilterTautomers(this);
 	int originalValencySum;
@@ -49,7 +50,9 @@ public class TautomerManager
 	public int maxNumOfBackTracks = 100000; //Used only for the Incremental algorithm
 	public int maxNumOfTautomerRegistrations = 2000;  //Used for the combinatorial and improved combinatorial algorithms
 	public int maxNumOfSubCombinations = 10000; //Used only for the improved combinatorial algorithm
-	public boolean FlagProcessRemainingStackIncSteps = true;   //Typically this flag should be true 			
+	public boolean FlagProcessRemainingStackIncSteps = true;   //Typically this flag should be true 
+	public boolean FlagStopGenerationOnReachingRuleSelectorLimit = false; //Typically this flag should be false
+	
 	
 	public TautomerManager()
 	{
@@ -73,6 +76,7 @@ public class TautomerManager
 		originalValencySum = FilterTautomers.getValencySum(str); 
 		
 		molecule = (IAtomContainer)originalMolecule.clone();
+		status = TautomerConst.STATUS_SET_STRUCTURE;
 	}
 	
 	public KnowledgeBase getKnowledgeBase()
@@ -100,6 +104,7 @@ public class TautomerManager
 	 */
 	public List<IAtomContainer> generateTautomers() throws Exception
 	{
+		status = TautomerConst.STATUS_STARTED;
 		numOfRegistrations = 0;
 		
 		searchAllRulePositions();
@@ -113,6 +118,7 @@ public class TautomerManager
 		if (ruleInstances.isEmpty())
 		{	
 			resultTautomers.add(molecule);
+			status = TautomerConst.STATUS_FINISHED;
 			return(resultTautomers);
 		}	
 		
@@ -123,6 +129,7 @@ public class TautomerManager
 		if (FlagCalculateCACTVSEnergyRank)
 			calcCACTVSEnergyRanks(resultTautomers);
 		
+		status = TautomerConst.STATUS_FINISHED;
 		return(resultTautomers);
 	}
 	
@@ -133,6 +140,7 @@ public class TautomerManager
 	 */	 
 	public List<IAtomContainer> generateTautomers_ImprovedCombApproach() throws Exception
 	{
+		status = TautomerConst.STATUS_STARTED;
 		numOfRegistrations = 0;
 		
 		searchAllRulePositions();
@@ -140,6 +148,7 @@ public class TautomerManager
 		if (extendedRuleInstances.isEmpty())
 		{	
 			resultTautomers.add(molecule);
+			status = TautomerConst.STATUS_FINISHED;
 			return(resultTautomers);
 		}
 		
@@ -166,6 +175,7 @@ public class TautomerManager
 		if (FlagCalculateCACTVSEnergyRank)
 			calcCACTVSEnergyRanks(resultTautomers);
 		
+		status = TautomerConst.STATUS_FINISHED;
 		return(resultTautomers);
 	}
 	
@@ -185,6 +195,7 @@ public class TautomerManager
 		//and the other rule instances are revised and accordingly 
 		//appropriate rule-instance sets are supported (derived from extendedRuleInstance)
 		
+		status = TautomerConst.STATUS_STARTED;
 		resultTautomers = new ArrayList<IAtomContainer>();	
 		resultTatomerStringCodes.clear();
 		
@@ -193,6 +204,7 @@ public class TautomerManager
 		if (extendedRuleInstances.isEmpty())
 		{	
 			resultTautomers.add(molecule);
+			status = TautomerConst.STATUS_FINISHED;
 			return(resultTautomers);
 		}
 		
@@ -204,8 +216,14 @@ public class TautomerManager
 		//and reusing again the excluded rules by the ruleSelector
 		if (FlagSwitchToCombinatorialOnReachingRuleLimit)
 			if (ruleSelector.switchToCombinatorial())
+			{	
+				if (FlagStopGenerationOnReachingRuleSelectorLimit)
+				{
+					status = TautomerConst.STATUS_STOPPED;
+					return(resultTautomers);
+				}
 				return switchToCombinatorial();
-			
+			}
 		
 		//The incremental approach is performed here
 		RuleManager rman = new RuleManager(this);
@@ -225,6 +243,7 @@ public class TautomerManager
 		if (FlagCalculateCACTVSEnergyRank)
 			calcCACTVSEnergyRanks(resultTautomers);
 		
+		status = TautomerConst.STATUS_FINISHED;
 		return(resultTautomers);
 	}
 	
@@ -256,7 +275,7 @@ public class TautomerManager
 		if (FlagCalculateCACTVSEnergyRank)
 			calcCACTVSEnergyRanks(resultTautomers);
 			
-
+		status = TautomerConst.STATUS_FINISHED;
 		return(resultTautomers);
 	}
 	
@@ -645,6 +664,10 @@ public class TautomerManager
 	
 	public int getInitialRuleCount(){
 		return extendedRuleInstances0.size();
+	}
+	
+	public int getStatus(){
+		return status;
 	}
 	
 	public static void calcCACTVSEnergyRanks(List<IAtomContainer> tautomers)

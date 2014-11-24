@@ -7,6 +7,14 @@ public class TautomerConst
 	public static final String KeyWordElementSeparator = ",";
 	
 	
+	//Generation status
+	public static final int STATUS_NONE = 0;
+	public static final int STATUS_SET_STRUCTURE = 1;
+	public static final int STATUS_STARTED = 2;
+	public static final int STATUS_STOPPED = 5;
+	public static final int STATUS_FINISHED = 10;
+	
+	
 	//Rule Types
 	public static final int RT_MobileGroup = 0;
 	public static final int RT_RingChain = 1;
