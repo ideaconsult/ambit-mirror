@@ -307,5 +307,9 @@
 			    ]
 			}				
     ],
+    "models" : {
+      "DatasetMetadata" : <#include "/apidocs/json_schema_datasetmeta.ftl" >,   	  
+      "Task" : <#include "/apidocs/json_schema_task.ftl" >
+    },    
 	<#include "/apidocs/profile/${menu_profile}/info.ftl" >  
 }

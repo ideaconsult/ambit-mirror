@@ -141,7 +141,7 @@
 			            "method": "GET",
 			            "summary": "Get a bundle",
 			            "notes": "Returns bundle representation (a dataset, composed of substances)",
-			            "type": "Bundle",
+			            "type": "DatasetMetadata",
 			            "nickname": "getBundleByID",
 			            <#include "/apidocs/authz.ftl" >
 
@@ -294,7 +294,7 @@
 			            "method": "GET",
 			            "summary": "Get metadata for a bundle",
 			            "notes": "Representation of the bundle metadata in a supported MIME type <a href='http://opentox.org/dev/apis/api-1.2/Dataset' target='opentox'>OpenTox Dataset API</a>",
-			            "type": "BundleMetadata",
+			            "type": "DatasetMetadata",
 			            "nickname": "getBundleMetadataByID",
 			            <#include "/apidocs/authz.ftl" >
 			            "parameters": [
@@ -679,7 +679,7 @@
 			            "method": "GET",
 			            "summary": "Get study summary per bundle",
 			            "notes": "Get study summary per bundle",
-			            "type": "Facet",
+			            "type": "StudySummaryFacet",
 			            "nickname": "getBundleStudySummary",
 			            <#include "/apidocs/authz.ftl" >
 			            "parameters": [
@@ -855,6 +855,7 @@
 			}								
     ],
     "models" : {
+      "DatasetMetadata" : <#include "/apidocs/json_schema_datasetmeta.ftl" >,   	
       "Substance" : <#include "/apidocs/json_schema_substance.ftl" >,   	  
       "Study"     : <#include "/apidocs/json_schema_study.ftl" >,   	  
       "Effect"     : <#include "/apidocs/json_schema_effect.ftl" >,
