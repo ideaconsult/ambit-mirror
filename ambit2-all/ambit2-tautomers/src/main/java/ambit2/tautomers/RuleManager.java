@@ -278,7 +278,7 @@ public class RuleManager {
 		//first depth search approach
 		int nMax = tman.maxNumOfBackTracks;
 		int n = 0;
-		boolean FlagReachedMaxNumOfBackTracks = false;
+		boolean FlagStopped = false;
 		
 		while (!stackIncSteps.isEmpty())
 		{	
@@ -307,13 +307,19 @@ public class RuleManager {
 			n++;
 			if (n > nMax)
 			{	
-				FlagReachedMaxNumOfBackTracks = true;
+				FlagStopped = true;
 				break;
-			}	
+			}
+			
+			if (tman.FlagCheckNumOfRegistrationsForIncrementalAlgorithm)
+				if (tman.numOfRegistrations > tman.maxNumOfTautomerRegistrations)
+				{
+					FlagStopped = true;
+					break;
+				}
 		}
 		
-		
-		if (FlagReachedMaxNumOfBackTracks)
+		if (FlagStopped)
 			if (tman.FlagProcessRemainingStackIncSteps)
 				processRemainingStackIncSteps();
 	}
