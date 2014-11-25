@@ -42,6 +42,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -128,6 +132,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -168,6 +176,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -246,6 +258,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -281,6 +297,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -320,6 +340,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -361,6 +385,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -407,6 +435,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -502,6 +534,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -560,6 +596,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -626,6 +666,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -666,6 +710,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -706,6 +754,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -746,6 +798,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -792,6 +848,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
@@ -847,6 +907,10 @@
 			                    "code": 404,
 			                    "message": "Bundle not found"
 			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
 							<#include "/apidocs/error_aa.ftl" >,
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
