@@ -47,11 +47,12 @@ public class TautomerManager
 	public boolean FlagPrintExtendedRuleInstances = false;
 	public boolean FlagPrintIcrementalStepDebugInfo = false;
 	
-	public int maxNumOfBackTracks = 100000; //Used only for the Incremental algorithm
-	public int maxNumOfTautomerRegistrations = 2000;  //Used for the combinatorial and improved combinatorial algorithms
+	public int maxNumOfBackTracks = 5000; //Used only for the Incremental algorithm
+	public int maxNumOfTautomerRegistrations = 1000;  //Used for the combinatorial and improved combinatorial algorithms
 	public int maxNumOfSubCombinations = 10000; //Used only for the improved combinatorial algorithm
 	public boolean FlagProcessRemainingStackIncSteps = true;   //Typically this flag should be true 
 	public boolean FlagStopGenerationOnReachingRuleSelectorLimit = false; //Typically this flag should be false
+	public boolean FlagCheckNumOfRegistrationsForIncrementalAlgorithm = true; 
 	
 	
 	public TautomerManager()
@@ -93,8 +94,6 @@ public class TautomerManager
 	{
 		this.ruleSelector = ruleSelector;
 	}
-	
-	
 	
 	
 	/**
@@ -196,6 +195,7 @@ public class TautomerManager
 		//appropriate rule-instance sets are supported (derived from extendedRuleInstance)
 		
 		status = TautomerConst.STATUS_STARTED;
+		numOfRegistrations = 0;
 		resultTautomers = new ArrayList<IAtomContainer>();	
 		resultTatomerStringCodes.clear();
 		
@@ -266,6 +266,7 @@ public class TautomerManager
 		
 		
 		/*
+		//pure combinatorial approach
 		ruleInstances.addAll(extendedRuleInstances);
 		generateRuleInstanceCombinations();
 		*/
@@ -292,6 +293,8 @@ public class TautomerManager
 	
 	public void registerTautomer(IAtomContainer newTautomer)
 	{
+		numOfRegistrations++;
+		
 		if (FlagCheckDuplicationOnRegistering)
 		{
 			//FlagTreatAromaticBondsAsEquivalent should always be false here  

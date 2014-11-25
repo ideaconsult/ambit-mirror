@@ -23,6 +23,9 @@ public class TautomerTestCases extends TestCase
 		tt = new TestTautomers();
 		tt.tman.getKnowledgeBase().use15ShiftRules(true);
 		tt.tman.getKnowledgeBase().use17ShiftRules(false);
+		tt.tman.FlagCheckNumOfRegistrationsForIncrementalAlgorithm = false;
+		tt.tman.maxNumOfBackTracks = 100000;
+		
 	}
 
 	public static Test suite() {
