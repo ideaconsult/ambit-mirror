@@ -112,8 +112,9 @@ public abstract class ProtectedResource extends ServerResource implements IAuthT
 	}
 	
 	protected void setCacheHeaders() {
-		getResponse().getCacheDirectives().add(CacheDirective.privateInfo());
-		getResponse().getCacheDirectives().add(CacheDirective.maxAge(2700));		
+		//getResponse().getCacheDirectives().add(CacheDirective.privateInfo());
+		//getResponse().getCacheDirectives().add(CacheDirective.maxAge(2700));
+		getResponse().getCacheDirectives().add(CacheDirective.noCache());
 	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
