@@ -30,7 +30,7 @@ import ambit2.db.reporters.ImageReporter;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
-import ambit2.rest.substance.SubstanceJSONReporter;
+import ambit2.rest.facet.FacetJSONReporter;
 import ambit2.rest.substance.SubstanceURIReporter;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
 
@@ -160,13 +160,13 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
-			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(),jsonpcallback);
+			FacetJSONReporter cmpreporter = new FacetJSONReporter(getRequest(),jsonpcallback);
 			return new OutputWriterConvertor<SubstanceRecord, Q>(
 					cmpreporter,
 					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);
 		} else { //json by default
 		//else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(),null);
+			FacetJSONReporter cmpreporter = new FacetJSONReporter(getRequest(),null);
 			return new OutputWriterConvertor<SubstanceRecord, Q>(
 					cmpreporter,
 					MediaType.APPLICATION_JSON,filenamePrefix);
