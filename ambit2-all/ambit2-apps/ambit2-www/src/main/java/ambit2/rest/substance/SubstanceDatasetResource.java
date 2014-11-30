@@ -38,7 +38,6 @@ import ambit2.base.data.substance.SubstanceUUID;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.reporters.CSVReporter;
-import ambit2.db.substance.ReadSubstanceByOwner;
 import ambit2.db.substance.study.ReadEffectRecordBySubstance;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.StringConvertor;

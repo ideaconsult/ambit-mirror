@@ -3,6 +3,7 @@ package ambit2.rest.facet;
 import java.net.URLEncoder;
 
 import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.facet.IFacet;
 import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
@@ -10,7 +11,6 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.facets.bookmarks.BookmarksByTopicFacet;
 import ambit2.db.facets.datasets.EndpointCompoundFacet;

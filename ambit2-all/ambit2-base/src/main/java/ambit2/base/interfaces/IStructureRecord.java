@@ -31,9 +31,9 @@ package ambit2.base.interfaces;
 
 import java.util.Map;
 
+import net.idea.modbcum.i.facet.IFacet;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.Property;
-import ambit2.base.facet.IFacet;
 
 
 public interface IStructureRecord extends IChemical{

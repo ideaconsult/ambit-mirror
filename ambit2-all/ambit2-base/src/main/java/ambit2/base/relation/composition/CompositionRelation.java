@@ -2,10 +2,10 @@ package ambit2.base.relation.composition;
 
 import java.util.Map;
 
+import net.idea.modbcum.i.facet.IFacet;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
-import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.json.JSONUtils;
 import ambit2.base.relation.AbstractRelation;

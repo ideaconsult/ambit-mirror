@@ -15,10 +15,10 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Bookmark;
 import ambit2.db.facets.bookmarks.BookmarksByTopicFacet;
 import ambit2.db.facets.bookmarks.BookmarksByTopicFacetQuery;
-import ambit2.rest.facet.FacetResource;
+import ambit2.rest.facet.AmbitFacetResource;
 import ambit2.rest.rdf.Annotea;
 
-public class BookmarkTopicsResource extends FacetResource<BookmarksByTopicFacet,BookmarksByTopicFacetQuery>  {
+public class BookmarkTopicsResource extends AmbitFacetResource<BookmarksByTopicFacet,BookmarksByTopicFacetQuery>  {
 	public final static String resource = "hasTopics";
 	@Override
 	protected BookmarksByTopicFacetQuery createQuery(Context context,

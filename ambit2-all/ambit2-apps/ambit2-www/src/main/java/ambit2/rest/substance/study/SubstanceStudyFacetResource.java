@@ -19,10 +19,10 @@ import ambit2.db.substance.study.facet.SubstanceStudyFacet;
 import ambit2.db.substance.study.facet.SubstanceStudyFacetQuery;
 import ambit2.db.update.bundle.effects.BundleStudyFacetQuery;
 import ambit2.rest.OpenTox;
-import ambit2.rest.facet.FacetResource;
+import ambit2.rest.facet.AmbitFacetResource;
 import ambit2.rest.substance.SubstanceResource;
 
-public class SubstanceStudyFacetResource<Q extends IQueryRetrieval<SubstanceStudyFacet>> extends FacetResource<SubstanceStudyFacet,Q>  {
+public class SubstanceStudyFacetResource<Q extends IQueryRetrieval<SubstanceStudyFacet>> extends AmbitFacetResource<SubstanceStudyFacet,Q>  {
 	public final static String resource = "studysummary";
 	
 	public SubstanceStudyFacetResource() {

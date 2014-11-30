@@ -15,7 +15,7 @@ import ambit2.db.facets.qlabel.DatasetStructureQLabelFacet;
 import ambit2.db.facets.qlabel.DatasetStructureQualityStats;
 import ambit2.rest.OpenTox;
 
-public class DatasetStructureQualityStatsResource extends FacetResource<DatasetStructureQLabelFacet,DatasetStructureQualityStats> {
+public class DatasetStructureQualityStatsResource extends AmbitFacetResource<DatasetStructureQLabelFacet,DatasetStructureQualityStats> {
 	public static final String resource = "/label_strucs";
 	protected Integer datasetID;
 	protected Integer queryResultsID;

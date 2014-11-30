@@ -9,7 +9,6 @@ import net.idea.modbcum.q.update.AbstractUpdate;
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
-import ambit2.base.data.substance.SubstanceProperty;
 
 public class DeleteSubstanceFromBundle  extends AbstractUpdate<SubstanceEndpointsBundle,SubstanceRecord> {
 	private static final String[] delete_sql =  {"delete from bundle_substance where idbundle=? and idsubstance=?"	};

@@ -1,9 +1,7 @@
 package ambit2.rest;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 import java.util.UUID;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
