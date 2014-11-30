@@ -240,8 +240,9 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>tomcat-maven-plugin</artifactId>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat6-maven-plugin</artifactId>
+         <version>2.2</version>
         <configuration>
           <url>http://apps.ideaconsult.net:8180/manager</url>
           <server>eos</server>
@@ -495,14 +496,6 @@
       <id>opennms-repo</id>
       <name>OpenNMS Repository</name>
       <url>http://repo.opennms.org/maven2</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>maven-restlet</id>
-      <name>Public online Restlet repository</name>
-      <url>http://maven.restlet.org</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>

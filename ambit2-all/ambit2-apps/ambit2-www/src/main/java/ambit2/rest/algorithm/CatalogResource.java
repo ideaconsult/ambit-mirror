@@ -19,7 +19,6 @@ import net.idea.restnet.i.task.ITaskApplication;
 import net.idea.restnet.i.task.ITaskResult;
 import net.idea.restnet.i.task.ITaskStorage;
 
-import org.owasp.encoder.Encode;
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
