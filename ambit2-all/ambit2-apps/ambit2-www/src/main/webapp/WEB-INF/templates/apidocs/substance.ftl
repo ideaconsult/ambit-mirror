@@ -470,10 +470,10 @@
       "Study"     : <#include "/apidocs/json_schema_study.ftl" >,   	  
       "Effect"     : <#include "/apidocs/json_schema_effect.ftl" >,
       "Result"     : <#include "/apidocs/json_schema_result.ftl" >,
-      "StudySummaryFacet" : {
-    		
-      },
-      "Task" : <#include "/apidocs/json_schema_task.ftl" >
+      "Facet"     : <#include "/apidocs/json_schema_facet.ftl" >,
+      "StudySummaryFacet"     : <#include "/apidocs/json_schema_studysummaryfacet.ftl" >,
+      "Task" : <#include "/apidocs/json_schema_task.ftl" >,
+      "Feature" : <#include "/apidocs/json_schema_feature.ftl" >
     },
 	<#include "/apidocs/profile/${menu_profile}/info.ftl" >  
 }
