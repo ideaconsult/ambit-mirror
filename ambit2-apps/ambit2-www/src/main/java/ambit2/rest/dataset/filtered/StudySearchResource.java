@@ -8,9 +8,14 @@ public class StudySearchResource<FACET extends IFacet<String>,Q extends QueryCou
 	public StudySearchResource() {
 		super();
 		mode = StatsMode.protocol_applications;
+		setHtmlbyTemplate(true);
 	}
 	@Override
 	protected ambit2.rest.dataset.filtered.StatisticsResource.StatsMode getSearchMode() {
 		return StatsMode.protocol_applications;
+	}
+	@Override
+	public String getTemplateName() {
+		return super.getTemplateName();
 	}
 }
