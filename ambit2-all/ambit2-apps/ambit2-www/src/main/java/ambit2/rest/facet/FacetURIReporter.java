@@ -11,6 +11,7 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
+import ambit2.base.data.study.Protocol._categories;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.facets.bookmarks.BookmarksByTopicFacet;
 import ambit2.db.facets.datasets.EndpointCompoundFacet;
@@ -95,9 +96,11 @@ public class FacetURIReporter <Q extends IQueryRetrieval<IFacet>> extends QueryU
 						    Reference.encode(item.getValue().toString()));
 		} else if (item instanceof SubstanceByCategoryFacet)  {
 			if (item!=null && item.getValue()!=null) {
+				_categories endpoint = ((SubstanceByCategoryFacet)item).getEndpoint();
 				return String.format("%s%s?type=endpointcategory&search=%s",
 							root,
-							SubstanceResource.substance,((SubstanceByCategoryFacet)item).getEndpoint().name()
+							SubstanceResource.substance,
+							endpoint==null?"":endpoint.name()
 						    );			
 			} else return "";
 		
