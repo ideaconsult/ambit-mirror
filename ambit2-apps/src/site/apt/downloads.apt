@@ -20,22 +20,23 @@ API
 
   {{{http://ideaconsult.github.io/examples-ambit/apidocs/}AMBIT REST API documentation (live)}}  
 
+Libraries
+~~~~~~~~~~
+
+ [AMBIT libraries] {{{./download_ambitlibs.html} AMBIT libraries}}
+ 
 Standalone applications
 ~~~~~~~~~~
 
  [Applicability domain] {{{./download_ambitdiscovery.html}AMBIT Discovery}}
+ 
+ [Tautomers generation (command line)] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/tautomers/ambit-tautomers-2.0.0-SNAPSHOT.jar/download}ambit-tautomers-2.0.0-SNAPSHOT.jar}} 
 
  [QMRF Editor] {{{http://qmrf.sf.net}http://qmrf.sf.net}}
  
  [Molbrowser] {{{https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example}Converts SDF file to a static web page}}
  
  
-Libraries
-~~~~~~~~~~
-
- [AMBIT libraries] {{{./download_ambitlibs.html} AMBIT libraries}}
- 
-
 Source code examples
 ~~~~~~~~~~
 
