@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<version>2.7.1-SNAPSHOT</version>
-	<description>Exposes  AMBIT 2 database search and other functionality by REST style web services.</description>
+  <version>2.7.1-SNAPSHOT</version>
+  <description>Exposes  AMBIT 2 database search and other functionality by REST style web services.</description>
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
   <artifactId>ambit2-www</artifactId>
@@ -34,7 +34,8 @@
         <web_xml>src/main/resources/web.https.xml</web_xml>
       </properties>
     </profile>
-    <!-- Release build. Use together with profile -P aa-enabled or -P aa-disabled, and -P http or -P https -->
+    <!-- Release build. Use together with profile -P aa-enabled or -P aa-disabled, 
+			and -P http or -P https -->
     <profile>
       <id>ambit-release</id>
       <activation>
@@ -52,7 +53,7 @@
         <ambit.db.host>localhost</ambit.db.host>
         <!-- root pasword for creating new db, used for testing -->
         <ambit.db.user.root.password></ambit.db.user.root.password>
-        <!-- Ontology service , assumed on the same host-->
+        <!-- Ontology service , assumed on the same host -->
         <service.ontology>http://localhost:8080/ontology</service.ontology>
         <!-- AA -->
         <aa.opensso>http://opensso.in-silico.ch/opensso/identity</aa.opensso>
@@ -74,13 +75,15 @@
         <attach.substance>true</attach.substance>
         <ambit.report.level>debug</ambit.report.level>
         <MAXRECORDS>10000</MAXRECORDS>
-        <!-- The folder, containing Dragon6 executable. Could be changed after deployment by editing WEB-INF/classes/ambit2/rest/config/ambit2.pref -->
+        <!-- The folder, containing Dragon6 executable. Could be changed after 
+					deployment by editing WEB-INF/classes/ambit2/rest/config/ambit2.pref -->
         <DRAGON_HOME>/usr/local/dragon</DRAGON_HOME>
-        <!-- The folder, containing OpenBabel executable. Could be changed after deployment by editing WEB-INF/classes/ambit2/rest/config/ambit2.pref -->
+        <!-- The folder, containing OpenBabel executable. Could be changed after 
+					deployment by editing WEB-INF/classes/ambit2/rest/config/ambit2.pref -->
         <OBABEL_HOME>/usr/local/openbabel/bin</OBABEL_HOME>
       </properties>
     </profile>
-    <!--  release build, with AA -->
+    <!-- release build, with AA -->
     <profile>
       <id>aa-enabled</id>
       <activation>
@@ -91,7 +94,7 @@
         <dataset.members.prefix>true</dataset.members.prefix>
       </properties>
     </profile>
-    <!--  release build, without AA -->
+    <!-- release build, without AA -->
     <profile>
       <id>aa-disabled</id>
       <activation>
@@ -102,9 +105,9 @@
         <dataset.members.prefix>false</dataset.members.prefix>
       </properties>
     </profile>
-    <!-- Simple local AA , GET is public, other methods require HTTP BASIC with preconfigured credentials 
-    Will be switched on only if OpenTox AA is not enabled by aa.enabled=true and aa.local.enabled is set to true
-    -->
+    <!-- Simple local AA , GET is public, other methods require HTTP BASIC 
+			with preconfigured credentials Will be switched on only if OpenTox AA is 
+			not enabled by aa.enabled=true and aa.local.enabled is set to true -->
     <profile>
       <id>aa-local</id>
       <activation>
@@ -115,7 +118,7 @@
         <aa.local.admin.name>admin</aa.local.admin.name>
         <aa.local.admin.pass>changeit</aa.local.admin.pass>
         <dataset.members.prefix>false</dataset.members.prefix>
-        <!--  Optional  -->
+        <!-- Optional -->
         <guard.enabled></guard.enabled>
         <guard.list>http://localhost</guard.list>
       </properties>
@@ -159,7 +162,8 @@
       </properties>
     </profile>
     <profile>
-      <!-- Remove JNI classes from the war; they should be copied into {tomcat}/shared/lib folder -->
+      <!-- Remove JNI classes from the war; they should be copied into {tomcat}/shared/lib 
+				folder -->
       <id>no-jni</id>
       <activation>
         <activeByDefault>false</activeByDefault>
@@ -242,13 +246,28 @@
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat6-maven-plugin</artifactId>
-         <version>2.2</version>
+        <version>2.2</version>
         <configuration>
           <url>http://apps.ideaconsult.net:8180/manager</url>
           <server>eos</server>
           <path>/ambit2</path>
           <systemProperties>
-            <JAVA_OPTS>XX:-UseSplitVerifier -Djava.util.Arrays.useLegacyMergeSort</JAVA_OPTS>
+            <JAVA_OPTS>XX:-UseSplitVerifier
+							-Djava.util.Arrays.useLegacyMergeSort</JAVA_OPTS>
+          </systemProperties>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <version>2.2</version>
+        <configuration>
+          <url>http://apps.ideaconsult.net:8180/manager</url>
+          <server>eos</server>
+          <path>/ambit2</path>
+          <systemProperties>
+            <JAVA_OPTS>XX:-UseSplitVerifier
+							-Djava.util.Arrays.useLegacyMergeSort</JAVA_OPTS>
           </systemProperties>
         </configuration>
       </plugin>
@@ -257,11 +276,8 @@
         <version>2.1.1</version>
         <configuration>
           <webXml>${web_xml}</webXml>
-          <!-- 
-        <manifest>
-          <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-        </manifest>
-         -->
+          <!-- <manifest> <addDefaultImplementationEntries>true</addDefaultImplementationEntries> 
+						</manifest> -->
           <archive>
             <manifestEntries>
               <Implementation-Build>${build.version}</Implementation-Build>
@@ -270,33 +286,12 @@
           <packagingExcludes>${exclude.jni}</packagingExcludes>
         </configuration>
       </plugin>
-      <!-- 
-    		<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2.1</version>
-				<executions>
-					<execution>
-						<id>create-executable-jar</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<descriptorRefs>
-								<descriptorRef>
-								jar-with-dependencies
-								</descriptorRef>
-							</descriptorRefs>
-							<archive>
-								<manifest>
-									<mainClass>ambit2.rest.AmbitApplication</mainClass>
-								</manifest>
-							</archive>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-	-->
+      <!-- <plugin> <artifactId>maven-assembly-plugin</artifactId> <version>2.2.1</version> 
+				<executions> <execution> <id>create-executable-jar</id> <phase>package</phase> 
+				<goals> <goal>single</goal> </goals> <configuration> <descriptorRefs> <descriptorRef> 
+				jar-with-dependencies </descriptorRef> </descriptorRefs> <archive> <manifest> 
+				<mainClass>ambit2.rest.AmbitApplication</mainClass> </manifest> </archive> 
+				</configuration> </execution> </executions> </plugin> -->
     </plugins>
   </build>
   <dependencies>
@@ -379,31 +374,15 @@
       <groupId>net.ideaconsult.restnet</groupId>
       <artifactId>restnet-db</artifactId>
       <version>${restnet.version}</version>
-	 <classifier>tests</classifier>
+      <classifier>tests</classifier>
       <scope>test</scope>
-    </dependency>    
-    <!-- 
-  	<dependency>
-  	<groupId>net.bull.javamelody</groupId>
-  	<artifactId>javamelody-core</artifactId>
-  	<version>1.22.0</version>
-  	<scope>runtime</scope>
-	</dependency>
-	 
-  	<dependency>
-		<groupId>org.jrobin</groupId>
-		<artifactId>jrobin</artifactId>
-		<version>1.5.9</version>
-		<scope>runtime</scope>
-	</dependency>
-	-->
-    <!-- 
-  	<dependency>
-  		<groupId>jmol</groupId>
-  		<artifactId>jmol</artifactId>
-  		<version>11.8.23</version>
-  	</dependency>
-  	-->
+    </dependency>
+    <!-- <dependency> <groupId>net.bull.javamelody</groupId> <artifactId>javamelody-core</artifactId> 
+			<version>1.22.0</version> <scope>runtime</scope> </dependency> <dependency> 
+			<groupId>org.jrobin</groupId> <artifactId>jrobin</artifactId> <version>1.5.9</version> 
+			<scope>runtime</scope> </dependency> -->
+    <!-- <dependency> <groupId>jmol</groupId> <artifactId>jmol</artifactId> 
+			<version>11.8.23</version> </dependency> -->
     <dependency>
       <groupId>dnsjava</groupId>
       <artifactId>dnsjava</artifactId>
@@ -445,18 +424,9 @@
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
-    <!-- 
-	<dependency>
-		<groupId>ambit</groupId>
-		<artifactId>qmrf-swing</artifactId>
-		<version>2.0.1-SNAPSHOT</version>
-	</dependency>
-	<dependency>
-		<groupId>ambit</groupId>
-		<artifactId>swing-lib</artifactId>
-		<version>2.0.1-SNAPSHOT</version>
-	</dependency>
-	 -->
+    <!-- <dependency> <groupId>ambit</groupId> <artifactId>qmrf-swing</artifactId> 
+			<version>2.0.1-SNAPSHOT</version> </dependency> <dependency> <groupId>ambit</groupId> 
+			<artifactId>swing-lib</artifactId> <version>2.0.1-SNAPSHOT</version> </dependency> -->
     <dependency>
       <groupId>ambit</groupId>
       <artifactId>opentox-client</artifactId>
@@ -500,33 +470,17 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
-    <!--
-    <repository>
-		<id>glassfish</id>
-		<name>javamelody is here</name>
-		<url>http://maven.glassfish.org/content/groups/public</url>
-		<releases><enabled>true</enabled></releases>
-	</repository>
--->
+    <!-- <repository> <id>glassfish</id> <name>javamelody is here</name> <url>http://maven.glassfish.org/content/groups/public</url> 
+			<releases><enabled>true</enabled></releases> </repository> -->
   </repositories>
   <reporting>
     <plugins>
-      <!-- 
+      <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>jxr-maven-plugin</artifactId> 
+				</plugin> -->
+      <!-- <plugin> <artifactId>maven-surefire-plugin</artifactId> </plugin> 
+				<plugin> <artifactId>maven-clover-plugin</artifactId> </plugin> -->
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jxr-maven-plugin</artifactId>
-      </plugin>
--->
-      <!-- 
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-      </plugin>
-     <plugin>
-        <artifactId>maven-clover-plugin</artifactId>
-      </plugin>      
-	-->
-      <plugin>
-        <!-- UML class diagrams  -->
+        <!-- UML class diagrams -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.1</version>
@@ -541,102 +495,39 @@
             <version>4.6</version>
           </docletArtifact>
           <additionalparam>
-            <!--  http://www.umlgraph.org/doc/cd-opt.html 
-	          	-attributes
-	          	-views
-	          	-types 
-	            -inferrel -inferdep -quiet -hide java.*
-	            -collpackages java.util.* -qualify
-	            -postfixpackage 
-	            --> 
-	            -all
-	          </additionalparam>
+            <!-- http://www.umlgraph.org/doc/cd-opt.html -attributes -views -types 
+							-inferrel -inferdep -quiet -hide java.* -collpackages java.util.* -qualify 
+							-postfixpackage -->
+						-all
+					</additionalparam>
         </configuration>
       </plugin>
-      <!-- 
-		<plugin>
-		    <groupId>org.apache.maven.plugins</groupId>
-		    <artifactId>maven-project-info-reports-plugin</artifactId>
- 			<version>2.1</version> 		    
-		    <configuration>
-		      <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-		    </configuration>
-		  </plugin>
-		   -->
-      <!-- 
-          <plugin>
-          	<groupId>org.apache.maven.plugins</groupId>
-          	<artifactId>maven-pmd-plugin</artifactId>
-          	<version>2.4</version>
-			<configuration>
-				<linkXref>false</linkXref>
-				<sourceEncoding>utf-8</sourceEncoding>
-				<minimumTokens>100</minimumTokens>
-				<targetJdk>
-					1.5
-				</targetJdk>
-				<excludes>
-					<exclude>*/generated/.java</exclude>
-				</excludes>
-			</configuration>          	
-          </plugin>
-           -->
-      <!-- 
-          <plugin>
-          	<groupId>org.codehaus.mojo</groupId>
-          	<artifactId>taglist-maven-plugin</artifactId>
-			<configuration>
-				<tags>
-					<tag>TODO</tag>
-					<tag>@todo</tag>
-					<tag>FIXME</tag>
-					<tag>XXX</tag>
-				</tags>
-			</configuration>          	
-          </plugin>
-          -->
+      <!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-project-info-reports-plugin</artifactId> 
+				<version>2.1</version> <configuration> <dependencyLocationsEnabled>false</dependencyLocationsEnabled> 
+				</configuration> </plugin> -->
+      <!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-pmd-plugin</artifactId> 
+				<version>2.4</version> <configuration> <linkXref>false</linkXref> <sourceEncoding>utf-8</sourceEncoding> 
+				<minimumTokens>100</minimumTokens> <targetJdk> 1.5 </targetJdk> <excludes> 
+				<exclude>*/generated/.java</exclude> </excludes> </configuration> </plugin> -->
+      <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>taglist-maven-plugin</artifactId> 
+				<configuration> <tags> <tag>TODO</tag> <tag>@todo</tag> <tag>FIXME</tag> 
+				<tag>XXX</tag> </tags> </configuration> </plugin> -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>jdepend-maven-plugin</artifactId>
         <version>2.0-beta-2</version>
       </plugin>
-      <!-- 
-          <plugin>
-          	<groupId>org.codehaus.mojo</groupId>
-          	<artifactId>cobertura-maven-plugin</artifactId>
-          </plugin>
-           -->
-      <!-- Develop our own rules or follow foreign ones ...
-          <plugin>
-          	<groupId>org.apache.maven.plugins</groupId>
-          	<artifactId>maven-checkstyle-plugin</artifactId>
-          	<configuration>
-				<configLocation>config/maven_checks.xml</configLocation>
-			</configuration>
-          </plugin>
-           -->
-      <!-- needs svn executable  
- 	  <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changelog-plugin</artifactId>
-      </plugin>
- 	
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-
-          <aggregate>true</aggregate>
-        </configuration>
-      </plugin>
- 	  -->
-      <!-- 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changelog-plugin</artifactId>
-        <version>2.2</version>
-      </plugin>
-     	   -->
+      <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> 
+				</plugin> -->
+      <!-- Develop our own rules or follow foreign ones ... <plugin> <groupId>org.apache.maven.plugins</groupId> 
+				<artifactId>maven-checkstyle-plugin</artifactId> <configuration> <configLocation>config/maven_checks.xml</configLocation> 
+				</configuration> </plugin> -->
+      <!-- needs svn executable <plugin> <groupId>org.apache.maven.plugins</groupId> 
+				<artifactId>maven-changelog-plugin</artifactId> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
+				<artifactId>maven-javadoc-plugin</artifactId> <configuration> <aggregate>true</aggregate> 
+				</configuration> </plugin> -->
+      <!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-changelog-plugin</artifactId> 
+				<version>2.2</version> </plugin> -->
     </plugins>
   </reporting>
   <properties>
