@@ -350,7 +350,49 @@
 			        }		        
 			    ]
 			},
-			
+			{
+			    "path": "/bundle/{idbundle}/summary",
+			    "operations": [
+			        {
+			            "method": "GET",
+			            "summary": "Get bundle summary",
+			            "notes": "Number of structures, substances and endpoints",
+			            "type": "Facet",
+			            "nickname": "getBundleSummary",
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+							{
+							    "name": "idbundle",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							}
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Invalid bundle identifier"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Bundle not found"
+			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }		        
+			    ]
+			},			
 			{
 			    "path": "/bundle/{idbundle}/substance",
 			    "operations": [
@@ -924,6 +966,7 @@
       "Study"     : <#include "/apidocs/json_schema_study.ftl" >,   	  
       "Effect"     : <#include "/apidocs/json_schema_effect.ftl" >,
       "Result"     : <#include "/apidocs/json_schema_result.ftl" >,
+      "Facet"     : <#include "/apidocs/json_schema_facet.ftl" >,
       "StudySummaryFacet" : {
     		
       },
