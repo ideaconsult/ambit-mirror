@@ -1,49 +1,49 @@
 {
     "type": "object",
     "$schema": "http://json-schema.org/draft-03/schema",
-    "id": "http://jsonschema.opentox.org/",
+    "id": "http://jsonschema.opentox.org/task",
     "required": false,
     "properties": {
         "completed": {
             "type": "number",
             "description": "Time stamp",
-            "id": "http://jsonschema.opentox.org/completed",
+            "id": "http://jsonschema.opentox.org/task/completed",
             "required": true
         },
         "errorCause": {
             "type": "string",
-            "id": "http://jsonschema.opentox.org/errorCause",
+            "id": "http://jsonschema.opentox.org/task/errorCause",
             "required": false
         },
         "error": {
             "type": "string",
-            "id": "http://jsonschema.opentox.org/error",
+            "id": "http://jsonschema.opentox.org/task/error",
             "required": false
         },
         "id": {
             "type": "string",
-            "id": "http://jsonschema.opentox.org/id",
+            "id": "http://jsonschema.opentox.org/task/id",
             "required": true
         },
         "name": {
             "type": "string",
-            "id": "http://jsonschema.opentox.org/name",
+            "id": "http://jsonschema.opentox.org/task/name",
             "required": true
         },
         "policyError": {
             "type": "string",
-            "id": "http://jsonschema.opentox.org/policyError",
+            "id": "http://jsonschema.opentox.org/task/policyError",
             "required": false
         },
         "result": {
             "type": "string",
-            "id": "http://jsonschema.opentox.org/result",
+            "id": "http://jsonschema.opentox.org/task/result",
             "required": true
         },
         "started": {
             "type": "number",
             "description": "Time stamp",
-            "id": "http://jsonschema.opentox.org/started",
+            "id": "http://jsonschema.opentox.org/task/started",
             "required": false
         },
         "status": {
@@ -54,12 +54,12 @@
         },
         "uri": {
             "type": "string",
-            "id": "http://jsonschema.opentox.org/uri",
+            "id": "http://jsonschema.opentox.org/task/uri",
             "required": true
         },
         "user": {
             "type": "string",
-            "id": "http://jsonschema.opentox.org/user",
+            "id": "http://jsonschema.opentox.org/task/user",
             "required": false
         }
     }

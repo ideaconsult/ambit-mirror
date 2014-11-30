@@ -325,5 +325,10 @@
 		}		
 		
     ],
+    "models" : {
+      "Model" : <#include "/apidocs/json_schema_model.ftl" >,
+      "Task" : <#include "/apidocs/json_schema_task.ftl" >,
+      "Feature" : <#include "/apidocs/json_schema_feature.ftl" >
+    },      
 	<#include "/apidocs/profile/${menu_profile}/info.ftl" >  
 }
