@@ -1,5 +1,6 @@
 package ambit2.base.facet;
 
+import net.idea.modbcum.i.facet.IFacet;
 import ambit2.base.json.JSONUtils;
 
 public abstract class AbstractFacet<T> implements IFacet<T> {

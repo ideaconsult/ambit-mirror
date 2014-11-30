@@ -5,9 +5,11 @@ import java.util.Map;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.facet.IFacet;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.r.QueryReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
+import net.idea.restnet.db.facet.FacetResource;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Request;
@@ -20,18 +22,15 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
-import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.property.ProfileReader;
-import ambit2.rest.query.QueryResource;
 
 
-public abstract class FacetResource<FACET extends IFacet<String>,Q extends IQueryRetrieval<FACET>> extends	QueryResource<Q,FACET> {
-	public static final String resource = "/facet";
+public abstract class AmbitFacetResource<FACET extends IFacet<String>,Q extends IQueryRetrieval<FACET>> extends	FacetResource<FACET,Q> {
 	
-	public FacetResource() {
+	public AmbitFacetResource() {
 		super();
 		setHtmlbyTemplate(true);
 	}
@@ -163,4 +162,10 @@ public abstract class FacetResource<FACET extends IFacet<String>,Q extends IQuer
 		map.put("facet_subgroup","");
 		map.put("facet_count","count");
 	}
+	
+	@Override
+	public String getConfigFile() {
+		return "ambit2/rest/config/ambit2.pref";
+	}
+	
 }

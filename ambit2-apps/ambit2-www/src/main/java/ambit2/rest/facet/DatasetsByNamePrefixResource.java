@@ -19,7 +19,7 @@ import ambit2.rest.query.QueryResource;
  * @author nina
  *
  */
-public class DatasetsByNamePrefixResource  extends FacetResource<DatasetPrefixFacet,DatasetByPrefixNameFacetQuery>  {
+public class DatasetsByNamePrefixResource  extends AmbitFacetResource<DatasetPrefixFacet,DatasetByPrefixNameFacetQuery>  {
 	public static final String resource = "/ndatasets_nameprefix";
 	
 	@Override

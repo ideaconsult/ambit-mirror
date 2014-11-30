@@ -6,12 +6,11 @@ import java.util.logging.Level;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.i.facet.IFacet;
 import net.idea.modbcum.r.QueryReporter;
 import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
-
-import ambit2.base.facet.IFacet;
 
 public class FacetCSVReporter<Q extends IQueryRetrieval<IFacet>> extends QueryReporter<IFacet, Q, Writer> {
 	protected QueryURIReporter<IFacet, IQueryRetrieval<IFacet>> uriReporter;

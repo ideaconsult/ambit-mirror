@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.facet.IFacet;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
@@ -16,7 +17,6 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
-import ambit2.base.facet.IFacet;
 import ambit2.db.model.QueryCountModels;
 import ambit2.db.substance.QueryCountEndpoints;
 import ambit2.db.substance.QueryCountInterpretationResults;
@@ -30,10 +30,10 @@ import ambit2.db.update.dataset.QueryCountProperties;
 import ambit2.db.update.dataset.QueryCountValues;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetStructuresResource;
-import ambit2.rest.facet.FacetResource;
+import ambit2.rest.facet.AmbitFacetResource;
 
 
-public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCount<FACET>> extends FacetResource<FACET,Q>  {
+public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCount<FACET>> extends AmbitFacetResource<FACET,Q>  {
 	public static String resource = "/stats";
 	public static String resourceKey = "mode";
 	protected StatsMode mode;

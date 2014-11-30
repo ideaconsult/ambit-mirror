@@ -1,6 +1,6 @@
 package ambit2.rest.dataset.filtered;
 
-import ambit2.base.facet.IFacet;
+import net.idea.modbcum.i.facet.IFacet;
 import ambit2.db.update.dataset.QueryCount;
 
 /**

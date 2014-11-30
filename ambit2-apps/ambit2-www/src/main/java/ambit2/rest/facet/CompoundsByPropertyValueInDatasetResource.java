@@ -26,7 +26,7 @@ import ambit2.rest.OpenTox;
  * @author nina
  *
  */
-public class CompoundsByPropertyValueInDatasetResource extends FacetResource<PropertyDatasetFacet<Property,SourceDataset>,PropertyDatasetFacetQuery> {
+public class CompoundsByPropertyValueInDatasetResource extends AmbitFacetResource<PropertyDatasetFacet<Property,SourceDataset>,PropertyDatasetFacetQuery> {
 	public static final String resource = "/ncompound_value";
 	@Override
 	protected PropertyDatasetFacetQuery createQuery(Context context,

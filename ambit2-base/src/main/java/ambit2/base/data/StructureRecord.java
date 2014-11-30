@@ -30,7 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import ambit2.base.facet.IFacet;
+import net.idea.modbcum.i.facet.IFacet;
 import ambit2.base.interfaces.IStructureRecord;
 
 

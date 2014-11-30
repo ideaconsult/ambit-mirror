@@ -5,9 +5,9 @@ import java.util.Hashtable;
 
 import junit.framework.Assert;
 import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.facet.IFacet;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.facet.IFacet;
 import ambit2.db.facets.propertyvalue.PropertyDatasetFacet;
 import ambit2.db.facets.propertyvalue.PropertyDatasetFacetQuery;
 import ambit2.db.search.test.QueryTest;

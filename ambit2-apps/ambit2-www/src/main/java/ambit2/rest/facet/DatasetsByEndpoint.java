@@ -16,7 +16,7 @@ import ambit2.db.search.StringCondition;
 import ambit2.rest.dataset.MetadatasetResource;
 import ambit2.rest.query.QueryResource;
 
-public class DatasetsByEndpoint extends FacetResource<EndpointCompoundFacet,EndpointCompoundFacetQuery> {
+public class DatasetsByEndpoint extends AmbitFacetResource<EndpointCompoundFacet,EndpointCompoundFacetQuery> {
 	public static final String resource = "/ndatasets_endpoint";
 	
 

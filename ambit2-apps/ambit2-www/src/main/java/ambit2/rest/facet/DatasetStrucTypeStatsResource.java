@@ -15,7 +15,7 @@ import ambit2.db.facets.qlabel.DatasetStrucTypeFacet;
 import ambit2.db.facets.qlabel.DatasetStrucTypeStats;
 import ambit2.rest.OpenTox;
 
-public class DatasetStrucTypeStatsResource  extends FacetResource<DatasetStrucTypeFacet,DatasetStrucTypeStats> {
+public class DatasetStrucTypeStatsResource  extends AmbitFacetResource<DatasetStrucTypeFacet,DatasetStrucTypeStats> {
 	public static final String resource = "/type_strucs";
 	protected Integer datasetID;
 	protected Integer queryResultsID;

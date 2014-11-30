@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 
 import junit.framework.Assert;
 import net.idea.modbcum.i.IQueryRetrieval;
-import ambit2.base.facet.IFacet;
+import net.idea.modbcum.i.facet.IFacet;
 import ambit2.db.facets.datasets.DatasetByPrefixNameFacetQuery;
 import ambit2.db.search.test.QueryTest;
 
