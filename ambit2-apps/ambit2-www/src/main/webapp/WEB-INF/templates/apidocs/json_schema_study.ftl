@@ -1,7 +1,7 @@
 {
     "type": "object",
     "$schema": "http://json-schema.org/draft-03/schema",
-    "id": "http://jsonschema.net",
+    "id": "http://jsonschema.opentox.org/",
     "required": false,
     "properties": {
         "citation": {
