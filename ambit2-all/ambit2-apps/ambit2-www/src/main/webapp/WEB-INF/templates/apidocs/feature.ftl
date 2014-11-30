@@ -127,7 +127,7 @@
 			            "method": "PUT",
 			            "summary": "Update feature",
 			            "notes": "Updates feature <a href='http://opentox.org/dev/apis/api-1.2/Feature' target='opentox'>OpenTox Feature API</a>",
-			            "type": "Feature",
+			            "type": "Task",
 			            "nickname": "updateFeature",
 	                    "consumes": [
 	     	                  "application/rdf+xml"
@@ -169,7 +169,7 @@
 			            "method": "DELETE",
 			            "summary": "Delete feature",
 			            "notes": "Delete feature <a href='http://opentox.org/dev/apis/api-1.2/Feature' target='opentox'>OpenTox Feature API</a>",
-			            "type": "Feature",
+			            "type": "Task",
 			            "nickname": "deleteFeature",
 	                    "consumes": [
 	                                 "application/x-www-form-urlencoded"
@@ -203,9 +203,8 @@
 			}			
     ],
     "models" : {
-    	"Feature" : {
-    		
-    	}
+    	"Task" : <#include "/apidocs/json_schema_task.ftl" >,
+		"Feature" : <#include "/apidocs/json_schema_feature.ftl" >    	
     },    
 	<#include "/apidocs/profile/${menu_profile}/info.ftl" >  
 }
