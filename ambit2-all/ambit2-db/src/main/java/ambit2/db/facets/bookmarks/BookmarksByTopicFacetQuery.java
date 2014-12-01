@@ -6,8 +6,8 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.facet.AbstractFacetQuery;
 import ambit2.base.data.Bookmark;
-import ambit2.db.facets.AbstractFacetQuery;
 import ambit2.db.search.StringCondition;
 
 public class BookmarksByTopicFacetQuery   extends AbstractFacetQuery<Bookmark,String,StringCondition,BookmarksByTopicFacet>  {

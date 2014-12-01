@@ -17,6 +17,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.model.QueryCountModels;
 import ambit2.db.substance.QueryCountEndpoints;
 import ambit2.db.substance.QueryCountInterpretationResults;
@@ -175,6 +176,12 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 		}		
 		case protocol_applications: {
 			QueryCountProtocolApplications q = new QueryCountProtocolApplications(mode.getURL());
+			//?bundle_uri=
+			Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(getParams());
+			if (bundleURI!=null) {
+				Integer idbundle = getIdBundle(bundleURI, request);
+				q.setBundle(new SubstanceEndpointsBundle(idbundle));
+			}	
 			q.setFieldname(getParams().getFirstValue("topcategory"));
 			q.setValue(getParams().getFirstValue("category"));
 			return (Q)q;
@@ -204,6 +211,16 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 		}
 
 	}
+	
+	protected Integer getIdBundle(Object bundleURI, Request request) {
+		if (bundleURI!=null) {
+			Object id = OpenTox.URI.bundle.getId(bundleURI.toString(), request.getRootRef());
+			if (id!=null && (id instanceof Integer)) 
+				return (Integer)id;		
+		} 
+		return null;
+	}
+	
 	@Override
 	public void configureTemplateMap(Map<String, Object> map, Request request,
 			IFreeMarkerApplication app) {

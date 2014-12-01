@@ -6,10 +6,10 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.facet.AbstractFacetQuery;
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;
 import ambit2.base.data.SourceDataset;
-import ambit2.db.facets.AbstractFacetQuery;
 import ambit2.db.search.StringCondition;
 
 public class DatasetStructureQualityStats extends AbstractFacetQuery<QLabel,SourceDataset,StringCondition,DatasetStructureQLabelFacet> {
