@@ -38,6 +38,15 @@
 							    "defaultValue" :"",
 							    <#include "/apidocs/parameter_endpointcategory_enum.ftl" >
 						},                    
+			            {
+				              "name": "bundle_uri",
+				              "description": "Bundle URI",
+				              "required": false,
+				              "type": "string",
+				              "paramType": "query",
+				              "defaultValue": "${ambit_root}/bundle/1",
+				              "allowMultiple"  : false
+				        },			            
 						<#include "/apidocs/parameters_page.ftl" >				            			            
                     ],
                     "responseMessages": [

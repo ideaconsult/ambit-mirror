@@ -6,9 +6,9 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.facet.AbstractFacetQuery;
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.study.Protocol;
-import ambit2.db.facets.AbstractFacetQuery;
 import ambit2.db.search.StringCondition;
 
 public class SubstanceStudyFacetQuery  extends AbstractFacetQuery<String,String,StringCondition,SubstanceStudyFacet>  {
