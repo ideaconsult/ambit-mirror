@@ -10,6 +10,10 @@
             "path": "/query/compound",
             "description": "Chemical structures search"
         },           
+ 		{
+            "path": "/query/substance",
+            "description": "Substance search"
+        },        
         {
             "path": "/feature",
             "description": "OpenTox Feature service"

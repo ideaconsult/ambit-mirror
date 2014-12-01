@@ -43,6 +43,7 @@ import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.processors.ProcessorException;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.UpdateExecutor;
@@ -56,6 +57,7 @@ import ambit2.db.substance.ReadSubstanceByExternalIDentifier;
 import ambit2.db.substance.ReadSubstanceByName;
 import ambit2.db.substance.ReadSubstanceByOwner;
 import ambit2.db.substance.ReadSubstanceByStudy;
+import ambit2.db.update.bundle.substance.ReadSubstancesByBundleCompounds;
 import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
@@ -151,9 +153,10 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 		Object key = request.getAttributes().get(idsubstance);
 		if (key==null) {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
+			//?compound_uri=
 			Object cmpURI = OpenTox.params.compound_uri.getFirstValue(form);
 			if (cmpURI!=null) {
-				Integer idchemical = getIdChemical(OpenTox.params.compound_uri.getFirstValue(form), request);
+				Integer idchemical = getIdChemical(cmpURI, request);
 				if (idchemical != null) {
 					search_mode mode = search_mode.reference;
 					try { 
@@ -173,6 +176,29 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 				} else 
 					throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			}
+			//?bundle_uri=
+			Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(form);
+			if (bundleURI!=null) {
+				Integer idbundle = getIdBundle(bundleURI, request);
+				if (idbundle != null) {
+					search_mode mode = search_mode.related;
+					try { 
+						mode = search_mode.valueOf(form.getFirstValue("type"));
+					} catch (Exception x) {}
+					switch (mode) {
+					case reference: {
+						SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(idbundle);
+						return (Q)new ReadSubstancesByBundleCompounds(bundle);			
+					}
+					case related: {
+						SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(idbundle);
+						return (Q)new ReadSubstancesByBundleCompounds(bundle);								
+					}
+					}
+				} else 
+					throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+			}
+			
 			String type = form.getFirstValue("type");
 			if ("facet".equals(type)) {
 				List<ProtocolApplication<Protocol, Params, String, Params,String>> protocols = new ArrayList<ProtocolApplication<Protocol, Params, String, Params,String>>();
@@ -308,6 +334,15 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 				if (ids!=null && (ids.length>1) && (ids[0] instanceof Integer)) 
 					return (Integer)ids[0];
 			}
+		} 
+		return null;
+	}
+	
+	protected Integer getIdBundle(Object bundleURI, Request request) {
+		if (bundleURI!=null) {
+			Object id = OpenTox.URI.bundle.getId(bundleURI.toString(), request.getRootRef());
+			if (id!=null && (id instanceof Integer)) 
+				return (Integer)id;		
 		} 
 		return null;
 	}

@@ -133,6 +133,7 @@ import ambit2.rest.structure.diagram.AbstractDepict;
 import ambit2.rest.structure.tautomers.QueryStructureRelationResource;
 import ambit2.rest.structure.tautomers.QueryTautomersResource;
 import ambit2.rest.substance.SubstanceDatasetResource;
+import ambit2.rest.substance.SubstanceLookup;
 import ambit2.rest.substance.SubstanceResource;
 import ambit2.rest.substance.composition.SubstanceCompositionResource;
 import ambit2.rest.substance.composition.SubstanceStructuresResource;
@@ -877,6 +878,13 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		lookup.attachDefault(CompoundLookup.class);
 		lookup.attach(CompoundLookup.resourceID,CompoundLookup.class);
 		lookup.attach(CompoundLookup.resourceID+CompoundLookup.representationID,CompoundLookup.class);		
+		
+		Router slookup = new MyRouter(getContext());
+		queryRouter.attach(OpenTox.URI.substance.getURI(),slookup);
+		slookup.attachDefault(SubstanceLookup.class);
+		slookup.attach("/{type}",SubstanceLookup.class);
+		slookup.attach("/{type}/{subtype}",SubstanceLookup.class);		
+		slookup.attach("/{type}/{subtype}/{subsubtype}",SubstanceLookup.class);
 		
 		return queryRouter;
 	}

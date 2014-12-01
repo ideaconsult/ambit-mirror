@@ -190,6 +190,24 @@ public class OpenTox {
 				return "Compound URIs";
 			}			
 		},	
+		bundle_uri {
+			public boolean isMandatory() {
+				return false;
+			}
+	
+			public String getDescription() {
+				return "Bundle URI";
+			}			
+		},		
+		substance_uri {
+			public boolean isMandatory() {
+				return false;
+			}
+	
+			public String getDescription() {
+				return "Substance URI";
+			}			
+		},			
 		delay {
 			public boolean isMandatory() {
 				return false;
