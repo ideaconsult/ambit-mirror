@@ -763,13 +763,13 @@
 			    ]
 			},
 			{
-			    "path": "/bundle/{idbundle}/studysummary",
+			    "path": "/bundle/{idbundle}/study",
 			    "operations": [
 			        {
 			            "method": "GET",
 			            "summary": "Get study summary per bundle",
 			            "notes": "Get study summary per bundle",
-			            "type": "StudySummaryFacet",
+			            "type": "Facet",
 			            "nickname": "getBundleStudySummary",
 			            <#include "/apidocs/authz.ftl" >
 			            "parameters": [

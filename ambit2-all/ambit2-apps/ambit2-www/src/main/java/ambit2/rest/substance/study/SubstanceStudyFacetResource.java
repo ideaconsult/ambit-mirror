@@ -11,14 +11,10 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.substance.study.facet.SubstanceStudyFacet;
 import ambit2.db.substance.study.facet.SubstanceStudyFacetQuery;
-import ambit2.db.update.bundle.effects.BundleStudyFacetQuery;
-import ambit2.rest.OpenTox;
 import ambit2.rest.facet.AmbitFacetResource;
 import ambit2.rest.substance.SubstanceResource;
 
@@ -32,9 +28,7 @@ public class SubstanceStudyFacetResource<Q extends IQueryRetrieval<SubstanceStud
 	@Override
 	protected Q createQuery(Context context,
 			Request request, Response response) throws ResourceException {
-		
-		Object idbundle = request.getAttributes().get(OpenTox.URI.bundle.getKey());
-		if (idbundle==null) {
+
 			Object substanceuuid = request.getAttributes().get(SubstanceResource.idsubstance);
 			Form form = getRequest().getResourceRef().getQueryAsForm();
 			String property = form.getFirstValue("property");
@@ -52,19 +46,6 @@ public class SubstanceStudyFacetResource<Q extends IQueryRetrieval<SubstanceStud
 				q.setValue(property);
 			}		
 			return (Q)q;
-		} else {
-			try {
-				SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(new Integer(Reference.decode(idbundle.toString())));
-				BundleStudyFacetQuery q = new BundleStudyFacetQuery(
-						String.format("%s%s/%s/study",getRootRef(),OpenTox.URI.bundle.getURI(),idbundle)
-						);
-				q.setFieldname(bundle);
-				return (Q)q;
-			} catch (Exception x) {
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
-			}
-
-		}
 	}
 	@Override
 	protected QueryReporter createJSONReporter(Request request, String jsonp) {
