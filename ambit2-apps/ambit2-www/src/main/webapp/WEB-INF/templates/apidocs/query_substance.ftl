@@ -36,6 +36,15 @@
 			              "paramType": "query",
 			              "allowMultiple"  : false
 			            },				            
+			            {
+				              "name": "bundle_uri",
+				              "description": "Retrieves if selected in this bundle",
+				              "required": false,
+				              "type": "string",
+				              "paramType": "query",
+				              "defaultValue": "${ambit_root}/bundle/1",
+				              "allowMultiple"  : false
+				        },					            
 						<#include "/apidocs/parameters_page.ftl" >
                     ],
                     "responseMessages": [
@@ -77,7 +86,16 @@
 			              "type": "string",
 			              "paramType": "query",
 			              "allowMultiple"  : false
-			            },				            
+			            },				    
+			            {
+				              "name": "bundle_uri",
+				              "description": "Retrieves if selected in this bundle",
+				              "required": false,
+				              "type": "string",
+				              "paramType": "query",
+				              "defaultValue": "${ambit_root}/bundle/1",
+				              "allowMultiple"  : false
+				        },					                    
 						<#include "/apidocs/parameters_page.ftl" >
                     ],
                     "responseMessages": [
@@ -119,7 +137,16 @@
 			              "type": "string",
 			              "paramType": "query",
 			              "allowMultiple"  : false
-			            },				            
+			            },				  
+			            {
+				              "name": "bundle_uri",
+				              "description": "Retrieves if selected in this bundle",
+				              "required": false,
+				              "type": "string",
+				              "paramType": "query",
+				              "defaultValue": "${ambit_root}/bundle/1",
+				              "allowMultiple"  : false
+				        },					                      
 						<#include "/apidocs/parameters_page.ftl" >
                     ],
                     "responseMessages": [
@@ -155,13 +182,22 @@
 			            },
 			            {
 				              "name": "bundle_uri",
-				              "description": "Bundle URI",
+				              "description": "Retrieves if selected in this bundle",
 				              "required": false,
 				              "type": "string",
 				              "paramType": "query",
 				              "defaultValue": "${ambit_root}/bundle/1",
 				              "allowMultiple"  : false
-				        },			            
+				        },			   
+			            {
+				              "name": "bundle",
+				              "description": "Restricts the search within this bundle",
+				              "required": false,
+				              "type": "string",
+				              "paramType": "query",
+				              "allowMultiple"  : false
+				        },		
+				        			                 
 						<#include "/apidocs/parameters_page.ftl" >
                     ],
                     "responseMessages": [
@@ -197,13 +233,21 @@
 			            },
 			            {
 				              "name": "bundle_uri",
-				              "description": "Bundle URI",
+				              "description": "Retrieves if selected in this bundle",
 				              "required": false,
 				              "type": "string",
 				              "paramType": "query",
 				              "defaultValue": "${ambit_root}/bundle/1",
 				              "allowMultiple"  : false
-				        },			            
+				        },			   
+			            {
+				              "name": "bundle",
+				              "description": "Restricts the search within this bundle",
+				              "required": false,
+				              "type": "string",
+				              "paramType": "query",
+				              "allowMultiple"  : false
+				        },            
 						<#include "/apidocs/parameters_page.ftl" >
                     ],
                     "responseMessages": [
@@ -294,7 +338,16 @@
 			              "type": "string",
 			              "paramType": "query",
 			              "allowMultiple"  : true			              
-			            },							            		                          	            
+			            },				
+			            {
+				              "name": "bundle_uri",
+				              "description": "Retrieves if selected in this bundle",
+				              "required": false,
+				              "type": "string",
+				              "paramType": "query",
+				              "defaultValue": "${ambit_root}/bundle/1",
+				              "allowMultiple"  : false
+				        },					            			            		                          	            
 						<#include "/apidocs/parameters_page.ftl" >
                     ],
                     "responseMessages": [

@@ -83,10 +83,21 @@ public class SubstanceLookup<Q extends IQueryRetrieval<SubstanceRecord>,T extend
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}	
 		
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Form form = getRequest().getResourceRef().getQueryAsForm();		
+		try {
+
+			Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(form);
+			Integer idbundle = bundleURI==null?null:getIdBundle(bundleURI, request);
+			SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(idbundle);
+			bundles = new SubstanceEndpointsBundle[1];
+			bundles[0] = bundle;
+		} catch (Exception x) {
+			bundles = null;
+		}		
+
 		Object cmpURI = OpenTox.params.compound_uri.getFirstValue(form);
 		Integer idchemical = cmpURI==null?null:getIdChemical(cmpURI, request);
-		Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(form);
+		Object bundleURI = form.getFirstValue("bundle");
 		Integer idbundle = bundleURI==null?null:getIdBundle(bundleURI, request);
 		
 		String search = form.getFirstValue(QueryResource.search_param);
@@ -102,6 +113,7 @@ public class SubstanceLookup<Q extends IQueryRetrieval<SubstanceRecord>,T extend
 			}
 			if (idbundle!=null) {
 				SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(idbundle);
+				bundles = new SubstanceEndpointsBundle[] {bundle};
 				return (Q)new ReadSubstancesByBundleCompounds(bundle);						
 			}				
 			break;
@@ -117,6 +129,7 @@ public class SubstanceLookup<Q extends IQueryRetrieval<SubstanceRecord>,T extend
 			}	
 			if (idbundle!=null) {
 				SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(idbundle);
+				bundles = new SubstanceEndpointsBundle[] {bundle};
 				return (Q)new ReadSubstancesByBundleCompounds(bundle);						
 			}
 			break;

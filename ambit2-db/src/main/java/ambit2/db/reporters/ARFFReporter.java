@@ -50,7 +50,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 		if (processors!=null)
 			for (IProcessor processor : processors) getProcessors().add(processor);
 		else 
-			configureProcessors(false);
+			configureProcessors(null, false);
 	}
 	
 	@Override

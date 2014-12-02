@@ -44,10 +44,10 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 	protected final CompoundJSONReporter<IQueryRetrieval<IStructureRecord>> cmpReporter;
 	protected final SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>> substanceReporter;
 
-	public SubstanceCompositionJSONReporter(Request request, ResourceDoc doc,String jsonpCallback) {
+	public SubstanceCompositionJSONReporter(Request request, String jsonpCallback) {
 		super();
 		Profile groupProperties = getGroupProperties();
-		cmpReporter = new CompoundJSONReporter(null,null,null,request,doc,request.getRootRef().toString(),false,null);
+		cmpReporter = new CompoundJSONReporter(null,null,null,null,request,request.getRootRef().toString(),false,null);
 		cmpReporter.setGroupProperties(groupProperties);
 		substanceReporter = new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(request);
 		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpCallback);

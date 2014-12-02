@@ -698,4 +698,13 @@ Then, when the "get(Variant)" method calls you back,
 			}
 		} //else throw new RestException(status);
 	}
+	
+	protected Integer getIdBundle(Object bundleURI, Request request) {
+		if (bundleURI!=null) {
+			Object id = OpenTox.URI.bundle.getId(bundleURI.toString(), request.getRootRef());
+			if (id!=null && (id instanceof Integer)) 
+				return (Integer)id;		
+		} 
+		return null;
+	}
 }

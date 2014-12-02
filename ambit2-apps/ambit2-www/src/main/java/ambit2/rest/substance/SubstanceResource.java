@@ -76,6 +76,8 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 	public final static String substance = OpenTox.URI.substance.getURI();
 	public final static String idsubstance = OpenTox.URI.substance.getKey();
 	public final static String substanceID = OpenTox.URI.substance.getResourceID();
+	protected SubstanceEndpointsBundle[] bundles;
+	
 	enum search_mode {
 		reference,
 		related
@@ -135,13 +137,13 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
-			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(),jsonpcallback);
+			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(),jsonpcallback,bundles);
 			return new OutputWriterConvertor<SubstanceRecord, Q>(
 					cmpreporter,
 					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);
 		} else { //json by default
 		//else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(),null);
+			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(),null,bundles);
 			return new OutputWriterConvertor<SubstanceRecord, Q>(
 					cmpreporter,
 					MediaType.APPLICATION_JSON,filenamePrefix);
@@ -153,6 +155,17 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 		Object key = request.getAttributes().get(idsubstance);
 		if (key==null) {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
+			
+			try {
+				Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(form);
+				Integer idbundle = bundleURI==null?null:getIdBundle(bundleURI, request);
+				SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(idbundle);
+				bundles = new SubstanceEndpointsBundle[1];
+				bundles[0] = bundle;
+			} catch (Exception x) {
+				bundles = null;
+			}	
+			
 			//?compound_uri=
 			Object cmpURI = OpenTox.params.compound_uri.getFirstValue(form);
 			if (cmpURI!=null) {
@@ -177,7 +190,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 					throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			}
 			//?bundle_uri=
-			Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(form);
+			Object bundleURI = form.getFirstValue("bundle");			
 			if (bundleURI!=null) {
 				Integer idbundle = getIdBundle(bundleURI, request);
 				if (idbundle != null) {
@@ -188,10 +201,12 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 					switch (mode) {
 					case reference: {
 						SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(idbundle);
+						bundles = new SubstanceEndpointsBundle[] {bundle};						
 						return (Q)new ReadSubstancesByBundleCompounds(bundle);			
 					}
 					case related: {
 						SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(idbundle);
+						bundles = new SubstanceEndpointsBundle[] {bundle};
 						return (Q)new ReadSubstancesByBundleCompounds(bundle);								
 					}
 					}

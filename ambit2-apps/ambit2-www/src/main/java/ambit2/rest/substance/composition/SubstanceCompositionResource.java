@@ -58,12 +58,12 @@ public class SubstanceCompositionResource<Q extends IQueryRetrieval<CompositionR
 		if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
-			SubstanceCompositionJSONReporter cmpreporter = new SubstanceCompositionJSONReporter(getRequest(),getDocumentation(),jsonpcallback);
+			SubstanceCompositionJSONReporter cmpreporter = new SubstanceCompositionJSONReporter(getRequest(),jsonpcallback);
 			return new OutputWriterConvertor<CompositionRelation, Q>(
 					cmpreporter,
 					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);
 		} else { //json by default
-			SubstanceCompositionJSONReporter cmpreporter = new SubstanceCompositionJSONReporter(getRequest(),getDocumentation(),null);
+			SubstanceCompositionJSONReporter cmpreporter = new SubstanceCompositionJSONReporter(getRequest(),null);
 			return new OutputWriterConvertor<CompositionRelation, Q>(
 					cmpreporter,
 					MediaType.APPLICATION_JSON,filenamePrefix);

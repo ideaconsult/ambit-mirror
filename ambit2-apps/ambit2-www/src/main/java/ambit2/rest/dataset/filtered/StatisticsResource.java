@@ -211,15 +211,7 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 		}
 
 	}
-	
-	protected Integer getIdBundle(Object bundleURI, Request request) {
-		if (bundleURI!=null) {
-			Object id = OpenTox.URI.bundle.getId(bundleURI.toString(), request.getRootRef());
-			if (id!=null && (id instanceof Integer)) 
-				return (Integer)id;		
-		} 
-		return null;
-	}
+
 	
 	@Override
 	public void configureTemplateMap(Map<String, Object> map, Request request,

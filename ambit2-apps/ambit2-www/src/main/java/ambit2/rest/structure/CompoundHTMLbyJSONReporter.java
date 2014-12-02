@@ -34,11 +34,11 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 	
 	protected CompoundJSONReporter<IQueryRetrieval<IStructureRecord>> cmp_reporter;
 	
-	public CompoundHTMLbyJSONReporter(String prefix, Request request,ResourceDoc doc,DisplayMode _dmode,
+	public CompoundHTMLbyJSONReporter(String prefix, Request request,DisplayMode _dmode,
 			QueryURIReporter urireporter,
 			Template template,Profile groupedProperties,Dimension d,String urlPrefix) {
-		super(request,_dmode,doc,false);
-		cmp_reporter = new CompoundJSONReporter<IQueryRetrieval<IStructureRecord>>(template,groupedProperties,null,request,doc,urlPrefix,false,null);
+		super(request,_dmode,null,false);
+		cmp_reporter = new CompoundJSONReporter<IQueryRetrieval<IStructureRecord>>(template,groupedProperties,null,null,request,urlPrefix,false,null);
 		processors = cmp_reporter.getProcessors();
 	}
 	@Override

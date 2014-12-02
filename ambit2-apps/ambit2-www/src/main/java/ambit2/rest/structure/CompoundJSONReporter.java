@@ -16,7 +16,6 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.facet.IFacet;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
-import net.idea.restnet.c.ResourceDoc;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.SDFWriter;
@@ -25,10 +24,13 @@ import org.restlet.Request;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.base.facet.BundleRoleFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.json.JSONUtils;
 import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.db.facets.compounds.ChemicalRoleByBundle;
 import ambit2.db.facets.compounds.CollectionsByChemical;
 import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
@@ -84,32 +86,34 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		dataset,
 		dataEntry,
 		values,
-		facets;
+		facets,
+		bundles;
 		
 		public String jsonname() {
 			return name();
 		}
 	}
 	
-	public CompoundJSONReporter(Template template, Request request,ResourceDoc doc, String urlPrefix,Boolean includeMol, String jsonpCallback) {
-		this(template,null,null,request,doc,urlPrefix,includeMol,jsonpCallback);
+	public CompoundJSONReporter(Template template, Request request, String urlPrefix,Boolean includeMol, String jsonpCallback) {
+		this(template,null,null,null,request,urlPrefix,includeMol,jsonpCallback);
 	}
 	
 	public CompoundJSONReporter(Template template,
 					Profile groupedProperties,
 					String[] folders,
-					Request request,ResourceDoc doc, 
+					SubstanceEndpointsBundle[] bundles,
+					Request request,
 					String urlPrefix,
 					Boolean includeMol,
 					String jsonpCallback) {
-		super(template,groupedProperties,folders,urlPrefix,includeMol);
+		super(request.getRootRef().toString(),template,groupedProperties,folders,bundles,urlPrefix,includeMol);
 		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpCallback);
 		
 		propertyJSONReporter = new PropertyJSONReporter(request);
 		hilightPredictions = request.getResourceRef().getQueryAsForm().getFirstValue("model_uri");
 	}
 	@Override
-	protected void configureProcessors(boolean includeMol) {
+	protected void configureProcessors(String baseRef, boolean includeMol) {
 		if (includeMol) {
 			RetrieveStructure r = new RetrieveStructure();
 			r.setPage(0);
@@ -117,7 +121,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			getProcessors().add(new ProcessorStructureRetrieval(r));
 		}
 		configurePropertyProcessors();
-		configureCollectionProcessors();
+		configureCollectionProcessors(baseRef);
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target);
@@ -126,21 +130,37 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		});	
 	};
 	@Override
-	protected void configureCollectionProcessors() {
-		if (folders==null || folders.length==0) return;
-		CollectionsByChemical collections = new CollectionsByChemical(null);
-		collections.setValue(folders);
-		MasterDetailsProcessor<IStructureRecord,IFacet<String>,IQueryCondition> facetReader = new MasterDetailsProcessor<IStructureRecord,IFacet<String>,IQueryCondition>(collections) {
-			@Override
-			protected IStructureRecord processDetail(IStructureRecord master,
-					IFacet<String> detail) throws Exception {
-				master.clearFacets();
-				master.addFacet(detail);
-				return master;
-			}
-		};
-		facetReader.setCloseConnection(false);
-		getProcessors().add(facetReader);
+	protected void configureCollectionProcessors(String baseURI) {
+		if (folders!=null && folders.length>0) {
+			CollectionsByChemical collections = new CollectionsByChemical(null);
+			collections.setValue(folders);
+			MasterDetailsProcessor<IStructureRecord,IFacet<String>,IQueryCondition> facetReader = new MasterDetailsProcessor<IStructureRecord,IFacet<String>,IQueryCondition>(collections) {
+				@Override
+				protected IStructureRecord processDetail(IStructureRecord master,
+						IFacet<String> detail) throws Exception {
+					master.clearFacets();
+					master.addFacet(detail);
+					return master;
+				}
+			};
+			facetReader.setCloseConnection(false);
+			getProcessors().add(facetReader);
+		}
+		if (bundles!=null && bundles.length>0) {
+			ChemicalRoleByBundle q = new ChemicalRoleByBundle(baseURI);
+			q.setValue(bundles[0]);
+			MasterDetailsProcessor<IStructureRecord,BundleRoleFacet,IQueryCondition> bundleReader = new MasterDetailsProcessor<IStructureRecord,BundleRoleFacet,IQueryCondition>(q) {
+				@Override
+				protected IStructureRecord processDetail(IStructureRecord master,BundleRoleFacet detail) throws Exception {
+					master.clearFacets();
+					master.addFacet(detail);
+					return master;
+				}
+			};
+			bundleReader.setCloseConnection(false);
+			getProcessors().add(bundleReader);
+		}		
+		
 	}
 	@Override
 	public void setOutput(Writer output) throws Exception {
@@ -271,12 +291,25 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			Iterable<IFacet> facets = item.getFacets();
 			String delimiter = "";
 			if (facets!=null) for (IFacet facet : facets) {
+				if (facet instanceof BundleRoleFacet) continue;
 				if (facet.getValue()==null) continue;
 				builder.append(delimiter);
 				builder.append(String.format("\t\t{\"%s\":%d}",facet.getValue()==null?"":facet.getValue(),facet.getCount()));
 				delimiter=",";
 			}
-			builder.append("\n\t\t]");
+			builder.append("\n\t\t],");
+				
+			builder.append(String.format("\n\t%s:{\n",JSONUtils.jsonQuote(jsonCompound.bundles.jsonname())));
+			facets = item.getFacets();
+			delimiter = "";
+			if (facets!=null) for (IFacet facet : facets) 
+				if (facet instanceof BundleRoleFacet) {
+					builder.append(delimiter);
+					builder.append("\n\t\t");
+					builder.append(facet.toJSON(propertyJSONReporter.getRequest().getRootRef().toString(),null));
+					delimiter=",";
+			}
+			builder.append("\n\t\t}");
 			
 			builder.append("\n\t}");
 			writer.write(builder.toString());

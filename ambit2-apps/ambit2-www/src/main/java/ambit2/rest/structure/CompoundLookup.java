@@ -38,6 +38,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.CASProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
@@ -53,6 +54,7 @@ import ambit2.db.search.structure.QueryStructure;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.pubchem.NCISearchProcessor;
 import ambit2.rest.DisplayMode;
+import ambit2.rest.OpenTox;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.task.CallableQueryProcessor;
@@ -148,6 +150,17 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		}
 		
 		Form form = getParams();
+		
+		try {
+			Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(form);
+			Integer idbundle = bundleURI==null?null:getIdBundle(bundleURI, request);
+			SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(idbundle);
+			bundles = new SubstanceEndpointsBundle[1];
+			bundles[0] = bundle;
+		} catch (Exception x) {
+			bundles = null;
+		}
+		
 		try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 		try { headless = Boolean.parseBoolean(form.getFirstValue("headless")); } catch (Exception x) { headless=false;}		
 		boolean casesens = "true".equals(form.getFirstValue(QueryResource.caseSensitive))?true:false;
