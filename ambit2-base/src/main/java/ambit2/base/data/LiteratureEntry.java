@@ -4,6 +4,8 @@
  */
 package ambit2.base.data;
 
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
+
 
 
 
@@ -81,6 +83,11 @@ public class LiteratureEntry extends AmbitBean implements ILiteratureEntry{
 	
 	public static synchronized LiteratureEntry getEINECSReference() {
 		return getInstance(EINECS_name,EINECS_uri);
+	}
+	public static synchronized LiteratureEntry getBundleReference(SubstanceEndpointsBundle bundle) {
+		LiteratureEntry et = new LiteratureEntry(String.format("/bundle/%d",bundle.getID()),String.format("/bundle/%d", bundle.getID()));
+		et.setType(_type.Dataset);
+		return et;
 	}
 	public static synchronized LiteratureEntry getInstance(String name,String url) {
 		return getInstance(name,url,-1);

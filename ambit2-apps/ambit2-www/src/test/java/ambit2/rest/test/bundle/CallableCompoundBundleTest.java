@@ -29,6 +29,8 @@ public class CallableCompoundBundleTest extends DbUnitTest {
 		
 		Form form  = new Form();
 		form.add("compound_uri","http://localhost:8081/ambit2/compound/11");
+		form.add("tag","source");
+		form.add("remarks","12345");
 		
 		try {
 			SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(1);
@@ -38,8 +40,10 @@ public class CallableCompoundBundleTest extends DbUnitTest {
 					bundle,reporter,Method.POST,form,c.getConnection(),null
 					);
 			TaskResult task = callable.call();
-			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,idchemical from bundle_chemicals where idchemical=11 and idbundle=1"));
+			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,idchemical,tag,remarks  from bundle_chemicals where idchemical=11 and idbundle=1"));
 			Assert.assertEquals(1,table.getRowCount());
+			Assert.assertEquals("source",table.getValue(0,"tag"));
+			Assert.assertEquals("12345",table.getValue(0,"remarks"));
 			
 		} catch (Exception x) {
 			throw x;
@@ -70,6 +74,7 @@ public class CallableCompoundBundleTest extends DbUnitTest {
 			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,idchemical from bundle_chemicals where idchemical=7 and idbundle=1"));
 			Assert.assertEquals(0,table.getRowCount());
 			
+			
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -87,6 +92,8 @@ public class CallableCompoundBundleTest extends DbUnitTest {
 		Form form  = new Form();
 		form.add("compound_uri","http://localhost:8081/ambit2/compound/11");
 		form.add("command","add");
+		form.add("tag","source");
+		form.add("remarks","12345");
 		
 		try {
 			SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(1);
@@ -96,8 +103,10 @@ public class CallableCompoundBundleTest extends DbUnitTest {
 					bundle,reporter,Method.PUT,form,c.getConnection(),null
 					);
 			TaskResult task = callable.call();
-			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,idchemical from bundle_chemicals where idchemical=11 and idbundle=1"));
+			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,idchemical,tag,remarks from bundle_chemicals where idchemical=11 and idbundle=1"));
 			Assert.assertEquals(1,table.getRowCount());
+			Assert.assertEquals("source",table.getValue(0,"tag"));
+			Assert.assertEquals("12345",table.getValue(0,"remarks"));
 			
 		} catch (Exception x) {
 			throw x;

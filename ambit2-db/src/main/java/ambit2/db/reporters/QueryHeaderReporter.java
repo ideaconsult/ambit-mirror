@@ -121,16 +121,21 @@ public abstract class QueryHeaderReporter<Q extends IQueryRetrieval<IStructureRe
 					return super.process(target);
 				}
 			});
-		if (getTemplate().size()>0) 
-			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
-				@Override
-				public IStructureRecord process(IStructureRecord target)
-						throws AmbitException {
-					((RetrieveProfileValues)getQuery()).setRecord(target);
-					return super.process(target);
-				}
-			});		
-		
+		if (getTemplate().size()>0)  {
+			Template copy = new Template();
+			for (Property p : getTemplate().values()) {
+				if (p.getId()>0) copy.add(p);
+			}
+			if (copy.size()>0)
+				getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,copy,true)) {
+					@Override
+					public IStructureRecord process(IStructureRecord target)
+							throws AmbitException {
+						((RetrieveProfileValues)getQuery()).setRecord(target);
+						return super.process(target);
+					}
+				});		
+		}
 	}
 
 }

@@ -105,5 +105,5 @@
   <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_REPEATED_ORAL_SECTION"  created="2014-11-20 09:41:19.0"/>
   <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_REPRODUCTION_SECTION"  created="2014-11-20 09:41:19.0"/>
   <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_SENSITIZATION_SECTION"  created="2014-11-20 09:41:19.0"/>
-  
+  <bundle_chemicals idbundle="1" idchemical="29141" created="2014-11-20 09:41:19.0" tag="source" remarks="remarks"/>
 </dataset>

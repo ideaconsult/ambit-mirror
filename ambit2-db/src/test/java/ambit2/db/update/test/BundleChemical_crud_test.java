@@ -6,6 +6,8 @@ import net.idea.modbcum.i.query.IQueryUpdate;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
@@ -21,40 +23,51 @@ public class BundleChemical_crud_test  extends CRUDTest<SubstanceEndpointsBundle
 	@Override
 	protected IQueryUpdate<SubstanceEndpointsBundle, IStructureRecord> createQuery()
 			throws Exception {
+		SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(1);
 		AddChemicalToBundle query = new AddChemicalToBundle();
-		query.setGroup(new SubstanceEndpointsBundle(1));
-		query.setObject(new StructureRecord(10,-1,null,null));
+		query.setGroup(bundle);
+		
+		StructureRecord record = new StructureRecord(10,-1,null,null);
+		record.setProperty(new Property("tag",LiteratureEntry.getBundleReference(bundle)),"target");
+		record.setProperty(new Property("remarks",LiteratureEntry.getBundleReference(bundle)),"ABCDEF");
+		query.setObject(record);
 		return query;
 	}
 
 	@Override
 	protected IQueryUpdate<SubstanceEndpointsBundle, IStructureRecord> createQueryNew()
 			throws Exception {
+		SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(1);
 		AddChemicalToBundle query = new AddChemicalToBundle();
-		query.setGroup(new SubstanceEndpointsBundle(1));
-		query.setObject(new StructureRecord(7,-1,null,null));
+		query.setGroup(bundle);
+		
+		StructureRecord record = new StructureRecord(7,-1,null,null);
+		record.setProperty(new Property("tag",LiteratureEntry.getBundleReference(bundle)),"target");
+		record.setProperty(new Property("remarks",LiteratureEntry.getBundleReference(bundle)),"ABCDEF");
+		query.setObject(record);
 		return query;		
 	}
 
 	@Override
 	protected IQueryUpdate<SubstanceEndpointsBundle, IStructureRecord> updateQuery()
 			throws Exception {
-		return null;
+		SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(1);
+		AddChemicalToBundle query = new AddChemicalToBundle();
+		query.setGroup(bundle);
+		
+		StructureRecord record = new StructureRecord(29141,-1,null,null);
+		record.setProperty(new Property("tag",LiteratureEntry.getBundleReference(bundle)),"target");
+		record.setProperty(new Property("remarks",LiteratureEntry.getBundleReference(bundle)),"ABCDEF");
+		query.setObject(record);
+		return query;
 	}
-	@Override
-	public void testUpdate() throws Exception {
 
-	}
-	@Override
-	public void testDelete() throws Exception {
-		//super.testDelete();
-	}
 	@Override
 	protected IQueryUpdate<SubstanceEndpointsBundle, IStructureRecord> deleteQuery()
 			throws Exception {
 		DeleteChemicalsFromBundle query = new DeleteChemicalsFromBundle();
 		query.setGroup(new SubstanceEndpointsBundle(1));
-		query.setObject(new StructureRecord(1,-1,null,null));
+		query.setObject(new StructureRecord(29141,-1,null,null));
 		return query;
 	}
 
@@ -63,8 +76,10 @@ public class BundleChemical_crud_test  extends CRUDTest<SubstanceEndpointsBundle
 			IQueryUpdate<SubstanceEndpointsBundle, IStructureRecord> query)
 			throws Exception {
 		 IDatabaseConnection c = getConnection();	
-		 ITable table = 	c.createQueryTable("EXPECTED_BUNDLE","SELECT idbundle,idchemical from bundle_chemicals where idbundle=1 and idchemical=10");
+		 ITable table = 	c.createQueryTable("EXPECTED_BUNDLE","SELECT idbundle,idchemical,tag,remarks from bundle_chemicals where idbundle=1 and idchemical=10");
 		 Assert.assertEquals(1,table.getRowCount());
+		 Assert.assertEquals("target",table.getValue(0, "tag"));
+		 Assert.assertEquals("ABCDEF",table.getValue(0, "remarks"));
   		 c.close();
 	}
 
@@ -73,8 +88,10 @@ public class BundleChemical_crud_test  extends CRUDTest<SubstanceEndpointsBundle
 			IQueryUpdate<SubstanceEndpointsBundle, IStructureRecord> query)
 			throws Exception {
 		 IDatabaseConnection c = getConnection();	
-		 ITable table = 	c.createQueryTable("EXPECTED_BUNDLE","SELECT idbundle,idchemical from bundle_chemicals where idbundle=1 and idchemical=7");
+		 ITable table = 	c.createQueryTable("EXPECTED_BUNDLE","SELECT idbundle,idchemical,tag,remarks from bundle_chemicals where idbundle=1 and idchemical=7");
 		 Assert.assertEquals(1,table.getRowCount());
+		 Assert.assertEquals("target",table.getValue(0, "tag"));
+		 Assert.assertEquals("ABCDEF",table.getValue(0, "remarks"));
   		 c.close();
 	}
 
@@ -82,6 +99,12 @@ public class BundleChemical_crud_test  extends CRUDTest<SubstanceEndpointsBundle
 	protected void updateVerify(
 			IQueryUpdate<SubstanceEndpointsBundle, IStructureRecord> query)
 			throws Exception {
+		 IDatabaseConnection c = getConnection();	
+		 ITable table = 	c.createQueryTable("EXPECTED_BUNDLE","SELECT idbundle,idchemical,tag,remarks from bundle_chemicals where idbundle=1 and idchemical=29141");
+		 Assert.assertEquals(1,table.getRowCount());
+		 Assert.assertEquals("target",table.getValue(0, "tag"));
+		 Assert.assertEquals("ABCDEF",table.getValue(0, "remarks"));
+ 		 c.close();		
 	}
 
 	@Override
@@ -89,7 +112,7 @@ public class BundleChemical_crud_test  extends CRUDTest<SubstanceEndpointsBundle
 			IQueryUpdate<SubstanceEndpointsBundle, IStructureRecord> query)
 			throws Exception {
 		 IDatabaseConnection c = getConnection();	
-		 ITable table = 	c.createQueryTable("EXPECTED_BUNDLE","SELECT idbundle,idchemical from bundle_chemicals where idbundle=1 and idchemical=10");
+		 ITable table = 	c.createQueryTable("EXPECTED_BUNDLE","SELECT idbundle,idchemical from bundle_chemicals where idbundle=1 and idchemical=29141");
 		 Assert.assertEquals(0,table.getRowCount());
   		 c.close();		
 	}
