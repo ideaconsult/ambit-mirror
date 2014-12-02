@@ -237,8 +237,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
 					ChemicalMediaType.THREECOL_ARFF,filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,
-								getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),
+			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,bundles,
+								getRequest(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),
 								includeMol,null);
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					cmpreporter,
@@ -247,8 +247,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
-			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,
-							getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),
+			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,bundles,
+							getRequest(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),
 							includeMol,jsonpcallback);
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					cmpreporter,
@@ -256,7 +256,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CSVReporter(getTemplate(),getGroupProperties(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),MediaType.TEXT_CSV,filenamePrefix);
+					new CSVReporter(getRequest().getRootRef().toString(),getTemplate(),getGroupProperties(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),MediaType.TEXT_CSV,filenamePrefix);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.NANO_CML)) { 
 				//return new DocumentConvertor<IStructureRecord, QueryStructureByID>(new StructureReporter((getRequest()==null)?null:getRequest().getRootRef()));
 				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(

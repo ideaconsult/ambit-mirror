@@ -52,7 +52,7 @@ public class QueryStructureRelationResource<Q extends IQueryRetrieval<StructureR
 	
 	@Override
 	protected CSVReporter createCSVReporter() {
-		CSVReporter csvReporter = new CSVReporter(null,null,
+		CSVReporter csvReporter = new CSVReporter(getRequest().getRootRef().toString(),null,null,
 				String.format("%s%s",getRequest().getRootRef(),getCompoundInDatasetPrefix())
 				);
 		csvReporter.setSimilarityColumn(Property.getInstance("metric",queryObject==null?"":queryObject.toString(),"http://ambit.sourceforge.net"));

@@ -13,6 +13,7 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.processors.ProcessorStructureRetrieval;
@@ -30,7 +31,16 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	protected Property similarityColumn;
 	protected String licenseColumn = null;
 	protected String[] folders;
+	protected SubstanceEndpointsBundle[] bundles;
 	
+	public SubstanceEndpointsBundle[] getBundles() {
+		return bundles;
+	}
+
+	public void setBundles(SubstanceEndpointsBundle[] bundles) {
+		this.bundles = bundles;
+	}
+
 	public String[] getFolders() {
 		return folders;
 	}
@@ -76,27 +86,28 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	}
 	
 	public CSVReporter() {
-		this(null);
+		this(null,null);
 	}
-	public CSVReporter(Template template) {
-		this(template,null,"");
+	public CSVReporter(String baseRef,Template template) {
+		this(baseRef,template,null,"");
 	}
-	public CSVReporter(Template template, Profile groupedProperties, String urlPrefix) {
-		this(template,groupedProperties,null,urlPrefix,false);	
+	public CSVReporter(String baseRef,Template template, Profile groupedProperties, String urlPrefix) {
+		this(baseRef,template,groupedProperties,null,null,urlPrefix,false);	
 	}
-	public CSVReporter(Template template, Profile groupedProperties,String[] folders, String urlPrefix, boolean includeMol) {
+	public CSVReporter(String baseRef,Template template, Profile groupedProperties,String[] folders, SubstanceEndpointsBundle[] bundles, String urlPrefix, boolean includeMol) {
 		this.includeMol = includeMol;
 		setUrlPrefix(urlPrefix);
 		setGroupProperties(groupedProperties);
 		setTemplate(template==null?new Template(null):template);
 		this.folders = folders;
+		this.bundles = bundles;
 		getProcessors().clear();
-		configureProcessors(includeMol);
+		configureProcessors(baseRef, includeMol);
 	}
 	
 	
 	
-	protected void configureCollectionProcessors() {
+	protected void configureCollectionProcessors(String baseURI) {
 	}
 	@Override
 	public void setLicenseURI(String licenseURI) {

@@ -265,7 +265,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 		groupProperties.add(new SubstanceName());
 		groupProperties.add(new SubstanceUUID());
 		return new OutputWriterConvertor<SubstanceRecord, Q>(
-				new CSVReporter(getTemplate(),groupProperties,
+				new CSVReporter(getRequest().getRootRef().toString(),getTemplate(),groupProperties,
 						String.format("%s%s",getRequest().getRootRef(),"")
 						) {
 					
@@ -285,8 +285,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 		String jsonpcallback = getParams().getFirstValue("jsonp");
 		if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
 		return new OutputWriterConvertor(
-				new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,getRequest(),
-						getDocumentation(),
+				new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,null,getRequest(),
 						getRequest().getRootRef().toString(),false,jsonpcallback) {
 					@Override
 					protected String getURI(IStructureRecord item) {

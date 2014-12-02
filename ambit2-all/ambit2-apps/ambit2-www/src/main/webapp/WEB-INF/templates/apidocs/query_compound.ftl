@@ -81,7 +81,16 @@
 				              "defaultValue" : "false",
 				              "paramType": "query",
 				              "allowMultiple"  : false
-				        },			            
+				        },			       
+			            {
+				              "name": "bundle_uri",
+				              "description": "Bundle URI",
+				              "required": false,
+				              "type": "string",
+				              "defaultValue" : null,
+				              "paramType": "query",
+				              "allowMultiple"  : false
+				        },						        
 			            <#include "/apidocs/parameters_mol.ftl" >,				            
 						<#include "/apidocs/parameters_page.ftl" >
                     ],
@@ -131,7 +140,16 @@
 			              "type": "string",
 			              "paramType": "query",
 			              "allowMultiple"  : false
-			            },				            	            
+			            },				 
+			            {
+				              "name": "bundle_uri",
+				              "description": "Bundle URI",
+				              "required": false,
+				              "type": "string",
+				              "defaultValue" : null,
+				              "paramType": "query",
+				              "allowMultiple"  : false
+				        },					            
 						<#include "/apidocs/parameters_mol.ftl" >,					            
 						<#include "/apidocs/parameters_page.ftl" >				            			            
                     ],
@@ -173,7 +191,16 @@
 			              "type": "string",
 			              "paramType": "query",
 			              "allowMultiple"  : false
-			            },				            
+			            },		
+			            {
+				              "name": "bundle_uri",
+				              "description": "Bundle URI",
+				              "required": false,
+				              "type": "string",
+				              "defaultValue" : null,
+				              "paramType": "query",
+				              "allowMultiple"  : false
+				        },					            
 						<#include "/apidocs/parameters_mol.ftl" >,		
 						<#include "/apidocs/parameters_page.ftl" >				            			            
                     ],

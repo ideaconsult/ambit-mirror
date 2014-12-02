@@ -22,6 +22,7 @@ import org.restlet.routing.Template;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.reporters.CSVReporter;
@@ -82,17 +83,22 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 		csvReporter.setSimilarityColumn(Property.getInstance("metric",queryObject==null?"":queryObject.toString(),"http://ambit.sourceforge.net"));
 		return csvReporter;
 	}
-	/*
-	@Override
-	protected QueryAbstractReporter createHTMLReporter(Dimension d) {
-		return new CompoundHTMLReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),
-						DisplayMode.singleitem,null,getTemplate(),getGroupProperties(),d,headless);
-	}
-	*/
+
 	@Override
 	protected Q createQuery(Context context,
 			Request request, Response response) throws ResourceException {
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
+		
+		try {
+			Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(form);
+			Integer idbundle = bundleURI==null?null:getIdBundle(bundleURI, request);
+			SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(idbundle);
+			bundles = new SubstanceEndpointsBundle[1];
+			bundles[0] = bundle;
+		} catch (Exception x) {
+			bundles = null;
+		}
+		
 		try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 		folders = form.getValuesArray("folder"); 
 		mol = getMolecule(form);

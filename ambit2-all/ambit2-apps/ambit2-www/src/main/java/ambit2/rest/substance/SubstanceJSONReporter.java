@@ -14,20 +14,25 @@ import org.restlet.Request;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.ExternalIdentifier;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.base.facet.BundleRoleFacet;
 import ambit2.base.json.JSONUtils;
+import ambit2.db.facets.bundle.SubstanceRoleByBundle;
 import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.substance.ids.ReadSubstanceIdentifiers;
 
 public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> extends SubstanceURIReporter<Q> {
 	protected String comma = null;
 	protected String jsonpCallback = null;
+	protected SubstanceEndpointsBundle[] bundles;
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2315457985592934727L;
-	public SubstanceJSONReporter(Request request, String jsonpCallback) {
+	public SubstanceJSONReporter(Request request, String jsonpCallback,SubstanceEndpointsBundle[] bundles) {
 		super(request);
+		this.bundles = bundles;
 		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpCallback);
 		
 		getProcessors().clear();
@@ -52,6 +57,23 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
 		};
 		idReader.setCloseConnection(false);
 		getProcessors().add(idReader);
+		
+		
+		if (bundles!=null && bundles.length>0) {
+			SubstanceRoleByBundle q = new SubstanceRoleByBundle(request.getRootRef().toString());
+			q.setValue(bundles[0]);
+			MasterDetailsProcessor<SubstanceRecord,BundleRoleFacet,IQueryCondition> bundleReader = new MasterDetailsProcessor<SubstanceRecord,BundleRoleFacet,IQueryCondition>(q) {
+				@Override
+				protected SubstanceRecord processDetail(SubstanceRecord master,BundleRoleFacet detail) throws Exception {
+					master.clearFacets();
+					master.addFacet(detail);
+					return master;
+				}
+			};
+			bundleReader.setCloseConnection(false);
+			getProcessors().add(bundleReader);
+		}			
+		
 		getProcessors().add(new DefaultAmbitProcessor<SubstanceRecord,SubstanceRecord>() {
 			public SubstanceRecord process(SubstanceRecord target) throws AmbitException {
 				processItem(target);
@@ -76,6 +98,7 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
 	public void footer(java.io.Writer output, Q query) {
 		try {
 			output.write("\n\t]");
+			
 		} catch (Exception x) {}
 		try {
 			output.write("\n}\n");

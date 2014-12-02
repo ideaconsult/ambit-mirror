@@ -100,7 +100,7 @@ public abstract class QueryHeaderReporter<Q extends IQueryRetrieval<IStructureRe
 	}
 
 	
-	protected void configureProcessors(boolean includeMol) {
+	protected void configureProcessors(String baseRef, boolean includeMol) {
 		configurePropertyProcessors();
 		getProcessors().add(new ProcessorStructureRetrieval(new QuerySmilesByID()));		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {

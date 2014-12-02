@@ -3,8 +3,10 @@ package ambit2.base.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.modbcum.i.facet.IFacet;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.substance.ExternalIdentifier;
+import ambit2.base.facet.BundleRoleFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRelation;
 import ambit2.base.json.JSONUtils;
@@ -313,7 +315,20 @@ Substance UUID, as assigned by the owner
 				d = ",";
 			}	
 		}	
-		builder.append("\t]\n");
+		builder.append("\t],\n");
+		
+		builder.append(String.format("\n\t%s:{\n",JSONUtils.jsonQuote("bundles")));
+		Iterable<IFacet> facets = getFacets();
+		String delimiter = "";
+		if (facets!=null) for (IFacet facet : facets) 
+			if (facet instanceof BundleRoleFacet) {
+				builder.append(delimiter);
+				builder.append("\n\t\t");
+				builder.append(facet.toJSON(baseReference,null));
+				delimiter=",";
+		}
+		builder.append("\n\t\t}");
+		
 		builder.append("\t}");
 		return builder.toString();
 	}	

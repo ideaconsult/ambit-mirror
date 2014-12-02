@@ -203,16 +203,14 @@ public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>
 					variant.getMediaType());
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			return new OutputWriterConvertor(
-					new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,getRequest(),
-							getDocumentation(),
+					new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,new SubstanceEndpointsBundle[] {bundle},getRequest(),
 							getRequest().getRootRef().toString(),includeMol,null),
 					MediaType.APPLICATION_JSON,filenamePrefix);	
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
 			return new OutputWriterConvertor(
-					new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,getRequest(),
-							getDocumentation(),
+					new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,new SubstanceEndpointsBundle[] {bundle},getRequest(),
 							getRequest().getRootRef().toString(),includeMol,jsonpcallback),
 					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);	
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
@@ -244,7 +242,7 @@ public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>
 					ChemicalMediaType.THREECOL_ARFF,filenamePrefix);				
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, Q>(
-					new CSVReporter(getTemplate(),groupProperties,String.format("%s%s",getRequest().getRootRef())),
+					new CSVReporter(getRequest().getRootRef().toString(),getTemplate(),groupProperties,String.format("%s%s",getRequest().getRootRef())),
 					MediaType.TEXT_CSV,filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
 			switch (rdfwriter) {
@@ -271,8 +269,7 @@ public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>
 					new DatasetRDFReporter("",getRequest(),getDocumentation(),variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType(),filenamePrefix);			
 		} else { //JSON
 			return new OutputWriterConvertor(
-					new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,getRequest(),
-							getDocumentation(),
+					new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,new SubstanceEndpointsBundle[] {bundle},getRequest(),
 							getRequest().getRootRef().toString(),includeMol,null),
 					MediaType.APPLICATION_JSON,filenamePrefix);	
 			

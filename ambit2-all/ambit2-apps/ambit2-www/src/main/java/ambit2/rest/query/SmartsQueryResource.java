@@ -23,6 +23,7 @@ import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.search.StoredQuery;
@@ -104,6 +105,17 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 			IQueryRetrieval<IStructureRecord> freetextQuery = getScopeQuery(context, request, response);
 			
 			Form form = request.getResourceRef().getQueryAsForm();
+			
+			try {
+				Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(form);
+				Integer idbundle = bundleURI==null?null:getIdBundle(bundleURI, request);
+				SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(idbundle);
+				bundles = new SubstanceEndpointsBundle[1];
+				bundles[0] = bundle;
+			} catch (Exception x) {
+				bundles = null;
+			}
+			
 			try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 			Object key = form.getFirstValue(QueryResource.search_param);
 			Object b64key = form.getFirstValue(QueryResource.b64search_param);

@@ -44,6 +44,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.MoleculeTools;
@@ -91,6 +92,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	protected Profile groupProperties;
 	protected boolean includeMol = false;
 	protected String[] folders;
+	protected SubstanceEndpointsBundle[] bundles;
 	
 	public boolean isIncludeMol() {
 		return includeMol;
@@ -220,7 +222,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				
 	}
 	protected CSVReporter createTXTReporter() {
-		CSVReporter csvreporter = new CSVReporter(getTemplate(),groupProperties,
+		CSVReporter csvreporter = new CSVReporter(getRequest().getRootRef().toString(),getTemplate(),groupProperties,
 						String.format("%s%s",getRequest().getRootRef(),getCompoundInDatasetPrefix()));
 		csvreporter.setSeparator("\t");
 		csvreporter.setNumberofHeaderLines(0);
@@ -229,7 +231,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	}
 	
 	protected CSVReporter createCSVReporter() {
-		return new CSVReporter(getTemplate(),groupProperties,
+		return new CSVReporter(getRequest().getRootRef().toString(),getTemplate(),groupProperties,
 				String.format("%s%s",getRequest().getRootRef(),getCompoundInDatasetPrefix())
 				);
 	}
@@ -292,16 +294,14 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					createHTMLReporter(d),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,getRequest(),
-							getDocumentation(),
+					new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,bundles,getRequest(),
 							getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),includeMol,null),
 					MediaType.APPLICATION_JSON,filenamePrefix);	
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,getRequest(),
-							getDocumentation(),
+					new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,bundles,getRequest(),
 							getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),includeMol,jsonpcallback),
 					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);				
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
@@ -350,7 +350,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	
 	protected QueryAbstractReporter createHTMLReporter(Dimension d) {
 		return new CompoundHTMLbyJSONReporter(
-				getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),
+				getCompoundInDatasetPrefix(),getRequest(),
 				DisplayMode.table,null,getTemplate(),getGroupProperties(),d,
 				getRequest().getRootRef().toString()+getCompoundInDatasetPrefix());
 		/*
