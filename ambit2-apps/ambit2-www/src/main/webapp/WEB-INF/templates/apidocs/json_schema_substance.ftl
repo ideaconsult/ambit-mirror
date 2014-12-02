@@ -9,6 +9,35 @@
             "id": "http://jsonschema.opentox.org/URI",
             "required": false
         },
+        "bundles": {
+            "type": "object",
+            "id": "hhttp://jsonschema.opentox.org/bundles",
+            "required": false,
+            "properties": {
+                "http://apps.ideaconsult.net:8080/data/bundle/1": {
+                    "type": "object",
+                    "id": "http://jsonschema.opentox.org/bundle/ID",
+                    "required": false,
+                    "properties": {
+                        "count": {
+                            "type": "number",
+                            "id": "http://jsonschema.opentox.org/bundle/count",
+                            "required": false
+                        },
+                        "remarks": {
+                            "type": "null",
+                            "id": "http://jsonschema.opentox.org/bundle/remarks",
+                            "required": false
+                        },
+                        "tag": {
+                            "type": "string",
+                            "id": "http://jsonschema.opentox.org/bundle/tag",
+                            "required": false
+                        }
+                    }
+                }
+            }
+        },
         "composition": {
             "type": "array",
             "id": "http://jsonschema.opentox.org/composition",
@@ -45,18 +74,16 @@
             "type": "string",
             "id": "http://jsonschema.opentox.org/i5uuid",
             "description": "Unique identifier for the substance",
-            "required": true
+            "required": false
         },
         "name": {
             "type": "string",
             "id": "http://jsonschema.opentox.org/name",
-            "description": "Name of the substance (company specific)",
             "required": false
         },
         "ownerName": {
             "type": "string",
             "id": "http://jsonschema.opentox.org/ownerName",
-            "description": "Name of the substance owner (company producing the substance)",
             "required": false
         },
         "ownerUUID": {
@@ -93,7 +120,7 @@
             "id": "http://jsonschema.opentox.org/substanceType",
             "description": "Substance type",            
             "enum" : ["Existing Chemical","UVCB","mono constituent substance","multi constituent substance","nanomaterial","nanoparticle"],
-            "required": true
+            "required": false
         }
     }
 }

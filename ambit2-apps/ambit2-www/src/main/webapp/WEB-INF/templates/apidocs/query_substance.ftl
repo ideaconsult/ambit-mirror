@@ -362,5 +362,8 @@
             ]
      	}     	
     ],
+	"models" : {
+      "Substance" : <#include "/apidocs/json_schema_substance.ftl" >   	  
+    },    
 	<#include "/apidocs/profile/${menu_profile}/info.ftl" >  
 }
