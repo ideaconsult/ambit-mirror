@@ -190,7 +190,7 @@
 				              "allowMultiple"  : false
 				        },			   
 			            {
-				              "name": "bundle",
+				              "name": "filterbybundle",
 				              "description": "Restricts the search within this bundle",
 				              "required": false,
 				              "type": "string",
@@ -241,7 +241,7 @@
 				              "allowMultiple"  : false
 				        },			   
 			            {
-				              "name": "bundle",
+				              "name": "filterbybundle",
 				              "description": "Restricts the search within this bundle",
 				              "required": false,
 				              "type": "string",
