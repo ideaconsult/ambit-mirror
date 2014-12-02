@@ -875,7 +875,25 @@
 							    "paramType": "form",
 							    "defaultValue" : "${ambit_root}/compound/1",
 							    "allowMultiple": false
-							}			
+							},
+							{
+							    "name": "tag",
+							    "description": "tag",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false,
+							    "defaultValue" :"target",
+							    "enum" : ["target","source"]
+							},		
+							{
+							    "name": "remarks",
+							    "description": "remarks",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false
+							}															
 			            ],
 			            "responseMessages": [
 			     			{
@@ -934,7 +952,25 @@
 							    "paramType": "form",
 							    "allowMultiple": false,
 							    "enum" : ["add","delete"]
-							}										
+							},
+							{
+							    "name": "tag",
+							    "description": "tag",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false,
+							    "defaultValue" :"target",
+							    "enum" : ["target","source"]
+							},		
+							{
+							    "name": "remarks",
+							    "description": "remarks",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false
+							}																		
 			            ],
 			            "responseMessages": [
 			     			{

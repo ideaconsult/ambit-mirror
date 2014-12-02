@@ -1,12 +1,19 @@
 package ambit2.db.update.bundle.chemicals;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
 
@@ -20,7 +27,7 @@ public class ReadChemicalsByBundle  extends AbstractStructureQuery<SubstanceEndp
 	 * 
 	 */
 	private static String sql = 
-		"select idbundle,idchemical,-1,1,1 as metric,inchikey as text from chemicals join bundle_chemicals using(idchemical) where idbundle=?";
+		"select idbundle,idchemical,smiles,formula,inchi,inchikey,tag,remarks from chemicals join bundle_chemicals using(idchemical) where idbundle=?";
 	
 	public ReadChemicalsByBundle() {
 		super();
@@ -29,6 +36,7 @@ public class ReadChemicalsByBundle  extends AbstractStructureQuery<SubstanceEndp
 		super();
 		setFieldname(bundle);
 	}
+	
 	
 	@Override
 	public String getSQL() throws AmbitException {
@@ -43,6 +51,40 @@ public class ReadChemicalsByBundle  extends AbstractStructureQuery<SubstanceEndp
 			return params1;
 		}
 		throw new AmbitException("Unspecified bundle");
+	}
+	@Override
+	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
+		try {
+			StructureRecord record = new StructureRecord();
+			record.setIdchemical(rs.getInt(2));
+			record.setIdstructure(-1);
+			record.setType(STRUC_TYPE.D2noH);
+			record.setFormat(MOL_TYPE.INC.name());
+			record.setContent(rs.getString("inchi"));			
+			record.setUsePreferedStructure(true);
+			record.setInchi(rs.getString("inchi"));
+			record.setInchiKey(rs.getString("inchikey"));
+			record.setSmiles(rs.getString("smiles"));
+			record.setFormula(rs.getString("formula"));
+			
+			LiteratureEntry reference = LiteratureEntry.getBundleReference(fieldname);			
+			String value = rs.getString("remarks");
+			if (value!=null)  {
+				Property tag = new Property("tag",reference);
+				tag.setEnabled(true);
+				record.setProperty(tag,rs.getString("tag"));
+			}
+			
+			value = rs.getString("remarks");
+			if (value !=null) {
+				Property remarks = new Property("remarks",reference);
+				remarks.setEnabled(true);
+				record.setProperty(remarks,rs.getString("remarks"));
+			}	
+			return record;
+		} catch (SQLException x) {
+			throw new AmbitException(x);
+		}
 	}
 
 

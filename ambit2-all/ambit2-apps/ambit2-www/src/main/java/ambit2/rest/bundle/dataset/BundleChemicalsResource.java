@@ -27,6 +27,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
@@ -117,8 +118,7 @@ public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>
 	
 	@Override
 	protected Q createQuery(Context context, Request request, Response response) throws ResourceException {
-		setGroupProperties(context, request, response);
-		setTemplate(createTemplate(context, request, response));
+
 		
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
@@ -130,9 +130,14 @@ public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>
 			bundle = new SubstanceEndpointsBundle();
 			bundle.setID(idnum);
 			q.setFieldname(bundle);
+			
+			setTemplate(createTemplate(context, request, response));
+			setGroupProperties(context, request, response);
+			
 			return (Q)q;
 		} catch (NumberFormatException x) {
 		}
+		
 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}	
 
@@ -291,15 +296,15 @@ public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>
 	}
 	public void setTemplate(Template template) {
 		this.template = (template==null)?new Template(null):template;
-
 	}
 	
 	protected void setGroupProperties(Context context, Request request,
 			Response response) throws ResourceException {
+		groupProperties = new Profile();
+		
 		Form form = getParams();
 		String[] gp = OpenTox.params.sameas.getValuesArray(form);
 		if (gp!=null) {
-			groupProperties = new Profile();
 			for (String g: gp) {
 				Property p = new Property(g);
 				p.setEnabled(true);
@@ -308,6 +313,12 @@ public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>
 			}
 				
 		}
+		LiteratureEntry ref = LiteratureEntry.getBundleReference(bundle);
+		Property p = new Property("tag",ref); p.setEnabled(true);
+		groupProperties.add(p);
+		p = new Property("remarks",ref); p.setEnabled(true);
+		groupProperties.add(p);
+		
 	}
 	protected Template createTemplate(Context context, Request request,
 			Response response) throws ResourceException {
