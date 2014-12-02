@@ -435,56 +435,7 @@
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
 			        },
-			        {
-			            "method": "POST",
-			            "summary": "Add a substance to the bundle",
-			            "notes": "Add a substance to the bundle",
-			            "type": "Task",
-			            "nickname": "addSubstanceToBundle",
-		                "consumes": [
-				                       "application/x-www-form-urlencoded"
-		                ],					            
-			            <#include "/apidocs/authz.ftl" >
-			            "parameters": [
-							{
-							    "name": "idbundle",
-							    "description": "Bundle identifier",
-							    "required": true,
-							    "type": "string",
-							    "paramType": "path",
-							    "allowMultiple": false
-							},
-							{
-							    "name": "substance_uri",
-							    "description": "Substance URI",
-							    "defaultValue" : "${ambit_root}/substance/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
-							    "required": true,
-							    "type": "string",
-							    "paramType": "form",
-							    "allowMultiple": true
-							}									
-			            ],
-			            "responseMessages": [
-			     			{
-			    			 "code": 200,
-			    			 "message": "OK"
-			    			},				                                 
-			     			{
-			     				"code": 400,
-			     			    "message": "Bad request"
-			     			},						                                 
-			                {
-			                    "code": 404,
-			                    "message": "Bundle not found"
-			                },
-			     			{
-			     				"code": 415,
-			     			    "message": "Media type not supported"
-			     			},							            			                
-							<#include "/apidocs/error_aa.ftl" >,
-							<#include "/apidocs/error_500.ftl" >			                
-			            ]
-			        },
+			       
 			        {
 			            "method": "PUT",
 			            "summary": "Add or delete a substance to the bundle",
@@ -585,67 +536,7 @@
 			            ]
 			        },
 			        
-			        {
-			            "method": "POST",
-			            "summary": "Add a property to the bundle",
-			            "notes": "Add a property to the bundle",
-			            "type": "Task",
-			            "nickname": "addPropertyToBundle",
-		                "consumes": [
-				               "application/x-www-form-urlencoded"
-		                ],					            
-			            <#include "/apidocs/authz.ftl" >
-			            "parameters": [
-							{
-							    "name": "idbundle",
-							    "description": "Bundle identifier",
-							    "required": true,
-							    "type": "string",
-							    "paramType": "path",
-							    "allowMultiple": false
-							},
-							{
-							    "name": "topcategory",
-							    "description": "Top endpoint category",
-							    "required": true,
-							    "type": "string",
-							    "paramType": "form",
-							    "allowMultiple": false,
-							    "defaultValue" : "ECOTOX",
-							    "enum" : ["P-CHEM","ENV FATE","ECOTOX","TOX"]
-							},
-							{
-							    "name": "endpointcategory",
-							    "description": "Endpoint category",
-							    "required": true,
-							    "type": "string",
-							    "paramType": "form",
-							    "allowMultiple": false,
-							    "defaultValue" :"EC_FISHTOX_SECTION",
-							    <#include "/apidocs/parameter_endpointcategorysection_enum.ftl">
-							}				
-			            ],
-			            "responseMessages": [
-			     			{
-			    			 "code": 200,
-			    			 "message": "OK"
-			    			},				                                 
-			     			{
-			     				"code": 400,
-			     			    "message": "Bad request"
-			     			},						                                 
-			                {
-			                    "code": 404,
-			                    "message": "Bundle not found"
-			                },
-			     			{
-			     				"code": 415,
-			     			    "message": "Media type not supported"
-			     			},							            			                
-							<#include "/apidocs/error_aa.ftl" >,
-							<#include "/apidocs/error_500.ftl" >			                
-			            ]
-			        },
+			       
 			        {
 			            "method": "PUT",
 			            "summary": "Add / delete a property to the bundle",
@@ -848,74 +739,7 @@
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
 			        },
-			        {
-			            "method": "POST",
-			            "summary": "Add a compound to the bundle",
-			            "notes": "Add a compound to the bundle",
-			            "type": "Task",
-			            "nickname": "addPropertyToBundle",
-		                "consumes": [
-				               "application/x-www-form-urlencoded"
-		                ],					            
-			            <#include "/apidocs/authz.ftl" >
-			            "parameters": [
-							{
-							    "name": "idbundle",
-							    "description": "Bundle identifier",
-							    "required": true,
-							    "type": "string",
-							    "paramType": "path",
-							    "allowMultiple": false
-							},
-							{
-							    "name": "compound_uri",
-							    "description": "Compound URI",
-							    "required": true,
-							    "type": "string",
-							    "paramType": "form",
-							    "defaultValue" : "${ambit_root}/compound/1",
-							    "allowMultiple": false
-							},
-							{
-							    "name": "tag",
-							    "description": "tag",
-							    "required": false,
-							    "type": "string",
-							    "paramType": "form",
-							    "allowMultiple": false,
-							    "defaultValue" :"target",
-							    "enum" : ["target","source"]
-							},		
-							{
-							    "name": "remarks",
-							    "description": "remarks",
-							    "required": false,
-							    "type": "string",
-							    "paramType": "form",
-							    "allowMultiple": false
-							}															
-			            ],
-			            "responseMessages": [
-			     			{
-			    			 "code": 200,
-			    			 "message": "OK"
-			    			},				                                 
-			     			{
-			     				"code": 400,
-			     			    "message": "Bad request"
-			     			},						                                 
-			                {
-			                    "code": 404,
-			                    "message": "Bundle not found"
-			                },
-			     			{
-			     				"code": 415,
-			     			    "message": "Media type not supported"
-			     			},							            			                
-							<#include "/apidocs/error_aa.ftl" >,
-							<#include "/apidocs/error_500.ftl" >			                
-			            ]
-			        },
+			      
 					{
 			            "method": "PUT",
 			            "summary": "Add or delete a compound to the bundle",

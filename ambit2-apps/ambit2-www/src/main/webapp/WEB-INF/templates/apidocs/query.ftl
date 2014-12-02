@@ -39,7 +39,7 @@
 							    <#include "/apidocs/parameter_endpointcategory_enum.ftl" >
 						},                    
 			            {
-				              "name": "bundle_uri",
+				              "name": "filterbybundle",
 				              "description": "Bundle URI",
 				              "required": false,
 				              "type": "string",
