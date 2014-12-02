@@ -97,7 +97,7 @@ public class SubstanceLookup<Q extends IQueryRetrieval<SubstanceRecord>,T extend
 
 		Object cmpURI = OpenTox.params.compound_uri.getFirstValue(form);
 		Integer idchemical = cmpURI==null?null:getIdChemical(cmpURI, request);
-		Object bundleURI = form.getFirstValue("bundle");
+		Object bundleURI = form.getFirstValue("filterbybundle");
 		Integer idbundle = bundleURI==null?null:getIdBundle(bundleURI, request);
 		
 		String search = form.getFirstValue(QueryResource.search_param);

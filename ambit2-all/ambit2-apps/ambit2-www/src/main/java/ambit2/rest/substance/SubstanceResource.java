@@ -190,7 +190,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 					throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			}
 			//?bundle_uri=
-			Object bundleURI = form.getFirstValue("bundle");			
+			Object bundleURI = form.getFirstValue("filterbybundle");			
 			if (bundleURI!=null) {
 				Integer idbundle = getIdBundle(bundleURI, request);
 				if (idbundle != null) {
