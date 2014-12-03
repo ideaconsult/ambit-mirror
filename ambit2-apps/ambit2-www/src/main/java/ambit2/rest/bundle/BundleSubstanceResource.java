@@ -30,7 +30,7 @@ import ambit2.db.reporters.ImageReporter;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
-import ambit2.rest.facet.FacetJSONReporter;
+import ambit2.rest.substance.SubstanceJSONReporter;
 import ambit2.rest.substance.SubstanceURIReporter;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
 
@@ -41,7 +41,7 @@ import ambit2.user.rest.resource.AmbitDBQueryResource;
  * @param <Q>
  */
 public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> extends AmbitDBQueryResource<Q,SubstanceRecord> {
-
+	protected SubstanceEndpointsBundle[] bundles;
 	public BundleSubstanceResource() {
 		super();
 		setHtmlbyTemplate(true);
@@ -91,6 +91,7 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 			Integer idnum = new Integer(Reference.decode(idbundle.toString()));
 			ReadSubstancesByBundle q = new ReadSubstancesByBundle();
 			SubstanceEndpointsBundle b = new SubstanceEndpointsBundle();
+			if (bundles==null) bundles = new SubstanceEndpointsBundle[] {b};
 			b.setID(idnum);
 			q.setFieldname(b);
 			return (Q)q;
@@ -160,13 +161,13 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
-			FacetJSONReporter cmpreporter = new FacetJSONReporter(getRequest(),jsonpcallback);
+			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(),jsonpcallback,bundles);
 			return new OutputWriterConvertor<SubstanceRecord, Q>(
 					cmpreporter,
 					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);
 		} else { //json by default
 		//else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-			FacetJSONReporter cmpreporter = new FacetJSONReporter(getRequest(),null);
+			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(),null,bundles);
 			return new OutputWriterConvertor<SubstanceRecord, Q>(
 					cmpreporter,
 					MediaType.APPLICATION_JSON,filenamePrefix);
