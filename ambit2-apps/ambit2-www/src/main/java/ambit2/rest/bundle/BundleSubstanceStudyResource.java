@@ -18,10 +18,10 @@ import ambit2.db.substance.study.facet.SubstanceByCategoryFacet;
 import ambit2.db.update.bundle.effects.BundleStudyFacetQuery;
 import ambit2.rest.OpenTox;
 import ambit2.rest.facet.AmbitFacetResource;
-import ambit2.rest.substance.study.StudySummaryJSONReporter;
 
 public class BundleSubstanceStudyResource<Q extends IQueryRetrieval<SubstanceByCategoryFacet>> extends AmbitFacetResource<SubstanceByCategoryFacet,Q>  {
 	public final static String resource = "/study";
+	protected SubstanceEndpointsBundle bundle;
 	
 	public BundleSubstanceStudyResource() {
 		super();
@@ -34,7 +34,7 @@ public class BundleSubstanceStudyResource<Q extends IQueryRetrieval<SubstanceByC
 		Object idbundle = request.getAttributes().get(OpenTox.URI.bundle.getKey());
 		if (idbundle!=null) {
 			try {
-				SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(new Integer(Reference.decode(idbundle.toString())));
+				bundle = new SubstanceEndpointsBundle(new Integer(Reference.decode(idbundle.toString())));
 				BundleStudyFacetQuery q = new BundleStudyFacetQuery(
 						String.format("%s%s/%s/study",getRootRef(),OpenTox.URI.bundle.getURI(),idbundle)
 						);
@@ -46,9 +46,8 @@ public class BundleSubstanceStudyResource<Q extends IQueryRetrieval<SubstanceByC
 	}
 	@Override
 	protected QueryReporter createJSONReporter(Request request, String jsonp) {
-		return new StudySummaryJSONReporter(request,jsonp);
-	};
-	
+		return new BundleStudyJSONReporter(request,jsonp,bundle);
+	}	
 	@Override
 	public void configureTemplateMap(Map<String, Object> map, Request request,
 			IFreeMarkerApplication app) {
