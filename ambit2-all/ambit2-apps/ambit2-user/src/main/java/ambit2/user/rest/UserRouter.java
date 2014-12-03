@@ -51,7 +51,9 @@ public class UserRouter extends MyRouter {
 	}
 	
 	public Restlet attachLocalDBAuthNZ(Router router,Context context,String secret, long sessionLength) {
-		Filter auth = createCookieAuthenticator(context,"ambit_users","ambit2/rest/config/config.prop",secret,sessionLength);
+		String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
+		if (usersdbname==null) usersdbname = "ambit_users";
+		Filter auth = createCookieAuthenticator(context,usersdbname,"ambit2/rest/config/config.prop",secret,sessionLength);
 		Router setCookieUserRouter = new MyRouter(context);
 		/*
 		Filter authz = new ProtocolAuthorizer(testAuthZ,DBRoles.adminRole);
@@ -83,7 +85,7 @@ public class UserRouter extends MyRouter {
 		protectedRouter.attach(String.format("/%s", UserLoginPOSTResource.resource),AMBITLoginPOSTResource.class);
 		protectedRouter.attach(String.format("/%s", UserLogoutPOSTResource.resource),AMBITLogoutPOSTResource.class);
 
-		auth = createCookieAuthenticator(context,"ambit_users","ambit2/rest/config/config.prop",secret,sessionLength);
+		auth = createCookieAuthenticator(context,usersdbname,"ambit2/rest/config/config.prop",secret,sessionLength);
 		auth.setNext(protectedRouter);
 		router.attach("/protected", auth);
 		

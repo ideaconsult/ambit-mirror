@@ -151,7 +151,8 @@ public abstract class AmbitDBQueryResource<Q extends IQueryRetrieval<T>,T extend
 	}
 
 	public String getDefaultUsersDB() {
-		return "ambit_users";
+		String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
+		return (usersdbname==null)?"ambit_users":usersdbname;
 	}
 	
 	protected String getItemName(T item) {
