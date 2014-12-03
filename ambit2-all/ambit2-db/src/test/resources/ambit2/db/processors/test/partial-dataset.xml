@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <users user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="false"/>
+  <ausers user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="false"/>
   <substance_experiment/>
   <substance_protocolapplication/>
   <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org" type="Dataset"/>

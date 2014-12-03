@@ -20,7 +20,7 @@ order by idchemical
 public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 	protected static String[] sql = {
 		//1
-		"insert ignore into users (user_name,email,lastname,keywords,homepage) values (?,\"quality\",\"Automatic quality verifier\",\"quality\",\"http://ambit.sourceforge.net\");",
+		"insert ignore into ausers (user_name,email,lastname,keywords,homepage) values (?,\"quality\",\"Automatic quality verifier\",\"quality\",\"http://ambit.sourceforge.net\");",
 		//3
 		"delete from quality_pair\n",
 		//4
@@ -84,7 +84,7 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"num_sources=CASE 1 WHEN num_sources<=values(num_sources) THEN values(num_sources) ELSE num_sources END\n",
 
 		//10
-		"insert ignore into users (user_name,email,lastname,keywords,homepage) values (\"comparison\",\"quality\",\"Automatic comparisong between sources\",\"comparison\",\"http://ambit.sourceforge.net\");",
+		"insert ignore into ausers (user_name,email,lastname,keywords,homepage) values (\"comparison\",\"quality\",\"Automatic comparisong between sources\",\"comparison\",\"http://ambit.sourceforge.net\");",
 		//12
 		"update quality_chemicals set text=replace(sortstring(text),',',':')\n",
 		//13

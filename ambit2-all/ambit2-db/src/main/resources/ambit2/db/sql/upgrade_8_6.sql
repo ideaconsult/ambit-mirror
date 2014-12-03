@@ -1,3 +1,10 @@
+ALTER TABLE `structure` ADD COLUMN `hash` VARBINARY(20) NULL DEFAULT NULL  AFTER `preference` ;
+ALTER TABLE `structure` ADD INDEX `Index_hash` (`hash` ASC) ;
+update structure set `hash`= unhex(sha1(uncompress(structure))) ;
+
+-- -----------------------------------------------------
+-- PubChem fingerprinter
+-- -----------------------------------------------------
 DROP TABLE IF EXISTS `pc1024`;
 CREATE TABLE `pc1024` (
   `idchemical` int(10) unsigned NOT NULL DEFAULT '0',
@@ -28,11 +35,6 @@ CREATE TABLE `pc1024` (
   KEY `status` (`status`),
   CONSTRAINT `pc1024_ibfk_1` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
-
-ALTER TABLE `structure` ADD COLUMN `hash` VARBINARY(20) NULL DEFAULT NULL  AFTER `preference` ;
-ALTER TABLE `structure` ADD INDEX `Index_hash` (`hash` ASC) ;
-update structure set `hash`= unhex(sha1(uncompress(structure))) ;
 
 -- -----------------------------------------------------
 -- A collection of substances and endpoints 
@@ -111,9 +113,9 @@ CREATE TABLE `bundle_chemicals` (
 ALTER TABLE `substance_protocolapplication` 
  ADD INDEX `xse` (`substance_prefix` ASC, `substance_uuid` ASC, `topcategory` ASC, `endpointcategory` ASC) ;
 
+-- -----------------------------------------------------
+-- former users table; no more used for application users 
+-- -----------------------------------------------------
+RENAME TABLE users TO ausers;
 
--- delete models
--- delete t,p,m from properties p, template_def d, template t, models m
--- where p.idproperty=d.idproperty and d.idtemplate=t.idtemplate 
--- and t.idtemplate=m.predicted and idmodel=44
 insert into version (idmajor,idminor,comment) values (8,6,"AMBIT2 schema") on duplicate key update date=now();

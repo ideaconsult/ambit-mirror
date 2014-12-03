@@ -32,7 +32,7 @@ public class CreateQLabelEINECS  extends AbstractUpdate<AmbitUser, String> {
 	
 	protected static String[] sql = {
 		//1
-		"insert ignore into users (user_name,email,lastname,keywords,homepage) values (?,\"CAS verifier\",\"Automatic quality verifier\",\"quality\",\"http://ambit.sourceforge.net\");",
+		"insert ignore into ausers (user_name,email,lastname,keywords,homepage) values (?,\"CAS verifier\",\"Automatic quality verifier\",\"quality\",\"http://ambit.sourceforge.net\");",
 		//3
 		"delete from quality_structure where user_name=?",
 		//4

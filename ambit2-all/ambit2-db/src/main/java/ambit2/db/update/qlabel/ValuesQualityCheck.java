@@ -39,7 +39,7 @@ public class ValuesQualityCheck extends AbstractUpdate<IStructureRecord,String> 
 
 	protected static String[] sql = {
 		//1
-		"insert ignore into users (user_name,email,lastname,keywords,homepage) values (\"quality\",\"quality\",\"Automatic quality verifier\",\"quality\",\"http://ambit.sourceforge.net\");",
+		"insert ignore into ausers (user_name,email,lastname,keywords,homepage) values (\"quality\",\"quality\",\"Automatic quality verifier\",\"quality\",\"http://ambit.sourceforge.net\");",
 		//3
 		//assigns OK if all structures of a chemical have the same value for properties with e.g. comments="CasRN", error if not
 		"insert into quality_labels (id,user_name,`label`,`text`)\n"+
