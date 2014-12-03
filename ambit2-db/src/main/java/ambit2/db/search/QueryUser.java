@@ -50,7 +50,7 @@ public class QueryUser extends AbstractQuery<String,String,StringCondition, Ambi
 	 */
 	private static final long serialVersionUID = -1174549562613435168L;
 	public static final String SQL = 
-		"SELECT user_name,email,title,firstname,lastname,address,country,homepage,institute,keywords,reviewer FROM users ";
+		"SELECT user_name,email,title,firstname,lastname,address,country,homepage,institute,keywords,reviewer FROM ausers ";
 	public static final String WHERE = " where %s %s ?";
 	
 	public QueryUser(String value) {

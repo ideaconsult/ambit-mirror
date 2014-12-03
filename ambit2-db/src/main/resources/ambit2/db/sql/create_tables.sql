@@ -3,11 +3,10 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
 -- -----------------------------------------------------
--- Table `users` Users
--- If registered, 'user_name' points to ambit_users.users table
+-- Table `ausers` Users
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
+DROP TABLE IF EXISTS `ausers`;
+CREATE TABLE `ausers` (
   `user_name` varchar(16) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `email` varchar(45) NOT NULL,
   `title` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '""',
@@ -722,28 +721,6 @@ CREATE TABLE  `property_tuples` (
   CONSTRAINT `FK_property_tuples_2` FOREIGN KEY (`id`) REFERENCES `property_values` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_tuple_1` FOREIGN KEY (`idtuple`) REFERENCES `tuples` (`idtuple`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- -----------------------------------------------------
--- Table `history` removed
--- -----------------------------------------------------
-
--- DROP TABLE IF EXISTS `history`;
-
--- CREATE TABLE  `history` (
---  `version` int(11) NOT NULL auto_increment,
---  `idstructure` int(11) unsigned NOT NULL,
---  `structure` blob NOT NULL,
---  `format` enum('SDF','CML','MOL') collate utf8_bin NOT NULL default 'CML',
---  `label` enum('OK','UNKNOWN','ERROR') collate utf8_bin NOT NULL default 'UNKNOWN' COMMENT 'quality label',
---  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
---  `user_name` varchar(16) collate utf8_bin default NULL,
---  `type_structure` enum('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental') collate utf8_bin NOT NULL default 'NA',
---  PRIMARY KEY  (`version`),
---  KEY `idstructure` (`idstructure`),
---  KEY `f_idstructure` (`idstructure`),
---  KEY `FK_history_1` (`user_name`),
---  CONSTRAINT `FK_history_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
--- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
 -- -----------------------------------------------------

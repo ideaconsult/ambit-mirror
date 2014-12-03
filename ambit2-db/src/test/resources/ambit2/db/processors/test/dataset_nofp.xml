@@ -64,6 +64,6 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <structure idchemical="666" idstructure="666" structure="" format="SDF"  type_structure="NA"/>
   <fp1024 idchemical="7" fp1="0" fp2="274877906944" fp3="5242896" fp4="0" fp5="0" fp6="33554432" fp7="1280" fp8="281474976710656" fp9="5368709120" fp10="2467972595799048192" fp11="0" fp12="299479479615490" fp13="6917529027641081856" fp14="562949953421312" fp15="0" fp16="0" time="0" bc="22" status="invalid"/>
   <sk1024/>
-  <users user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="0"/>
+  <ausers user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="0"/>
 
 </dataset>

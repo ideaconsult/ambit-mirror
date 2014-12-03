@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <users user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="0"/>
+  <ausers user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="0"/>
   <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org"/>
   <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org"/>
   <catalog_references idreference="3" title="InSilicoToxicology\Skinsens_dataset.sdf" url="RSCBook"/>

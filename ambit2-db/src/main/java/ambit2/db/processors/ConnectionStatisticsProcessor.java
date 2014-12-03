@@ -24,7 +24,6 @@ public class ConnectionStatisticsProcessor<T> extends ConnectionStatusProcessor<
 			"Select count(*) as 'Template definitions' from template_def",
 			"Select count(*) as 'Fingerprints' from fp1024",
 			"Select count(*) as 'Structural keys' from sk1024",
-			"Select count(*) as 'Users' from users",
 			"Select count(*) as 'Queries' from query",		
 			"select template.name as template,properties.name as property,count(*) as 'Number of entries' from template\n"+
 			"join template_def using(idtemplate)\n"+

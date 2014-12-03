@@ -14,7 +14,7 @@ import ambit2.core.data.MoleculeTools;
 public class CreateQLabelFingerprints extends AbstractUpdate<IStructureRecord, BitSet> {
 	protected static String[] sql = {
 		//1
-		"insert ignore into users (user_name,email,lastname,keywords,homepage) values (\"quality\",\"quality\",\"Automatic quality verifier\",\"quality\",\"http://ambit.sourceforge.net\");",
+		"insert ignore into ausers (user_name,email,lastname,keywords,homepage) values (\"quality\",\"quality\",\"Automatic quality verifier\",\"quality\",\"http://ambit.sourceforge.net\");",
 		//3
 		"insert into quality_structure (idstructure,user_name,`label`,`text`)\n"+
 		"SELECT idstructure,\"quality\",\"ProbablyOK\",? FROM structure left join fp1024 using(idchemical)\n"+

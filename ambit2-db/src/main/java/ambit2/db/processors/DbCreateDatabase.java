@@ -135,9 +135,9 @@ skip-name-resolve
         //TODO move this to the SQL script
         //TODO refactor to use existing empty db with rights assigned; not create it on the fly
         	String[] users = {
-        	String.format("insert into users (user_name,email,lastname,keywords,homepage) values (\"guest\",\"guest\",\"Default guest user\",\"guest\",\"http://ambit.sourceforge.net\");"),
-        	String.format("insert into users (user_name,email,lastname,keywords,homepage) values (\"admin\",\"admin\",\"Default admin user\",\"admin\",\"http://ambit.sourceforge.net\");"),
-        	String.format("insert into users (user_name,email,lastname,keywords,homepage) values (\"quality\",\"quality\",\"Automatic quality verifier\",\"quality\",\"http://ambit.sourceforge.net\");"),
+        	String.format("insert into ausers (user_name,email,lastname,keywords,homepage) values (\"guest\",\"guest\",\"Default guest user\",\"guest\",\"http://ambit.sourceforge.net\");"),
+        	String.format("insert into ausers (user_name,email,lastname,keywords,homepage) values (\"admin\",\"admin\",\"Default admin user\",\"admin\",\"http://ambit.sourceforge.net\");"),
+        	String.format("insert into ausers (user_name,email,lastname,keywords,homepage) values (\"quality\",\"quality\",\"Automatic quality verifier\",\"quality\",\"http://ambit.sourceforge.net\");"),
         	
         	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' IDENTIFIED BY '%s';",database,"localhost",userPass),
         	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' ;",database,"127.0.0.1"),
