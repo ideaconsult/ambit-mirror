@@ -57,6 +57,7 @@ import ambit2.user.rest.resource.AmbitDBQueryResource;
 
 public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>> extends AmbitDBQueryResource<Q,IStructureRecord> {
 	protected SubstanceEndpointsBundle bundle;
+	protected boolean enableFeatures = false;
 	
 	public BundleChemicalsResource() {
 		super();
@@ -123,10 +124,13 @@ public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 		
+		try { enableFeatures = "true".equals(form.getFirstValue("enableFeatures")); } catch (Exception x) { enableFeatures=false;}
+		
 		Object idbundle = request.getAttributes().get(OpenTox.URI.bundle.getKey());
 		if (idbundle != null)  try {
 			Integer idnum = new Integer(Reference.decode(idbundle.toString()));
 			ReadChemicalsByBundle q = new ReadChemicalsByBundle();
+			q.setEnableFeatures(enableFeatures);
 			bundle = new SubstanceEndpointsBundle();
 			bundle.setID(idnum);
 			q.setFieldname(bundle);
@@ -310,12 +314,13 @@ public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>
 			}
 				
 		}
-		LiteratureEntry ref = LiteratureEntry.getBundleReference(bundle);
-		Property p = new Property("tag",ref); p.setEnabled(true);
-		groupProperties.add(p);
-		p = new Property("remarks",ref); p.setEnabled(true);
-		groupProperties.add(p);
-		
+		if (enableFeatures) {
+			LiteratureEntry ref = LiteratureEntry.getBundleReference(bundle);
+			Property p = new Property("tag",ref); p.setEnabled(true);
+			groupProperties.add(p);
+			p = new Property("remarks",ref); p.setEnabled(true);
+			groupProperties.add(p);
+		}
 	}
 	protected Template createTemplate(Context context, Request request,
 			Response response) throws ResourceException {
