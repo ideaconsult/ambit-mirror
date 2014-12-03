@@ -173,6 +173,7 @@ public class RegistrationResource extends CatalogResource<DBUser> {
 	}
 	
 	public String getDefaultUsersDB() {
-		return "ambit_users";
+		String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
+		return (usersdbname==null)?"ambit_users":usersdbname;
 	}
 }

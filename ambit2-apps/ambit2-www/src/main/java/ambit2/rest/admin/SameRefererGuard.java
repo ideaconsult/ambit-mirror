@@ -38,8 +38,7 @@ public class SameRefererGuard  extends SimpleGuard {
 			if (referer != null) 
 				for (String r : allowed) 
 					if (referer.startsWith(r)) {
-						System.out.println(request.getResourceRef());
-						System.out.println(referer);
+						logger.log(Level.FINE,String.format("%s\t%s", referer,request.getResourceRef().toString()));
 						return true;
 					}
 		} catch (Exception x) {

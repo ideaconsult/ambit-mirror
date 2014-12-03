@@ -660,10 +660,12 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				 //protectedRouter.attach(NotificationResource.resourceKey, NotificationResource.class);
 					
 				 router.attach("/provider", protectedRouter);
-					
-				 Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(),  "ambit_users", "ambit2/rest/config/config.prop", secret, sessionLength);
+				 
+				 String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
+				 if (usersdbname==null) usersdbname = "ambit_users";					
+				 Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(),  usersdbname, "ambit2/rest/config/config.prop", secret, sessionLength);
 				 //UserAuthorizer authz = new UserAuthorizer();
-				 Filter authz = UserRouter.createPolicyAuthorizer(getContext(),  "ambit_users", "ambit2/rest/config/config.prop");
+				 Filter authz = UserRouter.createPolicyAuthorizer(getContext(),  usersdbname, "ambit2/rest/config/config.prop");
 				 dbAuth.setNext(authz);
 				 authz.setNext(router);
 		    	 return addOriginFilter(dbAuth);					

@@ -11,6 +11,7 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.AMBITConfig;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.facets.bundle.BundleSummaryFacet;
 import ambit2.db.facets.bundle.BundleSummaryQuery;
@@ -48,6 +49,7 @@ public class BundleSummaryResource extends AmbitFacetResource<BundleSummaryFacet
 
 	}
 	public String getDefaultUsersDB() {
-		return "ambit_users";
+		String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
+		return usersdbname==null?"ambit_users":usersdbname;
 	}
 }
