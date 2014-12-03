@@ -716,6 +716,16 @@
 							    "paramType": "path",
 							    "allowMultiple": false
 							},
+							{
+							    "name": "enableFeatures",
+							    "description": "Retreives tag and remarks as features",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "query",
+							    "defaultValue" : "false",
+							    "enum" : ["false","true"],
+							    "allowMultiple": false
+							},							
 							<#include "/apidocs/parameters_page.ftl" >									
 			            ],
 			            "responseMessages": [

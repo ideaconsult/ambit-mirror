@@ -29,6 +29,13 @@ public class ReadChemicalsByBundle  extends AbstractStructureQuery<SubstanceEndp
 	private static String sql = 
 		"select idbundle,idchemical,smiles,formula,inchi,inchikey,tag,remarks from chemicals join bundle_chemicals using(idchemical) where idbundle=?";
 	
+	protected boolean enableFeatures = false;
+	public boolean isEnableFeatures() {
+		return enableFeatures;
+	}
+	public void setEnableFeatures(boolean enableFeatures) {
+		this.enableFeatures = enableFeatures;
+	}
 	public ReadChemicalsByBundle() {
 		super();
 	}
@@ -66,21 +73,22 @@ public class ReadChemicalsByBundle  extends AbstractStructureQuery<SubstanceEndp
 			record.setInchiKey(rs.getString("inchikey"));
 			record.setSmiles(rs.getString("smiles"));
 			record.setFormula(rs.getString("formula"));
-			
-			LiteratureEntry reference = LiteratureEntry.getBundleReference(fieldname);			
-			String value = rs.getString("remarks");
-			if (value!=null)  {
-				Property tag = new Property("tag",reference);
-				tag.setEnabled(true);
-				record.setProperty(tag,rs.getString("tag"));
+			if (enableFeatures) {
+				LiteratureEntry reference = LiteratureEntry.getBundleReference(fieldname);			
+				String value = rs.getString("remarks");
+				if (value!=null)  {
+					Property tag = new Property("tag",reference);
+					tag.setEnabled(true);
+					record.setProperty(tag,rs.getString("tag"));
+				}
+				
+				value = rs.getString("remarks");
+				if (value !=null) {
+					Property remarks = new Property("remarks",reference);
+					remarks.setEnabled(true);
+					record.setProperty(remarks,rs.getString("remarks"));
+				}	
 			}
-			
-			value = rs.getString("remarks");
-			if (value !=null) {
-				Property remarks = new Property("remarks",reference);
-				remarks.setEnabled(true);
-				record.setProperty(remarks,rs.getString("remarks"));
-			}	
 			return record;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
