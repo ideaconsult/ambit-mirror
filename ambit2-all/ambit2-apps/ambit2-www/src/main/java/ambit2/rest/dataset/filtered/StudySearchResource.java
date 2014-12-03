@@ -1,9 +1,15 @@
 package ambit2.rest.dataset.filtered;
 
-import net.idea.modbcum.i.facet.IFacet;
-import ambit2.db.update.dataset.QueryCount;
+import net.idea.modbcum.r.QueryReporter;
 
-public class StudySearchResource<FACET extends IFacet<String>,Q extends QueryCount<FACET>> extends StatisticsResource<FACET, Q> {
+import org.restlet.Request;
+
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.db.substance.QueryCountProtocolApplications;
+import ambit2.db.substance.study.facet.SubstanceByCategoryFacet;
+import ambit2.rest.bundle.BundleStudyJSONReporter;
+
+public class StudySearchResource extends StatisticsResource<SubstanceByCategoryFacet, QueryCountProtocolApplications> {
 	public static final String resource = "/study";
 	public StudySearchResource() {
 		super();
@@ -17,5 +23,14 @@ public class StudySearchResource<FACET extends IFacet<String>,Q extends QueryCou
 	@Override
 	public String getTemplateName() {
 		return super.getTemplateName();
+	}
+	
+	@Override
+	protected QueryReporter createJSONReporter(Request request, String jsonp) {
+		SubstanceEndpointsBundle bundle = null;
+		if (queryObject instanceof QueryCountProtocolApplications) {
+			bundle = ((QueryCountProtocolApplications)queryObject).getBundle();
+		}
+		return new BundleStudyJSONReporter(request,jsonp,bundle);
 	}
 }
