@@ -91,7 +91,7 @@ public class SubstanceByCategoryFacet extends AbstractFacet<String> {
 			uri==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(uri)),
 			JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubcategoryTitle())),	
 			JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubCategoryURL(subcategory))),
-			bundleRole==null?"":bundleRole.toJSON(uri, "")
+			bundleRole==null?"":bundleRole.toJSON(bundleRole.getURL(), "")
 			);
 	}
 	
