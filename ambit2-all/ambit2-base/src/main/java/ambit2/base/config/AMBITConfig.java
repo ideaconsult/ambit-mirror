@@ -11,6 +11,7 @@ public enum AMBITConfig {
 	ambit_root,
 	ambit_version_short,
 	ambit_version_long,
+	Database,
 	users_dbname,
 	secret,
 	sessiontimeout,

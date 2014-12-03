@@ -32,7 +32,7 @@ public class ResetCredentials extends AbstractUpdate<UserRegistration,DBUser>  i
 		this.hoursValid = hoursValid;
 	}
 	private String sql = 
-		"update %s.users u, %s.user_registration r, %s.user xu set code=concat('PWDRST',rand(),CURRENT_TIMESTAMP()),confirmed=now(),user_pass=%s(?) " +
+		"update `%s`.users u, `%s`.user_registration r, `%s`.user xu set code=concat('PWDRST',rand(),CURRENT_TIMESTAMP()),confirmed=now(),user_pass=%s(?) " +
 		"where xu.username=u.user_name and u.user_name=r.user_name and r.status='confirmed' and date_add(created,interval ? hour)>=now() " +
 		"and code=?";
 

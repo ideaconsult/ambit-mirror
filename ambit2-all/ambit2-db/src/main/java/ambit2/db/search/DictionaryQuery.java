@@ -49,7 +49,7 @@ public abstract class DictionaryQuery<T extends Dictionary> extends AbstractQuer
 		"select tObject.name as category,tSubject.name as field,relationship  from dictionary d "+
 		"join template as tSubject on d.idsubject=tSubject.idtemplate "+
 		"join template as tObject on d.idobject=tObject.idtemplate "+
-		"where %s.name %s ? order by tObject.idtemplate";
+		"where `%s`.name %s ? order by tObject.idtemplate";
 	
 	public DictionaryQuery() {
 		setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
