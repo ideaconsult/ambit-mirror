@@ -38,10 +38,9 @@ aa.db.enabled=${aa.db.enabled}
 Host=${ambit.db.host}
 Scheme=jdbc\:mysql
 Port=3306
-Database=ambit_users
+Database=${users.db}
 User=${ambit.db.user.test}
 Password=${ambit.db.user.test.password}
-users_dbname=ambit_users
 #Secret (used to encrypt cookies) Change it. Should be 16 characters!
 secret=${ambit.secret}
 #Session timeout in milliseconds. Default is 45 min = 2700000 ms

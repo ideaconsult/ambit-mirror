@@ -28,7 +28,7 @@ public class ReadRegisteredUser   extends ReadUser<UserRegistration> implements 
 	
 	protected static String sql = 
 		"SELECT users.iduser,username,user.title,firstname,lastname,institute,weblog,homepage,email,keywords,reviewer " +
-		"FROM %s.user_registration r, users x "+ 
+		"FROM `%s`.user_registration r, users x "+ 
 		"where r.user_name=x.user_name and r.status='confirmed' and user_name=? and email=?";
 		
 	public ReadRegisteredUser(DBUser user) {

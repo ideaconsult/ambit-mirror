@@ -58,7 +58,7 @@ public class PropertyCount extends	AbstractQuery<String, String, StringCondition
 		"join template using(idtemplate)\n"+
 		"%s"+
 		"group by idproperty";
-	public static final String where = "where %s.name %s ?\n"; 
+	public static final String where = "where `%s`.name %s ?\n"; 
 	public PropertyCount() {
 		setCondition(StringCondition.getInstance("="));
 	}

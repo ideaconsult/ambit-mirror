@@ -21,7 +21,7 @@ public class CreateUserRole extends AbstractUpdate<DBRole,IUser> implements IDBC
 	@Override
 	public String[] getSQL() throws AmbitException {
 		return new String[] {
-			String.format("insert ignore into %s%suser_roles values (?,?)",databaseName==null?"":databaseName,databaseName==null?"":".")
+			String.format("insert ignore into %suser_roles values (?,?)",databaseName==null?"":String.format("`%s`.",databaseName))
 		};
 	}
 

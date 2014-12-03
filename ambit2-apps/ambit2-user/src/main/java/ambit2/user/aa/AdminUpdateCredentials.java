@@ -11,7 +11,7 @@ import net.idea.restnet.user.DBUser;
 
 public class AdminUpdateCredentials extends AbstractUpdateCredentials<DBUser> {
 
-	private final String sql = "update %s.users a, %s.user b set user_pass = %s(?) where a.user_name=b.username and iduser=? and user_name = ?";
+	private final String sql = "update `%s`.users a, `%s`.user b set user_pass = %s(?) where a.user_name=b.username and iduser=? and user_name = ?";
 	public AdminUpdateCredentials(UserCredentials c,DBUser ref, String dbname) {
 		super(c,ref);
 		setDatabaseName(dbname);
