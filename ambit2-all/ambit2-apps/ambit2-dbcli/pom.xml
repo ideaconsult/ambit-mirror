@@ -1,32 +1,32 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<artifactId>ambit2-apps</artifactId>
-		<groupId>ambit</groupId>
-		<version>2.7.1-SNAPSHOT</version>
-	</parent>
-	<groupId>ambit</groupId>
-	<artifactId>ambit2-dbcli</artifactId>
-	<name>ambit2-dbcli</name>
-	<version>2.7.1-SNAPSHOT</version>
-	<inceptionYear>2014</inceptionYear>
-	<dependencies>
-		<dependency>
-			<groupId>net.ideaconsult.restnet</groupId>
-			<artifactId>restnet-db</artifactId>
-			<version>${restnet.version}</version>
-		</dependency>
-	</dependencies>
-	<licenses>
-		<license>
-			<name>LGPL</name>
-			<url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
-			<distribution>repo</distribution>
-			<comments>LGPL 2</comments>
-		</license>
-	</licenses>
-	<build>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>ambit2-apps</artifactId>
+    <groupId>ambit</groupId>
+    <version>2.7.1</version>
+  </parent>
+  <groupId>ambit</groupId>
+  <artifactId>ambit2-dbcli</artifactId>
+  <name>ambit2-dbcli</name>
+  <version>2.7.1</version>
+  <inceptionYear>2014</inceptionYear>
+  <dependencies>
+    <dependency>
+      <groupId>net.ideaconsult.restnet</groupId>
+      <artifactId>restnet-db</artifactId>
+      <version>${restnet.version}</version>
+    </dependency>
+  </dependencies>
+  <licenses>
+    <license>
+      <name>LGPL</name>
+      <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
+      <distribution>repo</distribution>
+      <comments>LGPL 2</comments>
+    </license>
+  </licenses>
+  <build>
     <finalName>ambit2-cli</finalName>
     <resources>
       <resource>
@@ -34,31 +34,30 @@
         <filtering>true</filtering>
       </resource>
     </resources>
-
-		<plugins>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2-beta-5</version>
-				<executions>
-					<execution>
-						<id>create-executable-jar</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<descriptorRefs>
-								<descriptorRef>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2-beta-5</version>
+        <executions>
+          <execution>
+            <id>create-executable-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptorRefs>
+                <descriptorRef>
 									jar-with-dependencies
 								</descriptorRef>
-							</descriptorRefs>
-							<archive>
-								<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
-							</archive>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+              </descriptorRefs>
+              <archive>
+                <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+              </archive>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
