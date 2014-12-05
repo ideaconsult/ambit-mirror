@@ -33,8 +33,9 @@ License
 
 	[LGPL] {{{http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt}http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt}}
 
-	[]
+Download jars	
 
+	{{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/}AMBIT_modules at sourceforge.net}}
 
 The code
 	
@@ -54,7 +55,7 @@ The code
 <dependency>
   <groupId>ambit</groupId>
   <artifactId>ambit2-*</artifactId>
-  <version>2.5.9-SNAPSHOT</version>
+  <version>2.7.2-SNAPSHOT</version>
 </dependency>
 +---------------------------------   		
    		
@@ -64,7 +65,7 @@ The code
 <dependency>
   <groupId>ambit</groupId>
   <artifactId>ambit2-*</artifactId>
-  <version>2.5.8</version>
+  <version>2.7.1</version>
 </dependency>
 +---------------------------------
 
