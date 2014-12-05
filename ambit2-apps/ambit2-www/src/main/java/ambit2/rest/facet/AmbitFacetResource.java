@@ -176,7 +176,9 @@ public abstract class AmbitFacetResource<FACET extends IFacet<String>,Q extends 
 	@Override
 	protected Representation getHTMLByTemplate(Variant variant)
 			throws ResourceException {
-		return toRepresentation(getMap(variant), getTemplateName(), MediaType.TEXT_PLAIN);
+		Map map = getMap(variant);
+		configureTemplateMap(map, getRequest(), (IFreeMarkerApplication)getApplication());
+		return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
 	}
 	protected Map<String, Object> getMap(Variant variant) throws ResourceException {
 		   Map<String, Object> map = new HashMap<String, Object>();
