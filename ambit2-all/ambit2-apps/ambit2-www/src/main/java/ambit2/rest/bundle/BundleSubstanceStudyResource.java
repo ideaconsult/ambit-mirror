@@ -55,5 +55,8 @@ public class BundleSubstanceStudyResource<Q extends IQueryRetrieval<SubstanceByC
 		map.put("facet_title","Substance study summary");
 		map.put("facet_group","Structure type");
 		map.put("facet_count","Number of structures");
+
+		map.put("facet_tooltip","");
+		map.put("facet_subgroup","");
 	}
 }
