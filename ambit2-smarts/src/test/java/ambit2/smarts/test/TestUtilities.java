@@ -1480,8 +1480,6 @@ public class TestUtilities
 			System.out.println("Reactant atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
 			System.out.println("Reactant bond attributes:\n" + SmartsHelper.getBondAttributes(target));
 		}
-			
-		smrkMan.applyTransformation(target, reaction);
 		
 		if (FlagProductPreprocessing)
 			this.preProcess(target);
@@ -1491,6 +1489,9 @@ public class TestUtilities
 			System.out.println("Product atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
 			System.out.println("Product bond attributes:\n" + SmartsHelper.getBondAttributes(target));
 		}		
+		
+		smrkMan.applyTransformation(target, reaction);
+		
 		String transformedSmiles = SmartsHelper.moleculeToSMILES(target,true);
 		
 		System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
@@ -2196,6 +2197,14 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearchMDL("CC=C","D:/projects/nina/biphenyl.mol");
 		//tu.testSmartsManagerBoolSearchMDL("cc=c","D:/projects/nina/biphenyl.mol");
 		
+		tu.FlagProductPreprocessing = true;
+		//tu.FlagPrintAtomAttributes = true;
+		//tu.FlagExplicitHAtoms = true;
+		//tu.testSMIRKS("[H][#6:1]:1:[#6:5]:[#6:6]:[#6:7]:[#8:4]:1>>[OH1]-[#6:1]1:[#6:5]:[#6:6]:[#6:7]:[#8:4]:1", "o1cccc1");
+		//tu.testSMIRKS("[H][#6:1]:1:[#6:5]:[#6:6]:[#6:7]:[#8:4]:1>>[OH1]-[#6:1]1:[#6:5]:[#6:6]:[#6:7]:[#8:4]:1", "O1C=CC=C1");
+		
+		//Causes exception
+		tu.testSMIRKS("[H][#6:1]-,:1=,:[#6:5]-,:[#6:6]=,:[#6:7]-,:[#8:4]-,:1>>[OH1]-[#6:1]-,:1=,:[#6:5]-,:[#6:6]=[#6:7]-,:[#8:4]-,:1", "O1C=CC=C1");
 		
 		
 		//tu.testSMIRKS("[N:1][C:2][C:3][C:4]>>[C:4]=[C:3].[C:2]=[N----:1]Cl", "SNCCCN");
@@ -2303,7 +2312,7 @@ public class TestUtilities
 		//tu.testSmartsToQueryToSmarts("Cl/C=C/Cl");          //!!!!! CIS/TRANS info is missing
 		//tu.testSmartsToQueryToSmarts("C[C@](CO)(N)CC");   //!!!!! Bug in the SMARTS outputting --> C[C&@@](CO)(N)CC   
 		
-		tu.testBug78();
+		//tu.testBug78();
 	}
 	
 }
