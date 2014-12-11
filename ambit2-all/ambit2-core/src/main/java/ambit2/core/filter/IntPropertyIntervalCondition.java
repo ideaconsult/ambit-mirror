@@ -1,11 +1,13 @@
 package ambit2.core.filter;
 
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 public class IntPropertyIntervalCondition implements IMoleculeFilterCondition
 {
 	public static enum PropertyType{
-		NA, NB, CYCLOMATIC
+		NA, NB, CYCLOMATIC, NAromAt
 	}
 	
 	private int firstValue = 0;
@@ -30,6 +32,8 @@ public class IntPropertyIntervalCondition implements IMoleculeFilterCondition
 			return mol.getBondCount();
 		case CYCLOMATIC:
 			return mol.getBondCount() - mol.getAtomCount() + 1;	
+		case NAromAt:
+			return getNumAromAtoms(mol);
 		}
 		return 0;
 	}
@@ -58,8 +62,6 @@ public class IntPropertyIntervalCondition implements IMoleculeFilterCondition
 		this.propertyType = propertyType;
 	}
 	
-	
-	
 	public String toString()
 	{
 		if (firstValue == lastValue)
@@ -70,5 +72,14 @@ public class IntPropertyIntervalCondition implements IMoleculeFilterCondition
 				+ MoleculeFilter.intervalSep + ((lastValue == MoleculeFilter.BIG_INTEGER)?"":lastValue)
 				+ MoleculeFilter.closeBracket ; 
 	}
-
+	
+	int getNumAromAtoms(IAtomContainer mol)
+	{
+		int n = 0;
+		for (IAtom at : mol.atoms())
+			if (at.getFlag(CDKConstants.ISAROMATIC))
+				n++;
+		return n;
+	}
+	
 }
