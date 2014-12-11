@@ -72,8 +72,8 @@ public class TestTautomers
 		tt.tman.getKnowledgeBase().use15ShiftRules(true);
 		tt.tman.getKnowledgeBase().use17ShiftRules(false);
 		
-		tt.tman.maxNumOfBackTracks = 200;
-		tt.tman.maxNumOfTautomerRegistrations = 200;
+		tt.tman.maxNumOfBackTracks = 500;
+		tt.tman.maxNumOfTautomerRegistrations = 1000;
 		
 		tt.tman.FlagProcessRemainingStackIncSteps = true;
 		tt.tman.FlagCalculateCACTVSEnergyRank = true;
@@ -100,7 +100,7 @@ public class TestTautomers
 		//tt.visualTestInChI("NC1=CC(N)=NC(O)=N1");
 		
 		//tt.visualTest("NC1=CC(N)=NC(O)=N1");
-		//tt.visualTest("OC1=CC=CC=C1");
+		tt.visualTest("OC1=C(O)C=CC=C1");
 		//tt.visualTest("CC(=O)C");
 		//tt.visualTest("N=NNCCC");
 		//tt.visualTest("S=CNCC");
@@ -119,6 +119,9 @@ public class TestTautomers
 		
 		//tetracyclin
 		//tt.visualTest("CN(C)C1=C(O)C(C(N)=O)=C(O)C2(O)C1CC1C(=C2O)C(=O)C2=C(C=CC=C2O)C1(C)O");
+		//tt.visualTest("CN(C)C1=C(O)C(C(N)=O)=C(O)C2(O)C1CC1C(=C2O)C(=O)C2=C(C=CC=C2O)C1(C)O");
+		
+		
 		
 		//tt.test("[H][C@@]12CCCN1C(=O)[C@H](NC(=O)[C@@H](NC(=O)C1=C3N=C4C(OC3=C(C)C=C1)=C(C)"
 		//		+ "C(=O)C(N)=C4C(=O)N[C@H]1[C@@H](C)OC(=O)[C@H](C(C)C)N(C)C(=O)CN(C)C(=O)[C@]3([H])CCCN3C(=O)[C@H](NC1=O)C(C)C)",
@@ -129,9 +132,9 @@ public class TestTautomers
 		//		+ "C(O)=C3)=C2)[C@H](OC(=O)C2=CC(O)=C(O)C(OC(=O)C3=CC(O)=C(O)C(O)=C3)=C2)[C@@H](OC(=O)C2=CC(O)=C(O)"
 		//		+ "C(OC(=O)C3=CC(O)=C(O)C(O)=C3)=C2)[C@@H]1OC(=O)C1=CC(O)=C(O)C(OC(=O)C2=CC(O)=C(O)C(O)=C2)=C1"/*, TautomerConst.GAT_Incremental*/);
 		
-		tt.visualTest("OC1=CC(=CC(O)=C1O)C(=O)OC1=CC(=CC(O)=C1O)C(=O)OC[C@H]1O[C@@H](OC(=O)C2=CC(O)=C(O)C(OC(=O)C3=CC(O)=C(O)"
-				+ "C(O)=C3)=C2)[C@H](OC(=O)C2=CC(O)=C(O)C(OC(=O)C3=CC(O)=C(O)C(O)=C3)=C2)[C@@H](OC(=O)C2=CC(O)=C(O)"
-				+ "C(OC(=O)C3=CC(O)=C(O)C(O)=C3)=C2)[C@@H]1OC(=O)C1=CC(O)=C(O)C(OC(=O)C2=CC(O)=C(O)C(O)=C2)=C1", TautomerConst.GAT_Comb_Improved);
+		//tt.visualTest("OC1=CC(=CC(O)=C1O)C(=O)OC1=CC(=CC(O)=C1O)C(=O)OC[C@H]1O[C@@H](OC(=O)C2=CC(O)=C(O)C(OC(=O)C3=CC(O)=C(O)"
+		//		+ "C(O)=C3)=C2)[C@H](OC(=O)C2=CC(O)=C(O)C(OC(=O)C3=CC(O)=C(O)C(O)=C3)=C2)[C@@H](OC(=O)C2=CC(O)=C(O)"
+		//		+ "C(OC(=O)C3=CC(O)=C(O)C(O)=C3)=C2)[C@@H]1OC(=O)C1=CC(O)=C(O)C(OC(=O)C2=CC(O)=C(O)C(O)=C2)=C1", TautomerConst.GAT_Comb_Improved);
 		
 		
 		
