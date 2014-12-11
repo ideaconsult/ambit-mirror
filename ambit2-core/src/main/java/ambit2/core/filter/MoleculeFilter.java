@@ -102,6 +102,13 @@ public class MoleculeFilter
 			pos = 11;
 		}
 		
+		if (s.startsWith("NAromAt="))
+		{
+			pcond  = new IntPropertyIntervalCondition();
+			pcond.setPropertyType(PropertyType.NAromAt);
+			pos = 8;
+		}
+		
 		
 		if (pcond != null)
 		{
@@ -260,8 +267,9 @@ public class MoleculeFilter
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();
-		for (IMoleculeFilterCondition cond : conditions)
-			sb.append(cond.toString() + ";");
+		for (int i = 0; i < conditions.size(); i++)
+			sb.append(conditions.get(i).toString() + ((i<conditions.size()-1)?";":""));
+			
 		return sb.toString();
 	}
 	
