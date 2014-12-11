@@ -20,6 +20,8 @@ import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
 
+import net.sf.jniinchi.INCHI_OPTION;
+
 
 public class FilterTautomers 
 {	
@@ -33,7 +35,8 @@ public class FilterTautomers
 	//This duplication check is suitable for any case 
 	//since equal InChI keys are given to the resonance Kekeule stuctures
 	//By default this check is switched off
-	public boolean FlagApplyDuplicationCheckInChI = false;  
+	public boolean FlagApplyDuplicationCheckInChI = false;
+	public boolean FlagINCHI_OPTION_FixedH = true;
 	public boolean FlagFilterIncorrectValencySumStructures = true;
 	
 	
@@ -230,11 +233,20 @@ public class FilterTautomers
 		List<IAtomContainer> uniqueTautomers = new ArrayList<IAtomContainer>();
 		List<String> tKeys = new ArrayList<String> ();
 		
+		List<INCHI_OPTION> options = new ArrayList<INCHI_OPTION>();
+		
+		if (FlagINCHI_OPTION_FixedH)
+			options.add(INCHI_OPTION.FixedH);
+		options.add(INCHI_OPTION.SAbs);
+		options.add(INCHI_OPTION.SAsXYZ);
+		options.add(INCHI_OPTION.SPXYZ);
+		options.add(INCHI_OPTION.FixSp3Bug);
+		
 		for (int i = 0; i < tautomers.size(); i++)
 		{	
-			IAtomContainer clone = getCloneForInChIGeneration(tautomers.get(i)); //the clone contains eexplicit H atoms
+			IAtomContainer clone = getCloneForInChIGeneration(tautomers.get(i)); //the clone contains explicit H atoms
 			
-			InChIGenerator ig = igf.getInChIGenerator(clone);
+			InChIGenerator ig = igf.getInChIGenerator(clone, options);
 			String inchi = ig.getInchi();
 			String inchiKey = ig.getInchiKey();
 			//System.out.println("#" + i + "  " + inchi + "   "+ inchiKey + "  " + SmartsHelper.moleculeToSMILES(tautomers.get(i),false));
