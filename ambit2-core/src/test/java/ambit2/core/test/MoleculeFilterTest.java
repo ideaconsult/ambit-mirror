@@ -19,13 +19,6 @@ public class MoleculeFilterTest {
 	public void tearDown() throws Exception {
 	}
 	
-	/*
-	public static void main(String[] args) throws Exception
-	{
-		testMoleculeFilter("#Mol=23;NA=[-10,100];NAromAt=0");
-
-	}
-	*/
 	
 	public String getMoleculeFilter(String filterString) throws Exception
 	{	
@@ -52,6 +45,24 @@ public class MoleculeFilterTest {
 	{	
 		String fs = "NA=[,45];CYCLOMATIC=2;NAromAt=0";
 		Assert.assertEquals("Mol. filter " + fs, fs, getMoleculeFilter(fs));
+	}
+	
+	@Test
+	public void testIsAromaticityInfoNeeded01() throws Exception
+	{	
+		String fs = "NA=[,45];CYCLOMATIC=2;NAromAt=0";
+		MoleculeFilter filter = MoleculeFilter.parseFromCommandLineString(fs);
+		
+		Assert.assertEquals("Mol. filter " + fs + " isAromaticityInfoNeeded()", true, filter.isAromaticityInfoNeeded());
+	}
+	
+	@Test
+	public void testIsAromaticityInfoNeeded02() throws Exception
+	{	
+		String fs = "NA=[23,450];CYCLOMATIC=3;NB=23";
+		MoleculeFilter filter = MoleculeFilter.parseFromCommandLineString(fs);
+		
+		Assert.assertEquals("Mol. filter " + fs + " isAromaticityInfoNeeded()", false, filter.isAromaticityInfoNeeded());
 	}
 
 }

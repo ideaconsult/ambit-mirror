@@ -25,6 +25,17 @@ public class MoleculeFilter
 		return true;
 	};
 	
+	public boolean isAromaticityInfoNeeded()
+	{
+		for (IMoleculeFilterCondition cond : conditions)
+			if (isAromaticityInfoNeeded(cond))
+				return true;
+		
+		return false;
+	}
+	
+	
+	
 	public ArrayList<IMoleculeFilterCondition> getConditions() {
 		return conditions;
 	}
@@ -263,6 +274,18 @@ public class MoleculeFilter
 		res[1] = curChar;
 		return(res);
 	}
+	
+	public static boolean isAromaticityInfoNeeded(IMoleculeFilterCondition cond)
+	{
+		if (cond instanceof IntPropertyIntervalCondition)
+		{
+			IntPropertyIntervalCondition c = (IntPropertyIntervalCondition) cond;
+			if (c.getPropertyType() == PropertyType.NAromAt)
+				return true;
+		}
+		
+		return false;
+	}	
 	
 	public String toString()
 	{
