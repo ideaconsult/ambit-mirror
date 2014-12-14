@@ -28,7 +28,7 @@ public class ReadSubstanceComposition extends AbstractQuery<CompositionRelation,
 		"select cmp_prefix,hex(cmp_uuid) cmp_huuid,r.name as compositionname,idsubstance,idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,r.rs_prefix as refstruc,hex(r.rs_uuid) as refstrucuuid from substance_relation r ";
 	
 	private static String  q_idsubstance = "idsubstance=?";
-	private static String  q_uuid = "prefix=? and hex(uuid)=?";
+	private static String  q_uuid = "prefix=? and uuid=unhex(?)";
 	private static String  q_compound = "idcompound=?";
 	
 	private final static String sql_id = sql + " where " + q_idsubstance;

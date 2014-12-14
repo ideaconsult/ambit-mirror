@@ -21,7 +21,7 @@ public class ReadEffectRecordByBundle extends ReadEffectRecordBySubstance {
 		"from substance s join substance_protocolapplication p on s.prefix=p.substance_prefix and s.uuid=p.substance_uuid\n"+
 		"join substance_experiment e on p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"+
 		"join bundle_endpoints b on b.topcategory=e.topcategory and b.endpointcategory=e.endpointcategory\n"+
-		"where p.substance_prefix =? and hex(p.substance_uuid) =? and idbundle=?";
+		"where p.substance_prefix =? and p.substance_uuid =unhex(?) and idbundle=?";
 	
 	public ReadEffectRecordByBundle(SubstanceEndpointsBundle bundle) {
 		super();

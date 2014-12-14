@@ -22,7 +22,7 @@ public class ReadSubstanceIdentifiers extends AbstractQuery<SubstanceRecord,Exte
 	 * 
 	 */
 	private static final long serialVersionUID = -2268008311829764871L;
-	private static String readSQL = "select prefix,uuid,type,id from substance_ids where prefix=? and hex(uuid)=?";
+	private static String readSQL = "select prefix,uuid,type,id from substance_ids where prefix=? and uuid=unhex(?)";
 	
 	@Override
 	public String getSQL() throws AmbitException {

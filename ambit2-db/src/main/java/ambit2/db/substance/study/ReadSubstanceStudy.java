@@ -30,11 +30,11 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
 		"reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType\n" +
 		"from substance_protocolapplication p\n" +
 		"left join substance s on s.prefix=p.substance_prefix and s.uuid=p.substance_uuid\n"+
-		"where substance_prefix =? and hex(substance_uuid) =? ";
+		"where substance_prefix =? and substance_uuid = unhex(?) ";
 
 	private final static String whereTopCategory = "\nand topcategory=?";
 	private final static String whereCategory = "\nand endpointcategory=?";
-	private final static String whereProperty = "\nand document_uuid in (select document_uuid from substance_experiment where hex(endpointhash) =?)";
+	private final static String whereProperty = "\nand document_uuid in (select document_uuid from substance_experiment where endpointhash =unhex(?))";
 	@Override
 	public String getSQL() throws AmbitException {
 		if ((getValue()!=null) && (getValue().getProtocol()!=null)) {

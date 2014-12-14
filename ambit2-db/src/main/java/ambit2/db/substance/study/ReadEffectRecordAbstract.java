@@ -18,7 +18,7 @@ public abstract class ReadEffectRecordAbstract<F,ER extends EffectRecord<String,
 	 */
 	private static final long serialVersionUID = 2277250526632665919L;
 	protected final static String sql = 
-		"SELECT idresult,endpoint as effectendpoint,hex(endpointhash) as hash,conditions,unit,loQualifier,loValue,upQualifier,upValue,errQualifier,err,textValue from substance_experiment where document_prefix =? and hex(document_uuid) =?";
+		"SELECT idresult,endpoint as effectendpoint,hex(endpointhash) as hash,conditions,unit,loQualifier,loValue,upQualifier,upValue,errQualifier,err,textValue from substance_experiment where document_prefix =? and document_uuid =unhex(?)";
 	
 	
 	@Override

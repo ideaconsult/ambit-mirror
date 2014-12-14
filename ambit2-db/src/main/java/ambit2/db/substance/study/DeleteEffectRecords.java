@@ -19,7 +19,7 @@ import ambit2.base.data.study.ProtocolApplication;
  */
 public class DeleteEffectRecords extends AbstractUpdate<ProtocolApplication<Protocol, Params,String,Params,String>,EffectRecord> {
 
-	public static final String[] delete_sql = {"delete from substance_experiment where document_prefix =? and hex(document_uuid) =?"};
+	public static final String[] delete_sql = {"delete from substance_experiment where document_prefix =? and document_uuid =unhex(?)"};
 
 	public DeleteEffectRecords(ProtocolApplication<Protocol, Params,String,Params,String> papp) {
 		super(null);
