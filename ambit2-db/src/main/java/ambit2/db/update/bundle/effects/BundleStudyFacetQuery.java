@@ -18,7 +18,7 @@ public class BundleStudyFacetQuery extends AbstractFacetQuery<SubstanceEndpoints
 	 */
 	private static final long serialVersionUID = -8910197148842469398L;
 	private final static String sql = 
-		"select p.topcategory,count(*),p.endpointcategory,count(distinct(concat(p.substance_prefix,p.substance_uuid))) from substance_protocolapplication p, bundle_substance s ,bundle_endpoints b\n"+ 
+		"select p.topcategory,count(*),p.endpointcategory,count(distinct(p.substance_uuid)) from substance_protocolapplication p, bundle_substance s ,bundle_endpoints b\n"+ 
 		"where p.substance_prefix=s.substance_prefix and p.substance_uuid=s.substance_uuid\n"+
 		"and p.topcategory=b.topcategory and p.endpointcategory=b.endpointcategory and s.idbundle=b.idbundle and s.idbundle=?\n"+
 		"group by p.topcategory,p.endpointcategory order by p.topcategory,p.endpointcategory\n";	

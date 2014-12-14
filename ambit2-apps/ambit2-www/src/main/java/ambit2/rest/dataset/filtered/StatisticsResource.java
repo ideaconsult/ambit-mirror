@@ -176,6 +176,7 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 		}		
 		case protocol_applications: {
 			QueryCountProtocolApplications q = new QueryCountProtocolApplications(mode.getURL());
+			q.setPageSize(1000);
 			//?bundle_uri=
 			//Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(getParams());
 			Object bundleURI = getParams().getFirstValue("filterbybundle");
