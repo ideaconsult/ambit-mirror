@@ -40,6 +40,9 @@
 			</li>
 			</ul>
 		</li>
+		<li><a href="http://www.ideaconsult.net/" title="Developed by IdeaConsult Ltd.">IdeaConsult</a>
+			
+		</li>		
 		</ul>
 	</li>
 

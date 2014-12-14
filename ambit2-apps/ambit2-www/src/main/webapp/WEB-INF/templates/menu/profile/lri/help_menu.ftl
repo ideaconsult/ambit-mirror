@@ -35,6 +35,8 @@
 			</li>
 			</ul>
 		</li>
+		<li><a href="http://www.ideaconsult.net/" title="Developed by IdeaConsult Ltd.">IdeaConsult</a>	</li>
+		<li><a href="http://cefic-lri.org/" title='This project has received funding from CEFIC Long Range  Research Initiative'>CEFIC LRI</a>	</li>
 		</ul>
 	</li>
 
