@@ -11,7 +11,7 @@ import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.ExternalIdentifier;
 
 public class UpdateSubstanceIdentifiers<C extends SubstanceRecord> extends AbstractUpdate<C,C>  {
-	private static String deleteSQL = "delete from substance_ids where prefix=? and hex(uuid)=?";
+	private static String deleteSQL = "delete from substance_ids where prefix=? and uuid=unhex(?)";
 	private static String insertSQL = "insert into substance_ids (prefix,uuid,type,id) values %s";
 	
 	public UpdateSubstanceIdentifiers(C chemical) {

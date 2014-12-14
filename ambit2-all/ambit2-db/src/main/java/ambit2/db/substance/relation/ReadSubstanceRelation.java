@@ -64,8 +64,8 @@ public class ReadSubstanceRelation extends AbstractStructureQuery<STRUCTURE_RELA
 		
 	
 	private final static String where_substance_id = "idsubstance=?";
-	private final static String where_substance_uuid= "prefix=? and hex(uuid)=?";
-	private final static String where_owner_uuid= "owner_prefix=? and hex(owner_uuid)=?";
+	private final static String where_substance_uuid= "prefix=? and uuid=unhex(?)";
+	private final static String where_owner_uuid= "owner_prefix=? and owner_uuid=unhex(?)";
 	private final static String where_relation = "relation=?";
 	public ReadSubstanceRelation(SubstanceRecord structure) {
 		this(null,structure);

@@ -45,7 +45,7 @@ public class ReadSubstanceByOwner extends AbstractReadSubstance<_ownersearchmode
 	
 	private static String sql_by_owner_uuid = 
 		"select substance.idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid,owner_name "+ 
-		"from substance where owner_prefix=? and hex(owner_uuid)=?";
+		"from substance where owner_prefix=? and owner_uuid=unhex(?)";
 	
 	public ReadSubstanceByOwner() {
 		this(_ownersearchmode.owner_uuid,_ownersearchmode.owner_uuid.getDefaultSearchValue());

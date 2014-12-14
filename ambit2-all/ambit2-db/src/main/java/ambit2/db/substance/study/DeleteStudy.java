@@ -17,7 +17,7 @@ import ambit2.base.data.study.ProtocolApplication;
  *
  */
 public class DeleteStudy extends AbstractUpdate<String,ProtocolApplication<Protocol, Params, String, Params, String>> {
-	public static final String[] delete_sql = {"delete from substance_protocolapplication where substance_prefix =? and hex(substance_uuid) =?"};
+	public static final String[] delete_sql = {"delete from substance_protocolapplication where substance_prefix =? and substance_uuid =unhex(?)"};
 	
 	public DeleteStudy() {
 		super();

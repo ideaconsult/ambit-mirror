@@ -13,7 +13,7 @@ import ambit2.base.data.substance.SubstanceEndpointsBundle;
 public class DeleteSubstanceFromBundle  extends AbstractUpdate<SubstanceEndpointsBundle,SubstanceRecord> {
 	private static final String[] delete_sql =  {"delete from bundle_substance where idbundle=? and idsubstance=?"	};
 	
-	private static final String[] delete_sql_uuid =  {"delete bundle_substance from bundle_substance,substance where idbundle=? and bundle_substance.idsubstance=substance.idsubstance and prefix=? and hex(uuid)=?" }	;
+	private static final String[] delete_sql_uuid =  {"delete bundle_substance from bundle_substance,substance where idbundle=? and bundle_substance.idsubstance=substance.idsubstance and prefix=? and uuid=unhex(?)" }	;
 	
 	
 	public DeleteSubstanceFromBundle(SubstanceEndpointsBundle bundle,SubstanceRecord record) {

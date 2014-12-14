@@ -21,8 +21,8 @@ public class SubstanceStudyFacetQuery  extends AbstractFacetQuery<String,String,
 		"select topcategory,endpointcategory,count(*) from substance_protocolapplication\n";
 	private final static String group = "group by topcategory,endpointcategory with rollup";
 	
-	private final static String substance_uuid = " substance_prefix=? and hex(substance_uuid)=?\n";
-	private final static String endpointhash = " document_uuid in (select document_uuid from substance_experiment where hex(endpointhash) =?)\n";
+	private final static String substance_uuid = " substance_prefix=? and substance_uuid=unhex(?)\n";
+	private final static String endpointhash = " document_uuid in (select document_uuid from substance_experiment where endpointhash =unhex(?))\n";
 	
 	protected SubstanceStudyFacet record;
 	

@@ -41,7 +41,7 @@ public class DeleteSubstance extends AbstractObjectUpdate<SubstanceRecord>  {
 	
 	
 	public static final String[] delete_sql = {
-		"delete from substance where prefix =? and hex(uuid) =? "
+		"delete from substance where prefix =? and uuid =unhex(?) "
 	};
 
 	public DeleteSubstance(SubstanceRecord substance) {

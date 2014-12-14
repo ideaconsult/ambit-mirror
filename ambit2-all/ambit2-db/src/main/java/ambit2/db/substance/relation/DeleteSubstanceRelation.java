@@ -50,7 +50,7 @@ public class DeleteSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 
 	public static final String[] delete_sql = {"delete from substance_relation where idsubstance=? and idchemical=? and relation=?"};
 	
-	public static final String[] delete_composition = {"delete r from substance_relation r, substance s where s.idsubstance=r.idsubstance and s.prefix =? and hex(s.uuid) =?"};
+	public static final String[] delete_composition = {"delete r from substance_relation r, substance s where s.idsubstance=r.idsubstance and s.prefix =? and s.uuid =unhex(?)"};
 
 	public DeleteSubstanceRelation() {
 		this(null,null,null);

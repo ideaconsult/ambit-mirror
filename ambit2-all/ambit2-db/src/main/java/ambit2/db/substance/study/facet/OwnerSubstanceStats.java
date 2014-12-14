@@ -19,7 +19,7 @@ public class OwnerSubstanceStats  extends AbstractFacetQuery<String,String,Strin
 	protected String sql = 
 		"SELECT owner_prefix,hex(owner_uuid),owner_name,count(*) FROM substance group by owner_prefix,owner_uuid";
 	
-	private static String  owner_uuid = " owner_prefix=? and hex(owner_uuid)=?";
+	private static String  owner_uuid = " owner_prefix=? and owner_uuid=unhex(?)";
 	
 	protected OwnerFacet record;
 	
