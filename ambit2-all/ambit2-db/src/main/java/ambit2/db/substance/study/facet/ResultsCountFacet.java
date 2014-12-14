@@ -31,7 +31,7 @@ public class ResultsCountFacet<E> extends SubstanceByCategoryFacet {
 		if (result instanceof EffectRecord)
 			return String.format("\n\t{\n\t\"top\":%s,\n\t\"category\":%s,\n\t\"value\":%s,\n\t\"endpoint\":%s,\n\t\"count\":%d\n\t}",
 					JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubcategoryTitle())),	
-					JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint.name())),
+					endpoint==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint.name())),
 					getValue()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getValue().toString())),
 					JSONUtils.jsonQuote(JSONUtils.jsonEscape(((EffectRecord<String,Object,String>)result).getEndpoint())),
 					getCount()
@@ -39,7 +39,7 @@ public class ResultsCountFacet<E> extends SubstanceByCategoryFacet {
 		else if (result instanceof ProtocolApplication) {
 			return String.format("\n\t{\n\t\"top\":%s,\n\t\"category\":%s,\n\t\"value\":%s,\n\t\"interpretation_result\":%s,\n\t\"count\":%d\n\t}",
 					JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubcategoryTitle())),	
-					JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint.name())),
+					endpoint==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint.name())),
 					getValue()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getValue().toString())),
 					JSONUtils.jsonQuote(JSONUtils.jsonEscape(((ProtocolApplication)result).getInterpretationResult())),
 					getCount()

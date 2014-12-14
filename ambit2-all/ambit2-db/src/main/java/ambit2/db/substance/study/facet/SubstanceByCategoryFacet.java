@@ -86,7 +86,7 @@ public class SubstanceByCategoryFacet extends AbstractFacet<String> {
 	public String toJSON(String uri,String subcategory) {
 		return String.format("\n\t{\n\t\"value\":%s,\t\"endpoint\":%s,\n\t\"count\":%d,\n\t\"substancescount\":%d,\n\t\"uri\":%s,\n\t\"subcategory\":%s,\t\"subcategoryuri\":%s,\n\t\"bundles\":{%s}\n\t}",
 			getValue()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getValue().toString())),
-			JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint.name())),
+			endpoint==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint.name())),
 			getCount(),getSubstancesCount(),
 			uri==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(uri)),
 			JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubcategoryTitle())),	
