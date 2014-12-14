@@ -1153,7 +1153,140 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}					
-		}
+		},
+		//Toxcast - BAO
+		CELL_CYCLE_SECTION {
+			//obo:GO:0007049
+			@Override
+			public String getNumber() {
+				return "10.1";
+			}	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}		
+
+		},
+		CELL_DEATH_SECTION {
+			//obo:GO:0008219
+			@Override
+			public String getNumber() {
+				return "10.2";
+			}	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}		
+			
+		},
+		CELL_MORPHOLOGY_SECTION {
+			//BAO_0170002
+			@Override
+			public String getNumber() {
+				return "10.3";
+			}	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}		
+
+		},
+		
+		CELL_PROLIFERATION_SECTION {
+		//obo:GO:0008283
+			@Override
+			public String getNumber() {
+				return "10.4";
+			}	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}		
+
+		},
+		MITOCHONDRIAL_DEPOLARIZATION_SECTION {
+
+			@Override
+			public String getNumber() {
+				return "10.5";
+			}	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}		
+
+		},
+		OXIDATIVE_PHOSPHORYLATION_SECTION {
+			@Override
+			public String getNumber() {
+				return "10.6";
+			}	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}		
+
+		},
+		PROTEIN_STABILIZATION_SECTION {
+			//obo:GO:0050821
+			@Override
+			public String getNumber() {
+				return "10.7";
+			}	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}		
+
+		},
+		RECEPTOR_BINDING_SECTION {
+			//obo:GO:0005102
+			@Override
+			public String getNumber() {
+				return "10.8";
+			}	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}		
+
+		},
+		REGULATION_OF_CATALYTIC_ACTIVITY_SECTION {
+		//BAO_0002737
+			@Override
+			public String getNumber() {
+				return "10.9";
+			}	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}		
+
+		},
+		REGULATION_OF_GENE_EXPRESSION_SECTION {
+			//obo:GO:0010468
+			@Override
+			public String getNumber() {
+				return "10.10";
+			}	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}		
+	
+		},
+		REGULATION_OF_TRANSCRIPTION_FACTOR_ACTIVITY_SECTION {
+			//	obo:GO:0006355
+			@Override
+			public String getNumber() {
+				return "10.11";
+			}	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}		
+
+		};
 		
 
 		;
