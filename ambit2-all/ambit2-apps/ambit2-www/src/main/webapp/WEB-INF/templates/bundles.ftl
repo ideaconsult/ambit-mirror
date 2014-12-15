@@ -9,7 +9,7 @@
 	
 	$(document).ready(function() {
 		loadHelp("${ambit_root}","bundle");
-		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="Bunsles">Bundles</a></li>');
+		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="Bundles">Dataset of substances and studies</a></li>');
 
 		downloadForm("${ambit_request}");
 		<#if datasetid??>
@@ -54,12 +54,6 @@
 <a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
 </div>
 
-<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
-<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
-</div>
-<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
-</div>	
-
 </div>
 
 
@@ -70,7 +64,7 @@
 		<#if datasetid??>
 		<div class="row" style="padding:0;" >			
 			<div class="row remove-bottom ui-widget-header ui-corner-top">
-			Dataset at <a href='${ambit_root}/bundle/${datasetid}'>${ambit_root}/bundle/${datasetid}</a>
+			Substance dataset at <a href='${ambit_root}/bundle/${datasetid}'>${ambit_root}/bundle/${datasetid}</a>
 			</div>
 			
 			<#include "/dataset_one.ftl">
@@ -84,10 +78,8 @@
 			<table id='datasets' class='datasetstable ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
-			<th></th>
 			<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span></th>
 			<th>Name</th>
-			<th>Models</th>
 			<th>Download</th>
 			<th title='Remove the dataset. Only datasets with star rating <= 5 can be deleted!'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;'></span></th>
 			</tr>
