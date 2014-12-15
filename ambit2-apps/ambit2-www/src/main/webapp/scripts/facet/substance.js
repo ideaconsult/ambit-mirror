@@ -140,7 +140,7 @@ var facet = {
 							  var sOut = (o.aData["value"]===undefined)? o.aData["uri"]:o.aData["value"];
 							  sOut =
 								  "<span class='ui-icon ui-icon-folder-collapsed' style='float:left;margin: .1em;' title='Click to show endpoints'></span>"+
-								  sOut + " (<a href='"+o.aData["uri"]+"' title='Click to view substances'>"+ +o.aData["substancescount"] +"</a>)" +
+								  sOut + " (<a href='"+o.aData["uri"]+"' title='Click to view substances'>S</a>)" +
 								  " <span title='number of values'>[" + o.aData["count"] + "]</span>"
 								  ;
 							  return sOut;
