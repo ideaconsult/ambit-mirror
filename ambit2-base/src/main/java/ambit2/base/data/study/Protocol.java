@@ -1155,7 +1155,7 @@ public class Protocol {
 			}					
 		},
 		//Toxcast - BAO
-		CELL_CYCLE_SECTION {
+		CELL_CYCLE {
 			//obo:GO:0007049
 			@Override
 			public String getNumber() {
@@ -1167,7 +1167,7 @@ public class Protocol {
 			}		
 
 		},
-		CELL_DEATH_SECTION {
+		CELL_DEATH {
 			//obo:GO:0008219
 			@Override
 			public String getNumber() {
@@ -1179,7 +1179,7 @@ public class Protocol {
 			}		
 			
 		},
-		CELL_MORPHOLOGY_SECTION {
+		CELL_MORPHOLOGY {
 			//BAO_0170002
 			@Override
 			public String getNumber() {
@@ -1192,7 +1192,7 @@ public class Protocol {
 
 		},
 		
-		CELL_PROLIFERATION_SECTION {
+		CELL_PROLIFERATION {
 		//obo:GO:0008283
 			@Override
 			public String getNumber() {
@@ -1204,7 +1204,7 @@ public class Protocol {
 			}		
 
 		},
-		MITOCHONDRIAL_DEPOLARIZATION_SECTION {
+		MITOCHONDRIAL_DEPOLARIZATION {
 
 			@Override
 			public String getNumber() {
@@ -1216,7 +1216,7 @@ public class Protocol {
 			}		
 
 		},
-		OXIDATIVE_PHOSPHORYLATION_SECTION {
+		OXIDATIVE_PHOSPHORYLATION {
 			@Override
 			public String getNumber() {
 				return "10.6";
@@ -1227,7 +1227,7 @@ public class Protocol {
 			}		
 
 		},
-		PROTEIN_STABILIZATION_SECTION {
+		PROTEIN_STABILIZATION {
 			//obo:GO:0050821
 			@Override
 			public String getNumber() {
@@ -1239,7 +1239,7 @@ public class Protocol {
 			}		
 
 		},
-		RECEPTOR_BINDING_SECTION {
+		RECEPTOR_BINDING {
 			//obo:GO:0005102
 			@Override
 			public String getNumber() {
@@ -1251,7 +1251,7 @@ public class Protocol {
 			}		
 
 		},
-		REGULATION_OF_CATALYTIC_ACTIVITY_SECTION {
+		REGULATION_OF_CATALYTIC_ACTIVITY {
 		//BAO_0002737
 			@Override
 			public String getNumber() {
@@ -1263,7 +1263,7 @@ public class Protocol {
 			}		
 
 		},
-		REGULATION_OF_GENE_EXPRESSION_SECTION {
+		REGULATION_OF_GENE_EXPRESSION {
 			//obo:GO:0010468
 			@Override
 			public String getNumber() {
@@ -1275,7 +1275,7 @@ public class Protocol {
 			}		
 	
 		},
-		REGULATION_OF_TRANSCRIPTION_FACTOR_ACTIVITY_SECTION {
+		REGULATION_OF_TRANSCRIPTION_FACTOR_ACTIVITY {
 			//	obo:GO:0006355
 			@Override
 			public String getNumber() {
@@ -1286,6 +1286,17 @@ public class Protocol {
 				return "TOX";
 			}		
 
+		},
+		NA {
+
+			@Override
+			public String getNumber() {
+				return "10.12";
+			}	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}		
 		};
 		
 
