@@ -169,13 +169,15 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 						boolean isTextValue = ((detail.getLoValue() == null) && (detail.getUpValue()==null));
 						if (isTextValue && removeStringProperties) return master;
 						
-						JsonNode conditions = dx.readTree(new StringReader(detail.getConditions()));
+						JsonNode conditions = detail.getConditions()==null?null:dx.readTree(new StringReader(detail.getConditions()));
+						
 						PropertyAnnotations ann = new PropertyAnnotations();
 						
-						Iterator<Entry<String,JsonNode>> i = conditions.getFields();
+						Iterator<Entry<String,JsonNode>> i = conditions==null?null:conditions.getFields();
 						StringBuilder b = new StringBuilder();
 						b.append(detail.getEndpoint());
 						
+						if (i!=null)
 						while (i.hasNext()) {
 							Entry<String,JsonNode> val = i.next();
 							if (val.getValue() instanceof NullNode) continue;
