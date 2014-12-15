@@ -1666,3 +1666,155 @@ $.ajax({
 
 }	
 
+
+function defineBundlesTable(root,url,deleteVisible) {
+	var oTable = $('.datasetstable').dataTable( {
+	"sAjaxDataProp" : "dataset",
+	"sAjaxSource": url,	
+	"sSearch": "Filter:",
+	"bJQueryUI" : true,
+	"bSearchable": true,
+	"bProcessing" : true,
+	"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
+	"sSearch": "Filter:",
+	"bPaginate" : true,
+	"sPaginationType": "full_numbers",
+	"sPaginate" : ".dataTables_paginate _paging",
+	"oLanguage": {
+            "sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
+            "sLoadingRecords": "No datasets found.",
+            "sZeroRecords": "No datasets found.",
+            "sEmptyTable": "No datasets available.",
+            "sInfo": "Showing _TOTAL_ datasets (_START_ to _END_)",
+            "sLengthMenu": 'Display <select>' +
+          '<option value="10">10</option>' +
+          '<option value="20">20</option>' +
+          '<option value="50">50</option>' +
+          '<option value="100">100</option>' +
+          '<option value="-1">all</option>' +
+          '</select> datasets.'	            
+    },	
+    "aoColumnDefs": [
+    				{ //0
+    					"aTargets": [ 0 ],	
+    					"sClass" : "center",
+    					"bSortable" : false,
+    					"bSearchable" : false,
+    					"mData" : null,
+    					"bUseRendered" : false,	
+    					sWidth : "24px",
+    					"fnRender" : function(o,val) {
+     		               	var sOut = "<a href='"+o.aData.URI +"/similarity?search=c1ccccc1'><span class='ui-icon ui-icon-heart' style='float: left; margin: .1em;' title='Similarity search within the dataset'></span></a>&nbsp;";
+     		                sOut += "<a href='"+o.aData.URI +"/smarts?search=c1ccccc1'><span class='ui-icon ui-icon-search' style='float: left; margin: .1em;' title='Substructure search within the dataset'></span></a> ";
+    						return sOut;
+    					}
+    				},	     	            
+    	  			{  
+    				  "bSortable" : true,
+     	              "mDataProp":"stars",
+     	              "aTargets": [ 1 ],
+     	              "bUseRendered" : false,	
+     	              sWidth : "2em",
+	  					"fnRender" : function(o,val) {
+							 return  "<span class='ui-icon ui-icon-star' style='display:inline-block' title='Dataset quality stars rating (worst) 1-10 (best)'></span>"+val;			
+						}     	              
+    	  			},     	 
+    	  			{ "sTitle": "Title", 
+    	  			  "mDataProp":"title", 
+    	  			  "aTargets": [ 2 ],	
+    		          "bUseRendered" : false,	
+    		          "fnRender": function ( o, val ) {
+  		        	    	var shortURI = o.aData.URI;
+  		        	    	pos =  shortURI.lastIndexOf("/");
+  		        	    	if (pos>=0) shortURI = shortURI.substring(pos+1); 
+  		        	    	var href = root + "/ui/_dataset?dataset_uri="+encodeURIComponent(o.aData.URI);
+    		        	    var sOut = "<a target='table' href='"+ href +
+    		        	   		"' title='Click to view the dataset at "+ o.aData.URI+" as a table'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;'></span>D"+
+    		        	   		shortURI+"</a> " ;
+    		        	    
+    		        	    sOut += "<br/>"+val+ "<br/>";
+
+     		               sOut += " <a href='"+o.aData.URI +"/compound'>Structures</a>";
+    		               sOut += " | <a href='"+o.aData.URI +"/substance'>Substances</a>";
+    		               sOut += " | <a href='"+o.aData.URI +"/dataset'>Substances and studies</a>";
+   		                   sOut += " | <a href='"+o.aData.URI +"/property'>Properties list</a>";
+   		                sOut += " | <a href='"+o.aData.URI +"/summary'>Study summary</a>";
+    		               var seeAlso =  o.aData["seeAlso"];
+    		               if ((seeAlso != undefined) && (seeAlso != null)) {
+    		            	   if (seeAlso.indexOf('http')==0)
+    		            		   sOut += (" | <a href='" + seeAlso + "' target=_blank title='"+seeAlso+"'>Source</a>");
+    		               }
+    		               var rights =  o.aData["rights"];
+    		               if ((rights != undefined) && (rights != null)) {
+    		            	   if (rights["URI"].indexOf('http')==0)
+    		            		   sOut += (" | " + "<a href='" + rights["URI"] + "' target=_blank title='"+rights["URI"]+"'>"+rights["type"] +"</a>");
+    		            	   else sOut += " | " + rights["URI"];
+    		               }
+
+   		                   //sOut += " | <a href='"+root +"/algorithm/toxtreecramer?dataset_uri="+ o.aData.URI  + "' target='predict'>Predict</a>";
+    		               return sOut;
+    		          }
+    		  		},   
+    	  			{  
+      				  "bSortable" : true,
+       	              "mData":null,
+       	              "aTargets": [ 3 ],
+       	              "bUseRendered" : false,	
+       	              sWidth : "10%",
+  	  					"fnRender" : function(o,val) {
+	  						 var sOut = "<a href='"+root + "/model?dataset=" + encodeURIComponent(o.aData.URI) +"' title='Browse models, using this datasets as a training dataset'>View</a>";
+	   		                 sOut += "  <a href='"+root +"/algorithm/superbuilder?dataset_uri="+ o.aData.URI  + "' target='build' title='Build new model with this dataset as a training dataset'>Build</a>";
+	  						 return sOut;
+  						}     	              
+      	  			},      		  		
+    	  			{ "sTitle": "Download", 
+    	  			  "mData":null , 
+    	  			  "aTargets": [ 4 ],	
+    	  			  "bSortable" : false,
+    	  			  "bSearchable" : false,
+    	  			  sWidth: "5%",
+    		  	      "bUseRendered" : false,	
+    			       "fnRender": function ( o, val ) {
+    			    	   val = o.aData["URI"];
+    			    	   var sOut = "<a href='"+getMediaLink(val,"chemical/x-mdl-sdfile")+"' id='sdf'><img src='"+root+"/images/sdf.jpg' alt='SDF' title='Download as SDF' ></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"text/csv")+"' id='csv'><img src='"+root+"/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a> ";
+    			    	   var id = "d" + getID();
+    			    	   sOut += "<span style='display:none;' id='"+id+"'>"; 
+    			    	   sOut += "<a href='"+getMediaLink(val,"text/plain")+"' id='txt'><img src='"+root+"/images/excel.png' alt='TXT' title='Download as TXT'></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"chemical/x-cml")+"' id='cml'><img src='"+root+"/images/cml.jpg' alt='CML' title='Download as CML (Chemical Markup Language)'></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"chemical/x-daylight-smiles")+"' id='smiles'><img src='"+root+"/images/smi.png' alt='SMILES' title='Download as SMILES'></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"chemical/x-inchi")+"' id='inchi'><img src='"+root+"/images/inchi.png' alt='InChI' title='Download as InChI'></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"text/x-arff")+"' id='arff'><img src='"+root+"/images/weka.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"text/x-arff-3col")+"' id='arff3col'><img src='"+root+"/images/weka.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"application/rdf+xml")+"' id='rdfxml'><img src='"+root+"/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"text/n3")+"' id='rdfn3'><img src='"+root+"/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"application/json")+"' id='json' target=_blank><img src='"+root+"/images/json.png' alt='json' title='Download as JSON'></a>";
+    			    	   sOut += "</span>";
+    			    	   sOut += " <a href='#' onClick='$(\"#"+id+"\").toggle();' title='Click here for more download formats (CML, RDF, ARFF, JSON, etc.)'>...</a> ";
+    			    	   return sOut;
+    			      }
+    		  		},
+    	  			{  
+      	  			  "mDataProp":"stars" , 
+      	  			  "aTargets": [ 5 ],	
+      	  			  "sWidth" : "32px",
+      	  			  "bVisible" : deleteVisible,
+      		  	      "bUseRendered" : false,	
+      			       "fnRender": function ( o, val ) {
+      			    	   val = o.aData["URI"];
+      			    	   var statusSelector= 's'+ o['iDataRow'] ;
+      			    	   var sOut = "";
+    		               if (o.aData.stars<=5) {
+     		                	sOut = "<a href='#' onClick='deleteDataset(\""+o.aData.URI +
+     		                		"\",\"#" + statusSelector+  "\");'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;' title='Remove dataset "+ 
+     		                		o.aData.URI + "'></span></a><br/><span class='msg' id='" + statusSelector + "'></span>";
+     		                		
+     		               }
+      			    	   return sOut;
+      			      }
+      		  		}	    		  		
+     				],
+ 	  "aaSorting": [[1, 'desc']]		  
+	});
+	return oTable;
+}

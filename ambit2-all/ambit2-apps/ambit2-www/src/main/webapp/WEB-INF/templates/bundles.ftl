@@ -17,7 +17,7 @@
 			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${datasetid}/metadata" title="${ambit_root}/bundle/${datasetid}/metadata">Metadata</a></li>');
 			loadDatasetMeta("${ambit_root}","${ambit_root}/bundle/${datasetid}/metadata",true);
 		<#else>
-	  		var oTable = defineDatasetsTable("${ambit_root}","${ambit_request_json}",true);
+	  		var oTable = defineBundlesTable("${ambit_root}","${ambit_request_json}",true);
 	  	</#if>
 		jQuery("#breadCrumb").jBreadCrumb();
 		jQuery("#welcome").text("Dataset");	  	
