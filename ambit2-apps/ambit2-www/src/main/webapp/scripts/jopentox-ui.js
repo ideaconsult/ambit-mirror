@@ -1682,54 +1682,41 @@ function defineBundlesTable(root,url,deleteVisible) {
 	"sPaginate" : ".dataTables_paginate _paging",
 	"oLanguage": {
             "sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
-            "sLoadingRecords": "No datasets found.",
-            "sZeroRecords": "No datasets found.",
-            "sEmptyTable": "No datasets available.",
-            "sInfo": "Showing _TOTAL_ datasets (_START_ to _END_)",
+            "sLoadingRecords": "No substance datasets found.",
+            "sZeroRecords": "No substance datasets found.",
+            "sEmptyTable": "No substance datasets available.",
+            "sInfo": "Showing _TOTAL_ substance datasets (_START_ to _END_)",
             "sLengthMenu": 'Display <select>' +
           '<option value="10">10</option>' +
           '<option value="20">20</option>' +
           '<option value="50">50</option>' +
           '<option value="100">100</option>' +
           '<option value="-1">all</option>' +
-          '</select> datasets.'	            
+          '</select> substance datasets.'	            
     },	
     "aoColumnDefs": [
-    				{ //0
-    					"aTargets": [ 0 ],	
-    					"sClass" : "center",
-    					"bSortable" : false,
-    					"bSearchable" : false,
-    					"mData" : null,
-    					"bUseRendered" : false,	
-    					sWidth : "24px",
-    					"fnRender" : function(o,val) {
-     		               	var sOut = "<a href='"+o.aData.URI +"/similarity?search=c1ccccc1'><span class='ui-icon ui-icon-heart' style='float: left; margin: .1em;' title='Similarity search within the dataset'></span></a>&nbsp;";
-     		                sOut += "<a href='"+o.aData.URI +"/smarts?search=c1ccccc1'><span class='ui-icon ui-icon-search' style='float: left; margin: .1em;' title='Substructure search within the dataset'></span></a> ";
-    						return sOut;
-    					}
-    				},	     	            
+   	     	            
     	  			{  
     				  "bSortable" : true,
      	              "mDataProp":"stars",
-     	              "aTargets": [ 1 ],
+     	              "aTargets": [ 0 ],
      	              "bUseRendered" : false,	
-     	              sWidth : "2em",
+     	               "sWidth" : "2em",
 	  					"fnRender" : function(o,val) {
 							 return  "<span class='ui-icon ui-icon-star' style='display:inline-block' title='Dataset quality stars rating (worst) 1-10 (best)'></span>"+val;			
 						}     	              
     	  			},     	 
     	  			{ "sTitle": "Title", 
     	  			  "mDataProp":"title", 
-    	  			  "aTargets": [ 2 ],	
+    	  			  "aTargets": [ 1 ],	
     		          "bUseRendered" : false,	
     		          "fnRender": function ( o, val ) {
   		        	    	var shortURI = o.aData.URI;
   		        	    	pos =  shortURI.lastIndexOf("/");
   		        	    	if (pos>=0) shortURI = shortURI.substring(pos+1); 
-  		        	    	var href = root + "/ui/_dataset?dataset_uri="+encodeURIComponent(o.aData.URI);
+  		        	    	var href = o.aData.URI;
     		        	    var sOut = "<a target='table' href='"+ href +
-    		        	   		"' title='Click to view the dataset at "+ o.aData.URI+" as a table'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;'></span>D"+
+    		        	   		"' title='Click to view the substance dataset at "+ o.aData.URI+" as a table'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;'></span>B"+
     		        	   		shortURI+"</a> " ;
     		        	    
     		        	    sOut += "<br/>"+val+ "<br/>";
@@ -1755,24 +1742,12 @@ function defineBundlesTable(root,url,deleteVisible) {
     		               return sOut;
     		          }
     		  		},   
-    	  			{  
-      				  "bSortable" : true,
-       	              "mData":null,
-       	              "aTargets": [ 3 ],
-       	              "bUseRendered" : false,	
-       	              sWidth : "10%",
-  	  					"fnRender" : function(o,val) {
-	  						 var sOut = "<a href='"+root + "/model?dataset=" + encodeURIComponent(o.aData.URI) +"' title='Browse models, using this datasets as a training dataset'>View</a>";
-	   		                 sOut += "  <a href='"+root +"/algorithm/superbuilder?dataset_uri="+ o.aData.URI  + "' target='build' title='Build new model with this dataset as a training dataset'>Build</a>";
-	  						 return sOut;
-  						}     	              
-      	  			},      		  		
     	  			{ "sTitle": "Download", 
     	  			  "mData":null , 
-    	  			  "aTargets": [ 4 ],	
+    	  			   "sWidth" : "10%",
+    	  			  "aTargets": [2 ],	
     	  			  "bSortable" : false,
     	  			  "bSearchable" : false,
-    	  			  sWidth: "5%",
     		  	      "bUseRendered" : false,	
     			       "fnRender": function ( o, val ) {
     			    	   val = o.aData["URI"];
@@ -1796,7 +1771,7 @@ function defineBundlesTable(root,url,deleteVisible) {
     		  		},
     	  			{  
       	  			  "mDataProp":"stars" , 
-      	  			  "aTargets": [ 5 ],	
+      	  			  "aTargets": [ 3 ],	
       	  			  "sWidth" : "32px",
       	  			  "bVisible" : deleteVisible,
       		  	      "bUseRendered" : false,	
@@ -1805,7 +1780,7 @@ function defineBundlesTable(root,url,deleteVisible) {
       			    	   var statusSelector= 's'+ o['iDataRow'] ;
       			    	   var sOut = "";
     		               if (o.aData.stars<=5) {
-     		                	sOut = "<a href='#' onClick='deleteDataset(\""+o.aData.URI +
+     		                	sOut = "<a href='#' onClick='deleteBundle(\""+o.aData.URI +
      		                		"\",\"#" + statusSelector+  "\");'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;' title='Remove dataset "+ 
      		                		o.aData.URI + "'></span></a><br/><span class='msg' id='" + statusSelector + "'></span>";
      		                		
