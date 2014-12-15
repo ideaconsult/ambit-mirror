@@ -12,6 +12,7 @@
 		</li>
 	</#if>	
 	<li ><a href="${ambit_root}/substanceowner">Substance owners</a></li>
-	<li ><a href="${ambit_root}/admin/stats/protocol_applications">Experiments</a></li>  
-	<li ><a href="${ambit_root}/admin/stats/experiment_endpoints">Endpoints</a></li>	  
+		
+	<li ><a href="${ambit_root}/bundle?page=0&pagesize=10" title="Datasets of substances.">Datasets of substances and studies</a></li>
+	
 </ul>
