@@ -69,6 +69,9 @@ public class SmartsHelper
 	HashMap<IAtom,AtomSmartsNode> nodes = new HashMap<IAtom,AtomSmartsNode>();
 	HashMap<IAtom,String> atomIndexes = new HashMap<IAtom,String>();
 	List<IBond> ringClosures = new ArrayList<IBond>();
+	List<IAtom> traversedAtoms = new ArrayList<IAtom>(); 
+	List<IAtom> nonTraversedAtoms = new ArrayList<IAtom>(); 
+	
 	
 	int nAtom;
 	int nBond;
@@ -477,15 +480,38 @@ public class SmartsHelper
 	public String toSmarts(IQueryAtomContainer query)
 	{
 		determineFirstSheres(query);
+		traversedAtoms.clear();  //The list of atoms which were traversed (included into Smarts string) 
+		nonTraversedAtoms.clear();
+		for (int i = 0; i < query.getAtomCount(); i++)
+			nonTraversedAtoms.add(query.getAtom(i));
+		
 		nodes.clear();
 		atomIndexes.clear();
 		ringClosures.clear();
 		curIndex = 1;
-		AtomSmartsNode node = new AtomSmartsNode();
-		node.parent = null;
-		node.atom = query.getAtom(0);
-		nodes.put(node.atom, node);
-		return(nodeToString(node.atom));
+		
+		StringBuffer resBuf = new StringBuffer();
+		
+		while (traversedAtoms.size() < nAtom)
+		{
+			if (!traversedAtoms.isEmpty())
+				resBuf.append(".");
+			AtomSmartsNode node = new AtomSmartsNode();
+			node.parent = null;
+			//node.atom = query.getAtom(0);
+			node.atom = nonTraversedAtoms.get(0);
+			traverseAtom(node.atom);
+			nodes.put(node.atom, node);
+			resBuf.append(nodeToString(node.atom));
+		}
+		
+		return(resBuf.toString() );
+	}
+	
+	void traverseAtom(IAtom at)
+	{
+		nonTraversedAtoms.remove(at);
+		traversedAtoms.add(at);
 	}
 	
 	void addIndexToAtom(String ind, IAtom atom)
@@ -521,6 +547,7 @@ public class SmartsHelper
 				AtomSmartsNode newNode = new AtomSmartsNode();
 				newNode.atom = neighborAt;
 				newNode.parent = atom;
+				traverseAtom(newNode.atom);
 				nodes.put(newNode.atom, newNode); 
 				
 				String bond_str = bondToString(afs.bonds.get(i));				

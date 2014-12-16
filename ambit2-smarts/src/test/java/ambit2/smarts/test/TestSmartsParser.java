@@ -29,6 +29,8 @@ public class TestSmartsParser extends TestCase
 	public TestSmartsParser() 
 	{   
 		logger = new LoggingTool(this);
+		smartsParser.mSupportSmirksSyntax = true;
+		smartsParser.setComponentLevelGrouping(true);
 	}
 	
 	
@@ -77,6 +79,18 @@ public class TestSmartsParser extends TestCase
 		}
 	}
 	
+	public String smartsToQueryToSmarts(String smarts) throws Exception
+	{	 
+		IQueryAtomContainer qac = smartsParser.parse(smarts);
+		if (!smartsParser.getErrorMessages().equals(""))
+		{
+			System.out.println("Smarts Parser errors:\n" + smartsParser.getErrorMessages());
+			throw(new Exception("Smarts Parser errors:\n" + smartsParser.getErrorMessages()));
+		}
+		
+		return helper.toSmarts(qac);
+	}
+	
 	
 	public void testSmartsRingClosures() throws Exception 
 	{
@@ -121,7 +135,42 @@ public class TestSmartsParser extends TestCase
 		
 		parserError("C-,=3CCC-,:3",new String[]{
 				"Ring closure index 3 is associated with two different bond expressions"});
-
 		
 	}
+	
+	public void testSmartsToSmarts01() throws Exception 
+	{
+		String smarts = "C1CCCC1[#8;+;!$(O-N)]";
+		String converted_smarts = smartsToQueryToSmarts(smarts);
+		assertEquals("Smarts2Smarts: " , smarts, converted_smarts);
+	}
+	
+	public void testSmartsToSmarts02() throws Exception 
+	{
+		String smarts = "C1CCCC1[#8;+;!$(O-N)]";
+		String converted_smarts = smartsToQueryToSmarts(smarts);
+		assertEquals("Smarts2Smarts: " , smarts, converted_smarts);
+	}
+	
+	public void testSmartsToSmarts03() throws Exception 
+	{
+		String smarts = "[C:1][C:2][C:3]";  //This is just a test for the SMIRKS mapping
+		String converted_smarts = smartsToQueryToSmarts(smarts);
+		assertEquals("Smarts2Smarts: " , smarts, converted_smarts);
+	}
+	
+	public void testSmartsToSmarts04() throws Exception 
+	{
+		String smarts = "C1C[C&-;!R5]CC1CCC2CCCC2CCCNCCCC3=CC=CC3";
+		String converted_smarts = smartsToQueryToSmarts(smarts);
+		assertEquals("Smarts2Smarts: " , smarts, converted_smarts);
+	}
+	
+	public void testSmartsToSmarts05() throws Exception 
+	{
+		String smarts = "CC.CCC.CCN[C;!R5]";  
+		String converted_smarts = smartsToQueryToSmarts(smarts);
+		assertEquals("Smarts2Smarts: " , smarts, converted_smarts);
+	}
+	
 }
