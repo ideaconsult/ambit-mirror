@@ -611,8 +611,15 @@ public class SmartsAtomExpression extends SMARTSAtom
     {
     	StringBuffer sb = new StringBuffer();
     	sb.append("[");
+    	
+    	//Expression tokens
     	for (int i=0; i < tokens.size(); i++)
     		sb.append(tokenToString(tokens.get(i)));
+    	//SMIRKS mapping
+    	Object prop = this.getProperty("SmirksMapIndex");
+		if (prop != null)
+			sb.append(":"+prop);
+		
     	sb.append("]");
     	return sb.toString();
     }

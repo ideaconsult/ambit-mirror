@@ -1464,6 +1464,10 @@ public class TestUtilities
 			return;
 		}
 		
+		System.out.println("reactant SMARTS: " + smartsHelper.toSmarts(reaction.reactant) );
+		System.out.println("product SMARTS: " + smartsHelper.toSmarts(reaction.product) );
+		
+		
 		//System.out.println(reaction.transformationDataToString());
 		
 		//System.out.println("Reactant Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.reactant));
@@ -2204,10 +2208,10 @@ public class TestUtilities
 		//tu.testSMIRKS("[H][#6:1]:1:[#6:5]:[#6:6]:[#6:7]:[#8:4]:1>>[OH1]-[#6:1]1:[#6:5]:[#6:6]:[#6:7]:[#8:4]:1", "O1C=CC=C1");
 		
 		//Causes exception
-		tu.testSMIRKS("[H][#6:1]-,:1=,:[#6:5]-,:[#6:6]=,:[#6:7]-,:[#8:4]-,:1>>[OH1]-[#6:1]-,:1=,:[#6:5]-,:[#6:6]=[#6:7]-,:[#8:4]-,:1", "O1C=CC=C1");
+		//tu.testSMIRKS("[H][#6:1]-,:1=,:[#6:5]-,:[#6:6]=,:[#6:7]-,:[#8:4]-,:1>>[OH1]-[#6:1]-,:1=,:[#6:5]-,:[#6:6]=[#6:7]-,:[#8:4]-,:1", "O1C=CC=C1");
 		
 		
-		//tu.testSMIRKS("[N:1][C:2][C:3][C:4]>>[C:4]=[C:3].[C:2]=[N----:1]Cl", "SNCCCN");
+		tu.testSMIRKS("[N:1][C:2][C:3][C:4]>>[C:4]=[C:3].[C:2]=[N----:1]Cl", "SNCCCN");
 		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O]", "NCC"); //---> Parser error is produced (Exception is fixed now) !!!!!
 		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O:4]", "NCC"); //---> Parser error is produced (Exception is fixed now) !!!!!
 		//tu.testSMIRKS("[N:1][C:2]([C])>>[N:1][C].[C:2]=[O:4]", "NCC"); //---> Parser error is produced !!!!!
@@ -2217,7 +2221,7 @@ public class TestUtilities
 		//Ambit-SMARTS/SMIRKS parser does not require atom ampping info (":n") to be at the end of the atom expression 
 		//tu.testSMIRKS("[N;+:1][C:2]([H])>>[N:1;+][H].[Cl-][C:2]=[O]", "[H][N+1](C)C[H]");    
 		
-		//tu.testSMIRKS("[N:1][C:2]>>[N:1]Cl.[C:2]", "NCC");
+		//tu.testSMIRKS("[N;!$(N=O):1][C:2]>>[N:1]Cl.[C:2]", "NCC");
 		//tu.testSMIRKS("[N;!$(N=O):1][C:2]>>[N;!$(N=O):1]Cl.[C:2]", "NCCCCCN=O");  //--> No more exception is thrown due to the recursive SMARTS
 		//tu.testSMIRKS("[N;$(N-O-Br):1][C:2]>>[N:1]Cl.[C:2]", "ONCC");  //--> No more error  is obtained due to the recursive SMARTS
 		//tu.testSMIRKS("[N:1][C;!$([C;r5]);!$(CC=C):2]>>[N:1]Cl.[C:2]", "NC1CCCCC1CCCC2CCC=CC2N");
