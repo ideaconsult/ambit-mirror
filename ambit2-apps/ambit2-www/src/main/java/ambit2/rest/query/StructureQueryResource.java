@@ -101,9 +101,15 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 
 	public StructureQueryResource() {
 		super();
-		setDocumentation(new ResourceDoc("dataset","Dataset"));
+		setDocumentation(null);
+		setHtmlbyTemplate(true);
 	}
 	
+
+	@Override
+	public String getTemplateName() {
+		return "_dataset.ftl";
+	}
 	
 	public Profile getGroupProperties() {
 		return groupProperties;

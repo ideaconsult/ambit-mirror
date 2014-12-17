@@ -20,7 +20,7 @@
 
 <script type='text/javascript'>
 	var purl = $.url();
-	var dataset_uri = purl.param('dataset_uri')===undefined?'${ambit_root}/query/similarity?search=c1ccccc1':purl.param('dataset_uri');
+	var dataset_uri = purl.param('dataset_uri')===undefined?'${ambit_request}':purl.param('dataset_uri');
 			
 	$(document).ready(function() {
         jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/dataset?page=0&pagesize=100" title="Datasets">Datasets</a></li>');
