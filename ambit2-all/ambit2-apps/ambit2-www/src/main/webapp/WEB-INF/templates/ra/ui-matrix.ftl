@@ -50,160 +50,161 @@
 		================================================== -->
 	<div class="sixteen columns remove-bottom" style="padding:0;" >
 
-
-
-	  
   <div id="jtox-bundle" class="jtox-toolkit" data-kit="bundle" 
 	  <#if bundleid??>
 	data-bundle-uri="${ambit_root}/bundle/${bundleid}"
 			</#if>	
 	  >
-    <ul>
-      <li><a href="#jtox-identifiers">Assessment identifier</a></li>
-      <li><a href="#jtox-structures">Collect structures</a></li>
-      <li><a href="#jtox-endpoints">Endpoint data used</a></li>
-      <li><a href="#jtox-matrix">Assessment details</a></li>
-      <li><a href="#jtox-report">Report</a></li>
-    </ul>
-    <div id="jtox-identifiers" data-action="onIdentifiers">
-	  	<form>
-	      <table class="dataTable">
-	        <thead>
-	          <tr><th class="right size-third">Assessment</th><th class="data-field" data-field="id"></th></tr>
-	          <tr><td class="right size-third">Title:</td><td><input class="data-field first-time validate" data-field="title" name="title"></input></td></tr>
-	          <tr><td class="right size-third">Source:</td><td><input class="data-field first-time validate" data-field="source" name="source"></input></td></tr>
-	          <tr><td class="right size-third">Source URL:</td><td><input class="data-field first-time validate" data-field="url" name="url"></input></td></tr>
-	          <tr><td class="right size-third">License:</td><td><input class="data-field first-time validate" data-field="license" name="license"></input></td></tr>
-	          <tr><td class="right size-third">Rights holder:</td><td><input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder"></input></td></tr>
-	          <tr><td class="right size-third">Maintainer:</td><td><input class="data-field first-time validate" data-field="maintainer" name="maintainer"></input></td></tr>
+	    <ul>
+	      <li><a href="#jtox-identifiers">Assessment identifier</a></li>
+	      <li><a href="#jtox-structures">Collect structures</a></li>
+	      <li><a href="#jtox-endpoints">Endpoint data used</a></li>
+	      <li><a href="#jtox-matrix">Assessment details</a></li>
+	      <li><a href="#jtox-report">Report</a></li>
+	    </ul>
+	    <div id="jtox-identifiers" data-action="onIdentifiers">
+		  	<form>
+		      <table class="dataTable">
+		        <thead>
+		          <tr><th class="right size-third">Assessment</th><th class="data-field" data-field="id"></th></tr>
+		          <tr><td class="right size-third">Title:</td><td><input class="data-field first-time validate" data-field="title" name="title"></input></td></tr>
+		          <tr><td class="right size-third">Source:</td><td><input class="data-field first-time validate" data-field="source" name="source"></input></td></tr>
+		          <tr><td class="right size-third">Source URL:</td><td><input class="data-field first-time validate" data-field="url" name="url"></input></td></tr>
+		          <tr><td class="right size-third">License:</td><td><input class="data-field first-time validate" data-field="license" name="license"></input></td></tr>
+		          <tr><td class="right size-third">Rights holder:</td><td><input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder"></input></td></tr>
+		          <tr><td class="right size-third">Maintainer:</td><td><input class="data-field first-time validate" data-field="maintainer" name="maintainer"></input></td></tr>
 
-	          <tr><td class="right top size-third">Purpose:</td><td><textarea class="validate nomargin data-field" data-field="purpose" name="purpose"></textarea></td></tr>
-	          <tr><td class="right size-third">Version:</td><td class="data-field" data-field="version">?.?</td></tr>
-	          <tr><td class="right size-third">Status:</td><td class="data-field" data-field="status"></td></tr>
-	          <tr><td class="right size-third">Date started:</td><td class="data-field" data-field="started"></td></tr>
-	          <tr><td class="right size-third">Date finished:</td><td class="data-field" data-field="finished"></td></tr>
-	          <tr>
-	          	<td class="right size-third">Flags:</td>
-	          	<td>
-		          	<div class="jq-buttonset">
-		          		<input type="hidden" name="flags"/>
-								  <input type="checkbox" id="confidential" class="accumulate" data-accumulate="flags" value="confidential"><label for="confidential">Confidential</label></input>
-								  <input type="checkbox" id="internal" class="accumulate" data-accumulate="flags" value="internal"><label for="internal">Internal</label></input>
-								</div>
-							</td>
-						</tr>
-	          <tr>
-	          	<td class="right size-third">Published:</td>
-	          	<td>
-		          	<div class="jq-buttonset">
-								  <input type="radio" id="pub-yes" name="published" value="true"><label for="pub-yes">Yes</label></input>
-								  <input type="radio" id="pub-no" name="published" value="false" checked="checked"><label for="pub-no">No</label></input>
-								</div>
-							</td>
-						</tr>
-	          <tr>
-	          	<td class="right size-third">Use allowed:</td>
-	          	<td>
-		          	<div class="jq-buttonset">
-								  <input type="radio" id="use-yes" value="true" name="useAllowed"><label for="use-yes">Yes</label></input>
-								  <input type="radio" id="use-no" value="false" name="useAllowed" checked="checked"><label for="use-no">No</label></input>
-								</div>
-							</td>
-						</tr>
-	          <tr><td class="right size-third">Rating:</td><td class="data-stars-field"><input type="hidden" name="stars" value="0"></input></td></tr>
-	        </thead>
-	      </table>
-	      <div class="actions">
-		      <button name="assStart" type="button">Start</button>
-		      <button name="assFinalize" type="button">Finalize</button>
-		      <button name="assDuplicate" type="button">Duplicate</button>
+		          <tr><td class="right top size-third">Purpose:</td><td><textarea class="validate nomargin data-field" data-field="purpose" name="purpose"></textarea></td></tr>
+		          <tr><td class="right size-third">Version:</td><td class="data-field" data-field="version">?.?</td></tr>
+		          <tr><td class="right size-third">Status:</td><td class="data-field" data-field="status"></td></tr>
+		          <tr><td class="right size-third">Date started:</td><td class="data-field" data-field="started"></td></tr>
+		          <tr><td class="right size-third">Date finished:</td><td class="data-field" data-field="finished"></td></tr>
+		          <tr>
+		          	<td class="right size-third">Flags:</td>
+		          	<td>
+			          	<div class="jq-buttonset">
+			          		<input type="hidden" name="flags"/>
+									  <input type="checkbox" id="confidential" class="accumulate" data-accumulate="flags" value="confidential"><label for="confidential">Confidential</label></input>
+									  <input type="checkbox" id="internal" class="accumulate" data-accumulate="flags" value="internal"><label for="internal">Internal</label></input>
+									</div>
+								</td>
+							</tr>
+		          <tr>
+		          	<td class="right size-third">Published:</td>
+		          	<td>
+			          	<div class="jq-buttonset">
+									  <input type="radio" id="pub-yes" name="published" value="true"><label for="pub-yes">Yes</label></input>
+									  <input type="radio" id="pub-no" name="published" value="false" checked="checked"><label for="pub-no">No</label></input>
+									</div>
+								</td>
+							</tr>
+		          <tr>
+		          	<td class="right size-third">Use allowed:</td>
+		          	<td>
+			          	<div class="jq-buttonset">
+									  <input type="radio" id="use-yes" value="true" name="useAllowed"><label for="use-yes">Yes</label></input>
+									  <input type="radio" id="use-no" value="false" name="useAllowed" checked="checked"><label for="use-no">No</label></input>
+									</div>
+								</td>
+							</tr>
+		          <tr><td class="right size-third">Rating:</td><td class="data-stars-field"><input type="hidden" name="stars" value="0"></input></td></tr>
+		        </thead>
+		      </table>
+		      <div class="actions">
+			      <button name="assStart" type="button">Start</button>
+			      <button name="assFinalize" type="button">Finalize</button>
+			      <button name="assDuplicate" type="button">Duplicate</button>
+		      </div>
+		  	</form>
+		  </div>
+	    <div id="jtox-structures">
+		  	<div class="jq-buttonset center action" data-action="onStructures">
+				  <input type="radio" id="structcollect" name="structaction" checked="checked"><label for="structcollect">Collect structures</label></input>
+				  <input type="radio" id="structlist" name="structaction"><label for="structlist">List collected</label></input>
+				</div>
+	      <div id="jtox-query" class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="jTConfigurator" data-initial-query="false">
+	        <div class="jtox-foldable folded">
+	          <div class="title"><p class="data-field" data-field="title">Search</p></div>
+	          <div class="content">
+	            <div id="searchbar" class="jtox-toolkit jtox-widget" data-kit="search" data-hide-options="url,context"></div>
+	          </div>
+	        </div>
+	        <div id="browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-details-height="500px" data-hide-empty="true" data-on-details="onDetailedRow" data-show-diagrams="true" data-on-loaded="onBrowserFilled"></div>
 	      </div>
-	  	</form>
+	    </div>
+	    <div id="jtox-endpoints">
+		  	<div class="jq-buttonset center action" data-action="onEndpoint">
+				  <input type="radio" id="endsubstance" name="endaction" checked="checked"><label for="endsubstance">Search substance(s)</label></input>
+				  <input type="radio" id="endpoints" name="endaction"><label for="endpoints">Selection of endpoints</label></input>
+				</div>
+				<div class="size-full">
+	  			<div class="jtox-slidable">
+	          <div class="jtox-inline tab-substance"></div><div class="jtox-inline tab-points"><div class="check-all"><input type="checkbox" name="endpointAll"/>Show all<span>&nbsp;</span></div></div>
+	  			</div>
+	  		</div>
+			</div>
+	    <div id="jtox-matrix">
+		  	<div class="jq-buttonset center action" data-action="onMatrix">
+				  <input type="radio" id="xinitial" name="xaction" checked="checked"><label for="xinitial">Initial matrix</label></input>
+				  <input type="radio" id="xworking" name="xaction"><label for="xworking">Working matrix</label></input>
+				  <input type="radio" id="xfinal" name="xaction"><label for="xfinal">Final matrix</label></input>
+				</div>
+				<button class="save-button jt-disabled">Saved</button>
+				<div class="jtox-toolkit" data-kit="compound" data-manual-init="true"></div>
+	    </div>
+	    <div id="jtox-report" class="jtox-report"></div>
 	  </div>
-    <div id="jtox-structures">
-	  	<div class="jq-buttonset center action" data-action="onStructures">
-			  <input type="radio" id="structcollect" name="structaction" checked="checked"><label for="structcollect">Collect structures</label></input>
-			  <input type="radio" id="structlist" name="structaction"><label for="structlist">List collected</label></input>
-			</div>
-      <div id="jtox-query" class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="jTConfigurator" data-initial-query="false">
-        <div class="jtox-foldable folded">
-          <div class="title"><p class="data-field" data-field="title">Search</p></div>
-          <div class="content">
-            <div id="searchbar" class="jtox-toolkit jtox-widget" data-kit="search" data-hide-options="url,context"></div>
-          </div>
-        </div>
-        <div id="browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-details-height="500px" data-hide-empty="true" data-on-details="onDetailedRow" data-show-diagrams="true" data-on-loaded="onBrowserFilled"></div>
-      </div>
-    </div>
-    <div id="jtox-endpoints">
-	  	<div class="jq-buttonset center action" data-action="onEndpoint">
-			  <input type="radio" id="endsubstance" name="endaction" checked="checked"><label for="endsubstance">Search substance(s)</label></input>
-			  <input type="radio" id="endpoints" name="endaction"><label for="endpoints">Selection of endpoints</label></input>
-			</div>
-			<div class="size-full">
-  			<div class="jtox-slidable">
-          <div class="jtox-inline tab-substance"></div><div class="jtox-inline tab-points"><div class="check-all"><input type="checkbox" name="endpointAll"/>Show all<span>&nbsp;</span></div></div>
-  			</div>
-  		</div>
-		</div>
-    <div id="jtox-matrix">
-	  	<div class="jq-buttonset center action" data-action="onMatrix">
-			  <input type="radio" id="xinitial" name="xaction" checked="checked"><label for="xinitial">Initial matrix</label></input>
-			  <input type="radio" id="xworking" name="xaction"><label for="xworking">Working matrix</label></input>
-			  <input type="radio" id="xfinal" name="xaction"><label for="xfinal">Final matrix</label></input>
-			</div>
-			<div class="jtox-toolkit" data-kit="compound" data-manual-init="true"></div>
-    </div>
-    <div id="jtox-report" class="jtox-report"></div>
-  </div>
-  <div class="jtox-template">
-    <div id="info-box">
-      <table>
-        <thead>
-          <tr>
-            <th rowspan="2">Endpoint</th>
-            <th rowspan="2">Value</th>
-            <th rowspan="2">Type</th>
-            <th class="conditions center">Conditions</th>
-            <th rowspan="2">Source</th>
-          </tr>
-          <tr class="conditions">
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="data-field the-endpoint" data-field="endpoint"></td>
-            <td class="data-field the-value" data-field="value"></td>
-            <td class="data-field" data-field="type"></td>
-            <td class="data-field postconditions" data-field="source"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div id="edit-box">
-	    <div class="jtox-medium-box box-type">
-  	    <div class="jtox-details font-heavy">Study type</div>
-  	    <select class="data-field type-list" data-field="type"><option value="-1"> - Select type - </option></select>
+	  <div class="jtox-template">
+	    <div id="info-box">
+	      <table>
+	        <thead>
+	          <tr>
+	            <th rowspan="2">Endpoint</th>
+	            <th rowspan="2">Value</th>
+	            <th class="conditions center">Conditions</th>
+	            <th rowspan="2">Guidance</th>
+	          </tr>
+	          <tr class="conditions">
+	          </tr>
+	        </thead>
+	        <tbody>
+	          <tr>
+	            <td class="data-field the-endpoint" data-field="endpoint"></td>
+	            <td class="data-field the-value" data-field="value"></td>
+	            <td class="data-field postconditions" data-field="guidance"></td>
+	          </tr>
+	        </tbody>
+	      </table>
+	      <table class="delete-box">
+		      <tr>
+			      <td><textarea placeholder="Reason for deleting_"></textarea></td>
+			      <td><button class="jt-alert">Delete</button></td>
+		      </tr>
+	      </table>
 	    </div>
-	    <div class="jtox-medium-box box-reference">
-  	    <div class="jtox-details font-heavy">Reference</div>
-  	    <input type="text" class="data-field" data-field="reference" placeholder="Reference_"/>
+	    <div id="edit-box">
+		    <div class="jtox-medium-box box-type">
+	  	    <div class="jtox-details font-heavy">Study type</div>
+	  	    <select class="data-field type-list" data-field="type"><option value="-1"> - Select type - </option></select>
+		    </div>
+		    <div class="jtox-medium-box box-reference">
+	  	    <div class="jtox-details font-heavy">Reference</div>
+	  	    <input type="text" class="data-field" data-field="reference" placeholder="Reference_"/>
+		    </div>
+		    <div class="jtox-medium-box box-justification size-full">
+	  	    <div class="jtox-details font-heavy">Justification</div>
+	  	    <textarea class="data-field" data-field="justification" placeholder="Justification_"></textarea>
+		    </div>
+		    <div class="jtox-medium-box box-remarks size-full">
+	  	    <div class="jtox-details font-heavy">Remarks</div>
+	  	    <textarea class="data-field" data-field="remarks" placeholder="Remarks_"></textarea>
+		    </div>
+	      <div class="size-full the-send">
+	        <span class="data-field the-endpoint" data-field="endpoint"></span>
+	        <input value="Apply" type="button"/>
+	      </div>
 	    </div>
-	    <div class="jtox-medium-box box-justification size-full">
-  	    <div class="jtox-details font-heavy">Justification</div>
-  	    <textarea class="data-field" data-field="justification" placeholder="Justification_"></textarea>
-	    </div>
-	    <div class="jtox-medium-box box-remarks size-full">
-  	    <div class="jtox-details font-heavy">Remarks</div>
-  	    <textarea class="data-field" data-field="remarks" placeholder="Remarks_"></textarea>
-	    </div>
-      <div class="size-full the-send">
-        <span class="data-field the-endpoint" data-field="endpoint"></span>
-        <input value="Apply" type="button"/>
-      </div>
-    </div>
-  </div>
-
+	  </div>
   </div>
 
   
