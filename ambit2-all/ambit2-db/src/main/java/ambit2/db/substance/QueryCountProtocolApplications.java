@@ -17,7 +17,15 @@ public class QueryCountProtocolApplications   extends QueryCount<SubstanceByCate
 	 * 
 	 */
 	private static final long serialVersionUID = -6001454887114379950L;
+	public enum _mode_related {endpoints,substances}
+	protected _mode_related mode = _mode_related.endpoints;
 	
+	public _mode_related getMode() {
+		return mode;
+	}
+	public void setMode(_mode_related mode) {
+		this.mode = mode;
+	}
 	protected SubstanceEndpointsBundle bundle = null;
 	
 	public SubstanceEndpointsBundle getBundle() {
@@ -37,9 +45,12 @@ public class QueryCountProtocolApplications   extends QueryCount<SubstanceByCate
 	private static final String sql = 
 		"SELECT topcategory,count(*),endpointcategory,-1  FROM substance_protocolapplication p %s group by topcategory,endpointcategory";
 	
-	private static final String sql_bundle =
+	private static final String sql_bundle_byendpoints =
 		"SELECT p.topcategory,count(*),p.endpointcategory,-1  FROM substance_protocolapplication p join bundle_endpoints b where b.topcategory=p.topcategory and b.endpointcategory=p.endpointcategory and idbundle=? %s group by p.topcategory,p.endpointcategory";
 	
+	private static final String sql_bundle_bysubstances =
+			"select p.topcategory,count(*),p.endpointcategory,count(distinct(p.substance_uuid)) from substance_protocolapplication p\n"+
+			"where %s substance_uuid in (select substance_uuid from bundle_substance where idbundle=?) group by p.topcategory,p.endpointcategory"; 
 	/*
 select p.topcategory,p.endpointcategory,count(*) from substance_protocolapplication p, bundle_endpoints b 
 where p.topcategory=b.topcategory
@@ -56,10 +67,24 @@ order by p.topcategory,p.endpointcategory
 	@Override
 	public String getSQL() throws AmbitException {
 		StringBuilder b = new StringBuilder();
-		String d = ((bundle!=null) && (bundle.getID()>0))?"\nand ":"\nwhere ";
-		if (getFieldname()!=null) { b.append(d); b.append(w_topcategory); d = " and ";}
-		if (getValue()!=null) { b.append(d); b.append(w_endpointcategory); d = " and ";}
-		return String.format(((bundle!=null) && (bundle.getID()>0))?sql_bundle:sql,b.toString());
+		switch (mode) {
+		case substances: {
+			if ((bundle!=null) && (bundle.getID()>0)) {
+				String d = " and ";
+				if (getFieldname()!=null) { b.append(w_topcategory); b.append(d); }
+				if (getValue()!=null) {  b.append(w_endpointcategory); b.append(d);}
+				return String.format(sql_bundle_bysubstances,b.toString());
+			} else throw new AmbitException("bundle not defined");
+		}
+		default : {
+			String d = ((bundle!=null) && (bundle.getID()>0))?"\nand ":"\nwhere ";
+			if (getFieldname()!=null) { b.append(d); b.append(w_topcategory); d = " and ";}
+			if (getValue()!=null) { b.append(d); b.append(w_endpointcategory); d = " and ";}
+			return String.format(((bundle!=null) && (bundle.getID()>0))?sql_bundle_byendpoints:sql,b.toString());
+		}
+		}
+		
+
 	}
 	@Override
 	public void setValue(String value) {
@@ -74,10 +99,21 @@ order by p.topcategory,p.endpointcategory
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		if ((bundle!=null) && (bundle.getID()>0)) params.add(new QueryParam<Integer>(Integer.class, getBundle().getID())); 
-		if (getFieldname()!=null) params.add(new QueryParam<String>(String.class, getFieldname().toString()));
-		if (getValue()!=null) params.add(new QueryParam<String>(String.class, getValue().toString()));
-		return params;
+		switch (mode) {
+		case substances: {
+			if (getFieldname()!=null) params.add(new QueryParam<String>(String.class, getFieldname().toString()));
+			if (getValue()!=null) params.add(new QueryParam<String>(String.class, getValue().toString()));
+			if ((bundle!=null) && (bundle.getID()>0)) params.add(new QueryParam<Integer>(Integer.class, getBundle().getID()));
+			else throw new AmbitException("bundle not defined");
+			return params;	
+		} 
+		default: {
+			if ((bundle!=null) && (bundle.getID()>0)) params.add(new QueryParam<Integer>(Integer.class, getBundle().getID())); 
+			if (getFieldname()!=null) params.add(new QueryParam<String>(String.class, getFieldname().toString()));
+			if (getValue()!=null) params.add(new QueryParam<String>(String.class, getValue().toString()));
+			return params;
+		}
+		}
 	}
 	@Override
 	public SubstanceByCategoryFacet getObject(ResultSet rs) throws AmbitException {
