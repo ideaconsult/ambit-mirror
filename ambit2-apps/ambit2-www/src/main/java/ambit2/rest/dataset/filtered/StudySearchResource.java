@@ -9,6 +9,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.substance.QueryCountProtocolApplications;
+import ambit2.db.substance.QueryCountProtocolApplications._mode_related;
 import ambit2.db.substance.study.facet.SubstanceByCategoryFacet;
 import ambit2.rest.OpenTox;
 import ambit2.rest.bundle.BundleStudyJSONReporter;
@@ -37,7 +38,14 @@ public class StudySearchResource extends StatisticsResource<SubstanceByCategoryF
 			Integer idbundle = getIdBundle(bundleURI, request);
 			bundle = new SubstanceEndpointsBundle(idbundle);
 		}	
-		return super.createQuery(context, request, response);
+		QueryCountProtocolApplications q = super.createQuery(context, request, response);
+		try {
+			q.setMode(_mode_related.valueOf(getParams().getFirstValue("selected")));	
+		} catch (Exception x) {
+			q.setMode(_mode_related.endpoints);
+		}
+		
+		return q;
 	}
 	@Override
 	protected QueryReporter createJSONReporter(Request request, String jsonp) {

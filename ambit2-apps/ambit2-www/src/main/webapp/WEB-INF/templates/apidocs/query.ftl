@@ -46,7 +46,17 @@
 				              "paramType": "query",
 				              "defaultValue": "${ambit_root}/bundle/1",
 				              "allowMultiple"  : false
-				        },			            
+				        },			     
+			            {
+				              "name": "selected",
+				              "description": "Applicable if filterbybundle is present",
+				              "required": false,
+				              "type": "string",
+				              "paramType": "query",
+				              "defaultValue": "endpoints",
+				              "enum" : ["endpoints","substances"]
+				              "allowMultiple"  : false
+				        },					               
 						<#include "/apidocs/parameters_page.ftl" >				            			            
                     ],
                     "responseMessages": [

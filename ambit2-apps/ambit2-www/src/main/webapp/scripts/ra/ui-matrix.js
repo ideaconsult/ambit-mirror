@@ -20,8 +20,9 @@ var jToxBundle = {
   	property: 0,
 	},
 	
-	collected: {
-  	compounds: [],
+	edit: {
+  	properties: [],
+		refreshMatrix: true,
 	},
 		
   settings: {
@@ -78,7 +79,7 @@ var jToxBundle = {
     
     // initialize the tab structure for several versions of dataTables.
     $(root).tabs({
-      "disabled": [1, 2], //, 3, 4],
+      "disabled": [1, 2, 3, 4],
       "heightStyle": "fill",
       "select" : function(event, ui) {
         loadPanel(ui.panel);
@@ -100,8 +101,6 @@ var jToxBundle = {
     // finally, if provided - load the given bundleUri
     if (!ccLib.isNull(self.settings.bundleUri))
 	    self.load(self.settings.bundleUri);
-	  else
-	  	self.progressTabs();
     
     return self;
 	},
@@ -287,6 +286,9 @@ var jToxBundle = {
     		showUnits: false,
     		hasDetails: false,
     		configuration: conf,
+    		onLoaded: function () {
+	    		self.edit.refreshMatrix = false;
+    		},
     		onRow: function (row, data, index) {
       		$('.info-popup, .edit-popup, .delete-popup', row).on('click', function () {
       		  var boxOptions = { 
@@ -335,9 +337,9 @@ var jToxBundle = {
         		  
         		  ccLib.fillTree(infoDiv, {
         		    endpoint: feature.title,
-          		  type: feature.type,
+        		    guidance: feature.creator,
           		  value: jT.ui.valueWithUnits(data.values[featureId], feature.units),
-          		  source: '<a target="_blank" href="' + feature.source.URI + '">' + feature.source.type + '</a>'
+//           		  source: '<a target="_blank" href="' + feature.source.URI + '">' + feature.source.type + '</a>'
         		  });
         		  
         		  boxOptions.content = infoDiv.innerHTML;
@@ -364,9 +366,9 @@ var jToxBundle = {
       		});
     		}
   		});
-  		
-  		self.matrixKit.query(self.bundleUri + '/dataset');
 		}
+		if (self.edit.refreshMatrix)
+			self.matrixKit.query(self.bundleUri + '/dataset');
 	},
 	
 	// called when a sub-action in endpoint selection tab is called
@@ -522,6 +524,7 @@ var jToxBundle = {
     	$(el).removeClass('loading');
     	if (!!result) {
       	$(el).toggleClass('active');
+      	self.edit.refreshMatrix = true;
       	if (activate)
       	{
       	  self.bundleSummary.compound++;
@@ -540,6 +543,7 @@ var jToxBundle = {
 	structuresLoaded: function (kit, dataset) {
     if (document.body.className == 'structlist') {
       this.bundleSummary.compound = dataset.dataEntry.length;
+      this.edit.refreshMatrix = true;
       this.progressTabs();
     }
 	},
@@ -552,6 +556,7 @@ var jToxBundle = {
     	if (!result)
     	  el.checked = !el.checked; // i.e. revert
       else {
+      	self.edit.refreshMatrix = true;
         if (el.checked)
           self.bundleSummary.substance++;
         else
@@ -577,6 +582,7 @@ var jToxBundle = {
     	if (!result)
     	  el.checked = !el.checked; // i.e. revert
       else {
+      	self.edit.refreshMatrix = true;
         if (el.checked)
           self.bundleSummary.property++;
         else
