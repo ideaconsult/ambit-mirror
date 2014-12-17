@@ -35,6 +35,13 @@ public class BundleStudyJSONReporter<Q extends IQueryRetrieval<IFacet>> extends 
 			q.setValue(bundle);
 			MasterDetailsProcessor<IFacet,BundleRoleFacet,IQueryCondition> bundleReader = new MasterDetailsProcessor<IFacet,BundleRoleFacet,IQueryCondition>(q) {
 				@Override
+				public IFacet process(IFacet master) throws AmbitException {
+					if (master instanceof SubstanceByCategoryFacet) {
+						((SubstanceByCategoryFacet) master).setBundleRole(null);
+					}	
+					return super.process(master);
+				}
+				@Override
 				protected IFacet processDetail(IFacet master,BundleRoleFacet detail) throws Exception {
 					if (master instanceof SubstanceByCategoryFacet) {
 						((SubstanceByCategoryFacet) master).setBundleRole(detail);
