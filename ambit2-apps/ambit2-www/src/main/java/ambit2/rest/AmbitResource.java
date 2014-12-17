@@ -59,7 +59,7 @@ public class AmbitResource extends FreeMarkerResource {
 	
 	private final static String[] css = new String[] {
 		"<!--[if IE 7]><link rel='stylesheet' type='text/css' media='all' href='%s/style/ambit-msie7.css'><![endif]-->",
-		"<link href=\"%s/style/jquery-ui.css\" rel=\"stylesheet\" type=\"text/css\">\n",
+		"<link href=\"%s/style/jquery-ui-1.10.4.custom.min.css\" rel=\"stylesheet\" type=\"text/css\">\n",
 
 		"<link href=\"%s/style/jquery.ui.theme.css\" rel=\"stylesheet\" type=\"text/css\">\n",
 		
@@ -70,8 +70,8 @@ public class AmbitResource extends FreeMarkerResource {
 	};
 
 	private final static String[] js = new String[] {
-		"<script type='text/javascript' src='%s/jquery/jquery-1.7.1.min.js'></script>\n",
-		"<script type='text/javascript' src='%s/jquery/jquery-ui-1.8.18.custom.min.js'></script>\n",
+		"<script type='text/javascript' src='%s/jquery/jquery-1.10.2.js'></script>\n",
+		"<script type='text/javascript' src='%s/jquery/jquery-ui-1.10.4.custom.min.js'></script>\n",
 		"<script type='text/javascript' charset='utf8' src='%s/jquery/jquery.dataTables-1.9.4.min.js'></script>\n",
 		"<script type='text/javascript' src='%s/scripts/jopentox.js'></script>\n",
 		"<script type='text/javascript' src='%s/scripts/jopentox-ui-model.js'></script>\n",

@@ -4,7 +4,7 @@
  <link rel="stylesheet" href="../style/skeleton/base.css">
  <link rel="stylesheet" href="${ambit_root}/style/skeleton/skeleton-fluid.css">
  <link rel="stylesheet" href="${ambit_root}/style/skeleton/layout.css">
-  <link rel="stylesheet" href="${ambit_root}/style/jquery-ui.css">
+  <link rel="stylesheet" href="${ambit_root}/style/jquery-ui-1.10.4.custom.min.css">
 	<link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css">
 	<link rel="stylesheet" href="${ambit_root}/style/ketcher.css"/>
 
