@@ -54,7 +54,7 @@
 				              "type": "string",
 				              "paramType": "query",
 				              "defaultValue": "endpoints",
-				              "enum" : ["endpoints","substances"]
+				              "enum" : ["endpoints","substances"],
 				              "allowMultiple"  : false
 				        },					               
 						<#include "/apidocs/parameters_page.ftl" >				            			            
