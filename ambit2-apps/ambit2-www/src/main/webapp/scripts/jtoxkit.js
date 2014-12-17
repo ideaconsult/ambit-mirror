@@ -221,20 +221,30 @@ var ccLib = {
 	  var $ = window.jQuery;
 
 		// first - attach the accumulators handler.	  
-	  $('.accumulate', form).each(function (){
-		  $(this).on('change', function (e) {
-			  var target = $(this).data('accumulate');
-			  if (!!target) {
-			  	target = this.form[target];
-			  	var val = target.value.replace(new RegExp('(' + this.value + ')'), '');
-			  	if (this.checked)
-				  	val += ',' + this.value;
+	  $('.accumulate', form).on('change', function (e) {
+		  var target = $(this).data('accumulate');
+		  if (!!target) {
+		  	target = this.form[target];
+		  	var val = target.value.replace(new RegExp('(' + this.value + ')'), '');
+		  	if (this.checked)
+			  	val += ',' + this.value;
 
-				  target.value = val.replace(/,,/g, ',').replace(/^,/g, '').replace(/,$/g, ''); // change double commas with one, and replaces commas at the beginning and at the end
-			  }
-				return false;
-		  })
+			  target.value = val.replace(/,,/g, ',').replace(/^,/g, '').replace(/,$/g, ''); // change double commas with one, and replaces commas at the beginning and at the end
+		  }
+			return false;
 	  });
+  },
+  
+  packData: function (data) {
+    var out = {};
+    ccLib.enumObject(data, function (val, name) {
+      out[name] = val;
+    });
+    return out;
+  },
+  
+  serializeForm: function (form) {
+    return this.packData(window.jQuery(form).serializeArray());
   },
 	 
   flexSize: function (root) {
@@ -391,13 +401,6 @@ function ccNonEmptyFilter(v) {
 window.jT = window.jToxKit = {
 	templateRoot: null,
 
-	/* A single place to hold all necessary queries. Parameters are marked with {id} and formatString() (ccLib.js) is used
-	to prepare the actual URLs
-	*/
-	queries: {
-		taskPoll: { method: 'GET', service: "/task/{id}" },
-	},
-	
 	callId: 0,
 	
 	templates: { },        // html2js routine will fill up this variable
@@ -703,14 +706,28 @@ window.jT = window.jToxKit = {
 			jsonp: settings.jsonp ? 'callback' : false,
 			error: function(jhr, status, error){
 			  ccLib.fireCallback(settings.onError, kit, service, status, jhr, myId);
-				callback(null, jhr);
+			  ccLib.fireCallback(callback, kit, null, jhr);
 			},
 			success: function(data, status, jhr){
 			  ccLib.fireCallback(settings.onSuccess, kit, service, status, jhr, myId);
-				callback(data, jhr);
+			  ccLib.fireCallback(callback, kit, data, jhr);
 			}
 		});
-	}
+	},
+	
+	/* Encapsulates the process of calling certain service, along with task polling, if needed.
+  	*/
+	service: function (kit, service, params, callback) {
+  	var self = this;
+  	var fnCB = !params || params.method === 'GET' || params.method === 'get' || (!params.data && !params.method) ? callback : function (data, jhr) {
+      if (!data)
+        ccLib.fireCallback(callback, kit, data, jhr);
+      else
+        self.pollTask(kit, data, function (task, jhr) { ccLib.fireCallback(callback, kit, !task.error ? task.result : null, jhr); });
+  	};
+  	
+  	this.call(kit, service, params, fnCB);
+  }
 };
 
 /* UI related functions of jToxKit are put here for more convenient usage
@@ -1168,7 +1185,7 @@ var jToxQuery = (function () {
     
     // finally, wait a bit for everyone to get initialized and make a call, if asked to
     if (!!self.settings.initialQuery)
-      setTimeout(function () { self.query(); }, 200);
+      self.initialQueryTimer = setTimeout(function () { self.query(); }, 200);
   };
   
   cls.prototype = {
@@ -1182,7 +1199,16 @@ var jToxQuery = (function () {
         
       return this.mainKit;
     },
+    
+    setWidget: function (id, dom) {
+      this.settings.dom.widgets[id] = dom;
+    },
         
+    cancelInitialQuery: function () {
+      if (!!this.initialQueryTimer)
+        clearTimeout(this.initialQueryTimer);
+    },
+    
     /* Perform the actual query, traversing all the widgets and asking them to
     alter the given URL, then - makes the call */
     query: function () {
@@ -1419,8 +1445,10 @@ var jToxSearch = (function () {
     }
 
     jT.ui.installHandlers(self);
-    if (doQuery)
-      setTimeout(function () { self.queryKit.query(); }, 250);      
+    if (doQuery) {
+      self.queryKit.cancelInitialQuery();
+      setTimeout(function () { self.queryKit.query(); }, 250);
+    }
     // and very finally - install the handlers...
   };
   
@@ -1514,9 +1542,10 @@ var jToxCompound = (function () {
     "pageSize": 20,           // what is the default (startint) page size.
     "pageStart": 0,           // what is the default startint point for entries retrieval
     "rememberChecks": false,  // whether to remember feature-checkbox settings between queries
+    "featureUri": null,       // an URI for retrieving all feature for the dataset, rather than 1-sized initial query, which is by default
     "metricFeature": "http://www.opentox.org/api/1.1#Similarity",   // This is the default metric feature, if no other is specified
     "onTab": null,            // invoked after each group's tab is created - function (element, tab, name, isMain);
-    "onLoaded": null,         // invoked when a set of compound is loaded.
+    "onLoaded": null,         // invoked when a set of compounds is loaded.
     "onPrepared": null,       // invoked when the initial call for determining the tabs/columns is ready
     "onDetails": null,        // invoked when a details pane is openned
     "preDetails": null,       // invoked prior of details pane creation to see if it is going to happen at all
@@ -1863,12 +1892,12 @@ var jToxCompound = (function () {
       }
     },
     
-    featureValue: function (fId, data, type) {
+    featureValue: function (fId, entry, type) {
       var self = this;
       var feature = self.feature[fId];
-      var val = (feature.data !== undefined) ? (ccLib.getJsonValue(data, jT.$.isArray(feature.data) ? feature.data[0] : feature.data)) : data.values[fId];
+      var val = (feature.data !== undefined) ? (ccLib.getJsonValue(entry, jT.$.isArray(feature.data) ? feature.data[0] : feature.data)) : entry.values[fId];
       return (typeof feature.render == 'function') ? 
-        feature.render(val, !!type ? type : 'filter', data) : 
+        feature.render(val, !!type ? type : 'filter', entry) : 
         jT.ui.valueWithUnits(val, !!feature.units && (type == 'display' || type == 'details') ? feature.units : null)
     },
     
@@ -1889,9 +1918,9 @@ var jToxCompound = (function () {
         var title = feat.title;
         feat.value = self.featureValue(fId, entry, scope);
         if (!!title && (!self.settings.hideEmptyDetails || !!feat.value)) {
-          data.push(feat)
           if (!feat.value)
             feat.value = '-';
+          data.push(feat);
         }
       });
       
@@ -1914,22 +1943,24 @@ var jToxCompound = (function () {
       else if (!ccLib.isNull(feature.column))
         col = jT.$.extend(col, feature.column);
       
-      if (feature.data !== undefined)
-        col["mData"] = feature.data;
-      else {
-        col["mData"] = 'values';
-        col["mRender"] = (function(featureId) { return function(data, type, full) { var val = data[featureId]; return ccLib.isEmpty(val) ? '-' : val }; })(fId);
+      col["mData"] = (feature.data != null) ? feature.data : 'values';
+
+      if (feature.render != null) {
+        if (feature.data != null)
+          col["mRender"] = feature.render;
+        else
+          col["mRender"] = function (data, type, full) { return feature.render(full.values[fId], type, full); }
       }
+      else if (!!feature.shorten)
+        col["mRender"] = function(data, type, full) { return (type != "display") ? '' + data : jT.ui.shortenedData(data, "Press to copy the value in the clipboard"); };
+      else if (feature.data == null) // in other cases we want the default presenting of the plain value
+        col["mRender"] = (function(featureId) { return function(data, type, full) { var val = full.values[featureId]; return ccLib.isEmpty(val) ? '-' : val }; })(fId);
       
       // other convenient cases
-      if (!!feature.shorten) {
-        col["mRender"] = function(data, type, full) { return (type != "display") ? '' + data : jT.ui.shortenedData(data, "Press to copy the value in the clipboard"); };
+      if (!!feature.shorten)
         col["sWidth"] = "75px";
-      }
   
       // finally - this one.          
-      if (feature.render !== undefined)
-        col["mRender"] = feature.render;
       if (feature.order != null)
         col["iOrder"] = feature.order;
       return col;
@@ -2079,7 +2110,7 @@ var jToxCompound = (function () {
           // finally - assign column switching to the checkbox of main tab.
           var colList = !!feature.primary ? fixCols : varCols;
           var colId = 'col-' + colList.length;
-          col.sClass += ' ' + colId;
+          col.sClass = (!!col.sClass ? col.sClass + ' ' : '') + colId;
 
           jT.$('.jtox-ds-features input.jtox-checkbox[value="' + fId + '"]', self.rootElement).data({ sel: !!feature.primary ? '.jtox-ds-fixed' : '.jtox-ds-variable', column: colId, id: fId}).on('change', fnShowColumn)
           
@@ -2325,6 +2356,8 @@ var jToxCompound = (function () {
           
           // then process the dataset
           self.dataset = cls.processDataset(dataset, self.feature, self.settings.fnAccumulate, self.pageStart);
+          // time to call the supplied function, if any.
+          ccLib.fireCallback(self.settings.onLoaded, self, dataset);
           if (!self.settings.noInterface) {
             // ok - go and update the table, filtering the entries, if needed            
             self.updateTables();
@@ -2333,8 +2366,8 @@ var jToxCompound = (function () {
               self.updateControls(qStart, dataset.dataEntry.length);
           }
         }
-        // time to call the supplied function, if any.
-        ccLib.fireCallback(self.settings.onLoaded, self, dataset);
+        else
+          ccLib.fireCallback(self.settings.onLoaded, self, dataset);
       };
   
       // we may be passed dataset, if the initial, setup query was 404: Not Found - to avoid second such query...
@@ -2344,40 +2377,45 @@ var jToxCompound = (function () {
         jT.call(self, qUri, fillFn);
     },
     
-    /* Makes a query to the server for particular dataset, asking for feature list first, so that the table(s) can be 
-    prepared.
-    */
-    queryDataset: function (datasetUri) {
+    /* Retrieve features for provided dataserUri, using settings.featureUri, if provided, or making automatice page=0&pagesize=1 query
+      */
+    queryFeatures: function (callback) {
       var self = this;
-      // if some oldies exist...
-      this.clearDataset();
-      this.init();
+      var dataset = null;
 
-      datasetUri = jT.grabPaging(self, datasetUri);
+      // first, build the proper      
+        var queryUri;
+      if (!!self.settings.featureUri) {
+        queryUri = self.settings.featureUri;
+/*
+        if (!jT.$.isArray(self.settings.featureUris))
+          self.settings.featureUris = [self.settings.featureUris];
+        var cnt = 0;
+        if (queryUri.indexOf('?') < 0)
+          queryUri += '?';
+        for (var i = 0; i < self.settings.featureUris.length; ++i) {
+          var uri = self.settings.featureUris[i];
+          queryUri += 'feature_uris[]=' + encodeURIComponent(uri) + '&';
+        }
+*/
+      }
+      else // this is the automatic way, which makes a false query in the beginning
+        queryUri = ccLib.addParameter(self.datasetUri, "page=0&pagesize=1");
 
-      self.settings.baseUrl = self.settings.baseUrl || jT.grabBaseUrl(datasetUri);
-      
-      // remember the _original_ datasetUri and make a call with one size length to retrieve all features...
-      self.datasetUri = (datasetUri.indexOf('http') !=0 ? self.settings.baseUrl : '') + datasetUri;
-      
-      var procDiv = jT.$('.jt-processing', self.rootElement).show()[0];
-      if (!!self.settings.oLanguage.sLoadingRecords)
-        jT.$('.message', procDiv).html(self.settings.oLanguage.sLoadingRecords);
-
-      jT.call(self, ccLib.addParameter(self.datasetUri, "page=0&pagesize=1"), function (dataset, jhr) {
-        var empty = false;
-        if (!dataset && jhr.status == 404) {
-          empty = true;
+      // now make the actual call...
+      jT.call(self, queryUri, function (result, jhr) {
+        if (!result && jhr.status == 404) {
           dataset = { feature: {}, dataEntry: [] }; // an empty set, to make it show the table...
         }
         
         // remove the loading pane in anyways..
-        jT.$(procDiv).hide();
-        if (!!dataset) {
-          self.feature = dataset.feature;
+        if (!!result) {
+          self.feature = result.feature;
+
           cls.processFeatures(self.feature, self.settings.configuration.baseFeatures);
+          var miniset = { dataEntry: [], feature: self.feature };
           if (!self.settings.noInterface) {
-            self.prepareGroups(dataset);
+            self.prepareGroups(miniset);
             if (self.settings.showTabs) {
               // tabs feature building
               var nodeFn = function (id, name, parent) {
@@ -2417,11 +2455,39 @@ var jToxCompound = (function () {
             
             self.prepareTables(); // prepare the tables - we need features to build them - we have them!
             self.equalizeTables(); // to make them nicer, while waiting...
-            ccLib.fireCallback(self.settings.onPrepared, self, dataset, self);
           }
-          
-          self.queryEntries(self.pageStart, self.pageSize, empty ? dataset : null); // and make the query for actual data
+  
+          ccLib.fireCallback(self.settings.onPrepared, self, miniset, self);
+  
+          // finally make the callback for
+          callback(dataset);
         }
+      });
+    },
+    
+    /* Makes a query to the server for particular dataset, asking for feature list first, so that the table(s) can be 
+    prepared.
+    */
+    queryDataset: function (datasetUri) {
+      var self = this;
+      // if some oldies exist...
+      this.clearDataset();
+      this.init();
+
+      datasetUri = jT.grabPaging(self, datasetUri);
+
+      self.settings.baseUrl = self.settings.baseUrl || jT.grabBaseUrl(datasetUri);
+      
+      // remember the _original_ datasetUri and make a call with one size length to retrieve all features...
+      self.datasetUri = (datasetUri.indexOf('http') !=0 ? self.settings.baseUrl : '') + datasetUri;
+      
+      var procDiv = jT.$('.jt-processing', self.rootElement).show()[0];
+      if (!!self.settings.oLanguage.sLoadingRecords)
+        jT.$('.message', procDiv).html(self.settings.oLanguage.sLoadingRecords);
+      
+      self.queryFeatures(function (dataset) {
+        jT.$(procDiv).hide();
+        self.queryEntries(self.pageStart, self.pageSize, dataset);
       });
     },
     
@@ -2642,12 +2708,14 @@ var jToxDataset = (function () {
           result = { dataset: [] }; // empty one...
         if (!!result) {
           self.dataset = result.dataset;
+          ccLib.fireCallback(self.settings.onLoaded, self, result);
           if (!self.settings.noInterface)
             jT.$(self.table).dataTable().fnAddData(result.dataset);
         }
-        else
+        else {
           self.dataset = null;
-        ccLib.fireCallback(self.settings.onLoaded, self, result);
+          ccLib.fireCallback(self.settings.onLoaded, self, result);
+        }
       });
     },
     
@@ -2805,10 +2873,12 @@ var jToxModel = (function () {
           
         if (!!result) {
           self.models = result.model;
+          ccLib.fireCallback(self.settings.onLoaded, self, result);
           if (!self.settings.noInterface)
             jT.$(self.table).dataTable().fnAddData(result.model);
         }
-        ccLib.fireCallback(self.settings.onLoaded, self, result);
+        else
+          ccLib.fireCallback(self.settings.onLoaded, self, result);
       });
     },
     
@@ -2826,20 +2896,20 @@ var jToxModel = (function () {
           result = { algorithm: [] }; // empty one
         if (!!result) {
           self.algorithm = result.algorithm;
+          ccLib.fireCallback(self.settings.onLoaded, self, result);
           if (!self.settings.noInterface)
             jT.$(self.table).dataTable().fnAddData(result.algorithm);
         }
-        ccLib.fireCallback(self.settings.onLoaded, self, result);
+        else
+          ccLib.fireCallback(self.settings.onLoaded, self, result);
       });
     },
     
     getModel: function (algoUri, callback) {
       var self = this;
       var createIt = function () {
-        jT.call(self, algoUri, { method: 'POST' }, function (result, jhr) {
-          jT.pollTask(self, result, function (task, jhr) {
-            ccLib.fireCallback(callback, self, (!task.error ? task.result : null), jhr);
-          });
+        jT.service(self, algoUri, { method: 'POST' }, function (result, jhr) {
+          ccLib.fireCallback(callback, self, (!task.error ? task.result : null), jhr);
         });
       };
       
@@ -2861,13 +2931,11 @@ var jToxModel = (function () {
       var q = ccLib.addParameter(datasetUri, 'feature_uris[]=' + encodeURIComponent(modelUri + '/predicted'));
 
       var createIt = function () {
-        jT.call(self, modelUri, { method: "POST", data: { dataset_uri: datasetUri } }, function (task, jhr) {
-          jT.pollTask(self, task, function (task, jhr) {
-            if (!task || !!task.error)
-              ccLib.fireCallback(callback, self, null, jhr);
-            else
-              jT.call(self, task.result, callback);
-          });
+        jT.service(self, modelUri, { method: "POST", data: { dataset_uri: datasetUri } }, function (task, jhr) {
+          if (!task || !!task.error)
+            ccLib.fireCallback(callback, self, null, jhr);
+          else
+            jT.call(self, task.result, callback);
         });
       };     
       jT.call(self, q, function (result, jhr) {
@@ -3063,6 +3131,8 @@ var jToxSubstance = (function () {
           if (result.substance.length < self.pageSize) // we've reached the end!!
             self.entriesCount = from + result.substance.length;
 
+          // time to call the supplied function, if any.
+          ccLib.fireCallback(self.settings.onLoaded, self, result);
           if (!self.settings.noInterface) {
             jT.$(self.table).dataTable().fnClearTable();
             jT.$(self.table).dataTable().fnAddData(result.substance);
@@ -3070,8 +3140,8 @@ var jToxSubstance = (function () {
             self.updateControls(from, result.substance.length);
           }
         }
-        // time to call the supplied function, if any.
-        ccLib.fireCallback(self.settings.onLoaded, self, result);
+        else
+          ccLib.fireCallback(self.settings.onLoaded, self, result);
       });
     },
     
@@ -3238,6 +3308,7 @@ var jToxComposition = (function () {
             }
           }
           
+          ccLib.fireCallback(self.settings.onLoaded, self, json.composition);
           // now make the actual filling
           if (!self.settings.noInterface) {
             for (var i in substances) {
@@ -3252,9 +3323,9 @@ var jToxComposition = (function () {
               self.prepareTable(substances[i].composition, panel);
             }
           }
-          
-          ccLib.fireCallback(self.settings.onLoaded, self, json.composition);
         }
+        else
+          ccLib.fireCallback(self.settings.onLoaded, self, json.composition);
       });
     },   
     
@@ -3898,14 +3969,6 @@ var jToxPolicy = (function () {
       }, 3500);
     };
     
-    var dataEnumer = function (data) {
-      var out = {};
-      ccLib.enumObject(data, function (val, name) {
-        out[name] = val;
-      });
-      return out;
-    };
-    
     self.settings.configuration.handlers = {
       changed: function (e) {
         var data = jT.ui.rowData(this);
@@ -3918,19 +3981,17 @@ var jToxPolicy = (function () {
 
           $(el).addClass('loading');
           // now make the update call...
-          jT.call(self, data.uri, { method: 'PUT', data: dataEnumer(myObj) }, function (task) {
-            jT.pollTask(self, task, function (task) {
-              $(el).removeClass('loading');
-              if (!task || !!task.error) {
-                ccLib.setObjValue(el, ccLib.getJsonValue(data, myData)); // i.e. revert the old value
-                alerter(el, '', task);
-              }
-              else {
-                // we need to update the value... in our internal 'policies' array...
-                var idx = $(self.table).dataTable().fnGetPosition($(el).closest('tr')[0]);
-                ccLib.setJsonValue(self.policies[idx], myData, ccLib.getObjValue(el));
-              }
-            });
+          jT.service(self, data.uri, { method: 'PUT', data: ccLib.packData(myObj) }, function (task) {
+            $(el).removeClass('loading');
+            if (!task || !!task.error) {
+              ccLib.setObjValue(el, ccLib.getJsonValue(data, myData)); // i.e. revert the old value
+              alerter(el, '', task);
+            }
+            else {
+              // we need to update the value... in our internal 'policies' array...
+              var idx = $(self.table).dataTable().fnGetPosition($(el).closest('tr')[0]);
+              ccLib.setJsonValue(self.policies[idx], myData, ccLib.getObjValue(el));
+            }
           });
         }
         else {
@@ -3949,14 +4010,12 @@ var jToxPolicy = (function () {
         var el = this;
         var data = jT.ui.rowData(this);
         $(el).addClass('loading');
-        jT.call(self, data.uri, { method: "DELETE" }, function (task, jhr) {
-          jT.pollTask(self, task, function (task) {
-            $(el).removeClass('loading');
-            if (!task || !!task.error)
-              alerter(el, 'ui-icon-closethick', task)
-            else // i.e. - on success - reload them!
-              self.loadPolicies();
-          }, jhr);
+        jT.service(self, data.uri, { method: "DELETE" }, function (task) {
+          $(el).removeClass('loading');
+          if (!task || !!task.error)
+            alerter(el, 'ui-icon-closethick', task)
+          else // i.e. - on success - reload them!
+            self.loadPolicies();
         });
       },
       add: function (e) {
@@ -3964,14 +4023,12 @@ var jToxPolicy = (function () {
         delete data['uri'];
         var el = this;
         $(el).addClass('loading');
-        jT.call(self, '/admin/restpolicy', { method: "POST", data: dataEnumer(data)}, function (task) {
-          jT.pollTask(self, task, function (task) {
-            $(el).removeClass('loading');
-            if (!task || !!task.error)
-              alerter(el, 'ui-icon-plusthick', task)
-            else // i.e. - on success - reload them!
-              self.loadPolicies();
-          });
+        jT.service(self, '/admin/restpolicy', { method: "POST", data: ccLib.packData(data)}, function (task) {
+          $(el).removeClass('loading');
+          if (!task || !!task.error)
+            alerter(el, 'ui-icon-plusthick', task)
+          else // i.e. - on success - reload them!
+            self.loadPolicies();
         });
       },
     };
@@ -4281,7 +4338,7 @@ var jToxEndpoint = (function () {
     configuration: { 
       columns : {
         endpoint: {
-          'Id': { sTitle: "Id", mData: "endpoint", bSortable: false, sWidth: "30px", mRender: function (data, type, full) { return ''; } },
+          'Id': { sTitle: "Id", mData: "uri", bSortable: false, sWidth: "30px", mRender: function (data, type, full) { return ''; } },
           'Name': { sTitle: "Name", mData: "value", sDefaultContent: "-", mRender: function (data, type, full) {
             return data + '<span class="float-right jtox-details">(<a title="Click to view substances" target="_blank" href="' + full.uri + '">' + full.substancescount + '</a>) [<span title="Number of values">' + full.count + '</span>]</span>';
           } },
@@ -4554,11 +4611,12 @@ var jToxEndpoint = (function () {
       // now, as we're ready - go and fill everything
       jT.$('h3', self.rootElement).each(function () {
         var name = jT.$(this).data('cat');
-        var cat = ends[name.replace("_", " ")];
-        
         var table = self.tables[name];
         table.fnClearTable();
-        table.fnAddData(cat);
+
+        var cat = ends[name.replace("_", " ")];
+        if (cat != null)
+          table.fnAddData(cat);
       });
     },
     
@@ -4575,12 +4633,14 @@ var jToxEndpoint = (function () {
           result = { facet: [] }; // empty one
         if (!!result) {
           self.summary = result.facet;
+          ccLib.fireCallback(self.settings.onLoaded, self, result);
           if (!self.settings.noInterface)
             self.fillEntries(result.facet);
         }
-        else
+        else {
           self.facet = null;
-        ccLib.fireCallback(self.settings.onLoaded, self, result);
+          ccLib.fireCallback(self.settings.onLoaded, self, result);
+        }
       });
     },
     

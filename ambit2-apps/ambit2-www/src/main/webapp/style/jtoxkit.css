@@ -217,10 +217,15 @@
 .jtox-toolkit .loading {
   background: url(../images/waiting_small.gif) right top no-repeat;
   background-size: 16px 16px;
-  text-fill-color: rgba(0, 0, 0, 0);
-  color: rgba(0, 0, 0, 0);
   min-width: 16px;
   min-height: 16px;
+}
+
+.jtox-toolkit button.loading,
+.jtox-toolkit span.loading {
+  background-position: center center;
+  text-fill-color: rgba(0, 0, 0, 0);
+  color: rgba(0, 0, 0, 0);
 }
 
 .jtox-toolkit input[type="password"],

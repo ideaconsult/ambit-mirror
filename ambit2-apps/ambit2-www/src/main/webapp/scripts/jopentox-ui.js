@@ -1715,12 +1715,12 @@ function defineBundlesTable(root,url,deleteVisible) {
   		        	    	pos =  shortURI.lastIndexOf("/");
   		        	    	if (pos>=0) shortURI = shortURI.substring(pos+1); 
   		        	    	var href = o.aData.URI;
-    		        	    var sOut = "<a target='table' href='"+ href +
-    		        	   		"' title='Click to view the substance dataset at "+ o.aData.URI+" as a table'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;'></span>B"+
+    		        	    var sOut = "<a target='table' href='"+ root + "/ui/assessment?bundle_uri=" + encodeURIComponent(href) +
+    		        	   		"' title='Click to view the substance dataset at "+ o.aData.URI+" as a table'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;'></span>Assessment#"+
     		        	   		shortURI+"</a> " ;
     		        	    
     		        	    sOut += "<br/>"+val+ "<br/>";
-
+    		        	   sOut += " <a href='"+o.aData.URI +"/metadata'>Metadata</a>";
      		               sOut += " <a href='"+o.aData.URI +"/compound'>Structures</a>";
     		               sOut += " | <a href='"+o.aData.URI +"/substance'>Substances</a>";
     		               sOut += " | <a href='"+o.aData.URI +"/dataset'>Substances and studies</a>";

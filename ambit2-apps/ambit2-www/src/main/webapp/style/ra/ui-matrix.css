@@ -1,0 +1,175 @@
+/* toxtmatrix.css - jToxMatrix tool styles
+*/
+html, body, #jtox-bundle {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#logger {
+  position: fixed;
+	height: 144px;
+  width: 99%;
+  right: 0px;
+	bottom: 0px;
+	z-index: 100;
+	transition: bottom 0.5s ease;
+	-moz-transition: bottom 0.5s ease;
+	-webkit-transition: bottom 0.5s ease;
+	-o-transition: bottom 0.5s ease;
+	box-shadow: -3px 7px 7px #999;
+}
+
+#logger.hidden {
+  bottom: -120px;
+}
+
+#jtox-bundle textarea,
+.popup-box textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: none;
+}
+
+#jtox-identifiers form div.actions {
+	margin-top: 15px;
+	font-size: 80%;
+}
+
+#jtox-identifiers form input {
+	width: 100%;
+}
+
+#jtox-structures .jtox-foldable {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#jtox-structures td textarea {
+  min-width: 150px;
+  height: 150px;
+  overflow-x: none;
+  margin: 0px;
+  border: 0px;
+}
+
+body.structlist #jtox-query .jtox-foldable {
+  display: none;
+}
+
+body.structlist #browser {
+  margin-top: 5px;  
+}
+
+#jtox-matrix .jtox-toolkit {
+  margin-top: 10px;
+}
+
+#jtox-bundle>div.ui-tabs-panel {
+  position: relative;
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+}
+
+.jtox-slidable {
+  overflow: hidden;
+  position: relative;
+  top: 0px;
+  width: 202%;
+  padding: 0px;
+  -moz-transition: left ease 800ms;
+  -ms-transition: left ease 800ms;
+  -o-transition: left ease 800ms;
+  -webkit-transition: left ease 800ms;
+  transition: left ease 800ms;
+}
+
+.jtox-slidable>div {
+  width: 50%;
+  position: relative;
+  margin: 0px;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
+.jtox-slidable>div>div {
+  position: relative;
+}
+
+#jtox-endpoints .tab-substance  {
+  padding-right: 25px;
+}
+
+#jtox-endpoints .tab-points  {
+  padding-left: 15px;
+}
+
+#jtox-endpoints .tab-points>div.check-all {
+  margin-bottom: -16px;
+  z-index: 100;
+}
+
+#jtox-matrix table.dataTable td  {
+  white-space: nowrap;
+}
+
+#jtox-matrix table.dataTable td span.ui-icon {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+/* Now come info and edit box declarations
+*/
+.popup-box .box-reference {
+  width: 100%;
+}
+
+.popup-box .box-reference input {
+  font-size: 110%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.popup-box th,
+.popup-box td {
+  padding: 2px 5px 2px 5px;
+  border-left: 1px solid #666;
+  border-right: 1px solid #666;
+  text-align: center;
+}
+
+.popup-box td:first-child,
+.popup-box th:first-child{
+  border-left: 0px;
+}
+
+.popup-box td:last-child,
+.popup-box th:last-child {
+  border-right: 0px;
+}
+
+.popup-box thead tr:first-child {
+  border-bottom: 1px solid #666;
+}
+
+.popup-box tbody {
+  border-top: 1px solid #666;
+}
+
+.popup-box th {
+  font-size: 80%;
+  font-weight: bold;
+}
+
+.popup-box .the-value {
+  font-style: italic;
+  font-weight: bold;
+}
+
+.popup-box .the-endpoint {
+  font-weight: bold;
+}
+
+.popup-box .the-send input {
+  float: right;
+}
