@@ -21,7 +21,8 @@ var jToxBundle = {
 	},
 	
 	edit: {
-  	properties: [],
+  	added: { },
+  	deleted: { },
 		refreshMatrix: true,
 	},
 		
@@ -264,7 +265,50 @@ var jToxBundle = {
   		$(panel).addClass('initialized');
   		var conf = $.extend(true, {}, jTConfig.matrix, config_study);
   		delete conf.baseFeatures['#IdRow'];
-  		  		
+  		
+  		var saveButton = $('.save-button', panel)[0];
+  		saveButton.disabled = true;
+  		var dressButton = function() {
+	  		if ($.isEmptyObject(self.edit.added) && $.isEmptyObject(self.edit.deleted)) {
+	  			saveButton.disabled = true;
+	  			$(saveButton).removeClass('jt-alert').addClass('jt-disabled');
+	  			saveButton.innerHTML = "Saved";
+	  		}
+	  		else {
+	  			saveButton.disabled = false;
+	  			$(saveButton).addClass('jt-alert').removeClass('jt-disabled');
+	  			saveButton.innerHTML = "Save";
+	  		}
+  		};
+  		
+  		$(saveButton).on('click', function() {
+	  		// TODO: make actuall call to the server for adding and deleting
+	  		self.edit.added = {};
+				self.edit.deleted = {};
+				dressButton();
+	  	});
+  		
+  		var addFeature = function(compoundUri, featureId, value) {
+	  		var compound = self.edit.added[compoundUri];
+	  		if (compound == null)
+	  			self.edit.added[compoundUri] = compound = {};
+	  		compound[featureId] = value;
+	  		dressButton();
+  		};
+  		
+  		var deleteFeature = function (compoundUri, featureId) {
+	  		var compound = self.edit.added[compoundUri];
+	  		if (compound != null && compound[featureId] != null)
+	  			delete compound[featureId];
+	  		else {
+	  			compound = self.edit.deleted[compoundUri];
+		  		if (compound == null)
+		  			self.edit.deleted[compoundUri] = compound = [];
+		  		compound.push(featureId);
+		  	}
+	  		dressButton();
+  		};
+  		
   		var infoDiv = $('#info-box')[0];
   		var editDiv = $('#edit-box')[0];
   		// now, fill the select with proper values...
@@ -305,7 +349,7 @@ var jToxBundle = {
 
             var featureId = $(this).data('feature');
     		    var feature = self.matrixKit.dataset.feature[featureId];
-      		  if ($(this).hasClass('info-popup')) {
+      		  if (!$(this).hasClass('edit-popup')) {
       		    
         		  $('.dynamic-condition', infoDiv).remove();
         		  var dynHead = $('tr.conditions', infoDiv)[0];
@@ -342,11 +386,23 @@ var jToxBundle = {
 //           		  source: '<a target="_blank" href="' + feature.source.URI + '">' + feature.source.type + '</a>'
         		  });
         		  
+        		  if ($(this).hasClass('delete-popup')) {
+        		  	$('.delete-box', infoDiv).show();
+	              boxOptions.onOpen = function () {
+		              var box = this;
+		              var content = this.content[0];
+		              $('button.jt-alert', content).on('click', function (){ deleteFeature(data.compound.URI, featureId); box.close(); });
+              	};
+        		  }
+        		  else
+        		  	$('.delete-box', infoDiv).hide();
+        		  	
         		  boxOptions.content = infoDiv.innerHTML;
               new jBox('Tooltip', boxOptions).open();
       		  }
       		  else { // edit mode
               var parse = self.parseFeatureId(featureId, self.matrixKit);
+              var featureJson = {};
               
               // we're taking the original jToxEndpoint editor here and glue our part after it.
               boxOptions.content = jT.getTemplate('#jtox-endeditor').innerHTML + editDiv.innerHTML;
@@ -355,11 +411,15 @@ var jToxBundle = {
               boxOptions.confirmButton = "Add";
               boxOptions.cancelButton = "Cancel";
               var endSetValue = function (e, field, value) {
+	              // TODO: form the JSON here
                 console.log("Value set [" + field + "] = `" + value + "`");
               };
               
               boxOptions.onOpen = function () {
-                jToxEndpoint.linkEditors(self.matrixKit, this.content[0], parse.category, parse.topcategory, endSetValue);
+	              var box = this;
+	              var content = this.content[0];
+                jToxEndpoint.linkEditors(self.matrixKit, content, parse.category, parse.topcategory, endSetValue);
+	              $('input[type=button]', content).on('click', function (){ addFeature(data.compound.URI, featureId, featureJson); box.close();});	              
               };
               new jBox('Modal', boxOptions).open();
       		  }
@@ -418,7 +478,7 @@ var jToxBundle = {
     	  $(checkAll).on('change', function (e) {
 	    	  var qUri = "/query/study?bundle_uri=" + bUri;
 	    	  if (!this.checked)
-	    	  	qUri += "&filterbybundle=" + bUri;
+	    	  	qUri += "&selected=substances&filterbybundle=" + bUri;
           self.endpointKit.loadEndpoints(qUri);
     	  });
   	  }
