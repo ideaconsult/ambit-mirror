@@ -98,9 +98,10 @@ var jToxBundle = {
     
     self.onIdentifiers(null, $('#jtox-identifiers', self.rootElement)[0]);
     // finally, if provided - load the given bundleUri
-    if (!ccLib.isNull(self.settings.bundleUri)) {
+    if (!ccLib.isNull(self.settings.bundleUri))
 	    self.load(self.settings.bundleUri);
-    }
+	  else
+	  	self.progressTabs();
     
     return self;
 	},
@@ -373,6 +374,7 @@ var jToxBundle = {
 	  var self = this;
 	  var sub = $(".tab-" + id.substr(3), panel)[0];
 	  sub.parentNode.style.left = (-sub.offsetLeft) + 'px';
+	  var bUri = encodeURIComponent(self.bundleUri);
 	  
 	  if (id == "endsubstance") {
   	  if (sub.firstElementChild == null) {
@@ -394,7 +396,7 @@ var jToxBundle = {
         });
   	  }
   	  
-      self.substanceKit.query('/substance?type=related&bundle_uri=' + encodeURIComponent(self.bundleUri));
+      self.substanceKit.query('/query/substance/related?filterbybundle=' + bUri + '&bundle_uri=' + bUri);
 	  }
 	  else {// i.e. endpoints
   	  var checkAll = $('input', sub)[0];
@@ -412,7 +414,10 @@ var jToxBundle = {
       	  }
         });
     	  $(checkAll).on('change', function (e) {
-          self.endpointKit.loadEndpoints(!this.checked ? self.bundleUri + '/studysummary' : null);
+	    	  var qUri = "/query/study?bundle_uri=" + bUri;
+	    	  if (!this.checked)
+	    	  	qUri += "&filterbybundle=" + bUri;
+          self.endpointKit.loadEndpoints(qUri);
     	  });
   	  }
   	  $(checkAll).trigger('change'); // i.e. initiating a proper reload
@@ -427,15 +432,34 @@ var jToxBundle = {
   	  self.queryKit.setWidget("bundle", self.rootElement);
   	  // provid onRow function so the buttons can be se properly...
   	  self.queryKit.kit().settings.onRow = function (row, data, index) {
-      	  if (!data.bundles)
-      	  	return;
-    	  var bundleInfo = data.bundles[self.bundleUri];
-    	  if (!!bundleInfo) {
-      	  if (!!bundleInfo.tag)
-            $('button.jt-toggle.' + bundleInfo.tag.toLowerCase(), row).addClass('active');
-          if (!!bundleInfo.remarks)
-            $('textarea.remark', row).html(bundleInfo.remarks);
-    	  }
+    	  if (!data.bundles)
+    	  	return;
+    	  	
+    	  var bundleInfo = data.bundles[self.bundleUri] || {};
+    	  // we need to setup remarks field regardless of bundleInfo presence
+				var noteEl = $('textarea.remark', row).on('change', function (e) {
+					var data = jT.ui.rowData(this);
+					var el = this;
+					$(el).addClass('loading');
+			  	jT.service(self, self.bundleUri + '/compound', { 
+			      'method': 'PUT', 
+			      'data': { 
+			        compound_uri: data.compound.URI, 
+			        command: 'add', 
+			        tag: data.bundles[self.bundleUri].tag,
+			        remarks: $(el).val()
+			      } 
+			    }, function (result) {
+				  	$(el).removeClass('loading');    
+			    });
+				});
+
+    	  if (!!bundleInfo.tag) {
+          $('button.jt-toggle.' + bundleInfo.tag.toLowerCase(), row).addClass('active');
+          noteEl.val(bundleInfo.remarks);
+        }
+        else
+        	noteEl.prop('disabled', true).val(' ');
   	  };
     }
     
@@ -483,19 +507,22 @@ var jToxBundle = {
 	
 	selectStructure: function (uri, what, el) {
   	var self = this;
+  	var activate = !$(el).hasClass('active');
   	$(el).addClass('loading');
+  	var noteEl = $('textarea.remark', self.queryKit.kit().getVarRow(el))[0];
   	jT.service(self, self.bundleUri + '/compound', { 
       method: 'PUT', 
       data: { 
         compound_uri: uri, 
-        command: $(el).hasClass('active') ? 'delete' : 'add', 
-        compound_role: what 
+        command: activate ? 'add': 'delete',
+        tag: what,
+        remarks: $(noteEl).val()
       } 
     }, function (result) {
     	$(el).removeClass('loading');
     	if (!!result) {
       	$(el).toggleClass('active');
-      	if ($(el).hasClass('active'))
+      	if (activate)
       	{
       	  self.bundleSummary.compound++;
       	  what = (what == "target" ? "source" : "target");
@@ -503,6 +530,8 @@ var jToxBundle = {
         }
         else
           self.bundleSummary.compound--;
+
+      	$(noteEl).prop('disabled', !activate).val(activate ? "" : " ");
         self.progressTabs();
       }
   	});
