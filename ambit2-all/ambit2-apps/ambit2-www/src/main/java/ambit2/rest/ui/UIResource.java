@@ -26,11 +26,13 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.config.AMBITConfig;
 import ambit2.base.data.StructureRecord;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.json.JSONUtils;
 import ambit2.rendering.StructureEditorProcessor;
 import ambit2.rest.AmbitApplication;
+import ambit2.rest.OpenTox;
 import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.freemarker.FreeMarkerResource;
@@ -121,7 +123,23 @@ public class UIResource extends FreeMarkerResource {
 					response.getCacheDirectives().add(CacheDirective.noCache());
 				}				
 			},
-			dataset_comparison;
+			dataset_comparison,
+			assessment_new {
+				@Override
+				public String getTemplateName() {
+					return "ra/ui-matrix";
+				}				
+			},
+			assessment {
+				@Override
+				public String getTemplateName() {
+					return "ra/ui-matrix";
+				}
+			}
+			;
+			public String getTemplateName() {
+				return name();
+			}
 			public boolean enablePOST() {
 				return false;
 			}
@@ -155,7 +173,7 @@ public class UIResource extends FreeMarkerResource {
 				return String.format("menu/profile/%s/index.ftl",((AmbitApplication)getApplication()).getProfile());	
 			}
 			default: {
-				return String.format("%s.ftl", page.name());
+				return String.format("%s.ftl", page.getTemplateName());
 			}
 			}
 			
@@ -209,8 +227,24 @@ public class UIResource extends FreeMarkerResource {
 	    try {
 	        	map.put(AMBITConfig.ajaxtimeout.name(),((AmbitApplication)getApplication()).getAjaxTimeout());
 	    } catch (Exception x) { map.put(AMBITConfig.ajaxtimeout.name(), "10000");}		
+	    
+		try {
+			Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(request.getResourceRef().getQueryAsForm());
+			if (bundleURI!=null) map.put("bundleid",getIdBundle(bundleURI, request));
+		} catch (Exception x) {
+		}
+		
+    
 	}
 	
+	protected Integer getIdBundle(Object bundleURI, Request request) {
+		if (bundleURI!=null) {
+			Object id = OpenTox.URI.bundle.getId(bundleURI.toString(), request.getRootRef());
+			if (id!=null && (id instanceof Integer)) 
+				return (Integer)id;		
+		} 
+		return null;
+	}
 	@Override
 	protected void setCacheHeaders() {
 		if (page!=null) page.setCacheHeaders(getResponse());
