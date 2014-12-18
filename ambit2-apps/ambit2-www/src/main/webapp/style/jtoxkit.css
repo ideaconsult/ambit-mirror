@@ -348,6 +348,30 @@ button.jt-toggle.active {
   background: #aaa;
   opacity: 1.0;
 }
+
+/* Start of multi-row table-related classes */
+.jtox-toolkit table.dataTable td.jtox-multi {
+  padding: 0px;
+}
+
+td.jtox-multi table {
+  margin: 0px;
+}
+
+td.jtox-multi table td {
+  border-left: 0px !important;
+  border-right: 0px !important;
+  border-bottom: 0px !important;
+}
+
+td.jtox-multi table tr:first-child td {
+  border-top: 0px !important;
+}
+
+td.jtox-multi table {
+  height: 100%;
+  width: 100%;
+}
 /* toxtstudy.css - Styling for toxstudy engine
 */
 
@@ -659,30 +683,6 @@ div.jtox-study-tab .dataTables_wrapper {
 
 .jtox-toolkit .jtox-study table td {
   word-wrap: break-word;
-}
-
-/* Start of table-related classes */
-.jtox-toolkit table.dataTable td.jtox-multi {
-  padding: 0px;
-}
-
-td.jtox-multi table {
-  margin: 0px;
-}
-
-td.jtox-multi table td {
-  border-left: 0px !important;
-  border-right: 0px !important;
-  border-bottom: 0px !important;
-}
-
-td.jtox-multi table tr:first-child td {
-  border-top: 0px !important;
-}
-
-td.jtox-multi table {
-  height: 100%;
-  width: 100%;
 }
 /* jToxLog styling
 */
