@@ -118,19 +118,6 @@ body.structlist #browser {
   vertical-align: bottom;
 }
 
-#jtox-matrix button.save-button {
-	position: absolute;
-	top: 5px;
-	right: 20px;
-	font-size: 80%;
-}
-
-#jtox-matrix button.save-button.jt-disabled {
-	background: none;
-	border: none;
-	color: #999;
-}
-
 /* Now come info and edit box declarations
 */
 .popup-box .box-reference {
@@ -141,23 +128,6 @@ body.structlist #browser {
   font-size: 110%;
   width: 100%;
   box-sizing: border-box;
-}
-
-.popup-box .delete-box td {
-	border: 0px;	
-}
-
-.popup-box table.delete-box {
-	width: 100%;
-}
-
-.popup-box .delete-box button {
-	margin-bottom: 10px;
-}
-
-.popup-box .delete-box td:last-child {
-	width: 80px;
-	vertical-align: middle;
 }
 
 .popup-box th,
