@@ -20,7 +20,7 @@ public class ReadSubstanceCompositionTest extends QueryTest<ReadSubstanceComposi
 	@Override
 	protected ReadSubstanceComposition createQuery() throws Exception {
 		ReadSubstanceComposition query = new ReadSubstanceComposition();
-		query.setValue(new SubstanceRecord(1));
+		query.setFieldname(new SubstanceRecord(1));
 		return query;
 	}
 

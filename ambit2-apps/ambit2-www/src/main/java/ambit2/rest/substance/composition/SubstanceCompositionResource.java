@@ -87,8 +87,8 @@ public class SubstanceCompositionResource<Q extends IQueryRetrieval<CompositionR
 			ReadSubstanceComposition q = null;
 			try {
 				q = new ReadSubstanceComposition();
-				q.setValue(new SubstanceRecord(Integer.parseInt(key.toString())));
-				q.setFieldname(relation);
+				q.setFieldname(new SubstanceRecord(Integer.parseInt(key.toString())));
+				q.setValue(relation);
 				return (Q)q;
 			} catch (Exception x) {
 				int len = key.toString().trim().length(); 
@@ -96,8 +96,8 @@ public class SubstanceCompositionResource<Q extends IQueryRetrieval<CompositionR
 					SubstanceRecord record = new SubstanceRecord();
 					record.setCompanyUUID(key.toString());
 					q = new ReadSubstanceComposition();
-					q.setValue(record);
-					q.setFieldname(relation);
+					q.setFieldname(record);
+					q.setValue(relation);
 					return (Q)q;
 				}	
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);

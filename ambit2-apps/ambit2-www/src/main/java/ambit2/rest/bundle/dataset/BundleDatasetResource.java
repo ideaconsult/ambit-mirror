@@ -1,7 +1,9 @@
 package ambit2.rest.bundle.dataset;
 
+import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -9,11 +11,15 @@ import org.restlet.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.ProtocolEffectRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.data.substance.SubstanceName;
 import ambit2.base.data.substance.SubstancePublicName;
 import ambit2.base.data.substance.SubstanceUUID;
+import ambit2.base.relation.composition.CompositionRelation;
+import ambit2.db.processors.MasterDetailsProcessor;
+import ambit2.db.substance.relation.ReadSubstanceComposition;
 import ambit2.db.update.bundle.effects.ReadEffectRecordByBundle;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
 import ambit2.rest.OpenTox;
@@ -44,5 +50,24 @@ public class BundleDatasetResource extends SubstanceDatasetResource<ReadSubstanc
 	@Override
 	protected IQueryRetrieval<ProtocolEffectRecord<String, String, String>> getEffectQuery() {
 		return new ReadEffectRecordByBundle(bundle);
+	}
+	@Override
+	protected IProcessor getCompositionProcessors() {
+		final ReadSubstanceComposition q = new ReadSubstanceComposition();
+		MasterDetailsProcessor<SubstanceRecord,CompositionRelation,IQueryCondition> compositionReader = 
+				new MasterDetailsProcessor<SubstanceRecord,CompositionRelation,IQueryCondition>(q) {
+			@Override
+					public SubstanceRecord process(SubstanceRecord target)
+							throws AmbitException {
+						q.setBundle(bundle);
+						if (target.getRelatedStructures()!=null) target.getRelatedStructures().clear();
+						return super.process(target);
+					}
+			protected SubstanceRecord processDetail(SubstanceRecord target, CompositionRelation detail) throws Exception {
+				target.addStructureRelation(detail);
+				return target;
+			};
+		};
+		return compositionReader;
 	}
 }

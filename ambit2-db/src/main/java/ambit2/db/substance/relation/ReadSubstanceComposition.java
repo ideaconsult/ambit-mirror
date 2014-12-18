@@ -11,13 +11,14 @@ import ambit2.base.data.I5Utils;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.base.relation.composition.Proportion;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 
-public class ReadSubstanceComposition extends AbstractQuery<CompositionRelation,SubstanceRecord, EQCondition, CompositionRelation> implements IQueryRetrieval<CompositionRelation>{
+public class ReadSubstanceComposition extends AbstractQuery<SubstanceRecord,CompositionRelation, EQCondition, CompositionRelation> implements IQueryRetrieval<CompositionRelation>{
 
 	/**
 	 * 
@@ -25,7 +26,7 @@ public class ReadSubstanceComposition extends AbstractQuery<CompositionRelation,
 	private static final long serialVersionUID = -1980335091441168568L;
 	protected CompositionRelation record = new CompositionRelation(new SubstanceRecord(), new StructureRecord(), new Proportion());
 	private final static String sql = 
-		"select cmp_prefix,hex(cmp_uuid) cmp_huuid,r.name as compositionname,idsubstance,idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,r.rs_prefix as refstruc,hex(r.rs_uuid) as refstrucuuid from substance_relation r ";
+		"select cmp_prefix,hex(cmp_uuid) cmp_huuid,r.name as compositionname,idsubstance,r.idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,r.rs_prefix as refstruc,hex(r.rs_uuid) as refstrucuuid from substance_relation r ";
 	
 	private static String  q_idsubstance = "idsubstance=?";
 	private static String  q_uuid = "prefix=? and uuid=unhex(?)";
@@ -33,16 +34,25 @@ public class ReadSubstanceComposition extends AbstractQuery<CompositionRelation,
 	
 	private final static String sql_id = sql + " where " + q_idsubstance;
 	private final static String sql_uuid =sql + " join substance using(idsubstance) where " + q_uuid;
+	private final static String sql_bundle = sql + " join bundle_substance using(idsubstance) join bundle_chemicals c using(idbundle) where c.idchemical=r.idchemical and idbundle=? and "+ q_idsubstance;
 	
-
-
+	protected SubstanceEndpointsBundle bundle;
 	
+	public SubstanceEndpointsBundle getBundle() {
+		return bundle;
+	}
+
+	public void setBundle(SubstanceEndpointsBundle bundle) {
+		this.bundle = bundle;
+	}
+
 	@Override
 	public String getSQL() throws AmbitException {
-		if (getValue()!=null) {
-			if (getValue().getIdsubstance()>0) {
-				return sql_id;
-			} else if (getValue().getCompanyUUID()!= null) {
+		if (getFieldname()!=null) {
+			if (getFieldname().getIdsubstance()>0) {
+				if (bundle!=null && bundle.getID()>0) return sql_bundle;
+				else return sql_id;
+			} else if (getFieldname().getCompanyUUID()!= null) {
 				return sql_uuid;
 			}
 		}	
@@ -52,12 +62,16 @@ public class ReadSubstanceComposition extends AbstractQuery<CompositionRelation,
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = null;
-		if (getValue()!=null) {
-			if (getValue().getIdsubstance()>0) {
+		if (getFieldname()!=null) {
+			if (getFieldname().getIdsubstance()>0) {
 				params = new ArrayList<QueryParam>();
-				params.add(new QueryParam<Integer>(Integer.class,getValue().getIdsubstance()));
-			} else if (getValue().getCompanyUUID()!= null) {
-				String o_uuid = getValue().getCompanyUUID();
+				if (bundle!=null && bundle.getID()>0) 
+					params.add(new QueryParam<Integer>(Integer.class,bundle.getID()));
+				
+				params.add(new QueryParam<Integer>(Integer.class,getFieldname().getIdsubstance()));
+				
+			} else if (getFieldname().getCompanyUUID()!= null) {
+				String o_uuid = getFieldname().getCompanyUUID();
 				if (o_uuid==null) throw new AmbitException("Empty substance id");
 				String[] uuid = new String[]{null,o_uuid==null?null:o_uuid.toString()};
 				if (o_uuid!=null) 
