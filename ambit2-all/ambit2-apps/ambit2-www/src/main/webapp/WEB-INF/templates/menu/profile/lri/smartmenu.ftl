@@ -8,7 +8,7 @@
 	</ul>
 </li>
 <li>
-	<a href="#">Assessments</a>
+	<a href="${ambit_root}/bundle">Assessments</a>
 	<#include "/menu/profile/lri/assessment_menu.ftl">
 </li>	
 

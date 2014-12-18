@@ -23,12 +23,14 @@ import org.restlet.Request;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
+import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.facet.BundleRoleFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.json.JSONUtils;
+import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.facets.compounds.ChemicalRoleByBundle;
 import ambit2.db.facets.compounds.CollectionsByChemical;
@@ -87,7 +89,8 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		dataEntry,
 		values,
 		facets,
-		bundles;
+		bundles,
+		composition;
 		
 		public String jsonname() {
 			return name();
@@ -310,6 +313,20 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 					delimiter=",";
 			}
 			builder.append("\n\t\t}");
+			
+			if ((item instanceof SubstanceRecord) && ((SubstanceRecord)item).getRelatedStructures()!=null) {
+				SubstanceRecord substance = (SubstanceRecord)item;
+				builder.append(",");	
+				builder.append(String.format("\n\t%s:[\n",JSONUtils.jsonQuote(jsonCompound.composition.jsonname())));
+				List<CompositionRelation> composition = ((SubstanceRecord)item).getRelatedStructures();
+				for (int j = 0; j < composition.size(); j++ ) {
+					CompositionRelation cr = composition.get(j);
+					if (j>0) builder.append(",\n");
+					builder.append(cr.toJSON(uri, "{}"));
+					
+				}
+				builder.append("\n\t\t]");
+			}
 			
 			builder.append("\n\t}");
 			writer.write(builder.toString());

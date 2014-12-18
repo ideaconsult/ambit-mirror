@@ -127,6 +127,10 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	protected IQueryRetrieval<ProtocolEffectRecord<String, String, String>> getEffectQuery() {
 		return new ReadEffectRecordBySubstance();
 	}
+	protected IProcessor getCompositionProcessors() {
+		return null;
+	}
+
 	protected IProcessor getPropertyProcessors(final boolean removeIdentifiers, final boolean removeStringProperties) {
 		IQueryRetrieval<ProtocolEffectRecord<String, String, String>> queryP = getEffectQuery();
 		
@@ -295,6 +299,8 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 					}
 					@Override
 					protected void configurePropertyProcessors() {
+						IProcessor p = getCompositionProcessors();
+						if (p!=null) getProcessors().add(p);
 						getProcessors().add(getPropertyProcessors(false,false));
 					}
 				},
