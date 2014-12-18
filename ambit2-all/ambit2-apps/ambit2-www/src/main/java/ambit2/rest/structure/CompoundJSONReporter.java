@@ -322,7 +322,10 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 				for (int j = 0; j < composition.size(); j++ ) {
 					CompositionRelation cr = composition.get(j);
 					if (j>0) builder.append(",\n");
-					builder.append(cr.toJSON(uri, "{}"));
+					String component = "{}";
+					if (cr.getSecondStructure()!=null && cr.getSecondStructure().getIdchemical()>0)
+						component = String.format("{\"compound\":{\"URI\":\"%s/compound/%d\"}}",urlPrefix,cr.getSecondStructure().getIdchemical());
+					builder.append(cr.toJSON(uri, component));
 					
 				}
 				builder.append("\n\t\t]");
