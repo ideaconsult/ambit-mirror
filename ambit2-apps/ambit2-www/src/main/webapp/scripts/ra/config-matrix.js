@@ -46,6 +46,17 @@ jTConfig.matrix = {
 			  return (type != 'display') ? data : '<textarea class="remark" placeholder="Reason for selection_"></textarea>';
       }
 		},
+    "http://apps.ideaconsult.net:8080/data/identifier/tradename": { title: "Substance Name", primary: true },
+    "http://apps.ideaconsult.net:8080/data/identifier/uuid": { title: "I5UUID", primary: true},
+		"#SubstanceDataSource": { title: "Data source", data: "compound.einecs", accumulate: false, primary: true },
+		"#ConstituentName": { title: "Constituent Name", data: "compound.name", accumulate: false, primary: true },
+    "#ConstituentContent": { title: "Content", data: "proportion.typical", accumulate: false, primary: true, render: function (data, type, full) { 
+      return type != 'display' ? '' + data.value : jToxComposition.formatConcentration(data.precision, data.value, data.unit);
+    } },
+    "#ConstituentContainedAs": { title: "Contained As", data: "relation", accumulate: false, primary: true, render: function (data, type, full) { 
+      return (type != 'display') ? data : '<span>' + data.substring(4).toLowerCase() + '</span><sup class="helper"><a target="_blank" href="' + (full.substance.URI + '/composition') + '" title="' + full.compositionName + '(' + full.compositionUUID + ')">?</a></sup>'      
+    } },
+		
 		"#IdRow" : {
 			"data": "compound.URI",
 			"column": { sWidth: "80px", sClass: "text-top" },
