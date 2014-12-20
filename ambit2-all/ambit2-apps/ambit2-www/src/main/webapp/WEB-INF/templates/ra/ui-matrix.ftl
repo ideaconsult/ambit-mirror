@@ -55,7 +55,7 @@
 	data-bundle-uri="${ambit_root}/bundle/${bundleid}"
 			</#if>	
 	  >
-   <ul>
+    <ul>
       <li><a href="#jtox-identifiers">Assessment identifier</a></li>
       <li><a href="#jtox-structures">Collect structures</a></li>
       <li><a href="#jtox-endpoints">Endpoint data used</a></li>
@@ -149,6 +149,7 @@
 			  <input type="radio" id="xworking" name="xaction"><label for="xworking">Working matrix</label></input>
 			  <input type="radio" id="xfinal" name="xaction"><label for="xfinal">Final matrix</label></input>
 			</div>
+			<button class="save-button jt-disabled">Saved</button>
 			<div class="jtox-toolkit" data-kit="compound" data-manual-init="true"></div>
     </div>
     <div id="jtox-report" class="jtox-report"></div>
@@ -160,9 +161,8 @@
           <tr>
             <th rowspan="2">Endpoint</th>
             <th rowspan="2">Value</th>
-            <th rowspan="2">Type</th>
             <th class="conditions center">Conditions</th>
-            <th rowspan="2">Source</th>
+            <th rowspan="2">Guidance</th>
           </tr>
           <tr class="conditions">
           </tr>
@@ -171,10 +171,15 @@
           <tr>
             <td class="data-field the-endpoint" data-field="endpoint"></td>
             <td class="data-field the-value" data-field="value"></td>
-            <td class="data-field" data-field="type"></td>
-            <td class="data-field postconditions" data-field="source"></td>
+            <td class="data-field postconditions" data-field="guidance"></td>
           </tr>
         </tbody>
+      </table>
+      <table class="delete-box">
+	      <tr>
+		      <td><textarea placeholder="Reason for deleting_"></textarea></td>
+		      <td><button class="jt-alert">Delete</button></td>
+	      </tr>
       </table>
     </div>
     <div id="edit-box">
@@ -200,7 +205,8 @@
       </div>
     </div>
   </div>
-  </div>
+  
+  </div> <!-- sixteen columns -->
 
   
   <div class='row add-bottom'>&nbsp;</div>

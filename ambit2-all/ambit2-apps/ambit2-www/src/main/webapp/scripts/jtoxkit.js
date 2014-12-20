@@ -837,6 +837,20 @@ window.jT.ui = {
     return colDefs;
   },
   
+  renderMulti: function (data, type, full, render) {
+    var dlen = data.length;
+    if (dlen < 2)
+      return render(data[0], type, full);
+
+    var df = '<table>';
+    for (var i = 0, dlen = data.length; i < dlen; ++i) {
+      df += '<tr class="' + (i % 2 == 0 ? 'even' : 'odd') + '"><td class="center">' + render(data[i], type, full, i) + '</td></tr>';
+    }
+    
+    df += '</table>';
+    return df;
+  },
+  
   inlineChanger: function (location, breed, holder, handler) {
     if (handler == null)
       handler = "changed";
@@ -969,6 +983,10 @@ window.jT.ui = {
           if (res === false)
             return;
         }
+        
+        // equalize multi-rows, if there are any
+        ccLib.equalizeHeights.apply(window, jT.$('td.jtox-multi table tbody', nRow).toArray());
+        
         // handle a selection click.. if any
         jT.ui.installHandlers(kit, nRow);
         if (typeof kit.settings.selectionHandler == "function")
@@ -1539,6 +1557,7 @@ var jToxCompound = (function () {
     "hasDetails": true,       // whether browser should provide the option for per-item detailed info rows.
     "hideEmptyDetails": true, // hide feature values, when they are empty (only in detailed view)
     "detailsHeight": "fill",  // what is the tabs' heightStyle used for details row
+    "fixedWidth": null,				// the width (in css units) of the left (non-scrollable) part of the table
     "pageSize": 20,           // what is the default (startint) page size.
     "pageStart": 0,           // what is the default startint point for entries retrieval
     "rememberChecks": false,  // whether to remember feature-checkbox settings between queries
@@ -2120,6 +2139,9 @@ var jToxCompound = (function () {
       }
       
       // now - sort columns and create the tables...
+      if (self.settings.fixedWidth != null)
+      	jT.$(".jtox-ds-fixed", self.rootElement).width(self.settings.fixedWidth);
+      	
       jT.ui.sortColDefs(fixCols);
       self.fixTable = (jT.$(".jtox-ds-fixed table", self.rootElement).dataTable({
         "bPaginate": false,
@@ -2133,6 +2155,7 @@ var jToxCompound = (function () {
           if (self.settings.hasDetails)
             jT.$('.jtox-details-open', nRow).on('click', function(e) { fnShowDetails(nRow, e); });
           jT.$(nRow).data('jtox-index', iDataIndex);
+
           ccLib.fireCallback(self.settings.onRow, self, nRow, aData, iDataIndex);
           jT.ui.installHandlers(self, nRow);
           jT.$('.jtox-diagram span.ui-icon', nRow).on('click', function () {
@@ -2160,6 +2183,10 @@ var jToxCompound = (function () {
         "bScrollCollapse": true,
         "fnCreatedRow": function( nRow, aData, iDataIndex ) {
           nRow.id = 'jtox-var-' + self.instanceNo + '-' + iDataIndex;
+
+	        // equalize multi-rows, if there are any
+	        ccLib.equalizeHeights.apply(window, jT.$('td.jtox-multi table tbody', nRow).toArray());
+          
           jT.$(nRow).addClass('jtox-row');
           jT.$(nRow).data('jtox-index', iDataIndex);
           ccLib.fireCallback(self.settings.onRow, self, nRow, aData, iDataIndex);
@@ -2453,11 +2480,12 @@ var jToxCompound = (function () {
               });
             }
             
+          	ccLib.fireCallback(self.settings.onPrepared, self, miniset, self);
             self.prepareTables(); // prepare the tables - we need features to build them - we have them!
             self.equalizeTables(); // to make them nicer, while waiting...
           }
-  
-          ccLib.fireCallback(self.settings.onPrepared, self, miniset, self);
+          else
+          	ccLib.fireCallback(self.settings.onPrepared, self, miniset, self);
   
           // finally make the callback for
           callback(dataset);
@@ -2505,7 +2533,7 @@ var jToxCompound = (function () {
   cls.processEntry = function (entry, features, fnValue) {
     for (var fid in features) {
       var feature = features[fid];
-      var newVal = entry.values[fid];
+      var newVal = entry.value != null ? entry.values[fid] : undefined;
       
       // if applicable - location the feature value to a specific location whithin the entry
       if (!!feature.accumulate && newVal !== undefined && feature.data !== undefined) {
@@ -2518,8 +2546,7 @@ var jToxCompound = (function () {
           ccLib.setJsonValue(entry, accArr[v], ccLib.fireCallback(fn, this, fid,  /* oldVal */ ccLib.getJsonValue(entry, accArr[v]), newVal, features));
       }
       
-      if (feature.process !== undefined)
-        ccLib.fireCallback(feature.process, this, entry, fid, features);
+      ccLib.fireCallback(feature.process, this, entry, fid, features);
     }
     
     return entry;
@@ -3436,21 +3463,6 @@ var jToxStudy = (function () {
       return value;
     },
     
-    renderMulti: function (data, type, full, format) {
-      var self = this;
-      var dlen = data.length;
-      if (dlen < 2)
-        return self.getFormatted(data[0], type, format);
-  
-      var df = '<table>';
-      for (var i = 0, dlen = data.length; i < dlen; ++i) {
-        df += '<tr class="' + (i % 2 == 0 ? 'even' : 'odd') + '"><td class="center">' + self.getFormatted(data[i], type, format) + '</td></tr>';
-      }
-      
-      df += '</table>';
-      return df;
-    },
-    
     createCategory: function(tab, category) {
       var self = this;
   
@@ -3484,9 +3496,9 @@ var jToxStudy = (function () {
       if (!jT.$(theTable).hasClass('dataTable')) {
 	      var defaultColumns = [
 	        { "sTitle": "Name", "sClass": "center middle", "sWidth": "20%", "mData": "protocol.endpoint" }, // The name (endpoint)
-	        { "sTitle": "Endpoint", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData": "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, "endpoint");  } },   // Effects columns
-	        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return formatValue(data.result, type) }); } },
-	        { "sTitle": "Text", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return !!data.result.textValue  ? data.result.textValue : '-'; }); } },
+	        { "sTitle": "Endpoint", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData": "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return self.getFormatted(data, type, "endpoint"); }); } },   // Effects columns
+	        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return formatValue(data.result, type) }); } },
+	        { "sTitle": "Text", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return !!data.result.textValue  ? data.result.textValue : '-'; }); } },
 	        { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "-"  },    // Protocol columns
 	        { "sTitle": "Owner", "sClass": "center middle", "sWidth": "15%", "mData": "citation.owner", "sDefaultContent": "-" },
 	        { "sTitle": "Citation", "sClass": "center middle", "sWidth": "15%", "mData": "citation", "mRender": function (data, type, full) { return (data.title || "") + ' ' + (!!data.year && data.year.length > 1 ? data.year : ""); }  },
@@ -3597,7 +3609,7 @@ var jToxStudy = (function () {
             return null;
           
           col["mRender"] = function(data, type, full) {
-            return self.renderMulti(data, type, full, function(data, type) { 
+            return jT.ui.renderMulti(data, type, full, function(data, type) { 
               return formatValue(data.conditions[c], data.conditions[c + " unit"], type); 
             }); 
           };

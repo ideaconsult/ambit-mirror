@@ -20,18 +20,30 @@ var jToxBundle = {
   	property: 0,
 	},
 	
-	collected: {
-  	compounds: [],
+	edit: {
+  	added: { },
+  	deleted: { },
+		refreshMatrix: true,
 	},
 		
   settings: {
   	studyTypeList: _i5.qaSettings["Study result type"],
   	maxStars: 10,
-  	configuration: {
-    	columns: {
-      	
-    	}
-  	}
+  	matrixIdentifiers: [
+      "#DetailedInfoRow",
+      "http://www.opentox.org/api/1.1#CASRN",
+      "http://apps.ideaconsult.net:8080/data/identifier/tradename",
+      "http://apps.ideaconsult.net:8080/data/identifier/uuid",
+//       "http://www.opentox.org/api/1.1#TradeName",
+//       "http://www.opentox.org/api/1.1#IUCLID5_UUID",
+      "#SubstanceDataSource",
+    ],
+  	matrixMultiRows: [
+      "http://www.opentox.org/api/1.1#Diagram",
+      "#ConstituentName",
+      "#ConstituentContent",
+      "#ConstituentContainedAs"
+  	]
   },
   
   parseFeatureId: function (featureId, kit) {
@@ -78,7 +90,7 @@ var jToxBundle = {
     
     // initialize the tab structure for several versions of dataTables.
     $(root).tabs({
-      "disabled": [1, 2], //, 3, 4],
+      "disabled": [1, 2, 3, 4],
       "heightStyle": "fill",
       "select" : function(event, ui) {
         loadPanel(ui.panel);
@@ -98,9 +110,8 @@ var jToxBundle = {
     
     self.onIdentifiers(null, $('#jtox-identifiers', self.rootElement)[0]);
     // finally, if provided - load the given bundleUri
-    if (!ccLib.isNull(self.settings.bundleUri)) {
+    if (!ccLib.isNull(self.settings.bundleUri))
 	    self.load(self.settings.bundleUri);
-    }
     
     return self;
 	},
@@ -189,24 +200,7 @@ var jToxBundle = {
 	  var self = this;
 		if (!$(panel).hasClass('initialized')) {
       jTConfig.matrix.groups = function (miniset, kit) {
-        var groups = {
-          "Identifiers" : [
-            "http://www.opentox.org/api/1.1#Diagram", 
-            "#DetailedInfoRow",
-            "http://www.opentox.org/api/1.1#CASRN", 
-            "http://www.opentox.org/api/1.1#EINECS",
-            "http://www.opentox.org/api/1.1#IUCLID5_UUID",
-            // Now some names
-            "http://www.opentox.org/api/1.1#ChemicalName",
-            "http://www.opentox.org/api/1.1#TradeName",
-            "http://www.opentox.org/api/1.1#IUPACName",
-            "http://www.opentox.org/api/1.1#SMILES",
-            "http://www.opentox.org/api/1.1#InChIKey",
-            "http://www.opentox.org/api/1.1#InChI",
-            "http://www.opentox.org/api/1.1#REACHRegistrationDate"
-          ]
-      	};
-      	
+        var groups = { "Identifiers" : self.settings.matrixIdentifiers.concat(self.settings.matrixMultiRows) };
       	var endpoints = {};
       	
       	var fRender = function (feat, theId) {
@@ -264,7 +258,50 @@ var jToxBundle = {
   		$(panel).addClass('initialized');
   		var conf = $.extend(true, {}, jTConfig.matrix, config_study);
   		delete conf.baseFeatures['#IdRow'];
-  		  		
+  		
+  		var saveButton = $('.save-button', panel)[0];
+  		saveButton.disabled = true;
+  		var dressButton = function() {
+	  		if ($.isEmptyObject(self.edit.added) && $.isEmptyObject(self.edit.deleted)) {
+	  			saveButton.disabled = true;
+	  			$(saveButton).removeClass('jt-alert').addClass('jt-disabled');
+	  			saveButton.innerHTML = "Saved";
+	  		}
+	  		else {
+	  			saveButton.disabled = false;
+	  			$(saveButton).addClass('jt-alert').removeClass('jt-disabled');
+	  			saveButton.innerHTML = "Save";
+	  		}
+  		};
+  		
+  		$(saveButton).on('click', function() {
+	  		// TODO: make actuall call to the server for adding and deleting
+	  		self.edit.added = {};
+				self.edit.deleted = {};
+				dressButton();
+	  	});
+  		
+  		var addFeature = function(compoundUri, featureId, value) {
+	  		var compound = self.edit.added[compoundUri];
+	  		if (compound == null)
+	  			self.edit.added[compoundUri] = compound = {};
+	  		compound[featureId] = value;
+	  		dressButton();
+  		};
+  		
+  		var deleteFeature = function (compoundUri, featureId, reason) {
+	  		var compound = self.edit.added[compoundUri];
+	  		if (compound != null && compound[featureId] != null)
+	  			delete compound[featureId];
+	  		else {
+	  			compound = self.edit.deleted[compoundUri];
+		  		if (compound == null)
+		  			self.edit.deleted[compoundUri] = compound = [];
+		  		compound.push({ 'featureId': featureId, 'reason': reason});
+		  	}
+	  		dressButton();
+  		};
+  		
   		var infoDiv = $('#info-box')[0];
   		var editDiv = $('#edit-box')[0];
   		// now, fill the select with proper values...
@@ -285,8 +322,51 @@ var jToxBundle = {
     		showDiagrams: true,
     		showUnits: false,
     		hasDetails: false,
+    		fixedWidth: "600px",
     		configuration: conf,
+    		onPrepared: function (miniset, kit) {
+	    		// this is when we have the features combined, so we can make the multi stuff
+		      var getRender = function (fId, oldData, oldRender) {
+			      return function (data, type, full) {
+				      return typeof data != 'object' ? '-' : jT.ui.renderMulti(data, type, full, function (_data, _type, _full){
+					      var dt = ccLib.getJsonValue(_data, (fId.indexOf('#Diagram') > 0 ? 'component.' : '') + oldData);
+				      	return (typeof oldRender == 'function' ? oldRender(dt, _type, fId.indexOf('#Diagram') > 0 ? _data.component : _data) : dt);
+				      });
+			      };
+		      };
+		      
+		      for (var i = 0, mrl = self.settings.matrixMultiRows.length;i < mrl; ++i) {
+			      var fId = self.settings.matrixMultiRows[i];
+			      var mr = miniset.feature[fId];
+			      mr.render = getRender(fId, mr.data, mr.render);
+		      	mr.data = 'composition';
+			      var col = mr.column;
+			      if (col == null)
+			      	mr.column = col = { sClass: "jtox-multi" };
+			      else if (col.sClass == null)
+			      	col.sClass = "jtox-multi";
+			      else
+			      	col.sClass += " jtox-multi";
+		      }
+    		},
+    		onLoaded: function (dataset) {
+	    		self.edit.refreshMatrix = false;
+	    		// we need to process
+	    		for (var i = 0, dl = dataset.dataEntry.length; i < dl; ++i) {
+		    		var data = dataset.dataEntry[i];
+		    		if (data.composition != null)
+		    			for (var j = 0;j < data.composition.length; ++j)
+								jToxCompound.processEntry(data.composition[j].component, this.feature);
+	    		}
+    		},
     		onRow: function (row, data, index) {
+	        // equalize multi-rows, if there are any
+          jT.$('td.jtox-multi .jtox-diagram span.ui-icon', row).on('click', function () {
+            setTimeout(function () {
+              ccLib.equalizeHeights.apply(window, jT.$('td.jtox-multi table tbody', row).toArray());
+            }, 50);
+          });
+          
       		$('.info-popup, .edit-popup, .delete-popup', row).on('click', function () {
       		  var boxOptions = { 
         		  overlay: true,
@@ -302,7 +382,7 @@ var jToxBundle = {
 
             var featureId = $(this).data('feature');
     		    var feature = self.matrixKit.dataset.feature[featureId];
-      		  if ($(this).hasClass('info-popup')) {
+      		  if (!$(this).hasClass('edit-popup')) {
       		    
         		  $('.dynamic-condition', infoDiv).remove();
         		  var dynHead = $('tr.conditions', infoDiv)[0];
@@ -334,16 +414,28 @@ var jToxBundle = {
         		  
         		  ccLib.fillTree(infoDiv, {
         		    endpoint: feature.title,
-          		  type: feature.type,
+        		    guidance: feature.creator,
           		  value: jT.ui.valueWithUnits(data.values[featureId], feature.units),
-          		  source: '<a target="_blank" href="' + feature.source.URI + '">' + feature.source.type + '</a>'
+//           		  source: '<a target="_blank" href="' + feature.source.URI + '">' + feature.source.type + '</a>'
         		  });
         		  
+        		  if ($(this).hasClass('delete-popup')) {
+        		  	$('.delete-box', infoDiv).show();
+	              boxOptions.onOpen = function () {
+		              var box = this;
+		              var content = this.content[0];
+		              $('button.jt-alert', content).on('click', function (){ deleteFeature(data.compound.URI, featureId, $('textarea', content).val()); box.close(); });
+              	};
+        		  }
+        		  else
+        		  	$('.delete-box', infoDiv).hide();
+        		  	
         		  boxOptions.content = infoDiv.innerHTML;
               new jBox('Tooltip', boxOptions).open();
       		  }
       		  else { // edit mode
               var parse = self.parseFeatureId(featureId, self.matrixKit);
+              var featureJson = {};
               
               // we're taking the original jToxEndpoint editor here and glue our part after it.
               boxOptions.content = jT.getTemplate('#jtox-endeditor').innerHTML + editDiv.innerHTML;
@@ -352,20 +444,24 @@ var jToxBundle = {
               boxOptions.confirmButton = "Add";
               boxOptions.cancelButton = "Cancel";
               var endSetValue = function (e, field, value) {
+	              // TODO: form the JSON here
                 console.log("Value set [" + field + "] = `" + value + "`");
               };
               
               boxOptions.onOpen = function () {
-                jToxEndpoint.linkEditors(self.matrixKit, this.content[0], parse.category, parse.topcategory, endSetValue);
+	              var box = this;
+	              var content = this.content[0];
+                jToxEndpoint.linkEditors(self.matrixKit, content, parse.category, parse.topcategory, endSetValue);
+	              $('input[type=button]', content).on('click', function (){ addFeature(data.compound.URI, featureId, featureJson); box.close();});	              
               };
               new jBox('Modal', boxOptions).open();
       		  }
       		});
     		}
   		});
-  		
-  		self.matrixKit.query(self.bundleUri + '/dataset');
 		}
+		if (self.edit.refreshMatrix)
+			self.matrixKit.query(self.bundleUri + '/dataset');
 	},
 	
 	// called when a sub-action in endpoint selection tab is called
@@ -373,6 +469,7 @@ var jToxBundle = {
 	  var self = this;
 	  var sub = $(".tab-" + id.substr(3), panel)[0];
 	  sub.parentNode.style.left = (-sub.offsetLeft) + 'px';
+	  var bUri = encodeURIComponent(self.bundleUri);
 	  
 	  if (id == "endsubstance") {
   	  if (sub.firstElementChild == null) {
@@ -385,6 +482,8 @@ var jToxBundle = {
       	  selectionHandler: "onSelectSubstance", 
       	  configuration: jTConfig.matrix,
       	  onRow: function (row, data, index) {
+	      	  if (!data.bundles)
+	      	  	return;
         	  var bundleInfo = data.bundles[self.bundleUri];
         	  if (!!bundleInfo && bundleInfo.tag == "selected")
         	    $('input.jtox-handler', row).attr('checked', 'checked');
@@ -392,7 +491,7 @@ var jToxBundle = {
         });
   	  }
   	  
-      self.substanceKit.query('/substance?type=related&bundle_uri=' + encodeURIComponent(self.bundleUri));
+      self.substanceKit.query('/query/substance/related?filterbybundle=' + bUri + '&bundle_uri=' + bUri);
 	  }
 	  else {// i.e. endpoints
   	  var checkAll = $('input', sub)[0];
@@ -402,13 +501,18 @@ var jToxBundle = {
     	  self.endpointKit = new jToxEndpoint(root, { 
       	  selectionHandler: "onSelectEndpoint",
       	  onRow: function (row, data, index) {
+	      	  if (!data.bundles)
+	      	  	return;
         	  var bundleInfo = data.bundles[self.bundleUri];
         	  if (!!bundleInfo && bundleInfo.tag == "selected")
         	    $('input.jtox-handler', row).attr('checked', 'checked');
       	  }
         });
     	  $(checkAll).on('change', function (e) {
-          self.endpointKit.loadEndpoints(!this.checked ? self.bundleUri + '/studysummary' : null);
+	    	  var qUri = "/query/study?bundle_uri=" + bUri;
+	    	  if (!this.checked)
+	    	  	qUri += "&selected=substances&filterbybundle=" + bUri;
+          self.endpointKit.loadEndpoints(qUri);
     	  });
   	  }
   	  $(checkAll).trigger('change'); // i.e. initiating a proper reload
@@ -423,11 +527,34 @@ var jToxBundle = {
   	  self.queryKit.setWidget("bundle", self.rootElement);
   	  // provid onRow function so the buttons can be se properly...
   	  self.queryKit.kit().settings.onRow = function (row, data, index) {
-    	  var bundleInfo = data.bundles[self.bundleUri];
-    	  if (!!bundleInfo) {
+    	  if (!data.bundles)
+    	  	return;
+    	  	
+    	  var bundleInfo = data.bundles[self.bundleUri] || {};
+    	  // we need to setup remarks field regardless of bundleInfo presence
+				var noteEl = $('textarea.remark', row).on('change', function (e) {
+					var data = jT.ui.rowData(this);
+					var el = this;
+					$(el).addClass('loading');
+			  	jT.service(self, self.bundleUri + '/compound', { 
+			      'method': 'PUT', 
+			      'data': { 
+			        compound_uri: data.compound.URI, 
+			        command: 'add', 
+			        tag: data.bundles[self.bundleUri].tag,
+			        remarks: $(el).val()
+			      } 
+			    }, function (result) {
+				  	$(el).removeClass('loading');    
+			    });
+				});
+
+    	  if (!!bundleInfo.tag) {
           $('button.jt-toggle.' + bundleInfo.tag.toLowerCase(), row).addClass('active');
-          $('textarea.remark', row).html(bundleInfo.remarks);
-    	  }
+          noteEl.val(bundleInfo.remarks);
+        }
+        else
+        	noteEl.prop('disabled', true).val(' ');
   	  };
     }
     
@@ -475,24 +602,33 @@ var jToxBundle = {
 	
 	selectStructure: function (uri, what, el) {
   	var self = this;
+  	var activate = !$(el).hasClass('active');
   	$(el).addClass('loading');
+  	var noteEl = $('textarea.remark', self.queryKit.kit().getVarRow(el))[0];
   	jT.service(self, self.bundleUri + '/compound', { 
       method: 'PUT', 
       data: { 
         compound_uri: uri, 
-        command: $(el).hasClass('active') ? 'delete' : 'add', 
-        compound_role: what 
+        command: activate ? 'add': 'delete',
+        tag: what,
+        remarks: $(noteEl).val()
       } 
     }, function (result) {
     	$(el).removeClass('loading');
     	if (!!result) {
       	$(el).toggleClass('active');
-      	if ($(el).hasClass('active'))
+      	self.edit.refreshMatrix = true;
+      	if (activate)
+      	{
       	  self.bundleSummary.compound++;
+      	  what = (what == "target" ? "source" : "target");
+      	  $('button.' + what, el.parentNode).removeClass('active');
+        }
         else
           self.bundleSummary.compound--;
+
+      	$(noteEl).prop('disabled', !activate).val(activate ? "" : " ");
         self.progressTabs();
-        console.log("Structure [" + uri + "] selected as <" + what + ">");
       }
   	});
 	},
@@ -500,6 +636,7 @@ var jToxBundle = {
 	structuresLoaded: function (kit, dataset) {
     if (document.body.className == 'structlist') {
       this.bundleSummary.compound = dataset.dataEntry.length;
+      this.edit.refreshMatrix = true;
       this.progressTabs();
     }
 	},
@@ -512,6 +649,7 @@ var jToxBundle = {
     	if (!result)
     	  el.checked = !el.checked; // i.e. revert
       else {
+      	self.edit.refreshMatrix = true;
         if (el.checked)
           self.bundleSummary.substance++;
         else
@@ -537,6 +675,7 @@ var jToxBundle = {
     	if (!result)
     	  el.checked = !el.checked; // i.e. revert
       else {
+      	self.edit.refreshMatrix = true;
         if (el.checked)
           self.bundleSummary.property++;
         else
