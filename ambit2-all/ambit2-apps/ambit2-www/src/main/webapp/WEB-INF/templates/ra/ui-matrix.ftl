@@ -22,6 +22,7 @@
 
     <script src="${ambit_root}/scripts/ra/ui-matrix.js"></script>
   <script src="${ambit_root}/scripts/ra/config-matrix.js"></script>
+  <script src="${ambit_root}/scripts/config-study.js"></script>
   <script type='text/javascript' src='${ambit_root}/scripts/config-study.js'></script>
   
   <script type='text/javascript'>
@@ -36,13 +37,11 @@
 	
 	</script>
   
-</head>  
 </head>
 <body>
-<div id="logger" class="jtox-toolkit jtox-widget hidden" data-kit="log" data-resend="false" ></div>  
 
 <div class="container" style="margin:0;padding:0;">
-
+<div id="logger" class="jtox-toolkit jtox-widget hidden" data-kit="log" data-resend="false" ></div>
 
 <#include "/banner_crumbs.ftl">
 	
@@ -211,7 +210,20 @@
   
   <div class='row add-bottom'>&nbsp;</div>
 
-  <#include "/footer.ftl" >
+  <div class="sixteen  columns add-bottom">&nbsp;</div>
+
+
+<#if menu_profile??>
+	<#include "/menu/profile/${menu_profile}/footer.ftl" >
+</#if>
+
+		
+<#if username??>
+	    <form id='logoutForm' name='logoutForm'  action='${ambit_root}/provider/signout?targetUri=${ambit_root}&method=DELETE' method='POST'><input type='hidden' value="${username}"></input></form>
+</#if>
+
+	
+	
 
   </div> <!-- container -->
   

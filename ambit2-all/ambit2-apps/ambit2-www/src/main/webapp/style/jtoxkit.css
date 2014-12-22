@@ -322,6 +322,13 @@ img.jtox-smalldiagram {
   line-height: 1.2rem;
 }
 
+button.jt-alert {
+	display: inline-block;
+	background: #a41515;
+	color: #fff;
+	text-shadow: 0px 1px 0px #4d4d4d;
+}
+
 button.jt-toggle {
   display: inline-block;
   border: 1px solid #aaa;

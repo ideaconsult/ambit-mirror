@@ -479,7 +479,7 @@ window.jT = window.jToxKit = {
         obj.parentKit = parent;
       }
       else
-        console.log("jToxError: trying to initialize unexistend jTox kit: " + kit);
+        console.log("jToxError: trying to initialize unexistent jTox kit: " + kit);
 
       return obj;
     };
@@ -913,6 +913,12 @@ window.jT.ui = {
     var row = $(el).closest('tr')[0];
     var table = $(row).closest('table')[0];
     return $(table).dataTable().fnGetData(row);
+  },
+  
+  rowIndex: function (el) {
+    var row = $(el).closest('tr')[0];
+    var table = $(row).closest('table')[0];
+    return $(table).dataTable().fnGetPosition(row);
   },
   
   rowInline: function (el, base) {
@@ -1985,6 +1991,13 @@ var jToxCompound = (function () {
       return col;
     },
     
+    getVarRow: function (idx) {
+	  	if (idx.tagName != null)
+	  		idx = jT.ui.rowIndex(idx);
+	  	
+      return document.getElementById('jtox-var-' + this.instanceNo + '-' + idx);
+    },
+    
     prepareTables: function() {
       var self = this;
       var varCols = [];
@@ -2054,7 +2067,7 @@ var jToxCompound = (function () {
 
         // now go and expand both fixed and variable table details' cells.
         fnExpandCell(cell, toShow);
-        var varCell = document.getElementById('jtox-var-' + self.instanceNo + '-' + idx).firstElementChild;
+        var varCell = self.getVarRow(idx).firstElementChild;
         fnExpandCell(varCell, toShow);
         
         jT.$('.jtox-details-open', row).toggleClass('ui-icon-folder-open ui-icon-folder-collapsed');
@@ -4352,7 +4365,7 @@ var jToxEndpoint = (function () {
         endpoint: {
           'Id': { sTitle: "Id", mData: "uri", bSortable: false, sWidth: "30px", mRender: function (data, type, full) { return ''; } },
           'Name': { sTitle: "Name", mData: "value", sDefaultContent: "-", mRender: function (data, type, full) {
-            return data + '<span class="float-right jtox-details">(<a title="Click to view substances" target="_blank" href="' + full.uri + '">' + full.substancescount + '</a>) [<span title="Number of values">' + full.count + '</span>]</span>';
+            return data + '<span class="float-right jtox-details">[<span title="Number of values">' + full.count + '</span>]<sup class="helper"><a title="Click to view substances" target="_blank" href="' + full.uri + '">?</a></sup></span>';
           } },
         }
       }
@@ -4591,13 +4604,11 @@ var jToxEndpoint = (function () {
         // now make the summary...
         var html = '';
         if (iTotal > 0) {
-          var substances = 0, count = 0;
+          var count = 0;
           var data = this.fnGetData();
-          for (var i = iStart; i <= iEnd && i < iMax; ++i) {
+          for (var i = iStart; i <= iEnd && i < iMax; ++i)
             count += data[i].count;
-            substances += data[i].substancescount;
-          }
-          html = "(" + substances + ") [" + count + "]";
+          html = "[" + count + "]";
         }
         else
           html = '';
