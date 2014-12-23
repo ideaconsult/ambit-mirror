@@ -12,6 +12,7 @@ import ambit2.base.data.Property;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.data.substance.SubstanceName;
+import ambit2.base.data.substance.SubstanceOwner;
 import ambit2.base.data.substance.SubstanceProperty;
 import ambit2.base.data.substance.SubstancePublicName;
 import ambit2.base.data.substance.SubstanceUUID;
@@ -28,7 +29,8 @@ public class ReadEndpointsByBundle  extends  AbstractPropertyRetrieval<Substance
 		"select p.topcategory,p.endpointcategory,hex(endpointhash) hash from bundle_endpoints p where idbundle=?\n"+
 		"union select null,null,\"SubstancePublicName\"\n"+
 		"union select null,null,\"SubstanceName\"\n"+
-		"union select null,null,\"SubstanceUUID\"\n";
+		"union select null,null,\"SubstanceUUID\"\n"+
+		"union select null,null,\"SubstanceOwner\"\n";
 	//"where p.topcategory=? and p.endpointcategory=? and e.endpoint=? and endpointhash=unhex(?) limit 1";
 	
 	@Override
@@ -65,6 +67,7 @@ public class ReadEndpointsByBundle  extends  AbstractPropertyRetrieval<Substance
 				if ("SubstancePublicName".equals(hash)) return new SubstancePublicName();
 				else if ("SubstanceName".equals(hash)) return new SubstanceName();
 				else if ("SubstanceUUID".equals(hash)) return new SubstanceUUID();
+				else if ("SubstanceOwner".equals(hash)) return new SubstanceOwner();
 				return null;
 			}
 		} catch (Exception x) {

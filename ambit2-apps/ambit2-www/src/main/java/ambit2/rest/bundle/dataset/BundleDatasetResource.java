@@ -15,6 +15,7 @@ import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.ProtocolEffectRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.data.substance.SubstanceName;
+import ambit2.base.data.substance.SubstanceOwner;
 import ambit2.base.data.substance.SubstancePublicName;
 import ambit2.base.data.substance.SubstanceUUID;
 import ambit2.base.relation.composition.CompositionRelation;
@@ -39,6 +40,7 @@ public class BundleDatasetResource extends SubstanceDatasetResource<ReadSubstanc
 					record.setProperty(new SubstancePublicName(),record.getPublicName());
 					record.setProperty(new SubstanceName(),record.getCompanyName());
 					record.setProperty(new SubstanceUUID(), record.getCompanyUUID());
+					record.setProperty(new SubstanceOwner(), record.getOwnerName());
 					return record;
 				}
 			};
