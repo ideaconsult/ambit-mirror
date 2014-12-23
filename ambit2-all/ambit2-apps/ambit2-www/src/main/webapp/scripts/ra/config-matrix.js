@@ -1,32 +1,5 @@
 jTConfig.matrix = {
   "baseFeatures": {
-		"http://www.wikipathways.org/index.php/Pathway" :  {
-			"title": "Wiki Pathways",
-			"data" : "compound.wikipathway",
-			"accumulate": true,
-			"render" : function(data, type, full) {
-				return (type != "display") ? data : full.compound.wikipathway;
-			}
-		},
-		"http://www.opentox.org/echaEndpoints.owl#Carcinogenicity" : {
-      "title": "Carcinogenicity",
-      "data" : "compound.carcinogenicity",
-      "accumulate": true,
-      "render" : function(data, type, full) {
-        return (type != "display") ? data : (
-                (data=="active")?('<span style="color:red">' + data + '</span>'):data
-        );
-      }
-    },
-		"http://www.opentox.org/echaEndpoints.owl#Mutagenicity" : {
-			"title": "Mutagenicity",
-      "data" : "compound.mutagenicity",
-			"accumulate": true,
-			"render" : function(data, type, full) {
-        return (type != "display") ? data : (
-				  (data=="active")?('<span style="color:red">' + data + '</span>'):data);
-      }
-		},
 		"http://www.opentox.org/api/1.1#CompositionInfo" : {
 		  "visibility": "details",
 			"title": "Composition",
@@ -46,7 +19,7 @@ jTConfig.matrix = {
 			  return (type != 'display') ? data : '<textarea class="remark" placeholder="Reason for selection_"></textarea>';
       }
 		},
-		"#SubstanceDataSource": { title: "Data source", data: "compound.einecs", accumulate: false, primary: true },
+		"http://www.opentox.org/api/1.1#SubstanceDataSource": { title: "Data source", data: "compound.ownerName", accumulate: true, primary: true },
 		"#ConstituentName": { title: "Constituent Name", data: "compound.name", accumulate: false, primary: true },
     "#ConstituentContent": { title: "Content", data: "proportion.typical", accumulate: false, primary: true, render: function (data, type, full) { 
       return type != 'display' ? '' + data.value : jToxComposition.formatConcentration(data.precision, data.value, data.unit);
