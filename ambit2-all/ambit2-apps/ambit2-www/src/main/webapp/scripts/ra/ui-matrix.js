@@ -108,8 +108,9 @@ var jToxBundle = {
     
     self.onIdentifiers(null, $('#jtox-identifiers', self.rootElement)[0]);
     // finally, if provided - load the given bundleUri
-    if (!ccLib.isNull(self.settings.bundleUri))
-	    self.load(self.settings.bundleUri);
+    var bUri = self.settings.bundleUri || self.settings.bundle_uri;
+    if (!!bUri)
+	    self.load(bUri);
     
     return self;
 	},
@@ -244,7 +245,8 @@ var jToxBundle = {
 
           if (endpoints[feat.sameAs] == null) {
             endpoints[feat.sameAs] = true;
-            feat.title = feat.sameAs.substr(feat.sameAs.indexOf('#') + 1);
+            if (!feat.title)
+              feat.title = feat.sameAs.substr(feat.sameAs.indexOf('#') + 1);
             feat.render = fRender(feat, fId);
             grp.push(fId);
           }
@@ -323,6 +325,7 @@ var jToxBundle = {
     		hasDetails: false,
     		fixedWidth: "600px",
     		configuration: conf,
+    		featureUri: self.bundleUri + '/property',
     		onPrepared: function (miniset, kit) {
 	    		// this is when we have the features combined, so we can make the multi stuff
 		      var getRender = function (fId, oldData, oldRender) {
