@@ -122,28 +122,28 @@ public class SLNExpressionToken
 			return SLNConst.atomAttributeToSLNString(type) + "=" + param;
 			
 		case SLNConst.QA_ATTR_hac:
-			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+			return SLNConst.atomAttributeToSLNString(type) + "=" + param;
 			
 		case SLNConst.QA_ATTR_hc:
-			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+			return SLNConst.atomAttributeToSLNString(type) + "=" + param;
 			
 		case SLNConst.QA_ATTR_htc:
-			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+			return SLNConst.atomAttributeToSLNString(type) + "=" + param;
 			
 		case SLNConst.QA_ATTR_mw:
-			return SLNConst.bondAttributeToSLNString(type) + "=" + doubleParam;
+			return SLNConst.atomAttributeToSLNString(type) + "=" + doubleParam;
 			
 		case SLNConst.QA_ATTR_ntc:
-			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+			return SLNConst.atomAttributeToSLNString(type) + "=" + param;
 			
 		case SLNConst.QA_ATTR_tac:
-			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+			return SLNConst.atomAttributeToSLNString(type) + "=" + param;
 			
 		case SLNConst.QA_ATTR_tbo:
-			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+			return SLNConst.atomAttributeToSLNString(type) + "=" + param;
 			
 		case SLNConst.QA_ATTR_src:
-			return SLNConst.bondAttributeToSLNString(type) + "=" + param;
+			return SLNConst.atomAttributeToSLNString(type) + "=" + param;
 			
 
 		case SLNConst.A_ATTR_USER_DEFINED:			
@@ -160,7 +160,7 @@ public class SLNExpressionToken
 		{	
 		case SLNConst.B_ATTR_type:
 			return  SLNConst.bondAttributeToSLNString(type) + "=" + SLNConst.bondTypeAttributeToSLNString(param);
-			
+					
 		case SLNConst.B_ATTR_s:
 			return SLNConst.bondAttributeToSLNString(type) + "=" + SLNConst.bondStereoChemistryAttributeToSLNString(param);
 			

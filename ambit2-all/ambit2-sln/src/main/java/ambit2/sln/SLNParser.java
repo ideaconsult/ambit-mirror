@@ -231,7 +231,7 @@ public class SLNParser
 		curChar++;
 		int startPos = curChar;
 		int openBrackets = 1;
-		while ((curChar < nChars) && (openBrackets > 0) && (errors.size() == 0))
+		while ((curChar < nChars) && (openBrackets > 0) /* && (errors.size() == 0)*/)
 		{
 			if (sln.charAt(curChar)=='[')			
 				openBrackets++;
@@ -241,7 +241,12 @@ public class SLNParser
 
 			curChar++;
 		}
-
+		
+		if (openBrackets > 0)
+			newError("Incorrect atom expression - bracket '[' not closed" , curChar+1,"");
+		
+		
+		
 		return sln.substring(startPos,curChar-1);
 	}
 
@@ -973,7 +978,7 @@ public class SLNParser
 		curChar++;
 		int startPos = curChar;
 		int openBrackets = 1;
-		while ((curChar < nChars) && (openBrackets > 0) && (errors.size() == 0))
+		while ((curChar < nChars) && (openBrackets > 0) /*&& (errors.size() == 0) */)
 		{
 			if (sln.charAt(curChar)=='[')			
 				openBrackets++;
@@ -983,7 +988,10 @@ public class SLNParser
 
 			curChar++;
 		}
-
+		
+		if (openBrackets > 0)
+			newError("Incorrect bond expression - bracket '[' not closed" , curChar+1,"");
+		
 		return sln.substring(startPos,curChar-1);
 	}
 

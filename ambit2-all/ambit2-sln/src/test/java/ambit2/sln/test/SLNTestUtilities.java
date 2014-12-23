@@ -40,14 +40,16 @@ public class SLNTestUtilities
 		//tu.testSLN2SLN("CH2=CHCH2C[1]:CH:C[2]OCH2OC(@2):C(OCH3):CH:(@1)");
 		//tu.testSLN2SLN("CC[s=R]H(O)CC[s=S]H(O)N");
 		
-		tu.testSLNIsomorphism("C[hac=3]","CC(C)CCC");
-		tu.testSLNIsomorphism("C[hc=0]","CC(C)CCC");
-		tu.testSLNIsomorphism("C[tbo=4]","NNS");
-		tu.testSLNIsomorphism("C[src=3]","C1CCC1CC2CC2");
-		tu.testSLNIsomorphism("C[tac=2]","C#C");
+		//tu.testSLNIsomorphism("C[hac=3]","CC(C)CCC");
+		//tu.testSLNIsomorphism("C[hc=0]","CC(C)CCC");
+		//tu.testSLNIsomorphism("C[tbo=4]","NNS");
+		//tu.testSLNIsomorphism("C[src=3]","C1CCC1CC2CC2");
+		//tu.testSLNIsomorphism("C[tac=2]","C#C");
 		
-		tu.testSLNIsomorphism("C[rbc=2]","C1CCCC1"); //not working !!!
+		//tu.testSLNIsomorphism("C[rbc=1]","C1CCCC1"); //not working !!!
 		
+		tu.testSLNIsomorphism("C[asdf=3]","CCCC=C"); //not working !!!
+		//tu.testSLNIsomorphism("C~[type=2,type=3]C","CCCC=C"); //not working !!!
 		
 		
 		//tu.testSLN("C[hac=3]");
