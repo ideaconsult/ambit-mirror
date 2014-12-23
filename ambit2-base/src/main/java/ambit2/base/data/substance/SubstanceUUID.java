@@ -12,6 +12,7 @@ public class SubstanceUUID extends Property {
 	public SubstanceUUID() {
 		super(Property.IUCLID5_UUID, LiteratureEntry.getI5UUIDReference());
 		setLabel(opentox_IUCLID5_UUID);
+		setOrder(3);
 		setEnabled(true);
 	}
 	@Override

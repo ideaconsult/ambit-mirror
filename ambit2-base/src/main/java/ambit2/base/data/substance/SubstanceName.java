@@ -13,6 +13,7 @@ public class SubstanceName  extends Property {
 		super("Name", LiteratureEntry.getTradeNameReference());
 		setLabel(opentox_TradeName);
 		setEnabled(true);
+		setOrder(1);
 	}
 	@Override
 	public String getRelativeURI() {
