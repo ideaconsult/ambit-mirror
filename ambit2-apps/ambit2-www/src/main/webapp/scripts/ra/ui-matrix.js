@@ -32,10 +32,8 @@ var jToxBundle = {
   	matrixIdentifiers: [
       "#DetailedInfoRow",
       "http://www.opentox.org/api/1.1#CASRN",
-      "http://apps.ideaconsult.net:8080/data/identifier/tradename",
-      "http://apps.ideaconsult.net:8080/data/identifier/uuid",
-//       "http://www.opentox.org/api/1.1#TradeName",
-//       "http://www.opentox.org/api/1.1#IUCLID5_UUID",
+      "http://www.opentox.org/api/1.1#TradeName",
+      "http://www.opentox.org/api/1.1#IUCLID5_UUID",
       "#SubstanceDataSource",
     ],
   	matrixMultiRows: [
@@ -304,6 +302,7 @@ var jToxBundle = {
   		
   		var infoDiv = $('#info-box')[0];
   		var editDiv = $('#edit-box')[0];
+
   		// now, fill the select with proper values...
   		var df = document.createDocumentFragment();
   		for (var id in self.settings.studyTypeList) {
@@ -335,6 +334,15 @@ var jToxBundle = {
 			      };
 		      };
 		      
+		      // some name feature tweaks
+		      var nameFeature = miniset.feature['http://www.opentox.org/api/1.1#TradeName'];
+		      nameFeature.primary = true;
+		      nameFeature.render = function (data, type, full) {
+  		      return (type != 'display') ? data || '' : '<div class="breakable">' + (data || "-") + '</div>';
+		      };
+		      nameFeature.title = "Substance Name";
+		      
+		      // and now - process the multi-row columns
 		      for (var i = 0, mrl = self.settings.matrixMultiRows.length;i < mrl; ++i) {
 			      var fId = self.settings.matrixMultiRows[i];
 			      var mr = miniset.feature[fId];

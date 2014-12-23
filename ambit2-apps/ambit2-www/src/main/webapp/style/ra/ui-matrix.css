@@ -65,6 +65,10 @@ body.structlist #browser {
   margin-top: 5px;  
 }
 
+#jtox-matrix td .breakable {
+  width: 100px;
+}
+
 #jtox-matrix .jtox-toolkit {
   margin-top: 10px;
 }

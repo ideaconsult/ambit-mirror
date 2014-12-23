@@ -189,6 +189,12 @@
   white-space: nowrap;
 }
 
+.jtox-toolkit .breakable {
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
 .jtox-hidden {
   display: none !important;
 }
