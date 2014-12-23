@@ -997,7 +997,7 @@ public class SLNParser
 
 	public void analyzeBondExpression(String bondExpr)
 	{
-		//	System.out.println("**BondExpr " + bondExpr);
+		//System.out.println("**BondExpr " + bondExpr);
 		if (bondExpr.trim().equals(""))
 		{
 			newError("Empty bond expression", curChar+1,"");
@@ -1101,31 +1101,44 @@ public class SLNParser
 
 	SLNExpressionToken analyzeBondAttribute (String name, String value)
 	{
-		/*	if (value == null)
+		if (value == null)
 			System.out.println("Attribute" + name);
 		else
 			System.out.println("Attribute " + name + " = " + value);
-		 */
-		//Handle bond type attribute
+		
+		//Handle query bond attribute type - bond type specified by the bond character
 		if (name.equals("type"))
-		{
-			int typeParam = SLNConst.SLNStringToBondTypeAttr(value);
+		{	
 			if (extractError.equals(""))
 			{
-				if (typeParam == -1)
+				int btype = -1;
+				
+				if (value.equals("~"))
+					btype = SLNConst.B_TYPE_ANY;
+				if (value.equals("1") || value.equals("-"))
+					btype = SLNConst.B_TYPE_1;
+				if (value.equals("2") || value.equals("="))
+					btype = SLNConst.B_TYPE_2;
+				if (value.equals("3") || value.equals("#"))
+					btype = SLNConst.B_TYPE_3;
+				if (value.equals("4") || value.equals(":"))
+					btype = SLNConst.B_TYPE_aromatic;
+				
+				
+				if (btype == -1)
 				{
-					newError("Incorrect bond type value " + value, curChar,"");
+					newError("Incorrect bond query type value " + value, curChar,"");
 					return null;
 				}
-				SLNExpressionToken token = new SLNExpressionToken(SLNConst.B_ATTR_type,typeParam);
-				return token;
-			}
-			else
-			{
-				newError("Incorrect bond type value " + value, curChar,"");
-				return null;
+				else
+				{
+					SLNExpressionToken token = new SLNExpressionToken(SLNConst.QB_ATTR_type,btype);
+					return token;
+				}
 			}
 		}
+		
+		
 		//Handle stereo-chemistry bond attribute
 		if (name.equals("s"))
 		{	
@@ -1144,26 +1157,6 @@ public class SLNParser
 			{
 				newError("Incorrect stereo-chemistry bond value " + value, curChar,"");
 				return null;
-			}
-		}
-
-
-		//Handle query bond attribute type - bond type specified by the bond character
-		if (name.equals("type"))
-		{	
-			if (extractError.equals(""))
-			{
-				int type = extractInteger(value);
-				if (extractError.equals(""))
-				{
-					SLNExpressionToken token = new SLNExpressionToken(SLNConst.QB_ATTR_type,type);
-					return token;
-				}
-				else
-				{
-					newError("Incorrect query type value " + value, curChar,"");
-					return null;
-				} 
 			}
 		}
 
