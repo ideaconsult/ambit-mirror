@@ -1984,9 +1984,6 @@ var jToxCompound = (function () {
       if (!!feature.shorten)
         col["sWidth"] = "75px";
   
-      // finally - this one.          
-      if (feature.order != null)
-        col["iOrder"] = feature.order;
       return col;
     },
     
