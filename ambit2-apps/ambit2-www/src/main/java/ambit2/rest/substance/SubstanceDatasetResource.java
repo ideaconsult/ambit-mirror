@@ -189,8 +189,13 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 							if (val.getValue().getTextValue()==null) 
 								try {
 									PropertyAnnotation a = new PropertyAnnotation();
+									String unit = val.getValue().get("unit")==null?null:val.getValue().get("unit").asText();									
 									a.setPredicate(val.getKey());
-									a.setObject(val.getValue().get("loValue").asText());
+									if (unit==null)
+										a.setObject(val.getValue().get("loValue").asText());
+									else {
+										a.setObject(String.format("%s %s",val.getValue().get("loValue").asText(),unit));
+									}
 									ann.add(a);
 								} catch (Exception x) {}
 							else {
