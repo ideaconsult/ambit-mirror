@@ -125,8 +125,17 @@ body.structlist #browser {
   font-size: 80%;
 }
 
-#jtox-matrix table.dataTable td  {
+#jtox-matrix div.jtox-ds-variable table.dataTable td  {
   white-space: nowrap;
+}
+
+#jtox-matrix div.jtox-ds-variable table.dataTable th  {
+  white-space: inherit;
+  max-width: 160px;
+}
+
+#jtox-matrix th.word-break {
+  word-break: normal;
 }
 
 #jtox-matrix td.jtox-multi table td  {

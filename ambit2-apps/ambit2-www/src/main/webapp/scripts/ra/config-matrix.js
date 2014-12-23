@@ -19,8 +19,8 @@ jTConfig.matrix = {
 			  return (type != 'display') ? data : '<textarea class="remark" placeholder="Reason for selection_"></textarea>';
       }
 		},
-		"http://www.opentox.org/api/1.1#SubstanceDataSource": { title: "Data source", data: "compound.ownerName", accumulate: true, primary: true },
-		"#ConstituentName": { title: "Constituent Name", data: "compound.name", accumulate: false, primary: true },
+		"http://www.opentox.org/api/1.1#SubstanceDataSource": { title: "Data source", data: "compound.ownerName", accumulate: true, primary: true, column: { sClass: "breakable" } },
+		"#ConstituentName": { title: "Constituent Name", data: "compound.name", accumulate: false, primary: true, column: { sClass: "breakable work-break" } },
     "#ConstituentContent": { title: "Content", data: "proportion.typical", accumulate: false, primary: true, render: function (data, type, full) { 
       return type != 'display' ? '' + data.value : jToxComposition.formatConcentration(data.precision, data.value, data.unit);
     } },

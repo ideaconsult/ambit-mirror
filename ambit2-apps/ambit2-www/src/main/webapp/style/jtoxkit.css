@@ -190,9 +190,12 @@
 }
 
 .jtox-toolkit .breakable {
-  word-break: break-all;
   word-wrap: break-word;
   white-space: normal;
+}
+
+.jtox-toolkit .word-break {
+  word-break: break-all;
 }
 
 .jtox-toolkit .non-breakable {
