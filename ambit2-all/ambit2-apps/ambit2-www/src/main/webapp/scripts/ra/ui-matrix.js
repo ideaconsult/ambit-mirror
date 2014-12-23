@@ -248,6 +248,7 @@ var jToxBundle = {
             if (!feat.title)
               feat.title = feat.sameAs.substr(feat.sameAs.indexOf('#') + 1);
             feat.render = fRender(feat, fId);
+            feat.column = { sClass: "breakable", sWidth: "80px" };
             grp.push(fId);
           }
       	}
@@ -338,15 +339,12 @@ var jToxBundle = {
 		      };
 		      
 		      // some name feature tweaks
-		      var breakRender = function (data, type, full) {
-  		      return (type != 'display') ? data || '' : '<div class="breakable">' + (data || "-") + '</div>';
-		      };
-		      
 		      var nameFeature = miniset.feature['http://www.opentox.org/api/1.1#TradeName'];
 		      nameFeature.primary = true;
-		      nameFeature.render = breakRender;
 		      nameFeature.title = "Substance Name";
-		      miniset.feature['http://www.opentox.org/api/1.1#SubstanceDataSource'].render = breakRender;
+		      if (!nameFeature.column)
+		        nameFeature.column = {};
+		      nameFeature.column.sClass = "breakable word-break";
 		      
 		      // and now - process the multi-row columns
 		      for (var i = 0, mrl = self.settings.matrixMultiRows.length;i < mrl; ++i) {
