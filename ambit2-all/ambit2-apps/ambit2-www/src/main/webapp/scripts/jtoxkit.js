@@ -479,7 +479,7 @@ window.jT = window.jToxKit = {
         obj.parentKit = parent;
       }
       else
-        console.log("jToxError: trying to initialize unexistent jTox kit: " + kit);
+        console.log("jToxError: trying to initialize unexistend jTox kit: " + kit);
 
       return obj;
     };
@@ -1700,23 +1700,23 @@ var jToxCompound = (function () {
     "http://www.opentox.org/api/1.1#REACHRegistrationDate" : { title: "REACH Date", data: "compound.reachdate", accumulate: true, basic: true },
     "http://www.opentox.org/api/1.1#CASRN" : { title: "CAS", data: "compound.cas", accumulate: true, basic: true, primary: true },
   	"http://www.opentox.org/api/1.1#ChemicalName" : { title: "Name", data: "compound.name", accumulate: true, basic: true },
-  	"http://www.opentox.org/api/1.1#TradeName" : {title: "Trade Name", data: "compound.tradename", accumulate: true, basic: true},
-  	"http://www.opentox.org/api/1.1#IUPACName": {title: "IUPAC Name", data: ["compound.name", "compound.iupac"], accumulate: true, basic: true },
-  	"http://www.opentox.org/api/1.1#EINECS": {title: "EINECS", data: "compound.einecs", accumulate: true, basic: true, primary: true },
-    "http://www.opentox.org/api/1.1#InChI": {title: "InChI", data: "compound.inchi", shorten: true, accumulate: true, basic: true},
-  	"http://www.opentox.org/api/1.1#InChI_std": {title: "InChI", data: "compound.inchi", shorten: true, accumulate: true, sameAs: "http://www.opentox.org/api/1.1#InChI", basic: true},
-    "http://www.opentox.org/api/1.1#InChIKey": {title: "InChI Key", data: "compound.inchikey", accumulate: true, basic: true},
-  	"http://www.opentox.org/api/1.1#InChIKey_std": {title: "InChI Key", data: "compound.inchikey", accumulate: true, sameAs: "http://www.opentox.org/api/1.1#InChIKey", basic: true},
-    "http://www.opentox.org/api/1.1#InChI_AuxInfo": {title: "InChI Aux", data: "compound.inchiaux", accumulate: true, basic: true},
-  	"http://www.opentox.org/api/1.1#InChI_AuxInfo_std": {title: "InChI Aux", data: "compound.inchiaux", accumulate: true, sameAs: "http://www.opentox.org/api/1.1#InChI_AuxInfo", basic: true},
-  	"http://www.opentox.org/api/1.1#IUCLID5_UUID": {title: "IUCLID5 UUID", data: "compound.i5uuid", shorten: true, accumulate: true, basic: true, primary: true },
-  	"http://www.opentox.org/api/1.1#SMILES": {title: "SMILES", data: "compound.smiles", shorten: true, accumulate: true, basic: true},
-  	"http://www.opentox.org/api/dblinks#CMS": {title: "CMS", accumulate: true, basic: true},
-  	"http://www.opentox.org/api/dblinks#ChEBI": {title: "ChEBI", accumulate: true, basic: true},
-  	"http://www.opentox.org/api/dblinks#Pubchem": {title: "PubChem", accumulate: true, basic: true},
-  	"http://www.opentox.org/api/dblinks#ChemSpider": {title: "ChemSpider", accumulate: true, basic: true},
-  	"http://www.opentox.org/api/dblinks#ChEMBL": {title: "ChEMBL", accumulate: true, basic: true},
-  	"http://www.opentox.org/api/dblinks#ToxbankWiki": {title: "Toxbank Wiki", accumulate: true, basic: true},
+  	"http://www.opentox.org/api/1.1#TradeName" : { title: "Trade Name", data: "compound.tradename", accumulate: true, basic: true },
+  	"http://www.opentox.org/api/1.1#IUPACName": { title: "IUPAC Name", data: ["compound.name", "compound.iupac"], accumulate: true, basic: true },
+  	"http://www.opentox.org/api/1.1#EINECS": { title: "EINECS", data: "compound.einecs", accumulate: true, basic: true, primary: true },
+    "http://www.opentox.org/api/1.1#InChI": { title: "InChI", data: "compound.inchi", shorten: true, accumulate: true, basic: true },
+  	"http://www.opentox.org/api/1.1#InChI_std": { title: "InChI", data: "compound.inchi", shorten: true, accumulate: true, sameAs: "http://www.opentox.org/api/1.1#InChI", basic: true },
+    "http://www.opentox.org/api/1.1#InChIKey": { title: "InChI Key", data: "compound.inchikey", accumulate: true, basic: true },
+  	"http://www.opentox.org/api/1.1#InChIKey_std": { title: "InChI Key", data: "compound.inchikey", accumulate: true, sameAs: "http://www.opentox.org/api/1.1#InChIKey", basic: true },
+    "http://www.opentox.org/api/1.1#InChI_AuxInfo": { title: "InChI Aux", data: "compound.inchiaux", accumulate: true, basic: true },
+  	"http://www.opentox.org/api/1.1#InChI_AuxInfo_std": { title: "InChI Aux", data: "compound.inchiaux", accumulate: true, sameAs: "http://www.opentox.org/api/1.1#InChI_AuxInfo", basic: true},
+  	"http://www.opentox.org/api/1.1#IUCLID5_UUID": { title: "IUCLID5 UUID", data: "compound.i5uuid", shorten: true, accumulate: true, basic: true, primary: true },
+  	"http://www.opentox.org/api/1.1#SMILES": { title: "SMILES", data: "compound.smiles", shorten: true, accumulate: true, basic: true },
+  	"http://www.opentox.org/api/dblinks#CMS": { title: "CMS", accumulate: true, basic: true },
+  	"http://www.opentox.org/api/dblinks#ChEBI": { title: "ChEBI", accumulate: true, basic: true },
+  	"http://www.opentox.org/api/dblinks#Pubchem": { title: "PubChem", accumulate: true, basic: true },
+  	"http://www.opentox.org/api/dblinks#ChemSpider": { title: "ChemSpider", accumulate: true, basic: true },
+  	"http://www.opentox.org/api/dblinks#ChEMBL": { title: "ChEMBL", accumulate: true, basic: true },
+  	"http://www.opentox.org/api/dblinks#ToxbankWiki": { title: "Toxbank Wiki", accumulate: true, basic: true },
   };
   var instanceCount = 0;
 
@@ -1970,16 +1970,15 @@ var jToxCompound = (function () {
       
       col["mData"] = (feature.data != null) ? feature.data : 'values';
 
-      if (feature.render != null) {
-        if (feature.data != null)
-          col["mRender"] = feature.render;
-        else
-          col["mRender"] = function (data, type, full) { return feature.render(full.values[fId], type, full); }
-      }
+      if (feature.render != null)
+        col["mRender"] = feature.data != null ? feature.render : function (data, type, full) { return feature.render(full.values[fId], type, full); };
       else if (!!feature.shorten)
-        col["mRender"] = function(data, type, full) { return (type != "display") ? '' + data : jT.ui.shortenedData(data, "Press to copy the value in the clipboard"); };
+        col["mRender"] = function(data, type, full) { 
+          if (!feature.data) data = data[fId];
+          return (type != "display") ? '' + data : jT.ui.shortenedData(data, "Press to copy the value in the clipboard"); 
+        };
       else if (feature.data == null) // in other cases we want the default presenting of the plain value
-        col["mRender"] = (function(featureId) { return function(data, type, full) { var val = full.values[featureId]; return ccLib.isEmpty(val) ? '-' : val }; })(fId);
+        col["mRender"] = (function(featureId) { return function(data, type, full) { return full.values[featureId] ||'-'; }; })(fId);
       
       // other convenient cases
       if (!!feature.shorten)
@@ -2546,7 +2545,7 @@ var jToxCompound = (function () {
   cls.processEntry = function (entry, features, fnValue) {
     for (var fid in features) {
       var feature = features[fid];
-      var newVal = entry.value != null ? entry.values[fid] : undefined;
+      var newVal = entry.values != null ? entry.values[fid] : undefined;
       
       // if applicable - location the feature value to a specific location whithin the entry
       if (!!feature.accumulate && newVal !== undefined && feature.data !== undefined) {
@@ -2591,7 +2590,7 @@ var jToxCompound = (function () {
     
     for (;;){
       ccLib.fireCallback(callback, null, feature, retId);
-      if (feature.sameAs === undefined || feature.sameAs == null || feature.sameAs == fid || fid == base + feature.sameAs)
+      if (feature.sameAs == null || feature.sameAs == fid || fid == base + feature.sameAs)
         break;
       if (features[feature.sameAs] !== undefined)
         retId = feature.sameAs;
@@ -2635,7 +2634,7 @@ var jToxCompound = (function () {
     }
 
     if (ccLib.isNull(fnValue))
-      fnValue = cls.defaultSettings.fnAccumuate;
+      fnValue = cls.defaultSettings.fnAccumulate;
     
     if (!startIdx)
       startIdx = 0;
