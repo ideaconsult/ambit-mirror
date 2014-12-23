@@ -169,7 +169,7 @@
         <tbody>
           <tr>
             <td class="data-field the-endpoint" data-field="endpoint"></td>
-            <td class="data-field the-value" data-field="value"></td>
+            <td class="data-field the-value non-breakable" data-field="value"></td>
             <td class="data-field postconditions" data-field="guidance"></td>
           </tr>
         </tbody>
