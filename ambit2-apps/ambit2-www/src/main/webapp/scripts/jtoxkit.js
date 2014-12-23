@@ -2423,22 +2423,8 @@ var jToxCompound = (function () {
       var dataset = null;
 
       // first, build the proper      
-        var queryUri;
-      if (!!self.settings.featureUri) {
-        queryUri = self.settings.featureUri;
-/*
-        if (!jT.$.isArray(self.settings.featureUris))
-          self.settings.featureUris = [self.settings.featureUris];
-        var cnt = 0;
-        if (queryUri.indexOf('?') < 0)
-          queryUri += '?';
-        for (var i = 0; i < self.settings.featureUris.length; ++i) {
-          var uri = self.settings.featureUris[i];
-          queryUri += 'feature_uris[]=' + encodeURIComponent(uri) + '&';
-        }
-*/
-      }
-      else // this is the automatic way, which makes a false query in the beginning
+      var queryUri = self.settings.featureUri || self.settings.feature_uri;
+      if (!queryUri) // rollback this is the automatic way, which makes a false query in the beginning
         queryUri = ccLib.addParameter(self.datasetUri, "page=0&pagesize=1");
 
       // now make the actual call...
