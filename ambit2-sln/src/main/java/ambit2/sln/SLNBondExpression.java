@@ -10,34 +10,42 @@ public class SLNBondExpression
 
 	public ArrayList<SLNExpressionToken> tokens = new ArrayList<SLNExpressionToken>(); 
 
-	public boolean matches(IBond atom) 
+	public boolean matches(IBond bond) 
 	{
-		//TODO
-		return true;
+		SLNLogicalExpression sle = new SLNLogicalExpression();
+		for (int i = 0; i< tokens.size(); i++)
+		{
+			SLNExpressionToken tok = tokens.get(i);
+			if (tok.type < SLNConst.LO)
+			{	
+				sle.addArgument(getArgument(tok, bond));
+			}	
+			else
+				sle.addLogOperation(tok.type - SLNConst.LO);
+		}
+		return (sle.getValue()); 
 	}
 
-	boolean getArgument(SLNExpressionToken tok, SLNBond bond)
+	boolean getArgument(SLNExpressionToken tok, IBond bond)
     {	
 		switch (tok.type)
-		{
+		{			
 		case SLNConst.B_TYPE_1:
 			if (bond.getOrder() == IBond.Order.SINGLE)
 				return(true);   
-			else 
-				return(false);
+			
 		case SLNConst.B_TYPE_2:
 			if (bond.getOrder() == IBond.Order.DOUBLE)
 				return(true);   
-			else 
-				return(false);
+			
 		case SLNConst.B_TYPE_3:
 			if (bond.getOrder() == IBond.Order.TRIPLE)
 				return(true);   
-			else 
-				return(false);	
+
 		case SLNConst.B_TYPE_aromatic:
 			if (bond.getFlag(CDKConstants.ISAROMATIC));
-				return(true);	
+				return(true);
+				
 		case SLNConst.B_STEREO_C:
 			//TODO
     	}
