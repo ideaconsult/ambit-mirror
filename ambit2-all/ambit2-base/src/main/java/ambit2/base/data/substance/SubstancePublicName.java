@@ -9,6 +9,7 @@ public class SubstancePublicName extends Property {
 		super(Property.Names,LiteratureEntry.getInstance("Substance",""));
 		setLabel(Property.opentox_Name);
 		setEnabled(true);
+		setOrder(2);
 	}
 	
 	@Override
