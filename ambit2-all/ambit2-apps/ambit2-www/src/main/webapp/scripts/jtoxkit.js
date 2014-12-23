@@ -817,11 +817,14 @@ window.jT.ui = {
   },
   
   sortColDefs: function (colDefs) {
+    for (var i = 0, l = colDefs.length; i < l; ++i)
+      colDefs[i].iNaturalOrder = i;
 	  colDefs.sort(function(a, b) {
-	    var valA = ccLib.isNull(a.iOrder) ? 0 : a.iOrder;
-	    var valB = ccLib.isNull(b.iOrder) ? 0 : b.iOrder;
-	    return valA - valB;
-	  });
+  	  var res = (a.iOrder || 0) - (b.iOrder || 0);
+  	  if (res == 0) // i.e. they are equal
+  	    res = a.iNaturalOrder - b.iNaturalOrder;
+  	  return res; 
+    });
   },
   
   processColumns: function (kit, category) {
