@@ -14,6 +14,7 @@ public class SubstanceUUID extends Property {
 		setLabel(opentox_IUCLID5_UUID);
 		setOrder(3);
 		setEnabled(true);
+		setClazz(String.class);
 	}
 	@Override
 	public String getRelativeURI() {

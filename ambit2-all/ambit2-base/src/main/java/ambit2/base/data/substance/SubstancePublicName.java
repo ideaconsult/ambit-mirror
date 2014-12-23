@@ -10,6 +10,7 @@ public class SubstancePublicName extends Property {
 		setLabel(Property.opentox_Name);
 		setEnabled(true);
 		setOrder(2);
+		setClazz(String.class);
 	}
 	
 	@Override
