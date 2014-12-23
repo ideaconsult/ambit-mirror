@@ -342,7 +342,7 @@ public class SLNConst
 	}
 
 	//Bond Attributes (predefined)   B_ATTR_*
-	public static final int B_ATTR_type = 0; // overrides the type specified by the bond character
+	//public static final int B_ATTR_type = 0; // overrides the type specified by the bond character
 	public static final int B_ATTR_s = 1;	//indicates stereo-chemistry about a double bond
 
 	public static final int B_ATTR_USER_DEFINED = 500;
@@ -357,8 +357,8 @@ public class SLNConst
 	{
 		switch (attr)
 		{
-		case B_ATTR_type:
-			return "type";
+		//case B_ATTR_type:
+		//	return "type";
 		case B_ATTR_s:
 			return "s";
 
@@ -377,13 +377,12 @@ public class SLNConst
 		}
 	}
 
-	// Predefined values for type 
-	public static final int B_TYPE_ANY = 0; // equal to -
+	// Predefined values for bond type 
+	public static final int B_TYPE_ANY = 0; // equal to ~
 	public static final int B_TYPE_1 = 1; // equal to -
 	public static final int B_TYPE_2 = 2; // equal to =
 	public static final int B_TYPE_3 = 3; // equal to #
 	public static final int B_TYPE_aromatic = 4; // equal to :
-
 	public static final int B_TYPE_USER_DEFINED = 100; //???
 
 	public static String bondTypeAttributeToSLNString(int attr)
