@@ -9,6 +9,7 @@ import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.data.study.Protocol;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.data.substance.SubstanceName;
 import ambit2.base.data.substance.SubstanceProperty;
@@ -52,7 +53,12 @@ public class ReadEndpointsByBundle  extends  AbstractPropertyRetrieval<Substance
 			if (hash==null || "".equals(hash)) {
 				LiteratureEntry ref = new LiteratureEntry("","Default");
 				ref.setType(_type.Substance);
-				SubstanceProperty p = new SubstanceProperty(rs.getString(1),rs.getString(2),null,null,ref);
+				Protocol._categories cat = null;
+				try {
+					cat = Protocol._categories.valueOf(rs.getString(2));
+				} catch (Exception x) {}
+				SubstanceProperty p = new SubstanceProperty(rs.getString(1),rs.getString(2),cat==null?null:String.format("%s. %s", cat.getNumber(),cat.toString()),null,ref);
+				p.setOrder(cat==null?0:cat.getSortingOrder());
 				p.setIdentifier("");
 				return p;
 			} else {
