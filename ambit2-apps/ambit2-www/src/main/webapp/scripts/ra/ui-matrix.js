@@ -34,7 +34,7 @@ var jToxBundle = {
       "http://www.opentox.org/api/1.1#CASRN",
       "http://www.opentox.org/api/1.1#TradeName",
       "http://www.opentox.org/api/1.1#IUCLID5_UUID",
-      "#SubstanceDataSource",
+      "http://www.opentox.org/api/1.1#SubstanceDataSource",
     ],
   	matrixMultiRows: [
       "http://www.opentox.org/api/1.1#Diagram",
@@ -338,12 +338,15 @@ var jToxBundle = {
 		      };
 		      
 		      // some name feature tweaks
-		      var nameFeature = miniset.feature['http://www.opentox.org/api/1.1#TradeName'];
-		      nameFeature.primary = true;
-		      nameFeature.render = function (data, type, full) {
+		      var breakRender = function (data, type, full) {
   		      return (type != 'display') ? data || '' : '<div class="breakable">' + (data || "-") + '</div>';
 		      };
+		      
+		      var nameFeature = miniset.feature['http://www.opentox.org/api/1.1#TradeName'];
+		      nameFeature.primary = true;
+		      nameFeature.render = breakRender;
 		      nameFeature.title = "Substance Name";
+		      miniset.feature['http://www.opentox.org/api/1.1#SubstanceDataSource'].render = breakRender;
 		      
 		      // and now - process the multi-row columns
 		      for (var i = 0, mrl = self.settings.matrixMultiRows.length;i < mrl; ++i) {
