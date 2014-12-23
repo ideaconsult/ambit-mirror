@@ -847,7 +847,7 @@ window.jT.ui = {
 
     var df = '<table>';
     for (var i = 0, dlen = data.length; i < dlen; ++i) {
-      df += '<tr class="' + (i % 2 == 0 ? 'even' : 'odd') + '"><td class="center">' + render(data[i], type, full, i) + '</td></tr>';
+      df += '<tr class="' + (i % 2 == 0 ? 'even' : 'odd') + '"><td>' + render(data[i], type, full, i) + '</td></tr>';
     }
     
     df += '</table>';
