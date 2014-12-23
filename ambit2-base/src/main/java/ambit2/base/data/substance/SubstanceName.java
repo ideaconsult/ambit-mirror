@@ -14,6 +14,7 @@ public class SubstanceName  extends Property {
 		setLabel(opentox_TradeName);
 		setEnabled(true);
 		setOrder(1);
+		setClazz(String.class);
 	}
 	@Override
 	public String getRelativeURI() {
