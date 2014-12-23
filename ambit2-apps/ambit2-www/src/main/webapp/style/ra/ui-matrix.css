@@ -214,6 +214,8 @@ body.structlist #browser {
 .popup-box th {
   font-size: 80%;
   font-weight: bold;
+  word-wrap: normal;
+  white-space: nowrap;  
 }
 
 .popup-box .the-value {

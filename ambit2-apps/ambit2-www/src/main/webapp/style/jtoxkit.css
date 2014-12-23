@@ -195,6 +195,12 @@
   white-space: normal;
 }
 
+.jtox-toolkit .non-breakable {
+  word-break:normal;
+  word-wrap: normal;
+  white-space: nowrap;
+}
+
 .jtox-hidden {
   display: none !important;
 }
