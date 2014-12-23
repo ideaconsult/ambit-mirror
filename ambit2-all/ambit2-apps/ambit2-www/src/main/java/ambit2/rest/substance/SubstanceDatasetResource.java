@@ -32,6 +32,7 @@ import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
 import ambit2.base.data.study.ProtocolEffectRecord;
 import ambit2.base.data.substance.SubstanceName;
+import ambit2.base.data.substance.SubstanceOwner;
 import ambit2.base.data.substance.SubstanceProperty;
 import ambit2.base.data.substance.SubstancePublicName;
 import ambit2.base.data.substance.SubstanceUUID;
@@ -140,6 +141,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 			@Override
 			protected SubstanceRecord processDetail(SubstanceRecord master,
 					ProtocolEffectRecord<String, String, String> detail) throws Exception {
+				
 				if (detail != null) {
 					if (detail.getTextValue() != null && detail.getTextValue().toString().startsWith("{")) {
 
@@ -221,7 +223,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 						SubstanceProperty key = new SubstanceProperty(
 								detail.getProtocol().getTopCategory(),
 								detail.getProtocol().getCategory(),
-								b.toString(),detail.getUnit(),ref
+								detail.getEndpoint(),detail.getUnit(),ref
 								);
 						key.setIdentifier(detail.getSampleID());
 						key.setAnnotations(ann);
@@ -293,6 +295,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 		groupProperties.add(new SubstancePublicName());
 		groupProperties.add(new SubstanceName());
 		groupProperties.add(new SubstanceUUID());
+		groupProperties.add(new SubstanceOwner());
 		String jsonpcallback = getParams().getFirstValue("jsonp");
 		if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
 		return new OutputWriterConvertor(

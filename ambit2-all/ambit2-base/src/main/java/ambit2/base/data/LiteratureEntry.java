@@ -42,6 +42,7 @@ public class LiteratureEntry extends AmbitBean implements ILiteratureEntry{
     protected static String IUPAC_name = "IUPAC name";
     protected static String Public_name = "Public name";
     protected static String Trade_name = "Trade name";
+    protected static String OWNER_name = "Owner name";
     protected static String CAS_num = "CAS Registry Number";
     protected static String IUCLID5_UUID = "IUCLID5 UUID";
     protected static String DX = "DX";
@@ -71,6 +72,9 @@ public class LiteratureEntry extends AmbitBean implements ILiteratureEntry{
 	}
 	public static synchronized LiteratureEntry getI5UUIDReference() {
 		return getInstance(IUCLID5_UUID,AMBIT_uri);
+	}
+	public static synchronized LiteratureEntry getOwnerNameReference() {
+		return getInstance(OWNER_name,AMBIT_uri);
 	}	
 	public static synchronized LiteratureEntry getDXReference() {
 		return getDXReference(DX);

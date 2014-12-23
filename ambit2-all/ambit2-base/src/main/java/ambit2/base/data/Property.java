@@ -61,6 +61,7 @@ public class Property extends Model implements Serializable, Comparable<Property
 	public static final String opentox_CAS = "http://www.opentox.org/api/1.1#CASRN";
 	public static final String opentox_Name = "http://www.opentox.org/api/1.1#ChemicalName";
 	public static final String opentox_TradeName = "http://www.opentox.org/api/1.1#TradeName";
+	public static final String opentox_SubstanceDataSource = "http://www.opentox.org/api/1.1#SubstanceDataSource";
 	public static final String opentox_IupacName = "http://www.opentox.org/api/1.1#IUPACName";
 	public static final String opentox_EC = "http://www.opentox.org/api/1.1#EINECS";
 	public static final String opentox_InChI_std = "http://www.opentox.org/api/1.1#InChI_std";
