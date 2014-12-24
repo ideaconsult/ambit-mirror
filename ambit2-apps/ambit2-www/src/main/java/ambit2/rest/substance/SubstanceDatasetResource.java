@@ -1,6 +1,8 @@
 package ambit2.rest.substance;
 
+import java.io.IOException;
 import java.io.StringReader;
+import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -310,6 +312,14 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 						IProcessor p = getCompositionProcessors();
 						if (p!=null) getProcessors().add(p);
 						getProcessors().add(getPropertyProcessors(false,false));
+					}
+					@Override
+					protected void append2header(Writer writer,
+									IStructureRecord item) {
+						if (header == null) return;
+						for (Property p : item.getProperties()) {
+							if (header.indexOf(p)<0) header.add(p);
+						}
 					}
 				},
 				MediaType.APPLICATION_JSON,filenamePrefix);
