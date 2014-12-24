@@ -219,10 +219,14 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		*/
 		return h;
 	}	
+	protected void append2header(Writer writer, IStructureRecord item) {
+		
+	}
 	@Override 
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
 			Writer writer = getOutput();
+			append2header(writer,item);
 			writeHeader(writer);
 			int i = 0;
 			String uri = getURI(item);
