@@ -159,6 +159,12 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 					master.addFacet(detail);
 					return master;
 				}
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					// TODO Auto-generated method stub
+					return super.process(target);
+				}
 			};
 			bundleReader.setCloseConnection(false);
 			getProcessors().add(bundleReader);
@@ -306,34 +312,29 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			}
 			builder.append("\n\t\t],");
 				
-			builder.append(String.format("\n\t%s:{\n",JSONUtils.jsonQuote(jsonCompound.bundles.jsonname())));
-			facets = item.getFacets();
-			delimiter = "";
-			if (facets!=null) for (IFacet facet : facets) 
-				if (facet instanceof BundleRoleFacet) {
-					builder.append(delimiter);
-					builder.append("\n\t\t");
-					builder.append(facet.toJSON(propertyJSONReporter.getRequest().getRootRef().toString(),null));
-					delimiter=",";
-			}
-			builder.append("\n\t\t}");
+
 			
 			if ((item instanceof SubstanceRecord) && ((SubstanceRecord)item).getRelatedStructures()!=null) {
 				SubstanceRecord substance = (SubstanceRecord)item;
-				builder.append(",");	
 				builder.append(String.format("\n\t%s:[\n",JSONUtils.jsonQuote(jsonCompound.composition.jsonname())));
-				List<CompositionRelation> composition = ((SubstanceRecord)item).getRelatedStructures();
+				List<CompositionRelation> composition = substance.getRelatedStructures();
 				for (int j = 0; j < composition.size(); j++ ) {
 					CompositionRelation cr = composition.get(j);
 					if (j>0) builder.append(",\n");
 					String component = "{}";
-					if (cr.getSecondStructure()!=null && cr.getSecondStructure().getIdchemical()>0)
-						component = String.format("{\"compound\":{\"URI\":\"%s/compound/%d\"}}",urlPrefix,cr.getSecondStructure().getIdchemical());
+					if (cr.getSecondStructure()!=null && cr.getSecondStructure().getIdchemical()>0) {
+						StringBuilder bundles = new StringBuilder();
+						printBundles(cr.getSecondStructure().getFacets(), bundles);
+						component = String.format("{\"compound\":{\"URI\":\"%s/compound/%d\",\n\t%s}}",
+								urlPrefix,cr.getSecondStructure().getIdchemical(),bundles.toString());
+					}
 					builder.append(cr.toJSON(uri, component));
 					
 				}
-				builder.append("\n\t\t]");
+				builder.append("\n\t\t],");
 			}
+			
+			printBundles(item.getFacets(),builder);
 			
 			builder.append("\n\t}");
 			writer.write(builder.toString());
@@ -343,6 +344,19 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		}
 		return item;
 		
+	}
+	
+	protected void printBundles(Iterable<IFacet> facets, StringBuilder builder) {
+		builder.append(String.format("\n\t%s:{\n",JSONUtils.jsonQuote(jsonCompound.bundles.jsonname())));
+		String delimiter = "";
+		if (facets!=null) for (IFacet facet : facets) 
+			if (facet instanceof BundleRoleFacet) {
+				builder.append(delimiter);
+				builder.append("\n\t\t");
+				builder.append(facet.toJSON(propertyJSONReporter.getRequest().getRootRef().toString(),null));
+				delimiter=",";
+		}
+		builder.append("\n\t\t}");
 	}
 	
 	@Override

@@ -72,4 +72,10 @@ public class BundleDatasetResource extends SubstanceDatasetResource<ReadSubstanc
 		};
 		return compositionReader;
 	}
+	@Override
+	protected SubstanceEndpointsBundle[] getBundles() {
+		return null;
+		//return new SubstanceEndpointsBundle[] {bundle};
+	}
+
 }
