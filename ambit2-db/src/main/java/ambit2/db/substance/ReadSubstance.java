@@ -82,7 +82,7 @@ public class ReadSubstance  extends AbstractReadSubstance<CompositionRelation,Su
 		SubstanceRecord r =  super.getObject(rs);
 		if (retrieveComposition) {
 			r.addStructureRelation(ReadSubstanceComposition.readCompositionRelation(
-					new CompositionRelation(new SubstanceRecord(), new StructureRecord(), new Proportion()), rs));
+					new CompositionRelation(new SubstanceRecord(), new StructureRecord(), new Proportion()), rs,null));
 		}
 		return r;
 	}

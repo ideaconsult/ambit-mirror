@@ -33,6 +33,7 @@ import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
 import ambit2.base.data.study.ProtocolEffectRecord;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.data.substance.SubstanceName;
 import ambit2.base.data.substance.SubstanceOwner;
 import ambit2.base.data.substance.SubstanceProperty;
@@ -293,6 +294,9 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 				MediaType.TEXT_CSV,filenamePrefix);				
 
 	}
+	protected SubstanceEndpointsBundle[] getBundles() {
+		return null;
+	}
 	protected IProcessor<Q, Representation> createJSONReporter(String filenamePrefix) {
 		groupProperties.add(new SubstancePublicName());
 		groupProperties.add(new SubstanceName());
@@ -301,7 +305,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 		String jsonpcallback = getParams().getFirstValue("jsonp");
 		if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
 		return new OutputWriterConvertor(
-				new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,null,getRequest(),
+				new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,getBundles(),getRequest(),
 						getRequest().getRootRef().toString(),false,jsonpcallback) {
 					@Override
 					protected String getURI(IStructureRecord item) {
