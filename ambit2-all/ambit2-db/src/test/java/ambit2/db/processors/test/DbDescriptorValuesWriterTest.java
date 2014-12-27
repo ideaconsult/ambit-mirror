@@ -136,9 +136,9 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
         IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(3,names.getRowCount());
+		Assert.assertEquals(5,names.getRowCount());
 		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
-		Assert.assertEquals(0,values.getRowCount());
+		Assert.assertEquals(2,values.getRowCount());
 		ITable templates = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM template");	
 		Assert.assertEquals(5,templates.getRowCount());		
 		ITable dictionary = 	c.createQueryTable("EXPECTED_ONTOLOGY","SELECT * FROM dictionary");	
@@ -150,9 +150,9 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		writer.setStructure(new StructureRecord(7,100211,"",""));
         writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(4,names.getRowCount());
+		Assert.assertEquals(6,names.getRowCount());
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
-		Assert.assertEquals(1,values.getRowCount());	        
+		Assert.assertEquals(3,values.getRowCount());	        
         
         DescriptorValue v = new DescriptorValue(
                 new DescriptorSpecification("XLogPReference","XLogPTitle","XLogPIdentifier","XLogPVendor"),
@@ -169,7 +169,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
         
         c = getConnection();
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(5,names.getRowCount());
+		Assert.assertEquals(7,names.getRowCount());
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT value_num FROM property_values WHERE idstructure=100214");	
 		Assert.assertEquals(1,values.getRowCount());
 		Assert.assertEquals(5.01,(Double)DataType.DOUBLE.typeCast(values.getValue(0,"value_num")),1E-4);
@@ -181,9 +181,9 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
         IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(3,names.getRowCount());
+		Assert.assertEquals(5,names.getRowCount());
 		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
-		Assert.assertEquals(0,values.getRowCount());
+		Assert.assertEquals(2,values.getRowCount());
 		
         writer.setConnection(c.getConnection());
         writer.open();
@@ -191,9 +191,9 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		writer.setStructure(new StructureRecord(7,100211,"",""));
         writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(4,names.getRowCount());
+		Assert.assertEquals(6,names.getRowCount());
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
-		Assert.assertEquals(1,values.getRowCount());	        
+		Assert.assertEquals(3,values.getRowCount());	        
         
         DescriptorValue v = new DescriptorValue(
                 new DescriptorSpecification("XLogPReference","XLogPTitle","XLogPIdentifier","XLogPVendor"),
@@ -210,7 +210,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
         
         c = getConnection();
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(5,names.getRowCount());
+		Assert.assertEquals(7,names.getRowCount());
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT value FROM values_string WHERE idstructure=100214");	
 		Assert.assertEquals(1,values.getRowCount());
 		Assert.assertEquals("TESTVALUE",values.getValue(0,"value"));	
@@ -226,9 +226,9 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
         IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(3,names.getRowCount());
+		Assert.assertEquals(5,names.getRowCount());
 		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values join properties using(idproperty)");	
-		Assert.assertEquals(0,values.getRowCount());
+		Assert.assertEquals(2,values.getRowCount());
 		
         writer.setConnection(c.getConnection());
         writer.open();
@@ -238,7 +238,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		Assert.assertEquals(72.0,((DoubleResult)value.getValue()).doubleValue(),1E-4);
         writer.write(value);
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(4,names.getRowCount());
+		Assert.assertEquals(6,names.getRowCount());
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values join properties using(idproperty) WHERE abs(value_num-72)<1E-4");
 		Assert.assertEquals(1,values.getRowCount());	        
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values join properties using(idproperty) WHERE abs(value_num-144)<1E-4");
@@ -331,9 +331,9 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
         IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(3,names.getRowCount());
+		Assert.assertEquals(5,names.getRowCount());
 		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
-		Assert.assertEquals(0,values.getRowCount());
+		Assert.assertEquals(2,values.getRowCount());
 		ITable templates = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM template");	
 		Assert.assertEquals(5,templates.getRowCount());		
 		ITable template_def = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM template_def");	
@@ -380,7 +380,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		
 		
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(3+countValues,names.getRowCount());
+		Assert.assertEquals(5+countValues,names.getRowCount());
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values WHERE status ='OK' ");	
 		Assert.assertEquals(countValues,values.getRowCount());    
 		template_def = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT type FROM catalog_references where type=\"Algorithm\"");	

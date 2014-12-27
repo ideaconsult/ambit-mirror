@@ -73,10 +73,10 @@ public class DbReaderTest extends DbUnitTest {
 		IDatabaseConnection c = getConnection();
 		ITable names = c.createQueryTable("EXPECTED_NAMES",
 				"SELECT * FROM properties");
-		Assert.assertEquals(3, names.getRowCount());
+		Assert.assertEquals(5, names.getRowCount());
 		ITable values = c.createQueryTable("EXPECTED_VALUES",
 				"SELECT * FROM property_values");
-		Assert.assertEquals(0, values.getRowCount());
+		Assert.assertEquals(2, values.getRowCount());
 
 		QueryStructureByID query = new QueryStructureByID(100215);
 		batch.setConnection(c.getConnection());
@@ -94,10 +94,10 @@ public class DbReaderTest extends DbUnitTest {
 		IDatabaseConnection c = getConnection();
 		ITable names = c.createQueryTable("EXPECTED_NAMES",
 				"SELECT * FROM properties");
-		Assert.assertEquals(3, names.getRowCount());
+		Assert.assertEquals(5, names.getRowCount());
 		ITable values = c.createQueryTable("EXPECTED_VALUES",
 				"SELECT * FROM property_values");
-		Assert.assertEquals(0, values.getRowCount());
+		Assert.assertEquals(2, values.getRowCount());
 
 		ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> p = new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>();
 

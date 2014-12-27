@@ -3,7 +3,7 @@ package ambit2.rest.bundle.dataset;
 import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -54,7 +54,7 @@ public class BundleDatasetResource extends SubstanceDatasetResource<ReadSubstanc
 		return new ReadEffectRecordByBundle(bundle);
 	}
 	@Override
-	protected IProcessor getCompositionProcessors() {
+	protected void getCompositionProcessors(ProcessorsChain chain) {
 		final ReadSubstanceComposition q = new ReadSubstanceComposition();
 		MasterDetailsProcessor<SubstanceRecord,CompositionRelation,IQueryCondition> compositionReader = 
 				new MasterDetailsProcessor<SubstanceRecord,CompositionRelation,IQueryCondition>(q) {
@@ -70,7 +70,7 @@ public class BundleDatasetResource extends SubstanceDatasetResource<ReadSubstanc
 				return target;
 			};
 		};
-		return compositionReader;
+		chain.add(compositionReader);
 	}
 	@Override
 	protected SubstanceEndpointsBundle[] getBundles() {
