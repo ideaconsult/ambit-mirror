@@ -64,7 +64,7 @@ public class DbDescriptorWriterTest extends DbUnitTest {
         DbDescriptorWriter writer = new DbDescriptorWriter();
         IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(3,names.getRowCount());
+		Assert.assertEquals(5,names.getRowCount());
 		
         writer.setConnection(c.getConnection());
         writer.open();
@@ -83,9 +83,9 @@ public class DbDescriptorWriterTest extends DbUnitTest {
         
         c = getConnection();
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(5,names.getRowCount());
+		Assert.assertEquals(7,names.getRowCount());
 		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
-		Assert.assertEquals(0,values.getRowCount());		
+		Assert.assertEquals(2,values.getRowCount());		
 		c.close();
     }
 	@Test
@@ -94,7 +94,7 @@ public class DbDescriptorWriterTest extends DbUnitTest {
         DbDescriptorWriter writer = new DbDescriptorWriter();
         IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(3,names.getRowCount());
+		Assert.assertEquals(5,names.getRowCount());
 		
 		
         writer.setConnection(c.getConnection());
@@ -114,9 +114,9 @@ public class DbDescriptorWriterTest extends DbUnitTest {
         
         c = getConnection();
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(5,names.getRowCount());
+		Assert.assertEquals(7,names.getRowCount());
 		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
-		Assert.assertEquals(0,values.getRowCount());		
+		Assert.assertEquals(2,values.getRowCount());		
 		c.close();
     }
 	@Test
@@ -125,7 +125,7 @@ public class DbDescriptorWriterTest extends DbUnitTest {
         DbDescriptorWriter writer = new DbDescriptorWriter();
         IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(3,names.getRowCount());
+		Assert.assertEquals(5,names.getRowCount());
 		
 		
         writer.setConnection(c.getConnection());
@@ -140,9 +140,9 @@ public class DbDescriptorWriterTest extends DbUnitTest {
         
         c = getConnection();
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(87,names.getRowCount());
+		Assert.assertEquals(89,names.getRowCount());
 		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
-		Assert.assertEquals(0,values.getRowCount());		
+		Assert.assertEquals(2,values.getRowCount());		
 		ITable templates = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM properties join catalog_references using(idreference) where title=\""+d.getClass().getName()+"\"");	
 		Assert.assertEquals(84,templates.getRowCount());			
 

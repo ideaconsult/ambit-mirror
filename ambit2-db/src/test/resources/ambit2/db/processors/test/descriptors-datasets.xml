@@ -26,6 +26,8 @@
   <properties idproperty="1" idreference="8" name="Property 1" units=" " comments=" " islocal="0"/>
   <properties idproperty="2" idreference="8" name="Property 2" units=" " comments=" " islocal="0"/>
   <properties idproperty="3" idreference="8" name="Property 3" units=" " comments=" " islocal="0"/>
+  <properties idproperty="4" idreference="8" name="CAS" units=" " comments="http://www.opentox.org/api/1.1#CASRN" islocal="0"/>
+  <properties idproperty="5" idreference="8" name="Name" units=" " comments="http://www.opentox.org/api/1.1#ChemicalName" islocal="0"/>
 
   <property_annotation idproperty="1" predicate="test1" object="test2"/>
   
@@ -45,8 +47,10 @@
     
   <models idmodel="100" name="Model" predictors="5" dependent="85" predicted="85" content="zero"/>  
   <tuples/>
-  <property_string/>
-  <property_values/>
+  <property_string idvalue_string="2" value="123-45-6"/>
+  <property_string idvalue_string="3" value="Chemical name example"/>
+  <property_values id="2" idproperty="5" idchemical="11" idstructure="100215" idvalue_string="3" user_name="guest"/>
+  <property_values id="3" idproperty="4" idchemical="11" idstructure="100215" idvalue_string="2" user_name="guest"/>
   <src_dataset/>
   <struc_dataset/>
  <fp1024 idchemical="7" fp1="67108864" fp2="5246976" fp3="1048577" fp4="70368744177664" fp5="17592186044416" fp6="0" fp7="256" fp8="0" fp9="138516889600" fp10="2305878193585782784" fp11="16" fp12="72339481331499008" fp13="4611686018427387904" fp14="4398046511104" fp15="8589934592" fp16="0" time="0" bc="22" status="valid"/>

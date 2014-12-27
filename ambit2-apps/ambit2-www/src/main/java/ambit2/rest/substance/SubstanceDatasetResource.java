@@ -9,8 +9,10 @@ import java.util.Map.Entry;
 
 import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.r.QueryAbstractReporter;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
@@ -131,8 +133,8 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	protected IQueryRetrieval<ProtocolEffectRecord<String, String, String>> getEffectQuery() {
 		return new ReadEffectRecordBySubstance();
 	}
-	protected IProcessor getCompositionProcessors() {
-		return null;
+	protected void getCompositionProcessors(ProcessorsChain chain) {
+	
 	}
 
 	protected IProcessor getPropertyProcessors(final boolean removeIdentifiers, final boolean removeStringProperties) {
@@ -313,8 +315,8 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 					}
 					@Override
 					protected void configurePropertyProcessors() {
-						IProcessor p = getCompositionProcessors();
-						if (p!=null) getProcessors().add(p);
+						getCompositionProcessors(getProcessors());
+						//if (p!=null) getProcessors().add(p);
 						getProcessors().add(getPropertyProcessors(false,false));
 					}
 					@Override
