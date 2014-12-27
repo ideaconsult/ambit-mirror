@@ -162,7 +162,6 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 				@Override
 				public IStructureRecord process(IStructureRecord target)
 						throws AmbitException {
-					// TODO Auto-generated method stub
 					return super.process(target);
 				}
 			};
@@ -323,10 +322,23 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 					if (j>0) builder.append(",\n");
 					String component = "{}";
 					if (cr.getSecondStructure()!=null && cr.getSecondStructure().getIdchemical()>0) {
-						StringBuilder bundles = new StringBuilder();
-						printBundles(cr.getSecondStructure().getFacets(), bundles);
+						//StringBuilder bundles = new StringBuilder();
+						//printBundles(cr.getSecondStructure().getFacets(), bundles);
+						
+						Writer o = getOutput();
+						String savecomma = comma;
+						StringWriter w = new StringWriter();
+						setOutput(w);
+						setComma(null);
+						processItem(cr.getSecondStructure());
+						setOutput(o);
+						setComma(savecomma);
+						//System.out.println(w);
+						component = w.toString();
+						/*
 						component = String.format("{\"compound\":{\"URI\":\"%s/compound/%d\",\n\t%s}}",
 								urlPrefix,cr.getSecondStructure().getIdchemical(),bundles.toString());
+								*/
 					}
 					builder.append(cr.toJSON(uri, component));
 					

@@ -264,7 +264,7 @@ var jToxBundle = {
         if (!full.composition || typeof full.composition != 'object' || !full.composition.length)
           return html;
         for (var i = 0, cl = full.composition.length;i < cl; ++i) {
-          var bInfo = full.composition[i].component.compound.bundles[self.bundleUri];
+          var bInfo = full.composition[i].component.bundles[self.bundleUri];
           if (!bInfo)
             continue;
           if (!!bInfo.tag)

@@ -27,6 +27,10 @@ public class ReadSubstanceComposition extends AbstractQuery<SubstanceRecord,Comp
 	private static final long serialVersionUID = -1980335091441168568L;
 	protected CompositionRelation record = new CompositionRelation(new SubstanceRecord(), new StructureRecord(), new Proportion());
 
+	public void setRecord(CompositionRelation record) {
+		this.record = record;
+	}
+
 	private final static String _sql = 
 		"select cmp_prefix,hex(cmp_uuid) cmp_huuid,r.name as compositionname,idsubstance,r.idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,r.rs_prefix as refstruc,hex(r.rs_uuid) as refstrucuuid";
 	private final static String sql = _sql + " from substance_relation r ";
@@ -96,13 +100,15 @@ public class ReadSubstanceComposition extends AbstractQuery<SubstanceRecord,Comp
 
 	@Override
 	public CompositionRelation getObject(ResultSet rs) throws AmbitException {
-		record.clear();
+		if (record==null) record = new CompositionRelation(new SubstanceRecord(), new StructureRecord(), new Proportion());
+		else record.clear();
 		return readCompositionRelation(record,rs,bundle);
 	}
 	
 
 	public static CompositionRelation readCompositionRelation(CompositionRelation record,ResultSet rs,SubstanceEndpointsBundle bundle) throws AmbitException {
-		record.clear();
+		if (record==null) record= new CompositionRelation(new SubstanceRecord(), new StructureRecord(), new Proportion());
+		else record.clear();
 		try {
             try {
 	            String uuid = rs.getString("cmp_prefix") + "-" + 
