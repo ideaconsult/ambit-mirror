@@ -22,7 +22,7 @@ import ambit2.base.relation.composition.CompositionRelation;
  * @author nina
  *
  */
-public class ReadChemIdentifiersByComposition extends AbstractQuery<SubstanceRecord,Profile,SetCondition,IStructureRecord> 
+public class ReadChemIdentifiersByComposition extends AbstractQuery<SubstanceRecord,IStructureRecord,SetCondition,IStructureRecord> 
 															implements IQueryRetrieval<IStructureRecord> {
 	/**
 	 * 

@@ -311,7 +311,9 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 						getRequest().getRootRef().toString(),false,jsonpcallback) {
 					@Override
 					protected String getURI(IStructureRecord item) {
-						return SubstanceRecord.getURI(urlPrefix, ((SubstanceRecord)item));
+						if (item instanceof SubstanceRecord)
+							return SubstanceRecord.getURI(urlPrefix, ((SubstanceRecord)item));
+						else return super.getURI(item);
 					}
 					@Override
 					protected void configurePropertyProcessors() {
