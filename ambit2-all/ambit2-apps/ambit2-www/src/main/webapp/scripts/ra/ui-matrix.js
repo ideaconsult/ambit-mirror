@@ -30,7 +30,6 @@ var jToxBundle = {
   	studyTypeList: _i5.qaSettings["Study result type"],
   	maxStars: 10,
   	matrixIdentifiers: [
-      "#DetailedInfoRow",
       "http://www.opentox.org/api/1.1#CASRN",
       "http://www.opentox.org/api/1.1#TradeName",
       "http://www.opentox.org/api/1.1#IUCLID5_UUID",
@@ -258,7 +257,26 @@ var jToxBundle = {
 		
   		$(panel).addClass('initialized');
   		var conf = $.extend(true, {}, jTConfig.matrix, config_study);
-  		delete conf.baseFeatures['#IdRow'];
+  		conf.baseFeatures['#IdRow'] = { used: true, basic: true, data: "number", column: { "sClass": "middle center"}, render: function (data, type, full) {
+        if (type != 'display')
+          return data || 0;
+        var html = "&nbsp;-&nbsp;" + data + "&nbsp;-&nbsp;<br/>";
+        if (!full.composition || typeof full.composition != 'object' || !full.composition.length)
+          return html;
+        for (var i = 0, cl = full.composition.length;i < cl; ++i) {
+          var bInfo = full.composition[i].component.compound.bundles[self.bundleUri];
+          if (!bInfo)
+            continue;
+          if (!!bInfo.tag)
+            html += '<button class="jt-toggle active" disabled="true">' + (bInfo.tag == 'source' ? 'S' : 'T') + '</button>';
+          if (!!bInfo.remarks)
+            html += '<sup class="helper" title="' + bInfo.remarks + '">?</sup>';
+        }
+        
+        return html;
+  		} };
+  		
+  		var featuresInitialized = false;
   		
   		var saveButton = $('.save-button', panel)[0];
   		saveButton.disabled = true;
@@ -328,6 +346,8 @@ var jToxBundle = {
     		configuration: conf,
     		featureUri: self.bundleUri + '/property',
     		onPrepared: function (miniset, kit) {
+      		if (featuresInitialized)
+      		  return;
 	    		// this is when we have the features combined, so we can make the multi stuff
 		      var getRender = function (fId, oldData, oldRender) {
 			      return function (data, type, full) {
@@ -345,7 +365,7 @@ var jToxBundle = {
 		      if (!nameFeature.column)
 		        nameFeature.column = {};
 		      nameFeature.column.sClass = "breakable word-break";
-		      
+		      		      
 		      // and now - process the multi-row columns
 		      for (var i = 0, mrl = self.settings.matrixMultiRows.length;i < mrl; ++i) {
 			      var fId = self.settings.matrixMultiRows[i];
@@ -360,6 +380,8 @@ var jToxBundle = {
 			      else
 			      	col.sClass += " jtox-multi";
 		      }
+		      
+		      featuresInitialized = true;
     		},
     		onLoaded: function (dataset) {
 	    		self.edit.refreshMatrix = false;
