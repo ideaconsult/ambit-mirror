@@ -16,7 +16,7 @@
     "resourcePath": "/query",
 	"apis": [
      	{
-            "path": "/query/compound/search/{term}/{representation}",
+            "path": "/query/compound/{term}/{representation}",
             "operations": [
                 {
                     "method": "GET",
