@@ -1,15 +1,15 @@
 package ambit2.rest.substance;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.Writer;
+import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map.Entry;
 
 import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
@@ -136,7 +136,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	protected void getCompositionProcessors(ProcessorsChain chain) {
 	
 	}
-
+	protected NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
 	protected IProcessor getPropertyProcessors(final boolean removeIdentifiers, final boolean removeStringProperties) {
 		IQueryRetrieval<ProtocolEffectRecord<String, String, String>> queryP = getEffectQuery();
 		
@@ -237,7 +237,28 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 							master.setProperty(key, detail.getTextValue());
 							key.setClazz(String.class);
 						} else {
-							master.setProperty(key, detail.getLoValue()==null?detail.getUpValue():detail.getLoValue());
+							Double value = null;
+							boolean qualifier = false;
+							StringBuilder bb = null;
+							if (detail.getLoQualifier()!=null && !"".equals(detail.getLoQualifier())) {
+								bb = new StringBuilder(); bb.append(detail.getLoQualifier());
+								qualifier = true;
+							}
+							if (detail.getLoValue()!=null) {
+								if (bb==null) bb = new StringBuilder(); bb.append(nf.format(detail.getLoValue()));
+								value = detail.getLoValue();
+							}
+							if (detail.getUpQualifier()!=null && !"".equals(detail.getUpQualifier())) {
+								bb = new StringBuilder(); bb.append(detail.getUpQualifier());
+								qualifier = true;
+							}
+							if (detail.getUpValue()!=null) {
+								if (bb==null) bb = new StringBuilder(); bb.append(nf.format(detail.getUpValue()));
+								if (value==null) value = detail.getUpValue(); else value = null;
+							}		
+							if (value!=null && !qualifier) master.setProperty(key, value);
+							else if (bb!=null) master.setProperty(key, bb.toString());
+							//master.setProperty(key, detail.getLoValue()==null?detail.getUpValue():detail.getLoValue());
 							key.setClazz(Number.class);
 						}	
 					}
