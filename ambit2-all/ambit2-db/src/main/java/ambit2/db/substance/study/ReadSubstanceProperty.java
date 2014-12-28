@@ -37,14 +37,14 @@ public class ReadSubstanceProperty extends AbstractPropertyRetrieval<SubstancePr
 		if ((getFieldname()==null) ||
 			(getFieldname().getTopcategory()==null) ||
 			(getFieldname().getEndpointcategory()==null) ||
-			(getFieldname().getTitle()==null) ||
+			(getFieldname().getName()==null) ||
 			(getFieldname().getIdentifier()==null)
 			) throw new AmbitException("Empty property id");
 		
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<String>(String.class, getFieldname().getTopcategory()));
 		params.add(new QueryParam<String>(String.class, getFieldname().getEndpointcategory()));
-		params.add(new QueryParam<String>(String.class, getFieldname().getTitle()));
+		params.add(new QueryParam<String>(String.class, getFieldname().getName()));
 		params.add(new QueryParam<String>(String.class, getFieldname().getIdentifier()));
 		return params;
 	}
@@ -52,7 +52,7 @@ public class ReadSubstanceProperty extends AbstractPropertyRetrieval<SubstancePr
 	@Override
 	public Property getObject(ResultSet rs) throws AmbitException {
 		try {
-			LiteratureEntry ref = new LiteratureEntry(rs.getString(5), rs.getString(3));
+			LiteratureEntry ref = new LiteratureEntry(rs.getString(3), rs.getString(3));
 			ref.setType(_type.Substance);
 			SubstanceProperty p = new SubstanceProperty(
 					rs.getString(1),rs.getString(2),

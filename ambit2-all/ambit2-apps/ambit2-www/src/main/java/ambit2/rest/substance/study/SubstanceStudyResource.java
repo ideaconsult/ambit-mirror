@@ -99,6 +99,7 @@ public class SubstanceStudyResource<Q extends IQueryRetrieval<ProtocolApplicatio
 						//not nice REST style, but easiest to parse the URI
 						Reference puri = new Reference(property_uri);
 						property=puri.getLastSegment();
+						if (property.indexOf("-")>0) property = puri.getSegments().get(puri.getSegments().size()-2);
 					} catch (Exception x) {}
 					if (property!=null) {
 						EffectRecord effect = new EffectRecord();

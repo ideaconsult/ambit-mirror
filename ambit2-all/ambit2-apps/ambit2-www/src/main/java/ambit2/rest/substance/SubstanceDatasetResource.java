@@ -153,7 +153,8 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 						JsonNode node = dx.readTree(new StringReader(detail.getTextValue().toString()));
 
 						List<String> guideline = detail.getProtocol().getGuideline();
-						ILiteratureEntry ref = LiteratureEntry.getInstance(detail.getEndpoint(),
+						ILiteratureEntry ref = LiteratureEntry.getInstance(
+								guideline==null?null:guideline.size()==0?null:guideline.get(0),
 								guideline==null?null:guideline.size()==0?null:guideline.get(0));
 						
 						Iterator<Entry<String,JsonNode>> i = node.getFields();
@@ -165,6 +166,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 									detail.getProtocol().getCategory(),
 									val.getKey(),detail.getUnit(),
 									ref);
+							key.setExtendedURI(true);
 							key.setIdentifier(detail.getSampleID()+"/" + val.getKey());
 
 							groupProperties.add(key);
@@ -220,9 +222,10 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 							}	
 							
 						}
-
+						
 						List<String> guideline = detail.getProtocol().getGuideline();
-						ILiteratureEntry ref = LiteratureEntry.getInstance(detail.getEndpoint(),
+						ILiteratureEntry ref = LiteratureEntry.getInstance(
+								guideline==null?null:guideline.size()==0?null:guideline.get(0),
 								guideline==null?null:guideline.size()==0?null:guideline.get(0));
 						
 						SubstanceProperty key = new SubstanceProperty(
@@ -230,22 +233,38 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 								detail.getProtocol().getCategory(),
 								detail.getEndpoint(),detail.getUnit(),ref
 								);
+						key.setExtendedURI(true);
 						key.setIdentifier(detail.getSampleID());
 						key.setAnnotations(ann);
-						groupProperties.add(key);
+						Object oldValue = null;//master.getProperty(key);
+						if (master.getProperty(key)!=null) {
+							groupProperties.add(key);
+						} else
+							groupProperties.add(key);
 						if ((detail.getLoValue()) == null && (detail.getUpValue()==null)) {
-							master.setProperty(key, detail.getTextValue());
+							if (oldValue==null)
+								master.setProperty(key, detail.getTextValue());
+							else {
+								master.setProperty(key, String.format("%s, %s", 
+										oldValue instanceof Number?nf.format((Number)oldValue):oldValue.toString(),detail.getTextValue()));
+							}
 							key.setClazz(String.class);
 						} else {
 							Double value = null;
 							boolean qualifier = false;
 							StringBuilder bb = null;
+							if (oldValue!=null) {
+								qualifier = true;
+								bb = new StringBuilder(); bb.append(" ");
+								bb.append(oldValue instanceof Number?nf.format((Number)oldValue):oldValue.toString());
+							}
 							if (detail.getLoQualifier()!=null && !"".equals(detail.getLoQualifier())) {
 								bb = new StringBuilder(); bb.append(detail.getLoQualifier());
 								qualifier = true;
 							}
 							if (detail.getLoValue()!=null) {
-								if (bb==null) bb = new StringBuilder(); bb.append(nf.format(detail.getLoValue()));
+								if (bb==null) bb = new StringBuilder(); 
+								bb.append(" "); bb.append(nf.format(detail.getLoValue()));
 								value = detail.getLoValue();
 							}
 							if (detail.getUpQualifier()!=null && !"".equals(detail.getUpQualifier())) {
@@ -253,9 +272,11 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 								qualifier = true;
 							}
 							if (detail.getUpValue()!=null) {
-								if (bb==null) bb = new StringBuilder(); bb.append(nf.format(detail.getUpValue()));
-								if (value==null) value = detail.getUpValue(); else value = null;
+								if (bb==null) bb = new StringBuilder(); 
+								if (value==null) value = detail.getUpValue(); else { value = null; bb.append("  ");}
+								bb.append(nf.format(detail.getUpValue()));
 							}		
+
 							if (value!=null && !qualifier) master.setProperty(key, value);
 							else if (bb!=null) master.setProperty(key, bb.toString());
 							//master.setProperty(key, detail.getLoValue()==null?detail.getUpValue():detail.getLoValue());
