@@ -10,6 +10,7 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -106,10 +107,12 @@ public class SubstancePropertyResource extends QueryResource<IQueryRetrieval<Pro
 		if (topcategory==null || endpointcategory==null || endpoint==null || key==null)
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		
-		ILiteratureEntry ref = LiteratureEntry.getInstance(endpoint.toString(),"DEFAULT");
-		SubstanceProperty p = new SubstanceProperty(topcategory.toString(),
-						endpointcategory.toString(),endpoint.toString(),null,ref);
-		p.setIdentifier(key.toString());
+		ILiteratureEntry ref = LiteratureEntry.getInstance(Reference.decode(endpoint.toString()),"DEFAULT");
+		SubstanceProperty p = new SubstanceProperty(
+						Reference.decode(topcategory.toString()),
+						Reference.decode(endpointcategory.toString()),
+						Reference.decode(endpoint.toString()),null,ref);
+		p.setIdentifier(Reference.decode(key.toString()));
 		ReadSubstanceProperty query = new ReadSubstanceProperty();
 		query.setFieldname(p);
 		return query;

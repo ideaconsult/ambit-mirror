@@ -9,7 +9,16 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.study.Protocol;
 
+import com.google.common.base.Objects;
+
 public class SubstanceProperty extends Property {
+	protected boolean extendedURI = false;
+	public boolean isExtendedURI() {
+		return extendedURI;
+	}
+	public void setExtendedURI(boolean extendedURI) {
+		this.extendedURI = extendedURI;
+	}
 	protected String topcategory;
 	protected String endpointcategory;
 	
@@ -39,21 +48,28 @@ public class SubstanceProperty extends Property {
 	@Override
 	public String getRelativeURI() {
 		try {
-		return String.format("/property/%s/%s%s%s/%s",
+		return String.format("/property/%s/%s%s%s/%s%s%s",
 				URLEncoder.encode(topcategory==null?"TOX":topcategory,"UTF-8"),
 				URLEncoder.encode(						
 						endpointcategory==null?Protocol._categories.UNKNOWN_TOXICITY_SECTION.name():endpointcategory,
 						"UTF-8"),
 				getTitle()==null?"":"/",		
-				URLEncoder.encode(getTitle(),"UTF-8"),
+				URLEncoder.encode(getName(),"UTF-8"),
 				identifier==null?
 						UUID.nameUUIDFromBytes((getName() + getTitle()).toString().getBytes()).toString()
-						:identifier);
+						:identifier,
+				extendedURI?"/":"",
+				extendedURI?URLEncoder.encode(UUID.nameUUIDFromBytes(reference.getTitle().getBytes()).toString()):""
+						);
 		} catch (UnsupportedEncodingException x) {
 			return "/property";
 		}
 	}
-	
+	@Override
+    public int hashCode() {
+		return Objects.hashCode(topcategory,endpointcategory,getTitle(),getName());
+    }	
+
 	public String getTopcategory() {
 		return topcategory;
 	}
