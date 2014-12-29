@@ -3,7 +3,6 @@ package ambit2.sln;
 import java.util.ArrayList;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 
 public class SLNBondExpression 
@@ -36,19 +35,17 @@ public class SLNBondExpression
 							
 		case SLNConst.B_STEREO_C:
 			//TODO
-			break;
     	}
     	return true; //by default
     }
-	
-	
+		
 	boolean match_type(int param,  IBond bond)
 	{
 		switch (param)
 		{
 		case SLNConst.B_TYPE_ANY:
 			return true;
-		
+
 		case SLNConst.B_TYPE_1:
 		{	
 			if (bond.getOrder() == IBond.Order.SINGLE)
@@ -56,11 +53,28 @@ public class SLNBondExpression
 			else
 				return false;
 		}
-		
-		//TODO
-		
+		case SLNConst.B_TYPE_2:
+		{	
+			if (bond.getOrder() == IBond.Order.DOUBLE)
+				return true;
+			else
+				return false;
 		}
-		
+		case SLNConst.B_TYPE_3:
+		{	
+			if (bond.getOrder() == IBond.Order.TRIPLE)
+				return true;
+			else
+				return false;
+		}
+		case SLNConst.B_TYPE_aromatic:
+		{	
+			if (bond.getFlag(CDKConstants.ISAROMATIC))
+				return(true);
+			else
+				return false;		
+		}
+		}
 		return false;
 	}
 	
