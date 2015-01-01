@@ -61,6 +61,7 @@ import ambit2.db.search.structure.MissingFingerprintsQuery;
 import ambit2.db.search.structure.MissingInChIsQuery;
 import ambit2.db.update.chemical.UpdateChemical;
 import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
+import ambit2.dbcli.CliOptions._preprocessingoptions;
 import ambit2.descriptors.processors.BitSetGenerator;
 import ambit2.descriptors.processors.BitSetGenerator.FPTable;
 import ambit2.smarts.processors.SMARTSPropertiesGenerator;
@@ -99,339 +100,13 @@ public class AmbitCli {
 	public long go(String command,String subcommand) throws Exception {
 		long now = System.currentTimeMillis();
 		if ("import".equals(command)) {
-			File file = new File(options.input);
-			
-			final QuickImportBatchProcessor batch = new QuickImportBatchProcessor(file) {
-				@Override
-				public void onItemRead(IStructureRecord input,
-						IBatchStatistics stats) {
-					super.onItemRead(input, stats);
-					if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 10000) == 0)
-						try {
-							logger.log(Level.INFO,stats.toString());
-							getConnection().commit();
-						} catch (Exception x) {
-							logger.log(Level.WARNING,x.getMessage());	
-						}
-				};
-				@Override
-				public void onError(IStructureRecord input, Object output,
-						IBatchStatistics stats, Exception x) {
-					super.onError(input, output, stats, x);
-					logger.log(Level.SEVERE,x.getMessage());
-				}
-			};
-
-			Connection c = null;
-			DBConnection dbc = null;
-			dbc = getConnection(options.getSQLConfig());
-			c = dbc.getConnection();		
-			c.setAutoCommit(false);
-			batch.setCloseConnection(true);
-			batch.setConnection(c);
-			
-			FileInputState in = new FileInputState(file);
-			IBatchStatistics stats = null;
-			try {
-				stats = batch.process(in);
-			} catch (Exception x) {
-				logger.log(Level.WARNING,x.getMessage(),x);
-			} finally {
-				try {batch.getConnection().commit();} catch (Exception x) { logger.warning(x.getMessage());}
-				try {if (batch!=null) batch.close();} catch (Exception x) { logger.warning(x.getMessage());}
-				if (stats!=null) 
-					logger.log(Level.INFO,stats.toString());
-			}
+			parseCommandImport();
 		} else if ("preprocessing".equals(command)) {
-			int pagesize= 5000000;
-			try {
-				pagesize = (Integer)options.getParam(":pagesize");
-			} catch (Exception x) {
-				x.printStackTrace();
-			}
-
-			
-			Set<FPTable> preprocessingOption = new TreeSet<FPTable>();
-			//FPTable.inchi;
-			try {
-				if ((Boolean)options.getParam(":inchi")) preprocessingOption.add(FPTable.inchi);
-			} catch (Exception x) {}
-			/*
-			try {
-				if ((Boolean)options.getParam(":pubchemfp")) preprocessingOption.add(FPTable.pc1024);
-			} catch (Exception x) {
-				x.printStackTrace();
-			}
-			*/
-			
-			try {
-				if ((Boolean)options.getParam(":atomprops")) preprocessingOption.add(FPTable.smarts_accelerator);
-			} catch (Exception x) {}
-
-			try {
-				if ((Boolean)options.getParam(":fp1024")) preprocessingOption.add(FPTable.fp1024);
-			} catch (Exception x) {
-				x.printStackTrace();
-			}
-			
-			try {
-				if ((Boolean)options.getParam(":sk1024")) preprocessingOption.add(FPTable.sk1024);
-			} catch (Exception x) {}
-
-			try {
-				if ((Boolean)options.getParam(":smarts")) {
-					preprocessingOption.add(FPTable.smarts_accelerator);
-					preprocessingOption.add(FPTable.fp1024);
-					preprocessingOption.add(FPTable.sk1024);
-				}
-			} catch (Exception x) {}
-
-			try {
-				if ((Boolean)options.getParam(":similarity")) {
-					preprocessingOption.add(FPTable.smarts_accelerator);
-					preprocessingOption.add(FPTable.fp1024);
-				}
-			} catch (Exception x) {}
-			
-			DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>() {
-				@Override
-				public void onItemRead(IStructureRecord input,
-						IBatchStatistics stats) {
-					super.onItemRead(input, stats);
-					if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 5000) == 0)
-						try {
-							logger.log(Level.INFO,stats.toString());
-							getConnection().commit();
-						} catch (Exception x) {
-							logger.log(Level.WARNING,x.getMessage());	
-						}
-						
-				};
-				@Override
-				public void onError(IStructureRecord input, Object output,
-						IBatchStatistics stats, Exception x) {
-					super.onError(input, output, stats, x);
-					logger.log(Level.SEVERE,x.getMessage());
-				}
-			};
-			batch.setProcessorChain(new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>());
-			
-			/*structure*/
-			RetrieveStructure queryP = new RetrieveStructure(true);
-			queryP.setFieldname(true);
-			queryP.setPageSize(1);	queryP.setPage(0);
-
-			MasterDetailsProcessor<IStructureRecord,IStructureRecord,IQueryCondition> strucReader = new MasterDetailsProcessor<IStructureRecord,IStructureRecord,IQueryCondition>(queryP) {
-				@Override
-				protected void configureQuery(
-						IStructureRecord target,
-						IParameterizedQuery<IStructureRecord, IStructureRecord, IQueryCondition> query)
-						throws AmbitException {
-					query.setValue(target);
-					//super.configureQuery(target, query);
-				}
-				@Override
-				protected IStructureRecord processDetail(IStructureRecord master,
-						IStructureRecord detail) throws Exception {
-					
-					master.setContent(detail.getContent());
-					master.setFormat(detail.getFormat());
-					master.setType(detail.getType());
-					return master;
-				}
-			};
-			strucReader.setCloseConnection(false);
-			batch.getProcessorChain().add(strucReader);
-			//preprocessing itself
-			
-			//query
-			IQueryRetrieval<IStructureRecord> query = null;
-			AbstractUpdate updateQuery = null;
-			if (preprocessingOption.isEmpty()) preprocessingOption.add(FPTable.inchi);
-			
-			if (preprocessingOption.contains(FPTable.inchi)) {
-				query = new MissingInChIsQuery("UNKNOWN");
-				updateQuery = new UpdateChemical();
-				batch.getProcessorChain().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
-					protected transient StructureNormalizer normalizer = new StructureNormalizer();
-					@Override
-					public IStructureRecord process(IStructureRecord record)
-							throws Exception {
-						try {
-							normalizer.process(record);			
-							return record;
-						} catch (Exception x) {
-							record.setType(STRUC_TYPE.NA);
-							return record;
-						}
-					}
-				});				
-				batch.getProcessorChain().add(new AbstractUpdateProcessor<Object,IChemical>(OP.CREATE,updateQuery) {
-					@Override
-					protected IChemical execute(Object group,
-							IQueryUpdate<Object, IChemical> query)
-							throws SQLException, OperationNotSupportedException,
-							AmbitException {
-						if (group instanceof IChemical)
-							query.setObject((IChemical)group);
-						return super.execute(group, query);
-					}
-				});				
-			} else {
-				//add generators
-				if (preprocessingOption.contains(FPTable.smarts_accelerator)) {
-					query= new MissingFingerprintsQuery(FPTable.smarts_accelerator);
-					batch.getProcessorChain().add(new SMARTSPropertiesGenerator());
-				}
-				if (preprocessingOption.contains(FPTable.fp1024)) {
-					query =  new FingerprintsByStatus(FPTable.fp1024);
-					//updateQuery = new CreateFingerprintChemical(FPTable.fp1024);
-					batch.getProcessorChain().add(new BitSetGenerator(FPTable.fp1024));
-				}
-				if (preprocessingOption.contains(FPTable.sk1024)) {
-					query =  new FingerprintsByStatus(FPTable.sk1024);
-					batch.getProcessorChain().add(new BitSetGenerator(FPTable.sk1024));
-				}
-				
-				//add writers
-				if (preprocessingOption.contains(FPTable.smarts_accelerator)) {
-					batch.getProcessorChain().add(new SMARTSAcceleratorWriter());					
-				}
-				if (preprocessingOption.contains(FPTable.fp1024)) {
-					batch.getProcessorChain().add(new FP1024Writer(FPTable.fp1024));		
-				}
-				if (preprocessingOption.contains(FPTable.sk1024)) {
-					batch.getProcessorChain().add(new FP1024Writer(FPTable.sk1024));			
-				}
-				
-				/*
-				if (preprocessingOption.contains(FPTable.pc1024)) {
-					query =  new FingerprintsByStatus(FPTable.pc1024);
-					batch.getProcessorChain().add(new BitSetGenerator(FPTable.pc1024));
-					batch.getProcessorChain().add(new FP1024Writer(FPTable.pc1024));			
-				}
-				*/
-			}
-			
-	
-			batch.setHandlePrescreen(false);
-
-			Connection c = null;
-			DBConnection dbc = null;
-			dbc = getConnection(options.getSQLConfig());
-			c = dbc.getConnection();		
-			c.setAutoCommit(false);
-			batch.setCloseConnection(true);
-			batch.setConnection(c);
-			batch.open();
-			
-			IBatchStatistics stats = null;
-			try {
-				query.setPageSize(pagesize);
-				logger.fine(query.getSQL());
-				try {disableIndices(batch.getConnection());} catch (Exception x) { logger.warning(x.getMessage());}
-				logger.info(String.format("Query submitted [pagesize %d]",pagesize));
-				stats = batch.process(query);
-			} catch (Exception x) {
-				logger.log(Level.WARNING,x.getMessage(),x);
-			} finally {
-				try {batch.getConnection().commit();} catch (Exception x) { logger.warning(x.getMessage());}
-				
-				try {enableIndices(batch.getConnection());} catch (Exception x) { logger.warning(x.getMessage());}
-				
-				try {if (batch!=null) batch.close();} catch (Exception x) { logger.warning(x.getMessage());}
-				if (stats!=null) 
-					logger.log(Level.INFO,stats.toString());
-			}
-
-			
+			parseCommandPreprocessing();
 		} else if ("dataset".equals(command)) {
-			RawIteratingSDFReader reader = null;
-			try {
-				File file = new File(options.input);
-	
-				reader = new RawIteratingSDFReader(new FileReader(file));
-				reader.setReference(LiteratureEntry.getInstance(file.getName()));
-				SourceDataset dataset = new SourceDataset(file.getName(),
-						LiteratureEntry.getInstance("File", file.getName()));
-				return write(reader, new NoneKey(), dataset, -1);
-			} catch (Exception x) {
-				throw x;
-			} finally {
-				logger.info("Elapsed "+(System.currentTimeMillis() - now) + " msec.");
-				try {if (reader != null)	reader.close();	} catch (Exception x) {}
-				if (options.output!=null) {
-					logger.log(Level.INFO,"Results written to "+options.output);
-				}
-			}
+			return parseCommandDataset(now);
 		} else if ("split".equals(command)) {
-			RawIteratingSDFReader reader = null;
-			Writer writer = null;
-			long chunksize= 10000;
-			
-			JsonNode scmd = options.command.get(subcommand);
-			try {
-				JsonNode scommand = scmd.get("params");
-				JsonNode chunkNode = scommand.get(":chunk");
-				chunksize = Long.parseLong(chunkNode.get("value").getTextValue());
-			} catch (Exception x) {
-				logger.log(Level.WARNING,x.getMessage(),x);
-			}
-
-			int chunk = 1;
-			long chunk_started=System.currentTimeMillis();
-			try {
-				File file = new File(options.input);
-				File outdir = new File(options.output);
-				logger.info(String.format("Splitting %s into files of size %d records into directory %s",
-						file.getAbsoluteFile(),
-						chunksize,
-						outdir.getAbsolutePath()
-				));	
-				
-				if (outdir.exists() && outdir.isDirectory()) {
-					reader = new RawIteratingSDFReader(new FileReader(file));
-					File outfile = new File(outdir,String.format("%d_%s",chunk,file.getName()));
-					chunk_started=System.currentTimeMillis();
-					logger.info(String.format("Writing chunk %d:\t%s ...",chunk,outfile.getAbsolutePath()));
-					writer = new FileWriter(outfile);
-					int records = 0;
-					while (reader.hasNext()) {
-						if (records >= chunksize) {
-							System.out.println();
-							try {if (writer != null)	writer.close();	} catch (Exception x) {}
-							logger.info(String.format("Chunk %d written in %d msec.",chunk,(System.currentTimeMillis()-chunk_started)));
-							chunk++;
-							outfile = new File(outdir,String.format("%d_%s",chunk,file.getName()));
-							writer = new FileWriter(outfile);
-							records = 0;
-							chunk_started=System.currentTimeMillis();
-
-							logger.info(String.format("Writing chunk %d:\t%s ...",chunk,outfile.getAbsolutePath()));	
-						}
-						IStructureRecord record = reader.nextRecord();
-						writer.write(record.getContent());
-						if ((records % 10000)==0) {
-							System.out.print('.');
-							writer.flush();
-						}									
-						records++;
-					}
-					return chunk;
-				} else throw new Exception(String.format("ERROR: %s is not an existing directory.",options.output));
-			} catch (Exception x) {
-				throw x;
-			} finally {
-				logger.info("Elapsed "+(System.currentTimeMillis() - now) + " msec.");
-				try {if (reader != null)	reader.close();	} catch (Exception x) {}
-				try {
-					if (writer != null)	writer.close();
-					logger.info(String.format("Chunk %d written in %d msec.",chunk,(System.currentTimeMillis()-chunk_started)));
-				} catch (Exception x) {}
-				if (options.output!=null) {
-					logger.log(Level.INFO,"Results written to "+options.output);
-				}
-			}			
+			return parseCommandSplit(subcommand,now);
 		}
 		return -1;
 	}
@@ -645,4 +320,322 @@ public class AmbitCli {
     	}
     }     
 
+    protected long parseCommandDataset(long now) throws Exception {
+		RawIteratingSDFReader reader = null;
+		try {
+			File file = new File(options.input);
+
+			reader = new RawIteratingSDFReader(new FileReader(file));
+			reader.setReference(LiteratureEntry.getInstance(file.getName()));
+			SourceDataset dataset = new SourceDataset(file.getName(),
+					LiteratureEntry.getInstance("File", file.getName()));
+			return write(reader, new NoneKey(), dataset, -1);
+		} catch (Exception x) {
+			throw x;
+		} finally {
+			logger.info("Elapsed "+(System.currentTimeMillis() - now) + " msec.");
+			try {if (reader != null)	reader.close();	} catch (Exception x) {}
+			if (options.output!=null) {
+				logger.log(Level.INFO,"Results written to "+options.output);
+			}
+		}
+    }
+    protected long parseCommandSplit(String subcommand,long now) throws Exception  {
+    	RawIteratingSDFReader reader = null;
+		Writer writer = null;
+		long chunksize= 10000;
+		
+		JsonNode scmd = options.command.get(subcommand);
+		try {
+			JsonNode scommand = scmd.get("params");
+			JsonNode chunkNode = scommand.get(":chunk");
+			chunksize = Long.parseLong(chunkNode.get("value").getTextValue());
+		} catch (Exception x) {
+			logger.log(Level.WARNING,x.getMessage(),x);
+		}
+
+		int chunk = 1;
+		long chunk_started=System.currentTimeMillis();
+		try {
+			File file = new File(options.input);
+			File outdir = new File(options.output);
+			logger.info(String.format("Splitting %s into files of size %d records into directory %s",
+					file.getAbsoluteFile(),
+					chunksize,
+					outdir.getAbsolutePath()
+			));	
+			
+			if (outdir.exists() && outdir.isDirectory()) {
+				reader = new RawIteratingSDFReader(new FileReader(file));
+				File outfile = new File(outdir,String.format("%d_%s",chunk,file.getName()));
+				chunk_started=System.currentTimeMillis();
+				logger.info(String.format("Writing chunk %d:\t%s ...",chunk,outfile.getAbsolutePath()));
+				writer = new FileWriter(outfile);
+				int records = 0;
+				while (reader.hasNext()) {
+					if (records >= chunksize) {
+						System.out.println();
+						try {if (writer != null)	writer.close();	} catch (Exception x) {}
+						logger.info(String.format("Chunk %d written in %d msec.",chunk,(System.currentTimeMillis()-chunk_started)));
+						chunk++;
+						outfile = new File(outdir,String.format("%d_%s",chunk,file.getName()));
+						writer = new FileWriter(outfile);
+						records = 0;
+						chunk_started=System.currentTimeMillis();
+
+						logger.info(String.format("Writing chunk %d:\t%s ...",chunk,outfile.getAbsolutePath()));	
+					}
+					IStructureRecord record = reader.nextRecord();
+					writer.write(record.getContent());
+					if ((records % 10000)==0) {
+						System.out.print('.');
+						writer.flush();
+					}									
+					records++;
+				}
+				return chunk;
+			} else throw new Exception(String.format("ERROR: %s is not an existing directory.",options.output));
+		} catch (Exception x) {
+			throw x;
+		} finally {
+			logger.info("Elapsed "+(System.currentTimeMillis() - now) + " msec.");
+			try {if (reader != null)	reader.close();	} catch (Exception x) {}
+			try {
+				if (writer != null)	writer.close();
+				logger.info(String.format("Chunk %d written in %d msec.",chunk,(System.currentTimeMillis()-chunk_started)));
+			} catch (Exception x) {}
+			if (options.output!=null) {
+				logger.log(Level.INFO,"Results written to "+options.output);
+			}
+		}			    	
+    }
+    
+    public void parseCommandImport() throws Exception {
+    	File file = new File(options.input);
+		
+		final QuickImportBatchProcessor batch = new QuickImportBatchProcessor(file) {
+			@Override
+			public void onItemRead(IStructureRecord input,
+					IBatchStatistics stats) {
+				super.onItemRead(input, stats);
+				if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 10000) == 0)
+					try {
+						logger.log(Level.INFO,stats.toString());
+						getConnection().commit();
+					} catch (Exception x) {
+						logger.log(Level.WARNING,x.getMessage());	
+					}
+			};
+			@Override
+			public void onError(IStructureRecord input, Object output,
+					IBatchStatistics stats, Exception x) {
+				super.onError(input, output, stats, x);
+				logger.log(Level.SEVERE,x.getMessage());
+			}
+		};
+
+		Connection c = null;
+		DBConnection dbc = null;
+		dbc = getConnection(options.getSQLConfig());
+		c = dbc.getConnection();		
+		c.setAutoCommit(false);
+		batch.setCloseConnection(true);
+		batch.setConnection(c);
+		
+		FileInputState in = new FileInputState(file);
+		IBatchStatistics stats = null;
+		try {
+			stats = batch.process(in);
+		} catch (Exception x) {
+			logger.log(Level.WARNING,x.getMessage(),x);
+		} finally {
+			try {batch.getConnection().commit();} catch (Exception x) { logger.warning(x.getMessage());}
+			try {if (batch!=null) batch.close();} catch (Exception x) { logger.warning(x.getMessage());}
+			if (stats!=null) 
+				logger.log(Level.INFO,stats.toString());
+		}    	
+    }
+    
+    public void parseCommandPreprocessing() throws Exception {
+		int pagesize= 5000000;
+		try {
+			pagesize = (Integer)options.getParam(":pagesize");
+		} catch (Exception x) {
+			logger.log(Level.WARNING,x.toString());
+		}
+
+		Set<FPTable> preprocessingOption = new TreeSet<FPTable>();
+		/*
+		try {
+			if ((Boolean)options.getParam(":pubchemfp")) preprocessingOption.add(FPTable.pc1024);
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		*/
+		_preprocessingoptions[] po = _preprocessingoptions.values();
+		for (_preprocessingoptions p  : po) 
+			try {
+				if ((Boolean)options.getParam(p.toString())) {
+					FPTable[] to = p.getOption();
+					for (FPTable t: to )
+						 preprocessingOption.add(t);
+				}
+			} catch (Exception x) {
+				logger.log(Level.WARNING,x.toString());
+			}
+		
+		
+		DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>() {
+			@Override
+			public void onItemRead(IStructureRecord input,
+					IBatchStatistics stats) {
+				super.onItemRead(input, stats);
+				if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 5000) == 0)
+					try {
+						logger.log(Level.INFO,stats.toString());
+						getConnection().commit();
+					} catch (Exception x) {
+						logger.log(Level.WARNING,x.getMessage());	
+					}
+					
+			};
+			@Override
+			public void onError(IStructureRecord input, Object output,
+					IBatchStatistics stats, Exception x) {
+				super.onError(input, output, stats, x);
+				logger.log(Level.SEVERE,x.getMessage());
+			}
+		};
+		batch.setProcessorChain(new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>());
+		
+		/*structure*/
+		RetrieveStructure queryP = new RetrieveStructure(true);
+		queryP.setFieldname(true);
+		queryP.setPageSize(1);	queryP.setPage(0);
+
+		MasterDetailsProcessor<IStructureRecord,IStructureRecord,IQueryCondition> strucReader = new MasterDetailsProcessor<IStructureRecord,IStructureRecord,IQueryCondition>(queryP) {
+			@Override
+			protected void configureQuery(
+					IStructureRecord target,
+					IParameterizedQuery<IStructureRecord, IStructureRecord, IQueryCondition> query)
+					throws AmbitException {
+				query.setValue(target);
+				//super.configureQuery(target, query);
+			}
+			@Override
+			protected IStructureRecord processDetail(IStructureRecord master,
+					IStructureRecord detail) throws Exception {
+				
+				master.setContent(detail.getContent());
+				master.setFormat(detail.getFormat());
+				master.setType(detail.getType());
+				return master;
+			}
+		};
+		strucReader.setCloseConnection(false);
+		batch.getProcessorChain().add(strucReader);
+		//preprocessing itself
+		
+		//query
+		IQueryRetrieval<IStructureRecord> query = null;
+		AbstractUpdate updateQuery = null;
+		if (preprocessingOption.isEmpty()) preprocessingOption.add(FPTable.inchi);
+		
+		if (preprocessingOption.contains(FPTable.inchi)) {
+			query = new MissingInChIsQuery("UNKNOWN");
+			updateQuery = new UpdateChemical();
+			batch.getProcessorChain().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
+				protected transient StructureNormalizer normalizer = new StructureNormalizer();
+				@Override
+				public IStructureRecord process(IStructureRecord record)
+						throws Exception {
+					try {
+						normalizer.process(record);			
+						return record;
+					} catch (Exception x) {
+						record.setType(STRUC_TYPE.NA);
+						return record;
+					}
+				}
+			});				
+			batch.getProcessorChain().add(new AbstractUpdateProcessor<Object,IChemical>(OP.CREATE,updateQuery) {
+				@Override
+				protected IChemical execute(Object group,
+						IQueryUpdate<Object, IChemical> query)
+						throws SQLException, OperationNotSupportedException,
+						AmbitException {
+					if (group instanceof IChemical)
+						query.setObject((IChemical)group);
+					return super.execute(group, query);
+				}
+			});				
+		} else {
+			//add generators
+			if (preprocessingOption.contains(FPTable.smarts_accelerator)) {
+				query= new MissingFingerprintsQuery(FPTable.smarts_accelerator);
+				batch.getProcessorChain().add(new SMARTSPropertiesGenerator());
+			}
+			if (preprocessingOption.contains(FPTable.fp1024)) {
+				query =  new FingerprintsByStatus(FPTable.fp1024);
+				//updateQuery = new CreateFingerprintChemical(FPTable.fp1024);
+				batch.getProcessorChain().add(new BitSetGenerator(FPTable.fp1024));
+			}
+			if (preprocessingOption.contains(FPTable.sk1024)) {
+				query =  new FingerprintsByStatus(FPTable.sk1024);
+				batch.getProcessorChain().add(new BitSetGenerator(FPTable.sk1024));
+			}
+			
+			//add writers
+			if (preprocessingOption.contains(FPTable.smarts_accelerator)) {
+				batch.getProcessorChain().add(new SMARTSAcceleratorWriter());					
+			}
+			if (preprocessingOption.contains(FPTable.fp1024)) {
+				batch.getProcessorChain().add(new FP1024Writer(FPTable.fp1024));		
+			}
+			if (preprocessingOption.contains(FPTable.sk1024)) {
+				batch.getProcessorChain().add(new FP1024Writer(FPTable.sk1024));			
+			}
+			
+			/*
+			if (preprocessingOption.contains(FPTable.pc1024)) {
+				query =  new FingerprintsByStatus(FPTable.pc1024);
+				batch.getProcessorChain().add(new BitSetGenerator(FPTable.pc1024));
+				batch.getProcessorChain().add(new FP1024Writer(FPTable.pc1024));			
+			}
+			*/
+		}
+		
+
+		batch.setHandlePrescreen(false);
+
+		Connection c = null;
+		DBConnection dbc = null;
+		dbc = getConnection(options.getSQLConfig());
+		c = dbc.getConnection();		
+		c.setAutoCommit(false);
+		batch.setCloseConnection(true);
+		batch.setConnection(c);
+		batch.open();
+		
+		IBatchStatistics stats = null;
+		try {
+			query.setPageSize(pagesize);
+			logger.fine(query.getSQL());
+			try {disableIndices(batch.getConnection());} catch (Exception x) { logger.warning(x.getMessage());}
+			logger.info(String.format("Query submitted [pagesize %d]",pagesize));
+			stats = batch.process(query);
+		} catch (Exception x) {
+			logger.log(Level.WARNING,x.getMessage(),x);
+		} finally {
+			try {batch.getConnection().commit();} catch (Exception x) { logger.warning(x.getMessage());}
+			
+			try {enableIndices(batch.getConnection());} catch (Exception x) { logger.warning(x.getMessage());}
+			
+			try {if (batch!=null) batch.close();} catch (Exception x) { logger.warning(x.getMessage());}
+			if (stats!=null) 
+				logger.log(Level.INFO,stats.toString());
+		}
+
+		    	
+    }
 }
