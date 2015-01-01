@@ -26,10 +26,82 @@ import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.dbcli.exceptions.InvalidCommand;
+import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.rendering.StructureEditorProcessor._commands;
 
 public class CliOptions {
-	public enum _commandmode {dataset,post,put,get,delete,params,help,json,html};
+	public enum _commandmode {
+		imports {
+			@Override
+			public String toString() {
+				return "import";
+			}
+		},preprocessing,dataset,split;
+		public String toString() { return name();};
+		};
+	public enum _subcommandmode {dataset,post,put,get,delete,params,help,json,html};
 	public enum _fields {name,connection,params,sql,order,value,processor};
+	public enum _preprocessingoptions {
+		inchi {
+			@Override
+			public String getDescription() {
+				return "Generate InChI (enables exact search)";
+			}
+		},
+		atomprops {
+			@Override
+			public String getDescription() {
+				return "Precalculated aromaticity and ring properties. Speeds up search";
+			}					
+		},
+		fp1024 {
+			@Override
+			public String getDescription() {
+				return "Generates hashed fingerprints (necessary to enables similarity and substructure search)";
+			}	
+		},
+		sk1024 {
+			@Override
+			public String getDescription() {
+				return "Generates structure keys (necessary to enables substructure search)";
+			}			
+		},
+		smarts {
+			@Override
+			public String getDescription() {
+				return "Enables substructure search by running smarts_accelerator & fp1024 & sk1024 preprocessing";
+			}	
+			public FPTable[] getOption() throws Exception {
+				return new FPTable[] {
+						FPTable.smarts_accelerator,
+						FPTable.fp1024,
+						FPTable.sk1024
+						};
+			}
+		},
+		similarity {
+			@Override
+			public String getDescription() {
+				return "Enables similarity search by running smarts_accelerator & fp1024 preprocessing";
+			}
+			public FPTable[] getOption() throws Exception {
+				return new FPTable[] {
+						FPTable.smarts_accelerator,
+						FPTable.fp1024
+						};
+			}			
+		};
+		public FPTable[] getOption() throws Exception {
+			return new FPTable[] {FPTable.valueOf(name())};
+		}
+		@Override
+		public String toString() {
+			return ":" + name();
+		}
+		public String getDescription() {
+			return name();
+		}
+	}
 	protected String apiConfig = "config/api.json";
 	protected String cmd;
 	public String getCmd() {
@@ -49,9 +121,9 @@ public class CliOptions {
 	protected String output;
 	protected String media="csv";
 	protected ObjectNode command;
-	protected _commandmode subcommand = _commandmode.dataset;
+	protected _subcommandmode subcommand = _subcommandmode.dataset;
 
-	public _commandmode getSubcommand() {
+	public _subcommandmode getSubcommand() {
 		return subcommand;
 	}
 
@@ -93,8 +165,8 @@ public class CliOptions {
 		    	setCommand(cmd);
 			    try {
 			    	String s = getSubcommand(line);
-			    	if (s==null) subcommand =_commandmode.help;
-			    	else subcommand = _commandmode.valueOf(s);
+			    	if (s==null) subcommand =_subcommandmode.help;
+			    	else subcommand = _subcommandmode.valueOf(s);
 			    	switch(subcommand) {
 			    	case json: {
 			    		if ("help".equals(cmd))	{
@@ -156,7 +228,7 @@ public class CliOptions {
 			    				writer.write("\t");
 			    				writer.write(commands.get(key).get("description").getTextValue());
 			    				writer.write("\n");
-		    				    for (_commandmode subcommand : _commandmode.values()) {
+		    				    for (_subcommandmode subcommand : _subcommandmode.values()) {
 			    				    JsonNode scmd = commands.get(key).get(subcommand.name());
 			    					if (scmd==null) continue;
 				    				ObjectNode params = (ObjectNode)scmd.get("params");
@@ -196,7 +268,7 @@ public class CliOptions {
 			    		return false;			    		
 			    	}
 			    	case params: {
-			    		System.out.println(printParameters(cmd,_commandmode.dataset));
+			    		System.out.println(printParameters(cmd,_subcommandmode.dataset));
 			    		printHelp(options,null);
 			    		return false;			    		
 			    	}
@@ -217,7 +289,7 @@ public class CliOptions {
 		}
 	}
 
-	protected String printParameters(String cmd,_commandmode mode) {
+	protected String printParameters(String cmd,_subcommandmode mode) {
 		StringBuilder b = new StringBuilder();
 		b.append(cmd);
 		b.append("/");
@@ -354,17 +426,25 @@ public class CliOptions {
 	}
 
 	protected  Options createOptions() {
+		StringBuilder b = new StringBuilder();
+		b.append("Commands: ");
+		for (_commandmode cm : _commandmode.values()) { b.append(cm.toString()); b.append("|"); }
+		
     	Options options = new Options();
     	Option command   = OptionBuilder.withLongOpt("command")
     	        .hasArg()
     	        .withArgName("command")
-    	        .withDescription("API command")
+    	        .withDescription(b.toString())
     	        .create( "a" );
     	
+		 b = new StringBuilder();
+		b.append("Subcommands: ");
+		for (_subcommandmode cm : _subcommandmode.values()) { b.append(cm); b.append("|"); }
+		
     	Option subcommand   = OptionBuilder.withLongOpt("subcommand")
         .hasArg()
         .withArgName("subcommand")
-        .withDescription("API subcommand (help|params)")
+        .withDescription(b.toString())
         .create( "m" );
     	
     	Option input   = OptionBuilder
@@ -381,12 +461,20 @@ public class CliOptions {
         .withDescription("Output file")        
         .create( "o" );
     	
+    	b =  new StringBuilder();
+    	b.append("Command parameters\t");
+    	b.append("preprocessing options\t");
+    	for (_preprocessingoptions p : _preprocessingoptions.values()) {
+    		b.append(p.toString().replace(":", " "));
+    		b.append("=");b.append("true|false");
+    	}
     	Option data   = OptionBuilder
         .hasArgs()
         .withValueSeparator('=')        
         .withLongOpt("data")
         .withArgName("data")
-        .withDescription("Command parameters, e.g. -d \"chunk=1000000\" \"-d inchi=false\" \"-d fp1024=true\" \"-d pagesize=5000000\"")
+        .withDescription(b.toString())
+        		//"Command parameters, e.g. -d \"chunk=1000000\" \"-d inchi=false\" \"-d fp1024=true\" \"-d pagesize=5000000\"")
         .create( "d" );  
     	
     	Option config   = OptionBuilder
@@ -444,7 +532,7 @@ public class CliOptions {
 			 out.write(cmdDef.get("description").asText());
 			 out.write("\n");
 			 
-			 for (_commandmode subcommand : _commandmode.values()) {
+			 for (_subcommandmode subcommand : _subcommandmode.values()) {
 				 JsonNode scmd = cmdDef.get(subcommand.name());
 				 if (scmd==null) continue;
 				 
@@ -531,12 +619,12 @@ public class CliOptions {
 			 
 			 out.write("\n<div style='margin: 10 20 10 20;padding: 0 0 0 0;'>\n");
 			 out.write(cmd +" API:&nbsp;"); 
-			 for (_commandmode subcommand : _commandmode.values()) {
+			 for (_subcommandmode subcommand : _subcommandmode.values()) {
 				 JsonNode scmd = cmdDef.get(subcommand.name());
 				 if (scmd==null) continue;
 				 out.write("\n<a href='#"+cmd+"_"+subcommand+"'>/api/"+cmd + "/"+subcommand+"</a> |");
 			 }	 
-			 for (_commandmode subcommand : _commandmode.values()) {
+			 for (_subcommandmode subcommand : _subcommandmode.values()) {
 				 JsonNode scmd = cmdDef.get(subcommand.name());
 				 if (scmd==null) continue;
 				 out.write("\n<div style='margin: 5 50px 5 50px;'>\n");				 
