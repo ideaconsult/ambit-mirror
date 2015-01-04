@@ -157,11 +157,11 @@ public class AtomEnvironmentGeneratorTest {
 	   
 		public void runAtomTypeMatrixDescriptor(String root) throws Exception {
 			AtomEnvironmentMatrixDescriptor gen = new AtomEnvironmentMatrixDescriptor();
-			//InputStream in = new FileInputStream(root+"tox_benchmark_N6512.sdf");
-			InputStream in = new FileInputStream(root+"COSING1.sdf");
+			InputStream in = new FileInputStream(root+"SureChEMBL_20140801.sdf");
+			
 			IIteratingChemObjectReader<IAtomContainer> reader = new MyIteratingMDLReader(new InputStreamReader(in),SilentChemObjectBuilder.getInstance());
 			//matrix market sparse
-			String mmfile = root+"tox_benchmark_N6512_AEMATRIX.mm.tmp";
+			String mmfile = root+"SureChEMBL_20140801_AEMATRIX.mm.tmp";
 			FileWriter mmwriter = new FileWriter(mmfile);
 			int mmrows = 0; int mmcols = 0; int mmentries = 0;
 			
@@ -179,10 +179,18 @@ public class AtomEnvironmentGeneratorTest {
 				Object activityValue = mol.getProperty("Activity")==null?"":mol.getProperty("Activity");
 				FileWriter writer = writers.get("ALL");
 				System.out.print(".");
-				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);				
+				try {
+				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+				} catch (Exception x) {
+					System.err.println(x.getMessage());
+				}
               //if (useHydrogens) { //always, otherwise atom types are not recognised correctly
               	//for some reason H atoms are added as bond references, but not in atom list - bug?
+				try {
     		    mol = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(mol);
+				} catch (Exception x) {
+					System.err.println(x.getMessage());
+				}
 				try {
 	    			if (hAdder == null) hAdder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 	    		    hAdder.addImplicitHydrogens(mol);
