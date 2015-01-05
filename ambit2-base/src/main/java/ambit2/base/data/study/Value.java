@@ -96,44 +96,44 @@ public class Value<VALUE> implements IValue<VALUE, String, String> {
 	public String toString() {
 		String comma = "";
 		StringBuilder b = new StringBuilder();
-		b.append("{\n");
+		b.append("{");
 		if (getUnits()!=null) {
 			b.append(comma);
 			b.append("\t\"unit\":");
 			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUnits())));
-			comma = ",\n";
+			comma = ", ";
 		}
 		if (getLoQualifier()!=null) {
 			b.append(comma);
 			b.append("\t\"loQualifier\":");
 			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getLoQualifier())));
-			comma = ",\n";
+			comma = ", ";
 		}		
 		if (getLoValue()!=null) {
 			b.append(comma);
 			b.append("\t\"loValue\":");
 			serialize(getLoValue(), b);
-			comma = ",\n";
+			comma = ", ";
 		}
 		if (getUpQualifier()!=null) {
 			b.append(comma);
 			b.append("\t\"upQualifier\":");
 			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUpQualifier())));
-			comma = ",\n";
+			comma = ", ";
 		}
 		if (getUpValue()!=null) {
 			b.append(comma);
 			b.append("\t\"upValue\":");
 			serialize(getUpValue(), b);
-			comma = ",\n";
+			comma = ", ";
 		}		
 		if (getAnnotation()!=null) {
 			b.append(comma);
 			b.append("\t\"annotation\":");
 			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getAnnotation())));
-			comma = ",\n";
+			comma = ",";
 		}				
-		b.append("\n}\n");
+		b.append("}");
 		return b.toString();
 	}
 	
