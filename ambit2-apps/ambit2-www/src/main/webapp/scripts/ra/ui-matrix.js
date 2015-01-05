@@ -268,7 +268,7 @@ var jToxBundle = {
           if (!bInfo)
             continue;
           if (!!bInfo.tag)
-            html += '<button class="jt-toggle active" disabled="true">' + (bInfo.tag == 'source' ? 'S' : 'T') + '</button>';
+            html += '<button class="jt-toggle active" disabled="true"' + (!bInfo.remarks ? '' : 'title="' + bInfo.remarks + '"') + '>' + (bInfo.tag == 'source' ? 'S' : 'T') + '</button>';
           if (!!bInfo.remarks)
             html += '<sup class="helper" title="' + bInfo.remarks + '">?</sup>';
         }
@@ -365,7 +365,7 @@ var jToxBundle = {
 		      if (!nameFeature.column)
 		        nameFeature.column = {};
 		      nameFeature.column.sClass = "breakable word-break";
-		      		      
+		      
 		      // and now - process the multi-row columns
 		      for (var i = 0, mrl = self.settings.matrixMultiRows.length;i < mrl; ++i) {
 			      var fId = self.settings.matrixMultiRows[i];
@@ -385,12 +385,14 @@ var jToxBundle = {
     		},
     		onLoaded: function (dataset) {
 	    		self.edit.refreshMatrix = false;
+	    		jToxCompound.processFeatures(dataset.feature, this.feature);
+	    		
 	    		// we need to process
 	    		for (var i = 0, dl = dataset.dataEntry.length; i < dl; ++i) {
 		    		var data = dataset.dataEntry[i];
 		    		if (data.composition != null)
 		    			for (var j = 0;j < data.composition.length; ++j)
-								jToxCompound.processEntry(data.composition[j].component, this.feature);
+								jToxCompound.processEntry(data.composition[j].component, dataset.feature);
 	    		}
     		},
     		onRow: function (row, data, index) {

@@ -1050,6 +1050,10 @@ window.jT.ui = {
     }
   },
   
+  diagramUri: function (URI) {
+    return !!URI && (typeof URI == 'string') ? URI.replace(/(.+)(\/conformer.*)/, "$1") + "?media=image/png" : '';
+  },
+  
   valueWithUnits: function (val, unit) {
     var out = '';
     if (val != null) {
@@ -1656,13 +1660,11 @@ var jToxCompound = (function () {
       	  search: false,
         	visibility: "main",
         	primary: true,
-      	  process: function(entry, fId, features) {
-            entry.compound.diagramUri = entry.compound.URI.replace(/(.+)(\/conformer.*)/, "$1") + "?media=image/png";
-      	  },
-      	  data: "compound.diagramUri",
+      	  data: "compound.URI",
       	  column: { sClass: "paddingless", sWidth: "125px"},
       	  render: function(data, type, full) {
-            return (type != "display") ? "-" : '<div class="jtox-diagram borderless"><span class="ui-icon ui-icon-zoomin"></span><a target="_blank" href="' + full.compound.URI + '"><img src="' + data + '" class="jtox-smalldiagram"/></a></div>';
+        	  dUri = jT.ui.diagramUri(data);
+            return (type != "display") ? dUri : '<div class="jtox-diagram borderless"><span class="ui-icon ui-icon-zoomin"></span><a target="_blank" href="' + data + '"><img src="' + dUri + '" class="jtox-smalldiagram"/></a></div>';
           }
       	},
       	'#IdRow': {
@@ -2394,7 +2396,7 @@ var jToxCompound = (function () {
             self.entriesCount = qStart + dataset.dataEntry.length;
           
           // then process the dataset
-          self.dataset = cls.processDataset(dataset, self.feature, self.settings.fnAccumulate, self.pageStart);
+          self.dataset = cls.processDataset(dataset, $.extend(true, {}, dataset.feature, self.feature), self.settings.fnAccumulate, self.pageStart);
           // time to call the supplied function, if any.
           ccLib.fireCallback(self.settings.onLoaded, self, dataset);
           if (!self.settings.noInterface) {
@@ -2529,12 +2531,17 @@ var jToxCompound = (function () {
   
   // some public, static methods
   cls.processEntry = function (entry, features, fnValue) {
-    for (var fid in features) {
+    if (!fnValue)
+      fnValue = defaultSettings.fnAccumulate;
+    
+    for (var fid in entry.values) {
       var feature = features[fid];
-      var newVal = entry.values != null ? entry.values[fid] : undefined;
+      if (!feature)
+        continue;
+      var newVal = entry.values[fid];
       
       // if applicable - location the feature value to a specific location whithin the entry
-      if (!!feature.accumulate && newVal !== undefined && feature.data !== undefined) {
+      if (!!feature.accumulate && !!newVal && !!feature.data) {
         var fn = typeof feature.accumulate == 'function' ? feature.accumulate : fnValue;
         var accArr = feature.data;
         if (!jT.$.isArray(accArr))
@@ -2543,8 +2550,6 @@ var jToxCompound = (function () {
         for (var v = 0; v < accArr.length; ++v)
           ccLib.setJsonValue(entry, accArr[v], ccLib.fireCallback(fn, this, fid,  /* oldVal */ ccLib.getJsonValue(entry, accArr[v]), newVal, features));
       }
-      
-      ccLib.fireCallback(feature.process, this, entry, fid, features);
     }
     
     return entry;
@@ -2614,13 +2619,13 @@ var jToxCompound = (function () {
   };
   
   cls.processDataset = function(dataset, features, fnValue, startIdx) {
-    if (ccLib.isNull(features)) {
+    if (!features) {
       cls.processFeatures(dataset.feature);
       features = dataset.feature;
     }
 
-    if (ccLib.isNull(fnValue))
-      fnValue = cls.defaultSettings.fnAccumulate;
+    if (!fnValue)
+      fnValue = defaultSettings.fnAccumulate;
     
     if (!startIdx)
       startIdx = 0;
@@ -3276,10 +3281,7 @@ var jToxComposition = (function () {
         cols.push(jT.$.extend({}, diagFeature.column, { 
           sTitle: 'Structure', 
           mData: "component", 
-          mRender: function (val, type, full) {
-            diagFeature.process(val);
-            return diagFeature.render(val.compound.diagramUri, type, val);
-          } 
+          mRender: function (val, type, full) { return diagFeature.render(val.compound.URI, type, val); } 
         }));
       }
       // READYY! Go and prepare THE table.
