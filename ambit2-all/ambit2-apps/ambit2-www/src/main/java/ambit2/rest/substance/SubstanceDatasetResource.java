@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 
 import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryRetrieval;
@@ -34,7 +35,9 @@ import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
+import ambit2.base.data.study.MultiValue;
 import ambit2.base.data.study.ProtocolEffectRecord;
+import ambit2.base.data.study.Value;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.data.substance.SubstanceName;
 import ambit2.base.data.substance.SubstanceOwner;
@@ -236,11 +239,8 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 						key.setExtendedURI(true);
 						key.setIdentifier(detail.getSampleID());
 						key.setAnnotations(ann);
-						Object oldValue = null;//master.getProperty(key);
-						if (master.getProperty(key)!=null) {
-							groupProperties.add(key);
-						} else
-							groupProperties.add(key);
+						Object oldValue = master.getProperty(key);
+						groupProperties.add(key);
 						if ((detail.getLoValue()) == null && (detail.getUpValue()==null)) {
 							if (oldValue==null)
 								master.setProperty(key, detail.getTextValue());
@@ -250,37 +250,21 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 							}
 							key.setClazz(String.class);
 						} else {
-							Double value = null;
-							boolean qualifier = false;
-							StringBuilder bb = null;
-							if (oldValue!=null) {
-								qualifier = true;
-								bb = new StringBuilder(); bb.append(" ");
-								bb.append(oldValue instanceof Number?nf.format((Number)oldValue):oldValue.toString());
+							Value value = new Value();
+							value.setLoQualifier(detail.getLoQualifier());
+							value.setUpQualifier(detail.getUpQualifier());
+							value.setUpValue(detail.getUpValue());
+							value.setLoValue(detail.getLoValue());
+							if (oldValue == null) {
+								master.setProperty(key, new MultiValue<Value>(value));
+							} else if (oldValue instanceof MultiValue) {
+								((MultiValue)oldValue).add(value);
+							} else {
+								logger.log(Level.WARNING, oldValue.getClass().getName());
+								master.setProperty(key, new MultiValue<Value>(value));
 							}
-							if (detail.getLoQualifier()!=null && !"".equals(detail.getLoQualifier())) {
-								bb = new StringBuilder(); bb.append(detail.getLoQualifier());
-								qualifier = true;
-							}
-							if (detail.getLoValue()!=null) {
-								if (bb==null) bb = new StringBuilder(); 
-								bb.append(" "); bb.append(nf.format(detail.getLoValue()));
-								value = detail.getLoValue();
-							}
-							if (detail.getUpQualifier()!=null && !"".equals(detail.getUpQualifier())) {
-								bb = new StringBuilder(); bb.append(detail.getUpQualifier());
-								qualifier = true;
-							}
-							if (detail.getUpValue()!=null) {
-								if (bb==null) bb = new StringBuilder(); 
-								if (value==null) value = detail.getUpValue(); else { value = null; bb.append("  ");}
-								bb.append(nf.format(detail.getUpValue()));
-							}		
-
-							if (value!=null && !qualifier) master.setProperty(key, value);
-							else if (bb!=null) master.setProperty(key, bb.toString());
-							//master.setProperty(key, detail.getLoValue()==null?detail.getUpValue():detail.getLoValue());
-							key.setClazz(Number.class);
+							
+							key.setClazz(MultiValue.class);
 						}	
 					}
 				}

@@ -25,6 +25,8 @@ import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
+import ambit2.base.data.study.IValue;
+import ambit2.base.data.study.MultiValue;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.facet.BundleRoleFacet;
 import ambit2.base.interfaces.IStructureRecord;
@@ -292,7 +294,19 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 					builder.append(String.format("\t\t\"%s\":%d",key,(Integer)value));
 				else if (value instanceof Long) 
 					builder.append(String.format("\t\t\"%s\":%l",key,(Long)value));
-				else 
+				else if (value instanceof IValue) 
+					builder.append(String.format("\t\t\"%s\":%s",key,((IValue)value)).toString());
+				else if (value instanceof MultiValue) {
+					StringBuilder b = new StringBuilder(); 
+					String delimiter = "[";
+					for (IValue v : (MultiValue<IValue>)value) {
+						b.append(delimiter);
+						b.append(v.toString());
+						delimiter = ",";
+					}
+					b.append("]\n");
+					builder.append(String.format("\t\t\"%s\":%s",key,b.toString()));				
+				} else 
 					builder.append(String.format("\t\t\"%s\":\"%s\"",key,JSONUtils.jsonEscape(value.toString().replace("\n","|"))));				
 				i++;
 				comma1 = ",";

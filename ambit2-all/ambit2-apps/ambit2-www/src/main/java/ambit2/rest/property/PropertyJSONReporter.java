@@ -12,6 +12,8 @@ import org.restlet.data.Reference;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
+import ambit2.base.data.study.IValue;
+import ambit2.base.data.study.MultiValue;
 import ambit2.base.json.JSONUtils;
 
 /**
@@ -33,6 +35,7 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 		units,
 		isNominal,
 		isNumeric,
+		isMultiValue,
 		sameAs,
 		isModelPredictionFeature,
 		source,
@@ -70,6 +73,7 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 				(feature.getClazz()==Float.class) ||
 				(feature.getClazz()==Integer.class) ||
 				(feature.getClazz()==Long.class);
+			boolean multivalue = feature.getClazz() == MultiValue.class;
 			//tuple
 			//else if (item.getClazz()==Dictionary.class) feature.addOntClass(OTClass.TupleFeature.getOntClass(jenaModel));
 			
@@ -114,8 +118,9 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					"\n\t\"type\":\"Feature\"," + //uri
 					"\n\t\"%s\":%s," + //title
 					"\n\t\"%s\":%s," + //units
-					"\n\t\"%s\":\"%s\"," + //nominal
-					"\n\t\"%s\":\"%s\"," + //numeric
+					"\n\t\"%s\":%s," + //nominal
+					"\n\t\"%s\":%s," + //numeric
+					"\n\t\"%s\":%s," + //multivalue
 					"\n\t\"%s\":%s," + //sameAs
 					"\n\t\"%s\":%s," + //isModelPredictionFeature
 					"\n\t\"%s\":\"%s\"," + //creator
@@ -127,6 +132,7 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					jsonFeature.units.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(feature.getUnits())),
 					jsonFeature.isNominal.jsonname(),feature.isNominal(),
 					jsonFeature.isNumeric.jsonname(),numeric,
+					jsonFeature.isMultiValue.jsonname(),multivalue,
 					jsonFeature.sameAs.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(uriSameAs)),
 					jsonFeature.isModelPredictionFeature.jsonname(),isModelPredictionFeature,
 					jsonFeature.creator.jsonname(),JSONUtils.jsonEscape(feature.getReference().getURL()),
