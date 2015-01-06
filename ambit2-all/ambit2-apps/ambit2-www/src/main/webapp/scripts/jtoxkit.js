@@ -1033,6 +1033,48 @@ window.jT.ui = {
     return res;
   },
   
+  renderRange: function (data, unit, type, prefix) {
+    var out = "";
+    if (typeof data == 'string' || typeof data == 'number')
+      out += (type != 'display') ? data : ((!!prefix ? prefix + "&nbsp;=&nbsp;" : '') + jT.ui.valueWithUnits(data, unit));
+    else if (typeof data == 'object' && data != null) {
+      data.loValue = ccLib.trim(data.loValue);
+      data.upValue = ccLib.trim(data.upValue);
+      if (!ccLib.isEmpty(data.loValue) && !ccLib.isEmpty(data.upValue)) {
+        if (!!prefix)
+          out += prefix + "&nbsp;=&nbsp;";
+        out += (data.loQualifier == ">=") ? "[" : "(";
+        out += data.loValue + ", " + data.upValue;
+        out += (data.upQualifier == "<=") ? "]" : ") ";
+      }
+      else // either of them is non-undefined
+      {
+        var fnFormat = function (q, v) {
+          return (!!q ? q : "=") + " " + v;
+        };
+        
+        if (!!prefix)
+          out += prefix + ' ';
+        if (!ccLib.isEmpty(data.loValue))
+          out += fnFormat(data.loQualifier, data.loValue);
+        else if (!ccLib.isEmpty(data.upValue))
+          out += fnFormat(data.upQualifier, data.upValue);
+        else
+          out += '-';
+      }
+      
+      out = out.replace(/ /g, "&nbsp;");
+      if (type == 'display') {
+        unit = ccLib.trim(data.unit || unit);
+        if (!!unit)
+          out += '&nbsp;<span class="units">' + unit.replace(/ /g, "&nbsp;") + '</span>';
+      }
+    }
+    else
+      out += '-';
+    return out;
+  },
+  
   putInfo: function (href, title) {
     return '<sup class="helper"><a target="_blank" href="' + (href || '#') + '" title="' + (title || href) + '"><span class="ui-icon ui-icon-info"></span></a></sup>';
   },
@@ -3500,7 +3542,7 @@ var jToxStudy = (function () {
 	      var defaultColumns = [
 	        { "sTitle": "Name", "sClass": "center middle", "sWidth": "20%", "mData": "protocol.endpoint" }, // The name (endpoint)
 	        { "sTitle": "Endpoint", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData": "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return self.getFormatted(data, type, "endpoint"); }); } },   // Effects columns
-	        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return formatValue(data.result, type) }); } },
+	        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return jT.ui.renderRange(data.result, type) }); } },
 	        { "sTitle": "Text", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return !!data.result.textValue  ? data.result.textValue : '-'; }); } },
 	        { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "-"  },    // Protocol columns
 	        { "sTitle": "Owner", "sClass": "center middle", "sWidth": "15%", "mData": "citation.owner", "sDefaultContent": "-" },
@@ -3541,43 +3583,6 @@ var jToxStudy = (function () {
           }
         };
         
-        // some value formatting functions
-        var formatValue = function (data, unit, type) {
-          var out = "";
-          if (typeof data == 'string')
-            out += jT.ui.valueWithUnits(data, unit);
-          else if (typeof data == 'object' && data != null) {
-            data.loValue = ccLib.trim(data.loValue);
-            data.upValue = ccLib.trim(data.upValue);
-            if (!ccLib.isEmpty(data.loValue) && !ccLib.isEmpty(data.upValue)) {
-              out += (data.loQualifier == ">=") ? "[" : "(";
-              out += data.loValue + ", " + data.upValue;
-              out += (data.upQualifier == "<=") ? "]" : ") ";
-            }
-            else // either of them is non-undefined
-            {
-              var fnFormat = function (q, v) {
-                return (!!q ? q : "=") + " " + v;
-              };
-              
-              if (!ccLib.isEmpty(data.loValue))
-                out += fnFormat(data.loQualifier, data.loValue);
-              else if (!ccLib.isEmpty(data.upValue))
-                out += fnFormat(data.upQualifier, data.upValue);
-              else
-                out += '-';
-            }
-            
-            out = out.replace(/ /g, "&nbsp;");
-            data.unit = ccLib.trim(data.unit);
-            if (!ccLib.isNull(data.unit))
-              out += '&nbsp;<span class="units">' + data.unit.replace(/ /g, "&nbsp;") + '</span>';
-          }
-          else
-            out += '-';
-          return out;
-        };
-        
         putDefaults(0, 1, "main");
         
         // use it to put parameters...
@@ -3596,7 +3601,7 @@ var jToxStudy = (function () {
           if (col == null)
             return null;
           
-          col["mRender"] = function (data, type, full) { return formatValue(data, full[p + " unit"], type); };
+          col["mRender"] = function (data, type, full) { return jT.ui.renderRange(data, full[p + " unit"], type); };
           return col;
         });
         // .. and conditions
@@ -3613,7 +3618,7 @@ var jToxStudy = (function () {
           
           col["mRender"] = function(data, type, full) {
             return jT.ui.renderMulti(data, type, full, function(data, type) { 
-              return formatValue(data.conditions[c], data.conditions[c + " unit"], type); 
+              return jT.ui.renderRange(data.conditions[c], data.conditions[c + " unit"], type); 
             }); 
           };
           return col;

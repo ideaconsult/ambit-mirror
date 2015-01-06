@@ -213,18 +213,20 @@ var jToxBundle = {
                 continue;
                 
               var catId = self.parseFeatureId(fId, kit).category,
-                  config = jT.$.extend(true, {}, kit.settings.configuration.columns["_"], kit.settings.configuration.columns[catId]),
-                  val = '';
+                  config = jT.$.extend(true, {}, kit.settings.configuration.columns["_"], kit.settings.configuration.columns[catId]);
               
-              if (ccLib.getJsonValue(config, 'effects.endpoint.bVisible') !== false)
-                val += f.title.replace(" ", '&nbsp;') + "&nbsp;=&nbsp;";
-              val += jT.ui.valueWithUnits(full.values[fId], f.units);
-
+              var theData = full.values[fId];
+              var preVal = (ccLib.getJsonValue(config, 'effects.endpoint.bVisible') !== false) ? f.title.replace(" ", '&nbsp;') : null;
+              if (!f.isMultiValue || !$.isArray(theData))
+                theData = [theData];
+                
               // now - ready to produce HTML
-              html += '<span class="ui-icon ui-icon-circle-minus delete-popup" data-feature="' + theId + '"></span>&nbsp;';
-              html += '<a class="info-popup" data-feature="' + fId + '" href="#">' + val + '</a>';
-              html += jT.ui.putInfo(full.compound.URI + '/study?property_uri=' + encodeURIComponent(fId));
-              html += '<br/>';
+              for (var i = 0, vl = theData.length; i < vl; ++i) {
+                html += '<span class="ui-icon ui-icon-circle-minus delete-popup" data-feature="' + theId + '"></span>&nbsp;';
+                html += '<a class="info-popup" data-index="' + i + '" data-feature="' + fId + '" href="#">' + jT.ui.renderRange(theData[i], f.units, 'display', preVal) + '</a>';
+                html += jT.ui.putInfo(full.compound.URI + '/study?property_uri=' + encodeURIComponent(fId));
+                html += '<br/>';
+              }
             }
             
             html += '<span class="ui-icon ui-icon-circle-plus edit-popup" data-feature="' + theId + '"></span>';
@@ -409,6 +411,7 @@ var jToxBundle = {
       		  };
 
             var featureId = $(this).data('feature');
+            var valueIdx = $(this).data('index');
     		    var feature = self.matrixKit.dataset.feature[featureId];
       		  if (!$(this).hasClass('edit-popup')) {
       		    
@@ -440,10 +443,13 @@ var jToxBundle = {
               
         		  $('th.conditions', infoDiv).attr('colspan', cl);
         		  
+        		  var val = data.values[featureId];
+        		  if (!feature.isMultiValue || !$.isArray(val))
+        		    val = [val];
         		  ccLib.fillTree(infoDiv, {
         		    endpoint: feature.title,
         		    guidance: feature.creator,
-          		  value: jT.ui.valueWithUnits(data.values[featureId], feature.units),
+          		  value: jT.ui.renderRange(val[valueIdx], feature.units, 'display'),
 //           		  source: '<a target="_blank" href="' + feature.source.URI + '">' + feature.source.type + '</a>'
         		  });
         		  
