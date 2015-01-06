@@ -43,6 +43,7 @@ public class CallableBundleCreator extends	CallableDBUpdateTask<SubstanceEndpoin
 		} else if (Method.POST.equals(method)) {
 			item = new SubstanceEndpointsBundle();
 			parseForm(input, item);
+			if (item.getName()==null || item.getSource()==null || item.getURL() == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			return item;
 		} else if (Method.PUT.equals(method)) {
 			parseForm(input, item);
@@ -93,7 +94,9 @@ public class CallableBundleCreator extends	CallableDBUpdateTask<SubstanceEndpoin
 
 	@Override
 	protected String getURI(SubstanceEndpointsBundle item) throws Exception {
-		return reporter.getURI(item);
+		if (item.getID()>0)
+			return reporter.getURI(item);
+		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 
 	@Override

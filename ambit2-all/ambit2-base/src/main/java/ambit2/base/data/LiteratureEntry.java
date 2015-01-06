@@ -114,8 +114,8 @@ public class LiteratureEntry extends AmbitBean implements ILiteratureEntry{
 	 * @param url
 	 */
 	public LiteratureEntry(String title, String url) {
-		this.title = (title.length()>255)?title.substring(1,255):title;
-		this.URL = (url.length()>255)?url.substring(1,255):url;
+		this.title = title==null?"NA":((title.length()>255)?title.substring(1,255):title);
+		this.URL = url==null?null:(url.length()>255)?url.substring(1,255):url;
 	}
 	public String toString() {
 		StringBuffer buf = new StringBuffer();

@@ -53,7 +53,7 @@ public class SubstanceProperty extends Property {
 				URLEncoder.encode(						
 						endpointcategory==null?Protocol._categories.UNKNOWN_TOXICITY_SECTION.name():endpointcategory,
 						"UTF-8"),
-				getTitle()==null?"":"/",		
+				getName()==null?"":"/",		
 				URLEncoder.encode(getName(),"UTF-8"),
 				identifier==null?
 						UUID.nameUUIDFromBytes((getName() + getTitle()).toString().getBytes()).toString()

@@ -55,12 +55,16 @@ public class CreateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		switch (index) {
 		case 0: {
+			if (getObject().getSource()==null) throw new AmbitException("Empty source");
+			if (getObject().getURL()==null) throw new AmbitException("Empty url");
 			List<QueryParam> params1 = new ArrayList<QueryParam>();
 			params1.add(new QueryParam<String>(String.class, getObject().getSource()));
 			params1.add(new QueryParam<String>(String.class, getObject().getURL()));
 			return params1;
 		} 
 		case 1: {
+			if (getObject().getName()==null) throw new AmbitException("Empty name");
+			if (getObject().getSource()==null) throw new AmbitException("Empty source");
 			List<QueryParam> params2 = new ArrayList<QueryParam>();
 			params2.add(new QueryParam<Integer>(Integer.class, getObject().getID()>0?getObject().getID():null));
 			params2.add(new QueryParam<String>(String.class, getObject().getName()));

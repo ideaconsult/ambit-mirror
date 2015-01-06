@@ -41,7 +41,7 @@
 <body>
 
 <div class="container" style="margin:0;padding:0;">
-<div id="logger" class="jtox-toolkit jtox-widget hidden" data-kit="log" data-resend="false" ></div>
+<div id="logger" class="jtox-toolkit jtox-widget hidden" data-kit="log" data-resend="false" rightSide="true"></div>
 
 <#include "/banner_crumbs.ftl">
 	
