@@ -67,6 +67,11 @@
   opacity: 0.7;
 }
 
+.jtox-toolkit sup.helper span.ui-icon {
+  vertical-align: top !important;
+  display: inline-block;
+}
+
 .jtox-toolkit sup {
   font-size: smaller;
   vertical-align: super;
