@@ -31,9 +31,9 @@ var jToxBundle = {
   	maxStars: 10,
   	matrixIdentifiers: [
       "http://www.opentox.org/api/1.1#CASRN",
-      "http://www.opentox.org/api/1.1#TradeName",
-      "http://www.opentox.org/api/1.1#IUCLID5_UUID",
-      "http://www.opentox.org/api/1.1#SubstanceDataSource",
+      "#SubstanceName",
+      "#SubstanceUUID",
+      "#SubstanceDataSource",
     ],
   	matrixMultiRows: [
       "http://www.opentox.org/api/1.1#Diagram",
@@ -223,7 +223,7 @@ var jToxBundle = {
               // now - ready to produce HTML
               html += '<span class="ui-icon ui-icon-circle-minus delete-popup" data-feature="' + theId + '"></span>&nbsp;';
               html += '<a class="info-popup" data-feature="' + fId + '" href="#">' + val + '</a>';
-              html += '<sup class="helper"><a target="jtox-study" href="' + full.compound.URI + '/study?property_uri=' + encodeURIComponent(fId) + '">?</a></sup>';
+              html += jT.ui.putInfo(full.compound.URI + '/study?property_uri=' + encodeURIComponent(fId));
               html += '<br/>';
             }
             
@@ -270,7 +270,7 @@ var jToxBundle = {
           if (!!bInfo.tag)
             html += '<button class="jt-toggle active" disabled="true"' + (!bInfo.remarks ? '' : 'title="' + bInfo.remarks + '"') + '>' + (bInfo.tag == 'source' ? 'S' : 'T') + '</button>';
           if (!!bInfo.remarks)
-            html += '<sup class="helper" title="' + bInfo.remarks + '">?</sup>';
+            html += jT.ui.putInfo(null, bInfo.remarks);
         }
         
         return html;
@@ -357,14 +357,6 @@ var jToxBundle = {
 				      });
 			      };
 		      };
-		      
-		      // some name feature tweaks
-		      var nameFeature = miniset.feature['http://www.opentox.org/api/1.1#TradeName'];
-		      nameFeature.primary = true;
-		      nameFeature.title = "Substance Name";
-		      if (!nameFeature.column)
-		        nameFeature.column = {};
-		      nameFeature.column.sClass = "breakable word-break";
 		      
 		      // and now - process the multi-row columns
 		      for (var i = 0, mrl = self.settings.matrixMultiRows.length;i < mrl; ++i) {

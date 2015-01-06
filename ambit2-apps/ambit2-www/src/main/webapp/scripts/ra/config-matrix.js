@@ -19,13 +19,18 @@ jTConfig.matrix = {
 			  return (type != 'display') ? data : '<textarea class="remark" placeholder="Reason for selection_"></textarea>';
       }
 		},
-		"http://www.opentox.org/api/1.1#SubstanceDataSource": { title: "Data source", data: "compound.ownerName", accumulate: true, primary: true, column: { sClass: "breakable" } },
+		'#SubstanceName' : { title: "Substance Name", data: "compound.tradename", primary: true, basic: true, column: { sClass: "breakable word-break" } },
+    '#SubstanceUUID': { title: "I5UUID", data: "compound.i5uuid", primary: true, render: function (data, type, full) {
+      return (type != 'display') ? data : jT.ui.shortenedData('<a target="_blank" href="' + full.compound.URI + '/study">' + data + '</a>', "Press to copy the UUID in the clipboard", data)
+    } },
+
+		"#SubstanceDataSource": { title: "Data source", data: "compound.ownerName", accumulate: true, primary: true, column: { sClass: "breakable" } },
 		"#ConstituentName": { title: "Constituent Name", data: "component.compound.name", accumulate: false, primary: true, column: { sClass: "breakable work-break" } },
     "#ConstituentContent": { title: "Content", data: "proportion.typical", accumulate: false, primary: true, column: { sClass: "center" }, render: function (data, type, full) { 
       return type != 'display' ? '' + data.value : jToxComposition.formatConcentration(data.precision, data.value, data.unit);
     } },
     "#ConstituentContainedAs": { title: "Contained As", data: "relation", accumulate: false, primary: true, column: { sClass: "center" }, render: function (data, type, full) { 
-      return (type != 'display') ? data : '<span>' + data.substring(4).toLowerCase() + '</span><sup class="helper"><a target="_blank" href="' + (full.substance.URI + '/composition') + '" title="' + full.compositionName + '(' + full.compositionUUID + ')">?</a></sup>'      
+      return (type != 'display') ? data : '<span>' + data.substring(4).toLowerCase() + '</span>' + jT.ui.putInfo(full.substance.URI + '/composition', full.compositionName);      
     } },
 		
 		"#IdRow" : {

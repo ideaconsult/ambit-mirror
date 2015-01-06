@@ -1029,9 +1029,12 @@ window.jT.ui = {
       
     var res = '';
     for (var i = 0, il = data.length; i < il; ++i)
-      res += '<span>' + data[i].relation.substring(4).toLowerCase() + '</span><sup class="helper"><a target="_blank" href="' + (full.URI + '/composition') + '" title="' + data[i].compositionName + '(' + data[i].compositionUUID + ')">?</a></sup>';
-  
+      res += '<span>' + data[i].relation.substring(4).toLowerCase() + '</span>' + jT.ui.putInfo(full.URI + '/composition', data[i].compositionName + '(' + data[i].compositionUUID + ')');
     return res;
+  },
+  
+  putInfo: function (href, title) {
+    return '<sup class="helper"><a target="_blank" href="' + (href || '#') + '" title="' + (title || href) + '"><span class="ui-icon ui-icon-info"></span></a></sup>';
   },
   
   putStars: function (kit, stars, title) {
@@ -1688,7 +1691,7 @@ var jToxCompound = (function () {
       },
       "columns": {
         "compound": {
-          "Name": { sTitle: "Name", mData: 'title', mRender: function (data, type, full) { return '<span>' + data + '</span><sup class="helper"><a target="_blank" href="' + full.URI + '">?</a></sup>'; } },
+          "Name": { sTitle: "Name", mData: 'title', mRender: function (data, type, full) { return '<span>' + data + '</span>' + jT.ui.putInfo(full.URI); } },
           "Value": { sTitle: "Value", mData: 'value', sDefaultContent: "-" },
           "SameAs": { sTitle: "SameAs", mData: 'sameAs', sDefaultContent: "-" },
           "Source": { sTitle: "Source", mData: 'source', sDefaultContent: "-", mRender: function (data, type, full) { return !data || !data.type ? '-' : '<a target="_blank" href="' + data.URI + '">' + data.type + '</a>'; } }
@@ -4352,7 +4355,7 @@ var jToxEndpoint = (function () {
         endpoint: {
           'Id': { sTitle: "Id", mData: "uri", bSortable: false, sWidth: "30px", mRender: function (data, type, full) { return ''; } },
           'Name': { sTitle: "Name", mData: "value", sDefaultContent: "-", mRender: function (data, type, full) {
-            return data + '<span class="float-right jtox-details">[<span title="Number of values">' + full.count + '</span>]<sup class="helper"><a title="Click to view substances" target="_blank" href="' + full.uri + '">?</a></sup></span>';
+            return data + '<span class="float-right jtox-details">[<span title="Number of values">' + full.count + '</span>]' + jT.ui.putInfo(full.uri) + '</span>';
           } },
         }
       }
@@ -4686,7 +4689,7 @@ jT.templates['widget-search']  =
 "    		<div class=\"float-right search-pane\">" +
 "  			  <div class=\"dynamic auto-hide searchauto hidden jtox-inline\">" +
 "  			    <div>" +
-"    			    <input type=\"checkbox\" name=\"regexp\" title=\"fadsfas\"/><span>Enable fragment search<sup class=\"helper\"><a target=\"_blank\" href=\"http://en.wikipedia.org/wiki/Regular_expression\">?</a></sup></span>" +
+"    			    <input type=\"checkbox\" name=\"regexp\" title=\"fadsfas\"/><span>Enable fragment search<sup class=\"helper\"><a target=\"_blank\" href=\"http://en.wikipedia.org/wiki/Regular_expression\"><span class=\"ui-icon ui-icon-info\"></span></a></sup></span>" +
 "  			    </div>" +
 "  			  </div>" +
 "  			  <div class=\"dynamic auto-hide searchsimilarity hidden jtox-inline\">" +
@@ -4758,7 +4761,7 @@ jT.templates['compound-one-tab']  =
 ""; // end of #compound-one-tab 
 
 jT.templates['compound-one-feature']  = 
-"    <div id=\"jtox-ds-feature\" class=\"jtox-ds-feature\"><input type=\"checkbox\" checked=\"yes\" class=\"jtox-checkbox\" /><span class=\"data-field jtox-title\" data-field=\"title\"> ? </span><sup class=\"helper\"><a target=\"_blank\" class=\"data-field attribute\" data-attribute=\"href\" data-field=\"uri\">?</a></sup></div>" +
+"    <div id=\"jtox-ds-feature\" class=\"jtox-ds-feature\"><input type=\"checkbox\" checked=\"yes\" class=\"jtox-checkbox\" /><span class=\"data-field jtox-title\" data-field=\"title\"> ? </span><sup class=\"helper\"><a target=\"_blank\" class=\"data-field attribute\" data-attribute=\"href\" data-field=\"uri\"><span class=\"ui-icon ui-icon-info\"></span></a></sup></div>" +
 ""; // end of #jtox-ds-feature 
 
 jT.templates['compound-download']  = 
