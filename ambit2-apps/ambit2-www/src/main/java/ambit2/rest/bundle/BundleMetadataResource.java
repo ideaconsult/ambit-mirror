@@ -89,6 +89,7 @@ public class BundleMetadataResource extends  AmbitDBQueryResource<IQueryRetrieva
 		Object id = request.getAttributes().get(OpenTox.URI.bundle.getKey());
 		if (id != null)  try {
 				Integer idnum = new Integer(Reference.decode(id.toString()));
+				if (idnum.intValue()<=0) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST); 
 				dataset = new SubstanceEndpointsBundle();
 				dataset.setID(idnum);
 				query = new ReadBundle();
@@ -108,8 +109,10 @@ public class BundleMetadataResource extends  AmbitDBQueryResource<IQueryRetrieva
 		SubstanceEndpointsBundle bundle = null;
 		Object id = getRequest().getAttributes().get(OpenTox.URI.bundle.getKey());	
 		if ((id!=null)) try {
-			bundle = new SubstanceEndpointsBundle(new Integer(Reference.decode(id.toString())));
-		} catch (Exception x) {}
+			Integer i = new Integer(Reference.decode(id.toString()));
+			if (i>0) bundle = new SubstanceEndpointsBundle(i);
+		} catch (Exception x) {
+		}
 		
 		Connection conn = null;
 		try {

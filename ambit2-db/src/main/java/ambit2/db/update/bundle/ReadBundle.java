@@ -35,7 +35,9 @@ public class ReadBundle extends AbstractReadDataset<String,SubstanceEndpointsBun
 		if (getValue().getID()>0)
 			params.add(new QueryParam<Integer>(Integer.class,getValue().getID()));
 		else
-			params.add(new QueryParam<String>(String.class,getValue().getName()));
+			if (getValue().getName()!=null)
+				params.add(new QueryParam<String>(String.class,getValue().getName()));
+			else throw new AmbitException("Undefined bundle");
 		return params;
 	}
 
