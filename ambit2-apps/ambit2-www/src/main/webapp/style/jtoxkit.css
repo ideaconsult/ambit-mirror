@@ -707,6 +707,38 @@ div.jtox-study-tab .dataTables_wrapper {
 /* jToxLog styling
 */
 
+.jtox-log {
+  position: fixed;
+	height: 144px;
+  width: 99%;
+  right: 0px;
+	bottom: 0px;
+	z-index: 100;
+	transition: bottom 0.5s ease;
+	-moz-transition: bottom 0.5s ease;
+	-webkit-transition: bottom 0.5s ease;
+	-o-transition: bottom 0.5s ease;
+	box-shadow: -3px 7px 7px #999; 
+}
+
+.jtox-log.right-side {
+  position: fixed;
+	height: 144px;
+  width: 95%;
+  right: 5px;
+	bottom: 0px;
+	z-index: 100;
+	transition: bottom 0.5s ease;
+	-moz-transition: bottom 0.5s ease;
+	-webkit-transition: bottom 0.5s ease;
+	-o-transition: bottom 0.5s ease;
+	box-shadow: 7px 7px 7px #999;  
+}
+
+.jtox-log.hidden {
+  bottom: -120px;
+}
+
 .jtox-log div.icon {
   display: inline-block;
   vertical-align: middle;
@@ -750,7 +782,7 @@ div.jtox-study-tab .dataTables_wrapper {
   padding-left: 8px;
 }
 
-.jtox-log .list-wrap.right-side {
+.jtox-log.right-side .list-wrap {
   border-top-right-radius: 0px;
   border-top-left-radius: 5px;
 }
