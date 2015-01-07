@@ -237,9 +237,13 @@ var ccLib = {
   
   packData: function (data) {
     var out = {};
-    ccLib.enumObject(data, function (val, name) {
-      out[name] = val;
-    });
+    for (var i in data) {
+      if (!data.hasOwnProperty(i))
+        continue;
+      var o = data[i];
+      out[o.name] = o.value;
+    }
+      
     return out;
   },
   
@@ -723,7 +727,7 @@ window.jT = window.jToxKit = {
       if (!data)
         ccLib.fireCallback(callback, kit, data, jhr);
       else
-        self.pollTask(kit, data, function (task, jhr) { ccLib.fireCallback(callback, kit, !task.error ? task.result : null, jhr); });
+        self.pollTask(kit, data, function (task, jhr) { ccLib.fireCallback(callback, kit, !!task && !task.error ? task.result : null, jhr); });
   	};
   	
   	this.call(kit, service, params, fnCB);
@@ -4140,7 +4144,7 @@ var jToxLog = (function () {
   var cls = function (root, settings) {
     var self = this;
     self.rootElement = root;
-    jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even when manually initialized
+    jT.$(root).addClass('jtox-toolkit jtox-log'); // to make sure it is there even when manually initialized
 
     self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings);
     if (!self.settings.noInterface) {
@@ -4157,7 +4161,7 @@ var jToxLog = (function () {
   
       if (!!self.settings.rightSide) {
         statusEl.style.right = '0px';
-        jT.$('.list-wrap', self.rootElement).addClass('right-side');
+        jT.$(self.rootElement).addClass('right-side');
       }
       else
         statusEl.style.left = '0px';
@@ -4921,7 +4925,7 @@ jT.templates['policy']  =
 ""; // end of #jtox-model 
 
 jT.templates['logger']  = 
-"	  <div id=\"jtox-logger\" class=\"jtox-log\">" +
+"	  <div id=\"jtox-logger\">" +
 "	    <div class=\"list-wrap\">" +
 "	      <div class=\"list-root\"></div>" +
 "	    </div>" +

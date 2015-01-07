@@ -10,24 +10,6 @@ html, body, #jtox-bundle {
   position: relative;
 }
 
-#logger {
-  position: fixed;
-	height: 144px;
-  width: 99%;
-  right: 0px;
-	bottom: 0px;
-	z-index: 100;
-	transition: bottom 0.5s ease;
-	-moz-transition: bottom 0.5s ease;
-	-webkit-transition: bottom 0.5s ease;
-	-o-transition: bottom 0.5s ease;
-	box-shadow: -3px 7px 7px #999;
-}
-
-#logger.hidden {
-  bottom: -120px;
-}
-
 #jtox-bundle textarea,
 .popup-box textarea {
   width: 100%;

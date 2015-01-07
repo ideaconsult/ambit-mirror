@@ -19,7 +19,9 @@ jTConfig.matrix = {
 			  return (type != 'display') ? data : '<textarea class="remark" placeholder="Reason for selection_"></textarea>';
       }
 		},
-		'#SubstanceName' : { title: "Substance Name", data: "compound.tradename", primary: true, basic: true, column: { sClass: "breakable word-break" } },
+		'#SubstanceName' : { title: "Substance Name", data: "compound.name", primary: true, basic: true, column: { sClass: "breakable word-break" }, render: function (data, type, full) { 
+  		return data || full.compound.tradename;
+		} },
     '#SubstanceUUID': { title: "I5UUID", data: "compound.i5uuid", primary: true, render: function (data, type, full) {
       return (type != 'display') ? data : jT.ui.shortenedData('<a target="_blank" href="' + full.compound.URI + '/study">' + data + '</a>', "Press to copy the UUID in the clipboard", data)
     } },
