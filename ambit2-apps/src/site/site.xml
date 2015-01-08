@@ -167,14 +167,14 @@
 			<item name="WikiPathways" href="http://ideaconsult.github.io/Toxtree.js/"
 				target="_blank" />
 			<item name="ONS Melting point 33"
-				href="http://apps.ideaconsult.net:8080/data/ui/_dataset?dataset_uri=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fdata%2Fdataset%2F45"
+				href="https://apps.ideaconsult.net/data/ui/_dataset?dataset_uri=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fdata%2Fdataset%2F45"
 				target="_blank" />
-			<item name="Structure search" href="http://apps.ideaconsult.net:8080/data/ui/_search"
+			<item name="Structure search" href="https://apps.ideaconsult.net/data/ui/_search"
 				target="_blank" />
-			<item name="Substances" href="http://apps.ideaconsult.net:8080/data/substances"
+			<item name="Substances" href="https://apps.ideaconsult.net/data/substances"
 				target="_blank" />
 			<item name="Nanomaterials"
-				href="http://apps.ideaconsult.net:8080/enanomapper/substance"
+				href="https://apps.ideaconsult.net/enanomapper/substance"
 				target="_blank" />
 			<item name="BCF Gold Standard Database"
 				title="Bioconcentration factor (BCF) Gold Standard Database"

@@ -21,7 +21,7 @@ OpenTox API : Ontology service
 
 +--------------------------
  curl -X POST -H "Content-type:application/x-www-form-urlencoded" \
-         -d "query=the-sparql-query-url-encoded" http://apps.ideaconsult.net/ontology \
+         -d "query=the-sparql-query-url-encoded" https://apps.ideaconsult.net/ontology \
          -H "Accept:application/rdf+xml"  -H "subjectid:SECURITY-TOKEN 
 +--------------------------   
 

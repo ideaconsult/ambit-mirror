@@ -11,7 +11,7 @@
   A prototype web application that accepts chemical structures and identifiers as input and automatically generates a toxicity report based on several remote OpenTox toxicity models.
   Developed by {{{www.ideaconsult.net}Ideaconsult Ltd.}} in the framework of {{{http://opentox.org}OpenTox}} project.
   
-  Uses {{{http://apps.ideaconsult.net/ambit2/}AMBIT REST Web services}}, as well as several remote {{{http://opentox.org/dev/apis}OpenTox API}} compliant web services.
+  Uses {{{https://apps.ideaconsult.net/ambit2/}AMBIT REST Web services}}, as well as several remote {{{http://opentox.org/dev/apis}OpenTox API}} compliant web services.
 		
 [./images/thumb_toxpredict.png] ToxPredict web application.
 

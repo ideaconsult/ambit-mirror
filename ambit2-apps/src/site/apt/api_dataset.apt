@@ -36,15 +36,15 @@ OpenTox API : Dataset
   This simplified view is illustrated by Table 1.
   
 *----------*--------------+--------+----------------:
-| | {{{http://apps.ideaconsult.net/ambit2/feature/21591}/feature/21591}}     | {{{http://apps.ideaconsult.net/ambit2/feature/21580}/feature/21580}} |{{{http://apps.ideaconsult.net/ambit2/feature/21588}/feature/21588}}        |
+| | {{{https://apps.ideaconsult.net/ambit2/feature/21591}/feature/21591}}     | {{{https://apps.ideaconsult.net/ambit2/feature/21580}/feature/21580}} |{{{https://apps.ideaconsult.net/ambit2/feature/21588}/feature/21588}}        |
 *----------*--------------+--------+----------------:
-|{{{http://apps.ideaconsult.net/ambit2/compound/413/conformer/409421}/compound/413/conformer/409421}}  | 60-11-7     | Solvent Yellow 2; Butter Yellow;  | {{{http://apps.ideaconsult.net/ambit2/compound/44497/conformer/409422?feature_uris[]=http://apps.ideaconsult.net/ambit2/feature/21588&media=text/n3}225.3}}       |
+|{{{https://apps.ideaconsult.net/ambit2/compound/413/conformer/409421}/compound/413/conformer/409421}}  | 60-11-7     | Solvent Yellow 2; Butter Yellow;  | {{{https://apps.ideaconsult.net/ambit2/compound/44497/conformer/409422?feature_uris[]=https://apps.ideaconsult.net/ambit2/feature/21588&media=text/n3}225.3}}       |
 *----------*--------------+--------+----------------:
-| {{{http://apps.ideaconsult.net/ambit2/compound/44497/conformer/409422}/compound/44497/conformer/409422}} | 28322-02-3    |  4-AAF; 4-acetamidofluorene;       | {{{http://apps.ideaconsult.net/ambit2/compound/44497/conformer/409422?feature_uris[]=http://apps.ideaconsult.net/ambit2/feature/21588&media=text/n3} 223.28}}      |
+| {{{https://apps.ideaconsult.net/ambit2/compound/44497/conformer/409422}/compound/44497/conformer/409422}} | 28322-02-3    |  4-AAF; 4-acetamidofluorene;       | {{{https://apps.ideaconsult.net/ambit2/compound/44497/conformer/409422?feature_uris[]=https://apps.ideaconsult.net/ambit2/feature/21588&media=text/n3} 223.28}}      |
 *----------*--------------+--------+----------------:
-| {{{http://apps.ideaconsult.net/ambit2/compound/4480/conformer/409423}/compound/4480/conformer/409423}}  |129-00-0     |    Benzo[def]phenanthrene;     | {{{http://apps.ideaconsult.net/ambit2/compound/4480/conformer/409423?feature_uris[]=http://apps.ideaconsult.net/ambit2/feature/21588&media=text/n3}202.26}}      |
+| {{{https://apps.ideaconsult.net/ambit2/compound/4480/conformer/409423}/compound/4480/conformer/409423}}  |129-00-0     |    Benzo[def]phenanthrene;     | {{{https://apps.ideaconsult.net/ambit2/compound/4480/conformer/409423?feature_uris[]=https://apps.ideaconsult.net/ambit2/feature/21588&media=text/n3}202.26}}      |
 *----------*--------------+--------+----------------:
-| {{{http://apps.ideaconsult.net/ambit2/compound/602/conformer/409424}/compound/602/conformer/409424}}  |67-66-3    |  Formyl trichloride; methane trichloride      | {{{http://apps.ideaconsult.net/ambit2/compound/602/conformer/409424?feature_uris[]=http://apps.ideaconsult.net/ambit2/feature/21588&media=text/n3}119.38}}      |
+| {{{https://apps.ideaconsult.net/ambit2/compound/602/conformer/409424}/compound/602/conformer/409424}}  |67-66-3    |  Formyl trichloride; methane trichloride      | {{{https://apps.ideaconsult.net/ambit2/compound/602/conformer/409424?feature_uris[]=https://apps.ideaconsult.net/ambit2/feature/21588&media=text/n3}119.38}}      |
 *----------*--------------+--------+----------------:
 Simplified representation of OpenTox Dataset
   
@@ -69,25 +69,25 @@ Simplified representation of OpenTox Dataset
  ** Example 1. Retrieve dataset metadata in RDF/XML
 
 +---------------------------------------
-$ curl -H "Accept:application/rdf+xml" http://apps.ideaconsult.net/ambit2/dataset/9/metadata
+$ curl -H "Accept:application/rdf+xml" https://apps.ideaconsult.net/ambit2/dataset/9/metadata
 <rdf:RDF
-    xmlns:ac="http://apps.ideaconsult.net/ambit2/compound/"
+    xmlns:ac="https://apps.ideaconsult.net/ambit2/compound/"
     xmlns:ot="http://www.opentox.org/api/1.1#"
     xmlns:bx="http://purl.org/net/nknouf/ns/bibtex#"
     xmlns:otee="http://www.opentox.org/echaEndpoints.owl#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:ar="http://apps.ideaconsult.net/ambit2/reference/"
-    xmlns="http://apps.ideaconsult.net/ambit2/"
-    xmlns:am="http://apps.ideaconsult.net/ambit2/model/"
-    xmlns:af="http://apps.ideaconsult.net/ambit2/feature/"
+    xmlns:ar="https://apps.ideaconsult.net/ambit2/reference/"
+    xmlns="https://apps.ideaconsult.net/ambit2/"
+    xmlns:am="https://apps.ideaconsult.net/ambit2/model/"
+    xmlns:af="https://apps.ideaconsult.net/ambit2/feature/"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:ad="http://apps.ideaconsult.net/ambit2/dataset/"
-    xmlns:ag="http://apps.ideaconsult.net/ambit2/algorithm/"
+    xmlns:ad="https://apps.ideaconsult.net/ambit2/dataset/"
+    xmlns:ag="https://apps.ideaconsult.net/ambit2/algorithm/"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
     xmlns:ota="http://www.opentox.org/algorithmTypes.owl#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-  xml:base="http://apps.ideaconsult.net/ambit2/">
+  xml:base="https://apps.ideaconsult.net/ambit2/">
   <owl:Class rdf:about="http://www.opentox.org/api/1.1#Dataset"/>
   <owl:Class rdf:about="http://purl.org/net/nknouf/ns/bibtex#Entry"/>
   <ot:Dataset rdf:about="dataset/9">
@@ -107,28 +107,28 @@ $ curl -H "Accept:application/rdf+xml" http://apps.ideaconsult.net/ambit2/datase
  ** Example 2. Retrieve list of features URI, used in this dataset
 
 +---------------------------------------
-$ curl -H "Accept:text/uri-list" http://apps.ideaconsult.net/ambit2/dataset/9/feature
-http://apps.ideaconsult.net/ambit2/feature/21572
-http://apps.ideaconsult.net/ambit2/feature/21573
-http://apps.ideaconsult.net/ambit2/feature/21574
-http://apps.ideaconsult.net/ambit2/feature/21575
-http://apps.ideaconsult.net/ambit2/feature/21576
-http://apps.ideaconsult.net/ambit2/feature/21577
-http://apps.ideaconsult.net/ambit2/feature/21578
-http://apps.ideaconsult.net/ambit2/feature/21579
-http://apps.ideaconsult.net/ambit2/feature/21580
-http://apps.ideaconsult.net/ambit2/feature/21581
-http://apps.ideaconsult.net/ambit2/feature/21582
-http://apps.ideaconsult.net/ambit2/feature/21583
-http://apps.ideaconsult.net/ambit2/feature/21584
-http://apps.ideaconsult.net/ambit2/feature/21585
-http://apps.ideaconsult.net/ambit2/feature/21586
-http://apps.ideaconsult.net/ambit2/feature/21587
-http://apps.ideaconsult.net/ambit2/feature/21588
-http://apps.ideaconsult.net/ambit2/feature/21589
-http://apps.ideaconsult.net/ambit2/feature/21590
-http://apps.ideaconsult.net/ambit2/feature/21591
-http://apps.ideaconsult.net/ambit2/feature/21592
+$ curl -H "Accept:text/uri-list" https://apps.ideaconsult.net/ambit2/dataset/9/feature
+https://apps.ideaconsult.net/ambit2/feature/21572
+https://apps.ideaconsult.net/ambit2/feature/21573
+https://apps.ideaconsult.net/ambit2/feature/21574
+https://apps.ideaconsult.net/ambit2/feature/21575
+https://apps.ideaconsult.net/ambit2/feature/21576
+https://apps.ideaconsult.net/ambit2/feature/21577
+https://apps.ideaconsult.net/ambit2/feature/21578
+https://apps.ideaconsult.net/ambit2/feature/21579
+https://apps.ideaconsult.net/ambit2/feature/21580
+https://apps.ideaconsult.net/ambit2/feature/21581
+https://apps.ideaconsult.net/ambit2/feature/21582
+https://apps.ideaconsult.net/ambit2/feature/21583
+https://apps.ideaconsult.net/ambit2/feature/21584
+https://apps.ideaconsult.net/ambit2/feature/21585
+https://apps.ideaconsult.net/ambit2/feature/21586
+https://apps.ideaconsult.net/ambit2/feature/21587
+https://apps.ideaconsult.net/ambit2/feature/21588
+https://apps.ideaconsult.net/ambit2/feature/21589
+https://apps.ideaconsult.net/ambit2/feature/21590
+https://apps.ideaconsult.net/ambit2/feature/21591
+https://apps.ideaconsult.net/ambit2/feature/21592
 +---------------------------------------
 
  Or just the compound URIs (restricted to first 3) via text/uri-list mime type:
@@ -136,10 +136,10 @@ http://apps.ideaconsult.net/ambit2/feature/21592
  ** Example 3. Dataset representation in N3 format
 
 +---------------------------------------
-$ curl -H "Accept:text/uri-list" "http://apps.ideaconsult.net/ambit2/dataset/9?page=0&pagesize=3"
-http://apps.ideaconsult.net/ambit2/compound/413/conformer/409421
-http://apps.ideaconsult.net/ambit2/compound/44497/conformer/409422
-http://apps.ideaconsult.net/ambit2/compound/4480/conformer/409423
+$ curl -H "Accept:text/uri-list" "https://apps.ideaconsult.net/ambit2/dataset/9?page=0&pagesize=3"
+https://apps.ideaconsult.net/ambit2/compound/413/conformer/409421
+https://apps.ideaconsult.net/ambit2/compound/44497/conformer/409422
+https://apps.ideaconsult.net/ambit2/compound/4480/conformer/409423
 +---------------------------------------
 
 *{RDF Representation}
@@ -156,18 +156,18 @@ http://apps.ideaconsult.net/ambit2/compound/4480/conformer/409423
  
  A dataset consists of multiple ot:DataEntry-ies. These classes can be represented as anonymous classes in RDF notations, or have unique URIs.  
 
-  As an illustration, the content of the dataset  {{{http://apps.ideaconsult.net/ambit2/dataset/9}http://apps.ideaconsult.net/ambit2/dataset/9}} can be retrieved in RDF/XML and N3
+  As an illustration, the content of the dataset  {{{https://apps.ideaconsult.net/ambit2/dataset/9}https://apps.ideaconsult.net/ambit2/dataset/9}} can be retrieved in RDF/XML and N3
   
  ** Example 4. Dataset representation in RDF/XML or N3 format
 
 +---------------------------------------
-curl -H "Accept:application/rdf+xml" http://apps.ideaconsult.net/ambit2/dataset/9
+curl -H "Accept:application/rdf+xml" https://apps.ideaconsult.net/ambit2/dataset/9
 +---------------------------------------
  
  or
   
 +---------------------------------------
-curl -H "Accept:text/n3" http://apps.ideaconsult.net/ambit2/dataset/9
+curl -H "Accept:text/n3" https://apps.ideaconsult.net/ambit2/dataset/9
 +---------------------------------------
   
  ** Example 5. Dataset comparison demo  

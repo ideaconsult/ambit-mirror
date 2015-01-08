@@ -36,7 +36,7 @@ AMBIT REST web services are distributed as web archive (war file) and can be dep
 
 Try the public web services, datasets and models : 
 
--   [Datasets](http://apps.ideaconsult.net/data/dataset?pagesize=100) : [**ONS Melting point 33**](https://apps.ideaconsult.net/data/ui/_dataset?dataset_uri=https%3A%2F%2Fapps.ideaconsult.net%2Fdata%2Fdataset%2F45) [<sup>?</sup>](http://precedings.nature.com/documents/6229/version/1) | [**CPDBAS**](https://apps.ideaconsult.net/data/ui/_dataset?dataset_uri=https%3A%2F%2Fapps.ideaconsult.net%2Fdata%2Fdataset%2F10) [<sup>?</sup>](http://www.epa.gov/ncct/dsstox/sdf_cpdbas.html) | [**Tox21**](https://apps.ideaconsult.net/data/ui/_dataset?dataset_uri=https%3A%2F%2Fapps.ideaconsult.net%2Fdata%2Fdataset%2F36) | [**Inventory of Cosmetic Ingredients**](https://apps.ideaconsult.net/data/ui/_dataset?dataset_uri=https%3A%2F%2Fapps.ideaconsult.net%2Fdata%2Fdataset%2F1) | [**WikiPathways structure browser** at *GitHub*](http://ideaconsult.github.io/Toxtree.js) and at [*BiGCaT Maastricht University*](http://www.bigcat.unimaas.nl/~egonw/wpm/) [<sup>?</sup>](http://wikipathways.org/index.php/WikiPathways) |  [Bioconcentration factor **(BCF) Gold Standard Database**](http://ambit.sourceforge.net/euras/) [<sup>?</sup>](http://www.cefic-lri.org/lri-toolbox/bcf)
+-   [Datasets](https://apps.ideaconsult.net/data/dataset?pagesize=100) : [**ONS Melting point 33**](https://apps.ideaconsult.net/data/ui/_dataset?dataset_uri=https%3A%2F%2Fapps.ideaconsult.net%2Fdata%2Fdataset%2F45) [<sup>?</sup>](http://precedings.nature.com/documents/6229/version/1) | [**CPDBAS**](https://apps.ideaconsult.net/data/ui/_dataset?dataset_uri=https%3A%2F%2Fapps.ideaconsult.net%2Fdata%2Fdataset%2F10) [<sup>?</sup>](http://www.epa.gov/ncct/dsstox/sdf_cpdbas.html) | [**Tox21**](https://apps.ideaconsult.net/data/ui/_dataset?dataset_uri=https%3A%2F%2Fapps.ideaconsult.net%2Fdata%2Fdataset%2F36) | [**Inventory of Cosmetic Ingredients**](https://apps.ideaconsult.net/data/ui/_dataset?dataset_uri=https%3A%2F%2Fapps.ideaconsult.net%2Fdata%2Fdataset%2F1) | [**WikiPathways structure browser** at *GitHub*](http://ideaconsult.github.io/Toxtree.js) and at [*BiGCaT Maastricht University*](http://www.bigcat.unimaas.nl/~egonw/wpm/) [<sup>?</sup>](http://wikipathways.org/index.php/WikiPathways) |  [Bioconcentration factor **(BCF) Gold Standard Database**](http://ambit.sourceforge.net/euras/) [<sup>?</sup>](http://www.cefic-lri.org/lri-toolbox/bcf)
      
 -   Search: [**Structure search**](https://apps.ideaconsult.net/data/ui/_search) | [**Substances**](https://apps.ideaconsult.net/data/substances) | [**Nanomaterials**](https://apps.ideaconsult.net/enmtest/substances) 
    
@@ -60,15 +60,15 @@ User guide
 
 CHEMICAL SUBSTANCES, NANOMATERIALS AND ENDPOINT DATA IN AMBIT 
 
-The exercises will be using http://apps.ideaconsult.net/opentox/
+The exercises will be using https://apps.ideaconsult.net/opentox/
 
--   [**Structure search**](http://apps.ideaconsult.net/opentox/ui/_search)
+-   [**Structure search**](https://apps.ideaconsult.net/opentox/ui/_search)
 
--   [**Substance online**](http://apps.ideaconsult.net/opentox/substance)
+-   [**Substance online**](https://apps.ideaconsult.net/opentox/substance)
 
--   [**Endpoint search**](http://apps.ideaconsult.net/opentox/query/study)
+-   [**Endpoint search**](https://apps.ideaconsult.net/opentox/query/study)
 
--   [**Run Toxtree predictions**](http://apps.ideaconsult.net/opentox/ui/toxtree)
+-   [**Run Toxtree predictions**](https://apps.ideaconsult.net/opentox/ui/toxtree)
 
 -   Please [**provide feedback**](https://docs.google.com/forms/d/1ncsW59uGAJfEUgSv8tvfbiU0XRXIik9RuRJ376WnkB0/viewform) on the [**Read Across workflow user interface proposal**](http://ambit.sourceforge.net/RA/RA.pdf)
 
