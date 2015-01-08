@@ -8,7 +8,7 @@
 
 {AMBIT REST Web services} 
 	
-	Explore AMBIT implementation of OpenTox REST API at {{{http://apps.ideaconsult.net/ambit2}http://apps.ideaconsult.net/ambit2}}.
+	Explore AMBIT implementation of OpenTox REST API at {{{https://apps.ideaconsult.net/ambit2}https://apps.ideaconsult.net/ambit2}}.
 	
 	Try {{{http://toxpredict.org/}ToxPredict}} - demo application, consuming OpenTox REST services.
 

@@ -27,7 +27,7 @@
 		http://opensso.in-silico.ch/auth/authenticate 
 +---------------------------
 
-	AMBIT services offer log in via its {{{http://apps.ideaconsult.net/ambit2/opentoxuser}web page}}.
+	AMBIT services offer log in via its {{{https://apps.ideaconsult.net/ambit2/opentoxuser}web page}}.
 	
 	The relevant link for a local installation is {{{http://localhost:8080/ambit2/opentoxuser}http://yourhost:8080/ambit2/opentoxuser}}.
 

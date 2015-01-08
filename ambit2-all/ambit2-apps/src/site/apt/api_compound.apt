@@ -27,14 +27,14 @@ OpenTox API : Compound
  ** Example 1. Retrieve compound as SMILES ({{{http://www.daylight.com/dayhtml/doc/theory/theory.smiles.html}Simplified Molecular Input Line Entry System}})
 
 +---------------------------------------
- $ curl -H "Accept:chemical/x-daylight-smiles" http://apps.ideaconsult.net/ambit2/compound/1
+ $ curl -H "Accept:chemical/x-daylight-smiles" https://apps.ideaconsult.net/ambit2/compound/1
  O=C
 +---------------------------------------
 
  ** Example 2. Retrieve compound as SMILES, show HTTP headers
 
 +------------------------------------------+
- $ curl -H "Accept:chemical/x-daylight-smiles" http://apps.ideaconsult.net/ambit2/compound/1 -i
+ $ curl -H "Accept:chemical/x-daylight-smiles" https://apps.ideaconsult.net/ambit2/compound/1 -i
  HTTP/1.1 200 OK
  Content-Type: chemical/x-daylight-smiles;charset=UTF-8
 
@@ -44,14 +44,14 @@ O=C
  ** Example 3. Retrieve compound as {{{http://www.iupac.org/inchi/}InChI}}
 
 +---------------------------------------
-$ curl -H "Accept:chemical/x-inchi" http://apps.ideaconsult.net/ambit2/compound/1
+$ curl -H "Accept:chemical/x-inchi" https://apps.ideaconsult.net/ambit2/compound/1
 InChI=1S/CH2O/c1-2/h1H2
 +---------------------------------------
 
  ** Example 4. Retrieve compound in MOL format
 
 +---------------------------------------
-$ curl -H "Accept:chemical/x-mdl-molfile" http://apps.ideaconsult.net/ambit2/compound/1
+$ curl -H "Accept:chemical/x-mdl-molfile" https://apps.ideaconsult.net/ambit2/compound/1
 CH2O
 APtclcactv09040902283D 0   0.00000     0.00000
 
@@ -68,7 +68,7 @@ APtclcactv09040902283D 0   0.00000     0.00000
  ** Example 5. Retrieve compound in SDF format
 
 +---------------------------------------
-curl -H "Accept:chemical/x-mdl-sdfile" http://apps.ideaconsult.net/ambit2/compound/1
+curl -H "Accept:chemical/x-mdl-sdfile" https://apps.ideaconsult.net/ambit2/compound/1
 CH2O
 APtclcactv09040902283D 0   0.00000     0.00000
 
@@ -87,7 +87,7 @@ $$$$
  ** Example 6. Retrieve compound in CML format
 
 +---------------------------------------
-$ curl -H "Accept:chemical/x-cml" http://apps.ideaconsult.net/ambit2/compound/1
+$ curl -H "Accept:chemical/x-cml" https://apps.ideaconsult.net/ambit2/compound/1
 <?xml version="1.0" encoding="ISO-8859-1"?><list dictRef="cdk:moleculeSet" xmlns="http://www.xml-cml.org/schema">
 <molecule id="m1" title="CH2O" xmlns="http://www.xml-cml.org/schema">
   <atomArray>

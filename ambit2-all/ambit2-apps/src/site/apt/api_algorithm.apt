@@ -29,131 +29,131 @@ OpenTox API : Algorithm
   
  Algorithm types ontology is available at http://opentox.org/data/documents/development/RDF%20files/AlgorithmTypes and provides a hierarchical classification of algorithm types. Algorithm type in RDF representation is set by direct subclassing (rdf:type) of a class from the algorithm types ontology (ota:http://www.opentox.org/algorithms.owl ) , e.g. <myalgorithm> rdf:type ota:Classification, Example 21.
  
- Algorithm types ontology can be used to query algorithms of specific type, via {{{http://apps.ideaconsult.net:8080/ontology/query/Algorithm}OpenTox Ontology service}}
+ Algorithm types ontology can be used to query algorithms of specific type, via {{{https://apps.ideaconsult.net/ontology/query/Algorithm}OpenTox Ontology service}}
  
- {{{http://apps.ideaconsult.net/ontology/query/Descriptors}Descriptor calculation}} 
- {{{http://apps.ideaconsult.net/ontology/query/Classification}Classification}} 
- {{{http://apps.ideaconsult.net/ontology/query/Regression}Regression}} 
- {{{http://apps.ideaconsult.net/ontology/query/Rules}Expert rules}} 
- {{{http://apps.ideaconsult.net/ontology/query/AppDomain}Applicability domain}}
+ {{{https://apps.ideaconsult.net/ontology/query/Descriptors}Descriptor calculation}} 
+ {{{https://apps.ideaconsult.net/ontology/query/Classification}Classification}} 
+ {{{https://apps.ideaconsult.net/ontology/query/Regression}Regression}} 
+ {{{https://apps.ideaconsult.net/ontology/query/Rules}Expert rules}} 
+ {{{https://apps.ideaconsult.net/ontology/query/AppDomain}Applicability domain}}
  
 *{Examples} 
 ~~~~~~  
 
- ** {Example 1.} Retrieve list of all algorithm URIs at {{{http://www.ideaconsult.net}IdeaConsult}} {{{http://apps.ideaconsult.net/ambit2/algorithm}algorithm service}} : 
+ ** {Example 1.} Retrieve list of all algorithm URIs at {{{http://www.ideaconsult.net}IdeaConsult}} {{{https://apps.ideaconsult.net/ambit2/algorithm}algorithm service}} : 
 
 +---------------------------------------
-curl -H "Accept:text/uri-list" http://apps.ideaconsult.net/ambit2/algorithm
-http://apps.ideaconsult.net/ambit2/algorithm/SimpleKMeans
-http://apps.ideaconsult.net/ambit2/algorithm/J48
-http://apps.ideaconsult.net/ambit2/algorithm/RandomForest
-http://apps.ideaconsult.net/ambit2/algorithm/Functional+tree
-http://apps.ideaconsult.net/ambit2/algorithm/LibLINEAR
-http://apps.ideaconsult.net/ambit2/algorithm/IB1
-http://apps.ideaconsult.net/ambit2/algorithm/LR
-http://apps.ideaconsult.net/ambit2/algorithm/GaussianProcesses
-http://apps.ideaconsult.net/ambit2/algorithm/IsotonicRegression
-http://apps.ideaconsult.net/ambit2/algorithm/LMSLR
-http://apps.ideaconsult.net/ambit2/algorithm/LogisticRegression
-http://apps.ideaconsult.net/ambit2/algorithm/MLP
-http://apps.ideaconsult.net/ambit2/algorithm/PaceRegresion
-http://apps.ideaconsult.net/ambit2/algorithm/RBFNetwork
-http://apps.ideaconsult.net/ambit2/algorithm/SMO
-http://apps.ideaconsult.net/ambit2/algorithm/SMOreg
-http://apps.ideaconsult.net/ambit2/algorithm/VotedPerceptron
-http://apps.ideaconsult.net/ambit2/algorithm/Winnow
-http://apps.ideaconsult.net/ambit2/algorithm/Bayesian+Logistic+Regression
-http://apps.ideaconsult.net/ambit2/algorithm/DMNBtext
-http://apps.ideaconsult.net/ambit2/algorithm/NaiveBayes
-http://apps.ideaconsult.net/ambit2/algorithm/NBM
-http://apps.ideaconsult.net/ambit2/algorithm/BayesianLogisticRegression
-http://apps.ideaconsult.net/ambit2/algorithm/AODE
-http://apps.ideaconsult.net/ambit2/algorithm/HNB
-http://apps.ideaconsult.net/ambit2/algorithm/pka
-http://apps.ideaconsult.net/ambit2/algorithm/categories
-http://apps.ideaconsult.net/ambit2/algorithm/toxtreecramer
-http://apps.ideaconsult.net/ambit2/algorithm/toxtreecramer2
-http://apps.ideaconsult.net/ambit2/algorithm/toxtreeverhaar
-http://apps.ideaconsult.net/ambit2/algorithm/toxtreeverhaar2
-http://apps.ideaconsult.net/ambit2/algorithm/toxtreeeye
-http://apps.ideaconsult.net/ambit2/algorithm/toxtreeskinirritation
-http://apps.ideaconsult.net/ambit2/algorithm/toxtreemic
-http://apps.ideaconsult.net/ambit2/algorithm/toxtreeskinsens
-http://apps.ideaconsult.net/ambit2/algorithm/toxtreesmartcyp
-http://apps.ideaconsult.net/ambit2/algorithm/toxtreemichaelacceptors
-http://apps.ideaconsult.net/ambit2/algorithm/toxtreecarc
-http://apps.ideaconsult.net/ambit2/algorithm/toxtreebiodeg
-http://apps.ideaconsult.net/ambit2/algorithm/toxtreekroes
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.MannholdLogPDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/ambit2.descriptors.MolecularWeight
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.APolDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorCharge
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorMass
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorPolarizability
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.BPolDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.CarbonTypesDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.EccentricConnectivityIndexDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.FragmentComplexityDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.GravitationalIndexDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.IPMolecularDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.KappaShapeIndicesDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.KierHallSmartsDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.LengthOverBreadthDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.LongestAliphaticChainDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.MDEDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.MomentOfInertiaDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.PetitjeanNumberDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.PetitjeanShapeIndexDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/ambit2.mopac.MopacOriginalStructure
-http://apps.ideaconsult.net/ambit2/algorithm/ambit2.dragon.DescriptorDragonShell
-http://apps.ideaconsult.net/ambit2/algorithm/ambit2.some.DescriptorSOMEShell
-http://apps.ideaconsult.net/ambit2/algorithm/ambit2.descriptors.InChI
-http://apps.ideaconsult.net/ambit2/algorithm/ambit2.descriptors.AtomTypeVerifierDescriptor
-http://apps.ideaconsult.net/ambit2/algorithm/ambit2.descriptors.KekulizationVerifier
-http://apps.ideaconsult.net/ambit2/algorithm/ambit2.mopac.MopacShell
-http://apps.ideaconsult.net/ambit2/algorithm/finder
-http://apps.ideaconsult.net/ambit2/algorithm/pcaRanges
-http://apps.ideaconsult.net/ambit2/algorithm/distanceEuclidean
-http://apps.ideaconsult.net/ambit2/algorithm/distanceCityBlock
-http://apps.ideaconsult.net/ambit2/algorithm/distanceMahalanobis
-http://apps.ideaconsult.net/ambit2/algorithm/nparamdensity
-http://apps.ideaconsult.net/ambit2/algorithm/leverage
-http://apps.ideaconsult.net/ambit2/algorithm/fptanimoto
-http://apps.ideaconsult.net/ambit2/algorithm/fpmissingfragments
-http://apps.ideaconsult.net/ambit2/algorithm/fingerprints
-http://apps.ideaconsult.net/ambit2/algorithm/atomenvironments
-http://apps.ideaconsult.net/ambit2/algorithm/structurequality
-http://apps.ideaconsult.net/ambit2/algorithm/struckeys
-http://apps.ideaconsult.net/ambit2/algorithm/smartsprop
-http://apps.ideaconsult.net/ambit2/algorithm/inchi
-http://apps.ideaconsult.net/ambit2/algorithm/mcss
-http://apps.ideaconsult.net/ambit2/algorithm/superservice
-http://apps.ideaconsult.net/ambit2/algorithm/superbuilder
-http://apps.ideaconsult.net/ambit2/algorithm/mockup
-http://apps.ideaconsult.net/ambit2/algorithm/expert
+curl -H "Accept:text/uri-list" https://apps.ideaconsult.net/ambit2/algorithm
+https://apps.ideaconsult.net/ambit2/algorithm/SimpleKMeans
+https://apps.ideaconsult.net/ambit2/algorithm/J48
+https://apps.ideaconsult.net/ambit2/algorithm/RandomForest
+https://apps.ideaconsult.net/ambit2/algorithm/Functional+tree
+https://apps.ideaconsult.net/ambit2/algorithm/LibLINEAR
+https://apps.ideaconsult.net/ambit2/algorithm/IB1
+https://apps.ideaconsult.net/ambit2/algorithm/LR
+https://apps.ideaconsult.net/ambit2/algorithm/GaussianProcesses
+https://apps.ideaconsult.net/ambit2/algorithm/IsotonicRegression
+https://apps.ideaconsult.net/ambit2/algorithm/LMSLR
+https://apps.ideaconsult.net/ambit2/algorithm/LogisticRegression
+https://apps.ideaconsult.net/ambit2/algorithm/MLP
+https://apps.ideaconsult.net/ambit2/algorithm/PaceRegresion
+https://apps.ideaconsult.net/ambit2/algorithm/RBFNetwork
+https://apps.ideaconsult.net/ambit2/algorithm/SMO
+https://apps.ideaconsult.net/ambit2/algorithm/SMOreg
+https://apps.ideaconsult.net/ambit2/algorithm/VotedPerceptron
+https://apps.ideaconsult.net/ambit2/algorithm/Winnow
+https://apps.ideaconsult.net/ambit2/algorithm/Bayesian+Logistic+Regression
+https://apps.ideaconsult.net/ambit2/algorithm/DMNBtext
+https://apps.ideaconsult.net/ambit2/algorithm/NaiveBayes
+https://apps.ideaconsult.net/ambit2/algorithm/NBM
+https://apps.ideaconsult.net/ambit2/algorithm/BayesianLogisticRegression
+https://apps.ideaconsult.net/ambit2/algorithm/AODE
+https://apps.ideaconsult.net/ambit2/algorithm/HNB
+https://apps.ideaconsult.net/ambit2/algorithm/pka
+https://apps.ideaconsult.net/ambit2/algorithm/categories
+https://apps.ideaconsult.net/ambit2/algorithm/toxtreecramer
+https://apps.ideaconsult.net/ambit2/algorithm/toxtreecramer2
+https://apps.ideaconsult.net/ambit2/algorithm/toxtreeverhaar
+https://apps.ideaconsult.net/ambit2/algorithm/toxtreeverhaar2
+https://apps.ideaconsult.net/ambit2/algorithm/toxtreeeye
+https://apps.ideaconsult.net/ambit2/algorithm/toxtreeskinirritation
+https://apps.ideaconsult.net/ambit2/algorithm/toxtreemic
+https://apps.ideaconsult.net/ambit2/algorithm/toxtreeskinsens
+https://apps.ideaconsult.net/ambit2/algorithm/toxtreesmartcyp
+https://apps.ideaconsult.net/ambit2/algorithm/toxtreemichaelacceptors
+https://apps.ideaconsult.net/ambit2/algorithm/toxtreecarc
+https://apps.ideaconsult.net/ambit2/algorithm/toxtreebiodeg
+https://apps.ideaconsult.net/ambit2/algorithm/toxtreekroes
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.MannholdLogPDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/ambit2.descriptors.MolecularWeight
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.APolDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorCharge
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorMass
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorPolarizability
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.BPolDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.CarbonTypesDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.EccentricConnectivityIndexDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.FragmentComplexityDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.GravitationalIndexDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.IPMolecularDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.KappaShapeIndicesDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.KierHallSmartsDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.LengthOverBreadthDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.LongestAliphaticChainDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.MDEDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.MomentOfInertiaDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.PetitjeanNumberDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.PetitjeanShapeIndexDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/ambit2.mopac.MopacOriginalStructure
+https://apps.ideaconsult.net/ambit2/algorithm/ambit2.dragon.DescriptorDragonShell
+https://apps.ideaconsult.net/ambit2/algorithm/ambit2.some.DescriptorSOMEShell
+https://apps.ideaconsult.net/ambit2/algorithm/ambit2.descriptors.InChI
+https://apps.ideaconsult.net/ambit2/algorithm/ambit2.descriptors.AtomTypeVerifierDescriptor
+https://apps.ideaconsult.net/ambit2/algorithm/ambit2.descriptors.KekulizationVerifier
+https://apps.ideaconsult.net/ambit2/algorithm/ambit2.mopac.MopacShell
+https://apps.ideaconsult.net/ambit2/algorithm/finder
+https://apps.ideaconsult.net/ambit2/algorithm/pcaRanges
+https://apps.ideaconsult.net/ambit2/algorithm/distanceEuclidean
+https://apps.ideaconsult.net/ambit2/algorithm/distanceCityBlock
+https://apps.ideaconsult.net/ambit2/algorithm/distanceMahalanobis
+https://apps.ideaconsult.net/ambit2/algorithm/nparamdensity
+https://apps.ideaconsult.net/ambit2/algorithm/leverage
+https://apps.ideaconsult.net/ambit2/algorithm/fptanimoto
+https://apps.ideaconsult.net/ambit2/algorithm/fpmissingfragments
+https://apps.ideaconsult.net/ambit2/algorithm/fingerprints
+https://apps.ideaconsult.net/ambit2/algorithm/atomenvironments
+https://apps.ideaconsult.net/ambit2/algorithm/structurequality
+https://apps.ideaconsult.net/ambit2/algorithm/struckeys
+https://apps.ideaconsult.net/ambit2/algorithm/smartsprop
+https://apps.ideaconsult.net/ambit2/algorithm/inchi
+https://apps.ideaconsult.net/ambit2/algorithm/mcss
+https://apps.ideaconsult.net/ambit2/algorithm/superservice
+https://apps.ideaconsult.net/ambit2/algorithm/superbuilder
+https://apps.ideaconsult.net/ambit2/algorithm/mockup
+https://apps.ideaconsult.net/ambit2/algorithm/expert
 +---------------------------------------
 
  ** Example 3. Retrieve list of all algorithm URIs at NTUA algorithm service {{{http://opentox.ntua.gr:8080/algorithm}http://opentox.ntua.gr:8080/algorithm}}
@@ -172,10 +172,10 @@ http://opentox.ntua.gr:8080/algorithm/consensus
 http://opentox.ntua.gr:8080/algorithm/cleanup
 +---------------------------------------
 
-  ** {Example4.} Retrieve a representation of a descriptor calculation algorithm {{{http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}}
+  ** {Example4.} Retrieve a representation of a descriptor calculation algorithm {{{https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}}
   
 +-----------------------------------------
-curl -H "Accept:text/uri-list" http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
+curl -H "Accept:text/uri-list" https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 @prefix ot:      <http://www.opentox.org/api/1.1#> .
 @prefix dc:      <http://purl.org/dc/elements/1.1/> .
 @prefix ota:     <http://www.opentox.org/algorithmTypes.owl#> .
@@ -204,9 +204,9 @@ dc:publisher
 dc:format
       a       owl:AnnotationProperty .
 
-<http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor>
+<https://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor>
       a       ot:Algorithm , ota:DescriptorCalculation ;
-      dc:publisher "http://apps.ideaconsult.net/ambit2/algorithm/"^^xsd:anyURI ;
+      dc:publisher "https://apps.ideaconsult.net/ambit2/algorithm/"^^xsd:anyURI ;
       dc:title "XLogP"^^xsd:string ;
       bo:instanceOf bo:xlogP .
 
@@ -227,5 +227,5 @@ ota:DescriptorCalculation
  BlueObelisk ontology <<http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#xlogP>>. 
  The BlueObelisk ontology provides details of the algorithm itself, e.g. publication reference. 
  
- The {BlueObelisk} ontology can be queried via {{{http://apps.ideaconsult.net:8080/ontology}Ontology service}}.
+ The {BlueObelisk} ontology can be queried via {{{https://apps.ideaconsult.net/ontology}Ontology service}}.
  
