@@ -33,9 +33,10 @@ public class SMIRKSManager
 	
 	List<String> parserErrors = new ArrayList<String>();
 	
-	public int FlagSSMode = SmartsConst.SSM_NON_OVERLAPPING; 
+	public int FlagSSMode = SmartsConst.SSM_NON_OVERLAPPING; //This flag is used by the function applyTransformation()
+	
 	public boolean FlagFilterEquivalentMappings = false;
-	public boolean FlagPreprocessResultStructures = false;  //Triggers an optional preprocessing
+	public boolean FlagPreprocessResultStructures = false;  //Triggers an optional pre-processing
 	public boolean FlagCheckAromaticityInPreprocessing = true;
 	public boolean FlagAddImplicitHAtomsInPreprocessing = true;
 	
@@ -429,8 +430,18 @@ public class SMIRKSManager
 		return resSet;
 	}
 	
-	
+	/*
+	 *  This transformation is applied by default in SSM_NON_IDENTICAL
+	 */
 	public IAtomContainerSet applyTransformationWithSingleCopyForEachPos(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction) throws Exception
+	{
+		return applyTransformationWithSingleCopyForEachPos(target, selection, reaction, SmartsConst.SSM_NON_IDENTICAL);
+	}
+	
+	
+	
+	public IAtomContainerSet applyTransformationWithSingleCopyForEachPos(IAtomContainer target, 
+													IAcceptable selection, SMIRKSReaction reaction, int SSMode) throws Exception
 	{	
 		SmartsParser.prepareTargetForSMARTSSearch(reaction.reactantFlags, target);
 		if (reaction.reactantFlags.hasRecursiveSmarts)
@@ -438,7 +449,26 @@ public class SMIRKSManager
 		
 		isoTester.setQuery(reaction.reactant);
 		
-		List<List<IAtom>> rMaps0 = getNonIdenticalMappings(target);
+		List<List<IAtom>> rMaps0;
+		
+		switch (SSMode)
+		{
+		case SmartsConst.SSM_NON_OVERLAPPING:
+			rMaps0 = getNonOverlappingMappings(target);
+			break;
+			
+		case SmartsConst.SSM_NON_IDENTICAL:
+			rMaps0 = getNonIdenticalMappings(target);
+			break;
+			
+		case SmartsConst.SSM_ALL:
+			rMaps0 = getAllMappings(target);
+			break;	
+			
+		default:
+			rMaps0 = getNonIdenticalMappings(target);
+		}
+		
 		if (rMaps0.size()==0) 
 			return null;
 		
@@ -498,6 +528,15 @@ public class SMIRKSManager
 		//TODO
 		
 		List<List<IAtom>> rMaps = isoTester.getNonIdenticalMappings(target);
+		return(rMaps);
+	}
+	
+	public List<List<IAtom>> getAllMappings(IAtomContainer target)
+	{
+		//Special treatment for fragmented reactants 
+		//TODO
+		
+		List<List<IAtom>> rMaps = isoTester.getAllIsomorphismMappings(target);
 		return(rMaps);
 	}
 	
