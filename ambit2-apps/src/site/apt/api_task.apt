@@ -25,23 +25,23 @@ OpenTox API : Task
 *{Examples} 
 ~~~~~~  
 
- ** Example 1. Retrieve first 10 running tasks at {{{http://apps.ideaconsult.net:8080/ambit2/task}Ambit task service}}:
+ ** Example 1. Retrieve first 10 running tasks at {{{http://apps.ideaconsult.net/ambit2/task}Ambit task service}}:
 
 +---------------------------------------
- $ curl -H "Accept:text/uri-list" http://apps.ideaconsult.net:8080/ambit2/task?search=Running&max=10
+ $ curl -H "Accept:text/uri-list" http://apps.ideaconsult.net/ambit2/task?search=Running&max=10
  
- http://apps.ideaconsult.net:8080/ambit2/task/b84c2823-950b-4ef1-a581-a588925bf825
- http://apps.ideaconsult.net:8080/ambit2/task/c6e4ef56-9424-45b7-9cd3-db010ab53022
- http://apps.ideaconsult.net:8080/ambit2/task/cc2e3c6a-382d-47c5-8512-eaab9f721bda
- http://apps.ideaconsult.net:8080/ambit2/task/71a3fef3-7c96-4184-a892-2037aac93c53
+ http://apps.ideaconsult.net/ambit2/task/b84c2823-950b-4ef1-a581-a588925bf825
+ http://apps.ideaconsult.net/ambit2/task/c6e4ef56-9424-45b7-9cd3-db010ab53022
+ http://apps.ideaconsult.net/ambit2/task/cc2e3c6a-382d-47c5-8512-eaab9f721bda
+ http://apps.ideaconsult.net/ambit2/task/71a3fef3-7c96-4184-a892-2037aac93c53
 +---------------------------------------
 
  ** Example 2. Retrieve the RDF representation of a task
 
- $ curl -H "Accept:application/rdf+xml" http://apps.ideaconsult.net:8080/ambit2/task/b84c2823-950b-4ef1-a581-a588925bf825
+ $ curl -H "Accept:application/rdf+xml" http://apps.ideaconsult.net/ambit2/task/b84c2823-950b-4ef1-a581-a588925bf825
  
 +---------------------------------------
- curl  http://apps.ideaconsult.net:8080/ambit2/task/b84c2823-950b-4ef1-a581-a588925bf825 -i
+ curl  http://apps.ideaconsult.net/ambit2/task/b84c2823-950b-4ef1-a581-a588925bf825 -i
  HTTP/1.1 202 Accepted
  Content-Type: application/rdf+xml;charset=UTF-8
  Content-Length: 1548
@@ -61,7 +61,7 @@ OpenTox API : Task
   <owl:DatatypeProperty rdf:about="http://www.opentox.org/api/1.1#percentageCompleted"/>
   <owl:DatatypeProperty rdf:about="http://www.opentox.org/api/1.1#hasStatus"/>
   <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/date"/>
-  <ot:Task rdf:about="http://apps.ideaconsult.net:8080/ambit2/task/b84c2823-950b-4ef1-a581-a588925bf825">
+  <ot:Task rdf:about="http://apps.ideaconsult.net/ambit2/task/b84c2823-950b-4ef1-a581-a588925bf825">
     <ot:percentageCompleted rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
     >0.0</ot:percentageCompleted>
     <ot:hasStatus rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -69,7 +69,7 @@ OpenTox API : Task
     <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime"
     >1313498079638</dc:date>
     <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Apply Applicability domain: PCA ranges to http://apps.ideaconsult.net:8080/ambit2/dataset/636454</dc:title>
+    >Apply Applicability domain: PCA ranges to http://apps.ideaconsult.net/ambit2/dataset/636454</dc:title>
   </ot:Task>
   <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/title"/>
  </rdf:RDF>

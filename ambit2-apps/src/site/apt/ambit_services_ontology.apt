@@ -14,7 +14,7 @@ Ontology service
  * Get the representation of chemical compound
    
 ------
-curl http://apps.ideaconsult.net:8080/ambit2/compound/100
+curl http://apps.ideaconsult.net/ambit2/compound/100
 ------   
    
 *{POST}

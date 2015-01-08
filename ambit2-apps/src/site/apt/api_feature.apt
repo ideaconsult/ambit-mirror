@@ -44,13 +44,13 @@ OpenTox API : Feature
 *{Examples} 
 ~~~~~~  
 
- ** Example 1. Retrieve {{{http://apps.ideaconsult.net:8080/ambit2/feature/22114}http://apps.ideaconsult.net:8080/ambit2/feature/22114}} in RDF/XML format
+ ** Example 1. Retrieve {{{http://apps.ideaconsult.net/ambit2/feature/22114}http://apps.ideaconsult.net/ambit2/feature/22114}} in RDF/XML format
 
 +---------------------------------------
-$ curl -H "Accept:application/rdf+xml" http://apps.ideaconsult.net:8080/ambit2/feature/22114
+$ curl -H "Accept:application/rdf+xml" http://apps.ideaconsult.net/ambit2/feature/22114
 <?xml version="1.0"?>
 <!DOCTYPE rdf:RDF [
-  <!ENTITY this 'http://apps.ideaconsult.net:8080/ambit2/'>
+  <!ENTITY this 'http://apps.ideaconsult.net/ambit2/'>
   <!ENTITY dc 'http://purl.org/dc/elements/1.1/'>
   <!ENTITY ot 'http://www.opentox.org/api/1.1#'>
   <!ENTITY otee 'http://www.opentox.org/echaEndpoints.owl#'>
@@ -92,27 +92,27 @@ $ curl -H "Accept:application/rdf+xml" http://apps.ideaconsult.net:8080/ambit2/f
 
 +---------------------------------------
 
- Example 1 displays an OpenTox feature with title <<XLogP>> and identified by the URI {{{http://apps.ideaconsult.net:8080/ambit2/feature/22114}http://apps.ideaconsult.net:8080/ambit2/feature/22114}} , 
+ Example 1 displays an OpenTox feature with title <<XLogP>> and identified by the URI {{{http://apps.ideaconsult.net/ambit2/feature/22114}http://apps.ideaconsult.net/ambit2/feature/22114}} , 
  The algorithm used to generate values for this feature is identified by the URI
- {{{http://apps.ideaconsult.net:8080/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}http://apps.ideaconsult.net:8080/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}}. 
+ {{{http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}}. 
  Note the URI identifies OpenTox Algorithm resource, and the algorithm URI itself may not only be read , as will be shown later in this text, and also can be used to initiate calculations of XLogP descriptor. 
  
  The link to {ECHA} endpoints ontology (<<otee: http://www.opentox.org/echaEndpoints.owl>> namespace)  is also provided, specifying that this feature represents the physicochemical property <<Octanol water partitioning coefficient>>.  
  The ECHA endpoints ontology is derived from ECHA classification of endpoints, published in REACH guidance documents, and consists of hierarchical arrangement of physicochemical properties and various toxicological endpoints.  
  The hierarchy doesn't represent the complexity of toxicological assays, but can be used as a first approximation to assign meaning to the data entries.  As the RDF representation doesn't restrict the usage of this particular ontology, more specific description of toxicological assays can be used as well.
- It could be queried via {{{http://apps.ideaconsult.net:8080/ontology/query/Endpoints}OpenTox Ontology service}}.
+ It could be queried via {{{http://apps.ideaconsult.net/ontology/query/Endpoints}OpenTox Ontology service}}.
 
- The <<ot:hasSource>> property establishes link with the {{{./api_algorithm.html}OpenTox algorithm}}, which was used to calculate this feature, in this case {{{http://apps.ideaconsult.net:8080/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}http://apps.ideaconsult.net:8080/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}}.
+ The <<ot:hasSource>> property establishes link with the {{{./api_algorithm.html}OpenTox algorithm}}, which was used to calculate this feature, in this case {{{http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}}.
  Example how to retrieve the algorithm representation is available {{{./api_algorithm.html#Example4.}here}}.
  
  
- ** Example 2. Retrieve {{{http://apps.ideaconsult.net:8080/ambit2/feature/22114}http://apps.ideaconsult.net:8080/ambit2/feature/22114}} in N3 format
+ ** Example 2. Retrieve {{{http://apps.ideaconsult.net/ambit2/feature/22114}http://apps.ideaconsult.net/ambit2/feature/22114}} in N3 format
 
 +---------------------------------------
-curl -H "Accept:text/n3" http://apps.ideaconsult.net:8080/ambit2/feature/22114
+curl -H "Accept:text/n3" http://apps.ideaconsult.net/ambit2/feature/22114
 @prefix ot:      <http://www.opentox.org/api/1.1#> .
 @prefix dc:      <http://purl.org/dc/elements/1.1/> .
-@prefix :        <http://apps.ideaconsult.net:8080/ambit2/> .
+@prefix :        <http://apps.ideaconsult.net/ambit2/> .
 @prefix ota:     <http://www.opentox.org/algorithmTypes.owl#> .
 @prefix otee:    <http://www.opentox.org/echaEndpoints.owl#> .
 @prefix dcterms:  <http://purl.org/dc/terms/> .
@@ -130,11 +130,11 @@ ot:hasSource
 ot:units
       a       owl:DatatypeProperty .
 
-<http://apps.ideaconsult.net:8080/ambit2/feature/22114>
+<http://apps.ideaconsult.net/ambit2/feature/22114>
       a       ot:Feature , ot:NumericFeature ;
       dc:creator "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#xlogP" ;
       dc:title "XLogP" ;
-      ot:hasSource <http://apps.ideaconsult.net:8080/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor> ;
+      ot:hasSource <http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor> ;
       ot:units "" ;
       =       otee:Octanol-water_partition_coefficient_Kow .
 
@@ -145,7 +145,7 @@ ot:NumericFeature
       a       owl:Class ;
       rdfs:subClassOf ot:Feature .
 
-<http://apps.ideaconsult.net:8080/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor>
+<http://apps.ideaconsult.net/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor>
       a       ot:Algorithm .
 
 +---------------------------------------
@@ -157,19 +157,19 @@ ot:NumericFeature
 
  This algorithm URL could also be used to initiate descriptor calculations.
 
- ** Example 3. Retrieve {{{http://apps.ideaconsult.net:8080/ambit2/feature/26184}http://apps.ideaconsult.net:8080/ambit2/feature/26184}} in N3 notation
+ ** Example 3. Retrieve {{{http://apps.ideaconsult.net/ambit2/feature/26184}http://apps.ideaconsult.net/ambit2/feature/26184}} in N3 notation
 
 +---------------------------------------
-$ curl -H "Accept:text/n3" http://apps.ideaconsult.net:8080/ambit2/feature/26184
+$ curl -H "Accept:text/n3" http://apps.ideaconsult.net/ambit2/feature/26184
 @prefix ot:      <http://www.opentox.org/api/1.1#> .
 @prefix dc:      <http://purl.org/dc/elements/1.1/> .
-@prefix :        <http://apps.ideaconsult.net:8080/ambit2/> .
+@prefix :        <http://apps.ideaconsult.net/ambit2/> .
 @prefix bx:      <http://purl.org/net/nknouf/ns/bibtex#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl:     <http://www.w3.org/2002/07/owl#> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix af:      <http://apps.ideaconsult.net:8080/ambit2/feature/> .
+@prefix af:      <http://apps.ideaconsult.net/ambit2/feature/> .
 
 ot:hasSource
       a       owl:ObjectProperty .
@@ -195,20 +195,20 @@ af:26184
 
  And finally, all features, available at a feature resource can be listed in either of RDF formats, or just as a list of URIs , via text/uri-list mime type (Example 4).
  
- ** Example 4.  Retrieve URIs of first 10 features, available at http://apps.ideaconsult.net:8080/ambit2/feature
+ ** Example 4.  Retrieve URIs of first 10 features, available at http://apps.ideaconsult.net/ambit2/feature
 
 +---------------------------------------
-curl -H "Accept:text/uri-list" 'http://apps.ideaconsult.net:8080/ambit2/feature?page=0&pagesize=10'
- http://apps.ideaconsult.net:8080/ambit2/feature/1
- http://apps.ideaconsult.net:8080/ambit2/feature/2
- http://apps.ideaconsult.net:8080/ambit2/feature/3
- http://apps.ideaconsult.net:8080/ambit2/feature/4
- http://apps.ideaconsult.net:8080/ambit2/feature/5
- http://apps.ideaconsult.net:8080/ambit2/feature/6
- http://apps.ideaconsult.net:8080/ambit2/feature/7
- http://apps.ideaconsult.net:8080/ambit2/feature/8
- http://apps.ideaconsult.net:8080/ambit2/feature/9
- http://apps.ideaconsult.net:8080/ambit2/feature/10
+curl -H "Accept:text/uri-list" 'http://apps.ideaconsult.net/ambit2/feature?page=0&pagesize=10'
+ http://apps.ideaconsult.net/ambit2/feature/1
+ http://apps.ideaconsult.net/ambit2/feature/2
+ http://apps.ideaconsult.net/ambit2/feature/3
+ http://apps.ideaconsult.net/ambit2/feature/4
+ http://apps.ideaconsult.net/ambit2/feature/5
+ http://apps.ideaconsult.net/ambit2/feature/6
+ http://apps.ideaconsult.net/ambit2/feature/7
+ http://apps.ideaconsult.net/ambit2/feature/8
+ http://apps.ideaconsult.net/ambit2/feature/9
+ http://apps.ideaconsult.net/ambit2/feature/10
 +--------------------------------------- 
 
  ** Example 5. TODO : POST (create new feature) example 
