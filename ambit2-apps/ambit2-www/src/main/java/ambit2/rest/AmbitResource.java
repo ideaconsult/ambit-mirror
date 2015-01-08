@@ -254,7 +254,8 @@ public class AmbitResource extends FreeMarkerResource {
 			
 			{"[ambit - algorithms]","Structure diagram generation (DEMO)",formatHeader,null},
 			{"/depict/cdk?search=c1ccccc1O&smarts=aO","Structure diagram (based on CDK) (with SMARTS highlighting)",format,"GET"},
-			{"/depict/daylight?search=c1ccccc1","Structure diagram (based on Daylight depict",format,"GET"},
+			
+			//{"/depict/daylight?search=c1ccccc1","Structure diagram (based on Daylight depict",format,"GET"},
 			//{"/build3d?search=c1ccccc1","Generate 3D structure given a smiles",format,"GET","Under development"},
 
 			{"[ambit - stats]","Statistics",formatHeader,null},

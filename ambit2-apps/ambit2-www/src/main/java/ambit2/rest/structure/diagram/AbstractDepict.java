@@ -95,8 +95,11 @@ public class AbstractDepict extends ProtectedResource {
 		
 		Reference root = (Reference)ref.clone();
 		root.setQuery(null);
-		String uri = String.format("%s/daylight",root);
+		String uri;
 		String displaySmiles = smiles!=null && (smiles.length>0)?smiles[0]:"";
+		/*
+		uri = String.format("%s/daylight",root);
+		
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,smiles==null?"":Reference.encode(smiles[0]),"Daylight depiction",String.format(gplus,uri)),
@@ -107,8 +110,10 @@ public class AbstractDepict extends ProtectedResource {
 						),
 				style
 					));
-		b.append("</td><td>");
-		
+		b.append("</td>");
+
+		b.append("<td>");
+		*/		
 		uri = String.format("%s/cdk",root);
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s%s%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
@@ -124,8 +129,8 @@ public class AbstractDepict extends ProtectedResource {
 				style
 					)
 				);
-		b.append("</td></tr>");
-		b.append("<tr><td>");
+		b.append("</td>");
+		b.append("<td>");
 		uri = String.format("%s/cactvs",root);
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
@@ -138,7 +143,7 @@ public class AbstractDepict extends ProtectedResource {
 						displaySmiles,displaySmiles),
 				style
 					));
-		b.append("</td><td>");
+		b.append("</td></tr><tr><td>");
 		uri = String.format("%s/obabel",root);
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
@@ -153,9 +158,9 @@ public class AbstractDepict extends ProtectedResource {
 						h,h),
 				style
 					));
-		b.append("</td></tr>");
+		b.append("</td>");
 		
-		b.append("<tr><td>");
+		b.append("<td>");
 
 		String recordTypeOption = recordType==null?"":String.format("&record_type=%s", recordType);
 		uri = String.format("%s/pubchem",root);
