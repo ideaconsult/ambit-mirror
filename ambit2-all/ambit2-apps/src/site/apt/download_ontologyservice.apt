@@ -22,9 +22,9 @@
 	However, some applications like {{{./download_toxpredict.html}ToxPredict}} and 
 	{{{http://www.bioclipse.net/opentox}Bioclipse-OpenTox}} depend on querying an OpenTox Ontology service.    
 	
-    Currently, the {{{http://apps.ideaconsult.net:8080/ontology}Ontology service}} is used as a registry of all deployed OpenTox services (both local and remote),
+    Currently, the {{{http://apps.ideaconsult.net/ontology}Ontology service}} is used as a registry of all deployed OpenTox services (both local and remote),
     and {{{http://toxpredict.org/}ToxPredict}} web application retrieves the list of QSAR models 
-    via {{{http://apps.ideaconsult.net:8080/ontology/query/Model}SPARQL}} query.
+    via {{{http://apps.ideaconsult.net/ontology/query/Model}SPARQL}} query.
 
 *Download OpenTox Ontology service v.0.0.2
 
