@@ -31,7 +31,7 @@ AMBIT implementation of OpenTox REST API
 	  
 	  *** {{{https://apps.ideaconsult.net/ambit2/query/compound/search/all?type=smiles&property=&search=InChI%3D1S%2FC12H10O%2Fc1-3-7-11%288-4-1%2913-12-9-5-2-6-10-12%2Fh1-10H&page=0&pagesize=1} InChI = <<InChI=1S/C12H10O/c1-3-7-11(8-4-1)13-12-9-5-2-6-10-12/h1-10H>>}} or
 	 
-	  *** {{{https://apps.ideaconsult.net/ambit2/query/compound/url/all?search=http%3A%2F%2Fapps.ideaconsult.net%2Fambit2%2Fcompound%2F143894%2Fconformer%2F535653}InChIKey = <<NBFMTHWVRBOVPE-UHFFFAOYSA-N>>}}
+	  *** {{{https://apps.ideaconsult.net/ambit2/query/compound/url/all?search=https%3A%2F%2Fapps.ideaconsult.net%2Fambit2%2Fcompound%2F143894%2Fconformer%2F535653}InChIKey = <<NBFMTHWVRBOVPE-UHFFFAOYSA-N>>}}
 	
 	** Similarity search in the entire database {{{https://apps.ideaconsult.net/ambit2/query/similarity?search=c1ccccc1Oc2ccccc2&threshold=0.9}for SMILES <<c1ccccc1Oc2ccccc2>> and Tanimoto distance >= <<0.9>>}} 
 	
@@ -92,9 +92,9 @@ AMBIT implementation of OpenTox REST API
 
 	 ** {{{https://apps.ideaconsult.net/ambit2/model}All Models}}
 	 
-	 ** {{{https://apps.ideaconsult.net/ambit2/model?algorithm=http%3A%2F%2Fapps.ideaconsult.net%2Fambit2%2Falgorithm%2FLR}Models}}, created by the {{{https://apps.ideaconsult.net/ambit2/algorithm/LR}Linear regression algorithm}}.
+	 ** {{{https://apps.ideaconsult.net/ambit2/model?algorithm=https%3A%2F%2Fapps.ideaconsult.net%2Fambit2%2Falgorithm%2FLR}Models}}, created by the {{{https://apps.ideaconsult.net/ambit2/algorithm/LR}Linear regression algorithm}}.
 
-	 ** {{{https://apps.ideaconsult.net/ambit2/model?dataset=http%3A%2F%2Fapps.ideaconsult.net%2Fambit2%2Fdataset%2FR744050}Models}}, using {{{https://apps.ideaconsult.net/ambit2/dataset/R744050}https://apps.ideaconsult.net/ambit2/dataset/R744050}} as training dataset.
+	 ** {{{https://apps.ideaconsult.net/ambit2/model?dataset=https%3A%2F%2Fapps.ideaconsult.net%2Fambit2%2Fdataset%2FR744050}Models}}, using {{{https://apps.ideaconsult.net/ambit2/dataset/R744050}https://apps.ideaconsult.net/ambit2/dataset/R744050}} as training dataset.
 	 
 	 ** {{{https://apps.ideaconsult.net/ambit2/model/252837/independent}Model's independent (X) variables}}
 	 
