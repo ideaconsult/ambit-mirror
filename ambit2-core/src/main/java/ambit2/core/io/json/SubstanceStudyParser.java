@@ -24,6 +24,8 @@ import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.data.study.ReliabilityParams;
+import ambit2.base.data.study._FIELDS_RELIABILITY;
 import ambit2.base.data.substance.ExternalIdentifier;
 import ambit2.base.interfaces.ICiteable;
 import ambit2.base.interfaces.IStructureRecord;
@@ -210,6 +212,8 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 		ProtocolApplication pa = new ProtocolApplication(protocol);
 		pa.setDocumentUUID(node.get(ProtocolApplication._fields.uuid.name()).getTextValue());
 		parseOwner((ObjectNode)node.get(ProtocolApplication._fields.owner.name()),pa);
+		parseStudyReference((ObjectNode)node.get(ProtocolApplication._fields.citation.name()), pa);
+		parseReliability((ObjectNode)node.get(ProtocolApplication._fields.reliability.name()), pa);
 		parseInterpretation((ObjectNode)node.get(ProtocolApplication._fields.interpretation.name()),pa);
 		pa.setEffects(parseEffects((ArrayNode)node.get(ProtocolApplication._fields.effects.name())));
 		pa.setParameters(parseParams((ObjectNode)node.get(ProtocolApplication._fields.parameters.name())));
@@ -217,6 +221,36 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 		
 	}
 
+	protected static void parseReliability(ObjectNode node, ProtocolApplication record) {
+		if (node==null) return ;
+		ReliabilityParams reliability = new ReliabilityParams();
+		
+		JsonNode jn = node.get(_FIELDS_RELIABILITY.r_isUsedforMSDS.getTag());
+		reliability.setIsUsedforMSDS(jn.asBoolean());
+		jn = node.get(_FIELDS_RELIABILITY.r_isRobustStudy.getTag());
+		reliability.setIsRobustStudy(jn.asBoolean());
+		jn = node.get(_FIELDS_RELIABILITY.r_isUsedforClassification.getTag());
+		reliability.setIsUsedforClassification(jn.asBoolean());
+		jn = node.get(_FIELDS_RELIABILITY.r_purposeFlag.getTag());
+		reliability.setPurposeFlag(jn.getTextValue());
+		jn = node.get(_FIELDS_RELIABILITY.r_studyResultType.getTag());
+		reliability.setStudyResultType(jn.getTextValue());
+		jn = node.get(_FIELDS_RELIABILITY.r_value.getTag());
+		reliability.setValue(jn.getTextValue());
+		record.setReliability(reliability);
+	}
+	protected static void parseStudyReference(ObjectNode node, ProtocolApplication record) {
+		if (node==null) return ;
+		JsonNode jn = node.get("title");
+		record.setReference(jn.getTextValue());
+		jn = node.get("owner");
+		if (jn!= null) record.setReferenceOwner(jn.getTextValue());
+		jn = node.get("year");
+		if (jn!=null)
+			record.setReferenceYear(jn.getTextValue());
+	}
+
+	
 	protected static void parseCompany(ObjectNode node, ProtocolApplication record) {
 		if (node==null) return ;
 		JsonNode jn = node.get(ProtocolApplication._fields.uuid.name());
@@ -267,17 +301,17 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	}
 	public static Protocol parseProtocol(ObjectNode node) {
 		if (node==null) return null;
-		Protocol p = new Protocol(node.get(Protocol._fields.endpoint.name()).asText());
+		Protocol p = new Protocol(node.get(Protocol._fields.endpoint.name()).getTextValue());
 		JsonNode jn = node.get(Protocol._fields.topcategory.name());
-		if (jn!=null && !"".equals(jn.getTextValue()) && !"null".equals(jn.asText())) 
-			p.setTopCategory(jn.asText());	
-		jn = node.get(Protocol._fields.category.name());
-		if (jn!=null && !"".equals(jn.getTextValue()) && !"null".equals(jn.asText())) 
-			p.setCategory(jn.asText());
+		if (jn!=null && !"".equals(jn.getTextValue()) && !"null".equals(jn.getTextValue())) 
+			p.setTopCategory(jn.getTextValue());	
+		jn = node.get(Protocol._fields.category.name()).get("code");
+		if (jn!=null && !"".equals(jn.getTextValue()) && !"null".equals(jn.getTextValue())) 
+			p.setCategory(jn.getTextValue());
 		ArrayNode guidance = (ArrayNode)node.get(Protocol._fields.guideline.name());
 		if (guidance!=null)
 		for (int i=0; i < guidance.size();i++) {
-			p.addGuideline(guidance.get(i).asText());
+			p.addGuideline(guidance.get(i).getTextValue());
 		}
 		return p;
 	}
@@ -314,8 +348,8 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 		if (jn!=null) record.setUpValue(jn.asDouble());
 		
 		jn = node.get(EffectRecord._fields.unit.name());
-		if (jn!=null && !"".equals(jn.getTextValue()) && !"null".equals(jn.asText())) {
-			record.setUnit(jn.asText());
+		if (jn!=null && !"".equals(jn.getTextValue()) && !"null".equals(jn.getTextValue())) {
+			record.setUnit(jn.getTextValue());
 		}	
 	}
 }
