@@ -62,6 +62,11 @@ public class SMIRKSManager
 		return isoTester;
 	}
 	
+	public SmartsParser getSmartsParser()
+	{
+		return parser;
+	}
+	
 	
 	public void setSSMode(int mode)
 	{
