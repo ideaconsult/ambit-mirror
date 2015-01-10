@@ -91,10 +91,13 @@ public class TestUtilities
 	static SmartsToChemObject smToChemObj = new SmartsToChemObject(SilentChemObjectBuilder.getInstance());
 	static ChemObjectToSmiles cots = new ChemObjectToSmiles(); 
 	
+	boolean FlagClearAromaticityBeforePreProcess = true;
 	boolean FlagTargetPreprocessing = false;
 	boolean FlagProductPreprocessing = false;
 	boolean FlagExplicitHAtoms = false;
 	boolean FlagPrintAtomAttributes = false;
+	boolean FlagDoubleBondAromaticityNotSpecified  = false;
+	
 	int FlagSSMode = SmartsConst.SSM_NON_OVERLAPPING;
 	int FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_NON_IDENTICAL;
 	ReactionOperation FlagReactionOperation = ReactionOperation.APPLY;
@@ -108,8 +111,20 @@ public class TestUtilities
 	}
 	
 	public void preProcess(IAtomContainer mol) throws Exception 
-	{
+	{	
+		if (FlagClearAromaticityBeforePreProcess)
+		{
+			for (IAtom atom:mol.atoms()) if (atom.getFlag(CDKConstants.ISAROMATIC)) 
+				atom.setFlag(CDKConstants.ISAROMATIC,false);
+			for (IBond bond: mol.bonds()) if (bond.getFlag(CDKConstants.ISAROMATIC))
+				bond.setFlag(CDKConstants.ISAROMATIC,false);
+		}
+		
+		//AtomContainerManipulator.clearAtomConfigurations(mol);
+		//AtomContainerManipulator.removeHydrogens(mol);
+		
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		
 		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 		adder.addImplicitHydrogens(mol);
 		if (FlagExplicitHAtoms)			
@@ -1474,6 +1489,7 @@ public class TestUtilities
 		System.out.println("Testing SMIRKS: " + smirks);		
 		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 		smrkMan.FlagSSMode = FlagSSMode;
+		smrkMan.getSmartsParser().mSupportDoubleBondAromaticityNotSpecified = FlagDoubleBondAromaticityNotSpecified;
 		SMIRKSReaction reaction = smrkMan.parse(smirks);		
 		if (!smrkMan.getErrors().equals(""))
 		{
@@ -1500,28 +1516,47 @@ public class TestUtilities
 		
 		
 		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
+		
+		
+		if (FlagTargetPreprocessing)
+			this.preProcess(target);
+		
+		/*
 		if (FlagPrintAtomAttributes)
 		{	
 			System.out.println("Reactant atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
 			System.out.println("Reactant bond attributes:\n" + SmartsHelper.getBondAttributes(target));
 		}
-		
-		if (FlagTargetPreprocessing)
-			this.preProcess(target);
-		
-		if (FlagPrintAtomAttributes)
-		{	
-			System.out.println("Product atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
-			System.out.println("Product bond attributes:\n" + SmartsHelper.getBondAttributes(target));
-		}		
+		*/
 		
 		
 		switch (FlagReactionOperation)
 		{
 		case APPLY:
 			boolean res = smrkMan.applyTransformation(target, reaction);
+			
+			for (IAtom atom:target.atoms()) if (atom.getFlag(CDKConstants.ISAROMATIC)) 
+				atom.setFlag(CDKConstants.ISAROMATIC,false);
+			for (IBond bond: target.bonds()) if (bond.getFlag(CDKConstants.ISAROMATIC))
+				bond.setFlag(CDKConstants.ISAROMATIC,false);
+			
+			if (FlagPrintAtomAttributes)
+			{	
+				System.out.println("Product atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
+				System.out.println("Product bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+			}	
+			
+			System.out.println("    " +  SmartsHelper.moleculeToSMILES(target,true));
+			
 			if (FlagProductPreprocessing)
 				this.preProcess(target);
+			
+			if (FlagPrintAtomAttributes)
+			{	
+				System.out.println("Product atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
+				System.out.println("Product bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+			}	
+			
 			String transformedSmiles = SmartsHelper.moleculeToSMILES(target,true);
 
 			if (res)
@@ -2328,8 +2363,30 @@ public class TestUtilities
 		//tu.testSMIRKS("[#6:1]-[#8:2]-[#6:3]>>[#6:1]-[#8:2].[#6:3]=O","NC1OC(C(=O)C1", SmartsConst.SSM_NON_IDENTICAL);	
 		//tu.testSMIRKS("[#8;$([#8]([#6])[#6]):2]-[#6:3]>>[#8;$([#8]([#6])[#6]):2].[#6:3]=O","NC1OC(C(=O)C1", ReactionOperation.SingleCopyForEachPos);	
 		
-		tu.FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_ALL;
-		tu.testSMIRKS("[#6:1]-[#8:2]-[#6:3]>>[#6:1]-[#8:2].[#6:3]=S","NCCCOCC", ReactionOperation.SingleCopyForEachPos);	
+		//tu.FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_ALL;
+		//tu.testSMIRKS("[#6:1]-[#8:2]-[#6:3]>>[#6:1]-[#8:2].[#6:3]=S","NCCCOCC", ReactionOperation.SingleCopyForEachPos);	
+		
+		//tu.FlagExplicitHAtoms = true;
+		tu.FlagTargetPreprocessing = true;
+		tu.FlagProductPreprocessing = true;
+		tu.FlagPrintAtomAttributes = true;
+		tu.FlagDoubleBondAromaticityNotSpecified = true;
+		tu.FlagSSMode =  SmartsConst.SSM_NON_IDENTICAL_FIRST;
+		
+		//tu.testSMIRKS("[c:1]1[c:6]([H])[c:5]([H])[c:4][c:3][c:2]1>>[OH1]-[#6:5]([H])-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]([H])-1-[OH1]", "C1=CC=CC=C1");
+		//tu.testSMIRKS("[c:1]1[c:6][c:5][c:4][c:3][c:2]1>>[OH1]-[#6:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]-1-[OH1]", "C1=CC=CC=C1"); //This is a bug !!! 3 double bonds remain
+		//tu.testSMIRKS("[c:1]1[c:6][c:5][c:4][c:3][c:2]1>>[OH1]-[#6:5]-1-[#6:4]-[#6:3]-[#6:2]-[#6:1]-[#6:6]-1-[OH1]", "C1=CC=CC=C1"); //This is a bug !!! 3 double bonds remain
+		
+		
+		//tu.testSMIRKS("[#6:5]1[#6:4]=[#6:3][#6:2]=[#6:1][#6:6]=1>>[OH1]-[#6:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]-1-[OH1]", "C1=CC=CC=C1");
+		tu.testSMIRKS("[#6:5]1[#6:4]=[#6:3][#6:2]=[#6:1][#6:6]=1>>[OH1]-[#6:5]-1-[#6:4]-[#6:3]-[#6:2]-[#6:1]-[#6:6]-1-[OH1]", "C1=CC=CC=C1");
+		
+		/*
+		 * It seem to have two problems: (1) one the mapping of aromatic --> single/double bond
+		 * 								 (2) the preprocessing of the result
+		 */
+		
+		
 		
 		tu.FlagPrintAtomAttributes = false;
 		
