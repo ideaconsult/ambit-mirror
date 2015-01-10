@@ -157,7 +157,7 @@
                     },
                     "citation": {
                         "title": "Kligman AM (1965) Dimethyl Sulfoxide - Part 2. Clinical Science, 193, 11,  923-928.",
-                        "year": "0",
+                        "year": "1965",
                         "owner": "test383537851632"
                     },
                     "protocol": {
@@ -177,8 +177,8 @@
                         "Species": "human"
                     },
                     "reliability": {
-                        "isUsedforMSDS": "false",
-                        "isUsedforClassification": "false",
+                        "isUsedforMSDS": "true",
+                        "isUsedforClassification": "true",
                         "purposeFlag": "",
                         "value": "2 (reliable with restrictions)",
                         "studyResultType": "",
@@ -209,7 +209,7 @@
                     },
                     "citation": {
                         "title": "Hanbook of Chemistry and Physics, 66th edition, CRC, 1985-1986",
-                        "year": "0",
+                        "year": "1985",
                         "owner": "test293896422996"
                     },
                     "protocol": {
@@ -258,7 +258,7 @@
                     },
                     "citation": {
                         "title": "Matsui S, Okawa Y and Ota R (1988) Experience of 16 years'operation and  maintenance of the Fukashiba industrial wastewater treatment plant of the  Kashima Petrochemical Complex-II.  Biodegradability of 37 organic  substances and 28 process wastewaters. Wat. Sci. Tech., 20(10), 201-210.",
-                        "year": "0",
+                        "year": "1988",
                         "owner": "test723208032291"
                     },
                     "protocol": {
@@ -315,7 +315,7 @@
                     },
                     "citation": {
                         "title": "Biodegradation and bioaccumulation data of existing chemicals based on  the CSCL (Chemical Substances Control Law). Edited by Chemicals  Inspection and Testing Institute, Japan, October 1992.",
-                        "year": "0",
+                        "year": "1992",
                         "owner": "test793824921171"
                     },
                     "protocol": {
@@ -372,7 +372,7 @@
                     },
                     "citation": {
                         "title": "Fritzenschaf H, Kohlpoth M, Rusche B and Schiffmann D (1993) Testing of  known carcinogens and noncarcinogens in the Syrian hamster embryo (SHE)  micronucleus test in vitro; correlations with in vivo micronucleus  formation and cell transformation, Mutat. Res., 319(1), 47-53.",
-                        "year": "0",
+                        "year": "1993",
                         "owner": "test446446873664"
                     },
                     "protocol": {
@@ -524,7 +524,7 @@
                                 "Decomposition": "no"
                             },
                             "result": {
-                                "unit": "°C",
+                                "unit": "ï¿½C",
                                 "loValue": 18.5
                             }
                         }
@@ -643,7 +643,7 @@
                         }
                     },
                     "citation": {
-                        "title": "Elf Aquitaine Production, 1997. Ref N°97.028. Biodégradation du DMSO, du  dibenzyléther et de la MEK.",
+                        "title": "Elf Aquitaine Production, 1997. Ref Nï¿½97.028. Biodï¿½gradation du DMSO, du  dibenzylï¿½ther et de la MEK.",
                         "year": "0",
                         "owner": "test185899129311"
                     },
@@ -666,7 +666,7 @@
                         "isUsedforClassification": "true",
                         "purposeFlag": "key study",
                         "value": "2 (reliable with restrictions)",
-                        "studyResultType": "",
+                        "studyResultType": "experimental result",
                         "isRobustStudy": "false"
                     },
                     "interpretation": {
@@ -1098,7 +1098,7 @@
                         }
                     },
                     "citation": {
-                        "title": "Sapora O, Barone F, Belli M, Maggi A, Quintiliani M, and|Tabocchini M (1991) Relationship between cell killing,|mutation induction and DNA damage in X-irradiated V79 cells|: the influence of oxygen and DMSO. Int. J. Radiat. Biol,|1991, vol 60, n°3, 467-482.",
+                        "title": "Sapora O, Barone F, Belli M, Maggi A, Quintiliani M, and|Tabocchini M (1991) Relationship between cell killing,|mutation induction and DNA damage in X-irradiated V79 cells|: the influence of oxygen and DMSO. Int. J. Radiat. Biol,|1991, vol 60, nï¿½3, 467-482.",
                         "year": "0",
                         "owner": "test812911419955"
                     },
@@ -1258,7 +1258,7 @@
                         }
                     },
                     "citation": {
-                        "title": "Atkinson R (1989) Kinetics and mechanisms of the gas-phase reactions of  the hydroxy radical with organic compounds. Journal of physical and  chemical reference data. Monograph N°1.",
+                        "title": "Atkinson R (1989) Kinetics and mechanisms of the gas-phase reactions of  the hydroxy radical with organic compounds. Journal of physical and  chemical reference data. Monograph Nï¿½1.",
                         "year": "0",
                         "owner": "test975063064113"
                     },
@@ -1390,7 +1390,7 @@
                     },
                     "interpretation": {
                         "result": "other:",
-                        "criteria": "RS-Freetext:\r\nBackground study: examined effects of aeration on DMSO evaporation for  the experiment performed in flask cultures and air-lift bioreactor.\r\n\r\nDMSO concentration in shake-flask solution aereted at a flow rate of 0.5  L/h was monitored for 70h and varied little for the initial concentration  of 100 and 900 mg DMSO/L: 97.02 +/- 3.06 mg DMSO/L and 901.27 +/- 1.80 mg  DMSO/L respectively.\r\n\r\nDMSO concentrations in the air-lift bioreactor aereted at a flow rate of  10 L/min showed no statistical changes for the initial concentration of  700 mg DMSO/L.\r\n\r\nOptimal temperature with the shorstest time (35h) achieved for  degradation of 250 mg DMSO/L at pH 6.8 was 30°C. At temperatures of 20,  25 and 35°C, complete degradation of DMSO required 80, 44 and 80h  respectively.\r\n\r\nAn optimum range of pH of 7.0-8.5 has been determined for DMSO  degradation.\r\n\r\nTime needed for 500 mg/L DMSO biodegradation could be reduced to 16h at  the rate of 0.153 g DMSO per gram suspended solids per day if a repeated  batch mode was adopted, indicating that an acclimatation period is  required.\r\n\r\nRS-Freetext:\r\nUnder the optimal conditions of pH 7.0-8.5 and 30 °C, the highest removal  efficiency in treatment of 500 mg/L of DMSO occurred at the rate of 0.078  g DMSO per gram suspended solids per day corresponding to 37 h for  complete DMSO biodegradation in a shake-flask culture.\r\nHowever, the time needed for DMSO biodegradation could be reduced to 16 h  at the rate of 0.153 g DMSO per gram suspended solids per day if a  repeated-batch mode was adopted, indicating that an acclimation period is  required by the DMSO degraders. The reaction time could further be  shortened to less than 10 h with 95% removal of the 750 mg/L DMSO at the  maximum rate of 0.909 g DMSO per gram suspended solids per day using an  oxygen-enriched air-lift bioreactor.\r\n\r\nDegradation products: no"
+                        "criteria": "RS-Freetext:\r\nBackground study: examined effects of aeration on DMSO evaporation for  the experiment performed in flask cultures and air-lift bioreactor.\r\n\r\nDMSO concentration in shake-flask solution aereted at a flow rate of 0.5  L/h was monitored for 70h and varied little for the initial concentration  of 100 and 900 mg DMSO/L: 97.02 +/- 3.06 mg DMSO/L and 901.27 +/- 1.80 mg  DMSO/L respectively.\r\n\r\nDMSO concentrations in the air-lift bioreactor aereted at a flow rate of  10 L/min showed no statistical changes for the initial concentration of  700 mg DMSO/L.\r\n\r\nOptimal temperature with the shorstest time (35h) achieved for  degradation of 250 mg DMSO/L at pH 6.8 was 30ï¿½C. At temperatures of 20,  25 and 35ï¿½C, complete degradation of DMSO required 80, 44 and 80h  respectively.\r\n\r\nAn optimum range of pH of 7.0-8.5 has been determined for DMSO  degradation.\r\n\r\nTime needed for 500 mg/L DMSO biodegradation could be reduced to 16h at  the rate of 0.153 g DMSO per gram suspended solids per day if a repeated  batch mode was adopted, indicating that an acclimatation period is  required.\r\n\r\nRS-Freetext:\r\nUnder the optimal conditions of pH 7.0-8.5 and 30 ï¿½C, the highest removal  efficiency in treatment of 500 mg/L of DMSO occurred at the rate of 0.078  g DMSO per gram suspended solids per day corresponding to 37 h for  complete DMSO biodegradation in a shake-flask culture.\r\nHowever, the time needed for DMSO biodegradation could be reduced to 16 h  at the rate of 0.153 g DMSO per gram suspended solids per day if a  repeated-batch mode was adopted, indicating that an acclimation period is  required by the DMSO degraders. The reaction time could further be  shortened to less than 10 h with 95% removal of the 750 mg/L DMSO at the  maximum rate of 0.909 g DMSO per gram suspended solids per day using an  oxygen-enriched air-lift bioreactor.\r\n\r\nDegradation products: no"
                     },
                     "effects": [
                         {
@@ -1527,7 +1527,7 @@
                         }
                     },
                     "citation": {
-                        "title": "Caujolle F (1969) Rapport sur la toxicité du|diméthylsulfoxyde. Faculté de Médecine et de Pharmacie de|Toulouse. 12 mai 1969.",
+                        "title": "Caujolle F (1969) Rapport sur la toxicitï¿½ du|dimï¿½thylsulfoxyde. Facultï¿½ de Mï¿½decine et de Pharmacie de|Toulouse. 12 mai 1969.",
                         "year": "0",
                         "owner": "test368254060269"
                     },
@@ -1653,7 +1653,7 @@
                         }
                     },
                     "citation": {
-                        "title": "Willford WA (1967) Toxicity of dimethyl sulfoxide to fish. Invest. Fish  Control, N° 20, 8 pp.",
+                        "title": "Willford WA (1967) Toxicity of dimethyl sulfoxide to fish. Invest. Fish  Control, Nï¿½ 20, 8 pp.",
                         "year": "0",
                         "owner": "test820473564622"
                     },
@@ -2400,7 +2400,7 @@
                         }
                     },
                     "citation": {
-                        "title": "LNS (1992) Dimethylsulfoxide, EEC study BCO-P assay no. 25,|Laboratoire National de la Santé, Montpellier, France, Juin|1992.",
+                        "title": "LNS (1992) Dimethylsulfoxide, EEC study BCO-P assay no. 25,|Laboratoire National de la Santï¿½, Montpellier, France, Juin|1992.",
                         "year": "0",
                         "owner": "test759552581944"
                     },
@@ -2866,7 +2866,7 @@
                         }
                     },
                     "citation": {
-                        "title": "Sørensen S, Falbe-Hansen H, Mangoni M, Hjorth J and Jensen NR (1996)  Observation of DMSO and CH3S(O)OH from the gas phase reaction between DMS  and OH. Journal of Atmospheric Chemistry, 24(3), 299-315.",
+                        "title": "Sï¿½rensen S, Falbe-Hansen H, Mangoni M, Hjorth J and Jensen NR (1996)  Observation of DMSO and CH3S(O)OH from the gas phase reaction between DMS  and OH. Journal of Atmospheric Chemistry, 24(3), 299-315.",
                         "year": "0",
                         "owner": "test199995283224"
                     },
@@ -3467,7 +3467,7 @@
                                 "Decomposition": "yes"
                             },
                             "result": {
-                                "unit": "°C",
+                                "unit": "ï¿½C",
                                 "loValue": 189
                             }
                         }
@@ -3868,7 +3868,7 @@
                         }
                     },
                     "citation": {
-                        "title": "Béguin D, Lavoué J and Gérin M (2002) La substitution des solvants par le  dimethylsulfoxyde. IRSST publication, University of Montreal, 80p.",
+                        "title": "Bï¿½guin D, Lavouï¿½ J and Gï¿½rin M (2002) La substitution des solvants par le  dimethylsulfoxyde. IRSST publication, University of Montreal, 80p.",
                         "year": "0",
                         "owner": "test568614068040"
                     },
@@ -4396,7 +4396,7 @@
                         }
                     },
                     "citation": {
-                        "title": "Atochem (1989) Biodégradation ultime du diméthylsulfoxyde: essai de  simulation en maquette de station d'épuration a boues activees aerobies.  Centre d'Application de Levallois, n° de rapport: 23574, 19/10/1989.",
+                        "title": "Atochem (1989) Biodï¿½gradation ultime du dimï¿½thylsulfoxyde: essai de  simulation en maquette de station d'ï¿½puration a boues activees aerobies.  Centre d'Application de Levallois, nï¿½ de rapport: 23574, 19/10/1989.",
                         "year": "0",
                         "owner": "test905141540715"
                     },
@@ -4947,7 +4947,7 @@
                             "endpoint": "Water solubility",
                             "conditions": {
                                 "Temperature": {
-                                    "unit": "°C",
+                                    "unit": "ï¿½C",
                                     "loValue": 25
                                 },
                                 "Remark": null,
