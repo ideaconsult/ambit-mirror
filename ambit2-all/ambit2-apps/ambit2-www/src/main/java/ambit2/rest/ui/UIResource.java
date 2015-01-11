@@ -371,10 +371,11 @@ public class UIResource extends FreeMarkerResource {
 					json.append(",\n\"size\":");
 					json.append(file.getSize());
 					String ext = file.getName().toLowerCase();
-					if (ext.endsWith(".i5z") || ext.endsWith(".csv") || ext.endsWith(".rdf") ) {
+					if (ext.endsWith(".i5z") || ext.endsWith(".csv") || ext.endsWith(".rdf") || ext.endsWith(".json") ) {
 						String img = "i5z.png";
 						if (ext.endsWith(".csv")) img = "csv64.png"; 
 						if (ext.endsWith(".rdf")) img = "rdf64.png";
+						if (ext.endsWith(".json")) img = "json64.png";
 						try {
 							List<FileItem> item = new ArrayList<FileItem>();
 							item.add(file);

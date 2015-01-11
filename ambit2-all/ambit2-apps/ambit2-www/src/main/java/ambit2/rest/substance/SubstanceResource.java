@@ -422,7 +422,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 								} catch (Exception x) {}							
 						} else {
 							String ext = file.getName().toLowerCase();
-							if (ext.endsWith(".i5z") || ext.endsWith(".csv") || ext.endsWith(".rdf") ) {
+							if (ext.endsWith(".i5z") || ext.endsWith(".csv") || ext.endsWith(".rdf")  || ext.endsWith(".json")) {
 							} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Unsupported format "+ext);
 						}
 					}	

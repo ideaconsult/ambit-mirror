@@ -76,8 +76,8 @@ CREATE TABLE `bundle_substance` (
   UNIQUE KEY `u_sunstance_idx` (`substance_prefix`,`substance_uuid`,`idbundle`),
   KEY `s_bundle` (`idbundle`),
   KEY `a_substance_idx` (`idsubstance`),
-  CONSTRAINT `a_metadata` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `a_substance` FOREIGN KEY (`idsubstance`) REFERENCES `substance` (`idsubstance`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `bs_metadata` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `bs_substance` FOREIGN KEY (`idsubstance`) REFERENCES `substance` (`idsubstance`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------

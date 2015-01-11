@@ -32,6 +32,7 @@ import ambit2.core.io.FileInputState;
 import ambit2.core.io.IRawReader;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
+import ambit2.db.substance.processor.DBSubstanceWriter;
 import ambit2.rest.DBConnection;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.substance.SubstanceURIReporter;

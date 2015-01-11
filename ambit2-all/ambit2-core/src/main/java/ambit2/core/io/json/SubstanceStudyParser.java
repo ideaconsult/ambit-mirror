@@ -36,6 +36,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 
 	protected ObjectMapper dx = new ObjectMapper();
 	protected ArrayNode substance;
+	protected ArrayNode study;
 	protected int index = -1;
 	protected SubstanceRecord record = null; 
 	
@@ -48,12 +49,20 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	@Override
 	public void setReader(Reader reader) throws CDKException {
 		try {
-			JsonNode node = dx.readTree(reader).get("substance");
+			JsonNode root = dx.readTree(reader);
+			JsonNode node = root.get("substance");
 			if (node instanceof ArrayNode) {
 				substance = (ArrayNode)node;
 				index = -1;
 			}
-			else substance = null;
+			else {
+				substance = null;
+				node = root.get("study");
+				if (node instanceof ArrayNode) {
+					study = (ArrayNode)node;
+					index = -1;
+				}
+			}
 		} catch (Exception x ) {
 			throw new CDKException(x.getMessage(),x);
 		} finally {
@@ -86,17 +95,38 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	@Override
 	public boolean hasNext() {
 		index++;
-		if (index<substance.size()) {
-			record = parseSubstance(substance.get(index));
-			JsonNode papps = substance.get(index).get("study");
-			record.setMeasurements(parseProtocolApplications(papps));
-			JsonNode composition = substance.get(0).get("composition");
-			record.setRelatedStructures(parseComposition(composition));
-			return true;
-		} else {
-			record = null;
-			return false;
+		if (substance!=null) {
+			if (index<substance.size()) {
+				record = parseSubstance(substance.get(index));
+				JsonNode papps = substance.get(index).get("study");
+				record.setMeasurements(parseProtocolApplications(papps,record));
+				JsonNode composition = substance.get(0).get("composition");
+				record.setRelatedStructures(parseComposition(composition));
+				return true;
+			} else {
+				record = null;
+				return false;
+			}
+		} else if (study!=null) {
+			if (index<study.size()) {
+				//record = parseSubstance(substance.get(index));
+				record = new SubstanceRecord();
+				JsonNode papps = study.get(index);
+				try {
+					record.setCompanyUUID(papps.get("owner").get("substance").get("uuid").getTextValue());
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
+				record.setMeasurements(parseProtocolApplications(papps,record));
+				
+				return true;
+			} else {
+				record = null;
+				return false;
+			}
 		}
+		record = null;
+		return false;
 	}
 
 	@Override
@@ -126,7 +156,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 			if (substance instanceof ArrayNode) {
 				SubstanceRecord record = parseSubstance(substance.get(0));
 				JsonNode papps = substance.get(0).get("study");
-				record.setMeasurements(parseProtocolApplications(papps));
+				record.setMeasurements(parseProtocolApplications(papps,record));
 				JsonNode composition = substance.get(0).get("composition");
 				record.setRelatedStructures(parseComposition(composition));
 				return record;
@@ -138,6 +168,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
  			try { if (reader!=null) reader.close();} catch (Exception x) {}
 		}
 	}
+	
 	public static SubstanceRecord parseSubstance(JsonNode node) {
 		if (node==null) return null;
 		SubstanceRecord record = new SubstanceRecord();
@@ -177,13 +208,13 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 		//if (node==null) 
 			return null;
 	}
-	public static List<ProtocolApplication> parseProtocolApplication(Reader reader) throws Exception{
+	public static List<ProtocolApplication> parseProtocolApplication(Reader reader,SubstanceRecord record) throws Exception{
 		
 		ObjectMapper dx = new ObjectMapper();
 		try {
 			JsonNode root = dx.readTree(reader);
 			JsonNode papps = root.get("study");
-			return parseProtocolApplications(papps);
+			return parseProtocolApplications(papps,record);
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -192,16 +223,22 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	}
 	
 	
-	public static List<ProtocolApplication> parseProtocolApplications(JsonNode papps) {
+	public static List<ProtocolApplication> parseProtocolApplications(JsonNode papps,SubstanceRecord record) {
 		if (papps==null) return null;
 		List<ProtocolApplication> list = new ArrayList<ProtocolApplication>();
 		if (papps instanceof ArrayNode) {
 			ArrayNode a = (ArrayNode)papps;
 			for (int i=0; i < a.size(); i++) {
 				if (a.get(i) instanceof ObjectNode) {
-					list.add(SubstanceStudyParser.parseProtocolApplication((ObjectNode)a.get(i)));
+					ProtocolApplication p = SubstanceStudyParser.parseProtocolApplication((ObjectNode)a.get(i));
+					p.setSubstanceUUID(record.getCompanyUUID());
+					list.add(p);
 				}
 			}
+		} else if (papps instanceof ObjectNode){
+			ProtocolApplication p = SubstanceStudyParser.parseProtocolApplication((ObjectNode)papps);
+			p.setSubstanceUUID(record.getCompanyUUID());
+			list.add(p);
 		}
 		return list;
 

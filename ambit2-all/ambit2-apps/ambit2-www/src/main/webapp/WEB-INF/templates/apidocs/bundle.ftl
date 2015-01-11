@@ -654,6 +654,189 @@
 			    ]
 			},
 			{
+			    "path": "/bundle/{idbundle}/matrix",
+			    "operations": [
+			        {
+			            "method": "GET",
+			            "summary": "Get substance matrix (dataset copy)",
+			            "notes": "get substance dataset",
+			            "type": "SubstanceDataset",
+			            "nickname": "getBundleMatrix",
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+							{
+							    "name": "idbundle",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							},
+							<#include "/apidocs/parameters_page.ftl" >									
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Invalid bundle identifier"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Bundle not found"
+			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        },
+			        {
+			            "method": "POST",
+			            "summary": "Import studies for this bundle",
+			            "notes": "Import studies for this bundle. Supports JSON format",
+			            "type": "Task",
+			            "nickname": "uploadBundleStudy",
+		                "consumes": [
+		                       "multipart/form-data",
+		                       "application/x-www-form-urlencoded"
+		                ],			            
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+	           				{
+							    "name": "id",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							},			                           
+							{
+							    "name": "files[]",
+							    "description": "Files to upload",
+							    "required": true,
+							    "type": "File",
+							    "paramType": "form",
+							    "allowMultiple": true
+							},
+							{
+							    "name": "qaenabled",
+							    "description": "Import only high quality study records",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false,
+							    "defaultValue": "name",
+							    "enum" : [
+							       "checked","on","yes","off",""
+							    ]
+							},	
+							{
+							    "name": "clearMeasurements",
+							    "description": "Clear existing study records of imported substance(s)",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false,
+							    "defaultValue": "name",
+							    "enum" : [
+							       "checked","on","yes","off",""
+							    ]
+							},	
+							{
+							    "name": "clearComposition",
+							    "description": "Clear existing composition records of imported substance(s)",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false,
+							    "defaultValue": "name",
+							    "enum" : [
+							       "checked","on","yes","off",""
+							    ]
+							},		
+							{
+							    "name": "purposeflag",
+							    "description": "Purpose flag: 921 (key study); 1590 (supporting study); 1661 (weight of evidence); 8108 (disregarded study); NOT_SPECIFIED; null",							    
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": true,
+							    "defaultValue": "name",
+							    "enum" : [
+							       "921","1590","1661","8108","NOT_SPECIFIED","null"	
+							    ]
+							},			
+							{
+							    "name": "studyresulttype",
+							    "description": "Study result type: 1895 (experimental result);1896 (experimental study planned); 2303 (read-across based on grouping of substances (category approach)); 2304 (read-across from supporting substance (structural analogue or surrogate)); 14 ((Q)SAR); 1342 (other); 1173 (no data); NOT_SPECIFIED; null",							    
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": true,
+							    "defaultValue": "name",
+							    "enum" : [
+							       "1895","1896","2303","2304","14","1342","1173","NOT_SPECIFIED","null"						       
+							    ]
+							},		
+							{
+							    "name": "testmaterial",
+							    "description": "Test material : 2480 (yes); 2158 (no); NOT_SPECIFIED; null",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": true,
+							    "defaultValue": "name",
+							    "enum" : [
+							       "2480","2158","NOT_SPECIFIED","null"						       
+							    ]
+							},	
+							{
+							    "name": "reliability",
+							    "description": "Reliability : 16 - 1 (reliable without restriction); 18 - 2 (reliable with restrictions); 22 - 3 (not reliable); 24 - 4 (not assignable); 1342 - other; NOT_SPECIFIED; null",		
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": true,
+							    "defaultValue": "name",
+							    "enum" : [
+							       "16","18","22","24","1342","NOT_SPECIFIED", "null"							       
+							    ]
+							},	
+							{
+							    "name": "referencetype",
+							    "description": "Reference type: 1586 (study report); 266  (other company data; 1443 (publication); 1486 (review article or handbook);\n1542 (secondary source);811 (grey literature);1342 (title);NOT_SPECIFIED; null",						    
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": true,
+							    "defaultValue": "name",
+							    "enum" : [
+							         "1586","266","1443","1486","1542","811","1342","NOT_SPECIFIED","null"
+							    ]
+							}	            
+			            ],
+			            "responseMessages": [
+			         	    <#include "/apidocs/error_task.ftl" >,	
+			                {
+			                  "code": 404,
+			                   "message": "Model not found"
+			                 },
+			                {
+			       	           "code": 400,
+			       	           "message": "Bad request"
+			       	        },	 		                    
+			                <#include "/apidocs/error_aa.ftl" >,
+			                <#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }				        
+			    ]
+			},			
+			{
 			    "path": "/bundle/{idbundle}/study",
 			    "operations": [
 			        {

@@ -305,6 +305,79 @@ CREATE TABLE `bundle_chemicals` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
+-- Table `bundle_substance_protocolapplication` 
+-- -----------------------------------------------------
+drop table if exists `bundle_substance_protocolapplication`;
+CREATE TABLE `bundle_substance_protocolapplication` (
+  `idbundle` int(11) unsigned NOT NULL,
+  `document_prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
+  `document_uuid` varbinary(16) NOT NULL,
+  `topcategory` varchar(32) DEFAULT NULL,
+  `endpointcategory` varchar(45) DEFAULT NULL,
+  `endpoint` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `guidance` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `substance_prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `substance_uuid` varbinary(16) DEFAULT NULL,
+  `params` text NOT NULL,
+  `interpretation_result` varchar(128) DEFAULT NULL,
+  `interpretation_criteria` text,
+  `reference` text CHARACTER SET utf8 COLLATE utf8_bin,
+  `reference_year` smallint(6) DEFAULT NULL,
+  `reference_owner` varchar(128) DEFAULT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reliability` varchar(45) DEFAULT NULL COMMENT 'Klimish code (text) \n1 (reliable without restriction)\n2 (reliable with restrictions)\n3 (not reliable)\n4 (not assignable)\nother:\nempty (not specified)',
+  `isRobustStudy` tinyint(1) DEFAULT NULL,
+  `isUsedforClassification` tinyint(1) DEFAULT NULL,
+  `isUsedforMSDS` tinyint(1) DEFAULT NULL,
+  `purposeFlag` varchar(32) DEFAULT NULL,
+  `studyResultType` varchar(128) DEFAULT NULL COMMENT 'experimental result\nestimated by calculation\nread-across\n(Q)SAR',
+  PRIMARY KEY (idbundle,`document_prefix`,`document_uuid`),
+  KEY `bsubstance` (`substance_prefix`,`substance_uuid`),
+  KEY `bendpoint` (`endpoint`),
+  KEY `bcategory` (`endpointcategory`),
+  KEY `breference_owner` (`reference_owner`),
+  KEY `breference-x` (`reference`(255)),
+  KEY `btopcategory` (`topcategory`,`endpointcategory`,`interpretation_result`),
+  KEY `bxse` (`substance_prefix`,`substance_uuid`,`topcategory`,`endpointcategory`),
+  CONSTRAINT `bsubstance-x` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- -----------------------------------------------------
+-- Table `bundle_substance_experiment`
+-- -----------------------------------------------------
+drop table if exists `bundle_substance_experiment`;
+CREATE TABLE `bundle_substance_experiment` (
+  `idbundle` int(11) unsigned NOT NULL,
+  `idresult` int(11) NOT NULL AUTO_INCREMENT,
+  `document_prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
+  `document_uuid` varbinary(16) NOT NULL,
+  `topcategory` varchar(32) DEFAULT NULL,
+  `endpointcategory` varchar(45) DEFAULT NULL,
+  `endpointhash` varbinary(20) DEFAULT NULL COMMENT 'SHA1 over endpoint, unit and conditions',
+  `endpoint` varchar(64) DEFAULT NULL,
+  `conditions` text,
+  `unit` varchar(45) DEFAULT NULL,
+  `loQualifier` varchar(6) DEFAULT NULL,
+  `loValue` double DEFAULT NULL,
+  `upQualifier` varchar(6) DEFAULT NULL,
+  `upValue` double DEFAULT NULL,
+  `textValue` text,
+  `errQualifier` varchar(6) DEFAULT NULL,
+  `err` double DEFAULT NULL,
+  `substance_prefix` varchar(6) DEFAULT NULL,
+  `substance_uuid` varbinary(16) DEFAULT NULL,
+  PRIMARY KEY (`idresult`,`idbundle`),
+  KEY `bdocument_id` (`idbundle`,`document_uuid`,`document_prefix`),
+  KEY `bendpoint` (`endpoint`),
+  KEY `bdocument-x` (idbundle,`document_prefix`,`document_uuid`),
+  KEY `bhash-x` (`endpointhash`),
+  KEY `bcategory-x` (`topcategory`,`endpointcategory`,`endpoint`,`endpointhash`),
+  KEY `bsubstance-x` (`substance_prefix`,`substance_uuid`),
+  CONSTRAINT `bdocument-x` FOREIGN KEY (idbundle,`document_prefix`, `document_uuid`) REFERENCES `bundle_substance_protocolapplication` (idbundle,`document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- -----------------------------------------------------
 -- Table `structure`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `structure` ;
@@ -1277,7 +1350,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (8,6,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (8,7,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

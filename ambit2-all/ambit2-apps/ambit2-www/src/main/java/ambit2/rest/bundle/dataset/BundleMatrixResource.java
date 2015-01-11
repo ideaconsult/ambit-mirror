@@ -1,0 +1,227 @@
+package ambit2.rest.bundle.dataset;
+
+import java.util.List;
+
+import net.idea.i5.io.IQASettings;
+import net.idea.i5.io.QASettings;
+import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.restnet.c.TaskApplication;
+import net.idea.restnet.c.task.FactoryTaskConvertor;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskStorage;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.restlet.Context;
+import org.restlet.Request;
+import org.restlet.Response;
+import org.restlet.data.Form;
+import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
+import org.restlet.data.Status;
+import org.restlet.ext.fileupload.RestletFileUpload;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
+import org.restlet.resource.ResourceException;
+
+import ambit2.base.data.Property;
+import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.study.ProtocolEffectRecord;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.base.data.substance.SubstanceName;
+import ambit2.base.data.substance.SubstanceOwner;
+import ambit2.base.data.substance.SubstancePublicName;
+import ambit2.base.data.substance.SubstanceUUID;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.relation.composition.CompositionRelation;
+import ambit2.db.processors.CallableSubstanceI5Query;
+import ambit2.db.processors.MasterDetailsProcessor;
+import ambit2.db.substance.ids.ReadChemIdentifiersByComposition;
+import ambit2.db.substance.relation.ReadSubstanceComposition;
+import ambit2.db.update.bundle.effects.ReadEffectRecordByBundle;
+import ambit2.db.update.bundle.matrix.ReadEffectRecordByBundleMatrix;
+import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
+import ambit2.rest.OpenTox;
+import ambit2.rest.dataset.DatasetURIReporter;
+import ambit2.rest.substance.CallableStudyBundleImporter;
+import ambit2.rest.substance.CallableSubstanceImporter;
+import ambit2.rest.substance.SubstanceDatasetResource;
+import ambit2.rest.substance.SubstanceURIReporter;
+import ambit2.rest.task.AmbitFactoryTaskConvertor;
+
+public class BundleMatrixResource  extends	SubstanceDatasetResource<ReadSubstancesByBundle> {
+	protected SubstanceEndpointsBundle bundle;
+
+	@Override
+	protected ReadSubstancesByBundle createQuery(Context context,
+			Request request, Response response) throws ResourceException {
+		Object idbundle = request.getAttributes().get(
+				OpenTox.URI.bundle.getKey());
+		if (idbundle == null)
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		try {
+			bundle = new SubstanceEndpointsBundle(Integer.parseInt(idbundle
+					.toString()));
+			return new ReadSubstancesByBundle(bundle) {
+				public ambit2.base.data.SubstanceRecord getObject(
+						java.sql.ResultSet rs) throws AmbitException {
+					ambit2.base.data.SubstanceRecord record = super
+							.getObject(rs);
+					record.setProperty(new SubstancePublicName(),
+							record.getPublicName());
+					record.setProperty(new SubstanceName(),
+							record.getCompanyName());
+					record.setProperty(new SubstanceUUID(),
+							record.getCompanyUUID());
+					record.setProperty(new SubstanceOwner(),
+							record.getOwnerName());
+					return record;
+				}
+			};
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
+
+	}
+
+	@Override
+	protected IQueryRetrieval<ProtocolEffectRecord<String, String, String>> getEffectQuery() {
+		return new ReadEffectRecordByBundleMatrix(bundle);
+	}
+
+	@Override
+	protected void getCompositionProcessors(ProcessorsChain chain) {
+		final ReadSubstanceComposition q = new ReadSubstanceComposition();
+		MasterDetailsProcessor<SubstanceRecord, CompositionRelation, IQueryCondition> compositionReader = new MasterDetailsProcessor<SubstanceRecord, CompositionRelation, IQueryCondition>(
+				q) {
+			@Override
+			public SubstanceRecord process(SubstanceRecord target)
+					throws AmbitException {
+				q.setBundle(bundle);
+				if (target.getRelatedStructures() != null)
+					target.getRelatedStructures().clear();
+				return super.process(target);
+			}
+			
+			protected SubstanceRecord processDetail(SubstanceRecord target,CompositionRelation detail) throws Exception {
+				target.addStructureRelation(detail);
+				q.setRecord(null);
+				return target;
+			};
+		};
+		chain.add(compositionReader);
+		ReadChemIdentifiersByComposition qids = new ReadChemIdentifiersByComposition();
+		MasterDetailsProcessor<SubstanceRecord, IStructureRecord, IQueryCondition> idsReader = new MasterDetailsProcessor<SubstanceRecord, IStructureRecord, IQueryCondition>(
+				qids) {
+			@Override
+			protected SubstanceRecord processDetail(SubstanceRecord target,
+					IStructureRecord detail) throws Exception {
+				for (CompositionRelation r : target.getRelatedStructures())
+					if (detail.getIdchemical() == r.getSecondStructure()
+							.getIdchemical()) {
+						for (Property p : detail.getProperties()) {
+							r.getSecondStructure().setProperty(p,
+									detail.getProperty(p));
+						}
+						break;
+					}
+				return target;
+			}
+		};
+		chain.add(idsReader);
+	}
+
+	@Override
+	protected Representation post(Representation entity, Variant variant)
+			throws ResourceException {
+		
+		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
+
+		if (entity.getMediaType()!= null)
+			if (MediaType.MULTIPART_FORM_DATA.getName().equals(entity.getMediaType().getName())) {
+				DiskFileItemFactory factory = new DiskFileItemFactory();
+	            RestletFileUpload upload = new RestletFileUpload(factory);
+	            try {
+		            List<FileItem> items = upload.parseRequest(getRequest());
+					String token = getToken();
+					QASettings qa = new QASettings();
+					qa.clear(); //sets enabled to false and clears all flags
+					boolean clearMeasurements = false;
+					boolean clearComposition = false;					
+					for (FileItem file : items) {
+						if (file.isFormField()) {
+							if ("qaenabled".equals(file.getFieldName())) try {
+								if ("on".equals(file.getString())) qa.setEnabled(true);
+								if ("yes".equals(file.getString())) qa.setEnabled(true);
+								if ("checked".equals(file.getString())) qa.setEnabled(true);
+							} catch (Exception x) {
+								qa.setEnabled(true);
+							} else if ("clearMeasurements".equals(file.getFieldName())) {
+								try {
+									clearMeasurements = false;
+									String cm = file.getString();
+									if ("on".equals(cm)) clearMeasurements = true;
+									else if ("yes".equals(cm)) clearMeasurements = true;
+									else if ("checked".equals(cm)) clearMeasurements = true;
+								} catch (Exception x) {
+									clearMeasurements = false;
+								}							
+							
+							} else if ("clearComposition".equals(file.getFieldName())) {
+								try {
+									clearComposition = false;
+									String cm = file.getString();
+									if ("on".equals(cm)) clearComposition = true;
+									else if ("yes".equals(cm)) clearComposition = true;
+									else if ("checked".equals(cm)) clearComposition = true;
+								} catch (Exception x) {
+									clearComposition = false;
+								}								
+							} else
+							for (IQASettings.qa_field f : IQASettings.qa_field.values()) 
+								if (f.name().equals(file.getFieldName())) try {
+									String value = file.getString("UTF-8");
+									f.addOption(qa, "null".equals(value)?null:value==null?null:value.toString());
+								} catch (Exception x) {}							
+						} else {
+							String ext = file.getName().toLowerCase();
+							if (ext.endsWith(".json")) {
+							} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Unsupported format "+ext);
+						}
+					}	
+					CallableStudyBundleImporter<String> callable = new CallableStudyBundleImporter<String>(
+								items, 
+								"files[]",
+								getRootRef(),
+								getContext(),
+								new SubstanceURIReporter(getRequest().getRootRef()),
+								new DatasetURIReporter(getRequest().getRootRef()),
+								token);
+					callable.setBundle(bundle);
+					callable.setClearComposition(clearComposition);
+					callable.setClearMeasurements(clearMeasurements);
+					callable.setQASettings(qa);					
+					ITask<Reference,Object> task =  ((ITaskApplication)getApplication()).addTask(
+								"Substance import",
+								callable,
+								getRequest().getRootRef(),
+								token);
+								
+					  ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();				  
+					  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+					  task.update();
+					  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
+		              return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);
+	            } catch (ResourceException x) {
+	            	throw x;
+	            } catch (Exception x) {
+	            	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+	            }
+			}
+		throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
+	}
+}

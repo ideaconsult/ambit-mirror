@@ -21,8 +21,8 @@ import ambit2.core.io.IRawReader;
 import ambit2.core.io.RawIteratingWrapper;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
-import ambit2.db.processors.DBSubstanceWriter;
 import ambit2.db.processors.test.DbUnitTest;
+import ambit2.db.substance.processor.DBSubstanceWriter;
 
 public class ProteinCoronaPaperReaderTest  extends DbUnitTest {
 	@Test
@@ -59,7 +59,7 @@ public class ProteinCoronaPaperReaderTest  extends DbUnitTest {
     		entry.setType(_type.Dataset);
     		
     		CSV12Reader chemObjectReader = new CSV12Reader(new FileReader(
-					new File("D:/src-ideaconsult/Protein_Corona/MergedSheets.csv")),entry,"PRCR-");
+					new File("D:/src-ideaconsult/Protein_Corona_fork/MergedSheets.csv")),entry,"PRCR-");
 			parser = new CSV12SubstanceReader(chemObjectReader);
 	        write(parser,c.getConnection(),new ReferenceSubstanceUUID(),false);
 	        

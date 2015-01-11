@@ -37,10 +37,11 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
 import ambit2.core.io.IRawReader;
+import ambit2.core.io.json.SubstanceStudyParser;
 import ambit2.db.processors.BatchDBProcessor;
 import ambit2.db.processors.DBProcessorsChain;
-import ambit2.db.processors.DBSubstanceWriter;
 import ambit2.db.search.QueryExecutor;
+import ambit2.db.substance.processor.DBSubstanceWriter;
 import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.task.CallableFileUpload;
@@ -174,6 +175,11 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 					} else if (ext.endsWith(".rdf")) {
 						writer.setSplitRecord(false);
 						reader = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(file),"UTF-8"));
+					} else if (ext.endsWith(".json")) {
+						writer.setSplitRecord(false);
+						reader = new SubstanceStudyParser(new InputStreamReader(new FileInputStream(file),"UTF-8"));		
+						writer.setClearComposition(false);
+						writer.setClearMeasurements(false);
 					} else {
 						throw new AmbitException("Unsupported format "+file);
 					}
@@ -214,6 +220,10 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 		writer = new DBSubstanceWriter(dataset,importedRecord,clearMeasurements,clearComposition);
 		chain.add(writer);
 		return chain;
+	}
+	
+	protected DBSubstanceWriter createWriter() {
+		return new DBSubstanceWriter(dataset,importedRecord,clearMeasurements,clearComposition);	
 	}
 
 	@Override
