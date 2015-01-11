@@ -22,11 +22,9 @@ public class UpdateEffectRecords extends AbstractUpdate<ProtocolApplication<Prot
 		this.substanceUUID = substanceUUID;
 	}
 	
-	public static final String[] create_sql = {
+	private static final String[] create_sql = {
 		"INSERT INTO substance_experiment (document_prefix,document_uuid,endpoint,conditions,unit,loQualifier,loValue,upQualifier,upValue,textValue,errQualifier,err,endpointhash,topcategory,endpointcategory,substance_prefix,substance_uuid)\n"+
 		"values(?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,unhex(sha1(concat(ifnull(?,''),ifnull(?,''),ifnull(?,'')))),?,?,?,unhex(replace(?,'-','')))"
-		
-		//unhex(sha1(concat(ifnull(endpoint,""),ifnull(unit,""),ifnull(conditions,""))))
 	};
 	
 
@@ -52,7 +50,11 @@ public class UpdateEffectRecords extends AbstractUpdate<ProtocolApplication<Prot
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		check();
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
-		
+		addParameters(index, params1);
+		return params1;
+	}
+
+	public void addParameters(int index,List<QueryParam> params1) throws AmbitException {
 		String o_uuid = getGroup().getDocumentUUID();
 		String[] cmp_uuid = {null,o_uuid==null?null:o_uuid.toString()};
 		if (o_uuid!=null) cmp_uuid = I5Utils.splitI5UUID(o_uuid.toString());
@@ -96,6 +98,5 @@ public class UpdateEffectRecords extends AbstractUpdate<ProtocolApplication<Prot
 		params1.add(new QueryParam<String>(String.class, subst_uuid[0]));
 		params1.add(new QueryParam<String>(String.class, subst_uuid[1]));
 
-		return params1;
 	}
 }

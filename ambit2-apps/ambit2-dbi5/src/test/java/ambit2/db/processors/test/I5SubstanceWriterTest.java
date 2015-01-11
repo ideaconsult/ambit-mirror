@@ -2,8 +2,6 @@ package ambit2.db.processors.test;
 
 import java.io.File;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.sql.Connection;
 
 import junit.framework.Assert;
 import net.idea.i5._5.ambit2.I5AmbitProcessor;
@@ -15,16 +13,10 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
 
-import ambit2.base.data.SubstanceRecord;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.io.DownloadTool;
-import ambit2.core.io.IRawReader;
-import ambit2.core.io.json.SubstanceStudyParser;
-import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
-import ambit2.db.processors.DBSubstanceWriter;
 
-public class SubstanceWriterTest extends DbUnitTest {
+public class I5SubstanceWriterTest extends SubstanceWriterTest {
 
 	
 	@Test
@@ -154,82 +146,6 @@ public class SubstanceWriterTest extends DbUnitTest {
 			});
 		    return reader;
 	}
-	public int write(IRawReader<IStructureRecord> reader,Connection connection) throws Exception  {
-		return write(reader, connection,new ReferenceSubstanceUUID());
-	}
 
-	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key) throws Exception  {
-		return write(reader, connection,key,true);
-	}
-	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key, boolean splitRecord) throws Exception  {
-		
-		DBSubstanceWriter writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord(),true,true);
-		writer.setSplitRecord(splitRecord);
-		writer.setConnection(connection);
-        writer.open();
-		int records = 0;
-		while (reader.hasNext()) {
-            Object record = reader.next();
-            if (record==null) continue;
-            Assert.assertTrue(record instanceof IStructureRecord);
-            writer.process((IStructureRecord)record);
-            records++;
-		}
-		writer.close();
-		return records;
-	}	
-	
-
-	public SubstanceStudyParser getJSONReader() throws Exception {
-		InputStream in= null;
-		try {
-			in = this.getClass().getClassLoader().getResourceAsStream("ambit2/core/data/json/substance.json");
-			return new SubstanceStudyParser(new InputStreamReader(in,"UTF-8"));
-		} catch (Exception x) {
-			throw x;
-		} finally {
- 			try { if (in!=null) in.close();} catch (Exception x) {}
-		}
-	}
-
-	@Test
-	public void testWriteJSONStudies() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
-        IDatabaseConnection c = getConnection();
-		ITable substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance_experiment");
-	    Assert.assertEquals(0,substance.getRowCount());
-	    substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance");
-	    Assert.assertEquals(0,substance.getRowCount());
-	    substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance_protocolapplication");
-	    Assert.assertEquals(0,substance.getRowCount()); 
-        try {
-        	
-	        IRawReader<IStructureRecord> parser = getJSONReader();
-
-	        /*
-	        while (parser.hasNext()) {
-	        	IStructureRecord record = parser.nextRecord();
-	        	Assert.assertTrue(record instanceof SubstanceRecord);
-	        	Assert.assertNotNull(((SubstanceRecord)record).getMeasurements());
-	        	System.out.println(((SubstanceRecord)record).toJSON("http://localhost:8080/ambit2"));
-	        }
-	        */
-	
-	        write(parser,c.getConnection(),new ReferenceSubstanceUUID(),false);
-	        parser.close();
-	        
-	        c = getConnection();
-	        substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance");
-		    Assert.assertEquals(1,substance.getRowCount());
-	        substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance_protocolapplication");
-		    Assert.assertEquals(104,substance.getRowCount());
-		    substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance_experiment");
-		    Assert.assertEquals(110,substance.getRowCount());
-        } finally {
-        	c.close();
-        }
-        
-	}
-	
 	
 }

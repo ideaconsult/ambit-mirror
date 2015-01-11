@@ -40,8 +40,8 @@ import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 
 public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplication<Protocol, IParams, String, IParams, String>> {
-
-	public static final String[] create_sql = {
+	
+	private static final String[] create_sql = {
 		"INSERT INTO substance_protocolapplication (document_prefix,document_uuid,topcategory,endpointcategory,endpoint,guidance," +
 		"substance_prefix,substance_uuid,params,interpretation_result,interpretation_criteria,reference,reference_year,reference_owner," +
 		"reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType)\n" +
@@ -73,6 +73,7 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		//if (getObject().getProtocol().getEndpoint() == null) throw new AmbitException("No endpoint");
 		
 	}
+	@Override
 	public String[] getSQL() throws AmbitException {
 		check();
 		return create_sql;
@@ -81,7 +82,11 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		check();
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
-		
+		addParameters(index, params1);
+		return params1;
+	}	
+	
+	public void addParameters(int index, List<QueryParam> params1) throws AmbitException {	
 		Object o_uuid = getObject().getDocumentUUID();
 		String[] cmp_uuid = {null,o_uuid==null?null:o_uuid.toString()};
 		if (cmp_uuid==null || cmp_uuid.length<2) throw new AmbitException("Invalid UUID "+o_uuid.toString());
@@ -138,7 +143,6 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		} catch (Exception x) {	params1.add(new QueryParam<String>(String.class, null));}
 		try { params1.add(new QueryParam<String>(String.class, truncate(getObject().getReliability().getStudyResultType().toString(),128)));
 		} catch (Exception x) {	params1.add(new QueryParam<String>(String.class, null));}
-		return params1;
 	}
 
 }

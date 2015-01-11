@@ -1,7 +1,6 @@
-package ambit2.db.processors;
+package ambit2.db.substance.processor;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
@@ -20,6 +19,7 @@ import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
 import ambit2.db.UpdateExecutor;
+import ambit2.db.processors.RepositoryWriter;
 import ambit2.db.substance.CreateSubstance;
 import ambit2.db.substance.ids.UpdateSubstanceIdentifiers;
 import ambit2.db.substance.relation.DeleteSubstanceRelation;
@@ -135,10 +135,18 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 		super.close();
 	}
 	
+	protected UpdateSubstanceStudy createSubstanceStudyUpdateQuery(ProtocolApplication papp) throws Exception  {
+		return new UpdateSubstanceStudy(importedRecord.getCompanyUUID(), papp);
+	}
+	
+	protected UpdateEffectRecords createEffectRecordUpdateQuery(ProtocolApplication papp, EffectRecord effect) throws Exception  {
+		return new UpdateEffectRecords(importedRecord.getCompanyUUID(),papp,effect);
+	}
+	
 	protected void importSubstanceMeasurements(SubstanceRecord substance) throws Exception {
 		if (substance.getMeasurements()==null) return;
 		for (ProtocolApplication papp : substance.getMeasurements()) {
- 			if (qss==null) qss = new UpdateSubstanceStudy(importedRecord.getCompanyUUID(), papp);
+ 			if (qss==null) qss = createSubstanceStudyUpdateQuery(papp);
  			else {
  				qss.setGroup(importedRecord.getCompanyUUID());
  				qss.setObject(papp);
@@ -152,7 +160,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
  			if ( papp.getEffects()!=null)
  			for (Object effect : papp.getEffects()) 
  				if (effect instanceof EffectRecord) {
- 					if (qeffr==null) qeffr = new UpdateEffectRecords(importedRecord.getCompanyUUID(),papp,(EffectRecord)effect);
+ 					if (qeffr==null) qeffr = createEffectRecordUpdateQuery(papp,(EffectRecord)effect);
  					else {
  						qeffr.setSubstanceUUID(importedRecord.getCompanyUUID());
  						qeffr.setGroup(papp); qeffr.setObject((EffectRecord)effect);

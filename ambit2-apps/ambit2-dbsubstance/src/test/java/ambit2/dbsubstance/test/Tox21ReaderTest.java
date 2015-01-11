@@ -22,8 +22,8 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.IRawReader;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
-import ambit2.db.processors.DBSubstanceWriter;
 import ambit2.db.processors.test.DbUnitTest;
+import ambit2.db.substance.processor.DBSubstanceWriter;
 
 public class Tox21ReaderTest extends DbUnitTest {
 	
