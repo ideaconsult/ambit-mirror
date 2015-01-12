@@ -79,7 +79,7 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<M>,M extends ISou
 					"\n\t\"type\":\"%s\"," + //uri
 					"\n\t\"%s\":%s," + //title
 					"\n\t\"%s\":%d," + //stars
-					"\n\t\"%s\":%s," + //stars
+					"\n\t\"%s\":%s," + //source
 					"\n\t\"%s\":%s," + //rightsHolder
 					"\n\t\"%s\":%s," + //maintainer
 					"\n\t\"%s\":%s," + //seeAlso
