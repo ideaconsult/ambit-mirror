@@ -10,6 +10,7 @@ import org.restlet.Request;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
+import ambit2.base.data.study.MultiValue;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.reporters.ARFFReporter;
 import ambit2.rest.property.PropertyURIReporter;
@@ -69,6 +70,6 @@ public class ARFFResourceReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		return 
 		String.format("@attribute %s %s\n", 
 				reporter.getURI(p),
-				allowedValues!=null?allowedValues.toString():p.getClazz()==Number.class?"numeric":"string");
+				allowedValues!=null?allowedValues.toString():(p.getClazz().equals(Number.class) || p.getClazz().equals(MultiValue.class))?"numeric":"string");
 	}
 }

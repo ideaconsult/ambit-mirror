@@ -145,7 +145,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 				d,
 				p.getName(),
 				d,
-				p.isNominal()?allowedValues:p.getClazz()==Number.class?"numeric":"string");
+				p.isNominal()?allowedValues:(p.getClazz().equals(Number.class) || p.getClazz().equals(MultiValue.class))?"numeric":"string");
 	}
 	@Override
 	public void header(Writer writer, Q query) {
