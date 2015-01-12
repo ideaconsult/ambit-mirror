@@ -67,9 +67,9 @@
 	        <thead>
 	          <tr><th class="right size-third">Assessment</th><th class="data-field" data-field="id"></th></tr>
 	          <tr><td class="right size-third">Title:</td><td><input class="data-field first-time validate" data-field="title" name="title"></input></td></tr>
-	          <tr><td class="right size-third">Source:</td><td><input class="data-field first-time validate" data-field="source" name="source"></input></td></tr>
-	          <tr><td class="right size-third">Source URL:</td><td><input class="data-field first-time validate" data-field="url" name="url"></input></td></tr>
-	          <tr><td class="right size-third">License:</td><td><input class="data-field first-time validate" data-field="license" name="license"></input></td></tr>
+			  <tr><td class="right size-third">Source:</td><td><input class="data-field first-time validate" data-field="seeAlso" name="source"></input></td></tr>
+	          <tr><td class="right size-third">Source URL:</td><td><input class="data-field first-time validate" data-field="source" name="url"></input></td></tr>
+	          <tr><td class="right size-third">License:</td><td><input class="data-field first-time validate" data-field="rights.URI" name="license"></input></td></tr>
 	          <tr><td class="right size-third">Rights holder:</td><td><input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder"></input></td></tr>
 	          <tr><td class="right size-third">Maintainer:</td><td><input class="data-field first-time validate" data-field="maintainer" name="maintainer"></input></td></tr>
 
