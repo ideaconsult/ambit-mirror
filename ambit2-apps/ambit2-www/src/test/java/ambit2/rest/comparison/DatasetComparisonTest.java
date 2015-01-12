@@ -43,6 +43,7 @@ import com.hp.hpl.jena.vocabulary.DC;
 
 public class DatasetComparisonTest extends  ProtectedResourceTest  {
 	ObjectMapper mapper = new ObjectMapper();
+	
 	@Test
 	public void test() throws Exception {
 		/*
@@ -127,7 +128,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 
 	@Override
 	protected boolean isAAEnabled() {
-		return true;
+		return false;
 	}
 	@Override
 	public void setUpAA() throws Exception {
