@@ -34,7 +34,8 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<M>,M extends ISou
 		source,
 		rights,
 		rightsHolder,
-		seeAlso,
+		maintainer,
+		seeAlso
 		;
 		
 		public String jsonname() {
@@ -80,6 +81,7 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<M>,M extends ISou
 					"\n\t\"%s\":%d," + //stars
 					"\n\t\"%s\":%s," + //stars
 					"\n\t\"%s\":%s," + //rightsHolder
+					"\n\t\"%s\":%s," + //maintainer
 					"\n\t\"%s\":%s," + //seeAlso
 					"\n\t\"%s\":{\n\t\t\"URI\":%s,\n\t\t\"type\":%s\n\t}", 					//source
 					jsonFeature.URI.jsonname(),uri,type,
@@ -87,6 +89,7 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<M>,M extends ISou
 					jsonFeature.stars.jsonname(),item.getStars(),
 					jsonFeature.source.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSource())),
 					jsonFeature.rightsHolder.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getrightsHolder())),
+					jsonFeature.maintainer.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getMaintainer())),
 					jsonFeature.seeAlso.jsonname(),
 						(url==null)?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(url)),
 					jsonFeature.rights.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getLicenseURI())),
