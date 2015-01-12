@@ -72,12 +72,20 @@ public class SMIRKSReaction
 	List<IBond.Order> prodBo = new ArrayList<IBond.Order>();
 	
 	protected IChemObjectBuilder builder;
+	protected SmartsToChemObject mSTCO = null;
 	
 	public SMIRKSReaction(IChemObjectBuilder builder) {
 		super();
 		this.builder = builder;
 	}
-				
+	
+	public SmartsToChemObject getSmartsToChemObjectConvertor()
+	{
+		if (mSTCO == null)
+			mSTCO = new SmartsToChemObject(builder);
+		return mSTCO;
+	}
+	
 	public void checkMappings()
 	{
 		//Register all mappings
@@ -120,7 +128,7 @@ public class SMIRKSReaction
 			return;
 		}
 			
-		SmartsToChemObject stco = new SmartsToChemObject(builder);
+		SmartsToChemObject stco = getSmartsToChemObjectConvertor();
 		
 		//Checking for atom typing and some properties correctness for all mapped atoms
 		
@@ -182,6 +190,8 @@ public class SMIRKSReaction
 			int curFragNum, List<Integer> mapIndex, List<Integer> notMappedAt, 
 			List<Integer> atFragNum, List<Integer> atGlobalNum, List<Integer> fragNum)
 	{
+		SmartsToChemObject stco = new SmartsToChemObject(builder);
+		
 		for (int i = 0; i < fragment.getAtomCount(); i++)
 		{						
 			IAtom a = fragment.getAtom(i);
@@ -193,7 +203,7 @@ public class SMIRKSReaction
 				if (containsInteger(mapIndex, iObj))
 					mapErrors.add(compType + " Map Index " + iObj.intValue()+ " is repeated!");
 				else
-				{
+				{	
 					mapIndex.add(iObj);
 					atFragNum.add(new Integer(i));
 					fragNum.add(new Integer(curFragNum));
@@ -206,6 +216,13 @@ public class SMIRKSReaction
 			{	
 				//This is unmapped atom
 				//System.out.println("   not mapped atom");
+				if (compType.equals("Product"))
+				{
+					IAtom a0 = getSmartsToChemObjectConvertor().toAtom(a);
+					if (a0 == null)
+						mapErrors.add("Unmapped product atom with undefined type!" );
+				}
+				
 				int globalAtNum = globalContainer.getAtomNumber(a);
 				notMappedAt.add(new Integer(globalAtNum));
 			}
@@ -484,7 +501,7 @@ public class SMIRKSReaction
 	{
 		StringBuffer sb = new StringBuffer();
 		
-		System.out.println("Mappings:");
+		sb.append("Mappings:\n");
 		for (int i = 0; i < reactantMapIndex.size(); i++)
 		{	
 			Integer rMapInd = reactantMapIndex.get(i);
@@ -494,7 +511,7 @@ public class SMIRKSReaction
 			int pGlobAtNum = productAtomNum.get(pIndex).intValue();
 			IAtom glob_pa = product.getAtom(pGlobAtNum);
 			
-			System.out.println("Map #" + rMapInd.intValue()+ 
+			sb.append("Map #" + rMapInd.intValue()+ 
 					//"  P" + rNum + " A"+rAtNum + "  -->  R"+pNum+" A"+pAtNum+"  " +
 				 "     " + 
 				 "at# " + rGlobAtNum + 	
@@ -503,7 +520,7 @@ public class SMIRKSReaction
 				 "at# " + pGlobAtNum +
 				 "  Charge = " +  productAtCharge.get(pGlobAtNum) +				  
 				 "         pIndex = " + pIndex
-				 );
+				 + "\n");
 		}
 		
 		
