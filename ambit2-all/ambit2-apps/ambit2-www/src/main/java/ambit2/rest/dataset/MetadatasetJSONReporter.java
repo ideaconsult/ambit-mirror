@@ -62,23 +62,27 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<M>,M extends ISou
 				}
 			}
 
+			String type = "Dataset";
 			String url = null;
 			if (item instanceof SourceDataset) url = ((SourceDataset)item).getURL();
-			else if (item instanceof SubstanceEndpointsBundle) url = ((SubstanceEndpointsBundle)item).getURL();
+			else if (item instanceof SubstanceEndpointsBundle) 	{
+				url = ((SubstanceEndpointsBundle)item).getURL();
+				type = "Bundle";
+			}
+			
 			
 			if (comma!=null) getOutput().write(comma);
+			getOutput().write("\n{");
 			getOutput().write(String.format(
-					"\n{"+
 					"\n\t\"%s\":\"%s\"," + //uri
-					"\n\t\"type\":\"Dataset\"," + //uri
+					"\n\t\"type\":\"%s\"," + //uri
 					"\n\t\"%s\":%s," + //title
 					"\n\t\"%s\":%d," + //stars
 					"\n\t\"%s\":%s," + //stars
 					"\n\t\"%s\":%s," + //rightsHolder
 					"\n\t\"%s\":%s," + //seeAlso
-					"\n\t\"%s\":{\n\t\t\"URI\":%s,\n\t\t\"type\":%s\n\t}" + 					//source
-					"\n}",
-					jsonFeature.URI.jsonname(),uri,
+					"\n\t\"%s\":{\n\t\t\"URI\":%s,\n\t\t\"type\":%s\n\t}", 					//source
+					jsonFeature.URI.jsonname(),uri,type,
 					jsonFeature.title.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getName())),
 					jsonFeature.stars.jsonname(),item.getStars(),
 					jsonFeature.source.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSource())),
@@ -89,6 +93,15 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<M>,M extends ISou
 							JSONUtils.jsonQuote(JSONUtils.jsonEscape(rights))
 
 					));
+			if (item instanceof SubstanceEndpointsBundle) {
+				getOutput().write(String.format(",\n\t\"summary\":\"%s/summary\"",uri));
+				getOutput().write(String.format(",\n\t\"compound\":\"%s/compound\"",uri));
+				getOutput().write(String.format(",\n\t\"substance\":\"%s/substance\"",uri));
+				getOutput().write(String.format(",\n\t\"property\":\"%s/property\"",uri));
+				getOutput().write(String.format(",\n\t\"dataset\":\"%s/dataset\"",uri));
+				getOutput().write(String.format(",\n\t\"matrix\":\"%s/matrix\"",uri));
+			}
+			getOutput().write("\n}");			
 			comma = ",";
 		} catch (Exception x) {
 			logger.log(Level.WARNING,x.getMessage(),x);

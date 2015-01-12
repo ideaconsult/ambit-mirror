@@ -19,7 +19,8 @@ public class BundleSummaryQuery extends AbstractFacetQuery<SubstanceEndpointsBun
 	private static final String sql = 
 		"select \"compound\",count(idchemical) from bundle_chemicals where idbundle=? "+
 		"union select \"substance\",count(idsubstance) from bundle_substance where idbundle=? "+
-		"union select \"property\",count(*) from bundle_endpoints where idbundle=?";
+		"union select \"property\",count(*) from bundle_endpoints where idbundle=? "+
+		"union select \"matrix\",1";
 	
 	protected BundleSummaryFacet record;
 	

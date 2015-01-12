@@ -1,5 +1,6 @@
 package ambit2.rest.bundle.dataset;
 
+import java.sql.Connection;
 import java.util.List;
 
 import net.idea.i5.io.IQASettings;
@@ -8,8 +9,8 @@ import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.ProcessorsChain;
-import net.idea.restnet.c.TaskApplication;
 import net.idea.restnet.c.task.FactoryTaskConvertor;
+import net.idea.restnet.db.DBConnection;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskApplication;
 import net.idea.restnet.i.task.ITaskStorage;
@@ -21,6 +22,7 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.ext.fileupload.RestletFileUpload;
@@ -38,17 +40,15 @@ import ambit2.base.data.substance.SubstancePublicName;
 import ambit2.base.data.substance.SubstanceUUID;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
-import ambit2.db.processors.CallableSubstanceI5Query;
 import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.substance.ids.ReadChemIdentifiersByComposition;
 import ambit2.db.substance.relation.ReadSubstanceComposition;
-import ambit2.db.update.bundle.effects.ReadEffectRecordByBundle;
 import ambit2.db.update.bundle.matrix.ReadEffectRecordByBundleMatrix;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetURIReporter;
+import ambit2.rest.substance.CallableBundleMatrixCreator;
 import ambit2.rest.substance.CallableStudyBundleImporter;
-import ambit2.rest.substance.CallableSubstanceImporter;
 import ambit2.rest.substance.SubstanceDatasetResource;
 import ambit2.rest.substance.SubstanceURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
@@ -134,10 +134,86 @@ public class BundleMatrixResource  extends	SubstanceDatasetResource<ReadSubstanc
 		};
 		chain.add(idsReader);
 	}
-
 	@Override
-	protected Representation post(Representation entity, Variant variant)
-			throws ResourceException {
+	protected Representation delete(Variant variant) throws ResourceException {
+				String token = getToken();
+				
+				SubstanceEndpointsBundle bundle = null;
+				Object id = getRequest().getAttributes().get(OpenTox.URI.bundle.getKey());	
+				if ((id!=null)) try {
+					Integer i = new Integer(Reference.decode(id.toString()));
+					if (i>0) bundle = new SubstanceEndpointsBundle(i);
+				} catch (Exception x) {
+				}
+				
+				Connection conn = null;
+				try {
+					DatasetURIReporter r = new DatasetURIReporter(getRequest());
+					DBConnection dbc = new DBConnection(getApplication().getContext(),getConfigFile());
+					conn = dbc.getConnection();
+					CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(Method.DELETE,null,bundle,r,conn,getToken());
+					ITask<Reference,Object> task =  ((ITaskApplication)getApplication()).addTask(
+							"Delete matrix from bundle",
+							callable,
+							getRequest().getRootRef(),
+							token);
+							
+				  ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();				  
+				  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+				  task.update();
+				  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
+	              return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);
+	              
+				} catch (Exception x) {
+					x.printStackTrace();
+					try { conn.close(); } catch (Exception xx) {}
+					throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+				}
+	}
+	@Override
+	protected Representation post(Representation entity, Variant variant) throws ResourceException {
+		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
+		if (entity.getMediaType()!= null)
+			if (MediaType.APPLICATION_WWW_FORM.getName().equals(entity.getMediaType().getName())) {
+				String token = getToken();
+				
+				SubstanceEndpointsBundle bundle = null;
+				Object id = getRequest().getAttributes().get(OpenTox.URI.bundle.getKey());	
+				if ((id!=null)) try {
+					Integer i = new Integer(Reference.decode(id.toString()));
+					if (i>0) bundle = new SubstanceEndpointsBundle(i);
+				} catch (Exception x) {
+				}
+				
+				Connection conn = null;
+				try {
+					DatasetURIReporter r = new DatasetURIReporter(getRequest());
+					DBConnection dbc = new DBConnection(getApplication().getContext(),getConfigFile());
+					conn = dbc.getConnection();
+					CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(Method.POST,new Form(entity),bundle,r,conn,getToken());
+					ITask<Reference,Object> task =  ((ITaskApplication)getApplication()).addTask(
+							"Matrix from bundle",
+							callable,
+							getRequest().getRootRef(),
+							token);
+							
+				  ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();				  
+				  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+				  task.update();
+				  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
+	              return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);
+	              
+				} catch (Exception x) {
+					x.printStackTrace();
+					try { conn.close(); } catch (Exception xx) {}
+					throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+				}
+			}
+		throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);		
+			
+	}
+	@Override
+	protected Representation put(Representation entity, Variant variant) throws ResourceException {
 		
 		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
 

@@ -696,7 +696,7 @@
 			            ]
 			        },
 			        {
-			            "method": "POST",
+			            "method": "PUT",
 			            "summary": "Import studies for this bundle",
 			            "notes": "Import studies for this bundle. Supports JSON format",
 			            "type": "Task",
@@ -735,30 +735,6 @@
 							       "checked","on","yes","off",""
 							    ]
 							},	
-							{
-							    "name": "clearMeasurements",
-							    "description": "Clear existing study records of imported substance(s)",
-							    "required": false,
-							    "type": "string",
-							    "paramType": "form",
-							    "allowMultiple": false,
-							    "defaultValue": "name",
-							    "enum" : [
-							       "checked","on","yes","off",""
-							    ]
-							},	
-							{
-							    "name": "clearComposition",
-							    "description": "Clear existing composition records of imported substance(s)",
-							    "required": false,
-							    "type": "string",
-							    "paramType": "form",
-							    "allowMultiple": false,
-							    "defaultValue": "name",
-							    "enum" : [
-							       "checked","on","yes","off",""
-							    ]
-							},		
 							{
 							    "name": "purposeflag",
 							    "description": "Purpose flag: 921 (key study); 1590 (supporting study); 1661 (weight of evidence); 8108 (disregarded study); NOT_SPECIFIED; null",							    
@@ -833,7 +809,87 @@
 			                <#include "/apidocs/error_aa.ftl" >,
 			                <#include "/apidocs/error_500.ftl" >			                
 			            ]
-			        }				        
+			        },
+			        {
+			            "method": "POST",
+			            "summary": "Create matrix from bundle",
+			            "notes": "Copies studies defined by selected endpoints and substances into local bundle matrix",
+			            "type": "Task",
+			            "nickname": "createMatrixFromBundle",
+		                "consumes": [
+		                       "application/x-www-form-urlencoded"
+		                ],			            
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+	           				{
+							    "name": "id",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							},
+							{
+							    "name": "deletematrix",
+							    "description": "delete existing matrix content",						    
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false,
+							    "defaultValue": "false",
+							    "enum" : [
+							         "true","false"
+							    ]
+							}	    							
+			            ],
+			            "responseMessages": [
+			         	    <#include "/apidocs/error_task.ftl" >,	
+			                {
+			                  "code": 404,
+			                   "message": "Model not found"
+			                 },
+			                {
+			       	           "code": 400,
+			       	           "message": "Bad request"
+			       	        },	 		                    
+			                <#include "/apidocs/error_aa.ftl" >,
+			                <#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        },
+					{
+			            "method": "DELETE",
+			            "summary": "Delete matrix from bundle",
+			            "notes": "Deletes study copied",
+			            "type": "Task",
+			            "nickname": "deleteMatrixFromBundle",
+		                "consumes": [
+		                       "application/x-www-form-urlencoded"
+		                ],			            
+			            <#include "/apidocs/authz.ftl" >
+			            "parameters": [
+	           				{
+							    "name": "id",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							}    							
+			            ],
+			            "responseMessages": [
+			         	    <#include "/apidocs/error_task.ftl" >,	
+			                {
+			                  "code": 404,
+			                   "message": "Model not found"
+			                 },
+			                {
+			       	           "code": 400,
+			       	           "message": "Bad request"
+			       	        },	 		                    
+			                <#include "/apidocs/error_aa.ftl" >,
+			                <#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }				        		
 			    ]
 			},			
 			{

@@ -5,12 +5,14 @@ import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
+import org.junit.Test;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.update.bundle.CreateBundle;
 import ambit2.db.update.bundle.DeleteBundle;
 import ambit2.db.update.bundle.UpdateBundle;
+import ambit2.db.update.bundle.matrix.CreateMatrixFromBundle;
 
 public class Bundle_crud_test extends CRUDTest<Object,SubstanceEndpointsBundle> {
 	@Override
@@ -89,20 +91,42 @@ public class Bundle_crud_test extends CRUDTest<Object,SubstanceEndpointsBundle> 
 		Assert.assertEquals(0,table.getRowCount());		
 		c.close();
 	}
+	
+	@Test
+	public void testCreateNew() throws Exception {
+		IQueryUpdate<Object, SubstanceEndpointsBundle> query = createQueryNew();
+		setUpDatabase(dbFile);
+		IDatabaseConnection c = getConnection();
+		executor.setConnection(c.getConnection());
+		executor.open();
+		executor.process(query);
+		createVerifyNew(query);
+		c.close();
+	}	
+	
 	@Override
 	protected IQueryUpdate<Object, SubstanceEndpointsBundle> createQueryNew()
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle();
+		bundle.setID(1);		
+		return new CreateMatrixFromBundle(bundle);
 	}
 	@Override
 	protected void createVerifyNew(IQueryUpdate<Object, SubstanceEndpointsBundle> query)
 			throws Exception {
-		// TODO Auto-generated method stub
+		/*
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED_BUNDLE","SELECT idbundle,licenseURI FROM bundle where name='ambit'");
+		Assert.assertEquals(1,table.getRowCount());
+		Object idtemplate = table.getValue(0,"idbundle");
+		Assert.assertNotNull(idtemplate);
+		
+		table = c.createQueryTable("EXPECTED_REF","SELECT * FROM catalog_references where title='new_title'");
+		Assert.assertEquals(1,table.getRowCount());
+				
+		c.close();
+		*/
 		
 	}
-	@Override
-	public void testCreateNew() throws Exception {
 
-	}
 }
