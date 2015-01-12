@@ -163,7 +163,7 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 		Assert.assertEquals(3,rows.size());
 		while (rows.next()) {
 			ISourceDataset dataset = rows.getObject();
-			ITable table = 	c.createQueryTable("EXPECTED","SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder,stars FROM src_dataset join catalog_references using(idreference) where name='"+ dataset.getName() +"'");		
+			ITable table = 	c.createQueryTable("EXPECTED","SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder,stars,maintainer FROM src_dataset join catalog_references using(idreference) where name='"+ dataset.getName() +"'");		
 			Assert.assertEquals(1,table.getRowCount());			
 			for (int i=1; i <= rows.getMetaData().getColumnCount();i++) {
 				Assert.assertEquals(table.getValue(0,rows.getMetaData().getColumnName(i)).toString(),rows.getString(i));
