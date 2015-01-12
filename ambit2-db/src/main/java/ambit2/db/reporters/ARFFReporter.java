@@ -17,6 +17,8 @@ import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
+import ambit2.base.data.study.IValue;
+import ambit2.base.data.study.MultiValue;
 import ambit2.base.interfaces.IStructureRecord;
 
 public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryHeaderReporter< Q, Writer> {
@@ -187,25 +189,33 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 			
 			for (Property p : header) {
 				Object value = item.getProperty(p);
-				if ((value!=null) && p.isNominal()) {
-					p.addAllowedValue(value.toString());
-				}
-				if (p.isNominal()) 
-					writer.write(String.format(",%s",
+				if (value instanceof MultiValue) {
+					MultiValue<IValue> mv = (MultiValue<IValue>) value;
+					for (IValue m : mv) {
+						writer.write(String.format(",%s",m.getLoValue()));
+						break;
+					}
+				} else {
+					if ((value!=null) && p.isNominal()) {
+						p.addAllowedValue(value.toString());
+					}
+					if (p.isNominal()) 
+						writer.write(String.format(",%s",
+									(value==null)||(IQueryRetrieval.NaN.equals(value.toString()))?"?":value
+									));
+					else if (p.getClazz()==Number.class) { 
+						writer.write(String.format(",%s",
 								(value==null)||(IQueryRetrieval.NaN.equals(value.toString()))?"?":value
 								));
-				else if (p.getClazz()==Number.class) { 
-					writer.write(String.format(",%s",
-							(value==null)||(IQueryRetrieval.NaN.equals(value.toString()))?"?":value
-							));
-					
-				} else
-					writer.write(String.format(",%s%s%s",
-							value==null?"":"\"",
-							value==null?"?":
-							value.toString().replace("\n", "").replace("\r",""),
-							value==null?"":"\""
-							));					
+						
+					} else
+						writer.write(String.format(",%s%s%s",
+								value==null?"":"\"",
+								value==null?"?":
+								value.toString().replace("\n", "").replace("\r",""),
+								value==null?"":"\""
+								));	
+				}
 				i++;
 			}
 			writer.write('\n');
