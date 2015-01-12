@@ -100,6 +100,34 @@ public class SubstanceWriterTest extends DbUnitTest {
 	}
 	
 	@Test
+	public void testWriteJSONStudiesCellViability() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+        IDatabaseConnection c = getConnection();
+		ITable substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance_experiment");
+	    Assert.assertEquals(0,substance.getRowCount());
+	    substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance");
+	    Assert.assertEquals(0,substance.getRowCount());
+	    substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance_protocolapplication");
+	    Assert.assertEquals(0,substance.getRowCount()); 
+        try {
+        	
+	        IRawReader<IStructureRecord> parser = getJSONReader("cell_viability.json");
+	        write(null,parser,c.getConnection(),new ReferenceSubstanceUUID(),false,false,false);
+	        parser.close();
+	        
+	        c = getConnection();
+	        substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance");
+		    Assert.assertEquals(1,substance.getRowCount());
+	        substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance_protocolapplication");
+		    Assert.assertEquals(1,substance.getRowCount());
+		    substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance_experiment");
+		    Assert.assertEquals(2,substance.getRowCount());
+        } finally {
+        	c.close();
+        }
+	}
+	
+	@Test
 	public void testWriteJSONStudiesBundle() throws Exception {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
         IDatabaseConnection c = getConnection();
