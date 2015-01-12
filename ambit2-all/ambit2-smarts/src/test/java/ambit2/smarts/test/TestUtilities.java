@@ -48,6 +48,8 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
+
 import org.openscience.cdk.validate.BasicValidator;
 import org.openscience.cdk.validate.CDKValidator;
 import org.openscience.cdk.validate.ValidationReport;
@@ -121,7 +123,7 @@ public class TestUtilities
 		}
 		
 		//AtomContainerManipulator.clearAtomConfigurations(mol);
-		//AtomContainerManipulator.removeHydrogens(mol);
+		AtomContainerManipulator.removeHydrogens(mol);
 		
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 		
@@ -1505,7 +1507,7 @@ public class TestUtilities
 		//System.out.println("product SMARTS: " + smartsHelper.toSmarts(reaction.product) );
 		
 		
-		//System.out.println(reaction.transformationDataToString());
+		System.out.println(reaction.transformationDataToString());
 		
 		//System.out.println("Reactant Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.reactant));
 		//System.out.println("Product Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.product));
@@ -2376,10 +2378,13 @@ public class TestUtilities
 		//tu.testSMIRKS("[c:1]1[c:6]([H])[c:5]([H])[c:4][c:3][c:2]1>>[OH1]-[#6:5]([H])-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]([H])-1-[OH1]", "C1=CC=CC=C1");
 		//tu.testSMIRKS("[c:1]1[c:6][c:5][c:4][c:3][c:2]1>>[OH1]-[#6:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]-1-[OH1]", "C1=CC=CC=C1"); //This is a bug !!! 3 double bonds remain
 		//tu.testSMIRKS("[c:1]1[c:6][c:5][c:4][c:3][c:2]1>>[OH1]-[#6:5]-1-[#6:4]-[#6:3]-[#6:2]-[#6:1]-[#6:6]-1-[OH1]", "C1=CC=CC=C1"); //This is a bug !!! 3 double bonds remain
+		//tu.testSMIRKS("[C:1]>>[C:1]=[Cl]", "CC");
+		//tu.testSMIRKS("[C:1][C:2]>>[C:1]=[C:2]", "CC");
+		tu.testSMIRKS("[C:1]>>[C:1]=[C]", "C");
 		
 		
 		//tu.testSMIRKS("[#6:5]1[#6:4]=[#6:3][#6:2]=[#6:1][#6:6]=1>>[OH1]-[#6:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]-1-[OH1]", "C1=CC=CC=C1");
-		tu.testSMIRKS("[#6:5]1[#6:4]=[#6:3][#6:2]=[#6:1][#6:6]=1>>[OH1]-[#6:5]-1-[#6:4]-[#6:3]-[#6:2]-[#6:1]-[#6:6]-1-[OH1]", "C1=CC=CC=C1");
+		//tu.testSMIRKS("[#6:5]1[#6:4]=[#6:3][#6:2]=[#6:1][#6:6]=1>>[OH1]-[#6:5]-1-[#6:4]-[#6:3]-[#6:2]-[#6:1]-[#6:6]-1-[OH1]", "C1=CC=CC=C1");
 		
 		/*
 		 * It seem to have two problems: (1) one the mapping of aromatic --> single/double bond
