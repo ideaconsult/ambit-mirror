@@ -1,0 +1,80 @@
+{
+    "substance": [
+        {
+            "URI": "http://apps.ideaconsult.net:8080/biodeg/substance/IUC4-f5dd46ce-6fc9-316f-a468-c4f9acfcfc3c",
+            "ownerUUID": "TEST-44bf02d8-47c5-385d-b203-9a8f315911cb",
+            "ownerName": "Sigma–Aldrich",
+            "i5uuid": "TEST-f5dd46ce-6fc9-316f-a468-c4f9acfcfc3c",
+            "name": "CuO",
+            "publicname": "CuO",
+            "format": "json",
+            "substanceType": "nanoparticle",
+            "externalIdentifiers": [
+                {
+                    "type": "TEST",
+                    "id": "TEST905"
+                }
+            ],
+            "study": [
+                {
+                    "uuid": "TEST-69f39568-46e4-45ba-94f6-f00765525422",
+                    "owner": {
+                        "substance": {
+                            "uuid": "TEST-f5dd46ce-6fc9-316f-a468-c4f9acfcfc3c"
+                        },
+                        "company": {
+                            "uuid": "TEST-e535bebb-e59f-3906-f988-554478ad3734",
+                            "name": "Test"
+                        }
+                    },
+                    "citation": {
+                        "title": "http://dx.doi.org/10.1016/j.jphotobiol.2013.11.023",
+                        "year": "2014",
+                        "owner": "10.1016/j.jphotobiol.2013.11.023"
+                    },
+                    "protocol": {
+                        "topcategory": "TOX",
+                        "category": {
+                            "code": "BAO_0003009_SECTION"
+                        },
+                        "endpoint": "Cell viability",
+                        "guidance": [
+                            "Cell viability protocol"
+                        ]
+                    },
+                    "parameters": {
+                        "Species": "E. coli"
+                    },
+                    "interpretation": {
+                        "result": null,
+                        "criteria": ""
+                    },
+                    "effects": [
+                        {
+                            "endpoint": "logLC50",
+                            "conditions": {
+                                "Exposure": "dark"
+                            },
+                            "result": {
+                                "unit": "log(mol/L)",
+                                "loQualifier": "mean",
+                                "loValue": 2.42
+                            }
+                        },
+                        {
+                            "endpoint": "logLC50",
+                            "conditions": {
+                                "Exposure": "Photo-induced"
+                            },
+                            "result": {
+                                "unit": "log(mol/L)",
+                                "loQualifier": "mean",
+                                "loValue": 2.75
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
