@@ -33,7 +33,7 @@ var jToxBundle = {
       "http://www.opentox.org/api/1.1#CASRN",
       "#SubstanceName",
       "#SubstanceUUID",
-      "#SubstanceDataSource",
+      "http://www.opentox.org/api/1.1#SubstanceDataSource",
     ],
   	matrixMultiRows: [
       "http://www.opentox.org/api/1.1#Diagram",
