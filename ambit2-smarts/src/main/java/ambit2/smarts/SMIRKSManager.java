@@ -11,6 +11,7 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
@@ -269,7 +270,7 @@ public class SMIRKSManager
 			if (rMaps.size()==0) return false;
 			
 			//Map filtering here is not needed
-			
+						
 			boolean applied = false;
 			for (int i = 0; i < rMaps.size(); i++) {
 				if ((selection==null) || ((selection!=null) && (selection.accept(rMaps.get(i))))) {
@@ -617,7 +618,10 @@ public class SMIRKSManager
 					if (reaction.prodBo.get(i) == null)
 						target.removeBond(tBo); //Target bond is deleted
 					else
+					{	
 						tBo.setOrder(reaction.prodBo.get(i)); //Target bond is updated
+						
+					}	
 				}
 			}
 			else
@@ -831,4 +835,37 @@ public class SMIRKSManager
 			System.out.println();
 		}
 	}
+	
+	/*
+	public void clearMolAttributes(IAtomContainer mol)
+	{
+		System.out.println("#########");
+		for (IAtom atom:mol.atoms())
+		{	
+			//atom.setHybridization((IAtomType.Hybridization) CDKConstants.UNSET);
+			//atom.setMaxBondOrder((IBond.Order) CDKConstants.UNSET);
+			//atom.setValency((Integer) CDKConstants.UNSET);
+			//atom.setBondOrderSum((Double) CDKConstants.UNSET);
+			//atom.setFormalNeighbourCount((Integer) CDKConstants.UNSET);
+			
+			
+			//atom.setAtomTypeName((String) CDKConstants.UNSET);
+            atom.setMaxBondOrder((IBond.Order) CDKConstants.UNSET);
+            atom.setBondOrderSum((Double) CDKConstants.UNSET);
+            atom.setCovalentRadius((Double) CDKConstants.UNSET);
+            atom.setValency((Integer) CDKConstants.UNSET);
+            atom.setFormalCharge((Integer) CDKConstants.UNSET);
+            atom.setHybridization((IAtomType.Hybridization) CDKConstants.UNSET);
+            atom.setFormalNeighbourCount((Integer) CDKConstants.UNSET);
+            atom.setFlag(CDKConstants.IS_HYDROGENBOND_ACCEPTOR, false);
+            atom.setFlag(CDKConstants.IS_HYDROGENBOND_DONOR, false);
+            atom.setProperty(CDKConstants.CHEMICAL_GROUP_CONSTANT, CDKConstants.UNSET);
+            atom.setFlag(CDKConstants.ISAROMATIC, false);
+            atom.setProperty("org.openscience.cdk.renderer.color", CDKConstants.UNSET);
+            atom.setAtomicNumber((Integer) CDKConstants.UNSET);
+            atom.setExactMass((Double) CDKConstants.UNSET); 
+		}	
+	}
+	
+	*/
 }
