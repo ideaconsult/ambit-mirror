@@ -14,7 +14,7 @@ import ambit2.base.data.SourceDataset;
  */
 public class ReadDataset extends AbstractReadDataset<String,SourceDataset>{
 
-	public static final String select_datasets = "SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder,stars FROM src_dataset join catalog_references using(idreference) %s order by stars desc\n";
+	public static final String select_datasets = "SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder,stars,maintainer FROM src_dataset join catalog_references using(idreference) %s order by stars desc\n";
 	/**
 	 * 
 	 */

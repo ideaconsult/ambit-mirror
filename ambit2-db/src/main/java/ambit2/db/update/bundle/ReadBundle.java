@@ -17,7 +17,7 @@ import ambit2.db.update.dataset.AbstractReadDataset;
  */
 public class ReadBundle extends AbstractReadDataset<String,SubstanceEndpointsBundle>{
 
-	public static final String select_datasets = "SELECT idbundle as id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder,stars FROM bundle join catalog_references using(idreference) %s order by stars desc\n";
+	public static final String select_datasets = "SELECT idbundle as id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder,stars,maintainer FROM bundle join catalog_references using(idreference) %s order by stars desc\n";
 	/**
 	 * 
 	 */

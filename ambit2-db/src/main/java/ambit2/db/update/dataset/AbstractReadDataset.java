@@ -21,6 +21,7 @@ public abstract class AbstractReadDataset<T,M extends ISourceDataset> extends Ab
 		url,
 		licenseURI,
 		rightsHolder,
+		maintainer,
 		stars;
 		public int getIndex() {
 			return ordinal()+1;
@@ -47,6 +48,7 @@ public abstract class AbstractReadDataset<T,M extends ISourceDataset> extends Ab
 	        d.setID(rs.getInt(_fields.id_srcdataset.name()));
 	        d.setLicenseURI(rs.getString(_fields.licenseURI.name()));
 	        d.setrightsHolder(rs.getString(_fields.rightsHolder.name()));
+	        d.setMaintainer(rs.getString(_fields.maintainer.name()));
         } catch (SQLException x) {
         	throw new AmbitException(x);
         }
