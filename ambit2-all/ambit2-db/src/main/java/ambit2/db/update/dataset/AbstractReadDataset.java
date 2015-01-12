@@ -53,7 +53,7 @@ public abstract class AbstractReadDataset<T,M extends ISourceDataset> extends Ab
         	throw new AmbitException(x);
         }
         try {
-	        d.setStars(rs.getInt(_fields.stars.getIndex()));        	
+	        d.setStars(rs.getInt(_fields.stars.name()));        	
         } catch (SQLException x) {
         	d.setStars(-1);
         }
