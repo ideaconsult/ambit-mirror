@@ -15,7 +15,7 @@ import ambit2.db.update.dataset.ReadDataset;
 
 public class RetrieveDatasets extends AbstractQuery<IStructureRecord,SourceDataset,StringCondition,SourceDataset>  implements IQueryRetrieval<SourceDataset>{
     
-    public static final String select_datasets_bystruc = "SELECT id_srcdataset,name,src_dataset.user_name,idreference,title,url,licenseURI,rightsHolder,stars FROM structure join  struc_dataset using(idstructure) join src_dataset using(id_srcdataset) join catalog_references using(idreference) where %s order by name";
+    public static final String select_datasets_bystruc = "SELECT id_srcdataset,name,src_dataset.user_name,idreference,title,url,licenseURI,rightsHolder,stars,maintainer FROM structure join  struc_dataset using(idstructure) join src_dataset using(id_srcdataset) join catalog_references using(idreference) where %s order by name";
     
     public static final String select_WHERE = "where name %s ?";
     public static final String select_AND = " name %s ?";
