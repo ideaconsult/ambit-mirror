@@ -43,14 +43,14 @@ var jToxBundle = {
   	]
   },
   
-  parseFeatureId: function (featureId, kit) {
-    var parse = featureId.substr(kit.settings.baseUrl.length).match(/property\/([^\/]+)\/([^\/]+)\/.+/);
+  parseFeatureId: function (featureId) {
+    var parse = featureId.match(/https?\:\/\/(.*)\/property\/([^\/]+)\/([^\/]+)\/.+/);
     if (parse == null)
       return null;
     else
       return {
-        topcategory: parse[1].replace("+", " "),
-        category: parse[2].replace("+", " ")
+        topcategory: parse[2].replace("+", " "),
+        category: parse[3].replace("+", " ")
       };
   },
   
@@ -215,7 +215,7 @@ var jToxBundle = {
               if (f.sameAs != feat.sameAs || full.values[fId] == null)
                 continue;
                 
-              var catId = self.parseFeatureId(fId, kit).category,
+              var catId = self.parseFeatureId(fId).category,
                   config = jT.$.extend(true, {}, kit.settings.configuration.columns["_"], kit.settings.configuration.columns[catId]);
               
               var theData = full.values[fId];
@@ -242,7 +242,7 @@ var jToxBundle = {
       	  if (feat.sameAs == null || feat.sameAs.indexOf("echaEndpoints.owl#") < 0)
       	    continue;
           
-          var catId = self.parseFeatureId(fId, kit).topcategory;
+          var catId = self.parseFeatureId(fId).topcategory;
           var grp = groups[catId];
           if (grp == null)
             groups[catId] = grp = [];
@@ -471,7 +471,7 @@ var jToxBundle = {
               new jBox('Tooltip', boxOptions).open();
       		  }
       		  else { // edit mode
-              var parse = self.parseFeatureId(featureId, self.matrixKit);
+              var parse = self.parseFeatureId(featureId);
               var featureJson = {};
               
               // we're taking the original jToxEndpoint editor here and glue our part after it.
