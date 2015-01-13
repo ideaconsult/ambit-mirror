@@ -15,7 +15,7 @@
                 "topcategory": "TOX",
                 "category":  { "code" : "TO_ACUTE_ORAL_SECTION"},
                 "endpoint": "Acute toxicity: oral.001",
-                "guidance": [
+                "guideline": [
                     "OECD Guideline 401 (Acute Oral Toxicity)"
                 ]
             },
@@ -71,7 +71,7 @@
                 "topcategory": "ENV FATE",
                 "category": { "code" : "TO_BIODEG_WATER_SCREEN_SECTION"},
                 "endpoint": "Biodegradation in water: screening tests.001",
-                "guidance": [
+                "guideline": [
                     "OECD Guideline 301 D (Ready Biodegradability: Closed Bottle Test)"
                 ]
             },
@@ -144,7 +144,7 @@
                 "topcategory": "ENV FATE",
                 "category":  { "code" : "TO_BIODEG_WATER_SCREEN_SECTION"},
                 "endpoint": "Biodegradation in water: screening tests.002",
-                "guidance": ["N/A"]
+                "guideline": ["N/A"]
             },
             "parameters": {
                 "TEST TYPE": "aerobic"
@@ -215,7 +215,7 @@
                 "topcategory": "ECOTOX",
                 "category":  { "code" : "EC_FISHTOX_SECTION"},
                 "endpoint": "Short-term toxicity to fish.001",
-                "guidance": [
+                "guideline": [
                     "OECD Guideline 203 (Fish, Acute Toxicity Test)"
                 ]
             },
@@ -271,7 +271,7 @@
                 "topcategory": "ECOTOX",
                 "category":  { "code" : "EC_FISHTOX_SECTION"},
                 "endpoint": "Short-term toxicity to fish.002",
-                "guidance": [
+                "guideline": [
                     "OECD Guideline 203 (Fish, Acute Toxicity Test)"
                 ]
             },
@@ -341,7 +341,7 @@
                 "topcategory": "ECOTOX",
                 "category":  { "code" : "EC_FISHTOX_SECTION"},
                 "endpoint": "Short-term toxicity to fish.002",
-                "guidance": [
+                "guideline": [
                     "OECD Guideline 203 (Fish, Acute Toxicity Test)"
                 ]
             },
@@ -411,7 +411,7 @@
                 "topcategory": "P-CHEM",
                 "category":  { "code" : "PC_PARTITION_SECTION"},
                 "endpoint": "Partition coefficient.001",
-                "guidance": [
+                "guideline": [
                     "OECD Guideline 107 (Partition Coefficient (n-octanol / water), Shake Flask Method)"
                 ]
             },

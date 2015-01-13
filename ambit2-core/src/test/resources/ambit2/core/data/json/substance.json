@@ -19,7 +19,6 @@
                     "id": "TEST905"
                 }
             ],
-            
             "composition": [
                 {
                     "substance": {
@@ -59,7 +58,6 @@
                         "function_as_additive": null
                     }
                 }
-                
             ],
             "feature": {
                 "http://apps.ideaconsult.net:8080/biodeg/feature/http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23IUPACNameDefault": {
@@ -163,10 +161,8 @@
                     "protocol": {
                         "topcategory": "TOX",
                         "category": {
-                            "code": "TO_SKIN_IRRITATION_SECTION",
-                            "title": "Skin irritation / Corrosion"
+                            "code": "TO_SKIN_IRRITATION_SECTION"
                         },
-                        "endpoint": "Skin irritation / corrosion, IUC4#7/Ch.5.2.1",
                         "guideline": [
                             "Method: other"
                         ]
