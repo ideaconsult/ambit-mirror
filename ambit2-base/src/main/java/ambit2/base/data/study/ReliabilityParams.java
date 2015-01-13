@@ -1,5 +1,7 @@
 package ambit2.base.data.study;
 
+import com.google.common.base.Objects;
+
 /**
  * Corresponds to Klimish codes
  * @author nina
@@ -14,6 +16,11 @@ public class ReliabilityParams<VALUE> extends Params<VALUE> {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@Override
+    public int hashCode() {
+		return Objects.hashCode(getValue(),getIsRobustStudy(),getIsUsedforClassification(),getIsUsedforMSDS(),getPurposeFlag(),getStudyResultType());
+    }	
+	
 	public VALUE getId() {
 		return get(_FIELDS_RELIABILITY.r_id.name());
 	}

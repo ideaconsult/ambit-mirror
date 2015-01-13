@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import com.google.common.base.Objects;
+
 import ambit2.base.json.JSONUtils;
 
 /**
@@ -29,6 +31,11 @@ public class Params<VALUE> implements IParams<VALUE> {
 		super();
 		storage = new TreeMap<String, VALUE>();
 	}
+	
+	@Override
+    public int hashCode() {
+		return storage.hashCode();
+    }
 	public Params(VALUE value) {
 		this();
 		setLoValue(value);

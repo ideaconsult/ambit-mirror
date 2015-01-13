@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import ambit2.base.json.JSONUtils;
 
+import com.google.common.base.Objects;
+
 /**
  * Effect record. Modelled like IUCLID5 effects level
  * @author nina
@@ -21,7 +23,23 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 7520767344716433227L;
+	
 	protected String sampleID;
+	protected UNIT unit;
+	protected String loQualifier;
+	protected Double loValue = null;
+	protected String upQualifier;
+	protected Double upValue = null;
+	protected CONDITIONS conditions;
+	protected Object textValue;
+	protected String errQualifier;
+	protected Double errValue = null;
+	
+	@Override
+    public int hashCode() {
+		return Objects.hashCode(unit,loQualifier,loValue,upQualifier,upValue,conditions.hashCode(),textValue,errQualifier,errValue);
+    }	
+	
 	public String getSampleID() {
 		return sampleID;
 	}
@@ -112,16 +130,6 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 	public void setConditions(CONDITIONS conditions) {
 		this.conditions = conditions;
 	}
-	protected UNIT unit;
-	protected String loQualifier;
-	protected Double loValue = null;
-	protected String upQualifier;
-	protected Double upValue = null;
-	protected CONDITIONS conditions;
-	protected Object textValue;
-	protected String errQualifier;
-	protected Double errValue = null;
-	
 	public Object getTextValue() {
 		return textValue;
 	}
