@@ -129,14 +129,14 @@ public class SubstanceWriterTest extends DbUnitTest {
 	
 	@Test
 	public void testWriteJSONStudiesBundle() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
         IDatabaseConnection c = getConnection();
 		ITable substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance_experiment");
-	    Assert.assertEquals(0,substance.getRowCount());
+	    Assert.assertEquals(4,substance.getRowCount());
 	    substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance");
-	    Assert.assertEquals(0,substance.getRowCount());
+	    Assert.assertEquals(1,substance.getRowCount());
 	    substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance_protocolapplication");
-	    Assert.assertEquals(0,substance.getRowCount()); 
+	    Assert.assertEquals(4,substance.getRowCount()); 
         try {
         	
 	        IRawReader<IStructureRecord> parser = getJSONReader("study.json");
@@ -146,11 +146,12 @@ public class SubstanceWriterTest extends DbUnitTest {
 	        
 	        c = getConnection();
 	        substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance");
-		    Assert.assertEquals(2,substance.getRowCount());
+		    Assert.assertEquals(1,substance.getRowCount());
 	        substance = 	c.createQueryTable("EXPECTED","SELECT * FROM bundle_substance_protocolapplication where idbundle=1");
-		    Assert.assertEquals(7,substance.getRowCount());
+	        //only studies for already existing substances are written 
+		    Assert.assertEquals(4,substance.getRowCount());
 		    substance = 	c.createQueryTable("EXPECTED","SELECT * FROM bundle_substance_experiment where idbundle=1");
-		    Assert.assertEquals(21,substance.getRowCount());
+		    Assert.assertEquals(12,substance.getRowCount());
         } finally {
         	c.close();
         }
