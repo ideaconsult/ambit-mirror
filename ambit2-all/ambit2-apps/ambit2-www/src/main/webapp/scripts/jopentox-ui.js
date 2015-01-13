@@ -1725,7 +1725,8 @@ function defineBundlesTable(root,url,deleteVisible) {
     		               sOut += " | <a href='"+o.aData.URI +"/substance'>Substances</a>";
     		               sOut += " | <a href='"+o.aData.URI +"/dataset'>Substances and studies</a>";
    		                   sOut += " | <a href='"+o.aData.URI +"/property'>Properties list</a>";
-   		                sOut += " | <a href='"+o.aData.URI +"/summary'>Study summary</a>";
+   		                   sOut += " | <a href='"+o.aData.URI +"/summary'>Summary</a>";
+   		                   sOut += " | <a href='"+o.aData.URI +"/matrix'>Working matrix</a>";
     		               var seeAlso =  o.aData["seeAlso"];
     		               if ((seeAlso != undefined) && (seeAlso != null)) {
     		            	   if (seeAlso.indexOf('http')==0)

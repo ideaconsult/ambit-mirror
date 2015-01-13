@@ -11,6 +11,7 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ITaskResult;
 
 import org.restlet.Context;
@@ -407,5 +408,11 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 	protected QueryURIReporter<IStructureRecord, Q> getURUReporter(
 			Request baseReference) throws ResourceException {
 		return null;
+	}
+	
+	@Override
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
+		super.configureTemplateMap(map, request, app);
 	}
 }

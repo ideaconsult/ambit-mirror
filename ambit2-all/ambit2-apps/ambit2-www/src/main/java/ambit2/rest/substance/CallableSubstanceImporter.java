@@ -51,10 +51,12 @@ import ambit2.rest.task.TaskResult;
 /**
  * 
  * @author nina
- *
+ * 
  * @param <USERID>
  */
-public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<FileInputState, IStructureRecord,USERID> implements IQASettings {
+public class CallableSubstanceImporter<USERID> extends
+		CallableQueryProcessor<FileInputState, IStructureRecord, USERID>
+		implements IQASettings {
 	protected SubstanceURIReporter substanceReporter;
 	protected DatasetURIReporter datasetURIReporter;
 	protected SubstanceRecord importedRecord;
@@ -62,82 +64,112 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 	private String originalname;
 	private File file;
 	protected String fileDescription;
-	protected boolean clearMeasurements=true;
-	protected boolean clearComposition=true;
-	
+	protected boolean clearMeasurements = true;
+	protected boolean clearComposition = true;
+
 	public boolean isClearComposition() {
 		return clearComposition;
 	}
+
 	public void setClearComposition(boolean clearComposition) {
 		this.clearComposition = clearComposition;
 	}
 
-	protected DBSubstanceWriter writer; 
-	
+	protected DBSubstanceWriter writer;
+
 	public boolean isClearMeasurements() {
 		return clearMeasurements;
 	}
+
 	public void setClearMeasurements(boolean clearMeasurements) {
 		this.clearMeasurements = clearMeasurements;
 	}
 
 	protected QASettings qaSettings;
+
 	@Override
 	public QASettings getQASettings() {
-		if (qaSettings==null) qaSettings = new QASettings();
+		if (qaSettings == null)
+			qaSettings = new QASettings();
 		return qaSettings;
 	}
+
 	@Override
 	public void setQASettings(QASettings qa) {
 		this.qaSettings = qa;
 	}
+
 	protected File getFile() {
 		return file;
 	}
 
-	
-	protected void setFile(String originalName,File file,String description) {
+	protected void setFile(String originalName, File file, String description) {
 		this.originalname = originalName;
 		this.file = file;
 		this.fileDescription = description;
 	}
-	
-	public CallableSubstanceImporter(
-				List<FileItem> items,
-				String fileUploadField, 
-				Reference applicationRootReference,
-				Context context,
-				SubstanceURIReporter substanceReporter,
-				DatasetURIReporter datasetURIReporter,
-				USERID token) throws Exception {
-		super(applicationRootReference,null,  context,  token);
-		try { processForm(items, fileUploadField); } catch (Exception x) {}
+
+	public CallableSubstanceImporter(List<FileItem> items,
+			String fileUploadField, Reference applicationRootReference,
+			Context context, SubstanceURIReporter substanceReporter,
+			DatasetURIReporter datasetURIReporter, USERID token)
+			throws Exception {
+		super(applicationRootReference, null, context, token);
+		try {
+			processForm(items, fileUploadField);
+		} catch (Exception x) {
+		}
 		this.substanceReporter = substanceReporter;
 		this.datasetURIReporter = datasetURIReporter;
 
 	}
+
+	public CallableSubstanceImporter(File file,
+			Reference applicationRootReference, Context context,
+			SubstanceURIReporter substanceReporter,
+			DatasetURIReporter datasetURIReporter, USERID token)
+			throws Exception {
+		super(applicationRootReference, null, context, token);
+		try {
+			processForm(file);
+		} catch (Exception x) {
+		}
+		this.substanceReporter = substanceReporter;
+		this.datasetURIReporter = datasetURIReporter;
+
+	}
+
 	@Override
 	protected void processForm(Reference applicationRootReference, Form form) {
 		sourceReference = null;
 	}
-	
-	
-	protected void processForm(List<FileItem> items,String fileUploadField) throws Exception {
-		CallableFileUpload upload = new CallableFileUpload(items, fileUploadField) {
+
+	protected void processForm(File file) {
+		sourceReference = null;
+		setFile(file.getName(), file, file.getName());
+	}
+
+	protected void processForm(List<FileItem> items, String fileUploadField)
+			throws Exception {
+		CallableFileUpload upload = new CallableFileUpload(items,
+				fileUploadField) {
 			@Override
 			public Reference createReference() {
 				return null;
 			}
 
 			@Override
-			protected void processFile(File file,String description) throws Exception {
-				setFile(file.getName(),file,description);
+			protected void processFile(File file, String description)
+					throws Exception {
+				setFile(file.getName(), file, description);
 			}
+
 			@Override
 			protected void processFile(String originalname, File file,
 					String description) throws Exception {
-				setFile(originalname,file,description);
+				setFile(originalname, file, description);
 			}
+
 			@Override
 			protected void processProperties(
 					Hashtable<String, String> properties) throws Exception {
@@ -145,14 +177,14 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 		};
 		upload.call();
 	}
-	
 
 	@Override
 	protected FileInputState createTarget(Reference reference) throws Exception {
-		if (file==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		if (file == null)
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		return new FileInputState(file);
 	}
-	
+
 	@Override
 	protected AbstractBatchProcessor createBatch(FileInputState target)
 			throws Exception {
@@ -167,39 +199,50 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 					if (ext.endsWith(FileInputState.extensions[FileInputState.I5Z_INDEX])) {
 						writer.setSplitRecord(true);
 						reader = new I5ZReader(file);
-						((I5ZReader)reader).setQASettings(getQASettings());
-					} else if (ext.endsWith(FileInputState.extensions[FileInputState.CSV_INDEX])) {
+						((I5ZReader) reader).setQASettings(getQASettings());
+					} else if (ext
+							.endsWith(FileInputState.extensions[FileInputState.CSV_INDEX])) {
 						writer.setSplitRecord(false);
-						LiteratureEntry reference = new LiteratureEntry(originalname,originalname);
-						reader = new CSV12SubstanceReader(new CSV12Reader(new FileReader(file),reference,"FCSV-"));
+						LiteratureEntry reference = new LiteratureEntry(
+								originalname, originalname);
+						reader = new CSV12SubstanceReader(new CSV12Reader(
+								new FileReader(file), reference, "FCSV-"));
 					} else if (ext.endsWith(".rdf")) {
 						writer.setSplitRecord(false);
-						reader = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(file),"UTF-8"));
+						reader = new NanoWikiRDFReader(new InputStreamReader(
+								new FileInputStream(file), "UTF-8"));
 					} else if (ext.endsWith(".json")) {
 						writer.setSplitRecord(false);
-						reader = new SubstanceStudyParser(new InputStreamReader(new FileInputStream(file),"UTF-8"));		
+						reader = new SubstanceStudyParser(
+								new InputStreamReader(
+										new FileInputStream(file), "UTF-8"));
 						writer.setClearComposition(false);
 						writer.setClearMeasurements(false);
 					} else {
-						throw new AmbitException("Unsupported format "+file);
+						throw new AmbitException("Unsupported format " + file);
 					}
-					
+
 					reader.setErrorHandler(new IChemObjectReaderErrorHandler() {
-							@Override
-							public void handleError(String message, int row, int colStart, int colEnd,
-									Exception exception) {
-							}
-							@Override
-							public void handleError(String message, int row, int colStart, int colEnd) {
-							}
-							@Override
-							public void handleError(String message, Exception exception) {
-							}
-							@Override
-							public void handleError(String message) {
-							}
-						});
-					 return reader;
+						@Override
+						public void handleError(String message, int row,
+								int colStart, int colEnd, Exception exception) {
+						}
+
+						@Override
+						public void handleError(String message, int row,
+								int colStart, int colEnd) {
+						}
+
+						@Override
+						public void handleError(String message,
+								Exception exception) {
+						}
+
+						@Override
+						public void handleError(String message) {
+						}
+					});
+					return reader;
 				} catch (AmbitException x) {
 
 					throw x;
@@ -217,50 +260,64 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 		DBProcessorsChain chain = new DBProcessorsChain();
 		dataset = DBSubstanceWriter.datasetMeta();
 		importedRecord = new SubstanceRecord();
-		writer = new DBSubstanceWriter(dataset,importedRecord,clearMeasurements,clearComposition);
+		writer = createWriter();
 		chain.add(writer);
 		return chain;
 	}
-	
+
 	protected DBSubstanceWriter createWriter() {
-		return new DBSubstanceWriter(dataset,importedRecord,clearMeasurements,clearComposition);	
+		return new DBSubstanceWriter(dataset, importedRecord,
+				clearMeasurements, clearComposition);
 	}
 
 	@Override
 	protected TaskResult createReference(Connection connection)
 			throws Exception {
 
-		if ((importedRecord.getIdsubstance()>0) || (importedRecord.getCompanyUUID()!=null)) {
-			
-			try { batch.close();	} catch (Exception xx) {}
-			try { if (file!=null && file.exists()) file.delete(); } catch (Exception x) {}
-			return new TaskResult(substanceReporter.getURI(importedRecord));				
+		if ((importedRecord.getIdsubstance() > 0)
+				|| (importedRecord.getCompanyUUID() != null)) {
+
+			try {
+				batch.close();
+			} catch (Exception xx) {
+			}
+			try {
+				if (file != null && file.exists())
+					file.delete();
+			} catch (Exception x) {
+			}
+			return new TaskResult(substanceReporter.getURI(importedRecord));
 		} else {
 			SourceDataset newDataset = dataset;
-			if (newDataset.getId()<=0) {
+			if (newDataset.getId() <= 0) {
 				ReadDataset q = new ReadDataset();
 				q.setValue(newDataset);
 				QueryExecutor<ReadDataset> x = new QueryExecutor<ReadDataset>();
 				x.setConnection(connection);
 				ResultSet rs = x.process(q);
-	
+
 				while (rs.next()) {
 					newDataset = q.getObject(rs);
-					if (newDataset.getId()>0)
-					break;
+					if (newDataset.getId() > 0)
+						break;
 				}
 				x.closeResults(rs);
 				x.setConnection(null);
 			}
-			if (newDataset == null || newDataset.getId()<=0)
+			if (newDataset == null || newDataset.getId() <= 0)
 				throw new ResourceException(Status.SUCCESS_NO_CONTENT);
 
-			try { batch.close();	} catch (Exception xx) {}
-			try { if (file!=null && file.exists()) file.delete(); } catch (Exception x) {}
+			try {
+				batch.close();
+			} catch (Exception xx) {
+			}
+			try {
+				if (file != null && file.exists())
+					file.delete();
+			} catch (Exception x) {
+			}
 			return new TaskResult(datasetURIReporter.getURI(newDataset));
 		}
 	}
-	
 
 }
-
