@@ -1,5 +1,6 @@
 package ambit2.rest.substance;
 
+import java.io.File;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
@@ -11,9 +12,10 @@ import ambit2.db.substance.processor.DBBundleStudyWriter;
 import ambit2.db.substance.processor.DBSubstanceWriter;
 import ambit2.rest.dataset.DatasetURIReporter;
 
-public class CallableStudyBundleImporter<USERID> extends CallableSubstanceImporter<USERID> {
+public class CallableStudyBundleImporter<USERID> extends
+		CallableSubstanceImporter<USERID> {
 	private SubstanceEndpointsBundle bundle;
-	
+
 	public SubstanceEndpointsBundle getBundle() {
 		return bundle;
 	}
@@ -31,8 +33,17 @@ public class CallableStudyBundleImporter<USERID> extends CallableSubstanceImport
 				substanceReporter, datasetURIReporter, token);
 	}
 
+	public CallableStudyBundleImporter(File file,
+			Reference applicationRootReference, Context context,
+			SubstanceURIReporter substanceReporter,
+			DatasetURIReporter datasetURIReporter, USERID token)
+			throws Exception {
+		super(file, applicationRootReference, context, substanceReporter,
+				datasetURIReporter, token);
+	}
+
 	@Override
 	protected DBSubstanceWriter createWriter() {
-		return new DBBundleStudyWriter(bundle,dataset,importedRecord);	
+		return new DBBundleStudyWriter(bundle, dataset, importedRecord);
 	}
 }

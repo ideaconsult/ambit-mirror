@@ -27,7 +27,7 @@ public class DBBundleStudyWriter extends DBSubstanceWriter {
 		this.bundle = bundle;
 	}
 	
-	
+
 	/**
 	 * 
 	 */
@@ -61,8 +61,7 @@ public class DBBundleStudyWriter extends DBSubstanceWriter {
 		return new UpdateEffectRecordsBundle(bundle,importedRecord.getCompanyUUID(),papp,effect);
 	}
 	@Override
-	protected void importSubstanceRecord(SubstanceRecord substance)
-			throws Exception {
+	protected void importSubstanceRecord(SubstanceRecord substance) throws Exception {
 		SubstanceRecord q = new SubstanceRecord(substance.getCompanyUUID());
 		SubstanceRecord found = null;
 		rq.setValue(q);
@@ -77,7 +76,7 @@ public class DBBundleStudyWriter extends DBSubstanceWriter {
 			if (rs != null) rs.close();
 		}
 		if (found==null) {
-	     	super.importSubstanceRecord(substance);
+	     	throw new Exception("Not found");
 		} else {
 			substance.setIdsubstance(found.getIdsubstance());
 			importedRecord.setCompanyUUID(found.getCompanyUUID());

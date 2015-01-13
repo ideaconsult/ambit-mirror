@@ -85,8 +85,9 @@ public class Bundle_crud_test extends CRUDTest<Object,SubstanceEndpointsBundle> 
 	@Override
 	protected void updateVerify(IQueryUpdate<Object,SubstanceEndpointsBundle> query) throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM bundle where name='nina'");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT licenseURI,title,url,type FROM bundle join catalog_references using(idreference) where name='nina'");
 		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals(ISourceDataset.license.CC0_1_0.getURI(),table.getValue(0, "licenseURI"));
 		table = 	c.createQueryTable("EXPECTED","SELECT * FROM bundle where name='Dataset 1'");
 		Assert.assertEquals(0,table.getRowCount());		
 		c.close();

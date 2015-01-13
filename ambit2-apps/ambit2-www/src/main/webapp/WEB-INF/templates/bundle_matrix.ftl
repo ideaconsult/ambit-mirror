@@ -16,17 +16,14 @@
 <script type='text/javascript'>
 		
 	$(document).ready(function() {
-	
+	    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="Bundles">Bundles</a></li>');
 	    <#if bundleid??>	
-	    	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="Bundles">Dataset of substances and studies (bundles)</a></li>');
 			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${bundleid}" title="Bundle ${bundleid}">Bundle ${bundleid}</a></li>');
-			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${bundleid}/dataset" title="Bundle ${bundleid}">Dataset</a></li>');
+			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${bundleid}/dataset" title="Bundle ${bundleid} dataset">Dataset</a></li>');
+			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${bundleid}/matrix" title="Bundle ${bundleid} matrix">Working matrix</a></li>');
 		<#else>
-		    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/substance" title="Substance">Substances</a></li>');
-		    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/substanceowner" title="Substance">Substances per owner</a></li>');
-			jQuery("#breadCrumb ul").append('<li><a href="${ambit_request}" title="${ambit_request}">Dataset</a></li>');
+			jQuery("#breadCrumb ul").append('<li><a href="${ambit_request}" title="${ambit_request}">Matrix</a></li>');	
 		</#if>
-	
 		jQuery("#breadCrumb").jBreadCrumb();
 
 	  	//var ds = new jToxCompound($(".jtox-toolkit")[0],config_dataset);
@@ -49,15 +46,15 @@
 <div class="sixteen columns " style="padding:0 2px 2px 2px 0;margin-top:5px;margin-left:25;margin-right:25;">		
 	
 
-	<div class="jtox-toolkit" data-kit="compound"
-	data-configuration="config_dataset" 
+	<div class="jtox-toolkit" data-kit="compound" 
+	data-configuration="config_dataset"
+<#if bundleid??>	
+	data-featureUri="${ambit_root}/bundle/${bundleid}/property"
+</#if>	 
 	data-cross-domain="false"	
 	data-show-export="yes"
 	data-on-details="onDetailedRow"
 	data-dataset-uri="${ambit_request}"
-<#if bundleid??>	
-	data-featureUri="${ambit_root}/bundle/${bundleid}/property"
-</#if>	 	
 	data-tabs-folded="true"
 	data-on-error="errorHandler" 
 	data-jsonp="false">

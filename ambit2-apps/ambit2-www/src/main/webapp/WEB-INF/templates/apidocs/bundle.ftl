@@ -702,7 +702,8 @@
 			            "type": "Task",
 			            "nickname": "uploadBundleStudy",
 		                "consumes": [
-		                       "multipart/form-data"
+		                       "multipart/form-data",
+		                       "application/json"
 		                ],			            
 			            <#include "/apidocs/authz.ftl" >
 			            "parameters": [

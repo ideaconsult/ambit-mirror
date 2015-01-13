@@ -1,5 +1,7 @@
 package ambit2.rest.bundle.dataset;
 
+import java.util.Map;
+
 import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
@@ -9,6 +11,7 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Status;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
@@ -118,4 +121,15 @@ public class BundleDatasetResource extends
 		// return new SubstanceEndpointsBundle[] {bundle};
 	}
 
+	@Override
+	protected Map<String, Object> getMap(Variant variant)
+			throws ResourceException {
+		Map<String, Object> map = super.getMap(variant);
+		Object idbundle = getRequest().getAttributes().get(OpenTox.URI.bundle.getKey());
+		try {
+			map.put("bundleid",Integer.toString(Integer.parseInt(idbundle.toString())));
+		} catch (Exception x) {
+		}
+		return map;
+	}
 }
