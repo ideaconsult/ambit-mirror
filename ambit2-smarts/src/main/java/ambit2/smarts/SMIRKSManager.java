@@ -8,6 +8,8 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
@@ -16,6 +18,8 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.AtomConfigurator;
@@ -37,10 +41,20 @@ public class SMIRKSManager
 	public int FlagSSMode = SmartsConst.SSM_NON_OVERLAPPING; //This flag is used by the function applyTransformation()
 	
 	public boolean FlagFilterEquivalentMappings = false;
-	public boolean FlagPreprocessResultStructures = false;  //Triggers an optional pre-processing
-	public boolean FlagCheckAromaticityInPreprocessing = true;
-	public boolean FlagAddImplicitHAtomsInPreprocessing = true;
 	
+	
+	//public boolean FlagCheckAromaticityInPreprocessing = true;
+	//public boolean FlagAddImplicitHAtomsInPreprocessing = true;
+	
+	//Result processing flags
+	public boolean FlagProcessResultStructures = false;     //Triggers an optional (pre)processing for further use of reaction result
+	public boolean FlagClearHybridizationBeforeResultProcess = true; //Typically this flag should be true in order to correctly detect the new atom types of the transformed molecules 
+	public boolean FlagClearAromaticityBeforeResultProcess = true;  // Typically this flag should be true since some aromatic atoms may have lost their aromaticity 
+	public boolean FlagClearImlicitHAtomsBeforeResultProcess = true; //Typically this flag should be true in order to correctly detect the new atom types of the transformed molecules
+	public boolean FlagAddImlicitHAtomsOnResultProcess = false;
+	public boolean FlagConvertAddedImlicitHToExplicitOnResultProcess = false; //This flag takes effects only if FlagAddImlicitHAtomsOnResultProcess = true;
+	public boolean FlagCheckAromaticityOnResultProcess = true; 
+	public boolean FlagConvertExplicitHToImplicitOnResultProcess = false; //Typically if this flag is true it is expected that FlagAddImlicitHAtomsOnResultProcess = false
 	
 	
 	public SMIRKSManager(IChemObjectBuilder builder)
@@ -258,8 +272,8 @@ public class SMIRKSManager
 				throw e;
 			}
 			
-			if (FlagPreprocessResultStructures)
-				SmartsHelper.preProcessStructure(target, FlagCheckAromaticityInPreprocessing, FlagAddImplicitHAtomsInPreprocessing);
+			if (FlagProcessResultStructures)
+				processProduct(target);
 			
 			return applied;
 		}
@@ -286,8 +300,8 @@ public class SMIRKSManager
 							throw e;
 						}
 						
-						if (FlagPreprocessResultStructures)
-							SmartsHelper.preProcessStructure(target, FlagCheckAromaticityInPreprocessing, FlagAddImplicitHAtomsInPreprocessing);
+						if (FlagProcessResultStructures)
+							processProduct(target);
 						
 						return applied;
 				}
@@ -314,8 +328,8 @@ public class SMIRKSManager
 			AtomConfigurator  cfg = new AtomConfigurator();
 			cfg.process(target);
 			
-			if (FlagPreprocessResultStructures)
-				SmartsHelper.preProcessStructure(target, FlagCheckAromaticityInPreprocessing, FlagAddImplicitHAtomsInPreprocessing);
+			if (FlagProcessResultStructures)
+				processProduct(target);
 			
 			return applied;
 		}
@@ -379,8 +393,8 @@ public class SMIRKSManager
 		if (rMaps.size()==1)
 		{	
 			IAtomContainer product = applyTransformationsAtLocationsWithCloning(target, rMaps, reaction);
-			if (FlagPreprocessResultStructures)
-				SmartsHelper.preProcessStructure(product, FlagCheckAromaticityInPreprocessing, FlagAddImplicitHAtomsInPreprocessing);
+			if (FlagProcessResultStructures)
+				processProduct(product);
 			resSet.addAtomContainer(product);
 			return(resSet);
 		}
@@ -411,8 +425,8 @@ public class SMIRKSManager
 			
 			//Apply the transformation for the particular combination of locations with cloning
 			IAtomContainer product = applyTransformationsAtLocationsWithCloning(target, combMaps, reaction);  
-			if (FlagPreprocessResultStructures)
-				SmartsHelper.preProcessStructure(product, FlagCheckAromaticityInPreprocessing, FlagAddImplicitHAtomsInPreprocessing);
+			if (FlagProcessResultStructures)
+				processProduct(product);
 			resSet.addAtomContainer(product);
 			
 			
@@ -510,8 +524,8 @@ public class SMIRKSManager
 			List<List<IAtom>> vMaps = new ArrayList<List<IAtom>>(); 
 			vMaps.add(rMaps.get(i));
 			IAtomContainer product = applyTransformationsAtLocationsWithCloning(target, vMaps, reaction);  
-			if (FlagPreprocessResultStructures)
-				SmartsHelper.preProcessStructure(product, FlagCheckAromaticityInPreprocessing, FlagAddImplicitHAtomsInPreprocessing);
+			if (FlagProcessResultStructures)
+				processProduct(product);
 			resSet.addAtomContainer(product);
 		}
 		
@@ -836,36 +850,44 @@ public class SMIRKSManager
 		}
 	}
 	
-	/*
-	public void clearMolAttributes(IAtomContainer mol)
+	
+	protected void processProduct(IAtomContainer mol) throws Exception
 	{
-		System.out.println("#########");
-		for (IAtom atom:mol.atoms())
-		{	
-			//atom.setHybridization((IAtomType.Hybridization) CDKConstants.UNSET);
-			//atom.setMaxBondOrder((IBond.Order) CDKConstants.UNSET);
-			//atom.setValency((Integer) CDKConstants.UNSET);
-			//atom.setBondOrderSum((Double) CDKConstants.UNSET);
-			//atom.setFormalNeighbourCount((Integer) CDKConstants.UNSET);
-			
-			
-			//atom.setAtomTypeName((String) CDKConstants.UNSET);
-            atom.setMaxBondOrder((IBond.Order) CDKConstants.UNSET);
-            atom.setBondOrderSum((Double) CDKConstants.UNSET);
-            atom.setCovalentRadius((Double) CDKConstants.UNSET);
-            atom.setValency((Integer) CDKConstants.UNSET);
-            atom.setFormalCharge((Integer) CDKConstants.UNSET);
-            atom.setHybridization((IAtomType.Hybridization) CDKConstants.UNSET);
-            atom.setFormalNeighbourCount((Integer) CDKConstants.UNSET);
-            atom.setFlag(CDKConstants.IS_HYDROGENBOND_ACCEPTOR, false);
-            atom.setFlag(CDKConstants.IS_HYDROGENBOND_DONOR, false);
-            atom.setProperty(CDKConstants.CHEMICAL_GROUP_CONSTANT, CDKConstants.UNSET);
-            atom.setFlag(CDKConstants.ISAROMATIC, false);
-            atom.setProperty("org.openscience.cdk.renderer.color", CDKConstants.UNSET);
-            atom.setAtomicNumber((Integer) CDKConstants.UNSET);
-            atom.setExactMass((Double) CDKConstants.UNSET); 
-		}	
+		
+		if (FlagClearHybridizationBeforeResultProcess)
+			for (IAtom atom:mol.atoms())
+				atom.setHybridization((IAtomType.Hybridization) CDKConstants.UNSET);
+		
+		
+		if (FlagClearAromaticityBeforeResultProcess)
+		{
+			for (IAtom atom:mol.atoms()) if (atom.getFlag(CDKConstants.ISAROMATIC)) 
+				atom.setFlag(CDKConstants.ISAROMATIC,false);
+			for (IBond bond: mol.bonds()) if (bond.getFlag(CDKConstants.ISAROMATIC))
+				bond.setFlag(CDKConstants.ISAROMATIC,false);
+		}
+
+		if (FlagClearImlicitHAtomsBeforeResultProcess)
+			for (IAtom atom:mol.atoms())
+				atom.setImplicitHydrogenCount(null);
+				
+		
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		
+		if (FlagAddImlicitHAtomsOnResultProcess)
+		{
+			CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
+			adder.addImplicitHydrogens(mol);
+				
+			if (FlagConvertAddedImlicitHToExplicitOnResultProcess)
+				AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+		}
+		
+		if (FlagCheckAromaticityOnResultProcess)
+			CDKHueckelAromaticityDetector.detectAromaticity(mol);
+		
+		if (FlagConvertExplicitHToImplicitOnResultProcess)
+			SmartsHelper.convertExcplicitHAtomsToImplicit(mol);
 	}
 	
-	*/
 }

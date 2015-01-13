@@ -745,19 +745,101 @@ public class SmartsHelper
 		preProcessStructure(mol, true, true);
 	}
 	
-	public static void preProcessStructure(IAtomContainer mol, boolean HandleAromaticity, boolean AddExplicitHAtoms) throws Exception
+	public static void preProcessStructure(IAtomContainer mol, boolean HandleAromaticity, boolean AddImplicitHAtoms) throws Exception
 	{
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 		
-		if (AddExplicitHAtoms)
+		if (AddImplicitHAtoms)
+		{	
+			CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 			adder.addImplicitHydrogens(mol);
+		}	
 		
 		if (HandleAromaticity)
 			CDKHueckelAromaticityDetector.detectAromaticity(mol);
 	}
 	
+	public static void preProcessStructure(IAtomContainer mol, boolean HandleAromaticity, boolean AddImplicitHAtoms, boolean ImplicitHToExplicit) throws Exception
+	{
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		
+		if (AddImplicitHAtoms)
+		{	
+			CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
+			adder.addImplicitHydrogens(mol);
+			
+			if (ImplicitHToExplicit)
+				AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+		}	
+		
+		if (HandleAromaticity)
+			CDKHueckelAromaticityDetector.detectAromaticity(mol);
+	}
 	
+	public static void convertExcplicitHAtomsToImplicit(IAtomContainer mol) throws Exception
+	{	
+		List<IBond> removeBonds = new ArrayList<IBond>();
+		
+		for (IBond bond : mol.bonds())
+		{	
+			if (bond.getAtom(0).getSymbol().equals("H"))
+			{
+				if (bond.getAtom(1).getSymbol().equals("H"))
+					removeBonds.add(bond);
+				else
+				{
+					add1IplicitHAtom(bond.getAtom(1));
+					removeBonds.add(bond);
+				}
+			}
+			else
+			{
+				if (bond.getAtom(1).getSymbol().equals("H"))
+				{	
+					add1IplicitHAtom(bond.getAtom(0));
+					removeBonds.add(bond);
+				}	
+			}
+			
+			//System.out.println(bond.getAtom(0).getSymbol() + " ~ " + bond.getAtom(1).getSymbol() + "  " + implicitHAtomsVector(mol));
+		}
+		
+		List<IAtom> removeAtoms = new ArrayList<IAtom>();
+		
+		for (IAtom atom : mol.atoms())
+		{
+			if (atom.getSymbol().equals("H"))
+				removeAtoms.add(atom);
+		}
+		
+		for (IBond bond : removeBonds)
+			mol.removeBond(bond);
+		
+		for (IAtom atom : removeAtoms)
+			mol.removeAtom(atom);
+	}
+	
+	public static void add1IplicitHAtom(IAtom atom)
+	{
+		if (atom.getImplicitHydrogenCount() == CDKConstants.UNSET)
+			atom.setImplicitHydrogenCount(new Integer(1));
+		else
+			atom.setImplicitHydrogenCount(atom.getImplicitHydrogenCount() + 1);
+	}
+	
+	public static String implicitHAtomsVector(IAtomContainer mol)
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i< mol.getAtomCount(); i++)
+		{
+			Integer ihc = mol.getAtom(i).getImplicitHydrogenCount();
+			if (ihc == null)
+				sb.append("  null");
+			else
+				sb.append("  " + ihc);
+		}
+		return sb.toString();
+	}
 	
 	
 }
