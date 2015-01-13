@@ -28,7 +28,8 @@ import ambit2.rest.dataset.DatasetURIReporter;
 public class CallableBundleCreator extends	CallableDBUpdateTask<SubstanceEndpointsBundle, Form, String> {
 	protected DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>,SubstanceEndpointsBundle> reporter;
 	protected SubstanceEndpointsBundle item;
-	public CallableBundleCreator(SubstanceEndpointsBundle item,
+
+    public CallableBundleCreator(SubstanceEndpointsBundle item,
 			DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>,SubstanceEndpointsBundle> reporter,
 			Method method, Form input,Connection connection, String token) {
 		super(method, input, connection, token);
@@ -46,6 +47,7 @@ public class CallableBundleCreator extends	CallableDBUpdateTask<SubstanceEndpoin
 			if (item.getName()==null || item.getSource()==null || item.getURL() == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			return item;
 		} else if (Method.PUT.equals(method)) {
+		    	if ("".equals(item.getName())) item.setName(null);
 			parseForm(input, item);
 			return item;
 		}
