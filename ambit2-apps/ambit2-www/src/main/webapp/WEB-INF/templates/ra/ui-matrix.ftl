@@ -149,6 +149,7 @@
 			  <input type="radio" id="xfinal" name="xaction"><label for="xfinal">Final matrix</label></input>
 			</div>
 			<button class="save-button jt-disabled">Saved</button>
+			<button class="create-button">Create working copy</button>
 			<div class="jtox-toolkit" data-kit="compound" data-manual-init="true"></div>
     </div>
     <div id="jtox-report" class="jtox-report"></div>

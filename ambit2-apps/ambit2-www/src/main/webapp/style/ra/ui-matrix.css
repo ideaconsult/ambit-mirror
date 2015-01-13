@@ -22,8 +22,10 @@ html, body, #jtox-bundle {
 	font-size: 80%;
 }
 
+#jtox-identifiers form textarea,
 #jtox-identifiers form input {
 	width: 100%;
+	border: 0px;
 }
 
 #jtox-structures .jtox-foldable {

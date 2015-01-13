@@ -18,12 +18,12 @@ var jToxBundle = {
   	compound: 0,
   	substance: 0,
   	property: 0,
+  	matrix: 0,
 	},
 	
 	edit: {
   	added: { },
   	deleted: { },
-		refreshMatrix: true,
 	},
 		
   settings: {
@@ -197,7 +197,7 @@ var jToxBundle = {
 	},
 	
 	// called when a sub-action in bundle details tab is called
-	onMatrix: function (id, panel) {
+	onMatrix: function (panId, panel) {
 	  var self = this;
 		if (!$(panel).hasClass('initialized')) {
       jTConfig.matrix.groups = function (miniset, kit) {
@@ -225,14 +225,16 @@ var jToxBundle = {
                 
               // now - ready to produce HTML
               for (var i = 0, vl = theData.length; i < vl; ++i) {
-                html += '<span class="ui-icon ui-icon-circle-minus delete-popup" data-feature="' + theId + '"></span>&nbsp;';
+                if (self.edit.matrixEditable)
+                  html += '<span class="ui-icon ui-icon-circle-minus delete-popup" data-feature="' + theId + '"></span>&nbsp;';
                 html += '<a class="info-popup" data-index="' + i + '" data-feature="' + fId + '" href="#">' + jT.ui.renderRange(theData[i], f.units, 'display', preVal) + '</a>';
                 html += jT.ui.putInfo(full.compound.URI + '/study?property_uri=' + encodeURIComponent(fId));
                 html += '<br/>';
               }
             }
             
-            html += '<span class="ui-icon ui-icon-circle-plus edit-popup" data-feature="' + theId + '"></span>';
+            if (self.edit.matrixEditable)
+              html += '<span class="ui-icon ui-icon-circle-plus edit-popup" data-feature="' + theId + '"></span>';
       	    return  html;
           };
         };
@@ -381,7 +383,6 @@ var jToxBundle = {
 		      featuresInitialized = true;
     		},
     		onLoaded: function (dataset) {
-	    		self.edit.refreshMatrix = false;
 	    		jToxCompound.processFeatures(dataset.feature, this.feature);
 	    		
 	    		// we need to process
@@ -497,8 +498,46 @@ var jToxBundle = {
     		}
   		});
 		}
-		if (self.edit.refreshMatrix)
-			self.matrixKit.query(self.bundleUri + '/dataset');
+		
+		// finally decide what query to make, depending on the 
+		var queryUri = null;
+		if (panId == 'xinitial') {
+  		self.edit.matrixEditable = false;
+  		queryUri = self.bundleUri + '/dataset';
+  		$('.save-button', panel).hide();
+  		$('.create-button', panel).hide();
+		}
+		else {
+  		if (self.bundleSummary.matrix > 0) {
+  		  $('.create-button', panel).hide();
+        queryUri = self.bundleUri + '/matrix';
+        if (panId == 'xworking')
+          $('.save-button', panel).show();
+        else
+          $('.save-button', panel).show();
+        self.edit.matrixEditable = (panId == 'xworking');
+  		}
+  		else {
+  		  $('.jtox-toolkit', panel).hide();
+  		  $('.create-button', panel).show().on('click', function () {
+    		  var el = this;
+    		  $(el).addClass('loading');
+  		    jT.service(self, self.bundleUri + '/matrix', { method: 'POST', data: { deletematrix:	false } }, function (result, jhr) {
+      		  $(el).removeClass('loading');
+      		  if (!!result) {
+        		  $('.jtox-toolkit', panel).show();
+              $('.save-button', panel).show();
+        		  $('.create-button', panel).hide();
+        		  self.bundleSummary.matrix++;
+        		  self.matrixKit.query(self.bundleUri + '/matrix');
+      		  }
+    		  });
+    		});
+  		}
+		}
+
+    if (!!queryUri)
+		  self.matrixKit.query(queryUri);
 	},
 	
 	// called when a sub-action in endpoint selection tab is called
@@ -654,7 +693,6 @@ var jToxBundle = {
     	$(el).removeClass('loading');
     	if (!!result) {
       	$(el).toggleClass('active');
-      	self.edit.refreshMatrix = true;
       	if (activate)
       	{
       	  self.bundleSummary.compound++;
@@ -673,7 +711,6 @@ var jToxBundle = {
 	structuresLoaded: function (kit, dataset) {
     if (document.body.className == 'structlist') {
       this.bundleSummary.compound = dataset.dataEntry.length;
-      this.edit.refreshMatrix = true;
       this.progressTabs();
     }
 	},
@@ -686,7 +723,6 @@ var jToxBundle = {
     	if (!result)
     	  el.checked = !el.checked; // i.e. revert
       else {
-      	self.edit.refreshMatrix = true;
         if (el.checked)
           self.bundleSummary.substance++;
         else
@@ -712,7 +748,6 @@ var jToxBundle = {
     	if (!result)
     	  el.checked = !el.checked; // i.e. revert
       else {
-      	self.edit.refreshMatrix = true;
         if (el.checked)
           self.bundleSummary.property++;
         else
