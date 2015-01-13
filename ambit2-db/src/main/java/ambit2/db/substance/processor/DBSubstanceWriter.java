@@ -255,7 +255,7 @@ public class DBSubstanceWriter extends
 						importSubstanceMeasurements(substance);
 					} catch (Exception x) {
 						logger.log(Level.FINE, x.getMessage());
-					}	
+					}
 				}
 
 			} else if (record instanceof IStructureRecord) {

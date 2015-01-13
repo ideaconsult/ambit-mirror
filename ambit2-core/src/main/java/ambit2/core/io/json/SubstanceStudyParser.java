@@ -32,19 +32,19 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.core.io.IRawReader;
 
-public class SubstanceStudyParser extends DefaultIteratingChemObjectReader implements IRawReader<IStructureRecord>, ICiteable {
+public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
+		implements IRawReader<IStructureRecord>, ICiteable {
 
 	protected ObjectMapper dx = new ObjectMapper();
 	protected ArrayNode substance;
 	protected ArrayNode study;
 	protected int index = -1;
-	protected SubstanceRecord record = null; 
-	
+	protected SubstanceRecord record = null;
+
 	public SubstanceStudyParser(InputStreamReader reader) throws Exception {
 		super();
 		setReader(reader);
 	}
-	
 
 	@Override
 	public void setReader(Reader reader) throws CDKException {
@@ -52,32 +52,34 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 			JsonNode root = dx.readTree(reader);
 			JsonNode node = root.get("substance");
 			if (node instanceof ArrayNode) {
-				substance = (ArrayNode)node;
+				substance = (ArrayNode) node;
 				index = -1;
-			}
-			else {
+			} else {
 				substance = null;
 				node = root.get("study");
 				if (node instanceof ArrayNode) {
-					study = (ArrayNode)node;
+					study = (ArrayNode) node;
 					index = -1;
 				}
 			}
-		} catch (Exception x ) {
-			throw new CDKException(x.getMessage(),x);
+		} catch (Exception x) {
+			throw new CDKException(x.getMessage(), x);
 		} finally {
-			try { reader.close();} catch (Exception x) {}
+			try {
+				reader.close();
+			} catch (Exception x) {
+			}
 		}
 	}
 
 	@Override
 	public void setReader(InputStream in) throws CDKException {
 		try {
-			setReader(new InputStreamReader(in,"UTF-8"));
+			setReader(new InputStreamReader(in, "UTF-8"));
 		} catch (Exception x) {
-			throw new CDKException(x.getMessage(),x);
+			throw new CDKException(x.getMessage(), x);
 		}
-		
+
 	}
 
 	@Override
@@ -85,21 +87,19 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 		return null;
 	}
 
-	
-
 	@Override
 	public void close() throws IOException {
-		
+
 	}
 
 	@Override
 	public boolean hasNext() {
 		index++;
-		if (substance!=null) {
-			if (index<substance.size()) {
+		if (substance != null) {
+			if (index < substance.size()) {
 				record = parseSubstance(substance.get(index));
 				JsonNode papps = substance.get(index).get("study");
-				record.setMeasurements(parseProtocolApplications(papps,record));
+				record.setMeasurements(parseProtocolApplications(papps, record));
 				JsonNode composition = substance.get(0).get("composition");
 				record.setRelatedStructures(parseComposition(composition));
 				return true;
@@ -107,18 +107,19 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 				record = null;
 				return false;
 			}
-		} else if (study!=null) {
-			if (index<study.size()) {
-				//record = parseSubstance(substance.get(index));
+		} else if (study != null) {
+			if (index < study.size()) {
+				// record = parseSubstance(substance.get(index));
 				record = new SubstanceRecord();
 				JsonNode papps = study.get(index);
 				try {
-					record.setCompanyUUID(papps.get("owner").get("substance").get("uuid").getTextValue());
+					record.setCompanyUUID(papps.get("owner").get("substance")
+							.get("uuid").getTextValue());
 				} catch (Exception x) {
 					x.printStackTrace();
 				}
-				record.setMeasurements(parseProtocolApplications(papps,record));
-				
+				record.setMeasurements(parseProtocolApplications(papps, record));
+
 				return true;
 			} else {
 				record = null;
@@ -146,9 +147,10 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	@Override
 	public IStructureRecord nextRecord() {
 		return record;
-	}	
-	
-	public static SubstanceRecord parseSubstance(Reader reader) throws Exception {
+	}
+
+	public static SubstanceRecord parseSubstance(Reader reader)
+			throws Exception {
 		ObjectMapper dx = new ObjectMapper();
 		try {
 			JsonNode root = dx.readTree(reader);
@@ -156,7 +158,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 			if (substance instanceof ArrayNode) {
 				SubstanceRecord record = parseSubstance(substance.get(0));
 				JsonNode papps = substance.get(0).get("study");
-				record.setMeasurements(parseProtocolApplications(papps,record));
+				record.setMeasurements(parseProtocolApplications(papps, record));
 				JsonNode composition = substance.get(0).get("composition");
 				record.setRelatedStructures(parseComposition(composition));
 				return record;
@@ -165,103 +167,145 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 		} catch (Exception x) {
 			throw x;
 		} finally {
- 			try { if (reader!=null) reader.close();} catch (Exception x) {}
+			try {
+				if (reader != null)
+					reader.close();
+			} catch (Exception x) {
+			}
 		}
 	}
-	
+
 	public static SubstanceRecord parseSubstance(JsonNode node) {
-		if (node==null) return null;
+		if (node == null)
+			return null;
 		SubstanceRecord record = new SubstanceRecord();
-		record.setCompanyName(node.get(SubstanceRecord.jsonSubstance.name.name()).getTextValue());
-		record.setCompanyUUID(node.get(SubstanceRecord.jsonSubstance.i5uuid.name()).getTextValue());
-		record.setOwnerName(node.get(SubstanceRecord.jsonSubstance.ownerName.name()).getTextValue());
-		record.setOwnerUUID(node.get(SubstanceRecord.jsonSubstance.ownerUUID.name()).getTextValue());
-		record.setPublicName(node.get(SubstanceRecord.jsonSubstance.publicname.name()).getTextValue());
-		record.setSubstancetype(node.get(SubstanceRecord.jsonSubstance.substanceType.name()).getTextValue());
-		record.setFormat(node.get(SubstanceRecord.jsonSubstance.format.name()).getTextValue());
-		JsonNode subnode = node.get(SubstanceRecord.jsonSubstance.externalIdentifiers.name());
+		record.setCompanyName(node.get(
+				SubstanceRecord.jsonSubstance.name.name()).getTextValue());
+		record.setCompanyUUID(node.get(
+				SubstanceRecord.jsonSubstance.i5uuid.name()).getTextValue());
+		record.setOwnerName(node.get(
+				SubstanceRecord.jsonSubstance.ownerName.name()).getTextValue());
+		record.setOwnerUUID(node.get(
+				SubstanceRecord.jsonSubstance.ownerUUID.name()).getTextValue());
+		record.setPublicName(node.get(
+				SubstanceRecord.jsonSubstance.publicname.name()).getTextValue());
+		record.setSubstancetype(node.get(
+				SubstanceRecord.jsonSubstance.substanceType.name())
+				.getTextValue());
+		record.setFormat(node.get(SubstanceRecord.jsonSubstance.format.name())
+				.getTextValue());
+		JsonNode subnode = node
+				.get(SubstanceRecord.jsonSubstance.externalIdentifiers.name());
 		if (subnode instanceof ArrayNode) {
-			ArrayNode ids = (ArrayNode)subnode;
+			ArrayNode ids = (ArrayNode) subnode;
 			List<ExternalIdentifier> extids = new ArrayList<ExternalIdentifier>();
 			record.setExternalids(extids);
-			for (int i=0; i < ids.size(); i++) {
+			for (int i = 0; i < ids.size(); i++) {
 				if (ids.get(i) instanceof ObjectNode) {
-					extids.add(new ExternalIdentifier(
-							((ObjectNode) ids.get(i)).get("type").getTextValue(),
-							((ObjectNode) ids.get(i)).get("id").getTextValue()
-							));
+					extids.add(new ExternalIdentifier(((ObjectNode) ids.get(i))
+							.get("type").getTextValue(), ((ObjectNode) ids
+							.get(i)).get("id").getTextValue()));
 				}
 			}
 		}
-		subnode = node.get(SubstanceRecord.jsonSubstance.referenceSubstance.name());
-		if (subnode!=null) {
-			record.setReferenceSubstanceUUID(subnode.get(SubstanceRecord.jsonSubstance.i5uuid.name()).getTextValue());	
+		subnode = node.get(SubstanceRecord.jsonSubstance.referenceSubstance
+				.name());
+		if (subnode != null) {
+			record.setReferenceSubstanceUUID(subnode.get(
+					SubstanceRecord.jsonSubstance.i5uuid.name()).getTextValue());
 		}
 		return record;
-	}	
+	}
+
 	/**
 	 * TODO
+	 * 
 	 * @param node
 	 * @return
 	 */
 	public static List<CompositionRelation> parseComposition(JsonNode node) {
-		//if (node==null) 
-			return null;
+		// if (node==null)
+		return null;
 	}
-	public static List<ProtocolApplication> parseProtocolApplication(Reader reader,SubstanceRecord record) throws Exception{
-		
+
+	public static List<ProtocolApplication> parseProtocolApplication(
+			Reader reader, SubstanceRecord record) throws Exception {
+
 		ObjectMapper dx = new ObjectMapper();
 		try {
 			JsonNode root = dx.readTree(reader);
 			JsonNode papps = root.get("study");
-			return parseProtocolApplications(papps,record);
+			return parseProtocolApplications(papps, record);
 		} catch (Exception x) {
 			throw x;
 		} finally {
- 			try { if (reader!=null) reader.close();} catch (Exception x) {}
-		}	
+			try {
+				if (reader != null)
+					reader.close();
+			} catch (Exception x) {
+			}
+		}
 	}
-	
-	
-	public static List<ProtocolApplication> parseProtocolApplications(JsonNode papps,SubstanceRecord record) {
-		if (papps==null) return null;
+
+	public static List<ProtocolApplication> parseProtocolApplications(
+			JsonNode papps, SubstanceRecord record) {
+		if (papps == null)
+			return null;
 		List<ProtocolApplication> list = new ArrayList<ProtocolApplication>();
 		if (papps instanceof ArrayNode) {
-			ArrayNode a = (ArrayNode)papps;
-			for (int i=0; i < a.size(); i++) {
+			ArrayNode a = (ArrayNode) papps;
+			for (int i = 0; i < a.size(); i++) {
 				if (a.get(i) instanceof ObjectNode) {
-					ProtocolApplication p = SubstanceStudyParser.parseProtocolApplication((ObjectNode)a.get(i));
+					ProtocolApplication p = SubstanceStudyParser
+							.parseProtocolApplication((ObjectNode) a.get(i));
 					p.setSubstanceUUID(record.getCompanyUUID());
 					list.add(p);
 				}
 			}
-		} else if (papps instanceof ObjectNode){
-			ProtocolApplication p = SubstanceStudyParser.parseProtocolApplication((ObjectNode)papps);
+		} else if (papps instanceof ObjectNode) {
+			ProtocolApplication p = SubstanceStudyParser
+					.parseProtocolApplication((ObjectNode) papps);
 			p.setSubstanceUUID(record.getCompanyUUID());
 			list.add(p);
 		}
 		return list;
 
 	}
+
 	public static ProtocolApplication parseProtocolApplication(ObjectNode node) {
-		if (node==null) return null;
-		Protocol protocol = parseProtocol((ObjectNode)node.get(ProtocolApplication._fields.protocol.name()));
+		if (node == null)
+			return null;
+		Protocol protocol = parseProtocol((ObjectNode) node
+				.get(ProtocolApplication._fields.protocol.name()));
 		ProtocolApplication pa = new ProtocolApplication(protocol);
-		pa.setDocumentUUID(node.get(ProtocolApplication._fields.uuid.name()).getTextValue());
-		parseOwner((ObjectNode)node.get(ProtocolApplication._fields.owner.name()),pa);
-		parseStudyReference((ObjectNode)node.get(ProtocolApplication._fields.citation.name()), pa);
-		parseReliability((ObjectNode)node.get(ProtocolApplication._fields.reliability.name()), pa);
-		parseInterpretation((ObjectNode)node.get(ProtocolApplication._fields.interpretation.name()),pa);
-		pa.setEffects(parseEffects((ArrayNode)node.get(ProtocolApplication._fields.effects.name())));
-		pa.setParameters(parseParams((ObjectNode)node.get(ProtocolApplication._fields.parameters.name())));
+		pa.setDocumentUUID(node.get(ProtocolApplication._fields.uuid.name())
+				.getTextValue());
+		parseOwner(
+				(ObjectNode) node.get(ProtocolApplication._fields.owner.name()),
+				pa);
+		parseStudyReference(
+				(ObjectNode) node.get(ProtocolApplication._fields.citation
+						.name()), pa);
+		parseReliability(
+				(ObjectNode) node.get(ProtocolApplication._fields.reliability
+						.name()), pa);
+		parseInterpretation(
+				(ObjectNode) node.get(ProtocolApplication._fields.interpretation
+						.name()), pa);
+		pa.setEffects(parseEffects((ArrayNode) node
+				.get(ProtocolApplication._fields.effects.name())));
+		pa.setParameters(parseParams((ObjectNode) node
+				.get(ProtocolApplication._fields.parameters.name())));
 		return pa;
-		
+
 	}
 
-	protected static void parseReliability(ObjectNode node, ProtocolApplication record) {
-		if (node==null) return ;
+	protected static void parseReliability(ObjectNode node,
+			ProtocolApplication record) {
+		if (node == null)
+			return;
 		ReliabilityParams reliability = new ReliabilityParams();
-		
+
 		JsonNode jn = node.get(_FIELDS_RELIABILITY.r_isUsedforMSDS.getTag());
 		reliability.setIsUsedforMSDS(jn.asBoolean());
 		jn = node.get(_FIELDS_RELIABILITY.r_isRobustStudy.getTag());
@@ -276,117 +320,159 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 		reliability.setValue(jn.getTextValue());
 		record.setReliability(reliability);
 	}
-	protected static void parseStudyReference(ObjectNode node, ProtocolApplication record) {
-		if (node==null) return ;
+
+	protected static void parseStudyReference(ObjectNode node,
+			ProtocolApplication record) {
+		if (node == null)
+			return;
 		JsonNode jn = node.get("title");
 		record.setReference(jn.getTextValue());
 		jn = node.get("owner");
-		if (jn!= null) record.setReferenceOwner(jn.getTextValue());
+		if (jn != null)
+			record.setReferenceOwner(jn.getTextValue());
 		jn = node.get("year");
-		if (jn!=null)
+		if (jn != null)
 			record.setReferenceYear(jn.getTextValue());
 	}
 
-	
-	protected static void parseCompany(ObjectNode node, ProtocolApplication record) {
-		if (node==null) return ;
+	protected static void parseCompany(ObjectNode node,
+			ProtocolApplication record) {
+		if (node == null)
+			return;
 		JsonNode jn = node.get(ProtocolApplication._fields.uuid.name());
-		if (jn!=null) record.setCompanyUUID(jn.getTextValue());
+		if (jn != null)
+			record.setCompanyUUID(jn.getTextValue());
 		jn = node.get(ProtocolApplication._fields.name.name());
-		if (jn!=null) record.setCompanyName(jn.getTextValue());
+		if (jn != null)
+			record.setCompanyName(jn.getTextValue());
 	}
+
 	public static void parseOwner(ObjectNode node, ProtocolApplication record) {
-		if (node==null) return ;
-		parseSubstance((ObjectNode)node.get(ProtocolApplication._fields.substance.name()), record);
-		parseCompany((ObjectNode)node.get(ProtocolApplication._fields.company.name()), record);
+		if (node == null)
+			return;
+		parseSubstance(
+				(ObjectNode) node.get(ProtocolApplication._fields.substance
+						.name()), record);
+		parseCompany((ObjectNode) node.get(ProtocolApplication._fields.company
+				.name()), record);
 	}
-	protected static void parseSubstance(ObjectNode node, ProtocolApplication record) {
-		if (node==null) return ;
+
+	protected static void parseSubstance(ObjectNode node,
+			ProtocolApplication record) {
+		if (node == null)
+			return;
 		JsonNode jn = node.get(ProtocolApplication._fields.uuid.name());
-		if (jn!=null) {
+		if (jn != null) {
 			record.setSubstanceUUID(jn.getTextValue());
 		}
-	}	
-	public static void parseInterpretedResult(ObjectNode node, ProtocolApplication record) {
-		if (node==null) return ;
-			JsonNode jn = node.get(ProtocolApplication._fields.result.name());
-		if (jn!=null) {
+	}
+
+	public static void parseInterpretedResult(ObjectNode node,
+			ProtocolApplication record) {
+		if (node == null)
+			return;
+		JsonNode jn = node.get(ProtocolApplication._fields.result.name());
+		if (jn != null) {
 			record.setInterpretationResult(jn.getTextValue());
 		}
-	}	
-	public static void parseInterpretationCriteria(ObjectNode node, ProtocolApplication record) {
-		if (node==null) return ;
-			JsonNode jn = node.get(ProtocolApplication._fields.criteria.name());
-		if (jn!=null) {
+	}
+
+	public static void parseInterpretationCriteria(ObjectNode node,
+			ProtocolApplication record) {
+		if (node == null)
+			return;
+		JsonNode jn = node.get(ProtocolApplication._fields.criteria.name());
+		if (jn != null) {
 			record.setInterpretationCriteria(jn.getTextValue());
 		}
-	}	
-	public static void parseInterpretation(ObjectNode node, ProtocolApplication record) {
-		if (node==null) return ;
+	}
+
+	public static void parseInterpretation(ObjectNode node,
+			ProtocolApplication record) {
+		if (node == null)
+			return;
 		parseInterpretedResult(node, record);
 		parseInterpretationCriteria(node, record);
-	}		
+	}
+
 	public static IParams parseParams(ObjectNode node) {
-		if (node==null) return null;
+		if (node == null)
+			return null;
 		IParams params = new Params();
-		Iterator<Entry<String,JsonNode>> i = node.getFields();
+		Iterator<Entry<String, JsonNode>> i = node.getFields();
 		while (i.hasNext()) {
-			Entry<String,JsonNode> val = i.next();
-			params.put(val.getKey(),val.getValue().getTextValue());
+			Entry<String, JsonNode> val = i.next();
+			params.put(val.getKey(), val.getValue().getTextValue());
 		}
 		return params;
 	}
+
 	public static Protocol parseProtocol(ObjectNode node) {
-		if (node==null) return null;
-		Protocol p = new Protocol(node.get(Protocol._fields.endpoint.name()).getTextValue());
+		if (node == null)
+			return null;
+		Protocol p = new Protocol(node.get(Protocol._fields.endpoint.name())
+				.getTextValue());
 		JsonNode jn = node.get(Protocol._fields.topcategory.name());
-		if (jn!=null && !"".equals(jn.getTextValue()) && !"null".equals(jn.getTextValue())) 
-			p.setTopCategory(jn.getTextValue());	
+		if (jn != null && !"".equals(jn.getTextValue())
+				&& !"null".equals(jn.getTextValue()))
+			p.setTopCategory(jn.getTextValue());
 		jn = node.get(Protocol._fields.category.name()).get("code");
-		if (jn!=null && !"".equals(jn.getTextValue()) && !"null".equals(jn.getTextValue())) 
+		if (jn != null && !"".equals(jn.getTextValue())
+				&& !"null".equals(jn.getTextValue()))
 			p.setCategory(jn.getTextValue());
-		ArrayNode guidance = (ArrayNode)node.get(Protocol._fields.guideline.name());
-		if (guidance!=null)
-		for (int i=0; i < guidance.size();i++) {
-			p.addGuideline(guidance.get(i).getTextValue());
-		}
+		ArrayNode guidance = (ArrayNode) node.get(Protocol._fields.guideline
+				.name());
+		if (guidance != null)
+			for (int i = 0; i < guidance.size(); i++) {
+				p.addGuideline(guidance.get(i).getTextValue());
+			}
 		return p;
 	}
+
 	public static List<EffectRecord> parseEffects(ArrayNode node) {
-		if(node==null || node.size()==0) return null;
+		if (node == null || node.size() == 0)
+			return null;
 		List<EffectRecord> effects = new ArrayList<EffectRecord>();
-		for (int i=0; i< node.size(); i++) {
+		for (int i = 0; i < node.size(); i++) {
 			EffectRecord record = new EffectRecord();
 			JsonNode jn = node.get(i).get(EffectRecord._fields.endpoint.name());
-			if (jn!=null)
+			if (jn != null)
 				record.setEndpoint(jn.getTextValue());
-			record.setConditions(parseParams((ObjectNode)node.get(i).get(EffectRecord._fields.conditions.name())));
-			parseResult((ObjectNode)node.get(i).get(EffectRecord._fields.result.name()),record);
+			record.setConditions(parseParams((ObjectNode) node.get(i).get(
+					EffectRecord._fields.conditions.name())));
+			parseResult(
+					(ObjectNode) node.get(i).get(
+							EffectRecord._fields.result.name()), record);
 			effects.add(record);
 		}
 		return effects;
 
 	}
+
 	public static void parseResult(ObjectNode node, EffectRecord record) {
-		if (node==null) return ;
+		if (node == null)
+			return;
 		JsonNode jn = node.get(EffectRecord._fields.loQualifier.name());
-		if (jn!=null) {
+		if (jn != null) {
 			if (!"".equals(jn.getTextValue()))
-					record.setLoQualifier(jn.getTextValue());
+				record.setLoQualifier(jn.getTextValue());
 		}
 		jn = node.get(EffectRecord._fields.loValue.name());
-		if (jn!=null) record.setLoValue(jn.asDouble());
+		if (jn != null)
+			record.setLoValue(jn.asDouble());
 		jn = node.get(EffectRecord._fields.upQualifier.name());
-		if (jn!=null) {
+		if (jn != null) {
 			if (!"".equals(jn.getTextValue()))
-					record.setUpQualifier(jn.getTextValue());
+				record.setUpQualifier(jn.getTextValue());
 		}
 		jn = node.get(EffectRecord._fields.upValue.name());
-		if (jn!=null) record.setUpValue(jn.asDouble());
-		
+		if (jn != null)
+			record.setUpValue(jn.asDouble());
+
 		jn = node.get(EffectRecord._fields.unit.name());
-		if (jn!=null && !"".equals(jn.getTextValue()) && !"null".equals(jn.getTextValue())) {
+		if (jn != null && !"".equals(jn.getTextValue())
+				&& !"null".equals(jn.getTextValue())) {
 			record.setUnit(jn.getTextValue());
-		}	
+		}
 	}
 }
