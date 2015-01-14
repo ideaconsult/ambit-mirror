@@ -182,20 +182,20 @@
 	      </tr>
       </table>
     </div>
-    <div id="edit-box">
-	    <div class="jtox-medium-box box-type">
+ <div id="edit-box">
+	    <div class="jtox-medium-box box-field" data-name="type">
   	    <div class="jtox-details font-heavy">Study type</div>
   	    <select class="data-field type-list" data-field="type"><option value="-1"> - Select type - </option></select>
 	    </div>
-	    <div class="jtox-medium-box box-reference">
+	    <div class="jtox-medium-box box-field" data-name="reference">
   	    <div class="jtox-details font-heavy">Reference</div>
   	    <input type="text" class="data-field" data-field="reference" placeholder="Reference_"/>
 	    </div>
-	    <div class="jtox-medium-box box-justification size-full">
+	    <div class="jtox-medium-box box-field size-full" data-name="justification">
   	    <div class="jtox-details font-heavy">Justification</div>
   	    <textarea class="data-field" data-field="justification" placeholder="Justification_"></textarea>
 	    </div>
-	    <div class="jtox-medium-box box-remarks size-full">
+	    <div class="jtox-medium-box box-field size-full" data-name="remarks">
   	    <div class="jtox-details font-heavy">Remarks</div>
   	    <textarea class="data-field" data-field="remarks" placeholder="Remarks_"></textarea>
 	    </div>
