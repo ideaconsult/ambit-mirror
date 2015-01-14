@@ -236,12 +236,6 @@ public class AmbitResource extends FreeMarkerResource {
 			{String.format("%s/dataset/1%s/1",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for all compounds in a dataset for a given feature definition in a dataset",format,"GET","No"}, 
 			{String.format("%s%s/{fid}",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for a all compounds for a given feature definition",format,"GET","No"},
 */
-			{"Data entries","Data entries",formatHeader,null},
-			{"/compound/1/dataEntry","All available data entries per compound",format,"GET","Yes"},
-			{"/compound/1/dataEntry/264168","Specific data entry",format,"GET","Yes"},
-			{"","create/update/delete",format,"POST/PUT/DELETE","Under development"},
-
-			
 			{QueryResource.query_resource,"List available search options",format,"GET","Under development"},
 			{"/query/pubchem/50-00-0","Queries PubChem for specific term and retrieves structure(s) as SDF file",format,"GET","Yes"},
 			{"/query/cir/50-00-0/smiles","Queries Chemical Identifier Resolver /query/cir/{term}/{representation} http://cactus.nci.nih.gov/chemical/structure/documentation",format,"GET","Yes"},

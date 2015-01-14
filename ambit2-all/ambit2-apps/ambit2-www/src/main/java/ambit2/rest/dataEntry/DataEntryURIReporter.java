@@ -12,6 +12,7 @@ import ambit2.rest.structure.CompoundURIReporter;
 import ambit2.rest.structure.ConformerResource;
 
 public class DataEntryURIReporter<Q extends IQueryRetrieval<IStructureRecord>> extends CompoundURIReporter<Q> {
+	private final static String resourceTag = "/dataEntry";
 	/**
 	 * 
 	 */
@@ -36,7 +37,7 @@ public class DataEntryURIReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 					ref,
 					CompoundResource.compound,
 					item.getIdchemical(),
-					DataEntryResource.resourceTag,
+					resourceTag,
 					item.getDataEntryID()>0?Integer.toString(item.getDataEntryID()):""
 					);
 		else
@@ -46,7 +47,7 @@ public class DataEntryURIReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 						item.getIdchemical(),
 						ConformerResource.conformerKey,
 						item.getIdstructure(),
-						DataEntryResource.resourceTag,
+						resourceTag,
 						item.getDataEntryID()>0?Integer.toString(item.getDataEntryID()):""
 						);				
 		

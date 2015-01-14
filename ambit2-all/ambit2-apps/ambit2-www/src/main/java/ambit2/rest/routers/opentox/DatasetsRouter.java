@@ -6,16 +6,15 @@ import org.restlet.routing.Router;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.routers.MyRouter;
-import ambit2.rest.routers.misc.DataEntryRouter;
 
 public class DatasetsRouter extends MyRouter {
 
-	public DatasetsRouter(Context context,CompoundInDatasetRouter cmpdRouter, DataEntryRouter tupleRouter, Router smartsRouter, Router similarityRouter) {
+	public DatasetsRouter(Context context,CompoundInDatasetRouter cmpdRouter, Router smartsRouter, Router similarityRouter) {
 		super(context);
 		
 		attachDefault(DatasetsResource.class);
 		attach(String.format("/{%s}",DatasetResource.datasetKey), 
-					new DatasetRouter(getContext(),cmpdRouter,tupleRouter, smartsRouter,similarityRouter));	
+					new DatasetRouter(getContext(),cmpdRouter, smartsRouter,similarityRouter));	
 	}
 
 	

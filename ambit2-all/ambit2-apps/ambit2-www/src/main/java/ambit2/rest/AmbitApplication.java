@@ -377,8 +377,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		
 		/** filter */
 		router.attach(FilteredDatasetResource.resource,FilteredDatasetResource.class);
-		/** /dataEntry */ 
-		//DataEntryRouter tupleRouter = new DataEntryRouter(getContext());
+		
 		/** Similarity search TODO: move it under /algorithm  */
 		Router similarityRouter = createSimilaritySearchRouter();
 		
@@ -410,7 +409,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 		//can reuse CompoundRouter from above
 		CompoundInDatasetRouter cmpdRouter = new CompoundInDatasetRouter(getContext(), featuresRouter,  smartsRouter);
-		Router datasetRouter = new DatasetsRouter(getContext(),cmpdRouter, null, smartsRouter, similarityRouter);
+		Router datasetRouter = new DatasetsRouter(getContext(),cmpdRouter,  smartsRouter, similarityRouter);
 		
 		if (openToxAAEnabled) 
 			router.attach(DatasetResource.dataset,createProtectedResource(datasetRouter,"dataset"));
