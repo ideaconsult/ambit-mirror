@@ -15,6 +15,7 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -39,8 +40,9 @@ public class SubstanceCategoryProperty extends CatalogResource<EffectRecord<Stri
 	protected Iterator<EffectRecord<String, IParams, String>> createQuery(
 			Context context, Request request, Response response)
 			throws ResourceException {
-		Object topcategory = request.getAttributes().get(SubstancePropertyResource.topcategory);
-		Object endpointcategory = request.getAttributes().get(SubstancePropertyResource.endpointcategory);
+	    try {
+		Object topcategory = Reference.decode(request.getAttributes().get(SubstancePropertyResource.topcategory).toString());
+		Object endpointcategory = Reference.decode(request.getAttributes().get(SubstancePropertyResource.endpointcategory).toString());
 		if (topcategory==null || endpointcategory==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		I5_ROOT_OBJECTS category;
 		try {
@@ -50,7 +52,7 @@ public class SubstanceCategoryProperty extends CatalogResource<EffectRecord<Stri
 		}
 		if (!category.getTopCategory().equals(topcategory.toString())) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					String.format("Expected /property/%s/%s_SECTION",category.getTopCategory(),category.name()));
+					String.format("Expected /property/%s/%s",category.getTopCategory(),category.name()));
 		}
 		effects = new ArrayList<EffectRecord<String, IParams, String>>();
 		
@@ -63,6 +65,9 @@ public class SubstanceCategoryProperty extends CatalogResource<EffectRecord<Stri
 		else 
 			effects.add(category.createEffectRecord());
 		return effects.iterator();
+	    }catch (Exception x) {
+		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage());
+	    }
 	}
 	protected Form getParams() {
 		return getResourceRef(getRequest()).getQueryAsForm();
