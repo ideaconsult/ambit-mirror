@@ -1,0 +1,38 @@
+{
+    "study": [{
+        "owner": {
+            "substance": {
+                "uuid": "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734"
+            }
+        },
+        "protocol": {
+            "topcategory": "ECOTOX",
+            "category": {
+                "code": "EC_ALGAETOX_SECTION"
+            },
+            "endpoint": "6.1.5. Toxicity to aquatic algae and cyanobacteria",
+            "guideline": ["Some justification"]
+        },
+        "citation": {
+            "year": "2015",
+            "title": "My reference"
+        },
+        "parameters": {},
+        "interpretation": {
+            "criteria": "Some remarks"
+        },
+        "reliability": {
+            "r_studyResultType": "2304"
+        },
+        "effects": [{
+            "result": {
+                "loQualifier": "=",
+                "loValue": "3.4",
+                "unit": "mg/l"
+            },
+            "endpoint": "72-hour EbC50"
+        }
+        ]
+    }
+    ]
+}
