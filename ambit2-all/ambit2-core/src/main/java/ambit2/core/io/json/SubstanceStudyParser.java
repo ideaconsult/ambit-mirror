@@ -299,17 +299,17 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	ReliabilityParams reliability = new ReliabilityParams();
 
 	JsonNode jn = node.get(_FIELDS_RELIABILITY.r_isUsedforMSDS.getTag());
-	reliability.setIsUsedforMSDS(jn.asBoolean());
+	try {reliability.setIsUsedforMSDS(jn.asBoolean());} catch (Exception x) {}
 	jn = node.get(_FIELDS_RELIABILITY.r_isRobustStudy.getTag());
-	reliability.setIsRobustStudy(jn.asBoolean());
+	try {reliability.setIsRobustStudy(jn.asBoolean());} catch (Exception x) {}
 	jn = node.get(_FIELDS_RELIABILITY.r_isUsedforClassification.getTag());
-	reliability.setIsUsedforClassification(jn.asBoolean());
+	try {reliability.setIsUsedforClassification(jn.asBoolean());} catch (Exception x) {}
 	jn = node.get(_FIELDS_RELIABILITY.r_purposeFlag.getTag());
-	reliability.setPurposeFlag(jn.getTextValue());
+	try {reliability.setPurposeFlag(jn.getTextValue());} catch (Exception x) {}
 	jn = node.get(_FIELDS_RELIABILITY.r_studyResultType.getTag());
-	reliability.setStudyResultType(jn.getTextValue());
+	try {reliability.setStudyResultType(jn.getTextValue());} catch (Exception x) {}
 	jn = node.get(_FIELDS_RELIABILITY.r_value.getTag());
-	reliability.setValue(jn.getTextValue());
+	try {reliability.setValue(jn.getTextValue());} catch (Exception x) {}
 	record.setReliability(reliability);
     }
 

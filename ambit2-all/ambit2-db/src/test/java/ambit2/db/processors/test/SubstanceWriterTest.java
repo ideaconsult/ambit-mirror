@@ -127,6 +127,38 @@ public class SubstanceWriterTest extends DbUnitTest {
         }
 	}
 	
+	
+	@Test
+	public void testWriteJSONmatrixUpdate() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+        IDatabaseConnection c = getConnection();
+		ITable substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance_experiment");
+	    Assert.assertEquals(4,substance.getRowCount());
+	    substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance");
+	    Assert.assertEquals(1,substance.getRowCount());
+	    substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance_protocolapplication");
+	    Assert.assertEquals(4,substance.getRowCount()); 
+        try {
+        	
+	        IRawReader<IStructureRecord> parser = getJSONReader("matrixupdate.json");
+	        SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(1);
+	        write(bundle,parser,c.getConnection(),new ReferenceSubstanceUUID(),false,false,false);
+	        parser.close();
+	        
+	        c = getConnection();
+	        substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance");
+		    Assert.assertEquals(1,substance.getRowCount());
+	        substance = 	c.createQueryTable("EXPECTED","SELECT * FROM bundle_substance_protocolapplication where idbundle=1");
+	        //only studies for already existing substances are written 
+		    Assert.assertEquals(1,substance.getRowCount());
+		    substance = 	c.createQueryTable("EXPECTED","SELECT * FROM bundle_substance_experiment where idbundle=1");
+		    Assert.assertEquals(1,substance.getRowCount());
+        } finally {
+        	c.close();
+        }
+	}
+	
+	
 	@Test
 	public void testWriteJSONStudiesCellViability() throws Exception {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");

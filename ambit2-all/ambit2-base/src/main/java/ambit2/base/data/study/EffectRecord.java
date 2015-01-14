@@ -37,7 +37,7 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 	
 	@Override
     public int hashCode() {
-		return Objects.hashCode(unit,loQualifier,loValue,upQualifier,upValue,conditions.hashCode(),textValue,errQualifier,errValue);
+		return Objects.hashCode(unit,loQualifier,loValue,upQualifier,upValue,conditions==null?null:conditions.hashCode(),textValue,errQualifier,errValue);
     }	
 	
 	public String getSampleID() {
