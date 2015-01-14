@@ -3,7 +3,6 @@ package ambit2.db.processors;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
 
 import javax.naming.OperationNotSupportedException;
 
@@ -17,7 +16,6 @@ import ambit2.db.processors.AbstractPropertyWriter.mode;
 import ambit2.db.readers.PropertyValue;
 import ambit2.db.search.property.RetieveFeatures;
 import ambit2.db.update.property.CreateProperty;
-import ambit2.db.update.tuple.DatasetAddTuple;
 import ambit2.db.update.value.UpdateStructurePropertyIDNumber;
 import ambit2.db.update.value.UpdateStructurePropertyIDString;
 
@@ -41,22 +39,6 @@ public class ValueWriterNew extends AbstractRepositoryWriter<IStructureRecord,IS
 	 * Tuples
 	*/
 	protected PreparedStatementBatchExecutor tuples_batchExecutor = new PreparedStatementBatchExecutor();
-	protected DatasetAddTuple tuple = new DatasetAddTuple();
-    protected int getTuple(SourceDataset dataset) {
-    	try {
-    		if (dataset == null) return -1;
-	    	tuple.setGroup(dataset);
-	    	tuple.setObject(-1);
-	    	exec.process(tuple);
-	    	return tuple.getObject();
-    	} catch (AmbitException x) {
-    		logger.log(Level.WARNING,x.getMessage(),x);
-    		return -1;
-    	} finally {
-    		
-    	}
-     }
-
 
 	@Override
 	public IStructureRecord write(IStructureRecord recordToStore) throws SQLException,

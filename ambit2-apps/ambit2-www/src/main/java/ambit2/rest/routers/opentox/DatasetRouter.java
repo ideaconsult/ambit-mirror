@@ -4,7 +4,6 @@ import org.restlet.Context;
 import org.restlet.routing.Router;
 
 import ambit2.rest.OpenTox;
-import ambit2.rest.dataEntry.DataEntryResource;
 import ambit2.rest.dataset.DatasetCompoundResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
@@ -19,7 +18,6 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.SmartsQueryResource;
 import ambit2.rest.query.StrucTypeQueryResource;
 import ambit2.rest.routers.MyRouter;
-import ambit2.rest.routers.misc.DataEntryRouter;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.dataset.DatasetsByStructureResource;
@@ -30,16 +28,16 @@ import ambit2.rest.structure.dataset.DatasetsByStructureResource;
 public class DatasetRouter extends MyRouter {
 	
 	
-	public DatasetRouter(Context context,CompoundInDatasetRouter cmpdRouter, DataEntryRouter tupleRouter, Router smartsRouter, Router similarityRouter) {
+	public DatasetRouter(Context context,CompoundInDatasetRouter cmpdRouter,  Router smartsRouter, Router similarityRouter) {
 		super(context);
-		init(cmpdRouter,tupleRouter, smartsRouter, similarityRouter);
+		init(cmpdRouter, smartsRouter, similarityRouter);
 	}
 	
 	/**
 	 *  OpenTox dataset
 	 * @return
 	 */
-	protected void init(CompoundInDatasetRouter cmpdRouter, DataEntryRouter tupleRouter, Router smartsRouter, Router similarityRouter) {
+	protected void init(CompoundInDatasetRouter cmpdRouter,  Router smartsRouter, Router similarityRouter) {
 		attachDefault(DatasetResource.class);
 		//this is for backward compatibility
 
@@ -65,11 +63,6 @@ public class DatasetRouter extends MyRouter {
 		attach(String.format("%s/datasets",CompoundResource.compoundID), DatasetsByStructureResource.class);
 
 		attach(String.format("%s/datasets",OpenTox.URI.conformer.getResourceID()), DatasetsByStructureResource.class);
-		/**
-		 * Data entries /dataEntry
-		 */
-		attach(DataEntryResource.resourceTag,tupleRouter);
-	
 		
 		/**
 		 * Smarts/similarity within a dataset

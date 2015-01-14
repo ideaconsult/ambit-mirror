@@ -911,12 +911,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				Reference.encode("text/html")
 			));	
 		*/
-		/*
-		b.append(String.format("<a href=\"%s%s\">Data entries</a><br>",
-				w,
-				DataEntryResource.resourceTag
-			));	
-		*/
+	
 		/*
 		
 		b.append(String.format("<li><a href='%s/%s?media=%s&headless=true' title='Features'>Features</a></li>",
