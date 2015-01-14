@@ -14,6 +14,7 @@ import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.data.substance.SubstanceName;
 import ambit2.base.data.substance.SubstanceOwner;
 import ambit2.base.data.substance.SubstanceProperty;
+import ambit2.base.data.substance.SubstancePropertyCategory;
 import ambit2.base.data.substance.SubstancePublicName;
 import ambit2.base.data.substance.SubstanceUUID;
 import ambit2.db.search.StringCondition;
@@ -59,7 +60,7 @@ public class ReadEndpointsByBundle  extends  AbstractPropertyRetrieval<Substance
 				try {
 					cat = Protocol._categories.valueOf(rs.getString(2));
 				} catch (Exception x) {}
-				SubstanceProperty p = new SubstanceProperty(rs.getString(1),rs.getString(2),cat==null?null:String.format("%s. %s", cat.getNumber(),cat.toString()),null,ref);
+				SubstancePropertyCategory p = new SubstancePropertyCategory(rs.getString(1),rs.getString(2),cat==null?null:String.format("%s. %s", cat.getNumber(),cat.toString()),null,ref);
 				p.setOrder(cat==null?0:cat.getSortingOrder());
 				p.setIdentifier("");
 				return p;
