@@ -22,8 +22,8 @@ var jToxBundle = {
 	},
 	
 	edit: {
-  	added: { },
-  	deleted: { },
+  	added: [],
+  	deleted: [],
 	},
 		
   settings: {
@@ -226,7 +226,7 @@ var jToxBundle = {
               // now - ready to produce HTML
               for (var i = 0, vl = theData.length; i < vl; ++i) {
                 if (self.edit.matrixEditable)
-                  html += '<span class="ui-icon ui-icon-circle-minus delete-popup" data-feature="' + theId + '"></span>&nbsp;';
+                  html += '<span class="ui-icon ui-icon-circle-minus delete-popup"></span>&nbsp;';
                 html += '<a class="info-popup" data-index="' + i + '" data-feature="' + fId + '" href="#">' + jT.ui.renderRange(theData[i], f.units, 'display', preVal) + '</a>';
                 html += jT.ui.putInfo(full.compound.URI + '/study?property_uri=' + encodeURIComponent(fId));
                 html += '<br/>';
@@ -288,7 +288,7 @@ var jToxBundle = {
   		var saveButton = $('.save-button', panel)[0];
   		saveButton.disabled = true;
   		var dressButton = function() {
-	  		if ($.isEmptyObject(self.edit.added) && $.isEmptyObject(self.edit.deleted)) {
+	  		if (self.edit.added.length < 1 && self.edit.deleted.length < 1) {
 	  			saveButton.disabled = true;
 	  			$(saveButton).removeClass('jt-alert').addClass('jt-disabled');
 	  			saveButton.innerHTML = "Saved";
@@ -301,30 +301,197 @@ var jToxBundle = {
   		};
   		
   		$(saveButton).on('click', function() {
-	  		// TODO: make actuall call to the server for adding and deleting
-	  		self.edit.added = {};
-				self.edit.deleted = {};
-				dressButton();
+	  		if (self.edit.added.length > 0) {
+	  		  var toAdd = { study: self.edit.added };
+	  		  $(saveButton).addClass('loading'); 
+  	  		jT.service(self, self.bundleUri + '/matrix', { method: 'PUT', headers: { 'Content-Type': "application/json" }, data: JSON.stringify(toAdd) }, function (result, jhr) {
+	  		    $(saveButton).removeClass('loading');
+	  		    if (!!result) {
+	  		      self.edit.added = [];
+	  		      self.matrixKit.query(self.bundleUri + '/matrix');
+              dressButton();
+            }
+  	  		});
+  	  	}
+  	  	
+  	  	if (self.edit.deleted.length > 0) {
+	  		  // TODO: make actuall call to the server for adding and deleting
+  	  	}
 	  	});
+	  	
+	  	var onEditClick = function (data) {
+  		  var boxOptions = { 
+    		  overlay: true,
+    		  closeOnEsc: true,
+    		  closeOnClick: "overlay",
+    		  addClass: "popup-box jtox-toolkit ui-front",
+    		  animation: "zoomIn",
+  		    target: $(this),
+  		    maxWidth: 600,
+  		    zIndex: 90,
+  		    onCloseComplete: function () { this.destroy(); }
+  		  };
+
+        var isDelete = $(this).hasClass('delete-popup');
+        var jel = (isDelete ? $('a', this.parentNode) : $(this));
+
+        var featureId = jel.data('feature');
+        var valueIdx = jel.data('index');
+		    var feature = self.matrixKit.dataset.feature[featureId];
+  		  if (!jel.hasClass('edit-popup')) {
+  		    
+    		  $('.dynamic-condition', infoDiv).remove();
+    		  var dynHead = $('tr.conditions', infoDiv)[0];
+    		  var postCell = $('td.postconditions', infoDiv)[0];
+    		  
+    		  for (var i = 0, cl = feature.annotation.length; i < cl; ++i) {
+      		  var ano = feature.annotation[i];
+      		  // first add the column
+      		  var el = document.createElement('th');
+      		  el.className = 'dynamic-condition';
+      		  el.innerHTML = ano.p;
+      		  dynHead.appendChild(el);
+      		  // now add the value
+      		  el = document.createElement('td');
+      		  el.className = 'dynamic-condition';
+      		  el.innerHTML = ano.o;
+      		  postCell.parentNode.insertBefore(el, postCell);
+    		  }
+    		  
+    		  // make sure there is at least one cell.
+          if (cl < 1) {
+      		  el = document.createElement('td');
+      		  el.className = 'dynamic-condition';
+      		  el.innerHTML = '-';
+      		  postCell.parentNode.insertBefore(el, postCell);
+          }
+          
+    		  $('th.conditions', infoDiv).attr('colspan', cl);
+    		  
+    		  var val = data.values[featureId];
+    		  if (!feature.isMultiValue || !$.isArray(val))
+    		    val = [val];
+    		  ccLib.fillTree(infoDiv, {
+    		    endpoint: feature.title,
+    		    guidance: feature.creator,
+      		  value: jT.ui.renderRange(val[valueIdx], feature.units, 'display'),
+//           		  source: '<a target="_blank" href="' + feature.source.URI + '">' + feature.source.type + '</a>'
+    		  });
+    		  
+    		  if (isDelete) {
+    		  	$('.delete-box', infoDiv).show();
+            boxOptions.onOpen = function () {
+              var box = this;
+              var content = this.content[0];
+              $('button.jt-alert', content).on('click', function (){ deleteFeature(data, featureId, $('textarea', content).val()); box.close(); });
+          	};
+    		  }
+    		  else
+    		  	$('.delete-box', infoDiv).hide();
+    		  	
+    		  boxOptions.content = infoDiv.innerHTML;
+          new jBox('Tooltip', boxOptions).open();
+  		  }
+  		  else { // edit mode
+          var parse = self.parseFeatureId(featureId);
+          // map between UI fields and JSON properties
+          var valueMap = {
+            endpoint: 'effects[0].endpoint',
+            value: 'effects[0].result',
+            interpretation: 'interpretation.result',
+            
+            type: 'reliability.r_studyResultType',
+            reference: 'citation.title',
+            justification: 'protocol.guideline[0]',
+            remarks: 'interpretation.criteria'
+          };
+          
+          // the JSON that is about to be sent on Apply
+          var featureJson = {
+            owner: {
+              substance: {
+                uuid: data.compound.i5uuid
+              }
+            },
+            protocol: {
+              topcategory: parse.topcategory,
+              category: {
+                code: parse.category
+              },
+              endpoint: feature.title,
+              guideline: ['']
+            },
+            citation: {
+              year: (new Date()).getFullYear().toString()
+            },
+            parameters: { },
+            interpretation: { },
+            reliability: { },
+            effects: [{
+              result: { }
+            }]
+          };
+          
+          // we're taking the original jToxEndpoint editor here and glue our part after it.
+          boxOptions.content = jT.getTemplate('#jtox-endeditor').innerHTML + editDiv.innerHTML;
+          boxOptions.title = feature.title || parse.category;
+          boxOptions.closeButton = "box";
+          boxOptions.confirmButton = "Add";
+          boxOptions.cancelButton = "Cancel";
+          var endSetValue = function (e, field, value) {
+            ccLib.setJsonValue(featureJson, valueMap[field], value);
+          };
+          
+          boxOptions.onOpen = function () {
+            var box = this;
+            var content = this.content[0];
+            jToxEndpoint.linkEditors(self.matrixKit, content, parse.category, parse.topcategory, endSetValue);
+            $('input[type=button]', content).on('click', function (){ addFeature(data, featureId, featureJson, jel[0]); box.close();});	              
+          };
+          new jBox('Modal', boxOptions).open();
+  		  }
+  		};
   		
-  		var addFeature = function(compoundUri, featureId, value) {
-	  		var compound = self.edit.added[compoundUri];
-	  		if (compound == null)
-	  			self.edit.added[compoundUri] = compound = {};
-	  		compound[featureId] = value;
+  		var addFeature = function(data, fId, value, element) {
+    		self.edit.added.push(value);
+    		fId += '/' + self.edit.added.length;
+
+        var catId = self.parseFeatureId(fId).category,
+            config = jT.$.extend(true, {}, self.matrixKit.settings.configuration.columns["_"], self.matrixKit.settings.configuration.columns[catId]),
+            f = null;
+
+    		self.matrixKit.dataset.feature[fId] = f = {};
+        f.sameAs = "http://www.opentox.org/echaEndpoints.owl#" + catId;
+        f.title = value.effects[0].endpoint || (value.citation.title || "");
+        f.creator = value.protocol.guideline[0];
+        f.isMultiValue = true;
+        f.annotation = [];
+        
+        data.values[fId] = [value.effects[0].result];
+        
+        var preVal = (ccLib.getJsonValue(config, 'effects.endpoint.bVisible') !== false) ? f.title.replace(" ", '&nbsp;') : null;
+
+        var html = '';
+        html += '<span class="ui-icon ui-icon-circle-minus delete-popup" data-index="' + (self.edit.added.length - 1) + '"></span>&nbsp;';
+        html += '<a class="info-popup" data-index="0" data-feature="' + fId + '" href="#">' + jT.ui.renderRange(value.effects[0].result, null, 'display', preVal) + '</a>';
+        html += '<br/>';
+
+        var span = document.createElement('span');
+        span.className = "added-study";    		
+        span.innerHTML = html;
+        element.parentNode.insertBefore(span, element);
+        $('.info-popup', span).on('click', function (e) { onEditClick.call(this, data); });
+        $('.delete-popup', span).on('click', function (e) { 
+          var idx = $(this).data('index');
+          self.edit.added.splice(idx, 1);
+          $(this.parentNode).remove();
+          dressButton();
+        });
 	  		dressButton();
   		};
   		
-  		var deleteFeature = function (compoundUri, featureId, reason) {
-	  		var compound = self.edit.added[compoundUri];
-	  		if (compound != null && compound[featureId] != null)
-	  			delete compound[featureId];
-	  		else {
-	  			compound = self.edit.deleted[compoundUri];
-		  		if (compound == null)
-		  			self.edit.deleted[compoundUri] = compound = [];
-		  		compound.push({ 'featureId': featureId, 'reason': reason});
-		  	}
+  		var deleteFeature = function (data, featureId, reason) {
+    		self.edit.deleted.push({ 'substanceURI': data.compound.URI, 'featureId': featureId, 'reason': reason});
 	  		dressButton();
   		};
   		
@@ -401,100 +568,7 @@ var jToxBundle = {
             }, 50);
           });
           
-      		$('.info-popup, .edit-popup, .delete-popup', row).on('click', function () {
-      		  var boxOptions = { 
-        		  overlay: true,
-        		  closeOnEsc: true,
-        		  closeOnClick: "overlay",
-        		  addClass: "popup-box jtox-toolkit ui-front",
-        		  animation: "zoomIn",
-      		    target: $(this),
-      		    maxWidth: 600,
-      		    zIndex: 90,
-      		    onCloseComplete: function () { this.destroy(); }
-      		  };
-
-            var featureId = $(this).data('feature');
-            var valueIdx = $(this).data('index');
-    		    var feature = self.matrixKit.dataset.feature[featureId];
-      		  if (!$(this).hasClass('edit-popup')) {
-      		    
-        		  $('.dynamic-condition', infoDiv).remove();
-        		  var dynHead = $('tr.conditions', infoDiv)[0];
-        		  var postCell = $('td.postconditions', infoDiv)[0];
-        		  
-        		  for (var i = 0, cl = feature.annotation.length; i < cl; ++i) {
-          		  var ano = feature.annotation[i];
-          		  // first add the column
-          		  var el = document.createElement('th');
-          		  el.className = 'dynamic-condition';
-          		  el.innerHTML = ano.p;
-          		  dynHead.appendChild(el);
-          		  // now add the value
-          		  el = document.createElement('td');
-          		  el.className = 'dynamic-condition';
-          		  el.innerHTML = ano.o;
-          		  postCell.parentNode.insertBefore(el, postCell);
-        		  }
-        		  
-        		  // make sure there is at least one cell.
-              if (cl < 1) {
-          		  el = document.createElement('td');
-          		  el.className = 'dynamic-condition';
-          		  el.innerHTML = '-';
-          		  postCell.parentNode.insertBefore(el, postCell);
-              }
-              
-        		  $('th.conditions', infoDiv).attr('colspan', cl);
-        		  
-        		  var val = data.values[featureId];
-        		  if (!feature.isMultiValue || !$.isArray(val))
-        		    val = [val];
-        		  ccLib.fillTree(infoDiv, {
-        		    endpoint: feature.title,
-        		    guidance: feature.creator,
-          		  value: jT.ui.renderRange(val[valueIdx], feature.units, 'display'),
-//           		  source: '<a target="_blank" href="' + feature.source.URI + '">' + feature.source.type + '</a>'
-        		  });
-        		  
-        		  if ($(this).hasClass('delete-popup')) {
-        		  	$('.delete-box', infoDiv).show();
-	              boxOptions.onOpen = function () {
-		              var box = this;
-		              var content = this.content[0];
-		              $('button.jt-alert', content).on('click', function (){ deleteFeature(data.compound.URI, featureId, $('textarea', content).val()); box.close(); });
-              	};
-        		  }
-        		  else
-        		  	$('.delete-box', infoDiv).hide();
-        		  	
-        		  boxOptions.content = infoDiv.innerHTML;
-              new jBox('Tooltip', boxOptions).open();
-      		  }
-      		  else { // edit mode
-              var parse = self.parseFeatureId(featureId);
-              var featureJson = {};
-              
-              // we're taking the original jToxEndpoint editor here and glue our part after it.
-              boxOptions.content = jT.getTemplate('#jtox-endeditor').innerHTML + editDiv.innerHTML;
-              boxOptions.title = parse.category;
-              boxOptions.closeButton = "box";
-              boxOptions.confirmButton = "Add";
-              boxOptions.cancelButton = "Cancel";
-              var endSetValue = function (e, field, value) {
-	              // TODO: form the JSON here
-                console.log("Value set [" + field + "] = `" + value + "`");
-              };
-              
-              boxOptions.onOpen = function () {
-	              var box = this;
-	              var content = this.content[0];
-                jToxEndpoint.linkEditors(self.matrixKit, content, parse.category, parse.topcategory, endSetValue);
-	              $('input[type=button]', content).on('click', function (){ addFeature(data.compound.URI, featureId, featureJson); box.close();});	              
-              };
-              new jBox('Modal', boxOptions).open();
-      		  }
-      		});
+      		$('.info-popup, .edit-popup, .delete-popup', row).on('click', function (e) { onEditClick.call(this, data); });
     		}
   		});
 		}

@@ -103,7 +103,7 @@ var ccLib = {
     if (obj !== undefined || obj != null) {
       if (typeof obj == 'object') {
         for (var i in obj) {
-          if (obj[i] != null) {
+          if (obj.hasOwnProperty(i)) {
             empty = false;
             break;
           }
@@ -702,7 +702,7 @@ window.jT = window.jToxKit = {
 		// now make the actual call
 		self.$.ajax(service, {
 			dataType: params.dataType || (settings.plainText ? "text": (settings.jsonp ? 'jsonp' : 'json')),
-			headers: { Accept: accType },
+			headers: self.$.extend({ Accept: accType }, params.headers),
 			crossDomain: settings.crossDomain || settings.jsonp,
 			timeout: parseInt(settings.timeout),
 			type: params.method,
@@ -1044,7 +1044,7 @@ window.jT.ui = {
     else if (typeof data == 'object' && data != null) {
       data.loValue = ccLib.trim(data.loValue);
       data.upValue = ccLib.trim(data.upValue);
-      if (!ccLib.isEmpty(data.loValue) && !ccLib.isEmpty(data.upValue)) {
+      if (!!data.loValue && !!data.upValue && !!data.upQualifier && data.loQualifier != '=') {
         if (!!prefix)
           out += prefix + "&nbsp;=&nbsp;";
         out += (data.loQualifier == ">=") ? "[" : "(";
@@ -4451,9 +4451,9 @@ var jToxEndpoint = (function () {
         { type: "tag-qualifier", field: "loQualifier", tags: kit.settings.loTags || defaultSettings.loTags, strict: true},
         { type: "tag-value", field: "loValue", tags: null},
         { type: "tag-unit", field: "unit", tags: units},
-        { type: "tag-qualifier", field: "hiQualifier", tags: kit.settings.hiTags || defaultSettings.hiTags, strict: true},
-        { type: "tag-value", field: "hiValue", tags: null},
-        { type: "tag-unit", field: "unit", tags: units}
+        { type: "tag-qualifier", field: "upQualifier", tags: kit.settings.hiTags || defaultSettings.hiTags, strict: true},
+        { type: "tag-value", field: "upValue", tags: null},
+        { type: "tag-unit", tags: units}
       ];
   
       var nowOn = 0;
@@ -4485,20 +4485,31 @@ var jToxEndpoint = (function () {
         afterTagAdded: function (e, ui) {
           var cur = sequence[nowOn];
           ui.tag.addClass(cur.type);
-          data[sequence[nowOn].field] = ui.tagLabel;
-          ++nowOn;
+          var f = sequence[nowOn++].field;
+          if (!!f) {
+            data[f] = ui.tagLabel;
+            onchange(e, 'value', data);
+          }
           return true;
         },
-        afterTagRemoved: function () {
-          --nowOn;
-          delete data[sequence[nowOn].field];
+        afterTagRemoved: function (e, ui) {
+          var f = sequence[--nowOn].field;
+          if (!!f) {
+            delete data[f];
+            onchange(e, 'value', data);
+          }
           return true;
         }
-      })
-      .on('change', function (e) {
-        onchange(e, 'value', data);      
       });
     }
+    
+    // now initialize other fields, marked with box-field
+    jT.$('.box-field', root).each(function () {
+      var name = jT.$(this).data('name');
+      jT.$('input, textarea, select', this).on('change', function (e) {
+        onchange(e, name, jT.$(this).val());
+      });
+    });
   };
   
   cls.prototype = {

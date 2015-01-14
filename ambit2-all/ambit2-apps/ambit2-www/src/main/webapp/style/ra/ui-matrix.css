@@ -149,6 +149,11 @@ body.structlist #browser {
 	color: #999;
 }
 
+#jtox-matrix span.added-study a {
+  background: #ffcccc;  
+  border-radius: 3px;
+}
+
 /* Now come info and edit box declarations
 */
 .popup-box .box-reference {
