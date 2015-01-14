@@ -60,6 +60,7 @@ public class SubstanceProperty extends Property {
 	@Override
 	public String getRelativeURI() {
 		try {
+			String name = getName();
 			return String
 					.format("/property/%s/%s%s%s/%s%s%s",
 							URLEncoder.encode(topcategory == null ? "TOX"
@@ -67,10 +68,10 @@ public class SubstanceProperty extends Property {
 							URLEncoder
 									.encode(endpointcategory == null ? Protocol._categories.UNKNOWN_TOXICITY_SECTION
 											.name() : endpointcategory, "UTF-8"),
-							getName() == null ? "" : "/",
-							URLEncoder.encode(getName(), "UTF-8"),
+							name == null ? "" : "/",
+							name == null ? "": URLEncoder.encode(name, "UTF-8"),
 							identifier == null ? UUID.nameUUIDFromBytes(
-									(getName() + getTitle()).toString()
+									(name + getTitle()).toString()
 											.getBytes()).toString()
 									: identifier,
 							extendedURI ? "/" : "",
