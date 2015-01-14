@@ -227,7 +227,8 @@ var jToxBundle = {
               for (var i = 0, vl = theData.length; i < vl; ++i) {
                 if (self.edit.matrixEditable)
                   html += '<span class="ui-icon ui-icon-circle-minus delete-popup"></span>&nbsp;';
-                html += '<a class="info-popup" data-index="' + i + '" data-feature="' + fId + '" href="#">' + jT.ui.renderRange(theData[i], f.units, 'display', preVal) + '</a>';
+                var d = theData[i];
+                html += '<a class="info-popup" data-index="' + i + '" data-feature="' + fId + '" href="#">' + jT.ui.renderRange(d, f.units, 'display', preVal) + (!!d && !!d.textValue ? '&nbsp;/&nbsp;' + d.textValue: '') + '</a>';
                 html += jT.ui.putInfo(full.compound.URI + '/study?property_uri=' + encodeURIComponent(fId));
                 html += '<br/>';
               }
@@ -375,7 +376,7 @@ var jToxBundle = {
     		    endpoint: feature.title,
     		    guidance: feature.creator,
       		  value: jT.ui.renderRange(val[valueIdx], feature.units, 'display'),
-//           		  source: '<a target="_blank" href="' + feature.source.URI + '">' + feature.source.type + '</a>'
+//             source: '<a target="_blank" href="' + feature.source.URI + '">' + feature.source.type + '</a>'
     		  });
     		  
     		  if (isDelete) {
