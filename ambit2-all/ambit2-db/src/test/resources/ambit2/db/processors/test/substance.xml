@@ -112,7 +112,4 @@
   <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_SENSITIZATION_SECTION"  created="2014-11-20 09:41:19.0"/>
   <bundle_chemicals idbundle="1" idchemical="29141" created="2014-11-20 09:41:19.0" tag="source" remarks="remarks"/>
 
-  <bundle_substance_protocolapplication idbundle="1" document_prefix="IUC4" document_uuid="etsNA/abMqme/oa0qFd4kw==" topcategory="ECOTOX" endpointcategory="EC_FISHTOX_SECTION" endpoint="Short-term toxicity to fish, IUC4#53/Ch.4.1" guidance="Method: other: acute toxicity test; &quot;static bioassay&quot;" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA=="  params="{&quot;Test organism&quot;:&quot;Lepomis cyanellus&quot;}" reference="reference" reference_owner="Test Company 4" updated="2013-11-10 21:11:16.0" copied="1" deleted="0" />
-
-  <bundle_substance_experiment idbundle="1" idresult="1" document_prefix="IUC4" document_uuid="etsNA/abMqme/oa0qFd4kw==" topcategory="ECOTOX" endpointcategory="EC_FISHTOX_SECTION" endpoint="LC50" conditions="{&quot;Exposure&quot;:&quot;96&quot;}" unit="mg/L" loValue="83.1" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" copied="1" deleted="0" />
 </dataset>

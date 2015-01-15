@@ -342,7 +342,9 @@ CREATE TABLE `bundle_substance_protocolapplication` (
   KEY `breference-x` (`reference`(255)),
   KEY `btopcategory` (`topcategory`,`endpointcategory`,`interpretation_result`),
   KEY `bxse` (`substance_prefix`,`substance_uuid`,`topcategory`,`endpointcategory`),
-  CONSTRAINT `bsubstance-p` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`)
+  KEY `idbundle_idx` (`idbundle`),
+  CONSTRAINT `idbundle` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `bsubstance-p` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
@@ -379,8 +381,11 @@ CREATE TABLE `bundle_substance_experiment` (
   KEY `bhash-x` (`endpointhash`),
   KEY `bcategory-x` (`topcategory`,`endpointcategory`,`endpoint`,`endpointhash`),
   KEY `bsubstance-x` (`substance_prefix`,`substance_uuid`),
+  KEY `idb_idx` (`idbundle`),
+  CONSTRAINT `idb` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `bdocument-x` FOREIGN KEY (`idbundle`, `document_prefix`, `document_uuid`) REFERENCES `bundle_substance_protocolapplication` (`idbundle`, `document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 -- -----------------------------------------------------
 -- Table `structure`

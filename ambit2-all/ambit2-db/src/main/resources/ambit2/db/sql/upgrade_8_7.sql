@@ -33,7 +33,7 @@ CREATE TABLE `bundle_substance_protocolapplication` (
   KEY `breference-x` (`reference`(255)),
   KEY `btopcategory` (`topcategory`,`endpointcategory`,`interpretation_result`),
   KEY `bxse` (`substance_prefix`,`substance_uuid`,`topcategory`,`endpointcategory`),
-  CONSTRAINT `bsubstance-p` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  CONSTRAINT `bsubstance-p` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -74,6 +74,23 @@ CREATE TABLE `bundle_substance_experiment` (
 
 ALTER TABLE `bundle_substance_experiment` ADD COLUMN `copied` TINYINT NULL DEFAULT 0  AFTER `substance_uuid` , ADD COLUMN `deleted` TINYINT NULL DEFAULT 0  AFTER `copied` , ADD COLUMN `remarks` VARCHAR(45) NULL DEFAULT NULL  AFTER `deleted` ;
 ALTER TABLE `bundle_substance_protocolapplication` ADD COLUMN `copied` TINYINT NULL DEFAULT 0  AFTER `studyResultType` , ADD COLUMN `deleted` TINYINT NULL DEFAULT 0  AFTER `copied` , ADD COLUMN `remarks` VARCHAR(45) NULL DEFAULT NULL  AFTER `deleted` ;
+
+ALTER TABLE `bundle_substance_protocolapplication` 
+  ADD CONSTRAINT `idbundle`
+  FOREIGN KEY (`idbundle` )
+  REFERENCES `bundle` (`idbundle` )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE
+, ADD INDEX `idbundle_idx` (`idbundle` ASC) ;
+
+ALTER TABLE `bundle_substance_experiment` 
+  ADD CONSTRAINT `idb`
+  FOREIGN KEY (`idbundle` )
+  REFERENCES `bundle` (`idbundle` )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE
+, ADD INDEX `idb_idx` (`idbundle` ASC) ;
+
 
 -- -----------------------------------------------------
 
