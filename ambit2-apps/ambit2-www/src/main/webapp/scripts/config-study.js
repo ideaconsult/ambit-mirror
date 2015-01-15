@@ -7,23 +7,9 @@ var config_study = {
                 }
             },
             "parameters": {
-                "study year": {
-                    "bVisible": false
-                },
-                "data_gathering_instruments": {
-                    "sTitle": "Instruments"
-                },
-                "testmat_form": {
-                    "sTitle": "Test Material Form"
-                }                
+          
             },
             "conditions": {
-            	"medium": {
-                    "sTitle": "Medium"
-                },
-              	"std_dev": {
-                    "sTitle": "Std. Dev."
-                }
             },
             "effects": {
                 "text": {
