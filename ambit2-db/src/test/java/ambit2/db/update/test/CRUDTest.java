@@ -40,78 +40,85 @@ import org.junit.Test;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.processors.test.DbUnitTest;
 
-public abstract class CRUDTest<G,T> extends DbUnitTest {
-	protected UpdateExecutor<IQueryUpdate<G,T>> executor;
-	protected String dbFile = "src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml";	
-	
-	@Override
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
+public abstract class CRUDTest<G, T> extends DbUnitTest {
+    protected UpdateExecutor<IQueryUpdate<G, T>> executor;
+    protected String dbFile = "src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml";
 
-		executor = new UpdateExecutor<IQueryUpdate<G,T>>();
-	}
-	@After
-	public void tearDown() throws Exception {
-		if (executor!=null)
-			executor.close();
-	}
-	
-	@Test
-	public void testUpdate() throws Exception {
-		IQueryUpdate<G,T> query = updateQuery();
-		setUpDatabase(dbFile);
-		IDatabaseConnection c = getConnection();
-		executor.setConnection(c.getConnection());
-		executor.open();
-		Assert.assertTrue(executor.process(query)>=1);
-		updateVerify(query);
-		c.close();
-	}
+    @Override
+    @Before
+    public void setUp() throws Exception {
+	super.setUp();
 
-	@Test
-	public void testCreate() throws Exception {
-		setUpDatabase(dbFile);
-		IQueryUpdate<G,T> query = createQuery();		
-		IDatabaseConnection c = getConnection();
-		executor.setConnection(c.getConnection());
-		executor.open();
-		Assert.assertTrue(executor.process(query)>=1);
-		createVerify(query);
-		c.close();
-	}
-	
-	@Test
-	public void testCreateNew() throws Exception {
-		IQueryUpdate<G,T> query = createQueryNew();
-		setUpDatabase(dbFile);
-		IDatabaseConnection c = getConnection();
-		executor.setConnection(c.getConnection());
-		executor.open();
-		Assert.assertTrue(executor.process(query)>=1);
-		createVerifyNew(query);
-		c.close();
-	}	
+	executor = new UpdateExecutor<IQueryUpdate<G, T>>();
+    }
 
-	@Test
-	public void testDelete() throws Exception {
-		IQueryUpdate<G,T> query = deleteQuery();
-		setUpDatabase(dbFile);
-		IDatabaseConnection c = getConnection();
-		executor.setConnection(c.getConnection());
-		executor.open();
-		Assert.assertTrue(executor.process(query)>=1);
-		deleteVerify(query);
-		c.close();
-	}
+    @After
+    public void tearDown() throws Exception {
+	if (executor != null)
+	    executor.close();
+    }
 
-	protected abstract IQueryUpdate<G,T> createQuery() throws Exception;
-	protected abstract IQueryUpdate<G,T> createQueryNew() throws Exception;
-	protected abstract IQueryUpdate<G,T> updateQuery() throws Exception;
-	protected abstract IQueryUpdate<G,T> deleteQuery() throws Exception;
-	
-	protected abstract void createVerify(IQueryUpdate<G,T> query) throws Exception;
-	protected abstract void createVerifyNew(IQueryUpdate<G,T> query) throws Exception;
-	protected abstract void updateVerify(IQueryUpdate<G,T> query) throws Exception;
-	protected abstract void deleteVerify(IQueryUpdate<G,T> query) throws Exception;
+    @Test
+    public void testUpdate() throws Exception {
+	IQueryUpdate<G, T> query = updateQuery();
+	setUpDatabase(dbFile);
+	IDatabaseConnection c = getConnection();
+	executor.setConnection(c.getConnection());
+	executor.open();
+	Assert.assertTrue(executor.process(query) >= 1);
+	updateVerify(query);
+	c.close();
+    }
+
+    @Test
+    public void testCreate() throws Exception {
+	setUpDatabase(dbFile);
+	IQueryUpdate<G, T> query = createQuery();
+	IDatabaseConnection c = getConnection();
+	executor.setConnection(c.getConnection());
+	executor.open();
+	Assert.assertTrue(executor.process(query) >= 1);
+	createVerify(query);
+	c.close();
+    }
+
+    @Test
+    public void testCreateNew() throws Exception {
+	IQueryUpdate<G, T> query = createQueryNew();
+	setUpDatabase(dbFile);
+	IDatabaseConnection c = getConnection();
+	executor.setConnection(c.getConnection());
+	executor.open();
+	Assert.assertTrue(executor.process(query) >= 1);
+	createVerifyNew(query);
+	c.close();
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+	IQueryUpdate<G, T> query = deleteQuery();
+	setUpDatabase(dbFile);
+	IDatabaseConnection c = getConnection();
+	executor.setConnection(c.getConnection());
+	executor.open();
+	Assert.assertTrue(executor.process(query) >= 1);
+	deleteVerify(query);
+	c.close();
+    }
+
+    protected abstract IQueryUpdate<G, T> createQuery() throws Exception;
+
+    protected abstract IQueryUpdate<G, T> createQueryNew() throws Exception;
+
+    protected abstract IQueryUpdate<G, T> updateQuery() throws Exception;
+
+    protected abstract IQueryUpdate<G, T> deleteQuery() throws Exception;
+
+    protected abstract void createVerify(IQueryUpdate<G, T> query) throws Exception;
+
+    protected abstract void createVerifyNew(IQueryUpdate<G, T> query) throws Exception;
+
+    protected abstract void updateVerify(IQueryUpdate<G, T> query) throws Exception;
+
+    protected abstract void deleteVerify(IQueryUpdate<G, T> query) throws Exception;
 }

@@ -37,69 +37,69 @@ import net.idea.modbcum.q.update.AbstractUpdate;
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.SubstanceRecord;
 
-public class UpdateSubstance<C extends SubstanceRecord> extends AbstractUpdate<C,C>  {
-	public static final String[] update_sql = {	
-		"update substance set prefix=?,uuid=unhex(replace(?,'-','')),documentType=?,format=?,name=?,publicname=?,content=?,substanceType=?,rs_prefix=?,rs_uuid=unhex(replace(?,'-','')),owner_prefix=?,owner_uuid=unhex(replace(?,'-','')),owner_name=? where idsubstance=?"
-	};
-	
-	
-	public UpdateSubstance(C chemical) {
-		super(chemical);
+public class UpdateSubstance<C extends SubstanceRecord> extends AbstractUpdate<C, C> {
+    public static final String[] update_sql = { "update substance set prefix=?,uuid=unhex(replace(?,'-','')),documentType=?,format=?,name=?,publicname=?,content=?,substanceType=?,rs_prefix=?,rs_uuid=unhex(replace(?,'-','')),owner_prefix=?,owner_uuid=unhex(replace(?,'-','')),owner_name=? where idsubstance=?" };
+
+    public UpdateSubstance(C chemical) {
+	super(chemical);
+    }
+
+    public UpdateSubstance() {
+	this(null);
+    }
+
+    public List<QueryParam> getParameters(int index) throws AmbitException {
+	if (getObject() == null || getObject().getIdsubstance() <= 0)
+	    throw new AmbitException("Substance not defined");
+	List<QueryParam> params1 = new ArrayList<QueryParam>();
+	String o_uuid = getObject().getCompanyUUID();
+	String[] uuid = { null, o_uuid };
+	if (o_uuid != null) {
+	    uuid = I5Utils.splitI5UUID(o_uuid.toString());
+	    params1.add(new QueryParam<String>(String.class, uuid[0]));
+	    params1.add(new QueryParam<String>(String.class, uuid[1]));
+	} else {
+	    params1.add(new QueryParam<String>(String.class, null));
+	    params1.add(new QueryParam<String>(String.class, null));
 	}
-	public UpdateSubstance() {
-		this(null);
-	}	
-	
-	public List<QueryParam> getParameters(int index) throws AmbitException {
-		if (getObject()==null || getObject().getIdsubstance()<=0) throw new AmbitException("Substance not defined");
-		List<QueryParam> params1 = new ArrayList<QueryParam>();
-		String o_uuid = getObject().getCompanyUUID();
-		String[] uuid = {null,o_uuid};
-		if (o_uuid!=null) {
-			uuid = I5Utils.splitI5UUID(o_uuid.toString());
-			params1.add(new QueryParam<String>(String.class, uuid[0]));
-			params1.add(new QueryParam<String>(String.class, uuid[1]));
-		} else {
-			params1.add(new QueryParam<String>(String.class, null));
-			params1.add(new QueryParam<String>(String.class, null));
-		}
-		params1.add(new QueryParam<String>(String.class, "Substance"));
-		params1.add(new QueryParam<String>(String.class, getObject().getFormat()));		
-		params1.add(new QueryParam<String>(String.class, getObject().getCompanyName()));
-		params1.add(new QueryParam<String>(String.class, getObject().getPublicName()));
-		params1.add(new QueryParam<String>(String.class, getObject().getContent()));
-		params1.add(new QueryParam<String>(String.class, getObject().getSubstancetype()));	
-		String rs_uuid = getObject().getReferenceSubstanceUUID();
-		uuid = new String[]{null,rs_uuid};
-		if (rs_uuid!=null) {
-			uuid = I5Utils.splitI5UUID(rs_uuid.toString());
-			params1.add(new QueryParam<String>(String.class, uuid[0]));
-			params1.add(new QueryParam<String>(String.class, uuid[1]));
-		} else {
-			params1.add(new QueryParam<String>(String.class, null));
-			params1.add(new QueryParam<String>(String.class, null));
-		}
-		
-		String ownerUUID = getObject().getOwnerUUID();
-		uuid = new String[]{null,ownerUUID};
-		if (ownerUUID!=null) {
-			uuid = I5Utils.splitI5UUID(ownerUUID.toString());
-			params1.add(new QueryParam<String>(String.class, uuid[0]));
-			params1.add(new QueryParam<String>(String.class, uuid[1]));
-		} else {
-			params1.add(new QueryParam<String>(String.class, null));
-			params1.add(new QueryParam<String>(String.class, null));
-		}
-		params1.add(new QueryParam<String>(String.class, getObject().getOwnerName()));
-		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdsubstance()));
-		return params1;
-		
+	params1.add(new QueryParam<String>(String.class, "Substance"));
+	params1.add(new QueryParam<String>(String.class, getObject().getFormat()));
+	params1.add(new QueryParam<String>(String.class, getObject().getCompanyName()));
+	params1.add(new QueryParam<String>(String.class, getObject().getPublicName()));
+	params1.add(new QueryParam<String>(String.class, getObject().getContent()));
+	params1.add(new QueryParam<String>(String.class, getObject().getSubstancetype()));
+	String rs_uuid = getObject().getReferenceSubstanceUUID();
+	uuid = new String[] { null, rs_uuid };
+	if (rs_uuid != null) {
+	    uuid = I5Utils.splitI5UUID(rs_uuid.toString());
+	    params1.add(new QueryParam<String>(String.class, uuid[0]));
+	    params1.add(new QueryParam<String>(String.class, uuid[1]));
+	} else {
+	    params1.add(new QueryParam<String>(String.class, null));
+	    params1.add(new QueryParam<String>(String.class, null));
 	}
 
-	public String[] getSQL() throws AmbitException {
-		return update_sql;
+	String ownerUUID = getObject().getOwnerUUID();
+	uuid = new String[] { null, ownerUUID };
+	if (ownerUUID != null) {
+	    uuid = I5Utils.splitI5UUID(ownerUUID.toString());
+	    params1.add(new QueryParam<String>(String.class, uuid[0]));
+	    params1.add(new QueryParam<String>(String.class, uuid[1]));
+	} else {
+	    params1.add(new QueryParam<String>(String.class, null));
+	    params1.add(new QueryParam<String>(String.class, null));
 	}
-	public void setID(int index, int id) {
-		
-	}
+	params1.add(new QueryParam<String>(String.class, getObject().getOwnerName()));
+	params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdsubstance()));
+	return params1;
+
+    }
+
+    public String[] getSQL() throws AmbitException {
+	return update_sql;
+    }
+
+    public void setID(int index, int id) {
+
+    }
 }

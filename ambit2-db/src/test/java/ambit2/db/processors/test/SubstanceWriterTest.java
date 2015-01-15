@@ -160,10 +160,10 @@ public class SubstanceWriterTest extends DbUnitTest {
 	    substance = c.createQueryTable("EXPECTED",
 		    "SELECT topcategory,endpointcategory,guidance,interpretation_criteria,reference,studyResultType FROM bundle_substance_protocolapplication where idbundle=1");
 	    // only studies for already existing substances are written
-	    Assert.assertEquals(1, substance.getRowCount());
+	    Assert.assertEquals(2, substance.getRowCount());
 	    
 	    substance = c.createQueryTable("EXPECTED", "SELECT * FROM bundle_substance_experiment where idbundle=1");
-	    Assert.assertEquals(1, substance.getRowCount());
+	    Assert.assertEquals(2, substance.getRowCount());
 	} finally {
 	    c.close();
 	}
@@ -220,9 +220,9 @@ public class SubstanceWriterTest extends DbUnitTest {
 	    substance = c.createQueryTable("EXPECTED",
 		    "SELECT * FROM bundle_substance_protocolapplication where idbundle=1");
 	    // only studies for already existing substances are written
-	    Assert.assertEquals(4, substance.getRowCount());
+	    Assert.assertEquals(5, substance.getRowCount());
 	    substance = c.createQueryTable("EXPECTED", "SELECT * FROM bundle_substance_experiment where idbundle=1");
-	    Assert.assertEquals(12, substance.getRowCount());
+	    Assert.assertEquals(13, substance.getRowCount());
 	} finally {
 	    c.close();
 	}
