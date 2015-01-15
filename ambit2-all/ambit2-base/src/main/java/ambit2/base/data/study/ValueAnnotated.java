@@ -1,8 +1,17 @@
 package ambit2.base.data.study;
 
+import java.io.Serializable;
+
 import ambit2.base.json.JSONUtils;
 
-public class ValueAnnotated<VALUE> extends Value<VALUE> {
+public class ValueAnnotated<VALUE> extends Value<VALUE> implements Serializable {
+    public static enum _fields {
+	idresult, deleted, newentry,remarks;
+	public String toJSONField() {
+	    return "\t\"" + name() + "\":";
+	}
+    }
+
     protected int idresult;
 
     public int getIdresult() {
@@ -40,28 +49,34 @@ public class ValueAnnotated<VALUE> extends Value<VALUE> {
     protected boolean copied = true;
     protected boolean deleted = false;
     protected String remark = null;
-    
+
     @Override
     public String toJSON(StringBuilder b) {
-        String comma = super.toJSON(b);
-	if (getIdresult()>0) {
-	    b.append(",");
-	    b.append("\t\"idresult\":");
+	String comma = super.toJSON(b);
+	if (getIdresult() > 0) {
+	    b.append(comma);
+	    b.append(_fields.idresult.toJSONField());
 	    b.append(idresult);
 	    comma = ", ";
 	}
 	if (!isCopied()) {
-	    b.append(",");
-	    b.append("\t\"newentry\":");
+	    b.append(comma);
+	    b.append(_fields.newentry.toJSONField());
 	    b.append(!isCopied());
 	    comma = ", ";
 	}
 	if (isDeleted()) {
-	    b.append(",");
-	    b.append("\t\"deleted\":");
+	    b.append(comma);
+	    b.append(_fields.deleted.toJSONField());
 	    b.append(isDeleted());
 	    comma = ", ";
-	}	
+	}
+	if (getRemark()!=null) {
+	    b.append(comma);
+	    b.append(_fields.remarks.toJSONField());
+	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getRemark())));
+	    comma = ", ";
+	}
 	return comma;
     }
 }

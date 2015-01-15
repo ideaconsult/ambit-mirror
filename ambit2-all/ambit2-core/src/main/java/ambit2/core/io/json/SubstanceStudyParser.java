@@ -25,7 +25,9 @@ import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.data.study.ProtocolApplicationAnnotated;
 import ambit2.base.data.study.ReliabilityParams;
+import ambit2.base.data.study.ValueAnnotated;
 import ambit2.base.data.study._FIELDS_RELIABILITY;
 import ambit2.base.data.substance.ExternalIdentifier;
 import ambit2.base.interfaces.ICiteable;
@@ -279,19 +281,29 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
     public ProtocolApplication parseProtocolApplication(ObjectNode node) {
 	if (node == null)
 	    return null;
-	Protocol protocol = parseProtocol((ObjectNode) node.get(ProtocolApplication._fields.protocol.name()));
-	ProtocolApplication pa = new ProtocolApplication(protocol);
-	JsonNode docuuid = node.get(ProtocolApplication._fields.uuid.name());
-	pa.setDocumentUUID(docuuid == null ? null : docuuid.getTextValue());
-	parseOwner((ObjectNode) node.get(ProtocolApplication._fields.owner.name()), pa);
-	parseStudyReference((ObjectNode) node.get(ProtocolApplication._fields.citation.name()), pa);
-	parseReliability((ObjectNode) node.get(ProtocolApplication._fields.reliability.name()), pa);
-	parseInterpretation((ObjectNode) node.get(ProtocolApplication._fields.interpretation.name()), pa);
-	pa.setEffects(parseEffects((ArrayNode) node.get(ProtocolApplication._fields.effects.name()),protocol));
-	pa.setParameters(parseParams((ObjectNode) node.get(ProtocolApplication._fields.parameters.name())));
+	ProtocolApplication pa = null;
+	if (node.get("effects_to_delete") == null) {
+	    Protocol protocol = parseProtocol((ObjectNode) node.get(ProtocolApplication._fields.protocol.name()));
+	    pa = new ProtocolApplication(protocol);
+	    JsonNode docuuid = node.get(ProtocolApplication._fields.uuid.name());
+	    pa.setDocumentUUID(docuuid == null ? null : docuuid.getTextValue());
+	    parseOwner((ObjectNode) node.get(ProtocolApplication._fields.owner.name()), pa);
+	    parseStudyReference((ObjectNode) node.get(ProtocolApplication._fields.citation.name()), pa);
+	    parseReliability((ObjectNode) node.get(ProtocolApplication._fields.reliability.name()), pa);
+	    parseInterpretation((ObjectNode) node.get(ProtocolApplication._fields.interpretation.name()), pa);
+	    pa.setEffects(parseEffects((ArrayNode) node.get(ProtocolApplication._fields.effects.name()), protocol));
+	    pa.setParameters(parseParams((ObjectNode) node.get(ProtocolApplication._fields.parameters.name())));
+	} else {
+	    Protocol protocol = parseProtocol((ObjectNode) node.get(ProtocolApplication._fields.protocol.name()));
+	    pa = new ProtocolApplicationAnnotated(protocol);
+	    ((ProtocolApplicationAnnotated) pa).setRecords_to_delete(parseValuesAnnotated(
+		    (ArrayNode) node.get("effects_to_delete"), protocol));
+	}
 	return pa;
 
     }
+
+    // ProtocolApplicationAnnotated
 
     protected void parseReliability(ObjectNode node, ProtocolApplication record) {
 	if (node == null)
@@ -299,17 +311,35 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	ReliabilityParams reliability = new ReliabilityParams();
 
 	JsonNode jn = node.get(_FIELDS_RELIABILITY.r_isUsedforMSDS.name());
-	try {reliability.setIsUsedforMSDS(jn.asBoolean());} catch (Exception x) {}
+	try {
+	    reliability.setIsUsedforMSDS(jn.asBoolean());
+	} catch (Exception x) {
+	}
 	jn = node.get(_FIELDS_RELIABILITY.r_isRobustStudy.name());
-	try {reliability.setIsRobustStudy(jn.asBoolean());} catch (Exception x) {}
+	try {
+	    reliability.setIsRobustStudy(jn.asBoolean());
+	} catch (Exception x) {
+	}
 	jn = node.get(_FIELDS_RELIABILITY.r_isUsedforClassification.name());
-	try {reliability.setIsUsedforClassification(jn.asBoolean());} catch (Exception x) {}
+	try {
+	    reliability.setIsUsedforClassification(jn.asBoolean());
+	} catch (Exception x) {
+	}
 	jn = node.get(_FIELDS_RELIABILITY.r_purposeFlag.name());
-	try {reliability.setPurposeFlag(jn.getTextValue());} catch (Exception x) {}
+	try {
+	    reliability.setPurposeFlag(jn.getTextValue());
+	} catch (Exception x) {
+	}
 	jn = node.get(_FIELDS_RELIABILITY.r_studyResultType.name());
-	try {reliability.setStudyResultType(jn.getTextValue());} catch (Exception x) {}
+	try {
+	    reliability.setStudyResultType(jn.getTextValue());
+	} catch (Exception x) {
+	}
 	jn = node.get(_FIELDS_RELIABILITY.r_value.name());
-	try {reliability.setValue(jn.getTextValue());} catch (Exception x) {}
+	try {
+	    reliability.setValue(jn.getTextValue());
+	} catch (Exception x) {
+	}
 	record.setReliability(reliability);
     }
 
@@ -394,7 +424,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	if (node == null)
 	    return null;
 	JsonNode endpointnode = node.get(Protocol._fields.endpoint.name());
-	Protocol p = new Protocol(endpointnode==null?null:endpointnode.getTextValue());
+	Protocol p = new Protocol(endpointnode == null ? null : endpointnode.getTextValue());
 	JsonNode jn = node.get(Protocol._fields.topcategory.name());
 	if (jn != null && !"".equals(jn.getTextValue()) && !"null".equals(jn.getTextValue()))
 	    p.setTopCategory(jn.getTextValue());
@@ -412,7 +442,8 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
     protected EffectRecord createEffectRecord(Protocol protocol) {
 	return new EffectRecord();
     }
-    public List<EffectRecord> parseEffects(ArrayNode node,Protocol protocol) {
+
+    public List<EffectRecord> parseEffects(ArrayNode node, Protocol protocol) {
 	if (node == null || node.size() == 0)
 	    return null;
 	List<EffectRecord> effects = new ArrayList<EffectRecord>();
@@ -453,5 +484,32 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	if (jn != null && !"".equals(jn.getTextValue()) && !"null".equals(jn.getTextValue())) {
 	    record.setUnit(jn.getTextValue());
 	}
+    }
+
+    public void parseValueAnnotated(ObjectNode node, ValueAnnotated record) {
+	if (node == null)
+	    return;
+	JsonNode jn = node.get(ValueAnnotated._fields.idresult.name());
+	if (jn != null)
+	    record.setIdresult(jn.asInt(-1));
+	jn = node.get(ValueAnnotated._fields.deleted.name());
+	if (jn != null)
+	    record.setDeleted(jn.asBoolean(true));
+	jn = node.get(ValueAnnotated._fields.remarks.name());
+	if (jn != null)
+	    record.setRemark(jn.getTextValue());	
+    }
+
+    public List<ValueAnnotated> parseValuesAnnotated(ArrayNode node, Protocol protocol) {
+	if (node == null || node.size() == 0)
+	    return null;
+	List<ValueAnnotated> effects = new ArrayList<ValueAnnotated>();
+	for (int i = 0; i < node.size(); i++) {
+	    ValueAnnotated record = new ValueAnnotated();
+	    parseValueAnnotated((ObjectNode) node.get(i).get(EffectRecord._fields.result.name()), record);
+	    effects.add(record);
+	}
+	return effects;
+
     }
 }
