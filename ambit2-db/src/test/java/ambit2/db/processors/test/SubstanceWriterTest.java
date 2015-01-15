@@ -3,14 +3,20 @@ package ambit2.db.processors.test;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.util.List;
 
 import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
+import net.idea.modbcum.p.UpdateExecutor;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
 import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.data.study.ProtocolApplicationAnnotated;
+import ambit2.base.data.study.ValueAnnotated;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.IRawReader;
@@ -19,6 +25,7 @@ import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
 import ambit2.db.substance.processor.DBBundleStudyWriter;
 import ambit2.db.substance.processor.DBSubstanceWriter;
+import ambit2.db.update.bundle.matrix.DeleteMatrixValue;
 
 public class SubstanceWriterTest extends DbUnitTest {
 
@@ -157,11 +164,13 @@ public class SubstanceWriterTest extends DbUnitTest {
 	    c = getConnection();
 	    substance = c.createQueryTable("EXPECTED", "SELECT * FROM substance");
 	    Assert.assertEquals(1, substance.getRowCount());
-	    substance = c.createQueryTable("EXPECTED",
-		    "SELECT topcategory,endpointcategory,guidance,interpretation_criteria,reference,studyResultType FROM bundle_substance_protocolapplication where idbundle=1");
+	    substance = c
+		    .createQueryTable(
+			    "EXPECTED",
+			    "SELECT topcategory,endpointcategory,guidance,interpretation_criteria,reference,studyResultType FROM bundle_substance_protocolapplication where idbundle=1");
 	    // only studies for already existing substances are written
 	    Assert.assertEquals(2, substance.getRowCount());
-	    
+
 	    substance = c.createQueryTable("EXPECTED", "SELECT * FROM bundle_substance_experiment where idbundle=1");
 	    Assert.assertEquals(2, substance.getRowCount());
 	} finally {
@@ -257,4 +266,81 @@ public class SubstanceWriterTest extends DbUnitTest {
 	}
     }
 
+    @Test
+    public void testDeleteEffects() throws Exception {
+	setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+	IDatabaseConnection c = getConnection();
+	ITable substance = c
+		.createQueryTable("EXPECTED", "SELECT * FROM bundle_substance_experiment where deleted = 0");
+	Assert.assertEquals(1, substance.getRowCount());
+	substance = c.createQueryTable("EXPECTED", "SELECT * FROM substance");
+	Assert.assertEquals(1, substance.getRowCount());
+	substance = c.createQueryTable("EXPECTED",
+		"SELECT * FROM bundle_substance_protocolapplication where deleted = 0");
+	Assert.assertEquals(1, substance.getRowCount());
+	try {
+
+	    IRawReader<IStructureRecord> parser = getJSONReader("effects_delete.json");
+	    SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(1);
+	    delete(bundle, parser, c.getConnection());
+	    parser.close();
+
+	    c = getConnection();
+	    substance = c.createQueryTable("EXPECTED", "SELECT * FROM substance");
+	    Assert.assertEquals(1, substance.getRowCount());
+	    substance = c.createQueryTable("EXPECTED", "SELECT * FROM bundle_substance_protocolapplication");
+	    Assert.assertEquals(1, substance.getRowCount());
+	    substance = c.createQueryTable("EXPECTED", "SELECT * FROM bundle_substance_experiment where deleted = 0");
+	    Assert.assertEquals(0, substance.getRowCount());
+	    substance = c.createQueryTable("EXPECTED", "SELECT idbundle,idresult,remarks FROM bundle_substance_experiment where deleted = 1");
+	    Assert.assertEquals(1, substance.getRowCount());
+	    Assert.assertEquals("the reason to delete", substance.getValue(0, "remarks"));
+	} finally {
+	    c.close();
+	}
+    }
+
+    public int delete(SubstanceEndpointsBundle bundle, IRawReader<IStructureRecord> reader, Connection connection)
+	    throws Exception {
+	/*
+	 * DBSubstanceWriter writer; if (bundle != null) writer = new
+	 * DBBundleStudyWriter(bundle, DBSubstanceWriter.datasetMeta(), new
+	 * SubstanceRecord()); else writer = new
+	 * DBSubstanceWriter(DBSubstanceWriter.datasetMeta(), new
+	 * SubstanceRecord(), clearMeasurements, clearComposition);
+	 * writer.setSplitRecord(splitRecord); writer.setConnection(connection);
+	 * writer.open();
+	 */
+	UpdateExecutor<IQueryUpdate> writer = new UpdateExecutor<IQueryUpdate>();
+	writer.setConnection(connection);
+	DeleteMatrixValue q = new DeleteMatrixValue();
+	q.setGroup(bundle);
+	int records = 0;
+	while (reader.hasNext()) {
+	    Object record = reader.next();
+	    if (record == null)
+		continue;
+	    Assert.assertTrue(record instanceof SubstanceRecord);
+	    Assert.assertEquals("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
+		    ((SubstanceRecord) record).getCompanyUUID());
+	    for (ProtocolApplication pa : ((SubstanceRecord) record).getMeasurements()) {
+		Assert.assertTrue(pa instanceof ProtocolApplicationAnnotated);
+		System.out.println(((ProtocolApplicationAnnotated) pa).getRecords_to_delete());
+
+		ProtocolApplicationAnnotated paa = (ProtocolApplicationAnnotated) pa;
+		List<ValueAnnotated> vaa = paa.getRecords_to_delete();
+		for (ValueAnnotated va : vaa) {
+		    q.setObject(va);
+		    writer.process(q);
+		}
+	    }
+
+	    // writer.setImportedRecord((SubstanceRecord) record);
+	    // writer.process((IStructureRecord) record);
+	    records++;
+	}
+	
+	writer.close();
+	return records;
+    }
 }
