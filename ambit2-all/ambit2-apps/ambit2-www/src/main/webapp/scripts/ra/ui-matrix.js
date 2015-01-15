@@ -399,7 +399,7 @@ var jToxBundle = {
           var valueMap = {
             endpoint: 'effects[0].endpoint',
             value: 'effects[0].result',
-            interpretation: 'interpretation.result',
+            interpretation_result: 'interpretation.result',
             
             type: 'reliability.r_studyResultType',
             reference: 'citation.title',
@@ -429,7 +429,8 @@ var jToxBundle = {
             interpretation: { },
             reliability: { },
             effects: [{
-              result: { }
+              result: { },
+              conditions: { }
             }]
           };
           
@@ -440,13 +441,17 @@ var jToxBundle = {
           boxOptions.confirmButton = "Add";
           boxOptions.cancelButton = "Cancel";
           var endSetValue = function (e, field, value) {
-            ccLib.setJsonValue(featureJson, valueMap[field], value);
+            var f = valueMap[field];
+            if (!f)
+              featureJson.effects[0].conditions[field] = value;
+            else
+            ccLib.setJsonValue(featureJson, f, value);
           };
           
           boxOptions.onOpen = function () {
             var box = this;
             var content = this.content[0];
-            jToxEndpoint.linkEditors(self.matrixKit, content, parse.category, parse.topcategory, endSetValue);
+            jToxEndpoint.linkEditors(self.matrixKit, content, { category: parse.category, top: parse.topcategory, onchange: endSetValue, conditions: true });
             $('input[type=button]', content).on('click', function (){ addFeature(data, featureId, featureJson, jel[0]); box.close();});	              
           };
           new jBox('Modal', boxOptions).open();
@@ -467,6 +472,13 @@ var jToxBundle = {
         f.creator = value.protocol.guideline[0];
         f.isMultiValue = true;
         f.annotation = [];
+        for (var cId in value.effects[0].conditions) {
+          var c = value.effects[0].conditions[cId];
+          f.annotation.push({
+            'p': cId,
+            'o': jT.ui.renderRange(c) + (c.units || '')
+          });
+        }
         
         data.values[fId] = [value.effects[0].result];
         

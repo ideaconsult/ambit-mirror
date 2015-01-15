@@ -4345,6 +4345,7 @@ var jToxEndpoint = (function () {
     maxHits: 10,              // max hits in autocomplete
     showMultiselect: true,    // whether to hide select all / unselect all buttons
     showEditors: false,       // whether to show endpoint value editing fields as details
+    showConditions: true,     // whether to show conditions in endpoint field editing
     sDom: "<i>rt",            // passed with dataTable settings upon creation
     oLanguage: null,          // passed with dataTable settings upon creation
     onLoaded: null,           // callback called when the is available
@@ -4389,57 +4390,150 @@ var jToxEndpoint = (function () {
   };
   
   // now the editors...
-  cls.linkEditors = function (kit, root, category, top, onchange) {
+  cls.linkEditors = function (kit, root, settings) { // category, top, onchange, conditions
     // get the configuration so we can setup the fields and their titles according to it
-    var config = jT.$.extend(true, {}, kit.settings.configuration.columns["_"], kit.settings.configuration.columns[category]);
+    var config = jT.$.extend(true, {}, kit.settings.configuration.columns["_"], kit.settings.configuration.columns[settings.category]);
 
-    var putAutocomplete = function (field, service, configEntry) {
+    var putAutocomplete = function (box, service, configEntry, options) {
       // if we're not supposed to be visible - hide us.
-      var box = jT.$('div.box-' + field, root);
-      var v = ccLib.getJsonValue(config, configEntry + '.bVisible');
-      if (v !== undefined && !v) {
+      var field = box.data('field');
+      if (!configEntry || configEntry.bVisible === false) {
         box.hide();
-        return false;
+        return null;
       }
       
       // now deal with the title...
-      var t = ccLib.getJsonValue(config, configEntry + '.sTitle');
+      var t = !!configEntry ? configEntry.title : null;
       if (!!t)
         jT.$('div', box[0]).html(t);
-        
-      // finally - deal with the autocomplete itself
-      jT.$('input', box[0])
-      .autocomplete({
-        minLength: 0,
-        change: function (e, ui) {
-          onchange(e, field, !ui.item ? '' : ui.item.value);
-        },
-        source: function( request, response ) {
-          jT.call(kit, service, { method: "GET", data: { 
-            'category': category,
-            'top': top,
-            'max': kit.settings.maxHits || defaultSettings.maxHits,
-            'search': request.term }
-          } , function (data) {
-            response( !data ? [] : jT.$.map( data.facet, function( item ) {
-              var val = item[field] || '';
-              return {
-                label: val + (!item.count ? '' : " [" + item.count + "]"),
-                value: val
-              }
-            }));
-          });
-        }
-  		});
+      
+      // finally - configure the autocomplete options, themselves to initialize the component itself
+      if (!options)
+        options = {};
+      // the main one - source function
+      if (!options.source) options.source = function( request, response ) {
+        jT.call(kit, service, { method: "GET", data: { 
+          'category': settings.category,
+          'top': settings.top,
+          'max': kit.settings.maxHits || defaultSettings.maxHits,
+          'search': request.term }
+        } , function (data) {
+          response( !data ? [] : jT.$.map( data.facet, function( item ) {
+            var val = item[field] || '';
+            return {
+              label: val + (!item.count ? '' : " [" + item.count + "]"),
+              value: val
+            }
+          }));
+        });
+      };
+      
+      // and the change functon
+      if (!options.change) options.change = function (e, ui) {
+        settings.onchange.call(this, e, field, !ui.item ? '' : ui.item.value);
+      };
+      
+      // and the final parameter
+      if (!options.minLength) options.minLength = 0;
+      
+      return jT.$('input', box[0]).autocomplete(options);
     };
         
-    // deal with endpoint name itself
-    putAutocomplete('endpoint', '/query/experiment_endpoints', 'effects.endpoint');
-    putAutocomplete('interpretation_result', '/query/interpretation_result', 'interpretation.result');
+    var putValueComplete = function (root, configEntry) {
+      var field = root.data('field');
+      var extractLast = function( val ) { return !!val ? val.split( /[,\(\)\s]*/ ).pop() : val; };
+      var parseValue = function ( text ) { 
+        var obj = {};
+        var parsers = [
+          {
+            regex: /[\s=]*([\(\[])\s*([\d\.]*)\s*,\s*([\d\.]*)\s*([\)\]])\s*([^\s,]*)\s*/,
+            fields: ['', 'loQualifier', 'loValue', 'upValue', 'upQualifier', 'units'],
+            // adjust the parsed value, if needed
+            adjust: function (obj, parse) {
+              obj.loQualifier = parse[1] == '[' ? '>=' : '>';
+              obj.upQualifier = parse[4] == ']' ? '<=' : '<';  
+            }
+          },
+          {
+            regex: /\s*([>=]*)\s*([\d\.]+)\s*([^\s,]*)\s*([<=]*)\s*([\d\.]*)\s*([^\s,]*)\s*/,
+            fields: ['', 'loQualifier', 'loValue', 'units', 'upQualifier', 'upValue', 'units']
+          }
+        ];
+        
+        for (var pi = 0;pi < parsers.length; ++pi) {
+          var parse = text.match(parsers[pi].regex);
+          if (!parse)
+            continue;
+          for (var i = 1;i < parse.length; ++i)
+            if (!!parse[i]) {
+              var f = parsers[pi].fields[i];
+              obj[f] = parse[i];
+            }
+
+          if (!obj.loQualifier)
+            obj.loQualifier = '=';
+          if (parsers[pi].adjust)
+            parsers[pi].adjust(obj, parse);
+          break;
+        }
+        
+        if (pi >= parsers.length)
+          obj.textValue = ccLib.trim(text);
+          
+        return obj;
+      };
+      
+      var allTags = [].concat(kit.settings.loTags || defaultSettings.loTags, kit.settings.hiTags || defaultSettings.hiTags, kit.settings.units || defaultSettings.units);
+      
+      var autoEl = putAutocomplete(root, null, configEntry, {
+        change: function (e, ui) {
+          settings.onchange.call(this, e, field, parseValue(this.value));
+        },
+        source: function( request, response ) {
+          // delegate back to autocomplete, but extract the last term
+          response( jT.$.ui.autocomplete.filter( allTags, extractLast(request.term)));
+        },
+        focus: function() { // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+          var theVal = this.value,
+              last = extractLast(theVal);
+          
+          this.value = theVal.substr(0, theVal.length - last.length) + ui.item.value + ' ';
+          return false;
+        }
+      });
+      autoEl.bind('keydown', function (event) {
+        if ( event.keyCode === jT.$.ui.keyCode.TAB && !!autoEl.menu.active )
+          event.preventDefault();
+      });
+    };
     
+    // deal with endpoint name itself
+    putAutocomplete(jT.$('div.box-endpoint', root), '/query/experiment_endpoints', ccLib.getJsonValue(config, 'effects.endpoint'));
+    putAutocomplete(jT.$('div.box-interpretation', root), '/query/interpretation_result', ccLib.getJsonValue(config, 'interpretation.result'));
+    
+    jT.$('.box-conditions', root).hide(); // to optimize process with adding children
+    if (!!settings.conditions) {
+      // now put some conditions...
+      var any = false;
+      var condRoot = jT.$('div.box-conditions .jtox-border-box', root)[0];
+      for (var cond in config.conditions) {
+        any = true;
+        var div = jT.getTemplate('#jtox-endcondition');
+        jT.$(div).attr('data-field', cond);
+        condRoot.appendChild(div);
+        ccLib.fillTree(div, { title: config.conditions[cond].sTitle || cond });
+        jT.$('input', div).attr('placeholder', "Enter value or range");
+        putValueComplete(jT.$(div), config.conditions[cond]);
+      }
+      if (any)
+        jT.$('.box-conditions', root).show();
+    }
+      
     // now comes the tagging mechanism... first determine, if we need to show it at all
-    var v = ccLib.getJsonValue(config, 'effects.result.bVisible');
-    if (v !== undefined && !v)
+    if (ccLib.getJsonValue(config, 'effects.result.bVisible') === false)
       jT.$('div.box-value', root).hide();
     else {
       var t = ccLib.getJsonValue(config, 'effects.text.sTitle') || ccLib.getJsonValue(config, 'effects.result.sTitle');
@@ -4488,7 +4582,7 @@ var jToxEndpoint = (function () {
           var f = sequence[nowOn++].field;
           if (!!f) {
             data[f] = ui.tagLabel;
-            onchange(e, 'value', data);
+            settings.onchange.call(this, e, 'value', data);
           }
           return true;
         },
@@ -4496,7 +4590,7 @@ var jToxEndpoint = (function () {
           var f = sequence[--nowOn].field;
           if (!!f) {
             delete data[f];
-            onchange(e, 'value', data);
+            settings.onchange.call(this, e, 'value', data);
           }
           return true;
         }
@@ -4507,7 +4601,7 @@ var jToxEndpoint = (function () {
     jT.$('.box-field', root).each(function () {
       var name = jT.$(this).data('name');
       jT.$('input, textarea, select', this).on('change', function (e) {
-        onchange(e, name, jT.$(this).val());
+        settings.onchange.call(this, e, name, jT.$(this).val());
       });
     });
   };
@@ -4521,9 +4615,12 @@ var jToxEndpoint = (function () {
         self.edittedValues = {};
         self.settings.onDetails = function (root, data, element) {
           self.edittedValues[data.endpoint] = {};
-          cls.linkEditors(self, root.appendChild(jT.getTemplate('#jtox-endeditor')), data.endpoint, data.subcategory, function (e, field, value) {
-            self.edittedValues[data.endpoint][field] = value;
-          }); 
+          cls.linkEditors(self, root.appendChild(jT.getTemplate('#jtox-endeditor')), { 
+            category: data.endpoint, 
+            top: data.subcategory, 
+            conditions: self.settings.showConditions, 
+            onchange: function (e, field, value) { ccLib.setJsonValue(self.edittedValues[data.endpoint], field, value); }
+          });
         };
       }
       
@@ -4978,18 +5075,29 @@ jT.templates['all-endpoint']  =
 
 jT.templates['editor-endpoint']  = 
 "	  <div id=\"jtox-endeditor\" class=\"jt-endeditor\">" +
-"	    <div class=\"jtox-medium-box box-endpoint\">" +
+"	    <div class=\"jtox-medium-box box-endpoint\" data-field=\"endpoint\">" +
 "  	    <div class=\"jtox-details font-heavy\">Endpoint name</div>" +
 "  	    <input type=\"text\" placeholder=\"Endpoint_\"/>" +
 "	    </div>" +
-"	    <div class=\"jtox-medium-box box-value\">" +
+"	    <div class=\"jtox-medium-box box-value\" data-field=\"value\">" +
 "  	    <div class=\"jtox-details font-heavy\">Value range</div>" +
 "  	    <input type=\"text\"/>" +
 "	    </div>" +
-"      <div class=\"jtox-medium-box box-interpretation_result\">" +
+"      <div class=\"jtox-medium-box box-interpretation\" data-field=\"interpretation_result\">" +
 "  	    <div class=\"jtox-details font-heavy\">Intepretation of the results</div>" +
 "  	    <input type=\"text\" placeholder=\"Intepretation\"/>" +
 "      </div>" +
+"      <div class=\"size-full box-conditions\">" +
+"	      <div class=\"jtox-details font-heavy\">Conditions</div>" +
+"        <div class=\"jtox-border-box\"></div>" +
+"      </div>" +
 "	  </div>" +
+""; // end of #jtox-end-editor 
+
+jT.templates['editor-endpoint-condition']  = 
+"    <div id=\"jtox-endcondition\" class=\"jtox-medium-box\">" +
+"      <div class=\"jtox-details font-heavy data-field\" data-field=\"title\">?</div>" +
+"      <input type=\"text\" placeholder=\"Intepretation\"/>" +
+"    </div>" +
 ""; // end of #jtox-end-editor 
 

@@ -317,6 +317,15 @@ img.jtox-smalldiagram {
   display: none;
 }
 
+.jtox-toolkit .jtox-border-box {
+  box-sizing: border-box;
+  border: 1px solid #666;
+  border-radius: 6px;
+  padding: 10px;
+  width: 100%;
+  height: 100%;
+}
+
 .jtox-toolkit li.tagit-choice a.tagit-close {
   opacity: 0.4;
 }
