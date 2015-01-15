@@ -4401,20 +4401,21 @@ var jToxEndpoint = (function () {
         box.hide();
         return null;
       }
-      
+
       // now deal with the title...
-      var t = !!configEntry ? configEntry.title : null;
+      var t = !!configEntry ? configEntry.sTitle : null;
       if (!!t)
         jT.$('div', box[0]).html(t);
-      
-      // finally - configure the autocomplete options, themselves to initialize the component itself
+
+      // prepare the options
       if (!options)
         options = {};
-      // the main one - source function
+      
+      // finally - configure the autocomplete options, themselves to initialize the component itself
       if (!options.source) options.source = function( request, response ) {
         jT.call(kit, service, { method: "GET", data: { 
-          'category': settings.category,
-          'top': settings.top,
+          'category': options.category,
+          'top': options.top,
           'max': kit.settings.maxHits || defaultSettings.maxHits,
           'search': request.term }
         } , function (data) {
@@ -4430,7 +4431,7 @@ var jToxEndpoint = (function () {
       
       // and the change functon
       if (!options.change) options.change = function (e, ui) {
-        settings.onchange.call(this, e, field, !ui.item ? '' : ui.item.value);
+        options.onchange.call(this, e, field, !ui.item ? '' : ui.item.value);
       };
       
       // and the final parameter
@@ -4504,7 +4505,9 @@ var jToxEndpoint = (function () {
           return false;
         }
       });
-      autoEl.bind('keydown', function (event) {
+
+      // it might be a hidden one - so, take care for this      
+      if (!!autoEl) autoEl.bind('keydown', function (event) {
         if ( event.keyCode === jT.$.ui.keyCode.TAB && !!autoEl.menu.active )
           event.preventDefault();
       });
@@ -4532,70 +4535,8 @@ var jToxEndpoint = (function () {
         jT.$('.box-conditions', root).show();
     }
       
-    // now comes the tagging mechanism... first determine, if we need to show it at all
-    if (ccLib.getJsonValue(config, 'effects.result.bVisible') === false)
-      jT.$('div.box-value', root).hide();
-    else {
-      var t = ccLib.getJsonValue(config, 'effects.text.sTitle') || ccLib.getJsonValue(config, 'effects.result.sTitle');
-      if (!!t)
-        jT.$('div.box-value div', root).html(t);
-        
-      var units = kit.settings.units || defaultSettings.units;
-      var sequence = [
-        { type: "tag-qualifier", field: "loQualifier", tags: kit.settings.loTags || defaultSettings.loTags, strict: true},
-        { type: "tag-value", field: "loValue", tags: null},
-        { type: "tag-unit", field: "unit", tags: units},
-        { type: "tag-qualifier", field: "upQualifier", tags: kit.settings.hiTags || defaultSettings.hiTags, strict: true},
-        { type: "tag-value", field: "upValue", tags: null},
-        { type: "tag-unit", tags: units}
-      ];
-  
-      var nowOn = 0;
-      var data = {};
-      
-      jT.$('.box-value input', root).tagit({
-        autocomplete: {
-          source: function (request, response) {
-            var tags = nowOn < sequence.length ? sequence[nowOn].tags : null;
-            if (!!tags) {
-              tags = tags.filter(function (item) {
-                return item.indexOf(request.term) == 0;
-              });
-            }
-            response(tags);
-          }
-        },
-        singleFieldDelimiter: ";",
-        allowSpaces: false,
-        allowDuplicates: true,
-        singleField: true,
-        removeConfirmation: false,
-        caseSensitive: false,
-        showAutocompleteOnFocus: true,
-        beforeTagAdded: function (e, ui) {
-          var cur = sequence[nowOn];
-          return !cur.strict || cur.tags.indexOf(ui.tagLabel) > -1;
-        },
-        afterTagAdded: function (e, ui) {
-          var cur = sequence[nowOn];
-          ui.tag.addClass(cur.type);
-          var f = sequence[nowOn++].field;
-          if (!!f) {
-            data[f] = ui.tagLabel;
-            settings.onchange.call(this, e, 'value', data);
-          }
-          return true;
-        },
-        afterTagRemoved: function (e, ui) {
-          var f = sequence[--nowOn].field;
-          if (!!f) {
-            delete data[f];
-            settings.onchange.call(this, e, 'value', data);
-          }
-          return true;
-        }
-      });
-    }
+    // now comes the value editing mechanism
+    putValueComplete(jT.$('.box-value', root), jT.$.extend(true, {}, ccLib.getJsonValue(config, 'effects.result'), ccLib.getJsonValue(config, 'effects.text')));
     
     // now initialize other fields, marked with box-field
     jT.$('.box-field', root).each(function () {

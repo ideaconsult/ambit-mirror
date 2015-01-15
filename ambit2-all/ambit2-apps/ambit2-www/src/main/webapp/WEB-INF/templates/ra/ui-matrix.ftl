@@ -3,7 +3,6 @@
 <#include "/header_updated.ftl" >
 
 	<link rel="stylesheet" href="${ambit_root}/style/jBox.css" type="text/css">
-	<link rel="stylesheet" href="${ambit_root}/style/jquery.tagit.css" type="text/css">
 	<link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
 	<link rel="stylesheet" href="${ambit_root}/style/ketcher.css"/>
 	
@@ -15,7 +14,6 @@
   <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
 
   <script type='text/javascript' src='${ambit_root}/scripts/jBox.js'></script>
-  <script type='text/javascript' src='${ambit_root}/scripts/tag-it.js'></script>
   
   <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
   <script type='text/javascript' src='${ambit_root}/scripts/ketcher.js'></script>
