@@ -12,7 +12,6 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.restnet.c.task.FactoryTaskConvertor;
 import net.idea.restnet.db.DBConnection;
-import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskApplication;
 import net.idea.restnet.i.task.ITaskStorage;
@@ -36,6 +35,9 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.ProtocolEffectRecord;
+import ambit2.base.data.study.ProtocolEffectRecordMatrix;
+import ambit2.base.data.study.Value;
+import ambit2.base.data.study.ValueAnnotated;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.data.substance.SubstanceName;
 import ambit2.base.data.substance.SubstanceOwner;
@@ -56,324 +58,278 @@ import ambit2.rest.substance.SubstanceDatasetResource;
 import ambit2.rest.substance.SubstanceURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 
-public class BundleMatrixResource extends
-		SubstanceDatasetResource<ReadSubstancesByBundle> {
-	protected SubstanceEndpointsBundle bundle;
+public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstancesByBundle> {
+    protected SubstanceEndpointsBundle bundle;
 
-	@Override
-	public String getTemplateName() {
-		return "bundle_matrix.ftl";
-	}
+    @Override
+    public String getTemplateName() {
+	return "bundle_matrix.ftl";
+    }
 
-	@Override
-	protected ReadSubstancesByBundle createQuery(Context context,
-			Request request, Response response) throws ResourceException {
-		Object idbundle = request.getAttributes().get(
-				OpenTox.URI.bundle.getKey());
-		if (idbundle == null)
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-		try {
-			bundle = new SubstanceEndpointsBundle(Integer.parseInt(idbundle
-					.toString()));
-			return new ReadSubstancesByBundle(bundle) {
-				public ambit2.base.data.SubstanceRecord getObject(
-						java.sql.ResultSet rs) throws AmbitException {
-					ambit2.base.data.SubstanceRecord record = super
-							.getObject(rs);
-					record.setProperty(new SubstancePublicName(),
-							record.getPublicName());
-					record.setProperty(new SubstanceName(),
-							record.getCompanyName());
-					record.setProperty(new SubstanceUUID(),
-							record.getCompanyUUID());
-					record.setProperty(new SubstanceOwner(),
-							record.getOwnerName());
-					return record;
-				}
-			};
-		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+    @Override
+    protected ReadSubstancesByBundle createQuery(Context context, Request request, Response response)
+	    throws ResourceException {
+	Object idbundle = request.getAttributes().get(OpenTox.URI.bundle.getKey());
+	if (idbundle == null)
+	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+	try {
+	    bundle = new SubstanceEndpointsBundle(Integer.parseInt(idbundle.toString()));
+	    return new ReadSubstancesByBundle(bundle) {
+		public ambit2.base.data.SubstanceRecord getObject(java.sql.ResultSet rs) throws AmbitException {
+		    ambit2.base.data.SubstanceRecord record = super.getObject(rs);
+		    record.setProperty(new SubstancePublicName(), record.getPublicName());
+		    record.setProperty(new SubstanceName(), record.getCompanyName());
+		    record.setProperty(new SubstanceUUID(), record.getCompanyUUID());
+		    record.setProperty(new SubstanceOwner(), record.getOwnerName());
+		    return record;
 		}
-
+	    };
+	} catch (Exception x) {
+	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 
-	@Override
-	protected IQueryRetrieval<ProtocolEffectRecord<String, String, String>> getEffectQuery() {
-		return new ReadEffectRecordByBundleMatrix(bundle);
-	}
+    }
 
-	@Override
-	protected void getCompositionProcessors(ProcessorsChain chain) {
-		final ReadSubstanceComposition q = new ReadSubstanceComposition();
-		MasterDetailsProcessor<SubstanceRecord, CompositionRelation, IQueryCondition> compositionReader = new MasterDetailsProcessor<SubstanceRecord, CompositionRelation, IQueryCondition>(
-				q) {
-			@Override
-			public SubstanceRecord process(SubstanceRecord target)
-					throws AmbitException {
-				q.setBundle(bundle);
-				if (target.getRelatedStructures() != null)
-					target.getRelatedStructures().clear();
-				return super.process(target);
+    @Override
+    protected IQueryRetrieval<ProtocolEffectRecord<String, String, String>> getEffectQuery() {
+	return new ReadEffectRecordByBundleMatrix(bundle);
+    }
+
+    @Override
+    protected void getCompositionProcessors(ProcessorsChain chain) {
+	final ReadSubstanceComposition q = new ReadSubstanceComposition();
+	MasterDetailsProcessor<SubstanceRecord, CompositionRelation, IQueryCondition> compositionReader = new MasterDetailsProcessor<SubstanceRecord, CompositionRelation, IQueryCondition>(
+		q) {
+	    @Override
+	    public SubstanceRecord process(SubstanceRecord target) throws AmbitException {
+		q.setBundle(bundle);
+		if (target.getRelatedStructures() != null)
+		    target.getRelatedStructures().clear();
+		return super.process(target);
+	    }
+
+	    protected SubstanceRecord processDetail(SubstanceRecord target, CompositionRelation detail)
+		    throws Exception {
+		target.addStructureRelation(detail);
+		q.setRecord(null);
+		return target;
+	    };
+	};
+	chain.add(compositionReader);
+	ReadChemIdentifiersByComposition qids = new ReadChemIdentifiersByComposition();
+	MasterDetailsProcessor<SubstanceRecord, IStructureRecord, IQueryCondition> idsReader = new MasterDetailsProcessor<SubstanceRecord, IStructureRecord, IQueryCondition>(
+		qids) {
+	    @Override
+	    protected SubstanceRecord processDetail(SubstanceRecord target, IStructureRecord detail) throws Exception {
+		for (CompositionRelation r : target.getRelatedStructures())
+		    if (detail.getIdchemical() == r.getSecondStructure().getIdchemical()) {
+			for (Property p : detail.getProperties()) {
+			    r.getSecondStructure().setProperty(p, detail.getProperty(p));
 			}
+			break;
+		    }
+		return target;
+	    }
+	};
+	chain.add(idsReader);
+    }
 
-			protected SubstanceRecord processDetail(SubstanceRecord target,
-					CompositionRelation detail) throws Exception {
-				target.addStructureRelation(detail);
-				q.setRecord(null);
-				return target;
-			};
-		};
-		chain.add(compositionReader);
-		ReadChemIdentifiersByComposition qids = new ReadChemIdentifiersByComposition();
-		MasterDetailsProcessor<SubstanceRecord, IStructureRecord, IQueryCondition> idsReader = new MasterDetailsProcessor<SubstanceRecord, IStructureRecord, IQueryCondition>(
-				qids) {
-			@Override
-			protected SubstanceRecord processDetail(SubstanceRecord target,
-					IStructureRecord detail) throws Exception {
-				for (CompositionRelation r : target.getRelatedStructures())
-					if (detail.getIdchemical() == r.getSecondStructure()
-							.getIdchemical()) {
-						for (Property p : detail.getProperties()) {
-							r.getSecondStructure().setProperty(p,
-									detail.getProperty(p));
-						}
-						break;
-					}
-				return target;
-			}
-		};
-		chain.add(idsReader);
+    @Override
+    protected Representation delete(Variant variant) throws ResourceException {
+	String token = getToken();
+
+	SubstanceEndpointsBundle bundle = null;
+	Object id = getRequest().getAttributes().get(OpenTox.URI.bundle.getKey());
+	if ((id != null))
+	    try {
+		Integer i = new Integer(Reference.decode(id.toString()));
+		if (i > 0)
+		    bundle = new SubstanceEndpointsBundle(i);
+	    } catch (Exception x) {
+	    }
+
+	Connection conn = null;
+	try {
+	    DatasetURIReporter r = new DatasetURIReporter(getRequest());
+	    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
+	    conn = dbc.getConnection();
+	    CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(Method.DELETE, null, bundle, r,
+		    conn, getToken());
+	    ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("Delete matrix from bundle",
+		    callable, getRequest().getRootRef(), token);
+
+	    ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
+	    FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+	    task.update();
+	    getResponse().setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
+	    return tc.createTaskRepresentation(task.getUuid(), variant, getRequest(), getResponse(), null);
+
+	} catch (Exception x) {
+	    x.printStackTrace();
+	    try {
+		conn.close();
+	    } catch (Exception xx) {
+	    }
+	    throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x);
 	}
+    }
 
-	@Override
-	protected Representation delete(Variant variant) throws ResourceException {
+    @Override
+    protected Representation post(Representation entity, Variant variant) throws ResourceException {
+	if ((entity == null) || !entity.isAvailable())
+	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty content");
+	if (entity.getMediaType() != null)
+	    if (MediaType.APPLICATION_WWW_FORM.getName().equals(entity.getMediaType().getName())) {
 		String token = getToken();
 
 		SubstanceEndpointsBundle bundle = null;
-		Object id = getRequest().getAttributes().get(
-				OpenTox.URI.bundle.getKey());
+		Object id = getRequest().getAttributes().get(OpenTox.URI.bundle.getKey());
 		if ((id != null))
-			try {
-				Integer i = new Integer(Reference.decode(id.toString()));
-				if (i > 0)
-					bundle = new SubstanceEndpointsBundle(i);
-			} catch (Exception x) {
-			}
+		    try {
+			Integer i = new Integer(Reference.decode(id.toString()));
+			if (i > 0)
+			    bundle = new SubstanceEndpointsBundle(i);
+		    } catch (Exception x) {
+		    }
 
 		Connection conn = null;
 		try {
-			DatasetURIReporter r = new DatasetURIReporter(getRequest());
-			DBConnection dbc = new DBConnection(getApplication().getContext(),
-					getConfigFile());
-			conn = dbc.getConnection();
-			CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(
-					Method.DELETE, null, bundle, r, conn, getToken());
-			ITask<Reference, Object> task = ((ITaskApplication) getApplication())
-					.addTask("Delete matrix from bundle", callable,
-							getRequest().getRootRef(), token);
+		    DatasetURIReporter r = new DatasetURIReporter(getRequest());
+		    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
+		    conn = dbc.getConnection();
+		    CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(Method.POST,
+			    new Form(entity), bundle, r, conn, getToken());
+		    ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("Matrix from bundle",
+			    callable, getRequest().getRootRef(), token);
 
-			ITaskStorage storage = ((ITaskApplication) getApplication())
-					.getTaskStorage();
-			FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(
-					storage);
-			task.update();
-			getResponse()
-					.setStatus(
-							task.isDone() ? Status.SUCCESS_OK
-									: Status.SUCCESS_ACCEPTED);
-			return tc.createTaskRepresentation(task.getUuid(), variant,
-					getRequest(), getResponse(), null);
+		    ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
+		    FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+		    task.update();
+		    getResponse().setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
+		    return tc.createTaskRepresentation(task.getUuid(), variant, getRequest(), getResponse(), null);
 
 		} catch (Exception x) {
-			x.printStackTrace();
-			try {
-				conn.close();
-			} catch (Exception xx) {
-			}
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x);
+		    x.printStackTrace();
+		    try {
+			conn.close();
+		    } catch (Exception xx) {
+		    }
+		    throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x);
 		}
-	}
+	    }
+	throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
 
-	@Override
-	protected Representation post(Representation entity, Variant variant)
-			throws ResourceException {
-		if ((entity == null) || !entity.isAvailable())
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					"Empty content");
-		if (entity.getMediaType() != null)
-			if (MediaType.APPLICATION_WWW_FORM.getName().equals(
-					entity.getMediaType().getName())) {
-				String token = getToken();
+    }
 
-				SubstanceEndpointsBundle bundle = null;
-				Object id = getRequest().getAttributes().get(
-						OpenTox.URI.bundle.getKey());
-				if ((id != null))
-					try {
-						Integer i = new Integer(Reference.decode(id.toString()));
-						if (i > 0)
-							bundle = new SubstanceEndpointsBundle(i);
-					} catch (Exception x) {
-					}
+    @Override
+    protected Representation put(Representation entity, Variant variant) throws ResourceException {
 
-				Connection conn = null;
-				try {
-					DatasetURIReporter r = new DatasetURIReporter(getRequest());
-					DBConnection dbc = new DBConnection(getApplication()
-							.getContext(), getConfigFile());
-					conn = dbc.getConnection();
-					CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(
-							Method.POST, new Form(entity), bundle, r, conn,
-							getToken());
-					ITask<Reference, Object> task = ((ITaskApplication) getApplication())
-							.addTask("Matrix from bundle", callable,
-									getRequest().getRootRef(), token);
+	if ((entity == null) || !entity.isAvailable())
+	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty content");
 
-					ITaskStorage storage = ((ITaskApplication) getApplication())
-							.getTaskStorage();
-					FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(
-							storage);
-					task.update();
-					getResponse().setStatus(
-							task.isDone() ? Status.SUCCESS_OK
-									: Status.SUCCESS_ACCEPTED);
-					return tc.createTaskRepresentation(task.getUuid(), variant,
-							getRequest(), getResponse(), null);
-
-				} catch (Exception x) {
-					x.printStackTrace();
-					try {
-						conn.close();
-					} catch (Exception xx) {
-					}
-					throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x);
-				}
-			}
-		throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
-
-	}
-
-	@Override
-	protected Representation put(Representation entity, Variant variant)
-			throws ResourceException {
-
-		if ((entity == null) || !entity.isAvailable())
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					"Empty content");
-
-		if (entity.getMediaType() != null) {
-			if (MediaType.APPLICATION_JSON.getName().equals(
-					entity.getMediaType().getName())) {
-				try {
-					File file = File.createTempFile("_matrix_", ".json");
-					file.deleteOnExit();
-					DownloadTool.download(entity.getStream(), file);
-					String token = getToken();
-					QASettings qa = new QASettings();
-					qa.clear(); // sets enabled to false and clears all flags
-					CallableStudyBundleImporter<String> callable = new CallableStudyBundleImporter<String>(
-							file,
-							getRootRef(),
-							getContext(),
-							new SubstanceURIReporter(getRequest().getRootRef()),
-							new DatasetURIReporter(getRequest().getRootRef()),
-							token);
-					callable.setBundle(bundle);
-					callable.setClearComposition(false);
-					callable.setClearMeasurements(false);
-					callable.setQASettings(qa);
-					ITask<Reference, Object> task = ((ITaskApplication) getApplication())
-							.addTask("Substance import", callable, getRequest()
-									.getRootRef(), token);
-
-					ITaskStorage storage = ((ITaskApplication) getApplication())
-							.getTaskStorage();
-					FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(
-							storage);
-					task.update();
-					getResponse().setStatus(
-							task.isDone() ? Status.SUCCESS_OK
-									: Status.SUCCESS_ACCEPTED);
-					return tc.createTaskRepresentation(task.getUuid(), variant,
-							getRequest(), getResponse(), null);
-				} catch (Exception x) {
-					x.printStackTrace();
-				} finally {
-					try {
-						entity.getStream().close();
-					} catch (Exception xx) {
-					}
-				}
-
-			} else if (MediaType.MULTIPART_FORM_DATA.getName().equals(
-					entity.getMediaType().getName())) {
-				DiskFileItemFactory factory = new DiskFileItemFactory();
-				RestletFileUpload upload = new RestletFileUpload(factory);
-				try {
-					List<FileItem> items = upload.parseRequest(getRequest());
-					String token = getToken();
-					QASettings qa = new QASettings();
-					qa.clear(); // sets enabled to false and clears all flags
-					boolean clearMeasurements = false;
-					boolean clearComposition = false;
-					for (FileItem file : items) {
-						if (file.isFormField()) {
-							// ignore
-						} else {
-							String ext = file.getName().toLowerCase();
-							if (ext.endsWith(".json")) {
-							} else
-								throw new ResourceException(
-										Status.CLIENT_ERROR_BAD_REQUEST,
-										"Unsupported format " + ext);
-						}
-					}
-					CallableStudyBundleImporter<String> callable = new CallableStudyBundleImporter<String>(
-							items,
-							"files[]",
-							getRootRef(),
-							getContext(),
-							new SubstanceURIReporter(getRequest().getRootRef()),
-							new DatasetURIReporter(getRequest().getRootRef()),
-							token);
-					callable.setBundle(bundle);
-					callable.setClearComposition(clearComposition);
-					callable.setClearMeasurements(clearMeasurements);
-					callable.setQASettings(qa);
-					ITask<Reference, Object> task = ((ITaskApplication) getApplication())
-							.addTask("Substance import", callable, getRequest()
-									.getRootRef(), token);
-
-					ITaskStorage storage = ((ITaskApplication) getApplication())
-							.getTaskStorage();
-					FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(
-							storage);
-					task.update();
-					getResponse().setStatus(
-							task.isDone() ? Status.SUCCESS_OK
-									: Status.SUCCESS_ACCEPTED);
-					return tc.createTaskRepresentation(task.getUuid(), variant,
-							getRequest(), getResponse(), null);
-				} catch (ResourceException x) {
-					throw x;
-				} catch (Exception x) {
-					throw new ResourceException(
-							Status.CLIENT_ERROR_BAD_REQUEST, x);
-				}
-			}
-		}
-		throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
-	}
-
-	@Override
-	protected Map<String, Object> getMap(Variant variant)
-			throws ResourceException {
-		Map<String, Object> map = super.getMap(variant);
-		Object idbundle = getRequest().getAttributes().get(OpenTox.URI.bundle.getKey());
+	if (entity.getMediaType() != null) {
+	    if (MediaType.APPLICATION_JSON.getName().equals(entity.getMediaType().getName())) {
 		try {
-			map.put("bundleid",Integer.toString(Integer.parseInt(idbundle.toString())));
+		    File file = File.createTempFile("_matrix_", ".json");
+		    file.deleteOnExit();
+		    DownloadTool.download(entity.getStream(), file);
+		    String token = getToken();
+		    QASettings qa = new QASettings();
+		    qa.clear(); // sets enabled to false and clears all flags
+		    CallableStudyBundleImporter<String> callable = new CallableStudyBundleImporter<String>(file,
+			    getRootRef(), getContext(), new SubstanceURIReporter(getRequest().getRootRef()),
+			    new DatasetURIReporter(getRequest().getRootRef()), token);
+		    callable.setBundle(bundle);
+		    callable.setClearComposition(false);
+		    callable.setClearMeasurements(false);
+		    callable.setQASettings(qa);
+		    ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("Substance import",
+			    callable, getRequest().getRootRef(), token);
+
+		    ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
+		    FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+		    task.update();
+		    getResponse().setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
+		    return tc.createTaskRepresentation(task.getUuid(), variant, getRequest(), getResponse(), null);
 		} catch (Exception x) {
+		    x.printStackTrace();
+		} finally {
+		    try {
+			entity.getStream().close();
+		    } catch (Exception xx) {
+		    }
 		}
-		return map;
+
+	    } else if (MediaType.MULTIPART_FORM_DATA.getName().equals(entity.getMediaType().getName())) {
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		RestletFileUpload upload = new RestletFileUpload(factory);
+		try {
+		    List<FileItem> items = upload.parseRequest(getRequest());
+		    String token = getToken();
+		    QASettings qa = new QASettings();
+		    qa.clear(); // sets enabled to false and clears all flags
+		    boolean clearMeasurements = false;
+		    boolean clearComposition = false;
+		    for (FileItem file : items) {
+			if (file.isFormField()) {
+			    // ignore
+			} else {
+			    String ext = file.getName().toLowerCase();
+			    if (ext.endsWith(".json")) {
+			    } else
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Unsupported format "
+					+ ext);
+			}
+		    }
+		    CallableStudyBundleImporter<String> callable = new CallableStudyBundleImporter<String>(items,
+			    "files[]", getRootRef(), getContext(), new SubstanceURIReporter(getRequest().getRootRef()),
+			    new DatasetURIReporter(getRequest().getRootRef()), token);
+		    callable.setBundle(bundle);
+		    callable.setClearComposition(clearComposition);
+		    callable.setClearMeasurements(clearMeasurements);
+		    callable.setQASettings(qa);
+		    ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("Substance import",
+			    callable, getRequest().getRootRef(), token);
+
+		    ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
+		    FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+		    task.update();
+		    getResponse().setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
+		    return tc.createTaskRepresentation(task.getUuid(), variant, getRequest(), getResponse(), null);
+		} catch (ResourceException x) {
+		    throw x;
+		} catch (Exception x) {
+		    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x);
+		}
+	    }
 	}
+	throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
+    }
+
+    @Override
+    protected Map<String, Object> getMap(Variant variant) throws ResourceException {
+	Map<String, Object> map = super.getMap(variant);
+	Object idbundle = getRequest().getAttributes().get(OpenTox.URI.bundle.getKey());
+	try {
+	    map.put("bundleid", Integer.toString(Integer.parseInt(idbundle.toString())));
+	} catch (Exception x) {
+	}
+	return map;
+    }
+
+    @Override
+    protected Value processValue(ProtocolEffectRecord<String, String, String> detail) {
+	ValueAnnotated value = new ValueAnnotated();
+	value.setLoQualifier(detail.getLoQualifier());
+	value.setUpQualifier(detail.getUpQualifier());
+	value.setUpValue(detail.getUpValue());
+	value.setLoValue(detail.getLoValue());
+	value.setIdresult(detail.getIdresult());
+	if (detail instanceof ProtocolEffectRecordMatrix) try {
+	    value.setCopied(((ProtocolEffectRecordMatrix)detail).isCopied());
+	    value.setDeleted(((ProtocolEffectRecordMatrix)detail).isDeleted());
+	    value.setRemark(((ProtocolEffectRecordMatrix)detail).getRemarks());
+	} catch (Exception x) {}
+	return value;
+    }
 }

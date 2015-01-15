@@ -18,134 +18,142 @@ import ambit2.base.json.JSONUtils;
 </pre>
  */
 public class Value<VALUE> implements IValue<VALUE, String, String> {
-	protected String units;
-	protected VALUE loValue;
-	protected VALUE upValue;
-	protected String loQualifier;
-	protected String upQualifier;
-	protected String annotation;
-	
-	public Value() {
-	}
-	public Value(VALUE value) {
-		this(value,"  ");
-	}
-	public Value(VALUE value,String qualifier) {
-		setLoValue(value);
-		setLoQualifier(qualifier);
-	}
-	@Override
-	public String getAnnotation() {
-		return annotation;
-	}
-	@Override
-	public void setAnnotation(String annotation) {
-		this.annotation = annotation;
-	}
+    protected String units;
+    protected VALUE loValue;
+    protected VALUE upValue;
+    protected String loQualifier;
+    protected String upQualifier;
+    protected String annotation;
 
-	@Override
-	public String getUnits() {
-		return units;
-	}
+    public Value() {
+    }
 
-	@Override
-	public void setUnits(String unit) {
-		this.units = unit;
-	}
+    public Value(VALUE value) {
+	this(value, "  ");
+    }
 
-	@Override
-	public VALUE getLoValue() {
-		return loValue;
-	}
+    public Value(VALUE value, String qualifier) {
+	setLoValue(value);
+	setLoQualifier(qualifier);
+    }
 
-	@Override
-	public VALUE getUpValue() {
-		return upValue;
-	}
+    @Override
+    public String getAnnotation() {
+	return annotation;
+    }
 
-	@Override
-	public void setLoValue(VALUE value) {
-		this.loValue = value;
-	}
+    @Override
+    public void setAnnotation(String annotation) {
+	this.annotation = annotation;
+    }
 
-	@Override
-	public void setUpValue(VALUE value) {
-		this.upValue = value;
-	}
+    @Override
+    public String getUnits() {
+	return units;
+    }
 
-	@Override
-	public String getUpQualifier() {
-		return upQualifier;
-	}
+    @Override
+    public void setUnits(String unit) {
+	this.units = unit;
+    }
 
-	@Override
-	public String getLoQualifier() {
-		return loQualifier;
-	}
+    @Override
+    public VALUE getLoValue() {
+	return loValue;
+    }
 
-	@Override
-	public void setUpQualifier(String qualifier) {
-		this.upQualifier = qualifier;
-	}
+    @Override
+    public VALUE getUpValue() {
+	return upValue;
+    }
 
-	@Override
-	public void setLoQualifier(String qualifier) {
-		this.loQualifier = qualifier;
+    @Override
+    public void setLoValue(VALUE value) {
+	this.loValue = value;
+    }
+
+    @Override
+    public void setUpValue(VALUE value) {
+	this.upValue = value;
+    }
+
+    @Override
+    public String getUpQualifier() {
+	return upQualifier;
+    }
+
+    @Override
+    public String getLoQualifier() {
+	return loQualifier;
+    }
+
+    @Override
+    public void setUpQualifier(String qualifier) {
+	this.upQualifier = qualifier;
+    }
+
+    @Override
+    public void setLoQualifier(String qualifier) {
+	this.loQualifier = qualifier;
+    }
+
+    public String toJSON(StringBuilder b) {
+	String comma = "";
+	if (getUnits() != null) {
+	    b.append(comma);
+	    b.append("\t\"unit\":");
+	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUnits())));
+	    comma = ", ";
 	}
-	@Override
-	public String toString() {
-		String comma = "";
-		StringBuilder b = new StringBuilder();
-		b.append("{");
-		if (getUnits()!=null) {
-			b.append(comma);
-			b.append("\t\"unit\":");
-			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUnits())));
-			comma = ", ";
-		}
-		if (getLoQualifier()!=null) {
-			b.append(comma);
-			b.append("\t\"loQualifier\":");
-			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getLoQualifier())));
-			comma = ", ";
-		}		
-		if (getLoValue()!=null) {
-			b.append(comma);
-			b.append("\t\"loValue\":");
-			serialize(getLoValue(), b);
-			comma = ", ";
-		}
-		if (getUpQualifier()!=null) {
-			b.append(comma);
-			b.append("\t\"upQualifier\":");
-			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUpQualifier())));
-			comma = ", ";
-		}
-		if (getUpValue()!=null) {
-			b.append(comma);
-			b.append("\t\"upValue\":");
-			serialize(getUpValue(), b);
-			comma = ", ";
-		}		
-		if (getAnnotation()!=null) {
-			b.append(comma);
-			b.append("\t\"annotation\":");
-			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getAnnotation())));
-			comma = ",";
-		}				
-		b.append("}");
-		return b.toString();
+	if (getLoQualifier() != null) {
+	    b.append(comma);
+	    b.append("\t\"loQualifier\":");
+	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getLoQualifier())));
+	    comma = ", ";
 	}
-	
-	
-	private void serialize(VALUE value,StringBuilder b) {
-		if (value==null)
-			b.append("null");
-		else if (value instanceof Params)
-			b.append(value.toString());
-		else if (value instanceof Number)
-			b.append(value);
-		else
-			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(value.toString())));
+	if (getLoValue() != null) {
+	    b.append(comma);
+	    b.append("\t\"loValue\":");
+	    serialize(getLoValue(), b);
+	    comma = ", ";
 	}
+	if (getUpQualifier() != null) {
+	    b.append(comma);
+	    b.append("\t\"upQualifier\":");
+	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUpQualifier())));
+	    comma = ", ";
+	}
+	if (getUpValue() != null) {
+	    b.append(comma);
+	    b.append("\t\"upValue\":");
+	    serialize(getUpValue(), b);
+	    comma = ", ";
+	}
+	if (getAnnotation() != null) {
+	    b.append(comma);
+	    b.append("\t\"annotation\":");
+	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getAnnotation())));
+	    comma = ",";
+	}
+	return comma;
+    }
+    @Override
+    public String toString() {
+	StringBuilder b = new StringBuilder();
+	b.append("{");
+	toJSON(b);
+	b.append("}");
+	return b.toString();
+    }
+
+    private void serialize(VALUE value, StringBuilder b) {
+	if (value == null)
+	    b.append("null");
+	else if (value instanceof Params)
+	    b.append(value.toString());
+	else if (value instanceof Number)
+	    b.append(value);
+	else
+	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(value.toString())));
+    }
 }
