@@ -2552,7 +2552,7 @@ public class TestUtilities
 		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O]", "NCC"); //---> Parser error is produced (Exception is fixed now) !!!!!
 		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O:4]", "NCC"); //---> Parser error is produced (Exception is fixed now) !!!!!
 		//tu.testSMIRKS("[N:1][C:2]([C])>>[N:1][C].[C:2]=[O:4]", "NCC"); //---> Parser error is produced !!!!!
-		//tu.testSMIRKS("[N:1][C:1]([C])>>[N:1][C].[C:2]=[O]", "NCC"); //---> Should produce duplciation index errors !!!!!
+		//tu.testSMIRKS("[N:1][C:1]([C])>>[N:1][C].[C:2]=[O]", "NCC"); //---> Should produce duplciation index errors (it is fixed) !!!!!
 		//tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[Cl-][C:2]=[O]", "[H]N(C)C[H]"); 
 		
 		//Ambit-SMARTS/SMIRKS parser does not require atom ampping info (":n") to be at the end of the atom expression 
@@ -2611,23 +2611,31 @@ public class TestUtilities
 		//tu.FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_ALL;
 		//tu.testSMIRKS("[#6:1]-[#8:2]-[#6:3]>>[#6:1]-[#8:2].[#6:3]=S","NCCCOCC", ReactionOperation.SingleCopyForEachPos);	
 		
-		tu.FlagExplicitHAtoms = true;
+		//tu.FlagExplicitHAtoms = true;
 		tu.FlagTargetPreprocessing = true;
 		tu.FlagProductPreprocessing = true;
 		tu.FlagPrintAtomAttributes = true;
-		tu.FlagSSMode =  SmartsConst.SSM_NON_IDENTICAL_FIRST;
-		tu.FlagExplicitHToImplicitOnProductPreProcess = true;
+		//tu.FlagSSMode =  SmartsConst.SSM_NON_IDENTICAL_FIRST;
+		//tu.FlagExplicitHToImplicitOnProductPreProcess = true;
 		
 		//tu.testSMIRKS("[c:1]1[c:6]([H])[c:5]([H])[c:4][c:3][c:2]1>>[OH1]-[#6:5]([H])-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]([H])-1-[OH1]", "C1=CC=CC=C1");
 		//tu.testSMIRKS("[c:1]1[c:6][c:5][c:4][c:3][c:2]1>>[OH1]-[#6:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]-1-[OH1]", "C1=CC=CC=C1"); //This is a bug !!! 3 double bonds remain
 		//tu.testSMIRKS("[c:1]1[c:6][c:5][c:4][c:3][c:2]1>>[OH1]-[#6:5]-1-[#6:4]-[#6:3]-[#6:2]-[#6:1]-[#6:6]-1-[OH1]", "C1=CC=CC=C1"); //This is a bug !!! 3 double bonds remain
+		//tu.testSMIRKS("[c:1]1[c:6][c:5][c:4][c:3][c:2]1>>[OH1]-[c:1]1[c:6][c:5][c:4][c:3][c:2]1-[OH1]", "C1=CC=CC=C1"); //This is a bug !!! 3 double bonds remain
+		
+		
 		//tu.testSMIRKS("[C:1]>>[C:1]=[Cl]", "CC");
 		//tu.testSMIRKS("[C:1][C:2]>>[C:1]=[C:2]", "CC");
 		//tu.testSMIRKS("[C:1]>>[C:1]=[C]", "C");
 		//tu.testSMIRKS("[C:1]([H])[C:2]([H])>>[C:1]=[C:2]", "CCC");
 		//tu.testSMIRKS("[C:1][C:2]>>[C:1]=[C:2]", "CCC");
+		//tu.testSMIRKS("[C:1]~[C:2]>>[C:1]-[C:2]", "C#CCC=C");
+		//tu.testSMIRKS("[C:1]-[C:2]>>[C:1]~[C:2]", "C#CCC=C");
 		
-		tu.testExpliticHToImplicit("CCC=C");
+		//tu.testSMIRKS("[C:1][C:3][C:4][C:2]>>[C:1]1[C:3][C:4][C:2]~1", "CCCC");
+		//tu.testSMIRKS("[C:1]C>>[C:1]#&!=,-N", "CC");
+		tu.testSMIRKS("[C:1]C>>[C:1].C=N", "CC");
+		
 		
 		//tu.testAtomAttribsOnChangingBond();
 		
@@ -2697,6 +2705,7 @@ public class TestUtilities
 		
 		//tu.testBug78();
 		
+		//tu.testExpliticHToImplicit("CCC=C");
 		
 	}
 	

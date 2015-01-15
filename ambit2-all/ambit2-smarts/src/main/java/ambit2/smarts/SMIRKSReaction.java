@@ -237,7 +237,7 @@ public class SMIRKSReaction
 		//Atom Transformation. Different atom properties are handled
 		generateChargeTransformation();
 		
-		//TODO - other atom properties transformation
+		//TODO - other atom properties transformation: chirality, isotops, (??? eventually implicit H atoms and aromaticity special treatment)
 		
 		
 		//Bond Transformation
@@ -252,26 +252,20 @@ public class SMIRKSReaction
 			Integer raMapInd2 = (Integer)ra2.getProperty("SmirksMapIndex");
 			
 			if (raMapInd1 == null)
-			{
-				int rAt1Num = -reactant.getAtomNumber(ra1);  
-				if (raMapInd2 == null)
-				{
-					//int rAt2Num = -reactant.getAtomNumber(ra2);
-					//This bond is not registered as a transformation
-				}
-				else
-				{	
-					//TODO
-				}
+			{	
+				//A bond transformation is not registered.
+				//The reactant bond will be removed together with the unmapped atom 
 			}
 			else
 			{
 				if (raMapInd2 == null)
 				{
-					//TODO
+					//A bond transformation is not registered.
+					//The reactant bond will be removed together with the unmapped atom 
 				}
 				else
 				{
+					//System.out.println("    raMapIndices: " + raMapInd1 + " " + raMapInd2);
 					int pAt1Num = getMappedProductAtom(raMapInd1);
 					int pAt2Num = getMappedProductAtom(raMapInd2);
 					int rAt1Num = reactant.getAtomNumber(ra1);
@@ -282,7 +276,7 @@ public class SMIRKSReaction
 					boolean FlagRegisterTransform = false;
 					if (pbNum == -1)
 					{	
-						prodBo.add(null);
+						prodBo.add(null); //Bond deletion is registered 
 						FlagRegisterTransform = true;
 					}	
 					else
@@ -293,12 +287,15 @@ public class SMIRKSReaction
 						if (rb0 == null)
 						{	
 							if (pb0 == null)
-							{	
+							{
+								//check pb and rb expressions compatibility
+								//TODO
 							}
 							else
 							{
-								//Handle an error!
-								//TODO
+								//This is not treated as an error since the product bond order is defined and can be created
+								FlagRegisterTransform = true;
+								prodBo.add(pb0.getOrder());
 							}
 						}
 						else
@@ -306,29 +303,43 @@ public class SMIRKSReaction
 							if (pb0 == null)
 							{	
 								//Handle an error!
-								//TODO
+								mapErrors.add("A product bond with undefined order: " + SmartsHelper.bondToString(pb));
 							}
-							else
+							else //Both reactant and product bonds have defined orders 
 							{	
+								if (rb instanceof SingleOrAromaticBond) //Special treatment for "single or aromatic" reactant bond
+								{
+									if (!(pb instanceof SingleOrAromaticBond))
+									{
+										//In this case transformation is registered
+										//For example "-,:" --> "-" would be registered although in some occasions it is not needed 
+										// CC >> C-C is not needed but cc >> C-C is needed.
+										FlagRegisterTransform = true;
+										prodBo.add(pb0.getOrder());
+									}	
+								}
+								else
+									if (rb0.getOrder() != pb0.getOrder())
+									{
+										FlagRegisterTransform = true;
+										prodBo.add(pb0.getOrder());
+									}	
 							}
 						}
-						
-						
-						
-						if (rb0.getOrder() != pb0.getOrder())
-						{
-							FlagRegisterTransform = true;
-							prodBo.add(pb0.getOrder());
-						}	
 					}	
 					
 					if (FlagRegisterTransform)
 					{	
 						prodAt1.add(new Integer(pAt1Num));
 						prodAt2.add(new Integer(pAt2Num));
-						reactBo.add(rb0.getOrder());
+						
 						reactAt1.add(new Integer(rAt1Num));
 						reactAt2.add(new Integer(rAt2Num));
+						
+						if (rb0 == null)
+							reactBo.add(IBond.Order.QUADRUPLE);  //Quadruple order is used for the reactant bond with undefined order
+						else
+							reactBo.add(rb0.getOrder());
 					}
 				}
 			}	
@@ -341,11 +352,7 @@ public class SMIRKSReaction
 		{
 			IBond pb = product.getBond(i);
 			IBond pb0 = stco.toBond(pb);
-			if (pb0 == null)
-			{
-				//Handle error
-				//TODO
-			}
+			
 			IAtom pa1 = pb.getAtom(0);
 			IAtom pa2 = pb.getAtom(1);
 			int pAt1Num = product.getAtomNumber(pa1);
@@ -354,7 +361,13 @@ public class SMIRKSReaction
 			Integer paMapInd2 = (Integer)pa2.getProperty("SmirksMapIndex");
 			
 			if (paMapInd1 == null)
-			{
+			{	
+				if (pb0 == null)
+				{
+					mapErrors.add("A product bond with undefined order: " + SmartsHelper.bondToString(pb));
+					continue;
+				}
+				
 				if (paMapInd2 == null)
 				{	
 					//This is a bond between two unmapped atoms in the product
@@ -383,6 +396,12 @@ public class SMIRKSReaction
 			{
 				if (paMapInd2 == null)
 				{
+					if (pb0 == null)
+					{
+						mapErrors.add("A product bond with undefined order: " + SmartsHelper.bondToString(pb));
+						continue;
+					}
+					
 					//This is a bond between unmapped atom and mapped atom in the product
 					//at2 is unmapped, at1 is mapped
 					prodBo.add(pb0.getOrder());
@@ -401,6 +420,12 @@ public class SMIRKSReaction
 					int rbNum = reactant.getBondNumber(reactant.getAtom(rAt1Num), reactant.getAtom(rAt2Num));
 					if (rbNum == -1)
 					{	
+						if (pb0 == null)
+						{
+							mapErrors.add("A product bond with undefined order: " + SmartsHelper.bondToString(pb));
+							continue;
+						}
+						
 						prodBo.add(pb0.getOrder());
 						prodAt1.add(new Integer(pAt1Num));
 						prodAt2.add(new Integer(pAt2Num));
