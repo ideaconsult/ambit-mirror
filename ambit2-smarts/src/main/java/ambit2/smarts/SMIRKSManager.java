@@ -171,8 +171,10 @@ public class SMIRKSManager
 		if (res > 0)
 			return reaction;
 		
-		//Check the mapping
+		
 		reaction.checkMappings();
+		
+		//Check for mapping errors
 		if (reaction.mapErrors.size() > 0)
 		{
 			parserErrors.addAll(reaction.mapErrors);
@@ -181,6 +183,14 @@ public class SMIRKSManager
 		
 		
 		reaction.generateTransformationData();
+		
+		
+		//Check for errors produced by the generation of transformation data
+		if (reaction.mapErrors.size() > 0)
+		{
+			parserErrors.addAll(reaction.mapErrors);
+			return (reaction);
+		}
 		
 		//Check the components
 		//TODO
@@ -580,7 +590,7 @@ public class SMIRKSManager
 		
 		
 		//Atom Transformation		
-		//Setting atom charges for 'SMIRKS' mapped atoms and deleting unmapped atoms
+		//Setting atom charges for 'SMIRKS' mapped atoms and deleting unmapped atoms together with the associated bonds
 		for (int i = 0; i < reaction.reactant.getAtomCount(); i++)
 		{	
 			IAtom rAt = reaction.reactant.getAtom(i);
@@ -598,10 +608,7 @@ public class SMIRKSManager
 				IAtom tAt = rMap.get(i);
 				target.removeAtomAndConnectedElectronContainers(tAt);
 			}
-				
-			
 		}
-		
 		
 		
 		//Bond Transformations
@@ -615,7 +622,7 @@ public class SMIRKSManager
 				if (reaction.reactBo.get(i) == null)
 				{
 					//New bond must be created in the target.
-					//This happens when two atoms from the reactant are connected.
+					//This happens when two atoms from the reactant are not connected.
 					IAtom tAt1 = rMap.get(nrAt1);
 					IAtom tAt2 = rMap.get(nrAt2);
 					IBond tb = MoleculeTools.newBond(target.getBuilder());
@@ -634,7 +641,6 @@ public class SMIRKSManager
 					else
 					{	
 						tBo.setOrder(reaction.prodBo.get(i)); //Target bond is updated
-						
 					}	
 				}
 			}
@@ -642,7 +648,7 @@ public class SMIRKSManager
 			{
 				if ((nrAt1 == SmartsConst.SMRK_UNSPEC_ATOM) || (nrAt2 == SmartsConst.SMRK_UNSPEC_ATOM))
 				{
-					//This is the case when in the created bond in the target (product) 
+					//This is the case when the created bond in the target (product) 
 					//contains at least one not mapped atom
 					
 					IAtom tAt1 = null;
@@ -694,7 +700,6 @@ public class SMIRKSManager
 				}
 				
 				//Some other possible cases if needed. 
-				//TODO  
 			}			
 			
 		}
