@@ -331,7 +331,10 @@ CREATE TABLE `bundle_substance_protocolapplication` (
   `isUsedforMSDS` tinyint(1) DEFAULT NULL,
   `purposeFlag` varchar(32) DEFAULT NULL,
   `studyResultType` varchar(128) DEFAULT NULL COMMENT 'experimental result\nestimated by calculation\nread-across\n(Q)SAR',
-  PRIMARY KEY (idbundle,`document_prefix`,`document_uuid`),
+  `copied` tinyint(4) DEFAULT '0',
+  `deleted` tinyint(4) DEFAULT '0',
+  `remarks` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idbundle`,`document_prefix`,`document_uuid`),
   KEY `bsubstance` (`substance_prefix`,`substance_uuid`),
   KEY `bendpoint` (`endpoint`),
   KEY `bcategory` (`endpointcategory`),
@@ -339,9 +342,8 @@ CREATE TABLE `bundle_substance_protocolapplication` (
   KEY `breference-x` (`reference`(255)),
   KEY `btopcategory` (`topcategory`,`endpointcategory`,`interpretation_result`),
   KEY `bxse` (`substance_prefix`,`substance_uuid`,`topcategory`,`endpointcategory`),
-  CONSTRAINT `bsubstance-x` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  CONSTRAINT `bsubstance-p` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 -- -----------------------------------------------------
 -- Table `bundle_substance_experiment`
@@ -367,14 +369,17 @@ CREATE TABLE `bundle_substance_experiment` (
   `err` double DEFAULT NULL,
   `substance_prefix` varchar(6) DEFAULT NULL,
   `substance_uuid` varbinary(16) DEFAULT NULL,
+  `copied` tinyint(4) DEFAULT '0',
+  `deleted` tinyint(4) DEFAULT '0',
+  `remarks` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idresult`,`idbundle`),
   KEY `bdocument_id` (`idbundle`,`document_uuid`,`document_prefix`),
   KEY `bendpoint` (`endpoint`),
-  KEY `bdocument-x` (idbundle,`document_prefix`,`document_uuid`),
+  KEY `bdocument-x` (`idbundle`,`document_prefix`,`document_uuid`),
   KEY `bhash-x` (`endpointhash`),
   KEY `bcategory-x` (`topcategory`,`endpointcategory`,`endpoint`,`endpointhash`),
   KEY `bsubstance-x` (`substance_prefix`,`substance_uuid`),
-  CONSTRAINT `bdocument-x` FOREIGN KEY (idbundle,`document_prefix`, `document_uuid`) REFERENCES `bundle_substance_protocolapplication` (idbundle,`document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `bdocument-x` FOREIGN KEY (`idbundle`, `document_prefix`, `document_uuid`) REFERENCES `bundle_substance_protocolapplication` (`idbundle`, `document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------

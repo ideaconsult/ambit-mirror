@@ -22,7 +22,7 @@ public class CreateMatrixFromBundle extends AbstractObjectUpdate<SubstanceEndpoi
 	"insert into bundle_substance_protocolapplication SELECT e.idbundle,document_prefix,document_uuid,\n"+
 	"p.topcategory,p.endpointcategory,endpoint,guidance,p.substance_prefix,p.substance_uuid,params,\n"+
 	"interpretation_result,interpretation_criteria,reference,reference_year,reference_owner,updated,\n"+
-	"reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType \n"+
+	"reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType,1,0,null \n"+
 	"FROM substance_protocolapplication p join bundle_endpoints e join bundle_substance s\n"+ 
 	"where e.idbundle=s.idbundle and e.idbundle=?\n"+ 
 	"and s.substance_prefix = p.substance_prefix and p.substance_uuid=s.substance_uuid\n"+
@@ -30,7 +30,7 @@ public class CreateMatrixFromBundle extends AbstractObjectUpdate<SubstanceEndpoi
 
 	private static String _insert_exp = 
 	"insert into bundle_substance_experiment SELECT e.idbundle,null,document_prefix,document_uuid,p.topcategory,p.endpointcategory,p.endpointhash,endpoint,\n"+
-	"conditions,	unit,	loQualifier,loValue,upQualifier,upvalue,textvalue,errQualifier,err,	p.substance_prefix,	p.substance_uuid\n"+
+	"conditions,unit,loQualifier,loValue,upQualifier,upvalue,textvalue,errQualifier,err,p.substance_prefix,p.substance_uuid,1,0,null\n"+
 	"FROM substance_experiment p join bundle_endpoints e join bundle_substance s\n"+
 	"where e.idbundle=s.idbundle and e.idbundle=? and s.substance_prefix = p.substance_prefix and p.substance_uuid=s.substance_uuid\n"+
 	"and e.topcategory=p.topcategory and p.endpointcategory=e.endpointcategory \n";
