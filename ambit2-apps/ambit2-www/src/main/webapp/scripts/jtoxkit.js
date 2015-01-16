@@ -4448,7 +4448,7 @@ var jToxEndpoint = (function () {
         var parsers = [
           {
             regex: /[\s=]*([\(\[])\s*([\d\.]*)\s*,\s*([\d\.]*)\s*([\)\]])\s*([^\s,]*)\s*/,
-            fields: ['', 'loQualifier', 'loValue', 'upValue', 'upQualifier', 'units'],
+            fields: ['', 'loQualifier', 'loValue', 'upValue', 'upQualifier', 'unit'],
             // adjust the parsed value, if needed
             adjust: function (obj, parse) {
               obj.loQualifier = parse[1] == '[' ? '>=' : '>';
@@ -4457,7 +4457,7 @@ var jToxEndpoint = (function () {
           },
           {
             regex: /\s*([>=]*)\s*([\d\.]+)\s*([^\s,]*)\s*([<=]*)\s*([\d\.]*)\s*([^\s,]*)\s*/,
-            fields: ['', 'loQualifier', 'loValue', 'units', 'upQualifier', 'upValue', 'units']
+            fields: ['', 'loQualifier', 'loValue', 'unit', 'upQualifier', 'upValue', 'unit']
           }
         ];
         
@@ -4536,7 +4536,9 @@ var jToxEndpoint = (function () {
     }
       
     // now comes the value editing mechanism
-    putValueComplete(jT.$('.box-value', root), jT.$.extend(true, {}, ccLib.getJsonValue(config, 'effects.result'), ccLib.getJsonValue(config, 'effects.text')));
+    var confRange = ccLib.getJsonValue(config, 'effects.result') || {};
+    var confText = ccLib.getJsonValue(config, 'effects.text') || {};
+    putValueComplete(jT.$('.box-value', root), confRange.bVisible === false ? confText : confRange);
     
     // now initialize other fields, marked with box-field
     jT.$('.box-field', root).each(function () {

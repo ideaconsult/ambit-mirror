@@ -22,8 +22,7 @@ var jToxBundle = {
 	},
 	
 	edit: {
-  	added: [],
-  	deleted: [],
+  	study: [],
 	},
 		
   settings: {
@@ -225,12 +224,15 @@ var jToxBundle = {
                 
               // now - ready to produce HTML
               for (var i = 0, vl = theData.length; i < vl; ++i) {
+                var d = theData[i];
+                if (d.deleted)
+                  continue;
+                html += '<div>';
                 if (self.edit.matrixEditable)
                   html += '<span class="ui-icon ui-icon-circle-minus delete-popup"></span>&nbsp;';
-                var d = theData[i];
                 html += '<a class="info-popup" data-index="' + i + '" data-feature="' + fId + '" href="#">' + jT.ui.renderRange(d, f.units, 'display', preVal) + (!!d && !!d.textValue ? '&nbsp;/&nbsp;' + d.textValue: '') + '</a>';
                 html += jT.ui.putInfo(full.compound.URI + '/study?property_uri=' + encodeURIComponent(fId));
-                html += '<br/>';
+                html += '</div>';
               }
             }
             
@@ -289,7 +291,7 @@ var jToxBundle = {
   		var saveButton = $('.save-button', panel)[0];
   		saveButton.disabled = true;
   		var dressButton = function() {
-	  		if (self.edit.added.length < 1 && self.edit.deleted.length < 1) {
+	  		if (self.edit.study.length < 1) {
 	  			saveButton.disabled = true;
 	  			$(saveButton).removeClass('jt-alert').addClass('jt-disabled');
 	  			saveButton.innerHTML = "Saved";
@@ -302,21 +304,24 @@ var jToxBundle = {
   		};
   		
   		$(saveButton).on('click', function() {
-	  		if (self.edit.added.length > 0) {
-	  		  var toAdd = { study: self.edit.added };
-	  		  $(saveButton).addClass('loading'); 
-  	  		jT.service(self, self.bundleUri + '/matrix', { method: 'PUT', headers: { 'Content-Type': "application/json" }, data: JSON.stringify(toAdd) }, function (result, jhr) {
-	  		    $(saveButton).removeClass('loading');
-	  		    if (!!result) {
-	  		      self.edit.added = [];
-	  		      self.matrixKit.query(self.bundleUri + '/matrix');
-              dressButton();
-            }
+	  		if (self.edit.study.length > 0) {
+	  		  var toAdd = JSON.stringify({ study: self.edit.study });
+
+          // make two nested calls - for adding and for deleting
+          $(saveButton).addClass('loading');	  		  
+	  		  jT.service(self, self.bundleUri + '/matrix', { method: 'PUT', headers: { 'Content-Type': "application/json" }, data: toAdd }, function (result, jhr) {
+	  		    if (!!result) 
+	  		    jT.service(self, self.bundleUri + '/matrix/deleted', { method: 'PUT', headers: { 'Content-Type': "application/json" }, data: toAdd },function (result, jhr) {
+  	  		    $(saveButton).removeClass('loading');
+  	  		    if (!!result) {
+  	  		      self.edit.study = [];
+  	  		      self.matrixKit.query(self.bundleUri + '/matrix');
+                dressButton();
+              }
+  	  		  });
+            else
+  	  		    $(saveButton).removeClass('loading');
   	  		});
-  	  	}
-  	  	
-  	  	if (self.edit.deleted.length > 0) {
-	  		  // TODO: make actuall call to the server for adding and deleting
   	  	}
 	  	});
 	  	
@@ -384,7 +389,7 @@ var jToxBundle = {
             boxOptions.onOpen = function () {
               var box = this;
               var content = this.content[0];
-              $('button.jt-alert', content).on('click', function (){ deleteFeature(data, featureId, $('textarea', content).val()); box.close(); });
+              $('button.jt-alert', content).on('click', function (){ deleteFeature(data, featureId, valueIdx, $('textarea', content).val(), jel[0]); box.close(); });
           	};
     		  }
     		  else
@@ -459,8 +464,11 @@ var jToxBundle = {
   		};
   		
   		var addFeature = function(data, fId, value, element) {
-    		self.edit.added.push(value);
-    		fId += '/' + self.edit.added.length;
+    		self.edit.study.push(value);
+	  		dressButton();
+
+        // now fix the UI a bit, so we can see the     		
+    		fId += '/' + self.edit.study.length;
 
         var catId = self.parseFeatureId(fId).category,
             config = jT.$.extend(true, {}, self.matrixKit.settings.configuration.columns["_"], self.matrixKit.settings.configuration.columns[catId]),
@@ -484,28 +492,47 @@ var jToxBundle = {
         
         var preVal = (ccLib.getJsonValue(config, 'effects.endpoint.bVisible') !== false) ? f.title.replace(" ", '&nbsp;') : null;
 
-        var html = '';
-        html += '<span class="ui-icon ui-icon-circle-minus delete-popup" data-index="' + (self.edit.added.length - 1) + '"></span>&nbsp;';
-        html += '<a class="info-popup" data-index="0" data-feature="' + fId + '" href="#">' + jT.ui.renderRange(value.effects[0].result, null, 'display', preVal) + '</a>';
-        html += '<br/>';
+        var html =  '<span class="ui-icon ui-icon-circle-minus delete-popup" data-index="' + (self.edit.study.length - 1) + '"></span>&nbsp;';
+            html += '<a class="info-popup unsaved-study" data-index="0" data-feature="' + fId + '" href="#">' + jT.ui.renderRange(value.effects[0].result, null, 'display', preVal) + '</a>';
 
-        var span = document.createElement('span');
-        span.className = "added-study";    		
+        var span = document.createElement('div');
         span.innerHTML = html;
         element.parentNode.insertBefore(span, element);
         $('.info-popup', span).on('click', function (e) { onEditClick.call(this, data); });
         $('.delete-popup', span).on('click', function (e) { 
           var idx = $(this).data('index');
-          self.edit.added.splice(idx, 1);
+          self.edit.study.splice(idx, 1);
           $(this.parentNode).remove();
           dressButton();
         });
-	  		dressButton();
   		};
   		
-  		var deleteFeature = function (data, featureId, reason) {
-    		self.edit.deleted.push({ 'substanceURI': data.compound.URI, 'featureId': featureId, 'reason': reason});
+  		var deleteFeature = function (data, featureId, valueIdx, reason, element) {
+    		self.edit.study.push({
+          owner: { substance: { uuid: data.compound.i5uuid } },
+          effects_to_delete: [{
+            result: {
+              idresult: data.values[featureId][valueIdx].idresult,
+              deleted: true,
+              remarks: reason
+            },
+          }]
+        });
 	  		dressButton();
+	  		
+	  		// Now deal with the UI
+	  		$(element).addClass('unsaved-study');
+	  		$('span', element.parentNode)
+	  		.removeClass('ui-icon-circle-minus')
+	  		.addClass('ui-icon-circle-plus')
+	  		.data('index', self.edit.study.length - 1)
+	  		.on('click.undodelete', function () {
+  	  		var idx = $(this).data('index');
+  	  		$(this).addClass('ui-icon-circle-minus').removeClass('ui-icon-circle-plus').off('click.undodelete').data('index', null);
+  	  		$('a', this.parentNode).removeClass('unsaved-study');
+  	  		self.edit.study.splice(idx, 1);
+  	  		dressButton();
+	  		});
   		};
   		
   		var infoDiv = $('#info-box')[0];
@@ -581,7 +608,10 @@ var jToxBundle = {
             }, 50);
           });
           
-      		$('.info-popup, .edit-popup, .delete-popup', row).on('click', function (e) { onEditClick.call(this, data); });
+      		$('.info-popup, .edit-popup, .delete-popup', row).on('click', function (e) { 
+        		if (!$(this).hasClass('delete-popup') || $(this).data('index') == null)
+        		  onEditClick.call(this, data); 
+          });
     		}
   		});
 		}
