@@ -149,7 +149,7 @@ body.structlist #browser {
 	color: #999;
 }
 
-#jtox-matrix span.added-study a {
+#jtox-matrix a.unsaved-study {
   background: #ffcccc;  
   border-radius: 3px;
 }
