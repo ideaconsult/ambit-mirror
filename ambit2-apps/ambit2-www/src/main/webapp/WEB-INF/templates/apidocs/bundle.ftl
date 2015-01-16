@@ -654,6 +654,51 @@
 			    ]
 			},
 			{
+			    "path": "/bundle/{idbundle}/matrix/deleted",
+			    "operations": [
+			                   {
+						            "method": "PUT",
+						            "summary": "Marks matrix values as deleted",
+						            "notes": "Marks matrix values as deleted. Supports JSON format https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-core/src/test/resources/ambit2/core/data/json/effects_delete.json",
+						            "type": "Task",
+						            "nickname": "markDeletedValues",
+					                "consumes": [
+					                       "application/json"
+					                ],			            
+						            <#include "/apidocs/authz.ftl" >
+						            "parameters": [
+				           				{
+										    "name": "id",
+										    "description": "Bundle identifier",
+										    "required": true,
+										    "type": "string",
+										    "paramType": "path",
+										    "allowMultiple": false
+										},
+										  {
+										    "name": "body",
+										    "description": "JSON effect records",
+										    "required": true,
+										    "paramType": "body"
+										  }										
+						            ],
+						            "responseMessages": [
+						         	    <#include "/apidocs/error_task.ftl" >,	
+						                {
+						                  "code": 404,
+						                   "message": "Model not found"
+						                 },
+						                {
+						       	           "code": 400,
+						       	           "message": "Bad request"
+						       	        },	 		                    
+						                <#include "/apidocs/error_aa.ftl" >,
+						                <#include "/apidocs/error_500.ftl" >			                
+						            ]
+						        }			                   
+			     ]               
+			}  ,  
+			{
 			    "path": "/bundle/{idbundle}/matrix",
 			    "operations": [
 			        {

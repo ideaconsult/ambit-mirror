@@ -27,6 +27,7 @@ public class BundleRouter extends MyRouter {
 		attach(String.format("/{idbundle}/property"), BundlePropertyResource.class);
 		attach(String.format("/{idbundle}%s",OpenTox.URI.dataset.getURI()), BundleDatasetResource.class);
 		attach(String.format("/{idbundle}%s","/matrix"), BundleMatrixResource.class);
+		attach(String.format("/{idbundle}%s","/matrix/{list}"), BundleMatrixResource.class);
 		attach(String.format("/{idbundle}%s",OpenTox.URI.compound.getURI()), BundleChemicalsResource.class);
 		attach(String.format("/{idbundle}%s",BundleSubstanceStudyResource.resource), BundleSubstanceStudyResource.class);
 		attach(String.format("/{idbundle}%s",BundleSummaryResource.resource), BundleSummaryResource.class);

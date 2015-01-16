@@ -54,6 +54,7 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.substance.CallableBundleMatrixCreator;
 import ambit2.rest.substance.CallableStudyBundleImporter;
+import ambit2.rest.substance.CallableStudyBundleImporter._mode;
 import ambit2.rest.substance.SubstanceDatasetResource;
 import ambit2.rest.substance.SubstanceURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
@@ -136,6 +137,9 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 
     @Override
     protected Representation delete(Variant variant) throws ResourceException {
+	if (getList() != null)
+	    throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+
 	String token = getToken();
 
 	SubstanceEndpointsBundle bundle = null;
@@ -174,8 +178,15 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 	}
     }
 
+    protected Object getList() {
+	return getRequest().getAttributes().get("list");
+    }
+
     @Override
     protected Representation post(Representation entity, Variant variant) throws ResourceException {
+	if (getList() != null)
+	    throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+
 	if ((entity == null) || !entity.isAvailable())
 	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty content");
 	if (entity.getMediaType() != null)
@@ -223,12 +234,20 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 
     @Override
     protected Representation put(Representation entity, Variant variant) throws ResourceException {
+	Object list = getList();
 
 	if ((entity == null) || !entity.isAvailable())
 	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty content");
 
 	if (entity.getMediaType() != null) {
 	    if (MediaType.APPLICATION_JSON.getName().equals(entity.getMediaType().getName())) {
+		_mode importmode = _mode.studyimport;
+		if (list != null) {
+		    if ("deleted".equals(list.toString()))
+			importmode = _mode.matrixvaluedelete;
+		    else
+			throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+		}
 		try {
 		    File file = File.createTempFile("_matrix_", ".json");
 		    file.deleteOnExit();
@@ -236,8 +255,8 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 		    String token = getToken();
 		    QASettings qa = new QASettings();
 		    qa.clear(); // sets enabled to false and clears all flags
-		    CallableStudyBundleImporter<String> callable = new CallableStudyBundleImporter<String>(file,
-			    getRootRef(), getContext(), new SubstanceURIReporter(getRequest().getRootRef()),
+		    CallableStudyBundleImporter<String> callable = new CallableStudyBundleImporter<String>(importmode,
+			    file, getRootRef(), getContext(), new SubstanceURIReporter(getRequest().getRootRef()),
 			    new DatasetURIReporter(getRequest().getRootRef()), token);
 		    callable.setBundle(bundle);
 		    callable.setClearComposition(false);
@@ -261,6 +280,9 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 		}
 
 	    } else if (MediaType.MULTIPART_FORM_DATA.getName().equals(entity.getMediaType().getName())) {
+		if (list != null)
+		    throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		RestletFileUpload upload = new RestletFileUpload(factory);
 		try {
@@ -325,11 +347,13 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 	value.setUpValue(detail.getUpValue());
 	value.setLoValue(detail.getLoValue());
 	value.setIdresult(detail.getIdresult());
-	if (detail instanceof ProtocolEffectRecordMatrix) try {
-	    value.setCopied(((ProtocolEffectRecordMatrix)detail).isCopied());
-	    value.setDeleted(((ProtocolEffectRecordMatrix)detail).isDeleted());
-	    value.setRemark(((ProtocolEffectRecordMatrix)detail).getRemarks());
-	} catch (Exception x) {}
+	if (detail instanceof ProtocolEffectRecordMatrix)
+	    try {
+		value.setCopied(((ProtocolEffectRecordMatrix) detail).isCopied());
+		value.setDeleted(((ProtocolEffectRecordMatrix) detail).isDeleted());
+		value.setRemark(((ProtocolEffectRecordMatrix) detail).getRemarks());
+	    } catch (Exception x) {
+	    }
 	return value;
     }
 }

@@ -21,6 +21,7 @@ import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.p.AbstractDBProcessor;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 import org.apache.commons.fileupload.FileItem;
@@ -77,7 +78,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 	this.clearComposition = clearComposition;
     }
 
-    protected DBSubstanceWriter writer;
+    protected AbstractDBProcessor<IStructureRecord,IStructureRecord> writer;
 
     public boolean isClearMeasurements() {
 	return clearMeasurements;
@@ -188,30 +189,38 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 		    File file = ((FileInputState) target).getFile();
 		    String ext = file.getName().toLowerCase();
 		    if (ext.endsWith(FileInputState.extensions[FileInputState.I5Z_INDEX])) {
-			writer.setSplitRecord(true);
+			if (writer instanceof DBSubstanceWriter)
+			    if (writer instanceof DBSubstanceWriter) 
+				    ((DBSubstanceWriter)writer).setSplitRecord(true);
 			reader = new I5ZReader(file);
 			((I5ZReader) reader).setQASettings(getQASettings());
 		    } else if (ext.endsWith(FileInputState.extensions[FileInputState.CSV_INDEX])) {
-			writer.setSplitRecord(false);
+			if (writer instanceof DBSubstanceWriter) 
+			    ((DBSubstanceWriter)writer).setSplitRecord(false);
 			LiteratureEntry reference = new LiteratureEntry(originalname, originalname);
 			reader = new CSV12SubstanceReader(new CSV12Reader(new FileReader(file), reference, "FCSV-"));
 		    } else if (ext.endsWith(".rdf")) {
-			writer.setSplitRecord(false);
+			if (writer instanceof DBSubstanceWriter) 
+			    ((DBSubstanceWriter)writer).setSplitRecord(false);
 			reader = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 		    } else if (ext.endsWith(".json")) {
-			writer.setSplitRecord(false);
+			if (writer instanceof DBSubstanceWriter) 
+			    ((DBSubstanceWriter)writer).setSplitRecord(false);
 			reader = new SubstanceStudyParser(new InputStreamReader(new FileInputStream(file), "UTF-8")) {
-			  protected EffectRecord createEffectRecord(Protocol protocol) {
-			      try {
-				  I5_ROOT_OBJECTS category = I5_ROOT_OBJECTS.valueOf(protocol.getCategory()+"_SECTION");
-				  return category.createEffectRecord();
-			      } catch (Exception x) {
-				  return super.createEffectRecord(protocol);
-			      }
-			  };  
+			    protected EffectRecord createEffectRecord(Protocol protocol) {
+				try {
+				    I5_ROOT_OBJECTS category = I5_ROOT_OBJECTS.valueOf(protocol.getCategory()
+					    + "_SECTION");
+				    return category.createEffectRecord();
+				} catch (Exception x) {
+				    return super.createEffectRecord(protocol);
+				}
+			    };
 			};
-			writer.setClearComposition(false);
-			writer.setClearMeasurements(false);
+			if (writer instanceof DBSubstanceWriter) {
+			    ((DBSubstanceWriter)writer).setClearComposition(false);
+			    ((DBSubstanceWriter)writer).setClearMeasurements(false);
+			}
 		    } else {
 			throw new AmbitException("Unsupported format " + file);
 		    }
@@ -255,7 +264,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 	return chain;
     }
 
-    protected DBSubstanceWriter createWriter() {
+    protected AbstractDBProcessor<IStructureRecord,IStructureRecord> createWriter() {
 	return new DBSubstanceWriter(dataset, importedRecord, clearMeasurements, clearComposition);
     }
 
