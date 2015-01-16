@@ -1064,7 +1064,7 @@ window.jT.ui = {
         else if (!!data.upValue)
           out += fnFormat(data.upQualifier, data.upValue);
         else
-          out += '-';
+          out += type == 'display' ? '-' : '';
       }
       
       out = out.replace(/ /g, "&nbsp;");
@@ -4414,8 +4414,8 @@ var jToxEndpoint = (function () {
       // finally - configure the autocomplete options, themselves to initialize the component itself
       if (!options.source) options.source = function( request, response ) {
         jT.call(kit, service, { method: "GET", data: { 
-          'category': options.category,
-          'top': options.top,
+          'category': settings.category,
+          'top': settings.top,
           'max': kit.settings.maxHits || defaultSettings.maxHits,
           'search': request.term }
         } , function (data) {
@@ -4431,7 +4431,7 @@ var jToxEndpoint = (function () {
       
       // and the change functon
       if (!options.change) options.change = function (e, ui) {
-        options.onchange.call(this, e, field, !ui.item ? '' : ui.item.value);
+        settings.onchange.call(this, e, field, !ui.item ? '' : ui.item.value);
       };
       
       // and the final parameter
@@ -4633,18 +4633,11 @@ var jToxEndpoint = (function () {
       else 
         filter = needle;
 
-      var data = {};
       for (var endpoint in self.edittedValues) {
-        if (!filter(endpoint))
-          continue;
-        var edit = self.edittedValues[endpoint];
-        data[endpoint] = {
-          endpoint: edit.endpoint,
-          interpretation: edit.interpretation_result,
-          value: edit.value
-        };
+        if (filter(endpoint))
+          return self.edittedValues[endpoint];
       }
-      return data;
+      return null;
     },
     
     updateStats: function (name) {
