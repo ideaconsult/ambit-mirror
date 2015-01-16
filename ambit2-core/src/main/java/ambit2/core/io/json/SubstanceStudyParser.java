@@ -27,6 +27,7 @@ import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.study.ProtocolApplicationAnnotated;
 import ambit2.base.data.study.ReliabilityParams;
+import ambit2.base.data.study.Value;
 import ambit2.base.data.study.ValueAnnotated;
 import ambit2.base.data.study._FIELDS_RELIABILITY;
 import ambit2.base.data.substance.ExternalIdentifier;
@@ -415,7 +416,35 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	Iterator<Entry<String, JsonNode>> i = node.getFields();
 	while (i.hasNext()) {
 	    Entry<String, JsonNode> val = i.next();
-	    params.put(val.getKey(), val.getValue().getTextValue());
+	    JsonNode value = val.getValue();
+	    if (value instanceof ObjectNode) {
+		ObjectNode range = (ObjectNode) value;
+		Value rvalue = new Value();
+		
+		JsonNode jn = range.get(EffectRecord._fields.loQualifier.name());
+		if (jn != null) {
+		    if (!"".equals(jn.getTextValue()))
+			rvalue.setLoQualifier(jn.getTextValue());
+		}
+		jn = range.get(EffectRecord._fields.loValue.name());
+		if (jn != null)
+		    rvalue.setLoValue(jn.asDouble());
+		jn = range.get(EffectRecord._fields.upQualifier.name());
+		if (jn != null) {
+		    if (!"".equals(jn.getTextValue()))
+			rvalue.setUpQualifier(jn.getTextValue());
+		}
+		jn = range.get(EffectRecord._fields.upValue.name());
+		if (jn != null)
+		    rvalue.setUpValue(jn.asDouble());
+
+		jn = range.get(EffectRecord._fields.unit.name());
+		if (jn != null && !"".equals(jn.getTextValue()) && !"null".equals(jn.getTextValue())) {
+		    rvalue.setUnits(jn.getTextValue());
+		}
+		params.put(val.getKey(), rvalue);
+	    } else
+		params.put(val.getKey(), value.getTextValue());
 	}
 	return params;
     }
