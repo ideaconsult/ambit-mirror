@@ -482,9 +482,15 @@ var jToxBundle = {
         f.annotation = [];
         for (var cId in value.effects[0].conditions) {
           var c = value.effects[0].conditions[cId];
+          var val = jT.ui.renderRange(c);
+          if (!!val && !!c.units)
+            val += c.units;
+          if (!val)
+            val += c.textValue;
+            
           f.annotation.push({
             'p': cId,
-            'o': jT.ui.renderRange(c) + (c.units || '')
+            'o': val
           });
         }
         
