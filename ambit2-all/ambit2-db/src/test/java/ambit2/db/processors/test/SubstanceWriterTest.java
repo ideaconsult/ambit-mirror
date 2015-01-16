@@ -24,6 +24,7 @@ import ambit2.core.io.json.SubstanceStudyParser;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
 import ambit2.db.substance.processor.DBBundleStudyWriter;
+import ambit2.db.substance.processor.DBMatrixValueMarker;
 import ambit2.db.substance.processor.DBSubstanceWriter;
 import ambit2.db.update.bundle.matrix.DeleteMatrixValue;
 
@@ -282,7 +283,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 
 	    IRawReader<IStructureRecord> parser = getJSONReader("effects_delete.json");
 	    SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(1);
-	    delete(bundle, parser, c.getConnection());
+	    delete_by_writer(bundle, parser, c.getConnection());
 	    parser.close();
 
 	    c = getConnection();
@@ -292,12 +293,32 @@ public class SubstanceWriterTest extends DbUnitTest {
 	    Assert.assertEquals(1, substance.getRowCount());
 	    substance = c.createQueryTable("EXPECTED", "SELECT * FROM bundle_substance_experiment where deleted = 0");
 	    Assert.assertEquals(0, substance.getRowCount());
-	    substance = c.createQueryTable("EXPECTED", "SELECT idbundle,idresult,remarks FROM bundle_substance_experiment where deleted = 1");
+	    substance = c.createQueryTable("EXPECTED",
+		    "SELECT idbundle,idresult,remarks FROM bundle_substance_experiment where deleted = 1");
 	    Assert.assertEquals(1, substance.getRowCount());
 	    Assert.assertEquals("the reason to delete", substance.getValue(0, "remarks"));
 	} finally {
 	    c.close();
 	}
+    }
+
+    public int delete_by_writer(SubstanceEndpointsBundle bundle, IRawReader<IStructureRecord> reader,
+	    Connection connection) throws Exception {
+	DBMatrixValueMarker writer;
+	writer = new DBMatrixValueMarker(bundle);
+	writer.setConnection(connection);
+	writer.open();
+	int records = 0;
+	while (reader.hasNext()) {
+	    Object record = reader.next();
+	    if (record == null)
+		continue;
+	    Assert.assertTrue(record instanceof IStructureRecord);
+	    writer.process((IStructureRecord) record);
+	    records++;
+	}
+	writer.close();
+	return records;
     }
 
     public int delete(SubstanceEndpointsBundle bundle, IRawReader<IStructureRecord> reader, Connection connection)
@@ -339,7 +360,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 	    // writer.process((IStructureRecord) record);
 	    records++;
 	}
-	
+
 	writer.close();
 	return records;
     }
