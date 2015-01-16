@@ -723,7 +723,15 @@
 							    "type": "File",
 							    "paramType": "form",
 							    "allowMultiple": true
-							}
+							},
+		 					{
+							    "name": "body",
+							    "description": "JSON substances or studies to import",
+							    "required": true,
+							    "paramType": "body",
+							    "type" : "Study",
+							    "allowMultiple": false
+							  }										
 							    
 			            ],
 			            "responseMessages": [
@@ -889,7 +897,7 @@
 								    "required": true,
 								    "paramType": "body",
 								    "type" : "EffectsToDelete",
-								    "allowMultiple": true
+								    "allowMultiple": false
 								  }											
 													
 				            ],
