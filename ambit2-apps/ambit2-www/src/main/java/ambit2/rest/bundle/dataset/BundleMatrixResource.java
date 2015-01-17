@@ -4,6 +4,8 @@ import java.io.File;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import net.idea.i5.io.QASettings;
 import net.idea.modbcum.i.IQueryCondition;
@@ -130,6 +132,16 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 			break;
 		    }
 		return target;
+	    }
+
+	    @Override
+	    public SubstanceRecord process(SubstanceRecord target) throws AmbitException {
+		try {
+		    return super.process(target);
+		} catch (Exception x) {
+		    logger.log(Level.FINE, x.getMessage());
+		    return target;
+		}
 	    }
 	};
 	chain.add(idsReader);
@@ -340,13 +352,18 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
     }
 
     @Override
-    protected Value processValue(ProtocolEffectRecord<String, String, String> detail) {
+    protected Value processValue(ProtocolEffectRecord<String, String, String> detail, boolean istextvalue) {
 	ValueAnnotated value = new ValueAnnotated();
-	value.setLoQualifier(detail.getLoQualifier());
-	value.setUpQualifier(detail.getUpQualifier());
-	value.setUpValue(detail.getUpValue());
-	value.setLoValue(detail.getLoValue());
+	if (istextvalue) {
+	    value.setTextValue((detail.getTextValue() == null) ? "" : detail.getTextValue().toString());
+	} else {
+	    value.setLoQualifier(detail.getLoQualifier());
+	    value.setUpQualifier(detail.getUpQualifier());
+	    value.setUpValue(detail.getUpValue());
+	    value.setLoValue(detail.getLoValue());
+	}
 	value.setIdresult(detail.getIdresult());
+
 	if (detail instanceof ProtocolEffectRecordMatrix)
 	    try {
 		value.setCopied(((ProtocolEffectRecordMatrix) detail).isCopied());

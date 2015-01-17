@@ -157,7 +157,11 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 		upValue,
 		errQualifier,
 		errorValue,
-		textValue
+		textValue;
+		
+		public String toJSON() {
+		    return "\t\"" + name() +"\":";
+		}
 	}
 	@Override
 	public String toString() {

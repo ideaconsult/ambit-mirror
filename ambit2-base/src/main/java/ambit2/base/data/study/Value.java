@@ -101,31 +101,31 @@ public class Value<VALUE> implements IValue<VALUE, String, String> {
 	String comma = "";
 	if (getUnits() != null) {
 	    b.append(comma);
-	    b.append("\t\"unit\":");
+	    b.append(EffectRecord._fields.unit.toJSON());
 	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUnits())));
 	    comma = ", ";
 	}
-	if (getLoQualifier() != null) {
+	if (getLoQualifier() != null && !"".equals(getLoQualifier())) {
 	    b.append(comma);
-	    b.append("\t\"loQualifier\":");
+	    b.append(EffectRecord._fields.loQualifier.toJSON());
 	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getLoQualifier())));
 	    comma = ", ";
 	}
 	if (getLoValue() != null) {
 	    b.append(comma);
-	    b.append("\t\"loValue\":");
+	    b.append(EffectRecord._fields.loValue.toJSON());
 	    serialize(getLoValue(), b);
 	    comma = ", ";
 	}
-	if (getUpQualifier() != null) {
+	if (getUpQualifier() != null && !"".equals(getUpQualifier())) {
 	    b.append(comma);
-	    b.append("\t\"upQualifier\":");
+	    b.append(EffectRecord._fields.upQualifier.toJSON());
 	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUpQualifier())));
 	    comma = ", ";
 	}
 	if (getUpValue() != null) {
 	    b.append(comma);
-	    b.append("\t\"upValue\":");
+	    b.append(EffectRecord._fields.upValue.toJSON());
 	    serialize(getUpValue(), b);
 	    comma = ", ";
 	}
