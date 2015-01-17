@@ -181,6 +181,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 
     @Override
     protected AbstractBatchProcessor createBatch(FileInputState target) throws Exception {
+	if (target==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	final BatchDBProcessor<String> batch = new BatchDBProcessor<String>() {
 	    @Override
 	    public Iterator<String> getIterator(IInputState target) throws AmbitException {
