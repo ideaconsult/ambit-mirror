@@ -35,6 +35,7 @@ import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
+import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.MultiValue;
 import ambit2.base.data.study.ProtocolEffectRecord;
 import ambit2.base.data.study.Value;
@@ -168,8 +169,8 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 			    key.setIdentifier(detail.getSampleID() + "/" + val.getKey());
 
 			    groupProperties.add(key);
-			    if (val.getValue().get("loValue") != null) {
-				master.setProperty(key, val.getValue().get("loValue").asInt());
+			    if (val.getValue().get(EffectRecord._fields.loValue.name()) != null) {
+				master.setProperty(key, val.getValue().get(EffectRecord._fields.loValue.name()).asInt());
 				key.setClazz(Number.class);
 			    } else {
 				master.setProperty(key, val.getValue().getTextValue());
@@ -199,13 +200,15 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 				if (val.getValue().getTextValue() == null)
 				    try {
 					PropertyAnnotation a = new PropertyAnnotation();
-					String unit = val.getValue().get("unit") == null ? null : val.getValue()
-						.get("unit").asText();
+					String unit = val.getValue().get(EffectRecord._fields.unit.name()) == null ? null
+						: val.getValue().get(EffectRecord._fields.unit.name()).asText();
 					a.setPredicate(val.getKey());
 					if (unit == null)
-					    a.setObject(val.getValue().get("loValue").asText());
+					    a.setObject(val.getValue().get(EffectRecord._fields.loValue.name())
+						    .asText());
 					else {
-					    a.setObject(String.format("%s %s", val.getValue().get("loValue").asText(),
+					    a.setObject(String.format("%s %s",
+						    val.getValue().get(EffectRecord._fields.loValue.name()).asText(),
 						    unit));
 					}
 					ann.add(a);
