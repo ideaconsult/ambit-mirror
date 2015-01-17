@@ -188,8 +188,6 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 			PropertyAnnotations ann = new PropertyAnnotations();
 
 			Iterator<Entry<String, JsonNode>> i = conditions == null ? null : conditions.getFields();
-			StringBuilder b = new StringBuilder();
-			b.append(detail.getEndpoint());
 
 			if (i != null)
 			    while (i.hasNext()) {
@@ -219,14 +217,6 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 				    a.setPredicate(val.getKey());
 				    a.setObject(val.getValue().getTextValue());
 				    ann.add(a);
-				    try {
-					if (!"".equals(val.getValue().getTextValue().trim())) {
-					    b.append(" [");
-					    b.append(val.getValue().getTextValue());
-					    b.append("]");
-					}
-				    } catch (Exception x) {
-				    }
 				}
 
 			    }
@@ -243,19 +233,17 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 			key.setAnnotations(ann);
 			Object oldValue = master.getProperty(key);
 			groupProperties.add(key);
-			if ((detail.getLoValue()) == null && (detail.getUpValue() == null)) {
-			    if (oldValue == null)
-				master.setProperty(key, detail.getTextValue());
-			    else {
-				master.setProperty(key,
-					String.format(
-						"%s, %s",
-						oldValue instanceof Number ? nf.format((Number) oldValue) : oldValue
-							.toString(), detail.getTextValue()));
-			    }
-			    key.setClazz(String.class);
-			} else {
-			    Value value = processValue(detail);
+			/*
+			 * if (isTextValue) { //textvalue if (oldValue == null)
+			 * master.setProperty(key, detail.getTextValue()); else
+			 * { master.setProperty(key, String.format( "%s, %s",
+			 * oldValue instanceof Number ? nf.format((Number)
+			 * oldValue) : oldValue .toString(),
+			 * detail.getTextValue())); }
+			 * key.setClazz(String.class); } else { //numeric
+			 */
+			Value value = processValue(detail, isTextValue);
+			if (value != null) {
 			    if (oldValue == null) {
 				master.setProperty(key, new MultiValue<Value>(value));
 			    } else if (oldValue instanceof MultiValue) {
@@ -264,9 +252,10 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 				logger.log(Level.WARNING, oldValue.getClass().getName());
 				master.setProperty(key, new MultiValue<Value>(value));
 			    }
-
-			    key.setClazz(MultiValue.class);
 			}
+
+			key.setClazz(MultiValue.class);
+			// }
 		    }
 		}
 		return master;
@@ -276,13 +265,22 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	return effectReader;
     }
 
-    protected Value processValue(ProtocolEffectRecord<String, String, String> detail) {
-	Value value = new Value();
-	value.setLoQualifier(detail.getLoQualifier());
-	value.setUpQualifier(detail.getUpQualifier());
-	value.setUpValue(detail.getUpValue());
-	value.setLoValue(detail.getLoValue());
-	return value;
+    protected Value processValue(ProtocolEffectRecord<String, String, String> detail, boolean istextvalue) {
+	if (istextvalue) {
+	    Value<String> value = new Value<String>();
+	    value.setLoValue(detail.getTextValue() == null ? "" : detail.getTextValue().toString());
+	    return value;
+
+	} else {
+	    Value value = new Value();
+	    value.setLoQualifier(detail.getLoQualifier());
+	    value.setUpQualifier(detail.getUpQualifier());
+	    value.setUpValue(detail.getUpValue());
+	    value.setLoValue(detail.getLoValue());
+	    return value;
+
+	}
+
     }
 
     protected IProcessor<Q, Representation> createARFFReporter(String filenamePrefix) {

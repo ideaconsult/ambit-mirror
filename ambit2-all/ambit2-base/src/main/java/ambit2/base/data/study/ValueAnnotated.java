@@ -6,7 +6,7 @@ import ambit2.base.json.JSONUtils;
 
 public class ValueAnnotated<VALUE> extends Value<VALUE> implements Serializable {
     public static enum _fields {
-	idresult, deleted, newentry,remarks;
+	textValue,idresult, deleted, newentry,remarks;
 	public String toJSONField() {
 	    return "\t\"" + name() + "\":";
 	}
@@ -49,10 +49,25 @@ public class ValueAnnotated<VALUE> extends Value<VALUE> implements Serializable 
     protected boolean copied = true;
     protected boolean deleted = false;
     protected String remark = null;
+    protected String textValue = null;
+
+    public String getTextValue() {
+        return textValue;
+    }
+
+    public void setTextValue(String textValue) {
+        this.textValue = textValue;
+    }
 
     @Override
     public String toJSON(StringBuilder b) {
 	String comma = super.toJSON(b);
+	if (getIdresult() > 0) {
+	    b.append(comma);
+	    b.append(_fields.textValue.toJSONField());
+	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getTextValue())));
+	    comma = ", ";
+	}	
 	if (getIdresult() > 0) {
 	    b.append(comma);
 	    b.append(_fields.idresult.toJSONField());
