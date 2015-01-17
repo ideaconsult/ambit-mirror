@@ -420,36 +420,43 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	    if (value instanceof ObjectNode) {
 		ObjectNode range = (ObjectNode) value;
 		Value rvalue = new Value();
-		rvalue.setLoQualifier(null);rvalue.setUpQualifier(null);
+		rvalue.setLoQualifier(null);
+		rvalue.setUpQualifier(null);
 		rvalue.setLoValue(null);
 		rvalue.setUpValue(null);
 		rvalue.setUnits(null);
-		
-		JsonNode jn = range.get(EffectRecord._fields.loQualifier.name());
-		if (jn != null) {
-		    if (!"".equals(jn.getTextValue()))
-			rvalue.setLoQualifier(jn.getTextValue());
-		}
-		jn = range.get(EffectRecord._fields.loValue.name());
+
+		JsonNode jn = range.get(EffectRecord._fields.textValue.name());
 		if (jn != null && !"".equals(jn.getTextValue()))
-		    rvalue.setLoValue(jn.asDouble());
-		
-		jn = range.get(EffectRecord._fields.upQualifier.name());
-		
-		if (jn != null) {
-		    if (!"".equals(jn.getTextValue()))
-			rvalue.setUpQualifier(jn.getTextValue());
-		} 
-		jn = range.get(EffectRecord._fields.upValue.name());
-		if (jn != null && !"".equals(jn.getTextValue()))
-		    rvalue.setUpValue(jn.asDouble());
-		
-		
-		jn = range.get(EffectRecord._fields.unit.name());
-		if (jn != null && !"".equals(jn.getTextValue()) && !"null".equals(jn.getTextValue())) {
-		    rvalue.setUnits(jn.getTextValue());
+		    params.put(val.getKey(), jn.getTextValue());
+		else {
+		    jn = range.get(EffectRecord._fields.loQualifier.name());
+		    if (jn != null) {
+			if (!"".equals(jn.getTextValue()))
+			    rvalue.setLoQualifier(jn.getTextValue());
+		    }
+		    jn = range.get(EffectRecord._fields.loValue.name());
+		    if (jn != null && !"".equals(jn.getTextValue()))
+			rvalue.setLoValue(jn.asDouble());
+
+		    jn = range.get(EffectRecord._fields.upQualifier.name());
+
+		    if (jn != null) {
+			if (!"".equals(jn.getTextValue()))
+			    rvalue.setUpQualifier(jn.getTextValue());
+		    }
+		    jn = range.get(EffectRecord._fields.upValue.name());
+		    if (jn != null && !"".equals(jn.getTextValue()))
+			rvalue.setUpValue(jn.asDouble());
+
+		    jn = range.get(EffectRecord._fields.unit.name());
+		    if (jn != null && !"".equals(jn.getTextValue()) && !"null".equals(jn.getTextValue())) {
+			rvalue.setUnits(jn.getTextValue());
+		    }
+
+		    params.put(val.getKey(), rvalue);
+
 		}
-		params.put(val.getKey(), rvalue);
 	    } else
 		params.put(val.getKey(), value.getTextValue());
 	}
@@ -523,8 +530,8 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	jn = node.get(EffectRecord._fields.textValue.name());
 	if (jn != null && !"".equals(jn.getTextValue()) && !"null".equals(jn.getTextValue())) {
 	    record.setTextValue(jn.getTextValue());
-	}	
-	
+	}
+
     }
 
     public void parseValueAnnotated(ObjectNode node, ValueAnnotated record) {
@@ -538,7 +545,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	    record.setDeleted(jn.asBoolean(true));
 	jn = node.get(ValueAnnotated._fields.remarks.name());
 	if (jn != null)
-	    record.setRemark(jn.getTextValue());	
+	    record.setRemark(jn.getTextValue());
     }
 
     public List<ValueAnnotated> parseValuesAnnotated(ArrayNode node, Protocol protocol) {
