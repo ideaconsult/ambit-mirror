@@ -505,7 +505,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 		record.setLoQualifier(jn.getTextValue());
 	}
 	jn = node.get(EffectRecord._fields.loValue.name());
-	if (jn != null)
+	if (jn != null && !"".equals(jn.getTextValue()))
 	    record.setLoValue(jn.asDouble());
 	jn = node.get(EffectRecord._fields.upQualifier.name());
 	if (jn != null) {
@@ -513,13 +513,18 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 		record.setUpQualifier(jn.getTextValue());
 	}
 	jn = node.get(EffectRecord._fields.upValue.name());
-	if (jn != null)
+	if (jn != null && !"".equals(jn.getTextValue()))
 	    record.setUpValue(jn.asDouble());
 
 	jn = node.get(EffectRecord._fields.unit.name());
 	if (jn != null && !"".equals(jn.getTextValue()) && !"null".equals(jn.getTextValue())) {
 	    record.setUnit(jn.getTextValue());
 	}
+	jn = node.get(EffectRecord._fields.textValue.name());
+	if (jn != null && !"".equals(jn.getTextValue()) && !"null".equals(jn.getTextValue())) {
+	    record.setTextValue(jn.getTextValue());
+	}	
+	
     }
 
     public void parseValueAnnotated(ObjectNode node, ValueAnnotated record) {
