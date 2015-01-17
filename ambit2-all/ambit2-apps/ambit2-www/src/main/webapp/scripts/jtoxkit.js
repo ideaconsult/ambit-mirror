@@ -4457,7 +4457,8 @@ var jToxEndpoint = (function () {
           },
           {
             regex: /^\s*([>=]*)\s*(\-?\d+[\.eE]?\-?\d*)\s*([^\s,]*)\s*([<=]*)\s*(\-?\d*[\.eE]?\-?\d*)\s*([^\s,]*)\s*$/,
-            fields: ['', 'loQualifier', 'loValue', 'unit', 'upQualifier', 'upValue', 'unit']
+            fields: ['', 'loQualifier', 'loValue', 'unit', 'upQualifier', 'upValue', 'unit'],
+            adjust: function (obj, parse) { if (!obj.loQualifier) obj.loQualifier = '='; }
           }
         ];
         
@@ -4471,8 +4472,6 @@ var jToxEndpoint = (function () {
               obj[f] = parse[i];
             }
 
-          if (!obj.loQualifier)
-            obj.loQualifier = '=';
           if (parsers[pi].adjust)
             parsers[pi].adjust(obj, parse);
           break;
