@@ -62,7 +62,7 @@ public class ValueAnnotated<VALUE> extends Value<VALUE> implements Serializable 
     @Override
     public String toJSON(StringBuilder b) {
 	String comma = super.toJSON(b);
-	if (getIdresult() > 0) {
+	if (getTextValue()!=null) {
 	    b.append(comma);
 	    b.append(_fields.textValue.toJSONField());
 	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getTextValue())));
