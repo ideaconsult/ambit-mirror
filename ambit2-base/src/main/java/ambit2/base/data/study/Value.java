@@ -146,6 +146,15 @@ public class Value<VALUE> implements IValue<VALUE, String, String> {
 	return b.toString();
     }
 
+    public String toHumanReadable() {
+	StringBuilder b = new StringBuilder();
+	if (getLoQualifier()!=null) { b.append(getLoQualifier()); b.append(" "); }
+	if (getLoValue()!=null) { b.append(getLoValue()); b.append(" "); }
+	if (getUpQualifier()!=null) { b.append(getUpQualifier()); b.append(" "); }
+	if (getUpValue()!=null) { b.append(getUpValue()); b.append(" "); }
+	if (getUnits()!=null) { b.append(getUnits());  }
+	return b.toString();
+    }
     private void serialize(VALUE value, StringBuilder b) {
 	if (value == null)
 	    b.append("null");
