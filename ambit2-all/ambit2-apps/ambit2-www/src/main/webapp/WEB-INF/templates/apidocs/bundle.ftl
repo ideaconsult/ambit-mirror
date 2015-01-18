@@ -655,7 +655,7 @@
 			},
 			
 			{
-			    "path": "/bundle/{idbundle}/matrix",
+			    "path": "/bundle/{idbundle}/matrix/{matrixtype}",
 			    "operations": [
 			        {
 			            "method": "GET",
@@ -673,6 +673,18 @@
 							    "paramType": "path",
 							    "allowMultiple": false
 							},
+           					{
+							    "name": "matrixtype",
+							    "description": "Matrix type",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false,
+					    		"defaultValue": "working",
+							    "enum" : [
+							         "working","final"
+							    ]							    
+							},								
 							<#include "/apidocs/parameters_page.ftl" >									
 			            ],
 			            "responseMessages": [
@@ -731,7 +743,19 @@
 							    "paramType": "body",
 							    "type" : "Study",
 							    "allowMultiple": false
-							  }										
+							  },
+           					{
+							    "name": "matrixtype",
+							    "description": "Matrix type",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false,
+					    		"defaultValue": "working",
+							    "enum" : [
+							         "working"
+							    ]							    
+							}								  										
 							    
 			            ],
 			            "responseMessages": [
@@ -767,6 +791,18 @@
 							    "paramType": "path",
 							    "allowMultiple": false
 							},
+	           				{
+							    "name": "matrixtype",
+							    "description": "Matrix type",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false,
+					    		"defaultValue": "working",
+							    "enum" : [
+							         "working","final"
+							    ]							    
+							},							
 							{
 							    "name": "deletematrix",
 							    "description": "delete existing matrix content",						    
@@ -796,7 +832,7 @@
 			        },
 					{
 			            "method": "DELETE",
-			            "summary": "Delete matrix from bundle",
+			            "summary": "Delete working matrix from bundle",
 			            "notes": "Deletes study copied",
 			            "type": "Task",
 			            "nickname": "deleteMatrixFromBundle",
@@ -812,7 +848,19 @@
 							    "type": "string",
 							    "paramType": "path",
 							    "allowMultiple": false
-							}    							
+							},
+           					{
+							    "name": "matrixtype",
+							    "description": "Matrix type",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false,
+					    		"defaultValue": "working",
+							    "enum" : [
+							         "working"
+							    ]							    
+							}								    							
 			            ],
 			            "responseMessages": [
 			         	    <#include "/apidocs/error_task.ftl" >,	
@@ -834,48 +882,9 @@
 			    "path": "/bundle/{idbundle}/matrix/deleted",
 			    "operations": [
 						{
-						    "method": "GET",
-						    "summary": "Get substance matrix (dataset copy)",
-						    "notes": "get substance dataset",
-						    "type": "SubstanceDataset",
-						    "nickname": "getBundleMatrix",
-						    <#include "/apidocs/authz.ftl" >
-						    "parameters": [
-								{
-								    "name": "idbundle",
-								    "description": "Bundle identifier",
-								    "required": true,
-								    "type": "string",
-								    "paramType": "path",
-								    "allowMultiple": false
-								},									
-								<#include "/apidocs/parameters_page.ftl" >									
-						    ],
-						    "responseMessages": [
-									{
-								 "code": 200,
-								 "message": "OK"
-								},				                                 
-									{
-										"code": 400,
-									    "message": "Invalid bundle identifier"
-									},						                                 
-						        {
-						            "code": 404,
-						            "message": "Bundle not found"
-						        },
-									{
-										"code": 415,
-									    "message": "Media type not supported"
-									},							            			                
-								<#include "/apidocs/error_aa.ftl" >,
-								<#include "/apidocs/error_500.ftl" >			                
-						    ]
-						},
-						{
 				            "method": "PUT",
-				            "summary": "Marks matrix values as deleted",
-				            "notes": "Marks matrix values as deleted. Supports JSON format https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-core/src/test/resources/ambit2/core/data/json/effects_delete.json",
+				            "summary": "Marks working matrix values as deleted",
+				            "notes": "Marks working matrix values as deleted. Supports JSON format https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-core/src/test/resources/ambit2/core/data/json/effects_delete.json",
 				            "type": "Task",
 				            "nickname": "markDeletedValues",
 			                "consumes": [
@@ -917,7 +926,7 @@
 				        }								
 			               	                   
 			     ]               
-			}  ,  			
+			},  			
 			{
 			    "path": "/bundle/{idbundle}/study",
 			    "operations": [
