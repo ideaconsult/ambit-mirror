@@ -268,7 +268,13 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
     protected Value processValue(ProtocolEffectRecord<String, String, String> detail, boolean istextvalue) {
 	if (istextvalue) {
 	    Value<String> value = new Value<String>();
-	    value.setLoValue(detail.getTextValue() == null ? "" : detail.getTextValue().toString());
+	    if (detail.getTextValue() == null)
+		if (detail.getInterpretationResult() == null)
+		    value.setLoValue("");
+		else
+		    value.setLoValue(detail.getInterpretationResult());
+	    else
+		value.setLoValue(detail.getTextValue().toString());
 	    return value;
 
 	} else {
