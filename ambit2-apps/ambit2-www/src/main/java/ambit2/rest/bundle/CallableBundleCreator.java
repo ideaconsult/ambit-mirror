@@ -79,6 +79,10 @@ public class CallableBundleCreator extends	CallableDBUpdateTask<SubstanceEndpoin
 				bundle.setStars(Integer.parseInt(stars));
 		} catch (Exception x) { bundle.setStars(5); }
 		
+		String description = input.getFirstValue("description");
+		if (description!=null && !"".equals(description))
+			bundle.setDescription(description);		
+		
 	}
 	@Override
 	protected IQueryUpdate<? extends Object, SubstanceEndpointsBundle> createUpdate(

@@ -239,20 +239,21 @@ CREATE TABLE `bundle` (
   `idbundle` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT 'default',
   `user_name` varchar(16) COLLATE utf8_bin DEFAULT NULL,
-  `idreference` int(11) unsigned NOT NULL,  
+  `idreference` int(11) unsigned NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `licenseURI` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
   `rightsHolder` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
   `maintainer` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
   `stars` int(10) unsigned NOT NULL DEFAULT '5',
+  `description` text COLLATE utf8_bin,
   PRIMARY KEY (`idbundle`),
   UNIQUE KEY `assessment_name` (`name`),
   KEY `FK_assessment_1` (`user_name`),
   KEY `Index_6` (`maintainer`),
   KEY `Index_7` (`stars`),
+  KEY `FK_investigation_ref` (`idreference`),
   CONSTRAINT `FK_investigation_ref` FOREIGN KEY (`idreference`) REFERENCES `catalog_references` (`idreference`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 
 -- -----------------------------------------------------
 -- A collection of substances 

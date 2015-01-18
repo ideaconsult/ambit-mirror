@@ -41,7 +41,7 @@ public class CreateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 	
 	public static final String[] create_sql = {
 		"INSERT IGNORE INTO catalog_references (idreference, title, url) VALUES (null,?,?)",
-		"INSERT IGNORE INTO bundle (idbundle, name,user_name,idreference,licenseURI,rightsHolder) SELECT ?,?,SUBSTRING_INDEX(user(),'@',1),idreference,?,? FROM catalog_references WHERE title=?"
+		"INSERT IGNORE INTO bundle (idbundle, name,user_name,idreference,licenseURI,rightsHolder,description) SELECT ?,?,SUBSTRING_INDEX(user(),'@',1),idreference,?,?,? FROM catalog_references WHERE title=?"
 	};
 
 	public CreateBundle(SubstanceEndpointsBundle dataset) {
@@ -70,6 +70,7 @@ public class CreateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 			params2.add(new QueryParam<String>(String.class, getObject().getName()));
 			params2.add(new QueryParam<String>(String.class, getObject().getLicenseURI()));
 			params2.add(new QueryParam<String>(String.class, getObject().getrightsHolder()));
+			params2.add(new QueryParam<String>(String.class, getObject().getDescription()));
 			params2.add(new QueryParam<String>(String.class, getObject().getSource()));
 			
 			return params2;

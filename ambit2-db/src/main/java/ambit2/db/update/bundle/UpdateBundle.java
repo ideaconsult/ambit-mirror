@@ -51,6 +51,8 @@ public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 	
 	private static final String _maintainer = "maintainer=?";
 	
+	private static final String _description = "description=?";
+	
 	public UpdateBundle(SubstanceEndpointsBundle dataset) {
 		super(dataset);
 	}
@@ -71,6 +73,9 @@ public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 
 		if (getObject().getMaintainer()!=null)
 			params3.add(new QueryParam<String>(String.class, getObject().getMaintainer()));
+		
+		if (getObject().getDescription()!=null)
+			params3.add(new QueryParam<String>(String.class, getObject().getDescription()));		
 		
 		if (params3.size()==0)
 			throw new AmbitException(UpdateDataset.MSG_EMPTY);
@@ -105,6 +110,12 @@ public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 			i++;
 		}
 			
+		if (getObject().getDescription()!=null) {
+			b.append(i>0?",":"");
+			b.append(_description);
+			i++;
+		}
+				
 		if (i>0)
 			return new String[] {String.format(update_sql,b.toString())};
 		else
