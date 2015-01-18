@@ -13,6 +13,7 @@ import ambit2.db.update.bundle.CreateBundle;
 import ambit2.db.update.bundle.DeleteBundle;
 import ambit2.db.update.bundle.UpdateBundle;
 import ambit2.db.update.bundle.matrix.CreateMatrixFromBundle;
+import ambit2.db.update.bundle.matrix.ReadEffectRecordByBundleMatrix._matrix;
 
 public class Bundle_crud_test extends CRUDTest<Object,SubstanceEndpointsBundle> {
 	@Override
@@ -110,7 +111,7 @@ public class Bundle_crud_test extends CRUDTest<Object,SubstanceEndpointsBundle> 
 			throws Exception {
 		SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle();
 		bundle.setID(1);		
-		return new CreateMatrixFromBundle(bundle);
+		return new CreateMatrixFromBundle(bundle,_matrix.matrix_working);
 	}
 	@Override
 	protected void createVerifyNew(IQueryUpdate<Object, SubstanceEndpointsBundle> query)
