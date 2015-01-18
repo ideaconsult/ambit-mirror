@@ -199,26 +199,6 @@ var jToxBundle = {
 	onMatrix: function (panId, panel) {
 	  var self = this;
 		if (!$(panel).hasClass('initialized')) {
-  		var renderValue = function (data, units, type, pre) {
-    		if (!data)
-    		  return type == 'display' ? '-' : '';
-    		  
-    		var val = jT.ui.renderRange(data, units, type, pre);
-    		if (ccLib.trim(val) == '-')
-    		  val = '';
-    		if (!!val && type != 'display' && !!data.units)
-    		  val += '&nbsp;' + data.units;
-    		if (!!data.textValue) {
-      		if (!!val && type == 'display')
-      		  val += '&nbsp;/&nbsp;';
-      		val += data.textValue;
-    		}
-    		
-    		if (!val)
-    		  val = '-';
-    		return val;
-  		};
-  		
       jTConfig.matrix.groups = function (miniset, kit) {
         var groups = { "Identifiers" : self.settings.matrixIdentifiers.concat(self.settings.matrixMultiRows) };
       	var endpoints = {};
@@ -250,7 +230,7 @@ var jToxBundle = {
                 html += '<div>';
                 if (self.edit.matrixEditable)
                   html += '<span class="ui-icon ui-icon-circle-minus delete-popup"></span>&nbsp;';
-                html += '<a class="info-popup" data-index="' + i + '" data-feature="' + fId + '" href="#">' + renderValue(d, f.units, 'display', preVal) + '</a>';
+                html += '<a class="info-popup" data-index="' + i + '" data-feature="' + fId + '" href="#">' + jT.ui.renderObjValue(d, f.units, 'display', preVal) + '</a>';
                 html += jT.ui.putInfo(full.compound.URI + '/study?property_uri=' + encodeURIComponent(fId));
                 html += '</div>';
               }
@@ -400,7 +380,7 @@ var jToxBundle = {
     		  ccLib.fillTree(infoDiv, {
     		    endpoint: feature.title,
     		    guidance: feature.creator,
-      		  value: renderValue(val[valueIdx], feature.units, 'display'),
+      		  value: jT.ui.renderObjValue(val[valueIdx], feature.units, 'display'),
 //             source: '<a target="_blank" href="' + feature.source.URI + '">' + feature.source.type + '</a>'
     		  });
     		  
@@ -503,7 +483,7 @@ var jToxBundle = {
         for (var cId in value.effects[0].conditions) {
           f.annotation.push({
             'p': cId,
-            'o': renderValue(value.effects[0].conditions[cId])
+            'o': jT.ui.renderObjValue(value.effects[0].conditions[cId])
           });
         }
         
@@ -512,7 +492,7 @@ var jToxBundle = {
         var preVal = (ccLib.getJsonValue(config, 'effects.endpoint.bVisible') !== false) ? f.title.replace(" ", '&nbsp;') : null;
 
         var html =  '<span class="ui-icon ui-icon-circle-minus delete-popup" data-index="' + (self.edit.study.length - 1) + '"></span>&nbsp;';
-            html += '<a class="info-popup unsaved-study" data-index="0" data-feature="' + fId + '" href="#">' + renderValue(value.effects[0].result, null, 'display', preVal) + '</a>';
+            html += '<a class="info-popup unsaved-study" data-index="0" data-feature="' + fId + '" href="#">' + jT.ui.renderObjValue(value.effects[0].result, null, 'display', preVal) + '</a>';
 
         var span = document.createElement('div');
         span.innerHTML = html;
