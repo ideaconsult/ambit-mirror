@@ -19,6 +19,14 @@ public class ProtocolEffectRecord<ENDPOINT, CONDITIONS, UNIT> extends EffectReco
     protected Protocol protocol;
     protected String documentUUID;
     protected int idresult = -1;
+    protected String interpretationResult;
+    public String getInterpretationResult() {
+        return interpretationResult;
+    }
+
+    public void setInterpretationResult(String interpretationResult) {
+        this.interpretationResult = interpretationResult;
+    }
 
     public int getIdresult() {
 	return idresult;

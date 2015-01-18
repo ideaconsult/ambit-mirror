@@ -388,7 +388,10 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
     protected Value processValue(ProtocolEffectRecord<String, String, String> detail, boolean istextvalue) {
 	ValueAnnotated value = new ValueAnnotated();
 	if (istextvalue) {
-	    value.setTextValue((detail.getTextValue() == null) ? "" : detail.getTextValue().toString());
+	    if (detail.getTextValue()==null) 
+		if (detail.getInterpretationResult()!=null)  value.setTextValue(detail.getInterpretationResult()); 
+		else  value.setTextValue(""); 
+            else value.setTextValue(detail.getTextValue().toString());     
 	} else {
 	    value.setLoQualifier(detail.getLoQualifier());
 	    value.setUpQualifier(detail.getUpQualifier());

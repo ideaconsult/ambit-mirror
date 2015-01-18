@@ -23,7 +23,7 @@ public class ReadEffectRecordBySubstance extends
     // "SELECT idresult,endpoint as effectendpoint,conditions,unit,loQualifier,loValue,upQualifier,upValue,textValue from substance_experiment where document_prefix =? and hex(document_uuid) =?";
 
     private String sql = "select p.document_prefix,hex(p.document_uuid) u,\n"
-	    + "p.topcategory,p.endpointcategory,guidance,params,reference,idresult,\n"
+	    + "p.topcategory,p.endpointcategory,guidance,params,reference,idresult,interpretation_result,\n"
 	    + "e.endpoint as effectendpoint,hex(endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint\n"
 	    + "from substance s join substance_protocolapplication p on s.prefix=p.substance_prefix and s.uuid=p.substance_uuid\n"
 	    + "join substance_experiment e on p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"
@@ -59,6 +59,11 @@ public class ReadEffectRecordBySubstance extends
 	} catch (Exception x) {
 	    effect.setIdresult(-1);
 	}
+	try {
+	    effect.setInterpretationResult(rs.getString("interpretation_result"));
+	} catch (Exception x) {
+	    effect.setIdresult(-1);
+	}	
 	try {
 	    try {
 		effect.setDocumentUUID(rs.getString("document_prefix") + "-"

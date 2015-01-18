@@ -20,7 +20,7 @@ public class BundleSummaryQuery extends AbstractFacetQuery<SubstanceEndpointsBun
 		"select \"compound\",count(idchemical) from bundle_chemicals where idbundle=? "+
 		"union select \"substance\",count(idsubstance) from bundle_substance where idbundle=? "+
 		"union select \"property\",count(*) from bundle_endpoints where idbundle=? "+
-		"union select \"matrix\",count(*)>0 FROM bundle_substance_protocolapplication where idbundle=?" +
+		"union select \"matrix\",count(*)>0 FROM bundle_substance_protocolapplication where idbundle=? " +
 		"union select \"matrix/final\",count(*)>0 FROM bundle_final_protocolapplication where idbundle=?";
 	
 	protected BundleSummaryFacet record;
@@ -41,6 +41,7 @@ public class BundleSummaryQuery extends AbstractFacetQuery<SubstanceEndpointsBun
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		if (getFieldname()!=null && getFieldname().getID()>0) {
+			params.add(new QueryParam<Integer>(Integer.class,getFieldname().getID()));
 			params.add(new QueryParam<Integer>(Integer.class,getFieldname().getID()));
 			params.add(new QueryParam<Integer>(Integer.class,getFieldname().getID()));
 			params.add(new QueryParam<Integer>(Integer.class,getFieldname().getID()));
