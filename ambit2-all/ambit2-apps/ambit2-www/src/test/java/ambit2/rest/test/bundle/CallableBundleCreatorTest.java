@@ -33,6 +33,7 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 		form.add(ISourceDataset.fields.license.name(),"license");
 		form.add(ISourceDataset.fields.maintainer.name(),"maintainer");
 		form.add(ISourceDataset.fields.rightsHolder.name(),"rightsHolder");
+		form.add("description","description");
 		form.add(ISourceDataset.fields.url.name(),"url");
 		form.add(ISourceDataset.fields.stars.name(),"9");
 		
@@ -43,8 +44,9 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 					bundle,reporter,Method.POST,form,c.getConnection(),null
 					);
 			TaskResult task = callable.call();
-			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle from bundle where name='title'"));
+			ITable table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,description from bundle where name='title'"));
 			Assert.assertEquals(1,table.getRowCount());
+			Assert.assertEquals("description",table.getValue(0, "description"));
 			
 		} catch (Exception x) {
 			throw x;
@@ -93,6 +95,7 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 		form.add(ISourceDataset.fields.license.name(),"license");
 		form.add(ISourceDataset.fields.maintainer.name(),"maintainer");
 		form.add(ISourceDataset.fields.rightsHolder.name(),"rightsHolder");
+		form.add("description","description");
 		form.add(ISourceDataset.fields.url.name(),"url");
 		form.add(ISourceDataset.fields.stars.name(),"9");
 		
@@ -106,12 +109,13 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 					bundle,reporter,Method.PUT,form,c.getConnection(),null
 					);
 			TaskResult task = callable.call();
-			table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,name,licenseURI,rightsHolder,maintainer,stars,title,url from bundle join catalog_references using(idreference) where idbundle=1"));
+			table = 	c1.createQueryTable("EXPECTED",String.format("SELECT idbundle,name,licenseURI,rightsHolder,maintainer,stars,title,url,description from bundle join catalog_references using(idreference) where idbundle=1"));
 			Assert.assertEquals(1,table.getRowCount());
 			Assert.assertEquals("title",table.getValue(0,"name"));
 			Assert.assertEquals("maintainer",table.getValue(0,"maintainer"));
 			Assert.assertEquals("rightsHolder",table.getValue(0,"rightsHolder"));
 			Assert.assertEquals("license",table.getValue(0,"licenseURI"));
+			Assert.assertEquals("description",table.getValue(0, "description"));
 			//Assert.assertEquals("url",table.getValue(0,"url"));
 			//Assert.assertEquals("source",table.getValue(0,"title"));
 			

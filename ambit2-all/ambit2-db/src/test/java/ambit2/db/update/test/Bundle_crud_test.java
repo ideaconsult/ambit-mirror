@@ -35,6 +35,7 @@ public class Bundle_crud_test extends CRUDTest<Object,SubstanceEndpointsBundle> 
 		adataset.setName("ambit");
 		adataset.setTitle("new_title");
 		adataset.setURL("new_url");
+		adataset.setDescription("description");
 		adataset.setLicenseURI(ISourceDataset.license.CC0_1_0.getURI());
 		CreateBundle user = new CreateBundle();
 		user.setObject(adataset);
@@ -44,13 +45,15 @@ public class Bundle_crud_test extends CRUDTest<Object,SubstanceEndpointsBundle> 
 	@Override
 	protected void createVerify(IQueryUpdate<Object,SubstanceEndpointsBundle> query) throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED_BUNDLE","SELECT idbundle,licenseURI FROM bundle where name='ambit'");
+		ITable table = 	c.createQueryTable("EXPECTED_BUNDLE","SELECT idbundle,licenseURI,description FROM bundle where name='ambit'");
 		Assert.assertEquals(1,table.getRowCount());
 		Object idtemplate = table.getValue(0,"idbundle");
 		Assert.assertNotNull(idtemplate);
+		Assert.assertEquals("description",table.getValue(0, "description"));
 		
 		table = c.createQueryTable("EXPECTED_REF","SELECT * FROM catalog_references where title='new_title'");
 		Assert.assertEquals(1,table.getRowCount());
+
 				
 		c.close();
 	}
@@ -79,6 +82,7 @@ public class Bundle_crud_test extends CRUDTest<Object,SubstanceEndpointsBundle> 
 		adataset.setID(1);		
 		adataset.setName("nina");
 		adataset.setTitle("EURAS.BE");
+		adataset.setDescription("description");
 		adataset.setLicenseURI(ISourceDataset.license.CC0_1_0.getURI());
 		return new UpdateBundle(adataset);
 	}
@@ -86,8 +90,9 @@ public class Bundle_crud_test extends CRUDTest<Object,SubstanceEndpointsBundle> 
 	@Override
 	protected void updateVerify(IQueryUpdate<Object,SubstanceEndpointsBundle> query) throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT licenseURI,title,url,type FROM bundle join catalog_references using(idreference) where name='nina'");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT licenseURI,title,url,type,description FROM bundle join catalog_references using(idreference) where name='nina'");
 		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals("description",table.getValue(0, "description"));
 		Assert.assertEquals(ISourceDataset.license.CC0_1_0.getURI(),table.getValue(0, "licenseURI"));
 		table = 	c.createQueryTable("EXPECTED","SELECT * FROM bundle where name='Dataset 1'");
 		Assert.assertEquals(0,table.getRowCount());		

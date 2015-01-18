@@ -18,7 +18,21 @@ public class SubstanceEndpointsBundle implements ISourceDataset {
 	protected String name;
 	protected int id;
 	protected String userName;
+	protected String description;
+	public String getDescription() {
+	    return description;
+	}
+	public void setDescription(String description) {
+	    this.description = description;
+	}
+	protected long created;
 	
+	public long getCreated() {
+	    return created;
+	}
+	public void setCreated(long created) {
+	    this.created = created;
+	}
 	public SubstanceEndpointsBundle(int id) {
 		this("");
 		setID(id);

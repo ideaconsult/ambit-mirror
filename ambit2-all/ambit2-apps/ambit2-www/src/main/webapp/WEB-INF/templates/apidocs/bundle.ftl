@@ -71,6 +71,14 @@
 							   "allowMultiple": false
 							},	
 							{
+							   "name": "description",
+							   "description": "Description (free text)",
+							   "required": true,
+							   "type": "String",
+							   "paramType": "form",
+							   "allowMultiple": false
+							},								
+							{
 							   "name": "source",
 							   "description": "Bundle source",
 							   "required": true,
@@ -212,6 +220,14 @@
 							   "paramType": "form",
 							   "allowMultiple": false
 							},	
+							{
+							   "name": "description",
+							   "description": "Description (free text)",
+							   "required": true,
+							   "type": "String",
+							   "paramType": "form",
+							   "allowMultiple": false
+							},								
 							{
 							   "name": "license",
 							   "description": "Bundle license",
