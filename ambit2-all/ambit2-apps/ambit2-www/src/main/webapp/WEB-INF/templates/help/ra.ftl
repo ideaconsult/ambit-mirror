@@ -35,8 +35,13 @@ The assessment <a href='#' class='chelp assessment'>?</a> workflow is organized 
     <li><a href="#a_tab5">Tab5. Report</a></li>
   </ul>
   <div id="assessment">
-  	Assessment
-  	Creating an Assessment.
+  	Assessment ID is automatically generated upon creating an Assessment.
+  	<br/>
+ 	The assessment is available at {ambit_root}/bundle/{assessmentid}</a>. 
+ 	<br/>
+  	To create a new Assessment, fill in the Assessment identifiers and click Start.
+  	<br/>
+  	To edit the Assessment identifiers, edit the relevant text fields. 
   </div>  
   <div id="a_name">
     Assessment name
