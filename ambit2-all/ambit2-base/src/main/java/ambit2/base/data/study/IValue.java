@@ -43,4 +43,5 @@ public interface IValue<VALUE,QUALIFIER,UNITS> {
 	
 	public String getAnnotation();
 	public void setAnnotation(String annotation);
+	public String toHumanReadable();
 }

@@ -59,6 +59,7 @@ public class ValueAnnotated<VALUE> extends Value<VALUE> implements Serializable 
         this.textValue = textValue;
     }
 
+
     @Override
     public String toJSON(StringBuilder b) {
 	String comma = super.toJSON(b);
@@ -93,5 +94,10 @@ public class ValueAnnotated<VALUE> extends Value<VALUE> implements Serializable 
 	    comma = ", ";
 	}
 	return comma;
+    }
+    @Override
+    public String toHumanReadable() {
+	if (getTextValue()!=null) return getTextValue();
+	else return super.toHumanReadable();
     }
 }
