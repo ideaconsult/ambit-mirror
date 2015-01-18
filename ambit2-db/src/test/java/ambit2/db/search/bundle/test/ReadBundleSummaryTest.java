@@ -27,7 +27,7 @@ public class ReadBundleSummaryTest  extends QueryTest<BundleSummaryQuery> {
 			Assert.assertNotNull(record.getURL());
 			count++;
 		}
-		Assert.assertEquals(4,count);
+		Assert.assertEquals(5,count);
 		
 	}
 
