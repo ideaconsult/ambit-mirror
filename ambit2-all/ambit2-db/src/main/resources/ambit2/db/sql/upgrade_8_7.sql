@@ -174,6 +174,7 @@ CREATE TABLE `bundle_final_experiment` (
   CONSTRAINT `fdocument-x` FOREIGN KEY (`idbundle`, `document_prefix`, `document_uuid`) REFERENCES `bundle_final_protocolapplication` (`idbundle`, `document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ALTER TABLE `bundle` ADD COLUMN `description` TEXT NULL  AFTER `stars` ;
 -- -----------------------------------------------------
 
 insert into version (idmajor,idminor,comment) values (8,7,"AMBIT2 schema");
