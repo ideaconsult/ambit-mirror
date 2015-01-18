@@ -30,7 +30,7 @@
         <#if bundleid??>
         jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${bundleid}" title="Assessment">Assessment #${bundleid}</a></li>');
         </#if>
-        
+        loadHelp("${ambit_root}","ra");
 	});
 	
 	</script>
@@ -61,23 +61,26 @@
     </ul>
     <div id="jtox-identifiers" data-action="onIdentifiers">
 	  	<form>
+	  	  <div class="thirteen columns remove-bottom">
 	      <table class="dataTable">
 	        <thead>
-	          <tr><th class="right size-third">Assessment</th><th class="data-field" data-field="id"></th></tr>
-	          <tr><td class="right size-third">Title:</td><td><input class="data-field first-time validate" data-field="title" name="title"></input></td></tr>
-			  <tr><td class="right size-third">Source:</td><td><input class="data-field first-time validate" data-field="seeAlso" name="source"></input></td></tr>
-	          <tr><td class="right size-third">Source URL:</td><td><input class="data-field first-time validate" data-field="source" name="url"></input></td></tr>
-	          <tr><td class="right size-third">License:</td><td><input class="data-field first-time validate" data-field="rights.URI" name="license"></input></td></tr>
-	          <tr><td class="right size-third">Rights holder:</td><td><input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder"></input></td></tr>
-	          <tr><td class="right size-third">Maintainer:</td><td><input class="data-field first-time validate" data-field="maintainer" name="maintainer"></input></td></tr>
+	          <tr><th class="right size-third">Assessment<a href='#' class='chelp assessment'>?</a></th></th><th class="data-field" data-field="id"></th></tr>
+	          <tr><td class="right size-third">Name <a href='#' class='chelp a_name'>?</a>:</td><td><input class="data-field first-time validate" data-field="title" name="title"></input></td></tr>
+			  <tr><td class="right size-third">Source <a href='#' class='chelp a_source'>?</a>:</td><td><input class="data-field first-time validate" data-field="seeAlso" name="source"></input></td></tr>
+	          <tr><td class="right size-third">Source URL <a href='#' class='chelp a_source'>?</a>:</td><td><input class="data-field first-time validate" data-field="source" name="url"></input></td></tr>
+	          <tr><td class="right top size-third">Purpose <a href='#' class='chelp a_description'>?</a>:</td><td><textarea class="validate nomargin data-field" data-field="description" name="description"></textarea></td></tr>
+	          <tr><td class="right size-third">Owner <a href='#' class='chelp a_maintainer'>?</a>:</td><td><input class="data-field first-time validate" data-field="maintainer" name="maintainer"></input></td></tr>
+	          
+	          <tr><td class="right size-third">Version <a href='#' class='chelp a_version'>?</a>:</td><td class="data-field" data-field="version" title='versions not supported yet'></td></tr>
+	          	          	          
+	          <tr><td class="right size-third">License of Waiver <a href='#' class='chelp a_license'>?</a>:</td><td><input class="data-field first-time validate" data-field="rights.URI" name="license"></input></td></tr>
+	          <tr><td class="right size-third">Rights holder <a href='#' class='chelp a_rightsholder'>?</a>:</td><td><input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder"></input></td></tr>
 
-	          <tr><td class="right top size-third">Purpose:</td><td><textarea class="validate nomargin data-field" data-field="purpose" name="purpose"></textarea></td></tr>
-	          <tr><td class="right size-third">Version:</td><td class="data-field" data-field="version">?.?</td></tr>
-	          <tr><td class="right size-third">Status:</td><td class="data-field" data-field="status"></td></tr>
-	          <tr><td class="right size-third">Date started:</td><td class="data-field" data-field="started"></td></tr>
-	          <tr><td class="right size-third">Date finished:</td><td class="data-field" data-field="finished"></td></tr>
+	          <tr><td class="right size-third">Status <a href='#' class='chelp a_status'>?</a>:</td><td class="data-field" data-field="status"></td></tr>
+	          <tr><td class="right size-third">Date started <a href='#' class='chelp a_started'>?</a>:</td><td class="data-field" data-field="created"></td></tr>
+	          <tr><td class="right size-third">Date finished <a href='#' class='chelp a_started'>?</a>:</td><td class="data-field" data-field="finished"></td></tr>
 	          <tr>
-	          	<td class="right size-third">Flags:</td>
+	          	<td class="right size-third">Flags <a href='#' class='chelp a_flags'>?</a>:</td>
 	          	<td>
 		          	<div class="jq-buttonset">
 		          		<input type="hidden" name="flags"/>
@@ -104,14 +107,25 @@
 								</div>
 							</td>
 						</tr>
-	          <tr><td class="right size-third">Rating:</td><td class="data-stars-field"><input type="hidden" name="stars" value="0"></input></td></tr>
+
+	          <tr><td class="right size-third">Rating <a href='#' class='chelp a_rating'>?</a>:</td><td class="data-stars-field"><input type="hidden" name="stars" value="0"></input></td></tr>
 	        </thead>
 	      </table>
-	      <div class="actions">
+	      
+	      <div class="row actions">
 		      <button name="assStart" type="button">Start</button>
 		      <button name="assFinalize" type="button">Finalize</button>
 		      <button name="assDuplicate" type="button">Duplicate</button>
 	      </div>
+	      	      
+	      </div>
+	      <div class="three columns remove-bottom">
+				<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
+				<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'></div>
+				<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'></div>
+				      
+	      </div>
+
 	  	</form>
 	  </div>
     <div id="jtox-structures">
