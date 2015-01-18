@@ -1042,13 +1042,14 @@ window.jT.ui = {
     if (typeof data == 'string' || typeof data == 'number')
       out += (type != 'display') ? data : ((!!prefix ? prefix + "&nbsp;=&nbsp;" : '') + jT.ui.valueWithUnits(data, unit));
     else if (typeof data == 'object' && data != null) {
-      data.loValue = ccLib.trim(data.loValue);
-      data.upValue = ccLib.trim(data.upValue);
-      if (!!data.loValue && !!data.upValue && !!data.upQualifier && data.loQualifier != '=') {
+      var loValue = ccLib.trim(data.loValue),
+          upValue = ccLib.trim(data.upValue);
+
+      if (!!loValue && !!upValue && !!data.upQualifier && data.loQualifier != '=') {
         if (!!prefix)
           out += prefix + "&nbsp;=&nbsp;";
         out += (data.loQualifier == ">=") ? "[" : "(";
-        out += data.loValue + ", " + data.upValue;
+        out += loValue + ", " + upValue;
         out += (data.upQualifier == "<=") ? "]" : ") ";
       }
       else // either of them is non-undefined
@@ -1059,10 +1060,10 @@ window.jT.ui = {
         
         if (!!prefix)
           out += prefix + ' ';
-        if (!!data.loValue)
-          out += fnFormat(data.loQualifier, data.loValue);
+        if (!!loValue)
+          out += fnFormat(data.loQualifier, loValue);
         else if (!!data.upValue)
-          out += fnFormat(data.upQualifier, data.upValue);
+          out += fnFormat(data.upQualifier, upValue);
         else
           out += type == 'display' ? '-' : '';
       }
@@ -4447,18 +4448,32 @@ var jToxEndpoint = (function () {
         var obj = {};
         var parsers = [
           {
-            regex: /^[\s=]*([\(\[])\s*(\-?\d*[\.eE]?\-?\d*)\s*,\s*(\-?\d*[\.eE]?\-?\d*)\s*([\)\]])\s*([^\s,]*)\s*$/,
+            regex: /^[\s=]*([\(\[])\s*(\-?\d*[\.eE]?\-?\d*)\s*,\s*(\-?\d*[\.eE]?\-?\d*)\s*([\)\]])\s*([^\d,]*)\s*$/,
             fields: ['', 'loQualifier', 'loValue', 'upValue', 'upQualifier', 'unit'],
             // adjust the parsed value, if needed
             adjust: function (obj, parse) {
               obj.loQualifier = parse[1] == '[' ? '>=' : '>';
-              obj.upQualifier = parse[4] == ']' ? '<=' : '<';  
+              obj.upQualifier = parse[4] == ']' ? '<=' : '<';
+              if (!obj.upValue)
+                delete obj.upQualifier;
+              if (!obj.loValue)
+                delete obj.loQualifier;
+              if (!!obj.unit)
+                obj.unit = obj.unit.trim();
             }
           },
           {
-            regex: /^\s*([>=]*)\s*(\-?\d+[\.eE]?\-?\d*)\s*([^\s,]*)\s*([<=]*)\s*(\-?\d*[\.eE]?\-?\d*)\s*([^\s,]*)\s*$/,
+            regex: /^\s*(=|>|>=)?\s*(\-?\d+[\.eE]?\-?\d*)\s*([^\d,<=]*)\s*(<|<=)?\s*(\-?\d*[\.eE]?\-?\d*)\s*([^\d,]*)\s*$/,
             fields: ['', 'loQualifier', 'loValue', 'unit', 'upQualifier', 'upValue', 'unit'],
-            adjust: function (obj, parse) { if (!obj.loQualifier) obj.loQualifier = '='; }
+            adjust: function (obj, parse) { 
+              if (!obj.loQualifier) obj.loQualifier = '='; 
+              if (!!obj.unit) obj.unit = obj.unit.trim();
+            }
+          },
+          {
+            regex: /^\s*(<|<=)?\s*(\-?\d+[\.eE]?\-?\d*)\s*([^\d,]*)\s*$/,
+            fields: ['', 'upQualifier', 'upValue', 'unit'],
+            adjust: function (obj, parse) {  if (!!obj.unit) obj.unit = obj.unit.trim(); }
           }
         ];
         
