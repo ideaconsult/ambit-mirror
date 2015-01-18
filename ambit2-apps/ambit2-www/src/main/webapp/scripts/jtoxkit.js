@@ -1080,6 +1080,26 @@ window.jT.ui = {
     return out;
   },
   
+	renderObjValue: function (data, units, type, pre) {
+		if (!data)
+		  return type == 'display' ? '-' : '';
+		  
+		var val = jT.ui.renderRange(data, units, type, pre);
+		if (ccLib.trim(val) == '-')
+		  val = '';
+		if (!!val && type != 'display' && !!data.units)
+		  val += '&nbsp;' + data.units;
+		if (!!data.textValue) {
+  		if (!!val && type == 'display')
+  		  val += '&nbsp;/&nbsp;';
+  		val += data.textValue;
+		}
+		
+		if (!val)
+		  val = '-';
+		return val;
+	},
+  
   putInfo: function (href, title) {
     return '<sup class="helper"><a target="_blank" href="' + (href || '#') + '" title="' + (title || href) + '"><span class="ui-icon ui-icon-info"></span></a></sup>';
   },
@@ -1978,7 +1998,7 @@ var jToxCompound = (function () {
       var val = (feature.data !== undefined) ? (ccLib.getJsonValue(entry, jT.$.isArray(feature.data) ? feature.data[0] : feature.data)) : entry.values[fId];
       return (typeof feature.render == 'function') ? 
         feature.render(val, !!type ? type : 'filter', entry) : 
-        jT.ui.valueWithUnits(val, !!feature.units && (type == 'display' || type == 'details') ? feature.units : null)
+        jT.ui.renderObjValue(val, feature.units, type);
     },
     
     featureUri: function (fId) {
@@ -2033,7 +2053,20 @@ var jToxCompound = (function () {
           return (type != "display") ? '' + data : jT.ui.shortenedData(data, "Press to copy the value in the clipboard"); 
         };
       else if (feature.data == null) // in other cases we want the default presenting of the plain value
-        col["mRender"] = (function(featureId) { return function(data, type, full) { return full.values[featureId] ||'-'; }; })(fId);
+        col["mRender"] = (function(featureId, units) { return function(data, type, full) {
+          var val = full.values[featureId] || '-';
+          if (typeof val != 'object')
+            return val;
+          if (!jT.$.isArray(val))
+            val = [val];
+          var html = '';
+          for (var i = 0;i < val.length; ++i) {
+            html += (type == 'display') ? '<div>' : '';
+            html += jT.ui.renderObjValue(val[i], units, type);
+            html += (type == 'display') ? '</div>' : ',';
+          }
+          return html;
+        }; })(fId, feature.unit);
       
       // other convenient cases
       if (!!feature.shorten)
@@ -2470,12 +2503,12 @@ var jToxCompound = (function () {
     
     /* Retrieve features for provided dataserUri, using settings.featureUri, if provided, or making automatice page=0&pagesize=1 query
       */
-    queryFeatures: function (callback) {
+    queryFeatures: function (featureUri, callback) {
       var self = this;
       var dataset = null;
 
-      // first, build the proper      
-      var queryUri = self.settings.featureUri || self.settings.feature_uri;
+      // first, build the proper
+      var queryUri = featureUri || self.settings.featureUri || self.settings.feature_uri;
       if (!queryUri) // rollback this is the automatic way, which makes a false query in the beginning
         queryUri = ccLib.addParameter(self.datasetUri, "page=0&pagesize=1");
 
@@ -2546,7 +2579,7 @@ var jToxCompound = (function () {
     /* Makes a query to the server for particular dataset, asking for feature list first, so that the table(s) can be 
     prepared.
     */
-    queryDataset: function (datasetUri) {
+    queryDataset: function (datasetUri, featureUri) {
       var self = this;
       // if some oldies exist...
       this.clearDataset();
@@ -2563,7 +2596,7 @@ var jToxCompound = (function () {
       if (!!self.settings.oLanguage.sLoadingRecords)
         jT.$('.message', procDiv).html(self.settings.oLanguage.sLoadingRecords);
       
-      self.queryFeatures(function (dataset) {
+      self.queryFeatures(featureUri, function (dataset) {
         jT.$(procDiv).hide();
         self.queryEntries(self.pageStart, self.pageSize, dataset);
       });
