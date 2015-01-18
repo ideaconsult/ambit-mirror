@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import net.idea.i5.io.QASettings;
 import net.idea.modbcum.i.IQueryCondition;
@@ -51,6 +50,7 @@ import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.substance.ids.ReadChemIdentifiersByComposition;
 import ambit2.db.substance.relation.ReadSubstanceComposition;
 import ambit2.db.update.bundle.matrix.ReadEffectRecordByBundleMatrix;
+import ambit2.db.update.bundle.matrix.ReadEffectRecordByBundleMatrix._matrix;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetURIReporter;
@@ -95,7 +95,13 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 
     @Override
     protected IQueryRetrieval<ProtocolEffectRecord<String, String, String>> getEffectQuery() {
-	return new ReadEffectRecordByBundleMatrix(bundle);
+	_matrix matrix = getList();
+	switch (matrix) {
+	case matrix_final:
+	    return new ReadEffectRecordByBundleMatrix(bundle, _matrix.matrix_final);
+	   default: 
+	    return new ReadEffectRecordByBundleMatrix(bundle, _matrix.matrix_working);
+	}
     }
 
     @Override
@@ -149,8 +155,14 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 
     @Override
     protected Representation delete(Variant variant) throws ResourceException {
-	if (getList() != null)
+	
+	_matrix matrix = getList();
+	switch (matrix) {
+	case matrix_working:
+	    break;
+	default: 
 	    throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+	}
 
 	String token = getToken();
 
@@ -169,7 +181,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 	    DatasetURIReporter r = new DatasetURIReporter(getRequest());
 	    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
 	    conn = dbc.getConnection();
-	    CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(Method.DELETE, null, bundle, r,
+	    CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(_matrix.matrix_working,Method.DELETE, null, bundle, r,
 		    conn, getToken());
 	    ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("Delete matrix from bundle",
 		    callable, getRequest().getRootRef(), token);
@@ -190,15 +202,24 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 	}
     }
 
-    protected Object getList() {
-	return getRequest().getAttributes().get("list");
+    protected _matrix getList() throws ResourceException {
+	Object matrixtype = getRequest().getAttributes().get("list");
+	if (matrixtype == null) return _matrix.matrix_working; //working matrix by default
+	else if ("working".equals(matrixtype.toString())) return _matrix.matrix_working;
+	else if ("final".equals(matrixtype.toString())) return _matrix.matrix_final;
+	else if ("deleted".equals(matrixtype.toString())) return _matrix.deleted_values;
+	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
     }
 
     @Override
     protected Representation post(Representation entity, Variant variant) throws ResourceException {
-	if (getList() != null)
+	_matrix matrix = getList();
+	switch (matrix) {
+	case deleted_values:
 	    throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
-
+	default:
+	    break;
+	}
 	if ((entity == null) || !entity.isAvailable())
 	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty content");
 	if (entity.getMediaType() != null)
@@ -220,7 +241,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 		    DatasetURIReporter r = new DatasetURIReporter(getRequest());
 		    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
 		    conn = dbc.getConnection();
-		    CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(Method.POST,
+		    CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(matrix,Method.POST,
 			    new Form(entity), bundle, r, conn, getToken());
 		    ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("Matrix from bundle",
 			    callable, getRequest().getRootRef(), token);
@@ -246,20 +267,27 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 
     @Override
     protected Representation put(Representation entity, Variant variant) throws ResourceException {
-	Object list = getList();
-
+	_matrix matrix = getList();
+	
 	if ((entity == null) || !entity.isAvailable())
 	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty content");
 
 	if (entity.getMediaType() != null) {
 	    if (MediaType.APPLICATION_JSON.getName().equals(entity.getMediaType().getName())) {
 		_mode importmode = _mode.studyimport;
-		if (list != null) {
-		    if ("deleted".equals(list.toString()))
-			importmode = _mode.matrixvaluedelete;
-		    else
-			throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+		switch (matrix) {
+		case deleted_values: {
+		    importmode = _mode.matrixvaluedelete;
+		    break;
+		} 
+		case matrix_working: {
+		    importmode = _mode.studyimport;
+		    break;
 		}
+		default: 
+		    throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+		}
+
 		try {
 		    File file = File.createTempFile("_matrix_", ".json");
 		    file.deleteOnExit();
@@ -292,8 +320,13 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 		}
 
 	    } else if (MediaType.MULTIPART_FORM_DATA.getName().equals(entity.getMediaType().getName())) {
-		if (list != null)
+		switch (matrix) {
+		case matrix_working: {
+		    break;
+		}
+		default: 
 		    throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+		}		
 
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		RestletFileUpload upload = new RestletFileUpload(factory);

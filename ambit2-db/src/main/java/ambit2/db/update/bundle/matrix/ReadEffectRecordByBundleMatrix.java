@@ -12,26 +12,41 @@ import ambit2.db.substance.study.ReadEffectRecordBySubstance;
 
 public class ReadEffectRecordByBundleMatrix extends ReadEffectRecordBySubstance {
     protected SubstanceEndpointsBundle bundle;
+    public enum _matrix {matrix_working,matrix_final,deleted_values};
+    protected _matrix matrix = _matrix.matrix_working;
     /**
 	 * 
 	 */
     private static final long serialVersionUID = -1885870102248748663L;
 
-    private String sql = "select p.document_prefix,hex(p.document_uuid) u,\n"
+    private String sql_working = "select p.document_prefix,hex(p.document_uuid) u,\n"
 	    + "p.topcategory,p.endpointcategory,guidance,params,reference,idresult,\n"
 	    + "e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint,e.copied,e.deleted,e.remarks\n"
 	    + "from bundle_substance_protocolapplication p\n"
 	    + "join bundle_substance_experiment e on p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"
 	    + "where p.idbundle=e.idbundle and p.substance_prefix =? and p.substance_uuid =unhex(?) and p.idbundle=?";
 
-    public ReadEffectRecordByBundleMatrix(SubstanceEndpointsBundle bundle) {
+    private String sql_final = "select p.document_prefix,hex(p.document_uuid) u,\n"
+	    + "p.topcategory,p.endpointcategory,guidance,params,reference,idresult,\n"
+	    + "e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint,e.copied,e.deleted,e.remarks\n"
+	    + "from bundle_final_protocolapplication p\n"
+	    + "join bundle_final_experiment e on p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"
+	    + "where p.idbundle=e.idbundle and p.substance_prefix =? and p.substance_uuid =unhex(?) and p.idbundle=?";
+
+    
+    public ReadEffectRecordByBundleMatrix(SubstanceEndpointsBundle bundle, _matrix matrix) {
 	super();
 	this.bundle = bundle;
+	this.matrix = matrix;
     }
 
     @Override
     public String getSQL() throws AmbitException {
-	return sql;
+	switch(matrix) {
+	case matrix_final: return sql_final;
+	default: return sql_working;	
+	}
+	
     }
 
     @Override
