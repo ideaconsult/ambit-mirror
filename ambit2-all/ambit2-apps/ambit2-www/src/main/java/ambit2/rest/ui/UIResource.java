@@ -8,6 +8,7 @@ import java.util.Map;
 import net.idea.i5.io.IQASettings;
 import net.idea.i5.io.QASettings;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.task.ITaskResult;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -26,7 +27,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.config.AMBITConfig;
 import ambit2.base.data.StructureRecord;
-import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.json.JSONUtils;
@@ -38,7 +38,6 @@ import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.freemarker.FreeMarkerResource;
 import ambit2.rest.substance.CallableSubstanceImporter;
 import ambit2.rest.substance.SubstanceURIReporter;
-import ambit2.rest.task.TaskResult;
 import ambit2.user.rest.resource.AMBITDBRoles;
 import ambit2.user.rest.resource.DBRoles;
 
@@ -390,7 +389,7 @@ public class UIResource extends FreeMarkerResource {
 							callable.setClearComposition(clearComposition);
 							callable.setClearMeasurements(clearMeasurements);
 							callable.setQASettings(qa);
-							TaskResult result = callable.call();
+							ITaskResult result = callable.call();
 							json.append(",\n\"url\":");
 							json.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(result.getReference().toString())));
 							json.append(",\n\"thumbnailUrl\":");

@@ -13,7 +13,6 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.StringConvertor;
-import net.idea.restnet.c.TaskApplication;
 import net.idea.restnet.c.task.FactoryTaskConvertor;
 import net.idea.restnet.db.QueryResource;
 import net.idea.restnet.db.QueryURIReporter;
@@ -474,7 +473,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 						new SubstanceURIReporter(getRequest().getRootRef()),
 						new DatasetURIReporter(getRequest().getRootRef()),
 						token);
-						ITask<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
+						ITask<Reference,Object> task =  ((ITaskApplication)getApplication()).addTask(
 						"Retrieve substance from IUCLID5 server",
 						callable,
 						getRequest().getRootRef(),
