@@ -97,6 +97,8 @@ public class TestUtilities
 	boolean FlagTargetPreprocessing = false;
 	boolean FlagExplicitHAtoms = false;
 	boolean FlagPrintAtomAttributes = false;
+	boolean FlagPrintTransformationData = false;
+	
 	
 	boolean FlagProductPreprocessing = true;
 	boolean FlagClearImlicitHAtomsBeforeProductPreProcess = true;
@@ -1575,7 +1577,8 @@ public class TestUtilities
 			return;
 		}
 		
-		System.out.println(reaction.transformationDataToString());
+		if (FlagPrintTransformationData)
+			System.out.println(reaction.transformationDataToString());
 		
 		
 		if (targetSmiles.equals(""))
@@ -1667,8 +1670,8 @@ public class TestUtilities
 		//System.out.println("reactant SMARTS: " + smartsHelper.toSmarts(reaction.reactant) );
 		//System.out.println("product SMARTS: " + smartsHelper.toSmarts(reaction.product) );
 		
-		
-		System.out.println(reaction.transformationDataToString());
+		if (FlagPrintTransformationData)
+			System.out.println(reaction.transformationDataToString());
 		
 		//System.out.println("Reactant Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.reactant));
 		//System.out.println("Product Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.product));
@@ -2614,7 +2617,7 @@ public class TestUtilities
 		//tu.FlagExplicitHAtoms = true;
 		tu.FlagTargetPreprocessing = true;
 		tu.FlagProductPreprocessing = true;
-		tu.FlagPrintAtomAttributes = true;
+		//tu.FlagPrintAtomAttributes = true;
 		//tu.FlagSSMode =  SmartsConst.SSM_NON_IDENTICAL_FIRST;
 		//tu.FlagExplicitHToImplicitOnProductPreProcess = true;
 		
@@ -2634,7 +2637,11 @@ public class TestUtilities
 		
 		//tu.testSMIRKS("[C:1][C:3][C:4][C:2]>>[C:1]1[C:3][C:4][C:2]~1", "CCCC");
 		//tu.testSMIRKS("[C:1]C>>[C:1]#&!=,-N", "CC");
-		tu.testSMIRKS("[C:1]C>>[C:1].C=N", "CC");
+		
+		
+		tu.FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_ALL;
+		tu.testSMIRKS("[c:1]1[cH1:6][cH1:5][c:4][c:3][c:2]1>>[OH1]-[#6@H:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6@H:6]-1-[OH1]", 
+				"C=C(CC)C1=CC=CC=C1Cl",  ReactionOperation.SingleCopyForEachPos);
 		
 		
 		//tu.testAtomAttribsOnChangingBond();
@@ -2642,14 +2649,6 @@ public class TestUtilities
 		//tu.testSMIRKS("[#6:5]1[#6:4]=[#6:3][#6:2]=[#6:1][#6:6]=1>>[OH1]-[#6:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]-1-[OH1]", "C1=CC=CC=C1");
 		//tu.testSMIRKS("[#6:5]1[#6:4]=[#6:3][#6:2]=[#6:1][#6:6]=1>>[OH1]-[#6:5]-1-[#6:4]-[#6:3]-[#6:2]-[#6:1]-[#6:6]-1-[OH1]", "C1=CC=CC=C1");
 		
-		/*
-		 * It seem to have two problems: (1) one the mapping of aromatic --> single/double bond
-		 * 								 (2) the preprocessing of the result
-		 */
-		
-		
-		
-		tu.FlagPrintAtomAttributes = false;
 		
 		//tu.testSMIRKS("[H:99][O;X2:1][a:2]>>[H:99].Cl[O;X2:1][a:2]","[H]Oc1ccccc1");
 		//tu.testSMIRKS("[H:99][O;X2:1][a:2]>>[H:99].Cl[O;X2:1][a:2]","[H]OC1=CC=CC=C1");
