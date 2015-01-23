@@ -647,6 +647,7 @@ var jToxBundle = {
               $('.save-button', panel).show();
         		  $('.create-button', panel).hide();
         		  self.bundleSummary.matrix++;
+        		  self.edit.matrixEditable = true;
         		  self.matrixKit.query(self.bundleUri + '/matrix');
       		  }
     		  });
