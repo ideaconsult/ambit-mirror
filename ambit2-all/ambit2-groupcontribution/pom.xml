@@ -4,12 +4,12 @@
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
-    <version>2.7.2</version>
+    <version>2.7.3-SNAPSHOT</version>
   </parent>
   <groupId>ambit</groupId>
   <artifactId>ambit2-groupcontribution</artifactId>
   <name>Group contribution methods</name>
-  <version>2.7.2</version>
+  <version>2.7.3-SNAPSHOT</version>
   <inceptionYear>Nov 2013</inceptionYear>
   <dependencies>
     <dependency>

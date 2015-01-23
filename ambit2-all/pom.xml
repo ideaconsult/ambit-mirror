@@ -4,7 +4,7 @@
   <groupId>ambit</groupId>
   <artifactId>ambit2-all</artifactId>
   <packaging>pom</packaging>
-  <version>2.7.2</version>
+  <version>2.7.3-SNAPSHOT</version>
   <name>Ambit 2</name>
   <description>AMBIT offers chemoinformatics functionality via REST web services and desktop applications. Chemical compounds and data storage in MySQL database; substructure, similarity and other queries, descriptor calculation and predictive models building.</description>
   <url>http://ambit.sourceforge.net</url>
