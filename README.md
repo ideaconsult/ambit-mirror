@@ -1,13 +1,13 @@
-
 http://ambit.sourceforge.net
 
 This is multi module maven project.
 
+#Build
 
 Prerequisites for building AMBIT2
 JDK 1.6 or higher 
 MySQL 5.5 or higher (also compatible with MySQL 5.1 )
-Maven 2.x
+Maven 2.x or 3.x
 
 1) to build ambit2 libraries:  
 
@@ -16,7 +16,7 @@ svn checkout svn://svn.code.sf.net/p/ambit/code/trunk/ambit2-all ambit-all
 
 ambit2-all>mvn package
 
-2) to build applications - AMbitXT (standalone) and REST web services (war):
+2) to build applications - AMBIT REST web services (war):
 
 >cd ambit2-apps
 mvn clean buildnumber:create package -P http -P ambit-release -P aa-enabled -P aa-admin-disabled -P license-in-text-column
@@ -24,22 +24,27 @@ mvn clean buildnumber:create package -P http -P ambit-release -P aa-enabled -P a
 (See ambit2-all/ambit2-apps/README.txt for options)
 
 NOTE 1: The build of applications (ambit2-ambitxt and ambit2-www) depends on Toxtree jars. 
-All ambit and Toxtree artifacts are available at
+All AMBIT and Toxtree artifacts are available at
 
-http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty
+http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases
+
+http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots
 
 Optionally, to build Toxtree version on your own, get the source 
 svn checkout http://svn.code.sf.net/p/toxtree/svn/trunk/toxtree toxtree and run mvn install.
 
 
-NOTE 2: The build process includes mandatory database tests and may take a while. 
+NOTE 2: The build process includes mandatory database tests and may take a while.  Use -DskipTests=true option to skip the tests.
+
+##Database configuration 
+
 To be able to access mysql database, there should be "settings.xml" file in your ".m2" directory with the following configuration:
 
 Root DB password is used only for creating a new database via dbunit tests , and if a web request to create a new database succeeds.
 Regular user and password are guest/guest by default and are used in database queries/writes.
 
 
-
+````
 <settings xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -104,17 +109,52 @@ Regular user and password are guest/guest by default and are used in database qu
     </profile>
   </profiles>
 </settings>
+````
 
 To skip the tests, use -DskipTests=true option
 
 >mvn install [other options] -DskipTests=true
 
 ----------------------------------------------------------------------
-CHANGELOG
+#CHANGELOG
 
-AMBIT2 2.5.8-SNAPSHOT
+AMBIT2 2.7.3-SNAPSHOT
 Current version at trunk
 
+AMBIT2 2.7.2
+ambit2-www: UI for Read across workflow
+ambit2-www: Improved API-DOCS (swagger-ui)
+ambit2-db: Database schema 8.7 
+ambit2-db: Database and REST API support for Read across assessments
+ambit2-smarts: Improved SMIRKS parser
+ambit2-*: Various dependencies updated
+ambit2-*:  Bug fixes
+ 
+AMBIT2 2.7.1
+ambit2-db: Database schema 8.6 
+ambit2-db: Database and REST API support for Read across assessments 
+ambit2-db: Fixed to enable configurations of the users database name
+ambit2-*: Various dependencies updated
+ambit2-www: Cache headers
+ambit2-www: improved API-DOCS (swagger-ui)
+ambit2-tautomers: improved tautomer generation
+
+AMBIT2 2.7.0 
+ambit2-db: Database schema 8.5
+ambit2-db: Tuple tables removed
+ambit2-sln: Improved SLN parser
+ambit2-db: Refactoring to use modbcum dependencies
+ambit2-*: Bug fixes
+
+AMBIT2 2.5.9  
+ambit2-www: Password change by admin is enabled (see User management page).  Does not depend on email notification
+ambit2-www: Small Javascript fixes at the query page  
+   
+AMBIT2 2.5.8
+ambit2-www: Improved user interface
+ambit2-db: Substances and experimental data support (import, retrieve, Support for local users database and access rights)
+ambit2-db: Database schema 8.4
+   
 AMBIT2 2.5.7
 ambit2-db: Database schema 8.2
 ambit2-db: Mysql Connector/J 5.1.31
@@ -373,10 +413,11 @@ AMBIT 2.1.4
 Changelog: cdk 1.3.6 and jchempaint 3.1.3
 
 -------------------------------------------------------
-Database
+#Database
 
 If not using the automatic DB create via REST services , grant the following privileges (change the user if necessary)
 
+````
 GRANT ALL ON `ambit2`.* TO 'guest'@'localhost' IDENTIFIED BY 'guest';
 GRANT ALL ON `ambit2`.* TO 'guest'@'127.0.0.1' IDENTIFIED BY 'guest';
 GRANT ALL ON `ambit2`.* TO 'guest'@'::1' IDENTIFIED BY 'guest';
@@ -395,8 +436,10 @@ GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'::1';
 GRANT EXECUTE ON PROCEDURE `ambit2`.deleteDataset TO 'guest'@'localhost';
 GRANT EXECUTE ON PROCEDURE `ambit2`.deleteDataset TO 'guest'@'127.0.0.1';
 GRANT EXECUTE ON PROCEDURE `ambit2`.deleteDataset TO 'guest'@'::1';
+````
 
 test database ambit-test
+````
 GRANT ALL ON `ambit-test`.* TO 'guest'@'localhost' IDENTIFIED BY 'guest';
 GRANT ALL ON `ambit-test`.* TO 'guest'@'127.0.0.1' IDENTIFIED BY 'guest';
 GRANT ALL ON `ambit-test`.* TO 'guest'@'::1' IDENTIFIED BY 'guest';
@@ -410,6 +453,7 @@ GRANT EXECUTE ON PROCEDURE `ambit-test`.findByProperty TO 'guest'@'::1';
 GRANT EXECUTE ON PROCEDURE `ambit-test`.deleteDataset TO 'guest'@'localhost';
 GRANT EXECUTE ON PROCEDURE `ambit-test`.deleteDataset TO 'guest'@'127.0.0.1';
 GRANT EXECUTE ON PROCEDURE `ambit-test`.deleteDataset TO 'guest'@'::1';
+````
 
 UPDATE mysql.proc SET definer = 'guest@localhost' WHERE db = 'ambit2';
 UPDATE mysql.proc SET definer = 'guest@localhost' WHERE db = 'ambit-test';
