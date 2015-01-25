@@ -1243,7 +1243,11 @@ function defineFeatureTable(root,url) {
 					  "sWidth" : "10%",
 					  "bSortable" : true,
 					  "fnRender" : function(o,val) {
+					  	  try {
 						  return boolean2checkbox(val,"Numeric","String");
+						  } catch (err) {
+						  	return val;
+						  }
 					  }
 				},
 				{ "mDataProp": "feature.isNominal" , "asSorting": [ "asc", "desc" ],
@@ -1253,7 +1257,11 @@ function defineFeatureTable(root,url) {
 					  "sWidth" : "10%",
 					  "bSortable" : true,
 					  "fnRender" : function(o,val) {
+					  	  try {
 						  return boolean2checkbox(val,"Yes","No");
+						  } catch (err) {
+						  	return val;
+						  }
 					  }
 				},
 				{ "mDataProp": "URI" , "asSorting": [ "asc", "desc" ],
@@ -1328,8 +1336,14 @@ function defineFeatureTable(root,url) {
 }
 
 function boolean2checkbox(val,yes,no) {
-	var istrue = (val.toLowerCase() === 'true');
-	return "<input type='checkbox' "+ (istrue?"checked":"") + " title="  + (istrue?yes:no) + " disabled> " + (istrue?yes:no) ;
+    try {
+		var istrue = false;
+		if(typeof val === 'boolean') istrue = val;
+		else istrue =  (val.toLowerCase() === 'true');
+		return "<input type='checkbox' "+ (istrue?"checked":"") + " title="  + (istrue?yes:no) + " disabled> " + (istrue?yes:no) ;
+	} catch (err) {
+		return val;
+	}
 }
 /**
  * Features list box
