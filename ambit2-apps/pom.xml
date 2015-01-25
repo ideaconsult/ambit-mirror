@@ -519,4 +519,8 @@
       </modules>
     </profile>
   </profiles>
+  <ciManagement>
+  	<system>Jenkins</system>
+  	<url>https://jenkins.uni-plovdiv.net</url>
+  </ciManagement>
 </project>
