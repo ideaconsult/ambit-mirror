@@ -6,70 +6,61 @@
  2014/09/15
  -----
 
-AMBIT libraries 
+AMBIT source code 
 
-	AMBIT is implemented in Java, uses a MySQL database as backend, and relies on {{{http://cdk.sf.net}The Chemistry Development Kit}} 
-	for cheminformatics functionality. 
-	
-	The {{{./api.html}OpenTox API}} implementation introduces two additional major dependencies, namely, the {{{http://www.restlet.org/}Restlet}} library 
-	for implementation of REST services, and the {{{http://jena.sourceforge.net/}Jena}} RDF API. 
-	{{{http://maven.apache.org/}Apache Maven}} is used for software project management 
-	(organizing dependencies and building of executables). 
+	There are two top level Maven projects, AMBIT {{modules}} and AMBIT {{applications}}, consisting of several sub-modules.
+	 
+	The first (AMBIT modules) is used to organize and build libraries, while the second (AMBIT applications) uses these modules as dependencies to build the end user applications and web services.
+
+	AMBIT is implemented in Java, uses a MySQL database as backend, and relies on {{{http://cdk.sf.net}The Chemistry Development Kit}} for cheminformatics functionality. 
 	
 	The source code is available in a Subversion repository at the {{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all}SourceForge site}}. 
 	
-	There are two top level Maven projects, {{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all}ambit2-all (libraries)}} and 
-	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-apps}ambit2-apps (applications)}}, 
-	consisting of several sub-modules. 	The first is used to organize and build libraries, while the second uses these modules as dependencies 
-	to build the end user applications and web services. 
 	
-	The {{{http://toxtree.sf.net}Toxtree}} source code  also includes dependencies on some of the {{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all}ambit2-all}} modules.
-	On the other hand, Toxtree itself a dependency of the end user applications and web services, in which it has been incorporated, 
-	such as {{{./download_ambitxt.html}AmbitXT}} and {{{./download_ambitrest.html}AMBIT REST web services}}.
+AMBIT Modules {modules} 
+	
+	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all}/ambit2-all }} (source code at Sourceforge.net SVN)
+
+	{{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/}Downloads at Sourceforge.net}}
+	
+    {{{http://ambit.uni-plovdiv.bg:8083/nexus/#nexus-search;gav~ambit~~~jar~}Maven artifacts search}}
 	
 	More details about ({{{./AMBIT2-LIBS/apidocs}javadoc}}, code examples) at {{{https://github.com/ideaconsult/examples-ambit}GitHub}}. 
 
-License
+AMBIT Applications {applications} 
+
+	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-apps}/ambit2-all/ambit2-apps}} (source code at Sourceforge.net SVN)
+	
+	{{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/}Downloads at Sourceforge.net}}
+	
+	{{{http://ambit.uni-plovdiv.bg:8083/nexus/#nexus-search;gav~ambit~~~war~}Maven artifacts search}}
+	
+
+Toxtree dependencies
+ 	
+	The {{{http://toxtree.sf.net}Toxtree}} source code uses some of the {{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all}  AMBIT modules (ambit2-all)}} as dependencies.
+	
+	Toxtree code itself is a dependency of the AMBIT {{applications}}, such as  {{{./install_ambitrest.html}AMBIT REST web services}}.
+	
+
+AMBIT modules license
 
 	[LGPL] {{{http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt}http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt}}
 
-Download jars	
-
-	{{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/}AMBIT_modules at sourceforge.net}}
-
-The code
-	
-	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all}Libraries}} (multi-module Maven project) 
-	
-	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-apps}Applications}} (multi-module Maven project)
-	
-	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/tags}tags}} 
 	
 {{{http://maven.apache.org/}Maven}} artifacts 
    		
-   		{{{http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases/ambit/}http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases/ambit/}}
-   		
-   		Snapshots
+   		Release 
    		
 +---------------------------------    
 <dependency>
   <groupId>ambit</groupId>
   <artifactId>ambit2-*</artifactId>
-  <version>2.7.2-SNAPSHOT</version>
-</dependency>
-+---------------------------------   		
-   		
-   		Release
-   		
-+---------------------------------    
-<dependency>
-  <groupId>ambit</groupId>
-  <artifactId>ambit2-*</artifactId>
-  <version>2.7.1</version>
+  <version>2.7.2</version>
 </dependency>
 +---------------------------------
 
-		Repository
+		{{{http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases/ambit/}Release repository}} 
 		
 +---------------------------------
    <repository>
@@ -78,8 +69,27 @@ The code
     </repository>
 +--------------------------------- 	
 
+   		Snapshots
+   		
++---------------------------------    
+<dependency>
+  <groupId>ambit</groupId>
+  <artifactId>ambit2-*</artifactId>
+  <version>2.7.3-SNAPSHOT</version>
+</dependency>
++---------------------------------   
 
-AMBIT Examples
+		{{{http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases/ambit/}Snapshots Repository}}
+		
++---------------------------------
+   <repository>
+        <id>ambit-plovdiv-releases</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots</url>
+    </repository>
++--------------------------------- 	
+
+
+How to use:
 
  [Example: tautomers] {{{https://github.com/ideaconsult/examples-ambit/tree/master/tautomers-example}Examples how to use ambit2-tautomer package}}
  
