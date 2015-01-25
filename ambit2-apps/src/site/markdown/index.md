@@ -1,6 +1,38 @@
+#### [Structure search][smarts]
 
+![Structure search](images/screenshots/search_substructure_2.png "AMBIT Substructure search")
 
-![Substructure search](images/screenshots/search_substructure_2.png "AMBIT Substructure search")
+Chemical structure search (exact structure, by identifiers, similarity and substructure)
+
+#### [Chemical substances][composition]
+
+![Chemical substances](images/screenshots/composition.png "Chemical substances composition")
+
+Support for mono-constituent and multi-constituent  substances, including additives and impurities.
+
+#### [Endpoint data][endpoint]
+
+![Endpoint data](images/screenshots/endpoint_repeateddose_oral.png "Repeated dose toxicity")
+
+Endpoint data (support for all REACH endpoints, IUCLID5 import) 
+
+#### [Read across support][ra]
+
+![Read across support](images/screenshots/ra_matrix.png "AMBIT Read across support")
+
+Read across workflow - select structures, endpoints, create a data matrix.
+
+#### [Toxtree online][toxtree]
+
+![Toxtree online](images/screenshots/toxtree_1.png "Toxtree online")
+
+Toxtree predictions online
+
+[smarts]: usage.html
+[endpoint]: usage_substance.html
+[composition]: usage_substance.html
+[ra]: http://apps.ideaconsult.net/data/ui/assessment
+[toxtree]: https://apps.ideaconsult.net/data/ui/toxtree
 
 ---
 
@@ -56,11 +88,9 @@ User guide
 
 -   Quick user guides: [**Structure search**](usage.html) | [**Substance search**](usage_substance.html) | [**Datasets**](usage_dataset.html)
 
-## OpenTox Euro 2014 workshop [<sup>?</sup>](http://douglasconnect.com/abstract/workshop-data-ambit)
+## Explore 
 
-CHEMICAL SUBSTANCES, NANOMATERIALS AND ENDPOINT DATA IN AMBIT 
-
-The exercises will be using https://apps.ideaconsult.net/opentox/
+Chemical structures, chemical substances and endpoint data in AMBIT    
 
 -   [**Structure search**](https://apps.ideaconsult.net/opentox/ui/_search)
 
@@ -70,7 +100,7 @@ The exercises will be using https://apps.ideaconsult.net/opentox/
 
 -   [**Run Toxtree predictions**](https://apps.ideaconsult.net/opentox/ui/toxtree)
 
--   Please [**provide feedback**](https://docs.google.com/forms/d/1ncsW59uGAJfEUgSv8tvfbiU0XRXIik9RuRJ376WnkB0/viewform) on the [**Read Across workflow user interface proposal**](http://ambit.sourceforge.net/RA/RA.pdf)
+-   [**Provide feedback**](https://docs.google.com/forms/d/1ncsW59uGAJfEUgSv8tvfbiU0XRXIik9RuRJ376WnkB0/viewform) for the [**Read across workflow support** (under development)](https://apps.ideaconsult.net/opentox/ui/assessment)   
 
 ---
 
