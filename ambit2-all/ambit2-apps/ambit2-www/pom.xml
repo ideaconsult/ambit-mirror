@@ -267,7 +267,7 @@
           <path>/ambit2</path>
           <systemProperties>
             <JAVA_OPTS>XX:-UseSplitVerifier
-							-Djava.util.Arrays.useLegacyMergeSort</JAVA_OPTS>
+							-Djava.util.Arrays.useLegacyMergeSort=true</JAVA_OPTS>
           </systemProperties>
         </configuration>
       </plugin>
