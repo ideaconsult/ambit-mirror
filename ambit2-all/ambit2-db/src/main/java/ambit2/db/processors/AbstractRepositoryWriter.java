@@ -20,7 +20,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 
 package ambit2.db.processors;
 
@@ -39,121 +39,144 @@ import ambit2.base.processors.ProcessorException;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.search.QueryExecutor;
 
-public abstract class AbstractRepositoryWriter<Target,Result> extends AbstractDBProcessor<Target, Result>  {
-	public enum OP {CREATE,READ,UPDATE,DELETE};
-	protected OP operation =OP.CREATE;
+public abstract class AbstractRepositoryWriter<Target, Result> extends AbstractDBProcessor<Target, Result> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 7620071794813020111L;
+
+    public enum OP {
+	CREATE, READ, UPDATE, DELETE
+    };
+
+    protected OP operation = OP.CREATE;
     protected UpdateExecutor<IQueryUpdate> exec;
-    protected QueryExecutor<IQueryObject> queryexec;    
-    
-	public AbstractRepositoryWriter() {
-		exec = new UpdateExecutor<IQueryUpdate>();
-		exec.setUseCache(true);
-		queryexec = new QueryExecutor<IQueryObject>();
-		queryexec.setCache(true);
+    protected QueryExecutor<IQueryObject> queryexec;
+
+    public AbstractRepositoryWriter() {
+	exec = new UpdateExecutor<IQueryUpdate>();
+	exec.setUseCache(true);
+	queryexec = new QueryExecutor<IQueryObject>();
+	queryexec.setCache(true);
+    }
+
+    @Override
+    public void close() throws Exception {
+	try {
+	    exec.close();
+	} catch (Exception x) {
+	    logger.log(Level.FINEST, x.getMessage(), x);
 	}
-	@Override
-	public void close() throws Exception {
-		try {exec.close(); } catch (Exception x) { logger.log(Level.FINEST,x.getMessage(),x);}
-		try {queryexec.close(); } catch (Exception x) { logger.log(Level.FINEST,x.getMessage(),x);}
-		super.close();
+	try {
+	    queryexec.close();
+	} catch (Exception x) {
+	    logger.log(Level.FINEST, x.getMessage(), x);
 	}
-	
+	super.close();
+    }
+
     public OP getOperation() {
-		return operation;
-	}
-	public void setOperation(OP operation)  {
-		this.operation = operation;
-	}
-	@Override
-	public synchronized void setConnection(Connection connection)  throws DbAmbitException  {
-        super.setConnection(connection);
-        exec.setConnection(connection);
-        queryexec.setConnection(connection);
-    }       
-	@Override
+	return operation;
+    }
+
+    public void setOperation(OP operation) {
+	this.operation = operation;
+    }
+
+    @Override
+    public synchronized void setConnection(Connection connection) throws DbAmbitException {
+	super.setConnection(connection);
+	exec.setConnection(connection);
+	queryexec.setConnection(connection);
+    }
+
+    @Override
     public void open() throws DbAmbitException {
-        try {
-            prepareStatement(getConnection());
-        } catch (SQLException x) {
-            throw new DbAmbitException(null,x);
-        }
+	try {
+	    prepareStatement(getConnection());
+	} catch (SQLException x) {
+	    throw new DbAmbitException(null, x);
+	}
     }
-   
-	
+
     protected void prepareStatement(Connection connection) throws SQLException {
-       
+
     }
-	public Result transaction(Target target) throws SQLException, AmbitException {
-	    Result result = null;
-		try {
-			connection.setAutoCommit(false);	
-        	switch (getOperation()) {
-			case CREATE: {
-				result = create(target);
-				break;
-			}
-			case READ: {
-				result = read(target);
-				break;
-			}
-			case DELETE: { 
-				result = delete(target);
-				break;
-			}
-			case UPDATE: {
-				result = update(target);
-				break;
-			}
-			default:
-				throw new SQLException("OperationNotSupported " + getOperation());
-			}
-	        connection.commit();	
-	    } catch (OperationNotSupportedException x) {
-	    	connection.rollback();
-	    } catch (SQLException x) {
-	    	connection.rollback();
-	    } finally {
-	        
+
+    public Result transaction(Target target) throws SQLException, AmbitException {
+	Result result = null;
+	try {
+	    connection.setAutoCommit(false);
+	    switch (getOperation()) {
+	    case CREATE: {
+		result = create(target);
+		break;
 	    }
-        return result;
-        
-	}	
-	public Result write(Target arg0) throws SQLException,OperationNotSupportedException,AmbitException {
-		return create(arg0);
+	    case READ: {
+		result = read(target);
+		break;
+	    }
+	    case DELETE: {
+		result = delete(target);
+		break;
+	    }
+	    case UPDATE: {
+		result = update(target);
+		break;
+	    }
+	    default:
+		throw new SQLException("OperationNotSupported " + getOperation());
+	    }
+	    connection.commit();
+	} catch (OperationNotSupportedException x) {
+	    connection.rollback();
+	} catch (SQLException x) {
+	    connection.rollback();
+	} finally {
+
 	}
-	public Result create(Target arg0) throws SQLException,OperationNotSupportedException,AmbitException {
-		return write(arg0);
+	return result;
+
+    }
+
+    public Result write(Target arg0) throws SQLException, OperationNotSupportedException, AmbitException {
+	return create(arg0);
+    }
+
+    public Result create(Target arg0) throws SQLException, OperationNotSupportedException, AmbitException {
+	return write(arg0);
+    }
+
+    public Result delete(Target arg0) throws SQLException, OperationNotSupportedException, AmbitException {
+	throw new OperationNotSupportedException(getOperation().toString());
+    }
+
+    public Result read(Target arg0) throws SQLException, OperationNotSupportedException, AmbitException {
+	throw new OperationNotSupportedException(getOperation().toString());
+    }
+
+    public Result update(Target arg0) throws SQLException, OperationNotSupportedException, AmbitException {
+	throw new OperationNotSupportedException(getOperation().toString());
+    }
+
+    public Result process(Target target) throws AmbitException {
+	try {
+	    switch (getOperation()) {
+	    case CREATE:
+		return create(target);
+	    case READ:
+		return read(target);
+	    case DELETE:
+		return delete(target);
+	    case UPDATE:
+		return update(target);
+	    default:
+		throw new AmbitException("OperationNotSupported " + getOperation());
+	    }
+	} catch (OperationNotSupportedException x) {
+	    throw new ProcessorException(this, x);
+	} catch (SQLException x) {
+	    throw new ProcessorException(this, x);
 	}
-	public Result delete(Target arg0) throws SQLException,OperationNotSupportedException,AmbitException  {
-		throw new OperationNotSupportedException(getOperation().toString());		
-	}
-	public Result read(Target arg0) throws SQLException,OperationNotSupportedException,AmbitException {
-		throw new OperationNotSupportedException(getOperation().toString());		
-	}
-	public Result update(Target arg0) throws SQLException,OperationNotSupportedException,AmbitException {
-		throw new OperationNotSupportedException(getOperation().toString());
-	}
-	
-	public Result process(Target target) throws AmbitException {
-        try {
-        	switch (getOperation()) {
-			case CREATE:
-				return create(target);
-			case READ:
-				return read(target);
-			case DELETE:
-				return delete(target);
-			case UPDATE:
-				return update(target);
-			default:
-				throw new AmbitException("OperationNotSupported " + getOperation());
-			}
-        } catch (OperationNotSupportedException x) {
-            throw new ProcessorException(this,x);
-        } catch (SQLException x) {
-            throw new ProcessorException(this,x);
-        }
-	}
+    }
 }
-
-

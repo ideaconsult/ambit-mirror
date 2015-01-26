@@ -30,7 +30,6 @@
 package ambit2.dbui;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 import javax.swing.JComponent;
 
@@ -42,61 +41,66 @@ import ambit2.base.data.Property;
 import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.dbui.dictionary.DictionaryQueryPanel;
 
-public class ProfileEditor extends AbstractDBProcessor<Profile<Property>,Profile<Property>> implements IAmbitEditor<Profile<Property>> {
-	/**
+public class ProfileEditor extends AbstractDBProcessor<Profile<Property>, Profile<Property>> implements
+	IAmbitEditor<Profile<Property>> {
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 6665474866800960721L;
-	protected Profile<Property> profile;
-	protected DictionaryQueryPanel panel;
+    private static final long serialVersionUID = 6665474866800960721L;
+    protected Profile<Property> profile;
+    protected DictionaryQueryPanel panel;
 
-	public ProfileEditor() {
-		panel = new DictionaryQueryPanel();
-	}
-	public boolean confirm() {
-		return panel.confirm();
-	}
+    public ProfileEditor() {
+	panel = new DictionaryQueryPanel();
+    }
 
-	public JComponent getJComponent() {
-		return panel.getJComponent();
-	}
+    public boolean confirm() {
+	return panel.confirm();
+    }
 
-	public Profile<Property> getObject() {
-		return profile;
-	}
+    public JComponent getJComponent() {
+	return panel.getJComponent();
+    }
 
-	public boolean isEditable() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public Profile<Property> getObject() {
+	return profile;
+    }
 
-	public void setEditable(boolean editable) {
-		// TODO Auto-generated method stub
-		
-	}
+    public boolean isEditable() {
+	// TODO Auto-generated method stub
+	return false;
+    }
 
-	public void setObject(Profile<Property> object) {
-		this.profile = object;
-		panel.setProfile(profile);
-		
-	}
-	public Profile<Property> process(Profile<Property> target)
-			throws AmbitException {
-		return target;
-	}
-	public void open() throws DbAmbitException {
-		panel.open();
-		
-	}
-	@Override
-	public void setConnection(Connection connection) throws DbAmbitException {
-		super.setConnection(connection);
-		panel.setConnection(connection);
-	}
-	@Override
-	public void close() throws Exception {
-		super.close();
-		panel.close();
-	}
-	
+    public void setEditable(boolean editable) {
+	// TODO Auto-generated method stub
+
+    }
+
+    public void setObject(Profile<Property> object) {
+	this.profile = object;
+	panel.setProfile(profile);
+
+    }
+
+    public Profile<Property> process(Profile<Property> target) throws AmbitException {
+	return target;
+    }
+
+    public void open() throws DbAmbitException {
+	panel.open();
+
+    }
+
+    @Override
+    public void setConnection(Connection connection) throws DbAmbitException {
+	super.setConnection(connection);
+	panel.setConnection(connection);
+    }
+
+    @Override
+    public void close() throws Exception {
+	super.close();
+	panel.close();
+    }
+
 }

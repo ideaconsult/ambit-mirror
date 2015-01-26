@@ -7,7 +7,7 @@
     <version>2.7.3-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>ambit</groupId>
+
   <artifactId>ambit2-db</artifactId>
   <packaging>jar</packaging>
   <name>ambit2-db</name>
@@ -132,7 +132,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.5</version>
         <executions>
           <execution>
             <goals>

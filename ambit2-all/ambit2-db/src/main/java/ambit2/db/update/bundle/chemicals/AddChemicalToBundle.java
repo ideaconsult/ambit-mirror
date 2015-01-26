@@ -38,62 +38,71 @@ import ambit2.base.data.Property;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
 
-public class AddChemicalToBundle extends AbstractUpdate<SubstanceEndpointsBundle,IStructureRecord> {
-	private static final String[] update_sql =  {"insert into bundle_chemicals values (?,?,now(),?,?) on duplicate key update tag=values(tag),remarks=values(remarks)"	};
+public class AddChemicalToBundle extends AbstractUpdate<SubstanceEndpointsBundle, IStructureRecord> {
+    private static final String[] update_sql = { "insert into bundle_chemicals values (?,?,now(),?,?) on duplicate key update tag=values(tag),remarks=values(remarks)" };
 
-	private ILiteratureEntry reference = null;
-	public AddChemicalToBundle(SubstanceEndpointsBundle bundle,IStructureRecord dataset) {
-		this(dataset);
-		setGroup(bundle);
+    // private ILiteratureEntry reference = null;
+    public AddChemicalToBundle(SubstanceEndpointsBundle bundle, IStructureRecord dataset) {
+	this(dataset);
+	setGroup(bundle);
+    }
+
+    public AddChemicalToBundle(IStructureRecord dataset) {
+	super(dataset);
+    }
+
+    public AddChemicalToBundle() {
+	this(null);
+    }
+
+    @Override
+    public List<QueryParam> getParameters(int index) throws AmbitException {
+	List<QueryParam> params = new ArrayList<QueryParam>();
+
+	if (getGroup() == null || getGroup().getID() <= 0)
+	    throw new AmbitException("Bundle not defined");
+	if (getObject() == null)
+	    throw new AmbitException("Chemical not defined");
+
+	params.add(new QueryParam<Integer>(Integer.class, getGroup().getID()));
+
+	if (getObject().getIdchemical() > 0) {
+	    params.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
+	} else
+	    throw new AmbitException("Chemical not defined");
+
+	Object tag = null;
+	Object remarks = null;
+	ILiteratureEntry reference = LiteratureEntry.getBundleReference(getGroup());
+	for (Property property : getObject().getProperties()) {
+	    if ("tag".equals(property.getName()) && property.getReference().equals(reference)) {
+		tag = getObject().getProperty(property);
+	    } else if ("remarks".equals(property.getName()) && property.getReference().equals(reference)) {
+		remarks = getObject().getProperty(property);
+	    }
 	}
-	
-	public AddChemicalToBundle(IStructureRecord dataset) {
-		super(dataset);
+	params.add(new QueryParam<String>(String.class, tag == null ? null : tag.toString()));
+	params.add(new QueryParam<String>(String.class, remarks == null ? null : remarks.toString()));
+	return params;
+
+    }
+
+    @Override
+    public String[] getSQL() throws AmbitException {
+
+	if (getGroup() == null || getGroup().getID() <= 0)
+	    throw new AmbitException("Bundle not defined");
+	if (getObject() == null)
+	    throw new AmbitException("Chemical not defined");
+
+	if (getObject().getIdchemical() > 0) {
+	    return update_sql;
 	}
-	public AddChemicalToBundle() {
-		this(null);
-	}	
-	@Override
-	public List<QueryParam> getParameters(int index) throws AmbitException {
-		List<QueryParam> params = new ArrayList<QueryParam>();
-		
-		if (getGroup()==null || getGroup().getID()<=0) throw new AmbitException("Bundle not defined");
-		if (getObject() == null )  throw new AmbitException("Chemical not defined");
-		
-		params.add(new QueryParam<Integer>(Integer.class, getGroup().getID()));
-		
-		if (getObject().getIdchemical()>0) {
-			params.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
-		} else throw new AmbitException("Chemical not defined"); 
-		
-		Object tag = null;
-		Object remarks = null;
-		ILiteratureEntry reference = LiteratureEntry.getBundleReference(getGroup());
-		for (Property property : getObject().getProperties()) {
-			if ("tag".equals(property.getName()) && property.getReference().equals(reference)) {
-				tag = getObject().getProperty(property);
-			} else if ("remarks".equals(property.getName()) && property.getReference().equals(reference)) {
-				remarks = getObject().getProperty(property);
-			}
-		}
-		params.add(new QueryParam<String>(String.class, tag==null?null:tag.toString()));
-		params.add(new QueryParam<String>(String.class, remarks==null?null:remarks.toString()));
-		return params;
-		
-	}
-	@Override
-	public String[] getSQL() throws AmbitException {
-		
-		if (getGroup()==null || getGroup().getID()<=0) throw new AmbitException("Bundle not defined");
-		if (getObject() == null )  throw new AmbitException("Chemical not defined");
-			
-		if (getObject().getIdchemical()>0) {
-			return update_sql;
-		}		
-		throw new AmbitException("Chemical not defined");
-	}
-	public void setID(int index, int id) {
-		
-	}
-	
+	throw new AmbitException("Chemical not defined");
+    }
+
+    public void setID(int index, int id) {
+
+    }
+
 }

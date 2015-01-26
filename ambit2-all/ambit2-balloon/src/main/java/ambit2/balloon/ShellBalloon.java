@@ -55,7 +55,7 @@ public class ShellBalloon extends ShellSDFoutput<IAtomContainer> {
 	public static final String BALLOON_EXE = "balloon";
 	public static final String BALLOON_HOME = "BALLOON_HOME";
 	protected boolean hydrogens = true;
-	private String uuid = null;
+	//private String uuid = null;
 
 	public boolean isHydrogens() {
 		return hydrogens;

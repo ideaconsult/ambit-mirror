@@ -5,8 +5,13 @@ import java.io.Serializable;
 import ambit2.base.json.JSONUtils;
 
 public class ValueAnnotated<VALUE> extends Value<VALUE> implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 5475187477998823176L;
+
     public static enum _fields {
-	textValue,idresult, deleted, newentry,remarks;
+	textValue, idresult, deleted, newentry, remarks;
 	public String toJSONField() {
 	    return "\t\"" + name() + "\":";
 	}
@@ -52,23 +57,22 @@ public class ValueAnnotated<VALUE> extends Value<VALUE> implements Serializable 
     protected String textValue = null;
 
     public String getTextValue() {
-        return textValue;
+	return textValue;
     }
 
     public void setTextValue(String textValue) {
-        this.textValue = textValue;
+	this.textValue = textValue;
     }
-
 
     @Override
     public String toJSON(StringBuilder b) {
 	String comma = super.toJSON(b);
-	if (getTextValue()!=null) {
+	if (getTextValue() != null) {
 	    b.append(comma);
 	    b.append(_fields.textValue.toJSONField());
 	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getTextValue())));
 	    comma = ", ";
-	}	
+	}
 	if (getIdresult() > 0) {
 	    b.append(comma);
 	    b.append(_fields.idresult.toJSONField());
@@ -87,7 +91,7 @@ public class ValueAnnotated<VALUE> extends Value<VALUE> implements Serializable 
 	    b.append(isDeleted());
 	    comma = ", ";
 	}
-	if (getRemark()!=null) {
+	if (getRemark() != null) {
 	    b.append(comma);
 	    b.append(_fields.remarks.toJSONField());
 	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getRemark())));
@@ -95,9 +99,12 @@ public class ValueAnnotated<VALUE> extends Value<VALUE> implements Serializable 
 	}
 	return comma;
     }
+
     @Override
     public String toHumanReadable() {
-	if (getTextValue()!=null) return getTextValue();
-	else return super.toHumanReadable();
+	if (getTextValue() != null)
+	    return getTextValue();
+	else
+	    return super.toHumanReadable();
     }
 }

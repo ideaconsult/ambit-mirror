@@ -92,6 +92,11 @@ public class BrowserModeNavigator extends AbstractPanel<IBrowserMode> {
 		}
 		blayout.append(",8dlu,pref,1dlu,pref");
 		zoomIn = new JButton(new AbstractAmbitAction("Zoom in","images/zoom_in.png","Increase cell size") {
+			/**
+		     * 
+		     */
+		    private static final long serialVersionUID = -7230604413152102914L;
+
 			public void actionPerformed(ActionEvent e) {
 				//browserMode.zoom(browserMode.getBrowserMode().getCellSize(0,0).getHeight()*1.1);
 				browserMode.zoom(1.1,1.1);
@@ -100,6 +105,11 @@ public class BrowserModeNavigator extends AbstractPanel<IBrowserMode> {
 		zoomIn.setFocusable(false);
 		zoomOut = new JButton(new AbstractAmbitAction("Zoom out","images/zoom_out.png","Decrease cell size") {
 			
+			/**
+		     * 
+		     */
+		    private static final long serialVersionUID = 332852452089868875L;
+
 			public void actionPerformed(ActionEvent e) {
 				//browserMode.zoom(browserMode.getBrowserMode().getCellSize(0,0).getHeight()*0.9);
 				browserMode.zoom(0.9,0.9);
