@@ -910,6 +910,11 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			protected Task<ITaskResult, String> createTask(String user,ICallableTask callable) {
 				
 				return new PolicyProtectedTask(user,!(callable instanceof CallablePolicyCreator)) {
+					/**
+				     * 
+				     */
+				    private static final long serialVersionUID = -12811434343484170L;
+
 					@Override
 					public synchronized void setPolicy() throws Exception {
 

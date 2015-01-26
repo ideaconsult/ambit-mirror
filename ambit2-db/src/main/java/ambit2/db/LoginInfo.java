@@ -20,7 +20,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 
 package ambit2.db;
 
@@ -29,85 +29,95 @@ import java.sql.Connection;
 
 import ambit2.base.config.Preferences;
 
-
-
 public class LoginInfo {
-	protected String scheme;
-	protected String host;
-	protected String port;
-	protected String database;
-	protected String user;
-	protected String password;
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6766389941828875205L;
-	//TODO derive generic class from QMRFAttributes
-	public LoginInfo() {
-        setScheme(Preferences.getProperty(Preferences.SCHEME));
-		setHostname(Preferences.getProperty(Preferences.HOST));
-		setDatabase(Preferences.getProperty(Preferences.DATABASE));
-		setPort(Preferences.getProperty(Preferences.PORT));
-		setUser(Preferences.getProperty(Preferences.USER));
-	}
+    protected String scheme;
+    protected String host;
+    protected String port;
+    protected String database;
+    protected String user;
+    protected String password;
+
+    // TODO derive generic class from QMRFAttributes
+    public LoginInfo() {
+	setScheme(Preferences.getProperty(Preferences.SCHEME));
+	setHostname(Preferences.getProperty(Preferences.HOST));
+	setDatabase(Preferences.getProperty(Preferences.DATABASE));
+	setPort(Preferences.getProperty(Preferences.PORT));
+	setUser(Preferences.getProperty(Preferences.USER));
+    }
+
     public void setURI(URI uri) throws Exception {
-        String driver = uri.getScheme();
-        
-        URI u1= new URI(uri.getSchemeSpecificPart());
-        setScheme(driver + ":" + u1.getScheme());
-        
-        setHostname(u1.getHost());
-        setPort(Integer.toString(u1.getPort()));
-        setDatabase(u1.getPath().substring(1));
+	String driver = uri.getScheme();
+
+	URI u1 = new URI(uri.getSchemeSpecificPart());
+	setScheme(driver + ":" + u1.getScheme());
+
+	setHostname(u1.getHost());
+	setPort(Integer.toString(u1.getPort()));
+	setDatabase(u1.getPath().substring(1));
     }
+
     public void setURI(Connection connection) throws Exception {
-        setURI(new URI(connection.getMetaData().getURL()));
-        String username = connection.getMetaData().getUserName();
-        setUser(username.substring(0,username.indexOf("@")));
+	setURI(new URI(connection.getMetaData().getURL()));
+	String username = connection.getMetaData().getUserName();
+	setUser(username.substring(0, username.indexOf("@")));
     }
-    
-	public String getDatabase() {
-		return database;
-	}
-	public void setDatabase(String database) {
-		if ("${ambit.db}".equals(database)) this.host = "ambit2";
-		this.database = database;
-	}
-	public String getHostname() {
-		return host;
-	}
-	public void setHostname(String hostname) {
-		if ("${ambit.db.host}".equals(hostname)) this.host = hostname;
-		else this.host = hostname;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public String getPort() {
-		return port;
-	}
-	public void setPort(String port) {
-		this.port = port;
-	}
-	public String getScheme() {
-		return scheme;
-	}
-	public void setScheme(String scheme) {
-		this.scheme = scheme;
-	}
-	public String getUser() {
-		return user;
-	}
-	public void setUser(String user) {
-		this.user = user;
-	}
-	@Override
-	public String toString() {
-		return user;
-	}
+
+    public String getDatabase() {
+	return database;
+    }
+
+    public void setDatabase(String database) {
+	if ("${ambit.db}".equals(database))
+	    this.host = "ambit2";
+	this.database = database;
+    }
+
+    public String getHostname() {
+	return host;
+    }
+
+    public void setHostname(String hostname) {
+	if ("${ambit.db.host}".equals(hostname))
+	    this.host = hostname;
+	else
+	    this.host = hostname;
+    }
+
+    public String getPassword() {
+	return password;
+    }
+
+    public void setPassword(String password) {
+	this.password = password;
+    }
+
+    public String getPort() {
+	return port;
+    }
+
+    public void setPort(String port) {
+	this.port = port;
+    }
+
+    public String getScheme() {
+	return scheme;
+    }
+
+    public void setScheme(String scheme) {
+	this.scheme = scheme;
+    }
+
+    public String getUser() {
+	return user;
+    }
+
+    public void setUser(String user) {
+	this.user = user;
+    }
+
+    @Override
+    public String toString() {
+	return user;
+    }
 }
-
-

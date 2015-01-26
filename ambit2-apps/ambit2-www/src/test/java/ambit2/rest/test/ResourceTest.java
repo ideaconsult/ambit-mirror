@@ -14,11 +14,9 @@ import net.idea.restnet.rdf.ns.OT;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ArrayNode;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openscience.cdk.exception.CDKException;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.opentox.dsl.task.RemoteTask;
 import org.restlet.Client;

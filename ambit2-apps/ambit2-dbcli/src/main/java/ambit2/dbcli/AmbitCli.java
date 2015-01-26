@@ -414,6 +414,10 @@ public class AmbitCli {
     	File file = new File(options.input);
 		
 		final QuickImportBatchProcessor batch = new QuickImportBatchProcessor(file) {
+			/**
+		     * 
+		     */
+		    private static final long serialVersionUID = -2617748719057089460L;
 			@Override
 			public void onItemRead(IStructureRecord input,
 					IBatchStatistics stats) {
@@ -486,6 +490,10 @@ public class AmbitCli {
 		
 		
 		DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>() {
+			/**
+		     * 
+		     */
+		    private static final long serialVersionUID = 6777121852891369530L;
 			@Override
 			public void onItemRead(IStructureRecord input,
 					IBatchStatistics stats) {
@@ -514,6 +522,10 @@ public class AmbitCli {
 		queryP.setPageSize(1);	queryP.setPage(0);
 
 		MasterDetailsProcessor<IStructureRecord,IStructureRecord,IQueryCondition> strucReader = new MasterDetailsProcessor<IStructureRecord,IStructureRecord,IQueryCondition>(queryP) {
+			/**
+		     * 
+		     */
+		    private static final long serialVersionUID = -5350168222668294207L;
 			@Override
 			protected void configureQuery(
 					IStructureRecord target,
@@ -545,6 +557,10 @@ public class AmbitCli {
 			query = new MissingInChIsQuery("UNKNOWN");
 			updateQuery = new UpdateChemical();
 			batch.getProcessorChain().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
+				/**
+			     * 
+			     */
+			    private static final long serialVersionUID = -7628269103516836861L;
 				protected transient StructureNormalizer normalizer = new StructureNormalizer();
 				@Override
 				public IStructureRecord process(IStructureRecord record)
@@ -559,6 +575,11 @@ public class AmbitCli {
 				}
 			});				
 			batch.getProcessorChain().add(new AbstractUpdateProcessor<Object,IChemical>(OP.CREATE,updateQuery) {
+				/**
+			     * 
+			     */
+			    private static final long serialVersionUID = 9019409150445247686L;
+
 				@Override
 				protected IChemical execute(Object group,
 						IQueryUpdate<Object, IChemical> query)

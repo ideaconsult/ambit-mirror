@@ -269,6 +269,9 @@ public class UIResource extends FreeMarkerResource {
 				}
 			}
 		}
+		default : {
+		    break;
+		}
 		}
 		return super.getRepresentation(variant);
 	}

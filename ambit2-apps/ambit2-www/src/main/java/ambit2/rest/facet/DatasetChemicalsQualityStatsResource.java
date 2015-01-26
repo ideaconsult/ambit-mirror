@@ -54,6 +54,11 @@ public class DatasetChemicalsQualityStatsResource extends AmbitFacetResource<Dat
 	@Override
 	protected FacetHTMLReporter getHTMLReporter(Request request) {
 		return new FacetHTMLReporter(request) {
+			/**
+		     * 
+		     */
+		    private static final long serialVersionUID = 1576818116709958251L;
+
 			@Override
 			public void headerBeforeTable(Writer w, IQueryRetrieval query) {
 				super.headerBeforeTable(w, query);

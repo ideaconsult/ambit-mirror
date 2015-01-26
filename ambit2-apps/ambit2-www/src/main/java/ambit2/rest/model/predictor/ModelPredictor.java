@@ -355,6 +355,11 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 						new PropertyURIReporter(request),
 						null						
 						) {
+					/**
+						     * 
+						     */
+						    private static final long serialVersionUID = 9210380994358518445L;
+
 					@Override
 					public boolean isStructureRequired() {
 						return true;

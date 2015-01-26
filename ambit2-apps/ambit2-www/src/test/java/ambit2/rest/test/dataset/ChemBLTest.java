@@ -49,6 +49,10 @@ public class ChemBLTest extends ResourceTest {
 	public void readCompounds() throws Exception {
 		
 		OTOntologyService os = new OTOntologyService("http://rdf.farmbio.uu.se/chembl/sparql"){
+			/**
+		     * 
+		     */
+		    private static final long serialVersionUID = 6044026883931991782L;
 			int count = 0;
 			@Override
 			public Object processSolution(QuerySolution row) throws Exception {

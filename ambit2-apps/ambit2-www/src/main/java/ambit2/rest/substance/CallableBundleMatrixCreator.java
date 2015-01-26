@@ -57,6 +57,9 @@ public class CallableBundleMatrixCreator extends
 	    if (method.equals(Method.POST))
 		return new CreateMatrixFromBundle(target, deleteMatrix, matrix);
 	}
+	default: {
+	    break;
+	}
 	}
 
 	throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);

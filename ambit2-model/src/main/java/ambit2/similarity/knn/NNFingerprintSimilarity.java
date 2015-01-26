@@ -39,54 +39,46 @@ import ambit2.similarity.measure.IDistanceFunction;
 
 /**
  * kNN similarity on bitsets {@link BitSet}
+ * 
  * @author nina
- *
+ * 
  */
-public class NNFingerprintSimilarity<ID> extends NearestNeighborsSimilarity<ID,BitSet> {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 882010733645375997L;
-	protected FingerprintGenerator generator = null;
+public class NNFingerprintSimilarity<ID> extends NearestNeighborsSimilarity<ID, BitSet> {
 
+    protected FingerprintGenerator generator = null;
 
     public NNFingerprintSimilarity(IDistanceFunction<BitSet> distanceFunction, int knn) {
-        super(distanceFunction, knn);
-        generator = new FingerprintGenerator(new Fingerprinter());
-        generator.setHydrogens(false);
+	super(distanceFunction, knn);
+	generator = new FingerprintGenerator(new Fingerprinter());
+	generator.setHydrogens(false);
 
     }
+
     /**
      * Uses {@link FingerprintDistance}.
+     * 
      * @param knn
      */
     public NNFingerprintSimilarity(int knn) {
-        this(new FingerprintDistance(), knn);
+	this(new FingerprintDistance(), knn);
     }
+
     /*
+     * @Override protected BitSet calculateComparableProperty(Object object)
+     * throws AmbitException { if (object == null) return null; Object bitset =
+     * null; IAtomContainer ac = (IAtomContainer) object;
+     * 
+     * bitset = ac.getProperty(AmbitCONSTANTS.Fingerprint);
+     * 
+     * if (bitset == null) { if (generator == null) { generator = new
+     * FingerprintGenerator(); } generator.process(object); bitset =
+     * ac.getProperty(AmbitCONSTANTS.Fingerprint); } if (bitset == null) throw
+     * new AmbitException("Can't generate fingerprint!"); return (BitSet)bitset;
+     * }
+     */
     @Override
-    protected BitSet calculateComparableProperty(Object object)
-            throws AmbitException {
-        if (object == null) return null;
-        Object bitset = null;
-        IAtomContainer ac = (IAtomContainer) object;
-      
-        bitset = ac.getProperty(AmbitCONSTANTS.Fingerprint);
-     
-            if (bitset == null) {
-                if (generator == null) {
-                    generator = new FingerprintGenerator();
-                }    
-                generator.process(object);
-                bitset = ac.getProperty(AmbitCONSTANTS.Fingerprint);
-            }
-        if (bitset == null) throw new AmbitException("Can't generate fingerprint!");
-        return (BitSet)bitset;
+    protected BitSet getSelectedAttributes(BitSet attributes) {
+	return attributes;
     }
-    */
-	@Override
-	protected BitSet getSelectedAttributes(BitSet attributes) {
-		return attributes;
-	}
 
 }

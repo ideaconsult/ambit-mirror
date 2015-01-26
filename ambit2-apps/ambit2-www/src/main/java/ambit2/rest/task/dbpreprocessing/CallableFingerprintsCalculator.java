@@ -40,181 +40,193 @@ import ambit2.smarts.processors.SMARTSPropertiesGenerator;
 
 /**
  * Dataset fingerprints
+ * 
  * @author nina
- *
+ * 
  */
-public class CallableFingerprintsCalculator<USERID> extends	CallableDBProcessing<USERID> {
-	protected FPTable fingerprintsType = FPTable.fp1024;
-	protected String label ;
-	
-	public FPTable getFingerprintsType() {
-		return fingerprintsType;
+public class CallableFingerprintsCalculator<USERID> extends CallableDBProcessing<USERID> {
+    protected FPTable fingerprintsType = FPTable.fp1024;
+    protected String label;
+
+    public FPTable getFingerprintsType() {
+	return fingerprintsType;
+    }
+
+    public void setFingerprintsType(FPTable fingerprintsType) {
+	this.fingerprintsType = fingerprintsType;
+    }
+
+    public CallableFingerprintsCalculator(Form form, Reference applicationRootReference, Context context,
+	    Algorithm algorithm, USERID token) throws ResourceException {
+	super(form, applicationRootReference, context, algorithm, token);
+	try {
+	    setFingerprintsType(FPTable.valueOf(algorithm.getContent().toString()));
+	} catch (Exception x) {
+	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, algorithm.getContent().toString(), x);
 	}
 
-	public void setFingerprintsType(FPTable fingerprintsType) {
-		this.fingerprintsType = fingerprintsType;
+    }
+
+    @Override
+    protected void processForm(Reference applicationRootReference, Form form) {
+	super.processForm(applicationRootReference, form);
+	label = form.getFirstValue("label");
+    }
+
+    protected long batchSize = 10000;
+
+    @Override
+    protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors() throws Exception {
+	ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> p = new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>();
+	RetrieveStructure r = new RetrieveStructure(true);
+	r.setPageSize(1);
+	r.setPage(0);
+	p.add(new ProcessorStructureRetrieval(r));
+
+	switch (getFingerprintsType()) {
+	case fp1024: {
+	    p.add(new BitSetGenerator(getFingerprintsType()));
+	    p.add(new FP1024Writer(getFingerprintsType()));
+	    break;
+	}
+	case fp1024_struc: {
+	    p.add(new BitSetGenerator(getFingerprintsType()));
+	    p.add(new FPStructureWriter());
+	    break;
+	}
+	case sk1024: {
+	    p.add(new BitSetGenerator(getFingerprintsType()));
+	    p.add(new FP1024Writer(getFingerprintsType()));
+	    break;
+	}
+	case smarts_accelerator: {
+	    p.add(new SMARTSPropertiesGenerator());
+	    p.add(new SMARTSAcceleratorWriter());
+	    break;
+	}
+	case atomenvironments: {
+	    p.add(new AtomEnvironmentGenerator());
+	    p.add(new AtomEnvironmentWriter());
+	    break;
+	}
+	case inchi: {
+	    p.add(new StructureNormalizer());
+	    p.add(new InChIChemicalsWriter());
+	    break;
+	}
+	default: {
+	    break;
+	}
 	}
 
-	public CallableFingerprintsCalculator(Form form,
-			Reference applicationRootReference,Context context,
-			Algorithm algorithm,USERID token) throws ResourceException {
-		super(form, applicationRootReference, context,algorithm, token);
+	return p;
+    }
+
+    @Override
+    protected Object createTarget(Reference reference) throws Exception {
+	if (reference != null)
+	    if (applicationRootReference.isParent(reference)) {
 		try {
-			setFingerprintsType(FPTable.valueOf(algorithm.getContent().toString()));
+		    Object q = getQueryObject(reference, applicationRootReference, context);
+		    return q == null ? reference : q;
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,algorithm.getContent().toString(),x);
+		    return reference;
 		}
+	    } else
+		throw new Exception("Remote URI not supported, this is for housekeeping the database only!");
+	else {
+	    switch (getFingerprintsType()) {
+	    case inchi: {
+		MissingInChIsQuery q = new MissingInChIsQuery(label == null ? "ERROR" : label);
+		q.setPageSize(batchSize);
+		q.setPage(0);
+		return q;
+	    }
+	    default: {
+		// can have combined query with a dataset query if dataset_uri
+		// is present
+		MissingFingerprintsQuery q = new MissingFingerprintsQuery(getFingerprintsType());
+		q.setPageSize(batchSize);
+		q.setPage(0);
+		return q;
+	    }
+	    }
+	}
+    }
 
-	}
-	@Override
-	protected void processForm(Reference applicationRootReference, Form form) {
-		super.processForm(applicationRootReference, form);
-		label = form.getFirstValue("label");
-	}
-	protected long batchSize = 10000;
-	@Override
-	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors()
-			throws Exception {
-		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
-			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
-		RetrieveStructure r = new RetrieveStructure(true);
-		r.setPageSize(1);
-		r.setPage(0);
-		p.add(new ProcessorStructureRetrieval(r));
-	
+    protected AbstractBatchProcessor createBatch(Object target) throws Exception {
 
-		
-		switch (getFingerprintsType()) {
-		case fp1024: {
-			p.add(new BitSetGenerator(getFingerprintsType()));
-			p.add(new FP1024Writer(getFingerprintsType()));
-			break;
-		}
-		case fp1024_struc: {
-			p.add(new BitSetGenerator(getFingerprintsType()));
-			p.add(new FPStructureWriter());			
-			break;
-		}
-		case sk1024: {
-			p.add(new BitSetGenerator(getFingerprintsType()));
-			p.add(new FP1024Writer(getFingerprintsType()));
-			break;
-		}
-		case smarts_accelerator: {
-			p.add(new SMARTSPropertiesGenerator());
-			p.add(new SMARTSAcceleratorWriter());
-			break;
-		}
-		case atomenvironments: {
-			p.add(new AtomEnvironmentGenerator());
-			p.add(new AtomEnvironmentWriter());
-			break;
-		}
-		case  inchi: {
-			p.add(new StructureNormalizer());
-			p.add(new InChIChemicalsWriter());
-			break;			
-		}
-		}
-		
-		return p;
-	}
+	if (target instanceof AbstractStructureQuery) {
+	    DbReaderStructure reader = new DbReaderStructure(getFingerprintsType().equals(FPTable.inchi));
+	    reader.setHandlePrescreen(true);
+	    return reader;
+	} else
+	    throw new Exception("Can't process " + target.toString());
+    }
 
+    @Override
+    protected IBatchStatistics runBatch(Object target) throws Exception {
+	IBatchStatistics stats;
+	while (true) {
+	    stats = batch.process(target);
+	    if (target instanceof MissingFingerprintsQuery) { // loop until no
+							      // missing
+							      // fingerprints
+		if (stats.getRecords(RECORDS_STATS.RECORDS_PROCESSED) == 0)
+		    break;
+		stats.setRecords(RECORDS_STATS.RECORDS_PROCESSED, 0);
+		stats.setRecords(RECORDS_STATS.RECORDS_ERROR, 0);
+		stats.setRecords(RECORDS_STATS.RECORDS_READ, 0);
+	    } else
+		break;
+	}
+	return stats;
+    }
 
-	@Override
-	protected Object createTarget(Reference reference) throws Exception {
-		if (reference!= null)
-			if (applicationRootReference.isParent(reference)) {
-				try {
-					Object q = getQueryObject(reference, applicationRootReference,context);
-					return q==null?reference:q;
-				} catch (Exception x) {
-					return reference;
-				}
-			} else throw new Exception("Remote URI not supported, this is for housekeeping the database only!");
-		else { 	
-			switch (getFingerprintsType()) {
-			case inchi: {
-				MissingInChIsQuery q = new MissingInChIsQuery(label==null?"ERROR":label);
-				q.setPageSize(batchSize);
-				q.setPage(0);
-				return q;
-			}
-			default: {
-				//can have combined query with a dataset query if dataset_uri is present
-				MissingFingerprintsQuery q =  new MissingFingerprintsQuery(getFingerprintsType());
-				q.setPageSize(batchSize);
-				q.setPage(0);
-				return q;
-			}
-			}
-		}
+    @Override
+    protected TaskResult createReference(Connection connection) throws Exception {
+	TaskResult result = sourceReference == null ? null : new TaskResult(sourceReference.toString(), false);
+	switch (getFingerprintsType()) {
+	case fp1024: {
+	    return result;
 	}
-	protected AbstractBatchProcessor createBatch(Object target) throws Exception{
+	case fp1024_struc: {
+	    return structureQuality(connection);
+	}
+	case sk1024: {
+	    return result;
+	}
+	case smarts_accelerator: {
+	    return result;
+	}
+	case atomenvironments: {
+	    return result;
+	}
+	case inchi: {
+	    return result;
+	}
+	default: {
+	    throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED, getFingerprintsType().toString());
+	}
+	}
+    }
 
-		if (target instanceof AbstractStructureQuery) {
-			DbReaderStructure reader = new DbReaderStructure(getFingerprintsType().equals(FPTable.inchi));
-			reader.setHandlePrescreen(true);
-			return reader;
-		} else throw new Exception("Can't process "+ target.toString());
+    protected TaskResult structureQuality(Connection connection) throws Exception {
+	try {
+	    CreateQLabelPair q = new CreateQLabelPair();
+	    AbstractUpdateProcessor<AmbitUser, String> p = new AbstractUpdateProcessor<AmbitUser, String>(OP.CREATE, q);
+	    p.setConnection(connection);
+	    p.setCloseConnection(true);
+	    p.process(null);
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    try {
+		connection.close();
+	    } catch (Exception xx) {
+	    }
+	    ;
 	}
-	
-	@Override
-	protected IBatchStatistics runBatch(Object target) throws Exception {
-		IBatchStatistics stats;
-		while (true) {
-			stats = batch.process(target);
-			if (target instanceof MissingFingerprintsQuery) { //loop until no missing fingerprints
-				if (stats.getRecords(RECORDS_STATS.RECORDS_PROCESSED)==0) break;
-				stats.setRecords(RECORDS_STATS.RECORDS_PROCESSED, 0);
-				stats.setRecords(RECORDS_STATS.RECORDS_ERROR, 0);
-				stats.setRecords(RECORDS_STATS.RECORDS_READ,0);
-			} else break;
-		}
-		return stats;
-	}
-	
-
-	@Override
-	protected TaskResult createReference(Connection connection) throws Exception {
-		TaskResult result = sourceReference==null?null:new TaskResult(sourceReference.toString(),false);
-		switch (getFingerprintsType()) {
-		case fp1024: {
-			return result;
-		}
-		case fp1024_struc: {
-			return structureQuality(connection);
-		}
-		case sk1024: {
-			return result;
-		}
-		case smarts_accelerator: {
-			return result;
-		}		
-		case atomenvironments: {
-			return result;
-		}		
-		case inchi: {
-			return result;
-		}
-		default: {
-			throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,getFingerprintsType().toString());
-		}
-		}
-	}	
-	
-	protected TaskResult structureQuality(Connection connection) throws Exception {
-		try {
-			CreateQLabelPair q = new CreateQLabelPair();
-			AbstractUpdateProcessor<AmbitUser, String> p = new AbstractUpdateProcessor<AmbitUser, String>(OP.CREATE,q);
-			p.setConnection(connection);
-			p.setCloseConnection(true);
-			p.process(null);
-		} catch (Exception x) {
-			throw x;
-		} finally {
-			try { connection.close(); } catch (Exception xx) {};
-		}
-		return null;
-	}
+	return null;
+    }
 }

@@ -83,7 +83,12 @@ public class CSLSResource extends ProtectedResource {
 			            public void write(OutputStream stream) throws IOException {
 			            	try {
 			            		CSLSRequest<InputStream> q = new CSLSRequest<InputStream>() {
-			            			@Override
+			            			/**
+						     * 
+						     */
+						    private static final long serialVersionUID = 2638378178348461366L;
+
+							@Override
 			            			protected InputStream read(InputStream in) throws Exception {
 			            				return in;
 			            			}

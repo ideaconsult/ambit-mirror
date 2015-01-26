@@ -5,10 +5,8 @@
     <groupId>ambit</groupId>
     <version>2.7.3-SNAPSHOT</version>
   </parent>
-  <groupId>ambit</groupId>
   <artifactId>ambit2-dbisatab</artifactId>
   <name>ambit2-dbisatab</name>
-  <version>2.7.3-SNAPSHOT</version>
 
   <description>ISA-TAB import tools</description>
   <dependencies>

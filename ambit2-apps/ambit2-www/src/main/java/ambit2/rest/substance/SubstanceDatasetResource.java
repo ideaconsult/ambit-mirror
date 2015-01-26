@@ -145,6 +145,11 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 
 	MasterDetailsProcessor<SubstanceRecord, ProtocolEffectRecord<String, String, String>, IQueryCondition> effectReader = new MasterDetailsProcessor<SubstanceRecord, ProtocolEffectRecord<String, String, String>, IQueryCondition>(
 		queryP) {
+	    /**
+		     * 
+		     */
+		    private static final long serialVersionUID = -7354966336095750101L;
+
 	    @Override
 	    protected SubstanceRecord processDetail(SubstanceRecord master,
 		    ProtocolEffectRecord<String, String, String> detail) throws Exception {
@@ -293,6 +298,11 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 
 	return new OutputWriterConvertor<SubstanceRecord, Q>(new ARFFResourceReporter(getTemplate(),
 		getGroupProperties(), getRequest(), String.format("%s%s", getRequest().getRootRef(), "")) {
+	    /**
+		     * 
+		     */
+		    private static final long serialVersionUID = -2563353206914543953L;
+
 	    @Override
 	    protected void configurePropertyProcessors() {
 		getProcessors().add(getPropertyProcessors(true, true));
@@ -305,6 +315,11 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
     protected IProcessor<Q, Representation> createARFF3ColumnReporter(String filenamePrefix) {
 	return new OutputWriterConvertor<SubstanceRecord, Q>(new ARFF3ColResourceReporter(getTemplate(),
 		getGroupProperties(), getRequest(), String.format("%s%s", getRequest().getRootRef(), "")) {
+	    /**
+		     * 
+		     */
+	    private static final long serialVersionUID = 6838109982780717749L;
+
 	    @Override
 	    protected void configurePropertyProcessors() {
 		getProcessors().add(getPropertyProcessors(true, false));
@@ -320,6 +335,11 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	groupProperties.add(new SubstanceUUID());
 	return new OutputWriterConvertor<SubstanceRecord, Q>(new CSVReporter(getRequest().getRootRef().toString(),
 		getTemplate(), groupProperties, String.format("%s%s", getRequest().getRootRef(), "")) {
+
+	    /**
+		     * 
+		     */
+		    private static final long serialVersionUID = -2558990024073170008L;
 
 	    @Override
 	    protected void configurePropertyProcessors() {
@@ -344,6 +364,11 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	    jsonpcallback = getParams().getFirstValue("callback");
 	return new OutputWriterConvertor(new CompoundJSONReporter(getTemplate(), getGroupProperties(), folders,
 		getBundles(), getRequest(), getRequest().getRootRef().toString(), false, jsonpcallback) {
+	    /**
+		     * 
+		     */
+		    private static final long serialVersionUID = -5059577943753305935L;
+
 	    @Override
 	    protected String getURI(IStructureRecord item) {
 		if (item instanceof SubstanceRecord)

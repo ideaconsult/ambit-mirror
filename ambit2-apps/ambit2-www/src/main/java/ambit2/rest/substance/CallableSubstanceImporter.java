@@ -183,6 +183,11 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
     protected AbstractBatchProcessor createBatch(FileInputState target) throws Exception {
 	if (target==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	final BatchDBProcessor<String> batch = new BatchDBProcessor<String>() {
+	    /**
+	     * 
+	     */
+	    private static final long serialVersionUID = 5712170806359764006L;
+
 	    @Override
 	    public Iterator<String> getIterator(IInputState target) throws AmbitException {
 		try {

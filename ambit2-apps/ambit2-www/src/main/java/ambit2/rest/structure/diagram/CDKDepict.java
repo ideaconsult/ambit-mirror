@@ -104,6 +104,11 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 			if (MediaType.TEXT_HTML.equals(variant.getMediaType())) {
 				StringConvertor convertor = new StringConvertor(
 						new AbstractReporter<String, Writer>() {
+							/**
+						     * 
+						     */
+						    private static final long serialVersionUID = -1232605257681949242L;
+
 							public void close() throws Exception {
 							};
 
