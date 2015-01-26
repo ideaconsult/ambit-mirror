@@ -62,7 +62,12 @@ public class CollectionsByChemical   extends AbstractFacetQuery<IStructureRecord
 	
 	@Override
 	protected IFacet<String> createFacet(String facetURL) {
-		return new AbstractFacet<String>() {};
+		return new AbstractFacet<String>() {
+
+		    /**
+		     * 
+		     */
+		    private static final long serialVersionUID = -7825712959154973202L;};
 	}
 
 	@Override

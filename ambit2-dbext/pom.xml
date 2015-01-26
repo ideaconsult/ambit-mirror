@@ -6,9 +6,7 @@
     <groupId>ambit</groupId>
     <version>2.7.3-SNAPSHOT</version>
   </parent>
-  <groupId>ambit</groupId>
   <artifactId>ambit2-dbext</artifactId>
-  <version>2.7.3-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ambit2-dbext</name>
   <description>Additional database queries</description>
@@ -61,7 +59,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.5</version>
         <executions>
           <execution>
             <goals>

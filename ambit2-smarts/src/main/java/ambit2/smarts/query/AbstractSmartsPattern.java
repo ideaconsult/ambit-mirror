@@ -20,7 +20,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 
 package ambit2.smarts.query;
 
@@ -31,63 +31,70 @@ import java.util.logging.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 public abstract class AbstractSmartsPattern<T> implements Serializable, ISmartsPattern<T> {
-	protected static Logger logger = Logger.getLogger(AbstractSmartsPattern.class.getName());
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -771113251398072451L;
+    protected static Logger logger = Logger.getLogger(AbstractSmartsPattern.class.getName());
     protected boolean negate = false;
     protected String smarts = "";
     protected String name;
     protected String hint;
-	public String getHint() {
-		return hint;
-	}
 
-	public void setHint(String hint) {
-		this.hint = hint;
-	}
+    public String getHint() {
+	return hint;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setHint(String hint) {
+	this.hint = hint;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+	return name;
+    }
 
-	public boolean isNegate() {
-		return negate;
-	}
+    public void setName(String name) {
+	this.name = name;
+    }
 
-	public void setNegate(boolean negate) {
-		this.negate = negate;
+    public boolean isNegate() {
+	return negate;
+    }
 
-	}
+    public void setNegate(boolean negate) {
+	this.negate = negate;
+
+    }
 
     @Override
     public String toString() {
-    	return getSmarts();
+	return getSmarts();
     }
+
     public int match(IAtomContainer mol) throws SMARTSException {
-    	return hasSMARTSPattern(getObjectToVerify(mol));
+	return hasSMARTSPattern(getObjectToVerify(mol));
     }
 
-	public String getSmarts() {
-		return smarts;
-	}
+    public String getSmarts() {
+	return smarts;
+    }
 
-	public void setSmarts(String smarts) throws SMARTSException {
-		this.smarts = smarts;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof ISmartsPattern) {
-			ISmartsPattern p = (ISmartsPattern)obj;
-			
-			return getSmarts().equals(p.getSmarts()) && (isNegate() == p.isNegate());
-			
-		} else return false;
-	}
-	public List getUniqueMatchingAtoms() throws SMARTSException {
-		throw new SMARTSException("Not supported!");	
-}	
+    public void setSmarts(String smarts) throws SMARTSException {
+	this.smarts = smarts;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj instanceof ISmartsPattern) {
+	    ISmartsPattern p = (ISmartsPattern) obj;
+
+	    return getSmarts().equals(p.getSmarts()) && (isNegate() == p.isNegate());
+
+	} else
+	    return false;
+    }
+
+    public List getUniqueMatchingAtoms() throws SMARTSException {
+	throw new SMARTSException("Not supported!");
+    }
 }
-
-

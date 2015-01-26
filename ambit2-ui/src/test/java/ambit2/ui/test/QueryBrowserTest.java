@@ -99,6 +99,10 @@ public class QueryBrowserTest {
 }
 
 class TestTableModel extends AbstractTableModel implements IFindNavigator {
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -3944474322278979151L;
 	String findValue = "Find";
 	ArrayList<Integer> hits=new ArrayList<Integer>();
 	int pointer;

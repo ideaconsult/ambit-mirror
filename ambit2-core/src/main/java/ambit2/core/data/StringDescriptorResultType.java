@@ -31,15 +31,22 @@ package ambit2.core.data;
 
 /**
  * type left for compatibility
+ * 
  * @author nina
- *
+ * 
  */
 public class StringDescriptorResultType extends AbstractDescriptorResultType<String> {
-	public StringDescriptorResultType() {
-		this(null);
-	}
-	public StringDescriptorResultType(String value) {
-		this.value = value;
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 5993835059201650185L;
+
+    public StringDescriptorResultType() {
+	this(null);
+    }
+
+    public StringDescriptorResultType(String value) {
+	this.value = value;
+    }
 
 }

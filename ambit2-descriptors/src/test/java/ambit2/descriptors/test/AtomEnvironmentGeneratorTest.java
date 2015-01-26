@@ -157,18 +157,18 @@ public class AtomEnvironmentGeneratorTest {
 	   
 		public void runAtomTypeMatrixDescriptor(String root) throws Exception {
 			AtomEnvironmentMatrixDescriptor gen = new AtomEnvironmentMatrixDescriptor();
-			InputStream in = new FileInputStream(root+"SureChEMBL_20140801.sdf");
+			InputStream in = new FileInputStream(root+"AMES_combined.sdf");
 			
 			IIteratingChemObjectReader<IAtomContainer> reader = new MyIteratingMDLReader(new InputStreamReader(in),SilentChemObjectBuilder.getInstance());
 			//matrix market sparse
-			String mmfile = root+"SureChEMBL_20140801_AEMATRIX.mm.tmp";
+			String mmfile = root+"AMES_combined.mm.tmp";
 			FileWriter mmwriter = new FileWriter(mmfile);
 			int mmrows = 0; int mmcols = 0; int mmentries = 0;
 			
 			Hashtable<String, FileWriter> writers = new Hashtable<String, FileWriter>();
 			String[] sets = new String[] {"ALL"};
 			for (String set:sets) {
-				FileWriter writer = new FileWriter(root + "tox_benchmark_"+set+"_AEMATRIX.csv");
+				FileWriter writer = new FileWriter(root + "AMES_combined"+set+"_AEMATRIX.csv");
 				writers.put(set, writer);
 			}
 			boolean header = false;
@@ -255,7 +255,7 @@ public class AtomEnvironmentGeneratorTest {
 			}
 
 			mmwriter.close();
-			mmwriter = new FileWriter(root+"tox_benchmark_N6512_AEMATRIX.mm");
+			mmwriter = new FileWriter(root+"AMES_combined.mm");
 			mmwriter.write("%%MatrixMarket matrix coordinate real general\n");
 			mmwriter.write(String.format("%d\t%d\t%d\n",mmrows,mmcols,mmentries));
 			BufferedReader bin=null;

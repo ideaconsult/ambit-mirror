@@ -1,8 +1,5 @@
 package ambit2.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.idea.restnet.c.task.ClientResourceWrapper;
 import net.idea.restnet.i.aa.IAuthToken;
 

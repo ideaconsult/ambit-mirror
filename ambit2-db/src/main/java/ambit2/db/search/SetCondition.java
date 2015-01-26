@@ -6,6 +6,10 @@ import net.idea.modbcum.i.IQueryCondition;
 
 public class SetCondition  implements IQueryCondition {
 		
+		/**
+     * 
+     */
+    private static final long serialVersionUID = -3634401756080837607L;
 		public enum conditions {
 			in {
 				

@@ -1,16 +1,23 @@
 package ambit2.core.data;
 
 /**
- * Array of srings implementing {@link org.openscience.cdk.qsar.result.IDescriptorResult}.
+ * Array of srings implementing
+ * {@link org.openscience.cdk.qsar.result.IDescriptorResult}.
+ * 
  * @author nina
- *
+ * 
  */
 public class StringArrayResult extends ArrayResult<String> {
-	   public StringArrayResult() {
-	        super();
-	    }
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 7274535049474222283L;
 
-	   public StringArrayResult(String[] array) {
-	        super(array);
-	    }   
+    public StringArrayResult() {
+	super();
+    }
+
+    public StringArrayResult(String[] array) {
+	super(array);
+    }
 }

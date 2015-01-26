@@ -20,7 +20,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 
 package ambit2.base.exceptions;
 
@@ -28,41 +28,50 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.data.Template;
 
 public class PropertyNotInTemplateException extends AmbitException {
-	public static final String MESSAGE="Property not in template!"; 
-	Object key;
-	Template template;
-	public PropertyNotInTemplateException() {
-		this(MESSAGE,null,null,null);
-	}
-	public PropertyNotInTemplateException(Object key, Template template) {
-		this(MESSAGE,null,key,template);
-	}
-	public PropertyNotInTemplateException(String arg0) {
-		this(arg0,null,null,null);
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -5322902406955300615L;
+    public static final String MESSAGE = "Property not in template!";
+    Object key;
+    Template template;
 
-	public PropertyNotInTemplateException(Throwable arg0) {
-		this(null,arg0,null,null);
-	}
+    public PropertyNotInTemplateException() {
+	this(MESSAGE, null, null, null);
+    }
 
-	public PropertyNotInTemplateException(String arg0, Throwable arg1, Object key, Template template) {
-		super(arg0, arg1);
-		this.key = key;
-		this.template = template;
-	}
-	public Object getKey() {
-		return key;
-	}
-	public void setKey(Object key) {
-		this.key = key;
-	}
-	public Template getTemplate() {
-		return template;
-	}
-	public void setTemplate(Template template) {
-		this.template = template;
-	}
+    public PropertyNotInTemplateException(Object key, Template template) {
+	this(MESSAGE, null, key, template);
+    }
+
+    public PropertyNotInTemplateException(String arg0) {
+	this(arg0, null, null, null);
+    }
+
+    public PropertyNotInTemplateException(Throwable arg0) {
+	this(null, arg0, null, null);
+    }
+
+    public PropertyNotInTemplateException(String arg0, Throwable arg1, Object key, Template template) {
+	super(arg0, arg1);
+	this.key = key;
+	this.template = template;
+    }
+
+    public Object getKey() {
+	return key;
+    }
+
+    public void setKey(Object key) {
+	this.key = key;
+    }
+
+    public Template getTemplate() {
+	return template;
+    }
+
+    public void setTemplate(Template template) {
+	this.template = template;
+    }
 
 }
-
-

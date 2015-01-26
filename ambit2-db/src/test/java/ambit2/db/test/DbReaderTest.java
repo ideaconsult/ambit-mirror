@@ -134,6 +134,11 @@ public class DbReaderTest extends DbUnitTest {
 		p.add(new AtomConfigurator());
 		p.add(new FunctionalGroup("Test", "P", "Test"));
 		p.add(new IProcessor<VerboseDescriptorResult, String>() {
+			/**
+		     * 
+		     */
+		    private static final long serialVersionUID = -3923864774580483348L;
+
 			public String process(VerboseDescriptorResult target)
 					throws AmbitException {
 				Assert.assertEquals("1", target.getResult().toString());

@@ -12,6 +12,10 @@ import net.idea.modbcum.i.exceptions.AmbitException;
  * <b>Modified</b> 2005-12-18
  */
 public class AmbitIOException extends AmbitException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1758487706878089791L;
     public static String MSG_EMPTYFILE = "File is empty\t";
     public static String MSG_OPENSUCCESS = "File opened\t";
     public static String MSG_SAVESUCCESS = "File saved\t";

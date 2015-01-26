@@ -7,7 +7,6 @@
     <version>2.7.3-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>ambit</groupId>
   <artifactId>ambit2-rest</artifactId>
   <name>ambit2-rest</name>
   <dependencies>
