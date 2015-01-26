@@ -43,34 +43,32 @@ public class TaskResourceTest extends ResourceTest {
 	public void setUp() throws Exception {
 		super.setUp();
 		setUpDatabase("src/test/resources/src-datasets.xml");
-/*
-		Context context = new Context();
-		context.getParameters().add(Preferences.DATABASE, getDatabase());
-		context.getParameters().add(Preferences.USER, getUser());
-		context.getParameters().add(Preferences.PASSWORD, getPWD());
-		context.getParameters().add(Preferences.PORT, getPort());
-		context.getParameters().add(Preferences.HOST, getHost());
-
-		// Create a component
-		component = new Component();
-
-		component.getClients().add(Protocol.FILE);
-		component.getClients().add(Protocol.HTTP);
-		component.getClients().add(Protocol.HTTPS);
-
-		app = new AmbitApplication();
-		app.setContext(context);
-
-		// Attach the application to the component and start it
-
-		component.getDefaultHost().attach(app);
-		component.getInternalRouter().attach("/", app);
-
-		component.getServers().add(Protocol.HTTP, port);
-		component.getServers().add(Protocol.HTTPS, port);
-
-		component.start();
-		*/
+	/*
+	 * Context context = new Context();
+	 * context.getParameters().add(Preferences.DATABASE, getDatabase());
+	 * context.getParameters().add(Preferences.USER, getUser());
+	 * context.getParameters().add(Preferences.PASSWORD, getPWD());
+	 * context.getParameters().add(Preferences.PORT, getPort());
+	 * context.getParameters().add(Preferences.HOST, getHost());
+	 * 
+	 * // Create a component component = new Component();
+	 * 
+	 * component.getClients().add(Protocol.FILE);
+	 * component.getClients().add(Protocol.HTTP);
+	 * component.getClients().add(Protocol.HTTPS);
+	 * 
+	 * app = new AmbitApplication(); app.setContext(context);
+	 * 
+	 * // Attach the application to the component and start it
+	 * 
+	 * component.getDefaultHost().attach(app);
+	 * component.getInternalRouter().attach("/", app);
+	 * 
+	 * component.getServers().add(Protocol.HTTP, port);
+	 * component.getServers().add(Protocol.HTTPS, port);
+	 * 
+	 * component.start();
+	 */
 	}
 
 	@Override
@@ -103,7 +101,7 @@ public class TaskResourceTest extends ResourceTest {
 				return null;
 			}
 		};
-		((AmbitApplication) app).addTask("Test task", c, new Reference(String
+		app.addTask("Test task", c, new Reference(String
 				.format("http://localhost:%d", port)),getUserToken());
 
 		testGet(getTestURI(), MediaType.APPLICATION_RDF_XML);
@@ -131,7 +129,7 @@ public class TaskResourceTest extends ResourceTest {
 				return null;
 			}
 		};
-		((AmbitApplication) app).addTask("Test task", c, new Reference(String
+		app.addTask("Test task", c, new Reference(String
 				.format("http://localhost:%d", port)),getUserToken());
 
 		testGet(getTestURI(), MediaType.TEXT_URI_LIST);
