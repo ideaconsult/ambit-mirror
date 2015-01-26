@@ -34,6 +34,10 @@ public class BundleStudyJSONReporter<Q extends IQueryRetrieval<IFacet>> extends 
 			EndpointRoleByBundle q = new EndpointRoleByBundle(request.getRootRef().toString());
 			q.setValue(bundle);
 			MasterDetailsProcessor<IFacet,BundleRoleFacet,IQueryCondition> bundleReader = new MasterDetailsProcessor<IFacet,BundleRoleFacet,IQueryCondition>(q) {
+				/**
+			     * 
+			     */
+			    private static final long serialVersionUID = -135061244120269844L;
 				@Override
 				public IFacet process(IFacet master) throws AmbitException {
 					if (master instanceof SubstanceByCategoryFacet) {
@@ -51,7 +55,12 @@ public class BundleStudyJSONReporter<Q extends IQueryRetrieval<IFacet>> extends 
 			};
 			bundleReader.setCloseConnection(false);
 			getProcessors().add(bundleReader);
-			getProcessors().add(new DefaultAmbitProcessor<IFacet,IFacet>() {
+	    getProcessors().add(new DefaultAmbitProcessor<IFacet, IFacet>() {
+				/**
+			     * 
+			     */
+			    private static final long serialVersionUID = -3911776354159473349L;
+
 				public IFacet process(IFacet target) throws AmbitException {
 					processItem(target);
 					return target;

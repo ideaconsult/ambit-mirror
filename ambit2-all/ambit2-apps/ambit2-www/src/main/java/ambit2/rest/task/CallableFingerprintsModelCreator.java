@@ -63,6 +63,11 @@ public class CallableFingerprintsModelCreator<USERID> extends CallableStructures
 		p1.add(new MoleculeReader());
 		p1.add(new FingerprintGenerator(new Fingerprinter()));
 		p1.add(new DefaultAmbitProcessor<BitSet,BitSet>() {
+			/**
+		     * 
+		     */
+		    private static final long serialVersionUID = -2978697147490545478L;
+
 			public BitSet process(BitSet target) throws AmbitException {
 				builder.getTrainingData().add(target);
 				return target;

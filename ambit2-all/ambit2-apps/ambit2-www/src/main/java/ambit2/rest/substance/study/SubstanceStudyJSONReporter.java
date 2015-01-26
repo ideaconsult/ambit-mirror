@@ -46,6 +46,10 @@ public class SubstanceStudyJSONReporter<Q extends IQueryRetrieval<ProtocolApplic
 		IQueryRetrieval<EffectRecord<String, String, String>> queryP = new ReadEffectRecord(); 
 		MasterDetailsProcessor<ProtocolApplication,EffectRecord<String, String, String>,IQueryCondition> effectReader = 
 							new MasterDetailsProcessor<ProtocolApplication,EffectRecord<String, String, String>,IQueryCondition>(queryP) {
+			/**
+							     * 
+							     */
+							    private static final long serialVersionUID = 3254879775478674022L;
 			@Override
 			protected void configureQuery(
 					ProtocolApplication target,
@@ -64,6 +68,11 @@ public class SubstanceStudyJSONReporter<Q extends IQueryRetrieval<ProtocolApplic
 		effectReader.setCloseConnection(false);
 		getProcessors().add(effectReader);
 		getProcessors().add(new DefaultAmbitProcessor<ProtocolApplication,ProtocolApplication>() {
+			/**
+		     * 
+		     */
+		    private static final long serialVersionUID = 3463829174956429308L;
+
 			public ProtocolApplication process(ProtocolApplication target) throws AmbitException {
 				processItem(target);
 				return target;

@@ -116,6 +116,11 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	configurePropertyProcessors();
 	configureCollectionProcessors(baseRef);
 	getProcessors().add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
+	    /**
+	     * 
+	     */
+	    private static final long serialVersionUID = -7316415661186235101L;
+
 	    public IStructureRecord process(IStructureRecord target) throws AmbitException {
 		processItem(target);
 		return target;
@@ -130,6 +135,11 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	    collections.setValue(folders);
 	    MasterDetailsProcessor<IStructureRecord, IFacet<String>, IQueryCondition> facetReader = new MasterDetailsProcessor<IStructureRecord, IFacet<String>, IQueryCondition>(
 		    collections) {
+		/**
+			 * 
+			 */
+		private static final long serialVersionUID = 3644502232491880656L;
+
 		@Override
 		protected IStructureRecord processDetail(IStructureRecord master, IFacet<String> detail)
 			throws Exception {
@@ -146,6 +156,11 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	    q.setValue(bundles[0]);
 	    MasterDetailsProcessor<IStructureRecord, BundleRoleFacet, IQueryCondition> bundleReader = new MasterDetailsProcessor<IStructureRecord, BundleRoleFacet, IQueryCondition>(
 		    q) {
+		/**
+			 * 
+			 */
+		private static final long serialVersionUID = -5489861883749717778L;
+
 		@Override
 		protected IStructureRecord processDetail(IStructureRecord master, BundleRoleFacet detail)
 			throws Exception {

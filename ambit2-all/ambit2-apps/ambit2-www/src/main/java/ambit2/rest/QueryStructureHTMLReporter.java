@@ -68,6 +68,11 @@ public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStru
 		processors.add(valuesReader);
 		*/
 		processors.add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
+			/**
+		     * 
+		     */
+		    private static final long serialVersionUID = -6258307658499487505L;
+
 			public IStructureRecord process(IStructureRecord target) throws Exception {
 				processItem(target);
 				return target;

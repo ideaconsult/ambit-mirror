@@ -22,104 +22,124 @@ import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.substance.ids.ReadSubstanceIdentifiers;
 
 public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> extends SubstanceURIReporter<Q> {
-	protected String comma = null;
-	protected String jsonpCallback = null;
-	protected SubstanceEndpointsBundle[] bundles;
+    protected String comma = null;
+    protected String jsonpCallback = null;
+    protected SubstanceEndpointsBundle[] bundles;
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 2315457985592934727L;
-	public SubstanceJSONReporter(Request request, String jsonpCallback,SubstanceEndpointsBundle[] bundles) {
-		super(request);
-		this.bundles = bundles;
-		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpCallback);
-		
-		getProcessors().clear();
-		IQueryRetrieval<ExternalIdentifier> queryP = new ReadSubstanceIdentifiers(); 
-		MasterDetailsProcessor<SubstanceRecord,ExternalIdentifier,IQueryCondition> idReader = 
-							new MasterDetailsProcessor<SubstanceRecord,ExternalIdentifier,IQueryCondition>(queryP) {
-			@Override
-			protected void configureQuery(
-							SubstanceRecord target,
-							IParameterizedQuery<SubstanceRecord, ExternalIdentifier, IQueryCondition> query)
-							throws AmbitException {
-							query.setFieldname(target);
-			}
-			@Override
-			protected SubstanceRecord processDetail(
-							SubstanceRecord target,
-							ExternalIdentifier detail)	throws Exception {
-				if (target.getExternalids()==null) target.setExternalids(new ArrayList<ExternalIdentifier>());
-						target.getExternalids().add(detail);
-				return target;
-			}
-		};
-		idReader.setCloseConnection(false);
-		getProcessors().add(idReader);
-		
-		
-		if (bundles!=null && bundles.length>0) {
-			SubstanceRoleByBundle q = new SubstanceRoleByBundle(request.getRootRef().toString());
-			q.setValue(bundles[0]);
-			MasterDetailsProcessor<SubstanceRecord,BundleRoleFacet,IQueryCondition> bundleReader = new MasterDetailsProcessor<SubstanceRecord,BundleRoleFacet,IQueryCondition>(q) {
-				@Override
-				protected SubstanceRecord processDetail(SubstanceRecord master,BundleRoleFacet detail) throws Exception {
-					master.clearFacets();
-					master.addFacet(detail);
-					return master;
-				}
-			};
-			bundleReader.setCloseConnection(false);
-			getProcessors().add(bundleReader);
-		}			
-		
-		getProcessors().add(new DefaultAmbitProcessor<SubstanceRecord,SubstanceRecord>() {
-			public SubstanceRecord process(SubstanceRecord target) throws AmbitException {
-				processItem(target);
-				return target;
-			};
-		});			
-	}
-	public void header(java.io.Writer output, Q query) {
-		try {
-			if (jsonpCallback!=null) {
-				output.write(jsonpCallback);
-				output.write("(");
-			}
-			output.write("{\n");
-			output.write("\n\"substance\":[");
-			
-		} catch (Exception x) {
-			logger.log(Level.WARNING,x.getMessage(),x);
-		}
+    private static final long serialVersionUID = 2315457985592934727L;
+
+    public SubstanceJSONReporter(Request request, String jsonpCallback, SubstanceEndpointsBundle[] bundles) {
+	super(request);
+	this.bundles = bundles;
+	this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpCallback);
+
+	getProcessors().clear();
+	IQueryRetrieval<ExternalIdentifier> queryP = new ReadSubstanceIdentifiers();
+	MasterDetailsProcessor<SubstanceRecord, ExternalIdentifier, IQueryCondition> idReader = new MasterDetailsProcessor<SubstanceRecord, ExternalIdentifier, IQueryCondition>(
+		queryP) {
+	    /**
+							     * 
+							     */
+	    private static final long serialVersionUID = 5246468397385927943L;
+
+	    @Override
+	    protected void configureQuery(SubstanceRecord target,
+		    IParameterizedQuery<SubstanceRecord, ExternalIdentifier, IQueryCondition> query)
+		    throws AmbitException {
+		query.setFieldname(target);
+	    }
+
+	    @Override
+	    protected SubstanceRecord processDetail(SubstanceRecord target, ExternalIdentifier detail) throws Exception {
+		if (target.getExternalids() == null)
+		    target.setExternalids(new ArrayList<ExternalIdentifier>());
+		target.getExternalids().add(detail);
+		return target;
+	    }
 	};
-	
-	public void footer(java.io.Writer output, Q query) {
-		try {
-			output.write("\n\t]");
-			
-		} catch (Exception x) {}
-		try {
-			output.write("\n}\n");
-			
-			if (jsonpCallback!=null) {
-				output.write(");");
-			}
-		} catch (Exception x) {}
-	};
-	
-	@Override
-	public Object processItem(SubstanceRecord item) throws AmbitException {
-		try {
-			Writer writer = getOutput();
-			if (comma!=null) writer.write(comma);
-			writer.write(item.toJSON(getBaseReference().toString()));
-			comma = ",";
-		} catch (Exception x) {
-			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
+	idReader.setCloseConnection(false);
+	getProcessors().add(idReader);
+
+	if (bundles != null && bundles.length > 0) {
+	    SubstanceRoleByBundle q = new SubstanceRoleByBundle(request.getRootRef().toString());
+	    q.setValue(bundles[0]);
+	    MasterDetailsProcessor<SubstanceRecord, BundleRoleFacet, IQueryCondition> bundleReader = new MasterDetailsProcessor<SubstanceRecord, BundleRoleFacet, IQueryCondition>(
+		    q) {
+		/**
+			     * 
+			     */
+		private static final long serialVersionUID = -6901213143255746760L;
+
+		@Override
+		protected SubstanceRecord processDetail(SubstanceRecord master, BundleRoleFacet detail)
+			throws Exception {
+		    master.clearFacets();
+		    master.addFacet(detail);
+		    return master;
 		}
-		return item;
+	    };
+	    bundleReader.setCloseConnection(false);
+	    getProcessors().add(bundleReader);
 	}
+
+	getProcessors().add(new DefaultAmbitProcessor<SubstanceRecord, SubstanceRecord>() {
+	    /**
+		     * 
+		     */
+	    private static final long serialVersionUID = 7466417307554206003L;
+
+	    public SubstanceRecord process(SubstanceRecord target) throws AmbitException {
+		processItem(target);
+		return target;
+	    };
+	});
+    }
+
+    public void header(java.io.Writer output, Q query) {
+	try {
+	    if (jsonpCallback != null) {
+		output.write(jsonpCallback);
+		output.write("(");
+	    }
+	    output.write("{\n");
+	    output.write("\n\"substance\":[");
+
+	} catch (Exception x) {
+	    logger.log(Level.WARNING, x.getMessage(), x);
+	}
+    };
+
+    public void footer(java.io.Writer output, Q query) {
+	try {
+	    output.write("\n\t]");
+
+	} catch (Exception x) {
+	}
+	try {
+	    output.write("\n}\n");
+
+	    if (jsonpCallback != null) {
+		output.write(");");
+	    }
+	} catch (Exception x) {
+	}
+    };
+
+    @Override
+    public Object processItem(SubstanceRecord item) throws AmbitException {
+	try {
+	    Writer writer = getOutput();
+	    if (comma != null)
+		writer.write(comma);
+	    writer.write(item.toJSON(getBaseReference().toString()));
+	    comma = ",";
+	} catch (Exception x) {
+	    logger.log(java.util.logging.Level.SEVERE, x.getMessage(), x);
+	}
+	return item;
+    }
 
 }

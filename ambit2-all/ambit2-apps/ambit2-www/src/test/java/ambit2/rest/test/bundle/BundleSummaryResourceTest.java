@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.restlet.data.MediaType;
 
@@ -25,16 +24,16 @@ public class BundleSummaryResourceTest extends ProtectedResourceTest {
     }
 
     @Override
-	public boolean verifyResponseJSON(String uri, MediaType media, InputStream in)
-			throws Exception {
-		//todo parse json
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		
-		String line = null;
-		int count=0;
-		while ((line = reader.readLine())!=null) {
-			System.out.println(line);
-			count++;
-		}
-		return count ==1;
-	}}
+    public boolean verifyResponseJSON(String uri, MediaType media, InputStream in) throws Exception {
+	// todo parse json
+	BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+	String line = null;
+	int count = 0;
+	while ((line = reader.readLine()) != null) {
+	    System.out.println(line);
+	    count++;
+	}
+	return count == 1;
+    }
+}

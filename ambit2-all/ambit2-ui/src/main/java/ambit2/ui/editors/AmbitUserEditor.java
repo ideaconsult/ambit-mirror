@@ -27,61 +27,32 @@ import ambit2.base.data.AmbitUser;
 
 /**
  * Editor for {@link AmbitUser}
+ * 
  * @author nina
- *
+ * 
  */
 public class AmbitUserEditor extends BeanEditor<AmbitUser> {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1587449791043577379L;
 
-	protected String name = "";	
-	protected String title = "";
-	protected String firstName = "";
-	protected String lastName = "";
-	protected String affiliation = "";
-	protected String address = "";
-	protected String city = "";	
-	protected String country = "";
-	protected String email = "";
-	protected String www = "";	
-	//protected String loginAllowedFromHost = "%";
-	protected String loggedFromHost = "";	
-	protected String regStatus = "commenced";	
-	protected String password = "guest";
-	
-	public AmbitUserEditor() {
-		super(null,
-			new String[] {
-				"title",
-				"firstName",
-				"lastName",				
-				"affiliation",
-				"address",
-				"city",
-				"country",
-				"email",
-				"www",
-				"name",
-				"password"
-				},
-				new String[] {
-						"Title",
-						"First Name",
-						"Last Name",				
-						"Affiliation",
-						"Address",
-						"City",
-						"Country",
-						"e-mail",
-						"WWW",
-						"User name",
-						"password"
-						}
-				
-		,
-		"User account"
-		);
-	}
+    protected String name = "";
+    protected String title = "";
+    protected String firstName = "";
+    protected String lastName = "";
+    protected String affiliation = "";
+    protected String address = "";
+    protected String city = "";
+    protected String country = "";
+    protected String email = "";
+    protected String www = "";
+    // protected String loginAllowedFromHost = "%";
+    protected String loggedFromHost = "";
+    protected String regStatus = "commenced";
+    protected String password = "guest";
+
+    public AmbitUserEditor() {
+	super(null, new String[] { "title", "firstName", "lastName", "affiliation", "address", "city", "country",
+		"email", "www", "name", "password" }, new String[] { "Title", "First Name", "Last Name", "Affiliation",
+		"Address", "City", "Country", "e-mail", "WWW", "User name", "password" }
+
+	, "User account");
+    }
 }

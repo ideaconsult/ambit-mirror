@@ -61,6 +61,10 @@ public class CompoundsByPropertyValueInDatasetResource extends AmbitFacetResourc
 	@Override
 	protected FacetHTMLReporter getHTMLReporter(Request request) {
 		return new FacetHTMLReporter(request) {
+			/**
+		     * 
+		     */
+		    private static final long serialVersionUID = 3585043716711167668L;
 			@Override
 			public void headerBeforeTable(Writer w, IQueryRetrieval query) {
 				try {

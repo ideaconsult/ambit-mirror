@@ -80,6 +80,11 @@ public abstract class GroupDBResource<G extends IDBGroup>	extends AmbitDBQueryRe
 						new GroupRDFReporter<IQueryRetrieval<IDBGroup>>(
 								getRequest(),variant.getMediaType(),getDocumentation())
 						,variant.getMediaType(),filenamePrefix) {
+					/**
+						     * 
+						     */
+						    private static final long serialVersionUID = -9057507646017674637L;
+
 					@Override
 					protected String getDefaultNameSpace() {
 						return TOXBANK.URI;

@@ -45,6 +45,11 @@ public class BundleDatasetResource extends SubstanceDatasetResource<ReadSubstanc
 	try {
 	    bundle = new SubstanceEndpointsBundle(Integer.parseInt(idbundle.toString()));
 	    return new ReadSubstancesByBundle(bundle) {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -2845110519109843254L;
+
 		public ambit2.base.data.SubstanceRecord getObject(java.sql.ResultSet rs) throws AmbitException {
 		    ambit2.base.data.SubstanceRecord record = super.getObject(rs);
 		    record.setProperty(new SubstancePublicName(), record.getPublicName());
@@ -70,6 +75,11 @@ public class BundleDatasetResource extends SubstanceDatasetResource<ReadSubstanc
 	final ReadSubstanceComposition q = new ReadSubstanceComposition();
 	MasterDetailsProcessor<SubstanceRecord, CompositionRelation, IQueryCondition> compositionReader = new MasterDetailsProcessor<SubstanceRecord, CompositionRelation, IQueryCondition>(
 		q) {
+	    /**
+		     * 
+		     */
+		    private static final long serialVersionUID = -4012709744454255487L;
+
 	    @Override
 	    public SubstanceRecord process(SubstanceRecord target) throws AmbitException {
 		q.setBundle(bundle);
@@ -89,6 +99,11 @@ public class BundleDatasetResource extends SubstanceDatasetResource<ReadSubstanc
 	ReadChemIdentifiersByComposition qids = new ReadChemIdentifiersByComposition();
 	MasterDetailsProcessor<SubstanceRecord, IStructureRecord, IQueryCondition> idsReader = new MasterDetailsProcessor<SubstanceRecord, IStructureRecord, IQueryCondition>(
 		qids) {
+	    /**
+		     * 
+		     */
+		    private static final long serialVersionUID = -3547633994853667140L;
+
 	    @Override
 	    protected SubstanceRecord processDetail(SubstanceRecord target, IStructureRecord detail) throws Exception {
 		for (CompositionRelation r : target.getRelatedStructures())

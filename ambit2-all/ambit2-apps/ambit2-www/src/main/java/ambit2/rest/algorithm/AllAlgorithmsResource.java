@@ -141,6 +141,11 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			AlgorithmURIReporter r = new AlgorithmURIReporter(getRequest(),getDocumentation()) {
+				/**
+			     * 
+			     */
+			    private static final long serialVersionUID = 6533510120881493518L;
+
 				@Override
 				public void processItem(Algorithm item, Writer output) {
 					super.processItem(item, output);

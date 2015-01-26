@@ -98,6 +98,11 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 					createHTMLReporter(),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	new CatalogURIReporter<T>(getRequest(),getDocumentation()) {
+				/**
+			     * 
+			     */
+			    private static final long serialVersionUID = 6849465718621669311L;
+
 				@Override
 				public void processItem(T src, Writer output) {
 					super.processItem(src, output);

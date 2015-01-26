@@ -220,6 +220,11 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 		q.setPageSize(1);
 		q.setPage(0);
 		p.add(new ProcessorStructureRetrieval(q) {
+			/**
+		     * 
+		     */
+		    private static final long serialVersionUID = 621841537224691538L;
+
 			@Override
 			public IStructureRecord process(IStructureRecord target)
 					throws AmbitException {
@@ -233,7 +238,12 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 			}
 		});		
 
-		RepositoryWriter writer = new RepositoryWriter() {
+	RepositoryWriter writer = new RepositoryWriter() {
+			/**
+		     * 
+		     */
+		    private static final long serialVersionUID = 7175414487857418817L;
+
 			@Override
 			public List<IStructureRecord> process(IStructureRecord target)
 					throws AmbitException {

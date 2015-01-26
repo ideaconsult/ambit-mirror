@@ -146,6 +146,10 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 		String[] datasetsURI =  form.getValuesArray(dataset_intersection_uri);
 		if ((datasetsURI != null) && (datasetsURI.length>0)) {
 			QueryCombinedStructure qc = new QueryCombinedStructure() {
+				/**
+			     * 
+			     */
+			    private static final long serialVersionUID = -9042008008516030524L;
 				@Override
 				protected String getMainSQL() {
 					return "select idchemical from chemicals\n";

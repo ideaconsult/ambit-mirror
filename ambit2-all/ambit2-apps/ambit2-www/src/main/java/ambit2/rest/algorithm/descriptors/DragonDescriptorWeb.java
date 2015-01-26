@@ -17,8 +17,13 @@ public class DragonDescriptorWeb extends DescriptorDragonShell {
 	
 	@Override
     protected DragonShell createDragonShell() throws ShellException  {
-    	return new DragonShell() {
-    		@Override
+	return new DragonShell() {
+    		/**
+	     * 
+	     */
+	    private static final long serialVersionUID = 9099725609913728923L;
+
+		@Override
     		protected String getDragonHome() throws ShellException  {
     			return getDragonHomeFromConfig();
     		}
