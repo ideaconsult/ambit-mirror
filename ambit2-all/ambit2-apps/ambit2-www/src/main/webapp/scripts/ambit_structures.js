@@ -503,7 +503,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 			var searchURI = "";
 			var endpoint =  sameas==null?"":sameas;
 			if (sameas.indexOf(prefix)>=0) {
-				searchURI = " <a class='qxternal' href='http://apps.ideaconsult.net:8080/ontology/query?uri="+
+				searchURI = " <a class='qxternal' href='https://apps.ideaconsult.net/ontology/query?uri="+
 				encodeURIComponent(sameas) +
 				"' target=_blank><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></span></a>";
 				endpoint = sameas.replace(prefix,"");
