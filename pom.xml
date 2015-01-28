@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
@@ -137,8 +137,8 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.2</version>
           <configuration>
-            <source>1.7</source>
-            <target>1.7</target>
+            <source>${sourceVersion}</source>
+            <target>${sourceVersion}</target>
           </configuration>
         </plugin>
         <plugin>
@@ -473,6 +473,33 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>JRE6</id>
+      <activation>
+        <jdk>1.6</jdk>
+      </activation>
+      <properties>
+        <sourceVersion>1.6</sourceVersion>
+      </properties>
+    </profile>
+    <profile>
+      <id>JRE7</id>
+      <activation>
+        <jdk>1.7</jdk>
+      </activation>
+      <properties>
+        <sourceVersion>1.7</sourceVersion>
+      </properties>
+    </profile>
+    <profile>
+      <id>JRE8</id>
+      <activation>
+        <jdk>1.8</jdk>
+      </activation>
+      <properties>
+        <sourceVersion>1.8</sourceVersion>
+      </properties>
     </profile>
   </profiles>
   <properties>
