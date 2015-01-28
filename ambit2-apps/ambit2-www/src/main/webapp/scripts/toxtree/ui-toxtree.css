@@ -45,24 +45,6 @@ body>div.jtox-toolkit {
   border-radius: 7px;
 }
 
-#logger {
-  position: fixed;
-	height: 144px;
-  width: 95%;
-  right: 5px;
-	bottom: 0px;
-	z-index: 100;
-	transition: bottom 0.5s ease;
-	-moz-transition: bottom 0.5s ease;
-	-webkit-transition: bottom 0.5s ease;
-	-o-transition: bottom 0.5s ease;
-	box-shadow: 3px 7px 7px #999;
-}
-
-#logger.hidden {
-  bottom: -120px;
-}
-
 .ketcher {
   margin-left: 45px;
 }
@@ -85,6 +67,11 @@ body>div.jtox-toolkit {
 
 #tt-bigpane>div {
   height: 100%;
+}
+
+.counter-field {
+  font-size: 110%;
+  margin-bottom: 5px;
 }
 
 #tt-models-panel {
@@ -164,7 +151,9 @@ div.tt-algorithm div.tt-classification {
 
 #tt-browser-panel .tt-controls {
   vertical-align: bottom;
-  float: right;
+  position: absolute;
+  right: 0px;
+  top: 0px;
 }
 
 #tt-features {
@@ -175,7 +164,7 @@ div.tt-algorithm div.tt-classification {
   overflow: scroll;
   box-sizing: border-box;
   font-size: 90%;
-  padding: 5px;
+  padding: 0px 5px 0px 5px;
 }
 
 #tt-features .tt-feature {
