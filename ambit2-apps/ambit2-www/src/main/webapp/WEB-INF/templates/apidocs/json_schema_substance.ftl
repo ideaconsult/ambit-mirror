@@ -14,7 +14,7 @@
             "id": "hhttp://jsonschema.opentox.org/bundles",
             "required": false,
             "properties": {
-                "http://apps.ideaconsult.net:8080/data/bundle/1": {
+                "https://apps.ideaconsult.net/data/bundle/1": {
                     "type": "object",
                     "id": "http://jsonschema.opentox.org/bundle/ID",
                     "required": false,

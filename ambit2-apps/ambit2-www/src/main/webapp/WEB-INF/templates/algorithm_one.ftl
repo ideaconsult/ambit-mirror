@@ -88,7 +88,7 @@
 		<option value='NAME2STRUCTURE'   title='http://www-ucc.ch.cam.ac.uk/products/software/opsin'>Chemical Name to Structure converter (OPSIN) </option>
 		<option value='CHEBI'  disabled title='http://www.ebi.ac.uk/chebi'>Chemical Entities of Biological Interest (ChEBI)</option>
 		<option value='CHEMBL'   title='https://www.ebi.ac.uk/chembldb/index.php/ws/'>ChEMBL Web Services</option>
-		<option value='OPENTOX'   title='http://apps.ideaconsult.net:8080/ambit2'>OpenTox</option>
+		<option value='OPENTOX'   title='https://apps.ideaconsult.net/ambit2'>OpenTox</option>
 		<option value='TBWIKI'   title='http://wiki.toxbank.net/wiki/Special:SPARQLEndpoint'>ToxBank WIKI</option>
 		</select>
 		<div class='three columns omega'></div>
