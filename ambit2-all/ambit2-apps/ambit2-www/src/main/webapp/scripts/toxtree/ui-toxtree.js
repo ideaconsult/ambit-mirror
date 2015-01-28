@@ -2,7 +2,7 @@ var tt = {
   browserKit: null,
   modelKit: null,
   featuresList: null,
-  algoMap: {}, // { <id> : { index: <>, results: <>, dom: }
+  algoMap: {}, // { <id> : { index: <>, results: <>, dom: <>, model: <>}
   compoundIdx: 0,
   coreFeatures: [
     "http://www.opentox.org/api/1.1#CASRN", 
@@ -33,7 +33,7 @@ var config_toxtree = {
       e.stopPropagation();
     },
     "makeModel": function (e) { makeModel(this); e.stopPropagation(); },
-    "runPredict": function (e) { runPredict(this); e.stopPropagation(); }
+    "runPredict": function (e) { runPredict(this, $(this).data('algoId'), $(this).data('index')); e.stopPropagation(); }
 	},
 	"groups" : {
 	  "Identifiers": [
@@ -65,21 +65,21 @@ function makeModel(el, algoId, callback) {
   });
 }
 
-function runPredict (el, algoId, all) {
-  if (!el)
+function runPredict (el, algoId, index) {
+  if (multi = !el) // yes, it IS one =
     el = $('button.jt-toggle.predict', tt.algoMap[algoId].dom)[0];
-  else {
+  else if (algoId == null) {
     algoId = $(el).data('algoId');
     if (algoId == null) 
       algoId = $(el).parents('.tt-algorithm').data('algoId');
   }
 
   var datasetUri = null;
-  var index = null;
-  if (all)
+  if (multi)
     datasetUri = tt.browserKit.queryUri();
   else if (tt.browserKit.dataset != null) {
-    index = $(el).data('index');
+    if (index == null)
+      index = $(el).data('index');
     if (index == null)
       index = tt.compoundIdx;
     if (index >= 0 && index < tt.browserKit.dataset.dataEntry.length)
@@ -115,7 +115,7 @@ function runPredict (el, algoId, all) {
 function runSelected() {
   $('#tt-models-panel button.jt-toggle.auto.active').each(function () {
     var tEl = $(this).parents('.tt-algorithm');
-    runPredict(null, tEl.data('algoId'), true);
+    runPredict(null, tEl.data('algoId'));
   });  
 }
 
@@ -123,7 +123,7 @@ function formatAlgoName(val) {
   return (val.indexOf('ToxTree: ') == 0) ? val = val.substr(9) : val;
 }
 
-function buildCategories(features, values, all) {
+function buildCategories(features, values) {
 	var cats = [];
 	var regex = /\^\^(\S+)Category/i;
 	var multi = false;
@@ -137,13 +137,12 @@ function buildCategories(features, values, all) {
   	  if (cats.length > 0)
   	    multi = true;
     	for (var i = 0;i < anot.length; ++i) {
-      	if (anot[i].o == val || all)
-      	  cats.push({
-      	    name: features[fId].title.replace(/\s/g, '&nbsp;'),
-        	  title: anot[i].o.replace(/\s/g, '&nbsp;'),
-        	  toxicity: anot[i].type.replace(regex, '$1').toLowerCase(),
-        	  active: anot[i].o == val
-      	  });
+    	  cats.push({
+    	    name: features[fId].title.replace(/\s/g, '&nbsp;'),
+      	  title: anot[i].o.replace(/\s/g, '&nbsp;'),
+      	  toxicity: anot[i].type.replace(regex, '$1').toLowerCase(),
+      	  active: anot[i].o == val
+    	  });
     	}
     }
     else
@@ -170,20 +169,20 @@ function buildCategories(features, values, all) {
 	return cats;
 }
 
-function formatClassification(root, mapRes, all) {
-  var cats = buildCategories(mapRes.features, mapRes.compound.values, all);
+function fillClassification(root, cats, filter) {
   ccLib.populateData(root, '#tt-class', cats, function (data) {
+    if (filter && !data.active)
+      return false;
     $(this).addClass(data.toxicity);
     if (data.active)
       $(this).addClass('active');
   });
-  return cats;
 }
 
 function onSelectedUpdate(e) {
   if (tt.modelKit.algorithm == null)
     return;
-	var tEl = $('#tt-models-panel .title')[0];
+	var tEl = $('#tt-models-panel .counter-field')[0];
 	var v = $('button.jt-toggle.auto.active', tt.modelKit.rootElement).length;
 	tEl.innerHTML = jT.ui.updateCounter(tEl.innerHTML, v, tt.modelKit.algorithm.length);;
 }
@@ -197,7 +196,7 @@ function onAlgoLoaded(result) {
   if (!!result) {
     var idx = 0;
     ccLib.populateData(tt.modelKit.rootElement, '#tt-algorithm', result.algorithm, function (data) {
-      tt.algoMap[data.id] = { 
+      tt.algoMap[data.id] = {
         index: idx,
         dom: this,
         results: {},
@@ -265,9 +264,9 @@ function clearSlate(all) {
   if (all) {
     for (var aId in tt.algoMap)
   	  tt.algoMap[aId].results = {};
-  	 $('.tt-class', tt.browserKit.rootElement).remove();
-  	 $('.calculated', tt.browserKit.rootElement).removeClass('calculated');
-  	 tt.browserKit.equalizeTables();
+      $('.tt-class', tt.browserKit.rootElement).remove();
+      $('.calculated', tt.browserKit.rootElement).removeClass('calculated');
+      tt.browserKit.equalizeTables();
   }
 }
 
@@ -280,7 +279,7 @@ function showCompound() {
   var kit = tt.browserKit;
 
   if (kit.dataset.dataEntry[tt.compoundIdx] != null) {
-    $('#tt-diagram img.toxtree-diagram')[0].src = kit.dataset.dataEntry[tt.compoundIdx].compound.diagramUri;
+    $('#tt-diagram img.toxtree-diagram')[0].src = jT.ui.diagramUri(kit.dataset.dataEntry[tt.compoundIdx].compound.URI);
     updateSize('#tt-browser-panel');
   }
 
@@ -311,26 +310,17 @@ function showPrediction(algoId) {
   var mapRes = map.results[tt.compoundIdx];
   
   // check if we have results for this guy at all...
-  if (mapRes == null || mapRes.compound == null || mapRes.features == null)
+  if (mapRes == null || mapRes.data == null)
     return;
 
-  var explanation = null;
-  var data = jToxCompound.extractFeatures(mapRes.compound, mapRes.features, function (entry, fId) {
-    if (entry.title.indexOf("#explanation") > -1)
-      explanation = entry.value;
-    else if (entry.source.type.toLowerCase() == 'model' && !!entry.value)
-      return true;
-    else
-      return false;
-  });
-
-  addFeatures(data, algoId);
+  addFeatures(mapRes.data, algoId);
   var aEl = map.dom;
-  if (explanation != null)
-    $('.tt-explanation', aEl).html(explanation.replace(/(\W)(Yes|No)(\W)/g, '$1<span class="answer $2">$2</span>$3'));
+  if (mapRes.explanation != null)
+    $('.tt-explanation', aEl).html(mapRes.explanation.replace(/(Yes|No)/g, '<span class="answer $1">$1</span>'));
   $('.tt-classification', aEl).empty();
   
-  formatClassification($('.tt-classification', aEl)[0], mapRes, true);
+  
+  fillClassification($('.tt-classification', aEl)[0], mapRes.categories);
   $(aEl).removeClass('folded');
 }
 
@@ -340,20 +330,40 @@ function parsePrediction(result, algoId, index) {
   var cells = $('#tt-table table td.' + algoId);
   for (var i = 0, rl = result.dataEntry.length; i < rl; ++i) {
     var idx = i + (index || 0);
-    if (map.results[idx] == null)
-      map.results[idx] = {};
     var mapRes = map.results[idx];
-    mapRes.compound = result.dataEntry[i];
-    mapRes.features = result.feature;
-    $('.tt-class', cells[idx]).remove();
-    if (formatClassification(cells[idx], mapRes, false).length == 0)
-      cells[idx].innerHTML = '-';
-    $(cells[idx]).addClass('calculated');
+    if (mapRes == null)
+      map.results[idx] = mapRes = {};
+    mapRes.explanation = '';
+    mapRes.data = jToxCompound.extractFeatures(result.dataEntry[i], result.feature, function (feature, fId) {
+      if (feature.title.indexOf("#explanation") > -1) {
+        mapRes.explanation = feature.value;
+        return false;
+      }
+      else if (feature.source.type.toLowerCase() == 'model' && !!feature.value)
+        return true;
+      else
+        return false;
+    });
+
+    mapRes.categories = buildCategories(result.feature, result.dataEntry[i].values);
+    
+    if (mapRes.categories.length == 0 && index == null)
+        runPredict ($('button', cells[idx]), algoId);
+    else { 
+      $('.tt-class', cells[idx]).remove();
+      $(cells[idx]).addClass('calculated');
+      if (mapRes.categories.length > 0) {
+        fillClassification(cells[idx], mapRes.categories, true)
+        // we need to show it, if this is the selected one
+        if (idx == tt.compoundIdx)
+          showPrediction(algoId);
+      }
+      else // no data at all!
+        cells[idx].innerHTML = '-';
+    }
   }
   
   tt.browserKit.equalizeTables();
-  if (index == null || index == tt.compoundIdx)
-    showPrediction(algoId);
 }
 
 function loadCompound(index) {
@@ -451,7 +461,7 @@ $(document).ready(function(){
   $('#sidebar .side-title>div').on('click', switchView);
   switchView('single');
   
-  $('#logger').on('mouseover', function () { $(this).removeClass('hidden'); }).on('mouseout', function () { $(this).addClass('hidden');});
+  $('#logger').on('click', function () { $(this).toggleClass('hidden'); });
   
   $(window).on('resize', function () { updateSize(); });
   updateSize();
