@@ -41,6 +41,7 @@ public class CallableWafflesPredictor<USERID> extends CallableModelPredictor<Fil
 		HttpURLConnection uc=null;
 		try {
 			uc = ClientResourceWrapper.getHttpURLConnection(reference.toString(), "GET", ChemicalMediaType.WEKA_ARFF.toString());
+			HttpURLConnection.setFollowRedirects(true);
 			DownloadTool.download(uc.getInputStream(), files[0]);
 			logger.fine(files[0].getAbsolutePath());
 

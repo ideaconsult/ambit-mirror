@@ -150,7 +150,7 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 		try {
 			connection = 
 				ClientResourceWrapper.getHttpURLConnection(reference.toString(),"GET",MediaType.APPLICATION_JAVA_OBJECT.toString());
-			connection.setFollowRedirects(true);
+			HttpURLConnection.setFollowRedirects(true);
 			if (agent!=null) connection.setRequestProperty("User-Agent", agent);
 			if (cookies!=null)
 				connection.setRequestProperty("Cookie", cookies);
