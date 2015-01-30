@@ -85,6 +85,7 @@ public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<
 		HttpURLConnection client = null;
 		try {
 			client = ClientResourceWrapper.getHttpURLConnection(reference.toString(), "GET", ChemicalMediaType.WEKA_ARFF.toString());
+			HttpURLConnection.setFollowRedirects(true);
 			reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			return new Instances(reader);
 		} catch (Exception x) {
