@@ -396,11 +396,20 @@ var ccLib = {
       relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [,''])[1],
       segments: a.pathname.replace(/^\//,'').split('/')
     };
-  }    
+  }
 };
 
 function ccNonEmptyFilter(v) {
-  return v !== undefined && v != null && v != '';  
+  return v !== undefined && v != null && v != '';
+}
+
+// Formats JavaScript timestamp into human-readable presentation
+function formatDate(timestamp) {
+  var d = new Date(timestamp),
+      day = d.getDate(),
+      month = d.getMonth()+1,
+      year = d.getFullYear();
+  return ((day<10)?'0':'') + day + '.' + ((month<10)?'0':'') + month + '.' + d.getFullYear();
 }
 window.jT = window.jToxKit = {
 	templateRoot: null,
@@ -2247,8 +2256,9 @@ var jToxCompound = (function () {
         "sDom" : "rt",
         "aoColumns": fixCols,
         "bSort": false,
-        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+        "fnCreatedRow": function( nRow, aData) {
           // attach the click handling
+          var iDataIndex = aData.index;          
           if (self.settings.hasDetails)
             jT.$('.jtox-details-open', nRow).on('click', function(e) { fnShowDetails(nRow, e); });
           jT.$(nRow).data('jtox-index', iDataIndex);
@@ -2278,7 +2288,8 @@ var jToxCompound = (function () {
         "bSort": true,
         "aoColumns": varCols,
         "bScrollCollapse": true,
-        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+        "fnCreatedRow": function( nRow, aData ) {
+          var iDataIndex = aData.index;
           nRow.id = 'jtox-var-' + self.instanceNo + '-' + iDataIndex;
 
 	        // equalize multi-rows, if there are any
@@ -3022,7 +3033,7 @@ var jToxModel = (function () {
       var self = this;
       var createIt = function () {
         jT.service(self, algoUri, { method: 'POST' }, function (result, jhr) {
-          ccLib.fireCallback(callback, self, (!task.error ? task.result : null), jhr);
+          ccLib.fireCallback(callback, self, result, jhr);
         });
       };
       
