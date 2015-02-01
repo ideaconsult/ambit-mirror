@@ -76,7 +76,7 @@
       <div class="title" >
         <a target="_blank" class="data-field attribute" data-field="uri" data-attribute="href"><span class="ui-icon ui-icon-link jtox-inline"></span></a>
         <span class="data-field" data-field="name" data-format="formatAlgoName">?</span>
-        <div class="jtox-inline float-right">
+        <div class="jtox-inline command-buttons">
           <button class="jt-toggle jtox-handler predict" data-handler="runPredict" title="Run prediction with the algorithm on current compound">▶︎</button>
           <button class="jt-toggle jtox-handler model" data-handler="makeModel" title="Prepare the model for this algorithm">M</button>
           <button class="jt-toggle jtox-handler auto" data-handler="markAuto" title="Run automatically on new queries">A</button>
