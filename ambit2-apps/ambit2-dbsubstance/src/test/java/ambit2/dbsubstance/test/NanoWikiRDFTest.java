@@ -28,7 +28,7 @@ public class NanoWikiRDFTest  extends DbUnitTest {
 		NanoWikiRDFReader reader = null;
 		int records = 0;
 		try {
-			reader = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(new File("D:/src-other/nanowiki/backup_public_v5.rdf")),"UTF-8"));
+			reader = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(new File("D:/src-other/nanowiki/backup_public_v7.rdf")),"UTF-8"));
 			while (reader.hasNext()) {
 				IStructureRecord record = reader.nextRecord();
 				Assert.assertTrue(record instanceof SubstanceRecord);
@@ -45,7 +45,7 @@ public class NanoWikiRDFTest  extends DbUnitTest {
         IDatabaseConnection c = getConnection();
         IRawReader<IStructureRecord> parser = null;
         try {
-	        parser = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(new File("D:/src-other/nanowiki/backup_public_v5.rdf")),"UTF-8"));
+	        parser = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(new File("D:/src-other/nanowiki/backup_public_v7.rdf")),"UTF-8"));
 	        write(parser,c.getConnection(),new ReferenceSubstanceUUID(),false);
 	        
         } finally {
