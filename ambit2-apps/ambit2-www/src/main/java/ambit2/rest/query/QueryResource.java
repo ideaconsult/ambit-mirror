@@ -65,7 +65,6 @@ import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.exception.RResourceException;
 import ambit2.rest.property.ProfileReader;
 import ambit2.rest.rdf.RDFObjectIterator;
-import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.rest.task.TaskCreator;
@@ -570,7 +569,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 		    throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 		else {
 		    ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
-		    FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+		    FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 		    if (r.size() == 1) {
 			ITask<Reference, Object> task = storage.findTask(r.get(0));
 			task.update();

@@ -67,7 +67,6 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFStructuresIterator;
-import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableStructureEntry;
 import ambit2.rest.task.FactoryTaskConvertor;
 
@@ -553,7 +552,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 						token);
 						
 			  ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();				  
-			  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+			  FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 			  task.update();
 			  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
            return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);
@@ -665,7 +664,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 						token);
 						
 			  ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();				  
-			  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+			  FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 			  task.update();
 			  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
            return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);

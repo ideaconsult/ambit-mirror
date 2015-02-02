@@ -1,9 +1,7 @@
 package ambit2.rest.facet;
 
-import java.io.Writer;
 import java.util.Map;
 
-import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
@@ -51,28 +49,7 @@ public class DatasetChemicalsQualityStatsResource extends AmbitFacetResource<Dat
 		return q;
 	}
 	
-	@Override
-	protected FacetHTMLReporter getHTMLReporter(Request request) {
-		return new FacetHTMLReporter(request) {
-			/**
-		     * 
-		     */
-		    private static final long serialVersionUID = 1576818116709958251L;
 
-			@Override
-			public void headerBeforeTable(Writer w, IQueryRetrieval query) {
-				super.headerBeforeTable(w, query);
-				try {
-					w.write("<a href='?summary=true'>All</a>&nbsp;");
-					w.write("<a href='?summary=false'>Per dataset</a>");
-				} catch (Exception x) {
-					
-				}
-			}
-		};
-
-	}
-	
 	@Override
 	public void configureTemplateMap(Map<String, Object> map, Request request,
 			IFreeMarkerApplication app) {
