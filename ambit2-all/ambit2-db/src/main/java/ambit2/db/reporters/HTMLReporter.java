@@ -11,58 +11,62 @@ import ambit2.db.processors.ProcessorStructureRetrieval;
 
 /**
  * Very simple html reporter
+ * 
  * @author nina
- *
+ * 
  * @param <Q>
  */
-public class HTMLReporter <Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureReporter<Q, Writer> {
-	/**
+@Deprecated
+public class HTMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureReporter<Q, Writer> {
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 2931123688036795689L;
-	public HTMLReporter() {
-		getProcessors().clear();
-		getProcessors().add(new ProcessorStructureRetrieval());
-		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
-			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target);
-				return target;
-			};
-		});	
-	}
+    private static final long serialVersionUID = 2931123688036795689L;
 
-	
-	@Override
-	public Object processItem(IStructureRecord item) throws AmbitException {
+    public HTMLReporter() {
+	getProcessors().clear();
+	getProcessors().add(new ProcessorStructureRetrieval());
+	getProcessors().add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
+	    public IStructureRecord process(IStructureRecord target) throws AmbitException {
+		processItem(target);
+		return target;
+	    };
+	});
+    }
 
-		try {
-			//TODO generate PDFcontent
-			getOutput().write("<p>");
-			getOutput().write(item.getContent());		
-		} catch (Exception x) {
-			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
-		}
-		return null;
-	}
+    @Override
+    public Object processItem(IStructureRecord item) throws AmbitException {
 
-	public void open() throws DbAmbitException {
-		// TODO Auto-generated method stub
-		
+	try {
+	    // TODO generate PDFcontent
+	    getOutput().write("<p>");
+	    getOutput().write(item.getContent());
+	} catch (Exception x) {
+	    logger.log(java.util.logging.Level.SEVERE, x.getMessage(), x);
 	}
-	public void footer(Writer output, Q query) {
-		try {
-		output.write(String.format("<html><head><title>%s</title><body>",query.toString()));
-		} catch (Exception x) {
-			
-		}
-	};
-	public void header(Writer output, Q query) {
-		try {
-			output.write("</body></html>");
-			output.flush();
-		} catch (Exception x) {
-			
-		}
-	};
+	return null;
+    }
+
+    public void open() throws DbAmbitException {
+	// TODO Auto-generated method stub
+
+    }
+
+    public void footer(Writer output, Q query) {
+	try {
+	    output.write(String.format("<html><head><title>%s</title><body>", query.toString()));
+	} catch (Exception x) {
+
+	}
+    };
+
+    public void header(Writer output, Q query) {
+	try {
+	    output.write("</body></html>");
+	    output.flush();
+	} catch (Exception x) {
+
+	}
+    };
 
 }

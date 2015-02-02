@@ -1,10 +1,8 @@
 package ambit2.rest.facet;
 
-import java.io.Writer;
 import java.util.Iterator;
 import java.util.Map;
 
-import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
@@ -58,52 +56,7 @@ public class CompoundsByPropertyValueInDatasetResource extends AmbitFacetResourc
 		return q;
 	}
 
-	@Override
-	protected FacetHTMLReporter getHTMLReporter(Request request) {
-		return new FacetHTMLReporter(request) {
-			/**
-		     * 
-		     */
-		    private static final long serialVersionUID = 3585043716711167668L;
-			@Override
-			public void headerBeforeTable(Writer w, IQueryRetrieval query) {
-				try {
-					PropertyDatasetFacetQuery q = (PropertyDatasetFacetQuery) query;
-				w.write(String.format("<h5>Dataset <a href='%s/%s/%s?page=0&pagesize=100' target='_blank'>%s</a> &nbsp; Property <a href='%s/%s/%d'>%s</a></h5>", 
-						getRequest().getRootRef(),
-						OpenTox.URI.dataset.name(),
-						q.getValue().getId(),
-						q.getValue(),
-						getRequest().getRootRef(),
-						OpenTox.URI.feature.name(),
-						q.getFieldname().getId(),
-						q.getFieldname().getName()
-					));
-				} catch (Exception x) {
-					
-				}
-				
-			}
-			@Override
-			public void footer(Writer w, IQueryRetrieval query) {
-				try {
-					String chart = String.format("%s/chart/pie?%s",
-							getRequest().getRootRef(),
-							getRequest().getResourceRef().getQuery()
-							);
-					w.write(String.format("<tr><td colspan='2'><a href='%s&w=600&h=500' alt='%s' title='%s'><img src='%s&w=600&h=500' title='%s'></a></td></tr>",
-							chart,
-							query.toString(),
-							query.toString(),
-							chart,
-							query.toString()
-							));
-				} catch (Exception x) {}
-				
-				super.footer(w, query);
-			}
-		};
-	}
+	
 	
 	@Override
 	public void configureTemplateMap(Map<String, Object> map, Request request,

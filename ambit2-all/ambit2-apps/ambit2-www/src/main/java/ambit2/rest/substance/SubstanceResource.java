@@ -61,7 +61,6 @@ import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetURIReporter;
-import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
 
 
@@ -443,7 +442,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 								token);
 								
 					  ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();				  
-					  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+					  FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 					  task.update();
 					  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
 		              return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);
@@ -480,7 +479,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>,T exte
 						token);
 						
 				  ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();				  
-				  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+				  FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 				  task.update();
 				  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
 	              return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);				

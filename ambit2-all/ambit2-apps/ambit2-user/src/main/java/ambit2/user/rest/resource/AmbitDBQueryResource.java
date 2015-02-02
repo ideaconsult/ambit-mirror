@@ -54,7 +54,7 @@ public abstract class AmbitDBQueryResource<Q extends IQueryRetrieval<T>,T extend
 			throws ResourceException {
 		return new FactoryTaskConvertorRDF(storage,getHTMLBeauty());
 	}
-	
+	@Deprecated
 	protected QueryHTMLReporter createHTMLReporter(boolean headless) throws ResourceException {
 		return null;
 	}

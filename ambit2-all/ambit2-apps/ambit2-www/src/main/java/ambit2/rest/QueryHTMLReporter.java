@@ -20,6 +20,7 @@ import org.restlet.Request;
  * @param <T>
  * @param <Q>
  */
+@Deprecated
 public abstract class QueryHTMLReporter<T, Q extends IQueryRetrieval<T>> extends QueryReporter<T, Q, Writer> {
     protected QueryURIReporter uriReporter;
     protected boolean headless = false;

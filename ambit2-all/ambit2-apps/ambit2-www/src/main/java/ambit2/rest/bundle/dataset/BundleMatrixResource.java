@@ -59,7 +59,6 @@ import ambit2.rest.substance.CallableStudyBundleImporter;
 import ambit2.rest.substance.CallableStudyBundleImporter._mode;
 import ambit2.rest.substance.SubstanceDatasetResource;
 import ambit2.rest.substance.SubstanceURIReporter;
-import ambit2.rest.task.AmbitFactoryTaskConvertor;
 
 public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstancesByBundle> {
     protected SubstanceEndpointsBundle bundle;
@@ -104,7 +103,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 	switch (matrix) {
 	case matrix_final:
 	    return new ReadEffectRecordByBundleMatrix(bundle, _matrix.matrix_final);
-	   default: 
+	default:
 	    return new ReadEffectRecordByBundleMatrix(bundle, _matrix.matrix_working);
 	}
     }
@@ -117,7 +116,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 	    /**
 		     * 
 		     */
-		    private static final long serialVersionUID = -8766822645200139420L;
+	    private static final long serialVersionUID = -8766822645200139420L;
 
 	    @Override
 	    public SubstanceRecord process(SubstanceRecord target) throws AmbitException {
@@ -141,7 +140,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 	    /**
 		     * 
 		     */
-		    private static final long serialVersionUID = 8470730543950163672L;
+	    private static final long serialVersionUID = 8470730543950163672L;
 
 	    @Override
 	    protected SubstanceRecord processDetail(SubstanceRecord target, IStructureRecord detail) throws Exception {
@@ -170,12 +169,12 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 
     @Override
     protected Representation delete(Variant variant) throws ResourceException {
-	
+
 	_matrix matrix = getList();
 	switch (matrix) {
 	case matrix_working:
 	    break;
-	default: 
+	default:
 	    throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 	}
 
@@ -196,13 +195,13 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 	    DatasetURIReporter r = new DatasetURIReporter(getRequest());
 	    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
 	    conn = dbc.getConnection();
-	    CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(_matrix.matrix_working,Method.DELETE, null, bundle, r,
-		    conn, getToken());
+	    CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(_matrix.matrix_working,
+		    Method.DELETE, null, bundle, r, conn, getToken());
 	    ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("Delete matrix from bundle",
 		    callable, getRequest().getRootRef(), token);
 
 	    ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
-	    FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+	    FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 	    task.update();
 	    getResponse().setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
 	    return tc.createTaskRepresentation(task.getUuid(), variant, getRequest(), getResponse(), null);
@@ -219,10 +218,14 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 
     protected _matrix getList() throws ResourceException {
 	Object matrixtype = getRequest().getAttributes().get("list");
-	if (matrixtype == null) return _matrix.matrix_working; //working matrix by default
-	else if ("working".equals(matrixtype.toString())) return _matrix.matrix_working;
-	else if ("final".equals(matrixtype.toString())) return _matrix.matrix_final;
-	else if ("deleted".equals(matrixtype.toString())) return _matrix.deleted_values;
+	if (matrixtype == null)
+	    return _matrix.matrix_working; // working matrix by default
+	else if ("working".equals(matrixtype.toString()))
+	    return _matrix.matrix_working;
+	else if ("final".equals(matrixtype.toString()))
+	    return _matrix.matrix_final;
+	else if ("deleted".equals(matrixtype.toString()))
+	    return _matrix.deleted_values;
 	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
     }
 
@@ -256,13 +259,13 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 		    DatasetURIReporter r = new DatasetURIReporter(getRequest());
 		    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
 		    conn = dbc.getConnection();
-		    CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(matrix,Method.POST,
+		    CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(matrix, Method.POST,
 			    new Form(entity), bundle, r, conn, getToken());
 		    ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("Matrix from bundle",
 			    callable, getRequest().getRootRef(), token);
 
 		    ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
-		    FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+		    FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 		    task.update();
 		    getResponse().setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
 		    return tc.createTaskRepresentation(task.getUuid(), variant, getRequest(), getResponse(), null);
@@ -283,7 +286,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
     @Override
     protected Representation put(Representation entity, Variant variant) throws ResourceException {
 	_matrix matrix = getList();
-	
+
 	if ((entity == null) || !entity.isAvailable())
 	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty content");
 
@@ -294,12 +297,12 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 		case deleted_values: {
 		    importmode = _mode.matrixvaluedelete;
 		    break;
-		} 
+		}
 		case matrix_working: {
 		    importmode = _mode.studyimport;
 		    break;
 		}
-		default: 
+		default:
 		    throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 		}
 
@@ -321,7 +324,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 			    callable, getRequest().getRootRef(), token);
 
 		    ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
-		    FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+		    FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 		    task.update();
 		    getResponse().setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
 		    return tc.createTaskRepresentation(task.getUuid(), variant, getRequest(), getResponse(), null);
@@ -339,9 +342,9 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 		case matrix_working: {
 		    break;
 		}
-		default: 
+		default:
 		    throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
-		}		
+		}
 
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		RestletFileUpload upload = new RestletFileUpload(factory);
@@ -374,7 +377,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 			    callable, getRequest().getRootRef(), token);
 
 		    ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
-		    FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+		    FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 		    task.update();
 		    getResponse().setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
 		    return tc.createTaskRepresentation(task.getUuid(), variant, getRequest(), getResponse(), null);
@@ -403,10 +406,13 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
     protected Value processValue(ProtocolEffectRecord<String, String, String> detail, boolean istextvalue) {
 	ValueAnnotated value = new ValueAnnotated();
 	if (istextvalue) {
-	    if (detail.getTextValue()==null) 
-		if (detail.getInterpretationResult()!=null)  value.setTextValue(detail.getInterpretationResult()); 
-		else  value.setTextValue(""); 
-            else value.setTextValue(detail.getTextValue().toString());     
+	    if (detail.getTextValue() == null)
+		if (detail.getInterpretationResult() != null)
+		    value.setTextValue(detail.getInterpretationResult());
+		else
+		    value.setTextValue("");
+	    else
+		value.setTextValue(detail.getTextValue().toString());
 	} else {
 	    value.setLoQualifier(detail.getLoQualifier());
 	    value.setUpQualifier(detail.getUpQualifier());

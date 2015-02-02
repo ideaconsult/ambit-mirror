@@ -34,7 +34,6 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.reporters.CatalogURIReporter;
-import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.user.rest.resource.AMBITDBRoles;
@@ -169,7 +168,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 			else {
 				
 				ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();
-				FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+				FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 				if (tasks.size()==1)
 					return tc.createTaskRepresentation(tasks.get(0), variant, getRequest(),getResponse(),getDocumentation());
 				else

@@ -37,7 +37,6 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.algorithm.CatalogResource;
-import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.FactoryTaskConvertor;
 
@@ -200,7 +199,7 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 			else {
 				
 				ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();
-				FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+				FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 				if (tasks.size()==1)
 					return tc.createTaskRepresentation(tasks.get(0), variant, getRequest(),getResponse(),getDocumentation());
 				else
