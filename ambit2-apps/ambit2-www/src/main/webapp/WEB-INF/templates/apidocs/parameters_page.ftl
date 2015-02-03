@@ -1,6 +1,6 @@
 			            {
 			              "name": "page",
-			              "description": "Staring page",
+			              "description": "Starting page",
 			              "required": false,
 			              "type": "int",
 			              "paramType": "query",
