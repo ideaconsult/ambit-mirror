@@ -409,7 +409,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	parseInterpretationCriteria(node, record);
     }
 
-    public IParams parseParams(ObjectNode node) {
+    public static IParams parseParams(ObjectNode node) {
 	if (node == null)
 	    return null;
 	IParams params = new Params();

@@ -20,7 +20,7 @@ import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.NullNode;
+import org.codehaus.jackson.node.ObjectNode;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
@@ -31,11 +31,10 @@ import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
-import ambit2.base.data.PropertyAnnotation;
-import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
 import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.MultiValue;
 import ambit2.base.data.study.ProtocolEffectRecord;
 import ambit2.base.data.study.Value;
@@ -46,6 +45,7 @@ import ambit2.base.data.substance.SubstanceProperty;
 import ambit2.base.data.substance.SubstancePublicName;
 import ambit2.base.data.substance.SubstanceUUID;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.io.json.SubstanceStudyParser;
 import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.substance.study.ReadEffectRecordBySubstance;
@@ -148,7 +148,8 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	    /**
 		     * 
 		     */
-		    private static final long serialVersionUID = -7354966336095750101L;
+	    private static final long serialVersionUID = -7354966336095750101L;
+	    ProtocolEffectRecord2SubstanceProperty processor = new ProtocolEffectRecord2SubstanceProperty();
 
 	    @Override
 	    protected SubstanceRecord processDetail(SubstanceRecord master,
@@ -186,56 +187,69 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 			boolean isTextValue = ((detail.getLoValue() == null) && (detail.getUpValue() == null));
 			if (isTextValue && removeStringProperties)
 			    return master;
-
-			JsonNode conditions = detail.getConditions() == null ? null : dx.readTree(new StringReader(
-				detail.getConditions()));
-
-			PropertyAnnotations ann = new PropertyAnnotations();
-
-			Iterator<Entry<String, JsonNode>> i = conditions == null ? null : conditions.getFields();
-
-			if (i != null)
-			    while (i.hasNext()) {
-				Entry<String, JsonNode> val = i.next();
-				if (val.getValue() instanceof NullNode)
-				    continue;
-
-				if (val.getValue().getTextValue() == null)
-				    try {
-					PropertyAnnotation a = new PropertyAnnotation();
-					String unit = val.getValue().get(EffectRecord._fields.unit.name()) == null ? null
-						: val.getValue().get(EffectRecord._fields.unit.name()).asText();
-					a.setPredicate(val.getKey());
-					if (unit == null)
-					    a.setObject(val.getValue().get(EffectRecord._fields.loValue.name())
-						    .asText());
-					else {
-					    a.setObject(String.format("%s %s",
-						    val.getValue().get(EffectRecord._fields.loValue.name()).asText(),
-						    unit));
-					}
-					ann.add(a);
-				    } catch (Exception x) {
-				    }
-				else {
-				    PropertyAnnotation a = new PropertyAnnotation();
-				    a.setPredicate(val.getKey());
-				    a.setObject(val.getValue().getTextValue());
-				    ann.add(a);
-				}
-
+			/*
+			 * JsonNode conditions = detail.getConditions() == null
+			 * ? null : dx.readTree(new StringReader(
+			 * detail.getConditions()));
+			 * 
+			 * PropertyAnnotations ann = new PropertyAnnotations();
+			 * 
+			 * Iterator<Entry<String, JsonNode>> i = conditions ==
+			 * null ? null : conditions.getFields();
+			 * 
+			 * if (i != null) while (i.hasNext()) { Entry<String,
+			 * JsonNode> val = i.next(); if (val.getValue()
+			 * instanceof NullNode) continue;
+			 * 
+			 * if (val.getValue().getTextValue() == null) try {
+			 * PropertyAnnotation a = new PropertyAnnotation();
+			 * String unit =
+			 * val.getValue().get(EffectRecord._fields.unit.name())
+			 * == null ? null :
+			 * val.getValue().get(EffectRecord._fields
+			 * .unit.name()).asText(); a.setPredicate(val.getKey());
+			 * if (unit == null)
+			 * a.setObject(val.getValue().get(EffectRecord
+			 * ._fields.loValue.name()) .asText()); else {
+			 * a.setObject(String.format("%s %s",
+			 * val.getValue().get(
+			 * EffectRecord._fields.loValue.name()).asText(),
+			 * unit)); } ann.add(a); } catch (Exception x) { } else
+			 * { PropertyAnnotation a = new PropertyAnnotation();
+			 * a.setPredicate(val.getKey());
+			 * a.setObject(val.getValue().getTextValue());
+			 * ann.add(a); }
+			 * 
+			 * }
+			 */
+			ProtocolEffectRecord<String, IParams, String> effect = new ProtocolEffectRecord<String, IParams, String>();
+			effect.setProtocol(detail.getProtocol());
+			if (detail.getEndpoint() != null)
+			    effect.setEndpoint(detail.getEndpoint());
+			if (detail.getUnit() != null)
+			    effect.setUnit(detail.getUnit());
+			if (detail.getLoValue() != null)
+			    effect.setLoValue(detail.getLoValue());
+			if (detail.getUpValue() != null)
+			    effect.setUpValue(detail.getUpValue());
+			if (detail.getLoQualifier() != null)
+			    effect.setLoQualifier(detail.getLoQualifier());
+			if (detail.getUpQualifier() != null)
+			    effect.setUpQualifier(detail.getUpQualifier());
+			if (detail.getTextValue() != null)
+			    effect.setTextValue(detail.getTextValue());
+			if (detail.getErrorValue() != null)
+			    effect.setErrorValue(detail.getErrorValue());
+			try {
+			    JsonNode conditions = detail.getConditions() == null ? null : dx.readTree(new StringReader(
+				    detail.getConditions()));
+			    if (conditions instanceof ObjectNode) {
+				effect.setConditions(SubstanceStudyParser.parseParams((ObjectNode) conditions));
 			    }
-
-			List<String> guideline = detail.getProtocol().getGuideline();
-			ILiteratureEntry ref = LiteratureEntry.getInstance(guideline == null ? null
-				: guideline.size() == 0 ? null : guideline.get(0),
-				guideline == null ? null : guideline.size() == 0 ? null : guideline.get(0));
-
-			SubstanceProperty key = new SubstanceProperty(detail.getProtocol().getTopCategory(), detail
-				.getProtocol().getCategory(), detail.getEndpoint(), detail.getUnit(), ref);
-			key.setExtendedURI(true);
-			key.setIdentifier(detail.getSampleID());
-			key.setAnnotations(ann);
+			} catch (Exception x) {
+			    logger.log(Level.FINE, x.getMessage());
+			}
+			SubstanceProperty key = processor.process(effect);
 			Object oldValue = master.getProperty(key);
 			groupProperties.add(key);
 			/*
@@ -301,7 +315,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	    /**
 		     * 
 		     */
-		    private static final long serialVersionUID = -2563353206914543953L;
+	    private static final long serialVersionUID = -2563353206914543953L;
 
 	    @Override
 	    protected void configurePropertyProcessors() {
@@ -339,7 +353,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	    /**
 		     * 
 		     */
-		    private static final long serialVersionUID = -2558990024073170008L;
+	    private static final long serialVersionUID = -2558990024073170008L;
 
 	    @Override
 	    protected void configurePropertyProcessors() {
@@ -367,7 +381,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	    /**
 		     * 
 		     */
-		    private static final long serialVersionUID = -5059577943753305935L;
+	    private static final long serialVersionUID = -5059577943753305935L;
 
 	    @Override
 	    protected String getURI(IStructureRecord item) {

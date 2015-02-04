@@ -112,7 +112,95 @@
                     ]
                 }
             ]
+     	},
+     	{
+            "path": "/property",
+            "operations": [
+               
+                {
+		            "method": "POST",
+		            "summary": "Create a new property.",
+		            "notes": "Create a new property. Returns property URI. <a href='http://opentox.org/dev/apis/api-1.2/Feature' target='opentox'>OpenTox Feature API</a>",
+		            "type": "String",
+		            "nickname": "createProperty",
+                    "consumes": [
+     	                 "application/rdf+xml",
+     	                 "application/json",                 
+     	                 "application/x-www-form-urlencoded"
+     	            ],
+		            <#include "/apidocs/authz.ftl" >
+		            "parameters": [
+						{
+						    "name": "body",
+						    "description": "RDF/XML representation of the Feature or JSON representation of EffectRecord",
+						    "required": false,
+						    "type": "Effect",
+						    "paramType": "body",
+						    "allowMultiple": false
+						},
+						{
+						    "name": "protocol",
+						    "description": "Protocol name",
+						    "required": false,
+						    "type": "String",
+						    "paramType": "form",
+						    "allowMultiple": false
+						},								
+						{
+						    "name": "endpointcategory",
+						    "description": "Endpoint category",
+						    "required": false,
+						    "type": "String",
+						    "paramType": "form",
+						    "allowMultiple": false,
+						    <#include "/apidocs/parameter_endpointcategorysection_enum.ftl" >						    
+						},	
+						{
+						    "name": "name",
+						    "description": "Endpoint name",
+						    "required": false,
+						    "type": "String",
+						    "paramType": "form",
+						    "allowMultiple": false
+						},
+						{
+						    "name": "unit",
+						    "description": "Endpoint units",
+						    "required": false,
+						    "type": "String",
+						    "paramType": "form",
+						    "allowMultiple": false
+						},
+						{
+						    "name": "conditions",
+						    "description": "Conditions (JSON)",
+						    "required": false,
+						    "type": "String",
+						    "paramType": "form",
+						    "allowMultiple": false
+						}
+													
+		            ],
+		            "responseMessages": [
+		   	             			 {
+		   	            			    "code": 200,
+		   	            			    "message": "OK"
+		   	            			 },
+		   	             			 {
+		   		            			"code": 400,
+		   		            			"message": "Bad request"
+		   		            	    },	 		                    
+		   	            			<#include "/apidocs/error_aa.ftl" >,
+		   	            			<#include "/apidocs/error_500.ftl" >				                
+		            ]
+		        }	
+            ]
      	}	     	
     ],
+    "models" : {
+        "Effect"     : <#include "/apidocs/json_schema_effect.ftl" >,
+        "Task" : <#include "/apidocs/json_schema_task.ftl" >,
+        "Feature" : <#include "/apidocs/json_schema_feature.ftl" >
+      },      
 	<#include "/apidocs/profile/${menu_profile}/info.ftl" >  
 }

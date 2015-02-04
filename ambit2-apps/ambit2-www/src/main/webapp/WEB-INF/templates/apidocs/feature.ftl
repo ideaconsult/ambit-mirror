@@ -55,7 +55,7 @@
 			            "method": "POST",
 			            "summary": "Create a new feature.",
 			            "notes": "Create a new feature. Returns feature URI. <a href='http://opentox.org/dev/apis/api-1.2/Feature' target='opentox'>OpenTox Feature API</a>",
-			            "type": "String",
+			            "type": "Task",
 			            "nickname": "createFeature",
 	                    "consumes": [
 	     	                  "application/rdf+xml"

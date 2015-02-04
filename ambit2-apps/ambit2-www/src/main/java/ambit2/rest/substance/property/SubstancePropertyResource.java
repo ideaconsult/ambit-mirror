@@ -1,15 +1,20 @@
 package ambit2.rest.substance.property;
 
+import java.io.File;
+
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.c.task.CallableProtectedTask;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -27,7 +32,7 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyJSONReporter;
 import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.property.PropertyURIReporter;
-import ambit2.rest.query.QueryResource;
+import ambit2.user.rest.resource.AmbitDBQueryResource;
 
 /**
  * Substance property - serialization as in /feature </pre>
@@ -35,7 +40,7 @@ import ambit2.rest.query.QueryResource;
  * @author nina
  * 
  */
-public class SubstancePropertyResource extends QueryResource<IQueryRetrieval<Property>, Property> {
+public class SubstancePropertyResource extends AmbitDBQueryResource<IQueryRetrieval<Property>, Property> {
     /**
      * Parameters, expected in http headers
      * 
@@ -91,20 +96,23 @@ public class SubstancePropertyResource extends QueryResource<IQueryRetrieval<Pro
     @Override
     protected IQueryRetrieval<Property> createQuery(Context context, Request request, Response response)
 	    throws ResourceException {
-	Object topcategory = request.getAttributes().get(SubstancePropertyResource.topcategory);
-	Object endpointcategory = request.getAttributes().get(SubstancePropertyResource.endpointcategory);
-	Object endpoint = request.getAttributes().get(SubstancePropertyResource.endpoint);
-	Object key = request.getAttributes().get(substancepropertyid);
-	if (topcategory == null || endpointcategory == null || endpoint == null || key == null)
-	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+	if (Method.GET.equals(request.getMethod())) {
+	    Object topcategory = request.getAttributes().get(SubstancePropertyResource.topcategory);
+	    Object endpointcategory = request.getAttributes().get(SubstancePropertyResource.endpointcategory);
+	    Object endpoint = request.getAttributes().get(SubstancePropertyResource.endpoint);
+	    Object key = request.getAttributes().get(substancepropertyid);
+	    if (topcategory == null || endpointcategory == null || endpoint == null || key == null)
+		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 
-	ILiteratureEntry ref = LiteratureEntry.getInstance(Reference.decode(endpoint.toString()), "DEFAULT");
-	SubstanceProperty p = new SubstanceProperty(Reference.decode(topcategory.toString()),
-		Reference.decode(endpointcategory.toString()), Reference.decode(endpoint.toString()), null, ref);
-	p.setIdentifier(Reference.decode(key.toString()));
-	ReadSubstanceProperty query = new ReadSubstanceProperty();
-	query.setFieldname(p);
-	return query;
+	    ILiteratureEntry ref = LiteratureEntry.getInstance(Reference.decode(endpoint.toString()), "DEFAULT");
+	    SubstanceProperty p = new SubstanceProperty(Reference.decode(topcategory.toString()),
+		    Reference.decode(endpointcategory.toString()), Reference.decode(endpoint.toString()), null, ref);
+	    p.setIdentifier(Reference.decode(key.toString()));
+	    ReadSubstanceProperty query = new ReadSubstanceProperty();
+	    query.setFieldname(p);
+	    return query;
+	} else
+	    return null;
     }
 
     @Override
@@ -115,13 +123,9 @@ public class SubstancePropertyResource extends QueryResource<IQueryRetrieval<Pro
     /**
      * POST allowed to feature collections only (creates new feature)
      */
-    @Override
-    protected Representation post(Representation entity, Variant variant) throws ResourceException {
-	throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
-    }
 
     @Override
-    protected QueryURIReporter<Property, IQueryRetrieval<Property>> getURUReporter(Request baseReference)
+    protected QueryURIReporter<Property, IQueryRetrieval<Property>> getURIReporter(Request baseReference)
 	    throws ResourceException {
 	return new PropertyURIReporter(baseReference);
     }
@@ -130,6 +134,47 @@ public class SubstancePropertyResource extends QueryResource<IQueryRetrieval<Pro
     protected Representation delete(Variant variant) throws ResourceException {
 	throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 
+    }
+
+    @Override
+    public String getConfigFile() {
+	return "ambit2/rest/config/ambit2.pref";
+    }
+
+    // JSON , RDF , already as file
+    @Override
+    protected CallableProtectedTask<String> createCallable(Method method, File file, MediaType mediaType, Property item)
+	    throws ResourceException {
+	PropertyURIReporter reporter = new PropertyURIReporter(getRequest());
+	return new CallableSubstancePropertyCreator(reporter, method, file, mediaType, item, getToken());
+    }
+
+    @Override
+    protected CallableProtectedTask<String> createCallable(Method method, Form form, Property item)
+	    throws ResourceException {
+	PropertyURIReporter reporter = new PropertyURIReporter(getRequest());
+	return new CallableSubstancePropertyCreator(reporter, method, form, item, getToken());
+    }
+
+    @Override
+    protected String getObjectURI(Form queryForm) throws ResourceException {
+        return null;
+    }
+    @Override
+    protected boolean isAllowedMediaType(MediaType mediaType) throws ResourceException {
+	return (MediaType.APPLICATION_JSON.equals(mediaType) || MediaType.APPLICATION_RDF_XML.equals(mediaType)
+		|| MediaType.TEXT_RDF_N3.equals(mediaType) || MediaType.APPLICATION_WWW_FORM.equals(mediaType));
+
+    }
+
+    @Override
+    protected IQueryRetrieval<Property> createUpdateQuery(Method method, Context context, Request request,
+	    Response response) throws ResourceException {
+	Object topcategory = request.getAttributes().get(SubstancePropertyResource.topcategory);
+	if (Method.POST.equals(method)) {
+	    return null;
+	}
+	throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
     }
 
 }
