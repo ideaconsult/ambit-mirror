@@ -77,7 +77,6 @@ public class ProtocolEffectRecord2SubstanceProperty implements
 				    : value.getUpQualifier(), value.getUpValue() == null ? "" : value.getUpValue(),
 			    value.getUnits() == null ? "" : value.getUnits()));
 		}
-		a.setObject(o);
 		ann.add(a);
 	    } else {
 		PropertyAnnotation a = new PropertyAnnotation();
