@@ -88,11 +88,11 @@ public class EffectRecordTest {
 	p.setUpValue(10.0);
 
 	Value v = new Value();
-	v.setUnits(p.getUnits());
-	v.setLoValue(p.getLoValue());
-	v.setLoQualifier(p.getLoQualifier());
-	v.setUpQualifier(p.getUpQualifier());
-	v.setUpValue(p.getUpValue());
+	v.setUnits(p.getUnits().toString());
+	v.setLoValue((Number)p.getLoValue());
+	v.setLoQualifier(p.getLoQualifier().toString());
+	v.setUpQualifier(p.getUpQualifier().toString());
+	v.setUpValue((Number)p.getUpValue());
 	
 	Assert.assertEquals(p.toString(), v.toString());
 	
