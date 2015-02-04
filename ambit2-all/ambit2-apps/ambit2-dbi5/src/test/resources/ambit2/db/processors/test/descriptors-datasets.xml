@@ -1,8 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <ausers user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="false"/>
-  <ausers user_name="admin" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="false"/>  
-  <bookmark idbookmark="1" creator="test" recalls="http://example.com" hasTopic="Model" title="my model" description="" created="2010-08-11 19:05:19.0" date="2010-08-11 19:05:19.0"/>
+  <ausers user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="0"/>
+  <ausers user_name="admin" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="0"/>  
+  <bookmark idbookmark="1" creator="test" recalls="http://example.com" hasTopic="Model" title="my model" description=" " created="2010-08-11 19:05:19.0" date="2010-08-11 19:05:19.0"/>
+  <catalog_references idreference="9" title="Assessment reference" url="localhost" />
   <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org"/>
   <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org"/>
   <catalog_references idreference="3" title="XLogP" url="XLogP reference"/>
@@ -23,9 +24,11 @@
   <structure idstructure="100215" idchemical="11" structure="Pw4AAHicrVZtb+JGEP7uX+EP/QDKrtkZv+MWCZzk4HSh5JK7pDqdEAEnWAGc2tBe/n1n1wZsJ7mq&#xA;cS0SZp955vHMrPGsputX8/g6eojnwgVbeGBaLp5qmo6oo6nr4tWP7/v6VxRCaDpdaDiWh2Rw07BM&#xA;x5SYMMgr9ImuAt4Uyj9KBQxTeOarKqH+8/iSijAcB4VUsQzbBXyfimmYIFRFjuG56LxPxTIcgW5T&#xA;FdtAX3WD24Zrum7TXA5Wo7406e7xeWlSEfWFZKQKGPTU+g37so99Z1/QQb+pyrEvTSo67hHSLwqs&#xA;ps8LUm2+9z4VMHxXWE37cvhNN1QpYht19/h++V/60miP0PA8y8krsgS+syLX8EHFvnzvDlLFs/9V&#xA;BSgZ9b8CeS8gWWkNks2sQKjGRQWiKF85KpBdY9HaqbFo7dZYrsqrwvKUfJkFQge7ypIQ1FhUENZY&#xA;qEMte1rLsissS8lXWI6OUGM5OtSypzXUsqc11LP3VVfLLFpjNfsLXQ+HHxRLwmoLUT5K0nM2PtV6&#xA;+q9h/6qngW0KbiI5JHQ2Gp+FhCI4HNHkZgmdjmfrqKdF2+XzapvGT8to87y6T7L7ZBPv1vpdmqzj&#xA;RVQOuDjvaSGKIYqJMUiVZ/Rl0g/LSq2DVPtpmWT090JttFlEP4qYEofp1VQ420fpLehCu4gNl6Oe&#xA;pr5+g84xm2FnDhw5Qgs8DsgdbnKXg8nBY+BzsLjHLU6GzcFvo+DUERCcVsDB5SiCzpLI7pDhEBkM&#xA;zQCGnT9PIOg8Fb1U95w+Rs897ePwj/Ht7enl5fA6HH7kn89uhrc3v5/3bxXx6mL06Yya/m2Q8u9G&#xA;GH6bnHxvzWEuL2i35qgsbM9NZeR7crmbreLt8/TT7C5a9bT5Mpo/Rovp3fM0mt8pRjjbUJ/ms9X0&#xA;ah2vouw/3iBPv7/7MdrcJz2tMKiH0Bl3TYbMZgAMXGYxh4FgQF0gw2M+cxmQkzjk9xn102JIhACx&#xA;c9ZtmRRht1sO0SRZhlISMtyUTBlKOi5Bcicosh10ws9fuwiyu2m/izg5CV+5qLpOOuhmEGQYBJkV&#xA;LLgdZE6QweLEpYWVeUGgZSDIBiIBKheYci0ysCgIHLlwyfBypy/XTkb7TfcOu/kQZ8XLlIkgP9eW&#xA;ADlBWHGAomU+r1lxRiQgH70lID8BsuK0VGIU30eNg6jMQpNpHGLy4xIrht9RRKhweXxR5j79A20v&#xA;nQ+q0s3z+acKlMNMRavSpCFKCnm9dfpRMB9jrBhiBOQT6dgxLVDP23i3nva3yZqeU8QDMkmyeBv/&#xA;FRUeODjG0cPsVcd5OntYR5ut1DmAF9F2tiqo4oBebaM0St6AB8lmUYG/bB43yd+bN4Iq3hex1+ku&#xA;+nngG4zzJF3PVuFylj5EeyxMknRxGlORWZxs9mWOsnAZp7PVnnWRrKL5bjVLp1KDjP27eJBOaoSb&#xA;KH5Ybnua6YKBtrAdTfuFLu0fbiveOA==" format="SDF" user_name="guest" type_structure="2D with H" atomproperties="MDQ0MCwwMjIwLDAxMTAsMDMyMTA2MDIsMDMyMTA2MDIsMDMyMTA2MDIsMDMyMTA2MDIsMDQzMTA2&#xA;MDIsMDMyMTA2MDIsMDMyMTA2MDEsMDMyMTA2MDEsMDMyMTA2MDEsMDMyMTA2MDEsMDQzMTA2MDEs&#xA;MDMyMTA2MDEsMDMyMTA2MDAsMDMyMTA2MDAsMDMyMTA2MDAsMDMyMTA2MDAsMDQzMTA2MDAsMDMy&#xA;MTA2MDAsMDAwMCwKMCwwLDAsMCwwLDEsMSwxLDEsMSwxLDEsMSwxLDEsMSwxLDEsMSwxLDEsMSwx&#xA;LA=="/>
   <structure idstructure="129345" idchemical="29141" structure="PwMAAHicfZJRb9owFIXf/Sv8sNc0DoRC2GYpmHikWrIiSruqqiIXboNVx5ZMspV/P0OBwiiNLOXe&#xA;75x7LCdGGE9m8gZKOSPdoEN6QTvstoYIYRxgTM6tKIrwbYsQ4nyuvXAV+bDi8EnKfqEM4yQfIoq/&#xA;sXhCUTdsR14v8i7RGiVpnjBHW+3AI9GlFx7QIhcVUCSt0Yc04xRx2JB0eh2z/22pnsPrFqbvkC1S&#xA;169f3wN/N79uixdYUfQ7Se4H4/Hg6m7ErzJvOuKcx7/u4x8bIxPaaDkTqphUUsGSogcOjxtp3Agl&#xA;61XxUzyBougW7Goky8VBfty8pvrZULQt3P7Ez/uBb+N+wMG3g75vWf/rZiRvqiKuTeW2CPbg2ixl&#xA;Lf/AViB7IYdSfChwK8oKdH0Uk0Et1En4pAYL5iThDQ+Mnh/hqX7R5q8+M3Sknsze2AY+Hzzj4MZW&#xA;QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX&#xA;96B/xsDkzg==" format="SDF"  user_name="guest" type_structure="2D with H" atomproperties="MDAwMCwK"/>
     
-  <properties idproperty="1" idreference="8" name="Property 1" units="" comments="" islocal="false"/>
-  <properties idproperty="2" idreference="8" name="Property 2" units="" comments="" islocal="false"/>
-  <properties idproperty="3" idreference="8" name="Property 3" units="" comments="" islocal="false"/>
+  <properties idproperty="1" idreference="8" name="Property 1" units=" " comments=" " islocal="0"/>
+  <properties idproperty="2" idreference="8" name="Property 2" units=" " comments=" " islocal="0"/>
+  <properties idproperty="3" idreference="8" name="Property 3" units=" " comments=" " islocal="0"/>
+  <properties idproperty="4" idreference="8" name="CAS" units=" " comments="http://www.opentox.org/api/1.1#CASRN" islocal="0"/>
+  <properties idproperty="5" idreference="8" name="Name" units=" " comments="http://www.opentox.org/api/1.1#ChemicalName" islocal="0"/>
 
   <property_annotation idproperty="1" predicate="test1" object="test2"/>
   
@@ -39,14 +42,16 @@
   <template_def idtemplate="1" idproperty="2"/>
   <template_def idtemplate="1" idproperty="3"/>
 
-  <dictionary idsubject="44" idobject="5"/>
-  <dictionary idsubject="5" idobject="85"/>  
+  <dictionary idsubject="44" relationship="is_part_of"  idobject="5"/>
+  <dictionary idsubject="5" relationship="is_part_of"  idobject="85"/>  
   <dictionary idsubject="85" relationship="is_part_of" idobject="84"/>  
     
   <models idmodel="100" name="Model" predictors="5" dependent="85" predicted="85" content="zero"/>  
   <tuples/>
-  <property_string/>
-  <property_values/>
+  <property_string idvalue_string="2" value="123-45-6"/>
+  <property_string idvalue_string="3" value="Chemical name example"/>
+  <property_values id="2" idproperty="5" idchemical="11" idstructure="100215" idvalue_string="3" user_name="guest"/>
+  <property_values id="3" idproperty="4" idchemical="11" idstructure="100215" idvalue_string="2" user_name="guest"/>
   <src_dataset/>
   <struc_dataset/>
  <fp1024 idchemical="7" fp1="67108864" fp2="5246976" fp3="1048577" fp4="70368744177664" fp5="17592186044416" fp6="0" fp7="256" fp8="0" fp9="138516889600" fp10="2305878193585782784" fp11="16" fp12="72339481331499008" fp13="4611686018427387904" fp14="4398046511104" fp15="8589934592" fp16="0" time="0" bc="22" status="valid"/>
@@ -58,9 +63,8 @@
   <sk1024 idchemical="11" fp1="4127" fp2="128" fp3="0" fp4="0" fp5="0" fp6="536870912" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="0" fp13="0" fp14="0" fp15="0" fp16="0" time="0" bc="8" status="valid"/>
   <sk1024 idchemical="29141" fp1="0" fp2="0" fp3="0" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="0" fp13="0" fp14="0" fp15="0" fp16="0" time="0" bc="0" status="valid"/> 
   <sessions idsessions="1" user_name="guest" completed='2010-01-01 01:01:01' title='temp'/>
-  <query idquery="1" idsessions="1" name="test query 1" content=""/>
-  <query idquery="2" idsessions="1" name="test query 2" content="" idtemplate="1"/>
-  
+  <query idquery="2" idsessions="1" name="test query 2" content=" " idtemplate="1"/>
+  <query idquery="1" idsessions="1" name="test query 1" content=" "/>
   <query_results idquery="1" idchemical="7" idstructure="100211" selected="1" metric="0"/>
   <query_results idquery="1" idchemical="29141" idstructure="129345" selected="1" metric="0"/>
   
@@ -70,14 +74,45 @@
   <quality_structure idstructure="100214" label="OK" user_name="guest" />
   <chem_relation idchemical1="7" idchemical2="11" relation="test" metric="999"/>
   <substance idsubstance="1" prefix="IUC4" uuid="79shu+efMoapiLb2lE03NA==" documentType="Substance" format="i5._4." name="testname" publicname="publictestname" content="dGVzdA==" substanceType="Monoconstituent" owner_prefix="ECB5" owner_uuid="LJTjLDZiTeq6AEN4e4pv0w=="/>
-  <substance_relation idsubstance="1" idchemical="11" relation="HAS_ADDITIVE" proportion_typical="=" proportion_typical_value="10" proportion_typical_unit="%" cmp_prefix="ECB5" cmp_uuid="LJTjLDZiTeq6AEN4e4pv0w=="/>
+  
+  <substance_ids prefix="IUC4" uuid="79shu+efMoapiLb2lE03NA==" type="test" id="testid1" />
+  <substance_ids prefix="IUC4" uuid="79shu+efMoapiLb2lE03NA==" type="test" id="testid2" />
+  <substance_relation idsubstance="1" idchemical="11" relation="HAS_ADDITIVE" proportion_typical="=" proportion_typical_value="10" proportion_typical_unit="%" cmp_prefix="ECB5" cmp_uuid="LJTjLDZiTeq6AEN4e4pv0w==" name="composition name 12345"/>
+
   <substance_protocolapplication document_prefix="IUC4" document_uuid="rmT8OyKkMXOTYpzOH/Yirg==" topcategory="TOX" endpointcategory="TO_ACUTE_ORAL_SECTION" endpoint="Acute toxicity: oral, IUC4#2/Ch.5.1.1" guidance="Method: other: no data" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{&quot;Species&quot;:&quot;rat&quot;,&quot;Sex&quot;:&quot;male/female&quot;}" reference_year="1999" reference="Smyth, H. F. Seaton J., and Fischer L. (1941).|The single dose toxicity of some glycols and derivatives.|J. Ind. Hyg. Toxicol. 23, 259-268" reference_owner="Test Company 1" updated="2013-11-11 14:15:35.0"/>
   <substance_protocolapplication document_prefix="IUC4" document_uuid="HXXwHDsrNfWE8c4j4itscw==" topcategory="ENV FATE" endpointcategory="TO_BIODEG_WATER_SCREEN_SECTION" endpoint="Biodegradation in water: screening tests, IUC4#1/Ch.3.5" guidance="OECD Guideline 301 D (Ready Biodegradability: Closed Bottle Test)" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{}" reference="reference" reference_owner="Test Company 2" updated="2013-11-11 13:52:14.0"/>
   <substance_protocolapplication document_prefix="IUC4" document_uuid="L2SrJ9K+NS652E8CdP1mMw==" topcategory="P-CHEM" endpointcategory="PC_PARTITION_SECTION" endpoint="Partition coefficient, IUC4#5/Ch.2.5" guidance="Method: other (measured)" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{}" reference="reference" reference_owner="Test Company 3" updated="2013-11-11 13:32:38.0"/>
   <substance_protocolapplication document_prefix="IUC4" document_uuid="etsNA/abMqme/oa0qFd4kw==" topcategory="ECOTOX" endpointcategory="EC_FISHTOX_SECTION" endpoint="Short-term toxicity to fish, IUC4#53/Ch.4.1" guidance="Method: other: acute toxicity test; &quot;static bioassay&quot;" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{&quot;Test organism&quot;:&quot;Lepomis cyanellus&quot;}" reference="reference" reference_owner="Test Company 4" updated="2013-11-10 21:11:16.0"/>
-  <substance_experiment idresult="7" document_prefix="IUC4" document_uuid="etsNA/abMqme/oa0qFd4kw==" endpoint="LC50" conditions="{&quot;Exposure&quot;:&quot;96&quot;}" unit="mg/L" loValue="83.1"/>
-  <substance_experiment idresult="19" document_prefix="IUC4" document_uuid="L2SrJ9K+NS652E8CdP1mMw==" endpoint="log Pow" conditions="{&quot;Temperature&quot;:&quot;25 &#176;C&quot;}" loValue="0.35"/>
-  <substance_experiment idresult="30" document_prefix="IUC4" document_uuid="HXXwHDsrNfWE8c4j4itscw==" endpoint="% Degradation" conditions="{&quot;Time point&quot;:&quot;28 d&quot;}" unit="%" loValue="90.0"/>
-  <substance_experiment idresult="38" document_prefix="IUC4" document_uuid="rmT8OyKkMXOTYpzOH/Yirg==" endpoint="LD50" conditions="{&quot;Temperature&quot;:&quot;25 &#176;C&quot;,&quot;Sex&quot;:&quot;male&quot;}" unit="mg/kg bw" loValue="260.0" upvalue="320.0"/>
 
+  <substance_experiment idresult="38" document_prefix="IUC4" document_uuid="rmT8OyKkMXOTYpzOH/Yirg==" topcategory="TOX" endpointcategory="TO_ACUTE_ORAL_SECTION" endpoint="LD50" conditions="{&quot;Temperature&quot;:&quot;25 &#176;C&quot;,&quot;Sex&quot;:&quot;male&quot;}" unit="mg/kg bw" loValue="260.0" upvalue="320.0" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA=="/>
+  <substance_experiment idresult="30" document_prefix="IUC4" document_uuid="HXXwHDsrNfWE8c4j4itscw==" topcategory="ENV FATE" endpointcategory="TO_BIODEG_WATER_SCREEN_SECTION" endpoint="% Degradation" conditions="{&quot;Time point&quot;:&quot;28 d&quot;}" unit="%" loValue="90.0" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA=="/>
+  <substance_experiment idresult="19" document_prefix="IUC4" document_uuid="L2SrJ9K+NS652E8CdP1mMw==" topcategory="P-CHEM" endpointcategory="PC_PARTITION_SECTION" endpoint="log Pow" conditions="{&quot;Temperature&quot;:&quot;25 &#176;C&quot;}" loValue="0.35" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA=="/>
+  <substance_experiment idresult="7" document_prefix="IUC4" document_uuid="etsNA/abMqme/oa0qFd4kw==" topcategory="ECOTOX" endpointcategory="EC_FISHTOX_SECTION" endpoint="LC50" conditions="{&quot;Exposure&quot;:&quot;96&quot;}" unit="mg/L" loValue="83.1" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA=="/>
+  <bundle idbundle="1" name="Assessment" user_name="guest" idreference="9" created="2014-11-12 07:45:56.0" licenseURI="http://creativecommons.org/publicdomain/zero/1.0/" rightsHolder="xyz" maintainer="ABC" stars="8"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_GENETIC_IN_VIVO_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="ECOTOX" endpointcategory="EC_ALGAETOX_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="ECOTOX" endpointcategory="EC_BACTOX_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="ECOTOX" endpointcategory="EC_DAPHNIATOX_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="ECOTOX" endpointcategory="EC_FISHTOX_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="ENV FATE" endpointcategory="TO_BIODEG_WATER_SCREEN_SECTION" created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="ENV FATE" endpointcategory="TO_PHOTOTRANS_AIR_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="P-CHEM" endpointcategory="GI_GENERAL_INFORM_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="P-CHEM" endpointcategory="PC_BOILING_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="P-CHEM" endpointcategory="PC_MELTING_SECTION" created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="P-CHEM" endpointcategory="PC_VAPOUR_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="P-CHEM" endpointcategory="PC_WATER_SOL_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_ACUTE_DERMAL_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_ACUTE_INHAL_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_ACUTE_ORAL_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_GENETIC_IN_VITRO_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_REPEATED_DERMAL_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_REPEATED_INHAL_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_REPEATED_ORAL_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_REPRODUCTION_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_endpoints idbundle="1" topcategory="TOX" endpointcategory="TO_SENSITIZATION_SECTION"  created="2014-11-20 09:41:19.0"/>
+  <bundle_chemicals idbundle="1" idchemical="29141" created="2014-11-20 09:41:19.0" tag="source" remarks="remarks"/>
+
+  <bundle_substance_protocolapplication idbundle="1" document_prefix="IUC4" document_uuid="etsNA/abMqme/oa0qFd4kw==" topcategory="ECOTOX" endpointcategory="EC_FISHTOX_SECTION" endpoint="Short-term toxicity to fish, IUC4#53/Ch.4.1" guidance="Method: other: acute toxicity test; &quot;static bioassay&quot;" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA=="  params="{&quot;Test organism&quot;:&quot;Lepomis cyanellus&quot;}" reference="reference" reference_owner="Test Company 4" updated="2013-11-10 21:11:16.0" copied="1" deleted="0" />
+
+  <bundle_substance_experiment idbundle="1" idresult="1" document_prefix="IUC4" document_uuid="etsNA/abMqme/oa0qFd4kw==" topcategory="ECOTOX" endpointcategory="EC_FISHTOX_SECTION" endpoint="LC50" conditions="{&quot;Exposure&quot;:&quot;96&quot;}" unit="mg/L" loValue="83.1" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" copied="1" deleted="0" />
 </dataset>
