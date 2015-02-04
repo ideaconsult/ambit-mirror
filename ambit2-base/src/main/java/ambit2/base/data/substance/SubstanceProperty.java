@@ -7,9 +7,14 @@ import java.util.UUID;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 
 public class SubstanceProperty extends Property {
     protected boolean extendedURI = false;
@@ -104,5 +109,21 @@ public class SubstanceProperty extends Property {
     public void setEndpointcategory(String endpointcategory) {
 	this.endpointcategory = endpointcategory;
     }
-
+    
+    public String createHashedIdentifier(Params conditions) {
+	HashFunction hf = Hashing.sha1();
+	StringBuilder b = new StringBuilder();
+	b.append(getName()==null?"":getName());
+	b.append(getUnits()==null?"":getUnits());
+	b.append(conditions==null?"":conditions.toString());
+	System.out.println(b);
+	/*
+% Degradation%{"Sampling time":{"unit":"d","loValue":7.0}}
+% Degradation%{"Sampling time":{	"unit":"d", 	"loValue":7}}
+*/
+	HashCode hc = hf.newHasher()
+		       .putString(b.toString(), Charsets.US_ASCII)
+		       .hash();
+	return hc.toString().toUpperCase();
+    }
 }

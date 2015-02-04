@@ -160,7 +160,7 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 		textValue;
 		
 		public String toJSON() {
-		    return "\t\"" + name() +"\":";
+		    return "\"" + name() +"\":";
 		}
 	}
 	@Override
