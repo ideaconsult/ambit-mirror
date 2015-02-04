@@ -12,6 +12,7 @@ import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.data.study.Value;
 import ambit2.db.substance.study.DeleteEffectRecords;
 import ambit2.db.substance.study.UpdateEffectRecords;
 
@@ -43,7 +44,10 @@ public class EffectRecord_crud_test  extends CRUDTest<ProtocolApplication<Protoc
 	protected static EffectRecord initeffect_TO_BIODEG_WATER_SCREEN_SECTION() {
 		EffectRecord record = new EffectRecord<String,IParams,String>();
 		IParams params = new Params();
-		params.put("Time point", "28 d");
+		Value v = new Value();
+		v.setUnits("d");
+		v.setLoValue(7.0);
+		params.put("Sampling time", v);
 		record.setConditions(params);
 		record.setEndpoint("% Degradation");
 		record.setLoValue(90);
@@ -124,12 +128,12 @@ public class EffectRecord_crud_test  extends CRUDTest<ProtocolApplication<Protoc
 			throws Exception {
 		//return new UpdateEffectRecords("IUC4-1d75f01c-3b2b-35f5-84f1-ce23e22b6c73", initeffect_TO_BIODEG_WATER_SCREEN_SECTION());
 		Protocol p = new Protocol("test");
-		p.setCategory("TO_ACUTE_ORAL_SECTION");
+		p.setCategory("TO_BIODEG_WATER_SCREEN_SECTION");
 		p.setTopCategory("TOX");
 		ProtocolApplication papp = new ProtocolApplication(p);
 		papp.setDocumentUUID("IUC4-ae64fc3b-22a4-3173-9362-9cce1ff622ae");		
 		
-		return new UpdateEffectRecords("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",papp, initeffect_TO_ACUTE_ORAL_SECTION());
+		return new UpdateEffectRecords("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",papp, initeffect_TO_BIODEG_WATER_SCREEN_SECTION());
 		
 	}
 

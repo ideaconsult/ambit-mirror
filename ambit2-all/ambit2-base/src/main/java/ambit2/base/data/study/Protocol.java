@@ -328,6 +328,9 @@ public class Protocol {
 	    public int getSortingOrder() {
 		return 521;
 	    }
+	    public String getTopCategory() {
+		return "ENV FATE";
+	    }
 	},
 	TO_BIODEG_WATER_SIM_SECTION {
 	    @Override
@@ -1305,12 +1308,12 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 700;
+		return 800;
 	    }
 
 	    @Override
 	    public String getNumber() {
-		return "7.100";
+		return "8.100";
 	    }
 
 	    @Override

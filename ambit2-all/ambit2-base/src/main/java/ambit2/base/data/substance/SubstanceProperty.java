@@ -7,7 +7,7 @@ import java.util.UUID;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
-import ambit2.base.data.study.Params;
+import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Protocol;
 
 import com.google.common.base.Charsets;
@@ -110,7 +110,7 @@ public class SubstanceProperty extends Property {
 	this.endpointcategory = endpointcategory;
     }
     
-    public String createHashedIdentifier(Params conditions) {
+    public String createHashedIdentifier(IParams conditions) {
 	HashFunction hf = Hashing.sha1();
 	StringBuilder b = new StringBuilder();
 	b.append(getName()==null?"":getName());
