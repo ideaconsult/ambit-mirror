@@ -99,29 +99,29 @@ public class Value<VALUE> implements IValue<VALUE, String, String> {
 
     public String toJSON(StringBuilder b) {
 	String comma = "";
-	if (getUnits() != null) {
-	    b.append(comma);
-	    b.append(EffectRecord._fields.unit.toJSON());
-	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUnits())));
-	    comma = ", ";
-	}
 	if (getLoQualifier() != null && !"".equals(getLoQualifier())) {
 	    b.append(comma);
 	    b.append(EffectRecord._fields.loQualifier.toJSON());
 	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getLoQualifier())));
-	    comma = ", ";
+	    comma = ",";
 	}
 	if (getLoValue() != null) {
 	    b.append(comma);
 	    b.append(EffectRecord._fields.loValue.toJSON());
 	    serialize(getLoValue(), b);
-	    comma = ", ";
+	    comma = ",";
+	}
+	if (getUnits() != null) {
+	    b.append(comma);
+	    b.append(EffectRecord._fields.unit.toJSON());
+	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUnits())));
+	    comma = ",";
 	}
 	if (getUpQualifier() != null && !"".equals(getUpQualifier())) {
 	    b.append(comma);
 	    b.append(EffectRecord._fields.upQualifier.toJSON());
 	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUpQualifier())));
-	    comma = ", ";
+	    comma = ",";
 	}
 	if (getUpValue() != null) {
 	    b.append(comma);

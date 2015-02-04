@@ -5,6 +5,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Value;
 
@@ -60,6 +61,56 @@ public class EffectRecordTest {
 		       .putString("{\"MEDIUM\":\"Human serum  Sigma #H4522 \"}", Charsets.UTF_8)
 		       .hash();
 	Assert.assertEquals("e342fd5e5d524e6f234ed6da934e9225af5a3a09", hc.toString());
+	
+	hc = hf.newHasher()
+		       .putString("% Degradation", Charsets.UTF_8)
+		       .putString("%", Charsets.UTF_8)
+		       .putString("{\"Sampling time\":{	\"unit\":\"d\", 	\"loValue\":7.0}}", Charsets.UTF_8)
+		       .hash();
+	
+	Assert.assertEquals("79d261f21100358502adc85703f0a13f31dad619", hc.toString());
+	hc = hf.newHasher()
+		       .putString("% Degradation", Charsets.UTF_8)
+		       .putString("%", Charsets.UTF_8)
+		       .putString("{\"Sampling time\":{\"loValue\":7.0,\"unit\":\"d\"}}", Charsets.UTF_8)
+		       .hash();
+	Assert.assertEquals("3cf77d9efe4e74744e691bf4880b4ef728b16fae", hc.toString());
+	hc = hf.newHasher()
+		       .putString("% Degradation%{\"Sampling time\":{	\"unit\":\"d\", 	\"loValue\":7.0}}", Charsets.UTF_8)
+		       .hash();
+	Assert.assertEquals("79D261F21100358502ADC85703F0A13F31DAD619", hc.toString().toUpperCase());
+	
+	IParams p = new Params();
+	p.setLoValue(7.0);
+	p.setUnits("d");
+	p.setLoQualifier(">=");
+	p.setUpQualifier("<");
+	p.setUpValue(10.0);
+
+	Value v = new Value();
+	v.setUnits(p.getUnits());
+	v.setLoValue(p.getLoValue());
+	v.setLoQualifier(p.getLoQualifier());
+	v.setUpQualifier(p.getUpQualifier());
+	v.setUpValue(p.getUpValue());
+	
+	Assert.assertEquals(p.toString(), v.toString());
+	
+	EffectRecord<String,IParams,String> effect = new EffectRecord<String,IParams,String>();
+	effect.setConditions(new Params());
+	effect.setEndpoint("% Degradation");
+	effect.setUnit("%");
+	v = new Value();
+	v.setUnits("d");
+	v.setLoValue(7.0);
+	effect.getConditions().put("Sampling time",v);
+	//System.out.println(effect);
+	hc = hf.newHasher()
+		       .putString(effect.getEndpoint(), Charsets.UTF_8)
+		       .putString(effect.getUnit(), Charsets.UTF_8)
+		       .putString(effect.getConditions().toString(), Charsets.UTF_8)
+		       .hash();
+	Assert.assertEquals("3cf77d9efe4e74744e691bf4880b4ef728b16fae", hc.toString().toLowerCase());
     }
 
 }
