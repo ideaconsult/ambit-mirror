@@ -1,0 +1,27 @@
+<rdf:RDF 
+    xmlns:ot="http://www.opentox.org/api/1.1#" 
+    xmlns:bx="http://purl.org/net/nknouf/ns/bibtex#" 
+    xmlns:otee="http://www.opentox.org/echaEndpoints.owl#" 
+    xmlns:dc="http://purl.org/dc/elements/1.1/" 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:owl="http://www.w3.org/2002/07/owl#" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#" 
+    xmlns:ota="http://www.opentox.org/algorithmTypes.owl#" 
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
+    xml:base="http://195.178.207.233/PASS/"> 
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Algorithm"/> 
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Feature"/> 
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#NumericFeature"> 
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/api/1.1#Feature"/> 
+  </owl:Class>   <owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#hasSource"/> 
+  <owl:DatatypeProperty rdf:about="http://www.opentox.org/api/1.1#units"/> 
+  <ot:StringFeature> 
+    <dc:creator>http://www.ibmc.msk.ru/en/departments/30</dc:creator> 
+    <ot:hasSource> 
+      <ot:Algorithm rdf:about="Pe.html"/> 
+    </ot:hasSource> 
+        
+    <dc:title>MNA descriptors</dc:title> 
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Feature"/> 
+  </ot:StringFeature> 
+</rdf:RDF> 
