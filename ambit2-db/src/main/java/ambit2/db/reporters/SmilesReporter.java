@@ -158,7 +158,7 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 				for (Property key: item.getProperties()) {
 
 				boolean ok = true;
-				for (Mode m: mode.values())	
+				for (Mode m: Mode.values())	
 					if (key.getName().toLowerCase().equals(m.name().toString().toLowerCase())) { ok = false;break;}
 					else if (key.getLabel().toLowerCase().equals(m.getTag().toString().toLowerCase())) { ok = false;break;}
 

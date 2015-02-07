@@ -162,11 +162,11 @@ class POIListener implements HSSFListener {
             // the BOFRecord can represent either the beginning of a sheet or the workbook
             case BOFRecord.sid:
                 BOFRecord bof = (BOFRecord) record;
-                if (bof.getType() == bof.TYPE_WORKBOOK)
+                if (bof.getType() == BOFRecord.TYPE_WORKBOOK)
                 {
                     //System.out.println("Encountered workbook");
                     // assigned to the class level member
-                } else if (bof.getType() == bof.TYPE_WORKSHEET)
+                } else if (bof.getType() == BOFRecord.TYPE_WORKSHEET)
                 {
                     //System.out.println("Encountered sheet reference");
                 }
