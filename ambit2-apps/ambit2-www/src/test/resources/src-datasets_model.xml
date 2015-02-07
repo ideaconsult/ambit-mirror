@@ -118,6 +118,8 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   
   <property_values id="8" idproperty="1" idchemical="29141" idstructure="129345" idvalue_string="4" user_name="guest"/>
   <property_values id="9" idproperty="2" idchemical="29141" idstructure="129345" idvalue_string="2" user_name="guest"/>
+  
+  <property_annotation idproperty="1" rdf_type="a" predicate="b" object="c" />
     
   <src_dataset id_srcdataset="1" name="Dbunit dataset" user_name="guest" idreference="3"/>
   <src_dataset id_srcdataset="2" name="Dataset 1" user_name="guest" idreference="3"/>

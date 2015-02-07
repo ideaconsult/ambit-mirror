@@ -43,7 +43,7 @@ public class PropertyAnnotationRDFReporter<Q extends IQueryRetrieval<PropertyAnn
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request reference,ResourceDoc doc) {
-		PropertyAnnotationURIReporter r = new PropertyAnnotationURIReporter(reference,doc);
+		PropertyAnnotationURIReporter r = new PropertyAnnotationURIReporter(reference);
 		r.setPropertyOnly(true);
 		return r;
 	}

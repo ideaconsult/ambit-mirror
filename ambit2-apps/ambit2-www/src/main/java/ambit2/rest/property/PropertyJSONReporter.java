@@ -196,24 +196,7 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 	for (PropertyAnnotation annotation : feature.getAnnotations())
 	    try {
 		b.append(acomma);
-
-		b.append("\n\t{");
-
-		if (annotation.getType() != null && !"".equals(annotation.getType())) {
-		    b.append("\t\"type\" : \"");
-		    b.append(JSONUtils.jsonEscape(annotation.getType()));
-		    b.append("\",");
-		}
-
-		b.append("\t\"p\" : \"");
-		b.append(JSONUtils.jsonEscape(annotation.getPredicate()));
-		b.append("\",");
-
-		b.append("\t\"o\" : \"");
-		b.append(JSONUtils.jsonEscape(annotation.getObject().toString()));
-		b.append("\"");
-
-		b.append("}");
+		b.append(annotation.toJSON());
 		acomma = ",";
 	    } catch (Exception x) {
 
