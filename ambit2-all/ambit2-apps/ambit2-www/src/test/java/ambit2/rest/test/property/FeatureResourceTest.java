@@ -125,7 +125,7 @@ public class FeatureResourceTest extends ResourceTest {
 		
 		Response response =  testPost(
 					String.format("http://localhost:%d%s/compound/7/conformer/100211%s/2", port,PropertyValueResource.featureKey,PropertyResource.featuredef),
-					MediaType.TEXT_XML,
+					MediaType.TEXT_URI_LIST,
 					headers);
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
@@ -143,7 +143,7 @@ public class FeatureResourceTest extends ResourceTest {
 		
 		Response response =  testPost(
 					String.format("http://localhost:%d%s/compound/7/conformer/100211%s/2", port,PropertyValueResource.featureKey,PropertyResource.featuredef),
-					MediaType.TEXT_XML,
+					MediaType.TEXT_URI_LIST,
 					headers);
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		

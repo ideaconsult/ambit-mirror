@@ -376,10 +376,6 @@ public abstract class ResourceTest extends DbUnitTest {
 	    return verifyResponseHTML(uri, media, in);
 	else if (MediaType.APPLICATION_JSON.equals(media))
 	    return verifyResponseJSON(uri, media, in);
-	/*
-	 * else if (MediaType.TEXT_XML.equals(media)) return
-	 * verifyResponseXML(uri, media, in);
-	 */
 	else if (MediaType.TEXT_URI_LIST.equals(media))
 	    return verifyResponseURI(uri, media, in);
 	else if (MediaType.TEXT_PLAIN.equals(media))
