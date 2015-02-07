@@ -19,6 +19,7 @@ import org.restlet.data.ServerInfo;
 import org.restlet.data.Status;
 import org.restlet.ext.freemarker.TemplateRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.service.StatusService;
 
@@ -96,11 +97,13 @@ public class FreeMarkerStatusService extends StatusService implements IFreeMarke
 
     @Override
     public Representation getRepresentation(Status status, Request request, Response response) {
+
 	Form headers = (Form) response.getAttributes().get("org.restlet.http.headers");
 	if (headers == null) {
 	    headers = new Form();
 	    response.getAttributes().put("org.restlet.http.headers", headers);
 	}
+
 	headers.removeAll("X-Frame-Options");
 	headers.add("X-Frame-Options", "SAMEORIGIN");
 
@@ -124,8 +127,12 @@ public class FreeMarkerStatusService extends StatusService implements IFreeMarke
 	    }
 	}
 
-	return getHTMLByTemplate(status, status.getName(), status.getDescription(),
-		details == null ? null : details.toString(), request);
+	Object accept = request.getAttributes().get("Accept");
+	if (accept != null && accept.toString().indexOf("text/html") >= 0)
+	    return getHTMLByTemplate(status, status.getName(), status.getDescription(), details == null ? null
+		    : details.toString(), request);
+	else 
+	    return null;
     }
 
     @Override
