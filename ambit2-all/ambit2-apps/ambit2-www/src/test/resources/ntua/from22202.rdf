@@ -1,0 +1,69 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:ot="http://www.opentox.org/api/1.1#"
+    xmlns:ota="http://www.opentox.org/algorithmTypes.owl/#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:bibtex="http://purl.oclc.org/NET/nknouf/ns/bibtex#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:jaqpot="http://opentox.ntua.gr:3000"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" > 
+  <rdf:Description rdf:nodeID="A0">
+    <ot:hasSource rdf:resource="http://apps.ideaconsult.net:8080/ambit2/feature/22202"/>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Scaled Feature http://apps.ideaconsult.net:8080/ambit2/feature/22202</dc:title>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#Dataset">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/api/1.1#OpenToxResource"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Provides access to chemical compounds and their features (e.g. structural, physical-chemical, biological, toxicological properties)</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#DataType">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/api/1.1#OpenToxResource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#Feature">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/api/1.1#OpenToxResource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#OpenToxResource">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Generic OpenTox Resource</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#Model">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/api/1.1#OpenToxResource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#Task">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/api/1.1#String"/>
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/api/1.1#Feature"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://apps.ideaconsult.net:8080/ambit2/feature/22202">
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#Algorithm">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/api/1.1#OpenToxResource"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Provides access to OpenTox algorithms</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#hasSource">
+    <rdfs:range rdf:resource="http://www.opentox.org/api/1.1#Model"/>
+    <rdfs:range rdf:resource="http://www.opentox.org/api/1.1#Dataset"/>
+    <rdfs:range rdf:resource="http://www.opentox.org/api/1.1#Algorithm"/>
+    <rdfs:domain rdf:resource="http://www.opentox.org/api/1.1#Feature"/>
+    <rdfs:domain rdf:resource="http://www.opentox.org/api/1.1#Task"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#String">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/api/1.1#DataType"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#comment">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.org/dc/elements/1.1/title">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </rdf:Description>
+</rdf:RDF>
