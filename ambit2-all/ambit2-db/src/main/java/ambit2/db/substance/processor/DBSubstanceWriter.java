@@ -254,7 +254,7 @@ public class DBSubstanceWriter extends
 						importedRecord = substance;
 						importSubstanceMeasurements(substance);
 					} catch (Exception x) {
-						logger.log(Level.FINE, x.getMessage());
+						logger.log(Level.WARNING, x.getMessage());
 					}
 				}
 
