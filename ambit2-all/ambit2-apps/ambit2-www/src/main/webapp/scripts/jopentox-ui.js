@@ -1335,6 +1335,71 @@ function defineFeatureTable(root,url) {
 	return oTable;
 }
 
+function defineFeatureAnnotationTable(root,url) {
+
+	var oTable = $('#annotation').dataTable( {
+		"sAjaxDataProp" : "annotation",
+		"bProcessing": true,
+		"bServerSide": false,
+		"bStateSave": false,
+		"aoColumnDefs": [
+				{ "mDataProp": "type" , "asSorting": [ "asc", "desc" ],
+					  "aTargets": [ 0 ],	
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "bSortable" : true,
+					  "fnRender" : function(o,val) {
+  		        	    return val;
+					  }
+				},
+				{ "mDataProp": "p" , "asSorting": [ "asc", "desc" ],
+					  "aTargets": [ 1 ],	
+					  "sWidth" : "33%",
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "bSortable" : true,
+					  "fnRender" : function(o,val) {
+			                return val;
+					  }
+				},				
+				{ "mDataProp": "o" , "asSorting": [ "asc", "desc" ],
+					  "aTargets": [ 2 ],	
+					  "sWidth" : "33%",
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "bSortable" : true,
+					  "fnRender" : function(o,val) {
+			                return val;
+					  }
+				}				
+			],
+		"sSearch": "Filter:",
+		"bJQueryUI" : true,
+		"bSearchable": true,
+		"sAjaxSource": url,
+		"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
+		"bPaginate" : true,
+		"sPaginationType": "full_numbers",
+		"sPaginate" : ".dataTables_paginate _paging",
+		"oLanguage": {
+	            "sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
+	            "sLoadingRecords": "No annotations found.",
+	            "sZeroRecords": "No annotations found.",
+	            "sInfo": "Showing _TOTAL_ properties (_START_ to _END_)",
+	            "sLengthMenu": 'Display <select>' +
+              '<option value="10">10</option>' +
+              '<option value="20">20</option>' +
+              '<option value="50">50</option>' +
+              '<option value="100">100</option>' +
+              '<option value="-1">all</option>' +
+              '</select> annotations.'	            
+	    }
+	   	    
+	} );
+	return oTable;
+}
+
+
 function boolean2checkbox(val,yes,no) {
     try {
 		var istrue = false;

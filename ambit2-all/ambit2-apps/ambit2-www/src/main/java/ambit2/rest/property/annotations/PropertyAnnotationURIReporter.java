@@ -1,7 +1,6 @@
 package ambit2.rest.property.annotations;
 
 import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
@@ -28,14 +27,14 @@ public class PropertyAnnotationURIReporter extends QueryURIReporter<PropertyAnno
 	public void setPropertyOnly(boolean propertyOnly) {
 		this.propertyOnly = propertyOnly;
 	}
-	public PropertyAnnotationURIReporter(Reference baseRef,ResourceDoc doc) {
-		super(baseRef,doc);
+	public PropertyAnnotationURIReporter(Reference baseRef) {
+		super(baseRef);
 	}
-	public PropertyAnnotationURIReporter(Request ref,ResourceDoc doc) {
-		super(ref,doc);
+	public PropertyAnnotationURIReporter(Request ref) {
+		super(ref);
 	}
 	public PropertyAnnotationURIReporter() {
-		this((Request)null,null);
+		this((Request)null);
 	}
 	@Override
 	public String getURI(String ref, PropertyAnnotation record) {
