@@ -80,7 +80,7 @@ public class PropertyAnnotationRDFReporter<Q extends IQueryRetrieval<PropertyAnn
 	    predicate = jenaModel.createProperty(item.getPredicate());
 	} else {
 	    predicate = jenaModel.createProperty(String.format("http://www.opentox.org/api/1.1#%s",
-		    Reference.encode(item.getPredicate())));
+		    Reference.encode(item.getPredicate().replace(" ", "_"))));
 	}
 	String object = item.getObject().toString();
 	if (item.getType().startsWith("^^")) { // xsd:ToxicCategory a

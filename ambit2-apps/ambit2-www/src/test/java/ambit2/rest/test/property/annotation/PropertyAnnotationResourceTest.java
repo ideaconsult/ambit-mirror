@@ -163,7 +163,7 @@ public class PropertyAnnotationResourceTest extends ResourceTest {
 			PropertyResource.featuredef))), new ReferenceURIReporter());
 	StringWriter writer = new StringWriter();
 	model.write(writer, "RDF/XML");
-	System.out.println(writer.toString());
+	//System.out.println(writer.toString());
 
 	Response response = testPost(String.format("http://localhost:%d%s", port, PropertyResource.featuredef),
 		MediaType.APPLICATION_RDF_XML, writer.toString());
