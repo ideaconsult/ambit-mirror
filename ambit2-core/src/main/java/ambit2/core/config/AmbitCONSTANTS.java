@@ -84,10 +84,6 @@ public class AmbitCONSTANTS {
 	 */
 	public static final String QSARPOINT = "QSARPOINT";  //Training or Validation
 	/**
-	 * AQUIRE data (TO DO)
-	 */
-	public static final String AQUIRE = "AQUIRE";
-	/**
 	 * Daylight - like hashed fingerprint
 	 */
 	public static final String Fingerprint = "org.openscience.cdk.fingerprint.Fingerprinter";
