@@ -120,19 +120,19 @@
                 {
 		            "method": "POST",
 		            "summary": "Create a new property.",
-		            "notes": "Create a new property. Returns property URI. <a href='http://opentox.org/dev/apis/api-1.2/Feature' target='opentox'>OpenTox Feature API</a>",
+		            "notes": "Create a new property. Returns property URI. <a href='http://opentox.org/dev/apis/api-1.2/Feature' target='opentox'>OpenTox Feature API</a>. For RDF example see <a href='https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps/ambit2-www/src/test/resources/feature.rdf'>feature.rdf</a>",
 		            "type": "String",
 		            "nickname": "createProperty",
                     "consumes": [
      	                 "application/rdf+xml",
-     	                 "application/json",                 
+     	                 "text/n3",
      	                 "application/x-www-form-urlencoded"
      	            ],
 		            <#include "/apidocs/authz.ftl" >
 		            "parameters": [
 						{
 						    "name": "body",
-						    "description": "RDF/XML representation of the Feature or JSON representation of EffectRecord",
+						    "description": "RDF/XML or N3 representation of the Feature e.g. <a href='https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps/ambit2-www/src/test/resources/feature.rdf'>feature.rdf</a> and <a href='http://sourceforge.net/p/ambit/feature-requests/83/'>Issue #83</a>",
 						    "required": false,
 						    "type": "Effect",
 						    "paramType": "body",

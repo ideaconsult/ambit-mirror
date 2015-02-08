@@ -95,12 +95,11 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 
     protected Resource dataset;
 
-    public DatasetRDFReporter(Request request, MediaType mediaType, Template template,
-	    Profile groupedProperties) {
-	this("", request,  mediaType, template, groupedProperties);
+    public DatasetRDFReporter(Request request, MediaType mediaType, Template template, Profile groupedProperties) {
+	this("", request, mediaType, template, groupedProperties);
     }
 
-    public DatasetRDFReporter(String prefix, Request request,  MediaType mediaType, Template template,
+    public DatasetRDFReporter(String prefix, Request request, MediaType mediaType, Template template,
 	    Profile groupedProperties) {
 	super(prefix, request, mediaType);
 	setGroupProperties(groupedProperties);
@@ -130,9 +129,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	}
     }
 
-    protected void initProcessors() {
-
-	getProcessors().clear();
+    protected void configurePropertyProcessors() {
 	if ((getGroupProperties() != null) && (getGroupProperties().size() > 0))
 	    getProcessors().add(
 		    new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
@@ -163,7 +160,12 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 			    return super.process(target);
 			}
 		    });
+    }
 
+    protected void initProcessors() {
+
+	getProcessors().clear();
+	configurePropertyProcessors();
 	getProcessors().add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
 	    /**
 		     * 
@@ -236,7 +238,9 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	    // dataset.addProperty(DCTerms.license,ISourceDataset.license.Unknown.toString());
 	}
     }
-
+    protected boolean acceptProperty(Property p) {
+	return (p.getId() > 0); 
+    }
     @Override
     public Object processItem(IStructureRecord item) throws AmbitException {
 	try {
@@ -248,7 +252,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 
 	    boolean sort = false;
 	    for (Property p : item.getProperties())
-		if (p.getId() <= 0)
+		if (!acceptProperty(p))
 		    continue;
 		else if (Collections.binarySearch(header, p, comp) < 0) {
 		    header.add(p);

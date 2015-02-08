@@ -48,11 +48,15 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.json.SubstanceStudyParser;
 import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.reporters.CSVReporter;
+import ambit2.db.reporters.SDFReporter;
+import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.substance.study.ReadEffectRecordBySubstance;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFF3ColResourceReporter;
 import ambit2.rest.dataset.ARFFResourceReporter;
+import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.structure.CompoundJSONReporter;
 import ambit2.rest.substance.owner.SubstanceByOwnerResource;
 
@@ -73,7 +77,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
     protected void doInit() throws ResourceException {
 	super.doInit();
 	customizeVariants(new MediaType[] { ChemicalMediaType.WEKA_ARFF, MediaType.TEXT_CSV,
-		ChemicalMediaType.THREECOL_ARFF });
+		ChemicalMediaType.CHEMICAL_MDLSDF, ChemicalMediaType.THREECOL_ARFF });
 
     }
 
@@ -125,6 +129,29 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 
 	} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 	    return createCSVReporter(filenamePrefix);
+	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
+	    /*
+	    switch (rdfwriter) {
+	    case stax: {
+		return new RDFStaXConvertor(new DatasetRDFStaxReporter(null, getRequest(), getTemplate(),
+			getGroupProperties()), filenamePrefix);
+	    }
+	    default: { // jena
+	    */
+		return createRDFReporter(variant.getMediaType(),filenamePrefix);
+		/*
+	    }
+	    }
+	    */
+	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE)
+		|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
+		|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+		|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG)
+		|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)) {
+	    return createRDFReporter(variant.getMediaType(),filenamePrefix);
+	} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
+	    return new OutputWriterConvertor(new SDFReporter<QueryStructureByID>(template, getGroupProperties(),
+		    changeLineSeparators), ChemicalMediaType.CHEMICAL_MDLSDF, filenamePrefix);
 	} else { // json by default
 	    return createJSONReporter(filenamePrefix);
 	}
@@ -347,12 +374,9 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	groupProperties.add(new SubstancePublicName());
 	groupProperties.add(new SubstanceName());
 	groupProperties.add(new SubstanceUUID());
+	groupProperties.add(new SubstanceOwner());
 	return new OutputWriterConvertor<SubstanceRecord, Q>(new CSVReporter(getRequest().getRootRef().toString(),
 		getTemplate(), groupProperties, String.format("%s%s", getRequest().getRootRef(), "")) {
-
-	    /**
-		     * 
-		     */
 	    private static final long serialVersionUID = -2558990024073170008L;
 
 	    @Override
@@ -368,6 +392,24 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	return null;
     }
 
+    protected IProcessor<Q, Representation> createRDFReporter(MediaType media,String filenamePrefix) {
+	groupProperties.add(new SubstancePublicName());
+	groupProperties.add(new SubstanceName());
+	groupProperties.add(new SubstanceUUID());
+	groupProperties.add(new SubstanceOwner());
+	DatasetRDFReporter reporter = new DatasetRDFReporter(getRequest(), media, getTemplate(), getGroupProperties()) {
+	    @Override
+	    protected boolean acceptProperty(Property p) {
+	        return true;
+	    }
+	    @Override
+	    protected void configurePropertyProcessors() {
+		getProcessors().add(getPropertyProcessors(false, false));
+	    }
+	};
+	return new RDFJenaConvertor(reporter,media,filenamePrefix) ;
+
+    }
     protected IProcessor<Q, Representation> createJSONReporter(String filenamePrefix) {
 	groupProperties.add(new SubstancePublicName());
 	groupProperties.add(new SubstanceName());
@@ -378,9 +420,6 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	    jsonpcallback = getParams().getFirstValue("callback");
 	return new OutputWriterConvertor(new CompoundJSONReporter(getTemplate(), getGroupProperties(), folders,
 		getBundles(), getRequest(), getRequest().getRootRef().toString(), false, jsonpcallback) {
-	    /**
-		     * 
-		     */
 	    private static final long serialVersionUID = -5059577943753305935L;
 
 	    @Override
@@ -394,7 +433,6 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	    @Override
 	    protected void configurePropertyProcessors() {
 		getCompositionProcessors(getProcessors());
-		// if (p!=null) getProcessors().add(p);
 		getProcessors().add(getPropertyProcessors(false, false));
 	    }
 

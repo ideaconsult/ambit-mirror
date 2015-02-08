@@ -1,5 +1,8 @@
 package ambit2.rest.test.substance;
 
+import java.io.File;
+import java.net.URL;
+
 import junit.framework.Assert;
 import net.idea.restnet.db.CreateDatabaseProcessor;
 import net.idea.restnet.db.test.DbUnitTest;
@@ -7,9 +10,12 @@ import net.idea.restnet.i.task.TaskResult;
 
 import org.junit.Test;
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
+import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.Property;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.Value;
@@ -97,6 +103,29 @@ public class CallableSubstancePropertyCreatorTest extends DbUnitTest {
 	     */
 	    
 	    //http://localhost:8081/ambit2/property/P-CHEM/TO_BIODEG_WATER_SCREEN_SECTION/%25+Degradation/8C9DF1AF60CA3D8706C0156361E97E0DF4391C10/1f255895-eb7d-37dc-8eb8-bc9580d8be25
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+
+	}
+    }
+    
+    @Test
+    public void testCreateSubstancePropertyFromRDF() throws Exception {
+
+	URL url = getClass().getClassLoader().getResource("feature.rdf");
+	File file = new File(url.getFile());
+	Assert.assertTrue(file.exists());	
+	
+	try {
+	    PropertyURIReporter reporter = new PropertyURIReporter(new Reference("http://localhost:8081/ambit2"));
+	    CallableSubstancePropertyCreator callable = new CallableSubstancePropertyCreator(reporter, Method.POST,
+		    file,MediaType.APPLICATION_RDF_XML, null, null);
+	    TaskResult task = callable.call();
+	    
+	    System.out.println(task.getUri());
+	    //Assert.assertTrue(task.getUri().startsWith("http://localhost:8081/ambit2/property/P-CHEM/ZETA_POTENTIAL_SECTION/ZETA+POTENTIAL/A597EBC063D7A5A605B9535656E09149A72F0C23"));
+	    // "http://localhost:8081/ambit2/property/P-CHEM/ZETA_POTENTIAL_SECTION/ZETA+POTENTIAL/945DEEC24F876DEE6116F92646EF729107F5B5FD"
 	} catch (Exception x) {
 	    throw x;
 	} finally {

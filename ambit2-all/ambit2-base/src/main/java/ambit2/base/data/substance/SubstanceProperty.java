@@ -116,7 +116,7 @@ public class SubstanceProperty extends Property {
 	b.append(getName()==null?"":getName());
 	b.append(getUnits()==null?"":getUnits());
 	b.append(conditions==null?"":conditions.toString());
-	System.out.println(b);
+	//System.out.println(b);
 	/*
 % Degradation%{"Sampling time":{"unit":"d","loValue":7.0}}
 % Degradation%{"Sampling time":{	"unit":"d", 	"loValue":7}}

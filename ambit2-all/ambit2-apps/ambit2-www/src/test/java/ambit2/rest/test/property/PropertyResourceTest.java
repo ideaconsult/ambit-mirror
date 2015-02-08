@@ -243,7 +243,7 @@ public class PropertyResourceTest extends ResourceTest {
 	ITable table = c
 		.createQueryTable(
 			"EXPECTED",
-			"SELECT * FROM properties join catalog_references using(idreference) where name='cas' and comments='CasRN' and title='http://my.resource.org' and url='Default'");
+			"SELECT * FROM properties join catalog_references using(idreference) where name='EC10' and comments='http://www.opentox.org/echaEndpoints.owl#EC_DAPHNIATOX' and title='http://localhost:8080/ambit2/dataset/Method%3A+other%3A+Am.+Soc.+Test.+Mater.+%281980%29+and+U.S.+EPA+%281975%29' and url='Method: other: Am. Soc. Test. Mater. (1980) and U.S. EPA (1975)'");
 	Assert.assertEquals(1, table.getRowCount());
 	c.close();
     }
