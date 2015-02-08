@@ -27,10 +27,10 @@ public class BookmarkHTMLReporter extends QueryHTMLReporter<Bookmark, IQueryRetr
 	private static final long serialVersionUID = -7959033048710547839L;
 
 	public BookmarkHTMLReporter() {
-		this(null,DisplayMode.table,null);
+		this(null,DisplayMode.table);
 	}
-	public BookmarkHTMLReporter(Request baseRef, DisplayMode _dmode, ResourceDoc doc) {
-		super(baseRef,_dmode,doc);
+	public BookmarkHTMLReporter(Request baseRef, DisplayMode _dmode) {
+		super(baseRef,_dmode);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {

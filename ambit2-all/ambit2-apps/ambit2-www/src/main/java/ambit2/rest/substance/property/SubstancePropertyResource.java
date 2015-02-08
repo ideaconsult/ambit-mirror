@@ -84,8 +84,8 @@ public class SubstancePropertyResource extends AmbitDBQueryResource<IQueryRetrie
 		|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
 		|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)) {
 	    return new RDFJenaConvertor<Property, IQueryRetrieval<Property>>(
-		    new PropertyRDFReporter<IQueryRetrieval<Property>>(getRequest(), variant.getMediaType(),
-			    getDocumentation()), variant.getMediaType(), filenamePrefix);
+		    new PropertyRDFReporter<IQueryRetrieval<Property>>(getRequest(), variant.getMediaType()),
+		    variant.getMediaType(), filenamePrefix);
 	} else {
 	    PropertyURIReporter r = new PropertyURIReporter(getRequest());
 	    return new OutputWriterConvertor(new PropertyJSONReporter(getRequest()), MediaType.APPLICATION_JSON);
@@ -158,8 +158,9 @@ public class SubstancePropertyResource extends AmbitDBQueryResource<IQueryRetrie
 
     @Override
     protected String getObjectURI(Form queryForm) throws ResourceException {
-        return null;
+	return null;
     }
+
     @Override
     protected boolean isAllowedMediaType(MediaType mediaType) throws ResourceException {
 	return (MediaType.APPLICATION_JSON.equals(mediaType) || MediaType.APPLICATION_RDF_XML.equals(mediaType)

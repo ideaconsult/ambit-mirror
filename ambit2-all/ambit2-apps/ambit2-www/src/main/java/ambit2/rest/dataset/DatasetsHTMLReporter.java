@@ -37,20 +37,21 @@ import ambit2.rest.query.QueryResource;
  * @author nina
  *
  */
+@Deprecated
 public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQueryRetrieval<ISourceDataset>> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7959033048710547839L;
 	public static String fileUploadField = "file";
-	public DatasetsHTMLReporter(ResourceDoc doc) {
-		this(null,DisplayMode.table,doc,false);
+	public DatasetsHTMLReporter() {
+		this(null,DisplayMode.table,false);
 	}
-	public DatasetsHTMLReporter(Request baseRef,DisplayMode _dmode,ResourceDoc doc,boolean headless) {
-		this(baseRef,baseRef,_dmode,doc,headless);
+	public DatasetsHTMLReporter(Request baseRef,DisplayMode _dmode,boolean headless) {
+		this(baseRef,baseRef,_dmode,headless);
 	}
-	public DatasetsHTMLReporter(Request baseRef,Request originalRef,DisplayMode _dmode,ResourceDoc doc,boolean headless) {
-		super(baseRef,_dmode,doc,headless);
+	public DatasetsHTMLReporter(Request baseRef,Request originalRef,DisplayMode _dmode,boolean headless) {
+		super(baseRef,_dmode,headless);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
@@ -61,8 +62,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 		try {
 			if (!headless)
 			AmbitResource.writeHTMLHeader(w,query.toString(),uriReporter.getRequest(),
-					getUriReporter().getResourceRef(),
-					getUriReporter()==null?null:getUriReporter().getDocumentation());
+					getUriReporter().getResourceRef());
 	
 
 		} catch (Exception x) {

@@ -50,7 +50,7 @@ public class StructureRelationJSONReporter<Q extends IQueryRetrieval<AbstractRel
 		super();
 		this.request = request;
 		this.baseReference = request.getRootRef();
-		cmpReporter = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(request, null);
+		cmpReporter = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(request);
 	}
 	
 	public ConformerURIReporter<IQueryRetrieval<IStructureRecord>> getCmpReporter() {

@@ -53,6 +53,7 @@ import ambit2.rest.query.QueryResource;
  * 
  * @param <Q>
  */
+@Deprecated
 public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureHTMLReporter<Q> {
     /**
 	 * 
@@ -69,24 +70,23 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 
     // protected RetrieveFieldPropertyValue fieldQuery;
 
-    public CompoundHTMLReporter(Request request, ResourceDoc doc, DisplayMode _dmode, QueryURIReporter urireporter,
+    public CompoundHTMLReporter(Request request, DisplayMode _dmode, QueryURIReporter urireporter, boolean headless) {
+	this(request, _dmode, urireporter, null, headless);
+    }
+
+    public CompoundHTMLReporter(Request request, DisplayMode _dmode, QueryURIReporter urireporter, Template template,
 	    boolean headless) {
-	this(request, doc, _dmode, urireporter, null, headless);
+	this(request, _dmode, urireporter, template, null, null, headless);
     }
 
-    public CompoundHTMLReporter(Request request, ResourceDoc doc, DisplayMode _dmode, QueryURIReporter urireporter,
-	    Template template, boolean headless) {
-	this(request, doc, _dmode, urireporter, template, null, null, headless);
+    public CompoundHTMLReporter(Request request, DisplayMode _dmode, QueryURIReporter urireporter, Template template,
+	    Profile groupedProperties, Dimension d, boolean headless) {
+	this("", request, _dmode, urireporter, template, groupedProperties, d, headless);
     }
 
-    public CompoundHTMLReporter(Request request, ResourceDoc doc, DisplayMode _dmode, QueryURIReporter urireporter,
+    public CompoundHTMLReporter(String prefix, Request request, DisplayMode _dmode, QueryURIReporter urireporter,
 	    Template template, Profile groupedProperties, Dimension d, boolean headless) {
-	this("", request, doc, _dmode, urireporter, template, groupedProperties, d, headless);
-    }
-
-    public CompoundHTMLReporter(String prefix, Request request, ResourceDoc doc, DisplayMode _dmode,
-	    QueryURIReporter urireporter, Template template, Profile groupedProperties, Dimension d, boolean headless) {
-	super(prefix, request, _dmode, doc, headless);
+	super(prefix, request, _dmode, headless);
 
 	Reference f = request.getResourceRef().clone();
 	f.setQuery(null);
@@ -168,19 +168,19 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	return w;
     }
 
-    public CompoundHTMLReporter(Request request, ResourceDoc doc, DisplayMode _dmode, Template template,
+    public CompoundHTMLReporter(Request request,  DisplayMode _dmode, Template template,
 	    boolean headless) {
-	this(request, doc, _dmode, null, template, headless);
+	this(request,  _dmode, null, template, headless);
     }
 
-    public CompoundHTMLReporter(Request request, ResourceDoc doc, DisplayMode _dmode, boolean headless) {
-	this(request, doc, _dmode, null, null, headless);
+    public CompoundHTMLReporter(Request request, DisplayMode _dmode, boolean headless) {
+	this(request,  _dmode, null, null, headless);
 
     }
 
     @Override
-    protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
-	return new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(prefix, request, doc);
+    protected QueryURIReporter createURIReporter(Request request,ResourceDoc doc) {
+	return new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(prefix, request,false);
     }
 
     @Override
@@ -386,7 +386,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	    Reference baseReference = uriReporter.getBaseReference();
 	    if (!headless) {
 		AmbitResource.writeTopHeader(w, isCollapsed() ? "Chemical compounds" : "Chemical compound",
-			uriReporter.getRequest(), uriReporter.getResourceRef(), "", uriReporter.getDocumentation());
+			uriReporter.getRequest(), uriReporter.getResourceRef(), "");
 
 		;
 

@@ -139,7 +139,7 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 			PolicyJSONReporter r = new PolicyJSONReporter(getRequest(),jsonpcallback);
 			return new StringConvertor(	r,MediaType.APPLICATION_JAVASCRIPT);		
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor(	new PolicyURIReporter(getRequest(),getDocumentation()),MediaType.TEXT_URI_LIST);
+			return new StringConvertor(	new PolicyURIReporter(getRequest()),MediaType.TEXT_URI_LIST);
 			
 		} else //html 	
 			return new StringConvertor(createHTMLReporter(),MediaType.TEXT_HTML);
@@ -157,7 +157,7 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 	}
 	
 	protected Reporter createHTMLReporter() {
-		return new PolicyHTMLReporter(getRequest(),true,getDocumentation());
+		return new PolicyHTMLReporter(getRequest(),true);
 	}
 	
 
@@ -201,9 +201,9 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 				ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();
 				FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 				if (tasks.size()==1)
-					return tc.createTaskRepresentation(tasks.get(0), variant, getRequest(),getResponse(),getDocumentation());
+					return tc.createTaskRepresentation(tasks.get(0), variant, getRequest(),getResponse(),null);
 				else
-					return tc.createTaskRepresentation(tasks.iterator(), variant, getRequest(),getResponse(),getDocumentation());				
+					return tc.createTaskRepresentation(tasks.iterator(), variant, getRequest(),getResponse(),null);				
 			}
 		}
 	}	
@@ -213,7 +213,7 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 			throws Exception {
 		if (MediaType.TEXT_HTML.equals(variant.getMediaType())) {
 			StringWriter output = new StringWriter();
-			PolicyHTMLReporter r = new PolicyHTMLReporter(getRequest(),true,getDocumentation());
+			PolicyHTMLReporter r = new PolicyHTMLReporter(getRequest(),true);
 			r.setOutput(output);
 			r.header(output, null);
 			r.footer(output, null);

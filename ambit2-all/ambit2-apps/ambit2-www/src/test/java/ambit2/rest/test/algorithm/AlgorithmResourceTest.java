@@ -88,7 +88,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		while ((line = reader.readLine())!=null) {
 			count++;
 		}
-		return count == 140;
+		return count == 139;
 	}	
 	/**
 	 * fails because of not finding the Freemarker templates.

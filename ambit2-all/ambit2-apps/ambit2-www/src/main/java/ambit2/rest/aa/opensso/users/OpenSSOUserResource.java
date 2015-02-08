@@ -82,10 +82,9 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 	    ResourceException {
 
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-	    return new StringConvertor(new OpenSSOUserHTMLReporter(getRequest(), getDocumentation()),
-		    MediaType.TEXT_HTML);
+	    return new StringConvertor(new OpenSSOUserHTMLReporter(getRequest()), MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-	    return new StringConvertor(new OpenSSOUsersURIReporter(getRequest(), getDocumentation()) {
+	    return new StringConvertor(new OpenSSOUsersURIReporter(getRequest()) {
 		/**
 			     * 
 			     */
@@ -103,8 +102,7 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 
 	} else
 	    // html
-	    return new StringConvertor(new OpenSSOUserHTMLReporter(getRequest(), getDocumentation()),
-		    MediaType.TEXT_HTML);
+	    return new StringConvertor(new OpenSSOUserHTMLReporter(getRequest()), MediaType.TEXT_HTML);
 
     }
 

@@ -25,99 +25,106 @@ import com.hp.hpl.jena.ontology.OntModel;
 
 /**
  * FeatureValue
+ * 
  * @author nina
- *
+ * 
  * @param <T>
  */
-public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T,IQueryRetrieval<T>> {
+public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T, IQueryRetrieval<T>> {
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = -8129407642828025102L;
-	protected ReferenceURIReporter referenceReporter;
-	protected PropertyURIReporter propertyReporter;
-	protected CompoundURIReporter cmpReporter;
-	public PropertyValueRDFReporter(Request req, MediaType mediaType,ResourceDoc doc) {
-		super(req,mediaType,doc);
-		propertyReporter = new PropertyURIReporter(req);
-		referenceReporter = new ReferenceURIReporter(req);
-	}
-	@Override
-	protected QueryURIReporter<T, IQueryRetrieval<T>> createURIReporter(
-			Request req,ResourceDoc doc) {
-		return new PropertyValueURIReporter<T, IQueryRetrieval<T>>(req,doc);
-	}
-	public  Individual jenaProcess(Property property) throws AmbitException {
-		return
-		PropertyRDFReporter.addToModel(getJenaModel(),property, 
-				propertyReporter,
-				referenceReporter
-				);
-	
+    private static final long serialVersionUID = -8129407642828025102L;
+    protected ReferenceURIReporter referenceReporter;
+    protected PropertyURIReporter propertyReporter;
+    protected CompoundURIReporter cmpReporter;
 
-	}	
-	public  Individual valueProcess(Object item,Individual feature) throws AmbitException {
-		Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));
-		featureValue.addLiteral(OT.DataProperty.value.createProperty(getJenaModel()),getJenaModel().createTypedLiteral(item.toString(),	XSDDatatype.XSDstring));
-		if (feature!=null) featureValue.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()),feature);
-		return featureValue;
-	}	
-	public  Individual valueProcess(Number item,Individual feature) throws AmbitException {
-		Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));
-		featureValue.addLiteral(OT.DataProperty.value.createProperty(getJenaModel()),getJenaModel().createTypedLiteral(item,	XSDDatatype.XSDdouble));
-		if (feature!=null) featureValue.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()),feature);
-		return featureValue;
-	}		
-	public  Individual jenaProcess(PropertyValue item) throws AmbitException {
-		Individual feature = jenaProcess(item.getProperty());
-		return valueProcess(item.getValue(),feature);
-	}
-	public Individual jenaProcess(IStructureRecord record) throws AmbitException {
-		Individual dataEntry = null;
-		if (record != null) {
-			dataEntry = getJenaModel().createIndividual(OT.OTClass.DataEntry.getOntClass(getJenaModel()));
-			Individual compound = getJenaModel().createIndividual(
-				cmpReporter.getURI(record),OT.OTClass.Compound.getOntClass(getJenaModel()));
-			dataEntry.addProperty(OT.OTProperty.compound.createProperty(getJenaModel()), compound);			
-		}		
-		for (Property p : record.getProperties())  {
-			Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(p),
-					OT.OTClass.Feature.getOntClass(getJenaModel()));
-			Individual featureValue = valueProcess(record.getProperty(p),feature);
-			if (dataEntry!=null)
-				dataEntry.addProperty(OT.OTProperty.values.createProperty(getJenaModel()),featureValue);
-		}
-		return dataEntry;
-	}	
-	public Object jenaProcess(Object item) throws AmbitException {
-		return valueProcess(item, null);
-		
-		
-	}	
-	@Override
-	public Object processItem(T item) throws AmbitException {
-		if (item instanceof PropertyValue)
-			return jenaProcess((PropertyValue)item);
-		else if (item instanceof IStructureRecord)
-			return jenaProcess((IStructureRecord)item);	
-		else
-			return jenaProcess(item);
-	}
+    public PropertyValueRDFReporter(Request req, MediaType mediaType) {
+	super(req, mediaType);
+	propertyReporter = new PropertyURIReporter(req);
+	referenceReporter = new ReferenceURIReporter(req);
+    }
 
+    @Override
+    protected QueryURIReporter<T, IQueryRetrieval<T>> createURIReporter(Request req, ResourceDoc doc) {
+	return new PropertyValueURIReporter<T, IQueryRetrieval<T>>(req);
+    }
 
-	public void open() throws DbAmbitException {
-		// TODO Auto-generated method stub
-		
+    public Individual jenaProcess(Property property) throws AmbitException {
+	return PropertyRDFReporter.addToModel(getJenaModel(), property, propertyReporter, referenceReporter);
+
+    }
+
+    public Individual valueProcess(Object item, Individual feature) throws AmbitException {
+	Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));
+	featureValue.addLiteral(OT.DataProperty.value.createProperty(getJenaModel()), getJenaModel()
+		.createTypedLiteral(item.toString(), XSDDatatype.XSDstring));
+	if (feature != null)
+	    featureValue.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()), feature);
+	return featureValue;
+    }
+
+    public Individual valueProcess(Number item, Individual feature) throws AmbitException {
+	Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));
+	featureValue.addLiteral(OT.DataProperty.value.createProperty(getJenaModel()), getJenaModel()
+		.createTypedLiteral(item, XSDDatatype.XSDdouble));
+	if (feature != null)
+	    featureValue.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()), feature);
+	return featureValue;
+    }
+
+    public Individual jenaProcess(PropertyValue item) throws AmbitException {
+	Individual feature = jenaProcess(item.getProperty());
+	return valueProcess(item.getValue(), feature);
+    }
+
+    public Individual jenaProcess(IStructureRecord record) throws AmbitException {
+	Individual dataEntry = null;
+	if (record != null) {
+	    dataEntry = getJenaModel().createIndividual(OT.OTClass.DataEntry.getOntClass(getJenaModel()));
+	    Individual compound = getJenaModel().createIndividual(cmpReporter.getURI(record),
+		    OT.OTClass.Compound.getOntClass(getJenaModel()));
+	    dataEntry.addProperty(OT.OTProperty.compound.createProperty(getJenaModel()), compound);
 	}
-	@Override
-	public void header(OntModel jenaModel, IQueryRetrieval<T> query) {
-		super.header(output,query);
-		OT.OTClass.DataEntry.createOntClass(jenaModel);
-		OT.OTClass.Feature.createOntClass(jenaModel);
-		OT.OTClass.FeatureValue.createOntClass(jenaModel);
-		OT.OTClass.Compound.createOntClass(jenaModel);
-		
-	}	
+	for (Property p : record.getProperties()) {
+	    Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(p),
+		    OT.OTClass.Feature.getOntClass(getJenaModel()));
+	    Individual featureValue = valueProcess(record.getProperty(p), feature);
+	    if (dataEntry != null)
+		dataEntry.addProperty(OT.OTProperty.values.createProperty(getJenaModel()), featureValue);
+	}
+	return dataEntry;
+    }
+
+    public Object jenaProcess(Object item) throws AmbitException {
+	return valueProcess(item, null);
+
+    }
+
+    @Override
+    public Object processItem(T item) throws AmbitException {
+	if (item instanceof PropertyValue)
+	    return jenaProcess((PropertyValue) item);
+	else if (item instanceof IStructureRecord)
+	    return jenaProcess((IStructureRecord) item);
+	else
+	    return jenaProcess(item);
+    }
+
+    public void open() throws DbAmbitException {
+	// TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void header(OntModel jenaModel, IQueryRetrieval<T> query) {
+	super.header(output, query);
+	OT.OTClass.DataEntry.createOntClass(jenaModel);
+	OT.OTClass.Feature.createOntClass(jenaModel);
+	OT.OTClass.FeatureValue.createOntClass(jenaModel);
+	OT.OTClass.Compound.createOntClass(jenaModel);
+
+    }
 
 }

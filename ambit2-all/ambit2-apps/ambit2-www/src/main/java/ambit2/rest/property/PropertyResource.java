@@ -8,7 +8,6 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.RepresentationConvertor;
-import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 import net.idea.restnet.rdf.ns.OT;
@@ -87,7 +86,6 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 
     public PropertyResource() {
 	super();
-	setDocumentation(new ResourceDoc("Feature", "Feature"));
 	setHtmlbyTemplate(true);
     }
 
@@ -118,12 +116,12 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
 		|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)) {
 	    return new RDFJenaConvertor<Property, IQueryRetrieval<Property>>(
-		    new PropertyRDFReporter<IQueryRetrieval<Property>>(getRequest(), variant.getMediaType(),
-			    getDocumentation()), variant.getMediaType(), filenamePrefix);
+		    new PropertyRDFReporter<IQueryRetrieval<Property>>(getRequest(), variant.getMediaType()),
+		    variant.getMediaType(), filenamePrefix);
 	} else {
 	    PropertyURIReporter r = new PropertyURIReporter(getRequest());
 	    return new OutputWriterConvertor(new PropertyJSONReporter(getRequest()), MediaType.APPLICATION_JSON);
-	}    
+	}
     }
 
     @Override

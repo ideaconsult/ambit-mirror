@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
-import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.rdf.ns.OT;
 
 import org.restlet.Request;
@@ -35,9 +34,9 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 	 * 
 	 */
 	private static final long serialVersionUID = -2332767360556001891L;
-	public AlgorithmRDFReporter(Request request,MediaType mediaType,ResourceDoc doc) {
-		super(request,mediaType,doc);
-		reporter =  new AlgorithmURIReporter(request,doc);
+	public AlgorithmRDFReporter(Request request,MediaType mediaType) {
+		super(request,mediaType);
+		reporter =  new AlgorithmURIReporter(request);
 	}
 	@Override
 	public void processItem(Algorithm item, Writer output) {

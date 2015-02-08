@@ -47,7 +47,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<S
 	String filenamePrefix = getRequest().getResourceRef().getPath();
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),DisplayMode.table,getDocumentation(),headless),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),DisplayMode.table,headless),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset>(getRequest()),MediaType.TEXT_URI_LIST,filenamePrefix);
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
@@ -60,7 +60,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<S
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)
 			) {
-		QueryReporter<SourceDataset,IQueryRetrieval<SourceDataset>,OntModel> reporter = new MetadataRDFReporter<SourceDataset,IQueryRetrieval<SourceDataset>>(getRequest(),getDocumentation(),	variant.getMediaType());
+		QueryReporter<SourceDataset,IQueryRetrieval<SourceDataset>,OntModel> reporter = new MetadataRDFReporter<SourceDataset,IQueryRetrieval<SourceDataset>>(getRequest(),	variant.getMediaType());
 		return 
 		new RDFJenaConvertor<SourceDataset, IQueryRetrieval<SourceDataset>>(
 				reporter
@@ -70,7 +70,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<S
 		
 	} else //html 	
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),DisplayMode.table,getDocumentation(),headless),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),DisplayMode.table,headless),MediaType.TEXT_HTML);
 	}
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context, Request request,

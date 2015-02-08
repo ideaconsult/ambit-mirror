@@ -27,14 +27,14 @@ public class PairwiseSimilarityHTMLReporter  extends QueryHTMLReporter<Similarit
 	private static final long serialVersionUID = -7959033048710547839L;
 	protected PairwiseSimilarityJSONReporter similarityJSONReporter;
 	
-	public PairwiseSimilarityHTMLReporter(ResourceDoc doc) {
-		this(null,DisplayMode.table,doc);
+	public PairwiseSimilarityHTMLReporter() {
+		this(null,DisplayMode.table);
 	}
-	public PairwiseSimilarityHTMLReporter(Request request,DisplayMode _dmode,ResourceDoc doc) {
-		this(request,request,_dmode,doc);
+	public PairwiseSimilarityHTMLReporter(Request request,DisplayMode _dmode) {
+		this(request,request,_dmode);
 	}
-	public PairwiseSimilarityHTMLReporter(Request request,Request originalRef,DisplayMode _dmode,ResourceDoc doc) {
-		super(request,_dmode,doc);
+	public PairwiseSimilarityHTMLReporter(Request request,Request originalRef,DisplayMode _dmode) {
+		super(request,_dmode);
 
 	}
 	@Override

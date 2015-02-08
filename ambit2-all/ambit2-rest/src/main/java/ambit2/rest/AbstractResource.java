@@ -7,7 +7,6 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.BatchProcessingException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
 import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -47,19 +46,8 @@ public abstract class AbstractResource<Q, T extends Serializable, P extends IPro
 
     public final static String max_hits = "max";
 
-    protected ResourceDoc documentation = new ResourceDoc();
-
-    public ResourceDoc getDocumentation() {
-	return documentation;
-    }
-
-    public void setDocumentation(ResourceDoc documentation) {
-	this.documentation = documentation;
-    }
-
     public AbstractResource() {
 	super();
-	// setAutoDescribed(true);
     }
 
     public String[] URI_to_handle() {
@@ -76,11 +64,8 @@ public abstract class AbstractResource<Q, T extends Serializable, P extends IPro
     }
 
     protected void customizeVariants(MediaType[] mimeTypes) {
-	// List<Variant> variants = new ArrayList<Variant>();
 	for (MediaType m : mimeTypes)
 	    getVariants().add(new Variant(m));
-	// getVariants().put(Method.GET, variants);
-	// getVariants().put(Method.POST, variants);
     }
 
     public abstract P createConvertor(Variant variant) throws AmbitException, ResourceException;
@@ -108,16 +93,8 @@ public abstract class AbstractResource<Q, T extends Serializable, P extends IPro
     protected Representation getRepresentation(Variant variant) throws ResourceException {
 	try {
 	    setTokenCookies(variant, useSecureCookie(getRequest()));
-	    // SEND RESPONSE
 	    setStatus(Status.SUCCESS_OK);
-	    /*
-	     * if (variant.getMediaType().equals(MediaType.APPLICATION_WADL)) {
-	     * WadlRepresentation wadl = new WadlRepresentation(describe());
-	     * //wadl.setApplication(((WadlApplication)getApplication()).
-	     * getApplicationInfo(getRequest(), getResponse()));
-	     * 
-	     * return wadl; } else
-	     */
+
 	    if (MediaType.APPLICATION_JAVA_OBJECT.equals(variant.getMediaType())) {
 		if ((queryObject != null) && (queryObject instanceof Serializable))
 		    return new ObjectRepresentation((Serializable) queryObject, MediaType.APPLICATION_JAVA_OBJECT);

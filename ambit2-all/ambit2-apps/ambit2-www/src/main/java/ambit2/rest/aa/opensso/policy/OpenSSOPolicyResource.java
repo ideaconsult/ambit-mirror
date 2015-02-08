@@ -136,13 +136,13 @@ public class OpenSSOPolicyResource extends CatalogResource<Policy>{
 			return new StringConvertor(
 					createHTMLReporter(),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor(	new PolicyURIReporter(getRequest(),getDocumentation()),MediaType.TEXT_URI_LIST);
+			return new StringConvertor(	new PolicyURIReporter(getRequest()),MediaType.TEXT_URI_LIST);
 			
 		} else //html 	
 			return new StringConvertor(createHTMLReporter(),MediaType.TEXT_HTML);
 		
 	}
 	protected Reporter createHTMLReporter() {
-		return new PolicyHTMLReporter(getRequest(),false,getDocumentation());
+		return new PolicyHTMLReporter(getRequest(),false);
 	}
 }

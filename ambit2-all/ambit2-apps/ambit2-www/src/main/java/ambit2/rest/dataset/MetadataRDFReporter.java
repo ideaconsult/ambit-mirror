@@ -37,8 +37,8 @@ public class MetadataRDFReporter<M extends ISourceDataset,Q extends IQueryRetrie
 	 */
 	private static final long serialVersionUID = 6747452583425280704L;
 	protected ReferenceURIReporter referenceReporter;
-	public MetadataRDFReporter(Request request,ResourceDoc doc, MediaType mediaType) {
-		super(request, mediaType,doc);
+	public MetadataRDFReporter(Request request, MediaType mediaType) {
+		super(request, mediaType);
 		referenceReporter = new ReferenceURIReporter(request);
 	}
 	

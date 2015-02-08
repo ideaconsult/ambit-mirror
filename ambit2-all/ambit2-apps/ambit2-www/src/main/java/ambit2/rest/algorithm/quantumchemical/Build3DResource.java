@@ -60,7 +60,7 @@ public class Build3DResource extends CatalogResource {
 		ArrayList<String> q = new ArrayList<String>();
 		Algorithm build = new Algorithm();
 		build.setId(resource);
-		if (reporter == null) reporter = new AlgorithmURIReporter(request,getDocumentation());
+		if (reporter == null) reporter = new AlgorithmURIReporter(request);
 		q.add(reporter.getURI(build));
 		return q.iterator();
 	}

@@ -119,8 +119,8 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 											output,
 											smiles[0] == null ? "2D structure diagram"
 													: smiles[0], getRequest(),
-											getResourceRef(getRequest()), "",
-											null);
+											getResourceRef(getRequest()), ""
+											);
 									writeSearchForm(output, smiles[0],
 											getRequest(), "", Method.GET,
 											params);

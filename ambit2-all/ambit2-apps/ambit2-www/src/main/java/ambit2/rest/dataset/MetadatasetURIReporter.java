@@ -1,7 +1,6 @@
 package ambit2.rest.dataset;
 
 import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
@@ -15,10 +14,10 @@ public class MetadatasetURIReporter<Q extends IQueryRetrieval<M>,M extends ISour
 	 */
 	private static final long serialVersionUID = -6706277580631778672L;
 
-	public MetadatasetURIReporter(Request baseRef,ResourceDoc doc) {
+	public MetadatasetURIReporter(Request baseRef) {
 		super(baseRef);
 	}
-	public MetadatasetURIReporter(Reference baseRef,ResourceDoc doc) {
+	public MetadatasetURIReporter(Reference baseRef) {
 		super(baseRef);
 	}	
 	public MetadatasetURIReporter() {

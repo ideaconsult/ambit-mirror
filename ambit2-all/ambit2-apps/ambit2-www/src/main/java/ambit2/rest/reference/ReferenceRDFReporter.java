@@ -25,8 +25,8 @@ public class ReferenceRDFReporter<Q extends IQueryRetrieval<ILiteratureEntry>> e
 	 */
 	private static final long serialVersionUID = -8857789530109166243L;
 
-	public ReferenceRDFReporter(Request request,MediaType mediaType,ResourceDoc doc) {
-		super(request,mediaType,doc);
+	public ReferenceRDFReporter(Request request,MediaType mediaType) {
+		super(request,mediaType);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request reference,ResourceDoc doc) {

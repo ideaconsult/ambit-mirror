@@ -165,7 +165,7 @@ public class BundleMetadataResource extends
 		|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)) {
 	    return new RDFJenaConvertor<SubstanceEndpointsBundle, IQueryRetrieval<SubstanceEndpointsBundle>>(
 		    new MetadataRDFReporter<SubstanceEndpointsBundle, IQueryRetrieval<SubstanceEndpointsBundle>>(
-			    getRequest(), getDocumentation(), variant.getMediaType()), variant.getMediaType(),
+			    getRequest(),  variant.getMediaType()), variant.getMediaType(),
 		    filenamePrefix);
 
 	} else
@@ -179,7 +179,7 @@ public class BundleMetadataResource extends
     protected QueryURIReporter<SubstanceEndpointsBundle, IQueryRetrieval<SubstanceEndpointsBundle>> getURIReporter(
 	    Request baseReference) throws ResourceException {
 	return new MetadatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle>(
-		baseReference, getDocumentation());
+		baseReference );
     }
 
     @Override

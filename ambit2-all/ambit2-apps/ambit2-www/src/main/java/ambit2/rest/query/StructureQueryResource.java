@@ -100,7 +100,6 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 
     public StructureQueryResource() {
 	super();
-	setDocumentation(null);
 	setHtmlbyTemplate(true);
     }
 
@@ -282,7 +281,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		    MediaType.TEXT_PLAIN);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 	    ConformerURIReporter<QueryStructureByID> reporter = new ConformerURIReporter<QueryStructureByID>(
-		    getCompoundInDatasetPrefix(), getRequest(), queryObject.isPrescreen(), getDocumentation());
+		    getCompoundInDatasetPrefix(), getRequest(), queryObject.isPrescreen());
 	    return new StringConvertor(reporter, MediaType.TEXT_URI_LIST, filenamePrefix);
 	} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
 	    return new ImageConvertor<IStructureRecord, QueryStructureByID>(new ImageReporter<QueryStructureByID>(
@@ -332,14 +331,13 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	    switch (rdfwriter) {
 	    case stax: {
 		return new RDFStaXConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-			new DatasetRDFStaxReporter(getCompoundInDatasetPrefix(), getRequest(), getDocumentation(),
-				getTemplate(), getGroupProperties()), filenamePrefix);
+			new DatasetRDFStaxReporter(getCompoundInDatasetPrefix(), getRequest(), getTemplate(),
+				getGroupProperties()), filenamePrefix);
 	    }
 	    default: { // jena
 		return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-			new DatasetRDFReporter(getCompoundInDatasetPrefix(), getRequest(), getDocumentation(),
-				variant.getMediaType(), getTemplate(), getGroupProperties()), variant.getMediaType(),
-			filenamePrefix);
+			new DatasetRDFReporter(getCompoundInDatasetPrefix(), getRequest(), variant.getMediaType(),
+				getTemplate(), getGroupProperties()), variant.getMediaType(), filenamePrefix);
 
 	    }
 	    }
@@ -349,8 +347,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG)
 		|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)) {
 	    return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(new DatasetRDFReporter(
-		    getCompoundInDatasetPrefix(), getRequest(), getDocumentation(), variant.getMediaType(),
-		    getTemplate(), getGroupProperties()), variant.getMediaType(), filenamePrefix);
+		    getCompoundInDatasetPrefix(), getRequest(), variant.getMediaType(), getTemplate(),
+		    getGroupProperties()), variant.getMediaType(), filenamePrefix);
 	} else
 	    return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(new SDFReporter<QueryStructureByID>(
 		    template, getGroupProperties(), changeLineSeparators), ChemicalMediaType.CHEMICAL_MDLSDF,

@@ -407,7 +407,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		if (recordImported == null)
 		    throw new Exception("No compound imported");
 		if (compoundReporter == null)
-		    compoundReporter = new ConformerURIReporter(null);
+		    compoundReporter = new ConformerURIReporter("",null,false);
 		try {
 		    batch.close();
 		} catch (Exception xx) {

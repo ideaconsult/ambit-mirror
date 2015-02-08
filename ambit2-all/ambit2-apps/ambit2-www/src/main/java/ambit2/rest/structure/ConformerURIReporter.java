@@ -1,7 +1,6 @@
 package ambit2.rest.structure;
 
 import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
@@ -20,30 +19,26 @@ public class ConformerURIReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	 * 
 	 */
 	private static final long serialVersionUID = -3240656616658257198L;
-
-	public ConformerURIReporter(ResourceDoc doc) {
-		this("",null,false,doc);
-	}		
-	public ConformerURIReporter(String prefix,ResourceDoc doc) {
-		this(prefix,null,false,doc);
+	public ConformerURIReporter(String prefix) {
+		this(prefix,null,false);
 	}	
-	public ConformerURIReporter(String prefix,Request baseRef,ResourceDoc doc) {
-		super(prefix,baseRef,false,doc);
+	public ConformerURIReporter(String prefix,Request baseRef) {
+		super(prefix,baseRef,false);
 	}	
-	public ConformerURIReporter(Request baseRef,ResourceDoc doc) {
-		super("",baseRef,false,doc);
+	public ConformerURIReporter(Request baseRef) {
+		super("",baseRef,false);
 	}	
-	public ConformerURIReporter(String prefix,Request baseRef,boolean readStructure,ResourceDoc doc) {
-		super(prefix,baseRef,readStructure,doc);
+	public ConformerURIReporter(String prefix,Request baseRef,boolean readStructure) {
+		super(prefix,baseRef,readStructure);
 	}
-	public ConformerURIReporter(Request baseRef,boolean readStructure,ResourceDoc doc) {
-		this("",baseRef,readStructure,doc);
+	public ConformerURIReporter(Request baseRef,boolean readStructure) {
+		this("",baseRef,readStructure);
 	}	
-	public ConformerURIReporter(String prefix,Reference baseRef,ResourceDoc doc) {
-		super(prefix,baseRef,doc);
+	public ConformerURIReporter(String prefix,Reference baseRef) {
+		super(prefix,baseRef);
 	}
-	public ConformerURIReporter(Reference baseRef,ResourceDoc doc) {
-		this("",baseRef,doc);
+	public ConformerURIReporter(Reference baseRef) {
+		this("",baseRef);
 	}	
 
 	public String getURI(String ref, IStructureRecord item) {

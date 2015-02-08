@@ -5,7 +5,6 @@ import java.io.Writer;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.r.QueryReporter;
-import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Request;
 
@@ -20,7 +19,7 @@ public class FingerprintsCSVReporter extends QueryReporter<IFingerprint<FPTable,
 	 */
 	private static final long serialVersionUID = 1461184295760854495L;
 
-	public FingerprintsCSVReporter(Request request, ResourceDoc doc) {
+	public FingerprintsCSVReporter(Request request) {
 		super();
 	}
 	@Override

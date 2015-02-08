@@ -4,7 +4,6 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.RepresentationConvertor;
-import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
@@ -67,7 +66,6 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 
 	public FeatureResource() {
 		super();
-		setDocumentation(new ResourceDoc("Feature","FeatureValue"));
 	}
 	@Override
 	protected void doInit() throws ResourceException {
@@ -94,7 +92,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputWriterConvertor(
-					new PropertyValueHTMLReporter(getRequest(),DisplayMode.table,getDocumentation()),MediaType.TEXT_HTML);			
+					new PropertyValueHTMLReporter(getRequest(),DisplayMode.table),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	getURUReporter(getRequest()),MediaType.TEXT_URI_LIST,filenamePrefix);
 		} else return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_URI_LIST,filenamePrefix);
@@ -103,7 +101,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 	@Override
 	protected QueryURIReporter<PropertyValue, IQueryRetrieval<PropertyValue>> getURUReporter(
 			Request baseReference) throws ResourceException {
-		PropertyValueURIReporter reporter = new PropertyValueURIReporter<PropertyValue, IQueryRetrieval<PropertyValue>>(baseReference,getDocumentation());
+		PropertyValueURIReporter reporter = new PropertyValueURIReporter<PropertyValue, IQueryRetrieval<PropertyValue>>(baseReference);
 		if (queryObject instanceof AbstractQuery) {
 			if (((AbstractQuery)queryObject).getValue() instanceof IStructureRecord)
 			reporter.setRecord((IStructureRecord)((AbstractQuery)queryObject).getValue());

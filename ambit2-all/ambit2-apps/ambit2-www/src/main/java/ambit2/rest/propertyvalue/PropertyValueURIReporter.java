@@ -1,7 +1,6 @@
 package ambit2.rest.propertyvalue;
 
 import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
@@ -25,8 +24,8 @@ public class PropertyValueURIReporter<T,Q extends IQueryRetrieval<T>> extends Qu
 	public void setRecord(IStructureRecord record) {
 		this.record = record;
 	}
-	public PropertyValueURIReporter(Request baseRef,ResourceDoc doc) {
-		super(baseRef,doc);
+	public PropertyValueURIReporter(Request baseRef) {
+		super(baseRef);
 	}
 	public PropertyValueURIReporter() {
 	}	

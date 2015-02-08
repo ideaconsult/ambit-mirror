@@ -39,8 +39,8 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 	 */
 	private static final long serialVersionUID = -8857789530109166243L;
 	protected ReferenceURIReporter referenceReporter;
-	public PropertyRDFReporter(Request request,MediaType mediaType,ResourceDoc doc) {
-		super(request,mediaType,doc);
+	public PropertyRDFReporter(Request request,MediaType mediaType) {
+		super(request,mediaType);
 		referenceReporter = new ReferenceURIReporter(request);
 	}
 	@Override

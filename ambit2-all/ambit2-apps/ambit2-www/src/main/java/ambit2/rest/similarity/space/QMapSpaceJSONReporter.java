@@ -28,7 +28,7 @@ public class QMapSpaceJSONReporter<Q extends IQueryRetrieval<QMapSpace>> extends
 
     public QMapSpaceJSONReporter(Request request) {
 	super();
-	cmpReporter = new CompoundURIReporter(request, null);
+	cmpReporter = new CompoundURIReporter(request);
 	qmapReporter = new QMapJSONReporter(request);
 	qmapWriter = new StringWriter();
 	try {
