@@ -66,7 +66,7 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 					) {
 				return new RDFJenaConvertor<ILiteratureEntry, IQueryRetrieval<ILiteratureEntry>>(
 						new ReferenceRDFReporter<IQueryRetrieval<ILiteratureEntry>>(
-								getRequest(),variant.getMediaType(),getDocumentation())
+								getRequest(),variant.getMediaType())
 						,variant.getMediaType());					
 			} else 
 				return new OutputWriterConvertor(

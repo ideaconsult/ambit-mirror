@@ -26,11 +26,11 @@ public class ChemicalSpaceHTMLReporter  extends QueryHTMLReporter<ChemSpaceCell,
 	private static final long serialVersionUID = -7959033048710547839L;
 	protected ChemicalSpaceJSONReporter similarityJSONReporter;
 	
-	public ChemicalSpaceHTMLReporter(Request request,DisplayMode _dmode,ResourceDoc doc, ChemicalSpaceJSONReporter reporter) {
-		this(request,request,_dmode,doc,reporter);
+	public ChemicalSpaceHTMLReporter(Request request,DisplayMode _dmode,ChemicalSpaceJSONReporter reporter) {
+		this(request,request,_dmode,reporter);
 	}
-	public ChemicalSpaceHTMLReporter(Request request,Request originalRef,DisplayMode _dmode,ResourceDoc doc, ChemicalSpaceJSONReporter reporter) {
-		super(request,_dmode,doc);
+	public ChemicalSpaceHTMLReporter(Request request,Request originalRef,DisplayMode _dmode, ChemicalSpaceJSONReporter reporter) {
+		super(request,_dmode);
 		this.similarityJSONReporter = reporter;
 		setUriReporter(similarityJSONReporter.getCmpReporter());
 	}

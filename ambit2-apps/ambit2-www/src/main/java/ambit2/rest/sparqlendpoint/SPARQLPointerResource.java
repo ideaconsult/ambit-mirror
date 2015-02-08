@@ -52,7 +52,7 @@ public class SPARQLPointerResource extends CatalogResource<String> {
 	    ResourceException {
 	MediaType mime = variant.getMediaType().equals(MediaType.TEXT_URI_LIST) ? MediaType.TEXT_URI_LIST
 		: MediaType.TEXT_PLAIN;
-	return new StringConvertor(new CatalogURIReporter<String>(getRequest(), getDocumentation()) {
+	return new StringConvertor(new CatalogURIReporter<String>(getRequest()) {
 	    /**
 			     * 
 			     */

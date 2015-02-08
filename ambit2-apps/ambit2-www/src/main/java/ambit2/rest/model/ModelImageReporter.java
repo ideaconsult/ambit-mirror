@@ -7,7 +7,6 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.r.QueryReporter;
-import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.c.task.ClientResourceWrapper;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -37,7 +36,7 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 	protected Dimension d;
 	protected ModelURIReporter<IQueryRetrieval<ModelQueryResults>> modelURIReporter;
 	
-	public ModelImageReporter(Request request, Form form,Dimension d,ResourceDoc doc) throws ResourceException {
+	public ModelImageReporter(Request request, Form form,Dimension d) throws ResourceException {
 		super();
 		this.request = request;
 		this.d = d;
@@ -45,7 +44,7 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 		//if (dataset==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri.getDescription());
 		
 		param = form.getFirstValue(OpenTox.params.parameters.toString());
-		modelURIReporter = new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request,doc);
+		modelURIReporter = new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request);
 	
 	}
 	@Override

@@ -2,7 +2,6 @@ package ambit2.rest.dataset;
 
 import net.idea.modbcum.i.IQueryObject;
 import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -46,7 +45,6 @@ public class DatasetsResource extends MetadatasetResource<SourceDataset> {
 	
 	public DatasetsResource() {
 		super();
-		setDocumentation(new ResourceDoc("dataset","Dataset"));
 		_dmode = DisplayMode.table;
 		setHtmlbyTemplate(true);
 	}

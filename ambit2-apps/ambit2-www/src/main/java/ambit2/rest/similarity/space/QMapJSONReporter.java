@@ -40,7 +40,7 @@ public class QMapJSONReporter<Q extends IQueryRetrieval<QMap>> extends QueryRepo
 
     public QMapJSONReporter(Request request) {
 	super();
-	qmapReporter = new QMapURIReporter(request, null);
+	qmapReporter = new QMapURIReporter(request);
 	propertyWriter = new StringWriter();
 	datasetWriter = new StringWriter();
 	datasetReporter = new MetadatasetJSONReporter(request);

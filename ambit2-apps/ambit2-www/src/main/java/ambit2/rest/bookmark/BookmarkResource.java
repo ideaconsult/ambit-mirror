@@ -47,7 +47,7 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 			throws AmbitException, ResourceException {
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
-			return new StringConvertor(new BookmarkCSVReporter<IQueryRetrieval<Bookmark>>(getRequest(),getDocumentation())
+			return new StringConvertor(new BookmarkCSVReporter<IQueryRetrieval<Bookmark>>(getRequest())
 					,MediaType.TEXT_CSV,filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 				return new StringConvertor(	new BookmarkURIReporter<IQueryRetrieval<Bookmark>>(getRequest()),MediaType.TEXT_URI_LIST,filenamePrefix);
@@ -60,14 +60,14 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 					) {
 		
 				return new RDFJenaConvertor<Bookmark, IQueryRetrieval<Bookmark>>(
-						new BookmarkRDFReporter<IQueryRetrieval<Bookmark>>(getRequest(),getDocumentation(),variant.getMediaType())
+						new BookmarkRDFReporter<IQueryRetrieval<Bookmark>>(getRequest(),variant.getMediaType())
 						,variant.getMediaType(),filenamePrefix);					
 								
 			} else 
 				return new OutputWriterConvertor(
 						new BookmarkHTMLReporter(getRequest(),
-									queryObject.getValue()==null?DisplayMode.table:DisplayMode.singleitem,
-									getDocumentation()),
+									queryObject.getValue()==null?DisplayMode.table:DisplayMode.singleitem
+									),
 						MediaType.TEXT_HTML);
 	}
 

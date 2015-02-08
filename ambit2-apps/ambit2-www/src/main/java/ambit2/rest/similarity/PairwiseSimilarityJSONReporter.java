@@ -42,7 +42,7 @@ public class PairwiseSimilarityJSONReporter<Q extends IQueryRetrieval<Similarity
 		super();
 		this.request = request;
 		this.baseReference = request.getRootRef();
-		cmpReporter = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(request, null);
+		cmpReporter = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(request);
 	}
 	
 	public ConformerURIReporter<IQueryRetrieval<IStructureRecord>> getCmpReporter() {

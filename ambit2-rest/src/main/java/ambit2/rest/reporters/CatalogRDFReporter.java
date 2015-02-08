@@ -3,7 +3,6 @@ package ambit2.rest.reporters;
 import java.io.Writer;
 import java.util.Iterator;
 
-import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.rdf.ns.OT;
 
 import org.restlet.Context;
@@ -28,7 +27,7 @@ public abstract class CatalogRDFReporter<T> extends ListReporter<T,Writer> {
 	protected MediaType mediaType;
 	protected OntModel jenaModel;
 	
-	public CatalogRDFReporter(Request request,MediaType mediaType,ResourceDoc doc) {
+	public CatalogRDFReporter(Request request,MediaType mediaType) {
 		super();
 		this.mediaType = mediaType;
 	}

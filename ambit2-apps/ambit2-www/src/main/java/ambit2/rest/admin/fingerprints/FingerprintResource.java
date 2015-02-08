@@ -40,12 +40,12 @@ public class FingerprintResource  extends QueryResource<QueryFingerprints,IFinge
 	public IProcessor<QueryFingerprints, Representation> createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
 	    if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			FingerprintURIReporter reporter = 	new FingerprintURIReporter (getRequest(),getDocumentation());
+			FingerprintURIReporter reporter = 	new FingerprintURIReporter (getRequest());
 			return new OutputWriterConvertor(reporter,MediaType.TEXT_URI_LIST);
 	    } else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
-	    	return new OutputWriterConvertor(new FingerprintsCSVReporter(getRequest(),getDocumentation()),MediaType.TEXT_CSV);
+	    	return new OutputWriterConvertor(new FingerprintsCSVReporter(getRequest()),MediaType.TEXT_CSV);
 	    } else {
-	    	return new OutputWriterConvertor(new FingerprintsHTMLReporter(getRequest(),getDocumentation()),MediaType.TEXT_HTML);
+	    	return new OutputWriterConvertor(new FingerprintsHTMLReporter(getRequest()),MediaType.TEXT_HTML);
 	    }
 	}
 	@Override

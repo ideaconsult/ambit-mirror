@@ -27,14 +27,14 @@ public abstract class QueryStaXReporter<T,Q extends IQueryRetrieval<T>,R extends
 	protected String compoundInDatasetPrefix;
 	
 	
-	public QueryStaXReporter(Request request,ResourceDoc doc) {
+	public QueryStaXReporter(Request request) {
 		
 	}
-	public QueryStaXReporter(String prefix,Request request,ResourceDoc doc) {
+	public QueryStaXReporter(String prefix,Request request) {
 		super();
 		this.compoundInDatasetPrefix = prefix;
-		uriReporter = createURIReporter(request,doc);
-		recordWriter = createRecordWriter(request,doc);
+		uriReporter = createURIReporter(request,null);
+		recordWriter = createRecordWriter(request,null);
 		recordWriter.setUriReporter(uriReporter);
 	}
 	

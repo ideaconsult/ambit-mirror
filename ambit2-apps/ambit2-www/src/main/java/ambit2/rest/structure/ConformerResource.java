@@ -1,7 +1,6 @@
 package ambit2.rest.structure;
 
 import net.idea.modbcum.q.update.AbstractUpdate;
-import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Context;
@@ -51,7 +50,6 @@ public class ConformerResource extends CompoundResource {
 	
 	public ConformerResource() {
 		super();
-		setDocumentation(new ResourceDoc("structure","Conformer"));
 		
 	}
 	@Override
@@ -122,7 +120,7 @@ public class ConformerResource extends CompoundResource {
 		}
 	}	
 	protected QueryURIReporter getURIReporter() {
-		return new ConformerURIReporter<QueryStructureByID>(getRequest(),getDocumentation());
+		return new ConformerURIReporter<QueryStructureByID>(getRequest());
 	}
 	
 	

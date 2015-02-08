@@ -9,7 +9,6 @@ import java.util.concurrent.Callable;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.q.update.AbstractUpdate;
-import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ITaskResult;
@@ -67,7 +66,6 @@ public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extend
 	
 	public DatasetResource() {
 		super();
-		setDocumentation(new ResourceDoc("dataset","Dataset"));
 	}
 	@Override
 	protected void doInit() throws ResourceException {

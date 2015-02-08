@@ -34,13 +34,13 @@ public abstract class QueryRDFReporter<T,Q extends IQueryRetrieval<T>> extends Q
 	protected MediaType mediaType;
 	protected String compoundInDatasetPrefix;
 	
-	public QueryRDFReporter(Request request,MediaType mediaType,ResourceDoc doc) {
-		this("",request,mediaType,doc);
+	public QueryRDFReporter(Request request,MediaType mediaType) {
+		this("",request,mediaType);
 	}
-	public QueryRDFReporter(String prefix,Request request,MediaType mediaType,ResourceDoc doc) {
+	public QueryRDFReporter(String prefix,Request request,MediaType mediaType) {
 		super();
 		this.compoundInDatasetPrefix = prefix;
-		uriReporter = createURIReporter(request,doc);
+		uriReporter = createURIReporter(request,null);
 		this.mediaType = mediaType;
 	}
 	public OntModel getJenaModel() {

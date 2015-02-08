@@ -2,7 +2,6 @@ package ambit2.rest.property;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.q.update.AbstractUpdate;
-import net.idea.restnet.c.ResourceDoc;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -32,12 +31,8 @@ import ambit2.rest.dataset.DatasetStructuresResource;
  *
  */
 public class PropertiesByDatasetResource extends PropertyResource {
-	//public final static String DatasetFeaturedefID = String.format("%s%s/{%s}",DatasetsResource.datasetID,featuredef,idfeaturedef);
-	//public final static String DatasetFeaturedef = String.format("%s%s",DatasetsResource.datasetID,featuredef);
-
 	public PropertiesByDatasetResource() {
 		super();
-		setDocumentation(new ResourceDoc("Feature","Feature"));
 	}
 	@Override
 	protected IQueryRetrieval<Property> createQuery(Context context,

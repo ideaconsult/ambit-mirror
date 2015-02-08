@@ -34,7 +34,7 @@ public class ChemicalSpaceResource<Q extends IQueryRetrieval<ChemSpaceCell>> ext
 	}
 	@Override
 	protected QueryAbstractReporter createHTMLReporter(Dimension d) {
-		return new ChemicalSpaceHTMLReporter(getRequest(),DisplayMode.table,null,(ChemicalSpaceJSONReporter)createJSONReporter());
+		return new ChemicalSpaceHTMLReporter(getRequest(),DisplayMode.table,(ChemicalSpaceJSONReporter)createJSONReporter());
 	}
 
 	@Override

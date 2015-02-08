@@ -34,14 +34,14 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 	 */
 	private static final long serialVersionUID = 7230106201606494227L;
 	protected PropertyURIReporter propertyReporter;
-	public ModelRDFReporter(Request request, MediaType mediaType,ResourceDoc doc) {
-		super(request,mediaType,doc);
+	public ModelRDFReporter(Request request, MediaType mediaType) {
+		super(request,mediaType);
 		propertyReporter = new PropertyURIReporter(request);
 	}
 	@Override
 	protected QueryURIReporter<ModelQueryResults, IQueryRetrieval<ModelQueryResults>> createURIReporter(
 			Request req,ResourceDoc doc) {
-		return new ModelURIReporter(req,doc);
+		return new ModelURIReporter(req);
 	}
 	public void header(com.hp.hpl.jena.ontology.OntModel output, Q query) {
 		super.header(output,query);

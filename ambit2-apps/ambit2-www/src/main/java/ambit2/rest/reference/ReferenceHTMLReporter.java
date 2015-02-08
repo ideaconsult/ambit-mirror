@@ -23,7 +23,7 @@ public class ReferenceHTMLReporter extends QueryHTMLReporter<ILiteratureEntry, I
 		this(null,DisplayMode.table);
 	}
 	public ReferenceHTMLReporter(Request baseRef, DisplayMode _dmode) {
-		super(baseRef,_dmode,null);
+		super(baseRef,_dmode);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {

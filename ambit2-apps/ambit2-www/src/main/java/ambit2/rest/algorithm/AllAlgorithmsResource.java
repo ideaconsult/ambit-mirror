@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ICallableTask;
 
@@ -70,7 +69,6 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	
 	public AllAlgorithmsResource() {
 		super();
-		setDocumentation(new ResourceDoc("Algorithm","Algorithm"));
 		setHtmlbyTemplate(true);
 	}
 	
@@ -140,7 +138,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			AlgorithmURIReporter r = new AlgorithmURIReporter(getRequest(),getDocumentation()) {
+			AlgorithmURIReporter r = new AlgorithmURIReporter(getRequest()) {
 				/**
 			     * 
 			     */
@@ -154,13 +152,13 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			};
 			return new StringConvertor(	r,MediaType.TEXT_URI_LIST);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-			AlgorithmJSONReporter r = new AlgorithmJSONReporter(getRequest(),getDocumentation());
+			AlgorithmJSONReporter r = new AlgorithmJSONReporter(getRequest());
 			return new StringConvertor(	r,MediaType.APPLICATION_JSON);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			Form params = getResourceRef(getRequest()).getQueryAsForm();
 			String jsonpcallback = params.getFirstValue("jsonp");
 			if (jsonpcallback==null) jsonpcallback = params.getFirstValue("callback");
-			AlgorithmJSONReporter r = new AlgorithmJSONReporter(getRequest(),getDocumentation(),jsonpcallback);
+			AlgorithmJSONReporter r = new AlgorithmJSONReporter(getRequest(),jsonpcallback);
 			return new StringConvertor(	r,MediaType.APPLICATION_JAVASCRIPT);		
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
@@ -168,11 +166,11 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
 				) {
 			return new StringConvertor(
-					new AlgorithmRDFReporter(getRequest(),variant.getMediaType(),getDocumentation())
+					new AlgorithmRDFReporter(getRequest(),variant.getMediaType())
 					,variant.getMediaType(),filenamePrefix);					
 		} else //html 	
 			return new StringConvertor(
-					new CatalogHTMLReporter(getRequest(),getDocumentation()),MediaType.TEXT_HTML);
+					new CatalogHTMLReporter(getRequest()),MediaType.TEXT_HTML);
 		
 	}
 				
@@ -211,8 +209,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		if (form.getFirstValue(OpenTox.params.dataset_service.toString())==null)
 			form.add(OpenTox.params.dataset_service.toString(),String.format("%s/%s",getRequest().getRootRef(),OpenTox.URI.dataset.toString()));
 		
-		ModelURIReporter<IQueryRetrieval<ModelQueryResults>> modelReporter = new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation());
-		AlgorithmURIReporter algReporter = new AlgorithmURIReporter(getRequest(),getDocumentation());
+		ModelURIReporter<IQueryRetrieval<ModelQueryResults>> modelReporter = new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest());
+		AlgorithmURIReporter algReporter = new AlgorithmURIReporter(getRequest());
 		
 		String token = getToken();
 		try {

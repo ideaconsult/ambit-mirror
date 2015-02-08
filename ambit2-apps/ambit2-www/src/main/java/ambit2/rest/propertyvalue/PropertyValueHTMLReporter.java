@@ -26,6 +26,7 @@ import ambit2.rest.structure.CompoundHTMLReporter;
  *
  * @param <T>
  */
+@Deprecated
 public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetrieval<T>> {
 	
 	/**
@@ -43,19 +44,19 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 	public void setEditable(boolean editable) {
 		this.editable = editable;
 	}
-	public PropertyValueHTMLReporter(Request baseRef,ResourceDoc doc) {
-		this(baseRef,DisplayMode.singleitem,doc);
+	public PropertyValueHTMLReporter(Request baseRef) {
+		this(baseRef,DisplayMode.singleitem);
 	}
-	public PropertyValueHTMLReporter(Request baseRef, DisplayMode _dmode,ResourceDoc doc) {
+	public PropertyValueHTMLReporter(Request baseRef, DisplayMode _dmode) {
 	
-		super(baseRef,DisplayMode.table,doc);
-		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(baseRef,doc,_dmode,true);
+		super(baseRef,DisplayMode.table);
+		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(baseRef,_dmode,true);
 		propertyURIReporter = new PropertyURIReporter(baseRef);
 		this.editable = editable;
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
-		return new PropertyValueURIReporter(request,doc);
+		return new PropertyValueURIReporter(request);
 	}
 	
 

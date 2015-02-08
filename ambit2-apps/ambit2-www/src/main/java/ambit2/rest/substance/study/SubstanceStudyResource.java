@@ -63,12 +63,12 @@ public class SubstanceStudyResource<Q extends IQueryRetrieval<ProtocolApplicatio
 		if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
-			SubstanceStudyJSONReporter cmpreporter = new SubstanceStudyJSONReporter(getRequest(),getDocumentation(),jsonpcallback);
+			SubstanceStudyJSONReporter cmpreporter = new SubstanceStudyJSONReporter(getRequest(),jsonpcallback);
 			return new OutputWriterConvertor<ProtocolApplication, Q>(
 					cmpreporter,
 					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);
 		} else { //json by default
-			SubstanceStudyJSONReporter cmpreporter = new SubstanceStudyJSONReporter(getRequest(),getDocumentation(),null);
+			SubstanceStudyJSONReporter cmpreporter = new SubstanceStudyJSONReporter(getRequest(),null);
 			return new OutputWriterConvertor<ProtocolApplication, Q>(
 					cmpreporter,
 					MediaType.APPLICATION_JSON,filenamePrefix);

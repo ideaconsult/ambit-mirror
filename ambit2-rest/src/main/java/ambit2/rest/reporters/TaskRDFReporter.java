@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskResult;
 import net.idea.restnet.i.task.ITaskStorage;
@@ -39,10 +38,10 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<UUID> {
 	protected Reference baseRef;
 	protected TaskURIReporter<USERID> urireporter;
 	
-	public TaskRDFReporter(ITaskStorage<USERID> storage, Request request, MediaType mediaType,ResourceDoc doc) {
-		super(request, mediaType,doc);
+	public TaskRDFReporter(ITaskStorage<USERID> storage, Request request, MediaType mediaType) {
+		super(request, mediaType);
 		baseRef = request.getRootRef();
-		urireporter = new TaskURIReporter<USERID>(storage,request,doc);
+		urireporter = new TaskURIReporter<USERID>(storage,request);
 		this.storage = storage;
 	}
 	@Override

@@ -240,7 +240,7 @@ public class AbstractDepict extends ProtectedResource {
 			    else {
 
 				AmbitResource.writeTopHeader(output, smiles[0] == null ? "2D structural diagram"
-					: smiles[0], getRequest(), getResourceRef(getRequest()), header_gplus, null);
+					: smiles[0], getRequest(), getResourceRef(getRequest()), header_gplus);
 				writeSearchForm(output, smiles[0] == null ? "N/A" : smiles[0], getRequest(), "",
 					Method.GET, params);
 				output.write(target);

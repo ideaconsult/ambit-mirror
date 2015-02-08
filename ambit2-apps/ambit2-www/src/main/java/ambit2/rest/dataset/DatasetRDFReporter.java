@@ -95,18 +95,18 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 
     protected Resource dataset;
 
-    public DatasetRDFReporter(Request request, ResourceDoc doc, MediaType mediaType, Template template,
+    public DatasetRDFReporter(Request request, MediaType mediaType, Template template,
 	    Profile groupedProperties) {
-	this("", request, doc, mediaType, template, groupedProperties);
+	this("", request,  mediaType, template, groupedProperties);
     }
 
-    public DatasetRDFReporter(String prefix, Request request, ResourceDoc doc, MediaType mediaType, Template template,
+    public DatasetRDFReporter(String prefix, Request request,  MediaType mediaType, Template template,
 	    Profile groupedProperties) {
-	super(prefix, request, mediaType, doc);
+	super(prefix, request, mediaType);
 	setGroupProperties(groupedProperties);
 	setTemplate(template == null ? new Template(null) : template);
 	initProcessors();
-	propertyReporter = new PropertyRDFReporter(request, mediaType, doc);
+	propertyReporter = new PropertyRDFReporter(request, mediaType);
 
 	comp = new Comparator<Property>() {
 	    public int compare(Property o1, Property o2) {
@@ -121,9 +121,9 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	    ResourceDoc doc) {
 	try {
 	    compoundReporter = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(compoundInDatasetPrefix, req,
-		    doc);
-	    dataEntryReporter = new DataEntryURIReporter<IQueryRetrieval<IStructureRecord>>(req, doc);
-	    return new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(compoundInDatasetPrefix, req, doc);
+		    false);
+	    dataEntryReporter = new DataEntryURIReporter<IQueryRetrieval<IStructureRecord>>(req);
+	    return new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(compoundInDatasetPrefix, req);
 	} catch (Exception x) {
 	    logger.log(Level.WARNING, x.getMessage(), x);
 	    return null;

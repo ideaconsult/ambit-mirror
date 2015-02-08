@@ -3,6 +3,10 @@ package ambit2.db.version;
 import java.io.Serializable;
 
 public class AmbitDBVersion implements Serializable {
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -810148258205916153L;
 	protected String dbname;
 	public String getDbname() {
 		return dbname;

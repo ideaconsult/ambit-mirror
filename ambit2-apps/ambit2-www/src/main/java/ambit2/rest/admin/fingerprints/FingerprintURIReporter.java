@@ -1,7 +1,6 @@
 package ambit2.rest.admin.fingerprints;
 
 import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
@@ -18,11 +17,11 @@ public class FingerprintURIReporter<Q extends IQueryRetrieval<IFingerprint<FPTab
 	 */
 	private static final long serialVersionUID = -6959244677366115189L;
 
-	public FingerprintURIReporter(Reference baseRef,ResourceDoc doc) {
-		super(baseRef,doc);
+	public FingerprintURIReporter(Reference baseRef) {
+		super(baseRef);
 	}
-	public FingerprintURIReporter(Request request,ResourceDoc doc) {
-		super(request,doc);
+	public FingerprintURIReporter(Request request) {
+		super(request);
 	}
 
 

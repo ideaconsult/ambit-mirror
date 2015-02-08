@@ -12,19 +12,20 @@ import ambit2.descriptors.processors.BitSetGenerator.FPTable;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;
 
+@Deprecated
 public class FingerprintsHTMLReporter extends QueryHTMLReporter<IFingerprint<FPTable, String>, QueryFingerprints> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -952577019571483126L;
-	public FingerprintsHTMLReporter(Request request, ResourceDoc doc) {
-		super(request,DisplayMode.table,doc);
+	public FingerprintsHTMLReporter(Request request) {
+		super(request,DisplayMode.table);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request,
 			ResourceDoc doc) {
-		return new FingerprintURIReporter<QueryFingerprints>(request,doc);
+		return new FingerprintURIReporter<QueryFingerprints>(request);
 	}
 
 	@Override

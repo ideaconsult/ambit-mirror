@@ -24,8 +24,8 @@ public class BookmarkRDFReporter <Q extends IQueryRetrieval<Bookmark>> extends Q
 	 */
 	private static final long serialVersionUID = -8857789530109166243L;
 
-	public BookmarkRDFReporter(Request request,ResourceDoc doc,MediaType mediaType) {
-		super(request,mediaType,doc);
+	public BookmarkRDFReporter(Request request,MediaType mediaType) {
+		super(request,mediaType);
 	}
 	@Override
 	protected QueryURIReporter<Bookmark, IQueryRetrieval<Bookmark>> createURIReporter(

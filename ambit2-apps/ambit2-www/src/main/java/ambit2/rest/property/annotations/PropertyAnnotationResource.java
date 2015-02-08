@@ -50,8 +50,7 @@ public class PropertyAnnotationResource extends QueryResource<IQueryRetrieval<Pr
 		|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
 		|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)) {
 	    return new RDFJenaConvertor<PropertyAnnotation, IQueryRetrieval<PropertyAnnotation>>(
-		    new PropertyAnnotationRDFReporter(getRequest(), variant.getMediaType(), getDocumentation()),
-		    variant.getMediaType());
+		    new PropertyAnnotationRDFReporter(getRequest(), variant.getMediaType()), variant.getMediaType());
 	} else
 	    return new OutputWriterConvertor(new PropertyAnnotationJSONReporter(getRequest()),
 		    MediaType.APPLICATION_JSON);

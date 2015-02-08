@@ -142,7 +142,7 @@ public class FileUpload<USERID> {
 			getRequest());
 
 		ConformerURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(
-			getRequest(), null);
+			getRequest());
 
 		CallableFileImport callable = new CallableFileImport(getRequest().getClientInfo(), dataset, items,
 			DatasetsHTMLReporter.fileUploadField, connection, reporter, compoundReporter,
@@ -175,7 +175,7 @@ public class FileUpload<USERID> {
 		DatasetURIReporter<IQueryRetrieval<ISourceDataset>, ISourceDataset> reporter = new DatasetURIReporter<IQueryRetrieval<ISourceDataset>, ISourceDataset>(
 			getRequest());
 		ConformerURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(
-			getRequest(), null);
+			getRequest());
 
 		CallableFileImport callable = new CallableFileImport(getRequest().getClientInfo(), dataset, entity,
 			connection, reporter, compoundReporter, firstCompoundOnly, token);

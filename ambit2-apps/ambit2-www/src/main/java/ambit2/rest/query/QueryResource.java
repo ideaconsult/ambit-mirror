@@ -574,11 +574,10 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 			ITask<Reference, Object> task = storage.findTask(r.get(0));
 			task.update();
 			setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
-			return tc.createTaskRepresentation(r.get(0), variant, getRequest(), getResponse(),
-				getDocumentation());
+			return tc.createTaskRepresentation(r.get(0), variant, getRequest(), getResponse(), null);
 		    } else
-			return tc.createTaskRepresentation(r.iterator(), variant, getRequest(), getResponse(),
-				getDocumentation());
+			return tc.createTaskRepresentation(r.iterator(), variant, getRequest(), getResponse(), null);
+
 		}
 	    } catch (RResourceException x) {
 		throw x;

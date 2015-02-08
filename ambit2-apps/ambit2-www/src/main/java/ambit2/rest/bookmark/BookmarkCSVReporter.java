@@ -7,7 +7,6 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.r.QueryReporter;
-import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
@@ -21,7 +20,7 @@ public class BookmarkCSVReporter<Q extends IQueryRetrieval<Bookmark>> extends Qu
     private static final long serialVersionUID = 2305769340857680909L;
     protected QueryURIReporter<Bookmark, IQueryRetrieval<Bookmark>> uriReporter;
 
-    public BookmarkCSVReporter(Request baseRef, ResourceDoc doc) {
+    public BookmarkCSVReporter(Request baseRef) {
 	super();
 	uriReporter = new BookmarkURIReporter<IQueryRetrieval<Bookmark>>(baseRef);
     }

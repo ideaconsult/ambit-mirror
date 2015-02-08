@@ -8,7 +8,6 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Request;
@@ -416,12 +415,12 @@ public class AmbitResource extends FreeMarkerResource {
 		}
 	}
 	
-	public static void writeHTMLHeader(Writer w,String title,Request request,Reference resourceRef,ResourceDoc doc) throws IOException {
-		writeHTMLHeader(w, title, request,resourceRef, "",doc);
+	public static void writeHTMLHeader(Writer w,String title,Request request,Reference resourceRef) throws IOException {
+		writeHTMLHeader(w, title, request,resourceRef, "");
 	}
-	public static void writeHTMLHeader(Writer w,String title,Request request,Reference resourceRef,String meta,ResourceDoc doc) throws IOException {
+	public static void writeHTMLHeader(Writer w,String title,Request request,Reference resourceRef,String meta) throws IOException {
 
-		writeTopHeader(w, title, request,resourceRef, meta,doc);
+		writeTopHeader(w, title, request,resourceRef, meta);
 		writeSearchForm(w, title, request,resourceRef, meta);
 		
 	}
@@ -450,7 +449,7 @@ public class AmbitResource extends FreeMarkerResource {
 	
 	}
 	
-	public static void writeTopHeader(Writer w,String title,Request request,Reference resourceRef, String meta,ResourceDoc doc) throws IOException {
+	public static void writeTopHeader(Writer w,String title,Request request,Reference resourceRef, String meta) throws IOException {
 		Reference baseReference = request==null?null:request.getRootRef();
 		w.write(
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
@@ -498,24 +497,7 @@ public class AmbitResource extends FreeMarkerResource {
 		w.write("border: 1px solid #333; padding: 0px; margin: 0px auto;\">");
 		w.write("<div class=\"spacer\"></div>");
 		
-		String top;
-		if (doc!= null) {
-			top = String.format("&nbsp;<a style=\"color:#99CC00\" href='%s' target='_Ontology' title='Opentox %s (%s), describes representation of OpenTox REST resources'>OpenTox %s</a>&nbsp;",
-					doc.getPrimaryTopic(),
-					doc.getResource(),doc.getPrimaryTopic(),doc.getResource());
-			top += String.format("<a style=\"color:#99CC00\" href='%s' target='_API' title='REST API documentation'>REST API</a>&nbsp;",doc.getPrimaryDoc());
-			
-	
-		} else top = "";
-
-		/*
-		if(request != null) {
-			Reference r = resourceRef.hasQuery()?resourceRef.clone():resourceRef;
-			r.setQuery(null);
-			top += String.format("&nbsp;<a style=\"color:#99CC00\" href='%s/admin/policy?search=%s' target='_Policy' title='Click to view the access policies, assigned to this URI'>Access</a>", request.getRootRef(),Reference.encode(r.toString()));
-
-		}
-		*/
+		String top= "";
 		
 		w.write(String.format("<div class=\"row\"><span class=\"left\">&nbsp;%s",top));
 		w.write("</span>");

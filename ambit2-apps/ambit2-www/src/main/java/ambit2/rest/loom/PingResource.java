@@ -151,10 +151,8 @@ public class PingResource extends CatalogResource<ITask<ITaskResult, String>> {
 	    };
 	    return new StringConvertor(reporter, MediaType.APPLICATION_JSON);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-	    return new StringConvertor(new CatalogURIReporter<T>(getRequest(), getDocumentation()) {
-		/**
-			     * 
-			     */
+	    return new StringConvertor(new CatalogURIReporter<T>(getRequest()) {
+
 		private static final long serialVersionUID = -1928996919350493544L;
 
 		@Override

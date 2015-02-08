@@ -50,7 +50,7 @@ public class FacetURIReporter <Q extends IQueryRetrieval<IFacet>> extends QueryU
 	}
 	public FacetURIReporter(Request baseRef) {
 		super(baseRef,null);
-		cmpReporter = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(baseRef,null);
+		cmpReporter = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(baseRef);
 	}
 	public FacetURIReporter() {
 		this(null);
