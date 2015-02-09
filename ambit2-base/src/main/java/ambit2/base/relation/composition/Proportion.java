@@ -21,7 +21,6 @@ public class Proportion implements Serializable {
 	protected Double typical_value;
 	protected String typical_unit;
 	
-	protected Double real_value;
 	protected String real_lower;	
 	protected Double real_lowervalue;
 	protected String real_upper;
@@ -33,7 +32,6 @@ public class Proportion implements Serializable {
 		typical = null;
 		typical_value = null;
 		typical_unit = null;
-		real_value = null;
 		real_lower = null;
 		real_lowervalue = null;
 		real_upper = null;
@@ -110,12 +108,7 @@ public class Proportion implements Serializable {
 		this.typical_value = typical_value;
 	}
 	
-	public Double getReal_value() {
-		return real_value;
-	}
-	public void setReal_value(Double real_value) {
-		this.real_value = real_value;
-	}
+
 	public Double getReal_lowervalue() {
 		return real_lowervalue;
 	}
