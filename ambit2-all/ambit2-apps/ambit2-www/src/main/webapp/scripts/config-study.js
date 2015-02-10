@@ -1070,6 +1070,110 @@ var config_study = {
                 }
             }
         },
+        "TO_SENSITIZATION_INVITRO_SECTION": {
+            "parameters": {
+                "type_of_study": {
+                    "iOrder": -11,
+                    "sTitle": "Study type",
+                    "bVisible": false
+                },
+                "type_of_method": {
+                    "iOrder": -10,
+                    "sTitle": "Method type"
+                },
+                "data_gathering_instruments": {
+                    "iOrder": -9,
+                    "bVisible": false
+                }                
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -2
+                },
+                "citation": {
+                    "bVisible": true
+                }   
+            },
+            "conditions": {
+                "target gene": {
+                    "iOrder": -7
+                },
+                "cell line": {
+                    "iOrder": -8
+                }
+            },            
+            "effects": {
+                "endpoint": {
+                    "bVisible": true,
+                    "iOrder": -6
+                },
+                "result": {
+                    "bVisible": true,
+                    "iOrder": -5
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "sTitle": "Pos/Neg",
+                    "iOrder": -4
+                },
+                "criteria": {
+                    "iOrder": -3,
+                    "bVisible": false
+                }
+            }
+        },        
+        "TO_SENSITIZATION_INCHEMICO_SECTION": {
+            "parameters": {
+                "type_of_study": {
+                    "iOrder": -11,
+                    "sTitle": "Study type",
+                    "bVisible": false
+                },
+                "type_of_method": {
+                    "iOrder": -10,
+                    "sTitle": "Method type"
+                },
+                "data_gathering_instruments": {
+                    "iOrder": -9,
+                    "bVisible": false
+                }                
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -2
+                },
+                "citation": {
+                    "bVisible": true
+                }   
+            },
+            "conditions": {
+                "protein": {
+                    "iOrder": -7
+                },
+            },            
+            "effects": {
+                "endpoint": {
+                    "bVisible": true,
+                    "iOrder": -6
+                },
+                "result": {
+                    "bVisible": true,
+                    "iOrder": -5
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "sTitle": "Pos/Neg",
+                    "iOrder": -4
+                },
+                "criteria": {
+                    "iOrder": -3,
+                    "sTitle": "Potency",
+                    "bVisible": true
+                }
+            }
+        },                
         "TO_SKIN_IRRITATION_SECTION": {
             "parameters": {
                 "type of method": {
@@ -1808,19 +1912,10 @@ var config_study = {
                 }
             },
             "conditions": {
-                "remark": {
-                    "sTitle": "Remarks",
-                    "iOrder": -14,
-                    "bVisible": false
-                },
                 "medium": {
                     "sTitle": "Medium",
                     "iOrder": -15,
                     "bVisible": true
-                },
-                "std_dev": {
-                    "sTitle": "Std. dev.",
-                    "iOrder": -18
                 },
                 "n": {
                     "iOrder": -17
