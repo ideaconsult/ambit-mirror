@@ -10,7 +10,7 @@ import ambit2.base.data.PropertyAnnotations;
 public class PropertyAnnotationTest {
     @Test
     public void test1() throws Exception {
-	PropertyAnnotation a = new PropertyAnnotation<>();
+	PropertyAnnotation a = new PropertyAnnotation();
 	a.setObject("o");
 	a.setPredicate("p");
 	a.setType("t");
@@ -20,12 +20,12 @@ public class PropertyAnnotationTest {
     @Test
     public void testMany() throws Exception {
 	PropertyAnnotations as = new PropertyAnnotations();
-	PropertyAnnotation a1 = new PropertyAnnotation<>();
+	PropertyAnnotation a1 = new PropertyAnnotation();
 	a1.setObject("o");
 	a1.setPredicate("p");
 	a1.setType("t");
 	as.add(a1);
-	PropertyAnnotation a2 = new PropertyAnnotation<>();
+	PropertyAnnotation a2 = new PropertyAnnotation();
 	a2.setObject("o1");
 	a2.setPredicate("p1");
 	a2.setType("t1");
