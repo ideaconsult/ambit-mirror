@@ -1149,8 +1149,9 @@ var config_study = {
             },
             "conditions": {
                 "protein": {
-                    "iOrder": -7
-                },
+                    "iOrder": -7,
+                    "sTitle" : ""
+                }
             },            
             "effects": {
                 "endpoint": {
