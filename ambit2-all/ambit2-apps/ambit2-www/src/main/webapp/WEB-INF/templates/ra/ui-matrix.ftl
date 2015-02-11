@@ -77,8 +77,8 @@
 	          <tr><td class="right size-third">Rights holder <a href='#' class='chelp a_rightsholder'>?</a>:</td><td><input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder"></input></td></tr>
 
 	          <tr><td class="right size-third">Status <a href='#' class='chelp a_status'>?</a>:</td><td class="data-field" data-field="status"></td></tr>
-	          <tr><td class="right size-third">Date started <a href='#' class='chelp a_started'>?</a>:</td><td class="data-field" data-field="created"></td></tr>
-	          <tr><td class="right size-third">Date finished <a href='#' class='chelp a_started'>?</a>:</td><td class="data-field" data-field="finished"></td></tr>
+	          <tr><td class="right size-third">Date started <a href='#' class='chelp a_started'>?</a>:</td><td class="data-field" data-field="created" data-format="formatDate"></td></tr>
+	          <tr><td class="right size-third">Date finished <a href='#' class='chelp a_started'>?</a>:</td><td class="data-field" data-field="finished" data-format="formatDate"></td></tr>
 	          <tr>
 	          	<td class="right size-third">Flags <a href='#' class='chelp a_flags'>?</a>:</td>
 	          	<td>
