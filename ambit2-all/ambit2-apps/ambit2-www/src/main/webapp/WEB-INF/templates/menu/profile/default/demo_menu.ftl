@@ -20,8 +20,5 @@
 <li >
 	<a href="${ambit_root}/qmap" title="Quantitative Structure-Activity-Similarity Maps (QMaps)">ToxMatch 2</a>
 </li>
-<li >
-	<a href="${ambit_root}/ui/toxtree" title="Toxtree web release">Toxtree</a>
-</li>
 
 </ul>

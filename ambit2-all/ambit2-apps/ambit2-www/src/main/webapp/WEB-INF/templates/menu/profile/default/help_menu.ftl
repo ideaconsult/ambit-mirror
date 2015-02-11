@@ -27,6 +27,10 @@
 			</#if>
 		</#if>
 	</li>	
+	<li>
+		<a href="${ambit_root}/model" title="Demo: depiction,reactions,tautomers, Toxmatch">Demo</a>
+		<#include "/menu/profile/default/demo_menu.ftl">
+	</li>	
 	<li><a href="#">About</a>
 		<ul>
 		<li><a href="#">Version</a>
