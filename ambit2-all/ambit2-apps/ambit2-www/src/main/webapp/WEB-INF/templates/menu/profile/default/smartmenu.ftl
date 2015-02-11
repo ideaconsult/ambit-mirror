@@ -30,6 +30,9 @@
 	</ul>
 </li>
 		
+<li >
+	<a href="${ambit_root}/ui/toxtree" title="Toxtree web release">Toxtree predictions</a>
+</li>		
 <li>
 	<a href="${ambit_root}/help">Help</a>
 	<#include "/menu/profile/default/help_menu.ftl">
