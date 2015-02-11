@@ -10,5 +10,4 @@
 		</ul>
 	</li>
 	<li ><a href="${ambit_root}/substanceowner" title='Substances by substance owners'>Substance owners</a></li>
-	<li ><a href="${ambit_root}/admin/stats/experiment_endpoints">Endpoints</a></li>	  
 </ul>
