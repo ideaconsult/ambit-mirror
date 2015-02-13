@@ -41,7 +41,7 @@ public class TautomerUtils
 		*/
 	}
 	
-	public static ArrayList<TautomerPair> generatePairForEachRuleInstance(TautomerManager tman, IAtomContainer mol) throws Exception
+	public static ArrayList<TautomerPair> generatePairForEachRuleInstance(TautomerManager tman, IAtomContainer mol, boolean FlagFilter) throws Exception
 	{	
 		tman.setStructure(mol); 
 		tman.searchAllRulePositions();
@@ -100,8 +100,21 @@ public class TautomerUtils
 						tp.riAtomIndices[k] = tman.molecule.getAtomNumber(atoms.get(k));
 			}	
 			
-			ri.nextState();  //retunrs to the original state
+			ri.nextState();  //returns to the original state
+			
+			
+			//Filter the result
+			if (FlagFilter)
+			{	
+				ArrayList<IAtomContainer> tautomers = new ArrayList<IAtomContainer>();
+				tautomers.add(tp.mol0);
+				tautomers.add(tp.mol1);
+				List<IAtomContainer> filteredTautomers = tman.tautomerFilter.filter(tautomers);
 
+				if (filteredTautomers.size() < 2)
+					continue; //Some of the generated tautomers are not correct (like allene atom in cycle ...)
+			}
+			
 			tpairs.add(tp);	
 		}
 		

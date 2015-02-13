@@ -54,6 +54,7 @@ public class TautomerAnalysis
 	public String outFileType = "csv";
 	public String molFilterString = null;
 	public Task task = Task.PRINT_SMILES; 
+	public boolean FlagFilter = true;
 	
 	
 	//Work variables
@@ -174,21 +175,7 @@ public class TautomerAnalysis
 			try { reader.close(); } catch (Exception x) {}
 			
 			closeWriters();
-		
-			/*
-			if (writer != null)
-				try { writer.close(); } catch (Exception x) {}
-				
-				String totalTimeStat = "Total time" + sep + t_total + sep + "s\n" +
-						"Generation" + sep +  globalCalcTime + sep + "s" + sep + (100.0*globalCalcTime/t_total)+sep + "%\n"+
-						"IO/convert" + sep + (t_total-globalCalcTime) + sep + "s" + sep + (100.0*(t_total-globalCalcTime)/t_total) + sep + "%\n";
-				
-				benchmarkOut.write(totalTimeStat);
-				LOGGER.info(totalTimeStat);
-				try { benchmarkOut.close(); } catch (Exception x) {}
-				
-			*/	
-			
+
 		}
 		
 		logger.log(Level.INFO, String.format("[Records read/processed/error %d/%d/%d] %s", 
@@ -323,7 +310,7 @@ public class TautomerAnalysis
 	protected void generateRulePairs(IAtomContainer mol) throws Exception
 	{
 		String smiles = SmartsHelper.moleculeToSMILES(mol, false);
-		ArrayList<TautomerPair> tpairs =  TautomerUtils.generatePairForEachRuleInstance(tman, mol);
+		ArrayList<TautomerPair> tpairs =  TautomerUtils.generatePairForEachRuleInstance(tman, mol, FlagFilter);
 		for (int i = 0; i < tpairs.size(); i++)
 		{
 			outputTautomerPair(tpairs.get(i));

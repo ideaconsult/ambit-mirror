@@ -28,6 +28,7 @@ public class TestTautomerAnalysis
 		ta.outFilePrefix = "pairs-";
 		ta.setMoleculeFilter("#Mol=[1,100]");
 		ta.task = Task.GEN_RULE_PAIR;
+		ta.FlagFilter = false;
 		
 		ta.process();
 	}
@@ -37,7 +38,7 @@ public class TestTautomerAnalysis
 		System.out.println("testTautomerPairs  for " + smi);
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
 		TautomerManager tman = new TautomerManager();
-		TautomerUtils.generatePairForEachRuleInstance(tman, mol);
+		TautomerUtils.generatePairForEachRuleInstance(tman, mol, true);
 	}
 
 }
