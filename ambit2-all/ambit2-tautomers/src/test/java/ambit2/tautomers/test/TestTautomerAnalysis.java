@@ -13,8 +13,8 @@ public class TestTautomerAnalysis
 	
 	public static void main(String[] args) throws Exception
 	{
-		testTautomerPairs("NC=CCCCCCC=O");
-		//generateRuleCouples();
+		//testTautomerPairs("NC=CCCCCCC=S");
+		generateRuleCouples();
 	}
 	
 	public static void generateRuleCouples() throws Exception
@@ -26,7 +26,7 @@ public class TestTautomerAnalysis
 		ta.inputFileName = "TOX21S_1-100.smi";
 		ta.outFileType = "csv";
 		ta.outFilePrefix = "pairs-";
-		ta.setMoleculeFilter("#Mol=[1,2]");
+		ta.setMoleculeFilter("#Mol=[1,100]");
 		ta.task = Task.GEN_RULE_PAIR;
 		
 		ta.process();
