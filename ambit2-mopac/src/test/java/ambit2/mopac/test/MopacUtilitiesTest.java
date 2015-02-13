@@ -17,7 +17,7 @@ public class MopacUtilitiesTest
 		//test("CCCC=C");
 		
 		calcStrPairEnergies("D:/Projects/Nina/Tautomers/test-analysis/pairs-rule1-keto_enol.csv",
-				"D:/Projects/Nina/Tautomers/test-analysis/energies-test.csv");
+				"D:/Projects/Nina/Tautomers/test-analysis/energies-test.csv", 10);
 	}
 	
 	static void test(String smiles) throws Exception
@@ -30,7 +30,7 @@ public class MopacUtilitiesTest
 	/*
 	 * Expected csv file where the first two columns are the SMILES notations for the pair
 	 */
-	static void calcStrPairEnergies(String inputFile, String outputFile)
+	static void calcStrPairEnergies(String inputFile, String outputFile, int startLine)
 	{
 		RandomAccessFile reader = null;
 		FileWriter writer = null;
@@ -55,8 +55,13 @@ public class MopacUtilitiesTest
 			{	
 				n++;
 				String line = reader.readLine();
-				System.out.println("#" + n);
+				if (n < startLine)
+				{	
+					System.out.println("Skipping: #" + n);
+					continue;
+				}
 				
+				System.out.println("#" + n);
 				String tok[] =  line.split(",");
 				if (tok.length < 2)
 				{	
