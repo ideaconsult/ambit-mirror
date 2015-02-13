@@ -14,30 +14,30 @@ import ambit2.smarts.SmartsParser;
 
 public class Rule 
 {
-	int HAtomMode = TautomerConst.HRM_Implicit;
-	String name = null;	
-	int type = TautomerConst.RT_MobileGroup;
-	String mobileGroup = null;
-	int nStates = 2;
-	String smartsStates[] = null;
-	RuleStateFlags stateFlags[] = null;
-	RuleStateBondDistribution   stateBonds[] = null;
-	int nMobileGroups = 1;
-	boolean isMobileH[] = new boolean[1]; //by default this class is prepared for a rule with one mobile group
-	boolean isStandardRule = true; //e.g. H-X-Y=Z  <-->  X=Y-Z-H 
-	boolean isRuleActive = true;
-	int mobileGroupPos[][] = null;   
-	String RuleInfo = "";
-	IQueryAtomContainer stateQueries[] = null;
-	String OriginalRuleString = "";
-	RankingRule rankingRule = null;
+	public int HAtomMode = TautomerConst.HRM_Implicit;
+	public String name = null;	
+	public int type = TautomerConst.RT_MobileGroup;
+	public String mobileGroup = null;
+	public int nStates = 2;
+	public String smartsStates[] = null;
+	public RuleStateFlags stateFlags[] = null;
+	public RuleStateBondDistribution   stateBonds[] = null;
+	public int nMobileGroups = 1;
+	public boolean isMobileH[] = new boolean[1]; //by default this class is prepared for a rule with one mobile group
+	public boolean isStandardRule = true; //e.g. H-X-Y=Z  <-->  X=Y-Z-H 
+	public boolean isRuleActive = true;
+	public int mobileGroupPos[][] = null;   
+	public String RuleInfo = "";
+	public IQueryAtomContainer stateQueries[] = null;
+	public String OriginalRuleString = "";
+	public RankingRule rankingRule = null;
 	
 	//ring closure info
-	int ringClosureState = -1;
-	int ringClosureBondNum = -1;
-	int ringClosureBondFA = -1;
-	int ringClosureBondSA = -1;
-	IBond.Order  ringClosureBondOrder = IBond.Order.SINGLE;
+	public int ringClosureState = -1;
+	public int ringClosureBondNum = -1;
+	public int ringClosureBondFA = -1;
+	public int ringClosureBondSA = -1;
+	public IBond.Order  ringClosureBondOrder = IBond.Order.SINGLE;
 	
 	
 	public List<IRuleInstance>  applyRule(IAtomContainer mol) throws Exception

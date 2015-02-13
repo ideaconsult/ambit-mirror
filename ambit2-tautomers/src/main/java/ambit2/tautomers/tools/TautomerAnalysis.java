@@ -25,38 +25,70 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.exceptions.AmbitIOException;
+import ambit2.core.filter.MoleculeFilter;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.InteractiveIteratingMDLReader;
 import ambit2.smarts.SmartsHelper;
+import ambit2.tautomers.Rule;
 import ambit2.tautomers.TautomerConst;
+import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerUtils;
 
 
 
 public class TautomerAnalysis 
 {
+	public static enum Task {
+		PRINT_SMILES, GEN_RULE_COUPLES;
+	}
+	
 	private final static Logger logger = Logger.getLogger(TautomerAnalysis.class.getName());
 	
 	//Configuration variables
 	public String filePath = "";
 	public String inputFileName = null;
-	public String outPrefix = "out";
+	public String outFilePrefix = "out";
+	public String outFileType = "csv";
+	public String molFilterString = null;
+	public Task task = Task.PRINT_SMILES; 
+	
 	
 	//Work variables
+	protected TautomerManager tman = new TautomerManager();
 	protected FixBondOrdersTool kekulizer = new FixBondOrdersTool();
-	
+	protected MoleculeFilter molecularFilter = null;
+	protected int records_read = 0;
+	protected int records_processed = 0;
+	protected int records_error = 0;
+	protected FileWriter outWriters[] = null;
 	
 	
 	/**
 	 * 
-	 * @return
+	 * @param molFilterString expression which defines the filter e.g. "#Mol=[1,100];NA=[1,10]"
+	 * @throws Exception
+	 */
+	public void setMoleculeFilter(String molFilterString) throws Exception
+	{
+		this.molFilterString = molFilterString;
+		try {
+			MoleculeFilter filter = MoleculeFilter.parseFromCommandLineString(molFilterString);
+			molecularFilter = filter;
+		} catch (Exception x) {
+			throw new Exception("Incorrect molecule filter: " + x.getMessage());
+		}
+	}
+	
+	/**
+	 * 
+	 * @return number of read structure records
 	 * @throws Exception
 	 */
 	public int process() throws Exception 
 	{	
-		int records_read = 0;
-		int records_processed = 0;
-		int records_error = 0;
+		records_read = 0;
+		records_processed = 0;
+		records_error = 0;
 		
 		String sep = "\t";
 		String sep_exc = "\t";
@@ -73,6 +105,9 @@ public class TautomerAnalysis
 			reader = getReader(in,file.getName());
 			logger.log(Level.INFO, String.format("Reading %s",file.getAbsoluteFile()));
 			//LOGGER.log(Level.INFO, String.format("Writing %s tautomer(s)",all?"all":"best"));
+			
+			createWriters();
+			
 			while (reader.hasNext()) 
 			{	
 				IAtomContainer molecule  = reader.next();
@@ -82,7 +117,7 @@ public class TautomerAnalysis
 					continue;
 				}
 				
-				/*
+				
 				boolean FlagUseMolFilterAfterProcessing = false; 
 				
 				if (molecularFilter != null)
@@ -95,7 +130,6 @@ public class TautomerAnalysis
 							continue;
 					}	
 				}
-				*/
 				
 				
 				try {
@@ -114,31 +148,13 @@ public class TautomerAnalysis
 						logger.log(Level.WARNING, String.format("[Record %d] Error %s\t%s", records_read, file.getAbsoluteFile(), x.getMessage()));
 					}
 					
-					/*
+					
 					if (FlagUseMolFilterAfterProcessing)
 						if (!molecularFilter.useMolecule(molecule, records_read))
 							continue;
-					*/
 					
-					String smiles = SmartsHelper.moleculeToSMILES(molecule, false);
-					System.out.println(smiles);
-
-					/**
-					 * ambit2-tautomers
-					 * http://ambit.uni-plovdiv.bg:8083/nexus/index.html#nexus-search;quick~ambit2-tautomers
-					 */
-					List<IAtomContainer> resultTautomers = null;
-					try {
-						generationError = null;
-						//resultTautomers = generateTautomers(molecule);
-					} catch (Exception x) {
-						/*
-						 * java.lang.ArrayIndexOutOfBoundsException: 0 at ambit2.smarts.IsomorphismTester.generateNodes(IsomorphismTester.java:780)
-						 */
-						logger.log(Level.SEVERE, String.format("[Record %d] Error %s\t%s", records_read, file.getAbsoluteFile(), x.getMessage()));
-						resultTautomers = null;
-						generationError = x.getMessage();
-					}	
+					
+					doTask(molecule);
 					
 					
 					records_processed++;
@@ -154,6 +170,7 @@ public class TautomerAnalysis
 		} finally {
 			try { reader.close(); } catch (Exception x) {}
 			
+			closeWriters();
 		
 			/*
 			if (writer != null)
@@ -212,5 +229,89 @@ public class TautomerAnalysis
 		});
 		return reader;
 	}	
+	
+	
+	protected void createWriters() throws Exception
+	{
+		switch (task)
+		{
+		case PRINT_SMILES:
+			//no writer;
+			outWriters = null;
+			break;
+			
+		case GEN_RULE_COUPLES:
+			createRuleCoupleWriters();
+			break;
+		}
+	}
+	
+	protected FileWriter createWriter(String fname) throws Exception
+	{
+		FileWriter writer = null;
+		try {
+			writer = new FileWriter(fname);
+			
+		}catch (Exception x) {
+			//in case smth's wrong with the writer file, close it and throw an error
+			try {writer.close(); } catch (Exception xx) {}
+			throw x;
+		} finally { }
+		
+		return writer;
+	}
+	
+	protected void createRuleCoupleWriters()
+	{
+		for (int i = 0; i < tman.getKnowledgeBase().rules.size(); i++)
+		{
+			Rule rule = tman.getKnowledgeBase().rules.get(i);
+			System.out.println(rule.name);
+		}
+		//TODO
+	}
+	
+	
+	protected void closeWriters()
+	{
+		if (outWriters != null)
+			for (int i = 0; i < outWriters.length; i++)
+			{
+				try { outWriters[i].close(); } catch (Exception x) {}
+			}
+	}
+	
+	
+		
+	protected void doTask(IAtomContainer mol) throws Exception
+	{
+		switch (task)
+		{
+		case PRINT_SMILES:
+			printSmiles(mol);
+			break;
+			
+		case GEN_RULE_COUPLES:
+			generateRuleCouples(mol);
+			break;
+		}
+	}
+	
+	protected void printSmiles(IAtomContainer mol) throws Exception
+	{
+		String smiles = SmartsHelper.moleculeToSMILES(mol, false);
+		System.out.println(smiles);		
+	
+	}
+	
+	protected void generateRuleCouples(IAtomContainer mol) throws Exception
+	{
+		String smiles = SmartsHelper.moleculeToSMILES(mol, false);
+		System.out.println(smiles);	
+	}
+	
+	
+	
+	
 	
 }
