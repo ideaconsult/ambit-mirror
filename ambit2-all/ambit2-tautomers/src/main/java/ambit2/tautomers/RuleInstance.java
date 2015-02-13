@@ -168,7 +168,7 @@ public class RuleInstance implements IRuleInstance {
 			}
 			else 
 			{
-				System.out.println("**  chain --> ring");
+				logger.log(Level.FINE,"**  chain --> ring");
 				//System.out.println(SmartsHelper.moleculeToSMILES(molecule));
 				
 				//Molecule is in the chain state and the ring must be closed 
@@ -240,7 +240,10 @@ public class RuleInstance implements IRuleInstance {
 		return 0; //The state is OK
 	}
 	
-	
+	public List<IAtom> getAtoms()
+	{
+		return atoms;
+	}
 	
 	
 	

@@ -1,7 +1,9 @@
 package ambit2.tautomers;
 
+import java.util.List;
 import java.util.Vector;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 //This class currently is not used since the combined states generate
@@ -118,6 +120,12 @@ public class CombinedRuleInstance implements IRuleInstance
 		*/
 		
 		return(combinedStates.size());
+	}
+
+	@Override
+	public List<IAtom> getAtoms() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
