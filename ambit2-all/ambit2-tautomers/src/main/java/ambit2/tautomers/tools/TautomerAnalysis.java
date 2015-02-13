@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,13 +40,14 @@ import ambit2.tautomers.TautomerUtils;
 public class TautomerAnalysis 
 {
 	public static enum Task {
-		PRINT_SMILES, GEN_RULE_COUPLES;
+		PRINT_SMILES, GEN_RULE_PAIR;
 	}
 	
 	private final static Logger logger = Logger.getLogger(TautomerAnalysis.class.getName());
 	
 	//Configuration variables
 	public String filePath = "";
+	public String outFilePath = null; //If null it is treated as filePath
 	public String inputFileName = null;
 	public String outFilePrefix = "out";
 	public String outFileType = "csv";
@@ -61,7 +63,10 @@ public class TautomerAnalysis
 	protected int records_processed = 0;
 	protected int records_error = 0;
 	protected FileWriter outWriters[] = null;
+	protected File outFiles[] = null;
 	
+	protected ArrayList<String> fileRuleNames = new ArrayList<String>();
+	String sep = "\t";
 	
 	/**
 	 * 
@@ -89,10 +94,6 @@ public class TautomerAnalysis
 		records_read = 0;
 		records_processed = 0;
 		records_error = 0;
-		
-		String sep = "\t";
-		String sep_exc = "\t";
-		String generationError = null;
 		
 		File file = new File(filePath + inputFileName);
 		if (!file.exists()) 
@@ -240,8 +241,8 @@ public class TautomerAnalysis
 			outWriters = null;
 			break;
 			
-		case GEN_RULE_COUPLES:
-			createRuleCoupleWriters();
+		case GEN_RULE_PAIR:
+			createRulePairsWriters();
 			break;
 		}
 	}
@@ -261,14 +262,22 @@ public class TautomerAnalysis
 		return writer;
 	}
 	
-	protected void createRuleCoupleWriters()
+	protected void createRulePairsWriters() throws Exception
 	{
-		for (int i = 0; i < tman.getKnowledgeBase().rules.size(); i++)
+		String path = outFilePath;
+		if (path == null)
+			path = filePath;
+		
+		int nRules = tman.getKnowledgeBase().rules.size();
+		outWriters = new FileWriter[nRules];
+		outFiles = new File[nRules];
+		for (int i = 0; i < nRules; i++)
 		{
 			Rule rule = tman.getKnowledgeBase().rules.get(i);
-			System.out.println(rule.name);
+			System.out.println(rule.name + "  --> " + getFileRuleName(rule.name));
+			outFiles[i] = new File(path + outFilePrefix + getFileRuleName(rule.name)+"." + outFileType);
+			outWriters[i] = new FileWriter(outFiles[i]);
 		}
-		//TODO
 	}
 	
 	
@@ -277,7 +286,12 @@ public class TautomerAnalysis
 		if (outWriters != null)
 			for (int i = 0; i < outWriters.length; i++)
 			{
-				try { outWriters[i].close(); } catch (Exception x) {}
+				try { 
+					outWriters[i].close();
+					//logger.info("closed: " + outFiles[i].getAbsolutePath());
+				} catch (Exception x) {
+					logger.info("Error on clossing: " + outFiles[i].getAbsolutePath() + "\n" + x.getMessage());
+				}
 			}
 	}
 	
@@ -291,8 +305,8 @@ public class TautomerAnalysis
 			printSmiles(mol);
 			break;
 			
-		case GEN_RULE_COUPLES:
-			generateRuleCouples(mol);
+		case GEN_RULE_PAIR:
+			generateRulePairs(mol);
 			break;
 		}
 	}
@@ -304,14 +318,18 @@ public class TautomerAnalysis
 	
 	}
 	
-	protected void generateRuleCouples(IAtomContainer mol) throws Exception
+	protected void generateRulePairs(IAtomContainer mol) throws Exception
 	{
 		String smiles = SmartsHelper.moleculeToSMILES(mol, false);
 		System.out.println(smiles);	
 	}
 	
-	
-	
-	
+	protected String getFileRuleName(String rname)
+	{	
+		String fname = new String (rname);
+		fname = fname.replace('/', '_');
+		//fname = fname.replace("#", "b3");
+		return fname;
+	}
 	
 }

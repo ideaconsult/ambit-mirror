@@ -15,12 +15,13 @@ public class TestTautomerAnalysis
 	{
 		TautomerAnalysis ta = new TautomerAnalysis();
 		
-		ta.filePath = "D:/Projects/Nina/Tautomers/test-druglike-str/";
-		ta.inputFileName = "TOX21S_v4b_CID_structures_v02.smi";
+		ta.filePath = "D:/Projects/Nina/Tautomers/test-analysis/";
+		//ta.outFilePath = "D:/Projects/Nina/Tautomers/test-analysis/out/";
+		ta.inputFileName = "TOX21S_1-100.smi";
 		ta.outFileType = "csv";
-		ta.outFilePrefix = "out";
-		ta.setMoleculeFilter("#Mol=[1,100]");
-		ta.task = Task.GEN_RULE_COUPLES;
+		ta.outFilePrefix = "pairs-";
+		ta.setMoleculeFilter("#Mol=[1,2]");
+		ta.task = Task.GEN_RULE_PAIR;
 		
 		ta.process();
 	}
