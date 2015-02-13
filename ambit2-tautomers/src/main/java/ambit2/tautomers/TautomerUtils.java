@@ -18,6 +18,7 @@ public class TautomerUtils
 		public IAtomContainer mol0 = null;
 		public IAtomContainer mol1 = null;
 		public int riAtomIndices[] = null;
+		public int ruleKBIndex = 0;
 	}
 	
 	
@@ -51,6 +52,7 @@ public class TautomerUtils
 		{	
 			TautomerPair tp = new TautomerPair();
 			IRuleInstance ri = tman.extendedRuleInstances0.get(i);
+			tp.ruleKBIndex = tman.getKnowledgeBase().rules.indexOf(ri.getRule());
 			
 			if (ri.getCurrentState() == 0)
 			{	
@@ -61,7 +63,7 @@ public class TautomerUtils
 			else
 			{	
 				try{
-					tp.mol0 = (IAtomContainer)tman.molecule.clone();
+					tp.mol1 = (IAtomContainer)tman.molecule.clone();
 				} catch(Exception x){};
 			}	
 			
@@ -74,7 +76,7 @@ public class TautomerUtils
 			}	
 			
 			
-			logger.info("RI#" + (i+1) + "  " + ((RuleInstance)ri).debugInfo(tman.molecule) 	+ "    state " + ri.getCurrentState() + "   " + SmartsHelper.moleculeToSMILES(tman.molecule, false));
+			//logger.info("RI#" + (i+1) + "  Rule DB index " + tp.ruleIndex + "  " + ((RuleInstance)ri).debugInfo(tman.molecule) 	+ "    state " + ri.getCurrentState() + "   " + SmartsHelper.moleculeToSMILES(tman.molecule, false));
 			
 			ri.nextState();
 			
@@ -87,7 +89,7 @@ public class TautomerUtils
 			else
 			{	
 				try{
-					tp.mol0 = (IAtomContainer)tman.molecule.clone();
+					tp.mol1 = (IAtomContainer)tman.molecule.clone();
 				} catch(Exception x){};
 			}	
 			

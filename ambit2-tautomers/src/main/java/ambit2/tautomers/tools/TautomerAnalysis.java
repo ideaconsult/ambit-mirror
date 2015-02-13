@@ -34,6 +34,7 @@ import ambit2.tautomers.Rule;
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerUtils;
+import ambit2.tautomers.TautomerUtils.TautomerPair;
 
 
 
@@ -65,8 +66,9 @@ public class TautomerAnalysis
 	protected FileWriter outWriters[] = null;
 	protected File outFiles[] = null;
 	
+	
 	protected ArrayList<String> fileRuleNames = new ArrayList<String>();
-	String sep = "\t";
+	String sep = ",";
 	
 	/**
 	 * 
@@ -274,8 +276,8 @@ public class TautomerAnalysis
 		for (int i = 0; i < nRules; i++)
 		{
 			Rule rule = tman.getKnowledgeBase().rules.get(i);
-			System.out.println(rule.name + "  --> " + getFileRuleName(rule.name));
-			outFiles[i] = new File(path + outFilePrefix + getFileRuleName(rule.name)+"." + outFileType);
+			//System.out.println(rule.name + "  --> " + getFileRuleName(rule.name));
+			outFiles[i] = new File(path + outFilePrefix + "rule" + (i+1) +"-"+ getFileRuleName(rule.name)+"." + outFileType);
 			outWriters[i] = new FileWriter(outFiles[i]);
 		}
 	}
@@ -321,7 +323,41 @@ public class TautomerAnalysis
 	protected void generateRulePairs(IAtomContainer mol) throws Exception
 	{
 		String smiles = SmartsHelper.moleculeToSMILES(mol, false);
-		System.out.println(smiles);	
+		ArrayList<TautomerPair> tpairs =  TautomerUtils.generatePairForEachRuleInstance(tman, mol);
+		for (int i = 0; i < tpairs.size(); i++)
+		{
+			outputTautomerPair(tpairs.get(i));
+		}
+		
+		System.out.println("#" + records_read + "found " + tpairs.size() + " instances  " + smiles);
+	}
+	
+	protected void outputTautomerPair(TautomerPair tp) 
+	{
+		FileWriter fw = outWriters[tp.ruleKBIndex];
+		
+		try {
+		
+			StringBuffer atInd = new StringBuffer();
+			if (tp.riAtomIndices != null)
+				for (int i = 0; i < tp.riAtomIndices.length; i++)
+				{	
+					atInd.append(sep);
+					atInd.append(tp.riAtomIndices[i]);
+				}
+			
+			String s0 = SmartsHelper.moleculeToSMILES(tp.mol0, false);
+			String s1 = SmartsHelper.moleculeToSMILES(tp.mol1, false);
+			String s = String.format("%s%s%s%s\n",s0, sep, s1, atInd.toString());
+			//System.out.println(s);
+			
+			fw.write(s);
+			
+			fw.flush();
+		}
+		catch (Exception x){
+			System.out.println("outputTautomerPair Error: " + x.getMessage());
+		};
 	}
 	
 	protected String getFileRuleName(String rname)
