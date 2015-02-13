@@ -27,6 +27,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import ambit2.base.exceptions.AmbitIOException;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.InteractiveIteratingMDLReader;
+import ambit2.smarts.SmartsHelper;
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerUtils;
 
@@ -37,6 +38,7 @@ public class TautomerAnalysis
 	private final static Logger logger = Logger.getLogger(TautomerAnalysis.class.getName());
 	
 	//Configuration variables
+	public String filePath = "";
 	public String inputFileName = null;
 	public String outPrefix = "out";
 	
@@ -60,7 +62,7 @@ public class TautomerAnalysis
 		String sep_exc = "\t";
 		String generationError = null;
 		
-		File file = new File(inputFileName);
+		File file = new File(filePath + inputFileName);
 		if (!file.exists()) 
 			throw new FileNotFoundException(file.getAbsolutePath());
 		InputStream in = new FileInputStream(file);
@@ -118,7 +120,8 @@ public class TautomerAnalysis
 							continue;
 					*/
 					
-					
+					String smiles = SmartsHelper.moleculeToSMILES(molecule, false);
+					System.out.println(smiles);
 
 					/**
 					 * ambit2-tautomers
@@ -139,11 +142,10 @@ public class TautomerAnalysis
 					
 					
 					records_processed++;
-				} catch (Exception x) {
+				} 
+				catch (Exception x) {
 					records_error++;
 					logger.log(Level.SEVERE, String.format("[Record %d] Error %s\n", records_read, file.getAbsoluteFile()), x);
-					
-					
 				}
 			}//while
 		} catch (Exception x1) {
