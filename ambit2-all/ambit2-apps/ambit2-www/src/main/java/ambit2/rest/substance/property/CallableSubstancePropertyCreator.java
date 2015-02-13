@@ -197,10 +197,13 @@ public class CallableSubstancePropertyCreator<USERID> extends CallableProtectedT
 		    break;
 		}
 		try {
-		    Protocol._categories c = Protocol._categories.valueOf(p.getLabel().replace("http://www.opentox.org/echaEndpoints.owl#", "")+"_SECTION");
+			String category = p.getLabel().replace("http://www.opentox.org/echaEndpoints.owl#", "");
+			if (!category.contains("_SECTION")) category = category + "_SECTION";
+		    Protocol._categories c = Protocol._categories.valueOf(category);
 		    ((SubstanceProperty)p).setTopcategory(c.getTopCategory());
 		    ((SubstanceProperty)p).setEndpointcategory(c.name());
 		} catch (Exception x) {
+		    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Unsupported endpoint category");
 		}
 		IParams conditions = new Params();
 		
