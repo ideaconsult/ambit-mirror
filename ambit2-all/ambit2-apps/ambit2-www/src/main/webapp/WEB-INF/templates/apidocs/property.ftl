@@ -120,7 +120,7 @@
                 {
 		            "method": "POST",
 		            "summary": "Create a new property.",
-		            "notes": "Create a new property. Returns property URI. <a href='http://opentox.org/dev/apis/api-1.2/Feature' target='opentox'>OpenTox Feature API</a>. For RDF example see <a href='https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps/ambit2-www/src/test/resources/feature.rdf'>feature.rdf</a>",
+		            "notes": "Create a new property. Returns property URI. <a href='http://opentox.org/dev/apis/api-1.2/Feature' target='opentox'>OpenTox Feature API</a>. For more information see <a href='https://github.com/ideaconsult/examples-ambit/blob/master/ambit-json-docs/substance_property.md'>substance property docs</a>",
 		            "type": "String",
 		            "nickname": "createProperty",
                     "consumes": [
