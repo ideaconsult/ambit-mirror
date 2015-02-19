@@ -82,6 +82,7 @@ public class ProtocolEffectRecord2SubstanceProperty implements
 		PropertyAnnotation a = new PropertyAnnotation();
 		a.setPredicate(key);
 		a.setObject(o.toString());
+		ann.add(a);
 	    }
 	}
 	return ann;

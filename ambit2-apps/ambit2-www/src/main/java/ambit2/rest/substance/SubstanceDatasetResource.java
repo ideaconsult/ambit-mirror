@@ -277,6 +277,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 			    logger.log(Level.FINE, x.getMessage());
 			}
 			SubstanceProperty key = processor.process(effect);
+			key.setIdentifier(key.createHashedIdentifier(effect.getConditions()));
 			Object oldValue = master.getProperty(key);
 			groupProperties.add(key);
 			/*
