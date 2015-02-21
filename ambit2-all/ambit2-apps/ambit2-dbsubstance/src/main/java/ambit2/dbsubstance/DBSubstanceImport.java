@@ -40,6 +40,16 @@ public class DBSubstanceImport {
     static Logger logger = Logger.getLogger(DBSubstanceImport.class.getName());
     static final String loggingProperties = "config/logging.prop";
     protected String configFile;
+    protected String parserType = null;
+
+
+    public String getParserType() {
+        return parserType;
+    }
+
+    public void setParserType(String parserType) {
+        this.parserType = parserType;
+    }
 
     public String getConfigFile() {
 	return configFile;
@@ -49,6 +59,13 @@ public class DBSubstanceImport {
     protected String output;
     protected String jsonConfig;
 
+    protected static String getParserType(CommandLine line) {
+	if (line.hasOption('p'))
+	    return line.getOptionValue('p');
+	else
+	    return null;
+    }
+    
     protected static String getOutput(CommandLine line) {
 	if (line.hasOption('o'))
 	    return line.getOptionValue('o');
@@ -117,7 +134,7 @@ public class DBSubstanceImport {
 	}
     }
 
-    protected static Options createOptions() {
+    protected Options createOptions() {
 	Options options = new Options();
 	Option input = OptionBuilder.hasArg().withLongOpt("input").withArgName("file").withDescription("Input file")
 		.create("i");
@@ -132,14 +149,21 @@ public class DBSubstanceImport {
 		.withDescription("Config file (DB connection parameters)").create("c");
 
 	Option help = OptionBuilder.withLongOpt("help").withDescription("This help").create("h");
-
+	
+	
 	options.addOption(input);
 	options.addOption(jsonConfig);
 	options.addOption(output);
 	options.addOption(config);
+	options.addOption(createParserTypeOption());
 	options.addOption(help);
 
 	return options;
+    }
+    
+    protected Option createParserTypeOption() {
+	return OptionBuilder.hasArg().withLongOpt("parser").withArgName("type").withDescription("File parser mode : xlsx")
+		.create("p");
     }
 
     public boolean parse(String[] args) throws Exception {
@@ -157,6 +181,9 @@ public class DBSubstanceImport {
 	    output = getOutput(line);
 
 	    setConfig(getConfig(line));
+	    
+	    setParserType(getParserType(line));
+	    
 	    if (line.hasOption("h")) {
 		printHelp(options, null);
 		return false;
@@ -170,6 +197,10 @@ public class DBSubstanceImport {
 	}
     }
 
+    protected IRawReader<IStructureRecord> createParser(InputStream in) throws Exception {
+	return new GenericExcelParser(in, jsonConfig, true);
+    }
+    
     protected void importFile() throws Exception {
 	IRawReader<IStructureRecord> parser = null;
 	Connection c = null;
@@ -182,7 +213,7 @@ public class DBSubstanceImport {
 	    c = dbc.getConnection();
 	    c.setAutoCommit(true);
 
-	    parser = new GenericExcelParser(fin, jsonConfig, true);
+	    parser = createParser(fin);
 	    StructureRecordValidator validator = new StructureRecordValidator(file.getName(), true);
 	    write(parser, c, new ReferenceSubstanceUUID(), false, validator);
 	} catch (Exception x) {
