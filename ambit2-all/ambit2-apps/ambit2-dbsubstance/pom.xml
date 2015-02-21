@@ -68,11 +68,40 @@
     	<groupId>net.enanomapper</groupId>
 		<artifactId>nmparser</artifactId>
 	  <version>0.0.1-SNAPSHOT</version>
-	  <scope>test</scope>
 	</dependency>
 </dependencies>  
   <build>
-    <pluginManagement>
+    <finalName>ambit2-substance-import</finalName>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2-beta-5</version>
+        <executions>
+          <execution>
+            <id>create-executable-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
+              <archive>
+                <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+              </archive>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  <pluginManagement>
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -84,5 +113,6 @@
         </plugin>
       </plugins>
     </pluginManagement>
-  </build>
+      
+    </build>
 </project>
