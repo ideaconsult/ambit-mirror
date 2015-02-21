@@ -37,7 +37,7 @@ import ambit2.db.substance.processor.DBSubstanceWriter;
 import com.mysql.jdbc.CommunicationsException;
 
 public class DBSubstanceImport {
-    static Logger logger = Logger.getLogger(DBSubstanceImport.class.getName());
+    protected static Logger logger = Logger.getLogger(DBSubstanceImport.class.getName());
     static final String loggingProperties = "config/logging.prop";
     protected String configFile;
     protected String parserType = null;
@@ -284,7 +284,7 @@ public class DBSubstanceImport {
 	    Object record = reader.next();
 	    if (record == null)
 		continue;
-	    validator.process((IStructureRecord) record);
+	    validate(validator,(IStructureRecord) record);
 	    writer.process((IStructureRecord) record);
 	    records++;
 	}
@@ -292,6 +292,9 @@ public class DBSubstanceImport {
 	return records;
     }
 
+    protected void validate(StructureRecordValidator validator,IStructureRecord record) throws Exception {
+	validator.process((IStructureRecord) record);
+    }
     protected static void printHelp(Options options, String message) {
 	if (message != null)
 	    System.out.println(message);
