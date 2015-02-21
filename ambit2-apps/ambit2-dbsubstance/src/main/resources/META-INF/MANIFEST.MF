@@ -1,6 +1,6 @@
 Manifest-version: 1.0
 Package: ambit2.dbsubstance
-
+Main-Class: ambit2.dbsubstance.DBSubstanceImport
 Name: ambit2/dbsubstance/
 Specification-Title: ambit2.dbsubstance
 Specification-Version: ${project.version}
