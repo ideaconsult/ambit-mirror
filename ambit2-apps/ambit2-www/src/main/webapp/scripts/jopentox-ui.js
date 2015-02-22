@@ -1797,7 +1797,7 @@ function defineBundlesTable(root,url,deleteVisible,profile) {
   		        	    	if (pos>=0) shortURI = shortURI.substring(pos+1); 
   		        	    	var href = o.aData.URI;
     		        	    var sOut = "<a target='table' href='"+ root + "/ui/assessment?bundle_uri=" + encodeURIComponent(href) +
-    		        	   		"' title='Click to view the substance dataset at "+ o.aData.URI+" as a table'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;'></span>Assessment#"+
+    		        	   		"' title='Click to view the substance dataset at "+ o.aData.URI+" as a table'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;'></span>Substance dataset#"+
     		        	   		shortURI+"</a> " ;
     		        	    
     		        	    sOut += "<br/>"+val+ "<br/>";
