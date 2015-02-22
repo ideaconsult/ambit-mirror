@@ -17,7 +17,7 @@
 			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${datasetid}/metadata" title="${ambit_root}/bundle/${datasetid}/metadata">Metadata</a></li>');
 			loadDatasetMeta("${ambit_root}","${ambit_root}/bundle/${datasetid}/metadata",true);
 		<#else>
-	  		var oTable = defineBundlesTable("${ambit_root}","${ambit_request_json}",true);
+	  		var oTable = defineBundlesTable("${ambit_root}","${ambit_request_json}",true,"${menu_profile}");
 	  	</#if>
 		jQuery("#breadCrumb").jBreadCrumb();
 		jQuery("#welcome").text("Dataset");	  	
@@ -75,17 +75,34 @@
  		</div>
 		
 		<div class="row " style="padding:0;" >
-			<table id='datasets' class='datasetstable ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
-			<thead>
-			<tr>
-			<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span></th>
-			<th>Name</th>
-			<th>Download</th>
-			<th title='Remove the dataset. Only datasets with star rating <= 5 can be deleted!'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;'></span></th>
-			</tr>
-			</thead>
-			<tbody></tbody>
-			</table>
+		
+			<#if menu_profile?? && menu_profile='lri'>
+				<table id='datasets' class='datasetstable ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+				<thead>
+				<tr>
+				<th>ID</th>
+				<th>Code</th>
+				<th>Name</th>
+				<th>Status</th>
+				<th>Owner</th>
+				</tr>
+				</thead>
+				<tbody></tbody>
+				</table>
+			<#else>
+				<table id='datasets' class='datasetstable ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+				<thead>
+				<tr>
+				<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span></th>
+				<th>Name</th>
+				<th>Download</th>
+				<th title='Remove the dataset. Only datasets with star rating <= 5 can be deleted!'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;'></span></th>
+				</tr>
+				</thead>
+				<tbody></tbody>
+				</table>			
+			</#if>
+
 		
 		</#if>
 		
