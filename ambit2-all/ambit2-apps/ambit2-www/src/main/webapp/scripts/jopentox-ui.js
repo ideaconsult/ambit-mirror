@@ -1746,7 +1746,9 @@ $.ajax({
 }	
 
 
-function defineBundlesTable(root,url,deleteVisible) {
+function defineBundlesTable(root,url,deleteVisible,profile) {
+	if ("lri" == profile) return defineBundlesTable_lri(root,url,deleteVisible);
+	
 	var oTable = $('.datasetstable').dataTable( {
 	"sAjaxDataProp" : "dataset",
 	"sAjaxSource": url,	
@@ -1870,6 +1872,95 @@ function defineBundlesTable(root,url,deleteVisible) {
       		  		}	    		  		
      				],
  	  "aaSorting": [[1, 'desc']]		  
+	});
+	return oTable;
+}
+
+function defineBundlesTable_lri(root,url,deleteVisible) {
+	var oTable = $('.datasetstable').dataTable( {
+	"sAjaxDataProp" : "dataset",
+	"sAjaxSource": url,	
+	"sSearch": "Filter:",
+	"bJQueryUI" : true,
+	"bSearchable": true,
+	"bProcessing" : true,
+	"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
+	"sSearch": "Filter:",
+	"bPaginate" : true,
+	"sPaginationType": "full_numbers",
+	"sPaginate" : ".dataTables_paginate _paging",
+	"oLanguage": {
+            "sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
+            "sLoadingRecords": "No substance datasets found.",
+            "sZeroRecords": "No substance datasets found.",
+            "sEmptyTable": "No substance datasets available.",
+            "sInfo": "Showing _TOTAL_ substance datasets (_START_ to _END_)",
+            "sLengthMenu": 'Display <select>' +
+          '<option value="10">10</option>' +
+          '<option value="20">20</option>' +
+          '<option value="50">50</option>' +
+          '<option value="100">100</option>' +
+          '<option value="-1">all</option>' +
+          '</select> substance datasets.'	            
+    },	
+    "aoColumnDefs": [
+     	  			{  
+      				  "bSortable" : true,
+       	              "mDataProp":"id",
+       	              "aTargets": [ 0 ],
+       	              "sWidth" : "5%",
+       	              "bUseRendered" : false,	
+  	  					"fnRender" : function(o,val) {
+  							 return  val;			
+  						}     	              
+      	  			},     	  
+     	  			{  
+        				  "bSortable" : true,
+         	              "mDataProp":"source",
+         	              "aTargets": [ 1 ],
+         	             "sWidth" : "15%",
+         	              "bUseRendered" : false,	
+    	  					"fnRender" : function(o,val) {
+    							 return  val;			
+    						}     	              
+     	  			},         	  			
+    	  			{ "sTitle": "Title", 
+    	  			  "mDataProp":"title", 
+    	  			  "aTargets": [ 2 ],	
+    		          "bUseRendered" : false,	
+    		          "fnRender": function ( o, val ) {
+  		        	    	var shortURI = o.aData.URI;
+  		        	    	pos =  shortURI.lastIndexOf("/");
+  		        	    	if (pos>=0) shortURI = shortURI.substring(pos+1); 
+  		        	    	var href = o.aData.URI;
+    		        	    var sOut = "<b>Assessment title:</b><a target='table' href='"+ root + "/ui/assessment?bundle_uri=" + encodeURIComponent(href) +
+    		        	   		"' title='Click to view the substance dataset at "+ o.aData.URI+" as a table'>"+
+    		        	   		(o.aData.title==null?o.aData.id:o.aData.title)+"</a> " ;
+    		               return sOut;
+    		          }
+    	  			 },
+       	  			  {  
+        				  "bSortable" : true,
+         	              "mDataProp":"created",
+         	              "aTargets": [ 3 ],
+         	              "sWidth" : "5%",
+         	              "bUseRendered" : false,	
+    	  					"fnRender" : function(o,val) {
+    							 return  val;			
+    						}     	              
+     	  			  },  
+     	  			  {  
+      				  "bSortable" : true,
+       	              "mDataProp":"maintainer",
+       	              "aTargets": [ 4 ],
+       	              "sWidth" : "15%",
+       	              "bUseRendered" : false,	
+  	  					"fnRender" : function(o,val) {
+  							 return  val;			
+  						}     	              
+    		  		}   
+     				],
+ 	  "aaSorting": [[0, 'desc']]		  
 	});
 	return oTable;
 }
