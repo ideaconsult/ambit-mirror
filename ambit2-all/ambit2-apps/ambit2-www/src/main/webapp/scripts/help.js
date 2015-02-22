@@ -14,7 +14,7 @@ function loadHelp(root,topic) {
 			    var title = $(value).text();
 			    try {key = key.replace('#','');} catch (err) {}
 			    $('a.chelp.'+key)
-				 .attr('title','Click for more detailed help')
+				 .attr('title','Click for more detailed help on '+ title)
 				 .html('<span id="info-link" class="ui-icon ui-icon-info" style="display: inline-block;"></span>')
 				 .click(function() {
 					 $('#keytitle').text(title);
