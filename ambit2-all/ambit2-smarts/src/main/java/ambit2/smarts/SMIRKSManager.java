@@ -594,6 +594,29 @@ public class SMIRKSManager {
 		int pAtNum = reaction.getMappedProductAtom(raMapInd);
 		Integer charge = reaction.productAtCharge.get(pAtNum);
 		IAtom tAt = rMap.get(i);
+		
+		//Handle the cases when no charge transformation is to be done 
+		if (charge == null)
+		{
+			Integer reactantCharge = reaction.reactantAtCharge.get(i);
+			if (reactantCharge == null)
+				continue; //Both reactant and product charges are not specified. Therefore nothing is done
+			if (reactantCharge == 0)
+				continue; //Both reactant is not specified product charge is 0 (counted as non specified ) then nothing is done
+		}
+		else
+		{
+			if (charge == 0)
+			{
+				Integer reactantCharge = reaction.reactantAtCharge.get(i);
+				if (reactantCharge == null)
+					continue; //Reactant charge is 0 and product is null. Therefore nothing is done
+				if (reactantCharge == 0)
+					continue; //Both reactant and products charges are 0 (counted as non specified ) then nothing is done
+			}
+		}
+		
+		
 		tAt.setFormalCharge(charge);
 	    } else {
 		// Atom is deleted from
