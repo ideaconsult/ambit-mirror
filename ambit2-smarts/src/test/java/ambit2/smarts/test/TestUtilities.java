@@ -1394,7 +1394,9 @@ public class TestUtilities {
 	    return;
 
 	IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
+	String targetSmiles_cdk = SmartsHelper.moleculeToSMILES(target, true);
 
+	
 	if (FlagTargetPreprocessing)
 	    this.preProcess(target);
 
@@ -1414,7 +1416,7 @@ public class TestUtilities {
 		System.out.println("Product bond attributes:\n" + SmartsHelper.getBondAttributes(target));
 	    }
 
-	    System.out.println("    " + SmartsHelper.moleculeToSMILES(target, true));
+	    System.out.println("   target within cdk: " + targetSmiles_cdk);
 
 	    String transformedSmiles = SmartsHelper.moleculeToSMILES(target, true);
 
@@ -2380,9 +2382,10 @@ public class TestUtilities {
 	// tu.testSMIRKS("[#6:1]-[#8:2]-[#6:3]>>[#6:1]-[#8:2].[#6:3]=S","NCCCOCC",
 	// ReactionOperation.SingleCopyForEachPos);
 
-	// tu.FlagExplicitHAtoms = true;
+	tu.FlagPrintTransformationData = true;
+	//tu.FlagExplicitHAtoms = true;
 	tu.FlagTargetPreprocessing = true;
-	tu.FlagProductPreprocessing = true;
+	//tu.FlagProductPreprocessing = true;
 	// tu.FlagPrintAtomAttributes = true;
 	// tu.FlagSSMode = SmartsConst.SSM_NON_IDENTICAL_FIRST;
 	// tu.FlagExplicitHToImplicitOnProductPreProcess = true;
@@ -2395,6 +2398,17 @@ public class TestUtilities {
 	// "C1=CC=CC=C1"); //This is a bug !!! 3 double bonds remain
 	// tu.testSMIRKS("[c:1]1[c:6][c:5][c:4][c:3][c:2]1>>[OH1]-[c:1]1[c:6][c:5][c:4][c:3][c:2]1-[OH1]",
 	// "C1=CC=CC=C1"); //This is a bug !!! 3 double bonds remain
+	
+	//tu.testSMIRKS("[C-:1]>>[C-:1]=[N+]", "[C-]CC[C+]");
+	
+	tu.testSMIRKS("[#7,#8:7]=[#6:5][C:3][#6:6]>>[#7,#8:7]=[#6:5][C:3]([#6:6])[S---]", "CC[C-](=O)([N-])");
+	//tu.testSMIRKS("[#7,#8:7]~[#6:5][C:3][#6:6]>>[#7,#8:7]~[#6:5][C:3]([#6:6])O", "CCC([N-])(=O)");
+	
+	
+	//tu.testSMIRKS("[#7,#8:7]~[#6:5][C:3]([H])([H:2])[#6:6]>>[#7,#8:7]~[#6:5][C:3]([H:2])([#6:6])O", "CC(O)C(CC([O-])=O)CC([O-])=O");
+	
+	
+	
 
 	// tu.testSMIRKS("[C:1]>>[C:1]=[Cl]", "CC");
 	// tu.testSMIRKS("[C:1][C:2]>>[C:1]=[C:2]", "CC");
@@ -2408,11 +2422,12 @@ public class TestUtilities {
 	// "CCCC");
 	// tu.testSMIRKS("[C:1]C>>[C:1]#&!=,-N", "CC");
 
+	/*
 	tu.FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_ALL;
 	tu.testSMIRKS(
 		"[c:1]1[cH1:6][cH1:5][c:4][c:3][c:2]1>>[OH1]-[#6@H:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6@H:6]-1-[OH1]",
 		"C=C(CC)C1=CC=CC=C1Cl", ReactionOperation.SingleCopyForEachPos);
-
+	*/
 	// tu.testAtomAttribsOnChangingBond();
 
 	// tu.testSMIRKS("[#6:5]1[#6:4]=[#6:3][#6:2]=[#6:1][#6:6]=1>>[OH1]-[#6:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]-1-[OH1]",
