@@ -2399,7 +2399,7 @@ public class TestUtilities {
 	// tu.testSMIRKS("[c:1]1[c:6][c:5][c:4][c:3][c:2]1>>[OH1]-[c:1]1[c:6][c:5][c:4][c:3][c:2]1-[OH1]",
 	// "C1=CC=CC=C1"); //This is a bug !!! 3 double bonds remain
 	
-	//tu.testSMIRKS("[C-:1]>>[C-:1]=[N+]", "[C-]CC[C+]");
+	tu.testSMIRKS("[C-:1]>>[C-:1]=[N+]", "[C-]CC[C+]");
 	
 	tu.testSMIRKS("[#7,#8:7]=[#6:5][C:3][#6:6]>>[#7,#8:7]=[#6:5][C:3]([#6:6])[S---]", "CC[C-](=O)([N-])");
 	//tu.testSMIRKS("[#7,#8:7]~[#6:5][C:3][#6:6]>>[#7,#8:7]~[#6:5][C:3]([#6:6])O", "CCC([N-])(=O)");
