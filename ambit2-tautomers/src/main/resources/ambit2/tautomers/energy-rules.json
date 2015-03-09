@@ -1,0 +1,141 @@
+{
+
+	"ENERGY_RULES" : 
+	[
+		{	
+			"RULE_NAME":"keto/enol",
+			"RULE_ID":"1",
+			"RULE_STATE":1,
+			"RULE_STATE_INFO" : "enol C=CO",
+			"STATE_ENERGY":0.55,
+		
+			"ENERGY_CORRECTIONS":
+			[
+				{
+					"CORRECTION_NAME":"aromatic",
+					"ATOM2_CONDITIONS":["c"],
+					"ATOM3_CONDITIONS":["c"],
+					"ENERGY":-0.56
+				},
+
+			
+				{
+					"CORRECTION_NAME":"conjugation",					
+					"ATOM3_CONDITIONS": ["CC=O"],
+					"ENERGY":-0.12
+				}
+			]
+		},
+		
+		{	
+			"RULE_NAME":"amin/imin",
+			"RULE_ID":"2",
+			"RULE_STATE":1,
+			"RULE_STATE_INFO" : "imin C=CN",
+			"STATE_ENERGY":0.36,
+		
+			"ENERGY_CORRECTIONS":
+			[
+				{
+					"CORRECTION_NAME":"aromatic",
+					"ATOM2_CONDITIONS":["c"],
+					"ATOM3_CONDITIONS":["c"],
+					"ENERGY":-0.94
+				},
+
+			
+				{
+					"CORRECTION_NAME":"conjugation",					
+					"ATOM3_CONDITIONS": ["CC=O"],
+					"ENERGY":-0.30
+				}
+			]
+		},
+		
+		{	
+			"RULE_NAME":"amide/imid",
+			"RULE_ID":"3",
+			"RULE_STATE":1,
+			"RULE_STATE_INFO" : "OC=N",
+			"STATE_ENERGY":0.41,
+		
+			"ENERGY_CORRECTIONS":
+			[
+				{
+					"CORRECTION_NAME":"aromatic",
+					"ATOM2_CONDITIONS":["c"],
+					"ATOM3_CONDITIONS":["n"],
+					"ENERGY":-0.08
+				},
+
+			
+				{
+					"CORRECTION_NAME":"conjugation",					
+					"ATOM3_CONDITIONS": ["N-*=*"],
+					"ENERGY":-0.13
+				}
+			]
+		},		
+		
+		{	
+			"RULE_NAME":"nitroso/oxime",
+			"RULE_ID":"4",
+			"RULE_STATE":0,
+			"RULE_STATE_INFO" : "O=NC",
+			"STATE_ENERGY":0.35
+		
+		},		
+		
+		{	
+			"RULE_NAME":"azo/hydrazone",
+			"RULE_ID":"5",
+			"RULE_STATE":1,
+			"RULE_STATE_INFO" : "NN=C",
+			"STATE_ENERGY":0.07,
+		
+			"ENERGY_CORRECTIONS":
+			[
+				{
+					"CORRECTION_NAME":"conjugation",					
+					"ATOM3_CONDITIONS": ["CC=[#6,O]"],
+					"ENERGY":-0.29
+				}
+			]
+		},
+		
+		{	
+			"RULE_NAME":"amidine/imidine",
+			"RULE_ID":"8",
+			"RULE_STATE":1,
+			"RULE_STATE_INFO" : "NC=N",
+			"STATE_ENERGY":0.22,
+		
+			"ENERGY_CORRECTIONS":
+			[
+				{
+					"CORRECTION_NAME":"aromatic",
+					"ATOM2_CONDITIONS":["c"],
+					"ATOM3_CONDITIONS":["n"],
+					"ENERGY":-0.33
+				}
+			]
+		},		
+		
+		{	
+			"RULE_NAME":"thioamide/iminothiol",
+			"RULE_ID":"10",
+			"RULE_STATE":0,
+			"RULE_STATE_INFO" : "S=CN",
+			"STATE_ENERGY":0.29
+		},		
+		
+		{	
+			"RULE_NAME":"rule15",
+			"RULE_ID":"15",
+			"RULE_STATE":1,
+			"RULE_STATE_INFO" : "OS=C",
+			"STATE_ENERGY":0.74
+		}
+	]
+
+}
