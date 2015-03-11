@@ -8,6 +8,7 @@ import ambit2.rest.bundle.BundlePropertyResource;
 import ambit2.rest.bundle.BundleSubstanceResource;
 import ambit2.rest.bundle.BundleSubstanceStudyResource;
 import ambit2.rest.bundle.BundleSummaryResource;
+import ambit2.rest.bundle.BundleVersionsResource;
 import ambit2.rest.bundle.dataset.BundleChemicalsResource;
 import ambit2.rest.bundle.dataset.BundleDatasetResource;
 import ambit2.rest.bundle.dataset.BundleMatrixResource;
@@ -31,6 +32,8 @@ public class BundleRouter extends MyRouter {
 		attach(String.format("/{idbundle}%s",OpenTox.URI.compound.getURI()), BundleChemicalsResource.class);
 		attach(String.format("/{idbundle}%s",BundleSubstanceStudyResource.resource), BundleSubstanceStudyResource.class);
 		attach(String.format("/{idbundle}%s",BundleSummaryResource.resource), BundleSummaryResource.class);
+		attach(String.format("/{idbundle}%s","/version"), BundleVersionsResource.class);
+		
 
 		
 	}

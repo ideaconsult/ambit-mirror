@@ -4,7 +4,6 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 import net.idea.modbcum.p.DefaultAmbitProcessor;
-import ambit2.base.data.I5Utils;
 import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.interfaces.IStructureRecord;

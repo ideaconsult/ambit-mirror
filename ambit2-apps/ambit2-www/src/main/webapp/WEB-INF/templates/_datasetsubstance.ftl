@@ -56,7 +56,7 @@
 	data-on-details="onDetailedRow"
 	data-dataset-uri="${ambit_request}"
 <#if bundleid??>	
-	data-featureUri="${ambit_root}/bundle/${bundleid}/property"
+	data-feature-uri="${ambit_root}/bundle/${bundleid}/property"
 </#if>	 	
 	data-tabs-folded="true"
 	data-on-error="errorHandler" 

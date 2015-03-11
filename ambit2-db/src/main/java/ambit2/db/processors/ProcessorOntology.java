@@ -65,7 +65,7 @@ public class ProcessorOntology extends AbstractDBProcessor<Object, Dictionary> {
 		template[side.ordinal()] = dictionary;
 		return dictionary;
 	}
-	protected Dictionary moveProperty(Property property,SIDE source,SIDE destination) throws AmbitException {
+	protected Dictionary moveProperty(Property property,SIDE source,SIDE destination) throws Exception {
 		TemplateDeleteProperty delete = new TemplateDeleteProperty();
 		TemplateAddProperty add = new TemplateAddProperty();
 		delete.setGroup(getTemplate(source));
@@ -80,21 +80,21 @@ public class ProcessorOntology extends AbstractDBProcessor<Object, Dictionary> {
 	protected Dictionary getTemplate(SIDE side) {
 		return template[side.ordinal()];
 	}
-	protected Dictionary createProperty(Property property,SIDE side) throws AmbitException {
+	protected Dictionary createProperty(Property property,SIDE side) throws Exception {
 		TemplateAddProperty add = new TemplateAddProperty();
 		add.setGroup(getTemplate(side));
 		add.setObject(property);
 		executor.process(add);
 		return getTemplate(side);
 	}	
-	protected Dictionary deleteProperty(Property property,SIDE side) throws AmbitException {
+	protected Dictionary deleteProperty(Property property,SIDE side) throws Exception {
 		TemplateDeleteProperty delete = new TemplateDeleteProperty();
 		delete.setGroup(getTemplate(side));
 		delete.setObject(property);
 		executor.process(delete);
 		return getTemplate(side);
 	}	
-	protected Dictionary moveTemplate(Dictionary d,SIDE source,SIDE destination) throws AmbitException {
+	protected Dictionary moveTemplate(Dictionary d,SIDE source,SIDE destination) throws Exception {
 		DeleteDictionary delete = new DeleteDictionary();
 		delete.setObject(d); //new Dictionary(d.getTemplate(),getTemplate(source).getTemplate()));
 		CreateDictionary add = new CreateDictionary();
@@ -106,7 +106,7 @@ public class ProcessorOntology extends AbstractDBProcessor<Object, Dictionary> {
 		executor.process(add);
 		return newEntry;
 	}	
-	protected Dictionary createTemplate(Dictionary d,SIDE side) throws AmbitException {
+	protected Dictionary createTemplate(Dictionary d,SIDE side) throws Exception {
 		CreateDictionary add = new CreateDictionary();
 		Dictionary newEntry = new Dictionary();
 		newEntry.setTemplate(d.getTemplate());

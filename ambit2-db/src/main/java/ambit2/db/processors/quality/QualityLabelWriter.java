@@ -18,36 +18,41 @@ import ambit2.db.update.qlabel.CreateQLabelFingerprints;
 import ambit2.db.update.qlabel.SmilesUniquenessCheck;
 
 public class QualityLabelWriter extends AbstractRepositoryWriter<IStructureRecord, IStructureRecord> {
-	protected CreateQLabelFingerprints query = new CreateQLabelFingerprints();
-	protected SmilesUniquenessCheck querySmiles = new SmilesUniquenessCheck();
-	protected MoleculeReader molReader = new MoleculeReader();
-	protected FingerprintGenerator g = new FingerprintGenerator(new Fingerprinter());
-	protected SmilesKey smilesKey = new SmilesKey();
-	/**
+    protected CreateQLabelFingerprints query = new CreateQLabelFingerprints();
+    protected SmilesUniquenessCheck querySmiles = new SmilesUniquenessCheck();
+    protected MoleculeReader molReader = new MoleculeReader();
+    protected FingerprintGenerator g = new FingerprintGenerator(new Fingerprinter());
+    protected SmilesKey smilesKey = new SmilesKey();
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = -7068666045941631192L;
-	@Override
-	public IStructureRecord create(IStructureRecord record) throws SQLException,
-			OperationNotSupportedException, AmbitException {
-		IAtomContainer a = molReader.process(record);
-		if ((a==null) || (a.getAtomCount()==0)) {
-			query.setObject(null);
-			query.setGroup(record);
-			exec.process(query);
-			
-			querySmiles.setObject(null);
-			querySmiles.setGroup(record);
-			exec.process(querySmiles);
-		} else {
-			query.setObject(g.process(a));
-			query.setGroup(record);
-			exec.process(query);
-			
-			querySmiles.setObject(smilesKey.process(a));
-			querySmiles.setGroup(record);
-			exec.process(querySmiles);
-		}
-		return record;
+    private static final long serialVersionUID = -7068666045941631192L;
+
+    @Override
+    public IStructureRecord create(IStructureRecord record) throws SQLException, OperationNotSupportedException,
+	    AmbitException {
+	try {
+	    IAtomContainer a = molReader.process(record);
+	    if ((a == null) || (a.getAtomCount() == 0)) {
+		query.setObject(null);
+		query.setGroup(record);
+		exec.process(query);
+
+		querySmiles.setObject(null);
+		querySmiles.setGroup(record);
+		exec.process(querySmiles);
+	    } else {
+		query.setObject(g.process(a));
+		query.setGroup(record);
+		exec.process(query);
+
+		querySmiles.setObject(smilesKey.process(a));
+		querySmiles.setGroup(record);
+		exec.process(querySmiles);
+	    }
+	    return record;
+	} catch (Exception x) {
+	    throw new AmbitException(x);
 	}
+    }
 }

@@ -323,6 +323,95 @@
 			        }			        
 			    ]
 			},
+
+			{
+			    "path": "/bundle/{idbundle}/version",
+			    "operations": [
+			        {
+			            "method": "GET",
+			            "summary": "Get aall versions of a bundle",
+			            "notes": "Returns bundle representation (a dataset, composed of substances)",
+			            "type": "DatasetMetadata",
+			            "nickname": "getBundleVersionsByID",
+			            <#include "/apidocs/authz.ftl" >
+
+			            "parameters": [
+							{
+							    "name": "id",
+							    "description": "Bundle identifier",
+							    "required": true,
+							    "type": "string",
+							    "paramType": "path",
+							    "allowMultiple": false
+							}								
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Invalid bundle identifier"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Bundle not found"
+			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        },
+			        {
+			            "method": "POST",
+			            "summary": "Create bundle version",
+			            "notes": "Create  bundle version",
+			            "type": "Task",
+			            "nickname": "createBundleVersion",
+		                "consumes": [
+				                       "application/x-www-form-urlencoded"
+		                ],					            
+			            <#include "/apidocs/authz.ftl" >
+
+			            "parameters": [
+			               {
+							   "name": "idbundle",
+							   "description": "Bundle identifier",
+							   "required": true,
+							   "type": "string",
+							   "paramType": "path",
+							   "allowMultiple": false
+							}							
+			            ],
+			            "responseMessages": [
+			     			{
+			    			 "code": 200,
+			    			 "message": "OK"
+			    			},				                                 
+			     			{
+			     				"code": 400,
+			     			    "message": "Invalid bundle identifier"
+			     			},						                                 
+			                {
+			                    "code": 404,
+			                    "message": "Bundle not found"
+			                },
+			     			{
+			     				"code": 415,
+			     			    "message": "Media type not supported"
+			     			},							            			                
+							<#include "/apidocs/error_aa.ftl" >,
+							<#include "/apidocs/error_500.ftl" >			                
+			            ]
+			        }
+		        
+			    ]
+			},			
+
 			{
 			    "path": "/bundle/{idbundle}/metadata",
 			    "operations": [

@@ -64,7 +64,7 @@
 	  	  <div class="thirteen columns remove-bottom">
 	      <table class="dataTable">
 	        <thead>
-	          <tr><th class="right size-third">Assessment<a href='#' class='chelp assessment'>?</a></th></th><th class="data-field" data-field="id"></th></tr>
+	          <tr><th class="right size-third">Assessment<a href='#' class='chelp assessment'>?</a></th></th><th class="data-field" data-field="number"></th></tr>
 	          <tr><td class="right size-third">Name <a href='#' class='chelp a_name'>?</a>:</td><td><input class="data-field first-time validate" data-field="title" name="title"></input></td></tr>
 			  <tr><td class="right size-third">Source <a href='#' class='chelp a_source'>?</a>:</td><td><input class="data-field first-time validate" data-field="seeAlso" name="source"></input></td></tr>
 	          <tr><td class="right size-third">Source URL <a href='#' class='chelp a_source'>?</a>:</td><td><input class="data-field first-time validate" data-field="source" name="url"></input></td></tr>
@@ -78,7 +78,7 @@
 
 	          <tr><td class="right size-third">Status <a href='#' class='chelp a_status'>?</a>:</td><td class="data-field" data-field="status"></td></tr>
 	          <tr><td class="right size-third">Date started <a href='#' class='chelp a_started'>?</a>:</td><td class="data-field" data-field="created" data-format="formatDate"></td></tr>
-	          <tr><td class="right size-third">Date finished <a href='#' class='chelp a_started'>?</a>:</td><td class="data-field" data-field="finished" data-format="formatDate"></td></tr>
+	          <tr><td class="right size-third">Date updated <a href='#' class='chelp a_started'>?</a>:</td><td class="data-field" data-field="updated" data-format="formatDate"></td></tr>
 	          <tr>
 	          	<td class="right size-third">Flags <a href='#' class='chelp a_flags'>?</a>:</td>
 	          	<td>

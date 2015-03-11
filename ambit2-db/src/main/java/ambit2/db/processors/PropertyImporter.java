@@ -64,147 +64,141 @@ import ambit2.db.update.dataset.DatasetAddStructure;
  * @author nina
  * 
  */
-public class PropertyImporter extends
-		AbstractRepositoryWriter<IAtomContainer, List<IStructureRecord>> {
+public class PropertyImporter extends AbstractRepositoryWriter<IAtomContainer, List<IStructureRecord>> {
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = -723253191799638564L;
-	protected PropertyValuesWriter propertyWriter;
-	protected IStructureKey queryKey;
-	protected AbstractStructureQuery query_property;
-	protected DatasetAddStructure datasetAddStruc = new DatasetAddStructure();
+    private static final long serialVersionUID = -723253191799638564L;
+    protected PropertyValuesWriter propertyWriter;
+    protected IStructureKey queryKey;
+    protected AbstractStructureQuery query_property;
+    protected DatasetAddStructure datasetAddStruc = new DatasetAddStructure();
 
-	public PropertyImporter() {
-		propertyWriter = new PropertyValuesWriter();
-		setPropertyKey(new CASKey());
+    public PropertyImporter() {
+	propertyWriter = new PropertyValuesWriter();
+	setPropertyKey(new CASKey());
+    }
+
+    public IStructureKey getPropertyKey() {
+	return queryKey;
+    }
+
+    public void setPropertyKey(IStructureKey propertyKey) {
+	this.queryKey = propertyKey;
+	if ((propertyKey instanceof SmilesKey) || (propertyKey instanceof InchiKey)) {
+	    query_property = new QueryStructure();
+	} else if ((propertyKey.getType() == Number.class) || (propertyKey.getType() == Integer.class)
+		|| (propertyKey.getType() == Double.class))
+	    query_property = new QueryFieldNumeric();
+	else
+	    query_property = new QueryField();
+
+	query_property.setId(-1);
+
+    }
+
+    @Override
+    public synchronized void setConnection(Connection connection) throws DbAmbitException {
+	super.setConnection(connection);
+	propertyWriter.setConnection(connection);
+    }
+
+    @Override
+    public void open() throws DbAmbitException {
+	super.open();
+	propertyWriter.open();
+    }
+
+    public void close() throws Exception {
+	try {
+
+	    if (propertyWriter != null)
+		propertyWriter.close();
+
+	} catch (SQLException x) {
+	    logger.log(java.util.logging.Level.SEVERE, x.getMessage(), x);
 	}
+	super.close();
+    }
 
-	public IStructureKey getPropertyKey() {
-		return queryKey;
-	}
+    public void setDataset(SourceDataset dataset) {
+	propertyWriter.setDataset(dataset);
+    }
 
-	public void setPropertyKey(IStructureKey propertyKey) {
-		this.queryKey = propertyKey;
-		if ((propertyKey instanceof SmilesKey)
-				|| (propertyKey instanceof InchiKey)) {
-			query_property = new QueryStructure();
-		} else if ((propertyKey.getType() == Number.class)
-				|| (propertyKey.getType() == Integer.class)
-				|| (propertyKey.getType() == Double.class))
-			query_property = new QueryFieldNumeric();
+    public SourceDataset getDataset() {
+	return propertyWriter.getDataset();
+    }
+
+    protected Object getValue(IAtomContainer molecule) throws Exception {
+	if (getPropertyKey() instanceof PropertyKey) {
+	    IStructureRecord structure = new StructureRecord();
+	    structure.setReference(getDataset().getReference());
+	    structure.addProperties(molecule.getProperties());
+	    return queryKey.process(structure);
+	} else
+	    return queryKey.process(molecule);
+    }
+
+    @Override
+    public List<IStructureRecord> write(IAtomContainer molecule) throws SQLException, OperationNotSupportedException,
+	    AmbitException {
+	List<IStructureRecord> sr = new ArrayList<IStructureRecord>();
+
+	ResultSet rs = null;
+	try {
+	    Object value = getValue(molecule);
+	    if (value == null)
+		throw new AmbitException("No value to match " + getPropertyKey());
+
+	    query_property.setValue(value);
+
+	    if (queryKey.getQueryKey() != null) {
+		if (query_property instanceof QueryStructure)
+		    query_property.setFieldname(ExactStructureSearchMode.valueOf(queryKey.getQueryKey().toString()));
 		else
-			query_property = new QueryField();
+		    query_property.setFieldname(queryKey.getQueryKey());
+	    } else
+		query_property.setFieldname(null);
+	    rs = queryexec.process(query_property);
 
-		query_property.setId(-1);
-
+	    IStructureRecord old_structure = null;
+	    while (rs.next()) {
+		IStructureRecord structure = query_property.getObject(rs);
+		if ((old_structure != null) && (structure.getIdchemical() == old_structure.getIdchemical())
+			&& (structure.getIdstructure() == old_structure.getIdstructure()))
+		    continue;
+		structure.setReference(getDataset().getReference());
+		structure.clearProperties();
+		structure.addProperties(molecule.getProperties());
+		writeDataset(structure);
+		propertyWriter.process(structure);
+		sr.add(structure);
+		old_structure = structure;
+	    }
+	    if (sr.size() == 0)
+		throw new AmbitException("No matching entry! " + getPropertyKey() + "=" + value);
+	} catch (Exception x) {
+	    throw new AmbitException(x);
+	} finally {
+	    if (rs != null)
+		queryexec.closeResults(rs);
 	}
 
-	@Override
-	public synchronized void setConnection(Connection connection)
-			throws DbAmbitException {
-		super.setConnection(connection);
-		propertyWriter.setConnection(connection);
+	return sr;
+    }
+
+    protected void writeDataset(IStructureRecord structure) throws SQLException, AmbitException,
+	    OperationNotSupportedException {
+	if (getDataset() == null)
+	    setDataset(new SourceDataset("Default"));
+
+	datasetAddStruc.setObject(structure);
+	datasetAddStruc.setGroup(getDataset());
+	try {
+	    exec.process(datasetAddStruc);
+	} catch (Exception x) {
+	    throw new AmbitException(x);
 	}
-
-	@Override
-	public void open() throws DbAmbitException {
-		super.open();
-		propertyWriter.open();
-	}
-
-	public void close() throws Exception {
-		try {
-
-			if (propertyWriter != null)
-				propertyWriter.close();
-
-		} catch (SQLException x) {
-			logger.log(java.util.logging.Level.SEVERE, x.getMessage(), x);
-		}
-		super.close();
-	}
-
-	public void setDataset(SourceDataset dataset) {
-		propertyWriter.setDataset(dataset);
-	}
-
-	public SourceDataset getDataset() {
-		return propertyWriter.getDataset();
-	}
-
-	protected Object getValue(IAtomContainer molecule) throws Exception {
-		if (getPropertyKey() instanceof PropertyKey) {
-			IStructureRecord structure = new StructureRecord();
-			structure.setReference(getDataset().getReference());
-			structure.addProperties(molecule.getProperties());
-			return queryKey.process(structure);
-		} else
-			return queryKey.process(molecule);
-	}
-
-	@Override
-	public List<IStructureRecord> write(IAtomContainer molecule)
-			throws SQLException, OperationNotSupportedException, AmbitException {
-		List<IStructureRecord> sr = new ArrayList<IStructureRecord>();
-
-		ResultSet rs = null;
-		try {
-			Object value = getValue(molecule);
-			if (value == null)
-				throw new AmbitException("No value to match "
-						+ getPropertyKey());
-
-			query_property.setValue(value);
-
-			if (queryKey.getQueryKey() != null) {
-				if (query_property instanceof QueryStructure)
-					query_property.setFieldname(ExactStructureSearchMode
-							.valueOf(queryKey.getQueryKey().toString()));
-				else
-					query_property.setFieldname(queryKey.getQueryKey());
-			} else
-				query_property.setFieldname(null);
-			rs = queryexec.process(query_property);
-
-			IStructureRecord old_structure = null;
-			while (rs.next()) {
-				IStructureRecord structure = query_property.getObject(rs);
-				if ((old_structure != null)
-						&& (structure.getIdchemical() == old_structure
-								.getIdchemical())
-						&& (structure.getIdstructure() == old_structure
-								.getIdstructure()))
-					continue;
-				structure.setReference(getDataset().getReference());
-				structure.clearProperties();
-				structure.addProperties(molecule.getProperties());
-				writeDataset(structure);
-				propertyWriter.process(structure);
-				sr.add(structure);
-				old_structure = structure;
-			}
-			if (sr.size() == 0)
-				throw new AmbitException("No matching entry! "
-						+ getPropertyKey() + "=" + value);
-		} catch (Exception x) {
-			throw new AmbitException(x);			
-		} finally {
-			if (rs != null)
-				queryexec.closeResults(rs);
-		}
-
-		return sr;
-	}
-
-	protected void writeDataset(IStructureRecord structure)
-			throws SQLException, AmbitException, OperationNotSupportedException {
-		if (getDataset() == null)
-			setDataset(new SourceDataset("Default"));
-
-		datasetAddStruc.setObject(structure);
-		datasetAddStruc.setGroup(getDataset());
-		exec.process(datasetAddStruc);
-	}
+    }
 }

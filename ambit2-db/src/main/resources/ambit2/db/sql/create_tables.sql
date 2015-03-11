@@ -240,20 +240,27 @@ CREATE TABLE `bundle` (
   `name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT 'default',
   `user_name` varchar(16) COLLATE utf8_bin DEFAULT NULL,
   `idreference` int(11) unsigned NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `licenseURI` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
   `rightsHolder` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
   `maintainer` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
   `stars` int(10) unsigned NOT NULL DEFAULT '5',
   `description` text COLLATE utf8_bin,
+  `bundle_number` varbinary(16) NOT NULL,
+  `version` int(11) DEFAULT '1',
+  `published_status` enum('draft','published','archived','deleted') COLLATE utf8_bin DEFAULT 'draft',
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idbundle`),
-  UNIQUE KEY `assessment_name` (`name`),
+  UNIQUE KEY `bundle_number` (`bundle_number`,`version`),
   KEY `FK_assessment_1` (`user_name`),
   KEY `Index_6` (`maintainer`),
   KEY `Index_7` (`stars`),
   KEY `FK_investigation_ref` (`idreference`),
+  KEY `published_status` (`published_status`),
+  KEY `assessment_name` (`name`),
   CONSTRAINT `FK_investigation_ref` FOREIGN KEY (`idreference`) REFERENCES `catalog_references` (`idreference`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 
 -- -----------------------------------------------------
 -- A collection of substances 
@@ -1444,7 +1451,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (8,7,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (8,8,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
@@ -1781,6 +1788,93 @@ END $$
 
 DELIMITER ;
 
+-- -----------------------------------------------------
+-- Creates version of a bundle 
+-- keeps the bundle_number and increments the version
+-- -----------------------------------------------------
+DROP PROCEDURE IF EXISTS `createBundleVersion`;
+DELIMITER $$
+
+CREATE PROCEDURE `createBundleVersion`(
+				IN id INT,
+                OUT version_new INT,
+				OUT this_bundle_number VARCHAR(36),
+				OUT id_new INT)
+BEGIN
+    DECLARE no_more_rows BOOLEAN;
+    DECLARE bn VARBINARY(16);
+    
+    DECLARE bundle CURSOR FOR
+    	select max(version)+1,bundle_number from bundle where bundle_number in (select bundle_number from bundle where idbundle=id) LIMIT 1;
+    	
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET no_more_rows = TRUE;
+    
+    OPEN bundle;
+    the_loop: LOOP
+
+	  FETCH bundle into version_new,bn;
+	  IF no_more_rows THEN
+		  CLOSE bundle;
+		  LEAVE the_loop;
+  	END IF;
+        
+ 	
+    insert into bundle (idbundle,name,user_name,idreference,created,licenseURI,rightsHolder,maintainer,stars,description,bundle_number,version,published_status,updated)
+    select null,name,user_name,idreference,now(),licenseURI,rightsHolder,maintainer,stars,description,bn,version_new,'draft',now()
+    from bundle where idbundle=id;
+	
+	SET id_new = LAST_INSERT_ID();
+
+    update bundle set published_status='archived' where idbundle=id and published_status='draft';
+	update bundle set published_status='archived' where published_status='draft' and bundle_number=bn and (version != version_new);
+	set this_bundle_number = hex(bn);
+
+	insert into bundle_chemicals (idbundle,idchemical,created,tag,remarks)
+    select id_new,idchemical,now(),tag,remarks from bundle_chemicals where idbundle=id;
+
+	insert into bundle_endpoints (idbundle,topcategory,endpointcategory,endpointhash,created)
+    select id_new,topcategory,endpointcategory,endpointhash,now() from bundle_endpoints where idbundle=id;
+
+	insert into bundle_substance (idsubstance,idbundle,created,substance_prefix,substance_uuid)
+    select idsubstance,id_new,now(),substance_prefix,substance_uuid from bundle_substance where idbundle=id;
+
+    END LOOP the_loop;
+
+END $$
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- create assessment copy procedure
+-- -----------------------------------------------------
+DROP PROCEDURE IF EXISTS `createBundleCopy`;
+DELIMITER $$
+
+CREATE PROCEDURE `createBundleCopy`(
+				IN id INT,
+	            IN myusername VARCHAR(16),
+                OUT id_new INT)
+BEGIN
+    DECLARE bn VARCHAR(36);
+	SET bn = replace(uuid(),"-","");
+    insert into bundle (idbundle,name,user_name,idreference,created,licenseURI,rightsHolder,maintainer,stars,description,bundle_number,version,published_status,updated)
+    select null,name,myusername,idreference,now(),licenseURI,rightsHolder,maintainer,stars,description,unhex(bn),1,'draft',now()
+    from bundle where idbundle=id;
+	
+    SET id_new = LAST_INSERT_ID();
+	
+	-- update bundle set bundle_number=unhex(id_new) where idbundle=id_new;
+
+	insert into bundle_chemicals (idbundle,idchemical,created,tag,remarks)
+    select id_new,idchemical,now(),tag,remarks from bundle_chemicals where idbundle=id;
+
+	insert into bundle_endpoints (idbundle,topcategory,endpointcategory,endpointhash,created)
+    select id_new,topcategory,endpointcategory,endpointhash,now() from bundle_endpoints where idbundle=id;
+
+	insert into bundle_substance (idsubstance,idbundle,created,substance_prefix,substance_uuid)
+    select idsubstance,id_new,now(),substance_prefix,substance_uuid from bundle_substance where idbundle=id;
+
+END $$
+DELIMITER ;
 
 -- -----------------------------------------------------
 -- Deletes a dataset and associated structures, if the structures are not in any other dataset
