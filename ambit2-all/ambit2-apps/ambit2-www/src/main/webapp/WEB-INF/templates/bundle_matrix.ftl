@@ -49,7 +49,7 @@
 	<div class="jtox-toolkit" data-kit="compound" 
 	data-configuration="config_dataset"
 <#if bundleid??>	
-	data-featureUri="${ambit_root}/bundle/${bundleid}/property"
+	data-feature-uri="${ambit_root}/bundle/${bundleid}/property"
 </#if>	 
 	data-cross-domain="false"	
 	data-show-export="yes"

@@ -31,6 +31,7 @@ package ambit2.db.update.bundle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
@@ -41,7 +42,7 @@ public class CreateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 	
 	public static final String[] create_sql = {
 		"INSERT IGNORE INTO catalog_references (idreference, title, url) VALUES (null,?,?)",
-		"INSERT IGNORE INTO bundle (idbundle, name,user_name,idreference,licenseURI,rightsHolder,description) SELECT ?,?,SUBSTRING_INDEX(user(),'@',1),idreference,?,?,? FROM catalog_references WHERE title=?"
+		"INSERT IGNORE INTO bundle (idbundle, name,user_name,idreference,licenseURI,rightsHolder,description,created,bundle_number) SELECT ?,?,?,idreference,?,?,?,now(),unhex(replace(?,'-','')) FROM catalog_references WHERE title=?"
 	};
 
 	public CreateBundle(SubstanceEndpointsBundle dataset) {
@@ -68,11 +69,13 @@ public class CreateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 			List<QueryParam> params2 = new ArrayList<QueryParam>();
 			params2.add(new QueryParam<Integer>(Integer.class, getObject().getID()>0?getObject().getID():null));
 			params2.add(new QueryParam<String>(String.class, getObject().getName()));
+			params2.add(new QueryParam<String>(String.class, getObject().getUserName()));
 			params2.add(new QueryParam<String>(String.class, getObject().getLicenseURI()));
 			params2.add(new QueryParam<String>(String.class, getObject().getrightsHolder()));
 			params2.add(new QueryParam<String>(String.class, getObject().getDescription()));
+			if (getObject().getBundle_number()==null) getObject().setBundle_number(UUID.randomUUID());
+			params2.add(new QueryParam<String>(String.class, getObject().getBundle_number().toString()));			
 			params2.add(new QueryParam<String>(String.class, getObject().getSource()));
-			
 			return params2;
 		}
 		default: {

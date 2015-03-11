@@ -1,5 +1,7 @@
 package ambit2.base.data.substance;
 
+import java.util.UUID;
+
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.LiteratureEntry;
@@ -19,6 +21,33 @@ public class SubstanceEndpointsBundle implements ISourceDataset {
 	protected int id;
 	protected String userName;
 	protected String description;
+	protected UUID bundle_number;
+	protected String status = "draft";
+	public String getStatus() {
+	    return status;
+	}
+	public void setStatus(String status) {
+	    this.status = status;
+	}
+	public String getUserName() {
+	    return userName;
+	}
+	public void setUserName(String userName) {
+	    this.userName = userName;
+	}
+	public UUID getBundle_number() {
+	    return bundle_number;
+	}
+	public void setBundle_number(UUID bundle_number) {
+	    this.bundle_number = bundle_number;
+	}
+	public int getVersion() {
+	    return version;
+	}
+	public void setVersion(int version) {
+	    this.version = version;
+	}
+	protected int version;
 	public String getDescription() {
 	    return description;
 	}
@@ -26,7 +55,14 @@ public class SubstanceEndpointsBundle implements ISourceDataset {
 	    this.description = description;
 	}
 	protected long created;
+	protected long updated;
 	
+	public long getUpdated() {
+	    return updated;
+	}
+	public void setUpdated(long updated) {
+	    this.updated = updated;
+	}
 	public long getCreated() {
 	    return created;
 	}
@@ -128,12 +164,6 @@ public class SubstanceEndpointsBundle implements ISourceDataset {
 	}
 	public void setReference(ILiteratureEntry reference) {
 		this.reference = reference;
-	}
-	public String getUsername() {
-		return userName;
-	}
-	public void setUsername(String name) {
-		this.userName = name;
 	}
 	@Override
 	public String toString() {

@@ -3,9 +3,13 @@ package ambit2.db.update.bundle;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import org.apache.commons.lang3.StringUtils;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import ambit2.base.data.I5Utils;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
@@ -19,7 +23,7 @@ import ambit2.db.update.dataset.AbstractReadDataset;
  */
 public class ReadBundle extends AbstractReadDataset<String, SubstanceEndpointsBundle> {
 
-    public static final String select_datasets = "SELECT idbundle as id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder,stars,maintainer,created,description FROM bundle join catalog_references using(idreference) %s order by stars desc\n";
+    public static final String select_datasets = "SELECT idbundle as id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder,stars,maintainer,created,description,hex(bundle_number) bn,version,user_name,published_status,updated FROM bundle join catalog_references using(idreference) %s order by stars desc\n";
     /**
 	 * 
 	 */
@@ -28,7 +32,7 @@ public class ReadBundle extends AbstractReadDataset<String, SubstanceEndpointsBu
     @Override
     protected SubstanceEndpointsBundle createObject(String title, LiteratureEntry le, String username) {
 	SubstanceEndpointsBundle d = new SubstanceEndpointsBundle(title, le);
-	d.setUsername(username);
+	d.setUserName(username);
 	return d;
     }
 
@@ -46,7 +50,7 @@ public class ReadBundle extends AbstractReadDataset<String, SubstanceEndpointsBu
     }
 
     public String getSQL() throws AmbitException {
-	return String.format(select_datasets, getValue() == null ? "" : getValue().getID() > 0 ? "where idbundle=?"
+	return String.format(select_datasets, getValue() == null ? "where published_status in ('draft','published')" : getValue().getID() > 0 ? "where idbundle=?"
 		: "where name=?");
     }
 
@@ -61,13 +65,36 @@ public class ReadBundle extends AbstractReadDataset<String, SubstanceEndpointsBu
 	SubstanceEndpointsBundle bundle = super.getObject(rs);
 	try {
 	    bundle.setCreated(rs.getTimestamp("created").getTime());
-	} catch (Exception x) {
-	}
+	} catch (Exception x) {	}
+	try {
+	    bundle.setUpdated(rs.getTimestamp("updated").getTime());
+	} catch (Exception x) {	}
 	try {
 	    bundle.setDescription(rs.getString("description"));
 	} catch (Exception x) {
+	}
+	try {
+	    bundle.setUserName(rs.getString("username"));
+	} catch (Exception x) {
+	}
+	try {
+	    bundle.setVersion(rs.getInt("version"));
+	} catch (Exception x) {
+	}
+	try {
+	    bundle.setStatus(rs.getString("published_status"));
+	} catch (Exception x) {
+	}	
+	try {
+	    String bn = rs.getString("bn");
+	    if (bn.length()<32)  
+		bn = String.format("%32s", bn).replace(" ", "0");
+	    bundle.setBundle_number(UUID.fromString(I5Utils.addDashes(bn)));
+	} catch (Exception x) {
+	    x.printStackTrace();
 	}
 	return bundle;
     }
 
 }
+

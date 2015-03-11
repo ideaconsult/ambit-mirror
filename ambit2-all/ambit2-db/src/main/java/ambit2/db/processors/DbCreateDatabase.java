@@ -179,6 +179,9 @@ skip-name-resolve
 		        st.executeQuery(String.format("GRANT SELECT ON `mysql`.`proc` TO 'guest'@'%s';",localAddr));
 		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE findByProperty TO 'guest'@'%s';",localAddr));
 		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE deleteDataset TO 'guest'@'%s';",localAddr));
+		        
+		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE createBundleVersion TO 'guest'@'%s';",localAddr));
+		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE createBundleCopy TO 'guest'@'%s';",localAddr));
 	        }
 	         
         } catch (Exception x) {
@@ -260,6 +263,7 @@ skip-name-resolve
                 in.close();
                 reader.close();
         } catch (IOException x) {
+            x.printStackTrace();
             throw new SQLException(x.getMessage());
         }
     }

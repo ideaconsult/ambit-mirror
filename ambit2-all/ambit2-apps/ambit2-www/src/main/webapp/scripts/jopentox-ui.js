@@ -1891,33 +1891,47 @@ function defineBundlesTable_lri(root,url,deleteVisible) {
 	"sPaginate" : ".dataTables_paginate _paging",
 	"oLanguage": {
             "sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
-            "sLoadingRecords": "No substance datasets found.",
-            "sZeroRecords": "No substance datasets found.",
-            "sEmptyTable": "No substance datasets available.",
-            "sInfo": "Showing _TOTAL_ substance datasets (_START_ to _END_)",
+            "sLoadingRecords": "No assessments.",
+            "sZeroRecords": "No assessments.",
+            "sEmptyTable": "No assessments.",
+            "sInfo": "Showing _TOTAL_ assessments (_START_ to _END_)",
             "sLengthMenu": 'Display <select>' +
           '<option value="10">10</option>' +
           '<option value="20">20</option>' +
           '<option value="50">50</option>' +
           '<option value="100">100</option>' +
           '<option value="-1">all</option>' +
-          '</select> substance datasets.'	            
+          '</select> assessments.'	            
     },	
     "aoColumnDefs": [
+                     
      	  			{  
       				  "bSortable" : true,
-       	              "mDataProp":"id",
+       	              "mDataProp":"number",
        	              "aTargets": [ 0 ],
-       	              "sWidth" : "5%",
        	              "bUseRendered" : false,	
   	  					"fnRender" : function(o,val) {
-  							 return  val;			
+    		        	    var sOut = "<a target='table' href='"+ root + "/ui/assessment?bundle_uri=" + encodeURIComponent(o.aData.URI) +
+    		        	   		"' title='Click to view the assessments at "+ o.aData.URI+" as a table'>"+val+"</a> " ;
+    		               return sOut;
   						}     	              
       	  			},     	  
      	  			{  
         				  "bSortable" : true,
-         	              "mDataProp":"source",
+         	              "mDataProp":"version",
          	              "aTargets": [ 1 ],
+         	              "sWidth" : "5%",
+         	              "bUseRendered" : false,	
+    	  					"fnRender" : function(o,val) {
+        		        	    var sOut = "<a target='table' href='"+ o.aData.URI+"/version" +
+        		        	   		"' title='Click to view other versions "+ o.aData.URI+" as a table'>"+val+"</a> " ;
+        		               return sOut;
+    						}     	              
+        	  		},      	  			
+     	  			{  
+        				  "bSortable" : true,
+         	              "mDataProp":"source",
+         	              "aTargets": [ 2 ],
          	             "sWidth" : "15%",
          	              "bUseRendered" : false,	
     	  					"fnRender" : function(o,val) {
@@ -1926,23 +1940,16 @@ function defineBundlesTable_lri(root,url,deleteVisible) {
      	  			},         	  			
     	  			{ "sTitle": "Title", 
     	  			  "mDataProp":"title", 
-    	  			  "aTargets": [ 2 ],	
+    	  			  "aTargets": [ 3],	
     		          "bUseRendered" : false,	
     		          "fnRender": function ( o, val ) {
-  		        	    	var shortURI = o.aData.URI;
-  		        	    	pos =  shortURI.lastIndexOf("/");
-  		        	    	if (pos>=0) shortURI = shortURI.substring(pos+1); 
-  		        	    	var href = o.aData.URI;
-    		        	    var sOut = "<b>Assessment title:</b><a target='table' href='"+ root + "/ui/assessment?bundle_uri=" + encodeURIComponent(href) +
-    		        	   		"' title='Click to view the substance dataset at "+ o.aData.URI+" as a table'>"+
-    		        	   		(o.aData.title==null?o.aData.id:o.aData.title)+"</a> " ;
-    		               return sOut;
+   		        	   		return val==null?o.aData.id:o.aData.title;
     		          }
     	  			 },
        	  			  {  
         				  "bSortable" : true,
-         	              "mDataProp":"created",
-         	              "aTargets": [ 3 ],
+         	              "mDataProp":"status",
+         	              "aTargets": [ 4 ],
          	              "sWidth" : "5%",
          	              "bUseRendered" : false,	
     	  					"fnRender" : function(o,val) {
@@ -1952,7 +1959,7 @@ function defineBundlesTable_lri(root,url,deleteVisible) {
      	  			  {  
       				  "bSortable" : true,
        	              "mDataProp":"maintainer",
-       	              "aTargets": [ 4 ],
+       	              "aTargets": [ 5 ],
        	              "sWidth" : "15%",
        	              "bUseRendered" : false,	
   	  					"fnRender" : function(o,val) {

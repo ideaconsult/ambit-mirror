@@ -98,15 +98,22 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<M>,M extends ISou
 					));
 			if (item instanceof SubstanceEndpointsBundle) {
 			    	SubstanceEndpointsBundle bundle = (SubstanceEndpointsBundle) item;
-			    	getOutput().write(String.format(",\n\t\"id\":%s",bundle.getID()));
+			    	String bundle_number = bundle.getBundle_number()==null?null:bundle.getBundle_number().toString();
+			    	getOutput().write(String.format(",\n\t\"id\":%d",bundle.getID()));
+			    	getOutput().write(String.format(",\n\t\"number\":%s",JSONUtils.jsonQuote(JSONUtils.jsonEscape(bundle_number))));
+			    	getOutput().write(String.format(",\n\t\"version\":%d",bundle.getVersion()));
+			    	getOutput().write(String.format(",\n\t\"owner\":%s",JSONUtils.jsonQuote(JSONUtils.jsonEscape(bundle.getUserName()))));
 			    	getOutput().write(String.format(",\n\t\"description\":%s",JSONUtils.jsonQuote(JSONUtils.jsonEscape(bundle.getDescription()))));
 			    	getOutput().write(String.format(",\n\t\"created\":%s",bundle.getCreated()));
+			    	getOutput().write(String.format(",\n\t\"updated\":%s",bundle.getUpdated()));
+			    	getOutput().write(String.format(",\n\t\"status\":%s",JSONUtils.jsonQuote(JSONUtils.jsonEscape(bundle.getStatus()))));
 				getOutput().write(String.format(",\n\t\"summary\":\"%s/summary\"",uri));
 				getOutput().write(String.format(",\n\t\"compound\":\"%s/compound\"",uri));
 				getOutput().write(String.format(",\n\t\"substance\":\"%s/substance\"",uri));
 				getOutput().write(String.format(",\n\t\"property\":\"%s/property\"",uri));
 				getOutput().write(String.format(",\n\t\"dataset\":\"%s/dataset\"",uri));
 				getOutput().write(String.format(",\n\t\"matrix\":\"%s/matrix\"",uri));
+				getOutput().write(String.format(",\n\t\"bundleversions\":\"%s/version\"",uri));
 				
 			}
 			getOutput().write("\n}");			

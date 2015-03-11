@@ -41,7 +41,7 @@ import ambit2.db.update.dataset.UpdateDataset;
 public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle> {
 	private static final String update_sql = 
 
-		"update bundle set %s, user_name=SUBSTRING_INDEX(user(),'@',1) where idbundle=?"
+		"update bundle set %s where idbundle=?"
 	;
 	private static final String _license = "licenseURI=?";
 	

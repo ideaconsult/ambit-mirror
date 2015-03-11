@@ -110,5 +110,5 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <fp1024 idchemical="29141" fp1="0" fp2="0" fp3="0" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="0" fp13="0" fp14="4194304" fp15="0" fp16="0" time="0" bc="1" status="valid"/>
   <sk1024 idchemical="10" fp1="0" fp2="0" fp3="524288" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="33554432" fp10="0" fp11="0" fp12="0" fp13="0" fp14="0" fp15="0" fp16="0" time="0" bc="2" status="valid"/>
   <sk1024 idchemical="29141" fp1="0" fp2="0" fp3="0" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="0" fp13="0" fp14="0" fp15="0" fp16="0" time="0" bc="0" status="valid"/>
-  <bundle idbundle="1" name="Assessment" user_name="guest" idreference="9" created="2014-11-12 07:45:56.0" licenseURI="http://creativecommons.org/publicdomain/zero/1.0/" rightsHolder="xyz" maintainer="ABC" stars="8"/>
+  <bundle idbundle="1" name="Assessment" user_name="guest" idreference="9" created="2014-11-12 07:45:56.0" licenseURI="http://creativecommons.org/publicdomain/zero/1.0/" rightsHolder="xyz" maintainer="ABC" stars="8" bundle_number="79shu+efMoapiLb2lE03NA==" version="1"/>
 </dataset>

@@ -11,7 +11,7 @@
   <bundle_endpoints/>
   <bundle_substance_protocolapplication/>
   <bundle_substance_experiment/>
-  <bundle idbundle="1" name="test" user_name="guest" idreference="2" created="2014-11-12 07:45:56.0" licenseURI="http://creativecommons.org/publicdomain/zero/1.0/" rightsHolder="xyz" maintainer="ABC" stars="8"/>
+  <bundle idbundle="1" name="test" user_name="guest" idreference="2" created="2014-11-12 07:45:56.0" licenseURI="http://creativecommons.org/publicdomain/zero/1.0/" rightsHolder="xyz" maintainer="ABC" stars="8"  bundle_number="79shu+efMoapiLb2lE03NA==" version="1"/>
   <structure/>
   <properties/>
   <template/>

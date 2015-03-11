@@ -614,7 +614,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 
     	}
     }
-    protected void selectRecords(IStructureRecord record,boolean value) throws AmbitException,SQLException {
+    protected void selectRecords(IStructureRecord record,boolean value) throws Exception,SQLException {
     	IStoredQuery query = null;
     	if (storedResults==null) return;
     	if (storedResults instanceof QueryStoredResults) query = ((QueryStoredResults)storedResults).getFieldname();
@@ -628,7 +628,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
     		setQuery(getQuery());    	
     }
     
-    protected void selectRecords(SELECTION_MODE mode) throws AmbitException,SQLException {
+    protected void selectRecords(SELECTION_MODE mode) throws Exception,SQLException {
     	IStoredQuery query = null;
     	if (storedResults==null) return;
     	if (storedResults instanceof QueryStoredResults) query = ((QueryStoredResults)storedResults).getFieldname();

@@ -81,6 +81,7 @@
 				<thead>
 				<tr>
 				<th>ID</th>
+				<th>Version</th>
 				<th>Code</th>
 				<th>Name</th>
 				<th>Status</th>
