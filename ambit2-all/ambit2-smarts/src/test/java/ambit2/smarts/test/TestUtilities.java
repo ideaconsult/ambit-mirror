@@ -67,6 +67,7 @@ import ambit2.smarts.SMIRKSReaction;
 import ambit2.smarts.Screening;
 import ambit2.smarts.ScreeningData;
 import ambit2.smarts.SmartsConst;
+import ambit2.smarts.SmartsFlags;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsManager;
 import ambit2.smarts.SmartsParser;
@@ -251,6 +252,39 @@ public class TestUtilities {
 		}
 		boolean res = man.searchIn(mol);
 		System.out.println("Man_search " + smarts + " in " + smiles + "   --> " + res);
+	}
+	
+	public void testSmartsSearchAtPos(String smarts, String smiles, int pos) throws Exception {
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+
+		if (FlagTargetPreprocessing)
+			preProcess(mol);
+
+		IQueryAtomContainer query = sp.parse(smarts);
+		sp.setNeededDataFlags();
+		
+		
+		
+		/*
+		 
+		SmartsFlags flags = new SmartsFlags();
+		flags.hasRecursiveSmarts = sp.hasRecursiveSmarts;
+		flags.mNeedExplicitHData = sp.needExplicitHData();
+		
+		SmartsParser.prepareTargetForSMARTSSearch(
+				flags.mNeedNeighbourData, 
+				flags.mNeedValenceData, 
+				flags.mNeedRingData, 
+				flags.mNeedRingData2, 
+				flags.mNeedExplicitHData , 
+				flags.mNeedParentMoleculeData, mol);
+		
+		*/
+		
+		isoTester.setQuery(query);
+		boolean res = isoTester.checkIsomorphismAtPosition(mol, pos);
+		
+		System.out.println("Search "  + smarts + " in " + " at pos  " + pos + "  in " + smiles + "   --> " + res);
 	}
 
 	public void testSmartsManagerBoolSearchMDL(String smarts, String mdlFile) {
@@ -2399,9 +2433,9 @@ public class TestUtilities {
 		// tu.testSMIRKS("[c:1]1[c:6][c:5][c:4][c:3][c:2]1>>[OH1]-[c:1]1[c:6][c:5][c:4][c:3][c:2]1-[OH1]",
 		// "C1=CC=CC=C1"); //This is a bug !!! 3 double bonds remain
 
-		tu.testSMIRKS("[C-:1]>>[C-:1]=[N+]", "[C-]CC[C+]");
+		//tu.testSMIRKS("[C-:1]>>[C-:1]=[N+]", "[C-]CC[C+]");
 
-		tu.testSMIRKS("[#7,#8:7]=[#6:5][C:3][#6:6]>>[#7,#8:7]=[#6:5][C:3]([#6:6])[S---]", "CC[C-](=O)([N-])");
+		//tu.testSMIRKS("[#7,#8:7]=[#6:5][C:3][#6:6]>>[#7,#8:7]=[#6:5][C:3]([#6:6])[S---]", "CC[C-](=O)([N-])");
 		//tu.testSMIRKS("[#7,#8:7]~[#6:5][C:3][#6:6]>>[#7,#8:7]~[#6:5][C:3]([#6:6])O", "CCC([N-])(=O)");
 
 
@@ -2492,6 +2526,8 @@ public class TestUtilities {
 		// tu.testBug78();
 
 		// tu.testExpliticHToImplicit("CCC=C");
+		
+		tu.testSmartsSearchAtPos("c", "Cc1ccccc1", 1);
 
 	}
 

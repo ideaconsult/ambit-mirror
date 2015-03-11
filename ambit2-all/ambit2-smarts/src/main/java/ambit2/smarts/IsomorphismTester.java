@@ -291,6 +291,13 @@ public class IsomorphismTester
 		FlagStoreIsomorphismNode = false;
 		isomorphismNodes.clear();
 		
+		if (query.getAtomCount() == 1)
+		{
+			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);
+			return qa.matches(target.getAtom(atomNum));
+		}
+			
+			
 		TopLayer.setAtomTopLayers(target, TopLayer.TLProp);
 		
 		executeSequenceAtPos(atomNum);
