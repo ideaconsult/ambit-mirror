@@ -5,13 +5,22 @@ import java.util.List;
 
 public class EnergyRule 
 {	
-	public String error = null;	
+	public List<String> errors = null;
 	public String ruleName = null;
 	public String id = null;
 	
 	public int state = 0;
+	public String stateInfo = null;
 	public double stateEnergy = 0;
 	
 	public List<EnergyCorrection> energyCorrections = new ArrayList<EnergyCorrection>();
+	
+	
+	void addError(String err)
+	{
+		if (errors == null)
+			errors = new ArrayList<String>();
+		errors.add(err);
+	}
 	
 }
