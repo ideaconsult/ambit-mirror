@@ -3,6 +3,7 @@ package ambit2.tautomers.test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,8 @@ import ambit2.tautomers.KnowledgeBase;
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerRanking;
+import ambit2.tautomers.rules.EnergyRule;
+import ambit2.tautomers.rules.JsonRuleParser;
 
 
 public class TestTautomers 
@@ -829,6 +832,19 @@ public class TestTautomers
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
 		double scoreRank = CACTVSRanking.calcScoreRank(mol);
 		System.out.println("Score = " + scoreRank);
+	}
+	
+	public void testEnergyRule()  throws Exception
+	{
+		JsonRuleParser jrp = new JsonRuleParser();
+		URL resource = jrp.getClass().getClassLoader().getResource("ambit2/tautomers/energy-rules.json");
+		
+		List<EnergyRule> rules =  JsonRuleParser.readRuleSetFromJSON(resource.getFile());
+		for (int i = 0; i < rules.size(); i++)
+		{	
+			System.out.println("Rule #" + (i+1) + "\n" + JsonRuleParser.toJSONString(rules.get(i)) + "\n");
+		}
+		
 	}
 	
 	

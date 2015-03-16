@@ -221,6 +221,12 @@ public class JsonRuleParser
 		return enCorr;
 	}
 	
+	public static String toJSONString(EnergyRule eRule)
+	{
+		StringBuffer sb = new StringBuffer();
+		//TODO
+		return sb.toString();
+	}
 	
 	public AtomCondition parseAtomCondition(JsonNode node)
 	{
