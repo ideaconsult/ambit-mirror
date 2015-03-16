@@ -61,8 +61,20 @@ public class StructureRecordValidator extends DefaultAmbitProcessor<IStructureRe
     }
 
     public IStructureRecord validate(SubstanceRecord record) throws Exception {
-	if (record.getCompanyUUID() == null)
-	    logger.log(Level.SEVERE, "Missing Substance UUID");
+	if (record.getOwnerName()==null) {
+	    logger.log(Level.WARNING, "Missing substance owner name");
+	    if (fixErrors) {
+		record.setOwnerName(filename);
+		logger.log(Level.WARNING, "Assigned file name to substance owner name");
+	    }
+	}	
+	if (record.getCompanyUUID()==null) {
+	    logger.log(Level.WARNING, "Missing substance UUID");
+	    if (fixErrors) {
+		record.setCompanyUUID(generateUUIDfromString(prefix, record.getOwnerName() + record.getCompanyName()));
+		logger.log(Level.WARNING, "Generated substance UUID from substance name");
+	    }
+	}   		
 	if (record.getMeasurements() == null) {
 	    logger.log(Level.WARNING, "No measurements");
 	} else
@@ -93,13 +105,7 @@ public class StructureRecordValidator extends DefaultAmbitProcessor<IStructureRe
 	    }
 
 	}
-	if (record.getOwnerName()==null) {
-	    logger.log(Level.WARNING, "Missing substance owner name");
-	    if (fixErrors) {
-		record.setOwnerName(filename);
-		logger.log(Level.WARNING, "Assigned file name to substance owner name");
-	    }
-	}
+
 	if (record.getOwnerUUID()==null) {
 	    logger.log(Level.WARNING, "Missing substance owner UUID");
 	    if (fixErrors) {
@@ -107,11 +113,16 @@ public class StructureRecordValidator extends DefaultAmbitProcessor<IStructureRe
 		logger.log(Level.WARNING, "Generated substance owner UUID");
 	    }
 	}    
+
 	return record;
     }
 
     public IStructureRecord validate(SubstanceRecord record,
 	    ProtocolApplication<Protocol, IParams, String, IParams, String> papp) throws Exception {
+	if (papp.getSubstanceUUID()==null) {
+	    logger.log(Level.SEVERE, "Missing substance UUID in protocol application!");
+	    papp.setSubstanceUUID(record.getCompanyUUID());
+	}
 	if (papp.getDocumentUUID() == null) {
 	    logger.log(Level.SEVERE, "Missing measurement UUID");
 	    if (isFixErrors()) {
@@ -127,6 +138,22 @@ public class StructureRecordValidator extends DefaultAmbitProcessor<IStructureRe
 		if (isFixErrors()) {
 		    papp.getProtocol().setCategory(Protocol._categories.UNKNOWN_TOXICITY_SECTION.name());
 		    papp.getProtocol().setTopCategory(Protocol._categories.UNKNOWN_TOXICITY_SECTION.getTopCategory());
+		}
+	    }
+	    if (papp.getProtocol().getTopCategory() == null) {
+		logger.log(Level.SEVERE, "Missing protocol top category");
+		if (isFixErrors()) {
+		    try {
+			String c = papp.getProtocol().getCategory();
+			if (!c.endsWith("_SECTION")) c = c + "_SECTION";
+			Protocol._categories category = Protocol._categories.valueOf(c);
+			papp.getProtocol().setCategory(category.name());
+			papp.getProtocol().setTopCategory(category.getTopCategory());
+		    } catch (Exception x) {
+			papp.getProtocol().setTopCategory(Protocol._categories.UNKNOWN_TOXICITY_SECTION.getTopCategory());
+			papp.getProtocol().setCategory(Protocol._categories.UNKNOWN_TOXICITY_SECTION.name());
+		    }
+		    
 		}
 	    }
 	}
@@ -151,7 +178,8 @@ public class StructureRecordValidator extends DefaultAmbitProcessor<IStructureRe
 	if (rel.getCompositionUUID() == null) {
 	    logger.log(Level.SEVERE, "Missing composition UUID");
 	    if (isFixErrors()) {
-		rel.setCompositionUUID(record.getCompanyUUID());
+		String uuid = generateUUIDfromString(prefix, null);
+		rel.setCompositionUUID(uuid);
 		logger.log(Level.WARNING, "Generated composition UUID");
 	    }
 	}

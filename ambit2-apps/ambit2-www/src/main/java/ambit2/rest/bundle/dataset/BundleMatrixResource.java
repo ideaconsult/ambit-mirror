@@ -59,6 +59,7 @@ import ambit2.rest.substance.CallableStudyBundleImporter;
 import ambit2.rest.substance.CallableStudyBundleImporter._mode;
 import ambit2.rest.substance.SubstanceDatasetResource;
 import ambit2.rest.substance.SubstanceURIReporter;
+import ambit2.rest.task.CallableFileUpload;
 
 public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstancesByBundle> {
     protected SubstanceEndpointsBundle bundle;
@@ -367,7 +368,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 			}
 		    }
 		    CallableStudyBundleImporter<String> callable = new CallableStudyBundleImporter<String>(items,
-			    "files[]", getRootRef(), getContext(), new SubstanceURIReporter(getRequest().getRootRef()),
+			    CallableFileUpload.field_files, CallableFileUpload.field_config, getRootRef(), getContext(), new SubstanceURIReporter(getRequest().getRootRef()),
 			    new DatasetURIReporter(getRequest().getRootRef()), token);
 		    callable.setBundle(bundle);
 		    callable.setClearComposition(clearComposition);

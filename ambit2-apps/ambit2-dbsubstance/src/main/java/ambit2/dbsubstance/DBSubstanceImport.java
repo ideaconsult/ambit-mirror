@@ -2,6 +2,7 @@ package ambit2.dbsubstance;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
@@ -42,22 +43,21 @@ public class DBSubstanceImport {
     protected String configFile;
     protected String parserType = null;
 
-
     public String getParserType() {
-        return parserType;
+	return parserType;
     }
 
     public void setParserType(String parserType) {
-        this.parserType = parserType;
+	this.parserType = parserType;
     }
 
     public String getConfigFile() {
 	return configFile;
     }
 
-    protected String input;
-    protected String output;
-    protected String jsonConfig;
+    protected File inputFile;
+    protected File outputFile;
+    protected File jsonConfig;
 
     protected static String getParserType(CommandLine line) {
 	if (line.hasOption('p'))
@@ -65,25 +65,33 @@ public class DBSubstanceImport {
 	else
 	    return null;
     }
-    
-    protected static String getOutput(CommandLine line) {
-	if (line.hasOption('o'))
-	    return line.getOptionValue('o');
-	else
+
+    protected static File getOutput(CommandLine line) {
+	if (line.hasOption('o')) {
+	    return new File(line.getOptionValue('o'));
+	} else
 	    return null;
     }
 
-    protected static String getJSONConfig(CommandLine line) {
-	if (line.hasOption('j'))
-	    return line.getOptionValue('j');
-	else
+    protected static File getJSONConfig(CommandLine line) throws FileNotFoundException {
+	if (line.hasOption('j')) {
+	    File file = new File(line.getOptionValue('j'));
+	    if (!file.exists())
+		throw new FileNotFoundException(file.getName());
+	    else
+		return file;
+	} else
 	    return null;
     }
 
-    protected static String getInput(CommandLine line) {
-	if (line.hasOption('i'))
-	    return line.getOptionValue('i');
-	else
+    protected static File getInput(CommandLine line) throws FileNotFoundException {
+	if (line.hasOption('i')) {
+	    File file = new File(line.getOptionValue('i'));
+	    if (!file.exists())
+		throw new FileNotFoundException(file.getName());
+	    else
+		return file;
+	} else
 	    return null;
     }
 
@@ -149,8 +157,7 @@ public class DBSubstanceImport {
 		.withDescription("Config file (DB connection parameters)").create("c");
 
 	Option help = OptionBuilder.withLongOpt("help").withDescription("This help").create("h");
-	
-	
+
 	options.addOption(input);
 	options.addOption(jsonConfig);
 	options.addOption(output);
@@ -160,10 +167,10 @@ public class DBSubstanceImport {
 
 	return options;
     }
-    
+
     protected Option createParserTypeOption() {
-	return OptionBuilder.hasArg().withLongOpt("parser").withArgName("type").withDescription("File parser mode : xlsx")
-		.create("p");
+	return OptionBuilder.hasArg().withLongOpt("parser").withArgName("type")
+		.withDescription("File parser mode : xlsx").create("p");
     }
 
     public boolean parse(String[] args) throws Exception {
@@ -171,19 +178,19 @@ public class DBSubstanceImport {
 	CommandLineParser parser = new PosixParser();
 	try {
 	    CommandLine line = parser.parse(options, args, false);
-	    input = getInput(line);
-	    if (input == null)
+	    inputFile = getInput(line);
+	    if (inputFile == null)
 		throw new Exception("Missing input file");
 	    jsonConfig = getJSONConfig(line);
 	    if (jsonConfig == null)
 		throw new Exception("Missing JSON config file");
 
-	    output = getOutput(line);
+	    outputFile = getOutput(line);
 
 	    setConfig(getConfig(line));
-	    
+
 	    setParserType(getParserType(line));
-	    
+
 	    if (line.hasOption("h")) {
 		printHelp(options, null);
 		return false;
@@ -200,13 +207,12 @@ public class DBSubstanceImport {
     protected IRawReader<IStructureRecord> createParser(InputStream in) throws Exception {
 	return new GenericExcelParser(in, jsonConfig, true);
     }
-    
+
     protected void importFile() throws Exception {
 	IRawReader<IStructureRecord> parser = null;
 	Connection c = null;
 	try {
-	    File file = new File(input);
-	    FileInputStream fin = new FileInputStream(file);
+	    FileInputStream fin = new FileInputStream(inputFile);
 
 	    DBConnection dbc = null;
 	    dbc = getConnection(getConfigFile());
@@ -214,12 +220,13 @@ public class DBSubstanceImport {
 	    c.setAutoCommit(true);
 
 	    parser = createParser(fin);
-	    StructureRecordValidator validator = new StructureRecordValidator(file.getName(), true);
+	    StructureRecordValidator validator = new StructureRecordValidator(inputFile.getName(), true);
 	    write(parser, c, new ReferenceSubstanceUUID(), false, validator);
 	} catch (Exception x) {
 	    throw x;
 	} finally {
-	    if (parser!=null) parser.close();
+	    if (parser != null)
+		parser.close();
 	    try {
 		c.close();
 	    } catch (Exception x) {
@@ -233,7 +240,7 @@ public class DBSubstanceImport {
 	    String driver = context.getParameters().getFirstValue(Preferences.DRIVERNAME);
 
 	    if ((driver != null) && (driver.contains("mysql")))
-		return new MySQLSingleConnection(context,"config/ambit.properties");
+		return new MySQLSingleConnection(context, "config/ambit.properties");
 	    else
 		throw new AmbitException("Driver not supported");
 	} catch (Exception x) {
@@ -284,7 +291,7 @@ public class DBSubstanceImport {
 	    Object record = reader.next();
 	    if (record == null)
 		continue;
-	    validate(validator,(IStructureRecord) record);
+	    validate(validator, (IStructureRecord) record);
 	    writer.process((IStructureRecord) record);
 	    records++;
 	}
@@ -292,9 +299,10 @@ public class DBSubstanceImport {
 	return records;
     }
 
-    protected void validate(StructureRecordValidator validator,IStructureRecord record) throws Exception {
+    protected void validate(StructureRecordValidator validator, IStructureRecord record) throws Exception {
 	validator.process((IStructureRecord) record);
     }
+
     protected static void printHelp(Options options, String message) {
 	if (message != null)
 	    System.out.println(message);

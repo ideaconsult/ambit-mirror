@@ -94,7 +94,7 @@
 			        {
 			            "method": "POST",
 			            "summary": "Import substance(s) and studies",
-			            "notes": "Import substance(s) and studies. Supports IUCLID5 <a href='http://iuclid.eu/index.php?fuseaction=home.format'>*.i5z</a> files and custom <a href='https://github.com/ideaconsult/Protein_Corona'>12 line header</a> CSV files",
+			            "notes": "Import substance(s) and studies. Supports IUCLID5 <a href='http://iuclid.eu/index.php?fuseaction=home.format'>*.i5z</a> files, custom <a href='https://github.com/ideaconsult/Protein_Corona'>12 line header</a> CSV files and XLSX files with mandatory JSON configuration.",
 			            "type": "Task",
 			            "nickname": "uploadSubstance",
 		                "consumes": [
@@ -111,6 +111,14 @@
 							    "paramType": "form",
 							    "allowMultiple": true
 							},
+							{
+							    "name": "jsonconfig",
+							    "description": "JSON config, valid only for XLSX file import. See the format at https://github.com/enanomapper/nmdataparser",
+							    "required": true,
+							    "type": "File",
+							    "paramType": "form",
+							    "allowMultiple": false
+							},							
 							{
 							    "name": "qaenabled",
 							    "description": "Import only high quality study records",
