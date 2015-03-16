@@ -49,10 +49,15 @@ $(document)
 	<form action="${ambit_root}/substance" id="uploadForm"  method="POST"   ENCTYPE="multipart/form-data">		
 	
 	<div class='row remove-bottom'>
-		<label class='three columns alpha' for="file">File (.i5z or .i5d)<a href='#' class='chelp i5z'>?</a><em>*</em></label>
+		<label class='five columns alpha' for="file">File (.i5z or .i5d or xlsx)<a href='#' class='chelp i5z'>?</a><em>*</em></label>
 		<input class='eight columns alpha half-bottom'  type="file" name="files[]" title='Add new substance(s) (.i5d or .i5z file)' size="60">
-		<div class='five columns omega'></div>
+		<div class='three columns omega'></div>
 	</div>
+	<div class='row remove-bottom'>
+	<label class='five columns alpha' for="file">JSON map for XLSX file<a href='#' class='chelp i5z'>?</a></label>
+	<input class='eight columns alpha half-bottom'  type="file" name="jsonconfig" title='JSON configuration' size="60">
+	<div class='three columns omega'></div>
+	</div>	
 	<div class='row remove-bottom'>
 			<label class='four columns alpha' title='Uncheck to add or replace study records, retaining existing where relevant'>Clear existing study records</label>
 		   	<input class='one column omega half-bottom' type="checkbox" id="clearMeasurements" name="clearMeasurements" class="toggle" checked>

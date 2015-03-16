@@ -1,6 +1,7 @@
 package ambit2.rest.task;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -20,14 +21,16 @@ import org.restlet.resource.ResourceException;
  * 
  */
 public abstract class CallableFileUpload implements Callable<Reference> {
+    public static final String field_files = "files[]";
+    public static final String field_config = "jsonconfig";
     protected List<FileItem> items;
-    protected String fileUploadField;
+    protected String[] filesUploadField;
 
     protected long maxSize = 5000000000L;
 
-    public CallableFileUpload(List<FileItem> items, String fileUploadField) {
+    public CallableFileUpload(List<FileItem> items, String[] fileUploadField) {
 	this.items = items;
-	this.fileUploadField = fileUploadField;
+	this.filesUploadField = fileUploadField;
 
     }
 
@@ -51,10 +54,9 @@ public abstract class CallableFileUpload implements Callable<Reference> {
 		    throw new ResourceException(new Status(Status.CLIENT_ERROR_BAD_REQUEST, String.format(
 			    "File size %d > max allowed size %d", fi.getSize(), maxSize)));
 		}
-		if ((!found) && fi.getFieldName().equals(fileUploadField)) {
+		if (Arrays.binarySearch(filesUploadField, fi.getFieldName())>=0) {
 		    if (fi.getSize() == 0)
 			throw new ResourceException(new Status(Status.CLIENT_ERROR_BAD_REQUEST, "Empty file!"));
-		    found = true;
 		    File file = null;
 		    String description;
 		    if (fi.getName() == null)
@@ -73,7 +75,8 @@ public abstract class CallableFileUpload implements Callable<Reference> {
 			file.deleteOnExit();
 		    }
 		    fi.write(file);
-		    processFile(fi.getName(), file, description);
+
+		    processFile(fi.getFieldName(), fi.getName(), file, description);
 		}
 	    }
 	    processProperties(properties);
@@ -100,11 +103,11 @@ public abstract class CallableFileUpload implements Callable<Reference> {
 
     }
 
-    protected void processFile(File file, String description) throws Exception {
+    protected void processFile(String fieldname, File file, String description) throws Exception {
     };
 
-    protected void processFile(String originalname, File file, String description) throws Exception {
-	processFile(file, description);
+    protected void processFile(String fieldName, String originalname, File file, String description) throws Exception {
+	processFile(fieldName, file, description);
     };
 
     protected void processProperties(Hashtable<String, String> properties) throws Exception {

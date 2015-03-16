@@ -37,10 +37,10 @@ public class CallableStudyBundleImporter<USERID> extends CallableSubstanceImport
 	this.bundle = bundle;
     }
 
-    public CallableStudyBundleImporter(List<FileItem> items, String fileUploadField,
+    public CallableStudyBundleImporter(List<FileItem> items, String fileUploadField, String jsonConfigField,
 	    Reference applicationRootReference, Context context, SubstanceURIReporter substanceReporter,
 	    DatasetURIReporter datasetURIReporter, USERID token) throws Exception {
-	super(items, fileUploadField, applicationRootReference, context, substanceReporter, datasetURIReporter, token);
+	super(items, fileUploadField, jsonConfigField, applicationRootReference, context, substanceReporter, datasetURIReporter, token);
     }
     public CallableStudyBundleImporter(File file, Reference applicationRootReference, Context context,
 	    SubstanceURIReporter substanceReporter, DatasetURIReporter datasetURIReporter, USERID token)

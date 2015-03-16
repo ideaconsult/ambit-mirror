@@ -151,14 +151,14 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 
 	    }
 	}
-	upload = new CallableFileUpload(items, fileUploadField) {
+	upload = new CallableFileUpload(items, new String[] {fileUploadField}) {
 	    @Override
 	    public Reference createReference() {
 		return null;
 	    }
 
 	    @Override
-	    protected void processFile(File file, String description) throws Exception {
+	    protected void processFile(String fieldname, File file, String description) throws Exception {
 		setFile(file, description);
 	    }
 

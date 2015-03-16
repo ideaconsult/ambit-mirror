@@ -61,6 +61,7 @@ import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetURIReporter;
+import ambit2.rest.task.CallableFileUpload;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
 
 /**
@@ -448,16 +449,16 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 					} catch (Exception x) {
 					}
 			} else {
-			    String ext = file.getName().toLowerCase();
-			    if (ext.endsWith(".i5z") || ext.endsWith(".csv") || ext.endsWith(".rdf")
-				    || ext.endsWith(".json")) {
+			    String ext = file.getName().toLowerCase().trim();
+			    if ("".equals(ext) || ext.endsWith(".i5z") || ext.endsWith(".csv") || ext.endsWith(".rdf")
+				    || ext.endsWith(".json")  || ext.endsWith(".xlsx")) {
 			    } else
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Unsupported format "
 					+ ext);
 			}
 		    }
 		    CallableSubstanceImporter<String> callable = new CallableSubstanceImporter<String>(items,
-			    "files[]", getRootRef(), getContext(), new SubstanceURIReporter(getRequest().getRootRef()),
+			    CallableFileUpload.field_files, CallableFileUpload.field_config, getRootRef(), getContext(), new SubstanceURIReporter(getRequest().getRootRef()),
 			    new DatasetURIReporter(getRequest().getRootRef()), token);
 		    callable.setClearComposition(clearComposition);
 		    callable.setClearMeasurements(clearMeasurements);
