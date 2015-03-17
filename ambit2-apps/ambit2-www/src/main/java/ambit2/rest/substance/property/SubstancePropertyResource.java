@@ -32,7 +32,7 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyJSONReporter;
 import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.property.PropertyURIReporter;
-import ambit2.user.rest.resource.AmbitDBQueryResource;
+import ambit2.rest.query.AmbitDBResource;
 
 /**
  * Substance property - serialization as in /feature </pre>
@@ -40,7 +40,7 @@ import ambit2.user.rest.resource.AmbitDBQueryResource;
  * @author nina
  * 
  */
-public class SubstancePropertyResource extends AmbitDBQueryResource<IQueryRetrieval<Property>, Property> {
+public class SubstancePropertyResource extends AmbitDBResource<IQueryRetrieval<Property>, Property> {
     /**
      * Parameters, expected in http headers
      * 

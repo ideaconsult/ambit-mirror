@@ -35,10 +35,10 @@ import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.MetadataRDFReporter;
 import ambit2.rest.dataset.MetadatasetJSONReporter;
 import ambit2.rest.dataset.MetadatasetURIReporter;
-import ambit2.user.rest.resource.AmbitDBQueryResource;
+import ambit2.rest.query.AmbitDBResource;
 
 public class BundleMetadataResource extends
-	AmbitDBQueryResource<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> {
+	AmbitDBResource<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> {
     protected SubstanceEndpointsBundle dataset;
 
     public BundleMetadataResource() {
