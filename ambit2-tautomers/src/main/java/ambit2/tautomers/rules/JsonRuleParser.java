@@ -85,9 +85,9 @@ public class JsonRuleParser
 		}
 		
 		//ID
-		if (!node.path("ID").isMissingNode())
+		if (!node.path("RULE_ID").isMissingNode())
 		{
-			String s = extractStringKeyword(node, "ID", false);
+			String s = extractStringKeyword(node, "RULE_ID", false);
 			if (s == null)
 				rule.addError(this.getError());
 			else
@@ -96,13 +96,13 @@ public class JsonRuleParser
 		
 		
 		//STATE
-		if (node.path("STATE").isMissingNode())
+		if (node.path("RULE_STATE").isMissingNode())
 		{
-			rule.addError("STATE is missing!");
+			rule.addError("RULE_STATE is missing!");
 		}
 		else
 		{
-			Integer i = extractIntKeyword(node, "STATE", false);
+			Integer i = extractIntKeyword(node, "RULE_STATE", false);
 			if (i == null)
 				rule.addError(this.getError());
 			else
@@ -221,12 +221,6 @@ public class JsonRuleParser
 		return enCorr;
 	}
 	
-	public static String toJSONString(EnergyRule eRule)
-	{
-		StringBuffer sb = new StringBuffer();
-		//TODO
-		return sb.toString();
-	}
 	
 	public AtomCondition parseAtomCondition(JsonNode node)
 	{
@@ -301,16 +295,105 @@ public class JsonRuleParser
 			JsonRuleParser parser = new JsonRuleParser();
 			List<EnergyRule> eRules = parser.readEnergyRuleSet(energyRulesNode);
 			
-			if (!parser.getErrors().isEmpty())
+			if (parser.getErrors() != null)
 				throw (new Exception(parser.getAllErrors()));
 			
 			return eRules;
 		}
 		
-		
 		return null;
 	}
 	
+	public static String toJSONString(EnergyRule eRule)
+	{
+		return toJSONString(eRule, "");
+	}
+	
+	public static String toJSONString(EnergyRule eRule, String offset)
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append(offset + "{\n");
+		int nFields = 0;
+		
+		if (eRule.ruleName != null)
+		{	
+			sb.append(offset + "\t\"RULE_NAME\" : \"" + eRule.ruleName + "\"");
+			nFields++;
+		}
+		
+		if (eRule.id != null)
+		{
+			if (nFields > 0)
+				sb.append(",\n");
+			
+			sb.append(offset + "\t\"RULE_ID\" : \"" + eRule.id + "\"");
+			nFields++;
+		}
+		
+		//RULE_STATE
+		{
+			if (nFields > 0)
+				sb.append(",\n");
+			
+			sb.append(offset + "\t\"RULE_STATE\" : " + eRule.state);
+			nFields++;
+		}
+		
+		if (eRule.stateInfo != null)
+		{
+			if (nFields > 0)
+				sb.append(",\n");
+			
+			sb.append(offset + "\t\"RULE_STATE_INFO\" : \"" + eRule.stateInfo + "\"");
+			nFields++;
+		}
+		
+		//STATE_ENERGY
+		{
+			if (nFields > 0)
+				sb.append(",\n");
+			
+			sb.append(offset + "\t\"STATE_ENERGY\" : " + eRule.stateEnergy);
+			nFields++;
+		}
+		
+		if (!eRule.energyCorrections.isEmpty())
+		{
+			if (nFields > 0)
+				sb.append("\n");
+			
+			sb.append(offset + "\t\"ENERGY_CORRECTIONS\":\n");
+			sb.append(offset + "\t[\n");
+			for (int i = 0; i < eRule.energyCorrections.size(); i++)
+			{
+				sb.append(toJSONString(eRule.energyCorrections.get(i), offset+"\t\t"));
+				if (i < (eRule.energyCorrections.size()-1))
+					sb.append(",\n");
+			}
+			
+			
+			sb.append("\n" + offset + "\t]\n");
+			nFields++;
+		}
+		
+		if (nFields > 0)
+			sb.append("\n");
+		
+		sb.append(offset + "}\n");
+		return sb.toString();
+	}
+	
+	
+	public static String toJSONString(EnergyCorrection eCorr, String offset)
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append(offset + "{\n");
+		
+		//TODO
+		
+		sb.append(offset + "}");
+		return sb.toString();
+	}	
 		
 	//Helper functions
 	

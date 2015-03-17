@@ -103,7 +103,7 @@ public class TestTautomers
 		//tt.visualTestInChI("NC1=CC(N)=NC(O)=N1");
 		
 		//tt.visualTest("NC1=CC(N)=NC(O)=N1");
-		tt.visualTest("OC1=C(O)C=CC=C1");
+		//tt.visualTest("OC1=C(O)C=CC=C1");
 		//tt.visualTest("CC(=O)C");
 		//tt.visualTest("N=NNCCC");
 		//tt.visualTest("S=CNCC");
@@ -216,6 +216,8 @@ public class TestTautomers
 		//tt.visualTestFromFile("/work/tempAmbitIn.sdf");
 		
 		//tt.testCACTVSRank("c1ccccc1CCC=O");
+		
+		tt.testEnergyRules();
 	}
 	
 	public void performTestCases() throws Exception
@@ -834,7 +836,7 @@ public class TestTautomers
 		System.out.println("Score = " + scoreRank);
 	}
 	
-	public void testEnergyRule()  throws Exception
+	public void testEnergyRules()  throws Exception
 	{
 		JsonRuleParser jrp = new JsonRuleParser();
 		URL resource = jrp.getClass().getClassLoader().getResource("ambit2/tautomers/energy-rules.json");
