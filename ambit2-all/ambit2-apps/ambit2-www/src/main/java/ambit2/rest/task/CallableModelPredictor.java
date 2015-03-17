@@ -49,6 +49,13 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 					extends CallableQueryProcessor<Object, IStructureRecord,USERID> {
 	protected Reference applicationRootReference;
 	protected Predictor predictor;
+	public Predictor getPredictor() {
+	    return predictor;
+	}
+
+	public void setPredictor(Predictor predictor) {
+	    this.predictor = predictor;
+	}
 	protected boolean foreignInputDataset = false;
 	protected String tmpFileName;
 	protected String dataset_service;
@@ -61,7 +68,7 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 			USERID token
 				) {
 		super(form,context,token);
-		this.predictor = predictor;
+		setPredictor(predictor);
 		this.applicationRootReference = appReference;
 	}	
 

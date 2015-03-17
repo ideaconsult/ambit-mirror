@@ -267,6 +267,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						algorithm,
 						false,
 						new OptimizerModelBuilder(getRequest().getRootRef(),
+								form,
 								modelReporter,
 								algReporter,false),
 						token
