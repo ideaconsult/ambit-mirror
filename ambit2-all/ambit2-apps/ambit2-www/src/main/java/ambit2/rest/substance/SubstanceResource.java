@@ -13,7 +13,6 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.StringConvertor;
-import net.idea.restnet.c.task.FactoryTaskConvertor;
 import net.idea.restnet.db.QueryResource;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
@@ -61,8 +60,9 @@ import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetURIReporter;
+import ambit2.rest.query.AmbitDBResource;
 import ambit2.rest.task.CallableFileUpload;
-import ambit2.user.rest.resource.AmbitDBQueryResource;
+import ambit2.rest.task.FactoryTaskConvertor;
 
 /**
  * Substances (in the sense of IUCLID5)
@@ -72,7 +72,7 @@ import ambit2.user.rest.resource.AmbitDBQueryResource;
  * @param <Q>
  */
 public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T extends SubstanceRecord> extends
-	AmbitDBQueryResource<Q, SubstanceRecord> {
+	AmbitDBResource<Q, SubstanceRecord> {
     public final static String substance = OpenTox.URI.substance.getURI();
     public final static String idsubstance = OpenTox.URI.substance.getKey();
     public final static String substanceID = OpenTox.URI.substance.getResourceID();

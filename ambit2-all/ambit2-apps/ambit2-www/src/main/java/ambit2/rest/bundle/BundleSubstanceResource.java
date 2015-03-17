@@ -32,9 +32,9 @@ import ambit2.db.reporters.ImageReporter;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
+import ambit2.rest.query.AmbitDBResource;
 import ambit2.rest.substance.SubstanceJSONReporter;
 import ambit2.rest.substance.SubstanceURIReporter;
-import ambit2.user.rest.resource.AmbitDBQueryResource;
 
 /**
  * Substances per /bundle/{id}
@@ -44,7 +44,7 @@ import ambit2.user.rest.resource.AmbitDBQueryResource;
  * @param <Q>
  */
 public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> extends
-	AmbitDBQueryResource<Q, SubstanceRecord> {
+	AmbitDBResource<Q, SubstanceRecord> {
     protected SubstanceEndpointsBundle[] bundles;
 
     public BundleSubstanceResource() {

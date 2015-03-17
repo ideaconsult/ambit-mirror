@@ -51,12 +51,12 @@ import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.dataset.DatasetRDFStaxReporter;
 import ambit2.rest.property.ProfileReader;
+import ambit2.rest.query.AmbitDBResource;
 import ambit2.rest.structure.CompoundJSONReporter;
 import ambit2.rest.structure.CompoundURIReporter;
-import ambit2.user.rest.resource.AmbitDBQueryResource;
 
 public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>> extends
-	AmbitDBQueryResource<Q, IStructureRecord> {
+	AmbitDBResource<Q, IStructureRecord> {
     protected SubstanceEndpointsBundle bundle;
     protected boolean enableFeatures = false;
 

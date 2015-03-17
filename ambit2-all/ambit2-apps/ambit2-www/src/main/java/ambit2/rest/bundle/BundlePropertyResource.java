@@ -32,9 +32,9 @@ import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.property.PropertyJSONReporter;
 import ambit2.rest.property.PropertyURIReporter;
-import ambit2.user.rest.resource.AmbitDBQueryResource;
+import ambit2.rest.query.AmbitDBResource;
 
-public class BundlePropertyResource<Q extends IQueryRetrieval<Property>> extends AmbitDBQueryResource<Q,Property> {
+public class BundlePropertyResource<Q extends IQueryRetrieval<Property>> extends AmbitDBResource<Q,Property> {
 
 	public BundlePropertyResource() {
 		super();

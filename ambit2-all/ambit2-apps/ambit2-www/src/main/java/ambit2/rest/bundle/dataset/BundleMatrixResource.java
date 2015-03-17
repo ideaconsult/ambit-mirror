@@ -11,7 +11,6 @@ import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.ProcessorsChain;
-import net.idea.restnet.c.task.FactoryTaskConvertor;
 import net.idea.restnet.db.DBConnection;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskApplication;
@@ -60,6 +59,7 @@ import ambit2.rest.substance.CallableStudyBundleImporter._mode;
 import ambit2.rest.substance.SubstanceDatasetResource;
 import ambit2.rest.substance.SubstanceURIReporter;
 import ambit2.rest.task.CallableFileUpload;
+import ambit2.rest.task.FactoryTaskConvertor;
 
 public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstancesByBundle> {
     protected SubstanceEndpointsBundle bundle;
