@@ -73,7 +73,7 @@
 	          
 	          <tr><td class="right size-third">Version <a href='#' class='chelp a_version'>?</a>:</td><td class="data-field" data-field="version" title='versions not supported yet'></td></tr>
 	          	          	          
-	          <tr><td class="right size-third">License of Waiver <a href='#' class='chelp a_license'>?</a>:</td><td><input class="data-field first-time validate" data-field="rights.URI" name="license"></input></td></tr>
+	          <tr><td class="right size-third">License or Waiver <a href='#' class='chelp a_license'>?</a>:</td><td><input class="data-field first-time validate" data-field="rights.URI" name="license"></input></td></tr>
 	          <tr><td class="right size-third">Rights holder <a href='#' class='chelp a_rightsholder'>?</a>:</td><td><input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder"></input></td></tr>
 
 	          <tr><td class="right size-third">Status <a href='#' class='chelp a_status'>?</a>:</td><td class="data-field" data-field="status"></td></tr>
