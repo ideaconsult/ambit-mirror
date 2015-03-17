@@ -45,7 +45,7 @@
   <dictionary idsubject="5" idobject="85"/>  
   <dictionary idsubject="85" relationship="is_part_of" idobject="84"/>  
     
-  <models idmodel="100" name="Model" predictors="5" dependent="85" predicted="85" content="zero"/>  
+  <models idmodel="100" name="Model" predictors="5" dependent="85" predicted="85" content="zero" parameters="A123	B456"/>  
   <tuples/>
   <property_string idvalue_string="2" value="123-45-6"/>
   <property_string idvalue_string="3" value="Chemical name example"/>

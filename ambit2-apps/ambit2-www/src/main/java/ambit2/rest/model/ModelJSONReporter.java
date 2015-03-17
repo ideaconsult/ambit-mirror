@@ -51,6 +51,7 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 		content,
 		evaluations,
 		algFormat,
+		parameters,
 		stars;
 		
 		public String jsonname() {
@@ -126,6 +127,16 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 				evals.append("\t\n}");
 			}
 			evals.append("\t}");
+			
+			StringBuilder p = new StringBuilder();
+			if (model.getParameters()!=null) {
+			    String d = "";
+			    for (String param : model.getParameters()) {
+				p.append(d);
+				p.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(param)));
+				d = ",";
+			    }
+			}    
 			getOutput().write(String.format(
 					"\n{"+
 					"\n\"%s\":\"%s\"," + //uri
@@ -143,7 +154,8 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 					"\n\t\"%s\":\"%s\"," +
 					"\n\t\"%s\":\"%s\"," +
 					"\n\t\"%s\":%s," +
-					"\n\t\"%s\":%s " +
+					"\n\t\"%s\":%s, " +
+					"\n\t\"%s\":[%s] " +
 					"\n\n}}",
 					
 					jsonModel.URI.jsonname(),uri,
@@ -170,7 +182,8 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 												?JSONUtils.jsonEscape(model.getContent())
 												:(uri+"?media=text/plain"),
 					jsonModel.evaluations.jsonname(),evals.toString(),
-					jsonModel.stars.jsonname(),model.getStars()
+					jsonModel.stars.jsonname(),model.getStars(),
+					jsonModel.parameters.jsonname(),p.toString()
 					));
 			comma = ",";
 

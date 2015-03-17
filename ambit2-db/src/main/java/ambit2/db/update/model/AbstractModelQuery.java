@@ -189,7 +189,7 @@ public abstract class AbstractModelQuery<F,V>  extends AbstractQuery<F, V, Strin
 			q.setContentMediaType(rs.getString(11));
 			q.setAlgorithm(rs.getString(12));
 			
-			String params = rs.getString(13);
+			String params = rs.getString("parameters");
 			q.setParameters(params==null?null:params.split("\t"));
 			q.setHidden(rs.getBoolean(14));
 			

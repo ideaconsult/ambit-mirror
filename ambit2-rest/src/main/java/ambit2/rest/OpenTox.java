@@ -8,6 +8,8 @@ import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.routing.Template;
 
+import ambit2.base.data.study.ModelParams;
+
 public class OpenTox {
 	public static enum URI {
 		query,
@@ -347,6 +349,11 @@ public class OpenTox {
 		public String[] getValuesArray(Form form) {
 			return form.getValuesArray(toString());
 		}
+		public ModelParams getModelParams(Form form) {
+			ModelParams p = new ModelParams(form.getFirstValue(toString()));
+			return p;
+		}
+
 	};
 	
 	

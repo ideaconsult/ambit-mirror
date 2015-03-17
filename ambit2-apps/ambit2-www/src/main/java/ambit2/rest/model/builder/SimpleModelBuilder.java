@@ -1,6 +1,7 @@
 package ambit2.rest.model.builder;
 
 import java.util.List;
+import java.util.UUID;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
@@ -33,6 +34,14 @@ public class SimpleModelBuilder extends ModelBuilder<Object,Algorithm, ModelQuer
 	 */
 	private static final long serialVersionUID = -2827461619547962205L;
 	protected boolean modelHidden = false;
+	protected String[] parameters = null;
+
+	public String[] getParameters() {
+	    return parameters;
+	}
+	public void setParameters(String[] parameters) {
+	    this.parameters = parameters;
+	}
 	public SimpleModelBuilder(Reference applicationRootReference,
 			ModelURIReporter model_reporter,
 			AlgorithmURIReporter alg_reporter)  {
@@ -66,6 +75,12 @@ public class SimpleModelBuilder extends ModelBuilder<Object,Algorithm, ModelQuer
 		mr.setContent(getContent(algorithm));
 		mr.setAlgorithm(alg_reporter.getURI(algorithm));
 		mr.setPredictors(algorithm.getInput());
+		if (parameters!=null) {
+		    mr.setParameters(parameters);
+		    StringBuilder b = new StringBuilder();
+		    for (String param : parameters) {b.append(param);b.append(",");}
+		    mr.setName(UUID.nameUUIDFromBytes(b.toString().getBytes())+ "-" + mr.getName());
+		}
 		return mr;
 	}
 	protected PredictedVarsTemplate createPredictedTemplate(Algorithm algorithm) throws Exception {
