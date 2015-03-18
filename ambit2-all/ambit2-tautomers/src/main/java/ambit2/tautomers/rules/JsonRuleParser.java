@@ -388,8 +388,44 @@ public class JsonRuleParser
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append(offset + "{\n");
+		int nFields = 0;
 		
-		//TODO
+		if (eCorr.correctionName != null)
+		{	
+			sb.append(offset + "\t\"CORRECTION_NAME\" : \"" + eCorr.correctionName + "\"");
+			nFields++;
+		}
+		
+		for (Integer key : eCorr.atomConditions.keySet())
+		{
+			if (nFields > 0)
+				sb.append(",\n");
+			
+			AtomCondition atCond = eCorr.atomConditions.get(key);
+			sb.append(offset + "\t\"ATOM" + (key+1) + "_CONDITIONS\" : [");
+			//Adding smarts conditions
+			if (atCond.smarts != null)
+				for (int i = 0; i < atCond.smarts.length; i++)
+				{
+					sb.append("\"" + atCond.smarts[i] +"\"");
+					if (i < (atCond.smarts.length - 1))
+						sb.append(",");
+				}
+			sb.append("]");
+			nFields++;
+		}
+		
+		//ENERGY
+		{
+			if (nFields > 0)
+				sb.append(",\n");
+			
+			sb.append(offset + "\t\"ENERGY\" : " + eCorr.energy);
+			nFields++;
+		}
+		
+		if (nFields > 0)
+			sb.append("\n");
 		
 		sb.append(offset + "}");
 		return sb.toString();
