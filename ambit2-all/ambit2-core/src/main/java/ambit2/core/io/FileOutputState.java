@@ -6,6 +6,7 @@ import java.io.OutputStream;
 
 import org.openscience.cdk.io.HINWriter;
 import org.openscience.cdk.io.IChemObjectWriter;
+import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.io.XYZWriter;
 
@@ -92,8 +93,7 @@ public class FileOutputState extends FileState implements IOutputState {
 		IChemObjectWriter writer = null;
 		try {
 			if (fname.endsWith(extensions[SDF_INDEX])) {
-				writer = new ambit2.core.io.MDLWriter(stream);
-				((ambit2.core.io.MDLWriter) writer).dontWriteAromatic();
+				writer = new SDFWriter(stream);
 			} else if (fname.endsWith(extensions[CSV_INDEX])) 
 				writer = new DelimitedFileWriter(stream);
 			else if ((fname.endsWith(extensions[TXT_INDEX]))) 
