@@ -5,7 +5,7 @@
   <artifactId>ambit2-apps</artifactId>
   <packaging>pom</packaging>
   <name>Ambit2 applications</name>
-  <version>2.7.3-SNAPSHOT</version>
+  <version>2.7.3</version>
   <distributionManagement>
     <!-- use the following if you're not using a snapshot version. -->
     <repository>
@@ -25,13 +25,13 @@
     </site>
   </distributionManagement>
   <properties>
-    <net.idea.loom.version>1.0.8-SNAPSHOT</net.idea.loom.version>
+    <net.idea.loom.version>1.0.8</net.idea.loom.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <toxtree.version>2.6.13-SNAPSHOT</toxtree.version>
-    <ambit.version>2.7.3-SNAPSHOT</ambit.version>
+    <toxtree.version>2.6.13</toxtree.version>
+    <ambit.version>2.7.3</ambit.version>
     <junit.version>4.8.1</junit.version>
     <!-- https://github.com/ideaconsult/i5 -->
-    <i5.version>1.0.3-SNAPSHOT</i5.version>
+    <i5.version>1.0.3</i5.version>
     <restnet.version>1.0.7</restnet.version>
     <dbunit.version>2.4.9</dbunit.version>
   </properties>
