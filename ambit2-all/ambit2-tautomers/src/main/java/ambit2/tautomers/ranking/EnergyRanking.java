@@ -1,5 +1,6 @@
 package ambit2.tautomers.ranking;
 
+import java.io.File;
 import java.net.URL;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class EnergyRanking
 	
 	public EnergyRanking(String jsonRulesFile) throws Exception
 	{
-		loadEnergyRules(jsonRulesFile);
+		rules =  JsonRuleParser.readRuleSetFromJSON(jsonRulesFile);
 	}
 	
 	
@@ -29,11 +30,5 @@ public class EnergyRanking
 		URL resource = jrp.getClass().getClassLoader().getResource("ambit2/tautomers/energy-rules.json");
 		rules =  JsonRuleParser.readRuleSetFromJSON(resource.getFile());
 	}
-	
-	public void loadEnergyRules(String jsonRulesFile) throws Exception
-	{
-		//TODO
-	}
-	
 	
 }
