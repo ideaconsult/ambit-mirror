@@ -40,9 +40,11 @@ public class TautomerConst
 	public static final int RULE_ORDER_NONE = 0;
 	public static final int RULE_ORDER_BY_SIZE = 1;
 	
-	
-	
 	public static final int IHA_INDEX = 1000000;
+	
+	//Energy ranking method
+	public static final int ERM_OLD = 0;
+	public static final int ERM_NEW = 1;
 	
 	
 	

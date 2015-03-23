@@ -6,8 +6,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.smarts.SmartsHelper;
 
@@ -32,6 +38,9 @@ public class TautomerManager
 	
 	public FilterTautomers tautomerFilter = new FilterTautomers(this);
 	int originalValencySum;
+	
+	public int FlagEnergyRankingMethod = TautomerConst.ERM_OLD;
+	public boolean FlagApplySimpleAromaticityRankCorrection = true;  //This flag is valid only for the old ranking method
 	
 	public boolean FlagSwitchToCombinatorialOnReachingRuleLimit = true;
 	public boolean FlagRecurseBackResultTautomers = false;
@@ -291,7 +300,7 @@ public class TautomerManager
 		
 	}
 	
-	public void registerTautomer(IAtomContainer newTautomer)
+	public void registerTautomer(IAtomContainer newTautomer) throws Exception
 	{
 		numOfRegistrations++;
 		
@@ -308,10 +317,14 @@ public class TautomerManager
 			{	
 				resultTatomerStringCodes.add(newCode);
 				resultTautomers.add(newTautomer);
+				processTautomer(newTautomer);
 			}	
 		}
 		else
+		{	
 			resultTautomers.add(newTautomer);
+			processTautomer(newTautomer);
+		}	
 	}
 	
 	
@@ -680,6 +693,30 @@ public class TautomerManager
 			double rank = CACTVSRanking.getEnergyRank(mol);
 			mol.setProperty("CACTVS_ENERGY_RANK", new Double(rank));
 		}
+	}
+	
+	public static void processTautomer(IAtomContainer ac) throws Exception
+	{
+		if (ac == null)
+			return;
+		
+		//Clear aromaticity flags
+		for (int i = 0; i < ac.getAtomCount(); i++)
+			ac.getAtom(i).setFlag(CDKConstants.ISAROMATIC, false);			
+		for (int i = 0; i < ac.getBondCount(); i++)
+			ac.getBond(i).setFlag(CDKConstants.ISAROMATIC, false);
+		
+		//AtomContainerManipulator.clearAtomConfigurations(ac);
+		for (IAtom atom : ac.atoms()) {
+            atom.setHybridization((IAtomType.Hybridization) CDKConstants.UNSET);
+        }
+		
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(ac);
+		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
+		adder.addImplicitHydrogens(ac);
+		//AtomContainerManipulator.convertImplicitToExplicitHydrogens(ac);
+
+		CDKHueckelAromaticityDetector.detectAromaticity(ac);
 	}
 	
 }

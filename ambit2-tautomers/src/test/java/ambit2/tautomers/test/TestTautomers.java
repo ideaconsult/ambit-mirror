@@ -148,6 +148,8 @@ public class TestTautomers
 		
 		//tt.visualTest("OC=1N=CN=CC=1");  //Kekule aromatic - !!!!
 		
+		tt.visualTest("NC1=CC=C(O)C(=C1)C(O)=O");
+		
 		//tt.visualTest("O=C1N=C(N=CC1)N");
 		
 		//tt.visualTest("C1=CN=C(N)NC1(=O)");
@@ -217,7 +219,7 @@ public class TestTautomers
 		
 		//tt.testCACTVSRank("c1ccccc1CCC=O");
 		
-		tt.testEnergyRules();
+		//tt.testEnergyRules();
 	}
 	
 	public void performTestCases() throws Exception

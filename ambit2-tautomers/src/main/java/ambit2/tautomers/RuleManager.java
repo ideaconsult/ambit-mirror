@@ -332,10 +332,12 @@ public class RuleManager {
 			
 			try{
 				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
-				double rank = calculateRank(incStep);
+				
+				tman.registerTautomer(newTautomer);  //processing of the tautomer structure is done here. It must be before rank calculation
+				
+				double rank = calculateRank(incStep, newTautomer);
 				newTautomer.setProperty("TAUTOMER_RANK", new Double(rank));
 				
-				tman.registerTautomer(newTautomer); 
 				
 				if (tman.FlagPrintIcrementalStepDebugInfo)
 					System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer, false) 
@@ -356,10 +358,10 @@ public class RuleManager {
 		{
 			try{
 				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
-				double rank = calculateRank(incStep);
-				newTautomer.setProperty("TAUTOMER_RANK", new Double(rank));
+				tman.registerTautomer(newTautomer); //processing of the tautomer structure is done here. It must be before rank calculation
 				
-				tman.registerTautomer(newTautomer); 
+				double rank = calculateRank(incStep, newTautomer);
+				newTautomer.setProperty("TAUTOMER_RANK", new Double(rank)); 
 				
 				if (tman.FlagPrintIcrementalStepDebugInfo)
 					System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer, false) 
@@ -1040,7 +1042,7 @@ public class RuleManager {
 	}
 	
 	
-	double calculateRank(TautomerIncrementStep incStep)
+	double calculateRank(TautomerIncrementStep incStep, IAtomContainer tautomer)
 	{
 		//This is a simple approach for ranking
 		//It is to be improved further
@@ -1060,6 +1062,11 @@ public class RuleManager {
 			e_rank += rankRule.stateEnergies[ri.getCurrentState()];
 		}
 		
+		if (tman.FlagApplySimpleAromaticityRankCorrection)
+		{	
+			double aromRank = RuleManager.getAdditionalAromaticityRank(tautomer);	
+			e_rank += aromRank;
+		}
 		
 		//System.out.println("rank = " + e_rank);
 		
