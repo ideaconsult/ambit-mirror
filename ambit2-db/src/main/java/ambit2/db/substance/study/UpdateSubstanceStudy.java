@@ -36,6 +36,7 @@ import net.idea.modbcum.i.query.QueryParam;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.study.IParams;
+import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 
@@ -112,7 +113,9 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		params1.add(new QueryParam<String>(String.class, subst_uuid[0]));
 		params1.add(new QueryParam<String>(String.class, subst_uuid[1]));
 		
-		params1.add(new QueryParam<String>(String.class, getObject().getParameters().toString()));
+		IParams params = getObject().getParameters();
+		if (params==null) params = new Params();
+		params1.add(new QueryParam<String>(String.class, params.toString()));
 		
 		String result = getObject().getInterpretationResult();
 		if (result!=null && result.length()>128) result = result.substring(0,127);
