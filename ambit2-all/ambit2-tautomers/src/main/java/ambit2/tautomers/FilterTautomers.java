@@ -87,6 +87,7 @@ public class FilterTautomers
 		}
 		
 		
+		/*
 		//Pre-processing is done here 
 		for (int i = 0; i < uniqueTautomers.size(); i++)
 		{	
@@ -99,6 +100,7 @@ public class FilterTautomers
 				//System.out.println(e.toString()); Please do not hide exceptions!
 			}
 		}
+		*/
 		
 		
 		//Filtration according to the filter rules
@@ -491,6 +493,7 @@ public class FilterTautomers
 		
 	}
 	
+	/*
 	void preProcessStructures(IAtomContainer ac) throws Exception
 	{
 		if (ac == null)
@@ -526,6 +529,8 @@ public class FilterTautomers
 		}
 		
 	}
+	
+	*/
 	
 	public static int getValencySum(IAtomContainer ac)
 	{
