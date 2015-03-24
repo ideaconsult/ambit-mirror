@@ -608,6 +608,27 @@ public class TestTautomers
 		return(nNotFound);
 	}
 	
+	
+	public int testCaseEnergyRanks(String smi, double expectedRanks[], boolean FlagPrintTautomers) throws Exception
+	{			
+		System.out.println("Testing: " + smi);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		tman.setStructure(mol);
+		//List<IAtomContainer> resultTautomers = tman.generateTautomers();
+		
+		
+		List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+		if (FlagPrintTautomers)
+			for (int i = 0; i < resultTautomers.size(); i++)		
+				System.out.println("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i), false));
+		
+		int nErrors = 0; 
+		
+		//TODO
+		
+		return nErrors;
+		
+	}
 	 
 	public void testAdenine() throws CDKException, CloneNotSupportedException 
 	{
