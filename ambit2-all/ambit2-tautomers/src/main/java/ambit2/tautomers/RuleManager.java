@@ -1044,28 +1044,35 @@ public class RuleManager {
 	
 	double calculateRank(TautomerIncrementStep incStep, IAtomContainer tautomer)
 	{
-		//This is a simple approach for ranking
-		//It is to be improved further
-		
 		double e_rank = 0.0;  //energy based rank
-		for (int i = 0; i < incStep.usedRuleInstances.size(); i++)
-		{
-			RuleInstance ri = incStep.usedRuleInstances.get(i);
-			RankingRule rankRule = ri.rule.rankingRule; 
-			if (rankRule == null)
-				continue;
-			
-			int stateCheck  = ri.checkCurStateInstanceValidity();
-			if (stateCheck != 0)
-				continue;
-			
-			e_rank += rankRule.stateEnergies[ri.getCurrentState()];
-		}
 		
-		if (tman.FlagApplySimpleAromaticityRankCorrection)
+		if (tman.FlagEnergyRankingMethod == TautomerConst.ERM_OLD)
 		{	
-			double aromRank = RuleManager.getAdditionalAromaticityRank(tautomer);	
-			e_rank += aromRank;
+			//This is the simple (old) approach for ranking
+			
+			for (int i = 0; i < incStep.usedRuleInstances.size(); i++)
+			{
+				RuleInstance ri = incStep.usedRuleInstances.get(i);
+				RankingRule rankRule = ri.rule.rankingRule; 
+				if (rankRule == null)
+					continue;
+
+				int stateCheck  = ri.checkCurStateInstanceValidity();
+				if (stateCheck != 0)
+					continue;
+
+				e_rank += rankRule.stateEnergies[ri.getCurrentState()];
+			}
+
+			if (tman.FlagApplySimpleAromaticityRankCorrection)
+			{	
+				double aromRank = RuleManager.getAdditionalAromaticityRank(tautomer);	
+				e_rank += aromRank;
+			}
+		}
+		else
+		{
+			//The new approach for ranking
 		}
 		
 		//System.out.println("rank = " + e_rank);

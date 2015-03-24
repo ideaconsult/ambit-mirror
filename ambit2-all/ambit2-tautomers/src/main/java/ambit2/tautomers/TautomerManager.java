@@ -16,6 +16,7 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.smarts.SmartsHelper;
+import ambit2.tautomers.ranking.EnergyRanking;
 
 
 public class TautomerManager 
@@ -35,6 +36,8 @@ public class TautomerManager
 	List<String> errors = new ArrayList<String>(); 
 	int numOfRegistrations = 0;
 	int status = TautomerConst.STATUS_NONE;
+	private EnergyRanking energyRanking = null;
+	
 	
 	public FilterTautomers tautomerFilter = new FilterTautomers(this);
 	int originalValencySum;
@@ -717,6 +720,13 @@ public class TautomerManager
 		//AtomContainerManipulator.convertImplicitToExplicitHydrogens(ac);
 
 		CDKHueckelAromaticityDetector.detectAromaticity(ac);
+	}
+
+	public EnergyRanking getEnergyRanking() throws Exception 
+	{
+		if (energyRanking == null)
+			energyRanking = new EnergyRanking();
+		return energyRanking;
 	}
 	
 }
