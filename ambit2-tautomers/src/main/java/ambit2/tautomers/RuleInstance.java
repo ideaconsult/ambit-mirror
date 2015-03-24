@@ -12,20 +12,20 @@ import org.openscience.cdk.interfaces.IBond.Order;
 
 public class RuleInstance implements IRuleInstance {
 	protected static Logger logger = Logger.getLogger(RuleInstance.class.getName());
-	Rule rule;
-	CombinedRuleInstance combRI;
-	IAtomContainer molecule;
-	int foundState = 0;
-	int curState = 0;  //Current state is used to define the current position of the mobile group
-	int beginState = 0;
-	boolean FlagImplicitH = true;   //This flag is true when mobile h group is implicitly described
-	IAtom explicitH = null;
-	IAtom mobileAtom = null;
-	boolean FlagOverlapMode = false; //This is true when this instance overlaps with another one i.e. it is a part from combination
-	boolean FlagGoToStateSpecialOK = true;
+	public Rule rule;
+	public CombinedRuleInstance combRI;
+	public IAtomContainer molecule;
+	public int foundState = 0;
+	public int curState = 0;  //Current state is used to define the current position of the mobile group
+	public int beginState = 0;
+	public boolean FlagImplicitH = true;   //This flag is true when mobile h group is implicitly described
+	public IAtom explicitH = null;
+	public IAtom mobileAtom = null;
+	public boolean FlagOverlapMode = false; //This is true when this instance overlaps with another one i.e. it is a part from combination
+	public boolean FlagGoToStateSpecialOK = true;
 	
-	List<IAtom> atoms = new  ArrayList<IAtom>();
-	List<IBond> bonds = new  ArrayList<IBond>();
+	public List<IAtom> atoms = new  ArrayList<IAtom>();
+	public List<IBond> bonds = new  ArrayList<IBond>();
 	
 	
 	public RuleInstance()
