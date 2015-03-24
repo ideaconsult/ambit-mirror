@@ -148,7 +148,7 @@ public class TestTautomers
 		
 		//tt.visualTest("OC=1N=CN=CC=1");  //Kekule aromatic - !!!!
 		
-		tt.visualTest("NC1=CC=C(O)C(=C1)C(O)=O");
+		tt.visualTest("O=CCCC");
 		
 		//tt.visualTest("O=C1N=C(N=CC1)N");
 		
@@ -609,13 +609,11 @@ public class TestTautomers
 	}
 	
 	
-	public int testCaseEnergyRanks(String smi, double expectedRanks[], boolean FlagPrintTautomers) throws Exception
+	public int testCaseEnergyRanks(String smi, double expectedRanks[], boolean FlagPrintTautomers, double eps) throws Exception
 	{			
 		System.out.println("Testing: " + smi);
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
 		tman.setStructure(mol);
-		//List<IAtomContainer> resultTautomers = tman.generateTautomers();
-		
 		
 		List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 		if (FlagPrintTautomers)
@@ -624,10 +622,28 @@ public class TestTautomers
 		
 		int nErrors = 0; 
 		
-		//TODO
+		if (resultTautomers.size() != expectedRanks.length)
+			return (9999);
+		
+		for (int i = 0; i < resultTautomers.size(); i++)
+		{
+			Double d = (Double)resultTautomers.get(i).getProperty("TAUTOMER_RANK");
+			if (d == null)
+				throw new Exception("TAUTOMER_RANK is missing");
+			
+			boolean FlagFound = false;
+			for (int k = 0; k < expectedRanks.length; k++)
+				if (Math.abs(d - expectedRanks[k]) <= eps)
+				{
+					FlagFound = true;
+					break;
+				}
+			
+			if (!FlagFound)
+				nErrors++;
+		}
 		
 		return nErrors;
-		
 	}
 	 
 	public void testAdenine() throws CDKException, CloneNotSupportedException 
