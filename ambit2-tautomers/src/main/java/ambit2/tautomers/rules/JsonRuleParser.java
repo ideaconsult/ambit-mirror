@@ -4,6 +4,7 @@ package ambit2.tautomers.rules;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -266,8 +267,24 @@ public class JsonRuleParser
 				continue;
 			}
 			
-			//TODO make/check smarts queries from the atom conditions
-			
+			//Make and check smarts queries from the atom conditions
+			for (int k = 0; k < rule.energyCorrections.size(); k++)
+			{	
+				EnergyCorrection eCorrection = rule.energyCorrections.get(k);
+				for (Entry<Integer, AtomCondition> entry : eCorrection.atomConditions.entrySet())
+				{
+					int atomIndex = entry.getKey();
+					AtomCondition cond = entry.getValue();
+					cond.makeSmartsQueries();
+					
+					if (cond.errors != null)
+						for (String err: cond.errors)
+							addError("ENERGY_RULES[" + (i+1)+"], " + 
+									 "ENERGY_CORRECTION[" + (k+1) + "], " +
+									 "ATOM" + (atomIndex+1) + "_CONDITIONS error: "+ err);
+				}
+			}	
+					
 			rules.add(rule);
 		}
 		

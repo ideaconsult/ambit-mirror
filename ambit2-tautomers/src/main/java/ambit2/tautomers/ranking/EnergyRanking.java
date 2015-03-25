@@ -1,20 +1,25 @@
 package ambit2.tautomers.ranking;
 
-import java.io.File;
 import java.net.URL;
 import java.util.List;
+import java.util.Map.Entry;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.smarts.IsomorphismTester;
 import ambit2.tautomers.RankingRule;
 import ambit2.tautomers.RuleInstance;
 import ambit2.tautomers.TautomerIncrementStep;
+import ambit2.tautomers.rules.AtomCondition;
+import ambit2.tautomers.rules.EnergyCorrection;
 import ambit2.tautomers.rules.EnergyRule;
 import ambit2.tautomers.rules.JsonRuleParser;
 
 public class EnergyRanking 
 {
 	public List<EnergyRule> rules = null;
+	private IsomorphismTester isoTester = new IsomorphismTester();
 	
 	
 	public EnergyRanking() throws Exception
@@ -36,18 +41,46 @@ public class EnergyRanking
 		rules =  JsonRuleParser.readRuleSetFromJSON(resource.getFile());
 	}
 	
-	public double calculateRank(List<RuleInstance> usedRuleInstances, IAtomContainer tautomer)
+	public double calculateRank(List<RuleInstance> usedRuleInstances, IAtomContainer tautomer) throws Exception
 	{
 		double e_rank = 0.0;
+		
 		for (int i = 0; i < usedRuleInstances.size(); i++)
 		{
-			RuleInstance ri = usedRuleInstances.get(i);
+			RuleInstance ri = usedRuleInstances.get(i);			
 			EnergyRule eRule = getEnergyRuleByName(ri.rule.name);
+			if (eRule == null)
+				continue;
+			
+			//System.out.println("Rule: " + ri.rule.name);
 			
 			if (ri.curState == eRule.state)
 			{	
 				e_rank += eRule.stateEnergy;
-				//TODO add energy corrections
+				
+				//Checking the conditions for energy corrections
+				for (EnergyCorrection eCorrection : eRule.energyCorrections)
+				{	
+					boolean FlagApplyCorrection = true;
+					for (Entry<Integer, AtomCondition> entry : eCorrection.atomConditions.entrySet())
+					{
+						int atomIndex = entry.getKey();
+						AtomCondition cond = entry.getValue();
+						
+						IAtom atom = ri.atoms.get(atomIndex);
+						if (!cond.checkConditionForAtom(tautomer, atom, isoTester));
+						{
+							FlagApplyCorrection = false;
+							break;
+						}
+					}
+					
+					if (FlagApplyCorrection)
+					{	
+						e_rank += eCorrection.energy;
+						//System.out.println("correction: " + eCorrection.correctionName + "  " + eCorrection.energy);
+					}	
+				}
 			}
 			else
 			{

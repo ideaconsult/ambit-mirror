@@ -1042,7 +1042,7 @@ public class RuleManager {
 	}
 	
 	
-	double calculateRank(TautomerIncrementStep incStep, IAtomContainer tautomer)
+	double calculateRank(TautomerIncrementStep incStep, IAtomContainer tautomer) throws Exception
 	{
 		double e_rank = 0.0;  //energy based rank
 		
@@ -1073,6 +1073,7 @@ public class RuleManager {
 		else
 		{
 			//The new approach for ranking
+			e_rank = tman.getEnergyRanking().calculateRank(incStep.usedRuleInstances, tautomer);
 		}
 		
 		//System.out.println("rank = " + e_rank);
