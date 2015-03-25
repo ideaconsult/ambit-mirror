@@ -9,6 +9,7 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsFlags;
+import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
 
 public class AtomCondition 
@@ -62,22 +63,23 @@ public class AtomCondition
 	}
 	
 	
-	public boolean checkConditionForAtom(IAtomContainer mol, IAtom atom) throws Exception
+	public boolean checkConditionForAtom(IAtomContainer mol, int targetAtNum) throws Exception
 	{	
 		IsomorphismTester isoTester = null;
 		if (smartsQueries != null)
 			 isoTester = new IsomorphismTester();
 		
-		return checkConditionForAtom(mol, atom, isoTester);
+		return checkConditionForAtom(mol, targetAtNum, isoTester);
 	}
 	
-	public boolean checkConditionForAtom(IAtomContainer mol, IAtom atom, IsomorphismTester isoTester) throws Exception
+	public boolean checkConditionForAtom(IAtomContainer mol, int targetAtNum, IsomorphismTester isoTester) throws Exception
 	{	
 		//Check smarts queries	
 		if (smartsQueries != null)
 			for (int i = 0; i < smartsQueries.length; i++)
 			{
-				boolean res = checkSmartsConditionForAtom(i, mol, atom, isoTester);
+				boolean res = checkSmartsConditionForAtom(i, mol, targetAtNum, isoTester);
+				//System.out.println("*** checkSmartsCondition " + smarts[i] + "  for atom " + (targetAtNum + 1) + " --> " + res + "         " + SmartsHelper.moleculeToSMILES(mol, true) );
 				if (!res)
 					return false;
 			}
@@ -85,15 +87,8 @@ public class AtomCondition
 		return true;
 	}
 	
-	/*
-	boolean checkSmartsConditionForAtom(int condNum, IAtomContainer mol, IAtom atom)
-	{
-		IsomorphismTester isoTester = new IsomorphismTester();
-		return checkSmartsConditionForAtom(condNum, mol, atom, isoTester);
-	}
-	*/
 	
-	boolean checkSmartsConditionForAtom(int condNum, IAtomContainer mol, IAtom atom, IsomorphismTester isoTester) throws Exception
+	boolean checkSmartsConditionForAtom(int condNum, IAtomContainer mol, int targetAtNum, IsomorphismTester isoTester) throws Exception
 	{	
 		SmartsFlags flags = smartsQueryFlags[condNum];
 		SmartsParser.prepareTargetForSMARTSSearch(
@@ -105,7 +100,7 @@ public class AtomCondition
 				flags.mNeedParentMoleculeData, mol);
 		
 		isoTester.setQuery(smartsQueries[condNum]);
-		return isoTester.checkIsomorphismAtPosition(mol, mol.getAtomNumber(atom));
+		return isoTester.checkIsomorphismAtPosition(mol, targetAtNum);
 	}
 	
 	void handleLogicalPrefixes()

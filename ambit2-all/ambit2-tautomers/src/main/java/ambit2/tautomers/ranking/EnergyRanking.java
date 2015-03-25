@@ -41,13 +41,13 @@ public class EnergyRanking
 		rules =  JsonRuleParser.readRuleSetFromJSON(resource.getFile());
 	}
 	
-	public double calculateRank(List<RuleInstance> usedRuleInstances, IAtomContainer tautomer) throws Exception
+	public double calculateRank(TautomerIncrementStep incStep , IAtomContainer tautomer) throws Exception
 	{
 		double e_rank = 0.0;
 		
-		for (int i = 0; i < usedRuleInstances.size(); i++)
+		for (int i = 0; i < incStep.usedRuleInstances.size(); i++)
 		{
-			RuleInstance ri = usedRuleInstances.get(i);			
+			RuleInstance ri = incStep.usedRuleInstances.get(i);			
 			EnergyRule eRule = getEnergyRuleByName(ri.rule.name);
 			if (eRule == null)
 				continue;
@@ -64,11 +64,13 @@ public class EnergyRanking
 					boolean FlagApplyCorrection = true;
 					for (Entry<Integer, AtomCondition> entry : eCorrection.atomConditions.entrySet())
 					{
-						int atomIndex = entry.getKey();
+						int ruleAtomIndex = entry.getKey();
 						AtomCondition cond = entry.getValue();
 						
-						IAtom atom = ri.atoms.get(atomIndex);
-						if (!cond.checkConditionForAtom(tautomer, atom, isoTester));
+						IAtom atom = ri.atoms.get(ruleAtomIndex);  //This atom corresponds to incStep.struct (not to the tautomer which is a clone of incStep.struct) 
+						int tautomerAtomIndex = incStep.struct.getAtomNumber(atom);  //The correct index is taken from incStep.struct
+						
+						if (!cond.checkConditionForAtom(tautomer, tautomerAtomIndex, isoTester))
 						{
 							FlagApplyCorrection = false;
 							break;
