@@ -729,4 +729,9 @@ public class TautomerManager
 		return energyRanking;
 	}
 	
+	public void setEnergyRanking(EnergyRanking energyRanking)
+	{
+		this.energyRanking = energyRanking;
+	}
+	
 }

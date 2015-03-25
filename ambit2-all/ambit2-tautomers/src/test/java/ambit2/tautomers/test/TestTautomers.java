@@ -36,6 +36,7 @@ import ambit2.tautomers.KnowledgeBase;
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerRanking;
+import ambit2.tautomers.ranking.EnergyRanking;
 import ambit2.tautomers.rules.EnergyRule;
 import ambit2.tautomers.rules.JsonRuleParser;
 
@@ -53,6 +54,7 @@ public class TestTautomers
 	public static void main(String[] args) throws Exception 
 	{		
 		TestTautomers tt = new TestTautomers();
+		tt.tman.setEnergyRanking(new EnergyRanking());  //This is done here in order to catch the exception from the energy-rule parsing!
 		tt.tman.tautomerFilter.FlagApplyWarningFilter = true;
 		tt.tman.tautomerFilter.FlagApplyExcludeFilter = true;
 		tt.tman.tautomerFilter.FlagApplyDuplicationFilter = true;
@@ -148,7 +150,8 @@ public class TestTautomers
 		
 		//tt.visualTest("OC=1N=CN=CC=1");  //Kekule aromatic - !!!!
 		
-		tt.visualTest("O=CCCC");
+		tt.tman.FlagEnergyRankingMethod = TautomerConst.ERM_NEW;
+		tt.visualTest("OC=CC=O");
 		
 		//tt.visualTest("O=C1N=C(N=CC1)N");
 		
