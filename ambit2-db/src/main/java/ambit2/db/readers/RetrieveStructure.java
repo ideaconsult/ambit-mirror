@@ -62,7 +62,7 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
 	*/
 	protected String sql_prefered = 
     	"select structure.idstructure,idchemical,uncompress(structure) as ustructure,\n"+
-    	"format,type_structure,atomproperties,preference from structure\n"+
+    	"format,type_structure,atomproperties,preference from structure,1 as selected\n"+
     	"where structure.%s =?\n"+
     	"order by idchemical,preference,idstructure ";	
 	public RetrieveStructure() {
