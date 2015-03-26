@@ -47,7 +47,12 @@ public class EnergyRanking
 		
 		for (int i = 0; i < incStep.usedRuleInstances.size(); i++)
 		{
-			RuleInstance ri = incStep.usedRuleInstances.get(i);			
+			RuleInstance ri = incStep.usedRuleInstances.get(i);	
+			
+			int stateCheck  = ri.checkCurStateInstanceValidity();
+			if (stateCheck != 0)
+				continue;
+			
 			EnergyRule eRule = getEnergyRuleByName(ri.rule.name);
 			if (eRule == null)
 				continue;
@@ -56,7 +61,7 @@ public class EnergyRanking
 			
 			if (ri.curState == eRule.state)
 			{	
-				e_rank += eRule.stateEnergy;
+				boolean FlagBaseEnergy = true;
 				
 				//Checking the conditions for energy corrections
 				for (EnergyCorrection eCorrection : eRule.energyCorrections)
@@ -73,16 +78,21 @@ public class EnergyRanking
 						if (!cond.checkConditionForAtom(tautomer, tautomerAtomIndex, isoTester))
 						{
 							FlagApplyCorrection = false;
-							break;
+							break; //no more conditions are checked
 						}
 					}
 					
 					if (FlagApplyCorrection)
 					{	
 						e_rank += eCorrection.energy;
+						FlagBaseEnergy = false;  //correction energy is used instead of the base rule energy
+						break;   //no more corrections are checked
 						//System.out.println("correction: " + eCorrection.correctionName + "  " + eCorrection.energy);
 					}	
 				}
+				
+				if (FlagBaseEnergy)
+					e_rank += eRule.stateEnergy;
 			}
 			else
 			{
