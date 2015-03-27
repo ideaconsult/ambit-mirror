@@ -195,6 +195,16 @@ public class StoredQuery implements IStoredQuery {
     public void setStars(int rating) {
     	this.stars = rating;
     }
+    @Override
+    public String getStatus() {
+    return "published";
+    }
+    
+    @Override
+    public void setStatus(String value) {
+    //does nothing
+    
+    }
 }
 
 
