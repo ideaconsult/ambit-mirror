@@ -118,8 +118,9 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 
 	try {
 	    ITable table = c1.createQueryTable("EXPECTED",
-		    String.format("SELECT idbundle from bundle where idbundle=1"));
+		    String.format("SELECT idbundle,updated from bundle where idbundle=1"));
 	    Assert.assertEquals(1, table.getRowCount());
+	    Object updated = table.getValue(0, "updated");
 
 	    SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(1);
 	    DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> reporter = new DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle>(
@@ -130,13 +131,14 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 	    table = c1
 		    .createQueryTable(
 			    "EXPECTED",
-			    String.format("SELECT idbundle,name,licenseURI,rightsHolder,maintainer,stars,title,url,description from bundle join catalog_references using(idreference) where idbundle=1"));
+			    String.format("SELECT idbundle,name,licenseURI,rightsHolder,maintainer,stars,title,url,description,updated from bundle join catalog_references using(idreference) where idbundle=1"));
 	    Assert.assertEquals(1, table.getRowCount());
 	    Assert.assertEquals("title", table.getValue(0, "name"));
 	    Assert.assertEquals("maintainer", table.getValue(0, "maintainer"));
 	    Assert.assertEquals("rightsHolder", table.getValue(0, "rightsHolder"));
 	    Assert.assertEquals("license", table.getValue(0, "licenseURI"));
 	    Assert.assertEquals("description", table.getValue(0, "description"));
+	    Assert.assertNotSame(updated,table.getValue(0, "updated"));
 	    // Assert.assertEquals("url",table.getValue(0,"url"));
 	    // Assert.assertEquals("source",table.getValue(0,"title"));
 
@@ -153,6 +155,61 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 	    }
 	}
     }
+    
+    @Test
+    public void testUpdateBundleStatus() throws Exception {
+	setUpDatabase(dbFile);
+	IDatabaseConnection c = getConnection();
+	IDatabaseConnection c1 = getConnection();
+
+	Form form = new Form();
+	form.add(ISourceDataset.fields.status.name(), "published");
+
+	try {
+	    ITable table = c1.createQueryTable("EXPECTED",
+		    String.format("SELECT idbundle,published_status,name,licenseURI,rightsHolder,maintainer,stars,title,url,description,updated from bundle join catalog_references using(idreference) where idbundle=1"));
+	    Assert.assertEquals(1, table.getRowCount());
+	    Assert.assertEquals("draft", table.getValue(0, "published_status"));
+	    Assert.assertEquals("Assessment", table.getValue(0, "name"));
+	    Assert.assertEquals("ABC", table.getValue(0, "maintainer"));
+	    Assert.assertEquals("xyz", table.getValue(0, "rightsHolder"));
+	    Assert.assertEquals("http://creativecommons.org/publicdomain/zero/1.0/", table.getValue(0, "licenseURI"));
+	    Assert.assertNull(table.getValue(0, "description"));
+	    Object updated = table.getValue(0, "updated");
+	    SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(1);
+	    DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> reporter = new DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle>(
+		    new Reference("http://localhost"));
+	    CallableBundleCreator callable = new CallableBundleCreator(bundle, reporter, Method.PUT, form,
+		    c.getConnection(), null);
+	    TaskResult task = callable.call();
+	    table = c1
+		    .createQueryTable(
+			    "EXPECTED",
+			    String.format("SELECT idbundle,published_status,name,licenseURI,rightsHolder,maintainer,stars,title,url,description,updated from bundle join catalog_references using(idreference) where idbundle=1"));
+	    Assert.assertEquals(1, table.getRowCount());
+	    Assert.assertEquals("published", table.getValue(0, "published_status"));
+	    Assert.assertEquals("Assessment", table.getValue(0, "name"));
+	    Assert.assertEquals("ABC", table.getValue(0, "maintainer"));
+	    Assert.assertEquals("xyz", table.getValue(0, "rightsHolder"));
+	    Assert.assertEquals("http://creativecommons.org/publicdomain/zero/1.0/", table.getValue(0, "licenseURI"));
+	    Assert.assertNull(table.getValue(0, "description"));
+	    Assert.assertNotSame(updated,table.getValue(0, "updated"));
+	    // Assert.assertEquals("url",table.getValue(0,"url"));
+	    // Assert.assertEquals("source",table.getValue(0,"title"));
+	    
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    try {
+		c.close();
+	    } catch (Exception x) {
+	    }
+	    try {
+		c1.close();
+	    } catch (Exception x) {
+	    }
+	}
+    }    
 
     @Test
     public void testCreateBundleVersion() throws Exception {

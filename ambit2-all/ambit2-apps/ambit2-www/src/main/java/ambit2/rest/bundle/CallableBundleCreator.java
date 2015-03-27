@@ -82,7 +82,12 @@ public class CallableBundleCreator extends	CallableDBUpdateTask<SubstanceEndpoin
 		String description = input.getFirstValue("description");
 		if (description!=null && !"".equals(description))
 			bundle.setDescription(description);		
-		
+
+		try {
+			String status = input.getFirstValue(ISourceDataset.fields.status.name());
+			if (status!= null)
+				bundle.setStatus(UpdateBundle._published_status.valueOf(status).name());
+		} catch (Exception x) { }		
 	}
 	@Override
 	protected IQueryUpdate<? extends Object, SubstanceEndpointsBundle> createUpdate(

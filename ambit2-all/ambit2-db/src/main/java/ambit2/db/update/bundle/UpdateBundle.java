@@ -53,6 +53,10 @@ public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 	
 	private static final String _description = "description=?";
 	
+	private static final String _status = "published_status=?";
+	
+	public enum _published_status  {draft,archived,published};
+	
 	public UpdateBundle(SubstanceEndpointsBundle dataset) {
 		super(dataset);
 	}
@@ -76,6 +80,14 @@ public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 		
 		if (getObject().getDescription()!=null)
 			params3.add(new QueryParam<String>(String.class, getObject().getDescription()));		
+		
+		if (getObject().getStatus()!=null) {
+		    try {
+			params3.add(new QueryParam<String>(String.class, _published_status.valueOf(getObject().getStatus().trim()).name()));
+		    } catch (Exception x) {
+			
+		    }
+		}	
 		
 		if (params3.size()==0)
 			throw new AmbitException(UpdateDataset.MSG_EMPTY);
@@ -115,6 +127,16 @@ public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 			b.append(_description);
 			i++;
 		}
+		if (getObject().getStatus()!=null) {
+		    try {
+			_published_status.valueOf(getObject().getStatus().trim());
+			b.append(i>0?",":"");
+			b.append(_status);
+			i++;
+		    } catch (Exception x) {
+		    }
+		}	
+				
 				
 		if (i>0)
 			return new String[] {String.format(update_sql,b.toString())};

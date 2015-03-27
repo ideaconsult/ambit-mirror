@@ -259,7 +259,16 @@
 							   "type": "int",
 							   "paramType": "form",
 							   "allowMultiple": false
-							}								
+							},
+							{
+								   "name": "status",
+								   "description": "Published status",
+								   "required": false,
+								   "type": "String",
+								   "paramType": "form",
+								   "enum" : ["published","draft","archived"],
+								   "allowMultiple": false
+								}							
 			            ],
 			            "responseMessages": [
 			     			{
