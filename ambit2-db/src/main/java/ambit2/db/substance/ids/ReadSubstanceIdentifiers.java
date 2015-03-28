@@ -33,7 +33,7 @@ public class ReadSubstanceIdentifiers extends AbstractQuery<SubstanceRecord,Exte
 	public List<QueryParam> getParameters() throws AmbitException {
 		if (getFieldname()==null) throw new AmbitException("Substance not defined");
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
-		String o_uuid = getFieldname().getCompanyUUID();
+		String o_uuid = getFieldname().getSubstanceUUID();
 		String[] uuid = {null,o_uuid};
 		if (o_uuid == null) throw  new AmbitException("Substance not defined");
 		uuid = I5Utils.splitI5UUID(o_uuid.toString());

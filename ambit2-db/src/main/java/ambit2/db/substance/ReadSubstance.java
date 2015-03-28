@@ -60,7 +60,7 @@ public class ReadSubstance  extends AbstractReadSubstance<CompositionRelation,Su
 				b.append("where ");
 				b.append(q_idsubstance);
 				return b.toString();
-			} else if (getValue().getCompanyUUID()!= null) {
+			} else if (getValue().getSubstanceUUID()!= null) {
 				StringBuilder b = new StringBuilder();
 				b.append(sql);
 				b.append("where ");
@@ -93,8 +93,8 @@ public class ReadSubstance  extends AbstractReadSubstance<CompositionRelation,Su
 			if (getValue().getIdsubstance()>0) {
 				params1.add(new QueryParam<Integer>(Integer.class, getValue().getIdsubstance()));
 				return params1;
-			} else if (getValue().getCompanyUUID()!= null) {
-				String o_uuid = getValue().getCompanyUUID();
+			} else if (getValue().getSubstanceUUID()!= null) {
+				String o_uuid = getValue().getSubstanceUUID();
 				if (o_uuid==null) throw new AmbitException("Empty substance id");
 				String[] uuid = new String[]{null,o_uuid==null?null:o_uuid.toString()};
 				if (o_uuid!=null) 

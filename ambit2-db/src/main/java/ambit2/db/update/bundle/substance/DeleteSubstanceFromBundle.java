@@ -39,8 +39,8 @@ public class DeleteSubstanceFromBundle  extends AbstractUpdate<SubstanceEndpoint
 		if (getObject().getIdsubstance()>0) {
 			params.add(new QueryParam<Integer>(Integer.class, getObject().getIdsubstance()));
 			return params;
-		} else if (getObject().getCompanyUUID()!= null) {
-			String o_uuid = getObject().getCompanyUUID();
+		} else if (getObject().getSubstanceUUID()!= null) {
+			String o_uuid = getObject().getSubstanceUUID();
 			if (o_uuid==null) throw new AmbitException("Empty substance id");
 			String[] uuid = new String[]{null,o_uuid==null?null:o_uuid.toString()};
 			if (o_uuid!=null) 
@@ -59,7 +59,7 @@ public class DeleteSubstanceFromBundle  extends AbstractUpdate<SubstanceEndpoint
 			
 		if (getObject().getIdsubstance()>0) {
 			return delete_sql;
-		} else if (getObject().getCompanyUUID()!= null) 
+		} else if (getObject().getSubstanceUUID()!= null) 
 			return delete_sql_uuid;
 		
 		throw new AmbitException("Substance not defined");

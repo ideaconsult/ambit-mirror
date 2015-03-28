@@ -86,7 +86,7 @@ public class ReadSubstanceRelation extends AbstractStructureQuery<STRUCTURE_RELA
 		if (getValue()!=null) {
 			if (getValue().getIdsubstance()>0) {
 				sql.append(c); sql.append(where_substance_id); c = " and ";
-			} else if (getValue().getCompanyUUID()!=null) {
+			} else if (getValue().getSubstanceUUID()!=null) {
 				sql.append(c); sql.append(where_substance_uuid); c = " and ";
 			} else if (getValue().getOwnerUUID()!=null) {
 				sql.append(c); sql.append(where_owner_uuid); c = " and ";
@@ -102,8 +102,8 @@ public class ReadSubstanceRelation extends AbstractStructureQuery<STRUCTURE_RELA
 		if (getValue()!=null) {
 			if (getValue().getIdsubstance()>0)
 				params.add(new QueryParam<Integer>(Integer.class,getValue().getIdsubstance()));
-			else if (getValue().getCompanyUUID()!=null) {
-				String[] uuid = I5Utils.splitI5UUID(getValue().getCompanyUUID());
+			else if (getValue().getSubstanceUUID()!=null) {
+				String[] uuid = I5Utils.splitI5UUID(getValue().getSubstanceUUID());
 				params.add(new QueryParam<String>(String.class, uuid[0]));
 				params.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
 			} else if (getValue().getOwnerUUID()!=null) {

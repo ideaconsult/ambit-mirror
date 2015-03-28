@@ -343,7 +343,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 		continue;
 	    Assert.assertTrue(record instanceof SubstanceRecord);
 	    Assert.assertEquals("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
-		    ((SubstanceRecord) record).getCompanyUUID());
+		    ((SubstanceRecord) record).getSubstanceUUID());
 	    for (ProtocolApplication pa : ((SubstanceRecord) record).getMeasurements()) {
 		Assert.assertTrue(pa instanceof ProtocolApplicationAnnotated);
 		System.out.println(((ProtocolApplicationAnnotated) pa).getRecords_to_delete());

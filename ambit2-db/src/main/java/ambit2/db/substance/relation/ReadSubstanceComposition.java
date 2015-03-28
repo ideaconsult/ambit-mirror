@@ -59,7 +59,7 @@ public class ReadSubstanceComposition extends AbstractQuery<SubstanceRecord,Comp
 			if (getFieldname().getIdsubstance()>0) {
 				if (bundle!=null && bundle.getID()>0) return sql_bundle;
 				else return sql_id;
-			} else if (getFieldname().getCompanyUUID()!= null) {
+			} else if (getFieldname().getSubstanceUUID()!= null) {
 				return sql_uuid;
 			}
 		}	
@@ -77,8 +77,8 @@ public class ReadSubstanceComposition extends AbstractQuery<SubstanceRecord,Comp
 				
 				params.add(new QueryParam<Integer>(Integer.class,getFieldname().getIdsubstance()));
 				
-			} else if (getFieldname().getCompanyUUID()!= null) {
-				String o_uuid = getFieldname().getCompanyUUID();
+			} else if (getFieldname().getSubstanceUUID()!= null) {
+				String o_uuid = getFieldname().getSubstanceUUID();
 				if (o_uuid==null) throw new AmbitException("Empty substance id");
 				String[] uuid = new String[]{null,o_uuid==null?null:o_uuid.toString()};
 				if (o_uuid!=null) 

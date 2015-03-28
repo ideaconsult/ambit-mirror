@@ -94,7 +94,7 @@ public class SubstanceCompositionResource<Q extends IQueryRetrieval<CompositionR
 				int len = key.toString().trim().length(); 
 				if ((len > 40) && (len <=45)) {
 					SubstanceRecord record = new SubstanceRecord();
-					record.setCompanyUUID(key.toString());
+					record.setSubstanceUUID(key.toString());
 					q = new ReadSubstanceComposition();
 					q.setFieldname(record);
 					q.setValue(relation);

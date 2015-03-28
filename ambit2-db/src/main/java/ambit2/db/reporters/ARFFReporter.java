@@ -193,7 +193,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 	    int i = 0;
 	    String uri = null;
 	    if (item instanceof SubstanceRecord) {
-		uri = String.format("%s/substance/%s", urlPrefix, ((SubstanceRecord) item).getCompanyUUID());
+		uri = String.format("%s/substance/%s", urlPrefix, ((SubstanceRecord) item).getSubstanceUUID());
 	    } else {
 		uri = String.format("%s/compound/%d", urlPrefix, item.getIdchemical());
 		if (item.getIdstructure() > 0)

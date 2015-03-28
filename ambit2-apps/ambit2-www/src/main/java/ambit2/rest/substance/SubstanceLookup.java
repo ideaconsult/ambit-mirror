@@ -275,7 +275,7 @@ public class SubstanceLookup<Q extends IQueryRetrieval<SubstanceRecord>, T exten
 			}
 			case uuid: {
 			    SubstanceRecord record = new SubstanceRecord();
-			    record.setCompanyUUID(search.trim());
+			    record.setSubstanceUUID(search.trim());
 			    return (Q) new ReadSubstance(record);
 			}
 			case studyResultType: {

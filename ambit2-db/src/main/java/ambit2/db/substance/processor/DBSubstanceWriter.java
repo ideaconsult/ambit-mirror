@@ -150,12 +150,12 @@ public class DBSubstanceWriter extends
 
 	protected UpdateSubstanceStudy createSubstanceStudyUpdateQuery(
 			ProtocolApplication papp) throws Exception {
-		return new UpdateSubstanceStudy(importedRecord.getCompanyUUID(), papp);
+		return new UpdateSubstanceStudy(importedRecord.getSubstanceUUID(), papp);
 	}
 
 	protected UpdateEffectRecords createEffectRecordUpdateQuery(
 			ProtocolApplication papp, EffectRecord effect) throws Exception {
-		return new UpdateEffectRecords(importedRecord.getCompanyUUID(), papp,
+		return new UpdateEffectRecords(importedRecord.getSubstanceUUID(), papp,
 				effect);
 	}
 
@@ -167,7 +167,7 @@ public class DBSubstanceWriter extends
 			if (qss == null)
 				qss = createSubstanceStudyUpdateQuery(papp);
 			else {
-				qss.setGroup(importedRecord.getCompanyUUID());
+				qss.setGroup(importedRecord.getSubstanceUUID());
 				qss.setObject(papp);
 			}
 			x.process(qss);
@@ -185,7 +185,7 @@ public class DBSubstanceWriter extends
 									(EffectRecord) effect);
 						else {
 							qeffr.setSubstanceUUID(importedRecord
-									.getCompanyUUID());
+									.getSubstanceUUID());
 							qeffr.setGroup(papp);
 							qeffr.setObject((EffectRecord) effect);
 						}
@@ -200,7 +200,7 @@ public class DBSubstanceWriter extends
 		x.process(q);
 		qids.setObject(substance);
 		x.process(qids);
-		importedRecord.setCompanyUUID(substance.getCompanyUUID());
+		importedRecord.setSubstanceUUID(substance.getSubstanceUUID());
 		importedRecord.setIdsubstance(substance.getIdsubstance());
 
 		if (clearComposition)
@@ -228,7 +228,7 @@ public class DBSubstanceWriter extends
 
 		if (clearMeasurements)
 			try {
-				deleteStudy.setGroup(substance.getCompanyUUID());
+				deleteStudy.setGroup(substance.getSubstanceUUID());
 				x.process(deleteStudy);
 			} catch (Exception x) {
 				logger.log(Level.WARNING, x.getMessage());

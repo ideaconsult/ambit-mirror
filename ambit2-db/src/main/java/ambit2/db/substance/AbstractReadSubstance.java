@@ -46,14 +46,14 @@ public abstract class AbstractReadSubstance<F,T> extends AbstractQuery<F,T,EQCon
 	            r.clear();
 	            r.setIdsubstance(rs.getInt(_sqlids.idsubstance.name()));
 	            r.setFormat(rs.getString(_sqlids.format.name()));
-	            r.setCompanyName(rs.getString(_sqlids.name.name()));
+	            r.setSubstanceName(rs.getString(_sqlids.name.name()));
 	            r.setPublicName(rs.getString(_sqlids.publicname.name()));
 	            try {
 		            String uuid = rs.getString(_sqlids.prefix.name()) + "-" + 
 		            		I5Utils.addDashes(rs.getString(_sqlids.huuid.name())).toLowerCase();
-		            r.setCompanyUUID(uuid);
+		            r.setSubstanceUUID(uuid);
 	            } catch (Exception xx) {
-	            	r.setCompanyUUID(null);
+	            	r.setSubstanceUUID(null);
 	            }
 	            try {
 		            String uuid = rs.getString(_sqlids.rs_prefix.name()) + "-" + 

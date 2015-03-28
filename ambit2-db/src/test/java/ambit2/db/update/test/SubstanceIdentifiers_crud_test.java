@@ -21,7 +21,7 @@ public class SubstanceIdentifiers_crud_test extends CRUDTest<Object,SubstanceRec
 	protected IQueryUpdate<Object, SubstanceRecord> createQuery()
 			throws Exception {
 		SubstanceRecord c = new SubstanceRecord();
-		c.setCompanyUUID(example_uuid);
+		c.setSubstanceUUID(example_uuid);
 		if (c.getExternalids()==null) c.setExternalids(new ArrayList<ExternalIdentifier>());
 		c.getExternalids().add(new ExternalIdentifier("System1","id1"));
 		c.getExternalids().add(new ExternalIdentifier("System2","id2"));
@@ -45,7 +45,7 @@ public class SubstanceIdentifiers_crud_test extends CRUDTest<Object,SubstanceRec
 			throws Exception {
 		
 		SubstanceRecord c = new SubstanceRecord();
-		c.setCompanyUUID(example_uuid);
+		c.setSubstanceUUID(example_uuid);
 		c.setExternalids(null);
 		return new UpdateSubstanceIdentifiers(c);
 

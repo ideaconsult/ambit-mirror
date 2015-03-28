@@ -76,8 +76,8 @@ public class DeleteSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 			params.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
 			params.add(new QueryParam<String>(String.class, getRelation().name()));
 		} else {
-			String[] uuid = new String[]{null,getGroup().getCompanyUUID()};
-			uuid = I5Utils.splitI5UUID(getGroup().getCompanyUUID());
+			String[] uuid = new String[]{null,getGroup().getSubstanceUUID()};
+			uuid = I5Utils.splitI5UUID(getGroup().getSubstanceUUID());
 			params.add(new QueryParam<String>(String.class, uuid[0]));
 			params.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
 		}

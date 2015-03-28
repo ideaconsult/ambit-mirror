@@ -320,7 +320,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 
 		if ("uuid".equals(type)) {
 		    SubstanceRecord record = new SubstanceRecord();
-		    record.setCompanyUUID(search.trim());
+		    record.setSubstanceUUID(search.trim());
 		    return (Q) new ReadSubstance(record);
 		} else if ("name".equals(type)) {
 		    return (Q) new ReadSubstanceByName(type, search);
@@ -345,7 +345,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 		int len = key.toString().trim().length();
 		if ((len > 40) && (len <= 45)) {
 		    SubstanceRecord record = new SubstanceRecord();
-		    record.setCompanyUUID(key.toString());
+		    record.setSubstanceUUID(key.toString());
 		    return (Q) new ReadSubstance(record);
 		}
 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
@@ -520,7 +520,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 
 	    SubstanceRecord record = new SubstanceRecord();
-	    record.setCompanyUUID(key.toString());
+	    record.setSubstanceUUID(key.toString());
 	    executeUpdate(getRequestEntity(), null, createDeleteObject(record));
 	    getResponse().setStatus(Status.SUCCESS_OK);
 	    return new StringRepresentation(String.format("%s/dataset", getRequest().getRootRef()),

@@ -25,7 +25,7 @@ public class UpdateSubstanceIdentifiers<C extends SubstanceRecord> extends Abstr
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		if (getObject()==null) throw new AmbitException("Substance not defined");
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
-		String o_uuid = getObject().getCompanyUUID();
+		String o_uuid = getObject().getSubstanceUUID();
 		String[] uuid = {null,o_uuid};
 		if (o_uuid == null) throw  new AmbitException("Substance not defined");
 		uuid = I5Utils.splitI5UUID(o_uuid.toString());

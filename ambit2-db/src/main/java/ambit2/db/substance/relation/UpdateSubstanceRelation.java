@@ -156,7 +156,7 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 		params1.add(new QueryParam<String>(String.class, uuid[1]));
 		
 		if (getGroup()==null || getGroup().getIdsubstance()<=0) {
-			o_uuid = getGroup().getCompanyUUID();
+			o_uuid = getGroup().getSubstanceUUID();
 			if (o_uuid==null) throw new AmbitException("Empty substance id");
 			uuid = new String[]{null,o_uuid==null?null:o_uuid.toString()};
 			if (o_uuid!=null) 
