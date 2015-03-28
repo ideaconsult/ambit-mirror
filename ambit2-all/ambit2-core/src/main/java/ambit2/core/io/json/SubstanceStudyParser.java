@@ -130,7 +130,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 		record = new SubstanceRecord();
 		JsonNode papps = study.get(index);
 		try {
-		    record.setCompanyUUID(papps.get("owner").get("substance").get("uuid").getTextValue());
+		    record.setSubstanceUUID(papps.get("owner").get("substance").get("uuid").getTextValue());
 		} catch (Exception x) {
 		    x.printStackTrace();
 		}
@@ -198,8 +198,8 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	if (node == null)
 	    return null;
 	SubstanceRecord record = new SubstanceRecord();
-	record.setCompanyName(node.get(SubstanceRecord.jsonSubstance.name.name()).getTextValue());
-	record.setCompanyUUID(node.get(SubstanceRecord.jsonSubstance.i5uuid.name()).getTextValue());
+	record.setSubstanceName(node.get(SubstanceRecord.jsonSubstance.name.name()).getTextValue());
+	record.setSubstanceUUID(node.get(SubstanceRecord.jsonSubstance.i5uuid.name()).getTextValue());
 	record.setOwnerName(node.get(SubstanceRecord.jsonSubstance.ownerName.name()).getTextValue());
 	record.setOwnerUUID(node.get(SubstanceRecord.jsonSubstance.ownerUUID.name()).getTextValue());
 	record.setPublicName(node.get(SubstanceRecord.jsonSubstance.publicname.name()).getTextValue());
@@ -262,7 +262,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	    for (int i = 0; i < a.size(); i++) {
 		if (a.get(i) instanceof ObjectNode) {
 		    ProtocolApplication p = parseProtocolApplication((ObjectNode) a.get(i));
-		    p.setSubstanceUUID(record.getCompanyUUID());
+		    p.setSubstanceUUID(record.getSubstanceUUID());
 		    if (p.getDocumentUUID() == null)
 			generateDocumentUUID(p);
 		    list.add(p);
@@ -270,7 +270,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 	    }
 	} else if (papps instanceof ObjectNode) {
 	    ProtocolApplication p = parseProtocolApplication((ObjectNode) papps);
-	    p.setSubstanceUUID(record.getCompanyUUID());
+	    p.setSubstanceUUID(record.getSubstanceUUID());
 	    if (p.getDocumentUUID() == null)
 		generateDocumentUUID(p);
 	    list.add(p);

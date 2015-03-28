@@ -53,8 +53,8 @@ public class BundleDatasetResource extends SubstanceDatasetResource<ReadSubstanc
 		public ambit2.base.data.SubstanceRecord getObject(java.sql.ResultSet rs) throws AmbitException {
 		    ambit2.base.data.SubstanceRecord record = super.getObject(rs);
 		    record.setProperty(new SubstancePublicName(), record.getPublicName());
-		    record.setProperty(new SubstanceName(), record.getCompanyName());
-		    record.setProperty(new SubstanceUUID(), record.getCompanyUUID());
+		    record.setProperty(new SubstanceName(), record.getSubstanceName());
+		    record.setProperty(new SubstanceUUID(), record.getSubstanceUUID());
 		    record.setProperty(new SubstanceOwner(), record.getOwnerName());
 		    return record;
 		}

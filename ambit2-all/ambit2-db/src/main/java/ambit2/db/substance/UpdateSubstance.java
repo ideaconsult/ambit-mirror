@@ -52,7 +52,7 @@ public class UpdateSubstance<C extends SubstanceRecord> extends AbstractUpdate<C
 	if (getObject() == null || getObject().getIdsubstance() <= 0)
 	    throw new AmbitException("Substance not defined");
 	List<QueryParam> params1 = new ArrayList<QueryParam>();
-	String o_uuid = getObject().getCompanyUUID();
+	String o_uuid = getObject().getSubstanceUUID();
 	String[] uuid = { null, o_uuid };
 	if (o_uuid != null) {
 	    uuid = I5Utils.splitI5UUID(o_uuid.toString());
@@ -64,7 +64,7 @@ public class UpdateSubstance<C extends SubstanceRecord> extends AbstractUpdate<C
 	}
 	params1.add(new QueryParam<String>(String.class, "Substance"));
 	params1.add(new QueryParam<String>(String.class, getObject().getFormat()));
-	params1.add(new QueryParam<String>(String.class, getObject().getCompanyName()));
+	params1.add(new QueryParam<String>(String.class, getObject().getSubstanceName()));
 	params1.add(new QueryParam<String>(String.class, getObject().getPublicName()));
 	params1.add(new QueryParam<String>(String.class, getObject().getContent()));
 	params1.add(new QueryParam<String>(String.class, getObject().getSubstancetype()));

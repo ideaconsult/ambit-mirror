@@ -51,9 +51,9 @@ public class DeleteSubstance extends AbstractObjectUpdate<SubstanceRecord>  {
 		this(null);
 	}		
 	public List<QueryParam> getParameters(int index) throws AmbitException {
-		if (getObject()==null || getObject().getCompanyUUID()==null) throw new AmbitException("Substance UUID not defined");
+		if (getObject()==null || getObject().getSubstanceUUID()==null) throw new AmbitException("Substance UUID not defined");
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		String[] uuid = I5Utils.splitI5UUID(getObject().getCompanyUUID());
+		String[] uuid = I5Utils.splitI5UUID(getObject().getSubstanceUUID());
 		params.add(new QueryParam<String>(String.class, uuid[0]));
 		params.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
 		return params;

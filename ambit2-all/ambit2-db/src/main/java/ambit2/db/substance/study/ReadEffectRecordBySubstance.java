@@ -39,8 +39,8 @@ public class ReadEffectRecordBySubstance extends
 	List<QueryParam> params = new ArrayList<QueryParam>();
 	if (getFieldname() == null)
 	    throw new AmbitException("Empty substance id");
-	String[] uuid = new String[] { null, getFieldname().getCompanyUUID() };
-	uuid = I5Utils.splitI5UUID(getFieldname().getCompanyUUID());
+	String[] uuid = new String[] { null, getFieldname().getSubstanceUUID() };
+	uuid = I5Utils.splitI5UUID(getFieldname().getSubstanceUUID());
 	params.add(new QueryParam<String>(String.class, uuid[0]));
 	params.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
 	return params;

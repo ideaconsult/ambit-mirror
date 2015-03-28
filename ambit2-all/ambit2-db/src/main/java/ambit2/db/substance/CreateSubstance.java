@@ -77,7 +77,7 @@ public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
 		else
 			params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdsubstance()));
 		
-		String o_uuid = getObject().getCompanyUUID();
+		String o_uuid = getObject().getSubstanceUUID();
 		String[] uuid = {null,o_uuid};
 		if (o_uuid!=null) 
 			uuid = I5Utils.splitI5UUID(o_uuid.toString());
@@ -85,7 +85,7 @@ public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
 		params1.add(new QueryParam<String>(String.class, uuid[1]));
 		params1.add(new QueryParam<String>(String.class, "Substance"));
 		params1.add(new QueryParam<String>(String.class, getObject().getFormat()==null?null:truncate(getObject().getFormat().toString(),6)));		
-		params1.add(new QueryParam<String>(String.class, getObject().getCompanyName()));
+		params1.add(new QueryParam<String>(String.class, getObject().getSubstanceName()));
 		params1.add(new QueryParam<String>(String.class, getObject().getPublicName()));
 		params1.add(new QueryParam<String>(String.class, getObject().getContent()));
 		params1.add(new QueryParam<String>(String.class, getObject().getSubstancetype()==null?null:truncate(getObject().getSubstancetype(),45)));

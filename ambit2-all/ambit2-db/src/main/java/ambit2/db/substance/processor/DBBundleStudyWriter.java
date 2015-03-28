@@ -54,15 +54,15 @@ public class DBBundleStudyWriter extends DBSubstanceWriter {
 	}
 	@Override
 	protected UpdateSubstanceStudy createSubstanceStudyUpdateQuery(ProtocolApplication papp) throws Exception  {
-		return new UpdateSubstanceStudyBundle(bundle,importedRecord.getCompanyUUID(), papp);
+		return new UpdateSubstanceStudyBundle(bundle,importedRecord.getSubstanceUUID(), papp);
 	}
 	@Override
 	protected UpdateEffectRecords createEffectRecordUpdateQuery(ProtocolApplication papp, EffectRecord effect) throws Exception  {
-		return new UpdateEffectRecordsBundle(bundle,importedRecord.getCompanyUUID(),papp,effect);
+		return new UpdateEffectRecordsBundle(bundle,importedRecord.getSubstanceUUID(),papp,effect);
 	}
 	@Override
 	protected void importSubstanceRecord(SubstanceRecord substance) throws Exception {
-		SubstanceRecord q = new SubstanceRecord(substance.getCompanyUUID());
+		SubstanceRecord q = new SubstanceRecord(substance.getSubstanceUUID());
 		SubstanceRecord found = null;
 		rq.setValue(q);
 		ResultSet rs = null;
@@ -79,7 +79,7 @@ public class DBBundleStudyWriter extends DBSubstanceWriter {
 	     	throw new Exception("Not found");
 		} else {
 			substance.setIdsubstance(found.getIdsubstance());
-			importedRecord.setCompanyUUID(found.getCompanyUUID());
+			importedRecord.setSubstanceUUID(found.getSubstanceUUID());
 			importedRecord.setIdsubstance(found.getIdsubstance());
 		}
 	}

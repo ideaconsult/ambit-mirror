@@ -68,10 +68,10 @@ public class StructureRecordValidator extends DefaultAmbitProcessor<IStructureRe
 		logger.log(Level.WARNING, "Assigned file name to substance owner name");
 	    }
 	}	
-	if (record.getCompanyUUID()==null) {
+	if (record.getSubstanceUUID()==null) {
 	    logger.log(Level.WARNING, "Missing substance UUID");
 	    if (fixErrors) {
-		record.setCompanyUUID(generateUUIDfromString(prefix, record.getOwnerName() + record.getCompanyName()));
+		record.setSubstanceUUID(generateUUIDfromString(prefix, record.getOwnerName() + record.getSubstanceName()));
 		logger.log(Level.WARNING, "Generated substance UUID from substance name");
 	    }
 	}   		
@@ -121,7 +121,7 @@ public class StructureRecordValidator extends DefaultAmbitProcessor<IStructureRe
 	    ProtocolApplication<Protocol, IParams, String, IParams, String> papp) throws Exception {
 	if (papp.getSubstanceUUID()==null) {
 	    logger.log(Level.SEVERE, "Missing substance UUID in protocol application!");
-	    papp.setSubstanceUUID(record.getCompanyUUID());
+	    papp.setSubstanceUUID(record.getSubstanceUUID());
 	}
 	if (papp.getDocumentUUID() == null) {
 	    logger.log(Level.SEVERE, "Missing measurement UUID");

@@ -29,9 +29,9 @@ public class Substance_crud_test extends CRUDTest<Object, SubstanceRecord> {
     @Override
     protected IQueryUpdate<Object, SubstanceRecord> createQuery() throws Exception {
 	SubstanceRecord c = new SubstanceRecord();
-	c.setCompanyName("name");
+	c.setSubstanceName("name");
 	c.setPublicName("public name");
-	c.setCompanyUUID(example_uuid);
+	c.setSubstanceUUID(example_uuid);
 	c.setReferenceSubstanceUUID(example_rs_uuid);
 	c.setFormat("i5d");
 	c.setContent("<?xml>");
@@ -71,7 +71,7 @@ public class Substance_crud_test extends CRUDTest<Object, SubstanceRecord> {
     protected IQueryUpdate<Object, SubstanceRecord> deleteQuery() throws Exception {
 
 	SubstanceRecord c = new SubstanceRecord();
-	c.setCompanyUUID("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734");
+	c.setSubstanceUUID("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734");
 	return new DeleteSubstance(c);
 
     }
@@ -90,9 +90,9 @@ public class Substance_crud_test extends CRUDTest<Object, SubstanceRecord> {
 	c.setIdsubstance(1);
 	c.setContent("<?xml>");
 	c.setFormat("i5._4");
-	c.setCompanyName("name");
+	c.setSubstanceName("name");
 	c.setPublicName("public name");
-	c.setCompanyUUID(example_uuid);
+	c.setSubstanceUUID(example_uuid);
 	c.setReferenceSubstanceUUID(example_rs_uuid);
 	c.setSubstancetype("Multiconstituent");
 	c.setOwnerName("Test");
@@ -131,9 +131,9 @@ public class Substance_crud_test extends CRUDTest<Object, SubstanceRecord> {
 	// c.setIdsubstance(1);
 	c.setContent("<?xml>");
 	c.setFormat("i5._4.");
-	c.setCompanyName("name");
+	c.setSubstanceName("name");
 	c.setPublicName("public name");
-	c.setCompanyUUID(example_uuid);
+	c.setSubstanceUUID(example_uuid);
 	c.setReferenceSubstanceUUID(example_rs_uuid);
 	return new CreateSubstance(c);
     }

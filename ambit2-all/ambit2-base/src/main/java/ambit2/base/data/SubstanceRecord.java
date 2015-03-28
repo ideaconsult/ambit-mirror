@@ -80,9 +80,9 @@ public class SubstanceRecord extends StructureRecord {
 	protected String ownerName;
 	protected int idsubstance;
 	protected String substancetype;
-	protected String companyName;
+	protected String internalName;
 	protected String publicName;
-	protected String companyUUID;
+	protected String internalUUID;
 	public enum jsonSubstance {
 		URI,
 		externalIdentifiers,
@@ -132,12 +132,33 @@ To be extended for nanomaterials.
 	</pre>		
 	 * @return
 	 */	
+	public String getSubstanceName() {
+		return internalName;
+	}
+	/**
+	 * Substance name, as assigned by the owner
+	 * @param companyName
+	 */
+	public void setSubstanceName(String internalName) {
+		this.internalName = internalName;
+	}
+	/**
+	 * Use {@link #getSubstanceName()} instead
+	 * @return
+	 */
+	@Deprecated
 	public String getCompanyName() {
-		return companyName;
+		return getSubstanceName();
 	}
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
+	/**
+	 * Use {@link #setSubstanceName(String)} instead
+	 * @param companyName
+	 */
+	@Deprecated
+	public void setCompanyName(String internalName) {
+		setInchi(internalName);
 	}
+	
 /**
  * Public name of the substance 	
  * @return
@@ -155,12 +176,32 @@ Substance UUID, as assigned by the owner
 	"name": "formaldehyde (IUC4 DSN 52)",
 </pre>		
  * @return
- */
-	public String getCompanyUUID() {
-		return companyUUID;
+ */	
+	public String getSubstanceUUID() {
+		return internalUUID;
 	}
-	public void setCompanyUUID(String companyUUID) {
-		this.companyUUID = companyUUID;
+	/**
+	 * Use {@link #getSubstanceUUID()} instead
+	 * @return
+	 */
+	@Deprecated
+	public String getCompanyUUID() {
+		return getSubstanceUUID();
+	}	
+	/**
+	 * Substance UUID as assigned by the substance owner
+	 * @param internalUUID
+	 */
+	public void setSubstanceUUID(String internalUUID) {
+		this.internalUUID = internalUUID;
+	}
+	/**
+	 * Use {@link SubstanceRecord#setSubstanceUUID(String)} instead
+	 * @param internalUUID
+	 */
+	@Deprecated 
+	public void setCompanyUUID(String internalUUID) {
+	    setSubstanceUUID(internalUUID);
 	}
 	public void setSubstancetype(String substancetype) {
 		this.substancetype = substancetype;
@@ -175,7 +216,7 @@ Substance UUID, as assigned by the owner
 	}
 	public SubstanceRecord(String uuid) {
 		super();
-		setCompanyUUID(uuid);
+		setSubstanceUUID(uuid);
 	}
 	public SubstanceRecord(int idsubstance) {
 		super();
@@ -240,7 +281,7 @@ Substance UUID, as assigned by the owner
 	}
 	@Override
 	public String toString() {
-		return String.format("idsubstance=%d %s",getIdsubstance(),getCompanyUUID());
+		return String.format("idsubstance=%d %s",getIdsubstance(),getSubstanceUUID());
 	}
 	/**
 	 * UUID of the company, which is the substance owner (usually the substance manufacturer)
@@ -284,8 +325,8 @@ Substance UUID, as assigned by the owner
 		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.URI.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(uri))));
 		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.ownerUUID.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getOwnerUUID()))));
 		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.ownerName.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getOwnerName()))));
-		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.i5uuid.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getCompanyUUID()))));
-		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.name.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getCompanyName()))));
+		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.i5uuid.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubstanceUUID()))));
+		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.name.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubstanceName()))));
 		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.publicname.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getPublicName()))));
 		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.format.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getFormat()))));
 		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.substanceType.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubstancetype()))));
@@ -334,8 +375,8 @@ Substance UUID, as assigned by the owner
 	}	
 	
 	public static String getURI(String ref, SubstanceRecord item) {
-		if (item.getCompanyUUID()!=null)
-			return String.format("%s/substance/%s", ref,item.getCompanyUUID());
+		if (item.getSubstanceUUID()!=null)
+			return String.format("%s/substance/%s", ref,item.getSubstanceUUID());
 		else 
 			return String.format("%s/substance/%d", ref,item.getIdsubstance());
 	}

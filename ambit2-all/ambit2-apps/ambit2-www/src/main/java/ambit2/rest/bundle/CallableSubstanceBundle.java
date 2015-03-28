@@ -79,6 +79,6 @@ public class CallableSubstanceBundle extends CallableDBUpdateTask<SubstanceRecor
 		String uri = input.getFirstValue("substance_uri");
 		if (uri==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		uri = uri.replaceAll(reporter.getBaseReference().toString(),"");
-		bundle.setCompanyUUID(uri.replace("/substance/", ""));
+		bundle.setSubstanceUUID(uri.replace("/substance/", ""));
 	}
 }

@@ -63,7 +63,7 @@ public abstract class StringArrayHeader<CATEGORIES> {
 	protected ProtocolApplication<Protocol, IParams, String, IParams, String> getExperiment(CATEGORIES categories,SubstanceRecord record,Protocol protocol,
 				ReliabilityParams reliability) {
 		String experimentUUID = prefix+UUID.nameUUIDFromBytes(
-				(record.getCompanyUUID() + lines[_lines.technology.ordinal()]+lines[_lines.endpoint.ordinal()]).getBytes()
+				(record.getSubstanceUUID() + lines[_lines.technology.ordinal()]+lines[_lines.endpoint.ordinal()]).getBytes()
 				);
 		
 		if (record.getMeasurements()!=null)

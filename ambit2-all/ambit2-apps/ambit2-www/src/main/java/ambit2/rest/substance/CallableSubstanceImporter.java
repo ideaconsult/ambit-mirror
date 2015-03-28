@@ -321,7 +321,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
     @Override
     protected TaskResult createReference(Connection connection) throws Exception {
 
-	if ((importedRecord.getIdsubstance() > 0) || (importedRecord.getCompanyUUID() != null)) {
+	if ((importedRecord.getIdsubstance() > 0) || (importedRecord.getSubstanceUUID() != null)) {
 
 	    try {
 		batch.close();
