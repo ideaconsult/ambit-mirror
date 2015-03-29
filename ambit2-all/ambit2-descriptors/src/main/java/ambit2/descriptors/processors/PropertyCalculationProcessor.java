@@ -31,6 +31,8 @@ package ambit2.descriptors.processors;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -38,6 +40,7 @@ import java.util.logging.Level;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
 
 public class PropertyCalculationProcessor extends  DescriptorCalculationProcessor {
 	protected Property property = null;
@@ -55,7 +58,7 @@ public class PropertyCalculationProcessor extends  DescriptorCalculationProcesso
 		return property;
 	}
 
-	public synchronized IMolecularDescriptor getCachedDescriptor(Class className) throws Exception {
+	private synchronized IMolecularDescriptor getCachedDescriptor(Class className) throws Exception {
 		IMolecularDescriptor d = useCache?cache.get(className):null;
 		if (d == null) {
 			Object o = className.newInstance();
@@ -79,14 +82,28 @@ public class PropertyCalculationProcessor extends  DescriptorCalculationProcesso
 				if (useCache)
 					cache.put(className,d);
 			}
+			
 		}
 		return d;
+	}
+	public synchronized Object[] getParameters(Property property) {
+		if (property.getAnnotations()!=null) {
+			List<String> params = new ArrayList<String>();
+			for (int i=0; i < property.getAnnotations().size();i++) {
+				PropertyAnnotation a = property.getAnnotations().get(i);
+				if ("PARAMETER".equals(a.getType()))
+					params.add(a.getObject().toString());
+			}
+			return params.toArray();
+		}	
+		return null;
 	}
 	public synchronized void  setProperty(Property property) {
 		this.property = property;
 		if (property == null) return;
 		try {
 			setDescriptor(getCachedDescriptor(property.getClazz()));
+			getDescriptor().setParameters(getParameters(property));	
 		} catch (Exception x) {
 			logger.log(Level.WARNING,x.getMessage(),x);
 			setDescriptor(null);

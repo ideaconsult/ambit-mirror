@@ -33,6 +33,7 @@ import org.restlet.representation.Representation;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.data.Property;
+import ambit2.mopac.MopacShell;
 import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.test.ResourceTest;
@@ -261,9 +262,10 @@ public class AlgorithmResourceTest extends ResourceTest {
 	}		
 	
 	
-	
-	public void testMOPAC() throws Exception {
+	@Test
+	public void testMOPACStructureOptimizer() throws Exception {
 		Form headers = new Form();  
+		headers.add("mopac_commands", "PM6 NOINTER MMOK BONDS MULLIK GNORM=1.0 T=30.00M");
 		Reference model = testAsyncTask(
 				String.format("http://localhost:%d/algorithm/ambit2.mopac.MopacShell", port),
 				headers, Status.SUCCESS_OK,
@@ -271,7 +273,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 						"3"
 						));
 		
-		
+		headers = new Form();  
 		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
 		Reference ref = testAsyncTask(
 				model.toString(),
@@ -280,15 +282,21 @@ public class AlgorithmResourceTest extends ResourceTest {
 						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
 						));
 						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
-		
-		ref = testAsyncTask(
+	}		
+	
+	@Test
+	public void testMOPACDescriptor() throws Exception {
+		Form headers = new Form();  
+		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		headers.add("mopac_commands", "PM6 NOINTER MMOK BONDS MULLIK GNORM=1.0 T=30.00M");
+		Reference ref = testAsyncTask(
 				String.format("http://localhost:%d/algorithm/ambit2.mopac.MopacOriginalStructure", port),
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/dataset/%s", port,
-						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F4%2Fpredicted"
+						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
 						));
 						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
-			
+		
 		int count = 0;
 		RDFPropertyIterator i = new RDFPropertyIterator(ref);
 		i.setCloseModel(true);
