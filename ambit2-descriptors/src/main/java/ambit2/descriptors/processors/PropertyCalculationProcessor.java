@@ -103,11 +103,16 @@ public class PropertyCalculationProcessor extends  DescriptorCalculationProcesso
 		if (property == null) return;
 		try {
 			setDescriptor(getCachedDescriptor(property.getClazz()));
-			getDescriptor().setParameters(getParameters(property));	
+			try {
+				getDescriptor().setParameters(getParameters(property));	
+			} catch (Exception x) {
+				//not all descriptors handle null parameters properly...
+			}				
 		} catch (Exception x) {
 			logger.log(Level.WARNING,x.getMessage(),x);
 			setDescriptor(null);
 		}
+	
 	}
 	
 }
