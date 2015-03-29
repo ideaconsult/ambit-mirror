@@ -353,7 +353,18 @@ function defineModelTable(root,url) {
     	  			  sWidth : "25%",
     		          "bUseRendered" : false,	
     		          "fnRender": function ( o, val ) {
-    		        	    return val; 
+    		        	   try {
+			    	   		var params = o.aData["ambitprop"]["parameters"];
+  			    	   		if (params.length>0) {
+  			    	   			var sParam = "Model parameters:<br/>";
+	  			    	   		$.each(params, function( index, value ) {
+	  			    	   		  sParam += value;
+	  			    	   		  sParam + "<br/>";
+	  			    	   		});
+	  			    	   		return val + " <span class='ui-icon ui-icon-gear' style='display:inline-block' title='" + sParam + "'></span>";
+  			    	   		} 
+    		        	   } catch (err){}
+  			    	   		return val;
     		          }
     		  		},
     	  			{ "sTitle": "Training Dataset", 
@@ -532,6 +543,11 @@ function modelFormatDetails( oTable, nTr ,root ) {
     
     sOut += '<tr><td>Model name</td><td><a href=\"' + model.uri + '\">' + model.title + '</a></td></tr>';
     
+    try {
+    	if (model.ambitprop.parameters.length>0)
+    		sOut += '<tr><td>Model parameters</td><td>' + model.ambitprop.parameters + '</a></td></tr>';
+    } catch (err) {}
+    
     if (model.trainingDataset.indexOf("http")>=0) {
 	    sOut += '<tr><th>Training dataset</th><td><a href="' + model.trainingDataset + '">' + model.trainingDataset + '</a></td></tr>';
     }
@@ -601,6 +617,8 @@ function renderModel(entry,root,err) {
 	$("#model_title").text(entry["title"]);
 	$("#model_title").prop("title",entry["ambitprop"]["content"]);
 
+	$("#model_params").text(entry["ambitprop"]["parameters"]);
+	
 	$("#model_algorithm").html(entry["algorithm"]["URI"]);
 	$("#model_algorithm").prop('href',entry["algorithm"]["URI"]);
 	

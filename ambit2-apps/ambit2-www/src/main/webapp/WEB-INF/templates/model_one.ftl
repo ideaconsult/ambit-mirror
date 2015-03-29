@@ -7,11 +7,16 @@
 		<img src='' border='0' id='model_img'>
 		</div>
 	</div>
-
 	<div class='row remove-bottom'>
 		<label class='four columns alpha' for="model_algorithm">Training algorithm</label>
 		<a class='twelve columns alpha half-bottom' target=_blank href='#' id='model_algorithm'></a>
 	</div>	
+
+	<div class='row remove-bottom'>
+		<label class='four columns alpha' for="model_params">Parameters</label>
+		<span class='twelve columns alpha half-bottom' target=_blank href='#' id='model_params'></span>
+	</div>	
+	
 
 	<div class='row remove-bottom'>
 		<label class='four columns alpha' for="model_training">Training dataset <a href='#' class='chelp hdataset'>?</a></label>
