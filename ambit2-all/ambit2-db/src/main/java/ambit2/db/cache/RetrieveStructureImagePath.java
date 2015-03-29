@@ -29,7 +29,7 @@ public class RetrieveStructureImagePath extends RetrieveStructure  {
 	
 	private static final long serialVersionUID = -2535919053818523334L;
 	public static final String sqlField=
-		"select structure.idstructure,idchemical,uncompress(structure) as ustructure,format,type_structure,atomproperties,text,idquery from structure\n"+
+		"select structure.idstructure,idchemical,uncompress(structure) as ustructure,format,type_structure,atomproperties,text,idquery,1 as selected from structure\n"+
 		"join query_results using(idchemical,idstructure)\n"+
 		"join `query` using(idquery)\n"+
 		"join sessions using(idsessions)\n"+
@@ -38,7 +38,7 @@ public class RetrieveStructureImagePath extends RetrieveStructure  {
 		"query.name=? and\n"+
 		"structure.%s =?\n"+
 		"union\n"+
-		"SELECT idstructure,idchemical,uncompress(structure) as ustructure,format,type_structure,atomproperties,null,null FROM structure\n"+
+		"SELECT idstructure,idchemical,uncompress(structure) as ustructure,format,type_structure,atomproperties,null,null,1 as selected FROM structure\n"+
 		"where\n"+
 		"structure.%s =?\n"+
 		"order by type_structure desc";
