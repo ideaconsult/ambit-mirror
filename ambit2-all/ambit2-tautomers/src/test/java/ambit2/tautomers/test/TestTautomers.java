@@ -63,6 +63,7 @@ public class TestTautomers
 		tt.tman.tautomerFilter.FlagFilterIncorrectValencySumStructures = true;
 		tt.tman.tautomerFilter.FlagApplySimpleAromaticityRankCorrection = true;
 		
+		tt.tman.FlagNewRuleInstanceSearchOnEnergyRanking = false;
 		tt.tman.FlagCheckDuplicationOnRegistering = true;
 		
 		tt.tman.FlagRecurseBackResultTautomers = false;
@@ -151,6 +152,7 @@ public class TestTautomers
 		//tt.visualTest("OC=1N=CN=CC=1");  //Kekule aromatic - !!!!
 		
 		tt.tman.FlagEnergyRankingMethod = TautomerConst.ERM_NEW;
+		tt.tman.FlagNewRuleInstanceSearchOnEnergyRanking = false;
 		tt.visualTest("OC=CC=O");
 		
 		//tt.visualTest("O=C1N=C(N=CC1)N");

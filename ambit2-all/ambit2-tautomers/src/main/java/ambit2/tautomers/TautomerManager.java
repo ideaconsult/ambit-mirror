@@ -43,6 +43,7 @@ public class TautomerManager
 	int originalValencySum;
 	
 	public int FlagEnergyRankingMethod = TautomerConst.ERM_OLD;
+	public boolean FlagNewRuleInstanceSearchOnEnergyRanking = false;
 	public boolean FlagApplySimpleAromaticityRankCorrection = true;  //This flag is valid only for the old ranking method
 	
 	public boolean FlagSwitchToCombinatorialOnReachingRuleLimit = true;
