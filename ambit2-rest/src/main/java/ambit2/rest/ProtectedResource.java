@@ -1,5 +1,6 @@
 package ambit2.rest;
 
+import net.idea.restnet.c.BotsGuard;
 import net.idea.restnet.c.task.ClientResourceWrapper;
 import net.idea.restnet.i.aa.IAuthToken;
 
