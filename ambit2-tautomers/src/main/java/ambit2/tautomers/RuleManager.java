@@ -1073,7 +1073,10 @@ public class RuleManager {
 		else
 		{
 			//The new approach for ranking
-			e_rank = tman.getEnergyRanking().calculateRank(incStep, tautomer);
+			if (tman.FlagNewRuleInstanceSearchOnEnergyRanking)
+				e_rank = tman.getEnergyRanking().calculateRank(tautomer, tman.knowledgeBase);
+			else
+				e_rank = tman.getEnergyRanking().calculateRank(incStep, tautomer);
 		}
 		
 		//System.out.println("rank = " + e_rank);
