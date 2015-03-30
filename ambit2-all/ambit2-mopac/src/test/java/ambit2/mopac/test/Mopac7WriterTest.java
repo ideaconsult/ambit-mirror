@@ -217,6 +217,35 @@ public class Mopac7WriterTest  {
     		}            
     }
     
+    @Test
+    public void testReader2012() throws Exception {
+    		InputStream in = Mopac7Writer.class.getClassLoader().getResourceAsStream(
+    				"ambit2/mopac/mopac2012.out");
+            Mopac7Reader r = new Mopac7Reader(in);
+            
+    		SmilesParserWrapper p =  SmilesParserWrapper.getInstance(SMILES_PARSER.CDK);
+    		String smiles = "O[Sb]34(O[Sb]O4([Sb]O23([Sb]O1[Sb]O[Sb]12(O))))";
+            IChemObject m = p.parseSmiles(smiles); 
+            m = r.read(m);
+            in.close();
+            Object e = m.getProperty("EIGENVALUES");
+            Assert.assertNotNull(e);
+            /*
+            for (int i=0; i < Mopac7Reader.parameters.length;i++)
+            	System.out.println(
+            			Mopac7Reader.parameters[i]
+            			                        + " = " +
+            			((IAtomContainer) m).getProperty(Mopac7Reader.parameters[i])
+            			);
+            			*/
+            Assert.assertEquals(-7.287,
+            		Double.parseDouble(m.getProperty(DescriptorMopacShell.EHOMO).toString()),
+            		1E-3);
+            Assert.assertEquals(-0.560,
+            		Double.parseDouble(m.getProperty(DescriptorMopacShell.ELUMO).toString()),
+            		1E-3);   
+                        
+    }
     public void testNCI() throws Exception {
             IteratingMDLReader reader = new IteratingMDLReader(
                 new FileInputStream("D:\\nina\\Databases\\nciopen_3D_fixed.sdf"),
