@@ -10,7 +10,8 @@ ALTER TABLE `bundle` ADD INDEX `published_status` (`published_status` ASC) ;
 ALTER TABLE `bundle` CHANGE COLUMN `created` `created` TIMESTAMP NOT NULL  , ADD COLUMN `updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP  AFTER `published_status` ;
 update bundle set updated=created; 
 -- the name is not anymore unique (could be the same across versions and copies)
-ALTER TABLE `bundle` DROP INDEX `assessment_name` ADD INDEX `assessment_name` (`name` ASC) ;
+ALTER TABLE `bundle` DROP INDEX `assessment_name`;
+ALTER TABLE `bundle` ADD INDEX `assessment_name` (`name` ASC) ;
 
 -- -----------------------------------------------------
 -- Creates version of a bundle 
