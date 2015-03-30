@@ -67,6 +67,15 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 	public static final String os_LINUX64 = "Linux64";
 	public static final String os_FreeBSD = "FreeBSD";
 	private final static String msgEmptyMolecule = "Empty molecule after %s processing";
+	protected String workFolder;
+	
+	public String getWorkFolder() {
+		return workFolder;
+	}
+
+	public void setWorkFolder(String workFolder) {
+		this.workFolder = workFolder;
+	}
 
 	public static String getMsgemptymolecule() {
 		return msgEmptyMolecule;
@@ -81,6 +90,7 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 
 	protected boolean enabled = true;
 	protected int exitCode = 0;
+	
 
 	public long getID() {
 		// TODO Auto-generated method stub
@@ -97,6 +107,7 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 
 	protected CommandShell() throws ShellException {
 		executables = new Hashtable<String, Command>();
+		workFolder = System.getProperty("user.name");
 		initialize();
 	}
 
@@ -288,7 +299,7 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 
 	protected String getHomeDir(File file) {
 		return System.getProperty("java.io.tmpdir") + "/.ambit2/"
-				+ System.getProperty("user.name");
+				+ getWorkFolder();
 	}
 
 	protected synchronized INPUT transform_input(INPUT input)

@@ -82,7 +82,7 @@ public class OpenBabelAbstractShell<X> extends ShellSDFoutput<X> {
 		return String
 		.format("%s%s.ambit2%s%s%sobabel",
 				System.getProperty("java.io.tmpdir"), File.separator,
-				File.separator, System.getProperty("user.name"),
+				File.separator,getWorkFolder(),
 				File.separator);    	
     }	
 	@Override
