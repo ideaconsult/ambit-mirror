@@ -192,7 +192,8 @@ public class Mopac7Reader extends DefaultChemObjectReader {
 	            		
 	            	} else if (line.indexOf(Mopac7Reader.eigenvalues) >= 0) {
 	                    line = input.readLine();
-	                    line = input.readLine();
+	                    if ("".equals(line.trim())) //old mopac.out have one more empty line ...
+	                    	line = input.readLine();
 	                    while (!line.trim().equals("")) {
 	                        eigenvalues.append(line);
 	                        line = input.readLine();
