@@ -149,10 +149,10 @@ public abstract class AbstractMopacShell extends CommandShell<IAtomContainer, IA
 		    if (!useOriginalStructure) {
 				newmol = generate3DStructure(mol);
 		    } else newmol=mol;
-	    	logger.fine("Writing MOPAC input");
 	    	String exe = getExecutable();
 	    	//String mopac_path = new File(exe).getParent();
 	    	String homeDir = getHomeDir(null); // getPath(new File(exe));
+	    	logger.fine("Writing MOPAC input  into " + homeDir + " for "+exe);
 	    	try {
 		        Mopac7Writer wri = new Mopac7Writer(new FileOutputStream(homeDir + "/" + inFile));
 		        wri.setOptimize(isOptimize()?1:0);
