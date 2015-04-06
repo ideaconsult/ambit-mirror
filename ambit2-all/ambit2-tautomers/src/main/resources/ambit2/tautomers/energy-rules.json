@@ -18,7 +18,6 @@
 					"ENERGY":-0.56
 				},
 
-			
 				{
 					"CORRECTION_NAME":"conjugation",					
 					"ATOM3_CONDITIONS": ["CC=O"],
@@ -27,6 +26,23 @@
 			]
 		},
 		
+		{
+			"RULE_NAME":"keto/enol",
+			"RULE_ID":"1",
+			"RULE_STATE":0,
+			"RULE_STATE_INFO" : "O=CC",
+			"STATE_ENERGY":0.0,
+			
+			"ENERGY_CORRECTIONS":
+			[
+				{
+					"CORRECTION_NAME":"in 1-5 rule",
+					"ATOM3_CONDITIONS":["C=CCC"],
+					"ENERGY":0.05
+				}
+			]
+		},
+				
 		{	
 			"RULE_NAME":"amin/imin",
 			"RULE_ID":"2",
@@ -42,12 +58,28 @@
 					"ATOM3_CONDITIONS":["c"],
 					"ENERGY":-0.94
 				},
-
 			
 				{
 					"CORRECTION_NAME":"conjugation",					
 					"ATOM3_CONDITIONS": ["CC=O"],
 					"ENERGY":-0.30
+				}
+			]
+		},
+		
+		{
+			"RULE_NAME":"amin/imin",
+			"RULE_ID":"2",
+			"RULE_STATE":0,
+			"RULE_STATE_INFO" : "N=CC",
+			"STATE_ENERGY":0.0,
+			
+			"ENERGY_CORRECTIONS":
+			[
+				{
+					"CORRECTION_NAME":"in 1-5 rule",
+					"ATOM3_CONDITIONS":["C=CCC"],
+					"ENERGY":0.02
 				}
 			]
 		},
@@ -67,7 +99,6 @@
 					"ATOM3_CONDITIONS":["n"],
 					"ENERGY":-0.08
 				},
-
 			
 				{
 					"CORRECTION_NAME":"conjugation",					
@@ -104,6 +135,41 @@
 		},
 		
 		{	
+			"RULE_NAME":"thioketo/thioenol",
+			"RULE_ID":"6",
+			"RULE_STATE":1,
+			"RULE_STATE_INFO" : "SC=C",
+			"STATE_ENERGY":-0.33,
+		
+			"ENERGY_CORRECTIONS":
+			[
+				{
+					"CORRECTION_NAME":"aromatic",
+					"ATOM2_CONDITIONS":["c"],
+					"ATOM3_CONDITIONS":["c"],
+					"ENERGY":-1.98
+				}
+			]
+		},
+		
+		{
+			"RULE_NAME":"thioketo/thioenol",
+			"RULE_ID":"6",
+			"RULE_STATE":0,
+			"RULE_STATE_INFO" : "S=CC",
+			"STATE_ENERGY":0.0,
+			
+			"ENERGY_CORRECTIONS":
+			[
+				{
+					"CORRECTION_NAME":"in 1-5 rule",
+					"ATOM3_CONDITIONS":["C=CCC"],
+					"ENERGY":-0.06
+				}
+			]
+		},
+		
+		{	
 			"RULE_NAME":"amidine/imidine",
 			"RULE_ID":"8",
 			"RULE_STATE":1,
@@ -130,7 +196,7 @@
 		},		
 		
 		{	
-			"RULE_NAME":"rule15",
+			"RULE_NAME":"O=SC",
 			"RULE_ID":"15",
 			"RULE_STATE":1,
 			"RULE_STATE_INFO" : "OS=C",
