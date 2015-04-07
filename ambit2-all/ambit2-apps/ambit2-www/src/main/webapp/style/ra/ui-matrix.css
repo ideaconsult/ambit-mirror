@@ -8,6 +8,8 @@ html, body, #jtox-bundle {
 #jtox-bundle {
   overflow: hidden;
   position: relative;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 #jtox-bundle textarea,
@@ -28,6 +30,11 @@ html, body, #jtox-bundle {
 	border: 0px;
 }
 
+#jtox-identifiers table th {
+  font-weight: normal;
+  cursor: default;
+}
+
 #jtox-structures .jtox-foldable {
   margin-top: 5px;
   margin-bottom: 5px;
@@ -46,7 +53,13 @@ body.structlist #jtox-query .jtox-foldable {
 }
 
 body.structlist #browser {
-  margin-top: 5px;  
+  margin-top: 5px;
+}
+
+#structures-expand-all, #structures-collapse-all {
+  font-size: 0.8em;
+  padding: .25em .8em;
+  margin: 0;
 }
 
 #jtox-matrix td .breakable {
@@ -73,6 +86,7 @@ body.structlist #browser {
   top: 0px;
   width: 202%;
   padding: 0px;
+  white-space: nowrap;
   -moz-transition: left ease 800ms;
   -ms-transition: left ease 800ms;
   -o-transition: left ease 800ms;
@@ -83,9 +97,10 @@ body.structlist #browser {
 .jtox-slidable>div {
   width: 50%;
   position: relative;
-  margin: 0px;
+  margin: 0 -.25em 0 0;
   vertical-align: top;
   box-sizing: border-box;
+  white-space: normal;
 }
 
 .jtox-slidable>div>div {
@@ -150,7 +165,7 @@ body.structlist #browser {
 }
 
 #jtox-matrix a.unsaved-study {
-  background: #ffcccc;  
+  background: #ffcccc;
   border-radius: 3px;
 }
 
@@ -167,7 +182,7 @@ body.structlist #browser {
 }
 
 .popup-box .delete-box td {
-	border: 0px;	
+	border: 0px;
 }
 
 .popup-box table.delete-box {
@@ -213,7 +228,7 @@ body.structlist #browser {
   font-size: 80%;
   font-weight: bold;
   word-wrap: normal;
-  white-space: nowrap;  
+  white-space: nowrap;
 }
 
 .popup-box .the-value {
@@ -227,4 +242,26 @@ body.structlist #browser {
 
 .popup-box .the-send input {
   float: right;
+}
+
+.ui-button-icon-only {
+  height: 2.4em;
+  margin-bottom: 0;
+}
+
+tr:first-child .jtox-up {
+  display: none;
+}
+
+tr:last-child .jtox-down {
+  display: none;
+}
+
+.jtox-users-select {
+  width: 100%;
+  height: auto;
+}
+
+.jtox-toolkit table.dataTable td.jtox-user-rights {
+  overflow: visible !important;
 }
