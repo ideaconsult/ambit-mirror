@@ -5,10 +5,11 @@
 	<link rel="stylesheet" href="${ambit_root}/style/jBox.css" type="text/css">
 	<link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
 	<link rel="stylesheet" href="${ambit_root}/style/ketcher.css"/>
-	
 	<link rel="stylesheet" href="${ambit_root}/style/ra/ui-matrix.css"/>
+	<link rel="stylesheet" href="${ambit_root}/style/jquery.tokenize.css"/>
 
   <script src="${ambit_root}/scripts/ra/i5enums.js"></script>
+  <script type='text/javascript' src='${ambit_root}/jquery/jquery.tokenize.js'></script>
 
   <script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js'></script>
   <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
@@ -63,61 +64,90 @@
 	  	<form>
 	  	  <div class="thirteen columns remove-bottom">
 	      <table class="dataTable">
+
 	        <thead>
-	          <tr><th class="right size-third">Assessment<a href='#' class='chelp assessment'>?</a></th></th><th class="data-field" data-field="number"></th></tr>
-	          <tr><td class="right size-third">Name <a href='#' class='chelp a_name'>?</a>:</td><td><input class="data-field first-time validate" data-field="title" name="title"></input></td></tr>
-			  <tr><td class="right size-third">Source <a href='#' class='chelp a_source'>?</a>:</td><td><input class="data-field first-time validate" data-field="seeAlso" name="source"></input></td></tr>
-	          <tr><td class="right size-third">Source URL <a href='#' class='chelp a_source'>?</a>:</td><td><input class="data-field first-time validate" data-field="source" name="url"></input></td></tr>
-	          <tr><td class="right top size-third">Purpose <a href='#' class='chelp a_description'>?</a>:</td><td><textarea class="validate nomargin data-field" data-field="description" name="description"></textarea></td></tr>
-	          <tr><td class="right size-third">Owner <a href='#' class='chelp a_maintainer'>?</a>:</td><td><input class="data-field first-time validate" data-field="maintainer" name="maintainer"></input></td></tr>
-	          
-	          <tr><td class="right size-third">Version <a href='#' class='chelp a_version'>?</a>:</td><td class="data-field" data-field="version" title='versions not supported yet'></td></tr>
-	          	          	          
-	          <tr><td class="right size-third">License or Waiver <a href='#' class='chelp a_license'>?</a>:</td><td><input class="data-field first-time validate" data-field="rights.URI" name="license"></input></td></tr>
-	          <tr><td class="right size-third">Rights holder <a href='#' class='chelp a_rightsholder'>?</a>:</td><td><input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder"></input></td></tr>
+	       <#if menu_profile??> 
+	       <#switch menu_profile>
+	       	<#case 'lri'>
+	          <tr><th class="right size-third">Assessment title <a href='#' class='chelp a_name'>?</a>:</th><td><input class="data-field first-time validate" data-field="title" name="title"/></td></tr>
+	          <tr><th class="right size-third">Owner<a href='#' class='chelp a_maintainer'>?</a>:</th><td><input class="data-field first-time validate" data-field="maintainer" name="maintainer"/></td></tr>
+	
+	          <tr><th class="right top size-third">Purpose<a href='#' class='chelp a_description'>?</a>:</th><td><textarea class="validate nomargin data-field" data-field="description" name="description"></textarea></td></tr>
+	          <tr><th class="right size-third">Version<a href='#' class='chelp a_version'>?</a>:</th><td class="data-field" data-field="version">?.?</td></tr>
 
-	          <tr><td class="right size-third">Status <a href='#' class='chelp a_status'>?</a>:</td><td class="data-field" data-field="status"></td></tr>
-	          <tr><td class="right size-third">Date started <a href='#' class='chelp a_started'>?</a>:</td><td class="data-field" data-field="created" data-format="formatDate"></td></tr>
-	          <tr><td class="right size-third">Date updated <a href='#' class='chelp a_started'>?</a>:</td><td class="data-field" data-field="updated" data-format="formatDate"></td></tr>
+	          <tr><th class="right size-third">Version start date <a href='#' class='chelp a_version_date'>?</a>:</th><td class="data-field" data-field="created" data-format="formatDate"></td></tr>
+	          <tr><th class="right size-third">Version last modified on<a href='#' class='chelp a_version_date'>?</a>:</th><td class="data-field" data-field="updated" data-format="formatDate"></td></tr>
 	          <tr>
-	          	<td class="right size-third">Flags <a href='#' class='chelp a_flags'>?</a>:</td>
-	          	<td>
-		          	<div class="jq-buttonset">
-		          		<input type="hidden" name="flags"/>
-								  <input type="checkbox" id="confidential" class="accumulate" data-accumulate="flags" value="confidential"><label for="confidential">Confidential</label></input>
-								  <input type="checkbox" id="internal" class="accumulate" data-accumulate="flags" value="internal"><label for="internal">Internal</label></input>
-								</div>
-							</td>
-						</tr>
-	          <tr>
-	          	<td class="right size-third">Published:</td>
-	          	<td>
-		          	<div class="jq-buttonset">
-								  <input type="radio" id="pub-yes" name="published" value="true"><label for="pub-yes">Yes</label></input>
-								  <input type="radio" id="pub-no" name="published" value="false" checked="checked"><label for="pub-no">No</label></input>
-								</div>
-							</td>
-						</tr>
-	          <tr>
-	          	<td class="right size-third">Use allowed:</td>
-	          	<td>
-		          	<div class="jq-buttonset">
-								  <input type="radio" id="use-yes" value="true" name="useAllowed"><label for="use-yes">Yes</label></input>
-								  <input type="radio" id="use-no" value="false" name="useAllowed" checked="checked"><label for="use-no">No</label></input>
-								</div>
-							</td>
-						</tr>
+	            <th class="right size-third">Published <a href='#' class='chelp a_published'>?</a>:</th>
+	            <td>
+	              <select name="status" class="data-field" data-field="status">
+	                <option value="draft">No</option>
+	                <option value="published">Yes</option>
+	              </select>
+	            </td>
+	            </tr>
+          
+	            <tr><th class="right size-third">Assessment code <a href='#' class='chelp a_code'>?</a>:</th><td><input class="data-field first-time validate" data-field="seeAlso" name="source"/></td></tr>
+	            <tr><th class="right size-third">Assessment Doclink(s) <a href='#' class='chelp a_doclink'>?</a>:</th><td><input class="data-field first-time validate" data-field="source" name="url"/></td></tr>
+	            
+	       		<span style="display:none;">
+       			<input class="data-field first-time validate" data-field="rights.URI" name="license" />
+       			<input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder" />
+       			<span class="data-stars-field"><input type="hidden" name="stars" value="0" /></span>
+       			</span>
+                <tr><th class="right size-third">Assessment ID<a href='#' class='chelp assessment'>?</a>:</th><td class="data-field" data-field="number"></td></tr>
+                
+                <tr>
+                <th class="right size-third top">Users with write access <a href='#' class='chelp bundle_rw'>?</a>:</th>
+                <td class="jtox-user-rights">
+                  <select multiple class="jtox-users-select">
+                    <option value='g_public'>Public</option>
+                    <option value='admin'>Admin</option>
+                    <option value='guest'>Guest</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th class="right size-third top">Users with read access <a href='#' class='chelp bundle_rw'>?</a>:</th>
+                <td class="jtox-user-rights">
+                  <select multiple class="jtox-users-select">
+                    <option value='g_public'>Public</option>
+                    <option value='admin'>Admin</option>
+                    <option value='guest'>Guest</option>
+                  </select>
+                </td>
+              </tr>
+              
+	       	<#break>
+	       	<#default>
+	          <tr><th class="right size-third">Title <a href='#' class='chelp a_name'>?</a>:</th><td><input class="data-field first-time validate" data-field="title" name="title"/></td></tr>
+	          <tr><th class="right size-third">Maintainer<a href='#' class='chelp a_maintainer'>?</a>:</th><td><input class="data-field first-time validate" data-field="maintainer" name="maintainer"/></td></tr>
+	
+	          <tr><th class="right top size-third">Purpose<a href='#' class='chelp a_description'>?</a>:</th><td><textarea class="validate nomargin data-field" data-field="description" name="description"></textarea></td></tr>
+	          <tr><th class="right size-third">Version<a href='#' class='chelp a_version'>?</a>:</th><td class="data-field" data-field="version">?.?</td></tr>
 
-	          <tr><td class="right size-third">Rating <a href='#' class='chelp a_rating'>?</a>:</td><td class="data-stars-field"><input type="hidden" name="stars" value="0"></input></td></tr>
+	          <tr><th class="right size-third">Version start date<a href='#' class='chelp a_version_date'>?</a>:</th><td class="data-field" data-field="created" data-format="formatDate"></td></tr>
+	          <tr><th class="right size-third">Version last modified on<a href='#' class='chelp a_version_date'>?</a>:</th><td class="data-field" data-field="updated" data-format="formatDate"></td></tr>
+	          <tr><th class="right size-third">Published status<a href='#' class='chelp a_published_status'>?</a>:</th><td class="data-field" data-field="status"></td></tr>	          
+          
+	            <tr><th class="right size-third">Source<a href='#' class='chelp a_source'>?</a>:</th><td><input class="data-field first-time validate" data-field="seeAlso" name="source"/></td></tr>
+	            <tr><th class="right size-third">Source URL<a href='#' class='chelp a_source'>?</a>:</th><td><input class="data-field first-time validate" data-field="source" name="url"/></td></tr>	       	
+	       		<tr><th class="right size-third">License or Waiver<a href='#' class='chelp a_license'>?</a>:</th><td><input class="data-field first-time validate" data-field="rights.URI" name="license"/></td></tr>
+	       		<tr><th class="right size-third">Rights holder<a href='#' class='chelp a_rightsholder'>?</a>:</th><td><input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder"/></td></tr>
+	       		<tr><th class="right size-third">Rating <a href='#' class='chelp a_rating'>?</a>:</th><td class="data-stars-field"><input type="hidden" name="stars" value="0"/></td></tr>
+	            <tr><th class="right size-third">Identifier <a href='#' class='chelp assessment'>?</a>:</th><td class="data-field" data-field="number"></td></tr>
+	       	</#switch>
+		   </#if>       
+
+            
+          
 	        </thead>
 	      </table>
-	      
-	      <div class="row actions">
+	      <div class="actions">
 		      <button name="assStart" type="button">Start</button>
 		      <button name="assFinalize" type="button">Finalize</button>
-		      <button name="assDuplicate" type="button">Duplicate</button>
+		      <button name="assNewVersion" type="button">Generate new version</button>
 	      </div>
-	      	      
 	      </div>
 	      <div class="three columns remove-bottom">
 				<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
@@ -140,7 +170,7 @@
             <div id="searchbar" class="jtox-toolkit jtox-widget" data-kit="search" data-hide-options="url,context"></div>
           </div>
         </div>
-        <div id="browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-details-height="500px" data-hide-empty="true" data-on-details="onDetailedRow" data-show-diagrams="true" data-on-loaded="onBrowserFilled"></div>
+        <div id="browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-on-details="onDetailedRow" data-details-height="500px" data-show-diagrams="true" data-on-loaded="onBrowserFilled"></div>
       </div>
     </div>
     <div id="jtox-endpoints">
@@ -150,7 +180,22 @@
 			</div>
 			<div class="size-full">
   			<div class="jtox-slidable">
-          <div class="jtox-inline tab-substance"></div><div class="jtox-inline tab-points"><div class="check-all"><input type="checkbox" name="endpointAll"/>Show all<span>&nbsp;</span></div></div>
+
+          <div class="jtox-inline tab-substance">
+            <div class="float-right">
+              <button type="button" id="structures-expand-all">Expand all</button><button type="button" id="structures-collapse-all">Collapse all</button>
+            </div>
+            <div id="jtox-substance-query" class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="jTConfigurator" data-initial-query="false">
+              <div id="substance-browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-pre-details="preDetailedRow" data-show-diagrams="true"></div>
+            </div>
+          </div>
+
+          <div class="jtox-inline tab-points">
+            <div class="check-all">
+              <label for="endpointAll"><input type="checkbox" name="endpointAll" id="endpointAll"/> Show all endpoints</label>
+            </div>
+          </div>
+
   			</div>
   		</div>
 		</div>
@@ -195,17 +240,17 @@
 	      </tr>
       </table>
     </div>
- <div id="edit-box">
+    <div id="edit-box">
 	    <div class="jtox-medium-box box-field" data-name="type">
-  	    <div class="jtox-details font-heavy">Study type</div>
+  	    <div class="jtox-details font-heavy jtox-required">Study type</div>
   	    <select class="data-field type-list" data-field="type"><option value="-1"> - Select type - </option></select>
 	    </div>
 	    <div class="jtox-medium-box box-field" data-name="reference">
-  	    <div class="jtox-details font-heavy">Reference</div>
+  	    <div class="jtox-details font-heavy jtox-required">Reference</div>
   	    <input type="text" class="data-field" data-field="reference" placeholder="Reference_"/>
 	    </div>
 	    <div class="jtox-medium-box box-field size-full" data-name="justification">
-  	    <div class="jtox-details font-heavy">Justification</div>
+  	    <div class="jtox-details font-heavy jtox-required">Justification</div>
   	    <textarea class="data-field" data-field="justification" placeholder="Justification_"></textarea>
 	    </div>
 	    <div class="jtox-medium-box box-field size-full" data-name="remarks">

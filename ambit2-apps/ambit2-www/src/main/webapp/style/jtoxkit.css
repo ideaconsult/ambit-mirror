@@ -11,7 +11,7 @@
 	background: linear-gradient(top, rgba(255,255,255,.5) 0%,rgba(200,200,200,.5) 100%); /* W3C */
   border: 1px solid #aaa;
   border-top: 1px solid #ccc;
-  border-left: 1px solid #ccc; 
+  border-left: 1px solid #ccc;
   -moz-border-radius: 7px;
   -webkit-border-radius: 7px;
   border-radius: 7px;
@@ -190,7 +190,7 @@
 .jtox-toolkit .shortened {
   max-height: 25px;
   overflow: hidden;
-  text-overflow: ellipsis;  
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -256,9 +256,9 @@ select {
   margin-bottom: 10px;
 }
 
-.jtox-toolkit input[type="password"].jt-inlineaction, 
-.jtox-toolkit input[type="search"].jt-inlineaction, 
-.jtox-toolkit input[type="text"].jt-inlineaction, 
+.jtox-toolkit input[type="password"].jt-inlineaction,
+.jtox-toolkit input[type="search"].jt-inlineaction,
+.jtox-toolkit input[type="text"].jt-inlineaction,
 .jtox-toolkit select.jt-inlineaction {
   margin: 1px;
   box-sizing: border-box;
@@ -285,14 +285,14 @@ select {
   position: absolute;
   bottom: 0px;
   right: 0px;
-  display: none; 
+  display: none;
 }
 
 .jtox-diagram:hover span.ui-icon {
   display: block;
 }
 
-.jtox-toolkit a, 
+.jtox-toolkit a,
 .jtox-toolkit a:visited,
 .jtox-toolkit a:active {
   color: inherit;
@@ -310,7 +310,7 @@ img.jtox-smalldiagram {
   display: inline-block;
   min-width: 220px;
   height: auto;
-  vertical-align: top;  
+  vertical-align: top;
 }
 
 .jtox-endpoint thead {
@@ -400,6 +400,10 @@ td.jtox-multi table tr:first-child td {
 td.jtox-multi table {
   height: 100%;
   width: 100%;
+}
+
+.jtox-required:after {
+  content: ' *';
 }
 /* toxtstudy.css - Styling for toxstudy engine
 */

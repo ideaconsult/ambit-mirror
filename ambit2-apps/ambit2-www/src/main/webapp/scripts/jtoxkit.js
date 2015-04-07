@@ -5,7 +5,7 @@ var ccLib = {
       base = [];
     else if (!jQuery.isArray(base))
       base = [base];
-    
+
     // now proceed with extending
     if (arr !== undefined && arr !== null){
       for (var i = 0, al = arr.length; i < al; ++i){
@@ -16,7 +16,7 @@ var ccLib = {
     }
     return base;
   },
-  
+
   extendNew: function (base) {
     var deep = false;
     var arr = null;
@@ -27,13 +27,13 @@ var ccLib = {
     }
     else
       arr = arguments;
-    
+
     for (var i = 1, al = arr.length;i < al; ++i) {
       var obj = arr[i];
       if (typeof obj != 'object')
         continue;
       for (var key in obj) {
-        if (!base.hasOwnProperty(key)) 
+        if (!base.hasOwnProperty(key))
           base[key] = (typeof obj[key] == 'object') ? window.jQuery.extend({}, obj[key]) : obj[key];
         else if (deep && typeof base[key] == 'object' && typeof obj[key] == 'object')
           this.extendNew(true, base[key], obj[key]);
@@ -41,18 +41,18 @@ var ccLib = {
     }
     return base;
   },
-  
+
   joinDeep: function (data, field, jn) {
     var arr = [];
     for (var i = 0, dl = data.length;i < dl; ++i)
       arr.push(this.getJsonValue(data[i], field));
     return arr.join(jn);
   },
-  
+
   fireCallback: function (callback, self) {
     if (!jQuery.isArray(callback))
       callback = [callback];
-      
+
     var ret = true;
     for (var i = 0, cl = callback.length; i < cl; ++i) {
       var callone = callback[i];
@@ -62,23 +62,23 @@ var ccLib = {
     }
     return ret;
   },
-  
+
   /* Function setObjValue(obj, value)Set a given to the given element (obj) in the most appropriate way - be it property - the necessary one, or innetHTML
   */
   setObjValue: function (obj, value){
   	if ((value === undefined || value === null) && jQuery(obj).data('default') !== undefined)
   		value = jQuery(obj).data('default');
-  
+
     if (obj.nodeName == "INPUT" && obj.type == 'checkbox')
       obj.checked = !!value;
-    else if (obj.nodeName == "INPUT" || obj.nodeName == "SELECT")
+    else if (obj.nodeName == "INPUT" || obj.nodeName == "SELECT" || obj.nodeName == "TEXTAREA")
       obj.value = value;
     else if (obj.nodeName == "IMG")
       obj.src = value;
     else if (obj.nodeName == "BUTTON")
   		jQuery(obj).data('value', value);
     else
-      obj.innerHTML = value;      
+      obj.innerHTML = value;
   },
 
   getObjValue: function (obj){
@@ -97,7 +97,7 @@ var ccLib = {
   isNull: function(obj) {
     return obj === undefined || obj == null;
   },
-  
+
   isEmpty: function(obj) {
     var empty = true;
     if (obj !== undefined || obj != null) {
@@ -107,7 +107,7 @@ var ccLib = {
             empty = false;
             break;
           }
-        } 
+        }
       }
       else if (typeof obj == 'string')
         empty = obj.trim().length == 0;
@@ -118,7 +118,7 @@ var ccLib = {
     }
     return empty;
   },
-  
+
   enumObject: function(obj, fn, idx, level) {
     if (level == null)
       level = 0;
@@ -131,7 +131,7 @@ var ccLib = {
       for (var i in obj)
         this.enumObject(obj[i], fn, i, level + 1);
   },
-  
+
   setJsonValue: function (json, field, val) {
     if (field != null){
       try {
@@ -144,22 +144,22 @@ var ccLib = {
 
         json[arr[i]] = val;
       }
-    }  
+    }
   },
-  
+
   getJsonValue: function (json, field){
     var value = json[field];
     if (value === undefined && field != null) {
       try {
         eval("value = json." + field);
-      } 
+      }
       catch(e){
         ;
       }
     }
     return value;
   },
-  
+
   // given a root DOM element and an JSON object it fills all (sub)element of the tree
   // which has class 'data-field' and their name corresponds to a property in json object.
   // If prefix is given AND json has id property - the root's id set to to prefix + json.id
@@ -169,7 +169,7 @@ var ccLib = {
       return;
   	if (!filter)
   		filter = 'data-field';
-  	
+
   	var processFn = function(el, json){
   	  var value = self.getJsonValue(json, jQuery(el).data('field'));
       if (value !== undefined) {
@@ -183,21 +183,21 @@ var ccLib = {
           self.setObjValue(el, value);
       }
   	}
-	
+
   	if (jQuery(root).hasClass(filter))
   		processFn(root, json);
-  
+
     jQuery('.' + filter, root).each(function (i) { processFn(jQuery(this)[0], json); } );
-  
+
     if (prefix && json.id !== undefined) {
       root.id = prefix + json.id;
     }
   },
-  
+
   populateData: function (root, template, data, enumFn) {
     if (data == null || typeof data != 'object')
       return;
-      
+
     var temp = $(template)[0];
     var oldDisp = root.style.display;
     root.style.display = 'none';
@@ -206,21 +206,21 @@ var ccLib = {
       el.removeAttribute('id');
       if (this.fireCallback(enumFn, el, data[i]) === false)
         continue;
-    
+
       root.appendChild(el);
       this.fillTree(el, data[i]);
     }
-    
+
     root.style.display = oldDisp;
   },
-  
+
   // Prepare a form so that non-empty fields are checked before submit and accumuater fields
   // are accumulated. Call it after you've set submit behavior, etc.
   prepareForm: function (form) {
   	var self = this;
 	  var $ = window.jQuery;
 
-		// first - attach the accumulators handler.	  
+		// first - attach the accumulators handler.
 	  $('.accumulate', form).on('change', function (e) {
 		  var target = $(this).data('accumulate');
 		  if (!!target) {
@@ -234,7 +234,7 @@ var ccLib = {
 			return false;
 	  });
   },
-  
+
   packData: function (data) {
     var out = {};
     for (var i in data) {
@@ -243,14 +243,14 @@ var ccLib = {
       var o = data[i];
       out[o.name] = o.value;
     }
-      
+
     return out;
   },
-  
+
   serializeForm: function (form) {
     return this.packData(window.jQuery(form).serializeArray());
   },
-	 
+
   flexSize: function (root) {
     var $ = jQuery;
     $('.cc-flex', root).each(function () {
@@ -267,7 +267,7 @@ var ccLib = {
       el.style[horiz ? 'width' : 'height'] = (this.offsetParent[horiz ? 'clientWidth' : 'clientHeight'] - sum) + 'px';
     });
   },
-	 
+
 	 // Check if the form is not-empty according to non-empty fields
   validateForm: function (form, callback) {
   	var self = this;
@@ -276,7 +276,7 @@ var ccLib = {
 		  if (!self.fireCallback(callback, this))
 		  	ok = false;
 	  });
-	  
+
 	  return ok;
   },
   /*
@@ -287,7 +287,7 @@ var ccLib = {
       obj.removeChild(obj.lastChild);
     }
   },
-    
+
 	/* formats a string, replacing {number | property} in it with the corresponding value in the arguments
   */
   formatString: function(format, pars) {
@@ -295,7 +295,7 @@ var ccLib = {
       format = format.replace('{' + i + '}', pars[i]);
     return format;
   },
-  
+
   trim: function(obj) {
     if (obj === undefined || obj == null)
       return '';
@@ -304,36 +304,36 @@ var ccLib = {
     else
       return obj;
   },
-  
+
   copyToClipboard: function(text, prompt) {
     if (!prompt) {
       prompt = "Press Ctrl-C (Command-C) to copy and then Enter.";
     }
     window.prompt(prompt, text);
   },
-  
+
   equalizeHeights: function() {
     var tabs = [];
     for (var i = 0;i < arguments.length; ++i) {
       tabs[i] = arguments[i].firstElementChild;
-    }    
-    
+    }
+
     for (;;) {
       var height = 0;
       for (i = 0;i < tabs.length ; ++i) {
         if (tabs[i] == null)
           continue;
-          
+
         if (!jQuery(tabs[i]).hasClass('lock-height') && tabs[i].style.height != '')
           tabs[i].style.height = "auto";
 
         if (tabs[i].offsetHeight > height)
           height = tabs[i].offsetHeight;
       }
-      
+
       if (height == 0)
         break;
-        
+
       for (i = 0;i < tabs.length ; ++i) {
         if (tabs[i] != null) {
           jQuery(tabs[i]).height(height);
@@ -342,7 +342,7 @@ var ccLib = {
       }
     }
   },
-  
+
   positionTo: function (el, parent) {
     var ps = { left: -parent.offsetLeft, top: -parent.offsetTop };
     parent = parent.offsetParent;
@@ -352,11 +352,11 @@ var ccLib = {
     }
     return ps;
   },
-  
+
   addParameter: function (url, param) {
     return url + (("&?".indexOf(url.charAt(url.length - 1)) == -1) ?  (url.indexOf('?') > 0 ? "&" : "?") : '') + param;
   },
-  
+
   removeParameter: function (url, param) {
     return url.replace(new RegExp('(.*\?.*)(' + param + '=[^\&\s$]*\&?)(.*)'), '$1$3');
   },
@@ -415,7 +415,7 @@ window.jT = window.jToxKit = {
 	templateRoot: null,
 
 	callId: 0,
-	
+
 	templates: { },        // html2js routine will fill up this variable
 	tools: { },            // additional, external tools added with html2js
 
@@ -433,19 +433,19 @@ window.jT = window.jToxKit = {
   	onSuccess: null,	    // function (code, mess): called on server request successful return. It is called along with the normal processing. Part of settings.
   	onError: function (s, c, j) { if (!!console && !!console.log) console.log("jT call error [" + c + "]: " + j.responseText + " from request: [" + s + "]"); },		// called on server request error.
   },
-  
+
   // these are used in setting inheritance, so that non-inheritable settings are blanked...
   blankSettings: {
     onDetails: null,
     noInterface: false,
     selectionHandler: null
   },
-	
+
 	// form the "default" baseUrl if no other is supplied
 	formBaseUrl: function(url) {
     return !!url.host ? url.protocol + "://" + url.host + (url.port.length > 0 ? ":" + url.port : '') + '/' + url.segments[0] : null;
 	},
-    
+
   // initializes one kit, based on the kit name passed, either as params, or found within data-XXX parameters of the element
   initKit: function(element) {
     var self = this;
@@ -462,11 +462,11 @@ window.jT = window.jToxKit = {
       	topSettings = self.$.extend(true, topSettings, parent.settings);
     	}
   	});
-  	
+
   	// make us ultimate parent of all
   	if (!parent)
   	  parent = self;
-  	  
+
     dataParams = self.$.extend(true, topSettings, self.blankSettings, dataParams);
     dataParams.baseUrl = self.fixBaseUrl(dataParams.baseUrl);
 
@@ -477,14 +477,14 @@ window.jT = window.jToxKit = {
       // add jTox if it is missing AND there is not existing object/function with passed name. We can initialize ketcher and others like this too.
     	if (!window[kit] && kit.indexOf('jTox') != 0)
   	  	kit = 'jTox' + kit.charAt(0).toUpperCase() + kit.slice(1);
-  
+
     	var fn = window[kit];
     	var obj = null;
       if (typeof fn == 'function')
     	  obj = new fn(element, params);
       else if (typeof fn == "object" && typeof fn.init == "function")
         obj = fn.init(element, params);
-      
+
       if (obj != null) {
         if (fn.kits === undefined)
           fn.kits = [];
@@ -512,28 +512,28 @@ window.jT = window.jToxKit = {
 	      var config = window[dataParams.configuration];
 	      dataParams.configuration = (typeof config != 'function' ? config : config(kit));
       }
-  	  
+
       self.$(element).data('jtKit', realInit(dataParams));
 	  }
   },
-  
+
   // the jToxKit initialization routine, which scans all elements, marked as 'jtox-toolkit' and initializes them
 	init: function(root) {
   	var self = this;
-  	
+
   	if (!root) {
     	self.initTemplates();
-  
+
       // make this handler for UUID copying. Once here - it's live, so it works for all tables in the future
       self.$(document).on('click', '.jtox-toolkit span.ui-icon-copy', function () { ccLib.copyToClipboard(self.$(this).data('uuid')); return false;});
       // install the click handler for fold / unfold
       self.$(document).on('click', '.jtox-foldable>.title', function() { self.$(this).parent().toggleClass('folded'); });
       // install diagram zooming handlers
-      self.$(document).on('click', '.jtox-diagram span.ui-icon', function () { 
+      self.$(document).on('click', '.jtox-diagram span.ui-icon', function () {
         self.$(this).toggleClass('ui-icon-zoomin').toggleClass('ui-icon-zoomout');
-        self.$('img', this.parentNode).toggleClass('jtox-smalldiagram'); 
+        self.$('img', this.parentNode).toggleClass('jtox-smalldiagram');
       });
-      
+
       // scan the query parameter for settings
   		var url = self.settings.fullUrl = ccLib.parseURL(document.location);
   		var queryParams = url.params;
@@ -541,7 +541,7 @@ window.jT = window.jToxKit = {
   		  queryParams.baseUrl = self.formBaseUrl(url);
   		else
     		queryParams.baseUrl = self.fixBaseUrl(queryParams.baseUrl);
-  	
+
       self.settings = self.$.extend(true, self.settings, queryParams); // merge with defaults
       root = document;
   	}
@@ -549,11 +549,11 @@ window.jT = window.jToxKit = {
   	// now scan all insertion divs
   	self.$('.jtox-toolkit', root).each(function(i) { if (!self.$(this).data('manualInit')) self. initKit(this); });
 	},
-	
+
 	kit: function (element) {
   	return $(element).data('jtKit');
 	},
-	
+
 	parentKit: function(name, element) {
 	  var self = this;
     var query = null;
@@ -566,10 +566,10 @@ window.jT = window.jToxKit = {
       if (!name || kit instanceof name)
         query = kit;
     });
-    
+
     return query;
   },
-	
+
 	initTemplates: function() {
 	  var self = this;
 
@@ -579,16 +579,16 @@ window.jT = window.jToxKit = {
     	root.className = 'jtox-template';
     	document.body.appendChild(root);
     }
-    
+
 	  var html = root.innerHTML;
   	for (var t in self.templates) {
     	html += self.templates[t];
   	}
-  	
+
   	root.innerHTML = html;
   	self.templateRoot = root;
 	},
-	
+
 	getTemplate: function(selector) {
   	var el = this.$(selector, this.templateRoot)[0];
   	if (!!el){
@@ -597,7 +597,7 @@ window.jT = window.jToxKit = {
     }
     return el;
 	},
-	
+
 	insertTool: function (name, root) {
 	  var html = this.tools[name];
 	  if (!ccLib.isNull(html)) {
@@ -606,8 +606,8 @@ window.jT = window.jToxKit = {
     }
     return root;
 	},
-  
-	/* Poll a given taskId and calls the callback when a result from the server comes - 
+
+	/* Poll a given taskId and calls the callback when a result from the server comes -
 	be it "running", "completed" or "error" - the callback is always called.
 	*/
 	pollTask : function(kit, task, callback, jhr) {
@@ -627,7 +627,7 @@ window.jT = window.jToxKit = {
 		else
   	  ccLib.fireCallback(callback, kit, task, jhr);
 	},
-	
+
 	/* Fix the baseUrl - remove the trailing slash if any
 	*/
 	fixBaseUrl: function (url) {
@@ -646,7 +646,7 @@ window.jT = window.jToxKit = {
 	},
 
   /* Grab the paging information from the given URL and place it into the settings of passed
-  kit, as <kit>.settings.pageStart and <kit>.settings.pageSize. Pay attention that it is 'pageStart' 
+  kit, as <kit>.settings.pageStart and <kit>.settings.pageSize. Pay attention that it is 'pageStart'
   and not 'pageNo'.
   */
   grabPaging: function (kit, url) {
@@ -657,17 +657,17 @@ window.jT = window.jToxKit = {
         kit.settings.pageSize = kit.pageSize = sz;
       url = ccLib.removeParameter(url, 'pagesize');
     }
-    
+
     if (urlObj.params['page'] !== undefined) {
       var beg = parseInt(urlObj.params['page']);
       if (beg >= 0)
         kit.settings.pageStart = kit.pageStart = beg * kit.settings.pageSize;
       url = ccLib.removeParameter(url, 'page');
     }
-    
+
     return url;
   },
-	
+
 	/* Makes a server call for provided service, with settings form the given kit and calls 'callback' at the end - always.
 	The 'params', if passed, can have following attributes:
 		'method': the HTTP method to be used
@@ -681,20 +681,20 @@ window.jT = window.jToxKit = {
 		}
 		else if (params == null)
 		  params = {};
-		
+
 	  var settings = self.$.extend({}, this.settings, params);
 		if (kit == null)
 		  kit = self;
-		else 
+		else
   		settings = self.$.extend(settings, kit.settings);
 
 		var accType = settings.plainText ? "text/plain" : (settings.jsonp ? "application/x-javascript" : "application/json");
-		
+
 		if (!params.data){
 			params.data = {};
 			if (settings.jsonp)
 				params.data.media = accType;
-				
+
 			if (!params.method)
 				params.method = 'GET';
 		}
@@ -707,7 +707,7 @@ window.jT = window.jToxKit = {
 
     var myId = self.callId++;
 		ccLib.fireCallback(settings.onConnect, kit, service, params, myId);
-			
+
 		// now make the actual call
 		self.$.ajax(service, {
 			dataType: params.dataType || (settings.plainText ? "text": (settings.jsonp ? 'jsonp' : 'json')),
@@ -727,7 +727,7 @@ window.jT = window.jToxKit = {
 			}
 		});
 	},
-	
+
 	/* Encapsulates the process of calling certain service, along with task polling, if needed.
   	*/
 	service: function (kit, service, params, callback) {
@@ -738,7 +738,7 @@ window.jT = window.jToxKit = {
       else
         self.pollTask(kit, data, function (task, jhr) { ccLib.fireCallback(callback, kit, !!task && !task.error ? task.result : null, jhr); });
   	};
-  	
+
   	this.call(kit, service, params, fnCB);
   }
 };
@@ -748,7 +748,7 @@ window.jT = window.jToxKit = {
 window.jT.ui = {
   shortenedData: function (content, message, data) {
     var res = '';
-    
+
     if (ccLib.isNull(data))
       data = content;
     if (data.toString().length <= 5) {
@@ -761,7 +761,7 @@ window.jT.ui = {
     }
     return res;
   },
-  
+
   changeTabsIds: function (root, suffix) {
     jT.$('ul li a', root).each(function() {
       var id = jT.$(this).attr('href').substr(1);
@@ -769,14 +769,14 @@ window.jT.ui = {
       id += suffix;
       el.id = id;
       jT.$(this).attr('href', '#' + id);
-    })  
+    })
   },
-  
+
   addTab: function(root, name, id, content) {
     // first try to see if there is same already...
     if (document.getElementById(id) != null)
       return;
-  
+
     // first, create and add li/a element
     var li = document.createElement('li');
     var a = document.createElement('a');
@@ -784,7 +784,7 @@ window.jT.ui = {
     a.href = '#' + id;
     a.innerHTML = name;
     jT.$('ul', root)[0].appendChild(li);
-    
+
     // then proceed with the panel, itself...
     if (typeof content == 'function')
       content = content(root);
@@ -793,20 +793,20 @@ window.jT.ui = {
       div.innerHTML = content;
       content = div;
     }
-      
+
     content.id = id;
     root.appendChild(content);
     $(root).tabs('refresh');
     return { 'tab': a, 'content': content };
   },
-  
+
   modifyColDef: function (kit, col, category, group) {
     if (col.sTitle === undefined || col.sTitle == null)
       return null;
-      
+
 	  var name = col.sTitle.toLowerCase();
-	  
-	  // helper function for retrieving col definition, if exists. Returns empty object, if no.          
+
+	  // helper function for retrieving col definition, if exists. Returns empty object, if no.
 	  var getColDef = function (cat) {
 	    var catCol = kit.settings.configuration.columns[cat];
 	    if (!ccLib.isNull(catCol)) {
@@ -818,7 +818,7 @@ window.jT.ui = {
         else
 	        catCol = catCol[name];
 	    }
-	
+
 	    if (ccLib.isNull(catCol))
 	      catCol = {};
 	    return catCol;
@@ -828,7 +828,7 @@ window.jT.ui = {
 	  col = jT.$.extend(col, (!!group ? getColDef('_') : {}), getColDef(category));
 	  return ccLib.isNull(col.bVisible) || col.bVisible ? col : null;
   },
-  
+
   sortColDefs: function (colDefs) {
     for (var i = 0, l = colDefs.length; i < l; ++i)
       colDefs[i].iNaturalOrder = i;
@@ -836,10 +836,10 @@ window.jT.ui = {
   	  var res = (a.iOrder || 0) - (b.iOrder || 0);
   	  if (res == 0) // i.e. they are equal
   	    res = a.iNaturalOrder - b.iNaturalOrder;
-  	  return res; 
+  	  return res;
     });
   },
-  
+
   processColumns: function (kit, category) {
     var colDefs = [];
     var catList = kit.settings.configuration.columns[category];
@@ -848,11 +848,11 @@ window.jT.ui = {
       if (col != null)
         colDefs.push(col);
     }
-      
+
     this.sortColDefs(colDefs);
     return colDefs;
   },
-  
+
   renderMulti: function (data, type, full, render) {
     var dlen = data.length;
     if (dlen < 2)
@@ -862,15 +862,15 @@ window.jT.ui = {
     for (var i = 0, dlen = data.length; i < dlen; ++i) {
       df += '<tr class="' + (i % 2 == 0 ? 'even' : 'odd') + '"><td>' + render(data[i], type, full, i) + '</td></tr>';
     }
-    
+
     df += '</table>';
     return df;
   },
-  
+
   inlineChanger: function (location, breed, holder, handler) {
     if (handler == null)
       handler = "changed";
-      
+
     if (breed == "select")
       return function (data, type, full) {
         return type != 'display' ? (data || '') : '<select class="jt-inlineaction jtox-handler" data-handler="' + handler + '" data-data="' + location + '" value="' + (data || '') + '">' + (holder || '') + '</select>';
@@ -884,7 +884,7 @@ window.jT.ui = {
         return type != 'display' ? (data || '') : '<input type="text" class="jt-inlineaction jtox-handler" data-handler="' + handler + '" data-data="' + location + '" value="' + (data || '') + '"' + (!holder ? '' : ' placeholder="' + holder + '"') + '/>';
       };
   },
-    
+
   installMultiSelect: function (root, callback, parenter) {
     if (parenter == null)
       parenter = function (el) { return el.parentNode; };
@@ -899,18 +899,18 @@ window.jT.ui = {
         callback.call(this, e);
     });
   },
-  
+
   installHandlers: function (kit, root) {
     if (root == null)
       root = kit.rootElement;
-      
+
     jT.$('.jtox-handler', root).each(function () {
       var name = jT.$(this).data('handler');
       var handler = null;
       if (kit.settings.configuration != null && kit.settings.configuration.handlers != null)
         handler = kit.settings.configuration.handlers[name];
       handler = handler || window[name];
-      
+
       if (!handler)
         console.log("jToxQuery: referring unknown handler: " + name);
       else if (this.tagName == "INPUT" || this.tagName == "SELECT" || this.tagName == "TEXTAREA")
@@ -919,24 +919,24 @@ window.jT.ui = {
         jT.$(this).on('click', handler);
     });
   },
-  
+
   enterBlur: function (e) {
     if (e.keyCode == 13)
       this.blur();
   },
-  
+
   rowData: function (el) {
     var row = $(el).closest('tr')[0];
     var table = $(row).closest('table')[0];
     return $(table).dataTable().fnGetData(row);
   },
-  
+
   rowIndex: function (el) {
     var row = $(el).closest('tr')[0];
     var table = $(row).closest('table')[0];
     return $(table).dataTable().fnGetPosition(row);
   },
-  
+
   rowInline: function (el, base) {
     var row = $(el).closest('tr')[0];
     var data = $.extend({}, base);
@@ -945,10 +945,10 @@ window.jT.ui = {
       if (loc != null)
         ccLib.setJsonValue(data, loc, ccLib.getObjValue(this));
     });
-    
+
     return data;
   },
-  
+
   columnData: function (cols, data, type) {
     var out = new Array(data.length);
     if (type == null)
@@ -961,18 +961,18 @@ window.jT.ui = {
         var val = ccLib.getJsonValue(d, col.mData) || col.sDefaultValue;
         entry[col.sTitle] = typeof col.mRender != 'function' ? val : col.mRender(val, type, d);
       }
-      
+
       out[i] = entry;
     }
-    
+
     return out;
   },
-  
+
   queryInfo: function (aoData) {
     var info = {};
     for (var i = 0, dl = aoData.length; i < dl; ++i)
       info[aoData[i].name] = aoData[i].value;
-  
+
     if (info.iSortingCols > 0) {
       info.iSortDirection = info.sSortDir_0.toLowerCase();
       info.sSortData = info["mDataProp_" + info.iSortCol_0];
@@ -981,15 +981,15 @@ window.jT.ui = {
       info.iSortDirection = 0;
       info.sSortData = "";
     }
-    
+
     return info;
   },
-  
+
   putTable: function (kit, root, config, settings) {
     var onRow = kit.settings.onRow;
     if (onRow === undefined && settings != null)
       onRow = settings.onRow;
-      
+
     var opts = jT.$.extend({
       "bPaginate": false,
       "bProcessing": true,
@@ -1005,10 +1005,10 @@ window.jT.ui = {
           if (res === false)
             return;
         }
-        
+
         // equalize multi-rows, if there are any
         ccLib.equalizeHeights.apply(window, jT.$('td.jtox-multi table tbody', nRow).toArray());
-        
+
         // handle a selection click.. if any
         jT.ui.installHandlers(kit, nRow);
         if (typeof kit.settings.selectionHandler == "function")
@@ -1016,7 +1016,7 @@ window.jT.ui = {
         // other (non-function) handlers are installed via installHandlers().
 
         if (!!kit.settings.onDetails) {
-          jT.$('.jtox-details-toggle', nRow).on('click', function(e) {  
+          jT.$('.jtox-details-toggle', nRow).on('click', function(e) {
             var root = jT.ui.toggleDetails(e, nRow);
             if (!!root) {
               ccLib.fireCallback(kit.settings.onDetails, kit, root, aData, this);
@@ -1025,7 +1025,7 @@ window.jT.ui = {
         }
       }
     }, settings);
-    
+
     if (opts.aoColumns == null)
       opts.aoColumns = jT.ui.processColumns(kit, config);
     if (opts.oLanguage == null)
@@ -1035,17 +1035,17 @@ window.jT.ui = {
     jT.$(table).dataTable().fnAdjustColumnSizing();
     return table;
   },
-  
+
   renderRelation: function (data, type, full) {
     if (type != 'display')
       return ccLib.joinDeep(data, 'relation', ',');
-      
+
     var res = '';
     for (var i = 0, il = data.length; i < il; ++i)
       res += '<span>' + data[i].relation.substring(4).toLowerCase() + '</span>' + jT.ui.putInfo(full.URI + '/composition', data[i].compositionName + '(' + data[i].compositionUUID + ')');
     return res;
   },
-  
+
   renderRange: function (data, unit, type, prefix) {
     var out = "";
     if (typeof data == 'string' || typeof data == 'number')
@@ -1066,7 +1066,7 @@ window.jT.ui = {
         var fnFormat = function (q, v) {
           return (!!q ? q : "=") + " " + v;
         };
-        
+
         if (!!prefix)
           out += prefix + ' ';
         if (!!loValue)
@@ -1076,7 +1076,7 @@ window.jT.ui = {
         else
           out += type == 'display' ? '-' : '';
       }
-      
+
       out = out.replace(/ /g, "&nbsp;");
       if (type == 'display') {
         unit = ccLib.trim(data.unit || unit);
@@ -1088,11 +1088,11 @@ window.jT.ui = {
       out += '-';
     return out;
   },
-  
+
 	renderObjValue: function (data, units, type, pre) {
 		if (!data)
 		  return type == 'display' ? '-' : '';
-		  
+
 		var val = jT.ui.renderRange(data, units, type, pre);
 		if (ccLib.trim(val) == '-')
 		  val = '';
@@ -1103,16 +1103,16 @@ window.jT.ui = {
   		  val += '&nbsp;/&nbsp;';
   		val += data.textValue;
 		}
-		
+
 		if (!val)
 		  val = '-';
 		return val;
 	},
-  
+
   putInfo: function (href, title) {
     return '<sup class="helper"><a target="_blank" href="' + (href || '#') + '" title="' + (title || href) + '"><span class="ui-icon ui-icon-info"></span></a></sup>';
   },
-  
+
   putStars: function (kit, stars, title) {
     if (!kit.settings.shortStars) {
       var res = '<div title="' + title + '">';
@@ -1128,11 +1128,11 @@ window.jT.ui = {
       return '<span class="ui-icon ui-icon-star jtox-inline" title="' + title + '"></span>' + stars;
     }
   },
-  
+
   diagramUri: function (URI) {
     return !!URI && (typeof URI == 'string') ? URI.replace(/(.+)(\/conformer.*)/, "$1") + "?media=image/png" : '';
   },
-  
+
   valueWithUnits: function (val, unit) {
     var out = '';
     if (val != null) {
@@ -1142,7 +1142,7 @@ window.jT.ui = {
     }
     return out;
   },
-  
+
   updateCounter: function (str, count, total) {
     var re = null;
     var add = '';
@@ -1156,16 +1156,16 @@ window.jT.ui = {
       re = /\(([\d\?]+\/[\d\?\+-]+)\)$/;
       add = '' + count + '/' + total;
     }
-    
-    // now the addition    
+
+    // now the addition
     if (!str.match(re))
       str += ' (' + add + ')';
     else
       str = str.replace(re, "(" + add + ")");
-    
+
     return str;
   },
-    
+
   bindControls: function (kit, handlers) {
     var pane = jT.$('.jtox-controls', kit.rootElement)[0];
     if (kit.settings.showControls) {
@@ -1192,28 +1192,28 @@ window.jT.ui = {
         var html = oldFn(data, type, full);
         if (type != 'display')
           return html;
-          
+
         if (!!ignoreOriginal)
           html = '';
-          
+
         // this is inserted BEFORE the original, starting with given PRE-content
         if (!!kit.settings.selectionHandler)
           html = '<input type="checkbox" value="' + data + '" class="' +
                 (typeof kit.settings.selectionHandler == 'string' ? 'jtox-handler" data-handler="' + kit.settings.selectionHandler + '"' : 'jt-selection"') +
                 '/>' + html;
-                
+
         // strange enough - this is inserted AFTER the original
         if (!!kit.settings.onDetails)
           html += '<span class="jtox-details-toggle ui-icon ui-icon-folder-collapsed" data-data="' + data +'" title="Press to open/close detailed info for this entry"></span>';
 
         return html;
       };
-      
+
       col.mRender = newFn;
     }
     return col;
   },
-  
+
   toggleDetails: function (event, row) {
     self.$(event.currentTarget).toggleClass('ui-icon-folder-collapsed');
     self.$(event.currentTarget).toggleClass('ui-icon-folder-open');
@@ -1222,13 +1222,13 @@ window.jT.ui = {
       row = self.$(event.currentTarget).parents('tr')[0];
 
     var cell = self.$(event.currentTarget).parents('td')[0];
-    
+
     if (self.$(event.currentTarget).hasClass('jtox-openned')) {
       var detRow = document.createElement('tr');
       var detCell = document.createElement('td');
       detRow.appendChild(detCell);
       self.$(detCell).addClass('jtox-details');
-      
+
       detCell.setAttribute('colspan', self.$(row).children().length - 1);
       row.parentNode.insertBefore(detRow, row.nextElementSibling);
 
@@ -1247,7 +1247,7 @@ window.jT.ui = {
 // so it'll be too late to make this assignment then. Also - we can use jT.$ from now on :-)
 jT.$ = jQuery; // .noConflict();
 
-  	
+
 jT.$(document).ready(function(){
   jT.init();
 });
@@ -1676,11 +1676,11 @@ var jToxCompound = (function () {
         "Identifiers" : [
           "http://www.opentox.org/api/1.1#Diagram",
           "#DetailedInfoRow",
-          "http://www.opentox.org/api/1.1#CASRN", 
+          "http://www.opentox.org/api/1.1#CASRN",
           "http://www.opentox.org/api/1.1#EINECS",
           "http://www.opentox.org/api/1.1#IUCLID5_UUID"
         ],
-        
+
         "Names": [
           "http://www.opentox.org/api/1.1#ChemicalName",
           "http://www.opentox.org/api/1.1#TradeName",
@@ -1690,7 +1690,7 @@ var jToxCompound = (function () {
           "http://www.opentox.org/api/1.1#InChI",
           "http://www.opentox.org/api/1.1#REACHRegistrationDate"
         ],
-        
+
         "Calculated": function (name, miniset) {
           var arr = [];
           if (miniset.dataEntry.length > 0 && !ccLib.isNull(miniset.dataEntry[0].compound.metric))
@@ -1706,7 +1706,7 @@ var jToxCompound = (function () {
           }
           return arr;
         },
-        
+
         "Other": function (name, miniset) {
           var arr = [];
           for (var f in miniset.feature) {
@@ -1735,7 +1735,7 @@ var jToxCompound = (function () {
       "baseFeatures": {
       	// and one for unified way of processing diagram. This can be used as template too
       	"http://www.opentox.org/api/1.1#Diagram": {
-      	  title: "Diagram", 
+      	  title: "Diagram",
       	  search: false,
         	visibility: "main",
         	primary: true,
@@ -1753,7 +1753,7 @@ var jToxCompound = (function () {
       	  column: { "sClass": "middle"}
       	},
       	"#DetailedInfoRow": {
-      	  title: "Diagram", 
+      	  title: "Diagram",
       	  search: false,
       	  data: "compound.URI",
       	  basic: true,
@@ -1762,7 +1762,7 @@ var jToxCompound = (function () {
         	visibility: "none",
         	render: function(data, type, full) { return ''; }
       	},
-      	
+
       	"http://www.opentox.org/api/1.1#Similarity": {title: "Similarity", data: "compound.metric", search: true},
       },
       "columns": {
@@ -1809,29 +1809,29 @@ var jToxCompound = (function () {
     var self = this;
     self.rootElement = root;
     jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even in manual initialization.
-    
+
     var newDefs = jT.$.extend(true, { "configuration" : { "baseFeatures": baseFeatures} }, defaultSettings);
     self.settings = jT.$.extend(true, {}, newDefs, jT.settings, settings); // i.e. defaults from jToxCompound
-    
+
     // make a dull copy here, because, otherwise groups are merged... which we DON'T want
     if (settings != null && settings.configuration != null && settings.configuration.groups != null)
       self.settings.configuration.groups = settings.configuration.groups;
-      
+
     self.instanceNo = instanceCount++;
     if (self.settings.rememberChecks && self.settings.showTabs)
       self.featureStates = {};
 
-    // finally make the query, if Uri is provided      
+    // finally make the query, if Uri is provided
     if (self.settings['datasetUri'] != null){
       self.queryDataset(self.settings['datasetUri']);
     }
   };
-  
+
   // now follow the prototypes of the instance functions.
   cls.prototype = {
     init: function () {
       var self = this;
-      
+
       self.feature = null; // features, as downloaded from server, after being processed.
       self.dataset = null; // the last-downloaded dataset.
       self.groups = null; // computed groups, i.e. 'groupName' -> array of feature list, prepared.
@@ -1842,11 +1842,11 @@ var jToxCompound = (function () {
       self.usedFeatures = [];
       self.pageStart = self.settings.pageStart;
       self.pageSize = self.settings.pageSize;
-      
+
       if (!self.settings.noInterface) {
         self.rootElement.appendChild(jT.getTemplate('#jtox-compound'));
-        
-        jT.ui.bindControls(self, { 
+
+        jT.ui.bindControls(self, {
           nextPage: function () { self.nextPage(); },
           prevPage: function () { self.prevPage(); },
           sizeChange: function() { self.queryEntries(self.pageStart, parseInt(jT.$(this).val())); },
@@ -1854,10 +1854,10 @@ var jToxCompound = (function () {
         });
       }
     },
-    
+
     clearDataset: function () {
       if (this.usedFeatures !== undefined) {
-        if (!this.settings.noInterface)     
+        if (!this.settings.noInterface)
           jT.$(this.rootElement).empty();
         for (var i = 0, fl = this.usedFeatures.length; i < fl; ++i) {
           var fid = this.usedFeatures[i];
@@ -1865,13 +1865,13 @@ var jToxCompound = (function () {
         }
       }
     },
-    
+
     /* make a tab-based widget with features and grouped on tabs. It relies on filled and processed 'self.feature' as well
     as created 'self.groups'.
     */
     prepareTabs: function (root, isMain, groupFn) {
       var self = this;
-      
+
       var all = document.createElement('div');
       all.style.display = "none"; // we suppress the re-layouting engine this way, we'll show it at the end.
       root.appendChild(all);
@@ -1887,7 +1887,7 @@ var jToxCompound = (function () {
         liEl.appendChild(aEl);
         return liEl;
       };
-            
+
       var emptyList = [];
       var idx = 0;
       for (var gr in self.groups) {
@@ -1896,7 +1896,7 @@ var jToxCompound = (function () {
         var tabLi = createATab(grId, grName);
         if (isMain)
           tabLi.title = "Select which columns to be displayed";
-        
+
         // now prepare the content...
         var divEl = document.createElement('div');
         divEl.id = grId;
@@ -1914,7 +1914,7 @@ var jToxCompound = (function () {
             });
           });
         }
-        
+
         if (groupFn(divEl, gr)) {
           if (self.settings.hideEmpty) {
             jT.$(divEl).remove();
@@ -1925,10 +1925,10 @@ var jToxCompound = (function () {
             emptyList.push(idx);
         }
         ++idx;
-        
+
         ccLib.fireCallback(self.settings.onTab, self, divEl, tabLi, grName, isMain);
       }
-      
+
       if (isMain && self.settings.showExport) {
         var tabId = "jtox-ds-export-" + self.instanceNo;
         var liEl = createATab(tabId, "Export");
@@ -1937,31 +1937,31 @@ var jToxCompound = (function () {
         divEl.id = tabId;
         all.appendChild(divEl);
         divEl = jT.$('.jtox-exportlist', divEl)[0];
-        
+
         for (var i = 0, elen = self.settings.configuration.exports.length; i < elen; ++i) {
           var expo = self.settings.configuration.exports[i];
           var el = jT.getTemplate('#jtox-ds-download');
           divEl.appendChild(el);
-          
+
           jT.$('a', el)[0].href = ccLib.addParameter(self.datasetUri, "media=" + encodeURIComponent(expo.type));
           var img = el.getElementsByTagName('img')[0];
           img.alt = img.title = expo.type;
           img.src = (jT.settings.baseUrl || self.settings.baseUrl) + '/' + expo.icon;
         }
-        
+
         ccLib.fireCallback(self.settings.onTab, self, divEl, liEl, "Export", isMain);
       }
-      
+
       // now show the whole stuff and mark the disabled tabs
       all.style.display = "block";
-      return jT.$(all).tabs({ 
-        collapsible: isMain, 
-        active: (self.settings.tabsFolded && isMain) ? false : 0, 
-        disabled: emptyList, 
-        heightStyle: isMain ? "content" : (self.settings.detailsHeight == 'auto' ? 'auto' : 'fill') 
+      return jT.$(all).tabs({
+        collapsible: isMain,
+        active: (self.settings.tabsFolded && isMain) ? false : 0,
+        disabled: emptyList,
+        heightStyle: isMain ? "content" : (self.settings.detailsHeight == 'auto' ? 'auto' : 'fill')
       });
     },
-    
+
     equalizeTables: function () {
       var self = this;
       if (!self.suspendEqualization && self.fixTable != null && self.varTable != null) {
@@ -1986,12 +1986,12 @@ var jToxCompound = (function () {
             var rowH = jT.$(cell).parents('tr').height();
             var cellH = cell.offsetHeight;
             var meH = jT.$(this).height();
-            
+
             if (cellH < rowH)
               jT.$(cell).height(cellH = rowH);
             if (cellH < meH)
               jT.$(cell).height(cellH = meH);
-              
+
             if (meH < cellH) {
               jT.$(this).height(cellH);
               jT.$('.ui-tabs').tabs('refresh');
@@ -2000,20 +2000,20 @@ var jToxCompound = (function () {
         });
       }
     },
-    
+
     featureValue: function (fId, entry, type) {
       var self = this;
       var feature = self.feature[fId];
       var val = (feature.data !== undefined) ? (ccLib.getJsonValue(entry, jT.$.isArray(feature.data) ? feature.data[0] : feature.data)) : entry.values[fId];
-      return (typeof feature.render == 'function') ? 
-        feature.render(val, !!type ? type : 'filter', entry) : 
+      return (typeof feature.render == 'function') ?
+        feature.render(val, !!type ? type : 'filter', entry) :
         jT.ui.renderObjValue(val, feature.units, type);
     },
-    
+
     featureUri: function (fId) {
       return this.feature[fId].URI || fId;
     },
-    
+
     featureData: function (entry, set, scope) {
       if (scope == null)
         scope = 'details';
@@ -2032,34 +2032,34 @@ var jToxCompound = (function () {
           data.push(feat);
         }
       });
-      
+
       return data;
     },
-    
+
     prepareColumn: function (fId, feature) {
       var self = this;
       if (feature.visibility == 'details')
         return null;
-        
+
       // now we now we should show this one.
       var col = {
         "sTitle": !feature.title ? '' : jT.ui.valueWithUnits(feature.title.replace(/_/g, ' '), (!self.settings.showUnits ? null : feature.units)),
         "sDefaultContent": "-",
       };
-      
+
       if (typeof feature.column == 'function')
         col = feature.column.call(self, col, fId);
       else if (!ccLib.isNull(feature.column))
         col = jT.$.extend(col, feature.column);
-      
+
       col["mData"] = (feature.data != null) ? feature.data : 'values';
 
       if (feature.render != null)
         col["mRender"] = feature.data != null ? feature.render : function (data, type, full) { return feature.render(full.values[fId], type, full); };
       else if (!!feature.shorten)
-        col["mRender"] = function(data, type, full) { 
+        col["mRender"] = function(data, type, full) {
           if (!feature.data) data = data[fId];
-          return (type != "display") ? '' + data : jT.ui.shortenedData(data, "Press to copy the value in the clipboard"); 
+          return (type != "display") ? '' + data : jT.ui.shortenedData(data, "Press to copy the value in the clipboard");
         };
       else if (feature.data == null) // in other cases we want the default presenting of the plain value
         col["mRender"] = (function(featureId, units) { return function(data, type, full) {
@@ -2076,51 +2076,51 @@ var jToxCompound = (function () {
           }
           return html;
         }; })(fId, feature.unit);
-      
+
       // other convenient cases
       if (!!feature.shorten)
         col["sWidth"] = "75px";
-  
+
       return col;
     },
-    
+
     getVarRow: function (idx) {
 	  	if (idx.tagName != null)
 	  		idx = jT.ui.rowIndex(idx);
-	  	
+
       return document.getElementById('jtox-var-' + this.instanceNo + '-' + idx);
     },
-    
+
     prepareTables: function() {
       var self = this;
       var varCols = [];
       var fixCols = [];
-      
+
       // first, some preparation of the first, IdRow column
       var idFeature = self.settings.configuration.baseFeatures['#IdRow'];
       if (!idFeature.render) {
-        idFeature.render = self.settings.hasDetails ? 
+        idFeature.render = self.settings.hasDetails ?
           function (data, type, full) {
             return (type != "display") ?
-              '' + data : 
-              "&nbsp;-&nbsp;" + data + "&nbsp;-&nbsp;<br/>" + 
+              '' + data :
+              "&nbsp;-&nbsp;" + data + "&nbsp;-&nbsp;<br/>" +
               '<span class="jtox-details-open ui-icon ui-icon-folder-collapsed" title="Press to open/close detailed info for this compound"></span>';
           } : // no details case
-          function (data, type, full) { 
+          function (data, type, full) {
             return (type != "display") ?
-              '' + data : 
+              '' + data :
               "&nbsp;-&nbsp;" + data + "&nbsp;-&nbsp;";
           };
       }
-      
+
       fixCols.push(
         self.prepareColumn('#IdRow', idFeature),
         { "sClass": "jtox-hidden", "mData": "index", "sDefaultContent": "-", "bSortable": true, "mRender": function(data, type, full) { return ccLib.isNull(self.orderList) ? 0 : self.orderList[data]; } } // column used for ordering
       );
-      
+
       varCols.push({ "sClass": "jtox-hidden jtox-ds-details paddingless", "mData": "index", "mRender": function(data, type, full) { return ''; }  });
 
-      // prepare the function for column switching...      
+      // prepare the function for column switching...
       var fnShowColumn = function() {
         var dt = $(this).data();
         var cells = jT.$(dt.sel + ' table tr .' + dt.column, self.rootElement);
@@ -2137,7 +2137,7 @@ var jToxCompound = (function () {
           self.featureStates[dt.id] = this.checked;
         self.equalizeTables();
       };
-      
+
       var fnExpandCell = function (cell, expand) {
         var cnt = 0;
         for (var c = cell;c; c = c.nextElementSibling, ++cnt)
@@ -2145,14 +2145,14 @@ var jToxCompound = (function () {
 
         if (expand)
           cell.setAttribute('colspan', '' + cnt);
-        else 
+        else
           cell.removeAttribute('colspan');
       };
-      
+
       var fnShowDetails = (self.settings.hasDetails ? function(row, event) {
         var cell = jT.$(".jtox-ds-details", row)[0];
         var idx = jT.$(row).data('jtox-index');
-        
+
         if (self.settings.preDetails != null && !ccLib.fireCallback(self.settings.preDetails, self, idx, cell) || !cell)
           return; // the !cell  means you've forgotten to add #DetailedInfoRow feature somewhere.
         jT.$(row).toggleClass('jtox-detailed-row');
@@ -2162,9 +2162,9 @@ var jToxCompound = (function () {
         fnExpandCell(cell, toShow);
         var varCell = self.getVarRow(idx).firstElementChild;
         fnExpandCell(varCell, toShow);
-        
+
         jT.$('.jtox-details-open', row).toggleClass('ui-icon-folder-open ui-icon-folder-collapsed');
-        
+
         if (toShow) {
           // i.e. we need to show it - put the full sized diagram in the fixed part and the tabs in the variable one...
           var entry = self.dataset.dataEntry[idx];
@@ -2182,10 +2182,10 @@ var jToxCompound = (function () {
             jT.$(detDiv).height(self.settings.detailsHeight)
 
           tabRoot.appendChild(detDiv);
-          
+
           self.prepareTabs(detDiv, false, function (parent, gr) {
             var data = self.featureData(entry, self.groups[gr]);
-            
+
             if (data.length > 0 || !self.settings.hideEmpty) {
               jT.$(parent).addClass('jtox-details-table');
               var tabTable = document.createElement('table');
@@ -2202,10 +2202,10 @@ var jToxCompound = (function () {
               jT.$(tabTable).dataTable().fnAddData(data);
               jT.$(tabTable).dataTable().fnAdjustColumnSizing();
             }
-            
+
             return data.length == 0;
           });
-          
+
           jT.$(cell).height(detDiv.offsetHeight);
           ccLib.fireCallback(self.settings.onDetails, self, detDiv, entry, cell);
           jT.$(cell).data('detailsDiv', detDiv);
@@ -2217,7 +2217,7 @@ var jToxCompound = (function () {
           jT.$(cell).data('detailsDiv', null);
           cell.style.height = '';
         }
-        
+
         self.equalizeTables();
       } : null); // fnShowDetails definition end
 
@@ -2226,28 +2226,28 @@ var jToxCompound = (function () {
         ccLib.enumObject(self.groups[gr], function (fId, idx, level) {
           if (idx == "name")
             return;
-            
+
           var feature = self.feature[fId];
           var col = self.prepareColumn(fId, feature);
           if (!col)
             return;
-          
+
           // finally - assign column switching to the checkbox of main tab.
           var colList = !!feature.primary ? fixCols : varCols;
           var colId = 'col-' + colList.length;
           col.sClass = (!!col.sClass ? col.sClass + ' ' : '') + colId;
 
           jT.$('.jtox-ds-features input.jtox-checkbox[value="' + fId + '"]', self.rootElement).data({ sel: !!feature.primary ? '.jtox-ds-fixed' : '.jtox-ds-variable', column: colId, id: fId}).on('change', fnShowColumn)
-          
+
           // and push it into the proper list.
           colList.push(col);
         });
       }
-      
+
       // now - sort columns and create the tables...
       if (self.settings.fixedWidth != null)
       	jT.$(".jtox-ds-fixed", self.rootElement).width(self.settings.fixedWidth);
-      	
+
       jT.ui.sortColDefs(fixCols);
       self.fixTable = (jT.$(".jtox-ds-fixed table", self.rootElement).dataTable({
         "bPaginate": false,
@@ -2258,7 +2258,7 @@ var jToxCompound = (function () {
         "bSort": false,
         "fnCreatedRow": function( nRow, aData) {
           // attach the click handling
-          var iDataIndex = aData.index;          
+          var iDataIndex = aData.index;
           if (self.settings.hasDetails)
             jT.$('.jtox-details-open', nRow).on('click', function(e) { fnShowDetails(nRow, e); });
           jT.$(nRow).data('jtox-index', iDataIndex);
@@ -2294,7 +2294,7 @@ var jToxCompound = (function () {
 
 	        // equalize multi-rows, if there are any
 	        ccLib.equalizeHeights.apply(window, jT.$('td.jtox-multi table tbody', nRow).toArray());
-          
+
           jT.$(nRow).addClass('jtox-row');
           jT.$(nRow).data('jtox-index', iDataIndex);
           ccLib.fireCallback(self.settings.onRow, self, nRow, aData, iDataIndex);
@@ -2307,7 +2307,7 @@ var jToxCompound = (function () {
             var idx = jT.$(sorted[i]).data('jtox-index');
             self.orderList[idx] = i;
           }
-          
+
           if (rlen > 0)
             jT.$(self.fixTable).dataTable().fnSort([[1, "asc"]]);
         },
@@ -2317,27 +2317,27 @@ var jToxCompound = (function () {
 
     updateTables: function() {
       var self = this;
-      if (self.settings.hasDetails) 
+      if (self.settings.hasDetails)
         $('div.jtox-details-box', self.rootElement).remove();
 
       self.filterEntries(jT.$('.jtox-controls input', self.rootElement).val());
     },
-    
+
     /* Prepare the groups and the features.
     */
     prepareGroups: function (miniset) {
       var self = this;
-      
+
       var grps = self.settings.configuration.groups;
       if (typeof grps == 'function')
         grps = grps(miniset, self);
-        
+
       self.groups = {};
       for (var i in grps){
         var grp = grps[i];
         if (ccLib.isNull(grp))
           continue;
-          
+
         var grpArr = (typeof grp == "function" || typeof grp == "string") ? ccLib.fireCallback(grp, self, i, miniset) : grp;
         self.groups[i] = [];
         ccLib.enumObject(grpArr, function(fid, idx) {
@@ -2354,8 +2354,8 @@ var jToxCompound = (function () {
         });
       }
     },
-    
-    /* Enumerate all recofnized features, caling fnMatch(featureId, groupId) for each of it. 
+
+    /* Enumerate all recofnized features, caling fnMatch(featureId, groupId) for each of it.
     Return true from the function to stop enumeration, which in turn will return true if it was stopped.
     */
     enumerateFeatures: function(fnMatch) {
@@ -2366,27 +2366,27 @@ var jToxCompound = (function () {
           if (stopped = fnMatch(self.groups[gr][i], gr))
             break;
         }
-        
+
         if (stopped)
           break;
       }
-      
+
       return stopped;
     },
-    
+
     filterEntries: function(needle) {
       var self = this;
-      
+
       if (ccLib.isNull(needle))
         needle = '';
       else
         needle = needle.toLowerCase();
-        
+
       var dataFeed = [];
       if (needle != '') {
         for (var i = 0, slen = self.dataset.dataEntry.length;i < slen; ++i){
           var entry = self.dataset.dataEntry[i];
-  
+
           var match = self.enumerateFeatures(function(fId, gr){
             var feat = self.feature[fId];
             if (feat.search !== undefined && !feat.search)
@@ -2394,8 +2394,8 @@ var jToxCompound = (function () {
             var val = self.featureValue(fId, entry, 'sort');
             return !ccLib.isNull(val) && val.toString().toLowerCase().indexOf(needle) >= 0;
           });
-          
-            
+
+
           if (match)
             dataFeed.push(entry);
         }
@@ -2403,7 +2403,7 @@ var jToxCompound = (function () {
       else {
         dataFeed = self.dataset.dataEntry;
       }
-      
+
       jT.$(self.fixTable).dataTable().fnClearTable();
       jT.$(self.varTable).dataTable().fnClearTable();
       jT.$(self.fixTable).dataTable().fnAddData(dataFeed);
@@ -2413,30 +2413,30 @@ var jToxCompound = (function () {
       ccLib.fillTree(jT.$('.jtox-controls', self.rootElement)[0], {
         "filtered-text": !needle ? " " : ' (filtered to <span class="high">' + dataFeed.length + '</span>) '
       });
-      
+
       if (self.settings.showTabs){
         self.suspendEqualization = true;
-        jT.$('.jtox-ds-features .jtox-checkbox', self.rootElement).trigger('change');     
+        jT.$('.jtox-ds-features .jtox-checkbox', self.rootElement).trigger('change');
         self.suspendEqualization = false;
       }
-      
+
       // finally
       self.equalizeTables();
     },
-    
+
     // These two are shortcuts for calling the queryEntries routine
     nextPage: function() {
       var self = this;
       if (self.entriesCount == null || self.pageStart + self.pageSize < self.entriesCount)
         self.queryEntries(self.pageStart + self.pageSize);
     },
-    
+
     prevPage: function() {
       var self = this;
       if (self.pageStart > 0)
         self.queryEntries(self.pageStart - self.pageSize);
     },
-    
+
     updateControls: function (qStart, qSize) {
       var self = this;
       var pane = jT.$('.jtox-controls', self.rootElement)[0];
@@ -2444,20 +2444,20 @@ var jToxCompound = (function () {
         "pagestart": qSize > 0 ? qStart + 1 : 0,
         "pageend": qStart + qSize
       });
-      
+
       var nextBut = jT.$('.next-field', pane);
       if (self.entriesCount == null || qStart + qSize < self.entriesCount)
         jT.$(nextBut).addClass('paginate_enabled_next').removeClass('paginate_disabled_next');
       else
         jT.$(nextBut).addClass('paginate_disabled_next').removeClass('paginate_enabled_next');
-        
+
       var prevBut = jT.$('.prev-field', pane);
       if (qStart > 0)
         jT.$(prevBut).addClass('paginate_enabled_previous').removeClass('paginate_disabled_previous');
       else
         jT.$(prevBut).addClass('paginate_disabled_previous').removeClass('paginate_enabled_previous');
     },
-    
+
     queryUri: function (scope) {
       var self = this;
       if (self.datasetUri == null)
@@ -2468,10 +2468,10 @@ var jToxCompound = (function () {
         scope.from = 0;
       if (scope.size == null)
         scope.size = self.pageSize;
-        
+
       return ccLib.addParameter(self.datasetUri, "page=" + Math.floor(scope.from / scope.size) + "&pagesize=" + scope.size);
     },
-    
+
     // make the actual query for the (next) portion of data.
     queryEntries: function(from, size, dataset) {
       var self = this;
@@ -2488,13 +2488,13 @@ var jToxCompound = (function () {
           var qStart = self.pageStart = Math.floor(scope.from / scope.size) * scope.size;
           if (dataset.dataEntry.length < self.pageSize) // we've reached the end!!
             self.entriesCount = qStart + dataset.dataEntry.length;
-          
+
           // then process the dataset
           self.dataset = cls.processDataset(dataset, $.extend(true, {}, dataset.feature, self.feature), self.settings.fnAccumulate, self.pageStart);
           // time to call the supplied function, if any.
           ccLib.fireCallback(self.settings.onLoaded, self, dataset);
           if (!self.settings.noInterface) {
-            // ok - go and update the table, filtering the entries, if needed            
+            // ok - go and update the table, filtering the entries, if needed
             self.updateTables();
             if (self.settings.showControls)
               // finally - go and update controls if they are visible
@@ -2504,14 +2504,14 @@ var jToxCompound = (function () {
         else
           ccLib.fireCallback(self.settings.onLoaded, self, dataset);
       };
-  
+
       // we may be passed dataset, if the initial, setup query was 404: Not Found - to avoid second such query...
       if (dataset != null)
         fillFn(dataset)
-      else 
+      else
         jT.call(self, qUri, fillFn);
     },
-    
+
     /* Retrieve features for provided dataserUri, using settings.featureUri, if provided, or making automatice page=0&pagesize=1 query
       */
     queryFeatures: function (featureUri, callback) {
@@ -2528,7 +2528,7 @@ var jToxCompound = (function () {
         if (!result && jhr.status == 404) {
           dataset = { feature: {}, dataEntry: [] }; // an empty set, to make it show the table...
         }
-        
+
         // remove the loading pane in anyways..
         if (!!result) {
           self.feature = result.feature;
@@ -2543,17 +2543,17 @@ var jToxCompound = (function () {
                 var fEl = jT.getTemplate('#jtox-ds-feature');
                 parent.appendChild(fEl);
                 ccLib.fillTree(fEl, {title: name.replace(/_/g, ' '), uri: self.featureUri(id)});
-          
+
                 var checkEl = jT.$('input[type="checkbox"]', fEl)[0];
                 if (!checkEl)
                   return;
                 checkEl.value = id;
                 if (self.settings.rememberChecks)
                   checkEl.checked = (self.featureStates[id] === undefined || self.featureStates[id]);
-          
+
                 return fEl;
               };
-  
+
               self.prepareTabs(jT.$('.jtox-ds-features', self.rootElement)[0], true, function (divEl, gr) {
                 var empty = true;
                 ccLib.enumObject(self.groups[gr], function (fId, idx, level) {
@@ -2569,25 +2569,25 @@ var jToxCompound = (function () {
                       nodeFn(fId, title, divEl);
                   }
                 });
-                
+
                 return empty;
               });
             }
-            
+
           	ccLib.fireCallback(self.settings.onPrepared, self, miniset, self);
             self.prepareTables(); // prepare the tables - we need features to build them - we have them!
             self.equalizeTables(); // to make them nicer, while waiting...
           }
           else
           	ccLib.fireCallback(self.settings.onPrepared, self, miniset, self);
-  
+
           // finally make the callback for
           callback(dataset);
         }
       });
     },
-    
-    /* Makes a query to the server for particular dataset, asking for feature list first, so that the table(s) can be 
+
+    /* Makes a query to the server for particular dataset, asking for feature list first, so that the table(s) can be
     prepared.
     */
     queryDataset: function (datasetUri, featureUri) {
@@ -2599,56 +2599,56 @@ var jToxCompound = (function () {
       datasetUri = jT.grabPaging(self, datasetUri);
 
       self.settings.baseUrl = self.settings.baseUrl || jT.grabBaseUrl(datasetUri);
-      
+
       // remember the _original_ datasetUri and make a call with one size length to retrieve all features...
       self.datasetUri = (datasetUri.indexOf('http') !=0 ? self.settings.baseUrl : '') + datasetUri;
-      
+
       var procDiv = jT.$('.jt-processing', self.rootElement).show()[0];
       if (!!self.settings.oLanguage.sLoadingRecords)
         jT.$('.message', procDiv).html(self.settings.oLanguage.sLoadingRecords);
-      
+
       self.queryFeatures(featureUri, function (dataset) {
         jT.$(procDiv).hide();
         self.queryEntries(self.pageStart, self.pageSize, dataset);
       });
     },
-    
+
     /* This is a needed shortcut that jToxQuery routine will call
     */
     query: function (uri) {
       this.queryDataset(uri);
-    }    
+    }
   }; // end of prototype
-  
+
   // merge them for future use..
   cls.baseFeatures = jT.$.extend({}, baseFeatures, defaultSettings.configuration.baseFeatures);
-  
+
   // some public, static methods
   cls.processEntry = function (entry, features, fnValue) {
     if (!fnValue)
       fnValue = defaultSettings.fnAccumulate;
-    
+
     for (var fid in entry.values) {
       var feature = features[fid];
       if (!feature)
         continue;
       var newVal = entry.values[fid];
-      
+
       // if applicable - location the feature value to a specific location whithin the entry
       if (!!feature.accumulate && !!newVal && !!feature.data) {
         var fn = typeof feature.accumulate == 'function' ? feature.accumulate : fnValue;
         var accArr = feature.data;
         if (!jT.$.isArray(accArr))
           accArr = [accArr];
-        
+
         for (var v = 0; v < accArr.length; ++v)
           ccLib.setJsonValue(entry, accArr[v], ccLib.fireCallback(fn, this, fid,  /* oldVal */ ccLib.getJsonValue(entry, accArr[v]), newVal, features));
       }
     }
-    
+
     return entry;
   };
-  
+
   cls.extractFeatures = function (entry, features, callback) {
     var data = [];
     for (var fId in features) {
@@ -2662,17 +2662,17 @@ var jToxCompound = (function () {
         }
       }
     };
-    
+
     return data;
   };
-  
+
   cls.enumSameAs = function (fid, features, callback) {
     // starting from the feature itself move to 'sameAs'-referred features, until sameAs is missing or points to itself
     // This, final feature should be considered "main" and title and others taken from it.
     var feature = features[fid];
     var base = fid.replace(/(http.+\/feature\/).*/g, "$1");
     var retId = fid;
-    
+
     for (;;){
       ccLib.fireCallback(callback, null, feature, retId);
       if (feature.sameAs == null || feature.sameAs == fid || fid == base + feature.sameAs)
@@ -2685,18 +2685,18 @@ var jToxCompound = (function () {
         else
           break;
       }
-      
+
       feature = features[retId];
     }
-    
+
     return retId;
   };
-  
+
   cls.processFeatures = function(features, bases) {
     if (bases == null)
       bases = baseFeatures;
     features = jT.$.extend(features, bases);
-    
+
     for (var fid in features) {
       var theFeat = features[fid];
       if (!theFeat.URI)
@@ -2708,10 +2708,10 @@ var jToxCompound = (function () {
         feature.sameAs = sameAs;
       });
     }
-    
+
     return features;
   };
-  
+
   cls.processDataset = function(dataset, features, fnValue, startIdx) {
     if (!features) {
       cls.processFeatures(dataset.feature);
@@ -2720,19 +2720,19 @@ var jToxCompound = (function () {
 
     if (!fnValue)
       fnValue = defaultSettings.fnAccumulate;
-    
+
     if (!startIdx)
       startIdx = 0;
-      
+
     for (var i = 0, dl = dataset.dataEntry.length; i < dl; ++i) {
       cls.processEntry(dataset.dataEntry[i], features, fnValue);
       dataset.dataEntry[i].number = i + 1 + startIdx;
       dataset.dataEntry[i].index = i;
     }
-    
+
     return dataset;
   };
-  
+
   return cls;
 })();
 /* toxdataset.js - A kit for querying/manipulating all available datasets
@@ -4383,7 +4383,7 @@ var jToxLog = (function () {
 
 var jToxEndpoint = (function () {
   var defaultSettings = { // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
-    selectionHandler: null,   // selection handler to be attached on checkbox, for jToxQuery integration    
+    selectionHandler: null,   // selection handler to be attached on checkbox, for jToxQuery integration
     noInterface: false,       // run in interface-less mode, with data retrieval and callback calling only
     heightStyle: "content",   // the accordition heightStyle
     hideFilter: false,        // if you don't want to have filter box - just hide it
@@ -4405,7 +4405,7 @@ var jToxEndpoint = (function () {
       "sInfo": "Showing _TOTAL_ endpoint(s) (_START_ to _END_)"
     },
     /* endpointUri */
-    configuration: { 
+    configuration: {
       columns : {
         endpoint: {
           'Id': { sTitle: "Id", mData: "uri", bSortable: false, sWidth: "30px", mRender: function (data, type, full) { return ''; } },
@@ -4416,24 +4416,24 @@ var jToxEndpoint = (function () {
       }
     }
   };
-  
+
   var cls = function (root, settings) {
     var self = this;
     self.rootElement = root;
     jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even when manually initialized
 
     self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings);
-        
+
     if (!self.settings.noInterface) {
       self.rootElement.appendChild(jT.getTemplate('#jtox-endpoint'));
       self.init(settings);
     }
-        
+
     // finally, wait a bit for everyone to get initialized and make a call, if asked to
     if (self.settings.endpointUri != undefined || self.settings.loadOnInit)
       self.loadEndpoints(self.settings.endpointUri)
   };
-  
+
   // now the editors...
   cls.linkEditors = function (kit, root, settings) { // category, top, onchange, conditions
     // get the configuration so we can setup the fields and their titles according to it
@@ -4455,10 +4455,10 @@ var jToxEndpoint = (function () {
       // prepare the options
       if (!options)
         options = {};
-      
-      // finally - configure the autocomplete options, themselves to initialize the component itself
+
+      // finally - configure the autocomplete options themselves to initialize the component itself
       if (!options.source) options.source = function( request, response ) {
-        jT.call(kit, service, { method: "GET", data: { 
+        jT.call(kit, service, { method: "GET", data: {
           'category': settings.category,
           'top': settings.top,
           'max': kit.settings.maxHits || defaultSettings.maxHits,
@@ -4473,22 +4473,22 @@ var jToxEndpoint = (function () {
           }));
         });
       };
-      
+
       // and the change functon
       if (!options.change) options.change = function (e, ui) {
         settings.onchange.call(this, e, field, !ui.item ? ccLib.trim(this.value) : ui.item.value);
       };
-      
+
       // and the final parameter
       if (!options.minLength) options.minLength = 0;
-      
+
       return jT.$('input', box[0]).autocomplete(options);
     };
-        
+
     var putValueComplete = function (root, configEntry) {
       var field = root.data('field');
       var extractLast = function( val ) { return !!val ? val.split( /[,\(\)\s]*/ ).pop() : val; };
-      var parseValue = function ( text ) { 
+      var parseValue = function ( text ) {
         var obj = {};
         var parsers = [
           {
@@ -4498,7 +4498,7 @@ var jToxEndpoint = (function () {
             adjust: function (obj, parse) {
               if (!obj.upValue) delete obj.upQualifier;
               else              obj.upQualifier = parse[4] == ']' ? '<=' : '<';
-              
+
               if (!obj.loValue) delete obj.loQualifier;
               else              obj.loQualifier = parse[1] == '[' ? '>=' : '>';
             }
@@ -4525,7 +4525,7 @@ var jToxEndpoint = (function () {
             fields: ['', 'loValue', 'loQualifier', 'unit'],
           }
         ];
-        
+
         for (var pi = 0;pi < parsers.length; ++pi) {
           var parse = text.match(parsers[pi].regex);
           if (!parse)
@@ -4541,15 +4541,15 @@ var jToxEndpoint = (function () {
           if (!!obj.unit) obj.unit = obj.unit.trim();
           break;
         }
-        
+
         if (pi >= parsers.length)
           obj.textValue = ccLib.trim(text);
-          
+
         return obj;
       };
-      
+
       var allTags = [].concat(kit.settings.loTags || defaultSettings.loTags, kit.settings.hiTags || defaultSettings.hiTags, kit.settings.units || defaultSettings.units);
-      
+
       var autoEl = putAutocomplete(root, null, configEntry, {
         change: function (e, ui) {
           settings.onchange.call(this, e, field, parseValue(this.value));
@@ -4564,23 +4564,23 @@ var jToxEndpoint = (function () {
         select: function( event, ui ) {
           var theVal = this.value,
               last = extractLast(theVal);
-          
+
           this.value = theVal.substr(0, theVal.length - last.length) + ui.item.value + ' ';
           return false;
         }
       });
 
-      // it might be a hidden one - so, take care for this      
+      // it might be a hidden one - so, take care for this
       if (!!autoEl) autoEl.bind('keydown', function (event) {
         if ( event.keyCode === jT.$.ui.keyCode.TAB && !!autoEl.menu.active )
           event.preventDefault();
       });
     };
-    
+
     // deal with endpoint name itself
     putAutocomplete(jT.$('div.box-endpoint', root), '/query/experiment_endpoints', ccLib.getJsonValue(config, 'effects.endpoint'));
     putAutocomplete(jT.$('div.box-interpretation', root), '/query/interpretation_result', ccLib.getJsonValue(config, 'interpretation.result'));
-    
+
     jT.$('.box-conditions', root).hide(); // to optimize process with adding children
     if (!!settings.conditions) {
       // now put some conditions...
@@ -4598,12 +4598,12 @@ var jToxEndpoint = (function () {
       if (any)
         jT.$('.box-conditions', root).show();
     }
-      
+
     // now comes the value editing mechanism
     var confRange = ccLib.getJsonValue(config, 'effects.result') || {};
     var confText = ccLib.getJsonValue(config, 'effects.text') || {};
     putValueComplete(jT.$('.box-value', root), confRange.bVisible === false ? confText : confRange);
-    
+
     // now initialize other fields, marked with box-field
     jT.$('.box-field', root).each(function () {
       var name = jT.$(this).data('name');
@@ -4612,35 +4612,35 @@ var jToxEndpoint = (function () {
       });
     });
   };
-  
+
   cls.prototype = {
     init: function (settings) {
       var self = this;
-      
+
       // we can redefine onDetails only if there is not one passed and we're asked to show editors at ll
       if (!!self.settings.showEditors && !self.settings.onDetails) {
         self.edittedValues = {};
         self.settings.onDetails = function (root, data, element) {
           self.edittedValues[data.endpoint] = {};
-          cls.linkEditors(self, root.appendChild(jT.getTemplate('#jtox-endeditor')), { 
-            category: data.endpoint, 
-            top: data.subcategory, 
-            conditions: self.settings.showConditions, 
+          cls.linkEditors(self, root.appendChild(jT.getTemplate('#jtox-endeditor')), {
+            category: data.endpoint,
+            top: data.subcategory,
+            conditions: self.settings.showConditions,
             onchange: function (e, field, value) { ccLib.setJsonValue(self.edittedValues[data.endpoint], field, value); }
           });
         };
       }
-      
+
       // deal if the selection is chosen
       if (!!self.settings.selectionHandler || !!self.settings.onDetails)
         jT.ui.putActions(self, self.settings.configuration.columns.endpoint.Id);
-      
+
       self.settings.configuration.columns.endpoint.Id.sTitle = '';
-      
+
       // again , so that changed defaults can be taken into account.
       self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
       var cols = jT.ui.processColumns(self, 'endpoint');
-      
+
       // make the accordition now...
     	jT.$('.jtox-categories', self.rootElement).accordion( {
     		heightStyle: self.settings.heightStyle
@@ -4650,8 +4650,8 @@ var jToxEndpoint = (function () {
       // and now - initialize all the tables...
       jT.$('table', self.rootElement).each(function () {
         var name = this.className;
-        self.tables[name] = jT.ui.putTable(self, this, "endpoint", { 
-          "aoColumns": cols, 
+        self.tables[name] = jT.ui.putTable(self, this, "endpoint", {
+          "aoColumns": cols,
           "fnInfoCallback": self.updateStats(name),
           "aaSortingFixed": [[1, 'asc']],
           "onRow": function (nRow, aData, iDataIndex) {
@@ -4659,7 +4659,7 @@ var jToxEndpoint = (function () {
           }
         });
       });
-      
+
       if (!!self.settings.hideFilter)
         jT.$('.filter-box', self.rootElement).remove();
       else {
@@ -4667,34 +4667,34 @@ var jToxEndpoint = (function () {
         var fFilter = function (ev) {
           if (!!filterTimeout)
             clearTimeout(filterTimeout);
-      
+
           var field = ev.currentTarget;
-          
+
           filterTimeout = setTimeout(function() {
             jT.$('table', self.rootElement).each(function () {
               jT.$(this).dataTable().fnFilter(field.value);
             });
           }, 300);
         };
-        
+
         jT.$('.filter-box input', self.rootElement).on('keydown', fFilter);
       }
-      
+
       if (!self.settings.showMultiselect || !self.settings.selectionHandler)
         jT.$('h3 a', self.rootElement).remove();
       else
         jT.ui.installMultiSelect(self.rootElement, null, function (el) { return el.parentNode.parentNode.nextElementSibling; });
     },
-    
+
     getValues: function (needle) {
       var self = this;
-      
+
       var filter = null;
       if (!needle)
         filter = function (end) { return true; };
       else if (typeof needle != 'function')
         filter = function (end) { return end.indexOf(needle) >= 0; };
-      else 
+      else
         filter = needle;
 
       for (var endpoint in self.edittedValues) {
@@ -4703,7 +4703,7 @@ var jToxEndpoint = (function () {
       }
       return null;
     },
-    
+
     updateStats: function (name) {
       var self = this;
       return function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
@@ -4719,12 +4719,12 @@ var jToxEndpoint = (function () {
         }
         else
           html = '';
-        
-        jT.$('div.jtox-details span', head).html(html); 
+
+        jT.$('div.jtox-details span', head).html(html);
         return sPre;
       }
     },
-    
+
     fillEntries: function (facet) {
       var self = this;
       // first we need to group them and extract some summaries
@@ -4737,7 +4737,7 @@ var jToxEndpoint = (function () {
 
         cat.push(entry);
       }
-      
+
       // now, as we're ready - go and fill everything
       jT.$('h3', self.rootElement).each(function () {
         var name = jT.$(this).data('cat');
@@ -4749,7 +4749,7 @@ var jToxEndpoint = (function () {
           table.fnAddData(cat);
       });
     },
-    
+
     loadEndpoints: function (uri) {
       var self = this;
       if (uri == null)
@@ -4773,21 +4773,21 @@ var jToxEndpoint = (function () {
         }
       });
     },
-    
+
     query: function (uri) {
       this.loadEndpoints(uri);
     },
-    
+
     modifyUri: function (uri) {
       jT.$('input[type="checkbox"]', this.rootElement).each(function () {
         if (this.checked)
           uri = ccLib.addParameter(uri, 'feature_uris[]=' + encodeURIComponent(this.value + '/feature'));
       })
-      
+
       return uri;
     }
   };
-  
+
   return cls;
 })();
 jT.templates['widget-search']  = 
@@ -5080,11 +5080,11 @@ jT.templates['editor-endpoint']  =
 "  	    <input type=\"text\" placeholder=\"Endpoint_\"/>" +
 "	    </div>" +
 "	    <div class=\"jtox-medium-box box-value\" data-field=\"value\">" +
-"  	    <div class=\"jtox-details font-heavy\">Value range</div>" +
+"  	    <div class=\"jtox-details font-heavy jtox-required\">Value range</div>" +
 "  	    <input type=\"text\"/>" +
 "	    </div>" +
 "      <div class=\"jtox-medium-box box-interpretation\" data-field=\"interpretation_result\">" +
-"  	    <div class=\"jtox-details font-heavy\">Intepretation of the results</div>" +
+"  	    <div class=\"jtox-details font-heavy jtox-required\">Intepretation of the results</div>" +
 "  	    <input type=\"text\" placeholder=\"Intepretation\"/>" +
 "      </div>" +
 "      <div class=\"size-full box-conditions\">" +
