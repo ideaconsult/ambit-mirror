@@ -310,14 +310,14 @@ public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>
 
 	Form form = getParams();
 	String[] gp = OpenTox.params.sameas.getValuesArray(form);
-	if (gp != null) {
-	    for (String g : gp) {
-		Property p = new Property(g);
-		p.setEnabled(true);
-		p.setLabel(g);
-		groupProperties.add(p);
-	    }
-
+	if (gp == null || gp.length==0)
+	    gp = new String[] { "http://www.opentox.org/api/1.1#ChemicalName", "http://www.opentox.org/api/1.1#CASRN",
+		    "http://www.opentox.org/api/1.1#EINECS" };
+	for (String g : gp) {
+	    Property p = new Property(g);
+	    p.setEnabled(true);
+	    p.setLabel(g);
+	    groupProperties.add(p);
 	}
 	if (enableFeatures) {
 	    LiteratureEntry ref = LiteratureEntry.getBundleReference(bundle);
