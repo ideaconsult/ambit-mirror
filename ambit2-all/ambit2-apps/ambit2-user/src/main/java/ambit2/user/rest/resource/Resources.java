@@ -29,6 +29,7 @@ public class Resources {
 	public static final String reset = "/reset";
 	public static final String forgotten = "/forgotten";
 	public static final String failed = "/failed";
+	public static final String bundle = "/bundle";
 	public static final String help = "/help";
 
 	

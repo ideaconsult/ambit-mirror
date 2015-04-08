@@ -125,6 +125,14 @@
 							   "type": "int",
 							   "paramType": "form",
 							   "allowMultiple": false
+							},
+							{
+								   "name": "bundle_uri",
+								   "description": "URI of a bundle to create a copy of. If this field is used the rest are ignored",
+								   "required": false,
+								   "type": "String",
+								   "paramType": "form",
+								   "allowMultiple": false
 							}								
 			            ],
 			            "responseMessages": [

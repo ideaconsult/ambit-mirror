@@ -9,68 +9,6 @@
     "resourcePath": "/query",
 	"apis": [
      	{
-            "path": "/query/study",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "Search endpoint summary",
-                    "notes": "Returns endpoint summary",
-                    "type": "Facet",
-                    "nickname": "getEndpointSummary",
-                     <#include "/apidocs/authz.ftl" >
-                    "parameters": [
-						{
-							    "name": "topcategory",
-							    "description": "Top endpoint category",
-							    "required": false,
-							    "type": "string",
-							    "paramType": "query",
-							    "allowMultiple": false,
-							    "enum" : ["P-CHEM","ENV FATE","ECOTOX","TOX"]
-						},
-						{
-							    "name": "category",
-							    "description": "Endpoint category (The value in the protocol.category.code field)",
-							    "required": false,
-							    "type": "string",
-							    "paramType": "query",
-							    "allowMultiple": false,
-							    "defaultValue" :"",
-							    <#include "/apidocs/parameter_endpointcategory_enum.ftl" >
-						},                    
-			            {
-				              "name": "filterbybundle",
-				              "description": "Bundle URI",
-				              "required": false,
-				              "type": "string",
-				              "paramType": "query",
-				              "defaultValue": "${ambit_root}/bundle/1",
-				              "allowMultiple"  : false
-				        },			     
-			            {
-				              "name": "selected",
-				              "description": "Applicable if filterbybundle is present",
-				              "required": false,
-				              "type": "string",
-				              "paramType": "query",
-				              "defaultValue": "endpoints",
-				              "enum" : ["endpoints","substances"],
-				              "allowMultiple"  : false
-				        },					               
-						<#include "/apidocs/parameters_page.ftl" >				            			            
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 404,
-                            "message": "Not found"
-                        },
-						<#include "/apidocs/error_aa.ftl" >,
-						<#include "/apidocs/error_500.ftl" >                            
-                    ]
-                }
-            ]
-     	},
-     	{
             "path": "/query/type_strucs",
             "operations": [
                 {

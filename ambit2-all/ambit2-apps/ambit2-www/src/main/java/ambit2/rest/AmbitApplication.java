@@ -75,6 +75,7 @@ import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.bookmark.BookmarkResource;
+import ambit2.rest.bundle.BundleMetadataResource;
 import ambit2.rest.dataset.CollectionStructureResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
@@ -434,7 +435,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	    /**
 	     * /property/{id}
 	     */
-	    router.attach("/bundle", new BundleRouter(getContext()));
+	    router.attach(Resources.bundle, new BundleRouter(getContext()));
 
 	    router.attach(SubstancePropertyResource.substanceproperty, SubstancePropertyResource.class);
 	    router.attach(String.format("%s/{%s}/{%s}/{%s}/{%s}", SubstancePropertyResource.substanceproperty,
@@ -657,6 +658,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		MyRouter myAccountRouter = new MyRouter(getContext());
 		myAccountRouter.attachDefault(MyAccountResource.class);
 		myAccountRouter.attach(ambit2.user.rest.resource.Resources.reset, MyAccountPwdResetResource.class);
+		myAccountRouter.attach(Resources.bundle, BundleMetadataResource.class);
+		
 		router.attach(ambit2.user.rest.resource.Resources.myaccount, myAccountRouter);
 		router.attach(ambit2.user.rest.resource.Resources.user, new UserRouter(getContext(), org_router,
 			projectRouter));
@@ -665,6 +668,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			ambit2.user.rest.resource.Resources.confirm), RegistrationConfirmResource.class);
 		router.attach(String.format("%s%s", ambit2.user.rest.resource.Resources.register,
 			ambit2.user.rest.resource.Resources.notify), AMBITRegistrationNotifyResource.class);
+		
 		/*
 		 * /forgotten /forgotten/confirm /forgotten/notify
 		 * /forgotten/failed
