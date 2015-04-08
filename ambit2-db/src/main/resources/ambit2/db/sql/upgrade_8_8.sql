@@ -8,7 +8,9 @@ ALTER TABLE `bundle` ADD COLUMN `published_status` ENUM('draft','published','arc
 ALTER TABLE `bundle` ADD INDEX `published_status` (`published_status` ASC) ;
 -- updated timestamp
 ALTER TABLE `bundle` CHANGE COLUMN `created` `created` TIMESTAMP NOT NULL  , ADD COLUMN `updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP  AFTER `published_status` ;
-update bundle set updated=created; 
+ALTER TABLE `bundle` CHANGE COLUMN `updated` `updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+update bundle set updated=created;
+ 
 -- the name is not anymore unique (could be the same across versions and copies)
 ALTER TABLE `bundle` DROP INDEX `assessment_name`;
 ALTER TABLE `bundle` ADD INDEX `assessment_name` (`name` ASC) ;
