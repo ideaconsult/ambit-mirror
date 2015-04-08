@@ -1765,7 +1765,7 @@ $.ajax({
 
 
 function defineBundlesTable(root,url,deleteVisible,profile) {
-	if ("lri" == profile) return defineBundlesTable_lri(root,url,deleteVisible);
+	if ("lri" == profile) return defineBundlesTable_lri(root,url,deleteVisible,false);
 	
 	var oTable = $('.datasetstable').dataTable( {
 	"sAjaxDataProp" : "dataset",
@@ -1894,7 +1894,7 @@ function defineBundlesTable(root,url,deleteVisible,profile) {
 	return oTable;
 }
 
-function defineBundlesTable_lri(root,url,deleteVisible) {
+function defineBundlesTable_lri(root,url,deleteVisible,copyVisible) {
 	var oTable = $('.datasetstable').dataTable( {
 	"sAjaxDataProp" : "dataset",
 	"sAjaxSource": url,	
@@ -1983,9 +1983,29 @@ function defineBundlesTable_lri(root,url,deleteVisible) {
   	  					"fnRender" : function(o,val) {
   							 return  val;			
   						}     	              
-    		  		}   
+    		  		},
+    		  		{  
+        				  "bSortable" : false,
+         	              "mDataProp":"id",
+         	              "aTargets": [ 6 ],
+         	             "bVisible" : (deleteVisible || copyVisible),
+         	             "sWidth" : "5%",
+         	              "bUseRendered" : false,	
+    	  					"fnRender" : function(o,val) {
+   	  						 var action = root + "/bundle";
+	  						 var uri = action + "/" + val;    	  						
+    	  					 if (copyVisible) {
+    	  						 var sOut = "<form method='POST' action='"+action+"'><input name='bundle_uri' value='"+uri+"' type='hidden'><input type='submit' title='Create a copy' value='Copy'></form>";
+    							 return  sOut;
+    	  					 } else if (deleteVisible) {
+    	  						 var sOut = "<form method='POST' action='"+uri+"?method=DELETE' onsubmit='return confirmDeleteBundle(\""+o.aData.title+"\")'><input name='bundle_uri' value='"+uri+"' type='hidden'><input type='submit' title='Remove' value='Remove'></form>";
+    							 return  sOut;    	  						 
+    	  					 } else return "";
+    						}     	              
+      		  		}    		  		
      				],
  	  "aaSorting": [[0, 'desc']]		  
 	});
 	return oTable;
 }
+

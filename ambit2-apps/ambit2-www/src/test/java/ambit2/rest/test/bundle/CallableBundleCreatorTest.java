@@ -67,6 +67,40 @@ public class CallableBundleCreatorTest extends DbUnitTest {
     }
 
     @Test
+    public void testCreateBundleCopy() throws Exception {
+	setUpDatabase(dbFile);
+	IDatabaseConnection c = getConnection();
+	IDatabaseConnection c1 = getConnection();
+
+	Form form = new Form();
+	form.add("bundle_uri","http://localhost/bundle/1");
+
+	try {
+	    SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle();
+	    DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> reporter = new DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle>(
+		    new Reference("http://localhost"));
+	    CallableBundleCreator callable = new CallableBundleCreator(bundle, reporter, Method.POST, form,
+		    c.getConnection(), null);
+	    TaskResult task = callable.call();
+	    ITable table = c1.createQueryTable("EXPECTED",
+		    String.format("SELECT idbundle,licenseURI from bundle where name='Assessment' order by idbundle asc"));
+	    Assert.assertEquals(2, table.getRowCount());
+	    Assert.assertEquals( table.getValue(1, "licenseURI"), table.getValue(0, "licenseURI"));
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    try {
+		c.close();
+	    } catch (Exception x) {
+	    }
+	    try {
+		c1.close();
+	    } catch (Exception x) {
+	    }
+	}
+    }
+    @Test
     public void testDeleteBundle() throws Exception {
 	setUpDatabase(dbFile);
 	IDatabaseConnection c = getConnection();

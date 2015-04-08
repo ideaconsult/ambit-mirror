@@ -6,23 +6,14 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 
 <script type='text/javascript'>
-	
-	function confirmDeleteBundle(txt) {
-		return confirm("Are you sure you want to delete " + txt + "? Please confirm!");
-	}
-	
+
+
 	$(document).ready(function() {
-		loadHelp("${ambit_root}","bundle");
-		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="Bundles">Dataset of substances and studies</a></li>');
+		loadHelp("${ambit_root}","ra");
+		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="Bundles">Assessments</a></li>');
 
 		downloadForm("${ambit_request}");
-		<#if datasetid??>
-			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/_dataset?dataset_uri=${ambit_root}/bundle/${datasetid}" title="${ambit_root}/bundle/${datasetid}">/bundle/${datasetid}</a></li>');
-			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${datasetid}/metadata" title="${ambit_root}/bundle/${datasetid}/metadata">Metadata</a></li>');
-			loadDatasetMeta("${ambit_root}","${ambit_root}/bundle/${datasetid}/metadata",true);
-		<#else>
-	  		var oTable = defineBundlesTable("${ambit_root}","${ambit_request_json}",true,"${menu_profile}");
-	  	</#if>
+  		var oTable = defineBundlesTable_lri("${ambit_root}","${ambit_root}/bundle?media=application/json",false,"${menu_profile}",true);
 		jQuery("#breadCrumb").jBreadCrumb();
 		jQuery("#welcome").text("Dataset");	  	
 	});
@@ -39,29 +30,13 @@
 <!-- banner -->
 <#include "/banner_crumbs.ftl">
 
-<div class="three columns">
+<div class="one column">
 
-<form method='GET' name='searchform' id='searchform' action='${ambit_root}/bundle' style='padding:0;margin:0;'>
-
-<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-<span title='Search for datasets by name'>Search for bundles by name</span>
-		    	<input type='text'  id='search' name='search' value='' tabindex='1' >
-		    	<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
-</div>
-
-</form>
-
-<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-<a href='#' id='uri'><img src='${ambit_root}/images/link.png' alt='text/uri-list' title='Download as URI list '></a>
-<a href='#' id='rdfxml'><img src='${ambit_root}/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a>
-<a href='#' id='rdfn3'><img src='${ambit_root}/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a>
-<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
-</div>
-
+&nbsp;
 </div>
 
 
-<div class="thirteen columns remove-bottom" style="padding:0;" >
+<div class="twelve columns remove-bottom" style="padding:0;" >
 
 		<!-- Page Content
 		================================================== -->
@@ -113,11 +88,17 @@
 		</#if>
 		
 		</div>
-		
-
 
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
+</div>
+
+<div class="three columns">
+
+	<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
+	<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'></div>
+	<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'></div>
+
 </div>
 
 

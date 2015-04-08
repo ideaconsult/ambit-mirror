@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import net.idea.i5.io.IQASettings;
 import net.idea.i5.io.QASettings;
@@ -43,6 +44,7 @@ import ambit2.user.rest.resource.AMBITDBRoles;
 import ambit2.user.rest.resource.DBRoles;
 
 public class UIResource extends FreeMarkerResource {
+    private static Logger logger = Logger.getLogger(UIResource.class.getName());
     private static final String key = "key";
     protected pages page = pages.index;
 
@@ -124,7 +126,13 @@ public class UIResource extends FreeMarkerResource {
 	    public String getTemplateName() {
 		return "ra/ui-matrix";
 	    }
-	};
+	},
+	assessment_copy {
+	    @Override
+	    public String getTemplateName() {
+		return "ra/bundles";
+	    }
+	}; 
 	public String getTemplateName() {
 	    return name();
 	}
@@ -305,7 +313,7 @@ public class UIResource extends FreeMarkerResource {
 		}
 	    }
 	} catch (Exception x) {
-	    x.printStackTrace();
+	    logger.fine(x.getMessage());
 	}
 	throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 

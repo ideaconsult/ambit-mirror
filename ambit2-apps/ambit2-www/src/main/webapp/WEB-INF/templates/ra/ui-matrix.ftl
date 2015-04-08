@@ -27,9 +27,10 @@
   <script type='text/javascript'>
 
 	$(document).ready(function() {
-        jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle?page=0&pagesize=100" title="Assessments">Assessments</a></li>');
+        jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle?page=0&pagesize=100" title="Assessments">All assessments</a></li>');
         <#if bundleid??>
-        jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${bundleid}" title="Assessment">Assessment #${bundleid}</a></li>');
+        jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${bundleid}" title="Assessment">This assessment</a></li>');
+		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${bundleid}/version" title="Assessment versions">Versions</a></li>');        
         </#if>
         loadHelp("${ambit_root}","ra");
 	});
