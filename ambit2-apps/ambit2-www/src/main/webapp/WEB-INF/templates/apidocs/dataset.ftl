@@ -73,12 +73,30 @@
 							},	  
 							{
 							    "name": "feature_uris[]",
-							    "description": "Feature URIs",
+							    "description": "Feature URIs to use as columns",
 							    "required": false,
 							    "type": "string",
 							    "paramType": "query",
 							    "allowMultiple": true
 							},		
+							{
+							    "name": "sameas",
+							    "description": "Ontology URI to define groups of columns",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "query",
+							    "enum" : [
+							    "",
+							    "These are examples!",
+							    "http://www.opentox.org/api/1.1#ChemicalName",
+							    "http://www.opentox.org/api/1.1#CASRN",
+							    "http://www.opentox.org/api/1.1#EINECS",
+							    "http://www.opentox.org/echaEndpoints.owl#Carcinogenicity",
+							    "http://www.opentox.org/echaEndpoints.owl#Mutagenicity",
+							    "http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow"
+							    ],
+							    "allowMultiple": false
+							},								
 							{
 							    "name": "compound_uris[]",
 							    "description": "Compound URI",
