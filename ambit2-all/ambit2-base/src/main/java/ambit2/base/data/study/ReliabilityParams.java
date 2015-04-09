@@ -163,6 +163,7 @@ public class ReliabilityParams<VALUE> extends Params<VALUE> {
 	private static Hashtable<String, String> phrasegroup_Z05() {
 	    	Hashtable<String, String> p = new Hashtable<String,String>();
 	    	for (_r_flags f : _r_flags.values()) 
+	    	    if (f.getCode()!=null)
 	    	    p.put(f.getCode(),f.toString());
 	    	return p;
 	    }
