@@ -14,9 +14,9 @@ public class ReadEffectRecordByBundle extends ReadEffectRecordBySubstance {
 	 */
 	private static final long serialVersionUID = -1885870102248748663L;
 
-	private String sql = 
+	private String b_sql = 
 		"select p.document_prefix,hex(p.document_uuid) u,\n"+
-		"p.topcategory,p.endpointcategory,guidance,params,reference,idresult,\n"+
+		"p.topcategory,p.endpointcategory,guidance,params,reference,studyResultType,idresult,\n"+
 		"e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint\n"+ 
 		"from substance s join substance_protocolapplication p on s.prefix=p.substance_prefix and s.uuid=p.substance_uuid\n"+
 		"join substance_experiment e on p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"+
@@ -29,7 +29,7 @@ public class ReadEffectRecordByBundle extends ReadEffectRecordBySubstance {
 	}
 	@Override
 	public String getSQL() throws AmbitException {
-		return sql;
+		return b_sql;
 	}
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {

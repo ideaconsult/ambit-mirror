@@ -13,6 +13,7 @@ import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.study.MultiValue;
+import ambit2.base.data.substance.SubstanceProperty;
 import ambit2.base.json.JSONUtils;
 
 /**
@@ -76,6 +77,15 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 	    String uriSource = feature.getTitle();
 	    String typeSource = "Source";
 	    boolean isModelPredictionFeature = feature.getTitle().indexOf("/model/") > 0;
+	    if (feature instanceof SubstanceProperty) try {
+		SubstanceProperty sp = (SubstanceProperty) feature;
+		uriSource = String.format("%s/dataset/%s", getBaseReference(), Reference.encode(uriSource));		
+		if (sp.getStudyResultType()!=null) {
+        	      isModelPredictionFeature = sp.getStudyResultType().isPredicted();
+        	      typeSource = sp.getStudyResultType().toString();
+		}
+	    } catch (Exception x) {}
+	    else 
 	    if ((uriSource.indexOf("http://") < 0) && (uriSource.indexOf("https://") < 0)) {
 		if (_type.Algorithm.equals(feature.getReference().getType())) {
 		    uriSource = String.format("%s/algorithm/%s", getBaseReference(), Reference.encode(uriSource));

@@ -38,6 +38,7 @@ import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.MultiValue;
 import ambit2.base.data.study.ProtocolEffectRecord;
 import ambit2.base.data.study.Value;
+import ambit2.base.data.study.ReliabilityParams._r_flags;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.data.substance.SubstanceName;
 import ambit2.base.data.substance.SubstanceOwner;
@@ -131,24 +132,20 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	    return createCSVReporter(filenamePrefix);
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
 	    /*
-	    switch (rdfwriter) {
-	    case stax: {
-		return new RDFStaXConvertor(new DatasetRDFStaxReporter(null, getRequest(), getTemplate(),
-			getGroupProperties()), filenamePrefix);
-	    }
-	    default: { // jena
-	    */
-		return createRDFReporter(variant.getMediaType(),filenamePrefix);
-		/*
-	    }
-	    }
-	    */
+	     * switch (rdfwriter) { case stax: { return new RDFStaXConvertor(new
+	     * DatasetRDFStaxReporter(null, getRequest(), getTemplate(),
+	     * getGroupProperties()), filenamePrefix); } default: { // jena
+	     */
+	    return createRDFReporter(variant.getMediaType(), filenamePrefix);
+	    /*
+	     * } }
+	     */
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE)
 		|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
 		|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
 		|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG)
 		|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)) {
-	    return createRDFReporter(variant.getMediaType(),filenamePrefix);
+	    return createRDFReporter(variant.getMediaType(), filenamePrefix);
 	} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
 	    return new OutputWriterConvertor(new SDFReporter<QueryStructureByID>(template, getGroupProperties(),
 		    changeLineSeparators), ChemicalMediaType.CHEMICAL_MDLSDF, filenamePrefix);
@@ -198,6 +195,13 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 
 			    SubstanceProperty key = new SubstanceProperty(detail.getProtocol().getTopCategory(), detail
 				    .getProtocol().getCategory(), val.getKey(), detail.getUnit(), ref);
+			    try {
+				key.setStudyResultType(_r_flags.valueOf(detail.getStudyResultType().replace(":", "")
+					.replace("_", "").replace(" ", "").replace("-", "").replace(")", "")
+					.replace("(", "")));
+			    } catch (Exception x) {
+				key.setStudyResultType(null);
+			    }
 			    key.setExtendedURI(true);
 			    key.setIdentifier(detail.getSampleID() + "/" + val.getKey());
 
@@ -250,6 +254,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 			 * }
 			 */
 			ProtocolEffectRecord<String, IParams, String> effect = new ProtocolEffectRecord<String, IParams, String>();
+			effect.setStudyResultType(detail.getStudyResultType());
 			effect.setProtocol(detail.getProtocol());
 			if (detail.getEndpoint() != null)
 			    effect.setEndpoint(detail.getEndpoint());
@@ -393,7 +398,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	return null;
     }
 
-    protected IProcessor<Q, Representation> createRDFReporter(MediaType media,String filenamePrefix) {
+    protected IProcessor<Q, Representation> createRDFReporter(MediaType media, String filenamePrefix) {
 	groupProperties.add(new SubstancePublicName());
 	groupProperties.add(new SubstanceName());
 	groupProperties.add(new SubstanceUUID());
@@ -401,16 +406,18 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	DatasetRDFReporter reporter = new DatasetRDFReporter(getRequest(), media, getTemplate(), getGroupProperties()) {
 	    @Override
 	    protected boolean acceptProperty(Property p) {
-	        return true;
+		return true;
 	    }
+
 	    @Override
 	    protected void configurePropertyProcessors() {
 		getProcessors().add(getPropertyProcessors(false, false));
 	    }
 	};
-	return new RDFJenaConvertor(reporter,media,filenamePrefix) ;
+	return new RDFJenaConvertor(reporter, media, filenamePrefix);
 
     }
+
     protected IProcessor<Q, Representation> createJSONReporter(String filenamePrefix) {
 	groupProperties.add(new SubstancePublicName());
 	groupProperties.add(new SubstanceName());
