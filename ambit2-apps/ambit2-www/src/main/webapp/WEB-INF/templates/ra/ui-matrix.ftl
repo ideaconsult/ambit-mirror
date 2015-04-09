@@ -89,12 +89,16 @@
 	            </tr>
           
 	            <tr><th class="right size-third">Assessment code <a href='#' class='chelp a_code'>?</a>:</th><td><input class="data-field first-time validate" data-field="seeAlso" name="source"/></td></tr>
-	            <tr><th class="right size-third">Assessment Doclink(s) <a href='#' class='chelp a_doclink'>?</a>:</th><td><input class="data-field first-time validate" data-field="source" name="url"/></td></tr>
+	            <tr><th class="right size-third">Assessment Doclink(s) <a href='#' class='chelp a_doclink'>?</a>:</th><td><input class="data-field first-time validate" data-field="source" name="url" /></td></tr>
 	            
 	       		<span style="display:none;">
-       			<input class="data-field first-time validate" data-field="rights.URI" name="license" />
-       			<input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder" />
-       			<span class="data-stars-field"><input type="hidden" name="stars" value="0" /></span>
+       			<input class="data-field first-time validate" data-field="rights.URI" name="license" value="${ambit_root}"/>
+       			<#if username??>
+       				<input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder" value="${username}"/>
+       			<#else>
+       				<input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder" value="Default"/>
+       			</#if>
+       			<span class="data-stars-field"><input type="hidden" name="stars" value="5" /></span>
        			</span>
                 <tr><th class="right size-third">Assessment ID<a href='#' class='chelp assessment'>?</a>:</th><td class="data-field" data-field="number"></td></tr>
                 
