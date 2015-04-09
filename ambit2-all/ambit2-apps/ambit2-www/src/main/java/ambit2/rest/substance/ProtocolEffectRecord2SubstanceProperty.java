@@ -16,6 +16,7 @@ import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.ProtocolEffectRecord;
 import ambit2.base.data.study.Value;
+import ambit2.base.data.study.ReliabilityParams._r_flags;
 import ambit2.base.data.substance.SubstanceProperty;
 
 public class ProtocolEffectRecord2SubstanceProperty implements
@@ -56,17 +57,29 @@ public class ProtocolEffectRecord2SubstanceProperty implements
 
     public PropertyAnnotations conditions2annotations(ProtocolEffectRecord<String, IParams, String> detail)
 	    throws JsonProcessingException, IOException {
-	 
+
 	PropertyAnnotations ann = new PropertyAnnotations();
-	if (detail.getConditions()==null) return ann;
+	/* works but is a hack
+	if (detail.getStudyResultType() != null) {
+	    PropertyAnnotation a = new PropertyAnnotation();
+	    a.setType("reliability");
+	    a.setPredicate("studyResultType");
+	    a.setObject(detail.getStudyResultType());
+	    ann.add(a);
+	}
+	*/
+	if (detail.getConditions() == null)
+	    return ann;
 	Iterator<String> keys = detail.getConditions().keySet().iterator();
 	while (keys.hasNext()) {
 	    String key = keys.next();
 	    Object o = detail.getConditions().get(key);
-	    if (o==null) continue;
+	    if (o == null)
+		continue;
 	    else if (o instanceof Value) {
 		Value value = (Value) o;
 		PropertyAnnotation a = new PropertyAnnotation();
+		a.setType("condition");
 		a.setPredicate(key);
 		if (value.getLoValue() instanceof String) {
 		    a.setObject(value.getLoValue());
@@ -80,6 +93,7 @@ public class ProtocolEffectRecord2SubstanceProperty implements
 		ann.add(a);
 	    } else {
 		PropertyAnnotation a = new PropertyAnnotation();
+		a.setType("condition");
 		a.setPredicate(key);
 		a.setObject(o.toString());
 		ann.add(a);
@@ -90,11 +104,18 @@ public class ProtocolEffectRecord2SubstanceProperty implements
 
     @Override
     public SubstanceProperty process(ProtocolEffectRecord<String, IParams, String> detail) throws Exception {
+
 	SubstanceProperty key = new SubstanceProperty(detail.getProtocol().getTopCategory(), detail.getProtocol()
 		.getCategory(), detail.getEndpoint(), detail.getUnit(), getReference(detail));
 	key.setExtendedURI(true);
 	key.setIdentifier(detail.getSampleID());
 	key.setAnnotations(conditions2annotations(detail));
+	
+	try {
+	    key.setStudyResultType(_r_flags.valueOf(detail.getStudyResultType().replace(":","").replace("_","").replace(" ","").replace("-","").replace(")","").replace("(","")));
+	} catch (Exception x) {
+	    key.setStudyResultType(null);
+	}
 	return key;
     }
 

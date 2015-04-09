@@ -13,22 +13,157 @@ import com.google.common.base.Objects;
 
 public class ReliabilityParams<VALUE> extends Params<VALUE> {
 
-	/**
-	 * 
-	 */
+	public enum _r_flags {
+	    experimentalresult {
+		@Override
+		public String toString() {
+		    return "experimental result";
+		}
+		@Override
+		public String getCode() {
+		    return "1895";
+		}
+		@Override
+		public String getIdentifier() {
+		    return "E";
+		}
+		@Override
+		public boolean isPredicted() {
+		    return false;
+		}
+	    },
+	    experimentalstudyplanned {
+		@Override
+		public String toString() {
+		    return "experimental study planned";
+		}
+		@Override
+		public String getCode() {
+		    return "1896";
+		}
+		@Override
+		public String getIdentifier() {
+		    return "P";
+		}
+		@Override
+		public boolean isPredicted() {
+		    return false;
+		}
+	    },
+	    estimatedbycalculation {
+		@Override
+		public String toString() {
+		    return "estimated by calculation";
+		}
+		@Override
+		public String getCode() {
+		    return "1885";
+		}
+		@Override
+		public String getIdentifier() {
+		    return "C";
+		}
+	    },
+	    readacrossbasedongroupingofsubstancescategoryapproach {
+		@Override
+		public String toString() {
+		    return "read-across based on grouping of substances (category approach)";
+		}
+		@Override
+		public String getCode() {
+		    return "2303";
+		}
+		@Override
+		public String getIdentifier() {
+		    return "RAcat";
+		}
+	    },
+	    readacrossfromsupportingsubstancestructuralanalogueorsurrogate {
+		@Override
+		public String toString() {
+		    return "read-across from supporting substance (structural analogue or surrogate)";
+		}
+		@Override
+		public String getCode() {
+		    return "2304";
+		}
+		@Override
+		public String getIdentifier() {
+		    return "RA";
+		}
+	    },
+	    QSAR {
+		@Override
+		public String toString() {
+		    return "(Q)SAR";
+		}
+		@Override
+		public String getCode() {
+		    return "14";
+		}
+		@Override
+		public String getIdentifier() {
+		    return "QSAR";
+		}		
+	    },
+	    other {
+		@Override
+		public String toString() {
+		    return "other:";
+		}
+		@Override
+		public String getCode() {
+		    return "1342";
+		}
+		@Override
+		public String getIdentifier() {
+		    return name();
+		}
+	    },
+	    nodata {
+		@Override
+		public String toString() {
+		    return "no data";
+		}
+		@Override
+		public String getCode() {
+		    return "1173";
+		}
+	    },
+	    NOTSPECIFIED {
+		@Override
+		public String toString() {
+		    return "NOT_SPECIFIED";
+		}
+		@Override
+		public String getCode() {
+		    return "";
+		}
+	    },
+	    unsupported {
+		@Override
+		public String toString() {
+		    return "unsupported";
+		}
+		@Override
+		public String getCode() {
+		    return null;
+		}
+	    };	 	    
+	    public boolean isPredicted() {
+		return true;
+	    }
+	    public abstract String getCode();
+	    public String getIdentifier() {
+		return name();
+	    }
+	}
 	    
 	private static Hashtable<String, String> phrasegroup_Z05 = phrasegroup_Z05();
 	private static Hashtable<String, String> phrasegroup_Z05() {
 	    	Hashtable<String, String> p = new Hashtable<String,String>();
-	    	p.put("1895", "experimental result");
-	    	p.put("1896", "experimental study planned");
-	    	p.put("1885", "estimated by calculation");
-	    	p.put("2303", "read-across based on grouping of substances (category approach)");
-	    	p.put("2304", "read-across from supporting substance (structural analogue or surrogate)");
-	    	p.put("14", "(Q)SAR");
-	    	p.put("1342", "other:");
-	    	p.put("1173", "no data");
-	    	p.put("NOT_SPECIFIED", ""); 
+	    	for (_r_flags f : _r_flags.values()) 
+	    	    p.put(f.getCode(),f.toString());
 	    	return p;
 	    }
 
