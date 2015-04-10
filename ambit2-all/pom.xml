@@ -519,8 +519,8 @@
     <!-- cdk 1.4.11 is regular version, deployed to ambit repository; used 
 			since ambit 2.4.7-SNAPSHOT -->
     <cdk.version>1.4.11</cdk.version>
-    <restnet.version>1.0.7</restnet.version>
-    <modbcum.version>1.0.4</modbcum.version>
+   <restnet.version>1.0.8-SNAPSHOT</restnet.version>
+    <modbcum.version>1.0.5-SNAPSHOT</modbcum.version>
     <dbunit.version>2.4.9</dbunit.version>
     <rdf.jena.version>2.6.4</rdf.jena.version>
     <rdf.arq.version>2.8.8</rdf.arq.version>
