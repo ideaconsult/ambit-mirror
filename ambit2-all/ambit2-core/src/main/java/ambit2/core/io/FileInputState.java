@@ -13,7 +13,6 @@ import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.HINReader;
 import org.openscience.cdk.io.INChIReader;
 import org.openscience.cdk.io.MDLReader;
-import org.openscience.cdk.io.PDBReader;
 import org.openscience.cdk.io.formats.IChemFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
@@ -22,6 +21,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.exceptions.AmbitIOException;
 import ambit2.core.io.bcf.EurasBCFReader;
+import ambit2.core.io.pdb.RawIteratingPDBReader;
 import ambit2.core.io.sj.MalariaHTSDataDelimitedReader;
 
 /**
@@ -211,7 +211,7 @@ public class FileInputState extends FileState implements IInputState {
 		} else if (ext.endsWith(extensions[HIN_INDEX])) {
 			return new IteratingChemObjectReaderWrapper(new HINReader(stream));
 		} else if (ext.endsWith(extensions[PDB_INDEX])) {
-			return new IteratingChemObjectReaderWrapper(new PDBReader(stream));
+			return new RawIteratingPDBReader(new InputStreamReader(stream));
 		} else if ((ext.toLowerCase().indexOf("euras")>=0) && (ext.endsWith(extensions[XLS_INDEX]))) {
 			return new EurasBCFReader(stream,0);			
 		} else if (ext.endsWith(extensions[XLS_INDEX])) {
