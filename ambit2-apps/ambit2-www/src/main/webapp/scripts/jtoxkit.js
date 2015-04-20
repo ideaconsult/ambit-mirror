@@ -2880,7 +2880,7 @@ var jToxModel = (function () {
     oLanguage: null,          // merged to dataTable's settings, when created
     /* algorithmNeedle */
     /* modelUri */
-    configuration: { 
+    configuration: {
       columns : {
         model: {
           'Id': { iOrder: 0, sTitle: "Id", mData: "URI", sWidth: "50px", mRender: function (data, type, full) {
@@ -2910,58 +2910,58 @@ var jToxModel = (function () {
       }
     }
   };
-  
+
   var cls = function (root, settings) {
     var self = this;
     self.rootElement = root;
     jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even when manually initialized
-    
+
     self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings);
     self.models = null;
-    
+
     if (!self.settings.noInterface) {
       self.rootElement.appendChild(jT.getTemplate('#jtox-model'));
       self.init(settings);
     }
-        
+
     // finally, wait a bit for everyone to get initialized and make a call, if asked to
     if (self.settings.modelUri != null || self.settings.algorithmNeedle != null || self.settings.loadOnInit)
       self.query();
   };
-  
+
   cls.prototype = {
     init: function (settings) {
       var self = this;
-      
+
       // but before given it up - make a small sorting..
       if (!self.settings.algorithms) {
         self.settings.configuration.columns.model.Stars.mRender = function (data, type, full) { return type != 'display' ? data : jT.ui.putStars(self, data, "Model star rating (worst) 1 - 10 (best)"); };
         if (self.settings.shortStars)
           self.settings.configuration.columns.model.Stars.sWidth = "40px";
 
-        self.settings.configuration.columns.model.Algorithm.mRender = function (data, type, full) { 
+        self.settings.configuration.columns.model.Algorithm.mRender = function (data, type, full) {
           var name = data.URI.match(/https{0,1}:\/\/.*\/algorithm\/(\w+).*/)[1];
           if (type != 'display')
             return name;
-          var res = '<a target="_blank" href="' + data.URI + '">' + 
+          var res = '<a target="_blank" href="' + data.URI + '">' +
                     '<img src="' + (self.settings.baseUrl || jT.settings.baseUrl) + data.img + '"/>&nbsp;' +
-                    name + 
+                    name +
                     '</a>';
           if (self.settings.algorithmLink) {
             res += '<a href="' + ccLib.addParameter(self.modelUri, 'algorithm=' + encodeURIComponent(data.URI)) + '"><span class="ui-icon ui-icon-calculator float-right" title="Show models using algorithm ' + name + '"></span></a>';
           }
-  
+
           return res;
         };
       }
-      
+
       var cat = self.settings.algorithms ? 'algorithm' : 'model';
       // deal if the selection is chosen
       if (!!self.settings.selectionHandler || !!self.settings.onDetails) {
         jT.ui.putActions(self, self.settings.configuration.columns[cat].Id);
         self.settings.configuration.columns[cat].Id.sWidth = "60px";
       }
-      
+
       // again , so that changed defaults can be taken into account.
       self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
       if (self.settings.oLanguage == null)
@@ -2976,11 +2976,11 @@ var jToxModel = (function () {
           "sEmptyTable": "No models available.",
           "sInfo": "Showing _TOTAL_ model(s) (_START_ to _END_)"
         });
-      
+
       // READYY! Go and prepare THE table.
       self.table = jT.ui.putTable(self, $('table', self.rootElement)[0], cat);
     },
-    
+
     listModels: function (uri) {
       var self = this;
       if (uri == null)
@@ -2994,7 +2994,7 @@ var jToxModel = (function () {
       jT.call(self, uri, function (result, jhr) {
         if (!result && jhr.status == 404)
           result = { model: [] }; // empty one
-          
+
         if (!!result) {
           self.models = result.model;
           ccLib.fireCallback(self.settings.onLoaded, self, result);
@@ -3005,7 +3005,7 @@ var jToxModel = (function () {
           ccLib.fireCallback(self.settings.onLoaded, self, result);
       });
     },
-    
+
     /* List algorithms that contain given 'needle' in their name
     */
     listAlgorithms: function (needle) {
@@ -3028,7 +3028,7 @@ var jToxModel = (function () {
           ccLib.fireCallback(self.settings.onLoaded, self, result);
       });
     },
-    
+
     getModel: function (algoUri, callback) {
       var self = this;
       var createIt = function () {
@@ -3036,10 +3036,10 @@ var jToxModel = (function () {
           ccLib.fireCallback(callback, self, result, jhr);
         });
       };
-      
+
       if (self.settings.forceCreate)
         createIt();
-      else 
+      else
         jT.call(self, self.settings.baseUrl + '/model?algorithm=' + encodeURIComponent(algoUri), function (result, jhr) {
           if (!result && jhr.status != 404)
             ccLib.fireCallback(callback, self, null, jhr);
@@ -3049,19 +3049,19 @@ var jToxModel = (function () {
             ccLib.fireCallback(callback, self, result.model[0].URI, jhr);
         });
     },
-    
+
     runPrediction: function (datasetUri, modelUri, callback) {
       var self = this;
       var q = ccLib.addParameter(datasetUri, 'feature_uris[]=' + encodeURIComponent(modelUri + '/predicted'));
 
       var createIt = function () {
-        jT.service(self, modelUri, { method: "POST", data: { dataset_uri: datasetUri } }, function (task, jhr) {
-          if (!task || !!task.error)
+        jT.service(self, modelUri, { method: "POST", data: { dataset_uri: datasetUri } }, function (result, jhr) {
+          if (!result)
             ccLib.fireCallback(callback, self, null, jhr);
           else
-            jT.call(self, task.result, callback);
+            jT.call(self, result, callback);
         });
-      };     
+      };
       jT.call(self, q, function (result, jhr) {
         if (!result)
           ccLib.fireCallback(callback, self, null, jhr);
@@ -3075,30 +3075,30 @@ var jToxModel = (function () {
           if (empty)
             createIt();
           else
-            ccLib.fireCallback(callback, self, result, jhr)  
+            ccLib.fireCallback(callback, self, result, jhr)
         }
         else
           createIt();
       });
     },
-    
+
     query: function (uri) {
       if (this.settings.algorithms)
         this.listAlgorithms(this.settings.algorithmNeedle = (uri || this.settings.algorithmNeedle));
       else
         this.listModels(this.settings.modelUri = (uri || this.settings.modelUri));
     },
-    
+
     modifyUri: function (uri) {
       jT.$('input[type="checkbox"]', this.rootElement).each(function () {
         if (this.checked)
           uri = ccLib.addParameter(uri, 'feature_uris[]=' + encodeURIComponent(this.value + '/predicted'));
       })
-      
+
       return uri;
     }
   };
-  
+
   return cls;
 })();
 /* toxsubstance.js - A kit for browsing substances
