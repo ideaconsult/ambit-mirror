@@ -35,7 +35,9 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IPDBAtom;
 import org.openscience.cdk.qsar.DescriptorValue;
 
 import ambit2.base.data.Property;
@@ -74,6 +76,13 @@ public class DescriptorsCalculator extends AbstractDescriptorCalculator<IAtomCon
 	@Override
 	public IAtomContainer preprocess(IStructureRecord target) throws AmbitException {
     	IAtomContainer a = reader.process(target);
+    	boolean preprocess = ((a != null) && (a.getAtomCount()>0)) ;
+    	for (IAtom atom : a.atoms()) 
+    	    if (atom instanceof IPDBAtom) {
+    		preprocess = false;
+    		break;
+    	    }
+    	
     	//necessary for some calculations
     	for (Property p : target.getProperties()) try {
     		a.setProperty(p.getName(), target.getProperty(p));
@@ -83,7 +92,7 @@ public class DescriptorsCalculator extends AbstractDescriptorCalculator<IAtomCon
     	writer.setStructure(target);
     	selfwriter.setStructure(target);
     	
-    	if ((a != null) && (a.getAtomCount()>0))  {
+    	if (preprocess)  {
         	try {
         		cfg.process(a);
           	} catch (Exception x) {

@@ -37,7 +37,7 @@ import ambit2.base.data.Property;
 
 
 public interface IStructureRecord extends IChemical{
-	public enum MOL_TYPE {SDF,CML,CSV,URI,INC,NANO};
+	public enum MOL_TYPE {SDF,CML,CSV,URI,INC,NANO,PDB};
 	public static enum STRUC_TYPE {
 
 		NA {
@@ -99,7 +99,13 @@ public interface IStructureRecord extends IChemical{
 			public String toString() {
 				return "NANO";
 			}
-		}
+		},
+		PDB {
+			@Override
+			public String toString() {
+				return "PDB";
+			}
+		}		
 	};
 		
 	
