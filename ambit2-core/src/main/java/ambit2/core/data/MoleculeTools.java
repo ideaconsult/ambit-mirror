@@ -41,6 +41,7 @@ import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.io.CMLReader;
+import org.openscience.cdk.io.PDBReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -49,6 +50,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 import ambit2.core.config.AmbitCONSTANTS;
+import ambit2.core.io.IteratingChemObjectReaderWrapper;
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.core.smiles.SmilesParserWrapper;
@@ -206,6 +208,23 @@ public class MoleculeTools {
 	IMolecule mol = readMolfile(reader);
 	reader.close();
 	return mol;
+    }
+
+    public static IMolecule readPDBfile(String molfile) throws Exception {
+	PDBReader pdbreader = new PDBReader(new StringReader(molfile));
+	IteratingChemObjectReaderWrapper reader = new IteratingChemObjectReaderWrapper(pdbreader);
+	try {
+	    while (reader.hasNext()) {
+		Object o = reader.next();
+		if (o instanceof IMolecule)
+		    return ((IMolecule) o);
+	    }
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    try {reader.close();} catch (Exception x) {}
+	}
+	return null;
     }
 
     public static IMolecule readCMLMolecule(String cml) throws Exception {
