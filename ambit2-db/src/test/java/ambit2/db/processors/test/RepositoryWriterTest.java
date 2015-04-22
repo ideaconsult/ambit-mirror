@@ -1279,6 +1279,9 @@ public class RepositoryWriterTest extends DbUnitTest {
 	ITable property_values = c.createQueryTable("EXPECTED", "SELECT * FROM property_values");
 	Assert.assertEquals(4, property_values.getRowCount());
 
+	ITable template_def = c.createQueryTable("EXPECTED", "SELECT * FROM template_def");
+	Assert.assertEquals(3, template_def.getRowCount());
+	
 	InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/core/data/dx/predictions.sdf");
 	Assert.assertNotNull(in);
 	RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(in));
@@ -1324,6 +1327,8 @@ public class RepositoryWriterTest extends DbUnitTest {
 	Assert.assertEquals(31, property.getRowCount());
 	property_values = c.createQueryTable("EXPECTED", "SELECT * FROM property_values");
 	Assert.assertEquals(47, property_values.getRowCount());
+	template_def = c.createQueryTable("EXPECTED", "SELECT * FROM template_def");
+	Assert.assertEquals(30, template_def.getRowCount());
 	c.close();
 
     }
