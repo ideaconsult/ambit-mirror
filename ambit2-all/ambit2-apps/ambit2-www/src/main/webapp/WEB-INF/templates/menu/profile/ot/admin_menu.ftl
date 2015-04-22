@@ -24,11 +24,11 @@
 	</#if>
 
 	<li>
-		<a href="${ambit_root}/dataset?page=0&pagesize=100" title="Datasets: Chemical structures and properties">Chemical structures</a>
-		<#include "/menu/profile/default/dataset_menu.ftl">
+		<a href="${ambit_root}/dataset?page=0&pagesize=100" title="Datasets: Chemical structures and properties">Datasets</a>
+		<#include "/menu/profile/ot/dataset_menu.ftl">
 	</li>
 	<li>
 		<a href="${ambit_root}/substance?page=0&amp;pagesize=100">Substances</a>
-		<#include "/menu/profile/default/substance_menu.ftl">
+		<#include "/menu/profile/ot/substance_menu.ftl">
 	</li>
 </ul>
