@@ -184,6 +184,15 @@
       </dependencies>
     </profile>
     <profile>
+      <id>menu-ot</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <ambit.profile>ot</ambit.profile>
+      </properties>
+    </profile>    
+    <profile>
       <id>menu-lri</id>
       <activation>
         <activeByDefault>false</activeByDefault>

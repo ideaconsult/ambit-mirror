@@ -1765,7 +1765,7 @@ $.ajax({
 
 
 function defineBundlesTable(root,url,deleteVisible,profile) {
-	if ("lri" == profile) return defineBundlesTable_lri(root,url,deleteVisible,false);
+	if ("ot" != profile) return defineBundlesTable_lri(root,url,deleteVisible,false);
 	
 	var oTable = $('.datasetstable').dataTable( {
 	"sAjaxDataProp" : "dataset",
