@@ -211,7 +211,7 @@ function onAlgoLoaded(result) {
     	  column: { sClass: data.id },
     	  render: (function (aId) { return function(data, type, full) {
     	    return (type != 'display') ? data : 
-    	      '<button class="jt-toggle jtox-handler predict" data-algo-id="' + aId + '" data-index="' + data + '" data-handler="runPredict" title="Run prediction with the algorithm on current compound">▶︎</button>';
+    	      '<button class="jt-toggle jtox-handler predict" data-algo-id="' + aId + '" data-index="' + data + '" data-handler="runPredict" title="Run prediction on current compound">Run</button>';
           };
         })(data.id)
       };

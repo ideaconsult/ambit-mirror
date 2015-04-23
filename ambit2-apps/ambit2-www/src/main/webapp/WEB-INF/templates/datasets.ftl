@@ -8,19 +8,24 @@
 <script type='text/javascript'>
 	
 	$(document).ready(function() {
-		loadHelp("${ambit_root}","dataset");
-		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/dataset" title="Datasets">Datasets</a></li>');
+		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/dataset" title="Datasets">Chemical structures datasets</a></li>');
 
 		downloadForm("${ambit_request}");
+		
 		<#if datasetid??>
 			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/_dataset?dataset_uri=${ambit_root}/dataset/${datasetid}" title="${ambit_root}/dataset/${datasetid}">/dataset/${datasetid}</a></li>');
 			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/dataset/${datasetid}/metadata" title="${ambit_root}/dataset/${datasetid}/metadata">Metadata</a></li>');
 			loadDatasetMeta("${ambit_root}","${ambit_root}/dataset/${datasetid}/metadata",true);
 		<#else>
-	  		var oTable = defineDatasetsTable("${ambit_root}","${ambit_request_json}",true);
+			<#if openam_token??>
+	  			var oTable = defineDatasetsTable("${ambit_root}","${ambit_request_json}",true,true);
+	  		<#else>
+				var oTable = defineDatasetsTable("${ambit_root}","${ambit_request_json}",true,false);
+			</#if>
 	  	</#if>
 		jQuery("#breadCrumb").jBreadCrumb();
-		jQuery("#welcome").text("Dataset");	  	
+		jQuery("#welcome").text("Dataset");
+		loadHelp("${ambit_root}","dataset");
 	});
 </script>
 
@@ -39,15 +44,16 @@
 
 <form method='GET' name='searchform' id='searchform' action='${ambit_root}/dataset' style='padding:0;margin:0;'>
 
-<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-<span title='Search for datasets by name'>Search for datasets by name</span>
-		    	<input type='text'  id='search' name='search' value='' tabindex='1' >
-		    	<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
+<div class='row remove-bottom' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
+<span title='Search for datasets by name'>Search for datasets by name</span> <a href='#' class='chelp hname'>?</a>
+		    	<input type='text'  id='search' name='search' class='remove-bottom'' value='' tabindex='1' >
+		    	<input class='ambit_search remove-bottom' id='submit' type='submit' value='Search' tabindex='2'>
 </div>
 
-<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-<span title='Search for datasets by endpoints'>Search for datasets</span>
+<div class='row remove-bottom' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
+<span title='Search for datasets by endpoints'>Search for datasets</span> 
 <a href='${ambit_root}/query/ndatasets_endpoint?feature_sameas=http%3A%2F%2Fwww.opentox.org%2FechaEndpoints.owl&condition=startswith' title='List datasets by endpoints'>by endpoints</a>
+<a href='#' class='chelp hendpoint'>?</a>
 </div>
 
 <div class='row remove-bottom' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
@@ -95,12 +101,12 @@
 			<table id='datasets' class='datasetstable ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
-			<th></th>
-			<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span></th>
+			<th><a href='#' class='chelp hsearch'>?</a></th>
+			<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span> </th>
 			<th>Name</th>
-			<th>Models</th>
-			<th>Download</th>
-			<th title='Remove the dataset. Only datasets with star rating <= 5 can be deleted!'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;'></span></th>
+			<th>Actions <a href='#' class='chelp hactions'>?</a></th>
+			<th>Download <a href='#' class='chelp download'>?</a></th>
+			<th title='Remove the dataset. Only datasets with star rating <= 5 can be deleted!'> <a href='#' class='chelp hdelete'>?</a></th>
 			</tr>
 			</thead>
 			<tbody></tbody>
