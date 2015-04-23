@@ -23,6 +23,7 @@
 		<a href="${ambit_root}/model" title="Regression, classification, clustering, structural alerts, applicability domain, structure optimisation.">Models</a>
 		<#include "/menu/profile/default/model_menu.ftl">
 	</li>
+	<li><a href="${ambit_root}/dataset?page=0&pagesize=100" title="Chemical structures and calculated properties">Chemical structures</a></li>	
 	</ul>
 </li>
 

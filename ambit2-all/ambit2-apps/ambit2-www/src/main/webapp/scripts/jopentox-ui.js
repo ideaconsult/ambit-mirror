@@ -681,7 +681,7 @@ function loadDatasetMeta(root,url,deleteVisible) {
       });
 }
 
-function defineDatasetsTable(root,url,deleteVisible) {
+function defineDatasetsTable(root,url,deleteVisible,openamlink) {
 	var oTable = $('.datasetstable').dataTable( {
 	"sAjaxDataProp" : "dataset",
 	"sAjaxSource": url,	
@@ -746,24 +746,24 @@ function defineDatasetsTable(root,url,deleteVisible) {
     		        	   		"' title='Click to view the dataset at "+ o.aData.URI+" as a table'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;'></span>D"+
     		        	   		shortURI+"</a> " ;
     		        	    
-    		        	    sOut += "<br/>"+val;
+    		        	    sOut += "<br/>"+val + "<br/>";
+    		        	    
     		        	    
     		               var seeAlso =  o.aData["seeAlso"];
     		               if ((seeAlso != undefined) && (seeAlso != null)) {
     		            	   if (seeAlso.indexOf('http')==0)
-    		            		   sOut += ("<br/><a href='" + seeAlso + "' target=_blank title='"+seeAlso+"'>Source</a>");
+    		            		   sOut += ("<a href='" + seeAlso + "' target=_blank title='"+seeAlso+"'>Source</a> | ");
     		               }
     		               var rights =  o.aData["rights"];
     		               if ((rights != undefined) && (rights != null)) {
     		            	   if (rights["URI"].indexOf('http')==0)
-    		            		   sOut += (" | " + "<a href='" + rights["URI"] + "' target=_blank title='"+rights["URI"]+"'>"+rights["type"] +"</a>");
-    		            	   else sOut += " | " + rights["URI"];
+    		            		   sOut += ( "<a href='" + rights["URI"] + "' target=_blank title='"+rights["URI"]+"'>"+rights["type"] +"</a>");
+    		            	   else sOut +=  rights["URI"];
     		               }
-    		               sOut += " | <a href='"+o.aData.URI +"/metadata'>Metadata</a>";
-   		                   sOut += "<br/><a href='"+href+"'>Browse structures and properties</a>";
-   		                   sOut += " | <a href='"+ root + "/ui/_dataset?dataset_uri="+encodeURIComponent(o.aData.URI+"/compounds") +"'>Structures only</a>";
-   		                   sOut += " | <a href='"+o.aData.URI +"/feature'>Properties list</a>";
-   		                   sOut += " | <a href='"+root +"/admin/policy?search="+ o.aData.URI  + "' target='policy'>OpenAM access rights</a>";
+	  					   sOut += " | <a href='"+o.aData.URI +"/metadata' target='_metadata'>Metadata</a>";    		               
+    		               if (openamlink) {
+    		            	   sOut += " | <a href='"+root +"/admin/policy?search="+ o.aData.URI  + "' target='policy'>OpenAM access rights</a>";
+    		               }
    		                   //sOut += " | <a href='"+root +"/algorithm/toxtreecramer?dataset_uri="+ o.aData.URI  + "' target='predict'>Predict</a>";
     		               return sOut;
     		          }
@@ -773,10 +773,14 @@ function defineDatasetsTable(root,url,deleteVisible) {
        	              "mData":null,
        	              "aTargets": [ 3 ],
        	              "bUseRendered" : false,	
-       	              sWidth : "10%",
+       	              sWidth : "20%",
   	  					"fnRender" : function(o,val) {
-	  						 var sOut = "<a href='"+root + "/model?dataset=" + encodeURIComponent(o.aData.URI) +"' title='Browse models, using this datasets as a training dataset'>View</a>";
-	   		                 sOut += "  <a href='"+root +"/algorithm/superbuilder?dataset_uri="+ o.aData.URI  + "' target='build' title='Build new model with this dataset as a training dataset'>Build</a>";
+  	  						
+  	  						 var sOut = "<a href='"+root + "/ui/_search?option=uri&search=" + encodeURIComponent(o.aData.URI) +"' title='Browse and combine with other datasets and prediction results'>Browse and combine</a>";
+  	  						 
+  	  						 sOut += "<br/><a href='"+root + "/ui/toxtree?search=" + encodeURIComponent(o.aData.URI) +"' title='Run Toxtree predictions'>Run Toxtree predictions</a>";
+	  						 sOut += "<br/><a href='"+root + "/model?dataset=" + encodeURIComponent(o.aData.URI) +"' title='Browse models, using this datasets as a training dataset'>View models</a>";
+	   		                 sOut += "  <a href='"+root +"/algorithm/superbuilder?dataset_uri="+ o.aData.URI  + "' target='build' title='Build new model with this dataset as a training dataset'>Build Models</a>";
 	  						 return sOut;
   						}     	              
       	  			},      		  		
