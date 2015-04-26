@@ -19,6 +19,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
 import ambit2.base.data.ISourceDataset;
+import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
@@ -135,6 +136,7 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 		qc.setChemicalsOnly(true);
 		qc.setScope(qa);
 		setTemplate(createTemplate(context, request, response));
+		setGroupProperties(context, request, response);
 		return (Q) qc;
 	    } else {
 		Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
@@ -149,6 +151,7 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 			    ChemicalByDataset cd = new ChemicalByDataset(new Integer(srcdataset.getID()));
 			    qc.setScope(cd);
 			    setTemplate(createTemplate(context, request, response));
+			    setGroupProperties(context, request, response);
 			    return (Q) qc;
 			} else {
 			    // TODO, resort to all db
@@ -168,9 +171,11 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 		    ChemicalByDataset cd = new ChemicalByDataset(new Integer(dataset_id));
 		    qc.setScope(cd);
 		    setTemplate(createTemplate(context, request, response));
+		    setGroupProperties(context, request, response);
 		    return (Q) qc;
 		} catch (Exception x) {
 		    setTemplate(createTemplate(context, request, response));
+		    setGroupProperties(context, request, response);
 		    return (Q) q;
 		}
 	    }
@@ -219,4 +224,9 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 	return null;
     }
 
+    @Override
+    protected String[] getDefaultGroupProperties() {
+	return new String[] { Property.opentox_CAS, Property.opentox_EC, Property.opentox_Name,
+		Property.opentox_TradeName, Property.opentox_IupacName, Property.opentox_IUCLID5_UUID };
+    }
 }

@@ -217,6 +217,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		RDFPropertyIterator i = new RDFPropertyIterator(ref);
 		i.setCloseModel(true);
 		while (i.hasNext()) {
+		    	Property p = i.next();
 			count++;
 		}
 		i.close();
@@ -1288,12 +1289,14 @@ public class AlgorithmResourceTest extends ResourceTest {
 		IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
 			"SELECT count(*) c,group_concat(distinct(status)) s  FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity' group by `status` order by `status`");
-		Assert.assertEquals(2,table.getRowCount());
+		Assert.assertEquals(3,table.getRowCount());
 		Assert.assertEquals("OK",table.getValue(0,"s"));
-		Assert.assertEquals(new BigInteger("40"),table.getValue(0,"c"));
+		Assert.assertEquals(new BigInteger("30"),table.getValue(0,"c"));
+		Assert.assertEquals("ERROR",table.getValue(1,"s"));
+		Assert.assertEquals(new BigInteger("10"),table.getValue(1,"c"));		
 			//the explanation field
-		Assert.assertEquals("TRUNCATED",table.getValue(1,"s"));
-		Assert.assertEquals(new BigInteger("4"),table.getValue(1,"c"));
+		Assert.assertEquals("TRUNCATED",table.getValue(2,"s"));
+		Assert.assertEquals(new BigInteger("3"),table.getValue(2,"c"));
 		c.close();
 	}
 	
