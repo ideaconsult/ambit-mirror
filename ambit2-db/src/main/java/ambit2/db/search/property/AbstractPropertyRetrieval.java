@@ -78,7 +78,7 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 		};
 		public abstract void setValue(PropertyAnnotation<String>  a,String value);
 	}		
-	public static String base_sql = "select properties.idproperty,properties.name,units,title,url,idreference,comments,ptype as idtype,islocal,type,rdf_type,predicate,object,properties.idproperty as `order` from properties join catalog_references using(idreference)\n"+
+	public static String base_sql = "select properties.idproperty,properties.name as name,units,title,url,idreference,comments,ptype as idtype,islocal,type,rdf_type,predicate,object,properties.idproperty as `order` from properties join catalog_references using(idreference)\n"+
 			"left join (select idproperty,rdf_type,predicate,object from property_annotation where predicate regexp \"confidenceOf$\") a using(idproperty)\n";
 	/**
 	 * 
@@ -162,22 +162,23 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
          at org.restlet.resource.ServerResource.handle(ServerResource.java:818)
 	
  */
+	
 	public Property getObject(ResultSet rs,Property p) throws AmbitException {
 		try {
 			if (p==null) {
-				p = Property.getInstance(rs.getString(2),rs.getString(4),rs.getString(5));
+				p = Property.getInstance(rs.getString("name"),rs.getString("title"),rs.getString("url"));
 			} else {
-				p.setName(rs.getString(2));
+				p.setName(rs.getString("name"));
 				//!!!!!!!!!!!!!!!!!! update the rest 
 			}
 			try { p.setOrder(rs.getInt("order"));} catch (Exception x) {}
-			p.setId(rs.getInt(1));
-			p.setUnits(rs.getString(3));
-			p.setLabel(rs.getString(7));
-			p.getReference().setId(rs.getInt(6));
+			p.setId(rs.getInt("idproperty"));
+			p.setUnits(rs.getString("units"));
+			p.setLabel(rs.getString("comments"));
+			p.getReference().setId(rs.getInt("idreference"));
 
 			try {
-				String type = rs.getString(8);
+				String type = rs.getString("idtype");
 				String[] types = null;
 				if (type != null && !"".equals(type)) {
 					types = type.split(",");
@@ -188,13 +189,13 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 					}
 				}
 			} catch (Exception x) {
-				logger.log(Level.WARNING,x.getMessage(),x);
+				logger.log(Level.FINE,x.getMessage(),x);
 			}
 			try {
-				p.setNominal(rs.getBoolean(9));
+				p.setNominal(rs.getBoolean("islocal"));
 			} catch (Exception x) { p.setNominal(false);}
 			try {
-				String _type = rs.getString(10);
+				String _type = rs.getString("type");
 				if (_type != null)
 				p.getReference().setType(ILiteratureEntry._type.valueOf(_type));
 			} catch (Exception x) {}			

@@ -22,7 +22,7 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 	 */
 	private static final long serialVersionUID = 6247086921731939782L;
 	public static String sqlPerStructure = 
-		"select properties.idproperty,idproperty,name,units,title,url,idreference,comments,ptype,islocal,type,rdf_type,predicate,object from properties join catalog_references using(idreference)\n"+
+		"select properties.idproperty,idproperty,name,units,title,url,idreference,comments,ptype as idtype,islocal,type,rdf_type,predicate,object from properties join catalog_references using(idreference)\n"+
 		"left join (select idproperty,rdf_type,predicate,object from property_annotation where predicate regexp \"confidenceOf$\") b using(idproperty)\n"+
 		"where idproperty in (select idproperty from property_values where idstructure = ?) \n";
 	/*
@@ -31,7 +31,7 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 		"where idproperty in (select idproperty from structure join property_values using(idstructure) where idchemical = ?) \n";
 	*/
 	public static String sqlPerChemical = 
-	"select idproperty,properties.name,units,title,url,idreference,comments,ptype,islocal,type,rdf_type,predicate,object from properties\n"+
+	"select idproperty,properties.name,units,title,url,idreference,comments,ptype as idtype,islocal,type,rdf_type,predicate,object from properties\n"+
 	"join catalog_references using(idreference)\n"+
 	"left join (select idproperty,rdf_type,predicate,object from property_annotation where predicate regexp \"confidenceOf$\") b using(idproperty)\n"+
 	"join (\n"+
@@ -49,7 +49,7 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 		") p using(idproperty)\n"+
 		"join catalog_references using(idreference)\n";
 		*/
-		"select p.idproperty,p.name,units,title,url,idreference,comments,ptype,islocal,type,rdf_type,predicate,object from properties p\n"+
+		"select p.idproperty,p.name,units,title,url,idreference,comments,ptype as idtype,islocal,type,rdf_type,predicate,object from properties p\n"+
 		"join catalog_references using(idreference)\n"+
 		"left join (select idproperty,rdf_type,predicate,object from property_annotation where predicate regexp \"confidenceOf$\") a using(idproperty)\n"+		
 		"where p.idproperty=?\n";

@@ -56,8 +56,10 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 
     @Override
     public Object processItem(Property feature) throws AmbitException {
+	if (feature!=null)
 	try {
 	    String uri = getURI(feature);
+	    
 	    boolean numeric = (feature.getClazz() == Number.class) || (feature.getClazz() == Double.class)
 		    || (feature.getClazz() == Float.class) || (feature.getClazz() == Integer.class)
 		    || (feature.getClazz() == Long.class);
