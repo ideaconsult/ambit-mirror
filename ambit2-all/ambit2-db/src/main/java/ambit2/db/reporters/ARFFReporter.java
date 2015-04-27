@@ -222,7 +222,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 				(value == null) || (IQueryRetrieval.NaN.equals(value.toString())) ? "?" : value));
 		    else if (p.getClazz() == Number.class) {
 			writer.write(String.format(",%s",
-				(value == null) || (IQueryRetrieval.NaN.equals(value.toString())) ? "?" : value));
+				(value == null) || (value instanceof String) || (IQueryRetrieval.NaN.equals(value.toString())) ? "?" : value));
 
 		    } else
 			writer.write(String.format(",%s%s%s", value == null ? "" : "\"", value == null ? "?" : value
