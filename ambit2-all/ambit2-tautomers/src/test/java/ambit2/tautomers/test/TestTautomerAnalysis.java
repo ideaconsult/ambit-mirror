@@ -14,7 +14,8 @@ public class TestTautomerAnalysis
 	public static void main(String[] args) throws Exception
 	{
 		//testTautomerPairs("NC=CCCCCCC=S");
-		generateRuleCouples();
+		//generateRuleCouples();
+		generateAllTautomersAndRankings();
 	}
 	
 	public static void generateRuleCouples() throws Exception
@@ -32,6 +33,23 @@ public class TestTautomerAnalysis
 		
 		ta.process();
 	}
+	
+	public static void generateAllTautomersAndRankings() throws Exception
+	{
+		TautomerAnalysis ta = new TautomerAnalysis();
+		
+		ta.filePath = "D:/Projects/Nina/Tautomers/test-analysis/";
+		//ta.outFilePath = "D:/Projects/Nina/Tautomers/test-analysis/out/";
+		ta.inputFileName = "TOX21S_1-100.smi";
+		ta.outputFileName = "test.csv";
+		ta.setMoleculeFilter("#Mol=[1,15]");
+		ta.task = Task.CALC_TAUTOMERS_ALL_RANKS;
+		ta.FlagFilter = false;
+		
+		ta.process();
+	}
+	
+	
 	
 	public static void testTautomerPairs(String smi) throws Exception
 	{
