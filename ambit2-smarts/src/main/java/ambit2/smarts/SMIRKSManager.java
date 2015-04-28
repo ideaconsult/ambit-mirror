@@ -27,92 +27,131 @@ public class SMIRKSManager {
 
     private static SMIRKSManager defaultSMIRKSManager = null;
 
-    SmartsParser parser = new SmartsParser();
-    IsomorphismTester isoTester = new IsomorphismTester();
-    SmartsToChemObject stco;
-    EquivalenceTester eqTester = new EquivalenceTester();
+    protected SmartsParser parser = new SmartsParser();
+    protected IsomorphismTester isoTester = new IsomorphismTester();
+    protected SmartsToChemObject stco;
+    protected EquivalenceTester eqTester = new EquivalenceTester();
 
-    List<String> parserErrors = new ArrayList<String>();
+    protected List<String> parserErrors = new ArrayList<String>();
 
-    public int FlagSSMode = SmartsConst.SSM_NON_OVERLAPPING; // This flag is
+    protected int FlagSSMode = SmartsConst.SSM_NON_OVERLAPPING; // This flag is
 							     // used by the
 							     // function
 							     // applyTransformation()
 
-    public boolean FlagFilterEquivalentMappings = false;
+    public int getFlagSSMode() {
+		return FlagSSMode;
+	}
+
+	public void setFlagSSMode(int flagSSMode) {
+		FlagSSMode = flagSSMode;
+	}
+
+	public boolean isFlagFilterEquivalentMappings() {
+		return FlagFilterEquivalentMappings;
+	}
+
+	public void setFlagFilterEquivalentMappings(boolean flagFilterEquivalentMappings) {
+		FlagFilterEquivalentMappings = flagFilterEquivalentMappings;
+	}
+
+	public boolean isFlagProcessResultStructures() {
+		return FlagProcessResultStructures;
+	}
+	/**
+	 * Triggers an optional (pre)processing for further use of reaction result
+	 * @param flagProcessResultStructures
+	 */
+	public void setFlagProcessResultStructures(boolean flagProcessResultStructures) {
+		FlagProcessResultStructures = flagProcessResultStructures;
+	}
+
+	public boolean isFlagClearHybridizationBeforeResultProcess() {
+		return FlagClearHybridizationBeforeResultProcess;
+	}
+	/**
+	 *  Typically this flag should be true in order to correctly  detect the new atom types of the transformed molecules
+	 * @param flagClearHybridizationBeforeResultProcess
+	 */
+	public void setFlagClearHybridizationBeforeResultProcess(boolean flagClearHybridizationBeforeResultProcess) {
+		FlagClearHybridizationBeforeResultProcess = flagClearHybridizationBeforeResultProcess;
+	}
+
+	public boolean isFlagClearAromaticityBeforeResultProcess() {
+		return FlagClearAromaticityBeforeResultProcess;
+	}
+	/**
+	 *  Typically this flag should be true since some aromatic atoms may have lost their aromaticity
+	 * @param flagClearAromaticityBeforeResultProcess
+	 */
+	public void setFlagClearAromaticityBeforeResultProcess(boolean flagClearAromaticityBeforeResultProcess) {
+		FlagClearAromaticityBeforeResultProcess = flagClearAromaticityBeforeResultProcess;
+	}
+
+	public boolean isFlagClearImplicitHAtomsBeforeResultProcess() {
+		return FlagClearImplicitHAtomsBeforeResultProcess;
+	}
+	/**
+	 * Typically this flag should be true in order to correctly detect the new atom types of the transformed molecules
+	 * @param flagClearImplicitHAtomsBeforeResultProcess
+	 */
+	public void setFlagClearImplicitHAtomsBeforeResultProcess(boolean flagClearImplicitHAtomsBeforeResultProcess) {
+		FlagClearImplicitHAtomsBeforeResultProcess = flagClearImplicitHAtomsBeforeResultProcess;
+	}
+
+	public boolean isFlagAddImplicitHAtomsOnResultProcess() {
+		return FlagAddImplicitHAtomsOnResultProcess;
+	}
+
+	public void setFlagAddImplicitHAtomsOnResultProcess(boolean flagAddImplicitHAtomsOnResultProcess) {
+		FlagAddImplicitHAtomsOnResultProcess = flagAddImplicitHAtomsOnResultProcess;
+	}
+	
+	public boolean isFlagConvertAddedImplicitHToExplicitOnResultProcess() {
+		return FlagConvertAddedImplicitHToExplicitOnResultProcess;
+	}
+	/**
+	 *Typically if this flag is  true it is expected that FlagAddImplicitHAtomsOnResultProcess = false
+	 * @param flagConvertAddedImlicitHToExplicitOnResultProcess
+	 */
+	public void setFlagConvertAddedImplicitHToExplicitOnResultProcess(
+			boolean flagConvertAddedImplicitHToExplicitOnResultProcess) {
+		FlagConvertAddedImplicitHToExplicitOnResultProcess = flagConvertAddedImplicitHToExplicitOnResultProcess;
+	}
+
+	public boolean isFlagCheckAromaticityOnResultProcess() {
+		return FlagCheckAromaticityOnResultProcess;
+	}
+
+	public void setFlagCheckAromaticityOnResultProcess(boolean flagCheckAromaticityOnResultProcess) {
+		FlagCheckAromaticityOnResultProcess = flagCheckAromaticityOnResultProcess;
+	}
+
+	public boolean isFlagConvertExplicitHToImplicitOnResultProcess() {
+		return FlagConvertExplicitHToImplicitOnResultProcess;
+	}
+	/**
+	 * Typically if this flag is true it is expected that FlagAddImlicitHAtomsOnResultProcess=  false
+	 * @param flagConvertExplicitHToImplicitOnResultProcess
+	 */
+	public void setFlagConvertExplicitHToImplicitOnResultProcess(boolean flagConvertExplicitHToImplicitOnResultProcess) {
+		FlagConvertExplicitHToImplicitOnResultProcess = flagConvertExplicitHToImplicitOnResultProcess;
+	}
+
+	protected boolean FlagFilterEquivalentMappings = false;
 
     // public boolean FlagCheckAromaticityInPreprocessing = true;
     // public boolean FlagAddImplicitHAtomsInPreprocessing = true;
 
     // Result processing flags
-    public boolean FlagProcessResultStructures = false; // Triggers an optional
-							// (pre)processing for
-							// further use of
-							// reaction result
-    public boolean FlagClearHybridizationBeforeResultProcess = true; // Typically
-								     // this
-								     // flag
-								     // should
-								     // be true
-								     // in order
-								     // to
-								     // correctly
-								     // detect
-								     // the new
-								     // atom
-								     // types of
-								     // the
-								     // transformed
-								     // molecules
-    public boolean FlagClearAromaticityBeforeResultProcess = true; // Typically
-								   // this flag
-								   // should be
-								   // true since
-								   // some
-								   // aromatic
-								   // atoms may
-								   // have lost
-								   // their
-								   // aromaticity
-    public boolean FlagClearImlicitHAtomsBeforeResultProcess = true; // Typically
-								     // this
-								     // flag
-								     // should
-								     // be true
-								     // in order
-								     // to
-								     // correctly
-								     // detect
-								     // the new
-								     // atom
-								     // types of
-								     // the
-								     // transformed
-								     // molecules
-    public boolean FlagAddImlicitHAtomsOnResultProcess = false;
-    public boolean FlagConvertAddedImlicitHToExplicitOnResultProcess = false; // This
-									      // flag
-									      // takes
-									      // effects
-									      // only
-									      // if
-									      // FlagAddImlicitHAtomsOnResultProcess
-									      // =
-									      // true;
-    public boolean FlagCheckAromaticityOnResultProcess = true;
-    public boolean FlagConvertExplicitHToImplicitOnResultProcess = false; // Typically
-									  // if
-									  // this
-									  // flag
-									  // is
-									  // true
-									  // it
-									  // is
-									  // expected
-									  // that
-									  // FlagAddImlicitHAtomsOnResultProcess
-									  // =
-									  // false
+	protected boolean FlagProcessResultStructures = false; 
+	protected boolean FlagClearHybridizationBeforeResultProcess = true;
+	protected boolean FlagClearAromaticityBeforeResultProcess = true;
+	protected boolean FlagClearImplicitHAtomsBeforeResultProcess = true; 
+	protected boolean FlagAddImplicitHAtomsOnResultProcess = false;
+	protected boolean FlagConvertAddedImplicitHToExplicitOnResultProcess = false; 
+	protected boolean FlagCheckAromaticityOnResultProcess = true;
+	protected boolean FlagConvertExplicitHToImplicitOnResultProcess = false; 
 
     public SMIRKSManager(IChemObjectBuilder builder) {
 	parser.setComponentLevelGrouping(true);
@@ -850,17 +889,17 @@ public class SMIRKSManager {
 		    bond.setFlag(CDKConstants.ISAROMATIC, false);
 	}
 
-	if (FlagClearImlicitHAtomsBeforeResultProcess)
+	if (FlagClearImplicitHAtomsBeforeResultProcess)
 	    for (IAtom atom : mol.atoms())
 		atom.setImplicitHydrogenCount(null);
 
 	AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 
-	if (FlagAddImlicitHAtomsOnResultProcess) {
+	if (isFlagAddImplicitHAtomsOnResultProcess()) {
 	    CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 	    adder.addImplicitHydrogens(mol);
 
-	    if (FlagConvertAddedImlicitHToExplicitOnResultProcess)
+	    if (FlagConvertAddedImplicitHToExplicitOnResultProcess)
 		AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
 	}
 

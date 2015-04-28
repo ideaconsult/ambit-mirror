@@ -176,7 +176,7 @@ public class TestStrVisualizer
 		
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
-		smrkMan.FlagFilterEquivalentMappings = filterEqMaps;
+		smrkMan.setFlagFilterEquivalentMappings(filterEqMaps);
 		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
 		
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
@@ -270,7 +270,7 @@ public class TestStrVisualizer
 		
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
-		smrkMan.FlagFilterEquivalentMappings = filterEqMaps;
+		smrkMan.setFlagFilterEquivalentMappings(filterEqMaps);
 		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
 		
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
@@ -299,7 +299,7 @@ public class TestStrVisualizer
 		
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
-		smrkMan.FlagFilterEquivalentMappings = filterEqMaps;
+		smrkMan.setFlagFilterEquivalentMappings(filterEqMaps);
 		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
 		
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
