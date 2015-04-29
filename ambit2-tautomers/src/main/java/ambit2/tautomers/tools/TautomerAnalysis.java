@@ -284,7 +284,7 @@ public class TautomerAnalysis
 		outFiles = new File[1];
 		
 		outFiles[0] = new File(path + outputFileName);
-		outWriters[0] = createWriter(outFiles[0].getName());
+		outWriters[0] = createWriter(outFiles[0].getAbsolutePath());
 	}
 	
 	
@@ -372,8 +372,27 @@ public class TautomerAnalysis
 	protected void calcAllTautomersAndAllRanks(IAtomContainer mol) throws Exception
 	{
 		String smiles = SmartsHelper.moleculeToSMILES(mol, false);
-		//TODO		
-		System.out.println("#" + records_read + "  " + smiles);
+		tman.setStructure(mol);			
+		List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+		System.out.println("#" + records_read + "   " + smiles + "   nTautomers = " + resultTautomers.size());
+		
+		String s = String.format("%d%s%s%s%d%s%f\n",records_read, sep, smiles, sep, resultTautomers.size(), sep, 0.0);
+		outWriters[0].write(s);
+		outWriters[0].flush();
+		
+		if (resultTautomers.size() > 1)  
+			for (int i = 0; i < resultTautomers.size(); i++)
+			{
+				IAtomContainer tautomer = resultTautomers.get(i);
+				double old_rank = ((Double)tautomer.getProperty("TAUTOMER_RANK")).doubleValue();
+				double new_rank = tman.getEnergyRanking().calculateRank(tautomer, tman.getKnowledgeBase());
+				String tautomer_smiles = SmartsHelper.moleculeToSMILES(tautomer, false);
+				
+				s = String.format("%d%s%s%s%f%s%f\n",records_read, sep, tautomer_smiles, sep, old_rank, sep, new_rank);
+				System.out.println(s);
+				outWriters[0].write(s);
+				outWriters[0].flush();
+			}
 	}
 	
 	protected String getFileRuleName(String rname)
