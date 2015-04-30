@@ -242,8 +242,13 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
     }
 
     protected CSVReporter createCSVReporter() {
-	return new CSVReporter(getRequest().getRootRef().toString(), getTemplate(), groupProperties, String.format(
+	Form form = getParams();
+	CSVReporter csvreporter =  new CSVReporter(getRequest().getRootRef().toString(), getTemplate(), groupProperties, String.format(
 		"%s%s", getRequest().getRootRef(), getCompoundInDatasetPrefix()));
+	try {
+	    csvreporter.setNumberofHeaderLines(Integer.parseInt(form.getFirstValue("headerlines")));
+	} catch (Exception x) {}
+	return csvreporter;
     }
 
     @Override

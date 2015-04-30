@@ -12,6 +12,7 @@ import net.idea.modbcum.i.exceptions.DbAmbitException;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.Template;
 import ambit2.base.data.study.MultiValue;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
@@ -160,7 +161,24 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	    p.add(similarityColumn);
 	return p;
     }
-
+    
+    protected String getUnits(Property p) {
+	StringBuilder units = new StringBuilder();
+	    if (p.getUnits() != null && !"".equals(p.getUnits().trim())) {
+		if ("%".equals(p.getUnits())) {
+		    if (p.getName()!=null && p.getName().indexOf("%")>=0) ;
+		    else {
+			units.append(" ");
+			units.append(p.getUnits());
+		    }
+		} else {
+		    units.append("(");
+		    units.append(p.getUnits());
+		    units.append(")");
+		}
+	    }
+	 return units.toString();   
+    }
     protected void writeHeader(Writer writer) throws IOException {
 
 	if (header == null) {
@@ -170,9 +188,11 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		// no header
 	    } else if (numberofHeaderLines == 1) {
 		writer.write("Compound");
-		for (Property p : header)
-		    writer.write(String.format("%s\"%s %s\"", separator, p.getName() == null ? "N?A" : p.getName(),
-			    p.getUnits() == null ? "" : p.getUnits()));
+		for (Property p : header) {
+		    
+		    writer.write(String.format("%s\"%s %s\"", separator, p.getName() == null ? "NA" : p.getName(),
+			    getUnits(p)));
+		}
 
 		writer.write(String.format("%s%s", separator, "SMILES"));
 		if (licenseColumn != null)
@@ -182,21 +202,26 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	    } else {
 		writer.write("");
 		for (Property p : header)
-		    writer.write(String.format("%s\"%s\"", separator, p.getUrl()));
+		    writer.write(String.format("%s\"%s\"", separator, p.getUrl() == null ? "" : p.getUrl()));
 		writer.write(lineseparator);
 		writer.write("");
-		for (Property p : header)
-		    writer.write(String.format("%s\"%s\"", separator, p.getTitle()));
+		for (Property p : header) {
+		    StringBuilder b = new StringBuilder();
+		    if (p.getAnnotations() != null)
+			for (PropertyAnnotation a : p.getAnnotations()) {
+			    b.append(a.getPredicate());
+			    b.append(":");
+			    b.append(a.getObject());
+			    b.append(" ");
+			}
+		    writer.write(String.format("%s\"%s\"", separator, b.toString()));
+		}
 
 		writer.write(lineseparator);
 		writer.write("URI");
 		for (Property p : header)
-		    writer.write(String.format("%s\"%s\"", separator, p.getName()));
-		writer.write(lineseparator);
-
-		writer.write("");
-		for (Property p : header)
-		    writer.write(String.format("%s\"%s\"", separator, p.getUnits()));
+		    writer.write(String.format("%s\"%s %s\"", separator, p.getName() == null ? "NA" : p.getName(),
+			    getUnits(p)));
 
 		writer.write(String.format("%s%s", separator, "SMILES"));
 		if (licenseColumn != null)
@@ -260,8 +285,8 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		delimiter = separator;
 	    }
 	    // smiles
-	    writer.write(String.format("%s%s", separator,
-		    item.getProperty(Property.getInstance(AmbitCONSTANTS.SMILES, AmbitCONSTANTS.SMILES))));
+	    Object smiles = item.getProperty(Property.getInstance(AmbitCONSTANTS.SMILES, AmbitCONSTANTS.SMILES));
+	    writer.write(String.format("%s%s", separator, smiles == null ? "" : smiles));
 
 	    if (licenseColumn != null)
 		writer.write(String.format("%s%s", separator, getLicenseURI()));
