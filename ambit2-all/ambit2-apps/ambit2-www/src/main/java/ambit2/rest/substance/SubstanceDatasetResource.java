@@ -37,8 +37,8 @@ import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.MultiValue;
 import ambit2.base.data.study.ProtocolEffectRecord;
-import ambit2.base.data.study.Value;
 import ambit2.base.data.study.ReliabilityParams._r_flags;
+import ambit2.base.data.study.Value;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.data.substance.SubstanceName;
 import ambit2.base.data.substance.SubstanceOwner;
@@ -377,20 +377,27 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
     }
 
     protected IProcessor<Q, Representation> createCSVReporter(String filenamePrefix) {
+
 	groupProperties.add(new SubstancePublicName());
 	groupProperties.add(new SubstanceName());
 	groupProperties.add(new SubstanceUUID());
 	groupProperties.add(new SubstanceOwner());
-	return new OutputWriterConvertor<SubstanceRecord, Q>(new CSVReporter(getRequest().getRootRef().toString(),
+	
+	CSVReporter csvreporter = new CSVReporter(getRequest().getRootRef().toString(),
 		getTemplate(), groupProperties, String.format("%s%s", getRequest().getRootRef(), "")) {
-	    private static final long serialVersionUID = -2558990024073170008L;
-
 	    @Override
 	    protected void configurePropertyProcessors() {
 		getProcessors().add(getPropertyProcessors(false, false));
 	    }
-
-	}, MediaType.TEXT_CSV, filenamePrefix);
+	};
+	try {
+	    Form form = getParams();
+	    csvreporter.setNumberofHeaderLines(Integer.parseInt(form.getFirstValue("headerlines")));
+	} catch (Exception x) {
+	    csvreporter.setNumberofHeaderLines(3);
+	}
+	
+	return new OutputWriterConvertor<SubstanceRecord, Q>(csvreporter, MediaType.TEXT_CSV, filenamePrefix);
 
     }
 
