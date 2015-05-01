@@ -91,6 +91,7 @@ Substance search 	<a href='#' class='chelp substancesearch'></a>
 	<a href='#' id='rdfn3'><img src='${ambit_root}/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a>
 	-->
 	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
+	<a href='#' id='csv' target=_blank><img src='${ambit_root}/images/xls.png' alt='CSV' title='Download as CSV'></a>
 </div>
 	
 <#if username??>

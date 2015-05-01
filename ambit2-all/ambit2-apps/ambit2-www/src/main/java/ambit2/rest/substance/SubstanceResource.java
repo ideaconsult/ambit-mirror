@@ -130,6 +130,9 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 	} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
 	    return new ImageConvertor(new ImageReporter(variant.getMediaType().getMainType(), variant.getMediaType()
 		    .getSubType(), d), variant.getMediaType());
+	} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
+	    SubstanceCSVReporter csvreporter = new SubstanceCSVReporter(getRequest(), bundles);
+	    return new OutputWriterConvertor<SubstanceRecord, Q>(csvreporter, MediaType.TEXT_CSV,   filenamePrefix);
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 	    String jsonpcallback = getParams().getFirstValue("jsonp");
 	    if (jsonpcallback == null)
