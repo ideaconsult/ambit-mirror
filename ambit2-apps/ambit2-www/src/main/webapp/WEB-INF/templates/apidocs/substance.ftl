@@ -41,6 +41,8 @@
 							    "defaultValue": "name",
 							    "enum" : [
 							       "name",
+							       "like",
+							       "regexp",
 							       "uuid",
 							       "CompTox",
 							       "DOI",
