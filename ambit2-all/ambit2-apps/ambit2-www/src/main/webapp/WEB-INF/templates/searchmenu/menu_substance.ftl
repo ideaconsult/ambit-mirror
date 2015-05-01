@@ -14,7 +14,9 @@ Substance search 	<a href='#' class='chelp substancesearch'></a>
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
 <form method='GET' name='searchform' id='searchform' action='${ambit_root}/substance' style='padding:0;margin:0;'>
 	<select id='selecttype' name="type">
-		  <option value="name">Name</option>
+		  	 <option value="name">Name (starting with a string)</option>
+		  	 <option value="like">Name (pattern matching)</option>
+		  	 <option value="regexp">Name (regexp)</option>
 			  <option value="uuid">UUID</option>
 			  <option value="">External identifier</option>
 			  <option value="CompTox">CompTox</option>

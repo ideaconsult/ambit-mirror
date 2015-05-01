@@ -92,8 +92,8 @@ CREATE TABLE `substance` (
   `uuid` varbinary(16) DEFAULT NULL COMMENT 'The UUID part of  I5 UUIDs in binary format',
   `documentType` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'documentTypeType from I5 XSD schema ',
   `format` varchar(6) COLLATE utf8_bin DEFAULT 'i5._4.',
-  `name` text COLLATE utf8_bin COMMENT 'Human readable name of the entry',
-  `publicname` text COLLATE utf8_bin,
+  `name` text CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT 'Human readable name of the entry',
+  `publicname` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `content` blob,
   `substanceType` varchar(45) COLLATE utf8_bin DEFAULT NULL,
   `rs_prefix` varchar(6) COLLATE utf8_bin DEFAULT NULL COMMENT 'ReferenceSubstance UUID (prefix)',
@@ -108,7 +108,9 @@ CREATE TABLE `substance` (
   KEY `stype-x` (`substanceType`),
   KEY `rs-uuid-x` (`rs_uuid`,`rs_prefix`),
   KEY `owner-uuid-x` (`owner_prefix`,`owner_uuid`),
-  KEY `owner-name` (`owner_name`)
+  KEY `owner-name` (`owner_name`),
+  KEY `name-x` (`name`(128)),
+  KEY `publicname-x` (`publicname`(128))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Substance dossier (mainly to support IUCLID5)';
 
 -- -----------------------------------------------------
@@ -1451,7 +1453,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (8,9,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (8,10,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

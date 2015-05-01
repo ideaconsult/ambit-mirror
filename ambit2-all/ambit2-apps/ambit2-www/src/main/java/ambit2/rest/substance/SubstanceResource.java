@@ -326,7 +326,11 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 		    record.setSubstanceUUID(search.trim());
 		    return (Q) new ReadSubstance(record);
 		} else if ("name".equals(type)) {
-		    return (Q) new ReadSubstanceByName(type, search);
+		    return (Q) new ReadSubstanceByName("startswith", search);
+		} else if ("like".equals(type)) {
+		    return (Q) new ReadSubstanceByName("like", search);
+		} else if ("regexp".equals(type)) {
+		    return (Q) new ReadSubstanceByName("regexp", search);		    
 		} else if ("reliability".equals(type)) {
 		    return (Q) new ReadByReliabilityFlags(type, search);
 		} else if ("purposeFlag".equals(type)) {

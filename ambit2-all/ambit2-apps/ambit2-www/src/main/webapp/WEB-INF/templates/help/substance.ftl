@@ -51,7 +51,10 @@ Main constituent<a href='#' class='chelp main'>?</a>Additive<a href='#' class='c
   </div>  
     <div id="substancesearch">
     <ul>
-    <li><b>by Name</b>: Substance name or public name, starting with the specified string</li>
+    <li><b>by Name</b>: Substance name or public name, starting with the specified string (case insensitive)</li>
+    <li><b>by Name (pattern matching)</b>: Substance name or public name. Use * to matches any number of characters, use _ to match one character, e.g <i>*ether*</i> or <i>*ether</i>. 
+    </li>
+    <li><b>by Name (regexp)</b>: Substance name or public name, search by <a href='http://regexone.com/' target='_blank' class='qxternal'>regular expression</a></li>
     <li><b>by UUID</b>: Substance UUID</li>
     <li><b>by External identifier</b>: Any external identifier (of all types), exact search</li>
     <li><b>CompTox</b>: External identifier (of type CompTox), exact search</li>
