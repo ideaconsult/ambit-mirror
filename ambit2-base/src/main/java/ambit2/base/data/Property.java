@@ -142,7 +142,11 @@ public class Property extends Model implements Serializable, Comparable<Property
     public static synchronized Property getInstance(String name, String reference) {
 	return getInstance(name, reference, "");
     }
-
+    
+    public static synchronized Property getSMILESInstance() {
+   	return new Property(Property.opentox_SMILES);
+       }
+    
     public static synchronized Property getInChIInstance() {
 	return Property.getInstance(Property.opentox_InChI, new LiteratureEntry(Property.opentox_InChI,
 		"http://www.iupac.org/inchi/"));
