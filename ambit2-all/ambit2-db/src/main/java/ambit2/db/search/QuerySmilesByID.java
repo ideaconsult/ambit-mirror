@@ -48,7 +48,7 @@ public class QuerySmilesByID extends AbstractQuery<String, IStructureRecord, Num
 	 */
 	private static final long serialVersionUID = -4024101219917942351L;
 	protected IStructureRecord maxValue = null;
-	public static final String sqlField="select idchemical,idstructure,smiles,inchi from structure join chemicals using(idchemical) where idstructure ";
+	public static final String sqlField="select idchemical,idstructure,smiles,inchi,inchikey from structure join chemicals using(idchemical) where idstructure ";
 	public QuerySmilesByID() {
 		super();
 		setCondition(NumberCondition.getInstance("="));
@@ -97,14 +97,22 @@ public class QuerySmilesByID extends AbstractQuery<String, IStructureRecord, Num
                      	
             String smiles = rs.getString("smiles");
             if (smiles!= null)
-            	r.setProperty(Property.getInstance(AmbitCONSTANTS.SMILES,AmbitCONSTANTS.SMILES),smiles);
+            	r.setProperty(Property.getSMILESInstance(),smiles);
             else
-            	r.removeProperty(Property.getInstance(AmbitCONSTANTS.SMILES,AmbitCONSTANTS.SMILES));
+            	r.removeProperty(Property.getSMILESInstance());
             String inchi = rs.getString("inchi");
+            Property p = new Property(Property.opentox_InChI_std);
             if (inchi!= null)
-            	r.setProperty(Property.getInstance(AmbitCONSTANTS.INCHI,AmbitCONSTANTS.INCHI),inchi);  
+            	r.setProperty(p,inchi);  
             else
-            	r.removeProperty(Property.getInstance(AmbitCONSTANTS.INCHI,AmbitCONSTANTS.INCHI));
+            	r.removeProperty(p);
+
+            String inchikey = rs.getString("inchikey");
+            p = new Property(Property.opentox_InChIKey_std);
+            if (inchikey!= null)
+            	r.setProperty(p,inchikey);  
+            else
+            	r.removeProperty(p);            
             return r;
         } catch (Exception x){
             throw new AmbitException(x);

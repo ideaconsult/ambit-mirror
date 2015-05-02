@@ -40,6 +40,7 @@ import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.reporters.CSVReporter;
+import ambit2.db.search.QuerySmilesByID;
 import ambit2.rest.property.PropertyJSONReporter;
 
 /**
@@ -114,6 +115,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	    getProcessors().add(new ProcessorStructureRetrieval(r));
 	}
 	configurePropertyProcessors();
+	getProcessors().add(new ProcessorStructureRetrieval(new QuerySmilesByID()));
 	configureCollectionProcessors(baseRef);
 	getProcessors().add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
 	    /**

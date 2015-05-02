@@ -67,7 +67,7 @@ public class SmartsQueryResource extends StructureQueryResource<IQueryRetrieval<
     @Override
     protected String[] getDefaultGroupProperties() {
 	return new String[] { Property.opentox_CAS, Property.opentox_EC, Property.opentox_Name,
-		Property.opentox_TradeName, Property.opentox_IupacName, Property.opentox_IUCLID5_UUID };
+		Property.opentox_TradeName, Property.opentox_IupacName, Property.opentox_IUCLID5_UUID ,  Property.opentox_SMILES, Property.opentox_InChI_std, Property.opentox_InChIKey_std};
     }
 
     protected String getDefaultTemplateURI(Context context, Request request, Response response) {
