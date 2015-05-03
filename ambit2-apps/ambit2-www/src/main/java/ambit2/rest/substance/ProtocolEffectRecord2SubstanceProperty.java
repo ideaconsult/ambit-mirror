@@ -77,9 +77,10 @@ public class ProtocolEffectRecord2SubstanceProperty implements
 	    if (o == null)
 		continue;
 	    else if (o instanceof Value) {
+
 		Value value = (Value) o;
 		PropertyAnnotation a = new PropertyAnnotation();
-		a.setType("condition");
+		a.setType("conditions");
 		a.setPredicate(key);
 		if (value.getLoValue() instanceof String) {
 		    a.setObject(value.getLoValue());
@@ -93,7 +94,7 @@ public class ProtocolEffectRecord2SubstanceProperty implements
 		ann.add(a);
 	    } else {
 		PropertyAnnotation a = new PropertyAnnotation();
-		a.setType("condition");
+		a.setType("conditions");
 		a.setPredicate(key);
 		a.setObject(o.toString());
 		ann.add(a);

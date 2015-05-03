@@ -105,13 +105,13 @@ public class Value<VALUE> implements IValue<VALUE, String, String> {
 	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getLoQualifier())));
 	    comma = ",";
 	}
-	if (getLoValue() != null) {
+	if (getLoValue() != null &&  !"".equals(getLoValue().toString())) {
 	    b.append(comma);
 	    b.append(EffectRecord._fields.loValue.toJSON());
 	    serialize(getLoValue(), b);
 	    comma = ",";
 	}
-	if (getUnits() != null) {
+	if (getUnits() != null && !"".equals(getUnits().toString())) {
 	    b.append(comma);
 	    b.append(EffectRecord._fields.unit.toJSON());
 	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUnits())));
@@ -123,7 +123,7 @@ public class Value<VALUE> implements IValue<VALUE, String, String> {
 	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUpQualifier())));
 	    comma = ",";
 	}
-	if (getUpValue() != null) {
+	if (getUpValue() != null &&  !"".equals(getUpValue().toString())) {
 	    b.append(comma);
 	    b.append(EffectRecord._fields.upValue.toJSON());
 	    serialize(getUpValue(), b);
@@ -149,9 +149,9 @@ public class Value<VALUE> implements IValue<VALUE, String, String> {
     public String toHumanReadable() {
 	StringBuilder b = new StringBuilder();
 	if (getLoQualifier()!=null) { b.append(getLoQualifier()); b.append(" "); }
-	if (getLoValue()!=null) { b.append(getLoValue()); b.append(" "); }
+	if (getLoValue()!=null && !"".equals(getLoValue().toString())) { b.append(getLoValue()); b.append(" "); }
 	if (getUpQualifier()!=null) { b.append(getUpQualifier()); b.append(" "); }
-	if (getUpValue()!=null) { b.append(getUpValue()); b.append(" "); }
+	if (getUpValue()!=null && !"".equals(getUpValue().toString())) { b.append(getUpValue()); b.append(" "); }
 	if (getUnits()!=null) { b.append(getUnits());  }
 	return b.toString();
     }
