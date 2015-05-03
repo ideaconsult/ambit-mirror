@@ -73,15 +73,18 @@ public class SubstanceProperty extends Property {
     @Override
     public String getRelativeURI() {
 	try {
+	    String studyid = studyResultType==null?_r_flags.NOTSPECIFIED.getIdentifier():studyResultType.getIdentifier();
 	    String name = getName();
-	    return String.format("/property/%s/%s%s%s/%s%s%s", 
+	    String uri = String.format("/property/%s/%s%s%s/%s%s%s%s", 
 		    URLEncoder.encode(topcategory == null ? "TOX"  : topcategory, "UTF-8"), 
 		    URLEncoder.encode(endpointcategory == null ? Protocol._categories.UNKNOWN_TOXICITY_SECTION.name() : endpointcategory, "UTF-8"), 
-		    name == null ? "" : "/", name == null ? "" : URLEncoder.encode(name, "UTF-8"),
+		    name == null ? "" : "/", 
+	            name == null ? "" : URLEncoder.encode(name, "UTF-8"),
 		    identifier == null ? UUID.nameUUIDFromBytes((name + getTitle()).toString().getBytes()).toString() : identifier, 
-		    (studyResultType==null?(extendedURI ? "/" : ""):("/"+ studyResultType.getIdentifier())),	    
+		    "/"+ studyid,	    
                     extendedURI ? "/" : "",   
                     extendedURI ? URLEncoder.encode(UUID.nameUUIDFromBytes(reference.getTitle().getBytes()).toString())   : "");
+	    return uri;
 	} catch (UnsupportedEncodingException x) {
 	    return "/property";
 	}
@@ -133,7 +136,7 @@ public class SubstanceProperty extends Property {
 	 * % Degradation%{"Sampling time":{"unit":"d","loValue":7.0}} %
 	 * Degradation%{"Sampling time":{ "unit":"d", "loValue":7}}
 	 */
-	HashCode hc = hf.newHasher().putString(b.toString(), Charsets.US_ASCII).hash();
+	HashCode hc = hf.newHasher().putString(b.toString(), Charsets.UTF_8).hash();
 	return hc.toString().toUpperCase();
     }
 }
