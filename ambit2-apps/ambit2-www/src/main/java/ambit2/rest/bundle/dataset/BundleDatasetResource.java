@@ -65,6 +65,7 @@ public class BundleDatasetResource extends SubstanceDatasetResource<ReadSubstanc
 
     }
 
+    
     @Override
     protected IQueryRetrieval<ProtocolEffectRecord<String, String, String>> getEffectQuery() {
 	return new ReadEffectRecordByBundle(bundle);

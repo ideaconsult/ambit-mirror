@@ -72,7 +72,7 @@ public class BundleMetadataResource extends
 		    Integer idnum = new Integer(Reference.decode(id.toString()));
 		    dataset = new SubstanceEndpointsBundle();
 		    dataset.setID(idnum);
-		    ReadBundle query = new ReadBundle();
+		    ReadBundle query = new ReadBundle(getUserName());
 		    query.setValue(dataset);
 		    return query;
 		} catch (NumberFormatException x) {
@@ -82,7 +82,10 @@ public class BundleMetadataResource extends
 	}
 	throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
     }
-
+    
+    protected String getUserName() {
+	return null;
+    }
     @Override
     protected IQueryRetrieval<SubstanceEndpointsBundle> createQuery(Context context, Request request, Response response)
 	    throws ResourceException {
@@ -95,14 +98,14 @@ public class BundleMetadataResource extends
 		    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		dataset = new SubstanceEndpointsBundle();
 		dataset.setID(idnum);
-		query = new ReadBundle();
+		query = new ReadBundle(getUserName());
 		query.setValue(dataset);
 		return query;
 	    } catch (NumberFormatException x) {
 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	    }
 	else
-	    return new ReadBundle();
+	    return new ReadBundle(getUserName());
     }
 
     @Override
@@ -123,7 +126,8 @@ public class BundleMetadataResource extends
 	    DatasetURIReporter r = new DatasetURIReporter(getRequest());
 	    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
 	    conn = dbc.getConnection();
-	    return new CallableBundleCreator(bundle, r, method, form, conn, getToken());
+	     
+	    return new CallableBundleCreator(bundle, r, method, form, conn, getClientInfo()==null?null:getClientInfo().getUser(), getToken());
 	} catch (Exception x) {
 	    x.printStackTrace();
 	    try {

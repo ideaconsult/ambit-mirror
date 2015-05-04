@@ -16,7 +16,7 @@ public class ReadBundleTest extends QueryTest<ReadBundle> {
 
     @Override
     protected ReadBundle createQuery() throws Exception {
-	ReadBundle q = new ReadBundle();
+	ReadBundle q = new ReadBundle("guest");
 	SubstanceEndpointsBundle b = new SubstanceEndpointsBundle();
 	b.setID(1);
 	q.setValue(b);

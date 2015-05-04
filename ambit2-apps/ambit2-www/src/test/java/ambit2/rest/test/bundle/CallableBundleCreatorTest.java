@@ -12,14 +12,13 @@ import org.junit.Test;
 import org.restlet.data.Form;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
+import org.restlet.security.User;
 
 import ambit2.base.data.ISourceDataset;
-import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.rest.bundle.CallableBundleCreator;
 import ambit2.rest.bundle.CallableBundleVersionCreator;
 import ambit2.rest.dataset.DatasetURIReporter;
-import ambit2.rest.substance.SubstanceURIReporter;
 import ambit2.rest.test.CreateAmbitDatabaseProcessor;
 
 public class CallableBundleCreatorTest extends DbUnitTest {
@@ -45,12 +44,13 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 	    DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> reporter = new DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle>(
 		    new Reference("http://localhost"));
 	    CallableBundleCreator callable = new CallableBundleCreator(bundle, reporter, Method.POST, form,
-		    c.getConnection(), null);
+		    c.getConnection(), new User("testuser"), null);
 	    TaskResult task = callable.call();
 	    ITable table = c1.createQueryTable("EXPECTED",
-		    String.format("SELECT idbundle,description from bundle where name='title'"));
+		    String.format("SELECT idbundle,description,user_name from bundle where name='title'"));
 	    Assert.assertEquals(1, table.getRowCount());
 	    Assert.assertEquals("description", table.getValue(0, "description"));
+	    Assert.assertEquals("testuser", table.getValue(0, "user_name"));
 
 	} catch (Exception x) {
 	    throw x;
@@ -80,12 +80,13 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 	    DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> reporter = new DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle>(
 		    new Reference("http://localhost"));
 	    CallableBundleCreator callable = new CallableBundleCreator(bundle, reporter, Method.POST, form,
-		    c.getConnection(), null);
+		    c.getConnection(), new User("testuser"), null);
 	    TaskResult task = callable.call();
 	    ITable table = c1.createQueryTable("EXPECTED",
-		    String.format("SELECT idbundle,licenseURI from bundle where name='Assessment' order by idbundle asc"));
+		    String.format("SELECT idbundle,licenseURI,user_name from bundle where name='Assessment' order by idbundle asc"));
 	    Assert.assertEquals(2, table.getRowCount());
 	    Assert.assertEquals( table.getValue(1, "licenseURI"), table.getValue(0, "licenseURI"));
+	    Assert.assertEquals("testuser", table.getValue(1, "user_name"));
 
 	} catch (Exception x) {
 	    throw x;
@@ -115,9 +116,9 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 	    DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> reporter = new DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle>(
 		    new Reference("http://localhost"));
 	    CallableBundleCreator callable = new CallableBundleCreator(bundle, reporter, Method.DELETE, new Form(),
-		    c.getConnection(), null);
+		    c.getConnection(),new User("testuser"), null);
 	    TaskResult task = callable.call();
-	    table = c1.createQueryTable("EXPECTED", String.format("SELECT idbundle from bundle where idbundle=1"));
+	    table = c1.createQueryTable("EXPECTED", String.format("SELECT idbundle,user_name from bundle where idbundle=1"));
 	    Assert.assertEquals(0, table.getRowCount());
 
 	} catch (Exception x) {
@@ -160,12 +161,12 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 	    DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> reporter = new DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle>(
 		    new Reference("http://localhost"));
 	    CallableBundleCreator callable = new CallableBundleCreator(bundle, reporter, Method.PUT, form,
-		    c.getConnection(), null);
+		    c.getConnection(), new User("testuser"), null);
 	    TaskResult task = callable.call();
 	    table = c1
 		    .createQueryTable(
 			    "EXPECTED",
-			    String.format("SELECT idbundle,name,licenseURI,rightsHolder,maintainer,stars,title,url,description,updated from bundle join catalog_references using(idreference) where idbundle=1"));
+			    String.format("SELECT idbundle,name,licenseURI,rightsHolder,maintainer,stars,title,url,description,updated,user_name from bundle join catalog_references using(idreference) where idbundle=1"));
 	    Assert.assertEquals(1, table.getRowCount());
 	    Assert.assertEquals("title", table.getValue(0, "name"));
 	    Assert.assertEquals("maintainer", table.getValue(0, "maintainer"));
@@ -173,6 +174,7 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 	    Assert.assertEquals("license", table.getValue(0, "licenseURI"));
 	    Assert.assertEquals("description", table.getValue(0, "description"));
 	    Assert.assertNotSame(updated,table.getValue(0, "updated"));
+	    Assert.assertEquals("guest", table.getValue(0, "user_name"));
 	    // Assert.assertEquals("url",table.getValue(0,"url"));
 	    // Assert.assertEquals("source",table.getValue(0,"title"));
 
@@ -214,12 +216,12 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 	    DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> reporter = new DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle>(
 		    new Reference("http://localhost"));
 	    CallableBundleCreator callable = new CallableBundleCreator(bundle, reporter, Method.PUT, form,
-		    c.getConnection(), null);
+		    c.getConnection(), new User("testuser"),null);
 	    TaskResult task = callable.call();
 	    table = c1
 		    .createQueryTable(
 			    "EXPECTED",
-			    String.format("SELECT idbundle,published_status,name,licenseURI,rightsHolder,maintainer,stars,title,url,description,updated from bundle join catalog_references using(idreference) where idbundle=1"));
+			    String.format("SELECT idbundle,published_status,name,licenseURI,rightsHolder,maintainer,stars,title,url,description,updated,user_name from bundle join catalog_references using(idreference) where idbundle=1"));
 	    Assert.assertEquals(1, table.getRowCount());
 	    Assert.assertEquals("published", table.getValue(0, "published_status"));
 	    Assert.assertEquals("Assessment", table.getValue(0, "name"));
@@ -228,6 +230,7 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 	    Assert.assertEquals("http://creativecommons.org/publicdomain/zero/1.0/", table.getValue(0, "licenseURI"));
 	    Assert.assertNull(table.getValue(0, "description"));
 	    Assert.assertNotSame(updated,table.getValue(0, "updated"));
+	    Assert.assertEquals("guest", table.getValue(0, "user_name"));
 	    // Assert.assertEquals("url",table.getValue(0,"url"));
 	    // Assert.assertEquals("source",table.getValue(0,"title"));
 	    
