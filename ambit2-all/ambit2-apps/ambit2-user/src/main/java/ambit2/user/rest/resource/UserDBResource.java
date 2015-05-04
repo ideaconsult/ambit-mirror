@@ -118,7 +118,13 @@ public class UserDBResource<T> extends AmbitDBQueryResource<ReadUser<T>, DBUser>
 		}
 	    };
 	} else {
-	    String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
+	    
+	    return createJSONConvertor(variant);
+	}
+    }
+    
+    public RepresentationConvertor createJSONConvertor(Variant variant) throws AmbitException, ResourceException {
+	String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
 	    final ReadUserRoles query = new ReadUserRoles();
 	    query.setDatabaseName(usersdbname == null ? getDefaultUsersDB() : usersdbname);
 	    String regDBName = null;
@@ -151,10 +157,9 @@ public class UserDBResource<T> extends AmbitDBQueryResource<ReadUser<T>, DBUser>
 		    return roles == null ? "" : roles.toString();
 		}
 	    }, MediaType.APPLICATION_JSON);
-
-	}
     }
 
+    
     @Override
     protected QueryHTMLReporter createHTMLReporter(boolean headless) throws ResourceException {
 	return null;
@@ -195,24 +200,12 @@ public class UserDBResource<T> extends AmbitDBQueryResource<ReadUser<T>, DBUser>
 	String search_name = null;
 	Object search_value = null;
 	try {
-	    search_name = "search";
+	    search_name = "q";
 	    search_value = form.getFirstValue(search_name);
 	} catch (Exception x) {
 	    search_value = null;
 	}
-	if (search_value == null)
-	    try {
-		search_name = "username";
-		search_value = form.getFirstValue(search_name);
-	    } catch (Exception x) {
-		search_value = null;
-	    }
-	try {
-	    String n = form.getFirstValue("new");
-	    editable = n == null ? false : Boolean.parseBoolean(n);
-	} catch (Exception x) {
-	    editable = false;
-	}
+	
 	Object key = request.getAttributes().get(UserDBResource.resourceKey);
 	try {
 	    return getUserQuery(key, search_name, search_value);

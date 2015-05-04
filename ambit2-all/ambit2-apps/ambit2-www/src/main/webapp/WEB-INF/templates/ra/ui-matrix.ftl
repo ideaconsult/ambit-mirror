@@ -6,10 +6,10 @@
 	<link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
 	<link rel="stylesheet" href="${ambit_root}/style/ketcher.css"/>
 	<link rel="stylesheet" href="${ambit_root}/style/ra/ui-matrix.css"/>
-	<link rel="stylesheet" href="${ambit_root}/style/jquery.tokenize.css"/>
+	<link rel="stylesheet" href="${ambit_root}/style/token-input.css"/>
 
   <script src="${ambit_root}/scripts/ra/i5enums.js"></script>
-  <script type='text/javascript' src='${ambit_root}/jquery/jquery.tokenize.js'></script>
+  <script type='text/javascript' src='${ambit_root}/jquery/jquery.tokeninput.js'></script>
 
   <script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js'></script>
   <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
@@ -21,7 +21,6 @@
 
     <script src="${ambit_root}/scripts/ra/ui-matrix.js"></script>
   <script src="${ambit_root}/scripts/ra/config-matrix.js"></script>
-  <script src="${ambit_root}/scripts/config-study.js"></script>
   <script type='text/javascript' src='${ambit_root}/scripts/config-study.js'></script>
   
   <script type='text/javascript'>
@@ -105,20 +104,19 @@
                 <tr>
                 <th class="right size-third top">Users with write access <a href='#' class='chelp bundle_rw'>?</a>:</th>
                 <td class="jtox-user-rights">
-                  <select multiple class="jtox-users-select">
+                  <select multiple class="jtox-users-select" id="canWrite" name="canWrite">
+                  <!--
                     <option value='g_public'>Public</option>
                     <option value='admin'>Admin</option>
                     <option value='guest'>Guest</option>
+                    -->
                   </select>
                 </td>
               </tr>
               <tr>
                 <th class="right size-third top">Users with read access <a href='#' class='chelp bundle_rw'>?</a>:</th>
                 <td class="jtox-user-rights">
-                  <select multiple class="jtox-users-select">
-                    <option value='g_public'>Public</option>
-                    <option value='admin'>Admin</option>
-                    <option value='guest'>Guest</option>
+                  <select multiple class="jtox-users-select" id="canRead" name="canRead">
                   </select>
                 </td>
               </tr>

@@ -75,7 +75,8 @@ import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.bookmark.BookmarkResource;
-import ambit2.rest.bundle.BundleMetadataResource;
+import ambit2.rest.bundle.MyBundlesResource;
+import ambit2.rest.bundle.user.UserByURIResource;
 import ambit2.rest.dataset.CollectionStructureResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
@@ -658,7 +659,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		MyRouter myAccountRouter = new MyRouter(getContext());
 		myAccountRouter.attachDefault(MyAccountResource.class);
 		myAccountRouter.attach(ambit2.user.rest.resource.Resources.reset, MyAccountPwdResetResource.class);
-		myAccountRouter.attach(Resources.bundle, BundleMetadataResource.class);
+		myAccountRouter.attach(Resources.bundle, MyBundlesResource.class);
+		
+		myAccountRouter.attach("/users",UserByURIResource.class);
 		
 		router.attach(ambit2.user.rest.resource.Resources.myaccount, myAccountRouter);
 		router.attach(ambit2.user.rest.resource.Resources.user, new UserRouter(getContext(), org_router,

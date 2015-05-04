@@ -271,14 +271,15 @@ public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extend
 	dataset.setId(datasetID);
 	Connection c = null;
 	ResultSet rs = null;
+	QueryExecutor xx = null;
 	try {
 	    DBConnection dbc = new DBConnection(getContext());
 	    c = dbc.getConnection();
 	    ReadDataset read = new ReadDataset();
 	    read.setValue(dataset);
-	    QueryExecutor x = new QueryExecutor();
-	    x.setConnection(c);
-	    rs = x.process(read);
+	    xx = new QueryExecutor();
+	    xx.setConnection(c);
+	    rs = xx.process(read);
 	    while (rs.next()) {
 		dataset = read.getObject(rs);
 	    }
@@ -292,6 +293,10 @@ public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extend
 	    }
 	    try {
 		c.close();
+	    } catch (Exception x) {
+	    }
+	    try {
+		xx.close();
 	    } catch (Exception x) {
 	    }
 	}
