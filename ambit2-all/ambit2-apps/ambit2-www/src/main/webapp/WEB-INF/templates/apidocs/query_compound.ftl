@@ -140,10 +140,19 @@
 			              "type": "string",
 			              "paramType": "query",
 			              "allowMultiple"  : false
-			            },				 
+			            },			
+			            {
+				              "name": "filterBySubstance",
+				              "description": "Restrict the search within the set of structures with assigned substances",
+				              "required": false,
+				              "type": "string",
+				              "paramType": "query",
+				              "allowMultiple"  : false,
+				              "enum" : ["true","yes","on","false","no",""]
+				        },						            
 			            {
 				              "name": "bundle_uri",
-				              "description": "Bundle URI",
+				              "description": "If the structure is used in the specified bundle URI, the selection tag will be returned",
 				              "required": false,
 				              "type": "string",
 				              "defaultValue" : null,
@@ -193,8 +202,17 @@
 			              "allowMultiple"  : false
 			            },		
 			            {
+				              "name": "filterBySubstance",
+				              "description": "Restrict the search within the set of structures with assigned substances",
+				              "required": false,
+				              "type": "string",
+				              "paramType": "query",
+				              "allowMultiple"  : false,
+				              "enum" : ["true","yes","on","false","no",""]
+				        },						            
+			            {
 				              "name": "bundle_uri",
-				              "description": "Bundle URI",
+				              "description": "If the structure is used in the specified bundle URI, the selection tag will be returned",
 				              "required": false,
 				              "type": "string",
 				              "defaultValue" : null,

@@ -34,6 +34,7 @@ import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QuerySMARTS;
 import ambit2.db.search.structure.QueryStructureByID;
+import ambit2.db.substance.relation.ChemicalBySubstanceRelation;
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetResource;
@@ -54,6 +55,7 @@ public class SmartsQueryResource extends StructureQueryResource<IQueryRetrieval<
     public final static String resource = String.format("/%s", smartsKey);
     protected String dataset_id;
     protected String textSearch = "CasRN";
+    protected boolean filterBySubstance = false;
 
     @Override
     public String getCompoundInDatasetPrefix() {
@@ -67,7 +69,8 @@ public class SmartsQueryResource extends StructureQueryResource<IQueryRetrieval<
     @Override
     protected String[] getDefaultGroupProperties() {
 	return new String[] { Property.opentox_CAS, Property.opentox_EC, Property.opentox_Name,
-		Property.opentox_TradeName, Property.opentox_IupacName, Property.opentox_IUCLID5_UUID ,  Property.opentox_SMILES, Property.opentox_InChI_std, Property.opentox_InChIKey_std};
+		Property.opentox_TradeName, Property.opentox_IupacName, Property.opentox_IUCLID5_UUID,
+		Property.opentox_SMILES, Property.opentox_InChI_std, Property.opentox_InChIKey_std };
     }
 
     protected String getDefaultTemplateURI(Context context, Request request, Response response) {
@@ -128,6 +131,17 @@ public class SmartsQueryResource extends StructureQueryResource<IQueryRetrieval<
 		bundles = null;
 	    }
 
+	    filterBySubstance = false;
+	    try {
+		String filter = form.getFirstValue("filterBySubstance");
+		if (filter != null) {
+		    filter = filter.toLowerCase();
+		    filterBySubstance = "yes".equals(filter) || "on".equals(filter) || "true".equals(filter);
+		}
+	    } catch (Exception x) {
+		filterBySubstance = false;
+	    }
+	    
 	    try {
 		includeMol = "true".equals(form.getFirstValue("mol"));
 	    } catch (Exception x) {
@@ -212,6 +226,19 @@ public class SmartsQueryResource extends StructureQueryResource<IQueryRetrieval<
 		    setTemplate(createTemplate(context, request, response));
 		    setGroupProperties(context, request, response);
 		    return combined;
+		}
+		/**
+		 * restriction by substance
+		 */
+		if (filterBySubstance) {
+		    ChemicalBySubstanceRelation qa = new ChemicalBySubstanceRelation();
+		    QueryCombinedStructure qc = new QueryCombinedStructure();
+		    qc.add(query);
+		    qc.setChemicalsOnly(true);
+		    qc.setScope(qa);
+		    setTemplate(createTemplate(context, request, response));
+		    setGroupProperties(context, request, response);
+		    return qc;
 		}
 		/**
 		 * restriction to a dataset: ?dataset_uri=

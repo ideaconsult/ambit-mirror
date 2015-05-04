@@ -19,7 +19,6 @@ import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
 import ambit2.base.data.ISourceDataset;
-import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
@@ -31,6 +30,7 @@ import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.ChemicalByQueryFolder;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QuerySimilarityBitset;
+import ambit2.db.substance.relation.ChemicalBySubstanceRelation;
 import ambit2.db.update.structure.ChemicalByDataset;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
@@ -54,7 +54,7 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
     public final static String resourceID = String.format("/{%s}", smiles);
     protected double threshold = 0.9;
     protected String dataset_id;
-
+    protected boolean filterBySubstance = false;
     protected IAtomContainer mol;
 
     public SimilarityResource() {
@@ -105,6 +105,18 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 	    includeMol = false;
 	}
 	folders = form.getValuesArray("folder");
+	
+	filterBySubstance = false;
+	try {
+	    String filter = form.getFirstValue("filterBySubstance");
+	    if (filter != null) {
+		filter = filter.toLowerCase();
+		filterBySubstance = "yes".equals(filter) || "on".equals(filter) ||  "true".equals(filter) ; 
+	    }
+	} catch (Exception x) {
+	    filterBySubstance = false;
+	}
+	
 	mol = getMolecule(form);
 	if ((mol == null) || (mol.getAtomCount() == 0))
 	    throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Empty molecule");
@@ -129,7 +141,16 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 
 	try {
 	    q.setValue(getBitset(mol));
-	    if ((folders != null) && (folders.length > 0)) {
+	    if (filterBySubstance) {
+		ChemicalBySubstanceRelation qa = new ChemicalBySubstanceRelation();
+		QueryCombinedStructure qc = new QueryCombinedStructure();
+		qc.add(q);
+		qc.setChemicalsOnly(true);
+		qc.setScope(qa);
+		setTemplate(createTemplate(context, request, response));
+		setGroupProperties(context, request, response);
+		return (Q) qc;		
+	    } else if ((folders != null) && (folders.length > 0)) {
 		ChemicalByQueryFolder qa = new ChemicalByQueryFolder(folders);
 		QueryCombinedStructure qc = new QueryCombinedStructure();
 		qc.add(q);
