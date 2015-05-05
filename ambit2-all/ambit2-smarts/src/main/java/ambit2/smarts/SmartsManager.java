@@ -1203,6 +1203,77 @@ public class SmartsManager
 		return(null);
 	}
 	
+	
+	
+	/**
+	 * Calculates for each atom a bit set which describes the participation of this 
+	 * atom in each of the predefined groups.
+	 * This function uses IsomorphismTest for substructure searching.
+	 * All possible groups mappings are found (FlagSSMode = SmartsConst.SSM_ALL)
+	 * @param target
+	 * @param groupQueries
+	 */
+	public void markAtomGroups(IAtomContainer target, List<IQueryAtomContainer> groupQueries)
+	{
+		markAtomGroups(target, groupQueries, SmartsConst.SSM_ALL);
+	}
+	
+	public void markAtomGroups(IAtomContainer target, List<IQueryAtomContainer> groupQueries, int FlagSSMode)
+	{	
+		for (int i = 0; i < groupQueries.size(); i++)
+		{
+			IQueryAtomContainer groupQuery = groupQueries.get(i);
+			handleGroupRecursiveAtoms(target, groupQuery);
+			List<List<IAtom>> maps = getMappingsForGroup(target, groupQuery, FlagSSMode);
+			//TODO
+		}
+	}
+	
+	public void handleGroupRecursiveAtoms(IAtomContainer target, IQueryAtomContainer groupQuery)
+	{
+		List<SmartsAtomExpression> recAtList = new ArrayList<SmartsAtomExpression>();
+		
+		//Find and register all recursive atoms in the groupQuery
+		for (int i = 0; i < groupQuery.getAtomCount(); i++)
+		{
+			if (groupQuery.getAtom(i) instanceof SmartsAtomExpression)
+			{
+				SmartsAtomExpression sa = (SmartsAtomExpression) groupQuery.getAtom(i); 
+				if (sa.recSmartsStrings.size() > 0)
+					recAtList.add(sa);
+			}
+		}
+		
+		if (recAtList.isEmpty())
+			return; //nothing is done
+		
+		//Initialize/clear the recursive atoms matches
+		for (int i = 0; i < recAtList.size(); i++)
+			recAtList.get(i).recSmartsMatches = new ArrayList<List<IAtom>>();
+
+		//Find all matchings of the recursive atoms
+		List<IQueryAtomContainer> vRecCon;				
+		for (int i = 0; i < recAtList.size(); i++)
+		{	
+			vRecCon = recAtList.get(i).recSmartsContainers;
+			for (int j = 0; j < vRecCon.size(); j++)				
+			{	
+				List<IAtom> v = getFirstPosAtomMappings_CurrentIsoTester(target,vRecCon.get(j));
+				recAtList.get(i).recSmartsMatches.add(v);
+			}
+		}	
+	}
+	
+	public List<List<IAtom>> getMappingsForGroup(IAtomContainer target, IQueryAtomContainer groupQuery, int FlagSSMode)
+	{
+		switch (FlagSSMode)
+		{
+		//TODO	
+		default:
+			return null; //Unsupported or incorrect SS mode
+		}
+	}
+	
 	//------------------------------- some tests -------------------
 	
 	public void testCombinations()
