@@ -33,7 +33,8 @@ public class APIdocsResource extends FreeMarkerResource {
 		study,
 		query,
 		substanceowner,
-		bundle
+		bundle,
+		myaccount
 	}
 	public APIdocsResource() {
 		super();

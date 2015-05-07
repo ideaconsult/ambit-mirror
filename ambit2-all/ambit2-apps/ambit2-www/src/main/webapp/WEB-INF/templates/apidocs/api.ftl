@@ -53,7 +53,12 @@
         {
             "path": "/query",
             "description": "Queries"
-        }
+        },
+        {
+            "path": "/myaccount",
+            "description": "Local user"
+        }        
+        
                                  
     ],
 	<#include "/apidocs/authz.ftl" >

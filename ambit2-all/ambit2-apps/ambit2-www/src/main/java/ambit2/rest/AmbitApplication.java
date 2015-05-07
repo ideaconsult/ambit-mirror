@@ -76,6 +76,7 @@ import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.bookmark.BookmarkResource;
 import ambit2.rest.bundle.MyBundlesResource;
+import ambit2.rest.bundle.user.DummyUserByURIResource;
 import ambit2.rest.bundle.user.UserByURIResource;
 import ambit2.rest.dataset.CollectionStructureResource;
 import ambit2.rest.dataset.DatasetResource;
@@ -628,6 +629,12 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	    logger.log(Level.WARNING, x.getMessage(), x);
 	}
 
+	String usersdbname = getProperty(AMBITConfig.Database.name(), configProperties);
+	if (usersdbname == null)
+	    usersdbname = "ambit_users";
+	getContext().getParameters().add(AMBITConfig.users_dbname.name(), usersdbname);
+
+	
 	if (!isOpenToxAAEnabled()) {
 
 	    if (isDBAAEnabled()) {
@@ -696,10 +703,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 		router.attach("/provider", protectedRouter);
 
-		String usersdbname = getProperty(AMBITConfig.Database.name(), configProperties);
-		if (usersdbname == null)
-		    usersdbname = "ambit_users";
-		getContext().getParameters().add(AMBITConfig.users_dbname.name(), usersdbname);
 		Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname,
 			"ambit2/rest/config/config.prop", secret, sessionLength);
 		// UserAuthorizer authz = new UserAuthorizer();
@@ -728,7 +731,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		router.attach(ambit2.user.rest.resource.Resources.login, UINoAAResource.class);
 		router.attach(ambit2.user.rest.resource.Resources.myaccount, UINoAAResource.class);
 		router.attach("/provider/signout", UINoAAResource.class);
-
+		
+		//for testing purposes only!
+		router.attach(ambit2.user.rest.resource.Resources.myaccount+"/users",DummyUserByURIResource.class);
+		
 		getLogger().warning("Warning: No AA protection! All resources are open for GET, POST, PUT and DELETE!");
 	    }
 

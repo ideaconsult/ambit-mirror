@@ -118,48 +118,47 @@ public class UserDBResource<T> extends AmbitDBQueryResource<ReadUser<T>, DBUser>
 		}
 	    };
 	} else {
-	    
+
 	    return createJSONConvertor(variant);
 	}
     }
-    
+
     public RepresentationConvertor createJSONConvertor(Variant variant) throws AmbitException, ResourceException {
 	String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
-	    final ReadUserRoles query = new ReadUserRoles();
-	    query.setDatabaseName(usersdbname == null ? getDefaultUsersDB() : usersdbname);
-	    String regDBName = null;
-	    if ((getClientInfo() != null) && (getClientInfo().getUser() != null)
-		    && (getClientInfo().getRoles() != null) && (DBRoles.isAdmin(getClientInfo().getRoles()))) {
-		regDBName = query.getDatabaseName();
-	    }
-	    return new OutputWriterConvertor(new UserJSONReporter<IQueryRetrieval<DBUser>>(getRequest(), regDBName) {
-		/**
+	final ReadUserRoles query = new ReadUserRoles();
+	query.setDatabaseName(usersdbname == null ? getDefaultUsersDB() : usersdbname);
+	String regDBName = null;
+	if ((getClientInfo() != null) && (getClientInfo().getUser() != null) && (getClientInfo().getRoles() != null)
+		&& (DBRoles.isAdmin(getClientInfo().getRoles()))) {
+	    regDBName = query.getDatabaseName();
+	}
+	return new OutputWriterConvertor(new UserJSONReporter<IQueryRetrieval<DBUser>>(getRequest(), regDBName) {
+	    /**
 					     * 
 					     */
-		private static final long serialVersionUID = -3652772856548240919L;
+	    private static final long serialVersionUID = -3652772856548240919L;
 
-		@Override
-		protected ReadUserRoles createUserRolesQuery() {
-		    return query;
-		}
+	    @Override
+	    protected ReadUserRoles createUserRolesQuery() {
+		return query;
+	    }
 
-		@Override
-		protected String writeRoles(DBUser user) {
-		    StringBuilder roles = null;
-		    for (AMBITDBRoles role : AMBITDBRoles.values()) {
-			if (roles == null)
-			    roles = new StringBuilder();
-			else
-			    roles.append(",");
-			roles.append(String.format("\"%s\":%s", role.name(), user.getRoles() != null
-				&& user.getRoles().indexOf(role.name()) >= 0));
-		    }
-		    return roles == null ? "" : roles.toString();
+	    @Override
+	    protected String writeRoles(DBUser user) {
+		StringBuilder roles = null;
+		for (AMBITDBRoles role : AMBITDBRoles.values()) {
+		    if (roles == null)
+			roles = new StringBuilder();
+		    else
+			roles.append(",");
+		    roles.append(String.format("\"%s\":%s", role.name(), user.getRoles() != null
+			    && user.getRoles().indexOf(role.name()) >= 0));
 		}
-	    }, MediaType.APPLICATION_JSON);
+		return roles == null ? "" : roles.toString();
+	    }
+	}, MediaType.APPLICATION_JSON);
     }
 
-    
     @Override
     protected QueryHTMLReporter createHTMLReporter(boolean headless) throws ResourceException {
 	return null;
@@ -205,7 +204,7 @@ public class UserDBResource<T> extends AmbitDBQueryResource<ReadUser<T>, DBUser>
 	} catch (Exception x) {
 	    search_value = null;
 	}
-	
+
 	Object key = request.getAttributes().get(UserDBResource.resourceKey);
 	try {
 	    return getUserQuery(key, search_name, search_value);
@@ -222,11 +221,15 @@ public class UserDBResource<T> extends AmbitDBQueryResource<ReadUser<T>, DBUser>
 	return new UserURIReporter(getRequest());
     }
 
-    @Override
-    protected TaskCreator getTaskCreator(Form form, Method method, boolean async, Reference reference) throws Exception {
+    protected void check(Form form, Method method, boolean async, Reference reference) throws Exception {
 	if (Method.POST.equals(method) && (form.getFirstValue(ReadUser.fields.email.name()) == null)) {
 	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "e-mail address not specified!");
 	}
+    }
+
+    @Override
+    protected TaskCreator getTaskCreator(Form form, Method method, boolean async, Reference reference) throws Exception {
+	check(form, method, async, reference);
 	return super.getTaskCreator(form, method, async, reference);
     }
 

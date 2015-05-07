@@ -5,16 +5,19 @@ import java.sql.ResultSet;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.c.task.CallableProtectedTask;
+import net.idea.restnet.db.DBConnection;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 import net.idea.restnet.user.DBUser;
 import net.idea.restnet.user.db.ReadUser;
 
-import org.apache.poi.ss.formula.ptg.AddPtg;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -23,8 +26,8 @@ import ambit2.base.config.AMBITConfig;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.update.bundle.ReadBundle;
-import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
+import ambit2.user.policy.CallablePolicyUsersCreator;
 import ambit2.user.rest.ReadUserByBundleNumber;
 import ambit2.user.rest.resource.SimpleUserJSONReporter;
 import ambit2.user.rest.resource.UserDBResource;
@@ -38,27 +41,32 @@ import ambit2.user.rest.resource.UserDBResource;
  */
 public class UserByURIResource<T> extends UserDBResource<T> {
     protected boolean addPublicGroup = false;
+    private static final String param_q = "q";
+    private static final String param_bundle_uri = "bundle_uri";
+    private static final String param_mode = "mode";
+
     @Override
     public RepresentationConvertor createJSONConvertor(Variant variant) throws AmbitException, ResourceException {
 	String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
-	return new OutputWriterConvertor(new SimpleUserJSONReporter(getRequest(), usersdbname,addPublicGroup),
+	return new OutputWriterConvertor(new SimpleUserJSONReporter(getRequest(), usersdbname, addPublicGroup),
 		MediaType.APPLICATION_JSON);
     }
-
+    public void check(Context context, Request request, Response response) throws ResourceException { 
+	if (getClientInfo() == null || getClientInfo().getUser() == null)
+	    throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);	
+    }
     @Override
     protected ReadUser createQuery(Context context, Request request, Response response) throws ResourceException {
-	if (getClientInfo() == null || getClientInfo().getUser() == null)
-	    throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+	if (!Method.GET.equals(request.getMethod())) return null;
+	check(context, request, response);
 	String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
 	Form form = request.getResourceRef().getQueryAsForm();
-	String search_name = null;
 	Object search_value = null;
 	try {
-	    search_name = "q";
-	    search_value = form.getFirstValue(search_name);
+	    search_value = form.getFirstValue(param_q);
 	    if (search_value != null) {
 		ReadUser query = new ReadUser();
-		
+
 		DBUser user = new DBUser();
 		String s = String.format("^%s", search_value.toString());
 		user.setLastname(s);
@@ -72,15 +80,17 @@ public class UserByURIResource<T> extends UserDBResource<T> {
 	}
 
 	try {
-	    search_name = "bundle_uri";
-	    search_value = form.getFirstValue(search_name);
+	    search_value = form.getFirstValue(param_bundle_uri);
 	    Integer idbundle = search_value == null ? null : getIdBundle(search_value, request);
-	    SubstanceEndpointsBundle bundle =readBundle(idbundle);
+	    SubstanceEndpointsBundle bundle = readBundle(idbundle);
 	    ReadUserByBundleNumber query = new ReadUserByBundleNumber();
 	    query.setDatabaseName(usersdbname);
 	    query.setFieldname(bundle.getBundle_number().toString());
-	    search_value = form.getFirstValue("mode");
-	    if ("W".equals(search_value)) query.setAllowWrite(true); else query.setAllowWrite(false);
+	    search_value = form.getFirstValue(param_mode);
+	    if ("W".equals(search_value))
+		query.setAllowWrite(true);
+	    else
+		query.setAllowWrite(false);
 	    return query;
 	} catch (Exception x) {
 	    search_value = null;
@@ -95,7 +105,7 @@ public class UserByURIResource<T> extends UserDBResource<T> {
 	ResultSet rs = null;
 	QueryExecutor xx = null;
 	try {
-	    DBConnection dbc = new DBConnection(getContext());
+	    DBConnection dbc = new DBConnection(getContext(), getAmbitConfigFile());
 	    c = dbc.getConnection();
 	    ReadBundle read = new ReadBundle();
 	    read.setValue(dataset);
@@ -123,6 +133,11 @@ public class UserByURIResource<T> extends UserDBResource<T> {
 	    }
 	}
     }
+
+    public String getAmbitConfigFile() {
+	return "ambit2/rest/config/ambit2.pref";
+    }
+
     protected Integer getIdBundle(Object bundleURI, Request request) {
 	if (bundleURI != null) {
 	    Object id = OpenTox.URI.bundle.getId(bundleURI.toString(), request.getRootRef());
@@ -134,15 +149,40 @@ public class UserByURIResource<T> extends UserDBResource<T> {
 
     @Override
     public RepresentationConvertor createConvertor(Variant variant) throws AmbitException, ResourceException {
-	/*
-	 * if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
-	 * 
-	 * return new StringConvertor(new
-	 * PropertyValueReporter(),MediaType.TEXT_PLAIN);
-	 * 
-	 * } else
-	 */
 	String filenamePrefix = getRequest().getResourceRef().getPath();
 	return createJSONConvertor(variant);
+    }
+
+    @Override
+    protected ReadUser<T> createUpdateQuery(Method method, Context context, Request request, Response response)
+	    throws ResourceException {
+	if (Method.POST.equals(method)) {
+	    return null;
+	}
+	throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+    }
+    @Override
+    protected void check(Form form, Method method, boolean async, Reference reference) throws Exception {
+	if (!Method.POST.equals(method)) throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+    }
+
+
+    @Override
+    protected CallableProtectedTask<String> createCallable(Method method, Form form, DBUser item)
+	    throws ResourceException {
+	String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
+	Connection conn = null;
+	try {
+	    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
+	    conn = dbc.getConnection();
+	    return new CallablePolicyUsersCreator(method, form, getRequest().getRootRef().toString(), conn, getToken(),
+		    usersdbname == null ? getDefaultUsersDB() : usersdbname);
+	} catch (Exception x) {
+	    try {
+		conn.close();
+	    } catch (Exception xx) {
+	    }
+	    throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x);
+	}
     }
 }

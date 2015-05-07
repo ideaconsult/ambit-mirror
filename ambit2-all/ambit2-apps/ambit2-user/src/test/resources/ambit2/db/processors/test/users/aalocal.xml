@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <users user_name="test" user_pass="098f6bcd4621d373cade4e832627b4f6"/>
+  <users user_name="admin" user_pass="098f6bcd4621d373cade4e832627b4f6"/>
+  <roles role_name="user"/>
+  <roles role_name="admin"/>
+  <roles role_name="B.033BD94B116837E4B0D644C3C95E35BF.W"/>
+  <user_roles user_name="test" role_name="user"/>
+  <user_roles user_name="admin" role_name="user"/>
+  <user_roles user_name="admin" role_name="admin"/>
+  <user_roles user_name="test" role_name="B.033BD94B116837E4B0D644C3C95E35BF.W"/>
+  <user_registration user_name="admin" confirmed="2009-10-05 15:44:33.0" created="2009-10-05 00:00:00.0" code="ABCDEF" status="confirmed"/>
+  <policy idpolicy="1" role_name="user" prefix="" resource="/dataset" mget="1" mput="0" mpost="0" mdelete="0"/>
+  <policy idpolicy="2" role_name="admin" prefix="" resource="/dataset" mget="1" mput="1" mpost="1" mdelete="1"/>
+  <policy idpolicy="3" role_name="B.033BD94B116837E4B0D644C3C95E35BF.W" prefix="/ambit2" resource="/bundle/033BD94B-1168-37E4-B0D6-44C3C95E35BF" mget="0" mput="1" mpost="1" mdelete="1"/>
+  <policy idpolicy="4" role_name="user" prefix="/ambit2" resource="/bundle/033BD94B-1168-37E4-B0D6-44C3C95E35BF" mget="0" mput="1" mpost="1" mdelete="1"/>
+  
+</dataset>

@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<ausers user_name="test" email="test@example.com" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="false"/>
+  <ausers user_name="guest" email="guest@example.com" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="false"/>
+  <ausers user_name="admin" email="guest@example.com" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="false"/>  
+  <bookmark idbookmark="1" creator="test" recalls="http://example.com" hasTopic="Model" title="my model" description="" created="2010-08-11 19:05:19.0" date="2010-08-11 19:05:19.0"/>
+  <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org"/>
+  <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org"/>
+  <catalog_references idreference="3" title="XLogP" url="XLogP reference"/>
+  <catalog_references idreference="4" title="XLogP another implementation" url="XLogP another implementation"/>
+  <catalog_references idreference="5" title="Jonsson G, Bechmann RK, Bamber SD, Baussant T	Bioconcentration, biotransformation, and elimination of polycyclic aromatic hydrocarbons in sheepshead minnows (Cyprinodon Variegatus) exposed to contaminated seawater	Environmental Toxicology and Chemistry	20" url="EURAS.BE"/>
+  <catalog_references idreference="6" title="Satyanarayan S, Ramakant 	Bioaccumulation kinetics and bioconcentration factor of chlorinated pesticides in tissue of Puntius ticto (Ham.)	Journal of Environmental Science and Health B	2004	39	2	321-332" url="EURAS.BE"/>
+  <catalog_references idreference="7" title="EINECS" url="EINECS"/>
+  <catalog_references idreference="8" title="Dummy reference" url="NA"/>
+  
+  <chemicals idchemical="7" inchi="InChI=1/2C8H16O2.Sn/c2*1-3-5-6-7(4-2)8(9)10;/h2*7H,3-6H2,1-2H3,(H,9,10);/q;;+2/p-2" smiles="CCCCC(CC)C(=O)[O-].CCCCC(CC)C(=O)[O-].[SnH4+2]"/>
+  <chemicals idchemical="10" inchi="InChI=1/2FH.Na/h2*1H;/q;;+1/p-1" smiles="F.[F-].[Na+]"/>
+  <chemicals idchemical="11" inchi="InChI=1/C20H20P.BrH/c1-2-21(18-12-6-3-7-13-18,19-14-8-4-9-15-19)20-16-10-5-11-17-20;/h3-17H,2H2,1H3;1H/q+1;/p-1" smiles="[Br-].CC[P+](c1ccccc1)(c2ccccc2)c3ccccc3"/>
+  
+  <chemicals idchemical="29141" inchi="InChI=1/Fe" smiles="[Fe]"/>
+  
+  <structure idstructure="100211" idchemical="7" structure="5QwAAHicpVZdc6M2FH3nV6gzfbATgXUFCAhdz3ixE6fd2LtDmj7s7HgIUW0mNmQBbzf/vpcP2xgn&#xA;nSYwHls69+joSFe+QiHED6NbuYxCZoHJbNANi48VhXAgYBPCXvw4jkPuOGNMIfgwDVsIExU0x2ZO&#xA;A/PjcgBvDDZO5UoVXbMsEJUKmmANFY+8ZuRExdAcbhsvenmDitCYcIyuXiyNc6F39WJrurB4Vy+O&#xA;ZtqW2dXLPkeHnO9a8/+vwjWhM/Gil1rFfFOmdU3n1rszDTq3KxVHFCf+HSqADkwHOuYIDM187X/0&#xA;BhVTE6ZwunoRmuVYTlcvtsbA7rwvjgaW0dnLPkddzi5wjTPOO57dRqY7nN1Gpt9/dnEpWKGgBTmn&#xA;kN2s4ko5ymixdAKsBRnlfhxB2BctCPvWMYRCAC2IYw5PIecUalnFUdCyihBvWUUKtKxiH1pWsQ8t&#xA;qyjEj63eEOJNr8otKuDCTLGjasEqfwvGZDZWhuQ3b+QPFZ2BCkxlSoFMrmcTD0HOBIK2KhroYhZs&#xA;5FDJo5jcR1mPqzJfPa9X8mcQJ0Eu+03qzeVQ8ewpiDnXYMD9uAxex97qeqiUPx8Q3jH8eBDyM1B1&#xA;1VSFavUMlfftntMH5g5W/MyaUl0VU05B5VOd9qbUocD67uC7657zwZPKD+qLR/mMM/wx88ef7z6N&#xA;fv8yvp2qd5Orq7Hvz0fzkvhlG6yj/HnxKbiX66ESrmT4KB8W988LGd6XDA+XFEdhsF74m2gtM1xM&#xA;8fQ8r+/1Psz7X+fqN+0F6KsfT41z/q3hZ7T9eR3/nQyVuoHrhsHswqIAVOAyqEkNqlNObeq4YFEO&#xA;FATljIJJwaCgU8CF2xQwOphc8LNevfh0dMHBj8956cObz1XPazQH6ccLN+NupruZ4Wammwn3ge8Q&#xA;3Fn8wjYUHYwDEgAZJVbjHLc/9S4YrcsNZS7ewQpewrQqqQhUF2GDUb29HAjVe0iDUL1SHAjVy8Hx&#xA;HMUUDJvVZd2I7aarKlc5XXGF0roIIVCX2oN+Ue8aCnXhQkTZEarrpsmpro6GRnULNCn1NIXLui43&#xA;o+Wce5P7OfcuywMy224WozzZ4PHisEc+J1mURz9kHTkEZnIZNAJ8H7hMg+VGxjmC+h68kXmwPtHw&#xA;c5nKpIZZC/6YxA9H8J/xY5z8E78y6Ch6MvY23cr/HnjCqFZ0maSbYO2tgnQpd6O8JEkfxhEuMouS&#xA;eMe8zrxVlAbrHesmWctwuw7SRaGBDfzbgpjqxtyoC9CB8ZeMlqt8qBgMU2vgASziSJBZFixlXer8&#xA;PN2G+TaVJEziPIjijCzTZPvUy/okTnKSbZ+ekjSXDwRrYrhNU0wC+SHTwuQvivIrPsq/YM6W9Q==" format="SDF"  user_name="guest" type_structure="2D with H" atomproperties="MDAwMCwwNDMwLDAzMzAsMDIyMCwwMjIwLDAyMjAsMDExMCwwMjEwLDAxMTAsMDIyMCwwMTEwLDA0&#xA;MzAsMDMzMCwwMjIwLDAyMjAsMDIyMCwwMTEwLDAyMTAsMDExMCwwMjIwLDAxMTAsCjAsMCwwLDAs&#xA;MCwwLDAsMCwwLDAsMCwwLDAsMCwwLDAsMCwwLA=="/>
+  <structure idstructure="100214" idchemical="10" structure="rgQAAHichVNvc5owGH+fT5EXe7GtAglIq7JxhyiDO6XdrLN3vR4XIZVcgXQRtvrtFxEdzukgHA+/&#xA;fyQPAUA4i9k9XbEY3WAT9bDRvdFHAEBoQIjOjX6/D7/rCCGpgxCr3a7Z21ZIlRhqVR68kHIY4Mir&#xA;9FTT7OqnKeb/U/CFlJDUukvr2qZMIXT9LxBurfJSMKw9EG+ZcTgCNvzkOjMbYMMwlJ6hYLCFxkE4&#xA;diWqY1O5Rj3FaKFRSHJqgzVPWJXDdJMIvqJFwp6ziguW0LZ06tnA0/2Q1GAwv3PcY/vetMs5igiK&#xA;hL416hYbQxKzpHNwdmATtSZZCd/jgTw/NAFuGtigvn3Gmu75aki0VP+IfUv7YVlXWHtt1ltrohe6&#xA;scHQe3AWt74/mgfOZK58Gy/8h8Wt58xq4WwaTMayMY8huXpSHz3lSfVq4mtFMlZuoglZ0swGcUrj&#xA;F5pEy01E42WtcEnBCxaTLJrlLKNr2ZldQJ3VmoZTvQXFM7dBU8i5Yy0cYEu3DE04A8PzFGnRxHBg&#xA;WZpwB7st20EdZKFOs1VkjdsPdX5Y5ZFT8ly+2zgAd3zNSvaTNgQ+ECFdkX8SniCrnBblUcyUliQ7&#xA;kc5KKihvYPQXPORFcgTPi5eC/yrOmI7YE++9qOhl4xmFx0VOMjclYkX3mMu5SEZMLnLNeCH/g93n&#xA;WbspEyTbq6Y8o3GVERFtM2TR3ux/yAVlq7S0wTVW+/2uKZvzTh7gN9RpOnI=" format="SDF"  user_name="guest" type_structure="2D no H" atomproperties="MDAwMCwwMDAwLDAwMDAsCg=="/>
+  <structure idstructure="100215" idchemical="11" structure="Pw4AAHicrVZtb+JGEP7uX+EP/QDKrtkZv+MWCZzk4HSh5JK7pDqdEAEnWAGc2tBe/n1n1wZsJ7mq&#xA;cS0SZp955vHMrPGsputX8/g6eojnwgVbeGBaLp5qmo6oo6nr4tWP7/v6VxRCaDpdaDiWh2Rw07BM&#xA;x5SYMMgr9ImuAt4Uyj9KBQxTeOarKqH+8/iSijAcB4VUsQzbBXyfimmYIFRFjuG56LxPxTIcgW5T&#xA;FdtAX3WD24Zrum7TXA5Wo7406e7xeWlSEfWFZKQKGPTU+g37so99Z1/QQb+pyrEvTSo67hHSLwqs&#xA;ps8LUm2+9z4VMHxXWE37cvhNN1QpYht19/h++V/60miP0PA8y8krsgS+syLX8EHFvnzvDlLFs/9V&#xA;BSgZ9b8CeS8gWWkNks2sQKjGRQWiKF85KpBdY9HaqbFo7dZYrsqrwvKUfJkFQge7ypIQ1FhUENZY&#xA;qEMte1rLsissS8lXWI6OUGM5OtSypzXUsqc11LP3VVfLLFpjNfsLXQ+HHxRLwmoLUT5K0nM2PtV6&#xA;+q9h/6qngW0KbiI5JHQ2Gp+FhCI4HNHkZgmdjmfrqKdF2+XzapvGT8to87y6T7L7ZBPv1vpdmqzj&#xA;RVQOuDjvaSGKIYqJMUiVZ/Rl0g/LSq2DVPtpmWT090JttFlEP4qYEofp1VQ420fpLehCu4gNl6Oe&#xA;pr5+g84xm2FnDhw5Qgs8DsgdbnKXg8nBY+BzsLjHLU6GzcFvo+DUERCcVsDB5SiCzpLI7pDhEBkM&#xA;zQCGnT9PIOg8Fb1U95w+Rs897ePwj/Ht7enl5fA6HH7kn89uhrc3v5/3bxXx6mL06Yya/m2Q8u9G&#xA;GH6bnHxvzWEuL2i35qgsbM9NZeR7crmbreLt8/TT7C5a9bT5Mpo/Rovp3fM0mt8pRjjbUJ/ms9X0&#xA;ah2vouw/3iBPv7/7MdrcJz2tMKiH0Bl3TYbMZgAMXGYxh4FgQF0gw2M+cxmQkzjk9xn102JIhACx&#xA;c9ZtmRRht1sO0SRZhlISMtyUTBlKOi5Bcicosh10ws9fuwiyu2m/izg5CV+5qLpOOuhmEGQYBJkV&#xA;LLgdZE6QweLEpYWVeUGgZSDIBiIBKheYci0ysCgIHLlwyfBypy/XTkb7TfcOu/kQZ8XLlIkgP9eW&#xA;ADlBWHGAomU+r1lxRiQgH70lID8BsuK0VGIU30eNg6jMQpNpHGLy4xIrht9RRKhweXxR5j79A20v&#xA;nQ+q0s3z+acKlMNMRavSpCFKCnm9dfpRMB9jrBhiBOQT6dgxLVDP23i3nva3yZqeU8QDMkmyeBv/&#xA;FRUeODjG0cPsVcd5OntYR5ut1DmAF9F2tiqo4oBebaM0St6AB8lmUYG/bB43yd+bN4Iq3hex1+ku&#xA;+nngG4zzJF3PVuFylj5EeyxMknRxGlORWZxs9mWOsnAZp7PVnnWRrKL5bjVLp1KDjP27eJBOaoSb&#xA;KH5Ybnua6YKBtrAdTfuFLu0fbiveOA==" format="SDF" user_name="guest" type_structure="2D with H" atomproperties="MDQ0MCwwMjIwLDAxMTAsMDMyMTA2MDIsMDMyMTA2MDIsMDMyMTA2MDIsMDMyMTA2MDIsMDQzMTA2&#xA;MDIsMDMyMTA2MDIsMDMyMTA2MDEsMDMyMTA2MDEsMDMyMTA2MDEsMDMyMTA2MDEsMDQzMTA2MDEs&#xA;MDMyMTA2MDEsMDMyMTA2MDAsMDMyMTA2MDAsMDMyMTA2MDAsMDMyMTA2MDAsMDQzMTA2MDAsMDMy&#xA;MTA2MDAsMDAwMCwKMCwwLDAsMCwwLDEsMSwxLDEsMSwxLDEsMSwxLDEsMSwxLDEsMSwxLDEsMSwx&#xA;LA=="/>
+  <structure idstructure="129345" idchemical="29141" structure="PwMAAHicfZJRb9owFIXf/Sv8sNc0DoRC2GYpmHikWrIiSruqqiIXboNVx5ZMspV/P0OBwiiNLOXe&#xA;75x7LCdGGE9m8gZKOSPdoEN6QTvstoYIYRxgTM6tKIrwbYsQ4nyuvXAV+bDi8EnKfqEM4yQfIoq/&#xA;sXhCUTdsR14v8i7RGiVpnjBHW+3AI9GlFx7QIhcVUCSt0Yc04xRx2JB0eh2z/22pnsPrFqbvkC1S&#xA;169f3wN/N79uixdYUfQ7Se4H4/Hg6m7ErzJvOuKcx7/u4x8bIxPaaDkTqphUUsGSogcOjxtp3Agl&#xA;61XxUzyBougW7Goky8VBfty8pvrZULQt3P7Ez/uBb+N+wMG3g75vWf/rZiRvqiKuTeW2CPbg2ixl&#xA;Lf/AViB7IYdSfChwK8oKdH0Uk0Et1En4pAYL5iThDQ+Mnh/hqX7R5q8+M3Sknsze2AY+Hzzj4MZW&#xA;QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX&#xA;96B/xsDkzg==" format="SDF"  user_name="guest" type_structure="2D with H" atomproperties="MDAwMCwK"/>
+    
+  <properties idproperty="1" idreference="8" name="Property 1" units="" comments="" islocal="false"/>
+  <properties idproperty="2" idreference="8" name="Property 2" units="" comments="" islocal="false"/>
+  <properties idproperty="3" idreference="8" name="Property 3" units="" comments="" islocal="false"/>
+
+  <property_annotation idproperty="1" predicate="test1" object="test2"/>
+  
+  <template idtemplate="1" name="BCF"/>
+  <template idtemplate="44" name="Octanol-water partition coefficient (Kow)"/>
+  <template idtemplate="5" name="Physicochemical effects"/>
+  <template idtemplate="85" name="Endpoints"/>
+  <template idtemplate="84"/>
+  
+  <template_def idtemplate="1" idproperty="1"/>
+  <template_def idtemplate="1" idproperty="2"/>
+  <template_def idtemplate="1" idproperty="3"/>
+
+  <dictionary idsubject="85" relationship="is_part_of" idobject="84"/>
+  <dictionary idsubject="44" relationship="is_part_of" idobject="5"/>
+  <dictionary idsubject="5" relationship="is_part_of" idobject="85"/>  
+    
+    
+  <models idmodel="100" name="Model" predictors="5" dependent="85" predicted="85" content="zero"/>  
+  <tuples/>
+  <property_string/>
+  <property_values/>
+  <src_dataset/>
+  <struc_dataset/>
+ <fp1024 idchemical="7" fp1="67108864" fp2="5246976" fp3="1048577" fp4="70368744177664" fp5="17592186044416" fp6="0" fp7="256" fp8="0" fp9="138516889600" fp10="2305878193585782784" fp11="16" fp12="72339481331499008" fp13="4611686018427387904" fp14="4398046511104" fp15="8589934592" fp16="0" time="0" bc="22" status="valid"/>
+  <fp1024 idchemical="10" fp1="0" fp2="0" fp3="0" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="274877906944" fp13="0" fp14="0" fp15="0" fp16="0" time="0" bc="1" status="valid"/>
+  <fp1024 idchemical="11" fp1="0" fp2="140739637952512" fp3="9223380841537863680" fp4="11529215046070566914" fp5="17592186044416" fp6="0" fp7="0" fp8="0" fp9="4755801206503243777" fp10="11529215046085246976" fp11="4755801240862982144" fp12="288232300299192320" fp13="140737489403904" fp14="17314086912" fp15="2305843009222082560" fp16="524800" time="0" bc="37" status="valid"/>
+  <fp1024 idchemical="29141" fp1="0" fp2="0" fp3="0" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="0" fp13="0" fp14="4194304" fp15="0" fp16="0" time="0" bc="1" status="valid"/>
+  <sk1024 idchemical="7" fp1="10016007774447737568" fp2="151736943648960" fp3="2305860601433554944" fp4="536870912" fp5="140517376" fp6="144115188077969408" fp7="2251799813685248" fp8="0" fp9="275951648768" fp10="0" fp11="32768" fp12="0" fp13="0" fp14="64" fp15="0" fp16="0" time="0" bc="47" status="valid"/>
+  <sk1024 idchemical="10" fp1="0" fp2="0" fp3="524288" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="33554432" fp10="0" fp11="0" fp12="0" fp13="0" fp14="0" fp15="0" fp16="0" time="0" bc="2" status="valid"/>
+  <sk1024 idchemical="11" fp1="4127" fp2="128" fp3="0" fp4="0" fp5="0" fp6="536870912" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="0" fp13="0" fp14="0" fp15="0" fp16="0" time="0" bc="8" status="valid"/>
+  <sk1024 idchemical="29141" fp1="0" fp2="0" fp3="0" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="0" fp13="0" fp14="0" fp15="0" fp16="0" time="0" bc="0" status="valid"/> 
+  <sessions idsessions="1" user_name="guest" completed='2010-01-01 01:01:01' title='temp'/>
+  <query idquery="2" idsessions="1" name="test query 2" content="" idtemplate="1"/>
+  <query idquery="1" idsessions="1" name="test query 1" content=""/>
+  
+  
+  <query_results idquery="1" idchemical="7" idstructure="100211" selected="1" metric="0"/>
+  <query_results idquery="1" idchemical="29141" idstructure="129345" selected="1" metric="0"/>
+  
+  <query_results idquery="2" idchemical="10" idstructure="100214" selected="1" metric="0"/>
+  <query_results idquery="2" idchemical="29141" idstructure="129345" selected="1" metric="0"/>  
+  
+  <quality_structure idstructure="100214" label="OK" user_name="guest" />
+  <chem_relation idchemical1="7" idchemical2="11" relation="test" metric="999"/>
+  <substance idsubstance="1" prefix="IUC4" uuid="79shu+efMoapiLb2lE03NA==" documentType="Substance" format="i5._4." name="testname" publicname="publictestname" content="dGVzdA==" substanceType="Monoconstituent" owner_prefix="ECB5" owner_uuid="LJTjLDZiTeq6AEN4e4pv0w=="/>
+  <substance_ids prefix="IUC4" uuid="79shu+efMoapiLb2lE03NA==" type="test" id="testid1" />
+  <substance_ids prefix="IUC4" uuid="79shu+efMoapiLb2lE03NA==" type="test" id="testid2" />
+  <substance_relation idsubstance="1" idchemical="11" relation="HAS_ADDITIVE" proportion_typical="=" proportion_typical_value="10" proportion_typical_unit="%" cmp_prefix="ECB5" cmp_uuid="LJTjLDZiTeq6AEN4e4pv0w=="/>
+  <substance_protocolapplication document_prefix="IUC4" document_uuid="rmT8OyKkMXOTYpzOH/Yirg==" topcategory="TOX" endpointcategory="TO_ACUTE_ORAL_SECTION" endpoint="Acute toxicity: oral, IUC4#2/Ch.5.1.1" guidance="Method: other: no data" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{&quot;Species&quot;:&quot;rat&quot;,&quot;Sex&quot;:&quot;male/female&quot;}" reference_year="1999" reference="Smyth, H. F. Seaton J., and Fischer L. (1941).|The single dose toxicity of some glycols and derivatives.|J. Ind. Hyg. Toxicol. 23, 259-268" reference_owner="Test Company 1" updated="2013-11-11 14:15:35.0"/>
+  <substance_protocolapplication document_prefix="IUC4" document_uuid="HXXwHDsrNfWE8c4j4itscw==" topcategory="ENV FATE" endpointcategory="TO_BIODEG_WATER_SCREEN_SECTION" endpoint="Biodegradation in water: screening tests, IUC4#1/Ch.3.5" guidance="OECD Guideline 301 D (Ready Biodegradability: Closed Bottle Test)" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{}" reference="reference" reference_owner="Test Company 2" updated="2013-11-11 13:52:14.0"/>
+  <substance_protocolapplication document_prefix="IUC4" document_uuid="L2SrJ9K+NS652E8CdP1mMw==" topcategory="P-CHEM" endpointcategory="PC_PARTITION_SECTION" endpoint="Partition coefficient, IUC4#5/Ch.2.5" guidance="Method: other (measured)" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{}" reference="reference" reference_owner="Test Company 3" updated="2013-11-11 13:32:38.0"/>
+  <substance_protocolapplication document_prefix="IUC4" document_uuid="etsNA/abMqme/oa0qFd4kw==" topcategory="ECOTOX" endpointcategory="EC_FISHTOX_SECTION" endpoint="Short-term toxicity to fish, IUC4#53/Ch.4.1" guidance="Method: other: acute toxicity test; &quot;static bioassay&quot;" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{&quot;Test organism&quot;:&quot;Lepomis cyanellus&quot;}" reference="reference" reference_owner="Test Company 4" updated="2013-11-10 21:11:16.0"/>
+  <substance_experiment idresult="38" document_prefix="IUC4" document_uuid="rmT8OyKkMXOTYpzOH/Yirg==" endpoint="LD50" conditions="{&quot;Temperature&quot;:&quot;25 &#176;C&quot;,&quot;Sex&quot;:&quot;male&quot;}" unit="mg/kg bw" loValue="260.0" upvalue="320.0"/>
+  <substance_experiment idresult="7" document_prefix="IUC4" document_uuid="etsNA/abMqme/oa0qFd4kw==" endpoint="LC50" conditions="{&quot;Exposure&quot;:&quot;96&quot;}" unit="mg/L" loValue="83.1"/>
+  <substance_experiment idresult="19" document_prefix="IUC4" document_uuid="L2SrJ9K+NS652E8CdP1mMw==" endpoint="log Pow" conditions="{&quot;Temperature&quot;:&quot;25 &#176;C&quot;}" loValue="0.35"/>
+  <substance_experiment idresult="30" document_prefix="IUC4" document_uuid="HXXwHDsrNfWE8c4j4itscw==" endpoint="% Degradation" conditions="{&quot;Time point&quot;:&quot;28 d&quot;}" unit="%" loValue="90.0"/>
+
+</dataset>
