@@ -9,7 +9,7 @@ ALTER TABLE `policy` DROP FOREIGN KEY `fkrole1` ;
 ALTER TABLE `policy` CHANGE COLUMN `role_name` `role_name` VARCHAR(40) NOT NULL DEFAULT 'ambit_guest'  , 
   ADD CONSTRAINT `fkrole1`
   FOREIGN KEY (`role_name` )
-  REFERENCES `ambit_users`.`roles` (`role_name` )
+  REFERENCES `roles` (`role_name` )
   ON DELETE CASCADE
   ON UPDATE CASCADE;
   
@@ -17,7 +17,7 @@ ALTER TABLE `user_roles` DROP FOREIGN KEY `urolefk` ;
 ALTER TABLE `user_roles` CHANGE COLUMN `role_name` `role_name` VARCHAR(40) NOT NULL  , 
   ADD CONSTRAINT `urolefk`
   FOREIGN KEY (`role_name` )
-  REFERENCES `ambit_users`.`roles` (`role_name` )
+  REFERENCES `roles` (`role_name` )
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
