@@ -34,6 +34,14 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>net.ideaconsult.restnet</groupId>
+      <artifactId>restnet-db</artifactId>
+      <version>${restnet.version}</version>
+      <classifier>tests</classifier>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>    
+    <dependency>
       <groupId>org.dbunit</groupId>
       <artifactId>dbunit</artifactId>
       <version>${dbunit.version}</version>

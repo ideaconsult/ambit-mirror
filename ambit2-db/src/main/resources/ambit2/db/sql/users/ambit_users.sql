@@ -16,7 +16,7 @@ CREATE TABLE `users` (
 --
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
-  `role_name` varchar(16) NOT NULL DEFAULT 'ambit_guest',
+  `role_name` varchar(40) NOT NULL DEFAULT 'ambit_guest',
   PRIMARY KEY (`role_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -40,7 +40,7 @@ CREATE TABLE `organisation` (
 DROP TABLE IF EXISTS `policy`;
 CREATE TABLE `policy` (
   `idpolicy` int(11) NOT NULL AUTO_INCREMENT,
-  `role_name` varchar(16) NOT NULL DEFAULT 'ambit_guest',
+  `role_name` varchar(40) NOT NULL DEFAULT 'ambit_guest',
   `prefix` varchar(255) NOT NULL,
   `resource` varchar(255) NOT NULL,
   `level` smallint(6) DEFAULT '1',
@@ -58,7 +58,6 @@ CREATE TABLE `policy` (
   KEY `fk_resource` (`resource`),
   CONSTRAINT `fkrole1` FOREIGN KEY (`role_name`) REFERENCES `roles` (`role_name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 --
 -- Table structure for table `project`
 --
@@ -145,19 +144,19 @@ CREATE TABLE `user_registration` (
 DROP TABLE IF EXISTS `user_roles`;
 CREATE TABLE `user_roles` (
   `user_name` varchar(16) NOT NULL,
-  `role_name` varchar(16) NOT NULL,
+  `role_name` varchar(40) NOT NULL,
   PRIMARY KEY (`user_name`,`role_name`),
   KEY `urolefk_idx` (`role_name`),
-  CONSTRAINT `urolefk` FOREIGN KEY (`role_name`) REFERENCES `roles` (`role_name`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `urolefk` FOREIGN KEY (`role_name`) REFERENCES `roles` (`role_name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `userfk` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 --
 -- Table structure for table `version`
 --
 
 DROP TABLE IF EXISTS `version`;
-CREATE TABLE `version` (
+CREATE TABLE `version_users` (
   `idmajor` int(5) unsigned NOT NULL,
   `idminor` int(5) unsigned NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -166,7 +165,7 @@ CREATE TABLE `version` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
-insert into version (idmajor,idminor,comment) values (2,2,"AMBITDB users");
+insert into version_users (idmajor,idminor,comment) values (2,4,"AMBITDB users");
 
 -- -----------------------------------------------------
 -- Default users

@@ -20,9 +20,9 @@ CREATE TABLE `policy` (
   CONSTRAINT `fkrole1` FOREIGN KEY (`role_name`) REFERENCES `roles` (`role_name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-insert into roles value("ambit_datasetmgr");
-insert into roles value("ambit_modeller");
-insert into roles value("ambit_model_user");
+insert ignore into roles value("ambit_datasetmgr");
+insert ignore into roles value("ambit_modeller");
+insert ignore into roles value("ambit_model_user");
 
 delete from user_roles where role_name="ambit_curator";
 delete from roles where role_name="ambit_curator";
