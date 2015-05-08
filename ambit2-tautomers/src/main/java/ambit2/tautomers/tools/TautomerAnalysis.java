@@ -403,4 +403,57 @@ public class TautomerAnalysis
 		return fname;
 	}
 	
+	/**
+	 * This is a measure for the tautomer ranking based on a comparison with
+	 * tautomers energies
+	 * @param ranks
+	 * @param energies
+	 * @return
+	 */
+	public double tautomerRankingMeasures(double ranks[], double energies[])
+	{
+		if (ranks == null)
+			return 0.0;
+		if (energies == null)
+			return 0.0;
+		int n = ranks.length;
+		if (n != energies.length)
+			return 0.0;
+		if (n == 0)
+			return 0.0;
+		
+		double minRank = ranks[0];
+		double maxRank = ranks[0];
+		double minEnergy = energies[0];
+		double maxEnergy = energies[0];
+		
+		for (int i = 1; i < n; i++)
+		{
+			if (minRank > ranks[i])
+				minRank = ranks[i];
+			if (maxRank < ranks[i])
+				maxRank = ranks[i];
+			if (minEnergy > energies[i])
+				minEnergy = energies[i];
+			if (maxEnergy < energies[i])
+				maxEnergy = energies[i];
+		}
+		
+		double deltaRank = maxRank - minRank;
+		double deltaEnergy = maxEnergy - minEnergy;
+		double measure = 0.0;
+		
+		for (int i = 0; i < n; i++)
+		{
+			measure += Math.abs(
+					((deltaRank > 0)?(ranks[i]-minRank)/deltaRank:0.0) -
+					((deltaEnergy > 0)?(energies[i]-minEnergy)/deltaEnergy:0.0)		
+					);
+		}
+		
+		measure = measure / n;
+		
+		return measure;
+	}
+	
 }
