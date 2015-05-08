@@ -5,6 +5,10 @@ html, body, #jtox-bundle {
   height: 100%;
 }
 
+strong {
+  font-weight: bold;
+}
+
 #jtox-bundle {
   overflow: hidden;
   position: relative;
@@ -40,7 +44,7 @@ html, body, #jtox-bundle {
   margin-bottom: 5px;
 }
 
-#jtox-structures td textarea {
+#jtox-structures td textarea, #jtox-endpoints td textarea {
   min-width: 150px;
   height: 150px;
   overflow-x: none;
@@ -74,11 +78,12 @@ body.structlist #browser {
 	overflow-x: scroll;
 }
 
-#jtox-bundle>div.ui-tabs-panel {
+#jtox-bundle > div.ui-tabs-panel {
   position: relative;
   overflow-x: hidden !important;
   overflow-y: scroll !important;
 }
+
 
 .jtox-slidable {
   overflow: hidden;
@@ -94,7 +99,7 @@ body.structlist #browser {
   transition: left ease 800ms;
 }
 
-.jtox-slidable>div {
+.jtox-slidable > div {
   width: 50%;
   position: relative;
   margin: 0 -.25em 0 0;
@@ -148,7 +153,7 @@ body.structlist #browser {
 
 #jtox-matrix table.dataTable td span.ui-icon {
   display: inline-block;
-  vertical-align: bottom;
+  vertical-align: middle !important;
 }
 
 #jtox-matrix button.save-button {
@@ -164,10 +169,20 @@ body.structlist #browser {
 	color: #999;
 }
 
-#jtox-matrix a.unsaved-study {
+#jtox-matrix a.unsaved-study,#jtox-matrix a.deleted {
   background: #ffcccc;
   border-radius: 3px;
 }
+
+#jtox-matrix .jtox-ds-variable .shortened {
+  max-width: 180px;
+}
+
+#jtox-matrix .jtox-ds-variable span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 
 /* Now come info and edit box declarations
 */

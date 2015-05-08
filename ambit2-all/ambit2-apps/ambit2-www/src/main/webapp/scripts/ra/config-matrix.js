@@ -4,7 +4,6 @@ jTConfig.matrix = {
 		  "visibility": "details",
 			"title": "Composition",
 			"data": "compound.URI",
-      "primary": true,
 			"column": { bVisible: false },
 			"basic": true,
 			"render" : function(data, type, full) {
@@ -12,16 +11,28 @@ jTConfig.matrix = {
       }
 		},
     "http://www.opentox.org/api/1.1#ChemicalName" : {
-      "primary": true,
+      primary: false
+    },
+    "http://www.opentox.org/api/1.1#CASRN" : {
+      primary: false
+    },
+    "http://www.opentox.org/api/1.1#EINECS" : {
+      primary: false
     },
 		"http://www.opentox.org/api/1.1#Reasoning" : {
 			"title": "Rationale",
 			"data": "compound.URI",
-      "primary": true,
+      "search": true,
 			"column": { sWidth: "300px", sClass: "paddingless" },
 			"render" : function(data, type, full) {
+        // This looks realy hacky, but works.
+        // Get the remarks info here so that the column can be filtered.
+        var bundleInfo = full.bundles[jToxBundle.bundleUri] || {};
+        if (!!bundleInfo.tag) {
+          data = bundleInfo.remarks;
+        }
 			  data = data || '';
-			  return (type != 'display') ? data : '<textarea class="remark" placeholder="Reason for selection_"></textarea>';
+			  return (type != 'display') ? data : '<textarea class="remark" placeholder="Reason for selection_">' + data + '</textarea>';
       }
 		},
 		'#SubstanceName' : {
@@ -125,6 +136,6 @@ jTConfig.matrix = {
 	"columns": {
   	"substance": {
     	'Contained in as': { iOrder: 20, mData: "composition", sTitle: "Contained in as", mRender: jT.ui.renderRelation }
-  	}
+    }
 	}
 };
