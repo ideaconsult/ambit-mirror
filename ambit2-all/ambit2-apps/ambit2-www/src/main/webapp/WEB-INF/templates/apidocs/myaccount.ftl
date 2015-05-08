@@ -76,7 +76,7 @@
 	                            "description": "Bundle identifier (UUID)",
 	                            "required": true,
 	                            "type": "String",
-	                            "paramType": "query",
+	                            "paramType": "form",
 	                            "allowMultiple": false
 	                        },
 	                        {
