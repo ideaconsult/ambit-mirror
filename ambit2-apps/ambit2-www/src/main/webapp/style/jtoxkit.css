@@ -417,6 +417,12 @@ td.jtox-multi table {
   margin-bottom: 0px;
 }
 
+.jtox-search label {
+  display: inline-block;
+  font-weight: normal;
+  font-size: 1rem;
+}
+
 #searchcontext input {
   height: auto;
   width: 99%;
