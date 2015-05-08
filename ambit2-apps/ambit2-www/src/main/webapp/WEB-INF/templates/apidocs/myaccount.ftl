@@ -22,7 +22,7 @@
 							{
 							    "name": "q",
 							    "description": "User name (starts with)",
-							    "required": true,
+							    "required": false,
 							    "type": "string",
 							    "paramType": "query",
 							    "allowMultiple": false,
