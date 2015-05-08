@@ -38,7 +38,7 @@ public class TaskJSONReporter<USERID> extends TaskURIReporter<USERID> {
 	super(storage, baseRef);
     }
 
-    private static String format = "\n{\n\t\"uri\":\"%s\",\n\t\"id\": \"%s\",\n\t\"name\": \"%s\",\n\t\"error\": \"%s\",\n\t\"policyError\": \"%s\",\n\t\"status\": \"%s\",\n\t\"started\": %d,\n\t\"completed\": %d,\n\t\"result\": \"%s\",\n\t\"user\": \"%s\",\n\t\"errorCause\": %s\n}";
+    private static String format = "\n{\n\t\"uri\":\"%s\",\n\t\"id\": \"%s\",\n\t\"name\": \"%s\",\n\t\"error\": \"%s\",\n\t\"policyError\": \"%s\",\n\t\"status\": \"%s\",\n\t\"started\": %d,\n\t\"completed\": %d,\n\t\"result\": \"%s\",\n\t\"errorCause\": %s\n}";
 
     @Override
     public void processItem(UUID item, Writer output) {
@@ -67,7 +67,7 @@ public class TaskJSONReporter<USERID> extends TaskURIReporter<USERID> {
 			    : JSONUtils.jsonEscape(task.getError().toString()), task.getPolicyError() == null ? ""
 			    : JSONUtils.jsonEscape(task.getPolicyError().toString()), task.getStatus() == null ? ""
 			    : task.getStatus(), task.getStarted(), task.getTimeCompleted(), task.getUri() == null ? ""
-			    : task.getUri(), task.getUserid() == null ? "" : task.getUserid(),
+			    : task.getUri(), 
 		    errorTrace == null ? null : JSONUtils.jsonQuote(JSONUtils.jsonEscape(errorTrace.toString()))));
 	    comma = ",";
 	} catch (IOException x) {
