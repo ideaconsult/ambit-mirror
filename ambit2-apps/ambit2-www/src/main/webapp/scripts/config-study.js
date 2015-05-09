@@ -1009,7 +1009,8 @@ var config_study = {
             },
             "conditions": {
                 "target gene": {
-                    "iOrder": -7
+                    "iOrder": -7,
+                    "inMatrix" : true
                 },
                 "cell line": {
                     "iOrder": -8
@@ -2038,13 +2039,15 @@ var config_study = {
                 "medium": {
                     "sTitle": "Medium",
                     "iOrder": -15,
-                    "bVisible": true
+                    "bVisible": true,
+                    "inMatrix": true
                 },
                 "n": {
                     "iOrder": -17
                 },                
                 "ph": {
-                    "iOrder": -16
+                    "iOrder": -16,
+                    "inMatrix" : true
                 },
                 "remark": {
                     "sTitle": "Remarks",
@@ -2197,7 +2200,8 @@ var config_study = {
                 "medium": {
                     "sTitle": "Medium",
                     "iOrder": -14,
-                    "bVisible": true
+                    "bVisible": true,
+                    "inMatrix": true
                 },                
                 "remark": {
                     "sTitle": "Remark",
@@ -2281,7 +2285,8 @@ var config_study = {
             "conditions": {
                 "medium": {
                     "sTitle": "Medium",
-                    "iOrder": -15
+                    "iOrder": -15,
+                    "inMatrix": true
                 }
             },
             "effects": {
@@ -2747,7 +2752,8 @@ var config_study = {
             "conditions": {
                 "crystal system": {
                     "sTitle": "Crystal system",
-                    "iOrder": -18
+                    "iOrder": -18,
+                    "inMatrix": true
                 },
                 "common name": {
                     "sTitle": "Common name",
@@ -2914,7 +2920,8 @@ var config_study = {
                 },
               	"doses/concentrations": {
               		"bVisible": true,
-                    "sTitle": "Concentration"
+                    "sTitle": "Concentration",
+                    "inMatrix": true
                 },
                 "emission wavelength": {
                 	"bVisible": true,
