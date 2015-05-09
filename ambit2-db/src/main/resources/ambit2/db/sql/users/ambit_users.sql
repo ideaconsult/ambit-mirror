@@ -155,7 +155,7 @@ CREATE TABLE `user_roles` (
 -- Table structure for table `version`
 --
 
-DROP TABLE IF EXISTS `version`;
+DROP TABLE IF EXISTS `version_users`;
 CREATE TABLE `version_users` (
   `idmajor` int(5) unsigned NOT NULL,
   `idminor` int(5) unsigned NOT NULL,
@@ -170,22 +170,22 @@ insert into version_users (idmajor,idminor,comment) values (2,4,"AMBITDB users")
 -- -----------------------------------------------------
 -- Default users
 -- -----------------------------------------------------
-insert into users values("admin",MD5("admin"));
-insert into users values("guest",MD5("guest"));
-insert into roles values("ambit_admin");
-insert into roles values("ambit_user");
-insert into roles value("ambit_datasetmgr");
-insert into roles value("ambit_modeller");
-insert into roles value("ambit_model_user");
+insert ignore into users values("admin",MD5("admin"));
+insert ignore into users values("guest",MD5("guest"));
+insert ignore into roles values("ambit_admin");
+insert ignore into roles values("ambit_user");
+insert ignore into roles value("ambit_datasetmgr");
+insert ignore into roles value("ambit_modeller");
+insert ignore into roles value("ambit_model_user");
 
-insert into user_roles values("admin","ambit_admin");
-insert into user_roles values("admin","ambit_user");
+insert ignore into user_roles values("admin","ambit_admin");
+insert ignore into user_roles values("admin","ambit_user");
 
 insert ignore into user_registration
 SELECT user_name,now(),now(),concat("SYSTEM_",user_name),'confirmed' FROM users;
 
-insert into user values (null,'admin','','Admin','Administrator','AMBIT','http://ambit.sf.net','http://ambit.sf.net','','','admin',1);
-insert into user values (null,'guest','','Guest','Guest','AMBIT','http://ambit.sf.net','http://ambit.sf.net','','','guest',1);
+insert ignore into user values (null,'admin','','Admin','Administrator','AMBIT','http://ambit.sf.net','http://ambit.sf.net','','','admin',1);
+insert ignore into user values (null,'guest','','Guest','Guest','AMBIT','http://ambit.sf.net','http://ambit.sf.net','','','guest',1);
 
 insert ignore into policy values(null,"ambit_admin","/ambit2","/admin",1,1,1,1,1);
 insert ignore into policy values(null,"ambit_admin","/ambit2","/user",1,1,1,1,1);
