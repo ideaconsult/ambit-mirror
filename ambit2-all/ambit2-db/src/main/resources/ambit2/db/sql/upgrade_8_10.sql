@@ -5,6 +5,9 @@ ALTER TABLE `substance` CHANGE COLUMN `name` `name` TEXT CHARACTER SET 'utf8' CO
 -- add indices, will speed up LIKE value% queries
 ALTER TABLE `substance` ADD INDEX `name-x` (`name`(128) ASC) , ADD INDEX `publicname-x` (`publicname`(128) ASC);
 
+-- fill in missing bundle owners
+update bundle set user_name="admin" where user_name is null;
+
 -- enable fulltext search by substance name - requires MySQL 5.6.4 or higher
 -- ALTER TABLE `substance` ADD FULLTEXT INDEX `name-fulltext` (`name` ASC) ;
 -- ALTER TABLE `substance` ADD FULLTEXT INDEX `publicname-fulltext` (`publicname` ASC) ;

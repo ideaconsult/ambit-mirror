@@ -15,6 +15,8 @@
 		loadHelp("${ambit_root}","bundle");
 		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="Bundles">Dataset of substances and studies</a></li>');
 
+		userAutocomplete(".users","${ambit_root}/myaccount/users",10);
+		
 		downloadForm("${ambit_request}");
 		<#if datasetid??>
 			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/_dataset?dataset_uri=${ambit_root}/bundle/${datasetid}" title="${ambit_root}/bundle/${datasetid}">/bundle/${datasetid}</a></li>');
@@ -40,18 +42,28 @@
 <#include "/banner_crumbs.ftl">
 
 <div class="three columns">
-
+<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
+Search
+</div>
 <form method='GET' name='searchform' id='searchform' action='${ambit_root}/bundle' style='padding:0;margin:0;'>
 
-<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-<span title='Search for datasets by name'>Search for bundles by name</span>
-		    	<input type='text'  id='search' name='search' value='' tabindex='1' >
-		    	<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
-</div>
+<div class='row remove-bottom' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
+				<span title='Search for bundles by name'>by name</span>
+		    	<input  type='text'  id='search' name='search' value='' tabindex='1' >
 
+<#if menu_profile?? && menu_profile =='lri'>
+<span title='Search by users with read access'>by Users with Read access</span>
+		    	<input type='text' class='users' id='canRead' name='canRead' value='' tabindex='1' >
+
+<span title='Search by users with write access'>by Users with Write access</span>
+		    	<input type='text' class='users' id='canWrite' name='canWrite' value='' tabindex='1' >
+
+</#if>
+<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
+</div>
 </form>
 
-<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
+<div class='row remove-bottom' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
 <a href='#' id='uri'><img src='${ambit_root}/images/link.png' alt='text/uri-list' title='Download as URI list '></a>
 <a href='#' id='rdfxml'><img src='${ambit_root}/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a>
 <a href='#' id='rdfn3'><img src='${ambit_root}/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a>

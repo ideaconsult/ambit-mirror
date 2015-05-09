@@ -21,7 +21,7 @@ import ambit2.db.update.dataset.AbstractReadDataset;
  */
 public class ReadBundle extends AbstractReadDataset<String, SubstanceEndpointsBundle> {
 
-    public static final String select_datasets = "SELECT idbundle as id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder,stars,maintainer,created,description,hex(bundle_number) bn,version,user_name,published_status,updated FROM bundle join catalog_references using(idreference) %s %s order by stars desc\n";
+    public static final String select_datasets = "SELECT idbundle as id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder,stars,maintainer,created,description,hex(bundle_number) bn,version,user_name,published_status,updated FROM bundle join catalog_references using(idreference) %s %s\n";
     /**
 	 * 
 	 */
@@ -67,8 +67,9 @@ public class ReadBundle extends AbstractReadDataset<String, SubstanceEndpointsBu
     }
 
     public String getSQL() throws AmbitException {
-	return String.format(select_datasets, getValue() == null ? "where published_status in ('draft','published')"
-		: getValue().getID() > 0 ? "where idbundle=?" : "where name=?",(getFieldname()==null)?"":" and user_name=?");
+	String sql =  String.format(select_datasets, getValue() == null ? "where published_status in ('draft','published')"
+		: getValue().getID() > 0 ? "where idbundle=?" : "where name like ?",(getFieldname()==null)?"":" and user_name=?");
+	return sql;
 	
     }
 
