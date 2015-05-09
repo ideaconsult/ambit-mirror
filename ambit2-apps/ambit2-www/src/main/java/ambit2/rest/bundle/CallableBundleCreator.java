@@ -28,6 +28,7 @@ import ambit2.rest.dataset.DatasetURIReporter;
 public class CallableBundleCreator extends CallableDBUpdateTask<SubstanceEndpointsBundle, Form, String> {
     protected DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> reporter;
     protected SubstanceEndpointsBundle item;
+    protected String username;
 
     public CallableBundleCreator(SubstanceEndpointsBundle item,
 	    DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> reporter,
@@ -35,7 +36,7 @@ public class CallableBundleCreator extends CallableDBUpdateTask<SubstanceEndpoin
 	super(method, input, connection, token);
 	this.item = item;
 	this.reporter = reporter;
-	if (user!=null && item!=null) this.item.setUserName(user.getIdentifier());
+	username = user==null?"admin":user.getIdentifier();
     }
 
     @Override
@@ -43,7 +44,6 @@ public class CallableBundleCreator extends CallableDBUpdateTask<SubstanceEndpoin
 	if (Method.DELETE.equals(method)) {
 	    return item;
 	} else if (Method.POST.equals(method)) {
-	    String username = item==null?null:item.getUserName();
 	    item = new SubstanceEndpointsBundle();
 	    item.setUserName(username);
 	    parseForm(input, item);

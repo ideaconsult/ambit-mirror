@@ -70,7 +70,7 @@
 	       <#switch menu_profile>
 	       	<#case 'lri'>
 	          <tr><th class="right size-third">Assessment title <a href='#' class='chelp a_name'>?</a>:</th><td><input class="data-field first-time validate" data-field="title" name="title"/></td></tr>
-	          <tr><th class="right size-third">Owner<a href='#' class='chelp a_maintainer'>?</a>:</th><td><input class="data-field first-time validate" data-field="maintainer" name="maintainer"/></td></tr>
+	          <tr><th class="right size-third">Owner<a href='#' class='chelp a_maintainer'>?</a>:</th><td><input class="data-field first-time validate" data-field="owner" name="maintainer"/></td></tr>
 	
 	          <tr><th class="right top size-third">Purpose<a href='#' class='chelp a_description'>?</a>:</th><td><textarea class="validate nomargin data-field" data-field="description" name="description"></textarea></td></tr>
 	          <tr><th class="right size-third">Version<a href='#' class='chelp a_version'>?</a>:</th><td class="data-field" data-field="version">?.?</td></tr>

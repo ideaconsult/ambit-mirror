@@ -40,10 +40,10 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 	form.add(ISourceDataset.fields.stars.name(), "9");
 
 	try {
-	    SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle();
+	    
 	    DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> reporter = new DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle>(
 		    new Reference("http://localhost"));
-	    CallableBundleCreator callable = new CallableBundleCreator(bundle, reporter, Method.POST, form,
+	    CallableBundleCreator callable = new CallableBundleCreator(null, reporter, Method.POST, form,
 		    c.getConnection(), new User("testuser"), null);
 	    TaskResult task = callable.call();
 	    ITable table = c1.createQueryTable("EXPECTED",
@@ -76,10 +76,9 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 	form.add("bundle_uri","http://localhost/bundle/1");
 
 	try {
-	    SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle();
 	    DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> reporter = new DatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle>(
 		    new Reference("http://localhost"));
-	    CallableBundleCreator callable = new CallableBundleCreator(bundle, reporter, Method.POST, form,
+	    CallableBundleCreator callable = new CallableBundleCreator(null, reporter, Method.POST, form,
 		    c.getConnection(), new User("testuser"), null);
 	    TaskResult task = callable.call();
 	    ITable table = c1.createQueryTable("EXPECTED",

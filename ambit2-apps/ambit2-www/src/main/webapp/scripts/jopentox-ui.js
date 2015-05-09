@@ -1980,7 +1980,7 @@ function defineBundlesTable_lri(root,url,deleteVisible,copyVisible) {
      	  			  },  
      	  			  {  
       				  "bSortable" : true,
-       	              "mDataProp":"maintainer",
+       	              "mDataProp":"owner",
        	              "aTargets": [ 5 ],
        	              "sWidth" : "15%",
        	              "bUseRendered" : false,	
