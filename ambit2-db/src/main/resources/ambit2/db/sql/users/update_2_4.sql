@@ -21,6 +21,11 @@ ALTER TABLE `user_roles` CHANGE COLUMN `role_name` `role_name` VARCHAR(40) NOT N
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
+-- Default bundle access  
+insert ignore into policy values(null,"ambit_datasetmgr","/ambit2","/bundle",1,1,1,1,1);
+insert ignore into policy values(null,"ambit_user","/ambit2","/bundle",1,1,0,0,0);
+insert ignore into policy values(null,"ambit_admin","/ambit2","/bundle",1,1,1,1,1);
+
 insert into version_users (idmajor,idminor,comment) values (2,4,"AMBITDB users");
 
 -- insert into roles select concat("B.",hex(bundle_number),".R") from cosing.bundle where bundle_number=unhex("26C7777DC80D11E4919080EE7350BFA7")
