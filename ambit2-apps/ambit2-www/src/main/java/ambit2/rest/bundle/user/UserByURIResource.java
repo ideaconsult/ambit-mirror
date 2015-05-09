@@ -64,6 +64,7 @@ public class UserByURIResource<T> extends UserDBResource<T> {
 	Object search_value = null;
 	try {
 	    search_value = form.getFirstValue(param_q);
+	    if (search_value == null) search_value = form.getFirstValue("search");
 	    if (search_value != null) {
 		ReadUser query = new ReadUser();
 

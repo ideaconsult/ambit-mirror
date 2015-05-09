@@ -26,6 +26,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.AMBITConfig;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.update.bundle.ReadBundle;
 import ambit2.rest.OpenTox;
@@ -36,6 +37,7 @@ import ambit2.rest.dataset.MetadataRDFReporter;
 import ambit2.rest.dataset.MetadatasetJSONReporter;
 import ambit2.rest.dataset.MetadatasetURIReporter;
 import ambit2.rest.query.AmbitDBResource;
+import ambit2.user.bundle.ReadBundleByPolicy;
 
 public class BundleMetadataResource extends
 	AmbitDBResource<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle> {
@@ -82,10 +84,11 @@ public class BundleMetadataResource extends
 	}
 	throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
     }
-    
+
     protected String getUserName() {
 	return null;
     }
+
     @Override
     protected IQueryRetrieval<SubstanceEndpointsBundle> createQuery(Context context, Request request, Response response)
 	    throws ResourceException {
@@ -104,8 +107,29 @@ public class BundleMetadataResource extends
 	    } catch (NumberFormatException x) {
 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	    }
-	else
-	    return new ReadBundle(getUserName());
+	else {
+	    Form form = getParams();
+	    if (form.getFirstValue("search") != null) {
+		ReadBundle q =  new ReadBundle(getUserName());
+		SubstanceEndpointsBundle b = new SubstanceEndpointsBundle();
+		b.setName(form.getFirstValue("search").replace("*","%"));
+		q.setValue(b);
+		return q;
+	    } if (form.getFirstValue("canRead") != null) {
+		ReadBundleByPolicy q = new ReadBundleByPolicy();
+		q.setDatabaseName(getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name()));
+		q.setFieldname(form.getFirstValue("canRead"));
+		q.setMode_write(false);
+		return q;
+	    } else if (form.getFirstValue("canWrite") != null) {
+		ReadBundleByPolicy q = new ReadBundleByPolicy();
+		q.setDatabaseName(getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name()));
+		q.setFieldname(form.getFirstValue("canWrite"));
+		q.setMode_write(true);
+		return q;
+	    } else
+		return new ReadBundle(getUserName());
+	}
     }
 
     @Override
@@ -126,8 +150,9 @@ public class BundleMetadataResource extends
 	    DatasetURIReporter r = new DatasetURIReporter(getRequest());
 	    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
 	    conn = dbc.getConnection();
-	     
-	    return new CallableBundleCreator(bundle, r, method, form, conn, getClientInfo()==null?null:getClientInfo().getUser(), getToken());
+
+	    return new CallableBundleCreator(bundle, r, method, form, conn, getClientInfo() == null ? null
+		    : getClientInfo().getUser(), getToken());
 	} catch (Exception x) {
 	    x.printStackTrace();
 	    try {
@@ -169,8 +194,7 @@ public class BundleMetadataResource extends
 		|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)) {
 	    return new RDFJenaConvertor<SubstanceEndpointsBundle, IQueryRetrieval<SubstanceEndpointsBundle>>(
 		    new MetadataRDFReporter<SubstanceEndpointsBundle, IQueryRetrieval<SubstanceEndpointsBundle>>(
-			    getRequest(),  variant.getMediaType()), variant.getMediaType(),
-		    filenamePrefix);
+			    getRequest(), variant.getMediaType()), variant.getMediaType(), filenamePrefix);
 
 	} else
 	    // default json
@@ -183,7 +207,7 @@ public class BundleMetadataResource extends
     protected QueryURIReporter<SubstanceEndpointsBundle, IQueryRetrieval<SubstanceEndpointsBundle>> getURIReporter(
 	    Request baseReference) throws ResourceException {
 	return new MetadatasetURIReporter<IQueryRetrieval<SubstanceEndpointsBundle>, SubstanceEndpointsBundle>(
-		baseReference );
+		baseReference);
     }
 
     @Override
