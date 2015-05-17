@@ -7,6 +7,7 @@ function onSideLoaded(result) {
 	var set = (result.model || result.dataset);
 	$(tEl).data('total', set.length);
 	tEl.innerHTML = jT.ui.updateCounter(tEl.innerHTML, 0, set.length);
+	this.table.fnSort([ [2,'desc'] ]);
 }
 
 function onSelectedUpdate(e) {
