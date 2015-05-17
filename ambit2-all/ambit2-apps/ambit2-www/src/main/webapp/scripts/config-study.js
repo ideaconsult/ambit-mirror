@@ -1101,21 +1101,30 @@ var config_study = {
         "TO_SENSITIZATION_HUMANDB_SECTION" : {
      	
         	 "parameters": {
-                 "vehicle": {
+                 "p_vehicle": {
                      "iOrder": -4,
                      "sTitle": "Vehicle",
-                     "bVisible": true
+                     "bVisible": true,
+                     "inMatrix" : false
                  },
-                 "max dose tested": {
+                 "p_max dose tested": {
                      "iOrder": -3,
                      "sTitle": "Max Dose Tested",
-                     "bVisible": true
+                     "bVisible": true,
+                     "inMatrix" : false
+                 },
+                 "type of study": {
+                     "iOrder": -9,
+                     "sTitle": "Type of study",
+                     "bVisible": false,
+                     "inMatrix" : false
                  }
              },
              "protocol": {
                  "guideline": {
-                     "iOrder": -9,
-                     "inMatrix" : true
+                	 "iOrder": -9,
+                     "sTitle": "Type of study",
+                     "inMatrix" : false
                  },
                  "uuid" : {
                 	 "bVisible": false
@@ -1129,11 +1138,23 @@ var config_study = {
                      "mRender" : function(data,type,full) {
                      	return data["title"];
                      },             
-                 	"iOrder": -1
+                 	"iOrder": -1,
+                 	"inMatrix" : true
                  }                     
              },
              "conditions": {
-
+                 "vehicle": {
+                     "iOrder": -4,
+                     "sTitle": "Vehicle",
+                     "inMatrix" : false,
+                     "bVisible": false
+                 },
+                 "max dose tested": {
+                     "iOrder": -3,
+                     "sTitle": "Max Dose Tested",
+                     "bVisible": false,
+                     "inMatrix" : true
+                 }
              },            
              "effects": {
                  "endpoint": {
@@ -1141,6 +1162,7 @@ var config_study = {
                      "inMatrix" : true,
                      "iOrder": -8
                  },
+                 
                  "result": {
                      "bVisible": true,
                      "inMatrix" : true,
@@ -1155,7 +1177,8 @@ var config_study = {
              "interpretation": {
                  "result": {
                      "sTitle": "Pot. Cat.",
-                     "inMatrix" : true,
+                     "inMatrix" : false,
+                     "bVisible": false,
                      "iOrder": -5
                  },
                  "criteria": {
