@@ -29,9 +29,9 @@ public class BundleRoleFacet extends AbstractFacet<SubstanceEndpointsBundle> {
 	}
 	@Override
 	public String toJSON(String uri,String subcategory) {
-		return String.format("%s: {\"count\": %d, \"tag\": %s, \"remarks\": %s}\n",
+		return String.format("%s: {\"count\": %s, \"tag\": %s, \"remarks\": %s}\n",
 			JSONUtils.jsonQuote(JSONUtils.jsonEscape(uri + "/bundle/" + getValue().getID())),
-			getCount(),
+			JSONUtils.jsonNumber(getCount()),
 			JSONUtils.jsonQuote(JSONUtils.jsonEscape(getTag())),
 			JSONUtils.jsonQuote(JSONUtils.jsonEscape(getRemarks()))
 			);

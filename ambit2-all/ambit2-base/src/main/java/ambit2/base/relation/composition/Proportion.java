@@ -53,12 +53,12 @@ public class Proportion implements Serializable {
 		real {
 			@Override
 			public String toJSON(Proportion p) {
-				return String.format("\"%s\": {\"lowerPrecision\": %s,\"lowerValue\": %e,\"upperPrecision\": %s,\"upperValue\": %e,\"unit\": %s}", 
+				return String.format("\"%s\": {\"lowerPrecision\": %s,\"lowerValue\": %s,\"upperPrecision\": %s,\"upperValue\": %s,\"unit\": %s}", 
 						name(),
 						JSONUtils.jsonQuote(JSONUtils.jsonEscape(p.getReal_lower())),
-						p.getReal_lowervalue(),
+						JSONUtils.jsonExpNumber(p.getReal_lowervalue()),
 						JSONUtils.jsonQuote(JSONUtils.jsonEscape(p.getReal_upper())),
-						p.getReal_uppervalue(),
+						JSONUtils.jsonExpNumber(p.getReal_uppervalue()),
 						JSONUtils.jsonQuote(p.getReal_unit())
 						);
 			}			

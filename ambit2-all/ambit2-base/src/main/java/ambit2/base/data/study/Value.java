@@ -161,7 +161,7 @@ public class Value<VALUE> implements IValue<VALUE, String, String> {
 	else if (value instanceof Params)
 	    b.append(value.toString());
 	else if (value instanceof Number)
-	    b.append(value);
+	    b.append(JSONUtils.jsonNumber((Number)value));
 	else
 	    b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(value.toString())));
     }
