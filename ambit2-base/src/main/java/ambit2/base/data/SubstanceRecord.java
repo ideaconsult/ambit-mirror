@@ -142,23 +142,7 @@ To be extended for nanomaterials.
 	public void setSubstanceName(String internalName) {
 		this.internalName = internalName;
 	}
-	/**
-	 * Use {@link #getSubstanceName()} instead
-	 * @return
-	 */
-	@Deprecated
-	public String getCompanyName() {
-		return getSubstanceName();
-	}
-	/**
-	 * Use {@link #setSubstanceName(String)} instead
-	 * @param companyName
-	 */
-	@Deprecated
-	public void setCompanyName(String internalName) {
-		setInchi(internalName);
-	}
-	
+
 /**
  * Public name of the substance 	
  * @return
@@ -180,14 +164,7 @@ Substance UUID, as assigned by the owner
 	public String getSubstanceUUID() {
 		return internalUUID;
 	}
-	/**
-	 * Use {@link #getSubstanceUUID()} instead
-	 * @return
-	 */
-	@Deprecated
-	public String getCompanyUUID() {
-		return getSubstanceUUID();
-	}	
+	
 	/**
 	 * Substance UUID as assigned by the substance owner
 	 * @param internalUUID
@@ -195,14 +172,7 @@ Substance UUID, as assigned by the owner
 	public void setSubstanceUUID(String internalUUID) {
 		this.internalUUID = internalUUID;
 	}
-	/**
-	 * Use {@link SubstanceRecord#setSubstanceUUID(String)} instead
-	 * @param internalUUID
-	 */
-	@Deprecated 
-	public void setCompanyUUID(String internalUUID) {
-	    setSubstanceUUID(internalUUID);
-	}
+
 	public void setSubstancetype(String substancetype) {
 		this.substancetype = substancetype;
 	}
