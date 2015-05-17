@@ -190,7 +190,7 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 			b.append(",\n\t");
 			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.loValue.name())));
 			b.append(":\t");
-			b.append(getLoValue());
+			b.append(JSONUtils.jsonNumber(getLoValue()));
 		}
 		if (getUpQualifier()!=null) {
 			b.append(",\n\t");
@@ -202,7 +202,7 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 			b.append(",\n\t");
 			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.upValue.name())));
 			b.append(":\t");
-			b.append(getUpValue());
+			b.append(JSONUtils.jsonNumber(getUpValue()));
 		}
 		if (getErrQualifier()!=null) {
 			b.append(",\n\t");
@@ -214,7 +214,7 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 			b.append(",\n\t");
 			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.errorValue.name())));
 			b.append(":\t");
-			b.append(getErrorValue());
+			b.append(JSONUtils.jsonNumber(getErrorValue()));
 		}		
 		if (getTextValue()!=null) {
 			b.append(",\n\t");

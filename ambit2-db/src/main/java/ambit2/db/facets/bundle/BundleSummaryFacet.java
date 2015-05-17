@@ -14,9 +14,9 @@ public class BundleSummaryFacet  extends AbstractFacet<String> {
 	}
 	@Override
 	public String toJSON(String uri,String subcategory) {
-		return String.format("\n\t{\n\t\"value\":%s,\n\t\"count\":%d,\n\t\"uri\":%s,\n\t\"subcategory\":%s,\t\"subcategoryuri\":%s\n\t}",
+		return String.format("\n\t{\n\t\"value\":%s,\n\t\"count\":%s,\n\t\"uri\":%s,\n\t\"subcategory\":%s,\t\"subcategoryuri\":%s\n\t}",
 			getValue()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getValue().toString())),
-			getCount(),
+			JSONUtils.jsonNumber(getCount()),
 			uri==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(uri+"/"+getValue())),
 			JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubcategoryTitle())),	
 			JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubCategoryURL(subcategory)))

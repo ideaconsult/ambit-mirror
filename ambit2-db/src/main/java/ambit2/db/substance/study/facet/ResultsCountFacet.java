@@ -29,20 +29,20 @@ public class ResultsCountFacet<E> extends SubstanceByCategoryFacet {
 	@Override
 	public String toJSON(String uri, String subcategory) {
 		if (result instanceof EffectRecord)
-			return String.format("\n\t{\n\t\"top\":%s,\n\t\"category\":%s,\n\t\"value\":%s,\n\t\"endpoint\":%s,\n\t\"count\":%d\n\t}",
+			return String.format("\n\t{\n\t\"top\":%s,\n\t\"category\":%s,\n\t\"value\":%s,\n\t\"endpoint\":%s,\n\t\"count\":%s\n\t}",
 					JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubcategoryTitle())),	
 					endpoint==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint.name())),
 					getValue()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getValue().toString())),
 					JSONUtils.jsonQuote(JSONUtils.jsonEscape(((EffectRecord<String,Object,String>)result).getEndpoint())),
-					getCount()
+					JSONUtils.jsonNumber(getCount())
 					);
 		else if (result instanceof ProtocolApplication) {
-			return String.format("\n\t{\n\t\"top\":%s,\n\t\"category\":%s,\n\t\"value\":%s,\n\t\"interpretation_result\":%s,\n\t\"count\":%d\n\t}",
+			return String.format("\n\t{\n\t\"top\":%s,\n\t\"category\":%s,\n\t\"value\":%s,\n\t\"interpretation_result\":%s,\n\t\"count\":%s\n\t}",
 					JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubcategoryTitle())),	
 					endpoint==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint.name())),
 					getValue()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getValue().toString())),
 					JSONUtils.jsonQuote(JSONUtils.jsonEscape(((ProtocolApplication)result).getInterpretationResult())),
-					getCount()
+					JSONUtils.jsonNumber(getCount())
 					);			
 		}
 		else return super.toJSON(uri, subcategory);

@@ -100,7 +100,7 @@ public class Params<VALUE> implements IParams<VALUE> {
 	    else if (value instanceof IParams)
 		b.append(value.toString());
 	    else if (value instanceof Number)
-		b.append(value);
+		b.append(JSONUtils.jsonNumber((Number)value));
 	    else
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(value.toString())));
 	    comma = ",";
