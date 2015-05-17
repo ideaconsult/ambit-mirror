@@ -576,26 +576,7 @@ public class Protocol {
 		return "TOX";
 	    }
 	},
-	TO_SENSITIZATION_HUMAN_SECTION {
-	    @Override
-	    public String toString() {
-		return "Skin sensitisation (human)";
-	    }
-
-	    @Override
-	    public String getNumber() {
-		return "7.4.1";
-	    }
-
-	    @Override
-	    public int getSortingOrder() {
-		return 741;
-	    }
-
-	    public String getTopCategory() {
-		return "TOX";
-	    }
-	},
+	
 	TO_SENSITIZATION_INVITRO_SECTION {
 	    @Override
 	    public String toString() {
@@ -636,6 +617,26 @@ public class Protocol {
 		return "TOX";
 	    }
 	},	
+	TO_SENSITIZATION_HUMANDB_SECTION {
+	    @Override
+	    public String toString() {
+		return "Skin sensitisation (human)";
+	    }
+
+	    @Override
+	    public String getNumber() {
+		return "7.4.1";
+	    }
+
+	    @Override
+	    public int getSortingOrder() {
+		return 741;
+	    }
+
+	    public String getTopCategory() {
+		return "TOX";
+	    }	    
+	},
 	TO_REPEATED_ORAL_SECTION {
 	    @Override
 	    public String toString() {

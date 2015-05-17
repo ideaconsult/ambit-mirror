@@ -1,5 +1,7 @@
 package ambit2.base.data.study.test;
 
+import java.util.UUID;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -111,6 +113,11 @@ public class EffectRecordTest {
 		       .putString(effect.getConditions().toString(), Charsets.UTF_8)
 		       .hash();
 	Assert.assertEquals("3cf77d9efe4e74744e691bf4880b4ef728b16fae", hc.toString().toLowerCase());
+    }
+    @Test
+    public void testUUID() throws Exception {
+	UUID uuid = UUID.nameUUIDFromBytes("69-72-7-100".getBytes());
+	Assert.assertEquals("4da7ec68-aeaa-3f5d-9dea-95c0b0727861", uuid.toString());
     }
 
 }
