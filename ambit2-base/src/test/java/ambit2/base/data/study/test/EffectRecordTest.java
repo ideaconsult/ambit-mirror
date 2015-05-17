@@ -118,6 +118,10 @@ public class EffectRecordTest {
     public void testUUID() throws Exception {
 	UUID uuid = UUID.nameUUIDFromBytes("69-72-7-100".getBytes());
 	Assert.assertEquals("4da7ec68-aeaa-3f5d-9dea-95c0b0727861", uuid.toString());
+	
+	uuid = UUID.nameUUIDFromBytes("3371-50-4-100".getBytes());
+	Assert.assertEquals("b6fd0185-3c5c-36ae-9dad-b67299d94b96", uuid.toString());
+	
     }
 
 }
