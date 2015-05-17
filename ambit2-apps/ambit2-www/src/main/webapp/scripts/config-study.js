@@ -1098,6 +1098,72 @@ var config_study = {
                 }
             }
         },                
+        "TO_SENSITIZATION_HUMANDB_SECTION" : {
+     	
+        	 "parameters": {
+                 "vehicle": {
+                     "iOrder": -4,
+                     "sTitle": "Vehicle",
+                     "bVisible": true
+                 },
+                 "max dose tested": {
+                     "iOrder": -3,
+                     "sTitle": "Max Dose Tested",
+                     "bVisible": true
+                 }
+             },
+             "protocol": {
+                 "guideline": {
+                     "iOrder": -9,
+                     "inMatrix" : true
+                 },
+                 "uuid" : {
+                	 "bVisible": false
+                 },
+                 "owner" : {
+                	 "bVisible": false
+                 },
+                 "citation" : {
+                     "bVisible": true,
+                     "sTitle": "Reference",
+                     "mRender" : function(data,type,full) {
+                     	return data["title"];
+                     },             
+                 	"iOrder": -1
+                 }                     
+             },
+             "conditions": {
+
+             },            
+             "effects": {
+                 "endpoint": {
+                     "bVisible": true,
+                     "inMatrix" : true,
+                     "iOrder": -8
+                 },
+                 "result": {
+                     "bVisible": true,
+                     "inMatrix" : true,
+                     "iOrder": -7
+                 },
+                 "text": {
+                     "bVisible": true,
+                     "sTitle": "",
+                     "iOrder": -6                    
+                 }
+             },
+             "interpretation": {
+                 "result": {
+                     "sTitle": "Pot. Cat.",
+                     "inMatrix" : true,
+                     "iOrder": -5
+                 },
+                 "criteria": {
+                     "iOrder": -3,
+                     "bVisible": false
+                 }
+             }        	
+        },
         "TO_PHOTOTRANS_AIR_SECTION": {
             "parameters": {
                 "reactant": {
