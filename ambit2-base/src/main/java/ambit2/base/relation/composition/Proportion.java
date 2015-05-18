@@ -42,10 +42,10 @@ public class Proportion implements Serializable {
 		typical {
 			@Override
 			public String toJSON(Proportion p) {
-				return String.format("\"%s\": {\"precision\": %s,\"value\": %e,\"unit\": %s}", 
+				return String.format("\"%s\": {\"precision\": %s,\"value\": %s,\"unit\": %s}", 
 						name(),
 						JSONUtils.jsonQuote(JSONUtils.jsonEscape(p.getTypical())),
-						p.getTypical_value(),
+						JSONUtils.jsonExpNumber(p.getTypical_value()),
 						JSONUtils.jsonQuote(p.getTypical_unit())
 						);
 			}			
