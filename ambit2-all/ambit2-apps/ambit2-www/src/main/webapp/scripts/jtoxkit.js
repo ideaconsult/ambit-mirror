@@ -4836,7 +4836,7 @@ jT.templates['widget-search']  =
 "  			    </div>" +
 "  			  </div>" +
 "  			  <div class=\"dynamic auto-hide searchsimilarity hidden jtox-inline\">" +
-"            <input type=\"checkbox\" name=\"similaritybysubstance\" value=\"true\" id=\"similaritybysubstance\" /><label for=\"similaritybysubstance\">Filter by substance</label>" +
+"            <input type=\"checkbox\" name=\"similaritybysubstance\" value=\"true\" id=\"similaritybysubstance\" /><label for=\"similaritybysubstance\">Only hits with substance data</label>" +
 "      			<select name='threshold' title ='Tanimoto similarity threshold'>" +
 "    					<option value='0.9' selected=\"selected\">0.9</option>" +
 "  			   		<option value='0.8' >0.8</option>" +
@@ -4850,7 +4850,7 @@ jT.templates['widget-search']  =
 "      			</select>" +
 "  			  </div>" +
 "  			  <div class=\"dynamic auto-hide searchsmarts hidden jtox-inline\">" +
-"            <input type=\"checkbox\" name=\"smartsbysubstance\" value=\"true\" id=\"smartsbysubstance\" /><label for=\"smartsbysubstance\">Filter by substance</label>" +
+"            <input type=\"checkbox\" name=\"smartsbysubstance\" value=\"true\" id=\"smartsbysubstance\" /><label for=\"smartsbysubstance\">Only hits with substance data</label>" +
 "  			    <select name=\"smarts\" title =\"Predefined functional groups\"></select>" +
 "  			  </div>" +
 "  			  <div class=\"jtox-inline\">" +
