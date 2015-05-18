@@ -53,7 +53,7 @@ Search
 <form method='GET' name='searchform' id='searchform' action='${ambit_root}/bundle' style='padding:0;margin:0;'>
 
 <div class='row remove-bottom' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-				<span title='Search for bundles by name'>by name</span>
+				<span title='Search by title'>by title</span>
 		    	<input  type='text'  id='search' name='search' value='' tabindex='1' >
 
 <#if menu_profile?? && menu_profile =='lri'>
