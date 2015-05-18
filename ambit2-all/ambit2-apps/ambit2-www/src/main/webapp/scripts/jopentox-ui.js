@@ -1970,23 +1970,19 @@ function defineBundlesTable_lri(root,url,deleteVisible,copyVisible) {
           '</select> assessments.'	            
     },	
     "aoColumnDefs": [
-                     
-     	  			{  
-      				  "bSortable" : true,
-       	              "mDataProp":"number",
-       	              "aTargets": [ 0 ],
-       	              "bUseRendered" : false,	
-  	  					"fnRender" : function(o,val) {
-    		        	    var sOut = "<a target='table' href='"+ root + "/ui/assessment?bundle_uri=" + encodeURIComponent(o.aData.URI) +
-    		        	   		"' title='Click to view the assessments at "+ o.aData.URI+" as a table'>"+val+"</a> " ;
-    		               return sOut;
-  						}     	              
-      	  			},     	  
+     	  			{ "sTitle": "Title", 
+      	  			  "mDataProp":"title", 
+      	  			  "aTargets": [ 0],	
+      		          "bUseRendered" : false,	
+      		          "fnRender": function ( o, val ) {
+     		        	   		return val==null?o.aData.id:o.aData.title;
+      		          }
+      	  			 },
      	  			{  
         				  "bSortable" : true,
          	              "mDataProp":"version",
          	              "aTargets": [ 1 ],
-         	              "sWidth" : "5%",
+         	             "sWidth" : "5%",
          	              "bUseRendered" : false,	
     	  					"fnRender" : function(o,val) {
         		        	    var sOut = "<a target='table' href='"+ o.aData.URI+"/version" +
@@ -1997,25 +1993,18 @@ function defineBundlesTable_lri(root,url,deleteVisible,copyVisible) {
      	  			{  
         				  "bSortable" : true,
          	              "mDataProp":"source",
-         	              "aTargets": [ 2 ],
+         	              "aTargets": [2 ],
          	             "sWidth" : "15%",
          	              "bUseRendered" : false,	
     	  					"fnRender" : function(o,val) {
     							 return  val;			
     						}     	              
      	  			},         	  			
-    	  			{ "sTitle": "Title", 
-    	  			  "mDataProp":"title", 
-    	  			  "aTargets": [ 3],	
-    		          "bUseRendered" : false,	
-    		          "fnRender": function ( o, val ) {
-   		        	   		return val==null?o.aData.id:o.aData.title;
-    		          }
-    	  			 },
+
        	  			  {  
         				  "bSortable" : true,
          	              "mDataProp":"status",
-         	              "aTargets": [ 4 ],
+         	              "aTargets": [ 3 ],
          	              "sWidth" : "5%",
          	              "bUseRendered" : false,	
     	  					"fnRender" : function(o,val) {
@@ -2025,13 +2014,25 @@ function defineBundlesTable_lri(root,url,deleteVisible,copyVisible) {
      	  			  {  
       				  "bSortable" : true,
        	              "mDataProp":"owner",
-       	              "aTargets": [ 5 ],
-       	              "sWidth" : "15%",
+       	              "aTargets": [ 4 ],
+       	              "sWidth" : "20%",
        	              "bUseRendered" : false,	
   	  					"fnRender" : function(o,val) {
   							 return  val;			
   						}     	              
     		  		},
+     	  			{  
+        				  "bSortable" : true,
+         	              "mDataProp":"number",
+         	              "aTargets": [5 ],
+         	              "sWidth" : "15%",
+         	              "bUseRendered" : false,	
+    	  					"fnRender" : function(o,val) {
+      		        	    var sOut = "<a target='table' href='"+ root + "/ui/assessment?bundle_uri=" + encodeURIComponent(o.aData.URI) +
+      		        	   		"' title='Click to view the assessments at "+ o.aData.URI+"'>"+val+"</a> " ;
+      		               return sOut;
+    						}     	              
+        	  		},     	      		  		
     		  		{  
         				  "bSortable" : false,
          	              "mDataProp":"id",

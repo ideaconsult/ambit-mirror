@@ -10,8 +10,15 @@
 
 	$(document).ready(function() {
 		loadHelp("${ambit_root}","ra");
-		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="Bundles">Assessments</a></li>');
-
+<#if menu_profile?? && menu_profile=='lri'>		
+		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="All assessments">Assessments</a></li>');
+		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/assessment" title="New assessment (empty template)">New</a></li>');
+		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/assessment_copy" title="New assessment (existing assessment)">Use of existing assessment</a></li>');
+<#else>
+		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="Bundles: Datasets of substances and studies">Datasets of substances and studies</a></li>');
+		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/assessment" title="New dataset (empty template)">New</a></li>');
+		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/assessment_copy" title="New dataset (existing template)">Use of existing dataset</a></li>');
+</#if>
 		downloadForm("${ambit_request}");
   		var oTable = defineBundlesTable_lri("${ambit_root}","${ambit_root}/bundle?media=application/json",false,"${menu_profile}",true);
 		jQuery("#breadCrumb").jBreadCrumb();
@@ -59,12 +66,12 @@
 				<table id='datasets' class='datasetstable ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 				<thead>
 				<tr>
-				<th>ID</th>
+				<th>Name</th>
 				<th>Version</th>
 				<th>Code</th>
-				<th>Name</th>
 				<th>Status</th>
 				<th>Owner</th>
+				<th>Assessment ID</th>
 				<th>Action</th>
 				</tr>
 				</thead>

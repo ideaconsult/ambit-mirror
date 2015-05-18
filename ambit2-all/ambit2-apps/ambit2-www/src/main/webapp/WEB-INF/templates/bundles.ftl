@@ -13,7 +13,12 @@
 	
 	$(document).ready(function() {
 		loadHelp("${ambit_root}","bundle");
-		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="Bundles">Dataset of substances and studies</a></li>');
+		
+		<#if menu_profile?? && menu_profile=='lri'>		
+				jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="All assessments ">Assessments</a></li>');
+		<#else>
+				jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="Bundles: Datasets of substances and studies">Datasets of substances and studies</a></li>');
+		</#if>		
 
 		userAutocomplete(".users","${ambit_root}/myaccount/users",10);
 		
@@ -96,12 +101,12 @@ Search
 				<table id='datasets' class='datasetstable ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 				<thead>
 				<tr>
-				<th>ID</th>
+				<th>Name</th>
 				<th>Version</th>
 				<th>Code</th>
-				<th>Name</th>
 				<th>Status</th>
 				<th>Owner</th>
+				<th>Assessment ID</th>
 				<th>Action</th>
 				</tr>
 				</thead>
