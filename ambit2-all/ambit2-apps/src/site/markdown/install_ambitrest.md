@@ -4,7 +4,7 @@
 
 ###Java Runtime Environment (JRE)
 
-- Install Java 6 or Java 7 Standard Edition.
+- Install Java 7 Standard Edition.
 
 ###Web server
 
@@ -12,7 +12,7 @@
 
 ###Database server
 
-- Install MySQL 5.5.x or 5.6.x
+- Install MySQL 5.6.5 or newer
 
 ## Web services installation
 
