@@ -47,6 +47,8 @@ public class AutomaticTautomerTests
 	public static final int LPM_TAUTOMER_CALC_DESCR_AVERAGE = 14;
 	public static final int LPM_TAUTOMER_DESCR_STAT2 = 15;
 	public static final int LPM_TAUTOMER_FP_STAT2 = 16;
+	public static final int LPM_COMPARE_RANKINGS = 17;
+	
 	
 	
 	//public static final int LPM_COMPARE_AMBIT_INTERNAL = 11;
@@ -172,10 +174,11 @@ public class AutomaticTautomerTests
 			
 			att.handleArguments(new String[] {
 					
+					"-i","D:/Projects/Nina/Tautomers/example-output.csv",
 					//"-i","D:/temp2/test",
 					//"-i","D:/Projects/data015/LogP/XlogP.csv",
-					"-i","D:/Projects/data016/logP2-kekule-taut-EPI_Suite-LogP-CLEANED.csv",
-					"-i2","D:/Projects/data016/ext-validation-set02-activity.csv",
+					//"-i","D:/Projects/data016/logP2-kekule-taut-EPI_Suite-LogP-CLEANED.csv",
+					//"-i2","D:/Projects/data016/ext-validation-set02-activity.csv",
 					
 					
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",					
@@ -187,10 +190,10 @@ public class AutomaticTautomerTests
 					
 					"-nInpStr","0",
 					"-nStartStr","0",
-					"-c","tautomer-calc-descr-average",					
+					"-c","compare-rankings",					
 					//"-c","test-print",
 					//"-o","D:/Projects/data015/LogP/xlogp-test-average-descr.csv",
-					"-o","D:/Projects/data016/test.csv",
+					"-o","D:/Projects/Nina/Tautomers/test.txt",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -232,6 +235,7 @@ public class AutomaticTautomerTests
 		System.out.println("                 tautomer-fill-exp-values  fill experimental value for each tautomer");
 		System.out.println("                 concat-descr-files    Concatinates the descriptior files listed in the input file");
 		System.out.println("                 separate-weighted-descr  Calculated weighted descriptors are split into separate files");
+		System.out.println("                 compare-rankings      Compares the tautomer rankings");
 		
 	}	
 	
@@ -625,6 +629,17 @@ public class AutomaticTautomerTests
 			closeOutputFile();
 			return(0);
 		}
+		
+		if (command.equals("compare-rankings"))
+		{
+			System.out.println("Compares the tautomer rankings: " + inFileName);
+			openOutputFile();			
+			lineProcessMode = LPM_COMPARE_RANKINGS;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
 		
 		if (command.equals("tautomer-fill-exp-values"))
 		{
@@ -1090,6 +1105,14 @@ public class AutomaticTautomerTests
 			tautomerCalcDescrAverage(line);
 			return(0);
 		}
+		
+		if (lineProcessMode == LPM_COMPARE_RANKINGS)
+		{
+			compareRankings(line);
+			return(0);
+		}
+		
+		
 				
 		return 0;
 	}
@@ -2013,6 +2036,13 @@ public class AutomaticTautomerTests
 		return 0;
 	}
 	*/
+	
+	void compareRankings(String line)
+	{
+		//TODO
+		output("" + curLine + "\t" +line + endLine);
+	}
+	
 	
 	//------- command: tautomer-calc-descr-average --------------------
 	
