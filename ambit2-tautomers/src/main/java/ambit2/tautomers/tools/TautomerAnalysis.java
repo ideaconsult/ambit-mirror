@@ -35,6 +35,7 @@ import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerUtils;
 import ambit2.tautomers.TautomerUtils.TautomerPair;
+import ambit2.tautomers.tools.TautomerAnalysis;
 
 
 
@@ -410,7 +411,7 @@ public class TautomerAnalysis
 	 * @param energies
 	 * @return
 	 */
-	public double tautomerRankingMeasures(double ranks[], double energies[])
+	public static double calcTautomerRankingMeasure(double ranks[], double energies[])
 	{
 		if (ranks == null)
 			return 0.0;
