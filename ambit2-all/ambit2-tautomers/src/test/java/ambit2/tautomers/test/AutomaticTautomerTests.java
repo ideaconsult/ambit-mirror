@@ -19,6 +19,7 @@ import ambit2.smarts.SmartsHelper;
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerRanking;
+import ambit2.tautomers.tools.TautomerAnalysis;
 
 
 
@@ -160,6 +161,13 @@ public class AutomaticTautomerTests
 	RandomAccessFile fSchemes[] = null;
 	String firstLineForSeparatedWeightingSchemes = null;
 	
+	//helpers for rankings comparison
+	String compareRanksSeparator = ",";
+	ArrayList<Double> rank1 = null;
+	ArrayList<Double> rank2 = null;
+	ArrayList<Double> energies = null;
+	int compNum = -1;
+	String compSMILES = null;
 	
 	
 	public static void main(String[] args)
@@ -633,6 +641,13 @@ public class AutomaticTautomerTests
 		if (command.equals("compare-rankings"))
 		{
 			System.out.println("Compares the tautomer rankings: " + inFileName);
+			
+			//helpers initialization
+			rank1 = new ArrayList<Double>();
+			rank2 = new ArrayList<Double>();
+			energies = new ArrayList<Double>();
+			compNum = -1;
+			
 			openOutputFile();			
 			lineProcessMode = LPM_COMPARE_RANKINGS;
 			iterateInputFile();
@@ -2037,10 +2052,70 @@ public class AutomaticTautomerTests
 	}
 	*/
 	
-	void compareRankings(String line)
+	void compareRankings(String line) 
+	{	
+		//Parser tokens
+		String tokens[] = line.split(compareRanksSeparator);
+		
+		if (tokens.length != 5)
+		{	
+			System.out.println("Incorrect number of tokens on line " + curLine);
+			return;
+		}
+		
+		int comp_n;
+		double r1, r2, en;
+		
+		try{
+			comp_n = Integer.parseInt(tokens[0]);
+			r1 = Double.parseDouble(tokens[2]);
+			r2 = Double.parseDouble(tokens[3]);
+			en = Double.parseDouble(tokens[4]);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Incorrect integer/double tokens on line " + curLine);
+			return;
+		}
+		
+		if (comp_n == compNum)
+		{
+			rank1.add(r1);
+			rank2.add(r2);
+			energies.add(en);
+		}
+		else
+		{
+			if (compNum != -1)
+				finalizeRankingComparison();
+			
+			//Start new Ranking Comparison
+			rank1.clear();
+			rank2.clear();
+			energies.clear();
+			compNum = comp_n;
+			compSMILES = tokens[1];
+		}
+	}
+	
+	void finalizeRankingComparison()
 	{
-		//TODO
-		output("" + curLine + "\t" +line + endLine);
+		int n = rank1.size();
+		double r1[] = new double [n];
+		double r2[] = new double [n];
+		double e[] = new double [n];
+		for (int i = 0; i < n; i++)
+		{
+			r1[i] = rank1.get(i);
+			r2[i] = rank2.get(i);
+			e[i] = energies.get(i);
+		}
+		
+		double measure1 = TautomerAnalysis.calcTautomerRankingMeasure(r1, e);
+		double measure2 = TautomerAnalysis.calcTautomerRankingMeasure(r2, e);
+		String out_line = "" + compNum + compareRanksSeparator + compSMILES + compareRanksSeparator + measure1 + compareRanksSeparator + measure2;
+		output(out_line + endLine);
+		System.out.println(out_line);
 	}
 	
 	
