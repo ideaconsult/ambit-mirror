@@ -57,7 +57,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 401;
+		return 4010;
 	    }
 
 	    /**
@@ -83,7 +83,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 402;
+		return 4020;
 	    }
 
 	    public String getTopCategory() {
@@ -103,7 +103,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 403;
+		return 4030;
 	    }
 
 	    public String getTopCategory() {
@@ -123,7 +123,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 405;
+		return 4050;
 	    }
 
 	    public String getTopCategory() {
@@ -143,7 +143,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 406;
+		return 4060;
 	    }
 
 	    public String getTopCategory() {
@@ -163,7 +163,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 407;
+		return 4070;
 	    }
 
 	    public String getTopCategory() {
@@ -183,7 +183,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 408;
+		return 4080;
 	    }
 
 	    public String getTopCategory() {
@@ -203,7 +203,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 409;
+		return 4090;
 	    }
 
 	    public String getTopCategory() {
@@ -223,7 +223,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 420;
+		return 4200;
 	    }
 
 	    public String getTopCategory() {
@@ -243,7 +243,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 421;
+		return 4210;
 	    }
 
 	    public String getTopCategory() {
@@ -263,7 +263,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 499;
+		return 4990;
 	    }
 
 	    public String getTopCategory() {
@@ -286,7 +286,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 511;
+		return 5110;
 	    }
 
 	    public String getTopCategory() {
@@ -306,7 +306,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 512;
+		return 5120;
 	    }
 
 	    public String getTopCategory() {
@@ -326,7 +326,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 521;
+		return 5210;
 	    }
 	    public String getTopCategory() {
 		return "ENV FATE";
@@ -345,7 +345,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 522;
+		return 5220;
 	    }
 
 	    public String getTopCategory() {
@@ -365,7 +365,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 523;
+		return 5230;
 	    }
 
 	    public String getTopCategory() {
@@ -385,7 +385,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 531;
+		return 5310;
 	    }
 
 	    public String getTopCategory() {
@@ -405,7 +405,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 532;
+		return 5320;
 	    }
 
 	    public String getTopCategory() {
@@ -425,7 +425,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 541;
+		return 5410;
 	    }
 
 	    public String getTopCategory() {
@@ -445,7 +445,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 542;
+		return 5420;
 	    }
 
 	    public String getTopCategory() {
@@ -469,7 +469,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 721;
+		return 7210;
 	    }
 
 	    public String getTopCategory() {
@@ -489,7 +489,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 722;
+		return 7220;
 	    }
 
 	    public String getTopCategory() {
@@ -509,7 +509,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 723;
+		return 7230;
 	    }
 
 	    public String getTopCategory() {
@@ -529,7 +529,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 731;
+		return 7310;
 	    }
 
 	    public String getTopCategory() {
@@ -549,7 +549,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 732;
+		return 7320;
 	    }
 
 	    public String getTopCategory() {
@@ -569,7 +569,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 741;
+		return 7410;
 	    }
 
 	    public String getTopCategory() {
@@ -590,7 +590,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 741;
+		return 7411;
 	    }
 
 	    public String getTopCategory() {
@@ -610,7 +610,7 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 741;
+		return 7412;
 	    }
 
 	    public String getTopCategory() {
@@ -630,7 +630,27 @@ public class Protocol {
 
 	    @Override
 	    public int getSortingOrder() {
-		return 741;
+		return 7413;
+	    }
+
+	    public String getTopCategory() {
+		return "TOX";
+	    }	    
+	},	
+	TO_SENSITIZATION_LLNA_SECTION {
+	    @Override
+	    public String toString() {
+		return "Skin sensitisation (LLNA)";
+	    }
+
+	    @Override
+	    public String getNumber() {
+		return "7.4.1";
+	    }
+
+	    @Override
+	    public int getSortingOrder() {
+		return 7414;
 	    }
 
 	    public String getTopCategory() {

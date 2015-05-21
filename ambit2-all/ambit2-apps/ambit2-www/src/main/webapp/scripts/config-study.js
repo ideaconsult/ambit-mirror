@@ -504,16 +504,16 @@ var config_study = {
         "TO_SENSITIZATION_SECTION": {
             "parameters": {
                 "species": {
-                    "iOrder": -7,
+                    "iOrder": -6,
                     "bVisible": false
                 },
                 "type of study": {
-                    "iOrder": -8,
+                    "iOrder": -11,
                     "sTitle": "Study type",
                     "inMatrix" : true
                 },
                 "type of method": {
-                    "iOrder": -9,
+                    "iOrder": -8,
                     "sTitle": "Method type"
                 }
             },
@@ -527,23 +527,32 @@ var config_study = {
             },
             "effects": {
                 "endpoint": {
+                	"iOrder": -8,
                     "bVisible": false
                 },
                 "result": {
+                	"iOrder": -7,
                     "bVisible": false
+                },
+                "text": {
+                    "sTitle": "",
+                    "bVisible": false,
+                    "iOrder": -6
                 }
+                
             },
             "interpretation": {
                 "result": {
                     "sTitle": "Interpretation of the results",
-                    "iOrder": -7,
+                    "iOrder": -10,
                     "inMatrix" : true
                 },
                 "criteria": {
-                    "iOrder": -6
+                    "iOrder": -9
                 }
             }
         },        
+    
         "TO_REPEATED_ORAL_SECTION": {
             "parameters": {
                 "species": {
@@ -1098,7 +1107,7 @@ var config_study = {
                 }
             }
         },                
-        "TO_SENSITIZATION_HUMANDB_SECTION" : {
+        "TO_SENSITIZATION_LLNA_SECTION" : {
      	
         	 "parameters": {
                  "p_vehicle": {
@@ -1178,7 +1187,7 @@ var config_study = {
                  "result": {
                      "sTitle": "Pot. Cat.",
                      "inMatrix" : false,
-                     "bVisible": false,
+                     "bVisible": true,
                      "iOrder": -5
                  },
                  "criteria": {
@@ -1187,6 +1196,79 @@ var config_study = {
                  }
              }        	
         },
+        "TO_SENSITIZATION_HUMANDB_SECTION": {
+
+       	 "parameters": {
+                "species": {
+                    "iOrder": -9,
+                    "sTitle": "Species",
+                    "bVisible": true,
+                    "inMatrix" : true
+                },
+                "type of study": {
+                    "iOrder": -9,
+                    "sTitle": "Type of study",
+                    "bVisible": false,
+                    "inMatrix" : false
+                }
+            },
+            "protocol": {
+                "guideline": {
+               	 "iOrder": -9,
+                    "sTitle": "Guideline",
+                    "inMatrix" : false,
+                    "bVisible": false
+                },
+                "uuid" : {
+               	 "bVisible": false
+                },
+                "owner" : {
+               	 "bVisible": false
+                },
+                "citation" : {
+                    "bVisible": true,
+                    "sTitle": "Reference",
+                    "mRender" : function(data,type,full) {
+                    	return data["title"];
+                    },             
+                	"iOrder": -1,
+                	"inMatrix" : true
+                }                     
+            },
+            "conditions": {
+
+            },            
+            "effects": {
+                "endpoint": {
+                    "bVisible": true,
+                    "inMatrix" : true,
+                    "iOrder": -8
+                },
+                
+                "result": {
+                    "bVisible": true,
+                    "inMatrix" : true,
+                    "iOrder": -7
+                },
+                "text": {
+                    "bVisible": true,
+                    "sTitle": "",
+                    "iOrder": -6                    
+                }
+            },
+            "interpretation": {
+                "result": {
+                	"sTitle": "Interpretation",
+                    "inMatrix" : false,
+                    "bVisible": true,
+                    "iOrder": -5
+                },
+                "criteria": {
+                    "iOrder": -3,
+                    "bVisible": false
+                }
+            }      
+        },                 
         "TO_PHOTOTRANS_AIR_SECTION": {
             "parameters": {
                 "reactant": {
