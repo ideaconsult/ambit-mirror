@@ -32,7 +32,7 @@
     <junit.version>4.8.1</junit.version>
     <!-- https://github.com/ideaconsult/i5 -->
     <i5.version>1.0.5-SNAPSHOT</i5.version>
-    <restnet.version>1.0.8</restnet.version>
+    <restnet.version>1.0.9-SNAPSHOT</restnet.version>
     <dbunit.version>2.4.9</dbunit.version>
   </properties>
   <description>AMBIT applications</description>
