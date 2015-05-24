@@ -143,7 +143,8 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 		"join properties using(idproperty) join catalog_references using(idreference)\n"+ 
 		"where status != 'ERROR'\n"+
 		"%s\n"+
-		"and idchemical=?\norder by idproperty\n";
+		//"and idchemical=?\norder by idproperty\n";
+		"and idchemical=?\n";
 
 	
 	protected final String sql_chemical_novalue = 
