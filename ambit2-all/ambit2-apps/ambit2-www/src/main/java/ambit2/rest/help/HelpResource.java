@@ -43,7 +43,8 @@ public class HelpResource extends CatalogResource<String>  {
 		pwd_forgotten,
 		toxtree,
 		policy,
-		ra
+		ra,
+		ontobucket
 	}
 	public HelpResource() {
 		super();

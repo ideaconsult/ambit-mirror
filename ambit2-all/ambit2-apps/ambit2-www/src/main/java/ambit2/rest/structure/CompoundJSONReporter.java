@@ -301,9 +301,12 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		    builder.append(comma1);
 		    builder.append("\n");
 		}
-		if (value instanceof Double)
-		    builder.append(String.format(Locale.ENGLISH, "\t\t\"%s\":%6.3f", key, (Double) value));
-		else if (value instanceof Integer)
+		if (value instanceof Double) {
+		    if (((Double) value).isNaN())
+			builder.append(String.format(Locale.ENGLISH, "\t\t\"%s\":null", key));
+		    else
+			builder.append(String.format(Locale.ENGLISH, "\t\t\"%s\":%6.3f", key, (Double) value));			
+		} else if (value instanceof Integer)
 		    builder.append(String.format("\t\t\"%s\":%d", key, (Integer) value));
 		else if (value instanceof Long)
 		    builder.append(String.format("\t\t\"%s\":%l", key, (Long) value));

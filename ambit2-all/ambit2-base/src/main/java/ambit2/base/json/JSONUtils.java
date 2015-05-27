@@ -74,21 +74,21 @@ public class JSONUtils {
     }
 
     public static String jsonExpNumber(Double value) {
-	if (value == null)
+	if (value == null || value.isNaN())
 	    return null;
 	else
 	    return df.get().format(value);
     }
 
     public static String jsonNumber(Number value) {
-	if (value == null)
+	if (value == null )
 	    return null;
 	else
 	    return nf.get().format(value);
     }
 
     public static String jsonNumber(Double value) {
-	if (value == null)
+	if (value == null || value.isNaN())
 	    return null;
 	else
 	    return nf.get().format(value);

@@ -75,6 +75,7 @@ import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.bookmark.BookmarkResource;
+import ambit2.rest.bookmark.OntoBucketResource;
 import ambit2.rest.bundle.MyBundlesResource;
 import ambit2.rest.bundle.user.DummyUserByURIResource;
 import ambit2.rest.bundle.user.UserByURIResource;
@@ -562,6 +563,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	router.attach(ReportDatasetResource.resource, ReportDatasetResource.class);
 	/** /bookmark */
 	router.attach(BookmarkResource.resource, createBookmarksRouter());
+	/** /ontobucket */
+	router.attach("/ontobucket", OntoBucketResource.class);
+	
 	/** /chart */
 	router.attach(ChartResource.resource, new ChartRouter(getContext()));
 

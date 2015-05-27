@@ -213,9 +213,9 @@ CREATE TABLE `substance_experiment` (
   `endpoint` varchar(64) DEFAULT NULL,
   `conditions` text,
   `unit` varchar(45) DEFAULT NULL,
-  `loQualifier` varchar(6) DEFAULT NULL,
+  `loQualifier` varchar(8) DEFAULT NULL,
   `loValue` double DEFAULT NULL,
-  `upQualifier` varchar(6) DEFAULT NULL,
+  `upQualifier` varchar(8) DEFAULT NULL,
   `upValue` double DEFAULT NULL,
   `textValue` text,
   `errQualifier` varchar(6) DEFAULT NULL,
@@ -506,6 +506,24 @@ CREATE TABLE `structure` (
   KEY `Index_hash` (`hash`),
   CONSTRAINT `fk_idchemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+delimiter $$
+
+DROP TABLE IF EXISTS `ontobucket` ;
+CREATE TABLE `ontobucket` (
+  `s_source` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `s_id` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `o_source` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `o_id` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `label` text COLLATE utf8_unicode_ci,
+  `relation` enum('label','subclass','db','endpoint','endpointhash','hash','protocol') COLLATE utf8_unicode_ci DEFAULT 'subclass',
+  `uuid` varbinary(20) DEFAULT NULL,
+  KEY `s_id` (`s_id`),
+  KEY `o_id` (`o_id`,`relation`),
+  FULLTEXT KEY `fulltext` (`s_id`,`o_id`,`label`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 
 -- DELIMITER $
 -- CREATE TRIGGER copy_history BEFORE UPDATE ON structure
@@ -1453,7 +1471,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (8,10,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (8,11,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
