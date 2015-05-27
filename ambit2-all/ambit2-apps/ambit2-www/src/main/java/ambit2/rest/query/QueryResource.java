@@ -633,7 +633,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 
     protected Template createTemplate(Context context, Request request, Response response, String[] featuresURI)
 	    throws ResourceException {
-
+	Connection conn  = null;
 	try {
 	    Template profile = new Template(null);
 	    profile.setId(-1);
@@ -644,7 +644,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 	    reader.setCloseConnection(false);
 
 	    DBConnection dbc = new DBConnection(getContext());
-	    Connection conn = dbc.getConnection();
+	    conn = dbc.getConnection();
 	    try {
 		for (String featureURI : featuresURI) {
 		    if (featureURI == null)
@@ -671,11 +671,19 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 		    reader.close();
 		} catch (Exception x) {
 		}
+		System.out.println("Closed "+conn.isClosed());
 		// try { conn.close();} catch (Exception x) {}
 	    }
 	    return profile;
 	} catch (Exception x) {
 	    getLogger().log(Level.SEVERE, x.getMessage(), x);
+	    try {
+		if (conn!=null) {
+		    conn.close();
+		}
+	    } catch (Exception xx) {
+		
+	    }
 	    throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x);
 	}
 

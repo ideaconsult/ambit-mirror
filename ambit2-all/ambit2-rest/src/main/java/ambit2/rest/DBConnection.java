@@ -158,7 +158,7 @@ public class DBConnection {
 		 */
 		c = ds.getConnection();
 		t = c.createStatement();
-		rs = t.executeQuery("/* ping */ SELECT 1 FROM DUAL");
+		rs = t.executeQuery("/* ping */ SELECT 1");
 		while (rs.next()) {
 		    rs.getInt(1);
 		}
