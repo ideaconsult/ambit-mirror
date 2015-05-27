@@ -36,6 +36,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
+import net.idea.modbcum.c.DataSourceC3P0;
+import net.idea.modbcum.i.IDataSourcePool;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.db.LoginInfo;
 
@@ -108,7 +110,7 @@ public class DatasourceFactory {
         try {
         	//IDataSourcePool dataSource = new DataSourceAndPool(connectURI);
         	//IDataSourcePool dataSource = new DataSourceBoneCP(connectURI);
-        	IDataSourcePool dataSource = new DataSourceC3P0(connectURI);
+        	IDataSourcePool dataSource = new DataSourceC3P0(connectURI,"com.mysql.jdbc.Driver",true);
             
             return dataSource;
         } catch (Exception x) {
