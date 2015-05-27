@@ -126,18 +126,17 @@ public abstract class DbUnitTest {
 	} finally {
 	    rs.close();
 	    st.close();
-	    c.close();
 	}
 
-	if (!dbExists)
-	    try {
-
+	try {
+	    if (!dbExists) {
 		DbCreateDatabase db = new DbCreateDatabase(getPWD(), getAdminPWD());
 		db.setConnection(c.getConnection());
 		db.process(new StringBean(getDatabase()));
-	    } finally {
-		c.close();
 	    }
+	} finally {
+	    c.close();
+	}
 
     }
 
