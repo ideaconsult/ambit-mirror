@@ -37,7 +37,7 @@ public class PwdForgottenResource extends RegistrationResource {
 
 			UserURIReporter reporter = new UserURIReporter(getRequest(),"");
 			DBConnection dbc = new DBConnection(getApplication().getContext(),getConfigFile());
-			conn = dbc.getConnection();
+			conn = dbc.getConnection(30,true,8);
 			return new CallablePasswordReset(method,null,reporter, form,getRequest().getRootRef().toString(),
 					conn,getToken(),
 					enableEmailVerification,usersdbname==null?getDefaultUsersDB():usersdbname);

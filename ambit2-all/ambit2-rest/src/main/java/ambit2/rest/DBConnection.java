@@ -9,17 +9,26 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import net.idea.modbcum.c.DatasourceFactory;
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.restlet.Context;
 
 import ambit2.base.config.Preferences;
 import ambit2.db.LoginInfo;
-import ambit2.db.pool.DatasourceFactory;
 
 public class DBConnection {
     protected static Properties properties = null;
     protected Context context;
+    protected String namedConfig = null;
+
+    public String getNamedConfig() {
+	return namedConfig;
+    }
+
+    public void setNamedConfig(String namedConfig) {
+	this.namedConfig = namedConfig;
+    }
 
     public Context getContext() {
 	return context;
@@ -121,53 +130,36 @@ public class DBConnection {
     public synchronized Connection getConnection(String user, String password) throws AmbitException, SQLException {
 	return getConnection(getConnectionURI(user, password));
     }
-
     public synchronized Connection getConnection() throws AmbitException, SQLException {
-	// if (connectionURI == null)
-	// connectionURI = getConnectionURI();
-	return getConnection(getConnectionURI());
+	return getConnection(5,false,2);
+    }
+    public synchronized Connection getConnection(int maxRetry, boolean testIt , int testTimeout) throws AmbitException, SQLException {
+	return getConnectionNamedConfig(getNamedConfig(), getConnectionURI(),maxRetry,testIt,testTimeout);
     }
 
-    public synchronized Connection getConnection(String connectionURI) throws AmbitException, SQLException {
+    public synchronized Connection getConnection(String namedConfig) throws AmbitException, SQLException {
+	// if (connectionURI == null)
+	// connectionURI = getConnectionURI();
+	return getConnectionNamedConfig(namedConfig, getConnectionURI(),5,false,2);
+    }
+
+    public synchronized Connection getConnectionNamedConfig(String namedConfig, String connectionURI, int maxRetry, boolean testIt , int testTimeout)
+	    throws AmbitException, SQLException {
 	SQLException error = null;
 	Connection c = null;
 
 	ResultSet rs = null;
 	Statement t = null;
-	for (int retry = 0; retry < 5; retry++)
+	for (int retry = 0; retry < maxRetry; retry++)
 	    try {
-		DataSource ds = DatasourceFactory.getDataSource(connectionURI);
-		/*
-		 * if ( ds instanceof PooledDataSource) { PooledDataSource pds =
-		 * (PooledDataSource) ds; System.err.println("num_connections: "
-		 * + pds.getNumConnectionsDefaultUser());
-		 * System.err.println("num_busy_connections: " +
-		 * pds.getNumBusyConnectionsDefaultUser());
-		 * System.err.println("num_idle_connections: " +
-		 * pds.getNumIdleConnectionsDefaultUser());
-		 * System.err.println("num_thread_awaiting: "
-		 * +pds.getNumThreadsAwaitingCheckoutDefaultUser());
-		 * System.err.println
-		 * ("StatementCacheNumCheckedOutStatementsAllUsers: "
-		 * +pds.getStatementCacheNumCheckedOutStatementsAllUsers());
-		 * System.err.println("num_unclosed_orphaned_connections: "
-		 * +pds.getNumUnclosedOrphanedConnectionsAllUsers());
-		 * 
-		 * System.err.println(); } else
-		 * System.err.println("Not a c3p0 PooledDataSource!");
-		 */
+		error= null;
+		DataSource ds = DatasourceFactory.getDataSource(namedConfig, connectionURI,"com.mysql.jdbc.Driver");
+
 		c = ds.getConnection();
-		t = c.createStatement();
-		rs = t.executeQuery("/* ping */ SELECT 1");
-		while (rs.next()) {
-		    rs.getInt(1);
-		}
-		rs.close();
-		rs = null;
-		t.close();
-		t = null;
-		error = null;
-		return c;
+		if (testIt) { 
+		    if (c.isValid(testTimeout)) return c;
+		    else throw new SQLException(String.format("Invalid connection on attempt %d",retry));
+		} else return c;
 	    } catch (SQLException x) {
 		error = x;
 		Context.getCurrentLogger().severe(x.getMessage());
@@ -175,8 +167,8 @@ public class DBConnection {
 		try {
 		    if (c != null) {
 			c.close();
-			c= null;
-		    }	
+			c = null;
+		    }
 		} catch (Exception e) {
 		}
 	    } catch (Throwable x) {
@@ -184,8 +176,8 @@ public class DBConnection {
 		try {
 		    if (c != null) {
 			c.close();
-			c= null;
-		    }	
+			c = null;
+		    }
 		} catch (Exception e) {
 		}
 	    } finally {

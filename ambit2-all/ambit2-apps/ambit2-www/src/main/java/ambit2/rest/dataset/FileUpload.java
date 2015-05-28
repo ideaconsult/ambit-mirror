@@ -136,7 +136,7 @@ public class FileUpload<USERID> {
 	    Connection connection = null;
 	    try {
 		DBConnection dbc = new DBConnection(getApplication().getContext());
-		connection = dbc.getConnection();
+		connection = dbc.getConnection(30,true,8);
 		List<FileItem> items = upload.parseRequest(getRequest());
 		DatasetURIReporter<IQueryRetrieval<ISourceDataset>, ISourceDataset> reporter = new DatasetURIReporter<IQueryRetrieval<ISourceDataset>, ISourceDataset>(
 			getRequest());
@@ -171,7 +171,7 @@ public class FileUpload<USERID> {
 	    Connection connection = null;
 	    try {
 		DBConnection dbc = new DBConnection(getApplication().getContext());
-		connection = dbc.getConnection();
+		connection = dbc.getConnection(30,true,8);
 		DatasetURIReporter<IQueryRetrieval<ISourceDataset>, ISourceDataset> reporter = new DatasetURIReporter<IQueryRetrieval<ISourceDataset>, ISourceDataset>(
 			getRequest());
 		ConformerURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(

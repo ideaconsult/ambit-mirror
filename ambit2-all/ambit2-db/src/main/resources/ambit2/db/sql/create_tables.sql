@@ -525,7 +525,6 @@ CREATE TABLE `ontobucket` (
   FULLTEXT KEY `fulltext` (`s_id`,`o_id`,`label`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DELIMITER $
 
 -- DELIMITER $
 -- CREATE TRIGGER copy_history BEFORE UPDATE ON structure

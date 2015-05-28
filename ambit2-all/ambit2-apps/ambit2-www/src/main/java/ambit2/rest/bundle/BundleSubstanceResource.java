@@ -85,7 +85,7 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 	    SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>> r = new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(
 		    getRequest());
 	    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
-	    conn = dbc.getConnection();
+	    conn = dbc.getConnection(30,true,8);
 	    return new CallableSubstanceBundle(bundle, r, method, form, conn, getToken());
 	} catch (Exception x) {
 	    try {

@@ -67,6 +67,16 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
     protected String[] folders;
     protected ObjectMapper dx = new ObjectMapper();
 
+    protected boolean includeStructuresWithoutSubstances = false;
+
+    public boolean isIncludeStructuresWithoutSubstances() {
+	return includeStructuresWithoutSubstances;
+    }
+
+    public void setIncludeStructuresWithoutSubstances(boolean includeStructuresWithoutSubstances) {
+	this.includeStructuresWithoutSubstances = includeStructuresWithoutSubstances;
+    }
+
     public SubstanceDatasetResource() {
 	super();
 	setHtmlbyTemplate(true);
@@ -178,7 +188,8 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	    @Override
 	    protected SubstanceRecord processDetail(SubstanceRecord master,
 		    ProtocolEffectRecord<String, String, String> detail) throws Exception {
-
+		if (master.getIdsubstance() <=0) 
+		    return master;
 		if (detail != null) {
 		    if (detail.getTextValue() != null && detail.getTextValue().toString().startsWith("{")) {
 
@@ -382,9 +393,9 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	groupProperties.add(new SubstanceName());
 	groupProperties.add(new SubstanceUUID());
 	groupProperties.add(new SubstanceOwner());
-	
-	CSVReporter csvreporter = new CSVReporter(getRequest().getRootRef().toString(),
-		getTemplate(), groupProperties, String.format("%s%s", getRequest().getRootRef(), "")) {
+
+	CSVReporter csvreporter = new CSVReporter(getRequest().getRootRef().toString(), getTemplate(), groupProperties,
+		String.format("%s%s", getRequest().getRootRef(), "")) {
 	    @Override
 	    protected void configurePropertyProcessors() {
 		getProcessors().add(getPropertyProcessors(false, false));
@@ -396,7 +407,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 	} catch (Exception x) {
 	    csvreporter.setNumberofHeaderLines(3);
 	}
-	
+
 	return new OutputWriterConvertor<SubstanceRecord, Q>(csvreporter, MediaType.TEXT_CSV, filenamePrefix);
 
     }

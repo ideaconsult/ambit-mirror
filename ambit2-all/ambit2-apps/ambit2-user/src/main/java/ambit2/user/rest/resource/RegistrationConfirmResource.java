@@ -90,7 +90,7 @@ public class RegistrationConfirmResource extends  AmbitDBQueryResource<ReadRegis
 				if (usersdbname==null) usersdbname = getDefaultUsersDB();
 				UserURIReporter reporter = new UserURIReporter(getRequest(),"");
 				DBConnection dbc = new DBConnection(getApplication().getContext(),getConfigFile());
-				conn = dbc.getConnection();
+				conn = dbc.getConnection(30,true,8);
 				UserRegistration reg = new  UserRegistration(code.toString());
 				reg.setTitle("Confirm reset");
 				ConfirmRegistration q = new ConfirmRegistration(reg);

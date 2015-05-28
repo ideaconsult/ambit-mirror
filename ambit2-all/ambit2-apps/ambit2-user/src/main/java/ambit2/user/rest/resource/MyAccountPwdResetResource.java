@@ -70,7 +70,7 @@ public class MyAccountPwdResetResource<T> extends MyAccountResource<T> {
 
 				UserURIReporter reporter = new UserURIReporter(getRequest(),"");
 				DBConnection dbc = new DBConnection(getApplication().getContext(),getConfigFile());
-				conn = dbc.getConnection();
+				conn = dbc.getConnection(30,true,8);
 				return new AMBITCallableUserCreator(
 							method,
 							item,

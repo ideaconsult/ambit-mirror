@@ -27,7 +27,7 @@ package ambit2.dbui.test;
 import javax.sql.DataSource;
 
 import junit.framework.TestCase;
-import ambit2.db.pool.DatasourceFactory;
+import net.idea.modbcum.c.DatasourceFactory;
 
 public abstract class RepositoryTest extends TestCase {
 	protected DataSource datasource;
@@ -38,10 +38,10 @@ public abstract class RepositoryTest extends TestCase {
 		
 	}
 	protected void initDatasource()  throws Exception {
-		datasource = DatasourceFactory.getDataSource(
+		datasource = DatasourceFactory.getDataSource(null,
 				DatasourceFactory.getConnectionURI(
 						"jdbc:mysql", 
-						"localhost", "3306", "ambit2", "guest","guest" ));		
+						"localhost", "3306", "ambit2", "guest","guest" ),"com.mysql.jdbc.Driver");		
 	}
 	@Override
 	protected void tearDown() throws Exception {

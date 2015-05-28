@@ -27,3 +27,5 @@ mutant.level = WARNING
 #org.restlet.engine.level = WARNING
 #Inchi
 org.openscience.cdk.level = WARNING
+#c3p0
+#com.mchange.level = DEBUG

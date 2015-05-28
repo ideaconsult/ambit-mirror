@@ -91,7 +91,7 @@ public class BundleVersionsResource extends BundleMetadataResource {
 	try {
 	    DatasetURIReporter r = new DatasetURIReporter(getRequest());
 	    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
-	    conn = dbc.getConnection();
+	    conn = dbc.getConnection(30,true,8);
 	    return new CallableBundleVersionCreator(bundle, r, method, form, conn, getToken());
 	} catch (Exception x) {
 	    x.printStackTrace();

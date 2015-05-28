@@ -29,22 +29,24 @@ import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.substance.ids.ReadChemIdentifiersByComposition;
 import ambit2.db.substance.relation.ReadSubstanceComposition;
 import ambit2.db.update.bundle.effects.ReadEffectRecordByBundle;
+import ambit2.db.update.bundle.substance.ReadSubstanceChemicalsUnionByBundle;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
 import ambit2.rest.OpenTox;
 import ambit2.rest.substance.SubstanceDatasetResource;
 
-public class BundleDatasetResource extends SubstanceDatasetResource<ReadSubstancesByBundle> {
+public class BundleDatasetResource<Q extends ReadSubstancesByBundle> extends SubstanceDatasetResource<Q> {
     protected SubstanceEndpointsBundle bundle;
 
     @Override
-    protected ReadSubstancesByBundle createQuery(Context context, Request request, Response response)
+    protected Q createQuery(Context context, Request request, Response response)
 	    throws ResourceException {
 	Object idbundle = request.getAttributes().get(OpenTox.URI.bundle.getKey());
 	if (idbundle == null)
 	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	try {
 	    bundle = new SubstanceEndpointsBundle(Integer.parseInt(idbundle.toString()));
-	    return new ReadSubstancesByBundle(bundle) {
+	    ReadSubstanceChemicalsUnionByBundle q = new ReadSubstanceChemicalsUnionByBundle(bundle) {
+	    //return new ReadSubstancesByBundle(bundle) {
 		/**
 		 * 
 		 */
@@ -59,6 +61,7 @@ public class BundleDatasetResource extends SubstanceDatasetResource<ReadSubstanc
 		    return record;
 		}
 	    };
+	    return (Q)q;
 	} catch (Exception x) {
 	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
@@ -83,6 +86,8 @@ public class BundleDatasetResource extends SubstanceDatasetResource<ReadSubstanc
 
 	    @Override
 	    public SubstanceRecord process(SubstanceRecord target) throws AmbitException {
+		if (target==null || (target.getIdsubstance()<=0)) 
+		    return target;
 		q.setBundle(bundle);
 		if (target.getRelatedStructures() != null)
 		    target.getRelatedStructures().clear();

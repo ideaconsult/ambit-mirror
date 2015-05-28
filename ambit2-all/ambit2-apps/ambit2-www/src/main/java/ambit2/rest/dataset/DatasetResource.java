@@ -274,7 +274,7 @@ public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extend
 	QueryExecutor xx = null;
 	try {
 	    DBConnection dbc = new DBConnection(getContext());
-	    c = dbc.getConnection();
+	    c = dbc.getConnection(30,true,5);
 	    ReadDataset read = new ReadDataset();
 	    read.setValue(dataset);
 	    xx = new QueryExecutor();
