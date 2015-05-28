@@ -29,7 +29,6 @@ import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.substance.ids.ReadChemIdentifiersByComposition;
 import ambit2.db.substance.relation.ReadSubstanceComposition;
 import ambit2.db.update.bundle.effects.ReadEffectRecordByBundle;
-import ambit2.db.update.bundle.substance.ReadSubstanceChemicalsUnionByBundle;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
 import ambit2.rest.OpenTox;
 import ambit2.rest.substance.SubstanceDatasetResource;
@@ -45,8 +44,8 @@ public class BundleDatasetResource<Q extends ReadSubstancesByBundle> extends Sub
 	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	try {
 	    bundle = new SubstanceEndpointsBundle(Integer.parseInt(idbundle.toString()));
-	    ReadSubstanceChemicalsUnionByBundle q = new ReadSubstanceChemicalsUnionByBundle(bundle) {
-	    //return new ReadSubstancesByBundle(bundle) {
+	    //ReadSubstanceChemicalsUnionByBundle q = new ReadSubstanceChemicalsUnionByBundle(bundle) {
+	    ReadSubstancesByBundle q = new ReadSubstancesByBundle(bundle) {
 		/**
 		 * 
 		 */
