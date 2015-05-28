@@ -138,7 +138,7 @@ public abstract class AmbitDBQueryResource<Q extends IQueryRetrieval<T>,T extend
 		UpdateExecutor x = null;
 		try {
 			DBConnection dbc = new DBConnection(getApplication().getContext(),getConfigFile());
-			conn = dbc.getConnection();
+			conn = dbc.getConnection(30,true,8);
 			x = new UpdateExecutor();
 			x.setConnection(conn);
 			x.process(query);

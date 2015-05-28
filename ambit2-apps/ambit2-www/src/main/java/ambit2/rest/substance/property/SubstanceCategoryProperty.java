@@ -28,7 +28,6 @@ import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.IParams;
 import ambit2.user.rest.resource.AMBITDBRoles;
 import ambit2.user.rest.resource.DBRoles;
-import ambit2.user.rest.resource.Resources;
 
 public class SubstanceCategoryProperty extends CatalogResource<EffectRecord<String, IParams, String>> {
     protected List<EffectRecord<String, IParams, String>> effects;

@@ -195,7 +195,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 	try {
 	    DatasetURIReporter r = new DatasetURIReporter(getRequest());
 	    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
-	    conn = dbc.getConnection();
+	    conn = dbc.getConnection(30,true,8);
 	    CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(_matrix.matrix_working,
 		    Method.DELETE, null, bundle, r, conn, getToken());
 	    ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("Delete matrix from bundle",
@@ -259,7 +259,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 		try {
 		    DatasetURIReporter r = new DatasetURIReporter(getRequest());
 		    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
-		    conn = dbc.getConnection();
+		    conn = dbc.getConnection(30,true,8);
 		    CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(matrix, Method.POST,
 			    new Form(entity), bundle, r, conn, getToken());
 		    ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("Matrix from bundle",

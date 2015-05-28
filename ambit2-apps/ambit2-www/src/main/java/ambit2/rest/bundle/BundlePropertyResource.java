@@ -63,7 +63,7 @@ public class BundlePropertyResource<Q extends IQueryRetrieval<Property>> extends
 		try {
 			PropertyURIReporter r = new PropertyURIReporter(getRequest());
 			DBConnection dbc = new DBConnection(getApplication().getContext(),getConfigFile());
-			conn = dbc.getConnection();
+			conn = dbc.getConnection(30,true,8);
 			return new CallableEndpointsBundle(bundle,r,method,form,conn,getToken());
 		} catch (Exception x) {
 			x.printStackTrace();

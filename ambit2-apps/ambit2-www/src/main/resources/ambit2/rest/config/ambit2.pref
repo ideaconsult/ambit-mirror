@@ -8,6 +8,7 @@ ambit.build.timestamp=${timestamp}
 #For Authentication and authorization configuration please see config.prop file
 #For fine tuning logging please see logging.prop file 
 #MySQL Database configuration
+DriverClassName=com.mysql.jdbc.Driver
 Host=${ambit.db.host}
 Scheme=jdbc\:mysql
 Port=3306

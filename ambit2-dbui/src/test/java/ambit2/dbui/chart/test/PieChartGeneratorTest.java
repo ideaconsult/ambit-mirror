@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import net.idea.modbcum.c.DatasourceFactory;
+
 import org.junit.Test;
 
 import ambit2.base.data.Property;
@@ -23,7 +25,6 @@ import ambit2.db.chart.Numeric2SimilarityChartGenerator;
 import ambit2.db.chart.PieChartGenerator;
 import ambit2.db.chart.PropertiesChartGenerator;
 import ambit2.db.chart.XTabChartGenerator;
-import ambit2.db.pool.DatasourceFactory;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.StoredQuery;
 import ambit2.dbui.test.RepositoryTest;
@@ -31,10 +32,10 @@ import ambit2.dbui.test.RepositoryTest;
 public class PieChartGeneratorTest extends RepositoryTest  {
 	
 	protected void initDatasource()  throws Exception {
-		datasource = DatasourceFactory.getDataSource(
+		datasource = DatasourceFactory.getDataSource(null,
 				DatasourceFactory.getConnectionURI(
 						"jdbc:mysql", 
-						"localhost", "3306", "ambit2", "guest","guest" ));		
+						"localhost", "3306", "ambit2", "guest","guest" ),"com.mysql.jdbc.Driver");		
 	}	
 	
 	public Image test() {

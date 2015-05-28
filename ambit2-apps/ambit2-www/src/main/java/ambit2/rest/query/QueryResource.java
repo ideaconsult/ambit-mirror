@@ -298,7 +298,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 	UpdateExecutor executor = new UpdateExecutor();
 	try {
 	    DBConnection dbc = new DBConnection(getContext());
-	    c = dbc.getConnection();
+	    c = dbc.getConnection(30,true,5);
 
 	    executor.setConnection(c);
 	    executor.open();
@@ -547,7 +547,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 		};
 
 		DBConnection dbc = new DBConnection(getApplication().getContext());
-		conn = dbc.getConnection();
+		conn = dbc.getConnection(30,true,5);
 
 		List<UUID> r = null;
 		try {
@@ -643,8 +643,10 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 			    .getClientInfo().getAgent());
 	    reader.setCloseConnection(false);
 
-	    DBConnection dbc = new DBConnection(getContext());
-	    conn = dbc.getConnection();
+	    DBConnection dbc = new DBConnection(getApplication().getContext());
+	    conn = dbc.getConnection(30,true,5);
+	    
+	    
 	    try {
 		for (String featureURI : featuresURI) {
 		    if (featureURI == null)
@@ -671,7 +673,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 		    reader.close();
 		} catch (Exception x) {
 		}
-		System.out.println("Closed "+conn.isClosed());
+		//System.out.println("Closed "+conn.isClosed());
 		// try { conn.close();} catch (Exception x) {}
 	    }
 	    return profile;
@@ -684,7 +686,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 	    } catch (Exception xx) {
 		
 	    }
-	    throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x);
+	    throw new ResourceException(Status.CLIENT_ERROR_REQUEST_TIMEOUT, x);
 	}
 
     }

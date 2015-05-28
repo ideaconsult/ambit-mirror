@@ -175,7 +175,7 @@ public class UserByURIResource<T> extends UserDBResource<T> {
 	Connection conn = null;
 	try {
 	    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
-	    conn = dbc.getConnection();
+	    conn = dbc.getConnection(30,true,8);
 	    return new CallablePolicyUsersCreator(method, form, getRequest().getRootRef().toString(), conn, getToken(),
 		    usersdbname == null ? getDefaultUsersDB() : usersdbname);
 	} catch (Exception x) {

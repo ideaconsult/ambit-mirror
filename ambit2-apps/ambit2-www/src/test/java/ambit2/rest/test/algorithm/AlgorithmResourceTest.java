@@ -292,64 +292,101 @@ public class AlgorithmResourceTest extends ResourceTest {
 		port, Reference.encode(task.getResult().toExternalForm()));
 	Reference ref = testAsyncTask(model.toString(), headers, Status.SUCCESS_OK, expected);
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c.createQueryTable("EXPECTED", "SELECT * FROM chem_relation");
-	Assert.assertEquals(9, table.getRowCount());
-	table = c.createQueryTable("EXPECTED",
-		"SELECT * FROM src_dataset join struc_dataset using(id_srcdataset) where name='TAUTOMERS'");
-	Assert.assertEquals(9, table.getRowCount());
-	c.close();
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c.createQueryTable("EXPECTED", "SELECT * FROM chem_relation");
+	    Assert.assertEquals(9, table.getRowCount());
+	    table = c.createQueryTable("EXPECTED",
+		    "SELECT * FROM src_dataset join struc_dataset using(id_srcdataset) where name='TAUTOMERS'");
+	    Assert.assertEquals(9, table.getRowCount());
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
 
 	List list = cli.listURI(new URL(expected));
 	Assert.assertEquals(9, list.size());
 
 	// now try it again
 	ref = testAsyncTask(model.toString(), headers, Status.SUCCESS_OK, expected);
-	c = getConnection();
-	table = c.createQueryTable("EXPECTED", "SELECT idchemical1,idchemical2,relation,metric FROM chem_relation");
-	Assert.assertEquals(9, table.getRowCount());
-	Assert.assertNotNull(table.getValue(0, "metric"));
-	c.close();
+	try {
+	    c = getConnection();
+	    ITable table = c.createQueryTable("EXPECTED",
+		    "SELECT idchemical1,idchemical2,relation,metric FROM chem_relation");
+	    Assert.assertEquals(9, table.getRowCount());
+	    Assert.assertNotNull(table.getValue(0, "metric"));
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
 
 	otclient.close();
     }
 
     @Test
     public void testCalculateFingerprints() throws Exception {
+	IDatabaseConnection c = null;
+	ITable table = null;
+	try {
+	    c = getConnection();
+	    Connection connection = c.getConnection();
+	    Statement t = connection.createStatement();
+	    t.executeUpdate("delete from fp1024");
+	    t.close();
+	    table = c.createQueryTable("EXPECTED", "SELECT * from fp1024");
+	    Assert.assertEquals(0, table.getRowCount());
 
-	IDatabaseConnection c = getConnection();
-	Connection connection = c.getConnection();
-	Statement t = connection.createStatement();
-	t.executeUpdate("delete from fp1024");
-	t.close();
-	ITable table = c.createQueryTable("EXPECTED", "SELECT * from fp1024");
-	Assert.assertEquals(0, table.getRowCount());
-
-	c.close();
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
 	Form headers = new Form();
 	// headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1",
 	// port));
 	testAsyncTask(String.format("http://localhost:%d/algorithm/fingerprints", port), headers, Status.SUCCESS_OK, "");
 	// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 
-	c = getConnection();
-	table = c.createQueryTable("EXPECTED", "SELECT bc from fp1024");
-	Assert.assertEquals(4, table.getRowCount());
-	c.close();
+	try {
+	    c = getConnection();
+	    table = c.createQueryTable("EXPECTED", "SELECT bc from fp1024");
+	    Assert.assertEquals(4, table.getRowCount());
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     @Test
     public void testStructureQualityWorkflow() throws Exception {
 
-	IDatabaseConnection c = getConnection();
-	Connection connection = c.getConnection();
-	Statement t = connection.createStatement();
-	t.executeUpdate("delete from fp1024_struc");
-	t.close();
-	ITable table = c.createQueryTable("EXPECTED", "SELECT * from fp1024_struc");
-	Assert.assertEquals(0, table.getRowCount());
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    Connection connection = c.getConnection();
+	    Statement t = connection.createStatement();
+	    t.executeUpdate("delete from fp1024_struc");
+	    t.close();
+	    ITable table = c.createQueryTable("EXPECTED", "SELECT * from fp1024_struc");
+	    Assert.assertEquals(0, table.getRowCount());
 
-	c.close();
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
 	Form headers = new Form();
 	// headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1",
 	// port));
@@ -357,93 +394,134 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Status.SUCCESS_OK, "");
 	// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 
-	c = getConnection();
-	table = c.createQueryTable("EXPECTED", "SELECT bc from fp1024_struc");
-	Assert.assertEquals(5, table.getRowCount());
-	c.close();
+	try {
+	    c = getConnection();
+	    ITable table = c.createQueryTable("EXPECTED", "SELECT bc from fp1024_struc");
+	    Assert.assertEquals(5, table.getRowCount());
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     @Test
     public void testSK1024Generator() throws Exception {
 
-	IDatabaseConnection c = getConnection();
-	Connection connection = c.getConnection();
-	Statement t = connection.createStatement();
-	t.executeUpdate("delete from sk1024");
-	t.close();
-	ITable table = c.createQueryTable("EXPECTED", "SELECT * from sk1024");
-	Assert.assertEquals(0, table.getRowCount());
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
 
-	c.close();
+	    Connection connection = c.getConnection();
+	    Statement t = connection.createStatement();
+	    t.executeUpdate("delete from sk1024");
+	    t.close();
+	    ITable table = c.createQueryTable("EXPECTED", "SELECT * from sk1024");
+	    Assert.assertEquals(0, table.getRowCount());
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
 	Form headers = new Form();
 	// headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1",
 	// port));
 	testAsyncTask(String.format("http://localhost:%d/algorithm/struckeys", port), headers, Status.SUCCESS_OK, "");
 	// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+	try {
+	    c = getConnection();
+	    ITable table = c.createQueryTable("EXPECTED", "SELECT bc from sk1024");
+	    Assert.assertEquals(4, table.getRowCount());
 
-	c = getConnection();
-	table = c.createQueryTable("EXPECTED", "SELECT bc from sk1024");
-	Assert.assertEquals(4, table.getRowCount());
-	c.close();
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     @Test
     public void testSmartsAccelerator() throws Exception {
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    Connection connection = c.getConnection();
+	    Statement t = connection.createStatement();
+	    t.executeUpdate("update structure set atomproperties=null");
+	    t.close();
+	    ITable table = c.createQueryTable("EXPECTED", "SELECT * from structure where atomproperties is null");
+	    Assert.assertEquals(5, table.getRowCount());
 
-	IDatabaseConnection c = getConnection();
-	Connection connection = c.getConnection();
-	Statement t = connection.createStatement();
-	t.executeUpdate("update structure set atomproperties=null");
-	t.close();
-	ITable table = c.createQueryTable("EXPECTED", "SELECT * from structure where atomproperties is null");
-	Assert.assertEquals(5, table.getRowCount());
-
-	c.close();
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
 	Form headers = new Form();
 	// headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1",
 	// port));
 	testAsyncTask(String.format("http://localhost:%d/algorithm/smartsprop", port), headers, Status.SUCCESS_OK, "");
 	// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+	try {
+	    c = getConnection();
+	    ITable table = c.createQueryTable("EXPECTED", "SELECT * from structure where atomproperties is not null");
+	    Assert.assertEquals(5, table.getRowCount());
 
-	c = getConnection();
-	table = c.createQueryTable("EXPECTED", "SELECT * from structure where atomproperties is not null");
-	Assert.assertEquals(5, table.getRowCount());
-	c.close();
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     @Test
     public void testInChIChemicals() throws Exception {
 
-	IDatabaseConnection c = getConnection();
-	Connection connection = c.getConnection();
-	Statement t = connection.createStatement();
-	t.executeUpdate("update chemicals set inchi=null,inchikey=null");
-	t.close();
-	t = connection.createStatement();
-	t.executeUpdate("update structure set preference=10000,structure='' where idstructure=100214");
-	t.close();
-	t = connection.createStatement();
-	t.executeUpdate("update structure set structure='' where idchemical=11");
-	t.close();
-	ITable table = c.createQueryTable("EXPECTED", "SELECT * from chemicals where inchi is null");
-	Assert.assertEquals(4, table.getRowCount());
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    Connection connection = c.getConnection();
+	    Statement t = connection.createStatement();
+	    t.executeUpdate("update chemicals set inchi=null,inchikey=null");
+	    t.close();
+	    t = connection.createStatement();
+	    t.executeUpdate("update structure set preference=10000,structure='' where idstructure=100214");
+	    t.close();
+	    t = connection.createStatement();
+	    t.executeUpdate("update structure set structure='' where idchemical=11");
+	    t.close();
+	    ITable table = c.createQueryTable("EXPECTED", "SELECT * from chemicals where inchi is null");
+	    Assert.assertEquals(4, table.getRowCount());
 
-	c.close();
-	Form headers = new Form();
-	headers.add("label", "UNKNOWN");
-	// headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1",
-	// port));
-	testAsyncTask(String.format("http://localhost:%d/algorithm/inchi", port), headers, Status.SUCCESS_OK, "");
-	// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+	    c.close();
+	    Form headers = new Form();
+	    headers.add("label", "UNKNOWN");
+	    // headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1",
+	    // port));
+	    testAsyncTask(String.format("http://localhost:%d/algorithm/inchi", port), headers, Status.SUCCESS_OK, "");
+	    // "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 
-	c = getConnection();
-	table = c.createQueryTable("EXPECTED", "SELECT * from chemicals where inchi is not null");
-	Assert.assertEquals(3, table.getRowCount());
-	table = c.createQueryTable("EXPECTED",
-		"SELECT idchemical from chemicals where inchi is null and inchikey is null");
-	Assert.assertEquals(1, table.getRowCount());
-	Assert.assertEquals(11, table.getValue(0, "idchemical"));
-	c.close();
+	    c = getConnection();
+	    table = c.createQueryTable("EXPECTED", "SELECT * from chemicals where inchi is not null");
+	    Assert.assertEquals(3, table.getRowCount());
+	    table = c.createQueryTable("EXPECTED",
+		    "SELECT idchemical from chemicals where inchi is null and inchikey is null");
+	    Assert.assertEquals(1, table.getRowCount());
+	    Assert.assertEquals(11, table.getValue(0, "idchemical"));
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     @Test
@@ -456,34 +534,57 @@ public class AlgorithmResourceTest extends ResourceTest {
 		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor"
 			));
 	// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
-	IDatabaseConnection c = getConnection();
-	Connection connection = c.getConnection();
-	ITable table = c.createQueryTable("EXPECTED", "SELECT * from properties");
-	Assert.assertEquals(6, table.getRowCount());
-	table = c.createQueryTable("EXPECTED", "SELECT * from property_values");
-	Assert.assertEquals(19, table.getRowCount());
-	c.close();
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    Connection connection = c.getConnection();
+	    ITable table = c.createQueryTable("EXPECTED", "SELECT * from properties");
+	    Assert.assertEquals(6, table.getRowCount());
+	    table = c.createQueryTable("EXPECTED", "SELECT * from property_values");
+	    Assert.assertEquals(19, table.getRowCount());
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     @Test
     public void testAtomEnvironments() throws Exception {
 
-	IDatabaseConnection c = getConnection();
-	Connection connection = c.getConnection();
-	Statement t = connection.createStatement();
-	t.executeUpdate("delete from fpaechemicals");
-	t.close();
-	Form headers = new Form();
-	// headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1",
-	// port));
-	testAsyncTask(String.format("http://localhost:%d/algorithm/atomenvironments", port), headers,
-		Status.SUCCESS_OK, "");
-	// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    Connection connection = c.getConnection();
+	    Statement t = connection.createStatement();
+	    t.executeUpdate("delete from fpaechemicals");
+	    t.close();
+	    Form headers = new Form();
+	    // headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1",
+	    // port));
+	    testAsyncTask(String.format("http://localhost:%d/algorithm/atomenvironments", port), headers,
+		    Status.SUCCESS_OK, "");
+	    // "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 
-	c = getConnection();
-	ITable table = c.createQueryTable("EXPECTED", "SELECT * from fpaechemicals group by idchemical");
-	Assert.assertEquals(4, table.getRowCount());
-	c.close();
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
+	try {
+	    c = getConnection();
+	    ITable table = c.createQueryTable("EXPECTED", "SELECT * from fpaechemicals group by idchemical");
+	    Assert.assertEquals(4, table.getRowCount());
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     @Test
@@ -557,16 +658,26 @@ public class AlgorithmResourceTest extends ResourceTest {
 	i.close();
 	Assert.assertEquals(20, count);
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c.createQueryTable("EXPECTED",
-		"SELECT count(*) c,group_concat(distinct(status)) s FROM	properties\n"
-			+ "join property_values v using(idproperty)\n"
-			+ "left join property_string using(idvalue_string)\n"
-			+ "join template_def t using(idproperty) join models on t.idtemplate=models.predicted and\n"
-			+ "models.name='Number of each amino acid in an atom container'\n");
-	Assert.assertEquals(new BigInteger("80"), table.getValue(0, "c"));
-	Assert.assertEquals("OK", table.getValue(0, "s"));
-	c.close();
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable(
+			    "EXPECTED",
+			    "SELECT count(*) c,group_concat(distinct(status)) s FROM	properties\n"
+				    + "join property_values v using(idproperty)\n"
+				    + "left join property_string using(idvalue_string)\n"
+				    + "join template_def t using(idproperty) join models on t.idtemplate=models.predicted and\n"
+				    + "models.name='Number of each amino acid in an atom container'\n");
+	    Assert.assertEquals(new BigInteger("80"), table.getValue(0, "c"));
+	    Assert.assertEquals("OK", table.getValue(0, "s"));
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
 
     }
 
@@ -780,13 +891,21 @@ public class AlgorithmResourceTest extends ResourceTest {
 		"http://localhost:8181/dataset/1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F4%2Fpredicted");
 
 	// test tables
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable(
-			"EXPECTED",
-			"SELECT name,value_num,idchemical,idstructure FROM properties join property_values using(idproperty) join struc_dataset using(idstructure) where name='Cluster' and id_srcdataset=1");
-	Assert.assertEquals(4, table.getRowCount());
-	c.close();
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable(
+			    "EXPECTED",
+			    "SELECT name,value_num,idchemical,idstructure FROM properties join property_values using(idproperty) join struc_dataset using(idstructure) where name='Cluster' and id_srcdataset=1");
+	    Assert.assertEquals(4, table.getRowCount());
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     @Test
@@ -823,26 +942,35 @@ public class AlgorithmResourceTest extends ResourceTest {
 		String.format("http://localhost:%d/dataset/1%s", port,
 			String.format("%s", "?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable("EXPECTED",
-			"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Euclidean distance'");
-	Assert.assertEquals(4, table.getRowCount());
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable("EXPECTED",
+			    "SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Euclidean distance'");
+	    Assert.assertEquals(4, table.getRowCount());
 
-	table = c
-		.createQueryTable(
-			"EXPECTED",
-			"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Euclidean distance'");
-	Assert.assertEquals(4, table.getRowCount());
+	    table = c
+		    .createQueryTable(
+			    "EXPECTED",
+			    "SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Euclidean distance'");
+	    Assert.assertEquals(4, table.getRowCount());
 
-	table = c
-		.createQueryTable(
-			"EXPECTED",
-			"SELECT rdf_type,predicate,object FROM property_annotation join properties using(idproperty) where name='AppDomain_Euclidean distance'");
-	Assert.assertEquals(1, table.getRowCount());
-	Assert.assertEquals("ModelConfidenceFeature", table.getValue(0, "rdf_type"));
-	Assert.assertEquals("confidenceOf", table.getValue(0, "predicate"));
-	Assert.assertEquals("http://example.com/opentox/feature/xxx", table.getValue(0, "object"));
+	    table = c
+		    .createQueryTable(
+			    "EXPECTED",
+			    "SELECT rdf_type,predicate,object FROM property_annotation join properties using(idproperty) where name='AppDomain_Euclidean distance'");
+	    Assert.assertEquals(1, table.getRowCount());
+	    Assert.assertEquals("ModelConfidenceFeature", table.getValue(0, "rdf_type"));
+	    Assert.assertEquals("confidenceOf", table.getValue(0, "predicate"));
+	    Assert.assertEquals("http://example.com/opentox/feature/xxx", table.getValue(0, "object"));
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     @Test
@@ -891,16 +1019,25 @@ public class AlgorithmResourceTest extends ResourceTest {
 		String.format("http://localhost:%d/dataset/1%s", port,
 			String.format("%s", "?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable("EXPECTED",
-			"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Tanimoto'");
-	Assert.assertEquals(4, table.getRowCount());
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable("EXPECTED",
+			    "SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Tanimoto'");
+	    Assert.assertEquals(4, table.getRowCount());
 
-	table = c
-		.createQueryTable("EXPECTED",
-			"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Tanimoto'");
-	Assert.assertEquals(4, table.getRowCount());
+	    table = c
+		    .createQueryTable("EXPECTED",
+			    "SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Tanimoto'");
+	    Assert.assertEquals(4, table.getRowCount());
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     @Test
@@ -921,43 +1058,52 @@ public class AlgorithmResourceTest extends ResourceTest {
 		String.format("http://localhost:%d/dataset/1%s", port,
 			String.format("%s", "?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable("EXPECTED",
-			"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Tanimoto'");
-	Assert.assertEquals(4, table.getRowCount());
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable("EXPECTED",
+			    "SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Tanimoto'");
+	    Assert.assertEquals(4, table.getRowCount());
 
-	table = c
-		.createQueryTable("EXPECTED",
-			"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Tanimoto'");
-	Assert.assertEquals(4, table.getRowCount());
+	    table = c
+		    .createQueryTable("EXPECTED",
+			    "SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Tanimoto'");
+	    Assert.assertEquals(4, table.getRowCount());
 
-	table = c
-		.createQueryTable(
-			"EXPECTED",
-			"SELECT idproperty,rdf_type,predicate,object FROM property_annotation join properties using(idproperty) where name='AppDomain_Tanimoto'");
-	Assert.assertEquals(1, table.getRowCount());
-	Assert.assertEquals("ModelConfidenceFeature", table.getValue(0, "rdf_type"));
-	Assert.assertEquals("confidenceOf", table.getValue(0, "predicate"));
-	Assert.assertEquals("http://example.com/opentox/feature/xxx", table.getValue(0, "object"));
+	    table = c
+		    .createQueryTable(
+			    "EXPECTED",
+			    "SELECT idproperty,rdf_type,predicate,object FROM property_annotation join properties using(idproperty) where name='AppDomain_Tanimoto'");
+	    Assert.assertEquals(1, table.getRowCount());
+	    Assert.assertEquals("ModelConfidenceFeature", table.getValue(0, "rdf_type"));
+	    Assert.assertEquals("confidenceOf", table.getValue(0, "predicate"));
+	    Assert.assertEquals("http://example.com/opentox/feature/xxx", table.getValue(0, "object"));
 
-	String uri = String.format("http://localhost:%d/feature/%d", port, table.getValue(0, "idproperty"));
-	// String uri = String.format("http://localhost:%d/model/3/predicted",
-	// port);
-	/*
-	 * ClientResource cli = new ClientResource(uri); Representation r =
-	 * cli.get(MediaType.APPLICATION_RDF_XML);
-	 * System.out.println(r.getText()); r.release(); cli.release();
-	 */
+	    String uri = String.format("http://localhost:%d/feature/%d", port, table.getValue(0, "idproperty"));
+	    // String uri =
+	    // String.format("http://localhost:%d/model/3/predicted",
+	    // port);
+	    /*
+	     * ClientResource cli = new ClientResource(uri); Representation r =
+	     * cli.get(MediaType.APPLICATION_RDF_XML);
+	     * System.out.println(r.getText()); r.release(); cli.release();
+	     */
 
-	RDFPropertyIterator pi = new RDFPropertyIterator(new Reference(uri));
-	while (pi.hasNext()) {
-	    Property p = pi.next();
-	    // System.out.println(p.getAnnotations());
-	    Assert.assertNotNull(p.getAnnotations());
+	    RDFPropertyIterator pi = new RDFPropertyIterator(new Reference(uri));
+	    while (pi.hasNext()) {
+		Property p = pi.next();
+		// System.out.println(p.getAnnotations());
+		Assert.assertNotNull(p.getAnnotations());
+	    }
+	    pi.close();
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
 	}
-	pi.close();
-
     }
 
     @Test
@@ -974,19 +1120,26 @@ public class AlgorithmResourceTest extends ResourceTest {
 		String.format("http://localhost:%d/dataset/1%s", port,
 			String.format("%s", "?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable("EXPECTED",
-			"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Probability density'");
-	Assert.assertEquals(4, table.getRowCount());
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable("EXPECTED",
+			    "SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Probability density'");
+	    Assert.assertEquals(4, table.getRowCount());
 
-	table = c
-		.createQueryTable(
-			"EXPECTED",
-			"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Probability density'");
-	Assert.assertEquals(4, table.getRowCount());
+	    table = c
+		    .createQueryTable(
+			    "EXPECTED",
+			    "SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Probability density'");
+	    Assert.assertEquals(4, table.getRowCount());
 
-	c.close();
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     // algorithm/PCA is commented
@@ -1004,18 +1157,25 @@ public class AlgorithmResourceTest extends ResourceTest {
 		String.format("http://localhost:%d/dataset/1%s", port,
 			String.format("%s", "?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable("EXPECTED",
-			"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name regexp '^PCA_'");
-	Assert.assertEquals(4, table.getRowCount());
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable("EXPECTED",
+			    "SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name regexp '^PCA_'");
+	    Assert.assertEquals(4, table.getRowCount());
 
-	table = c
-		.createQueryTable("EXPECTED",
-			"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name regexp '^PCA_'");
-	Assert.assertEquals(4, table.getRowCount());
+	    table = c
+		    .createQueryTable("EXPECTED",
+			    "SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name regexp '^PCA_'");
+	    Assert.assertEquals(4, table.getRowCount());
 
-	c.close();
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
 
     }
 
@@ -1035,29 +1195,37 @@ public class AlgorithmResourceTest extends ResourceTest {
 		String.format("http://localhost:%d/dataset/1%s", port,
 			String.format("%s", "?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable("EXPECTED",
-			"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Leverage'");
-	Assert.assertEquals(4, table.getRowCount());
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable("EXPECTED",
+			    "SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Leverage'");
+	    Assert.assertEquals(4, table.getRowCount());
 
-	table = c
-		.createQueryTable("EXPECTED",
-			"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Leverage'");
-	Assert.assertEquals(4, table.getRowCount());
+	    table = c
+		    .createQueryTable("EXPECTED",
+			    "SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Leverage'");
+	    Assert.assertEquals(4, table.getRowCount());
 
-	table = c
-		.createQueryTable(
-			"INDOMAIN",
-			"SELECT idproperty,name,value_num FROM property_values join properties using(idproperty) where name='AppDomain_Leverage' and value_num=0");
-	Assert.assertEquals(3, table.getRowCount());
+	    table = c
+		    .createQueryTable(
+			    "INDOMAIN",
+			    "SELECT idproperty,name,value_num FROM property_values join properties using(idproperty) where name='AppDomain_Leverage' and value_num=0");
+	    Assert.assertEquals(3, table.getRowCount());
 
-	table = c
-		.createQueryTable(
-			"OUTOFDOMAIN",
-			"SELECT idproperty,name,value_num FROM property_values join properties using(idproperty) where name='AppDomain_Leverage' and value_num=1 and idstructure=129345");
-	Assert.assertEquals(1, table.getRowCount());
-	c.close();
+	    table = c
+		    .createQueryTable(
+			    "OUTOFDOMAIN",
+			    "SELECT idproperty,name,value_num FROM property_values join properties using(idproperty) where name='AppDomain_Leverage' and value_num=1 and idstructure=129345");
+	    Assert.assertEquals(1, table.getRowCount());
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
 
     }
 
@@ -1136,17 +1304,25 @@ public class AlgorithmResourceTest extends ResourceTest {
 	    testAsyncTask(String.format("http://localhost:%d/algorithm/toxtreecramer2", port), headers,
 		    Status.SUCCESS_OK, String.format("http://localhost:%d/model/4", port));
 
-	    IDatabaseConnection c = getConnection();
-	    ITable table = c
-		    .createQueryTable("p",
-			    "SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
-	    Assert.assertEquals(3, table.getRowCount());
-	    Assert.assertEquals("High (Class III)", table.getValue(0, "object"));
-	    Assert.assertEquals("Intermediate (Class II)", table.getValue(1, "object"));
-	    Assert.assertEquals("Low (Class I)", table.getValue(2, "object"));
-	    for (int j = 0; j < 2; j++)
-		Assert.assertEquals(new BigInteger("2"), table.getValue(j, "c"));
-	    c.close();
+	    IDatabaseConnection c = null;
+	    try {
+		c = getConnection();
+		ITable table = c
+			.createQueryTable("p",
+				"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+		Assert.assertEquals(3, table.getRowCount());
+		Assert.assertEquals("High (Class III)", table.getValue(0, "object"));
+		Assert.assertEquals("Intermediate (Class II)", table.getValue(1, "object"));
+		Assert.assertEquals("Low (Class I)", table.getValue(2, "object"));
+		for (int j = 0; j < 2; j++)
+		    Assert.assertEquals(new BigInteger("2"), table.getValue(j, "c"));
+
+	    } catch (Exception x) {
+		throw x;
+	    } finally {
+		if (c != null)
+		    c.close();
+	    }
 	}
 
     }
@@ -1162,16 +1338,24 @@ public class AlgorithmResourceTest extends ResourceTest {
 	OTDataset dataset = model
 		.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port, "1")));
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable("p",
-			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
-	Assert.assertEquals(2, table.getRowCount());
-	Assert.assertEquals("NO", table.getValue(0, "object"));
-	Assert.assertEquals("YES", table.getValue(1, "object"));
-	Assert.assertEquals(new BigInteger("6"), table.getValue(0, "c"));
-	Assert.assertEquals(new BigInteger("6"), table.getValue(1, "c"));
-	c.close();
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable("p",
+			    "SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+	    Assert.assertEquals(2, table.getRowCount());
+	    Assert.assertEquals("NO", table.getValue(0, "object"));
+	    Assert.assertEquals("YES", table.getValue(1, "object"));
+	    Assert.assertEquals(new BigInteger("6"), table.getValue(0, "c"));
+	    Assert.assertEquals(new BigInteger("6"), table.getValue(1, "c"));
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
 
     }
 
@@ -1186,16 +1370,24 @@ public class AlgorithmResourceTest extends ResourceTest {
 	OTDataset dataset = model
 		.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port, "1")));
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable("p",
-			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
-	Assert.assertEquals(2, table.getRowCount());
-	Assert.assertEquals("NO", table.getValue(0, "object"));
-	Assert.assertEquals("YES", table.getValue(1, "object"));
-	Assert.assertEquals(new BigInteger("6"), table.getValue(0, "c"));
-	Assert.assertEquals(new BigInteger("6"), table.getValue(1, "c"));
-	c.close();
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable("p",
+			    "SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+	    Assert.assertEquals(2, table.getRowCount());
+	    Assert.assertEquals("NO", table.getValue(0, "object"));
+	    Assert.assertEquals("YES", table.getValue(1, "object"));
+	    Assert.assertEquals(new BigInteger("6"), table.getValue(0, "c"));
+	    Assert.assertEquals(new BigInteger("6"), table.getValue(1, "c"));
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
 
     }
 
@@ -1209,16 +1401,24 @@ public class AlgorithmResourceTest extends ResourceTest {
 	OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port, "3"));
 	OTDataset dataset = model
 		.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port, "1")));
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable("p",
-			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
-	Assert.assertEquals(2, table.getRowCount());
-	Assert.assertEquals("NO", table.getValue(0, "object"));
-	Assert.assertEquals("YES", table.getValue(1, "object"));
-	Assert.assertEquals(new BigInteger("6"), table.getValue(0, "c"));
-	Assert.assertEquals(new BigInteger("6"), table.getValue(1, "c"));
-	c.close();
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable("p",
+			    "SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+	    Assert.assertEquals(2, table.getRowCount());
+	    Assert.assertEquals("NO", table.getValue(0, "object"));
+	    Assert.assertEquals("YES", table.getValue(1, "object"));
+	    Assert.assertEquals(new BigInteger("6"), table.getValue(0, "c"));
+	    Assert.assertEquals(new BigInteger("6"), table.getValue(1, "c"));
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
 
     }
 
@@ -1234,20 +1434,28 @@ public class AlgorithmResourceTest extends ResourceTest {
 		.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port, "1")));
 	logger.info(dataset.toString());
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable(
-			"EXPECTED",
-			"SELECT count(*) c,group_concat(distinct(status)) s  FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity' group by `status` order by `status`");
-	Assert.assertEquals(3, table.getRowCount());
-	Assert.assertEquals("OK", table.getValue(0, "s"));
-	Assert.assertEquals(new BigInteger("30"), table.getValue(0, "c"));
-	Assert.assertEquals("ERROR", table.getValue(1, "s"));
-	Assert.assertEquals(new BigInteger("10"), table.getValue(1, "c"));
-	// the explanation field
-	Assert.assertEquals("TRUNCATED", table.getValue(2, "s"));
-	Assert.assertEquals(new BigInteger("3"), table.getValue(2, "c"));
-	c.close();
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable(
+			    "EXPECTED",
+			    "SELECT count(*) c,group_concat(distinct(status)) s  FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity' group by `status` order by `status`");
+	    Assert.assertEquals(3, table.getRowCount());
+	    Assert.assertEquals("OK", table.getValue(0, "s"));
+	    Assert.assertEquals(new BigInteger("30"), table.getValue(0, "c"));
+	    Assert.assertEquals("ERROR", table.getValue(1, "s"));
+	    Assert.assertEquals(new BigInteger("10"), table.getValue(1, "c"));
+	    // the explanation field
+	    Assert.assertEquals("TRUNCATED", table.getValue(2, "s"));
+	    Assert.assertEquals(new BigInteger("3"), table.getValue(2, "c"));
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     @Test
@@ -1265,39 +1473,46 @@ public class AlgorithmResourceTest extends ResourceTest {
 		.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port, "1")));
 	logger.info(dataset.toString());
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable(
-			"EXPECTED",
-			"SELECT count(*) c,group_concat(distinct(status)) s FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: In vitro mutagenicity (Ames test) alerts by ISS' where idstructure=100211 group by idstructure,`status`");
-	Assert.assertEquals(1, table.getRowCount());
-	Assert.assertEquals("ERROR", table.getValue(0, "s"));
-	Assert.assertEquals(new BigInteger("6") /* WTF */, table.getValue(0, "c"));
-	table = c
-		.createQueryTable(
-			"EXPECTED",
-			"SELECT count(*) c,group_concat(distinct(status)) s  FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: In vitro mutagenicity (Ames test) alerts by ISS' where idstructure!=100211 group by `status` order by `status`");
-	Assert.assertEquals(2, table.getRowCount());
-	Assert.assertEquals("OK", table.getValue(0, "s"));
-	Assert.assertEquals(new BigInteger("18"), table.getValue(0, "c"));
-	// the explanation field
-	Assert.assertEquals("TRUNCATED", table.getValue(1, "s"));
-	Assert.assertEquals(new BigInteger("3"), table.getValue(1, "c"));
+	IDatabaseConnection c = null;
 
-	table = c
-		.createQueryTable(
-			"p",
-			"SELECT count(*) c,predicate,object FROM property_annotation join properties using(idproperty) group by object order by object");
-	Assert.assertEquals(2, table.getRowCount());
-	Assert.assertEquals("acceptValue", table.getValue(0, "predicate"));
-	Assert.assertEquals("acceptValue", table.getValue(1, "predicate"));
-	Assert.assertEquals("NO", table.getValue(0, "object"));
-	Assert.assertEquals("YES", table.getValue(1, "object"));
-	Assert.assertEquals(new BigInteger("6"), table.getValue(0, "c"));
-	Assert.assertEquals(new BigInteger("6"), table.getValue(1, "c"));
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable(
+			    "EXPECTED",
+			    "SELECT count(*) c,group_concat(distinct(status)) s FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: In vitro mutagenicity (Ames test) alerts by ISS' where idstructure=100211 group by idstructure,`status`");
+	    Assert.assertEquals(1, table.getRowCount());
+	    Assert.assertEquals("ERROR", table.getValue(0, "s"));
+	    Assert.assertEquals(new BigInteger("6") /* WTF */, table.getValue(0, "c"));
+	    table = c
+		    .createQueryTable(
+			    "EXPECTED",
+			    "SELECT count(*) c,group_concat(distinct(status)) s  FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: In vitro mutagenicity (Ames test) alerts by ISS' where idstructure!=100211 group by `status` order by `status`");
+	    Assert.assertEquals(2, table.getRowCount());
+	    Assert.assertEquals("OK", table.getValue(0, "s"));
+	    Assert.assertEquals(new BigInteger("18"), table.getValue(0, "c"));
+	    // the explanation field
+	    Assert.assertEquals("TRUNCATED", table.getValue(1, "s"));
+	    Assert.assertEquals(new BigInteger("3"), table.getValue(1, "c"));
 
-	c.close();
+	    table = c
+		    .createQueryTable(
+			    "p",
+			    "SELECT count(*) c,predicate,object FROM property_annotation join properties using(idproperty) group by object order by object");
+	    Assert.assertEquals(2, table.getRowCount());
+	    Assert.assertEquals("acceptValue", table.getValue(0, "predicate"));
+	    Assert.assertEquals("acceptValue", table.getValue(1, "predicate"));
+	    Assert.assertEquals("NO", table.getValue(0, "object"));
+	    Assert.assertEquals("YES", table.getValue(1, "object"));
+	    Assert.assertEquals(new BigInteger("6"), table.getValue(0, "c"));
+	    Assert.assertEquals(new BigInteger("6"), table.getValue(1, "c"));
 
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     @Test
@@ -1311,16 +1526,24 @@ public class AlgorithmResourceTest extends ResourceTest {
 	OTDataset dataset = model
 		.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port, "1")));
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable("p",
-			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
-	Assert.assertEquals(2, table.getRowCount());
-	Assert.assertEquals("NO", table.getValue(0, "object"));
-	Assert.assertEquals("YES", table.getValue(1, "object"));
-	Assert.assertEquals(new BigInteger("4"), table.getValue(0, "c"));
-	Assert.assertEquals(new BigInteger("4"), table.getValue(1, "c"));
-	c.close();
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable("p",
+			    "SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+	    Assert.assertEquals(2, table.getRowCount());
+	    Assert.assertEquals("NO", table.getValue(0, "object"));
+	    Assert.assertEquals("YES", table.getValue(1, "object"));
+	    Assert.assertEquals(new BigInteger("4"), table.getValue(0, "c"));
+	    Assert.assertEquals(new BigInteger("4"), table.getValue(1, "c"));
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
 
     }
 
@@ -1331,18 +1554,26 @@ public class AlgorithmResourceTest extends ResourceTest {
 	testAsyncTask(String.format("http://localhost:%d/algorithm/toxtreebiodeg", port), headers, Status.SUCCESS_OK,
 		String.format("http://localhost:%d/model/%s", port, "3"));
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable("p",
-			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
-	Assert.assertEquals(3, table.getRowCount());
-	Assert.assertEquals("Class 1 (easily biodegradable chemical)", table.getValue(0, "object"));
-	Assert.assertEquals("Class 2 (persistent chemical)", table.getValue(1, "object"));
-	Assert.assertEquals("Class 3 (unknown biodegradability)", table.getValue(2, "object"));
-	Assert.assertEquals(new BigInteger("1"), table.getValue(0, "c"));
-	Assert.assertEquals(new BigInteger("1"), table.getValue(1, "c"));
-	Assert.assertEquals(new BigInteger("1"), table.getValue(2, "c"));
-	c.close();
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable("p",
+			    "SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+	    Assert.assertEquals(3, table.getRowCount());
+	    Assert.assertEquals("Class 1 (easily biodegradable chemical)", table.getValue(0, "object"));
+	    Assert.assertEquals("Class 2 (persistent chemical)", table.getValue(1, "object"));
+	    Assert.assertEquals("Class 3 (unknown biodegradability)", table.getValue(2, "object"));
+	    Assert.assertEquals(new BigInteger("1"), table.getValue(0, "c"));
+	    Assert.assertEquals(new BigInteger("1"), table.getValue(1, "c"));
+	    Assert.assertEquals(new BigInteger("1"), table.getValue(2, "c"));
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
 
     }
 
@@ -1362,17 +1593,25 @@ public class AlgorithmResourceTest extends ResourceTest {
 	testAsyncTask(String.format("http://localhost:%d/algorithm/toxtreemic", port), headers, Status.SUCCESS_OK,
 		String.format("http://localhost:%d/model/%s", port, "3"));
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable("p",
-			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
-	Assert.assertEquals(2, table.getRowCount());
-	Assert.assertEquals("At least one positive structural alerts for the  micronucleus assay (Class I)",
-		table.getValue(0, "object"));
-	Assert.assertEquals("No alerts for the  micronucleus assay (Class II)", table.getValue(1, "object"));
-	for (int i = 0; i < 2; i++)
-	    Assert.assertEquals(new BigInteger("1"), table.getValue(i, "c"));
-	c.close();
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+	    ITable table = c
+		    .createQueryTable("p",
+			    "SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+	    Assert.assertEquals(2, table.getRowCount());
+	    Assert.assertEquals("At least one positive structural alerts for the  micronucleus assay (Class I)",
+		    table.getValue(0, "object"));
+	    Assert.assertEquals("No alerts for the  micronucleus assay (Class II)", table.getValue(1, "object"));
+	    for (int i = 0; i < 2; i++)
+		Assert.assertEquals(new BigInteger("1"), table.getValue(i, "c"));
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     @Test
@@ -1382,17 +1621,26 @@ public class AlgorithmResourceTest extends ResourceTest {
 	testAsyncTask(String.format("http://localhost:%d/algorithm/toxtreeeye", port), headers, Status.SUCCESS_OK,
 		String.format("http://localhost:%d/model/%s", port, "3"));
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable("p",
-			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
-	Assert.assertEquals(11, table.getRowCount());
-	Assert.assertEquals("Moderate reversable irritation to the eye", table.getValue(0, "object"));
-	Assert.assertEquals("NOT corrosion R34, R35 or R41", table.getValue(1, "object"));
-	Assert.assertEquals("NOT eye irritation R36", table.getValue(2, "object"));
-	for (int i = 0; i < 11; i++)
-	    Assert.assertEquals(new BigInteger("1"), table.getValue(i, "c"));
-	c.close();
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+
+	    ITable table = c
+		    .createQueryTable("p",
+			    "SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+	    Assert.assertEquals(11, table.getRowCount());
+	    Assert.assertEquals("Moderate reversable irritation to the eye", table.getValue(0, "object"));
+	    Assert.assertEquals("NOT corrosion R34, R35 or R41", table.getValue(1, "object"));
+	    Assert.assertEquals("NOT eye irritation R36", table.getValue(2, "object"));
+	    for (int i = 0; i < 11; i++)
+		Assert.assertEquals(new BigInteger("1"), table.getValue(i, "c"));
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 
     @Test
@@ -1411,15 +1659,24 @@ public class AlgorithmResourceTest extends ResourceTest {
 	testAsyncTask(String.format("http://localhost:%d/algorithm/toxtreemichaelacceptors", port), headers,
 		Status.SUCCESS_OK, String.format("http://localhost:%d/model/%s", port, "3"));
 
-	IDatabaseConnection c = getConnection();
-	ITable table = c
-		.createQueryTable("p",
-			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
-	Assert.assertEquals(2, table.getRowCount());
-	Assert.assertEquals("Michael acceptor", table.getValue(0, "object"));
-	Assert.assertEquals("Not reactive via Michael addition", table.getValue(1, "object"));
-	for (int i = 0; i < 2; i++)
-	    Assert.assertEquals(new BigInteger("1"), table.getValue(i, "c"));
-	c.close();
+	IDatabaseConnection c = null;
+	try {
+	    c = getConnection();
+
+	    ITable table = c
+		    .createQueryTable("p",
+			    "SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+	    Assert.assertEquals(2, table.getRowCount());
+	    Assert.assertEquals("Michael acceptor", table.getValue(0, "object"));
+	    Assert.assertEquals("Not reactive via Michael addition", table.getValue(1, "object"));
+	    for (int i = 0; i < 2; i++)
+		Assert.assertEquals(new BigInteger("1"), table.getValue(i, "c"));
+
+	} catch (Exception x) {
+	    throw x;
+	} finally {
+	    if (c != null)
+		c.close();
+	}
     }
 }

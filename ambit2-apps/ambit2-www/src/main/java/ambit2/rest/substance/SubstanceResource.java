@@ -556,7 +556,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 	UpdateExecutor executor = new UpdateExecutor();
 	try {
 	    DBConnection dbc = new DBConnection(getContext());
-	    c = dbc.getConnection();
+	    c = dbc.getConnection(30,true,5);
 
 	    executor.setConnection(c);
 	    executor.open();

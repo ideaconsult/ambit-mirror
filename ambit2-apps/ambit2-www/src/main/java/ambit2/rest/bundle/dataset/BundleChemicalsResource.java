@@ -101,7 +101,7 @@ public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>
 	    CompoundURIReporter<IQueryRetrieval<IStructureRecord>> r = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(
 		    getRequest());
 	    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
-	    conn = dbc.getConnection();
+	    conn = dbc.getConnection(30,true,8);
 	    return new CallableCompoundBundle(bundle, r, method, form, conn, getToken());
 	} catch (Exception x) {
 	    try {
@@ -353,7 +353,7 @@ public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>
 	    reader.setCloseConnection(false);
 
 	    DBConnection dbc = new DBConnection(getContext(), getConfigFile());
-	    Connection conn = dbc.getConnection();
+	    Connection conn = dbc.getConnection(30,true,8);
 	    try {
 		for (String featureURI : featuresURI) {
 		    if (featureURI == null)
