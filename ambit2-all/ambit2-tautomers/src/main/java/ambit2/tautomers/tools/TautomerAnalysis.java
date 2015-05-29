@@ -525,29 +525,47 @@ public class TautomerAnalysis
 		return 1.0 - 6.0 * sumdiff / (n*(n*n-1));
 	}
 	
-	public static int[] getRanks(double value[])
+	public static int[] getRanks(double values[])
 	{
-		int n = value.length;
-		int ranks[] = new int[n];
+		int n = values.length;
+		int index[] = new int[n];
+		double v[] = values.clone();
+		
 		for (int i = 0; i < n; i++)
-			ranks[i] = i;
+			index[i] = i;
+		
 		
 		for (int i = 1; i < n; i++)
 			for (int k = 0; k < n-i; k++)
 			{
-				if (value[ranks[k]] >  value[ranks[k+1]])
+				if (v[k] >  v[k+1])
 				{
-					int tmp = ranks[k+1];
-					ranks[k+1] = ranks[k];
-					ranks[k] = tmp;
+					//swap values
+					double tmp = v[k+1];
+					v[k+1] = v[k];
+					v[k] = tmp;
+					
+					//swap original indices
+					int tmp_i = index[k+1];
+					index[k+1] = index[k];
+					index[k] = tmp_i;
 				}
 			}
 		
+		//Get rankig
+		int ranks[] = new int[n];
+		for (int i = 0; i < n; i++)
+		{
+			//value with original index[i] has rank i 
+			ranks[index[i]] = i;
+		}
+			
 		return ranks;
 	}
 	
-	public static double[] intRanksToDouble(int ranks[])
+	public static double[] correctRanks(int ranks[])
 	{
+		//Take into account the 
 		//TODO
 		return null;
 	}
