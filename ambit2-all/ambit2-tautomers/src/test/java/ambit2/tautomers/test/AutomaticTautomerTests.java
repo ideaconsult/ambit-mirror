@@ -182,7 +182,7 @@ public class AutomaticTautomerTests
 			
 			att.handleArguments(new String[] {
 					
-					"-i","D:/Projects/Nina/Tautomers/example-output.csv",
+					"-i","D:/Projects/Nina/Tautomers/tauts-ranks-mopac.csv",
 					//"-i","D:/temp2/test",
 					//"-i","D:/Projects/data015/LogP/XlogP.csv",
 					//"-i","D:/Projects/data016/logP2-kekule-taut-EPI_Suite-LogP-CLEANED.csv",
@@ -201,7 +201,7 @@ public class AutomaticTautomerTests
 					"-c","compare-rankings",					
 					//"-c","test-print",
 					//"-o","D:/Projects/data015/LogP/xlogp-test-average-descr.csv",
-					"-o","D:/Projects/Nina/Tautomers/test.txt",
+					"-o","D:/Projects/Nina/Tautomers/test.csv",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});

@@ -457,4 +457,44 @@ public class TautomerAnalysis
 		return measure;
 	}
 	
+	public static double calcTautomerRankCorrCoefficient(double ranks[], double energies[])
+	{
+		if (ranks == null)
+			return 0.0;
+		if (energies == null)
+			return 0.0;
+		int n = ranks.length;
+		if (n != energies.length)
+			return 0.0;
+		if (n == 0)
+			return 0.0;
+		
+		double m_ranks = 0.0;
+		double m_energies = 0.0;
+		
+		for (int i = 0; i < n; i++)
+		{
+			m_ranks += ranks[i];
+			m_energies += energies[i];
+		}
+		
+		m_ranks = m_ranks / n;
+		m_energies = m_energies / n;
+		
+		double cov = 0.0;
+		double sr = 0;
+		double se = 0;
+		
+		for (int i = 0; i < n; i++)
+		{
+			cov += (ranks[i] - m_ranks)*(energies[i] - m_energies);
+			sr += (ranks[i] - m_ranks)*(ranks[i] - m_ranks);
+			se += (energies[i] - m_energies)*(energies[i] - m_energies);
+		}
+		
+		if ((sr == 0.0) || (se == 0.0) )
+			return 0.0;
+		
+		return cov/Math.sqrt(sr*se);
+	}	
 }
