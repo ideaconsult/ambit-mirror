@@ -457,7 +457,7 @@ public class TautomerAnalysis
 		return measure;
 	}
 	
-	public static double calcTautomerRankCorrCoefficient(double ranks[], double energies[])
+	public static double calcTautomerRankCorrCoeff(double ranks[], double energies[])
 	{
 		if (ranks == null)
 			return 0.0;
@@ -496,5 +496,59 @@ public class TautomerAnalysis
 			return 0.0;
 		
 		return cov/Math.sqrt(sr*se);
-	}	
+	}
+	
+	public static double calcTautomerRankSpearmanCorrCoeff(double ranks[], double energies[])
+	{
+		if (ranks == null)
+			return 0.0;
+		if (energies == null)
+			return 0.0;
+		int n = ranks.length;
+		if (n != energies.length)
+			return 0.0;
+		if (n == 0)
+			return 0.0;
+		if (n == 1)
+			return 1.0;
+		
+		int r_ranks[] = getRanks(ranks);
+		int r_energies[] = getRanks(energies);
+		double sumdiff = 0.0;
+		
+		for (int i = 0; i < n; i++)
+		{
+			int d = r_ranks[i] - r_energies[i]; 
+			sumdiff += d*d;
+		}
+		
+		return 1.0 - 6.0 * sumdiff / (n*(n*n-1));
+	}
+	
+	public static int[] getRanks(double value[])
+	{
+		int n = value.length;
+		int ranks[] = new int[n];
+		for (int i = 0; i < n; i++)
+			ranks[i] = i;
+		
+		for (int i = 1; i < n; i++)
+			for (int k = 0; k < n-i; k++)
+			{
+				if (value[ranks[k]] >  value[ranks[k+1]])
+				{
+					int tmp = ranks[k+1];
+					ranks[k+1] = ranks[k];
+					ranks[k] = tmp;
+				}
+			}
+		
+		return ranks;
+	}
+	
+	public static double[] intRanksToDouble(int ranks[])
+	{
+		//TODO
+		return null;
+	}
 }
