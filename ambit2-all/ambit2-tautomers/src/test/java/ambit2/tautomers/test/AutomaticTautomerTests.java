@@ -648,7 +648,9 @@ public class AutomaticTautomerTests
 			energies = new ArrayList<Double>();
 			compNum = -1;
 			
-			openOutputFile();			
+			openOutputFile();
+			String firstLine = "Comp#,SMILES,NumOfTaut,NK-Old,NK-New,CC-Old,CC-New,Spearman-Old, Spearman-New\n";
+			output(firstLine);
 			lineProcessMode = LPM_COMPARE_RANKINGS;
 			iterateInputFile();
 			closeOutputFile();
@@ -2113,9 +2115,19 @@ public class AutomaticTautomerTests
 		
 		double measure1 = TautomerAnalysis.calcTautomerRankingMeasure(r1, e);
 		double measure2 = TautomerAnalysis.calcTautomerRankingMeasure(r2, e);
-		String out_line = "" + compNum + compareRanksSeparator + compSMILES + compareRanksSeparator + measure1 + compareRanksSeparator + measure2;
+		double cc1 = TautomerAnalysis.calcTautomerRankCorrCoeff(r1, e);
+		double cc2 = TautomerAnalysis.calcTautomerRankCorrCoeff(r2, e);
+		double sp_cc1 = TautomerAnalysis.calcTautomerRankSpearmanCorrCoeff(r1, e);
+		double sp_cc2 = TautomerAnalysis.calcTautomerRankSpearmanCorrCoeff(r2, e);
+		
+		String out_line = "" + compNum + compareRanksSeparator +  compSMILES + compareRanksSeparator + n  + compareRanksSeparator 
+				+ measure1 + compareRanksSeparator + measure2 + compareRanksSeparator
+				+ cc1 + compareRanksSeparator + cc2 + compareRanksSeparator 
+				+ sp_cc1 + compareRanksSeparator + sp_cc2;
+		
 		output(out_line + endLine);
 		System.out.println(out_line);
+		
 	}
 	
 	
