@@ -83,12 +83,14 @@ public abstract class ProtectedResource extends ServerResource implements IAuthT
 	
 	protected void setTokenCookies(Variant variant, boolean secure) {
 		CookieSetting cS = new CookieSetting(0, "subjectid", getToken());
+		cS.setAccessRestricted(true);
 		cS.setSecure(secure);
 		cS.setComment("OpenSSO token");
 		cS.setPath("/");
         this.getResponse().getCookieSettings().add(cS);
         //
 		cS = new CookieSetting(0, "subjectid_secure", Boolean.toString(secure));
+		cS.setAccessRestricted(true);
 		cS.setSecure(false);
 		cS.setComment("Whether to transfer OpenSSO in secure token");
 		cS.setPath("/");

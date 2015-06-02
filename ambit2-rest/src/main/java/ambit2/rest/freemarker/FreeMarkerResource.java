@@ -96,6 +96,7 @@ public class FreeMarkerResource extends ProtectedResource implements IFreeMarker
 		setFrameOptions("SAMEORIGIN");
 		if (isHtmlbyTemplate() && MediaType.TEXT_HTML.equals(variant.getMediaType())) {
 			CookieSetting cS = new CookieSetting(0, "subjectid", getToken());
+			cS.setAccessRestricted(true);
 			cS.setPath("/");
 	        this.getResponse().getCookieSettings().add(cS);
 	        return getHTMLByTemplate(variant);

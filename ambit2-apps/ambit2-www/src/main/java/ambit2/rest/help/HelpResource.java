@@ -58,6 +58,7 @@ public class HelpResource extends CatalogResource<String>  {
 		if (isHtmlbyTemplate()) {
 			CookieSetting cS = new CookieSetting(0, "subjectid", getToken());
 			cS.setPath("/");
+			cS.setAccessRestricted(true);
 	        this.getResponse().getCookieSettings().add(cS);
 	        return getHTMLByTemplate(variant);
     	} else				
