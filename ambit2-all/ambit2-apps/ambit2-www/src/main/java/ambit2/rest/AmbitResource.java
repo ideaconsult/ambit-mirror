@@ -462,9 +462,8 @@ public class AmbitResource extends FreeMarkerResource {
 				"itemscope itemtype=\"http://schema.org/Product\"")
 				);
 		
-		w.write(String.format("<head> <meta property=\"dc:creator\" content=\"%s\"/> <meta property=\"dc:title\" content=\"%s\"/>",
-				resourceRef,
-				title
+		w.write(String.format("<head> <meta property=\"dc:creator\" content=\"%s\"/>",
+				resourceRef
 				)
 				);
 		

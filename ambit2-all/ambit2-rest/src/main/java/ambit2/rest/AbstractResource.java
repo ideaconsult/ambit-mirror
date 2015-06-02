@@ -82,6 +82,7 @@ public abstract class AbstractResource<Q, T extends Serializable, P extends IPro
     protected Representation get(Variant variant) throws ResourceException {
 	setFrameOptions("SAMEORIGIN");
 	CookieSetting cS = new CookieSetting(0, "subjectid", getToken());
+	cS.setAccessRestricted(true);
 	cS.setPath("/");
 	this.getResponse().getCookieSettings().add(cS);
 	if (isHtmlbyTemplate() && MediaType.TEXT_HTML.equals(variant.getMediaType())) {
