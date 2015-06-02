@@ -59,7 +59,20 @@ function defineOntoBucketTable(root,url,viscols) {
 						  "sWidth" : "10%",
 						  "bSearchable" : true,
 						  "bUseRendered" : false,
-						  "bSortable" : true
+						  "bSortable" : true,
+			  				"fnRender" : function(o,val) {
+			  					var search = o.aData["title"];
+			  					var type = undefined;
+			  					var descr = val;
+			  					if ("protocol" == val) { type = "guideline"; descr = "by protocol"; }
+			  					else if ("endpoint" == val) { type = "endpoint"; descr = "by endpoint"; }
+			  					else if ("hash" == val) {   type = "endpointhash"; descr = "by endpoint parameters"; search = o.aData["uuid"]; }
+			  					
+			  					if (type === undefined) return descr;
+			  					else 
+								return "<a href='" + root + "/substance?type=" + encodeURIComponent(type) + "&search=" +  encodeURIComponent(search)  + "'>" +descr + " </a>";
+							}	
+						  
 						}						
 			],
 		"bJQueryUI" : true,

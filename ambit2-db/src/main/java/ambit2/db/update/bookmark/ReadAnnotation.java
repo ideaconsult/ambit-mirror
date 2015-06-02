@@ -16,7 +16,7 @@ public class ReadAnnotation extends AbstractQuery<String, String, StringConditio
 
     // "select idbookmark,creator,recalls,hasTopic,title,description,created,date from bookmark %s order by date desc";
     protected static final String sql = 
-	    "SELECT null,b1.s_source,b1.s_id,b1.o_id,b2.label,b3.label,b1.label,b1.relation,match (b1.s_id,b1.o_id,b1.label) against (? with query expansion) as relevance,uuid\n"
+	    "SELECT null,b1.s_source,b1.s_id,b1.o_id,b2.label,b3.label,b1.label,b1.relation,match (b1.s_id,b1.o_id,b1.label) against (? with query expansion) as relevance,hex(b1.uuid) as huuid\n"
 	    + "FROM ontobucket b1  left join\n"
 	    + "(select label,s_id from ontobucket where relation!='subclass' limit 1) b2 on b1.s_id = b2.s_id\n"
 	    + "left join (select label,s_id from ontobucket where relation!='subclass' limit 1) b3 on b1.o_id = b3.s_id\n"
@@ -25,7 +25,7 @@ public class ReadAnnotation extends AbstractQuery<String, String, StringConditio
     protected static final String sql_by_relation = String.format("%s and relation=?", sql);
     
     protected static final String sql_labelsonly = 
-	    "SELECT null,b1.s_source,b1.s_id,b1.o_id,b1.label,null,null,b1.relation,match (b1.s_id,b1.o_id,b1.label) against (? with query expansion) as relevance,uuid\n"
+	    "SELECT null,b1.s_source,b1.s_id,b1.o_id,b1.label,null,null,b1.relation,match (b1.s_id,b1.o_id,b1.label) against (? with query expansion) as relevance,hex(b1.uuid) as huuid\n"
 	    + "FROM ontobucket b1\n"
 	    + "where match (b1.s_id,b1.o_id,b1.label) against (? with query expansion)";
     protected static final String sql_labelsonly_by_relation = String.format("%s and relation=?", sql_labelsonly);
@@ -97,7 +97,11 @@ public class ReadAnnotation extends AbstractQuery<String, String, StringConditio
 		q.setRelevance(rs.getDouble(9));
 	    } catch (Exception x) {
 	    }
-
+	    try {
+	    	q.setUuid(rs.getString("huuid").trim());
+	    } catch (Exception x) {
+	    	q.setUuid(null);
+	    }
 	    return q;
 	} catch (Exception x) {
 	    return null;

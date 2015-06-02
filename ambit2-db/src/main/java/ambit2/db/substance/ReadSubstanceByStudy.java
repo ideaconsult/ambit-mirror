@@ -41,6 +41,18 @@ public class ReadSubstanceByStudy  extends AbstractReadSubstance<_studysearchmod
 				return "EC_FISHTOX_SECTION";
 			}
 		},
+		endpoint {
+			@Override
+			String getDefaultSearchValue() {
+				return "LC50";
+			}
+		},
+		endpointhash {
+			@Override
+			String getDefaultSearchValue() {
+				return null;
+			}
+		},		
 		params {
 			@Override
 			String getDefaultSearchValue() {
@@ -77,6 +89,20 @@ public class ReadSubstanceByStudy  extends AbstractReadSubstance<_studysearchmod
 		"on((`s`.`prefix` = `p`.`substance_prefix`) and (`s`.`uuid` = `p`.`substance_uuid`)) "+
 		"where endpointcategory = ? )";	
 	
+	private static String sql_byendpoint =
+			"select substance.idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid,owner_name "+ 
+			"from substance where idsubstance in " +
+			" (select idsubstance from `substance` `s` join `substance_experiment` `p` "+
+			"on((`s`.`prefix` = `p`.`substance_prefix`) and (`s`.`uuid` = `p`.`substance_uuid`)) "+
+			"where endpoint = ? )";	
+	
+	private static String sql_byendpointhash =
+			"select substance.idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid,owner_name "+ 
+			"from substance where idsubstance in " +
+			" (select idsubstance from `substance` `s` join `substance_experiment` `p` "+
+			"on((`s`.`prefix` = `p`.`substance_prefix`) and (`s`.`uuid` = `p`.`substance_uuid`)) "+
+			"where endpointhash = unhex(?) )";	
+	
 	private static String sql_byprotocolparams =
 		"select substance.idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid,owner_name "+ 
 		"from substance where idsubstance in " +
@@ -107,6 +133,12 @@ public class ReadSubstanceByStudy  extends AbstractReadSubstance<_studysearchmod
 		case endpointcategory: {
 			return sql_byendpointcategory;
 		}
+		case endpoint: {
+			return sql_byendpoint;
+		}
+		case endpointhash: {
+			return sql_byendpointhash;
+		}		
 		case params: {
 			return sql_byprotocolparams;
 		}
@@ -118,6 +150,7 @@ public class ReadSubstanceByStudy  extends AbstractReadSubstance<_studysearchmod
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		if (getFieldname()==null) throw new AmbitException("Empty type");
+		if (getValue()==null && getFieldname().getDefaultSearchValue()==null) throw new AmbitException("Empty search");
 		params.add(new QueryParam<String>(String.class, getValue()==null?getFieldname().getDefaultSearchValue():getValue()));
 		return params;
 	}

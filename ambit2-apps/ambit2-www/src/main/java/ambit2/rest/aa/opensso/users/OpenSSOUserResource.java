@@ -63,12 +63,14 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 		super.setTokenCookies(variant, secure);
 	    else {
 		CookieSetting cS = new CookieSetting(0, "subjectid", ((OpenSSOUser) user).getToken());
+		cS.setAccessRestricted(true);
 		cS.setSecure(secure);
 		cS.setComment("OpenSSO token");
 		cS.setPath("/");
 		this.getResponse().getCookieSettings().add(cS);
 
 		cS = new CookieSetting(0, "subjectid_secure", Boolean.toString(secure));
+		cS.setAccessRestricted(true);
 		cS.setSecure(false);
 		cS.setComment("Send OpenSSO token by secure cookie");
 		cS.setPath("/");
