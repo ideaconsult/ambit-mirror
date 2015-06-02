@@ -19,7 +19,8 @@ $(document).ready(function() {
 $(document)
 	.ready(function() {
 		var purl = $.url();
-		$('#search').attr('value',purl.param('search')===undefined?'':purl.param('search'));	
+		$('#search').attr('value',purl.param('search')===undefined?'toxicity':purl.param('search'));
+		$('#selecttype').val(purl.param('type')===undefined?'all':purl.param('type'));	
 		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ontobucket" title="Search">Free text search</a></li>');
 		jQuery("#breadCrumb").jBreadCrumb();
 		jQuery("#welcome").html("");		
@@ -84,11 +85,11 @@ Free text search
 			<table id='ontobucket'  class='ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
-			<th>Recalls</th>
+			<th>Term</th>
 			<th>Title</th>
 			<th>Related to </th>			
-			<th>Relevance</th>
-			<th></th>				
+			<th>Hit importance</th>
+			<th>Find studies</th>				
 			</tr>
 			</thead>
 			<tbody></tbody>

@@ -15,7 +15,16 @@ public class Bookmark implements Serializable {
 	 * 
 	 */
     private static final long serialVersionUID = -7323544303939680815L;
-    protected double relevance = 0;
+    protected String uuid = null;
+    public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	protected double relevance = 0;
 
     protected String type;
     public String getType() {
@@ -127,7 +136,7 @@ public class Bookmark implements Serializable {
     }
 
     public static enum _fields {
-	recalls, hastopic, title, description, relevance,relation;
+	recalls, hastopic, title, description, relevance,relation,uuid;
 
 	public String toJSON() {
 	    return "\"" + name() + "\":";
@@ -169,6 +178,10 @@ public class Bookmark implements Serializable {
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getType())));
 		break;
 	    }	    
+	    case uuid : {
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUuid())));
+		break;
+	    }	  	    
 	    }
 	    comma = ",";
 
