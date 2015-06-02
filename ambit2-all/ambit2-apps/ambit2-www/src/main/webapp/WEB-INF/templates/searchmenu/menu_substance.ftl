@@ -20,6 +20,7 @@ Substance search 	<a href='#' class='chelp substancesearch'></a>
 			  <option value="uuid">UUID</option>
 			  <option value="">External identifier</option>
 			  <option value="CompTox">CompTox</option>
+			  <option value="guideline">Protocol / Guideline</option>
 			  <option value="DOI">DOI</option>
 			  <option value="reliability" title='1 (reliable without restriction)|2 (reliable with restrictions)|3 (not reliable)|4 (not assignable)|other:empty (not specified)'>Reliability</option>
 			  <option value="purposeFlag" title='key study|supporting study'>Study purpose</option>
