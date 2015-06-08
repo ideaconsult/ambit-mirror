@@ -13,21 +13,32 @@ import ambit2.db.search.StringCondition;
 
 public class ReadAnnotation extends AbstractQuery<String, String, StringCondition, Bookmark> implements
 	IQueryRetrieval<Bookmark> {
+	boolean queryExpansion = true;
+	public boolean isQueryExpansion() {
+		return queryExpansion;
+	}
 
+	public void setQueryExpansion(boolean queryExpansion) {
+		this.queryExpansion = queryExpansion;
+	}
+
+	private static final String sql_qe = " with query expansion ";
     // "select idbookmark,creator,recalls,hasTopic,title,description,created,date from bookmark %s order by date desc";
     protected static final String sql = 
-	    "SELECT null,b1.s_source,b1.s_id,b1.o_id,b2.label,b3.label,b1.label,b1.relation,match (b1.s_id,b1.o_id,b1.label) against (? with query expansion) as relevance,hex(b1.uuid) as huuid\n"
+	    "SELECT null,b1.s_source,b1.s_id,b1.o_id,b2.label,b3.label,b1.label,b1.relation,match (b1.s_id,b1.o_id,b1.label) against (? %s) as relevance,hex(b1.uuid) as huuid\n"
 	    + "FROM ontobucket b1  left join\n"
 	    + "(select label,s_id from ontobucket where relation!='subclass' limit 1) b2 on b1.s_id = b2.s_id\n"
 	    + "left join (select label,s_id from ontobucket where relation!='subclass' limit 1) b3 on b1.o_id = b3.s_id\n"
-	    + "where match (b1.s_id,b1.o_id,b1.label) against (? with query expansion)";
-
+	    + "where match (b1.s_id,b1.o_id,b1.label) against (? %s)";
+ 
+    		
     protected static final String sql_by_relation = String.format("%s and relation=?", sql);
     
     protected static final String sql_labelsonly = 
-	    "SELECT null,b1.s_source,b1.s_id,b1.o_id,b1.label,null,null,b1.relation,match (b1.s_id,b1.o_id,b1.label) against (? with query expansion) as relevance,hex(b1.uuid) as huuid\n"
+	    "SELECT null,b1.s_source,b1.s_id,b1.o_id,b1.label,null,null,b1.relation,match (b1.s_id,b1.o_id,b1.label) against (? %s) as relevance,hex(b1.uuid) as huuid\n"
 	    + "FROM ontobucket b1\n"
-	    + "where match (b1.s_id,b1.o_id,b1.label) against (? with query expansion)";
+	    + "where match (b1.s_id,b1.o_id,b1.label) against (? %s)";
+         
     protected static final String sql_labelsonly_by_relation = String.format("%s and relation=?", sql_labelsonly);
     /**
 	 * 
@@ -62,9 +73,9 @@ public class ReadAnnotation extends AbstractQuery<String, String, StringConditio
 
     public String getSQL() throws AmbitException {
 	if (getValue() == null)
-	    return sql_labelsonly;
+	    return String.format(sql_labelsonly,queryExpansion?sql_qe:"",queryExpansion?sql_qe:"");
 	else
-	    return sql_labelsonly_by_relation;
+	    return String.format(sql_labelsonly_by_relation,queryExpansion?sql_qe:"",queryExpansion?sql_qe:"");
 
     }
 

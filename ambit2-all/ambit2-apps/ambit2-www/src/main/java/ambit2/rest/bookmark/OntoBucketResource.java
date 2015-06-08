@@ -75,6 +75,12 @@ public class OntoBucketResource extends QueryResource<ReadAnnotation, Bookmark> 
 	protected ReadAnnotation createQuery(Context context, Request request, Response response) throws ResourceException {
 
 		Form form = getResourceRef(request).getQueryAsForm();
+		boolean with_queryexpansion = true;
+		Object qe = form.getFirstValue("qe");
+		if (qe!=null)
+		try {
+			with_queryexpansion = Boolean.parseBoolean(qe.toString());
+		} catch (Exception x) {}
 		Object key = form.getFirstValue(QueryResource.search_param);
 
 		_type type = _type.all;
@@ -88,6 +94,7 @@ public class OntoBucketResource extends QueryResource<ReadAnnotation, Bookmark> 
 			key = "toxicity";
 
 		ReadAnnotation q = new ReadAnnotation(key.toString());
+		q.setQueryExpansion(with_queryexpansion);
 		q.setPageSize(100);
 		q.setValue(type.getParam());
 		setPaging(form, queryObject);
