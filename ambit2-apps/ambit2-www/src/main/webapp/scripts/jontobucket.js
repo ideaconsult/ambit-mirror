@@ -76,7 +76,7 @@ function defineOntoBucketTable(root,url,viscols) {
 						}						
 			],
 		"bJQueryUI" : true,
-		"aaSorting" : [ [ 4, 'desc' ] ],
+		"aaSorting" : [ [ 3, 'desc' ] ],
 		"bSearchable": true,
 		"sAjaxSource": url,
 		"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
