@@ -227,6 +227,15 @@ text.active {
   fill: red;
 }
 
+.active {
+  color: red;
+  font-weight: bold; 
+}
+
+.inactive {
+  color: green;
+  font-weight: bold; 
+}
 
 .background {
   fill: #eee;

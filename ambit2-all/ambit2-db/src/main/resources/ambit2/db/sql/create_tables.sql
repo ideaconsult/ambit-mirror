@@ -518,7 +518,7 @@ CREATE TABLE `ontobucket` (
   `o_source` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
   `o_id` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `label` text COLLATE utf8_unicode_ci,
-  `relation` enum('label','subclass','db','endpoint','endpointhash','hash','protocol') COLLATE utf8_unicode_ci DEFAULT 'subclass',
+  `relation` enum('label','subclass','db','endpoint','endpointhash','hash','protocol','target','reference') COLLATE utf8_unicode_ci DEFAULT 'subclass',
   `uuid` varbinary(20) DEFAULT NULL,
   KEY `s_id` (`s_id`),
   KEY `o_id` (`o_id`,`relation`),

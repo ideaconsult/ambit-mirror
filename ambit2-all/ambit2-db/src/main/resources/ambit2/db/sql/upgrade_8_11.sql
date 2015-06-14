@@ -15,4 +15,8 @@ CREATE TABLE `ontobucket` (
   FULLTEXT KEY `fulltext` (`s_id`,`o_id`,`label`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+ALTER TABLE `ontobucket` CHANGE COLUMN `relation` `relation` ENUM('label','subclass','db','endpoint','endpointhash','hash','protocol','target') CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT 'subclass'  ;
+ALTER TABLE `ontobucket` CHANGE COLUMN `relation` `relation` ENUM('label','subclass','db','endpoint','endpointhash','hash','protocol','target','reference') CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT 'subclass'  ;
+
+
 insert into version (idmajor,idminor,comment) values (8,11,"AMBIT2 schema");
