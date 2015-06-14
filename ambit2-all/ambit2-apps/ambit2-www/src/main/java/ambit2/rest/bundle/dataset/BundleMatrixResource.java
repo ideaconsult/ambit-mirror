@@ -2,6 +2,7 @@ package ambit2.rest.bundle.dataset;
 
 import java.io.File;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -50,6 +51,7 @@ import ambit2.db.substance.ids.ReadChemIdentifiersByComposition;
 import ambit2.db.substance.relation.ReadSubstanceComposition;
 import ambit2.db.update.bundle.matrix.ReadEffectRecordByBundleMatrix;
 import ambit2.db.update.bundle.matrix.ReadEffectRecordByBundleMatrix._matrix;
+import ambit2.db.update.bundle.substance.ReadSubstanceChemicalsUnionByBundle;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetURIReporter;
@@ -75,23 +77,46 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 	Object idbundle = request.getAttributes().get(OpenTox.URI.bundle.getKey());
 	if (idbundle == null)
 	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+	Boolean filterBySubstance = isFilterBySubstance();
+	if (filterBySubstance == null)
+	    filterBySubstance = true;
 	try {
 	    bundle = new SubstanceEndpointsBundle(Integer.parseInt(idbundle.toString()));
-	    return new ReadSubstancesByBundle(bundle) {
-		/**
+	    if (filterBySubstance) {
+		return new ReadSubstancesByBundle(bundle) {
+		    /**
 		 * 
 		 */
-		private static final long serialVersionUID = -4794207133118760068L;
+		    private static final long serialVersionUID = -4794207133118760068L;
 
-		public ambit2.base.data.SubstanceRecord getObject(java.sql.ResultSet rs) throws AmbitException {
-		    ambit2.base.data.SubstanceRecord record = super.getObject(rs);
-		    record.setProperty(new SubstancePublicName(), record.getPublicName());
-		    record.setProperty(new SubstanceName(), record.getSubstanceName());
-		    record.setProperty(new SubstanceUUID(), record.getSubstanceUUID());
-		    record.setProperty(new SubstanceOwner(), record.getOwnerName());
-		    return record;
-		}
-	    };
+		    public ambit2.base.data.SubstanceRecord getObject(java.sql.ResultSet rs) throws AmbitException {
+			ambit2.base.data.SubstanceRecord record = super.getObject(rs);
+			record.setProperty(new SubstancePublicName(), record.getPublicName());
+			record.setProperty(new SubstanceName(), record.getSubstanceName());
+			record.setProperty(new SubstanceUUID(), record.getSubstanceUUID());
+			record.setProperty(new SubstanceOwner(), record.getOwnerName());
+			return record;
+		    }
+		};
+	    } else {
+		ReadSubstanceChemicalsUnionByBundle q = new ReadSubstanceChemicalsUnionByBundle(bundle) {
+		    /**
+		     * 
+		     */
+		    private static final long serialVersionUID = -1938712635877102937L;
+
+		    @Override
+		    public SubstanceRecord getObject(ResultSet rs) throws AmbitException {
+			ambit2.base.data.SubstanceRecord record = super.getObject(rs);
+			record.setProperty(new SubstancePublicName(), record.getPublicName());
+			record.setProperty(new SubstanceName(), record.getSubstanceName());
+			record.setProperty(new SubstanceUUID(), record.getSubstanceUUID());
+			record.setProperty(new SubstanceOwner(), record.getOwnerName());
+			return record;
+		    }
+		};
+		return (ReadSubstancesByBundle) q;
+	    }
 	} catch (Exception x) {
 	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
@@ -121,6 +146,8 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 
 	    @Override
 	    public SubstanceRecord process(SubstanceRecord target) throws AmbitException {
+		if (target == null || (target.getIdsubstance() <= 0))
+		    return target;
 		q.setBundle(bundle);
 		if (target.getRelatedStructures() != null)
 		    target.getRelatedStructures().clear();
@@ -149,6 +176,25 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 		    if (detail.getIdchemical() == r.getSecondStructure().getIdchemical()) {
 			for (Property p : detail.getProperties()) {
 			    r.getSecondStructure().setProperty(p, detail.getProperty(p));
+			}
+			if (target.getIdsubstance() == -1) {
+
+			    r.getRelation().setReal_lower("=");
+			    r.getRelation().setReal_lowervalue(100.0);
+			    r.getRelation().setReal_uppervalue(100.0);
+			    r.getRelation().setReal_upper("=");
+			    r.getRelation().setReal_unit("%");
+			    r.getRelation().setTypical("=");
+			    r.getRelation().setTypical_value(100.0);
+			    r.getRelation().setTypical_unit("%");
+
+			    for (Property p : detail.getProperties()) {
+				if (Property.opentox_Name.equals(p.getLabel())) {
+				    target.setProperty(new SubstancePublicName(), detail.getProperty(p));
+				} else if (Property.opentox_TradeName.equals(p.getLabel())) {
+				    target.setProperty(new SubstanceName(), detail.getProperty(p));
+				}
+			    }
 			}
 			break;
 		    }
@@ -195,7 +241,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 	try {
 	    DatasetURIReporter r = new DatasetURIReporter(getRequest());
 	    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
-	    conn = dbc.getConnection(30,true,8);
+	    conn = dbc.getConnection(30, true, 8);
 	    CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(_matrix.matrix_working,
 		    Method.DELETE, null, bundle, r, conn, getToken());
 	    ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("Delete matrix from bundle",
@@ -259,7 +305,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 		try {
 		    DatasetURIReporter r = new DatasetURIReporter(getRequest());
 		    DBConnection dbc = new DBConnection(getApplication().getContext(), getConfigFile());
-		    conn = dbc.getConnection(30,true,8);
+		    conn = dbc.getConnection(30, true, 8);
 		    CallableBundleMatrixCreator callable = new CallableBundleMatrixCreator(matrix, Method.POST,
 			    new Form(entity), bundle, r, conn, getToken());
 		    ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("Matrix from bundle",
@@ -368,8 +414,9 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 			}
 		    }
 		    CallableStudyBundleImporter<String> callable = new CallableStudyBundleImporter<String>(items,
-			    CallableFileUpload.field_files, CallableFileUpload.field_config, getRootRef(), getContext(), new SubstanceURIReporter(getRequest().getRootRef()),
-			    new DatasetURIReporter(getRequest().getRootRef()), token);
+			    CallableFileUpload.field_files, CallableFileUpload.field_config, getRootRef(),
+			    getContext(), new SubstanceURIReporter(getRequest().getRootRef()), new DatasetURIReporter(
+				    getRequest().getRootRef()), token);
 		    callable.setBundle(bundle);
 		    callable.setClearComposition(clearComposition);
 		    callable.setClearMeasurements(clearMeasurements);

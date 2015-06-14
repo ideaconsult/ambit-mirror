@@ -77,7 +77,18 @@
 				              "paramType": "query",
 				              "defaultValue": "${ambit_root}/bundle/1",
 				              "allowMultiple"  : false
-				        },												
+				        },
+				        {
+				              "name": "addDummySubstance",
+				              "description": "Adds a compound record as substance in JSON; only if type=related",
+				              "required": false,
+				              "type": "boolean",
+				              "paramType": "query",
+				              "defaultValue": "false",
+				               "enum" : [false,true],
+				              "allowMultiple"  : false
+				        },		
+				        										
 							<#include "/apidocs/parameters_page.ftl" >			            
 			            ],
 			            "responseMessages": [

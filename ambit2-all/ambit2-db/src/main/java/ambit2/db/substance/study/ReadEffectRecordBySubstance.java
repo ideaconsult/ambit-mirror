@@ -38,7 +38,7 @@ public class ReadEffectRecordBySubstance extends
     @Override
     public List<QueryParam> getParameters() throws AmbitException {
 	List<QueryParam> params = new ArrayList<QueryParam>();
-	if (getFieldname() == null)
+	if (getFieldname() == null || getFieldname().getSubstanceUUID() == null)
 	    throw new AmbitException("Empty substance id");
 	String[] uuid = new String[] { null, getFieldname().getSubstanceUUID() };
 	uuid = I5Utils.splitI5UUID(getFieldname().getSubstanceUUID());

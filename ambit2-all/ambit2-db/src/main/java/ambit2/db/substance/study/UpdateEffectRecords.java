@@ -69,11 +69,11 @@ public class UpdateEffectRecords extends AbstractUpdate<ProtocolApplication<Prot
 		if (unit!=null && unit.toString().length()>45) unit = unit.toString().substring(0,45);
 		params1.add(new QueryParam<String>(String.class,unit==null?null:unit.toString()));
 		Object lq = getObject().getLoQualifier();
-		if (lq!=null && lq.toString().length()>6) lq = lq.toString().substring(0,5);
+		if (lq!=null && lq.toString().length()>8) lq = lq.toString().substring(0,7);
 		params1.add(new QueryParam<String>(String.class,lq==null?null:lq.toString()));
 		params1.add(new QueryParam<Double>(Double.class,getObject().getLoValue()));
 		Object uq = getObject().getUpQualifier();
-		if (uq!=null && uq.toString().length()>6) uq = uq.toString().substring(0,5);
+		if (uq!=null && uq.toString().length()>8) uq = uq.toString().substring(0,7);
 		params1.add(new QueryParam<String>(String.class,uq==null?null:uq.toString()));
 		params1.add(new QueryParam<Double>(Double.class,getObject().getUpValue()));
 		
