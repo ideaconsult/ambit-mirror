@@ -347,7 +347,10 @@ Substance UUID, as assigned by the owner
 	public static String getURI(String ref, SubstanceRecord item) {
 		if (item.getSubstanceUUID()!=null)
 			return String.format("%s/substance/%s", ref,item.getSubstanceUUID());
-		else 
+		else if (item.getIdsubstance()>0)
 			return String.format("%s/substance/%d", ref,item.getIdsubstance());
+		if (item.getIdchemical()>0)
+			return String.format("%s/compound/%d", ref,item.getIdchemical());
+		else return null;
 	}
 }

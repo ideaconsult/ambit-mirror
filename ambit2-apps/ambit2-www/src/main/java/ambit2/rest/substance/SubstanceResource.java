@@ -42,6 +42,7 @@ import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorException;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.UpdateExecutor;
@@ -77,6 +78,8 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
     public final static String idsubstance = OpenTox.URI.substance.getKey();
     public final static String substanceID = OpenTox.URI.substance.getResourceID();
     protected SubstanceEndpointsBundle[] bundles;
+    
+    protected IStructureRecord queryRelatedRecord = null;
 
     enum search_mode {
 	reference, related
@@ -137,13 +140,13 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 	    String jsonpcallback = getParams().getFirstValue("jsonp");
 	    if (jsonpcallback == null)
 		jsonpcallback = getParams().getFirstValue("callback");
-	    SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(), jsonpcallback, bundles);
+	    SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(), jsonpcallback, bundles,queryRelatedRecord);
 	    return new OutputWriterConvertor<SubstanceRecord, Q>(cmpreporter, MediaType.APPLICATION_JAVASCRIPT,
 		    filenamePrefix);
 	} else { // json by default
 	    // else if
 	    // (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-	    SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(), null, bundles);
+	    SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(), null, bundles,queryRelatedRecord);
 	    return new OutputWriterConvertor<SubstanceRecord, Q>(cmpreporter, MediaType.APPLICATION_JSON,
 		    filenamePrefix);
 	}
@@ -165,6 +168,12 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 		bundles = null;
 	    }
 
+	    boolean addDummySubstance = false;
+	    try {
+		addDummySubstance = Boolean.parseBoolean(form.getFirstValue("addDummySubstance"));
+	    } catch (Exception x) {
+		addDummySubstance = false;
+	    }
 	    // ?compound_uri=
 	    Object cmpURI = OpenTox.params.compound_uri.getFirstValue(form);
 	    if (cmpURI != null) {
@@ -182,8 +191,10 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 			return (Q) new ReadSubstance(substance);
 		    }
 		    case related: {
-			CompositionRelation composition = new CompositionRelation(null, new StructureRecord(idchemical,
-				-1, null, null), null);
+			IStructureRecord record  = new StructureRecord(idchemical,-1, null, null);
+			//queryRelatedRecord
+			queryRelatedRecord = addDummySubstance?record:null;
+			CompositionRelation composition = new CompositionRelation(null, record , null);
 			return (Q) new ReadSubstance(composition);
 		    }
 		    }

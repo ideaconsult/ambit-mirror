@@ -43,8 +43,14 @@ import ambit2.db.update.AbstractObjectUpdate;
  *
  */
 public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
+	protected String documentType = "Substance";
 	
-	
+	public String getDocumentType() {
+	    return documentType;
+	}
+	public void setDocumentType(String documentType) {
+	    this.documentType = documentType;
+	}
 	public static final String[] create_sql = {
 		"INSERT INTO substance (idsubstance,prefix,uuid,documentType,format,name,publicname,content,substanceType,rs_prefix,rs_uuid,owner_prefix,owner_uuid,owner_name)\n" +
 		"values (?,?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,unhex(replace(?,'-','')),?,unhex(replace(?,'-','')),?) " +
@@ -83,7 +89,7 @@ public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
 			uuid = I5Utils.splitI5UUID(o_uuid.toString());
 		params1.add(new QueryParam<String>(String.class, uuid[0]));
 		params1.add(new QueryParam<String>(String.class, uuid[1]));
-		params1.add(new QueryParam<String>(String.class, "Substance"));
+		params1.add(new QueryParam<String>(String.class, getDocumentType()));
 		params1.add(new QueryParam<String>(String.class, getObject().getFormat()==null?null:truncate(getObject().getFormat().toString(),6)));		
 		params1.add(new QueryParam<String>(String.class, getObject().getSubstanceName()));
 		params1.add(new QueryParam<String>(String.class, getObject().getPublicName()));

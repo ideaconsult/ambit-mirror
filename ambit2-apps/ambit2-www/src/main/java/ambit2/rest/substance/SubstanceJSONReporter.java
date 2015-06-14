@@ -16,23 +16,29 @@ import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.ExternalIdentifier;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.facet.BundleRoleFacet;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.json.JSONUtils;
 import ambit2.db.facets.bundle.SubstanceRoleByBundle;
 import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.substance.ids.ReadSubstanceIdentifiers;
+import ambit2.db.update.bundle.substance.AddCompoundAsSubstanceToBundle;
 
 public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> extends SubstanceURIReporter<Q> {
     protected String comma = null;
     protected String jsonpCallback = null;
     protected SubstanceEndpointsBundle[] bundles;
-
+    protected int records = 0;
+    protected IStructureRecord dummySubstance;
     /**
 	 * 
 	 */
     private static final long serialVersionUID = 2315457985592934727L;
-
     public SubstanceJSONReporter(Request request, String jsonpCallback, SubstanceEndpointsBundle[] bundles) {
+	this(request,jsonpCallback,bundles,null);
+    }
+    public SubstanceJSONReporter(Request request, String jsonpCallback, SubstanceEndpointsBundle[] bundles, IStructureRecord dummySubstance) {
 	super(request);
+	this.dummySubstance = dummySubstance;
 	this.bundles = bundles;
 	this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpCallback);
 
@@ -99,6 +105,7 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
     }
 
     public void header(java.io.Writer output, Q query) {
+	records = 0;
 	try {
 	    if (jsonpCallback != null) {
 		output.write(jsonpCallback);
@@ -113,10 +120,20 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
     };
 
     public void footer(java.io.Writer output, Q query) {
+	if (records == 0 && dummySubstance!=null && dummySubstance.getIdchemical()>0 ) {
+	    SubstanceRecord dummy = AddCompoundAsSubstanceToBundle.structure2substance(dummySubstance);
+	    dummy.setSubstanceUUID(null);
+	    try { processItem(dummy);} catch (Exception x) {}
+	}
 	try {
 	    output.write("\n\t]");
 
 	} catch (Exception x) {
+	}
+	try {
+	    output.write(",\n\"records\":"+records);
+	} catch (Exception x) {
+	    
 	}
 	try {
 	    output.write("\n}\n");
@@ -136,6 +153,7 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
 		writer.write(comma);
 	    writer.write(item.toJSON(getBaseReference().toString()));
 	    comma = ",";
+	    records ++;
 	} catch (Exception x) {
 	    logger.log(java.util.logging.Level.SEVERE, x.getMessage(), x);
 	}

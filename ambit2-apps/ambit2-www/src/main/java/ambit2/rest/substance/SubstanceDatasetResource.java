@@ -67,16 +67,6 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
     protected String[] folders;
     protected ObjectMapper dx = new ObjectMapper();
 
-    protected boolean includeStructuresWithoutSubstances = false;
-
-    public boolean isIncludeStructuresWithoutSubstances() {
-	return includeStructuresWithoutSubstances;
-    }
-
-    public void setIncludeStructuresWithoutSubstances(boolean includeStructuresWithoutSubstances) {
-	this.includeStructuresWithoutSubstances = includeStructuresWithoutSubstances;
-    }
-
     public SubstanceDatasetResource() {
 	super();
 	setHtmlbyTemplate(true);
@@ -184,6 +174,13 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 		     */
 	    private static final long serialVersionUID = -7354966336095750101L;
 	    ProtocolEffectRecord2SubstanceProperty processor = new ProtocolEffectRecord2SubstanceProperty();
+	    @Override
+	    public SubstanceRecord process(SubstanceRecord target) throws AmbitException {
+		if (target == null || target.getSubstanceUUID()==null) 
+		    return target;
+		else 
+		    return super.process(target);
+	    }
 
 	    @Override
 	    protected SubstanceRecord processDetail(SubstanceRecord master,
@@ -472,5 +469,23 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 		}
 	    }
 	}, MediaType.APPLICATION_JSON, filenamePrefix);
+    }
+    /**
+     * if false will retrieve dummy substances as well
+     * @return
+     */
+    protected Boolean isFilterBySubstance()  {
+	Form form = getParams();
+	Boolean filterBySubstance = null;
+	try {
+	    String filter = form.getFirstValue("filterBySubstance");
+	    if (filter != null) {
+		filter = filter.toLowerCase();
+		filterBySubstance = "yes".equals(filter) || "on".equals(filter) ||  "true".equals(filter) ; 
+	    }
+	    return filterBySubstance;
+	} catch (Exception x) {
+	    return null;
+	}
     }
 }

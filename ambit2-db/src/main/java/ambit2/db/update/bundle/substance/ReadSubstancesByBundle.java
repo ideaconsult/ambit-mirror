@@ -16,19 +16,7 @@ public class ReadSubstancesByBundle  extends AbstractReadSubstance<SubstanceEndp
 	 */
 	private static final long serialVersionUID = 661276311247312738L;
 	private static String sql = "select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid,owner_name from substance join bundle_substance using(idsubstance) where idbundle=?\n";
-	
-	private static String sql_chemicals = 
-	"SELECT null,'CHEM',hex(idchemical) as huuid,null,null,idchemical as name,idchemical as publicname,null,'chemical',null,null,null,null,null\n"+ 
-	"FROM bundle_chemicals	where idbundle=? and idchemical not in \n"+
-	"(select idchemical from substance_relation join bundle_substance using(idsubstance) where idbundle=?)";
-	
-	protected boolean includeStructuresWithoutSubstances = false;
-	public boolean isIncludeStructuresWithoutSubstances() {
-	    return includeStructuresWithoutSubstances;
-	}
-	public void setIncludeStructuresWithoutSubstances(boolean includeStructuresWithoutSubstances) {
-	    this.includeStructuresWithoutSubstances = includeStructuresWithoutSubstances;
-	}
+
 	
 	public ReadSubstancesByBundle() {
 		super();
@@ -50,7 +38,7 @@ public class ReadSubstancesByBundle  extends AbstractReadSubstance<SubstanceEndp
 			params1.add(new QueryParam<Integer>(Integer.class, getFieldname().getID()));
 			return params1;
 		}
-		throw new AmbitException("Unspecified substance");
+		throw new AmbitException("Unspecified bundle");
 	}
 
 	@Override

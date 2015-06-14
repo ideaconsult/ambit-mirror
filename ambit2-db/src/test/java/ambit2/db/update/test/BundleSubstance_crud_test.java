@@ -6,8 +6,10 @@ import net.idea.modbcum.i.query.IQueryUpdate;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 
+import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.db.update.bundle.substance.AddCompoundAsSubstanceToBundle;
 import ambit2.db.update.bundle.substance.AddSubstanceToBundle;
 import ambit2.db.update.bundle.substance.DeleteSubstanceFromBundle;
 
@@ -38,12 +40,16 @@ public class BundleSubstance_crud_test extends CRUDTest<SubstanceEndpointsBundle
 	@Override
 	protected IQueryUpdate<SubstanceEndpointsBundle, SubstanceRecord> updateQuery()
 			throws Exception {
-		return null;
+		AddCompoundAsSubstanceToBundle query = new AddCompoundAsSubstanceToBundle();
+		query.setGroup(new SubstanceEndpointsBundle(1));
+		
+		StructureRecord compound = new SubstanceRecord();
+		compound.setIdchemical(29141);
+		
+		query.setCompound(compound);
+		return query;	
 	}
-	@Override
-	public void testUpdate() throws Exception {
 
-	}
 	@Override
 	public void testDelete() throws Exception {
 		//super.testDelete();
@@ -81,6 +87,13 @@ public class BundleSubstance_crud_test extends CRUDTest<SubstanceEndpointsBundle
 	protected void updateVerify(
 			IQueryUpdate<SubstanceEndpointsBundle, SubstanceRecord> query)
 			throws Exception {
+		 IDatabaseConnection c = getConnection();
+		 ITable table = 	c.createQueryTable("EXPECTED_COMPOSITION","SELECT idsubstance,idchemical,documentType from substance_relation join substance using(idsubstance) where idchemical=29141 and documentType='Structure'");
+		 Assert.assertEquals(1,table.getRowCount());
+		 
+		 table = 	c.createQueryTable("EXPECTED_BUNDLE","SELECT idbundle,bundle_substance.idsubstance from bundle_substance join substance_relation using(idsubstance) where idbundle=1 and idchemical=29141");
+		 Assert.assertEquals(1,table.getRowCount());
+		 c.close();	    
 	}
 
 	@Override
