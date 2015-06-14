@@ -55,6 +55,8 @@ $(document)
 		  	 <option value="endpoint">Endpoint</option>
 			 <option value="hash">Conditions</option>
 			 <option value="protocol">Protocol</option>
+			 <option value="reference">Reference</option>
+			 <option value="target">Target</option>
 			 <option value="all">All</option>
 		</select>
 <label>Query expansion</label>		

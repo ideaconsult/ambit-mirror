@@ -66,6 +66,7 @@ function defineOntoBucketTable(root,url,viscols) {
 			  					var descr = val;
 			  					if ("protocol" == val) { type = "guideline"; descr = "by protocol"; }
 			  					else if ("endpoint" == val) { type = "endpoint"; descr = "by endpoint"; }
+			  					else if ("reference" == val) { type = "citation"; descr = "by reference";  search = o.aData["recalls"];}
 			  					else if ("hash" == val) {   type = "endpointhash"; descr = "by endpoint parameters"; search = o.aData["uuid"]; }
 			  					
 			  					if (type === undefined) return descr;
