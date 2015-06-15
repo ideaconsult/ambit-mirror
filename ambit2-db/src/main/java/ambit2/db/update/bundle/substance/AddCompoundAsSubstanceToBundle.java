@@ -9,6 +9,7 @@ import net.idea.modbcum.q.update.AbstractUpdate;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.base.relation.composition.Proportion;
 import ambit2.db.substance.CreateSubstance;
@@ -51,7 +52,7 @@ public class AddCompoundAsSubstanceToBundle extends AbstractUpdate<SubstanceEndp
 	proportion.setReal_lower("=");
 	proportion.setReal_lowervalue(100.0);
 	proportion.setReal_unit("%");
-	CompositionRelation relation = new CompositionRelation(record, compound, proportion);
+	CompositionRelation relation = new CompositionRelation(record, compound,STRUCTURE_RELATION.HAS_STRUCTURE, proportion);
 	relation.setName(record.getContent());
 	relation.setCompositionUUID(record.getSubstanceUUID());
 	record.addStructureRelation(relation);

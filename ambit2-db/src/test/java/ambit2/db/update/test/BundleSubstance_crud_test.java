@@ -88,8 +88,9 @@ public class BundleSubstance_crud_test extends CRUDTest<SubstanceEndpointsBundle
 			IQueryUpdate<SubstanceEndpointsBundle, SubstanceRecord> query)
 			throws Exception {
 		 IDatabaseConnection c = getConnection();
-		 ITable table = 	c.createQueryTable("EXPECTED_COMPOSITION","SELECT idsubstance,idchemical,documentType from substance_relation join substance using(idsubstance) where idchemical=29141 and documentType='Structure'");
+		 ITable table = 	c.createQueryTable("EXPECTED_COMPOSITION","SELECT idsubstance,idchemical,documentType,relation from substance_relation join substance using(idsubstance) where idchemical=29141 and documentType='Structure'");
 		 Assert.assertEquals(1,table.getRowCount());
+		 Assert.assertEquals("HAS_STRUCTURE",table.getValue(0,"relation"));
 		 
 		 table = 	c.createQueryTable("EXPECTED_BUNDLE","SELECT idbundle,bundle_substance.idsubstance from bundle_substance join substance_relation using(idsubstance) where idbundle=1 and idchemical=29141");
 		 Assert.assertEquals(1,table.getRowCount());
