@@ -26,7 +26,7 @@ public class ChemicalBySubstanceRelation extends AbstractStructureQuery<STRUCTUR
 	 * 
 	 */
 	private static final long serialVersionUID = -8329798753353233477L;
-	public final static String sql = "select idchemical from substance_relation";
+	public final static String sql = "select idchemical from substance_relation where relation != 'HAS_STRUCTURE'";
 	
 	public ChemicalBySubstanceRelation() {
 		this(null);

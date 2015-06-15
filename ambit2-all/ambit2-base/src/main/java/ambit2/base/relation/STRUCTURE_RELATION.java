@@ -86,7 +86,13 @@ public enum STRUCTURE_RELATION {
 		public STRUCTURE_RELATION inverseOf() {
 			return HAS_CORE;
 		}
-	};		
+	},
+	HAS_STRUCTURE {
+		@Override
+		public STRUCTURE_RELATION inverseOf() {
+			return CONSTITUENT_OF;
+		}
+	};	
 	public STRUCTURE_RELATION inverseOf() {
 		return null;
 	}
