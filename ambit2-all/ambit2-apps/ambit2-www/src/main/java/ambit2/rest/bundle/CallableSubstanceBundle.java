@@ -82,7 +82,7 @@ public class CallableSubstanceBundle extends CallableDBUpdateTask<SubstanceRecor
 		String uri = input.getFirstValue("substance_uri");
 		if (uri==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		uri = uri.replaceAll(reporter.getBaseReference().toString(),"");
-		if (uri.indexOf("/substance/")>0)
+		if (uri.indexOf("/substance/")>=0)
 		    record.setSubstanceUUID(uri.replace("/substance/", ""));
 		else if (uri.indexOf("/compound/")>=0)  try {
 		    int idchemical = Integer.parseInt(uri.replace("/compound/", ""));
