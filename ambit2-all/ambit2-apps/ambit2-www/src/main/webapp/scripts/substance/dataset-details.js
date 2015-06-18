@@ -29,7 +29,7 @@ function onDetailedRow(row, data, event) {
       $(el).empty();
       var div = document.createElement('div');
       el.appendChild(div);
-  var ds = new jToxSubstance(div, $.extend(true, {}, this.settings, {crossDomain: true, selectionHandler: null, substanceUri: uri, showControls: false, onDetails: function (root, data, event) {
+  var ds = new jToxSubstance(div, $.extend(true, {}, this.settings, {crossDomain: false, selectionHandler: null, substanceUri: uri, showControls: false, onDetails: function (root, data, event) {
     new jToxStudy(root, $.extend({}, this.settings, {substanceUri: data}));
   } } ) );
 }

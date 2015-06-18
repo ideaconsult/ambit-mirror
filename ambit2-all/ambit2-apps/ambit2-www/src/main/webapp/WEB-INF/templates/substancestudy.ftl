@@ -8,6 +8,9 @@
 <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
 <script type='text/javascript' src='${ambit_root}/jquery/purl.js'></script>
+
+<script type='text/javascript' src='${ambit_root}/scripts/config/ce.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/config/toxcast.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/config-study.js'></script>
 
 <link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>

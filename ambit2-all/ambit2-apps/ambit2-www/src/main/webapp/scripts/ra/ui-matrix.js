@@ -1219,7 +1219,7 @@ function preDetailedRow(index, cell) {
     $cell.append(div);
 
     new jToxSubstance(div, {
-      crossDomain: true,
+      crossDomain: false,
       showDiagrams: true,
       embedComposition: true,
       substanceUri: uri,

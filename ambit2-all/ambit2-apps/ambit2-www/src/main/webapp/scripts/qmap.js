@@ -735,7 +735,7 @@ var qmap = {
 			var id_uri = query_service + "/query/compound/url/all?search=" + encodeURIComponent(compoundURI) + "&max=1&media=application%2Fx-javascript";
 			$.ajax({
 			         dataType: "jsonp",
-			         "crossDomain": true, 
+			         "crossDomain": false, 
 			         url: id_uri,
 			         success: function(data, status, xhr) {
 			        	identifiers(data);
@@ -886,7 +886,7 @@ var qmap = {
 
 			    // Run the layout a fixed number of times.
 			    // The ideal number of times scales with graph complexity.
-			    // Of course, don't run too long—you'll hang the page!
+			    // Of course, don't run too longï¿½you'll hang the page!
 			    force.start();
 			    for (var i = n; i > 0; --i) force.tick();
 			    force.stop();
