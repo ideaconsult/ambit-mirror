@@ -44,7 +44,7 @@ public class OriginFilter extends Filter {
 	                responseHeaders = new Form(); 
 	                response.getAttributes().put("org.restlet.http.headers", responseHeaders); 
 	            } 
-	            responseHeaders.add("Access-Control-Allow-Origin", all?"*":origin); 
+	            responseHeaders.add("Access-Control-Allow-Origin", origin!=null?origin:(all?"*":origin)); 
 	            responseHeaders.add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS"); 
 	            responseHeaders.add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept" );
 	            responseHeaders.add("Access-Control-Allow-Credentials", "true"); 
@@ -69,7 +69,7 @@ public class OriginFilter extends Filter {
 	                responseHeaders = new Form(); 
 	                response.getAttributes().put("org.restlet.http.headers", responseHeaders); 
 	            } 
-	            responseHeaders.add("Access-Control-Allow-Origin", all?"*":origin); 
+	            responseHeaders.add("Access-Control-Allow-Origin", origin!=null?origin:(all?"*":origin)); 
 	            responseHeaders.add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS"); 
 	            responseHeaders.add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept" );
 	            responseHeaders.add("Access-Control-Allow-Credentials", "true"); 
