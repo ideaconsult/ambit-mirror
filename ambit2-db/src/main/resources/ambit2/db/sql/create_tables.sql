@@ -194,7 +194,7 @@ CREATE TABLE `substance_protocolapplication` (
   KEY `reference_owner` (`reference_owner`),
   KEY `reference-x` (`reference`(255)),
   KEY `topcategory` (`topcategory`,`endpointcategory`,`interpretation_result`),
-  KEY `xse` (`substance_prefix`,`substance_uuid`,`topcategory`,`endpointcategory`),
+  KEY `xse` (`substance_prefix`,`substance_uuid`,`topcategory`,`endpointcategory`,`interpretation_result`),
   CONSTRAINT `substance-x` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

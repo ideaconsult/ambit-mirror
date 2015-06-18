@@ -13,9 +13,11 @@ import net.idea.restnet.db.QueryURIReporter;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
+import ambit2.base.facet.SubstanceStudyFacet;
 import ambit2.base.json.JSONUtils;
-import ambit2.db.substance.study.facet.SubstanceStudyFacet;
 import ambit2.rest.facet.FacetURIReporter;
+
+import com.google.common.base.CaseFormat;
 
 
 public class StudySummaryJSONReporter<Q extends IQueryRetrieval<IFacet>> extends QueryReporter<IFacet, Q, Writer> {
@@ -87,10 +89,19 @@ public class StudySummaryJSONReporter<Q extends IQueryRetrieval<IFacet>> extends
 						)));
 				
 				output.write("\n\t},\n\t\"category\":  {\n\t\t\t\"title\":");
-				output.write(item.getSubcategoryTitle()==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSubcategoryTitle())));
+				String v = JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSubcategoryTitle()));
+				output.write(v==null?"null":v);
 
 				output.write(",\n\t\t\t\"description\":");
-				output.write(printOrder(item));
+				
+				v = null;
+				try {
+					v = ambit2.base.data.study.Protocol._categories.valueOf(item.getSubcategoryTitle()).toString();
+					v = JSONUtils.jsonQuote(JSONUtils.jsonEscape(v));
+				} catch (Exception x) {
+					v = JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSubcategoryTitle()));	
+				}
+				output.write(v==null?"null":v);
 				//change description to order, but leave the former for compatibility
 				output.write(",\n\t\t\t\"order\":");
 				output.write(printOrder(item));
@@ -102,12 +113,23 @@ public class StudySummaryJSONReporter<Q extends IQueryRetrieval<IFacet>> extends
 						(item.getValue()==null?"":Reference.encode(item.getValue().toString()))+
 						"&category="+(item.getSubcategoryTitle()==null?"":Reference.encode(item.getSubcategoryTitle()));
 				output.write(suri==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(suri)));
-				output.write("\n\t},\n\t\"count\":");
+				output.write("\n\t}");
+				
+				if (item instanceof SubstanceStudyFacet) {
+					output.write(",\n\t\"interpretation_result\":");
+					v = JSONUtils.jsonQuote(JSONUtils.jsonEscape(((SubstanceStudyFacet)item).getInterpretation_result()));
+					output.write(v==null?"null":v);
+				}
+				
+
+				
+				output.write(",\n\t\"count\":");
 				output.write(Integer.toString(item.getCount()));
+				
+				
 				output.write("\n\t}");
 				comma = ",";
 		} catch (Exception x) {
-			x.printStackTrace();
 			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		return item;

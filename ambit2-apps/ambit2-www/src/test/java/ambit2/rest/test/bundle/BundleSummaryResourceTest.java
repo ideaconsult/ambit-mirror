@@ -34,6 +34,6 @@ public class BundleSummaryResourceTest extends ProtectedResourceTest {
 	    System.out.println(line);
 	    count++;
 	}
-	return count == 1;
+	return count == 33;
     }
 }

@@ -21,7 +21,7 @@ public class SubstanceCSVReporter<Q extends IQueryRetrieval<SubstanceRecord>> ex
     private static final long serialVersionUID = -3848727989098277273L;
 
     public SubstanceCSVReporter(Request request, SubstanceEndpointsBundle[] bundles) {
-	super(request, null, bundles);
+	super(request, null, bundles,false);
 	comma = ",";
     }
 

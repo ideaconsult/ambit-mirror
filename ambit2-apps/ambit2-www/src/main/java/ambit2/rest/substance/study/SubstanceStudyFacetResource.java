@@ -13,7 +13,8 @@ import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
-import ambit2.db.substance.study.facet.SubstanceStudyFacet;
+import ambit2.base.data.SubstanceRecord;
+import ambit2.base.facet.SubstanceStudyFacet;
 import ambit2.db.substance.study.facet.SubstanceStudyFacetQuery;
 import ambit2.rest.facet.AmbitFacetResource;
 import ambit2.rest.substance.SubstanceResource;
@@ -32,11 +33,29 @@ public class SubstanceStudyFacetResource<Q extends IQueryRetrieval<SubstanceStud
 			Object substanceuuid = request.getAttributes().get(SubstanceResource.idsubstance);
 			Form form = getRequest().getResourceRef().getQueryAsForm();
 			String property = form.getFirstValue("property");
-			String property_uri = form.getFirstValue("property_uri");		
+			String property_uri = form.getFirstValue("property_uri");	
+			boolean result = false;
+			try {
+				result = Boolean.parseBoolean(form.getFirstValue("result"));
+			} catch (Exception x) {
+				result = false;
+			}
+			
+			String topCategory = form.getFirstValue("top");
+			String category = form.getFirstValue("category");
+			
 			SubstanceStudyFacetQuery q = new SubstanceStudyFacetQuery(
 					String.format("%s%s/%s/study",getRootRef(),SubstanceResource.substance,substanceuuid)
 					);
-			q.setFieldname(substanceuuid==null?null:substanceuuid.toString());
+			q.setCategory(category);
+			q.setTopcategory(topCategory);
+			q.setGroupByInterpretationResult(result);
+			SubstanceRecord substanceRecord = null;
+			if (substanceuuid!=null) {
+				substanceRecord = new SubstanceRecord();
+				substanceRecord.setSubstanceUUID(substanceuuid.toString());
+			}
+			q.setFieldname(substanceRecord);
 			if (property_uri!=null) try {
 				//not nice REST style, but easiest to parse the URI
 				Reference puri = new Reference(property_uri.endsWith("/")?property_uri.substring(0, property_uri.length()-2):property_uri);
