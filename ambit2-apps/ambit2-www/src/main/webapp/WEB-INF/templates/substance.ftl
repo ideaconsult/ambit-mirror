@@ -28,7 +28,7 @@
 	  	loadHelp("${ambit_root}","substance");
 	  	downloadForm("${ambit_request}");		
 	  		
- 		var ds = new jToxSubstance($(".jtox-toolkit")[0], {crossDomain: true, selectionHandler: "query", embedComposition: true, showDiagrams: true } );
+ 		var ds = new jToxSubstance($(".jtox-toolkit")[0], {crossDomain: false, selectionHandler: "query", embedComposition: true, showDiagrams: true } );
         ds.querySubstance('${ambit_request_json}');	  		
 
 
