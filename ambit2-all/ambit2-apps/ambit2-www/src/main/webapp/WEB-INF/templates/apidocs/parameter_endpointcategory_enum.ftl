@@ -57,5 +57,12 @@
 										"TO_REPRODUCTION",
 										"TO_DEVELOPMENTAL",
 										"UNKNOWN_TOXICITY",
-										"PROTEOMICS"								    
+										"PROTEOMICS",
+										"AUTOFLUORESCENCE",
+										"CELL_PROLIFERATION",
+										"MITOCHONDRIAL_DEPOLARIZATION",
+										"REGULATION_OF_CATALYTIC_ACTIVITY",
+										"REGULATION_OF_GENE_EXPRESSION",
+										"REGULATION_OF_TRANSCRIPTION_FACTOR_ACTIVITY",
+																		    
 								    ]

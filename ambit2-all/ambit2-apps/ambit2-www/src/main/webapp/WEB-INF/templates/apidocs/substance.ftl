@@ -87,7 +87,17 @@
 				              "defaultValue": "false",
 				               "enum" : [false,true],
 				              "allowMultiple"  : false
-				        },		
+				        },	
+				        {
+				              "name": "studysummary",
+				              "description": "If trie retrieves study summary for each substance",
+				              "required": false,
+				              "type": "boolean",
+				              "paramType": "query",
+				              "defaultValue": "false",
+				               "enum" : [false,true],
+				              "allowMultiple"  : false
+				        },	
 				        										
 							<#include "/apidocs/parameters_page.ftl" >			            
 			            ],
@@ -335,7 +345,16 @@
 								    "type": "string",
 								    "paramType": "query",
 								    "allowMultiple": false
-								}			                  
+								},
+											                  								{
+								    "name": "result",
+								    "description": "If true will group by topcategory,endpointcategory,interpretation result",
+								    "required": false,
+								    "type": "string",
+								    "enum" : ["true","false"],
+								    "paramType": "query",
+								    "allowMultiple": false
+								}
 			            ],
 			            "responseMessages": [
 			     			{

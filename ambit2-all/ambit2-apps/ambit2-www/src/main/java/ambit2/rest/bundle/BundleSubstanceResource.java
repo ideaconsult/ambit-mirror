@@ -182,13 +182,13 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 	    String jsonpcallback = getParams().getFirstValue("jsonp");
 	    if (jsonpcallback == null)
 		jsonpcallback = getParams().getFirstValue("callback");
-	    SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(), jsonpcallback, bundles,null);
+	    SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(), jsonpcallback, bundles,null,false);
 	    return new OutputWriterConvertor<SubstanceRecord, Q>(cmpreporter, MediaType.APPLICATION_JAVASCRIPT,
 		    filenamePrefix);
 	} else { // json by default
 	    // else if
 	    // (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-	    SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(), null, bundles,null);
+	    SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(), null, bundles,null,false);
 	    return new OutputWriterConvertor<SubstanceRecord, Q>(cmpreporter, MediaType.APPLICATION_JSON,
 		    filenamePrefix);
 	}
