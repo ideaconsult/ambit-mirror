@@ -16,7 +16,7 @@ import ambit2.db.search.StringCondition;
 public class SubstanceStudyFacetQuery
 		extends
 		AbstractFacetQuery<SubstanceRecord, String, StringCondition, SubstanceStudyFacet> {
-
+	
 	/**
 	 * 
 	 */
@@ -34,6 +34,16 @@ public class SubstanceStudyFacetQuery
 	protected SubstanceStudyFacet record;
 	protected boolean groupByInterpretationResult = false;
 	protected String topcategory = null;
+	protected String facetURL;
+	protected boolean reuseRecord = true;
+
+	public boolean isReuseRecord() {
+		return reuseRecord;
+	}
+
+	public void setReuseRecord(boolean reuseRecord) {
+		this.reuseRecord = reuseRecord;
+	}
 
 	public String getTopcategory() {
 		return topcategory;
@@ -64,7 +74,16 @@ public class SubstanceStudyFacetQuery
 
 	public SubstanceStudyFacetQuery(String facetURL) {
 		super(facetURL);
-		record = createFacet(facetURL);
+		this.facetURL = facetURL;
+		record =  null;
+	}
+
+	public SubstanceStudyFacet getRecord() {
+		return record;
+	}
+
+	public void setRecord(SubstanceStudyFacet record) {
+		this.record = record;
 	}
 
 	@Override
@@ -146,6 +165,8 @@ public class SubstanceStudyFacetQuery
 	@Override
 	public SubstanceStudyFacet getObject(ResultSet rs) throws AmbitException {
 		try {
+			if (!reuseRecord || record==null) record = createFacet(facetURL);
+
 			record.setValue(rs.getString(1));
 			record.setSubcategoryTitle(rs.getString(2));
 			record.setCount(rs.getInt(3));

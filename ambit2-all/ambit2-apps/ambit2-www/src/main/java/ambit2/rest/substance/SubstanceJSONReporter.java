@@ -114,6 +114,7 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		} else if (retrieveStudySummary) {
 			SubstanceStudyFacetQuery q = new SubstanceStudyFacetQuery(request
 					.getRootRef().toString());
+			q.setReuseRecord(false);
 			q.setGroupByInterpretationResult(true);
 
 			MasterDetailsProcessor<SubstanceRecord, SubstanceStudyFacet, IQueryCondition> studyReader = new MasterDetailsProcessor<SubstanceRecord, SubstanceStudyFacet, IQueryCondition>(
