@@ -41,7 +41,7 @@ public class ReadSubstanceComposition extends AbstractQuery<SubstanceRecord,Comp
 	
 	private final static String sql_id = sql + " where " + q_idsubstance;
 	private final static String sql_uuid =sql + " join substance using(idsubstance) where " + q_uuid;
-	private final static String sql_bundle = _sql + ",tag,remarks from substance_relation r join bundle_substance using(idsubstance) join bundle_chemicals c using(idbundle) where c.idchemical=r.idchemical and idbundle=? and "+ q_idsubstance;
+	private final static String sql_bundle = _sql + ",c.tag,c.remarks from substance_relation r join bundle_substance using(idsubstance) join bundle_chemicals c using(idbundle) where c.idchemical=r.idchemical and idbundle=? and "+ q_idsubstance;
 	
 	protected SubstanceEndpointsBundle bundle;
 	
