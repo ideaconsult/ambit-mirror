@@ -11,6 +11,8 @@ import org.restlet.data.Method;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
@@ -78,6 +80,19 @@ public class CallableSubstanceBundle extends CallableDBUpdateTask<SubstanceRecor
 			//add/delete should be specified on PUT 
 			command = update_command.valueOf(input.getFirstValue("command"));
 		} catch (Exception x) { command = null;	}
+		
+		String tag = null;
+		String remarks = null;
+		try {
+			tag = input.getFirstValue("tag");
+		} catch (Exception x) { tag = null;	}
+		try {
+			remarks = input.getFirstValue("remarks");
+		} catch (Exception x) { remarks = null;	}
+		
+		LiteratureEntry ref = LiteratureEntry.getBundleReference(bundle);
+		if (tag!=null) record.setProperty(new Property("tag",ref) ,tag);
+		if (remarks!=null) record.setProperty(new Property("remarks",ref) ,remarks);
 		
 		String uri = input.getFirstValue("substance_uri");
 		if (uri==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);

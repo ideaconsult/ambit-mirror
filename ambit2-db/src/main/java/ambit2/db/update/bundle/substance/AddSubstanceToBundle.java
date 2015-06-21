@@ -33,13 +33,16 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import ambit2.base.data.I5Utils;
+import ambit2.base.data.ILiteratureEntry;
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 
 public class AddSubstanceToBundle extends AbstractUpdate<SubstanceEndpointsBundle,SubstanceRecord> {
-	private static final String[] update_sql =  {"insert into bundle_substance select idsubstance,?,now(),prefix,uuid from substance where idsubstance=? on duplicate key update substance_prefix=values(substance_prefix),substance_uuid=values(substance_uuid)"	};
+	private static final String[] update_sql =  {"insert into bundle_substance select idsubstance,?,now(),prefix,uuid,?,? from substance where idsubstance=? on duplicate key update substance_prefix=values(substance_prefix),substance_uuid=values(substance_uuid)"	};
 	
-	private static final String[] update_sql_uuid =  {"insert into bundle_substance select idsubstance,?,now(),prefix,uuid from substance where prefix=? and uuid=unhex(?) on duplicate key update substance_prefix=values(substance_prefix),substance_uuid=values(substance_uuid)"  }	;
+	private static final String[] update_sql_uuid =  {"insert into bundle_substance select idsubstance,?,now(),prefix,uuid,?,? from substance where prefix=? and uuid=unhex(?) on duplicate key update substance_prefix=values(substance_prefix),substance_uuid=values(substance_uuid)"  }	;
 	
 	public AddSubstanceToBundle(SubstanceEndpointsBundle bundle,SubstanceRecord dataset) {
 		this(dataset);
@@ -60,6 +63,19 @@ public class AddSubstanceToBundle extends AbstractUpdate<SubstanceEndpointsBundl
 		if (getObject() == null )  throw new AmbitException("Substance not defined");
 
 		params.add(new QueryParam<Integer>(Integer.class, getGroup().getID()));
+		
+		Object tag = null;
+		Object remarks = null;
+		ILiteratureEntry reference = LiteratureEntry.getBundleReference(getGroup());
+		for (Property property : getObject().getProperties()) {
+		    if ("tag".equals(property.getName()) && property.getReference().equals(reference)) {
+			tag = getObject().getProperty(property);
+		    } else if ("remarks".equals(property.getName()) && property.getReference().equals(reference)) {
+			remarks = getObject().getProperty(property);
+		    }
+		}
+		params.add(new QueryParam<String>(String.class, tag == null ? null : tag.toString()));
+		params.add(new QueryParam<String>(String.class, remarks == null ? null : remarks.toString()));
 		
 		if (getObject().getIdsubstance()>0) {
 			params.add(new QueryParam<Integer>(Integer.class, getObject().getIdsubstance()));

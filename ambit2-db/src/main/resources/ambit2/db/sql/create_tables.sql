@@ -274,6 +274,8 @@ CREATE TABLE `bundle_substance` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `substance_prefix` varchar(6) COLLATE utf8_bin DEFAULT NULL,
   `substance_uuid` varbinary(16) DEFAULT NULL,
+  `tag` varchar(10) COLLATE utf8_bin DEFAULT NULL,
+  `remarks` varchar(45) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`idsubstance`,`idbundle`),
   UNIQUE KEY `u_sunstance_idx` (`substance_prefix`,`substance_uuid`,`idbundle`),
   KEY `s_bundle` (`idbundle`),

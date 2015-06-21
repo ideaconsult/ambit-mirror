@@ -12,19 +12,22 @@ import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.facet.BundleRoleFacet;
 import ambit2.db.search.StringCondition;
 
-public class SubstanceRoleByBundle  extends AbstractFacetQuery<SubstanceRecord,SubstanceEndpointsBundle,StringCondition,BundleRoleFacet>  {
-	
+public class SubstanceRoleByBundle
+		extends
+		AbstractFacetQuery<SubstanceRecord, SubstanceEndpointsBundle, StringCondition, BundleRoleFacet> {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2880103630366030217L;
-	private final static String sql = "SELECT idbundle,idsubstance from bundle_substance where idbundle=? and idsubstance=?"; 
+	private final static String sql = "SELECT idbundle,idsubstance,tag,remarks from bundle_substance where idbundle=? and idsubstance=?";
 	protected BundleRoleFacet record;
-	
+
 	public SubstanceRoleByBundle(String facetURL) {
 		super(facetURL);
 		record = createFacet(facetURL);
 	}
+
 	@Override
 	public boolean isPrescreen() {
 		return false;
@@ -42,14 +45,17 @@ public class SubstanceRoleByBundle  extends AbstractFacetQuery<SubstanceRecord,S
 
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
-		if ((getFieldname()==null) || (getFieldname().getIdsubstance()<=0)) throw new AmbitException("Substance not defined");
-		if (getValue()==null || getValue().getID()<=0)  throw new AmbitException("Bundle not defined");
+		if ((getFieldname() == null) || (getFieldname().getIdsubstance() <= 0))
+			throw new AmbitException("Substance not defined");
+		if (getValue() == null || getValue().getID() <= 0)
+			throw new AmbitException("Bundle not defined");
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<Integer>(Integer.class,getValue().getID()));		
-		params.add(new QueryParam<Integer>(Integer.class,getFieldname().getIdsubstance()));		
+		params.add(new QueryParam<Integer>(Integer.class, getValue().getID()));
+		params.add(new QueryParam<Integer>(Integer.class, getFieldname()
+				.getIdsubstance()));
 		return params;
 	}
-	
+
 	@Override
 	protected BundleRoleFacet createFacet(String facetURL) {
 		return new BundleRoleFacet(facetURL);
@@ -59,18 +65,25 @@ public class SubstanceRoleByBundle  extends AbstractFacetQuery<SubstanceRecord,S
 	public BundleRoleFacet getObject(ResultSet rs) throws AmbitException {
 		if (record == null) {
 			record = createFacet(null);
-		} else record.clear();
+		} else
+			record.clear();
 		try {
-			record.setTag("selected");
-			record.setRemarks(null);
 			record.setValue(getValue());
 			record.setCount(1);
-			return record;
 		} catch (Exception x) {
 			record.setValue(getValue());
 			record.setCount(-1);
-			return record;
+
 		}
-	}	
-	
+		try {
+			String tag = rs.getString("tag");
+			record.setTag(tag==null?"selected":tag);
+			record.setRemarks(rs.getString("remarks"));
+		} catch (Exception x) {
+			record.setTag("selected");
+			record.setRemarks(null);
+		}
+		return record;
+	}
+
 }
