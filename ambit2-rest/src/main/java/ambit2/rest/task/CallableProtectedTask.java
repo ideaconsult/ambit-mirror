@@ -12,6 +12,9 @@ public abstract class CallableProtectedTask<USERID> implements ICallableTask, IA
 	protected UUID uuid;
 	private USERID token;
 	
+	protected String logFile;
+
+	
 	public CallableProtectedTask(USERID token) {
 		this.token = token;
 	}
@@ -24,7 +27,7 @@ public abstract class CallableProtectedTask<USERID> implements ICallableTask, IA
 	@Override
 	public void setUuid(UUID uuid) {
 		this.uuid = uuid;
-
+		logFile = String.format("%s/task_%s.log", System.getProperty("java.io.tmpdir"), uuid.toString());
 	}
 
 	@Override
@@ -48,5 +51,9 @@ public abstract class CallableProtectedTask<USERID> implements ICallableTask, IA
 	public String getTaskCategory() {
 		return null;
 	}
+
+
+	
+
 
 }

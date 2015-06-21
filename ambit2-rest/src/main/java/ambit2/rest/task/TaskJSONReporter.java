@@ -17,6 +17,7 @@ import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.json.JSONUtils;
+import ambit2.rest.exception.ImportSubstanceException;
 import ambit2.rest.reporters.TaskURIReporter;
 
 public class TaskJSONReporter<USERID> extends TaskURIReporter<USERID> {
@@ -54,6 +55,10 @@ public class TaskJSONReporter<USERID> extends TaskURIReporter<USERID> {
 		try {
 		    ResourceException exception = task.getError();
 		    errorTrace = new StringWriter();
+		    
+		    if (exception instanceof ImportSubstanceException) {
+		    	errorTrace.write(((ImportSubstanceException)exception).getDetails());
+		    } else 
 		    if (exception.getCause() == null)
 			exception.printStackTrace(new PrintWriter(errorTrace));
 		    else
