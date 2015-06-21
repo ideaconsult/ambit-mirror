@@ -29,6 +29,8 @@ public class CallableSubstanceBundleTest extends DbUnitTest {
 
 	Form form = new Form();
 	form.add("substance_uri", "http://localhost:8081/ambit2/substance/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734");
+	form.add("tag","CM");
+	form.add("remarks","remark");
 
 	try {
 	    SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(1);
@@ -38,8 +40,10 @@ public class CallableSubstanceBundleTest extends DbUnitTest {
 		    c.getConnection(), null);
 	    TaskResult task = callable.call();
 	    ITable table = c1.createQueryTable("EXPECTED",
-		    String.format("SELECT idbundle,idsubstance from bundle_substance"));
+		    String.format("SELECT idbundle,idsubstance,tag,remarks from bundle_substance"));
 	    Assert.assertEquals(1, table.getRowCount());
+	    Assert.assertEquals("CM", table.getValue(0,"tag"));
+	    Assert.assertEquals("remark", table.getValue(0,"remarks"));
 
 	} catch (Exception x) {
 	    throw x;

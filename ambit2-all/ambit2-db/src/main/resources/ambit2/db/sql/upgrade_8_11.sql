@@ -20,4 +20,7 @@ ALTER TABLE `ontobucket` CHANGE COLUMN `relation` `relation` ENUM('label','subcl
 
 ALTER TABLE `substance_protocolapplication` DROP INDEX `xse` , ADD INDEX `xse` (`substance_prefix` ASC, `substance_uuid` ASC, `topcategory` ASC, `endpointcategory` ASC, `interpretation_result` ASC) ;
 
+ALTER TABLE `bundle_substance` ADD COLUMN `tag` VARCHAR(10) NULL DEFAULT NULL  AFTER `substance_uuid` , ADD COLUMN `remarks` VARCHAR(45) NULL DEFAULT NULL  AFTER `tag` ;
+
+
 insert into version (idmajor,idminor,comment) values (8,11,"AMBIT2 schema");

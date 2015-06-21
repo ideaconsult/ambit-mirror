@@ -46,7 +46,8 @@ import ambit2.rest.substance.SubstanceURIReporter;
 public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> extends
 	AmbitDBResource<Q, SubstanceRecord> {
     protected SubstanceEndpointsBundle[] bundles;
-
+    protected boolean enableFeatures = false;
+    
     public BundleSubstanceResource() {
 	super();
 	setHtmlbyTemplate(true);
@@ -103,11 +104,19 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 
     @Override
     protected Q createQuery(Context context, Request request, Response response) throws ResourceException {
+    	Form form = getResourceRef(getRequest()).getQueryAsForm();
+    	try {
+    	    enableFeatures = "true".equals(form.getFirstValue("enableFeatures"));
+    	} catch (Exception x) {
+    	    enableFeatures = false;
+    	}
+    	
 	Object idbundle = request.getAttributes().get(OpenTox.URI.bundle.getKey());
 	if (idbundle != null)
 	    try {
 		Integer idnum = new Integer(Reference.decode(idbundle.toString()));
 		ReadSubstancesByBundle q = new ReadSubstancesByBundle();
+		q.setEnableFeatures(enableFeatures);
 		SubstanceEndpointsBundle b = new SubstanceEndpointsBundle();
 		if (bundles == null)
 		    bundles = new SubstanceEndpointsBundle[] { b };

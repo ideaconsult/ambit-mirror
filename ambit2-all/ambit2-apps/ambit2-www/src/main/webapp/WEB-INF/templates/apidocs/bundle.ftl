@@ -534,6 +534,16 @@
 							    "paramType": "path",
 							    "allowMultiple": false
 							},
+							{
+							    "name": "enableFeatures",
+							    "description": "Retrives tag and remarks as features",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "query",
+							    "defaultValue" : "false",
+							    "enum" : ["false","true"],
+							    "allowMultiple": false
+							},									
 							<#include "/apidocs/parameters_page.ftl" >									
 			            ],
 			            "responseMessages": [
@@ -594,7 +604,26 @@
 							    "paramType": "form",
 							    "allowMultiple": false,
 							    "enum" : ["add","delete"]
-							}										
+							},
+							{
+							    "name": "tag",
+							    "description": "tag",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false,
+							    "defaultValue" :"target",
+							    "enum" : ["target","source","CM"]
+							},		
+							{
+							    "name": "remarks",
+							    "description": "remarks",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "form",
+							    "allowMultiple": false
+							}																		
+																	
 			            ],
 			            "responseMessages": [
 			     			{
@@ -1217,7 +1246,7 @@
 							    "paramType": "form",
 							    "allowMultiple": false,
 							    "defaultValue" :"target",
-							    "enum" : ["target","source"]
+							    "enum" : ["target","source","CM"]
 							},		
 							{
 							    "name": "remarks",
