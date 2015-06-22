@@ -211,7 +211,77 @@
 			<button class="create-final-button">Create final matrix</button>
 			<div class="jtox-toolkit" data-kit="compound" data-manual-init="true"></div>
     </div>
-    <div id="jtox-report" class="jtox-report"></div>
+    <div id="jtox-report" class="jtox-report" data-action="onReport">
+
+      <div id="jtox-report-cover">
+        <h1>Ambit Assessment Report</h1>
+        <h2 class="data-field" data-field="title">Category For Glymes</h2>
+        <dl>
+          <dt>Author:</dt><dd class="data-field" data-field="maintainer"></dd>
+          <dt>Company:</dt><dd class="data-field" data-field="rightsHolder"></dd>
+          <dt>Date:</dt><dd class="data-field" data-field="created" data-format="formatDate"></dd>
+          <dt>Assessment code:</dt><dd class="data-field" data-field="number"></dd>
+          <dt>Purpose:</dt><dd class="data-field" data-field="description"></dd>
+        </dl>
+      </div>
+
+      <section id="jtox-report-identifiers">
+        <h2>Assessment Identifiers</h2>
+
+        <table class="dataTable">
+          <thead>
+            <tr><th class="right size-third">Title:</th><td class="data-field" data-field="title"></td></tr>
+            <tr><th class="right size-third">Maintainer:</th><td class="data-field" data-field="maintainer"></td></tr>
+
+            <tr><th class="right top size-third">Purpose:</th><td class="data-field" data-field="description"></td></tr>
+            <tr><th class="right size-third">Version:</th><td class="data-field" data-field="version">?.?</td></tr>
+            <tr><th class="right size-third">Status:</th><td class="data-field" data-field="status"></td></tr>
+            <tr><th class="right size-third">Version start date:</th><td class="data-field" data-field="created" data-format="formatDate"></td></tr>
+            <tr><th class="right size-third">Version last modified on:</th><td class="data-field" data-field="updated" data-format="formatDate"></td></tr>
+            <tr><th class="right size-third">Published:</th><td class="data-field" data-field="status"></td></tr>
+            <tr><th class="right size-third">License:</th><td class="data-field" data-field="rights.URI"></td></tr>
+            <tr><th class="right size-third">Rights holder:</th><td class="data-field" data-field="rightsHolder"></td></tr>
+            <tr><th class="right size-third">Source:</th><td class="data-field" data-field="seeAlso"></td></tr>
+            <tr><th class="right size-third">Source URL:</th><td class="data-field" data-field="source"></td></tr>
+            <tr><th class="right size-third">Assessment:</th><td class="data-field" data-field="number"></td></tr>
+          </thead>
+        </table>
+
+        <p>The original assessment in Ambit can be found via “Assessment ID”.</p>
+
+      </section>
+
+      <section id="jtox-report-structlist">
+        <h2>List of structures for assessment</h2>
+        <p>In the assessment, similar structures were selected from exact structure, substructure and/or similarity searches, or were added manually. The rationale for the selection is given in the table.</p>
+        <div id="jtox-report-query" class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="jTConfigurator" data-initial-query="false">
+          <div id="browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-on-details="onDetailedRow" data-details-height="500px" data-show-diagrams="true" data-on-loaded="onBrowserFilled"></div>
+        </div>
+      </section>
+
+      <section id="jtox-report-substances">
+        <h2>List of substances related to the structures</h2>
+        <p>In the following, for each structure listed in chapter 2, substances were selected and the rationale is given.</p>
+        <div id="jtox-report-substance-query" class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="jTConfigurator" data-initial-query="false">
+          <div id="report-substance-browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-pre-details="preDetailedRow" data-show-diagrams="true" data-on-loaded="onReportSubstancesLoaded"></div>
+        </div>
+      </section>
+
+      <section id="jtox-report-matrix">
+        <h2>Substance composition matrix</h2>
+        <p>In the following, for each substance, the associated structure(s) and the composition are given.</p>
+        <div class="jtox-toolkit" data-kit="compound" data-manual-init="true"></div>
+      </section>
+
+      <section id="jtox-report-final">
+        <h2>Assessment data matrix</h2>
+        <p>In the following, for each substance, the associated endpoint data are given, either experimental data, waiving or read-across.</p>
+        <p>For detailed data or rationale for waiving and read-across, click hyperlinks in the table. These data or rationales can also be found in the annex of the report.</p>
+        <div class="jtox-toolkit" data-manual-init="true"></div>
+      </section>
+
+
+    </div>
   </div>
   <div class="jtox-template">
     <div id="info-box">
@@ -221,7 +291,7 @@
             <th rowspan="2">Endpoint</th>
             <th rowspan="2">Value</th>
             <th class="conditions center">Conditions</th>
-            <th rowspan="2">Guidance</th>
+            <th rowspan="2">Guideline</th>
           </tr>
           <tr class="conditions">
           </tr>
