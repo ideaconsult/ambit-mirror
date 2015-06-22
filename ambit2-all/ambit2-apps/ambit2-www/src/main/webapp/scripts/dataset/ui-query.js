@@ -33,7 +33,7 @@ function onDetailedRow(row, data, element) {
   $(el).addClass('paddingless');
   var div = document.createElement('div');
   el.appendChild(div);
-  new jToxSubstance(div, $.extend(true, {}, this.settings, {crossDomain: true, selectionHandler: null, substanceUri: uri, showControls: true, onDetails: function (root, data, element) {
+  new jToxSubstance(div, $.extend(true, {}, this.settings, {crossDomain: false, selectionHandler: null, substanceUri: uri, showControls: true, onDetails: function (root, data, element) {
     new jToxStudy(root, $.extend({}, this.settings, {substanceUri: data.URI}));
   } } ) );
 }

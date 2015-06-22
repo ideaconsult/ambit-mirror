@@ -1077,7 +1077,7 @@ var jToxBundle = {
     var featuresInitialized = false;
 
     matrixKit = new jToxCompound(rootEl, {
-      crossDomain: true,
+      crossDomain: false,
       rememberChecks: true,
       tabsFolded: true,
       showDiagrams: true,
@@ -1342,7 +1342,7 @@ function preDetailedRow(index, cell) {
     $cell.append(div);
 
     new jToxSubstance(div, {
-      crossDomain: true,
+      crossDomain: false,
       showDiagrams: true,
       embedComposition: true,
       substanceUri: uri,
@@ -1381,7 +1381,7 @@ function onDetailedRow(row, data, event) {
   $(el).addClass('paddingless');
   var div = document.createElement('div');
   el.appendChild(div);
-  new jToxSubstance(div, $.extend(true, {}, this.settings, {crossDomain: true, selectionHandler: null, substanceUri: uri, showControls: false, onLoaded: null, onDetails: function (root, data, element) {
+  new jToxSubstance(div, $.extend(true, {}, this.settings, {crossDomain: false, selectionHandler: null, substanceUri: uri, showControls: false, onLoaded: null, onDetails: function (root, data, element) {
     new jToxStudy(root, $.extend({}, this.settings, {substanceUri: data.URI}));
   } } ) );
 }
