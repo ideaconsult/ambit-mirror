@@ -192,6 +192,7 @@ var config_ce1 = {
         },            
         "effects": {
             "endpoint": {
+            	"sTitle" : "EC3",
                 "bVisible": false,
                 "inMatrix" : true,
                 "iOrder": -8
@@ -268,7 +269,7 @@ var config_ce2 = {
              "endpoint": {
              	"sTitle" : "NOEL",
                  "bVisible": false,
-                 "inMatrix" : false,
+                 "inMatrix" : true,
                  "iOrder": -7
              },
              
@@ -287,7 +288,7 @@ var config_ce2 = {
          "interpretation": {
              "result": {
              	"sTitle": "Potency class",
-                 "inMatrix" : false,
+                 "inMatrix" : true,
                  "bVisible": true,
                  "iOrder": -8
              },

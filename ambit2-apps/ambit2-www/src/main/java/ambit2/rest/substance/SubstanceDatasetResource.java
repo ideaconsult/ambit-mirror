@@ -262,6 +262,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 			 * }
 			 */
 			ProtocolEffectRecord<String, IParams, String> effect = new ProtocolEffectRecord<String, IParams, String>();
+			effect.setInterpretationResult(detail.getInterpretationResult());
 			effect.setStudyResultType(detail.getStudyResultType());
 			effect.setProtocol(detail.getProtocol());
 			if (detail.getEndpoint() != null)
