@@ -186,7 +186,7 @@ public class DBSubstanceImport {
 	try {
 	    DBSubstanceImport object = new DBSubstanceImport();
 	    if (object.parse(args)) {
-		object.importFile();
+	    	object.importFile();
 	    } else
 		System.exit(0);
 	} catch (ConnectException x) {
@@ -285,15 +285,15 @@ public class DBSubstanceImport {
 	}
     }
 
-    protected IRawReader<IStructureRecord> createParser(InputStream in) throws Exception {
-	return new GenericExcelParser(in, jsonConfig, true);
+    protected IRawReader<IStructureRecord> createParser(InputStream in, boolean xlsx) throws Exception {
+	return new GenericExcelParser(in, jsonConfig, xlsx);
     }
 
     protected void importFile() throws Exception {
-	importFile(isSplitRecord());
+    	importFile(isSplitRecord(),inputFile.toString().toLowerCase().endsWith(".xlsx"));
     }
 
-    protected void importFile(boolean splitRecord) throws Exception {
+    protected void importFile(boolean splitRecord,boolean xlsx) throws Exception {
 	IRawReader<IStructureRecord> parser = null;
 	Connection c = null;
 	try {
@@ -304,7 +304,7 @@ public class DBSubstanceImport {
 	    c = dbc.getConnection();
 	    c.setAutoCommit(true);
 
-	    parser = createParser(fin);
+	    parser = createParser(fin,xlsx);
 	    StructureRecordValidator validator = new StructureRecordValidator(inputFile.getName(), true);
 	    write(parser, c, new ReferenceSubstanceUUID(), splitRecord, clearMeasurements, clearComposition, validator);
 	} catch (Exception x) {
