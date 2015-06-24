@@ -23,15 +23,15 @@ public class ReadEffectRecordByBundleMatrix extends ReadEffectRecordBySubstance 
 	    + "p.topcategory,p.endpointcategory,guidance,params,reference,idresult,studyResultType,interpretation_result,\n"
 	    + "e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint,e.copied,e.deleted,e.remarks\n"
 	    + "from bundle_substance_protocolapplication p\n"
-	    + "join bundle_substance_experiment e on p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"
-	    + "where p.idbundle=e.idbundle and p.substance_prefix =? and p.substance_uuid =unhex(?) and p.idbundle=?";
+	    + "left join bundle_substance_experiment e on p.idbundle=e.idbundle and p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"
+	    + "where p.substance_prefix =? and p.substance_uuid =unhex(?) and p.idbundle=?";
 
     private static String sql_final = "select p.document_prefix,hex(p.document_uuid) u,\n"
 	    + "p.topcategory,p.endpointcategory,guidance,params,reference,idresult,studyResultType,interpretation_result,\n"
 	    + "e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint,e.copied,e.deleted,e.remarks\n"
 	    + "from bundle_final_protocolapplication p\n"
-	    + "join bundle_final_experiment e on p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"
-	    + "where p.idbundle=e.idbundle and p.substance_prefix =? and p.substance_uuid =unhex(?) and p.idbundle=?";
+	    + "left join bundle_final_experiment e on p.idbundle=e.idbundle and p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"
+	    + "where p.substance_prefix =? and p.substance_uuid =unhex(?) and p.idbundle=?";
 
     
     public ReadEffectRecordByBundleMatrix(SubstanceEndpointsBundle bundle, _matrix matrix) {

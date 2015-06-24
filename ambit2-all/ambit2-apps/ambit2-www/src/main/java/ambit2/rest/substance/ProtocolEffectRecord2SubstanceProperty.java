@@ -106,7 +106,8 @@ public class ProtocolEffectRecord2SubstanceProperty implements
     public SubstanceProperty process(ProtocolEffectRecord<String, IParams, String> detail) throws Exception {
 
 	SubstanceProperty key = new SubstanceProperty(detail.getProtocol().getTopCategory(), detail.getProtocol()
-		.getCategory(), detail.getEndpoint(), detail.getUnit(), getReference(detail));
+		.getCategory(), detail.getEndpoint()==null?"interpretation_result":detail.getEndpoint(), detail.getUnit(), getReference(detail));
+	
 	key.setExtendedURI(true);
 	key.setIdentifier(detail.getSampleID());
 	key.setAnnotations(conditions2annotations(detail));
