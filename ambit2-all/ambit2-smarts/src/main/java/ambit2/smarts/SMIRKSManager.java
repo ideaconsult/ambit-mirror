@@ -298,6 +298,33 @@ public class SMIRKSManager {
 
 	return (fragment);
     }
+    
+    public boolean matchReaction(SMIRKSReaction reaction, IAtomContainer targetReactants, IAtomContainer targetProducts)
+    {
+    	//Match reactants
+    	SmartsParser.prepareTargetForSMARTSSearch(reaction.reactantFlags, targetReactants);
+    	if (reaction.reactantFlags.hasRecursiveSmarts)
+    	    mapRecursiveAtomsAgainstTarget(reaction.reactantRecursiveAtoms, targetReactants);
+    	isoTester.setQuery(reaction.reactant);    	
+    	
+    	boolean res = isoTester.hasIsomorphism(targetReactants);
+    	if (!res)
+    		return false;
+    	
+    	//Match products
+    	SmartsParser.prepareTargetForSMARTSSearch(reaction.productFlags, targetProducts);
+    	if (reaction.productFlags.hasRecursiveSmarts)
+    	    mapRecursiveAtomsAgainstTarget(reaction.productRecursiveAtoms, targetProducts);
+    	isoTester.setQuery(reaction.product);    	
+    	
+    	res = isoTester.hasIsomorphism(targetProducts);
+    	if (!res)
+    		return false;
+    	
+    	
+    	return true;
+    }
+    
 
     public boolean applyTransformation(IAtomContainer target, SMIRKSReaction reaction) throws Exception {
 	return applyTransformation(target, null, reaction);
