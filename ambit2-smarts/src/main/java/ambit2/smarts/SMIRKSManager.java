@@ -9,6 +9,7 @@ import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
@@ -299,8 +300,41 @@ public class SMIRKSManager {
 	return (fragment);
     }
     
-    public boolean matchReaction(SMIRKSReaction reaction, IAtomContainer targetReactants, IAtomContainer targetProducts)
+    /**
+     * 
+     * @param reaction - this must be a valid SMIRKSReaction object created by parsing a valid SMIRKS expression
+     * @param targetReactants - the target reactants represented as a single atom container
+     * @param targetProducts - the target products represented as a single atom container
+     * @param tagetAgents - the target agents may null (not specified)- in this case the agents are not matched if
+     * @return true if reaction is matched against the targets
+     * 
+     * All targets (reactants, products, agents) may be fragmented e.g. to represent several molecules/fragments
+     * 
+     */
+    public boolean matchReaction(SMIRKSReaction reaction, 
+    						IAtomContainer targetReactants, 
+    						IAtomContainer targetProducts, 
+    						IAtomContainer targetAgents)
     {
+    	if (targetReactants == null)
+    		return false;
+    	if (targetProducts == null)
+    		return false;
+    	
+    	//Check for multiple fragments within reactants, products or agents
+    	if (reaction.reactants.size() > 1 || reaction.products.size() > 1 || 
+    			(reaction.agents.size() > 1 && targetAgents != null) )
+    	{
+    		IAtomContainerSet reactFrags = ConnectivityChecker.partitionIntoMolecules(targetReactants);
+    		IAtomContainerSet prodFrags = ConnectivityChecker.partitionIntoMolecules(targetProducts);
+    		IAtomContainerSet agentFrags = null;
+    		if (targetAgents != null)
+    			agentFrags = ConnectivityChecker.partitionIntoMolecules(targetAgents);
+    		
+    		//Calling this function to check the component level grouping
+    		return matchReaction(reaction, reactFrags, prodFrags, agentFrags);
+    	}
+    	
     	//Match reactants
     	SmartsParser.prepareTargetForSMARTSSearch(reaction.reactantFlags, targetReactants);
     	if (reaction.reactantFlags.hasRecursiveSmarts)
@@ -321,8 +355,33 @@ public class SMIRKSManager {
     	if (!res)
     		return false;
     	
+    	//Match agents
+    	if (targetAgents != null)
+    	{
+    		//TODO
+    	}
+    	
     	
     	return true;
+    }
+    
+    /**
+     * 
+     * @param reaction
+     * @param targetReactants
+     * @param targetProducts
+     * @param tagetAgents
+     * @return true if reaction is matched against the targets
+     * 
+     * This function check component level grouping if specified within the SMIRKS definition
+     */
+    public boolean matchReaction(SMIRKSReaction reaction, 
+    					IAtomContainerSet targetReactants, 
+    					IAtomContainerSet targetProducts, 
+    					IAtomContainerSet tagetAgents)
+    {
+    	//TODO
+    	return false;
     }
     
 
