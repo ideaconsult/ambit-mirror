@@ -380,7 +380,16 @@ public class SMIRKSManager {
     					IAtomContainerSet targetProducts, 
     					IAtomContainerSet tagetAgents)
     {
-    	//TODO
+
+    	//Match reactants
+    	for (int i = 0; i < targetReactants.getAtomContainerCount(); i++)
+    	{	
+    		SmartsParser.prepareTargetForSMARTSSearch(reaction.reactantFlags, targetReactants.getAtomContainer(i));
+    		if (reaction.reactantFlags.hasRecursiveSmarts)
+    			mapRecursiveAtomsAgainstTarget(reaction.reactantRecursiveAtoms, targetReactants.getAtomContainer(i));
+    	}
+    	matchCLG(reaction.reactants, reaction.reactantCLG, targetReactants);
+    	
     	return false;
     }
     
@@ -937,6 +946,99 @@ public class SMIRKSManager {
 		recursiveAtoms.get(i).recSmartsMatches.add(v);
 	    }
 	}
+    }
+    
+    protected boolean matchCLG(List<IQueryAtomContainer> queryFragments, 
+    							List<Integer> queryCLG,
+    							IAtomContainerSet targetComponents)
+    {
+    	int maxCLG = 0;
+    	for (int i = 0; i < queryCLG.size(); i++)
+    	{	
+    		if (maxCLG <  queryCLG.get(i))
+    			maxCLG =  queryCLG.get(i);
+    	}	
+    	
+    	if (maxCLG == 0)
+    	{
+    		//No component level grouping is specified
+    		//i.e. there are no zero level brackets and each fragment maps anywhere
+    		for (int i = 0; i < queryFragments.size(); i++)
+    		{
+    			isoTester.setQuery(queryFragments.get(i));    	
+    	    	boolean FlagMatch = false;
+    	    	for (int k = 0; k < targetComponents.getAtomContainerCount(); k++)
+    	    	{
+    	    		IAtomContainer tComp = targetComponents.getAtomContainer(k);
+    	    		if (isoTester.hasIsomorphism(tComp))
+    	    		{
+    	    			FlagMatch = true;
+    	    			break;
+    	    		}
+    	    	}
+    	    	
+    	    	if (!FlagMatch)
+    	    		return false;  //current query fragment is not matched against any of the target components
+    		}
+    		
+    		//All query fragments are matched against at least one target component 
+    		return true;
+    	}
+    	
+    	//Simple preliminary check
+    	if (targetComponents.getAtomContainerCount() < maxCLG)
+    		return false; //Insufficient number of target components   
+    	
+    	List<Integer> queryCLG0List = new ArrayList<Integer>();
+    	
+		//The query fragments which are not in a zero level SMARTS brackets (component/CLG number = 0) are searched 
+		//against the "whole target" i.e. to found it at least in on the of the target components
+    	for (int i = 0; i < queryFragments.size(); i++)
+		{
+    		if (queryCLG.get(i) == 0)
+    		{
+    			isoTester.setQuery(queryFragments.get(i));    	
+    	    	boolean FlagMatch = false;
+    	    	for (int k = 0; k < targetComponents.getAtomContainerCount(); k++)
+    	    	{
+    	    		IAtomContainer tComp = targetComponents.getAtomContainer(k);
+    	    		if (isoTester.hasIsomorphism(tComp))
+    	    		{
+    	    			FlagMatch = true;
+    	    			break;
+    	    		}
+    	    	}
+    	    	
+    	    	if (!FlagMatch)
+    	    		return false;  //current query component is not matched against any of the target components
+    		}
+    		else
+    		{
+    			queryCLG0List.add(new Integer(i)); 
+    		}
+		}
+    	
+    	//Setting component mapping object
+    	ComponentMapping compMapping = new ComponentMapping();
+    	compMapping.fragMaps = new boolean[queryCLG0List.size()][targetComponents.getAtomContainerCount()];
+    	compMapping.components = new int[queryCLG0List.size()];
+		
+		//Each query fragment/component which is in a CLG with number > 0 is searched individually against
+		//each target component
+		for (int i = 0; i < queryCLG0List.size(); i++)
+		{
+			int queryCompNum = queryCLG0List.get(i);
+			compMapping.components[i] = queryCLG.get(queryCompNum);
+			isoTester.setQuery(queryFragments.get(queryCompNum)); 
+			
+			for (int j = 0; j < targetComponents.getAtomContainerCount(); j++)
+			{	
+				IAtomContainer comp_j = targetComponents.getAtomContainer(j);
+				compMapping.fragMaps[i][j] = isoTester.hasIsomorphism(comp_j);
+			}	
+		}
+    	
+    	return compMapping.checkComponentMapings();
     }
 
     // Helper functions
