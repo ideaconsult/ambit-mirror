@@ -309,6 +309,7 @@ public class SMIRKSManager {
      * @return true if reaction is matched against the targets
      * 
      * All targets (reactants, products, agents) may be fragmented e.g. to represent several molecules/fragments
+     * This function check component level grouping if specified within the SMIRKS definition
      * 
      */
     public boolean matchReaction(SMIRKSReaction reaction, 
@@ -378,7 +379,7 @@ public class SMIRKSManager {
     public boolean matchReaction(SMIRKSReaction reaction, 
     					IAtomContainerSet targetReactants, 
     					IAtomContainerSet targetProducts, 
-    					IAtomContainerSet tagetAgents)
+    					IAtomContainerSet targetAgents)
     {
 
     	//Match reactants
@@ -388,9 +389,28 @@ public class SMIRKSManager {
     		if (reaction.reactantFlags.hasRecursiveSmarts)
     			mapRecursiveAtomsAgainstTarget(reaction.reactantRecursiveAtoms, targetReactants.getAtomContainer(i));
     	}
-    	matchCLG(reaction.reactants, reaction.reactantCLG, targetReactants);
+    	boolean res = matchCLG(reaction.reactants, reaction.reactantCLG, targetReactants);
+    	if (!res)
+    		return false;
     	
-    	return false;
+    	//Match products
+    	for (int i = 0; i < targetProducts.getAtomContainerCount(); i++)
+    	{	
+    		SmartsParser.prepareTargetForSMARTSSearch(reaction.productFlags, targetProducts.getAtomContainer(i));
+    		if (reaction.productFlags.hasRecursiveSmarts)
+    			mapRecursiveAtomsAgainstTarget(reaction.productRecursiveAtoms, targetProducts.getAtomContainer(i));
+    	}
+    	res = matchCLG(reaction.products, reaction.productsCLG, targetProducts);
+    	if (!res)
+    		return false;
+    	
+    	
+    	if (targetAgents != null)
+    	{
+    		//TODO
+    	}
+    	
+    	return true;
     }
     
 
