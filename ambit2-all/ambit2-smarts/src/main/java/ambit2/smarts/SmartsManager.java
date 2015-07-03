@@ -362,6 +362,15 @@ public class SmartsManager
 		System.out.println("---------------------------");
 	}
 	
+	String combToString(int[] c)
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < c.length; i++)
+			sb.append(" " + c[i]);
+		return sb.toString();
+	}
+	
+	
 	boolean checkComponentMapings()
 	{
 		//Combination is defined as an array a[] where:
@@ -380,7 +389,10 @@ public class SmartsManager
 			resetCombination(a);
 			a[0] = k;
 			if (setComponentInCombination(0,a) != null)
+			{	
 				comb.push(a);
+			}	
+				
 		}					
 		boolean compMapResult = false;
 		
@@ -412,18 +424,46 @@ public class SmartsManager
 				continue;
 			int newC[] = a.clone();			
 			newC[n] = k;
-			if (setComponentInCombination(n,newC) != null)
-				comb.push(newC);
+			if (checkComponentInCombination(n,newC))
+				if (setComponentInCombination(n,newC) != null)
+				{	
+					comb.push(newC);
+				}	
 		}
 		
 		return(false);
+	}
+	
+	boolean checkComponentInCombination(int n, int a[])
+	{
+		//Checking all fragments 0,1,...,n-1
+		//If fragment #i is in the same component as fragment #n then
+		//the matched target components must be the same (a[i] = a[n])
+		//Also
+		//If fragments #i and #n are in different components then the 
+		//corresponding target components must be different (a[i] != a[n]) 
+		
+		for (int i = 0; i < n; i++)
+		{	
+			if(components[i] == components[n])
+			{	
+				if (a[i] != a[n])
+					return false;
+			}
+			else
+			{
+				if (a[i] == a[n])
+					return false;
+			}
+		}	
+		return true;
 	}
 	
 	int[] setComponentInCombination(int n, int a[])
 	{
 		//All fragments that are in the component of n-fragment
 		//must to be mapped onto target component a[n] as well
-		//If NOT, null pointer  is returned		
+		//If NOT, null pointer  is returned
 		for (int i = n+1; i < components.length; i++)
 		{	
 			if(components[i] == components[n])
