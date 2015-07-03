@@ -57,11 +57,39 @@ public class ComponentMapping
 				continue;
 			int newC[] = a.clone();			
 			newC[n] = k;
-			if (setComponentInCombination(n,newC) != null)
-				comb.push(newC);
+			if (checkComponentInCombination(n,newC))
+				if (setComponentInCombination(n,newC) != null)
+				{	
+					comb.push(newC);
+				}	
 		}
 		
 		return(false);
+	}
+	
+	protected boolean checkComponentInCombination(int n, int a[])
+	{
+		//Checking all fragments 0,1,...,n-1
+		//If fragment #i is in the same component as fragment #n then
+		//the matched target components must be the same (a[i] = a[n])
+		//Also
+		//If fragments #i and #n are in different components then the 
+		//corresponding target components must be different (a[i] != a[n]) 
+		
+		for (int i = 0; i < n; i++)
+		{	
+			if(components[i] == components[n])
+			{	
+				if (a[i] != a[n])
+					return false;
+			}
+			else
+			{
+				if (a[i] == a[n])
+					return false;
+			}
+		}	
+		return true;
 	}
 	
 	protected int[] setComponentInCombination(int n, int a[])

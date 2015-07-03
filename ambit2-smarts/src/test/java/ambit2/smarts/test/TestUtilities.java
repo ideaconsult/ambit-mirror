@@ -2526,7 +2526,9 @@ public class TestUtilities {
 
 		// tu.testExpliticHToImplicit("CCC=C");
 		
-		tu.testSmartsSearchAtPos("c", "Cc1ccccc1", 1);
+		//tu.testSmartsSearchAtPos("c", "Cc1ccccc1", 1);
+		
+		 tu.testSmartsManagerBoolSearch("(CC.O.N)","NCCO.Cl.NCO");
 
 	}
 
