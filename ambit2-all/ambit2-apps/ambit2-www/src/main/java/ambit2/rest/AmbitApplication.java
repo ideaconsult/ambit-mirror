@@ -1076,7 +1076,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		return "war:///META-INF";
 	    }
 	},
-	images, jmol, jme, jquery, style, ui_editor {
+	images, jmol, jme, jquery, style, report, ui_editor {
 	    @Override
 	    public String getPath() {
 		return "/ui/png";

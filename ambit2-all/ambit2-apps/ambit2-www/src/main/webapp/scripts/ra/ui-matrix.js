@@ -424,7 +424,6 @@ var jToxBundle = {
             var content = this.content[0];
             jToxEndpoint.linkEditors(self.matrixKit, content, { category: parse.category, top: parse.topcategory, onchange: endSetValue, conditions: true });
             $('input[type=button]', content).on('click', function (){ addFeature(data, featureId, featureJson, jel[0]); box.close();});
-            console.log(content.innerHTML);
           };
           new jBox('Modal', boxOptions).open();
         }
@@ -580,6 +579,7 @@ var jToxBundle = {
             self.bundleSummary['matrix/final']++;
             self.edit.matrixEditable = false;
             self.matrixKit.query(self.bundleUri + '/matrix/final');
+            self.progressTabs();
           }
         });
       });
@@ -742,7 +742,134 @@ var jToxBundle = {
 
     var self = this;
 
-    ccLib.fillTree(panel, self.bundle);
+    if (!$(panel).hasClass('initialized')) {
+
+      ccLib.fillTree(panel, self.bundle);
+
+      $('#generate-doc').on('click', function(){
+        var loadFile = function(url, callback){
+          JSZipUtils.getBinaryContent(url, callback);
+        }
+        loadFile("../report/assessment-report.docx", function(err, content){
+          if (err) { throw err };
+          var doc = new Docxgen(content);
+
+          var data = $.extend(true, {}, self.bundle);
+          data.created = formatDate(self.bundle.created);
+          data.updated = formatDate(self.bundle.updated);
+          data.structures = [];
+
+          var structuresFixRows = $('#jtox-report-query .jtox-ds-fixed tbody tr');
+          var structuresVarRows = $('#jtox-report-query .jtox-ds-variable tbody tr');
+          structuresFixRows.each(function(index){
+            var structure = {}, fr = $(this), vr = $(structuresVarRows[index]);
+            structure.tag = fr.find('td:first-child button.active').text();
+            var cells = vr.find('td:not(.jtox-hidden)');
+            structure.casrn = $(cells[0]).text();
+            structure.ecnum = $(cells[1]).text();
+            structure.names = $(cells[2]).text();
+            structure.rationale = $(cells[3]).find('textarea').val();
+            structure.substances = [];
+            data.structures.push(structure);
+          });
+
+          var substanceContainers = $('#jtox-report-substance-query .jtox-substance');
+          substanceContainers.each(function(index){
+            var structure = data.structures[index],
+                substanceRows = $(this).find('tbody tr');
+            substanceRows.each(function(i){
+              var cells = $(this).find('td'),
+                  substance = {};
+              substance.i = i + 1;
+              substance.name = $(cells[1]).text();
+              substance.uuid = $(cells[2]).text();
+              substance.type = $(cells[3]).text();
+              substance.pubname = $(cells[4]).text();
+              substance.refuuid = $(cells[5]).text();
+              substance.owner = $(cells[6]).text();
+              substance.info = $(cells[7]).text();
+              substance.contained = $(cells[8]).text();
+              structure.substances.push(substance);
+            });
+          });
+
+          data.matrix = [];
+          var matrixRows = $('#jtox-report-matrix .jtox-ds-fixed .dataTable > tbody > tr');
+          matrixRows.each(function(){
+            var rowData = {};
+            var cells = $(this).find('> td:not(.jtox-hidden)');
+            rowData.cas = $(cells[1]).text();
+            rowData.substancename = $(cells[2]).text();
+            rowData.i5uuid = $(cells[3]).text();
+            rowData.datasource = $(cells[4]).text();
+            rowData.tag = $(cells[5]).text();
+            rowData.constituentname = $(cells[7]).text();
+            rowData.content = $(cells[8]).text();
+            rowData.containedas = $(cells[9]).text();
+            data.matrix.push(rowData);
+          });
+
+          var structuresCount = data.matrix.length;
+          var groups = Math.ceil(structuresCount/3);
+
+          data.dataMatrix = [];
+          var structureRows = $('#jtox-report-final thead tr');
+          var dataRows = $('#jtox-report-final tbody tr');
+          var tagCells = $(structureRows[0]).find('th');
+          var nameCells = $(structureRows[1]).find('th');
+          var casCells = $(structureRows[2]).find('th');
+          for (var i = 0; i < groups; i++) {
+            var dataGroup = {
+              tag1: '',
+              tag2: '',
+              tag3: '',
+              name1: '',
+              name2: '',
+              name3: '',
+              cas1: '',
+              cas2: '',
+              cas3: '',
+              data: []
+            };
+            for (var c = 1, cl = Math.min(3, tagCells.length - 3*i); c <= cl; c++) {
+              dataGroup['tag' + c] = $(tagCells[3*i + c]).text();
+            }
+            for (var c = 1, cl = Math.min(3, nameCells.length - 3*i); c <= cl; c++) {
+              dataGroup['name' + c] = $(nameCells[3*i + c]).text();
+            }
+            for (var c = 1, cl = Math.min(3, casCells.length - 3*i); c <= cl; c++) {
+              dataGroup['cas' + c] = $(casCells[3*i + c]).text();
+            }
+            dataRows.each(function(){
+              var cells = $(this).find('th, td');
+              var row = { title: '', value1: '', value2: '', value3: ''};
+              row.title = $(cells[0]).text();
+              for (var c = 1, cl = Math.min(3, nameCells.length - 3*i); c <= cl; c++) {
+                var parts = [];
+                if (cells[3*i + c] !== undefined) {
+                  $(cells[3*i + c].childNodes).each(function(){
+                    parts.push( $(this).text() );
+                  });
+                }
+                row['value' + c] = parts.join('\n\r');
+              }
+              dataGroup.data.push(row);
+            });
+            data.dataMatrix.push(dataGroup);
+          }
+
+          //console.log(data);
+
+          doc.setData( data ); //set the templateVariables
+          doc.render(); //apply them (replace all occurences of {first_name} by Hipp, ...)
+          var output = doc.getZip().generate({type:"blob"}); //Output the document using Data-URI
+          saveAs(output, "report.docx");
+        });
+      });
+
+      $(panel).addClass('initialized');
+
+    }
 
     if (!self.reportQueryKit) {
       self.reportQueryKit = jT.kit($('#jtox-report-query')[0]);
@@ -847,6 +974,7 @@ var jToxBundle = {
   },
 
   prepareSubstanceKit: function(rootEl){
+    var self = this;
 
     var kit = jT.kit(rootEl);
 
@@ -924,8 +1052,8 @@ var jToxBundle = {
             var postVal = '', postValParts = [], parameters = [], conditions = [];
             for (var i = 0, l = f.annotation.length; i < l; i++){
               var a = f.annotation[i];
-              if ( a.type == 'conditions' && ccLib.getJsonValue(config, 'conditions.' + a.p.toLowerCase() + '.inMatrix') == true ) {
-                var t = ccLib.getJsonValue(config, 'conditions.' + a.p.toLowerCase() + '.sTitle') || a.p;
+              if ( a.type == 'conditions' && ccLib.getJsonValue(config, 'conditions["' + a.p.toLowerCase() + '"].inMatrix') == true ) {
+                var t = ccLib.getJsonValue(config, 'conditions["' + a.p.toLowerCase() + '"].sTitle') || a.p;
                 conditions.push(t + ' = ' + a.o);
               }
               else if (a.type == 'parameters') {
@@ -971,8 +1099,9 @@ var jToxBundle = {
             }
           }
 
-          if (self.edit.matrixEditable)
+          if (self.edit.matrixEditable) {
             html += '<span class="ui-icon ui-icon-circle-plus edit-popup" data-feature="' + theId + '"></span>';
+          }
           return  html;
         };
       };
@@ -1045,9 +1174,23 @@ var jToxBundle = {
     conf.baseFeatures['#IdRow'] = { used: true, basic: true, data: "number", column: { "sClass": "center"}, render: function (data, type, full) {
       if (type != 'display')
         return data || 0;
+      var bInfo = full.bundles[self.bundleUri];
+      var tag = 'target'; // the default
+      if (!!bInfo && !!bInfo.tag) {
+        tag = bInfo.tag;
+      }
       var html = "&nbsp;-&nbsp;" + data + "&nbsp;-&nbsp;<br/>";
-      html += '<button type="button" class="ui-button ui-button-icon-only jtox-up"><span class="ui-icon ui-icon-triangle-1-n">up</span></button><br />' +
-              '<button type="button" class="ui-button ui-button-icon-only jtox-down"><span class="ui-icon ui-icon-triangle-1-s">down</span></button><br />'
+      if (self.edit.matrixEditable) {
+        html += '<button class="jt-toggle jtox-handler target' + ( (tag == 'target') ? ' active' : '') + '" data-tag="target" data-uri="' + full.compound.URI + '" data-handler="onTagSubstance" title="Select the substance as Target">T</button>' +
+            '<button class="jt-toggle jtox-handler source' + ( (tag == 'source') ? ' active' : '') + '" data-tag="source" data-uri="' + full.compound.URI + '" data-handler="onTagSubstance" title="Select the substance as Source">S</button>' +
+            '<button class="jt-toggle jtox-handler cm' + ( (tag == 'cm') ? ' active' : '') + '" data-tag="cm" data-uri="' + full.compound.URI + '" data-handler="onTagSubstance" title="Select the substance as Category Member">CM</button>';
+      }
+      else {
+        tag = (tag == 'cm') ? 'CM' : tag.substr(0,1).toUpperCase();
+        html += '<button class="jt-toggle active" disabled="true">' + tag + '</button>';
+      }
+      html += '<div><button type="button" class="ui-button ui-button-icon-only jtox-up"><span class="ui-icon ui-icon-triangle-1-n">up</span></button><br />' +
+              '<button type="button" class="ui-button ui-button-icon-only jtox-down"><span class="ui-icon ui-icon-triangle-1-s">down</span></button><br /></div>'
       return html;
     } };
 
@@ -1077,7 +1220,6 @@ var jToxBundle = {
     var featuresInitialized = false;
 
     matrixKit = new jToxCompound(rootEl, {
-      crossDomain: false,
       rememberChecks: true,
       tabsFolded: true,
       showDiagrams: true,
@@ -1144,6 +1286,9 @@ var jToxBundle = {
         self.bundle = bundle;
 
         ccLib.fillTree(self.createForm, bundle);
+
+        $('#status-' + bundle.status).prop('checked', true);
+
         self.starHighlight($('.data-stars-field div', self.createForm)[0], bundle.stars);
         self.createForm.stars.value = bundle.stars;
 
@@ -1263,6 +1408,23 @@ var jToxBundle = {
     });
   },
 
+  tagSubstance: function (uri, el) {
+    var self = this;
+    var activate = !$(el).hasClass('active');
+    if (activate) {
+      $(el).addClass('loading');
+      jT.service(self, self.bundleUri + '/substance', { method: 'PUT', data: { substance_uri: uri, command: 'add', tag : $(el).data('tag')} }, function (result) {
+        $(el.parentNode).find('button.jt-toggle').removeClass('active');
+        $(el).removeClass('loading').addClass('active');
+        if (!result)
+          el.checked = !el.checked; // i.e. revert
+        else {
+          console.log("Substance [" + uri + "] tagged " + $(el).data('tag'));
+        }
+      });
+    }
+  },
+
   selectEndpoint: function (topcategory, endpoint, el) {
     var self = this;
     $(el).addClass('loading');
@@ -1300,6 +1462,10 @@ function onBrowserFilled(dataset) {
 
 function onSelectSubstance(e) {
   jToxBundle.selectSubstance(this.value, this);
+}
+
+function onTagSubstance(e) {
+  jToxBundle.tagSubstance($(this).data('uri'), this);
 }
 
 function onSelectEndpoint(e) {
@@ -1342,7 +1508,6 @@ function preDetailedRow(index, cell) {
     $cell.append(div);
 
     new jToxSubstance(div, {
-      crossDomain: false,
       showDiagrams: true,
       embedComposition: true,
       substanceUri: uri,
@@ -1374,14 +1539,14 @@ function onDetailedRow(row, data, event) {
   var el = $('.jtox-details-composition', row)[0];
   if (!el)
     return;
-  var uri = this.settings.baseUrl + '/substance?type=related&addDummySubstance=true&compound_uri=' + encodeURIComponent(data.compound.URI);
+  var uri = this.settings.baseUrl + '/substance?type=related&compound_uri=' + encodeURIComponent(data.compound.URI);
   el = $(el).parents('table')[0];
   el = el.parentNode;
   $(el).empty();
   $(el).addClass('paddingless');
   var div = document.createElement('div');
   el.appendChild(div);
-  new jToxSubstance(div, $.extend(true, {}, this.settings, {crossDomain: false, selectionHandler: null, substanceUri: uri, showControls: false, onLoaded: null, onDetails: function (root, data, element) {
+  new jToxSubstance(div, $.extend(true, {}, this.settings, {selectionHandler: null, substanceUri: uri, showControls: false, onLoaded: null, onDetails: function (root, data, element) {
     new jToxStudy(root, $.extend({}, this.settings, {substanceUri: data.URI}));
   } } ) );
 }

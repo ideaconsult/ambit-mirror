@@ -4,7 +4,6 @@
 
 	<link rel="stylesheet" href="${ambit_root}/style/jBox.css" type="text/css">
 	<link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
-	<link rel="stylesheet" href="${ambit_root}/style/ketcher.css"/>
 	<link rel="stylesheet" href="${ambit_root}/style/ra/ui-matrix.css"/>
 	
   <script src="${ambit_root}/scripts/ra/i5enums.js"></script>
@@ -14,15 +13,24 @@
   <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
   <script type='text/javascript'  src="${ambit_root}/jquery/jquery.tokenize.js"></script>
   <script type='text/javascript' src='${ambit_root}/scripts/jBox.js'></script>
-  
+
   <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
-  <script type='text/javascript' src='${ambit_root}/scripts/ketcher.js'></script>
   
-    <script src="${ambit_root}/scripts/ra/ui-matrix.js"></script>
+  <script src="${ambit_root}/scripts/ra/ui-matrix.js"></script>
   <script src="${ambit_root}/scripts/ra/config-matrix.js"></script>
   
- <script type='text/javascript' src='${ambit_root}/scripts/config/ce.js'></script>
- <script type='text/javascript' src='${ambit_root}/scripts/config/toxcast.js'></script>
+  <#if assessment_report??>
+  	<script src="${ambit_root}/scripts/ra/docxgen.min.js"></script>
+  	<script src="${ambit_root}/scripts/ra/FileSaver.min.js"></script>
+  	<script src="${ambit_root}/scripts/ra/jszip-utils.js"></script>
+  <#else>
+	<link rel="stylesheet" href="${ambit_root}/style/ketcher.css"/>
+  	<script type='text/javascript' src='${ambit_root}/scripts/ketcher.js'></script>
+  </#if>
+	
+
+  <script type='text/javascript' src='${ambit_root}/scripts/config/ce.js'></script>
+  <script type='text/javascript' src='${ambit_root}/scripts/config/toxcast.js'></script>
   <script type='text/javascript' src='${ambit_root}/scripts/config-study.js'></script>
 
   
@@ -31,14 +39,17 @@
 	$(document).ready(function() {
         jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle?page=0&pagesize=100" title="Assessments">All assessments</a></li>');
         <#if bundleid??>
-        jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${bundleid}" title="Assessment">This assessment</a></li>');
-		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${bundleid}/version" title="Assessment versions">Versions</a></li>');        
+    	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/assessment?bundle_uri=${ambit_root}/bundle/${bundleid}" title="Assessment">This assessment</a></li>');        
+        <#if assessment_report??>
+        	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/assessment_report?bundle_uri=${ambit_root}/bundle/${bundleid}" title="Report">Report</a></li>');
+        </#if>
         </#if>
         loadHelp("${ambit_root}","ra");
 	});
 	
 	</script>
   
+
 </head>
 <body>
 
@@ -57,10 +68,16 @@
 			</#if>	
 	  >
     <ul>
-      <li><a href="#jtox-identifiers">Assessment identifier</a></li>
-      <li><a href="#jtox-structures">Collect structures</a></li>
-      <li><a href="#jtox-endpoints">Endpoint data used</a></li>
-      <li><a href="#jtox-matrix">Assessment details</a></li>
+  	<li><a href="#jtox-identifiers" >Assessment identifier</a></li>    
+      <#if assessment_report??>
+      	<li><a href="#jtox-structures" style="display:none;">Collect structures</a></li>
+      	<li><a href="#jtox-endpoints" style="display:none;">Endpoint data used</a></li>
+      	<li><a href="#jtox-matrix" style="display:none;">Assessment details</a></li>      
+      <#else>
+      	<li><a href="#jtox-structures">Collect structures</a></li>
+      	<li><a href="#jtox-endpoints">Endpoint data used</a></li>
+      	<li><a href="#jtox-matrix">Assessment details</a></li>
+      </#if>
       <li><a href="#jtox-report">Report</a></li>
     </ul>
     <div id="jtox-identifiers" data-action="onIdentifiers">
@@ -81,12 +98,13 @@
 	          <tr><th class="right size-third">Version start date <a href='#' class='chelp a_version_date'>?</a>:</th><td class="data-field" data-field="created" data-format="formatDate"></td></tr>
 	          <tr><th class="right size-third">Version last modified on<a href='#' class='chelp a_version_date'>?</a>:</th><td class="data-field" data-field="updated" data-format="formatDate"></td></tr>
 	          <tr>
-	            <th class="right size-third">Published <a href='#' class='chelp a_published'>?</a>:</th>
+	            <th class="right size-third">Status <a href='#' class='chelp a_published'>?</a>:</th>
 	            <td>
-	              <select name="status" class="data-field" data-field="status">
-	                <option value="draft">No</option>
-	                <option value="published">Yes</option>
-	              </select>
+	            
+	            <input type="radio" name="status" value="draft" id="status-draft"><label for="status-draft">Draft</label>
+	            <input type="radio" name="status" value="published" id="status-published"><label for="status-published">Published</label>
+	            <input type="radio" name="status" value="archived" id="status-archived"><label for="status-archived">Archived</label>
+	                
 	            </td>
 	            </tr>
           
@@ -129,7 +147,15 @@
 
 	          <tr><th class="right size-third">Version start date<a href='#' class='chelp a_version_date'>?</a>:</th><td class="data-field" data-field="created" data-format="formatDate"></td></tr>
 	          <tr><th class="right size-third">Version last modified on<a href='#' class='chelp a_version_date'>?</a>:</th><td class="data-field" data-field="updated" data-format="formatDate"></td></tr>
-	          <tr><th class="right size-third">Published status<a href='#' class='chelp a_published_status'>?</a>:</th><td class="data-field" data-field="status"></td></tr>	          
+	          <tr><th class="right size-third">Status<a href='#' class='chelp a_published_status'>?</a>:</th>
+	          <td class="data-field" >
+	          
+	          <input type="radio" name="status" value="draft" id="status-draft"><label for="status-draft">Draft</label>
+	            <input type="radio" name="status" value="published" id="status-published"><label for="status-published">Published</label>
+	            <input type="radio" name="status" value="archived" id="status-archived"><label for="status-archived">Archived</label>
+	            
+	          </td>
+	          </tr>	          
           
 	            <tr><th class="right size-third">Source<a href='#' class='chelp a_source'>?</a>:</th><td><input class="data-field first-time validate" data-field="seeAlso" name="source"/></td></tr>
 	            <tr><th class="right size-third">Source URL<a href='#' class='chelp a_source'>?</a>:</th><td><input class="data-field first-time validate" data-field="source" name="url"/></td></tr>	       	
@@ -164,7 +190,7 @@
 			  <input type="radio" id="structcollect" name="structaction" checked="checked"><label for="structcollect">Collect structures</label></input>
 			  <input type="radio" id="structlist" name="structaction"><label for="structlist">List collected</label></input>
 			</div>
-      <div id="jtox-query" class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="jTConfigurator" data-initial-query="false">
+      <div id="jtox-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false">
         <div class="jtox-foldable folded">
           <div class="title"><p class="data-field" data-field="title">Search</p></div>
           <div class="content">
@@ -186,7 +212,7 @@
             <div class="float-right">
               <button type="button" id="structures-expand-all">Expand all</button><button type="button" id="structures-collapse-all">Collapse all</button>
             </div>
-            <div id="jtox-substance-query" class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="jTConfigurator" data-initial-query="false">
+            <div id="jtox-substance-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false">
               <div id="substance-browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-pre-details="preDetailedRow" data-show-diagrams="true"></div>
             </div>
           </div>
@@ -212,7 +238,9 @@
 			<div class="jtox-toolkit" data-kit="compound" data-manual-init="true"></div>
     </div>
     <div id="jtox-report" class="jtox-report" data-action="onReport">
-
+    
+      <#if assessment_report??>   
+      	<button type="button" id="generate-doc">Download</button>
       <div id="jtox-report-cover">
         <h1>Ambit Assessment Report</h1>
         <h2 class="data-field" data-field="title">Category For Glymes</h2>
@@ -230,8 +258,8 @@
 
         <table class="dataTable">
           <thead>
-            <tr><th class="right size-third">Title:</th><td class="data-field" data-field="title"></td></tr>
-            <tr><th class="right size-third">Maintainer:</th><td class="data-field" data-field="maintainer"></td></tr>
+            <tr><th class="right size-third">Assessment title:</th><td class="data-field" data-field="title"></td></tr>
+            <tr><th class="right size-third">Owner:</th><td class="data-field" data-field="maintainer"></td></tr>
 
             <tr><th class="right top size-third">Purpose:</th><td class="data-field" data-field="description"></td></tr>
             <tr><th class="right size-third">Version:</th><td class="data-field" data-field="version">?.?</td></tr>
@@ -239,11 +267,9 @@
             <tr><th class="right size-third">Version start date:</th><td class="data-field" data-field="created" data-format="formatDate"></td></tr>
             <tr><th class="right size-third">Version last modified on:</th><td class="data-field" data-field="updated" data-format="formatDate"></td></tr>
             <tr><th class="right size-third">Published:</th><td class="data-field" data-field="status"></td></tr>
-            <tr><th class="right size-third">License:</th><td class="data-field" data-field="rights.URI"></td></tr>
-            <tr><th class="right size-third">Rights holder:</th><td class="data-field" data-field="rightsHolder"></td></tr>
-            <tr><th class="right size-third">Source:</th><td class="data-field" data-field="seeAlso"></td></tr>
-            <tr><th class="right size-third">Source URL:</th><td class="data-field" data-field="source"></td></tr>
-            <tr><th class="right size-third">Assessment:</th><td class="data-field" data-field="number"></td></tr>
+            <tr><th class="right size-third">Assessment code:</th><td class="data-field" data-field="seeAlso"></td></tr>
+            <tr><th class="right size-third">Assessment DocLink:</th><td class="data-field" data-field="source" data-format="formatLink"></td></tr>
+            <tr><th class="right size-third">Assessment ID:</th><td class="data-field" data-field="number"></td></tr>
           </thead>
         </table>
 
@@ -254,7 +280,7 @@
       <section id="jtox-report-structlist">
         <h2>List of structures for assessment</h2>
         <p>In the assessment, similar structures were selected from exact structure, substructure and/or similarity searches, or were added manually. The rationale for the selection is given in the table.</p>
-        <div id="jtox-report-query" class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="jTConfigurator" data-initial-query="false">
+        <div id="jtox-report-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false">
           <div id="browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-on-details="onDetailedRow" data-details-height="500px" data-show-diagrams="true" data-on-loaded="onBrowserFilled"></div>
         </div>
       </section>
@@ -262,7 +288,7 @@
       <section id="jtox-report-substances">
         <h2>List of substances related to the structures</h2>
         <p>In the following, for each structure listed in chapter 2, substances were selected and the rationale is given.</p>
-        <div id="jtox-report-substance-query" class="jtox-toolkit" data-kit="query" data-cross-domain="true" data-configuration="jTConfigurator" data-initial-query="false">
+        <div id="jtox-report-substance-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false">
           <div id="report-substance-browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-pre-details="preDetailedRow" data-show-diagrams="true" data-on-loaded="onReportSubstancesLoaded"></div>
         </div>
       </section>
@@ -280,8 +306,14 @@
         <div class="jtox-toolkit" data-manual-init="true"></div>
       </section>
 
-
     </div>
+    <#else>
+  	<#if bundleid??>
+  		<a href="${ambit_root}/ui/assessment_report?bundle_uri=${ambit_root}/bundle/${bundleid}">View and download the assessment report</a>
+  	</#if>
+  </#if>
+
+
   </div>
   <div class="jtox-template">
     <div id="info-box">

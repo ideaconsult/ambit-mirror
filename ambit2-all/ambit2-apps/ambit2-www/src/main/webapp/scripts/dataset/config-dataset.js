@@ -20,6 +20,9 @@ var config_dataset = {
 		}
   },
   "groups": createGroups,
+  "handlers": {
+    "runPredict": function (e) { runPredict(this); e.stopPropagation(); }
+  },
 	"columns": {
   	"dataset": {
     	'Info': { bVisible: false },
