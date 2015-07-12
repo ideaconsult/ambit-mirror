@@ -39,9 +39,12 @@
 	$(document).ready(function() {
         jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle?page=0&pagesize=100" title="Assessments">All assessments</a></li>');
         <#if bundleid??>
-    	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/assessment?bundle_uri=${ambit_root}/bundle/${bundleid}" title="Assessment">This assessment</a></li>');        
+    	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/assessment?bundle_uri=${ambit_root}/bundle/${bundleid}" title="Assessment">This assessment</a></li>');
+       
         <#if assessment_report??>
         	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/assessment_report?bundle_uri=${ambit_root}/bundle/${bundleid}" title="Report">Report</a></li>');
+		<#else
+	 	    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${bundleid}/version" title="Assessment versions">Versions</a></li>');        	
         </#if>
         </#if>
         loadHelp("${ambit_root}","ra");
