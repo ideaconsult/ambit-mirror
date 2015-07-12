@@ -127,6 +127,12 @@ public class UIResource extends FreeMarkerResource {
 		return "ra/ui-matrix";
 	    }
 	},
+	assessment_report {
+	    @Override
+	    public String getTemplateName() {
+		return "ra/ui-report";
+	    }
+	},	
 	assessment_copy {
 	    @Override
 	    public String getTemplateName() {

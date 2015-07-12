@@ -10,6 +10,7 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.base.facet.BundleRoleFacet;
 import ambit2.db.substance.AbstractReadSubstance;
 
 public class ReadSubstancesByBundle extends
@@ -82,6 +83,15 @@ public class ReadSubstancesByBundle extends
 					remarks.setEnabled(true);
 					record.setProperty(remarks, rs.getString("remarks"));
 				}
+			} else {
+				BundleRoleFacet facet = new BundleRoleFacet(null);
+				facet.setCount(1);
+				SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle();
+				bundle.setID(getFieldname().getID());
+				facet.setValue(bundle);
+				facet.setRemarks(rs.getString("remarks"));
+				facet.setTag(rs.getString("tag"));
+				record.addFacet(facet);
 			}
 		} catch (Exception x) {
 			throw new AmbitException(x);

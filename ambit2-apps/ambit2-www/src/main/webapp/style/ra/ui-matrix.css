@@ -23,6 +23,11 @@ strong {
   resize: none;
 }
 
+#jtox-bundle button.jt-toggle {
+  width: auto;
+  min-width: 24px;
+}
+
 #jtox-identifiers form div.actions {
 	margin-top: 15px;
 	font-size: 80%;
@@ -32,6 +37,19 @@ strong {
 #jtox-identifiers form input {
 	width: 100%;
 	border: 0px;
+}
+
+#jtox-identifiers form input[type="radio"],
+#jtox-identifiers form input[type="checkbox"] {
+  display: inline-block;
+  width: auto;
+  vertical-align: top;
+}
+
+#jtox-identifiers label {
+  display: inline-block;
+  font-weight: normal;
+  font-size: inherit;
 }
 
 #jtox-identifiers table th {
@@ -279,4 +297,160 @@ tr:last-child .jtox-down {
 
 .jtox-toolkit table.dataTable td.jtox-user-rights {
   overflow: visible !important;
+}
+
+
+
+#jtox-report {
+  counter-reset: section;
+}
+
+#jtox-report tbody th {
+  padding: 3px 10px;
+  font-weight: bold;
+  text-align: left;
+}
+
+#jtox-report .shortened {
+  width: auto;
+  max-width: none;
+  max-height: none;
+  white-space: normal;
+}
+
+#jtox-report textarea {
+  border: none;
+  height: 128px;
+  color: inherit;
+  background: none;
+}
+
+#jtox-report .jtox-up, #jtox-report .jtox-down {
+  display: none;
+}
+
+#jtox-report .ui-icon {
+  display: inline-block;
+}
+
+#jtox-report .jt-toggle {
+  display: none;
+}
+
+#jtox-report .jt-toggle.active {
+  display: inline-block;
+}
+
+
+section {
+  clear: both;
+}
+
+section h2:before {
+  counter-increment: section;
+  content: counter(section) ". ";
+}
+
+dl {
+  margin: 0;
+  padding: 0;
+}
+
+dt {
+  float: left;
+  clear: left;
+  width: 25%;
+}
+
+dd {
+  min-height: 1.4em;
+  margin-left: 26%;
+  overflow: hidden;
+}
+
+@media print {
+
+  * {
+    background: transparent !important;
+    color: #000 !important; /* Black prints faster: h5bp.com/s */
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  thead {
+    display: table-header-group; /* h5bp.com/t */
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img, table {
+    max-width: 100% !important;
+  }
+
+  @page {
+    margin: 2cm 1cm;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+
+  #jtox-bundle {
+    overflow: visible;
+    border: none;
+    background: none;
+  }
+
+  html, body, #jtox-bundle {
+    width: 100%;
+    height: auto !important;
+    background: none;
+  }
+
+  #jtox-bundle > div#jtox-report {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .ui-tabs-nav {
+    display: none;
+  }
+
+  #jtox-report > section {
+    page-break-before: always;
+  }
+
+  #jtox-report dl {
+    margin: 5cm 0;
+  }
+
+  #jtox-report table {
+    width: 100% !important;
+    table-layout: auto !important;
+  }
+
+  #jtox-report th, #jtox-report td {
+    width: auto !important;
+  }
+
+  #jtox-report-matrix .jtox-ds-variable {
+    display: none;
+  }
+
+  #jtox-report-final table {
+    table-layout: fixed !important;
+  }
+
 }
