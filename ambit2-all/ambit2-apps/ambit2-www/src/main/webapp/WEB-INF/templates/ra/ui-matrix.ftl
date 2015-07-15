@@ -43,7 +43,7 @@
        
         <#if assessment_report??>
         	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/assessment_report?bundle_uri=${ambit_root}/bundle/${bundleid}" title="Report">Report</a></li>');
-		<#else
+		<#else>
 	 	    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${bundleid}/version" title="Assessment versions">Versions</a></li>');        	
         </#if>
         </#if>
