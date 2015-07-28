@@ -127,6 +127,10 @@ public class ZipReader extends RawIteratingFolderReader {
 		dest.close();
 	    } catch (Exception x) {
 	    }
+	    try {
+			fos.close();
+		    } catch (Exception x) {
+		    }
 	}
 	if (total > TOOBIG) {
 	    throw new IllegalStateException("File being unzipped is huge.");
