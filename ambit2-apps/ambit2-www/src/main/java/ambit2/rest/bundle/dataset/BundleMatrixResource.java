@@ -33,7 +33,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.ProtocolEffectRecord;
 import ambit2.base.data.study.ProtocolEffectRecordMatrix;
@@ -162,43 +161,15 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 	    };
 	};
 	chain.add(compositionReader);
-	ReadChemIdentifiersByComposition qids = new ReadChemIdentifiersByComposition();
+	final ReadChemIdentifiersByComposition qids = new ReadChemIdentifiersByComposition();
 	MasterDetailsProcessor<SubstanceRecord, IStructureRecord, IQueryCondition> idsReader = new MasterDetailsProcessor<SubstanceRecord, IStructureRecord, IQueryCondition>(
 		qids) {
-	    /**
-		     * 
-		     */
-	    private static final long serialVersionUID = 8470730543950163672L;
 
-	    @Override
+			private static final long serialVersionUID = -2477753091402684075L;
+
+		@Override
 	    protected SubstanceRecord processDetail(SubstanceRecord target, IStructureRecord detail) throws Exception {
-		for (CompositionRelation r : target.getRelatedStructures())
-		    if (detail.getIdchemical() == r.getSecondStructure().getIdchemical()) {
-			for (Property p : detail.getProperties()) {
-			    r.getSecondStructure().setProperty(p, detail.getProperty(p));
-			}
-			if (target.getIdsubstance() == -1) {
-
-			    r.getRelation().setReal_lower("=");
-			    r.getRelation().setReal_lowervalue(100.0);
-			    r.getRelation().setReal_uppervalue(100.0);
-			    r.getRelation().setReal_upper("=");
-			    r.getRelation().setReal_unit("%");
-			    r.getRelation().setTypical("=");
-			    r.getRelation().setTypical_value(100.0);
-			    r.getRelation().setTypical_unit("%");
-
-			    for (Property p : detail.getProperties()) {
-				if (Property.opentox_Name.equals(p.getLabel())) {
-				    target.setProperty(new SubstancePublicName(), detail.getProperty(p));
-				} else if (Property.opentox_TradeName.equals(p.getLabel())) {
-				    target.setProperty(new SubstanceName(), detail.getProperty(p));
-				}
-			    }
-			}
-			break;
-		    }
-		return target;
+	    	return qids.processDetail(target, detail);
 	    }
 
 	    @Override

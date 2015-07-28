@@ -779,6 +779,16 @@
 							    "paramType": "path",
 							    "allowMultiple": false
 							},
+							{
+							    "name": "mergeDatasets",
+							    "description": "If true will include feature values representing endpoints",
+							    "required": false,
+							    "type": "boolean",
+							    "paramType": "query",
+							    "enum" : ["true","false"],
+							    "defaultvalue" : false,
+							    "allowMultiple": false
+							},							
 							<#include "/apidocs/parameters_page.ftl" >									
 			            ],
 			            "responseMessages": [

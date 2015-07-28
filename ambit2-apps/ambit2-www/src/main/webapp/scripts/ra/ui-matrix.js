@@ -598,7 +598,7 @@ var jToxBundle = {
     if (panId == 'xinitial') {
       $('.jtox-toolkit', panel).show();
       self.edit.matrixEditable = false;
-      queryUri = self.bundleUri + '/dataset';
+      queryUri = self.bundleUri + '/dataset?mergeDatasets=true';
     }
     else {
       var queryPath = (panId == 'xfinal') ? '/matrix/final' : '/matrix/working';
@@ -677,7 +677,7 @@ var jToxBundle = {
           }
         });
         $(checkAll).on('change', function (e) {
-          var qUri = "/query/study?bundle_uri=" + bUri;
+          var qUri = "/query/study?mergeDatasets=true&bundle_uri=" + bUri;
           if (!this.checked)
             qUri += "&selected=substances&filterbybundle=" + bUri;
           self.endpointKit.loadEndpoints(qUri);
