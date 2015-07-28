@@ -241,8 +241,10 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
     public Object processItem(IStructureRecord item) throws AmbitException {
 	try {
 	    Writer writer = getOutput();
-	    append2header(writer, item);
+
 	    writeHeader(writer);
+	    append2header(writer, item);
+	    
 	    int i = 0;
 	    String uri = getURI(item);
 

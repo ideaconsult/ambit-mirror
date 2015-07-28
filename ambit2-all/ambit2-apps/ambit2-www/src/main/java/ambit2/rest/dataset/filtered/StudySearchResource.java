@@ -5,6 +5,7 @@ import net.idea.modbcum.r.QueryReporter;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
@@ -17,6 +18,7 @@ import ambit2.rest.bundle.BundleStudyJSONReporter;
 public class StudySearchResource extends StatisticsResource<SubstanceByCategoryFacet, QueryCountProtocolApplications> {
 	public static final String resource = "/study";
 	protected SubstanceEndpointsBundle bundle = null;
+	protected boolean mergeDatasets = false;
 	public StudySearchResource() {
 		super();
 		mode = StatsMode.protocol_applications;
@@ -33,6 +35,14 @@ public class StudySearchResource extends StatisticsResource<SubstanceByCategoryF
 	@Override
 	protected QueryCountProtocolApplications createQuery(Context context,
 			Request request, Response response) throws ResourceException {
+		
+		try {
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			mergeDatasets = Boolean.parseBoolean(form
+					.getFirstValue("mergeDatasets"));
+		} catch (Exception x) {
+			mergeDatasets = false;
+		}		
 		Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(getParams());
 		if (bundleURI!=null) {
 			Integer idbundle = getIdBundle(bundleURI, request);
@@ -53,6 +63,6 @@ public class StudySearchResource extends StatisticsResource<SubstanceByCategoryF
 			if (((QueryCountProtocolApplications)queryObject).getBundle()!=null)
 				bundle = ((QueryCountProtocolApplications)queryObject).getBundle();
 		}
-		return new BundleStudyJSONReporter(request,jsonp,bundle);
+		return new BundleStudyJSONReporter(request,jsonp,bundle,mergeDatasets);
 	}
 }

@@ -46,7 +46,7 @@ public class BundleSubstanceStudyResource<Q extends IQueryRetrieval<SubstanceByC
 	}
 	@Override
 	protected QueryReporter createJSONReporter(Request request, String jsonp) {
-		return new BundleStudyJSONReporter(request,jsonp,bundle);
+		return new BundleStudyJSONReporter(request,jsonp,bundle,true);
 	}	
 	@Override
 	public void configureTemplateMap(Map<String, Object> map, Request request,
