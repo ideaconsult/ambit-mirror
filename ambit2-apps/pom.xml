@@ -6,7 +6,7 @@
 	<artifactId>ambit2-apps</artifactId>
 	<packaging>pom</packaging>
 	<name>Ambit2 applications</name>
-	<version>2.7.5-SNAPSHOT</version>
+	<version>2.7.6-SNAPSHOT</version>
 	<distributionManagement>
 		<!-- use the following if you're not using a snapshot version. -->
 		<repository>
@@ -28,11 +28,11 @@
 	<properties>
 		<net.idea.loom.version>1.0.10-SNAPSHOT</net.idea.loom.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<toxtree.version>2.6.15-SNAPSHOT</toxtree.version>
-		<ambit.version>2.7.5-SNAPSHOT</ambit.version>
+		<toxtree.version>2.6.16-SNAPSHOT</toxtree.version>
+		<ambit.version>2.7.6-SNAPSHOT</ambit.version>
 		<junit.version>4.8.1</junit.version>
 		<!-- https://github.com/ideaconsult/i5 -->
-		<i5.version>1.0.5-SNAPSHOT</i5.version>
+		<i5.version>1.0.6-SNAPSHOT</i5.version>
 		<restnet.version>1.0.9-SNAPSHOT</restnet.version>
 		<dbunit.version>2.4.9</dbunit.version>
 	</properties>
@@ -347,7 +347,9 @@
 		<!-- <module>ambit2-taglibs</module> <module>ambit2-i5rest</module> -->
 		<module>ambit2-user</module>
 		<module>ambit2-dbsubstance</module>
+<!-- 		
 		<module>ambit2-dbisatab</module>
+ -->		
 		<module>ambit2-dbcli</module>
 	</modules>
 	<dependencies>
