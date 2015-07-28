@@ -123,9 +123,8 @@ public class TestStudyExportFormatting {
 					break;
 				}
 				case TO_BIODEG_WATER_SCREEN_SECTION: {
-					//TODO <<<<<<<<<
-					Assert.assertEquals(
-							"interpretationResult [Guideline]",
+					// TODO <<<<<<<<<
+					Assert.assertEquals("interpretationResult [Guideline]",
 							result);
 					break;
 					// Assert.assertEquals("interpretationResult [Guideline]",
@@ -485,8 +484,8 @@ public class TestStudyExportFormatting {
 					break;
 				}
 				case TO_BIODEG_WATER_SCREEN_SECTION: {
-					Assert.assertEquals(
-							"endpoint =textValue [Guideline]", result);
+					Assert.assertEquals("endpoint =textValue [Guideline]",
+							result);
 					break;
 				}
 				default: {
@@ -639,8 +638,7 @@ public class TestStudyExportFormatting {
 				}
 				case TO_BIODEG_WATER_SCREEN_SECTION: {
 					// OK, it assumes interpretation result is displayed only
-					Assert.assertEquals(
-							"endpoint =ca. 3.14  mg [Guideline]",
+					Assert.assertEquals("endpoint =ca. 3.14  mg [Guideline]",
 							result);
 					break;
 				}
@@ -910,6 +908,15 @@ public class TestStudyExportFormatting {
 							result);
 					break;
 				}
+				case PC_MELTING_SECTION: {
+					Assert.assertEquals("ca. 3.14  mg", result);
+					break;
+				}
+				case EN_HENRY_LAW_SECTION: {
+					Assert.assertEquals("ca. 3.14  mg", result);
+					break;
+				}
+
 				default: {
 					if (c.name().startsWith("BAO_"))
 						continue;
@@ -940,7 +947,9 @@ public class TestStudyExportFormatting {
 								" [Guideline] (type of study=paramvalue)",
 								result);
 					} else
-						Assert.assertEquals("ca. 3.14  mg", result);
+						Assert.assertEquals(c.toString(),
+								"endpoint =ca. 3.14  mg [Guideline]", result);
+
 				}
 				}
 			} catch (Exception x) {

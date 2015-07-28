@@ -15,6 +15,8 @@
 <script type='text/javascript' src='${ambit_root}/scripts/dataset/config-dataset.js'></script>
 
 <script type='text/javascript' src='${ambit_root}/scripts/config/ce.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/config/npo.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/config/bao.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/config/toxcast.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/config-study.js'></script>
 

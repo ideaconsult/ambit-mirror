@@ -1,4 +1,4 @@
-var config_ce = {
+var config_ce_inchemico = {
 	     "parameters": {
              "type_of_study": {
                  "iOrder": -11,
@@ -21,6 +21,9 @@ var config_ce = {
                  "iOrder": -20,
                  "inMatrix" : true
              },
+             "uuid" : {
+              	 "bVisible": false
+             },                
              "citation": {
                  "bVisible": true,
                  "iOrder": -16
@@ -61,7 +64,7 @@ var config_ce = {
          }		
 }
 
-var config_ce0 = {
+var config_ce_invitro = {
 	    "parameters": {
             "type_of_study": {
                 "iOrder": -11,
@@ -85,10 +88,14 @@ var config_ce0 = {
                 "inMatrix" : true,
                 "bVisible": true
             },
+            "uuid" : {
+              	 "bVisible": false
+            },            
             "citation": {
                 "bVisible": true,
-                "iOrder": -14
+                "iOrder": -13
             }   
+            
         },
         "conditions": {
             "target gene": {
@@ -114,7 +121,13 @@ var config_ce0 = {
                 "bVisible": true,
                 "iOrder": -16,
                 "inMatrix" : true                  
-            }                
+            },
+            "text": {
+            	"sTitle" : "Remarks",
+            	"bVisible": true,
+                "iOrder": -15,
+                "inMatrix" : true
+            }
         },
         "interpretation": {
             "result": {
@@ -122,7 +135,7 @@ var config_ce0 = {
                 "iOrder": -4,
                 "inMatrix" : false,
                 "bVisible": true,
-                "iOrder": -15
+                "iOrder": -14
             },
             "criteria": {
                 "iOrder": -3,
@@ -131,15 +144,21 @@ var config_ce0 = {
         }
 }
 
-var config_ce1 = {
+var config_ce_llna = {
      	
    	 "parameters": {
             "p_vehicle": {
                 "iOrder": -4,
                 "sTitle": "Vehicle",
                 "bVisible": true,
-                "inMatrix" : false
+                "inMatrix" : false  
             },
+            "p_vehicle_abbr": {
+                "iOrder": -4,
+                "sTitle": "Vehicle",
+                "bVisible": false,
+                "inMatrix" : true
+            },            
             "p_max dose tested": {
                 "iOrder": -3,
                 "sTitle": "Max Dose Tested (%)",
@@ -206,6 +225,7 @@ var config_ce1 = {
             },
             "text": {
                 "bVisible": true,
+                "inMatrix" : true,
                 "sTitle": "",
                 "iOrder": -6                    
             }
@@ -213,7 +233,7 @@ var config_ce1 = {
         "interpretation": {
             "result": {
                 "sTitle": "Potency",
-                "inMatrix" : false,
+                "inMatrix" : true,
                 "bVisible": true,
                 "iOrder": -5
             },
@@ -224,7 +244,7 @@ var config_ce1 = {
         }        
 }
 
-var config_ce2 = {
+var config_ce_humandb = {
 	 	 "parameters": {
              "species": {
                  "iOrder": -9,
@@ -298,4 +318,61 @@ var config_ce2 = {
                  "bVisible": true
              }
          }      
+}
+var config_ce_insilico = {
+        "parameters": {
+            "species": {
+                "iOrder": -6,
+                "bVisible": false
+            },
+            "type of study": {
+                "iOrder": -11,
+                "sTitle": "Study type",
+                "inMatrix" : true
+            },
+            "type of method": {
+                "iOrder": -8,
+                "sTitle": "Method type"
+            }
+        },
+        "protocol": {
+            "guideline": {
+            	"sTitle": "((Q)SAR or in silico)",
+                "iOrder": -12,
+                "inMatrix" : true
+            },
+            "uuid" : {
+             	 "bVisible": false
+            },               
+            "citation": {
+                "bVisible": true
+            }   
+        },
+        "effects": {
+            "endpoint": {
+            	"iOrder": -8,
+                "bVisible": false
+            },
+            "result": {
+            	"iOrder": -7,
+                "bVisible": false
+            },
+            "text": {
+                "sTitle": "",
+                "bVisible": false,
+                "iOrder": -6
+            }
+            
+        },
+        "interpretation": {
+            "result": {
+                "sTitle": "Result",
+                "iOrder": -10,
+                "inMatrix" : true
+            },
+            "criteria": {
+                "iOrder": -9,
+                "bVisible": false
+            }
+        } 
 }

@@ -120,28 +120,28 @@ public class StructureRecordValidator extends DefaultAmbitProcessor<IStructureRe
     public IStructureRecord validate(SubstanceRecord record,
 	    ProtocolApplication<Protocol, IParams, String, IParams, String> papp) throws Exception {
 	if (papp.getSubstanceUUID()==null) {
-	    logger.log(Level.SEVERE, "Missing substance UUID in protocol application!");
+	    logger.log(Level.WARNING, "Missing substance UUID in protocol application!");
 	    papp.setSubstanceUUID(record.getSubstanceUUID());
 	}
 	if (papp.getDocumentUUID() == null) {
-	    logger.log(Level.SEVERE, "Missing measurement UUID");
+	    logger.log(Level.WARNING, "Missing measurement UUID");
 	    if (isFixErrors()) {
 		papp.setDocumentUUID(generateUUIDfromString(prefix, null));
 		logger.log(Level.WARNING, "Generated measurement UUID");
 	    }
 	}
 	if (papp.getProtocol() == null)
-	    logger.log(Level.SEVERE, "Missing protocol");
+	    logger.log(Level.WARNING, "Missing protocol");
 	else {
 	    if (papp.getProtocol().getCategory() == null) {
-		logger.log(Level.SEVERE, "Missing protocol category");
+		logger.log(Level.WARNING, "Missing protocol category");
 		if (isFixErrors()) {
 		    papp.getProtocol().setCategory(Protocol._categories.UNKNOWN_TOXICITY_SECTION.name());
 		    papp.getProtocol().setTopCategory(Protocol._categories.UNKNOWN_TOXICITY_SECTION.getTopCategory());
 		}
 	    }
 	    if (papp.getProtocol().getTopCategory() == null) {
-		logger.log(Level.SEVERE, "Missing protocol top category");
+		logger.log(Level.WARNING, "Missing protocol top category");
 		if (isFixErrors()) {
 		    try {
 			String c = papp.getProtocol().getCategory();
@@ -163,12 +163,12 @@ public class StructureRecordValidator extends DefaultAmbitProcessor<IStructureRe
 	    logger.log(Level.WARNING, "Missing interpretation criteria");
 
 	if (papp.getEffects() == null)
-	    logger.log(Level.SEVERE, "Missing results");
+	    logger.log(Level.WARNING, "Missing results");
 	else
 	    for (EffectRecord<String, IParams, String> effect : papp.getEffects()) {
-		if (effect.getEndpoint()==null)  logger.log(Level.SEVERE, "Missing endpoint name");
+		if (effect.getEndpoint()==null)  logger.log(Level.WARNING, "Missing endpoint name");
 		if (effect.getConditions()==null || effect.getConditions().isEmpty())  logger.log(Level.WARNING, "Missing conditions");
-		if (effect.getLoValue()==null && effect.getUpValue()==null && effect.getTextValue()==null)  logger.log(Level.SEVERE, "Missing result value");
+		if (effect.getLoValue()==null && effect.getUpValue()==null && effect.getTextValue()==null)  logger.log(Level.WARNING, "Missing result value");
 		if ((effect.getLoValue()!=null || effect.getUpValue()!=null) && effect.getUnit()==null)  logger.log(Level.WARNING, "Value without units");
 	    }
 	return record;
@@ -176,7 +176,7 @@ public class StructureRecordValidator extends DefaultAmbitProcessor<IStructureRe
 
     public IStructureRecord validate(SubstanceRecord record, CompositionRelation rel) throws Exception {
 	if (rel.getCompositionUUID() == null) {
-	    logger.log(Level.SEVERE, "Missing composition UUID");
+	    logger.log(Level.WARNING, "Missing composition UUID");
 	    if (isFixErrors()) {
 		String uuid = generateUUIDfromString(prefix, null);
 		rel.setCompositionUUID(uuid);

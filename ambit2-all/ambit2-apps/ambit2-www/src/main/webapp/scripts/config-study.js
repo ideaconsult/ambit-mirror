@@ -7,7 +7,25 @@ var config_study = {
                 }
             },
             "parameters": {
-          
+                "data_gathering_instruments": {
+                    "sTitle": "Instruments"
+                },
+                "agitation": {"bVisible" : false},
+                "common name": {"bVisible" : false},
+                "controls included": {"bVisible" : false},
+                "illumination (flux)": {"bVisible" : false},
+                "exposure route": {"bVisible" : false},
+                "gender / life-stage": {"bVisible" : false},
+                "illumination (photoperiod)": {"bVisible" : false},
+                "source": {"bVisible" : false},
+                "temperature": {"bVisible" : false},
+                "ph": {"bVisible" : false},
+                "depuration duration": {"bVisible" : false},
+                "media": {"bVisible" : false},
+                "maintenance and preparation": {"bVisible" : false},
+    			"species" : {
+    				"bVisible": false
+    			}	
             },
             "conditions": {
             },
@@ -913,7 +931,13 @@ var config_study = {
                 },
                 "sex": {
                     "iOrder": -4
-                }
+                },
+                "p": {
+                    "sVisible" : false
+                },
+                "n": {
+                    "sVisible" : false
+                }                                
             },
             "effects": {
                 "endpoint": {
@@ -962,7 +986,13 @@ var config_study = {
                 "effect type": {
                     "iOrder": -7,
                     "inMatrix" : true
-                }
+                },
+                "p": {
+                    "sVisible" : false
+                },
+                "n": {
+                    "sVisible" : false
+                }                    
             },
             "effects": {
                 "endpoint": {
@@ -974,6 +1004,7 @@ var config_study = {
                     "iOrder": -5,
                     "inMatrix" : true
                 }
+                
             },
             "protocol": {
                 "guideline": {
@@ -992,35 +1023,113 @@ var config_study = {
         },
 
         "TO_SENSITIZATION_INVITRO_SECTION": {
-			"parameters" : config_ce0["parameters"],
-			"effects" : config_ce0["effects"],
-			"conditions" : config_ce0["conditions"],			
-			"protocol" : config_ce0["protocol"],
-			"interpretation" : config_ce0["interpretation"]	
+			"parameters" : config_ce_invitro["parameters"],
+			"effects" : config_ce_invitro["effects"],
+			"conditions" : config_ce_invitro["conditions"],			
+			"protocol" : config_ce_invitro["protocol"],
+			"interpretation" : config_ce_invitro["interpretation"]	
         
         },        
         "TO_SENSITIZATION_INCHEMICO_SECTION": {
-			"parameters" : config_ce["parameters"],
-			"effects" : config_ce["effects"],
-			"conditions" : config_ce["conditions"],			
-			"protocol" : config_ce["protocol"],
-			"interpretation" : config_ce["interpretation"]	       
+			"parameters" : config_ce_inchemico["parameters"],
+			"effects" : config_ce_inchemico["effects"],
+			"conditions" : config_ce_inchemico["conditions"],			
+			"protocol" : config_ce_inchemico["protocol"],
+			"interpretation" : config_ce_inchemico["interpretation"]	       
         },                
         "TO_SENSITIZATION_LLNA_SECTION" : {
-			"parameters" : config_ce1["parameters"],
-			"effects" : config_ce1["effects"],
-			"conditions" : config_ce1["conditions"],			
-			"protocol" : config_ce1["protocol"],
-			"interpretation" : config_ce1["interpretation"]	
+			"parameters" : config_ce_llna["parameters"],
+			"effects" : config_ce_llna["effects"],
+			"conditions" : config_ce_llna["conditions"],			
+			"protocol" : config_ce_llna["protocol"],
+			"interpretation" : config_ce_llna["interpretation"]	
         },
         "TO_SENSITIZATION_HUMANDB_SECTION": {
-			"parameters" : config_ce2["parameters"],
-			"effects" : config_ce2["effects"],
-			"conditions" : config_ce2["conditions"],			
-			"protocol" : config_ce2["protocol"],
-			"interpretation" : config_ce2["interpretation"]	
+			"parameters" : config_ce_humandb["parameters"],
+			"effects" : config_ce_humandb["effects"],
+			"conditions" : config_ce_humandb["conditions"],			
+			"protocol" : config_ce_humandb["protocol"],
+			"interpretation" : config_ce_humandb["interpretation"]	
       
-        },                 
+        },      
+        "TO_SENSITIZATION_INSILICO_SECTION": {
+			"parameters" : config_ce_insilico["parameters"],
+			"effects" : config_ce_insilico["effects"],
+			"conditions" : config_ce_insilico["conditions"],			
+			"protocol" : config_ce_insilico["protocol"],
+			"interpretation" : config_ce_insilico["interpretation"]	
+        
+        },        
+        "NPO_1709_SECTION" : {
+			"parameters" : config_npo["parameters"],
+			"effects" : config_npo["effects"],
+			"conditions" : config_npo["conditions"],			
+			"protocol" : config_npo["protocol"],
+			"interpretation" : config_npo["interpretation"]	
+        },
+        "NPO_1773_SECTION" : {
+			"parameters" : config_npo["parameters"],
+			"effects" : config_npo["effects"],
+			"conditions" : config_npo["conditions"],			
+			"protocol" : config_npo["protocol"],
+			"interpretation" : config_npo["interpretation"]	        	
+        },
+        "BAO_0002993_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	
+        },   
+        "BAO_0002733_SECTION" : {
+        	"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	         	
+        },
+        "OBI_0302736_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	        	
+        },
+        "CHMO_0000287_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	          	
+        },
+        "CHMO_0000234_SECTION" :{
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	          	
+        },
+        "CHMO_0000239_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	           	
+        },
+        "CHMO_0000538_SECTION" : {
+    		"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	        	
+        },
+        "CSEO_00001191_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	        	
+    	},
         "TO_PHOTOTRANS_AIR_SECTION": {
             "parameters": {
                 "reactant": {
@@ -1200,7 +1309,7 @@ var config_study = {
                 },
                 "species": {
                     "iOrder": -3
-                }
+                }                
             },
             "conditions": {
                 "doses/concentrations": {
@@ -1330,7 +1439,7 @@ var config_study = {
                 "test organism": {
                     "iOrder": -7,
                     "sTitle": "Organism"
-                }
+                }                
             },
             "conditions": {
                 "exposure": {
@@ -1373,7 +1482,7 @@ var config_study = {
                 "test organism": {
                     "iOrder": -7,
                     "sTitle": "Organism"
-                }
+                }                
             },
             "conditions": {
                 "exposure": {
@@ -1417,6 +1526,7 @@ var config_study = {
                     "iOrder": -7,
                     "sTitle": "Organism"
                 }
+                                
             },
             "conditions": {
                 "exposure": {
@@ -1459,7 +1569,7 @@ var config_study = {
                 "test organism": {
                     "iOrder": -7,
                     "sTitle": "Organism"
-                }
+                }                
             },
             "conditions": {
                 "exposure": {
@@ -1802,79 +1912,29 @@ var config_study = {
             }
         },
         "AGGLOMERATION_AGGREGATION_SECTION": {
-            "parameters": {
-                "type of method": {
-                    "iOrder": -22
-                },
-                "method details": {
-                    "iOrder": -11,
-                    "bVisible": false
-                },
-                "sampling": {
-                    "iOrder": -9,
-                    "bVisible": false
-                },
-                "data_gathering_instruments": {
-                    "sTitle": "Instruments",
-                    "iOrder": -8,
-                    "bVisible": false
-                }
-            },
-            "conditions": {
-                "percentile": {
-                    "bVisible": false
-                },
-                "remark": {
-                    "sTitle": "Remarks",
-                    "iOrder": -15,
-                    "bVisible": false
-                },
-                "medium": {
-                    "sTitle": "Medium",
-                    "iOrder": -16,
-                    "inMatrix" : true
-                },
-                "ph": {
-                    "iOrder": -17
-                },
-                "seq_num": {
-                    "iOrder": -21,
-                    "sTitle": "Seq. num."
-                }
-            },
-            "effects": {
-                "endpoint": {
-                    "iOrder": -20,
-                    "inMatrix" : true
-                },
-                "result": {
-                    "iOrder": -19,
-                    "inMatrix" : true
-                }
-            },
-            "protocol": {
-                "guideline": {
-                    "iOrder": -10
-                },
-                "citation": {
-                    "bVisible": true,
-                    "sTitle": "Reference",
-                    "iOrder": -11,
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }               	
-                }
-            },
-            "interpretation": {
-                "result": {
-                    "sTitle": "Conclusions",
-                    "iOrder": -7,
-                    "bVisible": false
-                }
-            }
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	
+
         },
         "ASPECT_RATIO_SHAPE_SECTION": {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+		       "interpretation": {
+		            "result": {
+		                "inMatrix" : true,
+		                "bVisible": true
+		            },
+		            "criteria": {
+		                "bVisible": true
+		            }
+		        }	
+        },
+        "I5_ASPECT_RATIO_SHAPE_SECTION": {
         	 "parameters": {
                  "type of method": {
                      "iOrder": -22
@@ -1945,6 +2005,13 @@ var config_study = {
             }
         },
         "ZETA_POTENTIAL_SECTION": {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	 	
+        },
+        "I5ZETA_POTENTIAL_SECTION": {
         	   "parameters": {
                    "type of method": {
                        "iOrder": -22
@@ -2020,6 +2087,23 @@ var config_study = {
                 }
             }
         },
+        "GENERIC_SURFACE_CHEMISTRY_SECTION": {
+	    	"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+	         "interpretation": {
+	                "result": {
+	                    "sTitle": "Conclusions",
+	                    "bVisible": false
+	                },
+	                "criteria": {
+	                    "sTitle": "Coating / Functionalisation",
+	                    "bVisible": true,
+	                    "iOrder": -24
+	                }
+	            }
+        },
         "SURFACE_CHEMISTRY_SECTION": {
         	 "parameters": {
                  "type of method": {
@@ -2044,6 +2128,9 @@ var config_study = {
                      "sTitle": "Instruments",
                      "iOrder": -8,
                      "bVisible": false
+                 },
+                 "testmat_form" : {
+                	 "bVisible": false
                  }
              },
              "conditions": {
@@ -2097,6 +2184,9 @@ var config_study = {
                     "iOrder": -10,
                 	"inMatrix": true
                 },
+                "uuid" : {
+                	 "bVisible": false
+                },                   
                 "citation": {
                     "bVisible":true,
                     "iOrder" : -11,
@@ -2120,643 +2210,81 @@ var config_study = {
             }
         },
         "PC_GRANULOMETRY_SECTION": {
-            "parameters": {
-                "type of method": {
-                    "iOrder": -25
-                },
-                "distribution_type": {
-                    "sTitle": "Distribution type",
-                    "iOrder": -23
-                },
-                "testmat_form": {
-                    "sTitle": "Test Material Form",
-                    "bVisible": false,
-                    "iOrder": -24
-                }
-            },
-            "conditions": {
-                "seq_num": {
-                    "sTitle": "Passage num.",
-                    "iOrder": -22,
-                    "bVisible": false
-                },
-                "medium": {
-                    "sTitle": "Medium",
-                    "iOrder": -14,
-                    "bVisible": true,
-                    "inMatrix": true
-                },                
-                "remark": {
-                    "sTitle": "Remark",
-                    "iOrder": -15,
-                    "bVisible": false
-                },
-                "n": {
-                    "iOrder": -16
-                },                
-                "phraseother_percentile" : {
-                	"bVisible": false
-                },
-                "std_dev" : {
-                	"bVisible": false
-                }                
-            },
-            "effects": {
-                "endpoint": {
-                    "iOrder": -20,
-                    "bVisible": true,
-                    "inMatrix": true
-                },
-                "result": {
-                    "sTitle": "Value",
-                    "iOrder": -18,
-                    "inMatrix": true
-                }
-            },
-            "protocol": {
-                "guideline": {
-                    "iOrder": -9,
-                    "inMatrix": true
-                },
-                "citation": {
-                    "bVisible": true,
-                    "sTitle": "Reference",
-                    "iOrder": -11,
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
-                },
-                "uuid" : {
-               	 "bVisible": false
-                },
-                
-            },            
-            "interpretation": {
-                "result": {
-                    "sTitle": "Conclusions",
-                    "bVisible": false
-                },
-                "criteria": {
-                    "bVisible": false
-                }
-            }
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	
         },
         "CRYSTALLITE_AND_GRAIN_SIZE_SECTION": {
-            "parameters": {
-                "type of method": {
-                    "iOrder": -23,
-                    "sTitle": "Method type"
-                },
-                "method details": {
-                    "iOrder": -22,
-                    "bVisible": false
-                },
-                "sampling": {
-                    "sTitle": "Sampling",
-                    "iOrder": -21,
-                    "bVisible": false
-                },
-                "data_gathering_instruments": {
-                    "sTitle": "Instruments",
-                    "iOrder": -20,
-                    "bVisible": false
-                },
-                "testmat_form": {
-                    "sTitle": "Test Material Form",
-                    "bVisible": true,
-                    "iOrder": -19
-                },
-                "material_isotropic": {
-                    "sTitle": "Isotropic material",
-                    "iOrder": -18
-                }
-            },
-            "conditions": {
-                "medium": {
-                    "sTitle": "Medium",
-                    "iOrder": -15,
-                    "inMatrix": true
-                }
-            },
-            "effects": {
-                "endpoint": {
-                    "iOrder": -17,
-                    "bVisible": true,
-                    "inMatrix": true
-                },
-                "result": {
-                    "sTitle": "Result",
-                    "iOrder": -16,
-                    "inMatrix": true
-                }
-            },
-            "protocol": {
-                "guideline": {
-                    "iOrder": -10,
-                    "inMatrix": true
-                },
-                "citation": {
-                    "bVisible": true,
-                    "sTitle": "Reference",
-                    "iOrder": -11,
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
-                }
-            },
-            "interpretation": {
-                "result": {
-                    "sTitle": "Conclusions",
-                    "bVisible": false
-                },
-                "criteria": {
-                    "bVisible": false
-                }
-            }
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	
         },
         "DUSTINESS_SECTION": {
-            "parameters": {
-                "type of method": {
-                    "iOrder": -23,
-                    "sTitle": "Method type"
-                },
-                "method details": {
-                    "iOrder": -22,
-                    "bVisible": false
-                },
-                "sampling": {
-                    "sTitle": "Sampling",
-                    "iOrder": -21,
-                    "bVisible": false
-                },
-                "data_gathering_instruments": {
-                    "sTitle": "Instruments",
-                    "iOrder": -20,
-                    "bVisible": false
-                },
-                "testmat_form": {
-                    "sTitle": "Test Material Form",
-                    "bVisible": true,
-                    "iOrder": -19
-                }
-            },
-            "conditions": {
-                
-            },
-            "effects": {
-                "endpoint": {
-                    "iOrder": -17,
-                    "bVisible": false,
-                    "inMatrix": true
-                },
-                "result": {
-                    "sTitle": "Dustiness index",
-                    "iOrder": -16,
-                    "inMatrix": true
-                }
-            },
-            "protocol": {
-                "guideline": {
-                    "iOrder": -10,
-                    "inMatrix": true
-                },
-                "citation": {
-                    "bVisible": true,
-                    "sTitle": "Reference",
-                    "iOrder": -11,
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
-                }
-            },
-            "interpretation": {
-                "result": {
-                    "sTitle": "Conclusions",
-                    "bVisible": false
-                },
-                "criteria": {
-                    "bVisible": false
-                }
-            }
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	
         },
         "POROSITY_SECTION": {
-            "parameters": {
-                "type of method": {
-                    "iOrder": -23,
-                    "sTitle": "Method type"
-                },
-                "method details": {
-                    "iOrder": -22,
-                    "bVisible": false
-                },
-                "sampling": {
-                    "sTitle": "Sampling",
-                    "iOrder": -21,
-                    "bVisible": false
-                },
-                "data_gathering_instruments": {
-                    "sTitle": "Instruments",
-                    "iOrder": -20,
-                    "bVisible": false
-                },
-                "testmat_form": {
-                    "sTitle": "Test Material Form",
-                    "bVisible": true,
-                    "iOrder": -19
-                }
-            },
-            "conditions": {
-                
-            },
-            "effects": {
-                "endpoint": {
-                    "iOrder": -17,
-                    "bVisible": true,
-                    "inMatrix": true
-                },
-                "result": {
-                    "iOrder": -16,
-                    "inMatrix": true
-                }
-            },
-            "protocol": {
-                "guideline": {
-                    "iOrder": -10,
-                    "inMatrix": true
-                },
-                "citation": {
-                    "bVisible": true,
-                    "iOrder": -11,
-                    "sTitle": "Reference",
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
-                }
-            },
-            "interpretation": {
-                "result": {
-                    "sTitle": "Conclusions",
-                    "bVisible": false
-                },
-                "criteria": {
-                    "bVisible": false
-                }
-            }
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	
         },
         "SPECIFIC_SURFACE_AREA_SECTION": {
-            "parameters": {
-                "type of method": {
-                    "iOrder": -23,
-                    "sTitle": "Method type"
-                },
-                "method details": {
-                    "iOrder": -22,
-                    "bVisible": false
-                },
-                "sampling": {
-                    "sTitle": "Sampling",
-                    "iOrder": -21,
-                    "bVisible": false
-                },
-                "data_gathering_instruments": {
-                    "sTitle": "Instruments",
-                    "iOrder": -20,
-                    "bVisible": false
-                },
-                "testmat_form": {
-                    "sTitle": "Test Material Form",
-                    "bVisible": true,
-                    "iOrder": -19
-                }
-            },
-            "conditions": {
-                "remark": {
-                    "sTitle": "Remarks",
-                    "iOrder": -14
-                }
-            },
-            "effects": {
-                "endpoint": {
-                    "iOrder": -17,
-                    "bVisible": false,
-                    "inMatrix": true
-                },
-                "result": {
-                    "sTitle": "Specific Surface Area",
-                    "iOrder": -16,
-                    "inMatrix": true
-                }
-            },
-            "protocol": {
-                "guideline": {
-                    "iOrder": -10,
-                    "inMatrix": true
-                },
-                "citation": {
-                    "bVisible": true,
-                    "iOrder": -11,
-                    "sTitle": "Reference",
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
-                }
-            },
-            "interpretation": {
-                "result": {
-                    "sTitle": "Conclusions",
-                    "bVisible": false
-                },
-                "criteria": {
-                    "bVisible": false
-                }
-            }
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	
         },
         "POUR_DENSITY_SECTION": {
-            "parameters": {
-                "type of method": {
-                    "iOrder": -23,
-                    "sTitle": "Method type"
-                },
-                "method details": {
-                    "iOrder": -22,
-                    "bVisible": false
-                },
-                "sampling": {
-                    "sTitle": "Sampling",
-                    "iOrder": -21,
-                    "bVisible": false
-                },
-                "data_gathering_instruments": {
-                    "sTitle": "Instruments",
-                    "iOrder": -20,
-                    "bVisible": false
-                },
-                "testmat_form": {
-                    "sTitle": "Test Material Form",
-                    "bVisible": true,
-                    "iOrder": -19
-                }
-            },
-            "conditions": {
-                
-            },
-            "effects": {
-                "endpoint": {
-                    "iOrder": -17,
-                    "bVisible": false,
-                    "inMatrix": true
-                },
-                "result": {
-                    "sTitle": "Pour density",
-                    "iOrder": -16,
-                    "inMatrix": true
-                }
-            },
-            "protocol": {
-                "guideline": {
-                    "iOrder": -10,
-                    "inMatrix": true
-                },
-                "citation": {
-                    "bVisible": true,
-                    "iOrder": -11,
-                    "sTitle": "Reference",
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
-                }
-            },
-            "interpretation": {
-                "result": {
-                    "sTitle": "Conclusions",
-                    "iOrder": -14,
-                    "bVisible": true
-                },
-                "criteria": {
-                    "bVisible": false
-                }
-            }
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	
         },
         "PHOTOCATALYTIC_ACTIVITY_SECTION": {
-            "parameters": {
-                "type of method": {
-                    "iOrder": -23,
-                    "sTitle": "Method type"
-                },
-                "method details": {
-                    "iOrder": -22,
-                    "bVisible": false
-                },
-                "sampling": {
-                    "sTitle": "Sampling",
-                    "iOrder": -21,
-                    "bVisible": false
-                },
-                "data_gathering_instruments": {
-                    "sTitle": "Instruments",
-                    "iOrder": -20,
-                    "bVisible": false
-                },
-                "testmat_form": {
-                    "sTitle": "Test Material Form",
-                    "bVisible": true,
-                    "iOrder": -19
-                }
-            },
-            "conditions": {
-                
-            },
-            "effects": {
-                "endpoint": {
-                    "iOrder": -17,
-                    "inMatrix": true
-                },
-                "result": {
-                    "iOrder": -16,
-                    "inMatrix": true
-                }
-            },
-            "protocol": {
-                "guideline": {
-                    "iOrder": -10,
-                    "inMatrix": true
-                },
-                "citation": {
-                    "bVisible": true,
-                    "sTitle": "Reference",
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
-                }
-            },
-            "interpretation": {
-                "result": {
-                    "sTitle": "Conclusions",
-                    "iOrder": -14,
-                    "bVisible": true
-                },
-                "criteria": {
-                	"iOrder": -11,
-                    "bVisible": false
-                }
-            }
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	
         },
         "CATALYTIC_ACTIVITY_SECTION": {
-            "parameters": {
-                "type of method": {
-                    "iOrder": -23,
-                    "sTitle": "Method type"
-                },
-                "method details": {
-                    "iOrder": -22,
-                    "bVisible": false
-                },
-                "sampling": {
-                    "sTitle": "Sampling",
-                    "iOrder": -21,
-                    "bVisible": false
-                },
-                "data_gathering_instruments": {
-                    "sTitle": "Instruments",
-                    "iOrder": -20,
-                    "bVisible": false
-                },
-                "testmat_form": {
-                    "sTitle": "Test Material Form",
-                    "bVisible": true,
-                    "iOrder": -19
-                }
-            },
-            "conditions": {
-                
-            },
-            "effects": {
-                "endpoint": {
-                    "iOrder": -17,
-                    "inMatrix": true
-                },
-                "result": {
-                    "iOrder": -16,
-                    "inMatrix": true
-                }
-            },
-            "protocol": {
-                "guideline": {
-                    "iOrder": -10,
-                    "inMatrix": true
-                },
-                "citation": {
-                    "bVisible": true,
-                    "sTitle": "Reference",
-                    "iOrder": -11,
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
-                }
-            },
-            "interpretation": {
-                "result": {
-                    "sTitle": "Conclusions",
-                    "iOrder": -14,
-                    "bVisible": true
-                },
-                "criteria": {
-                    "bVisible": false
-                }
-            }
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	
         },
         "CRYSTALLINE_PHASE_SECTION": {
-            "parameters": {
-                "type of method": {
-                    "iOrder": -23,
-                    "sTitle": "Method type"
-                },
-                "method details": {
-                    "iOrder": -22,
-                    "bVisible": false
-                },
-                "sampling": {
-                    "sTitle": "Sampling",
-                    "iOrder": -21,
-                    "bVisible": false
-                },
-                "data_gathering_instruments": {
-                    "sTitle": "Instruments",
-                    "iOrder": -20,
-                    "bVisible": false
-                },
-                "testmat_form": {
-                    "sTitle": "Test Material Form",
-                    "bVisible": true,
-                    "iOrder": -19
-                }
-            },
-            "conditions": {
-                "crystal system": {
-                    "sTitle": "Crystal system",
-                    "iOrder": -18,
-                    "inMatrix": true
-                },
-                "common name": {
-                    "sTitle": "Common name",
-                    "iOrder": -17
-                },
-                "bravais lattice": {
-                    "sTitle": "Bravais lattice",
-                    "iOrder": -16
-                },
-                "point group": {
-                    "sTitle": "Point group",
-                    "iOrder": -15
-                },
-                "space group": {
-                    "sTitle": "Space group",
-                    "iOrder": -14
-                },
-                "crystallographic planes": {
-                    "sTitle": "Crystallographic planes",
-                    "iOrder": -13
-                }
-            },
-            "effects": {
-                "endpoint": {
-                    "iOrder": -12,
-                    "bVisible": false,
-                    "inMatrix": true
-                },
-                "result": {
-                    "bVisible": false,
-                    "iOrder": -11,
-                    "inMatrix": true
-                }
-            },
-            "protocol": {
-                "guideline": {
-                    "iOrder": -5,
-                    "inMatrix": true
-                },
-                "citation": {
-                    "bVisible": true
-                }
-            },
-            "interpretation": {
-                "result": {
-                    "sTitle": "Conclusions",
-                    "iOrder": -10,
-                    "bVisible": false
-                },
-                "criteria": {
-                    "bVisible": false
-                }
-            }
+			"parameters" : config_bao["parameters"],
+	        "effects": {
+	            "endpoint": {
+	                "bVisible": true,
+	                "inMatrix" : true,
+	            },
+	            "result": {
+	                "bVisible": false,
+	                "inMatrix" : true,
+	            },
+	            "text": {
+	            	"sTitle" : "Result",
+	                "bVisible": true,
+	                "inMatrix" : true,
+	            }       
+	        },
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	
         },
         "PROTEOMICS_SECTION": {
             "parameters": {
@@ -2825,13 +2353,19 @@ var config_study = {
             }
         },
         "UNKNOWN_TOXICITY_SECTION" : {
+        	"parameters": {
+                "type of method": {
+                    "sVisible" : false,
+                    "sTitle": "Method type"
+                }
+        	},
             "effects": {
                 "endpoint": {
                     "bVisible": true,
                     "inMatrix": true
                 },            	
                 "text": {
-                    "bVisible": true,
+                    "bVisible": false,
                     "inMatrix": true
                 },
                 "result": {
@@ -2839,9 +2373,18 @@ var config_study = {
                     "inMatrix": true
                 }                
             },
+            "conditions": {
+                "p": {
+                    "bVisible": false
+                },
+                "n": {
+                    "bVisible": false
+                }                    
+            
+            },            
             "interpretation": {
                 "result": {
-                    "bVisible": true,
+                    "bVisible": false,
                     "inMatrix": true
                 },
                 "criteria": {
@@ -2849,10 +2392,52 @@ var config_study = {
                 }
             },
             "protocol": {
-                "guideline": {
-                    "inMatrix": true
-                }            
-            }            
+            	 "guideline": {
+                 	"sTitle" : "Protocol",
+                 	"iOrder": -20,
+                     "inMatrix" : true,
+                     "bVisible": true,
+                     "mRender" : function(data,type,full) {
+                     	var sOut = "";
+                      	try {
+                      		sOut += data[0];
+                      	} catch (err) {}	
+                      	sOut += "<br/>";
+                      	sOut += "<br/><ul>";
+                      	$.each(full.parameters,function(k,v){
+                      		
+                      		var title = k;
+                      		try {
+                      			title = config_bao.parameters[k.toLowerCase()]["sTitle"];
+                      			if (title === undefined) title=k;
+                      		} catch (err) {}
+                      		if ((v === undefined) || (v == null) || ("-" == v)) return "";                 		
+                      		sOut += "<li>" + title + ": ";
+                      		try {
+                      			if (v.loValue == undefined) sOut += v;
+                      			else sOut += v.loValue + " " + v.unit;
+                      		} catch (err) {
+                      			sOut += v;
+                      		}
+                      		"</li>";
+                      	});
+                      	sOut += "</ul>";
+                      	return sOut;
+                     }
+                 },
+                 "uuid" : {
+                  	 "bVisible": false
+                 },                
+                 "citation": {
+                     "bVisible":true,
+                     "iOrder" : -30,
+                     "sTitle": "Reference",
+                     "mRender" : function(data,type,full) {
+                     	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                     	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                     }
+                 }            
+            }
         },
         "UNKNOWN_TOXICITY_SECTION_SUMMARY" : {
             "effects": {
@@ -3037,29 +2622,36 @@ var config_study = {
                 }
             }         	
         },
-        "BAO_0003009_SECTION" : {
-            "protocol": {
-                "citation": {
-                    "bVisible":true,
-                    "iOrder" : -30,
-                    "sTitle": "Reference",
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
-                }
-            },
-            "interpretation": {
-                "result": {
-                	"bVisible": true,
-                	"sTitle" : "Result (text)",
-                	"inMatrix": true,
-                },
-                "criteria": {
-                	"bVisible": false
-                }
-            }   
 
+        "BAO_0003009_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	
+
+        },
+        "BAO_0002084_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	
+        	
+        },
+        "BAO_0000451_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	
+        },
+        "MMO_0000368_SECTION" : {
+        	"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]
         },
 		"CELL_DEATH" : {
 
@@ -3153,3 +2745,4 @@ var config_study = {
 		}           
     }
 }
+
