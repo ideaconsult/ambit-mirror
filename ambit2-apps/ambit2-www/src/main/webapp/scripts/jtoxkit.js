@@ -1767,6 +1767,7 @@ var jToxCompound = (function () {
         {type: "text/uri-list", icon: "images/lnk64.png"},
         {type: "application/pdf", icon: "images/pdf64.png"},
         {type: "text/csv", icon: "images/csv64.png"},
+        {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", icon: "images/xlsx.png"},
         {type: "text/plain", icon: "images/txt64.png"},
         {type: "text/x-arff", icon: "images/arff.png"},
         {type: "text/x-arff-3col", icon: "images/arff-3.png"},
