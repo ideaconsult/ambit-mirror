@@ -408,6 +408,8 @@ public class UIResource extends FreeMarkerResource {
 			String img = "i5z.png";
 			if (ext.endsWith(".csv"))
 			    img = "csv64.png";
+			if (ext.endsWith(".xlsx"))
+			    img = "xlsx.png";			
 			if (ext.endsWith(".rdf"))
 			    img = "rdf64.png";
 			if (ext.endsWith(".json"))
