@@ -126,8 +126,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
     protected IQueryRetrieval<ProtocolEffectRecord<String, String, String>> getEffectQuery() {
 	_matrix matrix = getList();
 	switch (matrix) {
-	case matrix_final:
-	    return new ReadEffectRecordByBundleMatrix(bundle, _matrix.matrix_final);
+	case matrix_final :	    return new ReadEffectRecordByBundleMatrix(bundle, _matrix.matrix_working);
 	default:
 	    return new ReadEffectRecordByBundleMatrix(bundle, _matrix.matrix_working);
 	}
@@ -240,8 +239,7 @@ public class BundleMatrixResource extends SubstanceDatasetResource<ReadSubstance
 	    return _matrix.matrix_working; // working matrix by default
 	else if ("working".equals(matrixtype.toString()))
 	    return _matrix.matrix_working;
-	else if ("final".equals(matrixtype.toString()))
-	    return _matrix.matrix_final;
+	else if ("final".equals(matrixtype.toString()))     return _matrix.matrix_working;
 	else if ("deleted".equals(matrixtype.toString()))
 	    return _matrix.deleted_values;
 	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);

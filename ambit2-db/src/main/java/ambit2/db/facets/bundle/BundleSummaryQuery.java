@@ -21,7 +21,7 @@ public class BundleSummaryQuery extends AbstractFacetQuery<SubstanceEndpointsBun
 		"union select \"substance\",count(idsubstance) from bundle_substance where idbundle=? "+
 		"union select \"property\",count(*) from bundle_endpoints where idbundle=? "+
 		"union select \"matrix\",count(*)>0 FROM bundle_substance_protocolapplication where idbundle=? " +
-		"union select \"matrix/final\",count(*)>0 FROM bundle_final_protocolapplication where idbundle=?";
+		"union select \"matrix/final\",count(*)>0 FROM bundle_substance_protocolapplication where idbundle=?";
 	
 	protected BundleSummaryFacet record;
 	

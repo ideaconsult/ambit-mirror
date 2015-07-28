@@ -53,10 +53,12 @@ public class CallableBundleMatrixCreator extends
 		return new DeleteMatrixFromBundle(target);
 
 	}
+	/*
 	case matrix_final: {
 	    if (method.equals(Method.POST))
 		return new CreateMatrixFromBundle(target, deleteMatrix, matrix);
 	}
+	*/
 	default: {
 	    break;
 	}

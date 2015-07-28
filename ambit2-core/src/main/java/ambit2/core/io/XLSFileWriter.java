@@ -46,6 +46,14 @@ import org.openscience.cdk.io.formats.IResourceFormat;
 public class XLSFileWriter extends FileWithHeaderWriter {
 	protected Workbook workbook;
 	protected Sheet sheet;
+	public Sheet getSheet() {
+		return sheet;
+	}
+
+
+	public void setSheet(Sheet sheet) {
+		this.sheet = sheet;
+	}
 	protected DataFormat dataformat;
 	protected CellStyle style;
 	protected OutputStream out;
@@ -63,7 +71,7 @@ public class XLSFileWriter extends FileWithHeaderWriter {
 	}
 
 
-	protected void writeHeader() throws IOException {
+	public void writeHeader() throws IOException {
 		Row row     = sheet.createRow((short)0);
 		for (int i=0;i<header.size();i++) {
 			row.createCell((short)(i+1)).setCellValue(header.list.get(i).toString()); 

@@ -1,4 +1,4 @@
-var config_study = {
+{
     "columns": {
         "_": {
             "main": {
@@ -6,11 +6,8 @@ var config_study = {
                     "bVisible": false
                 }
             },
-            "parameters": {
-          
-            },
-            "conditions": {
-            },
+            "parameters": {},
+            "conditions": {},
             "effects": {
                 "text": {
                     "bVisible": false
@@ -19,15 +16,8 @@ var config_study = {
             "protocol": {
                 "citation": {
                     "bVisible": false,
-                    "iOrder" : -1,
-                    "sTitle": "Study year",
-                    "mRender" : function(data,type,full) {
-                    	return "<span title='"+
-                    		(data["title"]==null?"N/A":data["title"])+
-                    		"'>" + 
-                    		(data["year"]==null?"-":data["year"]) + 
-                    		"</span>";
-                    }
+                    "iOrder": -1,
+                    "sTitle": "Study year"
                 }
             },
             "interpretation": {}
@@ -103,7 +93,7 @@ var config_study = {
                     "bVisible": false
                 }
             }
-        },        
+        },
         "PC_VAPOUR_SECTION": {
             "conditions": {
                 "temperature": {
@@ -129,7 +119,7 @@ var config_study = {
                     "bVisible": false
                 }
             }
-        },        
+        },
         "PC_PARTITION_SECTION": {
             "parameters": {
                 "method type": {
@@ -163,7 +153,6 @@ var config_study = {
                 }
             }
         },
-        
         "PC_WATER_SOL_SECTION": {
             "parameters": {
                 "method type": {
@@ -199,7 +188,7 @@ var config_study = {
                     "bVisible": false
                 }
             }
-        },   
+        },
         "PC_SOL_ORGANIC_SECTION": {
             "conditions": {
                 "solvent": {
@@ -230,7 +219,6 @@ var config_study = {
                 }
             }
         },
-        
         "PC_NON_SATURATED_PH_SECTION": {
             "parameters": {
                 "method type": {
@@ -263,7 +251,6 @@ var config_study = {
                 }
             }
         },
-      
         "PC_DISSOCIATION_SECTION": {
             "conditions": {
                 "no": {
@@ -291,12 +278,34 @@ var config_study = {
                 }
             }
         },
-      
+        "PC_UNKNOWN_SECTION": {
+            "effects": {
+                "endpoint": {
+                    "inMatrix": true,
+                    "bVisible": true
+                },
+                "result": {
+                    "inMatrix": true
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": true,
+                    "inMatrix": true
+                }
+            },
+            "protocol": {
+                "guideline": {
+                	"bVisible": true,
+                    "inMatrix": true
+                }
+            }
+        },
         "TO_ACUTE_ORAL_SECTION": {
             "parameters": {
                 "species": {
                     "iOrder": -7,
-                    "inMatrix" : true
+                    "inMatrix": true
                 }
             },
             "conditions": {
@@ -307,12 +316,12 @@ var config_study = {
             "effects": {
                 "endpoint": {
                     "iOrder": -6,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "result": {
                     "sTitle": "Value",
                     "iOrder": -5,
-                    "inMatrix" : true
+                    "inMatrix": true
                 }
             },
             "protocol": {
@@ -321,7 +330,7 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": true
-                }                
+                }
             },
             "interpretation": {
                 "result": {
@@ -337,7 +346,7 @@ var config_study = {
             "parameters": {
                 "species": {
                     "iOrder": -7,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "sex": {
                     "iOrder": -4
@@ -351,12 +360,12 @@ var config_study = {
             "effects": {
                 "endpoint": {
                     "iOrder": -6,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "result": {
                     "sTitle": "Value",
                     "iOrder": -5,
-                    "inMatrix" : true
+                    "inMatrix": true
                 }
             },
             "protocol": {
@@ -365,7 +374,7 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": true
-                }                   
+                }
             },
             "interpretation": {
                 "result": {
@@ -381,7 +390,7 @@ var config_study = {
             "parameters": {
                 "species": {
                     "iOrder": -8,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "sex": {
                     "iOrder": -4
@@ -398,12 +407,12 @@ var config_study = {
             "effects": {
                 "endpoint": {
                     "iOrder": -6,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "result": {
                     "sTitle": "Value",
                     "iOrder": -5,
-                    "inMatrix" : true
+                    "inMatrix": true
                 }
             },
             "protocol": {
@@ -412,8 +421,7 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": true
-                }   
-            
+                }
             },
             "interpretation": {
                 "result": {
@@ -430,7 +438,7 @@ var config_study = {
                 "type of method": {
                     "iOrder": -9,
                     "sTitle": "Method type",
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "species": {
                     "iOrder": -8
@@ -442,7 +450,7 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": true
-                }   
+                }
             },
             "effects": {
                 "endpoint": {
@@ -456,19 +464,19 @@ var config_study = {
                 "result": {
                     "sTitle": "Interpretation of the results",
                     "iOrder": -7,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "criteria": {
                     "iOrder": -6
                 }
             }
-        },        
+        },
         "TO_EYE_IRRITATION_SECTION": {
             "parameters": {
                 "type of method": {
                     "iOrder": -7,
                     "sTitle": "Method type",
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "species": {
                     "iOrder": -6
@@ -480,7 +488,7 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": true
-                }   
+                }
             },
             "effects": {
                 "endpoint": {
@@ -494,7 +502,7 @@ var config_study = {
                 "result": {
                     "sTitle": "Interpretation of the results",
                     "iOrder": -3,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "criteria": {
                     "iOrder": -2
@@ -510,7 +518,7 @@ var config_study = {
                 "type of study": {
                     "iOrder": -11,
                     "sTitle": "Study type",
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "type of method": {
                     "iOrder": -8,
@@ -523,15 +531,15 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": true
-                }   
+                }
             },
             "effects": {
                 "endpoint": {
-                	"iOrder": -8,
+                    "iOrder": -8,
                     "bVisible": false
                 },
                 "result": {
-                	"iOrder": -7,
+                    "iOrder": -7,
                     "bVisible": false
                 },
                 "text": {
@@ -539,33 +547,31 @@ var config_study = {
                     "bVisible": false,
                     "iOrder": -6
                 }
-                
             },
             "interpretation": {
                 "result": {
                     "sTitle": "Interpretation of the results",
                     "iOrder": -10,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "criteria": {
                     "iOrder": -9
                 }
             }
-        },        
-    
+        },
         "TO_REPEATED_ORAL_SECTION": {
             "parameters": {
                 "species": {
                     "iOrder": -10,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "test type": {
                     "iOrder": -9,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "route of administration": {
                     "iOrder": -8
-                },                
+                },
                 "doses/concentrations": {
                     "sTitle": "Dose/concentrations",
                     "iOrder": -7
@@ -579,12 +585,12 @@ var config_study = {
             "effects": {
                 "endpoint": {
                     "iOrder": -6,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "result": {
                     "sTitle": "Value",
                     "iOrder": -5,
-                    "inMatrix" : true
+                    "inMatrix": true
                 }
             },
             "protocol": {
@@ -593,7 +599,7 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": true
-                }   
+                }
             },
             "interpretation": {
                 "result": {
@@ -605,12 +611,12 @@ var config_study = {
             "parameters": {
                 "species": {
                     "iOrder": -10,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "test type": {
                     "iOrder": -9,
-                    "inMatrix" : true
-                },                
+                    "inMatrix": true
+                },
                 "route of administration": {
                     "iOrder": -8
                 },
@@ -627,12 +633,12 @@ var config_study = {
             "effects": {
                 "endpoint": {
                     "iOrder": -6,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "result": {
                     "sTitle": "Value",
                     "iOrder": -5,
-                    "inMatrix" : true
+                    "inMatrix": true
                 }
             },
             "protocol": {
@@ -641,7 +647,7 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": true
-                }   
+                }
             },
             "interpretation": {
                 "result": {
@@ -689,7 +695,7 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": true
-                }   
+                }
             },
             "interpretation": {
                 "result": {
@@ -697,7 +703,6 @@ var config_study = {
                 }
             }
         },
-        
         "TO_GENETIC_IN_VITRO_SECTION": {
             "parameters": {
                 "type of genotoxicity": {
@@ -707,7 +712,7 @@ var config_study = {
                 "type of study": {
                     "iOrder": -8,
                     "sTitle": "Study type",
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "metabolic activation system": {
                     "iOrder": -7,
@@ -748,18 +753,18 @@ var config_study = {
             "protocol": {
                 "guideline": {
                     "iOrder": -1,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "citation": {
                     "bVisible": true
-                }   
+                }
             },
             "interpretation": {
                 "result": {
                     "sTitle": "Interpretation of the result",
                     "bVisible": true,
                     "iOrder": -2,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "criteria": {
                     "bVisible": false
@@ -775,7 +780,7 @@ var config_study = {
                 "type of study": {
                     "iOrder": -8,
                     "sTitle": "Study type",
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "route of administration": {
                     "iOrder": -7,
@@ -811,18 +816,18 @@ var config_study = {
             "protocol": {
                 "guideline": {
                     "iOrder": -1,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "citation": {
                     "bVisible": true
-                }   
+                }
             },
             "interpretation": {
                 "result": {
                     "sTitle": "Interpretation of the result",
                     "bVisible": true,
                     "iOrder": -2,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "criteria": {
                     "bVisible": false
@@ -833,7 +838,7 @@ var config_study = {
             "parameters": {
                 "species": {
                     "iOrder": -10,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "route of administration": {
                     "iOrder": -9
@@ -843,33 +848,33 @@ var config_study = {
                     "sTitle": "Dose/concentrations"
                 },
                 "type of genotoxicity": {
-                	"bVisible" : false
+                    "bVisible": false
                 },
                 "type of study": {
-                	"bVisible" : false
-                }                
+                    "bVisible": false
+                }
             },
             "conditions": {
                 "effect type": {
                     "iOrder": -6,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "sex": {
-                    "bVisible" : false
+                    "bVisible": false
                 },
                 "toxicity": {
-                    "bVisible" : false
+                    "bVisible": false
                 }
             },
             "effects": {
                 "endpoint": {
                     "iOrder": -7,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "result": {
                     "sTitle": "Value",
                     "iOrder": -5,
-                    "inMatrix" : true
+                    "inMatrix": true
                 }
             },
             "protocol": {
@@ -878,8 +883,8 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": true
-                }                
-            },            
+                }
+            },
             "interpretation": {
                 "result": {
                     "iOrder": -3,
@@ -896,7 +901,7 @@ var config_study = {
             "parameters": {
                 "species": {
                     "iOrder": -10,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "route of administration": {
                     "iOrder": -9
@@ -909,7 +914,7 @@ var config_study = {
             "conditions": {
                 "generation": {
                     "iOrder": -7,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "sex": {
                     "iOrder": -4
@@ -918,22 +923,22 @@ var config_study = {
             "effects": {
                 "endpoint": {
                     "iOrder": -6,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "result": {
                     "sTitle": "Value",
                     "iOrder": -5,
-                    "inMatrix" : true
+                    "inMatrix": true
                 }
             },
             "protocol": {
                 "guideline": {
                     "iOrder": -3,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "citation": {
                     "bVisible": true
-                }   
+                }
             },
             "interpretation": {
                 "result": {
@@ -945,7 +950,7 @@ var config_study = {
             "parameters": {
                 "species": {
                     "iOrder": -10,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "route of administration": {
                     "iOrder": -9
@@ -961,28 +966,28 @@ var config_study = {
                 },
                 "effect type": {
                     "iOrder": -7,
-                    "inMatrix" : true
+                    "inMatrix": true
                 }
             },
             "effects": {
                 "endpoint": {
                     "iOrder": -6,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "result": {
                     "sTitle": "Value",
                     "iOrder": -5,
-                    "inMatrix" : true
+                    "inMatrix": true
                 }
             },
             "protocol": {
                 "guideline": {
                     "iOrder": -3,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "citation": {
                     "bVisible": true
-                }   
+                }
             },
             "interpretation": {
                 "result": {
@@ -990,48 +995,17 @@ var config_study = {
                 }
             }
         },
-
-        "TO_SENSITIZATION_INVITRO_SECTION": {
-			"parameters" : config_ce0["parameters"],
-			"effects" : config_ce0["effects"],
-			"conditions" : config_ce0["conditions"],			
-			"protocol" : config_ce0["protocol"],
-			"interpretation" : config_ce0["interpretation"]	
-        
-        },        
-        "TO_SENSITIZATION_INCHEMICO_SECTION": {
-			"parameters" : config_ce["parameters"],
-			"effects" : config_ce["effects"],
-			"conditions" : config_ce["conditions"],			
-			"protocol" : config_ce["protocol"],
-			"interpretation" : config_ce["interpretation"]	       
-        },                
-        "TO_SENSITIZATION_LLNA_SECTION" : {
-			"parameters" : config_ce1["parameters"],
-			"effects" : config_ce1["effects"],
-			"conditions" : config_ce1["conditions"],			
-			"protocol" : config_ce1["protocol"],
-			"interpretation" : config_ce1["interpretation"]	
-        },
-        "TO_SENSITIZATION_HUMANDB_SECTION": {
-			"parameters" : config_ce2["parameters"],
-			"effects" : config_ce2["effects"],
-			"conditions" : config_ce2["conditions"],			
-			"protocol" : config_ce2["protocol"],
-			"interpretation" : config_ce2["interpretation"]	
-      
-        },                 
         "TO_PHOTOTRANS_AIR_SECTION": {
             "parameters": {
                 "reactant": {
                     "iOrder": -9,
-                    "inMatrix" : true
+                    "inMatrix": true
                 }
             },
             "conditions": {
                 "test condition": {
                     "iOrder": -8,
-                    "inMatrix" : true
+                    "inMatrix": true
                 }
             },
             "effects": {
@@ -1040,7 +1014,7 @@ var config_study = {
                 },
                 "result": {
                     "sTitle": "DT50",
-                    "inMatrix" : true,
+                    "inMatrix": true,
                     "iOrder": -7
                 }
             },
@@ -1054,11 +1028,11 @@ var config_study = {
             "conditions": {
                 "ph": {
                     "iOrder": -3,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "temperature": {
                     "iOrder": -2,
-                    "inMatrix" : true
+                    "inMatrix": true
                 }
             },
             "effects": {
@@ -1067,7 +1041,7 @@ var config_study = {
                 },
                 "result": {
                     "sTitle": "DT50",
-                    "inMatrix" : true,
+                    "inMatrix": true,
                     "iOrder": -1
                 }
             },
@@ -1076,7 +1050,7 @@ var config_study = {
                     "bVisible": false
                 }
             }
-        },     
+        },
         "TO_BIODEG_WATER_SCREEN_SECTION": {
             "parameters": {
                 "test type": {
@@ -1089,8 +1063,8 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": false
-                }                   
-            },            
+                }
+            },
             "conditions": {
                 "sampling time": {
                     "iOrder": -3
@@ -1099,11 +1073,13 @@ var config_study = {
             "effects": {
                 "endpoint": {
                     "sTitle": "Degrad. Parameter",
-                    "iOrder": -1
+                    "iOrder": -1,
+                    "inMatrix": true
                 },
                 "result": {
                     "sTitle": "Degradation",
-                    "iOrder": -2
+                    "iOrder": -2,
+                    "inMatrix": true
                 }
             },
             "interpretation": {
@@ -1154,7 +1130,7 @@ var config_study = {
                     "bVisible": false
                 }
             }
-        },     
+        },
         "EN_STABILITY_IN_SOIL_SECTION": {
             "parameters": {
                 "test type": {
@@ -1170,7 +1146,7 @@ var config_study = {
                     "iOrder": -7
                 },
                 "oc content": {
-                	"sTitle": "OC content",
+                    "sTitle": "OC content",
                     "iOrder": -6
                 }
             },
@@ -1228,7 +1204,7 @@ var config_study = {
                     "bVisible": false
                 }
             }
-        },        
+        },
         "EN_BIOACCU_TERR_SECTION": {
             "parameters": {
                 "species": {
@@ -1239,7 +1215,7 @@ var config_study = {
                 "doses/concentrations": {
                     "iOrder": -5,
                     "sTitle": "Conc./Dose",
-                    "bVisible" : false
+                    "bVisible": false
                 },
                 "bioacc. basis": {
                     "iOrder": -3
@@ -1293,7 +1269,6 @@ var config_study = {
                 }
             }
         },
-        
         "EN_HENRY_LAW_SECTION": {
             "conditions": {
                 "temperature": {
@@ -1344,9 +1319,9 @@ var config_study = {
                     "iOrder": -6,
                     "sTitle": "Meas. Conc."
                 },
-                "based on" : {
-                	"iOrder": -1
-                } 
+                "based on": {
+                    "iOrder": -1
+                }
             },
             "effects": {
                 "endpoint": {
@@ -1387,9 +1362,9 @@ var config_study = {
                     "iOrder": -6,
                     "sTitle": "Meas. Conc."
                 },
-                "based on" : {
-                	"iOrder": -1
-                }                 
+                "based on": {
+                    "iOrder": -1
+                }
             },
             "effects": {
                 "endpoint": {
@@ -1430,9 +1405,9 @@ var config_study = {
                     "iOrder": -6,
                     "sTitle": "Meas. Conc."
                 },
-                "based on" : {
-                	"iOrder": -1
-                }                 
+                "based on": {
+                    "iOrder": -1
+                }
             },
             "effects": {
                 "endpoint": {
@@ -1472,9 +1447,9 @@ var config_study = {
                     "iOrder": -6,
                     "sTitle": "Meas. Conc."
                 },
-                "based on" : {
-                	"iOrder": -1
-                }                   
+                "based on": {
+                    "iOrder": -1
+                }
             },
             "effects": {
                 "endpoint": {
@@ -1516,9 +1491,9 @@ var config_study = {
                     "iOrder": -6,
                     "sTitle": "Meas. Conc."
                 },
-                "based on" : {
-                	"iOrder": -1
-                }                   
+                "based on": {
+                    "iOrder": -1
+                }
             },
             "effects": {
                 "endpoint": {
@@ -1560,9 +1535,9 @@ var config_study = {
                     "iOrder": -6,
                     "sTitle": "Meas. Conc."
                 },
-                "based on" : {
-                	"iOrder": -1
-                }                   
+                "based on": {
+                    "iOrder": -1
+                }
             },
             "effects": {
                 "endpoint": {
@@ -1604,9 +1579,9 @@ var config_study = {
                     "iOrder": -6,
                     "sTitle": "Meas. Conc."
                 },
-                "based on" : {
-                	"iOrder": -1
-                }                   
+                "based on": {
+                    "iOrder": -1
+                }
             },
             "effects": {
                 "endpoint": {
@@ -1635,7 +1610,7 @@ var config_study = {
                 "test organism": {
                     "iOrder": -8,
                     "sTitle": "Organism"
-                },            	
+                },
                 "exposure": {
                     "iOrder": -6,
                     "inMatrix": true
@@ -1694,7 +1669,7 @@ var config_study = {
                 },
                 "based on": {
                     "iOrder": -1
-                }                
+                }
             },
             "effects": {
                 "endpoint": {
@@ -1738,7 +1713,7 @@ var config_study = {
                 },
                 "based on": {
                     "iOrder": -1
-                }                  
+                }
             },
             "effects": {
                 "endpoint": {
@@ -1782,7 +1757,7 @@ var config_study = {
                 },
                 "based on": {
                     "iOrder": -1
-                }                  
+                }
             },
             "effects": {
                 "endpoint": {
@@ -1832,7 +1807,7 @@ var config_study = {
                 "medium": {
                     "sTitle": "Medium",
                     "iOrder": -16,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "ph": {
                     "iOrder": -17
@@ -1845,25 +1820,22 @@ var config_study = {
             "effects": {
                 "endpoint": {
                     "iOrder": -20,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "result": {
                     "iOrder": -19,
-                    "inMatrix" : true
+                    "inMatrix": true
                 }
             },
             "protocol": {
                 "guideline": {
-                    "iOrder": -10
+                    "iOrder": -10,
+                    "inMatrix": true
                 },
                 "citation": {
                     "bVisible": true,
                     "sTitle": "Reference",
-                    "iOrder": -11,
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }               	
+                    "iOrder": -11
                 }
             },
             "interpretation": {
@@ -1875,66 +1847,62 @@ var config_study = {
             }
         },
         "ASPECT_RATIO_SHAPE_SECTION": {
-        	 "parameters": {
-                 "type of method": {
-                     "iOrder": -22
-                 },
-                 "method details": {
-                     "iOrder": -11,
-                     "bVisible": false
-                 },
-                 "sampling": {
-                     "iOrder": -9,
-                     "bVisible": false
-                 },
-                 "data_gathering_instruments": {
-                     "sTitle": "Instruments",
-                     "iOrder": -8,
-                     "bVisible": false
-                 }
-             },
-             "conditions": {
-                 "shape_descriptive": {
-                     "sTitle": "Shape",
-                     "iOrder": -19,
-                     "inMatrix" : true
-                 },
-                 "x": {
-                     "iOrder": -16,
-                     "inMatrix" : true
-                 },
-                 "y": {
-                     "iOrder": -15,
-                     "inMatrix" : true
-                 },
-                 "z": {
-                     "iOrder": -14,
-                     "inMatrix" : true                    
-                 }
-             },
-             "effects": {
-                 "endpoint": {
-                     "iOrder": -20,
-                     "inMatrix" : true
-                 },
-                 "result": {
-                     "iOrder": -18,
-                     "inMatrix" : true
-                 }
-             },
+            "parameters": {
+                "type of method": {
+                    "iOrder": -22
+                },
+                "method details": {
+                    "iOrder": -11,
+                    "bVisible": false
+                },
+                "sampling": {
+                    "iOrder": -9,
+                    "bVisible": false
+                },
+                "data_gathering_instruments": {
+                    "sTitle": "Instruments",
+                    "iOrder": -8,
+                    "bVisible": false
+                }
+            },
+            "conditions": {
+                "shape_descriptive": {
+                    "sTitle": "Shape",
+                    "iOrder": -19,
+                    "inMatrix": true
+                },
+                "x": {
+                    "iOrder": -16,
+                    "inMatrix": true
+                },
+                "y": {
+                    "iOrder": -15,
+                    "inMatrix": true
+                },
+                "z": {
+                    "iOrder": -14,
+                    "inMatrix": true
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -20,
+                    "inMatrix": true
+                },
+                "result": {
+                    "iOrder": -18,
+                    "inMatrix": true
+                }
+            },
             "protocol": {
                 "guideline": {
                     "iOrder": -10,
-                    "inMatrix" : true
+                    "inMatrix": true
                 },
                 "citation": {
                     "bVisible": true,
                     "sTitle": "Reference",
-                    "iOrder": -11,
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
+                    "iOrder": -11
                 }
             },
             "interpretation": {
@@ -1945,71 +1913,67 @@ var config_study = {
             }
         },
         "ZETA_POTENTIAL_SECTION": {
-        	   "parameters": {
-                   "type of method": {
-                       "iOrder": -22
-                   },
-                   "method details": {
-                       "iOrder": -10,
-                       "bVisible": false
-                   },
-                   "sampling": {
-                       "iOrder": -8,
-                       "bVisible": false
-                   },
-                   "data_gathering_instruments": {
-                       "sTitle": "Instruments",
-                       "iOrder": -7,
-                       "bVisible": false
-                   },
-                   "testmat_form": {
-                       "sTitle": "Test Material Form",
-                       "bVisible": true,
-                       "iOrder": -21
-                   }
-               },
-               "conditions": {
-                   "medium": {
-                       "sTitle": "Medium",
-                       "iOrder": -15,
-                       "bVisible": true,
-                       "inMatrix": true
-                   },
-                   "n": {
-                       "iOrder": -17
-                   },                
-                   "ph": {
-                       "iOrder": -16,
-                       "inMatrix" : true
-                   },
-                   "remark": {
-                       "sTitle": "Remarks",
-                       "iOrder": -19
-                   }
-               },
-               "effects": {
-                   "endpoint": {
-                       "iOrder": -21,
-                       "inMatrix": true
-                   },
-                   "result": {
-                       "iOrder": -20,
-                       "inMatrix": true
-                   }
-               },
+            "parameters": {
+                "type of method": {
+                    "iOrder": -22
+                },
+                "method details": {
+                    "iOrder": -10,
+                    "bVisible": false
+                },
+                "sampling": {
+                    "iOrder": -8,
+                    "bVisible": false
+                },
+                "data_gathering_instruments": {
+                    "sTitle": "Instruments",
+                    "iOrder": -7,
+                    "bVisible": false
+                },
+                "testmat_form": {
+                    "sTitle": "Test Material Form",
+                    "bVisible": true,
+                    "iOrder": -21
+                }
+            },
+            "conditions": {
+                "medium": {
+                    "sTitle": "Medium",
+                    "iOrder": -15,
+                    "bVisible": true,
+                    "inMatrix": true
+                },
+                "n": {
+                    "iOrder": -17
+                },
+                "ph": {
+                    "iOrder": -16,
+                    "inMatrix": true
+                },
+                "remark": {
+                    "sTitle": "Remarks",
+                    "iOrder": -19
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -21,
+                    "inMatrix": true
+                },
+                "result": {
+                    "iOrder": -20,
+                    "inMatrix": true
+                }
+            },
             "protocol": {
                 "guideline": {
                     "iOrder": -9,
                     "inMatrix": true
-                 },
+                },
                 "citation": {
                     "bVisible": true,
                     "sTitle": "Reference",
-                    "iOrder": -11,
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
+                    "iOrder": -11
                 }
             },
             "interpretation": {
@@ -2021,90 +1985,85 @@ var config_study = {
             }
         },
         "SURFACE_CHEMISTRY_SECTION": {
-        	 "parameters": {
-                 "type of method": {
-                     "iOrder": -25
-                 },
-                 "method details": {
-                     "iOrder": -11,
-                     "bVisible": false
-                 },
-                 "sampling": {
-                     "sTitle": "Sampling",
-                     "iOrder": -9,
-                     "bVisible": false
-                 },
-                 "functionalization": {
-                     "bVisible": false
-                 },
-                 "coating": {
-                     "bVisible": false
-                 },
-                 "data_gathering_instruments": {
-                     "sTitle": "Instruments",
-                     "iOrder": -8,
-                     "bVisible": false
-                 }
-             },
-             "conditions": {
-                 "type": {
-                     "sTitle": "",
-                     "iOrder": -23
-                 },
-                 "description": {
-                     "sTitle": "Type",
-                     "iOrder": -22,
-                     "inMatrix": true
-                 },
-                 "coating_description": {
-                     "sTitle": "Coating description",
-                     "iOrder": -21,
-                     "bVisible": false,
-                     "inMatrix": true
-                 },
-                 "remark": {
-                     "sTitle": "Remarks",
-                     "iOrder": -15,
-                     "bVisible": false
-                 },
-                 "element_or_group": {
-                     "sTitle": "Element / Func. group",
-                     "iOrder": -19,
-                     "bVisible": false,
-                     "inMatrix": true
-                 }
-             },
-             "effects": {
-                 "endpoint": {
-                     "iOrder": -20,
-                     "bVisible": false
-                 },
-                 "result": {
-                     "sTitle": "Fraction",
-                     "iOrder": -18,
-                     "inMatrix": true
-                 },
-                 "text" : {
-                 	"sTitle": "Element / Func. group",
-                 	"iOrder": -19,
-                 	"bVisible": true,
-                 	"inMatrix": true
-                 }
-                 
-             },
+            "parameters": {
+                "type of method": {
+                    "iOrder": -25
+                },
+                "method details": {
+                    "iOrder": -11,
+                    "bVisible": false
+                },
+                "sampling": {
+                    "sTitle": "Sampling",
+                    "iOrder": -9,
+                    "bVisible": false
+                },
+                "functionalization": {
+                    "bVisible": false
+                },
+                "coating": {
+                    "bVisible": false
+                },
+                "data_gathering_instruments": {
+                    "sTitle": "Instruments",
+                    "iOrder": -8,
+                    "bVisible": false
+                }
+            },
+            "conditions": {
+                "type": {
+                    "sTitle": "",
+                    "iOrder": -23
+                },
+                "description": {
+                    "sTitle": "Type",
+                    "iOrder": -22,
+                    "inMatrix": true
+                },
+                "coating_description": {
+                    "sTitle": "Coating description",
+                    "iOrder": -21,
+                    "bVisible": false,
+                    "inMatrix": true
+                },
+                "remark": {
+                    "sTitle": "Remarks",
+                    "iOrder": -15,
+                    "bVisible": false
+                },
+                "element_or_group": {
+                    "sTitle": "Element / Func. group",
+                    "iOrder": -19,
+                    "bVisible": false,
+                    "inMatrix": true
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -20,
+                    "bVisible": false
+                },
+                "result": {
+                    "sTitle": "Fraction",
+                    "iOrder": -18,
+                    "inMatrix": true
+                },
+                "text": {
+                    "sTitle": "Element / Func. group",
+                    "iOrder": -19,
+                    "bVisible": true,
+                    "inMatrix": true
+                }
+            },
             "protocol": {
                 "guideline": {
                     "iOrder": -10,
-                	"inMatrix": true
+                    "inMatrix": true
                 },
                 "citation": {
-                    "bVisible":true,
-                    "iOrder" : -11,
-                    "sTitle": "Reference",
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
+                    "bVisible": true,
+                    "iOrder": -11,
+                    "sTitle": "Reference"
                 }
             },
             "interpretation": {
@@ -2145,7 +2104,7 @@ var config_study = {
                     "iOrder": -14,
                     "bVisible": true,
                     "inMatrix": true
-                },                
+                },
                 "remark": {
                     "sTitle": "Remark",
                     "iOrder": -15,
@@ -2153,13 +2112,13 @@ var config_study = {
                 },
                 "n": {
                     "iOrder": -16
-                },                
-                "phraseother_percentile" : {
-                	"bVisible": false
                 },
-                "std_dev" : {
-                	"bVisible": false
-                }                
+                "phraseother_percentile": {
+                    "bVisible": false
+                },
+                "std_dev": {
+                    "bVisible": false
+                }
             },
             "effects": {
                 "endpoint": {
@@ -2181,17 +2140,12 @@ var config_study = {
                 "citation": {
                     "bVisible": true,
                     "sTitle": "Reference",
-                    "iOrder": -11,
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
+                    "iOrder": -11
                 },
-                "uuid" : {
-               	 "bVisible": false
-                },
-                
-            },            
+                "uuid": {
+                    "bVisible": false
+                }
+            },
             "interpretation": {
                 "result": {
                     "sTitle": "Conclusions",
@@ -2259,11 +2213,7 @@ var config_study = {
                 "citation": {
                     "bVisible": true,
                     "sTitle": "Reference",
-                    "iOrder": -11,
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
+                    "iOrder": -11
                 }
             },
             "interpretation": {
@@ -2302,9 +2252,7 @@ var config_study = {
                     "iOrder": -19
                 }
             },
-            "conditions": {
-                
-            },
+            "conditions": {},
             "effects": {
                 "endpoint": {
                     "iOrder": -17,
@@ -2325,11 +2273,7 @@ var config_study = {
                 "citation": {
                     "bVisible": true,
                     "sTitle": "Reference",
-                    "iOrder": -11,
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
+                    "iOrder": -11
                 }
             },
             "interpretation": {
@@ -2368,9 +2312,7 @@ var config_study = {
                     "iOrder": -19
                 }
             },
-            "conditions": {
-                
-            },
+            "conditions": {},
             "effects": {
                 "endpoint": {
                     "iOrder": -17,
@@ -2390,11 +2332,7 @@ var config_study = {
                 "citation": {
                     "bVisible": true,
                     "iOrder": -11,
-                    "sTitle": "Reference",
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
+                    "sTitle": "Reference"
                 }
             },
             "interpretation": {
@@ -2459,11 +2397,7 @@ var config_study = {
                 "citation": {
                     "bVisible": true,
                     "iOrder": -11,
-                    "sTitle": "Reference",
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
+                    "sTitle": "Reference"
                 }
             },
             "interpretation": {
@@ -2502,9 +2436,7 @@ var config_study = {
                     "iOrder": -19
                 }
             },
-            "conditions": {
-                
-            },
+            "conditions": {},
             "effects": {
                 "endpoint": {
                     "iOrder": -17,
@@ -2525,11 +2457,7 @@ var config_study = {
                 "citation": {
                     "bVisible": true,
                     "iOrder": -11,
-                    "sTitle": "Reference",
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
+                    "sTitle": "Reference"
                 }
             },
             "interpretation": {
@@ -2569,9 +2497,7 @@ var config_study = {
                     "iOrder": -19
                 }
             },
-            "conditions": {
-                
-            },
+            "conditions": {},
             "effects": {
                 "endpoint": {
                     "iOrder": -17,
@@ -2589,11 +2515,7 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": true,
-                    "sTitle": "Reference",
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
+                    "sTitle": "Reference"
                 }
             },
             "interpretation": {
@@ -2603,7 +2525,7 @@ var config_study = {
                     "bVisible": true
                 },
                 "criteria": {
-                	"iOrder": -11,
+                    "iOrder": -11,
                     "bVisible": false
                 }
             }
@@ -2634,9 +2556,7 @@ var config_study = {
                     "iOrder": -19
                 }
             },
-            "conditions": {
-                
-            },
+            "conditions": {},
             "effects": {
                 "endpoint": {
                     "iOrder": -17,
@@ -2655,11 +2575,7 @@ var config_study = {
                 "citation": {
                     "bVisible": true,
                     "sTitle": "Reference",
-                    "iOrder": -11,
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
+                    "iOrder": -11
                 }
             },
             "interpretation": {
@@ -2784,9 +2700,7 @@ var config_study = {
                     "iOrder": -19
                 }
             },
-            "conditions": {
-             
-            },
+            "conditions": {},
             "effects": {
                 "endpoint": {
                     "iOrder": -13,
@@ -2797,7 +2711,7 @@ var config_study = {
                     "bVisible": true,
                     "iOrder": -12,
                     "inMatrix": true
-                },                
+                },
                 "result": {
                     "bVisible": false,
                     "iOrder": -11
@@ -2810,7 +2724,6 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": false
-                    
                 }
             },
             "interpretation": {
@@ -2824,12 +2737,12 @@ var config_study = {
                 }
             }
         },
-        "UNKNOWN_TOXICITY_SECTION" : {
+        "SUPPORTING_INFO_SECTION": {
             "effects": {
                 "endpoint": {
                     "bVisible": true,
                     "inMatrix": true
-                },            	
+                },
                 "text": {
                     "bVisible": true,
                     "inMatrix": true
@@ -2837,7 +2750,7 @@ var config_study = {
                 "result": {
                     "bVisible": true,
                     "inMatrix": true
-                }                
+                }
             },
             "interpretation": {
                 "result": {
@@ -2851,23 +2764,53 @@ var config_study = {
             "protocol": {
                 "guideline": {
                     "inMatrix": true
-                }            
-            }            
+                }
+            }
+        },        
+        "UNKNOWN_TOXICITY_SECTION": {
+            "effects": {
+                "endpoint": {
+                    "bVisible": true,
+                    "inMatrix": true
+                },
+                "text": {
+                    "bVisible": true,
+                    "inMatrix": true
+                },
+                "result": {
+                    "bVisible": true,
+                    "inMatrix": true
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": true,
+                    "inMatrix": true
+                },
+                "criteria": {
+                    "bVisible": false
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "inMatrix": true
+                }
+            }
         },
-        "UNKNOWN_TOXICITY_SECTION_SUMMARY" : {
+        "UNKNOWN_TOXICITY_SECTION_SUMMARY": {
             "effects": {
                 "text": {
                     "bVisible": true,
                     "inMatrix": true
                 }
-            }       	
-        },      
-        "PUBCHEM_SUMMARY_SECTION" : {
+            }
+        },
+        "PUBCHEM_SUMMARY_SECTION": {
             "parameters": {
                 "target gene": {
-                	"bVisible": false,
-                	"iOrder": -14
-                }                
+                    "bVisible": false,
+                    "iOrder": -14
+                }
             },
             "effects": {
                 "endpoint": {
@@ -2879,277 +2822,168 @@ var config_study = {
                     "bVisible": true,
                     "inMatrix": true,
                     "iOrder": -11
-                },                
+                },
                 "result": {
                     "bVisible": true,
                     "inMatrix": true,
                     "iOrder": -12
                 }
-            },            
+            },
             "conditions": {
-            	"replicate": {
-            		"bVisible": true
+                "replicate": {
+                    "bVisible": true
                 },
-              	"doses/concentrations": {
-              		"bVisible": true,
+                "doses/concentrations": {
+                    "bVisible": true,
                     "sTitle": "Concentration",
                     "inMatrix": true
                 },
                 "emission wavelength": {
-                	"bVisible": true,
-                	"iOrder": -5
+                    "bVisible": true,
+                    "iOrder": -5
                 },
                 "target gene": {
-                	"bVisible": false,
-                	"iOrder": -6
-                }                     
-            },            
+                    "bVisible": false,
+                    "iOrder": -6
+                }
+            },
             "protocol": {
-           	 "citation": {
+                "citation": {
                     "bVisible": true,
                     "sTitle": "Reference",
-                    "iOrder": -15,
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?data["title"]:data["year"];
-                    	return "PubChem Assay: <a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
-                }             
-           },
-           "interpretation": {
-        	   "result" : {
-        		 "sTitle": "PubChem Activity Outcome",  
-        		 "iOrder": -4,
-        		 "bVisible": true
-        	   },
-               "criteria": {
-            	   "sTitle" : "Target",
-            	   "iOrder": -3,
-                   "bVisible": true
-               }
-           }
-            
-        },        
-        "PUBCHEM_DOSERESPONSE_SECTION" : {
+                    "iOrder": -15
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "sTitle": "PubChem Activity Outcome",
+                    "iOrder": -4,
+                    "bVisible": true
+                },
+                "criteria": {
+                    "sTitle": "Target",
+                    "iOrder": -3,
+                    "bVisible": true
+                }
+            }
+        },
+        "PUBCHEM_DOSERESPONSE_SECTION": {
             "effects": {
-            	"endpoint" : {
-            		"iOrder" : -7
-            	},
+                "endpoint": {
+                    "iOrder": -7
+                },
                 "result": {
                     "sTitle": "Response",
-                    "iOrder" : -5
+                    "iOrder": -5
                 },
                 "text": {
                     "bVisible": false
                 }
             },
             "conditions": {
-            	"replicate": {
-            		"bVisible": true,
-            		"iOrder" : -8
+                "replicate": {
+                    "bVisible": true,
+                    "iOrder": -8
                 },
-              	"doses/concentrations": {
-              		"bVisible": true,
+                "doses/concentrations": {
+                    "bVisible": true,
                     "sTitle": "Concentration",
-                    "iOrder" : -6
+                    "iOrder": -6
                 },
                 "emission wavelength": {
-                	"bVisible": true,
-                	"iOrder" : -9
+                    "bVisible": true,
+                    "iOrder": -9
                 }
-                
             },
             "protocol": {
-            	 "citation": {
-                     "bVisible": true,
-                     "sTitle": "Reference",
-                     "mRender" : function(data,type,full) {
-                     	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                     	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                     },
-            		 "iOrder" : -10
-                 }             
+                "citation": {
+                    "bVisible": true,
+                    "sTitle": "Reference",
+                    "iOrder": -10
+                }
             },
             "interpretation": {
                 "result": {
-                	"bVisible": false
+                    "bVisible": false
                 },
                 "criteria": {
-                	"bVisible": false
+                    "bVisible": false
                 }
-            }            	
+            }
         },
-        "PUBCHEM_CONFIRMATORY_SECTION" : {
+        "PUBCHEM_CONFIRMATORY_SECTION": {
             "effects": {
                 "text": {
                     "bVisible": true
                 }
             },
             "conditions": {
-            	"replicate": {
-            		"bVisible": true
+                "replicate": {
+                    "bVisible": true
                 },
-              	"doses/concentrations": {
-              		"bVisible": true,
+                "doses/concentrations": {
+                    "bVisible": true,
                     "sTitle": "Concentration"
                 },
                 "emission wavelength": {
-                	"bVisible": true
+                    "bVisible": true
                 }
-                
             },
             "protocol": {
-            	 "citation": {
-                     "bVisible": true,
-                     "sTitle": "Reference",
-                     "mRender" : function(data,type,full) {
-                     	return  data["title"];
-                     }
-                 }             
+                "citation": {
+                    "bVisible": true,
+                    "sTitle": "Reference"
+                }
             },
             "interpretation": {
                 "result": {
-                	"bVisible": false
+                    "bVisible": false
                 },
                 "criteria": {
-                	"bVisible": false
+                    "bVisible": false
                 }
-            }            
-        },         
-        "CELL_VIABILITY_ASSAY_SECTION" : {
+            }
+        },
+        "CELL_VIABILITY_ASSAY_SECTION": {
             "effects": {
                 "text": {
                     "bVisible": true
                 }
-            }         	
+            }
         },
-        "PROTEIN_SMALLMOLECULE_INTERACTION_SECTION" : {
+        "PROTEIN_SMALLMOLECULE_INTERACTION_SECTION": {
             "effects": {
                 "text": {
                     "bVisible": true
                 }
-            }         	
+            }
         },
-        "TRANSCRIPTION_PROFILING" : {
+        "TRANSCRIPTION_PROFILING": {
             "effects": {
                 "text": {
                     "bVisible": true,
-                    "sTitle" : "File"
+                    "sTitle": "File"
                 }
-            }         	
+            }
         },
-        "BAO_0003009_SECTION" : {
+        "BAO_0003009_SECTION": {
             "protocol": {
                 "citation": {
-                    "bVisible":true,
-                    "iOrder" : -30,
-                    "sTitle": "Reference",
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
+                    "bVisible": true,
+                    "iOrder": -30,
+                    "sTitle": "Reference"
                 }
             },
             "interpretation": {
                 "result": {
-                	"bVisible": true,
-                	"sTitle" : "Result (text)",
-                	"inMatrix": true,
+                    "bVisible": true,
+                    "sTitle": "Result (text)",
+                    "inMatrix": true
                 },
                 "criteria": {
-                	"bVisible": false
+                    "bVisible": false
                 }
-            }   
-
-        },
-		"CELL_DEATH" : {
-
-			"parameters" : config_toxcast["parameters"],
-			"effects" : config_toxcast["effects"],
-			"conditions" : config_toxcast["conditions"],			
-			"protocol" : config_toxcast["protocol"],
-			"interpretation" : config_toxcast["interpretation"]
-
-		},
-		"OXIDATIVE_PHOSPHORYLATION" : {
-			"parameters" : config_toxcast["parameters"],
-			"effects" : config_toxcast["effects"],
-			"conditions" : config_toxcast["conditions"],
-			"protocol" : config_toxcast["protocol"],
-			"interpretation" : config_toxcast["interpretation"]
-
-		},
-		"CELL_MORPHOLOGY" : {
-			"parameters" : config_toxcast["parameters"],
-			"effects" : config_toxcast["effects"],
-			"conditions" : config_toxcast["conditions"],
-			"protocol" : config_toxcast["protocol"],
-			"interpretation" : config_toxcast["interpretation"]
-		},
-		"CELL_CYCLE" : {
-			"parameters" : config_toxcast["parameters"],
-			"effects" : config_toxcast["effects"],
-			"conditions" : config_toxcast["conditions"],
-			"protocol" : config_toxcast["protocol"],
-			"interpretation" : config_toxcast["interpretation"]
-		},
-
-		"CELL_PROLIFERATION" : {
-			"parameters" : config_toxcast["parameters"],
-			"effects" : config_toxcast["effects"],
-			"conditions" : config_toxcast["conditions"],
-			"protocol" : config_toxcast["protocol"],
-			"interpretation" : config_toxcast["interpretation"]
-		},
-		"PROTEIN_STABILIZATION" : {
-			"parameters" : config_toxcast["parameters"],
-			"effects" : config_toxcast["effects"],
-			"conditions" : config_toxcast["conditions"],
-			"protocol" : config_toxcast["protocol"],
-			"interpretation" : config_toxcast["interpretation"]
-		},
-		"RECEPTOR_BINDING" : {
-			"parameters" : config_toxcast["parameters"],
-			"effects" : config_toxcast["effects"],
-			"conditions" : config_toxcast["conditions"],
-			"protocol" : config_toxcast["protocol"],
-			"interpretation" : config_toxcast["interpretation"]
-
-		},
-		"REGULATION_OF_GENE_EXPRESSION" : {
-			"parameters" : config_toxcast["parameters"],
-			"effects" : config_toxcast["effects"],
-			"conditions" : config_toxcast["conditions"],
-			"protocol" : config_toxcast["protocol"],
-			"interpretation" : config_toxcast["interpretation"]
-		},
-		"REGULATION_OF_TRANSCRIPTION_FACTOR_ACTIVITY" : {
-			"parameters" : config_toxcast["parameters"],
-			"effects" : config_toxcast["effects"],
-			"conditions" : config_toxcast["conditions"],
-			"protocol" : config_toxcast["protocol"],
-			"interpretation" : config_toxcast["interpretation"]
-		},
-		"REGULATION_OF_CATALYTIC_ACTIVITY" : {
-			"parameters" : config_toxcast["parameters"],
-			"effects" : config_toxcast["effects"],
-			"conditions" : config_toxcast["conditions"],
-			"protocol" : config_toxcast["protocol"],
-			"interpretation" : config_toxcast["interpretation"]
-		},
-		"MITOCHONDRIAL_DEPOLARIZATION" : {
-			"parameters" : config_toxcast["parameters"],
-			"effects" : config_toxcast["effects"],
-			"conditions" : config_toxcast["conditions"],
-			"protocol" : config_toxcast["protocol"],
-			"interpretation" : config_toxcast["interpretation"]
-
-		},
-		"AUTOFLUORESCENCE" : {
-			"parameters" : config_toxcast["parameters"],
-			"effects" : config_toxcast["effects"],
-			"conditions" : config_toxcast["conditions"],
-			"protocol" : config_toxcast["protocol"],
-			"interpretation" : config_toxcast["interpretation"]
-		}           
+            }
+        }
     }
 }

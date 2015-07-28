@@ -17,6 +17,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.IValue;
 import ambit2.base.data.study.MultiValue;
+import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ReliabilityParams._r_flags;
 import ambit2.base.data.study.Value;
 import ambit2.base.data.substance.SubstanceProperty;
@@ -197,13 +198,42 @@ public class ReadChemPropertiesByComposition
 			else if (p.getName().indexOf("For a better assessment") >= 0)
 				continue;
 
-			String category = "SUPPORTING_INFO";
+			Protocol._categories category = Protocol._categories.SUPPORTING_INFO_SECTION;
 			if (p.getLabel().endsWith("Carcinogenicity"))
-				category = "TO_CARCINOGENICITY";
+				category = Protocol._categories.TO_CARCINOGENICITY_SECTION;
 			else if (p.getLabel().endsWith("Mutagenicity"))
-				category = "TO_CARCINOGENICITY";
+				category = Protocol._categories.TO_GENETIC_IN_VITRO_SECTION;
+			else if (p.getLabel().endsWith("Dissociation_constant_pKa"))
+				category = Protocol._categories.PC_DISSOCIATION_SECTION;
+			else if (p.getLabel().endsWith("Octanol-water_partition_coefficient_Kow"))
+				category = Protocol._categories.PC_PARTITION_SECTION;
+			else if (p.getLabel().endsWith("Acute_toxicity_to_fish_lethality"))
+				category = Protocol._categories.EC_FISHTOX_SECTION;
+			else if (p.getLabel().endsWith("Eye_irritation_corrosion"))
+				category = Protocol._categories.TO_EYE_IRRITATION_SECTION;
+			else if (p.getLabel().endsWith("SkinIrritationCorrosion"))
+				category = Protocol._categories.TO_SKIN_IRRITATION_SECTION;
+			else if (p.getLabel().endsWith("SkinSensitisation"))
+				category = Protocol._categories.TO_SENSITIZATION_SECTION;				
+			else if (p.getLabel().endsWith("PersistenceBiodegradation"))
+				category = Protocol._categories.TO_BIODEG_WATER_SCREEN_SECTION;
+			else if (p.getLabel().endsWith("Genotoxicity"))
+				category = Protocol._categories.TO_GENETIC_IN_VITRO_SECTION;
+			else if (p.getLabel().endsWith("ReproductiveToxicity"))
+				category = Protocol._categories.TO_REPRODUCTION_SECTION;
+			else if (p.getLabel().endsWith("DevelopmentalToxicity"))
+				category = Protocol._categories.TO_DEVELOPMENTAL_SECTION;
+			else if (p.getLabel().endsWith("Sensitisation"))
+				category = Protocol._categories.TO_SENSITIZATION_SECTION;
+			else if (p.getLabel().endsWith("Respiratory_sensitisation"))
+				category = Protocol._categories.TO_REPEATED_INHAL_SECTION;
 
-			SubstanceProperty sp = new SubstanceProperty("TOX", category,
+			
+			
+			
+			
+
+			SubstanceProperty sp = new SubstanceProperty("TOX", category.name().replace("_SECTION",""),
 					p.getName(), p.getUnits(), p.getReference());
 			sp.setEnabled(true);
 			if (p.getReference().getType().equals(_type.Dataset))

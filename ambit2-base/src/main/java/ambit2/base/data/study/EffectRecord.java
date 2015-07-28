@@ -119,36 +119,12 @@ public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable {
 		this.errValue = errorValue;
 	}
 
-	public IParams getStdDev() {
-		if (getConditions() instanceof IParams) {
-			Object stddev = ((IParams) getConditions())
-					.get(_FIELDS_RANGE.STD_DEV.name());
-			if (stddev instanceof IParams)
-				return (IParams) stddev;
-		}
-		return null;
-	}
-
-	public void setStdDev(double value) throws UnsupportedOperationException {
+	public void setStdDev(double value) {
 		setStdDev(value, null);
 	}
 
-	public void setStdDev(double value, String units)
-			throws UnsupportedOperationException {
+	public void setStdDev(double value, String units) {
 		setErrorValue(value);
-		/*
-		 * if (getConditions() instanceof IParams) { //this is a hack to enter
-		 * std deviation in the condition fields. To be refactored together with
-		 * the database storage. IParams cond = (IParams) getConditions(); if
-		 * (cond==null) throw new
-		 * UnsupportedOperationException("Use setConditions() first."); Object
-		 * stddev = cond.get(_FIELDS_RANGE.STD_DEV.name()); if (stddev==null) {
-		 * stddev = new Params(null); cond.put(_FIELDS_RANGE.STD_DEV.name(),
-		 * stddev); } else if (stddev instanceof IParams) { } else new
-		 * UnsupportedOperationException(); ((IParams)
-		 * stddev).setLoValue(value); ((IParams) stddev).setUnits(units); } else
-		 * throw new UnsupportedOperationException();
-		 */
 	}
 
 	public CONDITIONS getConditions() {
