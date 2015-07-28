@@ -23,9 +23,9 @@ import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolEffectRecord;
 import ambit2.base.data.substance.SubstanceProperty;
 import ambit2.core.io.json.SubstanceStudyParser;
+import ambit2.core.io.study.ProtocolEffectRecord2SubstanceProperty;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.RDFPropertyIterator;
-import ambit2.rest.substance.ProtocolEffectRecord2SubstanceProperty;
 
 public class CallableSubstancePropertyCreator<USERID> extends CallableProtectedTask<USERID> {
     protected SubstanceProperty property;

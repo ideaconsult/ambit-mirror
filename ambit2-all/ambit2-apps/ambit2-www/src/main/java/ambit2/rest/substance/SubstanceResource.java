@@ -60,6 +60,7 @@ import ambit2.db.update.bundle.substance.ReadSubstancesByBundleCompounds;
 import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
+import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.query.AmbitDBResource;
 import ambit2.rest.task.CallableFileUpload;
@@ -116,7 +117,10 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 		customizeVariants(new MediaType[] { MediaType.TEXT_HTML,
 				MediaType.TEXT_URI_LIST, MediaType.APPLICATION_JSON,
 				MediaType.APPLICATION_JAVA_OBJECT,
-				MediaType.APPLICATION_JAVASCRIPT, MediaType.IMAGE_PNG });
+				MediaType.APPLICATION_JAVASCRIPT, MediaType.IMAGE_PNG ,
+				MediaType.APPLICATION_EXCEL,
+				MediaType.APPLICATION_MSOFFICE_XLSX
+				});
 
 	}
 
@@ -159,6 +163,19 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 					getRequest(), bundles);
 			return new OutputWriterConvertor<SubstanceRecord, Q>(csvreporter,
 					MediaType.TEXT_CSV, filenamePrefix);
+		/*	
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_MSOFFICE_XLSX)) {
+			SubstanceXLSXReporter xlsxreporter = new SubstanceXLSXReporter(
+					getRequest(), bundles, false);
+			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
+					MediaType.APPLICATION_MSOFFICE_XLSX, filenamePrefix);			
+			
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_EXCEL)) {
+			SubstanceXLSXReporter xlsxreporter = new SubstanceXLSXReporter(
+					getRequest(), bundles, true);
+			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
+					MediaType.APPLICATION_EXCEL, filenamePrefix);		
+					*/		
 		} else if (variant.getMediaType().equals(
 				MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");

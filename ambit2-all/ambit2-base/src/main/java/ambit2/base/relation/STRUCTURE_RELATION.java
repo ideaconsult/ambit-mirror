@@ -96,5 +96,8 @@ public enum STRUCTURE_RELATION {
 	public STRUCTURE_RELATION inverseOf() {
 		return null;
 	}
+	public String toHumanReadable() {
+		return name().toLowerCase().replace("has_","").replace("_"," ");
+	}
 }
 

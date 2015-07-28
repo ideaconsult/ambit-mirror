@@ -13,6 +13,7 @@ import ambit2.db.substance.study.ReadEffectRecordBySubstance;
 public class ReadEffectRecordByBundleMatrix extends ReadEffectRecordBySubstance {
     protected SubstanceEndpointsBundle bundle;
     public enum _matrix {matrix_working,matrix_final,deleted_values};
+
     protected _matrix matrix = _matrix.matrix_working;
     /**
 	 * 
@@ -43,7 +44,7 @@ public class ReadEffectRecordByBundleMatrix extends ReadEffectRecordBySubstance 
     @Override
     public String getSQL() throws AmbitException {
 	switch(matrix) {
-	case matrix_final: return sql_final;
+	//case matrix_final: return sql_final;
 	default: return sql_working;	
 	}
 	

@@ -108,26 +108,29 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 
     @Override
     protected void configureProcessors(String baseRef, boolean includeMol) {
-	if (includeMol) {
-	    RetrieveStructure r = new RetrieveStructure();
-	    r.setPage(0);
-	    r.setPageSize(1);
-	    getProcessors().add(new ProcessorStructureRetrieval(r));
-	}
-	configurePropertyProcessors();
-	getProcessors().add(new ProcessorStructureRetrieval(new QuerySmilesByID()));
-	configureCollectionProcessors(baseRef);
-	getProcessors().add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
-	    /**
+		if (includeMol) {
+			RetrieveStructure r = new RetrieveStructure();
+			r.setPage(0);
+			r.setPageSize(1);
+			getProcessors().add(new ProcessorStructureRetrieval(r));
+		}
+		configurePropertyProcessors();
+		getProcessors().add(
+				new ProcessorStructureRetrieval(new QuerySmilesByID()));
+		configureCollectionProcessors(baseRef);
+		getProcessors()
+				.add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
+					/**
 	     * 
 	     */
-	    private static final long serialVersionUID = -7316415661186235101L;
+					private static final long serialVersionUID = -7316415661186235101L;
 
-	    public IStructureRecord process(IStructureRecord target) throws AmbitException {
-		processItem(target);
-		return target;
-	    };
-	});
+					public IStructureRecord process(IStructureRecord target)
+							throws AmbitException {
+						processItem(target);
+						return target;
+					};
+				});
     };
 
     @Override

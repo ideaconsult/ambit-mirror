@@ -312,8 +312,14 @@
     </div>
     <#else>
   	<#if bundleid??>
-  		<a href="${ambit_root}/ui/assessment_report?bundle_uri=${ambit_root}/bundle/${bundleid}">View and download the assessment report</a>
+  		<ul>
+  		<li><a href="${ambit_root}/ui/assessment_report?bundle_uri=${ambit_root}/bundle/${bundleid}">View and download the assessment report</a></li>
+  		<li><a href="${ambit_root}/bundle/${bundleid}/substance?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">Substances (XLSX)</a></li>
+		<li><a href="${ambit_root}/bundle/${bundleid}/dataset?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">Initial matrix (XLSX)</a></li>
+		<li><a href="${ambit_root}/bundle/${bundleid}/matrix?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">Working matrix (XLSX)</a></li>		  		
+  		</ul>
   	</#if>
+
   </#if>
 
 

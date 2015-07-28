@@ -20,8 +20,8 @@ import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolEffectRecord;
 import ambit2.base.data.study.Value;
 import ambit2.base.data.substance.SubstanceProperty;
+import ambit2.core.io.study.ProtocolEffectRecord2SubstanceProperty;
 import ambit2.rest.property.PropertyURIReporter;
-import ambit2.rest.substance.ProtocolEffectRecord2SubstanceProperty;
 import ambit2.rest.substance.property.CallableSubstancePropertyCreator;
 import ambit2.rest.test.CreateAmbitDatabaseProcessor;
 

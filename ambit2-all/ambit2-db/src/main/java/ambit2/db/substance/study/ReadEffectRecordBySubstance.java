@@ -63,6 +63,7 @@ public class ReadEffectRecordBySubstance extends
 	try {
 	    effect.setInterpretationResult(rs.getString("interpretation_result"));
 	} catch (Exception x) {
+		x.printStackTrace();
 	    effect.setInterpretationResult(null);
 	}
 	try {

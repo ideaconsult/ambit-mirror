@@ -74,9 +74,12 @@ public class CreateMatrixFromBundle extends AbstractObjectUpdate<SubstanceEndpoi
 	switch(matrix) {
 	case matrix_working:
 	    return deleteMatrix ? sql_delete : sql_insert;
+	    /*
 	case matrix_final :
 	    return deleteMatrix ? sql_delete_final : sql_insert_final;
+	    */
 	}
+	
 	throw new AmbitException("Matrix type undefined");
     }
 
