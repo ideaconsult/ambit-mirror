@@ -107,7 +107,7 @@ public abstract class ProtectedResource extends ServerResource implements IAuthT
 		}
 		headers.removeAll("X-Frame-Options");
 		headers.add("X-Frame-Options", value);
-		ServerInfo si = getResponse().getServerInfo();si.setAgent("Restlet");getResponse().setServerInfo(si);
+		ServerInfo si = getResponse().getServerInfo();si.setAgent("AMBIT");getResponse().setServerInfo(si);
 		setCacheHeaders();
 	}
 	
