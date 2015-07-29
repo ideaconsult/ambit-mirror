@@ -118,7 +118,7 @@ public class FreeMarkerStatusService extends StatusService implements
 
 		response.getCacheDirectives().add(CacheDirective.noCache());
 		ServerInfo si = response.getServerInfo();
-		si.setAgent("Restlet");
+		si.setAgent("AMBIT");
 		response.setServerInfo(si);
 		StringWriter details = null;
 		if (status.getThrowable() != null) {
