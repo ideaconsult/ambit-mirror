@@ -6,6 +6,7 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/facet/substance.js'></script>
 
+<script type='text/javascript' src='${ambit_root}/scripts/config/i5.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/config/ce.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/config/toxcast.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/config/npo.js'></script>
