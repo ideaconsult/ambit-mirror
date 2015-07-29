@@ -304,14 +304,20 @@
         "TO_ACUTE_ORAL_SECTION": {
             "parameters": {
                 "species": {
+                	"comment" : "Moved to conditions",
                     "iOrder": -7,
-                    "inMatrix": true
+                    "inMatrix": false,
+                    "bVisible" : false
                 }
             },
             "conditions": {
                 "sex": {
                     "iOrder": -4
-                }
+                },
+                "species": {
+                    "iOrder": -7,
+                    "inMatrix": true
+                }                
             },
             "effects": {
                 "endpoint": {
@@ -345,9 +351,12 @@
         "TO_ACUTE_DERMAL_SECTION": {
             "parameters": {
                 "species": {
+                	"comment" : "Moved to conditions",
                     "iOrder": -7,
-                    "inMatrix": true
-                },
+                    "inMatrix": false,
+                    "bVisible" : false
+                },            	
+                
                 "sex": {
                     "iOrder": -4
                 }
@@ -355,7 +364,11 @@
             "conditions": {
                 "sex": {
                     "iOrder": -4
-                }
+                },
+                "species": {
+                    "iOrder": -7,
+                    "inMatrix": true
+                }                
             },
             "effects": {
                 "endpoint": {
@@ -389,14 +402,20 @@
         "TO_ACUTE_INHAL_SECTION": {
             "parameters": {
                 "species": {
-                    "iOrder": -8,
-                    "inMatrix": true
-                },
+                	"comment" : "Moved to conditions",
+                    "iOrder": -7,
+                    "inMatrix": false,
+                    "bVisible" : false
+                },                   
                 "sex": {
                     "iOrder": -4
                 }
             },
             "conditions": {
+                "species": {
+                    "iOrder": -8,
+                    "inMatrix": true
+                },            	
                 "sex": {
                     "iOrder": -4
                 },
@@ -562,12 +581,16 @@
         "TO_REPEATED_ORAL_SECTION": {
             "parameters": {
                 "species": {
+                	"comment" : "copied to conditions",
                     "iOrder": -10,
-                    "inMatrix": true
+                    "inMatrix": false,
+                    "bVisible" : false
                 },
                 "test type": {
+                	"comment" : "copied to conditions",
                     "iOrder": -9,
-                    "inMatrix": true
+                    "inMatrix": false,
+                    "bVisible" : false
                 },
                 "route of administration": {
                     "iOrder": -8
@@ -578,6 +601,14 @@
                 }
             },
             "conditions": {
+                "test type": {
+                    "iOrder": -9,
+                    "inMatrix": true
+                },
+            	"species": {
+                    "iOrder": -10,
+                    "inMatrix": true
+                },            	
                 "sex": {
                     "iOrder": -4
                 }
@@ -610,13 +641,17 @@
         "TO_REPEATED_INHAL_SECTION": {
             "parameters": {
                 "species": {
+                	"comment" : "copied to conditions",
                     "iOrder": -10,
-                    "inMatrix": true
-                },
+                    "inMatrix": false,
+                    "bVisible" : false
+                },            	
                 "test type": {
+                	"comment" : "copied to conditions",
                     "iOrder": -9,
-                    "inMatrix": true
-                },
+                    "inMatrix": false,
+                    "bVisible" : false
+                },                
                 "route of administration": {
                     "iOrder": -8
                 },
@@ -626,6 +661,15 @@
                 }
             },
             "conditions": {
+                "test type": {
+                    "iOrder": -9,
+                    "inMatrix": true
+                },            	
+                "species": {
+                    "iOrder": -10,
+                    "inMatrix": true
+                },
+            	
                 "sex": {
                     "iOrder": -4
                 }
@@ -658,8 +702,11 @@
         "TO_REPEATED_DERMAL_SECTION": {
             "parameters": {
                 "species": {
-                    "iOrder": -11
-                },
+                	"comment" : "copied to conditions",
+                    "iOrder": -10,
+                    "inMatrix": false,
+                    "bVisible" : false
+                },            	
                 "type_coverage": {
                     "iOrder": -10,
                     "sTitle": "Type of coverage"
@@ -668,26 +715,41 @@
                     "iOrder": -8
                 },
                 "test type": {
-                    "iOrder": -9
-                },
+                	"comment" : "copied to conditions",
+                    "iOrder": -9,
+                    "inMatrix": false,
+                    "bVisible" : false
+                },                
                 "doses/concentrations": {
                     "sTitle": "Dose/concentrations",
                     "iOrder": -7
                 }
             },
             "conditions": {
+                "test type": {
+                    "iOrder": -9,
+                    "inMatrix": true
+                },                
+            	
+                "species": {
+                    "iOrder": -11,
+                    "inMatrix" : true
+                },
+            	
                 "sex": {
                     "iOrder": -4
                 }
             },
             "effects": {
                 "endpoint": {
-                    "iOrder": -6
+                    "iOrder": -6,
+                    "inMatrix": true
                 },
                 "result": {
                     "sTitle": "Value",
-                    "iOrder": -5
-                }
+                    "iOrder": -5,
+                    "inMatrix": true
+                }                
             },
             "protocol": {
                 "guideline": {
@@ -710,9 +772,11 @@
                     "sTitle": "Genotoxicity type"
                 },
                 "type of study": {
+                	"comment" : "copied to conditions",
                     "iOrder": -8,
                     "sTitle": "Study type",
-                    "inMatrix": true
+                    "inMatrix": false,
+                    "bVisible" : false
                 },
                 "metabolic activation system": {
                     "iOrder": -7,
@@ -723,6 +787,12 @@
                 }
             },
             "conditions": {
+                "type of study": {
+                    "iOrder": -8,
+                    "sTitle": "Study type",
+                    "inMatrix": true,
+                    "bVisible" : true
+                },            	
                 "metabolic activation system": {
                     "iOrder": -4,
                     "sTitle": "Metabolic activation"
@@ -773,14 +843,16 @@
         },
         "TO_GENETIC_IN_VIVO_SECTION": {
             "parameters": {
+                "type of study": {
+                	"comment" : "copied to conditions",
+                    "iOrder": -8,
+                    "sTitle": "Study type",
+                    "inMatrix": false,
+                    "bVisible" : false
+                },            	
                 "type of genotoxicity": {
                     "iOrder": -9,
                     "sTitle": "Genotoxicity type"
-                },
-                "type of study": {
-                    "iOrder": -8,
-                    "sTitle": "Study type",
-                    "inMatrix": true
                 },
                 "route of administration": {
                     "iOrder": -7,
@@ -791,6 +863,11 @@
                 }
             },
             "conditions": {
+                "type of study": {
+                    "iOrder": -8,
+                    "sTitle": "Study type",
+                    "inMatrix": true
+                },            	
                 "sex": {
                     "iOrder": -5
                 },
@@ -837,8 +914,10 @@
         "TO_CARCINOGENICITY_SECTION": {
             "parameters": {
                 "species": {
+                	"comment"  :"copied to conditions",
                     "iOrder": -10,
-                    "inMatrix": true
+                    "inMatrix": false,
+                    "bVisible" : false
                 },
                 "route of administration": {
                     "iOrder": -9
@@ -855,6 +934,10 @@
                 }
             },
             "conditions": {
+                "species": {
+                    "iOrder": -10,
+                    "inMatrix": true
+                },
                 "effect type": {
                     "iOrder": -6,
                     "inMatrix": true
@@ -900,9 +983,11 @@
         "TO_REPRODUCTION_SECTION": {
             "parameters": {
                 "species": {
+                	"comment"  :"copied to conditions",
                     "iOrder": -10,
-                    "inMatrix": true
-                },
+                    "inMatrix": false,
+                    "bVisible" : false
+                },                
                 "route of administration": {
                     "iOrder": -9
                 },
@@ -912,6 +997,10 @@
                 }
             },
             "conditions": {
+                "species": {
+                    "iOrder": -10,
+                    "inMatrix": true
+                },
                 "generation": {
                     "iOrder": -7,
                     "inMatrix": true
@@ -949,9 +1038,12 @@
         "TO_DEVELOPMENTAL_SECTION": {
             "parameters": {
                 "species": {
+                	"comment"  :"copied to conditions",
                     "iOrder": -10,
-                    "inMatrix": true
-                },
+                    "inMatrix": false,
+                    "bVisible" : false
+                },   
+                
                 "route of administration": {
                     "iOrder": -9
                 },
@@ -961,6 +1053,10 @@
                 }
             },
             "conditions": {
+                "species": {
+                    "iOrder": -10,
+                    "inMatrix": true
+                },            	
                 "sex": {
                     "iOrder": -4
                 },
@@ -998,11 +1094,17 @@
         "TO_PHOTOTRANS_AIR_SECTION": {
             "parameters": {
                 "reactant": {
+                	"comment" : "copied to conditions",
                     "iOrder": -9,
-                    "inMatrix": true
+                    "inMatrix": false,
+                    "bVisible" : false
                 }
             },
             "conditions": {
+                "reactant": {
+                    "iOrder": -9,
+                    "inMatrix": true
+                },            	
                 "test condition": {
                     "iOrder": -8,
                     "inMatrix": true
@@ -1095,11 +1197,18 @@
         "TO_BIODEG_WATER_SIM_SECTION": {
             "parameters": {
                 "test type": {
+                	"comment" : "copied to conditions",
                     "iOrder": -9,
-                    "inMatrix": true
+                    "inMatrix": false,
+                    "bVisible" : false
                 }
             },
             "conditions": {
+                "test type": {
+                    "iOrder": -9,
+                    "inMatrix": true,
+                    "bVisible" : true
+                },            	
                 "sampling time": {
                     "iOrder": -8
                 },
@@ -1114,6 +1223,10 @@
                 }
             },
             "effects": {
+                "test type": {
+                    "iOrder": -9,
+                    "inMatrix": true
+                },            	
                 "endpoint": {
                     "sTitle": "Half-life",
                     "inMatrix": true,
@@ -1134,11 +1247,18 @@
         "EN_STABILITY_IN_SOIL_SECTION": {
             "parameters": {
                 "test type": {
+                	"comment" : "copied to conditions",
                     "iOrder": -9,
-                    "inMatrix": true
+                    "inMatrix": false,
+                    "bVisible" : false
                 }
             },
             "conditions": {
+                "test type": {
+                    "iOrder": -9,
+                    "inMatrix": true,
+                    "bVisible" : true
+                },
                 "soil no.": {
                     "iOrder": -8
                 },
@@ -1171,14 +1291,20 @@
         "EN_BIOACCUMULATION_SECTION": {
             "parameters": {
                 "route": {
+                	"comment" : "copied to conditions",
                     "iOrder": -5,
-                    "inMatrix": true
+                    "inMatrix": false,
+                    "bVisible" : false
                 },
                 "species": {
                     "iOrder": -3
                 }
             },
             "conditions": {
+                "route": {
+                    "iOrder": -5,
+                    "inMatrix": true
+                },
                 "doses/concentrations": {
                     "sTitle": "Conc. / Dose",
                     "iOrder": -4
