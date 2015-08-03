@@ -246,7 +246,7 @@
     <div id="jtox-report" class="jtox-report" data-action="onReport">
     
       <#if assessment_report??>   
-      	<button type="button" id="generate-doc">Download</button>
+      	<button type="button" id="generate-doc">Create Word file</button>
       <div id="jtox-report-cover">
         <h1>Ambit Assessment Report</h1>
         <h2 class="data-field" data-field="title">Category For Glymes</h2>
@@ -316,10 +316,10 @@
     <#else>
   	<#if bundleid??>
   		<ul>
-  		<li><a href="${ambit_root}/ui/assessment_report?bundle_uri=${ambit_root}/bundle/${bundleid}">View and download the assessment report</a></li>
-  		<li><a href="${ambit_root}/bundle/${bundleid}/substance?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">Substances (XLSX)</a></li>
-		<li><a href="${ambit_root}/bundle/${bundleid}/dataset?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">Initial matrix (XLSX)</a></li>
-		<li><a href="${ambit_root}/bundle/${bundleid}/matrix?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">Working matrix (XLSX)</a></li>		  		
+  		<li><a href="${ambit_root}/ui/assessment_report?bundle_uri=${ambit_root}/bundle/${bundleid}">Create assessment report</a></li>
+  		<li><a href="${ambit_root}/bundle/${bundleid}/substance?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">Create Excel file with all used experimental data</a></li>
+		<li><a href="${ambit_root}/bundle/${bundleid}/dataset?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">Create Excel file with the initial matrix</a></li>
+		<li><a href="${ambit_root}/bundle/${bundleid}/matrix?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">Create Excel file with the working matrix</a></li>		  		
   		</ul>
   	</#if>
 
