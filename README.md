@@ -12,14 +12,18 @@ Maven 3.x
 1) to build ambit2 libraries:  
 
 Retrieve sources from SVN
-svn checkout svn://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT ambit-all
+````
+svn checkout svn://svn.code.sf.net/p/ambit/code//trunk/ambit2-all ambit-all
+````
 
 ambit2-all>mvn package
 
 2) to build applications - AMBIT REST web services (war):
 
+````
 >cd ambit2-apps
 mvn clean buildnumber:create package -P http -P ambit-release -P aa-enabled -P aa-admin-disabled -P license-in-text-column
+````
 
 (See ambit2-all/ambit2-apps/README.txt for options)
 

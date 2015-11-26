@@ -84,7 +84,7 @@ If true clears isotopes.
 ````
  -d neutralise=true|false	
 ````
- If true neutralises the molecule via set of [predefined SMIRKS](https://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT/ambit2-smarts/src/main/resources/ambit2/smirks/smirks.json).
+ If true neutralises the molecule via set of [predefined SMIRKS](https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-smarts/src/main/resources/ambit2/smirks/smirks.json).
  This is an option for convenience only. Using the transformation option `-d smirks` with the same SMIRKS file will have the same effect.  
  
 #### 5.Implicit hydrogens

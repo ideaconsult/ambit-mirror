@@ -114,10 +114,10 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:https://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT</connection>
-    <developerConnection>scm:svn+ssh://USERNAME@svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT</developerConnection>
-    <tag>scm:svn:https://svn.code.sf.net/p/ambit/code/tags</tag>
-    <url>https://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT</url>
+  		<connection>scm:svn:https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/</connection>
+		<developerConnection>scm:svn+ssh://USER@svn.code.sf.net/p/ambit/code/trunk/ambit2-all/</developerConnection>
+		<tag>scm:svn:https://svn.code.sf.net/p/ambit/code/tags</tag>
+		<url>https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/</url>
   </scm>
   <organization>
     <name>Ideaconsult Ltd.</name>

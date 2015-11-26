@@ -206,7 +206,7 @@ Database connection:	config/ambit.properties
 
 ## Source code 
 
-* Command line application [ambit2-dbcli package](https://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT/ambit2-apps/ambit2-dbcli)
-* Standardizer [ambit2.tautomers.processor.StructureStandardizer](https://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT/ambit2-tautomers/src/main/java/ambit2/tautomers/processor/StructureStandardizer.java)
-* SMIRKS transformation [ambit2.dbcli.smirks.SmirksProcessor](https://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT/ambit2-apps/ambit2-dbcli/src/main/java/ambit2/dbcli/smirks/SMIRKSProcessor.java)
+* Command line application [ambit2-dbcli package](https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps/ambit2-dbcli)
+* Standardizer [ambit2.tautomers.processor.StructureStandardizer](https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-tautomers/src/main/java/ambit2/tautomers/processor/StructureStandardizer.java)
+* SMIRKS transformation [ambit2.dbcli.smirks.SmirksProcessor](https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps/ambit2-dbcli/src/main/java/ambit2/dbcli/smirks/SMIRKSProcessor.java)
  

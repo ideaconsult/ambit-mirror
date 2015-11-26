@@ -18,7 +18,7 @@
 
 ####Database
 
-- Create the chemical structures database and set up the associated grants. You will need the [create_tables.sql](https://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT/ambit2-db/src/main/resources/ambit2/db/sql/create_tables.sql) script.
+- Create the chemical structures database and set up the associated grants. You will need the [create_tables.sql](https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-db/src/main/resources/ambit2/db/sql/create_tables.sql) script.
 
 - Run the following commands in the MySQL console.  [database create and grant access rights script](txt/enmgrants.sql)
 
