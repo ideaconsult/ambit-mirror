@@ -28,7 +28,7 @@
 
 	</distributionManagement>
 	<properties>
-		<net.idea.loom.version>1.1.0</net.idea.loom.version>
+		<net.idea.loom.version>1.1.1-SNAPSHOT</net.idea.loom.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<toxtree.version>3.0.0-SNAPSHOT</toxtree.version>
 		<ambit.version>3.0.1-SNAPSHOT</ambit.version>
