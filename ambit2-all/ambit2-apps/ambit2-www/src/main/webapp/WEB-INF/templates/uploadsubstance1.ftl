@@ -46,12 +46,12 @@ $(document)
 	<form action="${ambit_root}/substance" id="uploadForm"  method="POST"   ENCTYPE="multipart/form-data">		
 	
 	<div class='row remove-bottom'>
-		<label class='five columns alpha' for="file">File (.i5z or .i5d or xlsx)<a href='#' class='chelp i5z'>?</a><em>*</em></label>
-		<input class='eight columns alpha half-bottom'  type="file" name="files[]" title='Add new substance(s) (.i5d or .i5z file)' size="60">
+		<label class='five columns alpha' for="file">File (.i5z <a href='#' class='chelp i5z'>?</a> or .i5d  or .xls or .xlsx <a href='#' class='chelp nmparser'>?</a>)<em>*</em></label>
+		<input class='eight columns alpha half-bottom'  type="file" name="files[]" title='Add new substance(s) (.i5d or .i5z file or .xls or .xlsx)' size="60">
 		<div class='three columns omega'></div>
 	</div>
 	<div class='row remove-bottom'>
-	<label class='five columns alpha' for="file">JSON map for XLSX file<a href='#' class='chelp i5z'>?</a></label>
+	<label class='five columns alpha' for="file">JSON map for XLS/XLSX file <a href='#' class='chelp nmparser'>?</a></label>
 	<input class='eight columns alpha half-bottom'  type="file" name="jsonconfig" title='JSON configuration' size="60">
 	<div class='three columns omega'></div>
 	</div>	

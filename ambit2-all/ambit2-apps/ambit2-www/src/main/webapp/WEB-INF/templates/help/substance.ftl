@@ -18,6 +18,7 @@ Main constituent<a href='#' class='chelp main'>?</a>Additive<a href='#' class='c
     <li><a href="#additive">Additive</a></li>
     <li><a href="#impurity">Impurity</a></li>
     <li><a href="#i5z">.i5z file</a></li>
+    <li><a href="#nmparser">Configurable Excel templates</a></li>
     <li><a href="#substancesearch">Substance search</a></li>
     <li><a href="#category">Endpoint category</a></li>
     <li><a href="#reliability">Reliability</a></li>
@@ -48,6 +49,10 @@ Main constituent<a href='#' class='chelp main'>?</a>Additive<a href='#' class='c
   	<br/>
     Only Substance (IUCLID 5.4, IUCLID 5.5) and ReferenceSubstance (IUCLID 5.0, IUCLID 5.4, IUCLID 5.5.) records
     (as defined by the <a href='http://iuclid.eu/index.php?fuseaction=home.format' class='qxternal'  target=_blank>IUCLID schema</a>) can be imported in this version of Ambit.
+  </div>  
+    <div id="nmparser">
+    Excel templates with JSON configuration. <a href='https://github.com/enanomapper/nmdataparser'>More details</a>
+    </div>
   </div>  
     <div id="substancesearch">
     <ul>
