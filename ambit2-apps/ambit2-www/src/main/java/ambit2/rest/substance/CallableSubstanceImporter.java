@@ -249,15 +249,14 @@ public class CallableSubstanceImporter<USERID> extends
 							((DBSubstanceWriter) writer).setSplitRecord(false);
 						reader = new NanoWikiRDFReader(new InputStreamReader(
 								new FileInputStream(file), "UTF-8"));
-					} else if (ext
-							.endsWith(FileInputState._FILE_TYPE.XLSX_INDEX.getExtension())) {
+					} else if (FileInputState._FILE_TYPE.XLSX_INDEX.hasExtension(ext) || FileInputState._FILE_TYPE.XLS_INDEX.hasExtension(ext)) {
 						if (configFile == null)
 							throw new AmbitException(
-									"XLSX file import requires a JSON configuration file");
+									"XLSX/XLSX file import requires a JSON configuration file");
 						final StructureRecordValidator validator = new StructureRecordValidator(
 								file.getName(), true);
 						reader = new GenericExcelParser(new FileInputStream(
-								file), configFile) {
+								file), configFile,FileInputState._FILE_TYPE.XLSX_INDEX.hasExtension(ext)) {
 							public Object next() {
 								Object record = super.next();
 								try {

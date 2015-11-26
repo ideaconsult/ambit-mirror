@@ -552,7 +552,8 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 									|| ext.endsWith(".csv")
 									|| ext.endsWith(".rdf")
 									|| ext.endsWith(".json")
-									|| ext.endsWith(".xlsx")) {
+									|| ext.endsWith(".xlsx")
+									|| ext.endsWith(".xls")) {
 							} else
 								throw new ResourceException(
 										Status.CLIENT_ERROR_BAD_REQUEST,
