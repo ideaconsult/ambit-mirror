@@ -54,7 +54,7 @@
 				<version>2.7</version>
 				<!-- <docletPath>/path/to/UmlGraph.jar</docletPath> -->
 				<configuration>
-					<source>1.5</source>
+					<source>1.7</source>
 					<aggregate>false</aggregate>
 					<doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
 					<docletArtifact>

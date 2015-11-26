@@ -140,10 +140,10 @@
 	</developers>
 	<contributors></contributors>
 	<scm>
-		<connection>scm:svn:https://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT/ambit2-apps</connection>
-		<developerConnection>scm:svn+ssh://USER@svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT/ambit2-apps</developerConnection>
+	  		<connection>scm:svn:https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</connection>
+		<developerConnection>scm:svn+ssh://USER@svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</developerConnection>
 		<tag>scm:svn:https://svn.code.sf.net/p/ambit/code/tags</tag>
-		<url>https://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT/ambit2-apps</url>
+		<url>https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</url>
 	</scm>
 	<organization>
 		<name>Ideaconsult Ltd</name>
@@ -388,13 +388,15 @@
 		<repository>
 			<id>ambit-plovdiv-releases</id>
 			<url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 		<repository>
 			<id>ambit-plovdiv-snapshots</id>
 			<url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots</url>
 			<snapshots>
 				<enabled>true</enabled>
-				<updatePolicy>daily</updatePolicy>
 			</snapshots>
 		</repository>
 		<repository>
