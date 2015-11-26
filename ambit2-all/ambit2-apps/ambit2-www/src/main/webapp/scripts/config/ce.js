@@ -25,9 +25,13 @@ var config_ce_inchemico = {
               	 "bVisible": false
              },                
              "citation": {
+             		"sTitle": "Data entry year",
                  "bVisible": true,
                  "iOrder": -16
-             }   
+             },
+            "owner" : {
+             "sTitle" : "Provided by"
+            }                   
          },
          "conditions": {
              "c_endpoint": {
@@ -92,10 +96,13 @@ var config_ce_invitro = {
               	 "bVisible": false
             },            
             "citation": {
+            		"sTitle": "Data entry year",
                 "bVisible": true,
                 "iOrder": -13
-            }   
-            
+            }  ,
+            "owner" : {
+             "sTitle" : "Provided by"
+            }             
         },
         "conditions": {
             "target gene": {
@@ -183,6 +190,7 @@ var config_ce_llna = {
            	 "bVisible": false
             },
             "owner" : {
+             "sTitle" : "Provided by",	
            	 "bVisible": false
             },
             "citation" : {
@@ -226,15 +234,15 @@ var config_ce_llna = {
             "text": {
                 "bVisible": true,
                 "inMatrix" : true,
-                "sTitle": "",
+                "sTitle": "Sensitisation potential",
                 "iOrder": -6                    
             }
         },
         "interpretation": {
             "result": {
                 "sTitle": "Potency",
-                "inMatrix" : true,
-                "bVisible": true,
+                "inMatrix" : false,
+                "bVisible": false,
                 "iOrder": -5
             },
             "criteria": {
@@ -270,6 +278,7 @@ var config_ce_humandb = {
             	 "bVisible": false
              },
              "owner" : {
+             	"sTitle" : "Provided by",
             	 "bVisible": false
              },
              "citation" : {
@@ -345,8 +354,12 @@ var config_ce_insilico = {
              	 "bVisible": false
             },               
             "citation": {
+            		"sTitle": "Data entry year",
                 "bVisible": true
-            }   
+            } ,
+            "owner" : {
+             "sTitle" : "Provided by"
+            }                 
         },
         "effects": {
             "endpoint": {

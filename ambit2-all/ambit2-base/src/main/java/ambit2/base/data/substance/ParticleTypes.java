@@ -36,12 +36,12 @@ public enum ParticleTypes {
 			return "Au";
 		}
 	},	
-	NPO_602 {
+	NPO_606 {
 	// MWCNT
 		@Override
 		public String getSMILES() {
-			//useful to have structural reference, not really correct
-			return "C";
+			//https://github.com/enanomapper/data.enanomapper.net/issues/5
+			return "[C]";
 		}
 		@Override
 		public String getCAS() {
@@ -629,7 +629,15 @@ public enum ParticleTypes {
 		public String getEINECS() {
 			return "215-231-4";
 		}
-	}		
+	},
+	NPO_1862 {
+		//polymeric core
+		@Override
+		public String getAnnotation() {
+			return "NPO_1862";
+		}
+	
+	}
 	;
 	public String getSMILES() {
 		return null;

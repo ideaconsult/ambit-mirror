@@ -49,6 +49,7 @@ var config_npo = {
         },
         
 		"parameters": {
+			"bVisible": false,
 			"species" : {
 				"bVisible": false
 			},
@@ -114,6 +115,7 @@ var config_npo = {
             }       
         },
         "conditions": {
+        	"bVisible": false,
             "concentration": {
             	"iOrder": -7,
                 "bVisible": true,

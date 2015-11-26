@@ -145,11 +145,7 @@ public class Property implements Serializable,
 			String reference) {
 		return getInstance(name, reference, "");
 	}
-    
-    public static synchronized Property getSMILESInstance() {
-   	return new Property(Property.opentox_SMILES);
-       }
-    
+
 	public static synchronized Property getSMILESInstance() {
 		return new Property(Property.opentox_SMILES);
 	}

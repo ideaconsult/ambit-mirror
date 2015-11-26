@@ -50,10 +50,15 @@ var config_bao = {
         
 		"parameters": {
 			"bVisible": false,
+			
             "data_gathering_instruments": {
             	"sTitle" : "Instrument",
             	"bVisible": false
-            },
+            }, 
+	"distribution_type" : {
+		"sTitle" : "Distribution type",
+		"bVisible" : true	
+	},
 			"npo_1961" : {
 				"sTitle" : "Aids used to disperse/sonification",
 				"bVisible": false
@@ -165,6 +170,7 @@ var config_bao = {
             }       
         },
         "conditions": {
+        	"bVisible": false,
             "concentration": {
             	"iOrder": -7,
                 "bVisible": true,
@@ -180,31 +186,36 @@ var config_bao = {
                 "bVisible": true,
                 "inMatrix" : false
             },
-            "p": {
-                "bVisible": false
+            "ph": {
+                "bVisible": true
             },
-            "n": {
-                "bVisible": false
+            "medium": {
+                "bVisible": true,
+		"sTitle" : "Medium"
             } ,
             "biotarget": {
                 "bVisible": false
             },
-            "duration": {
+            "phraseother_percentile": {
+		"sTitle" : "Percentile",
                 "bVisible": false
             },
+	    	
             "remark" : {
                 "bVisible": false
             }, 
-            "seq_num" : {
-                "bVisible": false
+		"coating_description" : {
+			"sTitle" : "Coating",
+			"bVisible" : true
+		},
+            "cell" : {
+		"sTitle" : "Cell",
+                "bVisible": true
             },
 			"shape_descriptive" : {
 				"bVisible": true,
 				"sTitle" : "Shape"
-			},
-			"medium": {
-				"sTitle" : "Medium"
-			}	
+			}
         },            
         "interpretation": {
             "result": {

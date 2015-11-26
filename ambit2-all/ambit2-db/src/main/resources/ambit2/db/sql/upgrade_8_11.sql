@@ -1,6 +1,6 @@
 ALTER TABLE `substance_experiment` CHANGE COLUMN `loQualifier` `loQualifier` VARCHAR(8) NULL DEFAULT NULL  , CHANGE COLUMN `upQualifier` `upQualifier` VARCHAR(8) NULL DEFAULT NULL  ;
 
--- ontology freetext with query expsnsion support
+-- ontology freetext with query expansion support
 DROP TABLE IF EXISTS `ontobucket` ;
 CREATE TABLE `ontobucket` (
   `s_source` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,

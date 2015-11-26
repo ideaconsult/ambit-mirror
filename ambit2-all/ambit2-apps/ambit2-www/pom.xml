@@ -482,7 +482,7 @@
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>opentox-client</artifactId>
-			<version>3.0.1-SNAPSHOT</version>
+			<version>3.0.0</version>
 			<type>jar</type>
 		</dependency>
 		<dependency>

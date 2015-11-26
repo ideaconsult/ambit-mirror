@@ -65,7 +65,7 @@ public class OntoBucketResource extends QueryResource<ReadAnnotation, Bookmark> 
 				return null;
 			}
 		},
-		label, subclass, endpoint, hash, protocol;
+		label, subclass, endpoint, hash, protocol,substancetype,reference,target;
 		protected String getParam() {
 			return name();
 		}

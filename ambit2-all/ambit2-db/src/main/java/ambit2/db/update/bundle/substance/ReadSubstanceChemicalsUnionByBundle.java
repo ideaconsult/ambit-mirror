@@ -24,8 +24,8 @@ public class ReadSubstanceChemicalsUnionByBundle extends ReadSubstancesByBundle 
 	    + "content,substanceType,substance.rs_prefix,hex(substance.rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid),null as idchemical\n"
 	    + "from bundle_substance join substance using(idsubstance)	where idbundle=?\n"
 	    + "union(\n"
-	    + "select 	null,'CHEM',hex(idchemical) as huuid,\"/compound\",\"URI\",null,null,\n"
-	    + "concat('/compound/',idchemical),'chemical',null,null,null,null,idchemical from bundle_chemicals where idbundle=?\n"
+	    + "select 	null,'CHEM',hex(idchemical) as huuid,\"/compound\",\"URI\",idchemical as name,idchemical as publicname,\n"
+	    + "concat(\"/compound\",idchemical),'chemical',null,null,null,null,idchemical from bundle_chemicals where idbundle=?\n"
 	    + "and idchemical not in (select idchemical from substance_relation join bundle_substance using(idsubstance))\n"
 	    + ")";
 
@@ -55,12 +55,11 @@ public class ReadSubstanceChemicalsUnionByBundle extends ReadSubstancesByBundle 
 
 	    SubstanceRecord r = super.getObject(rs);
 	    if (r.getIdsubstance() <= 0) {
-		r.clear();
 		r.setIdchemical(rs.getInt("idchemical"));
-		r.setIdstructure(-1);
+		r.clear();
 		List<CompositionRelation> relatedStructures = new ArrayList<CompositionRelation>();
 		r.setRelatedStructures(relatedStructures);
-		relatedStructures.add(new CompositionRelation(r, new StructureRecord(rs.getInt("idchemical"), -1, null,
+		relatedStructures.add(new CompositionRelation(r, new StructureRecord(rs.getInt("idchemical"), 1, null,
 			null), new Proportion()));
 	    }
 	    return r;

@@ -201,14 +201,14 @@ public class StructureRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 			cell = row.createCell(_columns.name.ordinal());
 			cell.setCellType(Cell.CELL_TYPE_STRING);
 			try {
-				Object name = record.getProperty(new SubstancePublicName());
-				cell.setCellValue(name == null ? record.getProperty(
+				Object name = record.getRecordProperty(new SubstancePublicName());
+				cell.setCellValue(name == null ? record.getRecordProperty(
 						new SubstanceName()).toString() : name.toString());
 			} catch (Exception x) {
 
 			}
 
-			for (Property p : record.getProperties())
+			for (Property p : record.getRecordProperties())
 				if (p.getLabel().startsWith(prefix)) {
 					Integer colIndex = mergedProperties.get(p.getLabel());
 					if (colIndex == null) {
@@ -239,7 +239,7 @@ public class StructureRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 							hcell.setCellValue(h);
 						}
 					}
-					Object value = record.getProperty(p);
+					Object value = record.getRecordProperty(p);
 
 					try {
 

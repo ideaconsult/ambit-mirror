@@ -81,7 +81,7 @@ public class SimpleUserJSONReporter <Q extends IQueryRetrieval<DBUser>> extends 
 	try {
 	    output.write("[");
 	    if (addPublicGroup) {
-		output.write(String.format("{\"id\":\"g_%s\",\"name\":\"All\"}", AMBITDBRoles.ambit_user.name()));
+	    	output.write(String.format("{\"id\":\"g_%s\",\"name\":\"All\"}", AMBITDBRoles.ambit_user.name()));
 		comma = ",";
 	    }
 	} catch (Exception x) {

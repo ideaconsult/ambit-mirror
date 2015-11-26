@@ -68,7 +68,8 @@ function defineOntoBucketTable(root,url,viscols) {
 			  					else if ("endpoint" == val) { type = "endpoint"; descr = "by endpoint"; }
 			  					else if ("reference" == val) { type = "citation"; descr = "by reference";  search = o.aData["recalls"];}
 			  					else if ("hash" == val) {   type = "endpointhash"; descr = "by endpoint parameters"; search = o.aData["uuid"]; }
-			  					
+			  					else if ("substancetype" == val) { type = "substancetype"; descr = "by substance type"; search = o.aData["hastopic"];}
+
 			  					if (type === undefined) return descr;
 			  					else 
 								return "<a href='" + root + "/substance?type=" + encodeURIComponent(type) + "&search=" +  encodeURIComponent(search)  + "'>" +descr + " </a>";

@@ -244,8 +244,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		this.similarityOrder = similarityOrder;
 	}
 
-    public static final String AJAX_TIMEOUT = "ajax.timeout";
-    public static final String SIMILARITY_ORDER = "similarity.order";
+	protected boolean similarityOrder = true;
 
 	public AmbitApplication() {
 		this(false);
@@ -354,15 +353,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	public boolean isSendTokenAsCookie() {
 		return openToxAAEnabled;
 	}
-	setStatusService(new FreeMarkerStatusService(this, getStatusReportLevel()));
-	setTunnelService(new TunnelService(true, true) {
-	    @Override
-	    public Filter createInboundFilter(Context context) {
-		return new AmbitTunnelFilter(context);
-	    }
-	});
-	getTunnelService().setUserAgentTunnel(true);
-	getTunnelService().setExtensionsTunnel(false);
 
 	public Restlet initInboundRoot() {
 		initFreeMarkerConfiguration();
@@ -608,17 +598,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 */
 		attachStaticResources(router);
 
-	if (openToxAAEnabled) {
-	    if (protectFeatureResource())
-		router.attach(PropertyResource.featuredef, createProtectedResource(featuresRouter, "feature"));
-	    else {
-		Filter cauthN = new OpenSSOAuthenticator(getContext(), false, "opentox.org",
-			new OpenSSOVerifierSetUser(false));
-		cauthN.setNext(featuresRouter);
-		router.attach(PropertyResource.featuredef, cauthN);
-	    }
-	} else
-	    router.attach(PropertyResource.featuredef, featuresRouter);
+		router.attach("/chelp", HelpResource.class);
+		router.attach("/chelp/{key}", HelpResource.class);
 
 		router.setDefaultMatchingMode(Template.MODE_STARTS_WITH);
 		router.setRoutingMode(Router.MODE_BEST_MATCH);
@@ -1048,134 +1029,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		slookup.attach("/{type}/{subtype}", SubstanceLookup.class);
 		slookup.attach("/{type}/{subtype}/{subsubtype}", SubstanceLookup.class);
 
-		getLogger().warning("Warning: No AA protection! All resources are open for GET, POST, PUT and DELETE!");
-	    }
-
-	} else {
-
-	    // attach login
-
-	    Restlet login = createOpenSSOLoginRouter();
-	    router.attach("/", login);
-	    router.attach("", login);
-	    /**
-	     * OpenSSO login / logout Sets a cookie with OpenSSO token
-	     */
-	    router.attach("/" + OpenSSOUserResource.resource, login);
-	    router.attach("/login", login);
-	    router.attach("/myaccount", login);
-	    router.attach("/provider/signout", login);
-
-	} // OK, AA is already there
-
-	return addOriginFilter(router);
-    }
-
-    protected Restlet addOriginFilter(Restlet router) {
-	String allowedOrigins = getAllowedOrigins();
-	getLogger().info("CORS: Origin filter attached:\t" + allowedOrigins);
-	OriginFilter originFilter = new OriginFilter(getContext(), allowedOrigins);
-	originFilter.setNext(router);
-	/*
-	 * StringWriter w = new StringWriter(); printRoutes(router,"\t",w);
-	 * System.out.println(w);
-	 */
-	return originFilter;
-    }
-
-    protected Filter getBasicAuthFilter(Router router) {
-	ChallengeAuthenticator basicAuth = new ChallengeAuthenticator(getContext(), ChallengeScheme.HTTP_BASIC,
-		"ambit2");
-	// get from config file
-	ConcurrentMap<String, char[]> localSecrets = null;
-	try {
-	    localSecrets = getLocalSecrets();
-	} catch (Exception x) {
-	    getLogger().log(Level.SEVERE, x.getMessage(), x);
-	    localSecrets = new ConcurrentHashMap<String, char[]>(); // empty
+		return queryRouter;
 	}
-	basicAuth.setVerifier(new MapVerifier(localSecrets) {
-	    @Override
-	    public int verify(Request request, Response response) {
-		int result = super.verify(request, response);
-		return Method.GET.equals(request.getMethod()) ? RESULT_VALID : result;
-	    }
-	});
-	basicAuth.setEnroler(new Enroler() {
-	    @Override
-	    public void enrole(ClientInfo clientInfo) {
-		if (clientInfo.getUser() != null && clientInfo.isAuthenticated()) {
-		    // clientInfo.getRoles().add(UPDATE_ALLOWED);
-		    clientInfo.getRoles().add(DBRoles.adminRole);
-		    clientInfo.getRoles().add(DBRoles.datasetManager);
-		}
-	    }
-	});
-
-	UpdateAuthorizer authorizer = new UpdateAuthorizer();
-	authorizer.getAuthorizedRoles().add(DBRoles.adminRole);
-	authorizer.getAuthorizedRoles().add(DBRoles.datasetManager);
-	authorizer.setNext(router);
-	basicAuth.setNext(authorizer);
-	return basicAuth;
-    }
-
-    protected Restlet createOpenSSOLoginRouter() {
-	Filter userAuthn = new OpenSSOAuthenticator(getContext(), true, "opentox.org",
-		new OpenSSOVerifierSetUser(false));
-	userAuthn.setNext(OpenSSOUserResource.class);
-	return userAuthn;
-    }
-
-    protected Restlet createProtectedResource(Restlet router) {
-	return createProtectedResource(router, null);
-    }
-
-    protected Restlet createProtectedResource(Restlet router, String prefix) {
-	Filter authN = new OpenSSOAuthenticator(getContext(), false, "opentox.org", new OpenSSOVerifierSetUser(false));
-	OpenSSOAuthorizer authZ = new OpenSSOAuthorizer();
-	authZ.setPrefix(prefix);
-	authN.setNext(authZ);
-	authZ.setNext(router);
-	return authN;
-    }
-
-    protected Router createSimilaritySearchRouter() {
-	Router similarity = new MyRouter(getContext());
-	similarity.attachDefault(SimilarityResource.class);
-	similarity.attach(SimilarityMatrixResource.resource, SimilarityMatrixResource.class);
-	similarity.attach(ChemicalSpaceResource.resource, ChemicalSpaceResource.class);
-	return similarity;
-    }
-
-    protected Router createSMARTSSearchRouter() {
-	Router smartsRouter = new MyRouter(getContext());
-	smartsRouter.attachDefault(SmartsQueryResource.class);
-	smartsRouter.attach(SmartsQueryResource.resourceID, SmartsQueryResource.class);
-	return smartsRouter;
-    }
-
-    protected Router createRelationsRouter() {
-	Router relationsRouter = new MyRouter(getContext());
-	relationsRouter.attachDefault(QueryStructureRelationResource.class);
-	relationsRouter.attach(
-		String.format("%s%s", OpenTox.URI.dataset.getURI(), QueryStructureRelationResource.resourceID),
-		QueryStructureRelationResource.class);
-	relationsRouter.attach(
-		String.format("%s%s", OpenTox.URI.compound.getURI(), QueryStructureRelationResource.resourceID),
-		QueryTautomersResource.class);
-	return relationsRouter;
-    }
-
-    /**
-     * Everything under /query
-     * 
-     * @return
-     */
-    protected Router createQueryRouter() {
-
-	Router queryRouter = new MyRouter(getContext());
-	queryRouter.attachDefault(QueryListResource.class);
 
 	/**
 	 * Check for OpenSSO token and set the user, if available but don't verify
@@ -1204,18 +1059,23 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				     */
 					private static final long serialVersionUID = -12811434343484170L;
 
-	queryRouter.attach(DatasetStructureQualityStatsResource.resource, DatasetStructureQualityStatsResource.class);
-	queryRouter.attach(DatasetChemicalsQualityStatsResource.resource, DatasetChemicalsQualityStatsResource.class);
-	queryRouter.attach(DatasetStrucTypeStatsResource.resource, DatasetStrucTypeStatsResource.class);
+					@Override
+					public synchronized void setPolicy() throws Exception {
 
-	queryRouter.attach(StudySearchResource.resource, StudySearchResource.class);
+						super.setPolicy();
+					}
+				};
+			}
+		};
+	}
 
 	/**
 	 * Resource /bookmark
 	 * 
 	 * @return
 	 */
-	queryRouter.attach(MissingFeatureValuesResource.resource, MissingFeatureValuesResource.class);
+	protected Restlet createBookmarksRouter() {
+		BookmarksRouter bookmarkRouter = new BookmarksRouter(getContext());
 
 		Filter bookmarkAuth = new OpenSSOAuthenticator(getContext(), false,
 				"opentox.org");
@@ -1236,9 +1096,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		// sameIPguard.setNext(adminRouter);
 		return adminRouter;
 	}
-
-	queryRouter.attach(ExperimentsSearchResource.resource, ExperimentsSearchResource.class);
-	queryRouter.attach(InterpretationResultSearchResource.resource, InterpretationResultSearchResource.class);
 
 	/**
 	 * An attempt to retrieve datasets by an optimized query Not used currently
@@ -1341,10 +1198,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	 * 
 	 * @return
 	 */
-	Router chebi = new MyRouter(getContext());
-	queryRouter.attach(ChEBIResource.resource, chebi);
-	chebi.attachDefault(ChEBIResource.class);
-	chebi.attach(ChEBIResource.resourceID, ChEBIResource.class);
+	protected void attachStaticResources(Router router) {
 
 		for (_staticfile dir : _staticfile.values()) {
 			router.attach(dir.getPath(), dir.getDirectory(getContext()));
@@ -1367,114 +1221,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 * router.attach("/scripts/", scriptsDir);
 		 */
 
-	Router slookup = new MyRouter(getContext());
-	queryRouter.attach(OpenTox.URI.substance.getURI(), slookup);
-	slookup.attachDefault(SubstanceLookup.class);
-	slookup.attach("/{type}", SubstanceLookup.class);
-	slookup.attach("/{type}/{subtype}", SubstanceLookup.class);
-	slookup.attach("/{type}/{subtype}/{subsubtype}", SubstanceLookup.class);
-
-    /**
-     * Check for OpenSSO token and set the user, if available but don't verify
-     * the policy
-     * 
-     * @return
-     */
-    protected Restlet createAuthenticatedOpenResource(Router router) {
-	Filter algAuthn = new OpenSSOAuthenticator(getContext(), false, "opentox.org",
-		new OpenSSOVerifierSetUser(false));
-	algAuthn.setNext(router);
-	return algAuthn;
-    }
-
-    protected TaskStorage<String> createTaskStorage() {
-	return new TaskStorage<String>(getName(), getLogger()) {
-
-	    @Override
-	    protected Task<ITaskResult, String> createTask(String user, ICallableTask callable) {
-
-		return new PolicyProtectedTask(user, !(callable instanceof CallablePolicyCreator)) {
-		    /**
-				     * 
-				     */
-		    private static final long serialVersionUID = -12811434343484170L;
-
-		    @Override
-		    public synchronized void setPolicy() throws Exception {
-
-			super.setPolicy();
-		    }
-		};
-	    }
-	};
-    }
-
-    /**
-     * Resource /bookmark
-     * 
-     * @return
-     */
-    protected Restlet createBookmarksRouter() {
-	BookmarksRouter bookmarkRouter = new BookmarksRouter(getContext());
-
-	Filter bookmarkAuth = new OpenSSOAuthenticator(getContext(), false, "opentox.org");
-	Filter bookmarkAuthz = new BookmarksAuthorizer();
-	bookmarkAuth.setNext(bookmarkAuthz);
-	bookmarkAuthz.setNext(bookmarkRouter);
-	return bookmarkAuth;
-    }
-
-    /**
-     * Resource /admin
-     * 
-     * @return
-     */
-    protected Restlet createAdminRouter() {
-	AdminRouter adminRouter = new AdminRouter(getContext());
-	// DBCreateAllowedGuard sameIPguard = new DBCreateAllowedGuard();
-	// sameIPguard.setNext(adminRouter);
-	return adminRouter;
-    }
-
-    /**
-     * An attempt to retrieve datasets by an optimized query Not used currently
-     * 
-     * @return
-     */
-    protected Restlet createFastDatasetResource() {
-	/*
-	 * Router fastDatasetRouter = new MyRouter(getContext());
-	 * 
-	 * fastDatasetRouter.attachDefault(FastDatasetStructuresResource.class);
-	 * router
-	 * .attach(String.format("%s",FastDatasetStructuresResource.resource),
-	 * FastDatasetStructuresResource.class);
-	 * router.attach(String.format("%s/{%s}"
-	 * ,FastDatasetStructuresResource.resource,DatasetResource.datasetKey),
-	 * fastDatasetRouter); router.attach(String.format("%s/{%s}/metadata",
-	 * FastDatasetStructuresResource.resource,DatasetResource.datasetKey),
-	 * DatasetsResource.class);
-	 * 
-	 * 
-	 * fastDatasetRouter.attach(PropertiesByDatasetResource.featuredef,
-	 * PropertiesByDatasetResource.class);
-	 * fastDatasetRouter.attach(String.format
-	 * ("%s/{%s}",PropertiesByDatasetResource
-	 * .featuredef,PropertiesByDatasetResource
-	 * .idfeaturedef),PropertiesByDatasetResource.class);
-	 */
-	return null;
-    }
-
-    /**
-     * Resource protection via local MySQL/ Ambit database users. Not used
-     * currenty;
-     * 
-     * @return
-     */
-    protected Restlet createLocalUsersGuard() {
-
-	//
+	}
 
 	/**
 	 * Standalone, for testing mainly
@@ -1663,7 +1410,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			return "Unknown";
 		}
 	}
-    }
 
 	public synchronized String readVersionLong() {
 		try {
@@ -1720,7 +1466,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			prefix = "default";
 		return prefix;
 	}
-    }
 
 	protected synchronized boolean protectCompoundResource() {
 		try {
@@ -1766,7 +1511,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			return true;
 		}
 	}
-    }
 
 	protected synchronized String getProperty(String name, String config) {
 		try {
@@ -1849,22 +1593,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
  */
 class UpdateAuthorizer extends RoleAuthorizer {
 
-    public UpdateAuthorizer() {
-	super();
-    }
-
-    @Override
-    public boolean authorize(Request request, Response response) {
-	if (Method.GET.equals(request.getMethod()))
-	    return true;
-	try {
-	    String segment = request.getResourceRef().getLastSegment();
-	    StructureEditorProcessor._commands.valueOf(segment);
-	    List<String> s = request.getResourceRef().getSegments();
-	    // enable /ui/layout , /ui/aromatize /ui/dearomatize
-	    if ("ui".equals(s.get(s.size() - 2)))
-		return true;
-	} catch (Exception x) {
+	public UpdateAuthorizer() {
+		super();
 	}
 
 	@Override
