@@ -55,7 +55,7 @@ public class DescriptorCalculationProcessor extends AbstractDescriptorCalculatio
 				return descriptor.calculate(target);
 		} catch (Exception x) {
 				return new DescriptorValue(
-						descriptor.getSpecification(),
+						(DescriptorSpecification)descriptor.getSpecification(),
 						descriptor.getParameterNames(),
 						descriptor.getParameters(),
 						null,
@@ -88,7 +88,7 @@ public class DescriptorCalculationProcessor extends AbstractDescriptorCalculatio
 		if (descriptor instanceof IStructureDiagramHighlights) {
 			return ((IStructureDiagramHighlights)descriptor).getLegend(width, height);
 		} else {
-			DescriptorSpecification spec = descriptor.getSpecification();
+			DescriptorSpecification spec = (DescriptorSpecification)descriptor.getSpecification();
 			return writeMessages(new String[] {spec.getImplementationTitle()}, width, height);
 		}
 	}

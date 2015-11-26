@@ -96,21 +96,21 @@ public class RetrieveGroupedValuesByAlias extends AbstractQuery<Profile,IStructu
 				value = rs.getObject(5);
 				
 				if (value==null) {
-					record.setProperty(p, Double.NaN); p.setClazz(Number.class);
+					record.setRecordProperty(p, Double.NaN); p.setClazz(Number.class);
 				} else try {
-					record.setProperty(p,rs.getFloat(5));
+					record.setRecordProperty(p,rs.getFloat(5));
 					p.setClazz(Number.class);
 				} catch (Exception x) { //non-numbers, because of the concat ... 
-					record.setProperty(p,rs.getString(5));
+					record.setRecordProperty(p,rs.getString(5));
 					p.setClazz(String.class);
 				}
 			}
 			else {
 				if (NaN.equals(value.toString())) {
-					record.setProperty(p,Double.NaN);
+					record.setRecordProperty(p,Double.NaN);
 					p.setClazz(Number.class);
 				} else {
-					record.setProperty(p,rs.getString(4));
+					record.setRecordProperty(p,rs.getString(4));
 					p.setClazz(String.class);
 				}
 			}

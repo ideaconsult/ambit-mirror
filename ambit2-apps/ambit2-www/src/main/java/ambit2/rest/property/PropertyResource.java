@@ -37,7 +37,6 @@ import ambit2.db.update.property.CreatePropertyReferenceID;
 import ambit2.db.update.property.DeleteProperty;
 import ambit2.db.update.property.ReadProperty;
 import ambit2.db.update.property.UpdateProperty;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.RDFJenaConvertor;
@@ -50,6 +49,7 @@ import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 
 import com.hp.hpl.jena.rdf.model.Resource;
+
 
 /**
  * Feature definition resource http://opentox.org/development/wiki/feature <br>
@@ -97,7 +97,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
     @Override
     protected void doInit() throws ResourceException {
 	super.doInit();
-	customizeVariants(new MediaType[] { MediaType.TEXT_HTML, MediaType.TEXT_URI_LIST, ChemicalMediaType.TEXT_YAML,
+	customizeVariants(new MediaType[] { MediaType.TEXT_HTML, MediaType.TEXT_URI_LIST,
 		MediaType.APPLICATION_RDF_XML, MediaType.APPLICATION_RDF_TURTLE, MediaType.TEXT_RDF_N3,
 		MediaType.TEXT_RDF_NTRIPLES, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JAVA_OBJECT });
     }

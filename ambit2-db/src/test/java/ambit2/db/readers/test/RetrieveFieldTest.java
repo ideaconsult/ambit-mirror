@@ -97,14 +97,7 @@ public class RetrieveFieldTest extends RetrieveTest<Object> {
 					"left join property_string using(idvalue_string) \n"+
 					"join properties using(idproperty) join catalog_references using(idreference) \n"+
 					"where idstructure=100215 and name='Property 1' "
-					/*
-					"select name,idreference,idproperty,idstructure,value_string,value_num,idtype from properties join\n"+
-					"(\n"+
-					"select idstructure,idproperty,null as value_string,value as value_num,1 as idtype from values_number where idstructure=100215\n"+
-					"union\n"+
-					"select idstructure,idproperty,value as value_string,null,0 as idtype from values_string where idstructure=100215\n"+
-					") as L using (idproperty)\nwhere name='Property 1'"
-					*/
+
 					);			
 			Assert.assertEquals(1,table.getRowCount());			
 			for (int i=1; i <= rows.getMetaData().getColumnCount();i++) {

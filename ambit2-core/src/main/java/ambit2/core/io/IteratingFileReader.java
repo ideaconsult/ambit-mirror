@@ -28,8 +28,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.Collection;
 
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
 import org.openscience.cdk.io.formats.IChemFormat;
 import org.openscience.cdk.io.formats.IResourceFormat;
@@ -146,6 +148,35 @@ public class IteratingFileReader implements IIteratingChemObjectReader {
 	public void setReaderMode(Mode mode) {
 		if (reader != null) reader.setReaderMode(mode);
 		
+	}
+
+	@Override
+	public Collection<IChemObjectIOListener> getListeners() {
+		return reader.getListeners();
+	}
+	@Override
+	public <S extends IOSetting> S addSetting(IOSetting setting) {
+		return reader.addSetting(setting);
+	}
+	@Override
+	public void addSettings(Collection<IOSetting> settings) {
+		reader.addSettings(settings);
+	}
+	@Override
+	public boolean hasSetting(String name) {
+		return reader.hasSetting(name);
+	}
+	@Override
+	public <S extends IOSetting> S getSetting(String name) {
+		return reader.getSetting(name);
+	}
+	@Override
+	public <S extends IOSetting> S getSetting(String name, Class<S> c) {
+		return reader.getSetting(name,c);
+	}
+	@Override
+	public Collection<IOSetting> getSettings() {
+		return reader.getSettings();
 	}
 
 }

@@ -102,8 +102,8 @@ public class QueryPairwiseTanimotoAndProperty extends QueryPairwiseTanimoto {
 			relation.getSecondStructure().setIdchemical(rs.getInt(i*2+1));
 			relation.getSecondStructure().setIdchemical(rs.getInt(i*2+2));
 
-			relation.getFirstStructure().setProperty(property,rs.getDouble(7));
-			relation.getSecondStructure().setProperty(property,rs.getDouble(9));
+			relation.getFirstStructure().setRecordProperty(property,rs.getDouble(7));
+			relation.getSecondStructure().setRecordProperty(property,rs.getDouble(9));
 			
 			double noise = 0;
 			//linear with noise

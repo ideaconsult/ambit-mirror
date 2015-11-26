@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
-import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.silent.AtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
@@ -47,8 +47,8 @@ public class RuleStructureFactory
 			System.out.println(base);
 			IAtomContainer mol1 = cof.connectStructures(smi1, pos1, base, 0, IBond.Order.SINGLE);
 			IAtomContainer mol2 = cof.connectStructures(smi2, pos2, base, 0, IBond.Order.SINGLE);
-			String target1 = SmartsHelper.moleculeToSMILES(new Molecule(mol1), false);
-			String target2 = SmartsHelper.moleculeToSMILES(new Molecule(mol2), false);
+			String target1 = SmartsHelper.moleculeToSMILES(new AtomContainer(mol1), false);
+			String target2 = SmartsHelper.moleculeToSMILES(new AtomContainer(mol2), false);
 			ArrayList<String> list = new ArrayList<String>();
 			list.add(target1.trim());
 			list.add(target2.trim());

@@ -2,9 +2,7 @@ package ambit2.base.data;
 
 import java.text.NumberFormat;
 
-import com.jgoodies.binding.beans.Model;
-
-public class PropertyStats<T extends Comparable<T>> extends Model{
+public class PropertyStats<T extends Comparable<T>> {
 	
 	/**
 	 * 

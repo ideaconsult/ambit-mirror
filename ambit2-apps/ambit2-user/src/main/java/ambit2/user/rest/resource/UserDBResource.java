@@ -22,7 +22,6 @@ import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.aalocal.user.ReadUserRoles;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 import net.idea.restnet.db.convertors.QueryHTMLReporter;
-import net.idea.restnet.db.convertors.RDFJenaConvertor;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ITaskStorage;
 import net.idea.restnet.rdf.FactoryTaskConvertorRDF;
@@ -30,9 +29,7 @@ import net.idea.restnet.user.DBUser;
 import net.idea.restnet.user.db.ReadUser;
 import net.idea.restnet.user.resource.UserCSVReporter;
 import net.idea.restnet.user.resource.UserJSONReporter;
-import net.idea.restnet.user.resource.UserRDFReporter;
 import net.idea.restnet.user.resource.UserURIReporter;
-import net.toxbank.client.io.rdf.TOXBANK;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -101,24 +98,7 @@ public class UserDBResource<T> extends AmbitDBQueryResource<ReadUser<T>, DBUser>
 	} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 	    return new OutputWriterConvertor(new UserCSVReporter<IQueryRetrieval<DBUser>>(getRequest()),
 		    MediaType.TEXT_CSV);
-	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)
-		|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE)
-		|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
-		|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)) {
-	    return new RDFJenaConvertor<DBUser, IQueryRetrieval<DBUser>>(new UserRDFReporter<IQueryRetrieval<DBUser>>(
-		    getRequest(), variant.getMediaType(), getDocumentation()), variant.getMediaType(), filenamePrefix) {
-		/**
-					     * 
-					     */
-		private static final long serialVersionUID = -2520251520974057933L;
-
-		@Override
-		protected String getDefaultNameSpace() {
-		    return TOXBANK.URI;
-		}
-	    };
 	} else {
-
 	    return createJSONConvertor(variant);
 	}
     }

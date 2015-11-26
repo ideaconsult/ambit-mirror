@@ -1,0 +1,249 @@
+{
+	"REACTIONS":
+	[
+		{
+			"NAME" : "Aldehyde_ketone_reduction",
+			"CLASS" : "reduction",
+			"SMIRKS" : "[#6:1](=[O:2])[#6,H:5]>>[#6:1]([#6,H:5])[O:2][H]",
+			"USE" : true,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Thiolysis",
+			"CLASS" : "fatty_acid_pathway",
+			"SMIRKS" : "[C:1](=[O:2])[C:3][C:4](=[O:5])>>[C:1](=[O:2])[S].[S][C:3][C:4](=[O:5])",
+			"USE" : true,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Dehydrogenation",
+			"CLASS" : "fatty_acid_pathway",
+			"SMIRKS" : "[*:1][C:2][C:3][C:5](=[OX1])[O:4][H]>>[*:1][C:2]=[C:3][C:5](=[OX1])[O:4][H]",
+			"USE" : true,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Hydrolysis of disaccharides",
+			"CLASS" : "hydrolysis",
+			"SMIRKS" : "[O;R:1][C;R:2][O:3][C;R:4][C:5]>>[O;R:1][C;R:2][O:3][H].[C:4;R]([O][H])[C:5]",
+			"USE" : true,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Phosphorylation",
+			"CLASS" : "Glycolysis",
+			"SMIRKS" : "[CX4H2:1][OX2:2][H]>>[CX4H2:1][OX2H0:2][P]([O][H])([O][H])=[OX1]",
+			"USE" : true,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Dephosphorylation",
+			"CLASS" : "Glycolysis",
+			"SMIRKS" : "[CX4H2:1][OX2H0:2][P]([O][H])([O][H])=[OX1]>>[CX4H2:1][OX2:2][H]",
+			"USE" : true,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Dehydrogenation",
+			"CLASS" : "PentosePathway",
+			"SMIRKS" : "[*:1][C:2]([H])([O:3][H])[C:4]>>[*:1][CH0:2](=[OH0:3])[C:4]",
+			"USE" : false,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Aldose-ketose izomerization",
+			"CLASS" : "Glycolysis",
+			"SMIRKS" : "[C:1](=[O:2])[C:3]([H:6])([O:4][H:5])>>[C:1]([H:6])([O:2][H:5])[C:3](=[O:4])",
+			"USE" : false,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Substrate-level phosphorylation",
+			"CLASS" : "Krebs",
+			"SMIRKS" : "[#6:1][OX2H0:2][P]([O][H])([O][H])=[OX1]>>[#6:1][O:2][H]",
+			"USE" : false,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Decarboxylation",
+			"CLASS" : "Krebs",
+			"SMIRKS" : "[*:1][C:2][C:3](=[OH0:4])[O:5][H]>>[*:1][C:2].[CH0:3](=[OH0:4])=[OH0:5]",
+			"USE" : true,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Hydration",
+			"CLASS" : "Krebs",
+			"SMIRKS" : "[C:1]=[C:2]>>[C:1]([O])[C:2]",
+			"USE" : false,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Dehydration",
+			"CLASS" : "Krebs",
+			"SMIRKS" : "[*:1][C:2]([O])[C:3]>>[*:1][C:2]=[C:3]",
+			"USE" : false,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Aliphatic hydroxylation",
+			"CLASS" : "phase1",
+			"SMIRKS" : "[C;X4:1]([!O:3])([!O:4])([!O:5])[H:2]>>[C:1]([!O:3])([!O:4])([!O:5])[O][H:2]",
+			"USE" : false,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},		
+		{
+			"NAME" : "Aromatic hydroxylation",
+			"CLASS" : "phase1",
+			"SMIRKS" : "[c:1][H:2]>>[c:1][O][H:2]",
+			"USE" : true,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "O-dealkylation",
+			"CLASS" : "phase1",
+			"SMIRKS" : "[O:1][C:2]([H])>>[O:1][H].[C:2]=[O]",
+			"USE" : true,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Aldehyde oxidation",
+			"CLASS" : "phase1",
+			"SMIRKS" : "[H][C:1]=[O:2]>>[C:1](O[H])=[O:2]",
+			"USE" : false,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Alcohol oxidation",
+			"CLASS" : "phase1",
+			"SMIRKS" : "[C:1]([H])[O:2][H]>>[C:1]=[O:2]",
+			"USE" : false,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Dioxolane demethylation",
+			"CLASS" : "phase1",
+			"SMIRKS" : "[C:3]([#8:1])[#8:2]>>[#8:1].[#8:2].[C:3]=[O]",
+			"USE" : false,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Epoxidation",
+			"CLASS" : "phase1",
+			"SMIRKS" : "[C:1]=[C:2]>>[C:1]1[C:2][O]1",
+			"USE" : false,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Ester hydrolysis",
+			"CLASS" : "phase1.reduction",
+			"SMIRKS" : "[#6:1][CX3:2](=[OX1:3])[OX2H0:4][#6:5]>>[#6:1][CX3:2](=[OX1:3])[OH].[#6:5][OX2H0:4]",
+			"USE" : false,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		},
+		{
+			"NAME" : "Epoxide  hydrolysis",
+			"CLASS" : "phase1.reduction",
+			"SMIRKS" : "[C:1]([*:2])1[C:3]([*:4])[O:5]1>>([*:2])[C:1]([O])[C:3]([*:4])[O:5]",
+			"USE" : false,
+			"USE_CONDITIONS" : ["REACTION_APPLICATIONS_PER_REACTANT < 3"]
+		}
+	],
+	
+	
+	"REACTOR_STRATEGY":
+	{
+		"MAX_NUM_OF_REACTIONS" : -1,
+		"MAX_LEVEL" : 1,
+		
+		"ALLOWED_PRODUCTS_SMILES" :
+		[
+			"O=C=O",
+			"[OH2]",
+			"C=O",
+			"CC(=O)O",
+			"CC=O",
+			"O=C(O)O",
+			"CC(C)=O",
+			"OCC(=O)COP(=O)(O)O",
+			"[H]C(O)(C=O)CO",
+			"[H]C(O)(CO)C(=O)O",
+			"[H]C3(COP(=O)(O)OP(=O)(O)OCC(C)(C)C(O)C(=O)NCCC(=O)NCCSC(C)=O)(OC([H])(N2C=NC=1C(N)=NC=NC=12)C([H])(O)C3([H])(OP(=O)(O)O))",
+			"[H]C3(COP(=O)(O)OP(=O)(O)OCC(C)(C)C(O)C(=O)NCCC(=O)NCCSC(=O)CCC(=O)O)(OC([H])(N2C=NC=1C(N)=NC=NC=12)C([H])(O)C3([H])(OP(=O)(O)O))",
+			"[H]C(CO)(OP(=O)(O)O)C(=O)O",
+			"OC(=O)C(=C)OP(O)([O-])=O",
+			"CC(=O)C(=O)O",
+			"O=C(O)CC(O)(CC(=O)O)C(=O)O",
+			"O=C(O)C=C(CC(=O)O)C(=O)O",
+			"O=C(O)CC(C(=O)O)C(O)C(=O)O",
+			"O=C(O)CCC(=O)C(=O)O",
+			"[H]C3(COP(=O)(O)OP(=O)(O)OCC(C)(C)C(O)C(=O)NCCC(=O)NCCSC(=O)CCC(=O)O)(OC([H])(N2C=NC=1C(N)=NC=NC=12)C([H])(O)C3([H])(OP(=O)(O)O))",
+			"O=C(O)CCC(=O)O",
+			"O=C(O)C=CC(=O)O",
+			"COC1=C(O)C(C)=C(CC=C(C)CCC=C(C)C)C(O)=C1(OC)",
+			"[H]C1(O)(C(=O)OC([H])(COP(=O)(O)O)C([H])(O)C1([H])(O))",
+			"OCC(=O)C(O)C(O)C(O)C(O)COP(=O)(O)O",
+			"O=CC(O)C(O)COP(=O)(O)O",
+			"NC1C2NC=NC=2N=CN=1",
+			"NC1=C2N=CN=C2N=CN1",
+			"NC1=NC2=C(NC=N2)C(=O)N1",
+			"NC1NC2=C(NC=N2)C(=O)N=1",
+			"CC1=CNC(=O)NC1=O",
+			"NC1=NC(=O)NC=C1",
+			"NC1NC(=O)N=CC=1",
+			"O=C1NC=CC(=O)N1",
+			"NC1=NC=NC2=C1N=CN2C3OC(CO)C(O)C3O",
+			"[H]C1(O)(CC([H])(OC1([H])(CO))N3C=NC=2C(N)=NC=NC=23)",
+			"NC1=NC2=C(N=CN2C3OC(CO)C(O)C3O)C(=O)N1",
+			"[H]C1(O)(CC([H])(OC1([H])(CO))N3C=NC=2C(=O)NC(N)=NC=23)",
+			"NC1NC2=C(N=CN2C3OC(CO)C(O)C3O)C(=O)N=1",
+			"[H]C1(O)(CC([H])(OC1([H])(CO))N3C=NC=2C(=O)N=C(N)NC=23)",
+			"NC1=NC(=O)N(C=C1)C2OC(CO)C(O)C2O",
+			"[H]C1(O)(CC([H])(OC1([H])(CO))N2C=CC(N)=NC2(=O))",
+			"NC1NC(=O)N=(CC=1)C2OC(CO)C(O)C2O",
+			"OCC1OC(N2C=CC(=O)NC2=O)C(O)C1O",
+			"[H]C1(O)(CC([H])(OC1([H])(CO))N2C=CC(=O)NC2(=O))",
+			"O=C1NC(=O)C=2NC=NC=2(N1)",
+			"O=C1NC=NC=2N=CNC1=2",
+			"O=C1N=CNC=2N=CNC1=2",
+			"[H]C3(CO)(OC([H])(N2C=NC=1C(=O)NC=NC=12)C([H])(O)C3([H])(O))",
+			"[H]C1(O)(CC([H])(OC1([H])(CO))N3C=NC=2C(=O)NC=NC=23)",
+			"[H]C3(CO)(OC([H])(N2C=NC=1C(=O)N=CNC=12)C([H])(O)C3([H])(O))",
+			"[H]C1(O)(CC([H])(OC1([H])(CO))N3C=NC=2C(=O)N=CNC=23)",
+			"[H]C3(CO)(OC([H])(N2C=NC=1C(=O)NC(=O)NC=12)C([H])(O)C3([H])(O))",
+			"NC(CC1=CNC=N1)C(O)=O",
+			"CCC(C)C(N)C(O)=O",
+			"CC(C)CC(N)C(O)=O",
+			"NCCCCC(N)C(O)=O",
+			"CSCCC(N)C(O)=O",
+			"NC(CC1=CC=CC=C1)C(O)=O",
+			"CC(O)C(N)C(O)=O",
+			"NC(CC1=CNC2=C1C=CC=C2)C(O)=O",
+			"NC(CC1=CC=C(O)C=C1)C(O)=O",
+			"CC(C)C(N)C(O)=O",
+			"CC(N)C(O)=O",
+			"NC(CCCNC(N)=N)C(O)=O",
+			"NC(CC(N)=O)C(O)=O",
+			"NC(CC(O)=O)C(O)=O",
+			"NC(CS)C(O)=O",
+			"NC(CCC(O)=O)C(O)=O",
+			"NC(CCC(N)=O)C(O)=O",
+			"NCC(O)=O",
+			"[H]C1(CCCN1)C(O)=O",
+			"NC(CO)C(O)=O",
+			"OCC1OC(O)C(O)C(O)C1O",
+			"C1(O)(COC(O)(CO)C1(O))",
+			"C1(O)(C(O)OC(COP(=O)(O)O)C1(O))",
+			"C(O)(COP(=O)(O)O)C(O)C(=O)CO",
+			"C1(O)(OC(COP(=O)(O)O)C(O)C(O)C1(O))",
+			"C2(O)(C(O)OC(COC1(OC(CO)C(O)C(O)C1(O)))C(O)C2(O))",
+			"C1(N)(C(O)OC(CO)C(O)C1(O))",
+			"OC1C(O)C(OC1(O)CO)CO",
+			"OC1C(O)C(OC(O)C1O)CO",
+			"OCC(O)C(O)C(O)C(O)CO",
+			"OCC(O)CO",
+			"OCC(O)C(O)C(O)CO"
+			
+			]
+	}
+}

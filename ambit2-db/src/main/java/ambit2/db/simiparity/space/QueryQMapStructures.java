@@ -59,12 +59,12 @@ public class QueryQMapStructures extends AbstractStructureQuery<String,Integer,N
 	}
 	@Override
 	protected void retrieveMetric(IStructureRecord record, ResultSet rs) throws SQLException {
-		record.setProperty(Property.getInstance("metric",toString(),"http://ambit.sourceforge.net"), retrieveValue(rs));
-		record.setProperty(Property.getInstance("a",toString(),"http://ambit.sourceforge.net"), rs.getFloat(7));
-		record.setProperty(Property.getInstance("b",toString(),"http://ambit.sourceforge.net"), rs.getFloat(8));
-		record.setProperty(Property.getInstance("c",toString(),"http://ambit.sourceforge.net"), rs.getFloat(9));
-		record.setProperty(Property.getInstance("d",toString(),"http://ambit.sourceforge.net"), rs.getFloat(10));
-		record.setProperty(Property.getInstance("fisher",toString(),"http://ambit.sourceforge.net"), rs.getFloat(11));
+		record.setRecordProperty(Property.getInstance("metric",toString(),"http://ambit.sourceforge.net"), retrieveValue(rs));
+		record.setRecordProperty(Property.getInstance("a",toString(),"http://ambit.sourceforge.net"), rs.getFloat(7));
+		record.setRecordProperty(Property.getInstance("b",toString(),"http://ambit.sourceforge.net"), rs.getFloat(8));
+		record.setRecordProperty(Property.getInstance("c",toString(),"http://ambit.sourceforge.net"), rs.getFloat(9));
+		record.setRecordProperty(Property.getInstance("d",toString(),"http://ambit.sourceforge.net"), rs.getFloat(10));
+		record.setRecordProperty(Property.getInstance("fisher",toString(),"http://ambit.sourceforge.net"), rs.getFloat(11));
 	}	
 }
 /**

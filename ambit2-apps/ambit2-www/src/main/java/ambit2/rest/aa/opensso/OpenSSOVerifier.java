@@ -3,12 +3,15 @@ package ambit2.rest.aa.opensso;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.idea.restnet.i.aa.OpenSSOCookie;
+
 import org.opentox.aa.OTAAParams;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Cookie;
 import org.restlet.data.Form;
+import org.restlet.data.Protocol;
 import org.restlet.security.User;
 import org.restlet.security.Verifier;
 
@@ -45,7 +48,7 @@ public class OpenSSOVerifier implements Verifier {
 			token = getTokenFromCookies(request);
 		
 		if (token==null) { //still nothing  
-			request.getCookies().removeAll("subjectid");
+			request.getCookies().removeAll(OpenSSOCookie.CookieName);
 			return enabled?Verifier.RESULT_MISSING:Verifier.RESULT_VALID;
 	    } else token = token.trim();
 		
@@ -59,7 +62,7 @@ public class OpenSSOVerifier implements Verifier {
 					setUser(ssoToken, request);
 					return Verifier.RESULT_VALID;
 				} else {
-					request.getCookies().removeAll("subjectid");
+					request.getCookies().removeAll(OpenSSOCookie.CookieName);
 					return enabled?Verifier.RESULT_INVALID:Verifier.RESULT_VALID;
 				}
 			} catch (Exception x) {
@@ -67,7 +70,7 @@ public class OpenSSOVerifier implements Verifier {
 				return enabled?Verifier.RESULT_MISSING:Verifier.RESULT_VALID;
 			}
 		} else {
-			request.getCookies().removeAll("subjectid");
+			request.getCookies().removeAll(OpenSSOCookie.CookieName);
 			return enabled?Verifier.RESULT_MISSING:Verifier.RESULT_VALID;
 		}
 
@@ -80,14 +83,13 @@ public class OpenSSOVerifier implements Verifier {
 		OpenSSOUser user = new OpenSSOUser();
 		user.setToken(ssoToken.getToken());
 		user.setUseSecureCookie(useSecureCookie(request));
-		request.getCookies().removeAll("subjectid");
-		request.getCookies().add("subjectid",ssoToken.getToken());
+		OpenSSOCookie.setCookie(request.getCookies(),ssoToken.getToken(),useSecureCookie(request));
 		return user;
 	}
 	
 	protected String getTokenFromCookies(Request request) {
 		for (Cookie cookie : request.getCookies()) {
-			if ("subjectid".equals(cookie.getName()))
+			if (OpenSSOCookie.CookieName.equals(cookie.getName()))
 				return cookie.getValue();
 
 		}
@@ -95,13 +97,6 @@ public class OpenSSOVerifier implements Verifier {
 	}
 	
 	protected boolean useSecureCookie(Request request) {
-		for (Cookie cookie : request.getCookies()) {
-			if ("subjectid_secure".equals(cookie.getName())) try {
-				return Boolean.parseBoolean(cookie.getValue());
-			} catch (Exception x) {
-			}
-		}
-		//secure cookie by default
-		return true;
+		return Protocol.HTTPS.equals(request.getProtocol());
 	}	
 }

@@ -4,12 +4,12 @@ import java.awt.Component;
 
 import javax.swing.Action;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 public interface IMoleculeEditAction extends Action {
-	public IMolecule getMolecule();
+	public IAtomContainer getMolecule();
 
-	public void setMolecule(IMolecule molecule);
+	public void setMolecule(IAtomContainer molecule);
 	
 	public void setParentComponent(Component parentComponent);
 

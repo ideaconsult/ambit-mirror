@@ -107,7 +107,7 @@ public class CdkJmolAdapter extends JmolAdapter {
 			while (seq.hasNext()) {
 				Iterator<IChemModel> model = seq.next().chemModels().iterator();
 				while (model.hasNext()) {
-					Iterator<IAtomContainer> c = model.next().getMoleculeSet().molecules().iterator();
+					Iterator<IAtomContainer> c = model.next().getMoleculeSet().atomContainers().iterator();
 					while (c.hasNext()) {
 						Iterator<IAtom> it= c.next().atoms().iterator();
 						while(it.hasNext()) {

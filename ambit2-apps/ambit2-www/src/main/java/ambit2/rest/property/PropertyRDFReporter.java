@@ -47,7 +47,7 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 	protected QueryURIReporter createURIReporter(Request reference,ResourceDoc doc) {
 		return new PropertyURIReporter(reference);
 	}
-	public void header(com.hp.hpl.jena.ontology.OntModel output, Q query) {
+	public void header(OntModel output, Q query) {
 		super.header(output, query);
 		OT.OTClass.Feature.createOntClass(getJenaModel());
 	

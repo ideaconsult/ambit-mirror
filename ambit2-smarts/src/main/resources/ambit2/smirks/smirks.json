@@ -1,0 +1,547 @@
+{
+    "OPTIONS": {
+        "properties": {
+            "atomtypes": false,
+            "transformations": true,
+            "sparse": true
+        }
+    },
+    "REACTIONS": [
+        {
+            "NAME": "Nitro group uncharged -> charged",
+            "CLASS": "charger",
+            "SMIRKS": "[*:1][N:2](=[O:3])=[O:4]>>[*:1][N+:2](=[O:3])[O-:4]",
+            "USE": false,
+            "precondition": {
+                "atom": [
+                    "N"
+                ]
+            }
+        },
+        {
+            "NAME": "Nitro group charged -> uncharged",
+            "CLASS": "uncharge",
+            "SMIRKS": "[*:1][N+:2](=[O:3])[O-:4]>>[*:1][N:2](=[O:3])=[O:4]",
+            "USE": true,
+            "precondition": {
+                "comment": "only structures having at least one atom with any of the atomtypes listed will be submitted to SMIRKS matching",
+                "atomtype": [
+                    "N.plus.sp2.radical",
+                    "N.plus.sp3.radical",
+                    "N.plus",
+                    "N.plus.sp2",
+                    "N.plus.sp1"
+                ]
+            }
+        },
+        {
+            "NAME": "Ylide P",
+            "CLASS": "uncharge",
+            "SMIRKS": "[*-:1][P+:2]([C:3])[C:4]>>[*:1]=[P:2]([C:3])[C:4]",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "P.ate.charged",
+                    "P.anium",
+                    "P.sp1.plus"
+                ]
+            }
+        },
+        {
+            "NAME": "Ylide N",
+            "CLASS": "uncharge",
+            "SMIRKS": "[*-:1][N+;!X4:2]([C:3])[C:4]>>[*:1]=[N:2]([C:3])[C:4]",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "N.plus.sp2.radical",
+                    "N.plus.sp3.radical",
+                    "N.plus",
+                    "N.plus.sp2",
+                    "N.plus.sp1"
+                ]
+            }
+        },
+        {
+            "NAME": "Ylide S=O",
+            "CLASS": "uncharge",
+            "SMIRKS": "[O-:1][S+:2]([C:3])[C:4]>>[O:1]=[S:2]([C:3])[C:4]",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "S.plus",
+                    "S.inyl.charged",
+                    "S.onyl.charged"
+                ]
+            }
+        },
+        {
+            "NAME": "Ylide S=N",
+            "CLASS": "uncharge",
+            "SMIRKS": "[N-:1][S+:2]([C:3])[C:4]>>[N:1]=[S:2]([C:3])[C:4]",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "S.plus",
+                    "S.inyl.charged",
+                    "S.onyl.charged",
+                    "N.minus.sp3",
+                    "N.minus.sp2",
+                    "N.minus.planar3"
+                ]
+            }
+        },
+        {
+            "NAME": "Ylide S",
+            "CLASS": "uncharge",
+            "SMIRKS": "[*-:1][S+:2]([C:3])[C:4]>>[*:1]=[S:2]([C:3])[C:4]",
+            "USE": false,
+            "precondition": {
+                "atomtype": [
+                    "S.plus",
+                    "S.inyl.charged",
+                    "S.onyl.charged"
+                ]
+            }
+        },
+        {
+            "NAME": "N#N=N",
+            "CLASS": "uncharge",
+            "SMIRKS": "[N-:1]=[N+:2]=[N:3]>> [N:1]#[N:2]=[N:3]",
+            "example": "CC[N-]=[N+]=NCC",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "N.plus.sp2.radical",
+                    "N.plus.sp3.radical",
+                    "N.plus",
+                    "N.plus.sp2",
+                    "N.plus.sp1",
+                    "N.minus.sp3",
+                    "N.minus.sp2",
+                    "N.minus.planar3"
+                ]
+            }
+        },
+        {
+            "NAME": "S=O",
+            "CLASS": "uncharge",
+            "SMIRKS": "[S+:1][O-:2]>> [S:1]=[O:2]",
+            "example": "[O-][S+]1CC[S+]([O-])CC[S+]([O-])CC1",
+            "comment": "overlaps with ylide S",
+            "USE": false,
+            "precondition": {
+                "atomtype": [
+                    "S.plus",
+                    "S.inyl.charged",
+                    "S.onyl.charged",
+                    "O.minus2",
+                    "O.minus",
+                    "O.minus.co2"
+                ]
+            }
+        },
+        {
+            "NAME": "Amides",
+            "CLASS": "uncharge",
+            "SMIRKS": "[N-:1][C:2]=[O:3]>>[N:1]([H])[C:2]=[O:3]",
+            "example": "O=C([N-])C",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "N.minus.sp3",
+                    "N.minus.sp2",
+                    "N.minus.planar3"
+                ]
+            }
+        },
+        {
+            "NAME": "Quaternion",
+            "CLASS": "uncharge",
+            "SMIRKS": "[N+;X4:1]>>[N:1][H]",
+            "example": "CC[N+](C)(C)CCOP(=O)([O-])OC",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "N.plus.sp2.radical",
+                    "N.plus.sp3.radical",
+                    "N.plus",
+                    "N.plus.sp2",
+                    "N.plus.sp1"
+                ]
+            }
+        },
+        {
+            "NAME": "O-",
+            "CLASS": "uncharge",
+            "SMIRKS": "[O-;X1:1]>>[O:1][H]",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "O.minus2",
+                    "O.minus",
+                    "O.minus.co2"
+                ]
+            }
+        },
+        {
+            "NAME": "S-",
+            "CLASS": "uncharge",
+            "SMIRKS": "[S-;X1:1]>>[S:1][H]",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "S.2minus",
+                    "S.minus"
+                ]
+            }
+        },
+        {
+            "NAME": "C.minus.planar",
+            "CLASS": "uncharge",
+            "SMIRKS": "[C-;X3:1]>>[C:1][H]",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "C.minus.planar"
+                ]
+            }
+        },
+        {
+            "NAME": "[I.plus.sp3, C.minus.sp3]",
+            "CLASS": "uncharge",
+            "SMIRKS": "[C-;X3:1][I+;X2]>>[C:1]=[I]",
+            "example": "FC(F)(F)C(F)(F)C(F)(F)C(F)(F)S(=O)(=O)[C-]([I+]c1ccccc1)S(=O)(=O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+            "comment": "to be verified CHEMBL1988693",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "I.plus.sp3",
+                    "C.minus.sp3"
+                ]
+            }
+        },
+        {
+            "NAME": "[C.minus.sp3, C.plus.planar]",
+            "CLASS": "uncharge",
+            "SMIRKS": "[C-;X3:1][C+;X3:2]>>[C:1][C:2]",
+            "example": "N[C-]1N=CN(CC=Cc2ccccc2)[C@H]3N=CN[C+]13",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "C.plus.planar",
+                    "C.minus.sp3"
+                ]
+            }
+        },
+        {
+            "NAME": "[C.minus.sp3]",
+            "CLASS": "uncharge",
+            "SMIRKS": "[C-;X3:1]>>[C:1]",
+            "example": "CC(=O)O[C@]12CC[N@+]3(C)CCCC[C@@H]3[C-]1Nc4ccccc24",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "C.minus.sp3"
+                ]
+            }
+        },
+        {
+            "NAME": "[C.plus.planar]",
+            "CLASS": "uncharge",
+            "SMIRKS": "[C+;X3:1]>>[C:1]",
+            "example": "CCN(CC)[c+]1sc2C(Oc3ccc(Br)cc3c2s1)c4ccc(Cl)cc4",
+            "comment": "to be verified",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "C.plus.planar"
+                ]
+            }
+        },
+        {
+            "NAME": "B",
+            "CLASS": "metals",
+            "SMIRKS": "[B]>>",
+            "USE": false,
+            "precondition": {
+                "atom": [
+                    "B"
+                ]
+            }
+        },
+        {
+            "NAME": "Be",
+            "CLASS": "metals",
+            "SMIRKS": "[Be]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Be"
+                ]
+            }
+        },
+        {
+            "NAME": "Li",
+            "CLASS": "metals",
+            "SMIRKS": "[Li]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Li"
+                ]
+            }
+        },
+        {
+            "NAME": "Na",
+            "CLASS": "metals",
+            "SMIRKS": "[Na]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Na"
+                ]
+            }
+        },
+        {
+            "NAME": "K",
+            "CLASS": "metals",
+            "SMIRKS": "[K]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "K"
+                ]
+            }
+        },
+        {
+            "NAME": "As",
+            "CLASS": "metals",
+            "SMIRKS": "[As]>>",
+            "example": "[As](C=1C=CC([N-]CC(=O)N)=CC1)(=O)(O)O",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "As"
+                ]
+            }
+        },
+        {
+            "NAME": "Ba",
+            "CLASS": "metals",
+            "SMIRKS": "[Ba]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Ba"
+                ]
+            }
+        },
+        {
+            "NAME": "Al",
+            "CLASS": "metals",
+            "SMIRKS": "[Al]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Al"
+                ]
+            }
+        },
+        {
+            "NAME": "Si",
+            "CLASS": "metals",
+            "SMIRKS": "[Si]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Si"
+                ]
+            }
+        },
+        {
+            "NAME": "Ar",
+            "CLASS": "metals",
+            "SMIRKS": "[Ar]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Ar"
+                ]
+            }
+        },
+        {
+            "NAME": "Ti",
+            "CLASS": "metals",
+            "SMIRKS": "[Ti]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Ti"
+                ]
+            }
+        },
+        {
+            "NAME": "Fe",
+            "CLASS": "metals",
+            "SMIRKS": "[Fe]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Fe"
+                ]
+            }
+        },
+        {
+            "NAME": "Zn",
+            "CLASS": "metals",
+            "SMIRKS": "[Zn]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Zn"
+                ]
+            }
+        },
+        {
+            "NAME": "Xe",
+            "CLASS": "metals",
+            "SMIRKS": "[Xe]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Xe"
+                ]
+            }
+        },
+        {
+            "NAME": "Ra",
+            "CLASS": "metals",
+            "SMIRKS": "[Ra]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Ra"
+                ]
+            }
+        },
+        {
+            "NAME": "Ca",
+            "CLASS": "metals",
+            "SMIRKS": "[Ca]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Ca"
+                ]
+            }
+        },
+        {
+            "NAME": "Ag",
+            "CLASS": "metals",
+            "SMIRKS": "[Ag]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Ag"
+                ]
+            }
+        },
+        {
+            "NAME": "Kr",
+            "CLASS": "metals",
+            "SMIRKS": "[Kr]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Kr"
+                ]
+            }
+        },
+        {
+            "NAME": "Ra",
+            "CLASS": "metals",
+            "SMIRKS": "[Ra]>>",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Ra"
+                ]
+            }
+        },
+        {
+            "NAME": "Sb",
+            "CLASS": "metals",
+            "SMIRKS": "[Sb]>>",
+            "example": "[Cl-].[Cl-].[Cl-].[Cl-].[Cl-].NS(=O)(=O)CC1CC[C-]([Sb+5])CC1.c2ccncc2",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Sb"
+                ]
+            }
+        },
+        {
+            "NAME": "Te",
+            "CLASS": "metals",
+            "SMIRKS": "[Te]>>",
+            "example": "N.[Cl-].Cl[Te]1(Cl)OCCO1",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Te"
+                ]
+            }
+        },
+        {
+            "NAME": "Se",
+            "CLASS": "metals",
+            "SMIRKS": "[#34]>>",
+            "example": "Nc1ccc(cc1)c2cc(cc([se+]2)c3ccc(N)cc3)c4ccc(cc4)N5CCOCC5",
+            "comments" : "aromatic in the example!",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Se","X"
+                ]
+            }
+        },
+        {
+            "NAME": "Mg",
+            "CLASS": "metals",
+            "SMIRKS": "[Mg]>>",
+            "example": "[Mg+2].[O-]S(=O)(=O)[O-]",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "Mg"
+                ]
+            }
+        },        
+        {
+            "NAME": "[N=N.minus.sp2]",
+            "CLASS": "N",
+            "SMIRKS": "[N:1]=[N-:2]>>[N:1][N:2]([H])",
+            "example": "[N-]=NCC(=O)OC(COCc1ccccc1)COCc2ccccc2",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "N.minus.sp2"
+                ]
+            }
+        },
+
+         {
+            "NAME": "N.minus.sp3",
+            "CLASS": "uncharge",
+            "SMIRKS": "[*:1][N-:2][*:3]>>[*:1][N:2]([H])[*:3]",
+            "USE": true,
+            "precondition": {
+                "atomtype": [
+                    "N.minus.sp3"
+                ]
+            }
+        }
+                 
+    ]
+}

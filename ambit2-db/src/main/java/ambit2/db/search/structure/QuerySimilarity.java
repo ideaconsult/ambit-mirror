@@ -44,6 +44,6 @@ public abstract class QuerySimilarity<F,T,C extends IQueryCondition> extends Abs
 		return b.toString();
 	}	
 	protected void retrieveMetric(IStructureRecord record, ResultSet rs) throws SQLException {
-		record.setProperty(Property.getInstance(rs.getMetaData().getColumnName(5),toString(),"http://ambit.sourceforge.net"), retrieveValue(rs));
+		record.setRecordProperty(Property.getInstance(rs.getMetaData().getColumnName(5),toString(),"http://ambit.sourceforge.net"), retrieveValue(rs));
 	}	
 }

@@ -56,11 +56,11 @@ import ambit2.db.substance.ReadSubstanceByExternalIDentifier;
 import ambit2.db.substance.ReadSubstanceByName;
 import ambit2.db.substance.ReadSubstanceByOwner;
 import ambit2.db.substance.ReadSubstanceByStudy;
+import ambit2.db.substance.ReadSubstanceByType;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundleCompounds;
 import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
-import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.query.AmbitDBResource;
 import ambit2.rest.task.CallableFileUpload;
@@ -414,6 +414,8 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 					return (Q) new ReadByReliabilityFlags(type, search);
 				} else if ("isRobustStudy".equals(type)) {
 					return (Q) new ReadByReliabilityFlags(type, search);
+				} else if ("substancetype".equals(type)) {
+					return (Q) new ReadSubstanceByType(search);					
 				} else {
 					return (Q) new ReadSubstanceByExternalIDentifier(type,
 							search);

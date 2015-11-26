@@ -34,9 +34,10 @@ import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
@@ -48,194 +49,221 @@ import Jama.SingularValueDecomposition;
 import ambit2.base.data.Property;
 
 /**
- * Size descriptor.  Returns {@link org.openscience.cdk.qsar.result.DoubleResult}[3], where <br> 
+ * Size descriptor. Returns {@link org.openscience.cdk.qsar.result.DoubleResult}
+ * [3], where <br>
  * length, height and depth.
- * @author Nina Jeliazkova nina@acad.bg
- * <b>Modified</b> Aug 31, 2006
+ * 
+ * @author Nina Jeliazkova nina@acad.bg <b>Modified</b> Aug 31, 2006
  */
 public class SizeDescriptor implements IMolecularDescriptor {
 
-    /**
+	/**
      * 
      */
-    public SizeDescriptor() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	public SizeDescriptor() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-    /* (non-Javadoc)
-     * @see org.openscience.cdk.qsar.Descriptor#getSpecification()
-     */
+	@Override
+	public void initialise(IChemObjectBuilder arg0) {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.openscience.cdk.qsar.Descriptor#getSpecification()
+	 */
 	public DescriptorSpecification getSpecification() {
-        return new DescriptorSpecification(
-        	String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"SizeDescriptor"),
-		    this.getClass().getName(),
-		    "$Id: SizeDescriptor.java,v 0.1 2006/07/29 11:14:00 Nina Jeliazkova Exp $",
-            "http://ambit.sourceforge.net");
-    };
+		return new DescriptorSpecification(
+				String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,
+						"SizeDescriptor"),
+				this.getClass().getName(),
+				"$Id: SizeDescriptor.java,v 0.1 2006/07/29 11:14:00 Nina Jeliazkova Exp $",
+				"http://ambit.sourceforge.net");
+	};
 
-    /* (non-Javadoc)
-     * @see org.openscience.cdk.qsar.Descriptor#getParameterNames()
-     */
-    public String[] getParameterNames() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.openscience.cdk.qsar.Descriptor#getParameterNames()
+	 */
+	public String[] getParameterNames() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    /* (non-Javadoc)
-     * @see org.openscience.cdk.qsar.Descriptor#getParameterType(java.lang.String)
-     */
-    public Object getParameterType(String name) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.openscience.cdk.qsar.Descriptor#getParameterType(java.lang.String)
+	 */
+	public Object getParameterType(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    /* (non-Javadoc)
-     * @see org.openscience.cdk.qsar.Descriptor#setParameters(java.lang.Object[])
-     */
-    public void setParameters(Object[] params) throws CDKException {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.openscience.cdk.qsar.Descriptor#setParameters(java.lang.Object[])
+	 */
+	public void setParameters(Object[] params) throws CDKException {
 
-    }
+	}
 
-    /* (non-Javadoc)
-     * @see org.openscience.cdk.qsar.Descriptor#getParameters()
-     */
-    public Object[] getParameters() {
-        return null;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.openscience.cdk.qsar.Descriptor#getParameters()
+	 */
+	public Object[] getParameters() {
+		return null;
+	}
 
-    /* (non-Javadoc)
-     * @see org.openscience.cdk.qsar.IDescriptor#calculate(org.openscience.cdk.interfaces.AtomContainer)
-     */
-    public DescriptorValue calculate(IAtomContainer container) {
-    	try {
-	        double[] eval = doCalculation(container);
-	        //double min = eval[0];
-	        DoubleArrayResult value = new DoubleArrayResult(eval.length);
-	        for (int i=0; i < eval.length; i++)
-	            value.add(eval[i]);
-	        return new DescriptorValue(getSpecification(), getParameterNames(), 
-	                getParameters(),value,getDescriptorNames());
-    	} catch (Exception x) {
-	        return new DescriptorValue(getSpecification(), getParameterNames(), 
-	                getParameters(),null,getDescriptorNames(),x);
-    	}
-    }
-    public String[] getDescriptorNames() {
-    	return 
-    	new String[]{
-	        	CrossSectionalDiameterDescriptor.MAX_LENGTH,
-	        	CrossSectionalDiameterDescriptor.MAX_DIAMETER,
-	        	CrossSectionalDiameterDescriptor.MIN_DIAMETER};
-    }
-    /**
-     * Transforms coordinates to PCA space (this making sizes invariant to rotation)
-     * Sizes are ordered (max first)
-     * @param container
-     * @return length, height and depth in double[3] array
-     * @throws CDKException
-     */
-    public double[] doCalculation(IAtomContainer container) throws CDKException {
-    	/*
-        IsotopeFactory factory = null;
-        try {
-            factory = IsotopeFactory.getInstance();
-        } catch (Exception e) {
-            //logger.debug(e);
-        }
-		
-        double ccf = 1.000138;
-        
-        double eps = 1e-5;
-        */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.openscience.cdk.qsar.IDescriptor#calculate(org.openscience.cdk.interfaces
+	 * .AtomContainer)
+	 */
+	public DescriptorValue calculate(IAtomContainer container) {
+		try {
+			double[] eval = doCalculation(container);
+			// double min = eval[0];
+			DoubleArrayResult value = new DoubleArrayResult(eval.length);
+			for (int i = 0; i < eval.length; i++)
+				value.add(eval[i]);
+			return new DescriptorValue(getSpecification(), getParameterNames(),
+					getParameters(), value, getDescriptorNames());
+		} catch (Exception x) {
+			return new DescriptorValue(getSpecification(), getParameterNames(),
+					getParameters(), null, getDescriptorNames(), x);
+		}
+	}
 
-        double[][] imat = new double[container.getAtomCount()][3];
-        Point3d centerOfMass = GeometryTools.get3DCenter(container);
+	public String[] getDescriptorNames() {
+		return new String[] { CrossSectionalDiameterDescriptor.MAX_LENGTH,
+				CrossSectionalDiameterDescriptor.MAX_DIAMETER,
+				CrossSectionalDiameterDescriptor.MIN_DIAMETER };
+	}
 
-                for (int k = 0; k < container.getAtomCount(); k++) {
-                    double[] xyz = new double[3];
-                    //double mass = 0.0;
-                    //double radius = 0.0;
+	/**
+	 * Transforms coordinates to PCA space (this making sizes invariant to
+	 * rotation) Sizes are ordered (max first)
+	 * 
+	 * @param container
+	 * @return length, height and depth in double[3] array
+	 * @throws CDKException
+	 */
+	public double[] doCalculation(IAtomContainer container) throws CDKException {
+		/*
+		 * IsotopeFactory factory = null; try { factory =
+		 * IsotopeFactory.getInstance(); } catch (Exception e) {
+		 * //logger.debug(e); }
+		 * 
+		 * double ccf = 1.000138;
+		 * 
+		 * double eps = 1e-5;
+		 */
 
-                    IAtom currentAtom = container.getAtom(k);
-                    if (currentAtom.getPoint3d() == null) {
-                        throw new CDKException("Molecules should have 3D coordinates");
-                        		
-                    }
+		double[][] imat = new double[container.getAtomCount()][3];
+		Point3d centerOfMass = GeometryUtil.get3DCenter(container);
 
-                    //mass = factory.getMajorIsotope( currentAtom.getSymbol() ).getMassNumber();
+		for (int k = 0; k < container.getAtomCount(); k++) {
+			double[] xyz = new double[3];
+			// double mass = 0.0;
+			// double radius = 0.0;
 
-                    //radius = centerOfMass.distance( currentAtom.getPoint3d() );
+			IAtom currentAtom = container.getAtom(k);
+			if (currentAtom.getPoint3d() == null) {
+				throw new CDKException("Molecules should have 3D coordinates");
 
-                    imat[k][0] = currentAtom.getPoint3d().x - centerOfMass.x;
-                    imat[k][1] = currentAtom.getPoint3d().y - centerOfMass.y;
-                    imat[k][2] = currentAtom.getPoint3d().z - centerOfMass.z;
+			}
 
-                    if (Double.isNaN(imat[k][0]) || Double.isNaN(imat[k][1]) || Double.isNaN(imat[k][2])) 
-                    	throw new CDKException("3D coordinate is NaN");
-           
-                }
-                
-    			Matrix m = new Matrix(imat);
-    			try {
-    				Logger.getLogger(getClass().getName()).fine(String.format("SingularValueDecomposition %d",container.getAtomCount()));
-	    			long now = System.currentTimeMillis();
-	    		    SingularValueDecomposition svd = m.svd();
-	    		    now  = System.currentTimeMillis() - now;
-	    		    Logger.getLogger(getClass().getName()).fine(String.format("SingularValueDecomposition DONE in %d ms",now));
-	    		    Matrix pcapoints =  m.times(svd.getV());
-    		    
-	    			double[] max = new double[3];
-	    			double[] min = new double[3];
-	    			
-	    			for (int i=0; i < pcapoints.getRowDimension();i++) {
-	    			    if (i==0) {
-	    			        max[0] = pcapoints.get(i,0);
-	    			        max[1] = pcapoints.get(i,1);
-	    			        max[2] = pcapoints.get(i,2);    			        
-	    			        min[0] = pcapoints.get(i,0);
-	    			        min[1] = pcapoints.get(i,1);
-	    			        min[2] = pcapoints.get(i,2);    			        
-	    			    } else 
-	    			    	for (int k=0;k< 3; k++) {
-	    			    		if (max[k] <  pcapoints.get(i,k))
-	    			    			 max[k] = pcapoints.get(i,k);
-	    			    		if (min[k] >  pcapoints.get(i,k))
-	   			    			 min[k] = pcapoints.get(i,k);    			    		
-	    			    	}
-	    			}
-	    			for (int k=0;k< 3; k++) {
-	    				max[k] = max[k]-min[k];
-	    			}
-	    			return max;
-    			} catch (Exception x) {
-    				throw new CDKException(x.getMessage());
-    			}
+			// mass = factory.getMajorIsotope( currentAtom.getSymbol()
+			// ).getMassNumber();
 
+			// radius = centerOfMass.distance( currentAtom.getPoint3d() );
 
-        
+			imat[k][0] = currentAtom.getPoint3d().x - centerOfMass.x;
+			imat[k][1] = currentAtom.getPoint3d().y - centerOfMass.y;
+			imat[k][2] = currentAtom.getPoint3d().z - centerOfMass.z;
 
-    }
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    public String toString() {
-        return "Molecule size";
-    }
-    
-    @Override
-    public int hashCode() {
-    	String c = getClass().getName();
-    	int hash = 7;
-    	int var_code = (null == c ? 0 : c.hashCode());
-    	hash = 31 * hash + var_code; 
-    	return hash;
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-    	return (obj instanceof SizeDescriptor);
-    }
+			if (Double.isNaN(imat[k][0]) || Double.isNaN(imat[k][1])
+					|| Double.isNaN(imat[k][2]))
+				throw new CDKException("3D coordinate is NaN");
+
+		}
+
+		Matrix m = new Matrix(imat);
+		try {
+			Logger.getLogger(getClass().getName()).fine(
+					String.format("SingularValueDecomposition %d",
+							container.getAtomCount()));
+			long now = System.currentTimeMillis();
+			SingularValueDecomposition svd = m.svd();
+			now = System.currentTimeMillis() - now;
+			Logger.getLogger(getClass().getName()).fine(
+					String.format("SingularValueDecomposition DONE in %d ms",
+							now));
+			Matrix pcapoints = m.times(svd.getV());
+
+			double[] max = new double[3];
+			double[] min = new double[3];
+
+			for (int i = 0; i < pcapoints.getRowDimension(); i++) {
+				if (i == 0) {
+					max[0] = pcapoints.get(i, 0);
+					max[1] = pcapoints.get(i, 1);
+					max[2] = pcapoints.get(i, 2);
+					min[0] = pcapoints.get(i, 0);
+					min[1] = pcapoints.get(i, 1);
+					min[2] = pcapoints.get(i, 2);
+				} else
+					for (int k = 0; k < 3; k++) {
+						if (max[k] < pcapoints.get(i, k))
+							max[k] = pcapoints.get(i, k);
+						if (min[k] > pcapoints.get(i, k))
+							min[k] = pcapoints.get(i, k);
+					}
+			}
+			for (int k = 0; k < 3; k++) {
+				max[k] = max[k] - min[k];
+			}
+			return max;
+		} catch (Exception x) {
+			throw new CDKException(x.getMessage());
+		}
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return "Molecule size";
+	}
+
+	@Override
+	public int hashCode() {
+		String c = getClass().getName();
+		int hash = 7;
+		int var_code = (null == c ? 0 : c.hashCode());
+		hash = 31 * hash + var_code;
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return (obj instanceof SizeDescriptor);
+	}
 
 	public IDescriptorResult getDescriptorResultType() {
 		return new DoubleArrayResult();

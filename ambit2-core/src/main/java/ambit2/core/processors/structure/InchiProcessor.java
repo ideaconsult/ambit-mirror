@@ -51,13 +51,10 @@ public class InchiProcessor extends DefaultAmbitProcessor<IAtomContainer, InChIG
 	
 	public InchiProcessor() throws CDKException {
 		super();
-		// Generate factory - throws CDKException if native code does not load
 		factory = InChIGeneratorFactory.getInstance();
 	}
 	public InChIGenerator process(IAtomContainer target) throws AmbitException {
 		try {
-			// Get InChIGenerator
-
 			List<net.sf.jniinchi.INCHI_OPTION> options = new ArrayList<net.sf.jniinchi.INCHI_OPTION>();
 			/*
 			options.add(INCHI_OPTION.ChiralFlagON);
@@ -69,6 +66,7 @@ public class InchiProcessor extends DefaultAmbitProcessor<IAtomContainer, InChIG
 			options.add(INCHI_OPTION.SAsXYZ);
 			options.add(INCHI_OPTION.SPXYZ);
 			options.add(INCHI_OPTION.FixSp3Bug);
+			options.add(INCHI_OPTION.AuxNone);
 			InChIGenerator gen = factory.getInChIGenerator(target,options);
 
 			INCHI_RET ret = gen.getReturnStatus();

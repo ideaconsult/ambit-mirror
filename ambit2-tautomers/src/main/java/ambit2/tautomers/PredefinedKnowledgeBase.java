@@ -61,7 +61,8 @@ public class PredefinedKnowledgeBase
 	//Exclude Filters	
 	public static final String excludeFragments[] =
 	{	
-		"[*;r4,r5,r6,r7,r8](=*)=*"  //allene atom in a cycle (up to 8 atoms)
+		//"[*;r4,r5,r6,r7,r8](=*)=*"  //allene atom in a cycle (up to 8 atoms) - not good
+		"[*;R](=*)=*"  //allene atom in any cycle 
 	};
 	
 	

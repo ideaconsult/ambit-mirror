@@ -38,8 +38,6 @@ import java.util.Map;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
-import org.openscience.cdk.annotations.TestClass;
-import org.openscience.cdk.annotations.TestMethod;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ArrowElement;
 import org.openscience.cdk.renderer.elements.AtomSymbolElement;
@@ -53,6 +51,7 @@ import org.openscience.cdk.renderer.elements.RectangleElement;
 import org.openscience.cdk.renderer.elements.TextElement;
 import org.openscience.cdk.renderer.elements.TextGroupElement;
 import org.openscience.cdk.renderer.elements.WedgeLineElement;
+import org.openscience.cdk.renderer.elements.WedgeLineElement.TYPE;
 import org.openscience.cdk.renderer.elements.path.Type;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.font.IFontManager;
@@ -72,7 +71,7 @@ import org.openscience.cdk.renderer.visitor.IDrawVisitor;
  *
  * @cdk.module renderawt
  */
-@TestClass("org.openscience.cdk.renderer.visitor.AWTDrawVisitorTest")
+
 public class AWTDrawVisitorWithImageMap extends AbstractAWTDrawVisitor {
 	
     /**
@@ -95,7 +94,7 @@ public class AWTDrawVisitorWithImageMap extends AbstractAWTDrawVisitor {
 	 *
 	 * @return the current model
 	 */
-    @TestMethod("testGetRendererModel")
+    
 	public RendererModel getRendererModel() {
 		return rendererModel;
 	}
@@ -105,7 +104,7 @@ public class AWTDrawVisitorWithImageMap extends AbstractAWTDrawVisitor {
 	 *
 	 * @return a {@link Map} with Integer as keys and {@link BasicStroke}s.
 	 */
-    @TestMethod("testGetStrokeMap")
+    
 	public Map<Integer, BasicStroke> getStrokeMap() {
 		return strokeMap;
 	}
@@ -120,7 +119,7 @@ public class AWTDrawVisitorWithImageMap extends AbstractAWTDrawVisitor {
 	 *
 	 * @return the {@link Graphics2D} object
 	 */
-    @TestMethod("testGetGraphics")
+    
 	public Graphics2D getGraphics() {
 		return graphics;
 	}
@@ -132,7 +131,7 @@ public class AWTDrawVisitorWithImageMap extends AbstractAWTDrawVisitor {
      *
      * @param graphics {@link Graphics2D} to which will be drawn
      */
-    @TestMethod("testConstructor")
+    
 	public AWTDrawVisitorWithImageMap(Graphics2D graphics) {
 		this.graphics = graphics;
 		this.fontManager = null;
@@ -249,7 +248,7 @@ public class AWTDrawVisitorWithImageMap extends AbstractAWTDrawVisitor {
         vertexB.add(normal);
         vertexC.sub(normal);
         this.graphics.setColor(wedge.color);
-        if (wedge.isDashed) {
+        if (wedge.type == TYPE.DASHED) {
             this.drawDashedWedge(vertexA, vertexB, vertexC);
         } else {
             this.drawFilledWedge(vertexA, vertexB, vertexC);
@@ -539,7 +538,7 @@ public class AWTDrawVisitorWithImageMap extends AbstractAWTDrawVisitor {
     }
 
     /** {@inheritDoc} */
-    @TestMethod("testVisit")
+    
     public void visit(IRenderingElement element) {
         Color savedColor = this.graphics.getColor();
         if (element instanceof ElementGroup)
@@ -576,13 +575,13 @@ public class AWTDrawVisitorWithImageMap extends AbstractAWTDrawVisitor {
      *
      * @param fontManager the {@link IFontManager} to be used
      */
-    @TestMethod("testSetFontManager")
+    
     public void setFontManager(IFontManager fontManager) {
         this.fontManager = (AWTFontManager) fontManager;
     }
 
     /** {@inheritDoc} */
-    @TestMethod("testSetRendererModel")
+    
     public void setRendererModel(RendererModel rendererModel) {
         this.rendererModel = rendererModel;
         if (rendererModel.hasParameter(UseAntiAliasing.class)) {

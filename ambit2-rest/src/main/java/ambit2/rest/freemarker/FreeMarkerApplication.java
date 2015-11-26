@@ -84,4 +84,8 @@ public class FreeMarkerApplication<USERID> extends TaskApplication<USERID> imple
 		public boolean isChangeLineSeparators() {
 			return changeLineSeparators;
 		}
+		
+		public boolean isSendTokenAsCookie() {
+			return false;
+		}
 }

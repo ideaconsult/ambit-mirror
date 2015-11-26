@@ -88,7 +88,7 @@ public class ARFF3ColReporter<Q extends IQueryRetrieval<IStructureRecord>> exten
 			delimiter = ",";
 			
 			for (Property p : header) {
-				Object value = item.getProperty(p);
+				Object value = item.getRecordProperty(p);
 				if (value==null) continue;
 				if (IQueryRetrieval.NaN.equals(value.toString())) continue;
 				//write numbers only

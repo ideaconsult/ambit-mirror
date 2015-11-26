@@ -35,46 +35,55 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 
-
 /**
- * The MCSS of two compounds is the largest possible substructure that is present in both structures. 
- * The MCS is a measure and a description of the similarity of two structures whose numerical value MCS is the number of common elements provided by the matching conditions, i.e. a measure of the size of the maximum common substructure.
+ * The MCSS of two compounds is the largest possible substructure that is
+ * present in both structures. The MCS is a measure and a description of the
+ * similarity of two structures whose numerical value MCS is the number of
+ * common elements provided by the matching conditions, i.e. a measure of the
+ * size of the maximum common substructure.
  * 
  * @author Nina Jeliazkova
- *
+ * 
  */
 public class MCSSDistance implements IDistanceFunction<IAtomContainer> {
+	
+	public float getNativeComparison(IAtomContainer object1,
+			IAtomContainer object2) throws Exception {
+		try {
+			UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
+			List commonSubstructures = uit.getOverlaps(object1, object2);
 
+			int max = -1;
+			IAtomContainer mcss = null;
+			for (int i = 0; i < commonSubstructures.size(); i++) {
+				IAtomContainer a = (IAtomContainer) commonSubstructures.get(i);
+				if ((i == 0) || (a.getAtomCount() > max)) {
+					max = a.getAtomCount();
+					mcss = a;
+				}
+			}
+			float mcssAB = mcss.getAtomCount()
+					+ mcss.getElectronContainerCount();
+			float c1 = object1.getAtomCount()
+					+ object1.getElectronContainerCount();
+			float c2 = object2.getAtomCount()
+					+ object2.getElectronContainerCount();
+			if ((c1 > 0) && (c2 > 0)) {
+				return (mcssAB * mcssAB) / (c1 * c2);
+			} else
+				return 0;
+		} catch (CDKException x) {
+			throw new Exception(x);
+		}
+	}
 
+	public float getDistance(IAtomContainer object1, IAtomContainer object2)
+			throws Exception {
+		return getNativeComparison(object1, object2);
+	}
 
-    public float getNativeComparison(IAtomContainer object1, IAtomContainer object2) throws Exception {        
-        try {
-            List commonSubstructures =  UniversalIsomorphismTester.getOverlaps(object1,object2);
-            
-            int max = -1;
-            IAtomContainer mcss = null;
-            for (int i = 0; i < commonSubstructures.size(); i++){
-               IAtomContainer a = (IAtomContainer)commonSubstructures.get(i);
-               if ((i==0) || (a.getAtomCount() > max)) {
-                  max = a.getAtomCount();
-                  mcss = a;
-               }
-            }
-            float mcssAB = mcss.getAtomCount() + mcss.getElectronContainerCount();
-            float c1 = object1.getAtomCount() + object1.getElectronContainerCount();
-            float c2 = object2.getAtomCount() + object2.getElectronContainerCount();
-            if ((c1>0)&&(c2>0)) {
-                return (mcssAB*mcssAB)/(c1*c2);
-            } else return 0;
-        } catch (CDKException x) {
-            throw new Exception(x);
-        }
-    }
-    public float getDistance(IAtomContainer object1, IAtomContainer object2) throws Exception {
-        return getNativeComparison(object1, object2);
-    }
-    @Override
-    public String toString() {
-        return "Maximum Common Substructure (A+B)*(A+B)/(A*B)";
-    }
+	@Override
+	public String toString() {
+		return "Maximum Common Substructure (A+B)*(A+B)/(A*B)";
+	}
 }

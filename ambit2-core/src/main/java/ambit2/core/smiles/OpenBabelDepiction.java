@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.external.ShellException;
 
@@ -49,7 +49,7 @@ public class OpenBabelDepiction extends OpenBabelAbstractShell<String> {
 	}
 	
 	@Override
-	protected synchronized IMolecule parseOutput(String path, String mol)
+	protected synchronized IAtomContainer parseOutput(String path, String mol)
 			throws ShellException {
 		return null;
 	}

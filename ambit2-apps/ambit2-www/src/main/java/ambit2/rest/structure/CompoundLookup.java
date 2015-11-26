@@ -17,7 +17,6 @@ import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.index.CASNumber;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -468,7 +467,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
     public String[] atomcontainer2inchi(IAtomContainer c, String origin) throws ResourceException {
 	try {
 	    FixBondOrdersTool fbt = new FixBondOrdersTool();
-	    c = fbt.kekuliseAromaticRings((IMolecule) c);
+	    c = fbt.kekuliseAromaticRings((IAtomContainer) c);
 	    // inchi can't process aromatic bonds...
 	    for (IBond bond : c.bonds())
 		bond.setFlag(CDKConstants.ISAROMATIC, false);
@@ -568,10 +567,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	}
     }
 
-    protected QueryAbstractReporter createHTMLReporter(Dimension d) {
-	return new CompoundHTMLReporter(getCompoundInDatasetPrefix(), getRequest(), DisplayMode.properties, null,
-		getTemplate(), getGroupProperties(), d, headless);
-    }
+
     /*
      * @Override protected void processNotFound(NotFoundException x, int retry)
      * throws Exception { if (retry>0) super.processNotFound(x, retry); else if

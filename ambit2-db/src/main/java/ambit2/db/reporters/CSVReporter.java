@@ -258,7 +258,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	    String delimiter = writeCompoundURI ? separator : "";
 	    for (Property p : header) {
 
-		Object value = item.getProperty(p);
+		Object value = item.getRecordProperty(p);
 
 		boolean tdelimiter = false;
 		try {
@@ -285,7 +285,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		delimiter = separator;
 	    }
 	    // smiles
-	    Object smiles = item.getProperty(Property.getInstance(AmbitCONSTANTS.SMILES, AmbitCONSTANTS.SMILES));
+	    Object smiles = item.getRecordProperty(Property.getInstance(AmbitCONSTANTS.SMILES, AmbitCONSTANTS.SMILES));
 	    writer.write(String.format("%s%s", separator, smiles == null ? "" : smiles));
 
 	    if (licenseColumn != null)

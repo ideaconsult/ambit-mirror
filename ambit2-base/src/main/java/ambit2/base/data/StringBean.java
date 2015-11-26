@@ -1,8 +1,7 @@
 package ambit2.base.data;
 
-import com.jgoodies.binding.beans.Model;
 
-public class StringBean extends Model {
+public class StringBean {
 	/**
 	 * 
 	 */

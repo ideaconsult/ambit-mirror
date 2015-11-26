@@ -1,11 +1,20 @@
 <#include "/html.ftl" >
 <head>
+<script type='text/javascript' src='${ambit_root}/jquery/purl.js'></script>
 <#include "/header_updated.ftl" >
 
 <#if status_code == 403>
 	<#assign status_error_description="You are not allowed to view this page">
+	<#if username??>
+	<#else>
+		<#assign login_redirect="${ambit_root}/login">
+	</#if>
 <#elseif status_code == 401>
 	<#assign status_error_description="You are not allowed to view this page">
+	<#if username??>
+	<#else>
+		<#assign login_redirect="${ambit_root}/login">
+	</#if>
 </#if>
 				
 <script type='text/javascript' src="${ambit_root}/scripts/jopentox.js"></script>
@@ -13,9 +22,29 @@
 
 $(document)
 		.ready(function() {
+			
+			<#if login_redirect??>
+				var purl = $.url("${ambit_request}");
+				var targetURI = purl.param('targetUri');
+				if ((targetURI === undefined) || (targetURI == "") || (targetURI == null)) {
+					targetURI= encodeURIComponent("${ambit_request}");
+				} else {
+					var purl = $.url(targetURI);
+					var subTargetURI = purl.param('targetUri');
+					if ((subTargetURI === undefined) || (subTargetURI == "") || (subTargetURI == null)) {
+						targetURI=encodeURIComponent(targetURI);
+					} else {
+						targetURI=encodeURIComponent(subTargetURI);
+					}
+				}
+				window.location = "${login_redirect}?targetUri=" + targetURI;
+			</#if>
+			
 			jQuery("#breadCrumb ul").append('<li>Error</li>');
 			jQuery("#breadCrumb").jBreadCrumb();
 			jQuery("#welcome").html("");	
+			
+			
 				});
 </script>
 
@@ -43,7 +72,7 @@ $(document)
 				<span id='error_description'>${status_error_description}</span>
 			</div>
 			<div class='row help' style='text-align:right;margin:10px;'>
-					<a href='#' style='background-color: #fff; padding: 5px 10px;' onClick="$('#details').toggle(); return false;">Details</a>
+					<a href='#' style='background-color: #fff; padding: 5px 10px;' onClick="$('#details').toggle(); return false;" id="details_link">Details</a>
 			</div>
 			<div class='row help' style='display: none;text-align:right;margin:10px;' id='details'>
 				<#if status_details??>

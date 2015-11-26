@@ -15,7 +15,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.propertyvalue.FeatureResource;
+import ambit2.rest.propertyvalue.FeatureResourceIdentifiers;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.test.ResourceTest;
@@ -121,7 +121,7 @@ public class FeatureResourceTest extends ResourceTest {
 	@Test
 	public void testCreateEntry() throws Exception {
 		Form headers = new Form();  
-		headers.add(FeatureResource.headers.value.toString(),"XXXXXX");
+		headers.add(FeatureResourceIdentifiers.headers.value.toString(),"XXXXXX");
 		
 		Response response =  testPost(
 					String.format("http://localhost:%d%s/compound/7/conformer/100211%s/2", port,PropertyValueResource.featureKey,PropertyResource.featuredef),
@@ -139,7 +139,7 @@ public class FeatureResourceTest extends ResourceTest {
 	@Test
 	public void testCreateEntryNum() throws Exception {
 		Form headers = new Form();  
-		headers.add(FeatureResource.headers.value.toString(),"3.14");
+		headers.add(FeatureResourceIdentifiers.headers.value.toString(),"3.14");
 		
 		Response response =  testPost(
 					String.format("http://localhost:%d%s/compound/7/conformer/100211%s/2", port,PropertyValueResource.featureKey,PropertyResource.featuredef),

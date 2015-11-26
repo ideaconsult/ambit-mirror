@@ -6,18 +6,17 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.MoleculeSet;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.silent.AtomContainerSet;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.core.data.MoleculeTools;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.io.MDLWriter;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.smiles.SmilesParserWrapper;
@@ -74,7 +73,7 @@ public class StructureEditorProcessor extends DefaultAmbitProcessor<IStructureRe
 			if (mol!=null && mol.getAtomCount()>0)
 				switch (command) {
 				case layout : {
-					IMoleculeSet molecules = new MoleculeSet();
+					IAtomContainerSet molecules = new AtomContainerSet();
 					CompoundImageTools cit = new CompoundImageTools();
 					cit.generate2D(mol, true, molecules);
 					mol = MoleculeTools.newAtomContainer(mol.getBuilder());
@@ -90,7 +89,7 @@ public class StructureEditorProcessor extends DefaultAmbitProcessor<IStructureRe
 				case dearomatize :
 					if (mol!=null) {
 						FixBondOrdersTool fbt = new FixBondOrdersTool();
-						mol = fbt.kekuliseAromaticRings((IMolecule)mol);
+						mol = fbt.kekuliseAromaticRings((IAtomContainer)mol);
 						for (IBond bond : mol.bonds()) bond.setFlag(CDKConstants.ISAROMATIC,false);
 					}	
 					break;

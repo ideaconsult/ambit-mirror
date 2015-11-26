@@ -1,11 +1,16 @@
 <#include "/html.ftl">
 <head>
   <#include "/header_updated.ftl">
+  <script type='text/javascript' src='${ambit_root}/jquery/purl.js'></script>
+  
   <script type='text/javascript'>
 
 $(document)
 		.ready(
 				function() {
+						var purl = $.url();
+						$('#targetUri').attr('value',purl.param('targetUri')===undefined?'${ambit_root}/login':purl.param('targetUri'));
+						
 					    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/login" title="AMBIT log in">Log in</a></li>');
     					jQuery("#breadCrumb").jBreadCrumb();
     					jQuery("#welcome").text("Welcome to AMBIT");
@@ -59,7 +64,7 @@ $(document)
 		<div class="row remove-bottom">		
 		<label class='five columns alpha'>&nbsp;</label>		
 		<input class='three columns omega'  type="submit" value="Log in"><a href='#' class='chelp loginhelp'></a>
-		<input type='hidden' size='40' name='targetURI' value='${ambit_root}/login'>
+		<input type='hidden' size='40' name='targetUri' id='targetUri' value='${ambit_root}/login'>
 		</div>
 		</form>
 		

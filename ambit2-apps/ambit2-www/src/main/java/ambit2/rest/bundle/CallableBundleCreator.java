@@ -91,7 +91,7 @@ public class CallableBundleCreator extends CallableDBUpdateTask<SubstanceEndpoin
 	    String source = input.getFirstValue(ISourceDataset.fields.source.name());
 	    if (source != null)
 		bundle.setSource(source);
-	    String url = input.getFirstValue(ISourceDataset.fields.url.name());
+	    String url = input.getFirstValue(ISourceDataset.fields.seeAlso.name());
 	    if (url != null)
 		bundle.setURL(url);
 	    try {

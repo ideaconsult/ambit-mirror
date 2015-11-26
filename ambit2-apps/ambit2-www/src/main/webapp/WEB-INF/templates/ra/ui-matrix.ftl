@@ -2,184 +2,157 @@
 <head>
 <#include "/header_updated.ftl" >
 
-	<link rel="stylesheet" href="${ambit_root}/style/jBox.css" type="text/css">
-	<link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
-	<link rel="stylesheet" href="${ambit_root}/style/ra/ui-matrix.css"/>
-	
-  <script src="${ambit_root}/scripts/ra/i5enums.js"></script>
-  <link rel="stylesheet" href="${ambit_root}/style/jquery.tokenize.css"/>
+<link rel="stylesheet" href="${ambit_root}/style/jBox.css" type="text/css">
+<link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
+<link rel="stylesheet" href="${ambit_root}/style/ra/ui-matrix.css"/>
 
-  <script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js'></script>
-  <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
-  <script type='text/javascript'  src="${ambit_root}/jquery/jquery.tokenize.js"></script>
-  <script type='text/javascript' src='${ambit_root}/scripts/jBox.js'></script>
+<script src="${ambit_root}/scripts/ra/i5enums.js"></script>
+<link rel="stylesheet" href="${ambit_root}/style/jquery.tokenize.css"/>
 
-  <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
-  
-  <script src="${ambit_root}/scripts/ra/ui-matrix.js"></script>
-  <script src="${ambit_root}/scripts/ra/config-matrix.js"></script>
-  
-  <#if assessment_report??>
-  	<script src="${ambit_root}/scripts/ra/docxgen.min.js"></script>
-  	<script src="${ambit_root}/scripts/ra/FileSaver.min.js"></script>
-  	<script src="${ambit_root}/scripts/ra/jszip-utils.js"></script>
-  <#else>
-	<link rel="stylesheet" href="${ambit_root}/style/ketcher.css"/>
-  	<script type='text/javascript' src='${ambit_root}/scripts/ketcher.js'></script>
-  </#if>
-	
+<script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
+<script type='text/javascript'  src="${ambit_root}/jquery/jquery.tokenize.js"></script>
+<script type='text/javascript' src='${ambit_root}/scripts/jBox.js'></script>
 
-  <script type='text/javascript' src='${ambit_root}/scripts/config/i5.js'></script>
-  <script type='text/javascript' src='${ambit_root}/scripts/config/ce.js'></script>
-  <script type='text/javascript' src='${ambit_root}/scripts/config/npo.js'></script>
-  <script type='text/javascript' src='${ambit_root}/scripts/config/bao.js'></script>
-  <script type='text/javascript' src='${ambit_root}/scripts/config/toxcast.js'></script>
-  <script type='text/javascript' src='${ambit_root}/scripts/config-study.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
 
-  
-  <script type='text/javascript'>
+<script src="${ambit_root}/scripts/ra/ui-matrix.js"></script>
+<script src="${ambit_root}/scripts/ra/config-matrix.js"></script>
 
-	$(document).ready(function() {
-        jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle?page=0&pagesize=100" title="Assessments">All assessments</a></li>');
-        <#if bundleid??>
-    	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/assessment?bundle_uri=${ambit_root}/bundle/${bundleid}" title="Assessment">This assessment</a></li>');
-       
-        <#if assessment_report??>
-        	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/assessment_report?bundle_uri=${ambit_root}/bundle/${bundleid}" title="Report">Report</a></li>');
-		<#else>
-	 	    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${bundleid}/version" title="Assessment versions">Versions</a></li>');        	
-        </#if>
-        </#if>
-        loadHelp("${ambit_root}","ra");
-	});
-	
-	</script>
-  
+<link rel="stylesheet" href="${ambit_root}/style/ketcher.css"/>
+<script type='text/javascript' src='${ambit_root}/scripts/ketcher.js'></script>
 
+
+<script type='text/javascript' src='${ambit_root}/scripts/config/i5.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/config/ce.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/config/npo.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/config/bao.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/config/toxcast.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/config-study.js'></script>
+
+<script type='text/javascript'>
+
+var customize = {
+    "lri": {
+        "title": {
+            "l_title": "Assessment title",
+            "l_maintainer": "Owner",
+            "l_number": "Assessment ID",
+            "l_seeAlso": "Assessment code",
+            "l_source": "Assessment Doclink(s)"
+        },
+        "hide": "lri_hide"
+    },
+    "default" : {
+    	"title" : {},	
+    	"hide": "default_hide"
+    }
+};
+
+$(document)
+		.ready(
+				function() {
+				        jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle?page=0&pagesize=100" title="Assessments">All assessments</a></li>');
+				        <#if bundleid??>
+				    	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/assessment?bundle_uri=${ambit_root}/bundle/${bundleid}" title="Assessment">This assessment</a></li>');        
+				 	    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${bundleid}/version" title="Assessment versions">Versions</a></li>');        	
+				        </#if>
+				        
+				        loadHelp("${ambit_root}","ra");
+				        
+						var profile = "default";
+						<#if menu_profile??>
+							profile = "${menu_profile}";
+						</#if>
+						var c_profile = customize[profile];
+						if (c_profile == undefined) { profile ="default" ; c_profile = customize[profile]};
+							
+						$.each(customize[profile]["title"],function(key,value) {
+								try {$("#"+key).html(value);} catch (err) {};
+							});
+						try {$("." + customize[profile]["hide"]).hide();	} catch (err) {};		
+						
+							
+						//var sb = new jToxSearch($("#searchbar")[0], {crossDomain: false, baseUrl : "${ambit_root}/" } );
+						//sb.makeQuery("50-00-0");
+						
+											 	
+				});
+</script>  
 </head>
 <body>
-
 <div class="container" style="margin:0;padding:0;">
-<div id="logger" class="jtox-toolkit jtox-widget hidden" data-kit="log" data-resend="false" rightSide="true"></div>
+  <div id="logger" class="jtox-toolkit jtox-widget hidden" data-kit="log" data-resend="false" data-right-side="true"></div>
 
-<#include "/banner_crumbs.ftl">
+  <#include "/banner_crumbs.ftl">
+  
+	<!-- Page Content
+	================================================== -->
 	
-		<!-- Page Content
-		================================================== -->
-	<div class="sixteen columns remove-bottom" style="padding:0;" >
+  <div class="sixteen columns remove-bottom" style="padding:0;" >
 
   <div id="jtox-bundle" class="jtox-toolkit" data-kit="bundle" 
 	  <#if bundleid??>
-	data-bundle-uri="${ambit_root}/bundle/${bundleid}"
+				data-bundle-uri="${ambit_root}/bundle/${bundleid}"
 			</#if>	
 	  >
+	  
     <ul>
-  	<li><a href="#jtox-identifiers" >Assessment identifier</a></li>    
-      <#if assessment_report??>
-      	<li><a href="#jtox-structures" style="display:none;">Collect structures</a></li>
-      	<li><a href="#jtox-endpoints" style="display:none;">Endpoint data used</a></li>
-      	<li><a href="#jtox-matrix" style="display:none;">Assessment details</a></li>      
-      <#else>
-      	<li><a href="#jtox-structures">Collect structures</a></li>
-      	<li><a href="#jtox-endpoints">Endpoint data used</a></li>
-      	<li><a href="#jtox-matrix">Assessment details</a></li>
-      </#if>
+      <li><a href="#jtox-identifiers">Assessment identifier</a></li>
+      <li><a href="#jtox-structures">Collect structures</a></li>
+      <li><a href="#jtox-endpoints">Endpoint data used</a></li>
+      <li><a href="#jtox-matrix">Assessment details</a></li>
       <li><a href="#jtox-report">Report</a></li>
     </ul>
     <div id="jtox-identifiers" data-action="onIdentifiers">
-	  	<form>
-	  	  <div class="thirteen columns remove-bottom">
+	  	<form name="raform"  >
+	  	<div class="thirteen columns remove-bottom" style="padding:0;" >
 	      <table class="dataTable">
-
 	        <thead>
-	       <#if menu_profile??> 
-	       <#switch menu_profile>
-	       	<#case 'lri'>
-	          <tr><th class="right size-third">Assessment title <a href='#' class='chelp a_name'>?</a>:</th><td><input class="data-field first-time validate" data-field="title" name="title"/></td></tr>
-	          <tr><th class="right size-third">Owner<a href='#' class='chelp a_maintainer'>?</a>:</th><td><input class="data-field first-time validate" data-field="owner" name="maintainer"/></td></tr>
-	
-	          <tr><th class="right top size-third">Purpose<a href='#' class='chelp a_description'>?</a>:</th><td><textarea class="validate nomargin data-field" data-field="description" name="description"></textarea></td></tr>
-	          <tr><th class="right size-third">Version<a href='#' class='chelp a_version'>?</a>:</th><td class="data-field" data-field="version">?.?</td></tr>
+	          <tr><th class="right size-third"><label for="title" id="l_title">Title</label>*<a href='#' class='chelp a_name'>?</a>:</th><td><input class="data-field first-time validate" data-field="title" name="title" id="title" required /></td></tr>
+            <tr><th class="right size-third"><label for="maintainer" id="l_maintainer">Maintainer</label>*<a href='#' class='chelp a_maintainer'>?</a>:</th><td><input class="data-field first-time validate" data-field="maintainer" name="maintainer" id="maintainer" required /></td></tr>
 
-	          <tr><th class="right size-third">Version start date <a href='#' class='chelp a_version_date'>?</a>:</th><td class="data-field" data-field="created" data-format="formatDate"></td></tr>
-	          <tr><th class="right size-third">Version last modified on<a href='#' class='chelp a_version_date'>?</a>:</th><td class="data-field" data-field="updated" data-format="formatDate"></td></tr>
-	          <tr>
-	            <th class="right size-third">Status <a href='#' class='chelp a_published'>?</a>:</th>
-	            <td>
-	            
-	            <input type="radio" name="status" value="draft" id="status-draft"><label for="status-draft">Draft</label>
-	            <input type="radio" name="status" value="published" id="status-published"><label for="status-published">Published</label>
-	            <input type="radio" name="status" value="archived" id="status-archived"><label for="status-archived">Archived</label>
-	                
-	            </td>
-	            </tr>
-          
-	            <tr><th class="right size-third">Assessment code <a href='#' class='chelp a_code'>?</a>:</th><td><input class="data-field first-time validate" data-field="seeAlso" name="source"/></td></tr>
-	            <tr><th class="right size-third">Assessment Doclink(s) <a href='#' class='chelp a_doclink'>?</a>:</th><td><input class="data-field first-time validate" data-field="source" name="url" /></td></tr>
-	            
-	       		<span style="display:none;">
-       			<input class="data-field first-time validate" data-field="rights.URI" name="license" value="${ambit_root}"/>
-       			<#if username??>
-       				<input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder" value="${username}"/>
-       			<#else>
-       				<input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder" value="Default"/>
-       			</#if>
-       			<span class="data-stars-field"><input type="hidden" name="stars" value="5" /></span>
-       			</span>
-                <tr><th class="right size-third">Assessment ID<a href='#' class='chelp assessment'>?</a>:</th><td class="data-field" data-field="number"></td></tr>
-                
-                <tr>
-                <th class="right size-third top">Users with write access <a href='#' class='chelp bundle_rw'>?</a>:</th>
-                <td class="jtox-user-rights">
-                  <select name="users-write" id="users-write" multiple class="jtox-users-select">
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <th class="right size-third top">Users with read access <a href='#' class='chelp bundle_rw'>?</a>:</th>
-                <td class="jtox-user-rights">
-                  <select name="users-read" id="users-read" multiple class="jtox-users-select">
-                  </select>
-                </td>
-              </tr>
-              
-	       	<#break>
+            <tr><th class="right top size-third"><label for="description">Purpose</label>*<a href='#' class='chelp a_description'>?</a>:</th><td><textarea class="validate nomargin data-field" data-field="description" name="description" id="description" required ></textarea></td></tr>
+            <tr><th class="right size-third">Version <a href='#' class='chelp a_version'>?</a>:</th><td class="data-field" data-field="version">?.?</td></tr>
+            <tr><th class="right size-third">Version start date <a href='#' class='chelp a_version_date'>?</a>:</th><td class="data-field" data-field="created" data-format="formatDate"></td></tr>
+            <tr><th class="right size-third">Version last modified on <a href='#' class='chelp a_version_date'>?</a>:</th><td class="data-field" data-field="updated" data-format="formatDate"></td></tr>
+            <tr>
+              <th class="right size-third">Status<a href='#' class='chelp a_published'>?</a>:</th>
+              <td class="data-field" data-field="status" data-format="formatStatus"></td>
+            </tr>
+            <tr class="lri_hide"><th class="right size-third"><label for="license">License</label>*:</th><td><input class="data-field first-time validate" data-field="rights.URI" name="license" id="license"  /></td></tr>
+            <tr class="lri_hide"><th class="right size-third"><label for="rightsHolder">Rights holder</label>*<a href='#' class='chelp a_rightsholder'>?</a>:</th><td><input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder" id="rightsHolder" /></td></tr>
+	          <tr ><th class="right size-third"><label for="seeAlso" id="l_seeAlso">See also</label>*<a href='#' class='chelp a_code'>?</a>:</th><td><input class="data-field first-time validate" data-field="seeAlso" name="seeAlso" id="seeAlso" required /></td></tr>
+	          <tr ><th class="right size-third"><label for="source" id="l_source">Source URL</label>*<a href='#' class='chelp a_doclink'>?</a>:</th><td><input class="data-field first-time validate" data-field="source" name="source" id="source" required /></td></tr>
+            <tr><th class="right size-third"><label for="number" id="l_number">Identifier</label><a href='#' class='chelp assessment'>?</a>:</th><td class="data-field" data-field="number"></td></tr>
+	          <tr class="lri_hide"><th class="right size-third">Rating <a href='#' class='chelp a_rating'>?</a>:</th><td class="data-stars-field"><input type="hidden" name="stars" value="0"/></td></tr>
+	         <#if menu_profile??> 
+	       	<#switch menu_profile>
+	       	<#case 'lri'>	          
+            <tr class="aadb">
+              <th class="right size-third top"><label for="users-write">Users with write access</label><a href='#' class='chelp bundle_rw'>?</a>:</th>
+              <td class="jtox-user-rights">
+                <select name="users-write" id="users-write" multiple class="jtox-users-select">
+                </select>
+              </td>
+            </tr>
+            <tr class="aadb">
+              <th class="right size-third top"><label for="users-read">Users with read access</label><a href='#' class='chelp bundle_rw'>?</a>:</th>
+              <td class="jtox-user-rights">
+                <select name="users-read" id="users-read" multiple class="jtox-users-select">
+                </select>
+              </td>
+            </tr>
+            <#break>
 	       	<#default>
-	          <tr><th class="right size-third">Title <a href='#' class='chelp a_name'>?</a>:</th><td><input class="data-field first-time validate" data-field="title" name="title"/></td></tr>
-	          <tr><th class="right size-third">Maintainer<a href='#' class='chelp a_maintainer'>?</a>:</th><td><input class="data-field first-time validate" data-field="maintainer" name="maintainer"/></td></tr>
-	
-	          <tr><th class="right top size-third">Purpose<a href='#' class='chelp a_description'>?</a>:</th><td><textarea class="validate nomargin data-field" data-field="description" name="description"></textarea></td></tr>
-	          <tr><th class="right size-third">Version<a href='#' class='chelp a_version'>?</a>:</th><td class="data-field" data-field="version">?.?</td></tr>
-
-	          <tr><th class="right size-third">Version start date<a href='#' class='chelp a_version_date'>?</a>:</th><td class="data-field" data-field="created" data-format="formatDate"></td></tr>
-	          <tr><th class="right size-third">Version last modified on<a href='#' class='chelp a_version_date'>?</a>:</th><td class="data-field" data-field="updated" data-format="formatDate"></td></tr>
-	          <tr><th class="right size-third">Status<a href='#' class='chelp a_published_status'>?</a>:</th>
-	          <td class="data-field" >
-	          
-	          <input type="radio" name="status" value="draft" id="status-draft"><label for="status-draft">Draft</label>
-	            <input type="radio" name="status" value="published" id="status-published"><label for="status-published">Published</label>
-	            <input type="radio" name="status" value="archived" id="status-archived"><label for="status-archived">Archived</label>
-	            
-	          </td>
-	          </tr>	          
-          
-	            <tr><th class="right size-third">Source<a href='#' class='chelp a_source'>?</a>:</th><td><input class="data-field first-time validate" data-field="seeAlso" name="source"/></td></tr>
-	            <tr><th class="right size-third">Source URL<a href='#' class='chelp a_source'>?</a>:</th><td><input class="data-field first-time validate" data-field="source" name="url"/></td></tr>	       	
-	       		<tr><th class="right size-third">License or Waiver<a href='#' class='chelp a_license'>?</a>:</th><td><input class="data-field first-time validate" data-field="rights.URI" name="license"/></td></tr>
-	       		<tr><th class="right size-third">Rights holder<a href='#' class='chelp a_rightsholder'>?</a>:</th><td><input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder"/></td></tr>
-	       		<tr><th class="right size-third">Rating <a href='#' class='chelp a_rating'>?</a>:</th><td class="data-stars-field"><input type="hidden" name="stars" value="0"/></td></tr>
-	            <tr><th class="right size-third">Identifier <a href='#' class='chelp assessment'>?</a>:</th><td class="data-field" data-field="number"></td></tr>
 	       	</#switch>
-		   </#if>       
-
-            
-          
+	       	</#if>
 	        </thead>
 	      </table>
-	      <div class="actions">
-		      <button name="assStart" type="button">Start</button>
-		      <button name="assFinalize" type="button">Finalize</button>
-		      <button name="assNewVersion" type="button">Generate new version</button>
+	      <div class="actions default_hide">
+		      <button name="assStart" type="submit" class="default_hide">Start</button>
+		      <button name="assFinalize" type="button" class="default_hide">Finalize Assessment</button>
+		      <button name="assNewVersion" type="button" class="default_hide">Generate new version</button>
 	      </div>
 	      </div>
 	      <div class="three columns remove-bottom">
@@ -187,8 +160,7 @@
 				<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'></div>
 				<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'></div>
 				      
-	      </div>
-
+	      </div>	      
 	  	</form>
 	  </div>
     <div id="jtox-structures">
@@ -243,89 +215,23 @@
 			<button class="create-final-button">Create final matrix</button>
 			<div class="jtox-toolkit" data-kit="compound" data-manual-init="true"></div>
     </div>
-    <div id="jtox-report" class="jtox-report" data-action="onReport">
-    
-      <#if assessment_report??>   
-      	<button type="button" id="generate-doc">Create Word file</button>
-      <div id="jtox-report-cover">
-        <h1>Ambit Assessment Report</h1>
-        <h2 class="data-field" data-field="title">Category For Glymes</h2>
-        <dl>
-          <dt>Author:</dt><dd class="data-field" data-field="maintainer"></dd>
-          <dt>Company:</dt><dd class="data-field" data-field="rightsHolder"></dd>
-          <dt>Date:</dt><dd class="data-field" data-field="created" data-format="formatDate"></dd>
-          <dt>Assessment code:</dt><dd class="data-field" data-field="number"></dd>
-          <dt>Purpose:</dt><dd class="data-field" data-field="description"></dd>
-        </dl>
-      </div>
+    <div id="jtox-report" class="jtox-report">
+    <#if bundleid??>
+      <p>
+        <a href="${ambit_root}/ui/assessment_report?bundle_uri=${ambit_root}/bundle/${bundleid}" id="open-report">Create assessment report</a>
+      </p>
+      <p>
+        <a href="${ambit_root}/bundle/${bundleid}/substance?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="export-substance">Create Excel file with all used experimental data</a>
+      </p>
+      <p>
+        <a href="${ambit_root}/bundle/${bundleid}/dataset?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="export-initial-matrix">Create Excel file with the initial matrix</a>
+      </p>
+      <p>
+        <a href="${ambit_root}/bundle/${bundleid}/matrix?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="export-working-matrix">Create Excel file with the working matrix</a>
+      </p>
 
-      <section id="jtox-report-identifiers">
-        <h2>Assessment Identifiers</h2>
-
-        <table class="dataTable">
-          <thead>
-            <tr><th class="right size-third">Assessment title:</th><td class="data-field" data-field="title"></td></tr>
-            <tr><th class="right size-third">Owner:</th><td class="data-field" data-field="maintainer"></td></tr>
-
-            <tr><th class="right top size-third">Purpose:</th><td class="data-field" data-field="description"></td></tr>
-            <tr><th class="right size-third">Version:</th><td class="data-field" data-field="version">?.?</td></tr>
-            <tr><th class="right size-third">Status:</th><td class="data-field" data-field="status"></td></tr>
-            <tr><th class="right size-third">Version start date:</th><td class="data-field" data-field="created" data-format="formatDate"></td></tr>
-            <tr><th class="right size-third">Version last modified on:</th><td class="data-field" data-field="updated" data-format="formatDate"></td></tr>
-            <tr><th class="right size-third">Published:</th><td class="data-field" data-field="status"></td></tr>
-            <tr><th class="right size-third">Assessment code:</th><td class="data-field" data-field="seeAlso"></td></tr>
-            <tr><th class="right size-third">Assessment DocLink:</th><td class="data-field" data-field="source" data-format="formatLink"></td></tr>
-            <tr><th class="right size-third">Assessment ID:</th><td class="data-field" data-field="number"></td></tr>
-          </thead>
-        </table>
-
-        <p>The original assessment in Ambit can be found via “Assessment ID”.</p>
-
-      </section>
-
-      <section id="jtox-report-structlist">
-        <h2>List of structures for assessment</h2>
-        <p>In the assessment, similar structures were selected from exact structure, substructure and/or similarity searches, or were added manually. The rationale for the selection is given in the table.</p>
-        <div id="jtox-report-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false">
-          <div id="browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-on-details="onDetailedRow" data-details-height="500px" data-show-diagrams="true" data-on-loaded="onBrowserFilled"></div>
-        </div>
-      </section>
-
-      <section id="jtox-report-substances">
-        <h2>List of substances related to the structures</h2>
-        <p>In the following, for each structure listed in chapter 2, substances were selected and the rationale is given.</p>
-        <div id="jtox-report-substance-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false">
-          <div id="report-substance-browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-pre-details="preDetailedRow" data-show-diagrams="true" data-on-loaded="onReportSubstancesLoaded"></div>
-        </div>
-      </section>
-
-      <section id="jtox-report-matrix">
-        <h2>Substance composition matrix</h2>
-        <p>In the following, for each substance, the associated structure(s) and the composition are given.</p>
-        <div class="jtox-toolkit" data-kit="compound" data-manual-init="true"></div>
-      </section>
-
-      <section id="jtox-report-final">
-        <h2>Assessment data matrix</h2>
-        <p>In the following, for each substance, the associated endpoint data are given, either experimental data, waiving or read-across.</p>
-        <p>For detailed data or rationale for waiving and read-across, click hyperlinks in the table. These data or rationales can also be found in the annex of the report.</p>
-        <div class="jtox-toolkit" data-manual-init="true"></div>
-      </section>
-
+      </#if>
     </div>
-    <#else>
-  	<#if bundleid??>
-  		<ul>
-  		<li><a href="${ambit_root}/ui/assessment_report?bundle_uri=${ambit_root}/bundle/${bundleid}">Create assessment report</a></li>
-  		<li><a href="${ambit_root}/bundle/${bundleid}/substance?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">Create Excel file with all used experimental data</a></li>
-		<li><a href="${ambit_root}/bundle/${bundleid}/dataset?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">Create Excel file with the initial matrix</a></li>
-		<li><a href="${ambit_root}/bundle/${bundleid}/matrix?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">Create Excel file with the working matrix</a></li>		  		
-  		</ul>
-  	</#if>
-
-  </#if>
-
-
   </div>
   <div class="jtox-template">
     <div id="info-box">
@@ -378,9 +284,9 @@
       </div>
     </div>
   </div>
+  <!-- sixteen columns -->
+  </div>
   
-  </div> <!-- sixteen columns -->
-
   
   <div class='row add-bottom'>&nbsp;</div>
 
@@ -397,9 +303,8 @@
 </#if>
 
 	
-	
 
-  </div> <!-- container -->
-  
+<!-- container -->  
+</div>  
 </body>
 </html>

@@ -49,11 +49,11 @@ public abstract class CoveragePredictor<Input, T> extends ModelPredictor<DataCov
 	    Property p = predicted.next();
 	    if (value instanceof double[]) {
 		if (p.getName().startsWith("AppDomain_"))
-		    record.setProperty(p, ((double[]) value)[1]);
+		    record.setRecordProperty(p, ((double[]) value)[1]);
 		else
-		    record.setProperty(p, ((double[]) value)[0]);
+		    record.setRecordProperty(p, ((double[]) value)[0]);
 	    } else {
-		record.setProperty(p, value);
+		record.setRecordProperty(p, value);
 	    }
 	    count++;
 	}

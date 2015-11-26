@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.openscience.cdk.fingerprint.CircularFingerprinter;
+import org.openscience.cdk.fingerprint.ICountFingerprint;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
@@ -16,6 +18,8 @@ import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.templates.MoleculeFactory;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.descriptors.constitutional.AtomCountHybridizationDescriptor;
 import ambit2.descriptors.constitutional.AtomCountRelativeDescriptor;
@@ -38,6 +42,7 @@ public class TestDescriptors  {
 		for (int i = 0; i < smiles.size(); i++)
 		{	
 			IAtomContainer mol = sp.parseSmiles(smiles.get(i));
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 			DescriptorValue dv = descriptor.calculate(mol);
 			double d = TestDescriptors.unpackValueAsDouble(descrValueIndex, dv.getValue());
 			Assert.assertEquals(info + " value for " +smiles.get(i), expectedValues.get(i).doubleValue(), d, eps_precision);
@@ -289,7 +294,21 @@ public class TestDescriptors  {
 
 	}
 
-
+	@Test
+	public void testCircularFingerprints() throws Exception  {
+		CircularFingerprinter f = new CircularFingerprinter();
+		IAtomContainer mol = MoleculeFactory.makeBenzene();
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		ICountFingerprint r = f.getCountFingerprint(mol);
+		System.out.println(r.numOfPopulatedbins());
+		System.out.println(r.size());
+		for (int i=0; i < r.numOfPopulatedbins();i++) {
+			System.out.print(r.getHash(i));
+			System.out.print("\t");
+			System.out.println(r.getCount(i));
+			
+		}	
+	}
 	/*	later
 	public void testRingDescriptors() throws Exception 
 	{

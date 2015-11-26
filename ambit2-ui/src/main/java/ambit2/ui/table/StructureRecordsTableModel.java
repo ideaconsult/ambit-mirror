@@ -92,7 +92,7 @@ public class StructureRecordsTableModel extends AbstractTableModel {
 
 			IStructureRecord record = records.get(rowIndex);
 			Property p = (Property)fields.getElementAt(columnIndex-offset);
-			Object o = record.getProperty(p);
+			Object o = record.getRecordProperty(p);
 			return ((fields==null)||(o==null))?"":o;
 		}
 		}

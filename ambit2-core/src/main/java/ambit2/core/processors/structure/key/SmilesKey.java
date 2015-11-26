@@ -34,7 +34,7 @@ import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -53,7 +53,7 @@ public class SmilesKey extends DefaultAmbitProcessor<IAtomContainer,String> impl
 	protected Object key="smiles";
 	//protected AtomConfigurator conf = new AtomConfigurator();
 	public SmilesKey() {
-		gen = new SmilesGenerator(true);
+		gen = SmilesGenerator.unique().aromatic();
 	}
 	public Object getKey() {
 		return key;
@@ -66,13 +66,13 @@ public class SmilesKey extends DefaultAmbitProcessor<IAtomContainer,String> impl
 			throw new AmbitException("Empty molecule!");
 		IAtomContainer mol = null;
 		try {
-			mol = (IAtomContainer)molecule.clone();
-
-			mol = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(mol);
-			return gen.createSMILES((IMolecule)mol,false,new boolean[mol.getAtomCount()]);
+			mol = molecule;
+			mol = AtomContainerManipulator.copyAndSuppressedHydrogens(molecule);
+			//return gen.createSMILES((IAtomContainer)mol,false,new boolean[mol.getAtomCount()]);
+			return gen.create(mol);
 		} catch (CDKException x) {
-			logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
-			return gen.createSMILES((IMolecule)mol);
+			logger.log(java.util.logging.Level.WARNING,x.getMessage());
+			throw new AmbitException(x);
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}

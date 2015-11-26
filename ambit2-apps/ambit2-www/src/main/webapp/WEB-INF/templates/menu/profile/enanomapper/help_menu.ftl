@@ -1,33 +1,33 @@
 <ul>
+	<li> <a href="#">User guide</a>
+		<ul>
+		<li><a href='http://ambit.sourceforge.net/enanomapper_usage.html' target='guide'>Search by composition</a></li>
+		<li><a href='http://ambit.sourceforge.net/enanomapper_usage_substance.html' target='guide'>Search by phys chem or biological effects</a></li>
+		<li><a href='http://ambit.sourceforge.net/enanomapper.html' target='guide'>Downloads and Installation</a></li>
+		
+		</ul>
+	</li>
+	<li><a href='https://github.com/enanomapper/data.enanomapper.net/issues' target='report' title='Found an error? Report here'>Submit an issue <img src='${ambit_root}/images/profile/enanomapper/enm_api_24.png'></a></li>	
 	<li><a href="#">OpenTox API</a>
 	<ul>
 		<li><a href='${ambit_root}/api-docs' target=_blank title="API documentation in Swagger JSON format">API Documentation</a></li>
-		<li><a href='http://ideaconsult.github.io/examples-ambit/apidocs/' class="qxternal" target=_blank title="API documentation via swagger-ui">API Documentation (public services)</a></li>
 		<li><a href='http://enanomapper.github.io/API/' target=_blank title="API documentation in Swagger JSON format">API Documentation (eNanoMapper services)</a></li>
-		<li><a href="${ambit_root}/compound" title="Chemical compound">Compound</a></li>
-		<li><a href="${ambit_root}/dataset">Datasets</a></li>
-		<li><a href="${ambit_root}/feature" title="Features (identifiers, measured and calculated properties)">Features</a></li>
-		<li><a href="${ambit_root}/algorithm">Algorithm</a></li>
-		<li><a href="${ambit_root}/model">Model</a></li>
-		<li>
-			<a href="${ambit_root}">Search</a>
-			<ul>
-				<li><a href="${ambit_root}/query/similarity?search=c1ccccc1Oc2ccccc2&threshold=0.9">Similarity</a></li>
-				<li><a href="${ambit_root}/query/smarts?text=%22%22">Substructure</a></li>
-			
-			</ul>
-		</li>
 	</ul>
 	</li>
+	<li>
+		<a href="${ambit_root}/depict">Demo</a>
+		<#include "/menu/profile/enanomapper/demo_menu.ftl">
+	</li>			
+	<#if username??>	
 	<li><a href="${ambit_root}/admin">Admin</a>
-		<#if openam_token??>
+
 			<#if menu_profile??>
 				<#include "/menu/profile/${menu_profile}/admin_menu.ftl">
 			<#else>
 				<#include "/menu/profile/default/admin_menu.ftl">
 			</#if>
-		</#if>
 	</li>	
+	</#if>
 	<li><a href="#">About</a>
 		<ul>
 		<li><a href="#">Version</a>
@@ -41,6 +41,8 @@
 			</li>
 			</ul>
 		</li>
+		<li><a href="http://www.enanomapper.net/" target=_blank title="This project has received funding from the European Union’s FP7 for research, technological development and demonstration under grant agreement no 604134.">EU FP7 #604134</a></li>
+		<li><a href="http://ambit.sourceforge.net/enanomapper.html" target=_blank title="eNanoMapper database is customized version of AMBIT web services">ambit.sf.net</a>	</li>		
 		</ul>
 	</li>
 

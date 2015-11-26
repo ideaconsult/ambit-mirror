@@ -97,22 +97,22 @@ public class QuerySmilesByID extends AbstractQuery<String, IStructureRecord, Num
                      	
             String smiles = rs.getString("smiles");
             if (smiles!= null)
-            	r.setProperty(Property.getSMILESInstance(),smiles);
+            	r.setRecordProperty(Property.getSMILESInstance(),smiles);
             else
-            	r.removeProperty(Property.getSMILESInstance());
+            	r.removeRecordProperty(Property.getSMILESInstance());
             String inchi = rs.getString("inchi");
             Property p = new Property(Property.opentox_InChI_std);
             if (inchi!= null)
-            	r.setProperty(p,inchi);  
+            	r.setRecordProperty(p,inchi);  
             else
-            	r.removeProperty(p);
+            	r.removeRecordProperty(p);
 
             String inchikey = rs.getString("inchikey");
             p = new Property(Property.opentox_InChIKey_std);
             if (inchikey!= null)
-            	r.setProperty(p,inchikey);  
+            	r.setRecordProperty(p,inchikey);  
             else
-            	r.removeProperty(p);            
+            	r.removeRecordProperty(p);            
             return r;
         } catch (Exception x){
             throw new AmbitException(x);

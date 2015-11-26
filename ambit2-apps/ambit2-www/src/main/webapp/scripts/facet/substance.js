@@ -54,8 +54,17 @@ var facet = {
 				        //$('.ui-autocomplete').css('width', '450px');
 				    } 	        
 			});			
-		},		
-		searchStudy : function (event) {
+		},
+		runQuery : function (substanceQuery) {
+			this.substanceComponent.querySubstance(substanceQuery);
+			$("#hits").show();
+			
+			$.each(_ambit.downloads,function(index,value) {
+				var durl = substanceQuery +  ((substanceQuery.indexOf("?")<0)?"?":"&") + "media="+ encodeURIComponent(value.mime);
+				$('#download_results #'+value.id).attr('href',durl);
+			});
+		},
+		searchStudy : function (event, defaulturi) {
 			var selected = $("input[name^='category']:checked:enabled",'#fsearchForm');
 			var params = [{'name' : 'type', 'value' : 'facet'}];
 			$.each(selected,function(index,value) {
@@ -105,13 +114,13 @@ var facet = {
 					params.push({"name" : name , "value" : val});
 			});
 			if (this.substanceComponent != undefined && this.substanceComponent!= null)  {
+				
 				var substanceQuery =  this.root + '/substance?' + jQuery.param(params);
-				this.substanceComponent.querySubstance(substanceQuery);
-				$("#hits").show();
+				this.runQuery(substanceQuery);
 			}	
 			if (event!=null) event.preventDefault();
 		},
-		defineStudySearchFacets : function (root,url,selector) {
+		defineStudySearchFacets : function (root,url,selector,selected_default) {
 			var oTable = $(selector).dataTable( {
 				"sAjaxDataProp" : "facet",
 				"bProcessing": true,
@@ -126,7 +135,11 @@ var facet = {
 				        	"bSearchable" : false,
 				        	"bUseRendered" : false,
 				        	 "fnRender" : function(o,val) {
-				        		 return "<input type='checkbox' name='category' value='"+o.aData["subcategory"]+"."+o.aData["endpoint"]+"'>"; 
+				        		 var name = o.aData["subcategory"]+"."+o.aData["endpoint"];
+				        		 var id = name.replace(" ","_");
+				        		 id = name.replace(".","_");
+				        		 var checked = (id == selected_default)?"checked":"";
+				        		 return "<input type='checkbox' name='category' value='"+name+"' id='"+id+"' "+checked+" >"; 
 				        	 }
 				        },         
 		 				{ "mData": "value" , 
@@ -163,7 +176,52 @@ var facet = {
 						"sSearch": "Filter:",
 						"sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
 			            "sLoadingRecords": "No records found."
-			    }
+			    },
+			    "fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
+					oSettings.jqXHR = $.ajax({
+						"type" : "GET",
+						"url" : sSource,
+						"data" : aoData,
+						"dataType" : "json",
+						"contentType" : "application/json",
+						"cache" : true,
+						"success": function(result){
+							try {
+								if (result.facet.length == 0) {
+									$(selector+"_hdr").hide();
+									$(selector).hide();
+								} else {
+									$(selector+"_hdr").show();
+									$(selector).show();
+									fnCallback(result);
+								}	
+							} catch (err) {
+								
+							}
+							
+						},
+						"error" : function(xhr, textStatus, error) {
+							switch (xhr.status) {
+							case 400: {
+								console.log("none");
+								break;
+							}
+							case 403: {
+					        	alert("Restricted access. You are not authorized to access the requested resources.");
+								break;
+							}
+							case 404: {
+								//not found
+								break;
+							}
+							default: {
+
+							}
+							}
+							oSettings.oApi._fnProcessingDisplay(oSettings, false);
+						}
+					});
+				}			    
 			} );
 			
 			$(selector + ' tbody').on('click','td.details-control span',function() {

@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -54,7 +54,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 			} catch (ShellException x) {
 				setParser(SMILES_PARSER.CDK);
 				if (cdkParser == null) cdkParser = new SmilesParser(SilentChemObjectBuilder.getInstance());
-				IMolecule mol = cdkParser.parseSmiles(smiles);
+				IAtomContainer mol = cdkParser.parseSmiles(smiles);
 				/*
 	            if (addHydrogens) 
 	                try {
@@ -63,7 +63,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	                    h.addImplicitHydrogens(mol);
 	                    AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
 	          
-	                    //h.addExplicitHydrogensToSatisfyValency((IMolecule)mol);
+	                    //h.addExplicitHydrogensToSatisfyValency((IAtomContainer)mol);
 	                } catch (InvalidSmilesException x ) {
 	                    return null;
 	                } catch (CDKException x) {
@@ -83,7 +83,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 		}
 		default: {
 			if (cdkParser == null) cdkParser = new SmilesParser(SilentChemObjectBuilder.getInstance());
-			IMolecule mol = cdkParser.parseSmiles(smiles);
+			IAtomContainer mol = cdkParser.parseSmiles(smiles);
 			try {
 				return dbt.kekuliseAromaticRings(mol);
 				//return mol;

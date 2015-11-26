@@ -14,6 +14,7 @@ import org.restlet.security.Role;
 public class DBRoles {
 	public static final DBRole adminRole = new DBRole(AMBITDBRoles.ambit_admin.name(),AMBITDBRoles.ambit_admin.toString());
 	public static final DBRole datasetManager = new DBRole(AMBITDBRoles.ambit_datasetmgr.name(),AMBITDBRoles.ambit_datasetmgr.toString());
+	public static final DBRole modeller = new DBRole(AMBITDBRoles.ambit_modeller.name(),AMBITDBRoles.ambit_modeller.toString());
 	public static final DBRole userRole = new DBRole(AMBITDBRoles.ambit_user.name(),AMBITDBRoles.ambit_user.toString());
 
 	private DBRoles() {
@@ -26,6 +27,9 @@ public class DBRoles {
 	}	   
 	public static boolean isAdmin(List<Role> roles) {
 		return (roles==null)?false:(roles.indexOf(DBRoles.adminRole)>=0);
+	}
+	public static boolean isModeller(List<Role> roles) {
+		return (roles==null)?false:(roles.indexOf(DBRoles.modeller)>=0);
 	}
 	public static boolean isDatasetManager(List<Role> roles) {
 		return (roles==null)?false:(roles.indexOf(DBRoles.datasetManager)>=0);

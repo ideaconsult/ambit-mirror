@@ -16,6 +16,12 @@ Support for mono-constituent and multi-constituent  substances, including additi
 
 Endpoint data (support for all REACH endpoints, IUCLID5 import) 
 
+#### [NanoMaterials][nanomaterials]
+
+![NanoMaterials](images/screenshots/mwcnt.png "Multiwalled Carbon Nanotubes")
+
+Nanomaterial physicochemical and biological characterisation 
+
 #### [Read across support][ra]
 
 ![Read across support](images/screenshots/ra_matrix.png "AMBIT Read across support")
@@ -32,6 +38,7 @@ Toxtree predictions online
 [endpoint]: usage_substance.html
 [composition]: usage_substance.html
 [ra]: http://apps.ideaconsult.net/data/ui/assessment
+[nanomaterials]: enanomapper.html
 [toxtree]: https://apps.ideaconsult.net/data/ui/toxtree
 
 ---
@@ -46,17 +53,22 @@ AMBIT offers chemoinformatics functionality via [*OpenTox API*](api.html) compli
 
 - Descriptor calculation and predictive models building ([*Weka*](http://www.cs.waikato.ac.nz/ml/weka/), [*Toxtree*](http://toxtree.sf.net)).
 
-## Libraries
+## News
 
-AMBIT consists of multiple [*Maven modules*](http://maven.apache.org/) with well defined dependencies, which can be used in a stand alone mode or embedded in other applications.
-   
-- [Download AMBIT libraries](./download_ambitlibs.html)
+- [LRI Workshop on AMBIT and READ-ACROSS](http://cefic-lri.org/events/lri-workshop-on-ambit-and-read-across/) 
+
+CEFIC LRI is organising a hands-on training workshop on *21 January 2016* at [Cefic offices in Brussels](http://cefic-lri.org/contact/).
+
+- [eNanoMapper database](./enanomapper.html)
+
+The eNanoMapper [database](https://apps.ideaconsult.net/enanomapper) is part of the computational infrastructure for toxicological data 
+management of engineered nanomaterials, developed within the EU FP7 [eNanoMapper](www.enanomapper.net) project. It is implemented by a customized version of AMBIT web services and available for [download](enanomapper.html).
 
 ## Download
 
 AMBIT REST web services are distributed as web archive (war file) and can be deployed in an [Apache Tomcat](http://tomcat.apache.org/) application server or any other compatible [servlet](http://en.wikipedia.org/wiki/Java_Servlet) container. Download and install your own AMBIT instance :
 
--   [**Download** web application](./download_ambitrest.html)
+-   [**Download** web application and libraries](./downloads.html)
 
 -   [**Install** web application](./install_ambitrest.html)
 
@@ -70,7 +82,7 @@ Try the public web services, datasets and models :
 
 -   [Datasets](https://apps.ideaconsult.net/data/dataset?pagesize=100) : [**ONS Melting point 33**](https://apps.ideaconsult.net/data/ui/_dataset?dataset_uri=https%3A%2F%2Fapps.ideaconsult.net%2Fdata%2Fdataset%2F45) [<sup>?</sup>](http://precedings.nature.com/documents/6229/version/1) | [**CPDBAS**](https://apps.ideaconsult.net/data/ui/_dataset?dataset_uri=https%3A%2F%2Fapps.ideaconsult.net%2Fdata%2Fdataset%2F10) [<sup>?</sup>](http://www.epa.gov/ncct/dsstox/sdf_cpdbas.html) | [**Tox21**](https://apps.ideaconsult.net/data/ui/_dataset?dataset_uri=https%3A%2F%2Fapps.ideaconsult.net%2Fdata%2Fdataset%2F36) | [**Inventory of Cosmetic Ingredients**](https://apps.ideaconsult.net/data/ui/_dataset?dataset_uri=https%3A%2F%2Fapps.ideaconsult.net%2Fdata%2Fdataset%2F1) | [**WikiPathways structure browser** at *GitHub*](http://ideaconsult.github.io/Toxtree.js) and at [*BiGCaT Maastricht University*](http://www.bigcat.unimaas.nl/~egonw/wpm/) [<sup>?</sup>](http://wikipathways.org/index.php/WikiPathways) |  [Bioconcentration factor **(BCF) Gold Standard Database**](http://ambit.sourceforge.net/euras/) [<sup>?</sup>](http://www.cefic-lri.org/lri-toolbox/bcf)
      
--   Search: [**Structure search**](https://apps.ideaconsult.net/data/ui/_search) | [**Substances**](https://apps.ideaconsult.net/data/substances) | [**Nanomaterials**](https://apps.ideaconsult.net/enmtest/substances) 
+-   Search: [**Structure search**](https://apps.ideaconsult.net/data/ui/_search) | [**Substances**](https://apps.ideaconsult.net/data/substances) | [**Nanomaterials**](https://apps.ideaconsult.net/enanomapper/substances) 
    
 -   Models: [**Toxtree online**](https://apps.ideaconsult.net/data/ui/toxtree)
 
@@ -92,15 +104,15 @@ User guide
 
 Chemical structures, chemical substances and endpoint data in AMBIT    
 
--   [**Structure search**](https://apps.ideaconsult.net/opentox/ui/_search)
+-   [**Structure search**](https://apps.ideaconsult.net/ambit3/ui/_search)
 
--   [**Substance online**](https://apps.ideaconsult.net/opentox/substance)
+-   [**Substance online**](https://apps.ideaconsult.net/ambit3/substance)
 
--   [**Endpoint search**](https://apps.ideaconsult.net/opentox/query/study)
+-   [**Endpoint search**](https://apps.ideaconsult.net/ambit3/query/study)
 
--   [**Run Toxtree predictions**](https://apps.ideaconsult.net/opentox/ui/toxtree)
+-   [**Run Toxtree predictions**](https://apps.ideaconsult.net/ambit3/ui/toxtree)
 
--   [**Provide feedback**](https://docs.google.com/forms/d/1ncsW59uGAJfEUgSv8tvfbiU0XRXIik9RuRJ376WnkB0/viewform) for the [**Read across workflow support** (under development)](https://apps.ideaconsult.net/opentox/ui/assessment)   
+-   [**Provide feedback**](https://docs.google.com/forms/d/1ncsW59uGAJfEUgSv8tvfbiU0XRXIik9RuRJ376WnkB0/viewform) for the [**Read across workflow support** (beta test)](https://apps.ideaconsult.net/ambit3/ui/assessment)   
 
 ---
 
@@ -112,12 +124,16 @@ Acknowledgements
 
 >[**FP7 OpenTox**](http://opentox.org/)
 
+>[**FP7 eNanoMapper**](http://enanomapper.net)
+
+>[**H2020 ExCAPE**](http://cordis.europa.eu/project/rcn/197542_en.html)
+
 Related pages
 
 > [Toxtree](http://toxtree.sf.net/) | [Toxmatch](http://toxmatch.sf.net/) |  [(Q)MRF](http://qmrf.sf.net/) | 
  [AMBIT/OpenTox API client library](https://github.com/ideaconsult/opentox-cli) | [OpenTox AA client library](https://github.com/vedina/opentox-aa-cli) | 
  [jToxKit](https://github.com/ideaconsult/Toxtree.js) | [I5 library](https://github.com/ideaconsult/i5) | [ToxPredict](http://toxpredict.org) |
- [FP7 ToxBank](http://toxbank.net) | [FP7 eNanoMapper](http://enanomapper.net)
+ [FP7 ToxBank](http://toxbank.net)
 
 **Social**
 

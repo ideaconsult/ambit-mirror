@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -16,9 +15,11 @@ import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
+import ambit2.tautomers.TautomerConst.GAT;
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerRanking;
+import ambit2.tautomers.ranking.TautomerStringCode;
 import ambit2.tautomers.tools.TautomerAnalysis;
 
 
@@ -63,10 +64,19 @@ public class AutomaticTautomerTests
 	public boolean FlagWorkWithWholeDirectory = true;  //If this flag is true and input file is a directory then all file in it are used for the input
 	public boolean FlagSkipFirstLineInDirIteration = false;  //if true the first line is skipped for the all files except the first file in the directory
 	public boolean FlagUseCACTVSRank = false;
-	public int FlagGenerationAlgorithm = TautomerConst.GAT_Incremental; //GAT_Comb_Pure  GAT_Comb_Improved  
+	protected GAT FlagGenerationAlgorithm = GAT.Incremental;  
 	
 	
 	
+	public GAT getFlagGenerationAlgorithm() {
+		return FlagGenerationAlgorithm;
+	}
+
+	public void setFlagGenerationAlgorithm(GAT flagGenerationAlgorithm) {
+		FlagGenerationAlgorithm = flagGenerationAlgorithm;
+	}
+
+
 	public boolean FlagDescrAverageForCloseEnergies = true;  //The ranking is relative to the energy of the tautomer which is the original structure
 	
 	
@@ -1163,7 +1173,7 @@ public class AutomaticTautomerTests
 		try
 		{
 			//Create molecule from SMILES
-			IMolecule mol = null;
+			IAtomContainer mol = null;
 			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 			mol = sp.parseSmiles(tokens.get(1));
 			
@@ -1192,7 +1202,7 @@ public class AutomaticTautomerTests
 	{
 		try
 		{
-			IMolecule mol = null;
+			IAtomContainer mol = null;
 			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 			mol = sp.parseSmiles(line.trim());
 			
@@ -1276,13 +1286,13 @@ public class AutomaticTautomerTests
 		System.out.println("" + curLine + "   " + line);
 		try
 		{
-			IMolecule mol = null;
+			IAtomContainer mol = null;
 			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 			mol = sp.parseSmiles(line.trim());
 			
 			tman.setStructure(mol);
 			List<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
-			IAtomContainer can_t = TautomerManager.getCanonicTautomer(resultTautomers);
+			IAtomContainer can_t = tman.getCanonicTautomer(resultTautomers);
 			
 			output("" + curLine + "   " + line + "  " + resultTautomers.size() + "  " +  
 					SmartsHelper.moleculeToSMILES(can_t,false)  /* +  endLine */);
@@ -1299,7 +1309,7 @@ public class AutomaticTautomerTests
 		System.out.println("" + curLine + "   " + line);
 		try
 		{
-			IMolecule mol = null;
+			IAtomContainer mol = null;
 			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 			mol = sp.parseSmiles(line.trim());
 			
@@ -1322,7 +1332,7 @@ public class AutomaticTautomerTests
 		System.out.println("" + curLine + "   " + line);
 		try
 		{
-			IMolecule mol = null;
+			IAtomContainer mol = null;
 			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 			mol = sp.parseSmiles(line.trim());
 			
@@ -1346,7 +1356,7 @@ public class AutomaticTautomerTests
 		System.out.println(line);
 		try
 		{
-			IMolecule mol = null;
+			IAtomContainer mol = null;
 			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 			mol = sp.parseSmiles(line.trim());
 			
@@ -1430,7 +1440,7 @@ public class AutomaticTautomerTests
 		int CheckedTautomers = 0;
 		for (int i = 0; i < tautomers.size(); i++)
 		{
-			String code = TautomerManager.getTautomerCodeString(tautomers.get(i), false);
+			String code = TautomerStringCode.getCode(tautomers.get(i), false, tman.getCodeStrBondSequence());
 			for (int k = 0; k < codes.size(); k++)
 				if (code.equals(codes.get(k)))
 				{
@@ -1570,7 +1580,7 @@ public class AutomaticTautomerTests
 		System.out.print("" + curLine + "   " + line);
 		try
 		{
-			IMolecule mol = null;
+			IAtomContainer mol = null;
 			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 			mol = sp.parseSmiles(line.trim());
 			
@@ -1579,15 +1589,15 @@ public class AutomaticTautomerTests
 			
 			switch (FlagGenerationAlgorithm)
 			{
-			case TautomerConst.GAT_Comb_Pure:
+			case Comb_Pure:
 				resultTautomers = tman.generateTautomers();	
 				break;
 			
-			case TautomerConst.GAT_Incremental:
+			case Incremental:
 				resultTautomers = tman.generateTautomersIncrementaly();
 				break;
 			
-			case TautomerConst.GAT_Comb_Improved:
+			case Comb_Improved:
 				resultTautomers = tman.generateTautomers_ImprovedCombApproach();
 				break;
 			}
@@ -1603,9 +1613,9 @@ public class AutomaticTautomerTests
 					IAtomContainer tautomer = resultTautomers.get(i);
 					double rank;
 					if (FlagUseCACTVSRank)
-						rank = ((Double)tautomer.getProperty("CACTVS_ENERGY_RANK")).doubleValue();
+						rank = ((Double)tautomer.getProperty(TautomerConst.CACTVS_ENERGY_RANK)).doubleValue();
 					else
-						rank = ((Double)tautomer.getProperty("TAUTOMER_RANK")).doubleValue();
+						rank = ((Double)tautomer.getProperty(TautomerConst.TAUTOMER_RANK)).doubleValue();
 					
 					String smiles = SmartsHelper.moleculeToSMILES(tautomer, false).trim();
 					output("" + curLine + "   " + smiles + "  " + rank  +  endLine);
@@ -2424,7 +2434,7 @@ public class AutomaticTautomerTests
 	{	
 		try
 		{
-			IMolecule mol = null;
+			IAtomContainer mol = null;
 			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 			
 			String smiles = line.trim();
@@ -2720,11 +2730,11 @@ public class AutomaticTautomerTests
 				tok = tokens.get(numTokenAtFile1+1).trim();
 				tok2 = tokens2.get(numTokenAtFile2+1).trim();
 				
-				IMolecule mol = null;
+				IAtomContainer mol = null;
 				SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 				mol = sp.parseSmiles(tok);
 				
-				IMolecule mol2 = null;
+				IAtomContainer mol2 = null;
 				sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 				mol2 = sp.parseSmiles(tok2);
 				

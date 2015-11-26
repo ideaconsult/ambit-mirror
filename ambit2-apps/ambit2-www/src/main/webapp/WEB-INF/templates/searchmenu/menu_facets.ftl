@@ -4,6 +4,23 @@
 Statistics
 </div>
 <div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
+<a href="${ambit_root}/admin/stats/substances">Substances</a>
+</div>
+
+<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
+<a href="${ambit_root}/admin/stats/bundles">Substance datasets</a>
+</div>
+
+<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
+<a href="${ambit_root}/admin/stats/study_summary">Study summary</a>
+</div>
+
+
+<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
+<a href="${ambit_root}/substanceowner">Substance owners</a>
+</div>
+
+<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
 <a href="${ambit_root}/admin/stats/structures">Structures</a>
 </div>
 
@@ -23,21 +40,11 @@ Statistics
 <a href="${ambit_root}/admin/stats/models">Models</a>
 </div>
 
+<!--
 <div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-<a href="${ambit_root}/admin/stats/substances">Substances</a>
+<a href="${ambit_root}/query/experiment_endpoints">Substances: Endpoints</a>
 </div>
-
-<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-<a href="${ambit_root}/substanceowner">Substance owners</a>
-</div>
-
-<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-<a href="${ambit_root}/admin/stats/protocol_applications">Substances: Experiments</a>
-</div>
-
-<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-<a href="${ambit_root}/admin/stats/experiment_endpoints">Substances: Endpoints</a>
-</div>
+-->
 
 <div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
 <a href="${ambit_root}/admin/stats/chemicals_in_dataset">Chemicals in a dataset</a> 

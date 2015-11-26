@@ -6,7 +6,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.LoggingTool;
@@ -42,7 +42,7 @@ public class TestIsomorphismTester extends TestCase
 	public void match(String smarts, String smiles) throws Exception 
 	{
 		//Testing the algorithm via SmartsManager		
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		man.setUseCDKIsomorphismTester(false);
 		man.setQuery(smarts);
 		boolResult = man.searchIn(mol);

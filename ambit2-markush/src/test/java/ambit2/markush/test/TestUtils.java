@@ -3,8 +3,8 @@ package ambit2.markush.test;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.IChemObjectReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
@@ -30,7 +30,7 @@ public class TestUtils
 		
 		MDLV2000ReaderExtended reader = new MDLV2000ReaderExtended(in, IChemObjectReader.Mode.RELAXED);
 		
-		IMolecule mol = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
+		IAtomContainer mol = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 		IChemObject newMol = reader.read(mol);
 		reader.close();
 		return newMol;

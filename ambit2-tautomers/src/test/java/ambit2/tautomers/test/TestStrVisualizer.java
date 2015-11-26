@@ -15,13 +15,13 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import ambit2.core.io.MyIteratingMDLReader;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.smarts.ChemObjectToSmiles;
@@ -177,7 +177,7 @@ public class TestStrVisualizer
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 		smrkMan.setFlagFilterEquivalentMappings(filterEqMaps);
-		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
+		smrkMan.setSSMode(SmartsConst.SSM_MODE.SSM_NON_IDENTICAL);
 		
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
 		if (!smrkMan.getErrors().equals(""))
@@ -271,7 +271,7 @@ public class TestStrVisualizer
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 		smrkMan.setFlagFilterEquivalentMappings(filterEqMaps);
-		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
+		smrkMan.setSSMode(SmartsConst.SSM_MODE.SSM_NON_IDENTICAL);
 		
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
 		if (!smrkMan.getErrors().equals(""))
@@ -300,7 +300,7 @@ public class TestStrVisualizer
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 		smrkMan.setFlagFilterEquivalentMappings(filterEqMaps);
-		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
+		smrkMan.setSSMode(SmartsConst.SSM_MODE.SSM_NON_IDENTICAL);
 		
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
 		if (!smrkMan.getErrors().equals(""))
@@ -352,7 +352,7 @@ public class TestStrVisualizer
 		try
 		{
 			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
+			IteratingSDFReader reader = new IteratingSDFReader(new FileReader(mdlFile),b);
 			int record=0;
 
 			while (reader.hasNext()) 

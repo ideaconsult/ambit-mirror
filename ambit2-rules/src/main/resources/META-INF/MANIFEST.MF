@@ -1,0 +1,13 @@
+Manifest-version: 1.0
+Package: ambit2.rules
+
+Name: ambit2/rules/
+Specification-Title: AMBIT rules
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.rules
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.rules
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.

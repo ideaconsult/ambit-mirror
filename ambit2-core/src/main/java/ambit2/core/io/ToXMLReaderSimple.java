@@ -322,11 +322,11 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 			case Test: {
 				test++;
 				List<Property> l = new ArrayList<Property>();
-				for (Property pp : record.getProperties()) {
+				for (Property pp : record.getRecordProperties()) {
 					if (pp.getName().indexOf(thetag.toString())>0) l.add(pp) ;
 				}
 				for (Property pp : l)
-						record.removeProperty(pp);
+						record.removeRecordProperty(pp);
 				break;
 			}
 			case Id: {
@@ -430,8 +430,8 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 					return false;
 				}
 				case Source: {
-					Object v = record.getProperty(key);
-					record.removeProperty(key);
+					Object v = record.getRecordProperty(key);
+					record.removeRecordProperty(key);
 					key.setReference(new LiteratureEntry(value.trim(),toxml_tags.Datum.toString()));
 					properties.push(key);
 					//System.out.println("Source--> "+properties.toString());
@@ -498,7 +498,7 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 		}
 
 		if (newRecord) {
-			record.setProperty(inchiProperty,record.getInchi());
+			record.setRecordProperty(inchiProperty,record.getInchi());
 		}
 		return newRecord;
 	
@@ -506,15 +506,15 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 	
 	protected void setProperty(Property key, Object value) {
 		//System.out.println(String.format("%s,%s,%s",key,value,branches));
-		Object anotherValue = record.getProperty(key);
+		Object anotherValue = record.getRecordProperty(key);
 		String oldName = key.getName();
 		int count = 1;
 		while (anotherValue != null) {
 			key.setName(String.format("%s-%d", oldName,count));
-			anotherValue = record.getProperty(key);
+			anotherValue = record.getRecordProperty(key);
 			count++;
 		}
-		record.setProperty(key, value);
+		record.setRecordProperty(key, value);
 	}
 
 	protected String getDotPath() {

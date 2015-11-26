@@ -29,13 +29,13 @@ public abstract class AbstractPropertyGenerator<P> extends
 		long mark = System.currentTimeMillis();
 		try {
 			P p = generateProperty(atomContainer);
-			target.setProperty(getProperty(), p);
+			target.setRecordProperty(getProperty(), p);
 		} catch (Exception x) {
-			target.setProperty(getProperty(), null);
+			target.setRecordProperty(getProperty(), null);
 		} finally {
 			Property tp = getTimeProperty();
 			if (tp != null)
-				target.setProperty(getTimeProperty(),
+				target.setRecordProperty(getTimeProperty(),
 						System.currentTimeMillis() - mark);
 		}
 		return target;

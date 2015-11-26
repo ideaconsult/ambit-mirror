@@ -8,10 +8,9 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.restlet.data.MediaType;
-
-import ambit2.core.io.MyIteratingMDLReader;
 
 public class AllConformersResourceTest extends ConformerResourceTest {
     @Override
@@ -62,7 +61,7 @@ public class AllConformersResourceTest extends ConformerResourceTest {
 
     @Override
     public boolean verifyResponseSDF(String uri, MediaType media, InputStream in) throws Exception {
-	MyIteratingMDLReader reader = new MyIteratingMDLReader(in, SilentChemObjectBuilder.getInstance());
+    	IteratingSDFReader reader = new IteratingSDFReader(in, SilentChemObjectBuilder.getInstance());
 	int count = 0;
 	while (reader.hasNext()) {
 	    Object o = reader.next();

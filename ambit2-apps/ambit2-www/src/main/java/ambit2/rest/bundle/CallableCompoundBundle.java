@@ -97,8 +97,8 @@ public class CallableCompoundBundle  extends CallableDBUpdateTask<IStructureReco
 		} catch (Exception x) { remarks = null;	}
 		
 		LiteratureEntry ref = LiteratureEntry.getBundleReference(bundle);
-		if (tag!=null) record.setProperty(new Property("tag",ref) ,tag);
-		if (remarks!=null) record.setProperty(new Property("remarks",ref) ,remarks);
+		if (tag!=null) record.setRecordProperty(new Property("tag",ref) ,tag);
+		if (remarks!=null) record.setRecordProperty(new Property("remarks",ref) ,remarks);
 		
 		String uri = input.getFirstValue("compound_uri");
 		if (uri==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);

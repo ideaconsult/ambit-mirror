@@ -3,6 +3,7 @@ package ambit2.rest.rdf.chembl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.Collection;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemObject;
@@ -198,7 +199,7 @@ public class ChEMBLRawReader implements IRawReader<IStructureRecord>{
 				default: uri = null;
 			}
 			Property p = property.getProperty(uri);
-			record.setProperty(p, value);
+			record.setRecordProperty(p, value);
 		}
 		return record;
 
@@ -212,6 +213,48 @@ public class ChEMBLRawReader implements IRawReader<IStructureRecord>{
 	@Override
 	public void remove() {
 	
+	}
+
+	@Override
+	public Collection<IChemObjectIOListener> getListeners() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <S extends IOSetting> S addSetting(IOSetting setting) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addSettings(Collection<IOSetting> settings) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean hasSetting(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public <S extends IOSetting> S getSetting(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <S extends IOSetting> S getSetting(String name, Class<S> c) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<IOSetting> getSettings() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

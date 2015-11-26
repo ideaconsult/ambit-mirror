@@ -275,13 +275,13 @@ CREATE TABLE `bundle_substance` (
   `substance_prefix` varchar(6) COLLATE utf8_bin DEFAULT NULL,
   `substance_uuid` varbinary(16) DEFAULT NULL,
   `tag` varchar(10) COLLATE utf8_bin DEFAULT NULL,
-  `remarks` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  `remarks` text COLLATE utf8_bin,
   PRIMARY KEY (`idsubstance`,`idbundle`),
   UNIQUE KEY `u_sunstance_idx` (`substance_prefix`,`substance_uuid`,`idbundle`),
   KEY `s_bundle` (`idbundle`),
   KEY `a_substance_idx` (`idsubstance`),
-  CONSTRAINT `a_metadata` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `a_substance` FOREIGN KEY (`idsubstance`) REFERENCES `substance` (`idsubstance`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `bs_metadata` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `bs_substance` FOREIGN KEY (`idsubstance`) REFERENCES `substance` (`idsubstance`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
@@ -308,13 +308,14 @@ CREATE TABLE `bundle_chemicals` (
   `idchemical` int(11) unsigned NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `tag` varchar(10) COLLATE utf8_bin DEFAULT NULL,
-  `remarks` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  `remarks` text COLLATE utf8_bin,
   PRIMARY KEY (`idchemical`,`idbundle`),
   KEY `k_bundle` (`idbundle`),
   KEY `k_substance_idx` (`idchemical`),
   CONSTRAINT `c_chemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `c_metadata` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 
 -- -----------------------------------------------------
 -- Table `bundle_substance_protocolapplication` 
@@ -490,7 +491,7 @@ CREATE TABLE `structure` (
   `idstructure` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `idchemical` int(11) unsigned NOT NULL,
   `structure` blob NOT NULL,
-  `format` enum('SDF','CML','MOL','INC','NANO','PDB') COLLATE utf8_bin NOT NULL DEFAULT 'SDF',
+  `format` enum('SDF','CML','MOL','INC','NANO','PDB','CIF') COLLATE utf8_bin NOT NULL DEFAULT 'SDF',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_name` varchar(16) COLLATE utf8_bin DEFAULT NULL,
   `type_structure` enum('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental','NANO') COLLATE utf8_bin NOT NULL DEFAULT 'NA',
@@ -520,7 +521,7 @@ CREATE TABLE `ontobucket` (
   `o_source` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
   `o_id` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `label` text COLLATE utf8_unicode_ci,
-  `relation` enum('label','subclass','db','endpoint','endpointhash','hash','protocol','target','reference') COLLATE utf8_unicode_ci DEFAULT 'subclass',
+  `relation` enum('label','subclass','db','endpoint','endpointhash','hash','protocol','target','reference','substancetype') COLLATE utf8_unicode_ci DEFAULT 'subclass',
   `uuid` varbinary(20) DEFAULT NULL,
   KEY `s_id` (`s_id`),
   KEY `o_id` (`o_id`,`relation`),
@@ -1258,7 +1259,7 @@ CREATE TABLE  `fpae` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin;
 
 -- -----------------------------------------------------
--- atom environment of a chemical. 
+-- atom environment of a chemical. Deprecated
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `fpaechemicals`;
 CREATE TABLE  `fpaechemicals` (
@@ -1289,6 +1290,28 @@ CREATE TABLE  `fpaechemicals` (
   CONSTRAINT `FK_fpaelevels_5` FOREIGN KEY (`idfpae5`) REFERENCES `fpae` (`idfpae`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_fpaelevels_6` FOREIGN KEY (`idfpae6`) REFERENCES `fpae` (`idfpae`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin;
+
+-- -----------------------------------------------------
+-- atom environment of a chemical. 
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fpatomenvironments`;
+CREATE TABLE `fpatomenvironments` (
+  `idchemical` int(10) unsigned NOT NULL DEFAULT '0',
+  `inchi` varchar(27) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `tags` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  `time` int(10) unsigned DEFAULT '0',
+  `bc` int(6) NOT NULL DEFAULT '0',
+  `status` enum('invalid','valid','error') COLLATE utf8_bin NOT NULL DEFAULT 'invalid',
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `levels` int(6) NOT NULL DEFAULT '7',
+  `factory` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`idchemical`),
+  KEY `time` (`time`),
+  KEY `status` (`status`),
+  FULLTEXT KEY `fulltext` (`inchi`,`tags`),
+  CONSTRAINT `fpatomenvironments_ibfk_1` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 
 -- -----------------------------------------------------
 -- Procedure to add atom environments
@@ -1354,7 +1377,7 @@ END $
 
 DELIMITER ;
 
--- -----------------------------------------------------
+-- ------------------------------------------------------- 
 -- Table `bookmarks` 
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `bookmark`;
@@ -1474,7 +1497,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (8,11,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (8,12,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
@@ -1977,9 +2000,9 @@ DELIMITER ;
 -- numeric property values
 -- -----------------------------------------------------
 DROP VIEW IF EXISTS `values_number`;
-create view `values_number` as
-SELECT id,idproperty,idstructure,value_num as value,status,user_name
-FROM property_values where value_num is not null;
+-- create view `values_number` as
+-- SELECT id,idproperty,idstructure,value_num as value,status,user_name
+-- FROM property_values where value_num is not null;
 
 -- -----------------------------------------------------
 -- string property values

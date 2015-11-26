@@ -9,7 +9,6 @@ import java.util.Random;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.fingerprint.EStateFingerprinter;
 import org.openscience.cdk.fingerprint.ExtendedFingerprinter;
 import org.openscience.cdk.fingerprint.Fingerprinter;
@@ -18,10 +17,13 @@ import org.openscience.cdk.fingerprint.MACCSFingerprinter;
 import org.openscience.cdk.fingerprint.PubchemFingerprinter;
 import org.openscience.cdk.fingerprint.SubstructureFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
@@ -102,6 +104,7 @@ public class FingerPrintGeneratorTest {
 			IStructureRecord record = reader.nextRecord();
 			IAtomContainer mol = molreader.process(record);
 			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance()).addImplicitHydrogens(mol);
 			CDKHueckelAromaticityDetector.detectAromaticity(mol);
 			gen.setHydrogens(false);
 			mol = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(mol);
@@ -111,27 +114,27 @@ public class FingerPrintGeneratorTest {
 
 			ExtendedFingerprinter efp = new ExtendedFingerprinter();
 			System.out.println(efp.getClass().getName());
-			System.out.println(efp.getFingerprint(mol));
+			System.out.println(efp.getBitFingerprint(mol).asBitSet());
 			
-			PubchemFingerprinter pfp = new PubchemFingerprinter();
+			PubchemFingerprinter pfp = new PubchemFingerprinter(SilentChemObjectBuilder.getInstance());
 			System.out.println(pfp.getClass().getName());
-			System.out.println(pfp.getFingerprint(mol));
+			System.out.println(pfp.getBitFingerprint(mol).asBitSet());
 			
 			EStateFingerprinter esfp = new EStateFingerprinter();
 			System.out.println(esfp.getClass().getName());
-			System.out.println(esfp.getFingerprint(mol));
+			System.out.println(esfp.getBitFingerprint(mol).asBitSet());
 			
 			MACCSFingerprinter mfp = new MACCSFingerprinter();
 			System.out.println(mfp.getClass().getName());
-			System.out.println(mfp.getFingerprint(mol));
+			System.out.println(mfp.getBitFingerprint(mol).asBitSet());
 			
 			SubstructureFingerprinter sfp = new SubstructureFingerprinter();
 			System.out.println(sfp.getClass().getName());
-			System.out.println(sfp.getFingerprint(mol));
+			System.out.println(sfp.getBitFingerprint(mol).asBitSet());
 			
 			HybridizationFingerprinter hfp = new HybridizationFingerprinter();
 			System.out.println(hfp.getClass().getName());
-			System.out.println(hfp.getFingerprint(mol));
+			System.out.println(hfp.getBitFingerprint(mol).asBitSet());
 			/*
 			BigInteger[] h16 = new BigInteger[16];
 			MoleculeTools.bitset2bigint16(bs1,64,h16);

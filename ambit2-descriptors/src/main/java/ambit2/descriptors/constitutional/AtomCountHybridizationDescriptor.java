@@ -10,21 +10,22 @@ import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import ambit2.base.data.Property;
 
 /**
- * Atomistic topological indices. Todeschini , Handbook of Molecular descriptors, count descriptors, p.175.
- * @author Elena Urucheva, Nikolay Kochev
- * <b>Modified</b> 2013-10-31
+ * Atomistic topological indices. Todeschini , Handbook of Molecular
+ * descriptors, count descriptors, p.175.
+ * 
+ * @author Elena Urucheva, Nikolay Kochev <b>Modified</b> 2013-10-31
  */
-public class AtomCountHybridizationDescriptor extends AbstractAtomCountDescriptor {
+public class AtomCountHybridizationDescriptor extends
+		AbstractAtomCountDescriptor {
 
-	
-	public AtomCountHybridizationDescriptor()	{
-		super(new String[] {"nSp3" ,"nSp2", "nSp1"});
+	public AtomCountHybridizationDescriptor() {
+		super(new String[] { "nSp3", "nSp2", "nSp1" });
 	}
-
-	public DescriptorSpecification getSpecification() 
-	{
+	@Override
+	public DescriptorSpecification getSpecification() {
 		return new DescriptorSpecification(
-				String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"AtomCountHybridizationDescriptor"),
+				String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,
+						"AtomCountHybridizationDescriptor"),
 				this.getClass().getName(),
 				"$Id: AtomCountHybridizationDescriptor.java, v 0.1 2013 Elena Urucheva, Nikolay Kochev",
 				"http://ambit.sourceforge.net");
@@ -36,9 +37,8 @@ public class AtomCountHybridizationDescriptor extends AbstractAtomCountDescripto
 		int nSp2 = 0;
 		int nSp1 = 0;
 
-		for (int i = 0; i < container.getAtomCount(); i++) 
-		{
-			if ( container.getAtom(i).getHybridization() == null)
+		for (int i = 0; i < container.getAtomCount(); i++) {
+			if (container.getAtom(i).getHybridization() == null)
 				continue;
 
 			container.getAtom(i).getHybridization();
@@ -59,11 +59,11 @@ public class AtomCountHybridizationDescriptor extends AbstractAtomCountDescripto
 		result.add(nSp2);
 		result.add(nSp1);
 
-		return new DescriptorValue(getSpecification(), getParameterNames(), getParameters(),
-				result, getDescriptorNames());
+		return new DescriptorValue(getSpecification(), getParameterNames(),
+				getParameters(), result, getDescriptorNames());
 	}
 
-	public IDescriptorResult getDescriptorResultType()	{
+	public IDescriptorResult getDescriptorResultType() {
 		return new IntegerArrayResult(3);
 	}
 

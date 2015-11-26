@@ -7,29 +7,29 @@
 	</div>
 
 	<div class='row remove-bottom'>
-		<label class='five columns alpha' for="alg_implementation">Implementation of</label>
+		<label class='five columns alpha' for="alg_implementation">Implementation of <a href='#' class='chelp himpl'>?</a></label>
 		<a class='eleven columns alpha half-bottom' target=_blank href='#' id='alg_implementation'></a>
 	</div>	
 	<div class='row remove-bottom'>
-		<label class='five columns alpha' for="alg_requires">Requires</label>
+		<label class='five columns alpha' for="alg_requires">Requires <a href='#' class='chelp dtypes'>?</a></label>
 		<span class='eight columns alpha half-bottom' id='alg_requires'></span>
 		<div class='three columns omega'></div>
 	</div>		
 
 	<div class='row remove-bottom'>
-		<label class='five columns alpha' for="alg_type">Type</label>
+		<label class='five columns alpha' for="alg_type">Type <a href='#' class='chelp halgtypes'>?</a></label>
 		<span class='eight columns alpha half-bottom' id='alg_type'></span>
 		<div class='three columns omega'></div>
 	</div>	
 		
 	<div class='row remove-bottom'  id='predictsEndpoint'>
-		<label class='five columns alpha' for="alg_endpoint">Predicts endpoint</label>
+		<label class='five columns alpha' for="alg_endpoint">Predicts endpoint <a href='#' class='chelp hendpoint'>?</a></label>
 		<span class='eight columns alpha half-bottom' id='alg_endpoint'></span>
 		<div class='three columns omega'></div>
 	</div>	
 			
 	<div class='row remove-bottom'>
-		<label class='five columns alpha' for="alg_dataset">Action</label>
+		<label class='five columns alpha' for="alg_dataset">Action <a href='#' class='chelp dtypes'>?</a></label>
 		<span class='eight columns alpha half-bottom' id='alg_dataset'></span>
 		<div class='three columns omega help' id='help_action'></div>
 	</div>		

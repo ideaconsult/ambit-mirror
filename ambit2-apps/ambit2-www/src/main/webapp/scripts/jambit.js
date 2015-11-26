@@ -40,7 +40,8 @@ var _ambit = {
 	           	  {id:"rdfxml",img:"rdf.gif",alt:"RDF/XML",title:'Download as RDF XML',mime:'application/rdf+xml'},
 	           	  {id:"rdfn3",img:"rdf.gif",alt:"RDF N3",title:'Download as RDF N3',mime:'text/n3'},
 	           	  {id:"json",img:"json.png",alt:"JSON",title:'Download as JSON',mime:'application/json'},
-	           	  {id:"uri",img:"link.jpg",alt:"URI",title:'Download as URI list',mime:'text/uri-list'}
+	           	  {id:"uri",img:"link.jpg",alt:"URI",title:'Download as URI list',mime:'text/uri-list'},
+	           	  {id:"xlsx",img:"csv.jpg",alt:"XLSX",title:'Download as XLSX',mime:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}
 	           	 ],
 	'runModel' : function(modelURI,statusSelector) {
 		if ((this.search.result==null) || (this.search.result.dataEntry===undefined) || (this.search.result.dataEntry==null)) 

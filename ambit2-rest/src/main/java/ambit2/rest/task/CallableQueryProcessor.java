@@ -14,8 +14,6 @@ import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 import net.idea.restnet.c.task.ClientResourceWrapper;
 
-import org.opentox.dsl.OTDataset;
-import org.opentox.dsl.OTFeature;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -26,6 +24,8 @@ import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFStructuresReader;
+import ambit2.rest.legacy.OTDataset;
+import ambit2.rest.legacy.OTFeature;
 
 
 public abstract class CallableQueryProcessor<Target,Result,USERID> extends CallableProtectedTask<USERID> {

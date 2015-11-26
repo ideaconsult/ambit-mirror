@@ -96,6 +96,16 @@ public class SmartsConst
 	public static final int ChC_S = 1002;
 	
 	//SSS Modes
+	public enum SSM_MODE {
+		SSM_SINGLE,
+		SSM_NON_OVERLAPPING,
+		SSM_NON_IDENTICAL,
+		SSM_NON_EQUIVALENT,
+		SSM_ALL,
+		SSM_NON_IDENTICAL_FIRST
+		
+	}
+	/*
 	public static final int SSM_SINGLE = 0;
 	public static final int SSM_NON_OVERLAPPING = 1;
 	public static final int SSM_NON_IDENTICAL = 2;
@@ -103,6 +113,7 @@ public class SmartsConst
 	public static final int SSM_ALL = 10;
 	
 	public static final int SSM_NON_IDENTICAL_FIRST = 21;
+	*/
 	
 	public static final int SMRK_UNSPEC_ATOM = -100000;
 	

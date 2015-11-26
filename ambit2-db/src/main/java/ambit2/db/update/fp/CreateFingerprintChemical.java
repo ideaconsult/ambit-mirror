@@ -12,7 +12,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
 import ambit2.db.processors.FP1024Writer;
 import ambit2.db.processors.FP1024Writer.FP1024_status;
-import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.descriptors.processors.FPTable;
 
 /**
  * To replace {@link FP1024Writer}

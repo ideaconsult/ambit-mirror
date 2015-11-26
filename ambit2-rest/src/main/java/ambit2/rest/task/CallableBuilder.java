@@ -1,16 +1,16 @@
 package ambit2.rest.task;
 
-import org.opentox.dsl.OTAlgorithm;
-import org.opentox.dsl.OTAlgorithms;
-import org.opentox.dsl.OTDataset;
-import org.opentox.dsl.OTFeature;
-import org.opentox.dsl.OTModel;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 
 import ambit2.rest.OpenTox;
+import ambit2.rest.legacy.OTAlgorithm;
+import ambit2.rest.legacy.OTAlgorithms;
+import ambit2.rest.legacy.OTDataset;
+import ambit2.rest.legacy.OTFeature;
+import ambit2.rest.legacy.OTModel;
 
 /**
  * 

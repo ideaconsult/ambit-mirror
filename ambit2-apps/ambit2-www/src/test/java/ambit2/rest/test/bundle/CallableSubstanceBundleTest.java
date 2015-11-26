@@ -15,6 +15,7 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.rest.bundle.CallableBundleVersionCreator;
 import ambit2.rest.bundle.CallableSubstanceBundle;
 import ambit2.rest.substance.SubstanceURIReporter;
 import ambit2.rest.test.CreateAmbitDatabaseProcessor;

@@ -209,7 +209,7 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 						if (rs.getObject(name)!= null)
 							value = rs.getFloat(name);
 					}
-					record.setProperty(p,value);
+					record.setRecordProperty(p,value);
 				} catch (Exception x) {
 					logger.log(Level.WARNING,x.getMessage(),x);
 				}

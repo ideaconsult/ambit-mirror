@@ -14,7 +14,6 @@ import javax.imageio.ImageIO;
 
 import junit.framework.Assert;
 import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
 
 import org.junit.Test;
 import org.openscience.cdk.graph.PathTools;
@@ -23,8 +22,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
 import org.openscience.cdk.renderer.IRenderer;
@@ -38,6 +36,7 @@ import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.cdk.renderer.generators.SelectAtomGenerator;
+import org.openscience.cdk.renderer.generators.standard.StandardGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.SingleSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
@@ -89,25 +88,13 @@ public class RendererTest {
 
 		CompoundImageTools t = new CompoundImageTools();
 		// t.setBackground(Color.GRAY);
-		final IMolecule mol = MoleculeFactory.makePhenylAmine();
-		IAtom anAtom = null;
-		for (IAtom atom : mol.atoms()) {
-			if (atom.getSymbol().equals("N")) {
-				atom.setProperty(CompoundImageTools.SELECTED_ATOM_COLOR,
-						Color.CYAN);
-				anAtom = atom;
-			}
-		}
+		final IAtomContainer mol = MoleculeFactory.makePhenylAmine();
+
 		StructureDiagramGenerator g = new StructureDiagramGenerator(mol);
 		g.generateCoordinates();
-		final IMolecule selectedMol = MoleculeTools
-				.newMolecule(SilentChemObjectBuilder.getInstance());
-		selectedMol.addAtom(anAtom);
-		selectedMol.addBond(mol.getBond(0));
-		selectedMol.addAtom(mol.getBond(0).getAtom(0));
-		selectedMol.addAtom(mol.getBond(0).getAtom(1));
-		BufferedImage img = t.getImage(mol,
-				new IProcessor<IAtomContainer, IChemObjectSelection>() {
+
+
+		IAtomContainerHighlights p = new IAtomContainerHighlights() {
 
 					@Override
 					public void setEnabled(boolean value) {
@@ -123,8 +110,20 @@ public class RendererTest {
 					}
 
 					@Override
-					public IChemObjectSelection process(IAtomContainer target)
+					public IChemObjectSelection process(IAtomContainer mol)
 							throws AmbitException {
+						IAtom anAtom = null;
+						for (IAtom atom : mol.atoms()) {
+							if (atom.getSymbol().equals("N")) {
+								anAtom = atom;
+							}
+						}						
+						final IAtomContainer selectedMol = MoleculeTools
+								.newMolecule(SilentChemObjectBuilder.getInstance());
+						selectedMol.addAtom(anAtom);
+						selectedMol.addBond(mol.getBond(0));
+						selectedMol.addAtom(mol.getBond(0).getAtom(0));
+						selectedMol.addAtom(mol.getBond(0).getAtom(1));						
 						return new SingleSelection<IChemObject>(selectedMol);
 					}
 
@@ -137,7 +136,8 @@ public class RendererTest {
 					public long getID() {
 						return 0;
 					}
-				}, true, false);
+				};
+		BufferedImage img = t.getImage(mol,p,true, false);
 
 		File file = new File("test.png");
 		if (file.exists())
@@ -164,24 +164,24 @@ public class RendererTest {
 				.getResourceAsStream(filename);
 
 		Assert.assertNotNull(in);
-		IteratingMDLReader reader = new IteratingMDLReader(in,
+		IteratingSDFReader reader = new IteratingSDFReader(in,
 				SilentChemObjectBuilder.getInstance());
 
 		while (reader.hasNext()) {
 			IChemObject mol = reader.next();
-			Assert.assertTrue(mol instanceof IMolecule);
+			Assert.assertTrue(mol instanceof IAtomContainer);
 			AtomContainerManipulator
-					.percieveAtomTypesAndConfigureAtoms((IMolecule) mol);
+					.percieveAtomTypesAndConfigureAtoms((IAtomContainer) mol);
 			/**
 			 * if generating 2D coordinates via StructureDiagramGenerator, the
 			 * problem goes away, but it is still valid use case to generate a
 			 * structure diagram from coordinates retrieved from a file
 			 */
 			// StructureDiagramGenerator sdg = new
-			// StructureDiagramGenerator((IMolecule)mol);
+			// StructureDiagramGenerator((IAtomContainer)mol);
 			// sdg.generateCoordinates(new Vector2d(0,1));
 
-			BufferedImage img = paint((IMolecule) mol);
+			BufferedImage img = paint((IAtomContainer) mol);
 			File file = new File(imgfile);
 			// file.deleteOnExit();
 			if (file.exists())
@@ -262,7 +262,7 @@ public class RendererTest {
 		}
 	}
 
-	
+	@Test
 	public void testFullerene() throws Exception {
 		// String smiles =
 		// "O=C(O)C(N)CCCCNC%31%26C%29C5C3=C%25C=%23C%17=C4C=2c%16c1c%15c%14C%12=C1C=%10C=2C=9C(=C34)C5=C8c%30c7c6c%28C%22=C%21C6=C%13C=%11C7=C8C=9C=%10C=%11C%12=C%13C=%20c%14c%19c%18c%15c(c%16%17)C%24=C%18C=%27C(=C%19C=%20%21)C%22=C(C=%27C(C=%23%24)C%25%26)C%31c%28c%29%30";

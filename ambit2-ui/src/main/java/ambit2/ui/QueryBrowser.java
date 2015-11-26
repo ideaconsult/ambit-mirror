@@ -63,9 +63,7 @@ import javax.swing.table.TableModel;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.base.data.IFilteredColumns;
 import ambit2.base.data.ISelectableRecords;
@@ -313,8 +311,7 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 	if (model instanceof IBrowserMode)
 	    ((IBrowserMode) model).addPropertyChangeListener(getImageRenderer(BrowserMode.Spreadsheet));
 	table.setDefaultRenderer(Image.class, getImageRenderer(BrowserMode.Spreadsheet));
-	table.setDefaultRenderer(IMolecule.class, getImageRenderer(BrowserMode.Spreadsheet));
-	table.setDefaultRenderer(Molecule.class, getImageRenderer(BrowserMode.Spreadsheet));
+	table.setDefaultRenderer(IAtomContainer.class, getImageRenderer(BrowserMode.Spreadsheet));
 	table.setDefaultRenderer(AtomContainer.class, getImageRenderer(BrowserMode.Spreadsheet));
 	table.setDefaultRenderer(IAtomContainer.class, getImageRenderer(BrowserMode.Spreadsheet));
 	table.setDefaultRenderer(SuppleAtomContainer.class, getImageRenderer(BrowserMode.Spreadsheet));
@@ -461,8 +458,7 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 	cellRenderer.mode = mode;
 	browser_table.setDefaultRenderer(Image.class, getImageRenderer(mode));
 	browser_table.setDefaultRenderer(IAtomContainer.class, getImageRenderer(mode));
-	browser_table.setDefaultRenderer(IMolecule.class, getImageRenderer(mode));
-	browser_table.setDefaultRenderer(Molecule.class, getImageRenderer(mode));
+	browser_table.setDefaultRenderer(IAtomContainer.class, getImageRenderer(mode));
 	browser_table.setDefaultRenderer(AtomContainer.class, getImageRenderer(mode));
 	browser_table.setRowSelectionAllowed(mode.isRowSelectionAllowed());
 	browser_table.setColumnSelectionAllowed(mode.isColumnSelectionAllowed());

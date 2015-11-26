@@ -50,6 +50,7 @@ $(document)
 
 <div class="container" style="margin:0;padding:0;">
 
+<div id="logger" class="jtox-toolkit jtox-widget hidden" data-kit="log" data-resend-events="false" data-right-side="true"></div>
 
 <#include "/banner_crumbs.ftl">
 	
@@ -62,12 +63,12 @@ $(document)
   		data-hide-options="context"
   		data-base-url="${ambit_root}">
  		
-    <div id="searchbar" class="jtox-toolkit jtox-widget" data-kit="search"></div>
+    <div id="searchbar" class="jtox-toolkit jtox-widget cc-fixed" data-kit="search"></div>
     <div id="sidebar" class="hidden">
-      <div>
+      <button type="button" id="sidebar-handle">
         <span class="side-open-close ui-icon ui-icon-carat-2-e-w"></span>
         <div class="side-title">Select data sources/models</div>
-      </div>
+      </button>
       <div class="content">
         <div class="jtox-foldable folded">
           <div class="title">
@@ -91,7 +92,6 @@ $(document)
     </div>
 	  <div id="browser" class="jtox-toolkit" data-kit="compound" data-remember-checks="true" 
 	  data-hide-empty="true" data-details-height="500px" data-tabs-folded="true" 
-	  data-on-error="errorHandler" 
 	  <#if ajaxtimeout??>
 	  data-timeout="${ajaxtimeout}"	
 	  </#if>		  
@@ -103,7 +103,15 @@ $(document)
 		
 <div class='row add-bottom'>&nbsp;</div>
 
-<#include "/footer.ftl" >
+
+<#if menu_profile??>
+	<#include "/menu/profile/${menu_profile}/footer.ftl" >
+</#if>
+
+		
+<#if username??>
+	    <form id='logoutForm' name='logoutForm'  action='${ambit_root}/provider/signout?targetUri=${ambit_root}&method=DELETE' method='POST'><input type='hidden' value="${username}"></input></form>
+</#if>
 
 </div> <!-- container -->
 </body>

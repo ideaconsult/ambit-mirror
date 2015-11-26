@@ -24,7 +24,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.junit.Test;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
 import org.openscience.cdk.renderer.RendererModel;
@@ -133,7 +133,7 @@ public class TransparencyTest {
 			Rectangle drawArea = new Rectangle(WIDTH, HEIGHT);
 			BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
 			SmilesParser smilesParser = new SmilesParser(SilentChemObjectBuilder.getInstance());
-			IMolecule molecule = smilesParser.parseSmiles(smiles);
+			IAtomContainer molecule = smilesParser.parseSmiles(smiles);
 			StructureDiagramGenerator sdg =  new StructureDiagramGenerator();
 			sdg.setMolecule(molecule);
 			sdg.generateCoordinates();

@@ -15,16 +15,16 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.DefaultChemObjectWriter;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -63,7 +63,7 @@ public class Mopac7Writer extends DefaultChemObjectWriter {
         nf.setMaximumFractionDigits(4);
         writer = new BufferedWriter(out);
         try {
-            isotopeFactory = IsotopeFactory.getInstance(SilentChemObjectBuilder.getInstance());
+            isotopeFactory = Isotopes.getInstance();
         } catch (Exception exception) {
             logger.error("Failed to initiate isotope factory: ", exception.getMessage());
             logger.debug(exception);
@@ -76,7 +76,7 @@ public class Mopac7Writer extends DefaultChemObjectWriter {
         
     }
     
-    public void generate2d(IMolecule a) throws CDKException {
+    public void generate2d(IAtomContainer a) throws CDKException {
     	boolean coordinates2D = true;
     	boolean coordinates3d = true;
     	
@@ -108,9 +108,9 @@ public class Mopac7Writer extends DefaultChemObjectWriter {
      * @see org.openscience.cdk.io.ChemObjectWriter#write(IChemObject)
      */
     public synchronized void  write(IChemObject arg0) throws CDKException {
-        if (arg0 instanceof IMolecule)
+        if (arg0 instanceof IAtomContainer)
 	        try {
-	        	IMolecule a = (IMolecule) arg0;
+	        	IAtomContainer a = (IAtomContainer) arg0;
 	            generate2d(a);
 	            writer.write(getMopacCommands());
 
@@ -193,8 +193,8 @@ public class Mopac7Writer extends DefaultChemObjectWriter {
 		Class[] interfaces = classObject.getInterfaces();
 		for (int i=0; i<interfaces.length; i++) {
 			if (IChemFile.class.equals(interfaces[i])) return true;
-			if (IMoleculeSet.class.equals(interfaces[i])) return true;
-			if (IMolecule.class.equals(interfaces[i])) return true;
+			if (IAtomContainerSet.class.equals(interfaces[i])) return true;
+			if (IAtomContainer.class.equals(interfaces[i])) return true;
 		}
 		return false;
 	}

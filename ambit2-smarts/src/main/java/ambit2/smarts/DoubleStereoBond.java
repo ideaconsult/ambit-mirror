@@ -20,57 +20,41 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 package ambit2.smarts;
 
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 
 /**
  * 
  * @author Nikolay Kochev nick@uni-plovdiv.bg
  */
-public class DoubleStereoBond extends SMARTSBond
-{
-	private static final long serialVersionUID = -93579804683457479L;
+public class DoubleStereoBond extends SMARTSBond {
+	
 	public int stereoParameter = 0;
-	
-	public DoubleStereoBond() {
-    }
-	
-	public boolean matches(IBond bond) 
-	{		 
+
+	public DoubleStereoBond(IChemObjectBuilder builder) {
+		super(builder);
+	}
+
+	public boolean matches(IBond bond) {
 		if (bond.getOrder() != IBond.Order.DOUBLE)
-			return(false); 
+			return (false);
 		/*
-		if (stereoParameter > 0)
-		{
-			switch (stereoParameter)
-			{
-			case SmartsConst.BT_CIS:
-				if (bond.getStereo() != SmartsConst.ABSOLUTE_CIS)
-					return(false);
-				break;
-			case SmartsConst.BT_CISUNSPEC:
-				if (bond.getStereo() == 0)
-					return(true);
-				if (bond.getStereo() != SmartsConst.ABSOLUTE_CIS)
-					return(false);
-				break;
-			case SmartsConst.BT_TRANS:
-				if (bond.getStereo() != SmartsConst.ABSOLUTE_TRANS)
-					return(false);
-				break;
-			case SmartsConst.BT_TRANSUNSPEC:
-				if (bond.getStereo() == 0)
-					return(true);
-				if (bond.getStereo() != SmartsConst.ABSOLUTE_TRANS)
-					return(false);
-				break;	
-			}
-		}
-		*/
+		 * if (stereoParameter > 0) { switch (stereoParameter) { case
+		 * SmartsConst.BT_CIS: if (bond.getStereo() != SmartsConst.ABSOLUTE_CIS)
+		 * return(false); break; case SmartsConst.BT_CISUNSPEC: if
+		 * (bond.getStereo() == 0) return(true); if (bond.getStereo() !=
+		 * SmartsConst.ABSOLUTE_CIS) return(false); break; case
+		 * SmartsConst.BT_TRANS: if (bond.getStereo() !=
+		 * SmartsConst.ABSOLUTE_TRANS) return(false); break; case
+		 * SmartsConst.BT_TRANSUNSPEC: if (bond.getStereo() == 0) return(true);
+		 * if (bond.getStereo() != SmartsConst.ABSOLUTE_TRANS) return(false);
+		 * break; } }
+		 */
 		return true;
-    };
+	};
 
 }

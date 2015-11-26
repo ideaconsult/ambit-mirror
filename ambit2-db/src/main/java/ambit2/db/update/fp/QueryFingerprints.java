@@ -9,7 +9,7 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.StringCondition;
-import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.descriptors.processors.FPTable;
 
 /**
  * Expects 1024 bit fingerprint in the form of  "0-0-0-0-0-20000000-0-0-0-0-0-0-0-0-0-10000000" (16x 64 bits)

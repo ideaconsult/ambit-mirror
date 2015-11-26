@@ -19,6 +19,7 @@ import ambit2.rest.reference.ReferenceURIReporter;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
@@ -52,7 +53,7 @@ public class PropertyAnnotationRDFReporter<Q extends IQueryRetrieval<PropertyAnn
 	return r;
     }
 
-    public void header(com.hp.hpl.jena.ontology.OntModel output, Q query) {
+    public void header(OntModel output, Q query) {
 	super.header(output, query);
 	OT.OTClass.Feature.createOntClass(getJenaModel());
 
@@ -74,7 +75,7 @@ public class PropertyAnnotationRDFReporter<Q extends IQueryRetrieval<PropertyAnn
     public static void annotation2RDF(PropertyAnnotation item, OntModel jenaModel, Individual feature,
 	    String rootReference) throws AmbitException {
 
-	com.hp.hpl.jena.rdf.model.Property predicate = null;
+	Property predicate = null;
 	if (item.getPredicate().startsWith("http")) { // there is a chance this
 						      // is an URI
 	    predicate = jenaModel.createProperty(item.getPredicate());

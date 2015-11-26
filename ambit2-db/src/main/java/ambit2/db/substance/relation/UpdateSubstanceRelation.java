@@ -148,7 +148,7 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 		params1.add(new QueryParam<Double>(Double.class, getMetric().getTypical_value()));
 		params1.add(new QueryParam<String>(String.class, getMetric().getTypical_unit()));
 		
-		o_uuid = getObject().getProperty(Property.getI5UUIDInstance());
+		o_uuid = getObject().getRecordProperty(Property.getI5UUIDInstance());
 		String[] uuid = {null,o_uuid==null?null:o_uuid.toString()};
 		if (o_uuid!=null) 
 			uuid = I5Utils.splitI5UUID(o_uuid.toString());

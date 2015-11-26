@@ -32,10 +32,10 @@ import java.util.BitSet;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
-import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.descriptors.processors.FPTable;
 
 /**
- * Writes fingerprints, taken from IStructureRecord.getProperties().get(AmbitCONSTANTS.Fingerprint).
+ * Writes fingerprints, taken from IStructureRecord.getProperty(AmbitCONSTANTS.Fingerprint).
  * TODO to be replaced by @{link CreateFingerprintChemical}
  * @author nina
  *
@@ -69,11 +69,11 @@ public class FP1024Writer extends AbstractRepositoryWriter<IStructureRecord, ISt
 	@Override
 	public IStructureRecord write(IStructureRecord record) throws SQLException {
 		if (record.getIdchemical() < 0) throw new SQLException("Undefined ID");
-		Object time = record.getProperty(Property.getInstance(fpTable.getTimeProperty(),fpTable.getProperty()));
+		Object time = record.getRecordProperty(Property.getInstance(fpTable.getTimeProperty(),fpTable.getProperty()));
 		if (time == null)
 			time = new Long(0);
 		else ((Long) time).longValue();
-		Object fp = record.getProperty(Property.getInstance(fpTable.getProperty(),fpTable.getProperty()));
+		Object fp = record.getRecordProperty(Property.getInstance(fpTable.getProperty(),fpTable.getProperty()));
 		if (fp == null) {
 			writeBitSetValue(record.getIdchemical(), null, ((Long)time).longValue(),FP1024_status.error);
 		} else if (fp instanceof BitSet)		

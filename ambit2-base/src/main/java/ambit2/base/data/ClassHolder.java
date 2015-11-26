@@ -33,14 +33,12 @@ import javax.swing.ImageIcon;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
-import com.jgoodies.binding.beans.Model;
-
 /**
  * A place holder for class name and description, in order to allow display of light list of objects, instantiated on demand only.
  * @author nina
  *
  */
-public class ClassHolder extends Model {
+public class ClassHolder  {
 	/**
 	 * 
 	 */

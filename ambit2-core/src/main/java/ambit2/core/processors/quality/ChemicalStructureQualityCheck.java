@@ -3,7 +3,7 @@ package ambit2.core.processors.quality;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.IsomorphismTester;
 
 import ambit2.base.data.AmbitUser;
@@ -24,15 +24,15 @@ import ambit2.base.data.QLabel.QUALITY;
  * @author nina
  *
  */
-public class ChemicalStructureQualityCheck extends	DefaultAmbitProcessor<IMolecule, QLabel> {
+public class ChemicalStructureQualityCheck extends	DefaultAmbitProcessor<IAtomContainer, QLabel> {
 	protected AmbitUser qualityVerifier = new AmbitUser("quality");
-	protected IMolecule groundTruth = null;
+	protected IAtomContainer groundTruth = null;
 	protected IsomorphismTester isoTester = new IsomorphismTester();
-	public IMolecule getGroundTruth() {
+	public IAtomContainer getGroundTruth() {
 		return groundTruth;
 	}
 
-	public void setGroundTruth(IMolecule groundTruth) {
+	public void setGroundTruth(IAtomContainer groundTruth) {
 		this.groundTruth = groundTruth;
 	}
 
@@ -41,7 +41,7 @@ public class ChemicalStructureQualityCheck extends	DefaultAmbitProcessor<IMolecu
 	 */
 	private static final long serialVersionUID = -518931054923701570L;
 
-	public QLabel process(IMolecule target) throws AmbitException {
+	public QLabel process(IAtomContainer target) throws AmbitException {
 		if ((groundTruth ==null) || (target==null)) return new QLabel(QUALITY.Unknown);
 		QLabel label = new QLabel(isoTester.isIsomorphic(groundTruth,target)?QUALITY.OK:QUALITY.ERROR);
 		label.setUser(qualityVerifier);

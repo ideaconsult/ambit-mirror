@@ -36,7 +36,6 @@ import java.sql.ResultSet;
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
@@ -69,7 +68,7 @@ public class RetrieveAtomContainer extends AbstractStructureRetrieval<IAtomConta
             int type = rs.getMetaData().getColumnType(_sqlids.ustructure.getIndex());
             if (type == java.sql.Types.VARBINARY) {
 	              InputStream s = rs.getBinaryStream(_sqlids.ustructure.getIndex());
-	              IMolecule m = null;
+	              IAtomContainer m = null;
 	              if ("SDF".equals(r.getFormat()))
 	                	m = MoleculeTools.readMolfile(new InputStreamReader(s));
 	              else if ("CML".equals(r.getFormat()))

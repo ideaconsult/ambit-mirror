@@ -38,7 +38,6 @@ import javax.vecmath.Vector2d;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.templates.MoleculeFactory;
 
@@ -106,11 +105,11 @@ class TestTableModel extends AbstractTableModel implements IFindNavigator {
 	String findValue = "Find";
 	ArrayList<Integer> hits=new ArrayList<Integer>();
 	int pointer;
-	Hashtable<Integer, IMolecule> molecules;
+	Hashtable<Integer, IAtomContainer> molecules;
 
 	
 	public TestTableModel() {
-		molecules = new Hashtable<Integer, IMolecule>();
+		molecules = new Hashtable<Integer, IAtomContainer>();
 		molecules.put(0,MoleculeFactory.make4x3CondensedRings());
 		molecules.put(1,MoleculeFactory.makeAdenine());
 		molecules.put(2,MoleculeFactory.makeAlkane(6));
@@ -184,7 +183,7 @@ class TestTableModel extends AbstractTableModel implements IFindNavigator {
 		}		
 		case 1: {
 			try {
-			IMolecule a = molecules.get(row);
+			IAtomContainer a = molecules.get(row);
 			return a;
 			
 			} catch (Exception x) {}

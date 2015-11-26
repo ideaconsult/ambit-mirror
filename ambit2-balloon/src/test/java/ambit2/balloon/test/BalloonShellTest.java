@@ -43,7 +43,8 @@ public class BalloonShellTest {
 		IAtomContainer newmol = shell.runShell(mol);
 		Assert.assertNotNull(newmol);
 		IAtomContainer c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(newmol);
-		Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(mol,c));
+		UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
+		Assert.assertTrue(uit.isIsomorph(mol,c));
 		for (int i=0; i < newmol.getAtomCount(); i++) {
 			Assert.assertNotNull(newmol.getAtom(i).getPoint3d());
 		}	

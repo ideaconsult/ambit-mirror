@@ -69,7 +69,7 @@ public class DescriptorValue2Property extends DefaultAmbitProcessor<DescriptorVa
 		if (record == null) record = new StructureRecord();
 		int i=0;		
 		for (Property property:getPropertyNames(descriptor)) {
-			record.setProperty(property,getValue(descriptor, property, i));
+			record.setRecordProperty(property,getValue(descriptor, property, i));
 			i++;
 		}
 		return record;

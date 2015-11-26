@@ -25,16 +25,16 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.junit.Test;
-import org.opentox.dsl.OTAlgorithm;
-import org.opentox.dsl.OTDataset;
-import org.opentox.dsl.OTDatasets;
-import org.opentox.dsl.OTFeature;
-import org.opentox.dsl.OTFeatures;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.rest.legacy.OTAlgorithm;
+import ambit2.rest.legacy.OTDataset;
+import ambit2.rest.legacy.OTDatasets;
+import ambit2.rest.legacy.OTFeature;
+import ambit2.rest.legacy.OTFeatures;
 import ambit2.rest.test.ProtectedResourceTest;
 
 import com.hp.hpl.jena.rdf.model.Model;

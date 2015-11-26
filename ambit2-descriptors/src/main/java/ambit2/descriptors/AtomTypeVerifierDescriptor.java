@@ -2,6 +2,7 @@ package ambit2.descriptors;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
@@ -14,24 +15,27 @@ import ambit2.core.processors.structure.AtomConfigurator;
 public class AtomTypeVerifierDescriptor implements IMolecularDescriptor {
 	protected AtomConfigurator typer = new AtomConfigurator();
 	protected static final String OK = "OK";
-	
+
 	public DescriptorValue calculate(IAtomContainer mol) {
-		
-		String pref = Preferences.getProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES);
-		Preferences.setProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES,"true");
+
+		String pref = Preferences
+				.getProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES);
+		Preferences.setProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES, "true");
 		try {
 			typer.process(mol);
-	        StringArrayResult value = new StringArrayResult(new String[] { OK });
+			StringArrayResult value = new StringArrayResult(new String[] { OK });
 
-	        return new DescriptorValue(getSpecification(), getParameterNames(), 
-	                getParameters(), value,getDescriptorNames()); 			
+			return new DescriptorValue(getSpecification(), getParameterNames(),
+					getParameters(), value, getDescriptorNames());
 		} catch (Exception x) {
-	        StringArrayResult value = new StringArrayResult(new String[] { x.getMessage() });
+			StringArrayResult value = new StringArrayResult(
+					new String[] { x.getMessage() });
 
-	        return new DescriptorValue(getSpecification(), getParameterNames(), 
-	                getParameters(), value,getDescriptorNames()); 	
+			return new DescriptorValue(getSpecification(), getParameterNames(),
+					getParameters(), value, getDescriptorNames());
 		} finally {
-			Preferences.setProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES,pref==null?"false":pref);
+			Preferences.setProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES,
+					pref == null ? "false" : pref);
 		}
 	}
 
@@ -40,7 +44,7 @@ public class AtomTypeVerifierDescriptor implements IMolecularDescriptor {
 	}
 
 	public String[] getDescriptorNames() {
-		return new String[] {"AtomTypeERRORS" };
+		return new String[] { "AtomTypeERRORS" };
 	}
 
 	public String[] getParameterNames() {
@@ -56,14 +60,20 @@ public class AtomTypeVerifierDescriptor implements IMolecularDescriptor {
 	}
 
 	public DescriptorSpecification getSpecification() {
-        return new DescriptorSpecification(
-            	String.format("http://www.opentox.org/algorithmTypes#%s","AtomTypeVerifier"),
-    		    this.getClass().getName(),
-    		    "$Id: AtomTypeVerifierDescriptor.java,v 1.0 2010/08/204 13:00:00 Nina Jeliazkova Exp $",
-                "http:///ambit.sourceforge.net");
+		return new DescriptorSpecification(
+				String.format("http://www.opentox.org/algorithmTypes#%s",
+						"AtomTypeVerifier"),
+				this.getClass().getName(),
+				"$Id: AtomTypeVerifierDescriptor.java,v 1.0 2010/08/204 13:00:00 Nina Jeliazkova Exp $",
+				"http:///ambit.sourceforge.net");
 	}
 
 	public void setParameters(Object[] arg0) throws CDKException {
+
+	}
+
+	@Override
+	public void initialise(IChemObjectBuilder arg0) {
 
 	}
 

@@ -1,12 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
+<substance/>
+<bundle_final_protocolapplication/>
+<bundle_final_experiment/>
+<bundle_substance_protocolapplication/>
+<bundle_substance_experiment/>
+<bundle_chemicals/>
+<bundle_substance/>
+<bundle_endpoints/>
 <ausers/>
 <catalog_references/>
 <chemicals/>
 <structure/>
-<bundle_substance/>
 <bundle/>
-<substance/>
 <substance_relation/>
 <chem_relation/>
 <properties/>
@@ -45,5 +51,6 @@
 <summary_property_chemicals/>
 <substance_experiment/>
 <substance_protocolapplication/>
+<substance_ids/>
 <version/>
 </dataset>

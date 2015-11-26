@@ -33,7 +33,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.core.smiles.SmilesParserWrapper;
@@ -54,8 +53,8 @@ public class AtomEnvironmentHammingDistanceTest {
 	@Test
     public void testGetDistance() throws Exception {
         
-            IMolecule mol = MoleculeFactory.makeAlkane(3);
-            IMolecule mol1 = MoleculeFactory.makeAlkane(3);
+            IAtomContainer mol = MoleculeFactory.makeAlkane(3);
+            IAtomContainer mol1 = MoleculeFactory.makeAlkane(3);
             
             SmilesParserWrapper p =  SmilesParserWrapper.getInstance();
             

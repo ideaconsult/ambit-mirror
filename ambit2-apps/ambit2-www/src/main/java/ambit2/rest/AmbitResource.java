@@ -33,8 +33,6 @@ import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 import ambit2.rest.structure.smirks.ReactionDepict;
-import ambit2.rest.structure.tautomers.TautomersDepict;
-import ambit2.rest.template.OntologyResource;
 
 /**
  * window.setInterval(function() {
@@ -44,6 +42,7 @@ import ambit2.rest.template.OntologyResource;
  * @author nina
  *
  */
+@Deprecated
 public class AmbitResource extends FreeMarkerResource {
 	protected static String sparqlEndpoint = null;
 	protected static String jsGoogleAnalytics = null;
@@ -73,7 +72,7 @@ public class AmbitResource extends FreeMarkerResource {
 		"<script type='text/javascript' src='%s/jquery/jquery-ui-1.10.4.custom.min.js'></script>\n",
 		"<script type='text/javascript' charset='utf8' src='%s/jquery/jquery.dataTables-1.9.4.min.js'></script>\n",
 		"<script type='text/javascript' src='%s/scripts/jopentox.js'></script>\n",
-		"<script type='text/javascript' src='%s/scripts/jopentox-ui-model.js'></script>\n",
+		//"<script type='text/javascript' src='%s/scripts/jopentox-ui-model.js'></script>\n",
 		"<script type='text/javascript' src='%s/scripts/jopentox-ui-feature.js'></script>\n",
 		"<script type='text/javascript' src='%s/scripts/jopentox-ui-misc.js'></script>\n",
 		"<script type='text/javascript' src='%s/scripts/jopentox-ui-compound.js'></script>\n",
@@ -501,42 +500,24 @@ public class AmbitResource extends FreeMarkerResource {
 		w.write(String.format("<div class=\"row\"><span class=\"left\">&nbsp;%s",top));
 		w.write("</span>");
 
-		w.write(String.format("	<span class=\"right\">%s&nbsp;<a style=\"color:#99CC00\" href='%s/opentoxuser'>%s</a>",
-				"",
-				baseReference.toString(),
-				request.getClientInfo().getUser()==null?"Login":"My account"));
-		
-		
-		//w.write(String.format("&nbsp;<a href=\"%s/help\">Help</a>",baseReference.toString()));
-		w.write("</span></div>");
+		w.write("</div>");
 		w.write("	<div class=\"spacer\"></div>");
 		w.write("</div>");
 		w.write("<div>");		
 		
-		//w.write(String.format("<a href='%s/ttc?text=50-00-0&search=%s' title='Threshold of toxicological concern prediction'>TTC</a>&nbsp;",baseReference,Reference.encode("C=O")));
 		w.write(String.format("&nbsp;<a href='%s/ui'>Home</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/ui/query'>Query compounds</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/compound/100'>Chemical&nbsp;compounds</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/ui/_search'>Search</a>&nbsp;",baseReference));
 
-		w.write(String.format("<a href='%s/dataset?max=25'>Datasets</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/algorithm' title='Predictive algorithms'>Algorithms</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/model?page=0&pagesize=10' title='Models'>Models</a>&nbsp;",baseReference));
-		//w.write(String.format("<a href='%s%s'>References</a>&nbsp;",baseReference,ReferenceResource.reference));
-		w.write(String.format("<a href='%s%s?page=0&pagesize=10' title='Compound properties'>Features</a>&nbsp;",baseReference,PropertyResource.featuredef));
-		w.write(String.format("<a href='%s%s/Taxonomy' title='Features grouped in several categories'>Templates</a>&nbsp;",baseReference,OntologyResource.resource));
-
-		w.write(String.format("<a href='%s/query/similarity?search=c1ccccc1Oc2ccccc2&threshold=0.9' title='Search for similar structures'>Similarity</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/query/smarts?text=\"\"' title='Substructure search by SMARTS patterns'>Substructure</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s' title='Ontology service, SPARQL endpoint'>Ontology service</a>&nbsp;",getSparql(request)));
+//		w.write(String.format("<a href='%s/query/similarity?search=c1ccccc1Oc2ccccc2&threshold=0.9' title='Search for similar structures'>Similarity search</a> ",baseReference));
+		w.write(String.format("<a href='%s/query/smarts?text=\"\"' title='Substructure search by SMARTS patterns'>Substructure search</a> ",baseReference));
+		w.write("<b>Demo:</b>");
+		w.write(String.format("<a href='%s/depict?search=%s' title='Structure diagram'>Depiction</a> ",baseReference,Reference.encode("O=c2c1ccccc1c3ccccc23")));
+		w.write(String.format("<a href='%s/demo%s?search=c1ccccc1' title='SMIRKS test'>Reactions</a> ",baseReference,ReactionDepict.resource));
+//		w.write(String.format("<a href='%s/demo%s?search=%s' title='Tautomer test'>Tautomers</a> ",baseReference,TautomersDepict.resource,Reference.encode("NC=1N=CN=C2N=CNC2=1")));
 		
-		w.write(String.format("&nbsp;<a href='http://toxpredict.org' title='Predict'>ToxPredict</a>&nbsp;"));
-		w.write(String.format("<a href='%s/depict?search=%s' title='Structure diagram'>Depiction</a>&nbsp;",baseReference,Reference.encode("O=c2c1ccccc1c3ccccc23")));
-		w.write(String.format("<a href='%s/depict%s?search=c1ccccc1' title='SMIRKS test'>Reactions</a>&nbsp;",baseReference,ReactionDepict.resource));
-		w.write(String.format("<a href='%s/depict%s?search=%s' title='Tautomer test'>Tautomers</a>&nbsp;",baseReference,TautomersDepict.resource,Reference.encode("NC=1N=CN=C2N=CNC2=1")));
+		w.write(String.format("<a href='%s/ui/toxtree' >Toxtree</a> ",baseReference));
 
-
-
-		w.write(String.format("&nbsp;<a href='%s/help'>Help</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='http://ideaconsult.github.io/examples-ambit/apidocs/' target=_blank>API</a>&nbsp;",baseReference));
 
 
 		w.write("</div>");
@@ -572,7 +553,7 @@ public class AmbitResource extends FreeMarkerResource {
 		w.write("<table width='100%' bgcolor='#ffffff'>");
 		w.write("<tr>");
 		w.write("<td align='left' width='256px'>");
-		w.write(String.format("<a href=\"http://ambit.sourceforge.net/intro.html\"><img src='%s/images/ambit-logo.png' width='256px' alt='%s' title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
+		w.write(String.format("<a href=\"%s/ui\"><img src='%s/images/ambit-logo.png' width='256px' alt='%s' title='%s' border='0'></a>\n",baseReference,baseReference,"AMBIT",baseReference));
 		w.write("</td>");
 		w.write("<td align='center'>");
 		String query_smiles = "";

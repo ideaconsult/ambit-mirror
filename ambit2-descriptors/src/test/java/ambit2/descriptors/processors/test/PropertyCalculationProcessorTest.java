@@ -77,7 +77,9 @@ public class PropertyCalculationProcessorTest {
 		Assert.assertTrue(value.getValue() instanceof StringArrayResult);
 		StringArrayResult r = (StringArrayResult) value.getValue();
 		Assert.assertEquals("InChI=1S/C10H22/c1-3-5-7-9-10-8-6-4-2/h3-10H2,1-2H3", r.get(0));
-		Assert.assertEquals("AuxInfo=1/0/N:1,10,2,9,3,8,4,7,5,6/E:(1,2)(3,4)(5,6)(7,8)(9,10)/rA:10CCCCCCCCCC/rB:s1;s2;s3;s4;s5;s6;s7;s8;s9;/rC:;;;;;;;;;;", r.get(1));
+		//Assert.assertEquals("AuxInfo=1/0/N:1,10,2,9,3,8,4,7,5,6/E:(1,2)(3,4)(5,6)(7,8)(9,10)/rA:10CCCCCCCCCC/rB:s1;s2;s3;s4;s5;s6;s7;s8;s9;/rC:;;;;;;;;;;", r.get(1));
+		//we discarded AuxInfo
+		Assert.assertNull(r.get(1));
 		Assert.assertEquals("DIOQZVSQGTUSAI-UHFFFAOYSA-N", r.get(2));
 	}	
 }

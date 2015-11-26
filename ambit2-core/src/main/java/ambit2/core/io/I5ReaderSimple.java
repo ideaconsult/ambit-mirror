@@ -169,9 +169,9 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 		    							String value = reader.getAttributeValue(i);
 		    							int slashpos = value.indexOf("/");
 		    							if (slashpos>0)
-		    								record.setProperty(Property.getI5UUIDInstance(),value.substring(0,slashpos));
+		    								record.setRecordProperty(Property.getI5UUIDInstance(),value.substring(0,slashpos));
 		    							else
-		    								record.setProperty(Property.getI5UUIDInstance(),value);
+		    								record.setRecordProperty(Property.getI5UUIDInstance(),value);
 		    						}	
 		    					} catch (Exception x) { }
 		    				parentTag = i5_tags.ReferenceSubstance;		    					
@@ -205,7 +205,7 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 	        		case ReferenceSubstance: { 
 	        			parentTag = null;
 	        			for (int i=0;i < synonyms.size();i++)
-	        				record.setProperty(
+	        				record.setRecordProperty(
 	        						Property.getInstance(AmbitCONSTANTS.NAMES,
 	        						LiteratureEntry.getInstance(String.format("%s %s#%d",I5_REFERENCE,echa_tags.SYNONYM.toString(),i+1, 
 	        								I5_URL),I5_URL))
@@ -216,11 +216,11 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 	        		}
 	        		case name : {
 	        			if ((parentTag==null) || (i5_tags.ReferenceSubstance.equals(parentTag)))
-	        				record.setProperty(nameProperty,tmpValue);
+	        				record.setRecordProperty(nameProperty,tmpValue);
 	        			break;				
 	        		}
 	        		case iupacName : {
-	        			record.setProperty(Property.getNameInstance(),tmpValue);
+	        			record.setRecordProperty(Property.getNameInstance(),tmpValue);
 	        			break;				
 	        		}
 	        		case molecularFormula: {
@@ -228,14 +228,14 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 	        			break;
 	        		}
 	        		case number: {
-	        			record.setProperty(ecProperty,tmpValue);
+	        			record.setRecordProperty(ecProperty,tmpValue);
 	        			break;
 	        		}			
 	        		case casNumber: {
 	        			try {
-	        				record.setProperty(casProperty,casProcessor.process(tmpValue));
+	        				record.setRecordProperty(casProperty,casProcessor.process(tmpValue));
 	        			} catch (Exception x) {
-	            			record.setProperty(casProperty,tmpValue);
+	            			record.setRecordProperty(casProperty,tmpValue);
 	        			}
 	        			break;
 	        		}

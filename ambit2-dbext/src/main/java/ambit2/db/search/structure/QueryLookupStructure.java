@@ -30,6 +30,7 @@
 package ambit2.db.search.structure;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
@@ -73,7 +74,9 @@ public class QueryLookupStructure extends AbstractStructureQuery<IStructureKey,I
 		super.setValue(value);
 		try {
 			query.setValue(smiles.process(reader.process(value)));
-		} catch (Exception x) {}
+		} catch (Exception x) {
+			logger.log(Level.SEVERE, x.getMessage(),x);
+		}
 	}
 	@Override
 	public String toString() {

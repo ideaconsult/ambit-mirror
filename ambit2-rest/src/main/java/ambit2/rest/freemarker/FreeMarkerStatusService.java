@@ -19,7 +19,6 @@ import org.restlet.data.ServerInfo;
 import org.restlet.data.Status;
 import org.restlet.ext.freemarker.TemplateRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.service.StatusService;
 
@@ -73,6 +72,7 @@ public class FreeMarkerStatusService extends StatusService implements
 
 		freeMarkerSupport.configureTemplateMap(map, request, app);
 		map.put("creator", "IdeaConsult Ltd.");
+
 
 	}
 

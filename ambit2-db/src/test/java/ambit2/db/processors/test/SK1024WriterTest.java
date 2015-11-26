@@ -1,6 +1,6 @@
 package ambit2.db.processors.test;
 
-import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.descriptors.processors.FPTable;
 
 public class SK1024WriterTest  extends FP1024WriterTest {
 	@Override

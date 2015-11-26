@@ -153,7 +153,7 @@ public class ECHAPreregistrationListReader extends
 	        		switch (tag) {
 	        		case PRE_REGISTERED_SUBSTANCE: { 
 	        			for (int i=0;i < synonyms.size();i++)
-	        				record.setProperty(
+	        				record.setRecordProperty(
 	        						Property.getInstance(AmbitCONSTANTS.NAMES,
 	        						LiteratureEntry.getInstance(String.format("%s %s#%d",ECHA_REFERENCE,echa_tags.SYNONYM.toString(),i+1, 
 	        								ECHA_URL),ECHA_URL))
@@ -163,23 +163,23 @@ public class ECHAPreregistrationListReader extends
 	        			return true;
 	        		}
 	        		case NAME : {
-	        			record.setProperty(nameProperty,tmpValue);
+	        			record.setRecordProperty(nameProperty,tmpValue);
 	        			break;				
 	        		}
 	        		case EC_NUMBER: {
-	        			record.setProperty(ecProperty,tmpValue);
+	        			record.setRecordProperty(ecProperty,tmpValue);
 	        			break;
 	        		}			
 	        		case CAS_NUMBER: {
 	        			try {
-	        				record.setProperty(casProperty,casProcessor.process(tmpValue));
+	        				record.setRecordProperty(casProperty,casProcessor.process(tmpValue));
 	        			} catch (Exception x) {
-	            			record.setProperty(casProperty,tmpValue);
+	            			record.setRecordProperty(casProperty,tmpValue);
 	        			}
 	        			break;
 	        		}
 	        		case REGISTRATION_DATE: {
-	        			record.setProperty(registrationProperty,tmpValue);
+	        			record.setRecordProperty(registrationProperty,tmpValue);
 	        			break;
 	        		}	
 	        		case SYNONYM_NAME: {

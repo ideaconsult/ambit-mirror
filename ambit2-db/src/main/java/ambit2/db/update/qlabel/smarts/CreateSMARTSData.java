@@ -22,8 +22,8 @@ public class CreateSMARTSData extends AbstractUpdate<IStructureRecord,IStructure
 	}
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> p = new ArrayList<QueryParam>();
-		if (getObject().getProperty(property)!=null) 
-			p.add(new QueryParam<String>(String.class,getObject().getProperty(property).toString()));
+		if (getObject().getRecordProperty(property)!=null) 
+			p.add(new QueryParam<String>(String.class,getObject().getRecordProperty(property).toString()));
 		else 
 			p.add(new QueryParam<String>(String.class,null));
 	

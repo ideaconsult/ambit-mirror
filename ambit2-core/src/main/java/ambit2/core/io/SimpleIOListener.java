@@ -33,13 +33,14 @@ import org.openscience.cdk.io.ReaderEvent;
 import org.openscience.cdk.io.listener.IReaderListener;
 import org.openscience.cdk.io.listener.IWriterListener;
 import org.openscience.cdk.io.setting.IOSetting;
+import org.openscience.cdk.io.setting.IOSetting.Importance;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 
 public class SimpleIOListener implements IReaderListener, IWriterListener {
 
-    protected int level;
+    protected Importance level;
     protected Profile properties;
     protected int counter= 0;
 
@@ -47,7 +48,7 @@ public class SimpleIOListener implements IReaderListener, IWriterListener {
      * 
      * @param level
      */
-    public SimpleIOListener(int level) {
+    public SimpleIOListener(Importance level) {
         super();
         this.level = level;
         properties =  new Profile();
@@ -65,7 +66,7 @@ public class SimpleIOListener implements IReaderListener, IWriterListener {
         switch (question) {
         case IO_START: { counter = 0;}
         case IO_STOP: { if (counter > 0)
-            if (setting.getLevel() <= this.level)
+            if (setting.getLevel().ordinal() <= this.level.ordinal())
                 onStopEvent();
             else; //silent
         }
@@ -75,7 +76,7 @@ public class SimpleIOListener implements IReaderListener, IWriterListener {
 					Property p = Property.getInstance(setting.getName(),"I/O");
 					p.setLabel(setting.getDefaultSetting());
 					p.setOrder(counter);
-                    if (setting.getLevel() > this.level)
+                    if (setting.getLevel().ordinal() > this.level.ordinal())
                         p.setEnabled(true);
                     properties.add(p);
                     counter++;

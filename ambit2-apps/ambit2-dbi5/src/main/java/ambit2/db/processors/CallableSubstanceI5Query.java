@@ -13,8 +13,8 @@ import java.util.logging.StreamHandler;
 import net.idea.i5.cli.Container;
 import net.idea.i5.cli.ContainerClient;
 import net.idea.i5.cli.I5LightClient;
+import net.idea.i5.cli.PredefinedQuery;
 import net.idea.i5.cli.QueryToolClient;
-import net.idea.i5.cli.QueryToolClient.PredefinedQuery;
 import net.idea.i5.io.I5ZReader;
 import net.idea.i5.io.IQASettings;
 import net.idea.i5.io.QASettings;
@@ -22,6 +22,8 @@ import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.opentox.cli.IIdentifiableResource;
+import net.idea.opentox.cli.id.IIdentifier;
+import net.idea.opentox.cli.id.Identifier;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
@@ -241,17 +243,19 @@ public class CallableSubstanceI5Query<USERID> extends
 							substanceUUID = substanceUUID + "/0";
 						localLogger.log(Level.FINE, String.format(
 								"Retieving %s from %s", substanceUUID, server));
-						List<IIdentifiableResource<String>> container = null;
+						List<IIdentifiableResource<IIdentifier>> container = null;
 						try {
-							container = ccli.get(substanceUUID);
+							container = ccli.get(new Identifier(substanceUUID));
 						} catch (Exception x) {
 							localLogger.log(Level.SEVERE, String.format(
-									"Failed to retrieve %s from %s. Error %s", substanceUUID, server,x.getMessage()));							
+									"Failed to retrieve %s from %s. Error %s",
+									substanceUUID, server, x.getMessage()));
 							streamHandler.flush();
 							String msg = out.toString();
 							throw new ImportSubstanceException(new Status(
 									Status.SERVER_ERROR_BAD_GATEWAY,
-									String.format("Failed to retrieve %s",substanceUUID)), msg);
+									String.format("Failed to retrieve %s",
+											substanceUUID)), msg);
 						}
 						connection = dbc.getConnection();
 						localLogger.log(Level.INFO, String.format(
@@ -263,12 +267,13 @@ public class CallableSubstanceI5Query<USERID> extends
 						writer.setCloseConnection(false);
 						writer.setConnection(connection);
 						writer.open();
-						IIdentifiableResource<String> result = processContainer(
-								container, writer,server);
+						IIdentifiableResource<IIdentifier> result = processContainer(
+								container, writer, server);
 
 					} else
-						throw new ImportSubstanceException(
-								new Status(Status.SERVER_ERROR_BAD_GATEWAY,"IUCLID5 server login failed"),
+						throw new ImportSubstanceException(new Status(
+								Status.SERVER_ERROR_BAD_GATEWAY,
+								"IUCLID5 server login failed"),
 								"IUCLID5 server login failed [" + server + "].");
 				} catch (ResourceException x) {
 					throw x;
@@ -281,8 +286,9 @@ public class CallableSubstanceI5Query<USERID> extends
 				}
 			} else { // query
 				if (extIDType == null || extIDValue == null)
-					throw new ImportSubstanceException(
-							new Status(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid query"),"Invalid query");
+					throw new ImportSubstanceException(new Status(
+							Status.CLIENT_ERROR_BAD_REQUEST, "Invalid query"),
+							"Invalid query");
 				dbc = new DBConnection(context);
 				if (server == null)
 					server = dbc.getProperty("i5.server");
@@ -296,10 +302,9 @@ public class CallableSubstanceI5Query<USERID> extends
 					if (i5.login(user, pass)) {
 						QueryToolClient cli = i5.getQueryToolClient();
 
-						List<IIdentifiableResource<String>> queryResults = cli
-								.executeQuery(
-										PredefinedQuery.query_by_it_identifier,
-										extIDType, extIDValue);
+						List<IIdentifiableResource<IIdentifier>> queryResults = cli
+								.executeQuery(new PredefinedQuery(), extIDType,
+										extIDValue);
 
 						if (queryResults != null && queryResults.size() > 0) {
 							connection = dbc.getConnection();
@@ -314,13 +319,13 @@ public class CallableSubstanceI5Query<USERID> extends
 							ContainerClient ccli = i5.getContainerClient();
 							int imported = 0;
 							int importError = 0;
-							for (IIdentifiableResource<String> item : queryResults)
+							for (IIdentifiableResource<IIdentifier> item : queryResults)
 								try {
 									localLogger.log(Level.FINE,
-											item.getResourceIdentifier());
-									List<IIdentifiableResource<String>> container = ccli
+											item.getResourceIdentifier().toString());
+									List<IIdentifiableResource<IIdentifier>> container = ccli
 											.get(item.getResourceIdentifier());
-									processContainer(container, writer,server);
+									processContainer(container, writer, server);
 
 									imported++;
 								} catch (Exception x) {
@@ -350,32 +355,36 @@ public class CallableSubstanceI5Query<USERID> extends
 										foundMsg), msg);
 							} else if (imported == 0) {
 								throw new ImportSubstanceException(
-										new Status(Status.CLIENT_ERROR_NOT_FOUND, foundMsg),msg);
+										new Status(
+												Status.CLIENT_ERROR_NOT_FOUND,
+												foundMsg), msg);
 							}
 
 						} else {
 							streamHandler.flush();
 							String msg = out.toString();
 
-							throw new ImportSubstanceException(
-									new Status(Status.CLIENT_ERROR_NOT_FOUND,
-									"No substances found."),msg);
+							throw new ImportSubstanceException(new Status(
+									Status.CLIENT_ERROR_NOT_FOUND,
+									"No substances found."), msg);
 						}
 					} else
-						throw new ImportSubstanceException(
-								new Status(Status.SERVER_ERROR_BAD_GATEWAY,"IUCLID5 server login failed"),
+						throw new ImportSubstanceException(new Status(
+								Status.SERVER_ERROR_BAD_GATEWAY,
+								"IUCLID5 server login failed"),
 								"IUCLID5 server login failed [" + server + "].");
 				} catch (ResourceException x) {
 					throw x;
 				} catch (Exception x) {
 					localLogger.log(Level.SEVERE, x.getMessage());
 					streamHandler.flush();
-					String msg = out.toString();					
-					throw new ImportSubstanceException(
-							new Status(Status.SERVER_ERROR_BAD_GATEWAY, "Error when retrieving substances"),msg);
+					String msg = out.toString();
+					throw new ImportSubstanceException(new Status(
+							Status.SERVER_ERROR_BAD_GATEWAY,
+							"Error when retrieving substances"), msg);
 				}
 			}
-			
+
 			return createReference(connection);
 		} catch (ResourceException x) {
 			localLogger.log(Level.SEVERE, x.getMessage(), x);
@@ -425,11 +434,11 @@ public class CallableSubstanceI5Query<USERID> extends
 
 	}
 
-	private IIdentifiableResource<String> processContainer(
-			List<IIdentifiableResource<String>> container,
-			DBSubstanceWriter writer,String server) {
-		IIdentifiableResource<String> result = null;
-		for (IIdentifiableResource<String> item : container) {
+	private IIdentifiableResource<IIdentifier> processContainer(
+			List<IIdentifiableResource<IIdentifier>> container,
+			DBSubstanceWriter writer, String server) {
+		IIdentifiableResource<IIdentifier> result = null;
+		for (IIdentifiableResource<IIdentifier> item : container) {
 			I5ZReader reader = null;
 			File file = null;
 			if (item instanceof Container)
@@ -439,7 +448,8 @@ public class CallableSubstanceI5Query<USERID> extends
 						localLogger.fine(file.getAbsolutePath());
 						reader = getReader(((Container) item).getIpzarchive());
 						reader.setQASettings(getQASettings());
-						write(reader, writer, new ReferenceSubstanceUUID(),server);
+						write(reader, writer, new ReferenceSubstanceUUID(),
+								server);
 						result = item;
 						localLogger.log(Level.INFO, String.format(
 								"Substance UUID=%s imported successfully",
@@ -501,7 +511,8 @@ public class CallableSubstanceI5Query<USERID> extends
 	}
 
 	public int write(IRawReader<IStructureRecord> reader,
-			DBSubstanceWriter writer, PropertyKey key, String server) throws Exception {
+			DBSubstanceWriter writer, PropertyKey key, String server)
+			throws Exception {
 		try {
 			int records = 0;
 			while (reader.hasNext()) {
@@ -509,7 +520,9 @@ public class CallableSubstanceI5Query<USERID> extends
 				if (record == null)
 					continue;
 				if (record instanceof SubstanceRecord) {
-					((SubstanceRecord) record).setContent(String.format("Retrieved from %s at %s", server,System.currentTimeMillis()));
+					((SubstanceRecord) record).setContent(String.format(
+							"Retrieved from %s at %s", server,
+							System.currentTimeMillis()));
 				}
 				if (record instanceof IStructureRecord)
 					writer.process((IStructureRecord) record);

@@ -20,51 +20,52 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 
 package ambit2.smarts;
 
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 
 /**
  * 
  * @author Nikolay Kochev nick@uni-plovdiv.bg
  */
-public class RingQueryBond extends SMARTSBond
-{
+public class RingQueryBond extends SMARTSBond {
 	private static final long serialVersionUID = -90236069308675679L;
-	
-	public RingQueryBond() {
-    }
-	
-	public boolean matches(IBond bond) 
-	{		 
-		//if (bond.getFlag(CDKConstants.ISINRING)) 
-		//	return true;
+
+	public RingQueryBond(IChemObjectBuilder builder) {
+		super(builder);
+	}
+
+	public boolean matches(IBond bond) {
+		// if (bond.getFlag(CDKConstants.ISINRING))
+		// return true;
 		if (RingQueryBond.isRingBond(bond))
 			return true;
 		return false;
-    };
-    
-    public static boolean isRingBond(IBond bond)
-    {    	
-    	//This function uses atom ring info for the two atoms of this bond
-    	//in order to determine whether this bond is a ring bond
-    	//RingData2 contains the formal indexes of the rings 
-    	//In order this bond to be a ring bond the atoms must participate in the same ring
-    	//i.e. at least one index must be the same
-    	int atomRings0[] = (int[])bond.getAtom(0).getProperty(CMLUtilities.RingData2);
-    	int atomRings1[] = (int[])bond.getAtom(1).getProperty(CMLUtilities.RingData2); 
-    	if ((atomRings0 == null) || (atomRings1 == null))
-    		return(false);
-    	
-    	
-    	for (int i = 0; i < atomRings0.length; i++)
-    		for (int j = 0; j < atomRings1.length; j++)
-    			if (atomRings0[i] == atomRings1[j])
-    				return(true);
-    	
-    	return(false);
-    }
+	};
+
+	public static boolean isRingBond(IBond bond) {
+		// This function uses atom ring info for the two atoms of this bond
+		// in order to determine whether this bond is a ring bond
+		// RingData2 contains the formal indexes of the rings
+		// In order this bond to be a ring bond the atoms must participate in
+		// the same ring
+		// i.e. at least one index must be the same
+		int atomRings0[] = (int[]) bond.getAtom(0).getProperty(
+				CMLUtilities.RingData2);
+		int atomRings1[] = (int[]) bond.getAtom(1).getProperty(
+				CMLUtilities.RingData2);
+		if ((atomRings0 == null) || (atomRings1 == null))
+			return (false);
+
+		for (int i = 0; i < atomRings0.length; i++)
+			for (int j = 0; j < atomRings1.length; j++)
+				if (atomRings0[i] == atomRings1[j])
+					return (true);
+
+		return (false);
+	}
 }

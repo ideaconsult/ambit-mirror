@@ -106,9 +106,9 @@ public class ARFFIterator extends AbstractBatchProcessor<File[], IStructureRecor
 					}
 					for (int i=0; i < properties.length;i++) if (properties[i]!=null) {
 						if (dataResults.attribute(i).isNumeric())
-							record.setProperty(properties[i], resultInstance.value(i));
+							record.setRecordProperty(properties[i], resultInstance.value(i));
 						else
-							record.setProperty(properties[i], resultInstance.toString(i));
+							record.setRecordProperty(properties[i], resultInstance.toString(i));
 					}
 					return record;
 				}

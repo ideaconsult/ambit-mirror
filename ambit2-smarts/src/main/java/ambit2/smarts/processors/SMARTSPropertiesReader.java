@@ -6,7 +6,6 @@ import net.idea.modbcum.p.DefaultAmbitProcessor;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.base.data.Property;
 import ambit2.smarts.CMLUtilities;
@@ -47,7 +46,7 @@ public class SMARTSPropertiesReader extends DefaultAmbitProcessor<IAtomContainer
 			}
 		}
 		if (util == null) util = new CMLUtilities();
-		util.extractSMARTSProperties((IMolecule)mol);
+		util.extractSMARTSProperties((IAtomContainer)mol);
 
 		return mol;
 	}

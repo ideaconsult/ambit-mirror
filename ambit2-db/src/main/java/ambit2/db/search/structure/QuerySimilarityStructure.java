@@ -39,7 +39,7 @@ import net.idea.modbcum.i.query.QueryParam;
 
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
@@ -50,7 +50,7 @@ import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.search.NumberCondition;
 
-public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMoleculeSet,NumberCondition> {
+public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IAtomContainerSet,NumberCondition> {
 
 	/**
 	 * 
@@ -59,6 +59,7 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 	protected AbstractStructureQuery query;
 	protected FingerprintGenerator g;
 	protected MoleculeReader molReader = null;
+	protected UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
 	public static ClassHolder[] methods = new ClassHolder[] {
 			new ClassHolder("ambit2.db.search.structure.QuerySimilarityBitset","Tanimoto [fingerprints]","",""),
 			new ClassHolder("ambit2.db.search.structure.QueryExactStructure","Exact structure","",""),
@@ -148,11 +149,11 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 	}
 	
 	@Override
-	public void setValue(IMoleculeSet set) {
+	public void setValue(IAtomContainerSet set) {
 		super.setValue(set);
 		try {
 			//if (query instanceof QuerySimilarityBitset) {
-				Iterator<IAtomContainer> i = set.molecules().iterator();
+				Iterator<IAtomContainer> i = set.atomContainers().iterator();
 				BitSet bitset = new BitSet();
 				while (i.hasNext()) {
 					bitset.or(g.process(i.next()));
@@ -202,7 +203,7 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 				for (int i=0; i < getValue().getAtomContainerCount();i++) {
 					IAtomContainer q = getValue().getAtomContainer(i);
 					if (q.getAtomCount()==0) continue;
-					if (!UniversalIsomorphismTester.isSubgraph(target, q)) {
+					if (!uit.isSubgraph(target, q)) {
 						return 0;
 					} else match++;
 				}

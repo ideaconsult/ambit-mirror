@@ -46,7 +46,6 @@ import javax.swing.JTable;
 
 import junit.framework.Assert;
 import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -65,6 +64,7 @@ import ambit2.descriptors.processors.AtomEnvironmentGenerator;
 import ambit2.descriptors.processors.AtomEnvironmentList;
 import ambit2.model.AtomEnvironmentListTableModel;
 import ambit2.rendering.CompoundImageTools;
+import ambit2.rendering.IAtomContainerHighlights;
 import ambit2.similarity.measure.AtomEnvironmentsDistance;
 
 /**
@@ -145,9 +145,9 @@ public class AtomEnvironmentDistanceTest {
 
 		SmilesParserWrapper sp = SmilesParserWrapper.getInstance();
 
-		// IMolecule mol = sp.parseSmiles("O=N(=O)c1ccc(O)c(N)c1");
+		// IAtomContainer mol = sp.parseSmiles("O=N(=O)c1ccc(O)c(N)c1");
 		// Amino-2nitro-3.4-5 hydroxy-methyl benzene (ANMB)
-		// IMolecule mol1 = sp.parseSmiles("Cc1c(C)c(cc(N)c1(O))N(=O)=O");
+		// IAtomContainer mol1 = sp.parseSmiles("Cc1c(C)c(cc(N)c1(O))N(=O)=O");
 
 		IAtomContainer molecule1 = sp.parseSmiles("Nc1c(C)cccc1");
 		// Amino-2nitro-3.4-5 hydroxy-methyl benzene (ANMB)
@@ -283,7 +283,7 @@ public class AtomEnvironmentDistanceTest {
 	}
 }
 
-class MySelector implements IProcessor<IAtomContainer, IChemObjectSelection> {
+class MySelector implements IAtomContainerHighlights {
 	protected int selected = 0;
 
 	public MySelector() {

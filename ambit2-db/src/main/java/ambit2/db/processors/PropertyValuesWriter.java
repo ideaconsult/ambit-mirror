@@ -60,7 +60,7 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 	@Override
 	protected Object getValue(IStructureRecord record, Property property,
 			int index) {
-		Object o = record.getProperty(property);
+		Object o = record.getRecordProperty(property);
 
 		try {
 			if (o instanceof Number) return o;  
@@ -85,7 +85,7 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 
 	@Override
 	protected Iterable<Property> getPropertyNames(IStructureRecord record) {
-		return record.getProperties();
+		return record.getRecordProperties();
 	}
 
 	/*

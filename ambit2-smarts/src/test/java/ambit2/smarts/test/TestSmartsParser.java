@@ -1,6 +1,6 @@
 package ambit2.smarts.test;
 
-import java.util.Vector;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -65,7 +65,7 @@ public class TestSmartsParser extends TestCase
 	public void parserError(String smarts, String[] expErrors) throws Exception 
 	{
 		IQueryAtomContainer query = smartsParser.parse(smarts);
-		Vector<SmartsParserError> errors = smartsParser.getErrors();
+		List<SmartsParserError> errors = smartsParser.getErrors();
 		if (expErrors == null)				
 			assertEquals("Parisng " + smarts + " no errors expected!", 0, errors.size());
 		else

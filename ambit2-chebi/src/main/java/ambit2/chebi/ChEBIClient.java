@@ -105,22 +105,22 @@ public class ChEBIClient implements Iterator<IStructureRecord>{
 	    		 struc.setContent(item.getStructure());
 	    		 struc.setFormat(MOL_TYPE.SDF.toString());
 	    	  }
-	      struc.setProperty(getChebiProperty("CHEBI_ID", "http://www.ebi.ac.uk/chebi/id"), entity.getChebiId());
-	      struc.setProperty(getChebiProperty("Name", Property.opentox_Name), entity.getChebiAsciiName());
-	      struc.setProperty(getChebiProperty("InChI", Property.opentox_InChI), entity.getInchi());
-	      struc.setProperty(getChebiProperty("InChIKey", Property.opentox_InChIKey), entity.getInchiKey());
-	      struc.setProperty(getChebiProperty("CHEBI:Star", Property.opentox_InChIKey), entity.getEntityStar());
+	      struc.setRecordProperty(getChebiProperty("CHEBI_ID", "http://www.ebi.ac.uk/chebi/id"), entity.getChebiId());
+	      struc.setRecordProperty(getChebiProperty("Name", Property.opentox_Name), entity.getChebiAsciiName());
+	      struc.setRecordProperty(getChebiProperty("InChI", Property.opentox_InChI), entity.getInchi());
+	      struc.setRecordProperty(getChebiProperty("InChIKey", Property.opentox_InChIKey), entity.getInchiKey());
+	      struc.setRecordProperty(getChebiProperty("CHEBI:Star", Property.opentox_InChIKey), entity.getEntityStar());
 
-	      struc.setProperty(getChebiProperty("SMILES", Property.opentox_SMILES), entity.getSmiles());
+	      struc.setRecordProperty(getChebiProperty("SMILES", Property.opentox_SMILES), entity.getSmiles());
 	      
 	      List<DataItem> iupacnames = entity.getIupacNames();  //List all synonyms
 	      for (int i=0; i < iupacnames.size();i++) 
-		    struc.setProperty(getChebiProperty(String.format("IUPAC Name%d",i+1), Property.opentox_IupacName),  iupacnames.get(i).getData());
+		    struc.setRecordProperty(getChebiProperty(String.format("IUPAC Name%d",i+1), Property.opentox_IupacName),  iupacnames.get(i).getData());
 	      
 	      
 	      List<DataItem> synonyms = entity.getSynonyms();  //List all synonyms
 	      for (int i=0; i < synonyms.size();i++) 
-		    struc.setProperty(getChebiProperty(String.format("Synonym%d",i+1), Property.opentox_Name),  synonyms.get(i).getData());
+		    struc.setRecordProperty(getChebiProperty(String.format("Synonym%d",i+1), Property.opentox_Name),  synonyms.get(i).getData());
 
 
 	      return struc;

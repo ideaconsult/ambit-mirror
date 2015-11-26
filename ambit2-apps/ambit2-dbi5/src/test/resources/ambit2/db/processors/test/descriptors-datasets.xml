@@ -14,7 +14,7 @@
   <catalog_references idreference="8" title="Dummy reference" url="NA"/>
   
   <chemicals idchemical="7" inchi="InChI=1/2C8H16O2.Sn/c2*1-3-5-6-7(4-2)8(9)10;/h2*7H,3-6H2,1-2H3,(H,9,10);/q;;+2/p-2" smiles="CCCCC(CC)C(=O)[O-].CCCCC(CC)C(=O)[O-].[SnH4+2]"/>
-  <chemicals idchemical="10" inchi="InChI=1/2FH.Na/h2*1H;/q;;+1/p-1" smiles="F.[F-].[Na+]"/>
+  <chemicals idchemical="10" inchi="InChI=1/2FH.Na/h2*1H;/q;;+1/p-1" smiles="[F-].[Na+].F"/>
   <chemicals idchemical="11" inchi="InChI=1/C20H20P.BrH/c1-2-21(18-12-6-3-7-13-18,19-14-8-4-9-15-19)20-16-10-5-11-17-20;/h3-17H,2H2,1H3;1H/q+1;/p-1" smiles="[Br-].CC[P+](c1ccccc1)(c2ccccc2)c3ccccc3"/>
   
   <chemicals idchemical="29141" inchi="InChI=1/Fe" smiles="[Fe]"/>

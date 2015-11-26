@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -19,6 +18,7 @@ import ambit2.base.config.Preferences;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.groups.SuppleAtomContainer;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
@@ -197,7 +197,7 @@ public class QuerySMARTS extends
 				if (hAdder==null) hAdder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 				boolean detectAromaticity = true;
 				if ("true".equals(Preferences.getProperty(Preferences.FASTSMARTS)) && isUsePrecalculatedAtomProperties()) {
-					Object smartsdata = object.getProperty(smartsProperty);
+					Object smartsdata = object.getRecordProperty(smartsProperty);
 
 					if (smartsdata != null) {
 						mol.setProperty(smartsProperty, smartsdata);

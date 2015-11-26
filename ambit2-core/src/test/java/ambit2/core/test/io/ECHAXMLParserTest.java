@@ -39,9 +39,9 @@ public class ECHAXMLParserTest {
 			System.out.println();
 			*/
 			count++;
-			for (Property p :record.getProperties()) {
-				foundCas += record.getProperty(p).equals("8008-57-9")?1:0;
-				foundName += record.getProperty(p).equals("4'-methoxyacetanilide")?1:0;
+			for (Property p :record.getRecordProperties()) {
+				foundCas += record.getRecordProperty(p).equals("8008-57-9")?1:0;
+				foundName += record.getRecordProperty(p).equals("4'-methoxyacetanilide")?1:0;
 			}
 		}
 		reader.close();

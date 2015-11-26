@@ -7,9 +7,6 @@ import java.io.Writer;
 import net.idea.restnet.c.task.ClientResourceWrapper;
 import net.idea.restnet.rdf.ns.OT;
 
-import org.opentox.dsl.OTDataset;
-import org.opentox.dsl.OTFeatures;
-import org.opentox.dsl.OTObject;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -20,6 +17,9 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Property;
 import ambit2.base.io.DownloadTool;
 import ambit2.rest.OpenTox;
+import ambit2.rest.legacy.OTDataset;
+import ambit2.rest.legacy.OTFeatures;
+import ambit2.rest.legacy.OTObject;
 
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;

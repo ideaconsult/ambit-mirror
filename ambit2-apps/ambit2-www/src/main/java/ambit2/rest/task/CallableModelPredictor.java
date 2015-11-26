@@ -16,7 +16,6 @@ import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.p.AbstractDBProcessor;
 
 import org.codehaus.stax2.XMLOutputFactory2;
-import org.opentox.dsl.task.RemoteTask;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -36,6 +35,7 @@ import ambit2.db.processors.PropertyValuesWriter;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.property.ValuesReader;
 import ambit2.rest.dataset.DatasetRDFWriter;
+import ambit2.rest.legacy.OTRemoteTask;
 import ambit2.rest.model.predictor.ModelPredictor;
 
 import com.sun.xml.txw2.output.IndentingXMLStreamWriter;
@@ -157,7 +157,7 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 				if (!tmpFile.exists()) throw new ResourceException(Status.SERVER_ERROR_INTERNAL,"No results available!");
 				try {
 					
-					RemoteTask task = new RemoteTask(new Reference(dataset_service),MediaType.TEXT_URI_LIST,
+					OTRemoteTask task = new OTRemoteTask(new Reference(dataset_service),MediaType.TEXT_URI_LIST,
 							new FileRepresentation(tmpFile,MediaType.APPLICATION_RDF_XML),Method.POST);
 					//wait to complete, so that we can delete the tmp file
 					Thread.sleep(200);
@@ -230,7 +230,7 @@ class RDFFileWriter extends AbstractDBProcessor<IStructureRecord, IStructureReco
 	@Override
 	public IStructureRecord process(IStructureRecord target)
 			throws AmbitException {
-		for (Property p: target.getProperties())
+		for (Property p: target.getRecordProperties())
 			recordWriter.getTemplate().add(p);
 		
 		return recordWriter.process(target);

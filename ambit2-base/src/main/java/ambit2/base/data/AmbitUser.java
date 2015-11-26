@@ -25,14 +25,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.base.data;
 
-import com.jgoodies.binding.beans.Model;
 
 /**
  * Contains all information about an AMBIT database user. 
  * @author Nina Jeliazkova <br>
  * <b>Modified</b> 2005-4-7
  */
-public class AmbitUser extends Model {
+public class AmbitUser  {
 	/**
 	 * 
 	 */

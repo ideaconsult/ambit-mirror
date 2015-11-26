@@ -11,6 +11,7 @@ import org.openscience.cdk.io.ReaderEvent;
 import org.openscience.cdk.io.listener.IReaderListener;
 import org.openscience.cdk.io.listener.IWriterListener;
 import org.openscience.cdk.io.setting.IOSetting;
+import org.openscience.cdk.io.setting.IOSetting.Importance;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.ProfileListModel;
@@ -29,7 +30,7 @@ import ambit2.ui.editors.SelectFieldsPanel;
  * <b>Modified</b> 2008-12-13
  */
 public class AmbitSettingsListener implements IReaderListener, IWriterListener{
-    protected int level;
+    protected Importance level;
     protected Profile<Property> properties;
     protected int counter= 0;
 
@@ -37,7 +38,7 @@ public class AmbitSettingsListener implements IReaderListener, IWriterListener{
      * 
      * @param level
      */
-    public AmbitSettingsListener(int level) {
+    public AmbitSettingsListener(Importance level) {
         super();
         this.level = level;
         properties =  new Profile();
@@ -47,7 +48,7 @@ public class AmbitSettingsListener implements IReaderListener, IWriterListener{
      * @see org.openscience.cdk.io.listener.SwingGUIListener#processIOSettingQuestion(org.openscience.cdk.io.setting.IOSetting)
      */
     public void processIOSettingQuestion(IOSetting setting) {
-        if (setting.getLevel() <= this.level) { 
+        if (setting.getLevel().ordinal() <= this.level.ordinal()) { 
         	try {
         		Property.IO_QUESTION question = Property.IO_QUESTION.valueOf(setting.getQuestion());
         		switch (question) {

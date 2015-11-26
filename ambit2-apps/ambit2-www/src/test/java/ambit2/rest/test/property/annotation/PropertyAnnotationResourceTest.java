@@ -11,7 +11,6 @@ import net.idea.restnet.rdf.ns.OT;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
-import org.opentox.dsl.OTFeature;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -24,16 +23,16 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.db.search.property.RetrieveFieldNamesByAlias;
 import ambit2.rest.OpenTox;
+import ambit2.rest.legacy.OTFeature;
 import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
-import ambit2.rest.property.annotations.PropertyAnnotationResource;
 import ambit2.rest.reference.ReferenceURIReporter;
 import ambit2.rest.test.ResourceTest;
 
 import com.hp.hpl.jena.ontology.OntModel;
 
-/**
+/*
  * test for {@link PropertyAnnotationResource}
  * 
  * @author nina

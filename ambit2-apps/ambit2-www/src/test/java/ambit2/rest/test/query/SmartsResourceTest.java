@@ -10,7 +10,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Writer;
-import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.restlet.data.MediaType;
@@ -79,7 +79,7 @@ public class SmartsResourceTest extends ResourceTest {
 	@Override
 	public boolean verifyResponseSDF(String uri, MediaType media, InputStream in)
 			throws Exception {
-			IteratingMDLReader reader = new IteratingMDLReader(in, SilentChemObjectBuilder.getInstance());
+			IteratingSDFReader reader = new IteratingSDFReader(in, SilentChemObjectBuilder.getInstance());
 			int count = 0;
 			while (reader.hasNext()) {
 				Object o = reader.next();

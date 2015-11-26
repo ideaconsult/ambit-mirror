@@ -65,9 +65,9 @@ public class ChEBIResource extends ProtectedResource {
 			            		while (client.hasNext()) {
 			            			IStructureRecord record = client.next();
 			            			writer.write(record.getContent());
-			            			for (Property p: record.getProperties()) {
+			            			for (Property p: record.getRecordProperties()) {
 			            				writer.write(String.format("\n> <%s>\n",p.getName()));
-			            				writer.write(String.format("%s\n\n",record.getProperty(p)));
+			            				writer.write(String.format("%s\n\n",record.getRecordProperty(p)));
 			            			}
 			            		}
 			            		

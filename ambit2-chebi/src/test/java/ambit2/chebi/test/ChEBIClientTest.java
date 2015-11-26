@@ -22,8 +22,8 @@ public class ChEBIClientTest {
 		while (client.hasNext()) {
 			IStructureRecord struc = client.next();
 		      System.out.println(struc.getContent());
-		      for (Property p : struc.getProperties())
-		    	  System.out.println(String.format("%s %s %s",p.getName(),p.getLabel(),struc.getProperty(p)));
+		      for (Property p : struc.getRecordProperties())
+		    	  System.out.println(String.format("%s %s %s",p.getName(),p.getLabel(),struc.getRecordProperty(p)));
 		}
 	}
 	@Test
@@ -32,8 +32,8 @@ public class ChEBIClientTest {
 		while (client.hasNext()) {
 			IStructureRecord struc = client.next();
 		      System.out.println(struc.getContent());
-		      for (Property p : struc.getProperties())
-		    	  System.out.println(String.format("%s %s %s",p.getName(),p.getLabel(),struc.getProperty(p)));
+		      for (Property p : struc.getRecordProperties())
+		    	  System.out.println(String.format("%s %s %s",p.getName(),p.getLabel(),struc.getRecordProperty(p)));
 		}
 	}
 	@Test
@@ -43,11 +43,6 @@ public class ChEBIClientTest {
 			IStructureRecord struc = client.next();
 		      System.out.println(struc.getContent());
 		      verify(struc);
-		      /*
-		      for (Property p : struc.getProperties())
-		    	  System.out.println(String.format("%s %s %s %s %s",
-		    			  p.getName(),p.getLabel(),p.getTitle(),p.getUrl(),struc.getProperty(p)));
-		    			  */
 		}
 	}	
 	
@@ -70,7 +65,7 @@ public class ChEBIClientTest {
 		
 		for (int i=0; i < s.length; i++) {
 			Property p = new Property(s[i][0],s[i][1],new LiteratureEntry(s[i][2],s[i][3]));
-			Object value = struc.getProperty(p);
+			Object value = struc.getRecordProperty(p);
 			if (value ==null) System.out.println(p);
 			else
 				Assert.assertEquals(s[i][4],value.toString());

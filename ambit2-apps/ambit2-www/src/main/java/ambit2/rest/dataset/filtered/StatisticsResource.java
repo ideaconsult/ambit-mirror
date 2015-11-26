@@ -19,6 +19,7 @@ import org.restlet.routing.Template;
 
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.model.QueryCountModels;
+import ambit2.db.substance.QueryCountBundles;
 import ambit2.db.substance.QueryCountEndpoints;
 import ambit2.db.substance.QueryCountInterpretationResults;
 import ambit2.db.substance.QueryCountProtocolApplications;
@@ -33,11 +34,12 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.facet.AmbitFacetResource;
 
-
-public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCount<FACET>> extends AmbitFacetResource<FACET,Q>  {
+public class StatisticsResource<FACET extends IFacet<String>, Q extends QueryCount<FACET>>
+		extends AmbitFacetResource<FACET, Q> {
 	public static String resource = "/stats";
 	public static String resourceKey = "mode";
 	protected StatsMode mode;
+
 	public enum StatsMode {
 		structures {
 			@Override
@@ -45,16 +47,13 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 				return "/compound";
 			}
 		},
-		chemicals_in_dataset,
-		dataset_intersection,
-		properties {
+		chemicals_in_dataset, dataset_intersection, properties {
 			@Override
 			public String getURL() {
 				return "/feature";
 			}
 		},
-		values,
-		dataset {
+		values, dataset {
 			@Override
 			public String getURL() {
 				return "/dataset";
@@ -64,7 +63,7 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 			@Override
 			public String getURL() {
 				return "/model";
-			}			
+			}
 		},
 		substances {
 			@Override
@@ -83,129 +82,186 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 			public String getURL() {
 				return "/substance";
 			}
+
 			public String getTemplateName() {
 				return "facets/protocol_applications.ftl";
-			}			
+			}
+		},
+		study_summary {
+			@Override
+			public String getURL() {
+				return "/substance";
+			}
+
+			public String getTemplateName() {
+				return "facets/protocol_applications_summary.ftl";
+			}
 		},
 		interpretation_result {
 			@Override
 			public String getURL() {
 				return "/substance";
 			}
-	
-		}
-		;
-		
+			
+		},
+		bundles {
+			@Override
+			public String getURL() {
+				return "/bundle";
+			}
+			
+		};
+
 		public String getURL() {
 			return null;
 		}
+
 		public String getTemplateName() {
 			return "facet_statistics.ftl";
 		}
 	}
+
 	public StatisticsResource() {
 		super();
 		setHtmlbyTemplate(true);
 	}
-	
+
 	@Override
 	public String getTemplateName() {
 		return mode.getTemplateName();
 	}
-	
+
 	@Override
-	public IProcessor<Q, Representation> createConvertor(
-			Variant variant) throws AmbitException, ResourceException {
-		return super.createConvertor(variant); 	
+	public IProcessor<Q, Representation> createConvertor(Variant variant)
+			throws AmbitException, ResourceException {
+		return super.createConvertor(variant);
 	}
-	
+
 	protected StatsMode getSearchMode() {
 		try {
-			return StatsMode.valueOf(getRequest().getAttributes().get(resourceKey).toString());
+			return StatsMode.valueOf(getRequest().getAttributes()
+					.get(resourceKey).toString());
 		} catch (Exception x) {
 			return StatsMode.dataset;
 		}
 	}
 
 	@Override
-	protected Q createQuery(Context context,
-			Request request, Response response) throws ResourceException {
-		
-		String[] datasetsURI =  getParams().getValuesArray(OpenTox.params.dataset_uri.toString());
-		Template t = new Template(String.format("%s%s/{%s}",getRequest().getRootRef(),DatasetStructuresResource.dataset,DatasetStructuresResource.datasetKey));
+	protected Q createQuery(Context context, Request request, Response response)
+			throws ResourceException {
+
+		String[] datasetsURI = getParams().getValuesArray(
+				OpenTox.params.dataset_uri.toString());
+		Template t = new Template(String.format("%s%s/{%s}", getRequest()
+				.getRootRef(), DatasetStructuresResource.dataset,
+				DatasetStructuresResource.datasetKey));
 		setStatus(Status.SUCCESS_OK);
 		mode = getSearchMode();
 		switch (mode) {
 		case dataset_intersection: {
 			QueryCountDatasetIntersection q = null;
-			for (int i=0; i < datasetsURI.length;i++ ) {
-				if (q==null) q = new QueryCountDatasetIntersection(null);
+			for (int i = 0; i < datasetsURI.length; i++) {
+				if (q == null)
+					q = new QueryCountDatasetIntersection(null);
 				String datasetURI = datasetsURI[i];
 				Map<String, Object> vars = new HashMap<String, Object>();
 				t.parse(datasetURI, vars);
-				if (i==0) q.setFieldname(vars.get(DatasetStructuresResource.datasetKey).toString());
-				else q.setValue(vars.get(DatasetStructuresResource.datasetKey).toString());
-			}	
-			if (q==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Missing dataset_uri parameters!");
-			return (Q)q;
+				if (i == 0)
+					q.setFieldname(vars.get(
+							DatasetStructuresResource.datasetKey).toString());
+				else
+					q.setValue(vars.get(DatasetStructuresResource.datasetKey)
+							.toString());
+			}
+			if (q == null)
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+						"Missing dataset_uri parameters!");
+			return (Q) q;
 		}
 		case structures: {
-			return (Q)new QueryCount<FACET>(mode.getURL());
+			return (Q) new QueryCount<FACET>(mode.getURL());
 		}
 		case properties: {
-			return (Q)new QueryCountProperties(mode.getURL());
-		}		
+			return (Q) new QueryCountProperties(mode.getURL());
+		}
 		case values: {
 			return (Q) new QueryCountValues(mode.getURL());
-		}		
+		}
 		case dataset: {
-			return (Q)new QueryCountDataset(mode.getURL());
-		}	
+			return (Q) new QueryCountDataset(mode.getURL());
+		}
 		case models: {
-			return (Q)new QueryCountModels(mode.getURL());
+			return (Q) new QueryCountModels(mode.getURL());
 		}
 		case substances: {
-			return (Q)new QueryCountSubstances(mode.getURL());
-		}		
+			return (Q) new QueryCountSubstances(mode.getURL());
+		}
 		case experiment_endpoints: {
 			QueryCountEndpoints q = new QueryCountEndpoints(mode.getURL());
 			q.setFieldname(getParams().getFirstValue("top"));
 			q.setValue(getParams().getFirstValue("category"));
 			q.setEndpoint(getParams().getFirstValue("search"));
-			return (Q)q;
-		}		
+			return (Q) q;
+		}
 		case protocol_applications: {
-			QueryCountProtocolApplications q = new QueryCountProtocolApplications(mode.getURL());
+			QueryCountProtocolApplications q = new QueryCountProtocolApplications(
+					mode.getURL());
 			q.setPageSize(1000);
-			//?bundle_uri=
-			//Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(getParams());
+			// ?bundle_uri=
+			// Object bundleURI =
+			// OpenTox.params.bundle_uri.getFirstValue(getParams());
 			Object bundleURI = getParams().getFirstValue("filterbybundle");
-			if (bundleURI!=null) {
+			if (bundleURI != null) {
 				Integer idbundle = getIdBundle(bundleURI, request);
 				q.setBundle(new SubstanceEndpointsBundle(idbundle));
-			}	
+			}
 			q.setFieldname(getParams().getFirstValue("topcategory"));
 			q.setValue(getParams().getFirstValue("category"));
-			return (Q)q;
+			return (Q) q;
+		}
+		case study_summary: {
+			QueryCountProtocolApplications q = new QueryCountProtocolApplications(
+					mode.getURL(),
+					QueryCountProtocolApplications._mode_related.detail);
+			q.setPageSize(2000);
+			// ?bundle_uri=
+			// Object bundleURI =
+			// OpenTox.params.bundle_uri.getFirstValue(getParams());
+			/*
+			 * Object bundleURI = getParams().getFirstValue("filterbybundle");
+			 * if (bundleURI!=null) { Integer idbundle = getIdBundle(bundleURI,
+			 * request); q.setBundle(new SubstanceEndpointsBundle(idbundle)); }
+			 */
+			q.setFieldname(getParams().getFirstValue("topcategory"));
+			q.setValue(getParams().getFirstValue("category"));
+			return (Q) q;
 		}
 		case interpretation_result: {
-			QueryCountInterpretationResults q = new QueryCountInterpretationResults(mode.getURL());
+			QueryCountInterpretationResults q = new QueryCountInterpretationResults(
+					mode.getURL());
 			q.setFieldname(getParams().getFirstValue("top"));
 			q.setValue(getParams().getFirstValue("category"));
 			q.setInterpretation_result(getParams().getFirstValue("search"));
-			return (Q)q;
-		}		
+			return (Q) q;
+		}
 		case chemicals_in_dataset: {
 			QueryCountChemicalInDataset q = null;
-			for (int i=0; i < datasetsURI.length;i++ ) {
-				if (q==null) q = new QueryCountChemicalInDataset(mode.getURL());
+			for (int i = 0; i < datasetsURI.length; i++) {
+				if (q == null)
+					q = new QueryCountChemicalInDataset(mode.getURL());
 				String datasetURI = datasetsURI[i];
 				Map<String, Object> vars = new HashMap<String, Object>();
 				t.parse(datasetURI, vars);
-				q.setFieldname(vars.get(DatasetStructuresResource.datasetKey).toString());
-			}	
-			if (q==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Missing dataset_uri parameters!");
-			return (Q)q;
+				q.setFieldname(vars.get(DatasetStructuresResource.datasetKey)
+						.toString());
+			}
+			if (q == null)
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+						"Missing dataset_uri parameters!");
+			return (Q) q;
+		}
+		case bundles : {
+			return (Q) new QueryCountBundles(mode.getURL());
 		}
 		default: {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
@@ -214,17 +270,15 @@ public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCoun
 
 	}
 
-	
 	@Override
 	public void configureTemplateMap(Map<String, Object> map, Request request,
 			IFreeMarkerApplication app) {
 		super.configureTemplateMap(map, request, app);
-		map.put("facet_title","Statistics");/*
-		map.put("facet_tooltip","");
-		map.put("facet_group","");
-		map.put("facet_subgroup","");
-		map.put("facet_count","count");
-		*/
+		map.put("facet_title", "Statistics");/*
+											 * map.put("facet_tooltip","");
+											 * map.put("facet_group","");
+											 * map.put("facet_subgroup","");
+											 * map.put("facet_count","count");
+											 */
 	}
 }
-

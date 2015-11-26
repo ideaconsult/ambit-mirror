@@ -158,6 +158,8 @@ public abstract class DbUnitTest {
 	// SET NAMES utf8
 	IDatabaseConnection c = new DatabaseConnection(jdbcConnection);
 	DatabaseConfig dbConfig = c.getConfig();
+	
+	dbConfig.setProperty(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS, Boolean.TRUE);
 	dbConfig.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
 	/*
 	 * dbConn.getConfig().setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER

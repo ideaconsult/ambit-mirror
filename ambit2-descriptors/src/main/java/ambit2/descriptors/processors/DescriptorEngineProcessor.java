@@ -20,7 +20,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 
 package ambit2.descriptors.processors;
 
@@ -29,39 +29,47 @@ import java.util.List;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 
+import org.openscience.cdk.IImplementationSpecification;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorEngine;
-import org.openscience.cdk.qsar.DescriptorSpecification;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+
 /**
  * Calculates descriptors found in cdk jars. Uses {@link DescriptorEngine}
+ * 
  * @author Nina Jeliazkova
- *
+ * 
  */
-public class DescriptorEngineProcessor extends DefaultAmbitProcessor<IAtomContainer, List<DescriptorSpecification>> {
+public class DescriptorEngineProcessor
+		extends
+		DefaultAmbitProcessor<IAtomContainer, List<IImplementationSpecification>> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3482009837842377453L;
 	protected DescriptorEngine engine;
+
 	public DescriptorEngineProcessor() {
 		super();
-		engine = new DescriptorEngine(DescriptorEngine.MOLECULAR);
+		List classNames = DescriptorEngine.getDescriptorClassNameByPackage(
+				"org.openscience.cdk.qsar.descriptors.molecular", null);
+		engine = new DescriptorEngine(classNames,SilentChemObjectBuilder.getInstance());
 
 	}
+
 	public DescriptorEngine getDescriptorEngine() {
 		return engine;
 	}
-	public List<DescriptorSpecification> process(IAtomContainer target) throws AmbitException {
-			try {
-				engine.process(target);
-			} catch (CDKException x) {
-				throw new AmbitException(x);
-			}
+
+	public List<IImplementationSpecification> process(IAtomContainer target)
+			throws AmbitException {
+		try {
+			engine.process(target);
+		} catch (CDKException x) {
+			throw new AmbitException(x);
+		}
 		return engine.getDescriptorSpecifications();
 	}
- 
 
 }
-
-

@@ -10,6 +10,7 @@ import net.idea.modbcum.i.query.QueryParam;
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;
 import org.openscience.cdk.fingerprint.Fingerprinter;
+import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.base.data.Property;
@@ -157,9 +158,14 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		
 	}
 	
+	/**
+	 * gen = SmilesGenerator.unique().aromatic()
+	 * [Br-].[CH]:1:[CH]:[CH]:[C](:[CH]:[CH]1)[P+]([C]:2:[CH]:[CH]:[CH]:[CH]:[CH]2)([C]:3:[CH]:[CH]:[CH]:[CH]:[CH]3)CC
+	 * @throws Exception
+	 */
 	@Test
 	public void testSelectBySmiles() throws Exception {
-		QueryCombined q = createQuery(ExactStructureSearchMode.smiles,"[Br-].c1ccc(cc1)[P+](c2ccccc2)(c3ccccc3)CC");
+		QueryCombined q = createQuery(ExactStructureSearchMode.smiles,	"[Br-].c1ccc(cc1)[P+](c2ccccc2)(c3ccccc3)CC");
 		q.setId(-1);
 		setUpDatabase(getDbFile());
 		IDatabaseConnection c = getConnection();

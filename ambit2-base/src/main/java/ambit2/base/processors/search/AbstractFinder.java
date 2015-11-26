@@ -221,8 +221,8 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 	protected IStructureRecord transformResult(IStructureRecord record,IStructureRecord result) throws AmbitException {
 		record.setContent(result.getContent());
 		record.setFormat(result.getFormat());
-		for (Property key : result.getProperties())
-			record.setProperty(key, result.getProperty(key));
+		for (Property key : result.getRecordProperties())
+			record.setRecordProperty(key, result.getRecordProperty(key));
 		return record;
 	}
 	
@@ -238,7 +238,7 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 	}
 	
 	protected Object retrieveValue(IStructureRecord target, Property key) throws AmbitException {
-		 return target.getProperty(key);
+		 return target.getRecordProperty(key);
 	}
 	
 	@Override

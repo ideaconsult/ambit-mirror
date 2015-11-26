@@ -1,14 +1,16 @@
 package ambit2.rest.test.dataset;
 
 import org.junit.Test;
-import org.opentox.dsl.OTOntologyService;
 
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.rest.legacy.OTOntologyService;
 import ambit2.rest.rdf.chembl.ChEMBLRawReader;
 import ambit2.rest.test.ResourceTest;
 
 import com.hp.hpl.jena.query.QuerySolution;
+
+
 
 public class ChemBLTest extends ResourceTest {
 	@Override
@@ -79,9 +81,9 @@ public class ChemBLTest extends ResourceTest {
 			IStructureRecord record = reader.nextRecord();
 			
 			System.out.println(record);
-			for (Property key : record.getProperties()) {
+			for (Property key : record.getRecordProperties()) {
 				System.out.println(String.format("%s\t%s\t%s\t%s\t%s\t%s",
-						record.getProperty(key),
+						record.getRecordProperty(key),
 						key.getName(),key.getLabel(),key.getTitle(),key.getUnits(),key.getUrl()
 						));	
 			}

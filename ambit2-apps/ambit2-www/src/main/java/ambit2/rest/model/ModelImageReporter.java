@@ -10,6 +10,7 @@ import net.idea.modbcum.r.QueryReporter;
 import net.idea.restnet.c.task.ClientResourceWrapper;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -20,7 +21,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.model.predictor.ModelPredictor;
@@ -84,10 +84,10 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 		firstmol.addQueryParameter("max", "1");
 		ClientResourceWrapper client = new ClientResourceWrapper(firstmol);
 		Representation r = null;
-		MyIteratingMDLReader reader = null;
+		IteratingSDFReader reader = null;
 		try {
 			r = client.get(ChemicalMediaType.CHEMICAL_MDLSDF);
-			reader = new MyIteratingMDLReader(r.getStream(),SilentChemObjectBuilder.getInstance());
+			reader = new IteratingSDFReader(r.getStream(),SilentChemObjectBuilder.getInstance());
 			while (reader.hasNext()) {
 				Object o = reader.next();
 				if (o instanceof IAtomContainer)

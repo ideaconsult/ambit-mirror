@@ -33,15 +33,15 @@ public class RetrieveFieldStructure extends RetrieveField<IStructureRecord> {
 			Object value = rs.getObject(5);
 			if (value == null) {
 				value = rs.getObject(6);
-				record.setProperty(p,value==null?Double.NaN:rs.getFloat(6));
+				record.setRecordProperty(p,value==null?Double.NaN:rs.getFloat(6));
 				p.setClazz(Number.class);
 			}
 			else 
 				if (NaN.equals(value.toString())) {
-					record.setProperty(p,Double.NaN);
+					record.setRecordProperty(p,Double.NaN);
 					p.setClazz(Number.class);
 				} else {
-					record.setProperty(p,rs.getString(5));
+					record.setRecordProperty(p,rs.getString(5));
 					p.setClazz(String.class);
 				}
 			return record;

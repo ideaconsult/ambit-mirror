@@ -3,34 +3,25 @@
  -----
  Nina Jeliazkova
  -----
- 2015/01/25
+ 2015/11/19
  -----
 
-AMBIT Web services
+AMBIT Web services 
 ~~~~~~~~~~
 
-  [ambit2.war 2.7.2] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.7.2/ambit2-www-2.7.2.war/download}Download}} {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.7.2/}README}}
+ [Latest release] {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-3.0.0/}ambit2.war 3.0.0}} | {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-3.0.0/}README}}
+   
+ [Previous releases] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/}ambit2.war 2.7.4 and before}}
   
-  [ambit2.war 2.7.1] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.7.1/ambit2-www-2.7.1.war/download}Download}} {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.7.1/}README}}
-  
-  [ambit2.war 2.5.9] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.5.9/ambit2-www-2.5.9.war/download}Download}} {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.5.9/}README}}
+ [Development] {{{http://ambit.uni-plovdiv.bg:8083/nexus/#nexus-search;gav~~ambit2-www~3.0.1-SNAPSHOT~war~}ambit2.war 3.0.1-SNAPSHOT}}
 
-  [ambit2.war 2.5.8] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.5.8/ambit2-www-2.5.8.war/download}Download}} {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.5.8/}README}}
-  
-  [ambit2.war 2.5.7] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.5.7/ambit2-www-2.5.7.war/download}Download}} {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.5.7/}README}}
-
-AMBIT modules
-~~~~~~~~~~
-
- [ambit2-core,db,descriptors,smarts,tautomers,and more-.jar 2.7.2] {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/2.7.2/}Download}} 
- 
- {{{./download_ambitlibs.html} AMBIT modules help}} 
+ [Custom releases] {{{./enanomapper.html} eNanoMapper prototype database}} 
 
 AMBIT API
 ~~~~~~~~~~
 
   {{{http://ideaconsult.github.io/examples-ambit/apidocs/}AMBIT REST API documentation (live)}}  
-   
+
 Source code examples
 ~~~~~~~~~~
 
@@ -43,7 +34,7 @@ Source code examples
 Standalone applications
 ~~~~~~~~~~
 
- [Applicability domain] {{{./download_ambitdiscovery.html}AMBIT Discovery}}
+ [AMBIT command line] {{{./download_ambitcli.html}Standardisation, file processing, database import}}
  
  [Tautomers generation (command line)] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/tautomers/ambit-tautomers-2.0.0-SNAPSHOT.jar/download}ambit-tautomers-2.0.0-SNAPSHOT.jar}} 
 
@@ -51,5 +42,18 @@ Standalone applications
  
  [Molbrowser] {{{https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example}Converts SDF file to a static web page}}
  
+ [Applicability domain] {{{./download_ambitdiscovery.html}AMBIT Discovery}}
+ 
+AMBIT modules
+~~~~~~~~~~
+
+ AMBIT consists of multiple [*Maven modules*](http://maven.apache.org/) with well defined dependencies, which can be used in a stand alone mode or embedded in other applications. 
+ 
+ ambit2-core,db,descriptors,smarts,tautomers,and more-.jar {{{./download_ambitlibs.html}?}}  
+ 
+ [Latest release] {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/3.0.0/}ambit2-*-3.0.0.jar}}
+
+ [Previous releases] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/}Download}}
+
  
  

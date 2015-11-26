@@ -9,10 +9,8 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -27,6 +25,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.core.data.model.ModelQueryResults;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.db.chemrelation.UpdateStructureRelation;
@@ -34,9 +33,11 @@ import ambit2.db.processors.RepositoryWriter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.predictor.AbstractStructureProcessor;
 import ambit2.rest.property.PropertyURIReporter;
+import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 
-public class TautomersGenerator  extends	AbstractStructureProcessor<TautomerManager> {
+public class TautomersGenerator extends
+		AbstractStructureProcessor<TautomerManager> {
 
 	/**
 	 * 
@@ -47,18 +48,17 @@ public class TautomersGenerator  extends	AbstractStructureProcessor<TautomerMana
 	protected RepositoryWriter writer;
 	protected FixBondOrdersTool kekulizer = new FixBondOrdersTool();
 	protected UpdateStructureRelation updateStrucRelationQuery = new UpdateStructureRelation();
-	
-	public TautomersGenerator(
-			Reference applicationRootReference,
-			ModelQueryResults model, 
-			ModelURIReporter modelReporter,
-			PropertyURIReporter propertyReporter, 
-			String[] targetURI) throws ResourceException {
-		super(applicationRootReference,model,modelReporter,propertyReporter,targetURI);
+
+	public TautomersGenerator(Reference applicationRootReference,
+			ModelQueryResults model, ModelURIReporter modelReporter,
+			PropertyURIReporter propertyReporter, String[] targetURI)
+			throws ResourceException {
+		super(applicationRootReference, model, modelReporter, propertyReporter,
+				targetURI);
 		structureRequired = true;
 		valuesRequired = false;
 	}
-	
+
 	@Override
 	public void setConnection(Connection connection) throws DbAmbitException {
 		super.setConnection(connection);
@@ -69,20 +69,25 @@ public class TautomersGenerator  extends	AbstractStructureProcessor<TautomerMana
 		writer.setDataset(new SourceDataset("TAUTOMERS"));
 		writer.setUseExistingStructure(true);
 	}
+
 	@Override
 	public void close() throws Exception {
-		try {writer.setConnection(null);} catch (Exception x) {}
+		try {
+			writer.setConnection(null);
+		} catch (Exception x) {
+		}
 		super.close();
 	}
 
 	@Override
 	public synchronized TautomerManager createPredictor(ModelQueryResults model)
 			throws ResourceException {
-			try {
-				return new TautomerManager();
-			} catch (Exception x) {
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
-			}
+		try {
+			return new TautomerManager();
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+					x.getMessage(), x);
+		}
 	}
 
 	@Override
@@ -93,98 +98,118 @@ public class TautomersGenerator  extends	AbstractStructureProcessor<TautomerMana
 
 	@Override
 	public Object predict(IStructureRecord target) throws AmbitException {
-		
+
 		IAtomContainer best = null;
 		updateStrucRelationQuery.setGroup(target);
-		updateStrucRelationQuery.setRelation(STRUCTURE_RELATION.HAS_TAUTOMER.name());
-		
+		updateStrucRelationQuery.setRelation(STRUCTURE_RELATION.HAS_TAUTOMER
+				.name());
+
 		try {
 			IAtomContainer mol = reader.process(target);
-			if (mol!= null) {
-				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			if (mol != null) {
+				AtomContainerManipulator
+						.percieveAtomTypesAndConfigureAtoms(mol);
 				CDKHueckelAromaticityDetector.detectAromaticity(mol);
 				boolean aromatic = false;
-				for (IBond bond : mol.bonds()) if (bond.getFlag(CDKConstants.ISAROMATIC)) {aromatic = true; break;}
-				if (aromatic && (mol instanceof IMolecule)) mol = kekulizer.kekuliseAromaticRings((IMolecule)mol);
+				for (IBond bond : mol.bonds())
+					if (bond.getFlag(CDKConstants.ISAROMATIC)) {
+						aromatic = true;
+						break;
+					}
+				if (aromatic && (mol instanceof IAtomContainer))
+					mol = kekulizer.kekuliseAromaticRings( mol);
 
-				//implicit H count is NULL if read from InChI ...
+				// implicit H count is NULL if read from InChI ...
 				mol = AtomContainerManipulator.removeHydrogens(mol);
-				CDKHydrogenAdder.getInstance(mol.getBuilder()).addImplicitHydrogens(mol);
-				
-				List<IAtomContainer> resultTautomers=null;
+				CDKHydrogenAdder.getInstance(mol.getBuilder())
+						.addImplicitHydrogens(mol);
+
+				List<IAtomContainer> resultTautomers = null;
 				predictor.setStructure(mol);
 				resultTautomers = predictor.generateTautomersIncrementaly();
 				double bestRank = 0;
 
-				
 				IStructureRecord newrecord = new StructureRecord();
-				if (resultTautomers.size()>0) {
+				if (resultTautomers.size() > 0) {
 					writer.setConnection(connection);
 				}
-				for (IAtomContainer tautomer: resultTautomers) {
+				for (IAtomContainer tautomer : resultTautomers) {
 					try {
-						Object rank_property = tautomer.getProperty("TAUTOMER_RANK");
+						Object rank_property = tautomer
+								.getProperty(TautomerConst.TAUTOMER_RANK);
 						double rank;
 						if (rank_property == null) {
-							logger.log(Level.INFO, String.format("No tautomer rank, probably this is the original structure"));
+							logger.log(
+									Level.INFO,
+									String.format("No tautomer rank, probably this is the original structure"));
 							continue;
 						} else {
 							rank = Double.parseDouble(rank_property.toString());
 							/**
 							 * The rank is energy based, lower rank is better
 							 */
-							if ((best==null) || (bestRank>rank)) {
+							if ((best == null) || (bestRank > rank)) {
 								bestRank = rank;
 								best = tautomer;
 							}
 						}
 						aromatic = false;
-						for (IBond bond : tautomer.bonds()) if (bond.getFlag(CDKConstants.ISAROMATIC)) {aromatic = true; break;}
-						if (aromatic) 
-							tautomer = kekulizer.kekuliseAromaticRings((IMolecule)tautomer);
-						
-						
-						StringWriter w = new StringWriter();
-						SDFWriter molwriter = new SDFWriter(w); 
+						for (IBond bond : tautomer.bonds())
+							if (bond.getFlag(CDKConstants.ISAROMATIC)) {
+								aromatic = true;
+								break;
+							}
+						if (aromatic)
+							tautomer = kekulizer
+									.kekuliseAromaticRings(tautomer);
 
-						//tautomer.getProperties().clear();
+						StringWriter w = new StringWriter();
+						SDFWriter molwriter = new SDFWriter(w);
+
+						// tautomer.getProperties().clear();
 						molwriter.write(tautomer);
 						w.write("$$$$\n");
 						molwriter.close();
-						
+
 						newrecord.clear();
 						newrecord.setContent(w.toString());
 						newrecord.setFormat(MOL_TYPE.SDF.name());
 						molwriter.close();
-						List<IStructureRecord> strucWritten = writer.write(newrecord);
+						List<IStructureRecord> strucWritten = writer
+								.write(newrecord);
 						for (IStructureRecord struc : strucWritten) {
-							//if (target.getIdchemical()==struc.getIdchemical()) continue;
+							// if
+							// (target.getIdchemical()==struc.getIdchemical())
+							// continue;
 							updateStrucRelationQuery.setObject(struc);
 							updateStrucRelationQuery.setMetric(rank);
 							exec.process(updateStrucRelationQuery);
-							
+
 						}
 					} catch (Exception x) {
 						logger.log(Level.WARNING, x.getMessage());
 					}
-					//if (all) writeResult(writer,molecule,tautomer);
-				}				
+					// if (all) writeResult(writer,molecule,tautomer);
+				}
 
 			}
 		} catch (Exception x) {
-			logger.log(Level.SEVERE,x.getMessage(),x);
+			logger.log(Level.SEVERE, x.getMessage(), x);
 		} finally {
 		}
-		return best==null?target:best; //return the best tautomer. all others are written
+		return best == null ? target : best; // return the best tautomer. all
+												// others are written
 	}
+
 	@Override
 	public String toString() {
 
 		StringBuilder b = new StringBuilder();
-		b.append(String.format("Structures required\t%s\n",structureRequired?"YES":"NO"));
+		b.append(String.format("Structures required\t%s\n",
+				structureRequired ? "YES" : "NO"));
 		b.append("Tautomers generator");
 		return b.toString();
-				
-	}	
+
+	}
 
 }

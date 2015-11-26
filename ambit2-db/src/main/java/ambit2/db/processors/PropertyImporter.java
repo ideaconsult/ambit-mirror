@@ -134,7 +134,7 @@ public class PropertyImporter extends AbstractRepositoryWriter<IAtomContainer, L
 	if (getPropertyKey() instanceof PropertyKey) {
 	    IStructureRecord structure = new StructureRecord();
 	    structure.setReference(getDataset().getReference());
-	    structure.addProperties(molecule.getProperties());
+	    structure.addRecordProperties(molecule.getProperties());
 	    return queryKey.process(structure);
 	} else
 	    return queryKey.process(molecule);
@@ -170,7 +170,7 @@ public class PropertyImporter extends AbstractRepositoryWriter<IAtomContainer, L
 		    continue;
 		structure.setReference(getDataset().getReference());
 		structure.clearProperties();
-		structure.addProperties(molecule.getProperties());
+		structure.addRecordProperties(molecule.getProperties());
 		writeDataset(structure);
 		propertyWriter.process(structure);
 		sr.add(structure);

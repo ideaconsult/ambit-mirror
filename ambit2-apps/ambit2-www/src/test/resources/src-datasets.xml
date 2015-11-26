@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <ausers user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="false"/>
-  <ausers user_name="admin" email="admin" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="false"/>
+  <ausers user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="0"/>
+  <ausers user_name="admin" email="admin" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="0"/>
   <bookmark idbookmark="1" creator="test" recalls="http://example.com" hasTopic="Model" title="my model" description="" created="2010-08-11 19:05:19.0" date="2010-08-11 19:05:19.0"/>
   <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org"/>
   <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org"/>
@@ -14,7 +14,7 @@
  <catalog_references idreference="9" title="ambit2.descriptors.InChI" url="http://www.opentox.org/api/1.1#InChI" type="Algorithm"/>
  
   <chemicals idchemical="7" inchi="InChI=1/2C8H16O2.Sn/c2*1-3-5-6-7(4-2)8(9)10;/h2*7H,3-6H2,1-2H3,(H,9,10);/q;;+2/p-2" smiles="CCCCC(CC)C(=O)[O-].CCCCC(CC)C(=O)[O-].[SnH4+2]"/>
-  <chemicals idchemical="10" smiles="F.[F-].[Na+]"/>
+  <chemicals idchemical="10" smiles="[F-].[Na+].F"/>
   <chemicals idchemical="11" inchi="InChI=1S/C20H20P.BrH/c1-2-21(18-12-6-3-7-13-18,19-14-8-4-9-15-19)20-16-10-5-11-17-20;/h3-17H,2H2,1H3;1H/q+1;/p-1" smiles="[Br-].CC[P+](c1ccccc1)(c2ccccc2)c3ccccc3"/>
   <chemicals idchemical="29141" inchi="InChI=1/Fe" smiles="[Fe]"/>
   <structure idstructure="100211" idchemical="7" structure="5QwAAHicpVZdc6M2FH3nV6gzfbATgXUFCAhdz3ixE6fd2LtDmj7s7HgIUW0mNmQBbzf/vpcP2xgn
@@ -84,12 +84,12 @@ sXhCUTdsR14v8i7RGiVpnjBHW+3AI9GlFx7QIhcVUCSt0Yc04xRx2JB0eh2z/22pnsPrFqbvkC1S
 Lf/AViB7IYdSfChwK8oKdH0Uk0Et1En4pAYL5iThDQ+Mnh/hqX7R5q8+M3Sknsze2AY+Hzzj4MZW
 QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
 96B/xsDkzg==" format="SDF" updated="2008-10-29 06:35:33.0" user_name="guest" type_structure="2D with H"/>
-   <properties idproperty="1" idreference="8" name="Property 1" units="" comments="Property" islocal="false"/>
-  <properties idproperty="2" idreference="8" name="Property 2" units="" comments="Property" islocal="false"/>
-  <properties idproperty="3" idreference="8" name="CAS" units="" comments="http://www.opentox.org/api/1.1#CASRN" islocal="false"/>
-   <properties idproperty="4" idreference="9" name="http://www.opentox.org/api/1.1#InChI_std" units="" comments="http://www.opentox.org/api/1.1#InChI_std" islocal="false" ptype="STRING"/>
-  <properties idproperty="5" idreference="9" name="http://www.opentox.org/api/1.1#InChI_AuxInfo_std" units="" comments="http://www.opentox.org/api/1.1#InChI_AuxInfo_std" islocal="false" ptype="STRING"/>
-  <properties idproperty="6" idreference="9" name="http://www.opentox.org/api/1.1#InChIKey_std" units="" comments="http://www.opentox.org/api/1.1#InChIKey_std" islocal="false" ptype="STRING"/>
+   <properties idproperty="1" idreference="8" name="Property 1" units="" comments="Property" islocal="0"/>
+  <properties idproperty="2" idreference="8" name="Property 2" units="" comments="Property" islocal="0"/>
+  <properties idproperty="3" idreference="8" name="CAS" units="" comments="http://www.opentox.org/api/1.1#CASRN" islocal="0"/>
+   <properties idproperty="4" idreference="9" name="http://www.opentox.org/api/1.1#InChI_std" units="" comments="http://www.opentox.org/api/1.1#InChI_std" islocal="0" ptype="STRING"/>
+  <properties idproperty="5" idreference="9" name="http://www.opentox.org/api/1.1#InChI_AuxInfo_std" units="" comments="http://www.opentox.org/api/1.1#InChI_AuxInfo_std" islocal="0" ptype="STRING"/>
+  <properties idproperty="6" idreference="9" name="http://www.opentox.org/api/1.1#InChIKey_std" units="" comments="http://www.opentox.org/api/1.1#InChIKey_std" islocal="0" ptype="STRING"/>
  
   <template idtemplate="1" name="BCF"/>
   <template idtemplate="3" name="Empty"/>

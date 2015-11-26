@@ -97,11 +97,12 @@ public class SubstanceStudyResource<Q extends IQueryRetrieval<ProtocolApplicatio
 					ProtocolApplication papp = new ProtocolApplication(p);
 					if (property_uri!=null) try {
 						//not nice REST style, but easiest to parse the URI
+						//not nice REST style, but easiest to parse the URI
 						Reference puri = new Reference(property_uri.endsWith("/")?property_uri.substring(0, property_uri.length()-2):property_uri);
-						//the very last segment denotes study type, the previous one is the endpoint hash
+						//the very last segment denotes protocol, then study type, then one is the endpoint hash
 						if (puri.getSegments().get(puri.getSegments().size()-1).indexOf("-") > 0) //this is the protocol
 						    property=puri.getSegments().get(puri.getSegments().size()-3);
-						else
+						else    
 						    property=puri.getSegments().get(puri.getSegments().size()-2);
 						if (property.length()!=40) property = null;
 					} catch (Exception x) {}

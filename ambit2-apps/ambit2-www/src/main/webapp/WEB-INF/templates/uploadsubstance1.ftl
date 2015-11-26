@@ -31,16 +31,13 @@ $(document)
 <!-- banner -->
 <#include "/banner_crumbs.ftl">
 
-<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/searchmenu/menu_substance.ftl">
-
-</div>
-
+<div class="one column remove-bottom" style="padding:0;" >
+&nbsp;</div>
 
 		<!-- Page Content
 		================================================== -->
 
-<div class="eleven columns remove-bottom" style="padding:0;" >
+<div class="thirteen columns remove-bottom" style="padding:0;" >
 
 <div class='ui-widget-header ui-corner-top'>&nbsp;Import new substance(s)</div>
 <div class='ui-widget-content ui-corner-bottom'>	

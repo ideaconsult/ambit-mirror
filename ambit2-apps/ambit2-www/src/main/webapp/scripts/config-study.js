@@ -46,6 +46,9 @@ var config_study = {
                     		(data["year"]==null?"-":data["year"]) + 
                     		"</span>";
                     }
+                },
+                "reliability" : {
+                	"bVisible": false
                 }
             },
             "interpretation": {}
@@ -452,8 +455,10 @@ var config_study = {
         },
         "PROTEOMICS_SECTION": {
             "parameters": {
+		"bVisible" : false,
                 "type of method": {
                     "iOrder": -23,
+		    "bVisible" : true,
                     "sTitle": "Method type"
                 },
                 "method details": {
@@ -468,6 +473,7 @@ var config_study = {
                 "data_gathering_instruments": {
                     "sTitle": "Instruments",
                     "iOrder": -20,
+		  
                     "bVisible": true
                 },
                 "testmat_form": {
@@ -477,7 +483,7 @@ var config_study = {
                 }
             },
             "conditions": {
-             
+            	"bVisible": true
             },
             "effects": {
                 "endpoint": {
@@ -486,7 +492,7 @@ var config_study = {
                     "inMatrix": true
                 },
                 "text": {
-                    "bVisible": true,
+                    "bVisible": false,
                     "iOrder": -12,
                     "inMatrix": true
                 },                
@@ -496,6 +502,7 @@ var config_study = {
                 }
             },
             "protocol": {
+            	"bVisible": false,
                 "guideline": {
                     "iOrder": -5,
                     "inMatrix": true
@@ -518,10 +525,15 @@ var config_study = {
         },
         "UNKNOWN_TOXICITY_SECTION" : {
         	"parameters": {
+        		"sVisible" : false,
                 "type of method": {
-                    "sVisible" : false,
+                    "sVisible" : true,
                     "sTitle": "Method type"
-                }
+                },
+                "testmat_form": {
+                	"sVisible" : false,
+                "sTitle": "Test material form"
+            	}
         	},
             "effects": {
                 "endpoint": {
@@ -543,7 +555,10 @@ var config_study = {
                 },
                 "n": {
                     "bVisible": false
-                }                    
+                },
+		"medium" : {
+			"sTitle" : "Medium"
+		}                    
             
             },            
             "interpretation": {

@@ -24,7 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.smarts;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -37,8 +38,8 @@ import org.openscience.cdk.interfaces.IBond;
 public class TopLayer 
 {
 	public static final String  TLProp = "TL";
-	public Vector<IAtom> atoms = new Vector<IAtom>();
-	public Vector<IBond> bonds = new Vector<IBond>();
+	public List<IAtom> atoms = new ArrayList<IAtom>();
+	public List<IBond> bonds = new ArrayList<IBond>();
 			
 	static public void setAtomTopLayers(IAtomContainer container, Object propObj)
 	{	

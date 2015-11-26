@@ -126,10 +126,10 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
             try {
 	            Object ts = rs.getString(_sqlids.atomproperties.name());
 	            if ((ts==null) || "".equals(ts.toString().trim()))
-	            	r.removeProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp));
+	            	r.removeRecordProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp));
 	            else
-	            r.setProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp), ts);
-            } catch (Exception x) { r.removeProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp));}
+	            r.setRecordProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp), ts);
+            } catch (Exception x) { r.removeRecordProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp));}
 
             return r;
         } catch (SQLException x){

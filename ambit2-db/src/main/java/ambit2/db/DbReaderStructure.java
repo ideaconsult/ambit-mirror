@@ -88,10 +88,10 @@ public class DbReaderStructure extends DbReader<IStructureRecord> {
 		//looks like the metric is lost after retrieval!
 		Property metric = null;
 		Object metricValue = null;
-		for (Property property : object.getProperties())
+		for (Property property : object.getRecordProperties())
 			if ("metric".equals(property.getName())) {
 				metric = property; 
-				metricValue = object.getProperty(metric);
+				metricValue = object.getRecordProperty(metric);
 				break;
 			}
 
@@ -100,7 +100,7 @@ public class DbReaderStructure extends DbReader<IStructureRecord> {
 		object.setIdstructure(record.getIdstructure());
 		object.setContent(record.getContent());
 		object.setFormat(record.getFormat());
-		if ((metric !=null) && (metricValue!=null)) object.setProperty(metric,metricValue);
+		if ((metric !=null) && (metricValue!=null)) object.setRecordProperty(metric,metricValue);
 		return super.prescreen(query, record);
 	}
 	@Override

@@ -21,8 +21,9 @@
 }
 
 #sidebar span.side-open-close {
-  position: relative;
-	left: 355px;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 #sidebar .jtox-foldable {
@@ -35,19 +36,32 @@
 	height: 95%;
 }
 
+#sidebar-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 20px;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  font-size: 1em;
+}
+
 #sidebar .side-title {
   position: absolute;
   font-size: 110%;
   font-weight: bold;
-  right: -180px;
-  width: 100%;
+  right: -90px;
   bottom: 50%;
   text-align: center;
+  white-space: nowrap;
 	transform: rotate(270deg);
   -webkit-transform: rotate(270deg);
-  -moz-transform: rotate(270deg);   
-  -o-transform: rotate(270deg);  	
-  -ms-transform: rotate(270deg);  	
+  -moz-transform: rotate(270deg);
+  -o-transform: rotate(270deg);
+  -ms-transform: rotate(270deg);
 }
 
 #logger {
@@ -78,7 +92,6 @@
 
 #browser {
   position: relative;
-  top: 0px;
 	transition: top 0.3s ease 0.2s;
 	-moz-transition: top 0.3s ease 0.2s;
 	-webkit-transition: top 0.3s ease 0.2s;

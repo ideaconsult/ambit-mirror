@@ -40,6 +40,7 @@ public abstract class MasterDetailsProcessor<Master,Detail,C extends IQueryCondi
 	public void setConnection(Connection connection) throws DbAmbitException {
 		super.setConnection(connection);
 		if (exec==null) exec = new QueryExecutor<IQueryObject<Detail>>();
+		exec.setCache(true);
 		exec.setCloseConnection(false);
 		exec.setConnection(connection);
 	}

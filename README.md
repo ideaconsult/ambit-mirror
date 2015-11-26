@@ -5,14 +5,14 @@ This is multi module maven project.
 #Build
 
 Prerequisites for building AMBIT2
-JDK 1.6 or higher 
-MySQL 5.5 or higher (also compatible with MySQL 5.1 )
-Maven 2.x or 3.x
+JDK 1.7 or higher 
+MySQL 5.6.5 or higher 
+Maven 3.x
 
 1) to build ambit2 libraries:  
 
 Retrieve sources from SVN
-svn checkout svn://svn.code.sf.net/p/ambit/code/trunk/ambit2-all ambit-all
+svn checkout svn://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT ambit-all
 
 ambit2-all>mvn package
 
@@ -44,7 +44,7 @@ Root DB password is used only for creating a new database via dbunit tests , and
 Regular user and password are guest/guest by default and are used in database queries/writes.
 
 
-````
+````xml
 <settings xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -117,6 +117,18 @@ To skip the tests, use -DskipTests=true option
 
 ----------------------------------------------------------------------
 #CHANGELOG
+
+AMBIT2 3.0.0
+Upgrade to CDK 1.5.10
+Multiple dependencies updated
+Multiple refactoring and updates in all packages
+ambit2-www: UI for Read across workflow, with reporting. UI updates.
+ambit2-db: Database schema 8.12
+ambit2-dbcli: Added structure standardisation option 
+ambit2-smarts: Improved SMIRKS parser and matching
+ambit2-tautomers: Performance improvement, canonical tautomers
+ambit2-poi : all Apache POI dependent classes moved here
+
 
 AMBIT2 2.7.3-SNAPSHOT
 Current version at trunk

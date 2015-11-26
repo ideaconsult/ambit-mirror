@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
   <artifactId>ambit2-all</artifactId>
   <packaging>pom</packaging>
-  <version>2.7.6-SNAPSHOT</version>
+  <version>3.0.1-SNAPSHOT</version>
   <name>Ambit 2</name>
   <description>AMBIT offers chemoinformatics functionality via REST web services and desktop applications. Chemical compounds and data storage in MySQL database; substructure, similarity and other queries, descriptor calculation and predictive models building.</description>
   <url>http://ambit.sourceforge.net</url>
@@ -114,10 +114,10 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all</connection>
-    <developerConnection>scm:svn+ssh://USERNAME@svn.code.sf.net/p/ambit/code/trunk/ambit2-all</developerConnection>
+    <connection>scm:svn:https://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT</connection>
+    <developerConnection>scm:svn+ssh://USERNAME@svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT</developerConnection>
     <tag>scm:svn:https://svn.code.sf.net/p/ambit/code/tags</tag>
-    <url>https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all</url>
+    <url>https://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT</url>
   </scm>
   <organization>
     <name>Ideaconsult Ltd.</name>
@@ -211,7 +211,7 @@
             </execution>
           </executions>
           <configuration>
-            <revisionOnScmFailure>-SNAPSHOT</revisionOnScmFailure>
+            <revisionOnScmFailure>-${maven.build.timestamp}</revisionOnScmFailure>
             <doCheck>false</doCheck>
             <doUpdate>false</doUpdate>
             <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
@@ -310,6 +310,9 @@
     <module>ambit2-tautomers</module>
     <module>ambit2-ui</module>
     <module>ambit2-waffles</module>
+    <module>ambit2-rules</module>
+    <module>ambit2-poi</module>
+    <module>ambit2-fp</module>
   </modules>
   <distributionManagement>
     <!-- <repository> <id>dev_web_sourceforge</id> <url>scp://web.sourceforge.net/home/groups/a/am/ambit/htdocs/jars</url> 
@@ -518,13 +521,12 @@
 			since ambit 2.4.7-SNAPSHOT -->
     <!-- cdk 1.4.11 is regular version, deployed to ambit repository; used 
 			since ambit 2.4.7-SNAPSHOT -->
-    <cdk.version>1.4.11</cdk.version>
-   <restnet.version>1.0.9-SNAPSHOT</restnet.version>
-    <modbcum.version>1.0.6-SNAPSHOT</modbcum.version>
-    <dbunit.version>2.4.9</dbunit.version>
-    <rdf.jena.version>2.6.4</rdf.jena.version>
-    <rdf.arq.version>2.8.8</rdf.arq.version>
-    <rdf.arqextra.version>2.7.0</rdf.arqextra.version>
-    <rdf.iri.version>0.8</rdf.iri.version>
+	<!--  cdk 1.5.10 @ maven central since ambit 3.0.0 -->
+	<!--  cdk 1.5.11 @ maven central since ambit 3.0.0 Sep 2015-->				
+    <cdk.version>1.5.11</cdk.version>
+    <restnet.version>1.1.0</restnet.version>
+    <modbcum.version>1.0.7</modbcum.version>
+    <dbunit.version>2.5.1</dbunit.version>
+    
   </properties>
 </project>

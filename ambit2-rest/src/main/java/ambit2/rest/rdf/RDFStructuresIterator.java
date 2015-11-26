@@ -129,13 +129,13 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 		if (value.isLiteral()) {
 			RDFDatatype datatype = ((Literal)value).getDatatype();
 			if (XSDDatatype.XSDdouble.equals(datatype)) 
-				record.setProperty(key, ((Literal)value).getDouble());
+				record.setRecordProperty(key, ((Literal)value).getDouble());
 			else if (XSDDatatype.XSDfloat.equals(datatype)) 
-				record.setProperty(key, ((Literal)value).getFloat());
+				record.setRecordProperty(key, ((Literal)value).getFloat());
 			else if (XSDDatatype.XSDinteger.equals(datatype)) 
-				record.setProperty(key, ((Literal)value).getInt());		
+				record.setRecordProperty(key, ((Literal)value).getInt());		
 			else if (XSDDatatype.XSDstring.equals(datatype)) 
-				record.setProperty(key, value.toString());
+				record.setRecordProperty(key, value.toString());
 		}
 		
 	}
@@ -185,13 +185,13 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 				if (value.isLiteral()) {
 					RDFDatatype datatype = ((Literal)value).getDatatype();
 					if (XSDDatatype.XSDdouble.equals(datatype)) 
-						record.setProperty(key, ((Literal)value).getDouble());
+						record.setRecordProperty(key, ((Literal)value).getDouble());
 					else if (XSDDatatype.XSDfloat.equals(datatype)) 
-						record.setProperty(key, ((Literal)value).getFloat());
+						record.setRecordProperty(key, ((Literal)value).getFloat());
 					else if (XSDDatatype.XSDinteger.equals(datatype)) 
-						record.setProperty(key, ((Literal)value).getInt());		
+						record.setRecordProperty(key, ((Literal)value).getInt());		
 					else if (XSDDatatype.XSDstring.equals(datatype)) 
-						record.setProperty(key,  ((Literal)value).getString());
+						record.setRecordProperty(key,  ((Literal)value).getString());
 				}
 	
 			}

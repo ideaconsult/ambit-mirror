@@ -9,7 +9,7 @@ import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemSequence;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.io.DefaultChemObjectReader;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
@@ -24,7 +24,7 @@ public class IteratingChemObjectReaderWrapper extends
 		DefaultIteratingChemObjectReader {
 	protected IChemObject chemObject = null;
 	protected IResourceFormat format = null;
-	protected IMoleculeSet atomContainers = null;
+	protected IAtomContainerSet atomContainers = null;
 	protected int record = -1;
 	public IteratingChemObjectReaderWrapper(DefaultChemObjectReader reader) {
 		super();
@@ -42,8 +42,8 @@ public class IteratingChemObjectReaderWrapper extends
 					}	
 				}
 			} else
-			if (chemObject instanceof IMoleculeSet) 
-				atomContainers = (IMoleculeSet)chemObject; 
+			if (chemObject instanceof IAtomContainerSet) 
+				atomContainers = (IAtomContainerSet)chemObject; 
 		} catch (CDKException x) {
 			x.printStackTrace();
 			chemObject = null;

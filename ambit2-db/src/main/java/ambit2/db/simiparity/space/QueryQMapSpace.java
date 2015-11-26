@@ -121,7 +121,7 @@ public class QueryQMapSpace extends AbstractQuery<IStructureRecord,QMap,StringCo
 			qmap.setSimilarityThreshold(rs.getDouble(5));
 			qspace.getRecord().setIdchemical(rs.getInt(6));
 			qspace.getRecord().setIdstructure(-1);
-			qspace.getRecord().setProperty(qmap.getProperty(),rs.getDouble("value_num"));
+			qspace.getRecord().setRecordProperty(qmap.getProperty(),rs.getDouble("value_num"));
 			qspace.setG2(rs.getDouble("g2"));
 			qspace.setA(rs.getDouble("a"));
 			qspace.setB(rs.getDouble("b"));

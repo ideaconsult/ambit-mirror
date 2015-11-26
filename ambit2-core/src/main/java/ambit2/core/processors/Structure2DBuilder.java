@@ -9,8 +9,7 @@ import net.idea.modbcum.p.DefaultAmbitProcessor;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 
 import ambit2.core.data.MoleculeTools;
@@ -29,11 +28,11 @@ public class Structure2DBuilder extends DefaultAmbitProcessor<IAtomContainer, IA
 				molecule.getAtom(0).setPoint2d(new Point2d(new double[]{0.0001,0.0001}));
 				return molecule;
 			} else {			
-        	IMoleculeSet molecules =  ConnectivityChecker.partitionIntoMolecules(molecule);
+        	IAtomContainerSet molecules =  ConnectivityChecker.partitionIntoMolecules(molecule);
         	IAtomContainer newmol = MoleculeTools.newAtomContainer(molecules.getBuilder());
 	        for (int i=0; i < molecules.getAtomContainerCount();i++) {
 	        	IAtomContainer c = molecules.getAtomContainer(i);                	
-	            sdg.setMolecule((IMolecule)c,false);
+	            sdg.setMolecule((IAtomContainer)c,false);
 	            try {
 	            	sdg.generateCoordinates(new Vector2d(0,1));
 	            	newmol.add(sdg.getMolecule());

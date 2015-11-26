@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.core.io;
 
+import java.util.List;
+
 import org.openscience.cdk.io.formats.IChemFormatMatcher;
 
 /**
@@ -89,7 +91,11 @@ public class XLSFileFormat implements IChemFormatMatcher {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-    
+ 
+	@Override
+	public MatchResult matches(List<String> arg0) {
+		return null;
+	}
 }
 
 

@@ -1,5 +1,7 @@
 package ambit2.base.data.study;
 
+import net.idea.modbcum.i.JSONSerializable;
+
 /**
  * 
  * @author nina
@@ -17,7 +19,7 @@ package ambit2.base.data.study;
 	}
 </pre> 
  */
-public interface IValue<VALUE,QUALIFIER,UNITS> {
+public interface IValue<VALUE,QUALIFIER,UNITS> extends JSONSerializable {
 	public UNITS getUnits();
 	/**
 	 * 

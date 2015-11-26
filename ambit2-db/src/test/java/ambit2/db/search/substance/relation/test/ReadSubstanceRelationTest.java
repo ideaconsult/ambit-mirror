@@ -38,7 +38,7 @@ public class ReadSubstanceRelationTest extends QueryTest<ReadSubstanceRelation> 
 		while (rs.next()) {
 			IStructureRecord record = query.getObject(rs);
 			Assert.assertEquals(11,record.getIdchemical());
-			for (Property p : record.getProperties()) {
+			for (Property p : record.getRecordProperties()) {
 				//Assert.assertEquals("metric",p.getName());
 				//Assert.assertEquals(new Float(10.0),record.getProperty(p));
 			}

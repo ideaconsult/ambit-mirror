@@ -62,11 +62,11 @@ public class EINECSKey extends PropertyKey<String> {
 		if (structure == null)
 			throw new AmbitException("Empty molecule!");
 
-		if ((key == null) || (structure.getProperty(key) == null)) {
+		if ((key == null) || (structure.getRecordProperty(key) == null)) {
 			// find which key corresponds to EINECS
-			for (Property newkey : structure.getProperties()) {
+			for (Property newkey : structure.getRecordProperties()) {
 				if (newkey.getName().contains("RELATED")) continue;
-				Object einecs = structure.getProperty(newkey);
+				Object einecs = structure.getRecordProperty(newkey);
 				if (einecs == null)
 					continue;
 				if (!isKeyValid(newkey)) continue;
@@ -79,7 +79,7 @@ public class EINECSKey extends PropertyKey<String> {
 		}
 		if (key == null)
 			throw new AmbitException("EINECS tag not defined");
-		Object o = structure.getProperty(key);
+		Object o = structure.getRecordProperty(key);
 		if (o == null)
 			return null;
 		if (EINECS.isValidFormat(o.toString()))

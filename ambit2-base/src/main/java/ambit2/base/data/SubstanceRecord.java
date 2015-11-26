@@ -255,9 +255,9 @@ public class SubstanceRecord extends StructureRecord {
 
 	public void setReferenceSubstanceUUID(String uuid) {
 		if (uuid == null)
-			removeProperty(Property.getI5UUIDInstance());
+			removeRecordProperty(Property.getI5UUIDInstance());
 		else
-			setProperty(Property.getI5UUIDInstance(), uuid);
+			setRecordProperty(Property.getI5UUIDInstance(), uuid);
 	}
 
 	/**
@@ -267,7 +267,7 @@ public class SubstanceRecord extends StructureRecord {
 	 * @return
 	 */
 	public String getReferenceSubstanceUUID() {
-		Object name = getProperty(Property.getI5UUIDInstance());
+		Object name = getRecordProperty(Property.getI5UUIDInstance());
 		return name == null ? null : name.toString();
 	}
 

@@ -23,7 +23,7 @@ public class CreateAtomEnvironment extends AbstractUpdate<IStructureRecord,IStru
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class, getGroup().getIdchemical()));
 		
-		AtomEnvironment ae = ((AtomEnvironmentList)getGroup().getProperty(property)).get(index);
+		AtomEnvironment ae = ((AtomEnvironmentList)getGroup().getRecordProperty(property)).get(index);
 		params.add(new QueryParam<String>(String.class, ae.getCentral_atom()));
 		params.add(new QueryParam<Integer>(Integer.class, ae.getFrequency()));
 
@@ -38,7 +38,7 @@ public class CreateAtomEnvironment extends AbstractUpdate<IStructureRecord,IStru
 
 	@Override
 	public String[] getSQL() throws AmbitException {
-		AtomEnvironmentList ae = (AtomEnvironmentList)getGroup().getProperty(property);
+		AtomEnvironmentList ae = (AtomEnvironmentList)getGroup().getRecordProperty(property);
 		String[] sql = new String[ae.size()];
 		for (int i=0; i < ae.size();i++)
 			sql[i] = ae_sql;

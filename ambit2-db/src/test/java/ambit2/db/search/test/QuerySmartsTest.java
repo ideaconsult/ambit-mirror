@@ -153,7 +153,7 @@ public class QuerySmartsTest extends QueryTest<QuerySMARTS> {
 			} catch (Exception x) {
 				x.printStackTrace();
 			}
-			Assert.assertNotNull(record.getProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp)));
+			Assert.assertNotNull(record.getRecordProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp)));
 			
 			/*
 			record.setProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp),

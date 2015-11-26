@@ -1,6 +1,6 @@
 package ambit2.db.update.fp;
 
-import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.descriptors.processors.FPTable;
 import ambit2.smarts.SmartsScreeningKeys;
 
 

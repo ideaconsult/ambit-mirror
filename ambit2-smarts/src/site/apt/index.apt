@@ -54,7 +54,7 @@ AMBIT {modules}
 
  * Included in ambit2-smarts package since version 2.4.2
 
- * Test SMIRKS {{{http://apps.ideaconsult.net/ambit2/depict/reaction?search=c1ccccc1&smirks=%5Bc%3A1%5D%5BH%3A2%5D%3E%3E%5Bc%3A1%5D%5BO%5D%5BH%3A2%5D}online}}
+ * Test SMIRKS {{{http://apps.ideaconsult.net/ambit3/depict/reaction?search=c1ccccc1&smirks=%5Bc%3A1%5D%5BH%3A2%5D%3E%3E%5Bc%3A1%5D%5BO%5D%5BH%3A2%5D}online}}
  
  * Used to specify reactions and as a basis for metabolite generation in {{{http://toxtree.sourceforge.net/download.html#Toxtree_2.5.0}Toxtree 2.5.0}} {{{http://toxtree.sourceforge.net/smartcyp.html}SMARTCyp}} plugin.  
  

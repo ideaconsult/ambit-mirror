@@ -10,7 +10,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.db.update.fp.Fingerprint;
 import ambit2.db.update.fp.IFingerprint;
 import ambit2.db.update.fp.ReadStructuresByFingerprint;
-import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.descriptors.processors.FPTable;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 

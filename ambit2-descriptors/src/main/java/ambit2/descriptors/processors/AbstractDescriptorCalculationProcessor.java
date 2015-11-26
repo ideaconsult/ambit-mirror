@@ -3,9 +3,11 @@ package ambit2.descriptors.processors;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 
+import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IDescriptor;
 
+import ambit2.base.data.Property;
 import ambit2.core.data.AbstractDescriptorResultType;
 
 
@@ -40,7 +42,7 @@ public abstract class AbstractDescriptorCalculationProcessor<ITEM, DESCRIPTOR ex
 			return calculate(target);
 		} catch (Exception x) {
 				return new DescriptorValue(
-						descriptor.getSpecification(),
+						(DescriptorSpecification)descriptor.getSpecification(),
 						new String[]{},
 						new Object[]{},
 						new AbstractDescriptorResultType<Exception>(x),

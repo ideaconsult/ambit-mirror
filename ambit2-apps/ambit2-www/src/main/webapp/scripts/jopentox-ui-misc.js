@@ -13,7 +13,12 @@ $(function() {$( ".datatable" ).dataTable({
 	});
 });
 
-$(function() {$( ".tabs" ).tabs({cache: true});});
+$(document)
+.ready(
+		function() {
+
+			$( ".tabs" ).tabs({cache: true});
+		});
 
 $(function() {$( "#selectable" ).selectable();});
 

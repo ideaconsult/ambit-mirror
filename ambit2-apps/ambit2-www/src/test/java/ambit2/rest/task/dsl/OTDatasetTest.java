@@ -4,14 +4,14 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Assert;
 import org.junit.Test;
-import org.opentox.dsl.OTDataset;
-import org.opentox.dsl.OTDatasets;
-import org.opentox.dsl.OTFeature;
-import org.opentox.dsl.OTFeatures;
-import org.opentox.rdf.iterators.RDFFeaturesIterator;
 import org.restlet.data.Reference;
 
 import ambit2.rest.OpenTox;
+import ambit2.rest.legacy.OTDataset;
+import ambit2.rest.legacy.OTDatasets;
+import ambit2.rest.legacy.OTFeature;
+import ambit2.rest.legacy.OTFeatures;
+import ambit2.rest.legacy.RDFFeaturesIterator;
 import ambit2.rest.test.ResourceTest;
 
 public class OTDatasetTest extends ResourceTest {

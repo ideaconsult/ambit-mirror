@@ -38,10 +38,12 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.ext.mysql.MySqlDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Before;
 
@@ -126,8 +128,14 @@ public abstract class DbUnitTest {
                 String.format("jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8",
                 		host,port,db)
                 , user,pass);
-//SET NAMES utf8	        
-	   return new DatabaseConnection(jdbcConnection);
+	        
+    	IDatabaseConnection c = new DatabaseConnection(jdbcConnection);
+    	DatabaseConfig dbConfig = c.getConfig();
+    	
+    	dbConfig.setProperty(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS, Boolean.TRUE);
+    	dbConfig.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
+    	
+    	return c;
 	}	
 	protected IDatabaseConnection getConnection() throws Exception {
 	   return getConnection(getHost(),getDatabase(),getPort(),getUser(),getPWD());

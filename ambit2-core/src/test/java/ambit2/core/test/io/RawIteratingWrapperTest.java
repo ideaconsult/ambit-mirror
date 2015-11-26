@@ -9,7 +9,7 @@ import java.util.Iterator;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit2.base.data.LiteratureEntry;
@@ -55,7 +55,7 @@ public class RawIteratingWrapperTest {
 
 		int count = 0;
 		while(reader.hasNext()) {
-			IMolecule record = (IMolecule) reader.next();
+			IAtomContainer record = (IAtomContainer) reader.next();
 			Assert.assertEquals(10,record.getProperties().size());
 			Iterator<Object> keys = record.getProperties().keySet().iterator();
 			while (keys.hasNext()) {
@@ -84,10 +84,10 @@ public class RawIteratingWrapperTest {
 			
 			System.out.println(normalized.getContent());
 			int rr = 0;
-			for (Property p : normalized.getProperties()) {
+			for (Property p : normalized.getRecordProperties()) {
 				rr++;
-				System.out.println(String.format(">>\t%s\t=%s", p.getName(),normalized.getProperty(p)));
-				Assert.assertNotNull(normalized.getProperty(p));
+				System.out.println(String.format(">>\t%s\t=%s", p.getName(),normalized.getRecordProperty(p)));
+				Assert.assertNotNull(normalized.getRecordProperty(p));
 			}
 			Assert.assertEquals(51,rr);
 			/*
@@ -116,18 +116,18 @@ public class RawIteratingWrapperTest {
 			IStructureRecord record = (IStructureRecord) reader.next();
 
 			IStructureRecord normalized = normalizer.process(record);
-			for (Property p: normalized.getProperties()) {
+			for (Property p: normalized.getRecordProperties()) {
 				if ("PUBCHEM_SID".equals(p.getName())) {
-						Assert.assertNotNull(normalized.getProperty(p));
+						Assert.assertNotNull(normalized.getRecordProperty(p));
 						sid++;
 				} else if ("PUBCHEM Name".equals(p.getName()))
-					Assert.assertNotNull(normalized.getProperty(p));
+					Assert.assertNotNull(normalized.getRecordProperty(p));
 				else if ("DSSTox_GSID".equals(p.getName()))
-					Assert.assertNotNull(normalized.getProperty(p));
+					Assert.assertNotNull(normalized.getRecordProperty(p));
 				else if ("CASRN".equals(p.getName()))
-					Assert.assertNotNull(normalized.getProperty(p));
+					Assert.assertNotNull(normalized.getRecordProperty(p));
 				else if ("DSSTox_RID".equals(p.getName()))
-					Assert.assertNotNull(normalized.getProperty(p));	
+					Assert.assertNotNull(normalized.getRecordProperty(p));	
 			}
 			count++;
 		}

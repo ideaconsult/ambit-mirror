@@ -67,11 +67,11 @@ public class DatasetReporterTest extends ResourceTest {
 			IStructureRecord target = iterator.next();
 			Assert.assertTrue(target.getIdchemical()>0);
 			Assert.assertTrue(target.getIdstructure()>0);
-			Assert.assertNotNull(target.getProperties());
-			for (Property p : target.getProperties()) {
+			Assert.assertNotNull(target.getRecordProperties());
+			for (Property p : target.getRecordProperties()) {
 				System.out.println(p);
 				System.out.println(p.getId());
-				System.out.println(target.getProperty(p));
+				System.out.println(target.getRecordProperty(p));
 			}
 			Assert.assertNotNull(target.getContent());
 			Assert.assertEquals(MOL_TYPE.SDF.toString(),target.getFormat());			

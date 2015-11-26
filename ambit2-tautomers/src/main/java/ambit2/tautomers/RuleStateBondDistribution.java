@@ -1,6 +1,7 @@
 package ambit2.tautomers;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
@@ -30,8 +31,8 @@ public class RuleStateBondDistribution
 	{
 		int n = 0; 
 		SmartsToChemObject stco = new SmartsToChemObject(SilentChemObjectBuilder.getInstance());
-		Vector<Integer> v2 = new Vector<Integer>();
-		Vector<Integer> v3 = new Vector<Integer>();
+		List<Integer> v2 = new ArrayList<Integer>();
+		List<Integer> v3 = new ArrayList<Integer>();
 		for (int i = 0; i < statePattern.getBondCount(); i++)
 		{	
 			if (hasRingClosure)

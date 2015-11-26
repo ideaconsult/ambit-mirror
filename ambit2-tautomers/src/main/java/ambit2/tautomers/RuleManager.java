@@ -10,7 +10,7 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.core.data.MoleculeTools;
@@ -25,7 +25,6 @@ public class RuleManager {
 	List<Rule> generatedRules;
 	List<IRuleInstance> unprocessedInstances = new ArrayList<IRuleInstance>();
 	
-	
 	//List<TautomerIncrementStep> incSteps = new ArrayList<TautomerIncrementStep>(); 
 	Stack<TautomerIncrementStep> stackIncSteps = new Stack<TautomerIncrementStep>();
 		
@@ -37,8 +36,8 @@ public class RuleManager {
 		ruleInstances = tman.ruleInstances;
 		generatedRules = tman.generatedRules;
 		
-		
 	}
+	
 	
 	/*
 	
@@ -333,10 +332,17 @@ public class RuleManager {
 			try{
 				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
 				
-				tman.registerTautomer(newTautomer);  //processing of the tautomer structure is done here. It must be before rank calculation
+				if (tman.FlagRegisterOnlyBestRankTautomers)
+					tman.setCurIncrStep(incStep); //This will be used by externally by registerTautomer()
 				
-				double rank = calculateRank(incStep, newTautomer);
-				newTautomer.setProperty("TAUTOMER_RANK", new Double(rank));
+				//processing of the tautomer structure is done here. It must be before rank calculation				
+				boolean Fl_calc = tman.registerTautomer(newTautomer);  //processing of the tautomer structure is done here. It must be before rank calculation
+				
+				if (Fl_calc)
+				{	
+					double rank = calculateRank(incStep, newTautomer);
+					newTautomer.setProperty(TautomerConst.TAUTOMER_RANK, new Double(rank));
+				}	
 				
 				
 				if (tman.FlagPrintIcrementalStepDebugInfo)
@@ -358,10 +364,18 @@ public class RuleManager {
 		{
 			try{
 				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
-				tman.registerTautomer(newTautomer); //processing of the tautomer structure is done here. It must be before rank calculation
 				
-				double rank = calculateRank(incStep, newTautomer);
-				newTautomer.setProperty("TAUTOMER_RANK", new Double(rank)); 
+				if (tman.FlagRegisterOnlyBestRankTautomers)
+					tman.setCurIncrStep(incStep); //This will be used by externally by registerTautomer()
+				
+				//processing of the tautomer structure is done here. It must be before rank calculation
+				boolean Fl_calc = tman.registerTautomer(newTautomer); 
+				
+				if (Fl_calc)
+				{	
+					double rank = calculateRank(incStep, newTautomer);
+					newTautomer.setProperty(TautomerConst.TAUTOMER_RANK, new Double(rank)); 
+				}
 				
 				if (tman.FlagPrintIcrementalStepDebugInfo)
 					System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer, false) 
@@ -370,7 +384,7 @@ public class RuleManager {
 			catch(Exception e)
 			{
 				//Please throw exceptions, don;t add them to the manager
-				tman.errors.add("Error clonning molecule to get tatutomer!");
+				tman.errors.add("Error clonning molecule to get tauttomer!");
 			}
 			
 			return;
@@ -421,7 +435,7 @@ public class RuleManager {
 	{
 		//The structure is fully cloned as well as all used and unused rule instances
 		
-		IMolecule mol = SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class); //clone structure
+		IAtomContainer mol = SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class); //clone structure
 		IAtom newAtoms[] = new IAtom[prevStruct.getAtomCount()];
 		IBond newBonds[] = new IBond[prevStruct.getBondCount()];
 		
@@ -1042,7 +1056,7 @@ public class RuleManager {
 	}
 	
 	
-	double calculateRank(TautomerIncrementStep incStep, IAtomContainer tautomer) throws Exception
+	public double calculateRank(TautomerIncrementStep incStep, IAtomContainer tautomer) throws Exception
 	{
 		double e_rank = 0.0;  //energy based rank
 		
@@ -1079,7 +1093,46 @@ public class RuleManager {
 				e_rank = tman.getEnergyRanking().calculateRank(incStep, tautomer);
 		}
 		
-		//System.out.println("rank = " + e_rank);
+		return (e_rank);
+	}
+	
+	
+	public static double calculateRank(TautomerIncrementStep incStep, IAtomContainer tautomer, TautomerManager tman) throws Exception
+	{
+		double e_rank = 0.0;  //energy based rank
+		
+		if (tman.FlagEnergyRankingMethod == TautomerConst.ERM_OLD)
+		{	
+			//This is the simple (old) approach for ranking
+			
+			for (int i = 0; i < incStep.usedRuleInstances.size(); i++)
+			{
+				RuleInstance ri = incStep.usedRuleInstances.get(i);
+				RankingRule rankRule = ri.rule.rankingRule; 
+				if (rankRule == null)
+					continue;
+
+				int stateCheck  = ri.checkCurStateInstanceValidity();
+				if (stateCheck != 0)
+					continue;
+
+				e_rank += rankRule.stateEnergies[ri.getCurrentState()];
+			}
+
+			if (tman.FlagApplySimpleAromaticityRankCorrection)
+			{	
+				double aromRank = RuleManager.getAdditionalAromaticityRank(tautomer);	
+				e_rank += aromRank;
+			}
+		}
+		else
+		{
+			//The new approach for ranking
+			if (tman.FlagNewRuleInstanceSearchOnEnergyRanking)
+				e_rank = tman.getEnergyRanking().calculateRank(tautomer, tman.knowledgeBase);
+			else
+				e_rank = tman.getEnergyRanking().calculateRank(incStep, tautomer);
+		}
 		
 		return (e_rank);
 	}

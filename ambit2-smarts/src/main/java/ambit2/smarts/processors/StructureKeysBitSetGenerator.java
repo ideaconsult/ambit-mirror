@@ -8,7 +8,6 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -16,6 +15,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.QuerySequenceElement;

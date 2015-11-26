@@ -163,9 +163,9 @@ public class RetrieveStructurePair extends AbstractQuery<IStructureRecord,IStruc
 	            	r.setType(STRUC_TYPE.NA);
 	            }
 	            if ((rs.getString(rs_index.atomproperties.ordinal()+offset)==null) || "".equals(rs.getString(rs_index.atomproperties.ordinal()+offset).trim()))
-	            	r.removeProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp));
+	            	r.removeRecordProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp));
 	            else
-	            r.setProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp), rs.getString(rs_index.atomproperties.ordinal()+offset));
+	            r.setRecordProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp), rs.getString(rs_index.atomproperties.ordinal()+offset));
 
 	}
 

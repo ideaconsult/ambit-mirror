@@ -11,27 +11,23 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.graph.Cycles;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IRingSet;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.smarts.HydrogenAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.LogicalOperatorAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.RecursiveSmartsAtom;
-import org.openscience.cdk.ringsearch.AllRingsFinder;
-import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.smarts.parser.SMARTSParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
-import ambit2.core.io.MyIteratingMDLReader;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.Screening;
@@ -42,6 +38,7 @@ import ambit2.smarts.StructInfo;
 
 //This class provides utilities for automatic testing of Substructure Searching algorithms
 public class AutomaticTestUtilities {
+	UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
 
 	class CmdOption {
 		String option = null;
@@ -672,8 +669,8 @@ public class AutomaticTestUtilities {
 				FlagStat_SingleDBStr_CDK = true;
 				FlagStat_SingleDBStr_Ambit_CDK = true;
 				FlagStat_SingleDBStr_CDK_Ambit = true;
-				//FlagStat_SingleDBStr_Ambit_SMSD = true;
-				//FlagStat_SingleDBStr_CDK_SMSD = true;
+				// FlagStat_SingleDBStr_Ambit_SMSD = true;
+				// FlagStat_SingleDBStr_CDK_SMSD = true;
 				sss_SingleDBStrStat(line);
 				break;
 
@@ -750,7 +747,8 @@ public class AutomaticTestUtilities {
 		// CDK parser
 		QueryAtomContainer query_CDK = null;
 		try {
-			query_CDK = SMARTSParser.parse(line);
+			query_CDK = SMARTSParser.parse(line,
+					SilentChemObjectBuilder.getInstance());
 		} catch (Exception e) {
 			System.out.println("CDK parsing error: " + e.toString());
 			return -1;
@@ -762,7 +760,7 @@ public class AutomaticTestUtilities {
 
 		try {
 			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(
+			IteratingSDFReader reader = new IteratingSDFReader(
 					new FileReader(dbFileName), b);
 			int record = 0;
 
@@ -802,8 +800,7 @@ public class AutomaticTestUtilities {
 					// CDK test
 					startTime = System.nanoTime();
 					initializeRecursiveSmarts(query_CDK, mol);
-					boolean res = UniversalIsomorphismTester.isSubgraph(mol,
-							query_CDK);
+					boolean res = uit.isSubgraph(mol, query_CDK);
 					endTime = System.nanoTime();
 					timeCDK = endTime - startTime;
 
@@ -841,11 +838,14 @@ public class AutomaticTestUtilities {
 				initializeRecursiveSmartsAtom(
 						((LogicalOperatorAtom) atom).getRight(), atomContainer);
 			}
-		} else if (atom instanceof RecursiveSmartsAtom) {
-			((RecursiveSmartsAtom) atom).setAtomContainer(atomContainer);
-		} else if (atom instanceof HydrogenAtom) {
-			((HydrogenAtom) atom).setAtomContainer(atomContainer);
 		}
+		/*
+		 * setAtomContainer for these classes do not exist in cdk 1.5.10 else if
+		 * (atom instanceof RecursiveSmartsAtom) { ((RecursiveSmartsAtom)
+		 * atom).setAtomContainer(atomContainer); } else if (atom instanceof
+		 * HydrogenAtom) { ((HydrogenAtom)
+		 * atom).setAtomContainer(atomContainer); }
+		 */
 	}
 
 	private void initializeMolecule(IAtomContainer atomContainer)
@@ -896,18 +896,15 @@ public class AutomaticTestUtilities {
 		valencesTable.put("Co", 2);
 
 		// do all ring perception
-		AllRingsFinder arf = new AllRingsFinder();
 		IRingSet allRings;
 		try {
-			allRings = arf.findAllRings(atomContainer);
+			allRings = Cycles.all(atomContainer).toRingSet();
 		} catch (CDKException e) {
-			// logger.debug(e.toString());
-			throw new CDKException(e.toString(), e);
+			throw e;
 		}
 
 		// sets SSSR information
-		SSSRFinder finder = new SSSRFinder(atomContainer);
-		IRingSet sssr = finder.findEssentialRings();
+		IRingSet sssr = Cycles.sssr(atomContainer).toRingSet();
 
 		for (IAtom atom : atomContainer.atoms()) {
 
@@ -996,7 +993,7 @@ public class AutomaticTestUtilities {
 	int sss_SingleDBStrStat(String line) {
 		// Performs statistics for each structure from the DB
 		// It is applied for several algorithms simultaneously
-
+		UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
 		long startTime, endTime;
 		long timeAmbit = 0;
 		long timeCDK = 0;
@@ -1017,7 +1014,8 @@ public class AutomaticTestUtilities {
 		// CDK parser
 		QueryAtomContainer query_CDK = null;
 		try {
-			query_CDK = SMARTSParser.parse(line);
+			query_CDK = SMARTSParser.parse(line,
+					SilentChemObjectBuilder.getInstance());
 		} catch (Exception e) {
 			System.out.println("CDK parsing error: " + e.toString());
 			return -1;
@@ -1037,7 +1035,7 @@ public class AutomaticTestUtilities {
 
 		try {
 			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(
+			IteratingSDFReader reader = new IteratingSDFReader(
 					new FileReader(dbFileName), b);
 			int record = 0;
 
@@ -1080,8 +1078,7 @@ public class AutomaticTestUtilities {
 						if (FlagGarbCollector)
 							callGarbCollector();
 						startTime = System.nanoTime();
-						boolean res = UniversalIsomorphismTester.isSubgraph(
-								mol, query_CDK);
+						boolean res = uit.isSubgraph(mol, query_CDK);
 						endTime = System.nanoTime();
 						timeCDK = endTime - startTime;
 					}
@@ -1091,8 +1088,7 @@ public class AutomaticTestUtilities {
 							callGarbCollector();
 						startTime = System.nanoTime();
 						spAmbit.setSMARTSData(mol);
-						boolean res = UniversalIsomorphismTester.isSubgraph(
-								mol, query_ambit);
+						boolean res = uit.isSubgraph(mol, query_ambit);
 						endTime = System.nanoTime();
 						timeAmbitCDK = endTime - startTime;
 					}
@@ -1131,8 +1127,8 @@ public class AutomaticTestUtilities {
 					output("db-" + record + "  " + mol.getAtomCount() + "  "
 							+ sssResult + "       " + timeAmbit + "  "
 							+ timeCDK + "  " + timeAmbitCDK + "  "
-							+ timeCDKAmbit + "  " + 
-							//timeAmbitSMSD + "  "	+ timeCDKSMSD + 
+							+ timeCDKAmbit + "  " +
+							// timeAmbitSMSD + "  " + timeCDKSMSD +
 							endLine);
 
 					// System.out.println("record " + record+ "  " +
@@ -1171,7 +1167,8 @@ public class AutomaticTestUtilities {
 		// CDK parser
 		try {
 			startTime = System.nanoTime();
-			QueryAtomContainer query_CDK = SMARTSParser.parse(line);
+			QueryAtomContainer query_CDK = SMARTSParser.parse(line,
+					SilentChemObjectBuilder.getInstance());
 			endTime = System.nanoTime();
 			timeCDK = endTime - startTime;
 		} catch (Exception e) {
@@ -1486,7 +1483,8 @@ public class AutomaticTestUtilities {
 				while (f.getFilePointer() < length) {
 					line = f.readLine();
 					String smiles = line.trim();
-					IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+					IAtomContainer mol = SmartsHelper
+							.getMoleculeFromSmiles(smiles);
 
 					BitSet bs = screen.getStructureKeyBits(mol);
 					String s = screen.getBitSetString(bs);
@@ -1510,7 +1508,7 @@ public class AutomaticTestUtilities {
 
 		try {
 			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(
+			IteratingSDFReader reader = new IteratingSDFReader(
 					new FileReader(dbFileName), b);
 			int record = 0;
 			int readComp = 0;

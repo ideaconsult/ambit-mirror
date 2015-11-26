@@ -79,14 +79,14 @@ public class ReadChemicalsByBundle  extends AbstractStructureQuery<SubstanceEndp
 				if (value!=null)  {
 					Property tag = new Property("tag",reference);
 					tag.setEnabled(true);
-					record.setProperty(tag,rs.getString("tag"));
+					record.setRecordProperty(tag,rs.getString("tag"));
 				}
 				
 				value = rs.getString("remarks");
 				if (value !=null) {
 					Property remarks = new Property("remarks",reference);
 					remarks.setEnabled(true);
-					record.setProperty(remarks,rs.getString("remarks"));
+					record.setRecordProperty(remarks,rs.getString("remarks"));
 				}	
 			}
 			return record;

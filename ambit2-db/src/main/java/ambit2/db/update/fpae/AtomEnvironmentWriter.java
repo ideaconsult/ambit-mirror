@@ -10,6 +10,7 @@ import net.idea.modbcum.i.query.IQueryUpdate;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.processors.AbstractUpdateProcessor;
 
+@Deprecated
 public class AtomEnvironmentWriter<S> extends AbstractUpdateProcessor<IStructureRecord, S> {
 	protected CreateAtomEnvironment g = new CreateAtomEnvironment();
 	/**

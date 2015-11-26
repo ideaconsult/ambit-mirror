@@ -36,15 +36,15 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.db.RepositoryReader;
 import ambit2.db.processors.PropertyValuesWriter;
 
@@ -68,8 +68,8 @@ public class PropertyWriterTest  extends DbUnitTest {
 		for (int i=0; i < 255;i++) b.append(i % 10);	
 		for (int i=0; i < 255;i++) b.append("c");
 		for (int i=0; i < 255;i++) b.append("b");		
-		record.setProperty(Property.getInstance("Property1","Reference 1"), b.toString());
-		record.setProperty(Property.getInstance("Property2","Reference 1"), 0.99);
+		record.setRecordProperty(Property.getInstance("Property1","Reference 1"), b.toString());
+		record.setRecordProperty(Property.getInstance("Property2","Reference 1"), 0.99);
 		
         writer.setConnection(c.getConnection());
         writer.open();
@@ -81,7 +81,7 @@ public class PropertyWriterTest  extends DbUnitTest {
 		Assert.assertEquals(b.toString(),names.getValue(0,"value"));
 		Assert.assertEquals("TRUNCATED",names.getValue(0,"status"));		
 	
-		record.setProperty(Property.getInstance("Property1","Reference 1"),"Value1");
+		record.setRecordProperty(Property.getInstance("Property1","Reference 1"),"Value1");
 		
         writer.write(record);
         c.close();
@@ -126,13 +126,13 @@ public class PropertyWriterTest  extends DbUnitTest {
 			o = reader.next();
 			String content = reader.getStructure(o.getIdstructure());
 			if (content == null) continue;
-			IIteratingChemObjectReader mReader = new MyIteratingMDLReader(new StringReader(content),b);
+			IIteratingChemObjectReader mReader = new IteratingSDFReader(new StringReader(content),b);
 			
 			if (mReader.hasNext()) {
 				Object mol = mReader.next();
-				if (mol instanceof IMolecule) {
+				if (mol instanceof IAtomContainer) {
 					o.clearProperties();
-					o.addProperties(((IMolecule)mol).getProperties());
+					o.addRecordProperties(((IAtomContainer)mol).getProperties());
 					propertyWriter.write(o);
 				}
 			}

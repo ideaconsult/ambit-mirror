@@ -12,8 +12,6 @@ import java.util.logging.Logger;
 
 import net.idea.restnet.rdf.ns.OT;
 
-import org.opentox.dsl.task.RemoteTask;
-import org.opentox.dsl.task.RemoteTaskPool;
 import org.restlet.Context;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Form;
@@ -25,6 +23,8 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.OpenTox;
+import ambit2.rest.legacy.OTRemoteTask;
+import ambit2.rest.legacy.OTRemoteTaskPool;
 import ambit2.rest.task.Task.TaskProperty;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -65,8 +65,8 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 	protected String datasetURI;
 	protected Reference datasetService;
 	protected Form input;
-	protected RemoteTaskPool jobs = new RemoteTaskPool();
-	protected Hashtable<Reference,RemoteTask> algorithms = new Hashtable<Reference, RemoteTask>(); 
+	protected OTRemoteTaskPool jobs = new OTRemoteTaskPool();
+	protected Hashtable<Reference,OTRemoteTask> algorithms = new Hashtable<Reference, OTRemoteTask>(); 
 	protected Form featuresQuery = new Form();
 	/*
 	 * dataset_service=http://ambit.uni-plovdiv.bg:8080/ambit2/dataset
@@ -111,7 +111,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 	}
 	
 	protected Reference callInternal() throws Exception {
-		RemoteTask currentJob = null;
+		OTRemoteTask currentJob = null;
 		//create subsets with missing descriptors
 		run(new Reference(modelURI));
 		jobs.run();
@@ -120,12 +120,12 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		Enumeration<Reference> algs = algorithms.keys();
 		while (algs.hasMoreElements()) {
 			Reference alg = algs.nextElement();
-			RemoteTask task = algorithms.get(alg);
+			OTRemoteTask task = algorithms.get(alg);
 			if (Status.SUCCESS_OK.equals(task.getStatus())) {
 				Form input = new Form();
 				input.add(OpenTox.params.dataset_uri.toString(),task.getResult().toString());
 				input.add(OpenTox.params.dataset_service.toString(),datasetService.toString());
-				jobs.add(new RemoteTask(alg,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST));
+				jobs.add(new OTRemoteTask(alg,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST));
 			}
 			
 		}
@@ -147,7 +147,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		dataset.setQuery(query.getQueryString());
 		input.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
 		input.add(OpenTox.params.dataset_service.toString(),datasetService.toString());
-		currentJob = new RemoteTask(datasetService,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST);
+		currentJob = new OTRemoteTask(datasetService,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST);
 		jobs.add(currentJob);
 		jobs.run();
 		jobs.clear();
@@ -163,7 +163,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 			input.add(OpenTox.params.dataset_service.toString(),datasetService.toString());
 			
 			firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Start model (finally) %s",modelURI));
-			currentJob = new RemoteTask(new Reference(modelURI),MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST);
+			currentJob = new OTRemoteTask(new Reference(modelURI),MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST);
 			jobs.add(currentJob);
 			jobs.run();		
 			
@@ -294,7 +294,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		input.add(OpenTox.params.dataset_uri.toString(),filter.toString());
 		input.removeAll(OpenTox.params.dataset_service.toString());
 		firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Missing values"));		
-		RemoteTask job = new RemoteTask(datasetService,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST);
+		OTRemoteTask job = new OTRemoteTask(datasetService,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST);
 		algorithms.put(algorithm,job);
 		jobs.add(job);
 		firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Start descriptor calculation %s",algorithm));

@@ -22,6 +22,7 @@ Algorithm types<a href='#' class='chelp halgtypes'>?</a> |
     <li><a href="#hsuperservice"> </a></li>
     <li><a href="#hendpoint"> </a></li>
     <li><a href="#himpl"> </a></li>
+    <li><a href="#dtypes"> </a></li>
   </ul>
   <div id="hdataset">
     Dataset or compound URI as in <a href="${ambit_root}/dataset?max=100" target=_blank>Datasets list</a>.
@@ -47,23 +48,30 @@ Algorithm types<a href='#' class='chelp halgtypes'>?</a> |
     in this page means selecting a variable to predict.
   </div>    
   <div id="halgtypes">
-	Algorithms generating certain values, based on chemical structure (Descriptor calculation)
-	<br/><br/>
+  	<ul>
+	<li>
+	<a href='${ambit_root}/algorithm?ttype=DescriptorCalculation'>Algorithms generating certain values, based on chemical structure (Descriptor calculation)</a>
+	</li><li>
 	Data preprocessing (e.g. Principal component analysis, feature selection)
-	<br/><br/>
-	Structure processing (e.g. structure optimization)
-	<br/><br/>
+	</li><li>
+	<a href="${ambit_root}/algorithm?type=Structure">Structure processing (e.g. structure optimization)</a>
+	</li><li>
 	Algorithms, relating set of structures to another set of structures (e.g. similarity search or metabolite generation)
-	<br/><br/>
+	</li><li>
 	Machine learning algorithms
-	<br/><br/>
-	Supervised (e.g. Regression, Classification)
-	<br/><br/>
-	Unsupervised (e.g. Clustering )
-	<br/><br/>
-	Prediction algorithms, defined by experts (e.g. series of structural alerts, defined by human experts , not derived by learning algorithms)
-	<br/><br/>
-	Applicability domain algorithms
+	<ul>
+	<li>
+	<a href="${ambit_root}/algorithm?type=Supervised">Supervised</a>  (e.g.
+		<a href="${ambit_root}/algorithm?type=Regression">Regression</a>, 
+		<a href="${ambit_root}/algorithm?type=Classification">Classification</a> )   
+	</li><li>
+	<a href="${ambit_root}/algorithm?type=UnSupervised">Unsupervised</a>  (e.g. <a href="${ambit_root}/algorithm?type=Clustering">Clustering</a> )
+	</li><li>
+	</ul></li>
+	<a href="${ambit_root}/algorithm?type=Rules">Prediction algorithms, defined by experts</a> (e.g. series of structural alerts, defined by human experts , not derived by learning algorithms)
+	</li><li>
+	<a href="${ambit_root}/algorithm?type=AppDomain">Applicability domain algorithms</a>
+	</li></ul>
   </div>
   <div id="hwhat">
     Algorithm services accept a dataset URI in order to build a model or to process the dataset (e.g.  descriptor values).
@@ -94,5 +102,13 @@ More <a href='http://www.ideaconsult.net/web/ngn/blogs/-/blogs/opentox-model-sup
   <div id="himpl">
   Implementation of - as defined in Blueobelisk ontology 
   </div>
- 
+   <div id="dtypes">
+  <ul>
+  <li>D : Processes a dataset</li>
+  <li>M : Builds a model</li>
+  <li>I : Requires input dataset</li>
+  <li>T : Requires target variable</li>
+  <li>R : Requires property | structure [see the tooltip]</li>
+  </ul>
+  </div>
 </div>      

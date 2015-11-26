@@ -19,9 +19,15 @@
 
 <script type='text/javascript'>
 $(document).ready(function() {
-	facet.defineStudySearchFacets("${ambit_root}",
-				"${ambit_root}/query/study?topcategory=P-CHEM&media=application/json",
-				"#facet_pchem");
+	$( "#tabs" ).tabs();
+	
+	<#assign c_selected=""/>
+	
+	<#if menu_profile?? && menu_profile=='enanomapper'>
+		<#assign c_selected="P-CHEM_PC_GRANULOMETRY_SECTION"/>
+	</#if>
+
+
 	facet.defineStudySearchFacets("${ambit_root}",
 			"${ambit_root}/query/study?topcategory=TOX&media=application/json",
 			"#facet_tox");
@@ -30,8 +36,11 @@ $(document).ready(function() {
 			"#facet_ecotox");
 	facet.defineStudySearchFacets("${ambit_root}",
 			"${ambit_root}/query/study?topcategory=ENV%20FATE&media=application/json",
-			"#facet_envfate");	
-
+			"#facet_envfate");
+	facet.defineStudySearchFacets("${ambit_root}",
+			"${ambit_root}/query/study?topcategory=P-CHEM&media=application/json",
+			"#facet_pchem","${c_selected}");	
+	loadHelp("${ambit_root}","endpoint_search");
 	$( "#accordion" ).accordion( {
 		heightStyle: "content"
 	});	
@@ -45,6 +54,12 @@ $(document).ready(function() {
 	
 	downloadForm("${ambit_request}");
 
+	//get some results by default
+	<#if menu_profile?? && menu_profile=='enanomapper'>
+		facet.runQuery("${ambit_root}/substance?type=facet&category=P-CHEM.PC_GRANULOMETRY_SECTION");
+	</#if>
+	
+	
 	jQuery("#breadCrumb ul").append('<li><a href="#" onClick="facet.searchStudy();">Search substances by endpoint data</a></li>');
 	jQuery("#breadCrumb ul").append('<li id="hits" style="display:none"><a href="#" onClick="facet.searchStudy();">Hit list</a></li>');
 	jQuery("#submit").show();
@@ -78,37 +93,64 @@ $(document).ready(function() {
 <#include "/banner_crumbs.ftl">
 
 <form action='${ambit_root}/substance' id='fsearchForm' name='fsearchForm' method='GET' autocomplete='off' >
-<div class="four columns" id="sidebar" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+<div class="four columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+<div  id="sidebar" >
 	<input type='button' class='remove-bottom' value='Update results' onClick='facet.searchStudy();'>
 	<div id="accordion" style="padding-top:0;padding-left:1px;padding-right:1px;padding-bottom:2px;margin:0;font-size:80%">
-		<h3>P-Chem</h3>
+
+		<h3 id='facet_pchem_hdr'>P-Chem</h3>
 		  <table id='facet_pchem' class='facet .jtox-toolkit' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead><tr><th ></th><th ></th></tr></thead>
 			<tbody></tbody>
 		   </table>
-		<h3>Env Fate</h3>
-		  <table id='facet_envfate' class='facet ' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
-			<thead><tr><th ></th><th ></th></tr></thead>
-			<tbody></tbody>
-		   </table>
-		<h3>Eco Tox</h3>
+		   
+		<h3 id='facet_ecotox_hdr'>Eco Tox</h3>
 		  <table id='facet_ecotox' class='facet ' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead><tr><th ></th><th ></th></tr></thead>
 			<tbody></tbody>
 		   </table>
-		<h3>Tox</h3>
-		  <table id='facet_tox' class='facet ' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+		<h3 id='facet_envfate_hdr'>Env Fate</h3>
+		  <table id='facet_envfate' class='facet ' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead><tr><th ></th><th ></th></tr></thead>
 			<tbody></tbody>
 		   </table>
+		<h3 id='facet_tox_hdr' >Tox</h3>
+		   <table id='facet_tox' class='facet ' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+			<thead><tr><th ></th><th ></th></tr></thead>
+			<tbody></tbody>
+			  </table>	
+		
 		</div>
 		<input type='button' class='remove-bottom'  value='Update results' onClick='facet.searchStudy();'>
 		
-</form>			
-			
+</div>	
+<br/>
+<div id='download' class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; font-style:bold;'>
+<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json64.png' alt='json' title='Download as JSON'></a>
+<a href='#' id='csv' target=_blank><img src='${ambit_root}/images/csv64.png' alt='CSV' title='Download as CSV'></a>
 </div>
- 		
-		<div class="twelve columns remove-bottom" style="padding:0;" >
+</div>
+</form>		
+
+<div id="tabs" class="twelve columns remove-bottom"  style="padding:0;">
+<ul>
+<li><a href="#tabs_substance" id="header_substance">Hit list</a></li>
+<li><a href="#download_results">Download</a></li>
+<li><a href="#tabs_help">Help</a></li>
+</ul>
+	<div id='tabs_help'>
+		<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
+		<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
+		</div>
+		<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
+		</div>	
+	</div>
+	<div id='download_results' >  <!-- tabs_download -->
+	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json64.png' alt='json' title='Download as JSON'></a>
+	<a href='#' id='csv' target=_blank><img src='${ambit_root}/images/csv64.png' alt='CSV' title='Download as CSV'></a>
+	</div>
+	
+		<div id="tabs_substance" style="padding:0;" >
 
  		
 		<!-- Page Content
@@ -137,10 +179,12 @@ $(document).ready(function() {
 
 		
 		</div> 
+		</div>
+
 		
-<div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
 
+<div class='row add-bottom' style="height:140px;">&nbsp;</div>
 <#include "/footer.ftl" >
 </div> <!-- container -->
 </body>

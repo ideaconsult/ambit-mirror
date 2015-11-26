@@ -1,56 +1,20 @@
-#Installation
+#AMBIT web application install guide 
 
-## Requirements
+###Requirements
 
-###Java Runtime Environment (JRE)
+* Java Runtime Environment ([JRE](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)). Install Java 7 Standard Edition or newer.
 
-- Install Java 7 Standard Edition.
+* Web server. Install [Apache Tomcat](http://tomcat.apache.org/download-70.cgi) 7.x or newer.
 
-###Web server
-
-- Install Apache Tomcat 7.x
-
-###Database server
-
-- Install MySQL 5.6.5 or newer
+* Database server. Install [MySQL 5.6.5](https://dev.mysql.com/doc/relnotes/mysql/5.6/en/) or newer
 
 ## Web services installation
 
 ###Database
 
-- Create the chemical structures database and set up the associated grants. You will need the [create_tables.sql](https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-db/src/main/resources/ambit2/db/sql/create_tables.sql) script.
+- Create the chemical structures database and set up the associated grants. You will need the [create_tables.sql](https://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT/ambit2-db/src/main/resources/ambit2/db/sql/create_tables.sql) script.
 
-- Run the following commands in the MySQL console.
-
-````
-create database `ambit2` character set utf8;
-use `ambit2`;
-source create_tables.sql;
-GRANT ALL ON `ambit2`.* TO 'guest'@'localhost' IDENTIFIED BY 'guest';
-GRANT ALL ON `ambit2`.* TO 'guest'@'127.0.0.1' IDENTIFIED BY 'guest';
-GRANT ALL ON `ambit2`.* TO 'guest'@'::1' IDENTIFIED BY 'guest';
-
-GRANT TRIGGER ON `ambit2`.* TO 'guest'@'localhost';
-GRANT TRIGGER ON `ambit2`.* TO 'guest'@'127.0.0.1';
-GRANT TRIGGER ON `ambit2`.* TO 'guest'@'::1';
-
-GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'localhost';
-GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'127.0.0.1';
-GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'::1';
-
-GRANT EXECUTE ON PROCEDURE `ambit2`.deleteDataset TO 'guest'@'localhost';
-GRANT EXECUTE ON PROCEDURE `ambit2`.deleteDataset TO 'guest'@'127.0.0.1';
-GRANT EXECUTE ON PROCEDURE `ambit2`.deleteDataset TO 'guest'@'::1';
-
-GRANT EXECUTE ON PROCEDURE `ambit2`.createBundleCopy TO 'guest'@'localhost';
-GRANT EXECUTE ON PROCEDURE `ambit2`.createBundleCopy TO 'guest'@'127.0.0.1';
-GRANT EXECUTE ON PROCEDURE `ambit2`.createBundleCopy TO 'guest'@'::1';
-
-GRANT EXECUTE ON PROCEDURE `ambit2`.createBundleVersion TO 'guest'@'localhost';
-GRANT EXECUTE ON PROCEDURE `ambit2`.createBundleVersion TO 'guest'@'127.0.0.1';
-GRANT EXECUTE ON PROCEDURE `ambit2`.createBundleVersion TO 'guest'@'::1';
-
-````
+- Run the following commands in the MySQL console.  [database create and grant access rights script](txt/dbgrants.sql)
 
 - Verify the current version of the ambit2 database. Run the following commands in the MySQL console.  
 
@@ -63,7 +27,7 @@ The version can be also verified at http://localhost:8080/ambit2/admin/database
 
 ###Deployment
 
-- Deploy the [ambit2.war](http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.5.8/ambit2-www-2.5.8.war/download) in your Tomcat instance.
+- Deploy the [ambit2.war](http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.7.4/ambit2-www-2.7.4.war/download) in your Tomcat instance.
 
 - Open the following URI in your browser, replacing YOURHOST and YOURPORT with the relevant values from your configuration.
 
