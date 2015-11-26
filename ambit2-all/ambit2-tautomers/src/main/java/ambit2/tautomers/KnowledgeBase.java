@@ -1,7 +1,7 @@
 package ambit2.tautomers;
 
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.List;
 
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
@@ -9,10 +9,10 @@ import ambit2.smarts.SmartsParser;
 
 public class KnowledgeBase 
 {
-	public Vector<Rule> rules = new Vector<Rule>();
-	public Vector<RankingRule> rankingRules = new Vector<RankingRule>();
-	public Vector<Filter> warningFilters = new Vector<Filter>();
-	public Vector<Filter> excludeFilters = new Vector<Filter>();
+	public List<Rule> rules = new ArrayList<Rule>();
+	public List<RankingRule> rankingRules = new ArrayList<RankingRule>();
+	public List<Filter> warningFilters = new ArrayList<Filter>();
+	public List<Filter> excludeFilters = new ArrayList<Filter>();
 	
 	public boolean FlagUse13Shifts = true;
 	public boolean FlagUse15Shifts = true;
@@ -22,7 +22,7 @@ public class KnowledgeBase
 	public boolean FlagUseRingChainRules = false;
 	public boolean FlagUseChlorineRules = false;
 	
-	Vector<String> errors = new Vector<String>(); 
+	List<String> errors = new ArrayList<String>(); 
 	RuleParser ruleParser = new RuleParser();
 	SmartsParser sp = new SmartsParser();
 	

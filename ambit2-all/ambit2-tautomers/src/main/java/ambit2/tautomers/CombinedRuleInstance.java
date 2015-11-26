@@ -1,7 +1,7 @@
 package ambit2.tautomers;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -16,8 +16,8 @@ public class CombinedRuleInstance implements IRuleInstance
 	int curState = 0;  
 	int beginState = 0;
 	
-	Vector<RuleInstance> instances = new Vector<RuleInstance>(); 
-	Vector<int[]> combinedStates = new Vector<int[]>(); 
+	List<RuleInstance> instances = new ArrayList<RuleInstance>(); 
+	List<int[]> combinedStates = new ArrayList<int[]>(); 
 		
 	public Rule getRule(){
 		return null;

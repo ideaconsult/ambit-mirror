@@ -5,11 +5,10 @@ import java.util.logging.Level;
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.base.data.Property;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.AbstractPropertyGenerator;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.smarts.CMLUtilities;
@@ -34,9 +33,9 @@ public class SMARTSPropertiesGenerator extends AbstractPropertyGenerator<String>
 				CDKHueckelAromaticityDetector.detectAromaticity(c);
 			} catch (Exception x) { logger.log(Level.WARNING,x.getMessage(),x); }
 			StringBuilder b = new StringBuilder();
-			utils.setCMLSMARTSProperties((IMolecule)atomContainer);
+			utils.setCMLSMARTSProperties((IAtomContainer)atomContainer);
 			for (int i=0; i < atomContainer.getAtomCount();i++) {
-				b.append(atomContainer.getAtom(i).getProperty(CMLUtilities.SMARTSProp));
+				b.append(atomContainer.getAtom(i).getProperty(CMLUtilities.SMARTSProp).toString());
 				b.append(',');
 			}
 			b.append('\n');

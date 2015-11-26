@@ -1,6 +1,6 @@
 Manifest-version: 1.0
 Package: ambit2.descriptors
-
+Main-Class: ambit2.descriptors.app.AtomEnvironmentGeneratorApp
 Name: ambit2/descriptors/
 Specification-Title: Descriptors
 Specification-Version: ${project.version}

@@ -17,6 +17,7 @@ import ambit2.rest.algorithm.AllAlgorithmsResource;
  * @author nina
  * 
  */
+@Deprecated
 public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 
     /**
@@ -60,9 +61,6 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 		content.append(String
 			.format("<tr><th align='right'>%s</th><td><input type='password' size='40' name='%s' value=''></td></tr>",
 				"Password:&nbsp;", "password"));
-		content.append(String
-			.format("<tr><td title=''></td><td><input type=CHECKBOX name='subjectid_secure' %s>Use secure cookie for the OpenSSO token</option></td></tr>",
-				item.isUseSecureCookie() ? "SELECTED CHECKED" : ""));
 		content.append("<tr><td></td><td><input align='bottom' type=\"submit\" value=\"Log in\"></td></tr>");
 
 		content.append("</form>");

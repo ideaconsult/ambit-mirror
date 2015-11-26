@@ -8,6 +8,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 
 
@@ -21,9 +22,9 @@ public class SMIRKSReaction
 	public List<SmartsAtomExpression> productRecursiveAtoms = null;
 	
 	//Single container representation 
-	public IQueryAtomContainer reactant = new QueryAtomContainer();
-	public IQueryAtomContainer agent = new QueryAtomContainer();
-	public IQueryAtomContainer product = new QueryAtomContainer();
+	public IQueryAtomContainer reactant = new QueryAtomContainer(SilentChemObjectBuilder.getInstance());
+	public IQueryAtomContainer agent = new QueryAtomContainer(SilentChemObjectBuilder.getInstance());
+	public IQueryAtomContainer product = new QueryAtomContainer(SilentChemObjectBuilder.getInstance());
 	
 	//Multi-container representation
 	public List<IQueryAtomContainer> reactants = new ArrayList<IQueryAtomContainer>();
@@ -446,7 +447,7 @@ public class SMIRKSReaction
 	{
 		SmartsToChemObject stco = new SmartsToChemObject(builder);
 		
-		//TODO Improved charge treatment in some cases when atom type is not defined but charge info is
+		//TODO Improve charge treatment in some cases when atom type is not defined but charge info is defined
 		
 		for (int i = 0; i < reactant.getAtomCount(); i++)
 		{

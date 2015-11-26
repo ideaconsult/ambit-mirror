@@ -3,11 +3,15 @@
  -----
  Ideaconsult Ltd.
  -----
- 2014/09/15
+ 2015/07/28
  -----
 
 
 Publications
+
+  * N. Jeliazkova, C. Chomenidis, P. Doganis, B. Fadeel, R. Grafström, B. Hardy, J. Hastings, M. Hegi, V. Jeliazkov, N. Kochev, P. Kohonen, C. R. Munteanu, H. Sarimveis, B. Smeets, P. Sopasakis, G. Tsiliki, D. Vorgrimmler, and E. Willighagen, {{{http://www.beilstein-journals.org/bjnano/content/6/1/165}"The eNanoMapper database for nanomaterial safety information"}}, {{{http://www.beilstein-journals.org/bjnano/}Beilstein J. Nanotechnol.}}, vol. 6, pp. 1609–1634, Jul. <<2015>> {{{http://dx.doi.org/10.3762/bjnano.6.165}doi:10.3762/bjnano.6.165}}. 
+  	
+  * N. Jeliazkova, P. Doganis, B. Fadeel, R. Grafstrom, J. Hastings, V. Jeliazkov, P. Kohonen, C. R. Munteanu, H. Sarimveis, B. Smeets, G. Tsiliki, D. Vorgrimmler, and E. Willighagen, "The first eNanoMapper prototype: A substance database to support safe-by-design", in {{{http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=6979782}2014 IEEE International Conference on Bioinformatics and Biomedicine}} (BIBM), <<2014>>, pp. 1–9.. {{{http://dx.doi.org/10.1109/BIBM.2014.6999367}doi:10.1109/BIBM.2014.6999367}}
 
   * Kochev N., Paskaleva V., Jeliazkova N.,  {{{http://onlinelibrary.wiley.com/doi/10.1002/minf.201200133/abstract}Ambit-Tautomer: An Open Source Tool for Tautomer Generation}}, {{{http://onlinelibrary.wiley.com/journal/10.1002/(ISSN)1611-0218}Molecular Informatics}},  <<2013>>, 32(5-6):481-504. {{{http://dx.doi.org/10.1002/minf.201200133}doi:10.1002/minf.201200133}}
     
@@ -26,6 +30,6 @@ Web sites
 
  [AMBIT site] {{{http://ambit.sourceforge.net}http://ambit.sourceforge.net}}
  
- [AMBIT Web services] {{{https://apps.ideaconsult.net/ambit2}https://apps.ideaconsult.net/ambit2}}
+ [AMBIT Web services] {{{https://apps.ideaconsult.net/ambit3}https://apps.ideaconsult.net/ambit3}}
  
  

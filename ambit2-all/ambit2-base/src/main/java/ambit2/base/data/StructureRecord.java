@@ -20,7 +20,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 
 package ambit2.base.data;
 
@@ -29,10 +29,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.idea.modbcum.i.facet.IFacet;
 import ambit2.base.interfaces.IStructureRecord;
-
 
 public class StructureRecord implements IStructureRecord {
 	/**
@@ -40,15 +40,17 @@ public class StructureRecord implements IStructureRecord {
 	 */
 	private static final long serialVersionUID = -650816773926953033L;
 	protected boolean preferedStructure = true;
-	protected int dataEntryID=-1;
+	protected int dataEntryID = -1;
 	protected int id_srcdataset = -1;
-	
+
 	public int getDataEntryID() {
 		return dataEntryID;
 	}
+
 	public void setDataEntryID(int dataEntryID) {
 		this.dataEntryID = dataEntryID;
 	}
+
 	protected String inchiKey;
 	protected String formula;
 	protected String smiles;
@@ -58,31 +60,37 @@ public class StructureRecord implements IStructureRecord {
 	protected String content;
 	protected String format;
 	protected ILiteratureEntry reference = null;
-	protected Map<Property,Object> properties;
+	protected Map<Property, Object> properties;
 	protected STRUC_TYPE type = STRUC_TYPE.NA;
 	protected boolean selected = true;
 	protected List<IFacet> facets;
-	
+
 	public STRUC_TYPE getType() {
 		return type;
 	}
+
 	public void setType(STRUC_TYPE type) {
 		this.type = type;
 	}
-	public Map<Property,Object> getMap() {
+
+	public Map<Property, Object> getMap() {
 		return properties;
 	}
+
 	public String getFormula() {
 		return formula;
 	}
+
 	public void setFormula(String formula) {
 		this.formula = formula;
 	}
+
 	@Override
 	public void setInchiKey(String key) {
 		this.inchiKey = key;
-		
+
 	}
+
 	public String getInchiKey() {
 		return inchiKey;
 	}
@@ -90,118 +98,156 @@ public class StructureRecord implements IStructureRecord {
 	public String getSmiles() {
 		return smiles;
 	}
+
 	public void setSmiles(String smiles) {
 		this.smiles = smiles;
 	}
+
 	public String getInchi() {
 		return inchi;
 	}
+
 	public void setInchi(String inchi) {
 		this.inchi = inchi;
 	}
-	
-	
+
 	public StructureRecord() {
-		this(-1,-1,"","");
+		this(-1, -1, "", "");
 	}
-	public StructureRecord(int idchemical,int idstructure,String content, String format) {
+
+	public StructureRecord(int idchemical, int idstructure, String content,
+			String format) {
 		setIdchemical(idchemical);
 		setIdstructure(idstructure);
 		setContent(content);
 		setFormat(format);
 	}
-	/* (non-Javadoc)
-     * @see ambit2.repository.IStructureRecord#getFormat()
-     */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ambit2.repository.IStructureRecord#getFormat()
+	 */
 	public String getFormat() {
 		return format;
 	}
-	/* (non-Javadoc)
-     * @see ambit2.repository.IStructureRecord#setFormat(java.lang.String)
-     */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ambit2.repository.IStructureRecord#setFormat(java.lang.String)
+	 */
 	public void setFormat(String format) {
 		this.format = format;
 	}
-	/* (non-Javadoc)
-     * @see ambit2.repository.IStructureRecord#getIdchemical()
-     */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ambit2.repository.IStructureRecord#getIdchemical()
+	 */
 	public int getIdchemical() {
 		return idchemical;
 	}
-	/* (non-Javadoc)
-     * @see ambit2.repository.IStructureRecord#setIdchemical(int)
-     */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ambit2.repository.IStructureRecord#setIdchemical(int)
+	 */
 	public void setIdchemical(int idchemical) {
 		this.idchemical = idchemical;
 	}
-	/* (non-Javadoc)
-     * @see ambit2.repository.IStructureRecord#getIdstructure()
-     */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ambit2.repository.IStructureRecord#getIdstructure()
+	 */
 	public int getIdstructure() {
 		return idstructure;
 	}
-	/* (non-Javadoc)
-     * @see ambit2.repository.IStructureRecord#setIdstructure(int)
-     */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ambit2.repository.IStructureRecord#setIdstructure(int)
+	 */
 	public void setIdstructure(int idstructure) {
 		this.idstructure = idstructure;
 	}
-	/* (non-Javadoc)
-     * @see ambit2.repository.IStructureRecord#getContent()
-     */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ambit2.repository.IStructureRecord#getContent()
+	 */
 	public String getContent() {
 		return content;
 	}
+
 	public String getWritableContent() {
 		if (MOL_TYPE.SDF.toString().equals(getFormat())) {
 			int p = getContent().indexOf("M  END");
 			if (p > 0)
-				return getContent().substring(0,p+6);
-		} 
+				return getContent().substring(0, p + 6);
+		}
 		return getContent();
 	}
-	/* (non-Javadoc)
-     * @see ambit2.repository.IStructureRecord#setContent(java.lang.String)
-     */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ambit2.repository.IStructureRecord#setContent(java.lang.String)
+	 */
 	public void setContent(String content) {
 		this.content = content;
 		setSmiles(null);
 		setInchi(null);
 		setInchiKey(null);
 	}
-	/* 
-	public Map getProperties() {
-		return properties;
-	}
 
-	public void setProperties(Map properties) {
-		this.properties = properties;
-	}
-	*/
-	public Object getProperty(Property key) {
+	/*
+	 * public Map getProperties() { return properties; }
+	 * 
+	 * public void setProperties(Map properties) { this.properties = properties;
+	 * }
+	 */
+	public Object getRecordProperty(Property key) {
 		if (properties != null)
 			return properties.get(key);
-		else return null;
+		else
+			return null;
 	}
-	public void setProperty(Property key,Object value) {
-		if (key == null) return;
-		if (properties == null) properties = createProperties();
-		if (value == null) properties.remove(key);
-		else properties.put(key, value);
-			
+
+	public void setRecordProperty(Property key, Object value) {
+		if (key == null)
+			return;
+		if (properties == null)
+			properties = createProperties();
+		if (value == null)
+			properties.remove(key);
+		else
+			properties.put(key, value);
+
 	}
-	protected Map<Property,Object> createProperties() {
+
+	protected Map<Property, Object> createProperties() {
 		return new Hashtable<Property, Object>();
-		//return new TreeMap<Property, Object>();
+		// return new TreeMap<Property, Object>();
 	}
-	public Iterable<Property> getProperties() {
-		if (properties==null) properties = createProperties();
+
+	public Iterable<Property> getRecordProperties() {
+		if (properties == null)
+			properties = createProperties();
 		return properties.keySet();
 	}
-	
-	/* (non-Javadoc)
-     * @see ambit2.repository.IStructureRecord#clear()
-     */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ambit2.repository.IStructureRecord#clear()
+	 */
 	public void clear() {
 		setSmiles(null);
 		setInchi(null);
@@ -211,49 +257,65 @@ public class StructureRecord implements IStructureRecord {
 		setIdchemical(-1);
 		setIdstructure(-1);
 		setReference(null);
-		if (properties!=null) properties.clear();
+		if (properties != null)
+			properties.clear();
 		setFormat(null);
 	}
+
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
 		b.append("idchemical=");
 		b.append(getIdchemical());
 		b.append("\tidstructure=");
-		b.append(getIdstructure());		
+		b.append(getIdstructure());
 		return b.toString();
 	}
+
 	public int getNumberOfProperties() {
-		if (properties==null) return 0;
+		if (properties == null)
+			return 0;
 		return properties.size();
 	}
-	public Object removeProperty(Property key) {
-		if (properties!= null)
+
+	public Object removeRecordProperty(Property key) {
+		if (properties != null)
 			return properties.remove(key);
-		else return null;
-		
+		else
+			return null;
+
 	}
+
 	public void clearProperties() {
-		if (properties!=null)
+		if (properties != null)
 			properties.clear();
+
+	}
+
+	public void addRecordProperties(Map newProperties) {
+		Iterator entries = newProperties.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry thisEntry = (Entry) entries.next();
+			Object key = thisEntry.getKey();
+			Object value = thisEntry.getValue();
+			if (key instanceof Property)
+				setRecordProperty((Property) key, value);
+			else
+				setRecordProperty(
+						Property.getInstance(key.toString(), getReference()),
+						value);
+		}
 		
 	}
-	public void addProperties(Map newProperties) {
-		Iterator keys = newProperties.keySet().iterator();
-		while (keys.hasNext()) {
-			Object key = keys.next();
-			if (key instanceof Property)
-				setProperty((Property)key,newProperties.get(key));
-			else
-				setProperty(Property.getInstance(key.toString(),getReference()),newProperties.get(key));
-		}
-	}
+
 	public ILiteratureEntry getReference() {
 		return reference;
 	}
+
 	public void setReference(ILiteratureEntry reference) {
 		this.reference = reference;
 	}
+
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		StructureRecord record = new StructureRecord();
@@ -264,50 +326,63 @@ public class StructureRecord implements IStructureRecord {
 		record.setIdstructure(getIdstructure());
 		record.setSmiles(getSmiles());
 		record.setInchi(getInchi());
-		for (Property p : getProperties()) 
-			record.setProperty(p,getProperty(p));
+		for (Property p : getRecordProperties())
+			record.setRecordProperty(p, getRecordProperty(p));
 		return record;
-	}	
+	}
+
 	public boolean isSelected() {
 		return selected;
 	}
+
 	public void setSelected(boolean value) {
 		this.selected = true;
-		
+
 	}
+
 	@Override
 	public boolean usePreferedStructure() {
 		return preferedStructure;
 	}
+
 	@Override
 	public void setUsePreferedStructure(boolean value) {
 		preferedStructure = value;
-		
+
 	}
+
 	@Override
 	public int getDatasetID() {
 		return id_srcdataset;
 	}
+
 	@Override
 	public void setDatasetID(int id) {
 		id_srcdataset = id;
 	}
+
 	@Override
 	public void addFacet(IFacet facet) {
-		if (facets == null) facets = new ArrayList<IFacet>();
+		if (facets == null)
+			facets = new ArrayList<IFacet>();
 		facets.add(facet);
 	}
+
 	@Override
 	public void clearFacets() {
-		if (facets!=null) facets.clear();
-		
+		if (facets != null)
+			facets.clear();
+
 	}
+
 	@Override
 	public Iterable<IFacet> getFacets() {
 		return facets;
 	}
+
 	@Override
 	public void removeFacet(IFacet facet) {
-		if (facets!=null) facets.remove(facet);
+		if (facets != null)
+			facets.remove(facet);
 	}
-}	
+}

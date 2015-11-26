@@ -6,7 +6,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAminoAcid;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.descriptors.molecular.AminoAcidCountDescriptor;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
@@ -28,7 +28,7 @@ public class AminoAcidCountDescriptorTest {
 		AminoAcidCountDescriptor group = new AminoAcidCountDescriptor();
 
 		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
-		IMolecule m = p.parseSmiles("O=C(O)[C@@H](N)C"); //alanine
+		IAtomContainer m = p.parseSmiles("O=C(O)[C@@H](N)C"); //alanine
 		DescriptorValue result = group.calculate(m);
 		Assert.assertEquals(1,((IntegerArrayResult)result.getValue()).get(0));
 

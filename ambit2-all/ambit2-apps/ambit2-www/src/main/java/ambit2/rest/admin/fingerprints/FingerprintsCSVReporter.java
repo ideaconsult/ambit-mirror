@@ -10,7 +10,7 @@ import org.restlet.Request;
 
 import ambit2.db.update.fp.IFingerprint;
 import ambit2.db.update.fp.QueryFingerprints;
-import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.descriptors.processors.FPTable;
 
 public class FingerprintsCSVReporter extends QueryReporter<IFingerprint<FPTable,String>,QueryFingerprints,Writer>  {
 

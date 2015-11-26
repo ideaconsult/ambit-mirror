@@ -48,7 +48,7 @@ public class TautomerRanking
 		
 		for (int i = 0; i < distr.length; i++)
 		{	
-			Double rank = (Double)tautomers.get(i).getProperty("TAUTOMER_RANK");
+			Double rank = (Double)tautomers.get(i).getProperty(TautomerConst.TAUTOMER_RANK);
 			if (rank == null)
 				rank = new Double(9999);
 			distr[i] = getProbability(rank);

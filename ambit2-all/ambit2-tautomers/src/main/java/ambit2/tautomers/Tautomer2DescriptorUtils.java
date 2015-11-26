@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
@@ -59,7 +59,7 @@ public class Tautomer2DescriptorUtils {
 	public int tautomerFullInfo(int strNum, String targetSmiles) {	
 		try
 		{	
-			IMolecule mol = null;
+			IAtomContainer mol = null;
 			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 			mol = sp.parseSmiles(targetSmiles);
 			
@@ -73,7 +73,7 @@ public class Tautomer2DescriptorUtils {
 				for (int i = 0; i < resultTautomers.size(); i++)
 				{
 					IAtomContainer tautomer = resultTautomers.get(i);
-					double rank = ((Double)tautomer.getProperty("TAUTOMER_RANK")).doubleValue();
+					double rank = ((Double)tautomer.getProperty(TautomerConst.TAUTOMER_RANK)).doubleValue();
 					String smiles = SmartsHelper.moleculeToSMILES(tautomer,false).trim();
 					output("" + strNum + "   " + smiles + "  " + rank  +  endLineSymb);
 				}

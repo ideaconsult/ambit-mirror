@@ -6,8 +6,8 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ambit2.reactions.GenericParserUtils;
-import ambit2.reactions.GenericRuleMetaInfo;
+import ambit2.reactions.rules.GenericParserUtils;
+import ambit2.reactions.rules.GenericRuleMetaInfo;
 import ambit2.reactions.sets.ReactionData;
 import ambit2.reactions.sets.ReactionSet;
 

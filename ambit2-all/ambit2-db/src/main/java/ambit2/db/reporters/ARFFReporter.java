@@ -206,7 +206,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 	    writer.write(uri);
 
 	    for (Property p : header) {
-		Object value = item.getProperty(p);
+		Object value = item.getRecordProperty(p);
 		if (value instanceof MultiValue) {
 		    MultiValue<IValue> mv = (MultiValue<IValue>) value;
 		    for (IValue m : mv) {

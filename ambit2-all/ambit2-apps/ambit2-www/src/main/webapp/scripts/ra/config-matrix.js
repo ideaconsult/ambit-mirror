@@ -151,15 +151,7 @@ jTConfig.matrix = {
   },
   "columns": {
     "substance": {
-      'Contained in as': { iOrder: 20, mData: "composition", sTitle: "Contained in as", mRender: jT.ui.renderRelation },
-      'Reference substance UUID': {
-        sTitle: "Reference substance UUID",
-        mData: "referenceSubstance",
-        mRender: function (data, type, full) {
-          if (data.i5uuid == null) return '';
-          return (type != 'display') ? data.i5uuid : jT.ui.shortenedData('<a target="_blank" href="' + data.uri + '">' + data.i5uuid + '</a>', "Press to copy the UUID in the clipboard", data.i5uuid);
-        }
-      },
+      'contained in as': { iOrder: 20, mData: "composition", sTitle: "Contained in as", mRender: jT.ui.renderRelation }
     }
 	},
   "handlers": {

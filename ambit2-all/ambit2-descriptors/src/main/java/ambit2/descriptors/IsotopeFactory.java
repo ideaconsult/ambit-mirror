@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.openscience.cdk.annotations.TestClass;
-import org.openscience.cdk.annotations.TestMethod;
 import org.openscience.cdk.config.isotopes.IsotopeReader;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -66,7 +64,6 @@ import org.openscience.cdk.tools.LoggingTool;
  * @cdk.keyword    isotope
  * @cdk.keyword    element
  */
-@TestClass("org.openscience.cdk.config.IsotopeFactoryTest")
 public class IsotopeFactory
 {
 
@@ -123,7 +120,6 @@ public class IsotopeFactory
 	 * @return                             The instance value
 	 * @exception  IOException             Description of the Exception
 	 */
-    @TestMethod("testGetInstance_IChemObjectBuilder")
     public static IsotopeFactory getInstance(IChemObjectBuilder builder)
 			 throws IOException {
         if (ifac == null) {
@@ -138,7 +134,6 @@ public class IsotopeFactory
 	 *
 	 *@return    The size value
 	 */
-    @TestMethod("testGetSize")
     public int getSize()
 	{
 		return isotopes.size();
@@ -151,7 +146,6 @@ public class IsotopeFactory
 	 *@param  symbol  An element symbol to search for
 	 *@return         An array of isotopes that matches the given element symbol
 	 */
-    @TestMethod("testGetIsotopes_String")
     public IIsotope[] getIsotopes(String symbol) {
         ArrayList<IIsotope> list = new ArrayList<IIsotope>();
         for (IIsotope isotope : isotopes) {
@@ -182,7 +176,6 @@ public class IsotopeFactory
      *
      * @see #getMajorIsotope(String symbol)
      */
-    @TestMethod("testGetMajorIsotope_int")
     public IIsotope getMajorIsotope(int atomicNumber) {
         IIsotope major = null;
         for (IIsotope isotope : isotopes) {
@@ -211,7 +204,6 @@ public class IsotopeFactory
      * @param  elementName   The element name to test
      * @return               True is the element exists, false otherwise
      */
-    @TestMethod("testIsElement_String")
     public boolean isElement(String elementName) {
         return (getElement(elementName) != null);
     }
@@ -222,7 +214,6 @@ public class IsotopeFactory
      *@param  symbol  Description of the Parameter
      *@return         The Major Isotope value
      */
-    @TestMethod("testGetMajorIsotope_String")
     public IIsotope getMajorIsotope(String symbol) {
         IIsotope major = null;
         if (majorIsotopes.containsKey(symbol)) {
@@ -259,7 +250,6 @@ public class IsotopeFactory
 	 *@param  symbol  The element symbol for the requested element
 	 *@return         The configured element
 	 */
-    @TestMethod("testGetElement_String")
     public IElement getElement(String symbol)
 	{
         return getMajorIsotope(symbol);
@@ -272,7 +262,6 @@ public class IsotopeFactory
 	 *@param  atomicNumber  The elements atomic number
 	 *@return               The Element
 	 */
-    @TestMethod("testGetElement_int")
     public IElement getElement(int atomicNumber)
 	{
         return getMajorIsotope(atomicNumber);
@@ -284,7 +273,6 @@ public class IsotopeFactory
      * @param  atomicNumber  The elements atomic number
      * @return               The symbol of the Element
      */
-    @TestMethod("testGetElementSymbol_int")
     public String getElementSymbol(int atomicNumber) {
         IIsotope isotope = getMajorIsotope(atomicNumber);
         return isotope.getSymbol();
@@ -297,7 +285,6 @@ public class IsotopeFactory
 	 *@param  atom  The atom to be configured
 	 *@return       The configured atom
 	 */
-    @TestMethod("testConfigure_IAtom")
     public IAtom configure(IAtom atom)
 	{
 		IIsotope isotope = getMajorIsotope(atom.getSymbol());
@@ -313,7 +300,6 @@ public class IsotopeFactory
 	 *@param  isotope  The isotope to read the data from
 	 *@return          The configured atom
 	 */
-    @TestMethod("testConfigure_IAtom_IIsotope")
     public IAtom configure(IAtom atom, IIsotope isotope)
 	{
 		atom.setMassNumber(isotope.getMassNumber());
@@ -331,7 +317,6 @@ public class IsotopeFactory
 	 *
 	 *@param  container  The AtomContainer to be configured
 	 */
-    @TestMethod("testConfigureAtoms_IAtomContainer")
     public void configureAtoms(IAtomContainer container)
 	{
 		for (int f = 0; f < container.getAtomCount(); f++)
@@ -346,7 +331,6 @@ public class IsotopeFactory
 	 * @param  element                     Description of the Parameter
 	 * @return                             The natural mass value
 	 */
-    @TestMethod("testGetNaturalMass_IElement")
 	public double getNaturalMass(IElement element){
 		IIsotope[] isotopes = getIsotopes(element.getSymbol());
 		double summedAbundances = 0;

@@ -33,15 +33,17 @@ import net.idea.modbcum.i.processors.IProcessor;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.qsar.result.IntegerResult;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import ambit2.base.data.AmbitBean;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.smarts.query.ISmartsPattern;
 import ambit2.smarts.query.SMARTSException;
 import ambit2.smarts.query.SmartsPatternFactory;
@@ -159,17 +161,20 @@ public class FunctionalGroup extends AmbitBean implements
 			// Find out if this is a valid smiles ,
 			SmilesParser parser = new SmilesParser(
 					SilentChemObjectBuilder.getInstance());
-			IMolecule mol = parser.parseSmiles(smarts);
-			for (IAtom atom : mol.atoms())
-				if (atom.getFlag(CDKConstants.ISAROMATIC)) {
-					SmilesGenerator g = new SmilesGenerator();
-					g.setUseAromaticityFlag(true);
-					smarts = g.createSMILES(mol);
-					break;
-				}
+			IAtomContainer mol = parser.parseSmiles(smarts);
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			CDKHueckelAromaticityDetector.detectAromaticity(mol);
+			boolean generate = true;
+			for (IAtom atom : mol.atoms()) if (atom instanceof IPseudoAtom) generate = false;
+			if (generate) {
+				SmilesGenerator g = SmilesGenerator.unique().aromatic();
+				smarts = g.create(mol);
+			}
+
 		} catch (Exception x) {
 			// not a valid smiles, so we keep the original smarts
 		}
+
 		properties.put(t_smarts, smarts);
 		query = null;
 	}

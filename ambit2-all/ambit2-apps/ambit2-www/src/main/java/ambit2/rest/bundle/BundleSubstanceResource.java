@@ -29,9 +29,11 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.reporters.ImageReporter;
+import ambit2.db.reporters.xlsx.SubstanceRecordXLSXReporter;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
+import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.query.AmbitDBResource;
 import ambit2.rest.substance.SubstanceJSONReporter;
 import ambit2.rest.substance.SubstanceURIReporter;
@@ -67,8 +69,7 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 				MediaType.APPLICATION_RDF_TURTLE, MediaType.TEXT_RDF_N3,
 				MediaType.TEXT_RDF_NTRIPLES, MediaType.APPLICATION_JSON,
 				MediaType.APPLICATION_JAVASCRIPT,
-				MediaType.APPLICATION_JAVA_OBJECT,
-				MediaType.APPLICATION_EXCEL,
+				MediaType.APPLICATION_JAVA_OBJECT, MediaType.APPLICATION_EXCEL,
 				MediaType.APPLICATION_MSOFFICE_XLSX
 
 		});
@@ -222,20 +223,19 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 			return new ImageConvertor(new ImageReporter(variant.getMediaType()
 					.getMainType(), variant.getMediaType().getSubType(), d),
 					variant.getMediaType());
-			/*
 		} else if (variant.getMediaType().equals(
 				MediaType.APPLICATION_MSOFFICE_XLSX)) {
-			SubstanceXLSXReporter xlsxreporter = new SubstanceXLSXReporter(
-					getRequest(), bundles, false);
+			SubstanceRecordXLSXReporter xlsxreporter = new SubstanceRecordXLSXReporter(
+					getRequest().getRootRef().toString(), false, bundles);
 			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
 					MediaType.APPLICATION_MSOFFICE_XLSX, filenamePrefix);
 
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_EXCEL)) {
-			SubstanceXLSXReporter xlsxreporter = new SubstanceXLSXReporter(
-					getRequest(), bundles, true);
+			SubstanceRecordXLSXReporter xlsxreporter = new SubstanceRecordXLSXReporter(
+					getRequest().getRootRef().toString(),  true,bundles);
 			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
 					MediaType.APPLICATION_EXCEL, filenamePrefix);
-					*/
+
 		} else if (variant.getMediaType().equals(
 				MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");

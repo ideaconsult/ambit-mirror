@@ -1,0 +1,13 @@
+Manifest-version: 1.0
+Package: ambit2.fp
+Main-Class: 
+Name: ambit2/descriptors/
+Specification-Title: Fingerprints
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.fp
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.fp
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.

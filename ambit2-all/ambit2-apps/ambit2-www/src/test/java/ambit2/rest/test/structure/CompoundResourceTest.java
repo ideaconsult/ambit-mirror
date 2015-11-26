@@ -21,9 +21,8 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.opentox.dsl.OTCompound;
 import org.restlet.Client;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -41,10 +40,10 @@ import weka.core.Instances;
 import ambit2.base.io.DownloadTool;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.IteratingDelimitedFileReader;
-import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
+import ambit2.rest.legacy.OTCompound;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.pubchem.CSLSResource;
 import ambit2.rest.test.ResourceTest;
@@ -175,7 +174,7 @@ public class CompoundResourceTest extends ResourceTest {
 		return count ==2;
 		*/
 
-		IMolecule mol = MoleculeTools.readCMLMolecule(in);
+		IAtomContainer mol = MoleculeTools.readCMLMolecule(in);
 		Assert.assertNotNull(mol);
 		Assert.assertEquals(3,mol.getAtomCount());
 		Assert.assertEquals(0,mol.getBondCount());
@@ -189,7 +188,7 @@ public class CompoundResourceTest extends ResourceTest {
 	@Override
 	public boolean verifyResponseSDF(String uri, MediaType media, InputStream in)
 			throws Exception {
-		MyIteratingMDLReader reader = new MyIteratingMDLReader(in, SilentChemObjectBuilder.getInstance());
+		IteratingSDFReader reader = new IteratingSDFReader(in, SilentChemObjectBuilder.getInstance());
 		int count = 0;
 		while (reader.hasNext()) {
 			Object o = reader.next();

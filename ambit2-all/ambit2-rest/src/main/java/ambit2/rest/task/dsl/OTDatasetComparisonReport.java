@@ -3,11 +3,12 @@ package ambit2.rest.task.dsl;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import org.opentox.dsl.OTDataset;
-import org.opentox.dsl.OTDatasets;
-import org.opentox.dsl.OTObject;
-import org.opentox.dsl.OTOntologyService;
 import org.restlet.data.Reference;
+
+import ambit2.rest.legacy.OTDataset;
+import ambit2.rest.legacy.OTDatasets;
+import ambit2.rest.legacy.OTObject;
+import ambit2.rest.legacy.OTOntologyService;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Literal;

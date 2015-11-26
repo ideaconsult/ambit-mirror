@@ -4,7 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.LoggingTool;
 
 import ambit2.sln.SLNContainer;
@@ -32,7 +32,7 @@ public class TestSLNIsomorphism extends TestCase
 
 	public void slnMatch(String sln, String smiles, boolean expectedResult) throws Exception
 	{	
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		SLNContainer query = slnParser.parse(sln);
 		if (!slnParser.getErrorMessages().equals(""))
 		{

@@ -81,12 +81,12 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 			if (value==null) continue;
 			value = value.trim();
 			if ("".equals(value)) continue;
-			if (Property.opentox_CAS.equals(tag)) record.setProperty(Property.getCASInstance(), value);
-			else if (Property.opentox_EC.equals(tag)) record.setProperty(Property.getEINECSInstance(), value);
-			else if (Property.opentox_Name.equals(tag)) record.setProperty(Property.getNameInstance(), value);
-			else if (Property.opentox_TradeName.equals(tag)) record.setProperty(Property.getNameInstance(), value);
-			else if (Property.opentox_IupacName.equals(tag)) record.setProperty(Property.getNameInstance(), value);
-			else if (Property.opentox_IUCLID5_UUID.equals(tag)) record.setProperty(Property.getI5UUIDInstance(), value);
+			if (Property.opentox_CAS.equals(tag)) record.setRecordProperty(Property.getCASInstance(), value);
+			else if (Property.opentox_EC.equals(tag)) record.setRecordProperty(Property.getEINECSInstance(), value);
+			else if (Property.opentox_Name.equals(tag)) record.setRecordProperty(Property.getNameInstance(), value);
+			else if (Property.opentox_TradeName.equals(tag)) record.setRecordProperty(Property.getNameInstance(), value);
+			else if (Property.opentox_IupacName.equals(tag)) record.setRecordProperty(Property.getNameInstance(), value);
+			else if (Property.opentox_IUCLID5_UUID.equals(tag)) record.setRecordProperty(Property.getI5UUIDInstance(), value);
 			else if (Property.opentox_SMILES.equals(tag)) {record.setSmiles(value);}
 			else if (Property.opentox_InChI_std.equals(tag)) record.setInchi(value);
 			else if (Property.opentox_InChI.equals(tag)) record.setInchi(value);
@@ -110,13 +110,13 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 		if ((id!=null) && !"".equals(id.trim())) {
 			String value = form.getFirstValue(customid);
 			if ((value!=null) && !"".equals(value.trim())) {
-				record.setProperty(Property.getInstance(id, LiteratureEntry.getInstance()), value);
+				record.setRecordProperty(Property.getInstance(id, LiteratureEntry.getInstance()), value);
 			}
 		}
 	}
 	
 	protected void extractRecordID(String url,IStructureRecord record) throws AmbitException {
-		String cleanURI = org.opentox.rdf.OpenTox.removeDatasetFragment(url);
+		String cleanURI = OpenTox.removeDatasetFragment(url);
 		Object id = OpenTox.URI.compound.getId(cleanURI, compoundURITemplate);
 		if (id != null) record.setIdchemical((Integer)id);
 		else {

@@ -29,107 +29,82 @@
 
 package ambit2.core.processors.structure;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.config.Preferences;
 
-public class HydrogenAdderProcessor extends	AtomConfigurator {
+public class HydrogenAdderProcessor extends AtomConfigurator {
 	protected CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 	protected boolean addEexplicitHydrogens = true;
+
 	public boolean isAddEexplicitHydrogens() {
 		return addEexplicitHydrogens;
 	}
-
 
 	public void setAddEexplicitHydrogens(boolean addEexplicitHydrogens) {
 		this.addEexplicitHydrogens = addEexplicitHydrogens;
 	}
 
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6788800174158558265L;
-	
-		
+
 	public IAtomContainer process(IAtomContainer mol) throws AmbitException {
 		super.process(mol);
 		try {
-	       	if ((mol instanceof IMolecule) || (mol instanceof IAtomContainer))  {
-                try {
-    	            adder.addImplicitHydrogens(mol);
-    	            logger.fine("Adding implicit hydrogens; atom count "+mol.getAtomCount());
-    	            if (isAddEexplicitHydrogens()) {
-    	            	HydrogenAdderProcessor.convertImplicitToExplicitHydrogens(mol);
-	    	            logger.fine("Convert explicit hydrogens; atom count "+mol.getAtomCount());
-    	            }
+			if (mol instanceof IAtomContainer) {
+				try {
+					adder.addImplicitHydrogens(mol);
+					logger.fine("Adding implicit hydrogens; atom count " + mol.getAtomCount());
+					if (isAddEexplicitHydrogens()) {
+						AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+						logger.fine("Convert explicit hydrogens; atom count " + mol.getAtomCount());
+					}
 
-                } catch (Exception x) {
-                    if ("true".equals(Preferences.getProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES))) {
-                        logger.log(Level.SEVERE,x.getMessage(),x);
-                        throw new AmbitException(x);
-                    } else logger.log(Level.WARNING,x.getMessage());
-                }
-        	} else {
-        		IMoleculeSet moleculeSet = ConnectivityChecker.partitionIntoMolecules(mol);
-        	      
-        	      for (int k = 0; k < moleculeSet.getMoleculeCount(); k++) {
-        	    	  IMolecule molPart = moleculeSet.getMolecule(k);
-      		          adder.addImplicitHydrogens(molPart);
-      		          logger.fine("Adding implicit hydrogens; atom count "+molPart.getAtomCount());
-      		          if (isAddEexplicitHydrogens()) {
-      		        	HydrogenAdderProcessor.convertImplicitToExplicitHydrogens(molPart);
-	    		          logger.fine("Convert explicit hydrogens; atom count "+molPart.getAtomCount());
-      		          }
-        	      }
-        	}
-            return mol;
+				} catch (Exception x) {
+					if ("true".equals(Preferences.getProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES))) {
+						logger.log(Level.SEVERE, x.getMessage(), x);
+						throw new AmbitException(x);
+					} else
+						logger.log(Level.WARNING, x.getMessage());
+				}
+			} else {
+				IAtomContainerSet moleculeSet = ConnectivityChecker.partitionIntoMolecules(mol);
+
+				for (int k = 0; k < moleculeSet.getAtomContainerCount(); k++) {
+					IAtomContainer molPart = moleculeSet.getAtomContainer(k);
+					adder.addImplicitHydrogens(molPart);
+					logger.fine("Adding implicit hydrogens; atom count " + molPart.getAtomCount());
+					if (isAddEexplicitHydrogens()) {
+						AtomContainerManipulator.convertImplicitToExplicitHydrogens(molPart);
+						logger.fine("Convert explicit hydrogens; atom count " + molPart.getAtomCount());
+					}
+				}
+			}
+			return mol;
 
 		} catch (CDKException x) {
 			throw new AmbitException(x);
 		}
 	}
+	@Deprecated 
+	/**
+	 * Use AtomContainerManipulator.convertImplicitToExplicitHydrogens(atomContainer) 
+	 * @param atomContainer
+	 */
+	public static void convertImplicitToExplicitHydrogens(IAtomContainer atomContainer) {
+		AtomContainerManipulator.convertImplicitToExplicitHydrogens(atomContainer);
+	}
 
-	   public static void convertImplicitToExplicitHydrogens(IAtomContainer atomContainer) {
-	        List<IAtom> hydrogens = new ArrayList<IAtom>();
-	        List<IBond> newBonds = new ArrayList<IBond>();
-	        List<Integer> atomIndex = new ArrayList<Integer>();
-
-	        for (int a=0; a < atomContainer.getAtomCount();a++) {
-	        	IAtom atom = atomContainer.getAtom(a);
-	            if (!atom.getSymbol().equals("H")) {
-	                Integer hCount = atom.getImplicitHydrogenCount();
-	                if (hCount != null) {
-	                    for (int i = 0; i < hCount; i++) {
-
-	                        IAtom hydrogen = atom.getBuilder().newInstance(IAtom.class, "H");
-	                        hydrogen.setAtomTypeName("H");
-	                        hydrogens.add(hydrogen);
-	                        newBonds.add(atom.getBuilder().newInstance(IBond.class,
-	                                atom, hydrogen, CDKConstants.BONDORDER_SINGLE
-	                        ));
-	                    }
-	                    atomIndex.add(atomContainer.getAtomNumber(atom));
-	                }
-	            }
-	        }
-	        for (Integer index : atomIndex) atomContainer.getAtom(index).setImplicitHydrogenCount(0);
-	        for (IAtom atom : hydrogens) atomContainer.addAtom(atom);
-	        for (IBond bond : newBonds) atomContainer.addBond(bond);
-	    }
 }

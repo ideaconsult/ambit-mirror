@@ -8,23 +8,315 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openscience.cdk.io.formats.IChemFormat;
 
 import ambit2.base.exceptions.AmbitIOException;
 import ambit2.base.interfaces.IInputOutputState;
 
-import com.jgoodies.binding.beans.Model;
-
 
 
 /**
  * This is to be able to verify if a file has changed since it has been last processed by FileBatchProcessing
+ * @TODO cleanup
  * @author Nina Jeliazkova
- * <b>Modified</b> 2005-9-4
+ * <b>Modified</b> 2015-10-31
  */
-public class FileState extends Model implements IInputOutputState {
+public class FileState implements IInputOutputState {
 
+
+	public enum _FILE_TYPE {
+		SDF_INDEX,
+		CSV_INDEX {
+			@Override
+			public String getDescription() {
+				return "CSV files (Comma delimited) *.csv)";
+			}
+		},
+		SMI_INDEX, TXT_INDEX {
+			@Override
+			public String getDescription() {
+				return "Text files (Tab delimited) (*.txt)";
+			}
+		},
+		MOL_INDEX, ICHI_INDEX {
+			@Override
+			public String getExtension() {
+				return ".inchi";
+			}
+			@Override
+			public boolean supportsOutput() {
+				return false;
+			}
+		},
+		INCHI_INDEX {
+			@Override
+			public boolean supportsOutput() {
+				return false;
+			}
+		},
+		CML_INDEX {
+			@Override
+			public String getDescription() {
+				return "Chemical Markup Language files (*.cml)";
+			}
+		},
+		HIN_INDEX, PDB_INDEX, 
+		XLS_INDEX {
+			@Override
+			public String getDescription() {
+				return "Microsoft Office Excel files (*.xls)";
+			}
+			
+		}, 
+		XLSX_INDEX {
+			@Override
+			public String getDescription() {
+				return "Microsoft Office Excel files (*.xlsx)";
+			}
+		}, 
+		EURAS_INDEX {
+			@Override
+			public String getDescription() {
+				return "EURAS Excel file with BCF data (*.xls)";
+			}
+
+			@Override
+			public String getExtension() {
+				return ".xls";
+			}
+			@Override
+			public boolean supportsOutput() {
+				return false;
+			}
+		},
+		ECHAXML_INDEX {
+			@Override
+			public String getExtension() {
+				return ".echaxml";
+			}
+
+			@Override
+			public String getDescription() {
+				return "ECHA preregistration list XML format (*.echaxml)";
+			}
+			@Override
+			public boolean supportsOutput() {
+				return false;
+			}
+		},
+		TOXML_INDEX {
+			@Override
+			public String getExtension() {
+				return ".xml";
+			}
+
+			@Override
+			public String getDescription() {
+				return "Leadscope ToXML 3.08 (*.xml)";
+			}
+			@Override
+			public boolean supportsOutput() {
+				return false;
+			}
+		},
+		MALARIA_HTS_SHEETS {
+			@Override
+			public String getExtension() {
+				return ".sht";
+			}
+			@Override
+			public boolean supportsOutput() {
+				return false;
+			}
+		},
+		ZIP_INDEX {
+			@Override
+			public String getDescription() {
+				return "ZIP archive (*.zip)";
+			}
+			@Override
+			public boolean supportsOutput() {
+				return false;
+			}
+		},
+		GZ_INDEX {
+			@Override
+			public String getDescription() {
+				return "GZ archive (*.gz)";
+			}
+			@Override
+			public boolean supportsOutput() {
+				return false;
+			}
+		},
+		I5D_INDEX {
+			@Override
+			public String getDescription() {
+				return "IUCLID5 xml (*.i5d)";
+			}
+			@Override
+			public boolean supportsOutput() {
+				return false;
+			}
+		},
+		I5Z_INDEX {
+			@Override
+			public String getDescription() {
+				return "IUCLID5 archive (*.i5z)";
+			}
+			@Override
+			public boolean supportsOutput() {
+				return false;
+			}
+		},
+		NANOCMLx_INDEX {
+			@Override
+			public String getExtension() {
+				return ".nmx";
+			}
+
+			@Override
+			public String getDescription() {
+				return "Nano CML (*.nmx)";
+			}
+			@Override
+			public boolean supportsOutput() {
+				return false;
+			}
+		},
+		NANOCMLd_INDEX {
+			@Override
+			public String getDescription() {
+				return "Nano CML (*.nmd)";
+			}
+
+			@Override
+			public String getExtension() {
+				return ".nmd";
+			}
+			@Override
+			public boolean supportsOutput() {
+				return false;
+			}
+
+		},
+		XYZ_INDEX {
+			@Override
+			public boolean supportsOutput() {
+				return true;
+			}
+			@Override
+			public boolean supportsInput() {
+				return false;
+			}
+		},
+		HTML_INDEX {
+			@Override
+			public boolean supportsOutput() {
+				return true;
+			}
+			@Override
+			public boolean supportsInput() {
+				return false;
+			}
+			@Override
+			public String getDescription() {
+				return "HTML (*.html)";
+			}
+		},
+		PDF_INDEX {
+			@Override
+			public boolean supportsOutput() {
+				return true;
+			}
+			@Override
+			public boolean supportsInput() {
+				return false;
+			}
+			@Override
+			public String getDescription() {
+				return "Adobe PDF (*.pdf)";
+			}
+		},		
+		SVG_INDEX {
+			@Override
+			public boolean supportsOutput() {
+				return true;
+			}
+			@Override
+			public boolean supportsInput() {
+				return false;
+			}
+			@Override
+			public String getDescription() {
+				return "SVG (*.svg)";
+			}
+		},
+		JPG_INDEX {
+			@Override
+			public boolean supportsOutput() {
+				return true;
+			}
+			@Override
+			public boolean supportsInput() {
+				return false;
+			}
+			@Override
+			public String getDescription() {
+				return "JPEG image (*.jpg)";
+			}
+		},
+		PNG_INDEX {
+			@Override
+			public boolean supportsOutput() {
+				return true;
+			}
+			@Override
+			public boolean supportsInput() {
+				return false;
+			}
+			@Override
+			public String getDescription() {
+				return "PNG image (*.png)";
+			}
+		},
+		RTF_INDEX {
+			@Override
+			public boolean supportsOutput() {
+				return true;
+			}
+			@Override
+			public boolean supportsInput() {
+				return false;
+			}
+			@Override
+			public String getDescription() {
+				return "Rich Text Format (*.rtf)";
+			}
+		}			
+		;
+		public String getExtension() {
+			return "." + name().replace("_INDEX", "").toLowerCase();
+		}
+
+		public String getDescription() {
+			return name().replace("_INDEX", "") + " files (." + getExtension()
+					+ ")";
+		}
+		public boolean supportsInput() { return true;}
+		public boolean supportsOutput() { return true;}
+		public boolean hasExtension(String filename) {
+			return (filename!=null) && filename.toLowerCase().endsWith(getExtension());
+		}
+		public boolean hasExtension(File file) {
+			return file != null && hasExtension(file.getName());
+		}
+	}
+
+	
 	protected static transient String MSG_FILEDONOTEXISTS = "File do not exists!\t";
 	protected static transient String MSG_CANTCREATEFILE = "Can't create file!\t";
 	protected static transient String MSG_OPEN = "Opening input file\t";
@@ -33,9 +325,7 @@ public class FileState extends Model implements IInputOutputState {
 	protected String responseType = "text/plain";	
 	protected String[] supportedExtensions = new String[] {"*.*"};
 	protected String[] extensionDescriptions = new String[] {"All files"};
-	/**
-	 * Comment for <code>serialVersionUID</code>
-	 */
+	
 	private static final long serialVersionUID = -9098389880881547516L;
 	protected String filename=null;
 	protected long length=0;
@@ -248,5 +538,26 @@ public class FileState extends Model implements IInputOutputState {
     }
     public void setSupportedExtDescriptions(String[] descr) {
     	extensionDescriptions = descr;
-    }     
+    }
+
+	protected static String[] getExtensionDescriptions(boolean input) {
+		List<String> ext = new ArrayList<String>();
+		for (_FILE_TYPE ft : _FILE_TYPE.values())
+			if (input) {
+				if (ft.supportsInput()) ext.add(ft.getDescription());
+			} else 
+				if (ft.supportsOutput()) ext.add(ft.getDescription());
+		return ext.toArray(new String[ext.size()]);
+	}
+
+	protected static String[] getExtensions(boolean input) {
+		List<String> ext = new ArrayList<String>();
+		for (_FILE_TYPE ft : _FILE_TYPE.values())
+			if (input) {
+				if (ft.supportsInput()) ext.add(ft.getExtension());
+			} else 
+				if (ft.supportsOutput()) ext.add(ft.getExtension());
+		return ext.toArray(new String[ext.size()]);
+	}
+
 }

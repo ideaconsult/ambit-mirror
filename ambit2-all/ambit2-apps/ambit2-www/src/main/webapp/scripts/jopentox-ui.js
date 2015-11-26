@@ -31,13 +31,13 @@ function defineAlgorithmTable(root,url,viscols) {
 				  "bSearchable" : true,
 				  "bUseRendered" : false,
 				  "bSortable" : true,
-				  "sWidth" : "25%",
+				  "sWidth" : "15%",
 				  "fnRender" : function(o,val) {
 					  if (o.aData["id"]==null) return "Algorithm";
 					  var sOut = "<a href='"+val+"' title='Click to view the algorithm at "+
 					  		val+
 					  		" and (optionally) launch the processing'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' ></span>"+
-					  		o.aData["id"]+"</a><br/>" +o.aData["name"];
+					  		o.aData["name"]+"</a>";
 					  return sOut;
 					  
 				  }
@@ -48,7 +48,6 @@ function defineAlgorithmTable(root,url,viscols) {
 				  "bUseRendered" : false,
 				  "bVisible" : (viscols==null) || viscols[2],
 				  "bSortable" : true,
-				  "sWidth" : "20%",
 				  "fnRender" : function(o,val) {
 					  //create link to the ontology server
 					  var p = val.indexOf("#");
@@ -61,15 +60,14 @@ function defineAlgorithmTable(root,url,viscols) {
 				  "bSearchable" : true,
 				  "bVisible" : (viscols==null) || viscols[3],
 				  "bSortable" : true,
-				  "sWidth" : "22%",
 				  "bUseRendered" : false,
 				  "fnRender" : function(o,val) {
 					  
-					  var icon = '<span class="ui-icon ui-icon-pin-s" style="float: left; margin-right: .1em;"></span>';
-					  var sOut = icon + (val?"Processes a dataset":"Builds a model.");
-					  sOut += o.aData["requiresDataset"]?("<br>"+icon+"Requires input dataset"):"";
-					  sOut += o.aData["requires"]==""?"":"<br>"+icon+"Requires " + o.aData["requires"];
-					  sOut += o.aData["isSupevised"]?("<br>"+icon+"Requires target variable"):"";
+					  var icon = ''; //'<span class="ui-icon ui-icon-pin-s" style="float: left; margin-right: .1em;"	></span> ';
+					  var sOut = icon + (val?"<span title='Processes a dataset'>D</span> |":"<span title='Builds a model'>M</span> |");
+					  sOut += o.aData["requiresDataset"]?(icon+"<span title='Requires input dataset'>I</span> |"):"";
+					  sOut += o.aData["requires"]==""?"":icon+"<span title='Requires " + o.aData["requires"] + "'>R</span> |";
+					  sOut += o.aData["isSupevised"]?(icon+"<span title='Requires target variable'>T</span> "):"";
 					  return sOut;
 				  }
 				},
@@ -79,7 +77,7 @@ function defineAlgorithmTable(root,url,viscols) {
 					  "bVisible" : (viscols==null) || viscols[4],
 					  "bSortable" : true,
 					  "bUseRendered" : false,
-					  "sWidth" : "12%",
+
 					  "fnRender" : function(o,val) {
 						  var sOut = "";
 						  $.each(val, function(index, value) {
@@ -108,7 +106,6 @@ function defineAlgorithmTable(root,url,viscols) {
 					  "bSearchable" : true,
 					  "bVisible" : (viscols==null) || viscols[6],
 					  "bSortable" : true,
-					  "sWidth" : "12%",
 					  "bUseRendered" : false,
 					  "fnRender" : function(o,val) {
 						  var p = val.indexOf("#");
@@ -121,7 +118,8 @@ function defineAlgorithmTable(root,url,viscols) {
 		"bJQueryUI" : true,
 		"bSearchable": true,
 		"sAjaxSource": url,
-		"sDom" : '<"help remove-bottom"lf><"help remove-bottom">Trt<"help remove-bottom"lp>',
+		//"sDom": 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>' ,
+		"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
 		"sSearch": "Filter:",
 		"bPaginate" : true,
 		"sPaginationType": "full_numbers",
@@ -1590,6 +1588,79 @@ function defineFacetsTable(root,url,selector) {
 	return oTable;
 }
 
+function defineProtocolApplicationSummaryTable(root,url,selector) {
+	var oTable = $(selector).dataTable( {
+		"sAjaxDataProp" : "facet",
+		"bProcessing": true,
+		"bServerSide": false,
+		"bStateSave": false,
+		"aoColumnDefs": [
+		  				{ "mData": "subcategory" , 
+			 				  "asSorting": [ "asc", "desc" ],
+							  "aTargets": [0 ],
+							  "bSearchable" : true,
+							  "bUseRendered" : false,
+							  "bSortable" : true,
+							  "fnRender" : function(o,val) {
+								  return val;
+							  }
+							},			                 
+ 				{ "mData": "value" , 
+ 				  "asSorting": [ "asc", "desc" ],
+				  "aTargets": [ 1 ],	
+				  "bSearchable" : true,
+				  "bUseRendered" : false,
+				  "bSortable" : true,
+				  "fnRender" : function(o,val) {
+					  var sOut = (o.aData["value"]===undefined)? o.aData["uri"]:o.aData["value"];
+					  return "<a href='"+o.aData["uri"]+"' title='"+o.aData["uri"]+"'>"+sOut+"</a>";
+				  }
+				},
+			
+ 				{ "mData": "protocol" , 
+	 				  "asSorting": [ "asc", "desc" ],
+					  "aTargets": [2 ],
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "bSortable" : true,
+					  "fnRender" : function(o,val) {
+						  return val;
+					  }
+					},			
+	 				{ "mData": "interpretation_result" , 
+		 				  "asSorting": [ "asc", "desc" ],
+						  "aTargets": [3 ],
+						  "bSearchable" : true,
+						  "bUseRendered" : false,
+						  "bSortable" : true,
+						  "fnRender" : function(o,val) {
+							  return val;
+						  }
+						},						
+				{ "mDataProp": "count" , "asSorting": [ "asc", "desc" ],
+				  "aTargets": [ 4 ],
+				  "sWidth" : "10%",
+				  "bSearchable" : true,
+				  "bSortable" : true
+				}			
+			],
+		"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',	
+		"bJQueryUI" : true,
+		"bPaginate" : true,
+		"sPaginationType": "full_numbers",
+		"sPaginate" : ".dataTables_paginate _paging",
+		"bDeferRender": true,
+		"bSearchable": true,
+		"sAjaxSource": url,
+		"oLanguage": {
+				"sSearch": "Filter:",
+				"sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
+	            "sLoadingRecords": "No records found."
+	    }
+	} );
+	return oTable;
+}
+
 
 function defineSubstanceOwnerTable(root,url,selector) {
 	var oTable = $(selector).dataTable( {
@@ -1967,7 +2038,7 @@ function defineBundlesTable_lri(root,url,deleteVisible,copyVisible) {
           '<option value="50">50</option>' +
           '<option value="100">100</option>' +
           '<option value="-1">all</option>' +
-          '</select> assessments.'	            
+          '</select> entries.'	            
     },	
     "aoColumnDefs": [
      	  			{ "sTitle": "Title", 
@@ -2036,22 +2107,41 @@ function defineBundlesTable_lri(root,url,deleteVisible,copyVisible) {
     		  		{  
         				  "bSortable" : false,
          	              "mDataProp":"id",
-         	              "aTargets": [ 6 ],
+         	              "aTargets": [ 7 ],
          	             "bVisible" : (deleteVisible || copyVisible),
          	             "sWidth" : "5%",
          	              "bUseRendered" : false,	
     	  					"fnRender" : function(o,val) {
    	  						 var action = root + "/bundle";
-	  						 var uri = action + "/" + val;    	  						
+	  						 var uri = action + "/" + val; 
+	  						 var sOut = "";
     	  					 if (copyVisible) {
-    	  						 var sOut = "<form method='POST' action='"+action+"'><input name='bundle_uri' value='"+uri+"' type='hidden'><input type='submit' title='Create a copy' value='Copy'></form>";
-    							 return  sOut;
+    	  						 sOut = "<form method='POST' action='"+action+"'><input name='bundle_uri' value='"+uri+"' type='hidden'><input type='submit' title='Create a copy' value='Copy'></form>";
     	  					 } else if (deleteVisible) {
-    	  						 var sOut = "<form method='POST' action='"+uri+"?method=DELETE' onsubmit='return confirmDeleteBundle(\""+o.aData.title+"\")'><input name='bundle_uri' value='"+uri+"' type='hidden'><input type='submit' title='Remove' value='Remove'></form>";
-    							 return  sOut;    	  						 
-    	  					 } else return "";
+    	  						 sOut = "<form method='POST' action='"+uri+"?method=DELETE' onsubmit='return confirmDeleteBundle(\""+o.aData.title+"\")'><input name='bundle_uri' value='"+uri+"' type='hidden'><input type='submit' title='Remove' value='Remove'></form>";
+    	  					 }
+							 return  sOut;
     						}     	              
-      		  		}    		  		
+      		  		},    	
+        	  		{  
+      				  "bSortable" : false,
+       	              "mDataProp":"id",
+       	              "aTargets": [ 6 ],
+       	             "bVisible" : true,
+       	              "bUseRendered" : false,	
+  	  					"fnRender" : function(o,val) {
+ 	  						 var action = root + "/bundle";
+	  						 var uri = action + "/" + val + "/dataset?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"; 
+	  						 var sOut = "<a href='"+uri+"' title='Export as Excel'><img src='"+root+"/images/xlsx.png'></a>";
+	  						 
+	  						 uri = action + "/" + val + "/dataset?media=text/csv";
+	  						 sOut += " <a href='"+uri+"' title='Export as CSV'><img src='"+root+"/images/csv64.png'></a>";
+	  						 
+	  						 uri = action + "/" + val + "/dataset?media=application/json";
+	  						 sOut += " <a href='"+uri+"' title='Export as JSON'><img src='"+root+"/images/json64.png'></a>";
+							 return  sOut;
+  						}     	              
+    		  		}         	  		
      				],
  	  "aaSorting": [[0, 'desc']]		  
 	});

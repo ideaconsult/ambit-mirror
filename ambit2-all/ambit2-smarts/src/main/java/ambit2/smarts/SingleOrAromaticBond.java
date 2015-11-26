@@ -20,31 +20,31 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 package ambit2.smarts;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 
 /**
  * 
  * @author Nikolay Kochev nick@uni-plovdiv.bg
  */
-public class SingleOrAromaticBond extends SMARTSBond
-{
+public class SingleOrAromaticBond extends SMARTSBond {
 	private static final long serialVersionUID = -93436889077894679L;
-	
-	public SingleOrAromaticBond() {
-    }
-	
-	public boolean matches(IBond bond) 
-	{		 
+
+	public SingleOrAromaticBond(IChemObjectBuilder builder) {
+		super(builder);
+	}
+
+	public boolean matches(IBond bond) {
 		if (bond.getOrder() == IBond.Order.SINGLE)
-			return(true);
+			return (true);
 		if (bond.getFlag(CDKConstants.ISAROMATIC))
-			return(true);		
+			return (true);
 		return false;
-    };
+	};
 
 }

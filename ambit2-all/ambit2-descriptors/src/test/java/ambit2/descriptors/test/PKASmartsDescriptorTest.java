@@ -43,18 +43,19 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.MoleculeFactory;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 
 import ambit2.base.config.Preferences;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.io.DelimitedFileWriter;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.processors.structure.AtomConfigurator;
@@ -183,7 +184,7 @@ public class PKASmartsDescriptorTest {
      //System.out.println("sequnce check  -- > " + res);  
     }
     
-    public static  IMolecule getMoleculeFromSmiles(String smi)  throws Exception { 
+    public static  IAtomContainer getMoleculeFromSmiles(String smi)  throws Exception { 
      SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());   
      return sp.parseSmiles(smi);
     }
@@ -235,6 +236,7 @@ public class PKASmartsDescriptorTest {
     public void testOne() throws Exception {
     	SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
     	IAtomContainer a = MoleculeFactory.makeBenzene();
+    	AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(a);
     	HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
     	//SmartParser throws error if explicit hydrogens are used - fixed
     	ha.setAddEexplicitHydrogens(true);

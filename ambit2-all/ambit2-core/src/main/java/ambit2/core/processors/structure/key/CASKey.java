@@ -62,10 +62,10 @@ public class CASKey extends PropertyKey<String> {
 		if (structure == null)
 			throw new AmbitException("Empty molecule!");
 
-		if ((key == null) || (structure.getProperty(key) == null)) {
+		if ((key == null) || (structure.getRecordProperty(key) == null)) {
 			// find which key corresponds to CAS
-			for (Property newkey : structure.getProperties()) {
-				Object cas = structure.getProperty(newkey);
+			for (Property newkey : structure.getRecordProperties()) {
+				Object cas = structure.getRecordProperty(newkey);
 				if (cas == null)
 					continue;
 				if (!isKeyValid(newkey)) continue;
@@ -80,7 +80,7 @@ public class CASKey extends PropertyKey<String> {
 		}
 		if (key == null)
 			throw new AmbitException("CAS tag not defined");
-		Object o = structure.getProperty(key);
+		Object o = structure.getRecordProperty(key);
 		if (o == null)
 			return null;
 		String cas = transformer.process(o.toString());

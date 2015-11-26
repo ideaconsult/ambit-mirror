@@ -9,8 +9,8 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 
 import org.openscience.cdk.exception.InvalidSmilesException;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecularFormula;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
@@ -80,7 +80,7 @@ public class QueryStructure extends AbstractStructureQuery<ExactStructureSearchM
 		switch (getFieldname()) {
 		case smiles: {
 			SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
-			IMolecule mol = p.parseSmiles(getValue());
+			IAtomContainer mol = p.parseSmiles(getValue());
 			configurator.process(mol);
 			String smiles = smilesKey.process(mol);
 			if (smiles!=null && !"".equals(smiles)) return smiles;

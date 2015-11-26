@@ -20,37 +20,37 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 
 package ambit2.smarts;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
-
 
 /**
  * 
  * @author Nikolay Kochev nick@uni-plovdiv.bg
  */
 public class AliphaticSymbolQueryAtom extends SMARTSAtom {
-	
+
 	private static final long serialVersionUID = -18004315234561145L;
 
-    public AliphaticSymbolQueryAtom() {
-    }
-    
-	public boolean matches(IAtom atom) {
-		
-		if (!atom.getFlag(CDKConstants.ISAROMATIC) && this.getSymbol().equals(atom.getSymbol())) 
-        {	
-        	return true;
-        }
-        else
-        	return false;
-    };
+	public AliphaticSymbolQueryAtom(IChemObjectBuilder builder) {
+		super(builder);
+	}
 
-    public String toString() {
+	public boolean matches(IAtom atom) {
+
+		if (!atom.getFlag(CDKConstants.ISAROMATIC)
+				&& this.getSymbol().equals(atom.getSymbol())) {
+			return true;
+		} else
+			return false;
+	};
+
+	public String toString() {
 		return "AliphaticSymbolQueryAtom()";
-    }
+	}
 }

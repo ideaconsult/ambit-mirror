@@ -22,10 +22,10 @@ public class ReferenceSubstanceUUID extends PropertyKey<String> {
 		if (structure == null)
 			throw new AmbitException("Empty molecule!");
 
-		if ((key == null) || (structure.getProperty(key) == null)) {
+		if ((key == null) || (structure.getRecordProperty(key) == null)) {
 			// find which key corresponds to I5UUID
-			for (Property newkey : structure.getProperties()) {
-				Object i5uuid = structure.getProperty(newkey);
+			for (Property newkey : structure.getRecordProperties()) {
+				Object i5uuid = structure.getRecordProperty(newkey);
 				if (i5uuid == null)
 					continue;
 				if (!isKeyValid(newkey)) continue;
@@ -35,7 +35,7 @@ public class ReferenceSubstanceUUID extends PropertyKey<String> {
 		}
 		if (key == null)
 			throw new AmbitException("I5 UUID tag not defined");
-		Object o = structure.getProperty(key);
+		Object o = structure.getRecordProperty(key);
 		if (o == null)
 			return null;
 		else 

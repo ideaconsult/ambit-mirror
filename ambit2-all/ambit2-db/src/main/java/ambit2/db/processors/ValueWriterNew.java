@@ -82,7 +82,7 @@ public class ValueWriterNew extends AbstractRepositoryWriter<IStructureRecord,IS
 		property_batchExecutor.setCloseConnection(false);
 		property_batchExecutor.initBatch(connection);
 		
-		Iterable<Property> properties = record.getProperties(); 
+		Iterable<Property> properties = record.getRecordProperties(); 
 
 		for (Property property : properties) {
 			//properties --> table properties& catalog_reference
@@ -107,7 +107,7 @@ public class ValueWriterNew extends AbstractRepositoryWriter<IStructureRecord,IS
 		pnum_batchExecutor.initBatch(connection);
 		pstring_batchExecutor.initBatch(connection);
 		
-		Iterable<Property> properties = record.getProperties(); 
+		Iterable<Property> properties = record.getRecordProperties(); 
 
 		for (Property property : properties) {
 			//values --> table property_values && property_string
@@ -131,7 +131,7 @@ public class ValueWriterNew extends AbstractRepositoryWriter<IStructureRecord,IS
 		
 	};
 	protected void prepareStatementValues(IStructureRecord record, Property property) throws Exception {
-		Object o = record.getProperty(property);
+		Object o = record.getRecordProperty(property);
 		mode error = mode.UNKNOWN;
 		Number value = null;
 		boolean numeric = false;
@@ -188,10 +188,10 @@ public class ValueWriterNew extends AbstractRepositoryWriter<IStructureRecord,IS
 		try {
 			while (rs.next()) {
 				Property property = features.getObject(rs);
-				Object value = record.getProperty(property);
+				Object value = record.getRecordProperty(property);
 				if (value != null) {
-					record.setProperty(property, null);
-					record.setProperty(property, value); 
+					record.setRecordProperty(property, null);
+					record.setRecordProperty(property, value); 
 				}
 	
 			}

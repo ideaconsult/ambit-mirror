@@ -7,7 +7,7 @@ import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.db.update.fp.IFingerprint;
-import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.descriptors.processors.FPTable;
 import ambit2.rest.admin.AdminResource;
 
 public class FingerprintURIReporter<Q extends IQueryRetrieval<IFingerprint<FPTable,String>>> extends QueryURIReporter<IFingerprint<FPTable,String>, Q>{

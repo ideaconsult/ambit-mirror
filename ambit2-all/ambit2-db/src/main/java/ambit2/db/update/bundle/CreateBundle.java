@@ -41,7 +41,7 @@ import ambit2.db.update.AbstractObjectUpdate;
 public class CreateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle> {
 	
 	public static final String[] create_sql = {
-		"INSERT IGNORE INTO catalog_references (idreference, title, url) VALUES (null,?,?)",
+		"INSERT INTO catalog_references (idreference, title, url) VALUES (null,?,?) on duplicate key update url=values(url)",
 		"INSERT IGNORE INTO bundle (idbundle, name,user_name,idreference,licenseURI,rightsHolder,description,created,bundle_number) SELECT ?,?,?,idreference,?,?,?,now(),unhex(replace(?,'-','')) FROM catalog_references WHERE title=?"
 	};
 
@@ -88,7 +88,7 @@ public class CreateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 	public void setID(int index, int id) {
 		switch (index) {
 		case 0: {
-			getObject().getReference().setId(id);
+			getObject().setReferenceID(id);
 			break;
 		}
 			

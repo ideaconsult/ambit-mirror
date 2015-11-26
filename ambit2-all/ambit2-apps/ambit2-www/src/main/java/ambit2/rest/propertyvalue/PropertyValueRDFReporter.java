@@ -87,10 +87,10 @@ public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T, IQueryRetri
 		    OT.OTClass.Compound.getOntClass(getJenaModel()));
 	    dataEntry.addProperty(OT.OTProperty.compound.createProperty(getJenaModel()), compound);
 	}
-	for (Property p : record.getProperties()) {
+	for (Property p : record.getRecordProperties()) {
 	    Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(p),
 		    OT.OTClass.Feature.getOntClass(getJenaModel()));
-	    Individual featureValue = valueProcess(record.getProperty(p), feature);
+	    Individual featureValue = valueProcess(record.getRecordProperty(p), feature);
 	    if (dataEntry != null)
 		dataEntry.addProperty(OT.OTProperty.values.createProperty(getJenaModel()), featureValue);
 	}

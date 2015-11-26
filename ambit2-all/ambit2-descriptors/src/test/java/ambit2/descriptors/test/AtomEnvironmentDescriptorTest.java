@@ -16,8 +16,8 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
+import org.openscience.cdk.silent.AtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 
@@ -41,8 +41,8 @@ i think this is due to cdk:formalNeighbourCount entry missing for some of the ty
  */
 public class AtomEnvironmentDescriptorTest {
 
-    protected IMolecule getMol() {
-            IMolecule mol = new org.openscience.cdk.Molecule();
+    protected IAtomContainer getMol() {
+            IAtomContainer mol = new AtomContainer();
             IAtom a1 = new org.openscience.cdk.Atom("C");
             mol.addAtom(a1);
             IAtom a2 = new org.openscience.cdk.Atom("C");

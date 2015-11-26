@@ -1,0 +1,129 @@
+HEADER    CSD ENTRY 1010587
+CRYST1  10.6000  10.6000  10.6000  90.00  90.00  90.00      I213
+SCALE1      0.094340  0.000000  0.000000       0.000000
+SCALE2      0.000000  0.094340  0.000000       0.000000
+SCALE3      0.000000  0.000000  0.094340       0.000000
+HETATM    1  Y1  UNK     1       2.650   2.650   2.650  1.00  0.00           Y  
+HETATM    2  Y2  UNK     1       0.223   0.000   2.650  1.00  0.00           Y  
+HETATM    3  O1  UNK     1       1.325   1.325   3.975  1.00  0.00           O  
+HETATM    4  O2  UNK     1       1.325   3.975   3.975  1.00  0.00           O  
+HETATM    5  Y3  UNK     1       0.000   2.650   5.745  1.00  0.00           Y  
+HETATM    6  Y2  UNK     1       0.000   2.650   0.223  1.00  0.00           Y  
+HETATM    7  O1  UNK     1       1.325   3.975   1.325  1.00  0.00           O  
+HETATM    8  O2  UNK     1       3.975   3.975   1.325  1.00  0.00           O  
+HETATM    9  Y3  UNK     1       2.650   5.745   0.000  1.00  0.00           Y  
+HETATM   10  Y2  UNK     1       2.650   0.223   0.000  1.00  0.00           Y  
+HETATM   11  O1  UNK     1       3.975   1.325   1.325  1.00  0.00           O  
+HETATM   12  O2  UNK     1       3.975   1.325   3.975  1.00  0.00           O  
+HETATM   13  Y3  UNK     1       5.745   0.000   2.650  1.00  0.00           Y  
+HETATM   14  Y1  UNK     1      -2.650   2.650  -2.650  1.00  0.00           Y  
+HETATM   15  O1  UNK     1      -3.975   1.325  -1.325  1.00  0.00           O  
+HETATM   16  O2  UNK     1      -1.325   1.325  -1.325  1.00  0.00           O  
+HETATM   17  O2  UNK     1      -1.325   3.975   6.625  1.00  0.00           O  
+HETATM   18  O1  UNK     1      -1.325  -1.325   3.975  1.00  0.00           O  
+HETATM   19  O1  UNK     1      -1.325   1.325   1.325  1.00  0.00           O  
+HETATM   20  O2  UNK     1      -1.325  -1.325   1.325  1.00  0.00           O  
+HETATM   21  Y1  UNK     1      -2.650   2.650   7.950  1.00  0.00           Y  
+HETATM   22  Y1  UNK     1      -2.650  -2.650   2.650  1.00  0.00           Y  
+HETATM   23  Y1  UNK     1      -2.650   2.650   2.650  1.00  0.00           Y  
+HETATM   24  Y2  UNK     1      -5.300   2.650  -0.223  1.00  0.00           Y  
+HETATM   25  Y2  UNK     1       5.300   2.650  -0.223  1.00  0.00           Y  
+HETATM   26  Y2  UNK     1      -0.223   5.300   2.650  1.00  0.00           Y  
+HETATM   27  Y2  UNK     1       0.000  -2.650   5.077  1.00  0.00           Y  
+HETATM   28  Y2  UNK     1      -2.650   5.523   5.300  1.00  0.00           Y  
+HETATM   29  Y2  UNK     1      -5.523  -0.000  -2.650  1.00  0.00           Y  
+HETATM   30  Y2  UNK     1       2.650  -0.223   5.300  1.00  0.00           Y  
+HETATM   31  O1  UNK     1      -3.975   3.975  -3.975  1.00  0.00           O  
+HETATM   32  O1  UNK     1      -1.325   3.975  -1.325  1.00  0.00           O  
+HETATM   33  O1  UNK     1       3.975  -1.325  -1.325  1.00  0.00           O  
+HETATM   34  O1  UNK     1       1.325  -1.325   1.325  1.00  0.00           O  
+HETATM   35  O1  UNK     1       3.975  -1.325   3.975  1.00  0.00           O  
+HETATM   36  O1  UNK     1       3.975   3.975  -1.325  1.00  0.00           O  
+HETATM   37  O1  UNK     1       1.325   1.325  -1.325  1.00  0.00           O  
+HETATM   38  O1  UNK     1      -1.325   3.975   3.975  1.00  0.00           O  
+HETATM   39  O2  UNK     1      -3.975   1.325  -3.975  1.00  0.00           O  
+HETATM   40  O2  UNK     1      -1.325   3.975  -3.975  1.00  0.00           O  
+HETATM   41  O2  UNK     1       6.625  -1.325   3.975  1.00  0.00           O  
+HETATM   42  O2  UNK     1       3.975   6.625  -1.325  1.00  0.00           O  
+HETATM   43  O2  UNK     1       1.325  -1.325  -1.325  1.00  0.00           O  
+HETATM   44  O2  UNK     1       1.325   6.625   1.325  1.00  0.00           O  
+HETATM   45  O2  UNK     1       3.975  -1.325   1.325  1.00  0.00           O  
+HETATM   46  O2  UNK     1       1.325   3.975  -1.325  1.00  0.00           O  
+HETATM   47  O2  UNK     1       1.325   1.325   6.625  1.00  0.00           O  
+HETATM   48  O2  UNK     1      -1.325   1.325   3.975  1.00  0.00           O  
+HETATM   49  O2  UNK     1       6.625   1.325   1.325  1.00  0.00           O  
+HETATM   50  Y3  UNK     1       5.300   2.650   4.855  1.00  0.00           Y  
+HETATM   51  Y3  UNK     1      -2.650  -0.445   0.000  1.00  0.00           Y  
+HETATM   52  Y3  UNK     1       0.445   5.300   7.950  1.00  0.00           Y  
+HETATM   53  Y3  UNK     1      -0.000  -2.650  -0.445  1.00  0.00           Y  
+HETATM   54  Y3  UNK     1      -2.650   0.445   5.300  1.00  0.00           Y  
+HETATM   55  Y3  UNK     1       4.855   5.300   2.650  1.00  0.00           Y  
+HETATM   56  Y3  UNK     1       2.650   4.855   5.300  1.00  0.00           Y  
+HETATM   57  Y3  UNK     1      -0.445  -0.000  -2.650  1.00  0.00           Y  
+CONECT    1    3    4    7    8
+CONECT    1   11   12
+CONECT    2    3   18   19   20
+CONECT    2   34   48
+CONECT    3    1    2    5   30
+CONECT    4    1    5   26   56
+CONECT    5    3    4   17   38
+CONECT    5   47   48
+CONECT    6    7   16   19   32
+CONECT    6   37   46
+CONECT    7    1    6    9   26
+CONECT    8    1    9   25   55
+CONECT    9    7    8   36   42
+CONECT    9   44   46
+CONECT   10   11   33   34   37
+CONECT   10   43   45
+CONECT   11    1   10   13   25
+CONECT   12    1   13   30   50
+CONECT   13   11   12   35   41
+CONECT   13   45   49
+CONECT   14   15   16   31   32
+CONECT   14   39   40
+CONECT   15   14   24   29   51
+CONECT   16    6   14   51   57
+CONECT   17    5   21   28   52
+CONECT   18    2   22   27   54
+CONECT   19    2    6   23   51
+CONECT   20    2   22   51   53
+CONECT   21   17
+CONECT   22   18   20
+CONECT   23   19   38   48
+CONECT   24   15
+CONECT   25    8   11   36   49
+CONECT   26    4    7   38   44
+CONECT   27   18
+CONECT   28   17   38
+CONECT   29   15   39
+CONECT   30    3   12   35   47
+CONECT   31   14
+CONECT   32    6   14
+CONECT   33   10
+CONECT   34    2   10   53
+CONECT   35   13   30
+CONECT   36    9   25
+CONECT   37    6   10   57
+CONECT   38    5   23   26   28
+CONECT   39   14   29
+CONECT   40   14
+CONECT   41   13
+CONECT   42    9
+CONECT   43   10   53   57
+CONECT   44    9   26
+CONECT   45   10   13
+CONECT   46    6    9
+CONECT   47    5   30
+CONECT   48    2    5   23   54
+CONECT   49   13   25
+CONECT   50   12
+CONECT   51   15   16   19   20
+CONECT   52   17
+CONECT   53   20   34   43
+CONECT   54   18   48
+CONECT   55    8
+CONECT   56    4
+CONECT   57   16   37   43
+MASTER        0    0    0    0    0    0    0    3   57    0   65    0
+END

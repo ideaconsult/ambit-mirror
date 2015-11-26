@@ -24,7 +24,7 @@ public class SmartsScreeningKeys
 	
 	void loadKeysFromResource() throws Exception
 	{
-		InputStream inStream = getClass().getClassLoader().getResourceAsStream("smartskeys.txt");
+		InputStream inStream = getClass().getClassLoader().getResourceAsStream("ambit2/smarts/smartskeys.txt");
 		BufferedReader inReader  = new BufferedReader(new InputStreamReader(inStream));
 		mSmartsKeys.clear();
 		try {

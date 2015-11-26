@@ -36,6 +36,7 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
@@ -49,142 +50,159 @@ import ambit2.core.data.StringDescriptorResultType;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.some.SOMERawReader.someindex;
 
-
 /**
- * Used by {@link DescriptorSOMEShell} <br> 
- * Invokes some.exe from Mopac 7.1 http://www.dddc.ac.cn/adme/myzheng/SOME_1_0.tar.gz.<br>
- * @author Nina Jeliazkova nina@acad.bg
- * <b>Modified</b> 2010-9-4
+ * Used by {@link DescriptorSOMEShell} <br>
+ * Invokes some.exe from Mopac 7.1
+ * http://www.dddc.ac.cn/adme/myzheng/SOME_1_0.tar.gz.<br>
+ * 
+ * @author Nina Jeliazkova nina@acad.bg <b>Modified</b> 2010-9-4
  */
-public class DescriptorSOMEShell implements IMolecularDescriptor , IStructureDiagramHighlights {
+public class DescriptorSOMEShell implements IMolecularDescriptor,
+		IStructureDiagramHighlights {
 
-    protected static Logger logger = Logger.getLogger(DescriptorSOMEShell.class.getName());
-    protected SOMEShell some_shell;
-    protected SOMEVisualizer visualizer;
-    
+	protected static Logger logger = Logger.getLogger(DescriptorSOMEShell.class
+			.getName());
+	protected SOMEShell some_shell;
+	protected SOMEVisualizer visualizer;
 
-    /**
+	/**
      * 
      */
 
-    public DescriptorSOMEShell() throws ShellException {
-        super();
-        some_shell = new SOMEShell();
-        
-    }
+	public DescriptorSOMEShell() throws ShellException {
+		super();
+		some_shell = new SOMEShell();
 
-    public String toString() {
-    	return "Site Of Metabolism Estimator " + some_shell + " (http://www.dddc.ac.cn/adme/myzheng/SOME_1_0.tar.gz.)";
-    }
-    
-    public String[] getParameterNames() {
-        return null;
-    }
-    public Object[] getParameters() {
-        return null;
-    }
-    public Object getParameterType(String arg0) {
-        return "";
-    }
-    public DescriptorSpecification getSpecification() {
-        return new DescriptorSpecification(
-        	String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"SOME"),
-            this.getClass().getName(),
-            "$Id: DescriptorSOMEShell.java,v 0.2 2010/09/04 18:24:00 jeliazkova.nina@gmail.com$",
-            "http://www.dddc.ac.cn/adme/myzheng/SOME_1_0.tar.gz");
-    };
-    public void setParameters(Object[] arg0) throws CDKException {
-    }
-    public DescriptorValue calculate(IAtomContainer arg0) {
-    	ArrayResult r = null;
-    	try {
-    		if ((arg0==null) || (arg0.getAtomCount()==0)) throw new CDKException("Empty molecule!");
-    		if (!StructureTypeProcessor.has3DCoordinates(arg0)) throw new CDKException("No 3D coordinates!");
-    		logger.info(toString());
-	        IAtomContainer newmol = some_shell.runShell(arg0);
-	        
-	        Object value = newmol.getProperty(SOMEShell.SOME_RESULT);
-	        
-	        final int[] count = new int[SOMERawReader.someindex.values().length];
-	        for (int i=0; i < count.length;i++) count[i] = 0;
-	        
-	        if (value == null) value = "@SOME results: NONE";
-	        else {
-	        	SOMEResultsParser parser = new SOMEResultsParser() {
-	        		@Override
-	        		protected void process(int atomNum, String atomSymbol,
-	        				someindex index, double value, boolean star) {
-	        			if (star) count[index.ordinal()] ++;
-	        		}
-	        	};
-	        	parser.parseRecord(value.toString());
-	        }
-	         
-	        r = new ArrayResult(new Object[] {
-	        		value.toString(),
-	        		count[someindex.aliphaticHydroxylation.ordinal()],
-	        		count[someindex.aromaticHydroxylation.ordinal()],
-	        		count[someindex.NDealkylation.ordinal()],
-	        		count[someindex.NOxidation.ordinal()],
-	        		count[someindex.ODealkylation.ordinal()],
-	        		count[someindex.SOxidation.ordinal()],
-	        });
-        	
-	        return new DescriptorValue(
-		        		getSpecification(),
-		                getParameterNames(),
-		                getParameters(),r,getDescriptorNames());    	        	
-   		
-    	} catch (Exception x) {
-    		r = new ArrayResult(new Object[] {
-    			x.getMessage(),
-    			0,0,0,0,0,0
-    		});
-	        return new DescriptorValue(getSpecification(),
-	                getParameterNames(),getParameters(),r,getDescriptorNames());    
-    	}
-        
-    }
-    public String[] getDescriptorNames() {
-    	return new String[] {
-    			SOMEShell.SOME_RESULT,
-        		someindex.aliphaticHydroxylation.name(),
-        		someindex.aromaticHydroxylation.name(),
-        		someindex.NDealkylation.name(),
-        		someindex.NOxidation.name(),
-        		someindex.ODealkylation.name(),
-        		someindex.SOxidation.name()
-    	};
-    }
-    public IDescriptorResult getDescriptorResultType() {
-    	return new StringDescriptorResultType();
-    }
-    protected void debug(String message) {
-    	logger.info(message);
-    }
-   
-    public BufferedImage getImage(IAtomContainer mol) throws AmbitException {
-    	if (visualizer==null) visualizer = new SOMEVisualizer();
-    	return visualizer.getImage(mol);
-    }
-    public BufferedImage getImage(IAtomContainer mol,String ruleID,int width,int height,boolean atomnumbers) throws AmbitException {
-    	if (visualizer==null) visualizer = new SOMEVisualizer();
-    	return visualizer.getImage(mol,ruleID,width,height,atomnumbers);
-    }
-    
-    
-    public Dimension getImageSize() {
-    	if (visualizer==null) visualizer = new SOMEVisualizer();
+	}
+
+	@Override
+	public void initialise(IChemObjectBuilder arg0) {
+
+	}
+
+	public String toString() {
+		return "Site Of Metabolism Estimator " + some_shell
+				+ " (http://www.dddc.ac.cn/adme/myzheng/SOME_1_0.tar.gz.)";
+	}
+
+	public String[] getParameterNames() {
+		return null;
+	}
+
+	public Object[] getParameters() {
+		return null;
+	}
+
+	public Object getParameterType(String arg0) {
+		return "";
+	}
+
+	public DescriptorSpecification getSpecification() {
+		return new DescriptorSpecification(
+				String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY, "SOME"),
+				this.getClass().getName(),
+				"$Id: DescriptorSOMEShell.java,v 0.2 2010/09/04 18:24:00 jeliazkova.nina@gmail.com$",
+				"http://www.dddc.ac.cn/adme/myzheng/SOME_1_0.tar.gz");
+	};
+
+	public void setParameters(Object[] arg0) throws CDKException {
+	}
+
+	public DescriptorValue calculate(IAtomContainer arg0) {
+		ArrayResult r = null;
+		try {
+			if ((arg0 == null) || (arg0.getAtomCount() == 0))
+				throw new CDKException("Empty molecule!");
+			if (!StructureTypeProcessor.has3DCoordinates(arg0))
+				throw new CDKException("No 3D coordinates!");
+			logger.info(toString());
+			IAtomContainer newmol = some_shell.runShell(arg0);
+
+			Object value = newmol.getProperty(SOMEShell.SOME_RESULT);
+
+			final int[] count = new int[SOMERawReader.someindex.values().length];
+			for (int i = 0; i < count.length; i++)
+				count[i] = 0;
+
+			if (value == null)
+				value = "@SOME results: NONE";
+			else {
+				SOMEResultsParser parser = new SOMEResultsParser() {
+					@Override
+					protected void process(int atomNum, String atomSymbol,
+							someindex index, double value, boolean star) {
+						if (star)
+							count[index.ordinal()]++;
+					}
+				};
+				parser.parseRecord(value.toString());
+			}
+
+			r = new ArrayResult(new Object[] { value.toString(),
+					count[someindex.aliphaticHydroxylation.ordinal()],
+					count[someindex.aromaticHydroxylation.ordinal()],
+					count[someindex.NDealkylation.ordinal()],
+					count[someindex.NOxidation.ordinal()],
+					count[someindex.ODealkylation.ordinal()],
+					count[someindex.SOxidation.ordinal()], });
+
+			return new DescriptorValue(getSpecification(), getParameterNames(),
+					getParameters(), r, getDescriptorNames());
+
+		} catch (Exception x) {
+			r = new ArrayResult(
+					new Object[] { x.getMessage(), 0, 0, 0, 0, 0, 0 });
+			return new DescriptorValue(getSpecification(), getParameterNames(),
+					getParameters(), r, getDescriptorNames());
+		}
+
+	}
+
+	public String[] getDescriptorNames() {
+		return new String[] { SOMEShell.SOME_RESULT,
+				someindex.aliphaticHydroxylation.name(),
+				someindex.aromaticHydroxylation.name(),
+				someindex.NDealkylation.name(), someindex.NOxidation.name(),
+				someindex.ODealkylation.name(), someindex.SOxidation.name() };
+	}
+
+	public IDescriptorResult getDescriptorResultType() {
+		return new StringDescriptorResultType();
+	}
+
+	protected void debug(String message) {
+		logger.info(message);
+	}
+
+	public BufferedImage getImage(IAtomContainer mol) throws AmbitException {
+		if (visualizer == null)
+			visualizer = new SOMEVisualizer();
+		return visualizer.getImage(mol);
+	}
+
+	public BufferedImage getImage(IAtomContainer mol, String ruleID, int width,
+			int height, boolean atomnumbers) throws AmbitException {
+		if (visualizer == null)
+			visualizer = new SOMEVisualizer();
+		return visualizer.getImage(mol, ruleID, width, height, atomnumbers);
+	}
+
+	public Dimension getImageSize() {
+		if (visualizer == null)
+			visualizer = new SOMEVisualizer();
 		return visualizer.imageSize;
 	}
+
 	public void setImageSize(Dimension imageSize) {
-		if (visualizer==null) visualizer = new SOMEVisualizer();
+		if (visualizer == null)
+			visualizer = new SOMEVisualizer();
 		this.visualizer.imageSize = imageSize;
 	}
-	
+
 	@Override
 	public BufferedImage getLegend(int width, int height) throws AmbitException {
-		if (visualizer==null) visualizer = new SOMEVisualizer();
+		if (visualizer == null)
+			visualizer = new SOMEVisualizer();
 		return visualizer.getLegend(width, height);
 	}
 

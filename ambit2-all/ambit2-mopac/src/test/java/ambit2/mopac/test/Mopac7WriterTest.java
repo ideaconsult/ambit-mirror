@@ -39,9 +39,9 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
@@ -82,8 +82,8 @@ public class Mopac7WriterTest  {
             	}
             };
             SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
-            IMolecule mol = p.parseSmiles("CCCCCc1cccc2cccc(c12)CCC");
-
+            IAtomContainer mol = p.parseSmiles("CCCCCc1cccc2cccc(c12)CCC");
+            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
     		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
             adder.addImplicitHydrogens(mol);
             AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);            
@@ -176,7 +176,7 @@ public class Mopac7WriterTest  {
             	System.out.println(
             			Mopac7Reader.parameters[i]
             			                        + " = " +
-            			((IMolecule) m).getProperty(Mopac7Reader.parameters[i])
+            			((IAtomContainer) m).getProperty(Mopac7Reader.parameters[i])
             			);
             			*/
             Assert.assertEquals(-10.552,
@@ -185,9 +185,39 @@ public class Mopac7WriterTest  {
             Assert.assertEquals(1.438,
             		Double.parseDouble(m.getProperty(DescriptorMopacShell.ELUMO).toString()),
             		1E-3);   
-    		for (int i=0; i < ((IMolecule)m).getAtomCount(); i++) {
-    			Assert.assertNotNull(((IMolecule)m).getAtom(i).getPoint3d());
+    		for (int i=0; i < ((IAtomContainer)m).getAtomCount(); i++) {
+    			Assert.assertNotNull(((IAtomContainer)m).getAtom(i).getPoint3d());
     		}            
+    }
+    
+    @Test
+    public void testReader2012() throws Exception {
+    		InputStream in = Mopac7Writer.class.getClassLoader().getResourceAsStream(
+    				"ambit2/mopac/mopac2012.out");
+            Mopac7Reader r = new Mopac7Reader(in);
+            
+    		SmilesParserWrapper p =  SmilesParserWrapper.getInstance(SMILES_PARSER.CDK);
+    		String smiles = "O[Sb]34(O[Sb]O4([Sb]O23([Sb]O1[Sb]O[Sb]12(O))))";
+            IChemObject m = p.parseSmiles(smiles); 
+            m = r.read(m);
+            in.close();
+            Object e = m.getProperty("EIGENVALUES");
+            Assert.assertNotNull(e);
+            /*
+            for (int i=0; i < Mopac7Reader.parameters.length;i++)
+            	System.out.println(
+            			Mopac7Reader.parameters[i]
+            			                        + " = " +
+            			((IAtomContainer) m).getProperty(Mopac7Reader.parameters[i])
+            			);
+            			*/
+            Assert.assertEquals(-7.287,
+            		Double.parseDouble(m.getProperty(DescriptorMopacShell.EHOMO).toString()),
+            		1E-3);
+            Assert.assertEquals(-0.560,
+            		Double.parseDouble(m.getProperty(DescriptorMopacShell.ELUMO).toString()),
+            		1E-3);   
+                        
     }
     
     @Test
@@ -212,8 +242,8 @@ public class Mopac7WriterTest  {
             		Double.parseDouble(m.getProperty(DescriptorMopacShell.ELUMO).toString()),
             		1E-3);   
             		*/
-    		for (int i=0; i < ((IMolecule)m).getAtomCount(); i++) {
-    			Assert.assertNotNull(((IMolecule)m).getAtom(i).getPoint3d());
+    		for (int i=0; i < ((IAtomContainer)m).getAtomCount(); i++) {
+    			Assert.assertNotNull(((IAtomContainer)m).getAtom(i).getPoint3d());
     		}            
     }
     
@@ -247,7 +277,7 @@ public class Mopac7WriterTest  {
                         
     }
     public void testNCI() throws Exception {
-            IteratingMDLReader reader = new IteratingMDLReader(
+            IteratingSDFReader reader = new IteratingSDFReader(
                 new FileInputStream("D:\\nina\\Databases\\nciopen_3D_fixed.sdf"),
                 SilentChemObjectBuilder.getInstance()
                 );
@@ -260,11 +290,11 @@ public class Mopac7WriterTest  {
             DescriptorMopacShell shell = new DescriptorMopacShell();
             while (reader.hasNext()) {
                 Object o = reader.next();
-                if (o instanceof IMolecule) {
+                if (o instanceof IAtomContainer) {
                     n++;
                     if (n < 210) continue;
                     if (n > 219) break;
-                    IMolecule m = (IMolecule) o;
+                    IAtomContainer m = (IAtomContainer) o;
                     //writer.write((org.openscience.cdk.interfaces.ChemObject)o);
                     
 

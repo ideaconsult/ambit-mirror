@@ -330,17 +330,17 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader impleme
 	if (value.isLiteral()) {
 	    RDFDatatype datatype = ((Literal) value).getDatatype();
 	    if (XSDDatatype.XSDdouble.equals(datatype))
-		record.setProperty(key, ((Literal) value).getDouble());
+		record.setRecordProperty(key, ((Literal) value).getDouble());
 	    else if (XSDDatatype.XSDfloat.equals(datatype))
-		record.setProperty(key, ((Literal) value).getFloat());
+		record.setRecordProperty(key, ((Literal) value).getFloat());
 	    else if (XSDDatatype.XSDinteger.equals(datatype))
-		record.setProperty(key, ((Literal) value).getInt());
+		record.setRecordProperty(key, ((Literal) value).getInt());
 	    else if (XSDDatatype.XSDstring.equals(datatype))
-		record.setProperty(key, ((Literal) value).getString());
+		record.setRecordProperty(key, ((Literal) value).getString());
 	    else if (XSDDatatype.XSDboolean.equals(datatype))
-		record.setProperty(key, ((Literal) value).getBoolean());
+		record.setRecordProperty(key, ((Literal) value).getBoolean());
 	    else
-		record.setProperty(key, ((Literal) value).getString());
+		record.setRecordProperty(key, ((Literal) value).getString());
 	}
     }
 

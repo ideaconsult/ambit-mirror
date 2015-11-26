@@ -40,10 +40,10 @@ public class SubstanceByOwnerResource<Q extends IQueryRetrieval<SubstanceRecord>
 
 	    public ambit2.base.data.SubstanceRecord getObject(java.sql.ResultSet rs) throws AmbitException {
 		ambit2.base.data.SubstanceRecord record = super.getObject(rs);
-		record.setProperty(new SubstancePublicName(), record.getPublicName());
-		record.setProperty(new SubstanceName(), record.getSubstanceName());
-		record.setProperty(new SubstanceUUID(), record.getSubstanceUUID());
-		record.setProperty(new SubstanceOwner(), record.getOwnerName());
+		record.setRecordProperty(new SubstancePublicName(), record.getPublicName());
+		record.setRecordProperty(new SubstanceName(), record.getSubstanceName());
+		record.setRecordProperty(new SubstanceUUID(), record.getSubstanceUUID());
+		record.setRecordProperty(new SubstanceOwner(), record.getOwnerName());
 		return record;
 	    }
 	};

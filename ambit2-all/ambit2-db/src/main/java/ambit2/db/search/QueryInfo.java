@@ -1,6 +1,6 @@
 package ambit2.db.search;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.data.SourceDataset;
 
@@ -60,7 +60,7 @@ public class QueryInfo {
     protected String smiles;
     protected String inchi;
 
-    protected IMolecule molecule;
+    protected IAtomContainer molecule;
     protected Double threshold = 0.5;
     public static Double[] threshold_options = { 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };
 
@@ -121,11 +121,11 @@ public class QueryInfo {
 	this.inchi = inchi;
     }
 
-    public IMolecule getMolecule() {
+    public IAtomContainer getMolecule() {
 	return molecule;
     }
 
-    public void setMolecule(IMolecule molecule) {
+    public void setMolecule(IAtomContainer molecule) {
 	this.molecule = molecule;
     }
 

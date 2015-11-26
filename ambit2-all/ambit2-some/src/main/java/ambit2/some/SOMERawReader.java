@@ -5,7 +5,6 @@ import java.io.Reader;
 import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -13,6 +12,7 @@ import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 
 import ambit2.core.io.RawIteratingReader;
+import ambit2.rendering.IAtomContainerHighlights;
 
 /**
  * Reads SOME records
@@ -151,9 +151,9 @@ public class SOMERawReader extends RawIteratingReader<String> {
 		return recordBuffer != null;
 	}
 
-	public static IProcessor<IAtomContainer, IChemObjectSelection> getAtomSelector(
+	public static IAtomContainerHighlights getAtomSelector(
 			IAtomContainer structure, someindex index) throws Exception {
-		return new IProcessor<IAtomContainer, IChemObjectSelection>() {
+		return new IAtomContainerHighlights() {
 			@Override
 			public IChemObjectSelection process(IAtomContainer target)
 					throws AmbitException {

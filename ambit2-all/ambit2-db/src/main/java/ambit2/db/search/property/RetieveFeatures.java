@@ -24,7 +24,7 @@ public class RetieveFeatures extends AbstractPropertyRetrieval<String, IStructur
 	
 	@Override
 	public String getSQL() throws AmbitException {
-		Iterable<Property> properties = getValue().getProperties();
+		Iterable<Property> properties = getValue().getRecordProperties();
 		StringBuilder b = new StringBuilder();
 		int count = 0;
 		for (Property property : properties) 
@@ -40,7 +40,7 @@ public class RetieveFeatures extends AbstractPropertyRetrieval<String, IStructur
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		Iterable<Property> properties = getValue().getProperties();
+		Iterable<Property> properties = getValue().getRecordProperties();
 		for (Property property : properties) 
 			if (property.isEnabled()) {
 				params.add(new QueryParam<String>(String.class, property.getName()));				

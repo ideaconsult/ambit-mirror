@@ -1,6 +1,7 @@
 package ambit2.smarts;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
@@ -15,7 +16,7 @@ public class ChemObjectToSmiles
 	IAtomContainer mol;
 	int NA;
 	int walkedAtoms[];
-	Vector<ClosureBond> closures = new Vector<ClosureBond>();
+	List<ClosureBond> closures = new ArrayList<ClosureBond>();
 	String closureNums[];
 	int curIndex;
 		
@@ -129,7 +130,7 @@ public class ChemObjectToSmiles
 	String getAtomWalkString(int atNum, int parentAt)
 	{	
 		//strings for the neighbors atoms
-		Vector<String> v = new Vector<String>();   
+		List<String> v = new ArrayList<String>();   
 		TopLayer tl = (TopLayer)mol.getAtom(atNum).getProperty(TopLayer.TLProp);
 		
 		int a;	

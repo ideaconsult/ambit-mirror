@@ -7,9 +7,9 @@ import javax.vecmath.Point2d;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
-import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.silent.AtomContainerSet;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
@@ -26,7 +26,8 @@ import ambit2.rendering.CompoundImageTools;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
 
-public class Structure2DProcessor extends	AbstractStructureProcessor<CompoundImageTools> {
+public class Structure2DProcessor extends
+		AbstractStructureProcessor<CompoundImageTools> {
 	/**
 	 * 
 	 */
@@ -36,53 +37,53 @@ public class Structure2DProcessor extends	AbstractStructureProcessor<CompoundIma
 	 */
 	protected transient StructureTypeProcessor stype = new StructureTypeProcessor();
 	protected transient MoleculeReader reader = new MoleculeReader();
-	
-	public Structure2DProcessor(
-			Reference applicationRootReference,
-			ModelQueryResults model, 
-			ModelURIReporter modelReporter,
-			PropertyURIReporter propertyReporter, 
-			String[] targetURI) throws ResourceException {
-		super(applicationRootReference,model,modelReporter,propertyReporter,targetURI);
+
+	public Structure2DProcessor(Reference applicationRootReference,
+			ModelQueryResults model, ModelURIReporter modelReporter,
+			PropertyURIReporter propertyReporter, String[] targetURI)
+			throws ResourceException {
+		super(applicationRootReference, model, modelReporter, propertyReporter,
+				targetURI);
 		structureRequired = true;
 		valuesRequired = false;
 	}
-	
 
 	@Override
-	public synchronized CompoundImageTools createPredictor(ModelQueryResults model)
-			throws ResourceException {
-			try {
-				return new CompoundImageTools();
-			} catch (Exception x) {
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
-			}
+	public synchronized CompoundImageTools createPredictor(
+			ModelQueryResults model) throws ResourceException {
+		try {
+			return new CompoundImageTools();
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+					x.getMessage(), x);
+		}
 	}
-
 
 	@Override
 	public Object predict(IStructureRecord target) throws AmbitException {
 		try {
 			IAtomContainer mol = reader.process(target);
 			IAtomContainer newmol = null;
-			if (mol!= null) {
+			if (mol != null) {
 				STRUC_TYPE structype = stype.process(mol);
-				if (mol.getAtomCount()==1) {
+				if (mol.getAtomCount() == 1) {
 					newmol = mol;
-					mol.getAtom(0).setPoint2d(new Point2d(new double[]{0.0001,0.0001}));
+					mol.getAtom(0).setPoint2d(
+							new Point2d(new double[] { 0.0001, 0.0001 }));
 				} else {
-					if (!STRUC_TYPE.D1.equals(structype)) return target;
-					IMoleculeSet molecules = new MoleculeSet();
+					if (!STRUC_TYPE.D1.equals(structype))
+						return target;
+					IAtomContainerSet molecules = new AtomContainerSet();
 					newmol = MoleculeTools.newAtomContainer(mol.getBuilder());
-			        predictor.generate2D(mol,true, molecules);
-					for (int i=0; i < molecules.getMoleculeCount(); i++) 
-						newmol.add(molecules.getMolecule(i));
+					predictor.generate2D(mol, true, molecules);
+					for (int i = 0; i < molecules.getAtomContainerCount(); i++)
+						newmol.add(molecules.getAtomContainer(i));
 				}
-				if (newmol!= null) {
+				if (newmol != null) {
 					StringWriter sw = new StringWriter();
 					MDLWriter writer = new MDLWriter(sw);
 					writer.writeMolecule(newmol);
-					
+
 					target.setContent(sw.toString());
 					structype = stype.process(newmol);
 					target.setType(structype);
@@ -92,21 +93,23 @@ public class Structure2DProcessor extends	AbstractStructureProcessor<CompoundIma
 				}
 			}
 		} catch (Exception x) {
-			logger.log(Level.SEVERE,x.getMessage(),x);
+			logger.log(Level.SEVERE, x.getMessage(), x);
 		}
 		return target;
 	}
+
 	@Override
 	public String toString() {
 
 		StringBuilder b = new StringBuilder();
-		b.append(String.format("Structures required\t%s\n",structureRequired?"YES":"NO"));
+		b.append(String.format("Structures required\t%s\n",
+				structureRequired ? "YES" : "NO"));
 
 		if (predictor != null) {
 			b.append(predictor.toString());
 		}
 		return b.toString();
-				
-	}	
+
+	}
 
 }

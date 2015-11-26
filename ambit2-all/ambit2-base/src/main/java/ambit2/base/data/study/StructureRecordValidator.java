@@ -101,7 +101,7 @@ public class StructureRecordValidator extends DefaultAmbitProcessor<IStructureRe
 	    if ((record.getReferenceSubstanceUUID()==null) && referenceStructure!=null) {
 		String uuid = generateUUIDfromString(prefix, null);
 		record.setReferenceSubstanceUUID(uuid);
-		referenceStructure.setProperty(Property.getI5UUIDInstance(), uuid);
+		referenceStructure.setRecordProperty(Property.getI5UUIDInstance(), uuid);
 	    }
 
 	}

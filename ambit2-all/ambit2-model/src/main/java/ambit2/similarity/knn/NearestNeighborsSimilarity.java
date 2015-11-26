@@ -29,9 +29,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
-
-import org.apache.poi.ss.formula.functions.T;
-
 import ambit2.featureselection.IAttributeSelection;
 import ambit2.similarity.AbstractSimilarityModel;
 import ambit2.similarity.measure.DistanceComparable;
@@ -99,6 +96,7 @@ public abstract class NearestNeighborsSimilarity<ID, Features> extends
      * @return the property
      * @throws Exception
      */
+    /*
     protected Object calculateProperty(T query, List<DistanceComparable<T>> neighbors) throws Exception  {
 
         Iterator<DistanceComparable<T>> i = neighbors.iterator();
@@ -135,6 +133,7 @@ public abstract class NearestNeighborsSimilarity<ID, Features> extends
         if (normalize != 0) property = property/normalize;
         return property;
     }
+    */
     protected double calculateAverageDistance(Features query, List<DistanceComparable<Features>> neighbors) throws Exception  {
 
         Iterator<DistanceComparable<Features>> i = neighbors.iterator();

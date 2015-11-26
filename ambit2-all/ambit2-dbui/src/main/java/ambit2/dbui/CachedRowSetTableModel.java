@@ -34,7 +34,6 @@ import javax.swing.table.AbstractTableModel;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.core.data.MoleculeTools;
 
@@ -90,7 +89,7 @@ public class CachedRowSetTableModel extends AbstractTableModel {
             if (records.getMetaData().getColumnName(columnIndex).equals("uncompress(structure)")) {
             	if (type == java.sql.Types.VARBINARY) {
 	                InputStream s = records.getBinaryStream(columnIndex);
-	                IMolecule m = null;
+	                IAtomContainer m = null;
 	                if ("SDF".equals(records.getString("format")))
 	                	m = MoleculeTools.readMolfile(new InputStreamReader(s));
 	                else

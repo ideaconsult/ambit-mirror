@@ -6,20 +6,20 @@ import java.io.RandomAccessFile;
 import java.util.BitSet;
 
 import org.junit.Test;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.fingerprint.PubchemFingerprinter;
 import org.openscience.cdk.graph.PathTools;
 import org.openscience.cdk.graph.matrix.ConnectionMatrix;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
-import ambit2.core.io.MyIteratingMDLReader;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.descriptors.fingerprints.PubChemFingerprinter;
 import ambit2.descriptors.geometrical.CGIDescriptor;
 import ambit2.descriptors.topological.CTIDescriptor;
@@ -138,7 +138,7 @@ public class TestUtilities
 	public static IAtomContainer loadMoleculeFromMDlFile(String molFile) throws Exception
 	{
 		IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
-		MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(molFile),b);
+		IteratingSDFReader reader = new IteratingSDFReader(new FileReader(molFile),b);
 
 		if (reader.hasNext()) 
 		{	
@@ -187,7 +187,7 @@ public class TestUtilities
 		long length = f.length();
 		
 		PubChemFingerprinter ambitFP = new PubChemFingerprinter();
-		PubchemFingerprinter cdkFP = new PubchemFingerprinter();
+		PubchemFingerprinter cdkFP = new PubchemFingerprinter(SilentChemObjectBuilder.getInstance());
 		long ambitTime = 0;
 		long cdkTime = 0;
 		long curTime = 0;
@@ -245,9 +245,9 @@ public class TestUtilities
 	{
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		PubChemFingerprinter ambitFP = new PubChemFingerprinter();
-		PubchemFingerprinter cdkFP = new PubchemFingerprinter();
+		PubchemFingerprinter cdkFP = new PubchemFingerprinter(SilentChemObjectBuilder.getInstance());
 		BitSet bs0 = ambitFP.getFingerprint(mol);
-		BitSet bs1 = cdkFP.getFingerprint(mol);
+		BitSet bs1 = cdkFP.getBitFingerprint(mol).asBitSet();
 		System.out.println(smiles);
 		System.out.println("ambit: " + bs0);
 		System.out.println("cdk:   " + bs1);

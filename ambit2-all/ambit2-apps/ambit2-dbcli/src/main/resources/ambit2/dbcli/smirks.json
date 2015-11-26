@@ -1,0 +1,157 @@
+{
+    "OPTIONS": {
+        "properties": {
+            "atomtypes": true,
+            "transformations": true,
+            "sparse": false
+        }
+    },
+    "REACTIONS": [
+        {
+            "NAME": "Nitro group uncharged -> charged",
+            "CLASS": "standardization",
+            "SMIRKS": "[*:1][N:2](=[O:3])=[O:4]>>[*:1][N+:2](=[O:3])[O-:4]",
+            "USE": false
+        },
+        {
+            "NAME": "Nitro group charged -> uncharged",
+            "CLASS": "standardization",
+            "SMIRKS": "[*:1][N+:2](=[O:3])[O-:4]>>[*:1][N:2](=[O:3])=[O:4]",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "N",
+                    "O"
+                ]
+            }
+        },
+        {
+            "NAME": "Ylide P",
+            "CLASS": "standardization",
+            "SMIRKS": "[*-:1][P+:2]([C:3])[C:4]>>[*:1]=[P:2]([C:3])[C:4]",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "P"
+                ]
+            }
+        },
+        {
+            "NAME": "Ylide N",
+            "CLASS": "standardization",
+            "SMIRKS": "[*-:1][N+;!X4:2]([C:3])[C:4]>>[*:1]=[N:2]([C:3])[C:4]",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "N"
+                ]
+            }
+        },
+        {
+            "NAME": "Ylide S=O",
+            "CLASS": "standardization",
+            "SMIRKS": "[O-:1][S+:2]([C:3])[C:4]>>[O:1]=[S:2]([C:3])[C:4]",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "S",
+                    "O"
+                ]
+            }
+        },
+        {
+            "NAME": "Ylide S=N",
+            "CLASS": "standardization",
+            "SMIRKS": "[N-:1][S+:2]([C:3])[C:4]>>[N:1]=[S:2]([C:3])[C:4]",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "S",
+                    "N"
+                ]
+            }
+        },
+        {
+            "NAME": "Ylide S",
+            "CLASS": "standardization",
+            "SMIRKS": "[*-:1][S+:2]([C:3])[C:4]>>[*:1]=[S:2]([C:3])[C:4]",
+            "USE": false,
+            "precondition": {
+                "atom": [
+                    "S"
+                ]
+            }
+        },
+        {
+            "NAME": "N#N=N",
+            "CLASS": "standardization",
+            "SMIRKS": "[N-:1]=[N+:2]=[N:3]>> [N:1]#[N:2]=[N:3]",
+            "example": "CC[N-]=[N+]=NCC",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "N"
+                ]
+            }
+        },
+        {
+            "NAME": "S=O",
+            "CLASS": "standardization",
+            "SMIRKS": "[S+:1][O-:2]>> [S:1]=[O:2]",
+            "example": "[O-][S+]1CC[S+]([O-])CC[S+]([O-])CC1",
+            "comment" : "overlaps with ylide S",
+            "USE": false,
+            "precondition": {
+                "atom": [
+                    "S"
+                ]
+            }
+        },
+        {
+            "NAME": "Amides",
+            "CLASS": "standardization",
+            "SMIRKS": "[N-:1][C:2]=[O:3]>>[N:1]([H])[C:2]=[O:3]",
+            "example": "O=C([N-])C",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "N"
+                ]
+            }
+        },
+        {
+            "NAME": "Quaternion",
+            "CLASS": "standardization",
+            "SMIRKS": "[N+;X4:1]>>[N:1][H]",
+            "example": "CC[N+](C)(C)CCOP(=O)([O-])OC",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "N"
+                ]
+            }
+        },
+		{
+            "NAME": "O-",
+            "CLASS": "uncharge",
+            "SMIRKS": "[O-;X1:1]>>[O:1][H]",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "O"
+                ]
+            }
+        },
+		{
+            "NAME": "S-",
+            "CLASS": "uncharge",
+            "SMIRKS": "[S-;X1:1]>>[S:1][H]",
+            "USE": true,
+            "precondition": {
+                "atom": [
+                    "O"
+                ]
+            }
+        }                    
+    ]
+}

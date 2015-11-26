@@ -228,25 +228,6 @@ public class CompoundResource extends
 			return new PDFConvertor<IStructureRecord, QueryStructureByID, PDFReporter<QueryStructureByID>>(
 					new PDFReporter<QueryStructureByID>(getTemplate(),
 							getGroupProperties()));
-
-		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			Dimension d = _dmode.isCollapsed() ? new Dimension(150, 150)
-					: new Dimension(250, 250);
-			Form form = getResourceRef(getRequest()).getQueryAsForm();
-			try {
-
-				d.width = Integer.parseInt(form.getFirstValue("w").toString());
-			} catch (Exception x) {
-			}
-			try {
-				d.height = Integer.parseInt(form.getFirstValue("h").toString());
-			} catch (Exception x) {
-			}
-			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundHTMLReporter(getCompoundInDatasetPrefix(),
-							getRequest(), _dmode, getURIReporter(),
-							getTemplate(), getGroupProperties(), d, headless),
-					MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			QueryURIReporter r = (QueryURIReporter) getURIReporter();
 			return new StringConvertor(r, MediaType.TEXT_URI_LIST,
@@ -318,10 +299,14 @@ public class CompoundResource extends
 							getRequest(), variant.getMediaType(),
 							getTemplate(), getGroupProperties()),
 					variant.getMediaType(), filenamePrefix);
-		} else
+		} else {
+			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(
+					getTemplate(), getGroupProperties(), folders, bundles,
+					getRequest(), getRequest().getRootRef().toString()
+							+ getCompoundInDatasetPrefix(), includeMol, null);
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SmilesReporter<QueryStructureByID>(),
-					ChemicalMediaType.CHEMICAL_SMILES, filenamePrefix);
+					cmpreporter, MediaType.APPLICATION_JSON, filenamePrefix);
+		}
 
 	}
 

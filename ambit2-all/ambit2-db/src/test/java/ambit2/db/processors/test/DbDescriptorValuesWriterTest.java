@@ -48,14 +48,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.descriptors.molecular.WeightDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor;
 import org.openscience.cdk.qsar.result.DoubleResult;
+import org.openscience.cdk.silent.AtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
 
@@ -64,7 +65,6 @@ import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.StringDescriptorResultType;
-import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.db.RepositoryReader;
 import ambit2.db.processors.DbDescriptorValuesWriter;
@@ -280,13 +280,13 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 			o = reader.next();
 			String content = reader.getStructure(o.getIdstructure());
 			if (content == null) continue;
-			IIteratingChemObjectReader mReader = new MyIteratingMDLReader(new StringReader(content),b);
+			IIteratingChemObjectReader mReader = new IteratingSDFReader(new StringReader(content),b);
 			
 			if (mReader.hasNext()) {
 				Object mol = mReader.next();
-				if (mol instanceof IMolecule) {
+				if (mol instanceof IAtomContainer) {
 					writer.setStructure(o);
-					writer.write(xlogp.calculate((IMolecule)mol));
+					writer.write(xlogp.calculate((IAtomContainer)mol));
 				}
 			}
 			o.clear();
@@ -312,14 +312,14 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 	 * @return
 	 * @throws Exception
 	 */
-	public IMolecule getTestMolecule() throws Exception {
-		IMolecule mol = new org.openscience.cdk. Molecule();
+	public IAtomContainer getTestMolecule() throws Exception {
+		IAtomContainer mol = new  AtomContainer();
 		InputStream in = SizeDescriptor.class.getClassLoader().getResourceAsStream(
 						"ambit2/db/processors/sdf/224824.sdf");
 		Assert.assertNotNull(in);
 		MDLV2000Reader reader = new MDLV2000Reader(in);
 		
-		mol = (IMolecule) reader.read(mol);
+		mol = (IAtomContainer) reader.read(mol);
 		reader.close();
 		return mol;
 	}

@@ -1,27 +1,53 @@
 {
     "commands": {
+    
+  		"split": {
+        	"name" : "split",
+        	"description" : "Splits an SDF into chunks of predefined size (-i inputfile -o outputfile).",
+        	"connection" : "config/ambit.properties",
+        	"post"  : {
+        		"params" : {
+        			":chunk" : { "mandatory" : false,  "type" : "Integer", "value" : 1000, "comment" : ""}
+        		}
+        	}
+        },       
+    	"standardize": {
+        	"name" : "standardize",
+        	"description" : "Chemical structure standardization (-i inputfile.sdf -o outputfile.sdf , recognized by extensions .sdf , .csv, .cml , .txt)",
+        	"post"  : {
+        		"params" : {
+        		    ":smirks" : { "mandatory" : false,  "type" : "String", "value" : null, "comment" : "JSON file with SMIRKS transformations"},
+        		    ":neutralise" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment" : "If true neutralises the molecule via set of predefined SMIRKS"},
+					":splitfragments" : { "mandatory" : false,  "type" : "Boolean", "value" : true, "comment" : "If true keeps the largest fragment"},
+        			":implicith" : { "mandatory" : false,  "type" : "Boolean", "value" : true, "comment" : "If true converts hydrogens to implicit"},
+					":stereo" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment" : "If true uses org.openscience.cdk.stereo.StereoElementFactory to set the stereochemistry"},
+					":isotopes" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment" : "If true clears isotopes"},
+					":tautomers" : { "mandatory" : false,  "type" : "Boolean", "value" : true, "comment" : "If true generates the top ranked tautomer"},
+        			":inchi" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment": "Generates InChIs. If -d tautomers=true InChI FixedH=true, otherwise generates standard InChI"},
+        			":smiles" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment": "Generates SMILES (isomeric, kekule)"},
+        			":smilescanonical" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment": "Generates SMILES (canonical)"},
+        			":page" : { "mandatory" : false,  "type" : "Integer", "value" : 0, "comment" : "Start page (first page = 0)"},
+        			":pagesize" : { "mandatory" : false,  "type" : "Integer", "value" : 20000, "comment" : "Page size (in number of records)"},
+        			":tag_inchi" : { "mandatory" : false,  "type" : "String", "value" : "InChI", "comment" : "Specifies the InChI tag"},
+        			":tag_inchikey" : { "mandatory" : false,  "type" : "String", "value" : "InChIKey", "comment" : "Specifies the InChIKey tag"},
+        			":tag_smiles" : { "mandatory" : false,  "type" : "String", "value" : "SMILES", "comment" : "Specifies the SMILES tag"},
+        			":tag_rank" : { "mandatory" : false,  "type" : "String", "value" : "RANK", "comment" : "Specifies the tag to store the tautomer rank (energy based, less is better)"},
+        			":debugatomtypes" : { "mandatory" : false,  "type" : "boolean", "value" : false, "comment" : "Writes only structures with AtomTypes property set. For debug purposes"}
+        		}
+        	}
+        },              
   		"dataset": {
         	"name" : "dataset",
-        	"description" : "Dataset import",
+        	"description" : "Dataset import into AMBIT database (with normalisation). The database connection settings are read from -c {file}.",
         	"connection" : "config/ambit.properties",
         	"post"  : {
         		"params" : {
         		}
         	}        	
         },            
-  		"split": {
-        	"name" : "split",
-        	"description" : "Splits an SDF into records of predefined size",
-        	"connection" : "config/ambit.properties",
-        	"post"  : {
-        		"params" : {
-        			":chunk" : { "mandatory" : false,  "type" : "Integer", "value" : 1000}
-        		}
-        	}
-        },    
         "import": {
         	"name" : "import",
-        	"description" : "Quick import file",
+        	"description" : "Quick import into AMBIT database (No normalisation!). Input file (-i file). The database connection settings are read from -c {file}",
         	"connection" : "config/ambit.properties",
         	"post"  : {
         		"params" : {
@@ -30,7 +56,7 @@
         },
         "preprocessing": {
         	"name" : "preprocessing",
-        	"description" : "Preprocessing (depends on options, default inchi)",
+        	"description" : "Preprocessing of structures in AMBIT database (depends on options, default inchi). The database connection settings are read from -c {file}",
         	"connection" : "config/ambit.properties",
         	"post"  : {
         		"params" : {
@@ -38,15 +64,37 @@
         			":atomprops" : { "mandatory" : false,  "type" : "Boolean", "value" : false,"comment" : "Stores precalculated aromaticity/ring information in the structure table"},        			
         			":fp1024" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment" : "Hashed 1024 bit fingerprints, used for similarity searching anf substructure search prescreening"},
         			":sk1024" : { "mandatory" : false,  "type" : "Boolean", "value" : false,"comment": "Structure fingerprints, used for substructure search prescreening"},
+        			":cf1024" : { "mandatory" : false,  "type" : "Boolean", "value" : false,"comment": "Circular fingerprints org.openscience.cdk.fingerprint.CircularFingerprinter"},
         			":smarts" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment" : "Everything needed for substructure search prescreening - atomprops,fp1024,sk1024"},
         			":similarity" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment" : "Everything needed for similarity search - atomprops,fp1024"}, 
         			":pagesize" : { "mandatory" : false,  "type" : "Integer", "value" : 5000000, "comment" : "query size"}
         		}
         	}
-        },          
+        },   
+        "atomenvironments" : {
+        	"name" : "atom environments",
+        	"description" : "Generates atom environments matrix descriptors from SDF file (-i inputfile -o outputfile)",
+        	"connection" : "config/ambit.properties",
+        	"post"  : {
+        		"params" : {
+        			":id_tag" : { "mandatory" : false,  "type" : "String", "value" : "ID", "comment": "Identifier tag"},
+        			":activity_tag" : { "mandatory" : false,  "type" : "String", "value" : "Activity", "comment": "Activity tag"},
+        			":merge_results_file" : { "mandatory" : false,  "type" : "String", "value" : null, "comment": "File with id tag and results to merge"},
+        			":generate_csv" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment": "Generate CSV output"},
+        			":generate_mm" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment": "Generate Matrix Market output"},
+        			":generate_json" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment": "JSON output"},
+        			":generate_vw" : { "mandatory" : false,  "type" : "Boolean", "value" : true, "comment": "Generate Vowpal Wabbit output"},
+        			":normalize" : { "mandatory" : false,  "type" : "Boolean", "value" : true, "comment": "Divide the AE counts on the sum of counts for thee level"},
+        			":laplace_smoothing" : { "mandatory" : false,  "type" : "Double", "value" : null, "comment": "Laplace smoothing, provide alpha as argument. No smoothing if omitted"},
+        			":cost_sensitive" : { "mandatory" : false,  "type" : "Boolean", "value" : true, "comment": "Cost sensitive classification"},
+        			":levels_as_namespace" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment": "Each AE level is a separate namespace"},
+        			":toxtree" : { "mandatory" : false,  "type" : "Boolean", "value" : false, "comment": ""}    
+        		}
+        	}
+        },       
         "help" : {
-        	"name" : "API help",
-        	"description" : "Show API commands",
+        	"name" : "help",
+        	"description" : "List all commands",
         	"help" : {
         		"description" : "Displays all available commands"
         	},

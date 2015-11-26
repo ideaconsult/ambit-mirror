@@ -40,13 +40,13 @@ public class NumericADPredictor extends	CoveragePredictor<IStructureRecord,Matri
 		Matrix matrix = new Matrix(1,header.numAttributes()-1);
 		for (int j=0; j < matrix.getColumnDimension();j++) matrix.set(0,j,Double.NaN);
 		
-		for (Property p : target.getProperties()) {
+		for (Property p : target.getRecordProperties()) {
 			
 			String url = propertyReporter.getURI(p);
 			Attribute attr = header.attribute(url);
 			if (attr!=null) 
 				if (attr.isNumeric()) {
-					Number number = ((Number)target.getProperty(p));
+					Number number = ((Number)target.getRecordProperty(p));
 					matrix.set(0,attr.index()-1,number.doubleValue());
 				}
 				else throw new AmbitException(String.format("%s not numeric!",attr.name()));
@@ -75,12 +75,12 @@ public class NumericADPredictor extends	CoveragePredictor<IStructureRecord,Matri
 	protected double[][] predictionInstanceAsArray(IStructureRecord target) throws AmbitException {
 		double[][] matrix = new double[1][header.numAttributes()-1];
 		
-		for (Property p : target.getProperties()) {
+		for (Property p : target.getRecordProperties()) {
 			String url = propertyReporter.getURI(p);
 			Attribute attr = header.attribute(url);
 			if (attr!=null) 
 				if (attr.isNumeric()) 
-					matrix[0][attr.index()-1] = ((Number)target.getProperty(p)).doubleValue();
+					matrix[0][attr.index()-1] = ((Number)target.getRecordProperty(p)).doubleValue();
 					else throw new AmbitException(String.format("%s not numeric!",attr.name()));
 		}	
 		

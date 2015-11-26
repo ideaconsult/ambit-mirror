@@ -166,7 +166,7 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 
 			if (header != null)
 			for (ambit2.base.data.Property p : header) {
-				Object value = item.getProperty(p);
+				Object value = item.getRecordProperty(p);
 				if (value == null) continue;
 				try {
 					getOutput().writeStartElement(OT.NS,"values"); //property

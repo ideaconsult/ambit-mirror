@@ -41,16 +41,16 @@ public class BundleDatasetResource<Q extends ReadSubstancesByBundle> extends
 		SubstanceDatasetResource<Q> {
 	protected SubstanceEndpointsBundle bundle;
 	protected boolean mergeDatasets = false;
+
 	@Override
 	protected Q createQuery(Context context, Request request, Response response)
 			throws ResourceException {
-		
-		
+
 		Object idbundle = request.getAttributes().get(
 				OpenTox.URI.bundle.getKey());
 		if (idbundle == null)
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-		
+
 		try {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
 			mergeDatasets = Boolean.parseBoolean(form
@@ -58,7 +58,7 @@ public class BundleDatasetResource<Q extends ReadSubstancesByBundle> extends
 		} catch (Exception x) {
 			mergeDatasets = false;
 		}
-		
+
 		Boolean filterBySubstance = isFilterBySubstance();
 		if (filterBySubstance == null)
 			filterBySubstance = true;
@@ -74,13 +74,13 @@ public class BundleDatasetResource<Q extends ReadSubstancesByBundle> extends
 							java.sql.ResultSet rs) throws AmbitException {
 						ambit2.base.data.SubstanceRecord record = super
 								.getObject(rs);
-						record.setProperty(new SubstancePublicName(),
+						record.setRecordProperty(new SubstancePublicName(),
 								record.getPublicName());
-						record.setProperty(new SubstanceName(),
+						record.setRecordProperty(new SubstanceName(),
 								record.getSubstanceName());
-						record.setProperty(new SubstanceUUID(),
+						record.setRecordProperty(new SubstanceUUID(),
 								record.getSubstanceUUID());
-						record.setProperty(new SubstanceOwner(),
+						record.setRecordProperty(new SubstanceOwner(),
 								record.getOwnerName());
 						return record;
 					}
@@ -99,13 +99,13 @@ public class BundleDatasetResource<Q extends ReadSubstancesByBundle> extends
 							throws AmbitException {
 						ambit2.base.data.SubstanceRecord record = super
 								.getObject(rs);
-						record.setProperty(new SubstancePublicName(),
+						record.setRecordProperty(new SubstancePublicName(),
 								record.getPublicName());
-						record.setProperty(new SubstanceName(),
+						record.setRecordProperty(new SubstanceName(),
 								record.getSubstanceName());
-						record.setProperty(new SubstanceUUID(),
+						record.setRecordProperty(new SubstanceUUID(),
 								record.getSubstanceUUID());
-						record.setProperty(new SubstanceOwner(),
+						record.setRecordProperty(new SubstanceOwner(),
 								record.getOwnerName());
 						return record;
 					}
@@ -193,7 +193,12 @@ public class BundleDatasetResource<Q extends ReadSubstancesByBundle> extends
 				public SubstanceRecord process(SubstanceRecord target)
 						throws AmbitException {
 					try {
-						return super.process(target);
+						if ("multi constituent substance".equals(target
+								.getSubstancetype())
+								|| "UVCB".equals(target.getSubstancetype()))
+							return target;
+						else
+							return super.process(target);
 					} catch (Exception x) {
 						logger.log(Level.FINE, x.getMessage());
 						return target;

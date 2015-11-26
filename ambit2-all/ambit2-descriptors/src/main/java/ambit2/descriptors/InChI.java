@@ -5,6 +5,7 @@ import net.sf.jniinchi.INCHI_RET;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
@@ -17,37 +18,42 @@ import ambit2.core.processors.structure.InchiProcessor;
 public class InChI implements IMolecularDescriptor {
 	protected InchiProcessor processor;
 	protected static final String[] names = new String[] {
-			Property.opentox_InChI_std,
-			Property.opentox_InChIAuxInfo_std,
+			Property.opentox_InChI_std, Property.opentox_InChIAuxInfo_std,
 			Property.opentox_InChIKey_std
-			//Property.opentox_SMILES
+	// Property.opentox_SMILES
 	};
+
 	public InChI() throws CDKException {
 		super();
 		processor = new InchiProcessor();
 	}
+
+	@Override
+	public void initialise(IChemObjectBuilder arg0) {
+
+	}
+
 	public DescriptorValue calculate(IAtomContainer mol) {
 		try {
 			InChIGenerator gen = processor.process(mol);
 			INCHI_RET ret = gen.getReturnStatus();
-			if (ret.equals(INCHI_RET.OKAY) || ret.equals(INCHI_RET.WARNING) ) {
-		        StringArrayResult value = new StringArrayResult(new String[] {
-		        		gen.getInchi(),
-		        		gen.getAuxInfo(),
-		        		gen.getInchiKey()
-		        });
-		        return new DescriptorValue(getSpecification(), getParameterNames(), 
-		                getParameters(), value,getDescriptorNames()); 	
+			if (ret.equals(INCHI_RET.OKAY) || ret.equals(INCHI_RET.WARNING)) {
+				StringArrayResult value = new StringArrayResult(new String[] {
+						gen.getInchi(), null, gen.getInchiKey() });
+				return new DescriptorValue(getSpecification(),
+						getParameterNames(), getParameters(), value,
+						getDescriptorNames());
 			} else {
-				 return new DescriptorValue(getSpecification(), getParameterNames(), 
-			                getParameters(),null,getDescriptorNames(),
-			                new Exception(String.format("[%s] %s",gen.getReturnStatus(),gen.getMessage()))); 
+				return new DescriptorValue(getSpecification(),
+						getParameterNames(), getParameters(), null,
+						getDescriptorNames(), new Exception(String.format(
+								"[%s] %s", gen.getReturnStatus(),
+								gen.getMessage())));
 			}
-	        
-		
+
 		} catch (Exception x) {
-	        return new DescriptorValue(getSpecification(), getParameterNames(), 
-	                getParameters(),null,getDescriptorNames(),x);  
+			return new DescriptorValue(getSpecification(), getParameterNames(),
+					getParameters(), null, getDescriptorNames(), x);
 		}
 	}
 
@@ -72,15 +78,15 @@ public class InChI implements IMolecularDescriptor {
 	}
 
 	public DescriptorSpecification getSpecification() {
-        return new DescriptorSpecification(
-            	String.format("http://www.opentox.org/api/1.1#%s","InChI"),
-    		    this.getClass().getName(),
-    		    "$Id: StructureIdentifiersGenerator.java,v 1.0 2010/05/23 9:01:00 Nina Jeliazkova Exp $",
-                "http:///ambit.sourceforge.net");
+		return new DescriptorSpecification(
+				String.format("http://www.opentox.org/api/1.1#%s", "InChI"),
+				this.getClass().getName(),
+				"$Id: StructureIdentifiersGenerator.java,v 1.0 2010/05/23 9:01:00 Nina Jeliazkova Exp $",
+				"http:///ambit.sourceforge.net");
 	}
 
 	public void setParameters(Object[] arg0) throws CDKException {
-		
+
 	}
 
 }

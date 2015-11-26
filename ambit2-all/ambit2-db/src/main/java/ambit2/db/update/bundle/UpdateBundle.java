@@ -41,19 +41,24 @@ import ambit2.db.update.dataset.UpdateDataset;
 public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle> {
 	private static final String update_sql = 
 
-		"update bundle set %s where idbundle=?"
+		"update bundle b, catalog_references cr set %s where b.idreference=cr.idreference and idbundle=?"
 	;
-	private static final String _license = "licenseURI=?";
 	
-	private static final String _name = "name=?";
+	private static final String _license = "b.licenseURI=?";
 	
-	private static final String _rightsHolder = "rightsHolder=?";
+	private static final String _name = "b.name=?";
 	
-	private static final String _maintainer = "maintainer=?";
+	private static final String _rightsHolder = "b.rightsHolder=?";
 	
-	private static final String _description = "description=?";
+	private static final String _maintainer = "b.maintainer=?";
 	
-	private static final String _status = "published_status=?";
+	private static final String _description = "b.description=?";
+	
+	private static final String _status = "b.published_status=?";
+	
+	private static final String _seeAlso = "cr.url=?";
+	
+	private static final String _source = "cr.title=?";
 	
 	public enum _published_status  {draft,archived,published};
 	
@@ -79,7 +84,13 @@ public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 			params3.add(new QueryParam<String>(String.class, getObject().getMaintainer()));
 		
 		if (getObject().getDescription()!=null)
-			params3.add(new QueryParam<String>(String.class, getObject().getDescription()));		
+			params3.add(new QueryParam<String>(String.class, getObject().getDescription()));
+		
+		if (getObject().getTitle()!=null)
+			params3.add(new QueryParam<String>(String.class,getObject().getTitle()));		
+		
+		if (getObject().getURL()!=null)
+			params3.add(new QueryParam<String>(String.class,getObject().getURL()));	
 		
 		if (getObject().getStatus()!=null) {
 		    try {
@@ -127,6 +138,18 @@ public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 			b.append(_description);
 			i++;
 		}
+				
+		if (getObject().getTitle()!=null) {
+			b.append(i>0?",":"");
+			b.append(_source);
+			i++;
+		}
+		
+		if (getObject().getURL()!=null) {
+			b.append(i>0?",":"");
+			b.append(_seeAlso);
+			i++;
+		}
 		if (getObject().getStatus()!=null) {
 		    try {
 			_published_status.valueOf(getObject().getStatus().trim());
@@ -135,9 +158,7 @@ public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 			i++;
 		    } catch (Exception x) {
 		    }
-		}	
-				
-				
+		}			
 		if (i>0)
 			return new String[] {String.format(update_sql,b.toString())};
 		else

@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>ambit2-all</artifactId>
 		<groupId>ambit</groupId>
-		<version>2.7.6-SNAPSHOT</version>
+		<version>3.0.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>ambit2-base</artifactId>
@@ -17,21 +17,20 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.16</version>
 		</dependency>
+		 -->
+		<!-- 
 		<dependency>
 			<groupId>com.jgoodies</groupId>
 			<artifactId>binding</artifactId>
 			<version>2.0.6</version>
 		</dependency>
-		<dependency>
-			<groupId>net.idea</groupId>
-			<artifactId>modbcum-i</artifactId>
-			<version>${modbcum.version}</version>
-		</dependency>
+		 -->
 		<dependency>
 			<groupId>net.idea</groupId>
 			<artifactId>modbcum-p</artifactId>

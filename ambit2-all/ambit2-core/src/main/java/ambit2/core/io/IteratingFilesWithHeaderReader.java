@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
-import org.openscience.cdk.io.setting.IOSetting;
+import org.openscience.cdk.io.setting.IOSetting.Importance;
 import org.openscience.cdk.io.setting.StringIOSetting;
 
 import ambit2.base.data.LiteratureEntry;
@@ -80,7 +80,7 @@ public abstract class IteratingFilesWithHeaderReader<COLUMN> extends
 	protected void addHeaderColumn(String name) {
 		header.add(createPropertyByColumnName(name));
 		
-		fireIOSettingQuestion(new StringIOSetting(name,IOSetting.MEDIUM,Property.IO_QUESTION.IO_TRANSLATE_NAME.toString(),name));
+		fireIOSettingQuestion(new StringIOSetting(name,Importance.MEDIUM,Property.IO_QUESTION.IO_TRANSLATE_NAME.toString(),name));
 	}
 	protected void setHeaderColumn(int index,String name) {
 		header.ensureCapacity(index);

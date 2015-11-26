@@ -20,7 +20,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 
 package ambit2.smarts.query;
 
@@ -39,8 +39,9 @@ import ambit2.core.data.MoleculeTools;
 
 /**
  * Encapsulates CDK SMARTS parser.
+ * 
  * @author Nina Jeliazkova nina@acad.bg
- *
+ * 
  */
 public class SmartsPatternCDK extends AbstractSmartsPattern<IAtomContainer> {
 
@@ -49,35 +50,41 @@ public class SmartsPatternCDK extends AbstractSmartsPattern<IAtomContainer> {
 	 */
 	private static final long serialVersionUID = -63030468038251612L;
 	protected transient SMARTSQueryTool sqt;
+
 	public SmartsPatternCDK() {
 		sqt = null;
 	}
+
 	public SmartsPatternCDK(String smarts) throws SMARTSException {
-		this(smarts,false);
+		this(smarts, false);
 	}
-	public SmartsPatternCDK(String smarts,boolean negate) throws SMARTSException {
+
+	public SmartsPatternCDK(String smarts, boolean negate)
+			throws SMARTSException {
 		setSmarts(smarts);
 		setNegate(negate);
 	}
+
 	public IQueryAtomContainer getQuery() {
 		return null;
-	}	
+	}
+
 	@Override
 	public String getSmarts() {
 		if (sqt == null) {
 			return "";
-		}
-		else {
+		} else {
 			return sqt.getSmarts();
 		}
 	}
+
 	@Override
 	public void setSmarts(String smarts) throws SMARTSException {
 		try {
 			if (sqt == null) {
-				sqt = new SMARTSQueryTool(smarts);
-			}
-			else {
+				sqt = new SMARTSQueryTool(smarts,
+						SilentChemObjectBuilder.getInstance());
+			} else {
 				sqt.setSmarts(smarts);
 			}
 			super.setSmarts(smarts);
@@ -85,38 +92,40 @@ public class SmartsPatternCDK extends AbstractSmartsPattern<IAtomContainer> {
 			throw new SMARTSException(x);
 		}
 	}
+
 	public int hasSMARTSPattern(IAtomContainer mol) throws SMARTSException {
 
-    	if (sqt == null) {
-    		throw new SMARTSException("Undefined SMARTS pattern");
-    	}
-    	try {
-		        if (sqt.matches(mol)) {
-		        	return sqt.countMatches();
-		        }
-		        	
-                    
-		            //return sqt.getUniqueMatchingAtoms().size();
-		        else {
-		        	return 0;
-		        }
-    	} catch (CDKException x) {
-    		throw new SMARTSException(x);
-    	}
-    }
+		if (sqt == null) {
+			throw new SMARTSException("Undefined SMARTS pattern");
+		}
+		try {
+			if (sqt.matches(mol)) {
+				return sqt.countMatches();
+			}
+
+			// return sqt.getUniqueMatchingAtoms().size();
+			else {
+				return 0;
+			}
+		} catch (CDKException x) {
+			throw new SMARTSException(x);
+		}
+	}
+
 	public IAtomContainer getObjectToVerify(IAtomContainer mol) {
 		return mol;
 	}
+
 	public String getImplementationDetails() {
-		if (sqt == null)
-			{
+		if (sqt == null) {
 			return "CDK SMARTS";
-			}
-		else {
-			return sqt.getClass().getName();	
+		} else {
+			return sqt.getClass().getName();
 		}
 	}
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+
+	private void readObject(ObjectInputStream in) throws IOException,
+			ClassNotFoundException {
 		in.defaultReadObject();
 		try {
 			setSmarts(smarts);
@@ -124,37 +133,44 @@ public class SmartsPatternCDK extends AbstractSmartsPattern<IAtomContainer> {
 			sqt = null;
 		}
 	}
+
 	public IAtomContainer getMatchingStructure(IAtomContainer mol)
 			throws SMARTSException {
-		IAtomContainer selected = MoleculeTools.newAtomContainer(SilentChemObjectBuilder.getInstance());
+		IAtomContainer selected = MoleculeTools
+				.newAtomContainer(SilentChemObjectBuilder.getInstance());
 		List<List<Integer>> list = sqt.getUniqueMatchingAtoms();
-        for (int j=0; j < list.size();j++) {
-        	List<Integer> l = list.get(j); 
-        	for (int k=0; k < l.size();k++) {
-        		selected.addAtom(mol.getAtom(l.get(k)));
-        	}	
-        }		
-        return selected;
+		for (int j = 0; j < list.size(); j++) {
+			List<Integer> l = list.get(j);
+			for (int k = 0; k < l.size(); k++) {
+				selected.addAtom(mol.getAtom(l.get(k)));
+			}
+		}
+		return selected;
 	}
+
 	public List<List<Integer>> getUniqueMatchingAtoms(IAtomContainer mol)
 			throws SMARTSException {
-    	if (sqt == null) {
-    		throw new SMARTSException(Resources.getString(Resources.SMARTS_UNDEFINED));
-    	}
-    	return sqt.getUniqueMatchingAtoms(); 
+		if (sqt == null) {
+			throw new SMARTSException(
+					Resources.getString(Resources.SMARTS_UNDEFINED));
+		}
+		return sqt.getUniqueMatchingAtoms();
 	}
-	public void useMOEvPrimitive(boolean flag) throws UnsupportedOperationException {
+
+	public void useMOEvPrimitive(boolean flag)
+			throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("useMOEvPrimitive");
 	}
+
 	/**
 	 * For backward compatibility
+	 * 
 	 * @return
 	 * @throws SMARTSException
 	 */
 	public List<List<Integer>> getUniqueMatchingAtoms() throws SMARTSException {
-    	if (sqt == null) throw new SMARTSException("Undefined SMARTS pattern");
-    	return sqt.getUniqueMatchingAtoms(); 
+		if (sqt == null)
+			throw new SMARTSException("Undefined SMARTS pattern");
+		return sqt.getUniqueMatchingAtoms();
 	}
 }
-
-

@@ -133,7 +133,7 @@ public abstract class QueryFieldAbstract<T, C extends IQueryCondition, NC extend
 		p.setId(rs.getInt(7));
 		p.setUnits(rs.getString(3));
 		p.setLabel(rs.getString(9));
-		record.setProperty(p, rs.getString(10));
+		record.setRecordProperty(p, rs.getString(10));
 	    }
 	    return record;
 	} catch (SQLException x) {

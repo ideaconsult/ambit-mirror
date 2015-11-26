@@ -4,13 +4,12 @@
 		<name></name>
 	</bannerLeft>
 	<bannerRight>
-		<name>AMBIT</name>
+		<name></name>
 		<href>index.html</href>
 	</bannerRight>
 	<googleAnalyticsAccountId>UA-25223944-1</googleAnalyticsAccountId>
 	<publishDate position="bottom" format="yyyy-MM-dd" />
-	<version position="bottom" />
-
+	<version position="none" />
 	<poweredBy>
 		<logo name="SourceForge" href="http://sourceforge.net/projects/ambit"
 			img="http://sflogo.sourceforge.net/sflogo.php?group_id=191756&amp;type=12" />
@@ -65,6 +64,22 @@
 						<sidebar />
 					</sections>
 				</index>
+				<enanomapper>
+					<bannerRight>
+						<name>eNanoMapper</name>
+						<href></href>
+					</bannerRight>
+
+					<breadcrumbs>false</breadcrumbs>
+					<toc>false</toc>
+					<markPageHeader>false</markPageHeader>
+					<sections>
+						<carousel />
+						<columns>3</columns>
+						<body />
+						<sidebar />
+					</sections>
+				</enanomapper>				
 				<home>
 					<shortTitle>AMBIT | Home</shortTitle>
 					<sections>
@@ -128,7 +143,7 @@
 			<link rel="author" href="https://plus.google.com/+NinaJeliazkova" />
 			<meta name="description" content="AMBIT" />
 			<meta name="keywords"
-				content="AMBIT,web services,REST,API,QSAR,chemical similarity,Toxtree,Toxmatch,Ambit,SMARTS,databases, substructure search" />
+				content="AMBIT,web services,REST,API,QSAR,chemical similarity,Toxtree,Toxmatch,Ambit,SMARTS,databases, substructure search, enanomapper" />
 			<meta name="author" content="Nina Jeliazkova" />
 			<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 		</head>
@@ -149,6 +164,7 @@
 			<item name="AMBIT Web services" href="./download_ambitrest.html" />
 			<item name="AMBIT Libraries" href="./download_ambitlibs.html" />
 			<item name="AMBIT Discovery" href="./download_ambitdiscovery.html" />
+			<item name="eNanoMapper database" href="./enanomapper_install.html" />
 		</menu>
 
 		<menu name="OpenTox">

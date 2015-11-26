@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -15,6 +14,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.rest.query.StructureQueryResource.QueryType;
 import ambit2.rest.structure.diagram.CDKDepictVariants;
@@ -33,7 +33,7 @@ public class SMIRKSDepict extends CDKDepictVariants implements IAcceptable {
 			depict.setImageSize(new Dimension(w,h));
 
 			SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
-			smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL_FIRST);
+			smrkMan.setSSMode(SmartsConst.SSM_MODE.SSM_NON_IDENTICAL_FIRST);
 			
 			SMIRKSReaction smr = smrkMan.parse(getSmirks());
 			SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());

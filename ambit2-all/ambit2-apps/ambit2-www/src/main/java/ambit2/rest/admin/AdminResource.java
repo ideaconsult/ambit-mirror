@@ -9,7 +9,7 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.resource.ResourceException;
 
-import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.descriptors.processors.FPTable;
 import ambit2.rest.aa.opensso.policy.OpenSSOPoliciesResource;
 import ambit2.rest.admin.fingerprints.FingerprintResource;
 import ambit2.rest.algorithm.CatalogResource;

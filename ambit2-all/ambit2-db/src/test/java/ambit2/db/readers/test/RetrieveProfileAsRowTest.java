@@ -42,9 +42,9 @@ public class RetrieveProfileAsRowTest extends RetrieveTest<IStructureRecord> {
 		while (rows.next()) {
 			IStructureRecord r = rows.getObject();
 			logger.fine(r.toString());
-			for (Property p:r.getProperties()) {
+			for (Property p:r.getRecordProperties()) {
 				logger.fine(p.toString());
-				logger.fine(r.getProperty(p).toString());
+				logger.fine(r.getRecordProperty(p).toString());
 			}
 		
 		}

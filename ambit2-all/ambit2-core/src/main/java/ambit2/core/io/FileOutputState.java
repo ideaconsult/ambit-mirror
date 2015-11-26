@@ -3,6 +3,7 @@ package ambit2.core.io;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Constructor;
 
 import org.openscience.cdk.io.HINWriter;
 import org.openscience.cdk.io.IChemObjectWriter;
@@ -18,64 +19,24 @@ import ambit2.base.exceptions.AmbitIOException;
  * <b>Modified</b> Aug 31, 2006
  */
 public class FileOutputState extends FileState implements IOutputState {
-	public transient static final int SDF_INDEX = 0;
-	public transient static final int CSV_INDEX = 1;
-	public transient static final int SMI_INDEX = 2;
-	public transient static final int TXT_INDEX = 3;
-	public transient static final int CML_INDEX = 4;
-	public transient static final int MOL_INDEX = 5;
-	public transient static final int HIN_INDEX = 6;
-	public transient static final int PDB_INDEX = 7;
-	public transient static final int XYZ_INDEX = 8;
-	public transient static final int XLS_INDEX = 9;
-	public transient static final int XLSX_INDEX = 10;
-	
-	public transient static final int HTML_INDEX = 11;
-	public transient static final int PDF_INDEX = 12;
-	public transient static final int SVG_INDEX = 13;
-	public transient static final int JPG_INDEX = 14;
-	public transient static final int PNG_INDEX = 15;
-	public transient static final int RTF_INDEX = 16;	
-	
-	public transient static final String[] extensions = {".sdf",".csv",".smi",".txt",".cml",
-			".mol",".hin",".pdb",".xyz",".xls",".xlsx",
-			".html",".pdf",".svg",".jpg",".png",".rtf"};
-	public transient static final String[] extensionDescription = 
-		{"SDF files with chemical compounds (*.sdf)",
-		"CSV files (Comma delimited) *.csv)",
-		"SMILES files (*.smi)",
-		"Text files (Tab delimited) (*.txt)",
-		"Chemical Markup Language files (*.cml)",
-		"MOL files (*.mol)",
-		"HIN files (*.hin)",
-		"PDB files (*.pdb)",
-		"XYZ files (*.xyz)",
-		"Microsoft Office Excel Workbook (*.xls)",
-		"Microsoft Office Excel Workbook (*.xlsx)",
-		"HTML (*.html)",
-		"Adobe PDF (*.pdf)",
-		"SVG (*.svg)",
-		"JPEG image (*.jpg)",
-		"PNG image (*.png)",
-		"Rich Text Format (*.rtf)",
 
-		};
-	public FileOutputState() {
+
+		public FileOutputState() {
 		super();
-		setSupportedExtDescriptions(extensionDescription);
-		setSupportedExtensions(extensions);		
+		setSupportedExtDescriptions(getExtensionDescriptions(false));
+		setSupportedExtensions(getExtensions(false));		
 	}
 
 	public FileOutputState(String filename) {
 		super(filename);
-		setSupportedExtDescriptions(extensionDescription);
-		setSupportedExtensions(extensions);		
+		setSupportedExtDescriptions(getExtensionDescriptions(false));
+		setSupportedExtensions(getExtensions(false));		
 	}
 
 	public FileOutputState(File file) {
 		super(file);
-		setSupportedExtDescriptions(extensionDescription);
-		setSupportedExtensions(extensions);		
+		setSupportedExtDescriptions(getExtensionDescriptions(false));
+		setSupportedExtensions(getExtensions(false));		
 	}
 
 	public IChemObjectWriter getWriter() throws AmbitIOException {
@@ -92,14 +53,14 @@ public class FileOutputState extends FileState implements IOutputState {
 		String fname = ext.toLowerCase();
 		IChemObjectWriter writer = null;
 		try {
-			if (fname.endsWith(extensions[SDF_INDEX])) {
+			if (fname.endsWith(_FILE_TYPE.SDF_INDEX.getExtension())) {
 				writer = new SDFWriter(stream);
-			} else if (fname.endsWith(extensions[CSV_INDEX])) 
+			} else if (fname.endsWith(_FILE_TYPE.CSV_INDEX.getExtension())) 
 				writer = new DelimitedFileWriter(stream);
-			else if ((fname.endsWith(extensions[TXT_INDEX]))) 
+			else if ((fname.endsWith(_FILE_TYPE.TXT_INDEX.getExtension()))) 
 				writer = new DelimitedFileWriter(stream,
 						new DelimitedFileFormat("\t",'"'));
-			else if ((fname.endsWith(extensions[SMI_INDEX]))) 
+			else if ((fname.endsWith(_FILE_TYPE.SMI_INDEX.getExtension()))) 
 				writer = new SMILESWriter(stream);
 			/*
 			else if ((fname.endsWith(extensions[HTML_INDEX]))) 
@@ -109,22 +70,41 @@ public class FileOutputState extends FileState implements IOutputState {
 			else if ((fname.endsWith(extensions[PNG_INDEX])))  
 				writer = new ImageWriter(stream);
 				*/
-			else if ((fname.endsWith(extensions[PDF_INDEX]))) {
-				writer = new PDFWriter(stream);			
-			} else if ((fname.endsWith(extensions[XYZ_INDEX]))) 
+			else if ((fname.endsWith(_FILE_TYPE.PDF_INDEX.getExtension()))) {
+				try {
+					writer = createWriterByReflection(
+							"ambit2.core.io.PDFWriter",
+							stream);
+				} catch (Exception x) {
+					throw new AmbitIOException(x);
+				}	
+			} else if ((fname.endsWith(_FILE_TYPE.XYZ_INDEX.getExtension()))) 
 				writer = new XYZWriter(stream);
-			else if ((fname.endsWith(extensions[HIN_INDEX]))) 
+			else if ((fname.endsWith(_FILE_TYPE.HIN_INDEX.getExtension()))) 
 				writer = new HINWriter(stream);
-			else if ((fname.endsWith(extensions[MOL_INDEX]))) 
+			else if ((fname.endsWith(_FILE_TYPE.MOL_INDEX.getExtension()))) 
 				writer = new ambit2.core.io.MDLWriter(stream);		
 			/*
 			else if ((fname.endsWith(extensions[SVG_INDEX]))) 
 				writer = new SVGWriter(stream);
 				*/
-			else if ((fname.endsWith(extensions[XLS_INDEX]))) 
-				writer = new XLSFileWriter(stream,true);			
-			else if ((fname.endsWith(extensions[XLSX_INDEX]))) 
-				writer = new XLSFileWriter(stream,false);						
+			else if ((fname.endsWith(_FILE_TYPE.XLS_INDEX.getExtension()))) 
+				try {
+					writer = createXLSXWriterByReflection(
+							"ambit2.core.io.XLSFileWriter",
+							stream,true);
+				} catch (Exception x) {
+					throw new AmbitIOException(x);
+				}	
+			else if ((fname.endsWith(_FILE_TYPE.XLSX_INDEX.getExtension()))) 
+				try {
+					writer = createXLSXWriterByReflection(
+							"ambit2.core.io.XLSFileWriter",
+							stream,false);
+				} catch (Exception x) {
+					throw new AmbitIOException(x);
+				}
+					
 			else throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext);
 		} catch (Exception x) {
 			//logger.error(MSG_ERRORSAVE,filename);
@@ -132,6 +112,27 @@ public class FileOutputState extends FileState implements IOutputState {
 		}			
 		return writer;
 	}
+	
+	private static IChemObjectWriter createWriterByReflection(
+			String className, OutputStream stream) throws Exception {
+		Class clazz = FileInputState.class.getClassLoader()
+				.loadClass(className);
+		Constructor<? extends Runnable> constructor = clazz
+				.getConstructor(new Class[] {OutputStream.class, Boolean.class});
+		Object o = constructor.newInstance(stream);
+		return (IChemObjectWriter) o;
+	}
+
+	private static IChemObjectWriter createXLSXWriterByReflection(
+			String className, OutputStream stream,  boolean hssf) throws Exception {
+		Class clazz = FileInputState.class.getClassLoader()
+				.loadClass(className);
+		Constructor<? extends Runnable> constructor = clazz
+				.getConstructor(new Class[] {OutputStream.class, Boolean.class});
+		Object o = constructor.newInstance(new Object[] {stream,hssf});
+		return (IChemObjectWriter) o;
+	}
+	/*
 	public static String getResponseType(String ext) {
 		if (ext.endsWith(extensions[SDF_INDEX])) {
 			return "text/plain";
@@ -150,6 +151,6 @@ public class FileOutputState extends FileState implements IOutputState {
 		} else	return "text/plain";	    
 		
 	}
-
+*/
 	
 }

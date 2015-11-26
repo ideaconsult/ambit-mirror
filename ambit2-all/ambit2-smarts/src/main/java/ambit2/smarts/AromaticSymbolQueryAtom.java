@@ -20,11 +20,12 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 package ambit2.smarts;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 
 /**
@@ -32,24 +33,21 @@ import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
  * @author Nikolay Kochev nick@uni-plovdiv.bg
  */
 public class AromaticSymbolQueryAtom extends SMARTSAtom {
-    
-    private static final long serialVersionUID = -56452386792649224L;
 
-    public AromaticSymbolQueryAtom() {
-    }
-    
+	public AromaticSymbolQueryAtom(IChemObjectBuilder builder) {
+		super(builder);
+	}
+
 	public boolean matches(IAtom atom) {
-        if (atom.getFlag(CDKConstants.ISAROMATIC) && this.getSymbol().equals(atom.getSymbol())) 
-        {	        	
-        	return true;
-        }
-        else
-        {	
-        	return false;
-        }	
-    };
+		if (atom.getFlag(CDKConstants.ISAROMATIC)
+				&& this.getSymbol().equals(atom.getSymbol())) {
+			return true;
+		} else {
+			return false;
+		}
+	};
 
-    public String toString() {
+	public String toString() {
 		return "AromaticSymbolQueryAtom()";
-    }
+	}
 }

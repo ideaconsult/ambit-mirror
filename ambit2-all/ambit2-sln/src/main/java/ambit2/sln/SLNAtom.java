@@ -1,6 +1,7 @@
 package ambit2.sln;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 
 /**
@@ -8,12 +9,11 @@ import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
  * 
  */
 
-public class SLNAtom extends SMARTSAtom 
-{
+public class SLNAtom extends SMARTSAtom {
 	static final long serialVersionUID = 5327582562834894L;
-	
-	public SLNAtom()
-	{
+
+	public SLNAtom(IChemObjectBuilder builder) {
+		super(builder);
 	}
 
 	int atomType = 0;
@@ -21,50 +21,43 @@ public class SLNAtom extends SMARTSAtom
 	int atomID = -1;
 	int numHAtom = 0;
 	SLNAtomExpression atomExpression = null;
-	
-	
-	public boolean matches(IAtom atom) 
-	{
-		
-		//1. Matching the atom type
+
+	public boolean matches(IAtom atom) {
+
+		// 1. Matching the atom type
 		boolean FlagMatchAtomType = false;
-					
-		if (atomType == 0) //any atom
+
+		if (atomType == 0) // any atom
 			FlagMatchAtomType = true;
-		else		
-			if (atomType < SLNConst.GlobDictOffseet) //atomic symbol
-			{
-				FlagMatchAtomType = SLNConst.elSymbols[atomType].equals(atom.getSymbol());
-			}
-			else
-				if (atomType < SLNConst.LocalDictOffseet) //It is a global dictionary definition
-				{
-					//TODO
-				}
-				else
-				{
-					//It is a local dictionary definition
-					//TODO
-				}
-		
-		
+		else if (atomType < SLNConst.GlobDictOffseet) // atomic symbol
+		{
+			FlagMatchAtomType = SLNConst.elSymbols[atomType].equals(atom
+					.getSymbol());
+		} else if (atomType < SLNConst.LocalDictOffseet) // It is a global
+															// dictionary
+															// definition
+		{
+			// TODO
+		} else {
+			// It is a local dictionary definition
+			// TODO
+		}
+
 		if (!FlagMatchAtomType)
 			return false;
-		
-		//2. Matching the H atom count
-		//TODO
-		
-		//3. Matching the atom expression
+
+		// 2. Matching the H atom count
+		// TODO
+
+		// 3. Matching the atom expression
 		if (atomExpression != null)
 			return atomExpression.matches(atom);
-		
+
 		return true;
 	}
-	
-	String getHString()
-	{
-		switch (numHAtom)
-		{
+
+	String getHString() {
+		switch (numHAtom) {
 		case 0:
 			return "";
 		case 1:
@@ -73,16 +66,12 @@ public class SLNAtom extends SMARTSAtom
 			return "H" + numHAtom;
 		}
 	}
-	
-	public String toString()
-	{
+
+	public String toString() {
 		if (atomExpression == null)
-			return(atomName + getHString());
+			return (atomName + getHString());
 		else
-			return(atomName + getHString() + atomExpression.toString());
+			return (atomName + getHString() + atomExpression.toString());
 	}
-	
-	
-	
-	
+
 }

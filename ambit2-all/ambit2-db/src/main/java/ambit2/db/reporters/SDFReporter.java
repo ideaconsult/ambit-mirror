@@ -17,6 +17,7 @@ import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;
@@ -151,9 +152,9 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			}
 			output.write(content);
 			if (!isMOLONLY())
-				for (Property p : item.getProperties()) {
+				for (Property p : item.getRecordProperties()) {
 					if (CMLUtilities.SMARTSProp.equals(p.getName())) continue;
-					Object value = item.getProperty(p);
+					Object value = item.getRecordProperty(p);
 					if (value != null)
 						output.write(String.format("\r\n> <%s>\r\n%s\r\n",p.getName().toString(),
 								value.toString()));
@@ -181,7 +182,10 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			StringWriter w = new StringWriter();
 			SDFWriter sdfwriter = new SDFWriter(w); 
 			IAtomContainer ac = reader.process(item);
-			ac.getProperties().clear();
+			//ac.getProperties().clear();
+
+			MoleculeTools.clearProperties(ac);
+			
 			sdfwriter.write(ac);
 			sdfwriter.close();
 			if (isChangeLineSeparators())

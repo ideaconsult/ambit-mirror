@@ -6,8 +6,13 @@
 	<artifactId>ambit2-apps</artifactId>
 	<packaging>pom</packaging>
 	<name>Ambit2 applications</name>
-	<version>2.7.6-SNAPSHOT</version>
+	<version>3.0.1-SNAPSHOT</version>
 	<distributionManagement>
+		<site>
+			<id>website_ambit</id>
+			<url>scp://shell.sourceforge.net/home/project-web/ambit/htdocs</url>
+		</site>
+
 		<!-- use the following if you're not using a snapshot version. -->
 		<repository>
 			<id>ambit-plovdiv-releases</id>
@@ -20,21 +25,26 @@
 			<name>ambit and toxtree snapshots</name>
 			<url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
-		<site>
-			<id>website_ambit</id>
-			<url>scp://shell.sourceforge.net/home/project-web/ambit/htdocs</url>
-		</site>
+
 	</distributionManagement>
 	<properties>
-		<net.idea.loom.version>1.0.10-SNAPSHOT</net.idea.loom.version>
+		<net.idea.loom.version>1.1.0</net.idea.loom.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<toxtree.version>2.6.16-SNAPSHOT</toxtree.version>
-		<ambit.version>2.7.6-SNAPSHOT</ambit.version>
+		<toxtree.version>3.0.0-SNAPSHOT</toxtree.version>
+		<ambit.version>3.0.1-SNAPSHOT</ambit.version>
+		<cdk.version>1.5.11</cdk.version>
 		<junit.version>4.8.1</junit.version>
 		<!-- https://github.com/ideaconsult/i5 -->
-		<i5.version>1.0.6-SNAPSHOT</i5.version>
-		<restnet.version>1.0.9-SNAPSHOT</restnet.version>
-		<dbunit.version>2.4.9</dbunit.version>
+		<i5.version>1.1.0</i5.version>
+		<restnet.version>1.1.0</restnet.version>
+		<dbunit.version>2.5.1</dbunit.version>
+		<m2st-syntaxHighlighter-urlBase>syntaxhighlighter</m2st-syntaxHighlighter-urlBase>
+		<m2st-syntaxHighlighter-brushFiles>shBrushPlain.js,shBrushXml.js,shBrushJava.js</m2st-syntaxHighlighter-brushFiles>
+		<m2st-syntaxHighlighter-themeCssFile>shThemeDefault.css</m2st-syntaxHighlighter-themeCssFile>
+		<m2st-syntaxHighlighter-config>config.clipboardSwf='%ROOT%/scripts/clipboard.swf',defaults['gutter']=false</m2st-syntaxHighlighter-config>
+		<m2st-gatc-id>UA-25223944-1</m2st-gatc-id>
+		<m2st-gatc-config>_setDetectFlash(true),_setDetectTitle(false)</m2st-gatc-config>
+
 	</properties>
 	<description>AMBIT applications</description>
 	<inceptionYear>2008</inceptionYear>
@@ -130,10 +140,10 @@
 	</developers>
 	<contributors></contributors>
 	<scm>
-		<connection>scm:svn:https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</connection>
-		<developerConnection>scm:svn+ssh://USER@svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</developerConnection>
+		<connection>scm:svn:https://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT/ambit2-apps</connection>
+		<developerConnection>scm:svn+ssh://USER@svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT/ambit2-apps</developerConnection>
 		<tag>scm:svn:https://svn.code.sf.net/p/ambit/code/tags</tag>
-		<url>https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</url>
+		<url>https://svn.code.sf.net/p/ambit/code/branches/ambit-3.0.0-SNAPSHOT/ambit2-apps</url>
 	</scm>
 	<organization>
 		<name>Ideaconsult Ltd</name>
@@ -166,7 +176,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.18.1</version>
+					<version>2.18</version>
 					<configuration>
 						<skip>true</skip>
 						<disableXmlReport>true</disableXmlReport>
@@ -184,7 +194,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>2.6</version>
+					<version>2.2</version>
 					<configuration>
 						<archive>
 							<manifest>
@@ -222,7 +232,6 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
-					<version>2.4</version>
 					<executions>
 						<execution>
 							<id>attach-sources</id>
@@ -236,7 +245,7 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>buildnumber-maven-plugin</artifactId>
-					<version>1.2</version>
+					<version>1.3</version>
 					<executions>
 						<execution>
 							<phase>validate</phase>
@@ -246,7 +255,7 @@
 						</execution>
 					</executions>
 					<configuration>
-						<revisionOnScmFailure>-SNAPSHOT</revisionOnScmFailure>
+						<revisionOnScmFailure>-${maven.build.timestamp}</revisionOnScmFailure>
 						<doCheck>false</doCheck>
 						<doUpdate>false</doUpdate>
 						<getRevisionOnlyOnce>true</getRevisionOnlyOnce>
@@ -256,9 +265,10 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
-					<version>3.3</version>
+					<version>3.4</version>
 					<configuration>
 						<locales>en</locales>
+						<encoding>UTF-8</encoding>
 					</configuration>
 					<dependencies>
 						<dependency>
@@ -270,6 +280,12 @@
 							<groupId>org.apache.velocity</groupId>
 							<artifactId>velocity</artifactId>
 							<version>1.7</version>
+						</dependency>
+
+						<dependency>
+							<groupId>org.apache.maven.wagon</groupId>
+							<artifactId>wagon-ssh</artifactId>
+							<version>2.0</version>
 						</dependency>
 					</dependencies>
 				</plugin>
@@ -293,6 +309,14 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<extensions>
+			<!-- Enabling the use of SSH -->
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh-external</artifactId>
+				<version>1.0-beta-6</version>
+			</extension>
+		</extensions>
 	</build>
 	<mailingLists>
 		<mailingList>
@@ -347,144 +371,18 @@
 		<!-- <module>ambit2-taglibs</module> <module>ambit2-i5rest</module> -->
 		<module>ambit2-user</module>
 		<module>ambit2-dbsubstance</module>
-<!-- 		
-		<module>ambit2-dbisatab</module>
- -->		
+		<!-- <module>ambit2-dbisatab</module> -->
 		<module>ambit2-dbcli</module>
+		<module>ambit2-export</module>
 	</modules>
 	<dependencies>
 		<!-- Ambit -->
 		<dependency>
 			<groupId>ambit</groupId>
-			<artifactId>ambit2-db</artifactId>
-			<version>${ambit.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ambit</groupId>
 			<artifactId>ambit2-base</artifactId>
 			<version>${ambit.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>ambit</groupId>
-			<artifactId>ambit2-model</artifactId>
-			<version>${ambit.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ambit</groupId>
-			<artifactId>ambit2-mopac</artifactId>
-			<version>${ambit.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>ambit</groupId>
-			<artifactId>ambit2-namestructure</artifactId>
-			<version>${ambit.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<!-- Toxtree -->
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-cramer</artifactId>
-			<version>${toxtree.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-cramer2</artifactId>
-			<version>${toxtree.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-mutant</artifactId>
-			<version>${toxtree.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-ames</artifactId>
-			<version>${toxtree.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-verhaar</artifactId>
-			<version>${toxtree.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-verhaar2</artifactId>
-			<version>${toxtree.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-kroes</artifactId>
-			<version>${toxtree.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-michaelacceptors</artifactId>
-			<version>${toxtree.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-mic</artifactId>
-			<version>${toxtree.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-eye</artifactId>
-			<version>${toxtree.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-sicret</artifactId>
-			<version>${toxtree.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-biodegradation</artifactId>
-			<version>${toxtree.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-skinsensitisation</artifactId>
-			<version>${toxtree.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-smartcyp</artifactId>
-			<version>${toxtree.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ambit</groupId>
-			<artifactId>ambit2-dragon</artifactId>
-			<version>${ambit.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-dnabinding</artifactId>
-			<version>${toxtree.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>toxtree</groupId>
-			<artifactId>toxtree-proteinbinding</artifactId>
-			<version>${toxtree.version}</version>
-			<scope>compile</scope>
-		</dependency>
+
 	</dependencies>
 	<repositories>
 		<repository>

@@ -45,7 +45,7 @@ public class SMSDModelBuilder extends AbstractStructuresModelBuilder<ModelQueryR
 	public void transform(IStructureRecord[] records) {
 	
 		for (IStructureRecord record:records) {
-			for (Property key : record.getProperties()) {
+			for (Property key : record.getRecordProperties()) {
 				if (getTrainingData().getPredicted()==null) 
 					getTrainingData().setPredicted(
 							new PredictedVarsTemplate(String.format("%s#predicted", getTrainingData().getName()))

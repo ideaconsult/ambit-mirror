@@ -41,7 +41,6 @@ import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecularFormula;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
@@ -95,7 +94,7 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 		IAtomContainer molecule = molReader.process(structure);
 		
 		if ((molecule != null) && (molecule.getProperties()!=null))
-			structure.addProperties(molecule.getProperties());
+			structure.addRecordProperties(molecule.getProperties());
 		
 		if ((molecule == null) || (molecule.getAtomCount()==0)) structure.setType(STRUC_TYPE.NA);
 		else {
@@ -125,6 +124,7 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 				if ("".equals(structure.getSmiles())) structure.setSmiles(null);
 			}
 		} catch (Exception x) {
+			logger.log(Level.SEVERE,x.getMessage());
 			structure.setSmiles(null);
 		}		
 
@@ -144,10 +144,10 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 					IAtomContainer kekulized = (IAtomContainer) molecule;
 					if (kekulize) try {
 						//inchi can't process aromatic bonds...
-						kekulized = (IMolecule) molecule.clone();
+						kekulized = (IAtomContainer) molecule.clone();
 						//and kekulizer needs atom typing
 						AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(kekulized); 
-						kekulized = fbt.kekuliseAromaticRings((IMolecule)kekulized);
+						kekulized = fbt.kekuliseAromaticRings((IAtomContainer)kekulized);
 						for (IBond bond:kekulized.bonds()) bond.setFlag(CDKConstants.ISAROMATIC, false); 	
 					} catch (Exception x) { logger.log(Level.FINE,x.getMessage(),x);; }
 					InChIGenerator gen  = inchiProcessor.process(kekulized);

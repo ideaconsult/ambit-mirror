@@ -38,7 +38,7 @@ import javax.swing.JLabel;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 
 import ambit2.base.data.ClassHolder;
 import ambit2.base.interfaces.IStructureRecord;
@@ -51,7 +51,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class QuerySimilarityEditor extends QueryEditor<ClassHolder, IMoleculeSet,NumberCondition,IStructureRecord,
+public class QuerySimilarityEditor extends QueryEditor<ClassHolder, IAtomContainerSet,NumberCondition,IStructureRecord,
 															QuerySimilarityStructure>  {
 
 	/**

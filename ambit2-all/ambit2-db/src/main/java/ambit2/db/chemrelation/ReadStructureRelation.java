@@ -62,6 +62,6 @@ public class ReadStructureRelation extends AbstractStructureQuery<String,Integer
 	}
 	@Override
 	protected void retrieveMetric(IStructureRecord record, ResultSet rs) throws SQLException {
-		record.setProperty(Property.getInstance("metric",toString(),"http://ambit.sourceforge.net"), retrieveValue(rs));
+		record.setRecordProperty(Property.getInstance("metric",toString(),"http://ambit.sourceforge.net"), retrieveValue(rs));
 	}	
 }

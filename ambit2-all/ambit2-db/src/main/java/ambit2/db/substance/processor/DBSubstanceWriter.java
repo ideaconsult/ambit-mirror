@@ -213,13 +213,13 @@ public class DBSubstanceWriter extends
 			}
 		if (substance.getRelatedStructures() != null) {
 			for (CompositionRelation rel : substance.getRelatedStructures()) {
-				Object i5uuid = rel.getSecondStructure().getProperty(
+				Object i5uuid = rel.getSecondStructure().getRecordProperty(
 						Property.getI5UUIDInstance());
 
 				if (rel.getSecondStructure().getIdchemical() <= 0) {
 					writer.create(rel.getSecondStructure());
 				}
-				rel.getSecondStructure().setProperty(
+				rel.getSecondStructure().setRecordProperty(
 						Property.getI5UUIDInstance(), i5uuid);
 				qr.setCompositionRelation(rel);
 				x.process(qr);

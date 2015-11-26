@@ -43,7 +43,7 @@ public class ReliabilityParams<VALUE> extends Params<VALUE> {
 		}
 		@Override
 		public String getIdentifier() {
-		    return "P";
+		    return "Planned";
 		}
 		@Override
 		public boolean isPredicted() {
@@ -61,7 +61,7 @@ public class ReliabilityParams<VALUE> extends Params<VALUE> {
 		}
 		@Override
 		public String getIdentifier() {
-		    return "C";
+		    return "Calculated";
 		}
 	    },
 	    readacrossbasedongroupingofsubstancescategoryapproach {
@@ -75,7 +75,7 @@ public class ReliabilityParams<VALUE> extends Params<VALUE> {
 		}
 		@Override
 		public String getIdentifier() {
-		    return "RAcat";
+		    return "Read-across(category)";
 		}
 	    },
 	    readacrossfromsupportingsubstancestructuralanalogueorsurrogate {
@@ -89,7 +89,7 @@ public class ReliabilityParams<VALUE> extends Params<VALUE> {
 		}
 		@Override
 		public String getIdentifier() {
-		    return "RA";
+		    return "Read-across";
 		}
 	    },
 	    QSAR {
@@ -109,7 +109,7 @@ public class ReliabilityParams<VALUE> extends Params<VALUE> {
 	    other {
 		@Override
 		public String toString() {
-		    return "other:";
+		    return "other";
 		}
 		@Override
 		public String getCode() {
@@ -163,7 +163,7 @@ public class ReliabilityParams<VALUE> extends Params<VALUE> {
 	private static Hashtable<String, String> phrasegroup_Z05() {
 	    	Hashtable<String, String> p = new Hashtable<String,String>();
 	    	for (_r_flags f : _r_flags.values()) 
-	    	    if (f.getCode()!=null)
+	    		if (f.getCode()!=null)
 	    	    p.put(f.getCode(),f.toString());
 	    	return p;
 	    }

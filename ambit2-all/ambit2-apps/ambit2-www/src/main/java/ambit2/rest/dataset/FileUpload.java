@@ -39,6 +39,8 @@ import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.TaskResult;
 
 public class FileUpload<USERID> {
+	public static String fileUploadField = "file";
+	
     protected Request request;
     protected Application application;
     protected SourceDataset dataset;
@@ -145,7 +147,7 @@ public class FileUpload<USERID> {
 			getRequest());
 
 		CallableFileImport callable = new CallableFileImport(getRequest().getClientInfo(), dataset, items,
-			DatasetsHTMLReporter.fileUploadField, connection, reporter, compoundReporter,
+			fileUploadField, connection, reporter, compoundReporter,
 			firstCompoundOnly, token);
 
 		callable.setPropertyOnly(propertyOnly);

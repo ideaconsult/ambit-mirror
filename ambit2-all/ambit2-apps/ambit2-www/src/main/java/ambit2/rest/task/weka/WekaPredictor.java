@@ -171,10 +171,10 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 				Property property = predicted.next();
 				if (Property.opentox_ConfidenceFeature.equals(property.getLabel())) {
 					try { 
-						record.setProperty(property,values[1]);
-					} catch (Exception x) { record.setProperty(property,"NA");}
+						record.setRecordProperty(property,values[1]);
+					} catch (Exception x) { record.setRecordProperty(property,"NA");}
 				} else {
-					record.setProperty(property,values[0]);
+					record.setRecordProperty(property,values[0]);
 					count++;
 				}
 			}
@@ -189,10 +189,10 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 			Property property = predicted.next();
 			if (Property.opentox_ConfidenceFeature.equals(property.getLabel())) {
 				try { 
-					record.setProperty(property,confidence);
-				} catch (Exception x) { record.setProperty(property,"NA");}
+					record.setRecordProperty(property,confidence);
+				} catch (Exception x) { record.setRecordProperty(property,"NA");}
 			} else {
-				record.setProperty(property,value.value(count));
+				record.setRecordProperty(property,value.value(count));
 				count++;
 			}
 		}

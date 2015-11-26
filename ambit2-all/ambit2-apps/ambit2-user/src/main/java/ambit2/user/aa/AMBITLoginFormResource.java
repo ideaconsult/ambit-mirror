@@ -57,6 +57,7 @@ public class AMBITLoginFormResource extends UserLoginFormResource<User> {
 		        
 				map.put(AMBITDBRoles.ambit_admin.name(), Boolean.FALSE);
 				map.put(AMBITDBRoles.ambit_datasetmgr.name(), Boolean.FALSE);
+				map.put(AMBITDBRoles.ambit_modeller.name(), Boolean.FALSE);
 				if (getClientInfo()!=null) {
 					if (getClientInfo().getUser()!=null)
 						map.put("username", getClientInfo().getUser().getIdentifier());
@@ -65,6 +66,8 @@ public class AMBITLoginFormResource extends UserLoginFormResource<User> {
 							map.put(AMBITDBRoles.ambit_admin.name(),Boolean.TRUE);
 						if (DBRoles.isDatasetManager(getClientInfo().getRoles()))
 							map.put(AMBITDBRoles.ambit_datasetmgr.name(), Boolean.TRUE);
+						if (DBRoles.isModeller(getClientInfo().getRoles()))
+							map.put(AMBITDBRoles.ambit_modeller.name(), Boolean.TRUE);						
 						if (DBRoles.isUser(getClientInfo().getRoles()))
 							map.put(AMBITDBRoles.ambit_user.name(), Boolean.TRUE);	
 					}

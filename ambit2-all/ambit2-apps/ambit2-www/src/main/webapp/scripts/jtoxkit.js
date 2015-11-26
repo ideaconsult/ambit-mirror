@@ -503,7 +503,7 @@ window.jT = window.jToxKit = {
         obj.parentKit = parent;
       }
       else
-        console.log("jToxError: trying to initialize unexistend jTox kit: " + kit);
+        console.log("jToxError: trying to initialize unexistent jTox kit: " + kit);
 
       return obj;
     };
@@ -772,7 +772,23 @@ window.jT.ui = {
     }
     return res;
   },
+	linkedData: function (content, message, data) {
+    var res = '';
 
+    if (ccLib.isNull(data)) {
+      data = content;
+    }
+    if (data.toString().length <= 5) {
+      res += content;
+    }
+    else {
+      if (message != null) {
+        res +=  res += '<div title="' + message + '">' + content + '</div>';
+      }
+      else res += '<div >' + content + '</div>';
+    }
+    return res;
+	},
   changeTabsIds: function (root, suffix) {
     jT.$('ul li a', root).each(function() {
       var id = jT.$(this).attr('href').substr(1);
@@ -822,12 +838,19 @@ window.jT.ui = {
 	    var catCol = kit.settings.configuration.columns[cat];
 	    if (!ccLib.isNull(catCol)) {
 	      if (!!group) {
-	        catCol = catCol[group];
-  	      if (!ccLib.isNull(catCol))
+          catCol = catCol[group];
+  	      if (!ccLib.isNull(catCol)){
+            // Allow bVisible to be set on the whole category
+            if (!ccLib.isNull(catCol.bVisible)) {
+              catCol[name] = catCol[name] || {};
+              catCol[name].bVisible = !!catCol[name].bVisible || !!catCol.bVisible;
+            }
   	        catCol = catCol[name];
+          }
         }
-        else
+        else {
 	        catCol = catCol[name];
+        }
 	    }
 
 	    if (ccLib.isNull(catCol))
@@ -1767,12 +1790,12 @@ var jToxCompound = (function () {
         {type: "text/uri-list", icon: "images/lnk64.png"},
         {type: "application/pdf", icon: "images/pdf64.png"},
         {type: "text/csv", icon: "images/csv64.png"},
-        {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", icon: "images/xlsx.png"},
         {type: "text/plain", icon: "images/txt64.png"},
         {type: "text/x-arff", icon: "images/arff.png"},
         {type: "text/x-arff-3col", icon: "images/arff-3.png"},
         {type: "application/rdf+xml", icon: "images/rdf64.png"},
-        {type: "application/json", icon: "images/json64.png"}
+        {type: "application/json", icon: "images/json64.png"},
+        {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", icon: "images/xlsx.png"}
       ],
 
       // These are instance-wide pre-definitions of default baseFeatures as described below.
@@ -3168,23 +3191,28 @@ var jToxSubstance = (function () {
       "sEmptyTable": "No substances available.",
       "sInfo": "Showing _TOTAL_ substance(s) (_START_ to _END_)"
     },
-  
+
     pageStart: 0,
     pageSize: 10,
     /* substanceUri */
-    configuration: { 
+    configuration: {
       columns : {
         substance: {
-          'Id': { sTitle: 'Id', mData: 'URI', sDefaultContent: "-", sWidth: "60px", mRender: function (data, type, full) { 
+          'Id': { sTitle: 'Id', mData: 'URI', sDefaultContent: "-", sWidth: "60px", mRender: function (data, type, full) {
             return (type != 'display') ? full.index : '&nbsp;-&nbsp;' + full.index + '&nbsp;-&nbsp;';
           } },
-          'Substance Name': { sTitle: "Substance Name", mData: "name", sDefaultContent: "-" },
+          'Substance Name': { sTitle: "Substance Name", mData: "name",  mRender: function (data, type, full) {
+            if (ccLib.isNull(data) || data == 'null') data = '-';
+            return (type != 'display') ? data : jT.ui.linkedData('<a target="_blank" href="' + full.URI + '/study">' + data + '</a>', "Click to view study details", data)
+          } },
           'Substance UUID': { sTitle: "Substance UUID", mData: "i5uuid", mRender: function (data, type, full) {
+            if (ccLib.isNull(data) || data == 'null') return '';
             return (type != 'display') ? data : jT.ui.shortenedData('<a target="_blank" href="' + full.URI + '/study">' + data + '</a>', "Press to copy the UUID in the clipboard", data)
           } },
           'Substance Type': { sTitle: "Substance Type", mData: "substanceType", sWidth: "15%", sDefaultContent: '-' },
           'Public name': { sTitle: "Public name", mData: "publicname", sDefaultContent: '-'},
           'Reference substance UUID': { sTitle: "Reference substance UUID", mData: "referenceSubstance", mRender: function (data, type, full) {
+            if (ccLib.isNull(data.i5uuid) || data.i5uuid == 'null') return '';
             return (type != 'display') ? data.i5uuid : jT.ui.shortenedData('<a target="_blank" href="' + data.uri + '">' + data.i5uuid + '</a>', "Press to copy the UUID in the clipboard", data.i5uuid);
           } },
           'Owner': { sTitle: "Owner", mData: "ownerName", sDefaultContent: '-'},
@@ -3193,24 +3221,24 @@ var jToxSubstance = (function () {
       }
     }
   };
-  
+
   var cls = function (root, settings) {
     var self = this;
     self.rootElement = root;
     jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even when manually initialized
-    
+
     self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings);
 
     self.pageStart = self.settings.pageStart;
     self.pageSize = self.settings.pageSize;
-    
+
     if (!self.settings.noInterface) {
       if (self.settings.embedComposition && self.settings.onDetails == null) {
         self.settings.onDetails = function (root, data, element) {
           new jToxComposition(root, jT.$.extend(
-            {}, 
-            self.settings, 
-            (typeof self.settings.embedComposition == 'object' ? self.settings.embedComposition : jT.blankSettings), 
+            {},
+            self.settings,
+            (typeof self.settings.embedComposition == 'object' ? self.settings.embedComposition : jT.blankSettings),
             { compositionUri : data.URI + '/composition' }
           ));
         };
@@ -3218,18 +3246,18 @@ var jToxSubstance = (function () {
 
       self.rootElement.appendChild(jT.getTemplate('#jtox-substance'));
       self.init(settings);
-    }    
-        
+    }
+
     // finally, if provided - make the query
     if (!!self.settings.substanceUri)
       self.querySubstance(self.settings.substanceUri)
   };
-  
+
   // format the external identifiers column
   cls.formatExtIdentifiers = function (data, type, full) {
     if (type != 'display')
       return ccLib.joinDeep(data, 'id', ', ');
-    
+
     var html = '';
     for (var i = 0;i < data.length;++i) {
       if (i > 0)
@@ -3238,29 +3266,29 @@ var jToxSubstance = (function () {
     }
     return html;
   };
-  
+
   cls.prototype = {
     init: function (settings) {
       var self = this;
-      
+
       // deal if the selection is chosen
       var colId = self.settings.configuration.columns.substance['Id'];
       jT.ui.putActions(self, colId);
       colId.sTitle = '';
-      
+
       self.settings.configuration.columns.substance['Owner'].mRender = function (data, type, full) {
         return (type != 'display') ? data : '<a target="_blank" href="' + self.settings.baseUrl + '/substanceowner/' + full.ownerUUID + '/substance">' + data + '</a>';
       };
-      
+
       var opts = {  "sDom": "rti" };
       if (self.settings.showControls) {
-        jT.ui.bindControls(self, { 
+        jT.ui.bindControls(self, {
           nextPage: function () { self.nextPage(); },
           prevPage: function () { self.prevPage(); },
           sizeChange: function() { self.queryEntries(self.pageStart, parseInt(jT.$(this).val())); },
           filter: function () { jT.$(self.table).dataTable().fnFilter(jT.$(this).val()); }
         });
-        
+
         opts['fnInfoCallback'] = function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
           var needle = jT.$('.filterbox', self.rootElement).val();
           jT.$('.filtered-text', self.rootElement).html(!needle ? ' ' : ' (filtered to <span class="high">' + iTotal + '</span>) ');
@@ -3269,22 +3297,22 @@ var jToxSubstance = (function () {
       }
       else
         jT.$('.jtox-controls', self.rootElement).remove();
-      
+
       // again , so that changed defaults can be taken into account.
       self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
-      
+
       // READYY! Go and prepare THE table.
       self.table = jT.ui.putTable(self, jT.$('table', self.rootElement)[0], 'substance', opts);
     },
-    
+
     queryEntries: function(from, size) {
       var self = this;
       if (from < 0)
         from = 0;
-        
+
       if (!size || size < 0)
         size = self.pageSize;
-        
+
       var qStart = Math.floor(from / size);
       var qUri = ccLib.addParameter(self.substanceUri, "page=" + qStart + "&pagesize=" + size);
       jT.call(self, qUri, function (result, jhr) {
@@ -3293,12 +3321,12 @@ var jToxSubstance = (function () {
         if (!!result) {
           self.pageSize = size;
           self.pageStart = from;
-        
+
           for (var i = 0, rl = result.substance.length; i < rl; ++i)
             result.substance[i].index = i + from + 1;
 
           self.substance = result.substance;
-          
+
           if (result.substance.length < self.pageSize) // we've reached the end!!
             self.entriesCount = from + result.substance.length;
 
@@ -3307,7 +3335,7 @@ var jToxSubstance = (function () {
           if (!self.settings.noInterface) {
             jT.$(self.table).dataTable().fnClearTable();
             jT.$(self.table).dataTable().fnAddData(result.substance);
-            
+
             self.updateControls(from, result.substance.length);
           }
         }
@@ -3315,25 +3343,25 @@ var jToxSubstance = (function () {
           ccLib.fireCallback(self.settings.onLoaded, self, result);
       });
     },
-    
+
     querySubstance: function (uri) {
       var self = this;
       self.substanceUri = jT.grabPaging(self, uri);
       if (ccLib.isNull(self.settings.baseUrl))
         self.settings.baseUrl = jT.grabBaseUrl(uri);
       self.queryEntries(self.pageStart);
-    },   
-    
+    },
+
     query: function (uri) {
       this.querySubstance(uri);
     }
   };
-  
+
   // some "inheritance" :-)
   cls.prototype.nextPage = jToxCompound.prototype.nextPage;
   cls.prototype.prevPage = jToxCompound.prototype.prevPage;
   cls.prototype.updateControls = jToxCompound.prototype.updateControls;
-  
+
   return cls;
 })();
 /* toxcomposition.js - A kit for visualizing substance composition(s)
@@ -3518,10 +3546,10 @@ var jToxStudy = (function () {
     oLanguage: null,
     // events
     onSummary: null,    // invoked when the summary is loaded
-    onComposition: null, // invoked when the 
+    onComposition: null, // invoked when the
     onStudy: null,      // invoked for each loaded study
     onLoaded: null,     // invoked when the substance general info is loaded
-    configuration: { 
+    configuration: {
       columns: {
       	"_": {
 	    		"main" : { },
@@ -3535,28 +3563,28 @@ var jToxStudy = (function () {
     }
   };    // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
   var instanceCount = 0;
-  
+
   var fnDatasetValue = function (fid, old, value, features){
 		return ccLib.extendArray(old, value != null ? value.trim().toLowerCase().split("|") : [value]).filter(ccNonEmptyFilter);
   };
-  
+
   // constructor
   var cls = function (root, settings) {
     var self = this;
     self.rootElement = root;
     self.instanceNo = instanceCount++;
     jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even in manual initialization.
-    
+
     self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings); // i.e. defaults from jToxStudy
     self.settings.tab = self.settings.tab || jT.settings.fullUrl.hash;
     // now we have our, local copy of settings.
-    
+
     // get the main template, add it (so that jQuery traversal works) and THEN change the ids.
     // There should be no overlap, because already-added instances will have their IDs changed already...
     var tree = jT.getTemplate('#jtox-studies');
     root.appendChild(tree);
     jT.ui.changeTabsIds(tree, '_' + self.instanceNo);
-    
+
     // initialize the tab structure for several versions of tabs.
     self.tabs = jT.$(tree).tabs({
       "select" : function(event, ui) {
@@ -3567,13 +3595,13 @@ var jToxStudy = (function () {
           self.loadPanel(ui.newPanel[0]);
       }
     });
-    
-    // when all handlers are setup - make a call, if needed.    
+
+    // when all handlers are setup - make a call, if needed.
     if (self.settings['substanceUri'] != null) {
       self.querySubstance(self.settings['substanceUri']);
     }
   };
-  
+
   // now follow the prototypes of the instance functions.
   cls.prototype = {
     loadPanel: function(panel){
@@ -3588,10 +3616,10 @@ var jToxStudy = (function () {
             self.processStudies(panel, study.study, true);
             ccLib.fireCallback(self.settings.onStudy, self, study.study);
           }
-        });  
+        });
       }
     },
-    
+
     getFormatted: function (data, type, format) {
       var value = null;
       if (typeof format === 'function' )
@@ -3600,23 +3628,23 @@ var jToxStudy = (function () {
         value = data[format];
       else
         value = data[0];
-      
+
       return value;
     },
-    
+
     createCategory: function(tab, category) {
       var self = this;
-  
+
       var theCat = jT.$('.' + category + '.jtox-study', tab)[0];
       if (!theCat) {
         theCat = jT.getTemplate('#jtox-study');
         tab.appendChild(theCat);
         jT.$(theCat).addClass(category);
       }
-      
+
       return theCat;
     },
-    
+
     addParameters: function (summaryURI) {
       var self = this;
       var pars = ["property_uri", "top", "category"];
@@ -3625,10 +3653,10 @@ var jToxStudy = (function () {
         if (!!self.settings[p])
           summaryURI = ccLib.addParameter(summaryURI, p + "=" + self.settings[p]);
       }
-      
+
       return summaryURI;
     },
-    
+
     // modifies the column title, according to configuration and returns "null" if it is marked as "invisible".
     ensureTable: function (tab, study) {
       var self = this;
@@ -3636,21 +3664,22 @@ var jToxStudy = (function () {
       var theTable = jT.$('.' + category + ' .jtox-study-table', tab)[0];
       if (!jT.$(theTable).hasClass('dataTable')) {
 	      var defaultColumns = [
-	        { "sTitle": "Name", "sClass": "center middle", "sWidth": "20%", "mData": "protocol.endpoint" }, // The name (endpoint)
-	        { "sTitle": "Endpoint", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData": "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return self.getFormatted(data, type, "endpoint"); }); } },   // Effects columns
+	        { "sTitle": "Name", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.endpoint" }, // The name (endpoint)
+	        { "sTitle": "Endpoint", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData": "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return self.getFormatted(data, type, "endpoint"); }); } },   // Effects columns
 	        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return jT.ui.renderRange(data.result, null, type) }); } },
 	        { "sTitle": "Text", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return data.result.textValue ||  '-'; }); } },
 	        { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "-"  },    // Protocol columns
-	        { "sTitle": "Owner", "sClass": "center middle", "sWidth": "15%", "mData": "citation.owner", "sDefaultContent": "-" },
-	        { "sTitle": "Citation", "sClass": "center middle", "sWidth": "15%", "mData": "citation", "mRender": function (data, type, full) { return (data.title || "") + ' ' + (!!data.year || ""); }  },
+	        { "sTitle": "Owner", "sClass": "center middle", "sWidth": "10%", "mData": "citation.owner", "sDefaultContent": "-" },
+	        { "sTitle": "Citation", "sClass": "center middle", "sWidth": "10%", "mData": "citation", "mRender": function (data, type, full) { return (data.title || "") + ' ' + (!!data.year || ""); }  },
+          { "sTitle": "Reliability", "sClass": "center middle", "sWidth": "10%", "mData": "reliability", "mRender": function (data, type, full) { return data.r_value; }  },
 	        { "sTitle": "UUID", "sClass": "center middle", "sWidth": "15%", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : jT.ui.shortenedData(data, "Press to copy the UUID in the clipboard"); } }
 	      ];
-  
+
         var colDefs = [];
-        
+
         // start filling it
         var parCount = 0;
-  
+
         // this function takes care to add as columns all elements from given array
         var putAGroup = function(group, fProcess) {
           var count = 0;
@@ -3663,13 +3692,13 @@ var jToxStudy = (function () {
             var val = fProcess(p);
             if (ccLib.isNull(val))
               continue;
-              
+
             colDefs.push(val);
             count++;
           }
           return count;
         }
-        
+
         var putDefaults = function(start, len, group) {
           for (var i = 0;i < len; ++i) {
             var col = jT.$.extend({}, defaultColumns[i + start]);
@@ -3678,9 +3707,9 @@ var jToxStudy = (function () {
               colDefs.push(col);
           }
         };
-        
+
         putDefaults(0, 1, "main");
-        
+
         // use it to put parameters...
         putAGroup(study.parameters, function(p) {
           if (study.effects[0].conditions[p] !== undefined  || study.effects[0].conditions[p + " unit"] !== undefined)
@@ -3688,53 +3717,53 @@ var jToxStudy = (function () {
 
           var col = {
             "sTitle" : p,
-            "sClass" : "center middle", 
+            "sClass" : "center middle",
             "mData" : "parameters." + p,
             "sDefaultContent": "-"
           };
-          
+
           col = jT.ui.modifyColDef(self, col, category, "parameters");
           if (col == null)
             return null;
-          
+
           col["mRender"] = function (data, type, full) { return jT.ui.renderRange(data, full[p + " unit"], type); };
           return col;
         });
         // .. and conditions
         putAGroup(study.effects[0].conditions, function(c){
-          var col = { 
+          var col = {
             "sTitle" : c,
-            "sClass" : "center middle jtox-multi", 
+            "sClass" : "center middle jtox-multi",
             "mData" : "effects"
           };
-          
+
           col = jT.ui.modifyColDef(self, col, category, "conditions");
           if (col == null)
             return null;
-          
+
           col["mRender"] = function(data, type, full) {
-            return jT.ui.renderMulti(data, type, full, function(data, type) { 
-              return jT.ui.renderRange(data.conditions[c], data.conditions[c + " unit"], type); 
-            }); 
+            return jT.ui.renderMulti(data, type, full, function(data, type) {
+              return jT.ui.renderRange(data.conditions[c], data.conditions[c + " unit"], type);
+            });
           };
           return col;
         });
-        
+
         // add also the "default" effects columns
         putDefaults(1, 3, "effects");
-  
+
         // now is time to put interpretation columns..
         putAGroup(study.interpretation, function(i){
           var col = { "sTitle": i, "sClass" : "center middle jtox-multi", "mData" : "interpretation." + i, "sDefaultContent": "-"};
           return jT.ui.modifyColDef(self, col, category, "interpretation");
         });
-        
+
         // finally put the protocol entries
         putDefaults(4, 4, "protocol");
-        
+
         // but before given it up - make a small sorting..
         jT.ui.sortColDefs(colDefs);
-        
+
         // READYY! Go and prepare THE table.
         jT.$(theTable).dataTable( {
           "bPaginate": true,
@@ -3751,7 +3780,7 @@ var jToxStudy = (function () {
           "fnCreatedRow": function( nRow, aData, iDataIndex ) {
             ccLib.equalizeHeights.apply(window, jT.$('td.jtox-multi table tbody', nRow).toArray());
           },
-          
+
   				"oLanguage": jT.$.extend({
             "sProcessing": "<img src='" + (jT.settings.baseUrl || self.baseUrl) + "/images/24x24_ambit.gif' border='0'>",
             "sLoadingRecords": "No studies found.",
@@ -3767,23 +3796,23 @@ var jToxStudy = (function () {
               '</select> studies.'
           }, self.settings.oLanguage)
         });
-        
+
         jT.$(theTable).dataTable().fnAdjustColumnSizing();
       }
       else
         jT.$(theTable).dataTable().fnClearTable();
-        
+
       return theTable;
     },
-    
+
     processSummary: function (summary) {
       var self = this;
       var typeSummary = {};
       var knownNames = { "P-CHEM": "P-Chem", "ENV_FATE" : "Env Fate", "ECOTOX" : "Eco Tox", "TOX" : "Tox"};
-      
+
       // first - clear all existing tabs
 			jT.$('.jtox-study', self.rootElement).remove();
-      
+
       // create the groups on the corresponding tabs, first sorting them alphabetically
       summary.sort(function (a, b) {
       	var valA = (a.category.order || a.category.description || a.category.title);
@@ -3796,7 +3825,7 @@ var jToxStudy = (function () {
           return 0;
 	      return (valA < valB) ? -1 : 1;
       });
-      
+
       var tabRoot = $('ul', self.rootElement).parent()[0];
       var added = 0;
       var lastAdded = null;
@@ -3804,13 +3833,13 @@ var jToxStudy = (function () {
         var tab = jT.getTemplate('#jtox-study-tab');
         var link = jT.ui.addTab(tabRoot, (knownNames[top] || sum.topcategory.title) + " (0)", "jtox-" + top.toLowerCase() + '_' + self.instanceNo, tab).tab;
         jT.$(link).data('type', top);
-        
+
         jT.$(tab).addClass(top).data('jtox-uri', sum.topcategory.uri);
         ccLib.fillTree(tab, self.substance);
-        
+
         added++;
         lastAdded = top;
-      
+
         jT.$('div.jtox-study-tab div button', tabRoot).on('click', function (e) {
         	var par = jT.$(this).parents('.jtox-study-tab')[0];
     	    if (jT.$(this).hasClass('expand-all')) {
@@ -3820,10 +3849,10 @@ var jToxStudy = (function () {
     		    jT.$('.jtox-foldable', par).addClass('folded');
     	    }
         });
-        
+
         return tab;
       };
-      
+
       for (var si = 0, sl = summary.length; si < sl; ++si) {
         var sum = summary[si];
         var top = sum.topcategory.title;
@@ -3833,7 +3862,7 @@ var jToxStudy = (function () {
         var tab = jT.$('.jtox-study-tab.' + top, self.rootElement)[0];
         if (!tab)
           tab = addStudyTab(top, sum);
-        
+
         var catname = sum.category.title;
         if (!catname)
           typeSummary[top] = sum.count;
@@ -3841,7 +3870,7 @@ var jToxStudy = (function () {
           self.createCategory(tab, catname);
       }
 
-      // a small hack to force openning of this, later in the querySummary()      
+      // a small hack to force openning of this, later in the querySummary()
       if (added == 1)
         self.settings.tab = lastAdded;
 
@@ -3854,16 +3883,16 @@ var jToxStudy = (function () {
           el.innerHTML = jT.ui.updateCounter(el.innerHTML, cnt);
         }
       });
-      
+
       // now install the filter box handler. It delays the query a bit and then spaws is to all tables in the tab.
       var filterTimeout = null;
       var fFilter = function (ev) {
         if (!!filterTimeout)
           clearTimeout(filterTimeout);
-    
+
         var field = ev.currentTarget;
         var tab = jT.$(this).parents('.jtox-study-tab')[0];
-        
+
         filterTimeout = setTimeout(function() {
           var tabList = jT.$('.jtox-study-table', tab);
           for (var t = 0, tlen = tabList.length; t < tlen; ++t) {
@@ -3871,22 +3900,22 @@ var jToxStudy = (function () {
           }
         }, 300);
       };
-      
+
       var tabList = jT.$('.jtox-study-tab');
       for (var t = 0, tlen = tabList.length;t < tlen; t++){
         var filterEl = jT.$('.jtox-study-filter', tabList[t])[0].onkeydown = fFilter;
       }
     },
-    
+
     processStudies: function (tab, study, map) {
       var self = this;
       var cats = {};
       var cntCats = 0;
-      
+
       // first swipe to map them to different categories...
       if (!map){
         // add this one, if we're not remapping. map == false assumes that all passed studies will be from
-        // one category.    
+        // one category.
         cats[study[0].protocol.category.code] = study;
       }
       else{
@@ -3903,16 +3932,16 @@ var jToxStudy = (function () {
           }
         }
       }
-  
+
       // now iterate within all categories (if many) and initialize the tables
       for (var c in cats) {
         var onec = cats[c];
         var aStudy = jT.$('.' + c + '.jtox-study', tab)[0];
         if (aStudy === undefined)
           continue;
-  
+
         ccLib.fillTree(aStudy, {title: onec[0].protocol.category.title + " (0)"});
-        
+
         // now swipe through all studyies to build a "representative" one with all fields.
         var study = {};
         for (var i = 0, cl = onec.length; i < cl; ++i) {
@@ -3933,11 +3962,11 @@ var jToxStudy = (function () {
         });
       }
     },
-        
+
     querySummary: function(summaryURI) {
       var self = this;
-      
-      summaryURI = self.addParameters(summaryURI);      
+
+      summaryURI = self.addParameters(summaryURI);
       jT.call(self, summaryURI, function(summary) {
         if (!!summary && !!summary.facet)
           self.processSummary(summary.facet);
@@ -3956,27 +3985,27 @@ var jToxStudy = (function () {
           }
       });
     },
-    
+
     insertComposition: function(compositionURI) {
       var compRoot = jT.$('.jtox-compo-tab', this.rootElement)[0];
       jT.$(compRoot).empty();
       new jToxComposition(compRoot, jT.$.extend({}, this.settings, jT.blankSettings, {'compositionUri': compositionURI}));
     },
-    
+
     querySubstance: function(substanceURI) {
       var self = this;
-      
+
       // re-initialize us on each of these calls.
       self.baseUrl = ccLib.isNull(self.settings.baseUrl) ? jT.grabBaseUrl(substanceURI) : self.settings.baseUrl;
-      
+
       jT.call(self, substanceURI, function(substance){
         if (!!substance && !!substance.substance && substance.substance.length > 0){
           substance = substance.substance[0];
-           
+
           substance["showname"] = substance.publicname || substance.name;
           substance["IUCFlags"] = jToxSubstance.formatExtIdentifiers(substance.externalIdentifiers, 'display', substance);
           self.substance = substance;
-            
+
           ccLib.fillTree(self.rootElement, substance);
           // go and query for the reference query
           jT.call(self, substance.referenceSubstance.uri, function (dataset){
@@ -3985,7 +4014,7 @@ var jToxStudy = (function () {
               ccLib.fillTree(jT.$('.jtox-substance', self.rootElement)[0], dataset.dataEntry[0]);
             }
           });
-           
+
           ccLib.fireCallback(self.settings.onLoaded, self, substance.substance);
           // query for the summary and the composition too.
           self.querySummary(substance.URI + "/studysummary");
@@ -3995,12 +4024,12 @@ var jToxStudy = (function () {
           ccLib.fireCallback(self.settings.onLoaded, self, null);
       });
     },
-    
+
     query: function (uri) {
       this.querySubstance(uri);
     }
   }; // end of prototype
-  
+
   return cls;
 })();
 /* toxauth.js - Several kits for querying/manipulating authorization-related stuff: policies, roles, users

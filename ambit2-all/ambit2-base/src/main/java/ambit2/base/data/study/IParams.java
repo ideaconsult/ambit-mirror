@@ -2,7 +2,9 @@ package ambit2.base.data.study;
 
 import java.util.Map;
 
-public interface IParams<VALUE> extends Map<String,VALUE> {
+import net.idea.modbcum.i.JSONSerializable;
+
+public interface IParams<VALUE> extends Map<String,VALUE>, JSONSerializable {
 	public VALUE getUnits();
 	public void setUnits(VALUE unit);
 	

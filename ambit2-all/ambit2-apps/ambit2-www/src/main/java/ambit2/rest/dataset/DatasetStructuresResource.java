@@ -29,7 +29,7 @@ import ambit2.db.update.dataset.DatasetQueryFieldString;
 import ambit2.rest.OpenTox;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.propertyvalue.FeatureResource;
+import ambit2.rest.propertyvalue.FeatureResourceIdentifiers;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 
@@ -89,7 +89,7 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 				Template featureTemplate = new Template(String.format("%s%s%s",basereference==null?"":basereference,PropertyResource.featuredef,PropertyResource.featuredefID));
 				Map<String, Object> vars = new HashMap<String, Object>();
 				featureTemplate.parse(p, vars);
-				try {property = Integer.parseInt(vars.get(FeatureResource.featureID).toString()); } 
+				try {property = Integer.parseInt(vars.get(FeatureResourceIdentifiers.featureID).toString()); } 
 				catch (Exception x) { property = -1;};
 
 			} catch (Exception x) {

@@ -52,7 +52,7 @@ public class ShellSmi2SDF extends ShellSDFoutput<IAtomContainer> {
 	public void setDropHydrogens(boolean dropHydrogens) {
 		this.dropHydrogens = dropHydrogens;
 	}
-	protected transient SmilesGenerator gen = new SmilesGenerator(true);
+	protected transient SmilesGenerator gen = new SmilesGenerator();
 	public ShellSmi2SDF() throws ShellException {
 		super();
 	}

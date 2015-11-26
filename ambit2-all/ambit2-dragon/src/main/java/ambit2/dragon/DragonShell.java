@@ -10,15 +10,18 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.silent.AtomContainer;
 
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.DelimitedFileFormat;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.io.MDLWriter;
@@ -249,7 +252,8 @@ public class DragonShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	@Override
 	protected synchronized IAtomContainer parseOutput(String mopac_path, IAtomContainer mol)
 			throws ShellException {
-		mol.getProperties().clear();
+		//mol.getProperties().clear();
+		MoleculeTools.clearProperties(mol);
         for (int i=0; i< outFile.length;i++) {
             String fname = mopac_path+"/" + outFile[i]; 
             File f = new File(fname);
@@ -260,6 +264,7 @@ public class DragonShell extends CommandShell<IAtomContainer, IAtomContainer> {
                 		new DelimitedFileFormat("\t",'"'));
             	while (re.hasNext()) {
             		IAtomContainer m = (IAtomContainer) re.next();
+
             		mol.setProperties(m.getProperties());
             		break;
             	}

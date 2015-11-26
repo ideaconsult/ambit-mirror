@@ -5,7 +5,7 @@ http://sourceforge.net/projects/oscar3-chem/files/</description>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
-    <version>2.7.6-SNAPSHOT</version>
+    <version>3.0.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>ambit2-namestructure</artifactId>
@@ -56,6 +56,6 @@ http://sourceforge.net/projects/oscar3-chem/files/</description>
   </build>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <opsin.version>1.6.0</opsin.version>
+    <opsin.version>2.0.0</opsin.version>
   </properties>
 </project>

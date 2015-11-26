@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.core.io.IteratingDelimitedFileReader;
 
@@ -29,7 +29,7 @@ public class MalariaHTSDataDelimitedReader extends IteratingDelimitedFileReader 
 
 	@Override
 	public Object next() {
-		IMolecule mol = (IMolecule) super.next();
+		IAtomContainer mol = (IAtomContainer) super.next();
 		Object sample = mol.getProperty(col_SAMPLE);
 		Object batch = mol.getProperty(col_batch);
 		if (sample==null) return mol;

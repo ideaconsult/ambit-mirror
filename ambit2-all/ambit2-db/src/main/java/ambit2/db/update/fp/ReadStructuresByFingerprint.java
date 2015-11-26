@@ -7,7 +7,7 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
-import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.descriptors.processors.FPTable;
 
 public class ReadStructuresByFingerprint extends AbstractStructureQuery<String,IFingerprint<FPTable,String>,StringCondition> {
 

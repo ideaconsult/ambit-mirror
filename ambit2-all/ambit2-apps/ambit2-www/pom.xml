@@ -1,546 +1,693 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <description>Exposes  AMBIT 2 database search and other functionality by REST style web services.</description>
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>ambit2-www</artifactId>
-  <packaging>war</packaging>
-  <name>Ambit2 REST web services</name>
-  <parent>
-    <artifactId>ambit2-apps</artifactId>
-    <groupId>ambit</groupId>
-    <version>2.7.6-SNAPSHOT</version>
-  </parent>
-  <distributionManagement>
-    <site>
-      <id>website_ambit</id>
-      <url>scp://shell.sourceforge.net/home/project-web/ambit/htdocs/ambit2-www</url>
-    </site>
-  </distributionManagement>
-  <profiles>
-    <profile>
-      <id>http</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <web_xml>src/main/resources/web.xml</web_xml>
-      </properties>
-    </profile>
-    <profile>
-      <id>https</id>
-      <properties>
-        <web_xml>src/main/resources/web.https.xml</web_xml>
-      </properties>
-    </profile>
-    <!-- Release build. Use together with profile -P aa-enabled or -P aa-disabled, 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<description>Exposes  AMBIT 2 database search and other functionality by REST style web services.</description>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>ambit2-www</artifactId>
+	<packaging>war</packaging>
+	<name>Ambit2 REST web services</name>
+	<parent>
+		<artifactId>ambit2-apps</artifactId>
+		<groupId>ambit</groupId>
+		<version>3.0.1-SNAPSHOT</version>
+	</parent>
+	<distributionManagement>
+		<site>
+			<id>website_ambit</id>
+			<url>scp://shell.sourceforge.net/home/project-web/ambit/htdocs/ambit2-www</url>
+		</site>
+	</distributionManagement>
+	<profiles>
+		<profile>
+			<id>http</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<web_xml>src/main/resources/web.xml</web_xml>
+			</properties>
+		</profile>
+		<profile>
+			<id>https</id>
+			<properties>
+				<web_xml>src/main/resources/web.https.xml</web_xml>
+			</properties>
+		</profile>
+		<!-- Release build. Use together with profile -P aa-enabled or -P aa-disabled, 
 			and -P http or -P https -->
-    <profile>
-      <id>ambit-release</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <google.analytics>UA-8771500-5</google.analytics>
-        <rdf.writer>stax</rdf.writer>
-        <changeLineSeparators>false</changeLineSeparators>
-        <jsonp>true</jsonp>
-        <ambit.db>ambit2</ambit.db>
-        <ambit.db.user.test>guest</ambit.db.user.test>
-        <ambit.db.user.test.password>guest</ambit.db.user.test.password>
-        <ambit.db.create.allow>true</ambit.db.create.allow>
-        <ambit.db.host>localhost</ambit.db.host>
-        <!-- root pasword for creating new db, used for testing -->
-        <ambit.db.user.root.password></ambit.db.user.root.password>
-        <!-- Ontology service , assumed on the same host -->
-        <service.ontology>http://localhost:8080/ontology</service.ontology>
-        <!-- AA -->
-        <aa.opensso>http://opensso.in-silico.ch/opensso/identity</aa.opensso>
-        <aa.policy>http://opensso.in-silico.ch/Pol/opensso-pol</aa.policy>
-        <aa.user>guest</aa.user>
-        <aa.pass>guest</aa.pass>
-        <aa.model>false</aa.model>
-        <aa.feature>false</aa.feature>
-        <aa.compound>false</aa.compound>
-        <warmup.enabled>false</warmup.enabled>
-        <aa.local.enabled>false</aa.local.enabled>
-        <aa.local.admin.name>admin</aa.local.admin.name>
-        <aa.local.admin.pass>changeit</aa.local.admin.pass>
-        <guard.enabled></guard.enabled>
-        <guard.list>http://localhost </guard.list>
-        <allowed.origins>*</allowed.origins>
-        <attach.depict>true</attach.depict>
-        <attach.toxmatch>true</attach.toxmatch>
-        <attach.substance>true</attach.substance>
-        <ambit.report.level>debug</ambit.report.level>
-        <MAXRECORDS>10000</MAXRECORDS>
-        <!-- The folder, containing Dragon6 executable. Could be changed after 
+		<profile>
+			<id>ambit-release</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<google.analytics>UA-8771500-5</google.analytics>
+				<rdf.writer>stax</rdf.writer>
+				<changeLineSeparators>false</changeLineSeparators>
+				<jsonp>true</jsonp>
+				<ambit.db>ambit2</ambit.db>
+				<ambit.db.user.test>guest</ambit.db.user.test>
+				<ambit.db.user.test.password>guest</ambit.db.user.test.password>
+				<ambit.db.create.allow>true</ambit.db.create.allow>
+				<ambit.db.host>localhost</ambit.db.host>
+				<!-- root pasword for creating new db, used for testing -->
+				<ambit.db.user.root.password></ambit.db.user.root.password>
+				<!-- Ontology service , assumed on the same host -->
+				<service.ontology>http://localhost:8080/ontology</service.ontology>
+				<!-- AA -->
+				<aa.opensso>http://opensso.in-silico.ch/opensso/identity</aa.opensso>
+				<aa.policy>http://opensso.in-silico.ch/Pol/opensso-pol</aa.policy>
+				<aa.user>guest</aa.user>
+				<aa.pass>guest</aa.pass>
+				<aa.model>false</aa.model>
+				<aa.feature>false</aa.feature>
+				<aa.compound>false</aa.compound>
+				<warmup.enabled>false</warmup.enabled>
+				<aa.local.enabled>false</aa.local.enabled>
+				<aa.local.admin.name>admin</aa.local.admin.name>
+				<aa.local.admin.pass>changeit</aa.local.admin.pass>
+				<guard.enabled></guard.enabled>
+				<guard.list>http://localhost </guard.list>
+				<allowed.origins>*</allowed.origins>
+				<attach.depict>true</attach.depict>
+				<attach.toxmatch>true</attach.toxmatch>
+				<attach.substance>true</attach.substance>
+				<ambit.report.level>debug</ambit.report.level>
+				<MAXRECORDS>10000</MAXRECORDS>
+				<!-- The folder, containing Dragon6 executable. Could be changed after 
 					deployment by editing WEB-INF/classes/ambit2/rest/config/ambit2.pref -->
-        <DRAGON_HOME>/usr/local/dragon</DRAGON_HOME>
-        <!-- The folder, containing OpenBabel executable. Could be changed after 
+				<DRAGON_HOME>/usr/local/dragon</DRAGON_HOME>
+				<!-- The folder, containing OpenBabel executable. Could be changed after 
 					deployment by editing WEB-INF/classes/ambit2/rest/config/ambit2.pref -->
-        <OBABEL_HOME>/usr/local/openbabel/bin</OBABEL_HOME>
-      </properties>
-    </profile>
-    <!-- release build, with AA -->
-    <profile>
-      <id>aa-enabled</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <aa.enabled>true</aa.enabled>
-        <dataset.members.prefix>true</dataset.members.prefix>
-      </properties>
-    </profile>
-    <!-- release build, without AA -->
-    <profile>
-      <id>aa-disabled</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <aa.enabled>false</aa.enabled>
-        <dataset.members.prefix>false</dataset.members.prefix>
-      </properties>
-    </profile>
-    <!-- Simple local AA , GET is public, other methods require HTTP BASIC 
+				<OBABEL_HOME>/usr/local/openbabel/bin</OBABEL_HOME>
+			</properties>
+		</profile>
+		<!-- release build, with AA -->
+		<profile>
+			<id>aa-enabled</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<aa.enabled>true</aa.enabled>
+				<dataset.members.prefix>true</dataset.members.prefix>
+			</properties>
+		</profile>
+		<!-- release build, without AA -->
+		<profile>
+			<id>aa-disabled</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<aa.enabled>false</aa.enabled>
+				<dataset.members.prefix>false</dataset.members.prefix>
+			</properties>
+		</profile>
+		<!-- Simple local AA , GET is public, other methods require HTTP BASIC 
 			with preconfigured credentials Will be switched on only if OpenTox AA is 
 			not enabled by aa.enabled=true and aa.local.enabled is set to true -->
-    <profile>
-      <id>aa-local</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <aa.local.enabled>true</aa.local.enabled>
-        <aa.local.admin.name>admin</aa.local.admin.name>
-        <aa.local.admin.pass>changeit</aa.local.admin.pass>
-        <dataset.members.prefix>false</dataset.members.prefix>
-        <!-- Optional -->
-        <guard.enabled></guard.enabled>
-        <guard.list>http://localhost</guard.list>
-      </properties>
-    </profile>
-    <profile>
-      <id>no-license-in-text-column</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <license.intextfiles>false</license.intextfiles>
-      </properties>
-    </profile>
-    <profile>
-      <id>license-in-text-column</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <license.intextfiles>true</license.intextfiles>
-      </properties>
-    </profile>
-    <profile>
-      <!-- Activates /admin resources protection by OpenTox AA -->
-      <id>aa-admin-enabled</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <aa.admin>true</aa.admin>
-      </properties>
-    </profile>
-    <profile>
-      <!-- Disables /admin resources protection by OpenTox AA -->
-      <id>aa-admin-disabled</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <aa.admin>false</aa.admin>
-      </properties>
-    </profile>
-    <profile>
-      <!-- Remove JNI classes from the war; they should be copied into {tomcat}/shared/lib 
+		<profile>
+			<id>aa-local</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<aa.local.enabled>true</aa.local.enabled>
+				<aa.local.admin.name>admin</aa.local.admin.name>
+				<aa.local.admin.pass>changeit</aa.local.admin.pass>
+				<dataset.members.prefix>false</dataset.members.prefix>
+				<!-- Optional -->
+				<guard.enabled></guard.enabled>
+				<guard.list>http://localhost</guard.list>
+			</properties>
+		</profile>
+		<profile>
+			<id>no-license-in-text-column</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<license.intextfiles>false</license.intextfiles>
+			</properties>
+		</profile>
+		<profile>
+			<id>license-in-text-column</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<license.intextfiles>true</license.intextfiles>
+			</properties>
+		</profile>
+		<profile>
+			<!-- Activates /admin resources protection by OpenTox AA -->
+			<id>aa-admin-enabled</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<aa.admin>true</aa.admin>
+			</properties>
+		</profile>
+		<profile>
+			<!-- Disables /admin resources protection by OpenTox AA -->
+			<id>aa-admin-disabled</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<aa.admin>false</aa.admin>
+			</properties>
+		</profile>
+		<profile>
+			<!-- Remove JNI classes from the war; they should be copied into {tomcat}/shared/lib 
 				folder -->
-      <id>no-jni</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <exclude.jni>WEB-INF/lib/jni-inchi*.jar,WEB-INF/lib/jnati*.jar</exclude.jni>
-      </properties>
-    </profile>
-    <profile>
-      <id>nano</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>ambit</groupId>
-          <artifactId>ambit2-nano</artifactId>
-          <version>${project.version}</version>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>menu-ot</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <ambit.profile>ot</ambit.profile>
-      </properties>
-    </profile>    
-    <profile>
-      <id>menu-lri</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <ambit.profile>lri</ambit.profile>
-      </properties>
-    </profile>
-    <profile>
-      <id>menu-enanomapper</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <ambit.profile>enanomapper</ambit.profile>
-      </properties>
-    </profile>
-    <profile>
-      <id>menu-default</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <ambit.profile>default</ambit.profile>
-      </properties>
-    </profile>
-    <profile>
-      <id>menu-toxmatch</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <ambit.profile>toxmatch</ambit.profile>
-      </properties>
-    </profile>
-  </profiles>
-  <build>
-    <finalName>ambit2</finalName>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-      </resource>
-    </resources>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.cargo</groupId>
-        <artifactId>cargo-maven2-plugin</artifactId>
-        <version>1.0.2</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.tomcat.maven</groupId>
-        <artifactId>tomcat6-maven-plugin</artifactId>
-        <version>2.2</version>
-        <configuration>
-          <url>http://apps.ideaconsult.net:8180/manager</url>
-          <server>eos</server>
-          <path>/ambit2</path>
-          <systemProperties>
-            <JAVA_OPTS>XX:-UseSplitVerifier
+			<id>no-jni</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<exclude.jni>WEB-INF/lib/jni-inchi*.jar,WEB-INF/lib/jnati*.jar</exclude.jni>
+			</properties>
+		</profile>
+		<profile>
+			<id>nano</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>ambit</groupId>
+					<artifactId>ambit2-nano</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>menu-ot</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<ambit.profile>ot</ambit.profile>
+			</properties>
+		</profile>
+		<profile>
+			<id>menu-lri</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<ambit.profile>lri</ambit.profile>
+			</properties>
+		</profile>
+		<profile>
+			<id>menu-enanomapper</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<ambit.profile>enanomapper</ambit.profile>
+			</properties>
+		</profile>
+		<profile>
+			<id>menu-default</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<ambit.profile>default</ambit.profile>
+			</properties>
+		</profile>
+		<profile>
+			<id>menu-toxmatch</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<ambit.profile>toxmatch</ambit.profile>
+			</properties>
+		</profile>
+	</profiles>
+	<build>
+		<finalName>ambit2</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.cargo</groupId>
+				<artifactId>cargo-maven2-plugin</artifactId>
+				<version>1.0.2</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat6-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<url>http://apps.ideaconsult.net:8180/manager</url>
+					<server>eos</server>
+					<path>/ambit2</path>
+					<systemProperties>
+						<JAVA_OPTS>XX:-UseSplitVerifier
 							-Djava.util.Arrays.useLegacyMergeSort</JAVA_OPTS>
-          </systemProperties>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.tomcat.maven</groupId>
-        <artifactId>tomcat7-maven-plugin</artifactId>
-        <version>2.2</version>
-        <configuration>
-          <url>http://apps.ideaconsult.net:8180/manager</url>
-          <server>eos</server>
-          <path>/ambit2</path>
-          <systemProperties>
-            <JAVA_OPTS>XX:-UseSplitVerifier
-							-Djava.util.Arrays.useLegacyMergeSort=true 
+					</systemProperties>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<url>http://apps.ideaconsult.net:8180/manager</url>
+					<server>eos</server>
+					<path>/ambit2</path>
+					<systemProperties>
+						<JAVA_OPTS>XX:-UseSplitVerifier
+							-Djava.util.Arrays.useLegacyMergeSort=true
 							-Djsse.enableSNIExtension=false</JAVA_OPTS>
-          </systemProperties>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>2.1.1</version>
-        <configuration>
-          <webXml>${web_xml}</webXml>
-          <!-- <manifest> <addDefaultImplementationEntries>true</addDefaultImplementationEntries> 
+					</systemProperties>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+				<configuration>
+					<webXml>${web_xml}</webXml>
+					<!-- <manifest> <addDefaultImplementationEntries>true</addDefaultImplementationEntries> 
 						</manifest> -->
-          <archive>
-            <manifestEntries>
-              <Implementation-Build>${build.version}</Implementation-Build>
-            </manifestEntries>
-          </archive>
-          <packagingExcludes>${exclude.jni}</packagingExcludes>
-        </configuration>
-      </plugin>
-      <!-- <plugin> <artifactId>maven-assembly-plugin</artifactId> <version>2.2.1</version> 
+					<archive>
+						<manifestEntries>
+							<Implementation-Build>${build.version}</Implementation-Build>
+						</manifestEntries>
+					</archive>
+					<packagingExcludes>${exclude.jni}</packagingExcludes>
+				</configuration>
+			</plugin>
+			<!-- <plugin> <artifactId>maven-assembly-plugin</artifactId> <version>2.2.1</version> 
 				<executions> <execution> <id>create-executable-jar</id> <phase>package</phase> 
 				<goals> <goal>single</goal> </goals> <configuration> <descriptorRefs> <descriptorRef> 
 				jar-with-dependencies </descriptorRef> </descriptorRefs> <archive> <manifest> 
 				<mainClass>ambit2.rest.AmbitApplication</mainClass> </manifest> </archive> 
 				</configuration> </execution> </executions> </plugin> -->
-    </plugins>
-  </build>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>xmlunit</groupId>
-      <artifactId>xmlunit</artifactId>
-      <version>1.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.dbunit</groupId>
-      <artifactId>dbunit</artifactId>
-      <version>${dbunit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>ambit2-pubchem</artifactId>
-      <version>${ambit.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>saxon-dom</artifactId>
-      <version>8.7</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>commons-fileupload</groupId>
-      <artifactId>commons-fileupload</artifactId>
-      <version>1.3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.restlet.jee</groupId>
-      <artifactId>org.restlet.ext.ssl</artifactId>
-      <version>${restlet.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.4</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.5.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-nop</artifactId>
-      <version>1.5.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jyaml</groupId>
-      <artifactId>jyaml</artifactId>
-      <version>1.3</version>
-    </dependency>
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>ambit2-rest</artifactId>
-      <version>${ambit.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.restlet.jee</groupId>
-      <artifactId>org.restlet.ext.fileupload</artifactId>
-      <version>${restlet.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.ideaconsult.restnet</groupId>
-      <artifactId>restnet-db</artifactId>
-      <version>${restnet.version}</version>
-      <classifier>tests</classifier>
-      <scope>test</scope>
-    </dependency>
-    <!-- <dependency> <groupId>net.bull.javamelody</groupId> <artifactId>javamelody-core</artifactId> 
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-db</artifactId>
+			<version>${ambit.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-model</artifactId>
+			<version>${ambit.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-mopac</artifactId>
+			<version>${ambit.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-namestructure</artifactId>
+			<version>${ambit.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>xmlunit</groupId>
+			<artifactId>xmlunit</artifactId>
+			<version>1.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>${dbunit.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.poi</groupId>
+					<artifactId>poi</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.poi</groupId>
+					<artifactId>poi-ooxml</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.poi</groupId>
+					<artifactId>poi-ooxml-schemas</artifactId>
+				</exclusion>					
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-pubchem</artifactId>
+			<version>${ambit.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-poi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- for depiction only <dependency> <groupId>org.openscience.cdk</groupId> 
+			<artifactId>cdk-tautomer</artifactId> <version>${cdk.version}</version> </dependency> -->
+		<dependency>
+			<groupId>net.sf.saxon</groupId>
+			<artifactId>saxon-dom</artifactId>
+			<version>8.7</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jee</groupId>
+			<artifactId>org.restlet.ext.ssl</artifactId>
+			<version>${restlet.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.5.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-nop</artifactId>
+			<version>1.5.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jyaml</groupId>
+			<artifactId>jyaml</artifactId>
+			<version>1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-rest</artifactId>
+			<version>${ambit.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jee</groupId>
+			<artifactId>org.restlet.ext.fileupload</artifactId>
+			<version>${restlet.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.ideaconsult.restnet</groupId>
+			<artifactId>restnet-db</artifactId>
+			<version>${restnet.version}</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		<!-- <dependency> <groupId>net.bull.javamelody</groupId> <artifactId>javamelody-core</artifactId> 
 			<version>1.22.0</version> <scope>runtime</scope> </dependency> <dependency> 
 			<groupId>org.jrobin</groupId> <artifactId>jrobin</artifactId> <version>1.5.9</version> 
 			<scope>runtime</scope> </dependency> -->
-    <!-- <dependency> <groupId>jmol</groupId> <artifactId>jmol</artifactId> 
+		<!-- <dependency> <groupId>jmol</groupId> <artifactId>jmol</artifactId> 
 			<version>11.8.23</version> </dependency> -->
-    <dependency>
-      <groupId>dnsjava</groupId>
-      <artifactId>dnsjava</artifactId>
-      <version>2.1.1</version>
-    </dependency>
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>ambit2-chebi</artifactId>
-      <version>${ambit.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>ambit2-some</artifactId>
-      <version>${ambit.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.epimorphics.json</groupId>
-      <artifactId>json-rdf</artifactId>
-      <version>0.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>opentox-opensso</artifactId>
-      <version>2.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>ambit2-tautomers</artifactId>
-      <version>${project.version}</version>
-      <type>jar</type>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>ambit2-waffles</artifactId>
-      <version>${project.version}</version>
-      <type>jar</type>
-      <scope>compile</scope>
-    </dependency>
-    <!-- <dependency> <groupId>ambit</groupId> <artifactId>qmrf-swing</artifactId> 
+
+		<dependency>
+			<groupId>dnsjava</groupId>
+			<artifactId>dnsjava</artifactId>
+			<version>2.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-chebi</artifactId>
+			<version>${ambit.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-some</artifactId>
+			<version>${ambit.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>opentox-opensso</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-tautomers</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-waffles</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		
+		<!-- <dependency> <groupId>ambit</groupId> <artifactId>qmrf-swing</artifactId> 
 			<version>2.0.1-SNAPSHOT</version> </dependency> <dependency> <groupId>ambit</groupId> 
 			<artifactId>swing-lib</artifactId> <version>2.0.1-SNAPSHOT</version> </dependency> -->
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>opentox-client</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>ambit2-dbi5</artifactId>
-      <version>${ambit.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>ambit2-dbsubstance</artifactId>
-      <version>${ambit.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>ambit2-user</artifactId>
-      <version>${ambit.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>ambit2-loom</artifactId>
-      <version>${ambit.version}</version>
-    </dependency>
-  </dependencies>
-  <repositories>
-    <repository>
-      <id>ambit-plovdiv</id>
-      <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>opennms-repo</id>
-      <name>OpenNMS Repository</name>
-      <url>http://repo.opennms.org/maven2</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <!-- <repository> <id>glassfish</id> <name>javamelody is here</name> <url>http://maven.glassfish.org/content/groups/public</url> 
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>opentox-client</artifactId>
+			<version>3.0.1-SNAPSHOT</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-dbi5</artifactId>
+			<version>${ambit.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-dbsubstance</artifactId>
+			<version>${ambit.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-user</artifactId>
+			<version>${ambit.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-loom</artifactId>
+			<version>${ambit.version}</version>
+		</dependency>
+		<!-- Toxtree -->
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-cramer</artifactId>
+			<version>${toxtree.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-cramer2</artifactId>
+			<version>${toxtree.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-mutant</artifactId>
+			<version>${toxtree.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-ames</artifactId>
+			<version>${toxtree.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-verhaar</artifactId>
+			<version>${toxtree.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-verhaar2</artifactId>
+			<version>${toxtree.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-kroes</artifactId>
+			<version>${toxtree.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-michaelacceptors</artifactId>
+			<version>${toxtree.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-mic</artifactId>
+			<version>${toxtree.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-eye</artifactId>
+			<version>${toxtree.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-sicret</artifactId>
+			<version>${toxtree.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-biodegradation</artifactId>
+			<version>${toxtree.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-skinsensitisation</artifactId>
+			<version>${toxtree.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-smartcyp</artifactId>
+			<version>${toxtree.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-dragon</artifactId>
+			<version>${ambit.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-dnabinding</artifactId>
+			<version>${toxtree.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-proteinbinding</artifactId>
+			<version>${toxtree.version}</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+	<repositories>
+		<repository>
+			<id>ambit-plovdiv</id>
+			<url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>opennms-repo</id>
+			<name>OpenNMS Repository</name>
+			<url>http://repo.opennms.org/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<!-- <repository> <id>glassfish</id> <name>javamelody is here</name> <url>http://maven.glassfish.org/content/groups/public</url> 
 			<releases><enabled>true</enabled></releases> </repository> -->
-  </repositories>
-  <reporting>
-    <plugins>
-      <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>jxr-maven-plugin</artifactId> 
+	</repositories>
+	<reporting>
+		<plugins>
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>jxr-maven-plugin</artifactId> 
 				</plugin> -->
-      <!-- <plugin> <artifactId>maven-surefire-plugin</artifactId> </plugin> 
+			<!-- <plugin> <artifactId>maven-surefire-plugin</artifactId> </plugin> 
 				<plugin> <artifactId>maven-clover-plugin</artifactId> </plugin> -->
-      <plugin>
-        <!-- UML class diagrams -->
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.1</version>
-        <!-- <docletPath>/path/to/UmlGraph.jar</docletPath> -->
-        <configuration>
-          <source>1.5</source>
-          <aggregate>false</aggregate>
-          <doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
-          <docletArtifact>
-            <groupId>gr.spinellis</groupId>
-            <artifactId>UmlGraph</artifactId>
-            <version>4.6</version>
-          </docletArtifact>
-          <additionalparam>
-            <!-- http://www.umlgraph.org/doc/cd-opt.html -attributes -views -types 
+			<plugin>
+				<!-- UML class diagrams -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.1</version>
+				<!-- <docletPath>/path/to/UmlGraph.jar</docletPath> -->
+				<configuration>
+					<source>1.5</source>
+					<aggregate>false</aggregate>
+					<doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
+					<docletArtifact>
+						<groupId>gr.spinellis</groupId>
+						<artifactId>UmlGraph</artifactId>
+						<version>4.6</version>
+					</docletArtifact>
+					<additionalparam>
+						<!-- http://www.umlgraph.org/doc/cd-opt.html -attributes -views -types 
 							-inferrel -inferdep -quiet -hide java.* -collpackages java.util.* -qualify 
 							-postfixpackage -->
 						-all
 					</additionalparam>
-        </configuration>
-      </plugin>
-      <!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-project-info-reports-plugin</artifactId> 
+				</configuration>
+			</plugin>
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-project-info-reports-plugin</artifactId> 
 				<version>2.1</version> <configuration> <dependencyLocationsEnabled>false</dependencyLocationsEnabled> 
 				</configuration> </plugin> -->
-      <!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-pmd-plugin</artifactId> 
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-pmd-plugin</artifactId> 
 				<version>2.4</version> <configuration> <linkXref>false</linkXref> <sourceEncoding>utf-8</sourceEncoding> 
 				<minimumTokens>100</minimumTokens> <targetJdk> 1.5 </targetJdk> <excludes> 
 				<exclude>*/generated/.java</exclude> </excludes> </configuration> </plugin> -->
-      <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>taglist-maven-plugin</artifactId> 
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>taglist-maven-plugin</artifactId> 
 				<configuration> <tags> <tag>TODO</tag> <tag>@todo</tag> <tag>FIXME</tag> 
 				<tag>XXX</tag> </tags> </configuration> </plugin> -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jdepend-maven-plugin</artifactId>
-        <version>2.0-beta-2</version>
-      </plugin>
-      <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> 
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jdepend-maven-plugin</artifactId>
+				<version>2.0-beta-2</version>
+			</plugin>
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> 
 				</plugin> -->
-      <!-- Develop our own rules or follow foreign ones ... <plugin> <groupId>org.apache.maven.plugins</groupId> 
+			<!-- Develop our own rules or follow foreign ones ... <plugin> <groupId>org.apache.maven.plugins</groupId> 
 				<artifactId>maven-checkstyle-plugin</artifactId> <configuration> <configLocation>config/maven_checks.xml</configLocation> 
 				</configuration> </plugin> -->
-      <!-- needs svn executable <plugin> <groupId>org.apache.maven.plugins</groupId> 
+			<!-- needs svn executable <plugin> <groupId>org.apache.maven.plugins</groupId> 
 				<artifactId>maven-changelog-plugin</artifactId> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
 				<artifactId>maven-javadoc-plugin</artifactId> <configuration> <aggregate>true</aggregate> 
 				</configuration> </plugin> -->
-      <!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-changelog-plugin</artifactId> 
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-changelog-plugin</artifactId> 
 				<version>2.2</version> </plugin> -->
-    </plugins>
-  </reporting>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <restlet.version>2.0-M6</restlet.version>
-    <junit.version>4.8.1</junit.version>
-  </properties>
+		</plugins>
+	</reporting>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<restlet.version>2.0-M6</restlet.version>
+		<junit.version>4.8.1</junit.version>
+	</properties>
 </project>

@@ -75,7 +75,7 @@ public class UserAuthorizer extends RoleAuthorizer {
 			query.setValue(identifier);
 			DBConnection dbc = new DBConnection(getApplication().getContext(),"ambit2/rest/config/config.prop");
 			c = dbc.getConnection();
-			if (executor==null)  executor = new QueryExecutor<VerifyUser>();
+			if (executor==null)  executor = new QueryExecutor<VerifyUser>(true);
 			executor.setConnection(c);
 			rs = executor.process(query);
 			boolean ok = false;

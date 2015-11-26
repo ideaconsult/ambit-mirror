@@ -43,7 +43,7 @@ $(document)
 	<div class="ui-widget-content ui-corner-bottom add-bottom ">
 	<div class="row" style="padding:0;" >
 		
-			<table id='policy'  class='ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+			<table id='policy'  class='jtoxkit' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
 			<th>URI</th>

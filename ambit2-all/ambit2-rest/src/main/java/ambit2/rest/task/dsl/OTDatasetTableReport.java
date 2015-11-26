@@ -5,8 +5,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.opentox.dsl.OTDataset;
-import org.opentox.dsl.OTFeatures;
+import ambit2.rest.legacy.OTDataset;
+import ambit2.rest.legacy.OTFeatures;
 
 public class OTDatasetTableReport extends OTDatasetReport {
 	protected OTDatasetTableReport(OTDataset dataset,OTFeatures features, String application, int page, int pageSize) throws Exception {

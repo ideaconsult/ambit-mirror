@@ -7,20 +7,18 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
-
-public class SmartsFingerprinter 
-{
+public class SmartsFingerprinter {
 	Fingerprinter fp = new Fingerprinter();
-	SmartsToChemObject convertor ; 
-	
+	SmartsToChemObject convertor;
+
 	public SmartsFingerprinter(IChemObjectBuilder builder) {
 		super();
-		convertor = new SmartsToChemObject(builder); 
+		convertor = new SmartsToChemObject(builder);
 	}
-	public BitSet getFingerprint(IQueryAtomContainer query ) throws Exception
-	{
+
+	public BitSet getFingerprint(IQueryAtomContainer query) throws Exception {
 		IAtomContainer ac = convertor.extractAtomContainer(query);
-		BitSet bs = fp.getFingerprint(ac);
-		return(bs);
+		BitSet bs = fp.getBitFingerprint(ac).asBitSet();
+		return (bs);
 	}
 }

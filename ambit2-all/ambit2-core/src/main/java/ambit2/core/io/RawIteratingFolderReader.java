@@ -30,7 +30,10 @@
 package ambit2.core.io;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.util.zip.GZIPInputStream;
 
 import org.openscience.cdk.index.CASNumber;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
@@ -46,158 +49,209 @@ import ambit2.core.data.EINECS;
 /*
  * Raw reader for multiple files in a folder
  */
-public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRecord,IRawReader<IStructureRecord>> implements IRawReader<IStructureRecord> {
+public class RawIteratingFolderReader extends
+		IteratingFolderReader<IStructureRecord, IRawReader<IStructureRecord>>
+		implements IRawReader<IStructureRecord> {
 	protected enum FileNameMode {
-		NONE,
-		CAS,
-		EC,
-		Name
+		NONE, CAS, EC, Name
 	}
+
 	protected FileNameMode mode;
+
 	public FileNameMode getMode() {
 		return mode;
 	}
+
 	public void setMode(FileNameMode mode) {
 		this.mode = mode;
 	}
+
 	protected CASProcessor casTransformer = new CASProcessor();
 	protected Property einecsProperty = Property.getEINECSInstance();
-	protected Property casProperty = Property.getInstance(AmbitCONSTANTS.CASRN,LiteratureEntry.getCASReference());
+	protected Property casProperty = Property.getInstance(AmbitCONSTANTS.CASRN,
+			LiteratureEntry.getCASReference());
 	protected Property nameProperty = Property.getNameInstance();
-	
+
 	public RawIteratingFolderReader(File[] files) {
 		super(files);
 		casProperty.setLabel(AmbitCONSTANTS.CASRN);
 	}
+
 	@Override
 	public void setFiles(File[] files) {
 		super.setFiles(files);
-		if (files ==null) return;
+		if (files == null)
+			return;
 		casTransformer = new CASProcessor();
 		int[] count = new int[FileNameMode.values().length];
 		mode = FileNameMode.Name;
-		for (File file: files) {
+		for (File file : files) {
 			String name = file.getName().toLowerCase();
 			int i5d = name.indexOf(".i5d");
-			if (i5d>0) {
+			if (i5d > 0) {
 				mode = FileNameMode.NONE;
 				return;
 			}
 			int dot = name.indexOf('.');
 			if (dot >= 0) {
-				String id = name.substring(0,dot);
+				String id = name.substring(0, dot);
 				try {
 					String cas = casTransformer.process(id);
 					if (CASNumber.isValid(cas)) {
 						count[FileNameMode.CAS.ordinal()]++;
 						continue;
 					}
-				} catch (Exception x) {}
+				} catch (Exception x) {
+				}
 				try {
-					if (EINECS.isValid(id)) { 
+					if (EINECS.isValid(id)) {
 						count[FileNameMode.EC.ordinal()]++;
 						continue;
 					}
-				} catch (Exception x) {}	
+				} catch (Exception x) {
+				}
 				if (FileNameMode.NONE.equals(mode))
 					count[FileNameMode.NONE.ordinal()]++;
-				else 
+				else
 					count[FileNameMode.Name.ordinal()]++;
 			}
 		}
 		mode = FileNameMode.NONE;
-		for (FileNameMode m : FileNameMode.values()) 
-			if (count[m.ordinal()]>count[mode.ordinal()])
+		for (FileNameMode m : FileNameMode.values())
+			if (count[m.ordinal()] > count[mode.ordinal()])
 				mode = m;
 	}
+
 	@Override
 	public Object next() {
 		Object o = super.next();
 		if (o instanceof IStructureRecord)
 			switch (mode) {
-			case CAS: {assignCASRN((IStructureRecord)o);break;}
-			case EC: {assignEINECS((IStructureRecord)o);break;}
-			case Name: {assignName((IStructureRecord)o); break;}
-			default: {
-				
+			case CAS: {
+				assignCASRN((IStructureRecord) o);
+				break;
 			}
-			}		
+			case EC: {
+				assignEINECS((IStructureRecord) o);
+				break;
+			}
+			case Name: {
+				assignName((IStructureRecord) o);
+				break;
+			}
+			default: {
+
+			}
+			}
 		return o;
 	}
+
 	public IStructureRecord nextRecord() {
-		if (reader == null) return null;
+		if (reader == null)
+			return null;
 		IStructureRecord record = reader.nextRecord();
 		switch (mode) {
-		case CAS: {assignCASRN(record);break;}
-		case EC: {assignEINECS(record);break;}
-		case Name:{assignName(record); break;} 
+		case CAS: {
+			assignCASRN(record);
+			break;
+		}
+		case EC: {
+			assignEINECS(record);
+			break;
+		}
+		case Name: {
+			assignName(record);
+			break;
+		}
 		default: {
 		}
 		}
 		return record;
 	}
-	//does file name contain CAS number? 
+
+	// does file name contain CAS number?
 	protected void assignCASRN(IStructureRecord record) {
-		if (record.getProperty(casProperty)!=null)
-			record.removeProperty(casProperty);
+		if (record.getRecordProperty(casProperty) != null)
+			record.removeRecordProperty(casProperty);
 		int dot = files[index].getName().indexOf('.');
 		if (dot >= 0) {
-			String cas = files[index].getName().substring(0,dot);
+			String cas = files[index].getName().substring(0, dot);
 			try {
 				cas = casTransformer.process(cas);
-				if (CASProcessor.isValidFormat(cas)) 
-					record.setProperty(casProperty, cas);
+				if (CASProcessor.isValidFormat(cas))
+					record.setRecordProperty(casProperty, cas);
 				else
-					record.setProperty(nameProperty, files[index].getName().substring(0,dot));
+					record.setRecordProperty(nameProperty, files[index]
+							.getName().substring(0, dot));
 			} catch (Exception x) {
-				
+
 			}
-		}		
-	}
-	
-	protected void assignEINECS(IStructureRecord record) {
-		
-		if (record.getProperty(einecsProperty)!=null)
-			record.removeProperty(einecsProperty);
-		int dot = files[index].getName().indexOf('.');
-		if (dot >= 0) {
-			String ec = files[index].getName().substring(0,dot);
-			if (EINECS.isValidFormat(ec)) 
-				record.setProperty(einecsProperty, ec);
-			else 
-				record.setProperty(nameProperty, ec);
-		}		
-	}	
-	
-	protected void assignName(IStructureRecord record) {
-		
-		if (record.getProperty(nameProperty)!=null)
-			record.removeProperty(nameProperty);
-		int dot = files[index].getName().indexOf('.');
-		if (dot >= 0) {
-			String ec = files[index].getName().substring(0,dot);
-			record.setProperty(nameProperty, ec);
-		} else record.setProperty(nameProperty,files[index].getName());
-	}		
-	protected IRawReader<IStructureRecord> getItemReader(int index) throws Exception {
-		String name = files[index].getName().toLowerCase();
-		if (name.endsWith(FileInputState.extensions[FileInputState.SDF_INDEX])) {
-			RawIteratingSDFReader r = new RawIteratingSDFReader(new FileReader(files[index]));
-			r.setReference(LiteratureEntry.getInstance(files[index].getName(),"file:///"+files[index].getAbsolutePath()));
-			return (IRawReader<IStructureRecord>) r;
-		} else if (name.endsWith(FileInputState.extensions[FileInputState.MOL_INDEX])) {
-			RawIteratingMOLReader r = new RawIteratingMOLReader(new FileReader(files[index]));
-			r.setReference(LiteratureEntry.getInstance(files[index].getName(),"file:///"+files[index].getAbsolutePath()));
-			return (IRawReader<IStructureRecord>) r;
-		} else if (name.endsWith(FileInputState.extensions[FileInputState.I5D_INDEX])) {
-			IIteratingChemObjectReader r = FileInputState.getI5DReader(files[index]);
-			if (r instanceof ICiteable) {
-				((ICiteable)r).setReference(LiteratureEntry.getI5UUIDReference());
-			}
-			return (IRawReader<IStructureRecord>) r;
 		}
-			
-		else throw new Exception("Unsupported format "+name); 
+	}
+
+	protected void assignEINECS(IStructureRecord record) {
+
+		if (record.getRecordProperty(einecsProperty) != null)
+			record.removeRecordProperty(einecsProperty);
+		int dot = files[index].getName().indexOf('.');
+		if (dot >= 0) {
+			String ec = files[index].getName().substring(0, dot);
+			if (EINECS.isValidFormat(ec))
+				record.setRecordProperty(einecsProperty, ec);
+			else
+				record.setRecordProperty(nameProperty, ec);
+		}
+	}
+
+	protected void assignName(IStructureRecord record) {
+
+		if (record.getRecordProperty(nameProperty) != null)
+			record.removeRecordProperty(nameProperty);
+		int dot = files[index].getName().indexOf('.');
+		if (dot >= 0) {
+			String ec = files[index].getName().substring(0, dot);
+			record.setRecordProperty(nameProperty, ec);
+		} else
+			record.setRecordProperty(nameProperty, files[index].getName());
+	}
+
+	protected IRawReader<IStructureRecord> getItemReader(int index)
+			throws Exception {
+		String name = files[index].getName().toLowerCase();
+		if (name.endsWith(FileInputState._FILE_TYPE.SDF_INDEX.getExtension())) {
+			RawIteratingSDFReader r = new RawIteratingSDFReader(new FileReader(
+					files[index]));
+			r.setReference(LiteratureEntry.getInstance(files[index].getName(),
+					"file:///" + files[index].getAbsolutePath()));
+			return (IRawReader<IStructureRecord>) r;
+		} else if (name.endsWith(FileInputState._FILE_TYPE.MOL_INDEX
+				.getExtension())) {
+			RawIteratingMOLReader r = new RawIteratingMOLReader(new FileReader(
+					files[index]));
+			r.setReference(LiteratureEntry.getInstance(files[index].getName(),
+					"file:///" + files[index].getAbsolutePath()));
+			return (IRawReader<IStructureRecord>) r;
+		} else if (name.endsWith(FileInputState._FILE_TYPE.I5D_INDEX
+				.getExtension())) {
+			IIteratingChemObjectReader r = FileInputState
+					.getI5DReader(files[index]);
+			if (r instanceof ICiteable) {
+				((ICiteable) r).setReference(LiteratureEntry
+						.getI5UUIDReference());
+			}
+			return (IRawReader<IStructureRecord>) r;
+		} else if (name.endsWith(FileInputState._FILE_TYPE.ZIP_INDEX
+				.getExtension())) {
+			return new ZipReader(files[index]);
+		} else if (name.endsWith(FileInputState._FILE_TYPE.GZ_INDEX
+				.getExtension())) {
+			//assuming gzipped sdf only...
+			InputStreamReader reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(files[index])));
+			return new RawIteratingSDFReader(reader);
+		}
+
+		else
+			throw new Exception("Unsupported format " + name);
 	}
 
 }

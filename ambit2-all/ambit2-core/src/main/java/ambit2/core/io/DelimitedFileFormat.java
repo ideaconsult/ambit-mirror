@@ -24,6 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package ambit2.core.io;
 
+import java.util.List;
+
 import org.openscience.cdk.io.formats.IChemFormatMatcher;
 import org.openscience.cdk.tools.DataFeatures;
 
@@ -53,12 +55,10 @@ public class DelimitedFileFormat implements IChemFormatMatcher {
 		this.textDelimiter = textDelimiter;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.io.extensions.ChemFormatMatcher#matches(int, java.lang.String)
-	 */
-	public boolean matches(int lineNumber, String line) {
 
-		return false;
+	@Override
+	public MatchResult matches(List<String> arg0) {
+		return null;
 	}
 
 	/* (non-Javadoc)

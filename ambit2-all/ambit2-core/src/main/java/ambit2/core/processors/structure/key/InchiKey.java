@@ -30,6 +30,7 @@
 package ambit2.core.processors.structure.key;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
@@ -66,9 +67,11 @@ public class InchiKey extends DefaultAmbitProcessor<IAtomContainer,String> imple
 			try { 
 				return inchi.process(molecule).getInchi(); 
 			} catch (Exception x) {}
-		Iterator<Object> keys = molecule.getProperties().keySet().iterator();
-		while (keys.hasNext()) {
-			Object value = molecule.getProperties().get(keys.next());
+		
+		Iterator props = molecule.getProperties().entrySet().iterator();
+		while (props.hasNext()) {
+			Map.Entry entry = (Map.Entry) props.next();
+			Object value = entry.getValue();
 			if (value.toString().startsWith("InChI=")) 
 				return value.toString();
 		}

@@ -13,7 +13,6 @@ import org.opentox.aa.IOpenToxUser;
 import org.opentox.aa.OpenToxUser;
 import org.opentox.aa.opensso.OpenSSOPolicy;
 import org.opentox.aa.opensso.OpenSSOToken;
-import org.opentox.dsl.task.RemoteTask;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -23,6 +22,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
+import ambit2.rest.legacy.OTRemoteTask;
 
 /**
  * 
@@ -314,7 +314,7 @@ class MyThread extends Thread {
 			Form form = new Form();
 			form.add("dataset_uri", dataset);
 			ClientResourceWrapper.setTokenFactory(tokenFactory);
-			RemoteTask task = new RemoteTask(
+			OTRemoteTask task = new OTRemoteTask(
 					new Reference(modelUri),MediaType.TEXT_URI_LIST, form.getWebRepresentation(),Method.POST);
 			threadLogger.info("Model " + task.getUrl());
 			while (!task.poll()) {

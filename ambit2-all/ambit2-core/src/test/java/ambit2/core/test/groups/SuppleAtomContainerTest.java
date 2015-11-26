@@ -18,7 +18,6 @@ import org.openscience.cdk.interfaces.IChemObjectChangeEvent;
 import org.openscience.cdk.interfaces.IChemObjectListener;
 import org.openscience.cdk.interfaces.IElectronContainer;
 import org.openscience.cdk.interfaces.ILonePair;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -81,13 +80,13 @@ public class SuppleAtomContainerTest  {
     }
     
 	@Test public void testClone_IAtom2() throws Exception {
-		IMolecule molecule = new SuppleAtomContainer();
+		IAtomContainer molecule = new SuppleAtomContainer();
         IAtom carbon = MoleculeTools.newAtom(builder,"C");
         carbon.setPoint2d(new Point2d(2, 4));
 		molecule.addAtom(carbon); // 1
 
         // test cloning of Atoms
-		IMolecule clonedMol = (IMolecule)molecule.clone();
+		IAtomContainer clonedMol = (IAtomContainer)molecule.clone();
         carbon.setPoint2d(new Point2d(3, 1));
 		Assert.assertEquals(clonedMol.getAtom(0).getPoint2d().x, 2.0, 0.001);
 	}
@@ -160,7 +159,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testGetConnectedElectronContainersList_IAtom() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
@@ -197,7 +196,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testGetConnectedBondsList_IAtom() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
@@ -233,7 +232,7 @@ public class SuppleAtomContainerTest  {
 
 //    @Test public void testGetConnectedBonds_IAtom() {
 //        // acetone molecule
-//        IMolecule acetone = new SuppleAtomContainer();
+//        IAtomContainer acetone = new SuppleAtomContainer();
 //        
 //        IAtom c1 = MoleculeTools.newAtom(builder,"C");
 //        IAtom c2 = MoleculeTools.newAtom(builder,"C");
@@ -269,7 +268,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testGetConnectedLonePairsList_IAtom() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
@@ -307,7 +306,7 @@ public class SuppleAtomContainerTest  {
     
     @Test public void testRemoveAtomAndConnectedElectronContainers_IAtom() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
@@ -339,7 +338,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testGetAtomCount() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         Assert.assertEquals(0, acetone.getAtomCount());
         
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
@@ -356,7 +355,7 @@ public class SuppleAtomContainerTest  {
     
     @Test public void testGetBondCount() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         Assert.assertEquals(0, acetone.getBondCount());
         
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
@@ -404,7 +403,7 @@ public class SuppleAtomContainerTest  {
     }
 
     @Test public void testAtomContainer_IAtomContainer() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -426,7 +425,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testAdd_IAtomContainer() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -449,7 +448,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testRemove_IAtomContainer() throws Exception {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -478,7 +477,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testRemoveAllElements() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -504,7 +503,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testRemoveAtom_int() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -523,7 +522,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testRemoveAtom_IAtom() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -578,7 +577,7 @@ public class SuppleAtomContainerTest  {
     
     @Test public void testGetBond_int() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         Assert.assertEquals(0, acetone.getBondCount());
         
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
@@ -617,7 +616,7 @@ public class SuppleAtomContainerTest  {
     
     @Test public void testGetElectronContainerCount() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -644,7 +643,7 @@ public class SuppleAtomContainerTest  {
     
     @Test public void testRemoveAllBonds() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -668,7 +667,7 @@ public class SuppleAtomContainerTest  {
     
     @Test public void testRemoveAllElectronContainers() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -706,7 +705,7 @@ public class SuppleAtomContainerTest  {
     
 //    @Test public void testGetAtoms() {
 //        // acetone molecule
-//        IMolecule acetone = new SuppleAtomContainer();
+//        IAtomContainer acetone = new SuppleAtomContainer();
 //        IAtom c1 = MoleculeTools.newAtom(builder,"C");
 //        IAtom c2 = MoleculeTools.newAtom(builder,"C");
 //        IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -721,7 +720,7 @@ public class SuppleAtomContainerTest  {
     
     @Test public void testAddAtom_IAtom() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -746,7 +745,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testAtoms() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -780,7 +779,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testBonds() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -818,7 +817,7 @@ public class SuppleAtomContainerTest  {
     
     @Test public void testLonePairs() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -856,7 +855,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testSingleElectrons() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -894,7 +893,7 @@ public class SuppleAtomContainerTest  {
     
     @Test public void testElectronContainers() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -945,7 +944,7 @@ public class SuppleAtomContainerTest  {
     
     @Test public void testContains_IAtom() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -963,7 +962,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testAddLonePair_int() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -987,7 +986,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testGetMaximumBondOrder_IAtom() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1013,7 +1012,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testGetMinimumBondOrder_IAtom() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1039,7 +1038,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testRemoveElectronContainer_int() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1069,7 +1068,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testRemoveElectronContainer_IElectronContainer() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1100,7 +1099,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testAddBond_IBond() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1126,7 +1125,7 @@ public class SuppleAtomContainerTest  {
 
 //    @Test public void testSetElectronContainers_arrayIElectronContainer() {
 //        // acetone molecule
-//        IMolecule acetone = new SuppleAtomContainer();
+//        IAtomContainer acetone = new SuppleAtomContainer();
 //        IAtom c1 = MoleculeTools.newAtom(builder,"C");
 //        IAtom c2 = MoleculeTools.newAtom(builder,"C");
 //        IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1153,7 +1152,7 @@ public class SuppleAtomContainerTest  {
 
 //    @Test public void testAddElectronContainers_IAtomContainer() {
 //        // acetone molecule
-//        IMolecule acetone = new SuppleAtomContainer();
+//        IAtomContainer acetone = new SuppleAtomContainer();
 //        IAtom c1 = MoleculeTools.newAtom(builder,"C");
 //        IAtom c2 = MoleculeTools.newAtom(builder,"C");
 //        IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1185,7 +1184,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testAddElectronContainer_IElectronContainer() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
         acetone.addAtom(c);
@@ -1202,7 +1201,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testGetSingleElectron_IAtom() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
         acetone.addAtom(c);
@@ -1219,7 +1218,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testRemoveBond_IAtom_IAtom() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1244,7 +1243,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testAddBond_int_int_IBond_Order() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1274,7 +1273,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testAddBond_int_int_IBond_Order_int() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1308,7 +1307,7 @@ public class SuppleAtomContainerTest  {
 
     @Test public void testContains_IElectronContainer() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1362,7 +1361,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetAtomNumber_IAtom() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1380,7 +1379,7 @@ public class SuppleAtomContainerTest  {
     
     @Test public void testGetBondNumber_IBond() {
         // acetone molecule
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1405,7 +1404,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetBondNumber_IAtom_IAtom() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1427,7 +1426,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetBond_IAtom_IAtom() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1453,7 +1452,7 @@ public class SuppleAtomContainerTest  {
     }
     
 //    @Test public void testGetConnectedAtoms_IAtom() {
-//        IMolecule acetone = new SuppleAtomContainer();
+//        IAtomContainer acetone = new SuppleAtomContainer();
 //        IAtom c1 = MoleculeTools.newAtom(builder,"C");
 //        IAtom c2 = MoleculeTools.newAtom(builder,"C");
 //        IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1476,7 +1475,7 @@ public class SuppleAtomContainerTest  {
 //    }
     
     @Test public void testGetConnectedAtomsList_IAtom() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1499,7 +1498,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetConnectedAtomsCount_IAtom() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1522,7 +1521,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetLonePairCount() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1548,7 +1547,7 @@ public class SuppleAtomContainerTest  {
     }
 
     @Test public void testGetConnectedLonePairsCount_IAtom() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1577,7 +1576,7 @@ public class SuppleAtomContainerTest  {
     }
 
     @Test public void testGetBondOrderSum_IAtom() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1606,7 +1605,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetBondCount_IAtom() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1635,7 +1634,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetBondCount_int() {
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
@@ -1731,7 +1730,7 @@ public class SuppleAtomContainerTest  {
     
     @Test public void testGetConnectedSingleElectronsCount_IAtom() {
         // another rather artifial example
-        IMolecule acetone = new SuppleAtomContainer();
+        IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
         acetone.addAtom(c);
@@ -1756,7 +1755,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testAddLonePair_ILonePair() {
-    	 IMolecule acetone = new SuppleAtomContainer();
+    	 IAtomContainer acetone = new SuppleAtomContainer();
          IAtom c = MoleculeTools.newAtom(builder,"C");
          IAtom o = MoleculeTools.newAtom(builder,"O");
          acetone.addAtom(c);
@@ -1772,7 +1771,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testAddSingleElectron_ISingleElectron() {
-    	IMolecule acetone = new SuppleAtomContainer();
+    	IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
         acetone.addAtom(c);
@@ -1791,7 +1790,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testRemoveBond_int() {
-    	IMolecule acetone = new SuppleAtomContainer();
+    	IAtomContainer acetone = new SuppleAtomContainer();
     	IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
@@ -1816,7 +1815,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testContains_IBond() {
-    	IMolecule acetone = new SuppleAtomContainer();
+    	IAtomContainer acetone = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom o = MoleculeTools.newAtom(builder,"O");
         acetone.addAtom(c);
@@ -1829,7 +1828,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testAddSingleElectron_int() {
-    	IMolecule mol = new SuppleAtomContainer();
+    	IAtomContainer mol = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         mol.addAtom(c);
@@ -1850,7 +1849,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetConnectedSingleElectronsList_IAtom() {
-    	IMolecule mol = new SuppleAtomContainer();
+    	IAtomContainer mol = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         mol.addAtom(c);
@@ -1862,7 +1861,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testRemoveBond_IBond() {
-    	IMolecule mol = new SuppleAtomContainer();
+    	IAtomContainer mol = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         mol.addAtom(c);
@@ -1875,7 +1874,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetConnectedBondsCount_IAtom() {
-    	IMolecule acetone = new SuppleAtomContainer();
+    	IAtomContainer acetone = new SuppleAtomContainer();
     	IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
@@ -1897,7 +1896,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetConnectedBondsCount_int() {
-    	IMolecule acetone = new SuppleAtomContainer();
+    	IAtomContainer acetone = new SuppleAtomContainer();
     	IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
@@ -1919,7 +1918,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testSetBonds_arrayIBond() {
-    	IMolecule acetone = new SuppleAtomContainer();
+    	IAtomContainer acetone = new SuppleAtomContainer();
     	IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
@@ -1944,7 +1943,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetLonePair_int() {
-    	IMolecule mol = new SuppleAtomContainer();
+    	IAtomContainer mol = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         mol.addAtom(c);
@@ -1956,7 +1955,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetSingleElectron_int() {
-    	IMolecule mol = new SuppleAtomContainer();
+    	IAtomContainer mol = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         mol.addAtom(c);
@@ -1968,7 +1967,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetLonePairNumber_ILonePair() {
-    	IMolecule mol = new SuppleAtomContainer();
+    	IAtomContainer mol = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         mol.addAtom(c);
@@ -1980,7 +1979,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetSingleElectronNumber_ISingleElectron() {
-    	IMolecule mol = new SuppleAtomContainer();
+    	IAtomContainer mol = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         mol.addAtom(c);
@@ -1992,7 +1991,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetElectronContainer_int() {
-    	IMolecule acetone = new SuppleAtomContainer();
+    	IAtomContainer acetone = new SuppleAtomContainer();
     	IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         IAtom c2 = MoleculeTools.newAtom(builder,"C");
@@ -2014,7 +2013,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testGetSingleElectronCount() {
-    	IMolecule mol = new SuppleAtomContainer();
+    	IAtomContainer mol = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         mol.addAtom(c);
@@ -2025,7 +2024,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testRemoveLonePair_int() {
-    	IMolecule mol = new SuppleAtomContainer();
+    	IAtomContainer mol = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         mol.addAtom(c);
@@ -2039,7 +2038,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testRemoveLonePair_ILonePair() {
-    	IMolecule mol = new SuppleAtomContainer();
+    	IAtomContainer mol = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         mol.addAtom(c);
@@ -2054,7 +2053,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testRemoveSingleElectron_int() {
-    	IMolecule mol = new SuppleAtomContainer();
+    	IAtomContainer mol = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         mol.addAtom(c);
@@ -2068,7 +2067,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testRemoveSingleElectron_ISingleElectron() {
-    	IMolecule mol = new SuppleAtomContainer();
+    	IAtomContainer mol = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         mol.addAtom(c);
@@ -2084,7 +2083,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testContains_ILonePair() {
-    	IMolecule mol = new SuppleAtomContainer();
+    	IAtomContainer mol = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         mol.addAtom(c);
@@ -2097,7 +2096,7 @@ public class SuppleAtomContainerTest  {
     }
     
     @Test public void testContains_ISingleElectron() {
-    	IMolecule mol = new SuppleAtomContainer();
+    	IAtomContainer mol = new SuppleAtomContainer();
         IAtom c = MoleculeTools.newAtom(builder,"C");
         IAtom c1 = MoleculeTools.newAtom(builder,"C");
         mol.addAtom(c);
@@ -2171,12 +2170,13 @@ public class SuppleAtomContainerTest  {
         */
         
         SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
-        IMolecule origin = p.parseSmiles("CC1CC1");
+        IAtomContainer origin = p.parseSmiles("CC1CC1");
         mol.setFiltered(false);
-        Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(origin,mol));
-        IMolecule filtered = p.parseSmiles("C1CC1");
+        UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
+        Assert.assertTrue(uit.isIsomorph(origin,mol));
+        IAtomContainer filtered = p.parseSmiles("C1CC1");
         mol.setFiltered(true);
-        Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(filtered,mol));
+        Assert.assertTrue(uit.isIsomorph(filtered,mol));
                 
         
         

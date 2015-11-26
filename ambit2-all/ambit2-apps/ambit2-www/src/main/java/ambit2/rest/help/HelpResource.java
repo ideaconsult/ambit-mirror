@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.idea.restnet.i.aa.OpenSSOCookie;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
@@ -44,7 +45,11 @@ public class HelpResource extends CatalogResource<String>  {
 		toxtree,
 		policy,
 		ra,
-		ontobucket
+		ontobucket,
+		nanomaterial,
+		bundle,
+		endpoint_search,
+		openam
 	}
 	public HelpResource() {
 		super();
@@ -56,10 +61,7 @@ public class HelpResource extends CatalogResource<String>  {
 	protected Representation get(Variant variant) throws ResourceException {
 		setFrameOptions("SAMEORIGIN");
 		if (isHtmlbyTemplate()) {
-			CookieSetting cS = new CookieSetting(0, "subjectid", getToken());
-			cS.setPath("/");
-			cS.setAccessRestricted(true);
-	        this.getResponse().getCookieSettings().add(cS);
+			OpenSSOCookie.setCookieSetting(this.getResponse().getCookieSettings(),getToken(), useSecureCookie(getRequest()));
 	        return getHTMLByTemplate(variant);
     	} else				
     		return super.get(variant);

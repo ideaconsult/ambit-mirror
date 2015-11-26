@@ -85,9 +85,9 @@ public class RetrieveStructureImagePath extends RetrieveStructure  {
         try {
             IStructureRecord r = super.getObject(rs);
             try {
-                r.setProperty(Property.getInstance(mimeType,mimeType), rs.getString(s_text));
+                r.setRecordProperty(Property.getInstance(mimeType,mimeType), rs.getString(s_text));
             } catch (SQLException x){
-                r.removeProperty(Property.getInstance(mimeType,mimeType));
+                r.removeRecordProperty(Property.getInstance(mimeType,mimeType));
             }
             try {
             	String t = rs.getString(5);

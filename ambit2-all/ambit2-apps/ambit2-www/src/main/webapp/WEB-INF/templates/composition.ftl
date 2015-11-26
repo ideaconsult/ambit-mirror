@@ -55,7 +55,7 @@
 		<!-- Page Content
 		================================================== -->
 		<div class="row" style="padding:0;" >
-			<table id='composition' class='compositiontable ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+			<table id='composition' class='compositiontable jtoxkit' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
 			<th>Composition ID</th>

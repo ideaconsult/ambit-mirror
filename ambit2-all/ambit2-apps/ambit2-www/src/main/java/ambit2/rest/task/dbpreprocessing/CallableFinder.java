@@ -10,8 +10,6 @@ import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
-import org.opentox.dsl.OTDataset;
-import org.opentox.dsl.OTFeature;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -46,6 +44,8 @@ import ambit2.pubchem.rest.PubChemRestFinder;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFStructuresReader;
+import ambit2.rest.legacy.OTDataset;
+import ambit2.rest.legacy.OTFeature;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.search.AllSourcesFinder;
 import ambit2.search.chemidplus.ChemIdPlusRequest;

@@ -15,6 +15,14 @@ import ambit2.base.config.AMBITConfig;
 
 public class AMBITLogoutPOSTResource<U extends User> extends UserLogoutPOSTResource<U> {
 
+	public AMBITLogoutPOSTResource() {
+		super();
+		setHtmlbyTemplate(true);
+	}
+	@Override
+	public String getTemplateName() {
+		return "a/login.ftl";
+	}
 	
 	@Override
 	protected Representation post(Representation entity, Variant variant)

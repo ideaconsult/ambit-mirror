@@ -160,7 +160,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 	protected void extractRecordID(NativeTypeItem target, String url,IStructureRecord record) throws AmbitException {
-		String cleanURI = org.opentox.rdf.OpenTox.removeDatasetFragment(url);
+		String cleanURI = OpenTox.removeDatasetFragment(url);
 		Object id = OpenTox.URI.compound.getId(cleanURI, compoundURITemplate);
 		if (id != null) record.setIdchemical((Integer)id);
 		else {
@@ -265,7 +265,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 		Iterator<Property> predicted = model.getPredicted().getProperties(true);
 		int count = 0;
 		while (predicted.hasNext()) {
-			record.setProperty(predicted.next(),value);
+			record.setRecordProperty(predicted.next(),value);
 			count++;
 		}
 		if (count==0) throw new AmbitException("No property to assign results!!!");

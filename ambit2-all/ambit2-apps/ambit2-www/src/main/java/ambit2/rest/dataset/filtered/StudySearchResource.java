@@ -15,7 +15,7 @@ import ambit2.db.substance.study.facet.SubstanceByCategoryFacet;
 import ambit2.rest.OpenTox;
 import ambit2.rest.bundle.BundleStudyJSONReporter;
 
-public class StudySearchResource extends StatisticsResource<SubstanceByCategoryFacet, QueryCountProtocolApplications> {
+public class StudySearchResource<F extends SubstanceByCategoryFacet> extends StatisticsResource<F, QueryCountProtocolApplications<F>> {
 	public static final String resource = "/study";
 	protected SubstanceEndpointsBundle bundle = null;
 	protected boolean mergeDatasets = false;

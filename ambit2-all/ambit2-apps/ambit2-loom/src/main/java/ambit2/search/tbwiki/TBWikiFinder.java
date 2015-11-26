@@ -114,7 +114,7 @@ public class TBWikiFinder extends AbstractFinder<String, IStructureRecord> imple
 	}
 	Property property = new Property(pname, le);
 	property.setLabel(label);
-	record.setProperty(property, value);
+	record.setRecordProperty(property, value);
     }
 
     @Override

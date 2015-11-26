@@ -145,9 +145,9 @@ public class ReadSubstanceComposition extends AbstractQuery<SubstanceRecord,Comp
             try {
 	            String uuid = rs.getString("refstruc") + "-" + 
 	            		I5Utils.addDashes(rs.getString("refstrucuuid")).toLowerCase();
-	            record.setProperty(Property.getI5UUIDInstance(),uuid);
+	            record.setRecordProperty(Property.getI5UUIDInstance(),uuid);
             } catch (Exception xx) {
-            	record.removeProperty(Property.getI5UUIDInstance());
+            	record.removeRecordProperty(Property.getI5UUIDInstance());
             }
 		} catch (Exception x) {
 			x.printStackTrace();

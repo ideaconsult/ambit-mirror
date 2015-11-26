@@ -21,7 +21,6 @@ import javax.swing.JToolBar;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -38,6 +37,7 @@ import ambit2.db.search.structure.QuerySMARTS;
 import ambit2.descriptors.FuncGroupsDescriptorFactory;
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.descriptors.VerboseDescriptorResult;
+import ambit2.rendering.IAtomContainerHighlights;
 import ambit2.smarts.SmartsToChemObject;
 import ambit2.ui.Panel2D;
 import ambit2.ui.Utils;
@@ -254,7 +254,7 @@ public class QuerySmartsEditor
 							status.setIcon((notfound) ? Utils
 									.createImageIcon("images/cross.png")
 									: Utils.createImageIcon("images/tick.png"));
-							panel2D.setSelector(new IProcessor<IAtomContainer, IChemObjectSelection>() {
+							panel2D.setSelector(new IAtomContainerHighlights() {
 								public IChemObjectSelection process(
 										IAtomContainer target)
 										throws AmbitException {

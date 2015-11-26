@@ -40,7 +40,7 @@ public class QuerySimilarityBitSetTest extends QueryTest<QuerySimilarityBitset> 
 	protected QuerySimilarityBitset createQuery() throws Exception {
 		Fingerprinter fp = new Fingerprinter();
 		QuerySimilarityBitset qf = new QuerySimilarityBitset();
-		qf.setValue(fp.getFingerprint(MoleculeFactory.makeAlkane(3)));
+		qf.setValue(fp.getBitFingerprint(MoleculeFactory.makeAlkane(3)).asBitSet());
 		qf.setCondition(NumberCondition.getInstance(">"));
 		qf.setThreshold(0.24);
 		qf.setId(1);

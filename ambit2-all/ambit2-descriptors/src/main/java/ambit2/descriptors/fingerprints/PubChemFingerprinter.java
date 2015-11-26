@@ -1,4 +1,3 @@
-
 /* 
  * Modified by Nikolay Kochev
  * 
@@ -27,20 +26,18 @@
 
 package ambit2.descriptors.fingerprints;
 
-
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.graph.Cycles;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
-import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
 import ambit2.smarts.IsomorphismTester;
@@ -50,23 +47,23 @@ import ambit2.smarts.SmartsParser;
 /**
  * Generates a Pubchem fingerprint for a molecule.
  * <p/>
- * These fingerprints are described 
- * <a href="ftp://ftp.ncbi.nlm.nih.gov/pubchem/specifications/pubchem_fingerprints.txt">
+ * These fingerprints are described <a href=
+ * "ftp://ftp.ncbi.nlm.nih.gov/pubchem/specifications/pubchem_fingerprints.txt">
  * here</a> and are of the structural key type, of length 881. See
- * {@link org.openscience.cdk.fingerprint.Fingerprinter} for a
- * more detailed description of fingerprints in general. This implementation is 
- * based on the public domain code made available by the NCGC
- * <a href="http://www.ncgc.nih.gov/pub/openhts/code/NCGC_PubChemFP.java.txt">
+ * {@link org.openscience.cdk.fingerprint.Fingerprinter} for a more detailed
+ * description of fingerprints in general. This implementation is based on the
+ * public domain code made available by the NCGC <a
+ * href="http://www.ncgc.nih.gov/pub/openhts/code/NCGC_PubChemFP.java.txt">
  * here</a>
  * 
  * 
- * Some SMARTS patterns have been modified from the original code, since they 
+ * Some SMARTS patterns have been modified from the original code, since they
  * were based on explicit H matching. As a result, we replace the explicit H's
- * with a query of the #N&!H0 where N is the atomic number. Thus bit 344 was 
- * originally <code>[#6](~[#6])([H])</code> but is written here as 
+ * with a query of the #N&!H0 where N is the atomic number. Thus bit 344 was
+ * originally <code>[#6](~[#6])([H])</code> but is written here as
  * <code>[#6&!H0]~[#6]</code>. In some cases, where the H count can be reduced
- * to single possibility we directly use that H count. An example is bit 35, 
- * which was <code>[#6](~[#6])(~[#6])(~[#6])([H])</code> and is rewritten as 
+ * to single possibility we directly use that H count. An example is bit 35,
+ * which was <code>[#6](~[#6])(~[#6])(~[#6])([H])</code> and is rewritten as
  * <code>[#6H1](~[#6])(~[#6])(~[#6]</code>.
  * <p/>
  * 
@@ -80,10 +77,10 @@ import ambit2.smarts.SmartsParser;
  * @cdk.githash
  * @cdk.threadnonsafe
  */
-@TestClass("org.openscience.cdk.fingerprint.PubchemFingerprinterTest")
-public class PubChemFingerprinter  {
 
-	/** 
+public class PubChemFingerprinter {
+
+	/**
 	 * Number of bits in this fingerprint.
 	 */
 	public static final int FP_SIZE = 881;
@@ -92,35 +89,36 @@ public class PubChemFingerprinter  {
 	private transient IsomorphismTester isoTester = new IsomorphismTester();
 	private transient SmartsParser parser = new SmartsParser();
 
-
 	public PubChemFingerprinter() {
-		 m_bits = new byte[(FP_SIZE + 7) >> 3];
+		m_bits = new byte[(FP_SIZE + 7) >> 3];
 		initPubChemBitSubstructures();
 	}
-
 
 	/**
 	 * Calculate 881 bit Pubchem fingerprint for a molecule.
 	 * <p/>
-	 * See 
-	 * <a href="ftp://ftp.ncbi.nlm.nih.gov/pubchem/specifications/pubchem_fingerprints.txt">here</a>
-	 * for a description of each bit position.
+	 * See <a href=
+	 * "ftp://ftp.ncbi.nlm.nih.gov/pubchem/specifications/pubchem_fingerprints.txt"
+	 * >here</a> for a description of each bit position.
 	 *
-	 * @param atomContainer the molecule to consider
+	 * @param atomContainer
+	 *            the molecule to consider
 	 * @return the fingerprint
-	 * @throws CDKException if there is an error during substructure 
-	 * searching or atom typing
+	 * @throws CDKException
+	 *             if there is an error during substructure searching or atom
+	 *             typing
 	 * @see #getFingerprintAsBytes()
 	 */
-	public BitSet getFingerprint(IAtomContainer atomContainer) throws CDKException {
+	public BitSet getFingerprint(IAtomContainer atomContainer)
+			throws CDKException {
 		generateFp(atomContainer);
 		BitSet fp = new BitSet(FP_SIZE);
 		for (int i = 0; i < FP_SIZE; i++) {
-			if (isBitOn(i)) fp.set(i);
+			if (isBitOn(i))
+				fp.set(i);
 		}
 		return fp;
 	}
-
 
 	public int getSize() {
 		return FP_SIZE;
@@ -148,12 +146,12 @@ public class PubChemFingerprinter  {
 		IRingSet ringSet;
 
 		public CountRings(IAtomContainer m) {
-			//ringSet = Cycles.sssr(m).toRingSet();  //this CDK 1.5 approach
-			SSSRFinder sssrf = new SSSRFinder(m);
-			ringSet = sssrf.findSSSR();
+			// ringSet = Cycles.sssr(m).toRingSet(); //this CDK 1.5 approach
+
+			ringSet = Cycles.sssr(m).toRingSet();
 		}
 
-		public CountRings(IRingSet ringSet) {           
+		public CountRings(IRingSet ringSet) {
 			this.ringSet = ringSet;
 		}
 
@@ -168,7 +166,8 @@ public class PubChemFingerprinter  {
 
 		private boolean isCarbonOnlyRing(IAtomContainer ring) {
 			for (IAtom ringAtom : ring.atoms()) {
-				if (!ringAtom.getSymbol().equals("C")) return false;
+				if (!ringAtom.getSymbol().equals("C"))
+					return false;
 			}
 			return true;
 		}
@@ -177,7 +176,8 @@ public class PubChemFingerprinter  {
 			for (IBond ringBond : ring.bonds()) {
 				if (ringBond.getOrder() != IBond.Order.SINGLE
 						|| ringBond.getFlag(CDKConstants.ISAROMATIC)
-						/*|| ringBond.getFlag(CDKConstants.SINGLE_OR_DOUBLE) */) return false;
+				/* || ringBond.getFlag(CDKConstants.SINGLE_OR_DOUBLE) */)
+					return false;
 			}
 			return true;
 		}
@@ -189,7 +189,8 @@ public class PubChemFingerprinter  {
 		private int countNitrogenInRing(IAtomContainer ring) {
 			int c = 0;
 			for (IAtom ringAtom : ring.atoms()) {
-				if (ringAtom.getSymbol().equals("N")) c++;
+				if (ringAtom.getSymbol().equals("N"))
+					c++;
 			}
 			return c;
 		}
@@ -197,7 +198,7 @@ public class PubChemFingerprinter  {
 		private int countHeteroInRing(IAtomContainer ring) {
 			int c = 0;
 			for (IAtom ringAtom : ring.atoms()) {
-				if (!ringAtom.getSymbol().equals("C") 
+				if (!ringAtom.getSymbol().equals("C")
 						&& !ringAtom.getSymbol().equals("H"))
 					c++;
 			}
@@ -206,14 +207,16 @@ public class PubChemFingerprinter  {
 
 		private boolean isAromaticRing(IAtomContainer ring) {
 			for (IBond bond : ring.bonds())
-				if (!bond.getFlag(CDKConstants.ISAROMATIC)) return false;
+				if (!bond.getFlag(CDKConstants.ISAROMATIC))
+					return false;
 			return true;
 		}
 
 		public int countAromaticRing() {
 			int c = 0;
 			for (IAtomContainer ring : ringSet.atomContainers()) {
-				if (isAromaticRing(ring)) c++;
+				if (isAromaticRing(ring))
+					c++;
 			}
 			return c;
 		}
@@ -221,7 +224,8 @@ public class PubChemFingerprinter  {
 		public int countHeteroAromaticRing() {
 			int c = 0;
 			for (IAtomContainer ring : ringSet.atomContainers()) {
-				if (!isCarbonOnlyRing(ring) && isAromaticRing(ring)) c++;
+				if (!isCarbonOnlyRing(ring) && isAromaticRing(ring))
+					c++;
 			}
 			return c;
 		}
@@ -229,8 +233,7 @@ public class PubChemFingerprinter  {
 		public int countSaturatedOrAromaticCarbonOnlyRing(int size) {
 			int c = 0;
 			for (IAtomContainer ring : ringSet.atomContainers()) {
-				if (ring.getAtomCount() == size
-						&& isCarbonOnlyRing(ring)
+				if (ring.getAtomCount() == size && isCarbonOnlyRing(ring)
 						&& (isRingSaturated(ring) || isAromaticRing(ring)))
 					c++;
 			}
@@ -262,10 +265,8 @@ public class PubChemFingerprinter  {
 		public int countUnsaturatedCarbonOnlyRing(int size) {
 			int c = 0;
 			for (IAtomContainer ring : ringSet.atomContainers()) {
-				if (ring.getAtomCount() == size
-						&& isRingUnsaturated(ring)
-						&& !isAromaticRing(ring)
-						&& isCarbonOnlyRing(ring))
+				if (ring.getAtomCount() == size && isRingUnsaturated(ring)
+						&& !isAromaticRing(ring) && isCarbonOnlyRing(ring))
 					++c;
 			}
 			return c;
@@ -274,8 +275,7 @@ public class PubChemFingerprinter  {
 		public int countUnsaturatedNitrogenContainingRing(int size) {
 			int c = 0;
 			for (IAtomContainer ring : ringSet.atomContainers()) {
-				if (ring.getAtomCount() == size
-						&& isRingUnsaturated(ring)
+				if (ring.getAtomCount() == size && isRingUnsaturated(ring)
 						&& !isAromaticRing(ring)
 						&& countNitrogenInRing(ring) > 0)
 					++c;
@@ -286,66 +286,70 @@ public class PubChemFingerprinter  {
 		public int countUnsaturatedHeteroContainingRing(int size) {
 			int c = 0;
 			for (IAtomContainer ring : ringSet.atomContainers()) {
-				if (ring.getAtomCount() == size
-						&& isRingUnsaturated(ring)
-						&& !isAromaticRing(ring)
-						&& countHeteroInRing(ring) > 0)
+				if (ring.getAtomCount() == size && isRingUnsaturated(ring)
+						&& !isAromaticRing(ring) && countHeteroInRing(ring) > 0)
 					++c;
 			}
 			return c;
 		}
 	}
 
-	class PubChemBitSubstructure
-	{
+	class PubChemBitSubstructure {
 		private int bitNum;
 		private String smarts;
-		private IQueryAtomContainer smartsQuery;	
+		private IQueryAtomContainer smartsQuery;
 		private List<QuerySequenceElement> sequence;
 
 		public int getBitNum() {
 			return bitNum;
 		}
+
 		public void setBitNum(int bitNum) {
 			this.bitNum = bitNum;
 		}
+
 		public String getSmarts() {
 			return smarts;
 		}
+
 		public void setSmarts(String smarts) {
 			this.smarts = smarts;
 		}
+
 		public IQueryAtomContainer getSmartsQuery() {
 			return smartsQuery;
 		}
+
 		public void setSmartsQuery(IQueryAtomContainer smartsQuery) {
 			this.smartsQuery = smartsQuery;
 		}
+
 		public List<QuerySequenceElement> getSequence() {
 			return sequence;
 		}
+
 		public void setSequence(List<QuerySequenceElement> sequence) {
 			this.sequence = sequence;
 		}
 	}
 
-	private void addPubChemBitSubstructure(int bit, String smarts)
-	{
+	private void addPubChemBitSubstructure(int bit, String smarts) {
 		PubChemBitSubstructure pcbs = new PubChemBitSubstructure();
 		pcbs.setBitNum(bit);
 		pcbs.setSmarts(smarts);
-		IQueryAtomContainer query = parser.parse(smarts); 
-		//parser.setNeededDataFlags() is not called. This should not be needed for the key smarts queries
-		//TODO - Probably only H info would be enough
+		IQueryAtomContainer query = parser.parse(smarts);
+		// parser.setNeededDataFlags() is not called. This should not be needed
+		// for the key smarts queries
+		// TODO - Probably only H info would be enough
 		pcbs.setSmartsQuery(query);
 		isoTester.setQuery(query);
-		List<QuerySequenceElement> sequence = isoTester.transferSequenceToOwner();
+		List<QuerySequenceElement> sequence = isoTester
+				.transferSequenceToOwner();
 		pcbs.setSequence(sequence);
 		bitSubstructures.add(pcbs);
 	}
 
-	private void _generateFp(byte[] fp, IAtomContainer mol)
-			throws CDKException {
+	private void _generateFp(byte[] fp, IAtomContainer mol) throws CDKException {
 		countElements(fp, mol);
 		countRings(fp, mol);
 		countSubstructures(fp, mol);
@@ -370,7 +374,7 @@ public class PubChemFingerprinter  {
 	 *
 	 * @return The fingerprint as a byte array
 	 * @see #getBitFingerprint(org.openscience.cdk.interfaces.IAtomContainer)
-	 */  
+	 */
 	public byte[] getFingerprintAsBytes() {
 		return m_bits;
 	}
@@ -378,9 +382,10 @@ public class PubChemFingerprinter  {
 	/**
 	 * Returns a fingerprint from a Base64 encoded Pubchem fingerprint.
 	 *
-	 * @param enc The Base64 encoded fingerprint
+	 * @param enc
+	 *            The Base64 encoded fingerprint
 	 * @return A BitSet corresponding to the input fingerprint
-	 */   
+	 */
 	public static BitSet decode(String enc) {
 		byte[] fp = base64Decode(enc);
 		if (fp.length < 4) {
@@ -388,14 +393,14 @@ public class PubChemFingerprinter  {
 					"Input is not a proper PubChem base64 encoded fingerprint");
 		}
 
-		int len = (fp[0] << 24) | (fp[1] << 16)
-				| (fp[2] << 8) | (fp[3] & 0xff);
+		int len = (fp[0] << 24) | (fp[1] << 16) | (fp[2] << 8) | (fp[3] & 0xff);
 		if (len != FP_SIZE) {
 			throw new IllegalArgumentException(
 					"Input is not a proper PubChem base64 encoded fingerprint");
 		}
 
-		// note the IChemObjectBuilder is passed as null because the SMARTSQueryTool
+		// note the IChemObjectBuilder is passed as null because the
+		// SMARTSQueryTool
 		// isn't needed when decoding
 		PubChemFingerprinter pc = new PubChemFingerprinter();
 		for (int i = 0; i < pc.m_bits.length; ++i) {
@@ -404,11 +409,11 @@ public class PubChemFingerprinter  {
 
 		BitSet ret = new BitSet(FP_SIZE);
 		for (int i = 0; i < FP_SIZE; i++) {
-			if (pc.isBitOn(i)) ret.set(i);
+			if (pc.isBitOn(i))
+				ret.set(i);
 		}
 		return ret;
 	}
-
 
 	// the first four bytes contains the length of the fingerprint
 	private String encode() {
@@ -424,9 +429,8 @@ public class PubChemFingerprinter  {
 		return base64Encode(pack);
 	}
 
-	private static String BASE64_LUT =
-			"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
-					"abcdefghijklmnopqrstuvwxyz0123456789+/=";
+	private static String BASE64_LUT = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+			+ "abcdefghijklmnopqrstuvwxyz0123456789+/=";
 
 	// based on NCBI C implementation
 	private static String base64Encode(byte[] data) {
@@ -437,11 +441,11 @@ public class PubChemFingerprinter  {
 			c64[k + 2] = c64[k + 3] = 64;
 			if ((i + i) < data.length) {
 				c64[k + 1] |= data[i + 1] >> 4;
-			c64[k + 2] = (char) ((data[i + 1] & 0x0f) << 2);
+				c64[k + 2] = (char) ((data[i + 1] & 0x0f) << 2);
 			}
 			if ((i + 2) < data.length) {
 				c64[k + 2] |= data[i + 2] >> 6;
-			c64[k + 3] = (char) (data[i + 2] & 0x3f);
+				c64[k + 3] = (char) (data[i + 2] & 0x3f);
 			}
 			for (int j = 0; j < 4; ++j) {
 				c64[k + j] = BASE64_LUT.charAt(c64[k + j]);
@@ -488,8 +492,7 @@ public class PubChemFingerprinter  {
 				b64[k++] = (byte) ((buf[0] << 2) | ((buf[1] & 0x30) >> 4));
 			}
 			if (k < b64.length && j >= 3) {
-				b64[k++] = (byte) (((buf[1] & 0x0f) << 4)
-						| ((buf[2] & 0x3c) >> 2));
+				b64[k++] = (byte) (((buf[1] & 0x0f) << 4) | ((buf[2] & 0x3c) >> 2));
 			}
 			if (k < b64.length && j >= 4) {
 				b64[k++] = (byte) (((buf[2] & 0x03) << 6) | (buf[3] & 0x3f));
@@ -498,647 +501,873 @@ public class PubChemFingerprinter  {
 		return b64;
 	}
 
-	static final int BITCOUNT[] = {
-		0, 1, 1, 2, 1, 2, 2, 3,
-		1, 2, 2, 3, 2, 3, 3, 4,
-		1, 2, 2, 3, 2, 3, 3, 4,
-		2, 3, 3, 4, 3, 4, 4, 5,
-		1, 2, 2, 3, 2, 3, 3, 4,
-		2, 3, 3, 4, 3, 4, 4, 5,
-		2, 3, 3, 4, 3, 4, 4, 5,
-		3, 4, 4, 5, 4, 5, 5, 6,
-		1, 2, 2, 3, 2, 3, 3, 4,
-		2, 3, 3, 4, 3, 4, 4, 5,
-		2, 3, 3, 4, 3, 4, 4, 5,
-		3, 4, 4, 5, 4, 5, 5, 6,
-		2, 3, 3, 4, 3, 4, 4, 5,
-		3, 4, 4, 5, 4, 5, 5, 6,
-		3, 4, 4, 5, 4, 5, 5, 6,
-		4, 5, 5, 6, 5, 6, 6, 7,
-		1, 2, 2, 3, 2, 3, 3, 4,
-		2, 3, 3, 4, 3, 4, 4, 5,
-		2, 3, 3, 4, 3, 4, 4, 5,
-		3, 4, 4, 5, 4, 5, 5, 6,
-		2, 3, 3, 4, 3, 4, 4, 5,
-		3, 4, 4, 5, 4, 5, 5, 6,
-		3, 4, 4, 5, 4, 5, 5, 6,
-		4, 5, 5, 6, 5, 6, 6, 7,
-		2, 3, 3, 4, 3, 4, 4, 5,
-		3, 4, 4, 5, 4, 5, 5, 6,
-		3, 4, 4, 5, 4, 5, 5, 6,
-		4, 5, 5, 6, 5, 6, 6, 7,
-		3, 4, 4, 5, 4, 5, 5, 6,
-		4, 5, 5, 6, 5, 6, 6, 7,
-		4, 5, 5, 6, 5, 6, 6, 7,
-		5, 6, 6, 7, 6, 7, 7, 8
-	};
+	static final int BITCOUNT[] = { 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
+			3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 1, 2, 2, 3,
+			2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4,
+			4, 5, 4, 5, 5, 6, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+			2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 2, 3, 3, 4, 3, 4,
+			4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6,
+			5, 6, 6, 7, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3,
+			3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 2, 3, 3, 4, 3, 4, 4, 5,
+			3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6,
+			6, 7, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5,
+			4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5,
+			5, 6, 5, 6, 6, 7, 4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8 };
 
-	static final int MASK[] = {
-		0x80,
-		0x40,
-		0x20,
-		0x10,
-		0x08,
-		0x04,
-		0x02,
-		0x01
-	};
+	static final int MASK[] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
 
 	/*
-     Section 1: Hierarchic Element Counts - These bs test for the
-     presence or count of individual chemical atoms represented
-     by their atomic symbol.
+	 * Section 1: Hierarchic Element Counts - These bs test for the presence or
+	 * count of individual chemical atoms represented by their atomic symbol.
 	 */
 	private static void countElements(byte[] fp, IAtomContainer mol) {
 		int b;
 		CountElements ce = new CountElements(mol);
 
 		b = 0;
-		if (ce.getCount("H") >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("H") >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 1;
-		if (ce.getCount("H") >= 8) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("H") >= 8)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 2;
-		if (ce.getCount("H") >= 16) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("H") >= 16)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 3;
-		if (ce.getCount("H") >= 32) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("H") >= 32)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 4;
-		if (ce.getCount("Li") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Li") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 5;
-		if (ce.getCount("Li") >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Li") >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 6;
-		if (ce.getCount("B") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("B") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 7;
-		if (ce.getCount("B") >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("B") >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 8;
-		if (ce.getCount("B") >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("B") >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 9;
-		if (ce.getCount("C") >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("C") >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 10;
-		if (ce.getCount("C") >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("C") >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 11;
-		if (ce.getCount("C") >= 8) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("C") >= 8)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 12;
-		if (ce.getCount("C") >= 16) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("C") >= 16)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 13;
-		if (ce.getCount("C") >= 32) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("C") >= 32)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 14;
-		if (ce.getCount("N") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("N") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 15;
-		if (ce.getCount("N") >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("N") >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 16;
-		if (ce.getCount("N") >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("N") >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 17;
-		if (ce.getCount("N") >= 8) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("N") >= 8)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 18;
-		if (ce.getCount("O") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("O") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 19;
-		if (ce.getCount("O") >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("O") >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 20;
-		if (ce.getCount("O") >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("O") >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 21;
-		if (ce.getCount("O") >= 8) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("O") >= 8)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 22;
-		if (ce.getCount("O") >= 16) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("O") >= 16)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 23;
-		if (ce.getCount("F") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("F") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 24;
-		if (ce.getCount("F") >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("F") >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 25;
-		if (ce.getCount("F") >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("F") >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 26;
-		if (ce.getCount("Na") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Na") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 27;
-		if (ce.getCount("Na") >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Na") >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 28;
-		if (ce.getCount("Si") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Si") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 29;
-		if (ce.getCount("Si") >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Si") >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 30;
-		if (ce.getCount("P") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("P") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 31;
-		if (ce.getCount("P") >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("P") >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 32;
-		if (ce.getCount("P") >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("P") >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 33;
-		if (ce.getCount("S") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("S") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 34;
-		if (ce.getCount("S") >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("S") >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 35;
-		if (ce.getCount("S") >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("S") >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 36;
-		if (ce.getCount("S") >= 8) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("S") >= 8)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 37;
-		if (ce.getCount("Cl") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Cl") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 38;
-		if (ce.getCount("Cl") >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Cl") >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 39;
-		if (ce.getCount("Cl") >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Cl") >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 40;
-		if (ce.getCount("Cl") >= 8) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Cl") >= 8)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 41;
-		if (ce.getCount("K") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("K") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 42;
-		if (ce.getCount("K") >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("K") >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 43;
-		if (ce.getCount("Br") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Br") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 44;
-		if (ce.getCount("Br") >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Br") >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 45;
-		if (ce.getCount("Br") >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Br") >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 46;
-		if (ce.getCount("I") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("I") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 47;
-		if (ce.getCount("I") >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("I") >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 48;
-		if (ce.getCount("I") >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("I") >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 49;
-		if (ce.getCount("Be") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Be") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 50;
-		if (ce.getCount("Mg") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Mg") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 51;
-		if (ce.getCount("Al") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Al") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 52;
-		if (ce.getCount("Ca") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Ca") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 53;
-		if (ce.getCount("Sc") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Sc") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 54;
-		if (ce.getCount("Ti") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Ti") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 55;
-		if (ce.getCount("V") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("V") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 56;
-		if (ce.getCount("Cr") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Cr") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 57;
-		if (ce.getCount("Mn") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Mn") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 58;
-		if (ce.getCount("Fe") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Fe") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 59;
-		if (ce.getCount("Co") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Co") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 60;
-		if (ce.getCount("Ni") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Ni") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 61;
-		if (ce.getCount("Cu") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Cu") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 62;
-		if (ce.getCount("Zn") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Zn") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 63;
-		if (ce.getCount("Ga") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Ga") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 64;
-		if (ce.getCount("Ge") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Ge") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 65;
-		if (ce.getCount("As") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("As") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 66;
-		if (ce.getCount("Se") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Se") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 67;
-		if (ce.getCount("Kr") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Kr") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 68;
-		if (ce.getCount("Rb") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Rb") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 69;
-		if (ce.getCount("Sr") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Sr") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 70;
-		if (ce.getCount("Y") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Y") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 71;
-		if (ce.getCount("Zr") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Zr") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 72;
-		if (ce.getCount("Nb") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Nb") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 73;
-		if (ce.getCount("Mo") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Mo") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 74;
-		if (ce.getCount("Ru") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Ru") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 75;
-		if (ce.getCount("Rh") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Rh") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 76;
-		if (ce.getCount("Pd") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Pd") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 77;
-		if (ce.getCount("Ag") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Ag") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 78;
-		if (ce.getCount("Cd") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Cd") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 79;
-		if (ce.getCount("In") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("In") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 80;
-		if (ce.getCount("Sn") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Sn") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 81;
-		if (ce.getCount("Sb") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Sb") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 82;
-		if (ce.getCount("Te") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Te") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 83;
-		if (ce.getCount("Xe") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Xe") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 84;
-		if (ce.getCount("Cs") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Cs") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 85;
-		if (ce.getCount("Ba") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Ba") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 86;
-		if (ce.getCount("Lu") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Lu") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 87;
-		if (ce.getCount("Hf") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Hf") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 88;
-		if (ce.getCount("Ta") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Ta") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 89;
-		if (ce.getCount("W") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("W") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 90;
-		if (ce.getCount("Re") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Re") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 91;
-		if (ce.getCount("Os") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Os") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 92;
-		if (ce.getCount("Ir") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Ir") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 93;
-		if (ce.getCount("Pt") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Pt") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 94;
-		if (ce.getCount("Au") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Au") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 95;
-		if (ce.getCount("Hg") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Hg") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 96;
-		if (ce.getCount("Tl") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Tl") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 97;
-		if (ce.getCount("Pb") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Pb") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 98;
-		if (ce.getCount("Bi") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Bi") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 99;
-		if (ce.getCount("La") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("La") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 100;
-		if (ce.getCount("Ce") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Ce") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 101;
-		if (ce.getCount("Pr") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Pr") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 102;
-		if (ce.getCount("Nd") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Nd") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 103;
-		if (ce.getCount("Pm") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Pm") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 104;
-		if (ce.getCount("Sm") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Sm") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 105;
-		if (ce.getCount("Eu") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Eu") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 106;
-		if (ce.getCount("Gd") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Gd") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 107;
-		if (ce.getCount("Tb") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Tb") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 108;
-		if (ce.getCount("Dy") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Dy") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 109;
-		if (ce.getCount("Ho") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Ho") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 110;
-		if (ce.getCount("Er") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Er") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 111;
-		if (ce.getCount("Tm") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Tm") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 112;
-		if (ce.getCount("Yb") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Yb") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 113;
-		if (ce.getCount("Tc") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("Tc") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 114;
-		if (ce.getCount("U") >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (ce.getCount("U") >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 	}
 
 	/*
-      Section 2: Rings in a canonic ESSR ring set-These bs test for the
-      presence or count of the described chemical ring system.
-      An ESSR ring is any ring which does not share three
-      consecutive atoms with any other ring in the chemical
-      structure.  For example, naphthalene has three ESSR rings
-      (two phenyl fragments and the 10-membered envelope), while
-      biphenyl will yield a count of only two ESSR rings.
+	 * Section 2: Rings in a canonic ESSR ring set-These bs test for the
+	 * presence or count of the described chemical ring system. An ESSR ring is
+	 * any ring which does not share three consecutive atoms with any other ring
+	 * in the chemical structure. For example, naphthalene has three ESSR rings
+	 * (two phenyl fragments and the 10-membered envelope), while biphenyl will
+	 * yield a count of only two ESSR rings.
 	 */
 	private static void countRings(byte[] fp, IAtomContainer mol) {
 		CountRings cr = new CountRings(mol);
 		int b;
 
 		b = 115;
-		if (cr.countAnyRing(3) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(3) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 116;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(3) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(3) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 117;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(3) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(3) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 118;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(3) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(3) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 119;
-		if (cr.countUnsaturatedCarbonOnlyRing(3) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(3) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 120;
-		if (cr.countUnsaturatedNitrogenContainingRing(3) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(3) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 121;
-		if (cr.countUnsaturatedHeteroContainingRing(3) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(3) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 122;
-		if (cr.countAnyRing(3) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(3) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 123;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(3) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(3) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 124;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(3) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(3) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 125;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(3) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(3) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 126;
-		if (cr.countUnsaturatedCarbonOnlyRing(3) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(3) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 127;
-		if (cr.countUnsaturatedNitrogenContainingRing(3) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(3) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 128;
-		if (cr.countUnsaturatedHeteroContainingRing(3) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(3) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 129;
-		if (cr.countAnyRing(4) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(4) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 130;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(4) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(4) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 131;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(4) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(4) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 132;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(4) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(4) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 133;
-		if (cr.countUnsaturatedCarbonOnlyRing(4) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(4) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 134;
-		if (cr.countUnsaturatedNitrogenContainingRing(4) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(4) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 135;
-		if (cr.countUnsaturatedHeteroContainingRing(4) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(4) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 136;
-		if (cr.countAnyRing(4) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(4) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 137;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(4) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(4) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 138;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(4) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(4) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 139;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(4) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(4) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 140;
-		if (cr.countUnsaturatedCarbonOnlyRing(4) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(4) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 141;
-		if (cr.countUnsaturatedNitrogenContainingRing(4) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(4) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 142;
-		if (cr.countUnsaturatedHeteroContainingRing(4) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(4) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 143;
-		if (cr.countAnyRing(5) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(5) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 144;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(5) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(5) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 145;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(5) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(5) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 146;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(5) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(5) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 147;
-		if (cr.countUnsaturatedCarbonOnlyRing(5) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(5) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 148;
-		if (cr.countUnsaturatedNitrogenContainingRing(5) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(5) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 149;
-		if (cr.countUnsaturatedHeteroContainingRing(5) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(5) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 150;
-		if (cr.countAnyRing(5) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(5) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 151;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(5) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(5) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 152;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(5) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(5) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 153;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(5) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(5) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 154;
-		if (cr.countUnsaturatedCarbonOnlyRing(5) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(5) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 155;
-		if (cr.countUnsaturatedNitrogenContainingRing(5) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(5) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 156;
-		if (cr.countUnsaturatedHeteroContainingRing(5) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(5) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 157;
-		if (cr.countAnyRing(5) >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(5) >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 158;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(5) >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(5) >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 159;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(5) >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(5) >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 160;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(5) >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(5) >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 161;
-		if (cr.countUnsaturatedCarbonOnlyRing(5) >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(5) >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 162;
-		if (cr.countUnsaturatedNitrogenContainingRing(5) >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(5) >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 163;
-		if (cr.countUnsaturatedHeteroContainingRing(5) >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(5) >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 164;
-		if (cr.countAnyRing(5) >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(5) >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 165;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(5) >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(5) >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 166;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(5) >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(5) >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 167;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(5) >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(5) >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 168;
-		if (cr.countUnsaturatedCarbonOnlyRing(5) >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(5) >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 169;
-		if (cr.countUnsaturatedNitrogenContainingRing(5) >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(5) >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 170;
-		if (cr.countUnsaturatedHeteroContainingRing(5) >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(5) >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 171;
-		if (cr.countAnyRing(5) >= 5) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(5) >= 5)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 172;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(5) >= 5) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(5) >= 5)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 173;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(5) >= 5) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(5) >= 5)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 174;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(5) >= 5) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(5) >= 5)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 175;
-		if (cr.countUnsaturatedCarbonOnlyRing(5) >= 5) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(5) >= 5)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 176;
-		if (cr.countUnsaturatedNitrogenContainingRing(5) >= 5) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(5) >= 5)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 177;
-		if (cr.countUnsaturatedHeteroContainingRing(5) >= 5) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(5) >= 5)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 178;
-		if (cr.countAnyRing(6) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(6) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 179;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(6) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(6) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 180;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(6) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(6) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 181;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(6) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(6) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 182;
-		if (cr.countUnsaturatedCarbonOnlyRing(6) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(6) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 183;
-		if (cr.countUnsaturatedNitrogenContainingRing(6) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(6) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 184;
-		if (cr.countUnsaturatedHeteroContainingRing(6) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(6) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 185;
-		if (cr.countAnyRing(6) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(6) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 186;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(6) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(6) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 187;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(6) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(6) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 188;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(6) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(6) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 189;
-		if (cr.countUnsaturatedCarbonOnlyRing(6) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(6) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 190;
-		if (cr.countUnsaturatedNitrogenContainingRing(6) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(6) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 191;
-		if (cr.countUnsaturatedHeteroContainingRing(6) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(6) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 192;
-		if (cr.countAnyRing(6) >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(6) >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 193;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(6) >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(6) >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 194;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(6) >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(6) >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 195;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(6) >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(6) >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 196;
-		if (cr.countUnsaturatedCarbonOnlyRing(6) >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(6) >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 197;
-		if (cr.countUnsaturatedNitrogenContainingRing(6) >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(6) >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 198;
-		if (cr.countUnsaturatedHeteroContainingRing(6) >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(6) >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 199;
-		if (cr.countAnyRing(6) >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(6) >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 200;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(6) >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(6) >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 201;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(6) >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(6) >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 202;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(6) >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(6) >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 203;
-		if (cr.countUnsaturatedCarbonOnlyRing(6) >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(6) >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 204;
-		if (cr.countUnsaturatedNitrogenContainingRing(6) >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(6) >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 205;
-		if (cr.countUnsaturatedHeteroContainingRing(6) >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(6) >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 206;
-		if (cr.countAnyRing(6) >= 5) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(6) >= 5)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 207;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(6) >= 5) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(6) >= 5)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 208;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(6) >= 5) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(6) >= 5)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 209;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(6) >= 5) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(6) >= 5)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 210;
-		if (cr.countUnsaturatedCarbonOnlyRing(6) >= 5) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(6) >= 5)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 211;
-		if (cr.countUnsaturatedNitrogenContainingRing(6) >= 5) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(6) >= 5)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 212;
-		if (cr.countUnsaturatedHeteroContainingRing(6) >= 5) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(6) >= 5)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 213;
-		if (cr.countAnyRing(7) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(7) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 214;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(7) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(7) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 215;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(7) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(7) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 216;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(7) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(7) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 217;
-		if (cr.countUnsaturatedCarbonOnlyRing(7) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(7) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 218;
-		if (cr.countUnsaturatedNitrogenContainingRing(7) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(7) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 219;
-		if (cr.countUnsaturatedHeteroContainingRing(7) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(7) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 220;
-		if (cr.countAnyRing(7) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(7) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 221;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(7) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(7) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 222;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(7) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(7) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 223;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(7) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(7) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 224;
-		if (cr.countUnsaturatedCarbonOnlyRing(7) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(7) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 225;
-		if (cr.countUnsaturatedNitrogenContainingRing(7) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(7) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 226;
-		if (cr.countUnsaturatedHeteroContainingRing(7) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(7) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 227;
-		if (cr.countAnyRing(8) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(8) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 228;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(8) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(8) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 229;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(8) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(8) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 230;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(8) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(8) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 231;
-		if (cr.countUnsaturatedCarbonOnlyRing(8) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(8) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 232;
-		if (cr.countUnsaturatedNitrogenContainingRing(8) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(8) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 233;
-		if (cr.countUnsaturatedHeteroContainingRing(8) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(8) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 234;
-		if (cr.countAnyRing(8) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(8) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 235;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(8) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(8) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 236;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(8) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(8) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 237;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(8) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(8) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 238;
-		if (cr.countUnsaturatedCarbonOnlyRing(8) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(8) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 239;
-		if (cr.countUnsaturatedNitrogenContainingRing(8) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(8) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 240;
-		if (cr.countUnsaturatedHeteroContainingRing(8) >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(8) >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 241;
-		if (cr.countAnyRing(9) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(9) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 242;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(9) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(9) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 243;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(9) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(9) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 244;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(9) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(9) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 245;
-		if (cr.countUnsaturatedCarbonOnlyRing(9) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(9) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 246;
-		if (cr.countUnsaturatedNitrogenContainingRing(9) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(9) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 247;
-		if (cr.countUnsaturatedHeteroContainingRing(9) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(9) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 248;
-		if (cr.countAnyRing(10) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAnyRing(10) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 249;
-		if (cr.countSaturatedOrAromaticCarbonOnlyRing(10) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticCarbonOnlyRing(10) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 250;
-		if (cr.countSaturatedOrAromaticNitrogenContainingRing(10) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticNitrogenContainingRing(10) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 251;
-		if (cr.countSaturatedOrAromaticHeteroContainingRing(10) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countSaturatedOrAromaticHeteroContainingRing(10) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 252;
-		if (cr.countUnsaturatedCarbonOnlyRing(10) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedCarbonOnlyRing(10) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 253;
-		if (cr.countUnsaturatedNitrogenContainingRing(10) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedNitrogenContainingRing(10) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 254;
-		if (cr.countUnsaturatedHeteroContainingRing(10) >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countUnsaturatedHeteroContainingRing(10) >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 
 		b = 255;
-		if (cr.countAromaticRing() >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAromaticRing() >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 256;
-		if (cr.countHeteroAromaticRing() >= 1) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countHeteroAromaticRing() >= 1)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 257;
-		if (cr.countAromaticRing() >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAromaticRing() >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 258;
-		if (cr.countHeteroAromaticRing() >= 2) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countHeteroAromaticRing() >= 2)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 259;
-		if (cr.countAromaticRing() >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAromaticRing() >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 260;
-		if (cr.countHeteroAromaticRing() >= 3) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countHeteroAromaticRing() >= 3)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 261;
-		if (cr.countAromaticRing() >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countAromaticRing() >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 		b = 262;
-		if (cr.countHeteroAromaticRing() >= 4) fp[b >> 3] |= MASK[b % 8];
+		if (cr.countHeteroAromaticRing() >= 4)
+			fp[b >> 3] |= MASK[b % 8];
 	}
 
-	private void countSubstructures(byte[] fp, IAtomContainer mol) throws CDKException 
-	{	
-		//H info is needed for some keys
+	private void countSubstructures(byte[] fp, IAtomContainer mol)
+			throws CDKException {
+		// H info is needed for some keys
 		SmartsParser.setExplicitHAtomData(mol);
-		
-		//Calculates PubChem sections: 3,4,5,6,7 set up in 
+
+		// Calculates PubChem sections: 3,4,5,6,7 set up in
 		boolean res;
-		for (PubChemBitSubstructure bs: bitSubstructures)
-		{	
+		for (PubChemBitSubstructure bs : bitSubstructures) {
 			isoTester.setSequence(bs.getSmartsQuery(), bs.getSequence());
 			res = isoTester.hasIsomorphism(mol);
 			if (res)
 				fp[bs.getBitNum() >> 3] |= MASK[bs.getBitNum() % 8];
-		}	
+		}
 	}
 
-
-
-	private void initPubChemBitSubstructures()
-	{	
-		//Section 3: Simple atom pairs. These bits test for the presence
-		//of patterns of bonded atom pairs, regardless of bond order or
-		//count.
+	private void initPubChemBitSubstructures() {
+		// Section 3: Simple atom pairs. These bits test for the presence
+		// of patterns of bonded atom pairs, regardless of bond order or
+		// count.
 		addPubChemBitSubstructure(263, "[Li&!H0]");
 		addPubChemBitSubstructure(264, "[Li]~[Li]");
 		addPubChemBitSubstructure(265, "[Li]~[#5]");
@@ -1204,10 +1433,10 @@ public class PubChemFingerprinter  {
 		addPubChemBitSubstructure(325, "[#33&!H0]");
 		addPubChemBitSubstructure(326, "[#33]~[#33]");
 
-		//Section 4: Simple atom nearest neighbors.  These bits test for the
-		//presence of atom nearest neighbor patterns, regardless of
-		//bond order or count, but where bond aromaticity (denoted by
-		//"~") is significant.
+		// Section 4: Simple atom nearest neighbors. These bits test for the
+		// presence of atom nearest neighbor patterns, regardless of
+		// bond order or count, but where bond aromaticity (denoted by
+		// "~") is significant.
 		addPubChemBitSubstructure(327, "[#6](~Br)(~[#6])");
 		addPubChemBitSubstructure(328, "[#6](~Br)(~[#6])(~[#6])");
 		addPubChemBitSubstructure(329, "[#6&!H0]~[Br]");
@@ -1298,13 +1527,12 @@ public class PubChemFingerprinter  {
 		addPubChemBitSubstructure(414, "[#16](~[#6])(~[#8])");
 		addPubChemBitSubstructure(415, "[#14](~[#6])(~[#6])");
 
-
-		//Section 5: Detailed atom neighborhoods - These bits test for the
-		//presence of detailed atom neighborhood patterns, regardless
-		//of count, but where bond orders are specific, bond
-		//aromaticity matches both single and double bonds, and where
-		//"-", "=", and "#" matches a single bond, double bond, and
-		//triple bond order, respectively.
+		// Section 5: Detailed atom neighborhoods - These bits test for the
+		// presence of detailed atom neighborhood patterns, regardless
+		// of count, but where bond orders are specific, bond
+		// aromaticity matches both single and double bonds, and where
+		// "-", "=", and "#" matches a single bond, double bond, and
+		// triple bond order, respectively.
 		addPubChemBitSubstructure(416, "[#6]=,:[#6]");
 		addPubChemBitSubstructure(417, "[#6]#[#6]");
 		addPubChemBitSubstructure(418, "[#6]=,:[#7]");
@@ -1350,11 +1578,10 @@ public class PubChemFingerprinter  {
 		addPubChemBitSubstructure(458, "[#16](-,:[#8])(=,:[#8])");
 		addPubChemBitSubstructure(459, "[#16](=,:[#8])(=,:[#8])");
 
-
-		//Section 6: Simple SMARTS patterns - These bits test for the presence
-		//of simple SMARTS patterns, regardless of count, but where
-		//bond orders are specific and bond aromaticity matches both
-		//single and double bonds.
+		// Section 6: Simple SMARTS patterns - These bits test for the presence
+		// of simple SMARTS patterns, regardless of count, but where
+		// bond orders are specific and bond aromaticity matches both
+		// single and double bonds.
 		addPubChemBitSubstructure(460, "[#6]-,:[#6]-,:[#6]#[#6]");
 		addPubChemBitSubstructure(461, "[#8]-,:[#6]-,:[#6]=,:[#7]");
 		addPubChemBitSubstructure(462, "[#8]-,:[#6]-,:[#6]=,:[#8]");
@@ -1494,7 +1721,8 @@ public class PubChemFingerprinter  {
 		addPubChemBitSubstructure(596, "[#7]=,:[#6]-,:[#7]-,:[#6]-,:[#6]");
 		addPubChemBitSubstructure(597, "[#8]=,:[#6]-,:[#6]-,:c:c");
 		addPubChemBitSubstructure(598, "[Cl]-,:[#6]:[#6]:[#6]-,:[#6]");
-		addPubChemBitSubstructure(599, "[#6H,#6H2,#6H3]-,:[#6]=,:[#6H,#6H2,#6H3]");
+		addPubChemBitSubstructure(599,
+				"[#6H,#6H2,#6H3]-,:[#6]=,:[#6H,#6H2,#6H3]");
 		addPubChemBitSubstructure(600, "[#7]-,:[#6]:[#6]:[#6]-,:[#6]");
 		addPubChemBitSubstructure(601, "[#7]-,:[#6]:[#6]:[#6]-,:[#7]");
 		addPubChemBitSubstructure(602, "[#8]=,:[#6]-,:[#6]-,:[#7]-,:[#6]");
@@ -1574,45 +1802,77 @@ public class PubChemFingerprinter  {
 		addPubChemBitSubstructure(676, "[#7]#[#6]-,:[#6]-,:[#6]-,:[#6]");
 		addPubChemBitSubstructure(677, "[#6]-,:[#6]=,:[#6]-,:[#6]:c");
 		addPubChemBitSubstructure(678, "[#6]-,:[#6]-,:[#6]=,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(679, "[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(680, "[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(681, "[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#8]");
-		addPubChemBitSubstructure(682, "[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#7]");
-		addPubChemBitSubstructure(683, "[#7]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(684, "[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(685, "[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#7]");
-		addPubChemBitSubstructure(686, "[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#8]");
-		addPubChemBitSubstructure(687, "[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]=,:[#8]");
-		addPubChemBitSubstructure(688, "[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(689, "[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(690, "[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#8]");
-		addPubChemBitSubstructure(691, "[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#7]");
-		addPubChemBitSubstructure(692, "[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(693, "[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#8]");
-		addPubChemBitSubstructure(694, "[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]=,:[#8]");
-		addPubChemBitSubstructure(695, "[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#7]");
-		addPubChemBitSubstructure(696, "[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(697, "[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6](-,:[#6])-,:[#6]");
-		addPubChemBitSubstructure(698, "[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(699, "[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6](-,:[#6])-,:[#6]");
-		addPubChemBitSubstructure(700, "[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#8]-,:[#6]");
-		addPubChemBitSubstructure(701, "[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6](-,:[#8])-,:[#6]");
-		addPubChemBitSubstructure(702, "[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#7]-,:[#6]");
-		addPubChemBitSubstructure(703, "[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6](-,:[#7])-,:[#6]");
-		addPubChemBitSubstructure(704, "[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(705, "[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6](-,:[#8])-,:[#6]");
-		addPubChemBitSubstructure(706, "[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6](=,:[#8])-,:[#6]");
-		addPubChemBitSubstructure(707, "[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6](-,:[#7])-,:[#6]");
+		addPubChemBitSubstructure(679,
+				"[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
+		addPubChemBitSubstructure(680,
+				"[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
+		addPubChemBitSubstructure(681,
+				"[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#8]");
+		addPubChemBitSubstructure(682,
+				"[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#7]");
+		addPubChemBitSubstructure(683,
+				"[#7]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
+		addPubChemBitSubstructure(684,
+				"[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
+		addPubChemBitSubstructure(685,
+				"[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#7]");
+		addPubChemBitSubstructure(686,
+				"[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#8]");
+		addPubChemBitSubstructure(687,
+				"[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]=,:[#8]");
+		addPubChemBitSubstructure(688,
+				"[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
+		addPubChemBitSubstructure(689,
+				"[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
+		addPubChemBitSubstructure(690,
+				"[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#8]");
+		addPubChemBitSubstructure(691,
+				"[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#7]");
+		addPubChemBitSubstructure(692,
+				"[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
+		addPubChemBitSubstructure(693,
+				"[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#8]");
+		addPubChemBitSubstructure(694,
+				"[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]=,:[#8]");
+		addPubChemBitSubstructure(695,
+				"[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#7]");
+		addPubChemBitSubstructure(696,
+				"[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
+		addPubChemBitSubstructure(697,
+				"[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6](-,:[#6])-,:[#6]");
+		addPubChemBitSubstructure(698,
+				"[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
+		addPubChemBitSubstructure(699,
+				"[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6](-,:[#6])-,:[#6]");
+		addPubChemBitSubstructure(700,
+				"[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#8]-,:[#6]");
+		addPubChemBitSubstructure(701,
+				"[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6](-,:[#8])-,:[#6]");
+		addPubChemBitSubstructure(702,
+				"[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#7]-,:[#6]");
+		addPubChemBitSubstructure(703,
+				"[#8]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6](-,:[#7])-,:[#6]");
+		addPubChemBitSubstructure(704,
+				"[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6]");
+		addPubChemBitSubstructure(705,
+				"[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6](-,:[#8])-,:[#6]");
+		addPubChemBitSubstructure(706,
+				"[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6](=,:[#8])-,:[#6]");
+		addPubChemBitSubstructure(707,
+				"[#8]=,:[#6]-,:[#6]-,:[#6]-,:[#6]-,:[#6](-,:[#7])-,:[#6]");
 		addPubChemBitSubstructure(708, "[#6]-,:[#6](-,:[#6])-,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(709, "[#6]-,:[#6](-,:[#6])-,:[#6]-,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(710, "[#6]-,:[#6]-,:[#6](-,:[#6])-,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(711, "[#6]-,:[#6](-,:[#6])(-,:[#6])-,:[#6]-,:[#6]");
-		addPubChemBitSubstructure(712, "[#6]-,:[#6](-,:[#6])-,:[#6](-,:[#6])-,:[#6]");
+		addPubChemBitSubstructure(709,
+				"[#6]-,:[#6](-,:[#6])-,:[#6]-,:[#6]-,:[#6]");
+		addPubChemBitSubstructure(710,
+				"[#6]-,:[#6]-,:[#6](-,:[#6])-,:[#6]-,:[#6]");
+		addPubChemBitSubstructure(711,
+				"[#6]-,:[#6](-,:[#6])(-,:[#6])-,:[#6]-,:[#6]");
+		addPubChemBitSubstructure(712,
+				"[#6]-,:[#6](-,:[#6])-,:[#6](-,:[#6])-,:[#6]");
 
-
-		//Section 7: Complex SMARTS patterns - These bits test for the presence
-		//of complex SMARTS patterns, regardless of count, but where
-		//bond orders and bond aromaticity are specific.
+		// Section 7: Complex SMARTS patterns - These bits test for the presence
+		// of complex SMARTS patterns, regardless of count, but where
+		// bond orders and bond aromaticity are specific.
 		addPubChemBitSubstructure(713, "[#6]c1ccc([#6])cc1");
 		addPubChemBitSubstructure(714, "[#6]c1ccc([#8])cc1");
 		addPubChemBitSubstructure(715, "[#6]c1ccc([#16])cc1");
@@ -1780,7 +2040,7 @@ public class PubChemFingerprinter  {
 		addPubChemBitSubstructure(877, "[#7][#6]1[#6](Br)[#6][#6][#6]1");
 		addPubChemBitSubstructure(878, "Cl[#6]1[#6](Cl)[#6][#6][#6]1");
 		addPubChemBitSubstructure(879, "Cl[#6]1[#6](Br)[#6][#6][#6]1");
-		addPubChemBitSubstructure(880, "Br[#6]1[#6](Br)[#6][#6][#6]1");	
+		addPubChemBitSubstructure(880, "Br[#6]1[#6](Br)[#6][#6][#6]1");
 	}
 
 }

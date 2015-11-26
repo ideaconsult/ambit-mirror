@@ -5,7 +5,7 @@ import java.util.Locale;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor;
 import org.openscience.cdk.qsar.result.DoubleResult;
@@ -22,7 +22,7 @@ public class MolecularWeightDescriptorTest {
 	@Test
 	public void test() throws Exception {
 		MolecularWeight mw = new MolecularWeight();
-		IMolecule mol = MoleculeFactory.makeBenzene();
+		IAtomContainer mol = MoleculeFactory.makeBenzene();
 		HydrogenAdderProcessor p = new HydrogenAdderProcessor();
 		
 		DescriptorValue value = mw.calculate(p.process(mol));
@@ -38,8 +38,8 @@ public class MolecularWeightDescriptorTest {
 	public void testBCUT() throws Exception {
 		BCUTDescriptor mw = new BCUTDescriptor();
 		SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());
-		//IMolecule mol = sp.parseSmiles("O[As](O)O");
-		IMolecule mol = sp.parseSmiles("O1[As]2O[As]1O2");
+		//IAtomContainer mol = sp.parseSmiles("O[As](O)O");
+		IAtomContainer mol = sp.parseSmiles("O1[As]2O[As]1O2");
 		
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 		HydrogenAdderProcessor p = new HydrogenAdderProcessor();

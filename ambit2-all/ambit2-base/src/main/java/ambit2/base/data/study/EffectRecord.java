@@ -2,6 +2,7 @@ package ambit2.base.data.study;
 
 import java.io.Serializable;
 
+import net.idea.modbcum.i.JSONSerializable;
 import ambit2.base.json.JSONUtils;
 
 import com.google.common.base.Objects;
@@ -21,7 +22,7 @@ import com.google.common.base.Objects;
  *            new EffectRecord<String,new
  *            ambit2.base.data.study.Params(),String)
  */
-public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable {
+public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable , JSONSerializable{
 	/**
 	 * 
 	 */
@@ -163,7 +164,7 @@ public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable {
 	}
 
 	@Override
-	public String toString() {
+	public String asJSON() {
 		StringBuilder b = new StringBuilder();
 		b.append("{\n");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.endpoint
@@ -242,6 +243,10 @@ public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable {
 		return b.toString();
 	}
 
+	@Override
+	public String toString() {
+		return asJSON();
+	}
 	public boolean isEmpty() {
 		return (getLoValue() == null && getUpValue() == null && (getTextValue() == null || ""
 				.equals(getTextValue())));

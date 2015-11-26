@@ -48,7 +48,7 @@ public class JDBCBatchPropertyWrite extends DbUnitTest {
 				long now = System.currentTimeMillis();
 				recordToStore = writer.process(recordToStore);
 				logger.fine(String.format("Elapsed: %s ms",System.currentTimeMillis()-now));
-				for (Property p : recordToStore.getProperties()) Assert.assertTrue(p.getId()>0);
+				for (Property p : recordToStore.getRecordProperties()) Assert.assertTrue(p.getId()>0);
 				
 			}
 							
@@ -91,15 +91,15 @@ public class JDBCBatchPropertyWrite extends DbUnitTest {
 		LiteratureEntry e = new LiteratureEntry("test_entry", "blabla");
 		LiteratureEntry dummy = new LiteratureEntry("Dummy", "");
 		for (int i=0; i < nproperties; i++) {
-			record.setProperty(new Property(String.format("num_was_string_%d",i+1),e), i+0.555);
-			record.setProperty(new Property(String.format("num_was_num_%d",i+1),e), i+100);
-			record.setProperty(new Property(String.format("num_was_NaN_%d",i+1),e), Double.NaN);
-			record.setProperty(new Property(String.format("Property %d",i+1),dummy), String.format("ABCDE_%d", i+1));
+			record.setRecordProperty(new Property(String.format("num_was_string_%d",i+1),e), i+0.555);
+			record.setRecordProperty(new Property(String.format("num_was_num_%d",i+1),e), i+100);
+			record.setRecordProperty(new Property(String.format("num_was_NaN_%d",i+1),e), Double.NaN);
+			record.setRecordProperty(new Property(String.format("Property %d",i+1),dummy), String.format("ABCDE_%d", i+1));
 		}
 		StringBuilder longString = new StringBuilder(); 
 		for (int i=0; i < 255;i++) longString.append("AGTC");
-		record.setProperty(new Property("Long Property",dummy), longString.toString());
-		for (Property p : record.getProperties()) p.setEnabled(true);
+		record.setRecordProperty(new Property("Long Property",dummy), longString.toString());
+		for (Property p : record.getRecordProperties()) p.setEnabled(true);
 		return record;
 		
 	}
@@ -115,7 +115,7 @@ public class JDBCBatchPropertyWrite extends DbUnitTest {
 
 			retrieveProperties(record);
 					
-			for (Property property : record.getProperties()) {
+			for (Property property : record.getRecordProperties()) {
 				if ("Property 1".equals(property.getName()) || "Property 3".equals(property.getName()) || "Property 3".equals(property.getName()))
 				Assert.assertTrue(property.getId()>0);
 			}
@@ -134,10 +134,10 @@ public class JDBCBatchPropertyWrite extends DbUnitTest {
 		ResultSet rs = x.process(features);
 		while (rs.next()) {
 			Property property = features.getObject(rs);
-			Object value = record.getProperty(property);
+			Object value = record.getRecordProperty(property);
 			if (value != null) {
-				record.setProperty(property, null);
-				record.setProperty(property, value); 
+				record.setRecordProperty(property, null);
+				record.setRecordProperty(property, value); 
 			}
 
 		}

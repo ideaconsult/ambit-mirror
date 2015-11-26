@@ -157,19 +157,28 @@ var jToxBundle = {
 
   onIdentifiers: function (id, panel) {
     var self = this;
+    if (!panel) return;
     if (!$(panel).hasClass('initialized')) {
       $(panel).addClass('initialized');
+
       var checkForm = function () {
-        this.placeholder = "You need to fill this box";
-        return this.value.length > 0;
+        if( 'checkValidity' in this ){
+          return this.checkValidity();
+        }
+        else {
+          var valid = (this.value.length > 0);
+          if(!valid){
+            this.placeholder = 'You need to fill this box';
+          }
+          return valid;
+        }
       };
 
       self.createForm = $('form', panel)[0];
+
       // TODO: assign this on form submit, not on button click.
       //       Forms can be submitted in a number of other ways.
-      self.createForm.assStart.onclick = function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+      self.createForm.onsubmit = function (e) {
         if (ccLib.validateForm(self.createForm, checkForm)) {
           jT.service(self, '/bundle', { method: 'POST', data: ccLib.serializeForm(self.createForm)}, function (bundleUri, jhr) {
             if (!!bundleUri)
@@ -179,13 +188,50 @@ var jToxBundle = {
               console.log("Error on creating bundle [" + jhr.status + ": " + jhr.statusText);
           });
         }
+        e.preventDefault();
+        e.stopPropagation();
+      };
+
+      self.createForm.assFinalize.onclick = function (e) {
+
+        if (!self.bundleUri)
+          return;
+
+        var $this = $(this),
+            data = {};
+        data['status'] = 'published';
+        $this.addClass('loading');
+        jT.service(self, self.bundleUri, { method: 'PUT', data: data } , function (result) {
+          $this.removeClass('loading');
+          if (!result) { // i.e. on error - request the old data
+            self.load(self.bundleUri);
+          }
+          else {
+            $('.data-field[data-field="status"]').html(formatStatus('published'));
+          }
+        });
+
+        e.preventDefault();
+        e.stopPropagation();
+
       };
 
       self.createForm.assNewVersion.onclick = function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+
         if (!self.bundleUri)
           return;
+
+        var $this = $(this),
+            data = {};
+        data['status'] = 'archived';
+        $this.addClass('loading');
+        jT.service(self, self.bundleUri, { method: 'PUT', data: data } , function (result) {
+          $this.removeClass('loading');
+          if (!result) { // i.e. on error - request the old data
+            self.load(self.bundleUri);
+          }
+        });
+
         jT.service(self, self.bundleUri + '/version', { method: 'POST' }, function (bundleUri, jhr) {
           if (!!bundleUri)
             self.load(bundleUri);
@@ -193,6 +239,10 @@ var jToxBundle = {
             // TODO: report an error
             console.log("Error on creating bundle [" + jhr.status + ": " + jhr.statusText);
         });
+
+        e.preventDefault();
+        e.stopPropagation();
+
       };
 
       self.createForm.assFinalize.style.display = 'none';
@@ -238,6 +288,7 @@ var jToxBundle = {
       });
 
       ccLib.prepareForm(self.createForm);
+
     }
   },
 
@@ -413,10 +464,12 @@ var jToxBundle = {
           boxOptions.cancelButton = "Cancel";
           var endSetValue = function (e, field, value) {
             var f = valueMap[field];
-            if (!f)
+            if (!f) {
               featureJson.effects[0].conditions[field] = value;
-            else
-            ccLib.setJsonValue(featureJson, f, value);
+            }
+            else {
+              ccLib.setJsonValue(featureJson, f, value);
+            }
           };
 
           boxOptions.onOpen = function () {
@@ -598,7 +651,7 @@ var jToxBundle = {
     if (panId == 'xinitial') {
       $('.jtox-toolkit', panel).show();
       self.edit.matrixEditable = false;
-      queryUri = self.bundleUri + '/dataset?mergeDatasets=true';
+      queryUri = self.bundleUri + '/dataset';
     }
     else {
       var queryPath = (panId == 'xfinal') ? '/matrix/final' : '/matrix/working';
@@ -677,7 +730,7 @@ var jToxBundle = {
           }
         });
         $(checkAll).on('change', function (e) {
-          var qUri = "/query/study?mergeDatasets=true&bundle_uri=" + bUri;
+          var qUri = "/query/study?bundle_uri=" + bUri;
           if (!this.checked)
             qUri += "&selected=substances&filterbybundle=" + bUri;
           self.endpointKit.loadEndpoints(qUri);
@@ -750,121 +803,265 @@ var jToxBundle = {
         var loadFile = function(url, callback){
           JSZipUtils.getBinaryContent(url, callback);
         }
-        loadFile("../report/assessment-report.docx", function(err, content){
-          if (err) { throw err };
-          var doc = new Docxgen(content);
 
-          var data = $.extend(true, {}, self.bundle);
-          data.created = formatDate(self.bundle.created);
-          data.updated = formatDate(self.bundle.updated);
-          data.structures = [];
+        function get(url) {
+          // Return a new promise.
+          return new Promise(function(resolve, reject) {
+            // Do the usual XHR stuff
+            var req = new XMLHttpRequest();
+            req.open('GET', url);
+            req.responseType = 'arraybuffer';
 
-          var structuresFixRows = $('#jtox-report-query .jtox-ds-fixed tbody tr');
-          var structuresVarRows = $('#jtox-report-query .jtox-ds-variable tbody tr');
-          structuresFixRows.each(function(index){
-            var structure = {}, fr = $(this), vr = $(structuresVarRows[index]);
-            structure.tag = fr.find('td:first-child button.active').text();
-            var cells = vr.find('td:not(.jtox-hidden)');
-            structure.casrn = $(cells[0]).text();
-            structure.ecnum = $(cells[1]).text();
-            structure.names = $(cells[2]).text();
-            structure.rationale = $(cells[3]).find('textarea').val();
-            structure.substances = [];
-            data.structures.push(structure);
-          });
-
-          var substanceContainers = $('#jtox-report-substance-query .jtox-substance');
-          substanceContainers.each(function(index){
-            var structure = data.structures[index],
-                substanceRows = $(this).find('tbody tr');
-            substanceRows.each(function(i){
-              var cells = $(this).find('td'),
-                  substance = {};
-              substance.i = i + 1;
-              substance.name = $(cells[1]).text();
-              substance.uuid = $(cells[2]).text();
-              substance.type = $(cells[3]).text();
-              substance.pubname = $(cells[4]).text();
-              substance.refuuid = $(cells[5]).text();
-              substance.owner = $(cells[6]).text();
-              substance.info = $(cells[7]).text();
-              substance.contained = $(cells[8]).text();
-              structure.substances.push(substance);
-            });
-          });
-
-          data.matrix = [];
-          var matrixRows = $('#jtox-report-matrix .jtox-ds-fixed .dataTable > tbody > tr');
-          matrixRows.each(function(){
-            var rowData = {};
-            var cells = $(this).find('> td:not(.jtox-hidden)');
-            rowData.cas = $(cells[1]).text();
-            rowData.substancename = $(cells[2]).text();
-            rowData.i5uuid = $(cells[3]).text();
-            rowData.datasource = $(cells[4]).text();
-            rowData.tag = $(cells[5]).text();
-            rowData.constituentname = $(cells[7]).text();
-            rowData.content = $(cells[8]).text();
-            rowData.containedas = $(cells[9]).text();
-            data.matrix.push(rowData);
-          });
-
-          var structuresCount = data.matrix.length;
-          var groups = Math.ceil(structuresCount/3);
-
-          data.dataMatrix = [];
-          var structureRows = $('#jtox-report-final thead tr');
-          var dataRows = $('#jtox-report-final tbody tr');
-          var tagCells = $(structureRows[0]).find('th');
-          var nameCells = $(structureRows[1]).find('th');
-          var casCells = $(structureRows[2]).find('th');
-          for (var i = 0; i < groups; i++) {
-            var dataGroup = {
-              tag1: '',
-              tag2: '',
-              tag3: '',
-              name1: '',
-              name2: '',
-              name3: '',
-              cas1: '',
-              cas2: '',
-              cas3: '',
-              data: []
-            };
-            for (var c = 1, cl = Math.min(3, tagCells.length - 3*i); c <= cl; c++) {
-              dataGroup['tag' + c] = $(tagCells[3*i + c]).text();
-            }
-            for (var c = 1, cl = Math.min(3, nameCells.length - 3*i); c <= cl; c++) {
-              dataGroup['name' + c] = $(nameCells[3*i + c]).text();
-            }
-            for (var c = 1, cl = Math.min(3, casCells.length - 3*i); c <= cl; c++) {
-              dataGroup['cas' + c] = $(casCells[3*i + c]).text();
-            }
-            dataRows.each(function(){
-              var cells = $(this).find('th, td');
-              var row = { title: '', value1: '', value2: '', value3: ''};
-              row.title = $(cells[0]).text();
-              for (var c = 1, cl = Math.min(3, nameCells.length - 3*i); c <= cl; c++) {
-                var parts = [];
-                if (cells[3*i + c] !== undefined) {
-                  $(cells[3*i + c].childNodes).each(function(){
-                    parts.push( $(this).text() );
-                  });
-                }
-                row['value' + c] = parts.join('\n\r');
+            req.onload = function() {
+              // This is called even on 404 etc
+              // so check the status
+              if (req.status == 200) {
+                // Resolve the promise with the response text
+                resolve(req.response);
               }
-              dataGroup.data.push(row);
+              else {
+                // Otherwise reject with the status text
+                // which will hopefully be a meaningful error
+                reject(Error(req.statusText));
+              }
+            };
+
+            // Handle network errors
+            req.onerror = function() {
+              reject(Error("Network Error"));
+            };
+
+            // Make the request
+            req.send();
+          });
+        }
+
+        function getData() {
+
+          return new Promise(function(resolve, reject){
+
+            var data = $.extend(true, {}, self.bundle);
+            data.created = formatDate(self.bundle.created);
+            data.updated = formatDate(self.bundle.updated);
+            data.structures = [];
+
+            var imagePromises = [];
+
+            var structuresFixRows = $('#jtox-report-query .jtox-ds-fixed tbody tr');
+            var structuresVarRows = $('#jtox-report-query .jtox-ds-variable tbody tr');
+            structuresFixRows.each(function(index){
+              var structure = {"index": index + 1}, fr = $(this), vr = $(structuresVarRows[index]);
+              structure.tag = fr.find('td:first-child button.active').text();
+
+              var image = fr.find('img.jtox-smalldiagram')[0];
+
+              var imagePromise = get(image.src).then(function(data){
+                  structure.image = {
+                    "data": data.slice(0),
+                    "size": [image.width, image.height]
+                  }
+                });
+
+              imagePromises.push(imagePromise);
+
+              var cells = vr.find('td:not(.jtox-hidden)');
+              structure.casrn = $(cells[0]).text();
+              structure.ecnum = $(cells[1]).text();
+              structure.names = $(cells[2]).text();
+              structure.rationale = $(cells[3]).find('textarea').val();
+              structure.substances = [];
+              data.structures.push(structure);
             });
-            data.dataMatrix.push(dataGroup);
-          }
 
-          //console.log(data);
+            var substanceContainers = $('#jtox-report-substance-query .jtox-substance');
+            substanceContainers.each(function(index){
+              var structure = data.structures[index],
+                  substanceRows = $(this).find('tbody tr');
+              substanceRows.each(function(i){
+                var cells = $(this).find('td'),
+                    substance = {};
+                substance.i = i + 1;
+                substance.name = $(cells[1]).text();
+                substance.uuid = $(cells[2]).text();
+                substance.type = $(cells[3]).text();
+                substance.pubname = $(cells[4]).text();
+                substance.refuuid = $(cells[5]).text();
+                substance.owner = $(cells[6]).text();
+                substance.info = $(cells[7]).text();
+                substance.contained = $(cells[8]).text();
+                structure.substances.push(substance);
+              });
+            });
 
-          doc.setData( data ); //set the templateVariables
-          doc.render(); //apply them (replace all occurences of {first_name} by Hipp, ...)
-          var output = doc.getZip().generate({type:"blob"}); //Output the document using Data-URI
-          saveAs(output, "report.docx");
-        });
+            data.matrix = [];
+            var matrixRows = $('#jtox-report-matrix .jtox-ds-fixed .dataTable > tbody > tr');
+            matrixRows.each(function(){
+              var rowData = {};
+              var cells = $(this).find('> td:not(.jtox-hidden)');
+              rowData.cas = $(cells[1]).text();
+              rowData.substancename = $(cells[2]).text();
+              rowData.i5uuid = $(cells[3]).text();
+              rowData.datasource = $(cells[4]).text();
+              rowData.tag = $(cells[5]).text();
+              rowData.constituentname = $(cells[7]).text();
+              rowData.content = $(cells[8]).text();
+              rowData.containedas = $(cells[9]).text();
+              data.matrix.push(rowData);
+            });
+
+            var structuresCount = data.matrix.length;
+            var groups = Math.ceil(structuresCount/3);
+
+            data.dataMatrix = [];
+            var structureRows = $('#jtox-report-final thead tr');
+            var dataRows = $('#jtox-report-final tbody tr');
+            var tagCells = $(structureRows[0]).find('th');
+            var nameCells = $(structureRows[1]).find('th');
+            var casCells = $(structureRows[2]).find('th');
+            for (var i = 0; i < groups; i++) {
+              var dataGroup = {
+                tag1: '',
+                tag2: '',
+                tag3: '',
+                name1: '',
+                name2: '',
+                name3: '',
+                cas1: '',
+                cas2: '',
+                cas3: '',
+                data: []
+              };
+              for (var c = 1, cl = Math.min(3, tagCells.length - 3*i); c <= cl; c++) {
+                dataGroup['tag' + c] = $(tagCells[3*i + c]).text();
+              }
+              for (var c = 1, cl = Math.min(3, nameCells.length - 3*i); c <= cl; c++) {
+                dataGroup['name' + c] = $(nameCells[3*i + c]).text();
+              }
+              for (var c = 1, cl = Math.min(3, casCells.length - 3*i); c <= cl; c++) {
+                dataGroup['cas' + c] = $(casCells[3*i + c]).text();
+              }
+              dataRows.each(function(){
+                var cells = $(this).find('th, td');
+                var row = { title: '', value1: '', value2: '', value3: ''};
+                row.title = $(cells[0]).text();
+                for (var c = 1, cl = Math.min(3, nameCells.length - 3*i); c <= cl; c++) {
+                  var parts = [];
+                  if (cells[3*i + c] !== undefined) {
+                    $(cells[3*i + c].childNodes).each(function(){
+                      parts.push( $(this).text() );
+                    });
+                  }
+                  row['value' + c] = parts.join('\n\r');
+                }
+                dataGroup.data.push(row);
+              });
+              data.dataMatrix.push(dataGroup);
+            }
+
+            data.adstructures = [];
+            var adstructureEls = $('#jtox-report-gap-filling section');
+            adstructureEls.each(function(){
+
+              var structure = {name: $('h3', this).text(), features: []}
+
+              $(this).children('div').each(function(){
+                var feature = {name: $('h4', this).html(), data: []};
+                $('div.popup-box', this).each(function(){
+                  var entry = {
+                    endpoint: $('td.the-endpoint', this).text(),
+                    value: $('td.the-value', this).text(),
+                    guidance: $('td.postconditions', this).text(),
+                    rationaleTitle: $('h5', this).text(),
+                    rationale: $('p.justification', this).text(),
+                    conditions: []
+                  };
+                  var dch = $('th.dynamic-condition', this);
+                  var dcd = $('td.dynamic-condition', this);
+                  dch.each(function(i){
+                    entry.conditions.push({
+                      condition: this.innerHTML,
+                      value: dcd[i].innerHTML
+                    });
+                  });
+                  feature.data.push(entry);
+                });
+                structure.features.push(feature);
+              });
+
+              data.adstructures.push(structure);
+
+            });
+
+            data.ddstructures = [];
+            var ddstructureEls = $('#jtox-report-deleting-data section');
+            ddstructureEls.each(function(){
+
+              var structure = {name: $('h3', this).text(), features: []}
+
+              $(this).children('div').each(function(){
+                var feature = {name: $('h4', this).html(), data: []};
+                $('div.popup-box', this).each(function(){
+                  var entry = {
+                    endpoint: $('td.the-endpoint', this).text(),
+                    value: $('td.the-value', this).text(),
+                    guidance: $('td.postconditions', this).text(),
+                    rationale: $('p.justification', this).text(),
+                    conditions: []
+                  };
+                  var dch = $('th.dynamic-condition', this);
+                  var dcd = $('td.dynamic-condition', this);
+                  dch.each(function(i){
+                    entry.conditions.push({
+                      condition: this.innerHTML,
+                      value: dcd[i].innerHTML
+                    });
+                  });
+                  feature.data.push(entry);
+                });
+                structure.features.push(feature);
+              });
+
+              data.ddstructures.push(structure);
+
+            });
+
+
+            // We use Promose.all to wait for the images to load
+            // and then resolve with data
+            return Promise.all(imagePromises).then(function(){
+              resolve(data);
+            }, reject);
+
+          });
+
+        } // End getData function
+
+        getData().then(function(data){
+
+          loadFile("../report/assessment-report.docx", function(err, content){
+            if (err) { throw err };
+
+            var doc = new Docxgen();
+
+            var imageModule = new ImageModule({centered:false});
+            imageModule.getSizeFromData=function(imgData) {
+              return [imgData.size[0] / 2, imgData.size[1] / 2];
+            }
+            imageModule.getImageFromData=function(imgData) {
+              return imgData.data.slice(0);
+            }
+            doc.attachModule(imageModule);
+
+            doc.load(content);
+
+            doc.setData( data ); //set the templateVariables
+            doc.render(); //apply them (replace all occurences of {first_name} by Hipp, ...)
+            var output = doc.getZip().generate({type:"blob"}); //Output the document using Data-URI
+            saveAs(output, "report.docx");
+          });
+
+        }, function(error){console.log('Error', error);});
+
       });
 
       $(panel).addClass('initialized');
@@ -954,14 +1151,204 @@ var jToxBundle = {
         $(self.varTable).remove();
         self.equalizeTables();
 
+        // Generate appendixes 2 and 3
+
+        var substanceSection = $('#jtox-report-substance'),
+            featureSection = $('#jtox-report-feature'),
+            infoDiv = $('#info-box'),
+            addedData = [],
+            deletedData = [];
+
+        for ( var i = 0, sl = self.dataset.dataEntry.length; i < sl; i++ ) {
+          var substance = self.dataset.dataEntry[i];
+          for ( var theId in substance.values ) {
+            if( $.isArray(substance.values[theId]) ){
+              var feature = self.dataset.feature[theId];
+              for ( var j = 0, vl = substance.values[theId].length; j < vl; j++ ) {
+                var value = substance.values[theId][j];
+                if (feature.isModelPredictionFeature || value.deleted ) {
+
+                  for ( var fId in self.feature ) {
+                    var f = self.feature[fId];
+                    if ( f.sameAs == feature.sameAs ) {
+                      var featureId = f.URI;
+                    }
+                  }
+
+                  if ( feature.isModelPredictionFeature ) {
+                    // Append data to Appendix 2
+                    if( !addedData[i] ) {
+                      addedData[i] = {};
+                    }
+                    if( !addedData[i][featureId] ){
+                      addedData[i][featureId] = [];
+                    }
+                    addedData[i][featureId].push( {
+                      feature: feature,
+                      value: value
+                    } );
+                  }
+                  if ( value.deleted ) {
+                    // Append data to Appendix 3
+                    if( !deletedData[i] ) {
+                      deletedData[i] = {};
+                    }
+                    if( !deletedData[i][featureId] ){
+                      deletedData[i][featureId] = [];
+                    }
+                    deletedData[i][featureId].push( {
+                      feature: feature,
+                      value: value
+                    } );
+                  }
+
+                }
+              }
+            }
+          }
+
+        }
+
+        for( var i = 0, al = addedData.length; i < al; i++ ){
+          if( !addedData[i] ) continue;
+          var newSection = substanceSection.clone().removeAttr('id');
+          var substance = self.dataset.dataEntry[i];
+          ccLib.fillTree(newSection[0], {name: (substance.compound.name || substance.compound.tradename), number: substance.number});
+          for(fId in addedData[i]){
+            var set = addedData[i][fId];
+
+            var newFeature = featureSection.clone().removeAttr('id');
+            ccLib.fillTree(newFeature[0], {title: self.dataset.feature[fId].title});
+
+            for ( var j = 0, sl = set.length; j < sl; j++ ) {
+
+              var newInfo = infoDiv.clone().removeAttr('id');
+              var feature = set[j].feature;
+              var value = set[j].value;
+
+              $('.dynamic-condition', newInfo).remove();
+              var dynHead = $('tr.conditions', newInfo)[0];
+              var postCell = $('td.postconditions', newInfo)[0];
+
+              for (var k = 0, cl = feature.annotation.length; k < cl; ++k) {
+                var ano = feature.annotation[k];
+                // first add the column
+                var el = document.createElement('th');
+                el.className = 'dynamic-condition';
+                el.innerHTML = ano.p;
+                dynHead.appendChild(el);
+                // now add the value
+                el = document.createElement('td');
+                el.className = 'dynamic-condition';
+                el.innerHTML = ano.o;
+                postCell.parentNode.insertBefore(el, postCell);
+              }
+
+              // make sure there is at least one cell.
+              if (cl < 1) {
+                el = document.createElement('td');
+                el.className = 'dynamic-condition';
+                el.innerHTML = '-';
+                postCell.parentNode.insertBefore(el, postCell);
+              }
+
+              $('th.conditions', newInfo).attr('colspan', cl);
+
+              ccLib.fillTree(newInfo, {
+                endpoint: feature.title,
+                guidance: '',
+                value: jT.ui.renderObjValue(value, feature.units, 'display'),
+                remarks: feature.creator,
+                studyType: feature.source.type
+              });
+
+              newFeature.append( newInfo );
+
+            }
+
+            newSection.append( newFeature );
+
+          }
+
+          $('#jtox-report-gap-filling').append( newSection );
+
+        }
+
+        for( var i = 0, al = deletedData.length; i < al; i++ ){
+          if( !deletedData[i] ) continue;
+          var newSection = substanceSection.clone().removeAttr('id');
+          var substance = self.dataset.dataEntry[i];
+          ccLib.fillTree(newSection[0], {name: (substance.compound.name || substance.compound.tradename), number: substance.number});
+          for(fId in deletedData[i]){
+
+            var set = deletedData[i][fId];
+            var newFeature = featureSection.clone().removeAttr('id');
+            ccLib.fillTree(newFeature[0], {title: self.dataset.feature[fId].title});
+
+            for ( var j = 0, sl = set.length; j < sl; j++ ) {
+
+              var newInfo = infoDiv.clone().removeAttr('id');
+              var feature = set[j].feature;
+              var value = set[j].value;
+
+              $('.dynamic-condition', newInfo).remove();
+              var dynHead = $('tr.conditions', newInfo)[0];
+              var postCell = $('td.postconditions', newInfo)[0];
+
+              for (var k = 0, cl = feature.annotation.length; k < cl; ++k) {
+                var ano = feature.annotation[k];
+                // first add the column
+                var el = document.createElement('th');
+                el.className = 'dynamic-condition';
+                el.innerHTML = ano.p;
+                dynHead.appendChild(el);
+                // now add the value
+                el = document.createElement('td');
+                el.className = 'dynamic-condition';
+                el.innerHTML = ano.o;
+                postCell.parentNode.insertBefore(el, postCell);
+              }
+
+              // make sure there is at least one cell.
+              if (cl < 1) {
+                el = document.createElement('td');
+                el.className = 'dynamic-condition';
+                el.innerHTML = '-';
+                postCell.parentNode.insertBefore(el, postCell);
+              }
+
+              $('th.conditions', newInfo).attr('colspan', cl);
+
+              ccLib.fillTree(newInfo, {
+                endpoint: feature.title,
+                guidance: feature.creator,
+                value: jT.ui.renderObjValue(value, feature.units, 'display'),
+                remarks: value.remarks
+              });
+
+              newInfo.find('h5').remove();
+
+              newFeature.append( newInfo );
+
+            }
+
+            newSection.append( newFeature );
+
+          }
+
+          $('#jtox-report-deleting-data').append( newSection );
+
+        }
+
       };
 
       self.reportMatrixKit.settings.onRow = function (row, data, index) {
-        var self = this;
+
         // equalize multi-rows, if there are any
         setTimeout(function () {
           ccLib.equalizeHeights.apply(window, jT.$('td.jtox-multi table tbody', row).toArray());
         }, 50);
+
       };
 
     }
@@ -1265,9 +1652,11 @@ var jToxBundle = {
         // we need to process
         for (var i = 0, dl = dataset.dataEntry.length; i < dl; ++i) {
           var data = dataset.dataEntry[i];
-          if (data.composition != null)
-            for (var j = 0;j < data.composition.length; ++j)
+          if (data.composition != null) {
+            for (var j = 0;j < data.composition.length; ++j) {
               jToxCompound.processEntry(data.composition[j].component, dataset.feature);
+            }
+          }
         }
       }
 
@@ -1285,19 +1674,24 @@ var jToxBundle = {
         self.bundleUri = bundle.URI;
         self.bundle = bundle;
 
-        ccLib.fillTree(self.createForm, bundle);
+        if (!!self.createForm) {
 
-        $('#status-' + bundle.status).prop('checked', true);
+          ccLib.fillTree(self.createForm, bundle);
 
-        self.starHighlight($('.data-stars-field div', self.createForm)[0], bundle.stars);
-        self.createForm.stars.value = bundle.stars;
+          $('#status-' + bundle.status).prop('checked', true);
 
-        // now take care for enabling proper buttons on the Indetifiers page
-        self.createForm.assFinalize.style.display = '';
-        self.createForm.assNewVersion.style.display = '';
-        self.createForm.assStart.style.display = 'none';
+          self.starHighlight($('.data-stars-field div', self.createForm)[0], bundle.stars);
+          self.createForm.stars.value = bundle.stars;
+
+          // now take care for enabling proper buttons on the Identifiers page
+          self.createForm.assFinalize.style.display = '';
+          self.createForm.assNewVersion.style.display = '';
+          self.createForm.assStart.style.display = 'none';
+
+        }
 
         $(self.rootElement).tabs('enable', 1);
+
         // now request and process the bundle summary
         jT.call(self, bundle.URI + "/summary", function (summary) {
           if (!!summary) {
@@ -1308,7 +1702,16 @@ var jToxBundle = {
           }
           self.progressTabs();
         });
+
         self.loadUsers();
+
+        $('#open-report').prop('href', self.settings.baseUrl + '/ui/assessment_report?bundle_uri=' + encodeURIComponent(self.bundleUri));
+        $('#export-substance').prop('href', self.bundleUri + '/substance?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $('#export-initial-matrix').prop('href', self.bundleUri + '/dataset?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $('#export-working-matrix').prop('href', self.bundleUri + '/matrix?media=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+        ccLib.fireCallback(self.settings.onLoaded, self);
+
       }
     });
   },
@@ -1320,6 +1723,7 @@ var jToxBundle = {
     jT.call(self, self.settings.baseUrl + "/myaccount/users?mode=W&bundle_uri=" + encodeURIComponent(bundle.URI), function (users) {
       if (!!users) {
         var select = $('#users-write');
+        if (select.length == 0) return;
         select.data('tokenize').clear();
         for (var i = 0, l = users.length; i < l; ++i) {
           var u = users[i];
@@ -1331,6 +1735,7 @@ var jToxBundle = {
     jT.call(self, self.settings.baseUrl + "/myaccount/users?mode=R&bundle_uri=" + encodeURIComponent(bundle.URI), function (users) {
       if (!!users) {
         var select = $('#users-read');
+        if (select.length == 0) return;
         select.data('tokenize').clear();
         for (var i = 0, l = users.length; i < l; ++i) {
           var u = users[i];
@@ -1403,7 +1808,7 @@ var jToxBundle = {
         else
           self.bundleSummary.substance--;
         self.progressTabs();
-        console.log("Substance [" + uri + "] selected");
+        //console.log("Substance [" + uri + "] selected");
       }
     });
   },
@@ -1419,7 +1824,7 @@ var jToxBundle = {
         if (!result)
           el.checked = !el.checked; // i.e. revert
         else {
-          console.log("Substance [" + uri + "] tagged " + $(el).data('tag'));
+          //console.log("Substance [" + uri + "] tagged " + $(el).data('tag'));
         }
       });
     }
@@ -1445,7 +1850,7 @@ var jToxBundle = {
         else
           self.bundleSummary.property--;
         self.progressTabs();
-        console.log("Endpoint [" + endpoint + "] selected");
+        //console.log("Endpoint [" + endpoint + "] selected");
       }
     });
   }
@@ -1564,3 +1969,12 @@ function onReportSubstancesLoaded(dataset) {
 $(document).ready(function(){
   $('#logger').on('click', function () { $(this).toggleClass('hidden'); });
 });
+
+function formatStatus(status) {
+  var statuses = {
+    'draft': 'Draft Version',
+    'published': 'Final Assessment',
+    'archived': 'Archived Version'
+  }
+  return statuses[status];
+}

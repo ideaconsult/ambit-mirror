@@ -135,18 +135,18 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 			Object smiles = null;
 			switch (mode) {
 			case InChI : {
-				for (Property p : item.getProperties()) 
+				for (Property p : item.getRecordProperties()) 
 					if (p.getLabel().equals(Property.opentox_InChI_std)) {
-						smiles = item.getProperty(p);
+						smiles = item.getRecordProperty(p);
 						break;
 					} else if (p.getLabel().equals(Property.opentox_InChI)) {
-						smiles = item.getProperty(p);
+						smiles = item.getRecordProperty(p);
 						break;
 					}
 				break;
 			}
 			default: {
-				smiles = item.getProperty(key);
+				smiles = item.getRecordProperty(key);
 			}
 			}
 			if (smiles == null)
@@ -154,8 +154,8 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 			else 
 				output.write(smiles.toString());
 			
-			if (writeProperties && (item.getProperties() != null)) {
-				for (Property key: item.getProperties()) {
+			if (writeProperties && (item.getRecordProperties() != null)) {
+				for (Property key: item.getRecordProperties()) {
 
 				boolean ok = true;
 				for (Mode m: Mode.values())	
@@ -163,7 +163,7 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 					else if (key.getLabel().toLowerCase().equals(m.getTag().toString().toLowerCase())) { ok = false;break;}
 
 				if (ok) {
-					Object property = item.getProperty(key);
+					Object property = item.getRecordProperty(key);
 					String d = key.getName().indexOf(' ')>0?"\"":"";
 					output.write(String.format(",%s%s%s",d,d,
 						property==null?"":property.toString()

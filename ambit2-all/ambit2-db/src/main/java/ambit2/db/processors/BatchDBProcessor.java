@@ -87,14 +87,14 @@ public class BatchDBProcessor<ITEMTYPE> extends AbstractBatchProcessor<IInputSta
 					};					
 					return new RawIteratingFolderReader(file.listFiles(filter));
 				} else {
-					if (file.getName().endsWith(FileInputState.extensions[FileInputState.SDF_INDEX])) {
+					if (file.getName().endsWith(FileInputState._FILE_TYPE.SDF_INDEX.getExtension())) {
 						RawIteratingSDFReader reader = new RawIteratingSDFReader(
 								new FileReader(file));
 						if (getReference()==null)
 							reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
 						else reader.setReference(getReference());
 						return reader;
-					} else if (file.getName().endsWith(FileInputState.extensions[FileInputState.MOL_INDEX])) {
+					} else if (file.getName().endsWith(FileInputState._FILE_TYPE.MOL_INDEX.getExtension())) {
 						RawIteratingMOLReader reader = new RawIteratingMOLReader(new FileReader(file));
 						if (getReference()==null)
 							reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));

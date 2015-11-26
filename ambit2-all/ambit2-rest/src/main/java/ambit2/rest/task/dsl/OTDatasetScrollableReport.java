@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
-import org.opentox.dsl.OTDataset;
-import org.opentox.dsl.OTFeatures;
+import ambit2.rest.legacy.OTDataset;
+import ambit2.rest.legacy.OTFeatures;
 
 public class OTDatasetScrollableReport extends OTDatasetReport {
 

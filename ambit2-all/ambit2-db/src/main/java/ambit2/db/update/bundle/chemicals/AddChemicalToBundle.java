@@ -74,11 +74,11 @@ public class AddChemicalToBundle extends AbstractUpdate<SubstanceEndpointsBundle
 	Object tag = null;
 	Object remarks = null;
 	ILiteratureEntry reference = LiteratureEntry.getBundleReference(getGroup());
-	for (Property property : getObject().getProperties()) {
+	for (Property property : getObject().getRecordProperties()) {
 	    if ("tag".equals(property.getName()) && property.getReference().equals(reference)) {
-		tag = getObject().getProperty(property);
+		tag = getObject().getRecordProperty(property);
 	    } else if ("remarks".equals(property.getName()) && property.getReference().equals(reference)) {
-		remarks = getObject().getProperty(property);
+		remarks = getObject().getRecordProperty(property);
 	    }
 	}
 	params.add(new QueryParam<String>(String.class, tag == null ? null : tag.toString()));

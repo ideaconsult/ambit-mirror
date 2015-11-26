@@ -9,9 +9,6 @@ import java.util.List;
 
 import net.idea.restnet.c.task.ClientResourceWrapper;
 
-import org.opentox.dsl.OTDataset;
-import org.opentox.dsl.OTFeatures;
-import org.opentox.dsl.OTObject;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -19,6 +16,9 @@ import org.restlet.representation.Representation;
 
 import ambit2.core.io.QuotedTokenizer;
 import ambit2.rest.OpenTox;
+import ambit2.rest.legacy.OTDataset;
+import ambit2.rest.legacy.OTFeatures;
+import ambit2.rest.legacy.OTObject;
 
 public abstract class OTDatasetReport extends OTObject {
 	protected List<String> header;

@@ -39,7 +39,7 @@ import java.util.TimeZone;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.interfaces.IStructureRecord;
@@ -72,7 +72,7 @@ public class BatchRetrievePubChem extends DefaultAmbitProcessor<String,Integer> 
 			if (logfile.exists()) logfile.delete();
 			
 			FileWriter logwriter = new FileWriter(resultDir+getLogfile());
-			IMolecule m = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
+			IAtomContainer m = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 			File dir = new File(dirname);
 
 		    

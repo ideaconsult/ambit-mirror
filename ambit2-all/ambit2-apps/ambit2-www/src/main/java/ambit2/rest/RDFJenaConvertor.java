@@ -2,7 +2,6 @@ package ambit2.rest;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
@@ -15,9 +14,7 @@ import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 
-import com.epimorphics.jsonrdf.Encoder;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFWriter;
 
 /**
@@ -100,10 +97,7 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 	        				fasterWriter = jenaModel.getWriter("N3");
 	        			else if (mediaType.equals(MediaType.TEXT_RDF_NTRIPLES))
 	        				fasterWriter = jenaModel.getWriter("N-TRIPLE");	
-	        			else if (mediaType.equals(MediaType.APPLICATION_JSON)) {
-	        				exportToJSON(jenaModel,output);
-	        				return;
-	        			} else {
+	        			else {
 	        				fasterWriter = jenaModel.getWriter("RDF/XML-ABBREV");
 	        				fasterWriter.setProperty("showXmlDeclaration", Boolean.TRUE);
 	        				fasterWriter.setProperty("showDoctypeDeclaration", Boolean.TRUE);	//essential to get XSD prefixed
@@ -132,51 +126,5 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 	        return rep;
 
 	}
-	/**
-	 * using http://code.google.com/p/linked-data-api/
-	 * @param model
-	 * @param out
-	 */
 	
-	public void exportToJSON(Model model,OutputStream out) throws Exception {
-		Encoder encoder = Encoder.get(model);
-		OutputStreamWriter writer = new OutputStreamWriter(out);
-		
-		encoder.encode(model, writer, true);
-		writer.flush();
-		
-		
-	}
-	/*
-//http://tech.groups.yahoo.com/group/jena-dev/message/23035
-//JSON serialisation
-	public void exportToJSON(Model model,OutputStream out) {
-		// get Model as ResultSet by SELECT * WHERE { ?s ?p ?o }
-		Query q = QueryFactory.create("SELECT * WHERE { ?s ?p ?o }");
-		QueryExecution qexec = QueryExecutionFactory.create(q, model);
-		ResultSet rs = qexec.execSelect();
-		// Take ResultSet and serialize it into JSON Output Stream
-		ResultSetFormatter.outputAsJSON(out, rs);
-
-		qexec.close();
-	}
-
-	public Model importFromJSONFile(InputStream in) {
-		Model m = ModelFactory.createDefaultModel();
-
-		try {
-			ResultSet results = ResultSetFactory.fromJSON(in);
-			for (; results.hasNext();) {
-				QuerySolution soln = results.nextSolution();
-				Resource s = soln.getResource("s");
-				// Turn resources into properties because they have URIs
-				Property p = m.createProperty(soln.getResource("p").getURI());
-				RDFNode o = soln.get("o");
-				m.add(s, p, o);
-			}
-		} finally { // nothing
-		}
-		return m;
-	}
-	*/
 }

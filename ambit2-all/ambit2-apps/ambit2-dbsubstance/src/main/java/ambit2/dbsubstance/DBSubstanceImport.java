@@ -13,10 +13,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.enanomapper.parser.GenericExcelParser;
+import net.idea.modbcum.c.DBConnectionConfigurable;
+import net.idea.modbcum.c.MySQLSingleConnection;
 import net.idea.modbcum.i.config.Preferences;
 import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.restnet.db.DBConnection;
-import net.idea.restnet.db.MySQLSingleConnection;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -338,7 +338,7 @@ public class DBSubstanceImport {
 		try {
 			FileInputStream fin = new FileInputStream(inputFile);
 
-			DBConnection dbc = null;
+			DBConnectionConfigurable<Context> dbc = null;
 			dbc = getConnection(getConfigFile());
 			c = dbc.getConnection();
 			c.setAutoCommit(true);
@@ -360,7 +360,7 @@ public class DBSubstanceImport {
 		}
 	}
 
-	protected DBConnection getConnection(String configFile)
+	protected DBConnectionConfigurable<Context> getConnection(String configFile)
 			throws SQLException, AmbitException {
 		try {
 			Context context = initContext();
@@ -369,7 +369,7 @@ public class DBSubstanceImport {
 
 			if ((driver != null) && (driver.contains("mysql")))
 				return new MySQLSingleConnection(context,
-						"config/ambit.properties");
+						configFile);
 			else
 				throw new AmbitException("Driver not supported");
 		} catch (Exception x) {

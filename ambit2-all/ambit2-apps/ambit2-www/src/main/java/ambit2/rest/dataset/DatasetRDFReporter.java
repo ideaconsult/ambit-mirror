@@ -14,9 +14,9 @@ import net.idea.modbcum.p.DefaultAmbitProcessor;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.rdf.ns.OT;
 import net.idea.restnet.rdf.ns.OT.OTProperty;
 
-import org.opentox.rdf.OT;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -51,6 +51,8 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
+
+
 
 /**
  * RDF/XML
@@ -226,7 +228,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 
 	if (getLicenseURI() != null) {
 
-	    com.hp.hpl.jena.rdf.model.Property rights = DCTerms.rights;
+		com.hp.hpl.jena.rdf.model.Property rights = DCTerms.rights;
 	    for (ISourceDataset.license l : ISourceDataset.license.values())
 		if (l.getURI().equals(getLicenseURI())) {
 		    rights = DCTerms.license;
@@ -251,7 +253,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		header = template2Header(template, true);
 
 	    boolean sort = false;
-	    for (Property p : item.getProperties())
+	    for (Property p : item.getRecordProperties())
 		if (!acceptProperty(p))
 		    continue;
 		else if (Collections.binarySearch(header, p, comp) < 0) {
@@ -285,7 +287,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	    // writer.write(String.format("/conformer/%d",item.getIdstructure()));
 
 	    for (ambit2.base.data.Property p : header) {
-		Object value = item.getProperty(p);
+		Object value = item.getRecordProperty(p);
 		if (value == null)
 		    continue;
 

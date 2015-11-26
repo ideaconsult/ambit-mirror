@@ -23,6 +23,7 @@
 	var dataset_uri = purl.param('dataset_uri')===undefined?'${ambit_request}':purl.param('dataset_uri');
 			
 	$(document).ready(function() {
+		$("#_searchdiv").html("<form class='remove-bottom' action='#'><input name='search' class='search' value='' id='search' title='Search'> <input type='submit' value='Search'></form>");
         jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/dataset?page=0&pagesize=100" title="Datasets">Datasets</a></li>');
         jQuery("#breadCrumb ul").append('<li><a href="${ambit_request}" title="Dataset browser">Dataset browser</a></li>');
         jQuery("#breadCrumb ul").append("<li><a href='#' id='current' title='Old view mode'>Old view mode</a></li>");

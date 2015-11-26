@@ -90,7 +90,7 @@ public class ValuesReader extends ValuesByTemplateReader<IStructureRecord> {
 	@Override
 	protected void set(IStructureRecord result, Property fieldname, Object value)
 			throws AmbitException {
-		result.setProperty(fieldname, value);
+		result.setRecordProperty(fieldname, value);
 		
 	}
 

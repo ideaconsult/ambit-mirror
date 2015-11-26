@@ -13,10 +13,10 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import Jama.Matrix;
-import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.model.numeric.distance.DataCoverageDistanceEuclidean;
 
 public class DataCoverageDistanceTest {
@@ -50,7 +50,7 @@ public class DataCoverageDistanceTest {
 		
 		URL url = getClass().getClassLoader().getResource(file);
 		InputStream in = new FileInputStream(new File(url.getFile()));
-		MyIteratingMDLReader reader = new MyIteratingMDLReader(in, SilentChemObjectBuilder.getInstance());
+		IteratingSDFReader reader = new IteratingSDFReader(in, SilentChemObjectBuilder.getInstance());
 		List<String> header = null;
 		int n = 0;
 		
@@ -76,7 +76,7 @@ public class DataCoverageDistanceTest {
 		Assert.assertEquals(16,header.size());
 		//once again
 		in = new FileInputStream(new File(url.getFile()));
-		reader = new MyIteratingMDLReader(in, SilentChemObjectBuilder.getInstance());
+		reader = new IteratingSDFReader(in, SilentChemObjectBuilder.getInstance());
 
 		Matrix matrix = new Matrix(n,header.size());
 		n = 0;

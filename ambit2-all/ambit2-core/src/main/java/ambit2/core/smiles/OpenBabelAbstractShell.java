@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
@@ -66,7 +66,7 @@ public class OpenBabelAbstractShell<X> extends ShellSDFoutput<X> {
 		return "-osdf";
 	}
 	@Override
-	protected IMolecule transform(X mol) {
+	protected IAtomContainer transform(X mol) {
 		return null;
 	}	
 	@Override

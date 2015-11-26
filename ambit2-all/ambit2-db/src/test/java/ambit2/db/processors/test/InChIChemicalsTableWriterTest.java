@@ -15,7 +15,7 @@ import ambit2.db.RepositoryReader;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.update.chemical.InChIChemicalsWriter;
-import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.descriptors.processors.FPTable;
 
 public class InChIChemicalsTableWriterTest extends DbUnitTest {
 	

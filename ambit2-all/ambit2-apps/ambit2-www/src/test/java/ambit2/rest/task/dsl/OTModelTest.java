@@ -3,18 +3,18 @@ package ambit2.rest.task.dsl;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.opentox.dsl.OTAlgorithm;
-import org.opentox.dsl.OTDataset;
-import org.opentox.dsl.OTDatasets;
-import org.opentox.dsl.OTFeature;
-import org.opentox.dsl.OTFeatures;
-import org.opentox.dsl.OTModel;
-import org.opentox.dsl.OTSuperModel;
-import org.opentox.dsl.task.RemoteTask;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 
+import ambit2.rest.legacy.OTAlgorithm;
+import ambit2.rest.legacy.OTDataset;
+import ambit2.rest.legacy.OTDatasets;
+import ambit2.rest.legacy.OTFeature;
+import ambit2.rest.legacy.OTFeatures;
+import ambit2.rest.legacy.OTModel;
+import ambit2.rest.legacy.OTRemoteTask;
+import ambit2.rest.legacy.OTSuperModel;
 import ambit2.rest.test.ResourceTest;
 
 public class OTModelTest extends ResourceTest {
@@ -91,7 +91,7 @@ public class OTModelTest extends ResourceTest {
 	@Test
 	public void testCreateAndCalculateModel() throws Exception {
 
-		RemoteTask task = new RemoteTask(new Reference(String.format("http://localhost:%d/algorithm/toxtreeskinirritation",port)),
+		OTRemoteTask task = new OTRemoteTask(new Reference(String.format("http://localhost:%d/algorithm/toxtreeskinirritation",port)),
 				MediaType.TEXT_URI_LIST,
 				null,
 				Method.POST

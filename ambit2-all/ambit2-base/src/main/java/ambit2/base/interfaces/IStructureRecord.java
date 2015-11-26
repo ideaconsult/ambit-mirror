@@ -122,13 +122,13 @@ public interface IStructureRecord extends IChemical{
     void setSelected(boolean value);
 
     int getNumberOfProperties();
-    Iterable<Property> getProperties();
+    Iterable<Property> getRecordProperties();
     //void setProperties(Map properties);
-    void setProperty(Property key,Object value);    
-    Object getProperty(Property key);
-    Object removeProperty(Property key);
+    void setRecordProperty(Property key,Object value);    
+    Object getRecordProperty(Property key);
+    Object removeRecordProperty(Property key);
     void clearProperties();
-    void addProperties(Map newProperties);
+    void addRecordProperties(Map newProperties);
     void clear();
     String getWritableContent();
     ILiteratureEntry getReference();

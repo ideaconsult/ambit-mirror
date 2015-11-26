@@ -34,7 +34,7 @@ import java.io.File;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.random.RandomAccessReader;
 import org.openscience.cdk.io.random.RandomAccessSDFReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -55,7 +55,7 @@ public class RandomAccessTest  {
         rf.last();
         for (rf.last(); rf.hasNext(); rf.previous()) {
         	i--;
-            IMolecule m = (IMolecule)rf.readRecord(i);
+            IAtomContainer m = (IAtomContainer)rf.readRecord(i);
             Assert.assertEquals(numberofatoms[i],m.getAtomCount());
             rf.previous();
         }

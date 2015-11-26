@@ -24,6 +24,7 @@ import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
+
 /**
  * Retrieves metadata of the dataset in RDF format
  * @author nina
@@ -35,7 +36,7 @@ public class MetadataRDFReporter<M extends ISourceDataset,Q extends IQueryRetrie
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6747452583425280704L;
+	private static final long serialVersionUID = 8719099566753225775L;
 	protected ReferenceURIReporter referenceReporter;
 	public MetadataRDFReporter(Request request, MediaType mediaType) {
 		super(request, mediaType);
@@ -47,7 +48,7 @@ public class MetadataRDFReporter<M extends ISourceDataset,Q extends IQueryRetrie
 			Request req,ResourceDoc doc) {
 		return new DatasetURIReporter<IQueryRetrieval<M>,M>(req);
 	}
-	public void header(com.hp.hpl.jena.ontology.OntModel output, Q query) {
+	public void header(OntModel output, Q query) {
 		OT.OTClass.Dataset.createOntClass(output);
 	};
 	@Override

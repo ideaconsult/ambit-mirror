@@ -33,6 +33,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.json.JSONUtils;
 import ambit2.base.relation.composition.CompositionRelation;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.facets.compounds.ChemicalRoleByBundle;
 import ambit2.db.facets.compounds.CollectionsByChemical;
@@ -268,9 +269,9 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			    JSONUtils.jsonEscape(getSDFContent(item))));
 	    // similarity
 	    Object similarityValue = null;
-	    for (Property p : item.getProperties())
+	    for (Property p : item.getRecordProperties())
 		if ("metric".equals(p.getName())) {
-		    similarityValue = item.getProperty(p);
+		    similarityValue = item.getRecordProperty(p);
 		    break;
 		}
 	    builder.append(String.format("\t\t\"metric\":%s,\n", similarityValue));
@@ -292,7 +293,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	    for (int j = 0; j < header.size(); j++) {
 
 		Property p = header.get(j);
-		Object value = item.getProperty(p);
+		Object value = item.getRecordProperty(p);
 
 		String key = propertyJSONReporter.getURI(p);
 		if (key.contains("cdk:Title") || key.contains("cdk:Formula"))
@@ -493,7 +494,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	    StringWriter w = new StringWriter();
 	    SDFWriter sdfwriter = new SDFWriter(w);
 	    IAtomContainer ac = reader.process(item);
-	    ac.getProperties().clear();
+	    MoleculeTools.clearProperties(ac);    
 	    sdfwriter.write(ac);
 	    sdfwriter.close();
 	    return w.toString();

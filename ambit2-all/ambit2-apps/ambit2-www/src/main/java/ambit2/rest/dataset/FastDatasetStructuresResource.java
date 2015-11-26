@@ -183,7 +183,7 @@ class ChunkedCSVReporter extends QueryPacketReporter<IQueryRetrieval<IStructureR
 	    String delimiter = writeCompoundURI ? separator : "";
 	    for (Property p : header) {
 
-		Object value = item.getProperty(p);
+		Object value = item.getRecordProperty(p);
 		if (p.getClazz() == Number.class)
 		    writer.write(String.format("%s%s", delimiter, value == null ? "" : value));
 		else if ((value != null) && (value.toString().indexOf("<html>") >= 0))

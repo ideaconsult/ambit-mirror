@@ -59,7 +59,7 @@ public class QMapSpaceJSONReporter<Q extends IQueryRetrieval<QMapSpace>> extends
 			    QMapJSONReporter.qmapJSON.URI.jsonname(), cmpuri,
 			    QMapJSONReporter.qmapJSON.qmap.jsonname(), uri,
 			    QMapJSONReporter.qmapJSON.activity.jsonname(),
-			    item.getRecord().getProperty(item.getQmap().getProperty()), QMapJSONReporter.qmapJSON.g2,
+			    item.getRecord().getRecordProperty(item.getQmap().getProperty()), QMapJSONReporter.qmapJSON.g2,
 			    item.getG2(), QMapJSONReporter.qmapJSON.fisher, item.getFisher(),
 			    QMapJSONReporter.qmapJSON.a, item.getA(), QMapJSONReporter.qmapJSON.b, item.getB(),
 			    QMapJSONReporter.qmapJSON.c, item.getC(), QMapJSONReporter.qmapJSON.d, item.getD()));

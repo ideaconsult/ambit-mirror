@@ -11,7 +11,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -22,9 +21,10 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.MoleculeTools;
 import ambit2.rendering.CompoundImageTools;
+import ambit2.rendering.IAtomContainerHighlights;
 import ambit2.some.SOMERawReader.someindex;
 
-public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagramHighlights, IProcessor<IAtomContainer, IChemObjectSelection>  {
+public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagramHighlights, IAtomContainerHighlights  {
 	/**
 	 * 
 	 */

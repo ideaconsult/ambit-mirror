@@ -5,6 +5,8 @@
 # This defines a whitespace separated list of class names for handler classes to load and register as handlers on the root Logger (the Logger named "").
 #Console logging will end up in e.g. Apache TomCat logs, if executed in a servlet environment  
 handlers=java.util.logging.ConsoleHandler
+java.util.logging.ConsoleHandler.formatter=java.util.logging.SimpleFormatter
+java.util.logging.SimpleFormatter.format=%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %4$-6s %2$s %5$s%6$s%n
 # Set the default global logging level for the root logger
 #Loggers and Handlers can override this logging level (!)
 .level = INFO
@@ -29,3 +31,10 @@ mutant.level = WARNING
 org.openscience.cdk.level = WARNING
 #c3p0
 #com.mchange.level = DEBUG
+uk.ac.cam.ch.wwmm.opsin.level = SEVERE
+#http
+org.apache.http.level = SEVERE
+#i5 client
+java.net.idea.i5.cli.level = SEVERE
+net.idea.i5.level = SEVERE
+net.idea.opentox.level = SEVERE 

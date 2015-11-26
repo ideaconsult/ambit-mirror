@@ -29,13 +29,14 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
+import org.openscience.cdk.silent.AtomContainer;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.descriptors.CrossSectionalDiameterDescriptor;
@@ -44,7 +45,7 @@ import ambit2.descriptors.PlanarityDescriptor;
 import ambit2.descriptors.SizeDescriptor;
 
 public class SizeDescriptorTest  {
-	IMolecule molecule = null;
+	IAtomContainer molecule = null;
 
 	@Before
 	public void setUp() throws Exception {
@@ -54,7 +55,7 @@ public class SizeDescriptorTest  {
 	public void tearDown() throws Exception {
 		molecule = null;
 	}
-	public IMolecule getTestMolecule1() throws Exception {
+	public IAtomContainer getTestMolecule1() throws Exception {
 		String cml = 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+
 		"<molecule id=\"m1\">"+
@@ -129,26 +130,26 @@ public class SizeDescriptorTest  {
 		"</bondArray>"+
 		"</molecule>"
 		;
-		IMolecule mol = MoleculeTools.readCMLMolecule(cml);
+		IAtomContainer mol = MoleculeTools.readCMLMolecule(cml);
 		//HydrogenAdder adder = new HydrogenAdder();
 		//adder.addExplicitHydrogensToSatisfyValency(mol);
 		return mol;
 		
 	}
 	
-	public IMolecule getTestMolecule() throws Exception {
-		IMolecule mol = new org.openscience.cdk. Molecule();
+	public IAtomContainer getTestMolecule() throws Exception {
+		IAtomContainer mol = new AtomContainer();
 		MDLReader reader = new MDLReader(getClass().getClassLoader().getResourceAsStream(
 				"ambit2/descriptors/size/224824.sdf"));
 		
-		mol = (IMolecule) reader.read(mol);
+		mol = (IAtomContainer) reader.read(mol);
 		reader.close();
 		return mol;
 	}
 	/*
 	public void testProcessor() {
 		try {
-			IMolecule mol = getTestMolecule1();
+			IAtomContainer mol = getTestMolecule1();
 			DescriptorsHashtable descriptors = new DescriptorsHashtable();
 			IDescriptor cdkDescriptor = new CrossSectionalDiameterDescriptor();
 			descriptors.addDescriptorPair(cdkDescriptor, DescriptorFactory.createAmbitDescriptorFromCDKdescriptor(cdkDescriptor,"Angstrom","Effective cross sectional diameter - the diameter of minimal cyllinder circumscribing the molecule"));

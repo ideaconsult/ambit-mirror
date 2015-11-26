@@ -47,8 +47,8 @@ public class PropertyValueReporter<T> extends QueryReporter<T,IQueryRetrieval<T>
 		try {
 			if (item instanceof IStructureRecord) {
 				IStructureRecord v = (IStructureRecord) item;
-				for (Property p : v.getProperties())
-					output.write(String.format("%s = %s\n",p,v.getProperty(p)));
+				for (Property p : v.getRecordProperties())
+					output.write(String.format("%s = %s\n",p,v.getRecordProperty(p)));
 			} else if (item instanceof PropertyValue) {
 				PropertyValue v = (PropertyValue) item;
 				output.write(String.format("%s = %s",v.getProperty().getLabel(),v.getValue()));

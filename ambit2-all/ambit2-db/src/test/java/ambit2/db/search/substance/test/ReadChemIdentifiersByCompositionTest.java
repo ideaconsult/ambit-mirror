@@ -30,11 +30,11 @@ public class ReadChemIdentifiersByCompositionTest extends QueryTest<ReadChemIden
 		while (rs.next()) {
 			IStructureRecord record = query.getObject(rs);
 			Assert.assertEquals(11,record.getIdchemical());
-			for (Property p : record.getProperties()) {
+			for (Property p : record.getRecordProperties()) {
 				if (p.getLabel().equals("http://www.opentox.org/api/1.1#CASRN"))
-					Assert.assertEquals("123-45-6",record.getProperty(p));
+					Assert.assertEquals("123-45-6",record.getRecordProperty(p));
 				else if (p.getLabel().equals("http://www.opentox.org/api/1.1#ChemicalName"))
-					Assert.assertEquals("Chemical name example",record.getProperty(p));
+					Assert.assertEquals("Chemical name example",record.getRecordProperty(p));
 			}
 			count++;
 		}

@@ -36,7 +36,7 @@ $(document).ready(function() {
 		<div class="thirteen columns remove-bottom" style="padding:0;" >
 
 		
-		<table id='facet' class='ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+		<table id='facet' class='jtoxkit' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 		<thead>	
 		<tr>
 		<th >${facet_group}</th>

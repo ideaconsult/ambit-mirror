@@ -9,7 +9,6 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
-import org.opentox.dsl.OTDataset;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -17,6 +16,7 @@ import org.restlet.data.Status;
 
 import ambit2.base.data.Property;
 import ambit2.rest.OpenTox;
+import ambit2.rest.legacy.OTDataset;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.test.ResourceTest;
 

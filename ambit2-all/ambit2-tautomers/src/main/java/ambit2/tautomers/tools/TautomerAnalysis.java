@@ -11,14 +11,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
-import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
+import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
@@ -27,6 +24,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.exceptions.AmbitIOException;
 import ambit2.core.filter.MoleculeFilter;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.InteractiveIteratingMDLReader;
 import ambit2.smarts.SmartsHelper;
@@ -149,7 +147,7 @@ public class TautomerAnalysis
 						boolean aromatic = false;
 						for (IBond bond : molecule.bonds()) if (bond.getFlag(CDKConstants.ISAROMATIC)) {aromatic = true; break;}
 						if (aromatic)
-							molecule = kekulizer.kekuliseAromaticRings((IMolecule)molecule);
+							molecule = kekulizer.kekuliseAromaticRings((IAtomContainer)molecule);
 					} catch (Exception x) {
 						logger.log(Level.WARNING, String.format("[Record %d] Error %s\t%s", records_read, file.getAbsoluteFile(), x.getMessage()));
 					}
@@ -190,7 +188,7 @@ public class TautomerAnalysis
 	protected IIteratingChemObjectReader<IAtomContainer> getReader(InputStream in, String extension) throws CDKException, AmbitIOException {
 		FileInputState instate = new FileInputState();
 		IIteratingChemObjectReader<IAtomContainer> reader ;
-		if (extension.endsWith(FileInputState.extensions[FileInputState.SDF_INDEX])) {
+		if (extension.endsWith(FileInputState._FILE_TYPE.SDF_INDEX.getExtension())) {
 			reader = new InteractiveIteratingMDLReader(in,SilentChemObjectBuilder.getInstance());
 			((InteractiveIteratingMDLReader) reader).setSkip(true);
 		} else reader = instate.getReader(in,extension);
@@ -385,7 +383,7 @@ public class TautomerAnalysis
 			for (int i = 0; i < resultTautomers.size(); i++)
 			{
 				IAtomContainer tautomer = resultTautomers.get(i);
-				double old_rank = ((Double)tautomer.getProperty("TAUTOMER_RANK")).doubleValue();
+				double old_rank = ((Double)tautomer.getProperty(TautomerConst.TAUTOMER_RANK)).doubleValue();
 				double new_rank = tman.getEnergyRanking().calculateRank(tautomer, tman.getKnowledgeBase());
 				String tautomer_smiles = SmartsHelper.moleculeToSMILES(tautomer, false);
 				

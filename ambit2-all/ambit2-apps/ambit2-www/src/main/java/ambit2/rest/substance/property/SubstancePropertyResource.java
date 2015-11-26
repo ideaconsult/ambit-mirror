@@ -26,7 +26,6 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.substance.SubstanceProperty;
 import ambit2.db.substance.study.ReadSubstanceProperty;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyJSONReporter;
@@ -67,7 +66,7 @@ public class SubstancePropertyResource extends AmbitDBResource<IQueryRetrieval<P
     @Override
     protected void doInit() throws ResourceException {
 	super.doInit();
-	customizeVariants(new MediaType[] { MediaType.TEXT_HTML, MediaType.TEXT_URI_LIST, ChemicalMediaType.TEXT_YAML,
+	customizeVariants(new MediaType[] { MediaType.TEXT_HTML, MediaType.TEXT_URI_LIST, 
 		MediaType.APPLICATION_RDF_XML, MediaType.APPLICATION_RDF_TURTLE, MediaType.TEXT_RDF_N3,
 		MediaType.TEXT_RDF_NTRIPLES, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JAVA_OBJECT });
     }

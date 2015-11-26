@@ -18,8 +18,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.opentox.aa.opensso.OpenSSOToken;
-import org.opentox.dsl.task.RemoteTask;
-import org.opentox.dsl.task.RemoteTaskPool;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -32,6 +30,8 @@ import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
+import ambit2.rest.legacy.OTRemoteTask;
+import ambit2.rest.legacy.OTRemoteTaskPool;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.TaskResult;
 import ambit2.rest.test.ResourceTest;
@@ -180,14 +180,14 @@ public class TaskResourceTest extends ResourceTest {
 			Form form = new Form();  
 			form.add(OpenTox.params.dataset_uri.toString(),String.format("dataseturi-%d",i+1));
 			form.add(OpenTox.params.delay.toString(),"1000");
-			RemoteTask task = new RemoteTask(
+			OTRemoteTask task = new OTRemoteTask(
 					url,
 					MediaType.APPLICATION_WWW_FORM,form.getWebRepresentation(),Method.POST);
 		}
 		
 
 		Reference alltasks = new Reference(String.format("http://localhost:%d/task", port));
-		RemoteTask tasks = new RemoteTask(
+		OTRemoteTask tasks = new OTRemoteTask(
 				alltasks,
 				MediaType.TEXT_URI_LIST,null,Method.GET);
 		while (!tasks.poll()) {
@@ -374,7 +374,7 @@ public class TaskResourceTest extends ResourceTest {
 		
 		final Reference url = new Reference(String.format("http://localhost:%d/algorithm/ambit2.descriptors.InChI", port));
 		
-		final RemoteTaskPool pool = new RemoteTaskPool();
+		final OTRemoteTaskPool pool = new OTRemoteTaskPool();
 		ExecutorService xs= Executors.newCachedThreadPool();
 		Runnable[] t = new Runnable[5];
 		final int batch = 2000;
@@ -386,7 +386,7 @@ public class TaskResourceTest extends ResourceTest {
 					for (int i=0; i < batch; i++) {
 						Form form = new Form();  
 						form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/compound/11", port));
-						RemoteTask task = new RemoteTask(
+						OTRemoteTask task = new OTRemoteTask(
 								url,
 								MediaType.TEXT_URI_LIST,form.getWebRepresentation(),Method.POST);
 						pool.add(task);

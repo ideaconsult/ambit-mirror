@@ -19,7 +19,9 @@ import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.RDFPropertyIterator;
 
 import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.vocabulary.DC;
+
 
 /**
  * RDF output for Models
@@ -43,7 +45,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 			Request req,ResourceDoc doc) {
 		return new ModelURIReporter(req);
 	}
-	public void header(com.hp.hpl.jena.ontology.OntModel output, Q query) {
+	public void header(OntModel output, Q query) {
 		super.header(output,query);
 		OT.OTClass.Model.createOntClass(getJenaModel());
 		OT.OTClass.Algorithm.createOntClass(getJenaModel());

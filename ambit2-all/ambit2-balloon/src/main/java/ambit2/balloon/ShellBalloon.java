@@ -33,7 +33,7 @@ import java.util.UUID;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.SDFWriter;
 
 import ambit2.base.external.CommandShell;
@@ -109,7 +109,7 @@ public class ShellBalloon extends ShellSDFoutput<IAtomContainer> {
 	}
 
 	@Override
-	protected IMolecule transform(IAtomContainer mol) {
+	protected IAtomContainer transform(IAtomContainer mol) {
 		return null;
 	}
 

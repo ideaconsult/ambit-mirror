@@ -28,20 +28,16 @@ public class I5ParserTest {
 		int foundName=0;
 		while (reader.hasNext()) {
 			IStructureRecord record = reader.nextRecord();
-			/*
-			for (Property p : record.getProperties())
-				System.out.println(String.format("%s [%s] = %s",p.getName(),p.getReference().getTitle(),record.getProperty(p)));
-			System.out.println();
-			*/
+
 			count++;
-			for (Property p :record.getProperties()) {
-				foundCas += record.getProperty(p).equals("59-87-0")?1:0;
-				foundName += record.getProperty(p).equals("5-nitro-2-furaldehyde semicarbazone")?1:0;
-				System.out.println(p.getName() + " = " + record.getProperty(p));
+			for (Property p :record.getRecordProperties()) {
+				foundCas += record.getRecordProperty(p).equals("59-87-0")?1:0;
+				foundName += record.getRecordProperty(p).equals("5-nitro-2-furaldehyde semicarbazone")?1:0;
+				System.out.println(p.getName() + " = " + record.getRecordProperty(p));
 			}
 			Assert.assertNotNull(record.getSmiles());
 			Assert.assertNotNull(record.getContent());
-			Assert.assertNotNull(record.getProperty(Property.getI5UUIDInstance()));
+			Assert.assertNotNull(record.getRecordProperty(Property.getI5UUIDInstance()));
 		}
 		reader.close();
 		Assert.assertEquals(1,count);
@@ -85,10 +81,10 @@ public class I5ParserTest {
 			System.out.println();
 			*/
 			count++;
-			for (Property p :record.getProperties()) {
-				foundCas += record.getProperty(p).equals("59-87-0")?1:0;
-				foundName += record.getProperty(p).equals("5-nitro-2-furaldehyde semicarbazone")?1:0;
-				System.out.println(p.getName() + " = " + record.getProperty(p));
+			for (Property p :record.getRecordProperties()) {
+				foundCas += record.getRecordProperty(p).equals("59-87-0")?1:0;
+				foundName += record.getRecordProperty(p).equals("5-nitro-2-furaldehyde semicarbazone")?1:0;
+				System.out.println(p.getName() + " = " + record.getRecordProperty(p));
 			}
 			//Assert.assertNotNull(record.getSmiles());
 			//Assert.assertNotNull(record.getInchi());
@@ -120,20 +116,16 @@ public class I5ParserTest {
 		int foundName=0;
 		while (reader.hasNext()) {
 			IStructureRecord record = reader.nextRecord();
-			/*
-			for (Property p : record.getProperties())
-				System.out.println(String.format("%s [%s] = %s",p.getName(),p.getReference().getTitle(),record.getProperty(p)));
-			System.out.println();
-			*/
+
 			count++;
 			if (record.getContent()!=null && "INC".equals(record.getFormat())) {
 				foundInChI++;
 				System.out.println(record.getContent());
 			}
-			for (Property p :record.getProperties()) {
-				foundCas += record.getProperty(p).equals("59-87-0")?1:0;
-				foundName += record.getProperty(p).equals("5-nitro-2-furaldehyde semicarbazone")?1:0;
-				System.out.println(p.getName() + " = " + record.getProperty(p));
+			for (Property p :record.getRecordProperties()) {
+				foundCas += record.getRecordProperty(p).equals("59-87-0")?1:0;
+				foundName += record.getRecordProperty(p).equals("5-nitro-2-furaldehyde semicarbazone")?1:0;
+				System.out.println(p.getName() + " = " + record.getRecordProperty(p));
 			}
 			//Assert.assertNotNull(record.getSmiles());
 			//Assert.assertNotNull(record.getInchi());
@@ -148,6 +140,7 @@ public class I5ParserTest {
 	@Test
 	public void testSubstanceComposition() throws Exception {
 		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/core/data/i5d/TestSubstance3.i5d");
+
 		I5ReaderSimple reader = new I5ReaderSimple(new InputStreamReader(in,"UTF-8"));
 		int count = 0;
 		int foundCas=0;
@@ -160,14 +153,14 @@ public class I5ParserTest {
 			System.out.println();
 			*/
 			count++;
-			for (Property p :record.getProperties()) {
-				foundCas += record.getProperty(p).equals("59-87-0")?1:0;
-				foundName += record.getProperty(p).equals("5-nitro-2-furaldehyde semicarbazone")?1:0;
-				System.out.println(p.getName() + " = " + record.getProperty(p));
+			for (Property p :record.getRecordProperties()) {
+				foundCas += record.getRecordProperty(p).equals("59-87-0")?1:0;
+				foundName += record.getRecordProperty(p).equals("5-nitro-2-furaldehyde semicarbazone")?1:0;
+				System.out.println(p.getName() + " = " + record.getRecordProperty(p));
 			}
 			//Assert.assertNotNull(record.getSmiles());
 			Assert.assertNotNull(record.getContent());
-			Assert.assertNotNull(record.getProperty(Property.getI5UUIDInstance()));
+			Assert.assertNotNull(record.getRecordProperty(Property.getI5UUIDInstance()));
 		}
 		reader.close();
 		Assert.assertEquals(1,count);

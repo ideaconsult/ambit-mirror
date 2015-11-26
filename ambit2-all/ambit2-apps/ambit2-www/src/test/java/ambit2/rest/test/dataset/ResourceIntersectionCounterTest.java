@@ -3,9 +3,9 @@ package ambit2.rest.test.dataset;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.opentox.dsl.OTObject;
 
 import ambit2.rest.OpenTox;
+import ambit2.rest.legacy.OTObject;
 import ambit2.rest.test.ResourceTest;
 
 public class ResourceIntersectionCounterTest extends ResourceTest {

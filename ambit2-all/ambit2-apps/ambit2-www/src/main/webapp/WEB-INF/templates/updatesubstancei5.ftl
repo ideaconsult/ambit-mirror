@@ -57,19 +57,12 @@ function updateFormValidation(formName) {
 <!-- banner -->
 <#include "/banner_crumbs.ftl">
 
-<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/searchmenu/menu_substance.ftl">
-<ul >
-<li class="ui-selectee">
-<a href="${ambit_root}/admin"><span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>Admin</a>
-</li>
-</ul>
-</div>
-
+<div class="one column remove-bottom" style="padding:0;" >
+&nbsp;</div>
 
 <!-- Page Content
 		================================================== -->
-<div class="eleven columns remove-bottom" style="padding:0;" >
+<div class="thirteen columns remove-bottom" style="padding:0;" >
 
 <div class='ui-widget-header ui-corner-top'>&nbsp;Retrieve substance(s) from IUCLID5 server</div>
 <div class='ui-widget-content ui-corner-bottom'>	

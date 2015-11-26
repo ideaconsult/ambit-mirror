@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ambit</groupId>
+		<artifactId>ambit2-apps</artifactId>
+		<version>3.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>ambit2-export</artifactId>
+	<name>ambit2-export</name>
+	<inceptionYear>2015</inceptionYear>
+	<dependencies>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-base</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-rules</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-lgpl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-jsonSchema</artifactId>
+			<version>2.4.0-rc3</version>
+		</dependency>
+	</dependencies>
+</project>

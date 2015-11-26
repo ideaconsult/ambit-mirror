@@ -33,10 +33,10 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 	form.add(ISourceDataset.fields.title.name(), "title");
 	form.add(ISourceDataset.fields.source.name(), "source");
 	form.add(ISourceDataset.fields.license.name(), "license");
+	form.add(ISourceDataset.fields.seeAlso.name(), "seeAlso");
 	form.add(ISourceDataset.fields.maintainer.name(), "maintainer");
 	form.add(ISourceDataset.fields.rightsHolder.name(), "rightsHolder");
 	form.add("description", "description");
-	form.add(ISourceDataset.fields.url.name(), "url");
 	form.add(ISourceDataset.fields.stars.name(), "9");
 
 	try {
@@ -47,10 +47,12 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 		    c.getConnection(), new User("testuser"), null);
 	    TaskResult task = callable.call();
 	    ITable table = c1.createQueryTable("EXPECTED",
-		    String.format("SELECT idbundle,description,user_name from bundle where name='title'"));
+		    String.format("SELECT idbundle,description,user_name,title,url from bundle join catalog_references using(idreference) where name='title'"));
 	    Assert.assertEquals(1, table.getRowCount());
 	    Assert.assertEquals("description", table.getValue(0, "description"));
 	    Assert.assertEquals("testuser", table.getValue(0, "user_name"));
+	    Assert.assertEquals("source", table.getValue(0, "title"));
+	    Assert.assertEquals("seeAlso", table.getValue(0, "url"));
 
 	} catch (Exception x) {
 	    throw x;
@@ -142,12 +144,12 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 
 	Form form = new Form();
 	form.add(ISourceDataset.fields.title.name(), "title");
-	form.add(ISourceDataset.fields.source.name(), "source");
+	//form.add(ISourceDataset.fields.source.name(), "source");
 	form.add(ISourceDataset.fields.license.name(), "license");
 	form.add(ISourceDataset.fields.maintainer.name(), "maintainer");
 	form.add(ISourceDataset.fields.rightsHolder.name(), "rightsHolder");
+	form.add(ISourceDataset.fields.seeAlso.name(), "NEW VALUE");
 	form.add("description", "description");
-	form.add(ISourceDataset.fields.url.name(), "url");
 	form.add(ISourceDataset.fields.stars.name(), "9");
 
 	try {
@@ -165,7 +167,7 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 	    table = c1
 		    .createQueryTable(
 			    "EXPECTED",
-			    String.format("SELECT idbundle,name,licenseURI,rightsHolder,maintainer,stars,title,url,description,updated,user_name from bundle join catalog_references using(idreference) where idbundle=1"));
+			    String.format("SELECT idbundle,name,licenseURI,rightsHolder,maintainer,stars,title,url,description,updated,user_name,url,title from bundle join catalog_references using(idreference) where idbundle=1"));
 	    Assert.assertEquals(1, table.getRowCount());
 	    Assert.assertEquals("title", table.getValue(0, "name"));
 	    Assert.assertEquals("maintainer", table.getValue(0, "maintainer"));
@@ -174,8 +176,8 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 	    Assert.assertEquals("description", table.getValue(0, "description"));
 	    Assert.assertNotSame(updated,table.getValue(0, "updated"));
 	    Assert.assertEquals("guest", table.getValue(0, "user_name"));
-	    // Assert.assertEquals("url",table.getValue(0,"url"));
-	    // Assert.assertEquals("source",table.getValue(0,"title"));
+	    Assert.assertEquals("NEW VALUE",table.getValue(0,"url"));
+	    //Assert.assertEquals("source",table.getValue(0,"title"));
 
 	} catch (Exception x) {
 	    throw x;

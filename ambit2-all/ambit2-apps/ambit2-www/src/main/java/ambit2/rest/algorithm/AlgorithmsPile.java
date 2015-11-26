@@ -282,13 +282,6 @@ public class AlgorithmsPile {
 				null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,
 				"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#fmf"				
 			},			
-			 		
-			{"org.openscience.cdk.qsar.descriptors.molecular.IPMolecularLearningDescriptor",
-				"The ionization potential of a molecule",
-				"org.openscience.cdk.qsar.descriptors.molecular.IPMolecularLearningDescriptor",
-				null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,
-				"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#ip"				
-			},				
 			
 			{"org.openscience.cdk.qsar.descriptors.molecular.HybridizationRatioDescriptor",
 				"Reports the fraction of sp3 carbons to sp2 carbons",

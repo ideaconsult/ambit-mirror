@@ -39,7 +39,7 @@ import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.query.IQueryUpdate;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.data.AmbitUser;
@@ -186,7 +186,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 
 		ProcessorCreateQuery p = new ProcessorCreateQuery();
 		try {
-			IMoleculeSet set = MoleculeTools.newMoleculeSet(SilentChemObjectBuilder.getInstance());
+			IAtomContainerSet set = MoleculeTools.newMoleculeSet(SilentChemObjectBuilder.getInstance());
 			IStructureRecord record =  getRecord(row, col);
 			set.addAtomContainer(getAtomContainer(record));		
 			QuerySimilarityStructure q = new QuerySimilarityStructure();
@@ -479,7 +479,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
             if (records.getMetaData().getColumnName(columnIndex).equals("uncompress(structure)")) {
             	if (type == java.sql.Types.VARBINARY) {
 	                InputStream s = records.getBinaryStream(columnIndex);
-	                IMolecule m = null;
+	                IAtomContainer m = null;
 	                if ("SDF".equals(records.getString("format")))
 	                	m = MoleculeTools.readMolfile(new InputStreamReader(s));
 	                else

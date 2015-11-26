@@ -18,9 +18,9 @@ import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
+import org.openscience.cdk.graph.Cycles;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
@@ -28,13 +28,13 @@ import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
+import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.io.MDLV2000Writer;
-import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
@@ -43,10 +43,11 @@ import org.openscience.cdk.isomorphism.matchers.smarts.AliphaticSymbolAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.isomorphism.mcss.RMap;
-import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.stereo.DoubleBondStereochemistry;
+import org.openscience.cdk.stereo.TetrahedralChirality;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.validate.BasicValidator;
@@ -55,7 +56,7 @@ import org.openscience.cdk.validate.ValidationReport;
 import org.openscience.cdk.validate.ValidatorEngine;
 
 import ambit2.core.data.MoleculeTools;
-import ambit2.core.io.MyIteratingMDLReader;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.ChemObjectToSmiles;
@@ -72,6 +73,7 @@ import ambit2.smarts.SmartsManager;
 import ambit2.smarts.SmartsParser;
 import ambit2.smarts.SmartsScreeningKeys;
 import ambit2.smarts.SmartsToChemObject;
+import ambit2.smarts.StereoChemUtils;
 import ambit2.smarts.StructInfo;
 import ambit2.smarts.StructureSetAnalyzer;
 
@@ -80,13 +82,17 @@ public class TestUtilities {
 		APPLY, CombinedOverlappedPos, SingleCopyForEachPos
 	}
 
-	static SmartsHelper smartsHelper = new SmartsHelper(SilentChemObjectBuilder.getInstance());
+	UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
+	static SmartsHelper smartsHelper = new SmartsHelper(
+			SilentChemObjectBuilder.getInstance());
 	static SmartsParser sp = new SmartsParser();
 	// static SmilesParser smilesparser = new
 	// SmilesParser(SilentChemObjectBuilder.getInstance());
-	static SmartsManager man = new SmartsManager(SilentChemObjectBuilder.getInstance());
+	static SmartsManager man = new SmartsManager(
+			SilentChemObjectBuilder.getInstance());
 	static IsomorphismTester isoTester = new IsomorphismTester();
-	static SmartsToChemObject smToChemObj = new SmartsToChemObject(SilentChemObjectBuilder.getInstance());
+	static SmartsToChemObject smToChemObj = new SmartsToChemObject(
+			SilentChemObjectBuilder.getInstance());
 	static ChemObjectToSmiles cots = new ChemObjectToSmiles();
 
 	boolean FlagClearAromaticityBeforePreProcess = true;
@@ -96,7 +102,7 @@ public class TestUtilities {
 	boolean FlagPrintTransformationData = false;
 
 	boolean FlagProductPreprocessing = true;
-	boolean FlagClearImplicitHAtomsBeforeProductPreProcess = true;
+	boolean FlagClearImplicitHAtomsBeforeProductPreProcess = false;
 	boolean FlagClearHybridizationOnProductPreProcess = true;
 	boolean FlagAddImplicitHAtomsOnProductPreProcess = false;
 	boolean FlagImplicitHToExplicitOnProductPreProcess = false;
@@ -104,8 +110,8 @@ public class TestUtilities {
 
 	boolean FlagDoubleBondAromaticityNotSpecified = false;
 
-	int FlagSSMode = SmartsConst.SSM_NON_OVERLAPPING;
-	int FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_NON_IDENTICAL;
+	SmartsConst.SSM_MODE FlagSSMode = SmartsConst.SSM_MODE.SSM_NON_OVERLAPPING;
+	SmartsConst.SSM_MODE FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_MODE.SSM_NON_IDENTICAL;
 
 	ReactionOperation FlagReactionOperation = ReactionOperation.APPLY;
 
@@ -129,7 +135,8 @@ public class TestUtilities {
 
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 
-		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
+		CDKHydrogenAdder adder = CDKHydrogenAdder
+				.getInstance(SilentChemObjectBuilder.getInstance());
 		adder.addImplicitHydrogens(mol);
 		if (FlagExplicitHAtoms)
 			AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
@@ -177,10 +184,12 @@ public class TestUtilities {
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 
 		if (FlagAddImplicitHAtomsOnProductPreProcess) {
-			CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
+			CDKHydrogenAdder adder = CDKHydrogenAdder
+					.getInstance(SilentChemObjectBuilder.getInstance());
 			adder.addImplicitHydrogens(mol);
 			if (FlagImplicitHToExplicitOnProductPreProcess)
-				AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+				AtomContainerManipulator
+						.convertImplicitToExplicitHydrogens(mol);
 		}
 
 		CDKHueckelAromaticityDetector.detectAromaticity(mol);
@@ -190,7 +199,8 @@ public class TestUtilities {
 		System.out.println("Smarts " + smarts);
 		IQueryAtomContainer qac = sp.parse(smarts);
 		if (!sp.getErrorMessages().equals("")) {
-			System.out.println("Smarts Parser errors:\n" + sp.getErrorMessages());
+			System.out.println("Smarts Parser errors:\n"
+					+ sp.getErrorMessages());
 			return;
 		}
 		System.out.println("Atoms: " + SmartsHelper.getAtomsString(qac));
@@ -210,21 +220,21 @@ public class TestUtilities {
 		IQueryAtomContainer qac = sp.parse(smarts);
 		if (!sp.getErrorMessages().equals("")) {
 			System.out.println("Original smarts: " + smarts);
-			System.out.println("Smarts Parser errors:\n" + sp.getErrorMessages());
+			System.out.println("Smarts Parser errors:\n"
+					+ sp.getErrorMessages());
 			return;
 		}
 
 		String smarts2 = smartsHelper.toSmarts(qac);
 		System.out.println("Original  smarts: " + smarts /*
-		 * + "  -->  " +
-		 * smarts2
-		 */);
+														 * + "  -->  " + smarts2
+														 */);
 		System.out.println("Generated smarts: " + smarts2);
 
 	}
 
 	public static int boolSearch(String smarts, String smiles) throws Exception {
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 
 		man.setQuery(smarts);
 		if (!man.getErrors().equals("")) {
@@ -238,8 +248,9 @@ public class TestUtilities {
 			return (0);
 	}
 
-	public void testSmartsManagerBoolSearch(String smarts, String smiles) throws Exception {
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+	public void testSmartsManagerBoolSearch(String smarts, String smiles)
+			throws Exception {
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 
 		if (FlagTargetPreprocessing)
 			preProcess(mol);
@@ -250,49 +261,19 @@ public class TestUtilities {
 			return;
 		}
 		boolean res = man.searchIn(mol);
-		System.out.println("Man_search " + smarts + " in " + smiles + "   --> " + res);
-	}
-	
-	public void testSmartsSearchAtPos(String smarts, String smiles, int pos) throws Exception {
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
-
-		if (FlagTargetPreprocessing)
-			preProcess(mol);
-
-		IQueryAtomContainer query = sp.parse(smarts);
-		sp.setNeededDataFlags();
-		
-		
-		
-		/*
-		 
-		SmartsFlags flags = new SmartsFlags();
-		flags.hasRecursiveSmarts = sp.hasRecursiveSmarts;
-		flags.mNeedExplicitHData = sp.needExplicitHData();
-		
-		SmartsParser.prepareTargetForSMARTSSearch(
-				flags.mNeedNeighbourData, 
-				flags.mNeedValenceData, 
-				flags.mNeedRingData, 
-				flags.mNeedRingData2, 
-				flags.mNeedExplicitHData , 
-				flags.mNeedParentMoleculeData, mol);
-		
-		*/
-		
-		isoTester.setQuery(query);
-		boolean res = isoTester.checkIsomorphismAtPosition(mol, pos);
-		
-		System.out.println("Search "  + smarts + " in " + " at pos  " + pos + "  in " + smiles + "   --> " + res);
+		System.out.println("Man_search " + smarts + " in " + smiles + "   --> "
+				+ res);
 	}
 
 	public void testSmartsManagerBoolSearchMDL(String smarts, String mdlFile) {
 		try {
 			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile), b);
+			IteratingSDFReader reader = new IteratingSDFReader(
+					new FileReader(mdlFile), b);
 
 			if (!reader.hasNext()) {
-				System.out.println("Could find a molecule in the file: " + mdlFile);
+				System.out.println("Could find a molecule in the file: "
+						+ mdlFile);
 				return;
 			}
 
@@ -305,7 +286,8 @@ public class TestUtilities {
 					return;
 				}
 
-				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+				AtomContainerManipulator
+						.percieveAtomTypesAndConfigureAtoms(mol);
 				CDKHueckelAromaticityDetector.detectAromaticity(mol);
 
 				man.setQuery(smarts);
@@ -314,7 +296,8 @@ public class TestUtilities {
 					return;
 				}
 				boolean res = man.searchIn(mol);
-				System.out.println("Man_search " + smarts + " in MDL_FILE   -->  " + res);
+				System.out.println("Man_search " + smarts
+						+ " in MDL_FILE   -->  " + res);
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
@@ -327,7 +310,8 @@ public class TestUtilities {
 		try {
 			// Input
 			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile), b);
+			IteratingSDFReader reader = new IteratingSDFReader(
+					new FileReader(mdlFile), b);
 
 			// Output
 			File file = new File(outFile);
@@ -346,23 +330,24 @@ public class TestUtilities {
 				Object o = reader.next();
 				if (o instanceof IAtomContainer) {
 					IAtomContainer mol = (IAtomContainer) o;
-					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+					AtomContainerManipulator
+							.percieveAtomTypesAndConfigureAtoms(mol);
 					CDKHueckelAromaticityDetector.detectAromaticity(mol);
 
 					// Calc. ring statistics
-					SSSRFinder sssrf = new SSSRFinder(mol);
-					IRingSet ringSet = sssrf.findSSSR();
+					IRingSet ringSet = Cycles.sssr(mol).toRingSet();
 					int n = ringSet.getAtomContainerCount();
 					double ringSizeSum = 0;
 					double ringAverSize = 0;
 					for (int i = 0; i < n; i++)
-						ringSizeSum += ringSet.getAtomContainer(i).getAtomCount();
+						ringSizeSum += ringSet.getAtomContainer(i)
+								.getAtomCount();
 
 					if (n > 0)
 						ringAverSize = ringSizeSum / n;
 
-					String outData = "" + record + "  " + mol.getAtomCount() + "   " + n + "    " + ringAverSize
-					+ endLine;
+					String outData = "" + record + "  " + mol.getAtomCount()
+							+ "   " + n + "    " + ringAverSize + endLine;
 
 					outf.write(outData.getBytes());
 				}
@@ -374,7 +359,8 @@ public class TestUtilities {
 		}
 	}
 
-	public void showFullAtomMappingsCDKIsomorphism(String smarts, String smiles) throws Exception {
+	public void showFullAtomMappingsCDKIsomorphism(String smarts, String smiles)
+			throws Exception {
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 
 		if (FlagTargetPreprocessing)
@@ -386,7 +372,8 @@ public class TestUtilities {
 			return;
 		}
 
-		System.out.println("Show full atom/bond  mapping for Man_search of  " + smarts + "  against  " + smiles);
+		System.out.println("Show full atom/bond  mapping for Man_search of  "
+				+ smarts + "  against  " + smiles);
 		List bondMapList = man.getBondMappings(mol);
 		System.out.println("bondMapList.size() = " + bondMapList.size());
 
@@ -394,16 +381,19 @@ public class TestUtilities {
 		for (Object aBondMapping : bondMapList) {
 			n++;
 			System.out.println("# " + n);
-			System.out.print("  bond mapping: " + bondMappingToString((List) aBondMapping, mol));
+			System.out.print("  bond mapping: "
+					+ bondMappingToString((List) aBondMapping, mol));
 
-			List<IAtom> atomMapping = man.generateFullAtomMapping((List) aBondMapping, mol, man.getQueryContaner());
+			List<IAtom> atomMapping = man.generateFullAtomMapping(
+					(List) aBondMapping, mol, man.getQueryContaner());
 			System.out.print("  atom mapping: ");
 			for (int i = 0; i < atomMapping.size(); i++) {
 				IAtom a = atomMapping.get(i);
 				if (a == null)
 					System.out.print(" null");
 				else
-					System.out.print(" " + a.getSymbol() + "<" + mol.getAtomNumber(a) + ">");
+					System.out.print(" " + a.getSymbol() + "<"
+							+ mol.getAtomNumber(a) + ">");
 			}
 			System.out.println();
 		}
@@ -434,13 +424,15 @@ public class TestUtilities {
 			int at0Index = target.getAtomNumber(at0);
 			int at1Index = target.getAtomNumber(at1);
 
-			sb.append(i + "->(" + at0.getSymbol() + at0Index + "," + at1.getSymbol() + at1Index + ")  ");
+			sb.append(i + "->(" + at0.getSymbol() + at0Index + ","
+					+ at1.getSymbol() + at1Index + ")  ");
 		}
 
 		return (sb.toString());
 	}
 
-	public void showFullIsomorphismMappings(String smarts, String smiles) throws Exception {
+	public void showFullIsomorphismMappings(String smarts, String smiles)
+			throws Exception {
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 
 		if (FlagTargetPreprocessing)
@@ -461,17 +453,20 @@ public class TestUtilities {
 				if (a == null)
 					System.out.print(" null");
 				else
-					System.out.print(" " + a.getSymbol() + "<" + mol.getAtomNumber(a) + ">");
+					System.out.print(" " + a.getSymbol() + "<"
+							+ mol.getAtomNumber(a) + ">");
 			}
 
-			System.out.print("      " + SmartsHelper.moleculeToSMILES(ac, true));
+			System.out
+					.print("      " + SmartsHelper.moleculeToSMILES(ac, true));
 			// System.out.println();
 		}
 		System.out.println();
 	}
 
-	public void testIsomorphismTester(String smarts, String smiles) throws Exception {
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+	public void testIsomorphismTester(String smarts, String smiles)
+			throws Exception {
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 
 		if (FlagTargetPreprocessing)
 			preProcess(mol);
@@ -486,14 +481,16 @@ public class TestUtilities {
 
 		isoTester.setQuery(query);
 		sp.setSMARTSData(mol);
-		System.out.println("IsomorphismTester: " + smarts + "  in  " + smiles + "   " + isoTester.hasIsomorphism(mol));
+		System.out.println("IsomorphismTester: " + smarts + "  in  " + smiles
+				+ "   " + isoTester.hasIsomorphism(mol));
 		// boolean res = checkSequence(query,isoTester.getSequence());
 		// isoTester.printDebugInfo();
 		// System.out.println("sequnce check  -- > " + res);
 	}
 
-	public void testIsomorphismPositions(String smarts, String smiles) throws Exception {
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+	public void testIsomorphismPositions(String smarts, String smiles)
+			throws Exception {
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 
 		if (FlagTargetPreprocessing)
 			preProcess(mol);
@@ -509,14 +506,15 @@ public class TestUtilities {
 		isoTester.setQuery(query);
 		sp.setSMARTSData(mol);
 		List<Integer> pos = isoTester.getIsomorphismPositions(mol);
-		System.out.println("Isomorphism Positions: " + smarts + "  in  " + smiles);
+		System.out.println("Isomorphism Positions: " + smarts + "  in  "
+				+ smiles);
 		for (int i = 0; i < pos.size(); i++)
 			System.out.print("  " + pos.get(i).intValue());
 		System.out.println();
 	}
 
 	// helper function
-	public String getBondMapping(IMolecule mol, List<IAtom> amap) {
+	public String getBondMapping(IAtomContainer mol, List<IAtom> amap) {
 		List<IBond> v = isoTester.generateBondMapping(mol, amap);
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < v.size(); i++)
@@ -524,8 +522,9 @@ public class TestUtilities {
 		return (sb.toString());
 	}
 
-	public void testIsomorphismMapping(String smarts, String smiles) throws Exception {
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+	public void testIsomorphismMapping(String smarts, String smiles)
+			throws Exception {
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 
 		if (FlagTargetPreprocessing)
 			preProcess(mol);
@@ -540,7 +539,8 @@ public class TestUtilities {
 
 		isoTester.setQuery(query);
 		List<IAtom> map = isoTester.getIsomorphismMapping(mol);
-		System.out.println("Isomorphism Mapping: " + smarts + "  in  " + smiles);
+		System.out
+				.println("Isomorphism Mapping: " + smarts + "  in  " + smiles);
 		for (int i = 0; i < map.size(); i++) {
 			IAtom a = map.get(i);
 			int n = mol.getAtomNumber(a);
@@ -550,8 +550,9 @@ public class TestUtilities {
 		System.out.println("Bond mapping: " + getBondMapping(mol, map));
 	}
 
-	public void testIsomorphismAllMappings(String smarts, String smiles) throws Exception {
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+	public void testIsomorphismAllMappings(String smarts, String smiles)
+			throws Exception {
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 
 		if (FlagTargetPreprocessing)
 			preProcess(mol);
@@ -566,7 +567,8 @@ public class TestUtilities {
 
 		isoTester.setQuery(query);
 		List<List<IAtom>> allmaps = isoTester.getAllIsomorphismMappings(mol);
-		System.out.println("Isomorphism Mapping: " + smarts + "  in  " + smiles);
+		System.out
+				.println("Isomorphism Mapping: " + smarts + "  in  " + smiles);
 		for (int i = 0; i < allmaps.size(); i++) {
 			List<IAtom> map = allmaps.get(i);
 			for (int j = 0; j < map.size(); j++) {
@@ -588,7 +590,8 @@ public class TestUtilities {
 			long length = f.length();
 			while (f.getFilePointer() < length) {
 				String line = f.readLine();
-				String frags[] = SmartsHelper.getCarbonSkelletonsFromString(line);
+				String frags[] = SmartsHelper
+						.getCarbonSkelletonsFromString(line);
 				for (int k = 0; k < frags.length; k++) {
 					// System.out.println("frag="+frags[k]);
 
@@ -604,7 +607,8 @@ public class TestUtilities {
 					}
 					isoTester.setQuery(query);
 					boolean res = checkSequence(query, isoTester.getSequence());
-					System.out.println(frags[k].trim() + " -- > " + (res ? "OK" : "FAILED"));
+					System.out.println(frags[k].trim() + " -- > "
+							+ (res ? "OK" : "FAILED"));
 					if (!res)
 						nError++;
 					nTests++;
@@ -639,13 +643,15 @@ public class TestUtilities {
 		System.out.println("\nNumber of errors = " + nError);
 	}
 
-	public boolean checkSequence(IQueryAtomContainer query, List<QuerySequenceElement> sequence) {
-		ChemObjectFactory factory = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
+	public boolean checkSequence(IQueryAtomContainer query,
+			List<QuerySequenceElement> sequence) {
+		ChemObjectFactory factory = new ChemObjectFactory(
+				SilentChemObjectBuilder.getInstance());
 		IAtomContainer skelleton = factory.getCarbonSkelleton(sequence);
 		// System.out.println("skelleton = " +
 		// SmartsHelper.moleculeToSMILES(skelleton));
 		try {
-			boolean res = UniversalIsomorphismTester.isSubgraph(skelleton, query);
+			boolean res = uit.isSubgraph(skelleton, query);
 			return (res);
 		} catch (CDKException e) {
 			System.out.println(e.getMessage());
@@ -663,7 +669,8 @@ public class TestUtilities {
 
 		// smToChemObj.forceAromaticBondsAlways = true;
 		IAtomContainer mol = smToChemObj.extractAtomContainer(query);
-		System.out.println(smarts + "  --> " + SmartsHelper.moleculeToSMILES(mol, true));
+		System.out.println(smarts + "  --> "
+				+ SmartsHelper.moleculeToSMILES(mol, true));
 		return (0);
 	}
 
@@ -675,7 +682,8 @@ public class TestUtilities {
 			return (-1);
 		}
 
-		System.out.println(smarts + "  --> bond list converted to simple bonds when possible: ");
+		System.out.println(smarts
+				+ "  --> bond list converted to simple bonds when possible: ");
 		for (int i = 0; i < query.getBondCount(); i++) {
 			IBond bo = smToChemObj.toBond(query.getBond(i));
 			if (bo == null)
@@ -684,8 +692,10 @@ public class TestUtilities {
 				String aromatic = "";
 				if (bo.getFlag(CDKConstants.ISAROMATIC))
 					aromatic = " aromatic";
-				System.out.println("#" + i + "  " + SmartsHelper.bondOrderToIntValue(bo) + "  " + aromatic
-						+ "           class = " + query.getBond(i).getClass().getName());
+				System.out.println("#" + i + "  "
+						+ SmartsHelper.bondOrderToIntValue(bo) + "  "
+						+ aromatic + "           class = "
+						+ query.getBond(i).getClass().getName());
 			}
 		}
 
@@ -709,7 +719,7 @@ public class TestUtilities {
 
 		System.out.println("Creating a Chem object with teh SMILES parser ");
 		System.out.println(smarts);
-		IMolecule mol2 = SmartsHelper.getMoleculeFromSmiles(smarts);
+		IAtomContainer mol2 = SmartsHelper.getMoleculeFromSmiles(smarts);
 		printAromaticity(mol2);
 		System.out.println("Object to SMILES");
 		System.out.println(SmartsHelper.moleculeToSMILES(mol2, true));
@@ -720,7 +730,8 @@ public class TestUtilities {
 			return (2);
 
 		try {
-			boolean res = UniversalIsomorphismTester.isSubgraph(mol, query);
+			UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
+			boolean res = uit.isSubgraph(mol, query);
 			if (!res)
 				return (3);
 		} catch (CDKException e) {
@@ -735,7 +746,8 @@ public class TestUtilities {
 		List<String> failSmiles = new ArrayList<String>();
 		if ((!testType.equals("ExtractAtomContainer"))) {
 			System.out.println("Incorrect test type: " + testType);
-			System.out.println("Following ones are allowed: ExtractAtomContainer");
+			System.out
+					.println("Following ones are allowed: ExtractAtomContainer");
 			return;
 		}
 		int nError = 0;
@@ -777,12 +789,14 @@ public class TestUtilities {
 	public void printAromaticity(IAtomContainer mol) {
 		for (int i = 0; i < mol.getAtomCount(); i++) {
 			IAtom atom = mol.getAtom(i);
-			System.out.println("Atom " + i + "  aromatic = " + atom.getFlag(CDKConstants.ISAROMATIC));
+			System.out.println("Atom " + i + "  aromatic = "
+					+ atom.getFlag(CDKConstants.ISAROMATIC));
 		}
 
 		for (int i = 0; i < mol.getBondCount(); i++) {
 			IBond bond = mol.getBond(i);
-			System.out.println("Bond " + i + "  aromatic = " + bond.getFlag(CDKConstants.ISAROMATIC));
+			System.out.println("Bond " + i + "  aromatic = "
+					+ bond.getFlag(CDKConstants.ISAROMATIC));
 		}
 	}
 
@@ -791,7 +805,8 @@ public class TestUtilities {
 		printAromaticity(mol);
 	}
 
-	public void testSmartsManagerAtomMapping(String smarts, String smiles) throws Exception {
+	public void testSmartsManagerAtomMapping(String smarts, String smiles)
+			throws Exception {
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 
 		if (FlagTargetPreprocessing)
@@ -803,7 +818,8 @@ public class TestUtilities {
 			return;
 		}
 		List<IAtom> atoms = man.getFirstPosAtomMappings(mol);
-		System.out.println(smarts + " mapped against " + smiles + " gave " + atoms.size() + " atoms:");
+		System.out.println(smarts + " mapped against " + smiles + " gave "
+				+ atoms.size() + " atoms:");
 		for (int i = 0; i < atoms.size(); i++) {
 			System.out.print(" " + mol.getAtomNumber(atoms.get(i)));
 		}
@@ -842,7 +858,7 @@ public class TestUtilities {
 				// if (el.atoms[0].matches(targetAt.get(i)))
 				for (int j = 0; j < nTA; j++)
 					if (i != j)
-						// if (el.atoms[1].matches(targetAt.get(j)))
+					// if (el.atoms[1].matches(targetAt.get(j)))
 					{
 						System.out.println(i + " " + j);
 					}
@@ -858,7 +874,7 @@ public class TestUtilities {
 						// if (el.atoms[1].matches(targetAt.get(j)))
 						for (int k = 0; k < nTA; k++)
 							if ((k != i) && (k != j))
-								// if (el.atoms[2].matches(targetAt.get(k)))
+							// if (el.atoms[2].matches(targetAt.get(k)))
 							{
 								System.out.println(i + " " + j + " " + k);
 							}
@@ -916,7 +932,7 @@ public class TestUtilities {
 					}
 
 				if (Flag)
-					// if (el.atoms[n].matches(targetAt.get(i)))
+				// if (el.atoms[n].matches(targetAt.get(i)))
 				{
 					// new stack element
 					int tnew[] = new int[nGA + 1];
@@ -939,7 +955,7 @@ public class TestUtilities {
 
 	public void testCML(String smiles) throws Exception {
 		System.out.println("Writing " + smiles + " to CML file");
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		CMLUtilities cmlut = new CMLUtilities();
 		cmlut.setCMLSMARTSProperties(mol);
 
@@ -968,7 +984,8 @@ public class TestUtilities {
 			String cmlcode = output.toString();
 			System.out.println(cmlcode);
 			IChemFile chemFile = parseCMLString(cmlcode);
-			IMolecule mol2 = chemFile.getChemSequence(0).getChemModel(0).getMoleculeSet().getMolecule(0);
+			IAtomContainer mol2 = chemFile.getChemSequence(0).getChemModel(0)
+					.getMoleculeSet().getAtomContainer(0);
 
 			System.out.println("-------------------------");
 			String smiles2 = SmartsHelper.moleculeToSMILES(mol2, true);
@@ -976,8 +993,10 @@ public class TestUtilities {
 			cmlut.extractSMARTSProperties(mol2);
 			System.out.println(smiles2);
 			for (int i = 0; i < mol2.getAtomCount(); i++) {
-				System.out.println("AtType" + i + " = " + mol2.getAtom(i).getSymbol());
-				System.out.println(SmartsHelper.atomPropertiesToString(mol2.getAtom(i)));
+				System.out.println("AtType" + i + " = "
+						+ mol2.getAtom(i).getSymbol());
+				System.out.println(SmartsHelper.atomPropertiesToString(mol2
+						.getAtom(i)));
 			}
 
 			// System.out.println(SmartsHelper.atomPropertiesToString(mol2.getAtom(0)));
@@ -1014,20 +1033,21 @@ public class TestUtilities {
 
 	private IChemFile parseCMLString(String cmlString) throws Exception {
 		IChemFile chemFile = null;
-		CMLReader reader = new CMLReader(new ByteArrayInputStream(cmlString.getBytes()));
+		CMLReader reader = new CMLReader(new ByteArrayInputStream(
+				cmlString.getBytes()));
 		chemFile = (IChemFile) reader.read(new org.openscience.cdk.ChemFile());
 		return chemFile;
 	}
 
 	String getFingerprint(String smiles) throws Exception {
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 
 		if (FlagTargetPreprocessing)
 			preProcess(mol);
 
 		Fingerprinter fp = new Fingerprinter();
 		try {
-			BitSet bs = fp.getFingerprint(mol);
+			BitSet bs = fp.getBitFingerprint(mol).asBitSet();
 			return (bs.toString());
 		} catch (Exception e) {
 			System.out.println(e.toString());
@@ -1076,7 +1096,8 @@ public class TestUtilities {
 
 	void testFragmentation(String smiles) throws Exception {
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
-		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
+		ChemObjectFactory cof = new ChemObjectFactory(
+				SilentChemObjectBuilder.getInstance());
 		cof.setAtomSequence(mol, mol.getAtom(0));
 		for (int i = 0; i < cof.sequence.size(); i++) {
 			IAtomContainer frag = cof.getFragmentFromSequence(i);
@@ -1093,8 +1114,10 @@ public class TestUtilities {
 		System.out.println(smiles + "  --->  " + cots.getSMILES(mol));
 	}
 
-	void testProduceStructuresExhaustively(String smiles, int maxNumSteps) throws Exception {
-		System.out.println("Producing structs form " + smiles + "   maxNumSteps = " + maxNumSteps);
+	void testProduceStructuresExhaustively(String smiles, int maxNumSteps)
+			throws Exception {
+		System.out.println("Producing structs form " + smiles
+				+ "   maxNumSteps = " + maxNumSteps);
 		System.out.println("-------------------------------");
 		List<StructInfo> vStr = new ArrayList<StructInfo>();
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
@@ -1102,7 +1125,8 @@ public class TestUtilities {
 		if (FlagTargetPreprocessing)
 			preProcess(mol);
 
-		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
+		ChemObjectFactory cof = new ChemObjectFactory(
+				SilentChemObjectBuilder.getInstance());
 
 		cof.produceStructuresExhaustively(mol, vStr, maxNumSteps, 100);
 
@@ -1116,35 +1140,45 @@ public class TestUtilities {
 		if (FlagTargetPreprocessing)
 			preProcess(mol);
 
-		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
+		ChemObjectFactory cof = new ChemObjectFactory(
+				SilentChemObjectBuilder.getInstance());
 		cof.setAtomSequence(mol, mol.getAtom(0));
 		System.out.println(smiles);
 		for (int i = 0; i < cof.sequence.size(); i++)
-			System.out.println("SeqEl " + i + " : " + cof.sequence.get(i).toString());
+			System.out.println("SeqEl " + i + " : "
+					+ cof.sequence.get(i).toString());
 	}
 
 	void produceStructures() throws Exception {
-		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
+		ChemObjectFactory cof = new ChemObjectFactory(
+				SilentChemObjectBuilder.getInstance());
 		List<StructInfo> vStr = new ArrayList<StructInfo>();
-		cof.produceStructsFromMDL("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 5, 50000, 8, vStr,
-		"/java_frags.txt");
+		cof.produceStructsFromMDL(
+				"../src/test/resources/einecs/einecs_structures_V13Apr07.sdf",
+				5, 50000, 8, vStr, "/java_frags.txt");
 
 	}
 
 	void produceRandomStructures() throws Exception {
-		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
+		ChemObjectFactory cof = new ChemObjectFactory(
+				SilentChemObjectBuilder.getInstance());
 		List<StructInfo> vStr = new ArrayList<StructInfo>();
-		cof.produceRandomStructsFromMDL("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 30, 5, 50000,
-				vStr, "/java_random_frags.txt");
+		cof.produceRandomStructsFromMDL(
+				"../src/test/resources/einecs/einecs_structures_V13Apr07.sdf",
+				30, 5, 50000, vStr, "/java_random_frags.txt");
 	}
 
 	void makeStructureStatistics() throws Exception {
-		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
-		cof.performStructureStatistics("/exhaustive-str-set-ambit-first-900str.txt",
-				"../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 100, 5000, "/frags_stat_ambit_5000.txt");
+		ChemObjectFactory cof = new ChemObjectFactory(
+				SilentChemObjectBuilder.getInstance());
+		cof.performStructureStatistics(
+				"/exhaustive-str-set-ambit-first-900str.txt",
+				"../src/test/resources/einecs/einecs_structures_V13Apr07.sdf",
+				100, 5000, "/frags_stat_ambit_5000.txt");
 	}
 
-	void filterStructsBySize(String inputSmilesFile, String outSmilesFile, int maxNumAtoms) {
+	void filterStructsBySize(String inputSmilesFile, String outSmilesFile,
+			int maxNumAtoms) {
 		List<String> outSmiles = new ArrayList<String>();
 		try {
 			File file = new File(inputSmilesFile);
@@ -1208,7 +1242,8 @@ public class TestUtilities {
 				fileName = mdlFile;
 
 			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(fileName), b);
+			IteratingSDFReader reader = new IteratingSDFReader(
+					new FileReader(fileName), b);
 			int record = 0;
 
 			while (reader.hasNext()) {
@@ -1223,10 +1258,11 @@ public class TestUtilities {
 					IAtomContainer mol = (IAtomContainer) o;
 					if (mol.getAtomCount() == 0)
 						continue;
-					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+					AtomContainerManipulator
+							.percieveAtomTypesAndConfigureAtoms(mol);
 					CDKHueckelAromaticityDetector.detectAromaticity(mol);
 
-					CDKRes = UniversalIsomorphismTester.isSubgraph(mol, query);
+					CDKRes = uit.isSubgraph(mol, query);
 					isoTester.setQuery(query);
 					isoRes = isoTester.hasIsomorphism(mol);
 					if (isoRes)
@@ -1241,7 +1277,8 @@ public class TestUtilities {
 			System.out.println(e.toString());
 		}
 
-		System.out.println("  numDiff = " + numDiff + "  numIso = " + numOfIso + "   " + smarts);
+		System.out.println("  numDiff = " + numDiff + "  numIso = " + numOfIso
+				+ "   " + smarts);
 		return (numDiff);
 	}
 
@@ -1250,7 +1287,8 @@ public class TestUtilities {
 
 		try {
 			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile), b);
+			IteratingSDFReader reader = new IteratingSDFReader(
+					new FileReader(mdlFile), b);
 			int record = 0;
 
 			while (reader.hasNext()) {
@@ -1260,7 +1298,8 @@ public class TestUtilities {
 					IAtomContainer mol = (IAtomContainer) o;
 					if (mol.getAtomCount() == 0)
 						continue;
-					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+					AtomContainerManipulator
+							.percieveAtomTypesAndConfigureAtoms(mol);
 					CDKHueckelAromaticityDetector.detectAromaticity(mol);
 					structures.add(mol);
 				}
@@ -1273,9 +1312,11 @@ public class TestUtilities {
 	}
 
 	void testStructureAnalysis(String mdlFile) {
-		StructureSetAnalyzer analyzer = new StructureSetAnalyzer(SilentChemObjectBuilder.getInstance());
+		StructureSetAnalyzer analyzer = new StructureSetAnalyzer(
+				SilentChemObjectBuilder.getInstance());
 		analyzer.structures = getContainersFromMDL(mdlFile);
-		System.out.println("Loaded " + analyzer.structures.size() + " structures");
+		System.out.println("Loaded " + analyzer.structures.size()
+				+ " structures");
 
 		analyzer.maxHitStructSize = 20;
 		analyzer.stochasticAnalysis();
@@ -1305,7 +1346,8 @@ public class TestUtilities {
 				int res = compareIsoTester(line, null);
 				if (res > 0)
 					nFailedStr++;
-				System.out.println("nFailedStr = " + nFailedStr + "    nTest = " + n);
+				System.out.println("nFailedStr = " + nFailedStr
+						+ "    nTest = " + n);
 				System.out.println();
 			}
 			f.close();
@@ -1329,7 +1371,7 @@ public class TestUtilities {
 		System.out.println();
 
 		System.out.println("Target " + target);
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(target);
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(target);
 		ScreeningData sd = screen.getScreeningDataForTarget(mol);
 		System.out.println(screen.strKeysToString(sd.structureKeys));
 
@@ -1341,8 +1383,7 @@ public class TestUtilities {
 		if (FlagTargetPreprocessing)
 			preProcess(mol);
 
-		SSSRFinder sssrf = new SSSRFinder(mol);
-		IRingSet ringSet = sssrf.findSSSR();
+		IRingSet ringSet = Cycles.sssr(mol).toRingSet();
 
 		for (int i = 0; i < ringSet.getAtomContainerCount(); i++) {
 			System.out.print("  Ring:");
@@ -1362,10 +1403,10 @@ public class TestUtilities {
 		if (FlagTargetPreprocessing)
 			preProcess(mol);
 
-		SSSRFinder sssrf = new SSSRFinder(mol);
-		IRingSet ringSet = sssrf.findSSSR();
+		IRingSet ringSet = Cycles.sssr(mol).toRingSet();
 
-		IRingSet rsConnected = ringSet.getConnectedRings((IRing) ringSet.getAtomContainer(0));
+		IRingSet rsConnected = ringSet.getConnectedRings((IRing) ringSet
+				.getAtomContainer(0));
 
 		System.out.println(smiles);
 		System.out.print("Connected Rings to ring 0:");
@@ -1381,25 +1422,67 @@ public class TestUtilities {
 		System.out.println();
 	}
 
-	public void testConvertKekuleSmartsToAromatic(String smarts) throws Exception {
+	public void testConvertKekuleSmartsToAromatic(String smarts)
+			throws Exception {
 		System.out.println("testing Kekule to Aromatic: " + smarts);
 		IQueryAtomContainer qac = sp.parse(smarts);
 		smToChemObj.convertKekuleSmartsToAromatic(qac);
 	}
+	
+	public void testCheckStereoElements(String targetSmiles) throws Exception
+	{
+		IAtomContainer target = SmartsHelper
+				.getMoleculeFromSmiles(targetSmiles);
 
-	public void testSMIRKS(String smirks, String targetSmiles, int SSMode) throws Exception {
+		if (FlagTargetPreprocessing)
+			this.preProcess(target);
+
+		if (FlagPrintAtomAttributes) {
+			System.out.println("Target (reactant):");
+			System.out.println("Reactant atom attributes:\n"
+					+ SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Reactant bond attributes:\n"
+					+ SmartsHelper.getBondAttributes(target));
+		}
+		
+		System.out.println(targetSmiles);
+		
+		for (IStereoElement element : target.stereoElements())
+		{
+			if (element instanceof DoubleBondStereochemistry)
+			{
+				int status = StereoChemUtils.checkDoubleBondStereochemistry((DoubleBondStereochemistry) element, target);
+				System.out.println("DBStereo status = " + status);
+				continue;
+			}
+			
+			if (element instanceof TetrahedralChirality)
+			{
+				int status = StereoChemUtils.checkTetrahedralChirality((TetrahedralChirality) element, target);
+				System.out.println("Chiral atom status = " + status + 
+						"  " + StereoChemUtils.getTetrahedralChiralityStatusString(status));
+				System.out.println(StereoChemUtils.tetrahedralChirality2String((TetrahedralChirality) element, target));
+				continue;
+			}
+		}	
+	}
+
+	public void testSMIRKS(String smirks, String targetSmiles, SmartsConst.SSM_MODE SSMode)
+			throws Exception {
 		FlagSSMode = SSMode;
 		testSMIRKS(smirks, targetSmiles);
 	}
 
-	public void testSMIRKS(String smirks, String targetSmiles, ReactionOperation operation) throws Exception {
+	public void testSMIRKS(String smirks, String targetSmiles,
+			ReactionOperation operation) throws Exception {
 		FlagReactionOperation = operation;
 		testSMIRKS(smirks, targetSmiles);
 	}
 
 	public void testSMIRKS(String smirks, String targetSmiles) throws Exception {
 		System.out.println("Testing SMIRKS: " + smirks);
-		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
+		SMIRKSManager smrkMan = new SMIRKSManager(
+				SilentChemObjectBuilder.getInstance());
 		smrkMan.setFlagSSMode(FlagSSMode);
 
 		// Product processing flags
@@ -1426,17 +1509,18 @@ public class TestUtilities {
 		if (targetSmiles.equals(""))
 			return;
 
-		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
-		String targetSmiles_cdk = SmartsHelper.moleculeToSMILES(target, true);
-
+		IAtomContainer target = SmartsHelper
+				.getMoleculeFromSmiles(targetSmiles);
 
 		if (FlagTargetPreprocessing)
 			this.preProcess(target);
 
 		if (FlagPrintAtomAttributes) {
 			System.out.println("Target (reactant):");
-			System.out.println("Reactant atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
-			System.out.println("Reactant bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+			System.out.println("Reactant atom attributes:\n"
+					+ SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Reactant bond attributes:\n"
+					+ SmartsHelper.getBondAttributes(target));
 		}
 
 		switch (FlagReactionOperation) {
@@ -1445,40 +1529,52 @@ public class TestUtilities {
 
 			if (FlagPrintAtomAttributes) {
 				System.out.println("Product:");
-				System.out.println("Product atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
-				System.out.println("Product bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+				System.out.println("Product atom attributes:\n"
+						+ SmartsHelper.getAtomsAttributes(target));
+				System.out.println("Product bond attributes:\n"
+						+ SmartsHelper.getBondAttributes(target));
 			}
 
-			System.out.println("   target within cdk: " + targetSmiles_cdk);
+			System.out.println("    "
+					+ SmartsHelper.moleculeToSMILES(target, true));
 
-			String transformedSmiles = SmartsHelper.moleculeToSMILES(target, true);
+			String transformedSmiles = SmartsHelper.moleculeToSMILES(target,
+					true);
 
 			if (res)
-				System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
+				System.out.println("Reaction application: " + targetSmiles
+						+ "  -->  " + transformedSmiles);
 			else
 				System.out.println("Reaction not appicable!");
 			break;
 
 		case CombinedOverlappedPos:
-			IAtomContainerSet resSet = smrkMan.applyTransformationWithCombinedOverlappedPos(target, null, reaction);
+			IAtomContainerSet resSet = smrkMan
+					.applyTransformationWithCombinedOverlappedPos(target, null,
+							reaction);
 			if (resSet == null)
 				System.out.println("Reaction not appicable!");
 			else {
-				System.out.println("Reaction application With Combined Overlapped Positions: ");
+				System.out
+						.println("Reaction application With Combined Overlapped Positions: ");
 				for (int i = 0; i < resSet.getAtomContainerCount(); i++)
-					System.out.println(SmartsHelper.moleculeToSMILES(resSet.getAtomContainer(i), true));
+					System.out.println(SmartsHelper.moleculeToSMILES(
+							resSet.getAtomContainer(i), true));
 			}
 			break;
 
 		case SingleCopyForEachPos:
-			IAtomContainerSet resSet2 = smrkMan.applyTransformationWithSingleCopyForEachPos(target, null, reaction,
-					FlagSSModeForSingleCopyForEachPos);
+			IAtomContainerSet resSet2 = smrkMan
+					.applyTransformationWithSingleCopyForEachPos(target, null,
+							reaction, FlagSSModeForSingleCopyForEachPos);
 			if (resSet2 == null)
 				System.out.println("Reaction not appicable!");
 			else {
-				System.out.println("Reaction application With Single Copy For Each Position: ");
+				System.out
+						.println("Reaction application With Single Copy For Each Position: ");
 				for (int i = 0; i < resSet2.getAtomContainerCount(); i++)
-					System.out.println(SmartsHelper.moleculeToSMILES(resSet2.getAtomContainer(i), true));
+					System.out.println(SmartsHelper.moleculeToSMILES(
+							resSet2.getAtomContainer(i), true));
 			}
 			break;
 		}
@@ -1487,9 +1583,11 @@ public class TestUtilities {
 	}
 
 	// This is the old variant
-	public void testSMIRKS_(String smirks, String targetSmiles) throws Exception {
+	public void testSMIRKS_(String smirks, String targetSmiles)
+			throws Exception {
 		System.out.println("Testing SMIRKS: " + smirks);
-		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
+		SMIRKSManager smrkMan = new SMIRKSManager(
+				SilentChemObjectBuilder.getInstance());
 		smrkMan.setFlagSSMode(FlagSSMode);
 		smrkMan.getSmartsParser().mSupportDoubleBondAromaticityNotSpecified = FlagDoubleBondAromaticityNotSpecified;
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
@@ -1517,39 +1615,48 @@ public class TestUtilities {
 		if (targetSmiles.equals(""))
 			return;
 
-		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
+		IAtomContainer target = SmartsHelper
+				.getMoleculeFromSmiles(targetSmiles);
 
 		if (FlagTargetPreprocessing)
 			this.preProcess(target);
 
 		if (FlagPrintAtomAttributes) {
-			System.out.println("Reactant atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
-			System.out.println("Reactant bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+			System.out.println("Reactant atom attributes:\n"
+					+ SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Reactant bond attributes:\n"
+					+ SmartsHelper.getBondAttributes(target));
 		}
 
 		boolean res = smrkMan.applyTransformation(target, reaction);
 
 		if (FlagPrintAtomAttributes) {
 			System.out.println("Product before pre-processiong:");
-			System.out.println("Product atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
-			System.out.println("Product bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+			System.out.println("Product atom attributes:\n"
+					+ SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Product bond attributes:\n"
+					+ SmartsHelper.getBondAttributes(target));
 		}
 
-		System.out.println("    " + SmartsHelper.moleculeToSMILES(target, true));
+		System.out
+				.println("    " + SmartsHelper.moleculeToSMILES(target, true));
 
 		if (FlagProductPreprocessing)
 			this.preProcessProduct(target);
 
 		if (FlagPrintAtomAttributes) {
 			System.out.println("Product after pre-processiong:");
-			System.out.println("Product atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
-			System.out.println("Product bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+			System.out.println("Product atom attributes:\n"
+					+ SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Product bond attributes:\n"
+					+ SmartsHelper.getBondAttributes(target));
 		}
 
 		String transformedSmiles = SmartsHelper.moleculeToSMILES(target, true);
 
 		if (res)
-			System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
+			System.out.println("Reaction application: " + targetSmiles
+					+ "  -->  " + transformedSmiles);
 		else
 			System.out.println("Reaction not appicable!");
 
@@ -1559,25 +1666,34 @@ public class TestUtilities {
 		System.out.println("Testing smiles: " + smiles);
 		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(smiles);
 		if (FlagPrintAtomAttributes) {
-			System.out.println("Atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
-			System.out.println("Bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+			System.out.println("Atom attributes:\n"
+					+ SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Bond attributes:\n"
+					+ SmartsHelper.getBondAttributes(target));
 		}
 
 		String smiles2 = SmartsHelper.moleculeToSMILES(target, true);
-		SmilesGenerator smiGen = new SmilesGenerator();
-		smiGen.setUseAromaticityFlag(true);
-		String smiles3 = smiGen.createSMILES(target);
+		SmilesGenerator smiGen = SmilesGenerator.absolute();  
+		//SmilesGenerator smiGen = SmilesGenerator.generic(); //no stereo
+		//SmilesGenerator smiGen = SmilesGenerator.unique();  //no stereo
+		//SmilesGenerator smiGen = SmilesGenerator.isomeric();
+		
+		
+		String smiles3 = smiGen.create(target);
 		// String smiles4 = smiGen.createChiralSMILES(target, new boolean[0]);
 		// //This function requires 2D coordinates
 		System.out.println(smiles + "  --> " + smiles2 + "    " + smiles3);
 	}
 
-	public void testSmiles2MOLFile(String smiles, String molFileName) throws Exception {
+	public void testSmiles2MOLFile(String smiles, String molFileName)
+			throws Exception {
 		System.out.println("Testing smiles: " + smiles);
 		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(smiles);
 		if (FlagPrintAtomAttributes) {
-			System.out.println("Atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
-			System.out.println("Bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+			System.out.println("Atom attributes:\n"
+					+ SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Bond attributes:\n"
+					+ SmartsHelper.getBondAttributes(target));
 		}
 
 		System.out.println("Writing molecule to file: " + molFileName);
@@ -1585,19 +1701,22 @@ public class TestUtilities {
 		// code aromatic bonds as bonds of type 4)
 		// MDLWriter writer = new MDLWriter(new FileWriter(new
 		// File(molFileName)));
-		// writer.write((IMolecule)target);
+		// writer.write((IAtomContainer)target);
 		// writer.close();
 
-		MDLV2000Writer writer = new MDLV2000Writer(new FileWriter(new File(molFileName)));
+		MDLV2000Writer writer = new MDLV2000Writer(new FileWriter(new File(
+				molFileName)));
 		writer.writeMolecule(target);
 		writer.close();
 
 	}
 
-	public void testMOL2MOLFile(String inMolFileName, String outMolFileName) throws Exception {
+	public void testMOL2MOLFile(String inMolFileName, String outMolFileName)
+			throws Exception {
 		System.out.println("Testing molecule from file: " + inMolFileName);
 
-		IteratingMDLReader reader = new IteratingMDLReader(new FileReader(new File(inMolFileName)),
+		IteratingSDFReader reader = new IteratingSDFReader(new FileReader(
+				new File(inMolFileName)),
 				DefaultChemObjectBuilder.getInstance());
 		IAtomContainer target = null;
 		if (reader.hasNext())
@@ -1613,18 +1732,22 @@ public class TestUtilities {
 		System.out.println("    " + smiles);
 
 		if (FlagPrintAtomAttributes) {
-			System.out.println("Atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
-			System.out.println("Bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+			System.out.println("Atom attributes:\n"
+					+ SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Bond attributes:\n"
+					+ SmartsHelper.getBondAttributes(target));
 		}
 
 		System.out.println("Writing molecule to file: " + outMolFileName);
-		MDLV2000Writer writer = new MDLV2000Writer(new FileWriter(new File(outMolFileName)));
+		MDLV2000Writer writer = new MDLV2000Writer(new FileWriter(new File(
+				outMolFileName)));
 		writer.writeMolecule(target);
 		writer.close();
 	}
 
 	public void testEquivalenceTestes(String targetSmiles) throws Exception {
-		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
+		IAtomContainer target = SmartsHelper
+				.getMoleculeFromSmiles(targetSmiles);
 
 		if (FlagTargetPreprocessing)
 			preProcess(target);
@@ -1698,7 +1821,8 @@ public class TestUtilities {
 
 	public void testAtomAttributes(String targetSmiles) throws Exception {
 		System.out.println("Pre atom configuration");
-		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
+		IAtomContainer target = SmartsHelper
+				.getMoleculeFromSmiles(targetSmiles);
 
 		if (FlagTargetPreprocessing)
 			preProcess(target);
@@ -1716,7 +1840,8 @@ public class TestUtilities {
 	public void testBondIndexChange(String smarts) throws Exception {
 		IQueryAtomContainer q = sp.parse(smarts);
 		if (!sp.getErrorMessages().equals("")) {
-			System.out.println("Smarts Parser errors:\n" + sp.getErrorMessages());
+			System.out.println("Smarts Parser errors:\n"
+					+ sp.getErrorMessages());
 			return;
 		}
 
@@ -1743,7 +1868,8 @@ public class TestUtilities {
 		 */
 	}
 
-	public void testPreprocessing(String smiles, boolean FlagConnectAtom) throws Exception {
+	public void testPreprocessing(String smiles, boolean FlagConnectAtom)
+			throws Exception {
 		System.out.println("Testing the preprorocessing for " + smiles);
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 
@@ -1785,24 +1911,24 @@ public class TestUtilities {
 		// result
 
 		// Setting search query 'C**C'
-		QueryAtomContainer q = new QueryAtomContainer();
+		QueryAtomContainer q = new QueryAtomContainer(SilentChemObjectBuilder.getInstance());
 		// setting atoms
-		IQueryAtom a0 = new AliphaticSymbolAtom("C");
+		IQueryAtom a0 = new AliphaticSymbolAtom("C",q.getBuilder());
 		q.addAtom(a0);
-		IQueryAtom a1 = new AnyAtom();
+		IQueryAtom a1 = new AnyAtom(q.getBuilder());
 		q.addAtom(a1);
-		IQueryAtom a2 = new AnyAtom();
+		IQueryAtom a2 = new AnyAtom(q.getBuilder());
 		q.addAtom(a2);
-		IQueryAtom a3 = new AliphaticSymbolAtom("C");
+		IQueryAtom a3 = new AliphaticSymbolAtom("C",q.getBuilder());
 		q.addAtom(a3);
 		// setting bonds
-		OrderQueryBond b0 = new OrderQueryBond(IBond.Order.SINGLE);
+		OrderQueryBond b0 = new OrderQueryBond(IBond.Order.SINGLE,q.getBuilder());
 		b0.setAtoms(new IAtom[] { a0, a1 });
 		q.addBond(b0);
-		OrderQueryBond b1 = new OrderQueryBond(IBond.Order.SINGLE);
+		OrderQueryBond b1 = new OrderQueryBond(IBond.Order.SINGLE,q.getBuilder());
 		b1.setAtoms(new IAtom[] { a1, a2 });
 		q.addBond(b1);
-		OrderQueryBond b2 = new OrderQueryBond(IBond.Order.SINGLE);
+		OrderQueryBond b2 = new OrderQueryBond(IBond.Order.SINGLE,q.getBuilder());
 		b2.setAtoms(new IAtom[] { a2, a3 });
 		q.addBond(b2);
 
@@ -1834,7 +1960,7 @@ public class TestUtilities {
 		target.addBond(tb2);
 
 		// Isomorphism check
-		boolean res = UniversalIsomorphismTester.isSubgraph(target, q);
+		boolean res = uit.isSubgraph(target, q);
 		System.out.println("Mapping C**C against SCCS = " + res);
 	}
 
@@ -1843,10 +1969,12 @@ public class TestUtilities {
 		validatorEngine.addValidator(new CDKValidator());
 		validatorEngine.addValidator(new BasicValidator());
 
-		SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());
-		IMolecule m = sp.parseSmiles("c1ccccc1");
+		SmilesParser sp = new SmilesParser(
+				SilentChemObjectBuilder.getInstance());
+		IAtomContainer m = sp.parseSmiles("c1ccccc1");
 
-		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
+		SMIRKSManager smrkMan = new SMIRKSManager(
+				SilentChemObjectBuilder.getInstance());
 		SMIRKSReaction smr = smrkMan
 				.parse("[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2]([O])[c:3]([O])[c:4][c:5][c:6]1");
 		// SMIRKSReaction smr = smrkMan.parse("[c:1][c:2]>>[c:2][c:1]Cl");
@@ -1864,7 +1992,8 @@ public class TestUtilities {
 		 * System.out.println(r.getErrorCount()); }
 		 */
 
-		IAtomContainerSet rproducts = smrkMan.applyTransformationWithSingleCopyForEachPos(m, null, smr);
+		IAtomContainerSet rproducts = smrkMan
+				.applyTransformationWithSingleCopyForEachPos(m, null, smr);
 
 		int containerCount = rproducts.getAtomContainerCount();
 		ValidationReport r = null;
@@ -1889,13 +2018,17 @@ public class TestUtilities {
 			if (a == null)
 				System.out.println("atom #" + i + "is null");
 			else
-				System.out.println("atom #" + i + "  " + a.getSymbol() + "  " + a.getImplicitHydrogenCount());
+				System.out.println("atom #" + i + "  " + a.getSymbol() + "  "
+						+ a.getImplicitHydrogenCount());
 		}
 	}
 
-	public void testCOF_FileOperations(String inFile, String outFile) throws Exception {
-		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
-		ArrayList<ArrayList<String>> smiSets = cof.loadSmilesTuplesFromFile(inFile);
+	public void testCOF_FileOperations(String inFile, String outFile)
+			throws Exception {
+		ChemObjectFactory cof = new ChemObjectFactory(
+				SilentChemObjectBuilder.getInstance());
+		ArrayList<ArrayList<String>> smiSets = cof
+				.loadSmilesTuplesFromFile(inFile);
 
 		for (int i = 0; i < smiSets.size(); i++) {
 			ArrayList<String> ss = smiSets.get(i);
@@ -1908,16 +2041,20 @@ public class TestUtilities {
 	}
 
 	public void testBug78() throws Exception {
-		SMIRKSManager smrkMan = new SMIRKSManager(DefaultChemObjectBuilder.getInstance());
-		SMIRKSReaction reaction = smrkMan.parse("[H:3][C:1]#[C]>>[H:3][#6:1]=O");
+		SMIRKSManager smrkMan = new SMIRKSManager(
+				DefaultChemObjectBuilder.getInstance());
+		SMIRKSReaction reaction = smrkMan
+				.parse("[H:3][C:1]#[C]>>[H:3][#6:1]=O");
 		if (!smrkMan.getErrors().equals("")) {
 			System.out.println(smrkMan.getErrors());
 			return;
 		}
 		// IAtomContainer substrate = FormatConverter.fromSmiles("C#C");
-		IAtomContainer substrate = SmartsHelper.getMoleculeFromSmiles("C#C", true);
+		IAtomContainer substrate = SmartsHelper.getMoleculeFromSmiles("C#C",
+				true);
 
-		System.out.println(smrkMan.applyTransformationWithSingleCopyForEachPos(substrate, null, reaction));
+		System.out.println(smrkMan.applyTransformationWithSingleCopyForEachPos(
+				substrate, null, reaction));
 
 	}
 
@@ -2021,7 +2158,8 @@ public class TestUtilities {
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles, true);
 		System.out.println(SmartsHelper.getAtomsAttributes(mol));
 		System.out.println(SmartsHelper.getBondAttributes(mol));
-		System.out.println("    " + SmartsHelper.moleculeToSMILES(mol, true) + "\n");
+		System.out.println("    " + SmartsHelper.moleculeToSMILES(mol, true)
+				+ "\n");
 
 		SmartsHelper.convertExcplicitHAtomsToImplicit(mol);
 		System.out.println("excplicit H --> implicit H");
@@ -2415,13 +2553,41 @@ public class TestUtilities {
 		// tu.testSMIRKS("[#6:1]-[#8:2]-[#6:3]>>[#6:1]-[#8:2].[#6:3]=S","NCCCOCC",
 		// ReactionOperation.SingleCopyForEachPos);
 
-		tu.FlagPrintTransformationData = true;
-		//tu.FlagExplicitHAtoms = true;
+		tu.FlagExplicitHAtoms = true;
 		tu.FlagTargetPreprocessing = true;
-		//tu.FlagProductPreprocessing = true;
-		// tu.FlagPrintAtomAttributes = true;
+		tu.FlagProductPreprocessing = true;
+		tu.FlagPrintAtomAttributes = true;
 		// tu.FlagSSMode = SmartsConst.SSM_NON_IDENTICAL_FIRST;
-		// tu.FlagExplicitHToImplicitOnProductPreProcess = true;
+		//tu.FlagExplicitHToImplicitOnProductPreProcess = true;
+		
+		//tu.testCheckStereoElements("C(=O)[C@@]([H])1C(=O)C(C(=O)O1)(F)F");
+		//tu.testCheckStereoElements("C(=O)[C@@H]1C(=O)C(C(=O)O1)(F)F");
+		
+		//tu.testCheckStereoElements("C(=C(/C(=O)[O-])\\Cl)/C=C(\\C(=O)[O-])/O");
+		
+		tu.testSMIRKS("[#8:1]([H])-[#6:2](-[#6:9](-[#8-:10])=[O:11])=[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]-[#6](-[#8-])=O>>"
+				+ "[#8-:10]-[#6:9](=[O:11])-[#6:2](=[O:1])-[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]",
+				"C(=C(/C(=O)[O-])\\Cl)/C=C(\\C(=O)[O-])/O"/*, ReactionOperation.SingleCopyForEachPos*/);
+		
+		
+		//tu.testSMIRKS("[#8-:15]-[#6:1](=[O:16])\\[#6:2]([H])=[#6:3]([H])/[#6:4](=[#6:5]([H])\\[#6:6](-[#8-:8])=[O:7])/S([#8-])(=O)=O>>"
+		//		+ "[#8-:15]-[#6:1](=[O:16])-[#6:2]-[#6:3]-[#6:4](-[#8-])=O.[#6:5]-[#6:6](-[#8-:8])=[O:7]",
+		//		"C(=C/C(=O)[O-])/C(=C\\C(=O)[O-])/S(=O)(=O)[O-]", ReactionOperation.SingleCopyForEachPos);
+		
+		//tu.testSMIRKS("[H][#6:1](-[#6:5])=[O:4]>>[#6:5]-[#6:1](-[#8-])=[O:4]", 
+		//		"C(=O)[C@@H]1C(=O)C(C(=O)O1)(F)F", ReactionOperation.SingleCopyForEachPos);
+		
+		//tu.testSMIRKS("[H][#6:1](-[#6:5])=[O:4]>>[#6:5]-[#6:1](-[#8-])=[O:4]", 
+		//		"C(=O)[C@@]([H])1C(=O)C(C(=O)O1)(F)F", ReactionOperation.SingleCopyForEachPos);
+				
+		//tu.testSMIRKS("[H:6][C:1]([#6:4])([#16;H1v2])[#1,#6:5]>>[H:6][C:1]([H])([#6:4])[#1,#6:5]", 
+		//		"CN\\C(NCCS)=C\\[N+]([O-])=O", ReactionOperation.SingleCopyForEachPos);
+		
+		//tu.testSMIRKS("[H][#6:1](-[#6:5])=[O:4]>>[#6:5]-[#6:1](-[#8-])=[O:4]", "C[N]C(=O)C(=O)C=O");
+		//tu.testSMIRKS("[H:5][C:1]([#6:6])([#1,#9,#17,#35,#53:4])[#9,#17,#35,#53]>>[H:5][C:1]([#6:6])([#8][H])[#1,#9,#17,#35,#53:4]", "C(CN(CCCl)CC(C(=O)O)N)Cl");
+		//tu.testSMIRKS("[#8:7]([H])-[#6:1]([H])-1-[#6:2]=[#6:3]-[#6:4]=[#6:5]-[#6:6]([H])-1-[#8:8]([H])>>[#8:7]([H])-[#6:1]=1-[#6:2]=[#6:3]-[#6:4]=[#6:5]-[#6:6]=1-[#8:8]([H])",
+		//		"C1=C[C@@H]([C@@H](C(=C1)C2=CC=C(C=C2)Cl)O)O" );
+		
 
 		// tu.testSMIRKS("[c:1]1[c:6]([H])[c:5]([H])[c:4][c:3][c:2]1>>[OH1]-[#6:5]([H])-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]([H])-1-[OH1]",
 		// "C1=CC=CC=C1");
@@ -2432,18 +2598,7 @@ public class TestUtilities {
 		// tu.testSMIRKS("[c:1]1[c:6][c:5][c:4][c:3][c:2]1>>[OH1]-[c:1]1[c:6][c:5][c:4][c:3][c:2]1-[OH1]",
 		// "C1=CC=CC=C1"); //This is a bug !!! 3 double bonds remain
 
-		//tu.testSMIRKS("[C-:1]>>[C-:1]=[N+]", "[C-]CC[C+]");
-
-		//tu.testSMIRKS("[#7,#8:7]=[#6:5][C:3][#6:6]>>[#7,#8:7]=[#6:5][C:3]([#6:6])[S---]", "CC[C-](=O)([N-])");
-		//tu.testSMIRKS("[#7,#8:7]~[#6:5][C:3][#6:6]>>[#7,#8:7]~[#6:5][C:3]([#6:6])O", "CCC([N-])(=O)");
-
-
-		//tu.testSMIRKS("[#7,#8:7]~[#6:5][C:3]([H])([H:2])[#6:6]>>[#7,#8:7]~[#6:5][C:3]([H:2])([#6:6])O", "CC(O)C(CC([O-])=O)CC([O-])=O");
-
-
-
-
-		// tu.testSMIRKS("[C:1]>>[C:1]=[Cl]", "CC");
+		//tu.testSMIRKS("[C:1]>>[C:1]=[Cl]", "CC");
 		// tu.testSMIRKS("[C:1][C:2]>>[C:1]=[C:2]", "CC");
 		// tu.testSMIRKS("[C:1]>>[C:1]=[C]", "C");
 		// tu.testSMIRKS("[C:1]([H])[C:2]([H])>>[C:1]=[C:2]", "CCC");
@@ -2455,12 +2610,14 @@ public class TestUtilities {
 		// "CCCC");
 		// tu.testSMIRKS("[C:1]C>>[C:1]#&!=,-N", "CC");
 
-		/*
-	tu.FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_ALL;
-	tu.testSMIRKS(
-		"[c:1]1[cH1:6][cH1:5][c:4][c:3][c:2]1>>[OH1]-[#6@H:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6@H:6]-1-[OH1]",
-		"C=C(CC)C1=CC=CC=C1Cl", ReactionOperation.SingleCopyForEachPos);
-		 */
+		tu.FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_MODE.SSM_ALL;
+		//tu.testSMIRKS(
+		//		"[c:1]1[cH1:6][cH1:5][c:4][c:3][c:2]1>>[OH1]-[#6@H:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6@H:6]-1-[OH1]",
+		//		"C=C(CC)C1=CC=CC=C1Cl", ReactionOperation.SingleCopyForEachPos);
+		
+		//tu.testSMIRKS("[N:1]O>>[N:1]Cl", "C/C=C/CNO");
+		
+
 		// tu.testAtomAttribsOnChangingBond();
 
 		// tu.testSMIRKS("[#6:5]1[#6:4]=[#6:3][#6:2]=[#6:1][#6:6]=1>>[OH1]-[#6:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]-1-[OH1]",
@@ -2526,9 +2683,12 @@ public class TestUtilities {
 
 		// tu.testExpliticHToImplicit("CCC=C");
 		
-		//tu.testSmartsSearchAtPos("c", "Cc1ccccc1", 1);
+		//tu.testSmartsManagerBoolSearch("(CC.O.N)","NCCO.Cl.NCO");
+		//tu.testSmartsManagerBoolSearch("*/C=C/C","CC=CC");
 		
-		 tu.testSmartsManagerBoolSearch("(CC.O.N)","NCCO.Cl.NCO");
+		//tu.testSmiles2Smiles("C/C=C/C");
+		//tu.testSmiles2Smiles("c1ccccc1");
+		//tu.testSmiles2Smiles("C1=CC=CC=C1");
 
 	}
 

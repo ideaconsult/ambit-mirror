@@ -1,6 +1,6 @@
 package ambit2.sln.test;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
@@ -94,7 +94,7 @@ public class SLNTestUtilities
 	
 	public void testSLNIsomorphism(String sln, String smiles) throws Exception
 	{	
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		SLNContainer query = slnParser.parse(sln);
 		if (!slnParser.getErrorMessages().equals(""))
 		{

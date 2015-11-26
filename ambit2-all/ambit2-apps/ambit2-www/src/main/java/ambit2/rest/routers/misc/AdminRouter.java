@@ -11,6 +11,7 @@ import ambit2.rest.admin.fingerprints.FingerprintResource;
 import ambit2.rest.admin.fingerprints.StructuresByFingerprintResource;
 import ambit2.rest.dataset.filtered.StatisticsResource;
 import ambit2.rest.routers.MyRouter;
+import ambit2.rest.substance.study.SubstanceStudyTableResource;
 import ambit2.user.rest.resource.AmbitRESTPolicyResource;
 import ambit2.user.rest.resource.PwdResetResource;
 import ambit2.user.rest.resource.Resources;
@@ -56,6 +57,9 @@ public class AdminRouter extends MyRouter {
 		attach(String.format("%s/{%s}",Resources.restpolicy,AmbitRESTPolicyResource.resourceid),AmbitRESTPolicyResource.class);
 		
 		attach(String.format("%s%s",Resources.user,Resources.reset), PwdResetResource.class);		
+		
+		attach("/export/experiment", SubstanceStudyTableResource.class);		
+		
 
 	}
 

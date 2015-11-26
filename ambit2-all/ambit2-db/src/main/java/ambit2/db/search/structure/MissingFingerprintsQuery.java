@@ -35,7 +35,7 @@ import java.util.List;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import ambit2.db.search.EQCondition;
-import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.descriptors.processors.FPTable;
 
 public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, String, EQCondition> {
 

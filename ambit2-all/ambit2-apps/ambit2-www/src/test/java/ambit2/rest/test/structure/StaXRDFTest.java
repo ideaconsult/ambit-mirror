@@ -18,6 +18,7 @@ import ambit2.rest.test.ResourceTest;
 
 import com.hp.hpl.jena.ontology.OntModel;
 
+
 public class StaXRDFTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
@@ -145,7 +146,7 @@ public class StaXRDFTest extends ResourceTest {
 			Assert.assertTrue(record.getIdchemical()>0);
 			Assert.assertTrue(record.getIdstructure()>0);
 			int props = 0;
-			for (Property p : record.getProperties()) {
+			for (Property p : record.getRecordProperties()) {
 				System.out.println(p.getName());
 				propertyfound =propertyfound ||  "Property 1".equals(p.getName());
 				props++;

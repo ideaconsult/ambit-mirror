@@ -17,12 +17,12 @@ import org.jmol.viewer.Viewer;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.ChemSequence;
-import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemSequence;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.silent.AtomContainerSet;
 
 /**
  * JMol wrapper, used in {@link Panel3D}
@@ -38,7 +38,7 @@ public class ImageTools3D extends DefaultAmbitProcessor<IAtomContainer, Buffered
 	JmolViewer viewer;
 	JmolPopup jmolpopup;
 	JmolAdapter adapter;
-	IMoleculeSet moleculeSet;
+	IAtomContainerSet moleculeSet;
     IChemModel model;
     IChemSequence sequence;
     IChemFile chemFile;
@@ -51,7 +51,7 @@ public class ImageTools3D extends DefaultAmbitProcessor<IAtomContainer, Buffered
    	     jmolpopup = JmolPopup.newJmolPopup(viewer,true);
    	    viewer.setJmolStatusListener(new StatusListener(jmolpopup));
    	     
-   	     moleculeSet = new MoleculeSet();
+   	     moleculeSet = new AtomContainerSet();
    	     model = new ChemModel();
    	     model.setMoleculeSet(moleculeSet);
    	     sequence = new ChemSequence();

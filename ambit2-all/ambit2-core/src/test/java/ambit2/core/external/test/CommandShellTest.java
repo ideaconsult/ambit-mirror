@@ -7,7 +7,6 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -42,9 +41,9 @@ public class CommandShellTest {
 
 		IAtomContainer c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(newmol);
 		
-		IMolecule mol = MoleculeFactory.makeBenzene();
-
-		Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(mol,c));
+		IAtomContainer mol = MoleculeFactory.makeBenzene();
+		UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
+		Assert.assertTrue(uit.isIsomorph(mol,c));
 		new File(babel.getOutputFile()).delete();
 	}	
 

@@ -1,44 +1,71 @@
-
 <#if substanceUUID??>
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
 	<a href="${ambit_root}/ui/_dataset?dataset_uri=${ambit_root}/substance/${substanceUUID}/structure" title='Chemical structures for this substance'>Show structures</a>
 </div>
+<!--
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
 	<a href="${ambit_root}/substance/${substanceUUID}/composition" title='Substance composition'>Show composition</a>
 </div>
-</#if>
+-->
+	<#if username??>
+		<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; font-style:bold;'>
+			Remove substance
+		</div>
+		<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; font-style:bold;'>
+		
+			<a href='#' onClick='deleteSubstance("${ambit_root}/substance/${substanceUUID}","${substanceUUID}","#statusSelector")'>
+			<span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;' title=></span>&nbsp;${substanceUUID}</a>
+			<br/><span class='msg' id='statusSelector'></span>		
+		</div>
+	</#if>
+	
+	<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
+		<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json64.png' alt='json' title='Download as JSON'></a>
+<!--		
+		<a href='#' id='xlsx' target=_blank><img src='${ambit_root}/images/xlsx.png' alt='XLSX' title='Download as XLSX'></a>
+-->		
+	</div>
 
-<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; font-style:bold;'>
-Substance search 	<a href='#' class='chelp substancesearch'></a>	
-</div>
-<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-<form method='GET' name='searchform' id='searchform' action='${ambit_root}/substance' style='padding:0;margin:0;'>
-	<select id='selecttype' name="type">
-		  	 <option value="name">Name (starting with a string)</option>
-		  	 <option value="like">Name (pattern matching)</option>
-		  	 <option value="regexp">Name (regexp)</option>
-			  <option value="uuid">UUID</option>
-			  <option value="">External identifier</option>
-			  <option value="CompTox">CompTox</option>
-			  <option value="guideline">Protocol / Guideline</option>
-			  <option value="DOI">DOI</option>
-			  <option value="reliability" title='1 (reliable without restriction)|2 (reliable with restrictions)|3 (not reliable)|4 (not assignable)|other:empty (not specified)'>Reliability</option>
-			  <option value="purposeFlag" title='key study|supporting study'>Study purpose</option>
-			  <option value="studyResultType" title='experimental result|estimated by calculation|read-across|(Q)SAR'>Study result type</option>
-			  <option value="isRobustStudy" title='true|false'>Robust study</option>
-			  <option value="citation" title='Experiment reference'>Publication/report describing the experiment</option>
-			  <option value="topcategory" title='One of P-CHEM, ENV FATE, ECOTOX, TOX'>One of P-CHEM, ENV FATE, ECOTOX, TOX</option>
-			  <option value="endpointcategory" title='Endpoint category (e.g. EC_FISHTOX_SECTION)'>Endpoint category (e.g. EC_FISHTOX_SECTION)</option>
-			  <option value="params" title='Protocol parameter'>Protocol parameter</option>
-			  <option value="owner_name">Owner name</option>
-			  <option value="owner_uuid">Owner UUID</option>
-		</select>
+<#else>
+	
 
-	<input type='text'  id='search' name='search' value='' tabindex='1' >	
-	<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
-</form>				
-</div>
+	<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; font-style:bold;'>
+	Substance search 	<a href='#' class='chelp substancesearch'></a>	
+	</div>
+	<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
+	<form method='GET' name='searchform' id='searchform' action='${ambit_root}/substance' style='padding:0;margin:0;'>
+		<select id='selecttype' name="type">
+			  	 <option value="name">Name (starting with a string)</option>
+			  	 <option value="like">Name (pattern matching)</option>
+			  	 <option value="regexp">Name (regexp)</option>
+				  <option value="uuid">UUID</option>
+				  <option value="">External identifier</option>
+				  <option value="substancetype">Substance type</option>
+				  <option value="CompTox">CompTox</option>
+				  <option value="guideline">Protocol / Guideline</option>
+				  <option value="DOI">DOI</option>
+				  <option value="citation" title='Experiment reference'>Publication/report describing the experiment</option>
+				  <option value="topcategory" title='One of P-CHEM, ENV FATE, ECOTOX, TOX'>One of P-CHEM, ENV FATE, ECOTOX, TOX</option>
+				  <option value="endpointcategory" title='Endpoint category (e.g. EC_FISHTOX_SECTION)'>Endpoint category (e.g. EC_FISHTOX_SECTION)</option>
+				  <option value="endpoint" title='Endpoint, e.g. LC50'>Endpoint</option>
+				  <option value="endpointhash" title='Experiment conditions hash'>Experiment conditions</option>
+				  <!--
+				  <option value="params" title='Protocol parameter'>Protocol parameter</option>
+				  -->
+				  <option value="owner_name">Owner name</option>
+				  <option value="owner_uuid">Owner UUID</option>
+				  
+				  <option value="reliability" title='1 (reliable without restriction)|2 (reliable with restrictions)|3 (not reliable)|4 (not assignable)|other:empty (not specified)'>Reliability</option>
+				  <option value="purposeFlag" title='key study|supporting study'>Study purpose</option>
+				  <option value="studyResultType" title='experimental result|estimated by calculation|read-across|(Q)SAR'>Study result type</option>
+				  <option value="isRobustStudy" title='true|false'>Robust study</option>
+			</select>
 
+		<input type='text'  id='search' name='search' class='search' value='' tabindex='1' >	
+		<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
+	</form>				
+	</div>
+	
 	
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
 <span title='Filter substances by category'>Study<a href='#' class='chelp category'></a>:</span> 
@@ -86,27 +113,5 @@ Substance search 	<a href='#' class='chelp substancesearch'></a>
 <a href='${ambit_root}/substance?type=studyResultType&search=' title='not specified'>NA</a>
 
 </div>
-
-<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-	<a href='#' id='uri'><img src='${ambit_root}/images/link.png' alt='text/uri-list' title='Download as URI list'></a>
-	<!-- Not supported yet
-	<a href='#' id='rdfxml'><img src='${ambit_root}/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a>
-	<a href='#' id='rdfn3'><img src='${ambit_root}/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a>
-	-->
-	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
-	<a href='#' id='csv' target=_blank><img src='${ambit_root}/images/xls.png' alt='CSV' title='Download as CSV'></a>
-</div>
-	
-<#if username??>
-	<#if substanceUUID??>
-		<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; font-style:bold;'>
-			Remove substance
-		</div>
-		<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; font-style:bold;'>
-		
-			<a href='#' onClick='deleteSubstance("${ambit_root}/substance/${substanceUUID}","${substanceUUID}","#statusSelector")'>
-			<span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;' title=></span>&nbsp;${substanceUUID}</a>
-			<br/><span class='msg' id='statusSelector'></span>		
-		</div>
-	</#if>
 </#if>
+	

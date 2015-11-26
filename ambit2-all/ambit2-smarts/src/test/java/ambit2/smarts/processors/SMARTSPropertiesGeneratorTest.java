@@ -5,10 +5,10 @@ import java.io.InputStreamReader;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.MoleculeReader;
@@ -53,8 +53,8 @@ public class SMARTSPropertiesGeneratorTest {
 			
 			c = mr.process(record); //get the record anew
 			record = gen.process(record);  
-			Assert.assertNotNull(record.getProperty(gen.getProperty()));
-			c.setProperty(gen.getProperty(),record.getProperty(gen.getProperty()) );
+			Assert.assertNotNull(record.getRecordProperty(gen.getProperty()));
+			c.setProperty(gen.getProperty(),record.getRecordProperty(gen.getProperty()) );
 			Assert.assertNotNull(c.getProperty(gen.getProperty()));
 			testMatch(c);
 			
@@ -109,8 +109,8 @@ public class SMARTSPropertiesGeneratorTest {
 			//get the record anew, and set the property
 			c = mr.process(record);
 			record = gen.process(record);  
-			Assert.assertNotNull(record.getProperty(gen.getProperty()));
-			c.setProperty(gen.getProperty(),record.getProperty(gen.getProperty()) );
+			Assert.assertNotNull(record.getRecordProperty(gen.getProperty()));
+			c.setProperty(gen.getProperty(),record.getRecordProperty(gen.getProperty()) );
 			Assert.assertNotNull(c.getProperty(gen.getProperty()));
 			testMatchAromatic(c);
 

@@ -4,6 +4,8 @@ import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.idea.restnet.i.aa.OpenSSOCookie;
+
 import org.opentox.aa.OTAAParams;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Request;
@@ -108,7 +110,7 @@ public class OpenSSOAuthorizer extends Authorizer {
 	}
 	protected String getTokenFromCookies(Request request) {
 		for (Cookie cookie : request.getCookies()) {
-			if ("subjectid".equals(cookie.getName()))
+			if (OpenSSOCookie.CookieName.equals(cookie.getName()))
 				return cookie.getValue();
 
 		}

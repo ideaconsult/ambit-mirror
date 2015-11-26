@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -37,7 +36,7 @@ public abstract class ShellSDFoutput<INPUT> extends CommandShell<INPUT,IAtomCont
 		try {
 			if (isReadOutput()) {
 				MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(path + File.separator + getOutputFile()));
-				IMolecule newmol = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
+				IAtomContainer newmol = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 				reader.read(newmol);
 				reader.close();
 				return newmol;

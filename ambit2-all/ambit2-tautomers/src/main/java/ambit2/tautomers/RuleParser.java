@@ -1,6 +1,7 @@
 package ambit2.tautomers;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
@@ -310,7 +311,7 @@ public class RuleParser
 	void parseStates(String keyValue)
 	{	
 		String elements [] = keyValue.split(" ");
-		Vector<String> vs = new Vector<String>(); 
+		List<String> vs = new ArrayList<String>(); 
 		 
 		for (int i = 0; i < elements.length; i++)
 		{	
@@ -326,7 +327,7 @@ public class RuleParser
 	
 	void parseGroup_Pos(String keyValue)
 	{
-		Vector<String> elements = getStringElements(keyValue, TautomerConst.KeyWordElementSeparator);
+		List<String> elements = getStringElements(keyValue, TautomerConst.KeyWordElementSeparator);
 		curRule.mobileGroupPos = new int[1][elements.size()]; 
 		for (int i = 0; i < elements.size(); i++)
 		{	
@@ -349,7 +350,7 @@ public class RuleParser
 	void parseRankingRuleStateEnergies(String keyValue)
 	{	
 		String elements [] = keyValue.split(",");
-		Vector<String> vs = new Vector<String>(); 
+		List<String> vs = new ArrayList<String>(); 
 		 
 		for (int i = 0; i < elements.length; i++)
 		{	
@@ -607,7 +608,7 @@ public class RuleParser
 		//which corresponds to the ring closure.
 		
 		atomIndexFixError = "";
-		Vector<IBond> v = new Vector<IBond>(); 
+		List<IBond> v = new ArrayList<IBond>(); 
 		
 		for (int i = 0; i < q2.getBondCount(); i++)
 			v.add(q2.getBond(i));
@@ -643,7 +644,7 @@ public class RuleParser
 	}
 	
 	
-	IBond getBondWithAtomIndexes(int ind0, int ind1, Vector<IBond> v, IQueryAtomContainer q)
+	IBond getBondWithAtomIndexes(int ind0, int ind1, List<IBond> v, IQueryAtomContainer q)
 	{
 		for (int i = 0; i < v.size(); i++)
 		{
@@ -665,9 +666,9 @@ public class RuleParser
 	
 	//Helper function --------------------------------------------------
 	
-	Vector<String> getStringElements(String string, String separator)
+	List<String> getStringElements(String string, String separator)
 	{
-		Vector<String> elements = new Vector<String>();
+		List<String> elements = new ArrayList<String>();
 		int curPos = 0;
 		int res = string.indexOf(separator, curPos);
 		

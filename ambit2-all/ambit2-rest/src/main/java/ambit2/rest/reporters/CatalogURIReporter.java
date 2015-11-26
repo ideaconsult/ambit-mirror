@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
-import net.idea.restnet.c.ResourceDoc;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Reference;

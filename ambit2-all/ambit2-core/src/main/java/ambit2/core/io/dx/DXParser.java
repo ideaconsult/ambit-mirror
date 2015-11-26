@@ -99,8 +99,8 @@ public class DXParser extends DefaultAmbitProcessor<IStructureRecord, IStructure
 		ILiteratureEntry reference = null;
 		Map<Property,Object> properties = new Hashtable<Property, Object>();
 		PropertyAnnotations pa = new PropertyAnnotations();
-		for (Property p : record.getProperties()) {
-			Object value = record.getProperty(p);
+		for (Property p : record.getRecordProperties()) {
+			Object value = record.getRecordProperty(p);
 			JsonNode strucProperty = dxRoot.get(json_fields.StructureProperties.name()).get(p.getName());
 			if (strucProperty!=null) {
 				JsonNode propertyRef = strucProperty.get(json_fields.referenceFor.name());
@@ -132,8 +132,8 @@ public class DXParser extends DefaultAmbitProcessor<IStructureRecord, IStructure
 				}
 		}
 		if (reference == null)  reference = LiteratureEntry.getDXReference();
-		for (Property p : record.getProperties()) {
-			Object value = record.getProperty(p);
+		for (Property p : record.getRecordProperties()) {
+			Object value = record.getRecordProperty(p);
 			JsonNode reportProperty = dxRoot.get(json_fields.Report.name()).get(p.getName());
 			JsonNode strucProperty = dxRoot.get(json_fields.StructureProperties.name()).get(p.getName());
 			if (reportProperty!=null) continue; 	
@@ -163,7 +163,7 @@ public class DXParser extends DefaultAmbitProcessor<IStructureRecord, IStructure
 			} else properties.put(p,value);
 		}
 		record.clearProperties();
-		record.addProperties(properties);
+		record.addRecordProperties(properties);
 		return record;
 	}
 	private final static String DXPrefix = "DX.";
@@ -212,7 +212,7 @@ public class DXParser extends DefaultAmbitProcessor<IStructureRecord, IStructure
 	public int verifySuperEndpoints(IStructureRecord record,Property p) throws AmbitException {
 		int error = 0;
 		if ("Superendpoints".equals(p.getName())) {
-			String[] superendpoints = record.getProperty(p).toString().split("\n");
+			String[] superendpoints = record.getRecordProperty(p).toString().split("\n");
 			for (String superendpoint : superendpoints)
 				if (dxRoot.get(json_fields.endpoints.name()).get(superendpoint)==null) {
 					error ++;

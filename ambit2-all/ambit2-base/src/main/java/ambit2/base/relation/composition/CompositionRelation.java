@@ -371,28 +371,28 @@ public class CompositionRelation extends AbstractRelation<STRUCTURE_RELATION, Pr
 		return getSecondStructure().getNumberOfProperties();
 	}
 	@Override
-	public Iterable<Property> getProperties() {
-		return getSecondStructure().getProperties();
+	public Iterable<Property> getRecordProperties() {
+		return getSecondStructure().getRecordProperties();
 	}
 	@Override
-	public void setProperty(Property key, Object value) {
-		getSecondStructure().setProperty(key, value);
+	public void setRecordProperty(Property key, Object value) {
+		getSecondStructure().setRecordProperty(key, value);
 	}
 	@Override
-	public Object getProperty(Property key) {
-		return getSecondStructure().getProperty(key);
+	public Object getRecordProperty(Property key) {
+		return getSecondStructure().getRecordProperty(key);
 	}
 	@Override
-	public Object removeProperty(Property key) {
-		return getSecondStructure().removeProperty(key);
+	public Object removeRecordProperty(Property key) {
+		return getSecondStructure().removeRecordProperty(key);
 	}
 	@Override
 	public void clearProperties() {
 		getSecondStructure().clearProperties();
 	}
 	@Override
-	public void addProperties(Map newProperties) {
-		getSecondStructure().addProperties(newProperties);
+	public void addRecordProperties(Map newProperties) {
+		getSecondStructure().addRecordProperties(newProperties);
 	}
 	@Override
 	public String getWritableContent() {
