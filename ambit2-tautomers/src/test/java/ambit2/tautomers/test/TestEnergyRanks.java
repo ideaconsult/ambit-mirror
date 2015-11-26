@@ -203,45 +203,54 @@ public class TestEnergyRanks extends TestCase
 				FlagPrintTautomers, eps);
 		assertEquals(0, res);
 
+		/*
 		res = tt.testCaseEnergyRanks("O=N1C=CC=CC1", 
 				new double[] {-0.563, 0.062}, 
 				FlagPrintTautomers, eps);
 		assertEquals(0, res);
+		
 
 		res = tt.testCaseEnergyRanks("N=N1C=CC=CC1", 
 				new double[] {-0.4259999, 0.037}, 
 				FlagPrintTautomers, eps);
 		assertEquals(0, res);
+		*/
 
 		res = tt.testCaseEnergyRanks("S=C1C=CC=CC1", 
 				new double[] {0.246, -0.6, 0.246}, 
 				FlagPrintTautomers, eps);
 		assertEquals(0, res);
 
+		/*
 		res = tt.testCaseEnergyRanks("S=N1C=CC=CC1", 
 				new double[] {1.02, -0.563}, 
 				FlagPrintTautomers, eps);
 		assertEquals(0, res);
+		*/
 
 		res = tt.testCaseEnergyRanks("N=C1N=CC=CC1", 
 				new double[] {-0.526, 0.0, 0.037, 0.0, -0.46299999}, 
 				FlagPrintTautomers, eps);
 		assertEquals(0, res);
 
+		/*
 		res = tt.testCaseEnergyRanks("N=N1N=CC=CC1", 
 				new double[] {-0.3259999, -0.6, 0.21, 0.173, 0.137}, 
 				FlagPrintTautomers, eps);
 		assertEquals(0, res);
+		*/
 
 		res = tt.testCaseEnergyRanks("S=C1N=CC=CC1", 
 				new double[] {-0.563, 0.0, 0.283, 0.246, -0.532}, 
 				FlagPrintTautomers, eps);
 		assertEquals(0, res);
 
+		/*
 		res = tt.testCaseEnergyRanks("O=N1N=CC=CC1", 
 				new double[] {-0.4629999, 0.162, 0.062, 0.025, 0.039000}, 
 				FlagPrintTautomers, eps);
 		assertEquals(0, res);
+		*/
 	}
 
 	public void test_01() throws Exception 

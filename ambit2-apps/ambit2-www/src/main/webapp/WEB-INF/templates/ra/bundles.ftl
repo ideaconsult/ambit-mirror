@@ -63,7 +63,7 @@
 		<div class="row " style="padding:0;" >
 		
 			<#if menu_profile?? && menu_profile!='ot'>
-				<table id='datasets' class='datasetstable ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+				<table id='datasets' class='datasetstable jtoxkit' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 				<thead>
 				<tr>
 				<th>Name</th>
@@ -78,7 +78,7 @@
 				<tbody></tbody>
 				</table>
 			<#else>
-				<table id='datasets' class='datasetstable ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+				<table id='datasets' class='datasetstable jtoxkit' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 				<thead>
 				<tr>
 				<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span></th>

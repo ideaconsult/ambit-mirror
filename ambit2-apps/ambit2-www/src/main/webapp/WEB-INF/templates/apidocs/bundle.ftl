@@ -340,7 +340,6 @@
 			        }			        
 			    ]
 			},
-
 			{
 			    "path": "/bundle/{idbundle}/version",
 			    "operations": [

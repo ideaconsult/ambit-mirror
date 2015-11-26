@@ -35,7 +35,6 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IPDBAtom;
 import org.openscience.cdk.qsar.DescriptorValue;

@@ -757,7 +757,7 @@ var config_i5 = {
 		                },
 		                "metabolic activation system": {
 		                    "iOrder": -7,
-		                    "sVisible": true
+		                    "bVisible": true
 		                },
 		                "target gene": {
 		                    "iOrder": -6
@@ -833,7 +833,7 @@ var config_i5 = {
 		                },
 		                "route of administration": {
 		                    "iOrder": -7,
-		                    "sVisible": true
+		                    "bVisible": true
 		                },
 		                "species": {
 		                    "iOrder": -6
@@ -1274,7 +1274,9 @@ var config_i5 = {
 		                    "bVisible" : false
 		                },
 		                "species": {
-		                    "iOrder": -3
+		                    "iOrder": -3,
+		                    "bVisible" : true,
+		                    "inMatrix": false
 		                }
 		            },
 		            "conditions": {
@@ -1311,7 +1313,8 @@ var config_i5 = {
 		        "EN_BIOACCU_TERR_SECTION": {
 		            "parameters": {
 		                "species": {
-		                    "iOrder": -4
+		                    "iOrder": -4,
+		                    "bVisible": true
 		                }
 		            },
 		            "conditions": {
@@ -2107,6 +2110,9 @@ var config_i5 = {
 		                "coating": {
 		                    "bVisible": false
 		                },
+		                "testmat_form": {
+		                    "bVisible": false
+		                },		                
 		                "data_gathering_instruments": {
 		                    "sTitle": "Instruments",
 		                    "iOrder": -8,
@@ -2182,6 +2188,7 @@ var config_i5 = {
 		            }
 		        },
 		        "PC_GRANULOMETRY_SECTION": {
+		        	"bVisible": false,
 		            "parameters": {
 		                "type of method": {
 		                    "iOrder": -25
@@ -2197,6 +2204,7 @@ var config_i5 = {
 		                }
 		            },
 		            "conditions": {
+		            	"bVisible": false,
 		                "seq_num": {
 		                    "sTitle": "Passage num.",
 		                    "iOrder": -22,

@@ -3,6 +3,7 @@ package ambit2.core.io.study;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.idea.modbcum.i.processors.IProcessor;
 
@@ -76,10 +77,11 @@ public class ProtocolEffectRecord2SubstanceProperty
 		 */
 		if (detail.getConditions() == null)
 			return ann;
-		Iterator<String> keys = detail.getConditions().keySet().iterator();
-		while (keys.hasNext()) {
-			String key = keys.next();
-			Object o = detail.getConditions().get(key);
+		Iterator<Map.Entry> entries = detail.getConditions().entrySet().iterator();
+		while (entries.hasNext()) {
+			Map.Entry entry = entries.next();
+			Object key = entry.getKey();
+			Object o = entry.getValue();
 			if (o == null)
 				continue;
 			else if (o instanceof Value) {
@@ -87,7 +89,7 @@ public class ProtocolEffectRecord2SubstanceProperty
 				Value value = (Value) o;
 				PropertyAnnotation a = new PropertyAnnotation();
 				a.setType("conditions");
-				a.setPredicate(key);
+				a.setPredicate(key.toString());
 				if (value.getLoValue() instanceof String) {
 					a.setObject(value.getLoValue());
 				} else {
@@ -107,7 +109,7 @@ public class ProtocolEffectRecord2SubstanceProperty
 			} else {
 				PropertyAnnotation a = new PropertyAnnotation();
 				a.setType("conditions");
-				a.setPredicate(key);
+				a.setPredicate(key.toString());
 				a.setObject(o.toString());
 				ann.add(a);
 			}
@@ -199,11 +201,11 @@ public class ProtocolEffectRecord2SubstanceProperty
 			Value value, Object oldValue) {
 		if (value != null) {
 			if (oldValue == null) {
-				master.setProperty(key, new MultiValue<Value>(value));
+				master.setRecordProperty(key, new MultiValue<Value>(value));
 			} else if (oldValue instanceof MultiValue) {
 				((MultiValue) oldValue).add(value);
 			} else {
-				master.setProperty(key, new MultiValue<Value>(value));
+				master.setRecordProperty(key, new MultiValue<Value>(value));
 			}
 			key.setClazz(MultiValue.class);
 		}
