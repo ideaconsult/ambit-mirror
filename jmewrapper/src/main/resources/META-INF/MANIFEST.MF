@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Package: 
-Main-Class: JMEAppletWrapper
-Class-Path: ./JME.jar
