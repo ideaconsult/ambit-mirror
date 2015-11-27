@@ -1,3 +1,0 @@
-Package: org.opentox.aa
-Main-Class: org.opentox.aa.opensso.aacli
-Package-Version: ${project.version}
