@@ -1,7 +1,0 @@
-toxpredict.service.ontology=${toxpredict.service.ontology}
-toxpredict.service.dataset=${toxpredict.service.dataset}
-toxpredict.service.compound=${toxpredict.service.compound}
-toxpredict.service.model=${toxpredict.service.model}
-toxpredict.service.algorithm=${toxpredict.service.algorithm}
-toxpredict.service.feature=${toxpredict.service.feature}
-toxpredict.service.application=${toxpredict.service.application}
