@@ -55,7 +55,7 @@ public class SmirksProcessorTest {
 				mol = p.process(mol);
 				logger.log(Level.INFO, String.format("%s\t%s", t.getName(),mol.getProperties()));
 				Assert.assertTrue((int)mol.getProperty("Transformed")>0);
-				Assert.assertEquals(1, mol.getProperty("T."+t.getName()));
+				Assert.assertEquals(1, (int)mol.getProperty("T."+t.getName()));
 				Assert.assertEquals("[]",mol.getProperty("AtomTypes.added").toString());
 			}
 		}
