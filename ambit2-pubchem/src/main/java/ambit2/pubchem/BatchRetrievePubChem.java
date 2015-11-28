@@ -40,12 +40,12 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorException;
 import ambit2.core.data.MoleculeTools;
-import ambit2.core.io.MDLWriter;
 
 public class BatchRetrievePubChem extends DefaultAmbitProcessor<String,Integer> {
 	/**
@@ -132,8 +132,8 @@ public class BatchRetrievePubChem extends DefaultAmbitProcessor<String,Integer> 
 					    	logwriter.flush();
 			    		}
 			    	} else {
-		    			MDLWriter mdlWriter = new MDLWriter(new FileWriter(sdffile));
-		    			mdlWriter.writeMolecule(m);
+		    			SDFWriter mdlWriter = new SDFWriter(new FileWriter(sdffile));
+		    			mdlWriter.write(m);
 		    			mdlWriter.close();
 				    	logwriter.write(getMessage(file.getName(),sdffile.getName(),"CID not available",System.currentTimeMillis() - now));
 				    	logwriter.flush();    			

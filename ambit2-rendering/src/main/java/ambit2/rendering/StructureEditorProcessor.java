@@ -9,6 +9,7 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.silent.AtomContainerSet;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -17,7 +18,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
-import ambit2.core.io.MDLWriter;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
@@ -97,8 +97,8 @@ public class StructureEditorProcessor extends DefaultAmbitProcessor<IStructureRe
 					throw new AmbitException("Unknown command");
 				}
 				StringWriter w = new StringWriter();
-				MDLWriter writer = new MDLWriter(w);
-				writer.writeMolecule(mol);
+				SDFWriter writer = new SDFWriter(w);
+				writer.write(mol);
 				writer.close();
 				return w.toString();
 		} catch (AmbitException x) {

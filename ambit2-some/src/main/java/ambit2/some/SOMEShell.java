@@ -10,10 +10,10 @@ import java.util.List;
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.SDFWriter;
 
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
-import ambit2.core.io.MDLWriter;
 
 /**
  * Wrapper for Site Of Metabolism Estimator (SOME) http://www.dddc.ac.cn/adme/myzheng/SOME_1_0.tar.gz.
@@ -73,8 +73,8 @@ public class SOMEShell extends CommandShell<IAtomContainer, IAtomContainer> {
 		
 	    	String homeDir = getHomeDir(null); // getPath(new File(exe));
 	    	try {
-			    MDLWriter writer = new MDLWriter(new FileOutputStream(homeDir + "/example/" + inFile));
-			    writer.writeMolecule(mol);	    		
+			    SDFWriter writer = new SDFWriter(new FileOutputStream(homeDir + "/example/" + inFile));
+			    writer.write(mol);	    		
 		        writer.close();
 	    	} catch (Exception x) {
 	    		throw new ShellException(this,x);
