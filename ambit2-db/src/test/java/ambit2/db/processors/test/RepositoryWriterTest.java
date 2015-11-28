@@ -34,15 +34,19 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.sql.Connection;
+import java.sql.ResultSet;
 
 import junit.framework.Assert;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.QueryExecutor;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit2.base.config.Preferences;
@@ -57,6 +61,7 @@ import ambit2.core.io.RawIteratingFolderReader;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.io.RawIteratingWrapper;
 import ambit2.core.io.pdb.RawIteratingPDBReader;
+import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.MoleculeWriter;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.EINECSKey;
@@ -70,6 +75,7 @@ import ambit2.core.processors.structure.key.PubchemSID;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.processors.PropertyImporter;
 import ambit2.db.processors.RepositoryWriter;
+import ambit2.db.readers.RetrieveStructure;
 
 public class RepositoryWriterTest extends DbUnitTest {
 
@@ -153,6 +159,83 @@ public class RepositoryWriterTest extends DbUnitTest {
 		 * from struc_dataset where idstructure>3 on duplicate key update
 		 * idstructure=3 delete from struc_dataset where idstructure>3
 		 */
+
+	}
+
+	@Test
+	public void testWriteBondOrder4() throws Exception {
+
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		IDatabaseConnection c = getConnection();
+
+		ITable chemicals = c.createQueryTable("EXPECTED",
+				"SELECT * FROM chemicals");
+		Assert.assertEquals(0, chemicals.getRowCount());
+		ITable strucs = c.createQueryTable("EXPECTED",
+				"SELECT * FROM structure");
+		Assert.assertEquals(0, strucs.getRowCount());
+		ITable srcdataset = c.createQueryTable("EXPECTED",
+				"SELECT * FROM src_dataset");
+		Assert.assertEquals(0, srcdataset.getRowCount());
+		ITable struc_src = c.createQueryTable("EXPECTED",
+				"SELECT * FROM struc_dataset");
+		Assert.assertEquals(0, struc_src.getRowCount());
+		ITable property = c.createQueryTable("EXPECTED",
+				"SELECT * FROM properties");
+		Assert.assertEquals(0, property.getRowCount());
+		ITable property_values = c.createQueryTable("EXPECTED",
+				"SELECT * FROM property_values");
+		Assert.assertEquals(0, property_values.getRowCount());
+
+		InputStream in = this
+				.getClass()
+				.getClassLoader()
+				.getResourceAsStream(
+						"ambit2/db/processors/sdf/warfarin_aromatic.sdf");
+		Assert.assertNotNull(in);
+		RawIteratingSDFReader reader = new RawIteratingSDFReader(
+				new InputStreamReader(in));
+		reader.setReference(LiteratureEntry
+				.getInstance("warfarin_aromatic.sdf"));
+		write(reader, c.getConnection());
+		c.close();
+
+		c = getConnection();
+		chemicals = c.createQueryTable("EXPECTED", "SELECT * FROM chemicals");
+		Assert.assertEquals(1, chemicals.getRowCount());
+		chemicals = c
+				.createQueryTable(
+						"EXPECTED",
+						"SELECT * FROM chemicals where smiles is not null and inchi is not null and formula is not null");
+		Assert.assertEquals(1, chemicals.getRowCount());
+
+		IStructureRecord structure = new StructureRecord();
+		strucs = c.createQueryTable("EXPECTED",
+				"SELECT idchemical,idstructure FROM structure");
+		Assert.assertEquals(2, strucs.getRowCount());
+		structure.setIdchemical(((BigInteger) strucs.getValue(0, "idchemical")).intValue());
+		structure.setIdstructure(((BigInteger) strucs.getValue(0, "idstructure")).intValue());
+
+		RetrieveStructure q = new RetrieveStructure();
+		MoleculeReader molreader = new MoleculeReader();
+		q.setValue(structure);
+		QueryExecutor x = new QueryExecutor<>();
+		try {
+			x.setConnection(c.getConnection());
+			x.setCloseConnection(false);
+			ResultSet rs = x.process(q);
+			while (rs.next()) {
+				IStructureRecord result = q.getObject(rs);
+				IAtomContainer mol = molreader.process(result);
+				for (IBond bond : mol.bonds()) {
+					Assert.assertNotSame(IBond.Order.UNSET, bond.getOrder());
+				}
+			}
+		} finally {
+			x.close();
+		}
+
+		c.close();
 
 	}
 

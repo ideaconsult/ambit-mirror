@@ -170,21 +170,25 @@ public class MoleculeReader extends
 				}
 
 				if (ac != null) {
-					try {
-						AtomContainerManipulator
-								.percieveAtomTypesAndConfigureAtoms(ac);
-					} catch (Exception x) {
-						ac.setProperty("ERROR.atomtypes", String.format(
-								"%s\t%s", x.getClass().getName(),
-								x.getMessage()));
+					if (MoleculeTools.repairBondOrder4(ac)) {
+						// ok, all set
+					} else {
+						try {
+							AtomContainerManipulator
+									.percieveAtomTypesAndConfigureAtoms(ac);
+						} catch (Exception x) {
+							ac.setProperty("ERROR.atomtypes", String.format(
+									"%s\t%s", x.getClass().getName(),
+									x.getMessage()));
+						}
+						try {
+							hadder.addImplicitHydrogens(ac);
+						} catch (Exception x) {
+							ac.setProperty("ERROR.implicith", String.format(
+									"%s\t%s", x.getClass().getName(),
+									x.getMessage()));
+						}
 					}
-					try {
-						hadder.addImplicitHydrogens(ac);
-					} catch (Exception x) {
-						ac.setProperty("ERROR.implicith", String.format(
-								"%s\t%s", x.getClass().getName(),
-								x.getMessage()));
-					}					
 				}
 
 				return ac;
