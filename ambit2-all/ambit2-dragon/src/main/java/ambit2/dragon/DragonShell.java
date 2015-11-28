@@ -10,21 +10,19 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.silent.AtomContainer;
+import org.openscience.cdk.io.SDFWriter;
 
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.DelimitedFileFormat;
 import ambit2.core.io.IteratingDelimitedFileReader;
-import ambit2.core.io.MDLWriter;
 
 /**
  * Launches Dragon6 as an external executable and reads the results back.
@@ -185,8 +183,8 @@ public class DragonShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	    	String molfile = String.format("%s/%s",homeDir,inFile[1]);
 	    	String txtfile = String.format("%s/%s",homeDir,outFile[0]);
 	    	try {
-			    MDLWriter writer = new MDLWriter(new FileOutputStream(molfile));
-			    writer.writeMolecule(mol);	    		
+			    SDFWriter writer = new SDFWriter(new FileOutputStream(molfile));
+			    writer.write(mol);	    		
 		        writer.close();
 	    	} catch (Exception x) {
 	    		throw new ShellException(this,x);

@@ -9,6 +9,7 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.silent.AtomContainerSet;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -19,7 +20,6 @@ import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.core.io.MDLWriter;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.rendering.CompoundImageTools;
@@ -81,8 +81,8 @@ public class Structure2DProcessor extends
 				}
 				if (newmol != null) {
 					StringWriter sw = new StringWriter();
-					MDLWriter writer = new MDLWriter(sw);
-					writer.writeMolecule(newmol);
+					SDFWriter writer = new SDFWriter(sw);
+					writer.write(newmol);
 
 					target.setContent(sw.toString());
 					structype = stype.process(newmol);

@@ -41,6 +41,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.qsar.DescriptorValue;
@@ -50,7 +51,6 @@ import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
-import ambit2.core.io.MDLWriter;
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
 import ambit2.mopac.DescriptorMopacShell;
@@ -252,9 +252,9 @@ public class Mopac7WriterTest  {
                 new FileInputStream("D:\\nina\\Databases\\nciopen_3D_fixed.sdf"),
                 SilentChemObjectBuilder.getInstance()
                 );
-            MDLWriter wriOK = new MDLWriter(new FileOutputStream(
+            SDFWriter wriOK = new SDFWriter(new FileOutputStream(
                     "D:\\nina\\nciopen_3D_electronic_ok.sdf"));
-            MDLWriter wriErr = new MDLWriter(new FileOutputStream(
+            SDFWriter wriErr = new SDFWriter(new FileOutputStream(
             "D:\\nina\\nciopen_3D_electronic_err.sdf"));
             
             int n = 0;

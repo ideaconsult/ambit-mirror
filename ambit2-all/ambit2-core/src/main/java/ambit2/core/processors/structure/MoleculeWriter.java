@@ -35,6 +35,7 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.SDFWriter;
 
 public class MoleculeWriter extends DefaultAmbitProcessor<IAtomContainer,String> {
 	/**
@@ -46,8 +47,8 @@ public class MoleculeWriter extends DefaultAmbitProcessor<IAtomContainer,String>
 			throws AmbitException {
 		try {
 			StringWriter w = new StringWriter();
-			ambit2.core.io.MDLWriter writer = new ambit2.core.io.MDLWriter(w);
-			writer.setSdFields(target.getProperties());
+			SDFWriter writer = new SDFWriter(w);
+			//writer.setSdFields(target.getProperties());
 			writer.write(target);
 			writer.close();
 			return w.toString();
