@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.Aromaticity;
 import org.openscience.cdk.aromaticity.ElectronDonation;
-import org.openscience.cdk.aromaticity.Kekulization;
 import org.openscience.cdk.graph.Cycles;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtom;
@@ -32,6 +31,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IRawReader;
 import ambit2.core.processors.structure.InchiProcessor;
@@ -111,37 +111,20 @@ public class TestTautomersFromSDF {
 
 	public List<IAtomContainer> testTautomerGeneration(IAtomContainer mol)
 			throws Exception {
-
-		if (aromStatus(mol) > 0) {
-			for (IBond bond : mol.bonds()) {
-				if (bond.getOrder() == IBond.Order.UNSET) {
-					bond.setFlag(CDKConstants.ISAROMATIC, true); // needed?
-					bond.setOrder(IBond.Order.SINGLE);
-				}
+		if (MoleculeTools.repairBondOrder4(mol)) {
+			// ok
+			int aromatic = 0;
+			for (IBond b : mol.bonds()) {
+				Assert.assertNotSame(IBond.Order.UNSET, b.getOrder());
+				int ba = 0;
+				for (IAtom a : b.atoms())
+					if (a.getFlag(CDKConstants.ISAROMATIC)) {
+						ba++;
+					}
+				if (ba > 1)
+					aromatic++;
 			}
-
-			// need hydrogen counts, can add via other method
-			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-			CDKHydrogenAdder.getInstance(mol.getBuilder())
-					.addImplicitHydrogens(mol);
-
-			// percieveAtomTypesAndConfigureAtoms wipes arom flags on atoms
-			// (bug)
-			for (IBond bond : mol.bonds()) {
-				if (bond.getFlag(CDKConstants.ISAROMATIC)) {
-					bond.getAtom(0).setFlag(CDKConstants.ISAROMATIC, true);
-					bond.getAtom(1).setFlag(CDKConstants.ISAROMATIC, true);
-				}
-			}
-
-			Kekulization.kekulize(mol);
-			/*
-			 * for (IBond bond : mol.bonds()) if
-			 * (bond.getFlag(CDKConstants.ISAROMATIC)) {
-			 * System.out.print(bond.getOrder()); System.out.print(" ");
-			 * 
-			 * }
-			 */
+			//System.out.println(aromatic);
 		} else {
 			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 			CDKHydrogenAdder.getInstance(mol.getBuilder())
@@ -161,7 +144,7 @@ public class TestTautomersFromSDF {
 		 * AtomContainerManipulator.removeHydrogens(mol);
 		 */
 
-		System.out.println(g.create(mol));
+		//System.out.println(g.aromatic().create(mol));
 
 		if (inchip == null)
 			inchip = new InchiProcessor();
@@ -171,21 +154,6 @@ public class TestTautomersFromSDF {
 		tman.setStructure(mol);
 
 		return tman.generateTautomersIncrementaly();
-	}
-
-	static int aromStatus(IAtomContainer mol) {
-		int res = 0;
-		for (IAtom atom : mol.atoms()) {
-			if (atom.getImplicitHydrogenCount() == null
-					&& atom.getFlag(CDKConstants.ISAROMATIC)) {
-				// N and P are ambiguous
-				if (atom.getAtomicNumber() == 7 || atom.getAtomicNumber() == 15)
-					res = 2;
-				else if (res < 2)
-					res = 1;
-			}
-		}
-		return res;
 	}
 
 	@Test
@@ -259,7 +227,7 @@ public class TestTautomersFromSDF {
 					sdfwriter.close();
 					record.setContent(w.toString());
 					record.setType(STRUC_TYPE.D2noH);
-					//System.out.println(record.getContent());
+					// System.out.println(record.getContent());
 				}
 
 			}

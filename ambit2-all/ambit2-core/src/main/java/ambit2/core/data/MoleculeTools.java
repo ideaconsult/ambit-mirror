@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.aromaticity.Kekulization;
 import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
@@ -201,20 +202,54 @@ public class MoleculeTools {
 			return substTypeInorganic;
 	}
 
-	public static IAtomContainer readMolfile(Reader molfile) throws Exception {
+	protected static boolean hasBondOrderUnsetAromatic(IAtomContainer mol) {
+		boolean result = false;
+		for (IBond bond : mol.bonds())
+			if (bond.getOrder() == IBond.Order.UNSET) {
+				for (IAtom atom : bond.atoms())
+					if (atom.getFlag(CDKConstants.ISAROMATIC)) {
+						bond.setFlag(CDKConstants.ISAROMATIC, true);
+						bond.setOrder(IBond.Order.SINGLE);
+						result = true;
+						break;
+					}
+			}
+		return result;
+	}
 
-		IIteratingChemObjectReader mReader = new IteratingSDFReader(molfile,
-				SilentChemObjectBuilder.getInstance());
-		IAtomContainer molecule = null;
-		while (mReader.hasNext()) {
-			Object mol = mReader.next();
-			if (mol instanceof IAtomContainer) {
-				molecule = (IAtomContainer) mol;
-				break;
+	public static boolean repairBondOrder4(IAtomContainer mol) throws Exception {
+		if (hasBondOrderUnsetAromatic(mol)) {
+			// need hydrogen counts, can add via other method
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			CDKHydrogenAdder.getInstance(mol.getBuilder())
+					.addImplicitHydrogens(mol);
+
+			// percieveAtomTypesAndConfigureAtoms wipes arom flags on atoms
+			// (bug)
+			for (IBond bond : mol.bonds()) {
+				if (bond.getFlag(CDKConstants.ISAROMATIC)) {
+					for (IAtom atom : bond.atoms())
+						atom.setFlag(CDKConstants.ISAROMATIC, true);
+				}
+			}
+			Kekulization.kekulize(mol);
+			return true;
+		} else
+			return false;
+	}
+
+	public static IAtomContainer readMolfile(Reader reader) throws Exception {
+		MDLV2000Reader r = null;
+		try {
+			r = new MDLV2000Reader(reader);
+			IAtomContainer mol = r.read(new AtomContainer());
+			return mol;
+		} finally {
+			try {
+				r.close();
+			} catch (Exception x) {
 			}
 		}
-		mReader.close();
-		return molecule;
 
 	}
 
