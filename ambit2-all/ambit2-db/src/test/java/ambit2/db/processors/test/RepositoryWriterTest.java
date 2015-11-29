@@ -1020,7 +1020,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 		};
 
 		File[] files = dir.listFiles(filter);
-		Assert.assertEquals(11, files.length);
+		Assert.assertEquals(12, files.length);
 		RawIteratingFolderReader reader = new RawIteratingFolderReader(files);
 		write(reader, c.getConnection());
 		reader.close();
@@ -1028,28 +1028,28 @@ public class RepositoryWriterTest extends DbUnitTest {
 
 		c = getConnection();
 		chemicals = c.createQueryTable("EXPECTED", "SELECT * FROM chemicals");
-		Assert.assertEquals(8, chemicals.getRowCount());
+		Assert.assertEquals(9, chemicals.getRowCount());
 		// there are two empty file without $$$$ sign, which are skipped
 		strucs = c.createQueryTable("EXPECTED", "SELECT * FROM structure");
-		Assert.assertEquals(15, strucs.getRowCount());
+		Assert.assertEquals(17, strucs.getRowCount());
 		srcdataset = c.createQueryTable("EXPECTED",
 				"SELECT * FROM src_dataset where name='TEST INPUT'");
 		Assert.assertEquals(1, srcdataset.getRowCount());
 		struc_src = c.createQueryTable("EXPECTED",
 				"SELECT * FROM struc_dataset");
-		Assert.assertEquals(15, struc_src.getRowCount());
+		Assert.assertEquals(17, struc_src.getRowCount());
 
 		property = c.createQueryTable("EXPECTED", "SELECT * FROM properties");
 		// Assert.assertEquals(34,property.getRowCount());
-		Assert.assertEquals(213, property.getRowCount());
+		Assert.assertEquals(214, property.getRowCount());
 		property_values = c.createQueryTable("EXPECTED",
 				"SELECT * FROM property_values");
-		Assert.assertEquals(367, property_values.getRowCount());
+		Assert.assertEquals(370, property_values.getRowCount());
 		srcdataset = c
 				.createQueryTable(
 						"EXPECTED",
 						"SELECT * FROM src_dataset join template_def using(idtemplate) where name='TEST INPUT'");
-		Assert.assertEquals(213, srcdataset.getRowCount());
+		Assert.assertEquals(214, srcdataset.getRowCount());
 		ITable p_cas = c
 				.createQueryTable(
 						"EXPECTED",
