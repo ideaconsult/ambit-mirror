@@ -194,16 +194,21 @@ public class DXParser extends DefaultAmbitProcessor<IStructureRecord, IStructure
 				a.setPredicate("DX Superendpoint");	a.setObject(superEndpoint.getTextValue()); pa.add(a);
 				try {
 					ontology = dxRoot.get(json_fields.endpoints.name()).get(superEndpoint.getTextValue()).get(json_fields.ot.name());
-				} catch (Exception x) { logger.log(Level.WARNING,x.getMessage() + " " + superEndpoint.getTextValue());}
+				} catch (Exception x) { 
+					logger.log(Level.WARNING,x.getClass().getName() + " " + superEndpoint);
+				}
 			}			
 			if (endpoint != null) {
 				PropertyAnnotation a = new PropertyAnnotation();
 				a.setPredicate("DX endpoint");	a.setObject(split[1]); pa.add(a);
 				try {
-					ontology = dxRoot.get(json_fields.endpoints.name()).get(endpoint.getTextValue()).get(json_fields.ot.name());
-				} catch (Exception x) { logger.log(Level.WARNING,x.getMessage() + " " + endpoint.getTextValue());}
+					if (endpoint.get(json_fields.ot.name())!=null) ontology = endpoint.get(json_fields.ot.name()); 
+				} catch (Exception x) { 
+					logger.log(Level.WARNING,x.getClass().getName() + " " + endpoint);
+				}
 			}
-			if (ontology!=null) property.setLabel(ontology.getTextValue());
+			if (ontology!=null) 
+				property.setLabel(ontology.getTextValue());
 			for (PropertyAnnotation a : categories) pa.add(a);
 			property.setAnnotations(pa);
 			
