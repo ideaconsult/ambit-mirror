@@ -7,9 +7,8 @@ import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.apache.commons.csv.CSVFormat;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.HINReader;
@@ -22,6 +21,7 @@ import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.exceptions.AmbitIOException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.pdb.RawIteratingPDBReader;
 import ambit2.core.io.sj.MalariaHTSDataDelimitedReader;
 
@@ -138,6 +138,43 @@ public class FileInputState extends FileState implements IInputState {
 		} catch (Exception x) {
 			return new I5ReaderSimple(new FileReader(file));
 		}
+	}
+
+	public static IRawReader<IStructureRecord> getRawReader(InputStream stream,
+			String extension, IChemFormat format) throws CDKException,
+			AmbitIOException {
+		String ext = extension.toLowerCase();
+		if (_FILE_TYPE.SDF_INDEX.hasExtension(ext)) {
+			return new RawIteratingSDFReader(new InputStreamReader(stream));
+		} else if (_FILE_TYPE.MOL_INDEX.hasExtension(ext)) {
+				return new RawIteratingSDFReader(new InputStreamReader(stream));			
+		} else if (_FILE_TYPE.CSV_INDEX.hasExtension(ext)) {
+			try {
+				if ((format != null) && (format instanceof DelimitedFileFormat))
+					return new RawIteratingCSVReader(stream,
+							(DelimitedFileFormat) format);
+				else
+					return new RawIteratingCSVReader(stream, CSVFormat.EXCEL);
+			} catch (CDKException x) {
+				throw x;
+			} catch (Exception x) {
+				throw new AmbitIOException(x);
+			}
+		} else if (_FILE_TYPE.TXT_INDEX.hasExtension(ext)) {
+			try {
+				if ((format != null) && (format instanceof DelimitedFileFormat))
+					return new RawIteratingCSVReader(stream,
+							(DelimitedFileFormat) format);
+				else
+					return new RawIteratingCSVReader(stream,
+							CSVFormat.TDF.withCommentMarker('#'));
+			} catch (CDKException x) {
+				throw x;
+			} catch (Exception x) {
+				throw new AmbitIOException(x);
+			}
+		} else
+			throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT + ext);
 	}
 
 	public static IIteratingChemObjectReader getReader(InputStream stream,
