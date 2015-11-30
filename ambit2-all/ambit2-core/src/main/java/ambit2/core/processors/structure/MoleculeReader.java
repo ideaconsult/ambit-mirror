@@ -239,9 +239,7 @@ public class MoleculeReader extends
 								SilentChemObjectBuilder.getInstance());
 					IAtomContainer mol = smiParser.parseSmiles(target
 							.getContent());
-					AtomContainerManipulator
-							.percieveAtomTypesAndConfigureAtoms(mol);
-					hadder.addImplicitHydrogens(mol);
+					//atom typing will drop aromatic flags ...
 					return mol;
 				}
 			} catch (Exception x) {
