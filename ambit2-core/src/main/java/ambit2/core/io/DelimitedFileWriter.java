@@ -114,15 +114,17 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
 	}
 	protected void writeHeader() throws IOException {
         String fieldDelimiter =  format.getFieldDelimiter().substring(0,1);
-        char textDelimiter = format.getTextDelimiter();		
+        char textDelimiter = format.getTextDelimiter();
+        String d = "";
 		for (int i=0;i<header.size();i++) {
+			writer.write(d);
 			String h = header.get(i).toString();
 			if (h.indexOf(fieldDelimiter) >  -1) {
 				writer.write(textDelimiter);
 				writer.write(h);
 				writer.write(textDelimiter);
 			} else writer.write(h);
-			writer.write(fieldDelimiter);			
+			d = fieldDelimiter;
 		}
 		writer.newLine();
 		logger.fine(format.getFormatName()+"\tHeader written\t"+header);
@@ -141,13 +143,15 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
     	        writingStarted = true;
         	}
         	String s;
+        	String d = "";
         	for (int i =0; i< header.size(); i++) {
+        		writer.write(d);
         		value = molecule.getProperty(header.get(i));
         		if (i == smilesIndex) {
         			
         			if (value == null) //no SMILES available
         			try {
-        				value = sg.createSMILES(molecule);
+        				value = sg.create(molecule);
         			} catch (Exception x) {
         				logger.log(Level.WARNING,"Error while createSMILES\t",x);
         				value = "";
@@ -167,9 +171,9 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
 	        				writer.write(textDelimiter);        
         				} else writer.write(s); 
         			}
+            		d = fieldDelimiter;
         		}
-        		if (i< (header.size()-1))
-        				writer.write(fieldDelimiter);
+
         	}
             writer.newLine();
             writer.flush();
