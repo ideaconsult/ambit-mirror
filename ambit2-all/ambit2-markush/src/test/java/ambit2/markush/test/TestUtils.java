@@ -6,11 +6,11 @@ import java.io.InputStream;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.io.IChemObjectReader;
+import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.groups.SuppleAtomContainer;
-import ambit2.core.io.MDLV2000ReaderExtended;
 import ambit2.markush.MarkushHelpers;
 
 public class TestUtils 
@@ -28,7 +28,7 @@ public class TestUtils
 	{	
 		InputStream in = new FileInputStream(file);
 		
-		MDLV2000ReaderExtended reader = new MDLV2000ReaderExtended(in, IChemObjectReader.Mode.RELAXED);
+		MDLV2000Reader reader = new MDLV2000Reader(in, IChemObjectReader.Mode.RELAXED);
 		
 		IAtomContainer mol = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 		IChemObject newMol = reader.read(mol);

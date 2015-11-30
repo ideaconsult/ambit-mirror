@@ -472,6 +472,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	/**
 	 * @TODO reenable with CDK > 1.5.11
 	 **/
+	@Test
 	public void testMarkush() throws Exception {
 
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
@@ -508,6 +509,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 		write(reader, c.getConnection());
 		c.close();
 
+		//with cdk 1.5.12 it will write cdk:CtabSgroups as property!
 		c = getConnection();
 		chemicals = c.createQueryTable("EXPECTED", "SELECT * FROM chemicals");
 		Assert.assertEquals(1, chemicals.getRowCount());
@@ -524,15 +526,15 @@ public class RepositoryWriterTest extends DbUnitTest {
 		Assert.assertEquals(1, struc_src.getRowCount());
 
 		property = c.createQueryTable("EXPECTED", "SELECT * FROM properties");
-		Assert.assertEquals(18, property.getRowCount());
+		Assert.assertEquals(19, property.getRowCount());
 		property_values = c.createQueryTable("EXPECTED",
 				"SELECT * FROM property_values");
-		Assert.assertEquals(18, property_values.getRowCount());
+		Assert.assertEquals(19, property_values.getRowCount());
 		srcdataset = c
 				.createQueryTable(
 						"EXPECTED",
 						"SELECT * FROM src_dataset join template_def using(idtemplate) where name='TEST INPUT'");
-		Assert.assertEquals(18, srcdataset.getRowCount());
+		Assert.assertEquals(19, srcdataset.getRowCount());
 		c.close();
 
 	}
