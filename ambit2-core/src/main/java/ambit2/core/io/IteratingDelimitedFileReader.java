@@ -21,7 +21,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-*/
+ */
 package ambit2.core.io;
 
 import java.io.InputStream;
@@ -29,15 +29,19 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
+
+import ambit2.base.interfaces.IStructureRecord;
 
 /**
  * Iterating reader for delimited files.
  * 
  * @author Nina Jeliazkova <b>Modified</b> 2005-9-5
  */
-public class IteratingDelimitedFileReader extends IteratingDelimitedFileReaderComplexHeader<String> implements IIteratingChemObjectReader {
-
+public class IteratingDelimitedFileReader extends
+		IteratingDelimitedFileReaderComplexHeader<String> implements
+		IIteratingChemObjectReader {
 
 	public IteratingDelimitedFileReader(Reader in) throws CDKException {
 		this(in, new DelimitedFileFormat()); // default format
@@ -46,25 +50,39 @@ public class IteratingDelimitedFileReader extends IteratingDelimitedFileReaderCo
 	/**
 	 * 
 	 */
-	public IteratingDelimitedFileReader(Reader in, DelimitedFileFormat format) throws CDKException {
-		super(in,format);
-	}
-
-	public IteratingDelimitedFileReader(InputStream in) throws UnsupportedEncodingException, CDKException {
-		super(in);
-	}
-
-	public IteratingDelimitedFileReader(InputStream in,DelimitedFileFormat format) throws UnsupportedEncodingException, CDKException {
+	public IteratingDelimitedFileReader(Reader in, DelimitedFileFormat format)
+			throws CDKException {
 		super(in, format);
 	}
 
-	
+	public IteratingDelimitedFileReader(InputStream in)
+			throws UnsupportedEncodingException, CDKException {
+		super(in);
+	}
+
+	public IteratingDelimitedFileReader(InputStream in,
+			DelimitedFileFormat format) throws UnsupportedEncodingException,
+			CDKException {
+		super(in, format);
+	}
+
 	@Override
 	protected String getSmilesHeader(int index) {
-		return getHeaderColumn(index).toUpperCase();
+		String d = null;
+		try {
+			d = String.valueOf(((DelimitedFileFormat) getFormat())
+					.getTextDelimiter());
+		} catch (Exception x) {
+		}
+		if (d != null)
+			return getHeaderColumn(index).toUpperCase().replace(d, "");
+		else
+			return getHeaderColumn(index).toUpperCase();
 	}
+
 	@Override
-    protected String createPropertyByColumnName(String name) {
-    	return name;
-    }
+	protected String createPropertyByColumnName(String name) {
+		return name;
+	}
+
 }
