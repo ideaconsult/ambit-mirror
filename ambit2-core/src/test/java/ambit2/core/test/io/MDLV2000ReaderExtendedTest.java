@@ -38,8 +38,11 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.io.IChemObjectReader;
+import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSDFReader;
+import org.openscience.cdk.sgroup.Sgroup;
+import org.openscience.cdk.sgroup.SgroupType;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.core.data.MoleculeTools;
@@ -53,7 +56,6 @@ import ambit2.core.groups.MultipleGroup;
 import ambit2.core.groups.StructureRepeatingUnit;
 import ambit2.core.groups.SuppleAtomContainer;
 import ambit2.core.io.FileInputState;
-import ambit2.core.io.MDLV2000ReaderExtended;
 import ambit2.core.io.SGroupMDL2000Helper.SGROUP_CONNECTIVITY;
 
 public class MDLV2000ReaderExtendedTest  {
@@ -63,8 +65,8 @@ public class MDLV2000ReaderExtendedTest  {
 	}	
 	protected IChemObject readSGroup(String dir,String file) throws Exception {
 		
-		MDLV2000ReaderExtended reader = new MDLV2000ReaderExtended(
-				MDLV2000ReaderExtended.class.getClassLoader().getResourceAsStream(dir+file),
+		MDLV2000Reader reader = new MDLV2000Reader(
+				MDLV2000Reader.class.getClassLoader().getResourceAsStream(dir+file),
 				IChemObjectReader.Mode.RELAXED);
 		IAtomContainer mol = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 		IChemObject newMol = reader.read(mol);
@@ -83,19 +85,21 @@ public class MDLV2000ReaderExtendedTest  {
 	public void testAbbreviation() throws Exception {
         IChemObject mol = readSGroup("abbreviation.mol");
 		Assert.assertNotNull(mol);
-		Assert.assertTrue(mol instanceof SuppleAtomContainer);
-        SuppleAtomContainer sca = (SuppleAtomContainer) mol;
-        sca.setFiltered(false);
-        Assert.assertEquals(10,sca.getBondCount());
-        Assert.assertEquals(10,sca.getAtomCount());
-        List<ISGroup> superatom = getGroup(sca);
-        Assert.assertNotNull(superatom);
-        Assert.assertEquals(1,superatom.size());
-        Assert.assertNotNull(superatom.get(0));
-		sca.setFiltered(true);
+		Assert.assertTrue(mol instanceof IAtomContainer);
+		IAtomContainer sca = (IAtomContainer) mol;
 
-        verify((IAtomContainer)mol, superatom, false,7,7,false);
-        verify((IAtomContainer)mol, superatom, true,9,9,false);
+        Assert.assertEquals(9,sca.getBondCount());
+        Assert.assertEquals(9,sca.getAtomCount());
+
+		Object sgroup = mol.getProperty(CDKConstants.CTAB_SGROUPS);
+		Assert.assertNotNull(sgroup);
+		Assert.assertTrue(sgroup instanceof List);
+		Assert.assertEquals(1,((List)sgroup).size());
+		for (Object o : (List)sgroup) {
+			Assert.assertTrue(o instanceof Sgroup);
+			Sgroup g = (Sgroup) o;
+			Assert.assertEquals(SgroupType.CtabAbbreviation, g.getType());
+		}
 	}
     protected List<ISGroup> getGroup(IAtomContainer sca) {
         List<ISGroup> sgroup = new ArrayList<ISGroup>();
@@ -487,7 +491,7 @@ public class MDLV2000ReaderExtendedTest  {
 		if (files == null) throw new Exception("Files not found");
 		for (File file: files) 
 			try {
-				MDLV2000ReaderExtended reader = new MDLV2000ReaderExtended(new FileInputStream(file));
+				MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(file));
 				IAtomContainer mol = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 				reader.read(mol);
 				reader.close();

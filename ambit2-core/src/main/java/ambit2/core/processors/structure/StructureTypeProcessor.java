@@ -27,10 +27,9 @@ public class StructureTypeProcessor extends
 			return STRUC_TYPE.NA;
 		if (target.getAtomCount() == 0)
 			return STRUC_TYPE.NA;
-		
 		if (target instanceof SuppleAtomContainer) // requires old Ambit Sgroup parser
 			return STRUC_TYPE.MARKUSH;
-		if (target.getProperty("cdk:CtabSgroups") != null) //requires CDK > 1.5.11
+		if (target.getProperty(CDKConstants.CTAB_SGROUPS) != null) //requires CDK >= 1.5.12
 			return STRUC_TYPE.MARKUSH;
 		if (hasHydrogens(target))
 			if (has2DCoordinates(target) > 0)

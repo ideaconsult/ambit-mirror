@@ -47,12 +47,11 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemSequence;
 import org.openscience.cdk.interfaces.ICrystal;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
+import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.protein.data.PDBPolymer;
 import org.openscience.cdk.protein.data.PDBStructure;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-
-import ambit2.core.io.ReaderFactoryExtended;
 
 /**
  * Provides an interface to CDK IO and CDK data classes. The
@@ -80,7 +79,7 @@ public class CdkJmolAdapter extends JmolAdapter {
 		try {
 			ISimpleChemObjectReader chemObjectReader = null;
 			try {
-				chemObjectReader = new ReaderFactoryExtended()
+				chemObjectReader = new ReaderFactory()
 						.createReader(bufferedReader);
 			} catch (IOException ex) {
 				return "Jmol: Error determining input format: " + ex;
