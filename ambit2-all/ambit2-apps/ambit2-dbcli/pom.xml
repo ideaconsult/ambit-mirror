@@ -44,7 +44,7 @@
 		</license>
 	</licenses>
 	<build>
-		<finalName>ambitcli</finalName>
+		<finalName>ambitcli-${project.version}</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -52,25 +52,35 @@
 			</resource>
 		</resources>
 		<plugins>
+			<!-- <plugin> <artifactId>maven-assembly-plugin</artifactId> <version>2.6</version> 
+				<executions> <execution> <id>create-executable-jar</id> <phase>package</phase> 
+				<goals> <goal>single</goal> </goals> <configuration> <finalName>ambitcli-${ambit.version}</finalName> 
+				<descriptorRefs> <descriptorRef> jar-with-dependencies </descriptorRef> </descriptorRefs> 
+				<archive> <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile> 
+				</archive> </configuration> </execution> </executions> </plugin> -->
 			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.6</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.4.2</version>
 				<executions>
 					<execution>
-						<id>create-executable-jar</id>
 						<phase>package</phase>
 						<goals>
-							<goal>single</goal>
+							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<descriptorRefs>
-								<descriptorRef>
-									jar-with-dependencies
-								</descriptorRef>
-							</descriptorRefs>
-							<archive>
-								<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
-							</archive>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Main-Class>ambit2.dbcli.AmbitCli</Main-Class>
+										<Build-Number>${buildNumber}</Build-Number>
+										<Package-Vendor>Ideaconsult Ltd.</Package-Vendor>
+										<Package-Version>${project.version}</Package-Version>
+										<Package> ambit2.dbcli</Package>
+									</manifestEntries>
+								</transformer>
+							</transformers>
 						</configuration>
 					</execution>
 				</executions>
