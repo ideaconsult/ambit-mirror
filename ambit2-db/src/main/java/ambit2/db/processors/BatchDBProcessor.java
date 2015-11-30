@@ -36,6 +36,7 @@ import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
+import org.apache.commons.csv.CSVFormat;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit2.base.data.ILiteratureEntry;
@@ -43,6 +44,7 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitIOException;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
+import ambit2.core.io.RawIteratingCSVReader;
 import ambit2.core.io.RawIteratingFolderReader;
 import ambit2.core.io.RawIteratingMOLReader;
 import ambit2.core.io.RawIteratingSDFReader;
@@ -87,15 +89,28 @@ public class BatchDBProcessor<ITEMTYPE> extends AbstractBatchProcessor<IInputSta
 					};					
 					return new RawIteratingFolderReader(file.listFiles(filter));
 				} else {
-					if (file.getName().endsWith(FileInputState._FILE_TYPE.SDF_INDEX.getExtension())) {
+					if (FileInputState._FILE_TYPE.SDF_INDEX.hasExtension(file)) {
 						RawIteratingSDFReader reader = new RawIteratingSDFReader(
 								new FileReader(file));
 						if (getReference()==null)
 							reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
 						else reader.setReference(getReference());
 						return reader;
-					} else if (file.getName().endsWith(FileInputState._FILE_TYPE.MOL_INDEX.getExtension())) {
+					} else if (FileInputState._FILE_TYPE.MOL_INDEX.hasExtension(file)) {
 						RawIteratingMOLReader reader = new RawIteratingMOLReader(new FileReader(file));
+						if (getReference()==null)
+							reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
+						else reader.setReference(getReference());
+						return reader;
+/* TEST and replace the wrapper with this */
+					} else if (FileInputState._FILE_TYPE.CSV_INDEX.hasExtension(file)) {
+						RawIteratingCSVReader reader = new RawIteratingCSVReader(new FileReader(file),CSVFormat.EXCEL);
+						if (getReference()==null)
+							reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
+						else reader.setReference(getReference());
+						return reader;						
+					} else if (FileInputState._FILE_TYPE.TXT_INDEX.hasExtension(file)) {
+						RawIteratingCSVReader reader = new RawIteratingCSVReader(new FileReader(file),CSVFormat.TDF.withCommentMarker('#'));
 						if (getReference()==null)
 							reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
 						else reader.setReference(getReference());
