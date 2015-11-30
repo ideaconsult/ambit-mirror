@@ -17,6 +17,7 @@ import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.io.setting.StringIOSetting;
@@ -25,6 +26,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.CASProcessor;
 
 public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends IteratingFilesWithHeaderReader<COLUMN> {
@@ -141,7 +143,7 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends 
 									nextMolecule = SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class);
 								} else 
 							    nextMolecule = sp.parseSmiles(values[smilesIndex].toString());
-							} catch (InvalidSmilesException x) {
+							} catch (InvalidSmilesException | ArrayIndexOutOfBoundsException x) {
 									// do not want to break if a record is faulty
 									logger.fine("Empty molecule!");
 									nextMolecule = SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class); // just create
@@ -313,5 +315,5 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends 
 	    }
 	    @Override
 	    protected abstract COLUMN createPropertyByColumnName(String name);
-	    
+
 }
