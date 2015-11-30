@@ -66,6 +66,7 @@ Please note that modern web browsers (e.g. Firefox 10, Chrome, Internet Explorer
 ####Customize the Web application authentication and authorization
 
 - Open and edit the following file, replacing the {tomcat-dir} with the relevant value from your configuration.
+  [Details the configuration modes](./configureaa.html)
 
 ````
 	{tomcat-dir}/webapps/ambit2/WEB-INF/classes/config/config.prop
