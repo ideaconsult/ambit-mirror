@@ -48,6 +48,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.IChemObjectWriter;
 
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IChemical;
 import ambit2.base.interfaces.IStructureRecord;
@@ -766,10 +767,11 @@ public class AmbitCli {
 		}
 		try {
 			Object o = options.getParam(":isotopes");
-			standardprocessor.setClearIsotopes(Boolean.parseBoolean(o.toString()));
+			standardprocessor.setClearIsotopes(Boolean.parseBoolean(o
+					.toString()));
 		} catch (Exception x) {
 		}
-		
+
 		boolean debug = false;
 		try {
 			Object o = options.getParam(":debugatomtypes");
@@ -868,7 +870,14 @@ public class AmbitCli {
 
 						try {
 							mol = molReader.process(record);
-
+							if (mol != null)
+							for (Property p : record.getRecordProperties()) {
+								Object v = record.getRecordProperty(p);
+								//get rid of smiles, inchi , etc, these are already parsed
+								if (v != null && !p.getName().startsWith("http://www.opentox.org/api/1.1#")) {
+									mol.setProperty(p.getName(), v);
+								}	
+							}
 						} catch (Exception x) {
 							logger.log(Level.SEVERE, "MSG_ERR_MOLREAD",
 									record.getRecordProperties());
@@ -892,26 +901,27 @@ public class AmbitCli {
 
 						} catch (Exception x) {
 							logger.log(Level.SEVERE, x.getMessage(), x);
-							if (processed!=null)
-							processed.setProperty("ERROR.standardisation",
-									x.getMessage());
+							if (processed != null)
+								processed.setProperty("ERROR.standardisation",
+										x.getMessage());
 						} finally {
 							if (processed != null)
 								processed.addProperties(mol.getProperties());
 						}
-						if (processed!=null)
-						try {
-							if (debugatomtypes) {
-								Object debug = (processed==null)?null:processed
-										.getProperty("AtomTypes");
-								
-								if (debug != null && !"".equals(debug))
+						if (processed != null)
+							try {
+								if (debugatomtypes) {
+									Object debug = (processed == null) ? null
+											: processed
+													.getProperty("AtomTypes");
+
+									if (debug != null && !"".equals(debug))
+										writer.write(processed);
+								} else
 									writer.write(processed);
-							} else
-								writer.write(processed);
-						} catch (Exception x) {
-							logger.log(Level.SEVERE, x.getMessage());
-						}
+							} catch (Exception x) {
+								logger.log(Level.SEVERE, x.getMessage());
+							}
 						return record;
 
 					}
@@ -1247,5 +1257,10 @@ public class AmbitCli {
 }
 
 class Context extends HashMap<String, String> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1993541083813105854L;
 
 }
