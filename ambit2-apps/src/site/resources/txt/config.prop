@@ -1,0 +1,59 @@
+#AA configuration for AMBIT web services
+######## Option 1 #########################################
+#OpenTox OpenSSO server
+#For AMBIT  web services configuration please see ambit2.pref 
+#For logging fine logging please see logging.prop file
+#If true, Ambit REST services are protected by OpenTox AA 
+#If false, Ambit REST services are not protected by OpenSSO
+aa.enabled=false
+#OpenTox OpenSSO server
+aa.opensso=http://opensso.in-silico.ch/opensso/identity
+#OpenTox policy server
+aa.policy=http://opensso.in-silico.ch/Pol/opensso-pol
+#Test AA user, used for running tests only
+aa.user=example
+aa.pass=example
+######### Option 2 ########################################
+#Used to enable simple local HTTP Basic authz, in case OpenSSO AA is disabled
+aa.local.enabled=true
+aa.local.admin.name=admin
+aa.local.admin.pass=example
+guard.enabled=
+guard.list=http://localhost
+warmup.enabled=false
+allowed.origins=*
+######### Option 3 ########################################
+#AMBIT local users database
+aa.db.enabled=false
+#MySQL Database configuration
+Host=localhost
+Scheme=jdbc\:mysql
+Port=3306
+Database=ambit_users
+User=example
+Password=example
+users_dbname=ambit_users
+########################################################
+#Secret  Change it. Should be 16 characters!
+secret=123456changeit78
+#Session timeout in milliseconds. Default is 45 min = 2700000 ms
+sessiontimeout=2700000
+############################################################
+#e-mail setup. Used for registration notifications
+mail.smtp.starttls.enable=true
+mail.smtp.auth=true
+mail.transport.protocol=smtp
+mail.smtp.port=587
+mail.smtp.socketFactory.fallback=false
+mail.host=SMTP.server.net
+mail.user=emailaccount
+mail.password=emailaccountpassword
+notification.admin.email=emailaccount@smtp.server.net
+#use email verification upon user registration
+enableEmailVerification=false
+Note: there is a new option in ambit2.pref, specifying the timeout for the 
+queries, executed by the browser. If you experience timeout errors, consider
+increasing the default value of 10 sec (=10000 msec)
+###########################################################
+#AJAX query timeout, msec
+ajax.timeout=10000
