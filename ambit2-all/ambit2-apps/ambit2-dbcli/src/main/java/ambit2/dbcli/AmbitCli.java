@@ -44,6 +44,7 @@ import net.idea.modbcum.q.update.AbstractUpdate;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.codehaus.jackson.JsonNode;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.IChemObjectWriter;
 
@@ -871,13 +872,17 @@ public class AmbitCli {
 						try {
 							mol = molReader.process(record);
 							if (mol != null)
-							for (Property p : record.getRecordProperties()) {
-								Object v = record.getRecordProperty(p);
-								//get rid of smiles, inchi , etc, these are already parsed
-								if (v != null && !p.getName().startsWith("http://www.opentox.org/api/1.1#")) {
-									mol.setProperty(p.getName(), v);
-								}	
-							}
+								for (Property p : record.getRecordProperties()) {
+									Object v = record.getRecordProperty(p);
+									// get rid of smiles, inchi , etc, these are
+									// already parsed
+									if (v != null
+											&& !p.getName()
+													.startsWith(
+															"http://www.opentox.org/api/1.1#")) {
+										mol.setProperty(p.getName(), v);
+									}
+								}
 						} catch (Exception x) {
 							logger.log(Level.SEVERE, "MSG_ERR_MOLREAD",
 									record.getRecordProperties());
@@ -888,8 +893,10 @@ public class AmbitCli {
 						processed = mol;
 
 						// CDK adds these for the first MOL line
-						// mol.removeProperty(CDKConstants.TITLE);
-						// mol.removeProperty(CDKConstants.REMARK);
+						if (mol.getProperty(CDKConstants.TITLE) == null)
+							mol.removeProperty(CDKConstants.TITLE);
+						if (mol.getProperty(CDKConstants.REMARK) == null)
+							mol.removeProperty(CDKConstants.REMARK);
 
 						if ((smirksProcessor != null)
 								&& smirksProcessor.isEnabled()) {
