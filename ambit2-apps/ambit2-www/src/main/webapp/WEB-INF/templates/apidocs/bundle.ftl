@@ -87,7 +87,7 @@
 							   "allowMultiple": false
 							},			
 							{
-							   "name": "url",
+							   "name": "seeAlso",
 							   "description": "Bundle source URL",
 							   "required": true,
 							   "type": "String",
