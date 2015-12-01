@@ -71,7 +71,7 @@ Please note that modern web browsers (e.g. Firefox 10, Chrome, Internet Explorer
 
 #####Customize the Web application authentication and authorization
 
-- Open and edit the following file, replacing the {tomcat-dir} with the relevant value from your configuration.
+- Open and edit the following file, replacing the {tomcat-dir} with the relevant value from your configuration [Configuration details](./configureaa.html).
 
 ````
 	{tomcat-dir}/webapps/enanomapper/WEB-INF/classes/config/config.prop
