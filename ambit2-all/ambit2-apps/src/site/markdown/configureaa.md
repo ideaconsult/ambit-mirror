@@ -1,6 +1,8 @@
-#AMBIT web application install guide 
+#AMBIT web application configuration guide 
 
-##Configuration
+[Download](./downloads.html) | [Installation guide](install_ambitrest.html) | [Configuration](configure.html) | [Authentication and authorisation](./configureaa.html)
+
+##Authentication and authorisation	
 
 AMBIT supports three modes for defining users and assigning access rights.
 
@@ -16,7 +18,7 @@ The configuration file `config.prop` is found at
 {tomcat-dir}/webapps/ambit2/WEB-INF/classes/config/config.prop
 ````
 
-An example [configuration file](config.prop) 
+An example [configuration file](./txt/config.prop) 
 
 ### OpenTox AA
 Set `aa.enabled=true` to enable [OpenTox Authentication and Authorisation](./opentox_aa.html).
@@ -26,7 +28,7 @@ which relies on a customized [OpenAM](https://en.wikipedia.org/wiki/OpenAM).
 
 This mode enables federated authentication and authorisation.
 
-* Read only, one admin user
+### Read only, one admin user
 
 Set `aa.local.enabled=true` to switch to this mode.
 
@@ -44,18 +46,17 @@ This feature is introduced since AMBIT 2.5.5.
 
 * IMPORTANT: `ambit_users` database should exist at `ambit.db.host` 
 
-There is user management user interface.
+There is an user management user interface.
 
 The eMail notification settings are introduced since AMBIT 2.5.5. 
 The eMail server is used to send confirmation emails to newly registered users,
-as well as confirmations for password resets.
-Please define a valid SMTP server.
+as well as confirmations for password resets. Please define a valid SMTP server.
 
 The enableEmailVerification option is introduced since  
 AMBIT 2.5.8. With email verification disabled anybody could register a new
-user; however the user status have to be changed to 'confirmed' by an admin
+user; however the user status have to be changed to `confirmed` by an admin
 through the user management page. 
 
-Since ambit2 schema 8.6 and ambit_users schema 2.3 the tables may be imported 
+Since `ambit2` schema 8.6 and `ambit_users` schema 2.3 the tables may be imported 
 into one common database.
 

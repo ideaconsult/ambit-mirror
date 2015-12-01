@@ -1,0 +1,78 @@
+############################################################
+#This is AMBIT 3.0.0 web services configuration.
+ambit.version=3.0.0
+toxtree.version=3.0.0-SNAPSHOT
+############################################################
+#For Authentication and authorization configuration please see config.prop file
+#For fine tuning logging please see logging.prop file 
+#MySQL Database configuration
+#For database installation see http://ambit.sourceforge.net/install_ambitrest.html
+Host=localhost
+Scheme=jdbc\:mysql
+Port=3306
+Database=ambit2
+User=example
+Password=example
+############################################################
+#How to serialize RDF/XML - by Jena (standard, prettier, slower) or StAX (faster)
+rdf.writer=stax
+############################################################
+#When serializing to SDF, change line separators to \r\n 
+#(for DEREK compatibility)
+changeLineSeparators=true
+############################################################
+#Enable JSONP support true|false
+jsonp=true
+############################################################
+#URI of the ontology service , see http://ambit.sf.net/api_ontology.html
+service.ontology=http://server:port/ontology
+#Add dataset prefix for compound URI, e.g.  /dataset/1/compound/1 , instead of /compound/1
+#Experimental true|false. Should be used if AA is on, see config.prop file
+dataset.members.prefix=false
+############################################################
+#Path to OpenBabel executable http://openbabel.org
+#only for depiction demo
+OBABEL_HOME=/path/to/obabel
+#Enable Dragon descriptors via REST API
+#Path to Dragon6 executable http://www.talete.mi.it/products/dragon_description.htm 
+DRAGON_HOME=/path/to/dragon6
+#Enable Balloon for structure optimisation
+#Path to balloon executable http://users.abo.fi/mivainio/balloon/ 
+BALLOON_HOME=/path/to/baloon
+#Add a column with the license in CSV and TXT files
+license.intextfiles=false
+#Error report level : production or debug . If debug, the status will show the stack trace 
+ambit.report.level=debug
+############################################################
+MAXRECORDS=10000
+############################################################
+#ambit profile
+#Specifies which version of the menu will be used: default | lri | toxmatch | qmrf | enanomapper | ot
+ambit.profile=lri
+############################################################
+#attach resources
+attach.depict=true
+attach.toxmatch=true
+attach.substance=true
+############################################################
+#OpenPhacts client config
+ops.server_root=
+app_id=
+app_key=
+############################################################
+# IUCLID5 client config
+#iuclid5 SessionEngine service credentials 
+i5.user=example
+i5.pass=example
+#target url for iuclid5 services 
+i5.server=http://server:8080/i5wsruntime/services
+############################################################
+#google.analytics code (UA-XXXX-Y) if not set GA will be disabled
+google.analytics=
+############################################################
+#AJAX query timeout, msec
+#specifies the timeout for the queries, executed by the browser. 
+#If you experience timeout errors, consider increasing the default value of 10 sec
+ajax.timeout=300000
+#Order by similarity
+similarity.order=true

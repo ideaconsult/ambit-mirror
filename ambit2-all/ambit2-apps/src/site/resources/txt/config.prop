@@ -51,9 +51,3 @@ mail.password=emailaccountpassword
 notification.admin.email=emailaccount@smtp.server.net
 #use email verification upon user registration
 enableEmailVerification=false
-Note: there is a new option in ambit2.pref, specifying the timeout for the 
-queries, executed by the browser. If you experience timeout errors, consider
-increasing the default value of 10 sec (=10000 msec)
-###########################################################
-#AJAX query timeout, msec
-ajax.timeout=10000

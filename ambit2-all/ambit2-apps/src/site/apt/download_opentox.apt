@@ -11,7 +11,7 @@ Clients
 
  [OpenTox client] {{{https://github.com/ideaconsult/opentox-cli}OpenTox Java client library}}
  
- [OpenTox Authentication and Authorization client library] {{{https://github.com/vedina/opentox-aa-cli } source code (Java)}} 
+ [OpenTox Authentication and Authorization client library] {{{https://github.com/vedina/opentox-aa-cli} source code (Java)}} 
  
 Services
 ~~~~~~~~~~

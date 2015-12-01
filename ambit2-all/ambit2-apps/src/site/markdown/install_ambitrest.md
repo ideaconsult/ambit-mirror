@@ -1,5 +1,7 @@
 #AMBIT web application install guide 
 
+[Download](./downloads.html) | [Installation guide](install_ambitrest.html) | [Configuration](configure.html) | [Authentication and authorisation](./configureaa.html)
+
 ###Requirements
 
 * Java Runtime Environment ([JRE](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)). Install Java 7 Standard Edition or newer.
@@ -50,6 +52,7 @@ Please note that modern web browsers (e.g. Firefox 10, Chrome, Internet Explorer
 ````
 
 - The following option specifies the MySQL database configuration. Modify only if your setup differs from the default.
+  [Configuration details](./configure.html)
 
 >IMPORTANT: The guide assumes the user should have grants set as per database installation step above
 
@@ -66,7 +69,7 @@ Please note that modern web browsers (e.g. Firefox 10, Chrome, Internet Explorer
 ####Customize the Web application authentication and authorization
 
 - Open and edit the following file, replacing the {tomcat-dir} with the relevant value from your configuration.
-  [Details the configuration modes](./configureaa.html)
+  [Configuration details](./configureaa.html)
 
 ````
 	{tomcat-dir}/webapps/ambit2/WEB-INF/classes/config/config.prop
