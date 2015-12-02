@@ -3703,8 +3703,9 @@ var jToxStudy = (function () {
           for (var i = 0;i < len; ++i) {
             var col = jT.$.extend({}, defaultColumns[i + start]);
             col = jT.ui.modifyColDef(self, col, category, group);
-            if (col != null)
+            if (col != null) {
               colDefs.push(col);
+            }
           }
         };
 
@@ -3759,7 +3760,7 @@ var jToxStudy = (function () {
         });
 
         // finally put the protocol entries
-        putDefaults(4, 4, "protocol");
+        putDefaults(4, 5, "protocol");
 
         // but before given it up - make a small sorting..
         jT.ui.sortColDefs(colDefs);
