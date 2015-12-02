@@ -7,25 +7,6 @@ var config_study = {
                 }
             },
             "parameters": {
-                "data_gathering_instruments": {
-                    "sTitle": "Instruments"
-                },
-                "agitation": {"bVisible" : false},
-                "common name": {"bVisible" : false},
-                "controls included": {"bVisible" : false},
-                "illumination (flux)": {"bVisible" : false},
-                "exposure route": {"bVisible" : false},
-                "gender / life-stage": {"bVisible" : false},
-                "illumination (photoperiod)": {"bVisible" : false},
-                "source": {"bVisible" : false},
-                "temperature": {"bVisible" : false},
-                "ph": {"bVisible" : false},
-                "depuration duration": {"bVisible" : false},
-                "media": {"bVisible" : false},
-                "maintenance and preparation": {"bVisible" : false},
-    			"species" : {
-    				"bVisible": false
-    			}	
             },
             "conditions": {
             },
@@ -47,6 +28,9 @@ var config_study = {
                     		"</span>";
                     }
                 },
+                "uuid" : {
+                 	 "bVisible": true
+                }, 
                 "reliability" : {
                 	"bVisible": false
                 }
