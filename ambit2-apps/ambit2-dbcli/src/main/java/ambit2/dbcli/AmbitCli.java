@@ -92,7 +92,7 @@ import com.mysql.jdbc.CommunicationsException;
  * 
  */
 public class AmbitCli {
-	static Logger logger;
+	static Logger logger_cli;
 	static final String loggingProperties = "ambit2/dbcli/logging.properties";
 	static final String log4jProperties = "ambit2/dbcli/log4j.properties";
 
@@ -101,8 +101,9 @@ public class AmbitCli {
 	public AmbitCli(CliOptions options) {
 		this.options = options;
 		Locale.setDefault(Locale.ENGLISH);
-		logger = Logger.getLogger("ambitcli", "ambit2.dbcli.msg");
+		logger_cli = Logger.getLogger("ambitcli", "ambit2.dbcli.msg");
 
+		
 		String dOption = System.getProperty("java.util.logging.config.file");
 		if (dOption == null || "".equals(dOption)) {
 			InputStream in = null;
@@ -112,7 +113,7 @@ public class AmbitCli {
 				LogManager.getLogManager().readConfiguration(in);
 
 			} catch (Exception x) {
-				logger.log(Level.WARNING, x.getMessage());
+				logger_cli.log(Level.WARNING, x.getMessage());
 			} finally {
 				try {
 					in.close();
@@ -128,7 +129,7 @@ public class AmbitCli {
 			PropertyConfigurator.configure(in);
 
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage());
+			logger_cli.log(Level.WARNING, x.getMessage());
 		} finally {
 			try {
 				in.close();
@@ -136,6 +137,7 @@ public class AmbitCli {
 			}
 		}
 
+		logger_cli.log(Level.INFO,"MSG_INFO",new Object[] {System.currentTimeMillis()});
 	}
 
 	public long go(String command, String subcommand) throws Exception {
@@ -162,7 +164,7 @@ public class AmbitCli {
 			CliOptions options = new CliOptions();
 			if (options.parse(args)) {
 				AmbitCli navigator = new AmbitCli(options);
-				logger.log(
+				logger_cli.log(
 						Level.INFO,
 						"MSG_INFO_RUNNING",
 						new Object[] {
@@ -181,20 +183,20 @@ public class AmbitCli {
 			} else
 				System.exit(0);
 		} catch (ConnectException x) {
-			logger.log(Level.SEVERE, "MSG_CONNECTION_REFUSED");
+			logger_cli.log(Level.SEVERE, "MSG_CONNECTION_REFUSED");
 			System.exit(-1);
 		} catch (CommunicationsException x) {
-			logger.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED");
+			logger_cli.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED");
 			System.exit(-1);
 		} catch (SQLException x) {
-			logger.log(Level.SEVERE, "MSG_ERR_SQL", x);
+			logger_cli.log(Level.SEVERE, "MSG_ERR_SQL", x);
 			System.exit(-1);
 		} catch (Exception x) {
-			logger.log(Level.SEVERE, x.getMessage());
+			logger_cli.log(Level.SEVERE, x.getMessage());
 			System.exit(-1);
 		} finally {
 
-			logger.log(Level.INFO, "MSG_INFO_COMPLETED",
+			logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED",
 					(System.currentTimeMillis() - now));
 		}
 	}
@@ -204,15 +206,15 @@ public class AmbitCli {
 
 		try {
 			if (writer != null) {
-				logger.log(Level.FINE, "MSG_FINE_CONNCLOSE");
+				logger_cli.log(Level.FINE, "MSG_FINE_CONNCLOSE");
 				writer.close();
 			}
 			writer = null;
 		} catch (Exception xx) {
-			logger.log(Level.WARNING, xx.getMessage(), xx);
+			logger_cli.log(Level.WARNING, xx.getMessage(), xx);
 		}
 
-		logger.log(Level.FINE, "MSG_FINE_CONNOPEN");
+		logger_cli.log(Level.FINE, "MSG_FINE_CONNOPEN");
 
 		Connection c = null;
 		DBConnectionConfigurable<Context> dbc = null;
@@ -226,7 +228,7 @@ public class AmbitCli {
 		writer.setConnection(c);
 		writer.setCloseConnection(true);
 		writer.open();
-		logger.log(Level.FINE, "MSG_FINE_CONNOPENED");
+		logger_cli.log(Level.FINE, "MSG_FINE_CONNOPENED");
 		return writer;
 	}
 
@@ -273,7 +275,7 @@ public class AmbitCli {
 
 				if ((records % 1000) == 0) {
 					now = System.currentTimeMillis();
-					logger.info(String.format(
+					logger_cli.info(String.format(
 							"Records read %d ; %f msec per record\t", records,
 							((now - start) / 1000.0)));
 					start = now;
@@ -329,7 +331,7 @@ public class AmbitCli {
 
 					@Override
 					protected Logger getLogger() {
-						return logger;
+						return logger_cli;
 					}
 				};
 				return mc;
@@ -390,9 +392,9 @@ public class AmbitCli {
 			t.addBatch("SET UNIQUE_CHECKS = 0;");
 			t.addBatch("SET AUTOCOMMIT = 0;");
 			t.executeBatch();
-			logger.log(Level.FINE, "MSG_FINE_INDEXDISABLED");
+			logger_cli.log(Level.FINE, "MSG_FINE_INDEXDISABLED");
 		} catch (SQLException x) {
-			logger.log(Level.WARNING, "MSG_ERR_INDEX", new Object[] {
+			logger_cli.log(Level.WARNING, "MSG_ERR_INDEX", new Object[] {
 					"disabling", x.getMessage() });
 
 			throw x;
@@ -413,9 +415,9 @@ public class AmbitCli {
 			t.addBatch("SET FOREIGN_KEY_CHECKS = 1;");
 			t.executeBatch();
 			connection.commit();
-			logger.log(Level.FINE, "MSG_FINE_INDEXENABLED");
+			logger_cli.log(Level.FINE, "MSG_FINE_INDEXENABLED");
 		} catch (SQLException x) {
-			logger.log(Level.WARNING, "MSG_ERR_INDEX", new Object[] {
+			logger_cli.log(Level.WARNING, "MSG_ERR_INDEX", new Object[] {
 					"enabling", x.getMessage() });
 			throw x;
 		} finally {
@@ -440,7 +442,7 @@ public class AmbitCli {
 		} catch (Exception x) {
 			throw x;
 		} finally {
-			logger.log(Level.INFO, "MSG_INFO_COMPLETED",
+			logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED",
 					(System.currentTimeMillis() - now));
 			try {
 				if (reader != null)
@@ -448,7 +450,7 @@ public class AmbitCli {
 			} catch (Exception x) {
 			}
 			if (options.output != null) {
-				logger.log(Level.INFO, "MSG_INFO_RESULTSWRITTEN",
+				logger_cli.log(Level.INFO, "MSG_INFO_RESULTSWRITTEN",
 						options.output);
 			}
 		}
@@ -457,7 +459,7 @@ public class AmbitCli {
 	protected long parseCommandAE(String subcommand, long now) throws Exception {
 
 		AtomEnvironmentGeneratorApp test = new AtomEnvironmentGeneratorApp(
-				logger);
+				logger_cli);
 		String file = options.input;
 		String outdir = options.output;
 
@@ -477,7 +479,7 @@ public class AmbitCli {
 			if (o != null)
 				id_tag = o.toString();
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		}
 
 		try {
@@ -485,7 +487,7 @@ public class AmbitCli {
 			if (o != null)
 				activityTag = o.toString();
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		}
 
 		try {
@@ -493,7 +495,7 @@ public class AmbitCli {
 			if (o != null)
 				mergeResultsFile = o.toString();
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		}
 
 		try {
@@ -501,7 +503,7 @@ public class AmbitCli {
 			if (o != null)
 				generate_csv = ((Boolean) o).booleanValue();
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		}
 
 		try {
@@ -509,7 +511,7 @@ public class AmbitCli {
 			if (o != null)
 				generate_mm = ((Boolean) o).booleanValue();
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		}
 
 		try {
@@ -517,7 +519,7 @@ public class AmbitCli {
 			if (o != null)
 				generate_json = ((Boolean) o).booleanValue();
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		}
 
 		try {
@@ -525,7 +527,7 @@ public class AmbitCli {
 			if (o != null)
 				normalize = ((Boolean) o).booleanValue();
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		}
 
 		try {
@@ -533,7 +535,7 @@ public class AmbitCli {
 			if (o != null)
 				laplace_smoothing = ((Double) o).doubleValue();
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		}
 
 		try {
@@ -541,7 +543,7 @@ public class AmbitCli {
 			if (o != null)
 				cost_sensitive = ((Boolean) o).booleanValue();
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		}
 
 		try {
@@ -549,7 +551,7 @@ public class AmbitCli {
 			if (o != null)
 				levels_as_namespace = ((Boolean) o).booleanValue();
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		}
 
 		try {
@@ -578,7 +580,7 @@ public class AmbitCli {
 			JsonNode chunkNode = scommand.get(":chunk");
 			chunksize = Long.parseLong(chunkNode.get("value").getTextValue());
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		}
 
 		int chunk = 1;
@@ -586,7 +588,7 @@ public class AmbitCli {
 		try {
 			File file = new File(options.input);
 			File outdir = new File(options.output);
-			logger.log(
+			logger_cli.log(
 					Level.INFO,
 					"MSG_INFO_COMMAND_SPLIT",
 					new Object[] { file.getAbsoluteFile(), chunksize,
@@ -597,7 +599,7 @@ public class AmbitCli {
 				File outfile = new File(outdir, String.format("%d_%s", chunk,
 						file.getName()));
 				chunk_started = System.currentTimeMillis();
-				logger.log(Level.INFO, "MSG_INFO_COMMAND_CHUNK", new Object[] {
+				logger_cli.log(Level.INFO, "MSG_INFO_COMMAND_CHUNK", new Object[] {
 						chunk, outfile.getAbsolutePath() });
 				writer = new FileWriter(outfile);
 				int records = 0;
@@ -609,7 +611,7 @@ public class AmbitCli {
 								writer.close();
 						} catch (Exception x) {
 						}
-						logger.log(
+						logger_cli.log(
 								Level.INFO,
 								"MSG_INFO_COMMAND_CHUNKWRITTEN",
 								new Object[] {
@@ -622,7 +624,7 @@ public class AmbitCli {
 						records = 0;
 						chunk_started = System.currentTimeMillis();
 
-						logger.log(
+						logger_cli.log(
 								Level.INFO,
 								"MSG_INFO_COMMAND_CHUNK",
 								new Object[] { chunk, outfile.getAbsolutePath() });
@@ -643,7 +645,7 @@ public class AmbitCli {
 		} catch (Exception x) {
 			throw x;
 		} finally {
-			logger.log(Level.INFO, "MSG_INFO_COMPLETED",
+			logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED",
 					(System.currentTimeMillis() - now));
 			try {
 				if (reader != null)
@@ -653,13 +655,13 @@ public class AmbitCli {
 			try {
 				if (writer != null)
 					writer.close();
-				logger.log(Level.INFO, "MSG_INFO_COMMAND_CHUNKWRITTEN",
+				logger_cli.log(Level.INFO, "MSG_INFO_COMMAND_CHUNKWRITTEN",
 						new Object[] { chunk,
 								(System.currentTimeMillis() - chunk_started) });
 			} catch (Exception x) {
 			}
 			if (options.output != null) {
-				logger.log(Level.INFO, "MSG_INFO_RESULTSWRITTEN",
+				logger_cli.log(Level.INFO, "MSG_INFO_RESULTSWRITTEN",
 						options.output);
 			}
 		}
@@ -671,13 +673,13 @@ public class AmbitCli {
 		try {
 			page = (Integer) options.getParam(":page");
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.toString());
+			logger_cli.log(Level.WARNING, x.toString());
 		}
 		int pagesize = -1;
 		try {
 			pagesize = (Integer) options.getParam(":pagesize");
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.toString());
+			logger_cli.log(Level.WARNING, x.toString());
 		}
 		final StructureStandardizer standardprocessor = new StructureStandardizer();
 
@@ -696,11 +698,11 @@ public class AmbitCli {
 					tmp = new SMIRKSProcessor(smirksConfig);
 					tmp.setEnabled(true);
 				} else
-					logger.log(Level.WARNING,
+					logger_cli.log(Level.WARNING,
 							"SMIRKS transformation file not found");
 			}
 		} catch (Exception x) {
-			logger.log(Level.SEVERE, x.getMessage());
+			logger_cli.log(Level.SEVERE, x.getMessage());
 			tmp = null;
 		}
 		final SMIRKSProcessor smirksProcessor = tmp;
@@ -792,7 +794,7 @@ public class AmbitCli {
 					"Output file not specified. Please use -o {file}");
 		final File outfile = new File(options.output);
 
-		logger.log(
+		logger_cli.log(
 				Level.INFO,
 				"MSG_INFO_READINGWRITING",
 				new Object[] { file.getAbsoluteFile(),
@@ -836,7 +838,7 @@ public class AmbitCli {
 			public void onError(IStructureRecord input, Object output,
 					IBatchStatistics stats, Exception x) {
 				super.onError(input, output, stats, x);
-				logger.log(Level.SEVERE, x.getMessage());
+				logger_cli.log(Level.SEVERE, x.getMessage());
 			}
 
 			@Override
@@ -884,8 +886,8 @@ public class AmbitCli {
 									}
 								}
 						} catch (Exception x) {
-							logger.log(Level.SEVERE, "MSG_ERR_MOLREAD",
-									record.getRecordProperties());
+							logger_cli.log(Level.SEVERE, "MSG_ERR_MOLREAD",new Object[] {x.toString()}
+									);
 							return record;
 						} finally {
 
@@ -907,7 +909,7 @@ public class AmbitCli {
 							processed = standardprocessor.process(mol);
 
 						} catch (Exception x) {
-							logger.log(Level.SEVERE, x.getMessage(), x);
+							logger_cli.log(Level.SEVERE, x.getMessage(), x);
 							if (processed != null)
 								processed.setProperty("ERROR.standardisation",
 										x.getMessage());
@@ -927,7 +929,7 @@ public class AmbitCli {
 								} else
 									writer.write(processed);
 							} catch (Exception x) {
-								logger.log(Level.SEVERE, x.getMessage());
+								logger_cli.log(Level.SEVERE, x.getMessage());
 							}
 						return record;
 
@@ -940,7 +942,7 @@ public class AmbitCli {
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (AbstractBatchProcessor.PROPERTY_BATCHSTATS.equals(evt
 						.getPropertyName()))
-					logger.log(Level.INFO, evt.getNewValue().toString());
+					logger_cli.log(Level.INFO, evt.getNewValue().toString());
 			}
 		});
 		/*
@@ -956,20 +958,20 @@ public class AmbitCli {
 		try {
 			stats = batch.process(in);
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		} finally {
 			try {
 			} catch (Exception x) {
-				logger.warning(x.getMessage());
+				logger_cli.warning(x.getMessage());
 			}
 			try {
 				if (batch != null)
 					batch.close();
 			} catch (Exception x) {
-				logger.warning(x.getMessage());
+				logger_cli.warning(x.getMessage());
 			}
 			if (stats != null)
-				logger.log(Level.INFO, stats.toString());
+				logger_cli.log(Level.INFO, stats.toString());
 		}
 	}
 
@@ -990,10 +992,10 @@ public class AmbitCli {
 				super.onItemRead(input, stats);
 				if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 10000) == 0)
 					try {
-						logger.log(Level.INFO, stats.toString());
+						logger_cli.log(Level.INFO, stats.toString());
 						getConnection().commit();
 					} catch (Exception x) {
-						logger.log(Level.WARNING, x.getMessage());
+						logger_cli.log(Level.WARNING, x.getMessage());
 					}
 			};
 
@@ -1001,7 +1003,7 @@ public class AmbitCli {
 			public void onError(IStructureRecord input, Object output,
 					IBatchStatistics stats, Exception x) {
 				super.onError(input, output, stats, x);
-				logger.log(Level.SEVERE, x.getMessage());
+				logger_cli.log(Level.SEVERE, x.getMessage());
 			}
 		};
 
@@ -1018,21 +1020,21 @@ public class AmbitCli {
 		try {
 			stats = batch.process(in);
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		} finally {
 			try {
 				batch.getConnection().commit();
 			} catch (Exception x) {
-				logger.warning(x.getMessage());
+				logger_cli.warning(x.getMessage());
 			}
 			try {
 				if (batch != null)
 					batch.close();
 			} catch (Exception x) {
-				logger.warning(x.getMessage());
+				logger_cli.warning(x.getMessage());
 			}
 			if (stats != null)
-				logger.log(Level.INFO, stats.toString());
+				logger_cli.log(Level.INFO, stats.toString());
 		}
 	}
 
@@ -1042,7 +1044,7 @@ public class AmbitCli {
 		try {
 			pagesize = (Integer) options.getParam(":pagesize");
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.toString());
+			logger_cli.log(Level.WARNING, x.toString());
 		}
 
 		Set<FPTable> preprocessingOption = new TreeSet<FPTable>();
@@ -1060,7 +1062,7 @@ public class AmbitCli {
 						preprocessingOption.add(t);
 				}
 			} catch (Exception x) {
-				logger.log(Level.WARNING, x.toString());
+				logger_cli.log(Level.WARNING, x.toString());
 			}
 
 		DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>() {
@@ -1075,10 +1077,10 @@ public class AmbitCli {
 				super.onItemRead(input, stats);
 				if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 5000) == 0)
 					try {
-						logger.log(Level.INFO, stats.toString());
+						logger_cli.log(Level.INFO, stats.toString());
 						getConnection().commit();
 					} catch (Exception x) {
-						logger.log(Level.WARNING, x.getMessage());
+						logger_cli.log(Level.WARNING, x.getMessage());
 					}
 
 			};
@@ -1087,7 +1089,7 @@ public class AmbitCli {
 			public void onError(IStructureRecord input, Object output,
 					IBatchStatistics stats, Exception x) {
 				super.onError(input, output, stats, x);
-				logger.log(Level.SEVERE, x.getMessage());
+				logger_cli.log(Level.SEVERE, x.getMessage());
 			}
 		};
 		batch.setProcessorChain(new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>());
@@ -1227,37 +1229,37 @@ public class AmbitCli {
 		IBatchStatistics stats = null;
 		try {
 			query.setPageSize(pagesize);
-			logger.info(query.getSQL());
+			logger_cli.info(query.getSQL());
 			try {
 				disableIndices(batch.getConnection());
 			} catch (Exception x) {
-				logger.warning(x.getMessage());
+				logger_cli.warning(x.getMessage());
 			}
-			logger.log(Level.INFO, "MSG_INFO_QUERY", pagesize);
+			logger_cli.log(Level.INFO, "MSG_INFO_QUERY", pagesize);
 			stats = batch.process(query);
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		} finally {
 			try {
 				batch.getConnection().commit();
 			} catch (Exception x) {
-				logger.warning(x.getMessage());
+				logger_cli.warning(x.getMessage());
 			}
 
 			try {
 				enableIndices(batch.getConnection());
 			} catch (Exception x) {
-				logger.warning(x.getMessage());
+				logger_cli.warning(x.getMessage());
 			}
 
 			try {
 				if (batch != null)
 					batch.close();
 			} catch (Exception x) {
-				logger.warning(x.getMessage());
+				logger_cli.warning(x.getMessage());
 			}
 			if (stats != null)
-				logger.log(Level.INFO, stats.toString());
+				logger_cli.log(Level.INFO, stats.toString());
 		}
 
 	}
