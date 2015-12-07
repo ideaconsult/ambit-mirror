@@ -52,6 +52,8 @@ public class CallableBundleCreator extends
 			parseForm(input, item);
 			if (item.getName() == null || item.getSource() == null
 					|| item.getURL() == null) {
+				
+				if (item.getID()>0) return item; //bundle_uri 
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
 						String.format("%s=%s %s=%s %s=%s",
 								ISourceDataset.fields.title,item.getName(),
