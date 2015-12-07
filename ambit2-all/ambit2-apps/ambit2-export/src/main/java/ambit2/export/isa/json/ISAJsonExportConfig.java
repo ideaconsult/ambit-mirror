@@ -10,8 +10,7 @@ import ambit2.export.isa.ISAExportConfig;
 import ambit2.rules.json.JSONParsingUtils;
 
 public class ISAJsonExportConfig extends ISAExportConfig
-{
-	
+{	
 	public boolean singleJSONFile = false; 
 		
 	
@@ -32,9 +31,7 @@ public class ISAJsonExportConfig extends ISAExportConfig
 		{
 			//ISA_FORMAT
 			//ISA_VERSION
-			
 			//TODO
-			
 		}
 		
 		//Handling section BASIC
@@ -49,7 +46,6 @@ public class ISAJsonExportConfig extends ISAExportConfig
 				singleJSONFile = b;
 			
 			//TODO
-
 		}
 		
 		
