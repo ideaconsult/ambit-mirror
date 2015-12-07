@@ -11,6 +11,7 @@ import ambit2.export.isa.base.ISAConst.ISAFormat;
 import ambit2.export.isa.base.ISAConst.ISAVersion;
 import ambit2.export.isa.json.ISAJsonExportConfig;
 import ambit2.export.isa.json.ISAJsonExporter;
+import ambit2.export.isa.v1_0.objects.Investigation;
 
 public class ISAJsonExporter1_0 implements IISAExport
 {
@@ -25,6 +26,9 @@ public class ISAJsonExporter1_0 implements IISAExport
 
 	//work variables
 	ISAJsonExportConfig cfg = null;
+	
+	//ISA data
+	Investigation investigation = null;
 
 	public ISAJsonExporter1_0()
 	{	
@@ -59,13 +63,22 @@ public class ISAJsonExporter1_0 implements IISAExport
 		if (!records.hasNext())
 			throw new Exception("No records to iterate");
 
-		//TODO
+		
+		investigation = new Investigation();
 
 		while (records.hasNext())
 		{
 			SubstanceRecord rec = records.next();
 			handleRecord(rec);
 		}
+		
+		saveDataToOutputDir();
+	}
+	
+	void saveDataToOutputDir() throws Exception
+	{	
+		
+		//TODO
 	}
 
 	void handleRecord(SubstanceRecord rec)
