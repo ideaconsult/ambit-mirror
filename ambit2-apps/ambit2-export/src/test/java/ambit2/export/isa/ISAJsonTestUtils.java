@@ -1,8 +1,14 @@
 package ambit2.export.isa;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
+import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.export.isa.json.ISAJsonExportConfig;
+import ambit2.export.isa.v1_0.ISAJsonExporter1_0;
 
 import org.codehaus.jackson.schema.JsonSchema;
 import org.codehaus.jackson.JsonGenerationException;
@@ -21,7 +27,20 @@ public class ISAJsonTestUtils
 	public static void main(String[] args) throws Exception 
 	{
 		//testObjectToJson();
-		testJsonToObject();
+		//testJsonToObject();
+		
+		List<SubstanceRecord> sr = new ArrayList<SubstanceRecord>();
+		sr.add(null);
+		tesJsonExport(sr.iterator(), new File("/test"), null, null);
+	}
+	
+	public static void tesJsonExport(Iterator<SubstanceRecord> records, 
+			File outputDir, 
+			File exportConfig,
+			SubstanceEndpointsBundle endpointBundle) throws Exception
+	{
+		ISAJsonExporter1_0 exporter = new ISAJsonExporter1_0(records, outputDir, exportConfig,  endpointBundle);
+		exporter.export();
 	}
 	
 	public static void testISAJsonExportConfig(String jsonFileName) throws Exception
