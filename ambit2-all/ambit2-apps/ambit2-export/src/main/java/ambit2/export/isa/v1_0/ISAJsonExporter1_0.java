@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.export.isa.IISAExport;
@@ -56,15 +58,22 @@ public class ISAJsonExporter1_0 implements IISAExport
 			throw new Exception("Null output directory or file!");
 
 		if (exportConfig == null)
-			throw new Exception("Null export config file!");
-
-		cfg = ISAJsonExportConfig.loadFromJSON(exportConfig);
+		{	
+			//throw new Exception("Null export config file!");
+			cfg = ISAJsonExportConfig.getDefaultConfig();
+		}
+		else
+			cfg = ISAJsonExportConfig.loadFromJSON(exportConfig);
 
 		if (!records.hasNext())
 			throw new Exception("No records to iterate");
 
 		
 		investigation = new Investigation();
+		
+		investigation.title = "Title";
+		investigation.description = "Description";
+		
 
 		while (records.hasNext())
 		{
@@ -75,17 +84,27 @@ public class ISAJsonExporter1_0 implements IISAExport
 		saveDataToOutputDir();
 	}
 	
-	void saveDataToOutputDir() throws Exception
-	{	
-		
-		//TODO
-	}
-
 	void handleRecord(SubstanceRecord rec)
 	{
 		//TODO
 	}
-
+	
+	void saveDataToOutputDir() throws Exception
+	{	
+		if (cfg.singleJSONFile)
+		{
+			ObjectMapper mapper = new ObjectMapper();
+			String jsonString = mapper.writeValueAsString(investigation);
+			System.out.println(jsonString);
+		}
+		else
+		{
+			
+		}
+		//TODO
+	}
+	
+	
 	public File getExportJsonConfig() {
 		return exportConfig;
 	}

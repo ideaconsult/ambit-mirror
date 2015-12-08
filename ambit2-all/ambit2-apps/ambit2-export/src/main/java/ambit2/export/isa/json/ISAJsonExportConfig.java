@@ -11,7 +11,7 @@ import ambit2.rules.json.JSONParsingUtils;
 
 public class ISAJsonExportConfig extends ISAExportConfig
 {	
-	public boolean singleJSONFile = false; 
+	public boolean singleJSONFile = true;
 		
 	
 	
@@ -71,6 +71,13 @@ public class ISAJsonExportConfig extends ISAExportConfig
 		ISAJsonExportConfig conf = new ISAJsonExportConfig();
 		conf.parseJSONConfig(root);
 		return conf;
+	}
+	
+	public static ISAJsonExportConfig getDefaultConfig()
+	{
+		ISAJsonExportConfig conf = new ISAJsonExportConfig();
+		//TODO
 		
+		return conf;
 	}
 }
