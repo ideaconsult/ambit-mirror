@@ -293,8 +293,10 @@ public class StructureRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 						} catch (Exception x) {
 							hcell.setCellValue(h);
 						}
-						if (isAutosizeColumns())
+						if (isAutosizeColumns()) 
 							sheet.autoSizeColumn(hcell.getColumnIndex(), true);
+						sheet.setColumnHidden(hcell.getColumnIndex(),false);
+
 					}
 					Object value = record.getRecordProperty(p);
 
