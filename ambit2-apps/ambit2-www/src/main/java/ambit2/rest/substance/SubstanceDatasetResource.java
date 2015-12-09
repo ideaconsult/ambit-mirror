@@ -492,6 +492,8 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 								+ section.getTitle());
 
 						sheet.autoSizeColumn(hcell.getColumnIndex(), true);
+						//initially hide all columns, unhide if data is added to
+						sheet.setColumnHidden(hcell.getColumnIndex(),true);
 					}
 			}
 			}
