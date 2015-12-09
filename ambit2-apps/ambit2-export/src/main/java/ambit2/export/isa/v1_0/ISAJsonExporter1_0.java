@@ -6,6 +6,8 @@ import java.util.logging.Logger;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.export.isa.IISAExport;
@@ -14,6 +16,7 @@ import ambit2.export.isa.base.ISAConst.ISAVersion;
 import ambit2.export.isa.json.ISAJsonExportConfig;
 import ambit2.export.isa.json.ISAJsonExporter;
 import ambit2.export.isa.v1_0.objects.Investigation;
+import ambit2.export.isa.v1_0.objects.Publication;
 
 public class ISAJsonExporter1_0 implements IISAExport
 {
@@ -54,12 +57,11 @@ public class ISAJsonExporter1_0 implements IISAExport
 		if (records == null)
 			throw new Exception("Null input records iterator!");
 
-		if (outputDir == null)
-			throw new Exception("Null output directory or file!");
+		//if (outputDir == null)
+		//	throw new Exception("Null output directory or file!");
 
 		if (exportConfig == null)
 		{	
-			//throw new Exception("Null export config file!");
 			cfg = ISAJsonExportConfig.getDefaultConfig();
 		}
 		else
@@ -68,13 +70,15 @@ public class ISAJsonExporter1_0 implements IISAExport
 		if (!records.hasNext())
 			throw new Exception("No records to iterate");
 
-		
 		investigation = new Investigation();
 		
+		
+		//Some temp code
 		investigation.title = "Title";
 		investigation.description = "Description";
+		investigation.publications.add(new Publication());
+		investigation.publications.add(new Publication());
 		
-
 		while (records.hasNext())
 		{
 			SubstanceRecord rec = records.next();
@@ -93,15 +97,23 @@ public class ISAJsonExporter1_0 implements IISAExport
 	{	
 		if (cfg.singleJSONFile)
 		{
-			ObjectMapper mapper = new ObjectMapper();
-			String jsonString = mapper.writeValueAsString(investigation);
-			System.out.println(jsonString);
+			//ObjectMapper mapper = new ObjectMapper();
+			//String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
+			
+			//TODO
 		}
 		else
 		{
-			
+			//TODO
 		}
-		//TODO
+		
+	}
+	
+	public String getResultAsJson() throws Exception
+	{
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
+		return jsonString;
 	}
 	
 	
@@ -152,7 +164,7 @@ public class ISAJsonExporter1_0 implements IISAExport
 
 	@Override
 	public ISAVersion getISAVersion() {
-		return ISAVersion.Ver2_0;
+		return ISAVersion.Ver1_0;
 	}
 	
 }
