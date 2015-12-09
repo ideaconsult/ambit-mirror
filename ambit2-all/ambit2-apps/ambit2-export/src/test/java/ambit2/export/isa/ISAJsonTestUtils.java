@@ -31,7 +31,7 @@ public class ISAJsonTestUtils
 		
 		List<SubstanceRecord> sr = new ArrayList<SubstanceRecord>();
 		sr.add(null);
-		tesJsonExport(sr.iterator(), new File("/test"), null, null);
+		tesJsonExport(sr.iterator(), null, null, null);
 	}
 	
 	public static void tesJsonExport(Iterator<SubstanceRecord> records, 
@@ -41,6 +41,7 @@ public class ISAJsonTestUtils
 	{
 		ISAJsonExporter1_0 exporter = new ISAJsonExporter1_0(records, outputDir, exportConfig,  endpointBundle);
 		exporter.export();
+		System.out.println(exporter.getResultAsJson());
 	}
 	
 	public static void testISAJsonExportConfig(String jsonFileName) throws Exception
