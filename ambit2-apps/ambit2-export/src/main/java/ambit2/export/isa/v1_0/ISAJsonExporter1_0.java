@@ -8,6 +8,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.export.isa.IISAExport;
@@ -51,71 +52,6 @@ public class ISAJsonExporter1_0 implements IISAExport
 		setExportJsonConfig(exportConfig);
 		setEndpointBundle(endpointBundle);
 	}
-
-	public void export() throws Exception
-	{
-		if (records == null)
-			throw new Exception("Null input records iterator!");
-
-		//if (outputDir == null)
-		//	throw new Exception("Null output directory or file!");
-
-		if (exportConfig == null)
-		{	
-			cfg = ISAJsonExportConfig.getDefaultConfig();
-		}
-		else
-			cfg = ISAJsonExportConfig.loadFromJSON(exportConfig);
-
-		if (!records.hasNext())
-			throw new Exception("No records to iterate");
-
-		investigation = new Investigation();
-		
-		
-		//Some temp code
-		investigation.title = "Title";
-		investigation.description = "Description";
-		investigation.publications.add(new Publication());
-		investigation.publications.add(new Publication());
-		
-		while (records.hasNext())
-		{
-			SubstanceRecord rec = records.next();
-			handleRecord(rec);
-		}
-		
-		saveDataToOutputDir();
-	}
-	
-	void handleRecord(SubstanceRecord rec)
-	{
-		//TODO
-	}
-	
-	void saveDataToOutputDir() throws Exception
-	{	
-		if (cfg.singleJSONFile)
-		{
-			//ObjectMapper mapper = new ObjectMapper();
-			//String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
-			
-			//TODO
-		}
-		else
-		{
-			//TODO
-		}
-		
-	}
-	
-	public String getResultAsJson() throws Exception
-	{
-		ObjectMapper mapper = new ObjectMapper();
-		String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
-		return jsonString;
-	}
-	
 	
 	public File getExportJsonConfig() {
 		return exportConfig;
@@ -166,5 +102,92 @@ public class ISAJsonExporter1_0 implements IISAExport
 	public ISAVersion getISAVersion() {
 		return ISAVersion.Ver1_0;
 	}
+
+	public void export() throws Exception
+	{
+		if (records == null)
+			throw new Exception("Null input records iterator!");
+
+		//if (outputDir == null)
+		//	throw new Exception("Null output directory or file!");
+
+		if (exportConfig == null)
+		{	
+			cfg = ISAJsonExportConfig.getDefaultConfig();
+		}
+		else
+			cfg = ISAJsonExportConfig.loadFromJSON(exportConfig);
+
+		if (!records.hasNext())
+			throw new Exception("No records to iterate");
+
+		investigation = new Investigation();
+		
+		handleBundle();
+		
+		//Some temp code
+		investigation.publications.add(new Publication());
+		investigation.publications.add(new Publication());
+		
+		while (records.hasNext())
+		{
+			SubstanceRecord rec = records.next();
+			handleRecord(rec);
+		}
+		
+		saveDataToOutputDir();
+	}
+	
+	void handleBundle()
+	{
+		if (endpointBundle ==null)
+			return;
+		
+		investigation.title = endpointBundle.getTitle();
+		investigation.description = endpointBundle.getDescription();
+		
+	}
+	
+	void handleRecord(SubstanceRecord rec) throws Exception
+	{
+		if (rec == null)
+			return;
+		
+		//rec.getContent()
+		
+		ILiteratureEntry litEntry = rec.getReference();
+	}
+	
+	void addLiteratureEntry(ILiteratureEntry litEntry)
+	{
+		//TODO
+	}
+	
+	
+	void saveDataToOutputDir() throws Exception
+	{	
+		if (cfg.singleJSONFile)
+		{
+			//ObjectMapper mapper = new ObjectMapper();
+			//String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
+			
+			//TODO
+		}
+		else
+		{
+			//TODO
+		}
+		
+	}
+	
+	public String getResultAsJson() throws Exception
+	{
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
+		return jsonString;
+	}
+	
+	
+	
 	
 }
