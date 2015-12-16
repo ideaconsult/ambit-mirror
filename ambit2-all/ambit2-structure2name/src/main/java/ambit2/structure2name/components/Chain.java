@@ -11,7 +11,16 @@ public class Chain implements IIUPACComponent
 {
 	protected List<ComponentConnection> connections = new ArrayList<ComponentConnection>();
 	protected long rank = -1;
+	protected int size = 1;
 	
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
 	@Override
 	public CompType getType() {
 		return CompType.CHAIN;
