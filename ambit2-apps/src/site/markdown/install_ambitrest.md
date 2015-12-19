@@ -48,7 +48,7 @@ Please note that modern web browsers (e.g. Firefox 10, Chrome, Internet Explorer
 - Open and edit the following file, replacing the {tomcat-dir} with the relevant value from your configuration.
 
 ````
-{tomcat-dir}/webapps/ambit2/WEB-INF/classes/config/ambit2.pref
+{tomcat-dir}/webapps/ambit2/WEB-INF/classes/ambit2/config/ambit2.pref
 ````
 
 - The following option specifies the MySQL database configuration. Modify only if your setup differs from the default.
