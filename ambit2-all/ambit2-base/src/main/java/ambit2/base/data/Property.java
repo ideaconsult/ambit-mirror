@@ -147,19 +147,25 @@ public class Property implements Serializable,
 	}
 
 	public static synchronized Property getSMILESInstance() {
-		return new Property(Property.opentox_SMILES);
+		Property p = new Property(Property.opentox_SMILES);
+		p.setOrder(Integer.MAX_VALUE-1);
+		return p;
 	}
 
 	public static synchronized Property getInChIInstance() {
-		return Property.getInstance(Property.opentox_InChI,
+		Property p = Property.getInstance(Property.opentox_InChI,
 				new LiteratureEntry(Property.opentox_InChI,
 						"http://www.iupac.org/inchi/"));
+		p.setOrder(Integer.MAX_VALUE-2);
+		return p;
 	}
 
 	public static synchronized Property getInChIKeyInstance() {
-		return Property.getInstance(Property.opentox_InChIKey,
+		Property p = Property.getInstance(Property.opentox_InChIKey,
 				new LiteratureEntry(Property.opentox_InChIKey,
 						"http://www.iupac.org/inchi/"));
+		p.setOrder(Integer.MAX_VALUE-3);
+		return p;
 	}
 
 	public static synchronized Property getInChIStdInstance() {
@@ -183,6 +189,7 @@ public class Property implements Serializable,
 				url));
 		p.setLabel(name);
 		p.setEnabled(true);
+		p.setOrder(Integer.MAX_VALUE);
 
 		return p;
 	}

@@ -88,6 +88,8 @@ public class TautomerProcessor extends
 								.getProperty(TautomerConst.TAUTOMER_RANK);
 
 						if (rank_property == null) {
+							tautomer
+							.setProperty(TautomerConst.TAUTOMER_RANK,null);
 							logger.log(Level.FINE,
 									"NO RANK @ " + tautomer.getProperties());
 							continue;

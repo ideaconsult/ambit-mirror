@@ -31,60 +31,98 @@ package ambit2.core.io;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openscience.cdk.io.DefaultChemObjectWriter;
 
-public abstract class FilesWithHeaderWriter extends DefaultChemObjectWriter {
-    protected static Logger logger = Logger.getLogger(FilesWithHeaderWriter.class.getName());
-    public static String defaultSMILESHeader = "SMILES";    
-    protected ArrayList header = null;
-    protected boolean writingStarted = false;    
-    protected int smilesIndex = -1;    
+import ambit2.base.data.Property;
 
-    /**
-     * @return Returns the header.
-     */
-    public synchronized ArrayList getHeader() {
-        return header;
-    }
-    /**
-     * Creates header from Hashtable keys
-     * Used for default header - created from properties of the first molecule written 
-     * @param properties
-     */
-    public void setHeader(Map properties) {
-        if (writingStarted) {
-            logger.warning("Can't change header while writing !!!!");
-            return; //cant' change header !
-        }       
-        header = new ArrayList();
-        Iterator e = properties.keySet().iterator();
-        smilesIndex = -1; int i = 0;
-        while (e.hasNext()) {
-            header.add(e.next());
-            if (header.get(i).equals(defaultSMILESHeader)) smilesIndex = i;
-            i++;
-        }
-        if (smilesIndex == -1) { header.add(0,defaultSMILESHeader); smilesIndex = 0; }
-        logger.fine("Header created from hashtable\t"+header);
-    }    
-    abstract protected void writeHeader() throws IOException;
-    /**
-     * @param header The header to set.
-     */
-    public synchronized void setHeader(ArrayList header) {
-        if (writingStarted) {
-            logger.warning("Can't change header while writing !!!!");
-            return; //cant' change header !
-        }
-        this.header = header;
-        smilesIndex = -1;
-        for (int i=0; i < header.size(); i++) 
-            if (header.get(i).equals(defaultSMILESHeader)) smilesIndex = i;
-        if (smilesIndex == -1) { header.add(0,defaultSMILESHeader); smilesIndex = 0; }
-        logger.fine("Header created\t"+header);
-    }    
+public abstract class FilesWithHeaderWriter extends DefaultChemObjectWriter {
+	protected static Logger logger = Logger
+			.getLogger(FilesWithHeaderWriter.class.getName());
+	public static String defaultSMILESHeader = "SMILES";
+	protected ArrayList header = null;
+	protected boolean writingStarted = false;
+	protected int smilesIndex = -1;
+
+	/**
+	 * @return Returns the header.
+	 */
+	public synchronized ArrayList getHeader() {
+		return header;
+	}
+
+	/**
+	 * Creates header from Hashtable keys Used for default header - created from
+	 * properties of the first molecule written
+	 * 
+	 * @param properties
+	 */
+	public void setHeader(Map properties) {
+		if (writingStarted) {
+			logger.warning("Can't change header while writing !!!!");
+			return; // cant' change header !
+		}
+		header = new ArrayList();
+		Iterator e = properties.keySet().iterator();
+		smilesIndex = -1;
+		while (e.hasNext())
+			header.add(e.next());
+
+		Collections.sort(header, new Comparator<Object>() {
+			@Override
+			public int compare(Object o1, Object o2) {
+				if (o1 instanceof Property) {
+					if (o2 instanceof Property) {
+						return ((Property) o1).getOrder()
+								- ((Property) o2).getOrder();
+					} else {
+						return -Integer.MAX_VALUE;
+					}
+				} else {
+					if (o2 instanceof Property) {
+						return Integer.MAX_VALUE;
+					} else
+						return o1.toString().compareTo(o2.toString());
+				}
+			}
+		});
+		for (int j = 0; j < header.size(); j++)
+			if (header.get(j).toString().equals(defaultSMILESHeader)) {
+				smilesIndex = j;
+				break;
+			}
+		if (smilesIndex == -1) {
+			header.add(defaultSMILESHeader);
+			smilesIndex = header.size()-1;
+		}
+		logger.fine("Header created from hashtable\t" + header);
+	}
+
+	abstract protected void writeHeader() throws IOException;
+
+	/**
+	 * @param header
+	 *            The header to set.
+	 */
+	public synchronized void setHeader(ArrayList header) {
+		if (writingStarted) {
+			logger.warning("Can't change header while writing !!!!");
+			return; // cant' change header !
+		}
+		this.header = header;
+		smilesIndex = -1;
+		for (int i = 0; i < header.size(); i++)
+			if (header.get(i).toString().equals(defaultSMILESHeader))
+				smilesIndex = i;
+		if (smilesIndex == -1) {
+			header.add(defaultSMILESHeader);
+			smilesIndex = header.size()-1;
+		}
+		logger.fine("Header created\t" + header);
+	}
 }

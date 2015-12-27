@@ -34,6 +34,14 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-db</artifactId>
+			<version>${project.version}</version>
+			<classifier>tests</classifier>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<licenses>
 		<license>

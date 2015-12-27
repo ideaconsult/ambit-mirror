@@ -33,7 +33,7 @@ public class StructureStandardizer extends
 	 * 
 	 */
 	private static final long serialVersionUID = -2600599340740351460L;
-	protected Map<String, String> tags = new HashMap<>();
+	protected Map<Object, Property> tags = new HashMap<>();
 	protected boolean splitFragments = true;
 	protected boolean generateTautomers = true;
 	protected boolean generateInChI = true;
@@ -211,7 +211,6 @@ public class StructureStandardizer extends
 					try {
 						processed = tautomers.process(processed);
 					} catch (Exception x) {
-						x.printStackTrace();
 						processed.setProperty("ERROR.tautomers", String.format(
 								"%s\t%s", x.getClass().getName(),
 								x.getMessage()));
@@ -240,14 +239,14 @@ public class StructureStandardizer extends
 						}
 				}
 				if (generateSMILES || generateSMILES_Canonical) {
-					if (processed.getProperty(Property.opentox_SMILES) == null)
+					if (processed.getProperty(Property.getSMILESInstance()) == null)
 						try {
 							if (generateSMILES_Canonical)
-								processed.setProperty(Property.opentox_SMILES,
+								processed.setProperty(Property.getSMILESInstance(),
 										smilesGeneratorAbsolute
 												.create(processed));
 							else
-								processed.setProperty(Property.opentox_SMILES,
+								processed.setProperty(Property.getSMILESInstance(),
 										smilesGenerator.create(processed));
 						} catch (Exception x) {
 							processed.setProperty("ERROR.smiles", String
@@ -255,13 +254,16 @@ public class StructureStandardizer extends
 											x.getMessage()));
 						}
 				}
-				Iterator<Map.Entry<String, String>> i = tags.entrySet()
+				Iterator<Map.Entry<Object, Property>> i = tags.entrySet()
 						.iterator();
 				while (i.hasNext()) {
-					Map.Entry<String, String> entry = i.next();
-					String tag = entry.getKey();
+					Map.Entry<Object, Property> entry = i.next();
+					Object tag = entry.getKey();
 					Object value = processed.getProperty(tag);
 					if (value != null) {
+						if (tag instanceof Property) {
+							entry.getValue().setOrder(((Property)tag).getOrder());
+						}
 						processed.removeProperty(tag);
 						processed.setProperty(entry.getValue(), value);
 					}
@@ -282,20 +284,31 @@ public class StructureStandardizer extends
 	}
 
 	public void setInchiTag(String tag) {
-		tags.put(Property.opentox_InChI, tag);
+		Property newtag = Property.getInChIInstance();
+		newtag.setName(tag);
+		tags.put(Property.opentox_InChI, newtag);
+		tags.put(Property.getInChIInstance(), newtag);
 	}
 
 	public void setInchiKeyTag(String tag) {
-		tags.put(Property.opentox_InChIKey, tag);
+		Property newtag = Property.getInChIKeyInstance();
+		newtag.setName(tag);
+		tags.put(Property.opentox_InChIKey, newtag);
+		tags.put(Property.getInChIKeyInstance(), newtag);
 	}
 
 	public void setSMILESTag(String tag) {
-		tags.put(Property.opentox_SMILES, tag);
+		Property newtag = Property.getSMILESInstance();
+		newtag.setName(tag);
+		tags.put(Property.opentox_SMILES, newtag);
+		tags.put(Property.getSMILESInstance(), newtag);
 	}
 
 	public void setRankTag(String tag) {
-		tags.put(TautomerConst.CACTVS_ENERGY_RANK, tag);
-		tags.put(TautomerConst.TAUTOMER_RANK, tag);
+		Property newtag = Property.getInstance(tag,TautomerProcessor.class.getName());
+		newtag.setName(tag);
+		tags.put(TautomerConst.CACTVS_ENERGY_RANK, newtag);
+		tags.put(TautomerConst.TAUTOMER_RANK, newtag);
 	}
 
 }
