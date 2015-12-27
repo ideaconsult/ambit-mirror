@@ -245,7 +245,7 @@ CREATE TABLE `bundle` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `licenseURI` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
   `rightsHolder` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
-  `maintainer` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
+  `maintainer` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
   `stars` int(10) unsigned NOT NULL DEFAULT '5',
   `description` text COLLATE utf8_bin,
   `bundle_number` varbinary(16) NOT NULL,
@@ -521,7 +521,7 @@ CREATE TABLE `ontobucket` (
   `o_source` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
   `o_id` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `label` text COLLATE utf8_unicode_ci,
-  `relation` enum('label','subclass','db','endpoint','endpointhash','hash','protocol','target','reference','substancetype') COLLATE utf8_unicode_ci DEFAULT 'subclass',
+  `relation` enum('label','subclass','db','endpoint','endpointhash','hash','protocol','target','reference','substancetype','compound') COLLATE utf8_unicode_ci DEFAULT 'subclass',
   `uuid` varbinary(20) DEFAULT NULL,
   KEY `s_id` (`s_id`),
   KEY `o_id` (`o_id`,`relation`),
@@ -1497,7 +1497,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (8,12,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (8,13,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

@@ -68,10 +68,10 @@ public class CreateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 			if (getObject().getSource()==null) throw new AmbitException("Empty source");
 			List<QueryParam> params2 = new ArrayList<QueryParam>();
 			params2.add(new QueryParam<Integer>(Integer.class, getObject().getID()>0?getObject().getID():null));
-			params2.add(new QueryParam<String>(String.class, getObject().getName()));
+			params2.add(new QueryParam<String>(String.class, truncate(getObject().getName(),255)));
 			params2.add(new QueryParam<String>(String.class, getObject().getUserName()));
-			params2.add(new QueryParam<String>(String.class, getObject().getLicenseURI()));
-			params2.add(new QueryParam<String>(String.class, getObject().getrightsHolder()));
+			params2.add(new QueryParam<String>(String.class, truncate(getObject().getLicenseURI(),128)));
+			params2.add(new QueryParam<String>(String.class, truncate(getObject().getrightsHolder(),128)));
 			params2.add(new QueryParam<String>(String.class, getObject().getDescription()));
 			if (getObject().getBundle_number()==null) getObject().setBundle_number(UUID.randomUUID());
 			params2.add(new QueryParam<String>(String.class, getObject().getBundle_number().toString()));			

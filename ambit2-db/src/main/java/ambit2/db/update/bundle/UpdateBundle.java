@@ -72,16 +72,16 @@ public class UpdateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params3 = new ArrayList<QueryParam>();
 		if (getObject().getName()!=null)
-			params3.add(new QueryParam<String>(String.class, getObject().getName()));
+			params3.add(new QueryParam<String>(String.class, truncate(getObject().getName(),255)));
 
 		if (getObject().getLicenseURI()!=null)
-			params3.add(new QueryParam<String>(String.class, getObject().getLicenseURI()));
+			params3.add(new QueryParam<String>(String.class, truncate(getObject().getLicenseURI(),128)));
 		
 		if (getObject().getrightsHolder()!=null)
-			params3.add(new QueryParam<String>(String.class, getObject().getrightsHolder()));
+			params3.add(new QueryParam<String>(String.class, truncate(getObject().getrightsHolder(),128)));
 
 		if (getObject().getMaintainer()!=null)
-			params3.add(new QueryParam<String>(String.class, getObject().getMaintainer()));
+			params3.add(new QueryParam<String>(String.class, truncate(getObject().getMaintainer(),128)));
 		
 		if (getObject().getDescription()!=null)
 			params3.add(new QueryParam<String>(String.class, getObject().getDescription()));
