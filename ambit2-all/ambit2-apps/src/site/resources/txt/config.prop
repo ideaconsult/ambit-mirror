@@ -32,7 +32,6 @@ Port=3306
 Database=ambit_users
 User=example
 Password=example
-users_dbname=ambit_users
 ########################################################
 #Secret  Change it. Should be 16 characters!
 secret=123456changeit78
