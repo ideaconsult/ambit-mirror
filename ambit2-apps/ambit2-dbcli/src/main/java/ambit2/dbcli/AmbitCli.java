@@ -103,7 +103,6 @@ public class AmbitCli {
 		Locale.setDefault(Locale.ENGLISH);
 		logger_cli = Logger.getLogger("ambitcli", "ambit2.dbcli.msg");
 
-		
 		String dOption = System.getProperty("java.util.logging.config.file");
 		if (dOption == null || "".equals(dOption)) {
 			InputStream in = null;
@@ -137,7 +136,8 @@ public class AmbitCli {
 			}
 		}
 
-		logger_cli.log(Level.INFO,"MSG_INFO",new Object[] {System.currentTimeMillis()});
+		logger_cli.log(Level.INFO, "MSG_INFO",
+				new Object[] { System.currentTimeMillis() });
 	}
 
 	public long go(String command, String subcommand) throws Exception {
@@ -599,24 +599,23 @@ public class AmbitCli {
 				File outfile = new File(outdir, String.format("%d_%s", chunk,
 						file.getName()));
 				chunk_started = System.currentTimeMillis();
-				logger_cli.log(Level.INFO, "MSG_INFO_COMMAND_CHUNK", new Object[] {
-						chunk, outfile.getAbsolutePath() });
+				logger_cli.log(Level.INFO, "MSG_INFO_COMMAND_CHUNK",
+						new Object[] { chunk, outfile.getAbsolutePath() });
 				writer = new FileWriter(outfile);
 				int records = 0;
 				while (reader.hasNext()) {
 					if (records >= chunksize) {
-						System.out.println();
 						try {
 							if (writer != null)
 								writer.close();
 						} catch (Exception x) {
 						}
-						logger_cli.log(
-								Level.INFO,
-								"MSG_INFO_COMMAND_CHUNKWRITTEN",
-								new Object[] {
-										chunk,
-										(System.currentTimeMillis() - chunk_started) });
+						logger_cli
+								.log(Level.INFO,
+										"MSG_INFO_COMMAND_CHUNKWRITTEN",
+										new Object[] {
+												chunk,
+												(System.currentTimeMillis() - chunk_started) });
 						chunk++;
 						outfile = new File(outdir, String.format("%d_%s",
 								chunk, file.getName()));
@@ -624,10 +623,11 @@ public class AmbitCli {
 						records = 0;
 						chunk_started = System.currentTimeMillis();
 
-						logger_cli.log(
-								Level.INFO,
-								"MSG_INFO_COMMAND_CHUNK",
-								new Object[] { chunk, outfile.getAbsolutePath() });
+						logger_cli
+								.log(Level.INFO,
+										"MSG_INFO_COMMAND_CHUNK",
+										new Object[] { chunk,
+												outfile.getAbsolutePath() });
 					}
 					IStructureRecord record = reader.nextRecord();
 					writer.write(record.getContent());
@@ -759,8 +759,8 @@ public class AmbitCli {
 		}
 		try {
 			Object o = options.getParam(":smilescanonical");
-			standardprocessor.setGenerateSMILES(Boolean.parseBoolean(o
-					.toString()));
+			standardprocessor.setGenerateSMILES_Canonical(Boolean
+					.parseBoolean(o.toString()));
 		} catch (Exception x) {
 		}
 		try {
@@ -794,11 +794,8 @@ public class AmbitCli {
 					"Output file not specified. Please use -o {file}");
 		final File outfile = new File(options.output);
 
-		logger_cli.log(
-				Level.INFO,
-				"MSG_INFO_READINGWRITING",
-				new Object[] { file.getAbsoluteFile(),
-						outfile.getAbsolutePath() });
+		logger_cli.log(Level.INFO, "MSG_INFO_READINGWRITING", new Object[] {
+				file.getAbsoluteFile(), outfile.getAbsolutePath() });
 		FileOutputState out = new FileOutputState(outfile);
 		final IChemObjectWriter writer = out.getWriter();
 
@@ -876,18 +873,20 @@ public class AmbitCli {
 							if (mol != null)
 								for (Property p : record.getRecordProperties()) {
 									Object v = record.getRecordProperty(p);
-									// get rid of smiles, inchi , etc, these are
-									// already parsed
-									if (v != null
-											&& !p.getName()
-													.startsWith(
-															"http://www.opentox.org/api/1.1#")) {
-										mol.setProperty(p.getName(), v);
-									}
+									// initially to get rid of smiles, inchi ,
+									// etc, these are
+									// already parsed 
+									if (p.getName().startsWith(
+											"http://www.opentox.org/api/1.1#"))
+										continue;
+									else
+										mol.setProperty(p, v);
 								}
+							else
+								return record;
 						} catch (Exception x) {
-							logger_cli.log(Level.SEVERE, "MSG_ERR_MOLREAD",new Object[] {x.toString()}
-									);
+							logger_cli.log(Level.SEVERE, "MSG_ERR_MOLREAD",
+									new Object[] { x.toString() });
 							return record;
 						} finally {
 
@@ -906,7 +905,7 @@ public class AmbitCli {
 						}
 
 						try {
-							processed = standardprocessor.process(mol);
+							processed = standardprocessor.process(processed);
 
 						} catch (Exception x) {
 							logger_cli.log(Level.SEVERE, x.getMessage(), x);

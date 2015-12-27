@@ -7,16 +7,12 @@ import java.io.Reader;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
-import org.openscience.cdk.silent.AtomContainer;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.Property;
@@ -42,7 +38,25 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 	protected MoleculeReader molReader = null;
 
 	private enum special_header {
-		SMILES, INCHI, INCHIKEY;
+		SMILES {
+			@Override
+			public Property getproperty() {
+				return Property.getSMILESInstance();
+			}
+		},
+		INCHI {
+			@Override
+			public Property getproperty() {
+				return Property.getInChIInstance();
+			}
+		},
+		INCHIKEY {
+			@Override
+			public Property getproperty() {
+				return Property.getInChIKeyInstance();
+			}
+		};
+		public abstract Property getproperty();
 	}
 
 	public RawIteratingCSVReader(Reader in) throws CDKException {
@@ -114,25 +128,16 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 	public Object next() {
 		return nextRecord();
 		/*
-		if (structureRecord == null)
-			structureRecord = transform(iterator.next());
-		if (molReader == null)
-			molReader = new MoleculeReader();
-		try {
-			IAtomContainer mol = molReader.process(structureRecord);
-			if (mol == null)
-				mol = new AtomContainer();
-			for (Property p : structureRecord.getRecordProperties()) {
-				Object v = structureRecord.getRecordProperty(p);
-				if (v != null)
-					mol.setProperty(p, v);
-			}
-			return mol;
-		} catch (AmbitException x) {
-			x.printStackTrace();
-			return new AtomContainer();
-		}
-		*/
+		 * if (structureRecord == null) structureRecord =
+		 * transform(iterator.next()); if (molReader == null) molReader = new
+		 * MoleculeReader(); try { IAtomContainer mol =
+		 * molReader.process(structureRecord); if (mol == null) mol = new
+		 * AtomContainer(); for (Property p :
+		 * structureRecord.getRecordProperties()) { Object v =
+		 * structureRecord.getRecordProperty(p); if (v != null)
+		 * mol.setProperty(p, v); } return mol; } catch (AmbitException x) {
+		 * x.printStackTrace(); return new AtomContainer(); }
+		 */
 	}
 
 	@Override
@@ -154,6 +159,8 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 
 	private IStructureRecord transform(CSVRecord record) {
 		structureRecord = new StructureRecord();
+		Property[]  special_props = new Property[special_header.values().length];
+		
 		String[] ids = new String[special_header.values().length];
 
 		Iterator<Entry<String, Integer>> header = parser.getHeaderMap()
@@ -162,14 +169,17 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 			Entry<String, Integer> entry = header.next();
 			String value = record.get(entry.getValue());
 			try {
-				special_header h = special_header.valueOf(entry.getKey()
+				special_header h = special_header.valueOf(entry.getKey().replace("_", "")
 						.toUpperCase());
 				ids[h.ordinal()] = value == null || "".equals(value.trim()) ? null
 						: value.trim();
+				special_props[h.ordinal()] = h.getproperty();
+				special_props[h.ordinal()].setOrder(entry.getValue());
 				continue;
 			} catch (Exception x) {
 			}
 			Property p = Property.getInstance(entry.getKey(), getReference());
+			p.setOrder(entry.getValue());
 			structureRecord.setRecordProperty(p, value);
 		}
 		if (ids[special_header.INCHI.ordinal()] != null) {
@@ -187,13 +197,13 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 		structureRecord.setInchiKey(ids[special_header.INCHIKEY.ordinal()]);
 
 		if (structureRecord.getInchi() != null)
-			structureRecord.setRecordProperty(Property.getInChIInstance(),
+			structureRecord.setRecordProperty(special_props[special_header.INCHI.ordinal()],
 					structureRecord.getInchi());
 		if (structureRecord.getInchiKey() != null)
-			structureRecord.setRecordProperty(Property.getInChIKeyInstance(),
+			structureRecord.setRecordProperty(special_props[special_header.INCHIKEY.ordinal()],
 					structureRecord.getInchiKey());
 		if (structureRecord.getSmiles() != null)
-			structureRecord.setRecordProperty(Property.getSMILESInstance(),
+			structureRecord.setRecordProperty(special_props[special_header.SMILES.ordinal()],
 					structureRecord.getSmiles());
 		return structureRecord;
 	}

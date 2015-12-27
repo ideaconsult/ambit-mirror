@@ -21,7 +21,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-*/
+ */
 package ambit2.core.io;
 
 import java.io.BufferedWriter;
@@ -40,10 +40,12 @@ import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.DataFeatures;
 
+import ambit2.base.data.Property;
+
 /**
  * Writes delimited files
- * @author Nina Jeliazkova
- * <b>Modified</b> 2005-9-6
+ * 
+ * @author Nina Jeliazkova <b>Modified</b> 2005-9-6
  */
 public class DelimitedFileWriter extends FilesWithHeaderWriter {
 
@@ -52,59 +54,66 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
 
 	protected SmilesGenerator sg = new SmilesGenerator();
 
-
 	/**
 	 * 
 	 */
-    public DelimitedFileWriter(Writer out, DelimitedFileFormat format) {
-        //logger = new LoggingTool(this);
-    	this.format = format;
-        try {
-            writer = new BufferedWriter(out);
-        } catch (Exception exc) {
-        }
-    }
-    public DelimitedFileWriter(Writer out) {
-    	this(out,new DelimitedFileFormat());
-    }
-    public DelimitedFileWriter(OutputStream input, DelimitedFileFormat format) {
-        this(new OutputStreamWriter(input), format);
-    }
-    public DelimitedFileWriter(OutputStream input) {
-    	this(input, new DelimitedFileFormat());
-    }
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.io.ChemObjectWriter#write(org.openscience.cdk.ChemObject)
+	public DelimitedFileWriter(Writer out, DelimitedFileFormat format) {
+		// logger = new LoggingTool(this);
+		this.format = format;
+		try {
+			writer = new BufferedWriter(out);
+		} catch (Exception exc) {
+		}
+	}
+
+	public DelimitedFileWriter(Writer out) {
+		this(out, new DelimitedFileFormat());
+	}
+
+	public DelimitedFileWriter(OutputStream input, DelimitedFileFormat format) {
+		this(new OutputStreamWriter(input), format);
+	}
+
+	public DelimitedFileWriter(OutputStream input) {
+		this(input, new DelimitedFileFormat());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.openscience.cdk.io.ChemObjectWriter#write(org.openscience.cdk.ChemObject
+	 * )
 	 */
 	public void write(IChemObject object) throws CDKException {
-		
+
 		if (object instanceof IAtomContainerSet) {
-		    writeSetOfMolecules((IAtomContainerSet)object);
+			writeSetOfMolecules((IAtomContainerSet) object);
 		} else if (object instanceof IAtomContainer) {
-		    writeMolecule((IAtomContainer)object);
+			writeMolecule((IAtomContainer) object);
 		} else {
-		    throw new CDKException("Only supported is writing of ChemFile and Molecule objects.");
+			throw new CDKException(
+					"Only supported is writing of ChemFile and Molecule objects.");
 		}
 
 	}
 
+	public IResourceFormat getFormat() {
+		return format;
+	}
 
-
-    public IResourceFormat getFormat() {
-        return format;
-    }
-
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.openscience.cdk.io.ChemObjectIO#close()
 	 */
 	public void close() throws IOException {
-        writer.flush();
-        writer.close();
+		writer.flush();
+		writer.close();
 
 	}
-	public void  writeSetOfMolecules(IAtomContainerSet som)
-	{
+
+	public void writeSetOfMolecules(IAtomContainerSet som) {
 		for (int i = 0; i < som.getAtomContainerCount(); i++) {
 			try {
 				writeMolecule(som.getAtomContainer(i));
@@ -112,115 +121,134 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
 			}
 		}
 	}
+
 	protected void writeHeader() throws IOException {
-        String fieldDelimiter =  format.getFieldDelimiter().substring(0,1);
-        char textDelimiter = format.getTextDelimiter();
-        String d = "";
-		for (int i=0;i<header.size();i++) {
+		String fieldDelimiter = format.getFieldDelimiter().substring(0, 1);
+		char textDelimiter = format.getTextDelimiter();
+		String d = "";
+		for (int i = 0; i < header.size(); i++) {
 			writer.write(d);
-			String h = header.get(i).toString();
-			if (h.indexOf(fieldDelimiter) >  -1) {
+			String h;
+			if (header.get(i) instanceof Property)
+				h = ((Property) header.get(i)).getName();
+			else
+				h = header.get(i).toString();
+			if (h.indexOf(fieldDelimiter) > -1) {
 				writer.write(textDelimiter);
 				writer.write(h);
 				writer.write(textDelimiter);
-			} else writer.write(h);
+			} else
+				writer.write(h);
 			d = fieldDelimiter;
 		}
 		writer.newLine();
-		logger.fine(format.getFormatName()+"\tHeader written\t"+header);
+		logger.fine(format.getFormatName() + "\tHeader written\t" + header);
 	}
-    public void writeMolecule(IAtomContainer molecule) {
-        
-    	String fieldDelimiter =  format.getFieldDelimiter().substring(0,1);
-        char textDelimiter = format.getTextDelimiter();
-        Object value;    	
 
-        try {
-        	//give it a chance to create a header just before the first write
-        	if (!writingStarted) {
-    	        if (header == null) setHeader(molecule.getProperties());
-    	        writeHeader();
-    	        writingStarted = true;
-        	}
-        	String s;
-        	String d = "";
-        	for (int i =0; i< header.size(); i++) {
-        		writer.write(d);
-        		value = molecule.getProperty(header.get(i));
-        		if (i == smilesIndex) {
-        			
-        			if (value == null) //no SMILES available
-        			try {
-        				value = sg.create(molecule);
-        			} catch (Exception x) {
-        				logger.log(Level.WARNING,"Error while createSMILES\t",x);
-        				value = "";
-        			}
-        		} 
-        	
-        		if (value != null) {
-        			if (value instanceof Number) {
-        				writer.write(value.toString());
-        			} else {
-        				s = value.toString();
-        				if (s.indexOf(textDelimiter) > -1) s=s.replace(textDelimiter,' ');
-        				s = s.trim();
-        				if (s.indexOf(fieldDelimiter) > -1) {
-	        				writer.write(textDelimiter);
-	        				writer.write(s);
-	        				writer.write(textDelimiter);        
-        				} else writer.write(s); 
-        			}
-            		d = fieldDelimiter;
-        		}
+	public void writeMolecule(IAtomContainer molecule) {
 
-        	}
-            writer.newLine();
-            writer.flush();
-            logger.finer("file flushed...");
-        } catch(Exception x) {
-            logger.log(Level.SEVERE,"ERROR while writing Molecule: ", x);
-        }
-    }
+		String fieldDelimiter = format.getFieldDelimiter().substring(0, 1);
+		char textDelimiter = format.getTextDelimiter();
+		Object value;
 
+		try {
+			// give it a chance to create a header just before the first write
+			if (!writingStarted) {
+				if (header == null)
+					setHeader(molecule.getProperties());
+				writeHeader();
+				writingStarted = true;
+			}
+			String s;
+			String d = "";
+			for (int i = 0; i < header.size(); i++) {
+				writer.write(d);
+				value = molecule.getProperty(header.get(i));
+				if (i == smilesIndex) {
 
+					if (value == null) // no SMILES available
+						try {
+							value = sg.create(molecule);
+						} catch (Exception x) {
+							logger.log(Level.WARNING,
+									"Error while createSMILES\t", x);
+							value = "";
+						}
+				}
 
+				if (value != null) {
+					if (value instanceof Number) {
+						writer.write(value.toString());
+					} else {
+						s = value.toString();
+						if (s.indexOf(textDelimiter) > -1)
+							s = s.replace(textDelimiter, ' ');
+						s = s.trim();
+						if (s.indexOf(fieldDelimiter) > -1) {
+							writer.write(textDelimiter);
+							writer.write(s);
+							writer.write(textDelimiter);
+						} else
+							writer.write(s);
+					}
+					d = fieldDelimiter;
+				}
 
-    @Override
+			}
+			writer.newLine();
+			writer.flush();
+			logger.finer("file flushed...");
+		} catch (Exception x) {
+			logger.log(Level.SEVERE, "ERROR while writing Molecule: ", x);
+		}
+	}
+
+	@Override
 	public String toString() {
-        return "Writing compounds to " + format.toString(); 
-    }
+		return "Writing compounds to " + format.toString();
+	}
+
 	public boolean accepts(Class classObject) {
 		Class[] interfaces = classObject.getInterfaces();
-		for (int i=0; i<interfaces.length; i++) {
-			if (IChemFile.class.equals(interfaces[i])) return true;
-			if (IAtomContainerSet.class.equals(interfaces[i])) return true;
+		for (int i = 0; i < interfaces.length; i++) {
+			if (IChemFile.class.equals(interfaces[i]))
+				return true;
+			if (IAtomContainerSet.class.equals(interfaces[i]))
+				return true;
 		}
 		return false;
 	}
+
 	public int getSupportedDataFeatures() {
 		return DataFeatures.HAS_GRAPH_REPRESENTATION;
 	}
-	/* (non-Javadoc)
-     * @see org.openscience.cdk.io.IChemObjectWriter#setWriter(java.io.OutputStream)
-     */
-    public void setWriter(OutputStream writer) throws CDKException {
-        this.setWriter(new OutputStreamWriter(writer));
 
-    }
-    /* (non-Javadoc)
-     * @see org.openscience.cdk.io.IChemObjectWriter#setWriter(java.io.Writer)
-     */
-    public void setWriter(Writer writer) throws CDKException {
-        if (this.writer != null) {
-            try {
-            this.writer.close();
-            } catch (IOException x) {
-            	logger.log(Level.SEVERE,x.getMessage(),x);
-            }
-            this.writer = null;
-        }
-        this.writer = new BufferedWriter(writer);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.openscience.cdk.io.IChemObjectWriter#setWriter(java.io.OutputStream)
+	 */
+	public void setWriter(OutputStream writer) throws CDKException {
+		this.setWriter(new OutputStreamWriter(writer));
 
-    }
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.openscience.cdk.io.IChemObjectWriter#setWriter(java.io.Writer)
+	 */
+	public void setWriter(Writer writer) throws CDKException {
+		if (this.writer != null) {
+			try {
+				this.writer.close();
+			} catch (IOException x) {
+				logger.log(Level.SEVERE, x.getMessage(), x);
+			}
+			this.writer = null;
+		}
+		this.writer = new BufferedWriter(writer);
+
+	}
 }
