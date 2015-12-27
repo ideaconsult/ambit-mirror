@@ -31,6 +31,7 @@ public abstract class AbstractXLSXReporter<Q extends IQueryRetrieval<IStructureR
 	protected CellStyle style;
 	protected OutputStream out;
 	protected boolean writingStarted = false;
+	protected String fileExtension = "xlsx";
 	/**
 	 * 
 	 */
@@ -50,6 +51,7 @@ public abstract class AbstractXLSXReporter<Q extends IQueryRetrieval<IStructureR
 		configureProcessors(baseRef, includeMol);
 		
 		workbook = hssf ? new HSSFWorkbook() : new XSSFWorkbook();
+		fileExtension = hssf ? "xls" : "xlsx";
 		sheet = workbook.createSheet();
 		dataformat = workbook.createDataFormat();
 		style = workbook.createCellStyle();
@@ -74,5 +76,9 @@ public abstract class AbstractXLSXReporter<Q extends IQueryRetrieval<IStructureR
 		}
 		rts.applyFont(font);
 		return rts;
+	}
+	@Override
+	public String getFileExtension() {
+		return fileExtension;
 	}
 }
