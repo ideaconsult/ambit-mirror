@@ -36,7 +36,7 @@
 		<junit.version>4.8.1</junit.version>
 		<!-- https://github.com/ideaconsult/i5 -->
 		<i5.version>1.1.0</i5.version>
-		<restnet.version>1.1.0</restnet.version>
+		<restnet.version>1.1.1-SNAPSHOT</restnet.version>
 		<dbunit.version>2.5.1</dbunit.version>
 		<m2st-syntaxHighlighter-urlBase>syntaxhighlighter</m2st-syntaxHighlighter-urlBase>
 		<m2st-syntaxHighlighter-brushFiles>shBrushPlain.js,shBrushXml.js,shBrushJava.js</m2st-syntaxHighlighter-brushFiles>
