@@ -34,11 +34,11 @@ import java.util.List;
 
 import junit.framework.Assert;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.NumberCondition;
 
 import org.junit.Test;
 import org.openscience.cdk.templates.MoleculeFactory;
 
-import ambit2.db.search.NumberCondition;
 import ambit2.db.search.structure.QuerySimilarityStructure;
 
 public class QuerySimilarityStructureTest  extends QueryTest<QuerySimilarityStructure>{

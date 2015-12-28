@@ -6,11 +6,11 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.StringCondition;
 import net.idea.modbcum.q.facet.AbstractFacetQuery;
 import ambit2.base.data.ConsensusLabel;
 import ambit2.base.data.ConsensusLabel.CONSENSUS_LABELS;
 import ambit2.base.data.SourceDataset;
-import ambit2.db.search.StringCondition;
 
 public class DatasetChemicalsQualityStats  extends AbstractFacetQuery<CONSENSUS_LABELS,SourceDataset,StringCondition,DatasetConsensusLabelFacet> {
 	protected DatasetConsensusLabelFacet record;

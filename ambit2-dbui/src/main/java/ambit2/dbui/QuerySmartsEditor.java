@@ -21,6 +21,7 @@ import javax.swing.JToolBar;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.q.conditions.BooleanCondition;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -32,7 +33,6 @@ import org.openscience.cdk.smiles.SmilesParser;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
-import ambit2.db.search.BooleanCondition;
 import ambit2.db.search.structure.QuerySMARTS;
 import ambit2.descriptors.FuncGroupsDescriptorFactory;
 import ambit2.descriptors.FunctionalGroup;

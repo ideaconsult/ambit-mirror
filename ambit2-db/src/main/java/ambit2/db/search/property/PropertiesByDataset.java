@@ -8,13 +8,13 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.StringCondition;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
-import ambit2.db.search.StringCondition;
 
 /**
  * Retrieves Property-es used by particular dataset

@@ -8,6 +8,7 @@ import java.util.List;
 import net.idea.modbcum.i.IStoredProcStatement;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.StringCondition;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.key.CASKey;
@@ -22,7 +23,6 @@ import ambit2.core.processors.structure.key.PropertyNameKey;
 import ambit2.core.processors.structure.key.PubchemCID;
 import ambit2.core.processors.structure.key.PubchemSID;
 import ambit2.core.processors.structure.key.SmilesKey;
-import ambit2.db.search.StringCondition;
 
 /**
  * Calls findByProperty stored procedure

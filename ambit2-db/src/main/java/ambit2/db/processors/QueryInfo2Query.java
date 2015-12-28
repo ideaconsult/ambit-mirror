@@ -6,6 +6,8 @@ import net.idea.modbcum.i.IQueryObject;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.p.AbstractDBProcessor;
+import net.idea.modbcum.q.conditions.EQCondition;
+import net.idea.modbcum.q.conditions.StringCondition;
 
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.smiles.SmilesGenerator;
@@ -13,9 +15,7 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import ambit2.base.data.Property;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.key.ExactStructureSearchMode;
-import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryInfo;
-import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.structure.QueryField;

@@ -47,7 +47,6 @@ import ambit2.base.processors.CASProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.AtomConfigurator;
-import ambit2.core.processors.structure.key.CASKey;
 import ambit2.db.reporters.CMLReporter;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.reporters.ImageReporter;

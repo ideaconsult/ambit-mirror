@@ -34,12 +34,12 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.EQCondition;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.SmilesKey;
-import ambit2.db.search.EQCondition;
 
 /**
  * This is a wrapper around {@link QueryStructure} , allowing to use IStructureRecord as a parameter

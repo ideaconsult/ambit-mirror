@@ -7,6 +7,7 @@ import java.util.List;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.EQCondition;
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
@@ -17,7 +18,6 @@ import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.base.relation.composition.Proportion;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.EQCondition;
 
 public class ReadSubstanceComposition extends AbstractQuery<SubstanceRecord,CompositionRelation, EQCondition, CompositionRelation> implements IQueryRetrieval<CompositionRelation>{
 

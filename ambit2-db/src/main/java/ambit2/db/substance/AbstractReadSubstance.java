@@ -7,10 +7,10 @@ import java.sql.SQLException;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.q.conditions.EQCondition;
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.EQCondition;
 
 public abstract class AbstractReadSubstance<F,T> extends AbstractQuery<F,T,EQCondition,SubstanceRecord> implements IQueryRetrieval<SubstanceRecord> {
 	/**

@@ -1,6 +1,6 @@
 package ambit2.db.search.structure;
 
-import ambit2.db.search.NumberCondition;
+import net.idea.modbcum.q.conditions.NumberCondition;
 
 
 public abstract class NumberQuery<F> extends AbstractStructureQuery<F,Double,NumberCondition> {

@@ -11,13 +11,12 @@ import java.util.logging.Level;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.SetCondition;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.SetCondition;
-import ambit2.db.search.SetCondition.conditions;
 
 public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,int[],SetCondition,IStructureRecord> 
 					implements IQueryRetrieval<IStructureRecord> {
@@ -61,7 +60,7 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 		super();
 		setChemicalsOnly(chemicalsOnly);
 		setFieldname(profile);
-		setCondition(new SetCondition(conditions.in));
+		setCondition(new SetCondition(SetCondition.conditions.in));
 
 	}		
 	protected final String sql_property = 

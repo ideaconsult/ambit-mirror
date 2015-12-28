@@ -5,11 +5,11 @@ import java.sql.SQLException;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.q.conditions.StringCondition;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.StringCondition;
 
 public abstract class AbstractReadDataset<T,M extends ISourceDataset> extends AbstractQuery<T,M,StringCondition,M>  implements IQueryRetrieval<M>{
 	protected enum _fields {

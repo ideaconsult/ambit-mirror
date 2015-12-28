@@ -34,6 +34,8 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.BooleanCondition;
+import net.idea.modbcum.q.conditions.NumberCondition;
 
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -48,8 +50,6 @@ import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
-import ambit2.db.search.BooleanCondition;
-import ambit2.db.search.NumberCondition;
 import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.processors.SMARTSPropertiesReader;
 import ambit2.smarts.processors.StructureKeysBitSetGenerator;

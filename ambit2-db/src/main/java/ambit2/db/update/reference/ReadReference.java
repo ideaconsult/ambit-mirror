@@ -7,11 +7,11 @@ import java.util.List;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.EQCondition;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.EQCondition;
 
 /**
  * Retrieve references (by id or all)

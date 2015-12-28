@@ -33,12 +33,12 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.q.conditions.StringCondition;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.key.ExactStructureSearchMode;
-import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryStructure;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;

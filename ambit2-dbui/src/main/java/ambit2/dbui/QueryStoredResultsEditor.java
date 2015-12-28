@@ -37,12 +37,12 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.q.conditions.EQCondition;
+import net.idea.modbcum.q.conditions.StringCondition;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.results.RowsModel;
-import ambit2.db.search.EQCondition;
 import ambit2.db.search.IStoredQuery;
-import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.db.update.storedquery.SearchStoredQueries;
 

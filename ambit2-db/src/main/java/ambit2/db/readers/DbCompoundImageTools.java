@@ -33,11 +33,11 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.IQueryObject;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.q.conditions.EQCondition;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.data.StructureRecord;
-import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryExecutor;
 import ambit2.rendering.CompoundImageTools;
 

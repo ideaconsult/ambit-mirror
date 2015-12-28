@@ -3,11 +3,11 @@ package ambit2.db.search.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
+import net.idea.modbcum.q.conditions.NumberCondition;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
 
-import ambit2.db.search.NumberCondition;
 import ambit2.db.search.structure.QueryDistance;
 
 public class QueryDistanceTest extends QueryTest<QueryDistance> {

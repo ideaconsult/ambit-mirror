@@ -2,6 +2,7 @@ package ambit2.rest.facet;
 
 import java.util.Map;
 
+import net.idea.modbcum.q.conditions.StringCondition;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Context;
@@ -12,7 +13,6 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Property;
 import ambit2.db.facets.datasets.EndpointCompoundFacet;
 import ambit2.db.facets.datasets.EndpointCompoundFacetQuery;
-import ambit2.db.search.StringCondition;
 import ambit2.rest.dataset.MetadatasetResource;
 import ambit2.rest.query.QueryResource;
 
