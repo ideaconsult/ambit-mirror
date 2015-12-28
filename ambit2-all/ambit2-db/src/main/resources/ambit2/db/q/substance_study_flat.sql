@@ -5,3 +5,4 @@ ifnull(idresult,hex(p.document_uuid)) as id,concat(prefix,"-",hex(uuid)) as s_uu
 FROM substance
 join substance_protocolapplication p on p.substance_prefix=prefix and p.substance_uuid=uuid
 left join substance_experiment e on e.document_prefix=p.document_prefix and e.document_uuid=p.document_uuid 
+where (:all || ((prefix=:s_prefix) and uuid=unhex(:s_uuid)))
