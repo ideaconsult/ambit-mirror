@@ -9,6 +9,7 @@ import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.modbcum.p.MasterDetailsProcessor;
 
 import org.restlet.Request;
 
@@ -20,7 +21,6 @@ import ambit2.base.facet.SubstanceStudyFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.json.JSONUtils;
 import ambit2.db.facets.bundle.SubstanceRoleByBundle;
-import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.substance.ids.ReadSubstanceIdentifiers;
 import ambit2.db.substance.study.facet.SubstanceStudyFacetQuery;
 import ambit2.db.update.bundle.substance.AddCompoundAsSubstanceToBundle;

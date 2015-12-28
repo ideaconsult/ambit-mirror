@@ -15,6 +15,7 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.p.MasterDetailsProcessor;
 import net.idea.modbcum.r.QueryAbstractReporter;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
@@ -49,7 +50,6 @@ import ambit2.base.data.substance.SubstanceUUID;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.json.SubstanceStudyParser;
 import ambit2.core.io.study.ProtocolEffectRecord2SubstanceProperty;
-import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.xlsx.StructureRecordXLSXReporter;
@@ -204,7 +204,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 
 			@Override
 			public SubstanceRecord process(SubstanceRecord target)
-					throws AmbitException {
+					throws Exception {
 				if (target == null || target.getSubstanceUUID() == null)
 					return target;
 				else
@@ -484,18 +484,19 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 						mergedProperties.put(
 								"http://www.opentox.org/echaEndpoints.owl#"
 										+ section.name(), last);
-						Cell hcell = sheet.getRow(0).createCell(
-								last + afterCol);
+						Cell hcell = sheet.getRow(0)
+								.createCell(last + afterCol);
 						hcell.setCellStyle(hstyle);
 						hcell.setCellType(Cell.CELL_TYPE_STRING);
 						hcell.setCellValue(section.getNumber() + ". "
 								+ section.getTitle());
 
 						sheet.autoSizeColumn(hcell.getColumnIndex(), true);
-						//initially hide all columns, unhide if data is added to
-						sheet.setColumnHidden(hcell.getColumnIndex(),true);
+						// initially hide all columns, unhide if data is added
+						// to
+						sheet.setColumnHidden(hcell.getColumnIndex(), true);
 					}
-			}
+				}
 			}
 
 		}, media, filenamePrefix);

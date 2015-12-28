@@ -9,6 +9,7 @@ import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.modbcum.p.MasterDetailsProcessor;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -28,7 +29,6 @@ import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.study.IStudyPrinter;
 import ambit2.core.io.study.StudyFormatter;
-import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.substance.study.ReadSubstanceStudy;
 
 public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRecord>>
@@ -183,10 +183,10 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 		tableStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
 		tableStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
 		tableStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		
+
 		blueFont = workbook.createFont();
 		blueFont.setColor(IndexedColors.BLUE.getIndex());
-		
+
 		redFont = workbook.createFont();
 		redFont.setColor(IndexedColors.RED.getIndex());
 	}
@@ -291,12 +291,10 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 	public void footer(OutputStream output, Q query) {
 		sheet.autoSizeColumn(0, true);
 		/*
-		sheet.autoSizeColumn(1, true);
-		sheet.autoSizeColumn(2, true);
-		sheet.autoSizeColumn(3, true);
-		sheet.autoSizeColumn(4, true);
-		sheet.autoSizeColumn(5, true);
-		*/
+		 * sheet.autoSizeColumn(1, true); sheet.autoSizeColumn(2, true);
+		 * sheet.autoSizeColumn(3, true); sheet.autoSizeColumn(4, true);
+		 * sheet.autoSizeColumn(5, true);
+		 */
 		super.footer(output, query);
 	}
 }

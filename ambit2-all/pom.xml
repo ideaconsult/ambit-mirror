@@ -524,8 +524,8 @@
 	<!--  cdk 1.5.10 @ maven central since ambit 3.0.0 -->
 	<!--  cdk 1.5.11 @ maven central since ambit 3.0.0 Sep 2015-->				
     <cdk.version>1.5.12</cdk.version>
-    <restnet.version>1.1.0</restnet.version>
-    <modbcum.version>1.0.7</modbcum.version>
+    <restnet.version>1.1.1-SNAPSHOT</restnet.version>
+    <modbcum.version>1.0.8-SNAPSHOT</modbcum.version>
     <dbunit.version>2.5.1</dbunit.version>
     
   </properties>
