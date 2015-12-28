@@ -7,8 +7,8 @@ import java.util.List;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.StringCondition;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.StringCondition;
 import ambit2.descriptors.processors.FPTable;
 
 /**

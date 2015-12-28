@@ -5,12 +5,12 @@ import java.util.List;
 
 import junit.framework.Assert;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.NumberCondition;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import ambit2.base.data.Property;
-import ambit2.db.search.NumberCondition;
 import ambit2.db.search.structure.QueryFieldNumeric;
 
 public class QueryDescriptorTest extends QueryTest<QueryFieldNumeric> {

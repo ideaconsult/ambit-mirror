@@ -5,8 +5,8 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.BooleanCondition;
 import ambit2.base.data.ILiteratureEntry;
-import ambit2.db.search.BooleanCondition;
 
 /**
  * reads structures, for each there are / or there are not (depending on getCondition) descriptors with given idname and reference title.

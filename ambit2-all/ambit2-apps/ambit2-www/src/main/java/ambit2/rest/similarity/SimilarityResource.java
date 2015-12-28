@@ -6,6 +6,7 @@ import java.util.Map;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.q.conditions.NumberCondition;
 
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.fingerprint.Fingerprinter;
@@ -28,7 +29,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.HashIntDescriptorResult;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.reporters.CSVReporter;
-import ambit2.db.search.NumberCondition;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.ChemicalByQueryFolder;
 import ambit2.db.search.structure.QueryAtomEnvironment;

@@ -35,9 +35,9 @@ import java.util.List;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.EQCondition;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.EQCondition;
 
 /**
  * A convenience class for a query used to restrict the scope of other queries

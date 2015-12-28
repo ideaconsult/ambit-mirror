@@ -36,6 +36,7 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.NumberCondition;
 
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -48,7 +49,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
-import ambit2.db.search.NumberCondition;
 
 public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IAtomContainerSet,NumberCondition> {
 

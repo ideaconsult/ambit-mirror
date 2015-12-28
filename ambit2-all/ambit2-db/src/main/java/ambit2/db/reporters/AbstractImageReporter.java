@@ -20,6 +20,7 @@ import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.query.IQueryUpdate;
 import net.idea.modbcum.i.query.QueryParam;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.modbcum.q.conditions.NumberCondition;
 import net.idea.modbcum.r.QueryReporter;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -33,7 +34,6 @@ import ambit2.db.SessionID;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.cache.RetrieveStructureImagePath;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.search.NumberCondition;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.update.storedquery.CreateStoredQuery;

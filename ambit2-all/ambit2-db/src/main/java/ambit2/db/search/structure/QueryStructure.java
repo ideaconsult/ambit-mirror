@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.StringCondition;
 
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -20,7 +21,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.core.processors.structure.key.SmilesKey;
-import ambit2.db.search.StringCondition;
 
 /**
  * Search for smiles, inchi, formula

@@ -7,9 +7,9 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.NumberCondition;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
-import ambit2.db.search.NumberCondition;
 
 /**
  * First bitset is from structural keys, second from fingerprints

@@ -6,20 +6,19 @@ import java.util.List;
 
 import junit.framework.Assert;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.NumberCondition;
+import net.idea.modbcum.q.conditions.StringCondition;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;
 import org.openscience.cdk.fingerprint.Fingerprinter;
-import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.key.ExactStructureSearchMode;
-import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryCombined;
-import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.structure.QueryFieldNumeric;

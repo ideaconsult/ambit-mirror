@@ -8,11 +8,11 @@ import java.util.List;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.StringCondition;
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.AbstractPropertyRetrieval.PROPERTY_TABLE;
 
 public class QueryOntology  extends AbstractQuery<Boolean, Dictionary, StringCondition, Property> implements

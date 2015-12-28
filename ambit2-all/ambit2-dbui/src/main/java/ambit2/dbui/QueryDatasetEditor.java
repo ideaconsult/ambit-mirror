@@ -37,6 +37,7 @@ import javax.swing.JLabel;
 import javax.swing.ListModel;
 
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.q.conditions.StringCondition;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
@@ -45,7 +46,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.results.RowsModel;
-import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryDataset;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;

@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.q.conditions.EQCondition;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.search.EQCondition;
 
 /**
  * Returns results of a previously executed query (e.g. smarts)

@@ -29,7 +29,7 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
-import ambit2.db.search.StringCondition;
+import net.idea.modbcum.q.conditions.StringCondition;
 
 
 /**

@@ -7,13 +7,13 @@ import java.util.List;
 
 import net.idea.modbcum.i.IQueryObject;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.StringCondition;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.processors.QueryInfo2Query;
 import ambit2.db.search.QueryCombined;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.QueryInfo;
-import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.RetrieveFieldNames;
 import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.structure.QueryField;

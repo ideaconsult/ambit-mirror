@@ -5,9 +5,9 @@ import java.sql.ResultSet;
 import net.idea.modbcum.i.IParameterizedQuery;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.q.conditions.EQCondition;
 import ambit2.base.data.study.EffectRecord;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.EQCondition;
 
 public abstract class ReadEffectRecordAbstract<F, ER extends EffectRecord<String, String, String>> extends
 	AbstractQuery<F, ER, EQCondition, ER> implements IQueryRetrieval<ER>, IParameterizedQuery<F, ER, EQCondition> {

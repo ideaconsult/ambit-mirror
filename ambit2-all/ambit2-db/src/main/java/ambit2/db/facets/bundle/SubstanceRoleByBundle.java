@@ -6,11 +6,11 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.StringCondition;
 import net.idea.modbcum.q.facet.AbstractFacetQuery;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.facet.BundleRoleFacet;
-import ambit2.db.search.StringCondition;
 
 public class SubstanceRoleByBundle
 		extends

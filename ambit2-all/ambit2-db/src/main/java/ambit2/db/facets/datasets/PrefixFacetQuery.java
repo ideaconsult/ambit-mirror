@@ -7,8 +7,8 @@ import java.util.List;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.facet.IFacet;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.StringCondition;
 import net.idea.modbcum.q.facet.AbstractFacetQuery;
-import ambit2.db.search.StringCondition;
 
 public abstract  class PrefixFacetQuery<PARAM,FACET extends IFacet<String>>  extends AbstractFacetQuery<PARAM,String,StringCondition,FACET>  {
 	

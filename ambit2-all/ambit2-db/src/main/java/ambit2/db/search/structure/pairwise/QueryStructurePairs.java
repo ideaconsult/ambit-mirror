@@ -5,10 +5,10 @@ import java.sql.SQLException;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.q.conditions.NumberCondition;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.NumberCondition;
 
 /**
  * returns idstructure of two molecules

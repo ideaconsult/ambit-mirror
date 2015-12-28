@@ -37,9 +37,9 @@ import javax.swing.JTable;
 import javax.swing.ListModel;
 
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.q.conditions.StringCondition;
 import ambit2.base.data.PropertyTemplateStats;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryFunctionalGroups;
 
 import com.jgoodies.binding.adapter.AbstractTableAdapter;

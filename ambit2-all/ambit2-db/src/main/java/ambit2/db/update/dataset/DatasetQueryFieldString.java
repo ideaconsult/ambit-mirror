@@ -1,7 +1,7 @@
 package ambit2.db.update.dataset;
 
 import net.idea.modbcum.i.query.QueryParam;
-import ambit2.db.search.StringCondition;
+import net.idea.modbcum.q.conditions.StringCondition;
 
 public class DatasetQueryFieldString extends DatasetQueryFieldGeneric<String,StringCondition> {
 

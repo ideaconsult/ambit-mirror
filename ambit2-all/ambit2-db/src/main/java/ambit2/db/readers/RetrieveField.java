@@ -8,10 +8,10 @@ import java.util.List;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.EQCondition;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.EQCondition;
 import ambit2.db.search.property.AbstractPropertyRetrieval.SearchMode;
 
 public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructureRecord,EQCondition,ResultType> implements IQueryRetrieval<ResultType> {

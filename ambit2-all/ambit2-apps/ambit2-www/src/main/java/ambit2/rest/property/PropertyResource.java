@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.q.conditions.StringCondition;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.c.RepresentationConvertor;
 import net.idea.restnet.db.QueryURIReporter;
@@ -28,7 +29,6 @@ import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryExecutor;
-import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.FreeTextPropertyQuery;
 import ambit2.db.search.property.RetrieveFieldNames;
 import ambit2.db.search.property.RetrieveFieldNamesByAlias;

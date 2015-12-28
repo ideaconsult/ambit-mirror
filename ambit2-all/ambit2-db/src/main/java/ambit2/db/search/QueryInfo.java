@@ -1,5 +1,7 @@
 package ambit2.db.search;
 
+import net.idea.modbcum.q.conditions.StringCondition;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.data.SourceDataset;

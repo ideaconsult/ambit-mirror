@@ -6,9 +6,9 @@ import java.util.List;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.SetCondition;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
-import ambit2.db.search.SetCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
 
 public class QueryStructureByProperty<Q extends AbstractStructureQuery>  extends AbstractStructureQuery<Profile,Q, SetCondition> {

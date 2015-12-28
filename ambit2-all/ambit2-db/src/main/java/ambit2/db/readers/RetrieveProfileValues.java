@@ -10,14 +10,13 @@ import net.idea.modbcum.i.IMultiRetrieval;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.SetCondition;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.SetCondition;
-import ambit2.db.search.SetCondition.conditions;
 
 public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStructureRecord,SetCondition,IStructureRecord> 
 					implements IQueryRetrieval<IStructureRecord>, IMultiRetrieval<IStructureRecord> {
@@ -86,7 +85,7 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 		super();
 		setSearchMode(querymode);
 		setFieldname(profile);
-		setCondition(new SetCondition(conditions.in));
+		setCondition(new SetCondition(SetCondition.conditions.in));
 		setChemicalsOnly(chemicalsOnly);
 	}		
 	public SearchMode getSearchMode() {

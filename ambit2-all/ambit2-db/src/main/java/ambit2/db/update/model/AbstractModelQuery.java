@@ -5,11 +5,11 @@ import java.sql.ResultSet;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.StringCondition;
 import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Template;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.StringCondition;
 
 public abstract class AbstractModelQuery<F,V>  extends AbstractQuery<F, V, StringCondition, ModelQueryResults>  implements IQueryRetrieval<ModelQueryResults> {
 	/**

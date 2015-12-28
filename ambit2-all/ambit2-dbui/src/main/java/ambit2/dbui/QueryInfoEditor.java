@@ -12,10 +12,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import net.idea.modbcum.q.conditions.StringCondition.STRING_CONDITION;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.search.QueryInfo;
-import ambit2.db.search.StringCondition.STRING_CONDITION;
 import ambit2.ui.Panel2D;
 
 import com.jgoodies.binding.PresentationModel;

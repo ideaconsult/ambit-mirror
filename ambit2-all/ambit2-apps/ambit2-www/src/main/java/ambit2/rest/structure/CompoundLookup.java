@@ -1,12 +1,12 @@
 package ambit2.rest.structure;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.r.QueryAbstractReporter;
+import net.idea.modbcum.q.conditions.StringCondition;
+import net.idea.modbcum.q.conditions.StringCondition.STRING_CONDITION;
 import net.sf.jniinchi.INCHI_RET;
 
 import org.openscience.cdk.CDKConstants;
@@ -44,15 +44,12 @@ import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.EINECS;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.key.ExactStructureSearchMode;
-import ambit2.db.search.StringCondition;
-import ambit2.db.search.StringCondition.STRING_CONDITION;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldMultiple;
 import ambit2.db.search.structure.QueryStructure;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.pubchem.NCISearchProcessor;
-import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
