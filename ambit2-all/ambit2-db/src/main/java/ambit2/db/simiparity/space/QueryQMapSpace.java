@@ -7,12 +7,13 @@ import java.util.List;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.conditions.StringCondition;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
+import ambit2.base.data.substance.SubstanceProperty;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.StringCondition;
 
 /**
  * Reads {@link QMapSpace}
@@ -41,14 +42,23 @@ public class QueryQMapSpace extends AbstractQuery<IStructureRecord,QMap,StringCo
 		"p.name propertyname,p.units,p.comments,p.idreference\n"+
 		"from qsasheader q\n"+
 		"join qsasmap4 using(idsasmap)\n"+
-		"join property_values v using(idchemical)\n"+
-		"join properties p on v.idproperty=p.idproperty\n"+
+		"left join property_values v using(idchemical)\n"+
+		"left join properties p on v.idproperty=p.idproperty\n"+
 		//"where v.idproperty=q.idproperty and p.idproperty=q.idproperty and g2>0 and a>0\n"+
 		"where v.idproperty=q.idproperty and p.idproperty=q.idproperty and g2>0 and a>?\n"+
 		"%s\n"+
 		"order by q.id_srcdataset,q.idproperty\n";	
+	
+	private static final String sql_study = 
+			"SELECT idsasmap,id_srcdataset,-1,threshold_dact,threshold_sim,\n"+
+			"idchemical,a,b,c,d,fisher,g2,null,\n"+
+			"reference propertyname,null,guidance,null,null value_num\n"+ //add interpretation-result
+			"from qsasheader q\n"+
+			"join qsasmap4 using(idsasmap)\n"+
+			"where g2>0 and a>?\n"+
+			"%s\n";
 
-	protected StringBuilder condition=null;
+	protected StringBuilder conditionString=null;
 	
 	public QueryQMapSpace() {
 		super();
@@ -62,25 +72,28 @@ public class QueryQMapSpace extends AbstractQuery<IStructureRecord,QMap,StringCo
 
 	@Override
 	public String getSQL() throws AmbitException {
+		String the_sql = sql_study; 
 		if (getValue()!=null) {
+			if (getValue().getProperty() instanceof SubstanceProperty) the_sql = sql_study;
 			if ((getValue().getId()>0)) {
 				initCondition();
-				condition.append(" and idsasmap=?");			
+				conditionString.append(" and idsasmap=?");			
 			} else {
 				if ((getValue().getDataset()!=null) && (getValue().getDataset().getID()>0)) {
 					initCondition();
-					condition.append(" and id_srcdataset=?");			
+					conditionString.append(" and id_srcdataset=?");			
 				}
 				if ((getValue().getProperty()!=null) && (getValue().getProperty().getId()>0)) {
 					initCondition();
-					condition.append(" and q.idproperty=?");					
+					conditionString.append(" and q.idproperty=?");					
 				}		
 			}
 		}
-		return String.format(sql,condition);
+
+		return String.format(the_sql,conditionString);
 	}
 	protected boolean initCondition() {
-		if (condition==null) {condition = new StringBuilder(); return true;}
+		if (conditionString==null) {conditionString = new StringBuilder(); return true;}
 		else return false;
 	}
 
