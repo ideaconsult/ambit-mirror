@@ -51,8 +51,12 @@ var qmap = {
 		    					"mDataProp" : "activity",
 		    					"bUseRendered" : false,	
 		    					"fnRender" : function(o,val) {
-		    						var sOut = "<a href='"+ val.featureURI+"' title='Browse this feature' target='feature'>"+ val.feature.title+"</a> " + val.feature.units ;
+		    						try {
+		    						var sOut = "<a href='"+ val.featureURI+"' title='Browse this feature' target='feature'>"+ val.feature.title+"</a> " + (val.feature.units==null?"":val.feature.units) ;
 		    						return sOut;
+		    						} catch (err) {
+		    							return val.featureURI;
+		    						}
 		    					}
 		    				},	    	
 		    				{ //3
@@ -198,8 +202,8 @@ var qmap = {
 		    					"fnRender" : function(o,val) {
 									var cmpURI = val;
 									if (val.indexOf("/conformer") >= 0) {cmpURI = val.substring(0, val.indexOf("/conformer"));}
-									var prm = {'option': 'similarity', 'type':'url', 'search':cmpURI, 'pagesize': 1};
-									var searchURI = root + "/ui/query?" + $.param(prm,false);
+									var prm = { 'type':'auto', 'search':cmpURI, 'pagesize': 1};
+									var searchURI = root + "/ui/_search?" + $.param(prm,false);
 									var id = qmap.getCompoundID(root,cmpURI);
 									cmpURI = cmpURI + "?media=image/png";
 									var sOut =  '<a href="'+searchURI+'" target=_blank>' +
