@@ -4,12 +4,8 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Comparator;
 
-import net.idea.modbcum.i.IParameterizedQuery;
-import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
-import net.idea.modbcum.p.MasterDetailsProcessor;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -29,7 +25,7 @@ import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.study.IStudyPrinter;
 import ambit2.core.io.study.StudyFormatter;
-import ambit2.db.substance.study.ReadSubstanceStudy;
+import ambit2.db.substance.study.SubstanceStudyDetailsProcessor;
 
 public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		extends AbstractXLSXReporter<Q> implements IStudyPrinter {
@@ -115,36 +111,7 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 		super(baseRef, hssf, template, groupedProperties, bundles, urlPrefix,
 				false);
 
-		ReadSubstanceStudy<ProtocolApplication<Protocol, String, String, IParams, String>> queryP = new ReadSubstanceStudy<>();
-
-		MasterDetailsProcessor<SubstanceRecord, ProtocolApplication<Protocol, String, String, IParams, String>, IQueryCondition> paReader = new MasterDetailsProcessor<SubstanceRecord, ProtocolApplication<Protocol, String, String, IParams, String>, IQueryCondition>(
-				queryP) {
-
-			@Override
-			protected void configureQuery(
-					SubstanceRecord target,
-					IParameterizedQuery<SubstanceRecord, ProtocolApplication<Protocol, String, String, IParams, String>, IQueryCondition> query)
-					throws AmbitException {
-				((ReadSubstanceStudy) query).setRecord(null);
-				((ReadSubstanceStudy) query).setFieldname(target
-						.getSubstanceUUID());
-				if (target.getMeasurements() != null)
-					target.getMeasurements().clear();
-
-			}
-
-			@Override
-			protected SubstanceRecord processDetail(
-					SubstanceRecord target,
-					ProtocolApplication<Protocol, String, String, IParams, String> measurement)
-					throws Exception {
-				if (measurement != null)
-					target.addMeasurement(measurement);
-				((ReadSubstanceStudy) query).setRecord(null);
-				return target;
-			}
-
-		};
+		SubstanceStudyDetailsProcessor paReader = new SubstanceStudyDetailsProcessor();
 
 		getProcessors().clear();
 		getProcessors().add(paReader);
