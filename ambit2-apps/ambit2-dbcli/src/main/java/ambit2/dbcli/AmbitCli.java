@@ -39,6 +39,7 @@ import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.i.query.IQueryUpdate;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.modbcum.p.MasterDetailsProcessor;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 import net.idea.modbcum.q.update.AbstractUpdate;
 
@@ -67,7 +68,6 @@ import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.processors.AbstractUpdateProcessor;
 import ambit2.db.processors.BatchDBProcessor;
 import ambit2.db.processors.FP1024Writer;
-import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.processors.QuickImportBatchProcessor;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.db.readers.RetrieveStructure;

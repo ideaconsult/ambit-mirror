@@ -8,6 +8,7 @@ import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.p.MasterDetailsProcessor;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -17,7 +18,6 @@ import org.restlet.data.Status;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.ProtocolEffectRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
@@ -27,7 +27,6 @@ import ambit2.base.data.substance.SubstancePublicName;
 import ambit2.base.data.substance.SubstanceUUID;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
-import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.substance.ids.ReadChemIdentifiersByComposition;
 import ambit2.db.substance.properties.ReadChemPropertiesByComposition;
 import ambit2.db.substance.relation.ReadSubstanceComposition;
@@ -136,7 +135,7 @@ public class BundleDatasetResource<Q extends ReadSubstancesByBundle> extends
 
 			@Override
 			public SubstanceRecord process(SubstanceRecord target)
-					throws AmbitException {
+					throws Exception {
 				if (target == null || (target.getIdsubstance() <= 0))
 					return target;
 				q.setBundle(bundle);

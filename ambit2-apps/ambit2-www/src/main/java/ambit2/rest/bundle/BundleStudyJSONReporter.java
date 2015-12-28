@@ -8,6 +8,7 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.facet.IFacet;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.modbcum.p.MasterDetailsProcessor;
 
 import org.restlet.Request;
 
@@ -15,7 +16,6 @@ import ambit2.base.data.study.Protocol._categories;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.facet.BundleRoleFacet;
 import ambit2.db.facets.bundle.EndpointRoleByBundle;
-import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.substance.study.facet.SubstanceByCategoryFacet;
 import ambit2.rest.facet.FacetJSONReporter;
 
@@ -52,7 +52,7 @@ public class BundleStudyJSONReporter<Q extends IQueryRetrieval<IFacet>> extends
 				private static final long serialVersionUID = -135061244120269844L;
 
 				@Override
-				public IFacet process(IFacet master) throws AmbitException {
+				public IFacet process(IFacet master) throws Exception {
 					if (master instanceof SubstanceByCategoryFacet) {
 						((SubstanceByCategoryFacet) master).setBundleRole(null);
 					}
