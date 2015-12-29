@@ -76,9 +76,9 @@
 	
    * Authentication and authorization  {{{http://opentox.org/dev/apis/api-1.2/AA}API}}
       
- [AMBIT OpenTox API implementation]
+ [AMBIT API implementation and extensions]
 
-   * Chemical compound structure {{{./ambit_services.html}Examples}}
+   * {{{./api.html}API documentation}}
 
 
  []
