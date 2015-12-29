@@ -94,8 +94,10 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 			Bucket pbucket = new Bucket();
 			pbucket.setHeader(bucket.getHeader());
 			pbucket.put("id", bucket.get("id") + "_" + key);
+			pbucket.put("s_prefix", bucket.get("s_prefix"));
 			pbucket.put("s_uuid", bucket.get("s_uuid"));
-			pbucket.put("doc_uuid", bucket.get("doc_uuid"));
+			pbucket.put("document_prefix", bucket.get("document_prefix"));
+			pbucket.put("document_uuid", bucket.get("document_uuid"));
 			pbucket.put("s_type", key);
 			IParams iparams = parseConditions(params);
 			pbucket.put(key, iparams);

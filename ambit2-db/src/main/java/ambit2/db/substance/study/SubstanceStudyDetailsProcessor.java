@@ -1,18 +1,18 @@
 package ambit2.db.substance.study;
 
-import ambit2.base.data.SubstanceRecord;
-import ambit2.base.data.study.IParams;
-import ambit2.base.data.study.Protocol;
-import ambit2.base.data.study.ProtocolApplication;
+import java.util.List;
+
 import net.idea.modbcum.i.IParameterizedQuery;
 import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.MasterDetailsProcessor;
+import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.study.ProtocolApplication;
 
 public class SubstanceStudyDetailsProcessor
 		extends
-		MasterDetailsProcessor<SubstanceRecord, ProtocolApplication<Protocol, String, String, IParams, String>, IQueryCondition> {
+		MasterDetailsProcessor<SubstanceRecord, List<ProtocolApplication>, IQueryCondition> {
 
 	/**
 	 * 
@@ -20,34 +20,27 @@ public class SubstanceStudyDetailsProcessor
 	private static final long serialVersionUID = 2258609350382277827L;
 
 	public SubstanceStudyDetailsProcessor(
-			IQueryRetrieval<ProtocolApplication<Protocol, String, String, IParams, String>> query) {
+			IQueryRetrieval<List<ProtocolApplication>> query) {
 		super(query);
 	}
 
 	public SubstanceStudyDetailsProcessor() {
-		super(new ReadSubstanceStudy());
+		super(new ReadSubstanceStudyFlat());
 	}
 
 	@Override
-	protected SubstanceRecord processDetail(
-			SubstanceRecord target,
-			ProtocolApplication<Protocol, String, String, IParams, String> measurement)
-			throws Exception {
-		if (measurement != null)
-			target.addMeasurement(measurement);
-		((ReadSubstanceStudy) query).setRecord(null);
+	protected SubstanceRecord processDetail(SubstanceRecord target,
+			List<ProtocolApplication> measurements) throws Exception {
+		target.setMeasurements(measurements);
 		return target;
 	}
 
 	@Override
 	protected void configureQuery(
 			SubstanceRecord target,
-			IParameterizedQuery<SubstanceRecord, ProtocolApplication<Protocol, String, String, IParams, String>, IQueryCondition> query)
+			IParameterizedQuery<SubstanceRecord, List<ProtocolApplication>, IQueryCondition> query)
 			throws AmbitException {
-		((ReadSubstanceStudy) query).setRecord(null);
-		((ReadSubstanceStudy) query).setFieldname(target.getSubstanceUUID());
-		if (target.getMeasurements() != null)
-			target.getMeasurements().clear();
-
+		((ReadSubstanceStudyFlat) query).setRecord(target.getMeasurements());
+		((ReadSubstanceStudyFlat) query).setFieldname(target);
 	}
 }
