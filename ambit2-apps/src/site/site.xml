@@ -168,14 +168,14 @@
 		</menu>
 
 		<menu name="OpenTox">
-			<item name="OpenTox API" href="./api.html" />
+			<item name="OpenTox API" href="./api_opentox.html" />
 			<item name="Downloads" href="./download_opentox.html" />
 		</menu>
 
 		<menu name="Docs">
 			<item name="Installation" href="./install_ambitrest.html" />
 			<item name="Usage" href="./intro.html" />
-			<item name="AMBIT API" href="http://ideaconsult.github.io/examples-ambit/apidocs" />
+			<item name="AMBIT API" href="./api.html" />
 		</menu>
 
 
