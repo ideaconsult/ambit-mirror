@@ -46,11 +46,11 @@ public class SubstanceStudyFlatQueryTest extends
 					continue;
 				if (EffectRecord._fields.textValue.name().equals(header))
 					continue;
-				if ("err_qualifier".equals(header))
+				if ("errQualifier".equals(header))
 					continue;
 				if ("err".equals(header))
 					continue;
-				if ("e_hash".equals(header))
+				if ("hash".equals(header))
 					continue;
 				if (EffectRecord._fields.unit.name().equals(header))
 					continue;
