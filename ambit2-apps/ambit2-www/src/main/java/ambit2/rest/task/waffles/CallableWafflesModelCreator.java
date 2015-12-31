@@ -31,7 +31,7 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.dataset.RDFInstancesParser;
 import ambit2.rest.model.ModelURIReporter;
-import ambit2.rest.task.CallableModelCreator;
+import ambit2.rest.model.task.CallableModelCreator;
 import ambit2.rest.task.TaskResult;
 
 

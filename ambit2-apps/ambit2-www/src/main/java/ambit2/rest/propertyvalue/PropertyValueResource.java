@@ -6,7 +6,6 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.c.RepresentationConvertor;
 import net.idea.restnet.db.QueryURIReporter;
-import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -23,22 +22,21 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.RetrieveFieldPropertyValue;
 import ambit2.db.search.AbstractQuery;
+import ambit2.rest.DataResources;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.structure.CompoundResource;
-import ambit2.rest.structure.ConformerResource;
 
 public class PropertyValueResource<T extends Serializable> extends
 		QueryResource<IQueryRetrieval<T>, T> {
 	public static final String featureKey = "/feature_value";
 	public static final String compoundFeature = String.format("%s%s",
-			CompoundResource.compoundID, featureKey);
+			DataResources.compoundID_resource, featureKey);
 
 	public static final String FeatureNameConformer = String.format(
-			"%s/{name}%s", featureKey, ConformerResource.conformerID);
+			"%s/{name}%s", featureKey, DataResources.conformerID_resource);
 	public static final String FeatureNameCompound = String.format(
-			"%s/{name}%s", featureKey, CompoundResource.compoundID);
+			"%s/{name}%s", featureKey, DataResources.compoundID_resource);
 
 	@Override
 	protected void doInit() throws ResourceException {
@@ -108,17 +106,17 @@ public class PropertyValueResource<T extends Serializable> extends
 		IStructureRecord record = new StructureRecord();
 		try {
 			record.setIdchemical(Integer.parseInt(Reference.decode(request
-					.getAttributes().get(CompoundResource.idcompound)
+					.getAttributes().get(DataResources.idcompound_resource)
 					.toString())));
 		} catch (NumberFormatException x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
 					String.format("Invalid resource id %d", request
-							.getAttributes().get(CompoundResource.idcompound)),
+							.getAttributes().get(DataResources.idcompound_resource)),
 					x);
 		}
 		try {
 			record.setIdstructure(Integer.parseInt(Reference.decode(request
-					.getAttributes().get(ConformerResource.idconformer)
+					.getAttributes().get(DataResources.idconformer_resource)
 					.toString())));
 			field.setChemicalsOnly(false);
 

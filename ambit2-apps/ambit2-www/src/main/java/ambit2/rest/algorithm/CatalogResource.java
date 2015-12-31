@@ -81,8 +81,8 @@ public abstract class CatalogResource<T extends Serializable>
 	}
 
 	public static String getAlgorithmURI(String category) {
-		return String.format("%s%s/{%s}", AllAlgorithmsResource.algorithm,
-				category, AllAlgorithmsResource.algorithmKey);
+		return String.format("%s%s/{%s}", MLResources.algorithm,
+				category, MLResources.algorithmKey);
 	}
 
 	@Override

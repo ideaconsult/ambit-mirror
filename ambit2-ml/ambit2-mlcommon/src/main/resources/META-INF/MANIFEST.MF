@@ -1,0 +1,13 @@
+Manifest-version: 1.0
+Package: ambit2.mlcommon
+
+Name: ambit2/mlcommon/
+Specification-Title: ML common classes
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.mlcommon
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.mlcommon
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.

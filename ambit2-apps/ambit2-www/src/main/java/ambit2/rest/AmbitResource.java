@@ -22,16 +22,13 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.aa.opensso.OpenSSOUser;
-import ambit2.rest.algorithm.AllAlgorithmsResource;
+import ambit2.rest.algorithm.MLResources;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.freemarker.FreeMarkerResource;
-import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
-import ambit2.rest.structure.CompoundResource;
-import ambit2.rest.structure.ConformerResource;
 import ambit2.rest.structure.smirks.ReactionDepict;
 
 /**
@@ -85,10 +82,10 @@ public class AmbitResource extends FreeMarkerResource {
 	protected String[][] uri = {
 			
 			{"http://opentox.org/dev/apis/api-1.2/structure","Chemical compounds",formatHeader,null,"Implemented"},
-			{String.format("%s/%d",CompoundResource.compound,100),"Get the representation of chemical compound",format,"GET","Yes"},
-			{String.format("%s",CompoundResource.compound),"create a new chemical compound",format,"POST","Yes"},
-			{String.format("%s/%d",CompoundResource.compound,100),"Update the representation of chemical compound",format,"PUT","No"},
-			{String.format("%s/%d",CompoundResource.compound,100),"Remove chemical compound",format,"DELETE","No"},
+			{String.format("%s/%d",DataResources.compound_resource,100),"Get the representation of chemical compound",format,"GET","Yes"},
+			{String.format("%s",DataResources.compound_resource),"create a new chemical compound",format,"POST","Yes"},
+			{String.format("%s/%d",DataResources.compound_resource,100),"Update the representation of chemical compound",format,"PUT","No"},
+			{String.format("%s/%d",DataResources.compound_resource,100),"Remove chemical compound",format,"DELETE","No"},
 
 			{"http://opentox.org/dev/apis/api-1.2/structure","Chemical compounds query",formatHeader,null,"Implemented"},
 			
@@ -105,12 +102,12 @@ public class AmbitResource extends FreeMarkerResource {
 
 			
 			{"http://opentox.org/dev/apis/api-1.2/structure","Conformers",formatHeader,null,"Implemented"},
-			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100),"Get the representation of chemical compound",format,"GET","Yes"},
-			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100),"update the representation of a structure",format,"PUT","No"},
-			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100)," Remove structure",format,"DELETE","Yes"},
-			{String.format("%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey),"get available conformers of a chemical compound",format,"GET","Yes"},
-			{String.format("%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey),"create a new structure",format,"POST","No"},
-			{String.format("%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey),"Remove conformers",format,"DELETE","Yes"},
+			{String.format("%s/%d%s/%d",DataResources.compound_resource,100,DataResources.conformerKey_resource,100),"Get the representation of chemical compound",format,"GET","Yes"},
+			{String.format("%s/%d%s/%d",DataResources.compound_resource,100,DataResources.conformerKey_resource,100),"update the representation of a structure",format,"PUT","No"},
+			{String.format("%s/%d%s/%d",DataResources.compound_resource,100,DataResources.conformerKey_resource,100)," Remove structure",format,"DELETE","Yes"},
+			{String.format("%s/%d%s",DataResources.compound_resource,100,DataResources.conformerKey_resource),"get available conformers of a chemical compound",format,"GET","Yes"},
+			{String.format("%s/%d%s",DataResources.compound_resource,100,DataResources.conformerKey_resource),"create a new structure",format,"POST","No"},
+			{String.format("%s/%d%s",DataResources.compound_resource,100,DataResources.conformerKey_resource),"Remove conformers",format,"DELETE","Yes"},
 
 			/*
 			{"[ambit]","Compound properties",formatHeader,null,"Implemented"},
@@ -168,43 +165,43 @@ public class AmbitResource extends FreeMarkerResource {
 			{PropertyResource.featuredef,"Create a new feature<ul><li>RDF representation of ot:Feature in the content, RDF mime type<li>feature_uris[]=feature-URL in application/x-www-form-urlencoded</ul>",format,"POST","Yes"},
 	
 			{"http://opentox.org/dev/apis/api-1.2/structure","Features per compound/conformer",formatHeader,null,"Implemented"},
-			{String.format("%s/%d?feature_uris[]=%s",CompoundResource.compound,100,"featureuri"),"features and values ",format,"GET","Yes"},
+			{String.format("%s/%d?feature_uris[]=%s",DataResources.compound_resource,100,"featureuri"),"features and values ",format,"GET","Yes"},
 			
 
 			{"http://opentox.org/dev/apis/api-1.2/Algorithm","Algorithms",formatHeader,null},
-			{String.format("%s?page=0&pagesize=10",AllAlgorithmsResource.algorithm),"get a list of all available algorithms",format,"GET","Yes"},
-			{String.format("%s/pka",AllAlgorithmsResource.algorithm),"get the representation of an pKa algorthm",format,"GET","Yes"},
-			{String.format("%s/toxtreecramer",AllAlgorithmsResource.algorithm),"get the representation of an \"ToxTree: Cramer rules\" algorthm",format,"GET","Yes"},
-			{String.format("%s/toxtreecramer2",AllAlgorithmsResource.algorithm),"get the representation of an \"ToxTree: Extended Cramer rules\" algorithm",format,"GET","Yes"},
-			{String.format("%s/toxtreeeye",AllAlgorithmsResource.algorithm),"get the representation of an \"ToxTree: Eye irritation\" algorithm",format,"GET","Yes"},
-			{String.format("%s/toxtreeskinirritation",AllAlgorithmsResource.algorithm),"get the representation of an \"ToxTree: Skin irritation\" algorthm",format,"GET","Yes"},
-			{String.format("%s/toxtreemic",AllAlgorithmsResource.algorithm),"get the representation of \"ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents\" algorthm",format,"GET","Yes"},
-			{String.format("%s/toxtreemichaelacceptors",AllAlgorithmsResource.algorithm),"get the representation of \"ToxTree: Michael acceptors\" algorthm",format,"GET","Yes"},
-			{String.format("%s/toxtreecarc",AllAlgorithmsResource.algorithm),"get the representation of \"ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity\" algorithm",format,"GET","Yes"},
-			{String.format("%s/toxtreekroes",AllAlgorithmsResource.algorithm),"get the representation of \"ToxTree: ILSI/Kroes decision tree for TTC\" algorithm",format,"GET","Yes"},
-			{String.format("%s/pka",AllAlgorithmsResource.algorithm),"apply a model to a dataset for prediction",format,"POST","Yes"},
+			{String.format("%s?page=0&pagesize=10",MLResources.algorithm),"get a list of all available algorithms",format,"GET","Yes"},
+			{String.format("%s/pka",MLResources.algorithm),"get the representation of an pKa algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreecramer",MLResources.algorithm),"get the representation of an \"ToxTree: Cramer rules\" algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreecramer2",MLResources.algorithm),"get the representation of an \"ToxTree: Extended Cramer rules\" algorithm",format,"GET","Yes"},
+			{String.format("%s/toxtreeeye",MLResources.algorithm),"get the representation of an \"ToxTree: Eye irritation\" algorithm",format,"GET","Yes"},
+			{String.format("%s/toxtreeskinirritation",MLResources.algorithm),"get the representation of an \"ToxTree: Skin irritation\" algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreemic",MLResources.algorithm),"get the representation of \"ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents\" algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreemichaelacceptors",MLResources.algorithm),"get the representation of \"ToxTree: Michael acceptors\" algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreecarc",MLResources.algorithm),"get the representation of \"ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity\" algorithm",format,"GET","Yes"},
+			{String.format("%s/toxtreekroes",MLResources.algorithm),"get the representation of \"ToxTree: ILSI/Kroes decision tree for TTC\" algorithm",format,"GET","Yes"},
+			{String.format("%s/pka",MLResources.algorithm),"apply a model to a dataset for prediction",format,"POST","Yes"},
 			
-			{String.format("%s/leverage",AllAlgorithmsResource.algorithm),"Applicability domain by leverage. Requires dataset_uri as parameter. Creates a model, which can be used for AD estimation of other datasets",format,"POST","Yes"},
+			{String.format("%s/leverage",MLResources.algorithm),"Applicability domain by leverage. Requires dataset_uri as parameter. Creates a model, which can be used for AD estimation of other datasets",format,"POST","Yes"},
 						
 			{"http://opentox.org/dev/apis/api-1.2/Model","Models",formatHeader,null},
-			{String.format("%s?page=0&pagesize=10",ModelResource.resource),"get a list of all available models",format,"GET","Yes"},
-			{String.format("%s/{id}",ModelResource.resource),"get the representation of a model",format,"GET","Yes"},
-			{String.format("%s/{id}",ModelResource.resource),"delete a model",format,"DELETE","No"},
-			{String.format("%s/{id}",ModelResource.resource),"apply a model to a dataset for prediction",format,"POST","Yes"},
+			{String.format("%s?page=0&pagesize=10",MLResources.model_resource),"get a list of all available models",format,"GET","Yes"},
+			{String.format("%s/{id}",MLResources.model_resource),"get the representation of a model",format,"GET","Yes"},
+			{String.format("%s/{id}",MLResources.model_resource),"delete a model",format,"DELETE","No"},
+			{String.format("%s/{id}",MLResources.model_resource),"apply a model to a dataset for prediction",format,"POST","Yes"},
 
 			{"http://opentox.org/dev/apis/api-1.2/Model","Model variables",formatHeader,null},
-			{String.format("%s/1/independent",ModelResource.resource),"Independent variables",format,"GET","Yes"},
-			{String.format("%s/1/dependent",ModelResource.resource),"Dependent variables",format,"GET","Yes"},
-			{String.format("%s/1/predicted",ModelResource.resource),"Predicted variables",format,"GET","Yes"},
+			{String.format("%s/1/independent",MLResources.model_resource),"Independent variables",format,"GET","Yes"},
+			{String.format("%s/1/dependent",MLResources.model_resource),"Dependent variables",format,"GET","Yes"},
+			{String.format("%s/1/predicted",MLResources.model_resource),"Predicted variables",format,"GET","Yes"},
 			
 			{"http://opentox.org/dev/apis/api-1.2/AsyncTask","Asynchronous jobs",formatHeader,null},
 			{"/task","List of asynchronous jobs and their status",format,"GET","Yes"},
 			{"/task/{task id}","Information about a specific task",format,"GET","Yes"},		
 			
 			{"[ambit]","Features per compound/conformer",formatHeader,null,"Implemented"},
-			{String.format("%s/%d%s",CompoundResource.compound,100,PropertyResource.featuredef),"All features, available for a compound",format,"GET","Yes"},
-			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100,PropertyResource.featuredef),"All features, available for a conformer",format,"GET","Yes"},
-			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100304,PropertyResource.featuredef),"All features, available for a conformer",format,"GET","Yes"},
+			{String.format("%s/%d%s",DataResources.compound_resource,100,PropertyResource.featuredef),"All features, available for a compound",format,"GET","Yes"},
+			{String.format("%s/%d%s/%d%s",DataResources.compound_resource,100,DataResources.conformerKey_resource,100,PropertyResource.featuredef),"All features, available for a conformer",format,"GET","Yes"},
+			{String.format("%s/%d%s/%d%s",DataResources.compound_resource,100,DataResources.conformerKey_resource,100304,PropertyResource.featuredef),"All features, available for a conformer",format,"GET","Yes"},
 			
 			{"[ambit]","Actions on datasets (split, merge, subset)",formatHeader,null,"Implemented"},
 			{String.format("%s/{dataset1}?%s=%s",DatasetResource.dataset,DatasetResource.dataset_intersection_uri,

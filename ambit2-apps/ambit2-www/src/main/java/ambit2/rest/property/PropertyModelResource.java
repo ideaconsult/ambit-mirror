@@ -16,6 +16,7 @@ import ambit2.base.data.Property;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.search.property.ModelTemplates;
 import ambit2.rest.DisplayMode;
+import ambit2.rest.algorithm.MLResources;
 import ambit2.rest.model.ModelResource;
 
 /**
@@ -47,13 +48,13 @@ public class PropertyModelResource extends PropertyResource {
 
 	ModelQueryResults model = new ModelQueryResults();
 	try {
-	    model.setId(Integer.parseInt(getRequest().getAttributes().get(ModelResource.resourceKey).toString()));
+	    model.setId(Integer.parseInt(getRequest().getAttributes().get(MLResources.model_resourcekey).toString()));
 	} catch (Exception x) {
 	    model.setId(-1);
-	    if ("null".equals(getRequest().getAttributes().get(ModelResource.resourceKey).toString()))
+	    if ("null".equals(getRequest().getAttributes().get(MLResources.model_resourcekey).toString()))
 		model = null;
 	    else
-		model.setName(getRequest().getAttributes().get(ModelResource.resourceKey).toString());
+		model.setName(getRequest().getAttributes().get(MLResources.model_resourcekey).toString());
 	}
 	ModelTemplates query = new ModelTemplates();
 	try {

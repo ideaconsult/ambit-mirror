@@ -3,8 +3,6 @@ package ambit2.rest.algorithm;
 import java.io.Writer;
 import java.util.Iterator;
 
-import net.idea.restnet.c.ResourceDoc;
-
 import org.restlet.Request;
 
 import ambit2.rest.AmbitResource;
@@ -56,7 +54,7 @@ public class CatalogHTMLReporter<T> extends CatalogURIReporter<T> {
 	    output.write(AmbitResource.printWidgetContentFooter());
 	    output.write(AmbitResource.printWidgetFooter());
 
-	    AmbitResource.writeHTMLFooter(output, AllAlgorithmsResource.algorithm, getRequest());
+	    AmbitResource.writeHTMLFooter(output, MLResources.algorithm, getRequest());
 	    output.flush();
 	} catch (Exception x) {
 

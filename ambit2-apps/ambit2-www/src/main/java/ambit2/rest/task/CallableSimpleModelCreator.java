@@ -16,6 +16,7 @@ import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.ModelBuilder;
 import ambit2.rest.model.builder.SimpleModelBuilder;
+import ambit2.rest.model.task.CallableModelCreator;
 
 public class CallableSimpleModelCreator<Result, USERID> extends
 	CallableModelCreator<Object, Result, ModelBuilder<Object, Algorithm, ModelQueryResults>, USERID> {

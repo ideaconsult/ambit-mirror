@@ -315,6 +315,12 @@
 			<artifactId>ambit2-model</artifactId>
 			<version>${ambit.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-weka</artifactId>
+			<version>${ambit.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-mopac</artifactId>
@@ -369,14 +375,6 @@
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-poi</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<!-- for depiction only <dependency> <groupId>org.openscience.cdk</groupId> 
-			<artifactId>cdk-tautomer</artifactId> <version>${cdk.version}</version> </dependency> -->
-		<dependency>
-			<groupId>net.sf.saxon</groupId>
-			<artifactId>saxon-dom</artifactId>
-			<version>8.7</version>
-			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>commons-fileupload</groupId>

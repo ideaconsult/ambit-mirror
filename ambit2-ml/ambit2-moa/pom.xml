@@ -1,0 +1,19 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ambit</groupId>
+		<artifactId>ambit2-ml</artifactId>
+		<version>3.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>ambit2-moa</artifactId>
+	<name>ambit2-moa</name>
+	<dependencies>
+		<dependency>
+			<groupId>nz.ac.waikato.cms.moa</groupId>
+			<artifactId>moa</artifactId>
+			<version>2014.04</version>
+		</dependency>
+	</dependencies>
+	<description>http://moa.cms.waikato.ac.nz/getting-started/</description>
+</project>

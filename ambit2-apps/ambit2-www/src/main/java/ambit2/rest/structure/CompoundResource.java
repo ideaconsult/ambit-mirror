@@ -53,6 +53,7 @@ import ambit2.db.search.structure.QueryStructure;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.chemical.DeleteChemical;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.DataResources;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
@@ -93,10 +94,7 @@ import ambit2.rest.task.FactoryTaskConvertor;
 public class CompoundResource extends
 		StructureQueryResource<IQueryRetrieval<IStructureRecord>> {
 	protected FileUpload upload;
-	public final static String compound = OpenTox.URI.compound.getURI();
-	public final static String idcompound = OpenTox.URI.compound.getKey();
-	public final static String compoundID = OpenTox.URI.compound
-			.getResourceID();
+
 	protected boolean chemicalsOnly = true;
 	protected DisplayMode _dmode = DisplayMode.singleitem;
 
@@ -795,7 +793,7 @@ public class CompoundResource extends
 		if (key != null)
 			map.put("cmpid", key.toString());
 		Object idconformer = getRequest().getAttributes().get(
-				ConformerResource.idconformer);
+				DataResources.idconformer_resource);
 		if (idconformer != null)
 			map.put("strucid", idconformer.toString());
 	}

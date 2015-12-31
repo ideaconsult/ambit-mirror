@@ -22,7 +22,7 @@ public class ModelTextReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
     @Override
     public Object processItem(ModelQueryResults model) throws AmbitException {
 	try {
-	    ModelPredictor predictor = ModelPredictor.getPredictor(model, request);
+	    ModelPredictor predictor = ModelResource.getPredictor(model, request);
 	    getOutput().write(predictor.toString());
 	    return null;
 

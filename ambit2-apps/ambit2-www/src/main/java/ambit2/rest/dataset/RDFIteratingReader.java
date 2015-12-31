@@ -28,10 +28,9 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.core.io.IRawReader;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.DataResources;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFPropertyIterator;
-import ambit2.rest.structure.CompoundResource;
-import ambit2.rest.structure.ConformerResource;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
@@ -91,9 +90,9 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader impleme
 	    jenaModel = OT.createModel();
 	    jenaModel.read(reader, null, rdfFormat == null ? "RDF/XML" : rdfFormat);
 	    compoundTemplate = new Template(String.format("%s%s", basereference == null ? "" : basereference,
-		    CompoundResource.compoundID));
+		    DataResources.compoundID_resource));
 	    conformerTemplate = new Template(String.format("%s%s", basereference == null ? "" : basereference,
-		    ConformerResource.conformerID));
+	    		DataResources.conformerID_resource));
 	    propertyIterator = createPropertyIterator(jenaModel, basereference);
 	} catch (CDKException x) {
 	    throw x;
@@ -220,13 +219,13 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader impleme
 	String cmpURI = RDFObjectIterator.removeDatasetFragment(uri);
 	conformerTemplate.parse(cmpURI, vars);
 	try {
-	    record.setIdchemical(Integer.parseInt(vars.get(CompoundResource.idcompound).toString()));
+	    record.setIdchemical(Integer.parseInt(vars.get(DataResources.idcompound_resource).toString()));
 	} catch (Exception x) {
 	}
 	;
 
 	try {
-	    record.setIdstructure(Integer.parseInt(vars.get(ConformerResource.idconformer).toString()));
+	    record.setIdstructure(Integer.parseInt(vars.get(DataResources.idconformer_resource).toString()));
 	} catch (Exception x) {
 	}
 	;
@@ -234,7 +233,7 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader impleme
 	if (record.getIdchemical() <= 0) {
 	    try {
 		compoundTemplate.parse(cmpURI, vars);
-		record.setIdchemical(Integer.parseInt(vars.get(CompoundResource.idcompound).toString()));
+		record.setIdchemical(Integer.parseInt(vars.get(DataResources.idcompound_resource).toString()));
 	    } catch (Exception x) {
 	    }
 	    ;

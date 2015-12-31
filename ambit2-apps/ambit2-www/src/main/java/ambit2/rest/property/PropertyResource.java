@@ -37,6 +37,7 @@ import ambit2.db.update.property.CreatePropertyReferenceID;
 import ambit2.db.update.property.DeleteProperty;
 import ambit2.db.update.property.ReadProperty;
 import ambit2.db.update.property.UpdateProperty;
+import ambit2.rest.DataResources;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.RDFJenaConvertor;
@@ -45,8 +46,6 @@ import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFPropertyIterator;
-import ambit2.rest.structure.CompoundResource;
-import ambit2.rest.structure.ConformerResource;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -130,7 +129,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 
 	IStructureRecord record = null;
 	boolean chemicalsOnly = true;
-	Object key = request.getAttributes().get(CompoundResource.idcompound);
+	Object key = request.getAttributes().get(DataResources.idcompound_resource);
 	if (key != null)
 	    try {
 		record = new StructureRecord();
@@ -139,7 +138,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		record = null;
 	    }
 
-	key = request.getAttributes().get(ConformerResource.idconformer);
+	key = request.getAttributes().get(DataResources.idconformer_resource);
 	if (key != null)
 	    try {
 		if (record == null)

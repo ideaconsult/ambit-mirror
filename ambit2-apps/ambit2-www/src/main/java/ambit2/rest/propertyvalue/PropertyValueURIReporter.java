@@ -8,8 +8,8 @@ import org.restlet.Request;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.PropertyValue;
+import ambit2.rest.DataResources;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.structure.CompoundResource;
 
 public class PropertyValueURIReporter<T,Q extends IQueryRetrieval<T>> extends QueryURIReporter<T, Q> {
 	/**
@@ -45,7 +45,7 @@ public class PropertyValueURIReporter<T,Q extends IQueryRetrieval<T>> extends Qu
 		if (item instanceof Property)
 			return String.format("%s%s/%d%s/%s\n",
 						ref,
-						CompoundResource.compound,
+						DataResources.compound_resource,
 						getRecord().getIdchemical(),
 						PropertyValueResource.featureKey,
 						((PropertyValue)item).getProperty().getName()
@@ -54,7 +54,7 @@ public class PropertyValueURIReporter<T,Q extends IQueryRetrieval<T>> extends Qu
 			return String.format("%s%s%s/%d%s/%d",
 					ref,
 					PropertyValueResource.featureKey,
-					CompoundResource.compound,
+					DataResources.compound_resource,
 					getRecord()==null?null:getRecord().getIdchemical(),
 					PropertyResource.featuredef,
 					((PropertyValue)item).getProperty().getId());

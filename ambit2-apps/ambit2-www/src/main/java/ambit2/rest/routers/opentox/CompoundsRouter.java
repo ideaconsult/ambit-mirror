@@ -3,6 +3,7 @@ package ambit2.rest.routers.opentox;
 import org.restlet.Context;
 import org.restlet.routing.Router;
 
+import ambit2.rest.DataResources;
 import ambit2.rest.routers.MyRouter;
 import ambit2.rest.structure.CompoundResource;
 
@@ -20,7 +21,7 @@ public class CompoundsRouter extends MyRouter {
 		 * Compounds router   /compound
 		 */
 		attachDefault(CompoundResource.class);
-		attach(String.format("/{%s}",CompoundResource.idcompound),
+		attach(String.format("/{%s}",DataResources.idcompound_resource),
 					new CompoundRouter(getContext(),featuresRouter,smartsRouter));
 	}	
 }
