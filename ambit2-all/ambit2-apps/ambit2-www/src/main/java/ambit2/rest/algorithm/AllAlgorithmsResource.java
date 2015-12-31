@@ -55,8 +55,6 @@ import ambit2.rest.task.waffles.CallableWafflesModelCreator;
 import ambit2.rest.task.weka.CallableWekaModelCreator;
 
 public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
-	public final static String algorithm = OpenTox.URI.algorithm.getURI();
-	public final static String algorithmKey = OpenTox.URI.algorithm.getKey();
 
 	public enum _param {
 		level0, level1, level2
@@ -100,7 +98,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		try {
 			initList();
 
-			Object key = getRequest().getAttributes().get(algorithmKey);
+			Object key = getRequest().getAttributes().get(MLResources.algorithmKey);
 
 			if (key == null) {
 				Object type = getResourceRef(getRequest()).getQueryAsForm().getFirstValue("type");
@@ -355,7 +353,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	@Override
 	public void configureTemplateMap(Map<String, Object> map, Request request, IFreeMarkerApplication app) {
 		super.configureTemplateMap(map, request, app);
-		Object taskid = getRequest().getAttributes().get(algorithmKey);
+		Object taskid = getRequest().getAttributes().get(MLResources.algorithmKey);
 		if (taskid != null)
 			map.put("algid", taskid.toString());
 	}

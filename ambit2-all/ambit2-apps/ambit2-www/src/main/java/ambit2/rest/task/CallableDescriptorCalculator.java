@@ -17,7 +17,9 @@ import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.processors.DescriptorsCalculator;
 import ambit2.descriptors.processors.DescriptorsFactory;
+import ambit2.rest.dataset.RDFFileWriter;
 import ambit2.rest.model.predictor.DescriptorPredictor;
+import ambit2.rest.model.task.CallableModelPredictor;
 
 public class CallableDescriptorCalculator<USERID> extends
 	CallableModelPredictor<IStructureRecord, DescriptorPredictor, USERID> {

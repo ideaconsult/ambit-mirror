@@ -59,7 +59,7 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 
 	@Override
 	public Object processItem(ModelQueryResults model) throws Exception {
-		ModelPredictor predictor = ModelPredictor.getPredictor(model,request);
+		ModelPredictor predictor = ModelResource.getPredictor(model,request);
 		String resultsURI = String.format("%s/%s",modelURIReporter.getURI(model),OpenTox.URI.feature);
 		setOutput(getImage(predictor,resultsURI));
 		return model;

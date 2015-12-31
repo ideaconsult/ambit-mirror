@@ -16,6 +16,7 @@ import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.ModelBuilder;
+import ambit2.rest.model.task.CallableModelCreator;
 
 public abstract class CallableStructuresModelCreator<DATA,Builder extends ModelBuilder<DATA,Algorithm,ModelQueryResults>,USERID> extends	CallableModelCreator<DATA, IStructureRecord, Builder,USERID> {
 	protected Reference applicationRootReference;

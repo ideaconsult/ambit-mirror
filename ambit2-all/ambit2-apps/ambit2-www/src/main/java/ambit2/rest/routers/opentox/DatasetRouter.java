@@ -3,6 +3,7 @@ package ambit2.rest.routers.opentox;
 import org.restlet.Context;
 import org.restlet.routing.Router;
 
+import ambit2.rest.DataResources;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetCompoundResource;
 import ambit2.rest.dataset.DatasetResource;
@@ -19,7 +20,6 @@ import ambit2.rest.query.SmartsQueryResource;
 import ambit2.rest.query.StrucTypeQueryResource;
 import ambit2.rest.routers.MyRouter;
 import ambit2.rest.similarity.SimilarityResource;
-import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.dataset.DatasetsByStructureResource;
 
 /**
@@ -57,10 +57,10 @@ public class DatasetRouter extends MyRouter {
 
 
 		//attach(CompoundResource.compoundID, cmpdRouter);
-		attach(CompoundResource.compoundID, DatasetCompoundResource.class);
-		attach(CompoundResource.compound, DatasetStructuresResource.class);
+		attach(DataResources.compoundID_resource, DatasetCompoundResource.class);
+		attach(DataResources.compound_resource, DatasetStructuresResource.class);
 		
-		attach(String.format("%s/datasets",CompoundResource.compoundID), DatasetsByStructureResource.class);
+		attach(String.format("%s/datasets",DataResources.compoundID_resource), DatasetsByStructureResource.class);
 
 		attach(String.format("%s/datasets",OpenTox.URI.conformer.getResourceID()), DatasetsByStructureResource.class);
 		

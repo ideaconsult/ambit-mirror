@@ -72,6 +72,7 @@ import ambit2.rest.admin.PolicyResource;
 import ambit2.rest.admin.SimpleGuard;
 import ambit2.rest.admin.SimpleGuard.SimpleGuards;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
+import ambit2.rest.algorithm.MLResources;
 import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.bookmark.BookmarkResource;
 import ambit2.rest.bookmark.OntoBucketResource;
@@ -427,16 +428,16 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				featuresRouter, smartsRouter);
 		if (openToxAAEnabled) {
 			if (protectCompoundResource())
-				router.attach(CompoundResource.compound,
+				router.attach(DataResources.compound_resource,
 						createProtectedResource(compoundRouter, "compound"));
 			else {
 				Filter cauthN = new OpenSSOAuthenticator(getContext(), false,
 						"opentox.org", new OpenSSOVerifierSetUser(false));
 				cauthN.setNext(compoundRouter);
-				router.attach(CompoundResource.compound, cauthN);
+				router.attach(DataResources.compound_resource, cauthN);
 			}
 		} else
-			router.attach(CompoundResource.compound, compoundRouter);
+			router.attach(DataResources.compound_resource, compoundRouter);
 		/**
 		 * List of datasets /dataset , /datasets
 		 */
@@ -518,11 +519,11 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 		if (openToxAAEnabled) {
 			/** /algorithm */
-			router.attach(AllAlgorithmsResource.algorithm,
+			router.attach(MLResources.algorithm,
 					createAuthenticatedOpenResource(new AlgorithmRouter(
 							getContext())));
 			/** /model */
-			router.attach(ModelResource.resource,
+			router.attach(MLResources.model_resource,
 					createAuthenticatedOpenResource(new ModelRouter(
 							getContext())));
 			/** /task */
@@ -531,10 +532,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 					getContext())));
 		} else {
 			/** /algorithm */
-			router.attach(AllAlgorithmsResource.algorithm, new AlgorithmRouter(
+			router.attach(MLResources.algorithm, new AlgorithmRouter(
 					getContext()));
 			/** /model */
-			router.attach(ModelResource.resource, new ModelRouter(getContext()));
+			router.attach(MLResources.model_resource, new ModelRouter(getContext()));
 			/** /task */
 			router.attach(TaskResource.resource, new TaskRouter(getContext()));
 			router.attach("/ui", new UIRouter(getContext()));

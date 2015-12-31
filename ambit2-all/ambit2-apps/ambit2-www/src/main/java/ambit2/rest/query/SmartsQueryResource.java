@@ -38,12 +38,12 @@ import ambit2.db.search.structure.QuerySMARTS;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.substance.relation.ChemicalBySubstanceRelation;
 import ambit2.descriptors.FunctionalGroup;
+import ambit2.rest.DataResources;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.structure.CompoundResource;
 
 /**
  * SMARTS search in database
@@ -228,7 +228,7 @@ public class SmartsQueryResource extends
 			try {
 
 				Object cmpid = request.getAttributes().get(
-						CompoundResource.idcompound);
+						DataResources.idcompound_resource);
 				if (cmpid != null) {
 					IStructureRecord record = new StructureRecord();
 					record.setIdchemical(Integer.parseInt(Reference

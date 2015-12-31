@@ -14,10 +14,10 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 
+import ambit2.rest.DataResources;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.FeatureResourceIdentifiers;
 import ambit2.rest.propertyvalue.PropertyValueResource;
-import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.test.ResourceTest;
 
 public class FeatureResourceTest extends ResourceTest {
@@ -25,7 +25,7 @@ public class FeatureResourceTest extends ResourceTest {
 	public String getTestURI() {
 		return String.format("http://localhost:%d%s%s/%d%s/%d", port,
 				PropertyValueResource.featureKey,
-				CompoundResource.compound,
+				DataResources.compound_resource,
 				11,
 				PropertyResource.featuredef,
 				3);

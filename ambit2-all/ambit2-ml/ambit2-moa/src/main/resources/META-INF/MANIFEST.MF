@@ -1,0 +1,13 @@
+Manifest-version: 1.0
+Package: ambit2.moa
+
+Name: ambit2/moa/
+Specification-Title: MOA
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.moa
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.moa
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.

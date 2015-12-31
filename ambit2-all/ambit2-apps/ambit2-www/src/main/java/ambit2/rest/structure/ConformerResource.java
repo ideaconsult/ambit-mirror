@@ -17,6 +17,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.structure.DeleteStructure;
+import ambit2.rest.DataResources;
 import ambit2.rest.OpenTox;
 
 /**
@@ -41,12 +42,6 @@ image/png
  *
  */
 public class ConformerResource extends CompoundResource {
-
-	public final static String conformerKey = "/conformer";
-	public final static String conformer = String.format("%s%s",compoundID,conformerKey);
-	public final static String idconformer = "idconformer";
-	//public final static String conformers = String.format("%s%s",compoundID,conformerKey);
-	public final static String conformerID = String.format("%s%s/{%s}",compoundID,conformerKey,idconformer);
 	
 	public ConformerResource() {
 		super();
@@ -54,7 +49,7 @@ public class ConformerResource extends CompoundResource {
 	}
 	@Override
 	public boolean isHtmlbyTemplate() {
-		return getRequest().getAttributes().get(ConformerResource.idconformer)!=null;
+		return getRequest().getAttributes().get(DataResources.idconformer_resource)!=null;
 	}
 	@Override
 	protected String getDefaultTemplateURI(Context context, Request request,
@@ -89,7 +84,7 @@ public class ConformerResource extends CompoundResource {
 			setTemplate(createTemplate(context, request, response));
 			IStructureRecord record = new StructureRecord();
 			try {
-				record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(idcompound).toString())));
+				record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(DataResources.idcompound_resource).toString())));
 			} catch (NumberFormatException x) {
 				throw new ResourceException(
 						Status.CLIENT_ERROR_BAD_REQUEST,
@@ -99,7 +94,7 @@ public class ConformerResource extends CompoundResource {
 			}
 			QueryStructureByID query = new QueryStructureByID();			
 			query.setPageSize(-1);
-			Object idconformer = request.getAttributes().get(ConformerResource.idconformer);
+			Object idconformer = request.getAttributes().get(DataResources.idconformer_resource);
 			try {
 				record.setIdstructure(Integer.parseInt(Reference.decode(idconformer.toString())));
 				query.setChemicalsOnly(false);
@@ -165,7 +160,7 @@ public class ConformerResource extends CompoundResource {
 	@Override
 	protected IStructureRecord getRecord() {
 		IStructureRecord record = super.getRecord();
-		Object idconformer = getRequest().getAttributes().get(ConformerResource.idconformer);
+		Object idconformer = getRequest().getAttributes().get(DataResources.idconformer_resource);
 		if (idconformer!=null)
 			try {record.setIdstructure(Integer.parseInt(Reference.decode(idconformer.toString())));} catch (Exception x) {}
 		return record;

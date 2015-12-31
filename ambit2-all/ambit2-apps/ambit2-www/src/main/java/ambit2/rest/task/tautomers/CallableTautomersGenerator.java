@@ -11,7 +11,7 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.rest.task.CallableModelPredictor;
+import ambit2.rest.model.task.CallableModelPredictor;
 import ambit2.rest.task.TaskResult;
 
 public class CallableTautomersGenerator<USERID> extends CallableModelPredictor<IStructureRecord,TautomersGenerator,USERID> {

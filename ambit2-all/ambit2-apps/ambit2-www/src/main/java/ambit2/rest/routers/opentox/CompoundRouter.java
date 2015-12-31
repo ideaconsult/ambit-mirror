@@ -3,6 +3,7 @@ package ambit2.rest.routers.opentox;
 import org.restlet.Context;
 import org.restlet.routing.Router;
 
+import ambit2.rest.DataResources;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.PropertyTemplateResource;
@@ -45,7 +46,7 @@ public class CompoundRouter extends MyRouter {
 		 */
 		Router conformersRouter = new MyRouter(getContext());
 		conformersRouter.attachDefault(ConformerResource.class);
-		conformersRouter.attach(String.format("/{%s}",ConformerResource.idconformer),
+		conformersRouter.attach(String.format("/{%s}",DataResources.idconformer_resource),
 						new ConformerRouter(getContext(),featuresRouter,templateRouter));	
 	
 		
@@ -70,7 +71,7 @@ public class CompoundRouter extends MyRouter {
 		/**
 		*  /compound/{id}/conformer
 		*/
-		attach(ConformerResource.conformerKey,conformersRouter);
+		attach(DataResources.conformerKey_resource,conformersRouter);
 		
 		/**
 		*  Set of features  /template

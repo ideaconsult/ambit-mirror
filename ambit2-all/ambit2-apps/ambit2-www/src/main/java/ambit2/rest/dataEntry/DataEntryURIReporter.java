@@ -6,9 +6,8 @@ import org.restlet.Request;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
-import ambit2.rest.structure.CompoundResource;
+import ambit2.rest.DataResources;
 import ambit2.rest.structure.CompoundURIReporter;
-import ambit2.rest.structure.ConformerResource;
 
 public class DataEntryURIReporter<Q extends IQueryRetrieval<IStructureRecord>> extends CompoundURIReporter<Q> {
     private final static String resourceTag = "/dataEntry";
@@ -30,11 +29,11 @@ public class DataEntryURIReporter<Q extends IQueryRetrieval<IStructureRecord>> e
     @Override
     public String getURI(String ref, IStructureRecord item) {
 	if ((item.getIdstructure() == -1) || (item.getType().equals(STRUC_TYPE.NA)))
-	    return String.format("%s%s/%d%s/%s", ref, CompoundResource.compound, item.getIdchemical(), resourceTag,
+	    return String.format("%s%s/%d%s/%s", ref, DataResources.compound_resource, item.getIdchemical(), resourceTag,
 		    item.getDataEntryID() > 0 ? Integer.toString(item.getDataEntryID()) : "");
 	else
-	    return String.format("%s%s/%d%s/%d%s/%s", ref, CompoundResource.compound, item.getIdchemical(),
-		    ConformerResource.conformerKey, item.getIdstructure(), resourceTag,
+	    return String.format("%s%s/%d%s/%d%s/%s", ref, DataResources.compound_resource, item.getIdchemical(),
+	    		DataResources.conformerKey_resource, item.getIdstructure(), resourceTag,
 		    item.getDataEntryID() > 0 ? Integer.toString(item.getDataEntryID()) : "");
 
     }

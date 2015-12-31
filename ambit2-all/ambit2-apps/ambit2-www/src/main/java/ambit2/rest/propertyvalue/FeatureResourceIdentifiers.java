@@ -1,8 +1,7 @@
 package ambit2.rest.propertyvalue;
 
+import ambit2.rest.DataResources;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.structure.CompoundResource;
-import ambit2.rest.structure.ConformerResource;
 
 /**
 
@@ -11,9 +10,9 @@ import ambit2.rest.structure.ConformerResource;
  */
 public class FeatureResourceIdentifiers  {
 	public final static String CompoundFeaturedefID = String.format("%s%s%s/{%s}",
-			PropertyValueResource.featureKey,CompoundResource.compoundID,PropertyResource.featuredef,PropertyResource.idfeaturedef);
+			PropertyValueResource.featureKey,DataResources.compoundID_resource,PropertyResource.featuredef,PropertyResource.idfeaturedef);
 	public final static String ConformerFeaturedefID = String.format("%s%s%s/{%s}",
-			PropertyValueResource.featureKey,ConformerResource.conformerID,PropertyResource.featuredef,PropertyResource.idfeaturedef);
+			PropertyValueResource.featureKey,DataResources.conformerID_resource,PropertyResource.featuredef,PropertyResource.idfeaturedef);
 
 	public enum headers  {
 			value;

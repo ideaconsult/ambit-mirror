@@ -16,14 +16,14 @@ import org.restlet.data.Status;
 
 import ambit2.base.data.Property;
 import ambit2.rest.OpenTox;
+import ambit2.rest.algorithm.MLResources;
 import ambit2.rest.legacy.OTDataset;
-import ambit2.rest.model.ModelResource;
 import ambit2.rest.test.ResourceTest;
 
 public class ModelResourceTest extends ResourceTest {
     @Override
     public String getTestURI() {
-	return String.format("http://localhost:%d%s/1", port, ModelResource.resource);
+	return String.format("http://localhost:%d%s/1", port, MLResources.model_resource);
     }
 
     @Test
@@ -406,7 +406,7 @@ public class ModelResourceTest extends ResourceTest {
 	if (parameter != null)
 	    headers.add(OpenTox.params.parameters.toString(), parameter);
 
-	String wekaURI = String.format("http://localhost:%d%s/3", port, ModelResource.resource);
+	String wekaURI = String.format("http://localhost:%d%s/3", port, MLResources.model_resource);
 
 	testAsyncTask(algorithmURI, headers, Status.SUCCESS_OK, wekaURI);
 

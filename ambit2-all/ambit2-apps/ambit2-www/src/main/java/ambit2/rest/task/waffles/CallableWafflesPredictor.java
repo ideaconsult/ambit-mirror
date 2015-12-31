@@ -19,7 +19,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.io.DownloadTool;
 import ambit2.db.processors.PropertyValuesWriter;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.task.CallableModelPredictor;
+import ambit2.rest.model.task.CallableModelPredictor;
 
 public class CallableWafflesPredictor<USERID> extends CallableModelPredictor<File[],WafflesPredictor,USERID> { 
 
