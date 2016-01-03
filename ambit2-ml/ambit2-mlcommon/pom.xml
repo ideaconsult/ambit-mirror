@@ -28,11 +28,19 @@
 			<artifactId>ambit2-mopac</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>nz.ac.waikato.cms.weka</groupId>
-			<artifactId>weka-stable</artifactId>
-			<!-- 3.6.12 -->
+			<artifactId>${weka.package}</artifactId>
 			<version>${weka.version}</version>
 		</dependency>
+
+<!--
+		<dependency>
+			<groupId>nz.ac.waikato.cms.weka</groupId>
+			<artifactId>weka-dev</artifactId>
+			<version>${weka.version}</version>
+		</dependency>
+-->
 	</dependencies>
 </project>
