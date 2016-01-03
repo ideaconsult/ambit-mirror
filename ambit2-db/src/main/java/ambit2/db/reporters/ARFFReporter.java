@@ -78,7 +78,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
     protected void completeTheHeader() {
 	try {
 	    // complete the URI attribute
-	    output.write("}\n");
+	    //output.write("}\n");
 	    for (Property p : header) {
 		output.write(getPropertyHeader(p));
 	    }
@@ -173,7 +173,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 		writer.write(String.format("@relation %s_License:_%s\n\n", getRelationName().trim().replace(" ", "_")
 			.replace("?", "_").replace("&", "_"), getLicenseURI().trim().replace(" ", "_")));
 
-	    output.write("@attribute URI {");
+	    output.write("@attribute URI string\n");
 
 	} catch (IOException x) {
 	    logger.log(Level.WARNING, x.getMessage(), x);
@@ -200,8 +200,8 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 		    uri = String.format("%s/conformer/%d", uri, item.getIdstructure());
 	    }
 
-	    output.append(delimiter);
-	    output.append(uri);
+	    //output.append(delimiter);
+	    //output.append(uri);
 	    delimiter = ",";
 	    writer.write(uri);
 
