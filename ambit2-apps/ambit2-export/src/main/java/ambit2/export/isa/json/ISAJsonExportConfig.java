@@ -19,25 +19,14 @@ public class ISAJsonExportConfig extends ISAExportConfig
 	public void parseJSONConfig(JsonNode rootNode) throws Exception
 	{	
 		//Handle stuff on ISA level
-		//super.parseJSONConfig(rootNode);
+		super.parseJSONConfig(rootNode);
 		
 		JsonNode curNode;
 		
-		//Handling section EXPORT_INFO
-		curNode = rootNode.path("EXPORT_INFO");
+		//Handling section JSON_BASIC
+		curNode = rootNode.path("JSON_BASIC");
 		if (curNode.isMissingNode())
-			throw new Exception ("Section \"EXPORT_INFO\" is missing!");
-		else
-		{
-			//ISA_FORMAT
-			//ISA_VERSION
-			//TODO
-		}
-		
-		//Handling section BASIC
-		curNode = rootNode.path("BASIC");
-		if (curNode.isMissingNode())
-			throw new Exception ("Section \"BASIC\" is missing!");
+			throw new Exception ("Section \"JSON_BASIC\" is missing!");
 		else
 		{
 			//SINGLE_JSON_FILE
@@ -76,7 +65,7 @@ public class ISAJsonExportConfig extends ISAExportConfig
 	public static ISAJsonExportConfig getDefaultConfig()
 	{
 		ISAJsonExportConfig conf = new ISAJsonExportConfig();
-		//TODO
+		ISAExportConfig.fillDefaultISAConfig(conf);
 		
 		return conf;
 	}

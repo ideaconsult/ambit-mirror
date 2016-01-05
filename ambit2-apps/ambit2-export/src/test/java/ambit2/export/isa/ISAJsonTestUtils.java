@@ -31,10 +31,10 @@ public class ISAJsonTestUtils
 		
 		List<SubstanceRecord> sr = new ArrayList<SubstanceRecord>();
 		sr.add(null);
-		tesJsonExport(sr.iterator(), null, null, null);
+		testJsonExport(sr.iterator(), null, null, null);
 	}
 	
-	public static void tesJsonExport(Iterator<SubstanceRecord> records, 
+	public static void testJsonExport(Iterator<SubstanceRecord> records, 
 			File outputDir, 
 			File exportConfig,
 			SubstanceEndpointsBundle endpointBundle) throws Exception
