@@ -60,11 +60,9 @@ public class ISALocation  /* implements IDataLocation */
 		if (tokens.length == 0)
 			throw new Exception("ISA layer is not specified!");
 		
-		isaLoc.layer = Layer.fromString(tokens[0]);
+		isaLoc.layer = Layer.fromString(tokens[0].toUpperCase());
 		if (isaLoc.layer == Layer.UNDEFINED)
 			throw new Exception("ISA layer is not correct!");
-		
-		
 		
 		
 		return isaLoc;
