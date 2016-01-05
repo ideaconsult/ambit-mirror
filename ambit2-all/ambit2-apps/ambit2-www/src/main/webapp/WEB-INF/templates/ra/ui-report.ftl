@@ -28,11 +28,14 @@
   <script type='text/javascript' src='${ambit_root}/scripts/config/toxcast.js'></script>
   <script type='text/javascript' src='${ambit_root}/scripts/config-study.js'></script>
   
+   <script src="${ambit_root}/scripts/ie-shims.js"></script>
   <script src="${ambit_root}/scripts/ra/docxgen.js"></script>
   <script src="${ambit_root}/scripts/ra/docxgen-image.js"></script>
 
   <script src="${ambit_root}/scripts/ra/FileSaver.min.js"></script>
   <script src="${ambit_root}/scripts/ra/jszip-utils.js"></script>
+
+  <script src="${ambit_root}/scripts/es6-promise.min.js"></script>
 	
 
   <script>
