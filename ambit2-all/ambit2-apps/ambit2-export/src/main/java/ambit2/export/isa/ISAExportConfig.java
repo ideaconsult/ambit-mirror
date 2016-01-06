@@ -51,23 +51,35 @@ public class ISAExportConfig
 			//TODO
 		}
 		
-		fillISALocations();
+		parseISALocations();
 	}
 	
-	public void fillISALocations() throws Exception
+	public void parseISALocations() throws Exception
 	{
-		//TODO
+		protocolParamLoc = parseISALocationString(protocolParamLocString, "ISA Location for protocolParam");
+		effectRecordLoc = parseISALocationString(effectRecordLocString, "ISA Location for effectRecord");
+	}
+	
+	protected ISALocation parseISALocationString(String isaLocStr, String contexInfo) throws Exception
+	{
+		try
+		{
+			ISALocation loc = ISALocation.parseString(isaLocStr);
+			return loc;
+		}
+		catch(Exception e)
+		{
+			throw new Exception("Error in " + contexInfo + "/n" + e.getMessage());
+		}
 	}
 	
 	public static void fillDefaultISAConfig(ISAExportConfig cfg)
 	{
 		try
 		{
-			cfg.fillISALocations();
+			cfg.parseISALocations();
 		}
 		catch(Exception e){};
-		
-		//TODO
 	}
 	
 }
