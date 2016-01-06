@@ -4,7 +4,15 @@ package ambit2.export.isa.base;
  * 
  * @author nick
  * ISA Location is specified as string notation using following syntax
- * layer.[layer position].[process number/id].[element name/number].[sub-element name/number]
+ * layer.[layer position].[layer position2].[process index/id].[element name/index].[sub-element name/index]
+ * 
+ * [layer position2] is used for the definition of ISA location within assay
+ * 
+ * 
+ * Examples:
+ * 		investigation.description
+ * 		study.1.process[2]   
+ * 		assay.0.0.process[2]
  */
 
 
@@ -36,17 +44,21 @@ public class ISALocation  /* implements IDataLocation */
 	//value 0 is used to specified for default index/number/
 	
 	public Layer layer = null;
+	
 	public int layerPosIndex = -1;    
 	public String layerPosID = null;
 	
-	public int processNum = -1;
+	public int layerPos2Index = -1;    
+	public String layerPos2ID = null;
+	
+	public int processIndex = -1;
 	public String processID = null;
 	
 	public String elementName = null;
-	public int elementNum = -1;
+	public int elementIndex = -1;
 	
 	public String subElementName = null;
-	public int subElementNum = -1;
+	public int subElementIndex = -1;
 	
 	
 	public static ISALocation parseString(String isaLocString) throws Exception
@@ -66,16 +78,61 @@ public class ISALocation  /* implements IDataLocation */
 			throw new Exception("ISA layer is not correct!");
 		
 		
+		switch (isaLoc.layer)
+		{
+		case STUDY:
+			if (tokens.length > 1 )
+				parseLayerPos(isaLoc, tokens[1]);
+			else
+				throw new Exception ("ISA study postion is missing");
+			break;
+		case ASSAY:
+			if (tokens.length > 1 )
+				parseLayerPos(isaLoc, tokens[1]);
+			else
+				throw new Exception ("ISA study postion is missing");
+			
+			if (tokens.length > 2 )
+				parseLayerPos2(isaLoc, tokens[2]);
+			else
+				throw new Exception ("ISA assay postion is missing");
+			break;
+			
+		}
+		
+		
 		return isaLoc;
 	}
 	
 	protected static void parseLayerPos(ISALocation isaLoc, String token) throws Exception
 	{
-		//TODO
+		try
+		{
+			isaLoc.layerPosIndex = Integer.parseInt(token);
+		}
+		catch(Exception e)
+		{
+			//Incorrect integer then the token is interpreted as position id string
+			isaLoc.layerPosID = token;
+		}
+	}
+	
+	protected static void parseLayerPos2(ISALocation isaLoc, String token) throws Exception
+	{
+		try
+		{
+			isaLoc.layerPos2Index = Integer.parseInt(token);
+		}
+		catch(Exception e)
+		{
+			//Incorrect integer then the token is interpreted as position id string
+			isaLoc.layerPos2ID = token;
+		}
 	}
 	 
 	protected static void parseProcess(ISALocation isaLoc, String token) throws Exception
 	{
+		
 		//TODO
 	}
 	
@@ -106,9 +163,22 @@ public class ISALocation  /* implements IDataLocation */
 					sb.append("." + layerPosID);
 			}
 			
-			if (processNum != -1)
+			if (layer == Layer.ASSAY)
+			{
+				if (layerPos2Index != -1)
+				{
+					sb.append("." + layerPos2Index);
+				}
+				else
+				{
+					if (layerPos2ID != null)
+						sb.append("." + layerPos2ID);
+				}
+			}
+			
+			if (processIndex != -1)
 			{	
-				sb.append("process[" + processNum + "]");
+				sb.append("process[" + processIndex + "]");
 			}
 			else
 			{
