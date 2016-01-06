@@ -85,6 +85,12 @@ public class ISALocation  /* implements IDataLocation */
 				parseLayerPos(isaLoc, tokens[1]);
 			else
 				throw new Exception ("ISA study postion is missing");
+			
+			if (tokens.length > 2)
+				parseProcess(isaLoc, tokens[2]);
+			else
+				throw new Exception ("ISA process is missing");
+			
 			break;
 		case ASSAY:
 			if (tokens.length > 1 )
@@ -96,44 +102,85 @@ public class ISALocation  /* implements IDataLocation */
 				parseLayerPos2(isaLoc, tokens[2]);
 			else
 				throw new Exception ("ISA assay postion is missing");
-			break;
 			
+			
+			if (tokens.length > 3)
+				parseProcess(isaLoc, tokens[3]);
+			else
+				throw new Exception ("ISA process is missing");
+			
+			break;
 		}
-		
 		
 		return isaLoc;
 	}
 	
 	protected static void parseLayerPos(ISALocation isaLoc, String token) throws Exception
 	{
+		boolean FlagOK = true;
 		try
 		{
 			isaLoc.layerPosIndex = Integer.parseInt(token);
+			if (isaLoc.layerPosIndex < 0)
+				FlagOK = false;
 		}
 		catch(Exception e)
 		{
 			//Incorrect integer then the token is interpreted as position id string
 			isaLoc.layerPosID = token;
 		}
+		
+		if (!FlagOK)
+			throw new Exception ("ISA study postion is incorrect: " + isaLoc.layerPosIndex);
+		
 	}
 	
 	protected static void parseLayerPos2(ISALocation isaLoc, String token) throws Exception
 	{
+		boolean FlagOK = true;
 		try
-		{
+		{	
 			isaLoc.layerPos2Index = Integer.parseInt(token);
+			if (isaLoc.layerPos2Index < 0)
+				FlagOK = false;
 		}
 		catch(Exception e)
 		{
 			//Incorrect integer then the token is interpreted as position id string
 			isaLoc.layerPos2ID = token;
 		}
+		
+		if (!FlagOK)
+			throw new Exception ("ISA assay postion is incorrect: " + isaLoc.layerPos2Index);
 	}
 	 
 	protected static void parseProcess(ISALocation isaLoc, String token) throws Exception
 	{
+		if (!token.startsWith("process["))
+			throw new Exception ("ISA process is not specified correctly: " + token);
 		
-		//TODO
+		if (!token.endsWith("]"))
+			throw new Exception ("ISA process is not specified correctly: " + token);
+		
+		String proc = token.substring(8, token.length()-1);
+		
+		boolean FlagOK = true;
+		
+		try
+		{
+			isaLoc.processIndex = Integer.parseInt(proc);
+			if (isaLoc.processIndex < 0)
+				FlagOK = false;
+		}
+		catch(Exception e)
+		{
+			//Incorrect integer then the token is interpreted as position id string
+			isaLoc.processID = proc;
+		}
+		
+		if (!FlagOK)
+			throw new Exception ("ISA process index is incorrect: " + isaLoc.processIndex);
+		
 	}
 	
 	protected static void parseElement(ISALocation isaLoc, String token) throws Exception
@@ -178,12 +225,12 @@ public class ISALocation  /* implements IDataLocation */
 			
 			if (processIndex != -1)
 			{	
-				sb.append("process[" + processIndex + "]");
+				sb.append(".process[" + processIndex + "]");
 			}
 			else
 			{
 				if (processID != null)
-					sb.append("process[" + processID + "]");
+					sb.append(".process[" + processID + "]");
 			}
 		}
 		
