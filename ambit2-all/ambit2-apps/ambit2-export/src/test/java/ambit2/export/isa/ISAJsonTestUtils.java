@@ -7,6 +7,7 @@ import java.util.List;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.export.isa.base.ISALocation;
 import ambit2.export.isa.json.ISAJsonExportConfig;
 import ambit2.export.isa.v1_0.ISAJsonExporter1_0;
 
@@ -29,9 +30,13 @@ public class ISAJsonTestUtils
 		//testObjectToJson();
 		//testJsonToObject();
 		
+		testISALocation("investigation.test");
+		
 		List<SubstanceRecord> sr = new ArrayList<SubstanceRecord>();
 		sr.add(null);
-		testJsonExport(sr.iterator(), null, null, null);
+		//testJsonExport(sr.iterator(), null, null, null);
+		
+		
 	}
 	
 	public static void testJsonExport(Iterator<SubstanceRecord> records, 
@@ -68,6 +73,13 @@ public class ISAJsonTestUtils
 		String jsonOutString = mapper.writeValueAsString(t1);
 		System.out.println(jsonInString);
 		System.out.println(jsonOutString);
+	}
+	
+	public static void testISALocation(String isaLoc) throws Exception
+	{
+		ISALocation loc = ISALocation.parseString(isaLoc);
+		System.out.println(isaLoc);
+		System.out.println(loc.toString());
 	}
 	
 	public static void test00()

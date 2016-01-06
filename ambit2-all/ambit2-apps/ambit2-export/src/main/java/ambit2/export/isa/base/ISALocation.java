@@ -10,7 +10,7 @@ package ambit2.export.isa.base;
 
 public class ISALocation  /* implements IDataLocation */
 {
-	public static final String splitter = ".";
+	public static final String splitter = "\\.";
 	
 	public static enum Layer 
 	{
@@ -54,6 +54,7 @@ public class ISALocation  /* implements IDataLocation */
 		if (isaLocString == null)
 			return null;
 		
+		
 		ISALocation isaLoc = new ISALocation();		
 		String tokens[] = isaLocString.split(splitter);
 		
@@ -91,17 +92,37 @@ public class ISALocation  /* implements IDataLocation */
 		if (layer == null)
 			return ("null");
 		
-		sb.append(layer.toString());
+		sb.append(layer.toString().toLowerCase());
 		
 		if (layer == Layer.STUDY || layer == Layer.ASSAY)
 		{
+			if (layerPosIndex != -1)
+			{
+				sb.append("." + layerPosIndex);
+			}
+			else
+			{
+				if (layerPosID != null)
+					sb.append("." + layerPosID);
+			}
+			
 			if (processNum != -1)
-				sb.append("process[" + (processNum+1) + "]");
+			{	
+				sb.append("process[" + processNum + "]");
+			}
+			else
+			{
+				if (processID != null)
+					sb.append("process[" + processID + "]");
+			}
 		}
 		
 		if (elementName != null)
 		{
+			sb.append("." + elementName);
 			
+			if (subElementName != null)
+				sb.append("." + subElementName);
 		}
 		
 		return sb.toString();
