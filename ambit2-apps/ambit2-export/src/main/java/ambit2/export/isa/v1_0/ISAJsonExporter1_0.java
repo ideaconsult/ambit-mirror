@@ -35,6 +35,7 @@ public class ISAJsonExporter1_0 implements IISAExport
 	
 	//ISA data
 	Investigation investigation = null;
+	ISAJsonMapper1_0 isaMapper = null;
 
 	public ISAJsonExporter1_0()
 	{	
