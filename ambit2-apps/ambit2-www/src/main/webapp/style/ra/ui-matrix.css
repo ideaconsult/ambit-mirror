@@ -52,6 +52,16 @@ strong {
   font-size: inherit;
 }
 
+#jtox-identifiers #source {
+  width: 90%;
+  width: calc(100% - 3em);
+}
+
+#source-link {
+  display: inline-block;
+}
+
+
 #jtox-identifiers table th {
   font-weight: normal;
   cursor: default;

@@ -287,6 +287,12 @@ var jToxBundle = {
         }
       });
 
+      var link = $('#source-link')[0], $source = $('#source');
+      link.href = $source[0].value;
+      $source.on('change', function(){
+        link.href = this.value;
+      });
+
       ccLib.prepareForm(self.createForm);
 
     }
@@ -319,17 +325,19 @@ var jToxBundle = {
           // make two nested calls - for adding and for deleting
           $(saveButton).addClass('loading');
           jT.service(self, self.bundleUri + '/matrix', { method: 'PUT', headers: { 'Content-Type': "application/json" }, data: toAdd }, function (result, jhr) {
-            if (!!result)
-            jT.service(self, self.bundleUri + '/matrix/deleted', { method: 'PUT', headers: { 'Content-Type': "application/json" }, data: toAdd },function (result, jhr) {
+            if (!!result) {
+              jT.service(self, self.bundleUri + '/matrix/deleted', { method: 'PUT', headers: { 'Content-Type': "application/json" }, data: toAdd },function (result, jhr) {
+                $(saveButton).removeClass('loading');
+                if (!!result) {
+                  self.edit.study = [];
+                  self.matrixKit.query(self.bundleUri + '/matrix');
+                  dressButton();
+                }
+              });
+            }
+            else {
               $(saveButton).removeClass('loading');
-              if (!!result) {
-                self.edit.study = [];
-                self.matrixKit.query(self.bundleUri + '/matrix');
-                dressButton();
-              }
-            });
-            else
-              $(saveButton).removeClass('loading');
+            }
           });
         }
       });
@@ -943,15 +951,22 @@ var jToxBundle = {
               dataRows.each(function(){
                 var cells = $(this).find('th, td');
                 var row = { title: '', value1: '', value2: '', value3: ''};
+                var prefix = '';
                 row.title = $(cells[0]).text();
                 for (var c = 1, cl = Math.min(3, nameCells.length - 3*i); c <= cl; c++) {
                   var parts = [];
                   if (cells[3*i + c] !== undefined) {
                     $(cells[3*i + c].childNodes).each(function(){
-                      parts.push( $(this).text() );
+                      if ( $('.ui-icon-calculator', this).length > 0 ) {
+                        prefix = '<w:r><w:rPr><w:color w:val="FF0000" /></w:rPr><w:t xml:space="preserve">';
+                      }
+                      else {
+                        prefix = '<w:r><w:rPr><w:color w:val="0000FF" /></w:rPr><w:t xml:space="preserve">';
+                      }
+                      parts.push( prefix + ccLib.escapeHTML($(this).text()) + '</w:t></w:r>' );
                     });
                   }
-                  row['value' + c] = parts.join('\n\r');
+                  row['value' + c] = '<w:p><w:pPr><w:pStyle w:val="Style16"/><w:rPr></w:rPr></w:pPr>' + parts.join('<w:r><w:br /></w:r>') + '</w:p>';
                 }
                 dataGroup.data.push(row);
               });
@@ -1056,11 +1071,13 @@ var jToxBundle = {
 
             doc.setData( data ); //set the templateVariables
             doc.render(); //apply them (replace all occurences of {first_name} by Hipp, ...)
-            var output = doc.getZip().generate({type:"blob"}); //Output the document using Data-URI
+            var output = doc.getZip().generate({type:"blob", compression: 'DEFLATE'}); //Output the document using Data-URI
             saveAs(output, "report.docx");
           });
 
-        }, function(error){console.log('Error', error);});
+        }, function(error){
+          console.log('Error', error);
+        });
 
       });
 
