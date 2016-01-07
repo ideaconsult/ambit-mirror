@@ -71,43 +71,68 @@ public class ISALocation  /* implements IDataLocation */
 		String tokens[] = isaLocString.split(splitter);
 		
 		if (tokens.length == 0)
-			throw new Exception("ISA layer is not specified!");
+			throw new Exception("ISALocation error: layer is not specified!");
 		
 		isaLoc.layer = Layer.fromString(tokens[0].toUpperCase());
 		if (isaLoc.layer == Layer.UNDEFINED)
-			throw new Exception("ISA layer is not correct!");
+			throw new Exception("ISALocation error: layer is not correct!");
 		
 		
 		switch (isaLoc.layer)
 		{
+		case INVESTIGATION:
+			if (tokens.length > 1 )
+				parseElement(isaLoc, tokens[1]);
+			else
+				throw new Exception ("ISALocation error: element is missing");
+			
+			if (tokens.length > 2 )
+				parseSubElement(isaLoc, tokens[2]);
+			break;
+			
 		case STUDY:
 			if (tokens.length > 1 )
 				parseLayerPos(isaLoc, tokens[1]);
 			else
-				throw new Exception ("ISA study postion is missing");
+				throw new Exception ("ISALocation error: study postion is missing");
 			
 			if (tokens.length > 2)
 				parseProcess(isaLoc, tokens[2]);
 			else
-				throw new Exception ("ISA process is missing");
+				throw new Exception ("ISALocation error: process is missing");
+			
+			if (tokens.length > 3 )
+				parseElement(isaLoc, tokens[3]);
+			else
+				throw new Exception ("ISALocation error: element is missing");
+			
+			if (tokens.length > 4 )
+				parseSubElement(isaLoc, tokens[4]);
 			
 			break;
 		case ASSAY:
 			if (tokens.length > 1 )
 				parseLayerPos(isaLoc, tokens[1]);
 			else
-				throw new Exception ("ISA study postion is missing");
+				throw new Exception ("ISALocation error: study postion is missing");
 			
 			if (tokens.length > 2 )
 				parseLayerPos2(isaLoc, tokens[2]);
 			else
-				throw new Exception ("ISA assay postion is missing");
-			
+				throw new Exception ("ISALocation error: assay postion is missing");
 			
 			if (tokens.length > 3)
 				parseProcess(isaLoc, tokens[3]);
 			else
-				throw new Exception ("ISA process is missing");
+				throw new Exception ("ISALocation error: process is missing");
+			
+			if (tokens.length > 4 )
+				parseElement(isaLoc, tokens[4]);
+			else
+				throw new Exception ("ISALocation error: element is missing");
+			
+			if (tokens.length > 5 )
+				parseSubElement(isaLoc, tokens[5]);
 			
 			break;
 		}
@@ -131,7 +156,7 @@ public class ISALocation  /* implements IDataLocation */
 		}
 		
 		if (!FlagOK)
-			throw new Exception ("ISA study postion is incorrect: " + isaLoc.layerPosIndex);
+			throw new Exception ("ISALocation error: study postion is incorrect: " + isaLoc.layerPosIndex);
 		
 	}
 	
@@ -151,16 +176,16 @@ public class ISALocation  /* implements IDataLocation */
 		}
 		
 		if (!FlagOK)
-			throw new Exception ("ISA assay postion is incorrect: " + isaLoc.layerPos2Index);
+			throw new Exception ("ISALocation error: assay postion is incorrect: " + isaLoc.layerPos2Index);
 	}
 	 
 	protected static void parseProcess(ISALocation isaLoc, String token) throws Exception
 	{
 		if (!token.startsWith("process["))
-			throw new Exception ("ISA process is not specified correctly: " + token);
+			throw new Exception ("ISALocation error: process is not specified correctly: " + token);
 		
 		if (!token.endsWith("]"))
-			throw new Exception ("ISA process is not specified correctly: " + token);
+			throw new Exception ("ISALocation error: process is not specified correctly: " + token);
 		
 		String proc = token.substring(8, token.length()-1);
 		
@@ -179,16 +204,19 @@ public class ISALocation  /* implements IDataLocation */
 		}
 		
 		if (!FlagOK)
-			throw new Exception ("ISA process index is incorrect: " + isaLoc.processIndex);
+			throw new Exception ("ISALocation error: process index is incorrect: " + isaLoc.processIndex);
 		
 	}
 	
 	protected static void parseElement(ISALocation isaLoc, String token) throws Exception
 	{
-		//TODO
+		isaLoc.elementName = token;
 	}
 	
-	
+	protected static void parseSubElement(ISALocation isaLoc, String token) throws Exception
+	{
+		isaLoc.subElementName = token;
+	}
 	
 	public String toString()
 	{

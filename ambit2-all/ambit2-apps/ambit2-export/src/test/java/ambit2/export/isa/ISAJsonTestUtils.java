@@ -30,12 +30,12 @@ public class ISAJsonTestUtils
 		//testObjectToJson();
 		//testJsonToObject();
 		
-		testISALocation("assay.0.0.process[1]");
+		testISALocation("assay.0.0.process[1].element");
+		testISALocation("investigation.element");
 		
 		List<SubstanceRecord> sr = new ArrayList<SubstanceRecord>();
 		sr.add(null);
 		//testJsonExport(sr.iterator(), null, null, null);
-		
 		
 	}
 	
