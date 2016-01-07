@@ -12,7 +12,8 @@ The re-factoring is done simultaneously for the all objects using:
 	
 (2) Java classes are generated from the schemas using jsonschema2pojo project tools
 	 (http://www.jsonschema2pojo.org/)
-	
+	 
+	jsonschema2pojo -s source_dir -t target_dir -p ambit2.export.isa.v1_0.objects -E -S -da -R 
 	 
 	 
 (3) Rename some classes which has inappropriate names:

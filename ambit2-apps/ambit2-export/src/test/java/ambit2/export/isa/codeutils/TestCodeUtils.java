@@ -9,12 +9,16 @@ public class TestCodeUtils
 		//CodeUtils.delete(new File("/temp2/test/test01.txt"));
 		//CodeUtils.replaceTextInFile("/temp2/test/mytest1.txt", "test", "mytest");
 		
-		//CodeUtils.renameJsonSchema(new File("/temp2/test/test1"), new File("/temp2/test/test2"), "process_schema", "process");
-		
+		//CodeUtils.renameJsonSchema(new File("/temp2/test/test1"), new File("/temp2/test/test2"), "process_schema", "process");		
 		//CodeUtils.clearJsonFileSuffix(new File("/temp2/test/test1"), new File("/temp2/test/test2"), "_schema");
 		
 		
-		javaRename ("D:/Projects/Nina/jsonschema2pojo-0.4.15/target-isa1/ambit2/export/isa/v1_0/objects");
+		
+		CodeUtils.clearJsonFileSuffix(new File("/git-repositories/isa-api/isatools/schemas/isa_model_version_1_0_schemas/core"), 
+				new File("/temp2/test/test2"), "_schema");
+		
+		
+		//javaRename ("D:/Projects/Nina/jsonschema2pojo-0.4.15/target-isa1/ambit2/export/isa/v1_0/objects");
 		
 	}
 	
