@@ -10,6 +10,8 @@ import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.export.isa.base.ISALocation;
 import ambit2.export.isa.json.ISAJsonExportConfig;
 import ambit2.export.isa.v1_0.ISAJsonExporter1_0;
+import ambit2.export.isa.v1_0.ISAJsonMapper1_0;
+import ambit2.export.isa.v1_0.objects.Investigation;
 
 import org.codehaus.jackson.schema.JsonSchema;
 import org.codehaus.jackson.JsonGenerationException;
@@ -30,11 +32,16 @@ public class ISAJsonTestUtils
 		//testObjectToJson();
 		//testJsonToObject();
 		
+		/*
 		testISALocation("assay.0.0.process[1].element");
 		testISALocation("assay.0.0.element");
 		testISALocation("study.4.process[2].element5");
 		testISALocation("study.4.element5.subel");
 		testISALocation("investigation.element");
+		*/
+		
+		testISAJsonMapper1_0(new String[] {"investigation.filename", "investigation.title"},
+						new String[] {"myTest.txt", "MyTitle"}	);
 		
 		List<SubstanceRecord> sr = new ArrayList<SubstanceRecord>();
 		sr.add(null);
@@ -84,6 +91,26 @@ public class ISAJsonTestUtils
 		System.out.println(isaLoc);
 		System.out.println(loc.toString());
 		System.out.println();
+	}
+	
+	public static void testISAJsonMapper1_0(String locations[], String data[]) throws Exception
+	{
+		Investigation investigation = new Investigation();
+		ISAJsonMapper1_0 isaJM = new ISAJsonMapper1_0();
+		isaJM.setTargetDataObject(investigation);
+		
+		for (int i = 0; i < locations.length; i++)
+		{
+			ISALocation loc = ISALocation.parseString(locations[i]);
+			System.out.println("Parsing location " + locations[i]);
+			System.out.println("Putting data " + data[i]);
+			
+			isaJM.putString(data[i], loc);
+		}
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
+		System.out.println(jsonString);
 	}
 	
 	public static void test00()

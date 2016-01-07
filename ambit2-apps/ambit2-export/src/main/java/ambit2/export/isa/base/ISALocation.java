@@ -4,7 +4,7 @@ package ambit2.export.isa.base;
  * 
  * @author nick
  * ISA Location is specified as string notation using following syntax
- * layer.[layer position].[layer position2].[process index/id].[element name/index].[sub-element name/index]
+ * layer.[layer position].[layer position2].[process index/id].[element name[index]].[sub-element name[index]]
  * 
  * [layer position2] is used for the definition of ISA location within assay
  * 
@@ -216,11 +216,13 @@ public class ISALocation  /* implements IDataLocation */
 	protected static void parseElement(ISALocation isaLoc, String token) throws Exception
 	{
 		isaLoc.elementName = token;
+		//TODO parser elementIndex
 	}
 	
 	protected static void parseSubElement(ISALocation isaLoc, String token) throws Exception
 	{
 		isaLoc.subElementName = token;
+		//TODO parser subElementIndex
 	}
 	
 	public String toString()
@@ -270,9 +272,15 @@ public class ISALocation  /* implements IDataLocation */
 		if (elementName != null)
 		{
 			sb.append("." + elementName);
+			if (elementIndex >= 0)
+				sb.append("[" + elementIndex + "]");
 			
 			if (subElementName != null)
+			{	
 				sb.append("." + subElementName);
+				if (subElementIndex >= 0)
+					sb.append("[" + subElementIndex + "]");
+			}	
 		}
 		
 		return sb.toString();
