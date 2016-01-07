@@ -77,19 +77,11 @@ public class ISALocation  /* implements IDataLocation */
 		if (isaLoc.layer == Layer.UNDEFINED)
 			throw new Exception("ISALocation error: layer is not correct!");
 		
+		int n = 1;
 		
 		switch (isaLoc.layer)
 		{
-		case INVESTIGATION:
-			if (tokens.length > 1 )
-				parseElement(isaLoc, tokens[1]);
-			else
-				throw new Exception ("ISALocation error: element is missing");
-			
-			if (tokens.length > 2 )
-				parseSubElement(isaLoc, tokens[2]);
-			break;
-			
+		
 		case STUDY:
 			if (tokens.length > 1 )
 				parseLayerPos(isaLoc, tokens[1]);
@@ -97,19 +89,17 @@ public class ISALocation  /* implements IDataLocation */
 				throw new Exception ("ISALocation error: study postion is missing");
 			
 			if (tokens.length > 2)
-				parseProcess(isaLoc, tokens[2]);
+			{	
+				int res = parseProcess(isaLoc, tokens[2], true);
+				if (res == 0)
+					n = 3; 
+				else
+					n = 2; //This token will be handled as element
+			}	
 			else
-				throw new Exception ("ISALocation error: process is missing");
-			
-			if (tokens.length > 3 )
-				parseElement(isaLoc, tokens[3]);
-			else
-				throw new Exception ("ISALocation error: element is missing");
-			
-			if (tokens.length > 4 )
-				parseSubElement(isaLoc, tokens[4]);
-			
+				throw new Exception ("ISALocation error: process or element is missing");
 			break;
+			
 		case ASSAY:
 			if (tokens.length > 1 )
 				parseLayerPos(isaLoc, tokens[1]);
@@ -122,20 +112,27 @@ public class ISALocation  /* implements IDataLocation */
 				throw new Exception ("ISALocation error: assay postion is missing");
 			
 			if (tokens.length > 3)
-				parseProcess(isaLoc, tokens[3]);
+			{
+				int res = parseProcess(isaLoc, tokens[3], true);
+				if (res == 0)
+					n = 4; 
+				else
+					n = 3; //This token will be handled as element
+			}
 			else
-				throw new Exception ("ISALocation error: process is missing");
-			
-			if (tokens.length > 4 )
-				parseElement(isaLoc, tokens[4]);
-			else
-				throw new Exception ("ISALocation error: element is missing");
-			
-			if (tokens.length > 5 )
-				parseSubElement(isaLoc, tokens[5]);
+				throw new Exception ("ISALocation error: process or element is missing");
 			
 			break;
 		}
+		
+		//Handle element and sub-element
+		if (tokens.length > n )
+			parseElement(isaLoc, tokens[n]);
+		else
+			throw new Exception ("ISALocation error: element is missing");
+		
+		if (tokens.length > n+1 )
+			parseSubElement(isaLoc, tokens[n+1]);
 		
 		return isaLoc;
 	}
@@ -179,10 +176,17 @@ public class ISALocation  /* implements IDataLocation */
 			throw new Exception ("ISALocation error: assay postion is incorrect: " + isaLoc.layerPos2Index);
 	}
 	 
-	protected static void parseProcess(ISALocation isaLoc, String token) throws Exception
+	protected static int parseProcess(ISALocation isaLoc, String token, boolean AllowMissingProcess) throws Exception
 	{
 		if (!token.startsWith("process["))
-			throw new Exception ("ISALocation error: process is not specified correctly: " + token);
+		{	
+			if (AllowMissingProcess) //This token is not a process
+			{
+				return 1;
+			}
+			else
+				throw new Exception ("ISALocation error: process is not specified correctly: " + token);
+		}	
 		
 		if (!token.endsWith("]"))
 			throw new Exception ("ISALocation error: process is not specified correctly: " + token);
@@ -206,6 +210,7 @@ public class ISALocation  /* implements IDataLocation */
 		if (!FlagOK)
 			throw new Exception ("ISALocation error: process index is incorrect: " + isaLoc.processIndex);
 		
+		return 0; 
 	}
 	
 	protected static void parseElement(ISALocation isaLoc, String token) throws Exception
