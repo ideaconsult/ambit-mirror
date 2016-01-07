@@ -35,6 +35,9 @@ public class CodeUtils
 				String path = oldPath.replaceAll(oldFileName, newFileName);
 				file.renameTo(new File(path));
 				System.out.println("renaming " + oldPath + " to " + path);
+				
+				System.out.println("replacing in " + file.getAbsolutePath());
+				replaceTextInFile(path, oldFileName, newFileName);  //in some case this is needed as well
 			}
 			else
 			{
