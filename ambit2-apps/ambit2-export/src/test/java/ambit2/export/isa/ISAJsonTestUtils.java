@@ -31,6 +31,9 @@ public class ISAJsonTestUtils
 		//testJsonToObject();
 		
 		testISALocation("assay.0.0.process[1].element");
+		testISALocation("assay.0.0.element");
+		testISALocation("study.4.process[2].element5");
+		testISALocation("study.4.element5.subel");
 		testISALocation("investigation.element");
 		
 		List<SubstanceRecord> sr = new ArrayList<SubstanceRecord>();
@@ -80,6 +83,7 @@ public class ISAJsonTestUtils
 		ISALocation loc = ISALocation.parseString(isaLoc);
 		System.out.println(isaLoc);
 		System.out.println(loc.toString());
+		System.out.println();
 	}
 	
 	public static void test00()
