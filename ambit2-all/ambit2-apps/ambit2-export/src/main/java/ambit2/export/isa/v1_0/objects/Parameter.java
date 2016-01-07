@@ -8,15 +8,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
- * ISA parameter schema
+ * ISA protocol parameter schema
  * <p>
- * JSON-schema representing a parameter in the ISA model
+ * JSON-schema representing a parameter for a protocol in the ISA model
  * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
-    "parameterType",
+    "parameterName",
     "unit"
 })
 public class Parameter {
@@ -27,8 +27,8 @@ public class Parameter {
      * JSON-schema representing an ontology reference or annotation in the ISA model (for fields that are required to be ontology annotations)
      * 
      */
-    @JsonProperty("parameterType")
-    public OntologyAnnotation parameterType;
+    @JsonProperty("parameterName")
+    public MeasurementType parameterName;
     /**
      * ISA ontology reference schema
      * <p>
@@ -36,6 +36,6 @@ public class Parameter {
      * 
      */
     @JsonProperty("unit")
-    public OntologyAnnotation unit;
+    public MeasurementType unit;
 
 }

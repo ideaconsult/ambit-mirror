@@ -39,6 +39,6 @@ public class Publication {
      * 
      */
     @JsonProperty("status")
-    public OntologyAnnotation status;
+    public MeasurementType status;
 
 }

@@ -16,20 +16,20 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
-    "name",
-    "ontologyAnnotation"
+    "factorName",
+    "factorType"
 })
 public class Factor {
 
-    @JsonProperty("name")
-    public String name;
+    @JsonProperty("factorName")
+    public String factorName;
     /**
      * ISA ontology reference schema
      * <p>
      * JSON-schema representing an ontology reference or annotation in the ISA model (for fields that are required to be ontology annotations)
      * 
      */
-    @JsonProperty("ontologyAnnotation")
-    public OntologyAnnotation ontologyAnnotation;
+    @JsonProperty("factorType")
+    public MeasurementType factorType;
 
 }

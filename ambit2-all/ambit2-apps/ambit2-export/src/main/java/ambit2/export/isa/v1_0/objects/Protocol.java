@@ -38,7 +38,7 @@ public class Protocol {
      * 
      */
     @JsonProperty("protocolType")
-    public OntologyAnnotation protocolType;
+    public MeasurementType protocolType;
     @JsonProperty("description")
     public String description;
     @JsonProperty("uri")

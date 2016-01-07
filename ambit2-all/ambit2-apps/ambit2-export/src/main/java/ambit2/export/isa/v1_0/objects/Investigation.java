@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
+    "filename",
     "identifier",
     "title",
     "description",
@@ -33,6 +34,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class Investigation {
 
+    @JsonProperty("filename")
+    public String filename;
     @JsonProperty("identifier")
     public String identifier;
     @JsonProperty("title")

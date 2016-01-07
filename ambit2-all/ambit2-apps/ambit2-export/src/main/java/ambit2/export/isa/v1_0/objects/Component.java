@@ -9,13 +9,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
-    "name",
+    "componentName",
     "componentType"
 })
 public class Component {
 
-    @JsonProperty("name")
-    public String name;
+    @JsonProperty("componentName")
+    public String componentName;
     /**
      * ISA ontology reference schema
      * <p>
@@ -23,6 +23,6 @@ public class Component {
      * 
      */
     @JsonProperty("componentType")
-    public OntologyAnnotation componentType;
+    public MeasurementType componentType;
 
 }
