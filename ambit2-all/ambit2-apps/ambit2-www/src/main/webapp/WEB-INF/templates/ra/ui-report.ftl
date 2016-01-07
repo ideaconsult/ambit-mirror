@@ -110,7 +110,6 @@ var customize = {
         <h2 class="data-field" data-field="title"></h2>
         <dl>
           <dt>Author:</dt><dd class="data-field" data-field="maintainer"></dd>
-          <dt>Company:</dt><dd class="data-field" data-field="rightsHolder"></dd>
           <dt>Date:</dt><dd class="data-field" data-field="created" data-format="formatDate"></dd>
           <dt>Assessment code:</dt><dd class="data-field" data-field="number"></dd>
           <dt>Purpose:</dt><dd class="data-field" data-field="description"></dd>

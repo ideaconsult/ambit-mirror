@@ -120,10 +120,16 @@ $(document)
               <th class="right size-third">Status<a href='#' class='chelp a_published'>?</a>:</th>
               <td class="data-field" data-field="status" data-format="formatStatus"></td>
             </tr>
-            <tr class="lri_hide"><th class="right size-third"><label for="license">License</label>*:</th><td><input class="data-field first-time validate" data-field="rights.URI" name="license" id="license"  /></td></tr>
+            <tr class="lri_hide"><th class="right size-third"><label for="license">License</label>*:</th><td><input class="data-field first-time validate" data-field="rights.URI" name="license" id="license" /></td></tr>
             <tr class="lri_hide"><th class="right size-third"><label for="rightsHolder">Rights holder</label>*<a href='#' class='chelp a_rightsholder'>?</a>:</th><td><input class="data-field first-time validate" data-field="rightsHolder" name="rightsHolder" id="rightsHolder" /></td></tr>
 	          <tr ><th class="right size-third"><label for="seeAlso" id="l_seeAlso">See also</label>*<a href='#' class='chelp a_code'>?</a>:</th><td><input class="data-field first-time validate" data-field="seeAlso" name="seeAlso" id="seeAlso" required /></td></tr>
-	          <tr ><th class="right size-third"><label for="source" id="l_source">Source URL</label>*<a href='#' class='chelp a_doclink'>?</a>:</th><td><input class="data-field first-time validate" data-field="source" name="source" id="source" required /></td></tr>
+	          <tr >
+              <th class="right size-third"><label for="source" id="l_source">Source URL</label>*<a href='#' class='chelp a_doclink'>?</a>:</th>
+              <td>
+                <input class="data-field first-time validate" data-field="source" name="source" id="source" required />
+                <a href="" id="source-link" target="_blank" class="ui-icon ui-icon-extlink">open link</a>
+              </td>
+            </tr>
             <tr><th class="right size-third"><label for="number" id="l_number">Identifier</label><a href='#' class='chelp assessment'>?</a>:</th><td class="data-field" data-field="number"></td></tr>
 	          <tr class="lri_hide"><th class="right size-third">Rating <a href='#' class='chelp a_rating'>?</a>:</th><td class="data-stars-field"><input type="hidden" name="stars" value="0"/></td></tr>
 	         <#if menu_profile??> 
