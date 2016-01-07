@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
-    "fileName",
+    "filename",
     "measurementType",
     "technologyType",
     "technologyPlatform",
@@ -26,8 +26,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class Assay {
 
-    @JsonProperty("fileName")
-    public String fileName;
+    @JsonProperty("filename")
+    public String filename;
+    /**
+     * ISA ontology reference schema
+     * <p>
+     * JSON-schema representing an ontology reference or annotation in the ISA model (for fields that are required to be ontology annotations)
+     * 
+     */
     @JsonProperty("measurementType")
     public MeasurementType measurementType;
     @JsonProperty("technologyType")

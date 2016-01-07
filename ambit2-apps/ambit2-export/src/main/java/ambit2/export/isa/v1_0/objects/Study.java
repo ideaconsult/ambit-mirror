@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
+    "filename",
     "identifier",
     "title",
     "description",
@@ -31,10 +32,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "sources",
     "samples",
     "processSequence",
-    "assays"
+    "assays",
+    "factors"
 })
 public class Study {
 
+    @JsonProperty("filename")
+    public String filename;
     @JsonProperty("identifier")
     public String identifier;
     @JsonProperty("title")
@@ -50,7 +54,7 @@ public class Study {
     @JsonProperty("people")
     public List<Person> people = new ArrayList<Person>();
     @JsonProperty("studyDesignDescriptors")
-    public List<OntologyAnnotation> studyDesignDescriptors = new ArrayList<OntologyAnnotation>();
+    public List<MeasurementType> studyDesignDescriptors = new ArrayList<MeasurementType>();
     @JsonProperty("protocols")
     public List<Protocol> protocols = new ArrayList<Protocol>();
     @JsonProperty("sources")
@@ -61,5 +65,7 @@ public class Study {
     public List<Process> processSequence = new ArrayList<Process>();
     @JsonProperty("assays")
     public List<Assay> assays = new ArrayList<Assay>();
+    @JsonProperty("factors")
+    public List<Factor> factors = new ArrayList<Factor>();
 
 }

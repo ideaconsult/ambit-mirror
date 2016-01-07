@@ -47,6 +47,6 @@ public class Person {
     @JsonProperty("affiliation")
     public String affiliation;
     @JsonProperty("roles")
-    public List<Role> roles = new ArrayList<Role>();
+    public List<MeasurementType> roles = new ArrayList<MeasurementType>();
 
 }

@@ -19,7 +19,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
     "name",
-    "characteristics"
+    "characteristics",
+    "derivesFrom"
 })
 public class Material {
 
@@ -27,5 +28,13 @@ public class Material {
     public String name;
     @JsonProperty("characteristics")
     public List<MaterialAttribute> characteristics = new ArrayList<MaterialAttribute>();
+    /**
+     * ISA material node schema
+     * <p>
+     * JSON-schema representing a material node in the ISA model
+     * 
+     */
+    @JsonProperty("derivesFrom")
+    public Material derivesFrom;
 
 }

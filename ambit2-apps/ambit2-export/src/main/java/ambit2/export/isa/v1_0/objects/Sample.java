@@ -20,7 +20,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "name",
     "characteristics",
-    "factors"
+    "factorValues",
+    "derivesFrom"
 })
 public class Sample {
 
@@ -28,7 +29,15 @@ public class Sample {
     public String name;
     @JsonProperty("characteristics")
     public List<MaterialAttribute> characteristics = new ArrayList<MaterialAttribute>();
-    @JsonProperty("factors")
-    public List<FactorValue> factors = new ArrayList<FactorValue>();
+    @JsonProperty("factorValues")
+    public List<FactorValue> factorValues = new ArrayList<FactorValue>();
+    /**
+     * ISA source schema
+     * <p>
+     * JSON-schema representing a source in the ISA model. Sources are considered as the starting biological material used in a study.
+     * 
+     */
+    @JsonProperty("derivesFrom")
+    public Source derivesFrom;
 
 }
