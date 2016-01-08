@@ -78,6 +78,7 @@ import ambit2.db.update.chemical.UpdateChemical;
 import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
 import ambit2.dbcli.CliOptions._preprocessingoptions;
 import ambit2.dbcli.descriptors.AtomEnvironmentGeneratorApp;
+import ambit2.dbcli.exceptions.InvalidCommand;
 import ambit2.descriptors.processors.BitSetGenerator;
 import ambit2.descriptors.processors.FPTable;
 import ambit2.smarts.processors.SMARTSPropertiesGenerator;
@@ -92,22 +93,20 @@ import com.mysql.jdbc.CommunicationsException;
  * 
  */
 public class AmbitCli {
-	static Logger logger_cli;
+	static Logger logger_cli = Logger.getLogger("ambitcli", "ambit2.dbcli.msg");
 	static final String loggingProperties = "ambit2/dbcli/logging.properties";
 	static final String log4jProperties = "ambit2/dbcli/log4j.properties";
 
 	CliOptions options;
 
-	public AmbitCli(CliOptions options) {
-		this.options = options;
-		Locale.setDefault(Locale.ENGLISH);
+	static {
 		logger_cli = Logger.getLogger("ambitcli", "ambit2.dbcli.msg");
-
+		Locale.setDefault(Locale.ENGLISH);
 		String dOption = System.getProperty("java.util.logging.config.file");
 		if (dOption == null || "".equals(dOption)) {
 			InputStream in = null;
 			try {
-				in = getClass().getClassLoader().getResourceAsStream(
+				in = AmbitCli.class.getClassLoader().getResourceAsStream(
 						loggingProperties);
 				LogManager.getLogManager().readConfiguration(in);
 
@@ -123,7 +122,7 @@ public class AmbitCli {
 		// now log4j for those who use it
 		InputStream in = null;
 		try {
-			in = getClass().getClassLoader().getResourceAsStream(
+			in = AmbitCli.class.getClassLoader().getResourceAsStream(
 					log4jProperties);
 			PropertyConfigurator.configure(in);
 
@@ -136,8 +135,10 @@ public class AmbitCli {
 			}
 		}
 
-		logger_cli.log(Level.INFO, "MSG_INFO",
-				new Object[] { System.currentTimeMillis() });
+	}
+
+	public AmbitCli(CliOptions options) {
+		this.options = options;
 	}
 
 	public long go(String command, String subcommand) throws Exception {
@@ -159,7 +160,9 @@ public class AmbitCli {
 	}
 
 	public static void main(String[] args) {
+		logger_cli.log(Level.INFO, "MSG_INFO_VERSION");
 		long now = System.currentTimeMillis();
+		int code = 0;
 		try {
 			CliOptions options = new CliOptions();
 			if (options.parse(args)) {
@@ -180,25 +183,33 @@ public class AmbitCli {
 										.get("name").asText(),
 										options.getSubcommand()) });
 				navigator.go(options.getCmd(), options.getSubcommand().name());
-			} else
-				System.exit(0);
+			} else {
+				code = -1;
+			}
 		} catch (ConnectException x) {
-			logger_cli.log(Level.SEVERE, "MSG_CONNECTION_REFUSED");
-			System.exit(-1);
+			logger_cli.log(Level.SEVERE, "MSG_CONNECTION_REFUSED",new Object[] {x.getMessage()});
+			Runtime.getRuntime().runFinalization();
+			code = -1;
 		} catch (CommunicationsException x) {
-			logger_cli.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED");
-			System.exit(-1);
+			logger_cli.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED",new Object[] {x.getMessage()});
+			code = -1;
 		} catch (SQLException x) {
-			logger_cli.log(Level.SEVERE, "MSG_ERR_SQL", x);
-			System.exit(-1);
+			logger_cli.log(Level.SEVERE, "MSG_ERR_SQL", new Object[] {x.getMessage()});
+			code = -1;
+		} catch (InvalidCommand x) {
+			logger_cli.log(Level.SEVERE, "MSG_INVALIDCOMMAND", new Object[] {x.getMessage()});
+			code = -1;
 		} catch (Exception x) {
 			logger_cli.log(Level.SEVERE, x.getMessage());
-			System.exit(-1);
+			code = -1;
 		} finally {
-
-			logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED",
-					(System.currentTimeMillis() - now));
+			if (code >= 0)
+				logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED",
+						(System.currentTimeMillis() - now));
 		}
+	
+		Runtime.getRuntime().runFinalization();
+		Runtime.getRuntime().exit(code);
 	}
 
 	protected RepositoryWriter initWriter(RepositoryWriter writer,
@@ -875,7 +886,7 @@ public class AmbitCli {
 									Object v = record.getRecordProperty(p);
 									// initially to get rid of smiles, inchi ,
 									// etc, these are
-									// already parsed 
+									// already parsed
 									if (p.getName().startsWith(
 											"http://www.opentox.org/api/1.1#"))
 										continue;
