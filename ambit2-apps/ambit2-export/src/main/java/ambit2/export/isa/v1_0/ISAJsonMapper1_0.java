@@ -1,13 +1,17 @@
 package ambit2.export.isa.v1_0;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.logging.Logger;
 
 import ambit2.export.isa.base.IISADataMapper;
 import ambit2.export.isa.base.ISALocation;
 import ambit2.export.isa.base.ISALocation.Layer;
 import ambit2.export.isa.json.ISAJsonExporter;
+import ambit2.export.isa.v1_0.objects.Assay;
 import ambit2.export.isa.v1_0.objects.Investigation;
+import ambit2.export.isa.v1_0.objects.Study;
+import ambit2.export.isa.v1_0.objects.Process;
 
 public class ISAJsonMapper1_0 implements IISADataMapper
 {
@@ -76,6 +80,45 @@ public class ISAJsonMapper1_0 implements IISADataMapper
 			break;
 			
 		case STUDY:
+			Study study = null;
+			if (location.layerPosIndex == 0)
+			{
+				if (investigation.studies.isEmpty())
+					investigation.studies.add(new Study());
+				study = investigation.studies.get(investigation.studies.size() -1);
+			}
+			else
+			{	
+				int studyNum = location.layerPosIndex-1; //1-base to 0-base indexing
+				checkStudy(studyNum);
+				study = investigation.studies.get(studyNum);
+			}
+			
+			if (location.processIndex < 0)
+			{
+				//No process is specified hence the data is put directly into the Study object
+				putDataInObject(s, location, study);
+			}
+			else
+			{
+				Process process = null;
+				
+				if (location.processIndex == 0)
+				{
+					if (study.processSequence.isEmpty())
+						study.processSequence.add(new Process());
+					process = study.processSequence.get(study.processSequence.size()-1);
+				}
+				else
+				{
+					int processNum = location.processIndex-1; //1-base to 0-base indexing
+					checkStudyProcess(study, processNum);
+					process = study.processSequence.get(processNum);
+				}
+				
+				putDataInObject(s, location, process);
+			}
+			
 			break;
 			
 		case ASSAY:
@@ -86,7 +129,7 @@ public class ISAJsonMapper1_0 implements IISADataMapper
 	/** 
 	 * Data is put into the Object using element and subElement information
 	 **/	
-	protected void putDataInObject(String data, ISALocation location, Object obj) throws Exception
+	public void putDataInObject(String data, ISALocation location, Object obj) throws Exception
 	{
 		Class cls = obj.getClass();
 		Field field = null;
@@ -112,11 +155,57 @@ public class ISAJsonMapper1_0 implements IISADataMapper
 	}
 	
 	
+	protected int checkStudy(int studyIndex)
+	{
+		if (studyIndex < investigation.studies.size())
+			return 0;
+		else
+		{
+			int k = investigation.studies.size()-1;
+			for (int i = k; i < studyIndex; i++)
+				investigation.studies.add(new Study());
+			return studyIndex - k;
+		}
+	}
 	
+	protected int checkStudyProcess(Study study, int processIndex)
+	{
+		if (processIndex < study.processSequence.size())
+			return 0;
+		else
+		{
+			int k = study.processSequence.size()-1;
+			for (int i = k; i < processIndex; i++)
+				study.processSequence.add(new Process());
+			return processIndex - k;
+		}
+	}
 	
+	protected int checkAssay(Study study, int assayIndex)
+	{
+		if (assayIndex < study.assays.size())
+			return 0;
+		else
+		{
+			int k = study.assays.size()-1;
+			for (int i = k; i < assayIndex; i++)
+				study.assays.add(new Assay());
+			return assayIndex - k;
+		}
+	}
 	
-	
-	
+	protected int checkAssayProcess(Assay assay, int processIndex)
+	{
+		if (processIndex < assay.processSequence.size())
+			return 0;
+		else
+		{
+			int k = assay.processSequence.size()-1;
+			for (int i = k; i < processIndex; i++)
+				assay.processSequence.add(new Process());
+			return processIndex - k;
+		}
+	}
 	
 	
 }
