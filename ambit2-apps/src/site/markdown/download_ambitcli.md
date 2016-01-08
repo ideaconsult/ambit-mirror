@@ -13,7 +13,9 @@ A [command line Java application](download_ambitcli.html) used for processing ch
 
 ````sh
 $java -jar ambitcli.jar -help
-usage: ambit2.dbcli.AmbitCli
+INFO   ambitcli-3.0.1
+http://ambit.sf.net/ambit2-dbcli
+usage: ambitcli-{version}
  -a,--command <command>          Commands:
                                  import|preprocessing|dataset|split|standardize|help|
  -m,--subcommand <subcommand>    Subcommands. Use -a cmd -m help to list subcommands of a specific command.                                 
