@@ -1,5 +1,8 @@
-Package: ambit2.dbcli
-Main-Class: ambit2.dbcli.AmbitCli
-Manifest-version: ${project.version}
-Package-Version: ${project.version}
-Package-Vendor: Ideaconsult Ltd.
+Manifest-version: 1.0
+
+Name: ambit2.dbcli
+Package-Title: ambit2.dbcli
+Implementation-Title: ambit2.dbcli
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+

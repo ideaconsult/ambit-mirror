@@ -189,6 +189,7 @@ public class CliOptions {
 			delimiter = getDelimiter(line);
 			connectionLifeTime = getConnectionLifeTime(line);
 			setConfig(getConfig(line));
+
 			if (line.hasOption("h")) {
 				printHelp(options, null);
 				return false;
@@ -355,7 +356,7 @@ public class CliOptions {
 				return true;
 			}
 		} catch (Exception x) {
-			printHelp(options, x.getMessage());
+			printHelp(options,null);
 			throw x;
 		} finally {
 
@@ -620,15 +621,17 @@ public class CliOptions {
 		return options;
 	}
 
+
+	
 	protected static void printHelp(Options options, String message) {
 		if (message != null)
 			System.out.println(message);
 
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp(AmbitCli.class.getName(), options);
-		// subcommand2Option
-		Runtime.getRuntime().runFinalization();
-		Runtime.getRuntime().exit(0);
+		formatter.printHelp("ambitcli-{version}", options);
+		
+		//Runtime.getRuntime().runFinalization();
+		//Runtime.getRuntime().exit(0);
 	}
 
 	protected void printCommand(String cmd, ObjectNode cmdDef, boolean json,
