@@ -13,16 +13,21 @@ A [command line Java application](download_ambitcli.html) used for processing ch
 
 ````sh
 $java -jar ambitcli.jar -help
-usage: ambit2.dbcli.AmbitCli
+ INFO   ambitcli-3.0.1-SNAPSHOT build:7176 1452334324396
+http://ambit.sourceforge.net/download_ambitcli.html
+usage: ambitcli-{version}
  -a,--command <command>          Commands:
-                                 import|preprocessing|dataset|split|standardize|help|
- -m,--subcommand <subcommand>    Subcommands. Use -a cmd -m help to list subcommands of a specific command.                                 
+                                 import|preprocessing|dataset|split|standa
+                                 rdize|help|
+ -c,--config <file>              Config file (DB connection parameters)
  -d,--data <data>                Command specific parameters (multiple).
-                                 Use -a cmd -m help to list available parameters
- -i,--input <file>               Input file (e.g. file.sdf , recognized by extensions .sdf , .csv, .cml , .txt)
- -o,--output <file>              Output file (e.g. out.sdf , recognized by extensions .sdf , .csv, .cml , .txt)                                 
- -c,--config <file>              Config file (DB connection parameters)                                 
- -h,--help                       This help
+                                 Use -a cmd -m help to list available
+                                 parameters
+ -i,--input <file>               Input SDF file
+ -m,--subcommand <subcommand>    Subcommands. Use -a cmd -m help to list
+                                 subcommands of a specific command.
+ -o,--output <file>              Output file
+ -h,--help                       This help                                 
 ````
 For options other than standardisation see [the main ambitcli page](download_ambitcli.html).
 
@@ -127,10 +132,17 @@ Generates InChIs. If `-d tautomers=true` uses InChI option FixedH=true, otherwis
  -d tag_smiles=SMILES	// Specifies the SMILES tag	[type:String]
 ```` 
 
-#### 10.Page/pagesize
+#### 10.Page/Pagesize
 ````sh
  -d page=0	// Start page (first page = 0)	[type:Integer]
  -d pagesize=20000	// Page size (in number of records)	[type:Integer]
 ```` 
 Used to process specific part of the file (e.g. -d page=2 -d page=100 will skip the first 200 records).
+ 
+#### 11. SDF file molecule name  
+````sh
+ -d "sdftitle=InChIKey"	
+```` 
+If the output is SDF file, will write the specified property in the first line 
+ 
  

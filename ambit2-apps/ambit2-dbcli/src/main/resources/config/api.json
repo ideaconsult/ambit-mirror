@@ -32,6 +32,7 @@
         			":tag_inchikey" : { "mandatory" : false,  "type" : "String", "value" : "InChIKey", "comment" : "Specifies the InChIKey tag"},
         			":tag_smiles" : { "mandatory" : false,  "type" : "String", "value" : "SMILES", "comment" : "Specifies the SMILES tag"},
         			":tag_rank" : { "mandatory" : false,  "type" : "String", "value" : "RANK", "comment" : "Specifies the tag to store the tautomer rank (energy based, less is better)"},
+        			":sdftitle" : { "mandatory" : false,  "type" : "String", "value" : null, "comment" : "Specifies which field to write in the first SDF line"},
         			":debugatomtypes" : { "mandatory" : false,  "type" : "boolean", "value" : false, "comment" : "Writes only structures with AtomTypes property set. For debug purposes"}
         		}
         	}
