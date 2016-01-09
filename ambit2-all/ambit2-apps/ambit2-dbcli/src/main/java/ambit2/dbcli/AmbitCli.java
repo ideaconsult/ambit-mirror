@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -48,6 +49,7 @@ import org.codehaus.jackson.JsonNode;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.IChemObjectWriter;
+import org.openscience.cdk.io.SDFWriter;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -187,17 +189,21 @@ public class AmbitCli {
 				code = -1;
 			}
 		} catch (ConnectException x) {
-			logger_cli.log(Level.SEVERE, "MSG_CONNECTION_REFUSED",new Object[] {x.getMessage()});
+			logger_cli.log(Level.SEVERE, "MSG_CONNECTION_REFUSED",
+					new Object[] { x.getMessage() });
 			Runtime.getRuntime().runFinalization();
 			code = -1;
 		} catch (CommunicationsException x) {
-			logger_cli.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED",new Object[] {x.getMessage()});
+			logger_cli.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED",
+					new Object[] { x.getMessage() });
 			code = -1;
 		} catch (SQLException x) {
-			logger_cli.log(Level.SEVERE, "MSG_ERR_SQL", new Object[] {x.getMessage()});
+			logger_cli.log(Level.SEVERE, "MSG_ERR_SQL",
+					new Object[] { x.getMessage() });
 			code = -1;
 		} catch (InvalidCommand x) {
-			logger_cli.log(Level.SEVERE, "MSG_INVALIDCOMMAND", new Object[] {x.getMessage()});
+			logger_cli.log(Level.SEVERE, "MSG_INVALIDCOMMAND",
+					new Object[] { x.getMessage() });
 			code = -1;
 		} catch (Exception x) {
 			logger_cli.log(Level.SEVERE, x.getMessage());
@@ -207,7 +213,7 @@ public class AmbitCli {
 				logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED",
 						(System.currentTimeMillis() - now));
 		}
-	
+
 		Runtime.getRuntime().runFinalization();
 		Runtime.getRuntime().exit(code);
 	}
@@ -692,6 +698,14 @@ public class AmbitCli {
 		} catch (Exception x) {
 			logger_cli.log(Level.WARNING, x.toString());
 		}
+		Object tmpTag;
+		try {
+			tmpTag =  options.getParam(":sdftitle");
+		} catch (Exception x) {
+			tmpTag = null;
+		}
+		final String sdf_title = tmpTag==null?null:tmpTag.toString().toLowerCase();
+		
 		final StructureStandardizer standardprocessor = new StructureStandardizer();
 
 		try {
@@ -809,7 +823,7 @@ public class AmbitCli {
 				file.getAbsoluteFile(), outfile.getAbsolutePath() });
 		FileOutputState out = new FileOutputState(outfile);
 		final IChemObjectWriter writer = out.getWriter();
-
+		final boolean writesdf = writer instanceof SDFWriter;
 		final BatchDBProcessor<IStructureRecord> batch = new BatchDBProcessor<IStructureRecord>() {
 
 			@Override
@@ -905,11 +919,12 @@ public class AmbitCli {
 						processed = mol;
 
 						// CDK adds these for the first MOL line
-						if (mol.getProperty(CDKConstants.TITLE) == null)
-							mol.removeProperty(CDKConstants.TITLE);
-						if (mol.getProperty(CDKConstants.REMARK) == null)
-							mol.removeProperty(CDKConstants.REMARK);
-
+						if (!writesdf) {
+							if (mol.getProperty(CDKConstants.TITLE) != null)
+								mol.removeProperty(CDKConstants.TITLE);
+							if (mol.getProperty(CDKConstants.REMARK) != null)
+								mol.removeProperty(CDKConstants.REMARK);
+						}
 						if ((smirksProcessor != null)
 								&& smirksProcessor.isEnabled()) {
 							processed = smirksProcessor.process(processed);
@@ -929,6 +944,14 @@ public class AmbitCli {
 						}
 						if (processed != null)
 							try {
+								if (writesdf && sdf_title!=null) {
+									
+									for (Entry<Object,Object> p : processed.getProperties().entrySet()) 
+										if (sdf_title.equals(p.getKey().toString().toLowerCase())) {
+											processed.setProperty(CDKConstants.TITLE,p.getValue());
+											break;
+										}
+								}
 								if (debugatomtypes) {
 									Object debug = (processed == null) ? null
 											: processed
