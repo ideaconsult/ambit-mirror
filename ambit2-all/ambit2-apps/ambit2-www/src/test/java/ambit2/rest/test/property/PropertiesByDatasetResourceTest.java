@@ -20,7 +20,7 @@ public class PropertiesByDatasetResourceTest extends ResourceTest {
 	
 	@Test
 	public void testRDFXML_Query() throws Exception {
-		RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference(getTestURI()));
+		RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference(getTestURI()),"test");
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d", port)));
 		int count = 0;
 		while (iterator.hasNext()) {
@@ -37,7 +37,7 @@ public class PropertiesByDatasetResourceTest extends ResourceTest {
 	@Test
 	public void testRDFXML_Dataset() throws Exception {
 		String dataset = String.format("http://localhost:%d%s/2?%s=%d", port,OpenTox.URI.dataset.getURI(),AbstractResource.max_hits,1);
-		RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference(dataset));
+		RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference(dataset),"test");
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d", port)));
 		int count = 0;
 		while (iterator.hasNext()) {

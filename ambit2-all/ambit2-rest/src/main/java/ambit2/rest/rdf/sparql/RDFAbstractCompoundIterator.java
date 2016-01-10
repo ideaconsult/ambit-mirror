@@ -54,12 +54,12 @@ public abstract class RDFAbstractCompoundIterator<COMPOUND,PROPERTY> extends RDF
 		this(OT.createModel(null,representation,mediaType),sparql);
 	}
 	
-	public RDFAbstractCompoundIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
-		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML),sparql);
+	public RDFAbstractCompoundIterator(Reference reference,String referer) throws ResourceException,MalformedURLException,IOException {
+		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML,referer),sparql);
 	}
 	
-	public RDFAbstractCompoundIterator(Reference reference,MediaType mediaType) throws ResourceException ,MalformedURLException,IOException{
-		this(OT.createModel(null,reference, mediaType),sparql);
+	public RDFAbstractCompoundIterator(Reference reference,MediaType mediaType,String referer) throws ResourceException ,MalformedURLException,IOException{
+		this(OT.createModel(null,reference, mediaType,referer),sparql);
 	}
 	
 	public RDFAbstractCompoundIterator(InputStream in,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {

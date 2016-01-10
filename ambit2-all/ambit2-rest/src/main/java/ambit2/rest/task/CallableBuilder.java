@@ -38,23 +38,23 @@ subjectid
  */
 public class CallableBuilder<USERID> extends CallablePOST<USERID> {
 
-	public CallableBuilder(Form form,Reference root,USERID token) throws Exception {
-		this(MediaType.TEXT_URI_LIST,form.getWebRepresentation(),root,token);
+	public CallableBuilder(Form form,Reference root,USERID token,String referer) throws Exception {
+		this(MediaType.TEXT_URI_LIST,form.getWebRepresentation(),root,token,referer);
 	}	
 	
 
 	public CallableBuilder(MediaType media, 
 			  Representation input,
 			  Reference root,
-			  USERID token) {
-		this(media,input,1500,root,token);
+			  USERID token,String referer) {
+		this(media,input,1500,root,token,referer);
 	}
 	public CallableBuilder(MediaType media, 
 			  Representation input,
 			  long pollInterval,
 			  Reference root,
-			  USERID token) {
-		super(media,input,pollInterval,root,token);
+			  USERID token,String referer) {
+		super(media,input,pollInterval,root,token,referer);
 	}
 	
 	protected String getPredictionFeature(Form form) {
@@ -85,12 +85,12 @@ public class CallableBuilder<USERID> extends CallablePOST<USERID> {
 		//we have some descriptors to calculate before building a model
 		if ((feature_calculation!=null) && (feature_calculation.length>0)) {
 			if (dataset == null) throw new Exception("No dataset!");
-			dataset = buildDataset(dataset.getUri().toString(), dataset_service, feature_calculation, form);
+			dataset = buildDataset(dataset.getUri().toString(), dataset_service, feature_calculation, form,referer);
 		}
 		
 		String[] model_learning = getAlgorithms(form, OpenTox.params.model_learning.toString());
 		if ((model_learning!=null) && (model_learning.length>0)) { //model
-			OTAlgorithm algorithm = OTAlgorithm.algorithm(model_learning[0]);
+			OTAlgorithm algorithm = OTAlgorithm.algorithm(model_learning[0],"referer");
 			try {
 				OTModel model = algorithm.process(dataset, prediction_feature);
 				return new TaskResult(model.getUri().toString());
@@ -106,14 +106,14 @@ public class CallableBuilder<USERID> extends CallablePOST<USERID> {
 	protected OTDataset buildDataset(String datasetURI, 
 				String dataset_service, 
 				String[] feature_calculation,
-				Form form) throws Exception {
+				Form form,String referer) throws Exception {
 		
 		OTAlgorithms algorithms = OTAlgorithms.algorithms();
 		algorithms.withDatasetService(dataset_service);
 		
 		for (String algoUri : feature_calculation)
 			if (algoUri!=null) 
-				algorithms.add(OTAlgorithm.algorithm(algoUri.trim()).withParams(form));
+				algorithms.add(OTAlgorithm.algorithm(algoUri.trim(),referer).withParams(form));
 		
 		return algorithms.process(OTDataset.dataset(datasetURI).withDatasetService(dataset_service),true);
 	}

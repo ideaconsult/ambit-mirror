@@ -29,7 +29,7 @@ public abstract class ModelBuilder<DATA,A extends Algorithm,Model extends ModelQ
 	protected ModelURIReporter<IQueryRetrieval<ModelQueryResults>> model_reporter;
 	protected AlgorithmURIReporter alg_reporter;
 	protected Reference applicationRootReference;
-	
+	protected String referer;
 	
 	public Reference getApplicationRootReference() {
 		return applicationRootReference;
@@ -43,18 +43,20 @@ public abstract class ModelBuilder<DATA,A extends Algorithm,Model extends ModelQ
 	private static final long serialVersionUID = 3721710990307131078L;
 	public ModelBuilder(Reference applicationRootReference,
 						ModelURIReporter<IQueryRetrieval<ModelQueryResults>> model_reporter,
-						AlgorithmURIReporter alg_reporter) {
-		this(applicationRootReference,model_reporter,alg_reporter,null,null);
+						AlgorithmURIReporter alg_reporter,String referer) {
+		this(applicationRootReference,model_reporter,alg_reporter,null,null,referer);
 	}
 	public ModelBuilder(Reference applicationRootReference,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> model_reporter,
 			AlgorithmURIReporter alg_reporter,
 			String[] targetURI,
-			String[] parameters) {
+			String[] parameters,
+			String referer) {
 		super(targetURI,parameters);
 		this.applicationRootReference = applicationRootReference;
 		this.alg_reporter = alg_reporter;
 		this.model_reporter = model_reporter;
+		this.referer = referer;
 	}	
 
 	public AlgorithmURIReporter getAlgorithmReporter() {
@@ -71,13 +73,13 @@ public abstract class ModelBuilder<DATA,A extends Algorithm,Model extends ModelQ
 		this.model_reporter = model_reporter;
 	}		
 	
-	public Property createPropertyFromReference(Reference attribute, LiteratureEntry le) {
-		return createPropertyFromReference(attribute, le, applicationRootReference);
+	public Property createPropertyFromReference(Reference attribute, LiteratureEntry le,String referer) {
+		return createPropertyFromReference(attribute, le, applicationRootReference,referer);
 	}
-	public static Property createPropertyFromReference(Reference attribute, LiteratureEntry le, Reference applicationRootReference) {
+	public static Property createPropertyFromReference(Reference attribute, LiteratureEntry le, Reference applicationRootReference,String referer) {
 		RDFPropertyIterator reader = null;
 		try {
-			reader = new RDFPropertyIterator(attribute);
+			reader = new RDFPropertyIterator(attribute,referer);
 			reader.setBaseReference(applicationRootReference);
 			while (reader.hasNext()) {
 				return reader.next();

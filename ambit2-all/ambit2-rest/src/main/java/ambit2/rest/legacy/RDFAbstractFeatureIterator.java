@@ -56,12 +56,12 @@ public abstract class RDFAbstractFeatureIterator<PROPERTY> extends RDFSparqlIter
 		this(OT.createModel(null,representation,mediaType),sparql);
 	}
 	
-	public RDFAbstractFeatureIterator(Reference reference) throws ResourceException,IOException , MalformedURLException {
-		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML),sparql);
+	public RDFAbstractFeatureIterator(Reference reference,String referer) throws ResourceException,IOException , MalformedURLException {
+		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML,referer),sparql);
 	}
 	
-	public RDFAbstractFeatureIterator(Reference reference,MediaType mediaType) throws ResourceException,IOException , MalformedURLException {
-		this(OT.createModel(null,reference, mediaType),sparql);
+	public RDFAbstractFeatureIterator(Reference reference,MediaType mediaType,String referer) throws ResourceException,IOException , MalformedURLException {
+		this(OT.createModel(null,reference, mediaType,referer),sparql);
 	}
 	
 	public RDFAbstractFeatureIterator(InputStream in,MediaType mediaType) throws ResourceException {

@@ -95,6 +95,6 @@ public class CallableUpdateDataset<USERID> extends	CallableQueryProcessor<Object
 			reader.setHandlePrescreen(true);
 			return reader;
 		} else
-			return new RDFStructuresReader(target.toString());
+			return new RDFStructuresReader(target.toString(),referer);
 	}	
 }

@@ -32,7 +32,7 @@ public class CallableSimpleModelCreator<Result, USERID> extends
 	    Algorithm algorithm, ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 	    AlgorithmURIReporter alg_reporter, boolean hidden, USERID token,String referer) {
 	super(form, context, algorithm,
-		new SimpleModelBuilder(applicationRootReference, reporter, alg_reporter, hidden), token,referer);
+		new SimpleModelBuilder(applicationRootReference, reporter, alg_reporter, hidden,referer), token,referer);
     }
 
     @Override

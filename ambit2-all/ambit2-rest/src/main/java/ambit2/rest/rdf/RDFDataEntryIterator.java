@@ -30,11 +30,11 @@ public abstract class RDFDataEntryIterator<Item,Feature> extends RDFObjectIterat
 		super(representation,mediaType,OT.OTClass.DataEntry.toString());
 	}
 		
-	public RDFDataEntryIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
-		super(reference,OT.OTClass.DataEntry.toString());
+	public RDFDataEntryIterator(Reference reference,String referer) throws ResourceException,MalformedURLException,IOException {
+		super(reference,OT.OTClass.DataEntry.toString(),referer);
 	}	
-	public RDFDataEntryIterator(Reference reference,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
-		super(reference,mediaType,OT.OTClass.DataEntry.toString());
+	public RDFDataEntryIterator(Reference reference,MediaType mediaType,String referer) throws ResourceException,MalformedURLException,IOException {
+		super(reference,mediaType,OT.OTClass.DataEntry.toString(),referer);
 	}
 	
 	public RDFDataEntryIterator(InputStream in,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {

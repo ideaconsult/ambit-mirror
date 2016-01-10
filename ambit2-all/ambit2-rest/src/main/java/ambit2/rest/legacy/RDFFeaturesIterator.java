@@ -15,11 +15,11 @@ import com.hp.hpl.jena.rdf.model.Resource;
 @Deprecated
 public class RDFFeaturesIterator extends RDFAbstractFeatureIterator<OTFeature> {
 
-	public RDFFeaturesIterator(String string) throws ResourceException ,IOException , MalformedURLException{
-		super(new Reference(string));
+	public RDFFeaturesIterator(String string,String referer) throws ResourceException ,IOException , MalformedURLException{
+		super(new Reference(string),referer);
 	}
-	public RDFFeaturesIterator(Reference reference) throws ResourceException,IOException , MalformedURLException {
-		super(reference);
+	public RDFFeaturesIterator(Reference reference,String referer) throws ResourceException,IOException , MalformedURLException {
+		super(reference,referer);
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class RDFFeaturesIterator extends RDFAbstractFeatureIterator<OTFeature> {
 		if (node.isURIResource())
 			return OTFeature.feature(((Resource)node).getURI());
 		else
-			return OTFeature.feature();
+			return OTFeature.feature(referer);
 		} catch (Exception x) {return null;}
 	}
 

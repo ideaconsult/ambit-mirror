@@ -48,7 +48,7 @@ public class OTDatasetComparisonReport extends OTObject {
 		super();
 		this.application = application;
 		if ((dataset!=null) && (dataset.getUri()!=null)) {
-			datasets2 = OTDatasets.datasets();
+			datasets2 = OTDatasets.datasets("test");
 			datasets2.add(dataset);
 		}
 	}
@@ -205,7 +205,7 @@ public class OTDatasetComparisonReport extends OTObject {
 			else return node.toString();
 	 }
 	protected OTDatasets retrieveDatasets() throws Exception {
-		 final OTDatasets datasets = OTDatasets.datasets();
+		 final OTDatasets datasets = OTDatasets.datasets("test");
 		 OTOntologyService<String> ontology = new OTOntologyService<String>(ontology_service) {
 			 @Override
 			public String createObject() throws Exception {

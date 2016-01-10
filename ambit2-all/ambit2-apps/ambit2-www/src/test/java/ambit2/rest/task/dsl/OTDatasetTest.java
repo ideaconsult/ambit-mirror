@@ -75,7 +75,7 @@ public class OTDatasetTest extends ResourceTest {
 		//http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F3&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1
 		//http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F3&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1
 		int count = 0;
-		RDFFeaturesIterator i = new RDFFeaturesIterator(dataset.toString());
+		RDFFeaturesIterator i = new RDFFeaturesIterator(dataset.toString(),"test");
 		while (i.hasNext()) {
 			OTFeature feature = i.next();
 			System.out.println(feature);
@@ -111,7 +111,7 @@ public class OTDatasetTest extends ResourceTest {
 		withDatasetService(String.format("http://localhost:%d/dataset",port)).
 		addColumns(feature2);
 		
-		OTDatasets datasets = OTDatasets.datasets();
+		OTDatasets datasets = OTDatasets.datasets("test");
 		datasets.withDatasetService(String.format("http://localhost:%d/dataset",port)).add(dataset1).add(dataset2);
 		OTDataset dataset = datasets.merge();
 		Assert.assertEquals("http://localhost:8181/dataset/R3",dataset.toString());

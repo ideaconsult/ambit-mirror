@@ -23,12 +23,12 @@ public class RDFCompoundIterator extends RDFAbstractCompoundIterator<IStructureR
 		super(representation,mediaType);
 	}
 	
-	public RDFCompoundIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
-		super(reference);
+	public RDFCompoundIterator(Reference reference,String referer) throws ResourceException,MalformedURLException,IOException {
+		super(reference,referer);
 	}
 	
-	public RDFCompoundIterator(Reference reference,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
-		super(reference,mediaType);
+	public RDFCompoundIterator(Reference reference,MediaType mediaType,String referer) throws ResourceException,MalformedURLException,IOException {
+		super(reference,mediaType,referer);
 	}
 	
 	public RDFCompoundIterator(InputStream in,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {

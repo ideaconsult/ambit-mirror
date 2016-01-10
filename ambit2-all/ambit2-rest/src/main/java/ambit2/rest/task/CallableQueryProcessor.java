@@ -132,7 +132,7 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 			reader.setHandlePrescreen(true);
 			return reader;
 		} else
-			return new RDFStructuresReader(target.toString());
+			return new RDFStructuresReader(target.toString(),referer);
 	}
 	protected abstract Target createTarget(Reference reference) throws Exception;
 	protected abstract TaskResult createReference(Connection connection) throws Exception ;

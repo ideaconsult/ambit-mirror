@@ -49,12 +49,12 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 		this(OT.createModel(null,representation,mediaType));
 	}
 	
-	public RDFStructuresIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
-		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML));
+	public RDFStructuresIterator(Reference reference,String referer) throws ResourceException,MalformedURLException,IOException {
+		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML,referer));
 	}
 	
-	public RDFStructuresIterator(Reference reference,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
-		this(OT.createModel(null,reference, mediaType));
+	public RDFStructuresIterator(Reference reference,MediaType mediaType,String referer) throws ResourceException,MalformedURLException,IOException {
+		this(OT.createModel(null,reference, mediaType,referer));
 	}
 	
 	public RDFStructuresIterator(InputStream in,MediaType mediaType) throws ResourceException ,MalformedURLException,IOException{

@@ -63,8 +63,8 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			ModelURIReporter model_reporter,
 			AlgorithmURIReporter alg_reporter,
 			String[] targetURI,
-			String[] parameters) {
-		super(applicationRootReference,model_reporter,alg_reporter);
+			String[] parameters,String referer) {
+		super(applicationRootReference,model_reporter,alg_reporter,referer);
 		this.targetURI = targetURI;
 		this.parameters = parameters;
 
@@ -183,7 +183,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			
 			predictors = new Template(name+"#Independent");
 			for (int i=0; i < newInstances.numAttributes(); i++) {
-				property = createPropertyFromReference(new Reference(newInstances.attribute(i).name()), entry);
+				property = createPropertyFromReference(new Reference(newInstances.attribute(i).name()), entry,referer);
 				property.setOrder(i+1);
 				predictors.add(property);
 			}				
@@ -268,7 +268,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			
 			;
 			dependent = new Template(name+"#Dependent");
-			Property property = createPropertyFromReference(new Reference(newInstances.attribute(newInstances.classIndex()).name()), entry); 
+			Property property = createPropertyFromReference(new Reference(newInstances.attribute(newInstances.classIndex()).name()), entry,referer); 
 			dependent.add(property);
 			
 			predicted = new PredictedVarsTemplate(name+"#Predicted");
@@ -299,7 +299,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			predictors = new Template(name+"#Independent");
 			for (int i=0; i < newInstances.numAttributes(); i++) {
 				if (newInstances.classIndex()==i) continue;
-				property = createPropertyFromReference(new Reference(newInstances.attribute(i).name()), entry);
+				property = createPropertyFromReference(new Reference(newInstances.attribute(i).name()), entry,referer);
 				property.setOrder(i+1);
 				predictors.add(property);
 			}				
@@ -319,7 +319,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			predictors = new Template(name+"#Independent");
 			for (int i=0; i < newInstances.numAttributes(); i++) {
 				if (newInstances.classIndex()==i) continue;
-				property = createPropertyFromReference(new Reference(newInstances.attribute(i).name()), entry);
+				property = createPropertyFromReference(new Reference(newInstances.attribute(i).name()), entry,referer);
 				property.setOrder(i+1);
 				predictors.add(property);
 			}	
@@ -327,7 +327,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			predicted = new PredictedVarsTemplate(name+"#Predicted");
 			for (int i=0; i < newInstances.numAttributes(); i++) {
 				if (newInstances.classIndex()==i) continue;
-				property = createPropertyFromReference(new Reference(String.format("PCA_%d",i+1)), entry);
+				property = createPropertyFromReference(new Reference(String.format("PCA_%d",i+1)), entry,referer);
 				property.setClazz(Number.class);
 				property.setOrder(i+1);
 				predicted.add(property);

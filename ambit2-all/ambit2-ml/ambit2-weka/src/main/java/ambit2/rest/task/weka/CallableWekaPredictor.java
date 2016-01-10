@@ -23,7 +23,7 @@ public class CallableWekaPredictor<T,USERID> extends CallableModelPredictor<Inst
 		//use RDFObject parser and create instances on the fly
 		
 		//need tomake sure all descriptors are read here
-		return new RDFInstancesParser(applicationRootReference.toString()) ;
+		return new RDFInstancesParser(applicationRootReference.toString(),referer) ;
 	}	
 	
 	@Override

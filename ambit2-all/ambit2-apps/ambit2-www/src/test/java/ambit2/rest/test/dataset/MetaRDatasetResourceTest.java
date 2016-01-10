@@ -25,7 +25,7 @@ public class MetaRDatasetResourceTest extends ResourceTest {
 						port
 						));
 						
-		RDFMetaDatasetIterator<ISourceDataset> iterator = new RDFMetaDatasetIterator<ISourceDataset>(ref) {
+		RDFMetaDatasetIterator<ISourceDataset> iterator = new RDFMetaDatasetIterator<ISourceDataset>(ref,"test") {
 			@Override
 			protected ISourceDataset createRecord() {
 				return new SourceDataset();

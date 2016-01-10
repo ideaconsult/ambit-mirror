@@ -43,7 +43,7 @@ public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<
 						alg_reporter,
 						OpenTox.params.target.getValuesArray(form),
 						OpenTox.params.parameters.getValuesArray(form),
-						OpenTox.params.confidenceOf.getFirstValue(form)==null?null:OpenTox.params.confidenceOf.getFirstValue(form).toString()
+						OpenTox.params.confidenceOf.getFirstValue(form)==null?null:OpenTox.params.confidenceOf.getFirstValue(form).toString(),referer
 						),
 						token,referer);
 	}

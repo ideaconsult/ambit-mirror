@@ -92,7 +92,7 @@ public class BookmarkresourceTest extends ProtectedResourceTest {
 	
 	@Test
 	public void testRDFXML() throws Exception {
-		RDFBookmarkIterator iterator = new RDFBookmarkIterator(new Reference(getTestURI()));
+		RDFBookmarkIterator iterator = new RDFBookmarkIterator(new Reference(getTestURI()),"test");
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
 		while (iterator.hasNext()) {
 			Bookmark target = iterator.next();
@@ -107,7 +107,7 @@ public class BookmarkresourceTest extends ProtectedResourceTest {
 	@Test
 	public void testRDFXMLForeignURI() throws Exception {
 		try {
-			RDFBookmarkIterator iterator = new RDFBookmarkIterator(new Reference("http://google.com"));
+			RDFBookmarkIterator iterator = new RDFBookmarkIterator(new Reference("http://google.com"),"test");
 			iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
 			while (iterator.hasNext()) {
 				Bookmark target = iterator.next();

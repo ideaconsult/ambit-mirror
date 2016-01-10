@@ -142,7 +142,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
 		
 		int count = 0;
-		RDFPropertyIterator i = new RDFPropertyIterator(ref);
+		RDFPropertyIterator i = new RDFPropertyIterator(ref,"test");
 		i.setCloseModel(true);
 		while (i.hasNext()) {
 			count++;
@@ -164,7 +164,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
 		
 		int count = 0;
-		RDFPropertyIterator i = new RDFPropertyIterator(ref);
+		RDFPropertyIterator i = new RDFPropertyIterator(ref,"test");
 		i.setCloseModel(true);
 		while (i.hasNext()) {
 			count++;
@@ -185,7 +185,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
 		
 		int count = 0;
-		RDFPropertyIterator i = new RDFPropertyIterator(ref);
+		RDFPropertyIterator i = new RDFPropertyIterator(ref,"test");
 		i.setCloseModel(true);
 		while (i.hasNext()) {
 			count++;
@@ -215,7 +215,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
 			
 		int count = 0;
-		RDFPropertyIterator i = new RDFPropertyIterator(ref);
+		RDFPropertyIterator i = new RDFPropertyIterator(ref,"test");
 		i.setCloseModel(true);
 		while (i.hasNext()) {
 		    	Property p = i.next();
@@ -254,7 +254,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
 			
 		int count = 0;
-		RDFPropertyIterator i = new RDFPropertyIterator(ref);
+		RDFPropertyIterator i = new RDFPropertyIterator(ref,"test");
 		i.setCloseModel(true);
 		while (i.hasNext()) {
 			count++;
@@ -301,7 +301,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		
 		int count = 0;
 		ref.addQueryParameter("media","application/rdf+xml");
-		RDFPropertyIterator i = new RDFPropertyIterator(ref);
+		RDFPropertyIterator i = new RDFPropertyIterator(ref,"test");
 		i.setCloseModel(true);
 		while (i.hasNext()) {
 			count++;
@@ -599,7 +599,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
 			
 		int count = 0;
-		RDFPropertyIterator i = new RDFPropertyIterator(ref);
+		RDFPropertyIterator i = new RDFPropertyIterator(ref,"test");
 		i.setCloseModel(true);
 		while (i.hasNext()) {
 			count++;
@@ -989,7 +989,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		cli.release();
 		*/
 		
-		RDFPropertyIterator pi = new RDFPropertyIterator(new Reference(uri));
+		RDFPropertyIterator pi = new RDFPropertyIterator(new Reference(uri),"test");
 		while (pi.hasNext()) {
 			Property p = pi.next();
 			//System.out.println(p.getAnnotations());

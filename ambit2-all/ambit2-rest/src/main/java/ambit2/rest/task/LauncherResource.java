@@ -114,7 +114,7 @@ public class LauncherResource extends ProtectedResource {
 		try {
 			if (form.getFirstValue(OpenTox.params.dataset_service.toString())==null)
 				form.add(OpenTox.params.dataset_service.toString(), getDatasetService().toString());
-			return new CallablePOST(form,getRequest().getRootRef(),getUserToken("subjectid"));		
+			return new CallablePOST(form,getRequest().getRootRef(),getUserToken("subjectid"),getRequest().getResourceRef().toString());		
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {

@@ -22,16 +22,17 @@ public class RDFStructuresReader extends RDFBatchParser<IStructureRecord> {
 	 * 
 	 */
 	private static final long serialVersionUID = 7079139854857529405L;
-
-	public RDFStructuresReader(String baseReference) {
+	private String  referer;
+	public RDFStructuresReader(String baseReference,String referer) {
 		super(baseReference, OT.OTClass.DataEntry.toString());
+		this.referer = referer;
 	}
 
 	@Override
 	protected RDFObjectIterator<IStructureRecord> createObjectIterator(
 			Reference target, MediaType mediaType) throws ResourceException {
 		try {
-			RDFStructuresIterator i = new RDFStructuresIterator(target,mediaType);
+			RDFStructuresIterator i = new RDFStructuresIterator(target,mediaType,referer);
 			i.setBaseReference(new Reference(baseReference));
 			return i;
 		} catch (ResourceException x) {

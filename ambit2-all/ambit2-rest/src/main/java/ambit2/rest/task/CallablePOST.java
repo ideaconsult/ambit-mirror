@@ -25,27 +25,29 @@ public class CallablePOST<USERID> extends CallableProtectedTask<USERID> {
 
 	protected OTSuperModel superModel;
 	
+	protected String referer;
 	
-	public CallablePOST(Form form,Reference root,USERID token) throws Exception {
-		this(MediaType.TEXT_URI_LIST,form.getWebRepresentation(),root,token);
+	public CallablePOST(Form form,Reference root,USERID token,String referer) throws Exception {
+		this(MediaType.TEXT_URI_LIST,form.getWebRepresentation(),root,token,referer);
 	}	
 	
 
 	public CallablePOST(MediaType media, 
 			  Representation input,
 			  Reference root,
-			  USERID token) {
-		this(media,input,1500,root,token);
+			  USERID token,String referer) {
+		this(media,input,1500,root,token,referer);
 	}
 	public CallablePOST(MediaType media, 
 			  Representation input,
 			  long pollInterval,
 			  Reference root,
-			  USERID token) {
+			  USERID token,String referer) {
 		super(token);
 		this.media = media;
 		this.input = input;
 		this.applicationRootReference = root;
+		this.referer= referer;
 	}
 	protected String getDatasetService(Form form) {
 		String dataset_service = form.getFirstValue(OpenTox.params.dataset_service.toString());
@@ -92,7 +94,7 @@ public class CallablePOST<USERID> extends CallableProtectedTask<USERID> {
 				
 				for (String algoUri : algoURIs)
 					if (algoUri!=null) 
-						algorithms.add(OTAlgorithm.algorithm(algoUri.trim()).withParams(form));
+						algorithms.add(OTAlgorithm.algorithm(algoUri.trim(),referer).withParams(form));
 				
 				results = algorithms.process(OTDataset.dataset(datasetURI).withDatasetService(dataset_service));
 			}

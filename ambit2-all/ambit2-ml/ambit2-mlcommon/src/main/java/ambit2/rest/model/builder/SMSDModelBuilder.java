@@ -29,16 +29,16 @@ public class SMSDModelBuilder extends AbstractStructuresModelBuilder<ModelQueryR
 	private static final long serialVersionUID = -3199396535541771758L;
 	public SMSDModelBuilder(Reference applicationRootReference,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> model_reporter,
-			AlgorithmURIReporter alg_reporter) {
-		this(applicationRootReference,model_reporter,alg_reporter,null,null);
+			AlgorithmURIReporter alg_reporter,String referer) {
+		this(applicationRootReference,model_reporter,alg_reporter,null,null,referer);
 	}
 	
 	public SMSDModelBuilder(Reference applicationRootReference,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> model_reporter,
 			AlgorithmURIReporter alg_reporter,
 			String[] targetURI,
-			String[] parameters) {
-		super(applicationRootReference,model_reporter,alg_reporter,targetURI,parameters);
+			String[] parameters,String referer) {
+		super(applicationRootReference,model_reporter,alg_reporter,targetURI,parameters,referer);
 	}
 
 	@Override

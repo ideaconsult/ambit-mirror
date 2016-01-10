@@ -39,11 +39,11 @@ public abstract class RDFMetaDatasetIterator<M extends ISourceDataset> extends R
 		super(representation,mediaType,OT.OTClass.Dataset.toString());
 	}
 		
-	public RDFMetaDatasetIterator(Reference reference) throws ResourceException  , MalformedURLException,IOException{
-		super(reference,OT.OTClass.Dataset.toString());
+	public RDFMetaDatasetIterator(Reference reference,String referer) throws ResourceException  , MalformedURLException,IOException{
+		super(reference,OT.OTClass.Dataset.toString(),referer);
 	}	
-	public RDFMetaDatasetIterator(Reference reference,MediaType mediaType) throws ResourceException , MalformedURLException,IOException{
-		super(reference,mediaType,OT.OTClass.Dataset.toString());
+	public RDFMetaDatasetIterator(Reference reference,MediaType mediaType,String referer) throws ResourceException , MalformedURLException,IOException{
+		super(reference,mediaType,OT.OTClass.Dataset.toString(),referer);
 	}
 	
 	public RDFMetaDatasetIterator(InputStream in,MediaType mediaType) throws ResourceException , MalformedURLException,IOException {

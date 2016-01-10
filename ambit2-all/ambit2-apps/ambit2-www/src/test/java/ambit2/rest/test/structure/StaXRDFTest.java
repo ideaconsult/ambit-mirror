@@ -104,7 +104,7 @@ public class StaXRDFTest extends ResourceTest {
 		String.format("http://localhost:%d/query/smarts?rdfwriter=%s&search=%s",
 				port,rdfwriter,Reference.encode("c1ccccc1"));
 		
-		RDFStructuresIterator i = new RDFStructuresIterator(new Reference(uri));
+		RDFStructuresIterator i = new RDFStructuresIterator(new Reference(uri),"test");
 		i.setBaseReference(new Reference(String.format("http://localhost:%d", port)));
 		int count = 0;
 
@@ -136,7 +136,7 @@ public class StaXRDFTest extends ResourceTest {
 	public void testRDFXML() throws Exception {
 		//testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
 		
-		RDFStructuresIterator i = new RDFStructuresIterator(new Reference(getTestURI()));
+		RDFStructuresIterator i = new RDFStructuresIterator(new Reference(getTestURI()),"test");
 		i.setBaseReference(new Reference(String.format("http://localhost:%d", port)));
 		int count = 0;
 		boolean propertyfound = false;

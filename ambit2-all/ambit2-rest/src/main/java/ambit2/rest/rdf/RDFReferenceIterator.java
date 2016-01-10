@@ -34,11 +34,11 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 		super(representation,mediaType,BibTex.BTClass.Entry.toString());
 	}
 		
-	public RDFReferenceIterator(Reference reference) throws ResourceException , MalformedURLException,IOException {
-		super(reference,BibTex.BTClass.Entry.toString());
+	public RDFReferenceIterator(Reference reference,String referer) throws ResourceException , MalformedURLException,IOException {
+		super(reference,BibTex.BTClass.Entry.toString(),referer);
 	}	
-	public RDFReferenceIterator(Reference reference,MediaType mediaType) throws ResourceException , MalformedURLException,IOException {
-		super(reference,mediaType,BibTex.BTClass.Entry.toString());
+	public RDFReferenceIterator(Reference reference,MediaType mediaType,String referer) throws ResourceException , MalformedURLException,IOException {
+		super(reference,mediaType,BibTex.BTClass.Entry.toString(),referer);
 	}
 	
 	public RDFReferenceIterator(InputStream in,MediaType mediaType) throws ResourceException  , MalformedURLException,IOException{
@@ -86,7 +86,7 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 			RDFReferenceIterator iterator = null;
 			
 			try {
-				iterator = new RDFReferenceIterator(new Reference(thisurl));
+				iterator = new RDFReferenceIterator(new Reference(thisurl),referer);
 				iterator.setCloseModel(true);	
 				iterator.setBaseReference(baseReference);
 				while (iterator.hasNext()) {

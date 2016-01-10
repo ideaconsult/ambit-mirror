@@ -268,7 +268,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
     protected RDFObjectIterator<Property> createObjectIterator(Reference reference, MediaType mediaType)
 	    throws ResourceException {
 	try {
-	    RDFPropertyIterator iterator = new RDFPropertyIterator(reference, mediaType) {
+	    RDFPropertyIterator iterator = new RDFPropertyIterator(reference, mediaType,getRequest().getResourceRef().toString()) {
 		@Override
 		protected boolean skip(Resource newEntry) {
 		    return super.skip(newEntry) || isFeatureSource(newEntry);

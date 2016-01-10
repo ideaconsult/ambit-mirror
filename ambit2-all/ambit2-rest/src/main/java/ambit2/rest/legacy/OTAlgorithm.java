@@ -22,18 +22,18 @@ public class OTAlgorithm extends OTProcessingResource implements IOTAlgorithm  {
 	 */
 	private static final long serialVersionUID = -2661587415132661190L;
 
-	protected OTAlgorithm(Reference ref) {
-		super(ref);
+	protected OTAlgorithm(Reference ref,String referer) {
+		super(ref,referer);
 	}
-	protected OTAlgorithm(String ref) {
-		super(ref);
+	protected OTAlgorithm(String ref,String referer) {
+		super(ref,referer);
 	}
-	 public static OTAlgorithm algorithm(Reference datasetURI) throws Exception  { 
-			    return new OTAlgorithm(datasetURI);
+	 public static OTAlgorithm algorithm(Reference datasetURI,String referer) throws Exception  { 
+			    return new OTAlgorithm(datasetURI,referer);
 	}
 
-	public static OTAlgorithm algorithm(String datasetURI) throws Exception  { 
-			    return new OTAlgorithm(datasetURI);
+	public static OTAlgorithm algorithm(String datasetURI,String referer) throws Exception  { 
+			    return new OTAlgorithm(datasetURI,referer);
 	 }	 
 
 	 public OTRemoteTask processAsync(OTDataset inputDataset,OTFeature feature) throws Exception {
@@ -72,7 +72,7 @@ public class OTAlgorithm extends OTProcessingResource implements IOTAlgorithm  {
 			OTRemoteTask task = processAsync(inputDataset,feature);
 			task = wait(task,now);
 			if (task.getError()!=null) throw task.getError();
-			return OTModel.model(task.getResult());		 
+			return OTModel.model(task.getResult(),referer);		 
 	 }		 
 	 @Override
 	public OTAlgorithm withParams(Form form) throws Exception {

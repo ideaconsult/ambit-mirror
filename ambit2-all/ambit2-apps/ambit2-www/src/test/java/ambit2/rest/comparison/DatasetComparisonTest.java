@@ -216,7 +216,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 		w.write("<html><head><title>Dataset comparison</title></head><body>");
 		int count=0;
 		try {
-			OTDatasets datasets = new OTDatasets();
+			OTDatasets datasets = new OTDatasets("test");
 			datasets.read(uri1);
 			ClientResourceWrapper.setTokenFactory(this);
 			String intersection = prefix+"/admin/stats/dataset_intersection?dataset_uri=%s&dataset_uri=%s";
@@ -356,7 +356,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 		w.write("{\"nodes\":[");
 		int count=0;
 		try {
-			OTDatasets datasets = new OTDatasets();
+			OTDatasets datasets = new OTDatasets("test");
 			datasets.read(uri1);
 			ClientResourceWrapper.setTokenFactory(this);
 			String intersection = prefix+"/admin/stats/dataset_intersection?dataset_uri=%s&dataset_uri=%s";
@@ -505,7 +505,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 	 
 	 public String readName(String uri) throws Exception {
 		   Reference meta = new Reference(String.format("%s/metadata",uri));
-		 	Model model = OT.createModel(null, meta, MediaType.APPLICATION_RDF_XML);
+		 	Model model = OT.createModel(null, meta, MediaType.APPLICATION_RDF_XML,"test");
 		 	
 			try {
 				
@@ -533,7 +533,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 	  public void retrieveStructures(String uri1, String prefix, String fieldname) throws Exception {
 
 			try {
-				OTDatasets datasets = new OTDatasets();
+				OTDatasets datasets = new OTDatasets("test");
 				datasets.read(uri1);
 				ClientResourceWrapper.setTokenFactory(this);
 				String finder = prefix+"/algorithm/finder";
@@ -554,7 +554,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 				});
 			
 				for (String dataset:d)  {
-					OTAlgorithm alg = OTAlgorithm.algorithm(finder);
+					OTAlgorithm alg = OTAlgorithm.algorithm(finder,"test");
 					OTDataset inputDataset = OTDataset.dataset(dataset);
 					OTFeatures features = new OTFeatures();
 					inputDataset.getFeatures(features);

@@ -15,11 +15,14 @@ public class OTProcessingResource extends OTObject {
 	 * 
 	 */
 	private static final long serialVersionUID = -3483706848787877937L;
-	public OTProcessingResource(Reference ref) {
+	protected String referer;
+	public OTProcessingResource(Reference ref,String referer) {
 		super(ref);
+		this.referer = referer;
 	}
-	public OTProcessingResource(String ref) {
+	public OTProcessingResource(String ref,String referer) {
 		super(ref);
+		this.referer = referer;
 	}
 	public OTProcessingResource() {
 		super((Reference) null);
@@ -47,10 +50,10 @@ public class OTProcessingResource extends OTObject {
 					throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
 							String.format("%s %s",task.getUrl(),task.getError().getMessage()));
 			 if (pool.size()>1) {
-				 datasets= (datasets==null)?OTDatasets.datasets():datasets;
+				 datasets= (datasets==null)?OTDatasets.datasets(referer):datasets;
 				 datasets.add(OTDataset.dataset(task.getResult()))	;
 			 } else {
-				 datasets= (datasets==null)?OTDatasets.datasets():datasets;
+				 datasets= (datasets==null)?OTDatasets.datasets(referer):datasets;
 				 datasets.add(OTDataset.dataset(task.getResult()));
 			 }
 		}		
