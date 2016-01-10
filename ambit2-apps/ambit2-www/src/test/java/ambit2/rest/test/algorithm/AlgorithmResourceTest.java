@@ -1164,7 +1164,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 					headers, Status.SUCCESS_OK,
 					String.format("http://localhost:%d/model/%s", port,"1"));
 			//for some reason models table has autoincrement=4 
-			OTModel otmodel = OTModel.model(model.toString());
+			OTModel otmodel = OTModel.model(model.toString(),"test");
 			OTDataset dataset = otmodel.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
 			
 			testAsyncTask(
@@ -1196,7 +1196,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));
 		
-		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
+		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"),"test");
 		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
 		
 		IDatabaseConnection c = getConnection();
@@ -1220,7 +1220,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));
 		
-		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
+		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"),"test");
 		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
 		
 		IDatabaseConnection c = getConnection();
@@ -1249,7 +1249,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));
 		
-		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
+		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"),"test");
 		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
 		IDatabaseConnection c = getConnection();
 		ITable table = 	c.createQueryTable("p",
@@ -1272,7 +1272,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));
 		
-		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
+		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"),"test");
 		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
 		logger.info(dataset.toString());
 		
@@ -1301,7 +1301,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));
 		
-		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
+		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"),"test");
 		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
 		logger.info(dataset.toString());
 		
@@ -1344,7 +1344,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));
 		
-		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
+		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"),"test");
 		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
 		
 		

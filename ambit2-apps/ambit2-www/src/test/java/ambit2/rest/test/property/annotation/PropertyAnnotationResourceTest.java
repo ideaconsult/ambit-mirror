@@ -88,7 +88,7 @@ public class PropertyAnnotationResourceTest extends ResourceTest {
     public void testDeleteEntry() throws Exception {
 
 	OTFeature feature = OTFeature.feature(String.format("http://localhost:%d%s/1", port,
-		PropertyResource.featuredef));
+		PropertyResource.featuredef),"test");
 	feature.delete();
 	IDatabaseConnection c = getConnection();
 	ITable table = c.createQueryTable("EXPECTED", "SELECT * FROM properties where idproperty=1");

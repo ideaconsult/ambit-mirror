@@ -173,7 +173,7 @@ public class PropertyResourceTest extends ResourceTest {
 	public void testDeleteEntry() throws Exception {
 
 		OTFeature feature = OTFeature.feature(String.format(
-				"http://localhost:%d%s/1", port, PropertyResource.featuredef));
+				"http://localhost:%d%s/1", port, PropertyResource.featuredef),"test");
 		feature.delete();
 		IDatabaseConnection c = getConnection();
 		ITable table = c.createQueryTable("EXPECTED",
@@ -539,7 +539,7 @@ public class PropertyResourceTest extends ResourceTest {
 								sameAs));
 		Assert.assertEquals(0, table.getRowCount());
 		OTFeature feature = OTFeature.feature(String.format(
-				"http://localhost:%d%s/1", port, PropertyResource.featuredef));
+				"http://localhost:%d%s/1", port, PropertyResource.featuredef),"test");
 
 		feature.setSameas(sameAs);
 

@@ -31,8 +31,8 @@ public class OTDatasetTest extends ResourceTest {
 	public void testEmptyFeatureValues() throws Exception {
 		OTDataset dataset = OTDataset.dataset(String.format("http://localhost:%d/compound/10",port)).
 			withDatasetService(String.format("http://localhost:%d/dataset",port));
-		OTFeature feature = OTFeature.feature(String.format("http://localhost:%d/feature/3",port));
-		OTFeatures features = OTFeatures.features();
+		OTFeature feature = OTFeature.feature(String.format("http://localhost:%d/feature/3",port),"test");
+		OTFeatures features = OTFeatures.features(null,"test");
 		features.add(feature);
 
 		OTDataset subset = dataset.filteredSubsetWithFeatures(features);
@@ -43,8 +43,8 @@ public class OTDatasetTest extends ResourceTest {
 	public void testHasFeatureValues() throws Exception {
 		OTDataset dataset = OTDataset.dataset(String.format("http://localhost:%d/compound/11",port)).
 			withDatasetService(String.format("http://localhost:%d/dataset",port));
-		OTFeature feature = OTFeature.feature(String.format("http://localhost:%d/feature/3",port));
-		OTFeatures features = OTFeatures.features();
+		OTFeature feature = OTFeature.feature(String.format("http://localhost:%d/feature/3",port),"test");
+		OTFeatures features = OTFeatures.features(null,"test");
 		features.add(feature);
 
 		OTDataset subset = dataset.filteredSubsetWithoutFeatures(features);
@@ -55,9 +55,9 @@ public class OTDatasetTest extends ResourceTest {
 	public void testAddColumn() throws Exception {
 		
 		String f3 = String.format("http://localhost:%d/feature/3",port);
-		OTFeature feature1 = OTFeature.feature(f3);
+		OTFeature feature1 = OTFeature.feature(f3,"test");
 		String f1 = String.format("http://localhost:%d/feature/1",port);
-		OTFeature feature2 = OTFeature.feature(f1);
+		OTFeature feature2 = OTFeature.feature(f1,"test");
 		OTDataset dataset = OTDataset.dataset(String.format("http://localhost:%d/dataset/1",port)).
 			withDatasetService(String.format("http://localhost:%d/dataset",port)).
 			addColumns(feature1).
@@ -87,8 +87,8 @@ public class OTDatasetTest extends ResourceTest {
 	
 	@Test
 	public void testRemoveColumn() throws Exception {
-		OTFeature feature1 = OTFeature.feature(String.format("http://localhost:%d/feature/3",port));
-		OTFeature feature2 = OTFeature.feature(String.format("http://localhost:%d/feature/1",port));
+		OTFeature feature1 = OTFeature.feature(String.format("http://localhost:%d/feature/3",port),"test");
+		OTFeature feature2 = OTFeature.feature(String.format("http://localhost:%d/feature/1",port),"test");
 		OTDataset dataset = OTDataset.dataset(String.format("http://localhost:%d/dataset/1",port)).
 			withDatasetService(String.format("http://localhost:%d/dataset",port)).
 			addColumns(feature1).
@@ -101,8 +101,8 @@ public class OTDatasetTest extends ResourceTest {
 	}		
 	@Test
 	public void testMerge() throws Exception {
-		OTFeature feature1 = OTFeature.feature(String.format("http://localhost:%d/feature/3",port));
-		OTFeature feature2 = OTFeature.feature(String.format("http://localhost:%d/feature/1",port));
+		OTFeature feature1 = OTFeature.feature(String.format("http://localhost:%d/feature/3",port),"test");
+		OTFeature feature2 = OTFeature.feature(String.format("http://localhost:%d/feature/1",port),"test");
 		OTDataset dataset1 = OTDataset.dataset(String.format("http://localhost:%d/dataset/2",port)).
 			withDatasetService(String.format("http://localhost:%d/dataset",port)).
 			addColumns(feature1);
@@ -111,7 +111,7 @@ public class OTDatasetTest extends ResourceTest {
 		withDatasetService(String.format("http://localhost:%d/dataset",port)).
 		addColumns(feature2);
 		
-		OTDatasets datasets = OTDatasets.datasets("test");
+		OTDatasets datasets = OTDatasets.datasets(null,"test");
 		datasets.withDatasetService(String.format("http://localhost:%d/dataset",port)).add(dataset1).add(dataset2);
 		OTDataset dataset = datasets.merge();
 		Assert.assertEquals("http://localhost:8181/dataset/R3",dataset.toString());
@@ -129,8 +129,8 @@ public class OTDatasetTest extends ResourceTest {
 	
 	@Test
 	public void testCopy() throws Exception {
-		OTFeature feature1 = OTFeature.feature(String.format("http://localhost:%d/feature/3",port));
-		OTFeature feature2 = OTFeature.feature(String.format("http://localhost:%d/feature/1",port));
+		OTFeature feature1 = OTFeature.feature(String.format("http://localhost:%d/feature/3",port),"test");
+		OTFeature feature2 = OTFeature.feature(String.format("http://localhost:%d/feature/1",port),"test");
 		OTDataset dataset = OTDataset.dataset(String.format("http://localhost:%d/dataset/1?max=1",port)).
 			withDatasetService(String.format("http://localhost:%d/dataset",port)).
 			addColumns(feature1).

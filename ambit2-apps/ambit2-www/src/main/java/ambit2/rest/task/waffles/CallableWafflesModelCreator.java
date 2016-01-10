@@ -62,14 +62,14 @@ public class CallableWafflesModelCreator<USERID> extends CallableModelCreator<Fi
 						reporter,
 						alg_reporter,
 						OpenTox.params.target.getValuesArray(form),
-						OpenTox.params.parameters.getValuesArray(form)),
+						OpenTox.params.parameters.getValuesArray(form),referer),
 			token,referer);
 	}
 
 	@Override
 	protected AbstractBatchProcessor createBatch(Object target) throws Exception{
 		if (target == null) throw new Exception("");
-		return new RDFInstancesParser(builder.getApplicationRootReference().toString());
+		return new RDFInstancesParser(builder.getApplicationRootReference().toString(),referer);
 	}
 	/**
 	TODO download ARFF directly, instead of reading Weka instances in memory

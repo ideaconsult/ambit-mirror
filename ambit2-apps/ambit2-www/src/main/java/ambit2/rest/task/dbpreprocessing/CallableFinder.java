@@ -106,7 +106,7 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 				String[] xx = xvar.split("\n");
 				for (String x : xx )
 					if (!x.trim().equals("")) {
-						ds = ds.addColumns(OTFeature.feature(x));
+						ds = ds.addColumns(OTFeature.feature(x,referer));
 						Property key = createPropertyFromReference(x,null);
 						key.setEnabled(true);
 						profile.add(key);

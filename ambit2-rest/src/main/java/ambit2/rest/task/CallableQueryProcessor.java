@@ -55,7 +55,7 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 				String[] xx = xvar.split("\n");
 				for (String x : xx )
 					if (!x.trim().equals("")) 
-						ds = ds.addColumns(OTFeature.feature(x));
+						ds = ds.addColumns(OTFeature.feature(x,referer));
 			}
 			dataset =  ds.getUri().toString();
 

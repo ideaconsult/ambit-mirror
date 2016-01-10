@@ -89,20 +89,8 @@ public class OTModel extends OTProcessingResource implements IOTModel {
 
 	protected OTFeatures predictedVariables;
 
-	public OTModel(Reference ref,String referer) {
-		super(ref,referer);
-	}
-
 	public OTModel(String ref,String referer) {
-		this(new Reference(ref),referer);
-	}
-
-	public static OTModel model(String referer) throws Exception {
-		return new OTModel((Reference) null,referer);
-	}
-
-	public static OTModel model(Reference datasetURI,String referer) throws Exception {
-		return new OTModel(datasetURI,referer);
+		super(ref,referer);
 	}
 
 	public static OTModel model(String datasetURI,String referer) throws Exception {
@@ -168,20 +156,20 @@ public class OTModel extends OTProcessingResource implements IOTModel {
 				switch (varType) {
 				case independentVariables: {
 					if (independentVariables == null)
-						independentVariables = OTFeatures.features();
+						independentVariables = OTFeatures.features((String)null,referer);
 					vars = independentVariables;
 					break;
 				}
 				case dependentVariables: {
 					if (dependentVariables == null)
-						dependentVariables = OTFeatures.features();
+						dependentVariables = OTFeatures.features((String)null,referer);
 					vars = dependentVariables;
 					sparqlName = "sparql/ModelDependentVariables.sparql";
 					break;
 				}
 				case predictedVariables: {
 					if (predictedVariables == null)
-						predictedVariables = OTFeatures.features();
+						predictedVariables = OTFeatures.features((String)null,referer);
 					vars = predictedVariables;
 					sparqlName = "sparql/ModelPredictedVariables.sparql";
 					break;
@@ -258,7 +246,7 @@ public class OTModel extends OTProcessingResource implements IOTModel {
 						QuerySolution solution = results.next();
 						Resource var = solution.getResource("vars");
 
-						vars.add(OTFeature.feature(var.getURI()));
+						vars.add(OTFeature.feature(var.getURI(),referer));
 					}
 				} catch (Exception x) {
 					throw x;
@@ -300,10 +288,10 @@ public class OTModel extends OTProcessingResource implements IOTModel {
 
 		if (features.size() > 0) {
 			OTRemoteTaskPool pool = new OTRemoteTaskPool();
-			OTAlgorithms algorithms = OTAlgorithms.algorithms();
+			OTAlgorithms algorithms = OTAlgorithms.algorithms(null,referer);
 			algorithms.withDatasetService(dataset_service);
 
-			OTDatasets datasets = OTDatasets.datasets(referer);
+			OTDatasets datasets = OTDatasets.datasets(null,referer);
 			datasets.withDatasetService(dataset_service);
 
 			Exception stop = null;
