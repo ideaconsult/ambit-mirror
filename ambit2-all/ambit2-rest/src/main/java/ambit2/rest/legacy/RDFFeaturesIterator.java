@@ -26,9 +26,9 @@ public class RDFFeaturesIterator extends RDFAbstractFeatureIterator<OTFeature> {
 	protected OTFeature newProperty(RDFNode node) {
 		try {
 		if (node.isURIResource())
-			return OTFeature.feature(((Resource)node).getURI());
+			return OTFeature.feature(((Resource)node).getURI(),referer);
 		else
-			return OTFeature.feature(referer);
+			return OTFeature.feature(null,referer);
 		} catch (Exception x) {return null;}
 	}
 

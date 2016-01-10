@@ -47,10 +47,6 @@ public class OTFeature extends OTProcessingResource {
 		this.units = units;
 	}
 
-	public OTFeature(Reference ref, String referer) {
-		super(ref, referer);
-	}
-
 	public OTFeature(String ref, String referer) {
 		super(ref, referer);
 	}
@@ -59,16 +55,7 @@ public class OTFeature extends OTProcessingResource {
 		return algorithm;
 	}
 
-	public static OTFeature feature(String referer) throws Exception {
-		return new OTFeature((Reference) null, referer);
-	}
-
 	public static OTFeature feature(String ref, String referer)
-			throws Exception {
-		return new OTFeature(ref, referer);
-	}
-
-	public static OTFeature feature(Reference ref, String referer)
 			throws Exception {
 		return new OTFeature(ref, referer);
 	}
@@ -165,7 +152,7 @@ public class OTFeature extends OTProcessingResource {
 	}
 
 	public OTFeature getPage(int page, int pageSize) throws Exception {
-		return feature(OTObject.getPagedReference(getUri(), page, pageSize),referer);
+		return feature(OTObject.getPagedReference(getUri(), page, pageSize).toString(),referer);
 	}
 
 	public OTFeature setSameas(String newLabel) throws Exception {

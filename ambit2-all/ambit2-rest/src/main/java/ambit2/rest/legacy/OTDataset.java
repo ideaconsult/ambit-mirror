@@ -305,10 +305,10 @@ public class OTDataset extends OTObject implements IOTDataset {
 		 return dataset(ref);
 	 }	
 	 
-	 public OTFeatures retrieveFeatures(OTFeatures features) throws Exception {
+	 public OTFeatures retrieveFeatures(OTFeatures features,String referer) throws Exception {
 		 if ((getUri() == null) || ("".equals(getUri()))) throw new Exception("No URI");
 		 Reference ref = getUri().clone();
-		 if (features == null) features = OTFeatures.features();
+		 if (features == null) features = OTFeatures.features(null,referer);
 		 
 		 if (getUri().getQuery() != null) {
 			 

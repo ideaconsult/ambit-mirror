@@ -83,13 +83,13 @@ public class CallablePOST<USERID> extends CallableProtectedTask<USERID> {
 		try { 
 			if (modelURI != null) {
 
-				results = OTSuperModel.model(modelURI)
+				results = OTSuperModel.model(modelURI,referer)
 						.withDatasetService(dataset_service)
 						.withParams(form)
 						.process(OTDataset.dataset(datasetURI).withDatasetService(dataset_service));
 			} else if (algoURIs != null) {
 				
-				OTAlgorithms algorithms = OTAlgorithms.algorithms();
+				OTAlgorithms algorithms = OTAlgorithms.algorithms(null,referer);
 				algorithms.withDatasetService(dataset_service);
 				
 				for (String algoUri : algoURIs)

@@ -29,9 +29,6 @@ public abstract class OTContainers<T extends IOTObject>  extends OTProcessingRes
 	private static final long serialVersionUID = -461676329820947445L;
 	protected List<T> items;
 
-	public OTContainers(String referer) {
-		this(null,referer);
-	}
 	public OTContainers(String uri,String referer) {
 		super(uri,referer);
 

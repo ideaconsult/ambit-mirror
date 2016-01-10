@@ -25,15 +25,15 @@ public class OTModelTest extends ResourceTest {
 	@Test
 	public void testCalculateDescriptorsLocal() throws Exception {
 		String dataset_service = String.format("http://localhost:%d/dataset",port);
-		OTModel model = OTModel.model("test").withDatasetService(dataset_service);
+		OTModel model = OTModel.model(null,"test").withDatasetService(dataset_service);
 		
 		OTAlgorithm alg = OTAlgorithm.algorithm(String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",port),"test");
-		OTFeature feature = OTFeature.feature("test").withAlgorithm(alg);
+		OTFeature feature = OTFeature.feature(null,"test").withAlgorithm(alg);
 		
 		OTAlgorithm alg1 = OTAlgorithm.algorithm(String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",port),"test");
-		OTFeature feature1 = OTFeature.feature("test").withAlgorithm(alg1);
+		OTFeature feature1 = OTFeature.feature(null,"test").withAlgorithm(alg1);
 		
-		OTFeatures features = OTFeatures.features();
+		OTFeatures features = OTFeatures.features(null,"test");
 		features.withDatasetService(dataset_service).add(feature).add(feature1);
 		
 		OTDataset result = model.calculateDescriptors(
@@ -46,7 +46,7 @@ public class OTModelTest extends ResourceTest {
 	@Test
 	public void testCalculateModel() throws Exception {
 		String dataset_service = String.format("http://localhost:%d/dataset",port);
-		OTModel model = OTModel.model(String.format("http://localhost:%d/model/1",port)).withDatasetService(dataset_service);
+		OTModel model = OTModel.model(String.format("http://localhost:%d/model/1",port),"test").withDatasetService(dataset_service);
 
 		
 		OTDataset result = model.process(
@@ -70,14 +70,14 @@ public class OTModelTest extends ResourceTest {
 		OTAlgorithm alg2 = OTAlgorithm.algorithm(String.format("%s/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor",prefix),"test");
 		OTDataset calculated2 = alg2.process(inputDataset);
 		
-		OTDatasets datasets = OTDatasets.datasets("test");
+		OTDatasets datasets = OTDatasets.datasets(null,"test");
 		datasets.withDatasetService(dataset_service).add(calculated1).add(calculated2);
 		OTDataset dataset = datasets.merge();
 
 		OTAlgorithm lr = OTAlgorithm.algorithm(String.format("%s/algorithm/LR",prefix),"test");
-		OTModel model = lr.process(dataset, OTFeature.feature(String.format("%s/feature/4", prefix)));
+		OTModel model = lr.process(dataset, OTFeature.feature(String.format("%s/feature/4", prefix),"test"));
 		
-		OTModel supermodel = OTSuperModel.model(model.getUri(),"test").withDatasetService(dataset_service);
+		OTModel supermodel = OTSuperModel.model(model.getUri().toString(),"test").withDatasetService(dataset_service);
 		
 		System.out.println(supermodel.process(dataset));
 		
@@ -99,7 +99,7 @@ public class OTModelTest extends ResourceTest {
 		while (!task.poll()) ;
 		
 		String dataset_service = String.format("http://localhost:%d/dataset",port);
-		OTModel model = OTSuperModel.model(task.getResult(),"test").withDatasetService(dataset_service);
+		OTModel model = OTSuperModel.model(task.getResult().toString(),"test").withDatasetService(dataset_service);
 		Assert.assertEquals(String.format("http://localhost:%d/model/3",port), model.getUri().toString());
 		
 		OTDataset inputDataset = OTDataset.dataset(String.format("http://localhost:%d/query/substructure?search=c1ccccc1",port));

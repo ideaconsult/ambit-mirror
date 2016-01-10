@@ -69,7 +69,7 @@ public class CallableBuilder<USERID> extends CallablePOST<USERID> {
 		String dataset_service = getDatasetService(form);
 		String dataset_uri = getDatasetURI(form);
 		String target = getPredictionFeature(form);
-		OTFeature prediction_feature = target == null?null:OTFeature.feature(target);
+		OTFeature prediction_feature = target == null?null:OTFeature.feature(target,referer);
 		
 		String[] feature_calculation = getAlgorithms(form, OpenTox.params.feature_calculation.toString());
 		
@@ -108,7 +108,7 @@ public class CallableBuilder<USERID> extends CallablePOST<USERID> {
 				String[] feature_calculation,
 				Form form,String referer) throws Exception {
 		
-		OTAlgorithms algorithms = OTAlgorithms.algorithms();
+		OTAlgorithms algorithms = OTAlgorithms.algorithms(null,referer);
 		algorithms.withDatasetService(dataset_service);
 		
 		for (String algoUri : feature_calculation)

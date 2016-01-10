@@ -7,26 +7,23 @@ import ambit2.rest.OpenTox;
 @Deprecated
 public class OTAlgorithms extends OTProcessingContainers<OTAlgorithm> {
 
-	 /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8743429754894223373L;
 
-	public static OTAlgorithms algorithms() throws Exception  { 
-		    return new OTAlgorithms();
-	 }
-	 public static OTAlgorithms algorithms(String uri) throws Exception  { 
-		    return new OTAlgorithms(uri);
-	 }
-	 public OTAlgorithms() {
-		super();
+	public static OTAlgorithms algorithms(String uri, String referer)
+			throws Exception {
+		return new OTAlgorithms(uri, referer);
 	}
-	 public OTAlgorithms(String uri) {
-			super(uri);
-		} 
+
+	public OTAlgorithms(String uri, String referer) {
+		super(uri,referer);
+	}
+
 	@Override
 	public OTAlgorithm createItem(Reference uri) throws Exception {
-		return OTAlgorithm.algorithm(uri,referer);
+		return OTAlgorithm.algorithm(uri.toString(), referer);
 	}
 
 	@Override
