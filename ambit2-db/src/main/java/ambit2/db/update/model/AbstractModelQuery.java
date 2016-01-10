@@ -154,6 +154,7 @@ public abstract class AbstractModelQuery<F,V>  extends AbstractQuery<F, V, Strin
 		}
 	}
 	
+	
 	public ModelQueryResults getObject(ResultSet rs) throws AmbitException {
 		ModelQueryResults q = new ModelQueryResults();
 		try {
@@ -210,5 +211,9 @@ public abstract class AbstractModelQuery<F,V>  extends AbstractQuery<F, V, Strin
 	@Override
 	public String toString() {
 		return getValue()==null?"Models":String.format("%s",getValue().toString());
+	}
+	public AbstractModelQuery() {
+		super();
+		setPageSize(100);
 	}
 }
