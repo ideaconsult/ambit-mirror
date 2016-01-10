@@ -33,11 +33,11 @@ public abstract class RDFModelIterator<T,TrainingInstances extends T,TestInstanc
 		super(representation,mediaType,OT.OTClass.Model.toString());
 	}
 		
-	public RDFModelIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
-		super(reference,OT.OTClass.Model.toString());
+	public RDFModelIterator(Reference reference, String referer) throws ResourceException,MalformedURLException,IOException {
+		super(reference,OT.OTClass.Model.toString(),referer);
 	}	
-	public RDFModelIterator(Reference reference,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
-		super(reference,mediaType,OT.OTClass.Model.toString());
+	public RDFModelIterator(Reference reference,MediaType mediaType, String referer) throws ResourceException,MalformedURLException,IOException {
+		super(reference,mediaType,OT.OTClass.Model.toString(),referer);
 	}
 	
 	public RDFModelIterator(InputStream in,MediaType mediaType) throws ResourceException {

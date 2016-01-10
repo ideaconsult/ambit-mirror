@@ -127,7 +127,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 	protected void readProperties(Reference reference, com.hp.hpl.jena.rdf.model.Property predicate, Individual model, OT.OTClass featureclass) {
 		RDFPropertyIterator reader = null;
 		try {
-			reader = new RDFPropertyIterator(reference);
+			reader = new RDFPropertyIterator(reference,referer);
 			reader.setBaseReference(uriReporter.getBaseReference());
 			while (reader.hasNext()) {
 				Property property = reader.next();

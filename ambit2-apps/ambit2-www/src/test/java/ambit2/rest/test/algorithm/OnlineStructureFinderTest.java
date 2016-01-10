@@ -56,7 +56,7 @@ public class OnlineStructureFinderTest  extends ResourceTest {
 						));
 
 		int count = 0;
-		RDFPropertyIterator i = new RDFPropertyIterator(ref);
+		RDFPropertyIterator i = new RDFPropertyIterator(ref,"test");
 		i.setCloseModel(true);
 		while (i.hasNext()) {
 			count++;

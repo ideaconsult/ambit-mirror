@@ -14,8 +14,8 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 public class RDFFeatureIterator extends RDFAbstractFeatureIterator<Property> {
 
 
-	public RDFFeatureIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
-		super(reference);
+	public RDFFeatureIterator(Reference reference,String referer) throws ResourceException,MalformedURLException,IOException {
+		super(reference,referer);
 	}
 	public RDFFeatureIterator(Model jenaModel) {
 		super(jenaModel);

@@ -27,11 +27,11 @@ public class RDFBookmarkIterator  extends RDFObjectIterator<Bookmark> {
 		super(representation,mediaType,Annotea.Bookmark.Bookmark.toString());
 	}
 		
-	public RDFBookmarkIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
-		super(reference,Annotea.Bookmark.Bookmark.toString());
+	public RDFBookmarkIterator(Reference reference, String referer) throws ResourceException,MalformedURLException,IOException {
+		super(reference,Annotea.Bookmark.Bookmark.toString(),referer);
 	}	
-	public RDFBookmarkIterator(Reference reference,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
-		super(reference,mediaType,Annotea.Bookmark.Bookmark.toString());
+	public RDFBookmarkIterator(Reference reference,MediaType mediaType, String referer) throws ResourceException,MalformedURLException,IOException {
+		super(reference,mediaType,Annotea.Bookmark.Bookmark.toString(),referer);
 	}
 	
 	public RDFBookmarkIterator(InputStream in,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {

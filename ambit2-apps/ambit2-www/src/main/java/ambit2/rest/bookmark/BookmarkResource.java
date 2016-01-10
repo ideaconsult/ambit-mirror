@@ -128,7 +128,7 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 		if (uri!= null) {
 			Bookmark bookmark = null;
 			try {
-				RDFBookmarkIterator it = new RDFBookmarkIterator(new Reference(uri));
+				RDFBookmarkIterator it = new RDFBookmarkIterator(new Reference(uri),getRequest().getResourceRef().toString());
 				while (it.hasNext()) {
 					bookmark = it.next();
 					break;
@@ -164,7 +164,7 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 	protected RDFObjectIterator<Bookmark> createObjectIterator(
 			Reference reference, MediaType mediaType) throws ResourceException {
 		try {
-			return new RDFBookmarkIterator(reference,mediaType);
+			return new RDFBookmarkIterator(reference,mediaType,getRequest().getResourceRef().toString());
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {

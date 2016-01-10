@@ -53,7 +53,7 @@ public class MissingFeatureValuesResourceTest extends ResourceTest {
 	@Test
 	public void testRDFXML() throws Exception {
 
-		RDFStructuresIterator iterator = new RDFStructuresIterator(createMissingValuesReference());
+		RDFStructuresIterator iterator = new RDFStructuresIterator(createMissingValuesReference(),"test");
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
 		int count = 0;
 		while (iterator.hasNext()) {

@@ -50,9 +50,10 @@ public class FingerprintsModelBuilder extends ModelBuilder<List<BitSet>,Algorith
 			AlgorithmURIReporter alg_reporter,
 			String[] targetURI,
 			String[] parameters,
-			String predictedFeatureURI //optional, can be null
+			String predictedFeatureURI, //optional, can be null,
+			String referer
 			) {
-		super(applicationRootReference,model_reporter,alg_reporter,targetURI,parameters);
+		super(applicationRootReference,model_reporter,alg_reporter,targetURI,parameters,referer);
 		trainingData = new ArrayList<BitSet>();
 		this.predictedFeatureURI = predictedFeatureURI;
 	}

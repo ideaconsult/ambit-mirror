@@ -52,6 +52,7 @@ public abstract class RDFSparqlIterator<Item> implements Iterator<Item>{
 	protected Item record;
 	protected Item nextRecord;
 	protected RDFNode nextRecordNode = null;
+	protected String referer;
 	
 	/**
 	 * OpenTox object iterator - reads restlet representation
@@ -60,8 +61,9 @@ public abstract class RDFSparqlIterator<Item> implements Iterator<Item>{
 	 * @param sparql
 	 * @throws ResourceException
 	 */
-	public RDFSparqlIterator(Representation representation, MediaType mediaType, String sparql) throws ResourceException {
+	public RDFSparqlIterator(Representation representation, MediaType mediaType, String sparql,String referer) throws ResourceException {
 		this(OT.createModel(null,representation,mediaType),sparql);
+
 	}
 	/**
 	 * OpenTox object iterator - reads RDF, assumes application/rdf+xml
@@ -70,8 +72,8 @@ public abstract class RDFSparqlIterator<Item> implements Iterator<Item>{
 	 * @throws ResourceException
 	 */
 	
-	public RDFSparqlIterator(Reference reference, String sparql) throws ResourceException ,MalformedURLException,IOException{
-		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML),sparql);
+	public RDFSparqlIterator(Reference reference, String sparql, String referer) throws ResourceException ,MalformedURLException,IOException{
+		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML,referer),sparql);
 		this.reference = reference;
 	}
 	/**
@@ -81,8 +83,8 @@ public abstract class RDFSparqlIterator<Item> implements Iterator<Item>{
 	 * @param sparql
 	 * @throws ResourceException
 	 */
-	public RDFSparqlIterator(Reference reference,MediaType mediaType, String sparql) throws ResourceException,MalformedURLException,IOException {
-		this(OT.createModel(null,reference, mediaType),sparql);
+	public RDFSparqlIterator(Reference reference,MediaType mediaType, String sparql, String referer) throws ResourceException,MalformedURLException,IOException {
+		this(OT.createModel(null,reference, mediaType,referer),sparql);
 		this.reference = reference;
 	}
 	/**

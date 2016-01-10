@@ -15,18 +15,18 @@ import org.restlet.resource.ResourceException;
 public class OTSuperModel extends OTModel {
 
 	 
-	public OTSuperModel(Reference ref) {
-			super(ref);
+	public OTSuperModel(Reference ref,String referer) {
+			super(ref,referer);
 	}
-	public OTSuperModel(String ref) {
-			super(ref);
+	public OTSuperModel(String ref,String referer) {
+			super(ref,referer);
 	}
-     public static OTSuperModel model(Reference datasetURI) throws Exception  { 
-			    return new OTSuperModel(datasetURI);
+     public static OTSuperModel model(Reference datasetURI,String referer) throws Exception  { 
+			    return new OTSuperModel(datasetURI,referer);
 	}
 	
-	public static OTSuperModel model(String datasetURI) throws Exception  { 
-			    return new OTSuperModel(datasetURI);
+	public static OTSuperModel model(String datasetURI,String referer) throws Exception  { 
+			    return new OTSuperModel(datasetURI,referer);
 	}     
 
 	/*

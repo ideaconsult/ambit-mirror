@@ -314,7 +314,7 @@ public class TaskResourceTest extends ResourceTest {
 				MediaType.TEXT_URI_LIST,
 				form.getWebRepresentation(),
 				null,
-				null);
+				null,"test");
 		try {
 			TaskResult ref = post.call();
 			Assert.fail("Should throw an error");
@@ -491,7 +491,7 @@ public class TaskResourceTest extends ResourceTest {
 					MediaType.TEXT_URI_LIST,
 					form.getWebRepresentation(),
 					null,
-					ssoToken.getToken());
+					ssoToken.getToken(),"test");
 			TaskResult ref = post.call();
 			long now = System.currentTimeMillis();
 			System.out.println(ref.toString());

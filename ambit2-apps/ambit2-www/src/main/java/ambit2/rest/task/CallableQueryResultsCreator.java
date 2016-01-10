@@ -89,11 +89,11 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 		ref.setQuery(form.getQueryString());
 		
 		if(template == null) template = new Template(null);
-		RDFPropertyIterator.readFeaturesRDF(ref.toString(), template, applicationRootReference);
+		RDFPropertyIterator.readFeaturesRDF(ref.toString(), template, applicationRootReference,referer);
 		
 		if ((features!=null) && features.length>0) {
 			for (String feature : features)
-				RDFPropertyIterator.readFeaturesRDF(feature, template, applicationRootReference);
+				RDFPropertyIterator.readFeaturesRDF(feature, template, applicationRootReference,referer);
 		}
 
 		return template;

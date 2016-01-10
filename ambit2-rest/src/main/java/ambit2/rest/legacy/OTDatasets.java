@@ -18,17 +18,17 @@ public class OTDatasets extends OTContainers<OTDataset> {
 	 * 
 	 */
 	private static final long serialVersionUID = 7638982655806506900L;
-	public static OTDatasets datasets() throws Exception  { 
-		    return new OTDatasets();
+	public static OTDatasets datasets(String referer) throws Exception  { 
+		    return new OTDatasets(referer);
 	 }
-	public static OTDatasets datasets(String uri) throws Exception  { 
-	    return new OTDatasets(uri);
+	public static OTDatasets datasets(String uri,String referer) throws Exception  { 
+	    return new OTDatasets(uri,referer);
 	}
-	public OTDatasets() {
-		super();
+	public OTDatasets(String referer) {
+		super(referer);
 	}
-	public OTDatasets(String uri) {
-		super(uri);
+	public OTDatasets(String uri,String referer) {
+		super(uri,referer);
 	}
 	@Override
 	public OTDataset createItem(Reference uri) throws Exception {
@@ -48,7 +48,7 @@ public class OTDatasets extends OTContainers<OTDataset> {
 		if (size()== 0) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("No datasets! %s ",getUri().toString()));
 		OTDataset result = null;
 		
-		OTDatasets datasets = OTDatasets.datasets();
+		OTDatasets datasets = OTDatasets.datasets(referer);
 		datasets.withDatasetService(dataset_service);
 		for (OTDataset dataset: getItems()) 
 			if (result==null) 

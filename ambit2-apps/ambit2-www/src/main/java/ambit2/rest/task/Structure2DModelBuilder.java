@@ -24,14 +24,14 @@ public class Structure2DModelBuilder extends SimpleModelBuilder {
 	private static final long serialVersionUID = 9143489032897420113L;
 	public Structure2DModelBuilder(Reference applicationRootReference,
 			ModelURIReporter model_reporter,
-			AlgorithmURIReporter alg_reporter)  {
-		this(applicationRootReference,model_reporter,alg_reporter,false);
+			AlgorithmURIReporter alg_reporter,String referer)  {
+		this(applicationRootReference,model_reporter,alg_reporter,false,referer);
 	}	
 	public Structure2DModelBuilder(Reference applicationRootReference,
 			ModelURIReporter model_reporter,
 			AlgorithmURIReporter alg_reporter,
-			boolean isModelHidden)  {
-		super(applicationRootReference,model_reporter,alg_reporter);
+			boolean isModelHidden,String referer)  {
+		super(applicationRootReference,model_reporter,alg_reporter,referer);
 		this.modelHidden = isModelHidden;
 	}
 	public ModelQueryResults process(Algorithm algorithm) throws AmbitException {

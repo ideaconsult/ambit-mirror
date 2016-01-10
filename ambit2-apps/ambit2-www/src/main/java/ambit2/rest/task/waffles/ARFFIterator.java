@@ -65,7 +65,7 @@ public class ARFFIterator extends AbstractBatchProcessor<File[], IStructureRecor
 				RDFPropertyIterator reader = null;
 				Property p = null;
 				try {
-					reader = new RDFPropertyIterator(new Reference(attribute.name()));
+					reader = new RDFPropertyIterator(new Reference(attribute.name()),"arff");
 					reader.setBaseReference(baseReference);
 					while (reader.hasNext()) {
 						p = reader.next();

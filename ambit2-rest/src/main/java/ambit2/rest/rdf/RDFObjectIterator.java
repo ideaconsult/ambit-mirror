@@ -33,6 +33,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
  * @param <Item>
  */
 public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
+	protected String referer;
 	protected boolean forceReadRDFLocalObjects = false;
 	public boolean isForceReadRDFLocalObjects() {
 		return forceReadRDFLocalObjects;
@@ -74,14 +75,16 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 		this(OT.createModel(null,representation,mediaType),topObject);
 	}
 	
-	public RDFObjectIterator(Reference reference, String topObject) throws ResourceException,MalformedURLException,IOException {
-		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML),topObject);
+	public RDFObjectIterator(Reference reference, String topObject, String referer) throws ResourceException,MalformedURLException,IOException {
+		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML,referer),topObject);
 		this.reference = reference;
+		this.referer = referer;
 	}
 	
-	public RDFObjectIterator(Reference reference,MediaType mediaType, String topObject) throws ResourceException,MalformedURLException,IOException {
-		this(OT.createModel(null,reference, mediaType),topObject);
+	public RDFObjectIterator(Reference reference,MediaType mediaType, String topObject, String referer) throws ResourceException,MalformedURLException,IOException {
+		this(OT.createModel(null,reference, mediaType,referer),topObject);
 		this.reference = reference;
+		this.referer = referer;
 	}
 	
 	public RDFObjectIterator(InputStream in,MediaType mediaType, String topObject) throws ResourceException {

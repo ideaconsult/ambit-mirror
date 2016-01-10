@@ -39,7 +39,7 @@ public class OTFeatures  extends OTProcessingContainers<OTFeature> {
 
 	@Override
 	public OTFeature createItem(Reference uri) throws Exception {
-		return OTFeature.feature(uri);
+		return OTFeature.feature(uri,referer);
 	}
 
 	@Override
@@ -60,10 +60,10 @@ public class OTFeatures  extends OTProcessingContainers<OTFeature> {
 		return form;
 	}
 	
-	public OTFeatures readRDF(String uri) throws Exception {
+	public OTFeatures readRDF(String uri,String referer) throws Exception {
 		try {
 			
-			RDFFeaturesIterator iterator = new RDFFeaturesIterator(uri);
+			RDFFeaturesIterator iterator = new RDFFeaturesIterator(uri,referer);
 			while (iterator.hasNext()) 
 				add(iterator.next());
 			return this;

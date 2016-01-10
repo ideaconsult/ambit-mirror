@@ -61,7 +61,7 @@ public class DatasetReporterTest extends ResourceTest {
 						Reference.encode(String.format("http://localhost:%d%s", port,	PropertyResource.featuredef))
 						));
 
-		RDFStructuresIterator iterator = new RDFStructuresIterator(ref);
+		RDFStructuresIterator iterator = new RDFStructuresIterator(ref,"test");
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
 		while (iterator.hasNext()) {
 			IStructureRecord target = iterator.next();
@@ -107,7 +107,7 @@ public class DatasetReporterTest extends ResourceTest {
 	@Test
 	public void testParseInstances() throws Exception {
 		Reference ref = new Reference(DatasetReporterTest.class.getResource("/input.rdf"));
-		RDFInstancesIterator  iterator = new RDFInstancesIterator(ref);
+		RDFInstancesIterator  iterator = new RDFInstancesIterator(ref,"test");
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
 		while (iterator.hasNext()) {
 			iterator.next();

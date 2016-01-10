@@ -36,13 +36,13 @@ public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribu
 	this(OT.createModel(null, representation, mediaType));
     }
 
-    public RDFInstancesIterator(Reference reference) throws ResourceException, MalformedURLException, IOException {
-	this(OT.createModel(null, reference, MediaType.APPLICATION_RDF_XML));
+    public RDFInstancesIterator(Reference reference,String referer) throws ResourceException, MalformedURLException, IOException {
+	this(OT.createModel(null, reference, MediaType.APPLICATION_RDF_XML,referer));
     }
 
-    public RDFInstancesIterator(Reference reference, MediaType mediaType) throws ResourceException,
+    public RDFInstancesIterator(Reference reference, MediaType mediaType,String referer) throws ResourceException,
 	    MalformedURLException, IOException {
-	this(OT.createModel(null, reference, mediaType));
+	this(OT.createModel(null, reference, mediaType,referer));
     }
 
     public RDFInstancesIterator(InputStream in, MediaType mediaType) throws ResourceException, MalformedURLException,

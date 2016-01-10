@@ -35,13 +35,13 @@ public class OptimizerModelBuilder extends SimpleModelBuilder {
     }
 
     public OptimizerModelBuilder(Reference applicationRootReference, Form form, ModelURIReporter model_reporter,
-	    AlgorithmURIReporter alg_reporter) {
-	this(applicationRootReference, form, model_reporter, alg_reporter, false);
+	    AlgorithmURIReporter alg_reporter,String referer) {
+	this(applicationRootReference, form, model_reporter, alg_reporter, false,referer);
     }
 
     public OptimizerModelBuilder(Reference applicationRootReference, Form form, ModelURIReporter model_reporter,
-	    AlgorithmURIReporter alg_reporter, boolean isModelHidden) {
-	super(applicationRootReference, model_reporter, alg_reporter);
+	    AlgorithmURIReporter alg_reporter, boolean isModelHidden,String referer) {
+	super(applicationRootReference, model_reporter, alg_reporter,referer);
 	this.modelHidden = isModelHidden;
     }
 

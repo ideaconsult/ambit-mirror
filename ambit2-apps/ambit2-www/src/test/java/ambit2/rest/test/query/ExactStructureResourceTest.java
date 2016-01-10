@@ -75,7 +75,7 @@ public class ExactStructureResourceTest extends ResourceTest {
 						Reference.encode(String.format("http://localhost:%d%s", port,	PropertyResource.featuredef))
 						));
 						*/
-		RDFStructuresIterator iterator = new RDFStructuresIterator(ref);
+		RDFStructuresIterator iterator = new RDFStructuresIterator(ref,"test");
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
 		while (iterator.hasNext()) {
 			IStructureRecord target = iterator.next();

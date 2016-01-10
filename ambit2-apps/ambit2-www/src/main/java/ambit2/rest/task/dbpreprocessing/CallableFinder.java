@@ -298,7 +298,7 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 			reader.setHandlePrescreen(true);
 			return reader;
 		} else
-			return new RDFStructuresReader(target.toString());
+			return new RDFStructuresReader(target.toString(),referer);
 	}
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
@@ -308,7 +308,7 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 	protected Property createPropertyFromReference(String attribute, LiteratureEntry le) {
 		RDFPropertyIterator reader = null;
 		try {
-			reader = new RDFPropertyIterator(new Reference(attribute));
+			reader = new RDFPropertyIterator(new Reference(attribute),referer);
 			reader.setBaseReference(applicationRootReference);
 			while (reader.hasNext()) {
 				return reader.next();

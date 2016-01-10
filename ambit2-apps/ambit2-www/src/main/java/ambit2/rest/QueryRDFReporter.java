@@ -32,7 +32,7 @@ public abstract class QueryRDFReporter<T, Q extends IQueryRetrieval<T>> extends
 	 */
 	private static final long serialVersionUID = 1160842325900158717L;
 	protected QueryURIReporter<T, IQueryRetrieval<T>> uriReporter;
-
+	protected String referer;
 	protected abstract QueryURIReporter<T, IQueryRetrieval<T>> createURIReporter(
 			Request req, ResourceDoc doc);
 
@@ -48,6 +48,8 @@ public abstract class QueryRDFReporter<T, Q extends IQueryRetrieval<T>> extends
 		this.compoundInDatasetPrefix = prefix;
 		uriReporter = createURIReporter(request, null);
 		this.mediaType = mediaType;
+		
+		this.referer = request.getResourceRef().toString();
 	}
 
 	public OntModel getJenaModel() {

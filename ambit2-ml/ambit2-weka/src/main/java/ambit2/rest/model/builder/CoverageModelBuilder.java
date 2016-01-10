@@ -52,8 +52,9 @@ public class CoverageModelBuilder extends ModelBuilder<Instances,Algorithm,Model
 			String[] targetURI,
 			String[] parameters,
 			String predictedFeatureURI //optional, can be null
+			,String referer
 			) {
-		super(applicationRootReference,model_reporter,alg_reporter,targetURI,parameters);
+		super(applicationRootReference,model_reporter,alg_reporter,targetURI,parameters,referer);
 		this.predictedFeatureURI = predictedFeatureURI;
 	}
 	public ModelQueryResults process(Algorithm algorithm) throws AmbitException {
@@ -150,7 +151,7 @@ public class CoverageModelBuilder extends ModelBuilder<Instances,Algorithm,Model
 			
 			predictors = new Template(name+"#Independent");
 			for (int i=1; i < instances.numAttributes(); i++) {
-				property = createPropertyFromReference(new Reference(instances.attribute(i).name()), entry);
+				property = createPropertyFromReference(new Reference(instances.attribute(i).name()), entry,referer);
 				property.setOrder(i+1);
 				predictors.add(property);
 			}				

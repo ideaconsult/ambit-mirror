@@ -235,13 +235,13 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
 				return new CallableSimpleModelCreator(form, getContext(), algorithm, false, new ExpertModelBuilder(
 						datasetURI == null ? null : datasetURI.toString(), userName, getRequest().getRootRef(),
-						modelReporter, algReporter), token,getRequest().getResourceRef().toString());
+						modelReporter, algReporter,getRequest().getResourceRef().toString()), token,getRequest().getResourceRef().toString());
 
 			} else if (algorithm.hasType(AlgorithmType.SuperService)) {
-				return new CallablePOST<String>(form, getRequest().getRootRef(), token);
+				return new CallablePOST<String>(form, getRequest().getRootRef(), token,getRequest().getResourceRef().toString());
 
 			} else if (algorithm.hasType(AlgorithmType.SuperBuilder)) {
-				return new CallableBuilder<String>(form, getRequest().getRootRef(), token);
+				return new CallableBuilder<String>(form, getRequest().getRootRef(), token,getRequest().getResourceRef().toString());
 
 			} else if (algorithm.hasType(AlgorithmType.Mockup)) {
 				return new CallableMockup<String>(form, token);
@@ -253,13 +253,13 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 
 			} else if (algorithm.hasType(AlgorithmType.Structure)) {
 				return new CallableSimpleModelCreator(form, getContext(), algorithm, false, new OptimizerModelBuilder(
-						getRequest().getRootRef(), form, modelReporter, algReporter, false), token,getRequest().getResourceRef().toString());
+						getRequest().getRootRef(), form, modelReporter, algReporter, false,getRequest().getResourceRef().toString()), token,getRequest().getResourceRef().toString());
 			} else if (algorithm.hasType(AlgorithmType.Structure2D)) {
 
 				try {
 					CallableSimpleModelCreator modelCreator = new CallableSimpleModelCreator(form, getContext(),
 							algorithm, false, new Structure2DModelBuilder(getRequest().getRootRef(), modelReporter,
-									algReporter, false), token,getRequest().getResourceRef().toString());
+									algReporter, false,getRequest().getResourceRef().toString()), token,getRequest().getResourceRef().toString());
 					TaskResult modelRef = modelCreator.call();
 					ModelQueryResults model = modelCreator.getModel();
 					Structure2DProcessor predictor = new Structure2DProcessor(getRequest().getRootRef(), model,
@@ -277,7 +277,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 
 			} else if (algorithm.hasType(AlgorithmType.TautomerGenerator)) {
 				return new CallableSimpleModelCreator(form, getContext(), algorithm, false, new TautomersModelBuilder(
-						getRequest().getRootRef(), modelReporter, algReporter, false), token,getRequest().getResourceRef().toString());
+						getRequest().getRootRef(), modelReporter, algReporter, false,getRequest().getResourceRef().toString()), token,getRequest().getResourceRef().toString());
 			} else if (algorithm.hasType(AlgorithmType.PreferredStructure)) {
 				return new CallableFixPreferredStructure(form, getRequest().getRootRef(), getContext(), null, token,getRequest().getResourceRef().toString());
 			} else if (algorithm.hasType(AlgorithmType.DescriptorCalculation)) {

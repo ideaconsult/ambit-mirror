@@ -44,14 +44,14 @@ public class SimpleModelBuilder extends ModelBuilder<Object,Algorithm, ModelQuer
 	}
 	public SimpleModelBuilder(Reference applicationRootReference,
 			ModelURIReporter model_reporter,
-			AlgorithmURIReporter alg_reporter)  {
-		this(applicationRootReference,model_reporter,alg_reporter,false);
+			AlgorithmURIReporter alg_reporter,String referer)  {
+		this(applicationRootReference,model_reporter,alg_reporter,false,referer);
 	}	
 	public SimpleModelBuilder(Reference applicationRootReference,
 			ModelURIReporter model_reporter,
 			AlgorithmURIReporter alg_reporter,
-			boolean isModelHidden)  {
-		super(applicationRootReference,model_reporter,alg_reporter);
+			boolean isModelHidden,String referer)  {
+		super(applicationRootReference,model_reporter,alg_reporter,referer);
 		this.modelHidden = isModelHidden;
 	}
 	protected List<Property> createProperties(Algorithm algorithm) throws Exception {

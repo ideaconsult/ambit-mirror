@@ -31,8 +31,8 @@ public class  ExpertModelBuilder extends SimpleModelBuilder {
 			String userName,
 			Reference applicationRootReference,
 			ModelURIReporter model_reporter,
-			AlgorithmURIReporter alg_reporter)  {
-		this(datasetURI,userName,applicationRootReference,model_reporter,alg_reporter,false);
+			AlgorithmURIReporter alg_reporter,String referer)  {
+		this(datasetURI,userName,applicationRootReference,model_reporter,alg_reporter,false,referer);
 	}	
 	public ExpertModelBuilder(
 			String datasetURI,
@@ -40,8 +40,8 @@ public class  ExpertModelBuilder extends SimpleModelBuilder {
 			Reference applicationRootReference,
 			ModelURIReporter model_reporter,
 			AlgorithmURIReporter alg_reporter,
-			boolean isModelHidden)  {
-		super(applicationRootReference,model_reporter,alg_reporter);
+			boolean isModelHidden,String referer)  {
+		super(applicationRootReference,model_reporter,alg_reporter,referer);
 		this.modelHidden = isModelHidden;
 		this.userName = userName;
 		this.datasetURI=datasetURI;

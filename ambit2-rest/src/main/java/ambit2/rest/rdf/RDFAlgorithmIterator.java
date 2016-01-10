@@ -35,11 +35,11 @@ public class RDFAlgorithmIterator extends RDFObjectIterator<Algorithm> {
 		super(representation,mediaType,OT.OTClass.Algorithm.toString());
 	}
 		
-	public RDFAlgorithmIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
-		super(reference,OT.OTClass.Algorithm.toString());
+	public RDFAlgorithmIterator(Reference reference, String referer) throws ResourceException,MalformedURLException,IOException {
+		super(reference,OT.OTClass.Algorithm.toString(),referer);
 	}	
-	public RDFAlgorithmIterator(Reference reference,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
-		super(reference,mediaType,OT.OTClass.Algorithm.toString());
+	public RDFAlgorithmIterator(Reference reference,MediaType mediaType, String referer) throws ResourceException,MalformedURLException,IOException {
+		super(reference,mediaType,OT.OTClass.Algorithm.toString(),referer);
 	}
 	
 	public RDFAlgorithmIterator(InputStream in,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {

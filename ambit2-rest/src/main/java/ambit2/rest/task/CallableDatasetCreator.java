@@ -68,14 +68,16 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 	protected OTRemoteTaskPool jobs = new OTRemoteTaskPool();
 	protected Hashtable<Reference,OTRemoteTask> algorithms = new Hashtable<Reference, OTRemoteTask>(); 
 	protected Form featuresQuery = new Form();
+	protected String referer;
 	/*
 	 * dataset_service=http://ambit.uni-plovdiv.bg:8080/ambit2/dataset
 	 * curl -X POST -d "dataset_uri=http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R4666" http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/BCUTDescriptor 
 	curl -X POST -d "dataset_uri=http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/194" -d "prediction_feature=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/12236" http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_kNN_6 -v
 	 */
 	public CallableDatasetCreator(Form form, Reference applicationRoot, Reference datasetService,
-			Context context) throws ResourceException {
+			String referer) throws ResourceException {
 		super();
+		this.referer = referer;
 		this.applicationRoot = applicationRoot; 
 		//datasetService = new Reference(String.format("%s%s",applicationRoot.toString(),OpenTox.URI.dataset.getURI()));
 		this.datasetService=datasetService;
@@ -184,7 +186,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		try {
 			firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Retrieving model %s",modelURI));
 			jenaModel = OT.createModel(OntModelSpec.OWL_DL_MEM);
-			jenaModel = (OntModel) OT.createModel(jenaModel, modelURI,MediaType.APPLICATION_RDF_XML);
+			jenaModel = (OntModel) OT.createModel(jenaModel, modelURI,MediaType.APPLICATION_RDF_XML,referer);
 			features =  jenaModel.listStatements(
 					new SimpleSelector(null,OT.OTProperty.independentVariables.createProperty(jenaModel),(RDFNode)null));
 			int count = 0;
@@ -193,7 +195,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 				RDFNode feature = st.getObject();
 				if (feature.isURIResource()) {
 					//read feature
-					jenaModel =  (OntModel)OT.createModel(jenaModel,new Reference(((Resource)feature).getURI()),MediaType.APPLICATION_RDF_XML);
+					jenaModel =  (OntModel)OT.createModel(jenaModel,new Reference(((Resource)feature).getURI()),MediaType.APPLICATION_RDF_XML,referer);
 					count++;
 				
 				}

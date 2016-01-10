@@ -54,14 +54,14 @@ public class CallableWekaModelCreator<USERID> extends CallableModelCreator<Insta
 						reporter,
 						alg_reporter,
 						OpenTox.params.target.getValuesArray(form),
-						OpenTox.params.parameters.getValuesArray(form)),
+						OpenTox.params.parameters.getValuesArray(form),referer),
 			token,referer);
 	}
 
 	@Override
 	protected AbstractBatchProcessor createBatch(Object target) throws Exception{
 		if (target == null) throw new Exception("");
-		return new RDFInstancesParser(builder.getApplicationRootReference().toString());
+		return new RDFInstancesParser(builder.getApplicationRootReference().toString(),referer);
 	}
 
 
