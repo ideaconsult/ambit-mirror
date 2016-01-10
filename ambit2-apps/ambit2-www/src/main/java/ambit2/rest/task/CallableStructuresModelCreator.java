@@ -27,16 +27,16 @@ public abstract class CallableStructuresModelCreator<DATA,Builder extends ModelB
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 			AlgorithmURIReporter alg_reporter,
 			Builder builder,
-			USERID token) {
+			USERID token,String referer) {
 
-		super(form, context,algorithm,builder,token);
+		super(form, context,algorithm,builder,token,referer);
 		this.applicationRootReference =applicationRootReference;
 	
 	}	
 
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
-		return getQueryObject(reference, applicationRootReference,context);
+		return getQueryObject(reference, applicationRootReference,context,referer);
 	}
 
 	

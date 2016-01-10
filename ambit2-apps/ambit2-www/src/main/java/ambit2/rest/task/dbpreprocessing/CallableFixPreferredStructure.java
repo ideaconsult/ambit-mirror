@@ -20,8 +20,8 @@ import ambit2.rest.model.predictor.AbstractStructureProcessor;
 public class CallableFixPreferredStructure<USERID> extends CallableDBProcessing<USERID> {
 
     public CallableFixPreferredStructure(Form form, Reference applicationRootReference, Context context,
-	    Algorithm algorithm, USERID token) {
-	super(form, applicationRootReference, context, algorithm, token);
+	    Algorithm algorithm, USERID token,String referer) {
+	super(form, applicationRootReference, context, algorithm, token,referer);
     }
 
     /*

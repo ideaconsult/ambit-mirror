@@ -34,7 +34,7 @@ public class CallableFingerprintsModelCreator<USERID> extends CallableStructures
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 			AlgorithmURIReporter alg_reporter,
-			USERID token) {
+			USERID token,String referer) {
 
 		super(form,
 				applicationRootReference,
@@ -48,7 +48,7 @@ public class CallableFingerprintsModelCreator<USERID> extends CallableStructures
 						OpenTox.params.parameters.getValuesArray(form),
 						OpenTox.params.confidenceOf.getFirstValue(form)==null?null:OpenTox.params.confidenceOf.getFirstValue(form).toString()
 				),
-				token);
+				token,referer);
 	
 	}	
 

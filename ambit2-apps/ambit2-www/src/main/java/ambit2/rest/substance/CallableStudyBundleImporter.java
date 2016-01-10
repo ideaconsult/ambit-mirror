@@ -17,57 +17,78 @@ import ambit2.db.substance.processor.DBMatrixValueMarker;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.task.TaskResult;
 
-public class CallableStudyBundleImporter<USERID> extends CallableSubstanceImporter<USERID> {
-    private SubstanceEndpointsBundle bundle;
-    public enum _mode { studyimport, matrixvaluedelete}; 
-    protected _mode mode = _mode.studyimport;
-    public _mode getMode() {
-        return mode;
-    }
+public class CallableStudyBundleImporter<USERID> extends
+		CallableSubstanceImporter<USERID> {
+	private SubstanceEndpointsBundle bundle;
 
-    public void setMode(_mode mode) {
-        this.mode = mode;
-    }
+	public enum _mode {
+		studyimport, matrixvaluedelete
+	};
 
-    public SubstanceEndpointsBundle getBundle() {
-	return bundle;
-    }
+	protected _mode mode = _mode.studyimport;
 
-    public void setBundle(SubstanceEndpointsBundle bundle) {
-	this.bundle = bundle;
-    }
-
-    public CallableStudyBundleImporter(List<FileItem> items, String fileUploadField, String jsonConfigField,
-	    Reference applicationRootReference, Context context, SubstanceURIReporter substanceReporter,
-	    DatasetURIReporter datasetURIReporter, USERID token) throws Exception {
-	super(items, fileUploadField, jsonConfigField, applicationRootReference, context, substanceReporter, datasetURIReporter, token);
-    }
-    public CallableStudyBundleImporter(File file, Reference applicationRootReference, Context context,
-	    SubstanceURIReporter substanceReporter, DatasetURIReporter datasetURIReporter, USERID token)
-	    throws Exception {
-	this(_mode.studyimport,file, applicationRootReference, context, substanceReporter, datasetURIReporter, token);
-    }
-    public CallableStudyBundleImporter(_mode mode,File file, Reference applicationRootReference, Context context,
-	    SubstanceURIReporter substanceReporter, DatasetURIReporter datasetURIReporter, USERID token)
-	    throws Exception {
-	super(file, applicationRootReference, context, substanceReporter, datasetURIReporter, token);
-	setMode(mode);
-    }
-    
-    @Override
-    protected AbstractDBProcessor<IStructureRecord, IStructureRecord> createWriter() {
-	switch (mode) {
-	case matrixvaluedelete: {
-	    	return new DBMatrixValueMarker(bundle);
-	}
-	default: {
-		return new DBBundleStudyWriter(bundle, dataset, importedRecord);
-	}
+	public _mode getMode() {
+		return mode;
 	}
 
-    }
-    @Override
-    protected TaskResult createReference(Connection connection) throws Exception {
-	return new TaskResult(datasetURIReporter.getURI(bundle)+"/matrix");
-    }
+	public void setMode(_mode mode) {
+		this.mode = mode;
+	}
+
+	public SubstanceEndpointsBundle getBundle() {
+		return bundle;
+	}
+
+	public void setBundle(SubstanceEndpointsBundle bundle) {
+		this.bundle = bundle;
+	}
+
+	public CallableStudyBundleImporter(List<FileItem> items,
+			String fileUploadField, String jsonConfigField,
+			Reference applicationRootReference, Context context,
+			SubstanceURIReporter substanceReporter,
+			DatasetURIReporter datasetURIReporter, USERID token,String referer)
+			throws Exception {
+		super(items, fileUploadField, jsonConfigField,
+				applicationRootReference, context, substanceReporter,
+				datasetURIReporter, token,referer);
+	}
+
+	public CallableStudyBundleImporter(File file,
+			Reference applicationRootReference, Context context,
+			SubstanceURIReporter substanceReporter,
+			DatasetURIReporter datasetURIReporter, USERID token,String referer)
+			throws Exception {
+		this(_mode.studyimport, file, applicationRootReference, context,
+				substanceReporter, datasetURIReporter, token,referer);
+	}
+
+	public CallableStudyBundleImporter(_mode mode, File file,
+			Reference applicationRootReference, Context context,
+			SubstanceURIReporter substanceReporter,
+			DatasetURIReporter datasetURIReporter, USERID token,String referer)
+			throws Exception {
+		super(file, applicationRootReference, context, substanceReporter,
+				datasetURIReporter, token,referer);
+		setMode(mode);
+	}
+
+	@Override
+	protected AbstractDBProcessor<IStructureRecord, IStructureRecord> createWriter() {
+		switch (mode) {
+		case matrixvaluedelete: {
+			return new DBMatrixValueMarker(bundle);
+		}
+		default: {
+			return new DBBundleStudyWriter(bundle, dataset, importedRecord);
+		}
+		}
+
+	}
+
+	@Override
+	protected TaskResult createReference(Connection connection)
+			throws Exception {
+		return new TaskResult(datasetURIReporter.getURI(bundle) + "/matrix");
+	}
 }

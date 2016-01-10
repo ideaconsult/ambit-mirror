@@ -109,7 +109,7 @@ public class CollectionStructureResource<Q extends IQueryRetrieval<IStructureRec
 					getRequest().getRootRef(),
 					getContext(),
 					sq,
-					token);
+					token,getRequest().getResourceRef().toString());
 			((CallableQueryResultsCreator)callable).setClearPreviousContent(clearPreviousContent);
 		
 		try {

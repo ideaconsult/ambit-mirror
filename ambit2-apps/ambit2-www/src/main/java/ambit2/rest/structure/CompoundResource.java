@@ -627,7 +627,7 @@ public class CompoundResource extends
 			String token = getToken();
 			CallableStructureEntry callable = new CallableStructureEntry<String>(
 					new Form(entity), getRootRef(), getRecord(), getContext(),
-					null, token);
+					null, token,getRequest().getResourceRef().toString());
 			callable.setPropertyOnly(false);
 			ITask<Reference, Object> task = ((ITaskApplication) getApplication())
 					.addTask("New structure from web form", callable,
@@ -716,7 +716,7 @@ public class CompoundResource extends
 					LiteratureEntry.getInstance("User uploaded",
 							getResourceRef(getRequest()).toString())));
 
-			return upload.upload(entity, variant, true, false, getToken());
+			return upload.upload(entity, variant, true, false, getToken(),getRequest().getResourceRef().toString());
 		}
 	}
 
@@ -745,7 +745,7 @@ public class CompoundResource extends
 			String token = getToken();
 			CallableStructureEntry callable = new CallableStructureEntry<String>(
 					new Form(entity), getRootRef(), getRecord(), getContext(),
-					null, token);
+					null, token,getRequest().getResourceRef().toString());
 			callable.setPropertyOnly(true);
 			ITask<Reference, Object> task = ((ITaskApplication) getApplication())
 					.addTask("Properties from web form", callable, getRequest()
@@ -770,7 +770,7 @@ public class CompoundResource extends
 					LiteratureEntry.getInstance("User uploaded",
 							getResourceRef(getRequest()).toString())));
 
-			return upload.upload(entity, variant, true, true, getToken());
+			return upload.upload(entity, variant, true, true, getToken(),getRequest().getResourceRef().toString());
 		}
 	}
 

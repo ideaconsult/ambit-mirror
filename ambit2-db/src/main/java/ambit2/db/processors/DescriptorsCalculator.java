@@ -86,7 +86,9 @@ public class DescriptorsCalculator extends AbstractDescriptorCalculator<IAtomCon
     	//necessary for some calculations
     	for (Property p : target.getRecordProperties()) try {
     		a.setProperty(p.getName(), target.getRecordProperty(p));
-    	} catch (Exception x) {}
+    	} catch (Exception x) {
+    		x.printStackTrace();
+    	}
 
     	
     	writer.setStructure(target);

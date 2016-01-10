@@ -23,16 +23,16 @@ public class CallableSimpleModelCreator<Result, USERID> extends
     protected Object mopac_commands;
 
     public CallableSimpleModelCreator(Form form, Context context, Algorithm algorithm, boolean hidden,
-	    ModelBuilder<Object, Algorithm, ModelQueryResults> builder, USERID token) {
-	super(form, context, algorithm, builder, token);
+	    ModelBuilder<Object, Algorithm, ModelQueryResults> builder, USERID token,String referer) {
+	super(form, context, algorithm, builder, token,referer);
 
     }
 
     public CallableSimpleModelCreator(Form form, Reference applicationRootReference, Context context,
 	    Algorithm algorithm, ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
-	    AlgorithmURIReporter alg_reporter, boolean hidden, USERID token) {
+	    AlgorithmURIReporter alg_reporter, boolean hidden, USERID token,String referer) {
 	super(form, context, algorithm,
-		new SimpleModelBuilder(applicationRootReference, reporter, alg_reporter, hidden), token);
+		new SimpleModelBuilder(applicationRootReference, reporter, alg_reporter, hidden), token,referer);
     }
 
     @Override

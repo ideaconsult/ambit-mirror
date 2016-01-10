@@ -37,7 +37,7 @@ public class ReportDatasetResource<Q extends IQueryRetrieval<IStructureRecord>> 
 			throws ResourceException {
 		if (dataset_uri!=null) try {
 			Object q = CallableQueryProcessor.getQueryObject(new Reference(dataset_uri), 
-						getRequest().getRootRef(),getApplication().getContext());
+						getRequest().getRootRef(),getApplication().getContext(),getRequest().getResourceRef().toString());
 			if ((q!=null) && (q instanceof AbstractStructureQuery)) {
 				setTemplate(createTemplate(getContext(),getRequest(),getResponse(),feature_uris));
 				return (Q)q;

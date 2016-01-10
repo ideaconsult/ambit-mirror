@@ -235,7 +235,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
 				return new CallableSimpleModelCreator(form, getContext(), algorithm, false, new ExpertModelBuilder(
 						datasetURI == null ? null : datasetURI.toString(), userName, getRequest().getRootRef(),
-						modelReporter, algReporter), token);
+						modelReporter, algReporter), token,getRequest().getResourceRef().toString());
 
 			} else if (algorithm.hasType(AlgorithmType.SuperService)) {
 				return new CallablePOST<String>(form, getRequest().getRootRef(), token);
@@ -247,19 +247,19 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				return new CallableMockup<String>(form, token);
 			} else if (algorithm.hasType(AlgorithmType.Rules))
 				return new CallableSimpleModelCreator(form, getRequest().getRootRef(), getContext(), algorithm,
-						modelReporter, algReporter, false, token);
+						modelReporter, algReporter, false, token,getRequest().getResourceRef().toString());
 			else if (algorithm.hasType(AlgorithmType.Finder)) {
-				return new CallableFinder(form, getRequest().getRootRef(), getContext(), algorithm, token);
+				return new CallableFinder(form, getRequest().getRootRef(), getContext(), algorithm, token,getRequest().getResourceRef().toString());
 
 			} else if (algorithm.hasType(AlgorithmType.Structure)) {
 				return new CallableSimpleModelCreator(form, getContext(), algorithm, false, new OptimizerModelBuilder(
-						getRequest().getRootRef(), form, modelReporter, algReporter, false), token);
+						getRequest().getRootRef(), form, modelReporter, algReporter, false), token,getRequest().getResourceRef().toString());
 			} else if (algorithm.hasType(AlgorithmType.Structure2D)) {
 
 				try {
 					CallableSimpleModelCreator modelCreator = new CallableSimpleModelCreator(form, getContext(),
 							algorithm, false, new Structure2DModelBuilder(getRequest().getRootRef(), modelReporter,
-									algReporter, false), token);
+									algReporter, false), token,getRequest().getResourceRef().toString());
 					TaskResult modelRef = modelCreator.call();
 					ModelQueryResults model = modelCreator.getModel();
 					Structure2DProcessor predictor = new Structure2DProcessor(getRequest().getRootRef(), model,
@@ -267,7 +267,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							new PropertyURIReporter(getRequest()), null);
 
 					return new CallableStructureOptimizer(form, getRequest().getRootRef(), getContext(),
-							(Structure2DProcessor) predictor, token);
+							(Structure2DProcessor) predictor, token,getRequest().getResourceRef().toString());
 				} catch (ResourceException x) {
 					throw x;
 				} catch (Exception x) {
@@ -277,13 +277,13 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 
 			} else if (algorithm.hasType(AlgorithmType.TautomerGenerator)) {
 				return new CallableSimpleModelCreator(form, getContext(), algorithm, false, new TautomersModelBuilder(
-						getRequest().getRootRef(), modelReporter, algReporter, false), token);
+						getRequest().getRootRef(), modelReporter, algReporter, false), token,getRequest().getResourceRef().toString());
 			} else if (algorithm.hasType(AlgorithmType.PreferredStructure)) {
-				return new CallableFixPreferredStructure(form, getRequest().getRootRef(), getContext(), null, token);
+				return new CallableFixPreferredStructure(form, getRequest().getRootRef(), getContext(), null, token,getRequest().getResourceRef().toString());
 			} else if (algorithm.hasType(AlgorithmType.DescriptorCalculation)) {
 				try {
 					CallableSimpleModelCreator modelCreator = new CallableSimpleModelCreator(form, getRequest()
-							.getRootRef(), getContext(), algorithm, modelReporter, algReporter, true, token);
+							.getRootRef(), getContext(), algorithm, modelReporter, algReporter, true, token,getRequest().getResourceRef().toString());
 					TaskResult modelRef = modelCreator.call();
 					ModelQueryResults model = modelCreator.getModel();
 
@@ -308,7 +308,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 					DescriptorPredictor predictor = new DescriptorPredictor(getRequest().getRootRef(), model,
 							modelReporter, new PropertyURIReporter(getRequest()), null);
 					return new CallableDescriptorCalculator(form, getRequest().getRootRef(), getContext(), predictor,
-							token);
+							token,getRequest().getResourceRef().toString());
 				} catch (ResourceException x) {
 					throw x;
 				} catch (Exception x) {
@@ -319,11 +319,11 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				switch (algorithm.getRequirement()) {
 				case structure: {
 					return new CallableFingerprintsModelCreator(form, getRequest().getRootRef(), getContext(),
-							algorithm, modelReporter, algReporter, token);
+							algorithm, modelReporter, algReporter, token,getRequest().getResourceRef().toString());
 				}
 				case property: {
 					return new CallableNumericalModelCreator(form, getRequest().getRootRef(), getContext(), algorithm,
-							modelReporter, algReporter, token);
+							modelReporter, algReporter, token,getRequest().getResourceRef().toString());
 				}
 				default: {
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, algorithm.toString());
@@ -331,14 +331,14 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				}
 			} else if (algorithm.hasType(AlgorithmType.Fingerprints.toString())) {
 				return new CallableFingerprintsCalculator(form, getRequest().getRootRef(), getContext(), algorithm,
-						token);
+						token,getRequest().getResourceRef().toString());
 			} else if (AlgorithmFormat.WAFFLES_JSON.equals(algorithm.getFormat())) {
 				return new CallableWafflesModelCreator(form, getRequest().getRootRef(), getContext(), algorithm,
-						modelReporter, algReporter, token);
+						modelReporter, algReporter, token,getRequest().getResourceRef().toString());
 			} else {
 
 				return new CallableWekaModelCreator(form, getRequest().getRootRef(), getContext(), algorithm,
-						modelReporter, algReporter, token);
+						modelReporter, algReporter, token,getRequest().getResourceRef().toString());
 			}
 		} catch (ResourceException x) {
 			throw x;

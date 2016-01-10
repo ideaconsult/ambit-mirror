@@ -25,8 +25,8 @@ public class CallableWafflesPredictor<USERID> extends CallableModelPredictor<Fil
 
 	
 	public CallableWafflesPredictor(Form form, Reference appReference,
-			Context context, WafflesPredictor predictor,USERID token) {
-		super(form, appReference, context,predictor,token);
+			Context context, WafflesPredictor predictor,USERID token,String referer) {
+		super(form, appReference, context,predictor,token,referer);
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class CallableWafflesPredictor<USERID> extends CallableModelPredictor<Fil
 		files[0].deleteOnExit();
 		HttpURLConnection uc=null;
 		try {
-			uc = ClientResourceWrapper.getHttpURLConnection(reference.toString(), "GET", ChemicalMediaType.WEKA_ARFF.toString());
+			uc = ClientResourceWrapper.getHttpURLConnection(reference.toString(), "GET", ChemicalMediaType.WEKA_ARFF.toString(),getClass().getName());
 			HttpURLConnection.setFollowRedirects(true);
 			DownloadTool.download(uc.getInputStream(), files[0]);
 			logger.fine(files[0].getAbsolutePath());

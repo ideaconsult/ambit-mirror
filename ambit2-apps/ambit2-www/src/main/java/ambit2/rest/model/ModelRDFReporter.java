@@ -1,5 +1,7 @@
 package ambit2.rest.model;
 
+import java.util.logging.Level;
+
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
@@ -80,7 +82,8 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 					OT.OTClass.Dataset.getOntClass(getJenaModel()));
 			model.addProperty(OT.OTProperty.trainingDataset.createProperty(getJenaModel()), dataset);
 		}
-		
+		String itemuri = uriReporter.getURI(item);
+		logger.log(Level.INFO,String.format("Reading modelproperties %s", itemuri));
 		readProperties(new Reference(String.format("%s/independent",uriReporter.getURI(item))), 
 					OT.OTProperty.independentVariables.createProperty(getJenaModel()), model);
 		readProperties(new Reference(String.format("%s/dependent",uriReporter.getURI(item))), 
@@ -135,7 +138,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 			}
 
 		} catch (Exception x) {
-			Context.getCurrentLogger().severe(x.getMessage());
+			logger.log(Level.SEVERE,x.getMessage());
 		} finally {
 			try {reader.close(); } catch (Exception x) {}
 		}

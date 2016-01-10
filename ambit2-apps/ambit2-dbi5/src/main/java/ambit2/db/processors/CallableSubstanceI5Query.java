@@ -97,8 +97,8 @@ public class CallableSubstanceI5Query<USERID> extends
 
 	public CallableSubstanceI5Query(Reference applicationRootReference,
 			Form form, Context context, SubstanceURIReporter substanceReporter,
-			DatasetURIReporter datasetURIReporter, USERID token) {
-		super(form, context, token);
+			DatasetURIReporter datasetURIReporter, USERID token,String referer) {
+		super(form, context, token,referer);
 		sourceReference = applicationRootReference;
 	}
 

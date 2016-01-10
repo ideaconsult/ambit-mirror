@@ -385,7 +385,7 @@ public class BundleMatrixResource extends
 							getContext(),
 							new SubstanceURIReporter(getRequest().getRootRef()),
 							new DatasetURIReporter(getRequest().getRootRef()),
-							token);
+							token,getRequest().getResourceRef().toString());
 					callable.setBundle(bundle);
 					callable.setClearComposition(false);
 					callable.setClearMeasurements(false);
@@ -450,7 +450,7 @@ public class BundleMatrixResource extends
 							CallableFileUpload.field_config, getRootRef(),
 							getContext(), new SubstanceURIReporter(getRequest()
 									.getRootRef()), new DatasetURIReporter(
-									getRequest().getRootRef()), token);
+									getRequest().getRootRef()), token,getRequest().getResourceRef().toString());
 					callable.setBundle(bundle);
 					callable.setClearComposition(clearComposition);
 					callable.setClearMeasurements(clearMeasurements);

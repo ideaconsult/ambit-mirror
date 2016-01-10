@@ -115,7 +115,7 @@ public abstract class AmbitFacetResource<FACET extends IFacet<String>, Q extends
 					profile, getApplication().getContext(), getToken(),
 					getRequest().getCookies(),
 					getRequest().getClientInfo() == null ? null : getRequest()
-							.getClientInfo().getAgent());
+							.getClientInfo().getAgent(),getRequest().getResourceRef().toString());
 			reader.setCloseConnection(false);
 			reader.setConnection(connection);
 			for (int i = 0; i < propertyURI.length; i++) {

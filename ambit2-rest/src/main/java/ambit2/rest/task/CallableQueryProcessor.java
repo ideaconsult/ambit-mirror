@@ -34,14 +34,16 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 	protected Reference sourceReference;
 	//protected AmbitApplication application;
 	protected Context context;
+	protected String referer;
 
-	public CallableQueryProcessor(Form form,Context context,USERID token) {
-		this(null,form,context,token);
+	public CallableQueryProcessor(Form form,Context context,USERID token,String referer) {
+		this(null,form,context,token,referer);
 	}
-	public CallableQueryProcessor(Reference applicationRootReference,Form form,Context context,USERID token) {
+	public CallableQueryProcessor(Reference applicationRootReference,Form form,Context context,USERID token,String referer) {
 		super(token);
 		processForm(applicationRootReference,form);
 		this.context = context;
+		this.referer = referer;
 	}
 	protected void processForm(Reference applicationRootReference,Form form) {
 		Object dataset = OpenTox.params.dataset_uri.getFirstValue(form);
@@ -137,11 +139,11 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 	protected abstract ProcessorsChain<Result, IBatchStatistics, IProcessor> createProcessors() throws Exception;
 	//protected abstract QueryURIReporter createURIReporter(Request request); 
 	
-	public static Object getQueryObject(Reference reference, Reference applicationRootReference, Context context) throws Exception {
-		return getQueryObject(reference, applicationRootReference, context,null,null);
+	public static Object getQueryObject(Reference reference, Reference applicationRootReference, Context context,String referer) throws Exception {
+		return getQueryObject(reference, applicationRootReference, context,null,null,referer);
 	}
 	public static Object getQueryObject(Reference reference, Reference applicationRootReference, Context context,
-			String cookies,String agent) throws Exception {
+			String cookies,String agent,String referer) throws Exception {
 		CookieHandler.setDefault( new CookieManager( null, CookiePolicy.ACCEPT_ORIGINAL_SERVER) );
 		if (!applicationRootReference.isParent(reference)) throw 
 			new Exception(String.format("Remote reference %s %s",applicationRootReference,reference));
@@ -149,7 +151,7 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 		HttpURLConnection connection = null;
 		try {
 			connection = 
-				ClientResourceWrapper.getHttpURLConnection(reference.toString(),"GET",MediaType.APPLICATION_JAVA_OBJECT.toString());
+				ClientResourceWrapper.getHttpURLConnection(reference.toString(),"GET",MediaType.APPLICATION_JAVA_OBJECT.toString(),referer);
 			HttpURLConnection.setFollowRedirects(true);
 			if (agent!=null) connection.setRequestProperty("User-Agent", agent);
 			if (cookies!=null)

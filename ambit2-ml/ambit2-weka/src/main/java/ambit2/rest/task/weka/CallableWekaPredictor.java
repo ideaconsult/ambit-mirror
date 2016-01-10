@@ -14,8 +14,8 @@ import ambit2.rest.model.task.CallableModelPredictor;
 public class CallableWekaPredictor<T,USERID> extends CallableModelPredictor<Instance,ModelPredictor<T,Instance>,USERID> {
 	//protected String[] targetURI;
 	public CallableWekaPredictor(Form form, Reference appReference,
-			Context context, ModelPredictor<T,Instance> predictor,USERID token) {
-		super(form, appReference, context,predictor,token);
+			Context context, ModelPredictor<T,Instance> predictor,USERID token,String referer) {
+		super(form, appReference, context,predictor,token,referer);
 	}
 
 	protected AbstractBatchProcessor createBatch(Object target) throws Exception{

@@ -48,8 +48,8 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 			Reference applicationRootReference,
 			IStructureRecord record,
 			 Context context,
-			Algorithm algorithm, USERID token) {
-		super(form, applicationRootReference, context, algorithm, token);
+			Algorithm algorithm, USERID token,String referer) {
+		super(form, applicationRootReference, context, algorithm, token,referer);
 		cmpreporter = new CompoundURIReporter(applicationRootReference);
 		//overwrite the compound_uri parameter
 		if (record.getIdchemical()>0) {

@@ -15,15 +15,15 @@ public abstract class CallableDBProcessing<USERID> extends	CallableQueryProcesso
 	protected Reference applicationRootReference;
 	public CallableDBProcessing(Form form,
 			Reference applicationRootReference,Context context,
-			Algorithm algorithm,USERID token) {
-		super(applicationRootReference,form,context,token);
+			Algorithm algorithm,USERID token,String referer) {
+		super(applicationRootReference,form,context,token,referer);
 		this.applicationRootReference = applicationRootReference;
 	}
 	
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
 		try {
-			Object q = getQueryObject(reference, applicationRootReference,context);
+			Object q = getQueryObject(reference, applicationRootReference,context,referer);
 			return q==null?reference:q;
 		} catch (Exception x) {
 			return reference;

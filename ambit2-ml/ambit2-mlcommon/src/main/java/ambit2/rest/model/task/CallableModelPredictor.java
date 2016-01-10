@@ -53,9 +53,9 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 			Reference appReference,
 			Context context,
 			Predictor predictor,
-			USERID token
+			USERID token,String referer
 				) {
-		super(form,context,token);
+		super(form,context,token,referer);
 		setPredictor(predictor);
 		this.applicationRootReference = appReference;
 	}	
@@ -64,7 +64,7 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 	protected Object createTarget(Reference reference) throws Exception {
 		try {
 			prepareForeignProcessing(reference);
-			Object q = getQueryObject(reference, applicationRootReference,context);
+			Object q = getQueryObject(reference, applicationRootReference,context,referer);
 			return q==null?reference:q;
 		} catch (Exception x) {
 			return reference;

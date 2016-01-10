@@ -48,14 +48,14 @@ public class CallableWekaModelCreator<USERID> extends CallableModelCreator<Insta
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 			AlgorithmURIReporter alg_reporter,
-			USERID token) {
+			USERID token,String referer) {
 		super(form, context,algorithm,
 				new FilteredWekaModelBuilder(applicationRootReference,
 						reporter,
 						alg_reporter,
 						OpenTox.params.target.getValuesArray(form),
 						OpenTox.params.parameters.getValuesArray(form)),
-			token);
+			token,referer);
 	}
 
 	@Override

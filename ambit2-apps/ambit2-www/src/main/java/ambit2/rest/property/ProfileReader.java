@@ -32,12 +32,14 @@ public class ProfileReader extends AbstractDBProcessor<Reference, Template> {
 	protected Context context;
 	protected StringBuilder cookies;
 	protected String agent;
+	protected String referer;
 	
 	public ProfileReader(Reference applicationReference, Template profile,Context context,
 				String token,
 				Series<Cookie> cookies,
-				String agent) throws Exception {
+				String agent,String referer) throws Exception {
 		super();
+		this.referer = referer;
 		setApplicationReference(applicationReference);
 		setProfile(profile==null?new Template():profile);
 		reporter = new QueryTemplateReporter<IQueryRetrieval<Property>>(getProfile());
@@ -93,13 +95,14 @@ security.provider.certpath.SunCertPathBuilderException: unable to find valid cer
         at ambit2.rest.dataset.DatasetResource.createQuery(DatasetResource.java:55)
         at
 	 */
+	@Override
 	public Template process(Reference uri) throws AmbitException {
 		if (profile == null) setProfile(new Template());
 		if (uri==null) return profile;
 		Object q;
 		try {
 			q = CallableQueryProcessor.getQueryObject(uri, 
-					applicationReference,context,cookies==null?null:cookies.toString(),agent);
+					applicationReference,context,cookies==null?null:cookies.toString(),agent,referer);
 			if ((q!=null) && (q instanceof AbstractPropertyRetrieval)) {
 				
 				try {
