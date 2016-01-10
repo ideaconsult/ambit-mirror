@@ -57,6 +57,9 @@
 $(document)
 		.ready(
 				function() {
+					$( "#tabs" ).tabs();
+					$("#_searchdiv").html("<form class='remove-bottom' action='${ambit_root}/model'><b>Model search</b> <input name='search' class='search' value='' id='search' title='Model search'> <input type='submit' value='Search'></form>");
+				
 					datasetAutocomplete(".dataseturi","${ambit_root}/dataset",10);
 					loadHelp("${ambit_root}","model");
 					downloadForm("${ambit_request}");
@@ -76,12 +79,15 @@ $(document)
 <!-- banner -->
 <#include "/banner_crumbs.ftl">
 
+<div id="tabs" class="sixteen columns remove-bottom" style="padding:0;">
+	<ul>
+	<li><a href="#tabs_models" id="header_model">Models</a></li>
+	<li><a href="#tabs_search">Advanced search</a></li>
+	<li><a href="#tabs_help">Help</a></li>
+	</ul>
 
-
-<div class="thirteen columns remove-bottom" style="padding:0;" >
-
-		<!-- Page Content
-		================================================== -->
+		
+	<div id="tabs_models" >
 		<#if modelid??>
 		<div class="row" style="padding:0;" >			
 			<div class="ui-widget-header ui-corner-top">Model at <a href='${ambit_root}/model/${modelid}'>${ambit_root}/model/${modelid}</a></div>
@@ -113,19 +119,27 @@ $(document)
 			<tbody></tbody>
 			</table>
 		
-		</#if>
-		
 		</div>
-		
+		</#if>
+	</div>	
+
+	<div id="tabs_search">
+
+		<form method='GET' name='searchform' id='searchform' action='${ambit_root}/model' style='padding:0;margin:0;'>
+		<input type='text'  id='search' name='search' value='' tabindex='1' >
+		<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
+		</form>
+
+	</div>
 
 
-<div class='row add-bottom' style="height:140px;">&nbsp;</div>
+	<div id="tabs_help" >
+		<#include "/searchmenu/model_menu.ftl">
+	</div>
+	
+	
 </div>
 
-<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/searchmenu/model_menu.ftl">
-
-</div>
 
 <#include "/footer.ftl" >
 </div> <!-- container -->

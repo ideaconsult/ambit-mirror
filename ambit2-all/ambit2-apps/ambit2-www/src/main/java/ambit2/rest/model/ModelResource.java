@@ -115,7 +115,7 @@ public class ModelResource
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		AbstractModelQuery query = getModelQuery(getModelID(getRequest()
 				.getAttributes().get(MLResources.model_resourcekey)), form);
-
+		
 		return query;
 	}
 
@@ -407,20 +407,23 @@ public class ModelResource
 
 		if (model_query == null) {
 			query = new ReadModel();
-			String name = form.getFirstValue(QueryResource.search_param);
-			if (name != null)
-				query.setFieldname(name);
-
 			String condition = form.getFirstValue(QueryResource.condition);
 			if (condition != null)
 				query.setCondition(StringCondition.getInstance(condition));
 
+			String name = form.getFirstValue(QueryResource.search_param);
+			if (name != null) {
+				query.setFieldname(name.trim());
+				if (condition==null) query.setCondition(StringCondition.getInstance(StringCondition.C_STARTS_WITH));
+			}	
+			
 			if (idmodel == null) {
 				_dmode = DisplayMode.table;
-				return new ReadModel();
+				return query;
 			} else if (idmodel instanceof Integer) {
 				_dmode = DisplayMode.singleitem;
-				return new ReadModel((Integer) idmodel);
+				query.setValue((Integer) idmodel);
+				return query;
 			} else {
 				_dmode = DisplayMode.table;
 				query.setFieldname(idmodel.toString());
