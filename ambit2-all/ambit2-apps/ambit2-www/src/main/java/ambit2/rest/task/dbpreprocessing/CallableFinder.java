@@ -69,8 +69,8 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 	
 	public CallableFinder(Form form,
 			Reference applicationRootReference,Context context,
-			Algorithm algorithm,USERID token) {
-		super(form,applicationRootReference,context,algorithm,token);
+			Algorithm algorithm,USERID token,String referer) {
+		super(form,applicationRootReference,context,algorithm,token,referer);
 	}
 	@Override
 	protected void processForm(Reference applicationRootReference,Form form) {

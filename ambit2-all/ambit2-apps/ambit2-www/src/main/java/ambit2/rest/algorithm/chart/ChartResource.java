@@ -169,7 +169,7 @@ public class ChartResource extends ProtectedResource {
     		ProfileReader reader = new ProfileReader(getRequest().getRootRef(),
     				profile,getApplication().getContext(),getToken(),
     				getRequest().getCookies(),
-    				getRequest().getClientInfo()==null?null:getRequest().getClientInfo().getAgent()
+    				getRequest().getClientInfo()==null?null:getRequest().getClientInfo().getAgent(),getRequest().getResourceRef().toString()
     						);
     		reader.setCloseConnection(false);
     		reader.setConnection(connection);

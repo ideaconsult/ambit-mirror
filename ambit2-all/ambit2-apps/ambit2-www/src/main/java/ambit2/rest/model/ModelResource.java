@@ -279,7 +279,7 @@ public class ModelResource
 
 				return new CallableModelPredictor<IStructureRecord, ExpertModelpredictor, String>(
 						form, getRequest().getRootRef(), getContext(),
-						(ExpertModelpredictor) thepredictor, token) {
+						(ExpertModelpredictor) thepredictor, token,getRequest().getResourceRef().toString()) {
 					@Override
 					protected void processForm(
 							Reference applicationRootReference, Form form) {
@@ -292,12 +292,12 @@ public class ModelResource
 					AlgorithmFormat.WEKA.getMediaType())) {
 				return // reads Instances, instead of IStructureRecord
 				new CallableWekaPredictor<Object, String>(form, getRequest()
-						.getRootRef(), getContext(), thepredictor, token);
+						.getRootRef(), getContext(), thepredictor, token,getRequest().getResourceRef().toString());
 			} else if (model.getContentMediaType().equals(
 					AlgorithmFormat.WAFFLES_JSON.getMediaType())) {
 				return new CallableWafflesPredictor(form, getRequest()
 						.getRootRef(), getContext(),
-						(WafflesPredictor) thepredictor, token);
+						(WafflesPredictor) thepredictor, token,getRequest().getResourceRef().toString());
 			} else if (model.getContentMediaType().equals(
 					AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
 
@@ -306,7 +306,7 @@ public class ModelResource
 					if (thepredictor instanceof FingerprintsPredictor)
 						return new CallableModelPredictor<IStructureRecord, FingerprintsPredictor, String>(
 								form, getRequest().getRootRef(), getContext(),
-								(FingerprintsPredictor) thepredictor, token) {
+								(FingerprintsPredictor) thepredictor, token,getRequest().getResourceRef().toString()) {
 
 						};
 					else
@@ -316,7 +316,7 @@ public class ModelResource
 												.getClass().getName()));
 				} else {
 					return new CallableModelPredictor(form, getRequest()
-							.getRootRef(), getContext(), thepredictor, token) {
+							.getRootRef(), getContext(), thepredictor, token,getRequest().getResourceRef().toString()) {
 
 					};
 					/*
@@ -329,23 +329,23 @@ public class ModelResource
 					AlgorithmFormat.Structure2D.getMediaType())) {
 				return new CallableStructureOptimizer(form, getRequest()
 						.getRootRef(), getContext(),
-						(Structure2DProcessor) thepredictor, token);
+						(Structure2DProcessor) thepredictor, token,getRequest().getResourceRef().toString());
 			} else if (model.getContentMediaType().equals(
 					AlgorithmFormat.MOPAC.getMediaType())) {
 				return new CallableStructureOptimizer(form, getRequest()
 						.getRootRef(), getContext(),
-						(StructureProcessor) thepredictor, token);
+						(StructureProcessor) thepredictor, token,getRequest().getResourceRef().toString());
 			} else if (model.getContentMediaType().equals(
 					AlgorithmFormat.TAUTOMERS.getMediaType())) {
 				return new CallableTautomersGenerator(form, getRequest()
 						.getRootRef(), getContext(),
-						(TautomersGenerator) thepredictor, token);
+						(TautomersGenerator) thepredictor, token,getRequest().getResourceRef().toString());
 
 			} else if (model.getContentMediaType().equals(
 					AlgorithmFormat.JAVA_CLASS.getMediaType())) {
 				return new CallableDescriptorCalculator(form, getRequest()
 						.getRootRef(), getContext(),
-						(DescriptorPredictor) thepredictor, token);
+						(DescriptorPredictor) thepredictor, token,getRequest().getResourceRef().toString());
 			} else
 				throw new ResourceException(
 						Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,

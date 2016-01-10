@@ -710,7 +710,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 					profile, getApplication().getContext(), getToken(),
 					getRequest().getCookies(),
 					getRequest().getClientInfo() == null ? null : getRequest()
-							.getClientInfo().getAgent());
+							.getClientInfo().getAgent(),getRequest().getResourceRef().toString());
 			reader.setCloseConnection(false);
 
 			DBConnection dbc = new DBConnection(getApplication().getContext());

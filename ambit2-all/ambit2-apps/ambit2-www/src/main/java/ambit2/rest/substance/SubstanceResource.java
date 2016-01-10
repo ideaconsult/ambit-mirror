@@ -565,7 +565,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 							CallableFileUpload.field_config, getRootRef(),
 							getContext(), new SubstanceURIReporter(getRequest()
 									.getRootRef()), new DatasetURIReporter(
-									getRequest().getRootRef()), token);
+									getRequest().getRootRef()), token,getRequest().getResourceRef().toString());
 					callable.setClearComposition(clearComposition);
 					callable.setClearMeasurements(clearMeasurements);
 					callable.setQASettings(qa);
@@ -608,7 +608,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 						getRootRef(), form, getContext(),
 						new SubstanceURIReporter(getRequest().getRootRef()),
 						new DatasetURIReporter(getRequest().getRootRef()),
-						token);
+						token,getRequest().getResourceRef().toString());
 				ITask<Reference, Object> task = ((ITaskApplication) getApplication())
 						.addTask("Retrieve substance from IUCLID5 server",
 								callable, getRequest().getRootRef(), token);

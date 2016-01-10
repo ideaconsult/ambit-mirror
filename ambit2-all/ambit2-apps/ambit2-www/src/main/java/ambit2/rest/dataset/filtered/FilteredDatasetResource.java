@@ -56,7 +56,7 @@ public class FilteredDatasetResource<Q extends IQueryRetrieval<IStructureRecord>
 				setPaging(form, q);
 				return (Q)q;
 			} 
-			Object q = CallableQueryProcessor.getQueryObject(new Reference(dataset.toString()), getRequest().getRootRef(),getApplication().getContext());
+			Object q = CallableQueryProcessor.getQueryObject(new Reference(dataset.toString()), getRequest().getRootRef(),getApplication().getContext(),getRequest().getResourceRef().toString());
 			if (q==null) {
 				throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,"Processing foreign datasets not implemented!");
 			} else if (q instanceof QueryDatasetByID) {

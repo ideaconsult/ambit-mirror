@@ -30,7 +30,7 @@ public class CallableWekaModelCreatorTest extends ResourceTest {
 				(Algorithm)null, 
 				uriReporter,
 				new AlgorithmURIReporter(null),
-				null);
+				null,"test");
 		TaskResult ref = c.call();
 	}
 	@Override

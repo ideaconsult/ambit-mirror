@@ -18,8 +18,8 @@ public class CallableTautomersGenerator<USERID> extends CallableModelPredictor<I
 
 	public CallableTautomersGenerator(Form form,
 			Reference appReference,Context context,
-			TautomersGenerator predictor,USERID token) {
-		super(form, appReference, context, predictor,token);
+			TautomersGenerator predictor,USERID token,String referer) {
+		super(form, appReference, context, predictor,token,referer);
 
 	}
 

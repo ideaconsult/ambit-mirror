@@ -220,7 +220,7 @@ public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extend
 	Callable<ITaskResult> callable = null;
 	if ((queryResultsID != null) && (queryResultsID > 0)) {
 	    callable = new CallableQueryResultsCreator(form, getRequest().getRootRef(), getContext(), new StoredQuery(
-		    queryResultsID), token);
+		    queryResultsID), token,getRequest().getResourceRef().toString());
 	    ((CallableQueryResultsCreator) callable).setClearPreviousContent(clearPreviousContent);
 	} else if ((datasetID != null) && (datasetID > 0)) {
 	    // PUT only for compound_uris[]=... & feature_uris[]=....
@@ -228,7 +228,7 @@ public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extend
 	    SourceDataset dataset = readDataset();
 	    // reading from dataset uri)
 	    callable = new CallableUpdateDataset(form, getRequest().getRootRef(), getContext(), dataset,
-		    new DatasetURIReporter<IQueryRetrieval<ISourceDataset>, ISourceDataset>(getRequest()), token);
+		    new DatasetURIReporter<IQueryRetrieval<ISourceDataset>, ISourceDataset>(getRequest()), token,getRequest().getResourceRef().toString());
 	    ((CallableUpdateDataset) callable).setClearPreviousContent(clearPreviousContent);
 	} else {
 	    // POST only - creating a new dataset is via DatasetsResource ,
@@ -262,7 +262,7 @@ public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extend
 	    return copyDatasetToQueryResultsTable(new Form(entity), true);
 	} else {
 	    upload.setDataset(null);
-	    return upload.upload(entity, variant, true, false, getToken());
+	    return upload.upload(entity, variant, true, false, getToken(),getRequest().getResourceRef().toString());
 	}
     }
 
@@ -313,7 +313,7 @@ public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extend
 	} else if ((datasetID != null) && (datasetID > 0)) {
 	    SourceDataset dataset = readDataset();
 	    upload.setDataset(dataset);
-	    return upload.upload(entity, variant, true, false, getToken());
+	    return upload.upload(entity, variant, true, false, getToken(),getRequest().getResourceRef().toString());
 	} else
 	    throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
     }

@@ -46,9 +46,9 @@ public class CallableUpdateDataset<USERID> extends	CallableQueryProcessor<Object
 			Context context,
 			SourceDataset dataset,
 			DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset> datasetUriReporter,
-			USERID token
+			USERID token,String referer
 			) throws ResourceException {
-		super(form, context,token);
+		super(form, context,token,referer);
 		this.applicationRootReference = applicationRootReference;
 		compounds = form.getValuesArray(OpenTox.params.compound_uris.toString());
 
@@ -82,7 +82,7 @@ public class CallableUpdateDataset<USERID> extends	CallableQueryProcessor<Object
 
 	protected Object createTarget(Reference reference) throws Exception {
 		
-		return reference==null?compounds:getQueryObject(reference, applicationRootReference,context);
+		return reference==null?compounds:getQueryObject(reference, applicationRootReference,context,referer);
 	}
 	@Override
 	protected AbstractBatchProcessor createBatch(Object target)

@@ -243,7 +243,7 @@ public class OTRemoteTask implements Serializable {
 		InputStream in = null;
 		
 		try {
-			uc = ClientResourceWrapper.getHttpURLConnection(result.toString(),"GET", MediaType.APPLICATION_RDF_XML.toString());	
+			uc = ClientResourceWrapper.getHttpURLConnection(result.toString(),"GET", MediaType.APPLICATION_RDF_XML.toString(),getClass().getName());	
 			status = new Status(uc.getResponseCode());
 //			if (!r.getEntity().isAvailable()) throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,String.format("Representation not available %s",result));
 			in = uc.getInputStream();

@@ -1230,7 +1230,11 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Assert.assertEquals("NO",table.getValue(0,"object"));
 		Assert.assertEquals("YES",table.getValue(1,"object"));
 		Assert.assertEquals(new BigInteger("6"),table.getValue(0,"c"));
-		Assert.assertEquals(new BigInteger("6"),table.getValue(1,"c"));		
+		Assert.assertEquals(new BigInteger("6"),table.getValue(1,"c"));
+		
+		table = 	c.createQueryTable("p","SELECT * FROM property_values join property_string using(idvalue_string)");
+		Assert.assertEquals(27,table.getRowCount());
+		
 		c.close();	
 		
 		

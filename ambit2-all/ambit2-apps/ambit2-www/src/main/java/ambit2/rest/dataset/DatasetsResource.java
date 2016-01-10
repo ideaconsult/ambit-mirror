@@ -86,7 +86,7 @@ public class DatasetsResource extends MetadatasetResource<SourceDataset> {
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
 		return  upload.upload(entity,variant,true,false,
-				getToken()
+				getToken(),getRequest().getResourceRef().toString()
 				);
 		
 	}
@@ -97,7 +97,7 @@ public class DatasetsResource extends MetadatasetResource<SourceDataset> {
 	protected Representation put(Representation entity, Variant variant)
 			throws ResourceException {
 		return  upload.upload(entity,variant,true,true,
-				getToken()
+				getToken(),getRequest().getResourceRef().toString()
 				);
 	}
 

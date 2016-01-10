@@ -15,8 +15,8 @@ public class CallableStructureOptimizer<USERID> extends
 		CallableModelPredictor<IStructureRecord, AbstractStructureProcessor, USERID> {
 
 	public CallableStructureOptimizer(Form form, Reference appReference, Context context,
-			AbstractStructureProcessor predictor, USERID token) {
-		super(form, appReference, context, predictor, token);
+			AbstractStructureProcessor predictor, USERID token,String referer) {
+		super(form, appReference, context, predictor, token,referer);
 
 	}
 

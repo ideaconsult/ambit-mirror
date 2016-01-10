@@ -59,8 +59,8 @@ public class CallableFingerprintsCalculator<USERID> extends
 
 	public CallableFingerprintsCalculator(Form form,
 			Reference applicationRootReference, Context context,
-			Algorithm algorithm, USERID token) throws ResourceException {
-		super(form, applicationRootReference, context, algorithm, token);
+			Algorithm algorithm, USERID token,String referer) throws ResourceException {
+		super(form, applicationRootReference, context, algorithm, token,referer);
 		try {
 			setFingerprintsType(FPTable.valueOf(algorithm.getContent()
 					.toString()));
@@ -150,7 +150,7 @@ public class CallableFingerprintsCalculator<USERID> extends
 			if (applicationRootReference.isParent(reference)) {
 				try {
 					Object q = getQueryObject(reference,
-							applicationRootReference, context);
+							applicationRootReference, context,referer);
 					return q == null ? reference : q;
 				} catch (Exception x) {
 					return reference;

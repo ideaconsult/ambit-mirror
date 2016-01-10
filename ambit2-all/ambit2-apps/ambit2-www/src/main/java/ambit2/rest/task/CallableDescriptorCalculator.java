@@ -25,8 +25,8 @@ public class CallableDescriptorCalculator<USERID> extends
 	CallableModelPredictor<IStructureRecord, DescriptorPredictor, USERID> {
 
     public CallableDescriptorCalculator(Form form, Reference appReference, Context context,
-	    DescriptorPredictor predictor, USERID token) {
-	super(form, appReference, context, predictor, token);
+	    DescriptorPredictor predictor, USERID token,String referer) {
+	super(form, appReference, context, predictor, token,referer);
 
     }
 

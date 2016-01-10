@@ -478,7 +478,7 @@ public class UIResource extends FreeMarkerResource {
 									new SubstanceURIReporter(getRequest()
 											.getRootRef()),
 									new DatasetURIReporter(getRequest()
-											.getRootRef()), null);
+											.getRootRef()), null,getRequest().getResourceRef().toString());
 							callable.setClearComposition(clearComposition);
 							callable.setClearMeasurements(clearMeasurements);
 							callable.setQASettings(qa);

@@ -91,7 +91,7 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 		HttpURLConnection uc = null;
 		try {
 			if (target.isURIResource()) {
-				uc = ClientResourceWrapper.getHttpURLConnection(((Resource)target).getURI(), "GET", ChemicalMediaType.CHEMICAL_MDLSDF.toString());
+				uc = ClientResourceWrapper.getHttpURLConnection(((Resource)target).getURI(), "GET", ChemicalMediaType.CHEMICAL_MDLSDF.toString(),getClass().getName());
 				uc.setFollowRedirects(true);
 				if (HttpURLConnection.HTTP_OK== uc.getResponseCode()) {
 					in = uc.getInputStream();

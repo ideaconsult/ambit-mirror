@@ -349,7 +349,7 @@ public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>
 
 	    ProfileReader reader = new ProfileReader(getRequest().getRootRef(), profile, getApplication().getContext(),
 		    getToken(), getRequest().getCookies(), getRequest().getClientInfo() == null ? null : getRequest()
-			    .getClientInfo().getAgent());
+			    .getClientInfo().getAgent(),getRequest().getResourceRef().toString());
 	    reader.setCloseConnection(false);
 
 	    DBConnection dbc = new DBConnection(getContext(), getConfigFile());

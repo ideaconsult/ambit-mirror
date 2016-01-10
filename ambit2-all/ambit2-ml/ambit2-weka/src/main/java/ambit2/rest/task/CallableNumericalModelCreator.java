@@ -35,7 +35,7 @@ public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 			AlgorithmURIReporter alg_reporter,
-			USERID token) {
+			USERID token,String referer) {
 
 		super(form, context,algorithm,
 				new CoverageModelBuilder(applicationRootReference,
@@ -45,7 +45,7 @@ public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<
 						OpenTox.params.parameters.getValuesArray(form),
 						OpenTox.params.confidenceOf.getFirstValue(form)==null?null:OpenTox.params.confidenceOf.getFirstValue(form).toString()
 						),
-						token);
+						token,referer);
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<
 		BufferedReader reader = null;
 		HttpURLConnection client = null;
 		try {
-			client = ClientResourceWrapper.getHttpURLConnection(reference.toString(), "GET", ChemicalMediaType.WEKA_ARFF.toString());
+			client = ClientResourceWrapper.getHttpURLConnection(reference.toString(), "GET", ChemicalMediaType.WEKA_ARFF.toString(),getClass().getName());
 			HttpURLConnection.setFollowRedirects(true);
 			reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			return new Instances(reader);

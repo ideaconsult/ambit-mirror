@@ -56,14 +56,14 @@ public class CallableWafflesModelCreator<USERID> extends CallableModelCreator<Fi
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 			AlgorithmURIReporter alg_reporter,
-			USERID token) {
+			USERID token,String referer) {
 		super(form, context,algorithm,
 				new WafflesModelBuilder(applicationRootReference,
 						reporter,
 						alg_reporter,
 						OpenTox.params.target.getValuesArray(form),
 						OpenTox.params.parameters.getValuesArray(form)),
-			token);
+			token,referer);
 	}
 
 	@Override

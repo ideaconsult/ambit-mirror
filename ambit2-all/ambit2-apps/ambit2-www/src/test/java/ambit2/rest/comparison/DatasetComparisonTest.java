@@ -472,7 +472,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 			int code = 0;
 			try {
 				ClientResourceWrapper.setTokenFactory(this);
-				uc = ClientResourceWrapper.getHttpURLConnection(uri, "GET", MediaType.APPLICATION_JSON.toString());
+				uc = ClientResourceWrapper.getHttpURLConnection(uri, "GET", MediaType.APPLICATION_JSON.toString(),getClass().getName());
 				
 				code = uc.getResponseCode();
 				if (HttpURLConnection.HTTP_OK == code) {
