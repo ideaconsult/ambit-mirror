@@ -207,10 +207,11 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 			variant.setMediaType(new MediaType(media));
 
 		String filenamePrefix = getRequest().getResourceRef().getPath();
-		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			QueryURIReporter r = (QueryURIReporter) getURIReporter(getRequest());
-			return new StringConvertor(r, MediaType.TEXT_URI_LIST,
-					filenamePrefix);
+		if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(
+					getRequest(), null, bundles, null, false);
+			return new OutputWriterConvertor<SubstanceRecord, Q>(cmpreporter,
+					MediaType.APPLICATION_JSON, filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
 			Dimension d = new Dimension(250, 250);
 			try {
@@ -266,4 +267,9 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 		}
 	}
 
+	@Override
+	protected String getExtension(MediaType mediaType) {
+
+		return super.getExtension(mediaType);
+	}
 }

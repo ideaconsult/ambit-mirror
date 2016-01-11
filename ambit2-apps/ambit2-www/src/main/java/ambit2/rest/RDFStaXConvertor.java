@@ -50,7 +50,7 @@ public class RDFStaXConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepr
             		getReporter().process(query);
 
 				} catch (Exception  x) {
-					throw new IOException(x.getMessage());
+					throw new IOException(x);
 				} finally {
 					try { out.close();} catch (Exception x) {}
 					
@@ -62,5 +62,6 @@ public class RDFStaXConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepr
 		 return rep;
 	}
 
+	
 
 }
