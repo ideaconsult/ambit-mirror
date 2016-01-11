@@ -34,7 +34,10 @@ import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.RDFStaXConvertor;
 import ambit2.rest.query.AmbitDBResource;
+import ambit2.rest.substance.SubstanceBundleStAXReporter;
+import ambit2.rest.substance.SubstanceCSVReporter;
 import ambit2.rest.substance.SubstanceJSONReporter;
 import ambit2.rest.substance.SubstanceURIReporter;
 
@@ -198,17 +201,6 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 			throws AmbitException, ResourceException {
 		/* workaround for clients not being able to set accept headers */
 		Form acceptform = getResourceRef(getRequest()).getQueryAsForm();
-		Dimension d = new Dimension(250, 250);
-		try {
-			d.width = Integer
-					.parseInt(acceptform.getFirstValue("w").toString());
-		} catch (Exception x) {
-		}
-		try {
-			d.height = Integer.parseInt(acceptform.getFirstValue("h")
-					.toString());
-		} catch (Exception x) {
-		}
 
 		String media = acceptform.getFirstValue("accept-header");
 		if (media != null)
@@ -220,6 +212,17 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 			return new StringConvertor(r, MediaType.TEXT_URI_LIST,
 					filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
+			Dimension d = new Dimension(250, 250);
+			try {
+				d.width = Integer.parseInt(acceptform.getFirstValue("w")
+						.toString());
+			} catch (Exception x) {
+			}
+			try {
+				d.height = Integer.parseInt(acceptform.getFirstValue("h")
+						.toString());
+			} catch (Exception x) {
+			}
 			return new ImageConvertor(new ImageReporter(variant.getMediaType()
 					.getMainType(), variant.getMediaType().getSubType(), d),
 					variant.getMediaType());
@@ -232,9 +235,17 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_EXCEL)) {
 			SubstanceRecordXLSXReporter xlsxreporter = new SubstanceRecordXLSXReporter(
-					getRequest().getRootRef().toString(),  true,bundles);
+					getRequest().getRootRef().toString(), true, bundles);
 			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
 					MediaType.APPLICATION_EXCEL, filenamePrefix);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
+			return new RDFStaXConvertor(new SubstanceBundleStAXReporter(
+					getRequest()), filenamePrefix);
+		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
+			SubstanceCSVReporter csvreporter = new SubstanceCSVReporter(
+					getRequest(), bundles);
+			return new OutputWriterConvertor<SubstanceRecord, Q>(csvreporter,
+					MediaType.TEXT_CSV, filenamePrefix);
 
 		} else if (variant.getMediaType().equals(
 				MediaType.APPLICATION_JAVASCRIPT)) {

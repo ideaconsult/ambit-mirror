@@ -15,12 +15,12 @@ import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
-public class BundleResourceTest extends ProtectedResourceTest {
+public class BundleSubstanceResourceTest extends ProtectedResourceTest {
 	protected String dbFile = "src/test/resources/descriptors-datasets.xml";
 
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/bundle", port);
+		return String.format("http://localhost:%d/bundle/1/substance", port);
 	}
 
 	@Test
@@ -45,7 +45,7 @@ public class BundleResourceTest extends ProtectedResourceTest {
 	@Test
 	public void testRDF() throws Exception {
 		setUpDatabase(dbFile);
-		testGet(getTestURI(), MediaType.APPLICATION_RDF_XML);
+		testGet(getTestURI()+"?media=application/rdf+xml", MediaType.APPLICATION_RDF_XML);
 	}
 
 	@Override
@@ -63,25 +63,6 @@ public class BundleResourceTest extends ProtectedResourceTest {
 
 	@Test
 	public void testCreateEntry() throws Exception {
-		/*
-		 * 
-		 * InputStream in =
-		 * getClass().getClassLoader().getResourceAsStream("input.sdf");
-		 * 
-		 * StringBuilder b = new StringBuilder(); BufferedReader reader = new
-		 * BufferedReader(new InputStreamReader(in)); String line = null; while
-		 * ((line=reader.readLine())!=null) { b.append(line); b.append('\n'); }
-		 * 
-		 * testAsyncPoll(new
-		 * Reference(getTestURI()),ChemicalMediaType.CHEMICAL_MDLSDF, new
-		 * StringRepresentation
-		 * (b.toString(),ChemicalMediaType.CHEMICAL_MDLSDF),Method.POST, new
-		 * Reference(String.format("http://localhost:%d/dataset/4",port)));
-		 * 
-		 * IDatabaseConnection c = getConnection(); ITable table =
-		 * c.createQueryTable("EXPECTED","SELECT * FROM structure");
-		 * Assert.assertEquals(12,table.getRowCount()); c.close();
-		 */
 
 	}
 

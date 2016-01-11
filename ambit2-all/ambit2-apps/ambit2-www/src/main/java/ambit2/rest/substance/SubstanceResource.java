@@ -61,6 +61,7 @@ import ambit2.db.update.bundle.substance.ReadSubstancesByBundleCompounds;
 import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
+import ambit2.rest.RDFStaXConvertor;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.query.AmbitDBResource;
 import ambit2.rest.task.CallableFileUpload;
@@ -117,10 +118,9 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 		customizeVariants(new MediaType[] { MediaType.TEXT_HTML,
 				MediaType.TEXT_URI_LIST, MediaType.APPLICATION_JSON,
 				MediaType.APPLICATION_JAVA_OBJECT,
-				MediaType.APPLICATION_JAVASCRIPT, MediaType.IMAGE_PNG ,
+				MediaType.APPLICATION_JAVASCRIPT, MediaType.IMAGE_PNG,
 				MediaType.APPLICATION_EXCEL,
-				MediaType.APPLICATION_MSOFFICE_XLSX
-				});
+				MediaType.APPLICATION_MSOFFICE_XLSX });
 
 	}
 
@@ -129,19 +129,9 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 			throws AmbitException, ResourceException {
 		/* workaround for clients not being able to set accept headers */
 		Form acceptform = getResourceRef(getRequest()).getQueryAsForm();
-		Dimension d = new Dimension(250, 250);
 		try {
-			d.width = Integer
-					.parseInt(acceptform.getFirstValue("w").toString());
-		} catch (Exception x) {
-		}
-		try {
-			d.height = Integer.parseInt(acceptform.getFirstValue("h")
-					.toString());
-		} catch (Exception x) {
-		}
-		try {
-			retrieveStudySummary = Boolean.parseBoolean(acceptform.getFirstValue("studysummary"));
+			retrieveStudySummary = Boolean.parseBoolean(acceptform
+					.getFirstValue("studysummary"));
 		} catch (Exception x) {
 			retrieveStudySummary = false;
 		}
@@ -155,6 +145,17 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 			return new StringConvertor(r, MediaType.TEXT_URI_LIST,
 					filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
+			Dimension d = new Dimension(250, 250);
+			try {
+				d.width = Integer.parseInt(acceptform.getFirstValue("w")
+						.toString());
+			} catch (Exception x) {
+			}
+			try {
+				d.height = Integer.parseInt(acceptform.getFirstValue("h")
+						.toString());
+			} catch (Exception x) {
+			}
 			return new ImageConvertor(new ImageReporter(variant.getMediaType()
 					.getMainType(), variant.getMediaType().getSubType(), d),
 					variant.getMediaType());
@@ -163,33 +164,40 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 					getRequest(), bundles);
 			return new OutputWriterConvertor<SubstanceRecord, Q>(csvreporter,
 					MediaType.TEXT_CSV, filenamePrefix);
-		/*	
-		} else if (variant.getMediaType().equals(MediaType.APPLICATION_MSOFFICE_XLSX)) {
-			SubstanceXLSXReporter xlsxreporter = new SubstanceXLSXReporter(
-					getRequest(), bundles, false);
-			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
-					MediaType.APPLICATION_MSOFFICE_XLSX, filenamePrefix);			
-			
-		} else if (variant.getMediaType().equals(MediaType.APPLICATION_EXCEL)) {
-			SubstanceXLSXReporter xlsxreporter = new SubstanceXLSXReporter(
-					getRequest(), bundles, true);
-			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
-					MediaType.APPLICATION_EXCEL, filenamePrefix);		
-					*/		
+			/*
+			 * } else if
+			 * (variant.getMediaType().equals(MediaType.APPLICATION_MSOFFICE_XLSX
+			 * )) { SubstanceXLSXReporter xlsxreporter = new
+			 * SubstanceXLSXReporter( getRequest(), bundles, false); return new
+			 * OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
+			 * MediaType.APPLICATION_MSOFFICE_XLSX, filenamePrefix);
+			 * 
+			 * } else if
+			 * (variant.getMediaType().equals(MediaType.APPLICATION_EXCEL)) {
+			 * SubstanceXLSXReporter xlsxreporter = new SubstanceXLSXReporter(
+			 * getRequest(), bundles, true); return new
+			 * OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
+			 * MediaType.APPLICATION_EXCEL, filenamePrefix);
+			 */
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
+			return new RDFStaXConvertor(new SubstanceBundleStAXReporter(
+					getRequest()), filenamePrefix);
 		} else if (variant.getMediaType().equals(
 				MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback == null)
 				jsonpcallback = getParams().getFirstValue("callback");
 			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(
-					getRequest(), jsonpcallback, bundles, queryRelatedRecord,retrieveStudySummary);
+					getRequest(), jsonpcallback, bundles, queryRelatedRecord,
+					retrieveStudySummary);
 			return new OutputWriterConvertor<SubstanceRecord, Q>(cmpreporter,
 					MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);
 		} else { // json by default
 			// else if
 			// (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(
-					getRequest(), null, bundles, queryRelatedRecord, retrieveStudySummary);
+					getRequest(), null, bundles, queryRelatedRecord,
+					retrieveStudySummary);
 			return new OutputWriterConvertor<SubstanceRecord, Q>(cmpreporter,
 					MediaType.APPLICATION_JSON, filenamePrefix);
 		}
@@ -415,7 +423,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 				} else if ("isRobustStudy".equals(type)) {
 					return (Q) new ReadByReliabilityFlags(type, search);
 				} else if ("substancetype".equals(type)) {
-					return (Q) new ReadSubstanceByType(search);					
+					return (Q) new ReadSubstanceByType(search);
 				} else {
 					return (Q) new ReadSubstanceByExternalIDentifier(type,
 							search);
@@ -565,7 +573,8 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 							CallableFileUpload.field_config, getRootRef(),
 							getContext(), new SubstanceURIReporter(getRequest()
 									.getRootRef()), new DatasetURIReporter(
-									getRequest().getRootRef()), token,getRequest().getResourceRef().toString());
+									getRequest().getRootRef()), token,
+							getRequest().getResourceRef().toString());
 					callable.setClearComposition(clearComposition);
 					callable.setClearMeasurements(clearMeasurements);
 					callable.setQASettings(qa);
@@ -608,7 +617,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 						getRootRef(), form, getContext(),
 						new SubstanceURIReporter(getRequest().getRootRef()),
 						new DatasetURIReporter(getRequest().getRootRef()),
-						token,getRequest().getResourceRef().toString());
+						token, getRequest().getResourceRef().toString());
 				ITask<Reference, Object> task = ((ITaskApplication) getApplication())
 						.addTask("Retrieve substance from IUCLID5 server",
 								callable, getRequest().getRootRef(), token);
