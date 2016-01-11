@@ -24,9 +24,9 @@ public class BundleSubstanceResourceTest extends ProtectedResourceTest {
 	}
 
 	@Test
-	public void testURI() throws Exception {
+	public void testJSON() throws Exception {
 		setUpDatabase(dbFile);
-		testGet(getTestURI(), MediaType.TEXT_URI_LIST);
+		testGet(getTestURI(), MediaType.APPLICATION_JSON);
 	}
 
 	@Override
@@ -41,7 +41,13 @@ public class BundleSubstanceResourceTest extends ProtectedResourceTest {
 		}
 		return count == 1;
 	}
-
+	
+	@Override
+	public boolean verifyResponseJSON(String uri, MediaType media,
+			InputStream in) throws Exception {
+		// TODO Auto-generated method stub
+		return super.verifyResponseJSON(uri, media, in);
+	}
 	@Test
 	public void testRDF() throws Exception {
 		setUpDatabase(dbFile);

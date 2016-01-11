@@ -35,9 +35,6 @@ public abstract class QueryStaXReporter<T,Q extends IQueryRetrieval<T>,R extends
 	protected String compoundInDatasetPrefix;
 	
 	
-	public QueryStaXReporter(Request request) {
-		
-	}
 	public QueryStaXReporter(String prefix,Request request) {
 		super();
 		this.compoundInDatasetPrefix = prefix;
@@ -68,6 +65,10 @@ public abstract class QueryStaXReporter<T,Q extends IQueryRetrieval<T>,R extends
 		
 		recordWriter.header(writer);
 		
+	}
+	@Override
+	public String getFileExtension() {
+		return ".rdf";
 	}
    
 }

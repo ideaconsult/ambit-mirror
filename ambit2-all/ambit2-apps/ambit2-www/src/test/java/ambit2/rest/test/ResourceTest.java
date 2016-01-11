@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -236,8 +237,24 @@ public abstract class ResourceTest extends DbUnitTest {
 					extraHeaders);
 		}
 	}
-
-	public Response testGet(String uri, MediaType media, Status expectedStatus)
+	
+	public void testGet(String uri, MediaType media, Status expectedStatus)
+			throws Exception {
+		HttpURLConnection uc = ClientResourceWrapper.getHttpURLConnection(uri, "GET", media.toString(),"test");
+		HttpURLConnection.setFollowRedirects(true);
+		Assert.assertEquals(expectedStatus.getCode(), uc.getResponseCode());
+		InputStream in = null;
+		try {
+		    in = uc.getInputStream();
+		    Assert.assertTrue(verifyResponse(uri, media, in));
+		} catch (Exception x) {
+			throw x;
+		} finally {
+			try { in.close(); } catch (Exception x) {}
+		}
+	}
+	
+	public Response xtestGet(String uri, MediaType media, Status expectedStatus)
 			throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);

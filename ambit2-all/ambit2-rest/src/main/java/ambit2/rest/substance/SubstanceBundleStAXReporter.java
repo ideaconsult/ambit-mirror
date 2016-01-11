@@ -1,5 +1,7 @@
 package ambit2.rest.substance;
 
+import javax.xml.stream.XMLStreamWriter;
+
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
@@ -18,7 +20,19 @@ public class SubstanceBundleStAXReporter
 	private static final long serialVersionUID = 4249582934025698175L;
 
 	public SubstanceBundleStAXReporter(Request request) {
-		super(request);
+		super("", request);
+		initProcessors();
+	}
+	
+	protected void initProcessors() {
+		
+	}
+
+	
+	@Override
+	public void setOutput(XMLStreamWriter output) throws Exception {
+		super.setOutput(output);
+		recordWriter.setOutput(output);
 	}
 
 	@Override
@@ -28,8 +42,8 @@ public class SubstanceBundleStAXReporter
 	}
 
 	@Override
-	protected SubstanceRecordStaxWriter createRecordWriter(
-			Request request, ResourceDoc doc) {
+	protected SubstanceRecordStaxWriter createRecordWriter(Request request,
+			ResourceDoc doc) {
 		return new SubstanceRecordStaxWriter(getUriReporter());
 	}
 
@@ -39,4 +53,12 @@ public class SubstanceBundleStAXReporter
 		return item;
 	}
 
+	@Override
+	public void close() throws Exception {
+		try {
+			recordWriter.setOutput(null);
+		} catch (Exception x) {
+		}
+		super.close();
+	}
 }
