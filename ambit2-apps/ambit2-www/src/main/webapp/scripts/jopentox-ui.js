@@ -2063,7 +2063,7 @@ function defineBundlesTable_lri(root,url,deleteVisible,copyVisible) {
         	  		},      	  			
      	  			{  
         				  "bSortable" : true,
-         	              "mDataProp":"source",
+         	              "mDataProp":"seeAlso",
          	              "aTargets": [2 ],
          	             "sWidth" : "15%",
          	              "bUseRendered" : false,	
