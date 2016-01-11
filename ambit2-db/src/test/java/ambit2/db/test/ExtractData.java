@@ -24,7 +24,7 @@ public class ExtractData {
         String ids = "(11)";
         // partial database export
         QueryDataSet partialDataSet = new QueryDataSet(connection);
-        partialDataSet.addTable("users", "SELECT * FROM users WHERE user_name=\"guest\"");
+        partialDataSet.addTable("ausers", "SELECT * FROM ausers WHERE user_name=\"guest\"");
         partialDataSet.addTable("substance_experiment", "SELECT * FROM substance_experiment");
         
         partialDataSet.addTable("substance_protocolapplication", "SELECT * FROM substance_protocolapplication");
@@ -46,6 +46,9 @@ public class ExtractData {
         partialDataSet.addTable("bundle", "SELECT * FROM bundle");
         partialDataSet.addTable("bundle_substance", "SELECT * FROM bundle_substance");
         partialDataSet.addTable("bundle_endpoints", "SELECT * FROM bundle_endpoints");
+        partialDataSet.addTable("bundle_chemicals", "SELECT * FROM bundle_chemicals");
+        partialDataSet.addTable("bundle_substance_protocolapplication", "SELECT * FROM bundle_substance_protocolapplication");
+        partialDataSet.addTable("bundle_substance_experiment", "SELECT * FROM bundle_substance_experiment");
             
         partialDataSet.addTable("src_dataset", "SELECT id_srcdataset,name,user_name,idreference FROM src_dataset");
         partialDataSet.addTable("tuples",String.format("select * from tuples where idtuple in (select idtuple from property_tuples join property_values using(id) join structure using(idstructure) where structure.idchemical in %s)",ids)); 

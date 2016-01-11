@@ -75,7 +75,10 @@
 -->	
 	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json64.png' alt='json' title='Download as JSON'></a>
 	<a href='#' id='csv' target=_blank><img src='${ambit_root}/images/csv64.png' alt='CSV' title='Download as CSV'></a>
-	
+	<!--
+	<a href='#' id='xlsx' target=_blank><img src='${ambit_root}/images/xlsx.png' alt='XLSX' title='Download as XLSX'></a>
+	-->
+	<a href='#' id='rdfxml'><img src='${ambit_root}/images/rdf64.png' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a>
 	</div>
 	
 	<div id="tabs_search">

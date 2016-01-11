@@ -58,6 +58,7 @@ import ambit2.db.substance.study.ReadEffectRecordBySubstance;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RDFJenaConvertor;
+import ambit2.rest.RDFStaXConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFF3ColResourceReporter;
 import ambit2.rest.dataset.ARFFResourceReporter;
@@ -151,15 +152,17 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return createCSVReporter(filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
-			/*
-			 * switch (rdfwriter) { case stax: { return new RDFStaXConvertor(new
-			 * DatasetRDFStaxReporter(null, getRequest(), getTemplate(),
-			 * getGroupProperties()), filenamePrefix); } default: { // jena
-			 */
-			return createRDFReporter(variant.getMediaType(), filenamePrefix);
-			/*
-			 * } }
-			 */
+			
+			switch (rdfwriter) {
+			case stax: {
+				return new RDFStaXConvertor(
+						new SubstanceBundleStAXReporter(getRequest()),
+						filenamePrefix);
+			}
+			default: { // jena
+				return createRDFReporter(variant.getMediaType(), filenamePrefix);
+			}
+			}			
 		} else if (variant.getMediaType().equals(
 				MediaType.APPLICATION_RDF_TURTLE)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
