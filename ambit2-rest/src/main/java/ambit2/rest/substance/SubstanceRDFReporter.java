@@ -19,6 +19,7 @@ import ambit2.db.substance.study.SubstanceStudyDetailsProcessor;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.RDFS;
 
 public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		extends QueryRDFReporter<SubstanceRecord, Q> {
@@ -30,6 +31,8 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 
 	public SubstanceRDFReporter(Request request, MediaType mediaType) {
 		super(request, mediaType, null);
+		if (request != null)
+			base = request.getRootRef().toString();
 		SubstanceStudyDetailsProcessor paReader = new SubstanceStudyDetailsProcessor();
 
 		getProcessors().clear();
@@ -71,11 +74,29 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 				getOutput().add(substance,
 						RDFTerms.BFO_0000056.getProperty(getOutput()),
 						measuregroup);
+				// interpretation result as as separate endpoint group
+				if (pa.getInterpretationResult() != null) {
+					String endpointURI = String.format("%s/interpretation/%s",
+							base, pa.getDocumentUUID());
+					Resource endpoint = getOutput().createResource(endpointURI);
+					getOutput().add(
+							endpoint,
+							RDFTerms.has_value.getProperty(getOutput()),
+							getOutput().createLiteral(
+									pa.getInterpretationResult()));
+					getOutput().add(measuregroup,
+							RDFTerms.OBI_0000299.getProperty(getOutput()),
+							endpoint);
+					getOutput().add(endpoint,
+							RDFTerms.IAO_0000136.getProperty(getOutput()),
+							substanceURI);
+				}
+				// each effect as BAO endpoint
 				if (pa.getEffects() != null)
 					for (EffectRecord<String, IParams, String> effect : pa
 							.getEffects()) {
-						String endpointURI = String.format("%s/endpoint/%s",
-								base, effect.getSampleID());
+						String endpointURI = String.format("%s/endpoint/ID%d",
+								base, effect.getIdresult());
 						Resource endpoint = getOutput().createResource(
 								endpointURI);
 						getOutput().add(measuregroup,
@@ -84,17 +105,37 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 						getOutput().add(endpoint,
 								RDFTerms.IAO_0000136.getProperty(getOutput()),
 								substanceURI);
+						if (effect.getEndpoint() != null)
+							getOutput().add(endpoint, RDFS.label,
+									effect.getEndpoint());
+						/**
+						 * TODO
+						 * 
+						 * <pre>
+						 * getOutput().add(endpoint, RDF.type, endpoint type as per BAO, e.g. AC50);
+						 * </pre>
+						 */
 						if (effect.getLoValue() != null)
 							getOutput()
 									.add(endpoint,
 											RDFTerms.has_value
 													.getProperty(getOutput()),
-											String.format("%e",
+											getOutput().createTypedLiteral(
 													effect.getLoValue()));
+
 						if (effect.getUnit() != null)
 							getOutput().add(endpoint,
 									RDFTerms.has_unit.getProperty(getOutput()),
 									effect.getUnit());
+
+						if (effect.getTextValue() != null) {
+							getOutput()
+									.add(endpoint,
+											RDFTerms.has_value
+													.getProperty(getOutput()),
+											getOutput().createTypedLiteral(
+													effect.getTextValue()));
+						}
 					}
 			}
 
@@ -152,7 +193,7 @@ enum RDFTerms {
 	}
 
 	public String getURI() {
-		return String.format("%s/%s", getNamespace(), getTerm());
+		return String.format("%s%s", getNamespace(), getTerm());
 	}
 
 	public boolean isProperty() {

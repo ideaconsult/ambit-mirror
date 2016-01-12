@@ -18,6 +18,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.RDFWriter;
 
 /**
+ * TODO refactor to work with default model
  * Jena model convertor
  * @author nina
  *

@@ -10,6 +10,7 @@ import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.restnet.c.task.CallableProtectedTask;
 import net.idea.restnet.db.DBConnection;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
+import net.idea.restnet.rdf.ns.OT;
 
 import org.apache.commons.fileupload.FileItem;
 import org.restlet.Context;
@@ -38,6 +39,8 @@ import ambit2.rest.substance.SubstanceCSVReporter;
 import ambit2.rest.substance.SubstanceJSONReporter;
 import ambit2.rest.substance.SubstanceRDFReporter;
 import ambit2.rest.substance.SubstanceURIReporter;
+
+import com.hp.hpl.jena.ontology.OntModel;
 
 /**
  * Substances per /bundle/{id}
@@ -240,7 +243,19 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
 			return new RDFJenaConvertor(new SubstanceRDFReporter(getRequest(),
 					variant.getMediaType()), variant.getMediaType(),
-					filenamePrefix);
+					filenamePrefix) {
+				@Override
+				protected OntModel createOutput(IQueryRetrieval query) throws AmbitException {
+					try {
+						OntModel jenaModel = OT.createModel();
+						jenaModel.setNsPrefix("sio", "http://semanticscience.org/resource/");
+						jenaModel.setNsPrefix("obo","http://purl.obolibrary.org/obo/");
+						return jenaModel;
+					} catch (Exception x) {
+						throw new AmbitException(x);
+					}
+				}
+			};
 			/*
 			 * return new RDFStaXConvertor(new SubstanceBundleStAXReporter(
 			 * getRequest()), filenamePrefix);
