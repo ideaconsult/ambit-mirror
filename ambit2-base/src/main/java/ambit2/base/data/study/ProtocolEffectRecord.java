@@ -18,7 +18,6 @@ public class ProtocolEffectRecord<ENDPOINT, CONDITIONS, UNIT> extends EffectReco
     private static final long serialVersionUID = 7123248041424144730L;
     protected Protocol protocol;
     protected String documentUUID;
-    protected int idresult = -1;
     protected String studyResultType;
 
     public String getStudyResultType() {
@@ -36,14 +35,6 @@ public class ProtocolEffectRecord<ENDPOINT, CONDITIONS, UNIT> extends EffectReco
 
     public void setInterpretationResult(String interpretationResult) {
         this.interpretationResult = interpretationResult;
-    }
-
-    public int getIdresult() {
-	return idresult;
-    }
-
-    public void setIdresult(int idresult) {
-	this.idresult = idresult;
     }
 
     public String getDocumentUUID() {
