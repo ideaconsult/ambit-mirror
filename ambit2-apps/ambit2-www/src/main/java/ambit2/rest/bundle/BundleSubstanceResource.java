@@ -7,10 +7,8 @@ import java.util.List;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.restnet.c.StringConvertor;
 import net.idea.restnet.c.task.CallableProtectedTask;
 import net.idea.restnet.db.DBConnection;
-import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.apache.commons.fileupload.FileItem;
@@ -34,11 +32,11 @@ import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputStreamConvertor;
-import ambit2.rest.RDFStaXConvertor;
+import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.query.AmbitDBResource;
-import ambit2.rest.substance.SubstanceBundleStAXReporter;
 import ambit2.rest.substance.SubstanceCSVReporter;
 import ambit2.rest.substance.SubstanceJSONReporter;
+import ambit2.rest.substance.SubstanceRDFReporter;
 import ambit2.rest.substance.SubstanceURIReporter;
 
 /**
@@ -240,8 +238,13 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
 					MediaType.APPLICATION_EXCEL, filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
-			return new RDFStaXConvertor(new SubstanceBundleStAXReporter(
-					getRequest()), filenamePrefix);
+			return new RDFJenaConvertor(new SubstanceRDFReporter(getRequest(),
+					variant.getMediaType()), variant.getMediaType(),
+					filenamePrefix);
+			/*
+			 * return new RDFStaXConvertor(new SubstanceBundleStAXReporter(
+			 * getRequest()), filenamePrefix);
+			 */
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			SubstanceCSVReporter csvreporter = new SubstanceCSVReporter(
 					getRequest(), bundles);
