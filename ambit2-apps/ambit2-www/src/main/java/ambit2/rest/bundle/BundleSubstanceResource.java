@@ -241,7 +241,8 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
 					MediaType.APPLICATION_EXCEL, filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)
-				|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE)
+				|| variant.getMediaType().equals(
+						MediaType.APPLICATION_RDF_TURTLE)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)) {
 			return new RDFJenaConvertor(new SubstanceRDFReporter(getRequest(),
@@ -258,6 +259,10 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 								"http://purl.obolibrary.org/obo/");
 						jenaModel.setNsPrefix("bao",
 								"http://www.bioassayontology.org/bao#");
+						jenaModel.setNsPrefix("npo",
+								"http://purl.bioontology.org/ontology/npo/");
+						jenaModel.setNsPrefix("enm",
+								"http://purl.enanomapper.org/onto/");
 						return jenaModel;
 					} catch (Exception x) {
 						throw new AmbitException(x);
