@@ -80,6 +80,8 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 				record.getOwnerUUID());
 		Resource sowner = getOutput().createResource(sownerURI);
 		getOutput().add(substanceResource, DCTerms.source, sowner);
+		if (record.getOwnerName() != null)
+			getOutput().add(sowner, DCTerms.title, record.getOwnerName());
 
 		if (record.getMeasurements() != null)
 			for (ProtocolApplication<Protocol, String, String, IParams, String> pa : record
@@ -138,12 +140,25 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 				 * the reference as source the owner of the assay, e.g. the
 				 * company/lab
 				 */
-				if (pa.getReferenceOwner() != null
-						&& !"".equals(pa.getReferenceOwner()))
-					getOutput().add(assay, DCTerms.source,
-							pa.getReferenceOwner());
-				if (pa.getReference() != null && !"".equals(pa.getReference()))
-					getOutput().add(assay, DCTerms.source, pa.getReference());
+				if (pa.getReference() != null && !"".equals(pa.getReference())) {
+					HashCode hc = hf.newHasher()
+							.putString(pa.getReference(), Charsets.UTF_8)
+							.hash();
+					String referenceURI = String.format("%s/reference/%s",
+							base, hc.toString().toUpperCase());
+					Resource reference = getOutput().createResource(
+							referenceURI);
+					getOutput().add(reference, DC.title, pa.getReference());
+					getOutput().add(assay, DCTerms.source, reference);
+
+					if (pa.getReferenceOwner() != null
+							&& !"".equals(pa.getReferenceOwner())) {
+						String rownerURI = String.format("%s/owner/%s", base,
+								pa.getReferenceOwner());
+						Resource rowner = getOutput().createResource(rownerURI);
+						getOutput().add(reference, DC.publisher, rowner);
+					}
+				}
 
 				/*
 				 * each protocol application as one measure group
