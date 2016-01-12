@@ -28,7 +28,6 @@ public abstract class QueryStaXReporter<T,Q extends IQueryRetrieval<T>,R extends
 	private static final long serialVersionUID = 1L;
 	protected QueryURIReporter<T, IQueryRetrieval<T>> uriReporter;
 	protected abstract QueryURIReporter<T, IQueryRetrieval<T>> createURIReporter(Request req,ResourceDoc doc);
-
 	
 	protected R recordWriter;
 

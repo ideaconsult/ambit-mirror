@@ -3,12 +3,14 @@ package ambit2.rest.substance;
 import javax.xml.stream.XMLStreamWriter;
 
 import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
 
 import org.restlet.Request;
 
 import ambit2.base.data.SubstanceRecord;
+import ambit2.db.substance.study.SubstanceStudyDetailsProcessor;
 import ambit2.rest.QueryStaXReporter;
 
 public class SubstanceBundleStAXReporter
@@ -23,12 +25,23 @@ public class SubstanceBundleStAXReporter
 		super("", request);
 		initProcessors();
 	}
-	
+
 	protected void initProcessors() {
-		
+		SubstanceStudyDetailsProcessor paReader = new SubstanceStudyDetailsProcessor();
+
+		getProcessors().clear();
+		getProcessors().add(paReader);
+		getProcessors().add(
+				new DefaultAmbitProcessor<SubstanceRecord, SubstanceRecord>() {
+					@Override
+					public SubstanceRecord process(SubstanceRecord target)
+							throws Exception {
+						processItem(target);
+						return target;
+					};
+				});
 	}
 
-	
 	@Override
 	public void setOutput(XMLStreamWriter output) throws Exception {
 		super.setOutput(output);
