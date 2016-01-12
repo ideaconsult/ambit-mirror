@@ -240,16 +240,24 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 					getRequest().getRootRef().toString(), true, bundles);
 			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
 					MediaType.APPLICATION_EXCEL, filenamePrefix);
-		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)
+				|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE)
+				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)) {
 			return new RDFJenaConvertor(new SubstanceRDFReporter(getRequest(),
 					variant.getMediaType()), variant.getMediaType(),
 					filenamePrefix) {
 				@Override
-				protected OntModel createOutput(IQueryRetrieval query) throws AmbitException {
+				protected OntModel createOutput(IQueryRetrieval query)
+						throws AmbitException {
 					try {
 						OntModel jenaModel = OT.createModel();
-						jenaModel.setNsPrefix("sio", "http://semanticscience.org/resource/");
-						jenaModel.setNsPrefix("obo","http://purl.obolibrary.org/obo/");
+						jenaModel.setNsPrefix("sio",
+								"http://semanticscience.org/resource/");
+						jenaModel.setNsPrefix("obo",
+								"http://purl.obolibrary.org/obo/");
+						jenaModel.setNsPrefix("bao",
+								"http://www.bioassayontology.org/bao#");
 						return jenaModel;
 					} catch (Exception x) {
 						throw new AmbitException(x);

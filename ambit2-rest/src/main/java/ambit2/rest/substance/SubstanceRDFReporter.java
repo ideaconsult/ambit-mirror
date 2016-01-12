@@ -16,9 +16,16 @@ import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.db.substance.study.SubstanceStudyDetailsProcessor;
 
+import com.google.common.base.Charsets;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.DCTerms;
+import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
@@ -62,19 +69,98 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 
 	@Override
 	public Object processItem(SubstanceRecord record) throws Exception {
+		HashFunction hf = Hashing.murmur3_32();
+
+		Resource bioassayType = RDFTerms.BAO_0000015.getResource(getOutput());
+
 		String substanceURI = uriReporter.getURI(record);
-		Resource substance = getOutput().createResource(substanceURI);
+		Resource substanceResource = getOutput().createResource(substanceURI);
+
+		String sownerURI = String.format("%s/owner/%s", base,
+				record.getOwnerUUID());
+		Resource sowner = getOutput().createResource(sownerURI);
+		getOutput().add(substanceResource, DCTerms.source, sowner);
+
 		if (record.getMeasurements() != null)
 			for (ProtocolApplication<Protocol, String, String, IParams, String> pa : record
 					.getMeasurements()) {
+				/*
+				 * assays - for now each protocol application as one assay,
+				 * having one measure group. Later to consolidate assays on
+				 * perhaps protocol + reference basis?
+				 */
+
+				String assayURI = String.format("%s/assay/%s", base,
+						pa.getDocumentUUID());
+				Resource assay = getOutput().createResource(assayURI);
+				Protocol._categories assay_type = null;
+				try {
+					assay_type = Protocol._categories.valueOf(pa.getProtocol()
+							.getCategory());
+				} catch (Exception x) {
+				}
+				getOutput().add(
+						assay,
+						RDF.type,
+						assay_type == null ? bioassayType : getOutput()
+								.createResource(assay_type.getOntologyURI()));
+				if (pa.getProtocol() != null
+						&& pa.getProtocol().getEndpoint() != null)
+					getOutput().add(assay, DC.title,
+							pa.getProtocol().getEndpoint());
+				if (pa.getProtocol() != null) {
+					String guideline = null;
+					if (pa.getProtocol().getGuideline() != null
+							&& pa.getProtocol().getGuideline().size() > 0)
+
+						guideline = pa.getProtocol().getGuideline().get(0);
+					StringBuilder b = new StringBuilder();
+					b.append(guideline == null ? "" : guideline);
+					b.append(pa.getReference() == null ? "" : pa.getReference());
+					b.append(pa.getParameters() == null ? "" : pa
+							.getParameters().toString());
+
+					HashCode hc = hf.newHasher()
+							.putString(b.toString(), Charsets.UTF_8).hash();
+
+					String protocolURI = String.format("%s/protocol/%s", base,
+							hc.toString().toUpperCase());
+					Resource protocol = getOutput().createResource(protocolURI);
+					if (guideline != null)
+						getOutput().add(protocol, DC.title, guideline);
+					getOutput().add(assay,
+							RDFTerms.BAO_0002846.getProperty(getOutput()),
+							protocol);
+				}
+
+				/*
+				 * this is not right, but just to have it for now the owner and
+				 * the reference as source the owner of the assay, e.g. the
+				 * company/lab
+				 */
+				if (pa.getReferenceOwner() != null
+						&& !"".equals(pa.getReferenceOwner()))
+					getOutput().add(assay, DCTerms.source,
+							pa.getReferenceOwner());
+				if (pa.getReference() != null && !"".equals(pa.getReference()))
+					getOutput().add(assay, DCTerms.source, pa.getReference());
+
+				/*
+				 * each protocol application as one measure group
+				 */
 				String measuregroupURI = String.format("%s/measuregroup/%s",
 						base, pa.getDocumentUUID());
 				Resource measuregroup = getOutput().createResource(
 						measuregroupURI);
-				getOutput().add(substance,
+				getOutput().add(substanceResource,
 						RDFTerms.BFO_0000056.getProperty(getOutput()),
 						measuregroup);
-				// interpretation result as as separate endpoint group
+				getOutput().add(assay,
+						RDFTerms.BAO_0000209.getProperty(getOutput()),
+						measuregroup);
+				/*
+				 * interpretation result as as separate endpoint group
+				 */
 				if (pa.getInterpretationResult() != null) {
 					String endpointURI = String.format("%s/interpretation/%s",
 							base, pa.getDocumentUUID());
@@ -89,9 +175,11 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 							endpoint);
 					getOutput().add(endpoint,
 							RDFTerms.IAO_0000136.getProperty(getOutput()),
-							substanceURI);
+							substanceResource);
 				}
-				// each effect as BAO endpoint
+				/*
+				 * each effect as BAO endpoint
+				 */
 				if (pa.getEffects() != null)
 					for (EffectRecord<String, IParams, String> effect : pa
 							.getEffects()) {
@@ -104,7 +192,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 								endpoint);
 						getOutput().add(endpoint,
 								RDFTerms.IAO_0000136.getProperty(getOutput()),
-								substanceURI);
+								substanceResource);
 						if (effect.getEndpoint() != null)
 							getOutput().add(endpoint, RDFS.label,
 									effect.getEndpoint());
@@ -128,7 +216,8 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 									RDFTerms.has_unit.getProperty(getOutput()),
 									effect.getUnit());
 
-						if (effect.getTextValue() != null) {
+						if (effect.getTextValue() != null
+								&& !"".equals(effect.getTextValue())) {
 							getOutput()
 									.add(endpoint,
 											RDFTerms.has_value
@@ -144,22 +233,88 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 }
 
 enum RDFTerms {
+	/**
+	 * assay
+	 */
+	BAO_0000015 {
+		@Override
+		public String toString() {
+			return "assay";
+		}
+
+		@Override
+		public boolean isProperty() {
+			return false;
+		}
+	},
+	/**
+	 * protocol
+	 */
+	OBI_0000272 {
+		@Override
+		public String toString() {
+			return "protocol";
+		}
+
+		@Override
+		public boolean isProperty() {
+			return false;
+		}
+	},
+	/**
+	 * Property. has assay protocol
+	 */
+	BAO_0002846 {
+		@Override
+		public String toString() {
+			return "has assay protocol";
+		}
+
+	},
+	/**
+	 * Property. participates in at some time
+	 */
 	BFO_0000056 {
 		@Override
 		public String toString() {
 			return "participates in at some time";
 		}
 	},
+	/**
+	 * Property. has specified output
+	 */
 	OBI_0000299 {
 		@Override
 		public String toString() {
 			return "has specified output";
 		}
 	},
+	/**
+	 * Property. is about
+	 */
 	IAO_0000136 {
 		@Override
 		public String toString() {
 			return "is about";
+		}
+	},
+	/**
+	 * Property. has participant at some time
+	 */
+	BFO_0000057 {
+		// todo use for conditions and parameters , e.g. proteins
+		@Override
+		public String toString() {
+			return "has participant at some time";
+		}
+	},
+	/**
+	 * Property. has measure group
+	 */
+	BAO_0000209 {
+		@Override
+		public String toString() {
+			return "has measure group";
 		}
 	},
 	has_value {
@@ -215,4 +370,5 @@ enum RDFTerms {
 		} else
 			throw new Exception("Expected resource, found " + getTerm());
 	}
+
 }

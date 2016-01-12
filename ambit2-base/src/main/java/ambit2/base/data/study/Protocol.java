@@ -40,8 +40,11 @@ public class Protocol {
 	 */
 	List<String> guideline;
 
-	// hack for IUCLID categories, as i can't find the exact titles in the
-	// schema :(
+	/**
+	 * TODO refactor this to make ontology use easier
+	 * @author nina
+	 *
+	 */
 	public enum _categories {
 		/**
 		 * Phys chem properties
@@ -91,6 +94,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://semanticscience.org/resource/CHEMINF_000256";
+			}
 		},
 		PC_BOILING_SECTION {
 			@Override
@@ -110,6 +117,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "P-CHEM";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://semanticscience.org/resource/CHEMINF_000257";
 			}
 		},
 		PC_GRANULOMETRY_SECTION {
@@ -131,6 +142,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/CHMO_0002119";
+			}
 		},
 		PC_VAPOUR_SECTION {
 			@Override
@@ -150,6 +165,11 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "P-CHEM";
+			}
+			@Override
+			public String getOntologyURI() {
+				// http://purl.obolibrary.org/obo/CHMO_0002119
+				return "http://semanticscience.org/resource/CHEMINF_000419";
 			}
 		},
 		PC_PARTITION_SECTION {
@@ -171,6 +191,12 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+			@Override
+			public String getOntologyURI() {
+				// http://purl.obolibrary.org/obo/CHMO_0002119
+				//return "CHMO_0002119";
+				return "http://purl.obolibrary.org/obo/BAO_0002130";
+			}
 		},
 		PC_WATER_SOL_SECTION {
 			@Override
@@ -190,6 +216,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "P-CHEM";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/BAO_0002775";
 			}
 		},
 		PC_SOL_ORGANIC_SECTION {
@@ -211,6 +241,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/BAO_0002135";
+			}
 		},
 		PC_NON_SATURATED_PH_SECTION {
 			@Override
@@ -230,6 +264,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "P-CHEM";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "UO_0000196";
 			}
 		},
 		PC_DISSOCIATION_SECTION {
@@ -251,6 +289,12 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://semanticscience.org/resource/CHEMINF_000194";
+			}
+
 		},
 		PC_UNKNOWN_SECTION {
 			@Override
@@ -454,6 +498,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ENV FATE";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://semanticscience.org/resource/CHEMINF_000433";
+			}
 		},
 
 		/**
@@ -478,6 +526,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000020";
+			}
 		},
 		TO_ACUTE_INHAL_SECTION {
 			@Override
@@ -497,6 +549,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000023";
 			}
 		},
 		TO_ACUTE_DERMAL_SECTION {
@@ -518,6 +574,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000026";
+			}
 		},
 		TO_SKIN_IRRITATION_SECTION {
 			@Override
@@ -537,6 +597,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000032";
 			}
 		},
 		TO_EYE_IRRITATION_SECTION {
@@ -558,6 +622,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000033";
+			}
 		},
 		TO_SENSITIZATION_SECTION {
 			@Override
@@ -577,6 +645,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000034";
 			}
 		},
 		TO_SENSITIZATION_INSILICO_SECTION {
@@ -598,6 +670,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000034";
+			}
 		},
 		TO_SENSITIZATION_INVITRO_SECTION {
 			@Override
@@ -617,6 +693,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000034";
 			}
 		},
 		TO_SENSITIZATION_INCHEMICO_SECTION {
@@ -638,6 +718,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000034";
+			}
 		},
 		TO_SENSITIZATION_HUMANDB_SECTION {
 			@Override
@@ -657,6 +741,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000034";
 			}
 		},
 		TO_SENSITIZATION_LLNA_SECTION {
@@ -678,6 +766,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000034";
+			}
 		},
 		TO_REPEATED_ORAL_SECTION {
 			@Override
@@ -697,6 +789,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000021";
 			}
 		},
 		TO_REPEATED_INHAL_SECTION {
@@ -718,6 +814,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000024";
+			}
 		},
 		TO_REPEATED_DERMAL_SECTION {
 			@Override
@@ -737,6 +837,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000027";
 			}
 		},
 		TO_GENETIC_IN_VITRO_SECTION {
@@ -758,6 +862,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://www.bioassayontology.org/bao#BAO_0002167";
+			}
 		},
 		TO_GENETIC_IN_VIVO_SECTION {
 			@Override
@@ -778,6 +886,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000028";
+			}
 		},
 		TO_CARCINOGENICITY_SECTION {
 			@Override
@@ -797,6 +909,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000029";
 			}
 		},
 		TO_REPRODUCTION_SECTION {
@@ -862,6 +978,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000010";
+			}
 		},
 		EC_CHRONFISHTOX_SECTION {
 			@Override
@@ -882,6 +1002,11 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000011";
+			}
 		},
 		EC_DAPHNIATOX_SECTION {
 			@Override
@@ -901,6 +1026,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "ECOTOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000006";
 			}
 		},
 		EC_CHRONDAPHNIATOX_SECTION {
@@ -942,6 +1071,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000005";
+			}
 		},
 		EC_BACTOX_SECTION {
 			@Override
@@ -961,6 +1094,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "ECOTOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000015";
 			}
 		},
 		EC_SEDIMENTDWELLINGTOX_SECTION {
@@ -982,6 +1119,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000009";
+			}
 		},
 		EC_SOILDWELLINGTOX_SECTION {
 			@Override
@@ -1001,6 +1142,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "ECOTOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000013";
 			}
 		},
 		EC_HONEYBEESTOX_SECTION {
@@ -1022,6 +1167,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000016";
+			}
 		},
 		EC_PLANTTOX_SECTION {
 			@Override
@@ -1041,6 +1190,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "ECOTOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000017";
 			}
 		},
 		EC_SOIL_MICRO_TOX_SECTION {
@@ -1062,6 +1215,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000008";
+			}
 		},
 		AGGLOMERATION_AGGREGATION_SECTION {
 			@Override
@@ -1082,6 +1239,11 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+			@Override
+			public String getOntologyURI() {
+				//return "NPO_1967 NPO_1968";
+				return "http://purl.bioontology.org/ontology/npo/NPO_1967";
+			}
 		},
 		CRYSTALLINE_PHASE_SECTION {
 			@Override
@@ -1101,6 +1263,11 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.bioontology.org/ontology/npo/NPO_1512";
 			}
 		},
 		CRYSTALLITE_AND_GRAIN_SIZE_SECTION {
@@ -1142,6 +1309,11 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+			@Override
+			public String getOntologyURI() {
+				//return "NPO_274 NPO_1365";
+				return "http://purl.bioontology.org/ontology/npo/NPO_274";
+			}
 		},
 		SPECIFIC_SURFACE_AREA_SECTION {
 			@Override
@@ -1162,6 +1334,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.bioontology.org/ontology/npo/NPO_1235";
+			}
 		},
 		ZETA_POTENTIAL_SECTION {
 			@Override
@@ -1181,6 +1357,11 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.bioontology.org/ontology/npo/NPO_1302";
 			}
 		},
 		SURFACE_CHEMISTRY_SECTION {
@@ -1222,6 +1403,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_9000003";
+			}
 		},
 		POROSITY_SECTION {
 			@Override
@@ -1242,6 +1427,11 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
+			@Override
+			public String getOntologyURI() {
+				return "PATO_0000973";
+			}
 		},
 		POUR_DENSITY_SECTION {
 			@Override
@@ -1261,6 +1451,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "P-CHEM";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_9000004";
 			}
 		},
 		PHOTOCATALYTIC_ACTIVITY_SECTION {
@@ -1444,6 +1638,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/BAO_0003009";
+			}
 		},
 		BAO_0002993_SECTION {
 			@Override
@@ -1464,6 +1662,10 @@ public class Protocol {
 			@Override
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/BAO_0002993";
 			}
 		},
 		BAO_0002100_SECTION {
@@ -1486,6 +1688,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/BAO_0002100";
+			}
 		},
 		BAO_0002167_SECTION {
 			// to be merged with genotox
@@ -1507,6 +1713,10 @@ public class Protocol {
 			@Override
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/BAO_0002167";
 			}
 
 		},
@@ -1531,6 +1741,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 82168;
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/BAO_0002168";
+			}
 
 		},
 		BAO_0002189_SECTION {
@@ -1554,6 +1768,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 82189;
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/BAO_0002189";
+			}
 		},
 		BAO_0002084_SECTION {
 			@Override
@@ -1574,7 +1792,11 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82189;
-			}			
+			}		
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/BAO_0002084";
+			}
 		},
 		BAO_0000451_SECTION {
 			@Override
@@ -1596,6 +1818,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 82189;
 			}			
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/BAO_0000451";
+			}
 		},
 		BAO_0002733_SECTION {
 			@Override
@@ -1616,7 +1842,11 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82189;
-			}				
+			}	
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/BAO_0002733";
+			}
 		},
 		CHMO_0000287_SECTION {
 			@Override
@@ -1637,7 +1867,11 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82189;
-			}					
+			}		
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/CHMO_0000287";
+			}
 		},
 		MMO_0000368_SECTION {
 			@Override
@@ -1658,7 +1892,11 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82189;
-			}			
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/MMO_0000368";
+			}
 		},
 		OBI_0302736_SECTION {
 			@Override
@@ -1680,6 +1918,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 82189;
 			}			
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/OBI_0302736";
+			}
 		},
 		CSEO_00001191_SECTION {
 			@Override
@@ -1700,7 +1942,11 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82189;
-			}				
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://scai.fraunhofer.de/CSEO#CSEO_00001191";
+			}
 		},
 		CHMO_0000239_SECTION {
 			@Override
@@ -1722,6 +1968,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 82189;
 			}				
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/CHMO_0000239";
+			}
 		},
 		CHMO_0000538_SECTION  {
 			@Override
@@ -1743,6 +1993,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 82189;
 			}				
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/CHMO_0000538";
+			}
 		},
 		CHMO_0000234_SECTION {
 			@Override
@@ -1763,7 +2017,11 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82189;
-			}				
+			}	
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/CHMO_0000234";
+			}
 		},
 		NPO_1773_SECTION {
 
@@ -1786,6 +2044,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 82190;
 			}			
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.bioontology.org/ontology/npo#NPO_1773";
+			}
 		},
 		NPO_1709_SECTION {
 
@@ -1807,6 +2069,10 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82190;
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.bioontology.org/ontology/npo#NPO_1709";
 			}
 		},
 
@@ -2045,6 +2311,10 @@ public class Protocol {
 			protocol.setCategory(name());
 			protocol.setTopCategory(getTopCategory());
 			return protocol;
+		}
+		public String getOntologyURI() {
+			//generic assay by default
+			return "http://purl.obolibrary.org/obo/BAO_0000015";
 		}
 
 	}
