@@ -31,6 +31,7 @@ public abstract class ReadEffectRecordAbstract<F, ER extends EffectRecord<String
     public ER getObject(ResultSet rs) throws AmbitException {
 	ER record = createEffectRecord();
 	try {
+		record.setIdresult(rs.getInt("idresult"));
 	    record.setSampleID(rs.getString("hash"));
 	    record.setEndpoint(rs.getString("effectendpoint"));
 	    record.setConditions(rs.getString("conditions"));

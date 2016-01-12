@@ -22,7 +22,8 @@ import com.google.common.base.Objects;
  *            new EffectRecord<String,new
  *            ambit2.base.data.study.Params(),String)
  */
-public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable , JSONSerializable{
+public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable,
+		JSONSerializable {
 	/**
 	 * 
 	 */
@@ -38,6 +39,8 @@ public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable , 
 	protected Object textValue;
 	protected String errQualifier;
 	protected Double errValue = null;
+	
+    protected int idresult = -1;
 
 	@Override
 	public int hashCode() {
@@ -243,10 +246,19 @@ public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable , 
 		return b.toString();
 	}
 
+	public int getIdresult() {
+		return idresult;
+	}
+
+	public void setIdresult(int idresult) {
+		this.idresult = idresult;
+	}
+
 	@Override
 	public String toString() {
 		return asJSON();
 	}
+
 	public boolean isEmpty() {
 		return (getLoValue() == null && getUpValue() == null && (getTextValue() == null || ""
 				.equals(getTextValue())));
