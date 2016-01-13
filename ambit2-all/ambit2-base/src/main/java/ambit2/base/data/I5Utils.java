@@ -27,4 +27,13 @@ public class I5Utils {
 					u.substring(20,32)
 					);
 	}
+	/**
+	 * IUCLID style UUID
+	 * @param prefix
+	 * @param u
+	 * @return
+	 */
+	public static String getPrefixedUUID(Object prefix,Object u) {
+		return String.format("%s-%s", prefix,addDashes(u.toString().toLowerCase()));
+	}
 }

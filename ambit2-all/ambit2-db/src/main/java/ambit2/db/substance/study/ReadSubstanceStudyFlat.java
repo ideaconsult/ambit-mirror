@@ -65,10 +65,9 @@ public class ReadSubstanceStudyFlat implements
 		}
 		ProtocolApplication thisPA = null;
 		try {
-			String documentUUID = rs.getString("document_prefix")
-					+ "-"
-					+ I5Utils.addDashes(rs.getString("document_uuid"))
-							.toLowerCase();
+			String documentUUID = 
+					I5Utils.getPrefixedUUID(
+							rs.getString("document_prefix"), rs.getString("document_uuid"));
 			for (ProtocolApplication pa : measurements)
 				if (pa.getDocumentUUID().equals(documentUUID)) {
 					thisPA = pa;
@@ -80,10 +79,9 @@ public class ReadSubstanceStudyFlat implements
 				thisPA.setDocumentUUID(documentUUID);
 
 				try {
-					thisPA.setSubstanceUUID(rs.getString("s_prefix")
-							+ "-"
-							+ I5Utils.addDashes(rs.getString("s_uuid")
-									.toString().toLowerCase()));
+					thisPA.setSubstanceUUID(
+							I5Utils.getPrefixedUUID(
+									rs.getString("s_prefix"), rs.getString("s_uuid")));
 				} catch (Exception xx) {
 					xx.printStackTrace();
 					thisPA.setSubstanceUUID(null);
