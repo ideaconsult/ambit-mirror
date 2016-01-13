@@ -28,6 +28,7 @@ public class SubstanceStudyFlatQueryTest extends
 			Bucket record = query.getObject(rs);
 			//System.out.println(record.asJSON());
 			for (String header : record.getHeader()) {
+				
 				if ("owner_name".equals(header))
 					continue;
 				if ("params".equals(header))
@@ -46,6 +47,8 @@ public class SubstanceStudyFlatQueryTest extends
 					continue;
 				if (EffectRecord._fields.textValue.name().equals(header))
 					continue;
+				if ("document_prefix".equals(header)) continue;
+				if ("s_prefix".equals(header)) continue;
 				if ("errQualifier".equals(header))
 					continue;
 				if ("err".equals(header))
