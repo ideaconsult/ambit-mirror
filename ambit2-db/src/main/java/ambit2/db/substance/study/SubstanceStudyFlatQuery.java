@@ -86,6 +86,14 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 		Bucket bucket = super.getObject(rs);
 		bucket.put("s_type", "study");
 		bucket.remove("_childDocuments_");
+		
+		String substanceUUID =  I5Utils.getPrefixedUUID(bucket.get("s_prefix"),bucket.get("s_uuid"));
+		bucket.put("s_uuid",substanceUUID);
+		bucket.remove("s_prefix");
+		
+		String documentUUID =  I5Utils.getPrefixedUUID(bucket.get("document_prefix"),bucket.get("document_uuid"));
+		bucket.put("document_uuid",documentUUID);
+		bucket.remove("document_prefix");
 		List<Bucket> _childDocuments_ = new ArrayList<>();
 		final String[] keys = new String[] { "params", "conditions" };
 		for (String key : keys) {
@@ -94,10 +102,8 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 			Bucket pbucket = new Bucket();
 			pbucket.setHeader(bucket.getHeader());
 			pbucket.put("id", bucket.get("id") + "_" + key);
-			pbucket.put("s_prefix", bucket.get("s_prefix"));
-			pbucket.put("s_uuid", bucket.get("s_uuid"));
-			pbucket.put("document_prefix", bucket.get("document_prefix"));
-			pbucket.put("document_uuid", bucket.get("document_uuid"));
+			bucket.put("s_uuid",substanceUUID);
+			pbucket.put("document_uuid", documentUUID);
 			pbucket.put("s_type", key);
 			IParams iparams = parseConditions(params);
 			pbucket.put(key, iparams);

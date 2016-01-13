@@ -71,7 +71,11 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>>
 	}
 
 	protected BucketJSONReporter createJSONReporter() {
-		return  new BucketJSONReporter();
+		String command = "results";
+		try {
+			if (Boolean.parseBoolean(getParams().getFirstValue("array").toString())) command = null;
+		} catch (Exception x) {}
+		return  new BucketJSONReporter(command,null,null);
 	}
 	@Override
 	protected Q createQuery(Context context, Request request, Response response)
