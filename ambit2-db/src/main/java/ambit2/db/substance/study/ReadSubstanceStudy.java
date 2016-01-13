@@ -103,18 +103,14 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol, String,
 			protocol.setTopCategory(rs.getString("topcategory"));
 			record.setProtocol(protocol);
 			try {
-				record.setDocumentUUID(rs.getString("document_prefix")
-						+ "-"
-						+ I5Utils.addDashes(rs.getString("u").toString()
-								.toLowerCase()));
+				record.setDocumentUUID(I5Utils.getPrefixedUUID(
+						rs.getString("document_prefix"), rs.getString("u")));
 			} catch (Exception xx) {
 				record.setDocumentUUID(null);
 			}
 			try {
-				record.setSubstanceUUID(rs.getString("substance_prefix")
-						+ "-"
-						+ I5Utils.addDashes(rs.getString("su").toString()
-								.toLowerCase()));
+				record.setSubstanceUUID(I5Utils.getPrefixedUUID(
+						rs.getString("substance_prefix"), rs.getString("su")));
 			} catch (Exception xx) {
 				record.setSubstanceUUID(null);
 			}
@@ -141,19 +137,16 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol, String,
 
 			record.setCompanyName(rs.getString("owner_name"));
 			try {
-				record.setCompanyUUID(rs.getString("owner_prefix")
-						+ "-"
-						+ I5Utils.addDashes(rs.getString("ou").toString()
-								.toLowerCase()));
+				record.setCompanyUUID(I5Utils.getPrefixedUUID(
+						rs.getString("owner_prefix"), rs.getString("ou")));
 			} catch (Exception xx) {
 				record.setCompanyUUID(null);
 			}
 
 			try {
-				record.setReferenceSubstanceUUID(rs.getString("rs_prefix")
-						+ "-"
-						+ I5Utils.addDashes(rs.getString("rsu").toString()
-								.toLowerCase()));
+				record.setReferenceSubstanceUUID(I5Utils.getPrefixedUUID(
+						rs.getString("rs_prefix"), rs.getString("rsu")));
+
 			} catch (Exception xx) {
 				record.setReferenceSubstanceUUID(null);
 			}

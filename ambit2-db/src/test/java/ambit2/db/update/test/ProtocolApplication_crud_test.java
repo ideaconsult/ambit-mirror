@@ -111,8 +111,12 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 		ITable table = 	c.createQueryTable("EXPECTED",
 		"SELECT document_prefix,hex(document_uuid) u,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su,params,reference from substance_protocolapplication where document_prefix='IUC4' and document_UUID=unhex('7ADB0D03F69B32A99EFE86B4A8577893')");
 		Assert.assertEquals(1,table.getRowCount());
-		Assert.assertEquals(papp.getDocumentUUID(),table.getValue(0,"document_prefix") + "-" + I5Utils.addDashes(table.getValue(0,"u").toString().toLowerCase()));
-		Assert.assertEquals("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",table.getValue(0,"substance_prefix") + "-" + I5Utils.addDashes(table.getValue(0,"su").toString().toLowerCase()));
+		Assert.assertEquals(papp.getDocumentUUID(),
+				I5Utils.getPrefixedUUID(
+						table.getValue(0,"document_prefix"),table.getValue(0,"u")));
+		Assert.assertEquals("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",
+				I5Utils.getPrefixedUUID(
+						table.getValue(0,"substance_prefix"),table.getValue(0,"su")));
 		Assert.assertEquals(papp.getProtocol().getEndpoint(),table.getValue(0,"endpoint"));
 		Assert.assertEquals(papp.getProtocol().getCategory(),table.getValue(0,"endpointcategory"));
 		Assert.assertEquals(papp.getProtocol().getGuideline().get(0),table.getValue(0,"guidance"));

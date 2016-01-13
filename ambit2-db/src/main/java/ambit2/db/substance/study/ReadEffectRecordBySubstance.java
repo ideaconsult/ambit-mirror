@@ -73,8 +73,10 @@ public class ReadEffectRecordBySubstance extends
 	}		
 	try {
 	    try {
-		effect.setDocumentUUID(rs.getString("document_prefix") + "-"
-			+ I5Utils.addDashes(rs.getString("u").toString().toLowerCase()));
+		effect.setDocumentUUID(
+				I5Utils.getPrefixedUUID(
+						rs.getString("document_prefix"), rs.getString("u")));
+
 	    } catch (Exception xx) {
 		effect.setDocumentUUID(null);
 	    }
