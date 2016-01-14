@@ -20,14 +20,16 @@ public class ISAExportConfig
 	
 	//Data locations
 	public ISALocation protocolParamLoc = null;
-	public String protocolParamLocString = "study.0.process[1]";
+	public String protocolParamLocString = "study.0.process[1].element";
 	
 	public ISALocation effectRecordLoc = null;
-	public String effectRecordLocString = "assay.0.process[2]"; 
+	public String effectRecordLocString = "assay.0.process[2].element"; 
 	
 	//Bundle info  data locations
 	public ISALocation bundleDescriptionLoc = null; 
 	public String bundleDescriptionLocString = "investigation.description"; 
+	public ISALocation bundleTitleLoc = null; 
+	public String bundleTitleLocString = "investigation.title"; 
 	
 	
 	//Additive content flags
@@ -71,6 +73,7 @@ public class ISAExportConfig
 		effectRecordLoc = parseISALocationString(effectRecordLocString, "ISA Location for Effect Record");
 		
 		bundleDescriptionLoc = parseISALocationString(bundleDescriptionLocString, "ISA Location for bundle Description");
+		bundleTitleLoc = parseISALocationString(bundleTitleLocString, "ISA Location for bundle Title");
 	}
 	
 	protected ISALocation parseISALocationString(String isaLocStr, String contexInfo) throws Exception
@@ -92,7 +95,9 @@ public class ISAExportConfig
 		{
 			cfg.parseISALocations();
 		}
-		catch(Exception e){};
+		catch(Exception e){
+			System.out.println("!!! " + e.toString());
+		};
 	}
 	
 }

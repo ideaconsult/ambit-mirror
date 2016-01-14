@@ -122,8 +122,10 @@ public class ISAJsonExporter1_0 implements IISAExport
 		if (!records.hasNext())
 			throw new Exception("No records to iterate");
 
-		isaMapper = new ISAJsonMapper1_0 ();
+		
 		investigation = new Investigation();
+		isaMapper = new ISAJsonMapper1_0 ();
+		isaMapper.setTargetDataObject(investigation);  //The data is put (mapped) into investigation object
 		
 		handleBundle();
 		
@@ -140,13 +142,13 @@ public class ISAJsonExporter1_0 implements IISAExport
 		saveDataToOutputDir();
 	}
 	
-	void handleBundle()
+	void handleBundle() throws Exception
 	{
 		if (endpointBundle ==null)
 			return;
 		
-		investigation.title = endpointBundle.getTitle();
-		investigation.description = endpointBundle.getDescription();
+		isaMapper.putString(endpointBundle.getTitle(), cfg.bundleTitleLoc);
+		isaMapper.putString(endpointBundle.getDescription(), cfg.bundleDescriptionLoc, cfg.FlagDescriptionAdditiveContent);
 		
 	}
 	
