@@ -2,6 +2,7 @@ package ambit2.export.isa.v1_0;
 
 import java.io.File;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.export.isa.IISAExport;
 import ambit2.export.isa.base.ISAConst.ISAFormat;
@@ -160,15 +162,24 @@ public class ISAJsonExporter1_0 implements IISAExport
 		if (litEntry != null)
 			addLiteratureEntry(litEntry);
 		
-		//rec.getContent()
+		
+		for (ProtocolApplication pa : rec.getMeasurements())
+			addProtocolApplication(pa);
 	}
 	
-	void addLiteratureEntry(ILiteratureEntry litEntry)
+	void addLiteratureEntry(ILiteratureEntry litEntry) throws Exception
 	{
 		Publication pub = new Publication();
 		pub.title = litEntry.getTitle();
 		//TODO
 		investigation.publications.add(pub);
+	}
+	
+	void addProtocolApplication(ProtocolApplication pa) throws Exception
+	{
+				
+		
+		//TODO
 	}
 	
 	
