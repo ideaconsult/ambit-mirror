@@ -17,6 +17,7 @@ public class ISAJsonMapper1_0 implements IISADataMapper
 {
 	protected final static Logger logger = Logger.getLogger("ISAJsonMapper1_0");
 	
+	protected String addSeparator = " ";
 	protected Investigation investigation = null;
 	
 	@Override
@@ -69,14 +70,19 @@ public class ISAJsonMapper1_0 implements IISADataMapper
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void putString(String s, ISALocation location) throws Exception {
+		putString(s, location,  false);
+	}
 
 	@Override
-	public void putString(String s, ISALocation location) throws Exception 
+	public void putString(String s, ISALocation location,  boolean isAdditiveContent) throws Exception 
 	{
 		switch (location.layer)
 		{
 		case INVESTIGATION:
-			putDataInObject(s, location, investigation);
+			putDataInObject(s, location, investigation, isAdditiveContent);
 			break;
 			
 		case STUDY:
@@ -97,7 +103,7 @@ public class ISAJsonMapper1_0 implements IISADataMapper
 			if (location.processIndex < 0)
 			{
 				//No process is specified hence the data is put directly into the Study object
-				putDataInObject(s, location, study);
+				putDataInObject(s, location, study, isAdditiveContent);
 			}
 			else
 			{
@@ -116,7 +122,7 @@ public class ISAJsonMapper1_0 implements IISADataMapper
 					process = study.processSequence.get(processNum);
 				}
 				
-				putDataInObject(s, location, process);
+				putDataInObject(s, location, process, isAdditiveContent);
 			}
 			
 			break;
@@ -129,7 +135,7 @@ public class ISAJsonMapper1_0 implements IISADataMapper
 	/** 
 	 * Data is put into the Object using element and subElement information
 	 **/	
-	public void putDataInObject(String data, ISALocation location, Object obj) throws Exception
+	public void putDataInObject(String data, ISALocation location, Object obj, boolean isAdditiveContent) throws Exception
 	{
 		Class cls = obj.getClass();
 		Field field = null;
@@ -146,7 +152,16 @@ public class ISAJsonMapper1_0 implements IISADataMapper
 		String fType = field.getType().getName();	
 		if (fType.equals("java.lang.String"))
 		{	
-			field.set(obj, data);
+			if (isAdditiveContent)
+			{
+				String s = (String)field.get(obj);
+				if (s == null)
+					field.set(obj, data);
+				else
+					field.set(obj, s + addSeparator + data);
+			}
+			else
+				field.set(obj, data);
 		}
 		else
 		{
@@ -206,6 +221,8 @@ public class ISAJsonMapper1_0 implements IISADataMapper
 			return processIndex - k;
 		}
 	}
+
+	
 	
 	
 }

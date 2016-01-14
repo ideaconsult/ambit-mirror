@@ -122,6 +122,7 @@ public class ISAJsonExporter1_0 implements IISAExport
 		if (!records.hasNext())
 			throw new Exception("No records to iterate");
 
+		isaMapper = new ISAJsonMapper1_0 ();
 		investigation = new Investigation();
 		
 		handleBundle();
@@ -155,6 +156,7 @@ public class ISAJsonExporter1_0 implements IISAExport
 			return;
 		
 		//rec.getContent()
+		
 		
 		ILiteratureEntry litEntry = rec.getReference();
 	}

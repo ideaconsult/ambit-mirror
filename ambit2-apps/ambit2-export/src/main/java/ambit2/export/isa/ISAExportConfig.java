@@ -16,12 +16,23 @@ public class ISAExportConfig
 	public ISAFormat isaFormat = ISAFormat.JSON;
 	public ISAVersion isaVersion = ISAVersion.Ver1_0;
 	
+	
+	
 	//Data locations
 	public ISALocation protocolParamLoc = null;
 	public String protocolParamLocString = "study.0.process[1]";
 	
 	public ISALocation effectRecordLoc = null;
 	public String effectRecordLocString = "assay.0.process[2]"; 
+	
+	//Bundle info  data locations
+	public ISALocation bundleDescriptionLoc = null; 
+	public String bundleDescriptionLocString = "investigation.description"; 
+	
+	
+	//Additive content flags
+	public boolean FlagDescriptionAdditiveContent = true;  //If true the content is summed from various possible data sources
+	
 	
 	
 	public void parseJSONConfig(JsonNode rootNode) throws Exception
@@ -56,8 +67,10 @@ public class ISAExportConfig
 	
 	public void parseISALocations() throws Exception
 	{
-		protocolParamLoc = parseISALocationString(protocolParamLocString, "ISA Location for protocolParam");
-		effectRecordLoc = parseISALocationString(effectRecordLocString, "ISA Location for effectRecord");
+		protocolParamLoc = parseISALocationString(protocolParamLocString, "ISA Location for protocol Param");
+		effectRecordLoc = parseISALocationString(effectRecordLocString, "ISA Location for Effect Record");
+		
+		bundleDescriptionLoc = parseISALocationString(bundleDescriptionLocString, "ISA Location for bundle Description");
 	}
 	
 	protected ISALocation parseISALocationString(String isaLocStr, String contexInfo) throws Exception
