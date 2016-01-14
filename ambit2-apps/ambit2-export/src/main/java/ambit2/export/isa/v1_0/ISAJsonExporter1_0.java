@@ -149,7 +149,6 @@ public class ISAJsonExporter1_0 implements IISAExport
 		
 		isaMapper.putString(endpointBundle.getTitle(), cfg.bundleTitleLoc);
 		isaMapper.putString(endpointBundle.getDescription(), cfg.bundleDescriptionLoc, cfg.FlagDescriptionAdditiveContent);
-		
 	}
 	
 	void handleRecord(SubstanceRecord rec) throws Exception
@@ -157,15 +156,19 @@ public class ISAJsonExporter1_0 implements IISAExport
 		if (rec == null)
 			return;
 		
-		//rec.getContent()
-		
-		
 		ILiteratureEntry litEntry = rec.getReference();
+		if (litEntry != null)
+			addLiteratureEntry(litEntry);
+		
+		//rec.getContent()
 	}
 	
 	void addLiteratureEntry(ILiteratureEntry litEntry)
 	{
+		Publication pub = new Publication();
+		pub.title = litEntry.getTitle();
 		//TODO
+		investigation.publications.add(pub);
 	}
 	
 	
