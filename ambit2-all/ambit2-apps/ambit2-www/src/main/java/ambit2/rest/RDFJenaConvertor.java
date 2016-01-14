@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.db.convertors.AbstractObjectConvertor;
 import net.idea.restnet.rdf.ns.OT;
 
@@ -97,7 +98,9 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 	        			else if (mediaType.equals(MediaType.TEXT_RDF_N3))
 	        				fasterWriter = jenaModel.getWriter("N3");
 	        			else if (mediaType.equals(MediaType.TEXT_RDF_NTRIPLES))
-	        				fasterWriter = jenaModel.getWriter("N-TRIPLE");	
+	        				fasterWriter = jenaModel.getWriter("N-TRIPLE");
+	        			else if (mediaType.equals(ChemicalMediaType.APPLICATION_JSONLD))
+	        				fasterWriter = jenaModel.getWriter("JSON-LD");	        			
 	        			else {
 	        				fasterWriter = jenaModel.getWriter("RDF/XML-ABBREV");
 	        				fasterWriter.setProperty("showXmlDeclaration", Boolean.TRUE);

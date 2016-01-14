@@ -7,6 +7,7 @@ import java.util.List;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.task.CallableProtectedTask;
 import net.idea.restnet.db.DBConnection;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
@@ -74,7 +75,8 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 				MediaType.TEXT_RDF_NTRIPLES, MediaType.APPLICATION_JSON,
 				MediaType.APPLICATION_JAVASCRIPT,
 				MediaType.APPLICATION_JAVA_OBJECT, MediaType.APPLICATION_EXCEL,
-				MediaType.APPLICATION_MSOFFICE_XLSX
+				MediaType.APPLICATION_MSOFFICE_XLSX,
+				ChemicalMediaType.APPLICATION_JSONLD
 
 		});
 	}
@@ -244,7 +246,9 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 				|| variant.getMediaType().equals(
 						MediaType.APPLICATION_RDF_TURTLE)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
-				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)) {
+				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
+				|| variant.getMediaType().equals(ChemicalMediaType.APPLICATION_JSONLD)
+				) {
 			return new RDFJenaConvertor(new SubstanceRDFReporter(getRequest(),
 					variant.getMediaType()), variant.getMediaType(),
 					filenamePrefix) {
