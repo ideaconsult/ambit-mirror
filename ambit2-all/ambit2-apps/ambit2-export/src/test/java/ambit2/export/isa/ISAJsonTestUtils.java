@@ -40,12 +40,12 @@ public class ISAJsonTestUtils
 		testISALocation("investigation.element");
 		*/
 		
-		testISAJsonMapper1_0(new String[] {"investigation.filename", "investigation.title"},
-						new String[] {"myTest.txt", "MyTitle"}	);
+		//testISAJsonMapper1_0(new String[] {"investigation.filename", "investigation.title"},
+		//				new String[] {"myTest.txt", "MyTitle"}	);
 		
 		List<SubstanceRecord> sr = new ArrayList<SubstanceRecord>();
 		sr.add(null);
-		//testJsonExport(sr.iterator(), null, null, null);
+		testJsonExport(sr.iterator(), null, null, getTestSubstanceEndpointsBundle());
 		
 	}
 	
@@ -58,6 +58,7 @@ public class ISAJsonTestUtils
 		exporter.export();
 		System.out.println(exporter.getResultAsJson());
 	}
+	
 	
 	public static void testISAJsonExportConfig(String jsonFileName) throws Exception
 	{
@@ -111,6 +112,16 @@ public class ISAJsonTestUtils
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
 		System.out.println(jsonString);
+	}
+	
+	public static SubstanceEndpointsBundle getTestSubstanceEndpointsBundle()
+	{
+		SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle();
+		
+		bundle.setDescription("Bundle description");
+		bundle.setTitle("Bundle title");
+		
+		return bundle;
 	}
 	
 	public static void test00()

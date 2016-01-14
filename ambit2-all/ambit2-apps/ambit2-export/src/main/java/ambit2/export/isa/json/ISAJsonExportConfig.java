@@ -63,7 +63,7 @@ public class ISAJsonExportConfig extends ISAExportConfig
 	}
 	
 	public static ISAJsonExportConfig getDefaultConfig()
-	{
+	{	
 		ISAJsonExportConfig conf = new ISAJsonExportConfig();
 		ISAExportConfig.fillDefaultISAConfig(conf);
 		
