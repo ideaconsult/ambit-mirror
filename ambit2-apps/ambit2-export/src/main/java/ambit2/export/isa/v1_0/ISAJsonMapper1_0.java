@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import ambit2.export.isa.base.IISADataMapper;
+import ambit2.export.isa.base.ISAConst;
 import ambit2.export.isa.base.ISALocation;
 import ambit2.export.isa.base.ISALocation.Layer;
 import ambit2.export.isa.json.ISAJsonExporter;
@@ -17,7 +18,6 @@ public class ISAJsonMapper1_0 implements IISADataMapper
 {
 	protected final static Logger logger = Logger.getLogger("ISAJsonMapper1_0");
 	
-	protected String addSeparator = " ";
 	protected Investigation investigation = null;
 	
 	@Override
@@ -158,7 +158,7 @@ public class ISAJsonMapper1_0 implements IISADataMapper
 				if (s == null)
 					field.set(obj, data);
 				else
-					field.set(obj, s + addSeparator + data);
+					field.set(obj, s + ISAConst.addSeparator + data);
 			}
 			else
 				field.set(obj, data);
@@ -221,6 +221,8 @@ public class ISAJsonMapper1_0 implements IISADataMapper
 			return processIndex - k;
 		}
 	}
+	
+	
 	
 	
 

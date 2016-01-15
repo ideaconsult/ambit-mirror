@@ -7,8 +7,6 @@ import java.util.logging.Logger;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
@@ -23,7 +21,10 @@ import ambit2.export.isa.v1_0.objects.Investigation;
 import ambit2.export.isa.v1_0.objects.MeasurementType;
 import ambit2.export.isa.v1_0.objects.Protocol;
 import ambit2.export.isa.v1_0.objects.Publication;
+import ambit2.export.isa.v1_0.objects.Sample;
+import ambit2.export.isa.v1_0.objects.Source;
 import ambit2.export.isa.v1_0.objects.Study;
+import ambit2.export.isa.v1_0.objects.Process;
 
 public class ISAJsonExporter1_0 implements IISAExport
 {
@@ -167,7 +168,11 @@ public class ISAJsonExporter1_0 implements IISAExport
 		if (litEntry != null)
 			addLiteratureEntry(litEntry);
 		
-		handleComposition(rec);
+		if (cfg.FlagSaveCompositionAsStudy)
+			addCompositionAsStudy(rec);
+		
+		if (cfg.FlagSaveCompositionAsMaterial)
+			addCompositionAsMaterial(rec);
 		
 		for (ProtocolApplication pa : rec.getMeasurements())
 			addProtocolApplication(pa);
@@ -181,16 +186,23 @@ public class ISAJsonExporter1_0 implements IISAExport
 		investigation.publications.add(pub);
 	}
 	
-	void handleComposition(SubstanceRecord rec) throws Exception
+	void addCompositionAsStudy(SubstanceRecord rec) throws Exception
 	{
 		//TODO
+		
+	}
+	
+	void addCompositionAsMaterial(SubstanceRecord rec) throws Exception
+	{
+		//TODO
+		
 	}
 	
 	void addProtocolApplication(ProtocolApplication pa) throws Exception
 	{
+		//Each protocol application is stored as a separate study
 		Study study = new Study();	
 		investigation.studies.add(study);
-		
 				
 		//Handle protocol info
 		Protocol protocol = extractProtocolInfo(pa);
@@ -198,14 +210,33 @@ public class ISAJsonExporter1_0 implements IISAExport
 		
 		//TODO configurable handling of some ProtocolApplication fields: companyName, ...
 		
-		//study.description = "";
+		ISAJsonUtils1_0.addStudyDescriptionContent(study, "Substance UUID: " + pa.getSubstanceUUID());
 		
+		
+		//Create a study process
+		Process process = new Process();
+		study.processSequence.add(process);
+		Source source = new Source();
+		Sample sample = new Sample();
+		process.inputs.add(source);
+		process.outputs.add(sample);
+		//process.executesProtocol = protocol; ??
+		
+		if (!cfg.FlagSaveSourceAndSampleOnlyInProcess)
+		{
+			study.sources.add(source);
+			study.samples.add(sample);
+		}
+		
+		//process.parameters
+		source.name = pa.getSubstanceUUID();
+		
+		//TODO
 		
 		//Handle effects records
 		List<EffectRecord> effects = pa.getEffects();
 		for (EffectRecord eff : effects)
 			addEffectRecord(eff, study);
-		
 	}
 	
 	Protocol extractProtocolInfo(ProtocolApplication pa) 

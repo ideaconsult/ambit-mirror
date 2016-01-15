@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.study.test.ProtocolApplicationTestFactory;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
@@ -131,11 +132,16 @@ public class ISAJsonTestUtils
 	{
 		SubstanceRecord record = new SubstanceRecord();
 		record.setContent("Generated test content");
+		record.setOwnerUUID("record-uuid-1234567890");
 		
 		//Add measurements
-		record.addMeasurement(ProtocolApplicationTestFactory.initpa());
-		record.addMeasurement(ProtocolApplicationTestFactory.initpc());
-		record.addMeasurement(ProtocolApplicationTestFactory.initbiodeg());
+		ProtocolApplication pa = ProtocolApplicationTestFactory.initpa();
+		pa.setSubstanceUUID(record.getOwnerUUID());
+		record.addMeasurement(pa);
+		
+		
+		//record.addMeasurement(ProtocolApplicationTestFactory.initpc());
+		//record.addMeasurement(ProtocolApplicationTestFactory.initbiodeg());
 		
 		return record;
 	}
