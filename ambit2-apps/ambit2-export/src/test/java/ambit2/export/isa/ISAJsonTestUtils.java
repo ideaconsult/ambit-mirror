@@ -114,14 +114,23 @@ public class ISAJsonTestUtils
 		System.out.println(jsonString);
 	}
 	
-	public static SubstanceEndpointsBundle getTestSubstanceEndpointsBundle()
+	protected static SubstanceEndpointsBundle getTestSubstanceEndpointsBundle()
 	{
 		SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle();
 		
 		bundle.setDescription("Bundle description");
 		bundle.setTitle("Bundle title");
+		//TODO
 		
 		return bundle;
+	}
+	
+	protected static SubstanceRecord getTestSubstanceRecord()
+	{
+		SubstanceRecord record = new SubstanceRecord();
+		//TODO
+		
+		return record;
 	}
 	
 	public static void test00()
