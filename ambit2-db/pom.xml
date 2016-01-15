@@ -22,14 +22,8 @@
 			<version>5.1.36</version>
 			<scope>runtime</scope>
 		</dependency>
-<!-- 
-		<dependency>
-			<groupId>org.openscience.cdk</groupId>
-			<artifactId>cdk-qsar</artifactId>
-			<version>${cdk.version}</version>
-			<scope>compile</scope>
-		</dependency>
- -->
+		<!-- <dependency> <groupId>org.openscience.cdk</groupId> <artifactId>cdk-qsar</artifactId> 
+			<version>${cdk.version}</version> <scope>compile</scope> </dependency> -->
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-core</artifactId>
@@ -55,9 +49,7 @@
 			<artifactId>ambit2-descriptors</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>
-			<!-- 
-			<scope>test</scope>
-			 -->
+			<!-- <scope>test</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>ambit</groupId>
@@ -127,6 +119,14 @@
 			<groupId>net.idea</groupId>
 			<artifactId>modbcum-c</artifactId>
 			<version>${modbcum.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-base</artifactId>
+			<version>${project.version}</version>
+			<classifier>tests</classifier>
+			<type>jar</type>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<licenses>
