@@ -31,9 +31,12 @@ public class ISAExportConfig
 	public ISALocation bundleTitleLoc = null; 
 	public String bundleTitleLocString = "investigation.title"; 
 	
+	public boolean FlagSaveCompositionAsStudy = true;
+	public boolean FlagSaveCompositionAsMaterial = false;
 	
 	//Additive content flags
 	public boolean FlagDescriptionAdditiveContent = true;  //If true the content is summed from various possible data sources
+	
 	
 	
 	

@@ -160,10 +160,12 @@ public class ISAJsonExporter1_0 implements IISAExport
 		if (rec == null)
 			return;
 		
+		
 		ILiteratureEntry litEntry = rec.getReference();
 		if (litEntry != null)
 			addLiteratureEntry(litEntry);
 		
+		handleComposition(rec);
 		
 		for (ProtocolApplication pa : rec.getMeasurements())
 			addProtocolApplication(pa);
@@ -177,11 +179,17 @@ public class ISAJsonExporter1_0 implements IISAExport
 		investigation.publications.add(pub);
 	}
 	
+	void handleComposition(SubstanceRecord rec) throws Exception
+	{
+		//TODO
+	}
+	
 	void addProtocolApplication(ProtocolApplication pa) throws Exception
 	{
 		Study study = new Study();	
 		investigation.studies.add(study);
 		
+				
 		//Handle protocol info
 		//study.description
 		
