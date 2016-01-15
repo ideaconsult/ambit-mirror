@@ -1048,13 +1048,20 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected Restlet createAuthenticatedOpenMethodResource(Router router) {
 		Filter authN = new OpenSSOAuthenticator(getContext(), false,
 				"opentox.org", new OpenSSOVerifierSetUser(false));
-		OpenSSOAuthorizer authZ = new OpenSSOMethodAuthorizer();
+		OpenSSOAuthorizer authZ = new OpenSSOMethodAuthorizer() {
+			@Override
+			protected boolean authorize(Request request, Response response) {
+				if (Method.GET.equals(request.getMethod())) return true;
+				return super.authorize(request, response);
+			}
+
+		};
 
 		//authZ.setPrefix(prefix);
 		authN.setNext(authZ);
 		authZ.setNext(router);
 		
-		return authZ;
+		return authN;
 	}
 	
 	protected TaskStorage<String> createTaskStorage() {

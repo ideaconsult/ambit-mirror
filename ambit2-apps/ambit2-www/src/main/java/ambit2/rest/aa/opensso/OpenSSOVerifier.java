@@ -35,7 +35,7 @@ public class OpenSSOVerifier implements Verifier {
 	public OpenSSOVerifier(boolean enabled) {
 		this.enabled = enabled;
 	}
-	
+	@Override
 	public int verify(Request request, Response response) {
 		
 		
