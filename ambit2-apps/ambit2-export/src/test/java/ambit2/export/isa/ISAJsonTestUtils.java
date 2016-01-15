@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import ambit2.base.data.study.test.ProtocolApplicationTestFactory;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.export.isa.base.ISALocation;
@@ -20,6 +21,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 import org.codehaus.jackson.map.ser.FilterProvider;
+
 
 
 
@@ -44,7 +46,7 @@ public class ISAJsonTestUtils
 		//				new String[] {"myTest.txt", "MyTitle"}	);
 		
 		List<SubstanceRecord> sr = new ArrayList<SubstanceRecord>();
-		sr.add(null);
+		sr.add(getTestSubstanceRecord());
 		testJsonExport(sr.iterator(), null, null, getTestSubstanceEndpointsBundle());
 		
 	}
@@ -128,7 +130,12 @@ public class ISAJsonTestUtils
 	protected static SubstanceRecord getTestSubstanceRecord()
 	{
 		SubstanceRecord record = new SubstanceRecord();
-		//TODO
+		record.setContent("Generated test content");
+		
+		//Add measurements
+		record.addMeasurement(ProtocolApplicationTestFactory.initpa());
+		record.addMeasurement(ProtocolApplicationTestFactory.initpc());
+		record.addMeasurement(ProtocolApplicationTestFactory.initbiodeg());
 		
 		return record;
 	}
