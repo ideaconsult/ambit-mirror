@@ -64,6 +64,7 @@ import ambit2.rest.aa.basic.UINoAAResource;
 import ambit2.rest.aa.opensso.BookmarksAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
 import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
+import ambit2.rest.aa.opensso.OpenSSOMethodAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOVerifierSetUser;
 import ambit2.rest.aa.opensso.policy.CallablePolicyCreator;
 import ambit2.rest.aa.opensso.users.OpenSSOUserResource;
@@ -71,7 +72,6 @@ import ambit2.rest.admin.AdminResource;
 import ambit2.rest.admin.PolicyResource;
 import ambit2.rest.admin.SimpleGuard;
 import ambit2.rest.admin.SimpleGuard.SimpleGuards;
-import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.MLResources;
 import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.bookmark.BookmarkResource;
@@ -98,7 +98,6 @@ import ambit2.rest.freemarker.FreeMarkerStatusService;
 import ambit2.rest.help.HelpResource;
 import ambit2.rest.loom.LoomResource;
 import ambit2.rest.loom.LoomRouter;
-import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.pubchem.CSLSResource;
 import ambit2.rest.pubchem.ChEBIResource;
@@ -135,7 +134,6 @@ import ambit2.rest.similarity.space.QMapResource;
 import ambit2.rest.similarity.space.QMapSpaceResource;
 import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
 import ambit2.rest.structure.CompoundLookup;
-import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.diagram.DepictionResource;
 import ambit2.rest.structure.tautomers.QueryStructureRelationResource;
 import ambit2.rest.structure.tautomers.QueryTautomersResource;
@@ -468,9 +466,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			 */
 			if (openToxAAEnabled) {
 				router.attach(Resources.bundle,
-						createAuthenticatedOpenResource(new BundleRouter(getContext())));
-				router.attach(SubstanceResource.substance, createAuthenticatedOpenResource(new SubstanceRouter(getContext())));
-				router.attach(OwnerSubstanceFacetResource.owner, createAuthenticatedOpenResource(new SubstanceOwnerRouter(getContext())));
+						createAuthenticatedOpenMethodResource(new BundleRouter(getContext())));
+				router.attach(SubstanceResource.substance, createAuthenticatedOpenMethodResource(new SubstanceRouter(getContext())));
+				router.attach(OwnerSubstanceFacetResource.owner, createAuthenticatedOpenMethodResource(new SubstanceOwnerRouter(getContext())));
 			} else {
 				router.attach(Resources.bundle, new BundleRouter(getContext()));
 				router.attach(SubstanceResource.substance, new SubstanceRouter(getContext()));
@@ -1042,10 +1040,23 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected Restlet createAuthenticatedOpenResource(Router router) {
 		Filter algAuthn = new OpenSSOAuthenticator(getContext(), false,
 				"opentox.org", new OpenSSOVerifierSetUser(false));
+
 		algAuthn.setNext(router);
 		return algAuthn;
 	}
 
+	protected Restlet createAuthenticatedOpenMethodResource(Router router) {
+		Filter authN = new OpenSSOAuthenticator(getContext(), false,
+				"opentox.org", new OpenSSOVerifierSetUser(false));
+		OpenSSOAuthorizer authZ = new OpenSSOMethodAuthorizer();
+
+		//authZ.setPrefix(prefix);
+		authN.setNext(authZ);
+		authZ.setNext(router);
+		
+		return authZ;
+	}
+	
 	protected TaskStorage<String> createTaskStorage() {
 		return new TaskStorage<String>(getName(), getLogger()) {
 
