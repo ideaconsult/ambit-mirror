@@ -14,4 +14,6 @@ public class ISAConst
 	public static final String studyFilePrefix = "s_";
 	public static final String assayFilePrefix = "a_";
 	
+	public static final String addSeparator = " ";
+	
 }
