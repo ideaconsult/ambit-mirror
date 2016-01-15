@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.export.isa.IISAExport;
@@ -20,6 +21,7 @@ import ambit2.export.isa.json.ISAJsonExportConfig;
 import ambit2.export.isa.json.ISAJsonExporter;
 import ambit2.export.isa.v1_0.objects.Investigation;
 import ambit2.export.isa.v1_0.objects.Publication;
+import ambit2.export.isa.v1_0.objects.Study;
 
 public class ISAJsonExporter1_0 implements IISAExport
 {
@@ -177,9 +179,26 @@ public class ISAJsonExporter1_0 implements IISAExport
 	
 	void addProtocolApplication(ProtocolApplication pa) throws Exception
 	{
-				
+		Study study = new Study();	
+		investigation.studies.add(study);
+		
+		//Handle protocol info
+		//study.description
 		
 		//TODO
+		
+		//Handle effects records
+		List<EffectRecord> effects = pa.getEffects();
+		for (EffectRecord eff : effects)
+			addEffectRecord(eff, study);
+		
+	}
+	
+	void addEffectRecord(EffectRecord effect, Study study)
+	{
+		//TODO
+		
+		
 	}
 	
 	
