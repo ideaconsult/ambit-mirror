@@ -20,6 +20,8 @@ import ambit2.export.isa.base.ISAConst.ISAVersion;
 import ambit2.export.isa.json.ISAJsonExportConfig;
 import ambit2.export.isa.json.ISAJsonExporter;
 import ambit2.export.isa.v1_0.objects.Investigation;
+import ambit2.export.isa.v1_0.objects.MeasurementType;
+import ambit2.export.isa.v1_0.objects.Protocol;
 import ambit2.export.isa.v1_0.objects.Publication;
 import ambit2.export.isa.v1_0.objects.Study;
 
@@ -191,15 +193,47 @@ public class ISAJsonExporter1_0 implements IISAExport
 		
 				
 		//Handle protocol info
-		//study.description
+		Protocol protocol = extractProtocolInfo(pa);
+		study.protocols.add(protocol);
 		
-		//TODO
+		//TODO configurable handling of some ProtocolApplication fields: companyName, ...
+		
+		//study.description = "";
+		
 		
 		//Handle effects records
 		List<EffectRecord> effects = pa.getEffects();
 		for (EffectRecord eff : effects)
 			addEffectRecord(eff, study);
 		
+	}
+	
+	Protocol extractProtocolInfo(ProtocolApplication pa) 
+	{
+		Protocol protocol = new Protocol();
+		ambit2.base.data.study.Protocol prot = (ambit2.base.data.study.Protocol) pa.getProtocol();
+		
+		protocol.name = prot.getEndpoint();
+		
+		MeasurementType measType = new MeasurementType();
+		measType.name = prot.getCategory();
+		protocol.protocolType = measType;
+		
+		if (prot.getGuideline() != null)
+			if (!prot.getGuideline().isEmpty())
+			{
+				StringBuffer sb = new StringBuffer();
+				List<String> guides = prot.getGuideline();
+				for (int i = 0; i < guides.size(); i++)
+				{	
+					sb.append(guides.get(i));
+					if (i < guides.size()-1)
+						sb.append(" ");
+				}	
+				protocol.description = sb.toString();
+			}
+		
+		return protocol;
 	}
 	
 	void addEffectRecord(EffectRecord effect, Study study)

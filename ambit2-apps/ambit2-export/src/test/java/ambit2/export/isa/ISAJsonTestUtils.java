@@ -120,8 +120,8 @@ public class ISAJsonTestUtils
 	{
 		SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle();
 		
-		bundle.setDescription("Bundle description");
-		bundle.setTitle("Bundle title");
+		bundle.setDescription("Test Bundle description");
+		bundle.setTitle("Test Bundle title");
 		//TODO
 		
 		return bundle;
