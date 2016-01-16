@@ -2,6 +2,11 @@ package ambit2.export.isa.base;
 
 public class ISAConst 
 {	
+	public static enum DataFileFormat {
+		TEXT_TAB, TEXT_CSV
+	}
+	
+	
 	public static enum ISAVersion {
 		Ver1_0, Ver2_0
 	}

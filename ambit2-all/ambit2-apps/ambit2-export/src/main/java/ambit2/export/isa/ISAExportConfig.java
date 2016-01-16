@@ -6,8 +6,9 @@ import org.codehaus.jackson.JsonNode;
 
 import ambit2.export.isa.base.ISAConst.ISAFormat;
 import ambit2.export.isa.base.ISAConst.ISAVersion;
+import ambit2.export.isa.base.ISAConst.DataFileFormat;
 import ambit2.export.isa.base.ISALocation;
-import ambit2.rules.json.JSONParsingUtils;
+
 
 public class ISAExportConfig 
 {
@@ -15,7 +16,7 @@ public class ISAExportConfig
 	
 	public ISAFormat isaFormat = ISAFormat.JSON;
 	public ISAVersion isaVersion = ISAVersion.Ver1_0;
-	
+	public DataFileFormat dataFileFormat = DataFileFormat.TEXT_TAB;
 	
 	
 	//Data locations
@@ -37,7 +38,6 @@ public class ISAExportConfig
 	public boolean FlagSaveSourceAndSampleOnlyInProcess = true;
 	
 	public boolean FlagDescriptionAdditiveContent = true;  //If true the content is summed from various possible data sources
-	
 	
 	
 	

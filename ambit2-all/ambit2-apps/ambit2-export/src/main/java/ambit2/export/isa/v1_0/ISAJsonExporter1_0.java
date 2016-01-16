@@ -13,6 +13,7 @@ import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.export.isa.IISAExport;
+import ambit2.export.isa.base.ExternalDataFileManager;
 import ambit2.export.isa.base.ISAConst.ISAFormat;
 import ambit2.export.isa.base.ISAConst.ISAVersion;
 import ambit2.export.isa.json.ISAJsonExportConfig;
@@ -36,6 +37,7 @@ public class ISAJsonExporter1_0 implements IISAExport
 	File outputDir = null;
 	File exportConfig = null;
 	File xmlISAConfig =  null;
+	ExternalDataFileManager extDataManager = null;
 
 	//work variables
 	ISAJsonExportConfig cfg = null;
@@ -130,9 +132,11 @@ public class ISAJsonExporter1_0 implements IISAExport
 			throw new Exception("No records to iterate");
 
 		
+				
 		investigation = new Investigation();
 		isaMapper = new ISAJsonMapper1_0 ();
 		isaMapper.setTargetDataObject(investigation);  //The data is put (mapped) into investigation object
+		extDataManager = new ExternalDataFileManager(outputDir);
 		
 		handleBundle();
 		
