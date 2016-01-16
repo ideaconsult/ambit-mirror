@@ -118,8 +118,9 @@ public class ISAJsonExporter1_0 implements IISAExport
 		if (records == null)
 			throw new Exception("Null input records iterator!");
 
-		//if (outputDir == null)
-		//	throw new Exception("Null output directory or file!");
+		if (outputDir == null)	
+			logger.info("Null output directory or file! ISA data can be extarcted with function getResultAsJson() ");
+			
 
 		if (exportConfig == null)
 		{	
@@ -129,9 +130,8 @@ public class ISAJsonExporter1_0 implements IISAExport
 			cfg = ISAJsonExportConfig.loadFromJSON(exportConfig);
 
 		if (!records.hasNext())
-			throw new Exception("No records to iterate");
-
-		
+			logger.info("No substance records are found!");
+			
 				
 		investigation = new Investigation();
 		isaMapper = new ISAJsonMapper1_0 ();
