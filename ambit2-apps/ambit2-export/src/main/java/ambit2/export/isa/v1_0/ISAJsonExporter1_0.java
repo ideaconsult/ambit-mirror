@@ -18,6 +18,7 @@ import ambit2.export.isa.base.ISAConst.ISAFormat;
 import ambit2.export.isa.base.ISAConst.ISAVersion;
 import ambit2.export.isa.json.ISAJsonExportConfig;
 import ambit2.export.isa.json.ISAJsonExporter;
+import ambit2.export.isa.v1_0.objects.Assay;
 import ambit2.export.isa.v1_0.objects.Investigation;
 import ambit2.export.isa.v1_0.objects.MeasurementType;
 import ambit2.export.isa.v1_0.objects.Protocol;
@@ -212,8 +213,9 @@ public class ISAJsonExporter1_0 implements IISAExport
 	void addProtocolApplication(ProtocolApplication pa) throws Exception
 	{
 		//Each protocol application is stored as a separate study
-		Study study = new Study();	
+		Study study = new Study();
 		investigation.studies.add(study);
+		study.identifier = pa.getDocumentUUID();
 				
 		//Handle protocol info
 		Protocol protocol = extractProtocolInfo(pa);
@@ -280,9 +282,24 @@ public class ISAJsonExporter1_0 implements IISAExport
 	
 	void addEffectRecord(EffectRecord effect, Study study)
 	{
+		Assay assay = new Assay();
+		study.assays.add(assay);
+		
+		//Create assay processes
+		Process process1 = new Process();
+		Process process2 = new Process();
+		assay.processSequence.add(process1);
+		assay.processSequence.add(process2);
+		
+		//Set process 1
+		Source source1 = new Source();
+		Sample sample1 = new Sample();
+		process1.inputs.add(source1);
+		process1.outputs.add(sample1);
+		source1.name = study.identifier;
+		
+		
 		//TODO
-		
-		
 	}
 	
 	
