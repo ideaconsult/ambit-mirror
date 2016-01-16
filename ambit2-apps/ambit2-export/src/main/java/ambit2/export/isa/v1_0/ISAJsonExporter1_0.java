@@ -298,6 +298,11 @@ public class ISAJsonExporter1_0 implements IISAExport
 		process1.outputs.add(sample1);
 		source1.name = study.identifier;
 		
+		//Set process 2
+		
+		
+		//Store data to external data file
+		//String identifier = extDataManager.storeData(effect.getTextValue()).getLocationAsIdentifier();
 		
 		//TODO
 	}

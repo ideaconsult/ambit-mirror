@@ -24,12 +24,18 @@ public class ExternalDataFileManager
 		//TODO
 	}
 	
-	public void addLine()
+	public ExternalDataFileLocation storeData(Object obj)
+	{
+		//TODO
+		return null;
+	}
+	
+	void addLine()
 	{
 		//TODO
 	}
 	
-	public void addToLine(Object obj)
+	void addToLine(Object obj)
 	{
 		//TODO
 	}
