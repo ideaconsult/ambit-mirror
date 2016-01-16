@@ -37,6 +37,7 @@ public class ISAJsonExporter1_0 implements IISAExport
 	File outputDir = null;
 	File exportConfig = null;
 	File xmlISAConfig =  null;
+	File extDataFile = null;
 	ExternalDataFileManager extDataManager = null;
 
 	//work variables
@@ -136,7 +137,8 @@ public class ISAJsonExporter1_0 implements IISAExport
 		investigation = new Investigation();
 		isaMapper = new ISAJsonMapper1_0 ();
 		isaMapper.setTargetDataObject(investigation);  //The data is put (mapped) into investigation object
-		extDataManager = new ExternalDataFileManager(outputDir);
+		setExternalDataFile();
+		extDataManager = new ExternalDataFileManager(extDataFile);
 		
 		handleBundle();
 		
@@ -151,6 +153,11 @@ public class ISAJsonExporter1_0 implements IISAExport
 		}
 		
 		saveDataToOutputDir();
+	}
+	
+	void setExternalDataFile() throws Exception
+	{
+		//TODO
 	}
 	
 	void handleBundle() throws Exception
