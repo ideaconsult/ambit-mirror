@@ -200,6 +200,18 @@ public class ISAJsonExporter1_0 implements IISAExport
 	
 	void addCompositionAsStudy(SubstanceRecord rec) throws Exception
 	{
+		Study study = new Study();
+		investigation.studies.add(study);
+		study.identifier = "Composition-"+ rec.getSubstanceUUID();
+		study.description = "Substance composition";
+		
+		Process process = new Process();
+		study.processSequence.add(process);
+		Source source = new Source();
+		Sample sample = new Sample();
+		process.inputs.add(source);
+		process.outputs.add(sample);
+		
 		//TODO
 		
 	}
