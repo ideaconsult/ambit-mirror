@@ -132,7 +132,9 @@ public class ISAJsonTestUtils
 	{
 		SubstanceRecord record = new SubstanceRecord();
 		record.setContent("Generated test content");
-		record.setOwnerUUID("record-uuid-1234567890");
+		record.setOwnerUUID("owner-uuid-1234567890");
+		record.setSubstanceUUID("record-uuid-1234567890");
+		
 		
 		//Add measurements
 		ProtocolApplication pa = ProtocolApplicationTestFactory.initpa();
