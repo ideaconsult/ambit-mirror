@@ -542,10 +542,11 @@ td.jtox-multi table {
 }
 
 .jtox-ds-tables {
-  position: relative;  
+  position: relative;
 }
 
-.jtox-ds-tables .jt-processing {
+.jtox-ds-tables .jt-processing,
+.jtox-ds-tables .jt-error {
   text-align: center;
   display: none;
 }
@@ -559,6 +560,10 @@ td.jtox-multi table {
   padding-top: 8px;
   overflow: visible;
   display: inline-block;
+}
+
+.jtox-ds-tables .jt-error .message {
+  color: red;
 }
 
 .jtox-ds-tables .jtox-details-box {
@@ -577,7 +582,7 @@ td.jtox-multi table {
 }
 
 .jtox-ds-tables td .shortened {
-  max-width: 75px;  
+  max-width: 75px;
 }
 
 .jtox-ds-export {
@@ -604,7 +609,7 @@ div.jtox-details-table {
 
 .jtox-details-table table {
   width: 100%;
-  height: auto;  
+  height: auto;
   vertical-align: baseline;
 }
 
