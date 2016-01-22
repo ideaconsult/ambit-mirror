@@ -396,7 +396,19 @@ var ccLib = {
       relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [,''])[1],
       segments: a.pathname.replace(/^\//,'').split('/')
     };
+  },
+
+  escapeHTML: function(str){
+    var map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    };
+    return str.replace(/[&<>"']/g, function(m) { return map[m]; });
   }
+
 };
 
 function ccNonEmptyFilter(v) {
