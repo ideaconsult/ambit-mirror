@@ -57,8 +57,7 @@ import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.CallableStructureOptimizer;
 import ambit2.rest.task.tautomers.CallableTautomersGenerator;
 import ambit2.rest.task.tautomers.TautomersGenerator;
-import ambit2.rest.task.waffles.CallableWafflesPredictor;
-import ambit2.rest.task.waffles.WafflesPredictor;
+
 import ambit2.rest.task.weka.CallableWekaPredictor;
 import ambit2.rest.task.weka.FilteredWekaPredictor;
 
@@ -293,11 +292,14 @@ public class ModelResource
 				return // reads Instances, instead of IStructureRecord
 				new CallableWekaPredictor<Object, String>(form, getRequest()
 						.getRootRef(), getContext(), thepredictor, token,getRequest().getResourceRef().toString());
+				/*									
 			} else if (model.getContentMediaType().equals(
+
 					AlgorithmFormat.WAFFLES_JSON.getMediaType())) {
 				return new CallableWafflesPredictor(form, getRequest()
 						.getRootRef(), getContext(),
 						(WafflesPredictor) thepredictor, token,getRequest().getResourceRef().toString());
+*/						
 			} else if (model.getContentMediaType().equals(
 					AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
 
@@ -472,6 +474,7 @@ public class ModelResource
 						model,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
 								request));
+/*				
 			} else if (model.getContentMediaType().equals(
 					AlgorithmFormat.WAFFLES_JSON.getMediaType())) {
 				return new WafflesPredictor(
@@ -479,6 +482,7 @@ public class ModelResource
 						model,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
 								request));
+*/								
 			} else if (model.getContentMediaType().equals(
 					AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
 				if (model.getPredictors().size() == 0) { // hack for structure

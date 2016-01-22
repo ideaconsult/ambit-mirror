@@ -363,7 +363,7 @@
 				<exclusion>
 					<groupId>org.apache.poi</groupId>
 					<artifactId>poi-ooxml-schemas</artifactId>
-				</exclusion>					
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -465,7 +465,7 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		
+<!-- 
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-waffles</artifactId>
@@ -473,7 +473,7 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		
+ -->
 		<!-- <dependency> <groupId>ambit</groupId> <artifactId>qmrf-swing</artifactId> 
 			<version>2.0.1-SNAPSHOT</version> </dependency> <dependency> <groupId>ambit</groupId> 
 			<artifactId>swing-lib</artifactId> <version>2.0.1-SNAPSHOT</version> </dependency> -->
@@ -489,9 +489,15 @@
 			<version>${ambit.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ambit</groupId>
-			<artifactId>ambit2-dbsubstance</artifactId>
-			<version>${ambit.version}</version>
+			<groupId>net.ideaconsult</groupId>
+			<artifactId>loom-nm</artifactId>
+			<version>${net.idea.loom.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>net.enanomapper</groupId>
+			<artifactId>nmparser</artifactId>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ambit</groupId>
