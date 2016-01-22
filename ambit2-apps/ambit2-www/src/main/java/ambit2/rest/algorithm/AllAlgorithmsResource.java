@@ -25,7 +25,6 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.core.data.model.Algorithm;
-import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.core.data.model.AlgorithmType;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.data.model.Parameter;
@@ -51,7 +50,6 @@ import ambit2.rest.task.dbpreprocessing.CallableFinder;
 import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
 import ambit2.rest.task.dbpreprocessing.CallableFixPreferredStructure;
 import ambit2.rest.task.tautomers.TautomersModelBuilder;
-import ambit2.rest.task.waffles.CallableWafflesModelCreator;
 import ambit2.rest.task.weka.CallableWekaModelCreator;
 
 public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
@@ -332,9 +330,11 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			} else if (algorithm.hasType(AlgorithmType.Fingerprints.toString())) {
 				return new CallableFingerprintsCalculator(form, getRequest().getRootRef(), getContext(), algorithm,
 						token,getRequest().getResourceRef().toString());
+/*				
 			} else if (AlgorithmFormat.WAFFLES_JSON.equals(algorithm.getFormat())) {
 				return new CallableWafflesModelCreator(form, getRequest().getRootRef(), getContext(), algorithm,
 						modelReporter, algReporter, token,getRequest().getResourceRef().toString());
+*/						
 			} else {
 
 				return new CallableWekaModelCreator(form, getRequest().getRootRef(), getContext(), algorithm,

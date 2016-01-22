@@ -309,7 +309,9 @@
     <module>ambit2-structure2name</module>
     <module>ambit2-tautomers</module>
     <module>ambit2-ui</module>
+<!--     
     <module>ambit2-waffles</module>
+-->
     <module>ambit2-rules</module>
     <module>ambit2-poi</module>
     <module>ambit2-fp</module>
