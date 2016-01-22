@@ -8,11 +8,18 @@ import java.io.InputStream;
 import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import net.enanomapper.parser.GenericExcelParser;
+import net.enanomapper.parser.InvalidCommand;
+import net.idea.i5.io.I5Options;
+import net.idea.i5.io.I5ZReader;
+import net.idea.i5.io.QASettings;
 import net.idea.modbcum.c.DBConnectionConfigurable;
 import net.idea.modbcum.c.MySQLSingleConnection;
 import net.idea.modbcum.i.config.Preferences;
@@ -25,24 +32,70 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
-import org.restlet.Context;
+import org.apache.log4j.PropertyConfigurator;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.StructureRecordValidator;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.IRawReader;
+import ambit2.core.processors.structure.key.CASKey;
+import ambit2.core.processors.structure.key.EINECSKey;
+import ambit2.core.processors.structure.key.IStructureKey;
+import ambit2.core.processors.structure.key.InchiKey;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
+import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.substance.processor.DBSubstanceWriter;
 
 import com.mysql.jdbc.CommunicationsException;
 
 public class DBSubstanceImport {
-	protected static Logger logger = Logger.getLogger(DBSubstanceImport.class
-			.getName());
-	static final String loggingProperties = "config/logging.prop";
+	protected static Logger logger_cli = Logger
+			.getLogger(DBSubstanceImport.class.getName());
+	static final String loggingProperties = "ambit2/dbsubstance/logging.properties";
+	static final String log4jProperties = "ambit2/dbsubstance/log4j.properties";
+
+	static {
+		logger_cli = Logger.getLogger("ambitcli", "ambit2.dbsubstance.msg");
+		Locale.setDefault(Locale.ENGLISH);
+		String dOption = System.getProperty("java.util.logging.config.file");
+		if (dOption == null || "".equals(dOption)) {
+			InputStream in = null;
+			try {
+				in = DBSubstanceImport.class.getClassLoader()
+						.getResourceAsStream(loggingProperties);
+				LogManager.getLogManager().readConfiguration(in);
+
+			} catch (Exception x) {
+				logger_cli.log(Level.WARNING, x.getMessage());
+			} finally {
+				try {
+					in.close();
+				} catch (Exception x) {
+				}
+			}
+		}
+		// now log4j for those who use it
+		InputStream in = null;
+		try {
+			in = DBSubstanceImport.class.getClassLoader().getResourceAsStream(
+					log4jProperties);
+			PropertyConfigurator.configure(in);
+
+		} catch (Exception x) {
+			logger_cli.log(Level.WARNING, x.getMessage());
+		} finally {
+			try {
+				in.close();
+			} catch (Exception x) {
+			}
+		}
+
+	}
+
+	protected IStructureKey matchByKey = new ReferenceSubstanceUUID();
 	protected String configFile;
-	protected String parserType = null;
+	protected _parsertype parserType = _parsertype.xlsx;
 
 	protected boolean isSplitRecord = false;
 	protected boolean gzipped = false;
@@ -75,11 +128,15 @@ public class DBSubstanceImport {
 
 	protected boolean clearComposition = true;
 
-	public String getParserType() {
+	public enum _parsertype {
+		i5z, xlsx, xls, nanowiki
+	}
+
+	public _parsertype getParserType() {
 		return parserType;
 	}
 
-	public void setParserType(String parserType) {
+	public void setParserType(_parsertype parserType) {
 		this.parserType = parserType;
 	}
 
@@ -104,9 +161,26 @@ public class DBSubstanceImport {
 	protected File outputFile;
 	protected File jsonConfig;
 
-	protected static String getParserType(CommandLine line) {
+	protected static _parsertype getParserType(CommandLine line)
+			throws Exception {
 		if (line.hasOption('p'))
-			return line.getOptionValue('p');
+			try {
+				return _parsertype.valueOf(line.getOptionValue('p'));
+			} catch (Exception x) {
+				return null;
+			}
+		else
+			return null;
+	}
+
+	protected static _mode_matchstructure getStructureMatchMode(CommandLine line)
+			throws Exception {
+		if (line.hasOption('p'))
+			try {
+				return _mode_matchstructure.valueOf(line.getOptionValue('s'));
+			} catch (Exception x) {
+				return null;
+			}
 		else
 			return null;
 	}
@@ -193,45 +267,93 @@ public class DBSubstanceImport {
 		}
 		if (config == null) {
 			this.configFile = null;
-			System.err
-					.println("Config file not specified or do not exist, using default "
-							+ getClass().getClassLoader().getResource(
-									"config/ambit.properties"));
+			logger_cli.log(Level.WARNING,
+					"Config file not specified or do not exist!");
+
 		}
 	}
 
 	public static void main(String[] args) {
+		logger_cli.log(Level.INFO, "MSG_INFO_VERSION");
 		long now = System.currentTimeMillis();
+		int code = 0;
 		try {
 			DBSubstanceImport object = new DBSubstanceImport();
 			if (object.parse(args)) {
 				object.importFile();
 			} else
-				System.exit(0);
+				code = -1;
+
 		} catch (ConnectException x) {
-			logger.log(Level.SEVERE,
-					"Connection refused. Please verify if the remote server is responding.");
-			System.exit(-1);
+			logger_cli.log(Level.SEVERE, "MSG_CONNECTION_REFUSED",
+					new Object[] { x.getMessage() });
+			Runtime.getRuntime().runFinalization();
+			code = -1;
 		} catch (CommunicationsException x) {
-			logger.log(Level.SEVERE, "Can't connect to MySQL server!");
-			System.exit(-1);
+			logger_cli.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED",
+					new Object[] { x.getMessage() });
+			code = -1;
 		} catch (SQLException x) {
-			logger.log(Level.SEVERE, "SQL error", x);
-			System.exit(-1);
+			logger_cli.log(Level.SEVERE, "MSG_ERR_SQL",
+					new Object[] { x.getMessage() });
+			code = -1;
+		} catch (InvalidCommand x) {
+			logger_cli.log(Level.SEVERE, "MSG_INVALIDCOMMAND",
+					new Object[] { x.getMessage() });
+			code = -1;
 		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage(), x);
-			System.exit(-1);
+			logger_cli.log(Level.SEVERE, "MSG_ERR", new Object[] { x });
+			code = -1;
 		} finally {
-			logger.info(String.format("Completed in %s msec",
-					(System.currentTimeMillis() - now)));
-			logger.info("Done.");
+			if (code >= 0)
+				logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED",
+						(System.currentTimeMillis() - now));
 		}
 	}
+
+	private static enum _mode_matchstructure {
+		uuid {
+			@Override
+			public IStructureKey getKey() {
+				return new ReferenceSubstanceUUID();
+			}
+		},
+		cas {
+			@Override
+			public IStructureKey getKey() {
+				return new CASKey();
+			}
+		},
+		einecs {
+			@Override
+			public IStructureKey getKey() {
+				return new EINECSKey();
+			}			
+		},
+		smiles {
+			@Override
+			public IStructureKey getKey() {
+				return new SmilesKey();
+			}
+		},
+		inchi {
+			@Override
+			public IStructureKey getKey() {
+				try {
+					return new InchiKey();
+				} catch (Exception x) {
+					return null;
+				}
+			}
+		};
+		public abstract IStructureKey getKey();
+	};
 
 	protected Options createOptions() {
 		Options options = new Options();
 		Option input = OptionBuilder.hasArg().withLongOpt("input")
-				.withArgName("file").withDescription("Input file").create("i");
+				.withArgName("file").withDescription("Input file or folder")
+				.create("i");
 
 		Option jsonConfig = OptionBuilder.hasArg().withLongOpt("json")
 				.withArgName("file").withDescription("JSON config file")
@@ -253,6 +375,11 @@ public class DBSubstanceImport {
 				.withLongOpt("clearMeasurements").withArgName("value")
 				.withDescription("true|false").create("m");
 
+		Option matchStructure = OptionBuilder.hasArg()
+				.withLongOpt("structureMatch").withArgName("value")
+				.withDescription("Match structure by uuid|cas|smiles|inchi")
+				.create("s");
+
 		Option isSplitRecord = OptionBuilder.hasArg()
 				.withLongOpt("isSplitRecord").withArgName("value")
 				.withDescription("true|false").create("s");
@@ -271,6 +398,7 @@ public class DBSubstanceImport {
 		options.addOption(createParserTypeOption());
 		options.addOption(clearComposition);
 		options.addOption(clearMeasurement);
+		options.addOption(matchStructure);
 		options.addOption(isSplitRecord);
 
 		options.addOption(help);
@@ -279,8 +407,17 @@ public class DBSubstanceImport {
 	}
 
 	protected Option createParserTypeOption() {
+		StringBuilder b = new StringBuilder();
+		String d = "";
+		for (_parsertype p : _parsertype.values()) {
+			b.append(d);
+			b.append(p.name());
+			d = "|";
+		}
+		;
 		return OptionBuilder.hasArg().withLongOpt("parser").withArgName("type")
-				.withDescription("File parser mode : xlsx").create("p");
+				.withDescription("File parser mode : " + b.toString())
+				.create("p");
 	}
 
 	public boolean parse(String[] args) throws Exception {
@@ -289,20 +426,28 @@ public class DBSubstanceImport {
 		try {
 			CommandLine line = parser.parse(options, args, false);
 			setParserType(getParserType(line));
-
+			try {
+				matchByKey = getStructureMatchMode(line).getKey();
+			} catch (Exception x) {
+				matchByKey = new ReferenceSubstanceUUID();
+			}
 			setInputFile(getInput(line));
-			
+
 			if (inputFile == null)
 				throw new Exception("Missing input file");
 			jsonConfig = getJSONConfig(line);
 
-			if (!"nanowiki".equals(getParserType()))
+			if ("xslx".equals(getParserType()))
 				if (jsonConfig == null)
-					throw new Exception("Missing JSON config file");
+					throw new Exception(
+							"Missing JSON config file, mandatory for importing XLSX!");
 
 			outputFile = getOutput(line);
 
-			setConfig(getConfig(line));
+			String config = getConfig(line);
+			if (config == null || !(new File(config)).exists())
+				throw new Exception("Missing database connection config file");
+			setConfig(config);
 
 			setClearComposition(isClearComposition(line));
 			setClearMeasurements(isClearMeasurements(line));
@@ -326,27 +471,96 @@ public class DBSubstanceImport {
 		return new GenericExcelParser(in, jsonConfig, xlsx);
 	}
 
-	protected void importFile() throws Exception {
-		importFile(isSplitRecord(), inputFile.toString().toLowerCase()
-				.endsWith(".xlsx"));
+	protected int importFile() throws Exception {
+		if (inputFile.isDirectory()) {
+			logger_cli.log(Level.INFO, "MSG_IMPORT", new Object[] { "folder",
+					inputFile.getAbsolutePath() });
+			File[] allFiles = inputFile.listFiles();
+			long started = System.currentTimeMillis();
+			int allrecords = 0;
+			for (int i = 0; i < allFiles.length; i++) {
+				File file = allFiles[i];
+				setInputFile(file);
+				try {
+					allrecords += importFile();
+				} catch (Exception x) {
+					logger_cli.log(Level.INFO, "MSG_ERR",
+							new Object[] { x.getMessage() });
+				} finally {
+					long now = System.currentTimeMillis();
+					logger_cli.log(Level.INFO, "MSG_INFO_RECORDS",
+							new Object[] {
+									(i + 1),
+									(double) (now - started)
+											/ ((double) (i + 1)),
+									allrecords,
+									(double) (now - started)
+											/ ((double) allrecords) });
+				}
+			}
+			return allrecords;
+		} else {
+			String ext = inputFile.toString().toLowerCase();
+			if (ext.endsWith(".i5z"))
+				return importI5Z();
+			else
+				return importFile(isSplitRecord(), ext.endsWith(".xlsx"));
+		}
 	}
 
-	protected void importFile(boolean splitRecord, boolean xlsx)
+	protected int importI5Z() throws Exception {
+		logger_cli.log(Level.INFO, "MSG_IMPORT", new Object[] { "i5z",
+				inputFile.getAbsolutePath() });
+		I5ZReader reader = null;
+		Connection c = null;
+		try {
+
+			DBConnectionConfigurable<Context> dbc = null;
+			dbc = getConnection(getConfigFile());
+			c = dbc.getConnection();
+			c.setAutoCommit(true);
+			I5Options options = new I5Options();
+			reader = new I5ZReader<>(inputFile,options);
+			QASettings qa = new QASettings(false);
+			qa.setAll();
+			reader.setQASettings(qa);
+
+			matchByKey = new CASKey();
+			return write(reader, c, matchByKey, true, clearMeasurements,
+					clearComposition, null);
+		} catch (Exception x) {
+			throw x;
+		} finally {
+			if (reader != null)
+				reader.close();
+			try {
+				if (c != null)
+					c.close();
+			} catch (Exception x) {
+			}
+		}
+	}
+
+	protected int importFile(boolean splitRecord, boolean xlsx)
 			throws Exception {
 		IRawReader<IStructureRecord> parser = null;
 		Connection c = null;
 		try {
 			FileInputStream fin = new FileInputStream(inputFile);
 
+			parser = createParser(fin, xlsx);
+			logger_cli.log(Level.INFO, "MSG_IMPORT", new Object[] {
+					parser.getClass().getName(), inputFile.getAbsolutePath() });
+
+			StructureRecordValidator validator = new StructureRecordValidator(
+					inputFile.getName(), true);
+
 			DBConnectionConfigurable<Context> dbc = null;
 			dbc = getConnection(getConfigFile());
 			c = dbc.getConnection();
 			c.setAutoCommit(true);
 
-			parser = createParser(fin, xlsx);
-			StructureRecordValidator validator = new StructureRecordValidator(
-					inputFile.getName(), true);
-			write(parser, c, new ReferenceSubstanceUUID(), splitRecord,
+			return write(parser, c, new ReferenceSubstanceUUID(), splitRecord,
 					clearMeasurements, clearComposition, validator);
 		} catch (Exception x) {
 			throw x;
@@ -364,12 +578,10 @@ public class DBSubstanceImport {
 			throws SQLException, AmbitException {
 		try {
 			Context context = initContext();
-			String driver = context.getParameters().getFirstValue(
-					Preferences.DRIVERNAME);
+			String driver = context.get(Preferences.DRIVERNAME);
 
 			if ((driver != null) && (driver.contains("mysql")))
-				return new MySQLSingleConnection(context,
-						configFile);
+				return new MySQLSingleConnection(context, configFile);
 			else
 				throw new AmbitException("Driver not supported");
 		} catch (Exception x) {
@@ -389,18 +601,18 @@ public class DBSubstanceImport {
 
 			properties.load(in);
 			Context context = new Context();
-			context.getParameters().add(Preferences.DATABASE,
+			context.put(Preferences.DATABASE,
 					properties.get(Preferences.DATABASE).toString());
-			context.getParameters().add(Preferences.USER,
-					properties.get(Preferences.USER).toString());
-			context.getParameters().add(Preferences.PASSWORD,
+			context.put(Preferences.USER, properties.get(Preferences.USER)
+					.toString());
+			context.put(Preferences.PASSWORD,
 					properties.get(Preferences.PASSWORD).toString());
-			context.getParameters().add(Preferences.HOST,
-					properties.get(Preferences.HOST).toString());
+			context.put(Preferences.HOST, properties.get(Preferences.HOST)
+					.toString());
 
-			context.getParameters().add(Preferences.PORT,
-					properties.get(Preferences.PORT).toString());
-			context.getParameters().add(Preferences.DRIVERNAME,
+			context.put(Preferences.PORT, properties.get(Preferences.PORT)
+					.toString());
+			context.put(Preferences.DRIVERNAME,
 					properties.get(Preferences.DRIVERNAME).toString());
 			return context;
 
@@ -422,30 +634,35 @@ public class DBSubstanceImport {
 	}
 
 	public int write(IRawReader<IStructureRecord> reader,
-			Connection connection, PropertyKey key, boolean splitRecord,
+			Connection connection, IStructureKey key, boolean splitRecord,
 			boolean clearMeasurements, boolean clearComposition,
 			StructureRecordValidator validator) throws Exception {
 
 		DBSubstanceWriter writer = new DBSubstanceWriter(
 				DBSubstanceWriter.datasetMeta(), new SubstanceRecord(),
-				clearMeasurements, clearComposition);
+				clearMeasurements, clearComposition, key);
 		writer.setSplitRecord(splitRecord);
 		writer.setConnection(connection);
 		writer.setClearComposition(clearComposition);
 		writer.setClearMeasurements(clearMeasurements);
 		writer.open();
 		int records = 0;
-		while (reader.hasNext()) {
-			Object record = reader.next();
-			if (record == null)
-				continue;
-			if (record instanceof SubstanceRecord)
-				configure(writer, (SubstanceRecord) record);
-			validate(validator, (IStructureRecord) record);
-			writer.process((IStructureRecord) record);
-			records++;
+		try {
+			while (reader.hasNext()) {
+				Object record = reader.next();
+				if (record == null)
+					continue;
+				if (record instanceof SubstanceRecord)
+					configure(writer, (SubstanceRecord) record);
+				validate(validator, (IStructureRecord) record);
+				writer.process((IStructureRecord) record);
+				records++;
+			}
+		} finally {
+			writer.close();
+			logger_cli
+					.log(Level.INFO, "MSG_IMPORTED", new Object[] { records });
 		}
-		writer.close();
 		return records;
 	}
 
@@ -455,16 +672,26 @@ public class DBSubstanceImport {
 
 	protected void validate(StructureRecordValidator validator,
 			IStructureRecord record) throws Exception {
-		validator.process((IStructureRecord) record);
+		if (validator != null)
+			validator.process((IStructureRecord) record);
 	}
 
 	protected static void printHelp(Options options, String message) {
 		if (message != null)
-			System.out.println(message);
+			logger_cli.log(Level.WARNING, message);
 
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp(DBSubstanceImport.class.getName(), options);
+		formatter.printHelp("ambitsi-{version}", options);
 		Runtime.getRuntime().runFinalization();
 		Runtime.getRuntime().exit(0);
 	}
+}
+
+class Context extends HashMap<String, String> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1993541083813105854L;
+
 }

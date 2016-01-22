@@ -18,18 +18,24 @@ import java.util.zip.ZipInputStream;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import ambit2.base.exceptions.AmbitIOException;
 
-public class ZipReader extends RawIteratingFolderReader {
+public class ZipReader<OPTIONS> extends RawIteratingFolderReader {
 	final static int BUFFER = 2048;
 	static final int TOOBIG = 0x6400000; // 100MB
-
+	protected OPTIONS options;
+	
 	public ZipReader(File zipfile) throws AmbitIOException {
-		super(null);
-		setFiles(unzip(zipfile, getTempFolder()));
+		this(zipfile,null);
 	}
-
-	public ZipReader(InputStream zipstream) throws AmbitIOException {
+	public ZipReader(File zipfile,OPTIONS options) throws AmbitIOException {
 		super(null);
-		setFiles(unzip(zipstream, getTempFolder()));
+		setFiles(unzip(zipfile, getTempFolder(),options));
+	}
+	public ZipReader(InputStream zipstream) throws AmbitIOException {
+		this(zipstream,null);
+	}
+	public ZipReader(InputStream zipstream,OPTIONS options) throws AmbitIOException {
+		super(null);
+		setFiles(unzip(zipstream, getTempFolder(),options));
 	}
 
 	public static File getTempFolder() throws AmbitIOException {
@@ -45,7 +51,7 @@ public class ZipReader extends RawIteratingFolderReader {
 		}
 	}
 
-	public File[] unzip(File zipfile, File directory) throws AmbitIOException {
+	public File[] unzip(File zipfile, File directory,OPTIONS options) throws AmbitIOException {
 		List<File> files = new ArrayList<File>();
 		ZipFile zipFile = null;
 		try {
@@ -73,7 +79,7 @@ public class ZipReader extends RawIteratingFolderReader {
 		}
 	}
 
-	public File[] unzip(InputStream zipstream, File directory)
+	public File[] unzip(InputStream zipstream, File directory,OPTIONS options)
 			throws AmbitIOException {
 		List<File> files = new ArrayList<File>();
 		ZipInputStream zis = null;

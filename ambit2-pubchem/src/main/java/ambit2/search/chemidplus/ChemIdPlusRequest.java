@@ -17,8 +17,8 @@ public class ChemIdPlusRequest extends AbstractSearchRequest<String> {
 	 * 
 	 */
 	private static final long serialVersionUID = 4023235628557946550L;
-	//http://chem.sis.nlm.nih.gov/molfiles/0000050000.mol
-	public static final String CHEMIDPLUS_URL = "http://chem.sis.nlm.nih.gov/molfiles/%s.mol";
+	public static final String CHEMIDPLUS_URL = "http://chem.sis.nlm.nih.gov/chemidplus/mol3d/%s" ;
+			
 	
 	public String process(String target) throws AmbitException {
 		try {
@@ -30,12 +30,7 @@ public class ChemIdPlusRequest extends AbstractSearchRequest<String> {
 	
 	protected String formatCAS(String cas) throws AmbitException {
 		if (CASNumber.isValid(cas)) {
-			cas = cas.replace("-","");
-			StringBuilder b = new StringBuilder();
-			for (int i=0; i<10-cas.length();i++)
-				b.append("0");
-			b.append(cas);
-			return b.toString();
+			return cas;
 		} else throw new AmbitException("Invalid CAS");
 	}
 	

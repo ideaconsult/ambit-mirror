@@ -17,6 +17,8 @@ import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.relation.composition.CompositionRelation;
+import ambit2.core.processors.structure.key.IStructureKey;
+import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.processors.RepositoryWriter;
@@ -52,6 +54,7 @@ public class DBSubstanceWriter extends
 	private DeleteSubstanceRelation deleteComposition;
 	private RepositoryWriter writer;
 	protected boolean clearMeasurements;
+	protected PropertyKey componentsMatch = new ReferenceSubstanceUUID();
 
 	public boolean isClearMeasurements() {
 		return clearMeasurements;
@@ -98,6 +101,11 @@ public class DBSubstanceWriter extends
 	public DBSubstanceWriter(SourceDataset dataset,
 			SubstanceRecord importedRecord, boolean clearMeasurements,
 			boolean clearComposition) {
+		this(dataset,importedRecord,clearMeasurements,clearComposition,new ReferenceSubstanceUUID());
+	}
+	public DBSubstanceWriter(SourceDataset dataset,
+			SubstanceRecord importedRecord, boolean clearMeasurements,
+			boolean clearComposition, IStructureKey matchByKey) {
 		super();
 		q = new CreateSubstance();
 		qids = new UpdateSubstanceIdentifiers();
@@ -109,7 +117,7 @@ public class DBSubstanceWriter extends
 		x.setCloseConnection(false);
 		writer = new RepositoryWriter();
 		writer.setCloseConnection(false);
-		writer.setPropertyKey(new ReferenceSubstanceUUID());
+		writer.setPropertyKey(matchByKey);
 		writer.setUseExistingStructure(true);
 		writer.setDataset(dataset == null ? datasetMeta() : dataset);
 		writer.setBuild2D(true);
@@ -203,6 +211,8 @@ public class DBSubstanceWriter extends
 		importedRecord.setSubstanceUUID(substance.getSubstanceUUID());
 		importedRecord.setIdsubstance(substance.getIdsubstance());
 
+		String prefix = substance.getSubstanceUUID().substring(0, 4);
+		
 		if (clearComposition)
 			try {
 				deleteComposition.setGroup(importedRecord);
@@ -215,10 +225,18 @@ public class DBSubstanceWriter extends
 			for (CompositionRelation rel : substance.getRelatedStructures()) {
 				Object i5uuid = rel.getSecondStructure().getRecordProperty(
 						Property.getI5UUIDInstance());
-
+				/*
+				 * to work with I5 files we need to match components via reference substance UUID (especially if these are empty)
+				 * but to match structures within the database we use the match key, which might be different
+				 * TODO test how this work with other files
+				 */
 				if (rel.getSecondStructure().getIdchemical() <= 0) {
+					IStructureKey match = writer.getPropertyKey();
+					writer.setPropertyKey(componentsMatch);
 					writer.create(rel.getSecondStructure());
+					writer.setPropertyKey(match);
 				}
+
 				rel.getSecondStructure().setRecordProperty(
 						Property.getI5UUIDInstance(), i5uuid);
 				qr.setCompositionRelation(rel);
