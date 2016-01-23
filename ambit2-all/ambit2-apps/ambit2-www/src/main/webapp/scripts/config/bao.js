@@ -220,10 +220,16 @@ var config_bao = {
         "interpretation": {
             "result": {
                 "inMatrix" : false,
-                "bVisible": false
+                "bVisible": true,
+                "mRender" : function(data,type,full) {
+                	return "<span class='jtox-toolkit shortened ' title='"+data+"'>" + data + "</span>";                	
+                }
             },
             "criteria": {
-                "bVisible": false
+                "bVisible": true,
+                "mRender" : function(data,type,full) {
+                	return "<span class='jtox-toolkit shortened ' title='"+data+"'>" + data + "</span>";                	
+                }
             }
         }		
 }

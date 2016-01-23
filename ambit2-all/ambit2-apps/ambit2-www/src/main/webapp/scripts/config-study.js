@@ -148,6 +148,13 @@ var config_study = {
 			"protocol" : config_npo["protocol"],
 			"interpretation" : config_npo["interpretation"]	        	
         },
+        "BAO_0002168_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	        	
+        },
         "BAO_0002993_SECTION" : {
 			"parameters" : config_bao["parameters"],
 			"effects" : config_bao["effects"],
@@ -507,53 +514,18 @@ var config_study = {
                 }
             }
         },
+        "PC_UNKNOWN_SECTION" :{
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	         	
+        },
         "UNKNOWN_TOXICITY_SECTION" : {
-        	"parameters": {
-        		"sVisible" : false,
-                "type of method": {
-                    "sVisible" : true,
-                    "sTitle": "Method type"
-                },
-                "testmat_form": {
-                	"sVisible" : false,
-                "sTitle": "Test material form"
-            	}
-        	},
-            "effects": {
-                "endpoint": {
-                    "bVisible": true,
-                    "inMatrix": true
-                },            	
-                "text": {
-                    "bVisible": false,
-                    "inMatrix": true
-                },
-                "result": {
-                    "bVisible": true,
-                    "inMatrix": true
-                }                
-            },
-            "conditions": {
-                "p": {
-                    "bVisible": false
-                },
-                "n": {
-                    "bVisible": false
-                },
-		"medium" : {
-			"sTitle" : "Medium"
-		}                    
-            
-            },            
-            "interpretation": {
-                "result": {
-                    "bVisible": false,
-                    "inMatrix": true
-                },
-                "criteria": {
-                    "bVisible": false
-                }
-            },
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"interpretation" : config_bao["interpretation"],	        	
             "protocol": {
             	 "guideline": {
                  	"sTitle" : "Protocol",
