@@ -1,7 +1,7 @@
 package ambit2.export.isa.base;
 
 import java.io.File;
-
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,24 +15,25 @@ public class ExternalDataFileManager
 	
 	protected boolean FlagStoreDataInStringBuffer = false; 
 	protected StringBuffer buffer = null;
+	FileWriter fileWriter = null;
 	
-	List<String> currentLine = new ArrayList<String>();
+	protected List<String> currentLine = new ArrayList<String>();
 	
 	
-	public ExternalDataFileManager (File outputDir)
+	public ExternalDataFileManager (File outputDir) throws Exception
 	{
 		init();
 	}
 	
-	public void saveBufferAsFile() throws Exception
-	{
-		if (outputDir == null)
-			throw new Exception("OutputDir/File is null!");
-	}
 	
-	void init ()
+	void init () throws Exception
 	{
 		currentLine.clear();
+		if (outputDir != null)
+		{
+			//TODO
+		}
+		
 	}
 	
 	public ExternalDataFileLocation storeData(Object obj)
@@ -64,6 +65,38 @@ public class ExternalDataFileManager
 
 	public void setDataFileFormat(DataFileFormat dataFileFormat) {
 		this.dataFileFormat = dataFileFormat;
+	}
+	
+	public void saveBufferAsFile(File file) throws Exception
+	{
+		if (file == null)
+			throw new Exception("Target file is null!");
+		
+		FileWriter writer = createWriter(outputDir);
+		//TODO
+		
+		closeWriter(writer);
+	}
+	
+	
+	protected FileWriter createWriter(File file) throws Exception
+	{
+		FileWriter writer = null;
+		try {
+			writer = new FileWriter(file);
+			
+		}catch (Exception x) {
+			//in case smth's wrong with the writer file, close it and throw an error
+			try {writer.close(); } catch (Exception xx) {}
+			throw x;
+		} finally { }
+		
+		return writer;
+	}
+	
+	public void closeWriter(FileWriter writer) throws Exception
+	{
+		writer.close();
 	}
 
 }
