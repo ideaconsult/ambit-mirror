@@ -2,11 +2,13 @@ package ambit2.user.bundle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import net.idea.restnet.db.aalocal.user.IDBConfig;
 import ambit2.db.update.bundle.ReadBundle;
+import ambit2.db.update.bundle.UpdateBundle._published_status;
 
 /**
  * a bit of a hack to get bundles with R/W rights for a given user
@@ -24,6 +26,10 @@ public class ReadBundleByPolicy extends ReadBundle implements IDBConfig {
 	    + "join %s.user_roles using(role_name) where  user_name=? and resource like '/bundle/%%' and %s)";
     protected String databaseName;
     protected boolean mode_write = false;
+    
+    public ReadBundleByPolicy(Set<_published_status> status) {
+		super(status);
+	}
 
     public boolean isMode_write() {
 	return mode_write;

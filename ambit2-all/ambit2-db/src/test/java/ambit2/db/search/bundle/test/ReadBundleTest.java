@@ -1,6 +1,8 @@
 package ambit2.db.search.bundle.test;
 
 import java.sql.ResultSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 import junit.framework.Assert;
 
@@ -11,12 +13,15 @@ import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.search.test.QueryTest;
 import ambit2.db.update.bundle.ReadBundle;
 import ambit2.db.update.bundle.ReadBundleVersion;
+import ambit2.db.update.bundle.UpdateBundle._published_status;
 
 public class ReadBundleTest extends QueryTest<ReadBundle> {
 
     @Override
     protected ReadBundle createQuery() throws Exception {
-	ReadBundle q = new ReadBundle("guest");
+		Set<_published_status> status = new TreeSet<_published_status>();
+		status.add(_published_status.published);
+	ReadBundle q = new ReadBundle("guest",status);
 	SubstanceEndpointsBundle b = new SubstanceEndpointsBundle();
 	b.setID(1);
 	q.setValue(b);
@@ -42,7 +47,9 @@ public class ReadBundleTest extends QueryTest<ReadBundle> {
 
 
     protected ReadBundle createQueryVersion() throws Exception {
-	ReadBundleVersion q = new ReadBundleVersion();
+		Set<_published_status> status = new TreeSet<_published_status>();
+		status.add(_published_status.published);
+    	ReadBundleVersion q = new ReadBundleVersion(status);
 	SubstanceEndpointsBundle b = new SubstanceEndpointsBundle();
 	b.setID(1);
 	q.setValue(b);
