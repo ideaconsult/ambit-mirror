@@ -3,6 +3,8 @@ package ambit2.rest.bundle;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
@@ -29,6 +31,8 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.config.AMBITConfig;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.update.bundle.ReadBundle;
+import ambit2.db.update.bundle.UpdateBundle;
+import ambit2.db.update.bundle.UpdateBundle._published_status;
 import ambit2.rest.OpenTox;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
@@ -74,7 +78,10 @@ public class BundleMetadataResource extends
 		    Integer idnum = new Integer(Reference.decode(id.toString()));
 		    dataset = new SubstanceEndpointsBundle();
 		    dataset.setID(idnum);
-		    ReadBundle query = new ReadBundle(getUserName());
+			Set<_published_status> status = new TreeSet<_published_status>();
+			status.add(_published_status.published);
+			status.add(_published_status.draft);
+		    ReadBundle query = new ReadBundle(getUserName(),status);
 		    query.setValue(dataset);
 		    return query;
 		} catch (NumberFormatException x) {
@@ -89,6 +96,11 @@ public class BundleMetadataResource extends
 	return null;
     }
 
+    protected Set<UpdateBundle._published_status> getPublishedStatus() {
+		Set<_published_status> status = new TreeSet<_published_status>();
+		status.add(_published_status.published);
+		return status;
+    }
     @Override
     protected IQueryRetrieval<SubstanceEndpointsBundle> createQuery(Context context, Request request, Response response)
 	    throws ResourceException {
@@ -101,7 +113,8 @@ public class BundleMetadataResource extends
 		    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		dataset = new SubstanceEndpointsBundle();
 		dataset.setID(idnum);
-		query = new ReadBundle(getUserName());
+
+		query = new ReadBundle(getUserName(),getPublishedStatus());
 		query.setValue(dataset);
 		return query;
 	    } catch (NumberFormatException x) {
@@ -110,25 +123,25 @@ public class BundleMetadataResource extends
 	else {
 	    Form form = getParams();
 	    if (form.getFirstValue("search") != null) {
-		ReadBundle q =  new ReadBundle(getUserName());
+		ReadBundle q =  new ReadBundle(getUserName(),getPublishedStatus());
 		SubstanceEndpointsBundle b = new SubstanceEndpointsBundle();
 		b.setName(form.getFirstValue("search").replace("*","%"));
 		q.setValue(b);
 		return q;
 	    } if (form.getFirstValue("canRead") != null) {
-		ReadBundleByPolicy q = new ReadBundleByPolicy();
+		ReadBundleByPolicy q = new ReadBundleByPolicy(null);
 		q.setDatabaseName(getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name()));
 		q.setFieldname(form.getFirstValue("canRead"));
 		q.setMode_write(false);
 		return q;
 	    } else if (form.getFirstValue("canWrite") != null) {
-		ReadBundleByPolicy q = new ReadBundleByPolicy();
+		ReadBundleByPolicy q = new ReadBundleByPolicy(null);
 		q.setDatabaseName(getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name()));
 		q.setFieldname(form.getFirstValue("canWrite"));
 		q.setMode_write(true);
 		return q;
 	    } else
-		return new ReadBundle(getUserName());
+		return new ReadBundle(getUserName(),getPublishedStatus());
 	}
     }
 

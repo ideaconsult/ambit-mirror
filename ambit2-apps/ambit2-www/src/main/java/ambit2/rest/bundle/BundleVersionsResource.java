@@ -1,6 +1,8 @@
 package ambit2.rest.bundle;
 
 import java.sql.Connection;
+import java.util.Set;
+import java.util.TreeSet;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.restnet.c.task.CallableProtectedTask;
@@ -21,6 +23,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.update.bundle.ReadBundle;
 import ambit2.db.update.bundle.ReadBundleVersion;
+import ambit2.db.update.bundle.UpdateBundle._published_status;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetURIReporter;
 
@@ -42,7 +45,11 @@ public class BundleVersionsResource extends BundleMetadataResource {
 		    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		dataset = new SubstanceEndpointsBundle();
 		dataset.setID(idnum);
-		query = new ReadBundleVersion();
+		Set<_published_status> set = new TreeSet<_published_status>();
+		set.add(_published_status.published);
+		set.add(_published_status.draft);
+		set.add(_published_status.archived);
+		query = new ReadBundleVersion(set);
 		query.setValue(dataset);
 		return query;
 	    } catch (NumberFormatException x) {
@@ -62,7 +69,11 @@ public class BundleVersionsResource extends BundleMetadataResource {
 		    Integer idnum = new Integer(Reference.decode(id.toString()));
 		    dataset = new SubstanceEndpointsBundle();
 		    dataset.setID(idnum);
-		    ReadBundle query = new ReadBundle();
+			Set<_published_status> set = new TreeSet<_published_status>();
+			set.add(_published_status.published);
+			set.add(_published_status.draft);
+			set.add(_published_status.archived);
+		    ReadBundle query = new ReadBundle(set);
 		    query.setValue(dataset);
 		    return query;
 		} catch (NumberFormatException x) {

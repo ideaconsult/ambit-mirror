@@ -2,6 +2,8 @@ package ambit2.rest.bundle.user;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.restnet.c.RepresentationConvertor;
@@ -26,6 +28,7 @@ import ambit2.base.config.AMBITConfig;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.update.bundle.ReadBundle;
+import ambit2.db.update.bundle.UpdateBundle._published_status;
 import ambit2.rest.OpenTox;
 import ambit2.user.policy.CallablePolicyUsersCreator;
 import ambit2.user.rest.ReadUserByBundleNumber;
@@ -108,7 +111,9 @@ public class UserByURIResource<T> extends UserDBResource<T> {
 	try {
 	    DBConnection dbc = new DBConnection(getContext(), getAmbitConfigFile());
 	    c = dbc.getConnection();
-	    ReadBundle read = new ReadBundle();
+		Set<_published_status> status = new TreeSet<_published_status>();
+		status.add(_published_status.published);
+	    ReadBundle read = new ReadBundle(status);
 	    read.setValue(dataset);
 	    xx = new QueryExecutor();
 	    xx.setConnection(c);

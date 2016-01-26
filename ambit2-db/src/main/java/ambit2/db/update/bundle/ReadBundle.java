@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
@@ -12,6 +13,7 @@ import ambit2.base.data.I5Utils;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.db.update.bundle.UpdateBundle._published_status;
 import ambit2.db.update.dataset.AbstractReadDataset;
 
 /**
@@ -28,14 +30,26 @@ public class ReadBundle extends
 	 * 
 	 */
 	private static final long serialVersionUID = -5560670663328542819L;
+	protected Set<_published_status> status = null;
 
-	public ReadBundle() {
-		super();
+	public Set<_published_status> getStatus() {
+		return status;
 	}
 
-	public ReadBundle(String username) {
+	public void setStatus(Set<_published_status> status) {
+		this.status = status;
+	}
+
+	
+	public ReadBundle(Set<_published_status> status) {
+		super();
+		setStatus(status);
+	}
+
+	public ReadBundle(String username,Set<_published_status> status) {
 		super();
 		setFieldname(username);
+		setStatus(status);
 	}
 
 	@Override
@@ -76,9 +90,19 @@ public class ReadBundle extends
 	}
 
 	public String getSQL() throws AmbitException {
+		StringBuilder p = new StringBuilder();
+		String d = "where published_status in (";
+		for (_published_status s : getStatus()) {
+			p.append(d);
+			p.append("'");
+			p.append(s.name());
+			p.append("'");
+			d = ",";
+		}	
+		p.append(") ");
 		String sql = String
 				.format(select_datasets,
-						getValue() == null ? "where published_status in ('draft','published')"
+						getValue() == null ? p.toString()
 								: getValue().getID() > 0 ? "where idbundle=?"
 										: "where name like ?",
 						(getFieldname() == null) ? "" : " and user_name=?");
