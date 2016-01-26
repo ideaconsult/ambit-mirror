@@ -2,6 +2,9 @@ package ambit2.export.isa.base;
 
 import java.io.File;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ambit2.export.isa.base.ISAConst.DataFileFormat;
 
 public class ExternalDataFileManager 
@@ -13,15 +16,23 @@ public class ExternalDataFileManager
 	protected boolean FlagStoreDataInStringBuffer = false; 
 	protected StringBuffer buffer = null;
 	
+	List<String> currentLine = new ArrayList<String>();
+	
 	
 	public ExternalDataFileManager (File outputDir)
 	{
 		init();
 	}
 	
+	public void saveBufferAsFile() throws Exception
+	{
+		if (outputDir == null)
+			throw new Exception("OutputDir/File is null!");
+	}
+	
 	void init ()
 	{
-		//TODO
+		currentLine.clear();
 	}
 	
 	public ExternalDataFileLocation storeData(Object obj)
