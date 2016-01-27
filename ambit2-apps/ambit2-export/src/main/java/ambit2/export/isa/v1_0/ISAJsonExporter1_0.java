@@ -212,8 +212,19 @@ public class ISAJsonExporter1_0 implements IISAExport
 		process.inputs.add(source);
 		process.outputs.add(sample);
 		
-		//TODO
+		source.name = rec.getSubstanceUUID();
+		sample.name = "composition";
 		
+		//Storing composition info
+		String s = rec.getFormula();
+		if (s != null)
+		{
+			//sample.characteristics.add()
+		}
+		
+		
+		
+		//TODO
 	}
 	
 	void addCompositionAsMaterial(SubstanceRecord rec) throws Exception
