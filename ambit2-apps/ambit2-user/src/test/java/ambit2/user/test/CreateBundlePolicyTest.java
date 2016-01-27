@@ -22,16 +22,17 @@ import org.restlet.data.Form;
 import org.restlet.data.Method;
 
 import ambit2.db.UpdateExecutor;
+import ambit2.user.policy.CallableBundlePolicyCreator;
 import ambit2.user.policy.CallablePolicyUsersCreator;
 import ambit2.user.policy.CreateUsersPolicy;
 import ambit2.user.policy.RESTPolicyUsers;
 
 /**
- * Test for {@link CallablePolicyUsersCreator}
+ * Copied from {@link CreateUsersPolicyTest} but will use {@link CallableBundlePolicyCreator} instead
  * @author nina
  *
  */
-public class CreateUsersPolicyTest extends DbUnitTest {
+public class CreateBundlePolicyTest extends DbUnitTest {
 	protected UpdateExecutor<IQueryUpdate> executor;
 	protected UUID bundle = UUID.randomUUID();
 	protected UUID bundletest = UUID.nameUUIDFromBytes("TEST".getBytes());
