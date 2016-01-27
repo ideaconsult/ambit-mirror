@@ -1,6 +1,7 @@
 
 package ambit2.export.isa.v1_0.objects;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
+    "@id",
     "filename",
     "identifier",
     "title",
@@ -29,14 +31,17 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "people",
     "studyDesignDescriptors",
     "protocols",
-    "sources",
-    "samples",
+    "materials",
     "processSequence",
     "assays",
-    "factors"
+    "factors",
+    "characteristicCategories",
+    "comments"
 })
 public class Study {
 
+    @JsonProperty("@id")
+    public URI Id;
     @JsonProperty("filename")
     public String filename;
     @JsonProperty("identifier")
@@ -57,15 +62,21 @@ public class Study {
     public List<MeasurementType> studyDesignDescriptors = new ArrayList<MeasurementType>();
     @JsonProperty("protocols")
     public List<Protocol> protocols = new ArrayList<Protocol>();
-    @JsonProperty("sources")
-    public List<Source> sources = new ArrayList<Source>();
-    @JsonProperty("samples")
-    public List<Sample> samples = new ArrayList<Sample>();
+    @JsonProperty("materials")
+    public Object materials;
     @JsonProperty("processSequence")
     public List<Process> processSequence = new ArrayList<Process>();
     @JsonProperty("assays")
     public List<Assay> assays = new ArrayList<Assay>();
     @JsonProperty("factors")
     public List<Factor> factors = new ArrayList<Factor>();
+    /**
+     * List of all the characteristics (or material attributes) defined in the study, used to avoid duplication of their declaration when each material_attribute_value is created. 
+     * 
+     */
+    @JsonProperty("characteristicCategories")
+    public List<Charactersitic> characteristicCategories = new ArrayList<Charactersitic>();
+    @JsonProperty("comments")
+    public List<Comment> comments = new ArrayList<Comment>();
 
 }

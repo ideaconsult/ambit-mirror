@@ -1,7 +1,9 @@
 
 package ambit2.export.isa.v1_0.objects;
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -18,14 +20,20 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
+    "@id",
     "name",
     "executesProtocol",
-    "parameters",
+    "parameterValues",
+    "performer",
+    "date",
     "inputs",
-    "outputs"
+    "outputs",
+    "comments"
 })
 public class Process {
 
+    @JsonProperty("@id")
+    public URI Id;
     @JsonProperty("name")
     public String name;
     /**
@@ -36,11 +44,17 @@ public class Process {
      */
     @JsonProperty("executesProtocol")
     public Protocol executesProtocol;
-    @JsonProperty("parameters")
-    public List<Parameter> parameters = new ArrayList<Parameter>();
+    @JsonProperty("parameterValues")
+    public List<ParameterValue> parameterValues = new ArrayList<ParameterValue>();
+    @JsonProperty("performer")
+    public String performer;
+    @JsonProperty("date")
+    public Date date;
     @JsonProperty("inputs")
     public List<Object> inputs = new ArrayList<Object>();
     @JsonProperty("outputs")
     public List<Object> outputs = new ArrayList<Object>();
+    @JsonProperty("comments")
+    public List<Comment> comments = new ArrayList<Comment>();
 
 }

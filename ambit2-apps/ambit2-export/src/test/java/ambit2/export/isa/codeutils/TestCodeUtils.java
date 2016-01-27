@@ -22,7 +22,7 @@ public class TestCodeUtils
 		//Step 2 pojo
 		
 		//Step 3
-		//javaRename ("D:/Projects/Nina/jsonschema2pojo-0.4.15/target-isa1/ambit2/export/isa/v1_0/objects");
+		javaRename ("D:/Projects/Nina/jsonschema2pojo-0.4.15/target-isa1/ambit2/export/isa/v1_0/objects");
 		//------------------------------------------------------
 	}
 	

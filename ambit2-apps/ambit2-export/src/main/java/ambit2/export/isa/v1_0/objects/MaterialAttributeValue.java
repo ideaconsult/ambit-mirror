@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
- * ISA factor value schema
+ * ISA material attribute schema
  * <p>
- * JSON-schema representing a factor value in the ISA model
+ * JSON-schema representing a material attribute (or characteristic) value in the ISA model
  * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -22,18 +22,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "value",
     "unit"
 })
-public class FactorValue {
+public class MaterialAttributeValue {
 
     @JsonProperty("@id")
     public URI Id;
     /**
-     * ISA factor schema
+     * ISA material attribute schema
      * <p>
-     * JSON-schema representing a factor value in the ISA model
+     * JSON-schema representing a characteristics category (what appears between the brackets in Charactersitics[]) in the ISA model
      * 
      */
     @JsonProperty("category")
-    public Factor category;
+    public Charactersitic category;
     @JsonProperty("value")
     public Object value;
     /**

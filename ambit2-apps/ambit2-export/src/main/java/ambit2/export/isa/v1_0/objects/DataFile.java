@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 /**
- * ISA material node schema
+ * ISA data schema
  * <p>
- * JSON-schema representing a material node in the ISA model, which is not a source or a sample (as they have specific schemas) - this will correspond to 'Extract Name', 'Labeled Extract Name'
+ * JSON-schema representing a data file in the ISA model
  * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -26,38 +26,30 @@ import com.fasterxml.jackson.annotation.JsonValue;
     "@id",
     "name",
     "type",
-    "characteristics",
-    "derivesFrom"
+    "comments"
 })
-public class Material {
+public class DataFile {
 
     @JsonProperty("@id")
     public URI Id;
     @JsonProperty("name")
     public String name;
     @JsonProperty("type")
-    public Material.Type type;
-    @JsonProperty("characteristics")
-    public List<Charactersitic> characteristics = new ArrayList<Charactersitic>();
-    /**
-     * ISA material node schema
-     * <p>
-     * JSON-schema representing a material node in the ISA model, which is not a source or a sample (as they have specific schemas) - this will correspond to 'Extract Name', 'Labeled Extract Name'
-     * 
-     */
-    @JsonProperty("derivesFrom")
-    public Material derivesFrom;
+    public DataFile.Type type;
+    @JsonProperty("comments")
+    public List<Comment> comments = new ArrayList<Comment>();
 
     @Generated("org.jsonschema2pojo")
     public static enum Type {
 
-        EXTRACT_NAME("Extract Name"),
-        LABELED_EXTRACT_NAME("Labeled Extract Name");
+        RAW_DATA_FILE("Raw Data File"),
+        DERIVED_DATA_FILE("Derived Data File"),
+        IMAGE_FILE("Image File");
         private final String value;
-        private static Map<String, Material.Type> constants = new HashMap<String, Material.Type>();
+        private static Map<String, DataFile.Type> constants = new HashMap<String, DataFile.Type>();
 
         static {
-            for (Material.Type c: values()) {
+            for (DataFile.Type c: values()) {
                 constants.put(c.value, c);
             }
         }
@@ -73,8 +65,8 @@ public class Material {
         }
 
         @JsonCreator
-        public static Material.Type fromValue(String value) {
-            Material.Type constant = constants.get(value);
+        public static DataFile.Type fromValue(String value) {
+            DataFile.Type constant = constants.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
             } else {
