@@ -19,6 +19,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
+    "@id",
+    "comments",
     "name",
     "protocolType",
     "description",
@@ -29,6 +31,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class Protocol {
 
+    @JsonProperty("@id")
+    public URI Id;
+    @JsonProperty("comments")
+    public List<Comment> comments = new ArrayList<Comment>();
     @JsonProperty("name")
     public String name;
     /**

@@ -1,6 +1,7 @@
 
 package ambit2.export.isa.v1_0.objects;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,21 +20,23 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
+    "@id",
     "filename",
     "identifier",
     "title",
     "description",
     "submissionDate",
     "publicReleaseDate",
-    "commentCreatedWithConfiguration",
-    "commentLastOpenedWithConfiguration",
     "ontologySourceReferences",
     "publications",
     "people",
-    "studies"
+    "studies",
+    "comments"
 })
 public class Investigation {
 
+    @JsonProperty("@id")
+    public URI Id;
     @JsonProperty("filename")
     public String filename;
     @JsonProperty("identifier")
@@ -46,22 +49,6 @@ public class Investigation {
     public Date submissionDate;
     @JsonProperty("publicReleaseDate")
     public Date publicReleaseDate;
-    /**
-     * ISA comment schema - it corresponds to ISA Comment[] construct
-     * <p>
-     * JSON-schema representing a data file in the ISA model
-     * 
-     */
-    @JsonProperty("commentCreatedWithConfiguration")
-    public Comment commentCreatedWithConfiguration;
-    /**
-     * ISA comment schema - it corresponds to ISA Comment[] construct
-     * <p>
-     * JSON-schema representing a data file in the ISA model
-     * 
-     */
-    @JsonProperty("commentLastOpenedWithConfiguration")
-    public Comment commentLastOpenedWithConfiguration;
     @JsonProperty("ontologySourceReferences")
     public List<OntologySourceReference> ontologySourceReferences = new ArrayList<OntologySourceReference>();
     @JsonProperty("publications")
@@ -70,5 +57,7 @@ public class Investigation {
     public List<Person> people = new ArrayList<Person>();
     @JsonProperty("studies")
     public List<Study> studies = new ArrayList<Study>();
+    @JsonProperty("comments")
+    public List<Comment> comments = new ArrayList<Comment>();
 
 }

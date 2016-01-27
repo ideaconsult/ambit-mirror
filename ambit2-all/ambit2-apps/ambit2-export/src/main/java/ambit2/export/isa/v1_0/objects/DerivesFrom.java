@@ -11,9 +11,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
- * ISA sample schema
+ * ISA source schema
  * <p>
- * JSON-schema representing a sample in the ISA model. A sample represents a major output resulting from a protocol application other than the special case outputs of Extract or a Labeled Extract.
+ * JSON-schema representing a source in the ISA model. Sources are considered as the starting biological material used in a study.
  * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -21,11 +21,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "@id",
     "name",
-    "characteristics",
-    "factorValues",
-    "derivesFrom"
+    "characteristics"
 })
-public class Sample {
+public class DerivesFrom {
 
     @JsonProperty("@id")
     public URI Id;
@@ -33,15 +31,5 @@ public class Sample {
     public String name;
     @JsonProperty("characteristics")
     public List<MaterialAttributeValue> characteristics = new ArrayList<MaterialAttributeValue>();
-    @JsonProperty("factorValues")
-    public List<FactorValue> factorValues = new ArrayList<FactorValue>();
-    /**
-     * ISA source schema
-     * <p>
-     * JSON-schema representing a source in the ISA model. Sources are considered as the starting biological material used in a study.
-     * 
-     */
-    @JsonProperty("derivesFrom")
-    public DerivesFrom derivesFrom;
 
 }

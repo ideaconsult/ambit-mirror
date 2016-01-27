@@ -1,6 +1,7 @@
 
 package ambit2.export.isa.v1_0.objects;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
+    "@id",
     "lastName",
     "firstName",
     "midInitials",
@@ -26,10 +28,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "fax",
     "address",
     "affiliation",
-    "roles"
+    "roles",
+    "comments"
 })
 public class Person {
 
+    @JsonProperty("@id")
+    public URI Id;
     @JsonProperty("lastName")
     public String lastName;
     @JsonProperty("firstName")
@@ -48,5 +53,7 @@ public class Person {
     public String affiliation;
     @JsonProperty("roles")
     public List<MeasurementType> roles = new ArrayList<MeasurementType>();
+    @JsonProperty("comments")
+    public List<Comment> comments = new ArrayList<Comment>();
 
 }

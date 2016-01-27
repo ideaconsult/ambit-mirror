@@ -1,7 +1,6 @@
 
 package ambit2.export.isa.v1_0.objects;
 
-import java.net.URI;
 import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,31 +8,28 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
- * ISA factor value schema
+ * ISA process parameter value schema
  * <p>
- * JSON-schema representing a factor value in the ISA model
+ * JSON-schema representing a Parameter Value (associated with a Protocol REF) in the ISA model
  * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
-    "@id",
     "category",
     "value",
     "unit"
 })
-public class FactorValue {
+public class ParameterValue {
 
-    @JsonProperty("@id")
-    public URI Id;
     /**
-     * ISA factor schema
+     * ISA protocol parameter schema
      * <p>
-     * JSON-schema representing a factor value in the ISA model
+     * JSON-schema representing a parameter for a protocol (category declared in the investigation file) in the ISA model
      * 
      */
     @JsonProperty("category")
-    public Factor category;
+    public Parameter category;
     @JsonProperty("value")
     public Object value;
     /**
