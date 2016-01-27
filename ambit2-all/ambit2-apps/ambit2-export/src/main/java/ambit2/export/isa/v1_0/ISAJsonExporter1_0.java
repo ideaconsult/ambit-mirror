@@ -258,12 +258,13 @@ public class ISAJsonExporter1_0 implements IISAExport
 		process.outputs.add(sample);
 		//process.executesProtocol = protocol; ??
 		
+		/*
 		if (!cfg.FlagSaveSourceAndSampleOnlyInProcess)
-		{
-			//TODO - this flag may not be needed any more
+		{	
 			//study.sources.add(source);
 			//study.samples.add(sample);
 		}
+		*/
 		
 		//process.parameters
 		source.name = pa.getSubstanceUUID();
@@ -284,7 +285,7 @@ public class ISAJsonExporter1_0 implements IISAExport
 		protocol.name = prot.getEndpoint();
 		
 		MeasurementType measType = new MeasurementType();
-		//measType.name = prot.getCategory();
+		//measType.name = prot.getCategory(); - TODO 
 		
 		protocol.protocolType = measType;
 		
