@@ -23,8 +23,7 @@ import org.restlet.data.Method;
 
 import ambit2.db.UpdateExecutor;
 import ambit2.user.policy.CallableBundlePolicyCreator;
-import ambit2.user.policy.CallablePolicyUsersCreator;
-import ambit2.user.policy.CreateUsersPolicy;
+import ambit2.user.policy.CreateUsersBundlePolicy;
 import ambit2.user.policy.RESTPolicyUsers;
 
 /**
@@ -84,7 +83,7 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 		all.setAllowGET(true);
 		all.setRole("user");
 		all.setUri(policy.getUri());
-		return new CreateUsersPolicy(all, policy);
+		return new CreateUsersBundlePolicy(all, policy);
 	}
 
 	protected void createVerify(IQueryUpdate<RESTPolicy, RESTPolicyUsers> query)
@@ -93,11 +92,11 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 		ITable table = c
 				.createQueryTable(
 						"EXPECTED_USER",
-						"SELECT role_name,prefix,resource,level,mget,mput,mpost,mdelete FROM policy where role_name regexp '^B.*.R$'");
+						"SELECT role_name,prefix,hex(resource) as r,level,mget,mput,mpost,mdelete FROM policy_bundle where role_name regexp '^B.*.R$'");
 		Assert.assertEquals(1, table.getRowCount());
 		Assert.assertEquals("/ambit2", table.getValue(0, "prefix"));
-		Assert.assertEquals(getResource(bundle.toString()),
-				table.getValue(0, "resource").toString());
+		Assert.assertEquals(bundle.toString().replace("-", "").toUpperCase(),
+				table.getValue(0, "r").toString());
 		Assert.assertEquals(2, table.getValue(0, "level"));
 		Assert.assertEquals(true, table.getValue(0, "mget"));
 		Assert.assertEquals(false, table.getValue(0, "mput"));
@@ -107,10 +106,10 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 		table = c
 				.createQueryTable(
 						"EXPECTED_USER",
-						"SELECT role_name,prefix,resource,level,mget,mput,mpost,mdelete FROM policy where role_name ='user' and prefix='/ambit2' order by resource");
+						"SELECT idpolicy,role_name,prefix,hex(resource) as r,level,mget,mput,mpost,mdelete FROM policy_bundle where role_name ='user' and prefix='/ambit2' order by idpolicy");
 		Assert.assertEquals(2, table.getRowCount());
-		Assert.assertEquals(getResource(bundle.toString()),
-				table.getValue(1, "resource").toString());
+		Assert.assertEquals(bundle.toString().replace("-", "").toUpperCase(),
+				table.getValue(1, "r").toString());
 		Assert.assertEquals(2, table.getValue(1, "level"));
 		Assert.assertEquals(true, table.getValue(1, "mget"));
 		Assert.assertEquals(false, table.getValue(1, "mput"));
@@ -167,7 +166,7 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 		all.setAllowDELETE(false);
 		all.setRole("user");
 		all.setUri(policy.getUri());
-		return new CreateUsersPolicy(all, policy);
+		return new CreateUsersBundlePolicy(all, policy);
 	}
 
 	protected void updateVerify(
@@ -178,11 +177,11 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 		ITable table = c
 				.createQueryTable(
 						"EXPECTED_USER",
-						"SELECT role_name,prefix,resource,level,mget,mput,mpost,mdelete FROM policy where role_name regexp '^B.*.W$'");
+						"SELECT role_name,prefix,hex(resource) r,level,mget,mput,mpost,mdelete FROM policy_bundle where role_name regexp '^B.*.W$'");
 		Assert.assertEquals(1, table.getRowCount());
 		Assert.assertEquals("/ambit2", table.getValue(0, "prefix"));
-		Assert.assertEquals(getResource(bundletest.toString()),
-				table.getValue(0, "resource").toString());
+		Assert.assertEquals(bundletest.toString().replace("-", "").toUpperCase(),
+				table.getValue(0, "r").toString());
 		Assert.assertEquals(2, table.getValue(0, "level"));
 		Assert.assertEquals(false, table.getValue(0, "mget"));
 		Assert.assertEquals(true, table.getValue(0, "mput"));
@@ -192,7 +191,7 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 		table = c
 				.createQueryTable(
 						"EXPECTED_USER",
-						"SELECT role_name,prefix,resource,level,mget,mput,mpost,mdelete FROM policy where role_name ='user' and prefix='/ambit2'");
+						"SELECT role_name,prefix,resource,level,mget,mput,mpost,mdelete FROM policy_bundle where role_name ='user' and prefix='/ambit2'");
 		Assert.assertEquals(1, table.getRowCount());
 
 		table = c.createQueryTable("EXPECTED_USER",
@@ -242,7 +241,7 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 
 		try {
 
-			CallablePolicyUsersCreator callable = new CallablePolicyUsersCreator(
+			CallableBundlePolicyCreator callable = new CallableBundlePolicyCreator(
 					Method.POST, form, "http://localhost:8081/ambit2/",
 					c.getConnection(), null, getDatabase());
 			TaskResult task = callable.call();
@@ -270,7 +269,7 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 
 		try {
 
-			CallablePolicyUsersCreator callable = new CallablePolicyUsersCreator(
+			CallableBundlePolicyCreator callable = new CallableBundlePolicyCreator(
 					Method.POST, form, "http://localhost:8081/ambit2/",
 					c.getConnection(), null, getDatabase());
 			callable.setDefaultRole("user");
@@ -298,7 +297,7 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 
 		try {
 
-			CallablePolicyUsersCreator callable = new CallablePolicyUsersCreator(
+			CallableBundlePolicyCreator callable = new CallableBundlePolicyCreator(
 					Method.POST, form, "http://localhost:8081/ambit2/",
 					c.getConnection(), null, getDatabase());
 			callable.setDefaultRole("user");

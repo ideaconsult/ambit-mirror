@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import net.idea.modbcum.i.query.IQueryUpdate;
+import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.restnet.db.update.CallableDBUpdateTask;
 import net.idea.restnet.i.aa.RESTPolicy;
 import net.idea.restnet.user.DBUser;
@@ -23,7 +24,7 @@ import org.restlet.resource.ResourceException;
  */
 public class CallablePolicyUsersCreator extends
 		CallableDBUpdateTask<RESTPolicyUsers, Form, String> {
-	protected CreateUsersPolicy updateQuery;
+	protected AbstractUpdate<RESTPolicy, RESTPolicyUsers> updateQuery;
 	protected String usersdbname;
 	protected String defaultRole = "ambit_user";
 
@@ -66,7 +67,7 @@ public class CallablePolicyUsersCreator extends
 		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 	}
 
-	protected CreateUsersPolicy createPolicyQuery(String bundle_number,
+	protected AbstractUpdate<RESTPolicy, RESTPolicyUsers> createPolicyQuery(String bundle_number,
 			String[] ug, boolean readonly) {
 		if (ug == null || ug.length == 0 || bundle_number == null)
 			return null;

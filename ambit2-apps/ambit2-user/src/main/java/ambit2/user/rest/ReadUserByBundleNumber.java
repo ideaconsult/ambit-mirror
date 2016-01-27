@@ -35,7 +35,7 @@ public class ReadUserByBundleNumber  extends ReadUser<String> implements IDBConf
 	protected static String sql = 
 		"SELECT iduser,username,user.title,firstname,lastname,institute,weblog,homepage,email,keywords,reviewer " +
 		"FROM %s.user_roles join %s.user on user_name=username where role_name=?\n"+
-		"union select null,concat('g_',role_name),'',IF(role_name='ambit_user','All',role_name),'',null,null,null,null,null,0 from policy where resource = ? and role_name != ? %s";
+		"union select null,concat('g_',role_name),'',IF(role_name='ambit_user','All',role_name),'',null,null,null,null,null,0 from policy_bundle where resource = unhex(?) and role_name != ? %s";
 		
 	public ReadUserByBundleNumber(DBUser user) {
 		super(user);
@@ -44,19 +44,21 @@ public class ReadUserByBundleNumber  extends ReadUser<String> implements IDBConf
 	public ReadUserByBundleNumber() {
 		super();
 	}
+	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = null;
 		if (getFieldname()==null) throw new AmbitException("Empty argument!");
 		params = new ArrayList<QueryParam>();
-		String id = getFieldname().toUpperCase();
-		String rolename = "B."+id.replace("-", "") + (isAllowWrite()?".W":".R");
-		String resource = "/bundle/"+id;
+		String id = getFieldname().replace("-", "").toUpperCase();
+		String rolename = "B."+id + (isAllowWrite()?".W":".R");
+		//String resource = "/bundle/"+id;
 		params.add(new QueryParam<String>(String.class, rolename));
-		params.add(new QueryParam<String>(String.class, resource));
+		//params.add(new QueryParam<String>(String.class, resource));
+		params.add(new QueryParam<String>(String.class, id));
 		params.add(new QueryParam<String>(String.class, rolename));
 		return params;
 	}
-
+	@Override
 	public String getSQL() throws AmbitException {
 		if (getFieldname()==null) throw new AmbitException("Empty argument!");
 		if (getDatabaseName()==null) throw new AmbitException("Database not specified!");
