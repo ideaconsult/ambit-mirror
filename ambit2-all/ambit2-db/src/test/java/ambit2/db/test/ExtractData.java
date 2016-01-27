@@ -14,6 +14,7 @@ public class ExtractData {
 	
     public static void main(String[] args) throws Exception {
     	extract();
+    	extract_utest();
     }
     protected static void extract() throws Exception {
         // database connection
@@ -75,5 +76,29 @@ public class ExtractData {
         IDataSet fullDataSet = connection.createDataSet();
         FlatXmlDataSet.write(fullDataSet, new FileOutputStream("full-dataset.xml"));
         */
+        connection.close();
+    }
+    protected static void extract_utest() throws Exception {
+        // database connection
+        Class driverClass = Class.forName("com.mysql.jdbc.Driver");
+        Connection jdbcConnection = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/aalocal_test", "guest", "guest");
+        IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
+        String ids = "(11)";
+        // partial database export
+        QueryDataSet partialDataSet = new QueryDataSet(connection);
+        partialDataSet.addTable("policy", "SELECT * FROM policy");
+        partialDataSet.addTable("policy_bundle", "SELECT * FROM policy_bundle");
+
+        FlatDtdDataSet.write(partialDataSet, new FileOutputStream("src/test/resources/ambit2/db/processors/test/partial-aa.dtd"));
+        FlatXmlDataSet.write(partialDataSet, 
+        		new FileOutputStream("src/test/resources/ambit2/db/processors/test/partial-aa.xml"));
+        
+        /*
+        // full database export
+        IDataSet fullDataSet = connection.createDataSet();
+        FlatXmlDataSet.write(fullDataSet, new FileOutputStream("full-dataset.xml"));
+        */
+        connection.close();
     }
 }

@@ -58,6 +58,33 @@ CREATE TABLE `policy` (
   KEY `fk_resource` (`resource`),
   CONSTRAINT `fkrole1` FOREIGN KEY (`role_name`) REFERENCES `roles` (`role_name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- -----------------------------------
+-- Bundle specific policies
+-- -----------------------------------
+DROP TABLE IF EXISTS `policy_bundle`;
+CREATE TABLE `policy_bundle` (
+  `idpolicy` int(11) NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(40) NOT NULL DEFAULT 'ambit_guest',
+  `prefix` varchar(255) NOT NULL,
+  `resource` varbinary(16) NOT NULL,
+  `level` smallint(6) DEFAULT '2',
+  `mget` tinyint(1) NOT NULL DEFAULT '0',
+  `mput` tinyint(1) NOT NULL DEFAULT '0',
+  `mpost` tinyint(1) NOT NULL DEFAULT '0',
+  `mdelete` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`idpolicy`),
+  UNIQUE KEY `uri` (`prefix`,`resource`,`role_name`),
+  KEY `fkrole1_idx` (`role_name`),
+  KEY `get` (`mget`),
+  KEY `put` (`mput`),
+  KEY `post` (`mpost`),
+  KEY `delete` (`mdelete`),
+  KEY `fk_resource` (`resource`),
+  CONSTRAINT `fkbrole1` FOREIGN KEY (`role_name`) REFERENCES `roles` (`role_name`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 --
 -- Table structure for table `project`
 --
@@ -165,7 +192,7 @@ CREATE TABLE `version_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
-insert into version_users (idmajor,idminor,comment) values (2,4,"AMBITDB users");
+insert into version_users (idmajor,idminor,comment) values (2,5,"AMBITDB users");
 
 -- -----------------------------------------------------
 -- Default users
