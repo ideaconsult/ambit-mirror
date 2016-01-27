@@ -9,7 +9,7 @@
 
 <#else>
 </#if>	
-<li><a href="#" >Existing bundles</a>
+<li><a href="${ambit_root}/bundle" >Existing bundles</a>
 <ul>
 <#if username??>
 	<li><a href="${ambit_root}/myaccount/bundle" title="Browse/Edit">Own bundles</a></li>

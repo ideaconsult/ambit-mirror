@@ -9,7 +9,7 @@
 
 <#else>
 </#if>	
-<li><a href="#" title="Create new read across or category formation workflow">Existing assessments</a>
+<li><a href="${ambit_root}/bundle" title="Create new read across or category formation workflow">Existing assessments</a>
 <ul>
 <#if username??>
 	<li><a href="${ambit_root}/myaccount/bundle" title="Browse/Edit read across or category formation workflow">Own assessments</a></li>
