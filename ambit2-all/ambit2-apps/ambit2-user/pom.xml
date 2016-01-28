@@ -48,6 +48,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>net.ideaconsult.restnet</groupId>
+			<artifactId>restnet-db</artifactId>
+			<version>${restnet.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
 			<groupId>org.dbunit</groupId>
 			<artifactId>dbunit</artifactId>
 			<version>${dbunit.version}</version>
