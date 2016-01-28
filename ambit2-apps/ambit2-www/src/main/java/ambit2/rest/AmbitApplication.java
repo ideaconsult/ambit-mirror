@@ -778,6 +778,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				logger.log(Level.INFO, String.format(
 						"Property %s set, local AA enabled.", LOCAL_AA_ENABLED));
 
+				// for testing purposes only!
+				router.attach(ambit2.user.rest.resource.Resources.myaccount
+						+ "/users", DummyUserByURIResource.class);
+				
 				return addOriginFilter(getBasicAuthFilter(router));
 			} else {
 				router.attach("/", UIResource.class);
