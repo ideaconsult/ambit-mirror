@@ -81,6 +81,22 @@ ambitcli -a {command} -m {subcommand} -d {options}
 	Example:	ambitcli  -a standardize -m post -d smirks=null -d splitfragments=true -d implicith=true -d stereo=false -d tautomers=true -d inchi=false -d smiles=false -d smilescanonical=false -d page=0 -d pagesize=20000 -d tag_inchi=InChI -d tag_inchikey=InChIKey -d tag_smiles=SMILES -d tag_rank=RANK	
 ````
 
+````
+-a descriptor -m post -d <parameters>
+
+"Descriptor calculation (-i inputfile.sdf -o outputfile.sdf , recognized by extensions .sdf , .csv, .cml , .txt)"
+   -a descriptor -m post
+ -d fpclass=CircularFingerprinter,PubchemFingerprinter,SubstructureFingerprinter,ShortestPathFingerprinter,MACCSFingerprinter,LingoFingerpriter,EStateFingerprinter       // Comma delimited list of class names implementing org.openscience.cdk.fingerprint.IFingerprinter, e.g. KlekotaRothFingerprinter. If not fully qualified will prepend 'org.openscience.cdk.fingerprint.' [type:String, mandatory:false]
+ -d page=0      // Start page (first page = 0)  [type:Integer, mandatory:false]
+ -d pagesize=20000      // Page size (in number of records)     [type:Integer, mandatory:false]
+ -d sdftitle=null       // Specifies which field to write in the first SDF line [type:String, mandatory:false]
+
+Example
+ -d fpclass=CircularFingerprinter,PubchemFingerprinter,SubstructureFingerprinter,ShortestPathFingerprinter,MACCSFingerprinter,LingoFingerpriter,EStateFingerprinter -d page=0 -d pagesize=20000 -d sdftitle=null
+
+Available since ambitcli-3.0.1-SNAPSHOT build:7237
+````
+
 ````sh
 -a dataset	Dataset import into AMBIT database (with normalisation). The database connection settings are read from -c {file}.
 	Example:	ambitcli  -a dataset -m post	
