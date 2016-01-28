@@ -1,4 +1,5 @@
 <ul>
+	<li><a href='http://ambit.sourceforge.net/support.html' target='report' title='Found an error? Report here'>Submit an issue <img src='${ambit_root}/images/profile/lri/logo.png'></a></li>
 	<li><a href="#">OpenTox API</a>
 	<ul>
 		<li><a href='${ambit_root}/api-docs' target=_blank title="API documentation in Swagger JSON format">API Documentation</a></li>
