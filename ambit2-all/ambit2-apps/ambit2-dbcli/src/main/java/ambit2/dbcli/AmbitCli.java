@@ -14,8 +14,10 @@ import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -51,8 +53,11 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.fingerprint.CircularFingerprinter;
 import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.SDFWriter;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -785,13 +790,57 @@ public class AmbitCli {
 			}
 
 		};
-		
+		final List<IFingerprinter> fps = new ArrayList<IFingerprinter>();
+		try {
+			Object o = options.getParam(":fpclass");
+			if (o != null) {
+				String[] fpclass = o.toString().split(",");
+				Class clazz = null;
+				for (String fp : fpclass)
+					try {
+						if (fp.indexOf(".") < 0)
+							fp = "org.openscience.cdk.fingerprint." + fp.trim();
+						else
+							fp = fp.trim();
+						clazz = Class.forName(fp);
+						Object fingerprinter = clazz.newInstance();
+						if (fingerprinter instanceof IFingerprinter)
+							fps.add((IFingerprinter) fingerprinter);
+					} catch (Exception x) {
+						if (clazz != null)
+							try {
+								Object fingerprinter = clazz
+										.getDeclaredConstructor(
+												IChemObjectBuilder.class)
+										.newInstance(
+												SilentChemObjectBuilder
+														.getInstance());
+								if (fingerprinter instanceof IFingerprinter)
+									fps.add((IFingerprinter) fingerprinter);
+							} catch (Exception xx) {
+								logger_cli.log(Level.SEVERE, "MSG_ERR_CLASS",
+										new Object[] { fp, x.toString() });
+							}
+
+					}
+			}
+		} catch (Exception x) {
+		}
+		if (fps.size() == 0)
+			fps.add(new CircularFingerprinter());
+
+		StringBuilder b = new StringBuilder();
+		for (IFingerprinter fp : fps) {
+			b.append("\n");
+			b.append(fp.getClass().getName());
+		}
+
+		logger_cli.log(Level.INFO, "MSG_FP", new Object[] { b.toString() });
 		batch.setProcessorChain(new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>());
 		batch.getProcessorChain()
 				.add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
 
 					protected MoleculeReader molReader = new MoleculeReader();
-					protected IFingerprinter fp = new CircularFingerprinter();
 
 					@Override
 					public IStructureRecord process(IStructureRecord record)
@@ -802,6 +851,8 @@ public class AmbitCli {
 
 						try {
 							mol = molReader.process(record);
+							AtomContainerManipulator
+									.percieveAtomTypesAndConfigureAtoms(mol);
 							if (mol != null)
 								for (Property p : record.getRecordProperties()) {
 									Object v = record.getRecordProperty(p);
@@ -833,19 +884,24 @@ public class AmbitCli {
 								mol.removeProperty(CDKConstants.REMARK);
 						}
 
-						try {
-							BitSet fingerprint  = fp.getBitFingerprint(processed).asBitSet(); 
-							processed.setProperty(fp.getClass().getName(),fingerprint.toString());
+						for (IFingerprinter fp : fps)
+							try {
 
-						} catch (Exception x) {
-							logger_cli.log(Level.SEVERE, x.getMessage(), x);
-							if (processed != null)
-								processed.setProperty("ERROR.standardisation",
-										x.getMessage());
-						} finally {
-							if (processed != null)
-								processed.addProperties(mol.getProperties());
-						}
+								BitSet fingerprint = fp.getBitFingerprint(
+										processed).asBitSet();
+								processed.setProperty(fp.getClass().getName(),
+										fingerprint.toString());
+
+							} catch (Exception x) {
+								logger_cli.log(Level.SEVERE, x.getMessage(), x);
+								if (processed != null)
+									processed.setProperty("ERROR."
+											+ fp.getClass().getName(),
+											x.getMessage());
+							} finally {
+								if (processed != null)
+									processed.addProperties(mol.getProperties());
+							}
 						if (processed != null)
 							try {
 								if (writesdf && sdf_title != null) {
