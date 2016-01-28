@@ -22,8 +22,8 @@ public class ReadBundleByPolicy extends ReadBundle implements IDBConfig {
      * 
      */
     private static final long serialVersionUID = 7217707028379108173L;
-    private static final String sql_policy = "where hex(bundle_number) in (select replace(substring(resource,9),'-','') from %s.policy\n"
-	    + "join %s.user_roles using(role_name) where  user_name=? and resource like '/bundle/%%' and %s)";
+    private static final String sql_policy = "where bundle_number in (select resource from %s.policy_bundle\n"
+	    + "join %s.user_roles using(role_name) where  user_name=? and %s)";
     protected String databaseName;
     protected boolean mode_write = false;
     

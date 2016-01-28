@@ -348,13 +348,20 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			return root;
 
 	}
-	
+
 	public boolean isSendTokenAsCookie() {
 		return openToxAAEnabled;
 	}
 
 	public Restlet initInboundRoot() {
 		initFreeMarkerConfiguration();
+
+		String usersdbname = getProperty(AMBITConfig.Database.name(),
+				configProperties);
+		if (usersdbname == null)
+			usersdbname = "ambit_users";
+		getContext().getParameters().add(AMBITConfig.users_dbname.name(),
+				usersdbname);
 
 		Router router = new MyRouter(this.getContext()) {
 			public void handle(Request request, Response response) {
@@ -466,13 +473,34 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			 */
 			if (openToxAAEnabled) {
 				router.attach(Resources.bundle,
-						createAuthenticatedOpenMethodResource(new BundleRouter(getContext())));
-				router.attach(SubstanceResource.substance, createAuthenticatedOpenMethodResource(new SubstanceRouter(getContext())));
-				router.attach(OwnerSubstanceFacetResource.owner, createAuthenticatedOpenMethodResource(new SubstanceOwnerRouter(getContext())));
+						createAuthenticatedOpenMethodResource(new BundleRouter(
+								getContext(), null)));
+				router.attach(
+						SubstanceResource.substance,
+						createAuthenticatedOpenMethodResource(new SubstanceRouter(
+								getContext())));
+				router.attach(
+						OwnerSubstanceFacetResource.owner,
+						createAuthenticatedOpenMethodResource(new SubstanceOwnerRouter(
+								getContext())));
 			} else {
-				router.attach(Resources.bundle, new BundleRouter(getContext()));
-				router.attach(SubstanceResource.substance, new SubstanceRouter(getContext()));
-				router.attach(OwnerSubstanceFacetResource.owner, new SubstanceOwnerRouter(getContext()));
+				Filter authz = null;
+				if (dbAAEnabled)
+					try {
+						String dbname = getProperty(
+								AMBITConfig.Database.name(), ambitProperties);
+						authz = UserRouter.createBundlePolicyAuthorizer(
+								getContext(), dbname,usersdbname,
+								"ambit2/rest/config/config.prop");
+					} catch (Exception x) {
+
+					}
+				router.attach(Resources.bundle, new BundleRouter(getContext(),
+						authz));
+				router.attach(SubstanceResource.substance, new SubstanceRouter(
+						getContext()));
+				router.attach(OwnerSubstanceFacetResource.owner,
+						new SubstanceOwnerRouter(getContext()));
 			}
 
 			router.attach(SubstancePropertyResource.substanceproperty,
@@ -490,9 +518,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 					SubstancePropertyResource.endpointcategory),
 					SubstanceCategoryProperty.class);
 
-			 
 		}
-		
+
 		if (attachToxmatchRouter()) {
 			router.attach(QMapSpaceResource.resource, QMapSpaceResource.class);
 			router.attach(QMapResource.qmap, QMapResource.class);
@@ -533,7 +560,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			router.attach(MLResources.algorithm, new AlgorithmRouter(
 					getContext()));
 			/** /model */
-			router.attach(MLResources.model_resource, new ModelRouter(getContext()));
+			router.attach(MLResources.model_resource, new ModelRouter(
+					getContext()));
 			/** /task */
 			router.attach(TaskResource.resource, new TaskRouter(getContext()));
 			router.attach("/ui", new UIRouter(getContext()));
@@ -546,8 +574,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 */
 		Router queryRouter = createQueryRouter();
 		if (openToxAAEnabled) {
-			router.attach(QueryResource.query_resource, createAuthenticatedOpenResource(queryRouter));
-		} else 
+			router.attach(QueryResource.query_resource,
+					createAuthenticatedOpenResource(queryRouter));
+		} else
 			router.attach(QueryResource.query_resource, queryRouter);
 		queryRouter.attach(SmartsQueryResource.resource, smartsRouter);
 		queryRouter.attach(SimilarityResource.resource, similarityRouter);
@@ -652,13 +681,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		} catch (Exception x) {
 			logger.log(Level.WARNING, x.getMessage(), x);
 		}
-
-		String usersdbname = getProperty(AMBITConfig.Database.name(),
-				configProperties);
-		if (usersdbname == null)
-			usersdbname = "ambit_users";
-		getContext().getParameters().add(AMBITConfig.users_dbname.name(),
-				usersdbname);
 
 		if (!isOpenToxAAEnabled()) {
 
@@ -781,7 +803,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				// for testing purposes only!
 				router.attach(ambit2.user.rest.resource.Resources.myaccount
 						+ "/users", DummyUserByURIResource.class);
-				
+
 				return addOriginFilter(getBasicAuthFilter(router));
 			} else {
 				router.attach("/", UIResource.class);
@@ -807,16 +829,14 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			// attach login
 
 			Restlet login = createOpenSSOLoginRouter();
-			
+
 			router.attach("/", UIResource.class);
 			router.attach("", UIResource.class);
 
 			/*
-			router.attach("/", login);
-			router.attach("", login);
-			*/
-			
-			
+			 * router.attach("/", login); router.attach("", login);
+			 */
+
 			/**
 			 * OpenSSO login / logout Sets a cookie with OpenSSO token
 			 */
@@ -837,9 +857,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				allowedOrigins);
 		originFilter.setNext(router);
 
-		//StringWriter w = new StringWriter();
-		//printRoutes(router, "\t", w);
-		//System.out.println(w);
+		// StringWriter w = new StringWriter();
+		// printRoutes(router, "\t", w);
+		// System.out.println(w);
 
 		return originFilter;
 	}
@@ -1055,19 +1075,20 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		OpenSSOAuthorizer authZ = new OpenSSOMethodAuthorizer() {
 			@Override
 			protected boolean authorize(Request request, Response response) {
-				if (Method.GET.equals(request.getMethod())) return true;
+				if (Method.GET.equals(request.getMethod()))
+					return true;
 				return super.authorize(request, response);
 			}
 
 		};
 
-		//authZ.setPrefix(prefix);
+		// authZ.setPrefix(prefix);
 		authN.setNext(authZ);
 		authZ.setNext(router);
-		
+
 		return authN;
 	}
-	
+
 	protected TaskStorage<String> createTaskStorage() {
 		return new TaskStorage<String>(getName(), getLogger()) {
 
