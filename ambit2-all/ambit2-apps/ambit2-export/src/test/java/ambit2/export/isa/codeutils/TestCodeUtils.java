@@ -31,7 +31,10 @@ public class TestCodeUtils
 	{
 		CodeUtils.renameJavaClass(null, new File(targetDir),"ProcessSequence", "Process");
 		CodeUtils.renameJavaClass(null, new File(targetDir),"ExecutesProtocol", "Protocol");
-		CodeUtils.renameJavaClass(null, new File(targetDir),"Characteristic", "MaterialAttribute");
+		//CodeUtils.renameJavaClass(null, new File(targetDir),"Characteristic", "MaterialAttribute");
+		
+		//this is needed because of a typo in the  json schemas
+		CodeUtils.renameJavaClass(null, new File(targetDir),"Charactersitic", "MaterialAttribute"); 
 	}
 	
 

@@ -59,7 +59,7 @@ public class Assay {
      * 
      */
     @JsonProperty("charactersitics")
-    public List<Charactersitic> charactersitics = new ArrayList<Charactersitic>();
+    public List<MaterialAttribute> charactersitics = new ArrayList<MaterialAttribute>();
     @JsonProperty("processSequence")
     public List<Process> processSequence = new ArrayList<Process>();
 
