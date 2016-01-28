@@ -140,8 +140,8 @@
 					":fpclass": {
 						"mandatory": false,
 						"type": "String",
-						"value": "org.openscience.cdk.fingerprint.CircularFingerprinter",
-						"comment": "Class iname implementing org.openscience.cdk.fingerprint.IFingerprinter"
+						"value": "CircularFingerprinter,PubchemFingerprinter,SubstructureFingerprinter,ShortestPathFingerprinter,MACCSFingerprinter,LingoFingerpriter,EStateFingerprinter",
+						"comment": "Comma delimited list of class names implementing org.openscience.cdk.fingerprint.IFingerprinter, e.g. KlekotaRothFingerprinter. If not fully qualified will prepend 'org.openscience.cdk.fingerprint.'"
 					},
 					":page": {
 						"mandatory": false,
