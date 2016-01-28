@@ -14,6 +14,7 @@ import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -47,6 +48,8 @@ import net.idea.modbcum.q.update.AbstractUpdate;
 import org.apache.log4j.PropertyConfigurator;
 import org.codehaus.jackson.JsonNode;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.fingerprint.CircularFingerprinter;
+import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.SDFWriter;
@@ -157,6 +160,8 @@ public class AmbitCli {
 			return parseCommandAE(subcommand, now);
 		} else if ("standardize".equals(command)) {
 			parseCommandStandardize(subcommand, now);
+		} else if ("descriptor".equals(command)) {
+			parseCommandDescriptor(subcommand, now);
 		}
 		return -1;
 	}
@@ -684,6 +689,226 @@ public class AmbitCli {
 		}
 	}
 
+	public void parseCommandDescriptor(String subcommand, long now)
+			throws Exception {
+		int page = 0;
+		try {
+			page = (Integer) options.getParam(":page");
+		} catch (Exception x) {
+			logger_cli.log(Level.WARNING, x.toString());
+		}
+		int pagesize = -1;
+		try {
+			pagesize = (Integer) options.getParam(":pagesize");
+		} catch (Exception x) {
+			logger_cli.log(Level.WARNING, x.toString());
+		}
+		Object tmpTag;
+		try {
+			tmpTag = options.getParam(":sdftitle");
+		} catch (Exception x) {
+			tmpTag = null;
+		}
+		final String sdf_title = tmpTag == null ? null : tmpTag.toString()
+				.toLowerCase();
+
+		final int startRecord = pagesize > 0 ? (page * pagesize + 1) : 1;
+		final int maxRecord = pagesize > 0 ? ((page + 1) * pagesize + 1)
+				: pagesize;
+
+		final File file = new File(options.input);
+		FileInputState in = new FileInputState(file);
+
+		if (options.output == null)
+			throw new FileNotFoundException(
+					"Output file not specified. Please use -o {file}");
+		final File outfile = new File(options.output);
+
+		logger_cli.log(Level.INFO, "MSG_INFO_READINGWRITING", new Object[] {
+				file.getAbsoluteFile(), outfile.getAbsolutePath() });
+		FileOutputState out = new FileOutputState(outfile);
+		final IChemObjectWriter writer = out.getWriter();
+		final boolean writesdf = writer instanceof SDFWriter;
+		final BatchDBProcessor<IStructureRecord> batch = new BatchDBProcessor<IStructureRecord>() {
+
+			@Override
+			public void onItemRead(IStructureRecord input,
+					IBatchStatistics stats) {
+				super.onItemRead(input, stats);
+				if ((maxRecord > 0)
+						&& stats.getRecords(RECORDS_STATS.RECORDS_READ) >= (maxRecord))
+					cancel();
+			};
+
+			@Override
+			public boolean skip(IStructureRecord input, IBatchStatistics stats) {
+				return (stats.getRecords(RECORDS_STATS.RECORDS_READ) < startRecord)
+						|| ((maxRecord > 0) && (stats
+								.getRecords(RECORDS_STATS.RECORDS_READ) >= maxRecord));
+			}
+
+			@Override
+			public void onItemSkipped(IStructureRecord input,
+					IBatchStatistics stats) {
+				super.onItemSkipped(input, stats);
+				if (stats.isTimeToPrint(getSilentInterval() * 2))
+					propertyChangeSupport.firePropertyChange(
+							PROPERTY_BATCHSTATS, null, stats);
+			}
+
+			@Override
+			public void onItemProcessing(IStructureRecord input, Object output,
+					IBatchStatistics stats) {
+			}
+
+			@Override
+			public void onError(IStructureRecord input, Object output,
+					IBatchStatistics stats, Exception x) {
+				super.onError(input, output, stats, x);
+				logger_cli.log(Level.SEVERE, x.getMessage());
+			}
+
+			@Override
+			public long getSilentInterval() {
+				return 30000L;
+			}
+
+			@Override
+			public void close() throws Exception {
+				try {
+					writer.close();
+				} catch (Exception x) {
+				} finally {
+				}
+				super.close();
+
+			}
+
+		};
+		
+		batch.setProcessorChain(new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>());
+		batch.getProcessorChain()
+				.add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
+
+					protected MoleculeReader molReader = new MoleculeReader();
+					protected IFingerprinter fp = new CircularFingerprinter();
+
+					@Override
+					public IStructureRecord process(IStructureRecord record)
+							throws Exception {
+
+						IAtomContainer mol;
+						IAtomContainer processed = null;
+
+						try {
+							mol = molReader.process(record);
+							if (mol != null)
+								for (Property p : record.getRecordProperties()) {
+									Object v = record.getRecordProperty(p);
+									// initially to get rid of smiles, inchi ,
+									// etc, these are
+									// already parsed
+									if (p.getName().startsWith(
+											"http://www.opentox.org/api/1.1#"))
+										continue;
+									else
+										mol.setProperty(p, v);
+								}
+							else
+								return record;
+						} catch (Exception x) {
+							logger_cli.log(Level.SEVERE, "MSG_ERR_MOLREAD",
+									new Object[] { x.toString() });
+							return record;
+						} finally {
+
+						}
+						processed = mol;
+
+						// CDK adds these for the first MOL line
+						if (!writesdf) {
+							if (mol.getProperty(CDKConstants.TITLE) != null)
+								mol.removeProperty(CDKConstants.TITLE);
+							if (mol.getProperty(CDKConstants.REMARK) != null)
+								mol.removeProperty(CDKConstants.REMARK);
+						}
+
+						try {
+							BitSet fingerprint  = fp.getBitFingerprint(processed).asBitSet(); 
+							processed.setProperty(fp.getClass().getName(),fingerprint.toString());
+
+						} catch (Exception x) {
+							logger_cli.log(Level.SEVERE, x.getMessage(), x);
+							if (processed != null)
+								processed.setProperty("ERROR.standardisation",
+										x.getMessage());
+						} finally {
+							if (processed != null)
+								processed.addProperties(mol.getProperties());
+						}
+						if (processed != null)
+							try {
+								if (writesdf && sdf_title != null) {
+
+									for (Entry<Object, Object> p : processed
+											.getProperties().entrySet())
+										if (sdf_title.equals(p.getKey()
+												.toString().toLowerCase())) {
+											processed.setProperty(
+													CDKConstants.TITLE,
+													p.getValue());
+											break;
+										}
+								}
+
+								writer.write(processed);
+							} catch (Exception x) {
+								logger_cli.log(Level.SEVERE, x.getMessage());
+							}
+						return record;
+
+					}
+
+				});
+		batch.addPropertyChangeListener(new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (AbstractBatchProcessor.PROPERTY_BATCHSTATS.equals(evt
+						.getPropertyName()))
+					logger_cli.log(Level.INFO, evt.getNewValue().toString());
+			}
+		});
+		/*
+		 * standardprocessor.setCallback(new
+		 * DefaultAmbitProcessor<IAtomContainer, IAtomContainer>() {
+		 * 
+		 * @Override public IAtomContainer process(IAtomContainer target) throws
+		 * Exception { try { //writer.write(target); } catch (Exception x) {
+		 * logger.log(Level.SEVERE, x.getMessage()); } return target; } });
+		 */
+
+		IBatchStatistics stats = null;
+		try {
+			stats = batch.process(in);
+		} catch (Exception x) {
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
+		} finally {
+			try {
+			} catch (Exception x) {
+				logger_cli.warning(x.getMessage());
+			}
+			try {
+				if (batch != null)
+					batch.close();
+			} catch (Exception x) {
+				logger_cli.warning(x.getMessage());
+			}
+			if (stats != null)
+				logger_cli.log(Level.INFO, stats.toString());
+		}
+	}
+
 	public void parseCommandStandardize(String subcommand, long now)
 			throws Exception {
 		int page = 0;
@@ -700,12 +925,13 @@ public class AmbitCli {
 		}
 		Object tmpTag;
 		try {
-			tmpTag =  options.getParam(":sdftitle");
+			tmpTag = options.getParam(":sdftitle");
 		} catch (Exception x) {
 			tmpTag = null;
 		}
-		final String sdf_title = tmpTag==null?null:tmpTag.toString().toLowerCase();
-		
+		final String sdf_title = tmpTag == null ? null : tmpTag.toString()
+				.toLowerCase();
+
 		final StructureStandardizer standardprocessor = new StructureStandardizer();
 
 		try {
@@ -944,11 +1170,15 @@ public class AmbitCli {
 						}
 						if (processed != null)
 							try {
-								if (writesdf && sdf_title!=null) {
-									
-									for (Entry<Object,Object> p : processed.getProperties().entrySet()) 
-										if (sdf_title.equals(p.getKey().toString().toLowerCase())) {
-											processed.setProperty(CDKConstants.TITLE,p.getValue());
+								if (writesdf && sdf_title != null) {
+
+									for (Entry<Object, Object> p : processed
+											.getProperties().entrySet())
+										if (sdf_title.equals(p.getKey()
+												.toString().toLowerCase())) {
+											processed.setProperty(
+													CDKConstants.TITLE,
+													p.getValue());
 											break;
 										}
 								}
