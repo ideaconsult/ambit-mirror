@@ -75,7 +75,7 @@ public class Study {
      * 
      */
     @JsonProperty("characteristicCategories")
-    public List<Charactersitic> characteristicCategories = new ArrayList<Charactersitic>();
+    public List<MaterialAttribute> characteristicCategories = new ArrayList<MaterialAttribute>();
     @JsonProperty("comments")
     public List<Comment> comments = new ArrayList<Comment>();
 
