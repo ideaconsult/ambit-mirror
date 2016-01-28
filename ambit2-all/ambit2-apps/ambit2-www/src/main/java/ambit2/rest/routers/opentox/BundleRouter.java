@@ -29,30 +29,30 @@ public class BundleRouter extends MyRouter {
 		MyRouter bundleidrouter = new MyRouter(context);
 		bundleidrouter.attachDefault(BundleMetadataResource.class);
 		bundleidrouter.attach(
-				String.format("/{idbundle}%s", MetadatasetResource.metadata),
+				MetadatasetResource.metadata,
 				BundleMetadataResource.class);
 		bundleidrouter.attach(
-				String.format("/{idbundle}%s", SubstanceResource.substance),
+				SubstanceResource.substance,
 				BundleSubstanceResource.class);
-		bundleidrouter.attach(String.format("/{idbundle}/property"),
+		bundleidrouter.attach("/property",
 				BundlePropertyResource.class);
 		bundleidrouter.attach(
-				String.format("/{idbundle}%s", OpenTox.URI.dataset.getURI()),
+				OpenTox.URI.dataset.getURI(),
 				BundleDatasetResource.class);
-		bundleidrouter.attach(String.format("/{idbundle}%s", "/matrix"),
+		bundleidrouter.attach("/matrix",
 				BundleMatrixResource.class);
-		bundleidrouter.attach(String.format("/{idbundle}%s", "/matrix/{list}"),
+		bundleidrouter.attach("/matrix/{list}",
 				BundleMatrixResource.class);
 		bundleidrouter.attach(
-				String.format("/{idbundle}%s", OpenTox.URI.compound.getURI()),
+				 OpenTox.URI.compound.getURI(),
 				BundleChemicalsResource.class);
-		bundleidrouter.attach(String.format("/{idbundle}%s",
-				BundleSubstanceStudyResource.resource),
+		bundleidrouter.attach(
+				BundleSubstanceStudyResource.resource,
 				BundleSubstanceStudyResource.class);
 		bundleidrouter.attach(
-				String.format("/{idbundle}%s", BundleSummaryResource.resource),
+				BundleSummaryResource.resource,
 				BundleSummaryResource.class);
-		bundleidrouter.attach(String.format("/{idbundle}%s", "/version"),
+		bundleidrouter.attach("/version",
 				BundleVersionsResource.class);
 
 		if (authz == null)
