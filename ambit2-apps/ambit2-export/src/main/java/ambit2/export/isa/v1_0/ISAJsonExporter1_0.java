@@ -20,7 +20,6 @@ import ambit2.export.isa.json.ISAJsonExportConfig;
 import ambit2.export.isa.json.ISAJsonExporter;
 import ambit2.export.isa.v1_0.objects.Assay;
 import ambit2.export.isa.v1_0.objects.Investigation;
-import ambit2.export.isa.v1_0.objects.MeasurementType;
 import ambit2.export.isa.v1_0.objects.Protocol;
 import ambit2.export.isa.v1_0.objects.Publication;
 import ambit2.export.isa.v1_0.objects.Sample;
@@ -284,7 +283,7 @@ public class ISAJsonExporter1_0 implements IISAExport
 		
 		protocol.name = prot.getEndpoint();
 		
-		MeasurementType measType = new MeasurementType();
+		//MeasurementType measType = new MeasurementType();
 		//measType.name = prot.getCategory(); - TODO 
 		
 		//protocol.protocolType = measType;
