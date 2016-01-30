@@ -28,19 +28,20 @@ public class TestCodeUtils
 	
 	
 	public static void javaRename(String targetDir) throws Exception
-	{
+	{	
 		CodeUtils.renameJavaClass(null, new File(targetDir),"ProcessSequence", "Process");
+		
 		CodeUtils.renameJavaClass(null, new File(targetDir),"ExecutesProtocol", "Protocol");
+		
+		CodeUtils.renameJavaClass(null, new File(targetDir),"CharacteristicCategory", "MaterialAttribute");  
 		CodeUtils.renameJavaClass(null, new File(targetDir),"Characteristic", "MaterialAttributeValue");
-		CodeUtils.renameJavaClass(null, new File(targetDir),"CharacteristicCategory", "MaterialAttribute"); 
+		 
 		CodeUtils.renameJavaClass(null, new File(targetDir),"DataFile", "Data");
 		CodeUtils.renameJavaClass(null, new File(targetDir),"DerivesFrom", "Source");
 		CodeUtils.renameJavaClass(null, new File(targetDir),"MeasurementType", "OntologyAnotation");
 		
 		CodeUtils.renameJavaClass(null, new File(targetDir),"ParameterValue", "ProcessParameterValue");
 		CodeUtils.renameJavaClass(null, new File(targetDir),"Parameter", "ProtocolParameter");
-		
-		
 	}
 	
 
