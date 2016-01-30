@@ -44,7 +44,7 @@ public class Protocol {
      * 
      */
     @JsonProperty("protocolType")
-    public MeasurementType protocolType;
+    public OntologyAnnotation protocolType;
     @JsonProperty("description")
     public String description;
     @JsonProperty("uri")
@@ -52,7 +52,7 @@ public class Protocol {
     @JsonProperty("version")
     public String version;
     @JsonProperty("parameters")
-    public List<Parameter> parameters = new ArrayList<Parameter>();
+    public List<ProtocolParameter> parameters = new ArrayList<ProtocolParameter>();
     @JsonProperty("components")
     public List<Component> components = new ArrayList<Component>();
 

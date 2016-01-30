@@ -45,7 +45,7 @@ public class Process {
     @JsonProperty("executesProtocol")
     public Protocol executesProtocol;
     @JsonProperty("parameterValues")
-    public List<ParameterValue> parameterValues = new ArrayList<ParameterValue>();
+    public List<ProcessParameterValue> parameterValues = new ArrayList<ProcessParameterValue>();
     @JsonProperty("performer")
     public String performer;
     @JsonProperty("date")

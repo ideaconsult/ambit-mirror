@@ -38,7 +38,7 @@ public class Material {
     @JsonProperty("type")
     public Material.Type type;
     @JsonProperty("characteristics")
-    public List<MaterialAttribute> characteristics = new ArrayList<MaterialAttribute>();
+    public List<MaterialAttributeValue> characteristics = new ArrayList<MaterialAttributeValue>();
     /**
      * ISA material node schema
      * <p>

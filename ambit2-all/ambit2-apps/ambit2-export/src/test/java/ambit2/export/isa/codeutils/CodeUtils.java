@@ -112,7 +112,7 @@ public class CodeUtils
 				//replaceTextInFile(ranamedFile.getAbsolutePath(), oldName, newName);
 				replaceTextInFile(ranamedFile.getAbsolutePath(), oldName+" ", newName + " ");
 				replaceTextInFile(ranamedFile.getAbsolutePath(), oldName+">", newName + ">");
-				//replaceTextInFile(ranamedFile.getAbsolutePath(), oldName+"(", newName + "(");
+				//replaceTextInFile(ranamedFile.getAbsolutePath(), oldName+".", newName + ".");
 			}
 			else
 			{
@@ -120,7 +120,7 @@ public class CodeUtils
 				//replaceTextInFile(file.getAbsolutePath(), oldName, newName);
 				replaceTextInFile(file.getAbsolutePath(), oldName+" ", newName + " ");
 				replaceTextInFile(file.getAbsolutePath(), oldName+">", newName + ">");
-				//replaceTextInFile(file.getAbsolutePath(), oldName+"(", newName + "(");
+				//replaceTextInFile(file.getAbsolutePath(), oldName+".", newName + ".");
 			}
         }
 	}

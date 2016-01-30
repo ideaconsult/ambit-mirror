@@ -38,7 +38,7 @@ public class TestCodeUtils
 		 
 		CodeUtils.renameJavaClass(null, new File(targetDir),"DataFile", "Data");
 		CodeUtils.renameJavaClass(null, new File(targetDir),"DerivesFrom", "Source");
-		CodeUtils.renameJavaClass(null, new File(targetDir),"MeasurementType", "OntologyAnotation");
+		CodeUtils.renameJavaClass(null, new File(targetDir),"MeasurementType", "OntologyAnnotation");
 		
 		CodeUtils.renameJavaClass(null, new File(targetDir),"ParameterValue", "ProcessParameterValue");
 		CodeUtils.renameJavaClass(null, new File(targetDir),"Parameter", "ProtocolParameter");

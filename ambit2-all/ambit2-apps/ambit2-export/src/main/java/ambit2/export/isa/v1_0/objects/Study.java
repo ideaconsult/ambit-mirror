@@ -36,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "assays",
     "factors",
     "characteristicCategories",
+    "unitCategories",
     "comments"
 })
 public class Study {
@@ -59,7 +60,7 @@ public class Study {
     @JsonProperty("people")
     public List<Person> people = new ArrayList<Person>();
     @JsonProperty("studyDesignDescriptors")
-    public List<MeasurementType> studyDesignDescriptors = new ArrayList<MeasurementType>();
+    public List<OntologyAnnotation> studyDesignDescriptors = new ArrayList<OntologyAnnotation>();
     @JsonProperty("protocols")
     public List<Protocol> protocols = new ArrayList<Protocol>();
     @JsonProperty("materials")
@@ -71,11 +72,17 @@ public class Study {
     @JsonProperty("factors")
     public List<Factor> factors = new ArrayList<Factor>();
     /**
-     * List of all the characteristics (or material attributes) defined in the study, used to avoid duplication of their declaration when each material_attribute_value is created. 
+     * List of all the characteristics categories (or material attributes) defined in the study, used to avoid duplication of their declaration when each material_attribute_value is created. 
      * 
      */
     @JsonProperty("characteristicCategories")
     public List<MaterialAttribute> characteristicCategories = new ArrayList<MaterialAttribute>();
+    /**
+     * List of all the unitsdefined in the study, used to avoid duplication of their declaration when each value is created. 
+     * 
+     */
+    @JsonProperty("unitCategories")
+    public List<OntologyAnnotation> unitCategories = new ArrayList<OntologyAnnotation>();
     @JsonProperty("comments")
     public List<Comment> comments = new ArrayList<Comment>();
 

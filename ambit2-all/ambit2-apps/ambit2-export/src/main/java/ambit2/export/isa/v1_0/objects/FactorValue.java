@@ -43,6 +43,6 @@ public class FactorValue {
      * 
      */
     @JsonProperty("unit")
-    public MeasurementType unit;
+    public OntologyAnnotation unit;
 
 }
