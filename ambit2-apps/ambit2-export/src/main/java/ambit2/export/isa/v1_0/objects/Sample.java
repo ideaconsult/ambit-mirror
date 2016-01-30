@@ -42,6 +42,6 @@ public class Sample {
      * 
      */
     @JsonProperty("derivesFrom")
-    public DerivesFrom derivesFrom;
+    public Source derivesFrom;
 
 }

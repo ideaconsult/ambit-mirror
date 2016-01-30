@@ -20,6 +20,6 @@ public class TechnologyType {
      * 
      */
     @JsonProperty("ontologyAnnotation")
-    public MeasurementType ontologyAnnotation;
+    public OntologyAnnotation ontologyAnnotation;
 
 }

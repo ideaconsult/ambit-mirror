@@ -52,7 +52,7 @@ public class Person {
     @JsonProperty("affiliation")
     public String affiliation;
     @JsonProperty("roles")
-    public List<MeasurementType> roles = new ArrayList<MeasurementType>();
+    public List<OntologyAnnotation> roles = new ArrayList<OntologyAnnotation>();
     @JsonProperty("comments")
     public List<Comment> comments = new ArrayList<Comment>();
 

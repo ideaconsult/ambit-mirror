@@ -23,6 +23,6 @@ public class Component {
      * 
      */
     @JsonProperty("componentType")
-    public MeasurementType componentType;
+    public OntologyAnnotation componentType;
 
 }

@@ -37,7 +37,7 @@ public class Factor {
      * 
      */
     @JsonProperty("factorType")
-    public MeasurementType factorType;
+    public OntologyAnnotation factorType;
     @JsonProperty("comments")
     public List<Comment> comments = new ArrayList<Comment>();
 

@@ -9,18 +9,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
- * ISA material attribute schema
+ * ISA protocol parameter schema
  * <p>
- * JSON-schema representing a characteristics category (what appears between the brackets in Charactersitics[]) in the ISA model
+ * JSON-schema representing a parameter for a protocol (category declared in the investigation file) in the ISA model
  * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
     "@id",
-    "characteristicType"
+    "parameterName"
 })
-public class MaterialAttribute {
+public class ProtocolParameter {
 
     @JsonProperty("@id")
     public URI Id;
@@ -30,7 +30,7 @@ public class MaterialAttribute {
      * JSON-schema representing an ontology reference or annotation in the ISA model (for fields that are required to be ontology annotations)
      * 
      */
-    @JsonProperty("characteristicType")
-    public OntologyAnnotation characteristicType;
+    @JsonProperty("parameterName")
+    public OntologyAnnotation parameterName;
 
 }

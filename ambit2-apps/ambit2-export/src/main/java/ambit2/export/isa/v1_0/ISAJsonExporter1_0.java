@@ -287,7 +287,7 @@ public class ISAJsonExporter1_0 implements IISAExport
 		MeasurementType measType = new MeasurementType();
 		//measType.name = prot.getCategory(); - TODO 
 		
-		protocol.protocolType = measType;
+		//protocol.protocolType = measType;
 		
 		if (prot.getGuideline() != null)
 			if (!prot.getGuideline().isEmpty())

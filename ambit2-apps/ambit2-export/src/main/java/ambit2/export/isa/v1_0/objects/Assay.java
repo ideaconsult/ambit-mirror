@@ -27,7 +27,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "technologyPlatform",
     "dataFiles",
     "materials",
-    "charactersitics",
+    "characteristicCategories",
+    "unitCategories",
     "processSequence"
 })
 public class Assay {
@@ -45,21 +46,27 @@ public class Assay {
      * 
      */
     @JsonProperty("measurementType")
-    public MeasurementType measurementType;
+    public OntologyAnnotation measurementType;
     @JsonProperty("technologyType")
     public TechnologyType technologyType;
     @JsonProperty("technologyPlatform")
     public String technologyPlatform;
     @JsonProperty("dataFiles")
-    public List<DataFile> dataFiles = new ArrayList<DataFile>();
+    public List<Data> dataFiles = new ArrayList<Data>();
     @JsonProperty("materials")
     public Object materials;
     /**
-     * List of all the characteristics (or material attributes) defined in the study, used to avoid duplication of their declaration when each material_attribute_value is created. 
+     * List of all the characteristics categories (or material attributes) defined in the study, used to avoid duplication of their declaration when each material_attribute_value is created. 
      * 
      */
-    @JsonProperty("charactersitics")
-    public List<MaterialAttribute> charactersitics = new ArrayList<MaterialAttribute>();
+    @JsonProperty("characteristicCategories")
+    public List<MaterialAttribute> characteristicCategories = new ArrayList<MaterialAttribute>();
+    /**
+     * List of all the unitsdefined in the study, used to avoid duplication of their declaration when each value is created. 
+     * 
+     */
+    @JsonProperty("unitCategories")
+    public List<OntologyAnnotation> unitCategories = new ArrayList<OntologyAnnotation>();
     @JsonProperty("processSequence")
     public List<Process> processSequence = new ArrayList<Process>();
 

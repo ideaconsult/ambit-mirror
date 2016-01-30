@@ -29,7 +29,7 @@ public class MaterialAttributeValue {
     /**
      * ISA material attribute schema
      * <p>
-     * JSON-schema representing a characteristics category (what appears between the brackets in MaterialAttributes[]) in the ISA model
+     * JSON-schema representing a characteristics category (what appears between the brackets in Charactersitics[]) in the ISA model
      * 
      */
     @JsonProperty("category")
@@ -43,6 +43,6 @@ public class MaterialAttributeValue {
      * 
      */
     @JsonProperty("unit")
-    public MeasurementType unit;
+    public OntologyAnnotation unit;
 
 }

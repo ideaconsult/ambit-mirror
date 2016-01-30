@@ -2,6 +2,8 @@
 package ambit2.export.isa.v1_0.objects;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,14 +19,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
-    "name",
+    "@id",
+    "annotationValue",
     "termSource",
-    "termAccession"
+    "termAccession",
+    "comments"
 })
 public class OntologyAnnotation {
 
-    @JsonProperty("name")
-    public String name;
+    @JsonProperty("@id")
+    public URI Id;
+    @JsonProperty("annotationValue")
+    public Object annotationValue;
     /**
      * The abbreviated ontology name. It should correspond to one of the sources as specified in the ontologySourceReference section of the Investigation.
      * 
@@ -33,5 +39,7 @@ public class OntologyAnnotation {
     public String termSource;
     @JsonProperty("termAccession")
     public URI termAccession;
+    @JsonProperty("comments")
+    public List<Comment> comments = new ArrayList<Comment>();
 
 }
