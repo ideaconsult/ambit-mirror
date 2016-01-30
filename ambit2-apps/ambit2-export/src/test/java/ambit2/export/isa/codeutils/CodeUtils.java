@@ -108,12 +108,19 @@ public class CodeUtils
 				file.renameTo(ranamedFile);
 				System.out.println("renaming " + oldPath + " to " + path);
 				System.out.println("replacing in " + ranamedFile.getAbsolutePath());
-				replaceTextInFile(ranamedFile.getAbsolutePath(), oldName, newName);
+				
+				//replaceTextInFile(ranamedFile.getAbsolutePath(), oldName, newName);
+				replaceTextInFile(ranamedFile.getAbsolutePath(), oldName+" ", newName + " ");
+				replaceTextInFile(ranamedFile.getAbsolutePath(), oldName+">", newName + ">");
+				//replaceTextInFile(ranamedFile.getAbsolutePath(), oldName+"(", newName + "(");
 			}
 			else
 			{
 				System.out.println("replacing in " + file.getAbsolutePath());
-				replaceTextInFile(file.getAbsolutePath(), oldName, newName);
+				//replaceTextInFile(file.getAbsolutePath(), oldName, newName);
+				replaceTextInFile(file.getAbsolutePath(), oldName+" ", newName + " ");
+				replaceTextInFile(file.getAbsolutePath(), oldName+">", newName + ">");
+				//replaceTextInFile(file.getAbsolutePath(), oldName+"(", newName + "(");
 			}
         }
 	}
