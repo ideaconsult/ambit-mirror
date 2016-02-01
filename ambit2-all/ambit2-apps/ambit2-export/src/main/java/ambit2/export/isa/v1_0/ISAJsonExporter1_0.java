@@ -3,6 +3,7 @@ package ambit2.export.isa.v1_0;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -10,6 +11,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.export.isa.IISAExport;
@@ -21,7 +23,9 @@ import ambit2.export.isa.json.ISAJsonExporter;
 import ambit2.export.isa.v1_0.objects.Assay;
 import ambit2.export.isa.v1_0.objects.Investigation;
 import ambit2.export.isa.v1_0.objects.OntologyAnnotation;
+import ambit2.export.isa.v1_0.objects.ProcessParameterValue;
 import ambit2.export.isa.v1_0.objects.Protocol;
+import ambit2.export.isa.v1_0.objects.ProtocolParameter;
 import ambit2.export.isa.v1_0.objects.Publication;
 import ambit2.export.isa.v1_0.objects.Sample;
 import ambit2.export.isa.v1_0.objects.Source;
@@ -271,8 +275,27 @@ public class ISAJsonExporter1_0 implements IISAExport
 		source.name = pa.getSubstanceUUID();
 		sample.name = source.name + "[" + protocol.name + "]";
 		
-		//Handle parameters
-		//process.parameters
+		//Handle ProtocolApplication parameters info which is added to the process and to the protocol objects
+		if (pa.getParameters() != null)
+			if (pa.getParameters() instanceof IParams)
+			{
+				IParams params = (IParams) pa.getParameters();
+				Set keys = params.keySet();
+				for (Object key : keys)
+				{	
+					ProcessParameterValue ppv = new ProcessParameterValue();
+					process.parameterValues.add(ppv);
+					ppv.value = params.get(key);
+					ppv.category = new ProtocolParameter();
+					ppv.category.parameterName = ontologyManager.getOntologyAnotation(key.toString());
+					
+					//Protocol name is added also here
+					protocol.parameters.add(ppv.category);
+				}
+			}
+		
+		//Handle InterpretationCriteria and InterpretationResult
+		//TODO
 		
 		//Handle effects records
 		List<EffectRecord> effects = pa.getEffects();
