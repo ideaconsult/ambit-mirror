@@ -8,32 +8,39 @@ import java.util.List;
 import ambit2.export.isa.base.ISAConst.DataFileFormat;
 
 public class ExternalDataFileManager 
-{
-	
+{	
 	protected DataFileFormat dataFileFormat = DataFileFormat.TEXT_TAB;
 	protected File outputDir = null;
 	
 	protected boolean FlagStoreDataInStringBuffer = false; 
 	protected StringBuffer buffer = null;
-	FileWriter fileWriter = null;
+	protected FileWriter fileWriter = null;
 	
-	protected List<String> currentLine = new ArrayList<String>();
-	
+	protected int currentRecordNum = 1;
+	protected List<String> currentRecord = new ArrayList<String>();
+	protected ExternalDataFileHeader fileHeader = null;
 	
 	public ExternalDataFileManager (File outputDir) throws Exception
-	{
+	{		
+		this.outputDir = outputDir;
 		init();
-	}
-	
+	}	
 	
 	void init () throws Exception
 	{
-		currentLine.clear();
+		currentRecord.clear();
 		if (outputDir != null)
 		{
-			//TODO
+			fileWriter = createWriter(outputDir);
+			//TODO set file header
 		}
-		
+	}
+	
+	public void close() throws Exception
+	{
+		finalizeRecord();
+		if (fileWriter != null)
+			closeWriter(fileWriter);
 	}
 	
 	public ExternalDataFileLocation storeData(Object obj)
@@ -42,15 +49,30 @@ public class ExternalDataFileManager
 		return null;
 	}
 	
-	void addLine()
+	public void finalizeRecord()
 	{
-		//TODO
+		finalizeRecord(false);
 	}
 	
-	void addToLine(Object obj)
+	public void finalizeRecord(boolean FinalizeIfEmpty)
 	{
-		//TODO
+		if (currentRecord.isEmpty())
+			if (!FinalizeIfEmpty)
+				return;
+		
+		if (FlagStoreDataInStringBuffer)
+		{
+			//TODO
+		}
+		
+		if (fileWriter != null)
+		{
+			//TODO
+		}
+		
+		currentRecord.clear();
 	}
+	
 	
 	public String getDataStringBuffer()
 	{
