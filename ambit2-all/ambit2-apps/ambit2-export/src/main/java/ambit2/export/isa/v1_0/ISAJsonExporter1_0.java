@@ -20,6 +20,7 @@ import ambit2.export.isa.json.ISAJsonExportConfig;
 import ambit2.export.isa.json.ISAJsonExporter;
 import ambit2.export.isa.v1_0.objects.Assay;
 import ambit2.export.isa.v1_0.objects.Investigation;
+import ambit2.export.isa.v1_0.objects.OntologyAnnotation;
 import ambit2.export.isa.v1_0.objects.Protocol;
 import ambit2.export.isa.v1_0.objects.Publication;
 import ambit2.export.isa.v1_0.objects.Sample;
@@ -39,6 +40,7 @@ public class ISAJsonExporter1_0 implements IISAExport
 	File xmlISAConfig =  null;
 	File extDataFile = null;
 	ExternalDataFileManager extDataManager = null;
+	OntologyManager1_0 ontologyManager = null;
 
 	//work variables
 	ISAJsonExportConfig cfg = null;
@@ -139,6 +141,7 @@ public class ISAJsonExporter1_0 implements IISAExport
 		isaMapper.setTargetDataObject(investigation);  //The data is put (mapped) into investigation object
 		setExternalDataFile();
 		extDataManager = new ExternalDataFileManager(extDataFile);
+		ontologyManager = new OntologyManager1_0();
 		
 		handleBundle();
 		
@@ -221,7 +224,7 @@ public class ISAJsonExporter1_0 implements IISAExport
 			//sample.characteristics.add()
 		}
 		
-		
+		//TODO add FlagAllCompositionInOneProcess 
 		
 		//TODO
 	}
@@ -255,7 +258,7 @@ public class ISAJsonExporter1_0 implements IISAExport
 		Sample sample = new Sample();
 		process.inputs.add(source);
 		process.outputs.add(sample);
-		//process.executesProtocol = protocol; ??
+		process.executesProtocol = protocol; 
 		
 		/*
 		if (!cfg.FlagSaveSourceAndSampleOnlyInProcess)
@@ -265,10 +268,11 @@ public class ISAJsonExporter1_0 implements IISAExport
 		}
 		*/
 		
-		//process.parameters
 		source.name = pa.getSubstanceUUID();
+		sample.name = source.name + "[" + protocol.name + "]";
 		
-		//TODO
+		//Handle parameters
+		//process.parameters
 		
 		//Handle effects records
 		List<EffectRecord> effects = pa.getEffects();
@@ -283,10 +287,10 @@ public class ISAJsonExporter1_0 implements IISAExport
 		
 		protocol.name = prot.getEndpoint();
 		
-		//MeasurementType measType = new MeasurementType();
-		//measType.name = prot.getCategory(); - TODO 
-		
-		//protocol.protocolType = measType;
+		if (prot.getCategory() != null)
+		{	
+			protocol.protocolType = ontologyManager.getOntologyAnotation(prot.getCategory());
+		}	
 		
 		if (prot.getGuideline() != null)
 			if (!prot.getGuideline().isEmpty())
