@@ -149,10 +149,6 @@ public class ISAJsonExporter1_0 implements IISAExport
 		
 		handleBundle();
 		
-		//Some temp code
-		investigation.publications.add(new Publication());
-		investigation.publications.add(new Publication());
-		
 		while (records.hasNext())
 		{
 			SubstanceRecord rec = records.next();
@@ -296,6 +292,16 @@ public class ISAJsonExporter1_0 implements IISAExport
 		
 		//Handle InterpretationCriteria and InterpretationResult
 		//TODO
+		
+		//Handle reference
+		String ref = pa.getReference();
+		if (ref != null)
+		{
+			Publication pub = new Publication();
+			//TODO extract if possible intelligently the info
+			pub.title = ref; 
+			study.publications.add(pub);
+		}
 		
 		//Handle effects records
 		List<EffectRecord> effects = pa.getEffects();
