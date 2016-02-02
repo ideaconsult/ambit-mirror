@@ -336,26 +336,53 @@ public class ISAJsonExporter1_0 implements IISAExport
 	{
 		Assay assay = new Assay();
 		study.assays.add(assay);
+				
+		Process process1 = null;
 		
-		//Create assay processes
-		Process process1 = new Process();
+		//Process 1 describes the conditions for the measurement (effect record) 
+		//if there are no conditions process 1 is not registered
+		if (effect.getConditions() != null)
+		{	
+			process1 = new Process();
+			assay.processSequence.add(process1);
+			
+			process1.name = /*effect.getEndpoint() + */ "[conditions]";
+			Source source1 = new Source();
+			Sample sample1 = new Sample();
+			process1.inputs.add(source1);
+			process1.outputs.add(sample1);
+			source1.name = study.identifier;
+			sample1.name = source1.name + "[conditions]";
+			storeConditionsAsFactors(effect, sample1);
+		}
+		
+		//Process 2 describes the measurement itself (the effect record)
 		Process process2 = new Process();
-		assay.processSequence.add(process1);
 		assay.processSequence.add(process2);
+		process2.name = effect.getEndpoint().toString();
+		Source source2 = new Source();
+		Sample sample2 = new Sample();
+		process2.inputs.add(source2);
+		process2.outputs.add(sample2);
 		
-		//Set process 1
-		Source source1 = new Source();
-		Sample sample1 = new Sample();
-		process1.inputs.add(source1);
-		process1.outputs.add(sample1);
-		source1.name = study.identifier;
-		
-		//Set process 2
-		
-		
+		if (process1 == null)
+		{
+			source2.name = study.identifier;
+		}
+		else
+		{
+			Sample sample1 = (Sample)process1.outputs.get(0);
+			source2.name = sample1.name;
+		}
+			
 		//Store data to external data file
 		//String identifier = extDataManager.storeData(effect.getTextValue()).getLocationAsIdentifier();
 		
+		//TODO
+	}
+	
+	void storeConditionsAsFactors(EffectRecord effect, Sample sample)
+	{
 		//TODO
 	}
 	
