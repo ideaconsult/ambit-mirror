@@ -15,10 +15,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
@@ -50,7 +50,7 @@ import net.idea.modbcum.q.update.AbstractUpdate;
 import org.apache.log4j.PropertyConfigurator;
 import org.codehaus.jackson.JsonNode;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.fingerprint.CircularFingerprinter;
+import org.openscience.cdk.fingerprint.IBitFingerprint;
 import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -89,6 +89,8 @@ import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
 import ambit2.dbcli.CliOptions._preprocessingoptions;
 import ambit2.dbcli.descriptors.AtomEnvironmentGeneratorApp;
 import ambit2.dbcli.exceptions.InvalidCommand;
+import ambit2.descriptors.fingerprints.CircularFingerprintInterpretable;
+import ambit2.descriptors.fingerprints.ISparseFingerprint;
 import ambit2.descriptors.processors.BitSetGenerator;
 import ambit2.descriptors.processors.FPTable;
 import ambit2.smarts.processors.SMARTSPropertiesGenerator;
@@ -798,6 +800,7 @@ public class AmbitCli {
 				Class clazz = null;
 				for (String fp : fpclass)
 					try {
+						//if (fp.equals("CircularFingerprint"))	fp = "ambit2.descriptors.fingerprint.CircularFingerprintInterpretable";
 						if (fp.indexOf(".") < 0)
 							fp = "org.openscience.cdk.fingerprint." + fp.trim();
 						else
@@ -827,7 +830,7 @@ public class AmbitCli {
 		} catch (Exception x) {
 		}
 		if (fps.size() == 0)
-			fps.add(new CircularFingerprinter());
+			fps.add(new CircularFingerprintInterpretable());
 
 		StringBuilder b = new StringBuilder();
 		for (IFingerprinter fp : fps) {
@@ -887,11 +890,45 @@ public class AmbitCli {
 						for (IFingerprinter fp : fps)
 							try {
 
-								BitSet fingerprint = fp.getBitFingerprint(
-										processed).asBitSet();
-								processed.setProperty(fp.getClass().getName(),
-										fingerprint.toString());
+								if (fp instanceof ISparseFingerprint)
+									try {
+										StringBuilder b = new StringBuilder();
+										for (Object x : ((ISparseFingerprint) fp)
+												.getSparseFingerprint(processed)) {
+											b.append(",");
+											b.append(x.toString());
+										}
 
+										processed.setProperty(fp.getClass()
+												.getName() + ".full",
+												b.toString());
+									} catch (Exception x) {
+										// not all fp support this
+										x.printStackTrace();
+									}
+								else {
+									IBitFingerprint fpbinary = fp
+											.getBitFingerprint(processed);
+									processed.setProperty(
+											fp.getClass().getName() + ".binary",
+											fpbinary == null ? "" : fpbinary
+													.asBitSet().toString()
+													.replace("{", "")
+													.replace("}", ""));
+
+
+									try {
+										Map<String, Integer> fpcount = fp
+												.getRawFingerprint(processed);
+
+										processed.setProperty(fp.getClass()
+												.getName() + ".count",
+												fpcount.toString());
+									} catch (Exception x) {
+										// not all fp support this
+										x.printStackTrace();
+									}
+								}	
 							} catch (Exception x) {
 								logger_cli.log(Level.SEVERE, x.getMessage(), x);
 								if (processed != null)
