@@ -51,6 +51,8 @@ public class SubstanceStudyFlatQueryTest extends
 				if ("s_prefix".equals(header)) continue;
 				if ("errQualifier".equals(header))
 					continue;
+				if ("reference_year".equals(header))
+					continue;
 				if ("err".equals(header))
 					continue;
 				if ("hash".equals(header))
