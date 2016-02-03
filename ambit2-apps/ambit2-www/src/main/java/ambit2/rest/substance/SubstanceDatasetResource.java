@@ -261,11 +261,12 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 							groupProperties.add(key);
 							if (val.getValue().get(
 									EffectRecord._fields.loValue.name()) != null) {
+								Number num = val.getValue()
+								.get(EffectRecord._fields.loValue
+										.name()).asDouble();								
 								master.setRecordProperty(
 										key,
-										val.getValue()
-												.get(EffectRecord._fields.loValue
-														.name()).asInt());
+										num);
 								key.setClazz(Number.class);
 							} else {
 								master.setRecordProperty(key, val.getValue()
