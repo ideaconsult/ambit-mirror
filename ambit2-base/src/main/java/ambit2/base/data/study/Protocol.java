@@ -42,6 +42,7 @@ public class Protocol {
 
 	/**
 	 * TODO refactor this to make ontology use easier
+	 * 
 	 * @author nina
 	 *
 	 */
@@ -94,6 +95,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://semanticscience.org/resource/CHEMINF_000256";
@@ -118,6 +120,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://semanticscience.org/resource/CHEMINF_000257";
@@ -142,6 +145,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/CHMO_0002119";
@@ -166,6 +170,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				// http://purl.obolibrary.org/obo/CHMO_0002119
@@ -191,10 +196,11 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				// http://purl.obolibrary.org/obo/CHMO_0002119
-				//return "CHMO_0002119";
+				// return "CHMO_0002119";
 				return "http://purl.obolibrary.org/obo/BAO_0002130";
 			}
 		},
@@ -217,6 +223,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/BAO_0002775";
@@ -241,6 +248,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/BAO_0002135";
@@ -265,6 +273,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "UO_0000196";
@@ -498,6 +507,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ENV FATE";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://semanticscience.org/resource/CHEMINF_000433";
@@ -526,6 +536,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000020";
@@ -550,6 +561,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000023";
@@ -574,6 +586,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000026";
@@ -598,6 +611,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000032";
@@ -622,6 +636,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000033";
@@ -646,6 +661,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000034";
@@ -670,6 +686,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000034";
@@ -694,6 +711,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000034";
@@ -718,6 +736,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000034";
@@ -742,6 +761,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000034";
@@ -766,6 +786,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000034";
@@ -790,6 +811,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000021";
@@ -814,6 +836,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000024";
@@ -838,6 +861,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000027";
@@ -862,6 +886,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://www.bioassayontology.org/bao#BAO_0002167";
@@ -886,6 +911,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000028";
@@ -910,6 +936,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000029";
@@ -978,6 +1005,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000010";
@@ -1027,6 +1055,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000006";
@@ -1071,6 +1100,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000005";
@@ -1095,6 +1125,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000015";
@@ -1119,6 +1150,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000009";
@@ -1143,6 +1175,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000013";
@@ -1167,6 +1200,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000016";
@@ -1191,6 +1225,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000017";
@@ -1215,6 +1250,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "ECOTOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000008";
@@ -1239,9 +1275,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
 			@Override
 			public String getOntologyURI() {
-				//return "NPO_1967 NPO_1968";
+				// return "NPO_1967 NPO_1968";
 				return "http://purl.bioontology.org/ontology/npo/NPO_1967";
 			}
 		},
@@ -1309,9 +1346,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
 			@Override
 			public String getOntologyURI() {
-				//return "NPO_274 NPO_1365";
+				// return "NPO_274 NPO_1365";
 				return "http://purl.bioontology.org/ontology/npo/NPO_274";
 			}
 		},
@@ -1334,6 +1372,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.bioontology.org/ontology/npo/NPO_1235";
@@ -1403,6 +1442,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_9000003";
@@ -1452,6 +1492,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_9000004";
@@ -1638,6 +1679,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/BAO_0003009";
@@ -1663,6 +1705,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/BAO_0002993";
@@ -1688,6 +1731,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/BAO_0002100";
@@ -1714,6 +1758,7 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/BAO_0002167";
@@ -1741,6 +1786,7 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 82168;
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/BAO_0002168";
@@ -1768,6 +1814,7 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 82189;
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/BAO_0002189";
@@ -1792,7 +1839,8 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82189;
-			}		
+			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/BAO_0002084";
@@ -1817,7 +1865,8 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82189;
-			}			
+			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/BAO_0000451";
@@ -1842,7 +1891,8 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82189;
-			}	
+			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/BAO_0002733";
@@ -1867,7 +1917,8 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82189;
-			}		
+			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/CHMO_0000287";
@@ -1893,6 +1944,7 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 82189;
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/MMO_0000368";
@@ -1917,7 +1969,8 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82189;
-			}			
+			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/OBI_0302736";
@@ -1943,6 +1996,7 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 82189;
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://scai.fraunhofer.de/CSEO#CSEO_00001191";
@@ -1967,13 +2021,14 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82189;
-			}				
+			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/CHMO_0000239";
 			}
 		},
-		CHMO_0000538_SECTION  {
+		CHMO_0000538_SECTION {
 			@Override
 			public String toString() {
 				return "ICP-MS (Inductively Coupled Plasma-Mass Spectrometry)";
@@ -1992,7 +2047,8 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82189;
-			}				
+			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/CHMO_0000538";
@@ -2017,7 +2073,8 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82189;
-			}	
+			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/CHMO_0000234";
@@ -2043,7 +2100,8 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 82190;
-			}			
+			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.bioontology.org/ontology/npo#NPO_1773";
@@ -2070,6 +2128,7 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 82190;
 			}
+
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.bioontology.org/ontology/npo#NPO_1709";
@@ -2312,8 +2371,9 @@ public class Protocol {
 			protocol.setTopCategory(getTopCategory());
 			return protocol;
 		}
+
 		public String getOntologyURI() {
-			//generic assay by default
+			// generic assay by default
 			return "http://purl.obolibrary.org/obo/BAO_0000015";
 		}
 
@@ -2375,6 +2435,13 @@ public class Protocol {
 
 	@Override
 	public String toString() {
+		Protocol._categories pcategory = null;
+		try {
+			pcategory = Protocol._categories.valueOf(category);
+		} catch (Exception x) {
+
+		}
+
 		StringBuilder b = new StringBuilder();
 		b.append("{");
 
@@ -2389,6 +2456,13 @@ public class Protocol {
 		b.append(": ");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(category)));
 		b.append(",");
+		// onto
+		if (pcategory != null) {
+			b.append(JSONUtils.jsonQuote("term"));
+			b.append(": ");
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(pcategory.getOntologyURI())));
+			b.append(",");
+		}
 		b.append(JSONUtils.jsonQuote("title"));
 		b.append(": ");
 		try {
