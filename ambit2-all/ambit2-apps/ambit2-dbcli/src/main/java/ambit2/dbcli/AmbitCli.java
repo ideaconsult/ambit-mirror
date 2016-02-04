@@ -57,6 +57,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.data.LiteratureEntry;
@@ -70,6 +71,7 @@ import ambit2.core.io.FileOutputState;
 import ambit2.core.io.IRawReader;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.processors.StructureNormalizer;
+import ambit2.core.processors.structure.InchiProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.key.NoneKey;
 import ambit2.core.processors.structure.key.PropertyKey;
@@ -154,6 +156,12 @@ public class AmbitCli {
 	}
 
 	public long go(String command, String subcommand) throws Exception {
+		try {
+			inchi_warmup(3);
+		} catch (Exception x) {
+			logger_cli.log(Level.SEVERE, "MSG_INCHI",
+					new Object[] { "ERROR",x.getMessage() });
+		}
 		long now = System.currentTimeMillis();
 		if ("import".equals(command)) {
 			parseCommandImport();
@@ -800,7 +808,8 @@ public class AmbitCli {
 				Class clazz = null;
 				for (String fp : fpclass)
 					try {
-						//if (fp.equals("CircularFingerprint"))	fp = "ambit2.descriptors.fingerprint.CircularFingerprintInterpretable";
+						// if (fp.equals("CircularFingerprint")) fp =
+						// "ambit2.descriptors.fingerprint.CircularFingerprintInterpretable";
 						if (fp.indexOf(".") < 0)
 							fp = "org.openscience.cdk.fingerprint." + fp.trim();
 						else
@@ -909,13 +918,20 @@ public class AmbitCli {
 								else {
 									IBitFingerprint fpbinary = fp
 											.getBitFingerprint(processed);
-									processed.setProperty(
-											fp.getClass().getName() + ".binary",
-											fpbinary == null ? "" : fpbinary
-													.asBitSet().toString()
-													.replace("{", "")
-													.replace("}", ""));
-
+									processed
+											.setProperty(
+													fp.getClass().getName()
+															+ ".binary",
+													fpbinary == null ? ""
+															: fpbinary
+																	.asBitSet()
+																	.toString()
+																	.replace(
+																			"{",
+																			"")
+																	.replace(
+																			"}",
+																			""));
 
 									try {
 										Map<String, Integer> fpcount = fp
@@ -928,7 +944,7 @@ public class AmbitCli {
 										// not all fp support this
 										x.printStackTrace();
 									}
-								}	
+								}
 							} catch (Exception x) {
 								logger_cli.log(Level.SEVERE, x.getMessage(), x);
 								if (processed != null)
@@ -1618,6 +1634,27 @@ public class AmbitCli {
 				logger_cli.log(Level.INFO, stats.toString());
 		}
 
+	}
+
+	private static void inchi_warmup(int retry) throws Exception {
+		Exception err = null;
+		long now = System.currentTimeMillis();
+		for (int i = 0; i < retry; i++)
+			try {
+				InchiProcessor p = new InchiProcessor();
+				p.process(MoleculeFactory.makeCyclohexane());
+				p.close();
+				p = null;
+				
+				logger_cli.log(Level.INFO, "MSG_INCHI",
+						new Object[] { String.format("loaded in %d msec" , System.currentTimeMillis()  - now),""});
+				return;
+			} catch (Exception x) {
+				logger_cli.log(Level.WARNING, "MSG_INCHI",
+						new Object[] { "load failed at retry ",(retry+1)});
+				err = x;
+			}
+		if (err!=null) throw err;
 	}
 }
 
