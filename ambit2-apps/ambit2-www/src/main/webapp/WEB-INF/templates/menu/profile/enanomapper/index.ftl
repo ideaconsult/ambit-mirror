@@ -98,16 +98,21 @@ $(document)
 			<div class="sixteen columns remove-bottom" id="query">
 			<div class="alpha">
 				<div class="remove-bottom h4">
-						Search nanomaterials
+						Search nanomaterials by name
 				</div>
 			    <div class='chelp'> </div>			
 			</div>
 			</div>
-		<div class='row add-bottom'>
+		<div class='row half-bottom'>
 	
 			<input class='eight columns omega half-bottom' type="text" id='search' value='TiO2' name='search'>
 			<input  type="hidden" value='name' name='type'>
 			<input class='three columns omega submit' type='submit' value='Search'>
+		</div>
+		<div class='row add-bottom h4'>
+		<span class='eight columns'>
+		Try the new  <a  href="http://enanomapper.github.io/data.enanomapper.net/?search=zinc%20oxide" title="Free text search">free text search application</a>
+		</span>
 		</div>
 
 		<div class="sixteen columns remove-bottom" id="query">
@@ -120,8 +125,12 @@ $(document)
 			    <a href="${ambit_root}/substance?type=citation&search=10.1073&page=0&pagesize=20" title="Search for nanomaterials by paper reference">Search nanomaterials by citation</a> <a href='#' class='chelp nanomaterial2'>?</a></li>
 			    <li><a href="${ambit_root}/query/study" title="Search substances by physico-chemical parameters or biological effects">Search nanomaterials by physchem parameters or biological effects</a> <a href='#' class='chelp nanomaterial3'>?</a></li>
 			    <li><a href="${ambit_root}/ui/_search?search=SiO2" title="Search nanomaterials by chemical structure of components"><br/>Search nanomaterials by composition</a> <a href='#' class='chelp nanomaterial4'>?</a></li>
+			    <!--
 			    <li><a href="${ambit_root}/ontobucket?search=cytotoxicity&type=protocol&qe=true" title="Free text search (experimental)"><br/>Free text search</a> <a href='#' class='chelp nanomaterial5'>?</a></li>
-			    <!-- -->
+			    -->
+			    
+			    <li><a href="http://enanomapper.github.io/data.enanomapper.net/?search=zinc%20oxide" title="Free text search (experimental)"><br/>Free text search</a> <a href='#' class='chelp nanomaterial5'>?</a></li>
+			    
 			    <li><a href='${ambit_root}/substance'>Browse nanomaterials and studies</a> <a href='#' class='chelp nanomaterial'>?</a> <br/>
 			    <span class='chelp'> Data exchange via <a href='http://enanomapper.github.io/API/'  class='qxternal'>REST API</a> <a href='#' class='chelp nanomaterial7'>?</a></span>
 			    </li>
