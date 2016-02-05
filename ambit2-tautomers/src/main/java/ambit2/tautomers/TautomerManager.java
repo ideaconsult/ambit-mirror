@@ -17,6 +17,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.smarts.SmartsHelper;
+import ambit2.smarts.StereoChemUtils;
 import ambit2.tautomers.TautomerConst.CanonicTautomerMethod;
 import ambit2.tautomers.ranking.CanonicTautomer;
 import ambit2.tautomers.ranking.EnergyRanking;
@@ -88,7 +89,7 @@ public class TautomerManager {
 																// flag should
 																// be true
 	public boolean FlagGenerateStereoBasedOn2D = false;
-	public boolean FlagSetStereoElementsOnTautomerProcess = false;
+	public boolean FlagSetStereoElementsOnTautomerProcess = true;
 	public boolean FlagStopGenerationOnReachingRuleSelectorLimit = false; // Typically
 																			// this
 																			// flag
@@ -759,10 +760,9 @@ public class TautomerManager {
 
 		CDKHueckelAromaticityDetector.detectAromaticity(tautomer);
 
-		if (FlagSetStereo)
-		{
-			//TODO
-		}
+		
+		if (FlagSetStereo)		
+			StereoChemUtils.cloneAndCheckStereo(tautomer, originalMol);
 		
 		if (FlagGenerateStereoFrom2D)
 		{	
