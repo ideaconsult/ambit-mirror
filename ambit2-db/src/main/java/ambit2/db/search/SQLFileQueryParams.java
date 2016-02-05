@@ -98,6 +98,7 @@ public class SQLFileQueryParams extends SQLFileQuery<ObjectNode> implements
 				type = _supportedprmtypes.valueOf(qparam.get("type").asText()
 						.toUpperCase());
 			} catch (Exception x) {
+				x.printStackTrace();
 			}
 			switch (type) {
 			case STRING: {
