@@ -87,7 +87,8 @@ public class TautomerManager {
 	public boolean FlagProcessRemainingStackIncSteps = true; // Typically this
 																// flag should
 																// be true
-	public boolean FlagSetStereoElementsOnTautomerProcess = false;
+	public boolean FlagGenerateStereoBasedOn2D = false;
+	public boolean FlagSetStereoElementsOnTautomerProcess = true;
 	public boolean FlagStopGenerationOnReachingRuleSelectorLimit = false; // Typically
 																			// this
 																			// flag
@@ -372,7 +373,7 @@ public class TautomerManager {
 
 		if (FlagRegisterOnlyBestRankTautomers) {
 			if (tautomerFilter.checkMolecule(newTautomer)) {
-				processTautomer(newTautomer,
+				processTautomer(newTautomer, originalMolecule,
 						FlagSetStereoElementsOnTautomerProcess);
 				registerBestRankTautomer(newTautomer);
 			}
@@ -391,14 +392,14 @@ public class TautomerManager {
 			if (!resultTatomerStringCodes.contains(newCode)) {
 				resultTatomerStringCodes.add(newCode);
 				resultTautomers.add(newTautomer);
-				processTautomer(newTautomer,
+				processTautomer(newTautomer, originalMolecule,
 						FlagSetStereoElementsOnTautomerProcess);
 				return true;
 			} else
 				return false;
 		} else {
 			resultTautomers.add(newTautomer);
-			processTautomer(newTautomer, FlagSetStereoElementsOnTautomerProcess);
+			processTautomer(newTautomer, originalMolecule, FlagSetStereoElementsOnTautomerProcess);
 			return true;
 		}
 	}
@@ -534,7 +535,7 @@ public class TautomerManager {
 		IAtomContainer newTautomer = molecule.clone();
 
 		if (FlagRegisterOnlyBestRankTautomers) {
-			processTautomer(newTautomer, FlagSetStereoElementsOnTautomerProcess);
+			processTautomer(newTautomer, originalMolecule, FlagSetStereoElementsOnTautomerProcess);
 			registerBestRankTautomer(newTautomer);
 			return;
 		}
@@ -730,40 +731,57 @@ public class TautomerManager {
 			mol.setProperty(TautomerConst.CACTVS_ENERGY_RANK, new Double(rank));
 		}
 	}
+	
+	public static void processTautomer(IAtomContainer tautomer, 
+					IAtomContainer originalMol, 
+					boolean FlagSetStereo) throws Exception
+	{
+		processTautomer(tautomer, originalMol, FlagSetStereo, false);
+	}
+	
 
-	public static void processTautomer(IAtomContainer ac, boolean FlagSetStereo)
-			throws Exception {
-		if (ac == null)
+	public static void processTautomer(IAtomContainer tautomer, IAtomContainer originalMol, 
+					boolean FlagSetStereo, 
+					boolean FlagGenerateStereoFrom2D) throws Exception 
+	{
+		if (tautomer == null)
 			return;
 
 		// Clear aromaticity flags
-		for (int i = 0; i < ac.getAtomCount(); i++)
-			ac.getAtom(i).setFlag(CDKConstants.ISAROMATIC, false);
-		for (int i = 0; i < ac.getBondCount(); i++)
-			ac.getBond(i).setFlag(CDKConstants.ISAROMATIC, false);
+		for (int i = 0; i < tautomer.getAtomCount(); i++)
+			tautomer.getAtom(i).setFlag(CDKConstants.ISAROMATIC, false);
+		for (int i = 0; i < tautomer.getBondCount(); i++)
+			tautomer.getBond(i).setFlag(CDKConstants.ISAROMATIC, false);
 
 		// AtomContainerManipulator.clearAtomConfigurations(ac);
-		for (IAtom atom : ac.atoms()) {
+		for (IAtom atom : tautomer.atoms()) {
 			atom.setHybridization((IAtomType.Hybridization) CDKConstants.UNSET);
 		}
 
-		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(ac);
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(tautomer);
 		CDKHydrogenAdder adder = CDKHydrogenAdder
 				.getInstance(SilentChemObjectBuilder.getInstance());
-		adder.addImplicitHydrogens(ac);
+		adder.addImplicitHydrogens(tautomer);
 		// AtomContainerManipulator.convertImplicitToExplicitHydrogens(ac);
 
-		CDKHueckelAromaticityDetector.detectAromaticity(ac);
+		CDKHueckelAromaticityDetector.detectAromaticity(tautomer);
 
 		if (FlagSetStereo)
+		{
+			//TODO
+		}
+		
+		if (FlagGenerateStereoFrom2D)
+		{	
 			try {
 				StereoElementFactory stereo = StereoElementFactory
-						.using2DCoordinates(ac);
-				ac.setStereoElements(stereo.createAll());
+						.using2DCoordinates(tautomer);
+				tautomer.setStereoElements(stereo.createAll());
 			} catch (Exception x) {
-				ac.setProperty("ERROR.tautomers.stereo", x.getMessage());
+				tautomer.setProperty("ERROR.tautomers.stereo", x.getMessage());
 				logger.log(Level.WARNING, x.getMessage());
 			}
+		}	
 	}
 
 	public EnergyRanking getEnergyRanking() throws Exception {
