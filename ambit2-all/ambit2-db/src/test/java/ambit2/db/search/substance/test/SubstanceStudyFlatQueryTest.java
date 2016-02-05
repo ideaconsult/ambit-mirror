@@ -57,6 +57,8 @@ public class SubstanceStudyFlatQueryTest extends
 					continue;
 				if ("hash".equals(header))
 					continue;
+				if ("content".equals(header))
+					continue;
 				if (EffectRecord._fields.unit.name().equals(header))
 					continue;
 				Assert.assertNotNull(header, record.get(header));
