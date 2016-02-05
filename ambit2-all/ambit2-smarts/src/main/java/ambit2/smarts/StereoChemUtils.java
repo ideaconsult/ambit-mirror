@@ -417,4 +417,44 @@ public class StereoChemUtils
 		return sb.toString();
 	}
 	
+	
+	public static void cloneAndCheckStereo(IAtomContainer cloneMol, IAtomContainer originalMol)
+	{
+		for (IStereoElement element : originalMol.stereoElements() )
+    	{
+			if (element instanceof DoubleBondStereochemistry)
+    		{
+    			DoubleBondStereochemistry dbs0 = (DoubleBondStereochemistry) element;
+    			DoubleBondStereochemistry dbs = 
+    					StereoChemUtils.cloneDoubleBondStereochemistry(dbs0, originalMol, cloneMol);
+    			if (dbs != null)
+    			{	
+    				int checkRes = checkDoubleBondStereochemistry(dbs, cloneMol);
+    				if (checkRes == 0)
+    					cloneMol.addStereoElement(dbs);
+    			}	
+    			continue;
+    		}
+			
+			if (element instanceof TetrahedralChirality)
+			{
+				TetrahedralChirality thc0 = (TetrahedralChirality) element;
+				TetrahedralChirality thc =     			 
+						StereoChemUtils.cloneTetrahedralChirality(thc0, originalMol, cloneMol);
+				
+				if (thc != null)
+				{	
+					int checkRes = checkTetrahedralChirality(thc, cloneMol);
+					if (checkRes == 0)
+						cloneMol.addStereoElement(thc);
+				}	
+				continue;
+			}
+
+			//TODO handle ExtendedTetrahedral (... allene like chiral centers)
+    	}
+		
+		
+	}
+	
 }
