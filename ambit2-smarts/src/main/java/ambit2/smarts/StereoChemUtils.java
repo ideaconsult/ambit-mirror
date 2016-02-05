@@ -51,6 +51,40 @@ public class StereoChemUtils
 		return dbs;
 	}
 	
+	
+	/*
+	 * Cloning based on presumption that atom/bond indices define 
+	 * the atom mapping between original and clone molecule 
+	 */
+	public static DoubleBondStereochemistry cloneDoubleBondStereochemistry(
+			DoubleBondStereochemistry originalDBS, 
+			IAtomContainer originalMol,
+			IAtomContainer cloneMol
+			)
+	{
+		if (originalDBS.getStereoBond() == null)
+			return null;
+
+		int steroBondNum = originalMol.getBondNumber(originalDBS.getStereoBond());
+		
+		IBond bonds0[] = originalDBS.getBonds();
+
+		if (bonds0 == null)
+			return null;
+
+		IBond bonds[] = new IBond[bonds0.length];
+		for (int i = 0; i < bonds0.length; i++)
+		{
+			int boNum = originalMol.getBondNumber(bonds0[i]);
+			bonds[i] = cloneMol.getBond(boNum);
+		}
+
+		DoubleBondStereochemistry dbs 
+			= new DoubleBondStereochemistry(cloneMol.getBond(steroBondNum), bonds, originalDBS.getStereo());
+
+		return dbs;
+	}
+
 	public static TetrahedralChirality cloneTetrahedralChirality(
 			TetrahedralChirality originalTHC, 
 			IAtomContainer originalMol,
@@ -74,6 +108,37 @@ public class StereoChemUtils
 		}
 		
 		TetrahedralChirality thc = new TetrahedralChirality(newAtoms[chiralAtomNum], ligands, originalTHC.getStereo());
+		
+		return thc;
+	}
+	
+	
+	/*
+	 * Cloning based on presumption that atom/bond indices define 
+	 * the atom mapping between original and clone molecule 
+	 */
+	public static TetrahedralChirality cloneTetrahedralChirality(
+			TetrahedralChirality originalTHC, 
+			IAtomContainer originalMol,
+			IAtomContainer cloneMol	)
+	{	
+		IAtom chiralAtom = originalTHC.getChiralAtom();
+		if (chiralAtom == null)
+			return null;
+		
+		int chiralAtomNum = originalMol.getAtomNumber(chiralAtom);
+		IAtom ligands0[] = originalTHC.getLigands();
+		if (ligands0 == null)
+			return null;
+		
+		IAtom ligands[] = new IAtom[ligands0.length];
+		for (int i = 0; i < ligands0.length; i++)
+		{
+			int atNum = originalMol.getAtomNumber(ligands0[i]);
+			ligands[i] = cloneMol.getAtom(atNum);
+		}
+		
+		TetrahedralChirality thc = new TetrahedralChirality(cloneMol.getAtom(chiralAtomNum), ligands, originalTHC.getStereo());
 		
 		return thc;
 	}
