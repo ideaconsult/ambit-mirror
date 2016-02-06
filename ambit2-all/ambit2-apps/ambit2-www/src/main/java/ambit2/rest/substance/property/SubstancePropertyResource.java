@@ -34,7 +34,7 @@ import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.AmbitDBResource;
 
 /**
- * Substance property - serialization as in /feature </pre>
+ * Substance property - serialization as in /feature 
  * 
  * @author nina
  * 
