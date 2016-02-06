@@ -2134,6 +2134,61 @@ public class Protocol {
 				return "http://purl.bioontology.org/ontology/npo#NPO_1709";
 			}
 		},
+		BAO_0010001_SECTION {
+
+			@Override
+			public String toString() {
+				return "ATP Assay";
+			}
+
+			@Override
+			public String getNumber() {
+				return "BAO_0010001";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 82190;
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.bioontology.org/ontology/bao#BAO_0010001";
+			}
+		},
+
+		NPO_1911_SECTION {
+
+			@Override
+			public String toString() {
+				return "MTT Assay";
+			}
+
+			@Override
+			public String getNumber() {
+				return "NPO_1911";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 82190;
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.bioontology.org/ontology/npo#NPO_1911";
+			}			
+		},
 
 		// Toxcast - BAO
 		CELL_CYCLE {
