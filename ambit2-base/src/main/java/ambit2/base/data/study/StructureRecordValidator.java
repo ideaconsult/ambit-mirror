@@ -178,7 +178,7 @@ public class StructureRecordValidator extends DefaultAmbitProcessor<IStructureRe
 	if (rel.getCompositionUUID() == null) {
 	    logger.log(Level.WARNING, "Missing composition UUID");
 	    if (isFixErrors()) {
-		String uuid = generateUUIDfromString(prefix, null);
+		String uuid = generateUUIDfromString(prefix, record.getSubstanceUUID());
 		rel.setCompositionUUID(uuid);
 		logger.log(Level.WARNING, "Generated composition UUID");
 	    }

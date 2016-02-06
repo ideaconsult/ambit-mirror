@@ -10,6 +10,7 @@ import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -37,9 +38,15 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.PropertyConfigurator;
 
+import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.IParams;
+import ambit2.base.data.study.Protocol;
+import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.study.StructureRecordValidator;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.core.io.IRawReader;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.EINECSKey;
@@ -477,15 +484,18 @@ public class DBSubstanceImport {
 			in = new GZIPInputStream(stream);
 		else
 			in = stream;
-		if (mode == null)
-			throw new Exception("Unsupported parser type " + mode);
-
-		switch (mode) {
-		case nanowiki:
-			return new NanoWikiRDFReader(new InputStreamReader(in));
-		default:
+		if (mode == null) {
+			logger_cli.log(Level.INFO, "MSG_IMPORT", new Object[] {
+					"parser type not specified, assuming",
+					xlsx ? "xlsx" : "xls" });
 			return new GenericExcelParser(in, jsonConfig, xlsx);
-		}
+		} else
+			switch (mode) {
+			case nanowiki:
+				return new NanoWikiRDFReader(new InputStreamReader(in));
+			default:
+				return new GenericExcelParser(in, jsonConfig, xlsx);
+			}
 	}
 
 	protected int importFile() throws Exception {
@@ -571,7 +581,33 @@ public class DBSubstanceImport {
 					parser.getClass().getName(), inputFile.getAbsolutePath() });
 
 			StructureRecordValidator validator = new StructureRecordValidator(
-					inputFile.getName(), true);
+					inputFile.getName(), true) {
+				@Override
+				public IStructureRecord validate(SubstanceRecord record)
+						throws Exception {
+					if (record.getRelatedStructures() != null
+							&& !record.getRelatedStructures().isEmpty()) {
+
+						for (int i = record.getRelatedStructures().size() - 1; i >= 0; i--) {
+							CompositionRelation rel = record
+									.getRelatedStructures().get(i);
+							int props = 0;
+							for (Property p : rel.getSecondStructure()
+									.getRecordProperties()) {
+								Object val = rel.getSecondStructure()
+										.getRecordProperty(p);
+								if (val != null && !"".equals(val.toString()))
+									props++;
+							}
+							if ((rel.getContent() == null || "".equals(rel.getContent())) && (props == 0))
+								record.getRelatedStructures().remove(i);
+
+						}
+
+					}
+					return super.validate(record);
+				}
+			};
 
 			DBConnectionConfigurable<Context> dbc = null;
 			dbc = getConnection(getConfigFile());
@@ -676,6 +712,8 @@ public class DBSubstanceImport {
 				writer.process((IStructureRecord) record);
 				records++;
 			}
+		} catch (Exception x) {
+			x.printStackTrace();
 		} finally {
 			writer.close();
 			logger_cli
@@ -690,8 +728,39 @@ public class DBSubstanceImport {
 
 	protected void validate(StructureRecordValidator validator,
 			IStructureRecord record) throws Exception {
-		if (validator != null)
-			validator.process((IStructureRecord) record);
+		if (validator != null) {
+			if (record instanceof SubstanceRecord) {
+				_parsertype mode = getParserType();
+				SubstanceRecord srecord = (SubstanceRecord) record;
+				if (mode == null) {
+					List<ProtocolApplication> m = srecord.getMeasurements();
+					cleanupEmptyRecords(srecord, m);
+					validator.process((IStructureRecord) record);
+				} else
+					switch (mode) {
+					case i5z: {
+						break;
+					}
+					case xlsx: {
+						List<ProtocolApplication> m = srecord.getMeasurements();
+						cleanupEmptyRecords(srecord, m);
+						validator.process((IStructureRecord) record);
+						break;
+					}
+					case xls: {
+						List<ProtocolApplication> m = srecord.getMeasurements();
+						cleanupEmptyRecords(srecord, m);
+						validator.process((IStructureRecord) record);
+						break;
+					}
+					case nanowiki: {
+						validator.process((IStructureRecord) record);
+						break;
+					}
+					}
+			}
+
+		}
 	}
 
 	protected static void printHelp(Options options, String message) {
@@ -703,6 +772,68 @@ public class DBSubstanceImport {
 		Runtime.getRuntime().runFinalization();
 		Runtime.getRuntime().exit(0);
 	}
+
+	protected void cleanupEmptyRecords(SubstanceRecord srecord,
+			List<ProtocolApplication> m) {
+		if (m == null)
+			return;
+		for (int i = m.size() - 1; i >= 0; i--) {
+			ProtocolApplication<Protocol, IParams, String, IParams, String> papp = m
+					.get(i);
+			boolean empty = true;
+			if (papp.getEffects() != null) {
+				for (EffectRecord<String, IParams, String> effect : papp
+						.getEffects()) {
+					if (effect.getLoValue() != null
+							|| effect.getUpValue() != null)
+						effect.setTextValue(null);
+				}
+
+				List<EffectRecord<String, IParams, String>> effects = papp
+						.getEffects();
+				for (int j = effects.size() - 1; j >= 0; j--) {
+					if (!effects.get(j).isEmpty()) {
+						empty = false;
+					} else {
+						logger_cli
+								.log(Level.WARNING,
+										String.format(
+												"Remove empty effect record\t%s\t%s\t%s\t%s\t%s [%s]",
+												srecord.getSubstanceName(),
+												srecord.getPublicName(), papp
+														.getProtocol()
+														.getTopCategory(), papp
+														.getProtocol()
+														.getCategory(), papp
+														.getProtocol()
+														.getEndpoint(), papp
+														.getEffects().get(j)
+														.getErrQualifier()));
+						papp.getEffects().remove(j);
+					}
+				}
+
+				if (empty
+						&& ((papp.getInterpretationResult() == null) || ""
+								.equals(papp.getInterpretationResult()))) {
+					m.remove(i);
+					logger_cli
+							.log(Level.WARNING,
+									String.format(
+											"Remove empty protocol application\t%s\t%s\t%s\t%s",
+											srecord.getSubstanceName(), srecord
+													.getPublicName(), papp
+													.getProtocol()
+													.getTopCategory(), papp
+													.getProtocol()
+													.getCategory(), papp
+													.getProtocol()
+													.getEndpoint()));
+				}
+			}
+		}
+	}
+
 }
 
 class Context extends HashMap<String, String> {
