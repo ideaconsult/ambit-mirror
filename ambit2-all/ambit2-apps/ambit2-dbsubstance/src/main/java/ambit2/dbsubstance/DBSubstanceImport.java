@@ -129,7 +129,7 @@ public class DBSubstanceImport {
 	protected boolean clearComposition = true;
 
 	public enum _parsertype {
-		i5z, xlsx, xls, nanowiki
+		i5z, xlsx, xls, nanowiki, modnanotox
 	}
 
 	public _parsertype getParserType() {
@@ -167,7 +167,7 @@ public class DBSubstanceImport {
 			try {
 				return _parsertype.valueOf(line.getOptionValue('p'));
 			} catch (Exception x) {
-				return null;
+				throw x;
 			}
 		else
 			return null;
