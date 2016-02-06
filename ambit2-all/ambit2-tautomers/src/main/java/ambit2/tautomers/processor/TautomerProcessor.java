@@ -34,6 +34,7 @@ public class TautomerProcessor extends
 		tautomerManager.FlagCalculateCACTVSEnergyRank = true;
 		tautomerManager.FlagRegisterOnlyBestRankTautomers = true;
 		tautomerManager.FlagSetStereoElementsOnTautomerProcess = true;
+		//tautomerManager.FlagGenerateStereoBasedOn2D
 	}
 
 	public TautomerManager getTautomerManager() {

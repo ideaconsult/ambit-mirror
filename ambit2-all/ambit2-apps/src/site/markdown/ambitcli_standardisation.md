@@ -13,12 +13,11 @@ A [command line Java application](download_ambitcli.html) used for processing ch
 
 ````sh
 $java -jar ambitcli.jar -help
- INFO   ambitcli-3.0.1-SNAPSHOT build:7176 1452334324396
+INFO   ambitcli-3.0.1-SNAPSHOT build:7259 1454688887571
 http://ambit.sourceforge.net/download_ambitcli.html
-usage: ambitcli-{version}
  -a,--command <command>          Commands:
                                  import|preprocessing|dataset|split|standa
-                                 rdize|help|
+                                 rdize|descriptor|help|
  -c,--config <file>              Config file (DB connection parameters)
  -d,--data <data>                Command specific parameters (multiple).
                                  Use -a cmd -m help to list available
@@ -27,8 +26,39 @@ usage: ambitcli-{version}
  -m,--subcommand <subcommand>    Subcommands. Use -a cmd -m help to list
                                  subcommands of a specific command.
  -o,--output <file>              Output file
- -h,--help                       This help                                 
+-h,--help                       This help      
+ ````
+
+Standardization specific help:
+
+````sh
+$java -jar ambitcli.jar -a standardize -m help
+INFO   ambitcli-3.0.1-SNAPSHOT build:7259 1454688887571
+http://ambit.sourceforge.net/download_ambitcli.html
+-a standardize -m post -d <parameters>
+"Chemical structure standardization (-i inputfile.sdf -o outputfile.sdf , recognized by extensions .sdf , .csv, .cml , .txt)"
+   -a standardize -m post
+ -d smirks=null	// JSON file with SMIRKS transformations	[type:String, mandatory:false]
+ -d neutralise=false	// If true neutralises the molecule via set of predefined SMIRKS	[type:Boolean, mandatory:false]
+ -d splitfragments=true	// If true keeps the largest fragment	[type:Boolean, mandatory:false]
+ -d implicith=true	// If true converts hydrogens to implicit	[type:Boolean, mandatory:false]
+ -d stereo=false	// If true uses org.openscience.cdk.stereo.StereoElementFactory to set the stereochemistry	[type:Boolean, mandatory:false]
+ -d isotopes=false	// If true clears isotopes	[type:Boolean, mandatory:false]
+ -d generate2D=false	// Generate 2d coordinates (if no any)	[type:Boolean, mandatory:false]
+ -d tautomers=true	// If true generates the top ranked tautomer	[type:Boolean, mandatory:false]
+ -d inchi=false	// Generates InChIs. If -d tautomers=true InChI FixedH=true, otherwise generates standard InChI	[type:Boolean, mandatory:false]
+ -d smiles=false	// Generates SMILES (isomeric, kekule)	[type:Boolean, mandatory:false]
+ -d smilescanonical=false	// Generates SMILES (canonical). Set to true to generate stereo SMILES	[type:Boolean, mandatory:false]
+ -d page=0	// Start page (first page = 0)	[type:Integer, mandatory:false]
+ -d pagesize=20000	// Page size (in number of records)	[type:Integer, mandatory:false]
+ -d tag_inchi=InChI	// Specifies the InChI tag	[type:String, mandatory:false]
+ -d tag_inchikey=InChIKey	// Specifies the InChIKey tag	[type:String, mandatory:false]
+ -d tag_smiles=SMILES	// Specifies the SMILES tag	[type:String, mandatory:false]
+ -d tag_rank=RANK	// Specifies the tag to store the tautomer rank (energy based, less is better)	[type:String, mandatory:false]
+ -d sdftitle=null	// Specifies which field to write in the first SDF line null|inchikey|inchi|smiles|any-existing-field	[type:String, mandatory:false]
+ -d debugatomtypes=false	// Writes only structures with AtomTypes property set. For debug purposes	[type:boolean, mandatory:false]
 ````
+
 For options other than standardisation see [the main ambitcli page](download_ambitcli.html).
 
 ### <a name="standardize"></a>-a standardize
