@@ -1044,6 +1044,13 @@ public class AmbitCli {
 		final StructureStandardizer standardprocessor = new StructureStandardizer();
 
 		try {
+			Object o = options.getParam(":generate2D");
+			standardprocessor.setGenerate2D(Boolean.parseBoolean(o
+					.toString()));
+		} catch (Exception x) {
+		}
+		
+		try {
 			Object o = options.getParam(":tautomers");
 			standardprocessor.setGenerateTautomers(Boolean.parseBoolean(o
 					.toString()));

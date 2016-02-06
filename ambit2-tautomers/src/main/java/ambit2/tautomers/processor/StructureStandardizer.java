@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import javax.vecmath.Vector2d;
+
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 import net.sf.jniinchi.INCHI_OPTION;
@@ -15,6 +17,7 @@ import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IStereoElement;
+import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.stereo.StereoElementFactory;
@@ -24,6 +27,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import ambit2.base.data.Property;
 import ambit2.core.processors.FragmentProcessor;
 import ambit2.core.processors.IsotopesProcessor;
+import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.smarts.processors.NeutraliseProcessor;
 import ambit2.tautomers.TautomerConst;
 
@@ -40,6 +44,15 @@ public class StructureStandardizer extends
 	protected boolean generateSMILES = true;
 	protected boolean generateSMILES_Canonical = false;
 	protected boolean neutralise = false;
+	protected boolean generate2D = false;
+
+	public boolean isGenerate2D() {
+		return generate2D;
+	}
+
+	public void setGenerate2D(boolean generate2d) {
+		generate2D = generate2d;
+	}
 
 	public boolean isNeutralise() {
 		return neutralise;
@@ -123,7 +136,8 @@ public class StructureStandardizer extends
 	protected transient FragmentProcessor fragments = new FragmentProcessor();
 	protected transient NeutraliseProcessor neutraliser = null;
 	protected transient IsotopesProcessor isotopesProcessor = null;
-
+	protected transient StructureDiagramGenerator sdg = new StructureDiagramGenerator();
+	
 	protected transient CDKHydrogenAdder hadder = CDKHydrogenAdder
 			.getInstance(SilentChemObjectBuilder.getInstance());
 	protected transient InChIGeneratorFactory igf = null;
@@ -163,8 +177,13 @@ public class StructureStandardizer extends
 			}
 			if (splitFragments && (processed!=null))
 				processed = fragments.process(processed);
-
+			
 			if (processed != null) {
+				if (generate2D && (StructureTypeProcessor.has2DCoordinates(processed) <= 1)) {
+					sdg.setMolecule(processed, false);
+					sdg.generateCoordinates(new Vector2d(0, 1));
+					processed = sdg.getMolecule();
+				}
 				if (clearIsotopes) {
 					if (isotopesProcessor==null) {
 						isotopesProcessor = new IsotopesProcessor();
@@ -185,6 +204,16 @@ public class StructureStandardizer extends
 
 				int newse = 0;
 				int oldse = 0;
+
+				if (generateTautomers)
+					try {
+						//todo
+						processed = tautomers.process(processed);
+					} catch (Exception x) {
+						processed.setProperty("ERROR.tautomers", String.format(
+								"%s\t%s", x.getClass().getName(),
+								x.getMessage()));
+					}
 				if (stereo)
 					try {
 						StereoElementFactory stereo = StereoElementFactory
@@ -207,15 +236,6 @@ public class StructureStandardizer extends
 									.format("%s\t%s", x.getClass().getName(),
 											x.getMessage()));
 					}
-				if (generateTautomers)
-					try {
-						processed = tautomers.process(processed);
-					} catch (Exception x) {
-						processed.setProperty("ERROR.tautomers", String.format(
-								"%s\t%s", x.getClass().getName(),
-								x.getMessage()));
-					}
-
 				if (generateInChI) {
 					if (processed.getProperty(Property.opentox_InChI) == null)
 						try {

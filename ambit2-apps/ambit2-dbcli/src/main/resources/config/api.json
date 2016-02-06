@@ -57,6 +57,12 @@
 						"value": false,
 						"comment": "If true clears isotopes"
 					},
+					":generate2D": {
+						"mandatory": false,
+						"type": "Boolean",
+						"value": false,
+						"comment": "Generate 2d coordinates (if no any)"
+					},					
 					":tautomers": {
 						"mandatory": false,
 						"type": "Boolean",
@@ -79,7 +85,7 @@
 						"mandatory": false,
 						"type": "Boolean",
 						"value": false,
-						"comment": "Generates SMILES (canonical)"
+						"comment": "Generates SMILES (canonical). Set to true to generate stereo SMILES"
 					},
 					":page": {
 						"mandatory": false,
@@ -121,7 +127,7 @@
 						"mandatory": false,
 						"type": "String",
 						"value": null,
-						"comment": "Specifies which field to write in the first SDF line"
+						"comment": "Specifies which field to write in the first SDF line null|inchikey|inchi|smiles|any-existing-field"
 					},
 					":debugatomtypes": {
 						"mandatory": false,
