@@ -42,68 +42,7 @@ public class CallableSubstancePropertyCreator<USERID> extends CallableProtectedT
 	property = parseForm(form);
     }
 
-    /**
-     * <pre>
-     * @prefix ot:      <http://www.opentox.org/api/1.1#> .
-     * @prefix dc:      <http://purl.org/dc/elements/1.1/> .
-     * @prefix :        <https://apps.ideaconsult.net/enmtest/> .
-     * @prefix ota:     <http://www.opentox.org/algorithmTypes.owl#> .
-     * @prefix otee:    <http://www.opentox.org/echaEndpoints.owl#> .
-     * @prefix bx:      <http://purl.org/net/nknouf/ns/bibtex#> .
-     * @prefix dcterms:  <http://purl.org/dc/terms/> .
-     * @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
-     * @prefix am:      <https://apps.ideaconsult.net/enmtest/model/> .
-     * @prefix ac:      <https://apps.ideaconsult.net/enmtest/compound/> .
-     * @prefix owl:     <http://www.w3.org/2002/07/owl#> .
-     * @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
-     * @prefix ad:      <https://apps.ideaconsult.net/enmtest/dataset/> .
-     * @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-     * @prefix ag:      <https://apps.ideaconsult.net/enmtest/algorithm/> .
-     * @prefix af:      <https://apps.ideaconsult.net/enmtest/feature/> .
-     * 
-     * ot:hasSource
-     *       a       owl:ObjectProperty .
-     * 
-     * ot:units
-     *       a       owl:DatatypeProperty .
-     * 
-     * []    a       ot:Feature ;
-     *       dc:creator "OECD Guideline 423 (Acute Oral toxicity - Acute Toxic Class Method)" ;
-     *       dc:title "LDLo" ;
-     *       ot:hasSource "OECD Guideline 423 (Acute Oral toxicity - Acute Toxic Class Method)" ;
-     *       ot:units "mg/kg bw" ;
-     *       =       otee:TO_ACUTE_ORAL .
-     * 
-     * ot:Feature
-     *       a       owl:Class .
-     * 
-     * ot:ToxicityCategory
-     *       rdfs:subClassOf xsd:string .
-     * </pre>
-     * 
-     * <pre>
-     * "https://apps.ideaconsult.net/enmtest/property/P-CHEM/ZETA_POTENTIAL_SECTION/ZETA+POTENTIAL/657379CCBB437E98F8A200C38E526FA890887723/d41d8cd9-8f00-3204-a980-0998ecf8427e":{
-     * 
-     * 	"type":"Feature",
-     * 	"title":"ZETA POTENTIAL",
-     * 	"units":"58289",
-     * 	"isNominal":false,
-     * 	"isNumeric":false,
-     * 	"isMultiValue":true,
-     * 	"sameAs":"http://www.opentox.org/echaEndpoints.owl#ZETA_POTENTIAL",
-     * 	"isModelPredictionFeature":false,
-     * 	"creator":"",
-     * 	"order":1013,
-     * 	"source":{
-     * 		"URI":"https://apps.ideaconsult.net/enmtest/dataset/",
-     * 		"type":"Dataset"
-     * 	},
-     * 	"annotation":[
-     * 	{	"p" : "STD_DEV",	"o" : "6.5 "},
-     * 	{	"p" : "pH",	"o" : "4.26"}]
-     * 
-     * }
-     * </pre>
+  /**
      * 
      * @param reporter
      * @param method

@@ -32,7 +32,7 @@ import ambit2.user.rest.resource.DBRoles;
  * a single task under URL http://host/application/task/{taskid}. Task
  * identifiers are unique, generated via {@link UUID} class. <br>
  * An URL with a task identifier is returned when an asynchronous job is
- * submitted via {@link AsyncJobResource} If accepted, the status code is 201
+ * submitted via {@link TaskResource} If accepted, the status code is 201
  * and the URI of the task resource in the Location header /task/{id} <br>
  * If a list of tasks has been requested, returns list of URLs of the tasks TODO
  * - introduce Guards for protecting sensitive resources <br>
@@ -41,10 +41,6 @@ import ambit2.user.rest.resource.DBRoles;
  * If a single task is requested and the task is completed, returns Status code
  * 303 and the new URL in the "Location" header
  * 
- * <pre>
- * HTTP/1.1 303 See Other
- * Location: http://example.org/thenewurl
- * </pre
  * 
  * @author nina
  * 

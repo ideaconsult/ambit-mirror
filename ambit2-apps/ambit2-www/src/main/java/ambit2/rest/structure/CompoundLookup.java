@@ -95,7 +95,9 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
     }
 
     /**
-     * SMILES, InChI, InChI key (lookup) , identifiers, names , MOL file
+     * 
+     * @param form
+     * @return
      */
     protected String getFirstParam(Form form) {
 	String search = form.getFirstValue(b64search_param);

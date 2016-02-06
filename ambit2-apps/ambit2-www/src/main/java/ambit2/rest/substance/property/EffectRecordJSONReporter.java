@@ -19,7 +19,6 @@ import ambit2.rest.substance.SubstanceURIReporter;
  * Substance composition JSON serialization
  * @author nina
  *
- * @param <Q>
  */
 public class EffectRecordJSONReporter extends CatalogURIReporter<EffectRecord<String, IParams,String>> {
 	/**
