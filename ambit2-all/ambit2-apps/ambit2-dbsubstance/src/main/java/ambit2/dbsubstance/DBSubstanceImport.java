@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,12 +15,14 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+import java.util.zip.GZIPInputStream;
 
 import net.enanomapper.parser.GenericExcelParser;
 import net.enanomapper.parser.InvalidCommand;
 import net.idea.i5.io.I5Options;
 import net.idea.i5.io.I5ZReader;
 import net.idea.i5.io.QASettings;
+import net.idea.loom.nm.nanowiki.NanoWikiRDFReader;
 import net.idea.modbcum.c.DBConnectionConfigurable;
 import net.idea.modbcum.c.MySQLSingleConnection;
 import net.idea.modbcum.i.config.Preferences;
@@ -328,7 +331,7 @@ public class DBSubstanceImport {
 			@Override
 			public IStructureKey getKey() {
 				return new EINECSKey();
-			}			
+			}
 		},
 		smiles {
 			@Override
@@ -466,9 +469,23 @@ public class DBSubstanceImport {
 		}
 	}
 
-	protected IRawReader<IStructureRecord> createParser(InputStream in,
+	protected IRawReader<IStructureRecord> createParser(InputStream stream,
 			boolean xlsx) throws Exception {
-		return new GenericExcelParser(in, jsonConfig, xlsx);
+		_parsertype mode = getParserType();
+		InputStream in = null;
+		if (gzipped)
+			in = new GZIPInputStream(stream);
+		else
+			in = stream;
+		if (mode == null)
+			throw new Exception("Unsupported parser type " + mode);
+
+		switch (mode) {
+		case nanowiki:
+			return new NanoWikiRDFReader(new InputStreamReader(in));
+		default:
+			return new GenericExcelParser(in, jsonConfig, xlsx);
+		}
 	}
 
 	protected int importFile() throws Exception {
@@ -505,6 +522,7 @@ public class DBSubstanceImport {
 				return importI5Z();
 			else
 				return importFile(isSplitRecord(), ext.endsWith(".xlsx"));
+
 		}
 	}
 
@@ -520,7 +538,7 @@ public class DBSubstanceImport {
 			c = dbc.getConnection();
 			c.setAutoCommit(true);
 			I5Options options = new I5Options();
-			reader = new I5ZReader<>(inputFile,options);
+			reader = new I5ZReader<>(inputFile, options);
 			QASettings qa = new QASettings(false);
 			qa.setAll();
 			reader.setQASettings(qa);
