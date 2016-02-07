@@ -42,6 +42,16 @@ public class DBSubstanceWriter extends
 	/**
 	 * 
 	 */
+	protected boolean i5mode = false;
+
+	public boolean isI5mode() {
+		return i5mode;
+	}
+
+	public void setI5mode(boolean i5mode) {
+		this.i5mode = i5mode;
+	}
+
 	private static final long serialVersionUID = -2237399197958151808L;
 	private CreateSubstance q;
 	private UpdateSubstanceIdentifiers qids;
@@ -101,8 +111,10 @@ public class DBSubstanceWriter extends
 	public DBSubstanceWriter(SourceDataset dataset,
 			SubstanceRecord importedRecord, boolean clearMeasurements,
 			boolean clearComposition) {
-		this(dataset,importedRecord,clearMeasurements,clearComposition,new ReferenceSubstanceUUID());
+		this(dataset, importedRecord, clearMeasurements, clearComposition,
+				new ReferenceSubstanceUUID());
 	}
+
 	public DBSubstanceWriter(SourceDataset dataset,
 			SubstanceRecord importedRecord, boolean clearMeasurements,
 			boolean clearComposition, IStructureKey matchByKey) {
@@ -212,7 +224,7 @@ public class DBSubstanceWriter extends
 		importedRecord.setIdsubstance(substance.getIdsubstance());
 
 		String prefix = substance.getSubstanceUUID().substring(0, 4);
-		
+
 		if (clearComposition)
 			try {
 				deleteComposition.setGroup(importedRecord);
@@ -226,15 +238,25 @@ public class DBSubstanceWriter extends
 				Object i5uuid = rel.getSecondStructure().getRecordProperty(
 						Property.getI5UUIDInstance());
 				/*
-				 * to work with I5 files we need to match components via reference substance UUID (especially if these are empty)
-				 * but to match structures within the database we use the match key, which might be different
-				 * TODO test how this work with other files
+				 * to work with I5 files we need to match components via
+				 * reference substance UUID (especially if these are empty) but
+				 * to match structures within the database we use the match key,
+				 * which might be different TODO test how this work with other
+				 * files
 				 */
+
 				if (rel.getSecondStructure().getIdchemical() <= 0) {
-					IStructureKey match = writer.getPropertyKey();
-					writer.setPropertyKey(componentsMatch);
-					writer.create(rel.getSecondStructure());
-					writer.setPropertyKey(match);
+					if (i5mode) {
+						IStructureKey match = writer.getPropertyKey();
+						writer.setPropertyKey(componentsMatch);
+						writer.create(rel.getSecondStructure());
+						writer.setPropertyKey(match);
+					} else {
+						IStructureKey match = writer.getPropertyKey();
+						writer.setPropertyKey(match);
+						writer.create(rel.getSecondStructure());
+						writer.setPropertyKey(match);
+					}
 				}
 
 				rel.getSecondStructure().setRecordProperty(
