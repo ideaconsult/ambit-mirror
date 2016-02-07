@@ -35,6 +35,7 @@ public class DBBundleStudyWriter extends DBSubstanceWriter {
 
 	public DBBundleStudyWriter(SubstanceEndpointsBundle bundle,SourceDataset dataset, SubstanceRecord importedRecord) {
 		super(dataset, importedRecord, false, false);
+		setI5mode(false);
 		setBundle(bundle);
 		rq = new ReadSubstance();
 		qx = new QueryExecutor();

@@ -264,6 +264,7 @@ public class CallableSubstanceI5Query<USERID> extends
 								DBSubstanceWriter.datasetMeta(),
 								new SubstanceRecord(), clearMeasurements,
 								clearComposition);
+						writer.setI5mode(true);
 						writer.setCloseConnection(false);
 						writer.setConnection(connection);
 						writer.open();
@@ -312,6 +313,7 @@ public class CallableSubstanceI5Query<USERID> extends
 									DBSubstanceWriter.datasetMeta(),
 									new SubstanceRecord(), clearMeasurements,
 									clearComposition);
+							writer.setI5mode(true);
 							writer.setCloseConnection(false);
 							writer.setConnection(connection);
 							writer.open();

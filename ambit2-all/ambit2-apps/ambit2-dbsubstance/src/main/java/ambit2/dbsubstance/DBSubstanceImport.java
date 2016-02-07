@@ -45,6 +45,7 @@ import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.study.StructureRecordValidator;
+import ambit2.base.data.substance.ParticleTypes;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.core.io.IRawReader;
@@ -185,9 +186,9 @@ public class DBSubstanceImport {
 
 	protected static _mode_matchstructure getStructureMatchMode(CommandLine line)
 			throws Exception {
-		if (line.hasOption('p'))
+		if (line.hasOption('x'))
 			try {
-				return _mode_matchstructure.valueOf(line.getOptionValue('s'));
+				return _mode_matchstructure.valueOf(line.getOptionValue('x'));
 			} catch (Exception x) {
 				return null;
 			}
@@ -388,7 +389,7 @@ public class DBSubstanceImport {
 		Option matchStructure = OptionBuilder.hasArg()
 				.withLongOpt("structureMatch").withArgName("value")
 				.withDescription("Match structure by uuid|cas|smiles|inchi")
-				.create("s");
+				.create("x");
 
 		Option isSplitRecord = OptionBuilder.hasArg()
 				.withLongOpt("isSplitRecord").withArgName("value")
@@ -555,7 +556,7 @@ public class DBSubstanceImport {
 
 			matchByKey = new CASKey();
 			return write(reader, c, matchByKey, true, clearMeasurements,
-					clearComposition, null);
+					clearComposition, null, true);
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -614,8 +615,9 @@ public class DBSubstanceImport {
 			c = dbc.getConnection();
 			c.setAutoCommit(true);
 
-			return write(parser, c, new ReferenceSubstanceUUID(), splitRecord,
-					clearMeasurements, clearComposition, validator);
+			
+			return write(parser, c, matchByKey , splitRecord,
+					clearMeasurements, clearComposition, validator,false);
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -682,19 +684,20 @@ public class DBSubstanceImport {
 
 	public int write(IRawReader<IStructureRecord> reader,
 			Connection connection, PropertyKey key, boolean splitRecord,
-			StructureRecordValidator validator) throws Exception {
+			StructureRecordValidator validator,boolean i5mode) throws Exception {
 		return write(reader, connection, key, splitRecord, true, true,
-				validator);
+				validator,i5mode);
 	}
 
 	public int write(IRawReader<IStructureRecord> reader,
 			Connection connection, IStructureKey key, boolean splitRecord,
 			boolean clearMeasurements, boolean clearComposition,
-			StructureRecordValidator validator) throws Exception {
+			StructureRecordValidator validator, boolean i5mode) throws Exception {
 
 		DBSubstanceWriter writer = new DBSubstanceWriter(
 				DBSubstanceWriter.datasetMeta(), new SubstanceRecord(),
 				clearMeasurements, clearComposition, key);
+		writer.setI5mode(i5mode);
 		writer.setSplitRecord(splitRecord);
 		writer.setConnection(connection);
 		writer.setClearComposition(clearComposition);
@@ -733,6 +736,7 @@ public class DBSubstanceImport {
 				_parsertype mode = getParserType();
 				SubstanceRecord srecord = (SubstanceRecord) record;
 				if (mode == null) {
+					cleanReferenceStructure(srecord);
 					List<ProtocolApplication> m = srecord.getMeasurements();
 					cleanupEmptyRecords(srecord, m);
 					validator.process((IStructureRecord) record);
@@ -742,12 +746,14 @@ public class DBSubstanceImport {
 						break;
 					}
 					case xlsx: {
+						cleanReferenceStructure(srecord);
 						List<ProtocolApplication> m = srecord.getMeasurements();
 						cleanupEmptyRecords(srecord, m);
 						validator.process((IStructureRecord) record);
 						break;
 					}
 					case xls: {
+						cleanReferenceStructure(srecord);
 						List<ProtocolApplication> m = srecord.getMeasurements();
 						cleanupEmptyRecords(srecord, m);
 						validator.process((IStructureRecord) record);
@@ -773,6 +779,28 @@ public class DBSubstanceImport {
 		Runtime.getRuntime().exit(0);
 	}
 
+	protected void cleanReferenceStructure(SubstanceRecord srecord) {
+		if (srecord.getReferenceSubstanceUUID() == null) {
+			logger_cli.log(Level.WARNING,
+					"Missing Reference Substance UUID");
+
+			if (srecord.getReferenceSubstanceUUID() == null)
+				try {
+					ParticleTypes stype = ParticleTypes
+							.valueOf(srecord.getSubstancetype());
+					logger_cli.log(Level.WARNING,
+							"Missing Reference Substance UUID");
+					String ref_uuid = stype.getReferenceUUID();
+					if (ref_uuid != null)
+						srecord.setReferenceSubstanceUUID(ref_uuid);
+
+				} catch (Exception x) {
+				}
+		}
+
+		List<ProtocolApplication> m = srecord.getMeasurements();
+		cleanupEmptyRecords(srecord, m);		
+	}
 	protected void cleanupEmptyRecords(SubstanceRecord srecord,
 			List<ProtocolApplication> m) {
 		if (m == null)

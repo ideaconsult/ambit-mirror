@@ -231,9 +231,12 @@ public class CallableSubstanceImporter<USERID> extends
 					String ext = file.getName().toLowerCase();
 					if (ext.endsWith(FileInputState._FILE_TYPE.I5Z_INDEX.getExtension())) {
 						if (writer instanceof DBSubstanceWriter)
-							if (writer instanceof DBSubstanceWriter)
+							if (writer instanceof DBSubstanceWriter) {
 								((DBSubstanceWriter) writer)
 										.setSplitRecord(true);
+								((DBSubstanceWriter) writer)
+								.setI5mode(true);
+							}	
 						reader = new I5ZReader(file);
 						((I5ZReader) reader).setQASettings(getQASettings());
 					} else if (ext
