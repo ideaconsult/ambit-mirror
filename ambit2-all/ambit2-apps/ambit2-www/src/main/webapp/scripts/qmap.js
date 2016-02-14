@@ -858,7 +858,7 @@ var qmap = {
 			    	  }
                     });	  	
 		},
-		<!-- network graph -->
+	
 		"drawGraph":function (root,data,qmapuri,chartselector,width,height,nodesTable) {
 			  var qmaps = this.getQmapIndex(root,data);
 			  var nodes = data.nodes; //data.nodes.filter(function(node) { return node.qmap==qmapuri;  }); indexes will be different...
