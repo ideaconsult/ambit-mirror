@@ -25,6 +25,7 @@ public class AmbitML {
 
 	public void convert(String folder, String file, Set<out_formats> of,int columnid,
 			int maxrecords) throws Exception {
+		long now = System.currentTimeMillis();
 		if (of.isEmpty())
 			of.add(out_formats.vw);
 		FileReader reader = new FileReader(new File(folder, file));
@@ -66,7 +67,9 @@ public class AmbitML {
 					writer.close();
 				} catch (Exception xx) {
 				}
-
+			System.out.print("Completed in ");
+			System.out.print(System.currentTimeMillis()-now);
+			System.out.println("msec.");
 		}
 	}
 
