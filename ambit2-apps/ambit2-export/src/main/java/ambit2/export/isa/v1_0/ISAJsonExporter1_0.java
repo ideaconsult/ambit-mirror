@@ -21,6 +21,7 @@ import ambit2.export.isa.base.ISAConst.ISAVersion;
 import ambit2.export.isa.json.ISAJsonExportConfig;
 import ambit2.export.isa.json.ISAJsonExporter;
 import ambit2.export.isa.v1_0.objects.Assay;
+import ambit2.export.isa.v1_0.objects.Comment;
 import ambit2.export.isa.v1_0.objects.Investigation;
 import ambit2.export.isa.v1_0.objects.OntologyAnnotation;
 import ambit2.export.isa.v1_0.objects.ProcessParameterValue;
@@ -196,7 +197,10 @@ public class ISAJsonExporter1_0 implements IISAExport
 	{
 		Publication pub = new Publication();
 		pub.title = litEntry.getTitle();
-		//TODO
+		pub.authorList = litEntry.getName();
+		if (litEntry.getURL() != null)			
+			pub.comments.add(ISAJsonUtils1_0.getComment("URL", litEntry.getURL()));
+			
 		investigation.publications.add(pub);
 	}
 	
