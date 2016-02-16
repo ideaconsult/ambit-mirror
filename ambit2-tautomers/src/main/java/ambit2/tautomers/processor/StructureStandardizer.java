@@ -274,20 +274,7 @@ public class StructureStandardizer extends
 											x.getMessage()));
 						}
 				}
-				Iterator<Map.Entry<Object, Property>> i = tags.entrySet()
-						.iterator();
-				while (i.hasNext()) {
-					Map.Entry<Object, Property> entry = i.next();
-					Object tag = entry.getKey();
-					Object value = processed.getProperty(tag);
-					if (value != null) {
-						if (tag instanceof Property) {
-							entry.getValue().setOrder(((Property)tag).getOrder());
-						}
-						processed.removeProperty(tag);
-						processed.setProperty(entry.getValue(), value);
-					}
-				}
+				renameTags(processed,tags);
 			} else {
 				logger.log(Level.WARNING, "Null molecule after processing", mol.getProperties());
 			}
@@ -296,13 +283,33 @@ public class StructureStandardizer extends
 			logger.log(Level.SEVERE, x.getMessage() + " " + mol.getProperties().toString(), x);
 			x.printStackTrace();
 		} finally {
+			//System.out.println(processed.getProperties());
+			
 			if (mol != null && processed != null)
 				processed.addProperties(mol.getProperties());
+			
+			//System.out.println(processed.getProperties());
 		}
 		return processed;
 
 	}
 
+	public static void renameTags(IAtomContainer processed, Map<Object, Property> tags) {
+		Iterator<Map.Entry<Object, Property>> i = tags.entrySet()
+				.iterator();
+		while (i.hasNext()) {
+			Map.Entry<Object, Property> entry = i.next();
+			Object tag = entry.getKey();
+			Object value = processed.getProperty(tag);
+			if (value != null) {
+				if (tag instanceof Property) {
+					entry.getValue().setOrder(((Property)tag).getOrder());
+				}
+				processed.removeProperty(tag);
+				processed.setProperty(entry.getValue(), value);
+			}
+		}
+	}
 	public void setInchiTag(String tag) {
 		Property newtag = Property.getInChIInstance();
 		newtag.setName(tag);
