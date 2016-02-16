@@ -51,6 +51,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.codehaus.jackson.JsonNode;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.fingerprint.IBitFingerprint;
+import org.openscience.cdk.fingerprint.ICountFingerprint;
 import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -160,7 +161,7 @@ public class AmbitCli {
 			inchi_warmup(3);
 		} catch (Exception x) {
 			logger_cli.log(Level.SEVERE, "MSG_INCHI",
-					new Object[] { "ERROR",x.getMessage() });
+					new Object[] { "ERROR", x.getMessage() });
 		}
 		long now = System.currentTimeMillis();
 		if ("import".equals(command)) {
@@ -744,6 +745,17 @@ public class AmbitCli {
 		FileOutputState out = new FileOutputState(outfile);
 		final IChemObjectWriter writer = out.getWriter();
 		final boolean writesdf = writer instanceof SDFWriter;
+
+		final Map<Object, Property> tags = new HashMap<>();
+		Property newtag = Property.getSMILESInstance();
+		newtag.setName("SMILES");
+		tags.put(Property.opentox_SMILES, newtag);
+		tags.put(Property.getSMILESInstance(), newtag);
+		newtag = Property.getInChIKeyInstance();
+		newtag.setName("InChIKey");
+		tags.put(Property.opentox_InChIKey, newtag);
+		tags.put(Property.getInChIKeyInstance(), newtag);
+
 		final BatchDBProcessor<IStructureRecord> batch = new BatchDBProcessor<IStructureRecord>() {
 
 			@Override
@@ -863,22 +875,18 @@ public class AmbitCli {
 
 						try {
 							mol = molReader.process(record);
-							AtomContainerManipulator
-									.percieveAtomTypesAndConfigureAtoms(mol);
+
 							if (mol != null)
 								for (Property p : record.getRecordProperties()) {
 									Object v = record.getRecordProperty(p);
-									// initially to get rid of smiles, inchi ,
-									// etc, these are
-									// already parsed
-									if (p.getName().startsWith(
-											"http://www.opentox.org/api/1.1#"))
-										continue;
-									else
-										mol.setProperty(p, v);
+									mol.setProperty(p, v);
 								}
 							else
 								return record;
+
+							AtomContainerManipulator
+									.percieveAtomTypesAndConfigureAtoms(mol);
+
 						} catch (Exception x) {
 							logger_cli.log(Level.SEVERE, "MSG_ERR_MOLREAD",
 									new Object[] { x.toString() });
@@ -898,8 +906,31 @@ public class AmbitCli {
 
 						for (IFingerprinter fp : fps)
 							try {
+								ICountFingerprint cfp = fp
+										.getCountFingerprint(processed);
+								if (cfp != null) {
+									int numBins = cfp.numOfPopulatedbins();
+									StringBuilder b = new StringBuilder();
+									StringBuilder b_count = new StringBuilder();
+									for (int i = 0; i < numBins; i++) {
+										int hash = cfp.getHash(i);
+										int freq = cfp.getCount(i);
+										if (i > 0) {
+											b.append(" ");
+											b_count.append(" ");
+										}
+										b.append(hash);
+										b_count.append(String.format("%d:%d",
+												hash, freq));
+									}
+									processed.setProperty(fp.getClass()
+											.getName() + ".count",
+											b_count.toString());
+									processed.setProperty(fp.getClass()
+											.getName() + ".binary",
+											b.toString());
 
-								if (fp instanceof ISparseFingerprint)
+								} else if (fp instanceof ISparseFingerprint)
 									try {
 										StringBuilder b = new StringBuilder();
 										for (Object x : ((ISparseFingerprint) fp)
@@ -916,6 +947,7 @@ public class AmbitCli {
 										x.printStackTrace();
 									}
 								else {
+
 									IBitFingerprint fpbinary = fp
 											.getBitFingerprint(processed);
 									processed
@@ -931,6 +963,9 @@ public class AmbitCli {
 																			"")
 																	.replace(
 																			"}",
+																			"")
+																	.replace(
+																			",",
 																			""));
 
 									try {
@@ -938,11 +973,11 @@ public class AmbitCli {
 												.getRawFingerprint(processed);
 
 										processed.setProperty(fp.getClass()
-												.getName() + ".count",
+												.getName() + ".raw",
 												fpcount.toString());
 									} catch (Exception x) {
 										// not all fp support this
-										x.printStackTrace();
+										// x.printStackTrace();
 									}
 								}
 							} catch (Exception x) {
@@ -969,7 +1004,8 @@ public class AmbitCli {
 											break;
 										}
 								}
-
+								StructureStandardizer.renameTags(processed,
+										tags);
 								writer.write(processed);
 							} catch (Exception x) {
 								logger_cli.log(Level.SEVERE, x.getMessage());
@@ -1045,11 +1081,10 @@ public class AmbitCli {
 
 		try {
 			Object o = options.getParam(":generate2D");
-			standardprocessor.setGenerate2D(Boolean.parseBoolean(o
-					.toString()));
+			standardprocessor.setGenerate2D(Boolean.parseBoolean(o.toString()));
 		} catch (Exception x) {
 		}
-		
+
 		try {
 			Object o = options.getParam(":tautomers");
 			standardprocessor.setGenerateTautomers(Boolean.parseBoolean(o
@@ -1652,16 +1687,22 @@ public class AmbitCli {
 				p.process(MoleculeFactory.makeCyclohexane());
 				p.close();
 				p = null;
-				
-				logger_cli.log(Level.INFO, "MSG_INCHI",
-						new Object[] { String.format("loaded in %d msec" , System.currentTimeMillis()  - now),""});
+
+				logger_cli
+						.log(Level.INFO,
+								"MSG_INCHI",
+								new Object[] {
+										String.format("loaded in %d msec",
+												System.currentTimeMillis()
+														- now), "" });
 				return;
 			} catch (Exception x) {
-				logger_cli.log(Level.WARNING, "MSG_INCHI",
-						new Object[] { "load failed at retry ",(retry+1)});
+				logger_cli.log(Level.WARNING, "MSG_INCHI", new Object[] {
+						"load failed at retry ", (retry + 1) });
 				err = x;
 			}
-		if (err!=null) throw err;
+		if (err != null)
+			throw err;
 	}
 }
 
