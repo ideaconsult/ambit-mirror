@@ -14,6 +14,7 @@ import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.export.isa.IISAExport;
 import ambit2.export.isa.base.ExternalDataFileManager;
 import ambit2.export.isa.base.ISAConst.ISAFormat;
@@ -22,7 +23,11 @@ import ambit2.export.isa.json.ISAJsonExportConfig;
 import ambit2.export.isa.json.ISAJsonExporter;
 import ambit2.export.isa.v1_0.objects.Assay;
 import ambit2.export.isa.v1_0.objects.Comment;
+import ambit2.export.isa.v1_0.objects.Factor;
+import ambit2.export.isa.v1_0.objects.FactorValue;
 import ambit2.export.isa.v1_0.objects.Investigation;
+import ambit2.export.isa.v1_0.objects.MaterialAttribute;
+import ambit2.export.isa.v1_0.objects.MaterialAttributeValue;
 import ambit2.export.isa.v1_0.objects.OntologyAnnotation;
 import ambit2.export.isa.v1_0.objects.ProcessParameterValue;
 import ambit2.export.isa.v1_0.objects.Protocol;
@@ -206,31 +211,57 @@ public class ISAJsonExporter1_0 implements IISAExport
 	
 	void addCompositionAsStudy(SubstanceRecord rec) throws Exception
 	{
+		List<CompositionRelation> compRelList = rec.getRelatedStructures();		
+		if (compRelList == null)
+			return;
+		
 		Study study = new Study();
 		investigation.studies.add(study);
 		study.identifier = "Composition-"+ rec.getSubstanceUUID();
 		study.description = "Substance composition";
 		
-		Process process = new Process();
-		study.processSequence.add(process);
-		Source source = new Source();
-		Sample sample = new Sample();
-		process.inputs.add(source);
-		process.outputs.add(sample);
-		
-		source.name = rec.getSubstanceUUID();
-		sample.name = "composition";
-		
-		//Storing composition info
-		String s = rec.getFormula();
-		if (s != null)
+		if (cfg.FlagAllCompositionInOneProcess)
+		{	
+			Process process = new Process();
+			study.processSequence.add(process);
+			Source source = new Source();
+			Sample sample = new Sample();
+			process.inputs.add(source);
+			process.outputs.add(sample);
+
+			source.name = rec.getSubstanceUUID();
+			sample.name = "composition";
+
+			//Storing composition info
+			String s = rec.getFormula();
+			if (s != null)
+			{
+				//sample.characteristics.add()
+			}
+
+
+			for (int i = 0; i < compRelList.size(); i++)
+			{
+				String preff = "Comp" + (i+1) + ".";
+				CompositionRelation comRel = compRelList.get(i);
+
+				if (comRel.getFormula() != null)
+					sample.factorValues.add(
+							ISAJsonUtils1_0.getFactorValue(preff + "formula" , comRel.getFormula()));
+
+				if (comRel.getSmiles() != null)
+					sample.factorValues.add(
+							ISAJsonUtils1_0.getFactorValue(preff + "smiles" , comRel.getSmiles()));
+
+
+				//sample.characteristics.add(mav);
+			}
+		}
+		else
 		{
-			//sample.characteristics.add()
+			//TODO
 		}
 		
-		//TODO add FlagAllCompositionInOneProcess 
-		
-		//TODO
 	}
 	
 	void addCompositionAsMaterial(SubstanceRecord rec) throws Exception
