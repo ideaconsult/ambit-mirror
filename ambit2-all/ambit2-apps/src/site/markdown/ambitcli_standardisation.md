@@ -42,7 +42,7 @@ http://ambit.sourceforge.net/download_ambitcli.html
  -d neutralise=false	// If true neutralises the molecule via set of predefined SMIRKS	[type:Boolean, mandatory:false]
  -d splitfragments=true	// If true keeps the largest fragment	[type:Boolean, mandatory:false]
  -d implicith=true	// If true converts hydrogens to implicit	[type:Boolean, mandatory:false]
- -d stereo=false	// If true uses org.openscience.cdk.stereo.StereoElementFactory to set the stereochemistry	[type:Boolean, mandatory:false]
+ -d generatestereofrom2d=false	// If true uses org.openscience.cdk.stereo.StereoElementFactory to generate the stereochemistry from 2D coordinates	[type:Boolean, mandatory:false]
  -d isotopes=false	// If true clears isotopes	[type:Boolean, mandatory:false]
  -d generate2D=false	// Generate 2d coordinates (if no any)	[type:Boolean, mandatory:false]
  -d tautomers=true	// If true generates the top ranked tautomer	[type:Boolean, mandatory:false]
@@ -71,7 +71,7 @@ $java -jar ambitcli.jar -i input.sdf -o output.sdf -a standardize -m post -d <pa
 
 Example options
 ````
- -d smirks=null -d splitfragments=true -d implicith=true -d stereo=false -d tautomers=true -d isotopes=true -d neutralise=true -d inchi=false -d smiles=false -d smilescanonical=false -d page=0 -d pagesize=20000 -d tag_inchi=InChI -d tag_inchikey=InChIKey -d tag_smiles=SMILES -d tag_rank=RANK
+ -d smirks=null -d splitfragments=true -d implicith=true -d generatestereofrom2d=false -d tautomers=true -d isotopes=true -d neutralise=true -d inchi=false -d smiles=false -d smilescanonical=false -d page=0 -d pagesize=20000 -d tag_inchi=InChI -d tag_inchikey=InChIKey -d tag_smiles=SMILES -d tag_rank=RANK
 ````
 
 #### 1.Transformation
@@ -132,9 +132,9 @@ If true converts hydrogens to implicit. If false leaves the structure as it is. 
 
 #### 6.Stereochemistry
 ```` 
- -d stereo=true|false	
+ -d generatestereofrom2d=true|false	
 ````sh
-If true uses org.openscience.cdk.stereo.StereoElementFactory to set the stereochemistry (stereo elements derived from 2D coordinates).
+If true uses org.openscience.cdk.stereo.StereoElementFactory to generate the stereochemistry from 2D (stereo elements derived from 2D coordinates).
 
 #### 7.Tautomers
 ````sh 
