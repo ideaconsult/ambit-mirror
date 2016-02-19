@@ -296,7 +296,21 @@ public class FileState implements IInputOutputState {
 			public String getDescription() {
 				return "Rich Text Format (*.rtf)";
 			}
-		}			
+		},
+		VW_INDEX {
+			@Override
+			public boolean supportsOutput() {
+				return true;
+			}
+			@Override
+			public boolean supportsInput() {
+				return false;
+			}
+			@Override
+			public String getDescription() {
+				return "vw";
+			}
+		}		
 		;
 		public String getExtension() {
 			return "." + name().replace("_INDEX", "").toLowerCase();

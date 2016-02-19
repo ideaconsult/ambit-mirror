@@ -293,8 +293,10 @@ public class StructureStandardizer extends
 		return processed;
 
 	}
-
 	public static void renameTags(IAtomContainer processed, Map<Object, Property> tags) {
+		renameTags(processed,tags,false);
+	}
+	public static void renameTags(IAtomContainer processed, Map<Object, Property> tags, boolean removeIfDisabled) {
 		Iterator<Map.Entry<Object, Property>> i = tags.entrySet()
 				.iterator();
 		while (i.hasNext()) {
@@ -306,7 +308,10 @@ public class StructureStandardizer extends
 					entry.getValue().setOrder(((Property)tag).getOrder());
 				}
 				processed.removeProperty(tag);
-				processed.setProperty(entry.getValue(), value);
+				boolean add = (entry.getValue() instanceof Property)?((Property)entry.getValue()).isEnabled():true;
+				
+				if (removeIfDisabled && !add) ;
+				else processed.setProperty(entry.getValue(), value);
 			}
 		}
 	}

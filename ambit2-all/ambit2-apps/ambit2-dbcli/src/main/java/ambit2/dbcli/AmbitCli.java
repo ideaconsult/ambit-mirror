@@ -749,13 +749,33 @@ public class AmbitCli {
 		final Map<Object, Property> tags = new HashMap<>();
 		Property newtag = Property.getSMILESInstance();
 		newtag.setName("SMILES");
+		newtag.setEnabled(false);
 		tags.put(Property.opentox_SMILES, newtag);
 		tags.put(Property.getSMILESInstance(), newtag);
+		
+		newtag = Property.getInChIInstance();
+		newtag.setEnabled(false);
+		tags.put(Property.opentox_InChI, newtag);
+		tags.put("InChI", newtag);
+		tags.put(Property.getInChIInstance(), newtag);
+		
 		newtag = Property.getInChIKeyInstance();
+		newtag.setEnabled(true);
 		newtag.setName("InChIKey");
 		tags.put(Property.opentox_InChIKey, newtag);
 		tags.put(Property.getInChIKeyInstance(), newtag);
 
+		newtag = Property.getInstance(CDKConstants.TITLE, CDKConstants.TITLE);
+		newtag.setEnabled(false);
+		tags.put(CDKConstants.TITLE, newtag);
+		tags.put(newtag, newtag);
+
+		newtag = Property.getInstance("CHEMBL", "CHEMBL");
+		newtag.setEnabled(false);
+		tags.put("CHEMBL", newtag);
+		tags.put(newtag, newtag);
+
+		
 		final BatchDBProcessor<IStructureRecord> batch = new BatchDBProcessor<IStructureRecord>() {
 
 			@Override
@@ -876,12 +896,14 @@ public class AmbitCli {
 						try {
 							mol = molReader.process(record);
 
-							if (mol != null)
+							if (mol != null) {
 								for (Property p : record.getRecordProperties()) {
 									Object v = record.getRecordProperty(p);
 									mol.setProperty(p, v);
 								}
-							else
+								if (mol.getProperty(CDKConstants.TITLE) != null)
+									mol.removeProperty(CDKConstants.TITLE);
+							} else
 								return record;
 
 							AtomContainerManipulator
@@ -926,10 +948,10 @@ public class AmbitCli {
 									processed.setProperty(fp.getClass()
 											.getName() + ".count",
 											b_count.toString());
-									processed.setProperty(fp.getClass()
-											.getName() + ".binary",
-											b.toString());
-
+									/*
+									 * processed.setProperty(fp.getClass()
+									 * .getName() + ".binary", b.toString());
+									 */
 								} else if (fp instanceof ISparseFingerprint)
 									try {
 										StringBuilder b = new StringBuilder();
@@ -1005,7 +1027,7 @@ public class AmbitCli {
 										}
 								}
 								StructureStandardizer.renameTags(processed,
-										tags);
+										tags, true);
 								writer.write(processed);
 							} catch (Exception x) {
 								logger_cli.log(Level.SEVERE, x.getMessage());
