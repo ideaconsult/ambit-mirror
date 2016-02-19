@@ -45,11 +45,11 @@
 						"value": true,
 						"comment": "If true converts hydrogens to implicit"
 					},
-					":stereo": {
+					":generatestereofrom2d": {
 						"mandatory": false,
 						"type": "Boolean",
 						"value": false,
-						"comment": "If true uses org.openscience.cdk.stereo.StereoElementFactory to set the stereochemistry"
+						"comment": "If true uses org.openscience.cdk.stereo.StereoElementFactory to generate the stereochemistry from 2D coordinates"
 					},
 					":isotopes": {
 						"mandatory": false,
