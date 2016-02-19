@@ -59,6 +59,12 @@ http://ambit.sourceforge.net/download_ambitcli.html
  -d debugatomtypes=false	// Writes only structures with AtomTypes property set. For debug purposes	[type:boolean, mandatory:false]
 ````
 
+Logging configuration can be specified via  -Djava.util.logging.config.file option, specifying logging.properties file. If not specified, the [default logging.properties](https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps/ambit2-dbcli/src/main/resources/ambit2/dbcli/logging.properties) is used.
+
+````sh
+$java -jar -Djava.util.logging.config.file=myLoggingConfigFilePath .... other options ....
+````
+
 For options other than standardisation see [the main ambitcli page](download_ambitcli.html).
 
 ### <a name="standardize"></a>-a standardize
