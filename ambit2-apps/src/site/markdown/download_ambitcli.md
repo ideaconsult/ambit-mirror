@@ -27,6 +27,12 @@ usage: ambitcli-{version}
  -h,--help                       This help
 ````
 
+Logging configuration can be specified via  -Djava.util.logging.config.file option, specifying logging.properties file. If not specified, the [default logging.properties](https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps/ambit2-dbcli/src/main/resources/ambit2/dbcli/logging.properties) is used.
+
+````sh
+$java -jar -Djava.util.logging.config.file=myLoggingConfigFilePath .... other options ....
+````
+
 ### Supported file formats 
 
  * SDF filename.sdf <a href="https://en.wikipedia.org/wiki/Chemical_table_file#SDF">Structure Data Format</a>. 
