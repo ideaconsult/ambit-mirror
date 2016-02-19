@@ -48,6 +48,14 @@ public abstract class FilesWithHeaderWriter extends DefaultChemObjectWriter {
 	protected ArrayList header = null;
 	protected boolean writingStarted = false;
 	protected int smilesIndex = -1;
+	protected boolean addSMILEScolumn = true;
+	public boolean isAddSMILEScolumn() {
+		return addSMILEScolumn;
+	}
+
+	public void setAddSMILEScolumn(boolean addSMILEScolumn) {
+		this.addSMILEScolumn = addSMILEScolumn;
+	}
 
 	/**
 	 * @return Returns the header.
@@ -96,7 +104,7 @@ public abstract class FilesWithHeaderWriter extends DefaultChemObjectWriter {
 				smilesIndex = j;
 				break;
 			}
-		if (smilesIndex == -1) {
+		if (smilesIndex == -1 && addSMILEScolumn) {
 			header.add(defaultSMILESHeader);
 			smilesIndex = header.size()-1;
 		}

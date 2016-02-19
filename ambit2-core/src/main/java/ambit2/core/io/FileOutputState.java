@@ -83,7 +83,13 @@ public class FileOutputState extends FileState implements IOutputState {
 			else if ((fname.endsWith(_FILE_TYPE.HIN_INDEX.getExtension()))) 
 				writer = new HINWriter(stream);
 			else if ((fname.endsWith(_FILE_TYPE.MOL_INDEX.getExtension()))) 
-				writer = new SDFWriter(stream);		
+				writer = new SDFWriter(stream);
+			else if ((fname.endsWith(_FILE_TYPE.VW_INDEX.getExtension()))) {
+				writer = new DelimitedFileWriter(stream,
+						new DelimitedFileFormat("|",'"'));
+				((DelimitedFileWriter)writer).setAddSMILEScolumn(false);
+			}	
+						
 			/*
 			else if ((fname.endsWith(extensions[SVG_INDEX]))) 
 				writer = new SVGWriter(stream);
