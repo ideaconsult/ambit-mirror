@@ -14,7 +14,8 @@ var config_toxcast = {
 		},
 		"criteria" : {
 			"bVisible" : false,
-			"iOrder" : -9
+			"iOrder" : -9,
+			"inMatrix" : true
 		}
 	},
 	"protocol" : {
@@ -30,7 +31,8 @@ var config_toxcast = {
 		},		
 		"guideline" : {
 			"bVisible" : false,
-			"iOrder" : -1		
+			"iOrder" : -1,	
+			"inMatrix" : true
 		},
 		"uuid" : {
 			"bVisible" : false
@@ -61,11 +63,13 @@ var config_toxcast = {
 	},
 	"effects" : {
 		"endpoint" : {
-			"iOrder" : -21
+			"iOrder" : -21,
+			"inMatrix" : true
 		},
 		"result" : {
 			"sTitle" : "",
-			"iOrder" : -20
+			"iOrder" : -20,
+			"inMatrix" : true
 		},
 		"text" : {
 			"bVisible" : false
@@ -97,7 +101,8 @@ var config_toxcast = {
 		"intended_target_gene_symbol" : {
 			"sTitle" : "Intended target (gene)",
 			"bVisible" : true,
-			"iOrder" : -19
+			"iOrder" : -19,
+			"inMatrix" : true
 		}	,
 		"timepoint" : {
 			"sTitle" : "Time point",

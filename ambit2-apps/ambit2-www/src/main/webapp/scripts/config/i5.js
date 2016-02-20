@@ -21,7 +21,12 @@ var config_i5 = {
 		                    "iOrder": -3,
 		                    "inMatrix": true
 		                }
-		            }
+		            },
+		            "protocol": {
+		                "uuid" : {
+		                 	 "bVisible": true
+		                } 
+		            }		            
 		        },
 		        "PC_MELTING_SECTION": {
 		            "conditions": {
