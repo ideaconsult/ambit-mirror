@@ -1,6 +1,10 @@
 	<!-- Basic Page Needs
   ================================================== -->
-	<title>AMBIT</title>
+  <#if menu_profile?? && menu_profile=='enanomapper'>		 
+	<title>eNanoMapper</title>
+  <#else>
+  	<title>AMBIT</title>
+  </#if>	
 	<meta name="robots" content="index,follow"><META NAME="GOOGLEBOT" CONTENT="index,FOLLOW">
 	<meta charset="utf-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -42,7 +46,11 @@
 		
 	<!-- Favicons
 	================================================== -->
-	<link rel="shortcut icon" href="${ambit_root}/images/favicon.ico">
+	<#if menu_profile??>		 
+		<link rel="shortcut icon" href="${ambit_root}/images/profile/${menu_profile}/favicon.ico">
+	<#else>
+		<link rel="shortcut icon" href="${ambit_root}/images/favicon.ico">
+	</#if>
 	<link rel="apple-touch-icon" href="${ambit_root}/style/images/apple-touch-icon.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="${ambit_root}/style/images/apple-touch-icon-72x72.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="${ambit_root}/style/images/apple-touch-icon-114x114.png">

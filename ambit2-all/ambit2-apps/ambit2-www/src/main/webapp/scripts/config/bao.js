@@ -42,7 +42,7 @@ var config_bao = {
                 "iOrder" : -30,
                 "sTitle": "Reference",
                 "mRender" : function(data,type,full) {
-                	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
+                	var sOut = (data["year"]==null || data["year"] == 0)?"URL":data["year"];
                 	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
                 }
             }
@@ -167,7 +167,7 @@ var config_bao = {
             	"iOrder": -8,
                 "bVisible": true,
                 "inMatrix" : true,
-            }       
+            }          
         },
         "conditions": {
         	"bVisible": false,
@@ -215,18 +215,24 @@ var config_bao = {
 			"shape_descriptive" : {
 				"bVisible": true,
 				"sTitle" : "Shape"
-			}
+			},
+			"dose" : {
+				"bVisible": true
+			},
+			"exposure" : {
+				"bVisible": true
+			}						
         },            
         "interpretation": {
             "result": {
                 "inMatrix" : false,
-                "bVisible": true,
+                "bVisible": false,
                 "mRender" : function(data,type,full) {
                 	return "<span class='jtox-toolkit shortened ' title='"+data+"'>" + data + "</span>";                	
                 }
             },
             "criteria": {
-                "bVisible": true,
+                "bVisible": false,
                 "mRender" : function(data,type,full) {
                 	return "<span class='jtox-toolkit shortened ' title='"+data+"'>" + data + "</span>";                	
                 }
