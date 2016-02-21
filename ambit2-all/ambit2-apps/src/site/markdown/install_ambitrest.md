@@ -77,6 +77,9 @@ Please note that modern web browsers (e.g. Firefox 10, Chrome, Internet Explorer
 
 >IMPORTANT: You must restart Tomcat to make sure that the configuration	changes you've made become effective.
 
+>Note: Importing IUCLID5 files may require adjusting the PermGen setting in Java 7, see [this guide](./images/config/TomcatJVMConfig_win.pdf)
+
+
 #User guide
 
 [Quick user guide](./usage.html)	 
