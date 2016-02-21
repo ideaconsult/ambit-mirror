@@ -457,6 +457,15 @@
 			            "nickname": "getSubstanceComposition",
 			            <#include "/apidocs/authz.ftl" >
 			            "parameters": [
+								{
+							    "name": "all",
+							    "description": "true (Show all compositions) false (do not show hidden compositions)",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "query",
+							    "allowMultiple": false,
+							    "defaultValue": "false"
+								},			            
 			                  <#include "/apidocs/parameter_substance_uuid.ftl" >,
 							  <#include "/apidocs/parameters_page.ftl" >			            
 			            ],

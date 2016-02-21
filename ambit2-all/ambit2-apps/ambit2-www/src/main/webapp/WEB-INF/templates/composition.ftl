@@ -67,6 +67,7 @@
 			<th>Real concentration (lower)</th>
 			<th>Real concentration (upper)</th>
 			<th>Other related substances</th>
+			<th>Hidden</th>
 			</tr>
 			</thead>
 			<tbody></tbody>

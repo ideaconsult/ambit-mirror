@@ -34,13 +34,23 @@ public class ReadSubstanceComposition
 	public void setRecord(CompositionRelation record) {
 		this.record = record;
 	}
+	protected boolean excludeHidden = true;
 
-	private final static String _sql = "select cmp_prefix,hex(cmp_uuid) cmp_huuid,r.name as compositionname,idsubstance,r.idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,r.rs_prefix as refstruc,hex(r.rs_uuid) as refstrucuuid";
+	public boolean isExcludeHidden() {
+		return excludeHidden;
+	}
+
+	public void setExcludeHidden(boolean excludeHidden) {
+		this.excludeHidden = excludeHidden;
+	}
+	private final static String _sql = "select cmp_prefix,hex(cmp_uuid) cmp_huuid,r.name as compositionname,idsubstance,r.idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,r.rs_prefix as refstruc,hex(r.rs_uuid) as refstrucuuid,hidden";
 	private final static String sql = _sql + " from substance_relation r ";
 
-	private static String q_idsubstance = "idsubstance=?";
-	private static String q_uuid = "prefix=? and uuid=unhex(?)";
-	private static String q_compound = "idcompound=?";
+	private static String q_idsubstance = "idsubstance=? ";
+	private static String q_uuid = "prefix=? and uuid=unhex(?) ";
+	private static String q_compound = "idcompound=? ";
+	private static String q_excludehidden = " and hidden=0 ";
+	
 
 	private final static String sql_id = sql + " where " + q_idsubstance;
 	private final static String sql_uuid = sql
@@ -64,11 +74,11 @@ public class ReadSubstanceComposition
 		if (getFieldname() != null) {
 			if (getFieldname().getIdsubstance() > 0) {
 				if (bundle != null && bundle.getID() > 0)
-					return sql_bundle;
+					return sql_bundle + (isExcludeHidden()?q_excludehidden:"");
 				else
-					return sql_id;
+					return sql_id + (isExcludeHidden()?q_excludehidden:"");
 			} else if (getFieldname().getSubstanceUUID() != null) {
-				return sql_uuid;
+				return sql_uuid + (isExcludeHidden()?q_excludehidden:"");
 			}
 		}
 		throw new AmbitException("Unspecified substance");
@@ -139,6 +149,11 @@ public class ReadSubstanceComposition
 				record.setCompositionUUID(null);
 			}
 			record.setName(rs.getString("compositionname"));
+			try {
+				record.setHidden(rs.getBoolean("hidden"));
+			} catch (Exception x) {
+				record.setHidden(false);
+			}
 			record.getFirstStructure().setIdsubstance(rs.getInt("idsubstance"));
 			record.getSecondStructure().setIdchemical(rs.getInt("idchemical"));
 			record.setRelationType(STRUCTURE_RELATION.valueOf(rs
@@ -159,6 +174,7 @@ public class ReadSubstanceComposition
 					rs.getDouble("proportion_real_lower_value"));
 			record.getRelation().setReal_uppervalue(
 					rs.getDouble("proportion_real_upper_value"));
+
 			try {
 				record.getSecondStructure().clearFacets();
 				if (bundle != null && bundle.getID() > 0) {
