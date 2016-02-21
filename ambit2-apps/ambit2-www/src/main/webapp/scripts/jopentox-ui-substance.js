@@ -364,7 +364,15 @@ var substance = {
 			    						var sOut = "<a href='"+root+"/substance?type=related&compound_uri="+encodeURIComponent(val)+"' target=_blank>Also contained in...</span></a>"
 			    						return sOut;
 			    					}
-			    				}		    				
+			    				},
+			    				{ //2
+			    					"aTargets": [ 9 ],	
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "hidden",
+			    					"bUseRendered" : false	
+			    					
+			    				}				    				
 			    				],
 					"fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
 									oSettings.jqXHR = $.ajax({

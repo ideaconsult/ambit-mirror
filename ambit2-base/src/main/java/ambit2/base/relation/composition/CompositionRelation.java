@@ -260,22 +260,29 @@ public class CompositionRelation extends AbstractRelation<STRUCTURE_RELATION, Pr
 	 */
 	private static final long serialVersionUID = -1214326347782066597L;
 	
-	
-	
+
 	public enum jsonFeature {
 		substance,
 		component,
 		compositionUUID,
 		compositionName,
 		relation,
-		proportion
+		proportion,
+		hidden
 		;
 		
 		public String jsonname() {
 			return name();
 		}
 	}
-	
+	protected boolean hidden = false;
+	public boolean isHidden() {
+		return hidden;
+	}
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
+	}
+
 	protected String compositionUUID;
 	/**
 	 * Composition UUID
@@ -469,6 +476,7 @@ public class CompositionRelation extends AbstractRelation<STRUCTURE_RELATION, Pr
 				"\n\t\"%s\":%s," +
 				"\n\t\"%s\":%s," +
 				"\n\t\"%s\":%s," + 
+				"\n\t\"%s\":%s," + //metric
 				"\n\t\"%s\":%s" + //metric
 				"\n}",
 				CompositionRelation.jsonFeature.substance.jsonname(),JSONUtils.jsonQuote(substanceURI),
@@ -477,7 +485,8 @@ public class CompositionRelation extends AbstractRelation<STRUCTURE_RELATION, Pr
 				CompositionRelation.jsonFeature.compositionUUID.jsonname(),JSONUtils.jsonQuote(getCompositionUUID()),
 				CompositionRelation.jsonFeature.compositionName.jsonname(),JSONUtils.jsonQuote(getName()),
 				CompositionRelation.jsonFeature.relation.jsonname(),JSONUtils.jsonQuote(getRelationType().name()),
-				CompositionRelation.jsonFeature.proportion.jsonname(),getRelation().toJSON()
+				CompositionRelation.jsonFeature.proportion.jsonname(),getRelation().toJSON(),
+				CompositionRelation.jsonFeature.hidden.jsonname(),isHidden()
 				);
 	}
 }
