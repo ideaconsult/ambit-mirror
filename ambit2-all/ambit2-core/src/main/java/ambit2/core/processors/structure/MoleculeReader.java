@@ -101,9 +101,10 @@ public class MoleculeReader extends
 								ac.setProperty(
 										AmbitCONSTANTS.CASRN,
 										casTransformer.process(title.toString()));
+								ac.removeProperty(CDKConstants.TITLE);
 							} catch (Exception x) {
 							}
-						ac.removeProperty(CDKConstants.TITLE);
+						
 					}
 					// CAS transformation was moved from MyIterating MDLReader
 					Iterator props = ac.getProperties().entrySet().iterator();

@@ -1319,8 +1319,8 @@ public class AmbitCli {
 
 						// CDK adds these for the first MOL line
 						if (!writesdf) {
-							if (mol.getProperty(CDKConstants.TITLE) != null)
-								mol.removeProperty(CDKConstants.TITLE);
+							//if (mol.getProperty(CDKConstants.TITLE) != null)
+								//mol.removeProperty(CDKConstants.TITLE);
 							if (mol.getProperty(CDKConstants.REMARK) != null)
 								mol.removeProperty(CDKConstants.REMARK);
 						}
