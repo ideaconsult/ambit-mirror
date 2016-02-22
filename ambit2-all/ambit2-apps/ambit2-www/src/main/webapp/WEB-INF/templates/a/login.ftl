@@ -15,6 +15,7 @@ $(document)
     					jQuery("#breadCrumb").jBreadCrumb();
     					jQuery("#welcome").text("Welcome to AMBIT");
     					loadHelp("${ambit_root}","login");
+
 				});
 </script>
 </head>
@@ -66,6 +67,13 @@ $(document)
 		<input class='three columns omega'  type="submit" value="Log in"><a href='#' class='chelp loginhelp'></a>
 		<input type='hidden' size='40' name='targetUri' id='targetUri' value='${ambit_root}/login'>
 		</div>
+		
+				
+		
+		<#if menu_profile?? && menu_profile=='lri'>
+  			<#include "/menu/profile/lri/agreement.ftl">
+  		</#if>	
+		
 		</form>
 		
 		</div>
