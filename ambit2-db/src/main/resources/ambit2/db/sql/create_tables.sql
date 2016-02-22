@@ -101,6 +101,7 @@ CREATE TABLE `substance` (
   `owner_prefix` varchar(6) COLLATE utf8_bin DEFAULT NULL,
   `owner_uuid` varbinary(16) DEFAULT NULL,
   `owner_name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idsubstance`),
   UNIQUE KEY `uuid-x` (`prefix`,`uuid`),
   KEY `doxType-x` (`documentType`),
@@ -111,7 +112,8 @@ CREATE TABLE `substance` (
   KEY `owner-name` (`owner_name`),
   KEY `name-x` (`name`(128)),
   KEY `publicname-x` (`publicname`(128))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Substance dossier (mainly to support IUCLID5)';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Substances and nanomaterials';
+
 
 -- -----------------------------------------------------
 -- Table `substance_ids` 
@@ -1499,7 +1501,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (8,13,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (8,14,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

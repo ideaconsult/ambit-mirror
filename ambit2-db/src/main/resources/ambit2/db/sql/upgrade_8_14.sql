@@ -1,3 +1,6 @@
+-- timestamp for substance
+ALTER TABLE `substance` ADD COLUMN `timestamp` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP  AFTER `owner_name` ;
+
 -- allow to hide of the composition
 ALTER TABLE `substance_relation` ADD COLUMN `hidden` TINYINT NULL DEFAULT 0  AFTER `name` ;
 ALTER TABLE `substance_relation` ADD INDEX `cmp-hidden` (`hidden` ASC) ;
