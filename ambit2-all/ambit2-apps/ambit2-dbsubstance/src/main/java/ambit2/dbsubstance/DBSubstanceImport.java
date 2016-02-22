@@ -530,14 +530,14 @@ public class DBSubstanceImport {
 		} else {
 			String ext = inputFile.toString().toLowerCase();
 			if (ext.endsWith(".i5z"))
-				return importI5Z();
+				return importI5Z(matchByKey);
 			else
 				return importFile(isSplitRecord(), ext.endsWith(".xlsx"));
 
 		}
 	}
 
-	protected int importI5Z() throws Exception {
+	protected int importI5Z(IStructureKey keytomatch) throws Exception {
 		logger_cli.log(Level.INFO, "MSG_IMPORT", new Object[] { "i5z",
 				inputFile.getAbsolutePath() });
 		I5ZReader reader = null;
@@ -549,12 +549,15 @@ public class DBSubstanceImport {
 			c = dbc.getConnection();
 			c.setAutoCommit(true);
 			I5Options options = new I5Options();
+			options.setMaxReferenceStructures(1);
+			options.setExceptionOnMaxReferenceStructures(false);
+			options.setAllowMultipleSubstances(false);
 			reader = new I5ZReader<>(inputFile, options);
 			QASettings qa = new QASettings(false);
 			qa.setAll();
 			reader.setQASettings(qa);
 
-			matchByKey = new CASKey();
+			matchByKey = keytomatch==null?new CASKey():keytomatch;
 			return write(reader, c, matchByKey, true, clearMeasurements,
 					clearComposition, null, true);
 		} catch (Exception x) {
