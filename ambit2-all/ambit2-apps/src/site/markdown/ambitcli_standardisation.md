@@ -4,29 +4,33 @@ A [command line Java application](download_ambitcli.html) used for processing ch
 
 ## Download
 
-* <a href="http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/">Releases</a> 
+* <a href="http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/">Releases</a>
 
-* Development 
-  <a href="https://www.ideaconsult.net/downloads/ambitcli/ambitcli-3.0.1-20151130.jar">ambitcli-3.0.1-20151130.jar</a> | <a href="http://ambit.uni-plovdiv.bg:8083/nexus/#nexus-search;gav~~ambit2-dbcli~~jar~">Maven repository</a>
+* Pre-release <a href="https://www.ideaconsult.net/downloads/ambitcli/ambitcli-3.0.1-20151130.jar">ambitcli-3.0.1-20151130.jar</a>
+
+* Pre-release <a href="https://www.ideaconsult.net/downloads/ambitcli/ambitcli-3.0.1-20160205.jar">ambitcli-3.0.1-20160205.jar</a> (build:7259 1454688887571)
+
+* Development <a href="http://ambit.uni-plovdiv.bg:8083/nexus/#nexus-search;gav~~ambit2-dbcli~~jar~">Maven repository</a>
+
 
 ## Usage
 
-````sh
+````
+
 $java -jar ambitcli.jar -help
 INFO   ambitcli-3.0.1-SNAPSHOT build:7259 1454688887571
 http://ambit.sourceforge.net/download_ambitcli.html
- -a,--command <command>          Commands:
-                                 import|preprocessing|dataset|split|standa
-                                 rdize|descriptor|help|
- -c,--config <file>              Config file (DB connection parameters)
- -d,--data <data>                Command specific parameters (multiple).
-                                 Use -a cmd -m help to list available
-                                 parameters
- -i,--input <file>               Input SDF file
- -m,--subcommand <subcommand>    Subcommands. Use -a cmd -m help to list
+ -a,--command [command]          Commands:
+                                 import|preprocessing|dataset|split|standardize|descriptor|help|
+ -c,--config [file]              Config file (DB connection parameters)
+ -d,--data [data]                Command specific parameters (multiple).
+                                 Use -a cmd -m help to list available parameters
+ -i,--input [file]               Input SDF file
+ -m,--subcommand [subcommand]    Subcommands. Use -a cmd -m help to list
                                  subcommands of a specific command.
- -o,--output <file>              Output file
--h,--help                       This help      
+ -o,--output [file]              Output file
+-h,--help                       This help     
+ 
  ````
 
 Standardization specific help:

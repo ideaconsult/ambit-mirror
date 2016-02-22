@@ -140,10 +140,8 @@
 	</custom>
 	<body>
 		<head>
-			<link rel="author" href="https://plus.google.com/+NinaJeliazkova" />
-			<meta name="description" content="AMBIT" />
-			<meta name="keywords"
-				content="AMBIT,web services,REST,API,QSAR,chemical similarity,Toxtree,Toxmatch,Ambit,SMARTS,databases, substructure search, enanomapper" />
+			<meta name="description" content="AMBIT" >
+			<meta name="keywords" content="AMBIT,web services,REST,API,QSAR,chemical similarity,Toxtree,Toxmatch,Ambit,SMARTS,databases, substructure search, enanomapper" />
 			<meta name="author" content="Nina Jeliazkova" />
 			<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 		</head>
