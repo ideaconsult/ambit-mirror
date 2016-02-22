@@ -211,6 +211,16 @@ public class DBSubstanceImport {
 			}
 		return true;
 	}
+	
+	protected int maxRefSubstances = 1;
+	protected static int getMaxRefSubstances(CommandLine line) {
+		if (line.hasOption('r'))
+			try {
+				return Integer.parseInt(line.getOptionValue('r'));
+			} catch (Exception x) {
+			}
+		return 1;
+	}
 
 	/**
 	 * If splitrecord = true and record.getMeasurements() is not null, only
@@ -388,8 +398,13 @@ public class DBSubstanceImport {
 
 		Option matchStructure = OptionBuilder.hasArg()
 				.withLongOpt("structureMatch").withArgName("value")
-				.withDescription("Match structure by uuid|cas|smiles|inchi")
+				.withDescription("Match structure by uuid|cas|einecs|smiles|inchi")
 				.create("x");
+		
+		Option maxRefSubstances = OptionBuilder.hasArg()
+				.withLongOpt("maxReferenceSubstances").withArgName("value")
+				.withDescription("Maximum reference substances in *.i5z archive")
+				.create("r");
 
 		Option isSplitRecord = OptionBuilder.hasArg()
 				.withLongOpt("isSplitRecord").withArgName("value")
@@ -411,6 +426,7 @@ public class DBSubstanceImport {
 		options.addOption(clearMeasurement);
 		options.addOption(matchStructure);
 		options.addOption(isSplitRecord);
+		options.addOption(maxRefSubstances);
 
 		options.addOption(help);
 
@@ -463,7 +479,7 @@ public class DBSubstanceImport {
 			setClearComposition(isClearComposition(line));
 			setClearMeasurements(isClearMeasurements(line));
 			setSplitRecord(isSplitRecord(line));
-
+			maxRefSubstances = getMaxRefSubstances(line);
 			if (line.hasOption("h")) {
 				printHelp(options, null);
 				return false;
@@ -549,7 +565,8 @@ public class DBSubstanceImport {
 			c = dbc.getConnection();
 			c.setAutoCommit(true);
 			I5Options options = new I5Options();
-			options.setMaxReferenceStructures(1);
+			
+			options.setMaxReferenceStructures(maxRefSubstances);
 			options.setExceptionOnMaxReferenceStructures(false);
 			options.setAllowMultipleSubstances(false);
 			reader = new I5ZReader<>(inputFile, options);
