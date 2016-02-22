@@ -15,23 +15,11 @@ A [command line Java application](download_ambitcli.html) used for processing ch
 
 ## Usage
 
-````
+````sh
 
-$java -jar ambitcli.jar -help
-INFO   ambitcli-3.0.1-SNAPSHOT build:7259 1454688887571
-http://ambit.sourceforge.net/download_ambitcli.html
- -a,--command [command]          Commands:
-                                 import|preprocessing|dataset|split|standardize|descriptor|help|
- -c,--config [file]              Config file (DB connection parameters)
- -d,--data [data]                Command specific parameters (multiple).
-                                 Use -a cmd -m help to list available parameters
- -i,--input [file]               Input SDF file
- -m,--subcommand [subcommand]    Subcommands. Use -a cmd -m help to list
-                                 subcommands of a specific command.
- -o,--output [file]              Output file
--h,--help                       This help     
- 
- ````
+java -jar ambitcli.jar -a standardize -i file.sdf -m post -d page=0 -d pagesize=-1 -o file.txt -d tautomers=true -d splitfragments=true \
+									 -d implicith=true -d smiles=false -d smilescanonical=true -d inchi=true -d stereo=false -d neutralise=true -d isotopes=true 
+````
 
 Standardization specific help:
 
