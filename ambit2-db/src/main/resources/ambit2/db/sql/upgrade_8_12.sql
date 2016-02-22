@@ -1,4 +1,3 @@
-ALTER TABLE `bundle_chemicals` CHANGE COLUMN `remarks` `remarks` TEXT CHARACTER SET 'utf8' COLLATE 'utf8_bin' NULL DEFAULT NULL ;
 ALTER TABLE `bundle_substance` CHANGE COLUMN `remarks` `remarks` TEXT CHARACTER SET 'utf8' COLLATE 'utf8_bin' NULL DEFAULT NULL  ;
 
 ALTER TABLE `substance_protocolapplication` 
