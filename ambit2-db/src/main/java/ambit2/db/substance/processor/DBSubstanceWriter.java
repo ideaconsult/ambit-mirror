@@ -299,7 +299,11 @@ public class DBSubstanceWriter extends
 				}
 
 			} else if (record instanceof IStructureRecord) {
-				if (STRUC_TYPE.NA.equals(((IStructureRecord) record).getType())) {
+				if (i5mode) {
+					//creates if not there, adds links if already in
+					writer.create(record); 
+				} else if (STRUC_TYPE.NA.equals(((IStructureRecord) record)
+						.getType())) {
 					writer.create(record); // with the current settings, if the
 											// structure is already there, it
 											// will be used
