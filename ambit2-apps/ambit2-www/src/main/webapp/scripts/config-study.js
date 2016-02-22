@@ -32,7 +32,7 @@ var config_study = {
                  	 "bVisible": true
                 }, 
                 "reliability" : {
-                	"bVisible": false
+                	"bVisible": true
                 }
             },
             "interpretation": {}
