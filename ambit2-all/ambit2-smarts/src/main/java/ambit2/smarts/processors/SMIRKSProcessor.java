@@ -58,13 +58,16 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 		return transformations;
 	}
 
-	protected SMIRKSManager smrkMan = new SMIRKSManager(
-			SilentChemObjectBuilder.getInstance());
+	protected SMIRKSManager smrkMan;
 
 	public SMIRKSProcessor() {
+		super();
+		smrkMan = new SMIRKSManager(
+				SilentChemObjectBuilder.getInstance());
 	}
 
 	public SMIRKSProcessor(File jsonFile) throws Exception {
+		this();
 		loadReactionsFromJSON(jsonFile);
 	}
 
@@ -222,6 +225,7 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 				reactant.setProperty(transformed_property, transformed);
 				AtomContainerManipulator
 						.percieveAtomTypesAndConfigureAtoms(reactant);
+				AtomContainerManipulator.suppressHydrogens(reactant);
 				if (isAtomtypeasproperties())
 					reactant = atomtypes2property(reactant,
 							reactant.getProperty(at_property),

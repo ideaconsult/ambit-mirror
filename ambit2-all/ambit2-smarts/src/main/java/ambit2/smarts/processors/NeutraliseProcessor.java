@@ -2,6 +2,8 @@ package ambit2.smarts.processors;
 
 import java.io.InputStream;
 
+import ambit2.smarts.SMIRKSManager;
+
 /**
  * Chemical structure neutralisation via set of predefined SMIRKS {@link ambit2
  * /smirks/smirks.json}. Uses {@link SMIRKSProcessor}
@@ -18,6 +20,7 @@ public class NeutraliseProcessor extends SMIRKSProcessor {
 
 	public NeutraliseProcessor() throws Exception {
 		super();
+		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(true);
 		setLoadExamples(false);
 		InputStream in = null;
 
@@ -30,5 +33,10 @@ public class NeutraliseProcessor extends SMIRKSProcessor {
 		} finally {
 			if (in!=null) in.close();
 		}
+	}
+	@Override
+	public void configureReactions(SMIRKSManager smrkMan) throws Exception {
+		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(true);
+		super.configureReactions(smrkMan);
 	}
 }
