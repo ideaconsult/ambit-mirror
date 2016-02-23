@@ -6,7 +6,7 @@
 	<artifactId>ambit2-apps</artifactId>
 	<packaging>pom</packaging>
 	<name>Ambit2 applications</name>
-	<version>3.0.1-SNAPSHOT</version>
+	<version>3.0.1</version>
 	<distributionManagement>
 		<site>
 			<id>website_ambit</id>
@@ -28,14 +28,14 @@
 
 	</distributionManagement>
 	<properties>
-		<net.idea.loom.version>1.1.1-SNAPSHOT</net.idea.loom.version>
+		<net.idea.loom.version>1.1.1</net.idea.loom.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<toxtree.version>3.0.0-SNAPSHOT</toxtree.version>
-		<ambit.version>3.0.1-SNAPSHOT</ambit.version>
+		<ambit.version>3.0.1</ambit.version>
 		<cdk.version>1.5.12</cdk.version>
 		<junit.version>4.8.1</junit.version>
 		<!-- https://github.com/ideaconsult/i5 -->
-		<i5.version>1.2.0-SNAPSHOT</i5.version>
+		<i5.version>1.2.0</i5.version>
 		<restnet.version>1.1.1</restnet.version>
 		<dbunit.version>2.5.1</dbunit.version>
 		<m2st-syntaxHighlighter-urlBase>syntaxhighlighter</m2st-syntaxHighlighter-urlBase>
@@ -287,6 +287,11 @@
 							<artifactId>wagon-ssh</artifactId>
 							<version>2.0</version>
 						</dependency>
+						<dependency>
+            <groupId>org.apache.maven.doxia</groupId>
+            <artifactId>doxia-module-markdown</artifactId>
+            <version>1.4</version>
+        </dependency>
 					</dependencies>
 				</plugin>
 				<!-- generates PDF from the site -->
