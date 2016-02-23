@@ -11,6 +11,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigInteger;
 import java.util.BitSet;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,8 +43,9 @@ import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.PDBReader;
-import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
-import org.openscience.cdk.io.iterator.IteratingSDFReader;
+import org.openscience.cdk.io.listener.PropertiesListener;
+import org.openscience.cdk.io.setting.BooleanIOSetting;
+import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.silent.AtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -258,6 +260,19 @@ public class MoleculeTools {
 		try {
 			StringReader reader = new StringReader(molfile);
 			r = new MDLV2000Reader(reader);
+
+			r.addSetting(new BooleanIOSetting(
+					"AddStereoElements",
+					IOSetting.Importance.HIGH,
+					"Assign stereo configurations to stereocenters utilising 2D/3D coordinates.",
+					"false"));
+			/*
+			 * Properties customSettings = new Properties();
+			 * customSettings.setProperty("AddStereoElements", "false");
+			 * PropertiesListener listener = new
+			 * PropertiesListener(customSettings);
+			 * r.addChemObjectIOListener(listener);
+			 */
 			IAtomContainer mol = r.read(new AtomContainer());
 			reader.close();
 			return mol;
