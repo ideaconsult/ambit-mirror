@@ -884,8 +884,8 @@ public class AmbitCli {
 		batch.getProcessorChain()
 				.add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
 
-					protected MoleculeReader molReader = new MoleculeReader(true);
-
+					protected MoleculeReader molReader = new MoleculeReader(true,false);
+					
 					@Override
 					public IStructureRecord process(IStructureRecord record)
 							throws Exception {
@@ -1283,7 +1283,7 @@ public class AmbitCli {
 		batch.getProcessorChain()
 				.add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
 
-					protected MoleculeReader molReader = new MoleculeReader(true);
+					protected MoleculeReader molReader = new MoleculeReader(true,false);
 
 					@Override
 					public IStructureRecord process(IStructureRecord record)

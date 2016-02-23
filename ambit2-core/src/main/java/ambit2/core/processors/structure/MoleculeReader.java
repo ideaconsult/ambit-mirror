@@ -66,6 +66,14 @@ public class MoleculeReader extends
 	protected CDKHydrogenAdder hadder = CDKHydrogenAdder
 			.getInstance(SilentChemObjectBuilder.getInstance());
 	protected boolean atomtypingonsmiles = false;
+	protected boolean removeCDKTitle = true;
+	public boolean isRemoveCDKTitle() {
+		return removeCDKTitle;
+	}
+
+	public void setRemoveCDKTitle(boolean removeCDKTitle) {
+		this.removeCDKTitle = removeCDKTitle;
+	}
 
 	public boolean isAtomtypingonsmiles() {
 		return atomtypingonsmiles;
@@ -75,11 +83,12 @@ public class MoleculeReader extends
 		this.atomtypingonsmiles = atomtypingonsmiles;
 	}
 	public MoleculeReader() {
-		this(false);
+		this(false,true);
 	}
-	public MoleculeReader(boolean atomtypingonsmiles) {
+	public MoleculeReader(boolean atomtypingonsmiles,boolean removeCDKTitle) {
 		super();
 		setAtomtypingonsmiles(atomtypingonsmiles);
+		setRemoveCDKTitle(removeCDKTitle);
 	}
 	
 
@@ -123,7 +132,7 @@ public class MoleculeReader extends
 								ac.removeProperty(CDKConstants.TITLE);
 							} catch (Exception x) {
 							}
-
+						if (removeCDKTitle) ac.removeProperty(CDKConstants.TITLE);
 					}
 					// CAS transformation was moved from MyIterating MDLReader
 					Iterator props = ac.getProperties().entrySet().iterator();
