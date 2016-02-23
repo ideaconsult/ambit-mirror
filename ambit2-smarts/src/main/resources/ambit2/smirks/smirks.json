@@ -160,7 +160,7 @@
             "CLASS": "uncharge",
             "SMIRKS": "[N+;X4:1]>>[N:1][H]",
             "example": "CC[N+](C)(C)CCOP(=O)([O-])OC",
-            "USE": true,
+            "USE": false,
             "precondition": {
                 "atomtype": [
                     "N.plus.sp2.radical",
