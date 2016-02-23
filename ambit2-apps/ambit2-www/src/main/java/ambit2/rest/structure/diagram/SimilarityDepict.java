@@ -35,9 +35,9 @@ public class SimilarityDepict extends AbstractDepict {
 	@Override
 	protected String getTitle(Reference ref, String... smiles)
 			throws ResourceException {
-		final Reference root = (Reference) ref.getParentRef().clone();
+		final Reference root = (Reference) ref.getBaseRef().clone();
 		root.setQuery(null);
-		final String uri = String.format("%scdk", root);
+		final String uri = String.format("%s/depict/cdk", root);
 		final String style = "depictBox";
 
 		final StringBuilder b = new StringBuilder();
