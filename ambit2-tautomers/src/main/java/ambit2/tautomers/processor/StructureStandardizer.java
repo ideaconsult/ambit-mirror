@@ -62,7 +62,15 @@ public class StructureStandardizer extends
 		this.neutralise = neutralise;
 	}
 
-	protected boolean stereo = false;
+	protected boolean generateStereofrom2D = false;
+	public boolean isGenerateStereofrom2D() {
+		return generateStereofrom2D;
+	}
+
+	public void setGenerateStereofrom2D(boolean generateStereofrom2D) {
+		this.generateStereofrom2D = generateStereofrom2D;
+	}
+
 	protected boolean clearIsotopes = false;
 	public boolean isClearIsotopes() {
 		return clearIsotopes;
@@ -74,13 +82,6 @@ public class StructureStandardizer extends
 
 	protected List<net.sf.jniinchi.INCHI_OPTION> options = new ArrayList<net.sf.jniinchi.INCHI_OPTION>();
 
-	public boolean isStereo() {
-		return stereo;
-	}
-
-	public void setStereo(boolean stereo) {
-		this.stereo = stereo;
-	}
 
 	public boolean isGenerateSMILES_Canonical() {
 		return generateSMILES_Canonical;
@@ -162,11 +163,13 @@ public class StructureStandardizer extends
 	public void setCallback(IProcessor<IAtomContainer, IAtomContainer> callback) {
 		this.tautomers.setCallback(callback);
 	}
-
+	private final static  String ERROR_TAG = "ERROR";
 	@Override
 	public IAtomContainer process(IAtomContainer mol) throws Exception {
 		IAtomContainer processed = mol;
 		try {
+			String err = processed.getProperty(ERROR_TAG);
+			if (err==null) processed.setProperty(ERROR_TAG, "");
 			if (neutralise) {
 				if (neutraliser == null)
 					neutraliser = new NeutraliseProcessor();
@@ -196,10 +199,12 @@ public class StructureStandardizer extends
 						processed = AtomContainerManipulator
 								.suppressHydrogens(processed);
 					} catch (Exception x) {
-						if (processed != null)
-							processed.setProperty("ERROR.implicitHydrogens",
-									String.format("%s\t%s", x.getClass()
+						if (processed != null) {
+							 err = processed.getProperty(ERROR_TAG);
+							processed.setProperty(ERROR_TAG,
+									String.format("%s\t%s\t%s", err==null?"":err,x.getClass()
 											.getName(), x.getMessage()));
+						}
 					}
 
 				int newse = 0;
@@ -210,11 +215,12 @@ public class StructureStandardizer extends
 						//todo
 						processed = tautomers.process(processed);
 					} catch (Exception x) {
-						processed.setProperty("ERROR.tautomers", String.format(
-								"%s\t%s", x.getClass().getName(),
+						 err = processed.getProperty(ERROR_TAG);
+						processed.setProperty(ERROR_TAG, String.format(
+								"%s\t%s\t%s", err==null?"":err,x.getClass().getName(),
 								x.getMessage()));
 					}
-				if (stereo)
+				if (generateStereofrom2D)
 					try {
 						StereoElementFactory stereo = StereoElementFactory
 								.using2DCoordinates(processed);
@@ -231,10 +237,12 @@ public class StructureStandardizer extends
 											oldse, newse));
 						processed.setStereoElements(stereoElements);
 					} catch (Exception x) {
-						if (processed != null)
-							processed.setProperty("ERROR.stereo", String
-									.format("%s\t%s", x.getClass().getName(),
+						if (processed != null) {
+							 err = processed.getProperty(ERROR_TAG);
+							processed.setProperty(ERROR_TAG, String
+									.format("%s\t%s\t%s", err==null?"":err,x.getClass().getName(),
 											x.getMessage()));
+						}
 					}
 				if (generateInChI) {
 					if (processed.getProperty(Property.opentox_InChI) == null)
@@ -253,8 +261,9 @@ public class StructureStandardizer extends
 							processed.setProperty(Property.opentox_InChIKey,
 									gen.getInchiKey());
 						} catch (Exception x) {
-							processed.setProperty("ERROR.inchi", String.format(
-									"%s\t%s", x.getClass().getName(),
+							 err = processed.getProperty(ERROR_TAG);
+							processed.setProperty(ERROR_TAG, String.format(
+									"%s\t%s\t%s", err==null?"":err,x.getClass().getName(),
 									x.getMessage()));
 						}
 				}
@@ -269,8 +278,9 @@ public class StructureStandardizer extends
 								processed.setProperty(Property.getSMILESInstance(),
 										smilesGenerator.create(processed));
 						} catch (Exception x) {
-							processed.setProperty("ERROR.smiles", String
-									.format("%s\t%s", x.getClass().getName(),
+							 err = processed.getProperty(ERROR_TAG);
+							processed.setProperty(ERROR_TAG, String
+									.format("%s\t%s\t%s", err==null?"":err,x.getClass().getName(),
 											x.getMessage()));
 						}
 				}

@@ -1189,7 +1189,7 @@ public class AmbitCli {
 		}
 		try {
 			Object o = options.getParam(":generatestereofrom2d");
-			standardprocessor.setStereo(Boolean.parseBoolean(o.toString()));
+			standardprocessor.setGenerateStereofrom2D(Boolean.parseBoolean(o.toString()));
 		} catch (Exception x) {
 		}
 		try {
