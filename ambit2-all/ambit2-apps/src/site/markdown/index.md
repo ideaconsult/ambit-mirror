@@ -55,12 +55,13 @@ AMBIT offers chemoinformatics functionality via [*OpenTox API*](api.html) compli
 
 ## News
 
-- [LRI Workshop on AMBIT and READ-ACROSS](http://cefic-lri.org/events/lri-workshop-on-ambit-and-read-across/) 
+- LRI AMBIT [Read across workflow](https://apps.ideaconsult.net/ambit3)  [[Feedback]](https://docs.google.com/forms/d/1hhKCBTeBTqvfQxW3g2vc_ShNk29hof_WDHtt-cimjGQ/viewform)
 
-CEFIC LRI is organising a hands-on training workshop on *21 January 2016* at [Cefic offices in Brussels](http://cefic-lri.org/contact/).
+- LRI Workshop on AMBIT and READ-ACROSS [Video and slides](http://cefic-lri.org/events/lri-workshop-on-ambit-and-read-across/) 
+CEFIC LRI organised a hands-on training workshop on *21 January 2016* at [Cefic offices in Brussels](http://cefic-lri.org/contact/).
+- [eNanoMapper database](./enanomapper.html) 
 
-- [eNanoMapper database](./enanomapper.html)
-
+ <form action="http://enanomapper.github.io/data.enanomapper.net/" method="GET"><input type="text" id="searhc" name="search" value="zinc oxide"/><input type='submit' value='Search'/></form>
 The eNanoMapper [database](https://apps.ideaconsult.net/enanomapper) is part of the computational infrastructure for toxicological data 
 management of engineered nanomaterials, developed within the EU FP7 [eNanoMapper](www.enanomapper.net) project. It is implemented by a customized version of AMBIT web services and available for [download](enanomapper.html).
 

@@ -9,7 +9,7 @@
 	<parent>
 		<artifactId>ambit2-apps</artifactId>
 		<groupId>ambit</groupId>
-		<version>3.0.1-SNAPSHOT</version>
+		<version>3.0.1</version>
 	</parent>
 	<distributionManagement>
 		<site>
@@ -480,7 +480,7 @@
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>opentox-client</artifactId>
-			<version>3.0.0</version>
+			<version>3.0.1</version>
 			<type>jar</type>
 		</dependency>
 		<dependency>
@@ -497,7 +497,7 @@
 		<dependency>
 			<groupId>net.enanomapper</groupId>
 			<artifactId>nmparser</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>ambit</groupId>
