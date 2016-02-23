@@ -43,6 +43,7 @@ import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -64,6 +65,24 @@ public class MoleculeReader extends
 	protected SmilesParser smiParser = null;
 	protected CDKHydrogenAdder hadder = CDKHydrogenAdder
 			.getInstance(SilentChemObjectBuilder.getInstance());
+	protected boolean atomtypingonsmiles = false;
+
+	public boolean isAtomtypingonsmiles() {
+		return atomtypingonsmiles;
+	}
+
+	public void setAtomtypingonsmiles(boolean atomtypingonsmiles) {
+		this.atomtypingonsmiles = atomtypingonsmiles;
+	}
+	public MoleculeReader() {
+		this(false);
+	}
+	public MoleculeReader(boolean atomtypingonsmiles) {
+		super();
+		setAtomtypingonsmiles(atomtypingonsmiles);
+	}
+	
+
 	/**
      * 
      */
@@ -104,7 +123,7 @@ public class MoleculeReader extends
 								ac.removeProperty(CDKConstants.TITLE);
 							} catch (Exception x) {
 							}
-						
+
 					}
 					// CAS transformation was moved from MyIterating MDLReader
 					Iterator props = ac.getProperties().entrySet().iterator();
@@ -240,7 +259,15 @@ public class MoleculeReader extends
 								SilentChemObjectBuilder.getInstance());
 					IAtomContainer mol = smiParser.parseSmiles(target
 							.getContent());
-					//atom typing will drop aromatic flags ...
+					// atom typing will drop aromatic flags ...
+					if (atomtypingonsmiles) {
+						AtomContainerManipulator
+								.percieveAtomTypesAndConfigureAtoms(mol);
+						for (IBond b : mol.bonds())
+							if (b.isAromatic())
+								for (IAtom a : b.atoms())
+									a.setFlag(CDKConstants.ISAROMATIC, true);
+					}
 					return mol;
 				}
 			} catch (Exception x) {
