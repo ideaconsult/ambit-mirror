@@ -59,7 +59,7 @@
 					<markPageHeader>false</markPageHeader>
 					<sections>
 						<carousel />
-						<columns>3</columns>
+						<columns>3</columns>						
 						<body />
 						<sidebar />
 					</sections>

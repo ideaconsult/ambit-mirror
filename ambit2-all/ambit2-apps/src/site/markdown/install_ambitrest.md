@@ -29,7 +29,7 @@ The version can be also verified at http://localhost:8080/ambit2/admin/database
 
 ###Deployment
 
-- Deploy the [ambit2.war](http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.7.4/ambit2-www-2.7.4.war/download) in your Tomcat instance.
+- Deploy the [ambit2.war](http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-3.0.1/ambit2-www-3.0.1.war/download) in your Tomcat instance.
 
 - Open the following URI in your browser, replacing YOURHOST and YOURPORT with the relevant values from your configuration.
 

@@ -63,6 +63,8 @@ The eNanoMapper prototype database is an open source web application, which can 
 
 Try the public web services, datasets and models : 
 
+-   <form action="http://enanomapper.github.io/data.enanomapper.net/" method="GET"><input type="text" id="search" name="search" value="zinc oxide"/><input type='submit' value='Search'/></form>
+
 -   [**Search nanomaterials by identifier**](https://apps.ideaconsult.net/enanomapper/substance?search=NM-111%26)
 
 -   [**Search nanomaterials by citation**](https://apps.ideaconsult.net/enanomapper/substance?type=citation%26search=10.1073)
