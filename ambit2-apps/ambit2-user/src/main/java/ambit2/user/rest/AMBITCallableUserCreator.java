@@ -40,7 +40,7 @@ public class AMBITCallableUserCreator extends CallableUserCreator {
 
 	@Override
 	protected String getSender() {
-		return "AMBIT2";
+		return "AMBIT";
 	}
 
 
@@ -52,6 +52,6 @@ public class AMBITCallableUserCreator extends CallableUserCreator {
 
 	@Override
 	protected String getSystemName() {
-		return "AMBIT2";
+		return "AMBIT";
 	}
 }
