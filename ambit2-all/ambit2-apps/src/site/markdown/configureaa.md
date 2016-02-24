@@ -15,7 +15,7 @@ AMBIT supports three modes for defining users and assigning access rights.
 The configuration file `config.prop` is found at 
 
 ````
-{tomcat-dir}/webapps/ambit2/WEB-INF/classes/config/config.prop
+{tomcat-dir}/webapps/ambit2/WEB-INF/classes/ambit2/rest/config/config.prop
 ````
 
 An example [configuration file](./txt/config.prop) 
