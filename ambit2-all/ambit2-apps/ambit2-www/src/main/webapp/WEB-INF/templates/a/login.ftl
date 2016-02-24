@@ -26,7 +26,7 @@ $(document)
 <!-- banner -->
 <#include "/banner_crumbs.ftl">
 
-<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 &nbsp;
 </div>
 
@@ -34,7 +34,7 @@ $(document)
 		
 		<!-- Page Content
 		================================================== -->
-		<div class="eleven columns remove-bottom" style="padding:0;" >
+		<div class="twelve columns remove-bottom" style="padding:0;" >
 		
 	    <div class="row remove-bottom ui-widget-header ui-corner-top">&nbsp;Sign In</div>
     	<div class="ui-widget-content ui-corner-bottom">
@@ -51,13 +51,13 @@ $(document)
 		
 		
 		<div class="row remove-bottom">		
-		<label class='three columns alpha'>User name</label> 
-		<input class='five columns omega' type='text' size='40' name='login' value=''>
+		<label class='two columns alpha'>User name</label> 
+		<input class='six columns omega' type='text' size='40' name='login' value=''>
 		</div>
 		
 		<div class="row remove-bottom">		
-		<label class='three columns alpha'>Password</label> 
-		<input class='five columns omega' type='password' size='40' name='password' value=''>
+		<label class='two columns alpha'>Password</label> 
+		<input class='six columns omega' type='password' size='40' name='password' value=''>
 		<div class='three columns omega'>&nbsp;</div>
 		<div class='five columns omega'><a href="${ambit_root}/forgotten" title='Click to request one time password reset'>Forgotten password?</a></div>
 		</div>
