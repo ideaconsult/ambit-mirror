@@ -140,7 +140,7 @@
 	</developers>
 	<contributors></contributors>
 	<scm>
-	  		<connection>scm:svn:https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</connection>
+		<connection>scm:svn:https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</connection>
 		<developerConnection>scm:svn+ssh://USER@svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</developerConnection>
 		<tag>scm:svn:https://svn.code.sf.net/p/ambit/code/tags</tag>
 		<url>https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</url>
@@ -276,22 +276,20 @@
 							<artifactId>reflow-velocity-tools</artifactId>
 							<version>1.1.1</version>
 						</dependency>
-						<dependency>
-							<groupId>org.apache.velocity</groupId>
-							<artifactId>velocity</artifactId>
-							<version>1.7</version>
-						</dependency>
-
+						<!-- <dependency> <groupId>org.apache.velocity</groupId> <artifactId>velocity</artifactId> 
+							<version>1.7</version> </dependency> -->
 						<dependency>
 							<groupId>org.apache.maven.wagon</groupId>
 							<artifactId>wagon-ssh</artifactId>
 							<version>2.0</version>
 						</dependency>
+						<!-- 
 						<dependency>
-            <groupId>org.apache.maven.doxia</groupId>
-            <artifactId>doxia-module-markdown</artifactId>
-            <version>1.4</version>
-        </dependency>
+							<groupId>org.apache.maven.doxia</groupId>
+							<artifactId>doxia-module-markdown</artifactId>
+							<version>1.7</version>
+						</dependency>
+						 -->
 					</dependencies>
 				</plugin>
 				<!-- generates PDF from the site -->
