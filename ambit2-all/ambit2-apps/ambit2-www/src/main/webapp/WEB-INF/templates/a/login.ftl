@@ -51,13 +51,13 @@ $(document)
 		
 		
 		<div class="row remove-bottom">		
-		<label class='two columns alpha'>User name</label> 
-		<input class='six columns omega' type='text' size='40' name='login' value=''>
+		<label class='three columns alpha'>User name</label> 
+		<input class='five columns omega' type='text' size='40' name='login' value=''>
 		</div>
 		
 		<div class="row remove-bottom">		
-		<label class='two columns alpha'>Password</label> 
-		<input class='six columns omega' type='password' size='40' name='password' value=''>
+		<label class='three columns alpha'>Password</label> 
+		<input class='five columns omega' type='password' size='40' name='password' value=''>
 		<div class='three columns omega'>&nbsp;</div>
 		<div class='five columns omega'><a href="${ambit_root}/forgotten" title='Click to request one time password reset'>Forgotten password?</a></div>
 		</div>

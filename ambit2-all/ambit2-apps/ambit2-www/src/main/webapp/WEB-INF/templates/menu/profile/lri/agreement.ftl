@@ -1,7 +1,7 @@
 
 			<div class="row remove-bottom">
 				<label class='two columns alpha'>Legal notice:</label> 
-				<span class='fourteen columns omega' style='color:#CC3300; font-size: 0.75em;'> 
+				<span class='thirteen columns omega' style='color:#CC3300; font-size: 0.75em;'> 
 			<div id="agreement">			
 			The LRI AMBIT–IUCLID tool is loaded with non-confidential REACH data supplied by ECHA.
 			<br/>
