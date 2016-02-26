@@ -36,13 +36,13 @@
 					":splitfragments": {
 						"mandatory": false,
 						"type": "Boolean",
-						"value": true,
+						"value": false,
 						"comment": "If true keeps the largest fragment"
 					},
 					":implicith": {
 						"mandatory": false,
 						"type": "Boolean",
-						"value": true,
+						"value": false,
 						"comment": "If true converts hydrogens to implicit"
 					},
 					":generatestereofrom2d": {
@@ -72,7 +72,7 @@
 					":inchi": {
 						"mandatory": false,
 						"type": "Boolean",
-						"value": false,
+						"value": true,
 						"comment": "Generates InChIs. If -d tautomers=true InChI FixedH=true, otherwise generates standard InChI"
 					},
 					":smiles": {
@@ -84,7 +84,7 @@
 					":smilescanonical": {
 						"mandatory": false,
 						"type": "Boolean",
-						"value": false,
+						"value": true,
 						"comment": "Generates SMILES (canonical). Set to true to generate stereo SMILES"
 					},
 					":page": {
@@ -123,6 +123,12 @@
 						"value": "RANK",
 						"comment": "Specifies the tag to store the tautomer rank (energy based, less is better)"
 					},
+					":tag_tokeep": {
+						"mandatory": false,
+						"type": "String",
+						"value": "",
+						"comment": "Specifies which tags to keep, comma delimited list. Everything else will be removed. To keep all the tags, leave this empty."
+					},		
 					":sdftitle": {
 						"mandatory": false,
 						"type": "String",

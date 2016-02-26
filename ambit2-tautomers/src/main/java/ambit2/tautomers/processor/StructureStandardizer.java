@@ -38,14 +38,17 @@ public class StructureStandardizer extends
 	 */
 	private static final long serialVersionUID = -2600599340740351460L;
 	protected Map<Object, Property> tags = new HashMap<>();
-	protected boolean splitFragments = true;
-	protected boolean generateTautomers = true;
 	protected boolean generateInChI = true;
-	protected boolean generateSMILES = true;
-	protected boolean generateSMILES_Canonical = false;
+	protected boolean generateSMILES_Canonical = true;
+	protected boolean splitFragments = false;
+	protected boolean generateTautomers = false;
+	protected boolean generateSMILES = false; //not canonical
 	protected boolean neutralise = false;
 	protected boolean generate2D = false;
-
+	protected boolean implicitHydrogens = false;
+	protected boolean generateStereofrom2D = false;
+	protected boolean clearIsotopes = false;
+	
 	public boolean isGenerate2D() {
 		return generate2D;
 	}
@@ -62,7 +65,7 @@ public class StructureStandardizer extends
 		this.neutralise = neutralise;
 	}
 
-	protected boolean generateStereofrom2D = false;
+
 	public boolean isGenerateStereofrom2D() {
 		return generateStereofrom2D;
 	}
@@ -71,7 +74,6 @@ public class StructureStandardizer extends
 		this.generateStereofrom2D = generateStereofrom2D;
 	}
 
-	protected boolean clearIsotopes = false;
 	public boolean isClearIsotopes() {
 		return clearIsotopes;
 	}
@@ -131,7 +133,6 @@ public class StructureStandardizer extends
 		this.implicitHydrogens = implicitHydrogens;
 	}
 
-	protected boolean implicitHydrogens = true;
 
 	protected transient TautomerProcessor tautomers = new TautomerProcessor();
 	protected transient FragmentProcessor fragments = new FragmentProcessor();
@@ -163,7 +164,7 @@ public class StructureStandardizer extends
 	public void setCallback(IProcessor<IAtomContainer, IAtomContainer> callback) {
 		this.tautomers.setCallback(callback);
 	}
-	private final static  String ERROR_TAG = "ERROR";
+	public final static  String ERROR_TAG = "ERROR";
 	@Override
 	public IAtomContainer process(IAtomContainer mol) throws Exception {
 		IAtomContainer processed = mol;
@@ -306,6 +307,8 @@ public class StructureStandardizer extends
 	public static void renameTags(IAtomContainer processed, Map<Object, Property> tags) {
 		renameTags(processed,tags,false);
 	}
+	
+	
 	public static void renameTags(IAtomContainer processed, Map<Object, Property> tags, boolean removeIfDisabled) {
 		Iterator<Map.Entry<Object, Property>> i = tags.entrySet()
 				.iterator();
