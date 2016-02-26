@@ -22,6 +22,11 @@ A [command line Java application](download_ambitcli.html) used for processing ch
 java -Xmx1536m -jar ambitcli.jar -a standardize -i <inputfile> -m post -d page=page num -d pagesize=-1|page_size -o <output> -d tautomers=true -d splitfragments=true -d implicith=true -d smiles=false -d smilescanonical=true -d inchi=true -d neutralise=true -d isotopes=true
 ````
 
+Logging configuration can be specified via  -Djava.util.logging.config.file option, specifying logging.properties file. If not specified, the [default logging.properties](https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps/ambit2-dbcli/src/main/resources/ambit2/dbcli/logging.properties) is used.
+
+````sh
+$java -jar -Djava.util.logging.config.file=myLoggingConfigFilePath .... other options ....
+
 Standardization specific help:
 
 ````sh
