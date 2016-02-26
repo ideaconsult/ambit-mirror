@@ -480,7 +480,7 @@
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>opentox-client</artifactId>
-			<version>3.0.2-SNAPSHOT</version>
+			<version>3.0.1</version>
 			<type>jar</type>
 		</dependency>
 		<dependency>
