@@ -4,6 +4,8 @@ A [command line Java application](download_ambitcli.html) used for processing ch
 
 ## Download
 
+* <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.0.1/ambitcli-3.0.1.jar/download">Latest releases 3.0.1</a>
+
 * <a href="http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/">Releases</a>
 
 * Pre-release <a href="https://www.ideaconsult.net/downloads/ambitcli/ambitcli-3.0.1-20151130.jar">ambitcli-3.0.1-20151130.jar</a>
@@ -17,8 +19,7 @@ A [command line Java application](download_ambitcli.html) used for processing ch
 
 ````sh
 
-java -jar ambitcli.jar -a standardize -i file.sdf -m post -d page=0 -d pagesize=-1 -o file.txt -d tautomers=true -d splitfragments=true \
-									 -d implicith=true -d smiles=false -d smilescanonical=true -d inchi=true -d stereo=false -d neutralise=true -d isotopes=true 
+java -Xmx1536m -jar ambitcli.jar -a standardize -i <inputfile> -m post -d page=page num -d pagesize=-1|page_size -o <output> -d tautomers=true -d splitfragments=true -d implicith=true -d smiles=false -d smilescanonical=true -d inchi=true -d neutralise=true -d isotopes=true
 ````
 
 Standardization specific help:
