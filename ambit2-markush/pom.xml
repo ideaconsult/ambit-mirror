@@ -4,7 +4,7 @@
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
-    <version>3.0.1</version>
+    <version>3.0.2-SNAPSHOT</version>
   </parent>
   <artifactId>ambit2-markush</artifactId>
   <name>ambit2-markush</name>
