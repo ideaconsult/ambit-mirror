@@ -15,7 +15,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -69,6 +71,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.FileOutputState;
+import ambit2.core.io.FilesWithHeaderWriter;
 import ambit2.core.io.IRawReader;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.processors.StructureNormalizer;
@@ -752,13 +755,13 @@ public class AmbitCli {
 		newtag.setEnabled(false);
 		tags.put(Property.opentox_SMILES, newtag);
 		tags.put(Property.getSMILESInstance(), newtag);
-		
+
 		newtag = Property.getInChIInstance();
 		newtag.setEnabled(false);
 		tags.put(Property.opentox_InChI, newtag);
 		tags.put("InChI", newtag);
 		tags.put(Property.getInChIInstance(), newtag);
-		
+
 		newtag = Property.getInChIKeyInstance();
 		newtag.setEnabled(true);
 		newtag.setName("InChIKey");
@@ -775,7 +778,6 @@ public class AmbitCli {
 		tags.put("CHEMBL", newtag);
 		tags.put(newtag, newtag);
 
-		
 		final BatchDBProcessor<IStructureRecord> batch = new BatchDBProcessor<IStructureRecord>() {
 
 			@Override
@@ -884,8 +886,9 @@ public class AmbitCli {
 		batch.getProcessorChain()
 				.add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
 
-					protected MoleculeReader molReader = new MoleculeReader(true,false);
-					
+					protected MoleculeReader molReader = new MoleculeReader(
+							true, false);
+
 					@Override
 					public IStructureRecord process(IStructureRecord record)
 							throws Exception {
@@ -1148,6 +1151,22 @@ public class AmbitCli {
 		} catch (Exception x) {
 		}
 
+		String[] fields_to_keep = null;
+		try {
+			Object tag_to_keep = options.getParam(":tag_tokeep");
+			if (tag_to_keep != null && !"".equals(tag_to_keep.toString().trim()))
+				fields_to_keep = tag_to_keep.toString().split(",");
+			if (fields_to_keep!=null && fields_to_keep.length==0) fields_to_keep = null;
+		} catch (Exception x) {
+			fields_to_keep = null;
+			logger_cli.log(Level.WARNING, x.toString());
+		}
+		if (fields_to_keep != null) {
+			Arrays.sort(fields_to_keep);
+			for (int i = 0; i < fields_to_keep.length; i++)
+				fields_to_keep[i] = fields_to_keep[i].trim();
+		}
+		final String[] tags_to_keep = fields_to_keep;
 		try {
 			Object o = options.getParam(":tag_rank");
 			standardprocessor.setRankTag(o.toString());
@@ -1186,10 +1205,12 @@ public class AmbitCli {
 			standardprocessor.setGenerateSMILES_Canonical(Boolean
 					.parseBoolean(o.toString()));
 		} catch (Exception x) {
+
 		}
 		try {
 			Object o = options.getParam(":generatestereofrom2d");
-			standardprocessor.setGenerateStereofrom2D(Boolean.parseBoolean(o.toString()));
+			standardprocessor.setGenerateStereofrom2D(Boolean.parseBoolean(o
+					.toString()));
 		} catch (Exception x) {
 		}
 		try {
@@ -1222,6 +1243,8 @@ public class AmbitCli {
 				file.getAbsoluteFile(), outfile.getAbsolutePath() });
 		FileOutputState out = new FileOutputState(outfile);
 		final IChemObjectWriter writer = out.getWriter();
+		if (writer instanceof FilesWithHeaderWriter)
+			((FilesWithHeaderWriter) writer).setAddSMILEScolumn(false);
 		final boolean writesdf = writer instanceof SDFWriter;
 		final BatchDBProcessor<IStructureRecord> batch = new BatchDBProcessor<IStructureRecord>() {
 
@@ -1283,7 +1306,8 @@ public class AmbitCli {
 		batch.getProcessorChain()
 				.add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
 
-					protected MoleculeReader molReader = new MoleculeReader(true,false);
+					protected MoleculeReader molReader = new MoleculeReader(
+							true, false);
 
 					@Override
 					public IStructureRecord process(IStructureRecord record)
@@ -1294,19 +1318,44 @@ public class AmbitCli {
 
 						try {
 							mol = molReader.process(record);
-							if (mol != null)
+							if (mol != null) {
 								for (Property p : record.getRecordProperties()) {
 									Object v = record.getRecordProperty(p);
+
 									// initially to get rid of smiles, inchi ,
 									// etc, these are
 									// already parsed
+									if (tags_to_keep != null
+											&& Arrays.binarySearch(
+													tags_to_keep, p.getName()) < 0)
+										continue;
 									if (p.getName().startsWith(
 											"http://www.opentox.org/api/1.1#"))
 										continue;
 									else
 										mol.setProperty(p, v);
 								}
-							else
+								if (tags_to_keep != null) {
+									List<String> toRemove = null;
+									Iterator pi = mol.getProperties().keySet()
+											.iterator();
+									while (pi.hasNext()) {
+										Object p = pi.next();
+										if (Arrays.binarySearch(tags_to_keep,
+												p.toString()) < 0) {
+											if (toRemove == null)
+												toRemove = new ArrayList<String>();
+											toRemove.add(p.toString());
+										}
+
+									}
+									if (toRemove != null)
+										for (String propertyToRemove : toRemove)
+											mol.removeProperty(propertyToRemove);
+
+								}
+
+							} else
 								return record;
 						} catch (Exception x) {
 							logger_cli.log(Level.SEVERE, "MSG_ERR_MOLREAD",
@@ -1319,8 +1368,8 @@ public class AmbitCli {
 
 						// CDK adds these for the first MOL line
 						if (!writesdf) {
-							//if (mol.getProperty(CDKConstants.TITLE) != null)
-								//mol.removeProperty(CDKConstants.TITLE);
+							// if (mol.getProperty(CDKConstants.TITLE) != null)
+							// mol.removeProperty(CDKConstants.TITLE);
 							if (mol.getProperty(CDKConstants.REMARK) != null)
 								mol.removeProperty(CDKConstants.REMARK);
 						}
@@ -1333,10 +1382,17 @@ public class AmbitCli {
 							processed = standardprocessor.process(processed);
 
 						} catch (Exception x) {
+							String err = processed
+									.getProperty(StructureStandardizer.ERROR_TAG);
 							logger_cli.log(Level.SEVERE, x.getMessage(), x);
-							if (processed != null)
-								processed.setProperty("ERROR.standardisation",
-										x.getMessage());
+							if (processed != null) {
+								err = processed
+										.getProperty(StructureStandardizer.ERROR_TAG);
+								processed.setProperty(StructureStandardizer.ERROR_TAG, String.format(
+										"%s\t%s\t%s", err == null ? "" : err, x
+												.getClass().getName(), x
+												.getMessage()));
+							}
 						} finally {
 							if (processed != null)
 								processed.addProperties(mol.getProperties());
