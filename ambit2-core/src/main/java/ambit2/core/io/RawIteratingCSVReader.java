@@ -159,8 +159,8 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 
 	private IStructureRecord transform(CSVRecord record) {
 		structureRecord = new StructureRecord();
-		Property[]  special_props = new Property[special_header.values().length];
-		
+		Property[] special_props = new Property[special_header.values().length];
+
 		String[] ids = new String[special_header.values().length];
 
 		Iterator<Entry<String, Integer>> header = parser.getHeaderMap()
@@ -169,8 +169,8 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 			Entry<String, Integer> entry = header.next();
 			String value = record.get(entry.getValue());
 			try {
-				special_header h = special_header.valueOf(entry.getKey().replace("_", "")
-						.toUpperCase());
+				special_header h = special_header.valueOf(entry.getKey()
+						.replace("_", "").toUpperCase());
 				ids[h.ordinal()] = value == null || "".equals(value.trim()) ? null
 						: value.trim();
 				special_props[h.ordinal()] = h.getproperty();
@@ -182,11 +182,11 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 			p.setOrder(entry.getValue());
 			structureRecord.setRecordProperty(p, value);
 		}
-		if (ids[special_header.INCHI.ordinal()] != null) {
-			structureRecord.setContent(ids[special_header.INCHI.ordinal()]);
-			structureRecord.setFormat(MOL_TYPE.INC.name());
-		} else if (ids[special_header.SMILES.ordinal()] != null) {
+		if (ids[special_header.SMILES.ordinal()] != null) {
 			structureRecord.setContent(ids[special_header.SMILES.ordinal()]);
+			structureRecord.setFormat(MOL_TYPE.INC.name());
+		} else if (ids[special_header.INCHI.ordinal()] != null) {
+			structureRecord.setContent(ids[special_header.INCHI.ordinal()]);
 			structureRecord.setFormat(MOL_TYPE.INC.name());
 		} else {
 			structureRecord.setContent(null);
@@ -197,13 +197,16 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 		structureRecord.setInchiKey(ids[special_header.INCHIKEY.ordinal()]);
 
 		if (structureRecord.getInchi() != null)
-			structureRecord.setRecordProperty(special_props[special_header.INCHI.ordinal()],
+			structureRecord.setRecordProperty(
+					special_props[special_header.INCHI.ordinal()],
 					structureRecord.getInchi());
 		if (structureRecord.getInchiKey() != null)
-			structureRecord.setRecordProperty(special_props[special_header.INCHIKEY.ordinal()],
+			structureRecord.setRecordProperty(
+					special_props[special_header.INCHIKEY.ordinal()],
 					structureRecord.getInchiKey());
 		if (structureRecord.getSmiles() != null)
-			structureRecord.setRecordProperty(special_props[special_header.SMILES.ordinal()],
+			structureRecord.setRecordProperty(
+					special_props[special_header.SMILES.ordinal()],
 					structureRecord.getSmiles());
 		return structureRecord;
 	}
