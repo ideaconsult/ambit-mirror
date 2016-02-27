@@ -78,14 +78,14 @@
 					":smiles": {
 						"mandatory": false,
 						"type": "Boolean",
-						"value": false,
-						"comment": "Generates SMILES (isomeric, kekule)"
+						"value": true,
+						"comment": "Generates SMILES (isomeric, kekule).  Uses CDK SmilesGenerator.isomeric()"
 					},
 					":smilescanonical": {
 						"mandatory": false,
 						"type": "Boolean",
-						"value": true,
-						"comment": "Generates SMILES (canonical). Set to true to generate stereo SMILES"
+						"value": false,
+						"comment": "Generates SMILES (canonical).  Uses CDK SmilesGenerator.absolute()"
 					},
 					":page": {
 						"mandatory": false,
