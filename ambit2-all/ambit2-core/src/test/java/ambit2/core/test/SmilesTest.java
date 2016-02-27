@@ -57,6 +57,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.io.FileInputState;
+import ambit2.core.io.InteractiveIteratingMDLReader;
 import ambit2.core.test.io.RawIteratingWrapperTest;
 
 public class SmilesTest {
@@ -98,7 +99,7 @@ public class SmilesTest {
 			IAtomContainer mol = parser.parseSmiles(smiles[i]);
 			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 			CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance())
-			.addImplicitHydrogens(mol);
+					.addImplicitHydrogens(mol);
 			CDKHueckelAromaticityDetector.detectAromaticity(mol);
 			Assert.assertTrue(uit.isIsomorph(m, mol));
 			newSmiles[i] = gen.create(mol);
@@ -249,153 +250,7 @@ public class SmilesTest {
 
 	}
 
-	@Test
-	public void testChiralSmiles() throws Exception {
-		IIteratingChemObjectReader reader = null;
-		try {
-			InputStream in = RawIteratingWrapperTest.class.getClassLoader()
-					.getResourceAsStream("ambit2/core/data/427282-1.sdf");
-			Assert.assertNotNull(in);
-			reader = FileInputState.getReader(in, "427282-1.sdf");
-			Assert.assertNotNull(reader);
-			while (reader.hasNext()) {
-				IAtomContainer mol = (IAtomContainer) reader.next();
-
-				AtomContainerManipulator
-						.percieveAtomTypesAndConfigureAtoms(mol); // fails with
-																	// Cannot
-																	// percieve
-																	// atom type
-																	// for the
-																	// 17th
-																	// atom: N
-				CDKHueckelAromaticityDetector.detectAromaticity(mol);
-
-				printMol(mol);
-				int aromatic = 0;
-				for (IAtom atom : mol.atoms()) {
-					if (atom.getFlag(CDKConstants.ISAROMATIC))
-						aromatic++;
-				}
-				for (IBond bond : mol.bonds()) {
-					if (bond.getFlag(CDKConstants.ISAROMATIC))
-						bond.setOrder(Order.SINGLE);
-				}
-
-				SmilesGenerator g = SmilesGenerator.absolute();
-				System.out.println(g.createSMILES(mol));
-				// System.out.println(g.createChiralSMILES(mol, new
-				// boolean[mol.getAtomCount()]));
-				// [H][C@]14(COP\(=O)(O)O\[C@]4([H])(C\(O)C/(O1)N/2C\3N\C\N\C\(N)C\3(N\C\2Cl)))
-			}
-
-		} finally {
-			if (reader != null)
-				reader.close();
-		}
-
-	}
-
-	public static void testsdf(String[] args) {
-		try {
-			IIteratingChemObjectReader reader = FileInputState.getReader(
-					RawIteratingWrapperTest.class.getClassLoader()
-							.getResourceAsStream(
-									"ambit2/core/data/smiles/250731.sdf"),
-					"250731.sdf");
-			while (reader.hasNext()) {
-				IAtomContainer mol = (IAtomContainer) reader.next();
-
-				AtomContainerManipulator
-						.percieveAtomTypesAndConfigureAtoms(mol); // fails with
-																	// Cannot
-																	// percieve
-																	// atom type
-																	// for the
-																	// 17th
-																	// atom: N
-				CDKHueckelAromaticityDetector.detectAromaticity(mol);
-
-				printMol(mol);
-				int aromatic = 0;
-				for (IAtom atom : mol.atoms()) {
-					if (atom.getFlag(CDKConstants.ISAROMATIC))
-						aromatic++;
-				}
-				for (IBond bond : mol.bonds()) {
-					if (bond.getFlag(CDKConstants.ISAROMATIC))
-						bond.setOrder(Order.SINGLE);
-				}
-				/*
-				 * CompoundImageTools img = new CompoundImageTools(new
-				 * Dimension(400,400)); BufferedImage image =
-				 * img.getImage(mol,null,false,true); File file = new
-				 * File("kekuletest.png"); ImageIO.write(image,"png",file);
-				 */
-				FixBondOrdersTool d = new FixBondOrdersTool();
-				// d.setTimeout(100000000*1000); //100 sec
-				d.kekuliseAromaticRings(mol);
-				for (IBond bond : mol.bonds())
-					System.out.println(bond.getOrder());
-			}
-			reader.close();
-
-		} catch (Exception x) {
-			x.printStackTrace();
-		}
-
-	}
-
-	/*
-	 * @Test public void testMCS() throws Exception { SmilesParser sp = new
-	 * SmilesParser(SilentChemObjectBuilder.getInstance()); IAtomContainer mol1
-	 * = sp.parseSmiles("c1ccccc1NC"); IAtomContainer mol2 =
-	 * sp.parseSmiles("c1cccnc1");
-	 * 
-	 * org.openscience.cdk.smsd.Isomorphism mcs = new
-	 * org.openscience.cdk.smsd.Isomorphism(
-	 * org.openscience.cdk.smsd.interfaces.Algorithm.DEFAULT, true);
-	 * mcs.init(mol1, mol2, true, true); mcs.setChemFilters(true, true, true);
-	 * 
-	 * mol1 = mcs.getReactantMolecule(); IAtomContainer mcsmolecule =
-	 * SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class,
-	 * mol1); List<IAtom> atomsToBeRemoved = new ArrayList<IAtom>(); for (IAtom
-	 * atom : mcsmolecule.atoms()) { int index =
-	 * mcsmolecule.getAtomNumber(atom); if
-	 * (!mcs.getFirstMapping().containsKey(index)) atomsToBeRemoved.add(atom); }
-	 * 
-	 * for (IAtom atom : atomsToBeRemoved)
-	 * mcsmolecule.removeAtomAndConnectedElectronContainers(atom);
-	 * 
-	 * for (int i = 0; i < mcsmolecule.getAtomCount(); i++) {
-	 * System.out.println("is mcs atom aromtic: " +
-	 * mcsmolecule.getAtom(i).getFlag(CDKConstants.ISAROMATIC));
-	 * mcsmolecule.getAtom(i).setFlag(CDKConstants.ISINRING,true); }
-	 * 
-	 * for (int i = 0; i < mcsmolecule.getBondCount(); i++) {
-	 * System.out.println("is mcs bond aromtic: " +
-	 * mcsmolecule.getBond(i).getFlag(CDKConstants.ISAROMATIC));
-	 * mcsmolecule.getBond(i).setFlag(CDKConstants.ISINRING,true); }
-	 * 
-	 * SmilesGenerator g = new SmilesGenerator(); g.setUseAromaticityFlag(true);
-	 * System.out.println("mcs smiles: " + g.createSMILES(mcsmolecule));
-	 * 
-	 * }
-	 */
-
-	public void test() throws Exception {
-		SmilesParser sp = new SmilesParser(
-				SilentChemObjectBuilder.getInstance());
-
-		IAtomContainer mol1 = sp
-				.parseSmiles("O=C1OC=C(C=C1)C4CCC5(O)(C6CCC3=CC(OC2OC(C)C(O)C(O)C2(O))CCC3(C)C6(CCC45(C)))");
-		IAtomContainer mol2 = sp
-				.parseSmiles("O=C1C=CC4(C(=C1)CCC3C5CC(C)C(O)(C(=O)COC2OC(CO)C(O)C(O)C2(O))C5(C)(CC(O)C34(F)))(C)");
-		System.out.println("getOverlap");
-		long now = System.currentTimeMillis();
-		uit.getOverlaps(mol1, mol2);
-		System.out.println(System.currentTimeMillis() - now);
-	}
+	
 
 	@Test
 	public void test1() throws Exception {
@@ -406,5 +261,50 @@ public class SmilesTest {
 		SmilesGenerator sg = new SmilesGenerator();
 		String s_out = sg.createSMILES(m);
 		System.out.println(s_out);
+	}
+
+	@Test
+	public void testRoundtrip_isomeric() throws Exception {
+		testRoundtrip(new SmilesGenerator().isomeric());
+	}
+	@Test
+	public void testRoundtrip_absolute() throws Exception {
+		testRoundtrip(new SmilesGenerator().absolute());
+	}
+	
+	public void testRoundtrip(SmilesGenerator g) throws Exception {
+
+		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
+		IIteratingChemObjectReader<IAtomContainer> reader = null;
+		int error = 0;
+		try {
+			InputStream in = RawIteratingWrapperTest.class.getClassLoader()
+					.getResourceAsStream("ambit2/core/chembl/roundtrip7.sdf");
+			Assert.assertNotNull(in);
+			reader = new InteractiveIteratingMDLReader(in,
+					SilentChemObjectBuilder.getInstance());
+			Assert.assertNotNull(reader);
+			while (reader.hasNext()) {
+				IAtomContainer mol = reader.next();
+
+				AtomContainerManipulator
+						.percieveAtomTypesAndConfigureAtoms(mol);
+				try {
+					String smi = g.create(mol);
+					System.out.println(smi);
+					p.parseSmiles(smi);
+				} catch (Exception x) {
+					error++;
+					System.out.println(x.getMessage());
+				}
+
+			}
+
+		} finally {
+			if (reader != null)
+				reader.close();
+		}
+		Assert.assertEquals(0, error);
+
 	}
 }
