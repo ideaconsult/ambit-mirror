@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.study.test.ProtocolApplicationTestFactory;
 import ambit2.base.data.StructureRecord;
@@ -145,6 +147,11 @@ public class ISAJsonTestUtils
 		ProtocolApplication pa = ProtocolApplicationTestFactory.initpa();
 		pa.setSubstanceUUID(record.getOwnerUUID());
 		record.addMeasurement(pa);
+		
+		EffectRecord eff = (EffectRecord)pa.getEffects().get(0);
+		IParams par = (IParams)eff.getConditions();
+		par.put("condition1", "value1");
+		
 		addCompositionData(record);
 		
 		
