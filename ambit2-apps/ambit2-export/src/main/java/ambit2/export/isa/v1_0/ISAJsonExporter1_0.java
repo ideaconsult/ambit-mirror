@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.SubstanceRecord;
@@ -461,6 +462,8 @@ public class ISAJsonExporter1_0 implements IISAExport
 	public String getResultAsJson() throws Exception
 	{
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Inclusion.NON_EMPTY);
+		
 		String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
 		return jsonString;
 	}
