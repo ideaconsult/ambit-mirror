@@ -424,7 +424,21 @@ public class ISAJsonExporter1_0 implements IISAExport
 	
 	void storeConditionsAsFactors(EffectRecord effect, Sample sample)
 	{
-		//TODO
+		Object conditions = effect.getConditions();
+		if (conditions == null)
+			return;
+		
+		if (conditions instanceof IParams)
+		{
+			IParams params = (IParams)conditions;
+			Set keys = params.keySet();
+			for (Object key : keys)
+			{	
+				Object condValue = params.get(key);
+				FactorValue fv =  ISAJsonUtils1_0.getFactorValue(key.toString(), condValue);
+				sample.factorValues.add(fv);
+			}
+		}
 	}
 	
 	
