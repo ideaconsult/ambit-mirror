@@ -10,6 +10,8 @@ import ambit2.structure2name.components.IIUPACComponent;
 public class IUPACNameGenerator 
 {	
 	protected IUPACRuleDataBase ruleDataBase = null;
+	
+	protected List<IIUPACComponent> initialComponents = new ArrayList<IIUPACComponent>();
 	protected List<IIUPACComponent> components = new ArrayList<IIUPACComponent>();
 	
 	public IUPACNameGenerator()
@@ -23,8 +25,9 @@ public class IUPACNameGenerator
 	
 	public String generateIUPACName(IAtomContainer mol) throws Exception
 	{
+		initialComponents.clear();
 		components.clear();
-		
+				
 		findCyclicAndAcyclicComponets();
 		
 		processAcyclicComponets();
