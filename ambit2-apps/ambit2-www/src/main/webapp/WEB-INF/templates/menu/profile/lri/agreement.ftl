@@ -3,7 +3,7 @@
 				<label class='two columns alpha'>Legal notice:</label> 
 				<span class='thirteen columns omega' style='color:#CC3300; font-size: 0.75em;'> 
 			<div id="agreement">			
-			The LRI AMBIT–IUCLID tool is loaded with non-confidential REACH data supplied by ECHA.
+			The LRI AMBIT - IUCLID tool is loaded with non-confidential REACH data supplied by ECHA.
 			<br/>
 			The legal notice from the ECHA dissemination website <a href="http://echa.europa.eu/web/guest/legal-notice#registration" target=_blank target='blank'>http://echa.europa.eu/web/guest/legal-notice#registration</a> applies to the AMBIT users.
 			<br/>
