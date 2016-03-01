@@ -16,6 +16,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.AMBITConfig;
 import ambit2.rest.ProtectedResource;
 import freemarker.template.Configuration;
 
@@ -63,6 +64,8 @@ public class FreeMarkerResource extends ProtectedResource implements
 			IFreeMarkerApplication app) {
 		fmSupport.configureTemplateMap(map, getRequest(),
 				((IFreeMarkerApplication) getApplication()));
+		map.put(AMBITConfig.googleAnalytics.name(),
+				((IFreeMarkerApplication) getApplication()).getGACode());
 	}
 
 	/**
