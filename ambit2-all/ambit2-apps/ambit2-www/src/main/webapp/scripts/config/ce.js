@@ -31,7 +31,10 @@ var config_ce_inchemico = {
              },
             "owner" : {
              "sTitle" : "Provided by"
-            }                   
+            }
+            ,"reliability" : {
+                	"bVisible": false
+                }
          },
          "conditions": {
              "c_endpoint": {
@@ -102,7 +105,10 @@ var config_ce_invitro = {
             }  ,
             "owner" : {
              "sTitle" : "Provided by"
-            }             
+            }    
+            ,"reliability" : {
+                	"bVisible": false
+            }         
         },
         "conditions": {
             "target gene": {
@@ -201,7 +207,10 @@ var config_ce_llna = {
                 },             
             	"iOrder": -1,
             	"inMatrix" : true
-            }                     
+            }                  
+            ,"reliability" : {
+                	"bVisible": false
+            }                        
         },
         "conditions": {
             "vehicle": {
@@ -289,7 +298,10 @@ var config_ce_humandb = {
                  },             
              	"iOrder": -1,
              	"inMatrix" : true
-             }                     
+             }    
+            ,"reliability" : {
+                	"bVisible": false
+            }                                       
          },
          "conditions": {
 
@@ -359,7 +371,10 @@ var config_ce_insilico = {
             } ,
             "owner" : {
              "sTitle" : "Provided by"
-            }                 
+            }  
+            ,"reliability" : {
+                	"bVisible": false
+            }                                    
         },
         "effects": {
             "endpoint": {
