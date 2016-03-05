@@ -2941,15 +2941,6 @@ insert into catalog_references (idreference,title,url) values (2,"IUPAC name","h
 -- insert into dictionary (iddictionary,idparent,name,idreference) values (null,0,"IUPAC Name",2);
 
 
--- Grants for ambit2@localhost
--- REVOKE ALL PRIVILEGES ON ambit2.* FROM 'admin'@'localhost';
--- REVOKE ALL PRIVILEGES ON ambit2.* FROM 'guest'@'localhost';
--- GRANT USAGE ON ambit2.* TO 'admin'@'localhost' IDENTIFIED BY PASSWORD '*4ACFE3202A5FF5CF467898FC58AAB1D615029441';
--- GRANT ALL PRIVILEGES ON ambit2.* TO 'admin'@'localhost' WITH GRANT OPTION;
--- GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON ambit2.* TO 'guest'@'localhost' IDENTIFIED BY PASSWORD '*11DB58B0DD02E290377535868405F11E4CBEFF58';
--- GRANT EXECUTE ON FUNCTION sortstring TO 'guest'@'localhost'
--- GRANT CREATE TEMPORARY TABLEs on ambit2.* to 'guest'@'%'
-
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
