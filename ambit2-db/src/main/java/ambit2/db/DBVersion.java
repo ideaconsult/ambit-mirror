@@ -26,7 +26,7 @@ package ambit2.db;
 
 public interface DBVersion {
 	int AMBITDB_VERSION_MAJOR = 8;
-	int AMBITDB_VERSION_MINOR = 12;
+	int AMBITDB_VERSION_MINOR = 15;
 	int getMajor();
 	int getMinor();
 }
