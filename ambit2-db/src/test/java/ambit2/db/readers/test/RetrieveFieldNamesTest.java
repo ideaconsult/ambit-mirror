@@ -40,14 +40,14 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
 import ambit2.base.data.Property;
-import ambit2.db.results.AmbitRows;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.property.RetrieveFieldNames;
 
 /**
  * A dbunit test for {@link RetrieveFieldNames}
+ * 
  * @author nina
- *
+ * 
  */
 public class RetrieveFieldNamesTest extends RetrieveTest<Property> {
 
@@ -56,118 +56,135 @@ public class RetrieveFieldNamesTest extends RetrieveTest<Property> {
 		RetrieveFieldNames q = new RetrieveFieldNames();
 		return q;
 	}
+
 	@Test
 	public void testGetParameters() throws Exception {
-		Assert.assertNull(((IQueryObject)query).getParameters());
+		Assert.assertNull(((IQueryObject) query).getParameters());
 	}
 
 	@Test
 	public void testGetSQL() throws Exception {
-		Assert.assertEquals(RetrieveFieldNames.base_sql, ((IQueryObject)query).getSQL());
+		Assert.assertEquals(RetrieveFieldNames.base_sql,
+				((IQueryObject) query).getSQL());
 	}
 
 	@Override
 	protected String getTestDatabase() {
 		return "src/test/resources/ambit2/db/processors/test/dataset-properties.xml";
 	}
+
 	@Test
 	public void testGetObject() throws Exception {
 		setUpDatabase(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");		
-		Assert.assertEquals(4,names.getRowCount());
+		ITable names = c.createQueryTable("EXPECTED_NAMES",
+				"SELECT * FROM properties");
+		Assert.assertEquals(4, names.getRowCount());
 
-		QueryExecutor<RetrieveFieldNames> qe = new QueryExecutor<RetrieveFieldNames>();		
+		QueryExecutor<RetrieveFieldNames> qe = new QueryExecutor<RetrieveFieldNames>();
 		qe.setConnection(c.getConnection());
 
-		ResultSet rs = qe.process((RetrieveFieldNames)query);
-		
-		int count = 0; 
+		ResultSet rs = qe.process((RetrieveFieldNames) query);
+
+		int count = 0;
 		while (rs.next()) {
-			names = 	c.createQueryTable("EXPECTED_NAME","SELECT * FROM properties where name='"+query.getObject(rs)+"'");		
-			Assert.assertEquals(1,names.getRowCount());
+			names = c.createQueryTable(
+					"EXPECTED_NAME",
+					"SELECT * FROM properties where name='"
+							+ query.getObject(rs) + "'");
+			Assert.assertEquals(1, names.getRowCount());
 			count++;
 		}
-		Assert.assertEquals(4,count);
+		Assert.assertEquals(4, count);
 		rs.close();
 		qe.close();
 		c.close();
-	}	
-	
+	}
+
 	@Test
 	public void testGetObjectByName() throws Exception {
 		setUpDatabase(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");		
-		Assert.assertEquals(4,names.getRowCount());
+		ITable names = c.createQueryTable("EXPECTED_NAMES",
+				"SELECT * FROM properties");
+		Assert.assertEquals(4, names.getRowCount());
 
-		QueryExecutor<RetrieveFieldNames> qe = new QueryExecutor<RetrieveFieldNames>();		
+		QueryExecutor<RetrieveFieldNames> qe = new QueryExecutor<RetrieveFieldNames>();
 		qe.setConnection(c.getConnection());
 
-		Property p = Property.getInstance("Property 1","CAS Registry Number");
+		Property p = Property.getInstance("Property 1", "CAS Registry Number");
 		RetrieveFieldNames q = new RetrieveFieldNames();
 		q.setFieldname("name");
 		q.setValue(p);
 		ResultSet rs = qe.process(q);
-		
-		int count = 0; 
+
+		int count = 0;
 		while (rs.next()) {
-			
-			names = 	c.createQueryTable("EXPECTED_NAME","SELECT * FROM properties where idproperty="+query.getObject(rs).getId());		
-			Assert.assertEquals(1,names.getRowCount());
+
+			names = c.createQueryTable("EXPECTED_NAME",
+					"SELECT * FROM properties where idproperty="
+							+ query.getObject(rs).getId());
+			Assert.assertEquals(1, names.getRowCount());
 			count++;
 		}
-		Assert.assertEquals(1,count);
+		Assert.assertEquals(1, count);
 		rs.close();
 		qe.close();
 		c.close();
-	}		
+	}
 
 	@Test
 	public void testGetFieldID() {
-		Assert.assertEquals("idproperty", ((RetrieveFieldNames)query).getFieldID());
+		Assert.assertEquals("idproperty",
+				((RetrieveFieldNames) query).getFieldID());
 	}
 
 	@Test
 	public void testGetValueID() {
-		Assert.assertEquals("name", ((RetrieveFieldNames)query).getValueID());
+		Assert.assertEquals("name", ((RetrieveFieldNames) query).getValueID());
 	}
 
 	@Test
 	public void testGetFieldType() throws Exception {
-		Assert.assertEquals(String.class,((RetrieveFieldNames)query).getFieldType());
+		Assert.assertEquals(String.class,
+				((RetrieveFieldNames) query).getFieldType());
 	}
 
 	@Test
 	public void testGetValueType() {
-		Assert.assertEquals(String.class,((RetrieveFieldNames)query).getValueType());
+		Assert.assertEquals(String.class,
+				((RetrieveFieldNames) query).getValueType());
 	}
+
 	@Override
-	protected AmbitRows<Property> createRows() throws Exception {
-		return new AmbitRows<Property>();
-	}
-	@Override
-	protected void verifyRows(AmbitRows<Property> rows) throws Exception {
+	protected void verifyRows(IQueryRetrieval<Property> query, ResultSet rows)
+			throws Exception {
 		IDatabaseConnection c = getConnection();
 		Assert.assertNotNull(rows);
-		Assert.assertEquals(4,rows.size());
+		int r = 0;
 		while (rows.next()) {
-			Property p = rows.getObject();
-			ITable table = 	c.createQueryTable("EXPECTED",
-					"select idproperty,name,units,title,url,idreference,comments,ptype,islocal,type,rdf_type,predicate,object from properties join catalog_references using(idreference) left join property_annotation using(idproperty) where name='"+p.getName()+"' and title='"+p.getReference().getTitle()+"'");		
-			Assert.assertEquals(1,table.getRowCount());			
-			for (int i=1; i <= rows.getMetaData().getColumnCount();i++) {
-				Object expected = table.getValue(0,rows.getMetaData().getColumnName(i));
+			r++;
+			Property p = query.getObject(rows);
+			ITable table = c
+					.createQueryTable(
+							"EXPECTED",
+							"select idproperty,name,units,title,url,idreference,comments,ptype,islocal,type,rdf_type,predicate,object from properties join catalog_references using(idreference) left join property_annotation using(idproperty) where name='"
+									+ p.getName()
+									+ "' and title='"
+									+ p.getReference().getTitle() + "'");
+			Assert.assertEquals(1, table.getRowCount());
+			for (int i = 1; i <= rows.getMetaData().getColumnCount(); i++) {
+				Object expected = table.getValue(0, rows.getMetaData()
+						.getColumnName(i));
 				Object actual = rows.getObject(i);
-				if ((expected == null) && (actual == null)) continue;
+				if ((expected == null) && (actual == null))
+					continue;
 				else
-					Assert.assertEquals(expected.toString(),actual.toString());
-
-				
+					Assert.assertEquals(expected.toString(), actual.toString());
 			}
-			
 		}
+		Assert.assertEquals(4, r);
 	}
 }

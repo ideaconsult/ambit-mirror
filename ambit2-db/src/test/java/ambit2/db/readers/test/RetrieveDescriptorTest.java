@@ -42,7 +42,6 @@ import org.openscience.cdk.qsar.result.DoubleResult;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.db.readers.RetrieveDescriptor;
-import ambit2.db.results.AmbitRows;
 import ambit2.db.search.QueryExecutor;
 
 public class RetrieveDescriptorTest extends RetrieveTest<DescriptorValue> {
@@ -96,17 +95,13 @@ public class RetrieveDescriptorTest extends RetrieveTest<DescriptorValue> {
 	}
 
 	@Override
-	protected AmbitRows<DescriptorValue> createRows() throws Exception {
-		return new AmbitRows<DescriptorValue>();
-	}
-
-	@Override
-	protected void verifyRows(AmbitRows<DescriptorValue> rows) throws Exception {
+	protected void verifyRows(IQueryRetrieval<DescriptorValue> query, ResultSet rows) throws Exception {
 		IDatabaseConnection c = getConnection();
 		Assert.assertNotNull(rows);
-		Assert.assertEquals(2, rows.size());
+		int r = 0;
 		while (rows.next()) {
-			DescriptorValue value = rows.getObject();
+			r++;
+			DescriptorValue value = query.getObject(rows);
 			Assert.assertEquals(1, value.getNames().length);
 			ITable table = c
 					.createQueryTable(
@@ -128,5 +123,6 @@ public class RetrieveDescriptorTest extends RetrieveTest<DescriptorValue> {
 			}
 
 		}
+		Assert.assertEquals(2, r);
 	}
 }

@@ -29,6 +29,8 @@
 
 package ambit2.db.readers.test;
 
+import java.sql.ResultSet;
+
 import junit.framework.Assert;
 import net.idea.modbcum.i.IQueryRetrieval;
 
@@ -36,7 +38,6 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 
 import ambit2.base.data.Dictionary;
-import ambit2.db.results.AmbitRows;
 import ambit2.db.search.DictionaryObjectQuery;
 
 public class RetrieveDictionaryTest extends RetrieveTest<Dictionary> {
@@ -52,17 +53,15 @@ public class RetrieveDictionaryTest extends RetrieveTest<Dictionary> {
 	protected String getTestDatabase() {
 		return "src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml";
 	}
+	
 	@Override
-	protected AmbitRows<Dictionary> createRows() throws Exception {
-		return new AmbitRows<Dictionary>();
-	}
-	@Override
-	protected void verifyRows(AmbitRows<Dictionary> rows) throws Exception {
+	protected void verifyRows(IQueryRetrieval<Dictionary> query, ResultSet rows) throws Exception {
 		IDatabaseConnection c = getConnection();
 		Assert.assertNotNull(rows);
-		Assert.assertEquals(1,rows.size());
+		int r = 0;
 		while (rows.next()) {
-			Dictionary dict = rows.getObject();
+			r++;
+			Dictionary dict = query.getObject(rows);
 			ITable table = 	c.createQueryTable("EXPECTED",
 					"select tSubject.name,relationship from dictionary d "+
 					"join template as tSubject on d.idsubject=tSubject.idtemplate "+
@@ -74,6 +73,6 @@ public class RetrieveDictionaryTest extends RetrieveTest<Dictionary> {
 				Assert.assertEquals(table.getValue(0,"relationship"),dict.getRelationship());				
 			}
 		}
-		
+		Assert.assertEquals(1,r);
 	}
 }

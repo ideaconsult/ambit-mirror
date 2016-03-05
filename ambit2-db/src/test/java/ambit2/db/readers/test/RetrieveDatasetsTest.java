@@ -43,140 +43,159 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.SourceDatasetRows;
 import ambit2.db.readers.RetrieveDatasets;
-import ambit2.db.results.AmbitRows;
 import ambit2.db.search.QueryExecutor;
 
 public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 
-
 	@Test
 	public void testGetParameters() throws Exception {
-		Assert.assertEquals(0,((IQueryObject)query).getParameters().size());
+		Assert.assertEquals(0, ((IQueryObject) query).getParameters().size());
 	}
 
 	@Override
 	protected String getTestDatabase() {
 		return "src/test/resources/ambit2/db/processors/test/src-datasets.xml";
 	}
+
 	@Test
 	public void testGetObject() throws Exception {
 		setUpDatabase(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset");		
-		Assert.assertEquals(3,names.getRowCount());
+		ITable names = c.createQueryTable("EXPECTED_DATASETS",
+				"SELECT * FROM src_dataset");
+		Assert.assertEquals(3, names.getRowCount());
 
-		QueryExecutor<RetrieveDatasets> qe = new QueryExecutor<RetrieveDatasets>();		
+		QueryExecutor<RetrieveDatasets> qe = new QueryExecutor<RetrieveDatasets>();
 		qe.setConnection(c.getConnection());
-		ResultSet rs = qe.process((RetrieveDatasets)query);
-		
+		ResultSet rs = qe.process((RetrieveDatasets) query);
+
 		while (rs.next()) {
 			ISourceDataset dataset = query.getObject(rs);
-			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where id_srcdataset="+dataset.getID() + " and name='"+ dataset.getName()+"'");		
-			Assert.assertEquals(1,names.getRowCount());
+			names = c.createQueryTable(
+					"EXPECTED_DATASETS",
+					"SELECT * FROM src_dataset where id_srcdataset="
+							+ dataset.getID() + " and name='"
+							+ dataset.getName() + "'");
+			Assert.assertEquals(1, names.getRowCount());
 		}
 		rs.close();
 		qe.close();
 		c.close();
 	}
-	
+
 	@Test
 	public void testGetObjectByName() throws Exception {
 		setUpDatabase(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where name='Dataset 1'");		
-		Assert.assertEquals(1,names.getRowCount());
+		ITable names = c.createQueryTable("EXPECTED_DATASETS",
+				"SELECT * FROM src_dataset where name='Dataset 1'");
+		Assert.assertEquals(1, names.getRowCount());
 
-		QueryExecutor<RetrieveDatasets> qe = new QueryExecutor<RetrieveDatasets>();		
+		QueryExecutor<RetrieveDatasets> qe = new QueryExecutor<RetrieveDatasets>();
 		qe.setConnection(c.getConnection());
-		((RetrieveDatasets)query).setValue(new SourceDataset("Dataset 1"));
-		ResultSet rs = qe.process((RetrieveDatasets)query);
-		
+		((RetrieveDatasets) query).setValue(new SourceDataset("Dataset 1"));
+		ResultSet rs = qe.process((RetrieveDatasets) query);
+
 		while (rs.next()) {
 			ISourceDataset dataset = query.getObject(rs);
-			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where id_srcdataset="+dataset.getID() + " and name='"+ dataset.getName()+"'");		
-			Assert.assertEquals(1,names.getRowCount());
+			names = c.createQueryTable(
+					"EXPECTED_DATASETS",
+					"SELECT * FROM src_dataset where id_srcdataset="
+							+ dataset.getID() + " and name='"
+							+ dataset.getName() + "'");
+			Assert.assertEquals(1, names.getRowCount());
 		}
 		rs.close();
 		qe.close();
 		c.close();
-	}	
+	}
+
 	@Test
 	public void testGetDatasetbyChemical() throws Exception {
 		setUpDatabase(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where name='Dataset 1'");		
-		Assert.assertEquals(1,names.getRowCount());
+		ITable names = c.createQueryTable("EXPECTED_DATASETS",
+				"SELECT * FROM src_dataset where name='Dataset 1'");
+		Assert.assertEquals(1, names.getRowCount());
 
-		QueryExecutor<RetrieveDatasets> qe = new QueryExecutor<RetrieveDatasets>();		
+		QueryExecutor<RetrieveDatasets> qe = new QueryExecutor<RetrieveDatasets>();
 		qe.setConnection(c.getConnection());
 		IStructureRecord record = new StructureRecord();
 		record.setIdchemical(29141);
-		((RetrieveDatasets)query).setFieldname(record);
-		ResultSet rs = qe.process((RetrieveDatasets)query);
+		((RetrieveDatasets) query).setFieldname(record);
+		ResultSet rs = qe.process((RetrieveDatasets) query);
 		int count = 0;
 		while (rs.next()) {
 			ISourceDataset dataset = query.getObject(rs);
-			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where id_srcdataset="+dataset.getID() + " and name='"+ dataset.getName()+"'");		
-			Assert.assertEquals(1,names.getRowCount());
-			count++; 
+			names = c.createQueryTable(
+					"EXPECTED_DATASETS",
+					"SELECT * FROM src_dataset where id_srcdataset="
+							+ dataset.getID() + " and name='"
+							+ dataset.getName() + "'");
+			Assert.assertEquals(1, names.getRowCount());
+			count++;
 		}
-		Assert.assertEquals(2,count);
+		Assert.assertEquals(2, count);
 		rs.close();
 		qe.close();
 		c.close();
-	}		
+	}
+
 	@Test
 	public void testGetDatasetbyStructure() throws Exception {
 		setUpDatabase(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where name='Dataset 1'");		
-		Assert.assertEquals(1,names.getRowCount());
+		ITable names = c.createQueryTable("EXPECTED_DATASETS",
+				"SELECT * FROM src_dataset where name='Dataset 1'");
+		Assert.assertEquals(1, names.getRowCount());
 
-		QueryExecutor<RetrieveDatasets> qe = new QueryExecutor<RetrieveDatasets>();		
+		QueryExecutor<RetrieveDatasets> qe = new QueryExecutor<RetrieveDatasets>();
 		qe.setConnection(c.getConnection());
 		IStructureRecord record = new StructureRecord();
 		record.setIdstructure(129345);
-		((RetrieveDatasets)query).setFieldname(record);
-		ResultSet rs = qe.process((RetrieveDatasets)query);
+		((RetrieveDatasets) query).setFieldname(record);
+		ResultSet rs = qe.process((RetrieveDatasets) query);
 		int count = 0;
 		while (rs.next()) {
 			ISourceDataset dataset = query.getObject(rs);
-			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where id_srcdataset="+dataset.getID() + " and name='"+ dataset.getName()+"'");		
-			Assert.assertEquals(1,names.getRowCount());
+			names = c.createQueryTable(
+					"EXPECTED_DATASETS",
+					"SELECT * FROM src_dataset where id_srcdataset="
+							+ dataset.getID() + " and name='"
+							+ dataset.getName() + "'");
+			Assert.assertEquals(1, names.getRowCount());
 			count++;
 		}
-		Assert.assertEquals(2,count);
+		Assert.assertEquals(2, count);
 		rs.close();
 		qe.close();
 		c.close();
-	}		
+	}
+
 	@Override
-	protected void verifyRows(AmbitRows<SourceDataset> rows) throws Exception {
+	protected void verifyRows(IQueryRetrieval<SourceDataset> query, ResultSet rows) throws Exception {
 		IDatabaseConnection c = getConnection();
 		Assert.assertNotNull(rows);
-		Assert.assertEquals(3,rows.size());
+		int r = 0;
 		while (rows.next()) {
-			ISourceDataset dataset = rows.getObject();
+			r++;
+			ISourceDataset dataset = query.getObject(rows);
 			ITable table = 	c.createQueryTable("EXPECTED","SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder,stars,maintainer FROM src_dataset join catalog_references using(idreference) where name='"+ dataset.getName() +"'");		
 			Assert.assertEquals(1,table.getRowCount());			
 			for (int i=1; i <= rows.getMetaData().getColumnCount();i++) {
 				Assert.assertEquals(table.getValue(0,rows.getMetaData().getColumnName(i)).toString(),rows.getString(i));
 			}
 		}
-		
+		Assert.assertEquals(3,r);
 	}
-	@Override
-	protected AmbitRows<SourceDataset> createRows() throws Exception {
-		return new SourceDatasetRows();
-	}
+
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery() {
 		return new RetrieveDatasets();
-	}	
+	}
 }

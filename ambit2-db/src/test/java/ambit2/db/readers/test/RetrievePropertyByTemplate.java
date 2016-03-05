@@ -29,6 +29,8 @@
 
 package ambit2.db.readers.test;
 
+import java.sql.ResultSet;
+
 import junit.framework.Assert;
 import net.idea.modbcum.i.IQueryRetrieval;
 
@@ -36,10 +38,9 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 
 import ambit2.base.data.Property;
-import ambit2.db.results.AmbitRows;
 import ambit2.db.search.property.TemplateQuery;
 
-public class RetrievePropertyByTemplate  extends RetrieveTest<Property> {
+public class RetrievePropertyByTemplate extends RetrieveTest<Property> {
 
 	@Override
 	protected IQueryRetrieval<Property> createQuery() {
@@ -52,32 +53,34 @@ public class RetrievePropertyByTemplate  extends RetrieveTest<Property> {
 	protected String getTestDatabase() {
 		return "src/test/resources/ambit2/db/processors/test/dataset-properties.xml";
 	}
+
 	@Override
-	protected AmbitRows<Property> createRows() throws Exception {
-		return new AmbitRows<Property>();
-	}
-	@Override
-	protected void verifyRows(AmbitRows<Property> rows) throws Exception {
+	protected void verifyRows(IQueryRetrieval<Property> query, ResultSet rows)
+			throws Exception {
 		IDatabaseConnection c = getConnection();
 		Assert.assertNotNull(rows);
-		Assert.assertEquals(3,rows.size());
+		int r = 0;
 		while (rows.next()) {
-			Property p = rows.getObject();
-			ITable table = 	c.createQueryTable("EXPECTED",
-					"SELECT idproperty,idreference,properties.name,properties.units,properties.comments,title,url,ptype,islocal,type,`order` from template join template_def using(idtemplate) "+
-					"join properties using(idproperty) join catalog_references using(idreference) " +
-					"where template.name='BCF' and properties.name='"+p.getName()+"'");		
-			Assert.assertEquals(1,table.getRowCount());			
-			for (int i=1; i <= rows.getMetaData().getColumnCount();i++) {
-				Object expected = table.getValue(0,rows.getMetaData().getColumnName(i));
+			r++;
+			Property p = query.getObject(rows);
+			ITable table = c
+					.createQueryTable(
+							"EXPECTED",
+							"SELECT idproperty,idreference,properties.name,properties.units,properties.comments,title,url,ptype,islocal,type,`order` from template join template_def using(idtemplate) "
+									+ "join properties using(idproperty) join catalog_references using(idreference) "
+									+ "where template.name='BCF' and properties.name='"
+									+ p.getName() + "'");
+			Assert.assertEquals(1, table.getRowCount());
+			for (int i = 1; i <= rows.getMetaData().getColumnCount(); i++) {
+				Object expected = table.getValue(0, rows.getMetaData()
+						.getColumnName(i));
 				Object actual = rows.getObject(i);
-				if ((expected == null) && (actual == null)) continue;
+				if ((expected == null) && (actual == null))
+					continue;
 				else
-					Assert.assertEquals(expected.toString(),actual.toString());
-
-				
+					Assert.assertEquals(expected.toString(), actual.toString());
 			}
-			
 		}
+		Assert.assertEquals(3, r);
 	}
 }
