@@ -120,8 +120,8 @@ CREATE TABLE `substance` (
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `substance_ids`;
 CREATE TABLE `substance_ids` (
-  `prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `uuid` varbinary(16) DEFAULT NULL,
+  `prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `uuid` varbinary(16) NOT NULL,
   `type` varchar(64) NOT NULL,
   `id` varchar(64) NOT NULL,
   PRIMARY KEY (`prefix`,`uuid`,`type`,`id`),
@@ -296,12 +296,13 @@ CREATE TABLE `bundle_endpoints` (
   `idbundle` int(10) unsigned NOT NULL,
   `topcategory` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '',
   `endpointcategory` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `endpointhash` varbinary(20) DEFAULT NULL COMMENT 'SHA1 over endpoint, unit and conditions',
+  `endpointhash` varbinary(20) NOT NULL DEFAULT '' COMMENT 'SHA1 over endpoint, unit and conditions',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idbundle`,`topcategory`,`endpointcategory`,`endpointhash`),
   KEY `btopcategory` (`topcategory`,`endpointcategory`,`endpointhash`) USING BTREE,
   CONSTRAINT `b_metadata` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 
 -- -----------------------------------------------------
 -- A collection of chemicals 
