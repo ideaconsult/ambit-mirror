@@ -29,6 +29,8 @@
 
 package ambit2.db.readers.test;
 
+import java.sql.ResultSet;
+
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.IRetrieval;
 
@@ -37,7 +39,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ambit2.db.processors.test.DbUnitTest;
-import ambit2.db.results.AmbitRows;
+import ambit2.db.search.QueryExecutor;
 
 
 
@@ -54,29 +56,28 @@ public abstract class RetrieveTest<T> extends DbUnitTest {
 	}
 	
 	protected abstract String getTestDatabase();
+
 	
-	protected AmbitRows<T> createRows() throws Exception {
-		throw new Exception("Not implemented");
-	}
 	@Test
 	public void testRows() throws Exception {
 		setUpDatabase(getTestDatabase());
 		IDatabaseConnection c = getConnection();
-		AmbitRows<T> rows = createRows();
+		QueryExecutor qx = new QueryExecutor();
+		ResultSet rows = null;
 		try {
-			
-			rows.setConnection(c.getConnection());		
-			rows.setQuery(createQuery());
-			verifyRows(rows);
-			rows.close();
+			qx.setConnection(c.getConnection());
+			IQueryRetrieval<T>  query = createQuery();
+			rows = qx.process(query);
+			verifyRows(query,rows);
 		} catch (Exception x) {
 			throw x;
 		} finally {
-			rows.close();
+			if (rows!=null) qx.closeResults(rows);
+			qx.close();
 			c.close();
 		}
 	}
-	protected void verifyRows(AmbitRows<T> rows) throws Exception {
+	protected void verifyRows(IQueryRetrieval<T> query,ResultSet rs) throws Exception {
 		throw new Exception("Not implemented");
 	}
 

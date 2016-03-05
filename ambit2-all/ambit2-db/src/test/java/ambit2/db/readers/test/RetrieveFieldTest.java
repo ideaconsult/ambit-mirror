@@ -41,7 +41,6 @@ import org.junit.Test;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.db.readers.RetrieveField;
-import ambit2.db.results.AmbitRows;
 import ambit2.db.search.QueryExecutor;
 
 public class RetrieveFieldTest extends RetrieveTest<Object> {
@@ -82,16 +81,15 @@ public class RetrieveFieldTest extends RetrieveTest<Object> {
 		qe.close();
 		c.close();
 	}	
+	
 	@Override
-	protected AmbitRows<Object> createRows() throws Exception {
-		return new AmbitRows<Object>();
-	}
-	@Override
-	protected void verifyRows(AmbitRows<Object> rows) throws Exception {
+	protected void verifyRows(IQueryRetrieval<Object> query, ResultSet rows)
+			throws Exception {
 		IDatabaseConnection c = getConnection();
 		Assert.assertNotNull(rows);
-		Assert.assertEquals(1,rows.size());
+		int r = 0;
 		while (rows.next()) {
+			r++;
 			ITable table = 	c.createQueryTable("EXPECTED",
 					"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,-1,id,units,comments from property_values \n"+
 					"left join property_string using(idvalue_string) \n"+
@@ -110,5 +108,6 @@ public class RetrieveFieldTest extends RetrieveTest<Object> {
 			}
 			
 		}
+		Assert.assertEquals(1,r);
 	}
 }
