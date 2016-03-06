@@ -51,7 +51,7 @@ public class RetrieveDictionaryTest extends RetrieveTest<Dictionary> {
 
 	@Override
 	protected String getTestDatabase() {
-		return "src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml";
+		return "ambit2/db/processors/test/descriptors-datasets.xml";
 	}
 	
 	@Override

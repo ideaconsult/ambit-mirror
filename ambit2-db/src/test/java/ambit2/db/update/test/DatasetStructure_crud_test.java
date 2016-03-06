@@ -47,7 +47,7 @@ public class DatasetStructure_crud_test extends CRUDTest<SourceDataset, IStructu
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		dbFile = "src/test/resources/ambit2/db/processors/test/dataset-properties.xml";			
+		dbFile = "ambit2/db/processors/test/dataset-properties.xml";			
 	}
 	@Override
 	protected IQueryUpdate<SourceDataset, IStructureRecord> createQuery()
@@ -81,7 +81,7 @@ public class DatasetStructure_crud_test extends CRUDTest<SourceDataset, IStructu
 	@Test
 	public void testCreateNew() throws Exception {
 		IQueryUpdate query = createQueryNew();
-		setUpDatabase(dbFile);
+		setUpDatabaseFromResource(dbFile);
 		IDatabaseConnection c = getConnection();
 		executor.setConnection(c.getConnection());
 		executor.open();

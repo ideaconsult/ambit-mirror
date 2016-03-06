@@ -33,10 +33,9 @@ public class BookmarkresourceTest extends ProtectedResourceTest {
 		//no access to bookmarks without AA
 		return true;
 	}
-	
 	@Override
-	public void setUpDatabase(String xmlfile) throws Exception {
-		super.setUpDatabase(xmlfile);
+	public void setUpDatabaseFromResource(String resource) throws Exception {
+		super.setUpDatabaseFromResource(resource);
 		if (!"test".equals(getCreator())) {
 			IDatabaseConnection c = getConnection();	
 			PreparedStatement st =null;

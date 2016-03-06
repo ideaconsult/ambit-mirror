@@ -68,7 +68,7 @@ public class Chemical_crud_test extends CRUDTest<Object,IChemical>{
 	@Test
 	public void testCreate() throws Exception {
 		IQueryUpdate query = createQuery();
-		setUpDatabase(dbFile);
+		setUpDatabaseFromResource(dbFile);
 		IDatabaseConnection c = getConnection();
 		executor.setConnection(c.getConnection());
 		executor.open();
@@ -97,7 +97,7 @@ public class Chemical_crud_test extends CRUDTest<Object,IChemical>{
 	@Test
 	public void testCreateNew() throws Exception {
 		IQueryUpdate query = createQueryNew();
-		setUpDatabase(dbFile);
+		setUpDatabaseFromResource(dbFile);
 		IDatabaseConnection c = getConnection();
 		executor.setConnection(c.getConnection());
 		executor.open();
@@ -140,7 +140,7 @@ public class Chemical_crud_test extends CRUDTest<Object,IChemical>{
 		chem.setIdchemical(10);
 		
 		IQueryUpdate<Object,IChemical> query = new UpdateChemical(chem);
-		setUpDatabase(dbFile);
+		setUpDatabaseFromResource(dbFile);
 		IDatabaseConnection c = getConnection();
 		executor.setConnection(c.getConnection());
 		executor.open();

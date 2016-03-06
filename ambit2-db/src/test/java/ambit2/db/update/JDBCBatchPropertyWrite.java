@@ -31,7 +31,7 @@ public class JDBCBatchPropertyWrite extends DbUnitTest {
 	@Test
 	public void testValueWriter() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/src-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ValueWriterNew writer = new ValueWriterNew();
@@ -107,7 +107,7 @@ public class JDBCBatchPropertyWrite extends DbUnitTest {
 	@Test
 	public void testRetrieveProperties() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/src-datasets.xml");
 		IDatabaseConnection c = getConnection();
 		x.setConnection(c.getConnection());
 		try {

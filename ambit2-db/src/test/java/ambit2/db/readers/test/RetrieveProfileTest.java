@@ -62,7 +62,7 @@ public class RetrieveProfileTest extends RetrieveTest<Property> {
 
 	@Override
 	protected String getTestDatabase() {
-		return "src/test/resources/ambit2/db/processors/test/dataset-properties.xml";
+		return "ambit2/db/processors/test/dataset-properties.xml";
 	}
 
 	@Override

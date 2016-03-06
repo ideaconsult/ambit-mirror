@@ -55,7 +55,7 @@ public class QueryStructurebyQualityTest extends QueryTest<QueryStructureByQuali
 		
 	@Test
 	public void testSelectNull() throws Exception {
-		setUpDatabase(getDbFile());
+		setUpDatabaseFromResource(getDbFile());
 		IDatabaseConnection c = getConnection();
 		executor.setConnection(c.getConnection());
 		executor.open();

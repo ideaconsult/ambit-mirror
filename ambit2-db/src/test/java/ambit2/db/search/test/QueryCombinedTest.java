@@ -31,7 +31,7 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		setDbFile("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");
+		setDbFile("ambit2/db/processors/test/dataset-properties.xml");
 	}
 	@Test
 	public void testStructure() throws Exception {
@@ -166,7 +166,7 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 	public void testSelectBySmiles() throws Exception {
 		QueryCombined q = createQuery(ExactStructureSearchMode.smiles,	"[Br-].c1ccc(cc1)[P+](c2ccccc2)(c3ccccc3)CC");
 		q.setId(-1);
-		setUpDatabase(getDbFile());
+		setUpDatabaseFromResource(getDbFile());
 		IDatabaseConnection c = getConnection();
 		ResultSet rs = null;
 		try {

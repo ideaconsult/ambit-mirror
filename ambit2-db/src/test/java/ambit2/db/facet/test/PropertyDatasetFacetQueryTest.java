@@ -22,7 +22,7 @@ public class PropertyDatasetFacetQueryTest extends QueryTest<IQueryRetrieval<Pro
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		setDbFile("src/test/resources/ambit2/db/processors/test/query-datasets-string.xml");
+		setDbFile("ambit2/db/processors/test/query-datasets-string.xml");
 	}
 	@Override
 	protected IQueryRetrieval<PropertyDatasetFacet<Property, SourceDataset>> createQuery()

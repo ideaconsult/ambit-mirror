@@ -59,7 +59,6 @@ import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.dataset.ReadDatasetLicense;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
-import ambit2.rest.DisplayMode;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.PDFConvertor;
@@ -70,7 +69,6 @@ import ambit2.rest.dataset.ARFF3ColResourceReporter;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.dataset.DatasetRDFStaxReporter;
-import ambit2.rest.structure.CompoundHTMLbyJSONReporter;
 import ambit2.rest.structure.CompoundJSONReporter;
 import ambit2.rest.structure.ConformerURIReporter;
 
@@ -335,20 +333,6 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 							MediaType.IMAGE_GIF.getMainType(),
 							MediaType.IMAGE_GIF.getSubType()),
 					MediaType.IMAGE_GIF);
-		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			Dimension d = new Dimension(150, 150);
-			Form form = getResourceRef(getRequest()).getQueryAsForm();
-			try {
-
-				d.width = Integer.parseInt(form.getFirstValue("w").toString());
-			} catch (Exception x) {
-			}
-			try {
-				d.height = Integer.parseInt(form.getFirstValue("h").toString());
-			} catch (Exception x) {
-			}
-			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					createHTMLReporter(d), MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundJSONReporter(getTemplate(),
@@ -424,14 +408,6 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					ChemicalMediaType.CHEMICAL_MDLSDF, filenamePrefix);
 	}
 
-	protected QueryAbstractReporter createHTMLReporter(Dimension d) {
-		return new CompoundHTMLbyJSONReporter(getCompoundInDatasetPrefix(),
-				getRequest(), DisplayMode.table, null, getTemplate(),
-				getGroupProperties(), d, getRequest().getRootRef().toString()
-						+ getCompoundInDatasetPrefix());
-
-	}
-
 	protected String getMediaParameter(Request request) {
 		try {
 			Object m = request.getAttributes().get("media");
@@ -501,7 +477,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				IAtomContainer mol = MoleculeTools.readMolfile(reader);
 				AtomContainerManipulator
 						.percieveAtomTypesAndConfigureAtoms(mol);
-				CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(mol.getBuilder());
+				CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(mol
+						.getBuilder());
 				adder.addImplicitHydrogens(mol);
 				return mol;
 			} else
@@ -632,7 +609,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				if (query_smiles == null)
 					throw new ResourceException(
 							Status.CLIENT_ERROR_BAD_REQUEST, "Empty smiles");
-				
+
 				if (query_smiles.startsWith(AmbitCONSTANTS.INCHI)) {
 					InChIGeneratorFactory f = InChIGeneratorFactory
 							.getInstance();
@@ -654,7 +631,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 
 					try {
 						return MoleculeTools.getMolecule(query_smiles);
-					} catch (InvalidSmilesException | ArrayIndexOutOfBoundsException x) {
+					} catch (InvalidSmilesException
+							| ArrayIndexOutOfBoundsException x) {
 						NameToStructure nameToStructure = NameToStructure
 								.getInstance();
 

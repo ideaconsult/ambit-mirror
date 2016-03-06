@@ -55,12 +55,12 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 
 	@Override
 	protected String getTestDatabase() {
-		return "src/test/resources/ambit2/db/processors/test/src-datasets.xml";
+		return "ambit2/db/processors/test/src-datasets.xml";
 	}
 
 	@Test
 	public void testGetObject() throws Exception {
-		setUpDatabase(getTestDatabase());
+		setUpDatabaseFromResource(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
 		ITable names = c.createQueryTable("EXPECTED_DATASETS",
@@ -87,7 +87,7 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 
 	@Test
 	public void testGetObjectByName() throws Exception {
-		setUpDatabase(getTestDatabase());
+		setUpDatabaseFromResource(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
 		ITable names = c.createQueryTable("EXPECTED_DATASETS",
@@ -115,7 +115,7 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 
 	@Test
 	public void testGetDatasetbyChemical() throws Exception {
-		setUpDatabase(getTestDatabase());
+		setUpDatabaseFromResource(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
 		ITable names = c.createQueryTable("EXPECTED_DATASETS",
@@ -147,7 +147,7 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 
 	@Test
 	public void testGetDatasetbyStructure() throws Exception {
-		setUpDatabase(getTestDatabase());
+		setUpDatabaseFromResource(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
 		ITable names = c.createQueryTable("EXPECTED_DATASETS",

@@ -14,7 +14,7 @@ public class QueryDatasetByNameTest  extends QueryTest<IQueryRetrieval<IStructur
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		setDbFile("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
+		setDbFile("ambit2/db/processors/test/src-datasets.xml");
 	}
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery() throws Exception {

@@ -14,7 +14,7 @@ public class FilteredCountNumericTest extends QueryTest<FilteredCountNumeric> {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		setDbFile("src/test/resources/ambit2/db/processors/test/query-datasets.xml");
+		setDbFile("ambit2/db/processors/test/query-datasets.xml");
 	}
 	@Override
 	protected FilteredCountNumeric createQuery() throws Exception {

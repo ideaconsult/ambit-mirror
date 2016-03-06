@@ -16,7 +16,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 public class BundleSubstanceResourceTest extends ProtectedResourceTest {
-	protected String dbFile = "src/test/resources/descriptors-datasets.xml";
+	protected String dbFile = "descriptors-datasets.xml";
 
 	@Override
 	public String getTestURI() {
@@ -25,7 +25,7 @@ public class BundleSubstanceResourceTest extends ProtectedResourceTest {
 
 	@Test
 	public void testJSON() throws Exception {
-		setUpDatabase(dbFile);
+		setUpDatabaseFromResource(dbFile);
 		testGet(getTestURI(), MediaType.APPLICATION_JSON);
 	}
 
@@ -50,7 +50,7 @@ public class BundleSubstanceResourceTest extends ProtectedResourceTest {
 	}
 	@Test
 	public void testRDF() throws Exception {
-		setUpDatabase(dbFile);
+		setUpDatabaseFromResource(dbFile);
 		testGet(getTestURI()+"?media=application/rdf+xml", MediaType.APPLICATION_RDF_XML);
 	}
 

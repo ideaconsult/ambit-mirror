@@ -18,7 +18,7 @@ public class ReadStructureRelationTest extends QueryTest<ReadStructureRelation> 
 	@Override
 	public void setUp() throws Exception {
 
-		setDbFile("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		setDbFile("ambit2/db/processors/test/descriptors-datasets.xml");
 		super.setUp();
 	}
 	@Override

@@ -123,43 +123,4 @@ public class DatabaseResource extends
 		}
 	}
 
-	@Override
-	protected Representation processSQLError(SQLException x, int retry,
-			Variant variant) throws Exception {
-		try {
-			AmbitDBVersion db = new AmbitDBVersion();
-			DBConnection dbc = new DBConnection(getContext());
-			db.setDbname(dbc.getLoginInfo().getDatabase());
-			dbc = null;
-			return generateRepresentation(db, true);
-		} catch (Exception xx) {
-			getLogger().log(Level.WARNING, x.getMessage(), x);
-			return null;
-		} finally {
-
-		}
-	}
-
-	protected Representation generateRepresentation(AmbitDBVersion db,
-			boolean create) throws Exception {
-		try {
-			Writer writer = new StringWriter();
-			DBHtmlReporter reporter = new DBHtmlReporter(getRequest());
-			reporter.setCreate(create);
-			reporter.setOutput(writer);
-			reporter.header(writer, null);
-
-			reporter.processItem(db);
-			reporter.footer(writer, null);
-			writer.flush();
-
-			return new StringRepresentation(writer.toString(),
-					MediaType.TEXT_HTML, Language.ENGLISH, CharacterSet.UTF_8);
-		} catch (Exception xx) {
-
-			return null;
-		} finally {
-
-		}
-	}
 }

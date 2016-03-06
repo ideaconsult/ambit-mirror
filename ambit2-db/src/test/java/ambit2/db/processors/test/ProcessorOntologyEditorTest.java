@@ -16,7 +16,7 @@ public class ProcessorOntologyEditorTest extends DbUnitTest {
 	protected ProcessorOntology editor = new ProcessorOntology();
 	@Test
 	public void testMoveProperty() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");
 		IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("expected","SELECT template.name FROM template join template_def using(idtemplate) join properties using(idproperty) where properties.name=\"Property 1\"");
 		Assert.assertEquals(1,names.getRowCount());
@@ -33,7 +33,7 @@ public class ProcessorOntologyEditorTest extends DbUnitTest {
 	}
 	@Test
 	public void testMoveTemplate() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");
 		IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("expected","SELECT * FROM ontology where subject=\"BCF\" and object=\"Endpoints\"");
 		Assert.assertEquals(0,names.getRowCount());	
@@ -48,7 +48,7 @@ public class ProcessorOntologyEditorTest extends DbUnitTest {
 	}	
 	@Test
 	public void testCreateTemplate() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");
 		IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("expected","SELECT * FROM ontology where subject=\"Skin irritation\" and object=\"Endpoints\"");
 		Assert.assertEquals(0,names.getRowCount());	
@@ -66,7 +66,7 @@ public class ProcessorOntologyEditorTest extends DbUnitTest {
 	
 	@Test
 	public void testCreateProperty() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");
 		IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("expected","SELECT * FROM template_properties where template=\"Physicochemical effects\" and property=\"Boling point\"");
 		Assert.assertEquals(0,names.getRowCount());	

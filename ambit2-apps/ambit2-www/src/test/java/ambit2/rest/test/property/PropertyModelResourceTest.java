@@ -11,7 +11,7 @@ public class PropertyModelResourceTest extends ResourceTest {
 		return String.format("http://localhost:%d/model/1/predicted", port);
 	}
 	protected void setDatabase() throws Exception {
-		setUpDatabase("src/test/resources/src-datasets_model.xml");
+		setUpDatabaseFromResource("src-datasets_model.xml");
 	}
 	@Test
 	public void testRDFXML() throws Exception {

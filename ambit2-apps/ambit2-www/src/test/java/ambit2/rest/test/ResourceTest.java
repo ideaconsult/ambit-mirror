@@ -43,6 +43,7 @@ import org.xml.sax.InputSource;
 
 import weka.core.Instances;
 import ambit2.base.config.Preferences;
+import ambit2.db.processors.test.DbUnitTest;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.AmbitComponent;
 import ambit2.rest.ChemicalMediaType;
@@ -84,7 +85,7 @@ public abstract class ResourceTest extends DbUnitTest {
 	}
 
 	protected void setDatabase() throws Exception {
-		setUpDatabase("src/test/resources/src-datasets.xml");
+		setUpDatabaseFromResource("src-datasets.xml");
 	}
 
 	@After

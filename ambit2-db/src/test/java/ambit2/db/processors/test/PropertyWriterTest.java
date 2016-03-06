@@ -55,7 +55,7 @@ public class PropertyWriterTest  extends DbUnitTest {
 	@Test
 	public void testWrite() throws Exception {
 		
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");
         IDatabaseConnection c = getConnection();
         
 		ITable names = 	c.createQueryTable("expected_fields","SELECT * FROM property_values where idstructure=100211");
@@ -105,7 +105,7 @@ public class PropertyWriterTest  extends DbUnitTest {
 
 	@Test
 	public void testReadWriteProperty() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/experiments-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/experiments-datasets.xml");
         IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("expected_fields","SELECT * FROM property_values");
 		Assert.assertEquals(0,names.getRowCount());

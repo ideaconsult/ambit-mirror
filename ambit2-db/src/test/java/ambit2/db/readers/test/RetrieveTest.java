@@ -60,7 +60,7 @@ public abstract class RetrieveTest<T> extends DbUnitTest {
 	
 	@Test
 	public void testRows() throws Exception {
-		setUpDatabase(getTestDatabase());
+		setUpDatabaseFromResource(getTestDatabase());
 		IDatabaseConnection c = getConnection();
 		QueryExecutor qx = new QueryExecutor();
 		ResultSet rows = null;

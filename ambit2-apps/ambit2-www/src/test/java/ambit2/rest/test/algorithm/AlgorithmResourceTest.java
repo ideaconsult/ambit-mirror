@@ -46,7 +46,7 @@ public class AlgorithmResourceTest extends ResourceTest {
     }
 	@Override
 	protected void setDatabase() throws Exception {
-		setUpDatabase("src/test/resources/num-datasets.xml");
+		setUpDatabaseFromResource("num-datasets.xml");
 	}
 	@Override
 	public String getTestURI() {
@@ -1421,7 +1421,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 	public void testToxtreeEyeModel() throws Exception {
 		Form headers = new Form();  
 
-		testAsyncTask(
+		Reference ref = testAsyncTask(
 				String.format("http://localhost:%d/algorithm/toxtreeeye", port),
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));

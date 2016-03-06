@@ -18,7 +18,7 @@ public class QueryDescriptorTest extends QueryTest<QueryFieldNumeric> {
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
-		setDbFile("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");
+		setDbFile("ambit2/db/processors/test/dataset-properties.xml");
 	}
 	@Test
 	public void test() throws Exception {

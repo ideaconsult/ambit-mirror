@@ -12,7 +12,7 @@ public class DatasetPrefixFacet extends QueryTest<IQueryRetrieval<ambit2.db.face
 
 	@Override
 	public String getDbFile() {
-		setDbFile("src/test/resources/ambit2/db/processors/test/query-datasets-string.xml");
+		setDbFile("ambit2/db/processors/test/query-datasets-string.xml");
 		return super.getDbFile();
 	}
 	

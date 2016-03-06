@@ -20,7 +20,7 @@ public class I5SubstanceWriterTest extends SubstanceWriterTest {
 	@Test
 	public void testWriteMultipleFiles_i5d() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",

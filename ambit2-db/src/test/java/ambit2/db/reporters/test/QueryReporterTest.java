@@ -17,7 +17,7 @@ import ambit2.db.search.structure.QueryStructure;
 public class QueryReporterTest extends DbUnitTest {
 	@Test
 	public void test() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");
 		/*
 		IStructureKey<IAtomContainer,String> queryKey = new SmilesKey();
 		

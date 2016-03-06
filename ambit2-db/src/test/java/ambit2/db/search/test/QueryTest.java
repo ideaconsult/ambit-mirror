@@ -16,7 +16,7 @@ import ambit2.db.search.QueryExecutor;
 public abstract class QueryTest<T extends IQueryObject> extends DbUnitTest {
 	protected T query;
 	protected QueryExecutor<T> executor;
-	private String dbFile = "src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml";	
+	private String dbFile = "ambit2/db/processors/test/descriptors-datasets.xml";	
 	public String getDbFile() {
 		return dbFile;
 	}
@@ -36,7 +36,7 @@ public abstract class QueryTest<T extends IQueryObject> extends DbUnitTest {
 	
 	@Test
 	public void testSelect() throws Exception {
-		setUpDatabase(getDbFile());
+		setUpDatabaseFromResource(getDbFile());
 		IDatabaseConnection c = getConnection();
 		ResultSet rs = null;
 		try {

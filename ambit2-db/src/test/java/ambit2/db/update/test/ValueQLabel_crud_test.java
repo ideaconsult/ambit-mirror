@@ -17,7 +17,7 @@ public class ValueQLabel_crud_test extends CRUDTest<Integer,QLabel> {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		dbFile = "src/test/resources/ambit2/db/processors/test/qdescriptors-datasets.xml";	
+		dbFile = "ambit2/db/processors/test/qdescriptors-datasets.xml";	
 	}
 	@Override
 	protected IQueryUpdate<Integer, QLabel> createQuery() throws Exception {
@@ -73,7 +73,7 @@ public class ValueQLabel_crud_test extends CRUDTest<Integer,QLabel> {
 	@Test
 	public void testDelete() throws Exception {
 		IQueryUpdate<Integer,QLabel> query = deleteQuery();
-		setUpDatabase(dbFile);
+		setUpDatabaseFromResource(dbFile);
 		IDatabaseConnection c = getConnection();
 		executor.setConnection(c.getConnection());
 		executor.open();

@@ -44,7 +44,7 @@ public class QueryCombinedScopeTest extends QueryTest<QueryCombinedStructure> {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		setDbFile("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		setDbFile("ambit2/db/processors/test/descriptors-datasets.xml");
 	}
 
 	@Override
