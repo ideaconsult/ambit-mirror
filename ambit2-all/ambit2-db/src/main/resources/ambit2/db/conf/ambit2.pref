@@ -17,5 +17,4 @@ startMySQL=true
 database.test=ambit-test
 database.test.port=3306
 database.user.test=${ambit.db.user.test}
-database.user.root.password=${ambit.db.user.root.password}
 database.user.test.password=${ambit.db.user.test.password}
