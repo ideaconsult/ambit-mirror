@@ -437,12 +437,12 @@ var config_i5 = {
 		        "TO_SKIN_IRRITATION_SECTION": {
 		            "parameters": {
 		                "type of method": {
-		                    "iOrder": -9,
+		                    "iOrder": -19,
 		                    "sTitle": "Method type",
 		                    "inMatrix": true
 		                },
 		                "species": {
-		                    "iOrder": -8
+		                    "iOrder": -18
 		                }
 		            },
 		            "protocol": {
@@ -455,12 +455,17 @@ var config_i5 = {
 		            },
 		            "effects": {
 		                "endpoint": {
-		                    "bVisible": false
+		                    "bVisible": true,
+		                    "iOrder": -10
 		                },
 		                "result": {
-		                    "bVisible": false
+		                    "bVisible": true,
+		                    "iOrder": -9
 		                }
 		            },
+	                "conditions": {
+		                "bVisible": false
+		            },		      
 		            "interpretation": {
 		                "result": {
 		                    "sTitle": "Interpretation of the results",
@@ -475,12 +480,12 @@ var config_i5 = {
 		        "TO_EYE_IRRITATION_SECTION": {
 		            "parameters": {
 		                "type of method": {
-		                    "iOrder": -7,
+		                    "iOrder": -17,
 		                    "sTitle": "Method type",
 		                    "inMatrix": true
 		                },
 		                "species": {
-		                    "iOrder": -6
+		                    "iOrder": -16
 		                }
 		            },
 		            "protocol": {
@@ -491,12 +496,15 @@ var config_i5 = {
 		                    "bVisible": true
 		                }
 		            },
+
 		            "effects": {
 		                "endpoint": {
-		                    "bVisible": false
+		                    "bVisible": true,
+		                    "iOrder": -10
 		                },
 		                "result": {
-		                    "bVisible": false
+		                    "bVisible": true,
+		                    "iOrder": -9
 		                }
 		            },
 		            "interpretation": {
@@ -508,6 +516,9 @@ var config_i5 = {
 		                "criteria": {
 		                    "iOrder": -2
 		                }
+		            },
+		            "conditions": {
+		                "bVisible": false
 		            }
 		        },
 		        "TO_SENSITIZATION_SECTION": {
@@ -517,12 +528,12 @@ var config_i5 = {
 		                    "bVisible": false
 		                },
 		                "type of study": {
-		                    "iOrder": -11,
+		                    "iOrder": -15,
 		                    "sTitle": "Study type",
 		                    "inMatrix": true
 		                },
 		                "type of method": {
-		                    "iOrder": -8,
+		                    "iOrder": -14,
 		                    "sTitle": "Method type"
 		                }
 		            },
@@ -536,17 +547,17 @@ var config_i5 = {
 		            },
 		            "effects": {
 		                "endpoint": {
-		                    "iOrder": -8,
-		                    "bVisible": false
+		                    "iOrder": -12,
+		                    "bVisible": true
 		                },
 		                "result": {
-		                    "iOrder": -7,
-		                    "bVisible": false
+		                    "iOrder": -11,
+		                    "bVisible": true
 		                },
 		                "text": {
 		                    "sTitle": "",
 		                    "bVisible": false,
-		                    "iOrder": -6
+		                    "iOrder": -11
 		                }
 		            },
 		            "interpretation": {
@@ -558,7 +569,10 @@ var config_i5 = {
 		                "criteria": {
 		                    "iOrder": -9
 		                }
-		            }
+		            },
+		            "conditions": {
+		                "bVisible": false
+		            }		            
 		        },
 		        "TO_REPEATED_ORAL_SECTION": {
 		            "parameters": {
