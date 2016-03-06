@@ -9,35 +9,41 @@ import net.idea.modbcum.i.query.QueryParam;
 import net.idea.modbcum.q.conditions.NumberCondition;
 import ambit2.db.search.AbstractQuery;
 
-public class DBVersionQuery extends AbstractQuery<String, String, NumberCondition, AmbitDBVersion> 
-										implements IQueryRetrieval<AmbitDBVersion>{
+public class DBVersionQuery extends
+		AbstractQuery<String, String, NumberCondition, AmbitDBVersion>
+		implements IQueryRetrieval<AmbitDBVersion> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -915159203431471645L;
+
 	public DBVersionQuery() {
 		super();
 		setPage(0);
 		setPageSize(1);
 	}
-	public List<QueryParam> getParameters() throws AmbitException {
 
+	public List<QueryParam> getParameters() throws AmbitException {
 		return null;
 	}
 
+	private final static String sql = "select idmajor,idminor,date,comment from version order by idmajor*100000+idminor desc";
+
 	public String getSQL() throws AmbitException {
-		return "Select idmajor,idminor,date,comment from version order by idmajor*100000+idminor desc";
+		return sql;
 	}
+
 	public double calculateMetric(AmbitDBVersion object) {
 		return 1;
 	}
+
 	public boolean isPrescreen() {
 		return false;
 	}
+
 	public AmbitDBVersion getObject(ResultSet rs) throws AmbitException {
-		
-		
+
 		AmbitDBVersion db = new AmbitDBVersion();
 		try {
 			db.setDbname(rs.getMetaData().getCatalogName(1));
@@ -50,5 +56,5 @@ public class DBVersionQuery extends AbstractQuery<String, String, NumberConditio
 			throw new AmbitException(x);
 		}
 	}
-	
+
 }
