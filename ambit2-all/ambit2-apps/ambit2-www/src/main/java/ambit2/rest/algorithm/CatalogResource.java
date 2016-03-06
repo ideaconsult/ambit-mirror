@@ -117,7 +117,7 @@ public abstract class CatalogResource<T extends Serializable>
 	}
 
 	protected Reporter createHTMLReporter() {
-		return new CatalogHTMLReporter(getRequest());
+		return null;
 	}
 
 	protected ICallableTask createCallable(Form form, T item)

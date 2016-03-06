@@ -11,7 +11,7 @@ public class FreeTextQueryTest extends QueryTest<FreeTextQuery> {
 	@Override
 	public void setUp() throws Exception {
 
-		setDbFile("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");
+		setDbFile("ambit2/db/processors/test/dataset-properties.xml");
 		super.setUp();
 	}
 	@Override

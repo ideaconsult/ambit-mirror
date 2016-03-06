@@ -23,7 +23,7 @@ public class Substance_crud_test extends CRUDTest<Object, SubstanceRecord> {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		dbFile = "src/test/resources/ambit2/db/processors/test/substance.xml";
+		dbFile = "ambit2/db/processors/test/substance.xml";
 	}
 
 	@Override

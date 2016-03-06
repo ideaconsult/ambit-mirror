@@ -70,12 +70,12 @@ public class RetrieveFieldNamesTest extends RetrieveTest<Property> {
 
 	@Override
 	protected String getTestDatabase() {
-		return "src/test/resources/ambit2/db/processors/test/dataset-properties.xml";
+		return "ambit2/db/processors/test/dataset-properties.xml";
 	}
 
 	@Test
 	public void testGetObject() throws Exception {
-		setUpDatabase(getTestDatabase());
+		setUpDatabaseFromResource(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
 		ITable names = c.createQueryTable("EXPECTED_NAMES",
@@ -104,7 +104,7 @@ public class RetrieveFieldNamesTest extends RetrieveTest<Property> {
 
 	@Test
 	public void testGetObjectByName() throws Exception {
-		setUpDatabase(getTestDatabase());
+		setUpDatabaseFromResource(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
 		ITable names = c.createQueryTable("EXPECTED_NAMES",

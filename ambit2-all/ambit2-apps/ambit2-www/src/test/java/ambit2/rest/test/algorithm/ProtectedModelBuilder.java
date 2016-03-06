@@ -21,7 +21,7 @@ public class ProtectedModelBuilder extends ProtectedResourceTest {
 	
 	@Override
 	protected void setDatabase() throws Exception {
-		setUpDatabase("src/test/resources/num-datasets.xml");
+		setUpDatabaseFromResource("num-datasets.xml");
 	}
 	@Override
 	public String getTestURI() {

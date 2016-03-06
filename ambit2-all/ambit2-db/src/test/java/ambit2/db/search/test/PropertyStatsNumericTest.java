@@ -40,7 +40,7 @@ public class PropertyStatsNumericTest extends QueryTest<PropertyStatsNumeric>  {
 
 	@Override
 	public String getDbFile() {
-		setDbFile("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");	
+		setDbFile("ambit2/db/processors/test/dataset-properties.xml");	
 		return super.getDbFile();
 	}
 	@Override

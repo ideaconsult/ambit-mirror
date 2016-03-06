@@ -108,7 +108,7 @@ public class StoredQuery_crud_test extends CRUDTest<SessionID,IStoredQuery> {
 	@Test
 	public void testDeleteQueriesBySession() throws Exception {
 		IQueryUpdate<SessionID, IStoredQuery> query = deleteQueriesBySession();
-		setUpDatabase(dbFile);
+		setUpDatabaseFromResource(dbFile);
 		IDatabaseConnection c = getConnection();
 		executor.setConnection(c.getConnection());
 		executor.open();

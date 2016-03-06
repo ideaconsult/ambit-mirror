@@ -22,7 +22,7 @@ public class RepositoryWriterToXMLTest extends DbUnitTest {
 	@Test
 	public void testWriteToXML() throws Exception {
 		
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
         IDatabaseConnection c = getConnection();
         
 		ITable chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");

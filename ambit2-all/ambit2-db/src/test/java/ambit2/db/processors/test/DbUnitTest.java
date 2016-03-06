@@ -29,7 +29,6 @@
 
 package ambit2.db.processors.test;
 
-import java.io.File;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -38,6 +37,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.dbunit.database.DatabaseConfig;
@@ -69,6 +70,16 @@ public abstract class DbUnitTest {
 			}
 		} catch (Exception x) {
 			properties = null;
+		}
+	}
+
+	public static void setLogLevel(Level level) throws Exception {
+		Logger tempLogger = logger;
+		while (tempLogger != null) {
+			tempLogger.setLevel(level);
+			for (Handler handler : tempLogger.getHandlers())
+				handler.setLevel(level);
+			tempLogger = tempLogger.getParent();
 		}
 	}
 
@@ -202,32 +213,38 @@ public abstract class DbUnitTest {
 				getPWD());
 	}
 
-	public void setUpDatabase(String xmlfile) throws Exception {
+	public void setUpDatabaseFromResource(String resource) throws Exception {
+		InputStream xmlfile = getClass().getClassLoader().getResourceAsStream(resource);
+		setUpDatabase(xmlfile);
+	}
+	public void setUpDatabase(InputStream xmlfile) throws Exception {
 		// This ensures all tables as defined in the schema are cleaned up, and
 		// is a single place to modify if a schema changes
-		initDB("src/test/resources/ambit2/db/processors/test/tables.xml",
-				DatabaseOperation.DELETE_ALL, true);
+		InputStream in = getClass().getClassLoader().getResourceAsStream(
+				"ambit2/db/processors/test/tables.xml");
+		initDB(in, DatabaseOperation.DELETE_ALL, true);
 		// This will import only records, defined in the xmlfile
 		initDB(xmlfile, DatabaseOperation.INSERT, false);
 	}
 
-	private void initDB(String xmlfile, DatabaseOperation op, boolean admin)
+	private void initDB(InputStream xmlin, DatabaseOperation op, boolean admin)
 			throws Exception {
 		IDatabaseConnection connection = admin ? getConnection(getHost(),
 				getDatabase(), getPort(), getUser(), getPWD())
 				: getConnection();
 		FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
 		builder.setCaseSensitiveTableNames(false);
-		IDataSet dataSet = builder.build(new File(xmlfile));
+		IDataSet dataSet = builder.build(xmlin);
 		try {
 			// DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
 			op.execute(connection, dataSet);
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.SEVERE, x.getMessage(), x);
 			throw x;
 		} finally {
 			connection.close();
-
+			if (xmlin != null)
+				xmlin.close();
 		}
 	}
 

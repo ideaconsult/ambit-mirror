@@ -14,7 +14,7 @@ public class QueryMetricRangeTest extends QueryTest<QueryMetricRange> {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		setDbFile("src/test/resources/ambit2/db/processors/test/query-datasets.xml");
+		setDbFile("ambit2/db/processors/test/query-datasets.xml");
 	}
 	@Override
 	protected QueryMetricRange createQuery() throws Exception {

@@ -82,7 +82,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testWrite() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -165,7 +165,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testWriteBondOrder4() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -241,7 +241,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 
 	public void testWriteTXT() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -331,7 +331,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testWriteEmptySmiles() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -401,7 +401,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testMultiStrucSameSmiles() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -475,7 +475,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testMarkush() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -542,7 +542,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testECHAPreregistrationList() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -750,7 +750,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testWriteMultipleFilesNames() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -824,7 +824,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testWriteMultipleFilesEinecs() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -899,7 +899,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testWriteMultipleFiles_i5d() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -991,7 +991,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testWriteMultipleFiles() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -1075,7 +1075,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testSeekByCID() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -1146,7 +1146,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	public void testImportPropertiesBySMILES() throws Exception {
 
 		Preferences.setProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES, "false");
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/dataset-properties.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -1224,7 +1224,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testImportPropertiesByKey() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/dataset-properties.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -1306,7 +1306,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 
 	@Test
 	public void testImport3Same() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		InputStream in = this.getClass().getClassLoader()
@@ -1359,7 +1359,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 
 	@Test
 	public void testZeroLeadingCAS() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		InputStream in = this
@@ -1409,7 +1409,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testImportByInChI() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		InputStream in = this.getClass().getClassLoader()
@@ -1508,7 +1508,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testImportDX() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/dataset-properties.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -1595,7 +1595,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testImportTox21() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -1737,13 +1737,13 @@ public class RepositoryWriterTest extends DbUnitTest {
 	@Test
 	public void testEmpty() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 	}
 
 	@Test
 	public void testWritePDB() throws Exception {
 
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 
 		ITable chemicals = c.createQueryTable("EXPECTED",
@@ -1833,7 +1833,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 		IDatabaseConnection c = null;
 		long now = System.currentTimeMillis();
 		try {
-			w.setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+			w.setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 			c = w.getConnection();
 			reader = new RawIteratingSDFReader(new FileReader(file));
 			reader.setReference(LiteratureEntry.getInstance(file.getName()));

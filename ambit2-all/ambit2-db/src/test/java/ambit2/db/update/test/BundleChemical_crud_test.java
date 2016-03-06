@@ -20,7 +20,7 @@ public class BundleChemical_crud_test extends
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		dbFile = "src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml";
+		dbFile = "ambit2/db/processors/test/descriptors-datasets.xml";
 	}
 
 	@Override

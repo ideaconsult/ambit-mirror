@@ -10,7 +10,7 @@ public class RetrieveFieldNamesByTypeTest  extends QueryTest<RetrieveFieldNamesB
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		setDbFile("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");			
+		setDbFile("ambit2/db/processors/test/dataset-properties.xml");			
 	}
 	@Override
 	protected RetrieveFieldNamesByType createQuery() throws Exception {

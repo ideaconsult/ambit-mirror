@@ -42,7 +42,7 @@ import org.junit.Test;
 public class DbCreateDatabaseTest extends DbUnitTest {
 	@Test
     public void test() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");	
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");	
 		IDatabaseConnection c = getConnection();
 		Statement t = c.getConnection().createStatement();
 		ResultSet rs = t.executeQuery("select sortstring('4,3,2,1')");

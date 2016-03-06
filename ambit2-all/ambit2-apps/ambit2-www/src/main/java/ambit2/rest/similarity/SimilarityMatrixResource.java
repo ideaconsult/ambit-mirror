@@ -28,7 +28,7 @@ public class SimilarityMatrixResource<Q extends IQueryRetrieval<SimilarityRelati
 
 	@Override
 	protected QueryAbstractReporter createHTMLReporter(Dimension d) {
-		return new PairwiseSimilarityHTMLReporter(getRequest(),DisplayMode.table);
+		return null; // new PairwiseSimilarityHTMLReporter(getRequest(),DisplayMode.table);
 	}
 
 	@Override

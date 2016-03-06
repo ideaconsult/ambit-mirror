@@ -13,7 +13,7 @@ import ambit2.rest.test.ResourceTest;
 public class OnlineStructureFinderTest  extends ResourceTest {
 	@Override
 	protected void setDatabase() throws Exception {
-		setUpDatabase("src/test/resources/src-datasets.xml");
+		setUpDatabaseFromResource("src-datasets.xml");
 	}
 	@Override
 	public String getTestURI() {

@@ -69,7 +69,7 @@ public class DbReaderTest extends DbUnitTest {
 
 	@Test
 	public void testReadRecordsOnly() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");
 		IDatabaseConnection c = getConnection();
 		ITable names = c.createQueryTable("EXPECTED_NAMES",
 				"SELECT * FROM properties");
@@ -90,7 +90,7 @@ public class DbReaderTest extends DbUnitTest {
 
 	@Test
 	public void testProcess() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");
 		IDatabaseConnection c = getConnection();
 		ITable names = c.createQueryTable("EXPECTED_NAMES",
 				"SELECT * FROM properties");
@@ -137,7 +137,7 @@ public class DbReaderTest extends DbUnitTest {
 			/**
 		     * 
 		     */
-		    private static final long serialVersionUID = -3923864774580483348L;
+			private static final long serialVersionUID = -3923864774580483348L;
 
 			public String process(VerboseDescriptorResult target)
 					throws AmbitException {

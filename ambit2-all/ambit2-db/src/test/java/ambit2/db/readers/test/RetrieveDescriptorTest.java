@@ -48,12 +48,12 @@ public class RetrieveDescriptorTest extends RetrieveTest<DescriptorValue> {
 
 	@Override
 	protected String getTestDatabase() {
-		return "src/test/resources/ambit2/db/processors/test/dataset-properties.xml";
+		return "ambit2/db/processors/test/dataset-properties.xml";
 	}
 
 	@Test
 	public void testGetObject() throws Exception {
-		setUpDatabase(getTestDatabase());
+		setUpDatabaseFromResource(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
 		ITable names = c

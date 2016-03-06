@@ -100,7 +100,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 
 	@Test
 	public void testWriteJSONStudies() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 		ITable substance = c.createQueryTable("EXPECTED",
 				"SELECT * FROM substance_experiment");
@@ -134,7 +134,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 
 	@Test
 	public void testWriteJSONStudies_generateuuid() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 		ITable substance = c.createQueryTable("EXPECTED",
 				"SELECT * FROM substance_experiment");
@@ -168,7 +168,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 
 	@Test
 	public void testWriteJSONmatrixUpdate() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");
 		IDatabaseConnection c = getConnection();
 		ITable substance = c.createQueryTable("EXPECTED",
 				"SELECT * FROM substance_experiment");
@@ -208,7 +208,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 
 	@Test
 	public void testWriteJSONStudiesCellViability() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 		ITable substance = c.createQueryTable("EXPECTED",
 				"SELECT * FROM substance_experiment");
@@ -242,7 +242,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 
 	@Test
 	public void testWriteJSONStudiesBundle() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");
 		IDatabaseConnection c = getConnection();
 		ITable substance = c.createQueryTable("EXPECTED",
 				"SELECT * FROM substance_experiment");
@@ -280,7 +280,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 
 	@Test
 	public void testWriteJSONSubstanceStudies() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		IDatabaseConnection c = getConnection();
 		ITable substance = c.createQueryTable("EXPECTED",
 				"SELECT * FROM substance_experiment");
@@ -315,7 +315,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 
 	@Test
 	public void testDeleteEffects() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");
 		IDatabaseConnection c = getConnection();
 		ITable substance = c.createQueryTable("EXPECTED",
 				"SELECT * FROM bundle_substance_experiment where deleted = 0");

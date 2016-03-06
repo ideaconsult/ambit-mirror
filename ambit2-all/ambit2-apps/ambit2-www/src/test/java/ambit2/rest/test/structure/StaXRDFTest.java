@@ -29,7 +29,7 @@ public class StaXRDFTest extends ResourceTest {
 	//
 	@Override
 	protected void setDatabase() throws Exception {
-		setUpDatabase("src/test/resources/src-datasets_model.xml");
+		setUpDatabaseFromResource("src-datasets_model.xml");
 	}
 	/**
 <pre>

@@ -45,7 +45,7 @@ public class Dataset_crud_test extends CRUDTest<Object,SourceDataset> {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		dbFile = "src/test/resources/ambit2/db/processors/test/dataset-properties1.xml";			
+		dbFile = "ambit2/db/processors/test/dataset-properties1.xml";			
 	}
 	@Override
 	protected IQueryUpdate<Object,SourceDataset> createQuery() throws Exception {

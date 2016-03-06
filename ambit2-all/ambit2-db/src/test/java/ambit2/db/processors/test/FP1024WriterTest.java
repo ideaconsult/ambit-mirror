@@ -29,7 +29,7 @@ public class FP1024WriterTest extends DbUnitTest {
 	@Test
 	public void testProcess() throws Exception {
 		BitSetGenerator generator = new BitSetGenerator(getMode());
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/dataset_nofp.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/dataset_nofp.xml");
 		IDatabaseConnection dbConnection = getConnection();
 		String query = "SELECT idchemical,idstructure,uncompress(structure) as c,format FROM structure";
 		ITable chemicals = dbConnection.createQueryTable("EXPECTED_CHEMICALS",

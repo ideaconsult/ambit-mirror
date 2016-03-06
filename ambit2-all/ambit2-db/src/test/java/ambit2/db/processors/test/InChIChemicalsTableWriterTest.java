@@ -27,7 +27,7 @@ public class InChIChemicalsTableWriterTest extends DbUnitTest {
 	public void testProcess() throws Exception {
 		StructureNormalizer normalizer = new StructureNormalizer();
 		
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/dataset_nofp.xml"); //no inchis as well
+		setUpDatabaseFromResource("ambit2/db/processors/test/dataset_nofp.xml"); //no inchis as well
 		IDatabaseConnection dbConnection = getConnection();
 
 		ITable chemicals = 	dbConnection.createQueryTable("EXPECTED_FP","SELECT * FROM chemicals where inchi is null");

@@ -33,7 +33,7 @@ public class Tox21ReaderTest extends DbUnitTest {
 	}
 	@Test
 	public void testWriteTox21() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
         
         
 		File dir = new File("F:/Downloads/Chemical data/TOXCAST/Tox21/");

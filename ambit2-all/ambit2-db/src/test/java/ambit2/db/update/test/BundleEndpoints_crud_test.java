@@ -15,7 +15,7 @@ public class BundleEndpoints_crud_test extends CRUDTest<SubstanceEndpointsBundle
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		dbFile = "src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml";			
+		dbFile = "ambit2/db/processors/test/descriptors-datasets.xml";			
 	}
 	@Override
 	protected IQueryUpdate<SubstanceEndpointsBundle, SubstanceProperty> createQuery()

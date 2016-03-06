@@ -42,7 +42,7 @@ public class TaskResourceTest extends ResourceTest {
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
-		setUpDatabase("src/test/resources/src-datasets.xml");
+		setUpDatabaseFromResource("src-datasets.xml");
 	/*
 	 * Context context = new Context();
 	 * context.getParameters().add(Preferences.DATABASE, getDatabase());

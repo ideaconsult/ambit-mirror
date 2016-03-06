@@ -10,30 +10,31 @@ import org.restlet.data.MediaType;
 import ambit2.rest.test.ProtectedResourceTest;
 
 public class BundleSummaryResourceTest extends ProtectedResourceTest {
-    protected String dbFile = "src/test/resources/descriptors-datasets.xml";
+	protected String dbFile = "descriptors-datasets.xml";
 
-    @Override
-    public String getTestURI() {
-	return String.format("http://localhost:%d/bundle/1/summary", port);
-    }
-
-    @Test
-    public void testJSON() throws Exception {
-	setUpDatabase(dbFile);
-	testGet(getTestURI(), MediaType.APPLICATION_JSON);
-    }
-
-    @Override
-    public boolean verifyResponseJSON(String uri, MediaType media, InputStream in) throws Exception {
-	// todo parse json
-	BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-	String line = null;
-	int count = 0;
-	while ((line = reader.readLine()) != null) {
-	    System.out.println(line);
-	    count++;
+	@Override
+	public String getTestURI() {
+		return String.format("http://localhost:%d/bundle/1/summary", port);
 	}
-	return count == 33;
-    }
+
+	@Test
+	public void testJSON() throws Exception {
+		setUpDatabaseFromResource(dbFile);
+		testGet(getTestURI(), MediaType.APPLICATION_JSON);
+	}
+
+	@Override
+	public boolean verifyResponseJSON(String uri, MediaType media,
+			InputStream in) throws Exception {
+		// todo parse json
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+		String line = null;
+		int count = 0;
+		while ((line = reader.readLine()) != null) {
+			System.out.println(line);
+			count++;
+		}
+		return count == 33;
+	}
 }

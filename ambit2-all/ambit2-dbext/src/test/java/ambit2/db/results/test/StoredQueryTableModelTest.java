@@ -63,7 +63,7 @@ public class StoredQueryTableModelTest extends QueryTest<QueryStoredResults> {
 
 	@Test
 	public void testSelect() throws Exception {
-		setUpDatabase(getDbFile());
+		setUpDatabaseFromResource(getDbFile());
 		IDatabaseConnection c = getConnection();
 		testTable(c,false);
 		c.close();
@@ -71,7 +71,7 @@ public class StoredQueryTableModelTest extends QueryTest<QueryStoredResults> {
 	
 	
 	public void testSelectChemicals() throws Exception {
-		setUpDatabase(getDbFile());
+		setUpDatabaseFromResource(getDbFile());
 		IDatabaseConnection c = getConnection();
 		testTable(c,true);
 		c.close();

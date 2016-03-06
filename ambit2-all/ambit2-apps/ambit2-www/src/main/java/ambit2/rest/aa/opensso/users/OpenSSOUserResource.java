@@ -62,7 +62,9 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 			if ((user == null) || (((OpenSSOUser) user).getToken() == null))
 				super.setTokenCookies(variant, secure);
 			else {
-				OpenSSOCookie.setCookieSetting(this.getResponse().getCookieSettings(),getToken(), useSecureCookie(getRequest()));
+				OpenSSOCookie.setCookieSetting(this.getResponse()
+						.getCookieSettings(), getToken(),
+						useSecureCookie(getRequest()));
 			}
 		}
 	}
@@ -71,33 +73,22 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 	public IProcessor<Iterator<OpenSSOUser>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
 
-		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new StringConvertor(
-					new OpenSSOUserHTMLReporter(getRequest()),
-					MediaType.TEXT_HTML);
-		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor(
-					new OpenSSOUsersURIReporter(getRequest()) {
-						/**
+		// if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
+		return new StringConvertor(new OpenSSOUsersURIReporter(getRequest()) {
+			/**
 			     * 
 			     */
-						private static final long serialVersionUID = -19016700235414489L;
+			private static final long serialVersionUID = -19016700235414489L;
 
-						@Override
-						public void processItem(OpenSSOUser src, Writer output) {
-							super.processItem(src, output);
-							try {
-								output.write('\n');
-							} catch (Exception x) {
-							}
-						}
-					}, MediaType.TEXT_URI_LIST);
-
-		} else
-			// html
-			return new StringConvertor(
-					new OpenSSOUserHTMLReporter(getRequest()),
-					MediaType.TEXT_HTML);
+			@Override
+			public void processItem(OpenSSOUser src, Writer output) {
+				super.processItem(src, output);
+				try {
+					output.write('\n');
+				} catch (Exception x) {
+				}
+			}
+		}, MediaType.TEXT_URI_LIST);
 
 	}
 
@@ -120,7 +111,9 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 					user.setToken(ssoToken.getToken());
 					getRequest().getClientInfo().setUser(user);
 					user.setIdentifier(username);
-					OpenSSOCookie.setCookieSetting(this.getResponse().getCookieSettings(),ssoToken.getToken(), useSecureCookie(getRequest()));
+					OpenSSOCookie.setCookieSetting(this.getResponse()
+							.getCookieSettings(), ssoToken.getToken(),
+							useSecureCookie(getRequest()));
 
 					if (redirect != null)
 						this.getResponse().redirectSeeOther(redirect);
@@ -129,11 +122,11 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 								String.format("%s", getRequest().getRootRef()));
 					return null;
 					/*
-					queryObject = createQuery(getContext(), getRequest(),
-							getResponse());
-
-					return get(variant);
-					*/
+					 * queryObject = createQuery(getContext(), getRequest(),
+					 * getResponse());
+					 * 
+					 * return get(variant);
+					 */
 				} else {
 					getRequest().getClientInfo().setUser(null);
 					this.getResponse().getCookieSettings()

@@ -47,106 +47,112 @@ import ambit2.descriptors.FunctionalGroupDescriptor;
 
 /**
  * Tests writing two descriptors with different specifications
- * @author Nina Jeliazkova nina@acad.bg
- * <b>Modified</b> Jan 7, 2009
+ * 
+ * @author Nina Jeliazkova nina@acad.bg <b>Modified</b> Jan 7, 2009
  */
 public class DbDescriptorWriterTest extends DbUnitTest {
 
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-	
+
 	}
 
 	@Test
-    public void test() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
-        DbDescriptorWriter writer = new DbDescriptorWriter();
-        IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(5,names.getRowCount());
-		
-        writer.setConnection(c.getConnection());
-        writer.open();
-        XLogPDescriptor xlogp = new XLogPDescriptor();
-        writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
-        DescriptorValue v = new DescriptorValue(
-                new DescriptorSpecification("XLogPReference","XLogPTitle","XLogPIdentifier","XLogPVendor"),
-                new String[] {},
-                new Object[] {},
-                new DoubleResult(5),
-                new String[] {"XLogP"}
-                );
-        writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
-        writer.write(v);
-        c.close();
-        
-        c = getConnection();
-		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(7,names.getRowCount());
-		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
-		Assert.assertEquals(2,values.getRowCount());		
+	public void test() throws Exception {
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");
+		DbDescriptorWriter writer = new DbDescriptorWriter();
+		IDatabaseConnection c = getConnection();
+		ITable names = c.createQueryTable("EXPECTED_NAMES",
+				"SELECT * FROM properties");
+		Assert.assertEquals(5, names.getRowCount());
+
+		writer.setConnection(c.getConnection());
+		writer.open();
+		XLogPDescriptor xlogp = new XLogPDescriptor();
+		writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
+		DescriptorValue v = new DescriptorValue(new DescriptorSpecification(
+				"XLogPReference", "XLogPTitle", "XLogPIdentifier",
+				"XLogPVendor"), new String[] {}, new Object[] {},
+				new DoubleResult(5), new String[] { "XLogP" });
+		writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
+		writer.write(v);
 		c.close();
-    }
+
+		c = getConnection();
+		names = c
+				.createQueryTable("EXPECTED_NAMES", "SELECT * FROM properties");
+		Assert.assertEquals(7, names.getRowCount());
+		ITable values = c.createQueryTable("EXPECTED_VALUES",
+				"SELECT * FROM property_values");
+		Assert.assertEquals(2, values.getRowCount());
+		c.close();
+	}
+
 	@Test
-    public void testWriteAllDescriptors() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
-        DbDescriptorWriter writer = new DbDescriptorWriter();
-        IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(5,names.getRowCount());
-		
-		
-        writer.setConnection(c.getConnection());
-        writer.open();
-        XLogPDescriptor xlogp = new XLogPDescriptor();
-        writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
-        DescriptorValue v = new DescriptorValue(
-                new DescriptorSpecification("XLogPReference","XLogPTitle","XLogPIdentifier","XLogPVendor"),
-                new String[] {},
-                new Object[] {},
-                new DoubleResult(5),
-                new String[] {"XLogP"}
-                );
-        writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
-        writer.write(v);
-        c.close();
-        
-        c = getConnection();
-		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(7,names.getRowCount());
-		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
-		Assert.assertEquals(2,values.getRowCount());		
+	public void testWriteAllDescriptors() throws Exception {
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");
+		DbDescriptorWriter writer = new DbDescriptorWriter();
+		IDatabaseConnection c = getConnection();
+		ITable names = c.createQueryTable("EXPECTED_NAMES",
+				"SELECT * FROM properties");
+		Assert.assertEquals(5, names.getRowCount());
+
+		writer.setConnection(c.getConnection());
+		writer.open();
+		XLogPDescriptor xlogp = new XLogPDescriptor();
+		writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
+		DescriptorValue v = new DescriptorValue(new DescriptorSpecification(
+				"XLogPReference", "XLogPTitle", "XLogPIdentifier",
+				"XLogPVendor"), new String[] {}, new Object[] {},
+				new DoubleResult(5), new String[] { "XLogP" });
+		writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
+		writer.write(v);
 		c.close();
-    }
+
+		c = getConnection();
+		names = c
+				.createQueryTable("EXPECTED_NAMES", "SELECT * FROM properties");
+		Assert.assertEquals(7, names.getRowCount());
+		ITable values = c.createQueryTable("EXPECTED_VALUES",
+				"SELECT * FROM property_values");
+		Assert.assertEquals(2, values.getRowCount());
+		c.close();
+	}
+
 	@Test
-    public void testWriteFunctionalGroups() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
-        DbDescriptorWriter writer = new DbDescriptorWriter();
-        IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(5,names.getRowCount());
-		
-		
-        writer.setConnection(c.getConnection());
-        writer.open();
-        FunctionalGroupDescriptor d = new FunctionalGroupDescriptor();
-        Assert.assertEquals(84,((List)d.getParameters()[0]).size());
+	public void testWriteFunctionalGroups() throws Exception {
+		setUpDatabaseFromResource("ambit2/db/processors/test/descriptors-datasets.xml");
+		DbDescriptorWriter writer = new DbDescriptorWriter();
+		IDatabaseConnection c = getConnection();
+		ITable names = c.createQueryTable("EXPECTED_NAMES",
+				"SELECT * FROM properties");
+		Assert.assertEquals(5, names.getRowCount());
 
-        DescriptorValue v = d.calculate(MoleculeFactory.makePhenylAmine());
-        Assert.assertEquals(84,v.getNames().length);
-        writer.write(v);
-        c.close();
-        
-        c = getConnection();
-		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(89,names.getRowCount());
-		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
-		Assert.assertEquals(2,values.getRowCount());		
-		ITable templates = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM properties join catalog_references using(idreference) where title=\""+d.getClass().getName()+"\"");	
-		Assert.assertEquals(84,templates.getRowCount());			
+		writer.setConnection(c.getConnection());
+		writer.open();
+		FunctionalGroupDescriptor d = new FunctionalGroupDescriptor();
+		Assert.assertEquals(84, ((List) d.getParameters()[0]).size());
 
+		DescriptorValue v = d.calculate(MoleculeFactory.makePhenylAmine());
+		Assert.assertEquals(84, v.getNames().length);
+		writer.write(v);
+		c.close();
+
+		c = getConnection();
+		names = c
+				.createQueryTable("EXPECTED_NAMES", "SELECT * FROM properties");
+		Assert.assertEquals(89, names.getRowCount());
+		ITable values = c.createQueryTable("EXPECTED_VALUES",
+				"SELECT * FROM property_values");
+		Assert.assertEquals(2, values.getRowCount());
+		ITable templates = c
+				.createQueryTable(
+						"EXPECTED_TEMPLATES",
+						"SELECT * FROM properties join catalog_references using(idreference) where title=\""
+								+ d.getClass().getName() + "\"");
+		Assert.assertEquals(84, templates.getRowCount());
 
 		c.close();
-    }	
+	}
 }

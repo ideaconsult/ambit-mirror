@@ -51,7 +51,7 @@ public class ProteinCoronaPaperReaderTest  extends DbUnitTest {
 	
 	@Test
 	public void testWriteProteinCoronaData() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
         IDatabaseConnection c = getConnection();
         IRawReader<IStructureRecord> parser = null;
         try {
@@ -73,7 +73,7 @@ public class ProteinCoronaPaperReaderTest  extends DbUnitTest {
 	
 	@Test
 	public void testWriteLLNAData() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
         IDatabaseConnection c = getConnection();
         IRawReader<IStructureRecord> parser = null;
         try {
