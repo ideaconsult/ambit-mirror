@@ -38,12 +38,17 @@ import net.sf.jniinchi.INCHI_OPTION;
 import net.sf.jniinchi.INCHI_RET;
 
 import org.junit.Test;
+import org.openscience.cdk.fingerprint.CircularFingerprinter;
+import org.openscience.cdk.fingerprint.IBitFingerprint;
+import org.openscience.cdk.fingerprint.ICountFingerprint;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
+import org.openscience.cdk.isomorphism.Pattern;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -243,9 +248,9 @@ public class InchiProcessorTest {
 
 		InChIGeneratorFactory factory = InChIGeneratorFactory.getInstance();
 
-		InChIGenerator gen = factory.getInChIGenerator(mol,options);
+		InChIGenerator gen = factory.getInChIGenerator(mol, options);
 		Assert.assertEquals(INCHI_RET.OKAY, gen.getReturnStatus());
-		InChIGenerator genH = factory.getInChIGenerator(mol,options);
+		InChIGenerator genH = factory.getInChIGenerator(mol, options);
 		Assert.assertEquals(INCHI_RET.OKAY, genH.getReturnStatus());
 
 		Assert.assertEquals(gen.getInchi(), genH.getInchi());
@@ -273,14 +278,14 @@ public class InchiProcessorTest {
 
 		InChIGeneratorFactory factory = InChIGeneratorFactory.getInstance();
 
-		InChIGenerator gen = factory.getInChIGenerator(mol,options);
+		InChIGenerator gen = factory.getInChIGenerator(mol, options);
 		Assert.assertEquals(INCHI_RET.OKAY, gen.getReturnStatus());
-		InChIGenerator genH = factory.getInChIGenerator(mol,options);
+		InChIGenerator genH = factory.getInChIGenerator(mol, options);
 		Assert.assertEquals(INCHI_RET.OKAY, genH.getReturnStatus());
 
 		Assert.assertEquals(gen.getInchi(), genH.getInchi());
 	}
-	
+
 	@Test
 	public void testTautomers() throws Exception {
 
@@ -295,23 +300,23 @@ public class InchiProcessorTest {
 		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IAtomContainer mol1 = p.parseSmiles("S=NNCC");
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol1);
-		CDKHydrogenAdder.getInstance(mol1.getBuilder())
-				.addImplicitHydrogens(mol1);
+		CDKHydrogenAdder.getInstance(mol1.getBuilder()).addImplicitHydrogens(
+				mol1);
 
 		IAtomContainer mol2 = p.parseSmiles("SN=NCC");
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol2);
-		CDKHydrogenAdder.getInstance(mol2.getBuilder())
-				.addImplicitHydrogens(mol2);
+		CDKHydrogenAdder.getInstance(mol2.getBuilder()).addImplicitHydrogens(
+				mol2);
 
 		InChIGeneratorFactory factory = InChIGeneratorFactory.getInstance();
 
-		InChIGenerator gen1 = factory.getInChIGenerator(mol1,options);
+		InChIGenerator gen1 = factory.getInChIGenerator(mol1, options);
 		System.out.println(gen1.getReturnStatus());
 		System.out.println(gen1.getMessage());
-		//Assert.assertEquals(INCHI_RET.OKAY, gen1.getReturnStatus());
-		
-		InChIGenerator gen2 = factory.getInChIGenerator(mol2,options);
-		//Assert.assertEquals(INCHI_RET.OKAY, gen2.getReturnStatus());
+		// Assert.assertEquals(INCHI_RET.OKAY, gen1.getReturnStatus());
+
+		InChIGenerator gen2 = factory.getInChIGenerator(mol2, options);
+		// Assert.assertEquals(INCHI_RET.OKAY, gen2.getReturnStatus());
 		System.out.println(gen2.getReturnStatus());
 		System.out.println(gen2.getMessage());
 
@@ -323,4 +328,46 @@ public class InchiProcessorTest {
 		Assert.assertTrue(!gen1.getInchiKey().equals(gen2.getInchiKey()));
 	}
 
+	@Test
+	public void testInChI_pubchem() throws Exception {
+		InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
+
+		InChIToStructure c = f.getInChIToStructure(
+				"InChI=1/C34H34N4O4/c1-7-21-17(3)25-13-26-19(5)23(9-11-33(39)40)31(37-26)16-32-24(10-12-34(41)42)20(6)28(38-32)15-30-22(8-2)18(4)27(36-30)14-29(21)35-25/h7-8,13-16H,1-2,9-12H2,3-6H3,(H4,35,36,37,38,39,40,41,42)/p-2/fC34H32N4O4/h39,41H/q-2",
+				SilentChemObjectBuilder.getInstance());
+
+		System.out.println(c.getLog());
+		System.out.println(c.getWarningFlags());
+
+		IAtomContainer a = c.getAtomContainer();
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(a);
+		CDKHueckelAromaticityDetector.detectAromaticity(a);
+		
+		SmilesGenerator g = SmilesGenerator.absolute().aromatic();
+		String aromatic_smiles = g.create(a);
+		System.out.println(aromatic_smiles);
+
+		CircularFingerprinter fp = new CircularFingerprinter();
+		IBitFingerprint cf_inchi = fp.getBitFingerprint(a);
+		System.out.println(cf_inchi.asBitSet());
+		System.out.println();
+		String[] smiles = new String[] {	
+				"C=CC1=C(C)C2=NC1=CC3=C(C)C(=C(C=C4C(=C(CCC(=O)O)C(=N4)C=C5C(=C(C)C(=C2)[N-]5)CCC(=O)O)C)[N-]3)C=C",
+				"C=CC1=C(C)C2=NC1=CC3=NC(=CC4=C(C)C(=C(C=C5C(=C(C)C(=C2)[N-]5)CCC(=O)O)[N-]4)CCC(=O)O)C(=C3C)C=C",
+				"C=CC1=C2C=C3C(=C(C=C)C(=N3)C=C4C(=C(CCC(=O)O)C(=CC5=NC(=CC(=C1C)[N-]2)C(=C5CCC(=O)O)C)[N-]4)C)C"
+		};
+		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
+		
+		for (String smi : smiles) {
+			IAtomContainer mol = p.parseSmiles(smi);
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			CDKHueckelAromaticityDetector.detectAromaticity(mol);
+			
+			IBitFingerprint cf = fp.getBitFingerprint(mol);
+			System.out.println(cf.asBitSet());
+			String newsmiles = g.create(mol);
+			System.out.println(newsmiles);
+		}
+
+	}
 }
