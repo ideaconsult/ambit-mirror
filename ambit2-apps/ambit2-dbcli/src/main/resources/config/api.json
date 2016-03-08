@@ -87,6 +87,12 @@
 						"value": false,
 						"comment": "Generates SMILES (canonical).  Uses CDK SmilesGenerator.absolute()"
 					},
+					":smilesaromatic": {
+						"mandatory": false,
+						"type": "Boolean",
+						"value": false,
+						"comment": "Generates aromatic SMILES.  Uses CDK SmilesGenerator.aromatic()"
+					},
 					":page": {
 						"mandatory": false,
 						"type": "Integer",

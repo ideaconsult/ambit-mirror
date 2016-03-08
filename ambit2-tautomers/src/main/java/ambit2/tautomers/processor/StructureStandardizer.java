@@ -16,6 +16,7 @@ import net.sf.jniinchi.INCHI_OPTION;
 
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
@@ -26,6 +27,7 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.data.Property;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.FragmentProcessor;
 import ambit2.core.processors.IsotopesProcessor;
 import ambit2.core.processors.structure.StructureTypeProcessor;
@@ -41,6 +43,16 @@ public class StructureStandardizer extends
 	protected Map<Object, Property> tags = new HashMap<>();
 	protected boolean generateInChI = true;
 	protected boolean generateSMILES_Canonical = true;
+	protected boolean generateSMILES_Aromatic = false;
+
+	public boolean isGenerateSMILES_Aromatic() {
+		return generateSMILES_Aromatic;
+	}
+
+	public void setGenerateSMILES_Aromatic(boolean generateSMILES_Aromatic) {
+		this.generateSMILES_Aromatic = generateSMILES_Aromatic;
+	}
+
 	protected boolean splitFragments = false;
 	protected boolean generateTautomers = false;
 	protected boolean generateSMILES = false; // not canonical
@@ -92,6 +104,21 @@ public class StructureStandardizer extends
 		this.generateSMILES_Canonical = generateSMILES_Canonical;
 	}
 
+	protected SmilesGenerator getSmilesGenerator() {
+		if (smiles_generator == null) {
+			if (generateSMILES_Canonical)
+				smiles_generator = SmilesGenerator.absolute();
+			else if (generateSMILES)
+				smiles_generator = SmilesGenerator.isomeric();
+			if (generateSMILES_Aromatic) {
+				if (smiles_generator == null)
+					smiles_generator = SmilesGenerator.isomeric();
+				smiles_generator = smiles_generator.aromatic();
+			}
+		}
+		return smiles_generator;
+	}
+
 	public boolean isGenerateSMILES() {
 		return generateSMILES;
 	}
@@ -141,10 +168,7 @@ public class StructureStandardizer extends
 	protected transient CDKHydrogenAdder hadder = CDKHydrogenAdder
 			.getInstance(SilentChemObjectBuilder.getInstance());
 	protected transient InChIGeneratorFactory igf = null;
-	protected transient SmilesGenerator smilesGenerator = SmilesGenerator
-			.isomeric();
-	protected transient SmilesGenerator smilesGeneratorAbsolute = SmilesGenerator
-			.absolute();
+	protected transient SmilesGenerator smiles_generator;
 
 	public StructureStandardizer() {
 		super();
@@ -273,18 +297,19 @@ public class StructureStandardizer extends
 											.getMessage()));
 						}
 				}
-				if (generateSMILES || generateSMILES_Canonical) {
-					Property smiles = Property.getSMILESInstance();
+
+				if (getSmilesGenerator() != null) {
+					Property p_smiles = Property.getSMILESInstance();
 					try {
-						if (generateSMILES_Canonical)
-							processed.setProperty(smiles,
-									smilesGeneratorAbsolute.create(processed));
-						else
-							processed.setProperty(smiles,
-									smilesGenerator.create(processed));
+						processed.setProperty(p_smiles, getSmilesGenerator()
+								.create(processed));
 					} catch (Exception x) {
-						if (processed.getProperty(smiles) == null)
-							processed.setProperty(smiles, "");
+						
+						if (processed.getProperty(p_smiles) == null) {
+							Object inchi = processed.getProperty(Property.opentox_InChI);
+							String last_resort_smiles = inchi==null?"":InChI2SMILES(inchi.toString());
+							processed.setProperty(p_smiles, last_resort_smiles);
+						}	
 						err = processed.getProperty(ERROR_TAG);
 						processed.setProperty(ERROR_TAG, String.format(
 								"%s %s %s", err == null ? "" : err, x
@@ -379,6 +404,36 @@ public class StructureStandardizer extends
 		newtag.setName(tag);
 		tags.put(TautomerConst.CACTVS_ENERGY_RANK, newtag);
 		tags.put(TautomerConst.TAUTOMER_RANK, newtag);
+	}
+
+	/**
+	 * This is last resort, when creating SMILES from structure fails for
+	 * whatever reason
+	 * 
+	 * @param inchi
+	 * @return
+	 * @throws Exception
+	 */
+	protected String InChI2SMILES(String inchi) throws Exception {
+		try {
+		if (igf == null)
+			igf = InChIGeneratorFactory.getInstance();
+
+		InChIToStructure c = igf.getInChIToStructure(inchi,
+				SilentChemObjectBuilder.getInstance());
+
+		IAtomContainer a = c.getAtomContainer();
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(a);
+		CDKHueckelAromaticityDetector.detectAromaticity(a);
+
+		if (getSmilesGenerator() != null)
+			return getSmilesGenerator().create(a);
+		else
+			return null;
+		} catch (Exception x) {
+			logger.log(Level.WARNING, x.getMessage());
+			return null;
+		}
 	}
 
 }
