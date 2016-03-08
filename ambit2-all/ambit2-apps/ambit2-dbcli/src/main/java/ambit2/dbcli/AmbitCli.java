@@ -1210,6 +1210,14 @@ public class AmbitCli {
 
 		}
 		try {
+			Object o = options.getParam(":smilesaromatic");
+			standardprocessor.setGenerateSMILES_Aromatic(Boolean
+					.parseBoolean(o.toString()));
+		} catch (Exception x) {
+
+		}
+		
+		try {
 			Object o = options.getParam(":generatestereofrom2d");
 			standardprocessor.setGenerateStereofrom2D(Boolean.parseBoolean(o
 					.toString()));
