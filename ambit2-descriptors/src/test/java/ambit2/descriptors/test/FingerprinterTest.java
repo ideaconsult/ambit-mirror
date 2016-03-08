@@ -5,11 +5,16 @@ import java.util.BitSet;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.openscience.cdk.fingerprint.CircularFingerprinter;
+import org.openscience.cdk.fingerprint.IBitFingerprint;
 import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.fingerprint.PubchemFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.similarity.Tanimoto;
+import org.openscience.cdk.smiles.SmilesGenerator;
+import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -105,4 +110,34 @@ public class FingerprinterTest {
 				.getSpecification().getImplementationIdentifier());
 
 	}
+	
+
+	@Test
+	public void test_fp() throws Exception {
+		String[] smiles = new String[] { "O(CC(NCC1=C(C=C(C=C1)C)C)C)C",
+				"O(CC(NCC=1C(=CC(=CC1)C)C)C)C" };
+		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
+		SmilesGenerator absolute_aromatic = SmilesGenerator.absolute()
+				.aromatic();
+		SmilesGenerator isomeric_aromatic = SmilesGenerator.isomeric()
+				.aromatic();
+
+		CircularFingerprinter fp = new CircularFingerprinter();
+		BitSet[] bs = new BitSet[] {null,null};
+		for (int i=0; i < smiles.length; i++) {
+			
+			IAtomContainer mol = p.parseSmiles(smiles[i]);
+			//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			//CDKHueckelAromaticityDetector.detectAromaticity(mol);
+
+			IBitFingerprint cf = fp.getBitFingerprint(mol);
+			bs[i] = cf.asBitSet();
+			String newsmiles = absolute_aromatic.create(mol);
+			Assert.assertEquals(1.0f, Tanimoto.calculate(bs[i],fp.getBitFingerprint(p.parseSmiles(newsmiles)).asBitSet()));
+			String newsmiles_i = isomeric_aromatic.create(mol);
+			Assert.assertEquals(1.0f, Tanimoto.calculate(bs[i],fp.getBitFingerprint(p.parseSmiles(newsmiles_i)).asBitSet()));
+		}
+		Assert.assertEquals(1.0f, Tanimoto.calculate(bs[0],bs[1]));
+	}
+
 }
