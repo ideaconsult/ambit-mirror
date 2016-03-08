@@ -59,7 +59,7 @@ public class AmbitResource extends FreeMarkerResource {
 		"<link href=\"%s/style/jquery.ui.theme.css\" rel=\"stylesheet\" type=\"text/css\">\n",
 		
 		"<link href=\"%s/style/jquery.dataTables.css\" rel=\"stylesheet\" type=\"text/css\">\n",
-		"<link href=\"%s/style/skeleton/table.css\" rel=\"stylesheet\" type=\"text/css\">\n",
+		//"<link href=\"%s/style/skeleton/table.css\" rel=\"stylesheet\" type=\"text/css\">\n",
 		"<link href=\"%s/style/skeleton/ambit2.css\" rel=\"stylesheet\" type=\"text/css\">\n",
 		"<link href=\"%s/images/favicon.ico\" rel=\"shortcut icon\" type=\"image/ico\">\n",
 	};
@@ -75,8 +75,6 @@ public class AmbitResource extends FreeMarkerResource {
 		"<script type='text/javascript' src='%s/scripts/jopentox-ui-compound.js'></script>\n",
 		//"<script type='text/javascript' src='%s/scripts/jendpoints.js'></script>\n",
 		//"<script type=\"text/javascript\" src=\"%s/jquery/jquery.MultiFile.pack.js\"></script>\n",
-		"<script type='text/javascript' src='%s/jme/jme.js'></script>\n",
-		"<script type='text/javascript' src='%s/jmol/Jmol.js'></script>\n",
 	};
 
 	protected String[][] uri = {
@@ -587,16 +585,7 @@ public class AmbitResource extends FreeMarkerResource {
 		output.write("<div class=\"footer\">");
 
 		output.write("<span class=\"right\">");
-		output.write(String.format("<a href='http://www.cefic.be'><img src=%s/images/logocefic.png border='0' width='115' height='60'></a>&nbsp;",baseReference));
-		output.write(String.format("<a href='http://www.cefic-lri.org'><img src=%s/images/logolri.png border='0' width='115' height='60'></a>&nbsp;",baseReference));
-		output.write(String.format("<a href='http://www.opentox.org'><img src=%s/images/logo.png border='0' width='115' height='60'></a>",baseReference));
-		output.write("<br>Developed by Ideaconsult Ltd. (2005-2014)"); 
-		output.write("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
-		output.write(String.format("    <IMG SRC=\"%s/images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">",baseReference));
-		output.write("  </A>&nbsp; ");
-		output.write("<A HREF=\"http://jigsaw.w3.org/css-validator/check/referer\">");
-		output.write(String.format("    <IMG SRC=\"%s/images/valid-css-blue-small.png\" TITLE=\"Valid CSS\" ALT=\"Valid CSS\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">",baseReference));
-		output.write("  </A>");
+		output.write("<a href='http://www.ideaconsult.net' target=_blank>Ideaconsult Ltd.</a>"); 
 
 		output.write("</span>");		
 		output.write("</div>");

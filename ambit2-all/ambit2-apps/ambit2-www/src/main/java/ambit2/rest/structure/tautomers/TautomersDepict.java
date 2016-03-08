@@ -2,14 +2,13 @@ package ambit2.rest.structure.tautomers;
 
 import java.util.List;
 
-import org.openscience.cdk.CDKConstants;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -20,11 +19,13 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.Property;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
-import ambit2.tautomers.TautomerManager;
+import ambit2.tautomers.TautomerConst;
+import ambit2.tautomers.processor.TautomerProcessor;
 
 /**
  * C3=C(C(C1=C(OC2=C(C1=O)C=CC=C2)O)CC(=O)C)C=CC=C3
@@ -40,7 +41,7 @@ public class TautomersDepict extends AbstractDepict {
 
 	protected enum _method {
 		ambit
-		//, cactvs, inchi
+		// , cactvs, inchi
 	}
 
 	@Override
@@ -83,28 +84,8 @@ public class TautomersDepict extends AbstractDepict {
 							SilentChemObjectBuilder.getInstance());
 				smiles = smiles.trim();
 				mol = parser.parseSmiles(smiles);
-				boolean aromatic = false;
-				if (mol != null)
-					for (IAtom atom : mol.atoms())
-						if (atom.getFlag(CDKConstants.ISAROMATIC)) {
-							aromatic = true;
-							break;
-						}
-				if (aromatic)
-					try {
-						FixBondOrdersTool fbt = new FixBondOrdersTool();
-						mol = fbt.kekuliseAromaticRings(mol);
-						if (mol != null) {
-							for (IAtom atom : mol.atoms())
-								if (atom.getFlag(CDKConstants.ISAROMATIC))
-									atom.setFlag(CDKConstants.ISAROMATIC, false);
-							for (IBond bond : mol.bonds())
-								if (bond.getFlag(CDKConstants.ISAROMATIC))
-									bond.setFlag(CDKConstants.ISAROMATIC, false);
-						}
-					} catch (Exception x) {
-						// keep old mol
-					}
+				AtomContainerManipulator
+						.percieveAtomTypesAndConfigureAtoms(mol);
 			}
 
 		} catch (Exception x) {
@@ -150,23 +131,15 @@ public class TautomersDepict extends AbstractDepict {
 		}
 		if ((smiles == null) || "".equals(smiles))
 			return "<p>Empty SMILES</p>";
-		b.append("<table width='100%' >");
-		/*
-		 * b.append("<thead>"); b.append("<caption>"); for (_method m :
-		 * _method.values()) { if (method.equals(m))
-		 * b.append(String.format("<h3>%s tautomers</h3>",m)); else
-		 * b.append(String.format("<a href=''>%s tautomers</a>",m));
-		 * b.append("&nbsp;"); } b.append("</caption>"); b.append("</thead>");
-		 */
-		b.append("<tbody>");
-		b.append("<tr>");
 
 		IAtomContainer mol = null;
 		switch (method) {
 		case ambit: {
-			// ok, this is for a demo
-			if ("warfarin".equals(smiles[0]))
-				smiles[0] = "C3=C(C(C1=C(OC2=C(C1=O)C=CC=C2)O)CC(=O)C)C=CC=C3";
+			b.append("<table id='ttm' class='ambittable jtoxkit' width='100%' style='font-size:75%'>");
+			b.append("<thead><th>Diagram</th><th>Rank</th><th>InChIKey</th><th>InChI</th><th>SMILES</th></thead>");
+			b.append("<tbody>");
+			b.append("<tr>");
+
 			mol = getAtomContainer(smiles[0]);
 			b.append("<td>");
 			String url = String.format(
@@ -175,77 +148,37 @@ public class TautomersDepict extends AbstractDepict {
 					smarts == null ? "" : "&smarts=", smarts == null ? ""
 							: Reference.encode(smarts));
 
-			b.append(AmbitResource.printWidget(
-					String.format("<a href='%s' title='%s'>%s</a>", url,
-							smiles, "SOURCE"),
-					String.format(
-							"<img id='smiles' src='%s' alt='%s' title='%s' onError=\"hideDiv('smiles')\">",
-							url, visibleSmiles, visibleSmiles), "depictBox"));
+			b.append(String
+					.format("<a href='%s&w=400&h=400' target=_blank ><img id='smiles' style='border-color: red;' border='3' src='%s&w=200&h=200' alt='%s' title='%s' onError=\"hideDiv('smiles')\"></a>",
+							url,url, visibleSmiles, "source"));
+			b.append("</td><td></td><td></td>");
+			b.append("<td>");
+			b.append(smiles[0].startsWith("InChI")?smiles[0]:"");
 			b.append("</td>");
+			b.append("<td>");
+			b.append(smiles[0].startsWith("InChI")?"":smiles[0]);
+			b.append("</td>");
+			b.append("</tr>");
 			b.append(generateTautomersAmbit(mol));
 			break;
 		}
-		/*
-		case cactvs: {
-			b.append("<td>");
-			String url = String.format(
-					"%s/depict/cactvs?search=%s&media=image/png", getRequest()
-							.getRootRef(), Reference.encode(smiles[0]),
-					smarts == null ? "" : "&smarts=", smarts == null ? ""
-							: Reference.encode(smarts));
-
-			b.append(AmbitResource.printWidget(
-					String.format("<a href='%s' title='%s'>%s</a>", url,
-							smiles, "SOURCE"),
-					String.format(
-							"<img id='smiles' src='%s' alt='%s' title='%s' onError=\"hideDiv('smiles')\">",
-							url, visibleSmiles, visibleSmiles), "depictBox"));
-			b.append("</td>");
-			List<String> resultTautomers = generateTautomersCactvs(smiles[0]);
-			if (resultTautomers != null)
-				for (int i = 0; i < resultTautomers.size(); i++) {
-					if (((i + 1) % 3) == 0)
-						b.append("<tr>");
-					b.append("<td>");
-
-					String tautomerSmiles = resultTautomers.get(i);
-
-					b.append(getWidget(tautomerSmiles, i));
-
-					b.append("</td>");
-					if (((i + 1) % 3) == 2)
-						b.append("</tr>");
-				}
-			break;
+		default: {
+			b.append("<table width='100%' >");
+			b.append("<tbody>");
+			b.append("<tr>");
 		}
-		case inchi: {
-			if ("warfarin".equals(smiles))
-				smiles[0] = "C3=C(C(C1=C(OC2=C(C1=O)C=CC=C2)O)CC(=O)C)C=CC=C3";
-			b.append("<td>");
-			String url = String.format(
-					"%s/depict/cdk?search=%s&media=image/png", getRequest()
-							.getRootRef(), Reference.encode(smiles[0]),
-					smarts == null ? "" : "&smarts=", smarts == null ? ""
-							: Reference.encode(smarts));
-
-			b.append(AmbitResource.printWidget(
-					String.format("<a href='%s' title='%s'>%s</a>", url,
-							smiles, "SOURCE"),
-					String.format(
-							"<img id='smiles' src='%s' alt='%s' title='%s' onError=\"hideDiv('smiles')\">",
-							url, visibleSmiles, visibleSmiles), "depictBox"));
-			b.append("</td>");
-			mol = getAtomContainer(visibleSmiles);
-			b.append(generateTautomersInChI(mol));
-		}
-		*/
 		}
 		b.append("</tbody>");
 		b.append("</table>");
+		b.append("<script type='text/javascript'>$(document).ready(function(){$('.ambittable').DataTable();});</script>");
 		return b.toString();
 	}
 
 	protected String getWidget(String tautomerSmiles, int index) {
+		return getWidget(tautomerSmiles, index, "");
+	}
+
+	protected String getWidget(String tautomerSmiles, int index, String title) {
 		String url = String.format(
 				"%s/depict/cdk?search=%s%s%s&media=image/png", getRequest()
 						.getRootRef(), Reference.encode(tautomerSmiles),
@@ -255,8 +188,9 @@ public class TautomersDepict extends AbstractDepict {
 		return AmbitResource
 				.printWidget(
 						String.format(
-								"<a href='%s' title='Tautomer: %s'>%d. %s</a>",
-								url, tautomerSmiles, (index + 1), "Tautomer"),
+								"<a href='%s' title='Tautomer: %s'>%d. %s %s</a>",
+								url, tautomerSmiles, (index + 1), "Tautomer",
+								title),
 						String.format(
 								"<img id='t%d' src='%s' alt='%s' title='%s' onError=\"hideDiv('t%d')\">",
 								index + 1, url, tautomerSmiles == null ? ""
@@ -267,110 +201,70 @@ public class TautomersDepict extends AbstractDepict {
 
 	protected String generateTautomersAmbit(IAtomContainer mol)
 			throws ResourceException {
-		StringBuilder b = new StringBuilder();
+		final StringBuilder b = new StringBuilder();
 		List<IAtomContainer> resultTautomers = null;
-		TautomerManager tman = new TautomerManager();
+		TautomerProcessor tproc = new TautomerProcessor();
+		tproc.getTautomerManager().FlagRegisterOnlyBestRankTautomers = false;
+		IProcessor<IAtomContainer, IAtomContainer> callback = new DefaultAmbitProcessor<IAtomContainer, IAtomContainer>() {
+			SmilesGenerator gen = SmilesGenerator.isomeric();
+			int index = 0;
+
+			@Override
+			public IAtomContainer process(IAtomContainer ttm) throws Exception {
+				b.append("<tr>");
+				try {
+					String p = ttm.getProperties().toString();
+					String tautomerSmiles = gen.create(ttm);
+					b.append("<td>");
+					// b.append(getWidget(tautomerSmiles, index, ""));
+
+					String url = String
+							.format("%s/depict/cdk?search=%s%s%s&media=image/png",
+									getRequest().getRootRef(),
+									Reference.encode(tautomerSmiles),
+									smarts == null ? "" : "&smarts=",
+									smarts == null ? "" : Reference
+											.encode(smarts));
+
+					b.append(String
+							.format("<a href='%s&w=400&h=400' target=_blank><img id='t%d' src='%s&w=200&h=200' alt='%s' title='%s' onError=\"hideDiv('t%d')\"></a>",
+									url,index + 1, url, tautomerSmiles == null ? ""
+											: tautomerSmiles,
+									tautomerSmiles == null ? ""
+											: tautomerSmiles, index + 1));
+
+					b.append("</td>");
+					b.append("<td>");
+					b.append(ttm.getProperty(TautomerConst.CACTVS_ENERGY_RANK)==null?"":ttm.getProperty(TautomerConst.CACTVS_ENERGY_RANK));
+					b.append("</td>");
+					b.append("<td>");
+					b.append(ttm.getProperty(Property.opentox_InChIKey)==null?"":ttm.getProperty(Property.opentox_InChIKey));
+					b.append("</td>");
+					b.append("<td>");
+					b.append(ttm.getProperty(Property.opentox_InChI)==null?"":ttm.getProperty(Property.opentox_InChI));
+					b.append("</td>");
+					b.append("<td>");
+					b.append(tautomerSmiles==null?"":tautomerSmiles);
+					b.append("</td>");
+				} catch (Exception x) {
+					b.append(x.getMessage());
+				}
+				b.append("</tr>");
+				index++;
+				return ttm;
+			}
+		};
+		tproc.setCallback(callback);
 		try {
-
-			tman.setStructure(mol);
-			resultTautomers = tman.generateTautomersIncrementaly();
-
+			IAtomContainer best = tproc.process(mol);
 		} catch (Exception x) {
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,
 					x.getMessage(), x);
 		}
-		SmilesGenerator gen = SmilesGenerator.generic();
-
-		for (int i = 0; i < resultTautomers.size(); i++) {
-			if (((i + 1) % 3) == 0)
-				b.append("<tr>");
-			b.append("<td>");
-			try {
-				String tautomerSmiles = gen.create(resultTautomers.get(i));
-				b.append(getWidget(tautomerSmiles, i));
-			} catch (Exception x) {
-				b.append(x.getMessage());
-			}
-			b.append("</td>");
-			if (((i + 1) % 3) == 2)
-				b.append("</tr>");
-		}
 
 		return b.toString();
 	}
-	/*
-	protected List<String> generateTautomersCactvs(String value)
-			throws ResourceException {
-		final String cactvsURI = "http://cactus.nci.nih.gov/chemical/structure/tautomers:%s/smiles";
-		HTTPClient cli = null;
-		InputStream in = null;
-		List<String> smiles = new ArrayList<String>();
-		try {
-			cli = new HTTPClient(String.format(cactvsURI,
-					Reference.encode(value)));
-			cli.get();
-			if (cli.getStatus() == 200) {
-				in = cli.getInputStream();
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(in));
-				String line = null;
-				while ((line = reader.readLine()) != null) {
-					if (!"".equals(line.trim()))
-						smiles.add(line.trim());
-				}
 
-			}
-			return smiles;
-		} catch (Exception x) {
-			return null;
-		} finally {
-			try {
-				if (in != null)
-					in.close();
-			} catch (Exception x) {
-			}
-			try {
-				if (cli != null)
-					cli.release();
-			} catch (Exception x) {
-			}
-		}
-	}
-
-	protected String generateTautomersInChI(IAtomContainer mol)
-			throws ResourceException {
-		InChITautomerGenerator itg = new InChITautomerGenerator();
-		StringBuilder b = new StringBuilder();
-		try {
-
-			List<IAtomContainer> resultTautomers = itg.getTautomers(mol);
-			SmilesGenerator gen = SmilesGenerator.generic();
-			for (int i = 0; i < resultTautomers.size(); i++) {
-				if (((i + 1) % 3) == 0)
-					b.append("<tr>");
-				b.append("<td>");
-
-				String tautomerSmiles = gen.create(resultTautomers.get(i));
-
-				b.append(getWidget(tautomerSmiles, i));
-
-				b.append("</td>");
-				if (((i + 1) % 3) == 2)
-					b.append("</tr>");
-			}
-
-			return b.toString();
-		} catch (Exception x) {
-			b.append("<td>");
-			b.append(AmbitResource.printWidget("Error", x.getMessage(),
-					"depictBox"));
-			b.append("</td>");
-			// throw new
-			// ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
-		}
-		return b.toString();
-	}
-	*/
 }
 
 /**
