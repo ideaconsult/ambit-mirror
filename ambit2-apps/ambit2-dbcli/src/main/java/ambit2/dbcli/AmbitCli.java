@@ -1154,9 +1154,11 @@ public class AmbitCli {
 		String[] fields_to_keep = null;
 		try {
 			Object tag_to_keep = options.getParam(":tag_tokeep");
-			if (tag_to_keep != null && !"".equals(tag_to_keep.toString().trim()))
+			if (tag_to_keep != null
+					&& !"".equals(tag_to_keep.toString().trim()))
 				fields_to_keep = tag_to_keep.toString().split(",");
-			if (fields_to_keep!=null && fields_to_keep.length==0) fields_to_keep = null;
+			if (fields_to_keep != null && fields_to_keep.length == 0)
+				fields_to_keep = null;
 		} catch (Exception x) {
 			fields_to_keep = null;
 			logger_cli.log(Level.WARNING, x.toString());
@@ -1388,14 +1390,30 @@ public class AmbitCli {
 							if (processed != null) {
 								err = processed
 										.getProperty(StructureStandardizer.ERROR_TAG);
-								processed.setProperty(StructureStandardizer.ERROR_TAG, String.format(
-										"%s\t%s\t%s", err == null ? "" : err, x
-												.getClass().getName(), x
-												.getMessage()));
+								processed.setProperty(
+										StructureStandardizer.ERROR_TAG, String
+												.format("%s %s %s",
+														err == null ? "" : err,
+														x.getClass().getName(),
+														x.getMessage()));
 							}
 						} finally {
-							if (processed != null)
-								processed.addProperties(mol.getProperties());
+							if (processed != null) {
+								Iterator<Entry<Object, Object>> p = mol
+										.getProperties().entrySet().iterator();
+								// don't overwrite properties from the source
+								// molecule
+								while (p.hasNext()) {
+									Entry<Object, Object> entry = p.next();
+									Object value = processed.getProperty(entry
+											.getKey());
+									if (value == null
+											|| "".equals(value.toString()
+													.trim()))
+										processed.setProperty(entry.getKey(),
+												entry.getValue());
+								}
+							}
 						}
 						if (processed != null)
 							try {
