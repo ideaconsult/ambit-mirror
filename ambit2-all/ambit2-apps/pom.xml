@@ -28,14 +28,15 @@
 
 	</distributionManagement>
 	<properties>
-		<net.idea.loom.version>1.1.1</net.idea.loom.version>
+		<net.idea.loom.version>1.1.2-SNAPSHOT</net.idea.loom.version>
+		<nmparser.version>1.0.2-SNAPSHOT</nmparser.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<toxtree.version>3.0.0-SNAPSHOT</toxtree.version>
 		<ambit.version>3.0.2-SNAPSHOT</ambit.version>
 		<cdk.version>1.5.12</cdk.version>
 		<junit.version>4.8.1</junit.version>
 		<!-- https://github.com/ideaconsult/i5 -->
-		<i5.version>1.2.0</i5.version>
+		<i5.version>1.2.1-SNAPSHOT</i5.version>
 		<restnet.version>1.1.1</restnet.version>
 		<dbunit.version>2.5.1</dbunit.version>
 		<m2st-syntaxHighlighter-urlBase>syntaxhighlighter</m2st-syntaxHighlighter-urlBase>
