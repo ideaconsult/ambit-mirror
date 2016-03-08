@@ -189,6 +189,7 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
 						if (s.indexOf('\n') > -1)
 							s = s.replaceAll("\n", "");
 						
+						
 						s = s.trim();
 						if (s.indexOf(fieldDelimiter) > -1) {
 							writer.write(textDelimiter);
