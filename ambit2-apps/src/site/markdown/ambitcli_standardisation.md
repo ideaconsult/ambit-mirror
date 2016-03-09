@@ -39,7 +39,7 @@ Standardization specific help:
 $java -jar ambitcli.jar -a standardize -m help
 INFO   ambitcli-3.0.1-SNAPSHOT build:7259 1454688887571
 http://ambit.sourceforge.net/download_ambitcli.html
--a standardize -m post -d <parameters>
+-a standardize -m post -d [parameters]
 "Chemical structure standardization (-i inputfile.sdf -o outputfile.sdf , recognized by extensions .sdf , .csv, .cml , .txt)"
    -a standardize -m post
  -d smirks=null	// JSON file with SMIRKS transformations	[type:String, mandatory:false]
