@@ -173,6 +173,12 @@
 						"value": 20000,
 						"comment": "Page size (in number of records)"
 					},
+					":tag_tokeep": {
+						"mandatory": false,
+						"type": "String",
+						"value": "",
+						"comment": "Specifies which tags to keep, comma delimited list. Everything else will be removed. To keep all the tags, leave this empty."
+					},		
 					":sdftitle": {
 						"mandatory": false,
 						"type": "String",

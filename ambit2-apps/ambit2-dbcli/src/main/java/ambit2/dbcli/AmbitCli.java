@@ -95,7 +95,7 @@ import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
 import ambit2.dbcli.CliOptions._preprocessingoptions;
 import ambit2.dbcli.descriptors.AtomEnvironmentGeneratorApp;
 import ambit2.dbcli.exceptions.InvalidCommand;
-import ambit2.descriptors.fingerprints.CircularFingerprintInterpretable;
+import ambit2.descriptors.AtomEnvironentMatrix;
 import ambit2.descriptors.fingerprints.ISparseFingerprint;
 import ambit2.descriptors.processors.BitSetGenerator;
 import ambit2.descriptors.processors.FPTable;
@@ -338,7 +338,7 @@ public class AmbitCli {
 			} catch (Exception x) {
 			}
 		}
-
+		
 		return records;
 	}
 
@@ -728,6 +728,8 @@ public class AmbitCli {
 		} catch (Exception x) {
 			tmpTag = null;
 		}
+		final String[] tags_to_keep = parsetags_to_keep();
+
 		final String sdf_title = tmpTag == null ? null : tmpTag.toString()
 				.toLowerCase();
 
@@ -747,6 +749,8 @@ public class AmbitCli {
 				file.getAbsoluteFile(), outfile.getAbsolutePath() });
 		FileOutputState out = new FileOutputState(outfile);
 		final IChemObjectWriter writer = out.getWriter();
+		if (writer instanceof FilesWithHeaderWriter)
+			((FilesWithHeaderWriter) writer).setAddSMILEScolumn(false);
 		final boolean writesdf = writer instanceof SDFWriter;
 
 		final Map<Object, Property> tags = new HashMap<>();
@@ -834,6 +838,7 @@ public class AmbitCli {
 			}
 
 		};
+		//new AtomEnvironentMatrix();
 		final List<IFingerprinter> fps = new ArrayList<IFingerprinter>();
 		try {
 			Object o = options.getParam(":fpclass");
@@ -842,8 +847,6 @@ public class AmbitCli {
 				Class clazz = null;
 				for (String fp : fpclass)
 					try {
-						// if (fp.equals("CircularFingerprint")) fp =
-						// "ambit2.descriptors.fingerprint.CircularFingerprintInterpretable";
 						if (fp.indexOf(".") < 0)
 							fp = "org.openscience.cdk.fingerprint." + fp.trim();
 						else
@@ -872,8 +875,12 @@ public class AmbitCli {
 			}
 		} catch (Exception x) {
 		}
-		if (fps.size() == 0)
-			fps.add(new CircularFingerprintInterpretable());
+		if (fps.size() == 0) {
+			fps.add(new org.openscience.cdk.fingerprint.CircularFingerprinter());
+			fps.add(new AtomEnvironentMatrix());
+		}	
+		
+		
 
 		StringBuilder b = new StringBuilder();
 		for (IFingerprinter fp : fps) {
@@ -902,10 +909,40 @@ public class AmbitCli {
 							if (mol != null) {
 								for (Property p : record.getRecordProperties()) {
 									Object v = record.getRecordProperty(p);
-									mol.setProperty(p, v);
+
+									String pname = p.getName().replace(
+											"http://www.opentox.org/api/1.1#",
+											"");
+
+									// initially to get rid of smiles, inchi ,
+									// etc, these are
+									// already parsed
+									if (tags_to_keep != null
+											&& Arrays.binarySearch(
+													tags_to_keep, pname) < 0)
+										continue;
+									else
+										mol.setProperty(p, v);
 								}
-								if (mol.getProperty(CDKConstants.TITLE) != null)
-									mol.removeProperty(CDKConstants.TITLE);
+								if (tags_to_keep != null) {
+									List<String> toRemove = null;
+									Iterator pi = mol.getProperties().keySet()
+											.iterator();
+									while (pi.hasNext()) {
+										Object p = pi.next();
+										if (Arrays.binarySearch(tags_to_keep,
+												p.toString()) < 0) {
+											if (toRemove == null)
+												toRemove = new ArrayList<String>();
+											toRemove.add(p.toString());
+										}
+
+									}
+									if (toRemove != null)
+										for (String propertyToRemove : toRemove)
+											mol.removeProperty(propertyToRemove);
+
+								}
 							} else
 								return record;
 
@@ -921,41 +958,66 @@ public class AmbitCli {
 						}
 						processed = mol;
 
-						// CDK adds these for the first MOL line
-						if (!writesdf) {
-							if (mol.getProperty(CDKConstants.TITLE) != null)
-								mol.removeProperty(CDKConstants.TITLE);
-							if (mol.getProperty(CDKConstants.REMARK) != null)
-								mol.removeProperty(CDKConstants.REMARK);
-						}
-
-						for (IFingerprinter fp : fps)
+						for (IFingerprinter fp : fps) {
+							ICountFingerprint cfp = null;
 							try {
-								ICountFingerprint cfp = fp
-										.getCountFingerprint(processed);
+								cfp = fp.getCountFingerprint(processed);
+							} catch (Exception x) {
+								//logger.log(Level.WARNING, x.getMessage());
+							}
+							IBitFingerprint bfp = null;
+							try {
+								bfp = fp.getBitFingerprint(processed);
+							} catch (Exception x) {
+							}
+							Map<String, Integer> fpraw = null;
+							try {
+								fpraw = fp.getRawFingerprint(processed);
+							} catch (Exception x) {
+
+							}
+							try {
 								if (cfp != null) {
 									int numBins = cfp.numOfPopulatedbins();
-									StringBuilder b = new StringBuilder();
+									StringBuilder b_hashed = new StringBuilder();
 									StringBuilder b_count = new StringBuilder();
+									StringBuilder b_fp = new StringBuilder();
 									for (int i = 0; i < numBins; i++) {
 										int hash = cfp.getHash(i);
 										int freq = cfp.getCount(i);
 										if (i > 0) {
-											b.append(" ");
+											b_hashed.append(" ");
 											b_count.append(" ");
+											b_fp.append(" ");
 										}
-										b.append(hash);
+										b_hashed.append(hash);
 										b_count.append(String.format("%d:%d",
 												hash, freq));
+										b_fp.append(String.format("%d", hash));
 									}
 									processed.setProperty(fp.getClass()
 											.getName() + ".count",
 											b_count.toString());
-									/*
-									 * processed.setProperty(fp.getClass()
-									 * .getName() + ".binary", b.toString());
-									 */
-								} else if (fp instanceof ISparseFingerprint)
+									processed.setProperty(fp.getClass()
+											.getName(), b_fp.toString());
+								}
+								if (bfp != null) {
+									processed
+											.setProperty(fp.getClass()
+													.getName() + ".hashed",
+													bfp == null ? "" : bfp
+															.asBitSet()
+															.toString()
+															.replace("{", "")
+															.replace("}", "")
+															.replace(",", ""));
+								}
+								if (fpraw != null) {
+									processed.setProperty(fp.getClass()
+											.getName() + ".raw",
+											fpraw.toString());
+								}
+								if (fp instanceof ISparseFingerprint)
 									try {
 										StringBuilder b = new StringBuilder();
 										for (Object x : ((ISparseFingerprint) fp)
@@ -971,40 +1033,7 @@ public class AmbitCli {
 										// not all fp support this
 										x.printStackTrace();
 									}
-								else {
 
-									IBitFingerprint fpbinary = fp
-											.getBitFingerprint(processed);
-									processed
-											.setProperty(
-													fp.getClass().getName()
-															+ ".binary",
-													fpbinary == null ? ""
-															: fpbinary
-																	.asBitSet()
-																	.toString()
-																	.replace(
-																			"{",
-																			"")
-																	.replace(
-																			"}",
-																			"")
-																	.replace(
-																			",",
-																			""));
-
-									try {
-										Map<String, Integer> fpcount = fp
-												.getRawFingerprint(processed);
-
-										processed.setProperty(fp.getClass()
-												.getName() + ".raw",
-												fpcount.toString());
-									} catch (Exception x) {
-										// not all fp support this
-										// x.printStackTrace();
-									}
-								}
 							} catch (Exception x) {
 								logger_cli.log(Level.SEVERE, x.getMessage(), x);
 								if (processed != null)
@@ -1015,6 +1044,7 @@ public class AmbitCli {
 								if (processed != null)
 									processed.addProperties(mol.getProperties());
 							}
+						}
 						if (processed != null)
 							try {
 								if (writesdf && sdf_title != null) {
@@ -1077,6 +1107,27 @@ public class AmbitCli {
 			if (stats != null)
 				logger_cli.log(Level.INFO, stats.toString());
 		}
+	}
+
+	protected String[] parsetags_to_keep() {
+		String[] fields_to_keep = null;
+		try {
+			Object tag_to_keep = options.getParam(":tag_tokeep");
+			if (tag_to_keep != null
+					&& !"".equals(tag_to_keep.toString().trim()))
+				fields_to_keep = tag_to_keep.toString().split(",");
+			if (fields_to_keep != null && fields_to_keep.length == 0)
+				fields_to_keep = null;
+		} catch (Exception x) {
+			fields_to_keep = null;
+			logger_cli.log(Level.WARNING, x.toString());
+		}
+		if (fields_to_keep != null) {
+			Arrays.sort(fields_to_keep);
+			for (int i = 0; i < fields_to_keep.length; i++)
+				fields_to_keep[i] = fields_to_keep[i].trim();
+		}
+		return fields_to_keep;
 	}
 
 	public void parseCommandStandardize(String subcommand, long now)
@@ -1151,24 +1202,8 @@ public class AmbitCli {
 		} catch (Exception x) {
 		}
 
-		String[] fields_to_keep = null;
-		try {
-			Object tag_to_keep = options.getParam(":tag_tokeep");
-			if (tag_to_keep != null
-					&& !"".equals(tag_to_keep.toString().trim()))
-				fields_to_keep = tag_to_keep.toString().split(",");
-			if (fields_to_keep != null && fields_to_keep.length == 0)
-				fields_to_keep = null;
-		} catch (Exception x) {
-			fields_to_keep = null;
-			logger_cli.log(Level.WARNING, x.toString());
-		}
-		if (fields_to_keep != null) {
-			Arrays.sort(fields_to_keep);
-			for (int i = 0; i < fields_to_keep.length; i++)
-				fields_to_keep[i] = fields_to_keep[i].trim();
-		}
-		final String[] tags_to_keep = fields_to_keep;
+		final String[] tags_to_keep = parsetags_to_keep();
+
 		try {
 			Object o = options.getParam(":tag_rank");
 			standardprocessor.setRankTag(o.toString());
@@ -1211,12 +1246,12 @@ public class AmbitCli {
 		}
 		try {
 			Object o = options.getParam(":smilesaromatic");
-			standardprocessor.setGenerateSMILES_Aromatic(Boolean
-					.parseBoolean(o.toString()));
+			standardprocessor.setGenerateSMILES_Aromatic(Boolean.parseBoolean(o
+					.toString()));
 		} catch (Exception x) {
 
 		}
-		
+
 		try {
 			Object o = options.getParam(":generatestereofrom2d");
 			standardprocessor.setGenerateStereofrom2D(Boolean.parseBoolean(o

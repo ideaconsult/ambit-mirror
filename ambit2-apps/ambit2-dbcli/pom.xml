@@ -29,6 +29,12 @@
 			<version>${ambit.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-fp</artifactId>
+			<version>${ambit.version}</version>
+		</dependency>
+		
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
