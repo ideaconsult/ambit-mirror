@@ -144,7 +144,7 @@ public class StereoChemUtils
 	}
 	
 	public static void checkStereoElements(IAtomContainer mol)
-	{
+	{	
 		List<IStereoElement> okElements = new ArrayList<IStereoElement>();
 		for (IStereoElement element : mol.stereoElements())
 		{
@@ -455,6 +455,31 @@ public class StereoChemUtils
     	}
 		
 		
+	}
+	
+	public static String getStereoElementsStatus(IAtomContainer mol)
+	{
+		StringBuffer sb = new StringBuffer();
+		List<IStereoElement> okElements = new ArrayList<IStereoElement>();
+		for (IStereoElement element : mol.stereoElements())
+		{
+			if (element instanceof DoubleBondStereochemistry)
+			{
+				int status = checkDoubleBondStereochemistry((DoubleBondStereochemistry) element, mol);			
+				sb.append("DBStereo status = " + status + "\n");
+				continue;
+			}
+			
+			
+			if (element instanceof TetrahedralChirality)
+			{
+				int status = checkTetrahedralChirality((TetrahedralChirality) element, mol);
+				sb.append("Chiral atom status = " + status + "\n");
+				continue;
+			}
+			//TODO handle ExtendedTetrahedral stereo elements
+		}
+		return sb.toString();
 	}
 	
 }
