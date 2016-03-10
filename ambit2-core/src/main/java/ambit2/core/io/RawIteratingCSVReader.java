@@ -206,7 +206,7 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 				continue;
 			} catch (Exception x) {
 				if (optionalSMILESHeader != null
-						&& entry.getKey().equals(optionalSMILESHeader)) {
+						&& entry.getKey().toUpperCase().equals(optionalSMILESHeader)) {
 					special_header h = special_header.SMILES;
 					ids[h.ordinal()] = value == null || "".equals(value.trim()) ? null
 							: value.trim();
