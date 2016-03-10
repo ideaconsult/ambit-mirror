@@ -38,7 +38,7 @@ public class CliOptions {
 				return "import";
 			}
 		},
-		preprocessing, dataset, split, standardize, descriptor, help;
+		preprocessing, dataset, split, standardize, fingerprint, help;
 		public String toString() {
 			return name();
 		};

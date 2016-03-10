@@ -91,19 +91,22 @@ ambitcli -a {command} -m {subcommand} -d {options}
 ````
 
 ````
--a descriptor -m post -d <parameters>
+-a fingerprint -m post -d <parameters>
 
-"Descriptor calculation (-i inputfile.sdf -o outputfile.sdf , recognized by extensions .sdf , .csv, .cml , .txt)"
-   -a descriptor -m post
- -d fpclass=CircularFingerprinter,PubchemFingerprinter,SubstructureFingerprinter,ShortestPathFingerprinter,MACCSFingerprinter,LingoFingerpriter,EStateFingerprinter       // Comma delimited list of class names implementing org.openscience.cdk.fingerprint.IFingerprinter, e.g. KlekotaRothFingerprinter. If not fully qualified will prepend 'org.openscience.cdk.fingerprint.' [type:String, mandatory:false]
- -d page=0      // Start page (first page = 0)  [type:Integer, mandatory:false]
- -d pagesize=20000      // Page size (in number of records)     [type:Integer, mandatory:false]
- -d sdftitle=null       // Specifies which field to write in the first SDF line [type:String, mandatory:false]
+"Fingerprint calculation. Writes multiple files per fingerprint, all files start with prefix given by -o prefix)"
+   -a fingerprint -m post
+ -d fpclass=CircularFingerprinter,PubchemFingerprinter,SubstructureFingerprinter,ShortestPathFingerprinter,MACCSFingerprinter,LingoFingerpriter,EStateFingerprinter	// Comma delimited list of class names implementing org.openscience.cdk.fingerprint.IFingerprinter, e.g. KlekotaRothFingerprinter. If not fully qualified will prepend 'org.openscience.cdk.fingerprint.'	[type:String, mandatory:false]
+ -d page=0	// Start page (first page = 0)	[type:Integer, mandatory:false]
+ -d pagesize=20000	// Page size (in number of records)	[type:Integer, mandatory:false]
+ -d tag_tokeep=	// Specifies which tags to keep, comma delimited list. Everything else will be removed. To keep all the tags, leave this empty.	[type:String, mandatory:false]
+ -d write_count=false	// Whether to write the counts of getCountFingerprint()	[type:Boolean, mandatory:false]
+ -d write_raw=false	// Whether to write the raw fingerprint (getRawFingerprint)	[type:Boolean, mandatory:false]
+ -d sdftitle=null	// Specifies which field to write in the first SDF line	[type:String, mandatory:false]
 
 Example
- -d fpclass=CircularFingerprinter,PubchemFingerprinter,SubstructureFingerprinter,ShortestPathFingerprinter,MACCSFingerprinter,LingoFingerpriter,EStateFingerprinter -d page=0 -d pagesize=20000 -d sdftitle=null
+ -d fpclass=CircularFingerprinter -d page=0 -d pagesize=20000 -d tag_tokeep= -d write_count=false -d write_raw=false -d sdftitle=null
 
-Available since ambitcli-3.0.1-SNAPSHOT build:7237
+Available since ambitcli-3.0.2-SNAPSHOT build:7347
 ````
 
 ````sh
