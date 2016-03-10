@@ -1,8 +1,8 @@
 {
     "OPTIONS": {
         "properties": {
-            "atomtypes": true,
-            "transformations": true,
+            "atomtypes": false,
+            "transformations": false,
             "sparse": false
         }
     },
