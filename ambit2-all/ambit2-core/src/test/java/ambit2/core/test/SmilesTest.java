@@ -43,7 +43,6 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
@@ -56,12 +55,10 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
-import ambit2.core.io.FileInputState;
 import ambit2.core.io.InteractiveIteratingMDLReader;
 import ambit2.core.test.io.RawIteratingWrapperTest;
 
 public class SmilesTest {
-	protected UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
 
 	@Before
 	public void setUp() throws Exception {
@@ -93,9 +90,9 @@ public class SmilesTest {
 		SmilesParser parser = new SmilesParser(
 				SilentChemObjectBuilder.getInstance());
 		UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
+		// TODO replace with Pattern.findIdentical (?)
 		int count_differences = 0;
 		for (int i = 0; i < smiles.length; i++) {
-			System.out.println(smiles[i]);
 			IAtomContainer mol = parser.parseSmiles(smiles[i]);
 			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 			CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance())
@@ -223,55 +220,28 @@ public class SmilesTest {
 			System.out.println(bond.getOrder());
 	}
 
-	public static void main(String[] args) {
-		testsmiles(args);
-		// testsdf(args);
-	}
-
-	public static void testsmiles(String[] args) {
-		try {
-			SmilesParser parser = new SmilesParser(
-					SilentChemObjectBuilder.getInstance());
-			IAtomContainer mol = parser
-					.parseSmiles("O=C5C(=NNc1ccc(c2ccccc12)S(=O)(=O)O)C=C(C(=O)C5(=NNc3ccc(c4ccccc34)S(=O)(=O)O))CO");
-			printMol(mol);
-
-			// AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-			// fails with Cannot percieve atom type for the 17th atom: N
-			FixBondOrdersTool d = new FixBondOrdersTool();
-
-			// d.setTimeout(60*60*1000); //3 min
-			d.kekuliseAromaticRings(mol);
-			for (IBond bond : mol.bonds())
-				System.out.println(bond.getOrder());
-		} catch (Exception x) {
-			x.printStackTrace();
-		}
-
-	}
-
-	
-
 	@Test
 	public void test1() throws Exception {
 		String s_in = "CC(C)(C)C1=CC(=C(OP2OCC3(COP(OC4=CC=C(C=C4C(C)(C)C)C(C)(C)C)OC3)CO2)C=C1)C(C)(C)C";
 		SmilesParser sp = new SmilesParser(
 				DefaultChemObjectBuilder.getInstance());
 		IAtomContainer m = sp.parseSmiles(s_in);
-		SmilesGenerator sg = new SmilesGenerator();
-		String s_out = sg.createSMILES(m);
-		System.out.println(s_out);
+		SmilesGenerator sg = SmilesGenerator.isomeric();
+		Assert.assertEquals(
+				"CC(C)(C)C1=CC(=C(OP2OCC3(COP(OC4=CC=C(C=C4C(C)(C)C)C(C)(C)C)OC3)CO2)C=C1)C(C)(C)C",
+				sg.create(m));
 	}
 
 	@Test
 	public void testRoundtrip_isomeric() throws Exception {
 		testRoundtrip(new SmilesGenerator().isomeric());
 	}
+
 	@Test
 	public void testRoundtrip_absolute() throws Exception {
 		testRoundtrip(new SmilesGenerator().absolute());
 	}
-	
+
 	public void testRoundtrip(SmilesGenerator g) throws Exception {
 
 		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
@@ -291,11 +261,11 @@ public class SmilesTest {
 						.percieveAtomTypesAndConfigureAtoms(mol);
 				try {
 					String smi = g.create(mol);
-					System.out.println(smi);
 					p.parseSmiles(smi);
 				} catch (Exception x) {
 					error++;
-					System.out.println(x.getMessage());
+					
+					System.err.println(x.getMessage());
 				}
 
 			}
