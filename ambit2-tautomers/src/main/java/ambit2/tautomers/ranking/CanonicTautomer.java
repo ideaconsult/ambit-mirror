@@ -53,7 +53,7 @@ public class CanonicTautomer
 			Double rank;
 
 			if (tman.getCanonicTautomerMethod() == CanonicTautomerMethod.ENERGY_RANK_INCHI_KEY)				
-				rank = (Double)t.getProperty("TAUTOMER_RANK");
+				rank = (Double)t.getProperty(TautomerConst.TAUTOMER_RANK);
 			else
 			{	
 				rank = CACTVSRanking.getEnergyRank(t);
