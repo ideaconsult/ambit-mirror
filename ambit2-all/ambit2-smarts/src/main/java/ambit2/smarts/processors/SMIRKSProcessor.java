@@ -62,8 +62,7 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 
 	public SMIRKSProcessor() {
 		super();
-		smrkMan = new SMIRKSManager(
-				SilentChemObjectBuilder.getInstance());
+		smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	}
 
 	public SMIRKSProcessor(File jsonFile) throws Exception {
@@ -73,8 +72,9 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 
 	public void loadReactionsFromJSON(File jsonFile) throws Exception {
 		loadReactionsFromJSON(new FileInputStream(jsonFile));
-		
+
 	}
+
 	public void loadReactionsFromJSON(InputStream fin) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode root = null;
@@ -169,13 +169,20 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 		for (SMIRKSTransformation transform : transformations) {
 			transform.setApplicable(false);
 			// if no precondition defined, assuming always applicable
-			if (!transform.hasPreconditionAtomTypeDefined() && !transform.hasPreconditionAtomDefined()) transform.setApplicable(true);
-		}	
+			if (!transform.hasPreconditionAtomTypeDefined()
+					&& !transform.hasPreconditionAtomDefined())
+				transform.setApplicable(true);
+		}
 
 		boolean hasApplicable = false;
 		for (IAtom atom : reactant.atoms())
 			for (SMIRKSTransformation transform : transformations)
-				if (transform.isEnabled() && !transform.isApplicable()) { //if not yet set as applicable
+				if (transform.isEnabled() && !transform.isApplicable()) { // if
+																			// not
+																			// yet
+																			// set
+																			// as
+																			// applicable
 
 					if (transform.hasPreconditionAtomTypeDefined()) {
 						if (transform.hasPreconditionAtomtype(atom
@@ -200,7 +207,7 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 
 			int transformed = 0;
 			for (SMIRKSTransformation transform : transformations) {
-				if (transform.isEnabled() && !isSparseproperties())
+				if (transform.isEnabled() && !isSparseproperties() && isTransformationasproperties())
 					reactant.setProperty(
 							String.format("T.%s", transform.getName()), null);
 				if (transform.isApplicable()) {
@@ -222,7 +229,8 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 					break;
 			}
 			if (transformed > 0) {
-				reactant.setProperty(transformed_property, transformed);
+				if (isTransformationasproperties())
+					reactant.setProperty(transformed_property, transformed);
 				AtomContainerManipulator
 						.percieveAtomTypesAndConfigureAtoms(reactant);
 				AtomContainerManipulator.suppressHydrogens(reactant);
