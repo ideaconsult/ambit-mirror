@@ -1,6 +1,10 @@
 #CHANGELOG
 AMBIT2 3.0.2-SNAPSHOT
 current version at trunk
+Support for MySQL 5.7
+DB schema 8.15
+Test database now must exist before running tests
+ambitcli new options, including fingerprint calculations
 
 AMBIT2 3.0.1 (Feb 2016)
 Upgrade to CDK 1.5.12

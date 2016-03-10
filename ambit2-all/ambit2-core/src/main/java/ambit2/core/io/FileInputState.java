@@ -36,6 +36,34 @@ public class FileInputState extends FileState implements IInputState {
 	 * 
 	 */
 	private static final long serialVersionUID = 4293026709920994430L;
+	public String optionalSMILESHeader = null;
+	public String optionalInChIKeyHeader = null;
+	public String optionalInChIHeader = null;
+
+	public String getOptionalInChIKeyHeader() {
+		return optionalInChIKeyHeader;
+	}
+
+	public void setOptionalInChIKeyHeader(String optionalInChIKeyHeader) {
+		this.optionalInChIKeyHeader = optionalInChIKeyHeader;
+	}
+
+	public String getOptionalInChIHeader() {
+		return optionalInChIHeader;
+	}
+
+	public void setOptionalInChIHeader(String optionalInChIHeader) {
+		this.optionalInChIHeader = optionalInChIHeader;
+	}
+
+	public String getOptionalSMILESHeader() {
+		return optionalSMILESHeader;
+	}
+
+	public void setOptionalSMILESHeader(String optionalSMILESHeader) {
+		this.optionalSMILESHeader = optionalSMILESHeader == null ? null
+				: optionalSMILESHeader.toUpperCase();
+	}
 
 	public FileInputState() {
 		super();
@@ -147,7 +175,7 @@ public class FileInputState extends FileState implements IInputState {
 		if (_FILE_TYPE.SDF_INDEX.hasExtension(ext)) {
 			return new RawIteratingSDFReader(new InputStreamReader(stream));
 		} else if (_FILE_TYPE.MOL_INDEX.hasExtension(ext)) {
-				return new RawIteratingSDFReader(new InputStreamReader(stream));			
+			return new RawIteratingSDFReader(new InputStreamReader(stream));
 		} else if (_FILE_TYPE.CSV_INDEX.hasExtension(ext)) {
 			try {
 				if ((format != null) && (format instanceof DelimitedFileFormat))
@@ -189,12 +217,14 @@ public class FileInputState extends FileState implements IInputState {
 					SilentChemObjectBuilder.getInstance());
 		} else if (ext.endsWith(_FILE_TYPE.CSV_INDEX.getExtension())) {
 			try {
+				IteratingDelimitedFileReader reader = null;
 				if ((format != null) && (format instanceof DelimitedFileFormat))
-					return new IteratingDelimitedFileReader(stream,
+					reader = new IteratingDelimitedFileReader(stream,
 							(DelimitedFileFormat) format);
 				else
-					return new IteratingDelimitedFileReader(stream,
+					reader = new IteratingDelimitedFileReader(stream,
 							new DelimitedFileFormat(",", '"'));
+				return reader;
 			} catch (Exception x) {
 				throw new AmbitIOException(x);
 			}

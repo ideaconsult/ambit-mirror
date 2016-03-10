@@ -36,6 +36,34 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 	protected CSVFormat format;
 	protected ILiteratureEntry reference;
 	protected MoleculeReader molReader = null;
+	public String optionalSMILESHeader = null;
+	public String optionalInChIKeyHeader = null;
+	public String optionalInChIHeader = null;
+	
+	public String getOptionalInChIKeyHeader() {
+		return optionalInChIKeyHeader;
+	}
+
+	public void setOptionalInChIKeyHeader(String optionalInChIKeyHeader) {
+		this.optionalInChIKeyHeader = optionalInChIKeyHeader;
+	}
+
+	public String getOptionalInChIHeader() {
+		return optionalInChIHeader;
+	}
+
+	public void setOptionalInChIHeader(String optionalInChIHeader) {
+		this.optionalInChIHeader = optionalInChIHeader;
+	}
+
+	public String getOptionalSMILESHeader() {
+		return optionalSMILESHeader;
+	}
+
+	public void setOptionalSMILESHeader(String optionalSMILESHeader) {
+		this.optionalSMILESHeader = optionalSMILESHeader == null ? null
+				: optionalSMILESHeader.toUpperCase();
+	}
 
 	private enum special_header {
 		SMILES {
@@ -177,6 +205,14 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 				special_props[h.ordinal()].setOrder(entry.getValue());
 				continue;
 			} catch (Exception x) {
+				if (optionalSMILESHeader != null
+						&& entry.getKey().equals(optionalSMILESHeader)) {
+					special_header h = special_header.SMILES;
+					ids[h.ordinal()] = value == null || "".equals(value.trim()) ? null
+							: value.trim();
+					special_props[h.ordinal()] = h.getproperty();
+					special_props[h.ordinal()].setOrder(entry.getValue());
+				}
 			}
 			Property p = Property.getInstance(entry.getKey(), getReference());
 			p.setOrder(entry.getValue());

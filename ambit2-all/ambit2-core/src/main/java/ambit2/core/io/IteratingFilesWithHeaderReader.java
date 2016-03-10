@@ -21,7 +21,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-*/
+ */
 /**
  * 
  */
@@ -41,73 +41,97 @@ import ambit2.core.smiles.SmilesParserWrapper;
 
 /**
  * @author Nina Jeliazkova
- *
+ * 
  */
 public abstract class IteratingFilesWithHeaderReader<COLUMN> extends
 		DefaultIteratingChemObjectReader {
-	protected static Logger logger = Logger.getLogger(DelimitedFileWriter.class.getName());
+	protected static Logger logger = Logger.getLogger(DelimitedFileWriter.class
+			.getName());
 	protected SmilesParserWrapper sp = null;
 	protected InChIGeneratorFactory inchiFactory = null;
-	public static String defaultSMILESHeader = "SMILES";
-	
+	public static final String defaultSMILESHeader = "SMILES";
+
 	protected ArrayList<COLUMN> header;
 	protected int smilesIndex = -1;
 	protected int inchiIndex = -1;
-	protected long timeout = 60000; //ms
+	protected long timeout = 60000; // ms
 	protected int numberOfHeaderLines = 1;
+
+	public String optionalSMILESHeader = "CANONICAL_SMILES";
+
+	public String getOptionalSMILESHeader() {
+		return optionalSMILESHeader;
+	}
+
+	public void setOptionalSMILESHeader(String optionalSMILESHeader) {
+		this.optionalSMILESHeader = optionalSMILESHeader == null ? null
+				: optionalSMILESHeader.toUpperCase();
+	}
+
 	/**
 	 * 
 	 */
 	public IteratingFilesWithHeaderReader() {
 		super();
 		header = null;
-		sp =  SmilesParserWrapper.getInstance();
+		sp = SmilesParserWrapper.getInstance();
 	}
-    
+
 	public long getTimeout() {
 		return timeout;
 	}
+
 	public void setTimeout(long timeout) {
 		this.timeout = timeout;
 	}
+
 	public int getNumberOfHeaderLines() {
 		return numberOfHeaderLines;
 	}
+
 	public void setNumberOfHeaderLines(int numberOfHeaderLines) {
 		this.numberOfHeaderLines = numberOfHeaderLines;
 	}
+
 	protected abstract LiteratureEntry getReference();
+
 	protected void addHeaderColumn(String name) {
 		header.add(createPropertyByColumnName(name));
-		
-		fireIOSettingQuestion(new StringIOSetting(name,Importance.MEDIUM,Property.IO_QUESTION.IO_TRANSLATE_NAME.toString(),name));
+
+		fireIOSettingQuestion(new StringIOSetting(name, Importance.MEDIUM,
+				Property.IO_QUESTION.IO_TRANSLATE_NAME.toString(), name));
 	}
-	protected void setHeaderColumn(int index,String name) {
+
+	protected void setHeaderColumn(int index, String name) {
 		header.ensureCapacity(index);
 		while (index > header.size())
 			header.add(createPropertyByColumnName(""));
 
 		addHeaderColumn(name);
-	}	
-	
+	}
+
 	protected abstract COLUMN createPropertyByColumnName(String name);
-	
+
 	protected COLUMN getHeaderColumn(int index) {
-		if (header==null || header.size()<=index) return null;
+		if (header == null || header.size() <= index)
+			return null;
 		return header.get(index);
 	}
-	protected void updateHeaderColumn(int index,COLUMN value) {
-		header.set(index,value);
+
+	protected void updateHeaderColumn(int index, COLUMN value) {
+		header.set(index, value);
 	}
+
 	protected int getNumberOfColumns() {
 		return header.size();
 	}
+
 	protected boolean isHeaderEmpty() {
-		boolean ok = header==null;
-		if (ok) header = createHeader();
+		boolean ok = header == null;
+		if (ok)
+			header = createHeader();
 		return ok;
 	}
+
 	protected abstract ArrayList<COLUMN> createHeader();
 }
-
-

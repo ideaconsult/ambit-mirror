@@ -62,13 +62,17 @@ public class MultiFingerprintsWriter extends DefaultChemObjectWriter {
 	protected CSVPrinter getWriter(String property) {
 		CSVPrinter csvprinter = writers.get(property);
 		if (csvprinter == null) {
-			File file = new File(String.format("%s%s.csv", prefix, property));
+
+			boolean vw = property.endsWith("count");
+
+			File file = new File(String.format("%s%s%s.%s",
+					prefix.getAbsolutePath(), prefix.isDirectory() ? "/" : "",
+					property, vw ? "vw" : "csv"));
 			try {
 				csvprinter = new CSVPrinter(new PrintWriter(file),
 						property.endsWith("raw") ? CSVFormat.TDF : property
 								.endsWith("hashed") ? CSVFormat.DEFAULT
-								: property.endsWith("count") ? CSVFORMAT_SPACE
-										: CSVFormat.DEFAULT);
+								: vw ? CSVFORMAT_SPACE : CSVFormat.DEFAULT);
 				writers.put(property, csvprinter);
 				return csvprinter;
 			} catch (IOException x) {
@@ -152,8 +156,13 @@ public class MultiFingerprintsWriter extends DefaultChemObjectWriter {
 		} else
 			return null;
 		if (record != null)
-			for (int k = 0; k < tags.length; k++)
-				record[k] = tags[k];
+			if (propertyname.endsWith("count"))
+				for (int k = 0; k < tags.length; k++)
+					record[k] = tags[k] + "|";
+			else
+				for (int k = 0; k < tags.length; k++)
+					record[k] = tags[k];
+
 		return record;
 	}
 
