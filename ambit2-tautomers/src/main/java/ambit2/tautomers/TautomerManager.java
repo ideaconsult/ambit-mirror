@@ -10,6 +10,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.stereo.StereoElementFactory;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -759,10 +760,15 @@ public class TautomerManager {
 		// AtomContainerManipulator.convertImplicitToExplicitHydrogens(ac);
 
 		CDKHueckelAromaticityDetector.detectAromaticity(tautomer);
-
 		
-		if (FlagSetStereo)		
+		if (FlagSetStereo)
+		{	
+			//empty the stereo info which came from the IAtomContainer.clone() function
+			tautomer.setStereoElements(new ArrayList<IStereoElement>()); 
 			StereoChemUtils.cloneAndCheckStereo(tautomer, originalMol);
+		}	
+		
+		//System.out.println(StereoChemUtils.getStereoElementsStatus(tautomer));
 		
 		if (FlagGenerateStereoFrom2D)
 		{	
