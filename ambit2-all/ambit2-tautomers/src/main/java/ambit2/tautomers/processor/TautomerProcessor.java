@@ -70,6 +70,9 @@ public class TautomerProcessor extends
 				.generateTautomersIncrementaly();
 		if (tautomerManager.FlagRegisterOnlyBestRankTautomers) {
 			best = tautomerManager.getCanonicTautomer(resultTautomers);
+			
+			if (best.getProperty(TautomerConst.TAUTOMER_RANK) == null && best.getProperty(TautomerConst.CACTVS_ENERGY_RANK)==null)
+				best.setProperty(TautomerConst.TAUTOMER_RANK, Double.NaN);
 			return best == null ? mol : best;
 		} else {
 			// old version
