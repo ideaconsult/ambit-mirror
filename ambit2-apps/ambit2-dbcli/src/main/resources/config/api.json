@@ -66,7 +66,7 @@
 					":tautomers": {
 						"mandatory": false,
 						"type": "Boolean",
-						"value": true,
+						"value": false,
 						"comment": "If true generates the top ranked tautomer"
 					},
 					":inchi": {
@@ -103,8 +103,14 @@
 						"mandatory": false,
 						"type": "Integer",
 						"value": 20000,
-						"comment": "Page size (in number of records)"
+						"comment": "Page size (in number of records). Set to -1 to read all records."
 					},
+					":inputtag_smiles": {
+						"mandatory": false,
+						"type": "String",
+						"value": "SMILES",
+						"comment": "Specifies the name of the column, containing SMILES"
+					},						
 					":tag_inchi": {
 						"mandatory": false,
 						"type": "String",
@@ -158,7 +164,7 @@
 					":fpclass": {
 						"mandatory": false,
 						"type": "String",
-						"value": "CircularFingerprinter,PubchemFingerprinter,SubstructureFingerprinter,ShortestPathFingerprinter,MACCSFingerprinter,LingoFingerpriter,EStateFingerprinter",
+						"value": "CircularFingerprinter,PubchemFingerprinter,MACCSFingerprinter",
 						"comment": "Comma delimited list of class names implementing org.openscience.cdk.fingerprint.IFingerprinter, e.g. KlekotaRothFingerprinter. If not fully qualified will prepend 'org.openscience.cdk.fingerprint.'"
 					},
 					":page": {
@@ -173,10 +179,16 @@
 						"value": 20000,
 						"comment": "Page size (in number of records)"
 					},
+					":inputtag_smiles": {
+						"mandatory": false,
+						"type": "String",
+						"value": "SMILES",
+						"comment": "Specifies the name of the column, containing SMILES"
+					},	
 					":tag_tokeep": {
 						"mandatory": false,
 						"type": "String",
-						"value": "",
+						"value": "InChIKey",
 						"comment": "Specifies which tags to keep, comma delimited list. Everything else will be removed. To keep all the tags, leave this empty."
 					},	
 					":write_count": {

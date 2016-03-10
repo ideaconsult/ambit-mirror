@@ -20,7 +20,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 package ambit2.db.processors;
 
 import java.io.File;
@@ -51,104 +51,148 @@ import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.io.RawIteratingWrapper;
 
 /**
- * Reads file 
+ * Reads file
+ * 
  * @author nina
- *
+ * 
  * @param <ItemOutput>
  */
-public class BatchDBProcessor<ITEMTYPE> extends AbstractBatchProcessor<IInputState,ITEMTYPE> 	{
+public class BatchDBProcessor<ITEMTYPE> extends
+		AbstractBatchProcessor<IInputState, ITEMTYPE> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5659435501205598414L;
 	protected ILiteratureEntry reference;
-	
+
 	public ILiteratureEntry getReference() {
 		return reference;
 	}
+
 	public void setReference(ILiteratureEntry reference) {
 		this.reference = reference;
 	}
+
 	public BatchDBProcessor() {
 	}
-	public BatchDBProcessor(ProcessorsChain<ITEMTYPE,IBatchStatistics,IProcessor> processor) {
+
+	public BatchDBProcessor(
+			ProcessorsChain<ITEMTYPE, IBatchStatistics, IProcessor> processor) {
 		super(processor);
 
-	}	
+	}
+
 	public Iterator<ITEMTYPE> getIterator(IInputState target)
 			throws AmbitException {
 		if (target instanceof FileInputState)
 			try {
-				File file = ((FileInputState)target).getFile();
+				File file = ((FileInputState) target).getFile();
 				if (file.isDirectory()) {
 					FilenameFilter filter = new FilenameFilter() {
-					        public boolean accept(File dir, String name) {
-					            return !name.startsWith(".");
-					        }
-					};					
+						public boolean accept(File dir, String name) {
+							return !name.startsWith(".");
+						}
+					};
 					return new RawIteratingFolderReader(file.listFiles(filter));
 				} else {
 					if (FileInputState._FILE_TYPE.SDF_INDEX.hasExtension(file)) {
 						RawIteratingSDFReader reader = new RawIteratingSDFReader(
 								new FileReader(file));
-						if (getReference()==null)
-							reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
-						else reader.setReference(getReference());
+						if (getReference() == null)
+							reader.setReference(LiteratureEntry.getInstance(
+									file.getName(), file.getAbsolutePath()));
+						else
+							reader.setReference(getReference());
 						return reader;
-					} else if (FileInputState._FILE_TYPE.MOL_INDEX.hasExtension(file)) {
-						RawIteratingMOLReader reader = new RawIteratingMOLReader(new FileReader(file));
-						if (getReference()==null)
-							reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
-						else reader.setReference(getReference());
+					} else if (FileInputState._FILE_TYPE.MOL_INDEX
+							.hasExtension(file)) {
+						RawIteratingMOLReader reader = new RawIteratingMOLReader(
+								new FileReader(file));
+						if (getReference() == null)
+							reader.setReference(LiteratureEntry.getInstance(
+									file.getName(), file.getAbsolutePath()));
+						else
+							reader.setReference(getReference());
 						return reader;
-/* TEST and replace the wrapper with this */
-					} else if (FileInputState._FILE_TYPE.CSV_INDEX.hasExtension(file)) {
-						RawIteratingCSVReader reader = new RawIteratingCSVReader(new FileReader(file),CSVFormat.EXCEL);
-						if (getReference()==null)
-							reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
-						else reader.setReference(getReference());
-						return reader;						
-					} else if (FileInputState._FILE_TYPE.TXT_INDEX.hasExtension(file)) {
-						RawIteratingCSVReader reader = new RawIteratingCSVReader(new FileReader(file),CSVFormat.TDF.withCommentMarker('#'));
-						if (getReference()==null)
-							reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
-						else reader.setReference(getReference());
+						/* TEST and replace the wrapper with this */
+					} else if (FileInputState._FILE_TYPE.CSV_INDEX
+							.hasExtension(file)) {
+						RawIteratingCSVReader reader = new RawIteratingCSVReader(
+								new FileReader(file), CSVFormat.EXCEL);
+						reader.setOptionalSMILESHeader(((FileInputState) target)
+								.getOptionalSMILESHeader());
+						reader.setOptionalInChIHeader(((FileInputState) target)
+								.getOptionalInChIHeader());
+						reader.setOptionalInChIKeyHeader(((FileInputState) target)
+								.getOptionalInChIKeyHeader());
+						if (getReference() == null)
+							reader.setReference(LiteratureEntry.getInstance(
+									file.getName(), file.getAbsolutePath()));
+						else
+							reader.setReference(getReference());
+						return reader;
+					} else if (FileInputState._FILE_TYPE.TXT_INDEX
+							.hasExtension(file)) {
+						RawIteratingCSVReader reader = new RawIteratingCSVReader(
+								new FileReader(file),
+								CSVFormat.TDF.withCommentMarker('#'));
+						reader.setOptionalSMILESHeader(((FileInputState) target)
+								.getOptionalSMILESHeader());
+						reader.setOptionalInChIHeader(((FileInputState) target)
+								.getOptionalInChIHeader());
+						reader.setOptionalInChIKeyHeader(((FileInputState) target)
+								.getOptionalInChIKeyHeader());
+						if (getReference() == null)
+							reader.setReference(LiteratureEntry.getInstance(
+									file.getName(), file.getAbsolutePath()));
+						else
+							reader.setReference(getReference());
 						return reader;
 					} else {
-						IIteratingChemObjectReader ir = FileInputState.getReader(file,((FileInputState)target).getFileFormat());
-						if (ir == null) throw new AmbitException("Unsupported format "+file.getName());
+						IIteratingChemObjectReader ir = FileInputState
+								.getReader(file, ((FileInputState) target)
+										.getFileFormat());
+						if (ir == null)
+							throw new AmbitException("Unsupported format "
+									+ file.getName());
 						else {
-							RawIteratingWrapper reader = new RawIteratingWrapper(ir);
-							if (getReference()==null)
-								reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
-							else reader.setReference(getReference());
+							RawIteratingWrapper reader = new RawIteratingWrapper(
+									ir);
+							if (getReference() == null)
+								reader.setReference(LiteratureEntry
+										.getInstance(file.getName(),
+												file.getAbsolutePath()));
+							else
+								reader.setReference(getReference());
 							return reader;
 						}
-					} 
+					}
 				}
 			} catch (IOException x) {
 				throw new AmbitIOException(x);
 			} catch (Exception x) {
 				throw new AmbitException(x);
 			}
-		else throw new AmbitException("Not a file");
+		else
+			throw new AmbitException("Not a file");
 	}
+
 	@Override
-	public void afterProcessing(IInputState target,
-			Iterator<ITEMTYPE> iterator) throws AmbitException {
-		
+	public void afterProcessing(IInputState target, Iterator<ITEMTYPE> iterator)
+			throws AmbitException {
+
 		try {
 			if (iterator instanceof IIteratingChemObjectReader)
-				((IIteratingChemObjectReader)iterator).close();
-			else if(iterator instanceof IDBProcessor) 
-				((IDBProcessor)iterator).close();
+				((IIteratingChemObjectReader) iterator).close();
+			else if (iterator instanceof IDBProcessor)
+				((IDBProcessor) iterator).close();
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		} finally {
 			super.afterProcessing(target, iterator);
 		}
-		
+
 	}
-	
+
 }

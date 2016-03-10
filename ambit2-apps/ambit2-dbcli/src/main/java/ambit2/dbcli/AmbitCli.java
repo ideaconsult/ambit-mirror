@@ -73,6 +73,7 @@ import ambit2.core.io.FileInputState;
 import ambit2.core.io.FileOutputState;
 import ambit2.core.io.FilesWithHeaderWriter;
 import ambit2.core.io.IRawReader;
+import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.io.fp.MultiFingerprintsWriter;
 import ambit2.core.processors.StructureNormalizer;
@@ -726,6 +727,26 @@ public class AmbitCli {
 		}
 	}
 
+	protected String parseStringParam(String paramname, String defautlvalue) {
+		try {
+			return options.getParam(paramname).toString();
+		} catch (Exception x) {
+			return defautlvalue;
+		}
+	}
+
+	protected Boolean parseBooleanParam(String paramname, boolean defautlvalue) {
+		try {
+			return Boolean.parseBoolean(options.getParam(paramname).toString());
+		} catch (Exception x) {
+			return defautlvalue;
+		}
+	}
+
+	protected String parseInputTag_Param(String type, String defaultValue) {
+		return parseStringParam(":inputtag_" + type, defaultValue);
+	}
+
 	protected Object parseSdfTitleParam() {
 		try {
 			return options.getParam(":sdftitle");
@@ -759,6 +780,10 @@ public class AmbitCli {
 		int pagesize = parsePageSizeParam();
 		final boolean fp_count = parseWriteCountParam();
 		final boolean fp_raw = parseWriteRawParam();
+		String smiles_header = parseInputTag_Param("smiles",
+				IteratingDelimitedFileReader.defaultSMILESHeader);
+		String inchi_header = parseInputTag_Param("inchi", "InChI");
+		String inchikey_header = parseInputTag_Param("inchikey", "InChIKey");
 
 		Object tmpTag = parseSdfTitleParam();
 
@@ -772,7 +797,10 @@ public class AmbitCli {
 				: pagesize;
 
 		final File file = new File(options.input);
-		FileInputState in = new FileInputState(file);
+		FileInputState input = new FileInputState(file);
+		input.setOptionalSMILESHeader(smiles_header);
+		input.setOptionalInChIHeader(inchi_header);
+		input.setOptionalInChIKeyHeader(inchikey_header);
 
 		if (options.output == null)
 			throw new FileNotFoundException(
@@ -1043,7 +1071,7 @@ public class AmbitCli {
 
 		IBatchStatistics stats = null;
 		try {
-			stats = batch.process(in);
+			stats = batch.process(input);
 		} catch (Exception x) {
 			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		} finally {
@@ -1139,23 +1167,20 @@ public class AmbitCli {
 		int pagesize = parsePageSizeParam();
 		Object tmpTag = parseSdfTitleParam();
 
+		String smiles_header = parseInputTag_Param("smiles",
+				IteratingDelimitedFileReader.defaultSMILESHeader);
+		String inchi_header = parseInputTag_Param("inchi", "InChI");
+		String inchikey_header = parseInputTag_Param("inchikey", "InChIKey");
+
 		final String sdf_title = tmpTag == null ? null : tmpTag.toString()
 				.toLowerCase();
 
 		final StructureStandardizer standardprocessor = new StructureStandardizer();
+		standardprocessor
+				.setGenerate2D(parseBooleanParam(":generate2D", false));
+		standardprocessor.setGenerateTautomers(parseBooleanParam(":tautomers",
+				false));
 
-		try {
-			Object o = options.getParam(":generate2D");
-			standardprocessor.setGenerate2D(Boolean.parseBoolean(o.toString()));
-		} catch (Exception x) {
-		}
-
-		try {
-			Object o = options.getParam(":tautomers");
-			standardprocessor.setGenerateTautomers(Boolean.parseBoolean(o
-					.toString()));
-		} catch (Exception x) {
-		}
 		SMIRKSProcessor tmp = null;
 		try {
 			Object o = options.getParam(":smirks");
@@ -1173,100 +1198,43 @@ public class AmbitCli {
 			tmp = null;
 		}
 		final SMIRKSProcessor smirksProcessor = tmp;
-		try {
-			Object o = options.getParam(":splitfragments");
-			standardprocessor.setSplitFragments(Boolean.parseBoolean(o
-					.toString()));
-		} catch (Exception x) {
-		}
-		try {
-			Object o = options.getParam(":implicith");
-			standardprocessor.setImplicitHydrogens(Boolean.parseBoolean(o
-					.toString()));
-		} catch (Exception x) {
-		}
-		try {
-			Object o = options.getParam(":neutralise");
-			standardprocessor.setNeutralise(Boolean.parseBoolean(o.toString()));
-		} catch (Exception x) {
-		}
+
+		standardprocessor.setSplitFragments(parseBooleanParam(
+				":splitfragments", false));
+		standardprocessor.setImplicitHydrogens(parseBooleanParam(":implicith",
+				false));
+		standardprocessor
+				.setNeutralise(parseBooleanParam(":neutralise", false));
 
 		final String[] tags_to_keep = parsetags_to_keep();
 
-		try {
-			Object o = options.getParam(":tag_rank");
-			standardprocessor.setRankTag(o.toString());
-		} catch (Exception x) {
-		}
-		try {
-			Object o = options.getParam(":tag_inchi");
-			standardprocessor.setInchiTag(o.toString());
-		} catch (Exception x) {
-		}
-		try {
-			Object o = options.getParam(":tag_smiles");
-			standardprocessor.setSMILESTag(o.toString());
-		} catch (Exception x) {
-		}
+		standardprocessor.setRankTag(parseStringParam(":tag_rank", "RANK"));
+		standardprocessor.setInchiTag(parseStringParam(":tag_inchi", "InChI"));
+		standardprocessor.setInchiKeyTag(parseStringParam(":tag_inchikey", "InChIKey"));
+		standardprocessor.setSMILESTag(parseStringParam(":tag_smiles", "SMILES"));
 
-		try {
-			Object o = options.getParam(":tag_inchikey");
-			standardprocessor.setInchiKeyTag(o.toString());
-		} catch (Exception x) {
-		}
-		try {
-			Object o = options.getParam(":inchi");
-			standardprocessor.setGenerateInChI(Boolean.parseBoolean(o
-					.toString()));
-		} catch (Exception x) {
-		}
-		try {
-			Object o = options.getParam(":smiles");
-			standardprocessor.setGenerateSMILES(Boolean.parseBoolean(o
-					.toString()));
-		} catch (Exception x) {
-		}
-		try {
-			Object o = options.getParam(":smilescanonical");
-			standardprocessor.setGenerateSMILES_Canonical(Boolean
-					.parseBoolean(o.toString()));
-		} catch (Exception x) {
+		standardprocessor.setGenerateInChI(parseBooleanParam(":inchi", true));
+		standardprocessor.setGenerateSMILES(parseBooleanParam(":smiles", true));
+		standardprocessor.setGenerateSMILES_Canonical(parseBooleanParam(
+				":smilescanonical", false));
+		standardprocessor.setGenerateSMILES_Aromatic(parseBooleanParam(
+				":smilesaromatic", false));
+		standardprocessor.setGenerateStereofrom2D(parseBooleanParam(
+				":generatestereofrom2d", false));
+		standardprocessor.setClearIsotopes(parseBooleanParam(
+				":setClearIsotopes", false));
 
-		}
-		try {
-			Object o = options.getParam(":smilesaromatic");
-			standardprocessor.setGenerateSMILES_Aromatic(Boolean.parseBoolean(o
-					.toString()));
-		} catch (Exception x) {
-
-		}
-
-		try {
-			Object o = options.getParam(":generatestereofrom2d");
-			standardprocessor.setGenerateStereofrom2D(Boolean.parseBoolean(o
-					.toString()));
-		} catch (Exception x) {
-		}
-		try {
-			Object o = options.getParam(":isotopes");
-			standardprocessor.setClearIsotopes(Boolean.parseBoolean(o
-					.toString()));
-		} catch (Exception x) {
-		}
-
-		boolean debug = false;
-		try {
-			Object o = options.getParam(":debugatomtypes");
-			debug = Boolean.parseBoolean(o.toString());
-		} catch (Exception x) {
-		}
-		final boolean debugatomtypes = debug;
+		final boolean debugatomtypes = parseBooleanParam(":debugatomtypes",
+				false);
 		final int startRecord = pagesize > 0 ? (page * pagesize + 1) : 1;
 		final int maxRecord = pagesize > 0 ? ((page + 1) * pagesize + 1)
 				: pagesize;
 
 		final File file = new File(options.input);
 		FileInputState in = new FileInputState(file);
+		in.setOptionalInChIHeader(inchi_header);
+		in.setOptionalInChIKeyHeader(inchikey_header);
+		in.setOptionalSMILESHeader(smiles_header);
 
 		if (options.output == null)
 			throw new FileNotFoundException(
