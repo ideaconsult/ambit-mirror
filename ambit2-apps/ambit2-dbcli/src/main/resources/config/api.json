@@ -150,9 +150,9 @@
 				}
 			}
 		},
-		"descriptor": {
-			"name": "descriptor",
-			"description": "Descriptor calculation (-i inputfile.sdf -o outputfile.sdf , recognized by extensions .sdf , .csv, .cml , .txt)",
+		"fingerprint": {
+			"name": "fingerprint",
+			"description": "Fingerprint calculation. Writes multiple files per fingerprint, all files start with prefix given by -o prefix)",
 			"post": {
 				"params": {
 					":fpclass": {
@@ -178,7 +178,19 @@
 						"type": "String",
 						"value": "",
 						"comment": "Specifies which tags to keep, comma delimited list. Everything else will be removed. To keep all the tags, leave this empty."
-					},		
+					},	
+					":write_count": {
+						"mandatory": false,
+						"type": "Boolean",
+						"value": false,
+						"comment": "Whether to write the counts of getCountFingerprint()"
+					},
+					":write_raw": {
+						"mandatory": false,
+						"type": "Boolean",
+						"value": false,
+						"comment": "Whether to write the raw fingerprint (getRawFingerprint)"
+					},					
 					":sdftitle": {
 						"mandatory": false,
 						"type": "String",

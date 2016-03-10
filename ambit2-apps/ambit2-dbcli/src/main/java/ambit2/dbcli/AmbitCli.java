@@ -74,6 +74,7 @@ import ambit2.core.io.FileOutputState;
 import ambit2.core.io.FilesWithHeaderWriter;
 import ambit2.core.io.IRawReader;
 import ambit2.core.io.RawIteratingSDFReader;
+import ambit2.core.io.fp.MultiFingerprintsWriter;
 import ambit2.core.processors.StructureNormalizer;
 import ambit2.core.processors.structure.InchiProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
@@ -92,11 +93,10 @@ import ambit2.db.search.structure.MissingFingerprintsQuery;
 import ambit2.db.search.structure.MissingInChIsQuery;
 import ambit2.db.update.chemical.UpdateChemical;
 import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
+import ambit2.dbcli.CliOptions._commandmode;
 import ambit2.dbcli.CliOptions._preprocessingoptions;
 import ambit2.dbcli.descriptors.AtomEnvironmentGeneratorApp;
 import ambit2.dbcli.exceptions.InvalidCommand;
-import ambit2.descriptors.AtomEnvironentMatrix;
-import ambit2.descriptors.fingerprints.ISparseFingerprint;
 import ambit2.descriptors.processors.BitSetGenerator;
 import ambit2.descriptors.processors.FPTable;
 import ambit2.smarts.processors.SMARTSPropertiesGenerator;
@@ -179,8 +179,8 @@ public class AmbitCli {
 			return parseCommandAE(subcommand, now);
 		} else if ("standardize".equals(command)) {
 			parseCommandStandardize(subcommand, now);
-		} else if ("descriptor".equals(command)) {
-			parseCommandDescriptor(subcommand, now);
+		} else if (_commandmode.fingerprint.name().equals(command)) {
+			parseCommandFingerprints(subcommand, now);
 		}
 		return -1;
 	}
@@ -338,7 +338,7 @@ public class AmbitCli {
 			} catch (Exception x) {
 			}
 		}
-		
+
 		return records;
 	}
 
@@ -708,26 +708,60 @@ public class AmbitCli {
 		}
 	}
 
-	public void parseCommandDescriptor(String subcommand, long now)
+	protected int parsePageParam() {
+		try {
+			return (Integer) options.getParam(":page");
+		} catch (Exception x) {
+			logger_cli.log(Level.WARNING, x.toString());
+			return 0;
+		}
+	}
+
+	protected int parsePageSizeParam() {
+		try {
+			return (Integer) options.getParam(":pagesize");
+		} catch (Exception x) {
+			logger_cli.log(Level.WARNING, x.toString());
+			return -1;
+		}
+	}
+
+	protected Object parseSdfTitleParam() {
+		try {
+			return options.getParam(":sdftitle");
+		} catch (Exception x) {
+			return null;
+		}
+	}
+
+	protected boolean parseWriteCountParam() {
+		try {
+			return Boolean.parseBoolean(options.getParam(":write_count")
+					.toString());
+		} catch (Exception x) {
+			return false;
+		}
+	}
+
+	protected boolean parseWriteRawParam() {
+		try {
+			return Boolean.parseBoolean(options.getParam(":write_raw")
+					.toString());
+		} catch (Exception x) {
+			return false;
+		}
+	}
+
+	public void parseCommandFingerprints(String subcommand, long now)
 			throws Exception {
-		int page = 0;
-		try {
-			page = (Integer) options.getParam(":page");
-		} catch (Exception x) {
-			logger_cli.log(Level.WARNING, x.toString());
-		}
-		int pagesize = -1;
-		try {
-			pagesize = (Integer) options.getParam(":pagesize");
-		} catch (Exception x) {
-			logger_cli.log(Level.WARNING, x.toString());
-		}
-		Object tmpTag;
-		try {
-			tmpTag = options.getParam(":sdftitle");
-		} catch (Exception x) {
-			tmpTag = null;
-		}
+		boolean multifile = true;
+		int page = parsePageParam();
+		int pagesize = parsePageSizeParam();
+		final boolean fp_count = parseWriteCountParam();
+		final boolean fp_raw = parseWriteRawParam();
+
+		Object tmpTag = parseSdfTitleParam();
+
 		final String[] tags_to_keep = parsetags_to_keep();
 
 		final String sdf_title = tmpTag == null ? null : tmpTag.toString()
@@ -747,10 +781,20 @@ public class AmbitCli {
 
 		logger_cli.log(Level.INFO, "MSG_INFO_READINGWRITING", new Object[] {
 				file.getAbsoluteFile(), outfile.getAbsolutePath() });
-		FileOutputState out = new FileOutputState(outfile);
-		final IChemObjectWriter writer = out.getWriter();
-		if (writer instanceof FilesWithHeaderWriter)
-			((FilesWithHeaderWriter) writer).setAddSMILEScolumn(false);
+
+		final List<IFingerprinter> fps = parseFingerprinterParams();
+
+		FileOutputState out = null;
+		final IChemObjectWriter awriter;
+		if (multifile) {
+			awriter = new MultiFingerprintsWriter(outfile, fps, tags_to_keep);
+		} else {
+			out = new FileOutputState(outfile);
+			awriter = out.getWriter();
+			if (awriter instanceof FilesWithHeaderWriter)
+				((FilesWithHeaderWriter) awriter).setAddSMILEScolumn(false);
+		}
+		final IChemObjectWriter writer = awriter;
 		final boolean writesdf = writer instanceof SDFWriter;
 
 		final Map<Object, Property> tags = new HashMap<>();
@@ -838,57 +882,7 @@ public class AmbitCli {
 			}
 
 		};
-		//new AtomEnvironentMatrix();
-		final List<IFingerprinter> fps = new ArrayList<IFingerprinter>();
-		try {
-			Object o = options.getParam(":fpclass");
-			if (o != null) {
-				String[] fpclass = o.toString().split(",");
-				Class clazz = null;
-				for (String fp : fpclass)
-					try {
-						if (fp.indexOf(".") < 0)
-							fp = "org.openscience.cdk.fingerprint." + fp.trim();
-						else
-							fp = fp.trim();
-						clazz = Class.forName(fp);
-						Object fingerprinter = clazz.newInstance();
-						if (fingerprinter instanceof IFingerprinter)
-							fps.add((IFingerprinter) fingerprinter);
-					} catch (Exception x) {
-						if (clazz != null)
-							try {
-								Object fingerprinter = clazz
-										.getDeclaredConstructor(
-												IChemObjectBuilder.class)
-										.newInstance(
-												SilentChemObjectBuilder
-														.getInstance());
-								if (fingerprinter instanceof IFingerprinter)
-									fps.add((IFingerprinter) fingerprinter);
-							} catch (Exception xx) {
-								logger_cli.log(Level.SEVERE, "MSG_ERR_CLASS",
-										new Object[] { fp, x.toString() });
-							}
 
-					}
-			}
-		} catch (Exception x) {
-		}
-		if (fps.size() == 0) {
-			fps.add(new org.openscience.cdk.fingerprint.CircularFingerprinter());
-			fps.add(new AtomEnvironentMatrix());
-		}	
-		
-		
-
-		StringBuilder b = new StringBuilder();
-		for (IFingerprinter fp : fps) {
-			b.append("\n");
-			b.append(fp.getClass().getName());
-		}
-
-		logger_cli.log(Level.INFO, "MSG_FP", new Object[] { b.toString() });
 		batch.setProcessorChain(new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>());
 		batch.getProcessorChain()
 				.add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
@@ -963,7 +957,7 @@ public class AmbitCli {
 							try {
 								cfp = fp.getCountFingerprint(processed);
 							} catch (Exception x) {
-								//logger.log(Level.WARNING, x.getMessage());
+								logger.log(Level.FINER, x.getMessage());
 							}
 							IBitFingerprint bfp = null;
 							try {
@@ -972,67 +966,26 @@ public class AmbitCli {
 							}
 							Map<String, Integer> fpraw = null;
 							try {
-								fpraw = fp.getRawFingerprint(processed);
+								if (fp_raw)
+									fpraw = fp.getRawFingerprint(processed);
 							} catch (Exception x) {
 
 							}
+
 							try {
 								if (cfp != null) {
-									int numBins = cfp.numOfPopulatedbins();
-									StringBuilder b_hashed = new StringBuilder();
-									StringBuilder b_count = new StringBuilder();
-									StringBuilder b_fp = new StringBuilder();
-									for (int i = 0; i < numBins; i++) {
-										int hash = cfp.getHash(i);
-										int freq = cfp.getCount(i);
-										if (i > 0) {
-											b_hashed.append(" ");
-											b_count.append(" ");
-											b_fp.append(" ");
-										}
-										b_hashed.append(hash);
-										b_count.append(String.format("%d:%d",
-												hash, freq));
-										b_fp.append(String.format("%d", hash));
-									}
-									processed.setProperty(fp.getClass()
-											.getName() + ".count",
-											b_count.toString());
-									processed.setProperty(fp.getClass()
-											.getName(), b_fp.toString());
-								}
-								if (bfp != null) {
-									processed
-											.setProperty(fp.getClass()
-													.getName() + ".hashed",
-													bfp == null ? "" : bfp
-															.asBitSet()
-															.toString()
-															.replace("{", "")
-															.replace("}", "")
-															.replace(",", ""));
-								}
-								if (fpraw != null) {
-									processed.setProperty(fp.getClass()
-											.getName() + ".raw",
-											fpraw.toString());
-								}
-								if (fp instanceof ISparseFingerprint)
-									try {
-										StringBuilder b = new StringBuilder();
-										for (Object x : ((ISparseFingerprint) fp)
-												.getSparseFingerprint(processed)) {
-											b.append(",");
-											b.append(x.toString());
-										}
-
+									if (fp_count)
 										processed.setProperty(fp.getClass()
-												.getName() + ".full",
-												b.toString());
-									} catch (Exception x) {
-										// not all fp support this
-										x.printStackTrace();
-									}
+												.getName() + ".count", cfp);
+									processed.setProperty(fp.getClass()
+											.getName(), cfp);
+								}
+								if (bfp != null)
+									processed.setProperty(fp.getClass()
+											.getName() + ".hashed", bfp);
+								if (fpraw != null)
+									processed.setProperty(fp.getClass()
+											.getName() + ".raw", fpraw);
 
 							} catch (Exception x) {
 								logger_cli.log(Level.SEVERE, x.getMessage(), x);
@@ -1109,6 +1062,56 @@ public class AmbitCli {
 		}
 	}
 
+	protected List<IFingerprinter> parseFingerprinterParams() {
+		final List<IFingerprinter> fps = new ArrayList<IFingerprinter>();
+		try {
+			Object o = options.getParam(":fpclass");
+			if (o != null) {
+				String[] fpclass = o.toString().split(",");
+				Class clazz = null;
+				for (String fp : fpclass)
+					try {
+						if (fp.indexOf(".") < 0)
+							fp = "org.openscience.cdk.fingerprint." + fp.trim();
+						else
+							fp = fp.trim();
+						clazz = Class.forName(fp);
+						Object fingerprinter = clazz.newInstance();
+						if (fingerprinter instanceof IFingerprinter)
+							fps.add((IFingerprinter) fingerprinter);
+					} catch (Exception x) {
+						if (clazz != null)
+							try {
+								Object fingerprinter = clazz
+										.getDeclaredConstructor(
+												IChemObjectBuilder.class)
+										.newInstance(
+												SilentChemObjectBuilder
+														.getInstance());
+								if (fingerprinter instanceof IFingerprinter)
+									fps.add((IFingerprinter) fingerprinter);
+							} catch (Exception xx) {
+								logger_cli.log(Level.SEVERE, "MSG_ERR_CLASS",
+										new Object[] { fp, x.toString() });
+							}
+
+					}
+			}
+		} catch (Exception x) {
+		}
+		if (fps.size() == 0) {
+			fps.add(new org.openscience.cdk.fingerprint.CircularFingerprinter());
+			// fps.add(new AtomEnvironentMatrix());
+		}
+		StringBuilder b = new StringBuilder();
+		for (IFingerprinter fp : fps) {
+			b.append("\n");
+			b.append(fp.getClass().getName());
+		}
+		logger_cli.log(Level.INFO, "MSG_FP", new Object[] { b.toString() });
+		return fps;
+	}
+
 	protected String[] parsetags_to_keep() {
 		String[] fields_to_keep = null;
 		try {
@@ -1132,24 +1135,10 @@ public class AmbitCli {
 
 	public void parseCommandStandardize(String subcommand, long now)
 			throws Exception {
-		int page = 0;
-		try {
-			page = (Integer) options.getParam(":page");
-		} catch (Exception x) {
-			logger_cli.log(Level.WARNING, x.toString());
-		}
-		int pagesize = -1;
-		try {
-			pagesize = (Integer) options.getParam(":pagesize");
-		} catch (Exception x) {
-			logger_cli.log(Level.WARNING, x.toString());
-		}
-		Object tmpTag;
-		try {
-			tmpTag = options.getParam(":sdftitle");
-		} catch (Exception x) {
-			tmpTag = null;
-		}
+		int page = parsePageParam();
+		int pagesize = parsePageSizeParam();
+		Object tmpTag = parseSdfTitleParam();
+
 		final String sdf_title = tmpTag == null ? null : tmpTag.toString()
 				.toLowerCase();
 
@@ -1593,13 +1582,7 @@ public class AmbitCli {
 
 	public void parseCommandPreprocessing() throws Exception {
 
-		int pagesize = 5000000;
-		try {
-			pagesize = (Integer) options.getParam(":pagesize");
-		} catch (Exception x) {
-			logger_cli.log(Level.WARNING, x.toString());
-		}
-
+		int pagesize = parsePageSizeParam();
 		Set<FPTable> preprocessingOption = new TreeSet<FPTable>();
 		/*
 		 * try { if ((Boolean)options.getParam(":pubchemfp"))
