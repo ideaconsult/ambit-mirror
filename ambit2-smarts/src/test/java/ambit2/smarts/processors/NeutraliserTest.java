@@ -17,7 +17,7 @@ import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.FragmentProcessor;
 
 public class NeutraliserTest {
-	FragmentProcessor fragmenter = new FragmentProcessor();
+	FragmentProcessor fragmenter = new FragmentProcessor(null);
 
 	@Test
 	public void test() throws Exception {
@@ -46,7 +46,7 @@ public class NeutraliserTest {
 			for (IAtom atom : mol.atoms())
 				charge += atom.getFormalCharge();
 			Assert.assertFalse(charge == 0);
-			NeutraliseProcessor p = new NeutraliseProcessor();
+			NeutraliseProcessor p = new NeutraliseProcessor(null);
 			p.setAtomtypeasproperties(true);
 			p.setSparseproperties(true);
 			mol = p.process(mol);

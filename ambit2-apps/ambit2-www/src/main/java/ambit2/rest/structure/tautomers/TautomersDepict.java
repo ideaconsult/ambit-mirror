@@ -203,7 +203,7 @@ public class TautomersDepict extends AbstractDepict {
 			throws ResourceException {
 		final StringBuilder b = new StringBuilder();
 		List<IAtomContainer> resultTautomers = null;
-		TautomerProcessor tproc = new TautomerProcessor();
+		TautomerProcessor tproc = new TautomerProcessor(null);
 		tproc.getTautomerManager().FlagRegisterOnlyBestRankTautomers = false;
 		IProcessor<IAtomContainer, IAtomContainer> callback = new DefaultAmbitProcessor<IAtomContainer, IAtomContainer>() {
 			SmilesGenerator gen = SmilesGenerator.isomeric();

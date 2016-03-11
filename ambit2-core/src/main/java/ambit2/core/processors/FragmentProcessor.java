@@ -1,5 +1,7 @@
 package ambit2.core.processors;
 
+import java.util.logging.Logger;
+
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
@@ -17,6 +19,10 @@ public class FragmentProcessor extends AbstractStructureProcessor {
 	 */
 	private static final long serialVersionUID = 4826290923350893404L;
 
+	public FragmentProcessor(Logger logger) {
+		super(logger);
+	}
+	
 	@Override
 	public IAtomContainer process(IAtomContainer container) throws Exception {
 		if (container == null)

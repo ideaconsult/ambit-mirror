@@ -175,7 +175,7 @@ public class TestTautomersFromSDF {
 		Assert.assertTrue(infile.exists());
 
 		MoleculeReader molReader = new MoleculeReader();
-		TautomerProcessor tautomers = new TautomerProcessor();
+		TautomerProcessor tautomers = new TautomerProcessor(null);
 
 		tautomers
 				.setCallback(new DefaultAmbitProcessor<IAtomContainer, IAtomContainer>() {
