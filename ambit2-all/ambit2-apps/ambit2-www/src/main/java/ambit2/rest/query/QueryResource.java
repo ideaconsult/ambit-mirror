@@ -57,6 +57,7 @@ import ambit2.base.processors.ProcessorException;
 import ambit2.db.UpdateExecutor;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
@@ -114,6 +115,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 				MediaType.TEXT_PLAIN, MediaType.TEXT_URI_LIST,
 				MediaType.TEXT_CSV, MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE, MediaType.TEXT_RDF_N3,
+				ChemicalMediaType.APPLICATION_JSONLD,
 				MediaType.TEXT_RDF_NTRIPLES, MediaType.APPLICATION_JSON,
 				MediaType.APPLICATION_JAVASCRIPT,
 				MediaType.APPLICATION_JAVA_OBJECT, MediaType.APPLICATION_WADL
@@ -174,8 +176,8 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 	protected Representation getRepresentation(Variant variant)
 			throws ResourceException {
 		try {
-			if (MediaType.APPLICATION_JAVA_OBJECT.equals(variant
-					.getMediaType())) {
+			if (MediaType.APPLICATION_JAVA_OBJECT
+					.equals(variant.getMediaType())) {
 				if ((queryObject != null)
 						&& (queryObject instanceof Serializable))
 					return new ObjectRepresentation(
@@ -710,7 +712,8 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 					profile, getApplication().getContext(), getToken(),
 					getRequest().getCookies(),
 					getRequest().getClientInfo() == null ? null : getRequest()
-							.getClientInfo().getAgent(),getRequest().getResourceRef().toString());
+							.getClientInfo().getAgent(), getRequest()
+							.getResourceRef().toString());
 			reader.setCloseConnection(false);
 
 			DBConnection dbc = new DBConnection(getApplication().getContext());

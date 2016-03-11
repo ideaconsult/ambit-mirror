@@ -28,6 +28,7 @@ import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.AlgorithmType;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.data.model.Parameter;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelURIReporter;
@@ -174,7 +175,9 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				|| variant.getMediaType().equals(
 						MediaType.APPLICATION_RDF_TURTLE)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
-				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)) {
+				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+				|| variant.getMediaType().equals(
+						ChemicalMediaType.APPLICATION_JSONLD)) {
 			return new StringConvertor(new AlgorithmRDFReporter(getRequest(),
 					variant.getMediaType()), variant.getMediaType(),
 					filenamePrefix);

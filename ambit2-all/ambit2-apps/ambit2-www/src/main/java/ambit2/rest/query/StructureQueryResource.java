@@ -1,6 +1,5 @@
 package ambit2.rest.query;
 
-import java.awt.Dimension;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.Connection;
@@ -10,7 +9,6 @@ import java.util.logging.Level;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
-import net.idea.modbcum.r.QueryAbstractReporter;
 import net.idea.restnet.c.RepresentationConvertor;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
@@ -233,6 +231,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.APPLICATION_RDF_TRIG, MediaType.APPLICATION_RDF_TRIX,
 				MediaType.TEXT_RDF_N3, MediaType.TEXT_RDF_NTRIPLES,
+				ChemicalMediaType.APPLICATION_JSONLD,
 				MediaType.APPLICATION_JAVA_OBJECT,
 				MediaType.APPLICATION_JAVASCRIPT, ChemicalMediaType.IMAGE_JSON
 
@@ -395,7 +394,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				|| variant.getMediaType()
 						.equals(MediaType.APPLICATION_RDF_TRIG)
 				|| variant.getMediaType()
-						.equals(MediaType.APPLICATION_RDF_TRIX)) {
+						.equals(MediaType.APPLICATION_RDF_TRIX)
+				|| variant.getMediaType().equals(
+						ChemicalMediaType.APPLICATION_JSONLD)) {
 			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
 					new DatasetRDFReporter(getCompoundInDatasetPrefix(),
 							getRequest(), variant.getMediaType(),

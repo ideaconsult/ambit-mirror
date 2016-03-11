@@ -8,7 +8,8 @@ import org.restlet.data.MediaType;
  * @author nina
  * 
  */
-
+@Deprecated 
+/* replace with net.idea.restnet.c.ChemicalMediaType */
 public class ChemicalMediaType {
 
 	public static final MediaType CHEMICAL_MDLSDF = new MediaType(
@@ -28,6 +29,8 @@ public class ChemicalMediaType {
 	public static final MediaType THREECOL_ARFF = new MediaType(
 			"text/x-arff-3col");
 	public static final MediaType IMAGE_JSON = new MediaType("image/json");
+	public static final MediaType APPLICATION_JSONLD = new MediaType(
+			"application/ld+json");
 
 	protected ChemicalMediaType() {
 

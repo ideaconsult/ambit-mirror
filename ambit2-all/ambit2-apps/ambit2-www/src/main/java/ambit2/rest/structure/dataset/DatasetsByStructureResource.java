@@ -21,6 +21,7 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.RetrieveDatasets;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
@@ -57,7 +58,9 @@ public class DatasetsByStructureResource extends
 				|| variant.getMediaType()
 						.equals(MediaType.APPLICATION_RDF_TRIG)
 				|| variant.getMediaType()
-						.equals(MediaType.APPLICATION_RDF_TRIX)) {
+						.equals(MediaType.APPLICATION_RDF_TRIX)
+				|| variant.getMediaType().equals(
+						ChemicalMediaType.APPLICATION_JSONLD)) {
 			QueryReporter<SourceDataset, IQueryRetrieval<SourceDataset>, OntModel> reporter = new MetadataRDFReporter<SourceDataset, IQueryRetrieval<SourceDataset>>(
 					getRequest(), variant.getMediaType());
 			return new RDFJenaConvertor<SourceDataset, IQueryRetrieval<SourceDataset>>(

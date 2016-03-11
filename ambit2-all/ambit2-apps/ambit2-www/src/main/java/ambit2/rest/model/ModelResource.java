@@ -57,7 +57,6 @@ import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.CallableStructureOptimizer;
 import ambit2.rest.task.tautomers.CallableTautomersGenerator;
 import ambit2.rest.task.tautomers.TautomersGenerator;
-
 import ambit2.rest.task.weka.CallableWekaPredictor;
 import ambit2.rest.task.weka.FilteredWekaPredictor;
 
@@ -114,7 +113,7 @@ public class ModelResource
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		AbstractModelQuery query = getModelQuery(getModelID(getRequest()
 				.getAttributes().get(MLResources.model_resourcekey)), form);
-		
+
 		return query;
 	}
 
@@ -148,7 +147,9 @@ public class ModelResource
 				|| variant.getMediaType().equals(
 						MediaType.APPLICATION_RDF_TURTLE)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
-				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)) {
+				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+				|| variant.getMediaType().equals(
+						ChemicalMediaType.APPLICATION_JSONLD)) {
 			return new RDFJenaConvertor<ModelQueryResults, IQueryRetrieval<ModelQueryResults>>(
 					new ModelRDFReporter<IQueryRetrieval<ModelQueryResults>>(
 							getRequest(), variant.getMediaType()),
@@ -278,7 +279,8 @@ public class ModelResource
 
 				return new CallableModelPredictor<IStructureRecord, ExpertModelpredictor, String>(
 						form, getRequest().getRootRef(), getContext(),
-						(ExpertModelpredictor) thepredictor, token,getRequest().getResourceRef().toString()) {
+						(ExpertModelpredictor) thepredictor, token,
+						getRequest().getResourceRef().toString()) {
 					@Override
 					protected void processForm(
 							Reference applicationRootReference, Form form) {
@@ -291,15 +293,16 @@ public class ModelResource
 					AlgorithmFormat.WEKA.getMediaType())) {
 				return // reads Instances, instead of IStructureRecord
 				new CallableWekaPredictor<Object, String>(form, getRequest()
-						.getRootRef(), getContext(), thepredictor, token,getRequest().getResourceRef().toString());
-				/*									
-			} else if (model.getContentMediaType().equals(
-
-					AlgorithmFormat.WAFFLES_JSON.getMediaType())) {
-				return new CallableWafflesPredictor(form, getRequest()
-						.getRootRef(), getContext(),
-						(WafflesPredictor) thepredictor, token,getRequest().getResourceRef().toString());
-*/						
+						.getRootRef(), getContext(), thepredictor, token,
+						getRequest().getResourceRef().toString());
+				/*
+				 * } else if (model.getContentMediaType().equals(
+				 * 
+				 * AlgorithmFormat.WAFFLES_JSON.getMediaType())) { return new
+				 * CallableWafflesPredictor(form, getRequest() .getRootRef(),
+				 * getContext(), (WafflesPredictor) thepredictor,
+				 * token,getRequest().getResourceRef().toString());
+				 */
 			} else if (model.getContentMediaType().equals(
 					AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
 
@@ -308,7 +311,8 @@ public class ModelResource
 					if (thepredictor instanceof FingerprintsPredictor)
 						return new CallableModelPredictor<IStructureRecord, FingerprintsPredictor, String>(
 								form, getRequest().getRootRef(), getContext(),
-								(FingerprintsPredictor) thepredictor, token,getRequest().getResourceRef().toString()) {
+								(FingerprintsPredictor) thepredictor, token,
+								getRequest().getResourceRef().toString()) {
 
 						};
 					else
@@ -318,7 +322,8 @@ public class ModelResource
 												.getClass().getName()));
 				} else {
 					return new CallableModelPredictor(form, getRequest()
-							.getRootRef(), getContext(), thepredictor, token,getRequest().getResourceRef().toString()) {
+							.getRootRef(), getContext(), thepredictor, token,
+							getRequest().getResourceRef().toString()) {
 
 					};
 					/*
@@ -331,23 +336,27 @@ public class ModelResource
 					AlgorithmFormat.Structure2D.getMediaType())) {
 				return new CallableStructureOptimizer(form, getRequest()
 						.getRootRef(), getContext(),
-						(Structure2DProcessor) thepredictor, token,getRequest().getResourceRef().toString());
+						(Structure2DProcessor) thepredictor, token,
+						getRequest().getResourceRef().toString());
 			} else if (model.getContentMediaType().equals(
 					AlgorithmFormat.MOPAC.getMediaType())) {
 				return new CallableStructureOptimizer(form, getRequest()
 						.getRootRef(), getContext(),
-						(StructureProcessor) thepredictor, token,getRequest().getResourceRef().toString());
+						(StructureProcessor) thepredictor, token, getRequest()
+								.getResourceRef().toString());
 			} else if (model.getContentMediaType().equals(
 					AlgorithmFormat.TAUTOMERS.getMediaType())) {
 				return new CallableTautomersGenerator(form, getRequest()
 						.getRootRef(), getContext(),
-						(TautomersGenerator) thepredictor, token,getRequest().getResourceRef().toString());
+						(TautomersGenerator) thepredictor, token, getRequest()
+								.getResourceRef().toString());
 
 			} else if (model.getContentMediaType().equals(
 					AlgorithmFormat.JAVA_CLASS.getMediaType())) {
 				return new CallableDescriptorCalculator(form, getRequest()
 						.getRootRef(), getContext(),
-						(DescriptorPredictor) thepredictor, token,getRequest().getResourceRef().toString());
+						(DescriptorPredictor) thepredictor, token, getRequest()
+								.getResourceRef().toString());
 			} else
 				throw new ResourceException(
 						Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,
@@ -416,9 +425,11 @@ public class ModelResource
 			String name = form.getFirstValue(QueryResource.search_param);
 			if (name != null) {
 				query.setFieldname(name.trim());
-				if (condition==null) query.setCondition(StringCondition.getInstance(StringCondition.C_STARTS_WITH));
-			}	
-			
+				if (condition == null)
+					query.setCondition(StringCondition
+							.getInstance(StringCondition.C_STARTS_WITH));
+			}
+
 			if (idmodel == null) {
 				_dmode = DisplayMode.table;
 				return query;
@@ -474,15 +485,13 @@ public class ModelResource
 						model,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
 								request));
-/*				
-			} else if (model.getContentMediaType().equals(
-					AlgorithmFormat.WAFFLES_JSON.getMediaType())) {
-				return new WafflesPredictor(
-						request.getRootRef(),
-						model,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
-								request));
-*/								
+				/*
+				 * } else if (model.getContentMediaType().equals(
+				 * AlgorithmFormat.WAFFLES_JSON.getMediaType())) { return new
+				 * WafflesPredictor( request.getRootRef(), model, new
+				 * ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
+				 * request));
+				 */
 			} else if (model.getContentMediaType().equals(
 					AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
 				if (model.getPredictors().size() == 0) { // hack for structure

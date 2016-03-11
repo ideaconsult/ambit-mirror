@@ -19,6 +19,7 @@ import net.idea.restnet.db.convertors.OutputWriterConvertor;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskApplication;
 import net.idea.restnet.i.task.ITaskStorage;
+import net.idea.restnet.rdf.ns.OT;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -35,6 +36,8 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import com.hp.hpl.jena.ontology.OntModel;
+
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
@@ -48,6 +51,7 @@ import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.processors.CallableSubstanceI5Query;
 import ambit2.db.reporters.ImageReporter;
+import ambit2.db.reporters.xlsx.SubstanceRecordXLSXReporter;
 import ambit2.db.substance.DeleteSubstance;
 import ambit2.db.substance.FacetedSearchSubstance;
 import ambit2.db.substance.ReadByReliabilityFlags;
@@ -58,9 +62,12 @@ import ambit2.db.substance.ReadSubstanceByOwner;
 import ambit2.db.substance.ReadSubstanceByStudy;
 import ambit2.db.substance.ReadSubstanceByType;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundleCompounds;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
+import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RDFStaXConvertor;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.query.AmbitDBResource;
@@ -117,6 +124,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 		super.doInit();
 		customizeVariants(new MediaType[] { MediaType.TEXT_HTML,
 				MediaType.TEXT_URI_LIST, MediaType.APPLICATION_JSON,
+				ChemicalMediaType.APPLICATION_JSONLD,
 				MediaType.APPLICATION_JAVA_OBJECT,
 				MediaType.APPLICATION_JAVASCRIPT, MediaType.IMAGE_PNG,
 				MediaType.APPLICATION_EXCEL,
@@ -164,24 +172,53 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 					getRequest(), bundles);
 			return new OutputWriterConvertor<SubstanceRecord, Q>(csvreporter,
 					MediaType.TEXT_CSV, filenamePrefix);
-			/*
-			 * } else if
-			 * (variant.getMediaType().equals(MediaType.APPLICATION_MSOFFICE_XLSX
-			 * )) { SubstanceXLSXReporter xlsxreporter = new
-			 * SubstanceXLSXReporter( getRequest(), bundles, false); return new
-			 * OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
-			 * MediaType.APPLICATION_MSOFFICE_XLSX, filenamePrefix);
-			 * 
-			 * } else if
-			 * (variant.getMediaType().equals(MediaType.APPLICATION_EXCEL)) {
-			 * SubstanceXLSXReporter xlsxreporter = new SubstanceXLSXReporter(
-			 * getRequest(), bundles, true); return new
-			 * OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
-			 * MediaType.APPLICATION_EXCEL, filenamePrefix);
-			 */
+
+		} else if (variant.getMediaType().equals(
+				MediaType.APPLICATION_MSOFFICE_XLSX)) {
+			SubstanceRecordXLSXReporter xlsxreporter = new SubstanceRecordXLSXReporter(
+					getRequest().getRootRef().toString(), false, bundles);
+			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
+					MediaType.APPLICATION_MSOFFICE_XLSX, filenamePrefix);
+
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_EXCEL)) {
+			SubstanceRecordXLSXReporter xlsxreporter = new SubstanceRecordXLSXReporter(
+					getRequest().getRootRef().toString(), true, bundles);
+			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
+					MediaType.APPLICATION_EXCEL, filenamePrefix);
+
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
 			return new RDFStaXConvertor(new SubstanceBundleStAXReporter(
 					getRequest()), filenamePrefix);
+		} else if (variant.getMediaType().equals(
+				MediaType.APPLICATION_RDF_TURTLE)
+				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
+				|| variant.getMediaType().equals(
+						ChemicalMediaType.APPLICATION_JSONLD)) {
+			return new RDFJenaConvertor(new SubstanceRDFReporter(getRequest(),
+					variant.getMediaType()), variant.getMediaType(),
+					filenamePrefix) {
+				@Override
+				protected OntModel createOutput(IQueryRetrieval query)
+						throws AmbitException {
+					try {
+						OntModel jenaModel = OT.createModel();
+						jenaModel.setNsPrefix("sio",
+								"http://semanticscience.org/resource/");
+						jenaModel.setNsPrefix("obo",
+								"http://purl.obolibrary.org/obo/");
+						jenaModel.setNsPrefix("bao",
+								"http://www.bioassayontology.org/bao#");
+						jenaModel.setNsPrefix("npo",
+								"http://purl.bioontology.org/ontology/npo/");
+						jenaModel.setNsPrefix("enm",
+								"http://purl.enanomapper.org/onto/");
+						return jenaModel;
+					} catch (Exception x) {
+						throw new AmbitException(x);
+					}
+				}
+			};
 		} else if (variant.getMediaType().equals(
 				MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
