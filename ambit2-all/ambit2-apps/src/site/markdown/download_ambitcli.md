@@ -4,13 +4,16 @@ A [command line Java application](download_ambitcli.html) used for processing ch
 
 ## Download
 
-* <a href="http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/">Releases</a>
+* Latest release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.0.1/ambitcli-3.0.1.jar/download">ambitcli-3.0.1</a>
 
-* Pre-release <a href="https://www.ideaconsult.net/downloads/ambitcli/ambitcli-3.0.1-20151130.jar">ambitcli-3.0.1-20151130.jar</a>
+* <a href="http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/">All releases</a>
 
-* Pre-release <a href="https://www.ideaconsult.net/downloads/ambitcli/ambitcli-3.0.1-20160205.jar">ambitcli-3.0.1-20160205.jar</a> (build:7259 1454688887571)
+* Pre-release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.0.2">ambitcli-3.0.2-{buildnumber}.jar</a> 
+
+* Pre-release <a href="https://www.ideaconsult.net/downloads/ambitcli/ambitcli-3.0.1-20151130.jar">ambitcli-3.0.1-20151130.jar</a> | <a href="https://www.ideaconsult.net/downloads/ambitcli/ambitcli-3.0.1-20160205.jar">ambitcli-3.0.1-20160205.jar (build:7259 1454688887571)</a>
 
 * Development <a href="http://ambit.uni-plovdiv.bg:8083/nexus/#nexus-search;gav~~ambit2-dbcli~~jar~">Maven repository</a>
+
 
 ## Usage
 
@@ -72,7 +75,7 @@ Acetoin,513-86-0,CC(O)C(C)=O
 The application is organized around set of commands (`option -a`) , subcommands (option -m) and command parameters (multiple options -d).
 This mimics a REST API with structure `/command -X POST -d "option1=value1" -d "option2=value2"`   
 
-To list available commands use `-a help`
+* To list available commands use `-a help`
 
 ````sh
 $java -jar ambitcli.jar -a help
@@ -80,30 +83,19 @@ ambitcli -a {command} -m {subcommand} -d {options}
 	(use -m help to list subcommands and options per command)
 ````
 
+* Split
+
 ````sh
 -a split	Splits an SDF into chunks of predefined size (-i inputfile -o outputfile).
 	Example:	ambitcli  -a split -m post -d chunk=1000	
 ````
 
+* Standardize 
+
 ````sh
 -a standardize	Chemical structure standardization (-i inputfile.sdf -o outputfile.sdf , recognized by extensions .sdf , .csv, .cml , .txt)
 	Example:	ambitcli  -a standardize -m post -d smirks=null -d splitfragments=true -d implicith=true -d stereo=false -d tautomers=true -d inchi=false -d smiles=false -d smilescanonical=false -d page=0 -d pagesize=20000 -d tag_inchi=InChI -d tag_inchikey=InChIKey -d tag_smiles=SMILES -d tag_rank=RANK	
 ````
-
-````
--a fingerprint -m post -d <parameters>
-
-"Fingerprint calculation. Writes multiple files per fingerprint, all files start with prefix given by -o prefix)"
-   -a fingerprint -m post
- -d fpclass=CircularFingerprinter,PubchemFingerprinter,MACCSFingerprinter	// Comma delimited list of class names implementing org.openscience.cdk.fingerprint.IFingerprinter, e.g. KlekotaRothFingerprinter. If not fully qualified will prepend 'org.openscience.cdk.fingerprint.'	[type:String, mandatory:false]
- -d page=0	// Start page (first page = 0)	[type:Integer, mandatory:false]
- -d pagesize=20000	// Page size (in number of records)	[type:Integer, mandatory:false]
- -d inputtag_smiles=SMILES	// Specifies the name of the column, containing SMILES	[type:String, mandatory:false]
- -d tag_tokeep=InChIKey	// Specifies which tags to keep, comma delimited list. Everything else will be removed. To keep all the tags, leave this empty.	[type:String, mandatory:false]
- -d write_count=false	// Whether to write the counts of getCountFingerprint()	[type:Boolean, mandatory:false]
- -d write_raw=false	// Whether to write the raw fingerprint (getRawFingerprint)	[type:Boolean, mandatory:false]
- -d sdftitle=null	// Specifies which field to write in the first SDF line	[type:String, mandatory:false]
-
 
 ### Example 1:
 
@@ -119,20 +111,28 @@ ambitcli -a {command} -m {subcommand} -d {options}
 Available since ambitcli-3.0.2-SNAPSHOT build:7349
 ````
 
+* Import 
+
 ````sh
 -a dataset	Dataset import into AMBIT database (with normalisation). The database connection settings are read from -c {file}.
 	Example:	ambitcli  -a dataset -m post	
 ````
 
+* Import
+ 
 ````sh
 -a import	Quick import into AMBIT database (No normalisation!). Input file (-i file). The database connection settings are read from -c {file}
 	Example:	ambitcli  -a import -m post	
 ````
 
+* Database preprocessing 
+
 ````sh
 -a preprocessing	Preprocessing of structures in AMBIT database (depends on options, default inchi). The database connection settings are read from -c {file}
 	Example:	ambitcli  -a preprocessing -m post -d inchi=false -d atomprops=false -d fp1024=false -d sk1024=false -d cf1024=false -d smarts=false -d similarity=false -d pagesize=5000000	
 ````
+
+* Atom environment
 
 ````sh
 -a atomenvironments	Generates atom environments matrix descriptors from SDF file (-i inputfile -o outputfile)
@@ -160,6 +160,21 @@ $java -jar ambitcli.jar -a standardize -m help
 ### <a name="standardize"></a>-a standardize 
 
   [Chemical structure standardisaion options](ambitcli_standardisation.html)
+
+### -a fingerprint 
+
+````
+"Fingerprint calculation. Writes multiple files per fingerprint, all files start with prefix given by -o prefix)"
+   -a fingerprint -m post
+ -d fpclass=CircularFingerprinter,PubchemFingerprinter,MACCSFingerprinter	// Comma delimited list of class names implementing org.openscience.cdk.fingerprint.IFingerprinter, e.g. KlekotaRothFingerprinter. If not fully qualified will prepend 'org.openscience.cdk.fingerprint.'	[type:String, mandatory:false]
+ -d page=0	// Start page (first page = 0)	[type:Integer, mandatory:false]
+ -d pagesize=20000	// Page size (in number of records)	[type:Integer, mandatory:false]
+ -d inputtag_smiles=SMILES	// Specifies the name of the column, containing SMILES	[type:String, mandatory:false]
+ -d tag_tokeep=InChIKey	// Specifies which tags to keep, comma delimited list. Everything else will be removed. To keep all the tags, leave this empty.	[type:String, mandatory:false]
+ -d write_count=false	// Whether to write the counts of getCountFingerprint()	[type:Boolean, mandatory:false]
+ -d write_raw=false	// Whether to write the raw fingerprint (getRawFingerprint)	[type:Boolean, mandatory:false]
+ -d sdftitle=null	// Specifies which field to write in the first SDF line	[type:String, mandatory:false]
+````
 
 ### -a split
 

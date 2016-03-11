@@ -49,11 +49,11 @@ Standalone applications
 AMBIT modules
 ~~~~~~~~~~
 
- AMBIT consists of multiple [*Maven modules*](http://maven.apache.org/) with well defined dependencies, which can be used in a stand alone mode or embedded in other applications. 
+ AMBIT consists of multiple {{{http://maven.apache.org/}Maven modules}} with well defined dependencies, which can be used in a stand alone mode or embedded in other applications. 
  
  ambit2-core,db,descriptors,smarts,tautomers,and more-.jar {{{./download_ambitlibs.html}?}}  
  
- [Latest release] {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/3.0.0/}ambit2-*-3.0.0.jar}}
+ [Latest release] {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/3.0.1/}ambit2-*-3.0.1.jar}}
 
  [Previous releases] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/}Download}}
 
