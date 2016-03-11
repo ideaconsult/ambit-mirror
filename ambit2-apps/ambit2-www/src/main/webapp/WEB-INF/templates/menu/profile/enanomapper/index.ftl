@@ -111,7 +111,7 @@ $(document)
 		</div>
 		<div class='row add-bottom h4'>
 		<span class='eight columns'>
-		Try the new  <a  href="http://enanomapper.github.io/data.enanomapper.net/" title="Free text search">free text search application</a>
+		Try the new  <a  href="https://search.data.enanomapper.net/" title="Free text search">free text search application</a>
 		</span>
 		</div>
 
