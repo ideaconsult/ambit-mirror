@@ -19,7 +19,7 @@ public class SmirksProcessorTest {
 	static Logger logger = Logger.getLogger(SMIRKSProcessor.class.getName());
 	@Test
 	public void testOptions() throws Exception {
-		SMIRKSProcessor p = new SMIRKSProcessor();
+		SMIRKSProcessor p = new SMIRKSProcessor(logger);
 		Assert.assertFalse(p.isAtomtypeasproperties());
 		Assert.assertTrue(p.isSparseproperties());
 		Assert.assertFalse(p.isTransformationasproperties());
@@ -37,7 +37,7 @@ public class SmirksProcessorTest {
 	public void test() throws Exception {
 		URL config = this.getClass().getClassLoader()
 				.getResource("ambit2/smirks/smirks.json");
-		SMIRKSProcessor p = new SMIRKSProcessor();
+		SMIRKSProcessor p = new SMIRKSProcessor(logger);
 		p.setLoadExamples(true);
 		p.loadReactionsFromJSON(new File(config.getFile()));
 		Assert.assertEquals(38, p.getTransformations().size());

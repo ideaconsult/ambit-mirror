@@ -2,6 +2,7 @@ package ambit2.tautomers.processor;
 
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
@@ -26,8 +27,9 @@ public class TautomerProcessor extends
 		this.callback = callback;
 	}
 
-	public TautomerProcessor() {
+	public TautomerProcessor(Logger logger) {
 		super();
+		if (logger!=null) this.logger = logger;
 		tautomerManager.tautomerFilter
 				.setFlagApplyDuplicationCheckIsomorphism(false);
 		tautomerManager.tautomerFilter.setFlagApplyDuplicationCheckInChI(true);

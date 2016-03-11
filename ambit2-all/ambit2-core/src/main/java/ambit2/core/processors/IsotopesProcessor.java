@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.interfaces.IAtom;
@@ -24,8 +25,8 @@ public class IsotopesProcessor extends AbstractStructureProcessor {
 	private static final long serialVersionUID = -4774343290932854421L;
 	protected Isotopes isotopesFactory;
 
-	public IsotopesProcessor() {
-		super();
+	public IsotopesProcessor(Logger logger) {
+		super(logger);
 		setAtomtypeasproperties(true);
 		setSparseproperties(true);
 		try {

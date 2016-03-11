@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.vecmath.Vector2d;
 
@@ -44,15 +45,6 @@ public class StructureStandardizer extends
 	protected boolean generateInChI = true;
 	protected boolean generateSMILES_Canonical = true;
 	protected boolean generateSMILES_Aromatic = false;
-
-	public boolean isGenerateSMILES_Aromatic() {
-		return generateSMILES_Aromatic;
-	}
-
-	public void setGenerateSMILES_Aromatic(boolean generateSMILES_Aromatic) {
-		this.generateSMILES_Aromatic = generateSMILES_Aromatic;
-	}
-
 	protected boolean splitFragments = false;
 	protected boolean generateTautomers = false;
 	protected boolean generateSMILES = false; // not canonical
@@ -61,6 +53,14 @@ public class StructureStandardizer extends
 	protected boolean implicitHydrogens = false;
 	protected boolean generateStereofrom2D = false;
 	protected boolean clearIsotopes = false;
+
+	public boolean isGenerateSMILES_Aromatic() {
+		return generateSMILES_Aromatic;
+	}
+
+	public void setGenerateSMILES_Aromatic(boolean generateSMILES_Aromatic) {
+		this.generateSMILES_Aromatic = generateSMILES_Aromatic;
+	}
 
 	public boolean isGenerate2D() {
 		return generate2D;
@@ -159,8 +159,8 @@ public class StructureStandardizer extends
 		this.implicitHydrogens = implicitHydrogens;
 	}
 
-	protected transient TautomerProcessor tautomers = new TautomerProcessor();
-	protected transient FragmentProcessor fragments = new FragmentProcessor();
+	protected transient TautomerProcessor tautomers;
+	protected transient FragmentProcessor fragments;
 	protected transient NeutraliseProcessor neutraliser = null;
 	protected transient IsotopesProcessor isotopesProcessor = null;
 	protected transient StructureDiagramGenerator sdg = new StructureDiagramGenerator();
@@ -171,12 +171,21 @@ public class StructureStandardizer extends
 	protected transient SmilesGenerator smiles_generator;
 
 	public StructureStandardizer() {
+		this(null);
+	}
+
+	public StructureStandardizer(Logger logger) {
 		super();
 		options.add(INCHI_OPTION.SAbs);
 		options.add(INCHI_OPTION.SAsXYZ);
 		options.add(INCHI_OPTION.SPXYZ);
 		options.add(INCHI_OPTION.FixSp3Bug);
 		options.add(INCHI_OPTION.AuxNone);
+		if (logger != null)
+			this.logger = logger;
+		
+		 fragments = new FragmentProcessor(logger);
+		 tautomers = new TautomerProcessor(logger);
 	}
 
 	public IProcessor<IAtomContainer, IAtomContainer> getCallback() {
@@ -198,7 +207,7 @@ public class StructureStandardizer extends
 				processed.setProperty(ERROR_TAG, "");
 			if (neutralise) {
 				if (neutraliser == null)
-					neutraliser = new NeutraliseProcessor();
+					neutraliser = new NeutraliseProcessor(logger);
 				processed = neutraliser.process(processed);
 				fragments.setAtomtypeasproperties(neutraliser
 						.isAtomtypeasproperties());
@@ -216,7 +225,7 @@ public class StructureStandardizer extends
 				}
 				if (clearIsotopes) {
 					if (isotopesProcessor == null) {
-						isotopesProcessor = new IsotopesProcessor();
+						isotopesProcessor = new IsotopesProcessor(logger);
 
 					}
 					processed = isotopesProcessor.process(processed);
@@ -304,17 +313,27 @@ public class StructureStandardizer extends
 						processed.setProperty(p_smiles, getSmilesGenerator()
 								.create(processed));
 					} catch (Exception x) {
-						
-						if (processed.getProperty(p_smiles) == null) {
-							Object inchi = processed.getProperty(Property.opentox_InChI);
-							String last_resort_smiles = inchi==null?"":InChI2SMILES(inchi.toString());
-							processed.setProperty(p_smiles, last_resort_smiles);
-						}	
+						String inchi_err = "";
+						if (processed.getProperty(p_smiles) == null)
+							try {
+								Object inchi = processed
+										.getProperty(Property.opentox_InChI);
+								String last_resort_smiles = inchi == null ? ""
+										: InChI2SMILES(inchi.toString());
+								processed.setProperty(p_smiles,
+										last_resort_smiles);
+								inchi_err = "SMILES generated from InChI as fallback";
+							} catch (Exception xx) {
+								inchi_err = x.getMessage();
+								processed.setProperty(p_smiles, "");
+							}
+
 						err = processed.getProperty(ERROR_TAG);
-						processed.setProperty(ERROR_TAG, String.format(
-								"%s %s %s", err == null ? "" : err, x
-										.getClass().getName(), x.getMessage()));
-						logger.log(Level.WARNING, x.getMessage());
+						String msg = String.format("%s %s %s %s",
+								err == null ? "" : err, x.getClass().getName(),
+								x.getMessage(), inchi_err);
+						processed.setProperty(ERROR_TAG, msg);
+						logger.log(Level.WARNING, msg);
 					}
 				}
 				renameTags(processed, tags);
@@ -416,20 +435,20 @@ public class StructureStandardizer extends
 	 */
 	protected String InChI2SMILES(String inchi) throws Exception {
 		try {
-		if (igf == null)
-			igf = InChIGeneratorFactory.getInstance();
+			if (igf == null)
+				igf = InChIGeneratorFactory.getInstance();
 
-		InChIToStructure c = igf.getInChIToStructure(inchi,
-				SilentChemObjectBuilder.getInstance());
+			InChIToStructure c = igf.getInChIToStructure(inchi,
+					SilentChemObjectBuilder.getInstance());
 
-		IAtomContainer a = c.getAtomContainer();
-		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(a);
-		CDKHueckelAromaticityDetector.detectAromaticity(a);
+			IAtomContainer a = c.getAtomContainer();
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(a);
+			CDKHueckelAromaticityDetector.detectAromaticity(a);
 
-		if (getSmilesGenerator() != null)
-			return getSmilesGenerator().create(a);
-		else
-			return null;
+			if (getSmilesGenerator() != null)
+				return getSmilesGenerator().create(a);
+			else
+				return null;
 		} catch (Exception x) {
 			logger.log(Level.WARNING, x.getMessage());
 			return null;

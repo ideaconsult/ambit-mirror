@@ -1,6 +1,7 @@
 package ambit2.smarts.processors;
 
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 import ambit2.smarts.SMIRKSManager;
 
@@ -18,8 +19,8 @@ public class NeutraliseProcessor extends SMIRKSProcessor {
 	 */
 	private static final long serialVersionUID = 8550598539258019431L;
 
-	public NeutraliseProcessor() throws Exception {
-		super();
+	public NeutraliseProcessor(Logger logger) throws Exception {
+		super(logger);
 		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(true);
 		setLoadExamples(false);
 		InputStream in = null;

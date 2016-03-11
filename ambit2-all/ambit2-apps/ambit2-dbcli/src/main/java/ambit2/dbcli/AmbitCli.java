@@ -230,8 +230,11 @@ public class AmbitCli {
 			logger_cli.log(Level.SEVERE, "MSG_INVALIDCOMMAND",
 					new Object[] { x.getMessage() });
 			code = -1;
+		} catch (FileNotFoundException x) {
+			logger_cli.log(Level.SEVERE, "MSG_INVALIDFILE", new Object[] {x.getMessage()});
+			code = -1;
 		} catch (Exception x) {
-			logger_cli.log(Level.SEVERE, x.getMessage());
+			logger_cli.log(Level.SEVERE, "MSG_INVALIDCOMMAND", new Object[] {x.getMessage()});
 			code = -1;
 		} finally {
 			if (code >= 0)
@@ -772,7 +775,11 @@ public class AmbitCli {
 			return false;
 		}
 	}
-
+	
+	protected File getInputFile() throws Exception {
+		if (options.input == null) throw new FileNotFoundException("Input file not specified!");
+		return new File(options.input);	
+	}
 	public void parseCommandFingerprints(String subcommand, long now)
 			throws Exception {
 		boolean multifile = true;
@@ -796,7 +803,7 @@ public class AmbitCli {
 		final int maxRecord = pagesize > 0 ? ((page + 1) * pagesize + 1)
 				: pagesize;
 
-		final File file = new File(options.input);
+		final File file = getInputFile();
 		FileInputState input = new FileInputState(file);
 		input.setOptionalSMILESHeader(smiles_header);
 		input.setOptionalInChIHeader(inchi_header);
@@ -1175,7 +1182,7 @@ public class AmbitCli {
 		final String sdf_title = tmpTag == null ? null : tmpTag.toString()
 				.toLowerCase();
 
-		final StructureStandardizer standardprocessor = new StructureStandardizer();
+		final StructureStandardizer standardprocessor = new StructureStandardizer(logger_cli);
 		standardprocessor
 				.setGenerate2D(parseBooleanParam(":generate2D", false));
 		standardprocessor.setGenerateTautomers(parseBooleanParam(":tautomers",
@@ -1187,7 +1194,7 @@ public class AmbitCli {
 			if (o != null) {
 				File smirksConfig = new File(o.toString());
 				if (smirksConfig.exists()) {
-					tmp = new SMIRKSProcessor(smirksConfig);
+					tmp = new SMIRKSProcessor(smirksConfig,logger_cli);
 					tmp.setEnabled(true);
 				} else
 					logger_cli.log(Level.WARNING,
@@ -1230,7 +1237,7 @@ public class AmbitCli {
 		final int maxRecord = pagesize > 0 ? ((page + 1) * pagesize + 1)
 				: pagesize;
 
-		final File file = new File(options.input);
+		final File file = getInputFile();
 		FileInputState in = new FileInputState(file);
 		in.setOptionalInChIHeader(inchi_header);
 		in.setOptionalInChIKeyHeader(inchikey_header);
@@ -1468,7 +1475,8 @@ public class AmbitCli {
 		try {
 			stats = batch.process(in);
 		} catch (Exception x) {
-			logger_cli.log(Level.WARNING, x.getMessage(), x);
+			logger_cli.log(Level.WARNING, x.getMessage());
+			logger_cli.log(Level.FINE, x.getMessage(),x);
 		} finally {
 			try {
 			} catch (Exception x) {

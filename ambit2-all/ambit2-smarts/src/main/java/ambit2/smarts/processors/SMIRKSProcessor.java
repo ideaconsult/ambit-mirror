@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -60,13 +61,13 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 
 	protected SMIRKSManager smrkMan;
 
-	public SMIRKSProcessor() {
-		super();
+	public SMIRKSProcessor(Logger logger) {
+		super(logger);
 		smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	}
 
-	public SMIRKSProcessor(File jsonFile) throws Exception {
-		this();
+	public SMIRKSProcessor(File jsonFile,Logger logger) throws Exception {
+		this(logger);
 		loadReactionsFromJSON(jsonFile);
 	}
 
