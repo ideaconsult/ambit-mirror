@@ -14,14 +14,7 @@
 	$(document).ready(function() {
 		$( "#tabs" ).tabs();
 		
-		<#if menu_profile?? && menu_profile=='enanomapper'>		        
-	    	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="Nanomaterials">Bundles</a></li>');
-	    	loadHelp("${ambit_root}","bundle");
-			$("#_searchdiv").html("<form class='remove-bottom' action='${ambit_root}/bundle'><b>Name</b> <input name='search' class='search' value='' id='search'> <input type='submit' value='Search'></form>");
-			$("#header_substance").text("Nanomaterial bundles");
-			$("#th_assessmentid").text("Bundle ID");
-			$("#th_action").hide();
-		<#else>
+
 			<#if menu_profile?? && menu_profile=='lri'>
 				jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle" title="All assessments ">Assessments</a></li>');
 	    		loadHelp("${ambit_root}","ra");
@@ -31,7 +24,6 @@
 	    		loadHelp("${ambit_root}","substance");
 	    		$("#_searchdiv").html("<form class='remove-bottom' action='${ambit_root}/bundle'><b>Name</b> <input name='search' class='search' value='' id='search'> <input type='submit' value='Search'></form>");
 			</#if>
-	    </#if>
 	    
 
 		userAutocomplete(".users","${ambit_root}/myaccount/users",10);
@@ -43,6 +35,22 @@
 			loadDatasetMeta("${ambit_root}","${ambit_root}/bundle/${datasetid}/metadata",true);
 		<#else>
 	  		var oTable = defineBundlesTable("${ambit_root}","${ambit_request_json}",true,"${menu_profile}");
+	  			  		 $('.datasetstable tbody').on('click','td .zoomstruc',function() {
+					var nTr = $(this).parents('tr')[0];
+					if (oTable.fnIsOpen(nTr)) {
+						$(this).removeClass("ui-icon-folder-open");
+						$(this).addClass("ui-icon-folder-collapsed");
+						this.title='Click to show bundle details';
+						oTable.fnClose(nTr);
+					} else {
+						$(this).removeClass("ui-icon-folder-collapsed");
+						$(this).addClass("ui-icon-folder-open");
+						this.title='Click to close bundle details';
+						var id = 'v'+getID();
+						oTable.fnOpen(nTr, bundleFormatDetails(oTable,nTr,"${ambit_root}",false,true,false,true),	'details');
+												       
+					}
+			});
 	  	</#if>
 		jQuery("#breadCrumb").jBreadCrumb();
 		jQuery("#welcome").text("Dataset");	  	
@@ -120,13 +128,12 @@
 				<table id='datasets' class='datasetstable jtoxkit' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 				<thead>
 				<tr>
+				<th>#</th>
 				<th>Name</th>
-				<th>Version</th>
 				<th>Code</th>
 				<th>Status</th>
 				<th>Owner</th>
 				<th id='th_assessmentid'>Assessment ID</th>
-				<th id='th_export'>Export</th>
 				<th id='th_action'></th>
 				</tr>
 				</thead>

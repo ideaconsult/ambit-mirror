@@ -47,6 +47,10 @@ $(document).ready(function() {
 <div id='download' >  <!-- tabs_download -->
 <a href='#' id='json' target=_blank><img src='${ambit_root}/images/json64.png' alt='json' title='Download as JSON'></a>
 <a href='#' id='csv' target=_blank><img src='${ambit_root}/images/csv64.png' alt='CSV' title='Download as CSV'></a>
+	<a href='#' id='xlsx' target=_blank><img src='${ambit_root}/images/xlsx.png' alt='XLSX' title='Download as XLSX'></a>
+	
+	<a href='#' id='rdfxml'><img src='${ambit_root}/images/rdf64.png' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a>
+	<a href='#' id='jsonld'><img src='${ambit_root}/images/json-ld.png' alt='JSON-LD' title='Download as JSON-LD'></a>
 </div>
 	
 <div id="tabs_substance">
