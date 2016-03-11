@@ -86,7 +86,8 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 		customizeVariants(new MediaType[] { ChemicalMediaType.WEKA_ARFF,
 				MediaType.TEXT_CSV, ChemicalMediaType.CHEMICAL_MDLSDF,
 				ChemicalMediaType.THREECOL_ARFF, MediaType.APPLICATION_EXCEL,
-				MediaType.APPLICATION_MSOFFICE_XLSX });
+				MediaType.APPLICATION_MSOFFICE_XLSX,
+				ChemicalMediaType.APPLICATION_JSONLD });
 
 	}
 
@@ -152,17 +153,16 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return createCSVReporter(filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
-			
+
 			switch (rdfwriter) {
 			case stax: {
-				return new RDFStaXConvertor(
-						new SubstanceBundleStAXReporter(getRequest()),
-						filenamePrefix);
+				return new RDFStaXConvertor(new SubstanceBundleStAXReporter(
+						getRequest()), filenamePrefix);
 			}
 			default: { // jena
 				return createRDFReporter(variant.getMediaType(), filenamePrefix);
 			}
-			}			
+			}
 		} else if (variant.getMediaType().equals(
 				MediaType.APPLICATION_RDF_TURTLE)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
@@ -170,7 +170,9 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 				|| variant.getMediaType()
 						.equals(MediaType.APPLICATION_RDF_TRIG)
 				|| variant.getMediaType()
-						.equals(MediaType.APPLICATION_RDF_TRIX)) {
+						.equals(MediaType.APPLICATION_RDF_TRIX)
+				|| variant.getMediaType().equals(
+						ChemicalMediaType.APPLICATION_JSONLD)) {
 			return createRDFReporter(variant.getMediaType(), filenamePrefix);
 		} else if (variant.getMediaType().equals(
 				ChemicalMediaType.CHEMICAL_MDLSDF)) {
@@ -261,12 +263,11 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 							groupProperties.add(key);
 							if (val.getValue().get(
 									EffectRecord._fields.loValue.name()) != null) {
-								Number num = val.getValue()
-								.get(EffectRecord._fields.loValue
-										.name()).asDouble();								
-								master.setRecordProperty(
-										key,
-										num);
+								Number num = val
+										.getValue()
+										.get(EffectRecord._fields.loValue
+												.name()).asDouble();
+								master.setRecordProperty(key, num);
 								key.setClazz(Number.class);
 							} else {
 								master.setRecordProperty(key, val.getValue()

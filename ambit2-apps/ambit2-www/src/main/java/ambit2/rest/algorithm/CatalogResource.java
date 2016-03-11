@@ -30,6 +30,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.config.AMBITConfig;
 import ambit2.rest.AbstractResource;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.aa.opensso.OpenSSOUser;
@@ -74,6 +75,7 @@ public abstract class CatalogResource<T extends Serializable>
 		customizeVariants(new MediaType[] { MediaType.TEXT_URI_LIST,
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE, MediaType.TEXT_RDF_N3,
+				ChemicalMediaType.APPLICATION_JSONLD,
 				MediaType.TEXT_RDF_NTRIPLES, MediaType.APPLICATION_JAVA_OBJECT,
 				MediaType.APPLICATION_JSON, MediaType.APPLICATION_JAVASCRIPT,
 				MediaType.TEXT_HTML, MediaType.APPLICATION_WADL });
@@ -81,8 +83,8 @@ public abstract class CatalogResource<T extends Serializable>
 	}
 
 	public static String getAlgorithmURI(String category) {
-		return String.format("%s%s/{%s}", MLResources.algorithm,
-				category, MLResources.algorithmKey);
+		return String.format("%s%s/{%s}", MLResources.algorithm, category,
+				MLResources.algorithmKey);
 	}
 
 	@Override
