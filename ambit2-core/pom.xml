@@ -37,7 +37,6 @@
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-base</artifactId>
 			<version>${project.version}</version>
-			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.xml.stream</groupId>
@@ -89,7 +88,6 @@
 			<groupId>org.openscience.cdk</groupId>
 			<artifactId>cdk-standard</artifactId>
 			<version>${cdk.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openscience.cdk</groupId>
@@ -100,7 +98,6 @@
 			<groupId>org.openscience.cdk</groupId>
 			<artifactId>cdk-io</artifactId>
 			<version>${cdk.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openscience.cdk</groupId>
@@ -118,44 +115,37 @@
 			<groupId>org.openscience.cdk</groupId>
 			<artifactId>cdk-log4j</artifactId>
 			<version>${cdk.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openscience.cdk</groupId>
 			<artifactId>cdk-inchi</artifactId>
 			<version>${cdk.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openscience.cdk</groupId>
 			<artifactId>cdk-data</artifactId>
 			<version>${cdk.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openscience.cdk</groupId>
 			<artifactId>cdk-dict</artifactId>
 			<version>${cdk.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openscience.cdk</groupId>
 			<artifactId>cdk-structgen</artifactId>
 			<version>${cdk.version}</version>
-			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.openscience.cdk</groupId>
 			<artifactId>cdk-pdb</artifactId>
 			<version>${cdk.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openscience.cdk</groupId>
 			<artifactId>cdk-pdbcml</artifactId>
 			<version>${cdk.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openscience.cdk</groupId>
