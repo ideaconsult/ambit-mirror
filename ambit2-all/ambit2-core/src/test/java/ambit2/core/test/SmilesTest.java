@@ -43,7 +43,6 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -52,10 +51,9 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
-import ambit2.core.io.InteractiveIteratingMDLReader;
 import ambit2.core.test.io.RawIteratingWrapperTest;
 
 public class SmilesTest {
@@ -145,7 +143,8 @@ public class SmilesTest {
 				+ " 15 16  1  0  0  0  0\n" + " 15 18  1  0  0  0  0\n"
 				+ " 16 17  2  0  0  0  0\n" + "M  END\n" + "\n" + "$$$$";
 
-		MDLReader r = new MDLReader(new StringReader(sdf));
+		org.openscience.cdk.io.MDLV2000Reader r = new org.openscience.cdk.io.MDLV2000Reader(
+				new StringReader(sdf));
 		IAtomContainer m = MoleculeTools.newMolecule(SilentChemObjectBuilder
 				.getInstance());
 		try {
@@ -234,38 +233,52 @@ public class SmilesTest {
 
 	@Test
 	public void testRoundtrip_isomeric() throws Exception {
-		testRoundtrip(new SmilesGenerator().isomeric());
+		testRoundtrip(new SmilesGenerator().isomeric(),
+				"ambit2/core/chembl/roundtrip7.sdf", true);
 	}
 
 	@Test
 	public void testRoundtrip_absolute() throws Exception {
-		testRoundtrip(new SmilesGenerator().absolute());
+		testRoundtrip(new SmilesGenerator().absolute(),
+				"ambit2/core/chembl/roundtrip7.sdf", true);
 	}
 
-	public void testRoundtrip(SmilesGenerator g) throws Exception {
+	@Test
+	public void testRoundtrip_CHEMBL2369356() throws Exception {
+		testRoundtrip(new SmilesGenerator().isomeric(),
+				"ambit2/core/chembl/CHEMBL2369356.sdf", false);
+	}
+
+	public void testRoundtrip(SmilesGenerator g, String resource,
+			boolean perceiveAtoms) throws Exception {
 
 		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IIteratingChemObjectReader<IAtomContainer> reader = null;
-		int error = 0;
+		int error_smiles_generation = 0;
+		int error_smiles_parser = 0;
 		try {
 			InputStream in = RawIteratingWrapperTest.class.getClassLoader()
-					.getResourceAsStream("ambit2/core/chembl/roundtrip7.sdf");
+					.getResourceAsStream(resource);
 			Assert.assertNotNull(in);
-			reader = new InteractiveIteratingMDLReader(in,
+			reader = new IteratingSDFReader(in,
 					SilentChemObjectBuilder.getInstance());
 			Assert.assertNotNull(reader);
 			while (reader.hasNext()) {
 				IAtomContainer mol = reader.next();
-
-				AtomContainerManipulator
-						.percieveAtomTypesAndConfigureAtoms(mol);
+				if (perceiveAtoms)
+					AtomContainerManipulator
+							.percieveAtomTypesAndConfigureAtoms(mol);
 				try {
 					String smi = g.create(mol);
-					p.parseSmiles(smi);
+					try {
+						p.parseSmiles(smi);
+					} catch (Exception x) {
+						error_smiles_parser++;
+						System.err.println(String.format("Error parsing generated SMILES %s %s",x.getMessage(),smi));
+					}
 				} catch (Exception x) {
-					error++;
-					
-					System.err.println(x.getMessage());
+					error_smiles_generation++;
+					System.err.println(String.format("Error generating SMILES %s",x.getMessage()));
 				}
 
 			}
@@ -274,7 +287,9 @@ public class SmilesTest {
 			if (reader != null)
 				reader.close();
 		}
-		Assert.assertEquals(0, error);
+		Assert.assertEquals(0, error_smiles_parser);
+		Assert.assertEquals(0, error_smiles_generation);
 
 	}
+
 }
