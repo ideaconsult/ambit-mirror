@@ -232,8 +232,12 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 						cell.setCellValue(caption_category);
 						current_category = caption_category;
 						rowIndex++;
-						formatter.formatCategoryHeader(pa.getProtocol()
-								.getCategory(), this);
+						try {
+							formatter.formatCategoryHeader(pa.getProtocol()
+									.getCategory(), this);
+						} catch (Exception x) {
+
+						}
 						rowIndex++;
 					}
 					// uuid
