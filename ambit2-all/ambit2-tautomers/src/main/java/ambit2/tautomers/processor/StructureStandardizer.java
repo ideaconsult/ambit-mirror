@@ -1,5 +1,7 @@
 package ambit2.tautomers.processor;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -183,9 +185,9 @@ public class StructureStandardizer extends
 		options.add(INCHI_OPTION.AuxNone);
 		if (logger != null)
 			this.logger = logger;
-		
-		 fragments = new FragmentProcessor(logger);
-		 tautomers = new TautomerProcessor(logger);
+
+		fragments = new FragmentProcessor(logger);
+		tautomers = new TautomerProcessor(logger);
 	}
 
 	public IProcessor<IAtomContainer, IAtomContainer> getCallback() {
@@ -252,9 +254,13 @@ public class StructureStandardizer extends
 						// todo
 						processed = tautomers.process(processed);
 					} catch (Exception x) {
+						StringWriter w = new StringWriter();
+						x.printStackTrace(new PrintWriter(w));
+						logger.log(Level.WARNING, "MSG_TAUTOMERGEN",
+								new Object[] { x, w.toString() });
 						err = processed.getProperty(ERROR_TAG);
 						processed.setProperty(ERROR_TAG, String.format(
-								"%s %s %s", err == null ? "" : err, x
+								"Tautomer %s %s %s", err == null ? "" : err, x
 										.getClass().getName(), x.getMessage()));
 					}
 				if (generateStereofrom2D)
@@ -294,16 +300,56 @@ public class StructureStandardizer extends
 											generateTautomers ? tautomers.tautomerManager.tautomerFilter
 													.getInchiOptions()
 													: options);
-							processed.setProperty(Property.opentox_InChI,
-									gen.getInchi());
-							processed.setProperty(Property.opentox_InChIKey,
-									gen.getInchiKey());
+							switch (gen.getReturnStatus()) {
+							case OKAY: {
+								processed.setProperty(Property.opentox_InChI,
+										gen.getInchi());
+								processed.setProperty(
+										Property.opentox_InChIKey,
+										gen.getInchiKey());
+								break;
+							}
+							case WARNING: {
+								processed.setProperty(Property.opentox_InChI,
+										gen.getInchi());
+								processed.setProperty(
+										Property.opentox_InChIKey,
+										gen.getInchiKey());
+								logger.log(Level.FINE, "MSG_INCHIGEN",
+										new Object[] { gen.getReturnStatus(),
+												gen.getMessage() });
+								break;
+							}
+							default: {
+								processed.setProperty(Property.opentox_InChI,
+										"");
+								processed.setProperty(
+										Property.opentox_InChIKey, "");
+								err = processed.getProperty(ERROR_TAG);
+								processed.setProperty(ERROR_TAG,
+										String.format(
+												"InChI Generation %s %s %s",
+												err == null ? "" : err,
+												gen.getReturnStatus(),
+												gen.getMessage()));
+								logger.log(Level.WARNING, "MSG_INCHIGEN",
+										new Object[] { gen.getReturnStatus(),
+												gen.getMessage() });
+								break;
+							}
+							}
+							// gen.getReturnStatus().
+
 						} catch (Exception x) {
+							StringWriter w = new StringWriter();
+							x.printStackTrace(new PrintWriter(w));
+							logger.log(Level.WARNING, "MSG_INCHIGEN",
+									new Object[] { x, w.toString() });
 							err = processed.getProperty(ERROR_TAG);
 							processed.setProperty(ERROR_TAG, String.format(
-									"%s %s %s", err == null ? "" : err, x
-											.getClass().getName(), x
-											.getMessage()));
+									"InChI Generation %s %s %s",
+									err == null ? "" : err, x.getClass()
+											.getName(), x.getMessage()));
 						}
 				}
 
@@ -313,6 +359,17 @@ public class StructureStandardizer extends
 						processed.setProperty(p_smiles, getSmilesGenerator()
 								.create(processed));
 					} catch (Exception x) {
+						StringWriter w = new StringWriter();
+						x.printStackTrace(new PrintWriter(w));
+						logger.log(
+								Level.WARNING,
+								"MSG_SMILESGEN",
+								new Object[] {
+										x,
+										processed
+												.getProperty(Property.opentox_InChIKey) });
+						logger.log(Level.FINE, "MSG_SMILESGEN", new Object[] {
+								x, w.toString() });
 						String inchi_err = "";
 						if (processed.getProperty(p_smiles) == null)
 							try {

@@ -9,6 +9,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.net.ConnectException;
 import java.sql.Connection;
@@ -231,10 +233,12 @@ public class AmbitCli {
 					new Object[] { x.getMessage() });
 			code = -1;
 		} catch (FileNotFoundException x) {
-			logger_cli.log(Level.SEVERE, "MSG_INVALIDFILE", new Object[] {x.getMessage()});
+			logger_cli.log(Level.SEVERE, "MSG_INVALIDFILE",
+					new Object[] { x.getMessage() });
 			code = -1;
 		} catch (Exception x) {
-			logger_cli.log(Level.SEVERE, "MSG_INVALIDCOMMAND", new Object[] {x.getMessage()});
+			logger_cli.log(Level.SEVERE, "MSG_ERR",
+					new Object[] { x.getMessage() });
 			code = -1;
 		} finally {
 			if (code >= 0)
@@ -775,11 +779,14 @@ public class AmbitCli {
 			return false;
 		}
 	}
-	
+
 	protected File getInputFile() throws Exception {
-		if (options.input == null) throw new FileNotFoundException("Input file not specified!");
-		return new File(options.input);	
+		if (options.input == null)
+			throw new FileNotFoundException(
+					"Input file not specified! Please use -i {file}");
+		return new File(options.input);
 	}
+
 	public void parseCommandFingerprints(String subcommand, long now)
 			throws Exception {
 		boolean multifile = true;
@@ -972,8 +979,15 @@ public class AmbitCli {
 											mol.removeProperty(propertyToRemove);
 
 								}
-							} else
+							} else {
+								logger_cli
+										.log(Level.SEVERE,
+												"MSG_FINGEPRINTGEN",
+												new Object[] {
+														"Empty molecule",
+														"See the ERROR tag in the output file" });
 								return record;
+							}
 
 							AtomContainerManipulator
 									.percieveAtomTypesAndConfigureAtoms(mol);
@@ -1023,7 +1037,13 @@ public class AmbitCli {
 											.getName() + ".raw", fpraw);
 
 							} catch (Exception x) {
-								logger_cli.log(Level.SEVERE, x.getMessage(), x);
+								StringWriter w = new StringWriter();
+								x.printStackTrace(new PrintWriter(w));
+								logger_cli.log(
+										Level.SEVERE,
+										"MSG_FINGEPRINTGEN",
+										new Object[] { x.getMessage(),
+												w.toString() });
 								if (processed != null)
 									processed.setProperty("ERROR."
 											+ fp.getClass().getName(),
@@ -1051,8 +1071,21 @@ public class AmbitCli {
 										tags, true);
 								writer.write(processed);
 							} catch (Exception x) {
-								logger_cli.log(Level.SEVERE, x.getMessage());
+								StringWriter w = new StringWriter();
+								x.printStackTrace(new PrintWriter(w));
+								logger_cli.log(
+										Level.SEVERE,
+										"MSG_FINGEPRINTGEN",
+										new Object[] { x.getMessage(),
+												w.toString() });
 							}
+						else {
+							logger_cli
+									.log(Level.SEVERE,
+											"MSG_FINGEPRINTGEN",
+											new Object[] { "Empty molecule",
+													"See the ERROR tag in the output file" });
+						}
 						return record;
 
 					}
@@ -1182,7 +1215,8 @@ public class AmbitCli {
 		final String sdf_title = tmpTag == null ? null : tmpTag.toString()
 				.toLowerCase();
 
-		final StructureStandardizer standardprocessor = new StructureStandardizer(logger_cli);
+		final StructureStandardizer standardprocessor = new StructureStandardizer(
+				logger_cli);
 		standardprocessor
 				.setGenerate2D(parseBooleanParam(":generate2D", false));
 		standardprocessor.setGenerateTautomers(parseBooleanParam(":tautomers",
@@ -1194,7 +1228,7 @@ public class AmbitCli {
 			if (o != null) {
 				File smirksConfig = new File(o.toString());
 				if (smirksConfig.exists()) {
-					tmp = new SMIRKSProcessor(smirksConfig,logger_cli);
+					tmp = new SMIRKSProcessor(smirksConfig, logger_cli);
 					tmp.setEnabled(true);
 				} else
 					logger_cli.log(Level.WARNING,
@@ -1217,8 +1251,10 @@ public class AmbitCli {
 
 		standardprocessor.setRankTag(parseStringParam(":tag_rank", "RANK"));
 		standardprocessor.setInchiTag(parseStringParam(":tag_inchi", "InChI"));
-		standardprocessor.setInchiKeyTag(parseStringParam(":tag_inchikey", "InChIKey"));
-		standardprocessor.setSMILESTag(parseStringParam(":tag_smiles", "SMILES"));
+		standardprocessor.setInchiKeyTag(parseStringParam(":tag_inchikey",
+				"InChIKey"));
+		standardprocessor
+				.setSMILESTag(parseStringParam(":tag_smiles", "SMILES"));
 
 		standardprocessor.setGenerateInChI(parseBooleanParam(":inchi", true));
 		standardprocessor.setGenerateSMILES(parseBooleanParam(":smiles", true));
@@ -1364,8 +1400,15 @@ public class AmbitCli {
 
 								}
 
-							} else
+							} else {
+								logger_cli
+										.log(Level.SEVERE,
+												"MSG_STANDARDIZE",
+												new Object[] {
+														"Empty molecule",
+														"See the ERROR tag in the output file" });
 								return record;
+							}
 						} catch (Exception x) {
 							logger_cli.log(Level.SEVERE, "MSG_ERR_MOLREAD",
 									new Object[] { x.toString() });
@@ -1475,21 +1518,23 @@ public class AmbitCli {
 		try {
 			stats = batch.process(in);
 		} catch (Exception x) {
-			logger_cli.log(Level.WARNING, x.getMessage());
-			logger_cli.log(Level.FINE, x.getMessage(),x);
+			StringWriter w = new StringWriter();
+			x.printStackTrace(new PrintWriter(w));
+			logger_cli.log(Level.WARNING, "MSG_ERR",
+					new Object[] { x.getMessage() });
+			logger_cli.log(Level.FINE, "MSG_ERR_DEBUG",
+					new Object[] { x.getMessage(), w.toString() });
 		} finally {
-			try {
-			} catch (Exception x) {
-				logger_cli.warning(x.getMessage());
-			}
 			try {
 				if (batch != null)
 					batch.close();
 			} catch (Exception x) {
-				logger_cli.warning(x.getMessage());
+				logger_cli.log(Level.WARNING, "MSG_ERR",
+						new Object[] { x.getMessage() });
 			}
 			if (stats != null)
-				logger_cli.log(Level.INFO, stats.toString());
+				logger_cli.log(Level.INFO, "MSG_INFO",
+						new Object[] { stats.toString() });
 		}
 	}
 
