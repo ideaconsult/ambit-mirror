@@ -1075,12 +1075,12 @@ function defineDatasetsTable(root, url, deleteVisible, openamlink) {
 														"chemical/x-mdl-sdfile")
 												+ "' id='sdf'><img src='"
 												+ root
-												+ "/images/sdf.jpg' alt='SDF' title='Download as SDF' ></a> ";
+												+ "/images/sdf.png' alt='SDF' title='Download as SDF' ></a> ";
 										sOut += "<a href='"
 												+ getMediaLink(val, "text/csv")
 												+ "' id='csv'><img src='"
 												+ root
-												+ "/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a> ";
+												+ "/images/csv64.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a> ";
 										var id = "d" + getID();
 										sOut += "<span style='display:none;' id='"
 												+ id + "'>";
@@ -1089,13 +1089,13 @@ function defineDatasetsTable(root, url, deleteVisible, openamlink) {
 														"text/plain")
 												+ "' id='txt'><img src='"
 												+ root
-												+ "/images/excel.png' alt='TXT' title='Download as TXT'></a> ";
+												+ "/images/txt64.png' alt='TXT' title='Download as TXT'></a> ";
 										sOut += "<a href='"
 												+ getMediaLink(val,
 														"chemical/x-cml")
 												+ "' id='cml'><img src='"
 												+ root
-												+ "/images/cml.jpg' alt='CML' title='Download as CML (Chemical Markup Language)'></a> ";
+												+ "/images/cml.png' alt='CML' title='Download as CML (Chemical Markup Language)'></a> ";
 										sOut += "<a href='"
 												+ getMediaLink(val,
 														"chemical/x-daylight-smiles")
@@ -1113,24 +1113,30 @@ function defineDatasetsTable(root, url, deleteVisible, openamlink) {
 														"text/x-arff")
 												+ "' id='arff'><img src='"
 												+ root
-												+ "/images/weka.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
+												+ "/images/arff.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
 										sOut += "<a href='"
 												+ getMediaLink(val,
 														"text/x-arff-3col")
 												+ "' id='arff3col'><img src='"
 												+ root
-												+ "/images/weka.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
+												+ "/images/arff-3.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
 										sOut += "<a href='"
 												+ getMediaLink(val,
 														"application/rdf+xml")
 												+ "' id='rdfxml'><img src='"
 												+ root
-												+ "/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a> ";
+												+ "/images/rdf.png' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a> ";
 										sOut += "<a href='"
 												+ getMediaLink(val, "text/n3")
 												+ "' id='rdfn3'><img src='"
 												+ root
-												+ "/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a> ";
+												+ "/images/rdf.png' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a> ";
+										sOut += "<a href='"
+												+ getMediaLink(val,
+														"applicaiton/json+ld")
+												+ "' id='jsonld'><img src='"
+												+ root
+												+ "/images/json-ld.png' alt='JSON-LD' title='Download as JSON-LD'></a> ";
 										sOut += "<a href='"
 												+ getMediaLink(val,
 														"application/json")
@@ -1183,20 +1189,20 @@ function getDownloadLinksCompound(root, uri) {
 	val = uri;
 	var sOut = "<a href='" + getMediaLink(val, "chemical/x-mdl-sdfile")
 			+ "' id='sdf'><img src='" + root
-			+ "/images/sdf.jpg' alt='SDF' title='Download as SDF' ></a> ";
+			+ "/images/sdf.png' alt='SDF' title='Download as SDF' ></a> ";
 	sOut += "<a href='"
 			+ getMediaLink(val, "text/csv")
 			+ "' id='csv'><img src='"
 			+ root
-			+ "/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'></a> ";
+			+ "/images/csv64.png' alt='CSV' title='Download as CSV (Comma delimited file)'></a> ";
 	sOut += "<a href='" + getMediaLink(val, "text/plain")
 			+ "' id='txt'><img src='" + root
-			+ "/images/excel.png' alt='TXT' title='Download as TXT'></a> ";
+			+ "/images/txt64.png' alt='TXT' title='Download as TXT'></a> ";
 	sOut += "<a href='"
 			+ getMediaLink(val, "chemical/x-cml")
 			+ "' id='cml'><img src='"
 			+ root
-			+ "/images/cml.jpg' alt='CML' title='Download as CML (Chemical Markup Language)'></a> ";
+			+ "/images/cml.png' alt='CML' title='Download as CML (Chemical Markup Language)'></a> ";
 	sOut += "<a href='" + getMediaLink(val, "chemical/x-daylight-smiles")
 			+ "' id='smiles'><img src='" + root
 			+ "/images/smi.png' alt='SMILES' title='Download as SMILES'></a> ";
@@ -1207,22 +1213,22 @@ function getDownloadLinksCompound(root, uri) {
 			+ getMediaLink(val, "text/x-arff")
 			+ "' id='arff'><img src='"
 			+ root
-			+ "/images/weka.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
+			+ "/images/arff.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
 	sOut += "<a href='"
 			+ getMediaLink(val, "text/x-arff-3col")
 			+ "' id='arff3col'><img src='"
 			+ root
-			+ "/images/weka.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
+			+ "/images/arff-3.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
 	sOut += "<a href='"
 			+ getMediaLink(val, "application/rdf+xml")
 			+ "' id='rdfxml'><img src='"
 			+ root
-			+ "/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a> ";
+			+ "/images/rdf.png' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a> ";
 	sOut += "<a href='"
 			+ getMediaLink(val, "text/n3")
 			+ "' id='rdfn3'><img src='"
 			+ root
-			+ "/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a> ";
+			+ "/images/rdf.png' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a> ";
 	sOut += "<a href='" + getMediaLink(val, "application/json")
 			+ "' id='json' target=_blank><img src='" + root
 			+ "/images/json.png' alt='json' title='Download as JSON'></a>";
@@ -2612,12 +2618,12 @@ function defineBundlesTable(root, url, deleteVisible, profile) {
 														"chemical/x-mdl-sdfile")
 												+ "' id='sdf'><img src='"
 												+ root
-												+ "/images/sdf.jpg' alt='SDF' title='Download as SDF' ></a> ";
+												+ "/images/sdf.png' alt='SDF' title='Download as SDF' ></a> ";
 										sOut += "<a href='"
 												+ getMediaLink(val, "text/csv")
 												+ "' id='csv'><img src='"
 												+ root
-												+ "/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a> ";
+												+ "/images/csv64.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a> ";
 										var id = "d" + getID();
 										sOut += "<span style='display:none;' id='"
 												+ id + "'>";
@@ -2626,13 +2632,13 @@ function defineBundlesTable(root, url, deleteVisible, profile) {
 														"text/plain")
 												+ "' id='txt'><img src='"
 												+ root
-												+ "/images/excel.png' alt='TXT' title='Download as TXT'></a> ";
+												+ "/images/txt64.png' alt='TXT' title='Download as TXT'></a> ";
 										sOut += "<a href='"
 												+ getMediaLink(val,
 														"chemical/x-cml")
 												+ "' id='cml'><img src='"
 												+ root
-												+ "/images/cml.jpg' alt='CML' title='Download as CML (Chemical Markup Language)'></a> ";
+												+ "/images/cml.png' alt='CML' title='Download as CML (Chemical Markup Language)'></a> ";
 										sOut += "<a href='"
 												+ getMediaLink(val,
 														"chemical/x-daylight-smiles")
@@ -2650,24 +2656,24 @@ function defineBundlesTable(root, url, deleteVisible, profile) {
 														"text/x-arff")
 												+ "' id='arff'><img src='"
 												+ root
-												+ "/images/weka.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
+												+ "/images/arff.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
 										sOut += "<a href='"
 												+ getMediaLink(val,
 														"text/x-arff-3col")
 												+ "' id='arff3col'><img src='"
 												+ root
-												+ "/images/weka.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
+												+ "/images/arff-3.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
 										sOut += "<a href='"
 												+ getMediaLink(val,
 														"application/rdf+xml")
 												+ "' id='rdfxml'><img src='"
 												+ root
-												+ "/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a> ";
+												+ "/images/rdf.png' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a> ";
 										sOut += "<a href='"
 												+ getMediaLink(val, "text/n3")
 												+ "' id='rdfn3'><img src='"
 												+ root
-												+ "/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a> ";
+												+ "/images/rdf.png' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a> ";
 										sOut += "<a href='"
 												+ getMediaLink(val,
 														"application/json")
@@ -2762,14 +2768,16 @@ function defineBundlesTable_lri(root, url, deleteVisible, copyVisible) {
 									"bUseRendered" : false,
 									"fnRender" : function(o, val) {
 										var sOut = "<a target='table' href='"
-											+ root
-											+ "/ui/assessment?bundle_uri="
-											+ encodeURIComponent(o.aData.URI)
-											+ "' title='Click to view the assessments at "
-											+ o.aData.URI + "'>" + (val == null ? o.aData.id
-													: o.aData.title)
-											+ "</a> ";
-										
+												+ root
+												+ "/ui/assessment?bundle_uri="
+												+ encodeURIComponent(o.aData.URI)
+												+ "' title='Click to view the assessments at "
+												+ o.aData.URI
+												+ "'>"
+												+ (val == null ? o.aData.id
+														: o.aData.title)
+												+ "</a> ";
+
 										sOut += " <a target='table' href='"
 												+ o.aData.URI
 												+ "/version"
@@ -2863,6 +2871,173 @@ function defineBundlesTable_lri(root, url, deleteVisible, copyVisible) {
 	return oTable;
 }
 
+function defineBundlesTable_enm(root, url, deleteVisible, copyVisible) {
+	var oTable = $('.datasetstable')
+			.dataTable(
+					{
+						"sAjaxDataProp" : "dataset",
+						"sAjaxSource" : url,
+						"sSearch" : "Filter:",
+						"bJQueryUI" : true,
+						"bSearchable" : true,
+						"bProcessing" : true,
+						"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
+						"sSearch" : "Filter:",
+						"bPaginate" : true,
+						"sPaginationType" : "full_numbers",
+						"sPaginate" : ".dataTables_paginate _paging",
+						"oLanguage" : {
+							"sProcessing" : "<img src='" + root
+									+ "/images/24x24_ambit.gif' border='0'>",
+							"sLoadingRecords" : "No assessments.",
+							"sZeroRecords" : "No assessments.",
+							"sEmptyTable" : "No assessments.",
+							"sInfo" : "Showing _TOTAL_ assessments (_START_ to _END_)",
+							"sLengthMenu" : 'Display <select>'
+									+ '<option value="10">10</option>'
+									+ '<option value="20">20</option>'
+									+ '<option value="50">50</option>'
+									+ '<option value="100">100</option>'
+									+ '<option value="-1">all</option>'
+									+ '</select> entries.'
+						},
+						"aoColumnDefs" : [
+								{
+									"sTitle" : "",
+									"mDataProp" : "version",
+									"aTargets" : [ 0 ],
+									"sWidth" : "32px",
+									"bUseRendered" : false,
+									"fnRender" : function(o, val) {
+										var sOut = "<br><span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show model details'></span>";
+										return sOut;
+									}
+								},
+								{
+									"bSortable" : true,
+									"mDataProp" : "number",
+									"aTargets" : [ 1 ],
+									"sWidth" : "15%",
+									"bUseRendered" : false,
+									"fnRender" : function(o, val) {
+										var sOut = "<a style='font-size:75%;' target='table' href='"
+												+ root
+												+ "/ui/assessment?bundle_uri="
+												+ encodeURIComponent(o.aData.URI)
+												+ "' title='Click to view the assessments at "
+												+ o.aData.URI
+												+ "'>"
+												+ val
+												+ "</a> ";
+										return sOut;
+									}
+								},
+
+								{
+									"bSortable" : true,
+									"mDataProp" : "title",
+									"aTargets" : [ 2 ],
+									"sWidth" : "25%",
+									"bUseRendered" : false,
+									"fnRender" : function(o, val) {
+										var sOut = "<a target='table' style='font-weight:bold;' href='"
+												+ root
+												+ "/ui/assessment?bundle_uri="
+												+ encodeURIComponent(o.aData.URI)
+												+ "' title='Click to view the assessments at "
+												+ o.aData.URI
+												+ "'>"
+												+ (o.aData.title == null ? o.aData.id
+														: o.aData.title)
+												+ "</a> ";
+										return sOut;
+									}
+								},
+								{
+									"bSortable" : true,
+									"mDataProp" : "version",
+									"aTargets" : [ 3 ],
+									"sWidth" : "2%",
+									"bUseRendered" : false,
+									"fnRender" : function(o, val) {
+										var sOut = "<a target='table' href='"
+												+ o.aData.URI
+												+ "/version"
+												+ "' title='Click to view other versions "
+												+ o.aData.URI
+												+ " as a table'><br/>v"
+												+ o.aData.version + "</a> ";
+
+										return sOut;
+									}
+								},
+								{
+									"bSortable" : true,
+									"mDataProp" : "description",
+									"aTargets" : [ 4 ],
+									"bUseRendered" : false,
+									"fnRender" : function(o, val) {
+										return "<span style='font-style: italic;'>"
+												+ val + "</span>";
+									}
+								},
+								{
+									"bSortable" : true,
+									"mDataProp" : "source",
+									"aTargets" : [ 5 ],
+									"sWidth" : "20%",
+									"bUseRendered" : false,
+									"fnRender" : function(o, val) {
+										return o.aData.seeAlso
+												+ "<br/><a style='font-size:75%;' href='"
+												+ val
+												+ "' title='"
+												+ val
+												+ "' class='qxternal' target='source'>"
+												+ val + "</a>";
+									}
+								},
+								{
+									"bSortable" : true,
+									"mDataProp" : "maintainer",
+									"aTargets" : [ 6 ],
+									"sWidth" : "5%",
+									"bUseRendered" : false,
+									"fnRender" : function(o, val) {
+										var sOut = "";
+										if (val.indexOf("http") === 0)
+											sOut = "<a style='font-size:75%; href='"
+													+ val
+													+ "' title='maintainer: "
+													+ val
+													+ "' class='qxternal' target='maintainer'>"
+													+ val + "</a>";
+										else
+											sOut = "<span style='font-size:75%;' title='Maintainer'>"
+													+ val + "</span> ";
+
+										var license = "";
+										try {
+											license = "<a href='"
+													+ o.aData.rights.URI
+													+ "' title='"
+													+ o.aData.rights.URI
+													+ "' class='qxternal' target='license'>License</a>";
+										} catch (err) {
+										}
+										return "<span style='right: 0px;position:absolute;font-size:75%;'>"
+												+ license
+												+ "</span>"
+												+ "<br/><br/>" + sOut;
+
+									}
+								}
+
+						],
+						"aaSorting" : [ [ 0, 'desc' ] ]
+					});
+	return oTable;
+}
 function formatDownloadURI(bundle_URI, root, download, prefix) {
 	var sOut = "";
 	$.each(download, function(index, value) {
@@ -2876,12 +3051,16 @@ function formatDownloadURI(bundle_URI, root, download, prefix) {
 
 function bundleFormatDetails(oTable, nTr, root, export_substances,
 		export_chemicals, export_dataset, export_report) {
-	return bundleFormatDetails(Table, nTr, root, true, true, true, true);
+	return bundleFormatDetails(Table, nTr, root, true, true, true, true,false);
 }
 function bundleFormatDetails(oTable, nTr, root, export_substances,
-		export_chemicals, export_dataset, export_report) {
+		export_chemicals, export_dataset, export_report, export_property) {
 	var bundle = oTable.fnGetData(nTr);
-	var sOut = '<div class="ui-widget" >';
+	var bgcolor = "white";
+	if ($(nTr).hasClass('even')) {
+		bgcolor = "#F5F2EB";
+	}
+	var sOut = "<div style='margin:0px;padding:0px;' >";
 
 	var report = [
 			{
@@ -2932,13 +3111,16 @@ function bundleFormatDetails(oTable, nTr, root, export_substances,
 		mime : 'text/csv'
 	} ];
 
-	sOut += "<table style='background:lightgray;color:black' width='100%' border='1'><thead><tr><th align='left'></th><th align='left'>URI</th><th colspan='2' align='left'>Download as<th></th></tr></thead><tbody>";
+	sOut += "<table style='background:"
+			+ bgcolor
+			+ ";margin:0px;padding:0px;' width='100%' border='0'><thead><tr><th width='32px'/><th align='left'>Details</th><th align='left'></th><th colspan='2' align='left'>Download as<th></th></tr></thead><tbody>";
 
 	if (export_substances) {
-
-		sOut += "<tr><th width='20%' align='left'>Substances</th><td>";
-		sOut += "<a href='" + bundle.URI
-				+ "/substance' target=_blank>Browse substances</a> ";
+		var id = "substance_" + bundle.id;
+		sOut += "<tr><th width='32px'/><th width='20%' align='left'>Substances <span id='"
+				+ id + "'></span></th><td>";
+		sOut += "<a href='" + bundle.substance
+				+ "' target=_blank>Browse substances</a> ";
 		sOut += "</td><td>";
 		sOut += formatDownloadURI(bundle.URI, root, report, "/substance");
 		sOut += "</td><td>";
@@ -2946,9 +3128,11 @@ function bundleFormatDetails(oTable, nTr, root, export_substances,
 		sOut += "</td></tr>";
 	}
 	if (export_chemicals) {
-		sOut += "<tr><th width='20%' align='left'>Chemical structures</th><td>";
-		sOut += "<a href='" + bundle.URI
-				+ "/compound' target=_blank>Browse chemical structures</a> ";
+		var id = "compound_" + bundle.id;
+		sOut += "<tr><th width='32px'/><th width='20%' align='left'>Chemical structures <span id='"
+				+ id + "'></span></th><td>";
+		sOut += "<a href='" + bundle.compound
+				+ "' target=_blank>Browse chemical structures</a> ";
 		sOut += "</td><td>";
 		sOut += formatDownloadURI(bundle.URI, root, chemical, "/compound");
 		sOut += "</td><td>";
@@ -2956,18 +3140,28 @@ function bundleFormatDetails(oTable, nTr, root, export_substances,
 		sOut += "</td></tr>";
 	}
 	if (export_dataset) {
-		sOut += "<tr><th width='20%' align='left'>Dataset</th><td>";
-		sOut += "<a href='" + bundle.URI
-				+ "/dataset' target=_blank>Browse dataset</a> ";
+		sOut += "<tr><th width='32px'/><th width='20%' align='left'>Dataset</th><td>";
+		sOut += "<a href='" + bundle.dataset
+				+ "' target=_blank>Browse dataset</a> ";
 		sOut += "</td><td>";
 		sOut += formatDownloadURI(bundle.URI, root, report, "/dataset");
 		sOut += "</td><td>";
 		sOut += formatDownloadURI(bundle.URI, root, semantic, "/dataset");
 		sOut += "</td></tr>";
 	}
-
+	if (export_property) {
+		var id = "property_" + bundle.id;
+		sOut += "<tr><th width='32px'/><th width='20%' align='left'>Properties <span id='"
+				+ id + "'></span></th><td>";
+		sOut += "<a href='" + bundle.property
+				+ "' target=_blank>Browse properties</a> ";
+		sOut += "</td><td>";
+		sOut += "</td><td>";
+		sOut += "</td></tr>";
+	}
+	
 	if (export_report) {
-		sOut += "<tr><th width='20%' align='left'>Report</th><td>";
+		sOut += "<tr><th width='32px'/><th width='20%' align='left'>Report</th><td>";
 		var reporturi = root + "/ui/assessment_report?bundle_uri="
 				+ encodeURIComponent(bundle.URI);
 		sOut += "<a href='" + reporturi
@@ -2983,4 +3177,25 @@ function bundleFormatDetails(oTable, nTr, root, export_substances,
 	sOut += '</div>';
 
 	return sOut;
+}
+
+function loadBundleSummary(bundle) {
+	$.ajax({
+		dataType : "json",
+		url : bundle.summary,
+		success : function(data, status, xhr) {
+			$.each(data.facet, function(index, entry) {
+				try {
+					$("#" + entry.value + "_" + bundle.id).text("("+entry.count+")");
+				} catch (err) {
+				}
+			});
+
+		},
+		error : function(xhr, status, err) {
+
+		},
+		complete : function(xhr, status) {
+		}
+	});
 }

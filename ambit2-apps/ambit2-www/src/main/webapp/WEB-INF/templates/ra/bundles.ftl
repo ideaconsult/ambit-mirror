@@ -22,6 +22,21 @@
 </#if>
 		downloadForm("${ambit_request}");
   		var oTable = defineBundlesTable_lri("${ambit_root}","${ambit_root}/bundle?media=application/json",false,"${menu_profile}",true);
+  				var nTr = $(this).parents('tr')[0];
+					if (oTable.fnIsOpen(nTr)) {
+						$(this).removeClass("ui-icon-folder-open");
+						$(this).addClass("ui-icon-folder-collapsed");
+						this.title='Click to show bundle details';
+						oTable.fnClose(nTr);
+					} else {
+						$(this).removeClass("ui-icon-folder-collapsed");
+						$(this).addClass("ui-icon-folder-open");
+						this.title='Click to close bundle details';
+						var id = 'v'+getID();
+						oTable.fnOpen(nTr, bundleFormatDetails(oTable,nTr,"${ambit_root}",false,true,false,true),	'details');
+												       
+					}
+					loadBundleSummary(oTable.fnGetData(nTr));
 		jQuery("#breadCrumb").jBreadCrumb();
 		jQuery("#welcome").text("Dataset");	  	
 	});
