@@ -109,6 +109,8 @@ public abstract class QueryRDFReporter<T, Q extends IQueryRetrieval<T>> extends
 			return "rdf";
 		else if (MediaType.TEXT_RDF_N3.equals(mediaType))
 			return "n3";
-		return "rdf";
+		else if (ChemicalMediaType.APPLICATION_JSONLD.equals(mediaType))
+			return "jsonld";		
+		else return "rdf";
 	}
 }
