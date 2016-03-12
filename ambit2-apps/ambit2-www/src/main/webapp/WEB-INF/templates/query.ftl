@@ -171,12 +171,12 @@
 	</li>
 	</ul>
 	<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-	<a href='#' id='sdf'><img src='${ambit_root}/images/sdf.jpg' alt='SDF' title='Download as SDF' ></a>
-	<a href='#' id='csv'><img src='${ambit_root}/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'></a>
-	<a href='#' id='cml'><img src='${ambit_root}/images/cml.jpg' alt='CML' title='Download as CML (Chemical Markup Language)'></a>
-	<a href='#' id='arff'><img src='${ambit_root}/images/weka.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a>
-	<a href='#' id='rdfxml'><img src='${ambit_root}/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a>
-	<a href='#' id='rdfn3'><img src='${ambit_root}/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a>
+	<a href='#' id='sdf'><img src='${ambit_root}/images/sdf.png' alt='SDF' title='Download as SDF' ></a>
+	<a href='#' id='csv'><img src='${ambit_root}/images/csv64.png' alt='CSV' title='Download as CSV (Comma delimited file)'></a>
+	<a href='#' id='cml'><img src='${ambit_root}/images/cml.png' alt='CML' title='Download as CML (Chemical Markup Language)'></a>
+	<a href='#' id='arff'><img src='${ambit_root}/images/arff.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a>
+	<a href='#' id='rdfxml'><img src='${ambit_root}/images/rdf.png' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a>
+	<a href='#' id='rdfn3'><img src='${ambit_root}/images/rdf.png' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a>
 	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
 	</div>
 

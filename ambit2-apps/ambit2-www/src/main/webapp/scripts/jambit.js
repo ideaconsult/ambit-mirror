@@ -33,15 +33,14 @@ var _ambit = {
 	'selectedDatasets' : [],
 	'selectedModels' : [],
 	'downloads' : [
-	           	  {id:"sdf",img:"sdf.jpg",alt:"SDF",title:'Download as SDF',mime:'chemical/x-mdl-sdfile'},
-	           	  {id:"csv",img:"excel.png",alt:"CSV",title:'Download as CSV (Comma delimited file)',mime:'text/csv'},
-	           	  {id:"cml",img:"cml.jpg",alt:"CML",title:'Download as CML (Chemical Markup Language)',mime:'chemical/x-cml'},
-	           	  {id:"arff",img:"weka.png",alt:"SDF",title:'Download as SDF',mime:'text/x-arff'},
-	           	  {id:"rdfxml",img:"rdf.gif",alt:"RDF/XML",title:'Download as RDF XML',mime:'application/rdf+xml'},
-	           	  {id:"rdfn3",img:"rdf.gif",alt:"RDF N3",title:'Download as RDF N3',mime:'text/n3'},
+	           	  {id:"sdf",img:"sdf.png",alt:"SDF",title:'Download as SDF',mime:'chemical/x-mdl-sdfile'},
+	           	  {id:"csv",img:"csv64.png",alt:"CSV",title:'Download as CSV (Comma delimited file)',mime:'text/csv'},
+	           	  {id:"cml",img:"cml.png",alt:"CML",title:'Download as CML (Chemical Markup Language)',mime:'chemical/x-cml'},
+	           	  {id:"arff",img:"arff.png",alt:"SDF",title:'Download as SDF',mime:'text/x-arff'},
+	           	  {id:"rdfxml",img:"rdf.png",alt:"RDF/XML",title:'Download as RDF XML',mime:'application/rdf+xml'},
+	           	  {id:"rdfn3",img:"rdf.png",alt:"RDF N3",title:'Download as RDF N3',mime:'text/n3'},
 	           	  {id:"json",img:"json.png",alt:"JSON",title:'Download as JSON',mime:'application/json'},
-	           	  {id:"uri",img:"link.jpg",alt:"URI",title:'Download as URI list',mime:'text/uri-list'},
-	           	  {id:"xlsx",img:"csv.jpg",alt:"XLSX",title:'Download as XLSX',mime:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'},
+	           	  {id:"xlsx",img:"xlsx.png",alt:"XLSX",title:'Download as XLSX',mime:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'},
 	           	  {id:"jsonld",img:"json-ld.png",alt:"XLSX",title:'Download as XLSX',mime:'application/ld+json'}
 	           	  
 	           	 ],
