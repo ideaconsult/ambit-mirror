@@ -8,6 +8,7 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
+import net.idea.restnet.c.ChemicalMediaType;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -21,7 +22,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.pubchem.EntrezSearchProcessor;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.ProtectedResource;
 import ambit2.rest.query.QueryResource;
 

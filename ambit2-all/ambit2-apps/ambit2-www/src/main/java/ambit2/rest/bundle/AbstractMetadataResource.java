@@ -3,6 +3,7 @@ package ambit2.rest.bundle;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.RepresentationConvertor;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
@@ -16,7 +17,6 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.ISourceDataset;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.DatasetStructuresResource;

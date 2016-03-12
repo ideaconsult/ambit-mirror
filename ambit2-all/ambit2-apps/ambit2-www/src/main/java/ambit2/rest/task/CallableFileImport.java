@@ -20,6 +20,7 @@ import net.idea.modbcum.i.batch.IBatchStatistics.RECORDS_STATS;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.restnet.c.ChemicalMediaType;
 
 import org.apache.commons.fileupload.FileItem;
 import org.openscience.cdk.exception.CDKException;
@@ -47,7 +48,6 @@ import ambit2.db.processors.BatchDBProcessor;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.update.dataset.ReadDataset;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.RDFIteratingReader;
 import ambit2.rest.structure.ConformerURIReporter;

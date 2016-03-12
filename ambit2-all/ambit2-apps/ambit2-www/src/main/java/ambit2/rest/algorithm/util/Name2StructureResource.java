@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Level;
 
+import net.idea.restnet.c.ChemicalMediaType;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.SDFWriter;
 import org.restlet.data.Form;
@@ -17,7 +19,6 @@ import org.restlet.resource.ResourceException;
 
 import uk.ac.cam.ch.wwmm.opsin.OpsinResult;
 import ambit2.namestructure.Name2StructureProcessor;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.ProtectedResource;
 import ambit2.rest.query.QueryResource;
 

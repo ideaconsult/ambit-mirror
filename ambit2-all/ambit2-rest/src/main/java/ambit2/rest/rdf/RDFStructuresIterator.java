@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.task.ClientResourceWrapper;
 import net.idea.restnet.rdf.ns.OT;
 
@@ -23,7 +24,6 @@ import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;

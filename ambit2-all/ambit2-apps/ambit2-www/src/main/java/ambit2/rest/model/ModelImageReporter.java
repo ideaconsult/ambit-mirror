@@ -7,6 +7,7 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.task.ClientResourceWrapper;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -21,7 +22,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.model.ModelQueryResults;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.model.predictor.ModelPredictor;
 

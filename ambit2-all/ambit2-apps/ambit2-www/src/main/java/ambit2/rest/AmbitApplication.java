@@ -26,6 +26,7 @@ import javax.net.ssl.X509TrustManager;
 
 import net.idea.restnet.aa.local.UserLoginPOSTResource;
 import net.idea.restnet.aa.local.UserLogoutPOSTResource;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.i.task.ICallableTask;
 import net.idea.restnet.i.task.ITaskResult;
 

@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.RepresentationConvertor;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
@@ -55,7 +56,6 @@ import ambit2.db.reporters.SmilesReporter.Mode;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.dataset.ReadDatasetLicense;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;

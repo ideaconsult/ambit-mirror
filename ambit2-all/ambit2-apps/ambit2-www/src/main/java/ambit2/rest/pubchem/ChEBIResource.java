@@ -3,8 +3,9 @@ package ambit2.rest.pubchem;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.StringWriter;
 import java.util.logging.Level;
+
+import net.idea.restnet.c.ChemicalMediaType;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -12,7 +13,6 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
@@ -20,7 +20,6 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.chebi.ChEBIClient;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.ProtectedResource;
 import ambit2.rest.query.QueryResource;
 

@@ -10,6 +10,7 @@ import net.idea.modbcum.i.facet.IFacet;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.r.QueryReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
+import net.idea.restnet.db.facet.FacetCSVReporter;
 import net.idea.restnet.db.facet.FacetResource;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 

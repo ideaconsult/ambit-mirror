@@ -2,6 +2,7 @@ package ambit2.rest.freemarker;
 
 import java.util.Map;
 
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.freemarker.IFreeMarkerSupport;
 
@@ -12,7 +13,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import ambit2.base.config.AMBITConfig;
-import ambit2.rest.ChemicalMediaType;
 
 public class FreeMarkerSupport implements IFreeMarkerSupport {
 

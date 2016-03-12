@@ -1,5 +1,7 @@
 package ambit2.rest.nano;
 
+import net.idea.restnet.c.ChemicalMediaType;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -8,7 +10,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.structure.QueryStructureByID;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.structure.CompoundResource;
 

@@ -8,6 +8,7 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.q.conditions.StringCondition;
 import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.RepresentationConvertor;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
@@ -37,7 +38,6 @@ import ambit2.db.update.property.CreatePropertyReferenceID;
 import ambit2.db.update.property.DeleteProperty;
 import ambit2.db.update.property.ReadProperty;
 import ambit2.db.update.property.UpdateProperty;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DataResources;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
@@ -100,7 +100,7 @@ public class PropertyResource extends
 		super.doInit();
 		customizeVariants(new MediaType[] { MediaType.TEXT_HTML,
 				MediaType.TEXT_URI_LIST, MediaType.APPLICATION_RDF_XML,
-				MediaType.APPLICATION_RDF_TURTLE, MediaType.TEXT_RDF_N3,
+				MediaType.APPLICATION_RDF_TURTLE, MediaType.TEXT_RDF_N3,ChemicalMediaType.APPLICATION_JSONLD,
 				MediaType.TEXT_RDF_NTRIPLES, MediaType.APPLICATION_JSON,
 				MediaType.APPLICATION_JAVA_OBJECT });
 	}

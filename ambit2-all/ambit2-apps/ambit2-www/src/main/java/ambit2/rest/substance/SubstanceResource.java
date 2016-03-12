@@ -12,6 +12,7 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.StringConvertor;
 import net.idea.restnet.db.QueryResource;
 import net.idea.restnet.db.QueryURIReporter;
@@ -35,8 +36,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-
-import com.hp.hpl.jena.ontology.OntModel;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
@@ -62,7 +61,6 @@ import ambit2.db.substance.ReadSubstanceByOwner;
 import ambit2.db.substance.ReadSubstanceByStudy;
 import ambit2.db.substance.ReadSubstanceByType;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundleCompounds;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
@@ -73,6 +71,8 @@ import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.query.AmbitDBResource;
 import ambit2.rest.task.CallableFileUpload;
 import ambit2.rest.task.FactoryTaskConvertor;
+
+import com.hp.hpl.jena.ontology.OntModel;
 
 /**
  * Substances (in the sense of IUCLID5)

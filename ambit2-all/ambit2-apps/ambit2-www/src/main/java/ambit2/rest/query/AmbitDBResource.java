@@ -3,12 +3,12 @@ package ambit2.rest.query;
 import java.io.Serializable;
 
 import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.i.task.ITaskStorage;
 
 import org.restlet.data.MediaType;
 import org.restlet.resource.ResourceException;
 
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
 

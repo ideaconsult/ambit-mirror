@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 
 import junit.framework.Assert;
+import net.idea.restnet.c.ChemicalMediaType;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -20,7 +21,6 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
 import ambit2.rest.AbstractResource;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.test.ResourceTest;
 
 public class SmartsResourceTest extends ResourceTest {
