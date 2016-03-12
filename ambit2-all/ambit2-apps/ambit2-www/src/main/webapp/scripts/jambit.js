@@ -41,7 +41,7 @@ var _ambit = {
 	           	  {id:"rdfn3",img:"rdf.png",alt:"RDF N3",title:'Download as RDF N3',mime:'text/n3'},
 	           	  {id:"json",img:"json.png",alt:"JSON",title:'Download as JSON',mime:'application/json'},
 	           	  {id:"xlsx",img:"xlsx.png",alt:"XLSX",title:'Download as XLSX',mime:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'},
-	           	  {id:"jsonld",img:"json-ld.png",alt:"XLSX",title:'Download as XLSX',mime:'application/ld+json'}
+	           	  {id:"jsonld",img:"json-ld.png",alt:"JSON-LD",title:'Download as JSON-LD',mime:'application/ld+json'}
 	           	  
 	           	 ],
 	'runModel' : function(modelURI,statusSelector) {
