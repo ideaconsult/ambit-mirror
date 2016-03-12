@@ -1,7 +1,7 @@
 <#if substanceUUID??>
-<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-	<a href="${ambit_root}/ui/_dataset?dataset_uri=${ambit_root}/substance/${substanceUUID}/structure" title='Chemical structures for this substance'>Show structures</a>
-</div>
+	<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
+		<a href="${ambit_root}/ui/_dataset?dataset_uri=${ambit_root}/substance/${substanceUUID}/structure" title='Chemical structures for this substance'>Show structures</a>
+	</div>
 <!--
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
 	<a href="${ambit_root}/substance/${substanceUUID}/composition" title='Substance composition'>Show composition</a>
@@ -19,12 +19,18 @@
 		</div>
 	</#if>
 	
-	<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-		<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json64.png' alt='json' title='Download as JSON'></a>
-<!--		
-		<a href='#' id='xlsx' target=_blank><img src='${ambit_root}/images/xlsx.png' alt='XLSX' title='Download as XLSX'></a>
--->		
+	<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
+		
+		<a href="${ambit_root}/substance/${substanceUUID}" title='Chemical structures for this substance'>Show substance</a>
 	</div>
+	
+	<#if menu_profile?? && menu_profile=='enanomapper'>		        
+	<div class='row' id='download_substance' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
+		<a href='${ambit_root}/substance/${substanceUUID}/study?media=application/json' id='json' target=_blank><img src='${ambit_root}/images/json64.png' alt='json' title='Download as JSON'></a>
+		<a href='${ambit_root}/substance/${substanceUUID}?media=application%2Fld%2Bjson' id='jsonld' target=_blank><img src='${ambit_root}/images/json-ld.png' alt='json' title='Download as JSON-LD'></a>
+		<a href='${ambit_root}/substance/${substanceUUID}?media=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet' id='xlsx' target=_blank><img src='${ambit_root}/images/xlsx.png' alt='XLSX' title='Download as XLSX'></a>
+	</div>
+	</#if>
 
 <#else>
 	

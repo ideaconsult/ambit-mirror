@@ -2889,17 +2889,17 @@ function defineBundlesTable_enm(root, url, deleteVisible, copyVisible) {
 						"oLanguage" : {
 							"sProcessing" : "<img src='" + root
 									+ "/images/24x24_ambit.gif' border='0'>",
-							"sLoadingRecords" : "No assessments.",
-							"sZeroRecords" : "No assessments.",
-							"sEmptyTable" : "No assessments.",
-							"sInfo" : "Showing _TOTAL_ assessments (_START_ to _END_)",
+							"sLoadingRecords" : "No bundles.",
+							"sZeroRecords" : "No bundles.",
+							"sEmptyTable" : "No bundles.",
+							"sInfo" : "Showing _TOTAL_ bundles (_START_ to _END_)",
 							"sLengthMenu" : 'Display <select>'
 									+ '<option value="10">10</option>'
 									+ '<option value="20">20</option>'
 									+ '<option value="50">50</option>'
 									+ '<option value="100">100</option>'
 									+ '<option value="-1">all</option>'
-									+ '</select> entries.'
+									+ '</select> bundles.'
 						},
 						"aoColumnDefs" : [
 								{
@@ -2944,7 +2944,7 @@ function defineBundlesTable_enm(root, url, deleteVisible, copyVisible) {
 												+ root
 												+ "/ui/assessment?bundle_uri="
 												+ encodeURIComponent(o.aData.URI)
-												+ "' title='Click to view the assessments at "
+												+ "' title='Click to view the bundle at "
 												+ o.aData.URI
 												+ "'>"
 												+ (o.aData.title == null ? o.aData.id
