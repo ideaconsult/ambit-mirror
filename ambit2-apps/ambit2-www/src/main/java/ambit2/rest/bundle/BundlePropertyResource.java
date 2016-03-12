@@ -6,6 +6,7 @@ import java.sql.Connection;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.StringConvertor;
 import net.idea.restnet.c.task.CallableProtectedTask;
 import net.idea.restnet.db.DBConnection;
@@ -30,96 +31,118 @@ import ambit2.db.reporters.ImageReporter;
 import ambit2.db.update.bundle.endpoints.ReadEndpointsByBundle;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
+import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.property.PropertyJSONReporter;
+import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.AmbitDBResource;
 
-public class BundlePropertyResource<Q extends IQueryRetrieval<Property>> extends AmbitDBResource<Q,Property> {
+public class BundlePropertyResource<Q extends IQueryRetrieval<Property>>
+		extends AmbitDBResource<Q, Property> {
 
 	public BundlePropertyResource() {
 		super();
 		setHtmlbyTemplate(true);
 	}
-	
+
 	@Override
 	public String getTemplateName() {
 		return "feature.ftl";
 	}
-	
+
 	@Override
 	protected String getObjectURI(Form queryForm) throws ResourceException {
 		return null;
 	}
-		
+
 	@Override
-	protected CallableProtectedTask<String> createCallable(Method method,	Form form, Property item) throws ResourceException {
+	protected CallableProtectedTask<String> createCallable(Method method,
+			Form form, Property item) throws ResourceException {
 		SubstanceEndpointsBundle bundle = null;
-		Object id = getRequest().getAttributes().get(OpenTox.URI.bundle.getKey());	
-		if ((id!=null)) try {
-			bundle = new SubstanceEndpointsBundle(new Integer(Reference.decode(id.toString())));
-		} catch (Exception x) {}
-		
+		Object id = getRequest().getAttributes().get(
+				OpenTox.URI.bundle.getKey());
+		if ((id != null))
+			try {
+				bundle = new SubstanceEndpointsBundle(new Integer(
+						Reference.decode(id.toString())));
+			} catch (Exception x) {
+			}
+
 		Connection conn = null;
 		try {
 			PropertyURIReporter r = new PropertyURIReporter(getRequest());
-			DBConnection dbc = new DBConnection(getApplication().getContext(),getConfigFile());
-			conn = dbc.getConnection(30,true,8);
-			return new CallableEndpointsBundle(bundle,r,method,form,conn,getToken());
+			DBConnection dbc = new DBConnection(getApplication().getContext(),
+					getConfigFile());
+			conn = dbc.getConnection(30, true, 8);
+			return new CallableEndpointsBundle(bundle, r, method, form, conn,
+					getToken());
 		} catch (Exception x) {
 			x.printStackTrace();
-			try { conn.close(); } catch (Exception xx) {}
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+			try {
+				conn.close();
+			} catch (Exception xx) {
+			}
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x);
 		}
 	}
+
 	@Override
 	protected boolean isAllowedMediaType(MediaType mediaType)
 			throws ResourceException {
 		return MediaType.APPLICATION_WWW_FORM.equals(mediaType);
 	}
-	
+
 	@Override
-	protected Q createQuery(Context context, Request request, Response response) throws ResourceException {
-		Object idbundle = request.getAttributes().get(OpenTox.URI.bundle.getKey());
-		if (idbundle != null)  try {
-			Integer idnum = new Integer(Reference.decode(idbundle.toString()));
-			ReadEndpointsByBundle q = new ReadEndpointsByBundle();
-			SubstanceEndpointsBundle b = new SubstanceEndpointsBundle();
-			b.setID(idnum);
-			q.setFieldname(b);
-			//q.setValue(value);
-			return (Q)q;
-		} catch (NumberFormatException x) {
-		}
+	protected Q createQuery(Context context, Request request, Response response)
+			throws ResourceException {
+		Object idbundle = request.getAttributes().get(
+				OpenTox.URI.bundle.getKey());
+		if (idbundle != null)
+			try {
+				Integer idnum = new Integer(Reference.decode(idbundle
+						.toString()));
+				ReadEndpointsByBundle q = new ReadEndpointsByBundle();
+				SubstanceEndpointsBundle b = new SubstanceEndpointsBundle();
+				b.setID(idnum);
+				q.setFieldname(b);
+				// q.setValue(value);
+				return (Q) q;
+			} catch (NumberFormatException x) {
+			}
 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-	}	
-	
-	
+	}
+
 	@Override
 	public String getConfigFile() {
 		return "ambit2/rest/config/ambit2.pref";
 	}
-	
 
 	@Override
 	protected Q createUpdateQuery(Method method, Context context,
 			Request request, Response response) throws ResourceException {
-		Object idbundle = request.getAttributes().get(OpenTox.URI.bundle.getKey());
-		if (idbundle==null) throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
-		
-		Object idsubstance = request.getAttributes().get(OpenTox.URI.substance.getKey());
+		Object idbundle = request.getAttributes().get(
+				OpenTox.URI.bundle.getKey());
+		if (idbundle == null)
+			throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+
+		Object idsubstance = request.getAttributes().get(
+				OpenTox.URI.substance.getKey());
 		if (Method.POST.equals(method) || Method.PUT.equals(method)) {
-			if (idsubstance==null) return null;//post allowed only on /bundle/{id}/substance level, not on /bundle/id/substance/{idsubstance}
+			if (idsubstance == null)
+				return null;// post allowed only on /bundle/{id}/substance
+							// level, not on /bundle/id/substance/{idsubstance}
 		} else {
-			if (idsubstance!=null) {
+			if (idsubstance != null) {
 				try {
-						Integer idnum = new Integer(Reference.decode(idbundle.toString()));
-						SubstanceEndpointsBundle dataset = new SubstanceEndpointsBundle();
-						dataset.setID(idnum);
-						ReadEndpointsByBundle query = new ReadEndpointsByBundle();
-						query.setFieldname(dataset);
-						return (Q)query;
+					Integer idnum = new Integer(Reference.decode(idbundle
+							.toString()));
+					SubstanceEndpointsBundle dataset = new SubstanceEndpointsBundle();
+					dataset.setID(idnum);
+					ReadEndpointsByBundle query = new ReadEndpointsByBundle();
+					query.setFieldname(dataset);
+					return (Q) query;
 				} catch (NumberFormatException x) {
-						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 				}
 			}
 		}
@@ -131,34 +154,57 @@ public class BundlePropertyResource<Q extends IQueryRetrieval<Property>> extends
 			throws AmbitException, ResourceException {
 		/* workaround for clients not being able to set accept headers */
 		Form acceptform = getResourceRef(getRequest()).getQueryAsForm();
-		Dimension d = new Dimension(250,250);
+		Dimension d = new Dimension(250, 250);
 		try {
-			d.width = Integer.parseInt(acceptform.getFirstValue("w").toString());
-		} catch (Exception x) {}
+			d.width = Integer
+					.parseInt(acceptform.getFirstValue("w").toString());
+		} catch (Exception x) {
+		}
 		try {
-			d.height = Integer.parseInt(acceptform.getFirstValue("h").toString());
-		} catch (Exception x) {}		
-		
+			d.height = Integer.parseInt(acceptform.getFirstValue("h")
+					.toString());
+		} catch (Exception x) {
+		}
+
 		String media = acceptform.getFirstValue("accept-header");
-		if (media != null) variant.setMediaType(new MediaType(media));
+		if (media != null)
+			variant.setMediaType(new MediaType(media));
 
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			QueryURIReporter r = (QueryURIReporter)getURIReporter(getRequest());
-			return new StringConvertor(
-					r,MediaType.TEXT_URI_LIST,filenamePrefix);
+			QueryURIReporter r = (QueryURIReporter) getURIReporter(getRequest());
+			return new StringConvertor(r, MediaType.TEXT_URI_LIST,
+					filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
-			return new ImageConvertor(
-					new ImageReporter(variant.getMediaType().getMainType(),variant.getMediaType().getSubType(),d),
+			return new ImageConvertor(new ImageReporter(variant.getMediaType()
+					.getMainType(), variant.getMediaType().getSubType(), d),
 					variant.getMediaType());
-		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
+		} else if (variant.getMediaType().equals(
+				MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
-			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
-			return new OutputWriterConvertor(new PropertyJSONReporter(getRequest(),jsonpcallback),MediaType.APPLICATION_JAVASCRIPT);
-		} else { //json by default
-		//else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-			return new OutputWriterConvertor(new PropertyJSONReporter(getRequest()),MediaType.APPLICATION_JSON);
+			if (jsonpcallback == null)
+				jsonpcallback = getParams().getFirstValue("callback");
+			return new OutputWriterConvertor(new PropertyJSONReporter(
+					getRequest(), jsonpcallback),
+					MediaType.APPLICATION_JAVASCRIPT);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)
+				|| variant.getMediaType().equals(
+						MediaType.APPLICATION_RDF_TURTLE)
+				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
+				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+				|| variant.getMediaType().equals(
+						ChemicalMediaType.APPLICATION_JSONLD)) {
+			RDFJenaConvertor convertor = new RDFJenaConvertor<Property, IQueryRetrieval<Property>>(
+					new PropertyRDFReporter<IQueryRetrieval<Property>>(
+							getRequest(), variant.getMediaType()),
+					variant.getMediaType(), filenamePrefix);
+			return convertor;
+		} else { // json by default
+			// else if
+			// (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+			return new OutputWriterConvertor(new PropertyJSONReporter(
+					getRequest()), MediaType.APPLICATION_JSON);
 		}
-	}	
-	
+	}
+
 }

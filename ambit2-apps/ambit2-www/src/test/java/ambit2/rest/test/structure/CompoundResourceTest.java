@@ -14,6 +14,7 @@ import net.idea.opentox.cli.OTClient;
 import net.idea.opentox.cli.structure.Compound;
 import net.idea.opentox.cli.structure.CompoundClient;
 import net.idea.opentox.cli.task.RemoteTask;
+import net.idea.restnet.c.ChemicalMediaType;
 
 import org.apache.http.HttpStatus;
 import org.dbunit.database.IDatabaseConnection;
@@ -41,7 +42,6 @@ import ambit2.base.io.DownloadTool;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.db.search.structure.AbstractStructureQuery;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.legacy.OTCompound;
 import ambit2.rest.property.PropertyResource;

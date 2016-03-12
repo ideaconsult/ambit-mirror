@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 import junit.framework.Assert;
+import net.idea.restnet.c.ChemicalMediaType;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -33,7 +34,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.AbstractDataset;
 import ambit2.base.data.ISourceDataset;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.legacy.OTRemoteTask;
 import ambit2.rest.test.ProtectedResourceTest;

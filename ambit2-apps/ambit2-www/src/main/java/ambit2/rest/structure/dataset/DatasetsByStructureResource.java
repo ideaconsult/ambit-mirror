@@ -4,6 +4,7 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
@@ -21,7 +22,6 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.RetrieveDatasets;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;

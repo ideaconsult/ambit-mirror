@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import junit.framework.Assert;
+import net.idea.restnet.c.ChemicalMediaType;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -16,7 +17,6 @@ import org.restlet.data.Reference;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.query.ExactStructureQueryResource;
 import ambit2.rest.rdf.RDFStructuresIterator;
 import ambit2.rest.test.ResourceTest;

@@ -29,6 +29,12 @@
 		</dependency>
 		<dependency>
 			<groupId>net.ideaconsult.restnet</groupId>
+			<artifactId>restnet-c</artifactId>
+			<version>${restnet.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>net.ideaconsult.restnet</groupId>
 			<artifactId>restnet-rdf</artifactId>
 			<version>${restnet.version}</version>
 			<type>jar</type>

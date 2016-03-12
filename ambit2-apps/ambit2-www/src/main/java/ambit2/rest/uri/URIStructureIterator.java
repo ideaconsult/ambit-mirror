@@ -8,6 +8,7 @@ import java.util.Iterator;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.task.ClientResourceWrapper;
 
 import org.restlet.data.Reference;
@@ -15,7 +16,6 @@ import org.restlet.data.Reference;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 
 public class URIStructureIterator extends AbstractBatchProcessor<String[], IStructureRecord> {

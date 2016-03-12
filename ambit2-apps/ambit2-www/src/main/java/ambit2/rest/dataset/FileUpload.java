@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.List;
 
 import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskApplication;
 import net.idea.restnet.i.task.ITaskResult;
@@ -29,7 +30,6 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.rest.AmbitApplication;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
 import ambit2.rest.structure.ConformerURIReporter;
 import ambit2.rest.task.CallableFileImport;

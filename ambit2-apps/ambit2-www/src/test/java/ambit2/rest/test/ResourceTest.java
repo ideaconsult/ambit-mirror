@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import junit.framework.Assert;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.task.ClientResourceWrapper;
 import net.idea.restnet.i.aa.OpenSSOCookie;
 import net.idea.restnet.rdf.ns.OT;
@@ -46,7 +47,6 @@ import ambit2.base.config.Preferences;
 import ambit2.db.processors.test.DbUnitTest;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.AmbitComponent;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.legacy.OTRemoteTask;
 
 import com.hp.hpl.jena.ontology.OntModel;

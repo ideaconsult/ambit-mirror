@@ -3,6 +3,7 @@ package ambit2.rest.property.annotations;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 import org.restlet.Context;
@@ -16,7 +17,6 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.db.update.propertyannotations.ReadPropertyAnnotations;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.error.InvalidResourceIDException;

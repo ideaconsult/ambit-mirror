@@ -17,6 +17,7 @@ import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.p.MasterDetailsProcessor;
 import net.idea.modbcum.r.QueryAbstractReporter;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
@@ -55,7 +56,6 @@ import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.xlsx.StructureRecordXLSXReporter;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.substance.study.ReadEffectRecordBySubstance;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RDFStaXConvertor;

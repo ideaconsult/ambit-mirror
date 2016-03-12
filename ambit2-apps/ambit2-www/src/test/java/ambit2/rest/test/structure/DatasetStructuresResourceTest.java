@@ -3,6 +3,7 @@ package ambit2.rest.test.structure;
 import java.io.InputStream;
 
 import junit.framework.Assert;
+import net.idea.restnet.c.ChemicalMediaType;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -11,7 +12,6 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.restlet.data.MediaType;
 
 import weka.core.Instances;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.test.ResourceTest;
 
 import com.lowagie.text.pdf.PdfReader;

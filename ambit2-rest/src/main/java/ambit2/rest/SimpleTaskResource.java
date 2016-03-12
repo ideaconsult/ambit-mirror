@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskApplication;
 import net.idea.restnet.i.task.ITaskResult;
@@ -93,9 +94,9 @@ public class SimpleTaskResource<USERID>
 				MediaType.TEXT_URI_LIST, MediaType.TEXT_PLAIN,
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE, MediaType.TEXT_RDF_N3,
-				ChemicalMediaType.APPLICATION_JSONLD,
-				MediaType.APPLICATION_JSON, MediaType.APPLICATION_JAVASCRIPT,
-				MediaType.TEXT_RDF_NTRIPLES, MediaType.APPLICATION_JAVA_OBJECT });
+				ChemicalMediaType.APPLICATION_JSONLD, MediaType.APPLICATION_JSON,
+				MediaType.APPLICATION_JAVASCRIPT, MediaType.TEXT_RDF_NTRIPLES,
+				MediaType.APPLICATION_JAVA_OBJECT });
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		setPaging(form);
 		try {

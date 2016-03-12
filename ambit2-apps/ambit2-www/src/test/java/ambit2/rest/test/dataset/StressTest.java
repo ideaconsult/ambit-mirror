@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import junit.framework.Assert;
+import net.idea.restnet.c.ChemicalMediaType;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -18,7 +19,6 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.FileRepresentation;
 
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.legacy.OTRemoteTask;
 import ambit2.rest.test.ProtectedResourceTest;
 

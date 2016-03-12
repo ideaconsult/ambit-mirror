@@ -4,6 +4,7 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.rdf.ns.OT;

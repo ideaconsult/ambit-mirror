@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.reporter.Reporter;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ICallableTask;
 import net.idea.restnet.i.task.ITask;
@@ -30,7 +31,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.config.AMBITConfig;
 import ambit2.rest.AbstractResource;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.aa.opensso.OpenSSOUser;
