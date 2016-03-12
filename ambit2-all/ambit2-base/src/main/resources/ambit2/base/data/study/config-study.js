@@ -10,10 +10,14 @@
             "conditions": {},
             "effects": {
                 "endpoint": {
-                    "sTitle": "Endpoint"
+                	"inMatrix": true,
+                    "sTitle": "Endpoint",
+                    "iOrder": -16
                 },
                 "result": {
-                    "sTitle": "Value"
+                	"inMatrix": true,
+                    "sTitle": "Value",
+                    "iOrder": -17
                 },
                 "text": {
                     "bVisible": false
@@ -21,16 +25,19 @@
             },
             "protocol": {
                 "citation": {
+                	"inMatrix": true,
                     "bVisible": false,
-                    "iOrder": 10,
+                    "iOrder": -10,
                     "sTitle": "Study year"
                 },
                 "owner": {
+                	"inMatrix": true,
                     "bVisible": true,
-                    "iOrder": 20,
+                    "iOrder": -20,
                     "sTitle": "Owner"
                 },
                 "guideline": {
+                	"inMatrix": true,
                 	"iOrder": 15,
                     "sTitle": "Guideline"
                 }
@@ -3188,9 +3195,89 @@
                 }
             }
         },
-        "BAO_0003009_SECTION": {
+        "NPO_1911_SECTION" : {
+            "effects": {
+                "endpoint": {
+                	"inMatrix": true,
+                    "iOrder": -7
+                },
+                "result": {
+                	"inMatrix": true,
+                    "iOrder": -5
+                },
+                "text": {
+                    "bVisible": false
+                }
+            },        	
             "protocol": {
                 "citation": {
+                	"inMatrix": true,
+                    "bVisible": true,
+                    "iOrder": -30,
+                    "sTitle": "Reference"
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": true,
+                    "sTitle": "Result (text)",
+                    "inMatrix": true
+                },
+                "criteria": {
+                    "bVisible": false
+                }
+            }        	
+        },        
+        "BAO_0010001_SECTION" : {
+            "effects": {
+                "endpoint": {
+                	"inMatrix": true,
+                    "iOrder": -7
+                },
+                "result": {
+                	"inMatrix": true,
+                    "iOrder": -5
+                },
+                "text": {
+                    "bVisible": false
+                }
+            },        	
+            "protocol": {
+                "citation": {
+                	"inMatrix": true,
+                    "bVisible": true,
+                    "iOrder": -30,
+                    "sTitle": "Reference"
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": true,
+                    "sTitle": "Result (text)",
+                    "inMatrix": true
+                },
+                "criteria": {
+                    "bVisible": false
+                }
+            }        	
+        },
+        "BAO_0003009_SECTION": {
+            "effects": {
+                "endpoint": {
+                	"inMatrix": true,
+                    "iOrder": -7
+                },
+                "result": {
+                	"inMatrix": true,
+                    "iOrder": -5
+                },
+                "text": {
+                    "bVisible": false
+                }
+            },        	
+            "protocol": {
+                "citation": {
+                	"inMatrix": true,
                     "bVisible": true,
                     "iOrder": -30,
                     "sTitle": "Reference"
@@ -3207,6 +3294,123 @@
                 }
             }
         },
+        "NPO_1709_SECTION": {
+            "effects": {
+                "endpoint": {
+                	"inMatrix": true,
+                    "iOrder": -7
+                },
+                "result": {
+                	"inMatrix": true,
+                    "iOrder": -5
+                },
+                "text": {
+                    "bVisible": false
+                }
+            },
+            "conditions": {
+                "doses/concentrations": {
+                	"inMatrix": true,
+                    "bVisible": true,
+                    "sTitle": "Concentration",
+                    "iOrder": -6
+                }
+            },
+            "protocol": {
+                "citation": {
+                	"inMatrix": true,
+                    "bVisible": true,
+                    "sTitle": "Reference",
+                    "iOrder": -10
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                },
+                "criteria": {
+                    "bVisible": false
+                }
+            }
+        },
+        "BAO_0002167" : {
+            "effects": {
+                "endpoint": {
+                	"inMatrix": true,
+                    "iOrder": -7
+                },
+                "result": {
+                	"inMatrix": true,
+                    "iOrder": -5
+                },
+                "text": {
+                    "bVisible": false
+                }
+            },
+            "conditions": {
+                "doses/concentrations": {
+                	"inMatrix": true,
+                    "bVisible": true,
+                    "sTitle": "Concentration",
+                    "iOrder": -6
+                }
+            },
+            "protocol": {
+                "citation": {
+                	"inMatrix": true,
+                    "bVisible": true,
+                    "sTitle": "Reference",
+                    "iOrder": -10
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                },
+                "criteria": {
+                    "bVisible": false
+                }
+            }        	
+        },
+        "BAO_0002993_SECTION": {
+            "effects": {
+                "endpoint": {
+                	"inMatrix": true,
+                    "iOrder": -7
+                },
+                "result": {
+                	"inMatrix": true,
+                    "iOrder": -5
+                },
+                "text": {
+                    "bVisible": false
+                }
+            },
+            "conditions": {
+                "doses/concentrations": {
+                	"inMatrix": true,
+                    "bVisible": true,
+                    "sTitle": "Concentration",
+                    "iOrder": -6
+                }
+            },
+            "protocol": {
+                "citation": {
+                	"inMatrix": true,
+                    "bVisible": true,
+                    "sTitle": "Reference",
+                    "iOrder": -10
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                },
+                "criteria": {
+                    "bVisible": false
+                }
+            }
+        },        
         "TO_SENSITIZATION_INVITRO_SECTION": {
             "parameters": {
                 "type_of_study": {
