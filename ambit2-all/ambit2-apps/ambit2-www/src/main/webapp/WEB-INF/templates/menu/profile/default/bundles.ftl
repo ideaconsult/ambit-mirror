@@ -50,6 +50,7 @@
 						oTable.fnOpen(nTr, bundleFormatDetails(oTable,nTr,"${ambit_root}",false,true,true,false),	'details');
 												       
 					}
+					loadBundleSummary(oTable.fnGetData(nTr));		
 			});	  		
 	  	</#if>
 		jQuery("#breadCrumb").jBreadCrumb();

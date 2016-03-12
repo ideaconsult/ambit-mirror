@@ -28,7 +28,7 @@
 			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/bundle/${datasetid}/metadata" title="${ambit_root}/bundle/${datasetid}/metadata">Metadata</a></li>');
 			loadDatasetMeta("${ambit_root}","${ambit_root}/bundle/${datasetid}/metadata",true);
 		<#else>
-	  		var oTable = defineBundlesTable("${ambit_root}","${ambit_request_json}",false,"${menu_profile}");
+	  		var oTable = defineBundlesTable_enm("${ambit_root}","${ambit_request_json}",false,false);
 	  		 $('.datasetstable tbody').on('click','td .zoomstruc',function() {
 					var nTr = $(this).parents('tr')[0];
 					if (oTable.fnIsOpen(nTr)) {
@@ -41,8 +41,9 @@
 						$(this).addClass("ui-icon-folder-open");
 						this.title='Click to close bundle details';
 						var id = 'v'+getID();
-						oTable.fnOpen(nTr, bundleFormatDetails(oTable,nTr,"${ambit_root}",true,true,true,false),	'details');
-												       
+						oTable.fnOpen(nTr, bundleFormatDetails(oTable,nTr,"${ambit_root}",true,true,true,false,true),	'details');
+						
+						loadBundleSummary(oTable.fnGetData(nTr));				       	
 					}
 			});
 	  	</#if>
@@ -102,12 +103,12 @@
 			<thead>
 			<tr>
 			<th>#</th>
-			<th>Name</th>
-			<th>Code</th>
-			<th>Status</th>
-			<th>Owner</th>
 			<th id='th_assessmentid'>Bundle ID</th>
-			<th id='th_action'></th>
+			<th>Name</th>
+			<th title='Version'>Ver</th>
+			<th>Description</th>
+			<th>Source</th>
+			<th>License & Maintainer</th>			
 			</tr>
 			</thead>
 			<tbody></tbody>
