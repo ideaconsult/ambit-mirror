@@ -3,6 +3,7 @@ package ambit2.db.reporters.xlsx;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.logging.Level;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
@@ -236,7 +237,7 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 							formatter.formatCategoryHeader(pa.getProtocol()
 									.getCategory(), this);
 						} catch (Exception x) {
-
+							logger.log(Level.WARNING, x.getMessage(),x);
 						}
 						rowIndex++;
 					}

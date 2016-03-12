@@ -336,6 +336,9 @@ public class StudyFormatter {
 		ObjectNode column = (ObjectNode) columns.get(category);
 		List<ObjectNode> ordered = new ArrayList<ObjectNode>();
 
+		if (column == null)
+			column = defaultColumn;
+
 		ObjectNode config = getGuidelineConfig(column);
 		if (isVisible(config)) {
 			ordered.add(config);
@@ -465,6 +468,7 @@ public class StudyFormatter {
 	public void format(
 			final ProtocolApplication<Protocol, String, String, IParams, String> pa,
 			IStudyPrinter printer) throws Exception {
+
 		_r_flags flag = null;
 		try {
 			for (_r_flags rf : _r_flags.values())
@@ -479,6 +483,8 @@ public class StudyFormatter {
 
 		ObjectNode column = (ObjectNode) columns.get(pa.getProtocol()
 				.getCategory());
+		//defaultColumn
+		//TODO default column
 
 		ObjectNode config = getGuidelineConfig(column);
 		if (isVisible(config))
