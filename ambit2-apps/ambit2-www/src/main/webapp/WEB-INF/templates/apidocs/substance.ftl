@@ -4,7 +4,9 @@
         "application/json",
         "text/uri-list",
         "image/png",
-        "application/x-javascript"
+        "application/x-javascript",
+        "application/ld+json",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ],		
     "resourcePath": "/substance",
 	"apis": [

@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.task.CallableProtectedTask;
 import net.idea.restnet.db.DBConnection;
 import net.idea.restnet.db.QueryURIReporter;
@@ -223,7 +224,9 @@ public class BundleMetadataResource
 				|| variant.getMediaType()
 						.equals(MediaType.APPLICATION_RDF_TRIG)
 				|| variant.getMediaType()
-						.equals(MediaType.APPLICATION_RDF_TRIX)) {
+						.equals(MediaType.APPLICATION_RDF_TRIX)
+				|| variant.getMediaType().equals(
+						ChemicalMediaType.APPLICATION_JSONLD)) {
 			return new RDFJenaConvertor<SubstanceEndpointsBundle, IQueryRetrieval<SubstanceEndpointsBundle>>(
 					new MetadataRDFReporter<SubstanceEndpointsBundle, IQueryRetrieval<SubstanceEndpointsBundle>>(
 							getRequest(), variant.getMediaType()), variant

@@ -11,7 +11,8 @@
         "chemical/x-daylight-smiles",
         "chemical/x-inchi",
         "text/x-arff",
-        "text/x-arff-3col"
+        "text/x-arff-3col",
+        "application/ld+json"
     ],		
     "resourcePath": "/dataset",
 	"apis": [

@@ -1,7 +1,11 @@
 {
 	<#include "/apidocs/version.ftl" >
     "produces": [
-        "application/json"
+        "application/json",
+        "application/ld+json",
+        "text/csv",
+        "text/n3",
+        "application/rdf+xml"
     ],		
     "resourcePath": "/property",
 	"apis": [
