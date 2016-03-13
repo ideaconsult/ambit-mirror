@@ -3,7 +3,9 @@
     "produces": [
         "application/json",
         "text/csv",
-        "text/plain"
+        "text/plain",
+        "application/ld+json",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ],		
     "resourcePath": "/query",
 	"apis": [

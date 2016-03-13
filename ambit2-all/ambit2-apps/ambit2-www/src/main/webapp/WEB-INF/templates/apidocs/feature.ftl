@@ -5,7 +5,9 @@
         "text/n3",
         "application/rdf+xml",
         "text/uri-list",
-        "application/x-javascript"
+        "application/x-javascript",
+        "application/ld+json"
+        
     ],		
     "resourcePath": "/feature",
 	"apis": [

@@ -5,7 +5,9 @@
         "application/x-javascript",
         "text/x-arff",
         "text/x-arff-3col",
-        "text/csv"
+        "text/csv",
+        "application/ld+json",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ],		
     "resourcePath": "/substanceowner",
 	"apis": [

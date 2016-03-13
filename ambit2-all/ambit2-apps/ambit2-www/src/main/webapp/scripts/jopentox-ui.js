@@ -2921,10 +2921,8 @@ function defineBundlesTable_enm(root, url, deleteVisible, copyVisible) {
 									"bUseRendered" : false,
 									"fnRender" : function(o, val) {
 										var sOut = "<a style='font-size:75%;' target='table' href='"
-												+ root
-												+ "/ui/assessment?bundle_uri="
-												+ encodeURIComponent(o.aData.URI)
-												+ "' title='Click to view the assessments at "
+												+ o.aData.URI
+												+ "' title='Click to view the bundle at "
 												+ o.aData.URI
 												+ "'>"
 												+ val

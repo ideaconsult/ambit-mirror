@@ -4,7 +4,8 @@
         "application/json",
         "text/n3",
         "application/rdf+xml",
-        "text/uri-list"
+        "text/uri-list",
+        "application/ld+json"
     ],	
     "resourcePath": "/algorithm",
     "apis": [
