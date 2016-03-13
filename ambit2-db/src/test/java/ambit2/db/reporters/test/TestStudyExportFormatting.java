@@ -159,7 +159,21 @@ public class TestStudyExportFormatting {
 					break;
 				}
 				case BAO_0003009_SECTION: {
-					Assert.assertEquals("interpretationResult", result);
+					Assert.assertEquals(
+							"interpretation_result =interpretationResult [Guideline]",
+							result);
+					break;
+				}
+				case BAO_0010001_SECTION: {
+					Assert.assertEquals(
+							"interpretation_result =interpretationResult",
+							result);
+					break;
+				}
+				case NPO_1911_SECTION: {
+					Assert.assertEquals(
+							"interpretation_result =interpretationResult",
+							result);
 					break;
 				}
 				case TO_SENSITIZATION_INSILICO_SECTION: {
@@ -494,9 +508,20 @@ public class TestStudyExportFormatting {
 							result);
 					break;
 				}
+
 				case BAO_0003009_SECTION: {
-					// <<<<<<<<<
-					Assert.assertEquals(c.name(), "", result);
+					Assert.assertEquals("endpoint =textValue [Guideline]",
+							result);
+					break;
+				}
+				case NPO_1709_SECTION: {
+					Assert.assertEquals(
+							"endpoint =textValue [Guideline] (doses/concentrations=  20  UNIT)",
+							result);
+					break;
+				}
+				case NPO_1911_SECTION: {
+					Assert.assertEquals("endpoint =textValue", result);
 					break;
 				}
 				case TO_GENETIC_IN_VITRO_SECTION: {
@@ -989,7 +1014,16 @@ public class TestStudyExportFormatting {
 					Assert.assertEquals(c.name(), "ca. 3.14  mg", result);
 					break;
 				}
-
+				case NPO_1709_SECTION: {
+					Assert.assertEquals(
+							"endpoint =ca. 3.14  mg [Guideline] (doses/concentrations=  20  UNIT)",
+							result);
+					break;
+				}
+				case NPO_1911_SECTION: {
+					Assert.assertEquals("endpoint =ca. 3.14  mg", result);
+					break;
+				}
 				default: {
 					if (c.name().startsWith("BAO_"))
 						continue;
