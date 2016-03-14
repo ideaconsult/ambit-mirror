@@ -35,6 +35,22 @@
             }
         },
         {
+            "NAME": "N-oxide charged -> uncharged",
+            "CLASS": "uncharge",
+            "SMIRKS": "[*:1][N+:2][O-:3]>>[*:1][N:2]=[O:3]",
+            "USE": true,
+            "precondition": {
+      			"atomtype": [
+                    "N.plus.sp2.radical",
+                    "N.plus.sp3.radical",
+                    "N.plus",
+                    "N.plus.sp2",
+                    "N.plus.sp1",
+                    "O.minus"
+                ]
+            }
+        },        
+        {
             "NAME": "Ylide P",
             "CLASS": "uncharge",
             "SMIRKS": "[*-:1][P+:2]([C:3])[C:4]>>[*:1]=[P:2]([C:3])[C:4]",

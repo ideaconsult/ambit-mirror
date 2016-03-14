@@ -66,7 +66,7 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 		smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	}
 
-	public SMIRKSProcessor(File jsonFile,Logger logger) throws Exception {
+	public SMIRKSProcessor(File jsonFile, Logger logger) throws Exception {
 		this(logger);
 		loadReactionsFromJSON(jsonFile);
 	}
@@ -171,8 +171,10 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 			transform.setApplicable(false);
 			// if no precondition defined, assuming always applicable
 			if (!transform.hasPreconditionAtomTypeDefined()
-					&& !transform.hasPreconditionAtomDefined())
+					&& !transform.hasPreconditionAtomDefined()) {
 				transform.setApplicable(true);
+				logger.log(Level.FINER, transform.name);
+			}
 		}
 
 		boolean hasApplicable = false;
@@ -188,6 +190,9 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 					if (transform.hasPreconditionAtomTypeDefined()) {
 						if (transform.hasPreconditionAtomtype(atom
 								.getAtomTypeName())) {
+							logger.log(Level.FINE, String.format(
+									"Applicable %s atomtype %s",
+									transform.name, atom.getAtomTypeName()));
 							transform.setApplicable(true);
 							hasApplicable = true;
 						}
@@ -197,6 +202,9 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 						if (transform.hasPreconditionAtom(atom.getSymbol())) {
 							transform.setApplicable(true);
 							hasApplicable = true;
+							logger.log(Level.FINE, String.format(
+									"Applicable %s atom %s", transform.name,
+									atom.getSymbol()));
 						}
 						continue;
 					}
@@ -208,7 +216,8 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 
 			int transformed = 0;
 			for (SMIRKSTransformation transform : transformations) {
-				if (transform.isEnabled() && !isSparseproperties() && isTransformationasproperties())
+				if (transform.isEnabled() && !isSparseproperties()
+						&& isTransformationasproperties())
 					reactant.setProperty(
 							String.format("T.%s", transform.getName()), null);
 				if (transform.isApplicable()) {
@@ -220,7 +229,13 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 								reactant.setProperty(
 										String.format("T.%s",
 												transform.getName()), 1);
+
+							logger.log(Level.FINE, String.format(
+									"Transformed %s", transform.name));
 							transformed++;
+						} else{
+							logger.log(Level.FINE, String.format(
+									"Not transformed %s", transform.name));
 						}
 					} catch (Exception x) {
 						logger.log(Level.WARNING, x.getMessage());
