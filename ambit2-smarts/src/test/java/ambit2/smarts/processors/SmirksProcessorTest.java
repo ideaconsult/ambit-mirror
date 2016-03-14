@@ -30,7 +30,7 @@ public class SmirksProcessorTest {
 		
 		Assert.assertTrue(p.isTransformationasproperties());
 		// only USE=true reactions are loaded
-		Assert.assertEquals(38, p.getTransformations().size());
+		Assert.assertEquals(39, p.getTransformations().size());
 	}
 
 	@Test
@@ -40,7 +40,7 @@ public class SmirksProcessorTest {
 		SMIRKSProcessor p = new SMIRKSProcessor(logger);
 		p.setLoadExamples(true);
 		p.loadReactionsFromJSON(new File(config.getFile()));
-		Assert.assertEquals(38, p.getTransformations().size());
+		Assert.assertEquals(39, p.getTransformations().size());
 		Assert.assertFalse(p.isAtomtypeasproperties());
 		p.setAtomtypeasproperties(true);
 		SMIRKSManager m = new SMIRKSManager(
