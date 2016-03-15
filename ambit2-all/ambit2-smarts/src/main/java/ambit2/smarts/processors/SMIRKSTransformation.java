@@ -26,6 +26,15 @@ public class SMIRKSTransformation implements Comparable<SMIRKSTransformation> {
 	protected Set<String> precondition_atomtype = null;
 	protected boolean applicable = true;
 	protected transient String example = null;
+	protected int order = Integer.MAX_VALUE;
+
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
+	}
 
 	public String getExample() {
 		return example;

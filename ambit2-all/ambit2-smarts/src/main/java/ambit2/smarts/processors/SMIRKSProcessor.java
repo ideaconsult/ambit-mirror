@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -129,6 +131,18 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 				logger.log(Level.SEVERE, "MSG_ERR_TRANSFORMATION",
 						new Object[] { (i + 1), e.getMessage() });
 			}
+		Collections.sort(transformations,new Comparator<SMIRKSTransformation>() {
+			@Override
+			public int compare(SMIRKSTransformation o1, SMIRKSTransformation o2) {
+				return o1.getOrder()-o2.getOrder();
+			}
+		});
+		/*
+		for (SMIRKSTransformation t : transformations) {
+			System.out.print(t.getOrder());
+			System.out.println(t.getName());
+		}
+		*/	
 	}
 
 	public void configureReactions(SMIRKSManager smrkMan) throws Exception {
@@ -311,6 +325,11 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 				} catch (Exception x) {
 				}
 
+			try {
+				transformation.setOrder(node.get("order").asInt());
+			} catch (Exception x) {
+			}
+			
 			return transformation;
 		} catch (Exception x) {
 			// if no smirks we can't do much

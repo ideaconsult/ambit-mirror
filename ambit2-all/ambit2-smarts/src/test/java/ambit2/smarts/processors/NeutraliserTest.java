@@ -1,6 +1,7 @@
 package ambit2.smarts.processors;
 
 import java.io.InputStream;
+import java.util.BitSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,6 +10,7 @@ import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.fingerprint.CircularFingerprinter;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
@@ -84,6 +86,10 @@ public class NeutraliserTest {
 			Assert.assertEquals("[]", mol.getProperty("AtomTypes.added")
 					.toString());
 			Assert.assertEquals(0, charge);
+			
+			CircularFingerprinter fp = new CircularFingerprinter();
+			BitSet bs = fp.getBitFingerprint(mol).asBitSet();
+			Assert.assertNotNull(bs);
 		}
 	}
 }
