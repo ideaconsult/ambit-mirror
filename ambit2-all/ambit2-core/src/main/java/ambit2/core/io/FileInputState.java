@@ -188,7 +188,8 @@ public class FileInputState extends FileState implements IInputState {
 			} catch (Exception x) {
 				throw new AmbitIOException(x);
 			}
-		} else if (_FILE_TYPE.TXT_INDEX.hasExtension(ext)) {
+		} else if (_FILE_TYPE.TXT_INDEX.hasExtension(ext)
+				|| _FILE_TYPE.TSV_INDEX.hasExtension(ext)) {
 			try {
 				if ((format != null) && (format instanceof DelimitedFileFormat))
 					return new RawIteratingCSVReader(stream,
@@ -209,13 +210,13 @@ public class FileInputState extends FileState implements IInputState {
 			String extension, IChemFormat format) throws AmbitIOException,
 			CDKException {
 		String ext = extension.toLowerCase();
-		if (ext.endsWith(_FILE_TYPE.SDF_INDEX.getExtension())) {
+		if (_FILE_TYPE.SDF_INDEX.hasExtension(ext)) {
 			return new InteractiveIteratingMDLReader(stream,
 					SilentChemObjectBuilder.getInstance(), true);
-		} else if (ext.endsWith(_FILE_TYPE.SMI_INDEX.getExtension())) {
+		} else if (_FILE_TYPE.SMI_INDEX.hasExtension(ext)) {
 			return new IteratingSMILESReader(stream,
 					SilentChemObjectBuilder.getInstance());
-		} else if (ext.endsWith(_FILE_TYPE.CSV_INDEX.getExtension())) {
+		} else if (_FILE_TYPE.CSV_INDEX.hasExtension(ext)) {
 			try {
 				IteratingDelimitedFileReader reader = null;
 				if ((format != null) && (format instanceof DelimitedFileFormat))
@@ -228,7 +229,8 @@ public class FileInputState extends FileState implements IInputState {
 			} catch (Exception x) {
 				throw new AmbitIOException(x);
 			}
-		} else if (ext.endsWith(_FILE_TYPE.TXT_INDEX.getExtension())) {
+		} else if (_FILE_TYPE.TXT_INDEX.hasExtension(ext)
+				|| _FILE_TYPE.TSV_INDEX.hasExtension(ext)) {
 			try {
 				if ((format != null) && (format instanceof DelimitedFileFormat)) {
 					DelimitedFileFormat df = (DelimitedFileFormat) format;
@@ -248,13 +250,13 @@ public class FileInputState extends FileState implements IInputState {
 			// FilteredMDLReader(stream));
 			return new IteratingChemObjectReaderWrapper(new MDLReader(stream));
 
-		} else if (ext.endsWith(_FILE_TYPE.INCHI_INDEX.getExtension())) {
+		} else if (_FILE_TYPE.INCHI_INDEX.hasExtension(ext)) {
 			return new IteratingChemObjectReaderWrapper(new INChIReader(stream));
-		} else if (ext.endsWith(_FILE_TYPE.CML_INDEX.getExtension())) {
+		} else if (_FILE_TYPE.CML_INDEX.hasExtension(ext)) {
 			return new IteratingChemObjectReaderWrapper(new CMLReader(stream));
-		} else if (ext.endsWith(_FILE_TYPE.HIN_INDEX.getExtension())) {
+		} else if (_FILE_TYPE.HIN_INDEX.hasExtension(ext)) {
 			return new IteratingChemObjectReaderWrapper(new HINReader(stream));
-		} else if (ext.endsWith(_FILE_TYPE.PDB_INDEX.getExtension())) {
+		} else if (_FILE_TYPE.PDB_INDEX.hasExtension(ext)) {
 			return new RawIteratingPDBReader(new InputStreamReader(stream));
 		} else if ((ext.toLowerCase().indexOf("euras") >= 0)
 				&& (ext.endsWith(_FILE_TYPE.XLS_INDEX.getExtension()))) {

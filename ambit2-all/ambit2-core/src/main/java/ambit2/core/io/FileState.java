@@ -41,6 +41,12 @@ public class FileState implements IInputOutputState {
 				return "Text files (Tab delimited) (*.txt)";
 			}
 		},
+		TSV_INDEX {
+			@Override
+			public String getDescription() {
+				return "Text files (Tab delimited) (*.tsv)";
+			}
+		},		
 		MOL_INDEX, ICHI_INDEX {
 			@Override
 			public String getExtension() {
