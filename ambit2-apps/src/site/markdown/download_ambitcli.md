@@ -164,16 +164,18 @@ $java -jar ambitcli.jar -a standardize -m help
 ### -a fingerprint 
 
 ````
-"Fingerprint calculation. Writes multiple files per fingerprint, all files start with prefix given by -o prefix)"
-   -a fingerprint -m post
- -d fpclass=CircularFingerprinter,PubchemFingerprinter,MACCSFingerprinter	// Comma delimited list of class names implementing org.openscience.cdk.fingerprint.IFingerprinter, e.g. KlekotaRothFingerprinter. If not fully qualified will prepend 'org.openscience.cdk.fingerprint.'	[type:String, mandatory:false]
- -d page=0	// Start page (first page = 0)	[type:Integer, mandatory:false]
- -d pagesize=20000	// Page size (in number of records)	[type:Integer, mandatory:false]
- -d inputtag_smiles=SMILES	// Specifies the name of the column, containing SMILES	[type:String, mandatory:false]
- -d tag_tokeep=InChIKey	// Specifies which tags to keep, comma delimited list. Everything else will be removed. To keep all the tags, leave this empty.	[type:String, mandatory:false]
- -d write_count=false	// Whether to write the counts of getCountFingerprint()	[type:Boolean, mandatory:false]
- -d write_raw=false	// Whether to write the raw fingerprint (getRawFingerprint)	[type:Boolean, mandatory:false]
- -d sdftitle=null	// Specifies which field to write in the first SDF line	[type:String, mandatory:false]
+    Fingerprint calculation. Writes multiple files per fingerprint, all files start with prefix given by -o prefix)"
+    -a fingerprint -m post
+    -d fpclass=CircularFingerprinter,PubchemFingerprinter,MACCSFingerprinter	// Comma delimited list of class names implementing org.openscience.cdk.fingerprint.IFingerprinter, e.g. KlekotaRothFingerprinter. If not fully qualified will prepend 'org.openscience.cdk.fingerprint.'	[type:String, mandatory:false]
+    -d page=0	// Start page (first page = 0)	[type:Integer, mandatory:false]
+    -d pagesize=20000	// Page size (in number of records)	[type:Integer, mandatory:false]
+    -d inputtag_smiles=SMILES	// Specifies the name of the column, containing SMILES in the input file	[type:String, mandatory:false]
+    -d inputtag_inchi=InChI	// Specifies the name of the column, containing InChI in the input file	[type:String, mandatory:false]
+    -d inputtag_inchikey=InChIKey	// Specifies the name of the column, containing InChIKey in the input file	[type:String, mandatory:false]
+    -d tag_tokeep=InChIKey	// Specifies which tags to keep, comma delimited list. Everything else will be removed. To keep all the tags, leave this empty.	[type:String, mandatory:false]
+    -d write_count=false	// Whether to write the counts of getCountFingerprint()	[type:Boolean, mandatory:false]
+    -d write_raw=false	// Whether to write the raw fingerprint (getRawFingerprint)	[type:Boolean, mandatory:false]
+    -d sdftitle=null	// Specifies which field to write in the first SDF line	[type:String, mandatory:false]
 ````
 
 ### -a split
