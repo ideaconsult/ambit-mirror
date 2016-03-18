@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -30,6 +32,8 @@ import ambit2.core.processors.structure.MoleculeReader;
  */
 public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 		implements IRawReader<IStructureRecord>, ICiteable {
+	static Logger logger = Logger.getLogger(RawIteratingCSVReader.class
+			.getName());
 	protected CSVParser parser;
 	protected Iterator<CSVRecord> iterator;
 	protected IStructureRecord structureRecord;
@@ -39,7 +43,7 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 	public String optionalSMILESHeader = null;
 	public String optionalInChIKeyHeader = null;
 	public String optionalInChIHeader = null;
-	
+
 	public String getOptionalInChIKeyHeader() {
 		return optionalInChIKeyHeader;
 	}
@@ -195,7 +199,13 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 				.entrySet().iterator();
 		while (header.hasNext()) {
 			Entry<String, Integer> entry = header.next();
-			String value = record.get(entry.getValue());
+			String value= null;
+			try {
+				value = record.get(entry.getValue());
+			} catch (Exception x) {
+				logger.log(Level.WARNING, String.format("Error reading column %s %s", entry.getKey(),x.getClass().getName(),x.getMessage()));
+			}
+			if (value==null) continue;
 			try {
 				special_header h = special_header.valueOf(entry.getKey()
 						.replace("_", "").toUpperCase());
@@ -206,7 +216,8 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 				continue;
 			} catch (Exception x) {
 				if (optionalSMILESHeader != null
-						&& entry.getKey().toUpperCase().equals(optionalSMILESHeader)) {
+						&& entry.getKey().toUpperCase()
+								.equals(optionalSMILESHeader)) {
 					special_header h = special_header.SMILES;
 					ids[h.ordinal()] = value == null || "".equals(value.trim()) ? null
 							: value.trim();
