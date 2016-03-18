@@ -1,8 +1,10 @@
 #[eNanoMapper database](./enanomapper.html) 
 
-## [Download](https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/custom%20releases/enanomapper)
- 
-[eNanoMapper database web application](https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/custom%20releases/enanomapper)
+## Download 
+
+[**Docker image**](http://projects.bigcat.unimaas.nl/download/enanomapper.tar) A ready to use AMBIT-eNanoMapper instance, running on Tomcat + MySQL stack *[hosted by BiGCaT/UM, NL](http://www.bigcat.unimaas.nl/)*
+
+[**eNanoMapper database web application **](https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/custom%20releases/enanomapper)
 
 ## Install Guide 
 

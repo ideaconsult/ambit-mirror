@@ -61,7 +61,7 @@ AMBIT offers chemoinformatics functionality via [*OpenTox API*](api.html) compli
  
 - [eNanoMapper database](./enanomapper.html) 
 
- <form action="http://enanomapper.github.io/data.enanomapper.net/" method="GET"><input type="text" id="search" name="search" value="nanotube"/><input type='submit' value='Search'/></form>
+ <form action="http://search.data.enanomapper.net" method="GET"><input type="text" id="search" name="search" value="nanotube"/><input type='submit' value='Search'/></form>
  
 ## Download
 

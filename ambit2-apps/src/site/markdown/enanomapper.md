@@ -43,7 +43,9 @@ is part of the computational infrastructure for toxicological data management
 The eNanoMapper prototype database is an open source web application, which can be [downloaded, 
  installed]((./enanomapper_install.html)) and hosted by individual researchers or labs, and as such presents an open distributed platform for nanomaterials data management.
  
-  [**Download**](https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/custom%20releases/enanomapper)
+  [**Docker image**](http://projects.bigcat.unimaas.nl/download/enanomapper.tar)
+  
+  [**Web application (.war)**](https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/custom%20releases/enanomapper)
   
   [**Install guide**](./enanomapper_install.html)
   
@@ -63,7 +65,7 @@ The eNanoMapper prototype database is an open source web application, which can 
 
 Try the public web services, datasets and models : 
 
--   <form action="http://enanomapper.github.io/data.enanomapper.net/" method="GET"><input type="text" id="search" name="search" value="zinc oxide"/><input type='submit' value='Search'/></form>
+-   <form action="http://search.data.enanomapper.net" method="GET"><input type="text" id="search" name="search" value="zinc oxide"/><input type='submit' value='Search'/></form>
 
 -   [**Search nanomaterials by identifier**](https://apps.ideaconsult.net/enanomapper/substance?search=NM-111%26)
 
