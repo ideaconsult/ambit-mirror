@@ -62,14 +62,17 @@ $java -jar -Djava.util.logging.config.file=myLoggingConfigFilePath .... other op
     -d smilesaromatic=false	// Generates aromatic SMILES.  Uses CDK SmilesGenerator.aromatic()	[type:Boolean, mandatory:false]
     -d page=0	// Start page (first page = 0)	[type:Integer, mandatory:false]
     -d pagesize=20000	// Page size (in number of records). Set to -1 to read all records.	[type:Integer, mandatory:false]
-    -d inputtag_smiles=SMILES	// Specifies the name of the column, containing SMILES	[type:String, mandatory:false]
-    -d tag_inchi=InChI	// Specifies the InChI tag	[type:String, mandatory:false]
-    -d tag_inchikey=InChIKey	// Specifies the InChIKey tag	[type:String, mandatory:false]
-    -d tag_smiles=SMILES	// Specifies the SMILES tag	[type:String, mandatory:false]
+    -d inputtag_smiles=SMILES	// Specifies the name of the column, containing SMILES in the input file	[type:String, mandatory:false]
+    -d inputtag_inchi=InChI	// Specifies the name of the column, containing InChI in the input file	[type:String, mandatory:false]
+    -d inputtag_inchikey=InChIKey	// Specifies the name of the column, containing InChIKey in the input file	[type:String, mandatory:false]
+    -d tag_inchi=InChI	// Specifies the tag to store the generated InChI	[type:String, mandatory:false]
+    -d tag_inchikey=InChIKey	// Specifies the tag to store the generated InChIKey	[type:String, mandatory:false]
+    -d tag_smiles=SMILES	// Specifies the tag to store the generated SMILES	[type:String, mandatory:false]
     -d tag_rank=RANK	// Specifies the tag to store the tautomer rank (energy based, less is better)	[type:String, mandatory:false]
     -d tag_tokeep=	// Specifies which tags to keep, comma delimited list. Everything else will be removed. To keep all the tags, leave this empty.	[type:String, mandatory:false]
     -d sdftitle=null	// Specifies which field to write in the first SDF line null|inchikey|inchi|smiles|any-existing-field	[type:String, mandatory:false]
     -d debugatomtypes=false	// Writes only structures with AtomTypes property set. For debug purposes	[type:boolean, mandatory:false]
+
 ````
 
 ### Examples:
@@ -188,5 +191,7 @@ Used to process specific part of the file (e.g. -d page=2 -d page=100 will skip 
  -d "sdftitle=InChIKey"	
 ```` 
 If the output is SDF file, will write the specified property in the first line 
+
+#### 12. Input tags   
  
- 
+ -d inputtag_smiles=SMILES	// Specifies the name of the column, containing SMILES	[type:String, mandatory:false] 
