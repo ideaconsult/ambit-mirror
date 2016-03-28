@@ -9,6 +9,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.interfaces.ITetrahedralChirality;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
+import org.openscience.cdk.stereo.ExtendedTetrahedral;
 import org.openscience.cdk.stereo.TetrahedralChirality;
 
 public class StereoChemUtils 
@@ -480,6 +481,42 @@ public class StereoChemUtils
 			//TODO handle ExtendedTetrahedral stereo elements
 		}
 		return sb.toString();
+	}
+	
+	static public void setSteroElementsAsProperties(IAtomContainer container){
+
+		for (IStereoElement element : container.stereoElements())
+		{
+			if (element instanceof DoubleBondStereochemistry)
+			{
+				DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry)element;
+				IBond bond = dbsc.getStereoBond();
+				if (bond != null)
+					bond.setProperty("StereoElement", element);
+				continue;
+			}
+
+			if (element instanceof TetrahedralChirality)
+			{
+				TetrahedralChirality thc = (TetrahedralChirality)element;
+				IAtom atom = thc.getChiralAtom();
+				if (atom != null)
+					atom.setProperty("StereoElement", element);
+				continue;
+			}
+
+
+			if (element instanceof ExtendedTetrahedral)
+			{
+				/*
+				ExtendedTetrahedral et = (ExtendedTetrahedral)element;
+				IAtom atom = et.focus();
+				if (atom != null)
+					atom.setProperty("StereoElement", element);
+				*/	
+				continue;
+			}
+		}
 	}
 	
 }
