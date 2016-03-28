@@ -511,6 +511,7 @@ public class DBSubstanceImport {
 			case nanowiki:
 				return new NanoWikiRDFReader(new InputStreamReader(in));
 			default:
+				if (jsonConfig==null) throw new FileNotFoundException("JSON config file not specified!");
 				return new GenericExcelParser(in, jsonConfig, xlsx);
 			}
 	}
