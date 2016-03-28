@@ -79,11 +79,9 @@ public class SmartsParser {
 	public boolean mSupportOpenEyeExtension = true;
 	public boolean mSupportOpenBabelExtension = true;
 	public boolean mSupportSmirksSyntax = false;
-	public boolean mSupportDoubleBondAromaticityNotSpecified = false; // by
-																		// default
-																		// "="
-																		// is
-																		// DoubleNonAromatic
+	
+	// by default "=" is DoubleNonAromatic
+	public boolean mSupportDoubleBondAromaticityNotSpecified = false; 
 
 	// Work variables for Component Level Grouping
 	boolean FlagCLG = false;
@@ -1675,7 +1673,8 @@ public class SmartsParser {
 		}
 	}
 
-	void setDoubleBondsStereoInfo() {
+	void setDoubleBondsStereoInfo() 
+	{
 		processedDirBonds.clear();
 		processedDoubleBonds.clear();
 		newStereoDoubleBonds.clear();
@@ -1704,6 +1703,10 @@ public class SmartsParser {
 			}
 			processedDirBonds.add(dirBond);
 		}
+		
+		//TODO add stereo information into classes Double bond classes
+		//and stop using DoubleStereoBond class
+		//Instead make both classes inherit class DoubleStereoBond
 
 		// Replace all double bonds with new Stereo Double Bonds
 		for (int i = 0; i < processedDoubleBonds.size(); i++) {
