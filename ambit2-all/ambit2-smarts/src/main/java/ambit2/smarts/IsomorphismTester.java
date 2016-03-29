@@ -671,6 +671,8 @@ public class IsomorphismTester
 					//stack.push(node); 
 					if (node.sequenceElNum == sequence.size())
 					{	
+						//TODO check the stereo elements matching
+						
 						//The node is not added in the stack if the end of the sequence is reached
 						isomorphismFound = true;
 						if (FlagStoreIsomorphismNode)
@@ -714,6 +716,8 @@ public class IsomorphismTester
 					//stack.push(newNode);
 					if (newNode.sequenceElNum == sequence.size())
 					{	
+						//TODO check the stereo elements matching 
+						
 						//The node is not added in the stack if the end of the sequence is reached
 						isomorphismFound = true;
 						if (FlagStoreIsomorphismNode)
@@ -743,6 +747,8 @@ public class IsomorphismTester
 								//stack.push(newNode);
 								if (newNode.sequenceElNum == sequence.size())
 								{	
+									//TODO check the stereo elements matching
+									
 									//The node is not added in the stack if the end of the sequence is reached
 									isomorphismFound = true;
 									if (FlagStoreIsomorphismNode)
@@ -776,6 +782,8 @@ public class IsomorphismTester
 											//stack.push(newNode);
 											if (newNode.sequenceElNum == sequence.size())
 											{	
+												//TODO check the stereo elements matching
+												
 												//The node is not added in the stack if the end of the sequence is reached
 												isomorphismFound = true;
 												if (FlagStoreIsomorphismNode)
@@ -827,6 +835,8 @@ public class IsomorphismTester
 				//stack.push(newNode);
 				if (newNode.sequenceElNum == sequence.size())
 				{	
+					//TODO check the stereo elements matching
+					
 					//The node is not added in the stack if the end of the sequence is reached
 					isomorphismFound = true;
 					if (FlagStoreIsomorphismNode)
