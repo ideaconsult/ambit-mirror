@@ -99,6 +99,10 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 			boolean isProtected(Method method) {
 				return !method.equals(Method.GET);
 			}
+			@Override
+			boolean expectPolicies4IndividualResource() {
+				return true;
+			}
 		},
 		feature {
 			@Override
