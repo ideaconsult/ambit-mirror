@@ -64,8 +64,9 @@ public class QueryCountProtocolApplications<F extends SubstanceByCategoryFacet>
 
 	private static final String sql_bundle_byendpoints = "SELECT p.topcategory,count(*),p.endpointcategory,-1  FROM substance_protocolapplication p join bundle_endpoints b where b.topcategory=p.topcategory and b.endpointcategory=p.endpointcategory and idbundle=? %s group by p.topcategory,p.endpointcategory";
 
-	private static final String sql_bundle_bysubstances = "select p.topcategory,count(*),p.endpointcategory,count(distinct(p.substance_uuid)) from substance_protocolapplication p\n"
-			+ "where %s substance_uuid in (select substance_uuid from bundle_substance where idbundle=?) group by p.topcategory,p.endpointcategory";
+	private static final String sql_bundle_bysubstances =			
+			"select p.topcategory,count(*),p.endpointcategory,-1 from substance_protocolapplication p join bundle_substance using(substance_prefix,substance_uuid)\n"+
+			"where %s idbundle=? group by p.topcategory,p.endpointcategory";
 	/*
 	 * select p.topcategory,p.endpointcategory,count(*) from
 	 * substance_protocolapplication p, bundle_endpoints b where
