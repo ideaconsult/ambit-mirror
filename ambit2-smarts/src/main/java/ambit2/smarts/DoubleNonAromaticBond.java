@@ -7,6 +7,8 @@ import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 
 public class DoubleNonAromaticBond extends SMARTSBond {
 
+	private DoubleBondStereoInfo stereoInfo = null;
+	
 	public DoubleNonAromaticBond(IChemObjectBuilder builder) {
 		super(builder);
 	}
@@ -17,6 +19,14 @@ public class DoubleNonAromaticBond extends SMARTSBond {
 				return (true);
 
 		return false;
+	}
+
+	public DoubleBondStereoInfo getStereoInfo() {
+		return stereoInfo;
+	}
+
+	public void setStereoInfo(DoubleBondStereoInfo stereoInfo) {
+		this.stereoInfo = stereoInfo;
 	};
 
 }

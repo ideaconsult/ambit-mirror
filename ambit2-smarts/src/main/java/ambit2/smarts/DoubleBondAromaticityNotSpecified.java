@@ -4,8 +4,11 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 
+
 public class DoubleBondAromaticityNotSpecified extends SMARTSBond {
 
+	private DoubleBondStereoInfo stereoInfo = null;
+	
 	public DoubleBondAromaticityNotSpecified(IChemObjectBuilder builder) {
 		super(builder);
 	}
@@ -15,6 +18,14 @@ public class DoubleBondAromaticityNotSpecified extends SMARTSBond {
 			return (true);
 
 		return false;
+	}
+
+	public DoubleBondStereoInfo getStereoInfo() {
+		return stereoInfo;
+	}
+
+	public void setStereoInfo(DoubleBondStereoInfo stereoInfo) {
+		this.stereoInfo = stereoInfo;
 	};
 
 }

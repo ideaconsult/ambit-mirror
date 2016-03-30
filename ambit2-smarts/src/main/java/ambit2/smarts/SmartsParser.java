@@ -47,6 +47,7 @@ import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 
 /**
  * Implements SMARTS parser
@@ -1691,14 +1692,14 @@ public class SmartsParser {
 				SMARTSBond dBo = getNeighborDoubleBond(dirBond, 0);
 				if (dBo != null)
 					if (!isBondProcessed(dBo, processedDoubleBonds))
-						setDoubleStereoBond(dBo, at0, at1, dirBond, directions
+						setDoubleBondStereoElement(dBo, at0, at1, dirBond, directions
 								.get(i).intValue(), 0);
 			}
 			if (isAtomForStereoDoubleBond(at1)) {
 				SMARTSBond dBo = getNeighborDoubleBond(dirBond, 1);
 				if (dBo != null)
 					if (!isBondProcessed(dBo, processedDoubleBonds))
-						setDoubleStereoBond(dBo, at1, at0, dirBond, directions
+						setDoubleBondStereoElement(dBo, at1, at0, dirBond, directions
 								.get(i).intValue(), 1);
 			}
 			processedDirBonds.add(dirBond);
@@ -1708,11 +1709,14 @@ public class SmartsParser {
 		//and stop using DoubleStereoBond class
 		//Instead make both classes inherit class DoubleStereoBond
 
+		
+		/*
 		// Replace all double bonds with new Stereo Double Bonds
 		for (int i = 0; i < processedDoubleBonds.size(); i++) {
 			container.removeBond(processedDoubleBonds.get(i));
 			container.addBond(newStereoDoubleBonds.get(i));
 		}
+		*/
 
 	}
 
@@ -1757,15 +1761,81 @@ public class SmartsParser {
 			IBond bo = container.getBond(at, (IAtom) ca.get(k));
 			if (bo != bond)
 				if (bo instanceof OrderQueryBond) {
+					//TODO fix this with proper classes 
+					//OrderQueryBond is not used for a doble bond any more 
 					if (bo.getOrder() == IBond.Order.DOUBLE)
 						return (SMARTSBond) bo;
 				}
 		}
 		return (null);
 	}
+	
+	void setDoubleBondStereoElement(SMARTSBond doubleBond, IAtom atom, IAtom at0,
+			SMARTSBond dirBond, int direction, int atomPos) 
+	{
+		// Input defines a fragment of the type "a0--atom=="
+		// Direction of bond "a0--atom" is defined by parameters: direction and
+		// atPos
+		// atomPos is the number ot 'atom' inside the CDK representation of bond
+		// "a0--atom"
+		// One of the bonds "atom1--at2" or "atom1--at3" must be a directional
+		// bond otherwise
+		// the stereo configuration is not determined.
+		//
+		// The remaining part of this fragment is determined first
+		// at0 			at2
+		// \ doubleBond /
+		// atom == atom1
+		// / 			\
+		// at1 			at3
+		
+		// Determining only atoms: atom1 and at2
+		// atoms at1 and at3 are not needed for storing the stereo element
+		IAtom atom1;
+		IAtom at2 = null;
+		IBond dirBond2 = null;
+		
+		if (doubleBond.getAtom(0) == atom)
+			atom1 = doubleBond.getAtom(1);
+		else
+			atom1 = doubleBond.getAtom(0);
+		
+		java.util.List ca = container.getConnectedAtomsList(atom1);
+		for (int k = 0; k < ca.size(); k++) 
+		{
+			IAtom otherAt = (IAtom) ca.get(k);
+			if (otherAt == atom)
+				continue;
+			IBond bo = container.getBond(atom1, otherAt);
+			if (at2 == null) 
+			{
+				if (isDirectionalBond((SMARTSBond) bo));
+				{
+					at2 = otherAt;
+					dirBond2 = bo;
+					break;
+				}	
+			} 
+		}
+		
+		if (at2 == null)
+			return; //Stereo element is not complete
+		
+		//The stereo element is stored
+		DoubleBondStereoInfo dbsi = new DoubleBondStereoInfo();
+		dbsi.ligand1 = at0;
+		dbsi.ligand2 = at2;
+		
+		//Get direction
+		int dirBond2Index = directionalBonds.indexOf(dirBond2);
+		int direction2 = directions.get(dirBond2Index).intValue();
+				
+		//TODO
+	}
 
-	void setDoubleStereoBond(SMARTSBond doubleBond, IAtom atom, IAtom at0,
-			SMARTSBond dirBond, int direction, int atomPos) {
+	void setDoubleStereoBond0(SMARTSBond doubleBond, IAtom atom, IAtom at0,
+			SMARTSBond dirBond, int direction, int atomPos) 
+	{
 		// Input defines a fragment of the type "a0--atom=="
 		// Direction of bond "a0--atom" is defined by parameters: direction and
 		// atPos
@@ -1776,16 +1846,16 @@ public class SmartsParser {
 		// the stereo configuration is not determined.
 		//
 		// (1)The remaining part of this fragment is determined first
-		// at0 at2
+		// at0 			at2
 		// \ doubleBond /
 		// atom == atom1
-		// / \
-		// at1 at3
+		// / 			\
+		// at1 			at3
 		// (2) The Priorities of atoms at0, at1, at2, at3 are determined
 		// (3) The absolute stereo configuration is determined from the
 		// priorities and
 		// the directions of bonds: "at0--atom" and "atom1--at2/at3"
-		// (4)A new object of the type DoubleStereoBond is registered
+		// (4) A new object of the type DoubleStereoBond is registered
 		//
 		//
 
