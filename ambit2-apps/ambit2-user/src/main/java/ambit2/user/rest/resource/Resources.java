@@ -30,6 +30,8 @@ public class Resources {
 	public static final String forgotten = "/forgotten";
 	public static final String failed = "/failed";
 	public static final String bundle = "/bundle";
+	public static final String collection = "/dir";
+	public static final String collection_bundledrafts = String.format("%s/bd",collection);
 	public static final String help = "/help";
 
 	

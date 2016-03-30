@@ -156,7 +156,7 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 				return true;
 			}
 		},
-		model, substance {
+		model, substance, dir {
 			@Override
 			int getMaxLevel() {
 				return 3;
