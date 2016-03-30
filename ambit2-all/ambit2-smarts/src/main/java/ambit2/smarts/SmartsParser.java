@@ -49,6 +49,8 @@ import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 
+import ambit2.smarts.DoubleBondStereoInfo.DBStereo;
+
 /**
  * Implements SMARTS parser
  * 
@@ -1826,12 +1828,73 @@ public class SmartsParser {
 		dbsi.ligand1 = at0;
 		dbsi.ligand2 = at2;
 		
-		//Get direction
+		//Get stored direction
 		int dirBond2Index = directionalBonds.indexOf(dirBond2);
 		int direction2 = directions.get(dirBond2Index).intValue();
-				
-		//TODO
+		
+		//Get normalized directions
+		int norm_dir = normalizeBondDirection(direction, atom, at0);
+		int norm_dir2 = normalizeBondDirection(direction2, atom1, at2);
+		 
+		boolean isUp = (norm_dir == SmartsConst.BT_UP)
+				|| (norm_dir == SmartsConst.BT_UPUNSPEC);
+		
+		boolean isUp2 = (norm_dir2 == SmartsConst.BT_UP)
+				|| (norm_dir2 == SmartsConst.BT_UPUNSPEC);
+		
+		boolean isUndefined = (norm_dir == SmartsConst.BT_UPUNSPEC) 
+				|| (norm_dir == SmartsConst.BT_DOWNUNSPEC)
+				|| (norm_dir2 == SmartsConst.BT_UPUNSPEC) 
+				|| (norm_dir2 == SmartsConst.BT_DOWNUNSPEC);
+		
+		
+		
+		if (isUp == isUp2) //TODO check this
+		{	
+			if (isUndefined) 
+				dbsi.conformation = DBStereo.TOGETHER_OR_UNDEFINED;
+			else
+				dbsi.conformation = DBStereo.TOGETHER;
+		}
+		else
+		{
+			if (isUndefined) 
+				dbsi.conformation = DBStereo.OPPOSITE_OR_UNDEFINED;
+			else
+				dbsi.conformation = DBStereo.OPPOSITE;
+		}
+		
+		//TODO  add dbsi to the doouble bond
 	}
+	
+	/**
+	 * Determines the bond direction as "it is seen" 
+	 * from the double bond atom (a1) toward the ligand atom (a2)
+	 *  a=a1-a2
+	 * 
+	 * The result depend on the atom indexing given by SmartsParser
+	 * where the atoms appearence in the smarts string is determines 
+	 * the atom order (index).
+	 * 
+	 * @return normalized direction
+	 */
+	int normalizeBondDirection(int direction, IAtom doubleBondAtom, IAtom ligandAtom)
+	{
+		boolean FlagSwitch = false;
+		//TODO
+		
+		if (FlagSwitch)
+			return switchDirection(direction);
+		else
+			return direction;
+	}
+	
+	int switchDirection(int direction)
+	{
+		//TODO
+		return 0;
+	}
+	
 
 	void setDoubleStereoBond0(SMARTSBond doubleBond, IAtom atom, IAtom at0,
 			SMARTSBond dirBond, int direction, int atomPos) 
@@ -1970,7 +2033,8 @@ public class SmartsParser {
 		 * SmartsHelper.bondAtomNumbersToString(container, dirBond2));
 		 */
 		// "UP/DOWN" is interpreted as a direction from the double bond atom
-		// toward the outside atom
+		// toward the outside atom 
+		//(!!!! this could be a problem since it does not take the order of atoms in the SMARTS)
 		// For example atom-->at0, atom1-->at2
 		boolean isUp, isUp2;
 		isUp = (direction == SmartsConst.BT_UP)
@@ -2042,7 +2106,8 @@ public class SmartsParser {
 		// Registering the second directional bonds as a processed one
 		processedDirBonds.add(dirBond2);
 	}
-
+	
+	
 	public void setSMARTSData(IAtomContainer container) throws Exception {
 		prepareTargetForSMARTSSearch(mNeedNeighbourData, mNeedValencyData,
 				mNeedRingData, mNeedRingData2, mNeedExplicitHData,
