@@ -119,6 +119,7 @@ import ambit2.rest.routers.misc.DepictDemoRouter;
 import ambit2.rest.routers.misc.UIRouter;
 import ambit2.rest.routers.opentox.AlgorithmRouter;
 import ambit2.rest.routers.opentox.BundleRouter;
+import ambit2.rest.routers.opentox.CollectionsRouter;
 import ambit2.rest.routers.opentox.CompoundInDatasetRouter;
 import ambit2.rest.routers.opentox.CompoundsRouter;
 import ambit2.rest.routers.opentox.DatasetsRouter;
@@ -473,9 +474,15 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			 * /property/{id}
 			 */
 			if (openToxAAEnabled) {
+
 				router.attach(Resources.bundle,
 						createAuthenticatedOpenMethodResource(new BundleRouter(
 								getContext(), null)));
+
+				router.attach(Resources.collection_bundledrafts,
+						createProtectedResource(new CollectionsRouter(
+								getContext(), null)));
+
 				router.attach(
 						SubstanceResource.substance,
 						createAuthenticatedOpenMethodResource(new SubstanceRouter(
@@ -491,13 +498,15 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 						String dbname = getProperty(
 								AMBITConfig.Database.name(), ambitProperties);
 						authz = UserRouter.createBundlePolicyAuthorizer(
-								getContext(), dbname,usersdbname,
+								getContext(), dbname, usersdbname,
 								"ambit2/rest/config/config.prop");
 					} catch (Exception x) {
 
 					}
 				router.attach(Resources.bundle, new BundleRouter(getContext(),
 						authz));
+				router.attach(Resources.collection_bundledrafts,
+						new CollectionsRouter(getContext(), null));
 				router.attach(SubstanceResource.substance, new SubstanceRouter(
 						getContext()));
 				router.attach(OwnerSubstanceFacetResource.owner,
