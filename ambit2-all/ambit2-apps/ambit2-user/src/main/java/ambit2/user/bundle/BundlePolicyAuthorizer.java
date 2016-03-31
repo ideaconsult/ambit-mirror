@@ -14,10 +14,12 @@ import org.restlet.Response;
 
 public class BundlePolicyAuthorizer extends PolicyAuthorizer<BundlePolicyQuery> {
 	private BundleOwnerPolicy ownerPolicy;
+	protected int HOMEPAGE_DEPTH = 1;
 
 	public BundlePolicyAuthorizer(Context context, String configfile,
-			String dbName, String usersdbname) throws Exception {
+			String dbName, String usersdbname, int HOMEPAGE_DEPTH ) throws Exception {
 		super(context, configfile, dbName, usersdbname);
+		this.HOMEPAGE_DEPTH = HOMEPAGE_DEPTH;
 		if (dbName == null)
 			throw new Exception("Database not defined!");
 		ownerPolicy = new BundleOwnerPolicy(dbName);
@@ -28,18 +30,32 @@ public class BundlePolicyAuthorizer extends PolicyAuthorizer<BundlePolicyQuery> 
 			List<String> uri) {
 
 		int depth = request.getResourceRef().getSegments().size();
-		if (depth > 2)
-			depth = 2;
+		if (depth > (HOMEPAGE_DEPTH + 1))
+			depth = HOMEPAGE_DEPTH + 2;
 		StringBuilder resource = new StringBuilder();
-		for (int i = 0; i <= depth; i++) {
+		for (int i = 0; i < depth; i++) {
 			String segment = request.getResourceRef().getSegments().get(i);
 			resource.append("/");
 			resource.append(segment);
-			if (i == 2) {
+			if (i == (HOMEPAGE_DEPTH + 1)) {
 				uri.add(resource.toString());
 			}
 		}
 		return false;
+	}
+
+	@Override
+	protected RESTPolicy initRESTPolicy() {
+		RESTPolicy p = new RESTPolicy() {
+			@Override
+			public String[] splitURI(String href) throws Exception {
+				if (HOMEPAGE_DEPTH == 0)
+					return new String[] { "", href };
+				else
+					return super.splitURI(href);
+			}
+		};
+		return p;
 	}
 
 	@Override
@@ -48,7 +64,8 @@ public class BundlePolicyAuthorizer extends PolicyAuthorizer<BundlePolicyQuery> 
 	}
 
 	@Override
-	public boolean isOwner(String user,QueryExecutor<PolicyQuery> executor, RESTPolicy policy) {
+	public boolean isOwner(String user, QueryExecutor<PolicyQuery> executor,
+			RESTPolicy policy) {
 		ResultSet rs = null;
 		try {
 			ownerPolicy.setFieldname(policy);

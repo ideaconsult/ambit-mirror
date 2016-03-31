@@ -38,6 +38,7 @@ import ambit2.user.rest.resource.Resources;
 import ambit2.user.rest.resource.UserDBResource;
 
 public class UserRouter extends MyRouter {
+
 	public UserRouter(Context context ,OrganisationRouter orgRouter, ProjectRouter projectRouter) {
 		//, AlertRouter alertRouter) {
 		super(context);
@@ -138,16 +139,16 @@ public class UserRouter extends MyRouter {
 		return cookieAuth;
 	}
 
-	public static Filter createPolicyAuthorizer(Context context,String default_userdb, String config ) {
+	public static Filter createPolicyAuthorizer(Context context,String default_userdb, String config , int HOMEPAGE_DEPTH) {
 		String usersdbname = context.getParameters().getFirstValue(AMBITConfig.users_dbname.name());
 		if (usersdbname==null) usersdbname = "ambit_users";
-		 return new AmbitPolicyAuthorizer(context,config,usersdbname);
+		 return new AmbitPolicyAuthorizer(context,config,usersdbname,HOMEPAGE_DEPTH);
 	}
 	
-	public static Filter createBundlePolicyAuthorizer(Context context,String datadbname,String default_userdb, String config ) throws Exception {
+	public static Filter createBundlePolicyAuthorizer(Context context,String datadbname,String default_userdb, String config , int HOMEPAGE_DEPTH ) throws Exception {
 		String usersdbname = context.getParameters().getFirstValue(AMBITConfig.users_dbname.name());
 		if (usersdbname==null) usersdbname = "ambit_users";
-		 return new BundlePolicyAuthorizer(context,config,datadbname,usersdbname);
+		 return new BundlePolicyAuthorizer(context,config,datadbname,usersdbname, HOMEPAGE_DEPTH);
 	}
 	
 }
