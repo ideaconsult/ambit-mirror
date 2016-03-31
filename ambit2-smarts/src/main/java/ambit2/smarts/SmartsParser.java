@@ -1833,8 +1833,8 @@ public class SmartsParser {
 		int direction2 = directions.get(dirBond2Index).intValue();
 		
 		//Get normalized directions
-		int norm_dir = normalizeBondDirection(direction, atom, at0);
-		int norm_dir2 = normalizeBondDirection(direction2, atom1, at2);
+		int norm_dir = getNormalizedBondDirection(direction, atom, at0);
+		int norm_dir2 = getNormalizedBondDirection(direction2, atom1, at2);
 		 
 		boolean isUp = (norm_dir == SmartsConst.BT_UP)
 				|| (norm_dir == SmartsConst.BT_UPUNSPEC);
@@ -1846,8 +1846,6 @@ public class SmartsParser {
 				|| (norm_dir == SmartsConst.BT_DOWNUNSPEC)
 				|| (norm_dir2 == SmartsConst.BT_UPUNSPEC) 
 				|| (norm_dir2 == SmartsConst.BT_DOWNUNSPEC);
-		
-		
 		
 		if (isUp == isUp2) 
 		{	
@@ -1877,7 +1875,6 @@ public class SmartsParser {
 				db.setStereoInfo(dbsi);
 			}
 		}
-		
 	}
 	
 	/**
@@ -1885,21 +1882,17 @@ public class SmartsParser {
 	 * from the double bond atom (a1) toward the ligand atom (a2)
 	 *  a=a1-a2
 	 * 
-	 * The result depends on the atom indexing given by SmartsParser.
-	 * The atoms appearance in the smarts string determines 
-	 * the atom order (indexing).
+	 * The result depends on the atom indexing of a1 and a2 given by SmartsParser.
+	 * which depends on the atoms appearance in the smarts string.
 	 * 
 	 * @return normalized direction
 	 */
-	int normalizeBondDirection(int direction, IAtom doubleBondAtom, IAtom ligandAtom)
+	int getNormalizedBondDirection(int direction, IAtom doubleBondAtom, IAtom ligandAtom)
 	{
-		boolean FlagSwitch = false;
-		//TODO
-		
-		if (FlagSwitch)
-			return switchDirection(direction);
+		if (container.getAtomNumber(doubleBondAtom) < container.getAtomNumber(ligandAtom))
+			return direction; 
 		else
-			return direction;
+			return switchDirection(direction);	
 	}
 	
 	int switchDirection(int direction)
