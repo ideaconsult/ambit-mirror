@@ -63,10 +63,8 @@ public class SmartsParser {
 	Stack<IQueryAtom> brackets = new Stack<IQueryAtom>();
 	List<SMARTSBond> directionalBonds = new ArrayList<SMARTSBond>();
 	List<Integer> directions = new ArrayList<Integer>();
-	// Vector<Integer> absDirections = new Vector<Integer>();
 	List<SMARTSBond> processedDirBonds = new ArrayList<SMARTSBond>();
 	List<SMARTSBond> processedDoubleBonds = new ArrayList<SMARTSBond>();
-	List<SMARTSBond> newStereoDoubleBonds = new ArrayList<SMARTSBond>();
 	TreeMap<Integer, RingClosure> indexes = new TreeMap<Integer, RingClosure>();
 
 	boolean mNeedNeighbourData;
@@ -1680,30 +1678,36 @@ public class SmartsParser {
 	{
 		processedDirBonds.clear();
 		processedDoubleBonds.clear();
-		newStereoDoubleBonds.clear();
-		for (int i = 0; i < directionalBonds.size(); i++) {
+		
+		for (int i = 0; i < directionalBonds.size(); i++) 
+		{
 			SMARTSBond dirBond = directionalBonds.get(i);
-			// System.out.println("Dir: "+
-			// SmartsHelper.bondAtomNumbersToString(container, dirBond));
+			
+			//System.out.println("Dir: "+ SmartsHelper.bondAtomNumbersToString(container, dirBond) + "  " 
+			//		+ SmartsConst.bondDirectionToString(directions.get(i)));
+			
 			if (isBondProcessed(dirBond, processedDirBonds))
 				continue;
-
+			
 			IAtom at0 = dirBond.getAtom(0);
 			IAtom at1 = dirBond.getAtom(1);
-			if (isAtomForStereoDoubleBond(at0)) {
-				SMARTSBond dBo = getNeighborDoubleBond(dirBond, 0);
-				if (dBo != null)
-					if (!isBondProcessed(dBo, processedDoubleBonds))
-						setDoubleBondStereoElement(dBo, at0, at1, dirBond, directions
-								.get(i).intValue(), 0);
+
+			SMARTSBond dBo = getNeighborDoubleBond(dirBond, 0);
+			if (dBo != null)
+			{	
+				if (!isBondProcessed(dBo, processedDoubleBonds))
+					setDoubleBondStereoElement(dBo, at0, at1, dirBond, directions
+							.get(i).intValue(), 0);
 			}
-			if (isAtomForStereoDoubleBond(at1)) {
-				SMARTSBond dBo = getNeighborDoubleBond(dirBond, 1);
+			else
+			{		
+				dBo = getNeighborDoubleBond(dirBond, 1);
 				if (dBo != null)
 					if (!isBondProcessed(dBo, processedDoubleBonds))
 						setDoubleBondStereoElement(dBo, at1, at0, dirBond, directions
 								.get(i).intValue(), 1);
 			}
+
 			processedDirBonds.add(dirBond);
 		}
 	}
@@ -1715,6 +1719,7 @@ public class SmartsParser {
 		return false;
 	}
 
+	/*
 	boolean isAtomForStereoDoubleBond(IAtom atom) {
 		// Following elements could participate in a stereo double bond: C, N,
 		// P, Si
@@ -1732,6 +1737,7 @@ public class SmartsParser {
 			return true;
 		return false;
 	}
+	*/
 
 	boolean isBondProcessed(SMARTSBond bond, List<SMARTSBond> processedBonds) {
 		for (IQueryBond bo : processedBonds) {
@@ -1743,17 +1749,18 @@ public class SmartsParser {
 
 	SMARTSBond getNeighborDoubleBond(SMARTSBond bond, int atNum) {
 		// bond is a directional single bond
+		// the neighbor double is search among the "atNum" neighbors 
 		IAtom at = bond.getAtom(atNum);
 		java.util.List ca = container.getConnectedAtomsList(at);
 		for (int k = 0; k < ca.size(); k++) {
 			IBond bo = container.getBond(at, (IAtom) ca.get(k));
 			if (bo != bond)
-				if (bo instanceof OrderQueryBond) {
-					//TODO fix this with proper classes 
-					//OrderQueryBond is not used for a doble bond any more 
-					if (bo.getOrder() == IBond.Order.DOUBLE)
+			{	
+				if (bo instanceof DoubleNonAromaticBond)					
 						return (SMARTSBond) bo;
-				}
+				if (bo instanceof DoubleBondAromaticityNotSpecified)					
+					return (SMARTSBond) bo;
+			}	
 		}
 		return (null);
 	}
@@ -1779,6 +1786,8 @@ public class SmartsParser {
 		
 		// Determining only atoms: atom1 and at2
 		// atoms at1 and at3 are not needed for storing the stereo element
+		
+		//System.out.println("*** setDoubleBondStereoElement");
 		IAtom atom1;
 		IAtom at2 = null;
 		IBond dirBond2 = null;
@@ -1848,17 +1857,23 @@ public class SmartsParser {
 				dbsi.conformation = DBStereo.OPPOSITE;
 		}
 		
-		if (doubleBond instanceof DoubleBondAromaticityNotSpecified)
+		//System.out.println("db stereo: " + dbsi.conformation.toString());
+		
+		if (doubleBond instanceof DoubleNonAromaticBond)
 		{
-			DoubleBondAromaticityNotSpecified db = (DoubleBondAromaticityNotSpecified)doubleBond;
+			DoubleNonAromaticBond db = (DoubleNonAromaticBond)doubleBond;
 			db.setStereoInfo(dbsi);
+			processedDoubleBonds.add(doubleBond);
+			processedDirBonds.add((SMARTSBond)dirBond2);
 		}
 		else
 		{
-			if (doubleBond instanceof DoubleNonAromaticBond)
+			if (doubleBond instanceof DoubleBondAromaticityNotSpecified)
 			{
-				DoubleNonAromaticBond db = (DoubleNonAromaticBond)doubleBond;
+				DoubleBondAromaticityNotSpecified db = (DoubleBondAromaticityNotSpecified)doubleBond;
 				db.setStereoInfo(dbsi);
+				processedDoubleBonds.add(doubleBond);
+				processedDirBonds.add((SMARTSBond)dirBond2);
 			}
 		}
 	}

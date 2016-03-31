@@ -2565,9 +2565,9 @@ public class TestUtilities {
 		
 		//tu.testCheckStereoElements("C(=C(/C(=O)[O-])\\Cl)/C=C(\\C(=O)[O-])/O");
 		
-		tu.testSMIRKS("[#8:1]([H])-[#6:2](-[#6:9](-[#8-:10])=[O:11])=[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]-[#6](-[#8-])=O>>"
-				+ "[#8-:10]-[#6:9](=[O:11])-[#6:2](=[O:1])-[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]",
-				"C(=C(/C(=O)[O-])\\Cl)/C=C(\\C(=O)[O-])/O"/*, ReactionOperation.SingleCopyForEachPos*/);
+		//tu.testSMIRKS("[#8:1]([H])-[#6:2](-[#6:9](-[#8-:10])=[O:11])=[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]-[#6](-[#8-])=O>>"
+		//		+ "[#8-:10]-[#6:9](=[O:11])-[#6:2](=[O:1])-[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]",
+		//		"C(=C(/C(=O)[O-])\\Cl)/C=C(\\C(=O)[O-])/O"/*, ReactionOperation.SingleCopyForEachPos*/);
 		
 		
 		//tu.testSMIRKS("[#8-:15]-[#6:1](=[O:16])\\[#6:2]([H])=[#6:3]([H])/[#6:4](=[#6:5]([H])\\[#6:6](-[#8-:8])=[O:7])/S([#8-])(=O)=O>>"
@@ -2674,9 +2674,9 @@ public class TestUtilities {
 
 		// tu.testSmartsToQueryToSmarts("C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1");
 
-		// tu.testSmartsToQueryToSmarts("Cl/C=C/Cl"); //!!!!! CIS/TRANS info is
+		 tu.testSmartsToQueryToSmarts("Cl/C=C/Cl"); //!!!!! CIS/TRANS info is
 		// missing
-		// tu.testSmartsToQueryToSmarts("C[C@](CO)(N)CC"); //!!!!! Bug in the
+		//tu.testSmartsToQueryToSmarts("C[C@](CO)(N)CC"); //!!!!! Bug in the
 		// SMARTS outputting --> C[C&@@](CO)(N)CC
 
 		// tu.testBug78();
