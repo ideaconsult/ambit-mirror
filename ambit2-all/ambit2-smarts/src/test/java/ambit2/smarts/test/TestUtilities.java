@@ -2674,7 +2674,7 @@ public class TestUtilities {
 
 		// tu.testSmartsToQueryToSmarts("C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1");
 
-		 tu.testSmartsToQueryToSmarts("Cl/C=C/Cl"); //!!!!! CIS/TRANS info is
+		 tu.testSmartsToQueryToSmarts("Cl/C=C/C=C/N"); //!!!!! CIS/TRANS info is
 		// missing
 		//tu.testSmartsToQueryToSmarts("C[C@](CO)(N)CC"); //!!!!! Bug in the
 		// SMARTS outputting --> C[C&@@](CO)(N)CC

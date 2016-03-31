@@ -1714,7 +1714,7 @@ public class SmartsParser {
 
 	boolean isDirectionalBond(SMARTSBond bond) {
 		for (int i = 0; i < directionalBonds.size(); i++)
-			if (directionalBonds.get(i) == bond)
+			if (directionalBonds.get(i) == bond)	
 				return (true);
 		return false;
 	}
@@ -1805,25 +1805,25 @@ public class SmartsParser {
 				continue;
 			IBond bo = container.getBond(atom1, otherAt);
 			if (at2 == null) 
-			{
-				if (isDirectionalBond((SMARTSBond) bo));
+			{	
+				if (isDirectionalBond((SMARTSBond) bo))
 				{
 					at2 = otherAt;
 					dirBond2 = bo;
 					break;
-				}	
+				}
 			} 
 		}
 		
 		if (at2 == null)
 			return; //Stereo element is not complete
 		
-		//The stereo element is stored
+		//The stereo info object is created
 		DoubleBondStereoInfo dbsi = new DoubleBondStereoInfo();
 		dbsi.ligand1 = at0;
 		dbsi.ligand2 = at2;
 		
-		//Get stored direction
+		//Get stored direction for the second direction bond
 		int dirBond2Index = directionalBonds.indexOf(dirBond2);
 		int direction2 = directions.get(dirBond2Index).intValue();
 		
