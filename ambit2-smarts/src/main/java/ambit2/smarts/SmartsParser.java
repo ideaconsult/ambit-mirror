@@ -1579,8 +1579,8 @@ public class SmartsParser {
 			return (2);
 		if (bond instanceof DoubleBondAromaticityNotSpecified)
 			return (2);
-		if (bond instanceof DoubleStereoBond)
-			return (2);
+		//if (bond instanceof DoubleStereoBond)
+		//	return (2);
 		return (-1);
 	}
 
@@ -1706,20 +1706,6 @@ public class SmartsParser {
 			}
 			processedDirBonds.add(dirBond);
 		}
-		
-		//TODO add stereo information into classes Double bond classes
-		//and stop using DoubleStereoBond class
-		//Instead make both classes inherit class DoubleStereoBond
-
-		
-		/*
-		// Replace all double bonds with new Stereo Double Bonds
-		for (int i = 0; i < processedDoubleBonds.size(); i++) {
-			container.removeBond(processedDoubleBonds.get(i));
-			container.addBond(newStereoDoubleBonds.get(i));
-		}
-		*/
-
 	}
 
 	boolean isDirectionalBond(SMARTSBond bond) {
@@ -2103,6 +2089,7 @@ public class SmartsParser {
 				|| (direction2 == SmartsConst.BT_UPUNSPEC)
 				|| (direction2 == SmartsConst.BT_DOWNUNSPEC);
 
+		/*
 		// (4) Registering a new Double Stereo bond
 		DoubleStereoBond stereoBond = new DoubleStereoBond(SilentChemObjectBuilder.getInstance());
 		stereoBond.setAtom(atom, 0);
@@ -2120,6 +2107,7 @@ public class SmartsParser {
 		}
 		processedDoubleBonds.add(doubleBond);
 		newStereoDoubleBonds.add(stereoBond);
+		*/
 
 		// Registering the second directional bonds as a processed one
 		processedDirBonds.add(dirBond2);

@@ -364,8 +364,8 @@ public class SmartsHelper {
 		if (b instanceof DoubleNonAromaticBond)
 			return ("=");
 
-		if (b instanceof DoubleStereoBond)
-			return ("=");
+		//if (b instanceof DoubleStereoBond)
+		//	return ("=");
 
 		if (b instanceof RingQueryBond)
 			return ("@");
