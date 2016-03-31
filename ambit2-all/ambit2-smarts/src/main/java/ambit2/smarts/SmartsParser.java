@@ -1849,7 +1849,7 @@ public class SmartsParser {
 		
 		
 		
-		if (isUp == isUp2) //TODO check this
+		if (isUp == isUp2) 
 		{	
 			if (isUndefined) 
 				dbsi.conformation = DBStereo.TOGETHER_OR_UNDEFINED;
@@ -1864,7 +1864,20 @@ public class SmartsParser {
 				dbsi.conformation = DBStereo.OPPOSITE;
 		}
 		
-		//TODO  add dbsi to the doouble bond
+		if (doubleBond instanceof DoubleBondAromaticityNotSpecified)
+		{
+			DoubleBondAromaticityNotSpecified db = (DoubleBondAromaticityNotSpecified)doubleBond;
+			db.setStereoInfo(dbsi);
+		}
+		else
+		{
+			if (doubleBond instanceof DoubleNonAromaticBond)
+			{
+				DoubleNonAromaticBond db = (DoubleNonAromaticBond)doubleBond;
+				db.setStereoInfo(dbsi);
+			}
+		}
+		
 	}
 	
 	/**
