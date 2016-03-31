@@ -228,4 +228,20 @@ public class SmartsConst
 			return(-1);
 		}
 	}
+	
+	public static String bondDirectionToString(int direction)
+	{
+		switch (direction)
+		{
+		case BT_UP:
+			return "/";
+		case BT_DOWN:
+			return "\\";
+		case BT_UPUNSPEC:
+			return "/?";
+		case BT_DOWNUNSPEC:
+			return "\\?";	
+		}
+		return "";
+	}
 }
