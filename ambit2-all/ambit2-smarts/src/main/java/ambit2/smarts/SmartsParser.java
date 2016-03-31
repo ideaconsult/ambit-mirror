@@ -1885,9 +1885,9 @@ public class SmartsParser {
 	 * from the double bond atom (a1) toward the ligand atom (a2)
 	 *  a=a1-a2
 	 * 
-	 * The result depend on the atom indexing given by SmartsParser
-	 * where the atoms appearence in the smarts string is determines 
-	 * the atom order (index).
+	 * The result depends on the atom indexing given by SmartsParser.
+	 * The atoms appearance in the smarts string determines 
+	 * the atom order (indexing).
 	 * 
 	 * @return normalized direction
 	 */
@@ -1904,8 +1904,20 @@ public class SmartsParser {
 	
 	int switchDirection(int direction)
 	{
-		//TODO
-		return 0;
+		switch (direction)
+		{
+		case SmartsConst.BT_UP:
+			return SmartsConst.BT_DOWN;
+		case SmartsConst.BT_DOWN:
+			return SmartsConst.BT_UP;
+		case SmartsConst.BT_UPUNSPEC:
+			return SmartsConst.BT_DOWNUNSPEC;
+		case SmartsConst.BT_DOWNUNSPEC:
+			return SmartsConst.BT_UPUNSPEC;
+		}
+		
+		//Unknown constant - nothing is done 
+		return direction;
 	}
 	
 
