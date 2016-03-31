@@ -189,6 +189,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	public static final String GUARD_LIST = "guard.list";
 	public static final String WARMUP_ENABLED = "warmup.enabled";
 	public static final String ALLOWED_ORIGINS = "allowed.origins";
+	public static final String BASEURL_DEPTH = "baseurl.depth";
 
 	public static final String AJAX_TIMEOUT = "ajax.timeout";
 	public static final String SIMILARITY_ORDER = "similarity.order";
@@ -325,6 +326,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	@Override
 	public Restlet createInboundRoot() {
 		Restlet root = initInboundRoot();
+
 		SimpleGuards guard = isSimpleGuardEnabled();
 
 		if (!standalone && warmupEnabled) // only servlets are lazy
@@ -499,7 +501,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 								AMBITConfig.Database.name(), ambitProperties);
 						authz = UserRouter.createBundlePolicyAuthorizer(
 								getContext(), dbname, usersdbname,
-								"ambit2/rest/config/config.prop");
+								"ambit2/rest/config/config.prop",getBaseURLDepth());
 					} catch (Exception x) {
 
 					}
@@ -791,7 +793,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 								sessionLength);
 				// UserAuthorizer authz = new UserAuthorizer();
 				Filter authz = UserRouter.createPolicyAuthorizer(getContext(),
-						usersdbname, "ambit2/rest/config/config.prop");
+						usersdbname, "ambit2/rest/config/config.prop",getBaseURLDepth());
 				dbAuth.setNext(authz);
 				authz.setNext(router);
 				return addOriginFilter(dbAuth);
@@ -1389,6 +1391,15 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			return aaadmin == null ? null : Boolean.parseBoolean(aaadmin);
 		} catch (Exception x) {
 			return false;
+		}
+	}
+
+	protected synchronized int getBaseURLDepth() {
+		try {
+			String val = getProperty(BASEURL_DEPTH, ambitProperties);
+			return val == null ? 1 : Integer.parseInt(val);
+		} catch (Exception x) {
+			return 1;
 		}
 	}
 

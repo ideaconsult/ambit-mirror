@@ -229,6 +229,15 @@
 				<ambit.profile>toxmatch</ambit.profile>
 			</properties>
 		</profile>
+		<profile>
+			<id>tomcat_root</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<baseurl.depth>0</baseurl.depth>
+			</properties>
+		</profile>		
 	</profiles>
 	<build>
 		<finalName>ambit2</finalName>

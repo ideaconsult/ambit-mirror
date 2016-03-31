@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.idea.restnet.db.aalocal.policy.PolicyAuthorizer;
 import net.idea.restnet.db.aalocal.policy.PolicyQuery;
+import net.idea.restnet.i.aa.RESTPolicy;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -11,10 +12,11 @@ import org.restlet.Response;
 import org.restlet.data.Method;
 
 public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
-
+	protected int HOMEPAGE_DEPTH = 1;
 	public AmbitPolicyAuthorizer(Context context, String configfile,
-			String dbName) {
+			String dbName, int HOMEPAGE_DEPTH) {
 		super(context, configfile, null,dbName);
+		this.HOMEPAGE_DEPTH = HOMEPAGE_DEPTH;
 	}
 
 	/**
@@ -250,7 +252,18 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 		}
 		boolean isStatic() {return false;}
 	}
-
+	
+	@Override
+	protected RESTPolicy initRESTPolicy() {
+		RESTPolicy p = new RESTPolicy() {
+			@Override
+			public String[] splitURI(String href) throws Exception {
+				if (HOMEPAGE_DEPTH == 0) return new String[] {"",href};
+				else return super.splitURI(href);
+			}
+		};
+		return p;
+	}
 	@Override
 	public boolean authorizeSpecialCases(Request request, Response response,
 			List<String> uri) {
@@ -266,19 +279,19 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 		if ("riap".equals(request.getResourceRef().getScheme()))
 			return true;
 		int depth = request.getResourceRef().getSegments().size();
-		if (depth == 1)
+		if (depth == HOMEPAGE_DEPTH)
 			return true; // home page
-		if (depth > 2)
-			depth = 3;
+		if (depth > (HOMEPAGE_DEPTH+1))
+			depth = HOMEPAGE_DEPTH+2;
 		StringBuilder resource = new StringBuilder();
 		for (int i = 0; i < depth; i++) {
 			String segment = request.getResourceRef().getSegments().get(i);
 			resource.append("/");
 			resource.append(segment);
-			if (i > 0) {
+			if (i >= HOMEPAGE_DEPTH) {
 				uri.add(resource.toString());
 			}
-			if (i == 1)
+			if (i == HOMEPAGE_DEPTH)
 				try {
 					_resources s = _resources.valueOf(segment);
 					if (!s.isProtected(request.getMethod())) {
@@ -288,7 +301,6 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 						break;
 					} 
 				} catch (Exception x) {
-					System.out.println(segment);
 					if (Method.GET.equals(request.getMethod()))
 						return true;
 				}

@@ -98,3 +98,6 @@ google.analytics=${google.analytics}
 ajax.timeout=${ajax.timeout}
 #Order by similarity
 similarity.order=${similarity.order}
+############################################################
+# set to 0 if deployed to servlet container root , otherwise to 1
+baseurl.depth=${baseurl.depth}
