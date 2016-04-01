@@ -934,7 +934,26 @@ public class IsomorphismTester
 	
 	boolean matchDoubleBondStereo(SMARTSBond bond, Node node)
 	{
-		//TODO
+		DoubleBondStereoInfo dbsi = null;
+		if (bond instanceof DoubleNonAromaticBond)
+			dbsi = ((DoubleNonAromaticBond)bond).getStereoInfo();
+		else
+			if (bond instanceof DoubleBondAromaticityNotSpecified)
+				dbsi = ((DoubleBondAromaticityNotSpecified)bond).getStereoInfo();
+		
+		if (dbsi == null)
+			return true; //no stereo check is done;
+		
+		int query_index0 = query.getAtomNumber(bond.getAtom(0));
+		int query_index1 = query.getAtomNumber(bond.getAtom(1));		
+		int query_ligand0 =  query.getAtomNumber(dbsi.ligand1);
+		int query_ligand1 =  query.getAtomNumber(dbsi.ligand2);
+		
+		IAtom targetAt0 = node.atoms[query_index0];
+		IAtom targetAt1 = node.atoms[query_index1];
+		IAtom targetLigand0 = node.atoms[query_ligand0];
+		IAtom targetLigand1 = node.atoms[query_ligand1];		
+		
 		return true;
 	}
 	
