@@ -42,6 +42,8 @@ import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
  */
 public class IsomorphismTester 
 {
+	boolean FlagCheckStereoElements = false; 
+	
 	IQueryAtomContainer query;
 	IAtomContainer target;
 	boolean isomorphismFound;
@@ -54,6 +56,13 @@ public class IsomorphismTester
 	List<IQueryAtom> sequencedBondAt1 = new ArrayList<IQueryAtom>();
 	List<IQueryAtom> sequencedBondAt2 = new ArrayList<IQueryAtom>();
 	
+	public boolean isFlagCheckStereoElements() {
+		return FlagCheckStereoElements;
+	}
+
+	public void setFlagCheckStereoElements(boolean flagCheckStereoElements) {
+		FlagCheckStereoElements = flagCheckStereoElements;
+	}
 	
 	public void setQuery(IQueryAtomContainer container)
 	{
@@ -671,12 +680,17 @@ public class IsomorphismTester
 					//stack.push(node); 
 					if (node.sequenceElNum == sequence.size())
 					{	
-						//TODO check the stereo elements matching
-						
 						//The node is not added in the stack if the end of the sequence is reached
-						isomorphismFound = true;
-						if (FlagStoreIsomorphismNode)
-							isomorphismNodes.add(node);
+						boolean FlagOK = true;
+						if (FlagCheckStereoElements)
+							FlagOK = checkStereoMatching(node);
+						
+						if (FlagOK)
+						{	
+							isomorphismFound = true;
+							if (FlagStoreIsomorphismNode)
+								isomorphismNodes.add(node);
+						}
 					}
 					else
 						stack.push(node); 
@@ -716,12 +730,17 @@ public class IsomorphismTester
 					//stack.push(newNode);
 					if (newNode.sequenceElNum == sequence.size())
 					{	
-						//TODO check the stereo elements matching 
-						
 						//The node is not added in the stack if the end of the sequence is reached
-						isomorphismFound = true;
-						if (FlagStoreIsomorphismNode)
-							isomorphismNodes.add(newNode);
+						boolean FlagOK = true;
+						if (FlagCheckStereoElements)
+							FlagOK = checkStereoMatching(node);
+						
+						if (FlagOK)
+						{
+							isomorphismFound = true;
+							if (FlagStoreIsomorphismNode)
+								isomorphismNodes.add(newNode);
+						}
 					}
 					else
 						stack.push(newNode);
@@ -747,12 +766,17 @@ public class IsomorphismTester
 								//stack.push(newNode);
 								if (newNode.sequenceElNum == sequence.size())
 								{	
-									//TODO check the stereo elements matching
-									
 									//The node is not added in the stack if the end of the sequence is reached
-									isomorphismFound = true;
-									if (FlagStoreIsomorphismNode)
-										isomorphismNodes.add(newNode);
+									boolean FlagOK = true;
+									if (FlagCheckStereoElements)
+										FlagOK = checkStereoMatching(node);
+									
+									if (FlagOK)
+									{	
+										isomorphismFound = true;
+										if (FlagStoreIsomorphismNode)
+											isomorphismNodes.add(newNode);
+									}
 								}
 								else
 									stack.push(newNode);
@@ -782,12 +806,17 @@ public class IsomorphismTester
 											//stack.push(newNode);
 											if (newNode.sequenceElNum == sequence.size())
 											{	
-												//TODO check the stereo elements matching
-												
 												//The node is not added in the stack if the end of the sequence is reached
-												isomorphismFound = true;
-												if (FlagStoreIsomorphismNode)
-													isomorphismNodes.add(newNode);
+												boolean FlagOK = true;
+												if (FlagCheckStereoElements)
+													FlagOK = checkStereoMatching(node);
+												
+												if (FlagOK)
+												{	
+													isomorphismFound = true;
+													if (FlagStoreIsomorphismNode)
+														isomorphismNodes.add(newNode);
+												}
 											}	
 											else
 												stack.push(newNode);
@@ -835,12 +864,17 @@ public class IsomorphismTester
 				//stack.push(newNode);
 				if (newNode.sequenceElNum == sequence.size())
 				{	
-					//TODO check the stereo elements matching
-					
 					//The node is not added in the stack if the end of the sequence is reached
-					isomorphismFound = true;
-					if (FlagStoreIsomorphismNode)
-						isomorphismNodes.add(newNode);
+					boolean FlagOK = true;
+					if (FlagCheckStereoElements)
+						FlagOK = checkStereoMatching(node);
+					
+					if (FlagOK)
+					{	
+						isomorphismFound = true;
+						if (FlagStoreIsomorphismNode)
+							isomorphismNodes.add(newNode);
+					}
 				}
 				else
 					stack.push(newNode);
@@ -879,6 +913,16 @@ public class IsomorphismTester
 	{
 		IBond taBo = target.getBond(taAt, node.atoms[el.centerNum]);
 		return(el.bonds[qAtNum].matches(taBo));
+	}
+	
+	boolean checkStereoMatching(Node node)
+	{
+		//TODO check double bond stereo
+		
+		//TODO check chiral atoms
+		
+		
+		return true;
 	}
 	
 	//public Vector getAllIsomorphisms(IAtomContainer container)
