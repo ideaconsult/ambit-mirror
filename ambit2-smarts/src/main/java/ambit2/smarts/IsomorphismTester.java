@@ -34,6 +34,7 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
+import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 
 
 /**
@@ -917,13 +918,26 @@ public class IsomorphismTester
 	
 	boolean checkStereoMatching(Node node)
 	{
-		//TODO check double bond stereo
+		//Check double bond stereo
+		List<SMARTSBond> dbList = query.getProperty("StereoDoubleBonds");
+		if (dbList != null)
+			for (SMARTSBond b : dbList)
+			{	
+				if (!matchDoubleBondStereo(b, node))
+					return false;
+			}	
 		
 		//TODO check chiral atoms
 		
-		
 		return true;
 	}
+	
+	boolean matchDoubleBondStereo(SMARTSBond bond, Node node)
+	{
+		//TODO
+		return true;
+	}
+	
 	
 	//public Vector getAllIsomorphisms(IAtomContainer container)
 	//{
