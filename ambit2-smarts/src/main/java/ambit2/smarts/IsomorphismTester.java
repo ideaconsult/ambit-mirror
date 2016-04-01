@@ -30,11 +30,15 @@ import java.util.Stack;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+import org.openscience.cdk.stereo.DoubleBondStereochemistry;
+
+import ambit2.smarts.DoubleBondStereoInfo.DBStereo;
 
 
 /**
@@ -953,6 +957,29 @@ public class IsomorphismTester
 		IAtom targetAt1 = node.atoms[query_index1];
 		IAtom targetLigand0 = node.atoms[query_ligand0];
 		IAtom targetLigand1 = node.atoms[query_ligand1];		
+		
+		IBond targetBo = target.getBond(targetAt0, targetAt1);
+		
+		if (targetBo == null)  //this should never happen
+		{	
+			if (dbsi.conformation == DBStereo.OPPOSITE_OR_UNDEFINED ||
+					dbsi.conformation == DBStereo.TOGETHER_OR_UNDEFINED)
+				return true;
+			
+			return false;
+		}	
+		
+		//Find target double bond stereo element
+		DoubleBondStereochemistry element = null;
+		for (IStereoElement el: target.stereoElements())
+		{
+			if (el instanceof DoubleBondStereochemistry)
+				if (((DoubleBondStereochemistry) el).getStereoBond() == targetBo)
+					{
+						element =  (DoubleBondStereochemistry) el;
+						break;
+					}
+		}
 		
 		return true;
 	}
