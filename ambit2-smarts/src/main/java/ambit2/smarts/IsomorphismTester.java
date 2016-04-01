@@ -27,9 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import javax.lang.model.util.Elements;
+
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IDoubleBondStereochemistry.Conformation;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
@@ -976,12 +979,89 @@ public class IsomorphismTester
 			if (el instanceof DoubleBondStereochemistry)
 				if (((DoubleBondStereochemistry) el).getStereoBond() == targetBo)
 					{
-						element =  (DoubleBondStereochemistry) el;
+						element = (DoubleBondStereochemistry) el;
 						break;
 					}
 		}
 		
-		return true;
+		if (element == null)
+		{
+			if (dbsi.conformation == DBStereo.OPPOSITE_OR_UNDEFINED ||
+					dbsi.conformation == DBStereo.TOGETHER_OR_UNDEFINED)
+				return true;
+			
+			return false;
+		}
+		
+		int nMatchedLigands = 0;
+		IBond elementBonds[] = element.getBonds(); 
+		
+		if (elementBonds[0].contains(targetLigand0)
+			|| elementBonds[1].contains(targetLigand0))
+			nMatchedLigands++;
+		
+		if (elementBonds[0].contains(targetLigand1)
+				|| elementBonds[1].contains(targetLigand1))
+				nMatchedLigands++;
+		
+		//if nMatchedLigands == 0 then stereo element contains the other 
+		//two neighbor atoms to the double bond and they have exactly the same 
+		//stereo configuration (OPOSITE/TOGETHER) as the matched target ligands
+		//
+		//if nMatchedLigands == 1 then stereo element contains 
+		//one of the matched ligands and one other atom.
+		//Therefore the matched ligands have stereo configuration which is 
+		//DIFERERNT than the configuration of the stereo element 
+		//
+		//if nMatchedLigands == 2 then stereo element contains 
+		//exactly the matched target ligands
+
+		if (nMatchedLigands == 1)
+		{
+			//Query stereo must be alternative to the stereo element
+			
+			if (element.getStereo() == Conformation.OPPOSITE)
+			{
+				if ((dbsi.conformation == DBStereo.TOGETHER) ||
+						(dbsi.conformation == DBStereo.TOGETHER_OR_UNDEFINED))
+					return true;
+				else
+					return false;
+			}
+			else
+			{
+				// element.getStereo() == Conformation.TOGETHER	
+				if ((dbsi.conformation == DBStereo.TOGETHER) ||
+						(dbsi.conformation == DBStereo.TOGETHER_OR_UNDEFINED))
+					return false;
+				else
+					return true;
+			}
+		}
+		else
+		{
+			//nMatchedLigands == 0 or nMatchedLigands == 2
+			//Query stereo must be exactly as the stereo element
+			
+			if (element.getStereo() == Conformation.OPPOSITE)
+			{
+				if ((dbsi.conformation == DBStereo.TOGETHER) ||
+						(dbsi.conformation == DBStereo.TOGETHER_OR_UNDEFINED))
+					return false;
+				else
+					return true;
+			}
+			else
+			{
+				// element.getStereo() == Conformation.TOGETHER	
+				if ((dbsi.conformation == DBStereo.TOGETHER) ||
+						(dbsi.conformation == DBStereo.TOGETHER_OR_UNDEFINED))
+					return true;
+				else
+					return false;
+			}
+		}
+		
 	}
 	
 	
