@@ -741,7 +741,7 @@ public class IsomorphismTester
 						//The node is not added in the stack if the end of the sequence is reached
 						boolean FlagOK = true;
 						if (FlagCheckStereoElements)
-							FlagOK = checkStereoMatching(node);
+							FlagOK = checkStereoMatching(newNode);
 						
 						if (FlagOK)
 						{
@@ -777,7 +777,7 @@ public class IsomorphismTester
 									//The node is not added in the stack if the end of the sequence is reached
 									boolean FlagOK = true;
 									if (FlagCheckStereoElements)
-										FlagOK = checkStereoMatching(node);
+										FlagOK = checkStereoMatching(newNode);
 									
 									if (FlagOK)
 									{	
@@ -817,7 +817,7 @@ public class IsomorphismTester
 												//The node is not added in the stack if the end of the sequence is reached
 												boolean FlagOK = true;
 												if (FlagCheckStereoElements)
-													FlagOK = checkStereoMatching(node);
+													FlagOK = checkStereoMatching(newNode);
 												
 												if (FlagOK)
 												{	
@@ -875,7 +875,7 @@ public class IsomorphismTester
 					//The node is not added in the stack if the end of the sequence is reached
 					boolean FlagOK = true;
 					if (FlagCheckStereoElements)
-						FlagOK = checkStereoMatching(node);
+						FlagOK = checkStereoMatching(newNode);
 					
 					if (FlagOK)
 					{	
@@ -961,6 +961,11 @@ public class IsomorphismTester
 		IAtom targetLigand0 = node.atoms[query_ligand0];
 		IAtom targetLigand1 = node.atoms[query_ligand1];		
 		
+		//System.out.println("query double bond atoms: "+ query_index0 + "  " + query_index1);
+		//System.out.println("query ligand atoms: "+ query_ligand0 + "  " + query_ligand1);
+		//System.out.println("Target double bond atoms: "+ target.getAtomNumber(targetAt0) + " " + target.getAtomNumber(targetAt1));
+		//System.out.println("Target ligand atoms: "+ target.getAtomNumber(targetLigand0) + " " + target.getAtomNumber(targetLigand1));
+		
 		IBond targetBo = target.getBond(targetAt0, targetAt1);
 		
 		if (targetBo == null)  //this should never happen
@@ -1015,7 +1020,11 @@ public class IsomorphismTester
 		//
 		//if nMatchedLigands == 2 then stereo element contains 
 		//exactly the matched target ligands
-
+		
+		//System.out.println("nMatchedLigands = " + nMatchedLigands);
+		//System.out.println("dbsi.conformation = " + dbsi.conformation);
+		//System.out.println("element.getStereo() = " + element.getStereo());
+		
 		if (nMatchedLigands == 1)
 		{
 			//Query stereo must be alternative to the stereo element

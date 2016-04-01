@@ -2674,7 +2674,7 @@ public class TestUtilities {
 
 		// tu.testSmartsToQueryToSmarts("C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1");
 
-		 tu.testSmartsToQueryToSmarts("Cl/C=C/C=C/N"); //!!!!! CIS/TRANS info is
+		// tu.testSmartsToQueryToSmarts("Cl/C=C/C=C/N"); //!!!!! CIS/TRANS info is
 		// missing
 		//tu.testSmartsToQueryToSmarts("C[C@](CO)(N)CC"); //!!!!! Bug in the
 		// SMARTS outputting --> C[C&@@](CO)(N)CC
@@ -2689,6 +2689,11 @@ public class TestUtilities {
 		//tu.testSmiles2Smiles("C/C=C/C");
 		//tu.testSmiles2Smiles("c1ccccc1");
 		//tu.testSmiles2Smiles("C1=CC=CC=C1");
+		
+		tu.man.setIsomorphismTesterFlagCheckStereoElements(true);
+		//tu.testSmartsManagerBoolSearch("C/C=C/CC","C/C=C/CC");
+		tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C(N)=C(/CC)N");   
+		tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C(N)=C(/CC)C");
 
 	}
 
