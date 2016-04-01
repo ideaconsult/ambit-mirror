@@ -1710,6 +1710,13 @@ public class SmartsParser {
 
 			processedDirBonds.add(dirBond);
 		}
+		
+		if (!processedDoubleBonds.isEmpty())
+		{
+			List<SMARTSBond> dbList = new ArrayList<SMARTSBond>();
+			dbList.addAll(processedDoubleBonds);
+			container.setProperty("StereoDoubleBonds", dbList);
+		}
 	}
 
 	boolean isDirectionalBond(SMARTSBond bond) {
