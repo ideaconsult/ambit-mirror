@@ -1231,5 +1231,15 @@ public class SmartsManager {
 					+ smwriter.toSmarts(subQueryList.get(i)));
 		}
 	}
+	
+	public boolean getIsomorphismTesterFlagCheckStereoElements()
+	{
+		return isoTester.isFlagCheckStereoElements();		
+	}
+	
+	public void setIsomorphismTesterFlagCheckStereoElements(boolean checkStereoElements)
+	{
+		isoTester.setFlagCheckStereoElements(checkStereoElements);		
+	}
 
 }
