@@ -24,7 +24,7 @@ public class TestIsomorphismTester extends TestCase
 	public SmartsManager man = new SmartsManager(SilentChemObjectBuilder.getInstance());
 	public IsomorphismTester isoTester = new IsomorphismTester();
 		
-	//Helper variable where the results from match function is stored
+	//Helper variables where the results from match function is stored
 	boolean boolResult;
 	int mappingPosCount;
 	
