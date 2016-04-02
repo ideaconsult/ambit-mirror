@@ -17,6 +17,8 @@ public class TestSmartsSearchCLG extends TestCase
 	public TestSmartsSearchCLG() 
 	{   
 		logger = new LoggingTool(this);
+		//TestUtilities.man is used by function boolSearch()
+		TestUtilities.man.setUseCDKIsomorphismTester(false); //by default it is true
 	}
 	
 	public static Test suite() {

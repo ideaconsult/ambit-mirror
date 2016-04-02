@@ -2694,6 +2694,7 @@ public class TestUtilities {
 		//tu.testSmartsManagerBoolSearch("C/C=C/CC","C/C=C/CC");
 		tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C(N)=C(/CC)N");   
 		tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C(N)=C(/CC)C");
+		tu.testSmartsManagerBoolSearch("[$(C/C=C\\C)]","C\\C(N)=C(/CC)");
 
 	}
 
