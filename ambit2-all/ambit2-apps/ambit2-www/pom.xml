@@ -236,8 +236,19 @@
 			</activation>
 			<properties>
 				<baseurl.depth>0</baseurl.depth>
+				<baseurl>/</baseurl>
 			</properties>
 		</profile>		
+		<profile>
+			<id>webapp_root</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<baseurl.depth>1</baseurl.depth>
+				<baseurl>/ambit2</baseurl>
+			</properties>
+		</profile>			
 	</profiles>
 	<build>
 		<finalName>ambit2</finalName>
@@ -267,7 +278,7 @@
 				<configuration>
 					<url>http://apps.ideaconsult.net:8180/manager</url>
 					<server>eos</server>
-					<path>/ambit2</path>
+					<path>${baseurl}</path>
 					<systemProperties>
 						<JAVA_OPTS>XX:-UseSplitVerifier
 							-Djava.util.Arrays.useLegacyMergeSort</JAVA_OPTS>
@@ -281,7 +292,7 @@
 				<configuration>
 					<url>http://apps.ideaconsult.net:8180/manager</url>
 					<server>eos</server>
-					<path>/ambit2</path>
+					<path>${baseurl}</path>
 					<systemProperties>
 						<JAVA_OPTS>XX:-UseSplitVerifier
 							-Djava.util.Arrays.useLegacyMergeSort=true
