@@ -82,7 +82,7 @@ $(document)
 </head>
 <body>
 <div class="container" style="margin:0;padding:0;">
-  <div id="logger" class="jtox-toolkit jtox-widget hidden" data-kit="log" data-resend="false" data-right-side="true"></div>
+  <div id="logger" class="jtox-toolkit jtox-widget hidden" data-kit="log" data-resend="false" data-right-side="true" data-base-url="${ambit_root}"></div>
 
   <#include "/banner_crumbs.ftl">
   
@@ -91,7 +91,7 @@ $(document)
 	
   <div class="sixteen columns remove-bottom" style="padding:0;" >
 
-  <div id="jtox-bundle" class="jtox-toolkit" data-kit="bundle" 
+  <div id="jtox-bundle" class="jtox-toolkit" data-kit="bundle" data-base-url="${ambit_root}"
 	  <#if bundleid??>
 				data-bundle-uri="${ambit_root}/bundle/${bundleid}"
 			</#if>	
@@ -178,10 +178,10 @@ $(document)
         <div class="jtox-foldable folded">
           <div class="title"><p class="data-field" data-field="title">Search</p></div>
           <div class="content">
-            <div id="searchbar" class="jtox-toolkit jtox-widget" data-kit="search" data-hide-options="url,context"></div>
+            <div id="searchbar" class="jtox-toolkit jtox-widget" data-kit="search" data-hide-options="url,context" data-base-url="${ambit_root}"></div>
           </div>
         </div>
-        <div id="browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-on-details="onDetailedRow" data-details-height="500px" data-show-diagrams="true" data-on-loaded="onBrowserFilled"></div>
+        <div id="browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-on-details="onDetailedRow" data-details-height="500px" data-show-diagrams="true" data-on-loaded="onBrowserFilled" data-base-url="${ambit_root}"></div>
       </div>
     </div>
     <div id="jtox-endpoints">
@@ -197,7 +197,7 @@ $(document)
               <button type="button" id="structures-expand-all">Expand all</button><button type="button" id="structures-collapse-all">Collapse all</button>
             </div>
             <div id="jtox-substance-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false" data-base-url="${ambit_root}">
-              <div id="substance-browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-pre-details="preDetailedRow" data-show-diagrams="true"></div>
+              <div id="substance-browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-pre-details="preDetailedRow" data-show-diagrams="true" data-base-url="${ambit_root}"></div>
             </div>
           </div>
 
@@ -219,7 +219,7 @@ $(document)
 			<button class="save-button jt-disabled">Saved</button>
 			<button class="create-button">Create working copy</button>
 			<button class="create-final-button">Create final matrix</button>
-			<div class="jtox-toolkit" data-kit="compound" data-manual-init="true"></div>
+			<div class="jtox-toolkit" data-kit="compound" data-manual-init="true" data-base-url="${ambit_root}"></div>
     </div>
     <div id="jtox-report" class="jtox-report">
     <#if bundleid??>
