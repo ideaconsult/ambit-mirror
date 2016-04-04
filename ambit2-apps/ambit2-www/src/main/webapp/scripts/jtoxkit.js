@@ -94,10 +94,6 @@ var ccLib = {
       return obj.innerHTML;
   },
 
-  isNull: function(obj) {
-    return obj === undefined || obj == null;
-  },
-
   isEmpty: function(obj) {
     var empty = true;
     if (obj !== undefined || obj != null) {
@@ -434,6 +430,12 @@ function formatLink(str) {
   return str;
 }
 
+/* jtoxkit.js - The main jToxKit service routines
+ *
+ * Copyright 2012-2014, IDEAconsult Ltd. http://www.ideaconsult.net/
+ * Created by Ivan Georgiev
+**/
+
 window.jT = window.jToxKit = {
 	templateRoot: null,
 
@@ -521,7 +523,7 @@ window.jT = window.jToxKit = {
     };
 
 	  // first, get the configuration, if such is passed
-	  if (!ccLib.isNull(dataParams.configFile)) {
+	  if (dataParams.configFile != null) {
 	    // we'll use a trick here so the baseUrl parameters set so far to take account... thus passing 'fake' kit instance
 	    // as the first parameter of jT.call();
   	  self.call({ settings: dataParams}, dataParams.configFile, function(config){
@@ -570,7 +572,7 @@ window.jT = window.jToxKit = {
   	}
 
   	// now scan all insertion divs
-  	self.$('.jtox-toolkit', root).each(function(i) { if (!self.$(this).data('manualInit')) self. initKit(this); });
+  	self.$('.jtox-toolkit', root).each(function(i) { if (!self.$(this).data('manualInit')) self.initKit(this); });
 	},
 
 	kit: function (element) {
@@ -623,7 +625,7 @@ window.jT = window.jToxKit = {
 
 	insertTool: function (name, root) {
 	  var html = this.tools[name];
-	  if (!ccLib.isNull(html)) {
+	  if (html != null) {
   	  root.innerHTML = html;
   	  this.init(root); // since we're pasting as HTML - we need to make re-traverse and initiazaltion of possible jTox kits.
     }
@@ -658,14 +660,19 @@ window.jT = window.jToxKit = {
       url = url.slice(0, -1);
   	return url;
 	},
+	
 	/* Deduce the baseUrl from a given Url - either if it is full url, of fallback to jToxKit's if it is local
 	Passed is the first "non-base" component of the path...
 	*/
-	grabBaseUrl: function(url){
-    if (!ccLib.isNull(url) && url.indexOf('http') == 0)
-      return this.formBaseUrl(ccLib.parseURL(url));
-    else
-      return this.settings.baseUrl;
+	grabBaseUrl: function(url, key) {
+    if (url != null) {
+      if (!!key) 
+        return url.slice(0, url.indexOf("/" + key));
+      else if (url.indexOf('http') == 0)
+        return this.formBaseUrl(ccLib.parseURL(url));
+    }
+    
+    return this.settings.baseUrl;
 	},
 
   /* Grab the paging information from the given URL and place it into the settings of passed
@@ -772,7 +779,7 @@ window.jT.ui = {
   shortenedData: function (content, message, data) {
     var res = '';
 
-    if (ccLib.isNull(data))
+    if (data == null)
       data = content;
     if (data.toString().length <= 5) {
       res += content;
@@ -787,7 +794,7 @@ window.jT.ui = {
 	linkedData: function (content, message, data) {
     var res = '';
 
-    if (ccLib.isNull(data)) {
+    if (data == null) {
       data = content;
     }
     if (data.toString().length <= 5) {
@@ -848,12 +855,12 @@ window.jT.ui = {
 	  // helper function for retrieving col definition, if exists. Returns empty object, if no.
 	  var getColDef = function (cat) {
 	    var catCol = kit.settings.configuration.columns[cat];
-	    if (!ccLib.isNull(catCol)) {
+	    if (catCol != null) {
 	      if (!!group) {
           catCol = catCol[group];
-  	      if (!ccLib.isNull(catCol)){
+  	      if (catCol != null){
             // Allow bVisible to be set on the whole category
-            if (!ccLib.isNull(catCol.bVisible)) {
+            if (catCol.bVisible != null) {
               catCol[name] = catCol[name] || {};
               catCol[name].bVisible = !!catCol[name].bVisible || !!catCol.bVisible;
             }
@@ -865,14 +872,14 @@ window.jT.ui = {
         }
 	    }
 
-	    if (ccLib.isNull(catCol))
+	    if (catCol == null)
 	      catCol = {};
 	    return catCol;
 	  };
 	  // now form the default column, if existing and the category-specific one...
 	  // extract column redefinitions and merge them all.
 	  col = jT.$.extend(col, (!!group ? getColDef('_') : {}), getColDef(category));
-	  return ccLib.isNull(col.bVisible) || col.bVisible ? col : null;
+	  return col.bVisible == null || col.bVisible ? col : null;
   },
 
   sortColDefs: function (colDefs) {
@@ -1366,45 +1373,44 @@ var jToxQuery = (function () {
       self.initialQueryTimer = setTimeout(function () { self.query(); }, 200);
   };
 
-  cls.prototype = {
-    widget: function (name) {
-      return this.settings.dom.widgets[name];
-    },
+  cls.prototype.widget = function (name) {
+    return this.settings.dom.widgets[name];
+  };
 
-    kit: function () {
-      if (!this.mainKit)
-        this.mainKit = jT.kit(this.settings.dom.kit);
+  cls.prototype.kit = function () {
+    if (!this.mainKit)
+      this.mainKit = jT.kit(this.settings.dom.kit);
 
-      return this.mainKit;
-    },
+    return this.mainKit;
+  };
 
-    setWidget: function (id, dom) {
-      this.settings.dom.widgets[id] = dom;
-    },
+  cls.prototype.setWidget = function (id, dom) {
+    this.settings.dom.widgets[id] = dom;
+  };
 
-    cancelInitialQuery: function () {
-      if (!!this.initialQueryTimer)
-        clearTimeout(this.initialQueryTimer);
-    },
+  cls.prototype.cancelInitialQuery = function () {
+    if (!!this.initialQueryTimer)
+      clearTimeout(this.initialQueryTimer);
+  };
 
-    /* Perform the actual query, traversing all the widgets and asking them to
-    alter the given URL, then - makes the call */
-    query: function () {
-      var uri = this.settings.service || '';
-      for (var w in this.settings.dom.widgets) {
-        var widget = jT.kit(this.settings.dom.widgets[w]);
-        if (!widget)
-          console.log("jToxError: the widget [" + w + "] is not recognized: ignored");
-        else if (!widget['modifyUri'])
-          console.log("jToxError: the widget [" + w + "] doesn't have 'modifyUri' method: ignored");
-        else
-          uri = widget.modifyUri(uri);
-      }
-
-      if (!!uri)
-        this.kit().query(uri);
+  /* Perform the actual query, traversing all the widgets and asking them to
+  alter the given URL, then - makes the call */
+  cls.prototype.query = function () {
+    var uri = this.settings.service || '';
+    for (var w in this.settings.dom.widgets) {
+      var widget = jT.kit(this.settings.dom.widgets[w]);
+      if (!widget)
+        console.log("jToxError: the widget [" + w + "] is not recognized: ignored");
+      else if (!widget['modifyUri'])
+        console.log("jToxError: the widget [" + w + "] doesn't have 'modifyUri' method: ignored");
+      else
+        uri = widget.modifyUri(uri);
     }
-  }; // end of prototype
+
+    if (!!uri)
+      this.kit().query(uri);
+  }; 
+  // end of prototype
 
   return cls;
 })();
@@ -1630,80 +1636,79 @@ var jToxSearch = (function () {
     // and very finally - install the handlers...
   };
 
-  cls.prototype = {
-    // required from jToxQuery - this is how we add what we've collected
-    modifyUri: function (uri) {
-      var form = jT.$('form', this.rootElement)[0];
-      var params = { type: this.search.type };
-      var type = this.search.queryType;
+  // required from jToxQuery - this is how we add what we've collected
+  cls.prototype.modifyUri = function (uri) {
+    var form = jT.$('form', this.rootElement)[0];
+    var params = { type: this.search.type };
+    var type = this.search.queryType;
 
-      if (type == "auto" && params.type == 'auto' && form.searchbox.value.indexOf('http') == 0)
-        type = "uri";
+    if (type == "auto" && params.type == 'auto' && form.searchbox.value.indexOf('http') == 0)
+      type = "uri";
 
-      var res = queries[type] + (uri.indexOf('?') > -1 ? '' : '?') + uri;
+    var res = queries[type] + (uri.indexOf('?') > -1 ? '' : '?') + uri;
 
-      if (!!this.search.mol) {
-        params.b64search = $.base64.encode(this.search.mol);
-      }
-      else {
-        params.search = form.searchbox.value;
-        if (!params.search)
-          params.search = this.settings.defaultNeedle;
-          this.setAuto(params.search);
-      }
+    if (!!this.search.mol) {
+      params.b64search = $.base64.encode(this.search.mol);
+    }
+    else {
+      params.search = form.searchbox.value;
+      if (!params.search)
+        params.search = this.settings.defaultNeedle;
+        this.setAuto(params.search);
+    }
 
-      if (type == "auto" && form.regexp.checked) {
-        params['condition'] = "regexp";
-      }
-      if (type == 'similarity') {
-        params.threshold = form.threshold.value;
-      }
+    if (type == "auto" && form.regexp.checked) {
+      params['condition'] = "regexp";
+    }
+    if (type == 'similarity') {
+      params.threshold = form.threshold.value;
+    }
 
-      if (type == 'similarity') {
-        params.filterBySubstance = form.similaritybysubstance.checked;
-      }
-      if (type == 'smarts') {
-        params.filterBySubstance = form.smartsbysubstance.checked;
-      }
+    if (type == 'similarity') {
+      params.filterBySubstance = form.similaritybysubstance.checked;
+    }
+    if (type == 'smarts') {
+      params.filterBySubstance = form.smartsbysubstance.checked;
+    }
 
-      if (!!this.settings.contextUri)
-        params['dataset_uri'] = this.settings.contextUri;
+    if (!!this.settings.contextUri)
+      params['dataset_uri'] = this.settings.contextUri;
 
-      return ccLib.addParameter(res, $.param(params));
-    },
+    return ccLib.addParameter(res, $.param(params));
+  };
 
-    // some shortcuts for outer world.
-    makeQuery: function (needle) {
-      if (!!needle)
-        this.setAuto(needle);
-      this.queryKit.query();
-    },
+  // some shortcuts for outer world.
+  cls.prototype.makeQuery = function (needle) {
+    if (!!needle)
+      this.setAuto(needle);
+    this.queryKit.query();
+  },
 
-    getNeedle: function () {
-      return this.search.type == 'mol' ? this.search.mol : jT.$('form', this.rootElement)[0].searchbox.value;
-    },
+  cls.prototype.getNeedle = function () {
+    return this.search.type == 'mol' ? this.search.mol : jT.$('form', this.rootElement)[0].searchbox.value;
+  };
 
-    setAuto: function (needle) {
-      this.search.mol = null;
-      this.search.type = 'auto';
+  cls.prototype.setAuto = function (needle) {
+    this.search.mol = null;
+    this.search.type = 'auto';
 
-      var box = jT.$('form', this.rootElement)[0].searchbox;
-      if (!!this.search.oldplace)
-        box.placeholder = this.search.oldplace;
-      if (needle != null)
-        box.value = needle;
-    },
+    var box = jT.$('form', this.rootElement)[0].searchbox;
+    if (!!this.search.oldplace)
+      box.placeholder = this.search.oldplace;
+    if (needle != null)
+      box.value = needle;
+  };
 
-    setMol: function (mol) {
-      var box = jT.$('form', this.rootElement)[0].searchbox;
-      this.search.mol = mol;
-      this.search.type = 'mol';
-      this.search.oldplace = box.placeholder;
+  cls.prototype.setMol = function (mol) {
+    var box = jT.$('form', this.rootElement)[0].searchbox;
+    this.search.mol = mol;
+    this.search.type = 'mol';
+    this.search.oldplace = box.placeholder;
 
-      box.placeholder = "MOL formula saved_";
-      box.value = '';
-    },
-  }; // end of prototype
+    box.placeholder = "MOL formula saved_";
+    box.value = '';
+  }; 
+  // end of prototype
 
   return cls;
 })();
@@ -1740,10 +1745,10 @@ var jToxCompound = (function () {
     "preDetails": null,       // invoked prior of details pane creation to see if it is going to happen at all
     "oLanguage": {},          // some default language settings, which apply to first (static) table only
     "fnAccumulate": function(fId, oldVal, newVal, features) {
-      if (ccLib.isNull(newVal))
+      if (newVal == null)
         return oldVal;
       newVal = newVal.toString();
-      if (ccLib.isNull(oldVal) || newVal.toLowerCase().indexOf(oldVal.toLowerCase()) >= 0)
+      if (oldVal == null || newVal.toLowerCase().indexOf(oldVal.toLowerCase()) >= 0)
         return newVal;
       if (oldVal.toLowerCase().indexOf(newVal.toLowerCase()) >= 0)
         return oldVal;
@@ -1771,12 +1776,12 @@ var jToxCompound = (function () {
 
         "Calculated": function (name, miniset) {
           var arr = [];
-          if (miniset.dataEntry.length > 0 && !ccLib.isNull(miniset.dataEntry[0].compound.metric))
+          if (miniset.dataEntry.length > 0 && miniset.dataEntry[0].compound.metric != null)
             arr.push(this.settings.metricFeature);
 
           for (var f in miniset.feature) {
             var feat = miniset.feature[f];
-            if (ccLib.isNull(feat.source) || ccLib.isNull(feat.source.type) || !!feat.basic)
+            if (feat.source == null || feat.source.type == null || !!feat.basic)
               continue;
             else if (feat.source.type.toLowerCase() == "algorithm" || feat.source.type.toLowerCase() == "model") {
               arr.push(f);
@@ -1907,807 +1912,806 @@ var jToxCompound = (function () {
   };
 
   // now follow the prototypes of the instance functions.
-  cls.prototype = {
-    init: function () {
-      var self = this;
+cls.prototype.init = function () {
+    var self = this;
 
-      self.feature = null; // features, as downloaded from server, after being processed.
-      self.dataset = null; // the last-downloaded dataset.
-      self.groups = null; // computed groups, i.e. 'groupName' -> array of feature list, prepared.
-      self.fixTable = self.varTable = null; // the two tables - to be initialized in prepareTables.
-      self.entriesCount = null;
-      self.suspendEqualization = false;
-      self.orderList = [];
-      self.usedFeatures = [];
-      self.pageStart = self.settings.pageStart;
-      self.pageSize = self.settings.pageSize;
+    self.feature = null; // features, as downloaded from server, after being processed.
+    self.dataset = null; // the last-downloaded dataset.
+    self.groups = null; // computed groups, i.e. 'groupName' -> array of feature list, prepared.
+    self.fixTable = self.varTable = null; // the two tables - to be initialized in prepareTables.
+    self.entriesCount = null;
+    self.suspendEqualization = false;
+    self.orderList = [];
+    self.usedFeatures = [];
+    self.pageStart = self.settings.pageStart;
+    self.pageSize = self.settings.pageSize;
 
-      if (!self.settings.noInterface) {
-        self.rootElement.appendChild(jT.getTemplate('#jtox-compound'));
+    if (!self.settings.noInterface) {
+      self.rootElement.appendChild(jT.getTemplate('#jtox-compound'));
 
-        jT.ui.bindControls(self, {
-          nextPage: function () { self.nextPage(); },
-          prevPage: function () { self.prevPage(); },
-          sizeChange: function() { self.queryEntries(self.pageStart, parseInt(jT.$(this).val())); },
-          filter: function () { self.updateTables() }
-        });
+      jT.ui.bindControls(self, {
+        nextPage: function () { self.nextPage(); },
+        prevPage: function () { self.prevPage(); },
+        sizeChange: function() { self.queryEntries(self.pageStart, parseInt(jT.$(this).val())); },
+        filter: function () { self.updateTables() }
+      });
 
-        self.$procDiv = jT.$('.jt-processing', self.rootElement);
-        self.$errDiv = jT.$('.jt-error', self.rootElement);
+      self.$procDiv = jT.$('.jt-processing', self.rootElement);
+      self.$errDiv = jT.$('.jt-error', self.rootElement);
 
+    }
+  };
+
+  cls.prototype.clearDataset = function () {
+    if (this.usedFeatures !== undefined) {
+      if (!this.settings.noInterface)
+        jT.$(this.rootElement).empty();
+      for (var i = 0, fl = this.usedFeatures.length; i < fl; ++i) {
+        var fid = this.usedFeatures[i];
+        this.feature[fid].used = false;
       }
-    },
+    }
+  };
 
-    clearDataset: function () {
-      if (this.usedFeatures !== undefined) {
-        if (!this.settings.noInterface)
-          jT.$(this.rootElement).empty();
-        for (var i = 0, fl = this.usedFeatures.length; i < fl; ++i) {
-          var fid = this.usedFeatures[i];
-          this.feature[fid].used = false;
-        }
-      }
-    },
+  /* make a tab-based widget with features and grouped on tabs. It relies on filled and processed 'self.feature' as well
+  as created 'self.groups'.
+  */
+  cls.prototype.prepareTabs = function (root, isMain, groupFn) {
+    var self = this;
 
-    /* make a tab-based widget with features and grouped on tabs. It relies on filled and processed 'self.feature' as well
-    as created 'self.groups'.
-    */
-    prepareTabs: function (root, isMain, groupFn) {
-      var self = this;
+    var all = document.createElement('div');
+    all.style.display = "none"; // we suppress the re-layouting engine this way, we'll show it at the end.
+    root.appendChild(all);
+    ulEl = document.createElement('ul');
+    all.appendChild(ulEl);
 
-      var all = document.createElement('div');
-      all.style.display = "none"; // we suppress the re-layouting engine this way, we'll show it at the end.
-      root.appendChild(all);
-      ulEl = document.createElement('ul');
-      all.appendChild(ulEl);
+    var createATab = function(grId, name) {
+      var liEl = document.createElement('li');
+      ulEl.appendChild(liEl);
+      var aEl = document.createElement('a');
+      aEl.href = "#" + grId;
+      aEl.innerHTML = name;
+      liEl.appendChild(aEl);
+      return liEl;
+    };
 
-      var createATab = function(grId, name) {
-        var liEl = document.createElement('li');
-        ulEl.appendChild(liEl);
-        var aEl = document.createElement('a');
-        aEl.href = "#" + grId;
-        aEl.innerHTML = name;
-        liEl.appendChild(aEl);
-        return liEl;
-      };
+    var emptyList = [];
+    var idx = 0;
+    for (var gr in self.groups) {
+      var grId = "jtox-ds-" + gr.replace(/\s/g, "_") + "-" + self.instanceNo + (isMain ? '' : '-details');
+      var grName = gr.replace(/_/g, " ");
+      var tabLi = createATab(grId, grName);
+      if (isMain)
+        tabLi.title = "Select which columns to be displayed";
 
-      var emptyList = [];
-      var idx = 0;
-      for (var gr in self.groups) {
-        var grId = "jtox-ds-" + gr.replace(/\s/g, "_") + "-" + self.instanceNo + (isMain ? '' : '-details');
-        var grName = gr.replace(/_/g, " ");
-        var tabLi = createATab(grId, grName);
-        if (isMain)
-          tabLi.title = "Select which columns to be displayed";
-
-        // now prepare the content...
-        var divEl = document.createElement('div');
-        divEl.id = grId;
-        all.appendChild(divEl);
-        // add the group check multi-change
-        if (self.settings.groupSelection && isMain) {
-          var sel = jT.getTemplate("#jtox-ds-selection");
-          divEl.appendChild(sel);
-          jT.$('.multi-select', sel).on('click', function (e) {
-            var par = jT.$(this).closest('.ui-tabs-panel')[0];
-            var doSel = jT.$(this).hasClass('select');
-            $('input', par).each(function () {
-              this.checked = doSel;
-              jT.$(this).trigger('change');
-            });
+      // now prepare the content...
+      var divEl = document.createElement('div');
+      divEl.id = grId;
+      all.appendChild(divEl);
+      // add the group check multi-change
+      if (self.settings.groupSelection && isMain) {
+        var sel = jT.getTemplate("#jtox-ds-selection");
+        divEl.appendChild(sel);
+        jT.$('.multi-select', sel).on('click', function (e) {
+          var par = jT.$(this).closest('.ui-tabs-panel')[0];
+          var doSel = jT.$(this).hasClass('select');
+          $('input', par).each(function () {
+            this.checked = doSel;
+            jT.$(this).trigger('change');
           });
-        }
-
-        if (groupFn(divEl, gr)) {
-          if (self.settings.hideEmpty) {
-            jT.$(divEl).remove();
-            jT.$(tabLi).remove();
-            --idx;
-          }
-          else
-            emptyList.push(idx);
-        }
-        ++idx;
-
-        ccLib.fireCallback(self.settings.onTab, self, divEl, tabLi, grName, isMain);
-      }
-
-      if (isMain && self.settings.showExport) {
-        var tabId = "jtox-ds-export-" + self.instanceNo;
-        var liEl = createATab(tabId, "Export");
-        jT.$(liEl).addClass('jtox-ds-export');
-        var divEl = jT.getTemplate('#jtox-ds-export')
-        divEl.id = tabId;
-        all.appendChild(divEl);
-        divEl = jT.$('.jtox-exportlist', divEl)[0];
-
-        for (var i = 0, elen = self.settings.configuration.exports.length; i < elen; ++i) {
-          var expo = self.settings.configuration.exports[i];
-          var el = jT.getTemplate('#jtox-ds-download');
-          divEl.appendChild(el);
-
-          jT.$('a', el)[0].href = ccLib.addParameter(self.datasetUri, "media=" + encodeURIComponent(expo.type));
-          var img = el.getElementsByTagName('img')[0];
-          img.alt = img.title = expo.type;
-          img.src = (jT.settings.baseUrl || self.settings.baseUrl) + '/' + expo.icon;
-        }
-
-        ccLib.fireCallback(self.settings.onTab, self, divEl, liEl, "Export", isMain);
-      }
-
-      // now show the whole stuff and mark the disabled tabs
-      all.style.display = "block";
-      return jT.$(all).tabs({
-        collapsible: isMain,
-        active: (self.settings.tabsFolded && isMain) ? false : 0,
-        disabled: emptyList,
-        heightStyle: isMain ? "content" : (self.settings.detailsHeight == 'auto' ? 'auto' : 'fill')
-      });
-    },
-
-    equalizeTables: function () {
-      var self = this;
-      if (!self.suspendEqualization && self.fixTable != null && self.varTable != null) {
-        ccLib.equalizeHeights(self.fixTable.tHead, self.varTable.tHead);
-        ccLib.equalizeHeights(self.fixTable.tBodies[0], self.varTable.tBodies[0]);
-
-        // now we need to equalize openned details boxes, if any.
-        var tabRoot = jT.$('.jtox-ds-tables', self.rootElement)[0];
-        var varWidth = jT.$('.jtox-ds-variable', tabRoot).width();
-
-        jT.$('.jtox-details-box', self.rootElement).each(function (i) {
-          var cell = jT.$(this).data('rootCell');
-          if (!!cell) {
-            this.style.display = 'none';
-            var ps = ccLib.positionTo(cell, tabRoot);
-            this.style.top = ps.top + 'px';
-            this.style.left = ps.left + 'px';
-            var cellW = jT.$(cell).parents('.dataTables_wrapper').width() - cell.offsetLeft;
-            this.style.width = (cellW + varWidth) + 'px';
-            this.style.display = 'block';
-
-            var rowH = jT.$(cell).parents('tr').height();
-            var cellH = cell.offsetHeight;
-            var meH = jT.$(this).height();
-
-            if (cellH < rowH)
-              jT.$(cell).height(cellH = rowH);
-            if (cellH < meH)
-              jT.$(cell).height(cellH = meH);
-
-            if (meH < cellH) {
-              jT.$(this).height(cellH);
-              jT.$('.ui-tabs').tabs('refresh');
-            }
-          }
         });
       }
-    },
 
-    featureValue: function (fId, entry, type) {
-      var self = this;
-      var feature = self.feature[fId];
-      var val = (feature.data !== undefined) ? (ccLib.getJsonValue(entry, jT.$.isArray(feature.data) ? feature.data[0] : feature.data)) : entry.values[fId];
-      return (typeof feature.render == 'function') ?
-        feature.render(val, !!type ? type : 'filter', entry) :
-        jT.ui.renderObjValue(val, feature.units, type);
-    },
-
-    featureUri: function (fId) {
-      return this.feature[fId].URI || fId;
-    },
-
-    featureData: function (entry, set, scope) {
-      if (scope == null)
-        scope = 'details';
-      var self = this;
-      var data = [];
-      ccLib.enumObject(set, function (fId, idx, level) {
-        var feat = jT.$.extend({}, self.feature[fId]);
-        var vis = feat.visibility;
-        if (!!vis && vis != scope)
-          return;
-        var title = feat.title;
-        feat.value = self.featureValue(fId, entry, scope);
-        if (!!title && (!self.settings.hideEmptyDetails || !!feat.value)) {
-          if (!feat.value)
-            feat.value = '-';
-          data.push(feat);
+      if (groupFn(divEl, gr)) {
+        if (self.settings.hideEmpty) {
+          jT.$(divEl).remove();
+          jT.$(tabLi).remove();
+          --idx;
         }
-      });
-
-      return data;
-    },
-
-    prepareColumn: function (fId, feature) {
-      var self = this;
-      if (feature.visibility == 'details')
-        return null;
-
-      // now we now we should show this one.
-      var col = {
-        "sTitle": !feature.title ? '' : jT.ui.valueWithUnits(feature.title.replace(/_/g, ' '), (!self.settings.showUnits ? null : feature.units)),
-        "sDefaultContent": "-",
-      };
-
-      if (typeof feature.column == 'function')
-        col = feature.column.call(self, col, fId);
-      else if (!ccLib.isNull(feature.column))
-        col = jT.$.extend(col, feature.column);
-
-      col["mData"] = (feature.data != null) ? feature.data : 'values';
-
-      if (feature.render != null)
-        col["mRender"] = feature.data != null ? feature.render : function (data, type, full) { return feature.render(full.values[fId], type, full); };
-      else if (!!feature.shorten)
-        col["mRender"] = function(data, type, full) {
-          if (!feature.data) data = data[fId];
-          return (type != "display") ? '' + data : jT.ui.shortenedData(data, "Press to copy the value in the clipboard");
-        };
-      else if (feature.data == null) // in other cases we want the default presenting of the plain value
-        col["mRender"] = (function(featureId, units) { return function(data, type, full) {
-          var val = full.values[featureId] || '-';
-          if (typeof val != 'object')
-            return val;
-          if (!jT.$.isArray(val))
-            val = [val];
-          var html = '';
-          for (var i = 0;i < val.length; ++i) {
-            html += (type == 'display') ? '<div>' : '';
-            html += jT.ui.renderObjValue(val[i], units, type);
-            html += (type == 'display') ? '</div>' : ',';
-          }
-          return html;
-        }; })(fId, feature.unit);
-
-      // other convenient cases
-      if (!!feature.shorten)
-        col["sWidth"] = "75px";
-
-      return col;
-    },
-
-    getVarRow: function (idx) {
-	  	if (idx.tagName != null)
-	  		idx = jT.ui.rowIndex(idx);
-
-      return document.getElementById('jtox-var-' + this.instanceNo + '-' + idx);
-    },
-
-    prepareTables: function() {
-      var self = this;
-      var varCols = [];
-      var fixCols = [];
-
-      // first, some preparation of the first, IdRow column
-      var idFeature = self.settings.configuration.baseFeatures['#IdRow'];
-      if (!idFeature.render) {
-        idFeature.render = self.settings.hasDetails ?
-          function (data, type, full) {
-            return (type != "display") ?
-              '' + data :
-              "&nbsp;-&nbsp;" + data + "&nbsp;-&nbsp;<br/>" +
-              '<span class="jtox-details-open ui-icon ui-icon-folder-collapsed" title="Press to open/close detailed info for this compound"></span>';
-          } : // no details case
-          function (data, type, full) {
-            return (type != "display") ?
-              '' + data :
-              "&nbsp;-&nbsp;" + data + "&nbsp;-&nbsp;";
-          };
-      }
-
-      fixCols.push(
-        self.prepareColumn('#IdRow', idFeature),
-        { "sClass": "jtox-hidden", "mData": "index", "sDefaultContent": "-", "bSortable": true, "mRender": function(data, type, full) { return ccLib.isNull(self.orderList) ? 0 : self.orderList[data]; } } // column used for ordering
-      );
-
-      varCols.push({ "sClass": "jtox-hidden jtox-ds-details paddingless", "mData": "index", "mRender": function(data, type, full) { return ''; }  });
-
-      // prepare the function for column switching...
-      var fnShowColumn = function() {
-        var dt = $(this).data();
-        var cells = jT.$(dt.sel + ' table tr .' + dt.column, self.rootElement);
-        if (this.checked) {
-          jT.$(cells).show();
-          jT.$("table tr .blank-col", self.rootElement).addClass('jtox-hidden');
-        }
-        else {
-          jT.$(cells).hide();
-          if (jT.$(dt.sel + " table tr *:visible", self.rootElement).length == 0)
-            jT.$("table tr .blank-col", self.rootElement).removeClass('jtox-hidden');
-        }
-        if (self.settings.rememberChecks)
-          self.featureStates[dt.id] = this.checked;
-        self.equalizeTables();
-      };
-
-      var fnExpandCell = function (cell, expand) {
-        var cnt = 0;
-        for (var c = cell;c; c = c.nextElementSibling, ++cnt)
-          jT.$(c).toggleClass('jtox-hidden');
-
-        if (expand)
-          cell.setAttribute('colspan', '' + cnt);
         else
-          cell.removeAttribute('colspan');
+          emptyList.push(idx);
+      }
+      ++idx;
+
+      ccLib.fireCallback(self.settings.onTab, self, divEl, tabLi, grName, isMain);
+    }
+
+    if (isMain && self.settings.showExport) {
+      var tabId = "jtox-ds-export-" + self.instanceNo;
+      var liEl = createATab(tabId, "Export");
+      jT.$(liEl).addClass('jtox-ds-export');
+      var divEl = jT.getTemplate('#jtox-ds-export')
+      divEl.id = tabId;
+      all.appendChild(divEl);
+      divEl = jT.$('.jtox-exportlist', divEl)[0];
+
+      for (var i = 0, elen = self.settings.configuration.exports.length; i < elen; ++i) {
+        var expo = self.settings.configuration.exports[i];
+        var el = jT.getTemplate('#jtox-ds-download');
+        divEl.appendChild(el);
+
+        jT.$('a', el)[0].href = ccLib.addParameter(self.datasetUri, "media=" + encodeURIComponent(expo.type));
+        var img = el.getElementsByTagName('img')[0];
+        img.alt = img.title = expo.type;
+        img.src = (jT.settings.baseUrl || self.settings.baseUrl) + '/' + expo.icon;
+      }
+
+      ccLib.fireCallback(self.settings.onTab, self, divEl, liEl, "Export", isMain);
+    }
+
+    // now show the whole stuff and mark the disabled tabs
+    all.style.display = "block";
+    return jT.$(all).tabs({
+      collapsible: isMain,
+      active: (self.settings.tabsFolded && isMain) ? false : 0,
+      disabled: emptyList,
+      heightStyle: isMain ? "content" : (self.settings.detailsHeight == 'auto' ? 'auto' : 'fill')
+    });
+  };
+
+  cls.prototype.equalizeTables = function () {
+    var self = this;
+    if (!self.suspendEqualization && self.fixTable != null && self.varTable != null) {
+      ccLib.equalizeHeights(self.fixTable.tHead, self.varTable.tHead);
+      ccLib.equalizeHeights(self.fixTable.tBodies[0], self.varTable.tBodies[0]);
+
+      // now we need to equalize openned details boxes, if any.
+      var tabRoot = jT.$('.jtox-ds-tables', self.rootElement)[0];
+      var varWidth = jT.$('.jtox-ds-variable', tabRoot).width();
+
+      jT.$('.jtox-details-box', self.rootElement).each(function (i) {
+        var cell = jT.$(this).data('rootCell');
+        if (!!cell) {
+          this.style.display = 'none';
+          var ps = ccLib.positionTo(cell, tabRoot);
+          this.style.top = ps.top + 'px';
+          this.style.left = ps.left + 'px';
+          var cellW = jT.$(cell).parents('.dataTables_wrapper').width() - cell.offsetLeft;
+          this.style.width = (cellW + varWidth) + 'px';
+          this.style.display = 'block';
+
+          var rowH = jT.$(cell).parents('tr').height();
+          var cellH = cell.offsetHeight;
+          var meH = jT.$(this).height();
+
+          if (cellH < rowH)
+            jT.$(cell).height(cellH = rowH);
+          if (cellH < meH)
+            jT.$(cell).height(cellH = meH);
+
+          if (meH < cellH) {
+            jT.$(this).height(cellH);
+            jT.$('.ui-tabs').tabs('refresh');
+          }
+        }
+      });
+    }
+  };
+
+  cls.prototype.featureValue = function (fId, entry, type) {
+    var self = this;
+    var feature = self.feature[fId];
+    var val = (feature.data !== undefined) ? (ccLib.getJsonValue(entry, jT.$.isArray(feature.data) ? feature.data[0] : feature.data)) : entry.values[fId];
+    return (typeof feature.render == 'function') ?
+      feature.render(val, !!type ? type : 'filter', entry) :
+      jT.ui.renderObjValue(val, feature.units, type);
+  };
+
+  cls.prototype.featureUri = function (fId) {
+    return this.feature[fId].URI || fId;
+  };
+
+  cls.prototype.featureData = function (entry, set, scope) {
+    if (scope == null)
+      scope = 'details';
+    var self = this;
+    var data = [];
+    ccLib.enumObject(set, function (fId, idx, level) {
+      var feat = jT.$.extend({}, self.feature[fId]);
+      var vis = feat.visibility;
+      if (!!vis && vis != scope)
+        return;
+      var title = feat.title;
+      feat.value = self.featureValue(fId, entry, scope);
+      if (!!title && (!self.settings.hideEmptyDetails || !!feat.value)) {
+        if (!feat.value)
+          feat.value = '-';
+        data.push(feat);
+      }
+    });
+
+    return data;
+  };
+
+  cls.prototype.prepareColumn = function (fId, feature) {
+    var self = this;
+    if (feature.visibility == 'details')
+      return null;
+
+    // now we now we should show this one.
+    var col = {
+      "sTitle": !feature.title ? '' : jT.ui.valueWithUnits(feature.title.replace(/_/g, ' '), (!self.settings.showUnits ? null : feature.units)),
+      "sDefaultContent": "-",
+    };
+
+    if (typeof feature.column == 'function')
+      col = feature.column.call(self, col, fId);
+    else if (feature.column != null)
+      col = jT.$.extend(col, feature.column);
+
+    col["mData"] = (feature.data != null) ? feature.data : 'values';
+
+    if (feature.render != null)
+      col["mRender"] = feature.data != null ? feature.render : function (data, type, full) { return feature.render(full.values[fId], type, full); };
+    else if (!!feature.shorten)
+      col["mRender"] = function(data, type, full) {
+        if (!feature.data) data = data[fId];
+        return (type != "display") ? '' + data : jT.ui.shortenedData(data, "Press to copy the value in the clipboard");
       };
-
-      var fnShowDetails = (self.settings.hasDetails ? function(row, event) {
-        var cell = jT.$(".jtox-ds-details", row)[0];
-        var idx = jT.$(row).data('jtox-index');
-
-        if (self.settings.preDetails != null && !ccLib.fireCallback(self.settings.preDetails, self, idx, cell) || !cell)
-          return; // the !cell  means you've forgotten to add #DetailedInfoRow feature somewhere.
-        jT.$(row).toggleClass('jtox-detailed-row');
-        var toShow = jT.$(row).hasClass('jtox-detailed-row');
-
-        // now go and expand both fixed and variable table details' cells.
-        fnExpandCell(cell, toShow);
-        var varCell = self.getVarRow(idx).firstElementChild;
-        fnExpandCell(varCell, toShow);
-
-        jT.$('.jtox-details-open', row).toggleClass('ui-icon-folder-open ui-icon-folder-collapsed');
-
-        if (toShow) {
-          // i.e. we need to show it - put the full sized diagram in the fixed part and the tabs in the variable one...
-          var entry = self.dataset.dataEntry[idx];
-
-          var detDiv = document.createElement('div');
-          detDiv.className = 'jtox-details-box jtox-details';
-
-          var tabRoot = jT.$('.jtox-ds-tables', self.rootElement)[0];
-          var width = jT.$(cell).width() + jT.$('.jtox-ds-variable', tabRoot).width();
-          jT.$(detDiv).width(width);
-
-          if (ccLib.isNull(self.settings.detailsHeight) || self.settings.detailsHeight == 'fill')
-            jT.$(detDiv).height(jT.$(cell).height() * 2);
-          else if (parseInt(self.settings.detailsHeight) > 0)
-            jT.$(detDiv).height(self.settings.detailsHeight)
-
-          tabRoot.appendChild(detDiv);
-
-          self.prepareTabs(detDiv, false, function (parent, gr) {
-            var data = self.featureData(entry, self.groups[gr]);
-
-            if (data.length > 0 || !self.settings.hideEmpty) {
-              jT.$(parent).addClass('jtox-details-table');
-              var tabTable = document.createElement('table');
-              parent.appendChild(tabTable);
-              jT.$(tabTable).dataTable({
-                "bPaginate": false,
-                "bProcessing": true,
-                "bLengthChange": false,
-        				"bAutoWidth": true,
-                "sDom" : "rt<f>",
-                "aoColumns": jT.ui.processColumns(self, 'compound'),
-                "bSort": true,
-              });
-              jT.$(tabTable).dataTable().fnAddData(data);
-              jT.$(tabTable).dataTable().fnAdjustColumnSizing();
-            }
-
-            return data.length == 0;
-          });
-
-          jT.$(cell).height(detDiv.offsetHeight);
-          ccLib.fireCallback(self.settings.onDetails, self, detDiv, entry, cell);
-          jT.$(cell).data('detailsDiv', detDiv);
-          jT.$(detDiv).data('rootCell', cell);
+    else if (feature.data == null) // in other cases we want the default presenting of the plain value
+      col["mRender"] = (function(featureId, units) { return function(data, type, full) {
+        var val = full.values[featureId] || '-';
+        if (typeof val != 'object')
+          return val;
+        if (!jT.$.isArray(val))
+          val = [val];
+        var html = '';
+        for (var i = 0;i < val.length; ++i) {
+          html += (type == 'display') ? '<div>' : '';
+          html += jT.ui.renderObjValue(val[i], units, type);
+          html += (type == 'display') ? '</div>' : ',';
         }
-        else {
-          // i.e. we need to hide
-          jT.$(cell).data('detailsDiv').remove();
-          jT.$(cell).data('detailsDiv', null);
-          cell.style.height = '';
-        }
+        return html;
+      }; })(fId, feature.unit);
 
-        self.equalizeTables();
-      } : null); // fnShowDetails definition end
+    // other convenient cases
+    if (!!feature.shorten)
+      col["sWidth"] = "75px";
 
-      // now proceed to enter all other columns
-      for (var gr in self.groups) {
-        ccLib.enumObject(self.groups[gr], function (fId, idx, level) {
-          if (idx == "name")
-            return;
+    return col;
+  };
 
-          var feature = self.feature[fId];
-          var col = self.prepareColumn(fId, feature);
-          if (!col)
-            return;
+  cls.prototype.getVarRow = function (idx) {
+  	if (idx.tagName != null)
+  		idx = jT.ui.rowIndex(idx);
 
-          // finally - assign column switching to the checkbox of main tab.
-          var colList = !!feature.primary ? fixCols : varCols;
-          var colId = 'col-' + colList.length;
-          col.sClass = (!!col.sClass ? col.sClass + ' ' : '') + colId;
+    return document.getElementById('jtox-var-' + this.instanceNo + '-' + idx);
+  };
 
-          jT.$('.jtox-ds-features input.jtox-checkbox[value="' + fId + '"]', self.rootElement).data({ sel: !!feature.primary ? '.jtox-ds-fixed' : '.jtox-ds-variable', column: colId, id: fId}).on('change', fnShowColumn)
+  cls.prototype.prepareTables = function() {
+    var self = this;
+    var varCols = [];
+    var fixCols = [];
 
-          // and push it into the proper list.
-          colList.push(col);
-        });
+    // first, some preparation of the first, IdRow column
+    var idFeature = self.settings.configuration.baseFeatures['#IdRow'];
+    if (!idFeature.render) {
+      idFeature.render = self.settings.hasDetails ?
+        function (data, type, full) {
+          return (type != "display") ?
+            '' + data :
+            "&nbsp;-&nbsp;" + data + "&nbsp;-&nbsp;<br/>" +
+            '<span class="jtox-details-open ui-icon ui-icon-folder-collapsed" title="Press to open/close detailed info for this compound"></span>';
+        } : // no details case
+        function (data, type, full) {
+          return (type != "display") ?
+            '' + data :
+            "&nbsp;-&nbsp;" + data + "&nbsp;-&nbsp;";
+        };
+    }
+
+    fixCols.push(
+      self.prepareColumn('#IdRow', idFeature),
+      { "sClass": "jtox-hidden", "mData": "index", "sDefaultContent": "-", "bSortable": true, "mRender": function(data, type, full) { return self.orderList == null ? 0 : self.orderList[data]; } } // column used for ordering
+    );
+
+    varCols.push({ "sClass": "jtox-hidden jtox-ds-details paddingless", "mData": "index", "mRender": function(data, type, full) { return ''; }  });
+
+    // prepare the function for column switching...
+    var fnShowColumn = function() {
+      var dt = $(this).data();
+      var cells = jT.$(dt.sel + ' table tr .' + dt.column, self.rootElement);
+      if (this.checked) {
+        jT.$(cells).show();
+        jT.$("table tr .blank-col", self.rootElement).addClass('jtox-hidden');
       }
+      else {
+        jT.$(cells).hide();
+        if (jT.$(dt.sel + " table tr *:visible", self.rootElement).length == 0)
+          jT.$("table tr .blank-col", self.rootElement).removeClass('jtox-hidden');
+      }
+      if (self.settings.rememberChecks)
+        self.featureStates[dt.id] = this.checked;
+      self.equalizeTables();
+    };
 
-      // now - sort columns and create the tables...
-      if (self.settings.fixedWidth != null)
-      	jT.$(".jtox-ds-fixed", self.rootElement).width(self.settings.fixedWidth);
+    var fnExpandCell = function (cell, expand) {
+      var cnt = 0;
+      for (var c = cell;c; c = c.nextElementSibling, ++cnt)
+        jT.$(c).toggleClass('jtox-hidden');
 
-      jT.ui.sortColDefs(fixCols);
-      self.fixTable = (jT.$(".jtox-ds-fixed table", self.rootElement).dataTable({
-        "bPaginate": false,
-        "bLengthChange": false,
-				"bAutoWidth": true,
-        "sDom" : "rt",
-        "aoColumns": fixCols,
-        "bSort": false,
-        "fnCreatedRow": function( nRow, aData) {
-          // attach the click handling
-          var iDataIndex = aData.index;
-          if (self.settings.hasDetails)
-            jT.$('.jtox-details-open', nRow).on('click', function(e) { fnShowDetails(nRow, e); });
-          jT.$(nRow).data('jtox-index', iDataIndex);
+      if (expand)
+        cell.setAttribute('colspan', '' + cnt);
+      else
+        cell.removeAttribute('colspan');
+    };
 
-          ccLib.fireCallback(self.settings.onRow, self, nRow, aData, iDataIndex);
-          jT.ui.installHandlers(self, nRow);
-          jT.$('.jtox-diagram span.ui-icon', nRow).on('click', function () {
-            setTimeout(function () {
-              jT.$(self.fixTable).dataTable().fnAdjustColumnSizing();
-              self.equalizeTables();
-            }, 50);
-          });
-        },
-        "oLanguage" : { "sEmptyTable": '<span class="jt-feeding">' + (self.settings.oLanguage.sProcess || 'Feeding data...') + '</span>' }
-      }))[0];
+    var fnShowDetails = (self.settings.hasDetails ? function(row, event) {
+      var cell = jT.$(".jtox-ds-details", row)[0];
+      var idx = jT.$(row).data('jtox-index');
 
-      // we need to put a fake column to stay, when there is no other column here, or when everything is hidden..
-      varCols.push({ "sClass": "center blank-col" + (varCols.length > 1 ? " jtox-hidden" : ""), "mData": "index", "mRender": function(data, type, full) { return type != 'display' ? data : '...'; }  });
+      if (self.settings.preDetails != null && !ccLib.fireCallback(self.settings.preDetails, self, idx, cell) || !cell)
+        return; // the !cell  means you've forgotten to add #DetailedInfoRow feature somewhere.
+      jT.$(row).toggleClass('jtox-detailed-row');
+      var toShow = jT.$(row).hasClass('jtox-detailed-row');
 
-      jT.ui.sortColDefs(varCols);
-      self.varTable = (jT.$(".jtox-ds-variable table", self.rootElement).dataTable({
-        "bPaginate": false,
-        "bProcessing": true,
-        "bLengthChange": false,
-				"bAutoWidth": false,
-        "sDom" : "rt",
-        "bSort": true,
-        "aoColumns": varCols,
-        "bScrollCollapse": true,
-        "fnCreatedRow": function( nRow, aData ) {
-          var iDataIndex = aData.index;
-          nRow.id = 'jtox-var-' + self.instanceNo + '-' + iDataIndex;
+      // now go and expand both fixed and variable table details' cells.
+      fnExpandCell(cell, toShow);
+      var varCell = self.getVarRow(idx).firstElementChild;
+      fnExpandCell(varCell, toShow);
 
-	        // equalize multi-rows, if there are any
-	        ccLib.equalizeHeights.apply(window, jT.$('td.jtox-multi table tbody', nRow).toArray());
+      jT.$('.jtox-details-open', row).toggleClass('ui-icon-folder-open ui-icon-folder-collapsed');
 
-          jT.$(nRow).addClass('jtox-row');
-          jT.$(nRow).data('jtox-index', iDataIndex);
-          ccLib.fireCallback(self.settings.onRow, self, nRow, aData, iDataIndex);
-          jT.ui.installHandlers(self, nRow);
-        },
-        "fnDrawCallback": function(oSettings) {
-          // this is for synchro-sorting the two tables
-          var sorted = jT.$('.jtox-row', this);
-          for (var i = 0, rlen = sorted.length;i < rlen; ++i) {
-            var idx = jT.$(sorted[i]).data('jtox-index');
-            self.orderList[idx] = i;
+      if (toShow) {
+        // i.e. we need to show it - put the full sized diagram in the fixed part and the tabs in the variable one...
+        var entry = self.dataset.dataEntry[idx];
+
+        var detDiv = document.createElement('div');
+        detDiv.className = 'jtox-details-box jtox-details';
+
+        var tabRoot = jT.$('.jtox-ds-tables', self.rootElement)[0];
+        var width = jT.$(cell).width() + jT.$('.jtox-ds-variable', tabRoot).width();
+        jT.$(detDiv).width(width);
+
+        if (self.settings.detailsHeight == null || self.settings.detailsHeight == 'fill')
+          jT.$(detDiv).height(jT.$(cell).height() * 2);
+        else if (parseInt(self.settings.detailsHeight) > 0)
+          jT.$(detDiv).height(self.settings.detailsHeight)
+
+        tabRoot.appendChild(detDiv);
+
+        self.prepareTabs(detDiv, false, function (parent, gr) {
+          var data = self.featureData(entry, self.groups[gr]);
+
+          if (data.length > 0 || !self.settings.hideEmpty) {
+            jT.$(parent).addClass('jtox-details-table');
+            var tabTable = document.createElement('table');
+            parent.appendChild(tabTable);
+            jT.$(tabTable).dataTable({
+              "bPaginate": false,
+              "bProcessing": true,
+              "bLengthChange": false,
+      				"bAutoWidth": true,
+              "sDom" : "rt<f>",
+              "aoColumns": jT.ui.processColumns(self, 'compound'),
+              "bSort": true,
+            });
+            jT.$(tabTable).dataTable().fnAddData(data);
+            jT.$(tabTable).dataTable().fnAdjustColumnSizing();
           }
 
-          if (rlen > 0)
-            jT.$(self.fixTable).dataTable().fnSort([[1, "asc"]]);
-        },
-        "oLanguage" : { "sEmptyTable": "-"}
-      }))[0];
-    },
-
-    updateTables: function() {
-      var self = this;
-      if (self.settings.hasDetails)
-        $('div.jtox-details-box', self.rootElement).remove();
-
-      self.filterEntries(jT.$('.jtox-controls input', self.rootElement).val());
-    },
-
-    /* Prepare the groups and the features.
-    */
-    prepareGroups: function (miniset) {
-      var self = this;
-
-      var grps = self.settings.configuration.groups;
-      if (typeof grps == 'function')
-        grps = grps(miniset, self);
-
-      self.groups = {};
-      for (var i in grps){
-        var grp = grps[i];
-        if (ccLib.isNull(grp))
-          continue;
-
-        var grpArr = (typeof grp == "function" || typeof grp == "string") ? ccLib.fireCallback(grp, self, i, miniset) : grp;
-        self.groups[i] = [];
-        ccLib.enumObject(grpArr, function(fid, idx) {
-          var isUsed = false;
-          cls.enumSameAs(fid, self.feature, function (feature) {
-            isUsed |= feature.used;
-          });
-          if (idx != "name" && !isUsed) {
-            self.groups[i].push(fid);
-            // these we need to be able to return back to original state.
-            self.usedFeatures.push(fid);
-            self.feature[fid].used = true;
-          }
+          return data.length == 0;
         });
-      }
-    },
 
-    /* Enumerate all recofnized features, caling fnMatch(featureId, groupId) for each of it.
-    Return true from the function to stop enumeration, which in turn will return true if it was stopped.
-    */
-    enumerateFeatures: function(fnMatch) {
-      var self = this;
-      var stopped = false;
-      for (var gr in self.groups) {
-        for (var i = 0, glen = self.groups[gr].length;i < glen; ++i) {
-          if (stopped = fnMatch(self.groups[gr][i], gr))
-            break;
+        jT.$(cell).height(detDiv.offsetHeight);
+        ccLib.fireCallback(self.settings.onDetails, self, detDiv, entry, cell);
+        jT.$(cell).data('detailsDiv', detDiv);
+        jT.$(detDiv).data('rootCell', cell);
+      }
+      else {
+        // i.e. we need to hide
+        jT.$(cell).data('detailsDiv').remove();
+        jT.$(cell).data('detailsDiv', null);
+        cell.style.height = '';
+      }
+
+      self.equalizeTables();
+    } : null); // fnShowDetails definition end
+
+    // now proceed to enter all other columns
+    for (var gr in self.groups) {
+      ccLib.enumObject(self.groups[gr], function (fId, idx, level) {
+        if (idx == "name")
+          return;
+
+        var feature = self.feature[fId];
+        var col = self.prepareColumn(fId, feature);
+        if (!col)
+          return;
+
+        // finally - assign column switching to the checkbox of main tab.
+        var colList = !!feature.primary ? fixCols : varCols;
+        var colId = 'col-' + colList.length;
+        col.sClass = (!!col.sClass ? col.sClass + ' ' : '') + colId;
+
+        jT.$('.jtox-ds-features input.jtox-checkbox[value="' + fId + '"]', self.rootElement).data({ sel: !!feature.primary ? '.jtox-ds-fixed' : '.jtox-ds-variable', column: colId, id: fId}).on('change', fnShowColumn)
+
+        // and push it into the proper list.
+        colList.push(col);
+      });
+    }
+
+    // now - sort columns and create the tables...
+    if (self.settings.fixedWidth != null)
+    	jT.$(".jtox-ds-fixed", self.rootElement).width(self.settings.fixedWidth);
+
+    jT.ui.sortColDefs(fixCols);
+    self.fixTable = (jT.$(".jtox-ds-fixed table", self.rootElement).dataTable({
+      "bPaginate": false,
+      "bLengthChange": false,
+			"bAutoWidth": true,
+      "sDom" : "rt",
+      "aoColumns": fixCols,
+      "bSort": false,
+      "fnCreatedRow": function( nRow, aData) {
+        // attach the click handling
+        var iDataIndex = aData.index;
+        if (self.settings.hasDetails)
+          jT.$('.jtox-details-open', nRow).on('click', function(e) { fnShowDetails(nRow, e); });
+        jT.$(nRow).data('jtox-index', iDataIndex);
+
+        ccLib.fireCallback(self.settings.onRow, self, nRow, aData, iDataIndex);
+        jT.ui.installHandlers(self, nRow);
+        jT.$('.jtox-diagram span.ui-icon', nRow).on('click', function () {
+          setTimeout(function () {
+            jT.$(self.fixTable).dataTable().fnAdjustColumnSizing();
+            self.equalizeTables();
+          }, 50);
+        });
+      },
+      "oLanguage" : { "sEmptyTable": '<span class="jt-feeding">' + (self.settings.oLanguage.sProcess || 'Feeding data...') + '</span>' }
+    }))[0];
+
+    // we need to put a fake column to stay, when there is no other column here, or when everything is hidden..
+    varCols.push({ "sClass": "center blank-col" + (varCols.length > 1 ? " jtox-hidden" : ""), "mData": "index", "mRender": function(data, type, full) { return type != 'display' ? data : '...'; }  });
+
+    jT.ui.sortColDefs(varCols);
+    self.varTable = (jT.$(".jtox-ds-variable table", self.rootElement).dataTable({
+      "bPaginate": false,
+      "bProcessing": true,
+      "bLengthChange": false,
+			"bAutoWidth": false,
+      "sDom" : "rt",
+      "bSort": true,
+      "aoColumns": varCols,
+      "bScrollCollapse": true,
+      "fnCreatedRow": function( nRow, aData ) {
+        var iDataIndex = aData.index;
+        nRow.id = 'jtox-var-' + self.instanceNo + '-' + iDataIndex;
+
+        // equalize multi-rows, if there are any
+        ccLib.equalizeHeights.apply(window, jT.$('td.jtox-multi table tbody', nRow).toArray());
+
+        jT.$(nRow).addClass('jtox-row');
+        jT.$(nRow).data('jtox-index', iDataIndex);
+        ccLib.fireCallback(self.settings.onRow, self, nRow, aData, iDataIndex);
+        jT.ui.installHandlers(self, nRow);
+      },
+      "fnDrawCallback": function(oSettings) {
+        // this is for synchro-sorting the two tables
+        var sorted = jT.$('.jtox-row', this);
+        for (var i = 0, rlen = sorted.length;i < rlen; ++i) {
+          var idx = jT.$(sorted[i]).data('jtox-index');
+          self.orderList[idx] = i;
         }
 
-        if (stopped)
+        if (rlen > 0)
+          jT.$(self.fixTable).dataTable().fnSort([[1, "asc"]]);
+      },
+      "oLanguage" : { "sEmptyTable": "-"}
+    }))[0];
+  };
+
+  cls.prototype.updateTables = function() {
+    var self = this;
+    if (self.settings.hasDetails)
+      $('div.jtox-details-box', self.rootElement).remove();
+
+    self.filterEntries(jT.$('.jtox-controls input', self.rootElement).val());
+  };
+
+  /* Prepare the groups and the features.
+  */
+  cls.prototype.prepareGroups = function (miniset) {
+    var self = this;
+
+    var grps = self.settings.configuration.groups;
+    if (typeof grps == 'function')
+      grps = grps(miniset, self);
+
+    self.groups = {};
+    for (var i in grps){
+      var grp = grps[i];
+      if (grp == null)
+        continue;
+
+      var grpArr = (typeof grp == "function" || typeof grp == "string") ? ccLib.fireCallback(grp, self, i, miniset) : grp;
+      self.groups[i] = [];
+      ccLib.enumObject(grpArr, function(fid, idx) {
+        var isUsed = false;
+        cls.enumSameAs(fid, self.feature, function (feature) {
+          isUsed |= feature.used;
+        });
+        if (idx != "name" && !isUsed) {
+          self.groups[i].push(fid);
+          // these we need to be able to return back to original state.
+          self.usedFeatures.push(fid);
+          self.feature[fid].used = true;
+        }
+      });
+    }
+  };
+
+  /* Enumerate all recofnized features, caling fnMatch(featureId, groupId) for each of it.
+  Return true from the function to stop enumeration, which in turn will return true if it was stopped.
+  */
+  cls.prototype.enumerateFeatures = function(fnMatch) {
+    var self = this;
+    var stopped = false;
+    for (var gr in self.groups) {
+      for (var i = 0, glen = self.groups[gr].length;i < glen; ++i) {
+        if (stopped = fnMatch(self.groups[gr][i], gr))
           break;
       }
 
-      return stopped;
-    },
+      if (stopped)
+        break;
+    }
 
-    filterEntries: function(needle) {
-      var self = this;
+    return stopped;
+  };
 
-      if (ccLib.isNull(needle))
-        needle = '';
-      else
-        needle = needle.toLowerCase();
+  cls.prototype.filterEntries = function(needle) {
+    var self = this;
 
-      var dataFeed = [];
-      if (needle != '') {
-        for (var i = 0, slen = self.dataset.dataEntry.length;i < slen; ++i){
-          var entry = self.dataset.dataEntry[i];
+    if (needle == null)
+      needle = '';
+    else
+      needle = needle.toLowerCase();
 
-          var match = self.enumerateFeatures(function(fId, gr){
-            var feat = self.feature[fId];
-            if (feat.search !== undefined && !feat.search)
-              return false;
-            var val = self.featureValue(fId, entry, 'sort');
-            return !ccLib.isNull(val) && val.toString().toLowerCase().indexOf(needle) >= 0;
-          });
+    var dataFeed = [];
+    if (needle != '') {
+      for (var i = 0, slen = self.dataset.dataEntry.length;i < slen; ++i){
+        var entry = self.dataset.dataEntry[i];
+
+        var match = self.enumerateFeatures(function(fId, gr){
+          var feat = self.feature[fId];
+          if (feat.search !== undefined && !feat.search)
+            return false;
+          var val = self.featureValue(fId, entry, 'sort');
+          return val != null && val.toString().toLowerCase().indexOf(needle) >= 0;
+        });
 
 
-          if (match)
-            dataFeed.push(entry);
+        if (match)
+          dataFeed.push(entry);
+      }
+    }
+    else {
+      dataFeed = self.dataset.dataEntry;
+    }
+
+    jT.$(self.fixTable).dataTable().fnClearTable();
+    jT.$(self.varTable).dataTable().fnClearTable();
+    jT.$(self.fixTable).dataTable().fnAddData(dataFeed);
+    jT.$(self.varTable).dataTable().fnAddData(dataFeed);
+    jT.$('.jt-feeding', self.rootElement).html(self.settings.oLanguage.sZeroRecords || 'No records matching the filter.');
+
+    ccLib.fillTree(jT.$('.jtox-controls', self.rootElement)[0], {
+      "filtered-text": !needle ? " " : ' (filtered to <span class="high">' + dataFeed.length + '</span>) '
+    });
+
+    if (self.settings.showTabs){
+      self.suspendEqualization = true;
+      jT.$('.jtox-ds-features .jtox-checkbox', self.rootElement).trigger('change');
+      self.suspendEqualization = false;
+    }
+
+    // finally
+    self.equalizeTables();
+  };
+
+  // These two are shortcuts for calling the queryEntries routine
+  cls.prototype.nextPage = function() {
+    var self = this;
+    if (self.entriesCount == null || self.pageStart + self.pageSize < self.entriesCount)
+      self.queryEntries(self.pageStart + self.pageSize);
+  };
+
+  cls.prototype.prevPage = function() {
+    var self = this;
+    if (self.pageStart > 0)
+      self.queryEntries(self.pageStart - self.pageSize);
+  };
+
+  cls.prototype.updateControls = function (qStart, qSize) {
+    var self = this;
+    var pane = jT.$('.jtox-controls', self.rootElement)[0];
+    ccLib.fillTree(pane, {
+      "pagestart": qSize > 0 ? qStart + 1 : 0,
+      "pageend": qStart + qSize
+    });
+
+    var nextBut = jT.$('.next-field', pane);
+    if (self.entriesCount == null || qStart + qSize < self.entriesCount)
+      jT.$(nextBut).addClass('paginate_enabled_next').removeClass('paginate_disabled_next');
+    else
+      jT.$(nextBut).addClass('paginate_disabled_next').removeClass('paginate_enabled_next');
+
+    var prevBut = jT.$('.prev-field', pane);
+    if (qStart > 0)
+      jT.$(prevBut).addClass('paginate_enabled_previous').removeClass('paginate_disabled_previous');
+    else
+      jT.$(prevBut).addClass('paginate_disabled_previous').removeClass('paginate_enabled_previous');
+  };
+
+  cls.prototype.queryUri = function (scope) {
+    var self = this;
+    if (self.datasetUri == null)
+      return null;
+    if (scope == null)
+      scope = { from: self.pageStart, size: self.pageSize };
+    if (scope.from < 0)
+      scope.from = 0;
+    if (scope.size == null)
+      scope.size = self.pageSize;
+
+    return ccLib.addParameter(self.datasetUri, "page=" + Math.floor(scope.from / scope.size) + "&pagesize=" + scope.size);
+  };
+
+  // make the actual query for the (next) portion of data.
+  cls.prototype.queryEntries = function(from, size, dataset) {
+    var self = this;
+    var scope = { 'from': from, 'size': size };
+    var qUri = self.queryUri(scope);
+    jT.$('.jtox-controls select', self.rootElement).val(scope.size);
+    self.dataset = null;
+
+    // the function for filling
+    var fillFn = function(dataset) {
+      if (!!dataset){
+        // first, arrange the page markers
+        self.pageSize = scope.size;
+        var qStart = self.pageStart = Math.floor(scope.from / scope.size) * scope.size;
+        if (dataset.dataEntry.length < self.pageSize) // we've reached the end!!
+          self.entriesCount = qStart + dataset.dataEntry.length;
+
+        // then process the dataset
+        self.dataset = cls.processDataset(dataset, $.extend(true, {}, dataset.feature, self.feature), self.settings.fnAccumulate, self.pageStart);
+        // time to call the supplied function, if any.
+        ccLib.fireCallback(self.settings.onLoaded, self, dataset);
+        if (!self.settings.noInterface) {
+          // ok - go and update the table, filtering the entries, if needed
+          self.updateTables();
+          if (self.settings.showControls) {
+            // finally - go and update controls if they are visible
+            self.updateControls(qStart, dataset.dataEntry.length);
+          }
         }
       }
       else {
-        dataFeed = self.dataset.dataEntry;
+        ccLib.fireCallback(self.settings.onLoaded, self, dataset);
+      }
+      ccLib.fireCallback(self.settings.onComplete, self);
+    };
+
+    // we may be passed dataset, if the initial, setup query was 404: Not Found - to avoid second such query...
+    if (dataset != null)
+      fillFn(dataset)
+    else
+      jT.call(self, qUri, fillFn);
+  };
+
+  /* Retrieve features for provided dataserUri, using settings.featureUri, if provided, or making automatice page=0&pagesize=1 query
+    */
+  cls.prototype.queryFeatures = function (featureUri, callback) {
+    var self = this;
+    var dataset = null;
+
+    // first, build the proper
+    var queryUri = featureUri || self.settings.featureUri || self.settings.feature_uri;
+    if (!queryUri) // rollback this is the automatic way, which makes a false query in the beginning
+      queryUri = ccLib.addParameter(self.datasetUri, "page=0&pagesize=1");
+
+    // now make the actual call...
+    jT.call(self, queryUri, function (result, jhr) {
+      if (!result && jhr.status != 200) {
+        self.$procDiv.hide();
+        self.$errDiv.show().find('.message').html( 'Server error: ' + jhr.statusText );
       }
 
-      jT.$(self.fixTable).dataTable().fnClearTable();
-      jT.$(self.varTable).dataTable().fnClearTable();
-      jT.$(self.fixTable).dataTable().fnAddData(dataFeed);
-      jT.$(self.varTable).dataTable().fnAddData(dataFeed);
-      jT.$('.jt-feeding', self.rootElement).html(self.settings.oLanguage.sZeroRecords || 'No records matching the filter.');
+      // remove the loading pane in anyways..
+      if (!!result) {
+        self.feature = result.feature;
 
-      ccLib.fillTree(jT.$('.jtox-controls', self.rootElement)[0], {
-        "filtered-text": !needle ? " " : ' (filtered to <span class="high">' + dataFeed.length + '</span>) '
-      });
+        cls.processFeatures(self.feature, self.settings.configuration.baseFeatures);
+        var miniset = { dataEntry: [], feature: self.feature };
+        if (!self.settings.noInterface) {
+          self.prepareGroups(miniset);
+          if (self.settings.showTabs) {
+            // tabs feature building
+            var nodeFn = function (id, name, parent) {
+              var fEl = jT.getTemplate('#jtox-ds-feature');
+              parent.appendChild(fEl);
+              ccLib.fillTree(fEl, {title: name.replace(/_/g, ' '), uri: self.featureUri(id)});
 
-      if (self.settings.showTabs){
-        self.suspendEqualization = true;
-        jT.$('.jtox-ds-features .jtox-checkbox', self.rootElement).trigger('change');
-        self.suspendEqualization = false;
-      }
+              var checkEl = jT.$('input[type="checkbox"]', fEl)[0];
+              if (!checkEl)
+                return;
+              checkEl.value = id;
+              if (self.settings.rememberChecks)
+                checkEl.checked = (self.featureStates[id] === undefined || self.featureStates[id]);
 
-      // finally
-      self.equalizeTables();
-    },
+              return fEl;
+            };
 
-    // These two are shortcuts for calling the queryEntries routine
-    nextPage: function() {
-      var self = this;
-      if (self.entriesCount == null || self.pageStart + self.pageSize < self.entriesCount)
-        self.queryEntries(self.pageStart + self.pageSize);
-    },
+            self.prepareTabs(jT.$('.jtox-ds-features', self.rootElement)[0], true, function (divEl, gr) {
+              var empty = true;
+              ccLib.enumObject(self.groups[gr], function (fId, idx, level) {
+                var vis = (self.feature[fId] || {})['visibility'];
+                if (!!vis && vis != 'main')
+                  return;
+                empty = false;
+                if (idx == "name")
+                  var fEl = nodeFn(null, fId, divEl);
+                else if (level == 1) {
+                  var title = self.feature[fId].title;
+                  if (title != null)
+                    nodeFn(fId, title, divEl);
+                }
+              });
 
-    prevPage: function() {
-      var self = this;
-      if (self.pageStart > 0)
-        self.queryEntries(self.pageStart - self.pageSize);
-    },
-
-    updateControls: function (qStart, qSize) {
-      var self = this;
-      var pane = jT.$('.jtox-controls', self.rootElement)[0];
-      ccLib.fillTree(pane, {
-        "pagestart": qSize > 0 ? qStart + 1 : 0,
-        "pageend": qStart + qSize
-      });
-
-      var nextBut = jT.$('.next-field', pane);
-      if (self.entriesCount == null || qStart + qSize < self.entriesCount)
-        jT.$(nextBut).addClass('paginate_enabled_next').removeClass('paginate_disabled_next');
-      else
-        jT.$(nextBut).addClass('paginate_disabled_next').removeClass('paginate_enabled_next');
-
-      var prevBut = jT.$('.prev-field', pane);
-      if (qStart > 0)
-        jT.$(prevBut).addClass('paginate_enabled_previous').removeClass('paginate_disabled_previous');
-      else
-        jT.$(prevBut).addClass('paginate_disabled_previous').removeClass('paginate_enabled_previous');
-    },
-
-    queryUri: function (scope) {
-      var self = this;
-      if (self.datasetUri == null)
-        return null;
-      if (scope == null)
-        scope = { from: self.pageStart, size: self.pageSize };
-      if (scope.from < 0)
-        scope.from = 0;
-      if (scope.size == null)
-        scope.size = self.pageSize;
-
-      return ccLib.addParameter(self.datasetUri, "page=" + Math.floor(scope.from / scope.size) + "&pagesize=" + scope.size);
-    },
-
-    // make the actual query for the (next) portion of data.
-    queryEntries: function(from, size, dataset) {
-      var self = this;
-      var scope = { 'from': from, 'size': size };
-      var qUri = self.queryUri(scope);
-      jT.$('.jtox-controls select', self.rootElement).val(scope.size);
-      self.dataset = null;
-
-      // the function for filling
-      var fillFn = function(dataset) {
-        if (!!dataset){
-          // first, arrange the page markers
-          self.pageSize = scope.size;
-          var qStart = self.pageStart = Math.floor(scope.from / scope.size) * scope.size;
-          if (dataset.dataEntry.length < self.pageSize) // we've reached the end!!
-            self.entriesCount = qStart + dataset.dataEntry.length;
-
-          // then process the dataset
-          self.dataset = cls.processDataset(dataset, $.extend(true, {}, dataset.feature, self.feature), self.settings.fnAccumulate, self.pageStart);
-          // time to call the supplied function, if any.
-          ccLib.fireCallback(self.settings.onLoaded, self, dataset);
-          if (!self.settings.noInterface) {
-            // ok - go and update the table, filtering the entries, if needed
-            self.updateTables();
-            if (self.settings.showControls) {
-              // finally - go and update controls if they are visible
-              self.updateControls(qStart, dataset.dataEntry.length);
-            }
+              return empty;
+            });
           }
+
+        	ccLib.fireCallback(self.settings.onPrepared, self, miniset, self);
+          self.prepareTables(); // prepare the tables - we need features to build them - we have them!
+          self.equalizeTables(); // to make them nicer, while waiting...
         }
         else {
-          ccLib.fireCallback(self.settings.onLoaded, self, dataset);
-        }
-        ccLib.fireCallback(self.settings.onComplete, self);
-      };
-
-      // we may be passed dataset, if the initial, setup query was 404: Not Found - to avoid second such query...
-      if (dataset != null)
-        fillFn(dataset)
-      else
-        jT.call(self, qUri, fillFn);
-    },
-
-    /* Retrieve features for provided dataserUri, using settings.featureUri, if provided, or making automatice page=0&pagesize=1 query
-      */
-    queryFeatures: function (featureUri, callback) {
-      var self = this;
-      var dataset = null;
-
-      // first, build the proper
-      var queryUri = featureUri || self.settings.featureUri || self.settings.feature_uri;
-      if (!queryUri) // rollback this is the automatic way, which makes a false query in the beginning
-        queryUri = ccLib.addParameter(self.datasetUri, "page=0&pagesize=1");
-
-      // now make the actual call...
-      jT.call(self, queryUri, function (result, jhr) {
-        if (!result && jhr.status != 200) {
-          self.$procDiv.hide();
-          self.$errDiv.show().find('.message').html( 'Error : ' + jhr.statusText );
+        	ccLib.fireCallback(self.settings.onPrepared, self, miniset, self);
         }
 
-        // remove the loading pane in anyways..
-        if (!!result) {
-          self.feature = result.feature;
+        // finally make the callback for
+        callback(dataset);
+      }
+    });
+  };
 
-          cls.processFeatures(self.feature, self.settings.configuration.baseFeatures);
-          var miniset = { dataEntry: [], feature: self.feature };
-          if (!self.settings.noInterface) {
-            self.prepareGroups(miniset);
-            if (self.settings.showTabs) {
-              // tabs feature building
-              var nodeFn = function (id, name, parent) {
-                var fEl = jT.getTemplate('#jtox-ds-feature');
-                parent.appendChild(fEl);
-                ccLib.fillTree(fEl, {title: name.replace(/_/g, ' '), uri: self.featureUri(id)});
+  /* Makes a query to the server for particular dataset, asking for feature list first, so that the table(s) can be
+  prepared.
+  */
+  cls.prototype.queryDataset = function (datasetUri, featureUri) {
+    var self = this;
+    // if some oldies exist...
+    this.clearDataset();
+    this.init();
 
-                var checkEl = jT.$('input[type="checkbox"]', fEl)[0];
-                if (!checkEl)
-                  return;
-                checkEl.value = id;
-                if (self.settings.rememberChecks)
-                  checkEl.checked = (self.featureStates[id] === undefined || self.featureStates[id]);
+    datasetUri = jT.grabPaging(self, datasetUri);
 
-                return fEl;
-              };
+    self.settings.baseUrl = self.settings.baseUrl || jT.grabBaseUrl(datasetUri);
 
-              self.prepareTabs(jT.$('.jtox-ds-features', self.rootElement)[0], true, function (divEl, gr) {
-                var empty = true;
-                ccLib.enumObject(self.groups[gr], function (fId, idx, level) {
-                  var vis = (self.feature[fId] || {})['visibility'];
-                  if (!!vis && vis != 'main')
-                    return;
-                  empty = false;
-                  if (idx == "name")
-                    var fEl = nodeFn(null, fId, divEl);
-                  else if (level == 1) {
-                    var title = self.feature[fId].title;
-                    if (!ccLib.isNull(title))
-                      nodeFn(fId, title, divEl);
-                  }
-                });
+    // remember the _original_ datasetUri and make a call with one size length to retrieve all features...
+    self.datasetUri = (datasetUri.indexOf('http') !=0 ? self.settings.baseUrl : '') + datasetUri;
 
-                return empty;
-              });
-            }
+    self.$procDiv.show();
+    self.$errDiv.hide();
+    if (!!self.settings.oLanguage.sLoadingRecords)
+      jT.$('.message', procDiv).html(self.settings.oLanguage.sLoadingRecords);
 
-          	ccLib.fireCallback(self.settings.onPrepared, self, miniset, self);
-            self.prepareTables(); // prepare the tables - we need features to build them - we have them!
-            self.equalizeTables(); // to make them nicer, while waiting...
-          }
-          else {
-          	ccLib.fireCallback(self.settings.onPrepared, self, miniset, self);
-          }
+    self.queryFeatures(featureUri, function (dataset) {
+      self.$procDiv.hide();
+      self.queryEntries(self.pageStart, self.pageSize, dataset);
+    });
+  };
 
-          // finally make the callback for
-          callback(dataset);
-        }
-      });
-    },
-
-    /* Makes a query to the server for particular dataset, asking for feature list first, so that the table(s) can be
-    prepared.
-    */
-    queryDataset: function (datasetUri, featureUri) {
-      var self = this;
-      // if some oldies exist...
-      this.clearDataset();
-      this.init();
-
-      datasetUri = jT.grabPaging(self, datasetUri);
-
-      self.settings.baseUrl = self.settings.baseUrl || jT.grabBaseUrl(datasetUri);
-
-      // remember the _original_ datasetUri and make a call with one size length to retrieve all features...
-      self.datasetUri = (datasetUri.indexOf('http') !=0 ? self.settings.baseUrl : '') + datasetUri;
-
-      self.$procDiv.show();
-      self.$errDiv.hide();
-      if (!!self.settings.oLanguage.sLoadingRecords)
-        jT.$('.message', procDiv).html(self.settings.oLanguage.sLoadingRecords);
-
-      self.queryFeatures(featureUri, function (dataset) {
-        self.$procDiv.hide();
-        self.queryEntries(self.pageStart, self.pageSize, dataset);
-      });
-    },
-
-    /* This is a needed shortcut that jToxQuery routine will call
-    */
-    query: function (uri) {
-      this.queryDataset(uri);
-    }
-  }; // end of prototype
+  /* This is a needed shortcut that jToxQuery routine will call
+  */
+  cls.prototype.query = function (uri) {
+    this.queryDataset(uri);
+  }; 
+  // end of prototype
 
   // merge them for future use..
   cls.baseFeatures = jT.$.extend({}, baseFeatures, defaultSettings.configuration.baseFeatures);
@@ -2882,68 +2886,66 @@ var jToxDataset = (function () {
       self.listDatasets(self.settings.datasetUri)
   };
 
-  cls.prototype = {
-    init: function (settings) {
-      var self = this;
+  cls.prototype.init = function (settings) {
+    var self = this;
 
-      // arrange certain things on the columns first - like dealing with short/long stars
-      self.settings.configuration.columns.dataset.Stars.mRender = function (data, type, full) {
-        return type != 'display' ? data : jT.ui.putStars(self, data, "Dataset quality stars rating (worst) 1-10 (best)");
-      };
+    // arrange certain things on the columns first - like dealing with short/long stars
+    self.settings.configuration.columns.dataset.Stars.mRender = function (data, type, full) {
+      return type != 'display' ? data : jT.ui.putStars(self, data, "Dataset quality stars rating (worst) 1-10 (best)");
+    };
 
-      if (self.settings.shortStars)
-        self.settings.configuration.columns.dataset.Stars.sWidth = "40px";
+    if (self.settings.shortStars)
+      self.settings.configuration.columns.dataset.Stars.sWidth = "40px";
 
-      // deal if the selection is chosen
-      if (!!self.settings.selectionHandler || !!self.settings.onDetails) {
-        jT.ui.putActions(self, self.settings.configuration.columns.dataset.Id);
-        self.settings.configuration.columns.dataset.Id.sWidth = "60px";
-      }
-
-      // again , so that changed defaults can be taken into account.
-      self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
-
-      // READYY! Go and prepare THE table.
-      self.table = jT.ui.putTable(self, jT.$('table', self.rootElement)[0], 'dataset');
-    },
-
-    listDatasets: function (uri) {
-      var self = this;
-      if (uri == null)
-        uri = self.settings.baseUrl + '/dataset';
-      else if (!self.settings.baseUrl)
-        self.settings.baseUrl = jT.grabBaseUrl(uri);
-
-      if (!self.settings.noInterface)
-        jT.$(self.table).dataTable().fnClearTable();
-      jT.call(self, uri, function (result, jhr) {
-        if (!result && jhr.status != 200)
-          result = { dataset: [] }; // empty one...
-        if (!!result) {
-          self.dataset = result.dataset;
-          ccLib.fireCallback(self.settings.onLoaded, self, result);
-          if (!self.settings.noInterface)
-            jT.$(self.table).dataTable().fnAddData(result.dataset);
-        }
-        else {
-          self.dataset = null;
-          ccLib.fireCallback(self.settings.onLoaded, self, result);
-        }
-      });
-    },
-
-    query: function (uri) {
-      this.listDatasets(uri);
-    },
-
-    modifyUri: function (uri) {
-      jT.$('input[type="checkbox"]', this.rootElement).each(function () {
-        if (this.checked)
-          uri = ccLib.addParameter(uri, 'feature_uris[]=' + encodeURIComponent(this.value + '/feature'));
-      })
-
-      return uri;
+    // deal if the selection is chosen
+    if (!!self.settings.selectionHandler || !!self.settings.onDetails) {
+      jT.ui.putActions(self, self.settings.configuration.columns.dataset.Id);
+      self.settings.configuration.columns.dataset.Id.sWidth = "60px";
     }
+
+    // again , so that changed defaults can be taken into account.
+    self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
+
+    // READYY! Go and prepare THE table.
+    self.table = jT.ui.putTable(self, jT.$('table', self.rootElement)[0], 'dataset');
+  };
+
+  cls.prototype.listDatasets = function (uri) {
+    var self = this;
+    if (uri == null)
+      uri = self.settings.baseUrl + '/dataset';
+    else if (!self.settings.baseUrl)
+      self.settings.baseUrl = jT.grabBaseUrl(uri, "dataset");
+
+    if (!self.settings.noInterface)
+      jT.$(self.table).dataTable().fnClearTable();
+    jT.call(self, uri, function (result, jhr) {
+      if (!result && jhr.status != 200)
+        result = { dataset: [] }; // empty one...
+      if (!!result) {
+        self.dataset = result.dataset;
+        ccLib.fireCallback(self.settings.onLoaded, self, result);
+        if (!self.settings.noInterface)
+          jT.$(self.table).dataTable().fnAddData(result.dataset);
+      }
+      else {
+        self.dataset = null;
+        ccLib.fireCallback(self.settings.onLoaded, self, result);
+      }
+    });
+  };
+
+  cls.prototype.query = function (uri) {
+    this.listDatasets(uri);
+  };
+
+  cls.prototype.modifyUri = function (uri) {
+    jT.$('input[type="checkbox"]', this.rootElement).each(function () {
+      if (this.checked)
+        uri = ccLib.addParameter(uri, 'feature_uris[]=' + encodeURIComponent(this.value + '/feature'));
+    })
+
+    return uri;
   };
 
   return cls;
@@ -3018,174 +3020,172 @@ var jToxModel = (function () {
       self.query();
   };
 
-  cls.prototype = {
-    init: function (settings) {
-      var self = this;
+  cls.prototype.init = function (settings) {
+    var self = this;
 
-      // but before given it up - make a small sorting..
-      if (!self.settings.algorithms) {
-        self.settings.configuration.columns.model.Stars.mRender = function (data, type, full) { return type != 'display' ? data : jT.ui.putStars(self, data, "Model star rating (worst) 1 - 10 (best)"); };
-        if (self.settings.shortStars)
-          self.settings.configuration.columns.model.Stars.sWidth = "40px";
+    // but before given it up - make a small sorting..
+    if (!self.settings.algorithms) {
+      self.settings.configuration.columns.model.Stars.mRender = function (data, type, full) { return type != 'display' ? data : jT.ui.putStars(self, data, "Model star rating (worst) 1 - 10 (best)"); };
+      if (self.settings.shortStars)
+        self.settings.configuration.columns.model.Stars.sWidth = "40px";
 
-        self.settings.configuration.columns.model.Algorithm.mRender = function (data, type, full) {
-          var name = data.URI.match(/https{0,1}:\/\/.*\/algorithm\/(\w+).*/)[1];
-          if (type != 'display')
-            return name;
-          var res = '<a target="_blank" href="' + data.URI + '">' +
-                    '<img src="' + (self.settings.baseUrl || jT.settings.baseUrl) + data.img + '"/>&nbsp;' +
-                    name +
-                    '</a>';
-          if (self.settings.algorithmLink) {
-            res += '<a href="' + ccLib.addParameter(self.modelUri, 'algorithm=' + encodeURIComponent(data.URI)) + '"><span class="ui-icon ui-icon-calculator float-right" title="Show models using algorithm ' + name + '"></span></a>';
-          }
-
-          return res;
-        };
-      }
-
-      var cat = self.settings.algorithms ? 'algorithm' : 'model';
-      // deal if the selection is chosen
-      if (!!self.settings.selectionHandler || !!self.settings.onDetails) {
-        jT.ui.putActions(self, self.settings.configuration.columns[cat].Id);
-        self.settings.configuration.columns[cat].Id.sWidth = "60px";
-      }
-
-      // again , so that changed defaults can be taken into account.
-      self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
-      if (self.settings.oLanguage == null)
-        self.settings.oLanguage = (self.settings.algorithms ? {
-          "sLoadingRecords": "No algorithms found.",
-          "sZeroRecords": "No algorithms found.",
-          "sEmptyTable": "No algorithmss available.",
-          "sInfo": "Showing _TOTAL_ algorithm(s) (_START_ to _END_)"
-        } : {
-          "sLoadingRecords": "No models found.",
-          "sZeroRecords": "No models found.",
-          "sEmptyTable": "No models available.",
-          "sInfo": "Showing _TOTAL_ model(s) (_START_ to _END_)"
-        });
-
-      // READYY! Go and prepare THE table.
-      self.table = jT.ui.putTable(self, $('table', self.rootElement)[0], cat);
-    },
-
-    listModels: function (uri) {
-      var self = this;
-      if (uri == null)
-        uri = self.settings.baseUrl + '/model';
-      else if (!self.settings.baseUrl)
-        self.settings.baseUrl = jT.grabBaseUrl(uri);
-
-      self.modelUri = uri;
-      if (!self.settings.noInterface)
-        jT.$(self.table).dataTable().fnClearTable();
-      jT.call(self, uri, function (result, jhr) {
-        if (!result && jhr.status != 200)
-          result = { model: [] }; // empty one
-
-        if (!!result) {
-          self.models = result.model;
-          ccLib.fireCallback(self.settings.onLoaded, self, result);
-          if (!self.settings.noInterface)
-            jT.$(self.table).dataTable().fnAddData(result.model);
+      self.settings.configuration.columns.model.Algorithm.mRender = function (data, type, full) {
+        var name = data.URI.match(/https{0,1}:\/\/.*\/algorithm\/(\w+).*/)[1];
+        if (type != 'display')
+          return name;
+        var res = '<a target="_blank" href="' + data.URI + '">' +
+                  '<img src="' + (self.settings.baseUrl || jT.settings.baseUrl) + data.img + '"/>&nbsp;' +
+                  name +
+                  '</a>';
+        if (self.settings.algorithmLink) {
+          res += '<a href="' + ccLib.addParameter(self.modelUri, 'algorithm=' + encodeURIComponent(data.URI)) + '"><span class="ui-icon ui-icon-calculator float-right" title="Show models using algorithm ' + name + '"></span></a>';
         }
-        else
-          ccLib.fireCallback(self.settings.onLoaded, self, result);
-      });
-    },
 
-    /* List algorithms that contain given 'needle' in their name
-    */
-    listAlgorithms: function (needle) {
-      var self = this;
-      var uri = self.settings.baseUrl + '/algorithm';
-      if (!!needle)
-        uri = ccLib.addParameter(uri, 'search=' + needle);
-      if (!self.settings.noInterface)
-        jT.$(self.table).dataTable().fnClearTable();
-      jT.call(self, uri, function (result, jhr) {
-        if (!result && jhr.status != 200)
-          result = { algorithm: [] }; // empty one
-        if (!!result) {
-          self.algorithm = result.algorithm;
-          ccLib.fireCallback(self.settings.onLoaded, self, result);
-          if (!self.settings.noInterface)
-            jT.$(self.table).dataTable().fnAddData(result.algorithm);
-        }
-        else
-          ccLib.fireCallback(self.settings.onLoaded, self, result);
-      });
-    },
-
-    getModel: function (algoUri, callback) {
-      var self = this;
-      var createIt = function () {
-        jT.service(self, algoUri, { method: 'POST' }, function (result, jhr) {
-          ccLib.fireCallback(callback, self, result, jhr);
-        });
+        return res;
       };
+    }
 
-      if (self.settings.forceCreate)
-        createIt();
+    var cat = self.settings.algorithms ? 'algorithm' : 'model';
+    // deal if the selection is chosen
+    if (!!self.settings.selectionHandler || !!self.settings.onDetails) {
+      jT.ui.putActions(self, self.settings.configuration.columns[cat].Id);
+      self.settings.configuration.columns[cat].Id.sWidth = "60px";
+    }
+
+    // again , so that changed defaults can be taken into account.
+    self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
+    if (self.settings.oLanguage == null)
+      self.settings.oLanguage = (self.settings.algorithms ? {
+        "sLoadingRecords": "No algorithms found.",
+        "sZeroRecords": "No algorithms found.",
+        "sEmptyTable": "No algorithmss available.",
+        "sInfo": "Showing _TOTAL_ algorithm(s) (_START_ to _END_)"
+      } : {
+        "sLoadingRecords": "No models found.",
+        "sZeroRecords": "No models found.",
+        "sEmptyTable": "No models available.",
+        "sInfo": "Showing _TOTAL_ model(s) (_START_ to _END_)"
+      });
+
+    // READYY! Go and prepare THE table.
+    self.table = jT.ui.putTable(self, $('table', self.rootElement)[0], cat);
+  };
+
+  cls.prototype.listModels = function (uri) {
+    var self = this;
+    if (uri == null)
+      uri = self.settings.baseUrl + '/model';
+    else if (!self.settings.baseUrl)
+      self.settings.baseUrl = jT.grabBaseUrl(uri, "model");
+
+    self.modelUri = uri;
+    if (!self.settings.noInterface)
+      jT.$(self.table).dataTable().fnClearTable();
+    jT.call(self, uri, function (result, jhr) {
+      if (!result && jhr.status != 200)
+        result = { model: [] }; // empty one
+
+      if (!!result) {
+        self.models = result.model;
+        ccLib.fireCallback(self.settings.onLoaded, self, result);
+        if (!self.settings.noInterface)
+          jT.$(self.table).dataTable().fnAddData(result.model);
+      }
       else
-        jT.call(self, self.settings.baseUrl + '/model?algorithm=' + encodeURIComponent(algoUri), function (result, jhr) {
-          if (!result && jhr.status != 404)
-            ccLib.fireCallback(callback, self, null, jhr);
-          else if (!result || result.model.length == 0)
-            createIt();
-          else // we have it!
-            ccLib.fireCallback(callback, self, result.model[0].URI, jhr);
-        });
-    },
+        ccLib.fireCallback(self.settings.onLoaded, self, result);
+    });
+  };
 
-    runPrediction: function (datasetUri, modelUri, callback) {
-      var self = this;
-      var q = ccLib.addParameter(datasetUri, 'feature_uris[]=' + encodeURIComponent(modelUri + '/predicted'));
+  /* List algorithms that contain given 'needle' in their name
+  */
+  cls.prototype.listAlgorithms = function (needle) {
+    var self = this;
+    var uri = self.settings.baseUrl + '/algorithm';
+    if (!!needle)
+      uri = ccLib.addParameter(uri, 'search=' + needle);
+    if (!self.settings.noInterface)
+      jT.$(self.table).dataTable().fnClearTable();
+    jT.call(self, uri, function (result, jhr) {
+      if (!result && jhr.status != 200)
+        result = { algorithm: [] }; // empty one
+      if (!!result) {
+        self.algorithm = result.algorithm;
+        ccLib.fireCallback(self.settings.onLoaded, self, result);
+        if (!self.settings.noInterface)
+          jT.$(self.table).dataTable().fnAddData(result.algorithm);
+      }
+      else
+        ccLib.fireCallback(self.settings.onLoaded, self, result);
+    });
+  };
 
-      var createIt = function () {
-        jT.service(self, modelUri, { method: "POST", data: { dataset_uri: datasetUri } }, function (result, jhr) {
-          if (!result)
-            ccLib.fireCallback(callback, self, null, jhr);
-          else
-            jT.call(self, result, callback);
-        });
-      };
-      jT.call(self, q, function (result, jhr) {
+  cls.prototype.getModel = function (algoUri, callback) {
+    var self = this;
+    var createIt = function () {
+      jT.service(self, algoUri, { method: 'POST' }, function (result, jhr) {
+        ccLib.fireCallback(callback, self, result, jhr);
+      });
+    };
+
+    if (self.settings.forceCreate)
+      createIt();
+    else
+      jT.call(self, self.settings.baseUrl + '/model?algorithm=' + encodeURIComponent(algoUri), function (result, jhr) {
+        if (!result && jhr.status != 404)
+          ccLib.fireCallback(callback, self, null, jhr);
+        else if (!result || result.model.length == 0)
+          createIt();
+        else // we have it!
+          ccLib.fireCallback(callback, self, result.model[0].URI, jhr);
+      });
+  };
+
+  cls.prototype.runPrediction = function (datasetUri, modelUri, callback) {
+    var self = this;
+    var q = ccLib.addParameter(datasetUri, 'feature_uris[]=' + encodeURIComponent(modelUri + '/predicted'));
+
+    var createIt = function () {
+      jT.service(self, modelUri, { method: "POST", data: { dataset_uri: datasetUri } }, function (result, jhr) {
         if (!result)
           ccLib.fireCallback(callback, self, null, jhr);
-        else if (!self.settings.forceCreate && result.dataEntry.length > 0) {
-          var empty = true;
-          for (var i = 0, rl = result.dataEntry.length; i < rl; ++i)
-            if (!jT.$.isEmptyObject(result.dataEntry[i].values)) {
-              empty = false;
-              break;
-            }
-          if (empty)
-            createIt();
-          else
-            ccLib.fireCallback(callback, self, result, jhr)
-        }
         else
-          createIt();
+          jT.call(self, result, callback);
       });
-    },
-
-    query: function (uri) {
-      if (this.settings.algorithms)
-        this.listAlgorithms(this.settings.algorithmNeedle = (uri || this.settings.algorithmNeedle));
+    };
+    jT.call(self, q, function (result, jhr) {
+      if (!result)
+        ccLib.fireCallback(callback, self, null, jhr);
+      else if (!self.settings.forceCreate && result.dataEntry.length > 0) {
+        var empty = true;
+        for (var i = 0, rl = result.dataEntry.length; i < rl; ++i)
+          if (!jT.$.isEmptyObject(result.dataEntry[i].values)) {
+            empty = false;
+            break;
+          }
+        if (empty)
+          createIt();
+        else
+          ccLib.fireCallback(callback, self, result, jhr)
+      }
       else
-        this.listModels(this.settings.modelUri = (uri || this.settings.modelUri));
-    },
+        createIt();
+    });
+  };
 
-    modifyUri: function (uri) {
-      jT.$('input[type="checkbox"]', this.rootElement).each(function () {
-        if (this.checked)
-          uri = ccLib.addParameter(uri, 'feature_uris[]=' + encodeURIComponent(this.value + '/predicted'));
-      })
+  cls.prototype.query = function (uri) {
+    if (this.settings.algorithms)
+      this.listAlgorithms(this.settings.algorithmNeedle = (uri || this.settings.algorithmNeedle));
+    else
+      this.listModels(this.settings.modelUri = (uri || this.settings.modelUri));
+  };
 
-      return uri;
-    }
+  cls.prototype.modifyUri = function (uri) {
+    jT.$('input[type="checkbox"]', this.rootElement).each(function () {
+      if (this.checked)
+        uri = ccLib.addParameter(uri, 'feature_uris[]=' + encodeURIComponent(this.value + '/predicted'));
+    })
+
+    return uri;
   };
 
   return cls;
@@ -3221,17 +3221,17 @@ var jToxSubstance = (function () {
             return (type != 'display') ? full.index : '&nbsp;-&nbsp;' + full.index + '&nbsp;-&nbsp;';
           } },
           'Substance Name': { sTitle: "Substance Name", mData: "name",  mRender: function (data, type, full) {
-            if (ccLib.isNull(data) || data == 'null') data = '-';
+            if (data == null || data == 'null') data = '-';
             return (type != 'display') ? data : jT.ui.linkedData('<a target="_blank" href="' + full.URI + '/study">' + data + '</a>', "Click to view study details", data)
           } },
           'Substance UUID': { sTitle: "Substance UUID", mData: "i5uuid", mRender: function (data, type, full) {
-            if (ccLib.isNull(data) || data == 'null') return '';
+            if (data == null || data == 'null') return '';
             return (type != 'display') ? data : jT.ui.shortenedData('<a target="_blank" href="' + full.URI + '/study">' + data + '</a>', "Press to copy the UUID in the clipboard", data)
           } },
           'Substance Type': { sTitle: "Substance Type", mData: "substanceType", sWidth: "15%", sDefaultContent: '-' },
           'Public name': { sTitle: "Public name", mData: "publicname", sDefaultContent: '-'},
           'Reference substance UUID': { sTitle: "Reference substance UUID", mData: "referenceSubstance", mRender: function (data, type, full) {
-            if (ccLib.isNull(data.i5uuid) || data.i5uuid == 'null') return '';
+            if (data.i5uuid == null || data.i5uuid == 'null') return '';
             return (type != 'display') ? data.i5uuid : jT.ui.shortenedData('<a target="_blank" href="' + data.uri + '">' + data.i5uuid + '</a>', "Press to copy the UUID in the clipboard", data.i5uuid);
           } },
           'Owner': { sTitle: "Owner", mData: "ownerName", sDefaultContent: '-'},
@@ -3286,94 +3286,92 @@ var jToxSubstance = (function () {
     return html;
   };
 
-  cls.prototype = {
-    init: function (settings) {
-      var self = this;
+  cls.prototype.init = function (settings) {
+    var self = this;
 
-      // deal if the selection is chosen
-      var colId = self.settings.configuration.columns.substance['Id'];
-      jT.ui.putActions(self, colId);
-      colId.sTitle = '';
+    // deal if the selection is chosen
+    var colId = self.settings.configuration.columns.substance['Id'];
+    jT.ui.putActions(self, colId);
+    colId.sTitle = '';
 
-      self.settings.configuration.columns.substance['Owner'].mRender = function (data, type, full) {
-        return (type != 'display') ? data : '<a target="_blank" href="' + self.settings.baseUrl + '/substanceowner/' + full.ownerUUID + '/substance">' + data + '</a>';
+    self.settings.configuration.columns.substance['Owner'].mRender = function (data, type, full) {
+      return (type != 'display') ? data : '<a target="_blank" href="' + self.settings.baseUrl + '/substanceowner/' + full.ownerUUID + '/substance">' + data + '</a>';
+    };
+
+    var opts = {  "sDom": "rti" };
+    if (self.settings.showControls) {
+      jT.ui.bindControls(self, {
+        nextPage: function () { self.nextPage(); },
+        prevPage: function () { self.prevPage(); },
+        sizeChange: function() { self.queryEntries(self.pageStart, parseInt(jT.$(this).val())); },
+        filter: function () { jT.$(self.table).dataTable().fnFilter(jT.$(this).val()); }
+      });
+
+      opts['fnInfoCallback'] = function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
+        var needle = jT.$('.filterbox', self.rootElement).val();
+        jT.$('.filtered-text', self.rootElement).html(!needle ? ' ' : ' (filtered to <span class="high">' + iTotal + '</span>) ');
+        return '';
       };
+    }
+    else
+      jT.$('.jtox-controls', self.rootElement).remove();
 
-      var opts = {  "sDom": "rti" };
-      if (self.settings.showControls) {
-        jT.ui.bindControls(self, {
-          nextPage: function () { self.nextPage(); },
-          prevPage: function () { self.prevPage(); },
-          sizeChange: function() { self.queryEntries(self.pageStart, parseInt(jT.$(this).val())); },
-          filter: function () { jT.$(self.table).dataTable().fnFilter(jT.$(this).val()); }
-        });
+    // again , so that changed defaults can be taken into account.
+    self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
 
-        opts['fnInfoCallback'] = function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-          var needle = jT.$('.filterbox', self.rootElement).val();
-          jT.$('.filtered-text', self.rootElement).html(!needle ? ' ' : ' (filtered to <span class="high">' + iTotal + '</span>) ');
-          return '';
-        };
+    // READYY! Go and prepare THE table.
+    self.table = jT.ui.putTable(self, jT.$('table', self.rootElement)[0], 'substance', opts);
+  };
+
+  cls.prototype.queryEntries = function(from, size) {
+    var self = this;
+    if (from < 0)
+      from = 0;
+
+    if (!size || size < 0)
+      size = self.pageSize;
+
+    var qStart = Math.floor(from / size);
+    var qUri = ccLib.addParameter(self.substanceUri, "page=" + qStart + "&pagesize=" + size);
+    jT.call(self, qUri, function (result, jhr) {
+      if (!result && jhr.status != 200)
+        result = { substabce: [] }; // empty one
+      if (!!result) {
+        self.pageSize = size;
+        self.pageStart = from;
+
+        for (var i = 0, rl = result.substance.length; i < rl; ++i)
+          result.substance[i].index = i + from + 1;
+
+        self.substance = result.substance;
+
+        if (result.substance.length < self.pageSize) // we've reached the end!!
+          self.entriesCount = from + result.substance.length;
+
+        // time to call the supplied function, if any.
+        ccLib.fireCallback(self.settings.onLoaded, self, result);
+        if (!self.settings.noInterface) {
+          jT.$(self.table).dataTable().fnClearTable();
+          jT.$(self.table).dataTable().fnAddData(result.substance);
+
+          self.updateControls(from, result.substance.length);
+        }
       }
       else
-        jT.$('.jtox-controls', self.rootElement).remove();
+        ccLib.fireCallback(self.settings.onLoaded, self, result);
+    });
+  };
 
-      // again , so that changed defaults can be taken into account.
-      self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
+  cls.prototype.querySubstance = function (uri) {
+    var self = this;
+    self.substanceUri = jT.grabPaging(self, uri);
+    if (self.settings.baseUrl == null)
+      self.settings.baseUrl = jT.grabBaseUrl(uri, "substance");
+    self.queryEntries(self.pageStart);
+  };
 
-      // READYY! Go and prepare THE table.
-      self.table = jT.ui.putTable(self, jT.$('table', self.rootElement)[0], 'substance', opts);
-    },
-
-    queryEntries: function(from, size) {
-      var self = this;
-      if (from < 0)
-        from = 0;
-
-      if (!size || size < 0)
-        size = self.pageSize;
-
-      var qStart = Math.floor(from / size);
-      var qUri = ccLib.addParameter(self.substanceUri, "page=" + qStart + "&pagesize=" + size);
-      jT.call(self, qUri, function (result, jhr) {
-        if (!result && jhr.status != 200)
-          result = { substabce: [] }; // empty one
-        if (!!result) {
-          self.pageSize = size;
-          self.pageStart = from;
-
-          for (var i = 0, rl = result.substance.length; i < rl; ++i)
-            result.substance[i].index = i + from + 1;
-
-          self.substance = result.substance;
-
-          if (result.substance.length < self.pageSize) // we've reached the end!!
-            self.entriesCount = from + result.substance.length;
-
-          // time to call the supplied function, if any.
-          ccLib.fireCallback(self.settings.onLoaded, self, result);
-          if (!self.settings.noInterface) {
-            jT.$(self.table).dataTable().fnClearTable();
-            jT.$(self.table).dataTable().fnAddData(result.substance);
-
-            self.updateControls(from, result.substance.length);
-          }
-        }
-        else
-          ccLib.fireCallback(self.settings.onLoaded, self, result);
-      });
-    },
-
-    querySubstance: function (uri) {
-      var self = this;
-      self.substanceUri = jT.grabPaging(self, uri);
-      if (ccLib.isNull(self.settings.baseUrl))
-        self.settings.baseUrl = jT.grabBaseUrl(uri);
-      self.queryEntries(self.pageStart);
-    },
-
-    query: function (uri) {
-      this.querySubstance(uri);
-    }
+  cls.prototype.query = function (uri) {
+    this.querySubstance(uri);
   };
 
   // some "inheritance" :-)
@@ -3442,112 +3440,110 @@ var jToxComposition = (function () {
 		return ccLib.extendArray(old, value != null ? value.trim().toLowerCase().split("|") : [value]).filter(ccNonEmptyFilter);
   };
   
-  cls.prototype = {
-    prepareTable: function (json, tab) {
-      var self = this;
+  cls.prototype.prepareTable = function (json, tab) {
+    var self = this;
+    
+    // deal if the selection is chosen
+    var colId = self.settings.configuration.columns.composition.Name;
+    if (!!self.settings.selectionHandler) {
+      jT.ui.putActions(self, colId);
+      colId.sWidth = "60px";
+    }
       
-      // deal if the selection is chosen
-      var colId = self.settings.configuration.columns.composition.Name;
-      if (!!self.settings.selectionHandler) {
-        jT.ui.putActions(self, colId);
-        colId.sWidth = "60px";
+    // we need that processing to remove the title of "Also contained in..." column...
+    var cols = jT.ui.processColumns(self, 'composition');
+    for (var i = 0, cl = cols.length; i < cl; ++i)
+      if (cols[i].sTitle == 'Also') {
+        cols[i].sTitle = '';
+        // we need to do this here, because 'self' is not defined up there...
+        cols[i].mRender = function(val, type, full) { return !val ? '' : '<a href="' + (self.settings.baseUrl || self.baseUrl) + '/substance?type=related&compound_uri=' + encodeURIComponent(val) + '" target="_blank">Also contained in...</a>'; };
+        break;
       }
-        
-      // we need that processing to remove the title of "Also contained in..." column...
-      var cols = jT.ui.processColumns(self, 'composition');
-      for (var i = 0, cl = cols.length; i < cl; ++i)
-        if (cols[i].sTitle == 'Also') {
-          cols[i].sTitle = '';
-          // we need to do this here, because 'self' is not defined up there...
-          cols[i].mRender = function(val, type, full) { return !val ? '' : '<a href="' + (self.settings.baseUrl || self.baseUrl) + '/substance?type=related&compound_uri=' + encodeURIComponent(val) + '" target="_blank">Also contained in...</a>'; };
-          break;
-        }
-        
-      // if we have showDiagram set to true we need to show it up
-      if (self.settings.showDiagrams) {
-        var diagFeature = jToxCompound.baseFeatures['http://www.opentox.org/api/1.1#Diagram'];
-        cols.push(jT.$.extend({}, diagFeature.column, { 
-          sTitle: 'Structure', 
-          mData: "component", 
-          mRender: function (val, type, full) { return diagFeature.render(val.compound.URI, type, val); } 
-        }));
-      }
-      // READYY! Go and prepare THE table.
-      self.table = jT.ui.putTable(self, jT.$('table.composition-table', tab)[0], 'composition', {
-        "aoColumns": cols
-      });
       
-      jT.$(self.table).dataTable().fnAddData(json);
-      // now make a few fixing for multi-column title
-      var colSpan = jT.$('th.colspan-2', self.table);
-      jT.$(colSpan).attr('colspan', 2);
-      jT.$(jT.$(colSpan).next()).remove();
-      return self.table;
-    },
+    // if we have showDiagram set to true we need to show it up
+    if (self.settings.showDiagrams) {
+      var diagFeature = jToxCompound.baseFeatures['http://www.opentox.org/api/1.1#Diagram'];
+      cols.push(jT.$.extend({}, diagFeature.column, { 
+        sTitle: 'Structure', 
+        mData: "component", 
+        mRender: function (val, type, full) { return diagFeature.render(val.compound.URI, type, val); } 
+      }));
+    }
+    // READYY! Go and prepare THE table.
+    self.table = jT.ui.putTable(self, jT.$('table.composition-table', tab)[0], 'composition', {
+      "aoColumns": cols
+    });
     
-    queryComposition: function (uri) {
-      var self = this;
-      self.compositionUri = uri;
-      self.baseUrl = jT.grabBaseUrl(uri);
-      jT.call(self, uri, function (json) {
-        if (!!json && !!json.composition) {
-          // clear the old tabs, if any.
-          var substances = {};
+    jT.$(self.table).dataTable().fnAddData(json);
+    // now make a few fixing for multi-column title
+    var colSpan = jT.$('th.colspan-2', self.table);
+    jT.$(colSpan).attr('colspan', 2);
+    jT.$(jT.$(colSpan).next()).remove();
+    return self.table;
+  };
     
-          jToxCompound.processFeatures(json.feature);
-          // proprocess the data...
-          for (var i = 0, cmpl = json.composition.length; i < cmpl; ++i) {
-            var cmp = json.composition[i];
+  cls.prototype.queryComposition = function (uri) {
+    var self = this;
+    self.compositionUri = uri;
+    self.baseUrl = jT.grabBaseUrl(uri, "substance");
+    jT.call(self, uri, function (json) {
+      if (!!json && !!json.composition) {
+        // clear the old tabs, if any.
+        var substances = {};
+  
+        jToxCompound.processFeatures(json.feature);
+        // proprocess the data...
+        for (var i = 0, cmpl = json.composition.length; i < cmpl; ++i) {
+          var cmp = json.composition[i];
+          
+          // TODO: Start using show banner!
+          jToxCompound.processEntry(cmp.component, json.feature, fnDatasetValue);
+  
+          // now prepare the subs        
+          var theSubs = substances[cmp.compositionUUID];
+          if (theSubs === undefined)
+            substances[cmp.compositionUUID] = theSubs = { name: "", purity: "", maxvalue: 0, uuid: cmp.compositionUUID, composition: [] };
+          
+          theSubs.composition.push(cmp);
+          if (cmp.compositionName != '' && cmp.compositionName != null)
+            theSubs.name = cmp.compositionName;
             
-            // TODO: Start using show banner!
-            jToxCompound.processEntry(cmp.component, json.feature, fnDatasetValue);
-    
-            // now prepare the subs        
-            var theSubs = substances[cmp.compositionUUID];
-            if (theSubs === undefined)
-              substances[cmp.compositionUUID] = theSubs = { name: "", purity: "", maxvalue: 0, uuid: cmp.compositionUUID, composition: [] };
-            
-            theSubs.composition.push(cmp);
-            if (cmp.compositionName != '' && cmp.compositionName != null)
-              theSubs.name = cmp.compositionName;
-              
-            var val = cmp.proportion.typical;
-            if (cmp.relation == 'HAS_CONSTITUENT' && theSubs.name == '') {
-              theSubs.name = cmp.component.compound['name'] + ' (' + jToxComposition.formatConcentration(val.precision, val.value, val.unit) + ')';
-            }
-            
-            if (cmp.relation == 'HAS_CONSTITUENT' && theSubs.maxvalue < val.value) {
-              theSubs.maxvalue = val.value;
-              val = cmp.proportion.real;
-              theSubs.purity = jToxComposition.formatConcentration(null, val.lowerValue + '-' + val.upperValue, val.unit);
-            }
+          var val = cmp.proportion.typical;
+          if (cmp.relation == 'HAS_CONSTITUENT' && theSubs.name == '') {
+            theSubs.name = cmp.component.compound['name'] + ' (' + jToxComposition.formatConcentration(val.precision, val.value, val.unit) + ')';
           }
           
-          ccLib.fireCallback(self.settings.onLoaded, self, json.composition);
-          // now make the actual filling
-          if (!self.settings.noInterface) {
-            for (var i in substances) {
-              var panel = jT.getTemplate('#jtox-composition');
-              self.rootElement.appendChild(panel);
-              
-              if (self.settings.showBanner)
-                ccLib.fillTree(jT.$('.composition-info', panel)[0], substances[i]);
-              else // we need to remove it
-                jT.$('.composition-info', panel).remove();
-              // we need to prepare tables, abyways.
-              self.prepareTable(substances[i].composition, panel);
-            }
+          if (cmp.relation == 'HAS_CONSTITUENT' && theSubs.maxvalue < val.value) {
+            theSubs.maxvalue = val.value;
+            val = cmp.proportion.real;
+            theSubs.purity = jToxComposition.formatConcentration(null, val.lowerValue + '-' + val.upperValue, val.unit);
           }
         }
-        else
-          ccLib.fireCallback(self.settings.onLoaded, self, json.composition);
-      });
-    },   
+        
+        ccLib.fireCallback(self.settings.onLoaded, self, json.composition);
+        // now make the actual filling
+        if (!self.settings.noInterface) {
+          for (var i in substances) {
+            var panel = jT.getTemplate('#jtox-composition');
+            self.rootElement.appendChild(panel);
+            
+            if (self.settings.showBanner)
+              ccLib.fillTree(jT.$('.composition-info', panel)[0], substances[i]);
+            else // we need to remove it
+              jT.$('.composition-info', panel).remove();
+            // we need to prepare tables, abyways.
+            self.prepareTable(substances[i].composition, panel);
+          }
+        }
+      }
+      else
+        ccLib.fireCallback(self.settings.onLoaded, self, json.composition);
+    });
+  };
     
-    query: function (uri) {
-      jT.$(self.rootElement).empty();
-      this.queryComposition(uri);
-    }
+  cls.prototype.query = function (uri) {
+    jT.$(self.rootElement).empty();
+    this.queryComposition(uri);
   };
   
   return cls;
@@ -3622,433 +3618,432 @@ var jToxStudy = (function () {
   };
 
   // now follow the prototypes of the instance functions.
-  cls.prototype = {
-    loadPanel: function(panel){
-      var self = this;
-      if (jT.$(panel).hasClass('unloaded')){
-        var uri = self.addParameters(jT.$(panel).data('jtox-uri'));
-        jT.call(self, uri, function(study){
-          if (!!study) {
-            jT.$('.jtox-study.folded', panel).removeClass('folded');
-            jT.$(panel).removeClass('unloaded').addClass('loaded');
+  cls.prototype.loadPanel = function(panel){
+    var self = this;
+    if (jT.$(panel).hasClass('unloaded')){
+      var uri = self.addParameters(jT.$(panel).data('jtox-uri'));
+      jT.call(self, uri, function(study){
+        if (!!study) {
+          jT.$('.jtox-study.folded', panel).removeClass('folded');
+          jT.$(panel).removeClass('unloaded').addClass('loaded');
 
-            self.processStudies(panel, study.study, true);
-            ccLib.fireCallback(self.settings.onStudy, self, study.study);
-          }
-        });
-      }
-    },
-
-    getFormatted: function (data, type, format) {
-      var value = null;
-      if (typeof format === 'function' )
-        value = format.call(this, data, type);
-      else if (typeof format === 'string' || typeof format === 'number')
-        value = data[format];
-      else
-        value = data[0];
-
-      return value;
-    },
-
-    createCategory: function(tab, category) {
-      var self = this;
-
-      var theCat = jT.$('.' + category + '.jtox-study', tab)[0];
-      if (!theCat) {
-        theCat = jT.getTemplate('#jtox-study');
-        tab.appendChild(theCat);
-        jT.$(theCat).addClass(category);
-      }
-
-      return theCat;
-    },
-
-    addParameters: function (summaryURI) {
-      var self = this;
-      var pars = ["property_uri", "top", "category"];
-      for (var i = 0; i < pars.length; ++i) {
-        var p = pars[i];
-        if (!!self.settings[p])
-          summaryURI = ccLib.addParameter(summaryURI, p + "=" + self.settings[p]);
-      }
-
-      return summaryURI;
-    },
-
-    // modifies the column title, according to configuration and returns "null" if it is marked as "invisible".
-    ensureTable: function (tab, study) {
-      var self = this;
-      var category = study.protocol.category.code;
-      var theTable = jT.$('.' + category + ' .jtox-study-table', tab)[0];
-      if (!jT.$(theTable).hasClass('dataTable')) {
-	      var defaultColumns = [
-	        { "sTitle": "Name", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.endpoint" }, // The name (endpoint)
-	        { "sTitle": "Endpoint", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData": "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return self.getFormatted(data, type, "endpoint"); }); } },   // Effects columns
-	        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return jT.ui.renderRange(data.result, null, type) }); } },
-	        { "sTitle": "Text", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return data.result.textValue ||  '-'; }); } },
-	        { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "-"  },    // Protocol columns
-	        { "sTitle": "Owner", "sClass": "center middle", "sWidth": "10%", "mData": "citation.owner", "sDefaultContent": "-" },
-	        { "sTitle": "Citation", "sClass": "center middle", "sWidth": "10%", "mData": "citation", "mRender": function (data, type, full) { return (data.title || "") + ' ' + (!!data.year || ""); }  },
-          { "sTitle": "Reliability", "sClass": "center middle", "sWidth": "10%", "mData": "reliability", "mRender": function (data, type, full) { return data.r_value; }  },
-	        { "sTitle": "UUID", "sClass": "center middle", "sWidth": "15%", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : jT.ui.shortenedData(data, "Press to copy the UUID in the clipboard"); } }
-	      ];
-
-        var colDefs = [];
-
-        // start filling it
-        var parCount = 0;
-
-        // this function takes care to add as columns all elements from given array
-        var putAGroup = function(group, fProcess) {
-          var count = 0;
-          var skip = [];
-          for (var p in group) {
-            if (skip.indexOf(p) > -1)
-              continue;
-            if (group[p + " unit"] !== undefined)
-              skip.push(p + " unit");
-            var val = fProcess(p);
-            if (ccLib.isNull(val))
-              continue;
-
-            colDefs.push(val);
-            count++;
-          }
-          return count;
+          self.processStudies(panel, study.study, true);
+          ccLib.fireCallback(self.settings.onStudy, self, study.study);
         }
+      });
+    }
+  };
 
-        var putDefaults = function(start, len, group) {
-          for (var i = 0;i < len; ++i) {
-            var col = jT.$.extend({}, defaultColumns[i + start]);
-            col = jT.ui.modifyColDef(self, col, category, group);
-            if (col != null) {
-              colDefs.push(col);
-            }
+  cls.prototype.getFormatted = function (data, type, format) {
+    var value = null;
+    if (typeof format === 'function' )
+      value = format.call(this, data, type);
+    else if (typeof format === 'string' || typeof format === 'number')
+      value = data[format];
+    else
+      value = data[0];
+
+    return value;
+  };
+
+  cls.prototype.createCategory = function(tab, category) {
+    var self = this;
+
+    var theCat = jT.$('.' + category + '.jtox-study', tab)[0];
+    if (!theCat) {
+      theCat = jT.getTemplate('#jtox-study');
+      tab.appendChild(theCat);
+      jT.$(theCat).addClass(category);
+    }
+
+    return theCat;
+  };
+
+  cls.prototype.addParameters = function (summaryURI) {
+    var self = this;
+    var pars = ["property_uri", "top", "category"];
+    for (var i = 0; i < pars.length; ++i) {
+      var p = pars[i];
+      if (!!self.settings[p])
+        summaryURI = ccLib.addParameter(summaryURI, p + "=" + self.settings[p]);
+    }
+
+    return summaryURI;
+  };
+
+  // modifies the column title, according to configuration and returns "null" if it is marked as "invisible".
+  cls.prototype.ensureTable =function (tab, study) {
+    var self = this;
+    var category = study.protocol.category.code;
+    var theTable = jT.$('.' + category + ' .jtox-study-table', tab)[0];
+    if (!jT.$(theTable).hasClass('dataTable')) {
+      var defaultColumns = [
+        { "sTitle": "Name", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.endpoint" }, // The name (endpoint)
+        { "sTitle": "Endpoint", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData": "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return self.getFormatted(data, type, "endpoint"); }); } },   // Effects columns
+        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return jT.ui.renderRange(data.result, null, type) }); } },
+        { "sTitle": "Text", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return jT.ui.renderMulti(data, type, full, function (data, type) { return data.result.textValue ||  '-'; }); } },
+        { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "-"  },    // Protocol columns
+        { "sTitle": "Owner", "sClass": "center middle", "sWidth": "10%", "mData": "citation.owner", "sDefaultContent": "-" },
+        { "sTitle": "Citation", "sClass": "center middle", "sWidth": "10%", "mData": "citation", "mRender": function (data, type, full) { return (data.title || "") + ' ' + (!!data.year || ""); }  },
+        { "sTitle": "Reliability", "sClass": "center middle", "sWidth": "10%", "mData": "reliability", "mRender": function (data, type, full) { return data.r_value; }  },
+        { "sTitle": "UUID", "sClass": "center middle", "sWidth": "15%", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : jT.ui.shortenedData(data, "Press to copy the UUID in the clipboard"); } }
+      ];
+
+      var colDefs = [];
+
+      // start filling it
+      var parCount = 0;
+
+      // this function takes care to add as columns all elements from given array
+      var putAGroup = function(group, fProcess) {
+        var count = 0;
+        var skip = [];
+        for (var p in group) {
+          if (skip.indexOf(p) > -1)
+            continue;
+          if (group[p + " unit"] !== undefined)
+            skip.push(p + " unit");
+          var val = fProcess(p);
+          if (val == null)
+            continue;
+
+          colDefs.push(val);
+          count++;
+        }
+        return count;
+      }
+
+      var putDefaults = function(start, len, group) {
+        for (var i = 0;i < len; ++i) {
+          var col = jT.$.extend({}, defaultColumns[i + start]);
+          col = jT.ui.modifyColDef(self, col, category, group);
+          if (col != null) {
+            colDefs.push(col);
           }
+        }
+      };
+
+      putDefaults(0, 1, "main");
+
+      // use it to put parameters...
+      putAGroup(study.parameters, function(p) {
+        if (study.effects[0].conditions[p] !== undefined  || study.effects[0].conditions[p + " unit"] !== undefined)
+          return undefined;
+
+        var col = {
+          "sTitle" : p,
+          "sClass" : "center middle",
+          "mData" : "parameters." + p,
+          "sDefaultContent": "-"
         };
 
-        putDefaults(0, 1, "main");
+        col = jT.ui.modifyColDef(self, col, category, "parameters");
+        if (col == null)
+          return null;
 
-        // use it to put parameters...
-        putAGroup(study.parameters, function(p) {
-          if (study.effects[0].conditions[p] !== undefined  || study.effects[0].conditions[p + " unit"] !== undefined)
-            return undefined;
+        col["mRender"] = function (data, type, full) { return jT.ui.renderRange(data, full[p + " unit"], type); };
+        return col;
+      });
+      // .. and conditions
+      putAGroup(study.effects[0].conditions, function(c){
+        var col = {
+          "sTitle" : c,
+          "sClass" : "center middle jtox-multi",
+          "mData" : "effects"
+        };
 
-          var col = {
-            "sTitle" : p,
-            "sClass" : "center middle",
-            "mData" : "parameters." + p,
-            "sDefaultContent": "-"
-          };
+        col = jT.ui.modifyColDef(self, col, category, "conditions");
+        if (col == null)
+          return null;
 
-          col = jT.ui.modifyColDef(self, col, category, "parameters");
-          if (col == null)
-            return null;
+        col["mRender"] = function(data, type, full) {
+          return jT.ui.renderMulti(data, type, full, function(data, type) {
+            return jT.ui.renderRange(data.conditions[c], data.conditions[c + " unit"], type);
+          });
+        };
+        return col;
+      });
 
-          col["mRender"] = function (data, type, full) { return jT.ui.renderRange(data, full[p + " unit"], type); };
-          return col;
+      // add also the "default" effects columns
+      putDefaults(1, 3, "effects");
+
+      // now is time to put interpretation columns..
+      putAGroup(study.interpretation, function(i){
+        var col = { "sTitle": i, "sClass" : "center middle jtox-multi", "mData" : "interpretation." + i, "sDefaultContent": "-"};
+        return jT.ui.modifyColDef(self, col, category, "interpretation");
+      });
+
+      // finally put the protocol entries
+      putDefaults(4, 5, "protocol");
+
+      // but before given it up - make a small sorting..
+      jT.ui.sortColDefs(colDefs);
+
+      // READYY! Go and prepare THE table.
+      jT.$(theTable).dataTable( {
+        "bPaginate": true,
+        "bProcessing": true,
+        "bLengthChange": false,
+				"bAutoWidth": false,
+        "sDom" : self.settings.sDom,
+        "aoColumns": colDefs,
+        "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
+          var el = jT.$('.title .data-field', jT.$(this).parents('.jtox-study'))[0];
+          el.innerHTML = jT.ui.updateCounter(el.innerHTML, iTotal);
+          return sPre;
+        },
+        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+          ccLib.equalizeHeights.apply(window, jT.$('td.jtox-multi table tbody', nRow).toArray());
+        },
+
+				"oLanguage": jT.$.extend({
+          "sProcessing": "<img src='" + (jT.settings.baseUrl || self.baseUrl) + "/images/24x24_ambit.gif' border='0'>",
+          "sLoadingRecords": "No studies found.",
+          "sZeroRecords": "No studies found.",
+          "sEmptyTable": "No studies available.",
+          "sInfo": "Showing _TOTAL_ study(s) (_START_ to _END_)",
+          "sLengthMenu": 'Display <select>' +
+            '<option value="10">10</option>' +
+            '<option value="20">20</option>' +
+            '<option value="50">50</option>' +
+            '<option value="100">100</option>' +
+            '<option value="-1">all</option>' +
+            '</select> studies.'
+        }, self.settings.oLanguage)
+      });
+
+      jT.$(theTable).dataTable().fnAdjustColumnSizing();
+    }
+    else
+      jT.$(theTable).dataTable().fnClearTable();
+
+    return theTable;
+  };
+
+  cls.prototype.processSummary = function (summary) {
+    var self = this;
+    var typeSummary = {};
+    var knownNames = { "P-CHEM": "P-Chem", "ENV_FATE" : "Env Fate", "ECOTOX" : "Eco Tox", "TOX" : "Tox"};
+
+    // first - clear all existing tabs
+		jT.$('.jtox-study', self.rootElement).remove();
+
+    // create the groups on the corresponding tabs, first sorting them alphabetically
+    summary.sort(function (a, b) {
+    	var valA = (a.category.order || a.category.description || a.category.title);
+    	var valB = (b.category.order || b.category.description || b.category.title);
+    	if (valA == null)
+    		return -1;
+    	if (valB == null)
+    		return 1;
+      if (valA == valB)
+        return 0;
+      return (valA < valB) ? -1 : 1;
+    });
+
+    var tabRoot = $('ul', self.rootElement).parent()[0];
+    var added = 0;
+    var lastAdded = null;
+    var addStudyTab = function (top, sum) {
+      var tab = jT.getTemplate('#jtox-study-tab');
+      var link = jT.ui.addTab(tabRoot, (knownNames[top] || sum.topcategory.title) + " (0)", "jtox-" + top.toLowerCase() + '_' + self.instanceNo, tab).tab;
+      jT.$(link).data('type', top);
+
+      jT.$(tab).addClass(top).data('jtox-uri', sum.topcategory.uri);
+      ccLib.fillTree(tab, self.substance);
+
+      added++;
+      lastAdded = top;
+
+      jT.$('div.jtox-study-tab div button', tabRoot).on('click', function (e) {
+      	var par = jT.$(this).parents('.jtox-study-tab')[0];
+  	    if (jT.$(this).hasClass('expand-all')) {
+  		    jT.$('.jtox-foldable', par).removeClass('folded');
+  	    }
+  	    else if (jT.$(this).hasClass('collapse-all')) {
+  		    jT.$('.jtox-foldable', par).addClass('folded');
+  	    }
+      });
+
+      return tab;
+    };
+
+    for (var si = 0, sl = summary.length; si < sl; ++si) {
+      var sum = summary[si];
+      var top = sum.topcategory.title;
+      if (!top)
+        continue;
+      var top = top.replace(/ /g, "_");
+      var tab = jT.$('.jtox-study-tab.' + top, self.rootElement)[0];
+      if (!tab)
+        tab = addStudyTab(top, sum);
+
+      var catname = sum.category.title;
+      if (!catname)
+        typeSummary[top] = sum.count;
+      else
+        self.createCategory(tab, catname);
+    }
+
+    // a small hack to force openning of this, later in the querySummary()
+    if (added == 1)
+      self.settings.tab = lastAdded;
+
+    // update the number in the tabs...
+    jT.$('ul li a', self.rootElement).each(function (i){
+      var data = jT.$(this).data('type');
+      if (!!data){
+        var cnt = typeSummary[data];
+        var el = jT.$(this)[0];
+        el.innerHTML = jT.ui.updateCounter(el.innerHTML, cnt);
+      }
+    });
+
+    // now install the filter box handler. It delays the query a bit and then spaws is to all tables in the tab.
+    var filterTimeout = null;
+    var fFilter = function (ev) {
+      if (!!filterTimeout)
+        clearTimeout(filterTimeout);
+
+      var field = ev.currentTarget;
+      var tab = jT.$(this).parents('.jtox-study-tab')[0];
+
+      filterTimeout = setTimeout(function() {
+        var tabList = jT.$('.jtox-study-table', tab);
+        for (var t = 0, tlen = tabList.length; t < tlen; ++t) {
+          jT.$(tabList[t]).dataTable().fnFilter(field.value);
+        }
+      }, 300);
+    };
+
+    var tabList = jT.$('.jtox-study-tab');
+    for (var t = 0, tlen = tabList.length;t < tlen; t++){
+      var filterEl = jT.$('.jtox-study-filter', tabList[t])[0].onkeydown = fFilter;
+    }
+  };
+
+  cls.prototype.processStudies = function (tab, study, map) {
+    var self = this;
+    var cats = {};
+    var cntCats = 0;
+
+    // first swipe to map them to different categories...
+    if (!map){
+      // add this one, if we're not remapping. map == false assumes that all passed studies will be from
+      // one category.
+      cats[study[0].protocol.category.code] = study;
+    }
+    else{
+      for (var i = 0, slen = study.length; i < slen; ++i) {
+        var ones = study[i];
+        if (map) {
+          if (cats[ones.protocol.category.code] === undefined) {
+            cats[ones.protocol.category.code] = [ones];
+            cntCats++;
+          }
+          else {
+            cats[ones.protocol.category.code].push(ones);
+          }
+        }
+      }
+    }
+
+    // now iterate within all categories (if many) and initialize the tables
+    for (var c in cats) {
+      var onec = cats[c];
+      var aStudy = jT.$('.' + c + '.jtox-study', tab)[0];
+      if (aStudy === undefined)
+        continue;
+
+      ccLib.fillTree(aStudy, {title: onec[0].protocol.category.title + " (0)"});
+
+      // now swipe through all studyies to build a "representative" one with all fields.
+      var study = {};
+      for (var i = 0, cl = onec.length; i < cl; ++i) {
+        jT.$.extend(true, study, onec[i]);
+        if (!ccLib.isEmpty(study.parameters) && !ccLib.isEmpty(study.effects[0].conditions))
+          break;
+      }
+
+      var theTable = self.ensureTable(tab, study);
+      jT.$(theTable).dataTable().fnAddData(onec);
+      jT.$(theTable).colResizable({ minWidth: 30, liveDrag: true });
+      if (cntCats > 1)
+        jT.$(theTable).parents('.jtox-study').addClass('folded');
+
+      // we need to fix columns height's because of multi-cells
+      jT.$('#' + theTable.id + ' .jtox-multi').each(function(index){
+        this.style.height = '' + this.offsetHeight + 'px';
+      });
+    }
+  };
+
+  cls.prototype.querySummary = function(summaryURI) {
+    var self = this;
+
+    summaryURI = self.addParameters(summaryURI);
+    jT.call(self, summaryURI, function(summary) {
+      if (!!summary && !!summary.facet)
+        self.processSummary(summary.facet);
+        ccLib.fireCallback(self.settings.onSummary, self, summary.facet);
+        // check if there is an initial tab passed so we switch to it
+        if (!!self.settings.tab) {
+          var div = jT.$('.jtox-study-tab.' + decodeURIComponent(self.settings.tab).replace(/ /g, '_').toUpperCase(), self.root)[0];
+          if (!!div) {
+            for (var idx = 0, cl = div.parentNode.children.length; idx < cl; ++idx)
+              if (div.parentNode.children[idx].id == div.id)
+                break;
+            --idx;
+            jT.$(self.tabs).tabs('option', 'active', idx);
+            jT.$(self.tabs).tabs('option', 'selected', idx);
+          }
+        }
+    });
+  };
+
+  cls.prototype.insertComposition = function(compositionURI) {
+    var compRoot = jT.$('.jtox-compo-tab', this.rootElement)[0];
+    jT.$(compRoot).empty();
+    new jToxComposition(compRoot, jT.$.extend({}, this.settings, jT.blankSettings, {'compositionUri': compositionURI}));
+  };
+
+  cls.prototype.querySubstance = function(substanceURI) {
+    var self = this;
+
+    // re-initialize us on each of these calls.
+    self.baseUrl = self.settings.baseUrl == null ? jT.grabBaseUrl(substanceURI, "substance") : self.settings.baseUrl;
+
+    jT.call(self, substanceURI, function(substance){
+      if (!!substance && !!substance.substance && substance.substance.length > 0){
+        substance = substance.substance[0];
+
+        substance["showname"] = substance.publicname || substance.name;
+        substance["IUCFlags"] = jToxSubstance.formatExtIdentifiers(substance.externalIdentifiers, 'display', substance);
+        self.substance = substance;
+
+        ccLib.fillTree(self.rootElement, substance);
+        // go and query for the reference query
+        jT.call(self, substance.referenceSubstance.uri, function (dataset){
+          if (!!dataset) {
+            jToxCompound.processDataset(dataset, null, fnDatasetValue);
+            ccLib.fillTree(jT.$('.jtox-substance', self.rootElement)[0], dataset.dataEntry[0]);
+          }
         });
-        // .. and conditions
-        putAGroup(study.effects[0].conditions, function(c){
-          var col = {
-            "sTitle" : c,
-            "sClass" : "center middle jtox-multi",
-            "mData" : "effects"
-          };
 
-          col = jT.ui.modifyColDef(self, col, category, "conditions");
-          if (col == null)
-            return null;
-
-          col["mRender"] = function(data, type, full) {
-            return jT.ui.renderMulti(data, type, full, function(data, type) {
-              return jT.ui.renderRange(data.conditions[c], data.conditions[c + " unit"], type);
-            });
-          };
-          return col;
-        });
-
-        // add also the "default" effects columns
-        putDefaults(1, 3, "effects");
-
-        // now is time to put interpretation columns..
-        putAGroup(study.interpretation, function(i){
-          var col = { "sTitle": i, "sClass" : "center middle jtox-multi", "mData" : "interpretation." + i, "sDefaultContent": "-"};
-          return jT.ui.modifyColDef(self, col, category, "interpretation");
-        });
-
-        // finally put the protocol entries
-        putDefaults(4, 5, "protocol");
-
-        // but before given it up - make a small sorting..
-        jT.ui.sortColDefs(colDefs);
-
-        // READYY! Go and prepare THE table.
-        jT.$(theTable).dataTable( {
-          "bPaginate": true,
-          "bProcessing": true,
-          "bLengthChange": false,
-  				"bAutoWidth": false,
-          "sDom" : self.settings.sDom,
-          "aoColumns": colDefs,
-          "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-            var el = jT.$('.title .data-field', jT.$(this).parents('.jtox-study'))[0];
-            el.innerHTML = jT.ui.updateCounter(el.innerHTML, iTotal);
-            return sPre;
-          },
-          "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-            ccLib.equalizeHeights.apply(window, jT.$('td.jtox-multi table tbody', nRow).toArray());
-          },
-
-  				"oLanguage": jT.$.extend({
-            "sProcessing": "<img src='" + (jT.settings.baseUrl || self.baseUrl) + "/images/24x24_ambit.gif' border='0'>",
-            "sLoadingRecords": "No studies found.",
-            "sZeroRecords": "No studies found.",
-            "sEmptyTable": "No studies available.",
-            "sInfo": "Showing _TOTAL_ study(s) (_START_ to _END_)",
-            "sLengthMenu": 'Display <select>' +
-              '<option value="10">10</option>' +
-              '<option value="20">20</option>' +
-              '<option value="50">50</option>' +
-              '<option value="100">100</option>' +
-              '<option value="-1">all</option>' +
-              '</select> studies.'
-          }, self.settings.oLanguage)
-        });
-
-        jT.$(theTable).dataTable().fnAdjustColumnSizing();
+        ccLib.fireCallback(self.settings.onLoaded, self, substance.substance);
+        // query for the summary and the composition too.
+        self.querySummary(substance.URI + "/studysummary");
+        self.insertComposition(substance.URI + "/composition");
       }
       else
-        jT.$(theTable).dataTable().fnClearTable();
+        ccLib.fireCallback(self.settings.onLoaded, self, null);
+    });
+  };
 
-      return theTable;
-    },
-
-    processSummary: function (summary) {
-      var self = this;
-      var typeSummary = {};
-      var knownNames = { "P-CHEM": "P-Chem", "ENV_FATE" : "Env Fate", "ECOTOX" : "Eco Tox", "TOX" : "Tox"};
-
-      // first - clear all existing tabs
-			jT.$('.jtox-study', self.rootElement).remove();
-
-      // create the groups on the corresponding tabs, first sorting them alphabetically
-      summary.sort(function (a, b) {
-      	var valA = (a.category.order || a.category.description || a.category.title);
-      	var valB = (b.category.order || b.category.description || b.category.title);
-      	if (valA == null)
-      		return -1;
-      	if (valB == null)
-      		return 1;
-        if (valA == valB)
-          return 0;
-	      return (valA < valB) ? -1 : 1;
-      });
-
-      var tabRoot = $('ul', self.rootElement).parent()[0];
-      var added = 0;
-      var lastAdded = null;
-      var addStudyTab = function (top, sum) {
-        var tab = jT.getTemplate('#jtox-study-tab');
-        var link = jT.ui.addTab(tabRoot, (knownNames[top] || sum.topcategory.title) + " (0)", "jtox-" + top.toLowerCase() + '_' + self.instanceNo, tab).tab;
-        jT.$(link).data('type', top);
-
-        jT.$(tab).addClass(top).data('jtox-uri', sum.topcategory.uri);
-        ccLib.fillTree(tab, self.substance);
-
-        added++;
-        lastAdded = top;
-
-        jT.$('div.jtox-study-tab div button', tabRoot).on('click', function (e) {
-        	var par = jT.$(this).parents('.jtox-study-tab')[0];
-    	    if (jT.$(this).hasClass('expand-all')) {
-    		    jT.$('.jtox-foldable', par).removeClass('folded');
-    	    }
-    	    else if (jT.$(this).hasClass('collapse-all')) {
-    		    jT.$('.jtox-foldable', par).addClass('folded');
-    	    }
-        });
-
-        return tab;
-      };
-
-      for (var si = 0, sl = summary.length; si < sl; ++si) {
-        var sum = summary[si];
-        var top = sum.topcategory.title;
-        if (!top)
-          continue;
-        var top = top.replace(/ /g, "_");
-        var tab = jT.$('.jtox-study-tab.' + top, self.rootElement)[0];
-        if (!tab)
-          tab = addStudyTab(top, sum);
-
-        var catname = sum.category.title;
-        if (!catname)
-          typeSummary[top] = sum.count;
-        else
-          self.createCategory(tab, catname);
-      }
-
-      // a small hack to force openning of this, later in the querySummary()
-      if (added == 1)
-        self.settings.tab = lastAdded;
-
-      // update the number in the tabs...
-      jT.$('ul li a', self.rootElement).each(function (i){
-        var data = jT.$(this).data('type');
-        if (!!data){
-          var cnt = typeSummary[data];
-          var el = jT.$(this)[0];
-          el.innerHTML = jT.ui.updateCounter(el.innerHTML, cnt);
-        }
-      });
-
-      // now install the filter box handler. It delays the query a bit and then spaws is to all tables in the tab.
-      var filterTimeout = null;
-      var fFilter = function (ev) {
-        if (!!filterTimeout)
-          clearTimeout(filterTimeout);
-
-        var field = ev.currentTarget;
-        var tab = jT.$(this).parents('.jtox-study-tab')[0];
-
-        filterTimeout = setTimeout(function() {
-          var tabList = jT.$('.jtox-study-table', tab);
-          for (var t = 0, tlen = tabList.length; t < tlen; ++t) {
-            jT.$(tabList[t]).dataTable().fnFilter(field.value);
-          }
-        }, 300);
-      };
-
-      var tabList = jT.$('.jtox-study-tab');
-      for (var t = 0, tlen = tabList.length;t < tlen; t++){
-        var filterEl = jT.$('.jtox-study-filter', tabList[t])[0].onkeydown = fFilter;
-      }
-    },
-
-    processStudies: function (tab, study, map) {
-      var self = this;
-      var cats = {};
-      var cntCats = 0;
-
-      // first swipe to map them to different categories...
-      if (!map){
-        // add this one, if we're not remapping. map == false assumes that all passed studies will be from
-        // one category.
-        cats[study[0].protocol.category.code] = study;
-      }
-      else{
-        for (var i = 0, slen = study.length; i < slen; ++i) {
-          var ones = study[i];
-          if (map) {
-            if (cats[ones.protocol.category.code] === undefined) {
-              cats[ones.protocol.category.code] = [ones];
-              cntCats++;
-            }
-            else {
-              cats[ones.protocol.category.code].push(ones);
-            }
-          }
-        }
-      }
-
-      // now iterate within all categories (if many) and initialize the tables
-      for (var c in cats) {
-        var onec = cats[c];
-        var aStudy = jT.$('.' + c + '.jtox-study', tab)[0];
-        if (aStudy === undefined)
-          continue;
-
-        ccLib.fillTree(aStudy, {title: onec[0].protocol.category.title + " (0)"});
-
-        // now swipe through all studyies to build a "representative" one with all fields.
-        var study = {};
-        for (var i = 0, cl = onec.length; i < cl; ++i) {
-          jT.$.extend(true, study, onec[i]);
-          if (!ccLib.isEmpty(study.parameters) && !ccLib.isEmpty(study.effects[0].conditions))
-            break;
-        }
-
-        var theTable = self.ensureTable(tab, study);
-        jT.$(theTable).dataTable().fnAddData(onec);
-        jT.$(theTable).colResizable({ minWidth: 30, liveDrag: true });
-        if (cntCats > 1)
-          jT.$(theTable).parents('.jtox-study').addClass('folded');
-
-        // we need to fix columns height's because of multi-cells
-        jT.$('#' + theTable.id + ' .jtox-multi').each(function(index){
-          this.style.height = '' + this.offsetHeight + 'px';
-        });
-      }
-    },
-
-    querySummary: function(summaryURI) {
-      var self = this;
-
-      summaryURI = self.addParameters(summaryURI);
-      jT.call(self, summaryURI, function(summary) {
-        if (!!summary && !!summary.facet)
-          self.processSummary(summary.facet);
-          ccLib.fireCallback(self.settings.onSummary, self, summary.facet);
-          // check if there is an initial tab passed so we switch to it
-          if (!!self.settings.tab) {
-            var div = jT.$('.jtox-study-tab.' + decodeURIComponent(self.settings.tab).replace(/ /g, '_').toUpperCase(), self.root)[0];
-            if (!!div) {
-              for (var idx = 0, cl = div.parentNode.children.length; idx < cl; ++idx)
-                if (div.parentNode.children[idx].id == div.id)
-                  break;
-              --idx;
-              jT.$(self.tabs).tabs('option', 'active', idx);
-              jT.$(self.tabs).tabs('option', 'selected', idx);
-            }
-          }
-      });
-    },
-
-    insertComposition: function(compositionURI) {
-      var compRoot = jT.$('.jtox-compo-tab', this.rootElement)[0];
-      jT.$(compRoot).empty();
-      new jToxComposition(compRoot, jT.$.extend({}, this.settings, jT.blankSettings, {'compositionUri': compositionURI}));
-    },
-
-    querySubstance: function(substanceURI) {
-      var self = this;
-
-      // re-initialize us on each of these calls.
-      self.baseUrl = ccLib.isNull(self.settings.baseUrl) ? jT.grabBaseUrl(substanceURI) : self.settings.baseUrl;
-
-      jT.call(self, substanceURI, function(substance){
-        if (!!substance && !!substance.substance && substance.substance.length > 0){
-          substance = substance.substance[0];
-
-          substance["showname"] = substance.publicname || substance.name;
-          substance["IUCFlags"] = jToxSubstance.formatExtIdentifiers(substance.externalIdentifiers, 'display', substance);
-          self.substance = substance;
-
-          ccLib.fillTree(self.rootElement, substance);
-          // go and query for the reference query
-          jT.call(self, substance.referenceSubstance.uri, function (dataset){
-            if (!!dataset) {
-              jToxCompound.processDataset(dataset, null, fnDatasetValue);
-              ccLib.fillTree(jT.$('.jtox-substance', self.rootElement)[0], dataset.dataEntry[0]);
-            }
-          });
-
-          ccLib.fireCallback(self.settings.onLoaded, self, substance.substance);
-          // query for the summary and the composition too.
-          self.querySummary(substance.URI + "/studysummary");
-          self.insertComposition(substance.URI + "/composition");
-        }
-        else
-          ccLib.fireCallback(self.settings.onLoaded, self, null);
-      });
-    },
-
-    query: function (uri) {
-      this.querySubstance(uri);
-    }
-  }; // end of prototype
+  cls.prototype.query = function (uri) {
+    this.querySubstance(uri);
+  }; 
+  // end of prototype
 
   return cls;
 })();
@@ -4709,179 +4704,177 @@ var jToxEndpoint = (function () {
     });
   };
 
-  cls.prototype = {
-    init: function (settings) {
-      var self = this;
+  cls.prototype.init = function (settings) {
+    var self = this;
 
-      // we can redefine onDetails only if there is not one passed and we're asked to show editors at ll
-      if (!!self.settings.showEditors && !self.settings.onDetails) {
-        self.edittedValues = {};
-        self.settings.onDetails = function (root, data, element) {
-          self.edittedValues[data.endpoint] = {};
-          cls.linkEditors(self, root.appendChild(jT.getTemplate('#jtox-endeditor')), {
-            category: data.endpoint,
-            top: data.subcategory,
-            conditions: self.settings.showConditions,
-            onchange: function (e, field, value) { ccLib.setJsonValue(self.edittedValues[data.endpoint], field, value); }
-          });
-        };
-      }
-
-      // deal if the selection is chosen
-      if (!!self.settings.selectionHandler || !!self.settings.onDetails)
-        jT.ui.putActions(self, self.settings.configuration.columns.endpoint.Id);
-
-      self.settings.configuration.columns.endpoint.Id.sTitle = '';
-
-      // again , so that changed defaults can be taken into account.
-      self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
-      var cols = jT.ui.processColumns(self, 'endpoint');
-
-      // make the accordition now...
-    	jT.$('.jtox-categories', self.rootElement).accordion( {
-    		heightStyle: self.settings.heightStyle
-    	});
-
-      self.tables = { };
-      // and now - initialize all the tables...
-      jT.$('table', self.rootElement).each(function () {
-        var name = this.className;
-        self.tables[name] = jT.ui.putTable(self, this, "endpoint", {
-          "aoColumns": cols,
-          "fnInfoCallback": self.updateStats(name),
-          "aaSortingFixed": [[1, 'asc']],
-          "onRow": function (nRow, aData, iDataIndex) {
-            jT.$(nRow).addClass(aData.endpoint);
-          }
+    // we can redefine onDetails only if there is not one passed and we're asked to show editors at ll
+    if (!!self.settings.showEditors && !self.settings.onDetails) {
+      self.edittedValues = {};
+      self.settings.onDetails = function (root, data, element) {
+        self.edittedValues[data.endpoint] = {};
+        cls.linkEditors(self, root.appendChild(jT.getTemplate('#jtox-endeditor')), {
+          category: data.endpoint,
+          top: data.subcategory,
+          conditions: self.settings.showConditions,
+          onchange: function (e, field, value) { ccLib.setJsonValue(self.edittedValues[data.endpoint], field, value); }
         });
-      });
-
-      if (!!self.settings.hideFilter)
-        jT.$('.filter-box', self.rootElement).remove();
-      else {
-        var filterTimeout = null;
-        var fFilter = function (ev) {
-          if (!!filterTimeout)
-            clearTimeout(filterTimeout);
-
-          var field = ev.currentTarget;
-
-          filterTimeout = setTimeout(function() {
-            jT.$('table', self.rootElement).each(function () {
-              jT.$(this).dataTable().fnFilter(field.value);
-            });
-          }, 300);
-        };
-
-        jT.$('.filter-box input', self.rootElement).on('keydown', fFilter);
-      }
-
-      if (!self.settings.showMultiselect || !self.settings.selectionHandler)
-        jT.$('h3 a', self.rootElement).remove();
-      else
-        jT.ui.installMultiSelect(self.rootElement, null, function (el) { return el.parentNode.parentNode.nextElementSibling; });
-    },
-
-    getValues: function (needle) {
-      var self = this;
-
-      var filter = null;
-      if (!needle)
-        filter = function (end) { return true; };
-      else if (typeof needle != 'function')
-        filter = function (end) { return end.indexOf(needle) >= 0; };
-      else
-        filter = needle;
-
-      for (var endpoint in self.edittedValues) {
-        if (filter(endpoint))
-          return self.edittedValues[endpoint];
-      }
-      return null;
-    },
-
-    updateStats: function (name) {
-      var self = this;
-      return function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-        var head = jT.$('h3.' + name, self.rootElement)[0];
-        // now make the summary...
-        var html = '';
-        if (iTotal > 0) {
-          var count = 0;
-          var data = this.fnGetData();
-          for (var i = iStart; i <= iEnd && i < iMax; ++i)
-            count += data[i].count;
-          html = "[" + count + "]";
-        }
-        else
-          html = '';
-
-        jT.$('div.jtox-details span', head).html(html);
-        return sPre;
-      }
-    },
-
-    fillEntries: function (facet) {
-      var self = this;
-      // first we need to group them and extract some summaries
-      var ends = { };
-      for (var i = 0, fl = facet.length; i < fl; ++i) {
-        var entry = facet[i];
-        var cat = ends[entry.subcategory];
-        if (cat == null)
-          ends[entry.subcategory] = cat = [];
-
-        cat.push(entry);
-      }
-
-      // now, as we're ready - go and fill everything
-      jT.$('h3', self.rootElement).each(function () {
-        var name = jT.$(this).data('cat');
-        var table = self.tables[name];
-        table.fnClearTable();
-
-        var cat = ends[name.replace("_", " ")];
-        if (cat != null)
-          table.fnAddData(cat);
-      });
-    },
-
-    loadEndpoints: function (uri) {
-      var self = this;
-      if (uri == null)
-        uri = self.settings.baseUrl + '/query/study';
-      else if (!self.settings.baseUrl)
-        self.settings.baseUrl = jT.grabBaseUrl(uri);
-
-      // make the call...
-      jT.call(self, uri, function (result, jhr) {
-        if (!result && jhr.status != 200)
-          result = { facet: [] }; // empty one
-        if (!!result) {
-          self.summary = result.facet;
-          ccLib.fireCallback(self.settings.onLoaded, self, result);
-          if (!self.settings.noInterface)
-            self.fillEntries(result.facet);
-        }
-        else {
-          self.facet = null;
-          ccLib.fireCallback(self.settings.onLoaded, self, result);
-        }
-      });
-    },
-
-    query: function (uri) {
-      this.loadEndpoints(uri);
-    },
-
-    modifyUri: function (uri) {
-      jT.$('input[type="checkbox"]', this.rootElement).each(function () {
-        if (this.checked)
-          uri = ccLib.addParameter(uri, 'feature_uris[]=' + encodeURIComponent(this.value + '/feature'));
-      })
-
-      return uri;
+      };
     }
+
+    // deal if the selection is chosen
+    if (!!self.settings.selectionHandler || !!self.settings.onDetails)
+      jT.ui.putActions(self, self.settings.configuration.columns.endpoint.Id);
+
+    self.settings.configuration.columns.endpoint.Id.sTitle = '';
+
+    // again , so that changed defaults can be taken into account.
+    self.settings.configuration = jT.$.extend(true, self.settings.configuration, settings.configuration);
+    var cols = jT.ui.processColumns(self, 'endpoint');
+
+    // make the accordition now...
+  	jT.$('.jtox-categories', self.rootElement).accordion( {
+  		heightStyle: self.settings.heightStyle
+  	});
+
+    self.tables = { };
+    // and now - initialize all the tables...
+    jT.$('table', self.rootElement).each(function () {
+      var name = this.className;
+      self.tables[name] = jT.ui.putTable(self, this, "endpoint", {
+        "aoColumns": cols,
+        "fnInfoCallback": self.updateStats(name),
+        "aaSortingFixed": [[1, 'asc']],
+        "onRow": function (nRow, aData, iDataIndex) {
+          jT.$(nRow).addClass(aData.endpoint);
+        }
+      });
+    });
+
+    if (!!self.settings.hideFilter)
+      jT.$('.filter-box', self.rootElement).remove();
+    else {
+      var filterTimeout = null;
+      var fFilter = function (ev) {
+        if (!!filterTimeout)
+          clearTimeout(filterTimeout);
+
+        var field = ev.currentTarget;
+
+        filterTimeout = setTimeout(function() {
+          jT.$('table', self.rootElement).each(function () {
+            jT.$(this).dataTable().fnFilter(field.value);
+          });
+        }, 300);
+      };
+
+      jT.$('.filter-box input', self.rootElement).on('keydown', fFilter);
+    }
+
+    if (!self.settings.showMultiselect || !self.settings.selectionHandler)
+      jT.$('h3 a', self.rootElement).remove();
+    else
+      jT.ui.installMultiSelect(self.rootElement, null, function (el) { return el.parentNode.parentNode.nextElementSibling; });
+  };
+
+  cls.prototype.getValues = function (needle) {
+    var self = this;
+
+    var filter = null;
+    if (!needle)
+      filter = function (end) { return true; };
+    else if (typeof needle != 'function')
+      filter = function (end) { return end.indexOf(needle) >= 0; };
+    else
+      filter = needle;
+
+    for (var endpoint in self.edittedValues) {
+      if (filter(endpoint))
+        return self.edittedValues[endpoint];
+    }
+    return null;
+  };
+
+  cls.prototype.updateStats = function (name) {
+    var self = this;
+    return function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
+      var head = jT.$('h3.' + name, self.rootElement)[0];
+      // now make the summary...
+      var html = '';
+      if (iTotal > 0) {
+        var count = 0;
+        var data = this.fnGetData();
+        for (var i = iStart; i <= iEnd && i < iMax; ++i)
+          count += data[i].count;
+        html = "[" + count + "]";
+      }
+      else
+        html = '';
+
+      jT.$('div.jtox-details span', head).html(html);
+      return sPre;
+    }
+  };
+
+  cls.prototype.fillEntries = function (facet) {
+    var self = this;
+    // first we need to group them and extract some summaries
+    var ends = { };
+    for (var i = 0, fl = facet.length; i < fl; ++i) {
+      var entry = facet[i];
+      var cat = ends[entry.subcategory];
+      if (cat == null)
+        ends[entry.subcategory] = cat = [];
+
+      cat.push(entry);
+    }
+
+    // now, as we're ready - go and fill everything
+    jT.$('h3', self.rootElement).each(function () {
+      var name = jT.$(this).data('cat');
+      var table = self.tables[name];
+      table.fnClearTable();
+
+      var cat = ends[name.replace("_", " ")];
+      if (cat != null)
+        table.fnAddData(cat);
+    });
+  };
+
+  cls.prototype.loadEndpoints = function (uri) {
+    var self = this;
+    if (uri == null)
+      uri = self.settings.baseUrl + '/query/study';
+    else if (!self.settings.baseUrl)
+      self.settings.baseUrl = jT.grabBaseUrl(uri, "query");
+
+    // make the call...
+    jT.call(self, uri, function (result, jhr) {
+      if (!result && jhr.status != 200)
+        result = { facet: [] }; // empty one
+      if (!!result) {
+        self.summary = result.facet;
+        ccLib.fireCallback(self.settings.onLoaded, self, result);
+        if (!self.settings.noInterface)
+          self.fillEntries(result.facet);
+      }
+      else {
+        self.facet = null;
+        ccLib.fireCallback(self.settings.onLoaded, self, result);
+      }
+    });
+  };
+
+  cls.prototype.query = function (uri) {
+    this.loadEndpoints(uri);
+  };
+
+  cls.prototype.modifyUri = function (uri) {
+    jT.$('input[type="checkbox"]', this.rootElement).each(function () {
+      if (this.checked)
+        uri = ccLib.addParameter(uri, 'feature_uris[]=' + encodeURIComponent(this.value + '/feature'));
+    })
+
+    return uri;
   };
 
   return cls;

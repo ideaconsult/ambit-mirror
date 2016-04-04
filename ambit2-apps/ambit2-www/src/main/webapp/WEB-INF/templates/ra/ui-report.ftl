@@ -143,7 +143,7 @@ var customize = {
       <section id="jtox-report-structlist">
         <h2>List of structures for assessment</h2>
         <p>In the assessment, similar structures were selected from exact structure, substructure and/or similarity searches, or were added manually. The rationale for the selection is given in the table.</p>
-        <div id="jtox-report-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false">
+        <div id="jtox-report-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false" data-base-url="${ambit_root}">
           <div id="browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-on-details="onDetailedRow" data-details-height="500px" data-show-diagrams="true" data-on-loaded="onBrowserFilled"></div>
         </div>
       </section>
@@ -151,7 +151,7 @@ var customize = {
       <section id="jtox-report-substances">
         <h2>List of substances related to the structures</h2>
         <p>In the following, for each structure listed in chapter 2, substances were selected and the rationale is given.</p>
-        <div id="jtox-report-substance-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false">
+        <div id="jtox-report-substance-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false" data-base-url="${ambit_root}">
           <div id="report-substance-browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-pre-details="preDetailedRow" data-show-diagrams="true" data-on-loaded="onReportSubstancesLoaded"></div>
         </div>
       </section>
