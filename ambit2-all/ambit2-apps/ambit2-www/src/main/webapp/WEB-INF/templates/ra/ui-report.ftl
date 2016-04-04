@@ -99,7 +99,7 @@ var customize = {
 	================================================== -->
 	 <div class="sixteen columns remove-bottom" style="padding:0;" >
 	
-  <div id="jtox-bundle" class="jtox-toolkit" data-kit="bundle">
+  <div id="jtox-bundle" class="jtox-toolkit" data-kit="bundle" data-base-url="${ambit_root}">
 
     <div id="jtox-report" class="jtox-report">
 
@@ -152,21 +152,21 @@ var customize = {
         <h2>List of substances related to the structures</h2>
         <p>In the following, for each structure listed in chapter 2, substances were selected and the rationale is given.</p>
         <div id="jtox-report-substance-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false" data-base-url="${ambit_root}">
-          <div id="report-substance-browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-pre-details="preDetailedRow" data-show-diagrams="true" data-on-loaded="onReportSubstancesLoaded"></div>
+          <div id="report-substance-browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-pre-details="preDetailedRow" data-show-diagrams="true" data-on-loaded="onReportSubstancesLoaded" data-base-url="${ambit_root}"></div>
         </div>
       </section>
 
       <section id="jtox-report-matrix">
         <h2>Substance composition matrix</h2>
         <p>In the following, for each substance, the associated structure(s) and the composition are given.</p>
-        <div class="jtox-toolkit" data-kit="compound" data-manual-init="true"></div>
+        <div class="jtox-toolkit" data-kit="compound" data-manual-init="true" data-base-url="${ambit_root}"></div>
       </section>
 
       <section id="jtox-report-final">
         <h2>Assessment data matrix</h2>
         <p>In the following, for each substance, the associated endpoint data are given, either experimental data, waiving or read-across.</p>
         <p>For detailed data or rationale for waiving and read-across, click hyperlinks in the table. These data or rationales can also be found in the annex of the report.</p>
-        <div class="jtox-toolkit" data-manual-init="true"></div>
+        <div class="jtox-toolkit" data-manual-init="true" data-base-url="${ambit_root}"></div>
       </section>
 
       <section id="jtox-report-justification">
