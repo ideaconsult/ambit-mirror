@@ -134,12 +134,12 @@ jTConfig.matrix = {
 
     "Calculated": function (name, miniset) {
       var arr = [];
-      if (miniset.dataEntry.length > 0 && !ccLib.isNull(miniset.dataEntry[0].compound.metric))
+      if (miniset.dataEntry.length > 0 && miniset.dataEntry[0].compound.metric != null)
         arr.push(this.settings.metricFeature);
 
       for (var f in miniset.feature) {
         var feat = miniset.feature[f];
-        if (ccLib.isNull(feat.source) || ccLib.isNull(feat.source.type) || !!feat.basic)
+        if (feat.source == null || feat.source.type == null || !!feat.basic)
           continue;
         else if (feat.source.type.toLowerCase() == "algorithm" || feat.source.type.toLowerCase() == "model") {
           arr.push(f);

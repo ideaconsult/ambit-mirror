@@ -174,7 +174,7 @@ $(document)
 			  <input type="radio" id="structcollect" name="structaction" checked="checked"><label for="structcollect">Collect structures</label></input>
 			  <input type="radio" id="structlist" name="structaction"><label for="structlist">List collected</label></input>
 			</div>
-      <div id="jtox-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false">
+      <div id="jtox-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false" data-base-url="${ambit_root}">
         <div class="jtox-foldable folded">
           <div class="title"><p class="data-field" data-field="title">Search</p></div>
           <div class="content">
@@ -196,7 +196,7 @@ $(document)
             <div class="float-right">
               <button type="button" id="structures-expand-all">Expand all</button><button type="button" id="structures-collapse-all">Collapse all</button>
             </div>
-            <div id="jtox-substance-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false">
+            <div id="jtox-substance-query" class="jtox-toolkit" data-kit="query" data-configuration="jTConfigurator" data-initial-query="false" data-base-url="${ambit_root}">
               <div id="substance-browser" class="jtox-toolkit" data-kit="compound" data-show-tabs="false" data-hide-empty="true" data-pre-details="preDetailedRow" data-show-diagrams="true"></div>
             </div>
           </div>
