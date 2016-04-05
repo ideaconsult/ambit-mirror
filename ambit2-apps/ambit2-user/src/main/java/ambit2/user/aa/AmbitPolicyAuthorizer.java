@@ -285,16 +285,19 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 		if (depth > (HOMEPAGE_DEPTH + 1))
 			depth = HOMEPAGE_DEPTH + 2;
 		StringBuilder resource = new StringBuilder();
+		int maxdepths_resource = depth;
 		for (int i = 0; i < depth; i++) {
 			String segment = request.getResourceRef().getSegments().get(i);
 			resource.append("/");
 			resource.append(segment);
 			if (i >= HOMEPAGE_DEPTH) {
-				uri.add(resource.toString());
+				if (i<=maxdepths_resource)
+					uri.add(resource.toString());
 			}
 			if (i == HOMEPAGE_DEPTH)
 				try {
 					_resources s = _resources.valueOf(segment);
+					maxdepths_resource = s.getMaxLevel();
 					if (!s.isProtected(request.getMethod())) {
 						return true;
 					}
