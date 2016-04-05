@@ -61,7 +61,7 @@ public class SmartsAtomExpression extends SMARTSAtom {
 	//stereo tokens and preceding logical operations are removed
 	//This is used to match the atom regardless of the stereo information
 	//The stereo info match is performed later.
-	public List<SmartsExpressionToken> stereoRemovedTokens = new ArrayList<SmartsExpressionToken>();
+	public List<SmartsExpressionToken> stereoRemovedTokens = null;
 	
 	
 	
@@ -583,5 +583,43 @@ public class SmartsAtomExpression extends SMARTSAtom {
 
 		sb.append("]");
 		return sb.toString();
+	}
+	
+	void getStereoRemovedTokens()
+	{
+		stereoRemovedTokens = new ArrayList<SmartsExpressionToken>();
+		List<Integer> stereoTokens = new ArrayList<Integer>();
+		List<Integer> precedingLogicalOperations = new ArrayList<Integer>();
+		for (int i = 0; i < tokens.size(); i++)
+		{
+			SmartsExpressionToken token = tokens.get(i);
+			if (token.type == SmartsConst.AP_Chiral)
+			{
+				stereoTokens.add(i);
+				int numPrecLogOp = getPrecedingLogicalOperations(i);
+				precedingLogicalOperations.add(numPrecLogOp);
+			}
+		}
+		
+		int pos = 0;
+		
+		for (int i = 0; i < stereoTokens.size(); i++)
+		{
+			int pos1 = stereoTokens.get(i) - precedingLogicalOperations.get(i);
+			for (int k = pos; k < pos1; k++)
+				stereoRemovedTokens.add(tokens.get(k));
+			pos = stereoTokens.get(i)+1;
+		}
+		
+		//coping the remaining tokens after the last stereo token 
+		for (int k = pos; k < tokens.size(); k++)
+			stereoRemovedTokens.add(tokens.get(k));
+	}
+	
+	int getPrecedingLogicalOperations (int tokenNum)
+	{
+		int n = 0;
+		//TODO
+		return n;
 	}
 }
