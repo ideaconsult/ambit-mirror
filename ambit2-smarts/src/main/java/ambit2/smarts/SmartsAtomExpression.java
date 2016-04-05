@@ -619,7 +619,14 @@ public class SmartsAtomExpression extends SMARTSAtom {
 	int getPrecedingLogicalOperations (int tokenNum)
 	{
 		int n = 0;
-		//TODO
+		for (int i = tokenNum-1; i >= 0; i--)
+		{
+			if (tokens.get(i).isLogicalOperation())
+				n++;
+			else
+				break;
+		}
+		
 		return n;
 	}
 }
