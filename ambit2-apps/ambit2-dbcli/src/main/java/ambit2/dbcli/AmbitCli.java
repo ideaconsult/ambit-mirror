@@ -985,7 +985,7 @@ public class AmbitCli {
 												"MSG_FINGEPRINTGEN",
 												new Object[] {
 														"Empty molecule",
-														"See the ERROR tag in the output file" });
+														getIds(record) });
 								return record;
 							}
 
@@ -993,8 +993,12 @@ public class AmbitCli {
 									.percieveAtomTypesAndConfigureAtoms(mol);
 
 						} catch (Exception x) {
-							logger_cli.log(Level.SEVERE, "MSG_ERR_MOLREAD",
-									new Object[] { x.toString() });
+
+							logger_cli
+									.log(Level.SEVERE,
+											"MSG_ERR_MOLREAD",
+											new Object[] { getIds(record),
+													x.toString() });
 							return record;
 						} finally {
 
@@ -1037,13 +1041,13 @@ public class AmbitCli {
 											.getName() + ".raw", fpraw);
 
 							} catch (Exception x) {
-								StringWriter w = new StringWriter();
-								x.printStackTrace(new PrintWriter(w));
+								//StringWriter w = new StringWriter();
+								//x.printStackTrace(new PrintWriter(w));
 								logger_cli.log(
 										Level.SEVERE,
 										"MSG_FINGEPRINTGEN",
 										new Object[] { x.getMessage(),
-												w.toString() });
+												getIds(record) });
 								if (processed != null)
 									processed.setProperty("ERROR."
 											+ fp.getClass().getName(),
@@ -1071,20 +1075,20 @@ public class AmbitCli {
 										tags, true);
 								writer.write(processed);
 							} catch (Exception x) {
-								StringWriter w = new StringWriter();
-								x.printStackTrace(new PrintWriter(w));
+								//StringWriter w = new StringWriter();
+								//x.printStackTrace(new PrintWriter(w));
 								logger_cli.log(
 										Level.SEVERE,
 										"MSG_FINGEPRINTGEN",
 										new Object[] { x.getMessage(),
-												w.toString() });
+												getIds(record) });
 							}
 						else {
 							logger_cli
 									.log(Level.SEVERE,
 											"MSG_FINGEPRINTGEN",
 											new Object[] { "Empty molecule",
-													"See the ERROR tag in the output file" });
+													getIds(record) });
 						}
 						return record;
 
@@ -1405,13 +1409,15 @@ public class AmbitCli {
 										.log(Level.SEVERE,
 												"MSG_STANDARDIZE",
 												new Object[] {
-														"Empty molecule",
-														"See the ERROR tag in the output file" });
+														"Empty molecule See the ERROR tag in the output file",getIds(record) });
 								return record;
 							}
 						} catch (Exception x) {
-							logger_cli.log(Level.SEVERE, "MSG_ERR_MOLREAD",
-									new Object[] { x.toString() });
+							logger_cli
+									.log(Level.SEVERE,
+											"MSG_ERR_MOLREAD",
+											new Object[] { getIds(record),
+													x.toString() });
 							return record;
 						} finally {
 
@@ -1846,6 +1852,20 @@ public class AmbitCli {
 			}
 		if (err != null)
 			throw err;
+	}
+
+	protected String getIds(IStructureRecord record) {
+		try {
+			StringBuilder m = new StringBuilder();
+			for (Property p : record.getRecordProperties()) {
+				// m.append(p.getName());
+				m.append(record.getRecordProperty(p));
+				m.append("\t");
+			}
+			return m.toString();
+		} catch (Exception x) {
+			return "";
+		}
 	}
 }
 
