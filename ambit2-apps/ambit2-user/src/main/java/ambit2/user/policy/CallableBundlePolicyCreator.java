@@ -12,11 +12,11 @@ import org.restlet.data.Form;
 import org.restlet.data.Method;
 
 public class CallableBundlePolicyCreator extends CallablePolicyUsersCreator {
-
 	public CallableBundlePolicyCreator(Method method, Form input,
 			String baseReference, Connection connection, String token,
-			String usersdbname) {
-		super(method, input, baseReference, connection, token, usersdbname);
+			String usersdbname,int HOMEPAGE_DEPTH) {
+		super(method, input, baseReference, connection, token, usersdbname,HOMEPAGE_DEPTH);
+		
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class CallableBundlePolicyCreator extends CallablePolicyUsersCreator {
 		for (String s : ug) {
 			// group
 			if (s.startsWith("g_")) {
-				existingrole = new RESTPolicy();
+				existingrole = new AmbitRESTPolicy(HOMEPAGE_DEPTH);
 				existingrole.setRole(s.substring(2));
 				existingrole.setAllowGET(readonly);
 				existingrole.setAllowPOST(!readonly);
@@ -49,7 +49,7 @@ public class CallableBundlePolicyCreator extends CallablePolicyUsersCreator {
 		}
 		if (existingrole == null) {
 			// a way to remove the "all" policy
-			existingrole = new RESTPolicy();
+			existingrole = new AmbitRESTPolicy(HOMEPAGE_DEPTH);
 			existingrole.setRole(getDefaultRole());
 			existingrole.setAllowGET(false);
 			existingrole.setAllowPOST(false);
@@ -57,7 +57,7 @@ public class CallableBundlePolicyCreator extends CallablePolicyUsersCreator {
 			existingrole.setAllowDELETE(false);
 			existingrole.setUri(resource);
 		}
-		RESTPolicyUsers policy = new RESTPolicyUsers(users);
+		RESTPolicyUsers policy = new RESTPolicyUsers(HOMEPAGE_DEPTH,users);
 		policy.setRole(role);
 		policy.setAllowGET(readonly);
 		policy.setAllowPOST(!readonly);

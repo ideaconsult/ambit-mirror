@@ -301,8 +301,9 @@ tr:last-child .jtox-down {
 }
 
 .jtox-users-select {
-  width: 100%;
-  height: auto;
+  width: 90%;
+  width: calc(100% - 5em);
+  vertical-align: middle;
 }
 
 .jtox-toolkit table.dataTable td.jtox-user-rights {

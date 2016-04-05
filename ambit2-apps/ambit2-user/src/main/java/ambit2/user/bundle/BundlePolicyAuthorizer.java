@@ -12,6 +12,8 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 
+import ambit2.user.policy.AmbitRESTPolicy;
+
 public class BundlePolicyAuthorizer extends PolicyAuthorizer<BundlePolicyQuery> {
 	private BundleOwnerPolicy ownerPolicy;
 	protected int HOMEPAGE_DEPTH = 1;
@@ -46,16 +48,7 @@ public class BundlePolicyAuthorizer extends PolicyAuthorizer<BundlePolicyQuery> 
 
 	@Override
 	protected RESTPolicy initRESTPolicy() {
-		RESTPolicy p = new RESTPolicy() {
-			@Override
-			public String[] splitURI(String href) throws Exception {
-				if (HOMEPAGE_DEPTH == 0)
-					return new String[] { "", href };
-				else
-					return super.splitURI(href);
-			}
-		};
-		return p;
+		return new AmbitRESTPolicy(HOMEPAGE_DEPTH);
 	}
 
 	@Override

@@ -28,6 +28,7 @@ import ambit2.user.policy.RESTPolicyUsers;
 
 /**
  * Test for {@link CallablePolicyUsersCreator}
+ * TODO fix, as bundle policy is tested by {@link CreateBundlePolicyTest}
  * @author nina
  *
  */
@@ -73,7 +74,7 @@ public class CreateUsersPolicyTest extends DbUnitTest {
 		user = new DBUser();
 		user.setUserName("admin");
 		users.add(user);
-		RESTPolicyUsers policy = new RESTPolicyUsers(users);
+		RESTPolicyUsers policy = new RESTPolicyUsers(1,users);
 		policy.setAllowGET(true);
 		policy.setRole(getRole(bundle.toString(), "R"));
 		policy.setUri("http://localhost/ambit2"
@@ -150,7 +151,7 @@ public class CreateUsersPolicyTest extends DbUnitTest {
 		user = new DBUser();
 		user.setUserName("admin");
 		users.add(user);
-		RESTPolicyUsers policy = new RESTPolicyUsers(users);
+		RESTPolicyUsers policy = new RESTPolicyUsers(1,users);
 		policy.setAllowGET(false);
 		policy.setAllowPUT(true);
 		policy.setAllowPOST(true);
@@ -243,7 +244,7 @@ public class CreateUsersPolicyTest extends DbUnitTest {
 
 			CallablePolicyUsersCreator callable = new CallablePolicyUsersCreator(
 					Method.POST, form, "http://localhost:8081/ambit2/",
-					c.getConnection(), null, getDatabase());
+					c.getConnection(), null, getDatabase(),1);
 			TaskResult task = callable.call();
 			createVerify(null);
 
@@ -271,7 +272,7 @@ public class CreateUsersPolicyTest extends DbUnitTest {
 
 			CallablePolicyUsersCreator callable = new CallablePolicyUsersCreator(
 					Method.POST, form, "http://localhost:8081/ambit2/",
-					c.getConnection(), null, getDatabase());
+					c.getConnection(), null, getDatabase(),1);
 			callable.setDefaultRole("user");
 			TaskResult task = callable.call();
 			updateVerify(null, 2);
@@ -299,7 +300,7 @@ public class CreateUsersPolicyTest extends DbUnitTest {
 
 			CallablePolicyUsersCreator callable = new CallablePolicyUsersCreator(
 					Method.POST, form, "http://localhost:8081/ambit2/",
-					c.getConnection(), null, getDatabase());
+					c.getConnection(), null, getDatabase(),1);
 			callable.setDefaultRole("user");
 			TaskResult task = callable.call();
 			updateVerify(null, 0);

@@ -2,26 +2,25 @@ package ambit2.user.policy;
 
 import java.util.List;
 
-import net.idea.restnet.i.aa.RESTPolicy;
 import net.idea.restnet.user.DBUser;
 
-public class RESTPolicyUsers extends RESTPolicy {
-    /**
+public class RESTPolicyUsers extends AmbitRESTPolicy {
+	/**
      * 
      */
-    private static final long serialVersionUID = -5447223123997245656L;
-    protected List<DBUser> users;
-    
-    public List<DBUser> getUsers() {
-        return users;
-    }
+	private static final long serialVersionUID = -5447223123997245656L;
+	protected List<DBUser> users;
 
-    public void setUsers(List<DBUser> users) {
-        this.users = users;
-    }
+	public List<DBUser> getUsers() {
+		return users;
+	}
 
-    public RESTPolicyUsers(List<DBUser> users) {
-	super();
-	setUsers(users);
-    }
+	public void setUsers(List<DBUser> users) {
+		this.users = users;
+	}
+
+	public RESTPolicyUsers(int HOMEPAGE_DEPTH,List<DBUser> users) {
+		super(HOMEPAGE_DEPTH);
+		setUsers(users);
+	}
 }

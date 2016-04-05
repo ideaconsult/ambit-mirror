@@ -11,11 +11,14 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Method;
 
+import ambit2.user.policy.AmbitRESTPolicy;
+
 public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 	protected int HOMEPAGE_DEPTH = 1;
+
 	public AmbitPolicyAuthorizer(Context context, String configfile,
 			String dbName, int HOMEPAGE_DEPTH) {
-		super(context, configfile, null,dbName);
+		super(context, configfile, null, dbName);
 		this.HOMEPAGE_DEPTH = HOMEPAGE_DEPTH;
 	}
 
@@ -29,6 +32,7 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 			boolean isProtected(Method method) {
 				return false;
 			}
+
 			@Override
 			boolean isStatic() {
 				return true;
@@ -39,6 +43,7 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 			boolean isProtected(Method method) {
 				return false;
 			}
+
 			@Override
 			boolean isStatic() {
 				return true;
@@ -49,6 +54,7 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 			boolean isProtected(Method method) {
 				return false;
 			}
+
 			@Override
 			boolean isStatic() {
 				return true;
@@ -59,6 +65,7 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 			boolean isProtected(Method method) {
 				return false;
 			}
+
 			@Override
 			boolean isStatic() {
 				return true;
@@ -75,6 +82,7 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 			boolean isProtected(Method method) {
 				return false;
 			}
+
 			@Override
 			boolean isStatic() {
 				return true;
@@ -85,6 +93,7 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 			boolean isProtected(Method method) {
 				return false;
 			}
+
 			@Override
 			boolean isStatic() {
 				return true;
@@ -101,6 +110,7 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 			boolean isProtected(Method method) {
 				return !method.equals(Method.GET);
 			}
+
 			@Override
 			boolean expectPolicies4IndividualResource() {
 				return true;
@@ -174,11 +184,13 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 			boolean isProtected(Method method) {
 				return true;
 			}
-			//we'll get special filter for these
+
+			// we'll get special filter for these
 			@Override
 			boolean expectPolicies4IndividualResource() {
 				return false;
 			}
+
 			@Override
 			int getMaxLevel() {
 				return 1;
@@ -186,23 +198,15 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 		},
 		// substanceowner,
 		/*
-		bundle {
-			@Override
-			boolean isProtected(Method method) {
-				return true;
-			}
-
-			@Override
-			int getMaxLevel() {
-				return 3;
-			}
-
-			@Override
-			boolean expectPolicies4IndividualResource() {
-				return true;
-			}
-		},
-		*/
+		 * bundle {
+		 * 
+		 * @Override boolean isProtected(Method method) { return true; }
+		 * 
+		 * @Override int getMaxLevel() { return 3; }
+		 * 
+		 * @Override boolean expectPolicies4IndividualResource() { return true;
+		 * } },
+		 */
 		admin, user, myaccount {
 			@Override
 			boolean isProtected(Method method) {
@@ -250,20 +254,17 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 		int getMaxLevel() {
 			return 2;
 		}
-		boolean isStatic() {return false;}
+
+		boolean isStatic() {
+			return false;
+		}
 	}
-	
+
 	@Override
 	protected RESTPolicy initRESTPolicy() {
-		RESTPolicy p = new RESTPolicy() {
-			@Override
-			public String[] splitURI(String href) throws Exception {
-				if (HOMEPAGE_DEPTH == 0) return new String[] {"",href};
-				else return super.splitURI(href);
-			}
-		};
-		return p;
+		return new AmbitRESTPolicy(HOMEPAGE_DEPTH);
 	}
+
 	@Override
 	public boolean authorizeSpecialCases(Request request, Response response,
 			List<String> uri) {
@@ -281,8 +282,8 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 		int depth = request.getResourceRef().getSegments().size();
 		if (depth == HOMEPAGE_DEPTH)
 			return true; // home page
-		if (depth > (HOMEPAGE_DEPTH+1))
-			depth = HOMEPAGE_DEPTH+2;
+		if (depth > (HOMEPAGE_DEPTH + 1))
+			depth = HOMEPAGE_DEPTH + 2;
 		StringBuilder resource = new StringBuilder();
 		for (int i = 0; i < depth; i++) {
 			String segment = request.getResourceRef().getSegments().get(i);
@@ -299,7 +300,7 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 					}
 					if (!s.expectPolicies4IndividualResource()) {
 						break;
-					} 
+					}
 				} catch (Exception x) {
 					if (Method.GET.equals(request.getMethod()))
 						return true;
