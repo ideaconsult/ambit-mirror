@@ -756,7 +756,7 @@ var jToxBundle = {
           }
         });
         $(checkAll).on('change', function (e) {
-          var qUri = "/query/study?mergeDatasets=true&bundle_uri=" + bUri;
+          var qUri = self.settings.baseUrl + "/query/study?mergeDatasets=true&bundle_uri=" + bUri;
           if (!this.checked)
             qUri += "&selected=substances&filterbybundle=" + bUri;
           self.endpointKit.loadEndpoints(qUri);
