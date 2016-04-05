@@ -52,7 +52,19 @@ public class SmartsAtomExpression extends SMARTSAtom {
 	// If this data is not filled (i.e. null pointer) the current token is
 	// assumed to be 'TRUE'
 	public List<List<IAtom>> recSmartsMatches = null;
+	
+	//This is used if tetrahedral chiral atom or 
+	//extended tetrahedral chiral token is present 
+	public List<IAtom> stereoLigands = null;
 
+	//This is the expression without stereo information 
+	//stereo tokens and preceding logical operations are removed
+	//This is used to match the atom regardless of the stereo information
+	//The stereo info match is performed later.
+	public List<SmartsExpressionToken> stereoRemovedTokens = new ArrayList<SmartsExpressionToken>();
+	
+	
+	
 	public SmartsAtomExpression(IChemObjectBuilder builder) {
 		super(builder);
 	}
