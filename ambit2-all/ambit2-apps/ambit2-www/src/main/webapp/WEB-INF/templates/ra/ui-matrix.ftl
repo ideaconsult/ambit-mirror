@@ -140,6 +140,7 @@ $(document)
               <td class="jtox-user-rights">
                 <select name="users-write" id="users-write" multiple class="jtox-users-select">
                 </select>
+                <button type="button" class="jtox-users-submit">Save</button>
               </td>
             </tr>
             <tr class="aadb">
@@ -147,6 +148,7 @@ $(document)
               <td class="jtox-user-rights">
                 <select name="users-read" id="users-read" multiple class="jtox-users-select">
                 </select>
+                <button type="button" class="jtox-users-submit">Save</button>
               </td>
             </tr>
             <#break>

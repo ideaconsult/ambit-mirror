@@ -105,18 +105,18 @@ var jToxBundle = {
     $('.jq-buttonset', root).buttonset();
     $('.jq-buttonset.action input', root).on('change', loadAction);
 
-    var updateUsers = function(){
-      var el = this.select; // here this refers to the tokenizer
+    var updateUsers = function(kit){
+      var el = $(this.parentNode).find('select');
       $(el.parentNode).addClass('loading');
       var property = (el[0].id == 'users-write') ? 'canWrite' : 'canRead';
-      var data = 'bundle_number=' + self.bundle.number;
+      var data = 'bundle_number=' + kit.bundle.number;
       var users = el.val();
       if(users) {
         for(var i = 0, l = users.length; i < l; i++){
           data += '&' + property + '=' + users[i];
         }
       }
-      jT.service(self, self.settings.baseUrl + '/myaccount/users', { method: 'POST', data: data }, function(result){
+      jT.service(kit, kit.settings.baseUrl + '/myaccount/users', { method: 'POST', data: data }, function(result){
         $(el.parentNode).removeClass('loading');
         if (!result) { // i.e. on error - request the old data
           //self.loadUsers(); // this causes infinite loop because it triggers onRemoveToken callback.
@@ -128,9 +128,13 @@ var jToxBundle = {
       datas: self.settings.baseUrl + '/myaccount/users',
       searchParam: 'q',
       valueField: 'id',
-      textField: 'name',
-      onAddToken: updateUsers,
-      onRemoveToken: updateUsers
+      textField: 'name'
+      //onAddToken: updateUsers,
+      //onRemoveToken: updateUsers
+    });
+
+    $('.jtox-users-submit', root).on('click', function(){
+      updateUsers.call(this, self);
     });
 
     self.onIdentifiers(null, $('#jtox-identifiers', self.rootElement)[0]);
@@ -752,7 +756,7 @@ var jToxBundle = {
           }
         });
         $(checkAll).on('change', function (e) {
-          var qUri = self.settings.baseUrl + "/query/study?mergeDatasets=true&bundle_uri=" + bUri;
+          var qUri = "/query/study?mergeDatasets=true&bundle_uri=" + bUri;
           if (!this.checked)
             qUri += "&selected=substances&filterbybundle=" + bUri;
           self.endpointKit.loadEndpoints(qUri);

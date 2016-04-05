@@ -21,14 +21,17 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.config.AMBITConfig;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.search.QueryExecutor;
+import ambit2.db.update.bundle.BundleOwnerByNumber;
 import ambit2.db.update.bundle.ReadBundle;
 import ambit2.db.update.bundle.UpdateBundle._published_status;
+import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.user.policy.CallableBundlePolicyCreator;
 import ambit2.user.policy.CallablePolicyUsersCreator;
@@ -156,6 +159,69 @@ public class UserByURIResource<T> extends UserDBResource<T> {
 		}
 	}
 
+	/**
+	 * 
+	 * @param bundle_number
+	 *            bundle uuid
+	 * @param username
+	 *            the user to check as owner
+	 * @return bundle id if owner, -1 otherwise
+	 * @throws ResourceException
+	 */
+	protected int readBundleOwner(String bundle_number)
+			throws ResourceException {
+
+		String uname = null;
+		try {
+			uname = getClientInfo().getUser().getIdentifier();
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
+		}
+		if (uname == null)
+			throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
+
+		Connection c = null;
+		ResultSet rs = null;
+		QueryExecutor xx = null;
+		try {
+			DBConnection dbc = new DBConnection(getContext(),
+					getAmbitConfigFile());
+			c = dbc.getConnection();
+			Set<_published_status> status = new TreeSet<_published_status>();
+			status.add(_published_status.published);
+			BundleOwnerByNumber bundleq = new BundleOwnerByNumber();
+			bundleq.setFieldname(bundle_number);
+			bundleq.setValue(uname);
+			xx = new QueryExecutor();
+			xx.setConnection(c);
+			rs = xx.process(bundleq);
+			while (rs.next()) {
+				return bundleq.getObject(rs);
+			}
+			return 0;
+
+		} catch (Exception x) {
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,
+					x.getMessage(), x);
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (Exception x) {
+			}
+			try {
+				if (c != null)
+					c.close();
+			} catch (Exception x) {
+			}
+			try {
+				if (xx != null)
+					xx.close();
+			} catch (Exception x) {
+			}
+		}
+	}
+
 	public String getAmbitConfigFile() {
 		return "ambit2/rest/config/ambit2.pref";
 	}
@@ -175,6 +241,18 @@ public class UserByURIResource<T> extends UserDBResource<T> {
 			throws AmbitException, ResourceException {
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		return createJSONConvertor(variant);
+	}
+
+	@Override
+	protected Representation post(Representation entity, Variant variant)
+			throws ResourceException {
+		return super.post(entity, variant);
+	}
+
+	@Override
+	protected Representation post(Representation entity)
+			throws ResourceException {
+		return super.post(entity);
 	}
 
 	@Override
@@ -201,23 +279,51 @@ public class UserByURIResource<T> extends UserDBResource<T> {
 		Connection conn = null;
 		try {
 			String bundle_uri = form.getFirstValue("bundle_number");
+
+			int bundleid = readBundleOwner(bundle_uri);
+			if (bundleid <= 0)
+				throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
+
+			int hd = ((AmbitApplication) getApplication()).getHOMEPAGE_DEPTH();
+
 			DBConnection dbc = new DBConnection(getApplication().getContext(),
 					getConfigFile());
 			conn = dbc.getConnection(30, true, 8);
 			if (bundle_uri != null)
-				return new CallableBundlePolicyCreator(method, form,
-						getRequest().getRootRef().toString(), conn, getToken(),
-						usersdbname == null ? getDefaultUsersDB() : usersdbname);
+				return new CallableBundlePolicyCreator(
+						method,
+						form,
+						getRequest().getRootRef().toString(),
+						conn,
+						getToken(),
+						usersdbname == null ? getDefaultUsersDB() : usersdbname,
+						hd);
 			else
-				return new CallablePolicyUsersCreator(method, form,
-						getRequest().getRootRef().toString(), conn, getToken(),
-						usersdbname == null ? getDefaultUsersDB() : usersdbname);
+				return new CallablePolicyUsersCreator(
+						method,
+						form,
+						getRequest().getRootRef().toString(),
+						conn,
+						getToken(),
+						usersdbname == null ? getDefaultUsersDB() : usersdbname,
+						hd);
+		} catch (ResourceException x) {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (Exception xx) {
+			}
+			throw x;
 		} catch (Exception x) {
 			try {
-				conn.close();
+				if (conn != null)
+					conn.close();
 			} catch (Exception xx) {
 			}
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x);
+		} finally {
+
 		}
+
 	}
 }

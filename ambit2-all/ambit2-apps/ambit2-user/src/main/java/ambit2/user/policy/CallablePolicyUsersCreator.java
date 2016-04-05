@@ -27,6 +27,7 @@ public class CallablePolicyUsersCreator extends
 	protected AbstractUpdate<RESTPolicy, RESTPolicyUsers> updateQuery;
 	protected String usersdbname;
 	protected String defaultRole = "ambit_user";
+	protected int HOMEPAGE_DEPTH;
 
 	public String getDefaultRole() {
 		return defaultRole;
@@ -38,8 +39,10 @@ public class CallablePolicyUsersCreator extends
 
 	public CallablePolicyUsersCreator(Method method, Form input,
 			String baseReference, Connection connection, String token,
-			String usersdbname) {
+			String usersdbname, int HOMEPAGE_DEPTH) {
 		super(method, input, baseReference, connection, token);
+
+		this.HOMEPAGE_DEPTH = HOMEPAGE_DEPTH;
 		this.usersdbname = usersdbname;
 	}
 
@@ -67,8 +70,8 @@ public class CallablePolicyUsersCreator extends
 		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 	}
 
-	protected AbstractUpdate<RESTPolicy, RESTPolicyUsers> createPolicyQuery(String bundle_number,
-			String[] ug, boolean readonly) {
+	protected AbstractUpdate<RESTPolicy, RESTPolicyUsers> createPolicyQuery(
+			String bundle_number, String[] ug, boolean readonly) {
 		if (ug == null || ug.length == 0 || bundle_number == null)
 			return null;
 		String role = "B." + bundle_number.replace("-", "").toUpperCase() + "."
@@ -80,7 +83,7 @@ public class CallablePolicyUsersCreator extends
 		for (String s : ug) {
 			// group
 			if (s.startsWith("g_")) {
-				existingrole = new RESTPolicy();
+				existingrole = new AmbitRESTPolicy(HOMEPAGE_DEPTH);
 				existingrole.setRole(s.substring(2));
 				existingrole.setAllowGET(readonly);
 				existingrole.setAllowPOST(!readonly);
@@ -96,7 +99,7 @@ public class CallablePolicyUsersCreator extends
 		}
 		if (existingrole == null) {
 			// a way to remove the "all" policy
-			existingrole = new RESTPolicy();
+			existingrole = new AmbitRESTPolicy(HOMEPAGE_DEPTH);
 			existingrole.setRole(getDefaultRole());
 			existingrole.setAllowGET(false);
 			existingrole.setAllowPOST(false);
@@ -104,7 +107,7 @@ public class CallablePolicyUsersCreator extends
 			existingrole.setAllowDELETE(false);
 			existingrole.setUri(resource);
 		}
-		RESTPolicyUsers policy = new RESTPolicyUsers(users);
+		RESTPolicyUsers policy = new RESTPolicyUsers(HOMEPAGE_DEPTH,users);
 		policy.setRole(role);
 		policy.setAllowGET(readonly);
 		policy.setAllowPOST(!readonly);

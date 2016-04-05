@@ -221,6 +221,15 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 	protected String ajaxTimeout = "10000"; // msec
 	protected boolean enableEmailVerification = true;
+	protected int HOMEPAGE_DEPTH = 1;
+
+	public int getHOMEPAGE_DEPTH() {
+		return HOMEPAGE_DEPTH;
+	}
+
+	public void setHOMEPAGE_DEPTH(int hOMEPAGE_DEPTH) {
+		HOMEPAGE_DEPTH = hOMEPAGE_DEPTH;
+	}
 
 	public boolean isEnableEmailVerification() {
 		return enableEmailVerification;
@@ -263,6 +272,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		versionShort = readVersionShort();
 		versionLong = readVersionLong();
 		gaCode = readGACode();
+		HOMEPAGE_DEPTH = getBaseURLDepth();
 
 		setSimilarityOrder(getSimilarityOrderOption());
 		ajaxTimeout = getAjaxTimeoutOption();

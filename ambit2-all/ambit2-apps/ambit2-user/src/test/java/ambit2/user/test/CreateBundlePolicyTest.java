@@ -27,9 +27,11 @@ import ambit2.user.policy.CreateUsersBundlePolicy;
 import ambit2.user.policy.RESTPolicyUsers;
 
 /**
- * Copied from {@link CreateUsersPolicyTest} but will use {@link CallableBundlePolicyCreator} instead
+ * Copied from {@link CreateUsersPolicyTest} but will use
+ * {@link CallableBundlePolicyCreator} instead
+ * 
  * @author nina
- *
+ * 
  */
 public class CreateBundlePolicyTest extends DbUnitTest {
 	protected UpdateExecutor<IQueryUpdate> executor;
@@ -73,7 +75,7 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 		user = new DBUser();
 		user.setUserName("admin");
 		users.add(user);
-		RESTPolicyUsers policy = new RESTPolicyUsers(users);
+		RESTPolicyUsers policy = new RESTPolicyUsers(1, users);
 		policy.setAllowGET(true);
 		policy.setRole(getRole(bundle.toString(), "R"));
 		policy.setUri("http://localhost/ambit2"
@@ -150,7 +152,7 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 		user = new DBUser();
 		user.setUserName("admin");
 		users.add(user);
-		RESTPolicyUsers policy = new RESTPolicyUsers(users);
+		RESTPolicyUsers policy = new RESTPolicyUsers(1, users);
 		policy.setAllowGET(false);
 		policy.setAllowPUT(true);
 		policy.setAllowPOST(true);
@@ -180,8 +182,8 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 						"SELECT role_name,prefix,hex(resource) r,level,mget,mput,mpost,mdelete FROM policy_bundle where role_name regexp '^B.*.W$'");
 		Assert.assertEquals(1, table.getRowCount());
 		Assert.assertEquals("/ambit2", table.getValue(0, "prefix"));
-		Assert.assertEquals(bundletest.toString().replace("-", "").toUpperCase(),
-				table.getValue(0, "r").toString());
+		Assert.assertEquals(bundletest.toString().replace("-", "")
+				.toUpperCase(), table.getValue(0, "r").toString());
 		Assert.assertEquals(2, table.getValue(0, "level"));
 		Assert.assertEquals(false, table.getValue(0, "mget"));
 		Assert.assertEquals(true, table.getValue(0, "mput"));
@@ -243,7 +245,7 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 
 			CallableBundlePolicyCreator callable = new CallableBundlePolicyCreator(
 					Method.POST, form, "http://localhost:8081/ambit2/",
-					c.getConnection(), null, getDatabase());
+					c.getConnection(), null, getDatabase(), 1);
 			TaskResult task = callable.call();
 			createVerify(null);
 
@@ -271,7 +273,7 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 
 			CallableBundlePolicyCreator callable = new CallableBundlePolicyCreator(
 					Method.POST, form, "http://localhost:8081/ambit2/",
-					c.getConnection(), null, getDatabase());
+					c.getConnection(), null, getDatabase(), 1);
 			callable.setDefaultRole("user");
 			TaskResult task = callable.call();
 			updateVerify(null, 2);
@@ -299,7 +301,7 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 
 			CallableBundlePolicyCreator callable = new CallableBundlePolicyCreator(
 					Method.POST, form, "http://localhost:8081/ambit2/",
-					c.getConnection(), null, getDatabase());
+					c.getConnection(), null, getDatabase(), 1);
 			callable.setDefaultRole("user");
 			TaskResult task = callable.call();
 			updateVerify(null, 0);
@@ -312,5 +314,42 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 			} catch (Exception x) {
 			}
 		}
+	}
+
+	@Test
+	public void testSpltUri() throws Exception {
+		DBRole role = new DBRole("user", "Bundle role");
+		List<DBUser> users = new ArrayList<>();
+		DBUser user = new DBUser();
+		user.setUserName("test");
+		users.add(user);
+		user = new DBUser();
+		user.setUserName("admin");
+		users.add(user);
+		RESTPolicyUsers policy = new RESTPolicyUsers(1, users);
+		policy.setAllowGET(true);
+		policy.setRole(getRole(bundle.toString(), "R"));
+		policy.setUri("http://localhost/ambit2"
+				+ getResource(bundle.toString()));
+
+		String[] uri = policy.splitURI(policy.getUri());
+		Assert.assertEquals("/ambit2",uri[0]);
+		System.out.println(uri[1]);
+		
+		
+		policy = new RESTPolicyUsers(0, users);
+		policy.setAllowGET(true);
+		policy.setRole(getRole(bundle.toString(), "R"));
+		policy.setUri("http://localhost"
+				+ getResource(bundle.toString()));
+		String[]  uri1 = policy.splitURI(policy.getUri());
+		Assert.assertEquals("",uri1[0]);
+		Assert.assertEquals(uri[1], uri1[1]);
+		/*
+		 * 
+		 * RESTPolicy all = new AmbitRESTPolicy(1); all.setAllowGET(true);
+		 * all.setRole("user"); all.setUri(policy.getUri());
+		 */
+
 	}
 }
