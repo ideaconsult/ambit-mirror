@@ -248,7 +248,17 @@
 				<baseurl.depth>1</baseurl.depth>
 				<baseurl>/ambit2</baseurl>
 			</properties>
-		</profile>			
+		</profile>		
+		<profile>
+			<id>ambit3_root</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<baseurl.depth>1</baseurl.depth>
+				<baseurl>/ambit3</baseurl>
+			</properties>
+		</profile>				
 	</profiles>
 	<build>
 		<finalName>ambit2</finalName>
