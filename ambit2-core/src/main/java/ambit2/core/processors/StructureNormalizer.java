@@ -121,14 +121,14 @@ public class StructureNormalizer extends
 						SDFWriter writer = new SDFWriter(w);
 						try {
 							writer.write(molecule);
-							structure.setType(strucType.process(molecule));
-							structure.setContent(w.toString());
-							structure.setFormat(MOL_TYPE.SDF.name());
 						} catch (Exception x) {
-							logger.log(Level.WARNING,x.getMessage());
+							logger.log(Level.WARNING, x.getMessage());
 						} finally {
 							writer.close();
 						}
+						structure.setType(strucType.process(molecule));
+						structure.setContent(w.toString());
+						structure.setFormat(MOL_TYPE.SDF.name());
 					}
 				} catch (Exception x) {
 				}
