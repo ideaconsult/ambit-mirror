@@ -212,14 +212,14 @@ public class DBSubstanceImport {
 		return true;
 	}
 	
-	protected int maxRefSubstances = 1;
+	protected int maxRefSubstances = -1;
 	protected static int getMaxRefSubstances(CommandLine line) {
 		if (line.hasOption('r'))
 			try {
 				return Integer.parseInt(line.getOptionValue('r'));
 			} catch (Exception x) {
 			}
-		return 1;
+		return -1;
 	}
 
 	/**
