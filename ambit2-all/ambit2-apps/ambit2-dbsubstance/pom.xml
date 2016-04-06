@@ -155,6 +155,7 @@
 					<version>2.6</version>
 					<configuration>
 						<skip>true</skip>
+						<argLine>-Xmx512</argLine>
 					</configuration>
 				</plugin>
 			</plugins>
