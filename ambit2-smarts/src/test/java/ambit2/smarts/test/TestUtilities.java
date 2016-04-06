@@ -2688,13 +2688,21 @@ public class TestUtilities {
 		
 		//tu.testSmiles2Smiles("C/C=C/C");
 		//tu.testSmiles2Smiles("c1ccccc1");
-		//tu.testSmiles2Smiles("C1=CC=CC=C1");
+		//tu.testSmiles2Smiles("C1CCC/C=C/1C\\N");
+		
+		//tu.testSmiles2Smiles("CC(C)NC(C=1C=CC=2C(C1)=N/C(=C\\3/C=C\\C(\\C=C3)=C/4\\C=C\\C(=C/5/C=C\\C(\\C=C5)"
+		//		+ "=C\\6/N=C7C=CC(=CC7=N6)C(=N)NC(C)C)\\O4)/N2)=N");
+		
+		
+		tu.testSmiles2Smiles("N(/C)(/N)=C/C");  //gives smiles parser error due to incorrect stereo
+												//Multiple directional bonds on atom 0
+		
 		
 		tu.man.setIsomorphismTesterFlagCheckStereoElements(true);
 		//tu.testSmartsManagerBoolSearch("C/C=C/CC","C/C=C/CC");
-		tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C(N)=C(/CC)N");   
-		tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C(N)=C(/CC)C");
-		tu.testSmartsManagerBoolSearch("[$(C/C=C\\C)]","C\\C(N)=C(/CC)");
+		//tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C(N)=C(/CC)N");   
+		//tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C(N)=C(/CC)C");
+		//tu.testSmartsManagerBoolSearch("[$(C/C=C\\C)]","C\\C(N)=C(/CC)");
 
 	}
 
