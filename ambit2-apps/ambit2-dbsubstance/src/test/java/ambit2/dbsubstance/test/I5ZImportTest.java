@@ -2,6 +2,7 @@ package ambit2.dbsubstance.test;
 
 import java.io.File;
 import java.io.InputStream;
+import java.math.BigInteger;
 
 import junit.framework.Assert;
 
@@ -63,15 +64,17 @@ public class I5ZImportTest extends DbUnitTest {
 		IDatabaseConnection c = getConnection();
 		try {
 			ITable table = c.createQueryTable("EXPECTED_SUBSTANCES",
-					"SELECT * FROM substance");
+					"SELECT prefix,hex(uuid) as huuid,rs_prefix,hex(rs_uuid) as rs_huuid FROM substance");
 			Assert.assertEquals(1, table.getRowCount());
+			Assert.assertNotNull(table.getValue(0,"huuid"));
+			Assert.assertNotNull(table.getValue(0,"rs_huuid"));
 			ITable values = c.createQueryTable("EXPECTED_STRUCTURES",
 					"SELECT * FROM structure ");
 			Assert.assertEquals(6, values.getRowCount());
 			//structures should not be empty
 			values = c.createQueryTable("EXPECTED_STRUCTURES",
 					"SELECT count(*) as c FROM structure where format='SDF' and type_structure!='NA' and uncompress(structure) regexp 'M  END' ");
-			Assert.assertEquals(4,values.getValue(0, "c"));
+			Assert.assertEquals(BigInteger.valueOf(4),values.getValue(0, "c"));
 
 			values = c.createQueryTable("EXPECTED_CHEMICALS",
 					"SELECT * FROM chemicals");

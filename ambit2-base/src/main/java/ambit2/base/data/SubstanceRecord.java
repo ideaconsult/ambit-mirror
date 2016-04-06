@@ -86,6 +86,7 @@ public class SubstanceRecord extends StructureRecord {
 	protected String internalName;
 	protected String publicName;
 	protected String internalUUID;
+	protected String refsubstance_uuid;
 
 	public enum jsonSubstance {
 		URI, externalIdentifiers, i5uuid, documentType, format, name, publicname, content, substanceType, referenceSubstance, ownerUUID, ownerName, composition;
@@ -254,10 +255,7 @@ public class SubstanceRecord extends StructureRecord {
 	}
 
 	public void setReferenceSubstanceUUID(String uuid) {
-		if (uuid == null)
-			removeRecordProperty(Property.getI5UUIDInstance());
-		else
-			setRecordProperty(Property.getI5UUIDInstance(), uuid);
+		refsubstance_uuid = uuid;
 	}
 
 	/**
@@ -267,8 +265,7 @@ public class SubstanceRecord extends StructureRecord {
 	 * @return
 	 */
 	public String getReferenceSubstanceUUID() {
-		Object name = getRecordProperty(Property.getI5UUIDInstance());
-		return name == null ? null : name.toString();
+		return refsubstance_uuid;
 	}
 
 	@Override
