@@ -9,9 +9,11 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.facet.IFacet;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 import net.idea.restnet.db.facet.FacetCSVReporter;
 import net.idea.restnet.db.facet.FacetResource;
+import net.idea.restnet.db.facet.FacetTreeJSONReporter;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.restlet.Request;
@@ -92,6 +94,10 @@ public abstract class AmbitFacetResource<FACET extends IFacet<String>, Q extends
 			return new OutputWriterConvertor(
 					new FacetURIReporter(getRequest()),
 					MediaType.TEXT_URI_LIST, filenamePrefix);
+		} else if (variant.getMediaType().equals(
+				ChemicalMediaType.APPLICATION_FACETJSON)) {
+			return new OutputWriterConvertor(new FacetTreeJSONReporter(
+					getRequest()), ChemicalMediaType.APPLICATION_FACETJSON);
 		} else
 			return new OutputWriterConvertor(createJSONReporter(getRequest(),
 					null), MediaType.APPLICATION_JSON, filenamePrefix);
@@ -116,7 +122,8 @@ public abstract class AmbitFacetResource<FACET extends IFacet<String>, Q extends
 					profile, getApplication().getContext(), getToken(),
 					getRequest().getCookies(),
 					getRequest().getClientInfo() == null ? null : getRequest()
-							.getClientInfo().getAgent(),getRequest().getResourceRef().toString());
+							.getClientInfo().getAgent(), getRequest()
+							.getResourceRef().toString());
 			reader.setCloseConnection(false);
 			reader.setConnection(connection);
 			for (int i = 0; i < propertyURI.length; i++) {
