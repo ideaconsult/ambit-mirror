@@ -122,11 +122,22 @@ public class MultiFingerprintsWriter extends DefaultChemObjectWriter {
 		boolean writecounts = propertyname.endsWith(".count");
 		if (propertyvalue instanceof IBitFingerprint) {
 			BitSet bitset = ((IBitFingerprint) propertyvalue).asBitSet();
-			record = new Object[bitset.size() + offset];
-			// not sparse!
-			for (int i = 0; i < bitset.size(); i++) {
-				record[i + offset] = bitset.get(i) ? 1 : 0;
+
+ 
+			/*//not sparse!
+			 * record = new Object[bitset.size() + offset]; for (int i = 0; i <
+			 * bitset.size(); i++) { record[i + offset] = bitset.get(i) ? 1 : 0;
+			 * }
+			 */
+			//this is sparse output
+			record = new Object[bitset.cardinality()+offset];
+			int i = 0;
+			for (int b = bitset.nextSetBit(0); b >= 0; b = bitset
+					.nextSetBit(b + 1)) {
+				record[i + offset] = b;
+				i++;
 			}
+
 		} else if (propertyvalue instanceof ICountFingerprint) {
 			ICountFingerprint cfp = (ICountFingerprint) propertyvalue;
 			int numBins = cfp.numOfPopulatedbins();
