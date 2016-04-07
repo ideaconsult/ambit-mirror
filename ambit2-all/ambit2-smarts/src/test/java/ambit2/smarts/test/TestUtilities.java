@@ -1684,6 +1684,42 @@ public class TestUtilities {
 		// //This function requires 2D coordinates
 		System.out.println(smiles + "  --> " + smiles2 + "    " + smiles3);
 	}
+	
+	public void testSmiles2Smiles2Smiles(String smiles, boolean FlagScrambeAtoms) throws Exception
+	{
+		System.out.println("Testing smiles: " + smiles);
+		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(smiles);
+		if (FlagPrintAtomAttributes) {
+			System.out.println("Atom attributes:\n"
+					+ SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Bond attributes:\n"
+					+ SmartsHelper.getBondAttributes(target));
+		}
+
+		String smiles2 = SmartsHelper.moleculeToSMILES(target, true);
+		System.out.println(smiles + "  --> " + smiles2 );
+		
+		IAtomContainer target2 = SmartsHelper.getMoleculeFromSmiles(smiles2);
+		
+		if (FlagScrambeAtoms)
+		{
+			int n = target2.getAtomCount();
+			IAtom atoms[] = new IAtom[n];
+			for (int i = 0; i < n; i++)
+				atoms[n-1-i] = target2.getAtom(i);
+			target2.setAtoms(atoms);
+			
+			int m = target2.getBondCount();
+			IBond bonds[] = new IBond[m];
+			for (int i = 0; i < m; i++)
+				bonds[m-1-i] = target2.getBond(i);
+			target2.setBonds(bonds);
+		}
+		
+		String smiles3 = SmartsHelper.moleculeToSMILES(target2, true);
+		
+		System.out.println(smiles2 + "  --> " + smiles3);
+	}
 
 	public void testSmiles2MOLFile(String smiles, String molFileName)
 			throws Exception {
@@ -2694,9 +2730,37 @@ public class TestUtilities {
 		//		+ "=C\\6/N=C7C=CC(=CC7=N6)C(=N)NC(C)C)\\O4)/N2)=N");
 		
 		
-		tu.testSmiles2Smiles("N(/C)(/N)=C/C");  //gives smiles parser error due to incorrect stereo
+		
+		//tu.testSmiles2Smiles("CC(C)NC(=N)C1=CC2=N/C(=C\\3/C=C\\C(=C\\4/C=C/C(=C/5\\C=C/C(=C\\6/N=C7C=CC(=CC7=N6)C(=N)NC(C)C)/C=C5)/O4)\\C=C3)/N=C2C=C1");
+		
+		//tu.testSmiles2Smiles("CC(C)NC(=N)C1=CC2=N/C(=C\\3/C=C\\C(=C/N)\\C=C3)/N=C2C=C1");  //db stereo problem
+		
+		//tu.testSmiles2Smiles("C\\3/C=C\\C(=C/N)/C=C3");  //db stereo problem
+		
+		//tu.testSmiles2Smiles("C/C=C\\C(=C/N)/C=C"); //db stereo problem
+		
+		//tu.testSmiles2Smiles("C/C(=C/N)/C=C"); //db stereo problem
+		
+		
+		//tu.testSmiles2Smiles("N(/C)(/N)=C/C");  //gives smiles parser error due to incorrect stereo
 												//Multiple directional bonds on atom 0
 		
+		
+		//tu.testSmiles2Smiles("CC(C)NC(C=1C=CC=2C(C1)=N\\C(=C/3\\C=C/C(/C=C3)=C\\4/C=C/C(=C/5\\C=C/C(/C=C5)=C/6\\N=C7C=CC(=CC7=N6)C(=N)NC(C)C)/O4)\\N2)=N");
+		
+		
+		tu.FlagPrintAtomAttributes = false;
+		//tu.testSmiles2Smiles2Smiles("CC(C)NC(C=1C=CC=2C(C1)=N\\C(=C/3\\C=C/C(/C=C3)=C\\4/C=C/C(=C/5\\C=C/C(/C=C5)=C/6\\N=C7C=CC(=CC7=N6)C(=N)NC(C)C)/O4)\\N2)=N", false);
+		
+		
+		for (int i = 0; i < 10; i++)
+		{	
+			System.out.println("Iteration " + (i+1));
+			tu.testSmiles2Smiles2Smiles("CC(C)NC(C=1C=CC=2C(C1)=N\\C(=C/3\\C=C/C(/C=C3)=C\\4/C=C/C(=C/5\\C=C/C(/C=C5)=C/6\\N=C7C=CC(=CC7=N6)C(=N)NC(C)C)/O4)\\N2)=N", false);
+		}
+		
+			
+		//tu.testSmiles2Smiles("CC(C)NC(=N)C1=CC2=N/C(=C\\3/C=C\\C(=C\\4/C=C/C(=C/5\\C=C/C(=C\\6/N=C7C=CC(=CC7=N6)C(=N)NC(C)C)/C=C5)/O4)\\C=C3)/N=C2C=C1");
 		
 		tu.man.setIsomorphismTesterFlagCheckStereoElements(true);
 		//tu.testSmartsManagerBoolSearch("C/C=C/CC","C/C=C/CC");

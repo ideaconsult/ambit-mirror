@@ -35,6 +35,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IDoubleBondStereochemistry;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.interfaces.ITetrahedralChirality;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
@@ -50,6 +51,7 @@ import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -173,6 +175,12 @@ public class SmartsHelper {
 			if (stereoEl instanceof ITetrahedralChirality) {
 				sb.append(stereoCenterToString(container,
 						(ITetrahedralChirality) stereoEl) + "\n");
+				continue;
+			}
+			if (stereoEl instanceof DoubleBondStereochemistry)
+			{
+				sb.append(StereoChemUtils.doubleBondStereochemistry2String(
+						(DoubleBondStereochemistry)stereoEl, container) + "\n");
 				continue;
 			}
 			sb.append(stereoEl.toString() + "\n");

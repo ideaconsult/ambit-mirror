@@ -347,6 +347,45 @@ public class StereoChemUtils
 		}
 	}
 	
+	public static String doubleBondStereochemistry2String(DoubleBondStereochemistry dbs, IAtomContainer mol)
+	{
+		StringBuffer sb = new StringBuffer();
+		IBond stereoBond = dbs.getStereoBond();
+		
+		if (stereoBond == null)
+			sb.append("stereo bond = null ");
+		else
+		{
+			sb.append("stereo bond = ");
+			sb.append(stereoBond.getAtom(0).getSymbol());
+			sb.append(mol.getAtomNumber(stereoBond.getAtom(0)));
+			sb.append(" ");
+			sb.append(stereoBond.getAtom(1).getSymbol());
+			sb.append(mol.getAtomNumber(stereoBond.getAtom(1)));
+			sb.append(" ");
+		}
+		
+		sb.append(dbs.getStereo() + " ");
+		IBond bo[] = dbs.getBonds();
+		for (int i = 0; i < bo.length; i++)
+		{	
+			IBond b = bo[i];
+			if (b == null)
+				sb.append("null ");
+			else
+			{	
+				if (b.getAtom(0) == stereoBond.getAtom(0) || 
+						b.getAtom(0) == stereoBond.getAtom(1))
+					sb.append(b.getAtom(1).getSymbol() + mol.getAtomNumber(b.getAtom(1)));
+				else
+					sb.append(b.getAtom(0).getSymbol() + mol.getAtomNumber(b.getAtom(0)));
+				sb.append(" ");
+			}	
+		}	
+		
+		return sb.toString();
+	}
+	
 	public static String tetrahedralChirality2String(TetrahedralChirality thc, IAtomContainer mol)
 	{
 		StringBuffer sb = new StringBuffer();
@@ -467,7 +506,8 @@ public class StereoChemUtils
 			if (element instanceof DoubleBondStereochemistry)
 			{
 				int status = checkDoubleBondStereochemistry((DoubleBondStereochemistry) element, mol);			
-				sb.append("DBStereo status = " + status + "\n");
+				sb.append("DBStereo status = " + status + "   " 
+						+ doubleBondStereochemistry2String((DoubleBondStereochemistry) element, mol) + "\n");
 				continue;
 			}
 			
@@ -475,7 +515,8 @@ public class StereoChemUtils
 			if (element instanceof TetrahedralChirality)
 			{
 				int status = checkTetrahedralChirality((TetrahedralChirality) element, mol);
-				sb.append("Chiral atom status = " + status + "\n");
+				sb.append("Chiral atom status = " + status + "   " + 
+						tetrahedralChirality2String((TetrahedralChirality) element, mol) + "\n");
 				continue;
 			}
 			//TODO handle ExtendedTetrahedral stereo elements
