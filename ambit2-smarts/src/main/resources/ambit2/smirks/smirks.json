@@ -2,7 +2,7 @@
 	"OPTIONS": {
 		"properties": {
 			"atomtypes": false,
-			"transformations": true,
+			"transformations": false,
 			"sparse": true
 		}
 	},

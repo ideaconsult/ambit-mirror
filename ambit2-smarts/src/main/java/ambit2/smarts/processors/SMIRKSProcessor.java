@@ -111,6 +111,7 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 			setTransformationasproperties(optionsNode.get("properties")
 					.get("transformations").asBoolean());
 		} catch (Exception x) {
+			setTransformationasproperties(false);
 		}
 
 		JsonNode reactionsNode = root.path("REACTIONS");
