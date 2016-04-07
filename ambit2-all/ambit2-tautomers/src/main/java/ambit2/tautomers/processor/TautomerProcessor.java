@@ -29,14 +29,15 @@ public class TautomerProcessor extends
 
 	public TautomerProcessor(Logger logger) {
 		super();
-		if (logger!=null) this.logger = logger;
+		if (logger != null)
+			this.logger = logger;
 		tautomerManager.tautomerFilter
 				.setFlagApplyDuplicationCheckIsomorphism(false);
 		tautomerManager.tautomerFilter.setFlagApplyDuplicationCheckInChI(true);
 		tautomerManager.FlagCalculateCACTVSEnergyRank = true;
 		tautomerManager.FlagRegisterOnlyBestRankTautomers = true;
 		tautomerManager.FlagSetStereoElementsOnTautomerProcess = true;
-		//tautomerManager.FlagGenerateStereoBasedOn2D
+		// tautomerManager.FlagGenerateStereoBasedOn2D
 	}
 
 	public TautomerManager getTautomerManager() {
@@ -55,17 +56,27 @@ public class TautomerProcessor extends
 
 	@Override
 	public IAtomContainer process(IAtomContainer mol) throws Exception {
-		if (mol == null || mol.getAtomCount() == 0)
+		if (mol == null)
+			return null;
+		if (mol.getAtomCount() == 0) {
+			// we still need a property
+			mol.setProperty(TautomerConst.TAUTOMER_RANK, Double.NaN);
 			return mol;
+		}
+
 		boolean applicable = false;
-		//if all single bonds don't waste time on trying the tautomerisation
+		// if all single bonds don't waste time on trying the tautomerisation
 		for (IBond bond : mol.bonds())
 			if (!Order.SINGLE.equals(bond.getOrder())) {
 				applicable = true;
 				break;
 			}
-		if (!applicable) return mol;
-		
+		if (!applicable) {
+			// no tautomers could be generated, but we still need a property 
+			mol.setProperty(TautomerConst.TAUTOMER_RANK, Double.NaN);
+			return mol;
+		}
+
 		tautomerManager.setStructure(mol);
 		IAtomContainer best = null;
 		List<IAtomContainer> resultTautomers = tautomerManager
@@ -73,7 +84,8 @@ public class TautomerProcessor extends
 		if (tautomerManager.FlagRegisterOnlyBestRankTautomers) {
 			best = tautomerManager.getCanonicTautomer(resultTautomers);
 			best = best == null ? mol : best;
-			if (best.getProperty(TautomerConst.TAUTOMER_RANK) == null && best.getProperty(TautomerConst.CACTVS_ENERGY_RANK)==null)
+			if (best.getProperty(TautomerConst.TAUTOMER_RANK) == null
+					&& best.getProperty(TautomerConst.CACTVS_ENERGY_RANK) == null)
 				best.setProperty(TautomerConst.TAUTOMER_RANK, Double.NaN);
 			return best;
 		} else {
@@ -94,8 +106,8 @@ public class TautomerProcessor extends
 								.getProperty(TautomerConst.TAUTOMER_RANK);
 
 						if (rank_property == null) {
-							tautomer
-							.setProperty(TautomerConst.TAUTOMER_RANK,null);
+							tautomer.setProperty(TautomerConst.TAUTOMER_RANK,
+									null);
 							logger.log(Level.FINE,
 									"NO RANK @ " + tautomer.getProperties());
 							continue;
