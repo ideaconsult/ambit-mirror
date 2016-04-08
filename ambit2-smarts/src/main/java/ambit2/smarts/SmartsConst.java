@@ -40,7 +40,9 @@ public class SmartsConst
 	public static final int LO_AND = 1;
 	public static final int LO_OR = 2;
 	public static final int LO_ANDLO = 3;
+	public static final int LO_UNDEFINED = 100;
 	public static final int LO = 1000;
+	
 		
 	//Atom Primitives
 	public static char AtomPrimChars[] = {'*','a','A','D','H','h','R','r','v','X',
