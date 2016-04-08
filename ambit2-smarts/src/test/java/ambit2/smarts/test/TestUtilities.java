@@ -2780,7 +2780,7 @@ public class TestUtilities {
 		}
 		*/
 		
-		tu.testStereoRemovedTokens("[!@&+1@@!X4](C)(CC)(CCC)(N)");
+		tu.testStereoRemovedTokens("[D;@@,@,X]");
 			
 		//tu.testSmiles2Smiles("CC(C)NC(=N)C1=CC2=N/C(=C\\3/C=C\\C(=C\\4/C=C/C(=C/5\\C=C/C(=C\\6/N=C7C=CC(=CC7=N6)C(=N)NC(C)C)/C=C5)/O4)\\C=C3)/N=C2C=C1");
 		
