@@ -67,6 +67,7 @@ import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SMIRKSReaction;
 import ambit2.smarts.Screening;
 import ambit2.smarts.ScreeningData;
+import ambit2.smarts.SmartsAtomExpression;
 import ambit2.smarts.SmartsConst;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsManager;
@@ -2204,6 +2205,24 @@ public class TestUtilities {
 
 		System.out.println("    " + SmartsHelper.moleculeToSMILES(mol, true));
 	}
+	
+	public void testStereoRemovedTokens(String smarts) 
+	{
+		System.out.println("Smarts " + smarts);
+		IQueryAtomContainer qac = sp.parse(smarts);
+		if (!sp.getErrorMessages().equals("")) {
+			System.out.println("Smarts Parser errors:\n"
+					+ sp.getErrorMessages());
+			return;
+		}
+		
+		//System.out.println("Atoms: " + SmartsHelper.getAtomsString(qac));
+		
+		SmartsAtomExpression expr = (SmartsAtomExpression)qac.getAtom(0);
+		expr.getStereoRemovedTokens();
+		System.out.println(expr.toString());
+		System.out.println(expr.stereoRemovedToString());
+	}
 
 	// -------------------------------------------------------------------------------
 
@@ -2753,12 +2772,15 @@ public class TestUtilities {
 		//tu.testSmiles2Smiles2Smiles("CC(C)NC(C=1C=CC=2C(C1)=N\\C(=C/3\\C=C/C(/C=C3)=C\\4/C=C/C(=C/5\\C=C/C(/C=C5)=C/6\\N=C7C=CC(=CC7=N6)C(=N)NC(C)C)/O4)\\N2)=N", false);
 		
 		
+		/*
 		for (int i = 0; i < 10; i++)
 		{	
 			System.out.println("Iteration " + (i+1));
 			tu.testSmiles2Smiles2Smiles("CC(C)NC(C=1C=CC=2C(C1)=N\\C(=C/3\\C=C/C(/C=C3)=C\\4/C=C/C(=C/5\\C=C/C(/C=C5)=C/6\\N=C7C=CC(=CC7=N6)C(=N)NC(C)C)/O4)\\N2)=N", false);
 		}
+		*/
 		
+		tu.testStereoRemovedTokens("[!@&+1@@!X4](C)(CC)(CCC)(N)");
 			
 		//tu.testSmiles2Smiles("CC(C)NC(=N)C1=CC2=N/C(=C\\3/C=C\\C(=C\\4/C=C/C(=C/5\\C=C/C(=C\\6/N=C7C=CC(=CC7=N6)C(=N)NC(C)C)/C=C5)/O4)\\C=C3)/N=C2C=C1");
 		
