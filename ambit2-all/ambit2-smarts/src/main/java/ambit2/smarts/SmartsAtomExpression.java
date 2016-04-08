@@ -650,7 +650,7 @@ public class SmartsAtomExpression extends SMARTSAtom {
 		int n = 0;
 		for (int i = tokenNum-1; i >= 0; i--)
 		{
-			if (tokens.get(i).type == SmartsConst.LO_NOT)
+			if (tokens.get(i).type == (SmartsConst.LO + SmartsConst.LO_NOT))
 				n++;
 			else
 				break;
@@ -667,9 +667,74 @@ public class SmartsAtomExpression extends SMARTSAtom {
 	 */
 	int [] analyseStereoToken(int tokenNum){
 		int a[] = new int [3];
-		a[0]  = getPrecedingLogicalNos(tokenNum);
+		a[0] = getPrecedingLogicalNos(tokenNum);
+		a[1] = 0; //initialized so that previous operation is not removed (preserved)
+		a[2] = 0; //initialized so that next operation is not removed (preserved)
+		int prevLogOp = SmartsConst.LO_UNDEFINED;
+		int nextLogOp = SmartsConst.LO_UNDEFINED;
 		
-		//TODO
+		int pos = tokenNum - a[0] - 1;
+		if (pos >= 0)
+			prevLogOp = tokens.get(pos).type - SmartsConst.LO;
+		
+		pos = tokenNum + 1;
+		if (pos < tokens.size())
+			nextLogOp = tokens.get(pos).type - SmartsConst.LO;
+		
+		//The logical operation before/after the stereo token is removed/preserved
+		//so that the obtained smarts expression logic could be calculated 
+		//regardless the stereo matching. 
+		//The precedence of the logical operations is taken into account in order to 
+		//decide which logical operations to preserve/remove.
+		
+		if (prevLogOp == SmartsConst.LO_UNDEFINED)
+		{
+			//This means that the stereo token is the at beginning of the smarts expression 
+			//(negation before the stereo token is not counted)  
+			
+			//[@,D] --> [D]   (next operation is removed)
+			//[@&D] --> [D]   (next operation is removed)
+			//[@;D] --> [D]   (next operation is removed)
+			//[@]   --> [ ]   (next operation is not removed /nothing to remove/)
+			
+			if (nextLogOp != SmartsConst.LO_UNDEFINED)
+				a[2] = 1;
+		}
+		
+		if (prevLogOp == SmartsConst.LO_AND)
+		{
+			//[X&@,D] --> [X,D]   (previous operation is removed)
+			//[X&@&D] --> [X&D]   (previous operation is removed)
+			//[X&@;D] --> [X;D]   (previous operation is removed)
+			//[X&@]   --> [X ]    (previous operation is removed)
+			a[1] = 1; 
+		}
+		
+		if (prevLogOp == SmartsConst.LO_OR)
+		{
+			//[X,@,D] --> [X,D]   (previous operation is removed)
+			//[X,@&D] --> [X,D]   (previous operation is preserved, next operation is removed)
+			//[X,@;D] --> [X;D]   (previous operation is removed)
+			//[X,@]   --> [X ]    (previous operation is removed)
+			
+			if (nextLogOp == SmartsConst.LO_AND)
+				a[2] = 1;
+			else
+				a[1] = 1;
+		}
+		
+		if (prevLogOp == SmartsConst.LO_ANDLO)
+		{
+			//[X;@,D] --> [X;D]   (next operation is removed)
+			//[X;@&D] --> [X;D]   (next operation is removed)
+			//[X;@;D] --> [X;D]   (next operation is removed)
+			//[X;@]   --> [X ]    (previous operation is removed)
+			if (nextLogOp == SmartsConst.LO_UNDEFINED)
+				a[1] = 1;
+			else
+				a[2] = 1;
+		}
+		
 		return a;
 	}
 }
