@@ -585,19 +585,46 @@ public class SmartsAtomExpression extends SMARTSAtom {
 		return sb.toString();
 	}
 	
-	void getStereoRemovedTokens()
+	public String stereoRemovedToString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("[");
+
+		// Expression tokens
+		for (int i = 0; i < stereoRemovedTokens.size(); i++)
+			sb.append(tokenToString(stereoRemovedTokens.get(i)));
+		// SMIRKS mapping
+		Object prop = this.getProperty("SmirksMapIndex");
+		if (prop != null)
+			sb.append(":" + prop);
+
+		sb.append("]");
+		return sb.toString();
+	}
+	
+	public void getStereoRemovedTokens()
 	{
 		stereoRemovedTokens = new ArrayList<SmartsExpressionToken>();
 		List<Integer> stereoTokens = new ArrayList<Integer>();
-		List<Integer> precedingLogicalOperations = new ArrayList<Integer>();
+		List<Integer> precedingLogicalNos = new ArrayList<Integer>();
+		List<Boolean> removePreviousLogOperation = new ArrayList<Boolean>();
+		List<Boolean> removeNextLogOperation = new ArrayList<Boolean>();
+		
 		for (int i = 0; i < tokens.size(); i++)
 		{
 			SmartsExpressionToken token = tokens.get(i);
 			if (token.type == SmartsConst.AP_Chiral)
 			{
 				stereoTokens.add(i);
-				int numPrecLogOp = getPrecedingLogicalOperations(i);
-				precedingLogicalOperations.add(numPrecLogOp);
+				int a[] = analyseStereoToken(i);
+				precedingLogicalNos.add(a[0]);
+				if (a[1] == 0)
+					removePreviousLogOperation.add(false);
+				else
+					removePreviousLogOperation.add(true);
+				if (a[2] == 0)
+					removeNextLogOperation.add(false);
+				else
+					removeNextLogOperation.add(true);
 			}
 		}
 		
@@ -605,10 +632,12 @@ public class SmartsAtomExpression extends SMARTSAtom {
 		
 		for (int i = 0; i < stereoTokens.size(); i++)
 		{
+			/*
 			int pos1 = stereoTokens.get(i) - precedingLogicalOperations.get(i);
 			for (int k = pos; k < pos1; k++)
 				stereoRemovedTokens.add(tokens.get(k));
 			pos = stereoTokens.get(i)+1;
+			*/
 		}
 		
 		//coping the remaining tokens after the last stereo token 
@@ -616,17 +645,31 @@ public class SmartsAtomExpression extends SMARTSAtom {
 			stereoRemovedTokens.add(tokens.get(k));
 	}
 	
-	int getPrecedingLogicalOperations (int tokenNum)
+	int getPrecedingLogicalNos(int tokenNum)
 	{
 		int n = 0;
 		for (int i = tokenNum-1; i >= 0; i--)
 		{
-			if (tokens.get(i).isLogicalOperation())
+			if (tokens.get(i).type == SmartsConst.LO_NOT)
 				n++;
 			else
 				break;
 		}
 		
 		return n;
+	}
+	
+	/**
+	 * @return int[3]
+	 * [0] is the number of preceding logical not operations
+	 * [1] Flag for removing preceding logical operation
+	 * [2] Flag for removing next logical operation
+	 */
+	int [] analyseStereoToken(int tokenNum){
+		int a[] = new int [3];
+		a[0]  = getPrecedingLogicalNos(tokenNum);
+		
+		//TODO
+		return a;
 	}
 }
