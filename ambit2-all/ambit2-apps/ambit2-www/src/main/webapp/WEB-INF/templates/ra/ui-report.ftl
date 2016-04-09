@@ -227,7 +227,7 @@ var customize = {
             <th rowspan="2">Endpoint</th>
             <th rowspan="2">Value</th>
             <th class="conditions center">Conditions</th>
-            <th rowspan="2">Guideline</th>
+            <th rowspan="2">Guideline or Justification</th>
           </tr>
           <tr class="conditions">
           </tr>

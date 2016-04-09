@@ -249,7 +249,7 @@ $(document)
             <th rowspan="2">Endpoint</th>
             <th rowspan="2">Value</th>
             <th class="conditions center">Conditions</th>
-            <th rowspan="2">Guideline</th>
+            <th rowspan="2">Guideline or Justification</th>
           </tr>
           <tr class="conditions">
           </tr>
@@ -279,7 +279,7 @@ $(document)
   	    <input type="text" class="data-field" data-field="reference" placeholder="Reference_"/>
 	    </div>
 	    <div class="jtox-medium-box box-field size-full" data-name="justification">
-  	    <div class="jtox-details font-heavy jtox-required">Justification</div>
+  	    <div class="jtox-details font-heavy jtox-required">Guideline or Justification</div>
   	    <textarea class="data-field" data-field="justification" placeholder="Justification_"></textarea>
 	    </div>
 	    <div class="jtox-medium-box box-field size-full" data-name="remarks">
