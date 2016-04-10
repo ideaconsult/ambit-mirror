@@ -71,15 +71,82 @@ public class SmartsAtomExpression extends SMARTSAtom {
 	}
 
 	public boolean matches(IAtom atom) {
-		SmartsLogicalExpression sle = new SmartsLogicalExpression();
-		for (int i = 0; i < tokens.size(); i++) {
-			SmartsExpressionToken tok = tokens.get(i);
-			if (tok.type < SmartsConst.LO) {
-				sle.addArgument(getArgument(tok, atom));
-			} else
-				sle.addLogOperation(tok.type - SmartsConst.LO);
+		
+		if (stereoTokenIndices == null)
+		{	
+			SmartsLogicalExpression sle = new SmartsLogicalExpression();
+			for (int i = 0; i < tokens.size(); i++) {
+				SmartsExpressionToken tok = tokens.get(i);
+				if (tok.type < SmartsConst.LO) {
+					sle.addArgument(getArgument(tok, atom));
+				} else
+					sle.addLogOperation(tok.type - SmartsConst.LO);
+			}
+			return (sle.getValue());
 		}
-		return (sle.getValue());
+		
+		//Handle the case when stereo tokens are present
+		
+		if (stereoTokenIndices.length > 3)
+			//This case is very rare.
+			//The smarts atom expression contains too many stereo tokens
+			//It is assumed here that the matching result is true
+			//and then the result will be checked on the final stereo check
+			//within IsomorphismTester class
+			return true;  
+		else
+		{
+			//Handling up to 3 stereo tokens
+			//all possible combinations of the boolean values
+			//of the stereo tokens are checked together with the other
+			//non stereo tokens.
+			//If at least one of these combinations gives true then
+			//it is POSSIBLE MATCH
+			//The "YES" result for the match is confirmed at the 
+			//final stereo check within IsomorphismTester class
+			
+			int comb[][] = null;
+			switch (stereoTokenIndices.length)
+			{
+			case 1: 
+				comb = BinaryCombinations.c1;
+				break;
+			case 2: 
+				comb = BinaryCombinations.c2;
+				break;
+			case 3: 
+				comb = BinaryCombinations.c3;
+				break;	
+			}
+			
+			for (int combNum = 0; combNum < comb.length; combNum++)
+			{
+				SmartsLogicalExpression sle = new SmartsLogicalExpression();
+				int curStereoToken = 0;
+				for (int i = 0; i < tokens.size(); i++) 
+				{
+					SmartsExpressionToken tok = tokens.get(i);
+					if (tok.type < SmartsConst.LO) 
+					{
+						if (tok.type == SmartsConst.AP_Chiral )
+						{	
+							sle.addArgument(comb[combNum][curStereoToken] != 0);
+							curStereoToken++;
+						}
+						else
+							sle.addArgument(getArgument(tok, atom));
+					} 
+					else
+						sle.addLogOperation(tok.type - SmartsConst.LO);
+				}
+				
+				boolean res = sle.getValue();
+				if (res)
+					return true; //found at least one combination of all possible stereo match results
+								//that gives true for the entire expression  
+			}
+			return false;
+		}
 
 	};
 
