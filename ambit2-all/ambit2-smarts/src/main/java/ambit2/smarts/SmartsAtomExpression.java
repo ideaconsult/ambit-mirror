@@ -58,11 +58,12 @@ public class SmartsAtomExpression extends SMARTSAtom {
 	public List<IAtom> stereoLigands = null;
 
 	//This is the expression without stereo information 
-	//stereo tokens and preceding logical operations are removed
+	//stereo tokens and preceding or next logical operations are removed
 	//This is used to match the atom regardless of the stereo information
 	//The stereo info match is performed later.
 	public List<SmartsExpressionToken> stereoRemovedTokens = null;
 	
+	public int stereoTokenIndices[] = null;
 	
 	
 	public SmartsAtomExpression(IChemObjectBuilder builder) {
@@ -599,6 +600,26 @@ public class SmartsAtomExpression extends SMARTSAtom {
 
 		sb.append("]");
 		return sb.toString();
+	}
+	
+	public void getStereoTokenIndices()
+	{
+		List<Integer> stereoTokens = new ArrayList<Integer>();
+		for (int i = 0; i < tokens.size(); i++)
+		{
+			SmartsExpressionToken token = tokens.get(i);
+			if (token.type == SmartsConst.AP_Chiral)
+				stereoTokens.add(i);
+		}
+		
+		if (stereoTokens.isEmpty())
+			stereoTokenIndices = null;
+		else
+		{
+			stereoTokenIndices = new int[stereoTokens.size()];
+			for (int i = 0; i < stereoTokens.size(); i++)
+				stereoTokenIndices[i] = stereoTokens.get(i);
+		}	
 	}
 	
 	public void getStereoRemovedTokens()
