@@ -14,58 +14,65 @@ import ambit2.base.data.study.ProtocolApplicationAnnotated;
 import ambit2.base.data.study.ValueAnnotated;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.update.bundle.matrix.DeleteMatrixProtocolApplicationValue;
 import ambit2.db.update.bundle.matrix.DeleteMatrixValue;
 
-public class DBMatrixValueMarker extends AbstractDBProcessor<IStructureRecord, IStructureRecord> {
-    protected UpdateExecutor<IQueryUpdate> writer;
-    protected DeleteMatrixValue query;
+public class DBMatrixValueMarker extends
+		AbstractDBProcessor<IStructureRecord, IStructureRecord> {
+	protected UpdateExecutor<IQueryUpdate> writer;
+	protected DeleteMatrixValue query_effectrecord;
+	protected DeleteMatrixProtocolApplicationValue query_interpretation_result;
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 1630263508460590694L;
+	private static final long serialVersionUID = 1630263508460590694L;
 
-    public DBMatrixValueMarker(SubstanceEndpointsBundle bundle) {
-	super();
-	writer = new UpdateExecutor<IQueryUpdate>();
-	query = new DeleteMatrixValue();
-	query.setGroup(bundle);
-    }
-
-    @Override
-    public void setConnection(Connection connection) throws DbAmbitException {
-	super.setConnection(connection);
-	writer.setConnection(connection);
-    }
-
-    @Override
-    public void close() throws Exception {
-	try {
-	    writer.close();
-	} catch (Exception x) {
+	public DBMatrixValueMarker(SubstanceEndpointsBundle bundle) {
+		super();
+		writer = new UpdateExecutor<IQueryUpdate>();
+		query_effectrecord = new DeleteMatrixValue();
+		query_effectrecord.setGroup(bundle);
+		query_interpretation_result = new DeleteMatrixProtocolApplicationValue();
+		query_interpretation_result.setGroup(bundle);
 	}
-	super.close();
-    }
 
-    @Override
-    public IStructureRecord process(IStructureRecord record) throws Exception {
-	for (ProtocolApplication pa : ((SubstanceRecord) record).getMeasurements())
-	    if (pa instanceof ProtocolApplicationAnnotated) {
-		ProtocolApplicationAnnotated paa = (ProtocolApplicationAnnotated) pa;
-		if (paa.getRecords_to_delete() == null)
-		    continue;
-		List<ValueAnnotated> vaa = paa.getRecords_to_delete();
-		for (ValueAnnotated va : vaa) {
-		    query.setObject(va);
-		    try {
-			writer.process(query);
-		    } catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage());
-		    }
+	@Override
+	public void setConnection(Connection connection) throws DbAmbitException {
+		super.setConnection(connection);
+		writer.setConnection(connection);
+	}
+
+	@Override
+	public void close() throws Exception {
+		try {
+			writer.close();
+		} catch (Exception x) {
 		}
-	    }
-	return record;
+		super.close();
+	}
 
-    }
+	@Override
+	public IStructureRecord process(IStructureRecord record) throws Exception {
+		for (ProtocolApplication pa : ((SubstanceRecord) record)
+				.getMeasurements())
+			if (pa instanceof ProtocolApplicationAnnotated) {
+				ProtocolApplicationAnnotated paa = (ProtocolApplicationAnnotated) pa;
+				if (paa.getRecords_to_delete() == null)
+					continue;
+				List<ValueAnnotated> vaa = paa.getRecords_to_delete();
+				for (ValueAnnotated va : vaa) {
+					net.idea.modbcum.q.update.AbstractUpdate query = (va.getIdresult() instanceof Integer)?query_effectrecord:query_interpretation_result;
+					query.setObject(va);
+					try {
+						writer.process(query);
+					} catch (Exception x) {
+						logger.log(Level.WARNING, x.getMessage());
+					}
+				}
+			}
+		return record;
+
+	}
 
 }

@@ -351,6 +351,16 @@ public class SubstanceWriterTest extends DbUnitTest {
 			Assert.assertEquals(1, substance.getRowCount());
 			Assert.assertEquals("the reason to delete",
 					substance.getValue(0, "remarks"));
+			//interpretation_result
+			substance = c
+					.createQueryTable(
+							"EXPECTED",
+							"SELECT idbundle,document_prefix,hex(document_uuid),deleted,interpretation_result,remarks FROM bundle_substance_protocolapplication where deleted = 1");
+			Assert.assertEquals(1, substance.getRowCount());
+			//truncated to 45 chars
+			Assert.assertEquals("test for deleting interpretation_result give",	substance.getValue(0, "remarks"));
+			
+			
 		} finally {
 			c.close();
 		}
@@ -403,8 +413,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 			for (ProtocolApplication pa : ((SubstanceRecord) record)
 					.getMeasurements()) {
 				Assert.assertTrue(pa instanceof ProtocolApplicationAnnotated);
-				System.out.println(((ProtocolApplicationAnnotated) pa)
-						.getRecords_to_delete());
+				//System.out.println(((ProtocolApplicationAnnotated) pa)getRecords_to_delete());
 
 				ProtocolApplicationAnnotated paa = (ProtocolApplicationAnnotated) pa;
 				List<ValueAnnotated> vaa = paa.getRecords_to_delete();

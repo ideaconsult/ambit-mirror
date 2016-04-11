@@ -43,6 +43,13 @@
                         "deleted" : true,
                         "remarks" : "the reason to delete"
                     }
+                },
+                {
+                	"result": {
+                        "idresult" : "IUC4-7adb0d03-f69b-32a9-9efe-86b4a8577893",
+                        "deleted" : true,
+                        "remarks" : "test for deleting interpretation_result given document_uuid"
+                    }
                 }
             ]
         }

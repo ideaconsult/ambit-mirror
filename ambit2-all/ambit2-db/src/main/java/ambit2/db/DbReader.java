@@ -65,7 +65,7 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 	}
 	/**
 	 * Returns cached query results or NOTCACHED if not in the cache. Default implementation returns NOTCACHED.
-	 * @param query
+	 * @param query_effectrecord
 	 * @param object
 	 * @return
 	 */
@@ -74,7 +74,7 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 	}
 	/**
 	 * Does nothing, otherwise should cache the query result
-	 * @param query
+	 * @param query_effectrecord
 	 * @param object
 	 */
 	protected void cache(String category,String key, ResultType object,boolean ok) {

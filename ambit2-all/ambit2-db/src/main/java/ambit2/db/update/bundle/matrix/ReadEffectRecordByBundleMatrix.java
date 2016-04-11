@@ -11,70 +11,86 @@ import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.substance.study.ReadEffectRecordBySubstance;
 
 public class ReadEffectRecordByBundleMatrix extends ReadEffectRecordBySubstance {
-    protected SubstanceEndpointsBundle bundle;
-    public enum _matrix {matrix_working,matrix_final,deleted_values};
+	protected SubstanceEndpointsBundle bundle;
 
-    protected _matrix matrix = _matrix.matrix_working;
-    /**
+	public enum _matrix {
+		matrix_working, matrix_final, deleted_values
+	};
+
+	protected _matrix matrix = _matrix.matrix_working;
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = -1885870102248748663L;
+	private static final long serialVersionUID = -1885870102248748663L;
 
-    private static String sql_working = "select p.document_prefix,hex(p.document_uuid) u,\n"
-	    + "p.topcategory,p.endpointcategory,guidance,params,reference,idresult,studyResultType,interpretation_result,\n"
-	    + "e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint,e.copied,e.deleted,e.remarks\n"
-	    + "from bundle_substance_protocolapplication p\n"
-	    + "left join bundle_substance_experiment e on p.idbundle=e.idbundle and p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"
-	    + "where p.substance_prefix =? and p.substance_uuid =unhex(?) and p.idbundle=?";
+	private static String sql_working = "select p.document_prefix,hex(p.document_uuid) u,\n"
+			+ "p.topcategory,p.endpointcategory,guidance,params,reference,idresult,studyResultType,interpretation_result,\n"
+			+ "e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint,e.copied,e.deleted,e.remarks,p.copied as pcopied,p.deleted as pdeleted,p.remarks as premarks\n"
+			+ "from bundle_substance_protocolapplication p\n"
+			+ "left join bundle_substance_experiment e on p.idbundle=e.idbundle and p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"
+			+ "where p.substance_prefix =? and p.substance_uuid =unhex(?) and p.idbundle=?";
 
-    private static String sql_final = "select p.document_prefix,hex(p.document_uuid) u,\n"
-	    + "p.topcategory,p.endpointcategory,guidance,params,reference,idresult,studyResultType,interpretation_result,\n"
-	    + "e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint,e.copied,e.deleted,e.remarks\n"
-	    + "from bundle_final_protocolapplication p\n"
-	    + "left join bundle_final_experiment e on p.idbundle=e.idbundle and p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"
-	    + "where p.substance_prefix =? and p.substance_uuid =unhex(?) and p.idbundle=?";
+	private static String sql_final = "select p.document_prefix,hex(p.document_uuid) u,\n"
+			+ "p.topcategory,p.endpointcategory,guidance,params,reference,idresult,studyResultType,interpretation_result,\n"
+			+ "e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint,e.copied,e.deleted,e.remarks,p.copied as pcopied,p.deleted as pdeleted,p.remarks as premarks\n"
+			+ "from bundle_final_protocolapplication p\n"
+			+ "left join bundle_final_experiment e on p.idbundle=e.idbundle and p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"
+			+ "where p.substance_prefix =? and p.substance_uuid =unhex(?) and p.idbundle=?";
 
-    
-    public ReadEffectRecordByBundleMatrix(SubstanceEndpointsBundle bundle, _matrix matrix) {
-	super();
-	this.bundle = bundle;
-	this.matrix = matrix;
-    }
-
-    @Override
-    public String getSQL() throws AmbitException {
-	switch(matrix) {
-	//case matrix_final: return sql_final;
-	default: return sql_working;	
+	public ReadEffectRecordByBundleMatrix(SubstanceEndpointsBundle bundle,
+			_matrix matrix) {
+		super();
+		this.bundle = bundle;
+		this.matrix = matrix;
 	}
-	
-    }
 
-    @Override
-    public List<QueryParam> getParameters() throws AmbitException {
-	if (bundle == null || bundle.getID() <= 0)
-	    throw new AmbitException("Bundle not defined");
+	@Override
+	public String getSQL() throws AmbitException {
+		switch (matrix) {
+		// case matrix_final: return sql_final;
+		default:
+			return sql_working;
+		}
 
-	List<QueryParam> params = super.getParameters();
-	params.add(new QueryParam<Integer>(Integer.class, bundle.getID()));
-	return params;
-    }
+	}
 
-    @Override
-    protected ProtocolEffectRecord<String, String, String> createEffectRecord() {
-	return new ProtocolEffectRecordMatrix<String, String, String>();
-    }
+	@Override
+	public List<QueryParam> getParameters() throws AmbitException {
+		if (bundle == null || bundle.getID() <= 0)
+			throw new AmbitException("Bundle not defined");
 
-    @Override
-    public ProtocolEffectRecord<String, String, String> getObject(ResultSet rs) throws AmbitException {
-	ProtocolEffectRecord<String, String, String> effect = super.getObject(rs);
-	if (effect instanceof ProtocolEffectRecordMatrix)
-	    try {
-		((ProtocolEffectRecordMatrix)effect).setCopied(rs.getBoolean("copied"));
-		((ProtocolEffectRecordMatrix)effect).setDeleted(rs.getBoolean("deleted"));
-		((ProtocolEffectRecordMatrix)effect).setRemarks(rs.getString("remarks"));
-	    } catch (Exception x) {
-	    }
-	return effect;
-    }
+		List<QueryParam> params = super.getParameters();
+		params.add(new QueryParam<Integer>(Integer.class, bundle.getID()));
+		return params;
+	}
+
+	@Override
+	protected ProtocolEffectRecord<String, String, String> createEffectRecord() {
+		return new ProtocolEffectRecordMatrix<String, String, String>();
+	}
+
+	@Override
+	public ProtocolEffectRecord<String, String, String> getObject(ResultSet rs)
+			throws AmbitException {
+		ProtocolEffectRecord<String, String, String> effect = super
+				.getObject(rs);
+		if (effect instanceof ProtocolEffectRecordMatrix)
+			try {
+				((ProtocolEffectRecordMatrix) effect).setCopied(rs
+						.getBoolean("copied"));
+				((ProtocolEffectRecordMatrix) effect).setDeleted(rs
+						.getBoolean("deleted"));
+				((ProtocolEffectRecordMatrix) effect).setRemarks(rs
+						.getString("remarks"));
+				
+				((ProtocolEffectRecordMatrix) effect).setProtocolapp_copied(rs
+						.getBoolean("pcopied"));
+				((ProtocolEffectRecordMatrix) effect).setProtocolapp_deleted(rs
+						.getBoolean("pdeleted"));
+				((ProtocolEffectRecordMatrix) effect).setProtocolapp_remarks(rs
+						.getString("premarks"));
+			} catch (Exception x) {
+			}
+		return effect;
+	}
 }
