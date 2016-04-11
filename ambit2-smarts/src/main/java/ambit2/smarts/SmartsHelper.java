@@ -427,6 +427,40 @@ public class SmartsHelper {
 		
 		return false;
 	}
+	
+	public static boolean isSingleBondOrExpression(IBond b)
+	{	
+		if (b instanceof SmartsBondExpression)
+		{
+			//TODO more refined check
+			return true;
+		}	
+
+		if (b instanceof SingleOrAromaticBond)
+			return (true);
+
+		if (b instanceof SingleNonAromaticBond)
+			return (true);
+
+		if (b instanceof RingQueryBond)
+			return (true);
+
+		if (b instanceof AnyOrderQueryBond)
+			return (true);
+		
+		if (b instanceof AromaticQueryBond)
+			return (true); 
+		
+		if (b instanceof SingleBondAromaticityNotSpecified)
+			return (true);
+		
+		if (b instanceof OrderQueryBond) 
+			if (b.getOrder() == IBond.Order.SINGLE)
+				return (true);
+		
+		return false;
+	}
+	
 
 	static public String smilesBondToString(IBond b, boolean aromaticity) {
 		if (aromaticity)

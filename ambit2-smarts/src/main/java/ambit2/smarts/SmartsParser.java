@@ -1742,6 +1742,21 @@ public class SmartsParser {
 				//check for implicit H token which must be the fourth ligand
 				//TODO
 			}
+			
+			for (int i = 0; i < atom.stereoLigands.size(); i++)
+			{
+				IBond bo = container.getBond(atom,  atom.stereoLigands.get(i));
+				if (bo == null)
+					//This error should never ocur
+					newError("Ligand " + (i+1) + " to chiral center atom "+ (atomIndex+1) 
+							+ " is not connected to the chiral center",	-1, "");
+				else
+				{
+					if (!SmartsHelper.isSingleBondOrExpression(bo))
+						newError("Ligand " + (i+1) + " to chiral center atom "+ (atomIndex+1) 
+								+ " is connected with incorrect bond",	-1, "");
+				}
+			}
 		}
 		else
 		{
@@ -1750,6 +1765,8 @@ public class SmartsParser {
 		//TODO
 		return 0;
 	}
+	
+	
 
 	void setDoubleBondsStereoInfo() 
 	{
