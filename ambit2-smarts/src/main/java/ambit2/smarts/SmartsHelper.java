@@ -412,6 +412,21 @@ public class SmartsHelper {
 		// These is a default exit. Generally this should not happen.
 		return ("-");
 	}
+	
+	public static boolean isQueryDoubleBond(IBond bond)
+	{	
+		if (bond instanceof DoubleNonAromaticBond)
+			return true;
+		
+		if (bond  instanceof DoubleBondAromaticityNotSpecified)
+			return true;
+		
+		if (bond instanceof OrderQueryBond)
+			if (bond.getOrder() == IBond.Order.DOUBLE)
+				return true;
+		
+		return false;
+	}
 
 	static public String smilesBondToString(IBond b, boolean aromaticity) {
 		if (aromaticity)
