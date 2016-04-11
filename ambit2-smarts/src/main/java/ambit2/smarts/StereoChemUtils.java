@@ -467,9 +467,47 @@ public class StereoChemUtils
 		else
 			sb.append("focus = " + focusAtom.getSymbol() + "(" + mol.getAtomNumber(focusAtom) + ") ");
 				
-		IAtom ligands[] = eth.peripherals();
 		
-		//TODO
+		IAtom terminals[] = eth.findTerminalAtoms(mol);
+		
+		if (terminals == null)
+			sb.append("terminals = null ");
+		else
+		{
+			sb.append("terminals = ");
+			for (int i = 0; i < terminals.length; i++)
+			{
+				if (terminals[i]== null){	
+					sb.append(" null");
+					continue;
+				}
+				
+				sb.append(terminals[i].getSymbol() + "(" + 
+						mol.getAtomNumber(terminals[i]) + ") ");
+			}
+			
+		}
+		
+		IAtom peripherals[] = eth.peripherals();
+		
+		if (peripherals == null)
+			sb.append("peripherals = null ");
+		else
+		{	
+			sb.append("peripherals = ");
+			for (int i = 0; i < peripherals.length; i++)
+			{
+				if (peripherals[i]== null){	
+					sb.append(" null");
+					continue;
+				}
+				
+				sb.append(peripherals[i].getSymbol() + "(" + 
+						mol.getAtomNumber(peripherals[i]) + ") ");
+				
+				//TODO
+			}
+		}
 		
 		return sb.toString();
 	}
