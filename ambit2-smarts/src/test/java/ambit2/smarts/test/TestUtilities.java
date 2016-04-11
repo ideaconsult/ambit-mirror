@@ -57,6 +57,7 @@ import org.openscience.cdk.validate.ValidatorEngine;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
+import ambit2.smarts.BinaryCombinations;
 import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.ChemObjectToSmiles;
@@ -2223,6 +2224,31 @@ public class TestUtilities {
 		System.out.println(expr.toString());
 		System.out.println(expr.stereoRemovedToString());
 	}
+	
+	public void testBinaryCombinations(int n)
+	{
+		BinaryCombinations bc = new BinaryCombinations();
+		int c[] = bc.getFirst(n);
+		System.out.println(binCombToString(c));
+		while (bc.hasNext())
+			System.out.println(binCombToString(bc.next()));
+	}
+	
+	public String binCombToString(int c[])
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("{");
+		for (int i = 0; i < c.length; i++)
+		{
+			sb.append(c[i]);
+			if (i < (c.length-1))
+				sb.append(",");
+		}
+		sb.append("},");
+			
+			
+		return sb.toString();
+	}
 
 	// -------------------------------------------------------------------------------
 
@@ -2780,7 +2806,7 @@ public class TestUtilities {
 		}
 		*/
 		
-		tu.testStereoRemovedTokens("[D;@@,@,X]");
+		//tu.testStereoRemovedTokens("[D;@@,@,X]");
 			
 		//tu.testSmiles2Smiles("CC(C)NC(=N)C1=CC2=N/C(=C\\3/C=C\\C(=C\\4/C=C/C(=C/5\\C=C/C(=C\\6/N=C7C=CC(=CC7=N6)C(=N)NC(C)C)/C=C5)/O4)\\C=C3)/N=C2C=C1");
 		
@@ -2789,6 +2815,8 @@ public class TestUtilities {
 		//tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C(N)=C(/CC)N");   
 		//tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C(N)=C(/CC)C");
 		//tu.testSmartsManagerBoolSearch("[$(C/C=C\\C)]","C\\C(N)=C(/CC)");
+		
+		tu.testBinaryCombinations(4);
 
 	}
 

@@ -4,7 +4,8 @@ package ambit2.smarts;
 public class BinaryCombinations 
 {
 	int nDigits = 0;
-	int curMaxDigit = 0;
+	int numOfComb = 0;
+	int generatedCombinations = 0;
 	int curComb[] = null;
 	
 	public static int c1[][] = {
@@ -34,16 +35,20 @@ public class BinaryCombinations
 	public int[] getFirst(int n)
 	{
 		nDigits = n;
+		generatedCombinations = 1;
 		curComb = new int[n];
-		curMaxDigit = 0;
+		numOfComb = 1;
 		for (int i = 0; i < nDigits; i++)
+		{	
 			curComb[i] = 0;
+			numOfComb *= 2;
+		}	
 		return curComb;
 	}
 	
 	public boolean hasNext()
 	{
-		return (curMaxDigit < nDigits);
+		return (generatedCombinations  < numOfComb);
 	}
 	
 	public int[] next()
@@ -51,14 +56,15 @@ public class BinaryCombinations
 		int n = 0;
 		boolean FlagNextDigit = true;
 		
-		while ((n < nDigits) && FlagNextDigit)
+		while (FlagNextDigit && (n < nDigits))
 		{
 			FlagNextDigit = addToDigit(n);
-			n++;
+			if (FlagNextDigit)
+				n++;
 		}
 		
-		if (curMaxDigit < n)
-			curMaxDigit = n;
+		generatedCombinations++;
+		
 		return curComb;
 	}
 	

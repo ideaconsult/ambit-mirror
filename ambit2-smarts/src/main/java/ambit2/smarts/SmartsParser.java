@@ -1668,7 +1668,7 @@ public class SmartsParser {
 		for (int i = 0; i < atom.tokens.size(); i++) {
 			SmartsExpressionToken tok = atom.tokens.get(i);
 			if (tok.type == SmartsConst.AP_Chiral) {
-				tok.param = getAbsoluteChirality(atom, tok.param);
+				//tok.param = getAbsoluteChirality(atom, tok.param);
 				// System.out.println("chirality = " + tok.param);
 			}
 		}

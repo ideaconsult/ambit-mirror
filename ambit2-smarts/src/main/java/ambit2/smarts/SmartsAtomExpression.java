@@ -101,7 +101,7 @@ public class SmartsAtomExpression extends SMARTSAtom {
 			//of the stereo tokens are checked together with the other
 			//non stereo tokens.
 			//If at least one of these combinations gives true then
-			//it is POSSIBLE MATCH
+			//it is a POSSIBLE MATCH
 			//The "YES" result for the match is confirmed at the 
 			//final stereo check within IsomorphismTester class
 			
