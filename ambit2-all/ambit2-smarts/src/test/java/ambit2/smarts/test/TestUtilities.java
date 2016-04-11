@@ -2817,7 +2817,7 @@ public class TestUtilities {
 		//tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C(N)=C(/CC)C");
 		//tu.testSmartsManagerBoolSearch("[$(C/C=C\\C)]","C\\C(N)=C(/CC)");
 		
-		tu.testSmartsManagerBoolSearch("C[C@](C)(C)(N)C","CCCC");
+		tu.testSmartsManagerBoolSearch("C[C@](#C)(N)C","CCCC");
 		
 		//tu.testBinaryCombinations(4);
 
