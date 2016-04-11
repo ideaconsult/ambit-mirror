@@ -1730,6 +1730,23 @@ public class SmartsParser {
 	
 	int checkChirality(SmartsAtomExpression atom, int atomIndex)
 	{
+		if (atom.extChirInfo == null)
+		{
+			if ((atom.stereoLigands.size() <3) || (atom.stereoLigands.size() >4) )
+				newError("Incorrect number of lingands (" + atom.stereoLigands.size() 
+						+ " ligands) atached to the chiral center atom "+ (atomIndex+1),
+						-1, "");
+			
+			if (atom.stereoLigands.size() == 3)
+			{	 
+				//check for implicit H token which must be the fourth ligand
+				//TODO
+			}
+		}
+		else
+		{
+			//This is extended tethrahedral 
+		}
 		//TODO
 		return 0;
 	}
