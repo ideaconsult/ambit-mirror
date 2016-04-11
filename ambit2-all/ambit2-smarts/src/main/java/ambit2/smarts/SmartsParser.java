@@ -167,10 +167,14 @@ public class SmartsParser {
 
 		// Handle chirality info
 		for (int i = 0; i < container.getAtomCount(); i++)
-			if (container.getAtom(i) instanceof SmartsAtomExpression) {
+			if (container.getAtom(i) instanceof SmartsAtomExpression) 
+			{
 				SmartsAtomExpression sa = (SmartsAtomExpression) container
 						.getAtom(i);
 				handleChirality(sa);
+				
+				if (sa.stereoTokenIndices != null)
+					checkChirality(sa, i);
 			}
 
 		setNeededDataFlags();
@@ -1664,14 +1668,43 @@ public class SmartsParser {
 		return (false);
 	}
 
-	void handleChirality(SmartsAtomExpression atom) {
+	void handleChirality(SmartsAtomExpression atom) 
+	{
+		List<Integer> stereoTokens = new ArrayList<Integer>();
+		
 		for (int i = 0; i < atom.tokens.size(); i++) {
 			SmartsExpressionToken tok = atom.tokens.get(i);
 			if (tok.type == SmartsConst.AP_Chiral) {
+				stereoTokens.add(i);
 				//tok.param = getAbsoluteChirality(atom, tok.param);
 				// System.out.println("chirality = " + tok.param);
 			}
 		}
+		
+		if (!stereoTokens.isEmpty())
+		{
+			atom.stereoTokenIndices = new int[stereoTokens.size()];
+			for (int i = 0; i < stereoTokens.size(); i++)
+				atom.stereoTokenIndices[i] = stereoTokens.get(i);
+			
+			setStereoLigands(atom);
+		}	
+	}
+	
+	void setStereoLigands(SmartsAtomExpression atom)
+	{
+		List<IAtom> ligands = container.getConnectedAtomsList(atom);
+		if (ligands.size() == 2)
+		{
+			//TODO check for extended tetrahedral chirality C=C=C	
+		}
+		atom.stereoLigands = ligands;
+	}
+	
+	int checkChirality(SmartsAtomExpression atom, int atomIndex)
+	{
+		//TODO
+		return 0;
 	}
 
 	void setDoubleBondsStereoInfo() 

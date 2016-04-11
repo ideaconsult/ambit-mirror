@@ -56,6 +56,8 @@ public class SmartsAtomExpression extends SMARTSAtom {
 	//This is used if tetrahedral chiral atom or 
 	//extended tetrahedral chiral token is present 
 	public List<IAtom> stereoLigands = null;
+	
+	public ExtendedChiralityInfo extChirInfo = null;
 
 	//This is the expression without stereo information 
 	//stereo tokens and preceding or next logical operations are removed
@@ -669,6 +671,7 @@ public class SmartsAtomExpression extends SMARTSAtom {
 		return sb.toString();
 	}
 	
+	/*
 	public void getStereoTokenIndices()
 	{
 		List<Integer> stereoTokens = new ArrayList<Integer>();
@@ -688,6 +691,7 @@ public class SmartsAtomExpression extends SMARTSAtom {
 				stereoTokenIndices[i] = stereoTokens.get(i);
 		}	
 	}
+	*/
 	
 	public void getStereoRemovedTokens()
 	{
