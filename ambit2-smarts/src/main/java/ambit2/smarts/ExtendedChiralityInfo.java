@@ -8,5 +8,4 @@ public class ExtendedChiralityInfo
 	
 	public IAtom terminal1 = null;
 	public IAtom terminal2 = null;
-			
 }

@@ -1695,11 +1695,36 @@ public class SmartsParser {
 	{
 		List<IAtom> ligands = container.getConnectedAtomsList(atom);
 		if (ligands.size() == 2)
-		{
-			//check for extended tetrahedral chirality C=C=C
+		{	
+			//Check for extended tetrahedral chirality
+			//L1-[terminal1](-L2)=[center]=[terminal2](-L3)(-L4)
 			
-			//TODO
+			List<IBond> bonds = container.getConnectedBondsList(atom);
+			if (SmartsHelper.isQueryDoubleBond(bonds.get(0))
+					&& SmartsHelper.isQueryDoubleBond(bonds.get(1)))
+					{
+						atom.extChirInfo = new ExtendedChiralityInfo();
+						
+						//Ligands become terminals
+						atom.extChirInfo.terminal1 = ligands.get(0);
+						atom.extChirInfo.terminal2 = ligands.get(1);
+						
+						//New ligands are searched as peripheral to
+						//the terminal atoms
+						ligands.clear();
+						List<IAtom> neigh = container.getConnectedAtomsList(atom.extChirInfo.terminal1);
+						for (IAtom a: neigh)
+							if (a != atom)
+								ligands.contains(a);
+						
+						neigh = container.getConnectedAtomsList(atom.extChirInfo.terminal2);
+						for (IAtom a: neigh)
+							if (a != atom)
+								ligands.contains(a);
+						
+					}
 		}
+		
 		atom.stereoLigands = ligands;
 	}
 	
