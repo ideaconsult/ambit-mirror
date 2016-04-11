@@ -456,10 +456,12 @@ var config_i5 = {
 		            "effects": {
 		                "endpoint": {
 		                    "bVisible": true,
+		                    "inMatrix": true,
 		                    "iOrder": -10
 		                },
 		                "result": {
 		                    "bVisible": true,
+		                    "inMatrix": true,
 		                    "iOrder": -9
 		                }
 		            },
@@ -500,10 +502,12 @@ var config_i5 = {
 		            "effects": {
 		                "endpoint": {
 		                    "bVisible": true,
+		                    "inMatrix": true,
 		                    "iOrder": -10
 		                },
 		                "result": {
 		                    "bVisible": true,
+		                    "inMatrix": true,
 		                    "iOrder": -9
 		                }
 		            },
@@ -548,14 +552,17 @@ var config_i5 = {
 		            "effects": {
 		                "endpoint": {
 		                    "iOrder": -12,
+		                    "inMatrix": true,
 		                    "bVisible": true
 		                },
 		                "result": {
 		                    "iOrder": -11,
+		                    "inMatrix": true,
 		                    "bVisible": true
 		                },
 		                "text": {
 		                    "sTitle": "",
+		                    "inMatrix": true,
 		                    "bVisible": false,
 		                    "iOrder": -11
 		                }

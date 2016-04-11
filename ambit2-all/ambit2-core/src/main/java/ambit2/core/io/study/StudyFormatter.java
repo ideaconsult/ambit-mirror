@@ -117,11 +117,15 @@ public class StudyFormatter {
 				ObjectNode config = getEndpointConfig(column);
 				if (inMatrix(config)) {
 					JsonNode node = config.get("sTitle");
-					if (node == null)
-						b.append(property.getName());
-					else
+					if (node == null) {
+						if (!"interpretation_result".equals(property.getName())) {
+							b.append(property.getName());
+							b.append(" =");
+						}
+					} else {
 						b.append(node.asText());
-					b.append(" =");
+						b.append(" =");
+					}
 
 				}
 
@@ -483,8 +487,8 @@ public class StudyFormatter {
 
 		ObjectNode column = (ObjectNode) columns.get(pa.getProtocol()
 				.getCategory());
-		//defaultColumn
-		//TODO default column
+		// defaultColumn
+		// TODO default column
 
 		ObjectNode config = getGuidelineConfig(column);
 		if (isVisible(config))

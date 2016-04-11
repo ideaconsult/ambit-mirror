@@ -515,10 +515,12 @@
 			},
 			"effects": {
 				"endpoint": {
-					"bVisible": false
+					"bVisible": true,
+					"inMatrix": true
 				},
 				"result": {
-					"bVisible": false
+					"bVisible": true,
+					"inMatrix": true
 				}
 			},
 			"interpretation": {
@@ -555,10 +557,12 @@
 			},
 			"effects": {
 				"endpoint": {
-					"bVisible": false
+					"bVisible": true,
+					"inMatrix": true
 				},
 				"result": {
-					"bVisible": false
+					"bVisible": true,
+					"inMatrix": true
 				}
 			},
 			"interpretation": {
@@ -601,11 +605,13 @@
 			"effects": {
 				"endpoint": {
 					"iOrder": -8,
-					"bVisible": false
+					"bVisible": true,
+					"inMatrix": true
 				},
 				"result": {
 					"iOrder": -7,
-					"bVisible": false
+					"bVisible": true,
+					"inMatrix": true
 				},
 				"text": {
 					"sTitle": "",

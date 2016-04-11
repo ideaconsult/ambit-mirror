@@ -97,6 +97,21 @@ public class TestStudyExportFormatting {
 	}
 
 	@Test
+	public void testInterpretationResult_skinirritation() throws Exception {
+		Protocol._categories c = Protocol._categories.TO_SKIN_IRRITATION_SECTION;
+		IParams conditions = initConditions(c);
+		ProtocolEffectRecordMatrix<String, String, String> detail = initDetail(c);
+		detail.setInterpretationResult("interpretationResult");
+		detail.setUnit(null);
+		detail.setTextValue(null);
+		detail.setEndpoint(null);
+		detail.setConditions(conditions.toString());
+		String result = format(c, detail, conditions, true);
+		Assert.assertEquals("interpretationResult (paramvalue)", result);
+
+	}
+
+	@Test
 	public void testInterpretationResult() throws Exception {
 		for (Protocol._categories c : Protocol._categories.values()) {
 			IParams conditions = initConditions(c);
@@ -123,12 +138,9 @@ public class TestStudyExportFormatting {
 					break;
 				}
 				case TO_BIODEG_WATER_SCREEN_SECTION: {
-					// TODO <<<<<<<<<
 					Assert.assertEquals("interpretationResult [Guideline]",
 							result);
 					break;
-					// Assert.assertEquals("interpretationResult [Guideline]",
-					// result);
 				}
 
 				case TO_SKIN_IRRITATION_SECTION: {
@@ -159,20 +171,19 @@ public class TestStudyExportFormatting {
 					break;
 				}
 				case BAO_0003009_SECTION: {
-					Assert.assertEquals(
-							"interpretation_result =interpretationResult [Guideline]",
+					Assert.assertEquals("interpretationResult [Guideline]",
 							result);
 					break;
 				}
 				case BAO_0010001_SECTION: {
 					Assert.assertEquals(
-							"interpretation_result =interpretationResult",
+							"interpretationResult",
 							result);
 					break;
 				}
 				case NPO_1911_SECTION: {
 					Assert.assertEquals(
-							"interpretation_result =interpretationResult",
+							"interpretationResult",
 							result);
 					break;
 				}
@@ -187,8 +198,7 @@ public class TestStudyExportFormatting {
 					break;
 				}
 				default: {
-					Assert.assertEquals(
-							"interpretation_result =interpretationResult [Guideline]",
+					Assert.assertEquals("interpretationResult [Guideline]",
 							result);
 
 				}
@@ -343,17 +353,18 @@ public class TestStudyExportFormatting {
 					break;
 				}
 				case TO_SKIN_IRRITATION_SECTION: {
-					// <<<<<<<<<<<<<
-					Assert.assertEquals(c.name(), " (paramvalue)", result);
+					Assert.assertEquals("endpoint =textValue (paramvalue)",
+							result);
 					break;
 				}
 				case TO_EYE_IRRITATION_SECTION: {
-					// <<<<<<<<
-					Assert.assertEquals(c.name(), " (paramvalue)", result);
+					Assert.assertEquals("endpoint =textValue (paramvalue)",
+							result);
 					break;
 				}
 				case TO_SENSITIZATION_SECTION: {
-					Assert.assertEquals(c.name(), " (paramvalue)", result);
+					Assert.assertEquals("endpoint =textValue (paramvalue)",
+							result);
 					break;
 				}
 				case TO_REPEATED_ORAL_SECTION: {
@@ -771,18 +782,25 @@ public class TestStudyExportFormatting {
 				case TO_SKIN_IRRITATION_SECTION: {
 					// OK, it assumes interpretation result is displayed only
 					// and not even the guideline
-					Assert.assertEquals(c.name(), " (paramvalue)", result);
+					// added endpoint
+					Assert.assertEquals("endpoint =ca. 3.14  mg (paramvalue)",
+							result);
 					break;
 				}
 				case TO_EYE_IRRITATION_SECTION: {
 					// OK, it assumes interpretation result is displayed only
-					Assert.assertEquals(c.name(), " (paramvalue)", result);
+					// added endpoint
+					Assert.assertEquals("endpoint =ca. 3.14  mg (paramvalue)",
+							result);
 					break;
 				}
 				case TO_SENSITIZATION_SECTION: {
 					// OK, it assumes interpretation result is displayed only
-					Assert.assertEquals(c.name(), " (paramvalue)", result);
+					// added endpoint
+					Assert.assertEquals("endpoint =ca. 3.14  mg (paramvalue)",
+							result);
 					break;
+
 				}
 
 				case TO_SENSITIZATION_INCHEMICO_SECTION: {
