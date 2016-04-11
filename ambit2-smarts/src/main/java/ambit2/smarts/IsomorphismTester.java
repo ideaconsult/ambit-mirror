@@ -934,7 +934,16 @@ public class IsomorphismTester
 					return false;
 			}	
 		
-		//TODO check chiral atoms
+		/*
+		//Check chiral atoms
+		List<SmartsAtomExpression> caList = query.getProperty("ChiralAtoms");
+		if (caList != null)
+			for (SmartsAtomExpression a: caList)
+			{
+				if (!matchChiralAtom(a, node))
+					return false;
+			}
+		*/	
 		
 		return true;
 	}
@@ -1071,6 +1080,12 @@ public class IsomorphismTester
 			}
 		}
 		
+	}
+	
+	boolean matchChiralAtom(SmartsAtomExpression atom, Node node)
+	{
+		//TODO
+		return true;
 	}
 	
 	
