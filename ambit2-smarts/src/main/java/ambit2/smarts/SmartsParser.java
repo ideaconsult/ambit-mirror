@@ -166,6 +166,7 @@ public class SmartsParser {
 			setDoubleBondsStereoInfo();
 
 		// Handle chirality info
+		List<SmartsAtomExpression> caList = new ArrayList<SmartsAtomExpression>();
 		for (int i = 0; i < container.getAtomCount(); i++)
 			if (container.getAtom(i) instanceof SmartsAtomExpression) 
 			{
@@ -174,8 +175,14 @@ public class SmartsParser {
 				handleChirality(sa);
 				
 				if (sa.stereoTokenIndices != null)
+				{	
 					checkChirality(sa, i);
+					caList.add(sa);
+				}	
 			}
+		
+		if (!caList.isEmpty())
+			container.setProperty("ChiralAtoms", caList);
 
 		setNeededDataFlags();
 
