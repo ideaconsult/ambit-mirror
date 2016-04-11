@@ -52,6 +52,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
+import org.openscience.cdk.stereo.ExtendedTetrahedral;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -181,6 +182,12 @@ public class SmartsHelper {
 			{
 				sb.append(StereoChemUtils.doubleBondStereochemistry2String(
 						(DoubleBondStereochemistry)stereoEl, container) + "\n");
+				continue;
+			}
+			if (stereoEl instanceof ExtendedTetrahedral)
+			{
+				sb.append(StereoChemUtils.extendedTetrahedral2String(
+						(ExtendedTetrahedral)stereoEl, container) + "\n");
 				continue;
 			}
 			sb.append(stereoEl.toString() + "\n");

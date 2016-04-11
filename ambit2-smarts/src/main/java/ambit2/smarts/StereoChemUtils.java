@@ -457,6 +457,22 @@ public class StereoChemUtils
 		return sb.toString();
 	}
 	
+	public static String extendedTetrahedral2String(ExtendedTetrahedral eth, IAtomContainer mol)
+	{
+		StringBuffer sb = new StringBuffer();
+		IAtom focusAtom = eth.focus();
+		
+		if (focusAtom == null)
+			sb.append("focus = null ");
+		else
+			sb.append("focus = " + focusAtom.getSymbol() + "(" + mol.getAtomNumber(focusAtom) + ") ");
+				
+		IAtom ligands[] = eth.peripherals();
+		
+		//TODO
+		
+		return sb.toString();
+	}
 	
 	public static void cloneAndCheckStereo(IAtomContainer cloneMol, IAtomContainer originalMol)
 	{
