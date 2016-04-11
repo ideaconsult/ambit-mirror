@@ -287,7 +287,7 @@ public class StereoChemUtils
 					//ligands[i] is supposed to be the imlicit H atom connected to the ligand
 					//that is why the bond is null
 					if (chiralAtom.getImplicitHydrogenCount() == 1)
-						return 0;
+						continue; //the ligand is OK
 					else
 						return 10;
 				}
