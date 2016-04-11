@@ -28,7 +28,7 @@ public class SmirksProcessorTest {
 		p.loadReactionsFromJSON(new File(config.getFile()));
 		Assert.assertFalse(p.isAtomtypeasproperties());
 		
-		Assert.assertTrue(p.isTransformationasproperties());
+		Assert.assertFalse(p.isTransformationasproperties());
 		// only USE=true reactions are loaded
 		Assert.assertEquals(39, p.getTransformations().size());
 	}
@@ -40,6 +40,7 @@ public class SmirksProcessorTest {
 		SMIRKSProcessor p = new SMIRKSProcessor(logger);
 		p.setLoadExamples(true);
 		p.loadReactionsFromJSON(new File(config.getFile()));
+		p.setTransformationasproperties(true);
 		Assert.assertEquals(39, p.getTransformations().size());
 		Assert.assertFalse(p.isAtomtypeasproperties());
 		p.setAtomtypeasproperties(true);
@@ -54,6 +55,7 @@ public class SmirksProcessorTest {
 				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 				mol = p.process(mol);
 				logger.log(Level.INFO, String.format("%s\t%s", t.getName(),mol.getProperties()));
+				Assert.assertTrue((int)mol.getProperty("Transformed")>0);
 				Assert.assertTrue((int)mol.getProperty("Transformed")>0);
 				Assert.assertEquals(1, (int)mol.getProperty("T."+t.getName()));
 				Assert.assertEquals("[]",mol.getProperty("AtomTypes.added").toString());
