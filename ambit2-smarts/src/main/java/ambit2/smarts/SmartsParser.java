@@ -1715,13 +1715,12 @@ public class SmartsParser {
 						List<IAtom> neigh = container.getConnectedAtomsList(atom.extChirInfo.terminal1);
 						for (IAtom a: neigh)
 							if (a != atom)
-								ligands.contains(a);
+								ligands.add(a);
 						
 						neigh = container.getConnectedAtomsList(atom.extChirInfo.terminal2);
 						for (IAtom a: neigh)
 							if (a != atom)
-								ligands.contains(a);
-						
+								ligands.add(a);
 					}
 		}
 		
@@ -1730,12 +1729,16 @@ public class SmartsParser {
 	
 	int checkChirality(SmartsAtomExpression atom, int atomIndex)
 	{
+		int nerr = 0;
 		if (atom.extChirInfo == null)
 		{
 			if ((atom.stereoLigands.size() <3) || (atom.stereoLigands.size() >4) )
+			{	
 				newError("Incorrect number of lingands (" + atom.stereoLigands.size() 
 						+ " ligands) atached to the chiral center atom "+ (atomIndex+1),
 						-1, "");
+				nerr++;
+			}	
 			
 			if (atom.stereoLigands.size() == 3)
 			{	 
@@ -1747,23 +1750,81 @@ public class SmartsParser {
 			{
 				IBond bo = container.getBond(atom,  atom.stereoLigands.get(i));
 				if (bo == null)
-					//This error should never ocur
+				{	
+					//This error should never occur
 					newError("Ligand " + (i+1) + " to chiral center atom "+ (atomIndex+1) 
 							+ " is not connected to the chiral center",	-1, "");
+					nerr++;
+				}	
 				else
 				{
 					if (!SmartsHelper.isSingleBondOrExpression(bo))
+					{	
 						newError("Ligand " + (i+1) + " to chiral center atom "+ (atomIndex+1) 
 								+ " is connected with incorrect bond",	-1, "");
+						nerr++;
+					}	
 				}
 			}
 		}
 		else
 		{
-			//This is extended tethrahedral 
+			//Checking extended tethrahedral 
+			if (atom.stereoLigands.size() != 4)
+				newError("Incorrect total number of peripherials/lingands (" + atom.stereoLigands.size() 
+						+ " peripherials) for extended tethrahedral chiral atom "+ (atomIndex+1),
+						-1, "");
+			
+			int term1Connections = 0;
+			int term2Connections = 0;
+			
+			for (int i = 0; i < atom.stereoLigands.size(); i++)
+			{
+				IAtom preripherial = atom.stereoLigands.get(i);
+				IBond bo = container.getBond(preripherial, atom.extChirInfo.terminal1);
+				
+				if (bo != null)
+					term1Connections++;
+				else
+				{	
+					bo = container.getBond(preripherial, atom.extChirInfo.terminal2);
+					if (bo != null)
+						term2Connections++;
+				}	
+				
+				if (bo == null)
+					//This error should never occur
+					newError("Peripherial " + (i+1) + " to extended tethrahedral chiral center atom "+ (atomIndex+1) 
+							+ " is not connected to the terminal",	-1, "");
+				else
+				{
+					if (!SmartsHelper.isSingleBondOrExpression(bo))
+						newError("Peripherial " + (i+1) + " to extended tethrahedral chiral center atom "+ (atomIndex+1) 
+								+ " is connected to the terminal with incorrect bond",	-1, "");
+				}	
+			}
+			
+			if (term1Connections != 2)
+			{
+				newError("Incorrect number of peripherials/lingands (" + term1Connections  
+						+ " peripherials) atached to the terminal1 (atom "   
+						+ container.getAtomNumber(atom.extChirInfo.terminal1) 
+						+ ") of the extended tethrahedral chiral atom "+ (atomIndex+1),
+						-1, "");
+			}
+			
+			if (term2Connections != 2)
+			{
+				newError("Incorrect number of peripherials/lingands (" + term2Connections  
+						+ " peripherials) atached to the terminal2 (atom "   
+						+ container.getAtomNumber(atom.extChirInfo.terminal2) 
+						+ ") of the extended tethrahedral chiral atom "+ (atomIndex+1),
+						-1, "");
+			}
 		}
-		//TODO
-		return 0;
+		
+		
+		return nerr;
 	}
 	
 	
