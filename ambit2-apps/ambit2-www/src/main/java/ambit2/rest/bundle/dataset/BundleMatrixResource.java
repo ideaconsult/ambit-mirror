@@ -385,7 +385,7 @@ public class BundleMatrixResource extends
 							getContext(),
 							new SubstanceURIReporter(getRequest().getRootRef()),
 							new DatasetURIReporter(getRequest().getRootRef()),
-							token,getRequest().getResourceRef().toString());
+							token, getRequest().getResourceRef().toString());
 					callable.setBundle(bundle);
 					callable.setClearComposition(false);
 					callable.setClearMeasurements(false);
@@ -450,7 +450,8 @@ public class BundleMatrixResource extends
 							CallableFileUpload.field_config, getRootRef(),
 							getContext(), new SubstanceURIReporter(getRequest()
 									.getRootRef()), new DatasetURIReporter(
-									getRequest().getRootRef()), token,getRequest().getResourceRef().toString());
+									getRequest().getRootRef()), token,
+							getRequest().getResourceRef().toString());
 					callable.setBundle(bundle);
 					callable.setClearComposition(clearComposition);
 					callable.setClearMeasurements(clearMeasurements);
@@ -498,33 +499,54 @@ public class BundleMatrixResource extends
 	protected Value processValue(
 			ProtocolEffectRecord<String, String, String> detail,
 			boolean istextvalue) {
-		ValueAnnotated value = new ValueAnnotated();
+		ValueAnnotated value = null;
 		if (istextvalue) {
-			if (detail.getTextValue() == null)
-				if (detail.getInterpretationResult() != null)
+			if (detail.getTextValue() == null) {
+				if (detail.getInterpretationResult() != null
+				// && !"".equals(detail.getInterpretationResult())
+				) {
+					value = new ValueAnnotated<Object, String>();
 					value.setTextValue(detail.getInterpretationResult());
-				else
-					value.setTextValue("");
-			else
+					value.setIdresult(detail.getDocumentUUID());
+					if (detail instanceof ProtocolEffectRecordMatrix)
+						try {
+							value.setCopied(((ProtocolEffectRecordMatrix) detail)
+									.isProtocolapp_copied());
+							value.setDeleted(((ProtocolEffectRecordMatrix) detail)
+									.isProtocolapp_deleted());
+							value.setRemark(((ProtocolEffectRecordMatrix) detail)
+									.getProtocolapp_remarks());
+						} catch (Exception x) {
+						}
+					return value;
+				} else {
+				} // now why should we care about empty values?
+					// else value.setTextValue("");
+			} else {
+				value = new ValueAnnotated<Object, Integer>();
 				value.setTextValue(detail.getTextValue().toString());
+				value.setIdresult(detail.getIdresult());
+			}
 		} else {
+			value = new ValueAnnotated<Object, Integer>();
 			value.setLoQualifier(detail.getLoQualifier());
 			value.setUpQualifier(detail.getUpQualifier());
 			value.setUpValue(detail.getUpValue());
 			value.setLoValue(detail.getLoValue());
+			value.setIdresult(detail.getIdresult());
 		}
-		value.setIdresult(detail.getIdresult());
 
-		if (detail instanceof ProtocolEffectRecordMatrix)
-			try {
-				value.setCopied(((ProtocolEffectRecordMatrix) detail)
-						.isCopied());
-				value.setDeleted(((ProtocolEffectRecordMatrix) detail)
-						.isDeleted());
-				value.setRemark(((ProtocolEffectRecordMatrix) detail)
-						.getRemarks());
-			} catch (Exception x) {
-			}
+		if (value != null)
+			if (detail instanceof ProtocolEffectRecordMatrix)
+				try {
+					value.setCopied(((ProtocolEffectRecordMatrix) detail)
+							.isCopied());
+					value.setDeleted(((ProtocolEffectRecordMatrix) detail)
+							.isDeleted());
+					value.setRemark(((ProtocolEffectRecordMatrix) detail)
+							.getRemarks());
+				} catch (Exception x) {
+				}
 		return value;
 	}
 }

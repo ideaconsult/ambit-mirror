@@ -344,8 +344,9 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 						 * key.setClazz(String.class); } else { //numeric
 						 */
 						Value value = processValue(detail, isTextValue);
-						ProtocolEffectRecord2SubstanceProperty.addValues(
-								master, key, value, oldValue);
+						if (value != null)
+							ProtocolEffectRecord2SubstanceProperty.addValues(
+									master, key, value, oldValue);
 
 						// }
 					}

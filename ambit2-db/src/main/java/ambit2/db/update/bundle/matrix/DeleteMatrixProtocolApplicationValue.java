@@ -6,6 +6,7 @@ import java.util.List;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import net.idea.modbcum.q.update.AbstractUpdate;
+import ambit2.base.data.I5Utils;
 import ambit2.base.data.study.ValueAnnotated;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 
@@ -16,18 +17,17 @@ import ambit2.base.data.substance.SubstanceEndpointsBundle;
  * @author nina
  * 
  */
-public class DeleteMatrixValue<VALUE>
-		extends
-		AbstractUpdate<SubstanceEndpointsBundle, ValueAnnotated<VALUE, Integer>> {
+public class DeleteMatrixProtocolApplicationValue<VALUE> extends
+		AbstractUpdate<SubstanceEndpointsBundle, ValueAnnotated<VALUE, String>> {
 
-	private final static String[] sql = new String[] { "update bundle_substance_experiment set deleted=? ,remarks=? where idbundle=? and idresult=?" };
+	private final static String[] sql = new String[] { "update bundle_substance_protocolapplication set deleted=? ,remarks=? where document_prefix=? and document_uuid=unhex(?)" };
 
-	public DeleteMatrixValue() {
+	public DeleteMatrixProtocolApplicationValue() {
 		this(null, null);
 	}
 
-	public DeleteMatrixValue(SubstanceEndpointsBundle bundle,
-			ValueAnnotated<VALUE, Integer> value) {
+	public DeleteMatrixProtocolApplicationValue(
+			SubstanceEndpointsBundle bundle, ValueAnnotated<VALUE, String> value) {
 		super();
 		setGroup(bundle);
 		setObject(value);
@@ -41,15 +41,16 @@ public class DeleteMatrixValue<VALUE>
 	@Override
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		if (getGroup() == null || getGroup().getID() <= 0
-				|| getObject() == null || getObject().getIdresult() <= 0)
+				|| getObject() == null || getObject().getIdresult() == null)
 			throw new AmbitException("Value not defined");
+		String[] doc_uuid = I5Utils.splitI5UUID(getObject().getIdresult());
+
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Boolean>(Boolean.class, getObject()
 				.isDeleted()));
-		params.add(new QueryParam<String>(String.class, getObject().getRemark()));
-		params.add(new QueryParam<Integer>(Integer.class, getGroup().getID()));
-		params.add(new QueryParam<Integer>(Integer.class, getObject()
-				.getIdresult()));
+		params.add(new QueryParam<String>(String.class, truncate(getObject().getRemark(),45)));
+		params.add(new QueryParam<String>(String.class, doc_uuid[0]));
+		params.add(new QueryParam<String>(String.class, doc_uuid[1].replace("-", "")));
 		return params;
 	}
 
