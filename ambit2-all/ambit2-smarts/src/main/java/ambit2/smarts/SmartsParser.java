@@ -1696,7 +1696,9 @@ public class SmartsParser {
 		List<IAtom> ligands = container.getConnectedAtomsList(atom);
 		if (ligands.size() == 2)
 		{
-			//TODO check for extended tetrahedral chirality C=C=C	
+			//check for extended tetrahedral chirality C=C=C
+			
+			//TODO
 		}
 		atom.stereoLigands = ligands;
 	}
