@@ -18,6 +18,8 @@ public class ChiralPermutations
 		int n = 0;
 		int perm[] = permutation1.clone();  //a temporary state
 		
+		//System.out.println(permutationToString(perm));
+		
 		for (int i = 0; i < permutation1.length -1; i++)
 		{
 			int pos = getPos(permutation2[i], perm);
@@ -26,6 +28,7 @@ public class ChiralPermutations
 			{	
 				move(pos, i, perm);
 				n += (pos - i);
+				//System.out.println("moving pos " + pos + " --> to pos " + i + "   " + permutationToString(perm));
 			}			
 		}
 		
@@ -64,5 +67,12 @@ public class ChiralPermutations
 		}
 	}
 	
+	public static String permutationToString(int p[])
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < p.length; i++) 
+			sb.append(" " + p[i]);
+		return sb.toString();
+	}
 	
 }
