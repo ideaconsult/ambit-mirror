@@ -7,19 +7,29 @@ public class ChiralPermutations
 	 * Calculates the number of pair switches needed to obtain
 	 * permutation2 starting from permutation1
 	 * The number is not unique (since various paths are possible),
-	 * but the parity (even or odd) of the number must always be the same
+	 * but the parity (even/odd) of the switches number must always be the same
 	 * 
 	 * @param permutation1
 	 * @param permutation2
-	 * @return
+	 * @return number of pair switches
 	 */
 	public static int getNumOfPairSwitches(int permutation1[], int permutation2[])
 	{
 		int n = 0;
-		int perm[] = permutation1.clone();
+		int perm[] = permutation1.clone();  //a temporary state
+		
+		for (int i = 0; i < permutation1.length -1; i++)
+		{
+			int pos = getPos(permutation2[i], perm);
+			//moving from position 'pos' to position i
+			if (pos != i)
+			{	
+				move(pos, i, perm);
+				n += (pos - i);
+			}			
+		}
 		
 		
-		//TODO
 		return n;
 	}
 	
