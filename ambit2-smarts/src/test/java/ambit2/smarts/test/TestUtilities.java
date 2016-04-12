@@ -2825,10 +2825,10 @@ public class TestUtilities {
 		//tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C(N)=C(/CC)C");
 		//tu.testSmartsManagerBoolSearch("[$(C/C=C\\C)]","C\\C(N)=C(/CC)");
 		
-		//tu.testSmartsManagerBoolSearch("C[C@](#C)(N)C","CCCC");
+		tu.testSmartsManagerBoolSearch("C[C@](Cl)(N)O","C[C](Cl)(N)O");
 		//tu.testSmartsManagerBoolSearch("CC(O)=[C@]=C(Cl)N","CCCC");
 		
-		tu.testChiralPermutations(new int[] {0,2,1,3}, new int[] {0,1,2,3});
+		//tu.testChiralPermutations(new int[] {0,2,1,3}, new int[] {0,1,2,3});
 		
 		//tu.testBinaryCombinations(4);
 
