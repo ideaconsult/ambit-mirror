@@ -40,6 +40,7 @@ import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
+import org.openscience.cdk.stereo.TetrahedralChirality;
 
 import ambit2.smarts.DoubleBondStereoInfo.DBStereo;
 
@@ -1084,9 +1085,45 @@ public class IsomorphismTester
 	
 	boolean matchChiralAtom(SmartsAtomExpression atom, Node node)
 	{
-		//TODO
+		IAtom targetLigands[] = new IAtom[atom.stereoLigands.size()];
+		for (int i = 0; i < targetLigands.length; i++)
+		{	
+			int query_index = query.getAtomNumber(atom.stereoLigands.get(i));
+			targetLigands[i] = node.atoms[query_index];
+		}
+		
+		if (atom.extChirInfo == null)
+		{
+			//Handle chiral stereo center
+			int query_index = query.getAtomNumber(atom);
+			IAtom targetCenter = node.atoms[query_index];
+			TetrahedralChirality thc = findTargetChiralStereoElement(targetCenter);
+			if (thc == null)
+				return false;
+			
+			return true;
+			//TODO
+		}
+		else
+		{	
+			//Handle extended chirality
+			//TODO
+		}
 		return true;
 	}
+	
+	TetrahedralChirality findTargetChiralStereoElement(IAtom targetCenter)
+	{
+		for (IStereoElement el: target.stereoElements())
+		{
+			if (el instanceof TetrahedralChirality)
+				if (((TetrahedralChirality) el).getChiralAtom() == targetCenter)
+						return (TetrahedralChirality) el;
+		}
+		
+		return null;
+	}
+	
 	
 	
 	//public Vector getAllIsomorphisms(IAtomContainer container)
