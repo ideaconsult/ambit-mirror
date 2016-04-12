@@ -61,6 +61,7 @@ import ambit2.smarts.BinaryCombinations;
 import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.ChemObjectToSmiles;
+import ambit2.smarts.ChiralPermutations;
 import ambit2.smarts.EquivalenceTester;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.QuerySequenceElement;
@@ -2249,6 +2250,13 @@ public class TestUtilities {
 			
 		return sb.toString();
 	}
+	
+	public void testChiralPermutations(int p1[], int p2[])
+	{
+		int n = ChiralPermutations.getNumOfPairSwitches(p1, p2);
+		System.out.println(" " + n + " switches");
+	}
+	
 
 	// -------------------------------------------------------------------------------
 
@@ -2818,8 +2826,9 @@ public class TestUtilities {
 		//tu.testSmartsManagerBoolSearch("[$(C/C=C\\C)]","C\\C(N)=C(/CC)");
 		
 		//tu.testSmartsManagerBoolSearch("C[C@](#C)(N)C","CCCC");
-		tu.testSmartsManagerBoolSearch("CC(O)=[C@]=C(Cl)N","CCCC");
+		//tu.testSmartsManagerBoolSearch("CC(O)=[C@]=C(Cl)N","CCCC");
 		
+		tu.testChiralPermutations(new int[] {0,2,1,3}, new int[] {0,1,2,3});
 		
 		//tu.testBinaryCombinations(4);
 
