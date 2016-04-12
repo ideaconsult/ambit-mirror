@@ -30,5 +30,13 @@ public class ChiralPermutations
 		array[pos2] = temp;
 	}
 	
+	public static int getPos(int value, int array[])
+	{
+		for (int i = 0; i < array.length; i++)
+			if (array[i] == value)
+				return i;
+		return -1;
+	}
+	
 	
 }
