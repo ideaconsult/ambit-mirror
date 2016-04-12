@@ -38,5 +38,21 @@ public class ChiralPermutations
 		return -1;
 	}
 	
+	public static void move(int startPos, int endPos, int array[])
+	{	
+		int step = 1;
+		if (startPos > endPos)
+			step = -1;
+		
+		int nSteps = Math.abs(endPos-startPos); 
+		int pos = startPos; 
+		
+		for (int i = 0; i < nSteps; i++)
+		{	
+			switchPos(pos, pos + step, array);
+			pos+= step;
+		}
+	}
+	
 	
 }
