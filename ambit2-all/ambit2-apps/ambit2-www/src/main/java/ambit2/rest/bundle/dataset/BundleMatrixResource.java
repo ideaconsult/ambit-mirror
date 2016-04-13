@@ -503,8 +503,7 @@ public class BundleMatrixResource extends
 		if (istextvalue) {
 			if (detail.getTextValue() == null) {
 				if (detail.getInterpretationResult() != null
-				// && !"".equals(detail.getInterpretationResult())
-				) {
+						&& !"".equals(detail.getInterpretationResult().trim())) {
 					value = new ValueAnnotated<Object, String>();
 					value.setTextValue(detail.getInterpretationResult());
 					value.setIdresult(detail.getDocumentUUID());
