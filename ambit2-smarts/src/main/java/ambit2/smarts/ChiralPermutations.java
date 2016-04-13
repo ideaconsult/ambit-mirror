@@ -2,6 +2,7 @@ package ambit2.smarts;
 
 public class ChiralPermutations 
 {
+	public static final int basic4Permutation[] = new int[] {0,1,2,3};
 	
 	/**
 	 * Calculates the number of pair switches needed to obtain
