@@ -1103,8 +1103,36 @@ public class IsomorphismTester
 				targetLigands[i] = node.atoms[query_index];
 			}
 			
+			
+			if (atom.hasImplicitHStereoLigand)
+			{
+				//The targetCenter must be within target ligands
+				boolean FlagOK = false;
+				for (int i = 0; i < targetLigands.length; i++)
+				{
+					if (targetLigands[i] == targetCenter)
+					{
+						FlagOK = true;
+						break;
+					}
+				}
+				
+				if (!FlagOK)
+					return false;
+			}
+			
+			
+			
+			int targetPerm[] = new int[4];
 			//TODO
 			
+			
+			int nSwitches = ChiralPermutations.getNumOfPairSwitches(
+									ChiralPermutations.basic4Permutation, targetPerm);
+			if ((nSwitches % 2) == 0)
+				return true;
+			else 
+				return false;
 		}
 		else
 		{	
