@@ -88,7 +88,54 @@ public class SmartsAtomExpression extends SMARTSAtom {
 		}
 		
 		//Handle the case when stereo tokens are present
+		//Two possible case are checked: ChC_AntiClock and ChC_Clock 
+		//If at least one of these case gives true then
+		//it is a POSSIBLE MATCH
+		//The "YES" result for the match is confirmed at the 
+		//final stereo check within IsomorphismTester class
 		
+		//Case I
+		int orientation = SmartsConst.ChC_AntiClock;
+		SmartsLogicalExpression sle = new SmartsLogicalExpression();
+		for (int i = 0; i < tokens.size(); i++) 
+		{
+			SmartsExpressionToken tok = tokens.get(i);
+			if (tok.type < SmartsConst.LO) 
+			{
+				if (tok.type == SmartsConst.AP_Chiral )
+					sle.addArgument(tok.param ==orientation);
+				else
+					sle.addArgument(getArgument(tok, atom));
+			} 
+			else
+				sle.addLogOperation(tok.type - SmartsConst.LO);
+		}
+		
+		boolean res = sle.getValue();
+		if (res)
+			return true;   
+		
+		//Case II
+		orientation = SmartsConst.ChC_Clock;
+		sle = new SmartsLogicalExpression();
+		for (int i = 0; i < tokens.size(); i++) 
+		{
+			SmartsExpressionToken tok = tokens.get(i);
+			if (tok.type < SmartsConst.LO) 
+			{
+				if (tok.type == SmartsConst.AP_Chiral )
+					sle.addArgument(tok.param ==orientation);
+				else
+					sle.addArgument(getArgument(tok, atom));
+			} 
+			else
+				sle.addLogOperation(tok.type - SmartsConst.LO);
+		}
+
+		res = sle.getValue();
+		return res;   
+		
+		/*
 		if (stereoTokenIndices.length > 3)
 			//This case is very rare.
 			//The smarts atom expression contains too many stereo tokens
@@ -98,6 +145,7 @@ public class SmartsAtomExpression extends SMARTSAtom {
 			return true;  
 		else
 		{
+			
 			//Handling up to 3 stereo tokens
 			//all possible combinations of the boolean values
 			//of the stereo tokens are checked together with the other
@@ -149,6 +197,8 @@ public class SmartsAtomExpression extends SMARTSAtom {
 			}
 			return false;
 		}
+		
+		*/
 
 	};
 
