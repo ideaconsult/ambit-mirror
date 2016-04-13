@@ -45,11 +45,11 @@ public class StructureStandardizer extends
 	private static final long serialVersionUID = -2600599340740351460L;
 	protected Map<Object, Property> tags = new HashMap<>();
 	protected boolean generateInChI = true;
-	protected boolean generateSMILES_Canonical = true;
+	protected boolean generateSMILES_Canonical = false;
 	protected boolean generateSMILES_Aromatic = false;
 	protected boolean splitFragments = false;
 	protected boolean generateTautomers = false;
-	protected boolean generateSMILES = false; // not canonical
+	protected boolean generateSMILES = true; // not canonical
 	protected boolean neutralise = false;
 	protected boolean generate2D = false;
 	protected boolean implicitHydrogens = false;
