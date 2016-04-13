@@ -2816,7 +2816,10 @@ public class TestUtilities {
 		*/
 		
 		//tu.testStereoRemovedTokens("[D;@@,@,X]");
-			
+		
+		//tu.testStereoRemovedTokens("[C;!@;@@](Cl)(N)O");
+		
+		
 		//tu.testSmiles2Smiles("CC(C)NC(=N)C1=CC2=N/C(=C\\3/C=C\\C(=C\\4/C=C/C(=C/5\\C=C/C(=C\\6/N=C7C=CC(=CC7=N6)C(=N)NC(C)C)/C=C5)/O4)\\C=C3)/N=C2C=C1");
 		
 		tu.man.setIsomorphismTesterFlagCheckStereoElements(true);
@@ -2825,7 +2828,7 @@ public class TestUtilities {
 		//tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C(N)=C(/CC)C");
 		//tu.testSmartsManagerBoolSearch("[$(C/C=C\\C)]","C\\C(N)=C(/CC)");
 		
-		tu.testSmartsManagerBoolSearch("C[C@](Cl)(N)O","C[C](Cl)(N)O");
+		tu.testSmartsManagerBoolSearch("C[C;!@,@;!@@](Cl)(N)O","C[C](Cl)(N)O");
 		//tu.testSmartsManagerBoolSearch("CC(O)=[C@]=C(Cl)N","CCCC");
 		
 		//tu.testChiralPermutations(new int[] {0,2,1,3}, new int[] {0,1,2,3});
