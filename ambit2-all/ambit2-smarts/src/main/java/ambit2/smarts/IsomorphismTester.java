@@ -40,6 +40,7 @@ import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
+import org.openscience.cdk.stereo.ExtendedTetrahedral;
 import org.openscience.cdk.stereo.TetrahedralChirality;
 
 import ambit2.smarts.DoubleBondStereoInfo.DBStereo;
@@ -1084,30 +1085,36 @@ public class IsomorphismTester
 	}
 	
 	boolean matchChiralAtom(SmartsAtomExpression atom, Node node)
-	{
-		IAtom targetLigands[] = new IAtom[atom.stereoLigands.size()];
-		for (int i = 0; i < targetLigands.length; i++)
-		{	
-			int query_index = query.getAtomNumber(atom.stereoLigands.get(i));
-			targetLigands[i] = node.atoms[query_index];
-		}
+	{	
+		int queryChiralCenter_index = query.getAtomNumber(atom);
+		IAtom targetCenter = node.atoms[queryChiralCenter_index];
 		
 		if (atom.extChirInfo == null)
 		{
 			//Handle chiral stereo center
-			int query_index = query.getAtomNumber(atom);
-			IAtom targetCenter = node.atoms[query_index];
 			TetrahedralChirality thc = findTargetChiralStereoElement(targetCenter);
 			if (thc == null)
 				return false;
 			
-			return true;
+			IAtom targetLigands[] = new IAtom[atom.stereoLigands.size()];
+			for (int i = 0; i < targetLigands.length; i++)
+			{	
+				int query_index = query.getAtomNumber(atom.stereoLigands.get(i));
+				targetLigands[i] = node.atoms[query_index];
+			}
+			
 			//TODO
+			
 		}
 		else
 		{	
 			//Handle extended chirality
+			ExtendedTetrahedral ext = findTargetExtendedTetrahedralElement(targetCenter);
+			if (ext == null)
+				return false;
+			
 			//TODO
+			
 		}
 		return true;
 	}
@@ -1124,6 +1131,17 @@ public class IsomorphismTester
 		return null;
 	}
 	
+	ExtendedTetrahedral findTargetExtendedTetrahedralElement(IAtom targetCenter)
+	{
+		for (IStereoElement el: target.stereoElements())
+		{
+			if (el instanceof ExtendedTetrahedral)
+				if (((ExtendedTetrahedral) el).focus() == targetCenter)
+						return (ExtendedTetrahedral) el;
+		}
+		
+		return null;
+	}
 	
 	
 	//public Vector getAllIsomorphisms(IAtomContainer container)
