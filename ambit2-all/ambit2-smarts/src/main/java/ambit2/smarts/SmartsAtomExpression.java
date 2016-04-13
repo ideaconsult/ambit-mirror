@@ -65,7 +65,10 @@ public class SmartsAtomExpression extends SMARTSAtom {
 	//The stereo info match is performed later.
 	public List<SmartsExpressionToken> stereoRemovedTokens = null;
 	
+	//The indices of the logical tokens that contain stereo information
 	public int stereoTokenIndices[] = null;
+	
+	public boolean hasImplicitHStereoLigand = false;
 	
 	
 	public SmartsAtomExpression(IChemObjectBuilder builder) {

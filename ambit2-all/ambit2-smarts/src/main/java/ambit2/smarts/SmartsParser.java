@@ -1749,8 +1749,29 @@ public class SmartsParser {
 			
 			if (atom.stereoLigands.size() == 3)
 			{	 
-				//check for implicit H token which must be the fourth ligand
-				//TODO
+				//TODO check for implicit H token which must be the fourth ligand
+				
+				//Adding the chiral center atom as fourth ligand 
+				//at the proper position
+				int centerIndex = container.getAtomNumber(atom);
+				boolean FlagAdded = false;
+				List<IAtom> ligands = new ArrayList<IAtom>();
+				for (int i = 0; i < 3; i++)
+				{
+					IAtom lig =  atom.stereoLigands.get(i);
+					int ligIndex = container.getAtomNumber(lig);
+					if (centerIndex < ligIndex)
+					{	
+						ligands.add(atom);
+						FlagAdded = true;
+					}	
+					ligands.add(lig);
+				}
+				
+				if (!FlagAdded)
+					ligands.add(atom); 
+				atom.stereoLigands = ligands;
+				atom.hasImplicitHStereoLigand = true;
 			}
 			
 			for (int i = 0; i < atom.stereoLigands.size(); i++)
