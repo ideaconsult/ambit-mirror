@@ -72,6 +72,11 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 		this(logger);
 		loadReactionsFromJSON(jsonFile);
 	}
+	public SMIRKSProcessor(InputStream jsonFile, Logger logger) throws Exception {
+		this(logger);
+		loadReactionsFromJSON(jsonFile);
+	}
+
 
 	public void loadReactionsFromJSON(File jsonFile) throws Exception {
 		loadReactionsFromJSON(new FileInputStream(jsonFile));
