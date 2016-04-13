@@ -323,12 +323,13 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 				} else
 					throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			}
-
+			int maxfacet = 3;
 			String type = form.getFirstValue("type");
 			if ("facet".equals(type)) {
 				List<ProtocolApplication<Protocol, Params, String, Params, String>> protocols = new ArrayList<ProtocolApplication<Protocol, Params, String, Params, String>>();
 				for (String value : form.getValuesArray("category"))
 					try {
+						if (protocols.size()>=maxfacet) break;
 						String[] categories = value.split("\\.");
 						Protocol protocol = new Protocol(null);
 						protocol.setCategory(Protocol._categories.valueOf(
