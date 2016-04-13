@@ -4,7 +4,7 @@
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
-    <version>3.0.2-SNAPSHOT</version>
+    <version>3.0.2</version>
   </parent>
   <artifactId>ambit2-balloon</artifactId>
   <packaging>jar</packaging>
