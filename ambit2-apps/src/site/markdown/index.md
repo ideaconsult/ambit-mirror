@@ -55,10 +55,10 @@ AMBIT offers chemoinformatics functionality via [*OpenTox API*](api.html) compli
 
 ## News
 
+- **The LRI AMBIT Read across tool** is online [https://ambitlri.ideaconsult.net](https://ambitlri.ideaconsult.net) 
+
 - LRI Workshop on AMBIT and READ-ACROSS [**Video and slides**](http://cefic-lri.org/events/lri-workshop-on-ambit-and-read-across/)
 
-- Try LRI AMBIT [**Read across workflow**](https://apps.ideaconsult.net/ambit3)  [Feedback](https://docs.google.com/forms/d/1hhKCBTeBTqvfQxW3g2vc_ShNk29hof_WDHtt-cimjGQ/viewform)
- 
 - [eNanoMapper database](./enanomapper.html) 
 
  <form action="http://search.data.enanomapper.net" method="GET"><input type="text" id="search" name="search" value="nanotube"/><input type='submit' value='Search'/></form>
@@ -103,15 +103,15 @@ User guide
 
 Chemical structures, chemical substances and endpoint data in AMBIT    
 
--   [**Structure search**](https://apps.ideaconsult.net/ambit3/ui/_search)
+-   [**Structure search**](https://ambitlri.ideaconsult.net/tool/ui/_search)
 
--   [**Substance online**](https://apps.ideaconsult.net/ambit3/substance)
+-   [**Substance online**](https://ambitlri.ideaconsult.net/tool/substance)
 
--   [**Endpoint search**](https://apps.ideaconsult.net/ambit3/query/study)
+-   [**Endpoint search**](https://ambitlri.ideaconsult.net/tool/query/study)
 
--   [**Run Toxtree predictions**](https://apps.ideaconsult.net/ambit3/ui/toxtree)
+-   [**Run Toxtree predictions**](https://ambitlri.ideaconsult.net/tool/ui/toxtree)
 
--   [**Provide feedback**](https://docs.google.com/forms/d/1ncsW59uGAJfEUgSv8tvfbiU0XRXIik9RuRJ376WnkB0/viewform) for the [**Read across workflow support** (beta test)](https://apps.ideaconsult.net/ambit3/ui/assessment)   
+-   [**Read Across tool**](http://ambitlri.ideaconsult.net)   
 
 ---
 
