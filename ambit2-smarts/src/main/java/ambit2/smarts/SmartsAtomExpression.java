@@ -204,6 +204,29 @@ public class SmartsAtomExpression extends SMARTSAtom {
 		*/
 
 	};
+	
+	
+	public boolean stereoMatch(IAtom atom, int targetStereo) 
+	{
+		SmartsLogicalExpression sle = new SmartsLogicalExpression();
+		for (int i = 0; i < tokens.size(); i++) 
+		{
+			SmartsExpressionToken tok = tokens.get(i);
+			if (tok.type < SmartsConst.LO) 
+			{
+				if (tok.type == SmartsConst.AP_Chiral )
+					sle.addArgument(tok.param == targetStereo);
+				else
+					sle.addArgument(getArgument(tok, atom));
+			} 
+			else
+				sle.addLogOperation(tok.type - SmartsConst.LO);
+		}
+		
+		return sle.getValue();
+	}
+	
+	
 
 	public SmartsExpressionToken getLastToken() {
 		return (tokens.get(tokens.size() - 1));

@@ -1087,8 +1087,10 @@ public class IsomorphismTester
 	
 	boolean matchChiralSmartsAtomExpreession(SmartsAtomExpression atom, Node node)
 	{
-		//TODO
-		return true;
+		int targetStereo = getTargetChiralAtomStereo(atom, node);
+		int queryChiralCenter_index = query.getAtomNumber(atom);
+		IAtom targetCenter = node.atoms[queryChiralCenter_index];
+		return atom.stereoMatch(targetCenter, targetStereo);
 	}
 	
 	int getTargetChiralAtomStereo(SmartsAtomExpression atom, Node node)
