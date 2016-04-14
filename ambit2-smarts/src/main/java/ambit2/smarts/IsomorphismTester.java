@@ -34,6 +34,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IDoubleBondStereochemistry.Conformation;
 import org.openscience.cdk.interfaces.IStereoElement;
+import org.openscience.cdk.interfaces.ITetrahedralChirality;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
@@ -942,10 +943,10 @@ public class IsomorphismTester
 		if (caList != null)
 			for (SmartsAtomExpression a: caList)
 			{
-				if (!matchChiralAtom(a, node))
+				if (!matchChiralSmartsAtomExpreession(a, node))
 					return false;
 			}
-		*/	
+		*/
 		
 		return true;
 	}
@@ -1084,17 +1085,24 @@ public class IsomorphismTester
 		
 	}
 	
-	boolean matchChiralAtom(SmartsAtomExpression atom, Node node)
+	boolean matchChiralSmartsAtomExpreession(SmartsAtomExpression atom, Node node)
+	{
+		//TODO
+		return true;
+	}
+	
+	int getTargetChiralAtomStereo(SmartsAtomExpression atom, Node node)
 	{	
 		int queryChiralCenter_index = query.getAtomNumber(atom);
 		IAtom targetCenter = node.atoms[queryChiralCenter_index];
+		
 		
 		if (atom.extChirInfo == null)
 		{
 			//Handle chiral stereo center
 			TetrahedralChirality thc = findTargetChiralStereoElement(targetCenter);
 			if (thc == null)
-				return false;
+				return SmartsConst.ChC_Unspec;
 			
 			IAtom targetMathedLigands[] = new IAtom[atom.stereoLigands.size()];
 			for (int i = 0; i < targetMathedLigands.length; i++)
@@ -1118,7 +1126,7 @@ public class IsomorphismTester
 				}
 				
 				if (!FlagOK)
-					return false;
+					return SmartsConst.ChC_Unspec;  //This case should not occur if target stereo element is OK
 			}
 			
 			//ligands as defined in the target molecule. It is possible that they are incorrect
@@ -1133,7 +1141,8 @@ public class IsomorphismTester
 			{
 				int pos = getLigandIndex(targetMathedLigands[i], targetOriginalLigands);
 				if (pos == -1)
-					return false; 	//This means incorrect target ligands in the stereo element. 
+					return SmartsConst.ChC_Unspec; 	
+									//This means incorrect target ligands in the stereo element. 
 								  	//Neighbor to the targer center is matched which is not within
 								  	//The stereo element ligang list.
 								  	//This error should not appear but if present it is due to
@@ -1145,24 +1154,39 @@ public class IsomorphismTester
 			int nSwitches = ChiralPermutations.getNumOfPairSwitches(
 									ChiralPermutations.basic4Permutation, targetPerm);
 			
+			
 			if ((nSwitches % 2) == 0)
+			{	
 				//even number of pair switches means that the query and target
 				//relative stereo configurations are the same
-				return true;  
+				if (thc.getStereo() == ITetrahedralChirality.Stereo.ANTI_CLOCKWISE)
+					return SmartsConst.ChC_AntiClock;
+				else
+					return SmartsConst.ChC_Clock;
+			}	
 			else 
-				return false;
+			{
+				//odd number of pair switches means that the query and target
+				//relative stereo configurations are different
+				if (thc.getStereo() == ITetrahedralChirality.Stereo.ANTI_CLOCKWISE)
+					return SmartsConst.ChC_Clock;
+				else
+					return SmartsConst.ChC_AntiClock;
+			}	
 		}
 		else
 		{	
 			//Handle extended chirality
 			ExtendedTetrahedral ext = findTargetExtendedTetrahedralElement(targetCenter);
 			if (ext == null)
-				return false;
+				return SmartsConst.ChC_Unspec;
 			
 			//TODO
 			
 		}
-		return true;
+		
+		//Temporary code here
+		return SmartsConst.ChC_Unspec;
 	}
 	
 	TetrahedralChirality findTargetChiralStereoElement(IAtom targetCenter)
@@ -1196,6 +1220,25 @@ public class IsomorphismTester
 				return i;
 		return -1;
 	}
+	
+	/*
+	boolean equalStereo(int ambitStereo, ITetrahedralChirality.Stereo stereo)
+	{
+		if (ambitStereo == SmartsConst.ChC_AntiClock)
+		{	
+			if (stereo == ITetrahedralChirality.Stereo.ANTI_CLOCKWISE)
+				return true;
+		}
+		else
+			if (ambitStereo == SmartsConst.ChC_Clock)
+			{	
+				if (stereo == ITetrahedralChirality.Stereo.CLOCKWISE)
+					return true;
+			}
+		
+		return false;
+	}
+	*/
 	
 	
 	//public Vector getAllIsomorphisms(IAtomContainer container)
