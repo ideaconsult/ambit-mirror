@@ -1096,11 +1096,11 @@ public class IsomorphismTester
 			if (thc == null)
 				return false;
 			
-			IAtom targetLigands[] = new IAtom[atom.stereoLigands.size()];
-			for (int i = 0; i < targetLigands.length; i++)
+			IAtom targetMathedLigands[] = new IAtom[atom.stereoLigands.size()];
+			for (int i = 0; i < targetMathedLigands.length; i++)
 			{	
 				int query_index = query.getAtomNumber(atom.stereoLigands.get(i));
-				targetLigands[i] = node.atoms[query_index];
+				targetMathedLigands[i] = node.atoms[query_index];
 			}
 			
 			
@@ -1108,9 +1108,9 @@ public class IsomorphismTester
 			{
 				//The targetCenter must be within target ligands
 				boolean FlagOK = false;
-				for (int i = 0; i < targetLigands.length; i++)
+				for (int i = 0; i < targetMathedLigands.length; i++)
 				{
-					if (targetLigands[i] == targetCenter)
+					if (targetMathedLigands[i] == targetCenter)
 					{
 						FlagOK = true;
 						break;
@@ -1121,16 +1121,34 @@ public class IsomorphismTester
 					return false;
 			}
 			
+			//ligands as defined in the target molecule. It is possible that they are incorrect
+			IAtom targetOriginalLigands[] = thc.getLigands();
 			
-			
+			//Determining the target ligands permutation as well as 
+			//checking the correctness of the target stereo element (there is a chance that
+			//the target stereo element is no correct - in this case result is 'false')
+			//The query ligands order is considered to be the basic permutation (0,1,2,3) 
 			int targetPerm[] = new int[4];
-			//TODO
-			
+			for (int i = 0; i < targetMathedLigands.length; i++)
+			{
+				int pos = getLigandIndex(targetMathedLigands[i], targetOriginalLigands);
+				if (pos == -1)
+					return false; 	//This means incorrect target ligands in the stereo element. 
+								  	//Neighbor to the targer center is matched which is not within
+								  	//The stereo element ligang list.
+								  	//This error should not appear but if present it is due to
+								  	//incorrect IAtomContainer object 
+				
+				targetPerm[i] = pos;
+			}
 			
 			int nSwitches = ChiralPermutations.getNumOfPairSwitches(
 									ChiralPermutations.basic4Permutation, targetPerm);
+			
 			if ((nSwitches % 2) == 0)
-				return true;
+				//even number of pair switches means that the query and target
+				//relative stereo configurations are the same
+				return true;  
 			else 
 				return false;
 		}
@@ -1169,6 +1187,14 @@ public class IsomorphismTester
 		}
 		
 		return null;
+	}
+	
+	int getLigandIndex (IAtom a, IAtom ligands[])
+	{
+		for (int i = 0; i < ligands.length; i++)
+			if (ligands[i] == a)
+				return i;
+		return -1;
 	}
 	
 	
