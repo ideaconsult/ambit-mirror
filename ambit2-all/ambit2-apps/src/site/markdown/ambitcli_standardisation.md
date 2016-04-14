@@ -6,7 +6,7 @@ Chemical structure standardization. Available since AMBIT 3.0.0.
 
 ## Download
 
-* Latest release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.0.1/ambitcli-3.0.1.jar/download">ambitcli-3.0.1</a>
+* Latest release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.0.2/ambitcli-3.0.2.jar/download">ambitcli-3.0.2</a>
 
 * <a href="http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/">All releases</a>
 

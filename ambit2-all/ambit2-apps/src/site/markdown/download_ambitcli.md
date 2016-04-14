@@ -4,7 +4,7 @@ A [command line Java application](download_ambitcli.html) used for processing ch
 
 ## Download
 
-* Latest release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.0.1/ambitcli-3.0.1.jar/download">ambitcli-3.0.1</a>
+* Latest release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.0.2/ambitcli-3.0.2.jar/download">ambitcli-3.0.2</a>
 
 * <a href="http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/">All releases</a>
 
@@ -18,19 +18,23 @@ A [command line Java application](download_ambitcli.html) used for processing ch
 ## Usage
 
 ````sh
-$java -jar ambitcli.jar -help
-INFO   ambitcli-3.0.1
-http://ambit.sf.net/ambit2-dbcli
+$java -jar ambitcli-VERSION.jar -help
+INFO   ambitcli-3.0.2 build:7472 1460532616351
+http://ambit.sourceforge.net/download_ambitcli.html
 usage: ambitcli-{version}
  -a,--command <command>          Commands:
-                                 import|preprocessing|dataset|split|standardize|help|
- -m,--subcommand <subcommand>    Subcommands. Use -a cmd -m help to list subcommands of a specific command.                                 
+                                 import|preprocessing|dataset|split|standardize|fingerprint|help|
+ -c,--config <file>              Config file (DB connection parameters)
  -d,--data <data>                Command specific parameters (multiple).
-                                 Use -a cmd -m help to list available parameters
- -i,--input <file>               Input file (e.g. file.sdf , recognized by extensions .sdf , .csv, .cml , .txt)
- -o,--output <file>              Output file (e.g. out.sdf , recognized by extensions .sdf , .csv, .cml , .txt)                                 
- -c,--config <file>              Config file (DB connection parameters)                                 
+                                 Use -a cmd -m help to list available
+                                 parameters
  -h,--help                       This help
+ -i,--input <file>               Input SDF file
+ -m,--subcommand <subcommand>    Subcommands. Use -a cmd -m help to list
+                                 subcommands of a specific command.
+ -o,--output <file>              Output file
+ -r,--restartConnection <msec>   Restart SQL connection every ? msec
+                                 (default 1h= 3600000 msec)
 ````
 
 Logging configuration can be specified via  -Djava.util.logging.config.file option, specifying logging.properties file. If not specified, the [default logging.properties](https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps/ambit2-dbcli/src/main/resources/ambit2/dbcli/logging.properties) is used.
@@ -164,18 +168,28 @@ $java -jar ambitcli.jar -a standardize -m help
 ### -a fingerprint 
 
 ````
-    Fingerprint calculation. Writes multiple files per fingerprint, all files start with prefix given by -o prefix)"
-    -a fingerprint -m post
-    -d fpclass=CircularFingerprinter,PubchemFingerprinter,MACCSFingerprinter	// Comma delimited list of class names implementing org.openscience.cdk.fingerprint.IFingerprinter, e.g. KlekotaRothFingerprinter. If not fully qualified will prepend 'org.openscience.cdk.fingerprint.'	[type:String, mandatory:false]
-    -d page=0	// Start page (first page = 0)	[type:Integer, mandatory:false]
-    -d pagesize=20000	// Page size (in number of records)	[type:Integer, mandatory:false]
-    -d inputtag_smiles=SMILES	// Specifies the name of the column, containing SMILES in the input file	[type:String, mandatory:false]
-    -d inputtag_inchi=InChI	// Specifies the name of the column, containing InChI in the input file	[type:String, mandatory:false]
-    -d inputtag_inchikey=InChIKey	// Specifies the name of the column, containing InChIKey in the input file	[type:String, mandatory:false]
-    -d tag_tokeep=InChIKey	// Specifies which tags to keep, comma delimited list. Everything else will be removed. To keep all the tags, leave this empty.	[type:String, mandatory:false]
-    -d write_count=false	// Whether to write the counts of getCountFingerprint()	[type:Boolean, mandatory:false]
-    -d write_raw=false	// Whether to write the raw fingerprint (getRawFingerprint)	[type:Boolean, mandatory:false]
-    -d sdftitle=null	// Specifies which field to write in the first SDF line	[type:String, mandatory:false]
+    >java -jar ambitcli-3.0.2.jar -a fingerprint -m help
+INFO   ambitcli-3.0.2 build:7472 1460532616351
+http://ambit.sourceforge.net/download_ambitcli.html
+-a fingerprint -m post -d <parameters>
+
+"Fingerprint calculation. Writes multiple files per fingerprint, all files start with prefix given by -o prefix). Fingerpritns are written in a sparse format"
+   -a fingerprint -m post
+ -d fpclass=CircularFingerprinter,PubchemFingerprinter,MACCSFingerprinter       // Comma delimited list of class names i mplementing org.openscience.cdk.fingerprint.IFingerprinter, e.g. KlekotaRothFingerprinter. If not fully qualified will prepend 'org.openscience.cdk.fingerprint.' 
+ -d page=0      // Start page (first page = 0) 
+ -d pagesize=20000      // Page size (in number of records)  
+ -d inputtag_smiles=SMILES      // Specifies the name of the column, containing SMILES in the input file
+ -d inputtag_inchi=InChI        // Specifies the name of the column, containing InChI in the input file
+ -d inputtag_inchikey=InChIKey  // Specifies the name of the column, containing InChIKey in the input file
+ -d tag_tokeep=InChIKey // Specifies which tags to keep, comma delimited list. Everything else will be removed. To keep all the tags, leave this empty.
+ -d write_count=false   // Whether to write the counts of getCountFingerprint() (in [.vw](http://hunch.net/~vw/) format)
+ -d write_raw=false     // Whether to write the raw fingerprint (getRawFingerprint)
+ -d sdftitle=null       // Specifies which field to write in the first SDF line
+
+
+Example
+ -d fpclass=CircularFingerprinter,PubchemFingerprinter,MACCSFingerprinter -d page=0 -d pagesize=20000 -d inputtag_smiles=SMILES -d inputtag_inchi=InChI -d inputtag_inchikey=InChIKey -d tag_tokeep=InChIKey -d write_count=true 
+
 ````
 
 ### -a split
