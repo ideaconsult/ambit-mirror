@@ -1106,21 +1106,20 @@ public class IsomorphismTester
 			if (thc == null)
 				return SmartsConst.ChC_Unspec;
 			
-			IAtom targetMathedLigands[] = new IAtom[atom.stereoLigands.size()];
-			for (int i = 0; i < targetMathedLigands.length; i++)
+			IAtom targetMatchedLigands[] = new IAtom[atom.stereoLigands.size()];
+			for (int i = 0; i < targetMatchedLigands.length; i++)
 			{	
 				int query_index = query.getAtomNumber(atom.stereoLigands.get(i));
-				targetMathedLigands[i] = node.atoms[query_index];
+				targetMatchedLigands[i] = node.atoms[query_index];
 			}
-			
 			
 			if (atom.hasImplicitHStereoLigand)
 			{
 				//The targetCenter must be within target ligands
 				boolean FlagOK = false;
-				for (int i = 0; i < targetMathedLigands.length; i++)
+				for (int i = 0; i < targetMatchedLigands.length; i++)
 				{
-					if (targetMathedLigands[i] == targetCenter)
+					if (targetMatchedLigands[i] == targetCenter)
 					{
 						FlagOK = true;
 						break;
@@ -1136,13 +1135,13 @@ public class IsomorphismTester
 			
 			//Determining the target ligands permutation as well as 
 			//checking the correctness of the target stereo element (there is a chance that
-			//the target stereo element is no correct - in this case result is 'false')
+			//the target stereo element is no correct - in this case the result is ChC_Unspec)
 			//The query ligands order is considered to be the basic permutation (0,1,2,3) 
 			int targetPerm[] = new int[4];
 			
-			for (int i = 0; i < targetMathedLigands.length; i++)
+			for (int i = 0; i < targetMatchedLigands.length; i++)
 			{
-				int pos = getLigandIndex(targetMathedLigands[i], targetOriginalLigands);
+				int pos = getLigandIndex(targetMatchedLigands[i], targetOriginalLigands);
 				if (pos == -1)
 					return SmartsConst.ChC_Unspec; 	
 									//This means incorrect target ligands in the stereo element. 
