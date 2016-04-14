@@ -2830,7 +2830,7 @@ public class TestUtilities {
 		
 		//tu.testSmartsManagerBoolSearch("C[C;!@,@;!@@](Cl)(N)O","C[C](Cl)(N)O");
 		//tu.testSmartsManagerBoolSearch("CC(O)=[C@]=C(Cl)N","CC(O)=[C@]=C(Cl)N");
-		tu.testSmartsManagerBoolSearch("C[C@H](Cl)N","C[C@H](Cl)N");
+		tu.testSmartsManagerBoolSearch("C[C@H](Cl)N","C[C@@H](N)Cl");
 		
 		//tu.testChiralPermutations(new int[] {0,2,1,3}, new int[] {0,1,2,3});
 		

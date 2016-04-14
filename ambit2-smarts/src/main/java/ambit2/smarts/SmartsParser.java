@@ -1761,10 +1761,11 @@ public class SmartsParser {
 					IAtom lig =  atom.stereoLigands.get(i);
 					int ligIndex = container.getAtomNumber(lig);
 					if (centerIndex < ligIndex)
-					{	
-						ligands.add(atom);
-						FlagAdded = true;
-					}	
+						if (!FlagAdded)
+						{
+							ligands.add(atom);
+							FlagAdded = true;
+						}	
 					ligands.add(lig);
 				}
 				

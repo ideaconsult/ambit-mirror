@@ -1139,7 +1139,7 @@ public class IsomorphismTester
 			//the target stereo element is no correct - in this case result is 'false')
 			//The query ligands order is considered to be the basic permutation (0,1,2,3) 
 			int targetPerm[] = new int[4];
-			System.out.println("targetMathedLigands.length = " + targetMathedLigands.length);
+			
 			for (int i = 0; i < targetMathedLigands.length; i++)
 			{
 				int pos = getLigandIndex(targetMathedLigands[i], targetOriginalLigands);
