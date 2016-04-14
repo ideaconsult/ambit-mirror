@@ -937,7 +937,6 @@ public class IsomorphismTester
 					return false;
 			}	
 		
-		/*
 		//Check chiral atoms
 		List<SmartsAtomExpression> caList = query.getProperty("ChiralAtoms");
 		if (caList != null)
@@ -946,7 +945,6 @@ public class IsomorphismTester
 				if (!matchChiralSmartsAtomExpreession(a, node))
 					return false;
 			}
-		*/
 		
 		return true;
 	}
@@ -1130,8 +1128,15 @@ public class IsomorphismTester
 					return SmartsConst.ChC_Unspec;  //This case should not occur if target stereo element is OK
 			}
 			
-			//ligands as defined in the target molecule. It is possible that they are incorrect
+			//ligands as defined in the target molecule. 
 			IAtom targetOriginalLigands[] = thc.getLigands();
+			
+			//It is possible that original ligands are incorrect 
+			//(additional checks are done below as well)
+			if (targetOriginalLigands == null)
+				return SmartsConst.ChC_Unspec;
+			if (targetOriginalLigands.length != 4)
+				return SmartsConst.ChC_Unspec;
 			
 			//Determining the target ligands permutation as well as 
 			//checking the correctness of the target stereo element (there is a chance that
@@ -1148,7 +1153,7 @@ public class IsomorphismTester
 								  	//Neighbor to the targer center is matched which is not within
 								  	//The stereo element ligang list.
 								  	//This error should not appear but if present it is due to
-								  	//incorrect IAtomContainer object 
+								  	//incorrect target AtomContainer object 
 				
 				targetPerm[i] = pos;
 			}
@@ -1179,16 +1184,70 @@ public class IsomorphismTester
 		else
 		{	
 			//Handle extended chirality
-			ExtendedTetrahedral ext = findTargetExtendedTetrahedralElement(targetCenter);
-			if (ext == null)
+			ExtendedTetrahedral exth = findTargetExtendedTetrahedralElement(targetCenter);
+			if (exth == null)
+				return SmartsConst.ChC_Unspec;
+						
+			IAtom targetMatchedLigands[] = new IAtom[atom.stereoLigands.size()];
+			for (int i = 0; i < targetMatchedLigands.length; i++)
+			{	
+				int query_index = query.getAtomNumber(atom.stereoLigands.get(i));
+				targetMatchedLigands[i] = node.atoms[query_index];
+			}
+			
+			//peripherals (ligands) as defined in the target molecule.
+			IAtom targetOriginalLigands[] = exth.peripherals();
+			
+			//It is possible that original ligands are incorrect 
+			//(additional checks are done below as well)
+			if (targetOriginalLigands == null)
+				return SmartsConst.ChC_Unspec;
+			if (targetOriginalLigands.length != 4)
 				return SmartsConst.ChC_Unspec;
 			
-			//TODO
+			//Determining the target ligands permutation as well as 
+			//checking the correctness of the target stereo element (there is a chance that
+			//the target stereo element is no correct - in this case the result is ChC_Unspec)
+			//The query ligands order is considered to be the basic permutation (0,1,2,3) 
+			int targetPerm[] = new int[4];
 			
+			for (int i = 0; i < targetMatchedLigands.length; i++)
+			{
+				int pos = getLigandIndex(targetMatchedLigands[i], targetOriginalLigands);
+				if (pos == -1)
+					return SmartsConst.ChC_Unspec; 	
+									//This means incorrect target ligands in the stereo element. 
+								  	//Neighbor to the targer center is matched which is not within
+								  	//The stereo element ligang list.
+								  	//This error should not appear but if present it is due to
+								  	//incorrect target IAtomContainer object 
+				
+				targetPerm[i] = pos;
+			}
+			
+			int nSwitches = ChiralPermutations.getNumOfPairSwitches(
+									ChiralPermutations.basic4Permutation, targetPerm);
+			
+			
+			if ((nSwitches % 2) == 0)
+			{	
+				//even number of pair switches means that the query and target
+				//relative stereo configurations are the same
+				if (exth.winding() == ITetrahedralChirality.Stereo.ANTI_CLOCKWISE)
+					return SmartsConst.ChC_AntiClock;
+				else
+					return SmartsConst.ChC_Clock;
+			}	
+			else 
+			{	
+				//odd number of pair switches means that the query and target
+				//relative stereo configurations are different
+				if (exth.winding() == ITetrahedralChirality.Stereo.ANTI_CLOCKWISE)
+					return SmartsConst.ChC_Clock;
+				else
+					return SmartsConst.ChC_AntiClock;
+			}
 		}
-		
-		//Temporary code here
-		return SmartsConst.ChC_Unspec;
 	}
 	
 	TetrahedralChirality findTargetChiralStereoElement(IAtom targetCenter)
