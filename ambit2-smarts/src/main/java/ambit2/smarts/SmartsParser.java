@@ -1776,6 +1776,10 @@ public class SmartsParser {
 			
 			for (int i = 0; i < atom.stereoLigands.size(); i++)
 			{
+				if (atom.hasImplicitHStereoLigand)
+					if (atom.stereoLigands.get(i) == atom)
+						continue;
+				
 				IBond bo = container.getBond(atom,  atom.stereoLigands.get(i));
 				if (bo == null)
 				{	
