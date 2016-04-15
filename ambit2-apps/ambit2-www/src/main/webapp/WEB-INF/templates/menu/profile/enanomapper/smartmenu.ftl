@@ -10,7 +10,7 @@
 		<!--
 		<li><a href="${ambit_root}/ontobucket?search=cytotoxicity&type=protocol&qe=true" title="Free text search (experimental)">Free text search</a></li>
 		-->
-		<li><a href="http://enanomapper.github.io/data.enanomapper.net/?search=zinc%20oxide" title="Free text search"><br/>Free text search</a></li>
+		<li><a href="https://search.data.enanomapper.net/" title="Free text search"><br/>Free text search</a></li>
 	</ul>
 </li>
 <li>
