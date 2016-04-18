@@ -29,8 +29,7 @@ public class TestIsomorphismTesterStereo extends TestCase
 	public TestIsomorphismTesterStereo() 
 	{   
 		logger = new LoggingTool(this);
-		
-		//TODO set stereo check flags in isomorphism tester
+		isoTester.setFlagCheckStereoElements(true);
 	}
 	
 	public static Test suite() 
@@ -43,6 +42,7 @@ public class TestIsomorphismTesterStereo extends TestCase
 		//Testing the algorithm via SmartsManager		
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		man.setUseCDKIsomorphismTester(false);
+		man.setIsomorphismTesterFlagCheckStereoElements(true);
 		man.setQuery(smarts);
 		boolResult = man.searchIn(mol);
 		
