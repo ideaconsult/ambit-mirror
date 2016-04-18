@@ -34,7 +34,7 @@ public class TestIsomorphismTesterStereo extends TestCase
 	
 	public static Test suite() 
 	{
-		return new TestSuite(TestIsomorphismTester.class);
+		return new TestSuite(TestIsomorphismTesterStereo.class);
 	}
 	
 	public void match(String smarts, String smiles) throws Exception 
@@ -61,5 +61,11 @@ public class TestIsomorphismTesterStereo extends TestCase
 		sp.setSMARTSData(mol);
 		List<Integer> pos = isoTester.getIsomorphismPositions(mol);
 		mappingPosCount = pos.size();
+	}
+	
+	public void testDBStereo01() throws Exception {
+		match("C/C=C/N", "CC/C=C/NCC");
+		assertEquals(true, boolResult);
+		assertEquals(1, mappingPosCount);
 	}
 }
