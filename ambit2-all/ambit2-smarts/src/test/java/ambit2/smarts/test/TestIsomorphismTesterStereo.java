@@ -63,9 +63,24 @@ public class TestIsomorphismTesterStereo extends TestCase
 		mappingPosCount = pos.size();
 	}
 	
-	public void testDBStereo01() throws Exception {
+	public void testDBStereo01A() throws Exception {
 		match("C/C=C/N", "CC/C=C/NCC");
 		assertEquals(true, boolResult);
 		assertEquals(1, mappingPosCount);
 	}
+	
+	public void testDBStereo01B() throws Exception {
+		match("C/C=C/N", "CC\\C=C\\NCC");
+		assertEquals(true, boolResult);
+		assertEquals(1, mappingPosCount);
+	}
+	
+	public void testDBStereo01C() throws Exception {
+		match("C\\C=C/N", "CC/C=C/NCC");
+		assertEquals(false, boolResult);
+		assertEquals(0, mappingPosCount);
+	}
+	
+	
+	
 }
