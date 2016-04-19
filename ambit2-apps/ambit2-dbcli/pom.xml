@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>ambit2-apps</artifactId>
 		<groupId>ambit</groupId>
-		<version>3.0.2</version>
+		<version>3.0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>ambit2-dbcli</artifactId>
 	<name>ambit2-dbcli</name>
