@@ -11,6 +11,21 @@
 	<name>ambit2-jchempaint</name>
 	<description>JChemPaint dependency</description>
 	<repositories>
+   <repository>
+      <id>ambit-plovdiv</id>
+      <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>ambit-plovdiv-releases</id>
+      <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+<!--
 		<repository>
 			<id>ebi-repo</id>
 			<url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo</url>
@@ -19,7 +34,9 @@
 			<id>ebi-repo-snapshots</id>
 			<url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo-snapshots</url>
 		</repository>
+-->
 	</repositories>
+	
 	<dependencies>
 		<dependency>
 			<groupId>ambit</groupId>
