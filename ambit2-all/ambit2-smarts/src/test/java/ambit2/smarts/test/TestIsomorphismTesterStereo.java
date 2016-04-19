@@ -99,4 +99,27 @@ public class TestIsomorphismTesterStereo extends TestCase
 		assertEquals(2, mappingPosCount);
 	}
 	
+	public void testDBStereo05() throws Exception {
+		match("C/C=C/C", "O/C(C)=C(C)/CC");
+		assertEquals(true, boolResult);
+		assertEquals(2, mappingPosCount);
+	}
+	
+	public void testDBStereo06A() throws Exception {
+		match("N/C=C/C", "N/C=C(O)/CC/C=C/N");
+		assertEquals(true, boolResult);
+		assertEquals(2, mappingPosCount);
+	}
+	
+	public void testDBStereo06B() throws Exception {
+		match("N/C=C/C", "N/C=C(O)/CC/C=C\\N");
+		assertEquals(true, boolResult);
+		assertEquals(1, mappingPosCount);
+	}
+	
+	public void testDBStereo06C() throws Exception {
+		match("N/C=C/C", "N\\C=C(O)/CC/C=C\\N");
+		assertEquals(false, boolResult);
+		assertEquals(0, mappingPosCount);
+	}
 }
