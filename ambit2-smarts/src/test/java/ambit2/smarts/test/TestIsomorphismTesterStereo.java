@@ -153,5 +153,25 @@ public class TestIsomorphismTesterStereo extends TestCase
 		assertEquals(1, mappingPosCount);
 	}
 	
+	public void testChiralAtom01A() throws Exception {
+		match("N[C@](C)(O)CC", "N[C@@](CC)(O)C");
+		assertEquals(true, boolResult);
+		assertEquals(1, mappingPosCount);
+	}
+	
+	public void testChiralAtom01B() throws Exception {
+		match("N[C@](C)(O)CC", "N[C@](CC)(O)C");
+		assertEquals(false, boolResult);
+		assertEquals(0, mappingPosCount);
+	}
+	
+	public void testChiralAtom01C() throws Exception {
+		match("N[C](C)(O)CC", "N[C@](CC)(O)C");
+		assertEquals(true, boolResult);
+		assertEquals(1, mappingPosCount);
+	}
+	
+	
+	
 	
 }
