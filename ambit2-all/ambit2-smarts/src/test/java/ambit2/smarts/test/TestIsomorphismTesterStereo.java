@@ -129,6 +129,24 @@ public class TestIsomorphismTesterStereo extends TestCase
 		assertEquals(0, mappingPosCount);
 	}
 	
+	public void testDBStereo06E() throws Exception {
+		match("N/?C=C/?C", "NC=C(O)CCC=CN");
+		assertEquals(true, boolResult);
+		assertEquals(2, mappingPosCount);
+	}
+	
+	public void testDBStereo06F() throws Exception {
+		match("N/?C=C/?C", "N/C=C(O)/CC/C=C\\N");
+		assertEquals(true, boolResult);
+		assertEquals(1, mappingPosCount);
+	}
+	
+	public void testDBStereo06G() throws Exception {
+		match("N/?C=C/C", "N/C=C(O)/CC/C=C/N");
+		assertEquals(true, boolResult);
+		assertEquals(2, mappingPosCount);
+	}
+	
 	public void testDBStereo07A() throws Exception {
 		match("N/C=C/CCC\\C=C\\O", "ClCN/C=C/CCC/C=C/OCC");
 		assertEquals(true, boolResult);
