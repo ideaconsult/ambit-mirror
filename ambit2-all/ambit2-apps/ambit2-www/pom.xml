@@ -9,7 +9,7 @@
 	<parent>
 		<artifactId>ambit2-apps</artifactId>
 		<groupId>ambit</groupId>
-		<version>3.0.2</version>
+		<version>3.0.3-SNAPSHOT</version>
 	</parent>
 	<distributionManagement>
 		<site>
@@ -300,9 +300,9 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<url>http://apps.ideaconsult.net:8180/manager</url>
 					<server>eos</server>
 					<path>${baseurl}</path>
+					<port>9090</port>
 					<systemProperties>
 						<JAVA_OPTS>XX:-UseSplitVerifier
 							-Djava.util.Arrays.useLegacyMergeSort=true

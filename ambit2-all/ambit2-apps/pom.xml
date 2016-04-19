@@ -6,7 +6,7 @@
 	<artifactId>ambit2-apps</artifactId>
 	<packaging>pom</packaging>
 	<name>Ambit2 applications</name>
-	<version>3.0.2</version>
+	<version>3.0.3-SNAPSHOT</version>
 	<distributionManagement>
 		<site>
 			<id>website_ambit</id>
@@ -31,8 +31,8 @@
 		<net.idea.loom.version>1.1.2</net.idea.loom.version>
 		<nmparser.version>1.0.2</nmparser.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<toxtree.version>3.0.0</toxtree.version>
-		<ambit.version>3.0.2</ambit.version>
+		<toxtree.version>3.0.1-SNAPSHOT</toxtree.version>
+		<ambit.version>3.0.3-SNAPSHOT</ambit.version>
 		<cdk.version>1.5.12</cdk.version>
 		<junit.version>4.8.1</junit.version>
 		<!-- https://github.com/ideaconsult/i5 -->

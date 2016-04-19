@@ -1,10 +1,17 @@
 #CHANGELOG
-AMBIT2 3.0.2-SNAPSHOT
+AMBIT2 3.0.3-SNAPSHOT
 current version at trunk
-Support for MySQL 5.7
-DB schema 8.15
-Test database now must exist before running tests
-ambitcli new options, including fingerprint calculations
+
+AMBIT2 3.0.2 (Apr 2016)
+* ambit2-www: fixed errors when deploying to servlet root
+* ambit2-www: Read Across support improvements:  [#92](https://sourceforge.net/p/ambit/bugs/92/),[#93](https://sourceforge.net/p/ambit/bugs/93/), [#94](https://sourceforge.net/p/ambit/bugs/94/),
+ [#95](https://sourceforge.net/p/ambit/bugs/95/), [#96](https://sourceforge.net/p/ambit/bugs/96/), [#98](https://sourceforge.net/p/ambit/bugs/98/)
+* ambit2-www: [jToxKit](https://github.com/ideaconsult/Toxtree.js/tree/jtoxkit-ambit-3.0.2) updated
+* ambit2-smarts: improved stereo support for SMIRKS
+* ambit2-smarts: Neutralisation SMIRKS updated
+* Updated dependencies: [opsin-2.1.0](http://opsin.ch.cam.ac.uk/), [i5-1.2.1](https://github.com/ideaconsult/i5), [nmparser-1.0.2](https://github.com/enanomapper/nmdataparser), [toxtree-3.0.0](http
+://toxtree.sf.net)
+* ambit2-dbcli: [ambitcli-3.0.2 release](https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.0.2/)
 
 AMBIT2 3.0.1 (Feb 2016)
 Upgrade to CDK 1.5.12
