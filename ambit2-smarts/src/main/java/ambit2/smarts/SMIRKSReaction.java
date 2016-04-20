@@ -72,6 +72,13 @@ public class SMIRKSReaction
 	List<Integer> prodAt2 = new ArrayList<Integer>();
 	List<IBond.Order> prodBo = new ArrayList<IBond.Order>();
 	
+	//Double bond stereo transformation 
+	//The lists contain the global numbers of the bonds associated 
+	//to stereo elements
+	List<Integer> reactDBSteroEl = new ArrayList<Integer>();
+	List<Integer> prodDBSteroEl = new ArrayList<Integer>();
+	
+	
 	protected IChemObjectBuilder builder;
 	protected SmartsToChemObject mSTCO = null;
 	
