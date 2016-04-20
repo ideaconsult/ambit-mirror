@@ -6,9 +6,11 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 
 
 
@@ -478,9 +480,31 @@ public class SMIRKSReaction
 	
 	void generateDBStereoTransformation() 
 	{
-		//TODO
+		for (IStereoElement element : reactant.stereoElements())
+		{
+			if (element instanceof DoubleBondStereochemistry)
+			{
+				DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry)element;
+				int globalBondIndex = reactant.getBondNumber(dbsc.getStereoBond());
+				reactDBSteroEl.add(globalBondIndex);
+			}
+		}
+		
+		for (IStereoElement element : product.stereoElements())
+		{
+			if (element instanceof DoubleBondStereochemistry)
+			{
+				DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry)element;
+				int globalBondIndex = product.getBondNumber(dbsc.getStereoBond());
+				prodDBSteroEl.add(globalBondIndex);
+			}
+		}
 	}
 	
+	void checkDBStereoTransformation() 
+	{
+		//TODO
+	}
 	
 	//Helper functions
 	
