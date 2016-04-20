@@ -43,7 +43,7 @@ public class SMIRKSManager {
 							     // used by the
 							     // function
 							     // applyTransformation()
-
+    
     public SSM_MODE getFlagSSMode() {
 		return FlagSSMode;
 	}
@@ -176,9 +176,20 @@ public class SMIRKSManager {
 	protected boolean FlagCheckAromaticityOnResultProcess = true;
 	protected boolean FlagConvertExplicitHToImplicitOnResultProcess = false; 
 	
-	protected boolean FlagCheckResultStereo = true; 
+	protected boolean FlagCheckResultStereo = true;
+	protected boolean FlagApplyStereoTransformation = false;
 
-    public SMIRKSManager(IChemObjectBuilder builder) {
+    public boolean isFlagApplyStereoTransformation() {
+		return FlagApplyStereoTransformation;
+	}
+
+	public void setFlagApplyStereoTransformation(
+			boolean flagApplyStereoTransformation) {
+		FlagApplyStereoTransformation = flagApplyStereoTransformation;
+		isoTester.FlagCheckStereoElements = FlagApplyStereoTransformation;  
+	}
+
+	public SMIRKSManager(IChemObjectBuilder builder) {
 	parser.setComponentLevelGrouping(true);
 	parser.mSupportSmirksSyntax = true;
 	stco = new SmartsToChemObject(builder);
