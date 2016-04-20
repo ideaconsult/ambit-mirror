@@ -74,7 +74,7 @@ public class SMIRKSReaction
 	
 	//Double bond stereo transformation 
 	//The lists contain the global numbers of the bonds associated 
-	//to stereo elements
+	//to the stereo elements
 	List<Integer> reactDBSteroEl = new ArrayList<Integer>();
 	List<Integer> prodDBSteroEl = new ArrayList<Integer>();
 	
@@ -446,7 +446,7 @@ public class SMIRKSReaction
 			}
 			
 		}
-		
+					
 	}
 	
 	
@@ -474,6 +474,11 @@ public class SMIRKSReaction
 			else
 				productAtCharge.add(a.getFormalCharge());
 		}
+	}
+	
+	void generateDBStereoTransformation() 
+	{
+		//TODO
 	}
 	
 	

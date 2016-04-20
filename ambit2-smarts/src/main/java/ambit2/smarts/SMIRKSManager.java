@@ -159,6 +159,16 @@ public class SMIRKSManager {
 			boolean flagClearExcplicitHAtomsBeforeResultProcess) {
 		FlagClearExcplicitHAtomsBeforeResultProcess = flagClearExcplicitHAtomsBeforeResultProcess;
 	}
+	
+	public boolean isFlagApplyStereoTransformation() {
+		return FlagApplyStereoTransformation;
+	}
+
+	public void setFlagApplyStereoTransformation(
+			boolean flagApplyStereoTransformation) {
+		FlagApplyStereoTransformation = flagApplyStereoTransformation;
+		isoTester.FlagCheckStereoElements = FlagApplyStereoTransformation;  
+	}
 
 	protected boolean FlagFilterEquivalentMappings = false;
 
@@ -178,16 +188,7 @@ public class SMIRKSManager {
 	
 	protected boolean FlagCheckResultStereo = true;
 	protected boolean FlagApplyStereoTransformation = false;
-
-    public boolean isFlagApplyStereoTransformation() {
-		return FlagApplyStereoTransformation;
-	}
-
-	public void setFlagApplyStereoTransformation(
-			boolean flagApplyStereoTransformation) {
-		FlagApplyStereoTransformation = flagApplyStereoTransformation;
-		isoTester.FlagCheckStereoElements = FlagApplyStereoTransformation;  
-	}
+   
 
 	public SMIRKSManager(IChemObjectBuilder builder) {
 	parser.setComponentLevelGrouping(true);
@@ -295,6 +296,13 @@ public class SMIRKSManager {
     	}
 
     	reaction.generateTransformationData();
+    	
+    	//Handle stereo transformation
+    	if (reaction.mapErrors.isEmpty())
+    		if (FlagApplyStereoTransformation)
+    		{	
+    			reaction.generateDBStereoTransformation();
+    		}	
 
     	// Check for errors produced by the generation of transformation data
     	if (reaction.mapErrors.size() > 0) {
