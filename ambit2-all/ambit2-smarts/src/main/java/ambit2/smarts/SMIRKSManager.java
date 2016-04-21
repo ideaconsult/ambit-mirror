@@ -19,6 +19,7 @@ import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
+import org.openscience.cdk.stereo.ExtendedTetrahedral;
 import org.openscience.cdk.stereo.TetrahedralChirality;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -918,7 +919,8 @@ public class SMIRKSManager {
 
     	}
     	
-    	//checkStereo(target, rMap, reaction);
+    	
+    	//handleTransformedStereoElements(target, rMap, reaction);
 
     }
 
@@ -1226,9 +1228,58 @@ public class SMIRKSManager {
     		SmartsHelper.convertExcplicitHAtomsToImplicit(mol);
     }
     
-    void checkStereo(IAtomContainer target, List<IAtom> rMap, SMIRKSReaction reaction)
+    void handleTransformedStereoElements(IAtomContainer target, List<IAtom> rMap, SMIRKSReaction reaction)
+    {
+    	for (IStereoElement element : target.stereoElements())
+		{
+			if (element instanceof DoubleBondStereochemistry)
+			{
+				DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry)element;
+				handleDoubleBondStereochemistry(dbsc, target, rMap, reaction);
+				continue;
+			}
+
+			if (element instanceof TetrahedralChirality)
+			{
+				TetrahedralChirality thc = (TetrahedralChirality)element;
+				handleTetrahedralChirality(thc, target, rMap, reaction);
+				continue;
+			}
+
+
+			if (element instanceof ExtendedTetrahedral)
+			{
+				
+				ExtendedTetrahedral etc = (ExtendedTetrahedral)element;
+				handleExtendedTetrahedral(etc, target, rMap, reaction);
+				continue;
+			}
+		}
+    }
+    
+    void handleDoubleBondStereochemistry(DoubleBondStereochemistry dbsc,
+    								IAtomContainer target, 
+    								List<IAtom> rMap, 
+    								SMIRKSReaction reaction)
     {
     	//TODO
     }
+    
+    void handleTetrahedralChirality(TetrahedralChirality thc,
+    		IAtomContainer target, 
+    		List<IAtom> rMap, 
+    		SMIRKSReaction reaction)
+    {
+    	//TODO
+    }
+    
+    void handleExtendedTetrahedral(ExtendedTetrahedral etc,
+    		IAtomContainer target, 
+    		List<IAtom> rMap, 
+    		SMIRKSReaction reaction)
+    {
+    	//TODO
+    }
+    
 
 }
