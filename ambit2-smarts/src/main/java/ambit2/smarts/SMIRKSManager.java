@@ -1240,12 +1240,29 @@ public class SMIRKSManager {
     		SmartsHelper.convertExcplicitHAtomsToImplicit(mol);
     }
     
-    // void handleStereoOnAtomDeletion()
+    void handleStereoOnAtomDeletion(IAtom deletedAt,
+    						IAtomContainer target, 
+    						List<IAtom> rMap, 
+    						SMIRKSReaction reaction)
+    {
+    	//TODO
+    }
     
-    // void handleStereoOnBondAddition()
+    void handleStereoOnBondChange(IAtom targetAt1, IAtom targetAt2,
+    					int initialBondOrder, int updatedBondOrder, 
+    					IAtomContainer target, 
+    					List<IAtom> rMap, 
+    					SMIRKSReaction reaction)
+    {
+    	//TODO
+    }
+    
+    
+    
+   
     
 
-    
+    /*
     void handleTransformedStereoElements(IAtomContainer target, List<IAtom> rMap, SMIRKSReaction reaction)
     {
     	for (IStereoElement element : target.stereoElements())
@@ -1299,6 +1316,6 @@ public class SMIRKSManager {
     	//TODO
     }
    
-    
+    */
 
 }
