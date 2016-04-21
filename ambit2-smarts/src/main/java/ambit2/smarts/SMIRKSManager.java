@@ -917,6 +917,8 @@ public class SMIRKSManager {
     		}
 
     	}
+    	
+    	//checkStereo(target, rMap, reaction);
 
     }
 
@@ -1222,6 +1224,11 @@ public class SMIRKSManager {
 
     	if (FlagConvertExplicitHToImplicitOnResultProcess)
     		SmartsHelper.convertExcplicitHAtomsToImplicit(mol);
+    }
+    
+    void checkStereo(IAtomContainer target, List<IAtom> rMap, SMIRKSReaction reaction)
+    {
+    	//TODO
     }
 
 }

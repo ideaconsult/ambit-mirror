@@ -506,6 +506,11 @@ public class SMIRKSReaction
 		//TODO
 	}
 	
+	void checkChiralStereoTransformation() 
+	{
+		//TODO
+	}
+	
 	//Helper functions
 	
 	int getMappedProductAtom(Integer raMapInd)
