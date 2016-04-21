@@ -838,6 +838,9 @@ public class SMIRKSManager {
     			// Atom is deleted from
     			IAtom tAt = rMap.get(i);
     			target.removeAtomAndConnectedElectronContainers(tAt);
+    			
+    			//TODO handle stereo on atom removal 
+    			
     		}
     	}
 
@@ -863,10 +866,17 @@ public class SMIRKSManager {
     				IAtom tAt2 = rMap.get(nrAt2);
     				IBond tBo = target.getBond(tAt1, tAt2);
     				if (reaction.prodBo.get(i) == null)
+    				{	
     					target.removeBond(tBo); // Target bond is deleted
-    				else {
+    					
+    					//TODO handle stereo on bond deletion
+    				}	
+    				else 
+    				{
     					tBo.setOrder(reaction.prodBo.get(i)); // Target bond is
     					// updated
+    					
+    					//TODO handle stereo on bond order change 
     				}
     			}
     		} else {
@@ -912,6 +922,8 @@ public class SMIRKSManager {
     				tb.setAtoms(new IAtom[] { tAt1, tAt2 });
     				tb.setOrder(reaction.prodBo.get(i));
     				target.addBond(tb);
+    				
+    				//TODO handle stereo on bond addition 
     			}
 
     			// Some other possible cases if needed.
@@ -1228,6 +1240,12 @@ public class SMIRKSManager {
     		SmartsHelper.convertExcplicitHAtomsToImplicit(mol);
     }
     
+    // void handleStereoOnAtomDeletion()
+    
+    // void handleStereoOnBondAddition()
+    
+
+    
     void handleTransformedStereoElements(IAtomContainer target, List<IAtom> rMap, SMIRKSReaction reaction)
     {
     	for (IStereoElement element : target.stereoElements())
@@ -1280,6 +1298,7 @@ public class SMIRKSManager {
     {
     	//TODO
     }
+   
     
 
 }
