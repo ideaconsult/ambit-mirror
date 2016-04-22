@@ -787,7 +787,13 @@ public class SMIRKSManager {
 
     public void applyTransformAtLocation(IAtomContainer target, List<IAtom> rMap, SMIRKSReaction reaction) {
     	// printSSMap(target,rMap);
-
+    	
+    	//This is a container with stereo elements that are removed during the molecule transformation
+    	//due to invalidation of the stereo information
+    	//Some of these elements can be returned back to the molecule stereo elements
+    	//if some later transformation makes them again valid stereo elements
+    	List<IStereoElement> removedStereoElements = new ArrayList<IStereoElement>();
+    	
     	// Create Non Existing Atoms
     	List<IAtom> newAtoms = new ArrayList<IAtom>();
     	for (int i = 0; i < reaction.productNotMappedAt.size(); i++) {
@@ -837,9 +843,33 @@ public class SMIRKSManager {
     		} else {
     			// Atom is deleted from
     			IAtom tAt = rMap.get(i);
-    			target.removeAtomAndConnectedElectronContainers(tAt);
     			
-    			//TODO handle stereo on atom removal 
+    			if (FlagApplyStereoTransformation)
+    			{
+    				//Preliminary store the elements that are to be changed by the atom deletion
+    				//and hence to be removed from the IAtomContainer object 
+    				//by function removeAtomAndConnectedElectronContainers()
+    				List<IStereoElement> listSE = getStereoElementsToBeRemoved(tAt, target);
+    				
+    				target.removeAtomAndConnectedElectronContainers(tAt);
+    				
+    				//Check previously removed stereo elements
+    				for (IStereoElement stEl : removedStereoElements)
+    				{
+    					if (stEl.contains(tAt))
+    						handleStereoOnAtomDeletion(tAt, target, stEl);
+    				}
+    				
+    				//Handle newly removed removed stereo elements
+    				if (!listSE.isEmpty())
+    				{
+    					for (IStereoElement stEl : listSE)
+    						handleStereoOnAtomDeletion(tAt, target, stEl);
+    					removedStereoElements.addAll(listSE);
+    				}
+    			}	
+    			else
+    				target.removeAtomAndConnectedElectronContainers(tAt);
     			
     		}
     	}
@@ -1240,10 +1270,14 @@ public class SMIRKSManager {
     		SmartsHelper.convertExcplicitHAtomsToImplicit(mol);
     }
     
-    void handleStereoOnAtomDeletion(IAtom deletedAt,
-    						IAtomContainer target, 
-    						List<IAtom> rMap, 
-    						SMIRKSReaction reaction)
+    List<IStereoElement> getStereoElementsToBeRemoved (IAtom deletedAt, IAtomContainer target)
+ 	{
+    	//TODO
+    	return null;
+ 	}
+
+    						
+    void handleStereoOnAtomDeletion(IAtom deletedAt, IAtomContainer target, IStereoElement stEl)
     {
     	//TODO
     }
@@ -1290,30 +1324,6 @@ public class SMIRKSManager {
 				continue;
 			}
 		}
-    }
-    
-    void handleDoubleBondStereochemistry(DoubleBondStereochemistry dbsc,
-    								IAtomContainer target, 
-    								List<IAtom> rMap, 
-    								SMIRKSReaction reaction)
-    {
-    	//TODO
-    }
-    
-    void handleTetrahedralChirality(TetrahedralChirality thc,
-    		IAtomContainer target, 
-    		List<IAtom> rMap, 
-    		SMIRKSReaction reaction)
-    {
-    	//TODO
-    }
-    
-    void handleExtendedTetrahedral(ExtendedTetrahedral etc,
-    		IAtomContainer target, 
-    		List<IAtom> rMap, 
-    		SMIRKSReaction reaction)
-    {
-    	//TODO
     }
    
     */
