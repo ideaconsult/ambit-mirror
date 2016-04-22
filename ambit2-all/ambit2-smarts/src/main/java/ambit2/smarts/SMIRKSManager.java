@@ -792,7 +792,7 @@ public class SMIRKSManager {
     	//due to invalidation of the stereo information
     	//Some of these elements can be returned back to the molecule stereo elements
     	//if some later transformation makes them again valid stereo elements
-    	List<IStereoElement> removedStereoElements = new ArrayList<IStereoElement>();
+    	List<IStereoElement> invalidatedStereoElements = new ArrayList<IStereoElement>();
     	
     	// Create Non Existing Atoms
     	List<IAtom> newAtoms = new ArrayList<IAtom>();
@@ -853,19 +853,22 @@ public class SMIRKSManager {
     				
     				target.removeAtomAndConnectedElectronContainers(tAt);
     				
-    				//Check previously removed stereo elements
-    				for (IStereoElement stEl : removedStereoElements)
+    				//Check previously invalidated stereo elements
+    				
+    				for (IStereoElement stEl : invalidatedStereoElements)
     				{
     					if (stEl.contains(tAt))
-    						handleStereoOnAtomDeletion(tAt, target, stEl);
+    					{	
+    						int res = handleStereoOnAtomDeletion(tAt, target, stEl);
+    					}	
     				}
     				
-    				//Handle newly removed removed stereo elements
+    				//Handle newly invalidated  stereo elements
     				if (!listSE.isEmpty())
     				{
     					for (IStereoElement stEl : listSE)
     						handleStereoOnAtomDeletion(tAt, target, stEl);
-    					removedStereoElements.addAll(listSE);
+    					invalidatedStereoElements.addAll(listSE);
     				}
     			}	
     			else
