@@ -1272,14 +1272,21 @@ public class SMIRKSManager {
     
     List<IStereoElement> getStereoElementsToBeRemoved (IAtom deletedAt, IAtomContainer target)
  	{
-    	//TODO
-    	return null;
+    	List<IStereoElement> list = new ArrayList<IStereoElement>(); 
+    	for (IStereoElement element : target.stereoElements())
+    	{
+    		if (element.contains(deletedAt))
+    			list.add(element);
+    	}
+    	
+    	return list;
  	}
 
     						
-    void handleStereoOnAtomDeletion(IAtom deletedAt, IAtomContainer target, IStereoElement stEl)
+    int handleStereoOnAtomDeletion(IAtom deletedAt, IAtomContainer target, IStereoElement stEl)
     {
     	//TODO
+    	return 0;
     }
     
     void handleStereoOnBondChange(IAtom targetAt1, IAtom targetAt2,
