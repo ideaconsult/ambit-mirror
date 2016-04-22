@@ -856,18 +856,19 @@ public class SMIRKSManager {
     				//Check previously invalidated stereo elements
     				if (!invalidatedStereoElements.isEmpty())
     				{	
-    					List<IStereoElement> forTotalRemoval = new ArrayList<IStereoElement>();
+    					List<IStereoElement> newInvEl = new ArrayList<IStereoElement>();
     					
     					for (IStereoElement stEl : invalidatedStereoElements)
     					{
     						if (stEl.contains(tAt))
     						{	
-    							int res = handleStereoOnAtomDeletion(tAt, target, stEl);
-    							if (res != 0)
-    								forTotalRemoval.add(stEl);
+    							IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl);
+    							//if el = null then the stereo element is for 'total removal'
+    							if (el != null) 
+    								newInvEl.add(el);
     						}	
     					}
-    					invalidatedStereoElements.removeAll(forTotalRemoval);
+    					invalidatedStereoElements = newInvEl;
     				}
     				
     				//Handle newly invalidated stereo elements
@@ -875,15 +876,18 @@ public class SMIRKSManager {
     				{
     					for (IStereoElement stEl : listSE)
     					{	
-    						int res = handleStereoOnAtomDeletion(tAt, target, stEl);
+    						IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl);
     						//if res <> 0 then the stereo element is for 'total removal'
-    						if (res == 0)
-    							invalidatedStereoElements.add(stEl);
+    						if (el != null)
+    							invalidatedStereoElements.add(el);
     					}
     				}
     			}	
     			else
+    			{	
+    				//Stereo is not handled
     				target.removeAtomAndConnectedElectronContainers(tAt);
+    			}	
     			
     		}
     	}
@@ -1297,10 +1301,77 @@ public class SMIRKSManager {
  	}
 
     						
-    int handleStereoOnAtomDeletion(IAtom deletedAt, IAtomContainer target, IStereoElement stEl)
+    IStereoElement handleStereoOnAtomDeletion(IAtom deletedAt, IAtomContainer target, IStereoElement element)
     {
-    	//TODO
-    	return 0;
+    	if (element instanceof DoubleBondStereochemistry)
+    	{
+    		DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry)element;
+    		if (dbsc.getStereoBond().contains(deletedAt))
+    			return null; //element will be removed since the deleted aton is part of the double bond
+    		
+    		//Stereo element is invalidated (bond is removed)
+    		IBond bonds[] = dbsc.getBonds();
+    		
+    		
+    		if (bonds.length == 1)
+    		{
+    			//The element contains only one single bond and after removal
+        		//it will contain 0 single bonds
+    			DoubleBondStereochemistry newDbsc = 
+					new DoubleBondStereochemistry(dbsc.getStereoBond(), new IBond[0], dbsc.getStereo());
+    			return newDbsc;
+    		}
+    		
+    		
+    		int n = -1;
+    		for (int i = 0; i < bonds.length; i++)
+    		{
+    			if (bonds[i].contains(deletedAt))
+    			{
+    				n = i;
+    				break;
+    			}
+    		}
+    		
+    		//bond 0 is removed
+    		if (n == 0)
+    		{
+    			IBond newBo[] = new IBond[1];
+    			newBo[0] = bonds[1];
+    			DoubleBondStereochemistry newDbsc = 
+    					new DoubleBondStereochemistry(dbsc.getStereoBond(), newBo, dbsc.getStereo());
+    			return newDbsc;
+    		}
+    		
+    		//bond 1 is removed
+    		if (n == 1)
+    		{
+    			IBond newBo[] = new IBond[1];
+    			newBo[0] = bonds[0];
+    			DoubleBondStereochemistry newDbsc = 
+    					new DoubleBondStereochemistry(dbsc.getStereoBond(), newBo, dbsc.getStereo());
+    			return newDbsc;
+    		}
+    		
+    		return null;
+    	}
+
+    	if (element instanceof TetrahedralChirality)
+    	{
+    		TetrahedralChirality thc = (TetrahedralChirality)element;
+    		//TODO
+    		return null;
+    	}
+    	
+    	if (element instanceof ExtendedTetrahedral)
+		{	
+			ExtendedTetrahedral etc = (ExtendedTetrahedral)element;
+			//TODO
+			return null;
+		}
+
+    	
+    	return null;
     }
     
     void handleStereoOnBondChange(IAtom targetAt1, IAtom targetAt2,
@@ -1311,7 +1382,6 @@ public class SMIRKSManager {
     {
     	//TODO
     }
-    
     
     
    
