@@ -870,12 +870,16 @@ public class SMIRKSManager {
     					invalidatedStereoElements.removeAll(forTotalRemoval);
     				}
     				
-    				//Handle newly invalidated  stereo elements
+    				//Handle newly invalidated stereo elements
     				if (!listSE.isEmpty())
     				{
     					for (IStereoElement stEl : listSE)
-    						handleStereoOnAtomDeletion(tAt, target, stEl);
-    					invalidatedStereoElements.addAll(listSE);
+    					{	
+    						int res = handleStereoOnAtomDeletion(tAt, target, stEl);
+    						//if res <> 0 then the stereo element is for 'total removal'
+    						if (res == 0)
+    							invalidatedStereoElements.add(stEl);
+    					}
     				}
     			}	
     			else
