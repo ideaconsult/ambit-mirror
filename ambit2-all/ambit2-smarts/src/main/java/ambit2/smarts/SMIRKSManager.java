@@ -854,13 +854,20 @@ public class SMIRKSManager {
     				target.removeAtomAndConnectedElectronContainers(tAt);
     				
     				//Check previously invalidated stereo elements
-    				
-    				for (IStereoElement stEl : invalidatedStereoElements)
-    				{
-    					if (stEl.contains(tAt))
-    					{	
-    						int res = handleStereoOnAtomDeletion(tAt, target, stEl);
-    					}	
+    				if (!invalidatedStereoElements.isEmpty())
+    				{	
+    					List<IStereoElement> forTotalRemoval = new ArrayList<IStereoElement>();
+    					
+    					for (IStereoElement stEl : invalidatedStereoElements)
+    					{
+    						if (stEl.contains(tAt))
+    						{	
+    							int res = handleStereoOnAtomDeletion(tAt, target, stEl);
+    							if (res != 0)
+    								forTotalRemoval.add(stEl);
+    						}	
+    					}
+    					invalidatedStereoElements.removeAll(forTotalRemoval);
     				}
     				
     				//Handle newly invalidated  stereo elements
