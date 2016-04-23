@@ -6,11 +6,13 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.interfaces.ITetrahedralChirality;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 import org.openscience.cdk.stereo.ExtendedTetrahedral;
 import org.openscience.cdk.stereo.TetrahedralChirality;
+
 
 public class StereoChemUtils 
 {
@@ -715,4 +717,27 @@ public class StereoChemUtils
 		//TODO
 		return null;
 	}
+	
+	
+	public static DoubleBondStereochemistry bondChange(IAtom at1, IAtom at2,
+			IBond.Order initialBondOrder, IBond.Order updatedBondOrder, 
+			IAtomContainer target,
+			DoubleBondStereochemistry dbsc)
+	{
+		//TODO
+		
+		
+		return null;
+	}
+	
+	public static TetrahedralChirality bondChange(IAtom at1, IAtom at2,
+			IBond.Order initialBondOrder, IBond.Order updatedBondOrder, 
+			IAtomContainer target,
+			TetrahedralChirality thc)
+	{
+		//TODO
+		
+		return null;
+	}
+	
 }	
