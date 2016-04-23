@@ -1327,12 +1327,60 @@ public class SMIRKSManager {
     }
     
     void handleStereoOnBondChange(IAtom targetAt1, IAtom targetAt2,
-    					int initialBondOrder, int updatedBondOrder, 
-    					IAtomContainer target, 
-    					List<IAtom> rMap, 
-    					SMIRKSReaction reaction)
+    		IBond.Order initialBondOrder, IBond.Order updatedBondOrder, 
+    		IAtomContainer target, 
+    		List<IStereoElement> invalidatedStereoElements)
     {
-    	//TODO
+    	
+    	List<IStereoElement> newElements = new ArrayList<IStereoElement>();
+    	List<IStereoElement> newInvEl = new ArrayList<IStereoElement>();
+    	
+    	for (IStereoElement element : target.stereoElements())
+		{
+			if (!element.contains(targetAt1) && !element.contains(targetAt2))
+				continue;
+    		
+    		if (element instanceof DoubleBondStereochemistry)
+			{
+				DoubleBondStereochemistry dbsc = 
+				StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
+						updatedBondOrder, target, (DoubleBondStereochemistry)element);
+				
+				//TODO check for validity
+				
+				continue;
+			}
+
+			if (element instanceof TetrahedralChirality)
+			{
+				TetrahedralChirality thc = (TetrahedralChirality)element;
+				
+				continue;
+			}
+
+
+			if (element instanceof ExtendedTetrahedral)
+			{	
+				//ExtendedTetrahedral etc = (ExtendedTetrahedral)element;
+				//TODO
+				continue;
+			}
+		}
+    	
+    	
+    	for (IStereoElement element : invalidatedStereoElements)
+		{
+			if (!element.contains(targetAt1) && !element.contains(targetAt2))
+				continue;
+			
+			//TODO
+		}	
+    	
+    	
+    	//Update the stereo element lists
+    	target.setStereoElements(newElements);
+    	invalidatedStereoElements.clear();
+    	invalidatedStereoElements.addAll(newInvEl);
     }
     
     
