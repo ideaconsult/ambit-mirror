@@ -1314,57 +1314,9 @@ public class SMIRKSManager {
     IStereoElement handleStereoOnAtomDeletion(IAtom deletedAt, IAtomContainer target, IStereoElement element)
     {
     	if (element instanceof DoubleBondStereochemistry)
-    	{
-    		DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry)element;
-    		if (dbsc.getStereoBond().contains(deletedAt))
-    			return null; //element will be removed since the deleted aton is part of the double bond
+    		return StereoChemUtils.deleteAtom(deletedAt, target, (DoubleBondStereochemistry)element);
     		
-    		//Stereo element is invalidated (bond is removed)
-    		IBond bonds[] = dbsc.getBonds();
-    		
-    		
-    		if (bonds.length == 1)
-    		{
-    			//The element contains only one single bond and after removal
-        		//it will contain 0 single bonds
-    			DoubleBondStereochemistry newDbsc = 
-					new DoubleBondStereochemistry(dbsc.getStereoBond(), new IBond[0], dbsc.getStereo());
-    			return newDbsc;
-    		}
-    		
-    		
-    		int n = -1;
-    		for (int i = 0; i < bonds.length; i++)
-    		{
-    			if (bonds[i].contains(deletedAt))
-    			{
-    				n = i;
-    				break;
-    			}
-    		}
-    		
-    		//bond 0 is removed
-    		if (n == 0)
-    		{
-    			IBond newBo[] = new IBond[1];
-    			newBo[0] = bonds[1];
-    			DoubleBondStereochemistry newDbsc = 
-    					new DoubleBondStereochemistry(dbsc.getStereoBond(), newBo, dbsc.getStereo());
-    			return newDbsc;
-    		}
-    		
-    		//bond 1 is removed
-    		if (n == 1)
-    		{
-    			IBond newBo[] = new IBond[1];
-    			newBo[0] = bonds[0];
-    			DoubleBondStereochemistry newDbsc = 
-    					new DoubleBondStereochemistry(dbsc.getStereoBond(), newBo, dbsc.getStereo());
-    			return newDbsc;
-    		}
-    		
-    		return null;
-    	}
+    	
 
     	if (element instanceof TetrahedralChirality)
     	{
