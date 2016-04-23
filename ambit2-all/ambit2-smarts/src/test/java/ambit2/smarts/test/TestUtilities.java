@@ -2257,6 +2257,61 @@ public class TestUtilities {
 		System.out.println(" " + n + " switches");
 	}
 	
+	
+	public void testStereoOnMoleculeChange() throws Exception
+	{
+		String smiles = "CC[C@](N)(O)Cl";
+		System.out.println("Testing smiles: " + smiles);
+		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(smiles);
+		if (FlagPrintAtomAttributes) {
+			System.out.println("Atom attributes:\n"
+					+ SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Bond attributes:\n"
+					+ SmartsHelper.getBondAttributes(target));
+		}
+
+		//Trnasformation I
+		//target.removeAtomAndConnectedElectronContainers(target.getAtom(3));
+		
+		
+		//Trnasformation II
+		//target.getBond(target.getAtom(2), target.getAtom(3)).setOrder(IBond.Order.DOUBLE);
+		
+		
+		//Trnasformation III		
+		target.removeBond(target.getBond(target.getAtom(2), target.getAtom(3)));
+		
+		
+		String smiles2 = SmartsHelper.moleculeToSMILES(target, true);
+		System.out.println("Transformed molecule: " + smiles2);
+		
+		if (FlagPrintAtomAttributes) {
+			System.out.println("Atom attributes:\n"
+					+ SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Bond attributes:\n"
+					+ SmartsHelper.getBondAttributes(target));
+		}
+		
+		for (IStereoElement element : target.stereoElements())
+		{
+			if (element instanceof DoubleBondStereochemistry)
+			{
+				int status = StereoChemUtils.checkDoubleBondStereochemistry((DoubleBondStereochemistry) element, target);
+				System.out.println("DBStereo status = " + status);
+				continue;
+			}
+			
+			if (element instanceof TetrahedralChirality)
+			{
+				int status = StereoChemUtils.checkTetrahedralChirality((TetrahedralChirality) element, target);
+				System.out.println("Chiral atom status = " + status + 
+						"  " + StereoChemUtils.getTetrahedralChiralityStatusString(status));
+				System.out.println(StereoChemUtils.tetrahedralChirality2String((TetrahedralChirality) element, target));
+				continue;
+			}
+		}	
+	}
+	
 
 	// -------------------------------------------------------------------------------
 
@@ -2803,7 +2858,7 @@ public class TestUtilities {
 		
 		//tu.testSmiles2Smiles("CC(O)=[C@]=C(Cl)N");
 		
-		tu.FlagPrintAtomAttributes = false;
+		tu.FlagPrintAtomAttributes = true;
 		//tu.testSmiles2Smiles2Smiles("CC(C)NC(C=1C=CC=2C(C1)=N\\C(=C/3\\C=C/C(/C=C3)=C\\4/C=C/C(=C/5\\C=C/C(/C=C5)=C/6\\N=C7C=CC(=CC7=N6)C(=N)NC(C)C)/O4)\\N2)=N", false);
 		
 		
@@ -2830,11 +2885,13 @@ public class TestUtilities {
 		
 		//tu.testSmartsManagerBoolSearch("C[C;!@,@;!@@](Cl)(N)O","C[C](Cl)(N)O");
 		//tu.testSmartsManagerBoolSearch("CC(O)=[C@]=C(Cl)N","CC(O)=[C@]=C(Cl)N");
-		tu.testSmartsManagerBoolSearch("C[C@H](Cl)N","C[C@@H](N)Cl");
+		//tu.testSmartsManagerBoolSearch("C[C@H](Cl)N","C[C@@H](N)Cl");
 		
 		//tu.testChiralPermutations(new int[] {0,2,1,3}, new int[] {0,1,2,3});
 		
 		//tu.testBinaryCombinations(4);
+		
+		tu.testStereoOnMoleculeChange();
 
 	}
 
