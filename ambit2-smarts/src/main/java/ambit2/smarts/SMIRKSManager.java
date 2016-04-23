@@ -1315,24 +1315,14 @@ public class SMIRKSManager {
     {
     	if (element instanceof DoubleBondStereochemistry)
     		return StereoChemUtils.deleteAtom(deletedAt, target, (DoubleBondStereochemistry)element);
-    		
     	
-
     	if (element instanceof TetrahedralChirality)
-    	{
-    		TetrahedralChirality thc = (TetrahedralChirality)element;
-    		//TODO
-    		return null;
-    	}
-    	
+    		return StereoChemUtils.deleteAtom(deletedAt, target,  (TetrahedralChirality)element);
+    		
     	if (element instanceof ExtendedTetrahedral)
-		{	
-			ExtendedTetrahedral etc = (ExtendedTetrahedral)element;
-			//TODO
-			return null;
-		}
-
-    	
+    		return StereoChemUtils.deleteAtom(deletedAt, target, (ExtendedTetrahedral)element);
+		
+    	//Unknown type of stereo element
     	return null;
     }
     
