@@ -893,12 +893,15 @@ public class SMIRKSManager {
     	}
 
     	// Bond Transformations
-    	for (int i = 0; i < reaction.reactBo.size(); i++) {
+    	for (int i = 0; i < reaction.reactBo.size(); i++) 
+    	{
     		int nrAt1 = reaction.reactAt1.get(i).intValue();
     		int nrAt2 = reaction.reactAt2.get(i).intValue();
 
-    		if ((nrAt1 >= 0) && (nrAt2 >= 0)) {
-    			if (reaction.reactBo.get(i) == null) {
+    		if ((nrAt1 >= 0) && (nrAt2 >= 0)) 
+    		{
+    			if (reaction.reactBo.get(i) == null) 
+    			{
     				// New bond must be created in the target.
     				// This happens when two atoms from the reactant are not
     				// connected.
@@ -909,7 +912,11 @@ public class SMIRKSManager {
     				tb.setAtoms(new IAtom[] { tAt1, tAt2 });
     				tb.setOrder(reaction.prodBo.get(i));
     				target.addBond(tb);
-    			} else {
+    				
+    				//TODO handle stereo on new bond creation
+    			} 
+    			else 
+    			{
     				IAtom tAt1 = rMap.get(nrAt1);
     				IAtom tAt2 = rMap.get(nrAt2);
     				IBond tBo = target.getBond(tAt1, tAt2);
@@ -927,7 +934,9 @@ public class SMIRKSManager {
     					//TODO handle stereo on bond order change 
     				}
     			}
-    		} else {
+    		} 
+    		else 
+    		{
     			if ((nrAt1 == SmartsConst.SMRK_UNSPEC_ATOM) || (nrAt2 == SmartsConst.SMRK_UNSPEC_ATOM)) {
     				// This is the case when the created bond in the target
     				// (product)
@@ -971,7 +980,7 @@ public class SMIRKSManager {
     				tb.setOrder(reaction.prodBo.get(i));
     				target.addBond(tb);
     				
-    				//TODO handle stereo on bond addition 
+    				//TODO handle stereo on bond creation 
     			}
 
     			// Some other possible cases if needed.
@@ -980,7 +989,8 @@ public class SMIRKSManager {
     	}
     	
     	
-    	//handleTransformedStereoElements(target, rMap, reaction);
+    	//handle stereo transformation defined in the SMIRKS 
+    	//TODO
 
     }
 
