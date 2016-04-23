@@ -615,6 +615,7 @@ public class StereoChemUtils
 	}
 	
 	
+	//Utilities for manipulation(update) of stereo elements
 	
 	public static DoubleBondStereochemistry deleteAtom(IAtom at, 
 					IAtomContainer target, 
@@ -669,4 +670,20 @@ public class StereoChemUtils
 		return null;
 	}
 	
-}
+	public static TetrahedralChirality deleteAtom(IAtom at, 
+			IAtomContainer target, 
+			TetrahedralChirality thc)
+	{
+		//TODO
+		
+		return null;
+	}
+	
+	public static ExtendedTetrahedral deleteAtom(IAtom at, 
+			IAtomContainer target, 
+			ExtendedTetrahedral etc)
+	{
+		//TODO
+		return null;
+	}
+}	
