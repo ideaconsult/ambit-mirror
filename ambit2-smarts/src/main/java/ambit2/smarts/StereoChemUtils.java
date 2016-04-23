@@ -672,6 +672,43 @@ public class StereoChemUtils
 		return null;
 	}
 	
+	/*
+	public static DoubleBondStereochemistry deleteAtom0(IAtom at, DoubleBondStereochemistry dbsc)
+	{
+		if (dbsc.getStereoBond().contains(at))
+			return null; //entire element will be removed since the deleted atom is part of the double bond
+
+		//Stereo element is invalidated: 
+		//bond is 'removed' i.e. replaced with null pointer
+		IBond bonds[] = dbsc.getBonds();
+
+		if (bonds == null)
+			return dbsc;
+
+		if (bonds.length == 0)
+			return dbsc;
+
+		int n = -1;
+		for (int i = 0; i < bonds.length; i++)
+		{
+			if (bonds[i].contains(at))
+			{
+				n = i;
+				break;
+			}
+		}
+
+		if (n == -1)
+			return dbsc;  // atom is not among the bonds - no update is performed
+
+		IBond newBo[] = bonds.clone();
+		newBo[n] = null;
+
+		return new DoubleBondStereochemistry(dbsc.getStereoBond(), newBo, dbsc.getStereo());
+	}
+	*/
+		
+	
 	
 	public static TetrahedralChirality deleteAtom(IAtom at, 
 			IAtomContainer target, 
