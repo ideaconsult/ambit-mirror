@@ -618,11 +618,11 @@ public class StereoChemUtils
 	//Utilities for manipulation(update) of stereo elements
 	
 	public static DoubleBondStereochemistry deleteAtom(IAtom at, 
-					IAtomContainer target, 
+					//IAtomContainer target, 
 					DoubleBondStereochemistry dbsc)
 	{
 		if (dbsc.getStereoBond().contains(at))
-			return null; //element will be removed since the deleted atonm is part of the double bond
+			return null; //entire element will be removed since the deleted atom is part of the double bond
 		
 		//Stereo element is invalidated (bond is removed)
 		IBond bonds[] = dbsc.getBonds();
@@ -670,13 +670,42 @@ public class StereoChemUtils
 		return null;
 	}
 	
+	
 	public static TetrahedralChirality deleteAtom(IAtom at, 
 			IAtomContainer target, 
 			TetrahedralChirality thc)
 	{
-		//TODO
+		if (thc.getChiralAtom() == at)
+			return null; //entire element will be removed since the deleted atom is the chiral center
 		
-		return null;
+		IAtom ligands[] = thc.getLigands();
+		if (ligands == null)
+			return thc;
+				
+		if (ligands.length == 0)
+			return thc; 
+		
+		int n = -1;
+		for (int i = 0; i < ligands.length; i++)
+		{
+			if (ligands[i] == at)
+			{
+				n = i;
+				break;
+			}
+		}
+		
+		if (n == -1)
+			return thc;  //atom is not found among the ligands - no update is performed! 
+		
+		//Set new ligands where ligands #n is ommited 
+		IAtom newLigands[] = new IAtom[ligands.length -1];
+		for (int i = 0; i < n; i++)
+			newLigands[i] = ligands[i];
+		for (int i = n; i < newLigands.length; i++)
+			newLigands[i] = ligands[i+1];
+		
+		return new TetrahedralChirality(thc.getChiralAtom(), newLigands, thc.getStereo());
 	}
 	
 	public static ExtendedTetrahedral deleteAtom(IAtom at, 

@@ -1314,7 +1314,7 @@ public class SMIRKSManager {
     IStereoElement handleStereoOnAtomDeletion(IAtom deletedAt, IAtomContainer target, IStereoElement element)
     {
     	if (element instanceof DoubleBondStereochemistry)
-    		return StereoChemUtils.deleteAtom(deletedAt, target, (DoubleBondStereochemistry)element);
+    		return StereoChemUtils.deleteAtom(deletedAt, /*target,*/ (DoubleBondStereochemistry)element);
     	
     	if (element instanceof TetrahedralChirality)
     		return StereoChemUtils.deleteAtom(deletedAt, target,  (TetrahedralChirality)element);
