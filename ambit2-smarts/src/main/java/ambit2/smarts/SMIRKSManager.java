@@ -1333,7 +1333,7 @@ public class SMIRKSManager {
     {
     	
     	List<IStereoElement> newElements = new ArrayList<IStereoElement>();
-    	List<IStereoElement> newInvEl = new ArrayList<IStereoElement>();
+    	List<IStereoElement> newInvalidEl = new ArrayList<IStereoElement>();
     	
     	for (IStereoElement element : target.stereoElements())
 		{
@@ -1346,18 +1346,28 @@ public class SMIRKSManager {
 				StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
 						updatedBondOrder, target, (DoubleBondStereochemistry)element);
 				
-				//TODO check for validity
+				//check validity
+				if (dbsc.contains(null))
+					newInvalidEl.add(dbsc);
+				else
+					newElements.add(dbsc);
 				
 				continue;
 			}
 
 			if (element instanceof TetrahedralChirality)
 			{
-				TetrahedralChirality thc = (TetrahedralChirality)element;
+				TetrahedralChirality thc = StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
+						updatedBondOrder, target, (TetrahedralChirality)element);
+				
+				//check validity
+				if (thc.contains(null))
+					newInvalidEl.add(thc);
+				else
+					newElements.add(thc);
 				
 				continue;
 			}
-
 
 			if (element instanceof ExtendedTetrahedral)
 			{	
@@ -1380,7 +1390,7 @@ public class SMIRKSManager {
     	//Update the stereo element lists
     	target.setStereoElements(newElements);
     	invalidatedStereoElements.clear();
-    	invalidatedStereoElements.addAll(newInvEl);
+    	invalidatedStereoElements.addAll(newInvalidEl);
     }
     
     

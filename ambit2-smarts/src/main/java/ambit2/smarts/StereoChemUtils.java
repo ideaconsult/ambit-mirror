@@ -619,6 +619,7 @@ public class StereoChemUtils
 	
 	//Utilities for manipulation(update) of stereo elements
 	
+	/*
 	public static DoubleBondStereochemistry deleteAtom(IAtom at, 
 					//IAtomContainer target, 
 					DoubleBondStereochemistry dbsc)
@@ -671,9 +672,10 @@ public class StereoChemUtils
 		
 		return null;
 	}
+	*/
 	
-	/*
-	public static DoubleBondStereochemistry deleteAtom0(IAtom at, DoubleBondStereochemistry dbsc)
+	
+	public static DoubleBondStereochemistry deleteAtom(IAtom at, DoubleBondStereochemistry dbsc)
 	{
 		if (dbsc.getStereoBond().contains(at))
 			return null; //entire element will be removed since the deleted atom is part of the double bond
@@ -706,7 +708,7 @@ public class StereoChemUtils
 
 		return new DoubleBondStereochemistry(dbsc.getStereoBond(), newBo, dbsc.getStereo());
 	}
-	*/
+	
 		
 	
 	
