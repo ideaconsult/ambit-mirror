@@ -873,7 +873,10 @@ public class SMIRKSManager {
     				tb.setOrder(reaction.prodBo.get(i));
     				target.addBond(tb);
     				
-    				//TODO handle stereo on new bond creation
+    				//handle stereo on new bond creation
+    				if (FlagApplyStereoTransformation)
+    					handleStereoOnBondChange(tAt1, tAt2, null, tb.getOrder(),
+    			    		target, invalidatedStereoElements);
     			} 
     			else 
     			{
@@ -884,14 +887,21 @@ public class SMIRKSManager {
     				{	
     					target.removeBond(tBo); // Target bond is deleted
     					
-    					//TODO handle stereo on bond deletion
+    					//handle stereo on bond deletion
+    					if (FlagApplyStereoTransformation)
+        					handleStereoOnBondChange(tAt1, tAt2, tBo.getOrder(), null,
+        			    		target, invalidatedStereoElements);
     				}	
     				else 
     				{
-    					tBo.setOrder(reaction.prodBo.get(i)); // Target bond is
-    					// updated
+    					IBond.Order prevBO =  tBo.getOrder();
     					
-    					//TODO handle stereo on bond order change 
+    					tBo.setOrder(reaction.prodBo.get(i)); //Target bond is updated
+    					
+    					//handle stereo on bond order change
+    					if (FlagApplyStereoTransformation)
+        					handleStereoOnBondChange(tAt1, tAt2, prevBO, tBo.getOrder(),
+        			    		target, invalidatedStereoElements);
     				}
     			}
     		} 
@@ -940,7 +950,11 @@ public class SMIRKSManager {
     				tb.setOrder(reaction.prodBo.get(i));
     				target.addBond(tb);
     				
-    				//TODO handle stereo on bond creation 
+    				// handle stereo on bond creation when at least one atom is mapped
+    				if (FlagApplyStereoTransformation)
+    					if ((nrAt1 != SmartsConst.SMRK_UNSPEC_ATOM) || (nrAt2 != SmartsConst.SMRK_UNSPEC_ATOM))
+    						handleStereoOnBondChange(tAt1, tAt2, null, tb.getOrder(),
+    								target, invalidatedStereoElements);
     			}
 
     			// Some other possible cases if needed.
