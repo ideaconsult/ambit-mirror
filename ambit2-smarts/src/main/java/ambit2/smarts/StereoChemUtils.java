@@ -726,22 +726,10 @@ public class StereoChemUtils
 		if (ligands.length == 0)
 			return thc; 
 		
-		int n = -1;
-		for (int i = 0; i < ligands.length; i++)
-		{
-			if (ligands[i] == at)
-			{
-				n = i;
-				break;
-			}
-		}
+		IAtom newLigands[] = deleteAtomFromLigands(at, ligands);
 		
-		if (n == -1)
-			return thc;  //atom is not found among the ligands - no update is performed! 
-		
-		//Set the new ligands where ligand n is set to null 
-		IAtom newLigands[] = ligands.clone();
-		newLigands[n] = null;
+		if (ligands == newLigands)
+			return thc;  //no change (atom is not found among the ligands)
 		
 		return new TetrahedralChirality(thc.getChiralAtom(), newLigands, thc.getStereo());
 	}
@@ -809,5 +797,64 @@ public class StereoChemUtils
 		
 		return null;
 	}
+	
+	
+	static IAtom[] addAtomToLigands(IAtom at, IAtom ligands[])
+	{
+		//TODO
+		return null;
+	}
+	
+	static IAtom[] deleteAtomFromLigands(IAtom at, IAtom ligands[])
+	{
+		int n = -1;
+		for (int i = 0; i < ligands.length; i++)
+		{
+			if (ligands[i] == at)
+			{
+				n = i;
+				break;
+			}
+		}
+		
+		if (n == -1)
+			return ligands;
+		
+		if (ligands.length > 4)
+		{	
+			//There is at least one extra ligand added (index 4) 
+			//And it will be put in place of the deleted atom
+			if (n < 4)
+			{
+				IAtom newLigands[] = new IAtom[ligands.length-1];
+				for (int i = 0; i < 4; i++)
+					if (i == n)
+						newLigands[i] = ligands[4];
+					else
+						newLigands[i] = ligands[i];
+				
+				//Shifting the lignads after index 4 (if more that one extra ligand is present)
+				for (int i = 4; i < newLigands.length; i++)
+					newLigands[i] = ligands[i+1];
+				return newLigands;
+			}
+			else
+			{
+				//This case should not appear
+				//Set the new ligands where ligand n is set to null 
+				IAtom newLigands[] = ligands.clone();
+				newLigands[n] = null;
+				return newLigands;
+			}	
+		}
+		else
+		{
+			//Set the new ligands where ligand n is set to null 
+			IAtom newLigands[] = ligands.clone();
+			newLigands[n] = null;
+			return newLigands;
+		}
+	}
+	
 	
 }	
