@@ -845,50 +845,10 @@ public class SMIRKSManager {
     			IAtom tAt = rMap.get(i);
     			
     			if (FlagApplyStereoTransformation)
-    			{
-    				//Preliminary store the elements that are to be changed by the atom deletion
-    				//and hence to be removed from the IAtomContainer object 
-    				//by function removeAtomAndConnectedElectronContainers()
-    				List<IStereoElement> listSE = getStereoElementsToBeRemoved(tAt, target);
-    				
-    				target.removeAtomAndConnectedElectronContainers(tAt);
-    				
-    				//Check previously invalidated stereo elements
-    				if (!invalidatedStereoElements.isEmpty())
-    				{	
-    					List<IStereoElement> newInvEl = new ArrayList<IStereoElement>();
-    					
-    					for (IStereoElement stEl : invalidatedStereoElements)
-    					{
-    						if (stEl.contains(tAt))
-    						{	
-    							IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl);
-    							//if el = null then the stereo element is for 'total removal'
-    							if (el != null) 
-    								newInvEl.add(el);
-    						}	
-    					}
-    					invalidatedStereoElements = newInvEl;
-    				}
-    				
-    				//Handle newly invalidated stereo elements
-    				if (!listSE.isEmpty())
-    				{
-    					for (IStereoElement stEl : listSE)
-    					{	
-    						IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl);
-    						//if res <> 0 then the stereo element is for 'total removal'
-    						if (el != null)
-    							invalidatedStereoElements.add(el);
-    					}
-    				}
-    			}	
+    				deleteAtomAndDoStereoTransformation(tAt, target, invalidatedStereoElements);
     			else
-    			{	
     				//Stereo is not handled
     				target.removeAtomAndConnectedElectronContainers(tAt);
-    			}	
-    			
     		}
     	}
 
@@ -1298,6 +1258,47 @@ public class SMIRKSManager {
     		SmartsHelper.convertExcplicitHAtomsToImplicit(mol);
     }
     
+    void deleteAtomAndDoStereoTransformation(IAtom tAt, IAtomContainer target, 
+    		List<IStereoElement> invalidatedStereoElements)
+    {
+    	//Preliminary store the elements that are to be changed by the atom deletion
+		//and hence to be removed from the IAtomContainer object 
+		//by function removeAtomAndConnectedElectronContainers()
+		List<IStereoElement> listSE = getStereoElementsToBeRemoved(tAt, target);
+		
+		target.removeAtomAndConnectedElectronContainers(tAt);
+		
+		//Check previously invalidated stereo elements
+		if (!invalidatedStereoElements.isEmpty())
+		{	
+			List<IStereoElement> newInvEl = new ArrayList<IStereoElement>();
+			
+			for (IStereoElement stEl : invalidatedStereoElements)
+			{
+				if (stEl.contains(tAt))
+				{	
+					IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl);
+					//if el = null then the stereo element is for 'total removal'
+					if (el != null) 
+						newInvEl.add(el);
+				}	
+			}
+			invalidatedStereoElements = newInvEl;
+		}
+		
+		//Handle newly invalidated stereo elements
+		if (!listSE.isEmpty())
+		{
+			for (IStereoElement stEl : listSE)
+			{	
+				IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl);
+				//if res <> 0 then the stereo element is for 'total removal'
+				if (el != null)
+					invalidatedStereoElements.add(el);
+			}
+		}
+    }
+    
     List<IStereoElement> getStereoElementsToBeRemoved (IAtom deletedAt, IAtomContainer target)
  	{
     	List<IStereoElement> list = new ArrayList<IStereoElement>(); 
@@ -1308,9 +1309,8 @@ public class SMIRKSManager {
     	}
     	
     	return list;
- 	}
-
-    						
+ 	}    
+    
     IStereoElement handleStereoOnAtomDeletion(IAtom deletedAt, IAtomContainer target, IStereoElement element)
     {
     	if (element instanceof DoubleBondStereochemistry)
