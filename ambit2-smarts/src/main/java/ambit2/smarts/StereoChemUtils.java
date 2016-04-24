@@ -760,8 +760,28 @@ public class StereoChemUtils
 			IAtomContainer target,
 			DoubleBondStereochemistry dbsc)
 	{
-		//TODO
+		if (dbsc.getStereoBond() == null)
+			return dbsc;
 		
+		IAtom dbAtom = null; //the atom that is part of the double bond
+		if (dbsc.getStereoBond().contains(at1))
+			dbAtom = at1;
+		if (dbsc.getStereoBond().contains(at2))
+		{
+			if (dbAtom == at1)
+			{
+				//both atoms (at1, at2) are part of the double bond
+				if (updatedBondOrder != IBond.Order.DOUBLE)
+					return null; //element is 'totally' removed
+				else
+					return dbsc; //this case should not happen 
+			}
+			else
+				dbAtom = at2;
+		}
+		
+		
+		//TODO
 		
 		return null;
 	}
