@@ -1383,9 +1383,42 @@ public class SMIRKSManager {
 			if (!element.contains(targetAt1) && !element.contains(targetAt2))
 				continue;
 			
-			//TODO
-		}	
-    	
+			if (element instanceof DoubleBondStereochemistry)
+			{
+				DoubleBondStereochemistry dbsc = 
+				StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
+						updatedBondOrder, target, (DoubleBondStereochemistry)element);
+				
+				//check validity
+				if (dbsc.contains(null))
+					newInvalidEl.add(dbsc);
+				else
+					newElements.add(dbsc);
+				
+				continue;
+			}
+
+			if (element instanceof TetrahedralChirality)
+			{
+				TetrahedralChirality thc = StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
+						updatedBondOrder, target, (TetrahedralChirality)element);
+				
+				//check validity
+				if (thc.contains(null))
+					newInvalidEl.add(thc);
+				else
+					newElements.add(thc);
+				
+				continue;
+			}
+
+			if (element instanceof ExtendedTetrahedral)
+			{	
+				//ExtendedTetrahedral etc = (ExtendedTetrahedral)element;
+				//TODO
+				continue;
+			}
+		}
     	
     	//Update the stereo element lists
     	target.setStereoElements(newElements);
