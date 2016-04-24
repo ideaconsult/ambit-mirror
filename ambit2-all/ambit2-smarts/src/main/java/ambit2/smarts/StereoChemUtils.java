@@ -756,16 +756,22 @@ public class StereoChemUtils
 	
 	
 	public static DoubleBondStereochemistry bondChange(IAtom at1, IAtom at2,
-			IBond.Order initialBondOrder, IBond.Order updatedBondOrder, 
+		 	IBond.Order initialBondOrder, IBond.Order updatedBondOrder, 
 			IAtomContainer target,
 			DoubleBondStereochemistry dbsc)
 	{
 		if (dbsc.getStereoBond() == null)
 			return dbsc;
 		
+		
 		IAtom dbAtom = null; //the atom that is part of the double bond
+		IAtom perAtom = null; //the peripheral atom
+		
 		if (dbsc.getStereoBond().contains(at1))
 			dbAtom = at1;
+		else
+			perAtom = at1;
+		
 		if (dbsc.getStereoBond().contains(at2))
 		{
 			if (dbAtom == at1)
@@ -779,6 +785,14 @@ public class StereoChemUtils
 			else
 				dbAtom = at2;
 		}
+		else
+			perAtom = at2;
+		
+		IBond bonds[] = dbsc.getBonds();
+		
+		if (bonds == null)
+			return dbsc;
+		
 		
 		
 		//TODO
