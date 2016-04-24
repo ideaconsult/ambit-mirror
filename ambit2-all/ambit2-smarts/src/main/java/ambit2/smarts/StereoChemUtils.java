@@ -739,12 +739,9 @@ public class StereoChemUtils
 		if (n == -1)
 			return thc;  //atom is not found among the ligands - no update is performed! 
 		
-		//Set new ligands where ligands #n is ommited 
-		IAtom newLigands[] = new IAtom[ligands.length -1];
-		for (int i = 0; i < n; i++)
-			newLigands[i] = ligands[i];
-		for (int i = n; i < newLigands.length; i++)
-			newLigands[i] = ligands[i+1];
+		//Set the new ligands where ligand n is set to null 
+		IAtom newLigands[] = ligands.clone();
+		newLigands[n] = null;
 		
 		return new TetrahedralChirality(thc.getChiralAtom(), newLigands, thc.getStereo());
 	}
