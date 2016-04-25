@@ -19,20 +19,6 @@ AMBIT Web services
 
  [Custom releases] {{{./enanomapper.html} eNanoMapper prototype database}} 
 
-AMBIT API
-~~~~~~~~~~
-
-  {{{http://ideaconsult.github.io/examples-ambit/apidocs/}AMBIT REST API documentation (live)}}  
-
-Source code examples
-~~~~~~~~~~
-
- {{{https://github.com/ideaconsult/examples-ambit/tree/master/tautomers-example}How to use ambit2-tautomer package}}
- 
- {{{https://github.com/ideaconsult/examples-ambit/tree/master/smirks-example}How to use AMBIT SMIRKS implementation}}
-  
- {{{https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example}How to use applicability domain methods in AMBIT}}
- 
 Standalone applications
 ~~~~~~~~~~
 
@@ -57,5 +43,18 @@ AMBIT modules
 
  [Previous releases] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/}Download}}
 
+AMBIT API
+~~~~~~~~~~
+
+  {{{http://ideaconsult.github.io/examples-ambit/apidocs/}AMBIT REST API documentation (live)}}  
+
+Source code examples
+~~~~~~~~~~
+
+ {{{https://github.com/ideaconsult/examples-ambit/tree/master/tautomers-example}How to use ambit2-tautomer package}}
+ 
+ {{{https://github.com/ideaconsult/examples-ambit/tree/master/smirks-example}How to use AMBIT SMIRKS implementation}}
+  
+ {{{https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example}How to use applicability domain methods in AMBIT}}
  
  
