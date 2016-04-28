@@ -1360,11 +1360,11 @@ public class SMIRKSManager {
 				StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
 						updatedBondOrder, target, (DoubleBondStereochemistry)element);
 				
-				//check validity
-				if (dbsc.contains(null))
-					newInvalidEl.add(dbsc);
+				//quick validity check
+				if (dbsc.contains(null) || (dbsc.getBonds().length != 2))
+					newInvalidEl.add(dbsc); //invalid
 				else
-					newElements.add(dbsc);
+					newElements.add(dbsc);  //valid
 				
 				continue;
 			}
@@ -1374,11 +1374,11 @@ public class SMIRKSManager {
 				TetrahedralChirality thc = StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
 						updatedBondOrder, target, (TetrahedralChirality)element);
 				
-				//check validity
-				if (thc.contains(null))
-					newInvalidEl.add(thc);
+				//quick validity check 
+				if (thc.contains(null) || (thc.getLigands().length != 4))
+					newInvalidEl.add(thc); //invalid
 				else
-					newElements.add(thc);
+					newElements.add(thc);  //valid
 				
 				continue;
 			}
@@ -1403,11 +1403,11 @@ public class SMIRKSManager {
 				StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
 						updatedBondOrder, target, (DoubleBondStereochemistry)element);
 				
-				//check validity
-				if (dbsc.contains(null))
-					newInvalidEl.add(dbsc);
+				//quick validity check
+				if (dbsc.contains(null) || (dbsc.getBonds().length != 2))
+					newInvalidEl.add(dbsc);  //invalid
 				else
-					newElements.add(dbsc);
+					newElements.add(dbsc);  //valid
 				
 				continue;
 			}
@@ -1417,11 +1417,11 @@ public class SMIRKSManager {
 				TetrahedralChirality thc = StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
 						updatedBondOrder, target, (TetrahedralChirality)element);
 				
-				//check validity
-				if (thc.contains(null))
-					newInvalidEl.add(thc);
+				//quick validity check 
+				if (thc.contains(null) || (thc.getLigands().length != 4))
+					newInvalidEl.add(thc); //invalid
 				else
-					newElements.add(thc);
+					newElements.add(thc);  //valid
 				
 				continue;
 			}
