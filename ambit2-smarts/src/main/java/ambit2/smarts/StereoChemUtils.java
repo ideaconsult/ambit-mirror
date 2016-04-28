@@ -788,6 +788,7 @@ public class StereoChemUtils
 		return null;
 	}
 	
+	
 	public static TetrahedralChirality bondChange(IAtom at1, IAtom at2,
 			IBond.Order initialBondOrder, IBond.Order updatedBondOrder, 
 			IAtomContainer target,
@@ -795,6 +796,16 @@ public class StereoChemUtils
 	{
 		//TODO
 		
+		return null;
+	}
+	
+	
+	public static ExtendedTetrahedral bondChange(IAtom at1, IAtom at2,
+			IBond.Order initialBondOrder, IBond.Order updatedBondOrder, 
+			IAtomContainer target,
+			ExtendedTetrahedral etc)
+	{
+		//TODO
 		return null;
 	}
 	
