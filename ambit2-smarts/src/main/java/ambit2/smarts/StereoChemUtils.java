@@ -801,13 +801,38 @@ public class StereoChemUtils
 	
 	static IAtom[] addAtomToLigands(IAtom at, IAtom ligands[])
 	{
-		//TODO
-		return null;
+		int n = -1; //index of the first null ligand (if present)		
+		for (int i = 0; i < ligands.length; i++)
+		{
+			if (ligands[i] == null)
+			{
+				n = i;
+				break;
+			}
+		}
+		
+		if (n == -1)
+		{
+			//no null ligand is present
+			//the atom is added as an extra array element
+			IAtom newLigands[] = new IAtom[ligands.length+1];
+			for (int i = 0; i < ligands.length; i++)
+				newLigands[i] = ligands[i];
+			newLigands[ligands.length] = at;
+			return newLigands;
+		}
+		else
+		{
+			//a null ligand is present
+			//the atom is added in the place of the first null ligand (i.e. index n)
+			ligands[n] = at;
+			return ligands;
+		}
 	}
 	
 	static IAtom[] deleteAtomFromLigands(IAtom at, IAtom ligands[])
 	{
-		int n = -1;
+		int n = -1; //the index of atom to be deleted
 		for (int i = 0; i < ligands.length; i++)
 		{
 			if (ligands[i] == at)
@@ -833,7 +858,7 @@ public class StereoChemUtils
 					else
 						newLigands[i] = ligands[i];
 				
-				//Shifting the lignads after index 4 (if more that one extra ligand is present)
+				//Shifting the ligands after index 4 (if more that one extra ligand is present)
 				for (int i = 4; i < newLigands.length; i++)
 					newLigands[i] = ligands[i+1];
 				return newLigands;
