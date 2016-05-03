@@ -1361,7 +1361,7 @@ public class SMIRKSManager {
 						updatedBondOrder, target, (DoubleBondStereochemistry)element);
 				
 				//quick validity check
-				if (dbsc.contains(null) || (dbsc.getBonds().length != 2))
+				if (StereoChemUtils.isInvalidated(dbsc))
 					newInvalidEl.add(dbsc); //invalid
 				else
 					newElements.add(dbsc);  //valid
@@ -1375,7 +1375,7 @@ public class SMIRKSManager {
 						updatedBondOrder, target, (TetrahedralChirality)element);
 				
 				//quick validity check 
-				if (thc.contains(null) || (thc.getLigands().length != 4))
+				if (StereoChemUtils.isInvalidated(thc))
 					newInvalidEl.add(thc); //invalid
 				else
 					newElements.add(thc);  //valid
@@ -1404,7 +1404,7 @@ public class SMIRKSManager {
 						updatedBondOrder, target, (DoubleBondStereochemistry)element);
 				
 				//quick validity check
-				if (dbsc.contains(null) || (dbsc.getBonds().length != 2))
+				if (StereoChemUtils.isInvalidated(dbsc))
 					newInvalidEl.add(dbsc);  //invalid
 				else
 					newElements.add(dbsc);  //valid
@@ -1418,7 +1418,7 @@ public class SMIRKSManager {
 						updatedBondOrder, target, (TetrahedralChirality)element);
 				
 				//quick validity check 
-				if (thc.contains(null) || (thc.getLigands().length != 4))
+				if (StereoChemUtils.isInvalidated(thc))
 					newInvalidEl.add(thc); //invalid
 				else
 					newElements.add(thc);  //valid
