@@ -767,11 +767,22 @@ public class StereoChemUtils
 		IBond bonds[] = dbsc.getBonds();
 		
 		if (bonds == null)
-			return dbsc;
+			return dbsc;  //stereo element is not valid. No change done
 		
 		
-		
-		//TODO
+		if (initialBondOrder == null)
+		{
+			if (updatedBondOrder == null)
+				return dbsc; //This case should not appear. No change
+			
+			IBond bo = target.getBond(at1, at2);
+			IBond newBonds[] = addBondToLigands(bo, bonds);
+			return new DoubleBondStereochemistry(dbsc.getStereoBond(), newBonds, dbsc.getStereo());
+		}
+		else
+		{
+			//TODO
+		}
 		
 		return null;
 	}
