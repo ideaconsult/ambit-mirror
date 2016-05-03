@@ -841,6 +841,37 @@ public class StereoChemUtils
 		}
 	}
 	
+	static IBond[] addBondToLigands(IBond bo, IBond ligandBonds[])
+	{
+		int n = -1; //index of the first null ligand bond (if present)		
+		for (int i = 0; i < ligandBonds.length; i++)
+		{
+			if (ligandBonds[i] == null)
+			{
+				n = i;
+				break;
+			}
+		}
+		
+		if (n == -1)
+		{
+			//no null ligand bond is present
+			//the bond is added as an extra array element
+			IBond newLigandBonds[] = new IBond[ligandBonds.length+1];
+			for (int i = 0; i < ligandBonds.length; i++)
+				newLigandBonds[i] = ligandBonds[i];
+			newLigandBonds[ligandBonds.length] = bo;
+			return newLigandBonds;
+		}
+		else
+		{
+			//a null ligand is present
+			//the bond is added in the place of the first null ligand bond (i.e. index n)
+			ligandBonds[n] = bo;
+			return ligandBonds;
+		}
+	}
+	
 	static IAtom[] deleteAtomFromLigands(IAtom at, IAtom ligands[])
 	{
 		int n = -1; //the index of atom to be deleted
