@@ -974,5 +974,44 @@ public class StereoChemUtils
 		}
 	}
 	
+	public static boolean isInvalidated(DoubleBondStereochemistry dbsc)
+	{
+		//if (dbsc.contains(null))
+		//	return true;
+		
+		if (dbsc.getBonds() == null)
+			return true;
+		
+		if (dbsc.getBonds().length != 2)
+			return true;
+		
+		if (dbsc.getBonds()[0] == null)
+			return true;
+		if (dbsc.getBonds()[1] == null)
+			return true;
+		
+		return false;
+	}
+	
+	public static boolean isInvalidated(TetrahedralChirality thc)
+	{
+		if (thc.contains(null))
+			return true;
+		
+		if (thc.getLigands() == null)
+			return true;
+		
+		if (thc.getLigands().length != 4)
+			return true;
+		
+		return false;
+	}
+	
+	public static boolean isInvalidated(ExtendedTetrahedral etc)
+	{
+		//TODO
+		return false;
+	}
+	
 	
 }	
