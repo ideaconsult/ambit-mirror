@@ -689,26 +689,14 @@ public class StereoChemUtils
 
 		if (bonds.length == 0)
 			return dbsc;
-
-		int n = -1;
-		for (int i = 0; i < bonds.length; i++)
-		{
-			if (bonds[i].contains(at))
-			{
-				n = i;
-				break;
-			}
-		}
-
-		if (n == -1)
-			return dbsc;  // atom is not among the bonds - no update is performed
-
-		IBond newBo[] = bonds.clone();
-		newBo[n] = null;
-
-		return new DoubleBondStereochemistry(dbsc.getStereoBond(), newBo, dbsc.getStereo());
+		
+		IBond newBonds[] = deleteBondFromLigands(at, bonds);
+		
+		if (bonds == newBonds)
+			return dbsc; //no change (bond containing the atom is not found among the ligand bonds)
+		
+		return new DoubleBondStereochemistry(dbsc.getStereoBond(), newBonds, dbsc.getStereo());
 	}
-	
 		
 	
 	
@@ -923,12 +911,20 @@ public class StereoChemUtils
 		}
 	}
 	
-	static IBond[] deleteBondFromLigands(IBond bo, IBond ligandBonds[])
+	
+	/**
+	 * Deletes the bonds that contains atom 'at'
+	 * 
+	 * @param at
+	 * @param ligandBonds
+	 * @return
+	 */
+	static IBond[] deleteBondFromLigands(IAtom at, IBond ligandBonds[])
 	{
 		int n = -1; //the index of bond to be deleted
 		for (int i = 0; i < ligandBonds.length; i++)
 		{
-			if (ligandBonds[i] == bo)
+			if (ligandBonds[i].contains(at))
 			{
 				n = i;
 				break;
