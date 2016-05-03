@@ -923,5 +923,56 @@ public class StereoChemUtils
 		}
 	}
 	
+	static IBond[] deleteBondFromLigands(IBond bo, IBond ligandBonds[])
+	{
+		int n = -1; //the index of bond to be deleted
+		for (int i = 0; i < ligandBonds.length; i++)
+		{
+			if (ligandBonds[i] == bo)
+			{
+				n = i;
+				break;
+			}
+		}
+		
+		if (n == -1)
+			return ligandBonds;
+		
+		if (ligandBonds.length > 2)
+		{	
+			//There is at least one extra ligand bond added (index 2) 
+			//And it will be put in place of the deleted bond
+			if (n < 2)
+			{
+				IBond newLigandBonds[] = new IBond[ligandBonds.length-1];
+				for (int i = 0; i < 2; i++)
+					if (i == n)
+						newLigandBonds[i] = ligandBonds[2];
+					else
+						newLigandBonds[i] = ligandBonds[i];
+				
+				//Shifting the ligands after index 2 (if more that one extra ligand bond is present)
+				for (int i = 2; i < newLigandBonds.length; i++)
+					newLigandBonds[i] = ligandBonds[i+1];
+				return newLigandBonds;
+			}
+			else
+			{
+				//This case should not appear
+				//Set the new ligand bonds where ligand bond n is set to null 
+				IBond newLigandBonds[] = ligandBonds.clone();
+				newLigandBonds[n] = null;
+				return newLigandBonds;
+			}	
+		}
+		else
+		{
+			//Set the new ligand bonds where ligand bond n is set to null 
+			IBond newLigandBonds[] = ligandBonds.clone();
+			newLigandBonds[n] = null;
+			return newLigandBonds;
+		}
+	}
+	
 	
 }	
