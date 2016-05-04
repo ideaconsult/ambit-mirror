@@ -924,11 +924,11 @@ public class StereoChemUtils
 	
 	
 	/**
-	 * Deletes the bonds that contains atom 'at'
+	 * Deletes the bond that contains atom 'at'
 	 * 
 	 * @param at
 	 * @param ligandBonds
-	 * @return
+	 * @return renewed list of ligand bonds
 	 */
 	static IBond[] deleteBondFromLigands(IAtom at, IBond ligandBonds[])
 	{
@@ -994,8 +994,19 @@ public class StereoChemUtils
 		
 		if (dbsc.getBonds()[0] == null)
 			return true;
+		else
+		{	
+			if (dbsc.getBonds()[0].getOrder() != Order.SINGLE)
+				return true;
+		}			
+		
 		if (dbsc.getBonds()[1] == null)
 			return true;
+		else
+		{	
+			if (dbsc.getBonds()[1].getOrder() != Order.SINGLE)
+				return true;
+		}
 		
 		return false;
 	}
