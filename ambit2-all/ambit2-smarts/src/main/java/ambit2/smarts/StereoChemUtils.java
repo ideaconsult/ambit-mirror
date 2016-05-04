@@ -1071,12 +1071,30 @@ public class StereoChemUtils
 	 * @param at
 	 * @return
 	 */
-	public static boolean contains (IStereoElement element, IAtom at)
+	public static boolean contains(IStereoElement element, IAtom at)
 	{
 		if (element instanceof DoubleBondStereochemistry)
 		{
 			DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry)element;
-			//TODO
+
+			IBond bo = dbsc.getStereoBond();
+			if (bo != null)
+			{	
+				if (bo.getAtom(0) == at)
+					return true;
+				if (bo.getAtom(1) == at)
+					return true;
+			}
+			
+			IBond bonds[] = dbsc.getBonds();
+			for (int i = 0; i < bonds.length; i++)
+				if (bonds[i] != null)
+				{
+					if (bonds[i].getAtom(0) == at)
+						return true;
+					if (bonds[i].getAtom(1) == at)
+						return true;
+				}
 		}
 		
 
@@ -1092,6 +1110,8 @@ public class StereoChemUtils
 				if (ligands[i] == at)
 					return true;
 		}
+		
+		//TODO handle ExtendedTetrahedral
 		
 		return false;
 	}
