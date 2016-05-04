@@ -798,9 +798,34 @@ public class StereoChemUtils
 			IAtomContainer target,
 			TetrahedralChirality thc)
 	{
-		//TODO
+		IAtom ligands[] = thc.getLigands();
+		IAtom ligAtom = null;
 		
-		return null;
+		if (thc.getChiralAtom() == at1)
+			ligAtom = at2;
+		else
+			ligAtom = at1; 
+		
+		
+		if (initialBondOrder == null)
+		{
+			if (updatedBondOrder == null)
+				return thc; //This case should not appear. No change
+			
+			IAtom newLigands[] = addAtomToLigands(ligAtom, ligands);
+			return new TetrahedralChirality(thc.getChiralAtom(), newLigands, thc.getStereo());
+		}
+		else
+		{
+			if (updatedBondOrder == null)
+			{
+				IAtom newLigands[] = deleteAtomFromLigands(ligAtom, ligands);
+				return new TetrahedralChirality(thc.getChiralAtom(), newLigands, thc.getStereo());
+			}
+			
+			//Bond order is changed hence nothing is done to the stereo element
+			return thc;
+		}
 	}
 	
 	
