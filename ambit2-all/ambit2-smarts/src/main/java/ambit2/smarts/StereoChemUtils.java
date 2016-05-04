@@ -1062,4 +1062,39 @@ public class StereoChemUtils
 	}
 	
 	
+	/**
+	 * Checks whether the stereo element contains the atom
+	 * This function works with invalidated  stereo elements.
+	 * The standard IStereoElement.contains() method would throws Null pointer exception 
+	 * in some cases of invalidated elements
+	 * @param element
+	 * @param at
+	 * @return
+	 */
+	public static boolean contains (IStereoElement element, IAtom at)
+	{
+		if (element instanceof DoubleBondStereochemistry)
+		{
+			DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry)element;
+			//TODO
+		}
+		
+
+		if (element instanceof TetrahedralChirality)
+		{
+			TetrahedralChirality thc =  (TetrahedralChirality)element;
+			
+			if (thc.getChiralAtom() == at)
+				return true;
+			
+			IAtom ligands[] = thc.getLigands();
+			for (int i = 0; i < ligands.length; i++)
+				if (ligands[i] == at)
+					return true;
+		}
+		
+		return false;
+	}
+	
+	
 }	

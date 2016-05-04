@@ -1351,9 +1351,16 @@ public class SMIRKSManager {
     	
     	for (IStereoElement element : target.stereoElements())
 		{
-			if (!element.contains(targetAt1) && !element.contains(targetAt2))
+			int n = 0;
+			if (targetAt1 != null)
+				if (StereoChemUtils.contains(element, targetAt1))
+					n++;
+			if (targetAt2 != null)
+				if (StereoChemUtils.contains(element, targetAt2))
+					n++;
+			if (n==0)
 				continue;
-    		
+			
     		if (element instanceof DoubleBondStereochemistry)
 			{
 				DoubleBondStereochemistry dbsc = 
@@ -1394,7 +1401,14 @@ public class SMIRKSManager {
     	
     	for (IStereoElement element : invalidatedStereoElements)
 		{
-			if (!element.contains(targetAt1) && !element.contains(targetAt2))
+    		int n = 0;
+			if (targetAt1 != null)
+				if (StereoChemUtils.contains(element, targetAt1))
+					n++;
+			if (targetAt2 != null)
+				if (StereoChemUtils.contains(element, targetAt2))
+					n++;
+			if (n==0)
 				continue;
 			
 			if (element instanceof DoubleBondStereochemistry)
