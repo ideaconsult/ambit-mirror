@@ -110,6 +110,8 @@ public class TestUtilities {
 	boolean FlagAddImplicitHAtomsOnProductPreProcess = false;
 	boolean FlagImplicitHToExplicitOnProductPreProcess = false;
 	boolean FlagExplicitHToImplicitOnProductPreProcess = false;
+	
+	boolean FlagApplyStereoTransformation = false;
 
 	boolean FlagDoubleBondAromaticityNotSpecified = false;
 
@@ -1496,6 +1498,7 @@ public class TestUtilities {
 		smrkMan.setFlagAddImplicitHAtomsOnResultProcess(this.FlagAddImplicitHAtomsOnProductPreProcess);
 		smrkMan.setFlagConvertAddedImplicitHToExplicitOnResultProcess(this.FlagImplicitHToExplicitOnProductPreProcess);
 		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(this.FlagExplicitHToImplicitOnProductPreProcess);
+		smrkMan.setFlagApplyStereoTransformation(FlagApplyStereoTransformation);
 
 		smrkMan.getSmartsParser().mSupportDoubleBondAromaticityNotSpecified = FlagDoubleBondAromaticityNotSpecified;
 
@@ -2697,10 +2700,10 @@ public class TestUtilities {
 		// tu.testSMIRKS("[#6:1]-[#8:2]-[#6:3]>>[#6:1]-[#8:2].[#6:3]=S","NCCCOCC",
 		// ReactionOperation.SingleCopyForEachPos);
 
-		tu.FlagExplicitHAtoms = true;
+		//tu.FlagExplicitHAtoms = true;
 		tu.FlagTargetPreprocessing = true;
 		tu.FlagProductPreprocessing = true;
-		tu.FlagPrintAtomAttributes = true;
+		//tu.FlagPrintAtomAttributes = true;
 		// tu.FlagSSMode = SmartsConst.SSM_NON_IDENTICAL_FIRST;
 		//tu.FlagExplicitHToImplicitOnProductPreProcess = true;
 		
@@ -2708,6 +2711,9 @@ public class TestUtilities {
 		//tu.testCheckStereoElements("C(=O)[C@@H]1C(=O)C(C(=O)O1)(F)F");
 		
 		//tu.testCheckStereoElements("C(=C(/C(=O)[O-])\\Cl)/C=C(\\C(=O)[O-])/O");
+		
+		tu.FlagApplyStereoTransformation = true;
+		tu.testSMIRKS("[C:1]Cl>>[C:1]F", "C[C@](O)(CC)Cl"); 
 		
 		//tu.testSMIRKS("[#8:1]([H])-[#6:2](-[#6:9](-[#8-:10])=[O:11])=[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]-[#6](-[#8-])=O>>"
 		//		+ "[#8-:10]-[#6:9](=[O:11])-[#6:2](=[O:1])-[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]",
@@ -2891,7 +2897,7 @@ public class TestUtilities {
 		
 		//tu.testBinaryCombinations(4);
 		
-		tu.testStereoOnMoleculeChange();
+		//tu.testStereoOnMoleculeChange();
 
 	}
 
