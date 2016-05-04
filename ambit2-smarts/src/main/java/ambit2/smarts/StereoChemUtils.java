@@ -781,10 +781,15 @@ public class StereoChemUtils
 		}
 		else
 		{
-			//TODO
+			if (updatedBondOrder == null)
+			{
+				IBond newBonds[] = deleteBondFromLigands(perAtom, bonds);
+				return new DoubleBondStereochemistry(dbsc.getStereoBond(), newBonds, dbsc.getStereo());
+			}
+			
+			//Bond order is changed hence nothing is done to the stereo element
+			return dbsc;
 		}
-		
-		return null;
 	}
 	
 	
