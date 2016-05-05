@@ -5,12 +5,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
+import org.codehaus.jackson.map.ser.FilterProvider;
+import org.codehaus.jackson.schema.JsonSchema;
+
+import ambit2.base.data.StructureRecord;
+import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.study.test.ProtocolApplicationTestFactory;
-import ambit2.base.data.StructureRecord;
-import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.STRUCTURE_RELATION;
@@ -21,14 +27,6 @@ import ambit2.export.isa.json.ISAJsonExportConfig;
 import ambit2.export.isa.v1_0.ISAJsonExporter1_0;
 import ambit2.export.isa.v1_0.ISAJsonMapper1_0;
 import ambit2.export.isa.v1_0.objects.Investigation;
-
-import org.codehaus.jackson.schema.JsonSchema;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectWriter;
-import org.codehaus.jackson.map.ser.FilterProvider;
 
 
 
@@ -64,8 +62,8 @@ public class ISAJsonTestUtils
 			File exportConfig,
 			SubstanceEndpointsBundle endpointBundle) throws Exception
 	{
-		ISAJsonExporter1_0 exporter = new ISAJsonExporter1_0(records, outputDir, exportConfig,  endpointBundle);
-		exporter.export();
+		ISAJsonExporter1_0 exporter = new ISAJsonExporter1_0(outputDir, exportConfig);
+		exporter.export(endpointBundle,records);
 		System.out.println(exporter.getResultAsJson());
 	}
 	

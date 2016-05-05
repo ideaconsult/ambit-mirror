@@ -3073,7 +3073,19 @@ function bundleFormatDetails(oTable, nTr, root, export_substances,
 				alt : "CSV",
 				title : 'Download as CSV (Comma delimited file)',
 				mime : 'text/csv'
-			} ];
+			}
+			];
+	var report_isa = [
+	            report[0],report[1],       
+	  			
+	  			 {
+	  				id : "ISA-JSON",
+	  				img : "isa.png",
+	  				alt : "ISA",
+	  				title : 'Download as ISA-JSON',
+	  				mime : 'application/isa+json'
+	  			}
+	  			];	
 	var semantic = [ {
 		id : "json",
 		img : "json64.png",
@@ -3120,7 +3132,7 @@ function bundleFormatDetails(oTable, nTr, root, export_substances,
 		sOut += "<a href='" + bundle.substance
 				+ "' target=_blank>Browse substances</a> ";
 		sOut += "</td><td>";
-		sOut += formatDownloadURI(bundle.URI, root, report, "/substance");
+		sOut += formatDownloadURI(bundle.URI, root, report_isa, "/substance");
 		sOut += "</td><td>";
 		sOut += formatDownloadURI(bundle.URI, root, semantic, "/substance");
 		sOut += "</td></tr>";

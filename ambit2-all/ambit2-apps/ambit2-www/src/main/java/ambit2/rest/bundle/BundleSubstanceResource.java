@@ -2,18 +2,17 @@ package ambit2.rest.bundle;
 
 import java.awt.Dimension;
 import java.sql.Connection;
-import java.util.List;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.r.QueryReporter;
 import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.task.CallableProtectedTask;
 import net.idea.restnet.db.DBConnection;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 import net.idea.restnet.rdf.ns.OT;
 
-import org.apache.commons.fileupload.FileItem;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -31,6 +30,7 @@ import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.xlsx.SubstanceRecordXLSXReporter;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundle;
+import ambit2.export.isa.base.ISAConst;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputStreamConvertor;
@@ -52,6 +52,8 @@ import com.hp.hpl.jena.ontology.OntModel;
  */
 public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 		extends AmbitDBResource<Q, SubstanceRecord> {
+	
+	public static MediaType ISAJSON = new MediaType(ISAConst.ISAFormat.JSON.getMediaType());
 	protected SubstanceEndpointsBundle[] bundles;
 	protected boolean enableFeatures = false;
 
@@ -76,7 +78,7 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 				MediaType.APPLICATION_JAVASCRIPT,
 				MediaType.APPLICATION_JAVA_OBJECT, MediaType.APPLICATION_EXCEL,
 				MediaType.APPLICATION_MSOFFICE_XLSX,
-				ChemicalMediaType.APPLICATION_JSONLD
+				ChemicalMediaType.APPLICATION_JSONLD, ISAJSON
 
 		});
 	}
@@ -84,14 +86,6 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 	@Override
 	protected String getObjectURI(Form queryForm) throws ResourceException {
 		return null;
-	}
-
-	@Override
-	protected CallableProtectedTask<String> createCallable(Method method,
-			List<FileItem> input, SubstanceRecord item)
-			throws ResourceException {
-		// TODO Auto-generated method stub
-		return super.createCallable(method, input, item);
 	}
 
 	@Override
@@ -210,6 +204,7 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 			variant.setMediaType(new MediaType(media));
 
 		String filenamePrefix = getRequest().getResourceRef().getPath();
+
 		if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(
 					getRequest(), null, bundles, null, false);
@@ -232,23 +227,14 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 					variant.getMediaType());
 		} else if (variant.getMediaType().equals(
 				MediaType.APPLICATION_MSOFFICE_XLSX)) {
-			SubstanceRecordXLSXReporter xlsxreporter = new SubstanceRecordXLSXReporter(
-					getRequest().getRootRef().toString(), false, bundles);
-			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
+			return new OutputStreamConvertor<SubstanceRecord, Q>(
+					createXLSXReporter(getRequest(), false),
 					MediaType.APPLICATION_MSOFFICE_XLSX, filenamePrefix);
-
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_EXCEL)) {
-			SubstanceRecordXLSXReporter xlsxreporter = new SubstanceRecordXLSXReporter(
-					getRequest().getRootRef().toString(), true, bundles);
-			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
+			return new OutputStreamConvertor<SubstanceRecord, Q>(
+					createXLSXReporter(getRequest(), false),
 					MediaType.APPLICATION_EXCEL, filenamePrefix);
-		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)
-				|| variant.getMediaType().equals(
-						MediaType.APPLICATION_RDF_TURTLE)
-				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
-				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
-				|| variant.getMediaType().equals(ChemicalMediaType.APPLICATION_JSONLD)
-				) {
+		} else if (isRDFMediaType(variant.getMediaType())) {
 			return new RDFJenaConvertor(new SubstanceRDFReporter(getRequest(),
 					variant.getMediaType()), variant.getMediaType(),
 					filenamePrefix) {
@@ -273,14 +259,9 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 					}
 				}
 			};
-			/*
-			 * return new RDFStaXConvertor(new SubstanceBundleStAXReporter(
-			 * getRequest()), filenamePrefix);
-			 */
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
-			SubstanceCSVReporter csvreporter = new SubstanceCSVReporter(
-					getRequest(), bundles);
-			return new OutputWriterConvertor<SubstanceRecord, Q>(csvreporter,
+			return new OutputWriterConvertor<SubstanceRecord, Q>(
+					new SubstanceCSVReporter(getRequest(), bundles),
 					MediaType.TEXT_CSV, filenamePrefix);
 
 		} else if (variant.getMediaType().equals(
@@ -288,23 +269,63 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback == null)
 				jsonpcallback = getParams().getFirstValue("callback");
-			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(
-					getRequest(), jsonpcallback, bundles, null, false);
-			return new OutputWriterConvertor<SubstanceRecord, Q>(cmpreporter,
+
+			return new OutputWriterConvertor<SubstanceRecord, Q>(
+					createJSONReporter(getRequest(), jsonpcallback),
+					MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);
+
+		} else if (variant.getMediaType().equals(ISAJSON)) {
+			return new OutputStreamConvertor<SubstanceRecord, Q>(
+					createISAReporter(getRequest()),
 					MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);
 		} else { // json by default
-			// else if
-			// (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(
-					getRequest(), null, bundles, null, false);
-			return new OutputWriterConvertor<SubstanceRecord, Q>(cmpreporter,
+			return new OutputWriterConvertor<SubstanceRecord, Q>(
+					createJSONReporter(getRequest(), null),
 					MediaType.APPLICATION_JSON, filenamePrefix);
 		}
+	}
+
+	protected QueryReporter createXLSXReporter(Request request, boolean hssf) {
+		return new SubstanceRecordXLSXReporter(request.getRootRef().toString(),
+				hssf, bundles);
+
+	}
+
+	protected QueryReporter createJSONReporter(Request request,
+			String jsonpcallback) {
+		return new SubstanceJSONReporter(getRequest(), jsonpcallback, bundles,
+				null, false);
+
+	}
+
+	protected QueryReporter createISAReporter(Request request) {
+		return new BundleISA_JSONReporter(getRequest().getRootRef().toString(), bundles);
+
+	}
+
+	protected boolean isRDFMediaType(MediaType mediaType) {
+		return mediaType.equals(MediaType.APPLICATION_RDF_XML)
+				|| mediaType.equals(
+						MediaType.APPLICATION_RDF_TURTLE)
+				|| mediaType.equals(MediaType.TEXT_RDF_NTRIPLES)
+				|| mediaType.equals(MediaType.TEXT_RDF_N3)
+				|| mediaType.equals(
+						ChemicalMediaType.APPLICATION_JSONLD);
 	}
 
 	@Override
 	protected String getExtension(MediaType mediaType) {
 
 		return super.getExtension(mediaType);
+	}
+	@Override
+	protected Representation get() throws ResourceException {
+
+		return super.get();
+	}
+	
+	@Override
+	protected Representation get(Variant variant) throws ResourceException {
+		return super.get(variant);
 	}
 }

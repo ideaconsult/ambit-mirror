@@ -61,18 +61,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 	public void testWADLApp() throws Exception {
 		testGet(String.format("http://localhost:%d", port),MediaType.APPLICATION_WADL);
 	}
-	@Override
-	public boolean verifyResponseWADL(String uri, MediaType media,
-			InputStream in) throws Exception {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		String line = null;
-		int count=0;
-		while ((line = reader.readLine())!=null) {
-			count++;
-			logger.info(line);
-		}
-		return false;
-	}
+	
 	@Test
 	public void testRDFXML() throws Exception {
 		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
