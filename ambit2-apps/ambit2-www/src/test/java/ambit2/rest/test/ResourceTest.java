@@ -47,6 +47,7 @@ import ambit2.base.config.Preferences;
 import ambit2.db.processors.test.DbUnitTest;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.AmbitComponent;
+import ambit2.rest.bundle.BundleSubstanceResource;
 import ambit2.rest.legacy.OTRemoteTask;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -409,7 +410,7 @@ public abstract class ResourceTest extends DbUnitTest {
 		throw new Exception("Not implemented");
 	}
 
-	public boolean verifyResponseWADL(String uri, MediaType media,
+	public boolean verifyResponseISA(String uri, MediaType media,
 			InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
@@ -437,8 +438,8 @@ public abstract class ResourceTest extends DbUnitTest {
 			throws Exception {
 		if (MediaType.APPLICATION_PDF.equals(media))
 			return verifyResponsePDF(uri, media, in);
-		else if (MediaType.APPLICATION_WADL.equals(media))
-			return verifyResponseWADL(uri, media, in);
+		else if (BundleSubstanceResource.ISAJSON.equals(media))
+			return verifyResponseISA(uri, media, in);
 		else if (MediaType.TEXT_HTML.equals(media))
 			return verifyResponseHTML(uri, media, in);
 		else if (MediaType.APPLICATION_JSON.equals(media))
