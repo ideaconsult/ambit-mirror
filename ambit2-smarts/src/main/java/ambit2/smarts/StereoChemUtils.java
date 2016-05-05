@@ -1042,15 +1042,16 @@ public class StereoChemUtils
 	}
 	
 	public static boolean isInvalidated(TetrahedralChirality thc)
-	{
-		if (thc.contains(null))
-			return true;
-		
+	{	
 		if (thc.getLigands() == null)
 			return true;
 		
 		if (thc.getLigands().length != 4)
 			return true;
+		
+		if (contains(thc, null))
+			return true;
+		
 		
 		return false;
 	}
