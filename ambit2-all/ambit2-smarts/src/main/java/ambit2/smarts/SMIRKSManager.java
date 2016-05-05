@@ -1289,7 +1289,7 @@ public class SMIRKSManager {
 			
 			for (IStereoElement stEl : invalidatedStereoElements)
 			{
-				if (stEl.contains(tAt))
+				if (StereoChemUtils.contains(stEl,tAt))
 				{	
 					IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl);
 					//if el = null then the stereo element is for 'total removal'
@@ -1306,7 +1306,7 @@ public class SMIRKSManager {
 			for (IStereoElement stEl : listSE)
 			{	
 				IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl);
-				//if res <> 0 then the stereo element is for 'total removal'
+				//if el = null then the stereo element is for 'total removal'
 				if (el != null)
 					invalidatedStereoElements.add(el);
 			}
