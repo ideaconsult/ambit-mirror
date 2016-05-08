@@ -6,17 +6,7 @@
 	
 	<li ><a href="${ambit_root}/substanceowner">Nanomaterial contributors</a></li>
 		
-	<li ><a href="#">Data management</a>
-		<ul>
-			<li ><a href="${ambit_root}/ui/uploadsubstance" title='Upload of several *.i5z , *.rdf or *.csv file'>Multiple files upload</a>
-			<li ><a href="${ambit_root}/ui/uploadsubstance1" title='Excel template with JSON configuration upload'>Spreadsheet upload</a>
-			<li ><a href="${ambit_root}/ui/updatesubstancei5">Retrieve substance(s) from IUCLID5 server</a>
-			<li>
-			<a href="${ambit_root}/bundle">Datasets of nanomaterials and studies</a>
-				<#include "/menu/profile/enanomapper/assessment_menu.ftl">
-			</li>			
-		</ul>
-	</li>
+	
 <!--	
 	<li ><a href="${ambit_root}/query/experiment_endpoints">Endpoints</a></li>
 -->	

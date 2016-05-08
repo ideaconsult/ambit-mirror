@@ -8,12 +8,7 @@
 		</ul>
 	</li>
 	<li><a href='https://github.com/enanomapper/data.enanomapper.net/issues' target='report' title='Found an error? Report here'>Submit an issue <img src='${ambit_root}/images/profile/enanomapper/enm_api_24.png'></a></li>	
-	<li><a href="#">OpenTox API</a>
-	<ul>
-		<li><a href='${ambit_root}/api-docs' target=_blank title="API documentation in Swagger JSON format">API Documentation</a></li>
-		<li><a href='http://enanomapper.github.io/API/' target=_blank title="API documentation in Swagger JSON format">API Documentation (eNanoMapper services)</a></li>
-	</ul>
-	</li>
+	
 	<li>
 		<a href="${ambit_root}/depict">Demo</a>
 		<#include "/menu/profile/enanomapper/demo_menu.ftl">
