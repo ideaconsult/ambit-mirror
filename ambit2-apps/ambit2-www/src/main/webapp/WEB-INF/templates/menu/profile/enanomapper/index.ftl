@@ -129,7 +129,7 @@ $(document)
 			    <li><a href="${ambit_root}/ontobucket?search=cytotoxicity&type=protocol&qe=true" title="Free text search (experimental)"><br/>Free text search</a> <a href='#' class='chelp nanomaterial5'>?</a></li>
 			    -->
 			    
-			    <li><a href="http://enanomapper.github.io/data.enanomapper.net/?search=zinc%20oxide" title="Free text search (experimental)"><br/>Free text search</a> <a href='#' class='chelp nanomaterial5'>?</a></li>
+			    <li><a href="https://search.data.enanomapper.net" title="Free text search"><br/>Free text search</a> <a href='#' class='chelp nanomaterial5'>?</a></li>
 			    
 			    <li><a href='${ambit_root}/substance'>Browse nanomaterials and studies</a> <a href='#' class='chelp nanomaterial'>?</a> <br/>
 			    </li>
