@@ -40,8 +40,7 @@ See <a href="http://www.beilstein-journals.org/bjnano/single/articleFullText.htm
 	<a href="http://www.beilstein-journals.org/bjnano/single/articleFullText.htm?publicId=2190-4286-6-165#F13" target='guide' class='qxternal'>More details</a>.
   </div>
   <div id="nanomaterial5">
-  	Free text search with query expansion based on the eNanomapper ontology and annotated database entries, with an indication of the relevance of the hits. UNDER DEVELOPMENT!.
-	<a href="http://www.beilstein-journals.org/bjnano/single/articleFullText.htm?publicId=2190-4286-6-165#F1" target='guide' class='qxternal'>More details</a>.  	 
+  	Free text search and integrated view of eNanoMapper database and <a href="https://cananolab.nci.nih.gov/caNanoLab/#/" target=_blank class="qxternal">caNanoLab</a>  	 
   </div>
  <div id="nanomaterial6">
 	Requires login!
@@ -55,11 +54,11 @@ The API specifies how software components should interact.  A good API makes it 
 <br/>
 Representational state transfer (<a href="https://en.wikipedia.org/wiki/Representational_state_transfer"  target='guide' class='qxternal'>REST</a>) is an abstraction of the architecture of the World Wide Web ;
 <br/>
-<a href='http://enanomapper.github.io/API/' target='guide' class='qxternal'>Online documentation</a> using the <a href='http://swagger.io/' target='guide' class='qxternal'>Swagger</a> specification.
+<a href='http://enanomapper.github.io/API/' target='guide' class='qxternal' target=_blank>Online documentation</a> using the <a href='http://swagger.io/' target='guide' class='qxternal'>Swagger</a> specification.
 
   </div>
  <div id="_oht">
-The OECD Harmonized Templates (OHTs) are structured (XML) data formats for reporting safety-related studies on chemical substances. The OHTs http://www.oecd.org/ehs/templates/ ) and the supporting IT tool (IUCLID5, http://iuclid.eu ) are used in a regulatory context, for preparation of substance dossiers for REACH and for other regulatory frameworks operating in Europe; as well as by the JRC NanoHub database
+The OECD Harmonized Templates (OHTs) are structured (XML) data formats for reporting safety-related studies on chemical substances. The <a href="http://www.oecd.org/ehs/templates/" class="qxternal" target=_blank>OHTs</a>  ) and the supporting IT tool (<a href="http://iuclid.eu" class="qxternal" target=_blank>IUCLID5</a>) are used in a regulatory context, for preparation of substance dossiers for <a href="http://ec.europa.eu/environment/chemicals/reach/reach_en.htm" class="qxternal" target=_blank>REACH</a> and for other regulatory frameworks operating in Europe; as well as by the JRC NanoHub database
   </div>
  <div id="_nmdataparser">
 Excel files with custom JSON configuration. <br/>
@@ -67,7 +66,7 @@ Excel files with custom JSON configuration. <br/>
 <li>Prepare the ENM characterisation and assay data using your own templates;</li>
 <li>The Excel parser enables converting the  input templates into the eNanoMapper data model and upload into the DB;</li>
 <li>The parser configuration is defined in a separate JSON file, mapping the custom spreadsheet structure into the internal eNanoMapper storage components</li> 
-<li>The JSON configuration syntax includes a set of keywords, specifying different strategies for reading the data from one or several sheets, as well as allowing combination of the excel structures (sheets, rows, columns, blocks of cells and cells) into the eNanoMapper data model. The parser code, the JSON syntax, documentation and example files are available at https://github.com/enanomapper/nmdataparser/. The mapping enables a uniform approach towards import, storage and searching of the ENM physicochemical measurements and biological assay results. While the parser itself is open source, the configuration files may not be, thus not revealing the organisation of confidential data templates.</li> 
+<li>The JSON configuration syntax includes a set of keywords, specifying different strategies for reading the data from one or several sheets, as well as allowing combination of the excel structures (sheets, rows, columns, blocks of cells and cells) into the eNanoMapper data model. The parser code, the JSON syntax, documentation and example files are <a href="https://github.com/enanomapper/nmdataparser/" target=_blank class="qxternal">available</a>. The mapping enables a uniform approach towards import, storage and searching of the ENM physicochemical measurements and biological assay results. While the parser itself is open source, the configuration files may not be, thus not revealing the organisation of confidential data templates.</li> 
 <li>Maps of the confidential spreadsheet templates are available on <a href='mailto:support@ideaconsult.net'>request</a></li> 
 </ul>
 <a href="http://www.beilstein-journals.org/bjnano/single/articleFullText.htm?publicId=2190-4286-6-165#F7" target='guide'>More</a>
