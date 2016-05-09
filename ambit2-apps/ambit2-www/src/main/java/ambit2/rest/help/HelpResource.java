@@ -49,7 +49,8 @@ public class HelpResource extends CatalogResource<String>  {
 		nanomaterial,
 		bundle,
 		endpoint_search,
-		openam
+		openam,
+		enmindex
 	}
 	public HelpResource() {
 		super();
