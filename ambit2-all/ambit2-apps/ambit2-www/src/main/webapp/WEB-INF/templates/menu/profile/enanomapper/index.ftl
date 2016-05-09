@@ -26,6 +26,17 @@ h4, h5, h6 {
 	color: #8C0305;
 }	
 
+.mhelp {
+}
+
+.mhelp a:link {
+    text-decoration: none;
+}
+
+.mhelp a:visited {
+    text-decoration: none;
+}
+
 #footer {
 	position: fixed;
 	height: 80px;
@@ -44,8 +55,7 @@ h4, h5, h6 {
 	background-color: #8C0305;
 	text-align: center;
 }
-.search_options { list-style-type: none; margin: 0; padding: 0; width: 600px; }
-.search_options li { margin: 3px 3px 3px 0; padding: 20px 5px 5px 5px; float: left; width: 140px; height: 120px; font-size: 1em; vertical-align: middle; text-align: center; box-shadow: 5px 6px 6px #540103; border: 1px solid #8C0305; background-color: #fafafa; }
+
 </style>
 
 
@@ -54,10 +64,13 @@ h4, h5, h6 {
 $(document)
 		.ready(
 				function() {
-						loadHelp("${ambit_root}","nanomaterial");
+						$( "#smartmenu" ).smartmenus();    
+						loadHelpAsTooltip("${ambit_root}","enmindex");
 						jQuery("#breadCrumb").hide();
-						$( ".search_options" ).sortable();
-					    $( ".search_options" ).disableSelection();
+					    $( document ).tooltip({
+      						track: true
+					    });
+					    
 				});
 </script>
 </head>
@@ -68,82 +81,105 @@ $(document)
 
 <!-- banner -->
 
-<#include "/banner_crumbs.ftl">
-
+<div class="row half-bottom" id="header" style="padding-top:5px">
+	<div class="one column">&nbsp;</div>
+	<div class="fourteen columns remove-bottom">
+		<#include "/menu/profile/enanomapper/smartmenu.ftl">
+	</div>
+	<div class="one column">&nbsp;</div>	
+</div>
 	
+<div class="row remove-bottom" id="header">
+	<#include "/toplinks.ftl">
+</div>
+<div class="row half-bottom">
+
+		<div class="eight columns remove-bottom" style="padding-left:10px;">
+			<div id="breadCrumb" class="breadCrumb module remove-bottom h5">
+                    <ul>
+                        <li>
+                            <a href="${ambit_root}" title="AMBIT Home">Home</a>
+                        </li>
+                    </ul>
+			</div>
+		</div>
+		
+		<div class="seven columns remove-bottom"  id="_searchdiv">
+		</div>
+
+</div>	
+<!-- end banner -->	
+<div class="row add-bottom">&nbsp;</div>
+<div class="row add-bottom">&nbsp;</div>
 <div class="two columns" id="query">
 &nbsp;
 </div>	
 
-<div class="thirteen columns " style="padding:0;" >
-	<div class="row add-bottom">
-	&nbsp;
-	</div>
-	<div class="row add-bottom">
+<div class="thirteen columns remove-bottom" style="padding:0;" >
+	<div class="row remove-bottom">
 		
-			<div class="sixteen columns remove-bottom" id="query">
-			<div class="alpha" >
-				<div class="remove-bottom h2">
-						Welcome to eNanoMapper prototype database 
+				<div class="three columns remove-bottom">
+					<a href="http://enanomapper.net"><img class='scale-with-grid' border='0' src='${ambit_root}/images/profile/${menu_profile}/logo.png' title='eNanoMapper web site' alt='AMBIT logo'></a>
 				</div>
-			    <div class='enmhelp'> A substance database for nanomaterial safety information</div>			
-			</div>
-			</div>
+				<div class="twelve columns remove-bottom h2">
+					eNanoMapper prototype database 
+				</div>
+		
+	</div>
+	
+	<div class="row remove-bottom">
+		<div class="three columns remove-bottom">&nbsp;</div>
+		<div class='twelve columns remove-bottom'><span class="mhelp enmhelp substance">A substance database for nanomaterial safety information</span></div>
 	</div>	
 		
 	<div class="row add-bottom">&nbsp;</div>	
 	
-	<div class="row add-bottom">
+	<div class="row remove-bottom">
 		<form action="https://search.data.enanomapper.net/" id="searchForm"  method="GET" >	
-			<div class="sixteen columns remove-bottom" id="query">
+			<div class="sixteen columns remove-bottom" >
 			<div class="alpha">
 				<div class="remove-bottom h4">
-						Try the new free text search  <a href='#' class='chelp nanomaterial5'>?</a>
+						<span class='mhelp nanomaterial5' style='"text-decoration: none;'>free text search</span>
 				</div>
 			    <div class='chelp'> </div>			
 			</div>
 			</div>
-		<div class='row half-bottom'>
+		<div class='row remove-bottom'>
 			<input class='eight columns omega half-bottom' type="text" id='search' value='TiO2' name='search'>
 			<input class='three columns omega submit' type='submit' value='Search'>
 		</div>
+		
+		<div class="sixteen columns add-bottom" >
+				<span style='font-weight:bold;'>Search</span>
+			    <a href="${ambit_root}/substance?type=&search=NM-111&page=0&pagesize=20" title="Search for nanomaterials by identifiers" class="mhelp substancesearch">by identifier</a> | 
+			    <a href="${ambit_root}/query/study" title="Search substances by physico-chemical parameters or biological effects" class="mhelp nanomaterial3">by physchem parameters or biological effects</a> |
+			    <a href="${ambit_root}/ui/_search?search=SiO2" title="Search nanomaterials by chemical structure of components" class="mhelp nanomaterial4">by composition</a> | 
+			    <a href="${ambit_root}/substance?type=citation&search=10.1073&page=0&pagesize=20" title="Search for nanomaterials by paper reference" class="mhelp nanomaterial2">by citation</a> |  
+			    <a href='${ambit_root}/substance' class="mhelp nanomaterial">Browse</a> |
+				<a href='${ambit_root}/ui/uploadsubstance1' class="mhelp nanomaterial6">Upload</a>
+		</div>
+		</form>	
+   <div>
 
 
-		<div class="sixteen columns remove-bottom" id="query">
-
-			<div class="alpha ten columns" style="padding: 0px 5px 5px 5px"> 
-				<span style='font-weight:bold;'>Search, browse, upload</span>
-				<ul class='search_options'>
-			    <li><br/><a href="${ambit_root}/substance?type=&search=NM-111&page=0&pagesize=20" title="Search for nanomaterials by identifiers">Search nanomaterials by identifier</a> <a href='#' class='chelp substancesearch'>?</a></li>
-			    <li><a href="${ambit_root}/query/study" title="Search substances by physico-chemical parameters or biological effects">Search nanomaterials by physchem parameters or biological effects</a> <a href='#' class='chelp nanomaterial3'>?</a></li>
-			    <li><a href="${ambit_root}/ui/_search?search=SiO2" title="Search nanomaterials by chemical structure of components"><br/>Search nanomaterials by composition</a> <a href='#' class='chelp nanomaterial4'>?</a></li>
-			    <!--
-			    <li><a href="${ambit_root}/ontobucket?search=cytotoxicity&type=protocol&qe=true" title="Free text search (experimental)"><br/>Free text search</a> <a href='#' class='chelp nanomaterial5'>?</a></li>
-			    <li><a href="https://search.data.enanomapper.net" title="Free text search"><br/>Free text search</a> <a href='#' class='chelp nanomaterial5'>?</a></li>
-			    -->
-			    <li><a href="${ambit_root}/substance?type=citation&search=10.1073&page=0&pagesize=20" title="Search for nanomaterials by paper reference">Search nanomaterials by citation</a> <a href='#' class='chelp nanomaterial2'>?</a></li>
-			    <li><a href='${ambit_root}/substance'>Browse nanomaterials and studies</a> <a href='#' class='chelp nanomaterial'>?</a> <br/>
-			    </li>
-				<li><a href='${ambit_root}/ui/uploadsubstance1'>Data upload</a> <a href='#' class='chelp nanomaterial6'>?</a>
-				<span class='chelp'> Supported import formats: OECD HT<a href='#' class='chelp _oht'>?</a>, Excel spreadsheets<a href='#' class='chelp _nmdataparser'>?</a></a>
-				</li>
-				</ul>
-			</div>
-			<div class="one columns omega" style='padding:0;margin:0;'>&nbsp;</div>
-			<div class="four columns omega" style=" box-shadow: 3px 3px 7px #999;border: 1px solid #ccc;padding: 1em 25px 25px 25px;background-color: #fafafa;">
+	<div class='row add-bottom'>&nbsp;</div>
+	<div class='row add-bottom'>&nbsp;</div>
+	
+	
+	<div class="row add-bottom">
+			<div class="ten columns" style=" box-shadow: 3px 3px 7px #999;border: 1px solid #ccc;padding: 1em 25px 25px 25px;background-color: #fafafa;">
 				<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
 				<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'></div>
 				<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'></div>		
 			</div>
 
-		</div>
-		
-		</div>		
-	</form>				
+	
+				
 	</div>	
 
 	
 	<div class='row add-bottom'>&nbsp;</div>
+	
 
 </div>   		
 

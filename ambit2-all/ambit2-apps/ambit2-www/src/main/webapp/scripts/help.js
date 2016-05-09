@@ -24,3 +24,20 @@ function loadHelp(root,topic) {
 		});
 	});
 }
+
+function loadHelpAsTooltip(root,topic) {
+	var helpURI =  root + "/chelp/" + (topic===undefined?"":topic) + "?media=text/html";
+	$.get(helpURI,function(data) {
+		$('#pagehelp').append(data);	
+		$('#keys ul li').map(function(el, value) {
+			try {
+				var key = $(value.innerHTML).attr('href');
+			    var content = $(key).html();
+			    try {key = key.replace('#','');} catch (err) {}
+			    $('.mhelp.'+key)
+				 .attr('title',content)
+				 ;
+			} catch (err) {}    
+		});
+	});
+}
