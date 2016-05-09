@@ -41,6 +41,8 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import junit.framework.Assert;
+
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -215,6 +217,7 @@ public abstract class DbUnitTest {
 
 	public void setUpDatabaseFromResource(String resource) throws Exception {
 		InputStream xmlfile = getClass().getClassLoader().getResourceAsStream(resource);
+		Assert.assertNotNull(resource,xmlfile);
 		setUpDatabase(xmlfile);
 	}
 	public void setUpDatabase(InputStream xmlfile) throws Exception {

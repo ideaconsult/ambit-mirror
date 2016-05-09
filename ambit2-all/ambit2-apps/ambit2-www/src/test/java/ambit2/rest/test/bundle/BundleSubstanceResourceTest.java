@@ -44,13 +44,6 @@ public class BundleSubstanceResourceTest extends ProtectedResourceTest {
 		return count == 1;
 	}
 
-	@Override
-	public boolean verifyResponseJSON(String uri, MediaType media,
-			InputStream in) throws Exception {
-		// TODO Auto-generated method stub
-		return super.verifyResponseJSON(uri, media, in);
-	}
-
 	@Test
 	public void testRDF() throws Exception {
 		setUpDatabaseFromResource(dbFile);

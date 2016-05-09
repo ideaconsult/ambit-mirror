@@ -19,6 +19,7 @@ import net.idea.opentox.cli.structure.CompoundClient;
 import net.idea.restnet.c.task.ClientResourceWrapper;
 
 import org.apache.http.HttpStatus;
+import org.codehaus.jackson.JsonNode;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.BeforeClass;
@@ -105,18 +106,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 	public void testJSON() throws Exception {
 		testGet(getTestURI(),MediaType.APPLICATION_JSON);
 	}
-	@Override
-	public boolean verifyResponseJSON(String uri, MediaType media, InputStream in)
-			throws Exception {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		String line = null;
-		int count=0;
-		while ((line = reader.readLine())!=null) {
-			count++;
-		}
-		return count > 0;
-	}		
-	
+
 
 	@Test
 	public void testCalculateCPSA() throws Exception {
