@@ -43,10 +43,17 @@ public class BundleResourceTest extends ProtectedResourceTest {
 	}
 
 	@Test
+	public void testJSON() throws Exception {
+		setUpDatabaseFromResource(dbFile);
+		testGet(getTestURI(), MediaType.APPLICATION_JSON);
+	}
+
+	@Test
 	public void testRDF() throws Exception {
 		setUpDatabaseFromResource(dbFile);
 		testGet(getTestURI(), MediaType.APPLICATION_RDF_XML);
 	}
+
 
 	@Override
 	public OntModel verifyResponseRDFXML(String uri, MediaType media,

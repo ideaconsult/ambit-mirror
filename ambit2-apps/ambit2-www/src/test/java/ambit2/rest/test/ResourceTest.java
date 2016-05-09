@@ -52,8 +52,6 @@ import ambit2.rest.legacy.OTRemoteTask;
 
 import com.hp.hpl.jena.ontology.OntModel;
 
-
-
 public abstract class ResourceTest extends DbUnitTest {
 	protected Component component = null;
 	protected OpenSSOToken ssoToken = null;
@@ -239,23 +237,27 @@ public abstract class ResourceTest extends DbUnitTest {
 					extraHeaders);
 		}
 	}
-	
+
 	public void testGet(String uri, MediaType media, Status expectedStatus)
 			throws Exception {
-		HttpURLConnection uc = ClientResourceWrapper.getHttpURLConnection(uri, "GET", media.toString(),"test");
+		HttpURLConnection uc = ClientResourceWrapper.getHttpURLConnection(uri,
+				"GET", media.toString(), "test");
 		HttpURLConnection.setFollowRedirects(true);
 		Assert.assertEquals(expectedStatus.getCode(), uc.getResponseCode());
 		InputStream in = null;
 		try {
-		    in = uc.getInputStream();
-		    Assert.assertTrue(verifyResponse(uri, media, in));
+			in = uc.getInputStream();
+			Assert.assertTrue(verifyResponse(uri, media, in));
 		} catch (Exception x) {
 			throw x;
 		} finally {
-			try { in.close(); } catch (Exception x) {}
+			try {
+				in.close();
+			} catch (Exception x) {
+			}
 		}
 	}
-	
+
 	public Response xtestGet(String uri, MediaType media, Status expectedStatus)
 			throws Exception {
 		Request request = new Request();
@@ -340,10 +342,15 @@ public abstract class ResourceTest extends DbUnitTest {
 			InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
-
+	public JsonNode parseResponseJSON(String uri, MediaType media,
+			InputStream in) throws Exception {
+		ObjectMapper m = new ObjectMapper();
+		return m.readTree(in);
+	}
 	public boolean verifyResponseJSON(String uri, MediaType media,
 			InputStream in) throws Exception {
-		throw new Exception("Not implemented");
+		JsonNode node = parseResponseJSON(uri, media, in);
+		return node!=null;
 	}
 
 	/*
@@ -410,8 +417,8 @@ public abstract class ResourceTest extends DbUnitTest {
 		throw new Exception("Not implemented");
 	}
 
-	public boolean verifyResponseISA(String uri, MediaType media,
-			InputStream in) throws Exception {
+	public boolean verifyResponseISA(String uri, MediaType media, InputStream in)
+			throws Exception {
 		throw new Exception("Not implemented");
 	}
 
