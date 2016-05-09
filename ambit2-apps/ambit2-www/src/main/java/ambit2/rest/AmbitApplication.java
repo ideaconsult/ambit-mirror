@@ -878,10 +878,11 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		OriginFilter originFilter = new OriginFilter(getContext(),
 				allowedOrigins);
 		originFilter.setNext(router);
-
-		// StringWriter w = new StringWriter();
-		// printRoutes(router, "\t", w);
-		// System.out.println(w);
+		/*
+		StringWriter w = new StringWriter();
+		printRoutes(router, "\t", w);
+		 System.out.println(w);
+		 */
 
 		return originFilter;
 	}
@@ -1572,7 +1573,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected synchronized boolean attachSubstanceRouter() {
 		try {
 			String attach = getProperty(attachSubstance, ambitProperties);
-			return attach == null ? null : Boolean.parseBoolean(attach);
+			if (attach!=null && attach.startsWith("${")) return true;
+			return attach == null ? true : Boolean.parseBoolean(attach);
 		} catch (Exception x) {
 			return true;
 		}
