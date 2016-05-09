@@ -389,7 +389,7 @@ public class DBSubstanceImport {
 				.create("c");
 
 		Option clearComposition = OptionBuilder.hasArg()
-				.withLongOpt("clearComposotion").withArgName("value")
+				.withLongOpt("clearComposition").withArgName("value")
 				.withDescription("true|false").create("t");
 
 		Option clearMeasurement = OptionBuilder.hasArg()
