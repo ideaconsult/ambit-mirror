@@ -155,6 +155,12 @@ public class CompoundResource extends
 				IProcessor<Object, Representation> convertor = createConvertor(variant);
 				Representation r = convertor.process(null);
 				return r;
+			} catch (NotFoundException x) {
+				getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND, x);
+				return null;
+			} catch (ResourceException x) {
+				getResponse().setStatus(x.getStatus(),x);
+				return null;
 			} catch (Exception x) {
 				getResponse().setStatus(Status.SERVER_ERROR_INTERNAL, x);
 				return null;
