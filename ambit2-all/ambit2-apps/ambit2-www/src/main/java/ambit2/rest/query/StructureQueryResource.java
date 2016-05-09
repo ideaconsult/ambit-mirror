@@ -503,21 +503,19 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 
 	protected String getSMILES(Form form, boolean aromatic)
 			throws ResourceException {
-		QueryType query_type;
 		String query_smiles;
-		try {
-			query_type = QueryType.valueOf(form.getFirstValue("type").trim());
+		String search_arg = form.getFirstValue(QueryResource.search_param);
+		String searchb64_arg = form
+				.getFirstValue(QueryResource.b64search_param);
+		QueryType query_type = getQueryType(form, search_arg);
 
-		} catch (Exception x) {
-			query_type = QueryType.smiles;
-		}
 		switch (query_type) {
 		case mol: {
-			query_smiles = form.getFirstValue(QueryResource.b64search_param);
+			query_smiles = searchb64_arg;
 			if (query_smiles != null) {
 				query_smiles = new String(Base64.decode(query_smiles));
 			} else
-				query_smiles = form.getFirstValue(QueryResource.search_param);
+				query_smiles = search_arg;
 			try {
 				IAtomContainer ac = MoleculeTools.readMolfile(query_smiles);
 				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(ac);
@@ -533,21 +531,20 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			}
 		}
 		case smiles: {
-			query_smiles = form.getFirstValue(QueryResource.b64search_param);
+			query_smiles = searchb64_arg;
 			if (query_smiles != null) {
 				query_smiles = new String(Base64.decode(query_smiles));
 			} else
-				query_smiles = form.getFirstValue(QueryResource.search_param);
+				query_smiles = search_arg;
 
 			return query_smiles == null ? null : query_smiles.trim();
 
 		}
 		case url:
 			try {
-				if (form.getFirstValue(QueryResource.search_param) == null)
+				if (search_arg == null)
 					return null;
-				query_smiles = form.getFirstValue(QueryResource.search_param)
-						.trim();
+				query_smiles = search_arg.trim();
 				if (query_smiles == null)
 					throw new ResourceException(
 							Status.CLIENT_ERROR_BAD_REQUEST, "Empty query");
@@ -556,11 +553,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				mol = c.process(mol);
 				ambit2.core.helper.CDKHueckelAromaticityDetector
 						.detectAromaticity(mol);
-				SmilesGenerator g = null;
+				SmilesGenerator g = SmilesGenerator.generic();
 				if (aromatic)
 					g = g.aromatic();
-				else
-					g = SmilesGenerator.generic();
 				return g.create(mol);
 			} catch (Exception x) {
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
@@ -572,25 +567,34 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 
 	}
 
-	protected IAtomContainer getMolecule(Form form) throws ResourceException {
-		QueryType query_type;
-		String query_smiles = "";
+	protected QueryType getQueryType(Form form, String search_arg) {
 		try {
-			query_type = QueryType.valueOf(form.getFirstValue("type"));
+			String arg = form.getFirstValue("type");
+			if (search_arg != null && search_arg.startsWith("http"))
+				return QueryType.url;
+			else
+				return QueryType.valueOf(arg);
 
 		} catch (Exception x) {
-			query_type = QueryType.smiles;
+			return QueryType.smiles;
 		}
+	}
+
+	protected IAtomContainer getMolecule(Form form) throws ResourceException {
+
+		String query_smiles = "";
+		String search_arg = form.getFirstValue(QueryResource.search_param);
+		String searchb64_arg = form
+				.getFirstValue(QueryResource.b64search_param);
+		QueryType query_type = getQueryType(form, search_arg);
 		switch (query_type) {
 		case mol: {
 			try {
-				query_smiles = form
-						.getFirstValue(QueryResource.b64search_param);
+				query_smiles = searchb64_arg;
 				if (query_smiles != null) {
 					query_smiles = new String(Base64.decode(query_smiles));
 				} else
-					query_smiles = form
-							.getFirstValue(QueryResource.search_param);
+					query_smiles = search_arg;
 				return MoleculeTools.readMolfile(query_smiles);
 			} catch (Exception x) {
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
@@ -599,13 +603,11 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		}
 		case smiles:
 			try {
-				query_smiles = form
-						.getFirstValue(QueryResource.b64search_param);
+				query_smiles = searchb64_arg;
 				if (query_smiles != null) {
 					query_smiles = new String(Base64.decode(query_smiles));
 				} else
-					query_smiles = form
-							.getFirstValue(QueryResource.search_param);
+					query_smiles = search_arg;
 
 				if (query_smiles == null)
 					throw new ResourceException(
@@ -658,7 +660,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			}
 
 		case url: {
-			query_smiles = form.getFirstValue(QueryResource.search_param);
+			query_smiles = search_arg;
 			if (query_smiles == null)
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
 						"Empty query");
