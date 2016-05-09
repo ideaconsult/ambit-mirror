@@ -1,6 +1,5 @@
 package ambit2.rules.conditions.parser;
 
-import ambit2.rules.conditions.ConditionExpression;
 import ambit2.rules.conditions.DescriptorValueCondition;
 import ambit2.rules.conditions.ICondition;
 import ambit2.rules.conditions.value.IValue.Relation;

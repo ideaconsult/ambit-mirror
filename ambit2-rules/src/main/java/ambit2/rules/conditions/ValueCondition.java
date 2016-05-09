@@ -1,7 +1,6 @@
 package ambit2.rules.conditions;
 
 import ambit2.rules.conditions.value.IValue;
-import ambit2.rules.conditions.value.Value;
 
 public class ValueCondition implements IValueCondition
 {
