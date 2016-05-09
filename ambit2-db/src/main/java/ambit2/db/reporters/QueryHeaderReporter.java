@@ -121,7 +121,7 @@ public abstract class QueryHeaderReporter<Q extends IQueryRetrieval<IStructureRe
 					return super.process(target);
 				}
 			});
-		if (getTemplate().size()>0)  {
+		if ((getTemplate()!=null) && (getTemplate().size()>0))  {
 			Template copy = new Template();
 			for (Property p : getTemplate().values()) {
 				if (p.getId()>0) copy.add(p);

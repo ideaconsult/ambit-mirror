@@ -6,10 +6,13 @@ import java.io.InputStreamReader;
 
 import junit.framework.Assert;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
+import ambit2.export.isa.v1_0.objects.Investigation;
+import ambit2.export.isa.v1_0.objects.Study;
 import ambit2.rest.bundle.BundleSubstanceResource;
 import ambit2.rest.test.ProtectedResourceTest;
 
@@ -56,20 +59,23 @@ public class BundleSubstanceResourceTest extends ProtectedResourceTest {
 		setUpDatabaseFromResource(dbFile);
 		Reference r = new Reference(getTestURI());
 		r.addQueryParameter("media", BundleSubstanceResource.ISAJSON.getName());
-		testGet(r.toString(),BundleSubstanceResource.ISAJSON);
+		testGet(r.toString(), BundleSubstanceResource.ISAJSON);
 	}
 
 	@Override
-	public boolean verifyResponseISA(String uri, MediaType media, InputStream in)
-			throws Exception {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		String line = null;
-		int count = 0;
-		while ((line = reader.readLine()) != null) {
-			System.out.println(line);
-			count++;
+	public boolean verifyResponseISAJSON(String uri, MediaType media,
+			InputStream in) throws Exception {
+		ObjectMapper m = new ObjectMapper();
+		Assert.assertTrue(m.canDeserialize(m.constructType(Investigation.class)));
+		Investigation isa = m.readValue(in, Investigation.class);
+		Assert.assertNotNull(isa.studies);
+		for (Study study : isa.studies) {
+			Assert.assertNotNull(study.protocols);
+			Assert.assertNotNull(study.assays);
+			Assert.assertNotNull(study.materials);
+			Assert.assertNotNull(study.factors);
 		}
-		return count == 1;
+		return isa != null;
 	}
 
 	@Override

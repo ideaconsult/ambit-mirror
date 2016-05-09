@@ -417,7 +417,7 @@ public abstract class ResourceTest extends DbUnitTest {
 		throw new Exception("Not implemented");
 	}
 
-	public boolean verifyResponseISA(String uri, MediaType media, InputStream in)
+	public boolean verifyResponseISAJSON(String uri, MediaType media, InputStream in)
 			throws Exception {
 		throw new Exception("Not implemented");
 	}
@@ -446,7 +446,7 @@ public abstract class ResourceTest extends DbUnitTest {
 		if (MediaType.APPLICATION_PDF.equals(media))
 			return verifyResponsePDF(uri, media, in);
 		else if (BundleSubstanceResource.ISAJSON.equals(media))
-			return verifyResponseISA(uri, media, in);
+			return verifyResponseISAJSON(uri, media, in);
 		else if (MediaType.TEXT_HTML.equals(media))
 			return verifyResponseHTML(uri, media, in);
 		else if (MediaType.APPLICATION_JSON.equals(media))
