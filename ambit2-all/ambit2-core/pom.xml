@@ -39,6 +39,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-rules</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.sun.xml.stream</groupId>
 			<artifactId>sjsxp</artifactId>
 			<version>1.0.1</version>
