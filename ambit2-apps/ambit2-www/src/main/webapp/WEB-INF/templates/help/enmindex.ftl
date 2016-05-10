@@ -42,7 +42,7 @@ Publication: <a href="http://www.beilstein-journals.org/bjnano/single/articleFul
   	Search by free text within eNanoMapper database and NIH/NCI caNanoLab  	 
   </div>
  <div id="nanomaterial6">
- 	Upload via web form. Supported import formats: OECD HT, Excel spreadsheets with JSON configuration. Requires login!
+ 	Upload via web form. Supported import formats: OECD HT, Excel spreadsheets with JSON configuration. Requires login and data upload rights.
   </div>
   <div id="nanomaterial">
  	Browse nanomaterials
