@@ -155,8 +155,8 @@ $(document)
 			    <a href="${ambit_root}/query/study" title="Search substances by physico-chemical parameters or biological effects" class="mhelp nanomaterial3">by physchem parameters or biological effects</a> |
 			    <a href="${ambit_root}/ui/_search?search=SiO2" title="Search nanomaterials by chemical structure of components" class="mhelp nanomaterial4">by composition</a> | 
 			    <a href="${ambit_root}/substance?type=citation&search=10.1073&page=0&pagesize=20" title="Search for nanomaterials by paper reference" class="mhelp nanomaterial2">by citation</a> |  
-			    <a href='${ambit_root}/substance' class="mhelp nanomaterial">Browse</a> |
-				<a href='${ambit_root}/ui/uploadsubstance1' class="mhelp nanomaterial6">Upload</a>
+			    <a href='${ambit_root}/substance' class="mhelp nanomaterial"><span style='font-weight:bold;'>Browse</span></a> |
+				<a href='${ambit_root}/ui/uploadsubstance1' class="mhelp nanomaterial6"><span style='font-weight:bold;'>Upload</span></a>
 		</div>
 		</form>	
    <div>
