@@ -4,6 +4,12 @@
 
 eNanoMapper database  a substance database for nanomaterial safety information
 
+#### [Data collections][data_collection]
+
+![Data collections](./images/enanomapper/screenshots/bundles.png "Data collections")
+
+Data collections
+
 #### [Endpoint search][endpoint_search]
 
 ![Endpoint search](./images/enanomapper/screenshots/search_size.png "Search nanomaterials by size")
@@ -22,10 +28,18 @@ Nanomaterial physicochemical characterisaion
 
 Nanomaterial studies (Protein corona)
 
+#### [Free text search][text_search]
+
+![Free text search](./images/enanomapper/screenshots/search.png "Free text search")
+
+Free text search on eNanoMapper and cananoLab databases
+
 [frontpage]: enanomapper.html
 [endpoint_search]: enanomapper_usage.html
 [physchem]: enanomapper_usage_substance.html
 [bundle]: enanomapper_usage_substance.html
+[text_search]: enanomapper.html
+[data_collection]: enanomapper.html
 
 ---
 
@@ -77,7 +91,7 @@ Try the public web services, datasets and models :
 
 -   [**Browse nanomaterials and studies**](https://apps.ideaconsult.net/enanomapper/substance)
 
--   [**Free text search**](https://apps.ideaconsult.net/enanomapper/ontobucket?search=cytotoxicity%26type=protocol%26qe=true)
+-   [**Free text search**](https://search.data.enanomapper.net)
 
 Browse and try eNanoMapper database REST API
 
