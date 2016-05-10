@@ -2713,8 +2713,14 @@ public class TestUtilities {
 		//tu.testCheckStereoElements("C(=C(/C(=O)[O-])\\Cl)/C=C(\\C(=O)[O-])/O");
 		
 		tu.FlagApplyStereoTransformation = true;
-		tu.testSMIRKS("O[C:1]>>N[C:1]", "C[C@](O)(CC)Cl"); 
-		tu.testSMIRKS("O[C:1]>>N[C:1]", "O\\C=C/C");
+		//tu.testSMIRKS("O[C:1]>>N[C:1]", "C[C@](O)(CC)Cl"); 
+		//tu.testSMIRKS("O[C:1]>>N[C:1]", "O/C=C/C");		
+		//tu.testSMIRKS("O[C:1]Cl>>N[C:1]Br", "C[C@](O)(CC)Cl"); 
+		//tu.testSMIRKS("O[C:1]>>N[C:1]", "C[C@H](O)Cl");
+		tu.testSMIRKS("[C:1]=[C:2]>>[C:1].[C:2]", "O/C=C/C");
+		
+		
+		
 		
 		//tu.testSMIRKS("[#8:1]([H])-[#6:2](-[#6:9](-[#8-:10])=[O:11])=[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]-[#6](-[#8-])=O>>"
 		//		+ "[#8-:10]-[#6:9](=[O:11])-[#6:2](=[O:1])-[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]",

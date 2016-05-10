@@ -790,7 +790,7 @@ public class SMIRKSManager {
     	
     	//This is a container with stereo elements that are removed during the molecule transformation
     	//due to invalidation of the stereo information
-    	//Some of these elements can be returned back to the molecule stereo elements
+    	//Some of these elements can be returned back into the molecule stereo element list
     	//if some later transformation makes them again valid stereo elements
     	List<IStereoElement> invalidatedStereoElements = new ArrayList<IStereoElement>();
     	
@@ -1297,7 +1297,9 @@ public class SMIRKSManager {
 						newInvEl.add(el);
 				}	
 			}
-			invalidatedStereoElements = newInvEl;
+			
+			invalidatedStereoElements.clear();
+			invalidatedStereoElements.addAll(newInvEl);
 		}
 		
 		//Handle newly invalidated stereo elements
@@ -1328,13 +1330,13 @@ public class SMIRKSManager {
     IStereoElement handleStereoOnAtomDeletion(IAtom deletedAt, IAtomContainer target, IStereoElement element)
     {
     	if (element instanceof DoubleBondStereochemistry)
-    		return StereoChemUtils.deleteAtom(deletedAt, /*target,*/ (DoubleBondStereochemistry)element);
+    		return StereoChemUtils.deleteAtom(deletedAt, (DoubleBondStereochemistry)element);
     	
     	if (element instanceof TetrahedralChirality)
-    		return StereoChemUtils.deleteAtom(deletedAt, /*target,*/  (TetrahedralChirality)element);
+    		return StereoChemUtils.deleteAtom(deletedAt, (TetrahedralChirality)element);
     		
     	if (element instanceof ExtendedTetrahedral)
-    		return StereoChemUtils.deleteAtom(deletedAt, /*target,*/ (ExtendedTetrahedral)element);
+    		return StereoChemUtils.deleteAtom(deletedAt, (ExtendedTetrahedral)element);
 		
     	//Unknown type of stereo element
     	return null;
@@ -1363,10 +1365,13 @@ public class SMIRKSManager {
 			
     		if (element instanceof DoubleBondStereochemistry)
 			{
-				DoubleBondStereochemistry dbsc = 
-				StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
-						updatedBondOrder, target, (DoubleBondStereochemistry)element);
+    			DoubleBondStereochemistry dbsc = 
+    					StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
+    							updatedBondOrder, target, (DoubleBondStereochemistry)element);
 				
+    			if (dbsc == null)
+    				continue;
+    			
 				//quick validity check
 				if (StereoChemUtils.isInvalidated(dbsc))
 					newInvalidEl.add(dbsc); //invalid
@@ -1378,8 +1383,12 @@ public class SMIRKSManager {
 
 			if (element instanceof TetrahedralChirality)
 			{
-				TetrahedralChirality thc = StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
-						updatedBondOrder, target, (TetrahedralChirality)element);
+				TetrahedralChirality thc = 
+						StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
+								updatedBondOrder, target, (TetrahedralChirality)element);
+				
+				if (thc == null)
+					continue;
 				
 				//quick validity check 
 				if (StereoChemUtils.isInvalidated(thc))
@@ -1414,8 +1423,11 @@ public class SMIRKSManager {
 			if (element instanceof DoubleBondStereochemistry)
 			{
 				DoubleBondStereochemistry dbsc = 
-				StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
-						updatedBondOrder, target, (DoubleBondStereochemistry)element);
+						StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
+								updatedBondOrder, target, (DoubleBondStereochemistry)element);
+				
+				if (dbsc == null)
+    				continue;
 				
 				//quick validity check
 				if (StereoChemUtils.isInvalidated(dbsc))
@@ -1428,8 +1440,12 @@ public class SMIRKSManager {
 
 			if (element instanceof TetrahedralChirality)
 			{
-				TetrahedralChirality thc = StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
-						updatedBondOrder, target, (TetrahedralChirality)element);
+				TetrahedralChirality thc = 
+						StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
+								updatedBondOrder, target, (TetrahedralChirality)element);
+				
+				if (thc == null)
+    				continue;
 				
 				//quick validity check 
 				if (StereoChemUtils.isInvalidated(thc))

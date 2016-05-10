@@ -35,12 +35,14 @@ public class TestSMIRKS {
 			.getName());
 	// All tests fail , if hydrogens are explicit!
 	boolean explicitH = true;
+	boolean FlagApplyStereoTransformation = false;
 
 	SMIRKSManager smrkMan = new SMIRKSManager(
 			SilentChemObjectBuilder.getInstance());
 	SmartsParser smartsParser = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
 	SmilesGenerator smigen = new SmilesGenerator();
+	
 
 	/**
 	 * Throws exception if anything is wrong
@@ -120,7 +122,8 @@ public class TestSMIRKS {
 
 	IAtomContainer applySMIRKSReaction(String smirks, IAtomContainer target)
 			throws Exception {
-
+		
+		smrkMan.setFlagApplyStereoTransformation(FlagApplyStereoTransformation);
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
 		if (!smrkMan.getErrors().equals("")) {
 			throw (new Exception("Smirks Parser errors:\n"
