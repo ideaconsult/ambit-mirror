@@ -14,6 +14,8 @@
 		<module>ambit2-weka</module>
 		<module>ambit2-mlcommon</module>
 		<module>ambit2-mlio</module>
+		<module>ambit2-ml-carrot</module>
+		<module>ambit2-mlib</module>
 	</modules>
 	<properties>
 		<weka.version>3.6.9</weka.version>
