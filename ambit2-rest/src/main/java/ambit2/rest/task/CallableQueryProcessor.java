@@ -27,46 +27,53 @@ import ambit2.rest.dataset.RDFStructuresReader;
 import ambit2.rest.legacy.OTDataset;
 import ambit2.rest.legacy.OTFeature;
 
-
-public abstract class CallableQueryProcessor<Target,Result,USERID> extends CallableProtectedTask<USERID> {
-	protected AbstractBatchProcessor batch; 
+public abstract class CallableQueryProcessor<Target, Result, USERID> extends
+		CallableProtectedTask<USERID> {
+	protected AbstractBatchProcessor batch;
 	protected Target target;
 	protected Reference sourceReference;
-	//protected AmbitApplication application;
+	// protected AmbitApplication application;
 	protected Context context;
 	protected String referer;
 
-	public CallableQueryProcessor(Form form,Context context,USERID token,String referer) {
-		this(null,form,context,token,referer);
+	public CallableQueryProcessor(Form form, Context context, USERID token,
+			String referer) {
+		this(null, form, context, token, referer);
 	}
-	public CallableQueryProcessor(Reference applicationRootReference,Form form,Context context,USERID token,String referer) {
+
+	public CallableQueryProcessor(Reference applicationRootReference,
+			Form form, Context context, USERID token, String referer) {
 		super(token);
-		processForm(applicationRootReference,form);
+		processForm(applicationRootReference, form);
 		this.context = context;
 		this.referer = referer;
 	}
-	protected void processForm(Reference applicationRootReference,Form form) {
+
+	protected void processForm(Reference applicationRootReference, Form form) {
 		Object dataset = OpenTox.params.dataset_uri.getFirstValue(form);
 		String[] xvars = OpenTox.params.feature_uris.getValuesArray(form);
-		if (xvars != null) try {
-			
-			OTDataset ds = OTDataset.dataset(dataset.toString());
-			for (String xvar :xvars) {
-				String[] xx = xvar.split("\n");
-				for (String x : xx )
-					if (!x.trim().equals("")) 
-						ds = ds.addColumns(OTFeature.feature(x,referer));
-			}
-			dataset =  ds.getUri().toString();
+		if (xvars != null)
+			try {
 
-		} catch (Exception x) {
-			
-		}
-		this.sourceReference = dataset==null?null:new Reference(dataset.toString().trim());
+				OTDataset ds = OTDataset.dataset(dataset.toString());
+				for (String xvar : xvars) {
+					String[] xx = xvar.split("\n");
+					for (String x : xx)
+						if (!x.trim().equals(""))
+							ds = ds.addColumns(OTFeature.feature(x, referer));
+				}
+				dataset = ds.getUri().toString();
+
+			} catch (Exception x) {
+
+			}
+		this.sourceReference = dataset == null ? null : new Reference(dataset
+				.toString().trim());
 	}
+
 	@Override
 	public TaskResult doCall() throws Exception {
-		
+
 		Context.getCurrentLogger().fine("Start()");
 		Connection connection = null;
 		try {
@@ -75,88 +82,113 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 			try {
 				target = createTarget(sourceReference);
 			} catch (Exception x) {
-				target = (Target)sourceReference;
+				target = (Target) sourceReference;
 			}
-			
+
 			batch = createBatch(target);
-			
+
 			if (batch != null) {
 				batch.setCloseConnection(false);
 				batch.setProcessorChain(createProcessors());
 				try {
-		    		if ((connection==null) || connection.isClosed()) throw new Exception("SQL Connection unavailable ");			
+					if ((connection == null) || connection.isClosed())
+						throw new Exception("SQL Connection unavailable ");
 					batch.setConnection(connection);
 					batch.open();
-				} catch (Exception x) { connection = null;}
+				} catch (Exception x) {
+					connection = null;
+				}
 				/*
-				batch.addPropertyChangeListener(AbstractBatchProcessor.PROPERTY_BATCHSTATS,new PropertyChangeListener(){
-					public void propertyChange(PropertyChangeEvent evt) {
-						context.getLogger().info(evt.getNewValue().toString());
-						
-					}
-				});
-				*/
+				 * batch.addPropertyChangeListener(AbstractBatchProcessor.
+				 * PROPERTY_BATCHSTATS,new PropertyChangeListener(){ public void
+				 * propertyChange(PropertyChangeEvent evt) {
+				 * context.getLogger().info(evt.getNewValue().toString());
+				 * 
+				 * } });
+				 */
 				IBatchStatistics stats = runBatch(target);
 			}
 			return createReference(connection);
 		} catch (Exception x) {
-			Context.getCurrentLogger().log(Level.SEVERE,x.getMessage(),x);
+			Context.getCurrentLogger().log(Level.SEVERE, x.getMessage(), x);
 
 			throw x;
 		} finally {
 			Context.getCurrentLogger().fine("Done");
-			try { connection.close(); } catch (Exception x) {Context.getCurrentLogger().warning(x.getMessage());}
+			try {
+				connection.close();
+			} catch (Exception x) {
+				Context.getCurrentLogger().warning(x.getMessage());
+			}
 		}
 		/*
-		try {
-    		//connection = application.getConnection((Request)null);
-    		//if (connection.isClosed()) connection = application.getConnection((Request)null);			
-			return createReference(connection);
-		} catch (Exception x) {
-			x.printStackTrace();
-			throw x;
-		} finally {
-			try { connection.close(); } catch (Exception x) {}
-		}		
-		*/	
-		
+		 * try { //connection = application.getConnection((Request)null); //if
+		 * (connection.isClosed()) connection =
+		 * application.getConnection((Request)null); return
+		 * createReference(connection); } catch (Exception x) {
+		 * x.printStackTrace(); throw x; } finally { try { connection.close(); }
+		 * catch (Exception x) {} }
+		 */
+
 	}
+
 	protected IBatchStatistics runBatch(Target target) throws Exception {
 		return batch.process(target);
 	}
-	
-	protected AbstractBatchProcessor createBatch(Target target) throws Exception{
-		if (target == null) throw new Exception("");
+
+	protected AbstractBatchProcessor createBatch(Target target)
+			throws Exception {
+		if (target == null)
+			throw new Exception("");
 		if (target instanceof AbstractStructureQuery) {
 			DbReaderStructure reader = new DbReaderStructure();
 			reader.setHandlePrescreen(true);
 			return reader;
 		} else
-			return new RDFStructuresReader(target.toString(),referer);
+			return new RDFStructuresReader(target.toString(), referer);
 	}
-	protected abstract Target createTarget(Reference reference) throws Exception;
-	protected abstract TaskResult createReference(Connection connection) throws Exception ;
-	protected abstract ProcessorsChain<Result, IBatchStatistics, IProcessor> createProcessors() throws Exception;
-	//protected abstract QueryURIReporter createURIReporter(Request request); 
-	
-	public static Object getQueryObject(Reference reference, Reference applicationRootReference, Context context,String referer) throws Exception {
-		return getQueryObject(reference, applicationRootReference, context,null,null,referer);
+
+	protected abstract Target createTarget(Reference reference)
+			throws Exception;
+
+	protected abstract TaskResult createReference(Connection connection)
+			throws Exception;
+
+	protected abstract ProcessorsChain<Result, IBatchStatistics, IProcessor> createProcessors()
+			throws Exception;
+
+	// protected abstract QueryURIReporter createURIReporter(Request request);
+
+	public static Object getQueryObject(Reference reference,
+			Reference applicationRootReference, Context context, String referer)
+			throws Exception {
+		return getQueryObject(reference, applicationRootReference, context,
+				null, null, referer);
 	}
-	public static Object getQueryObject(Reference reference, Reference applicationRootReference, Context context,
-			String cookies,String agent,String referer) throws Exception {
-		CookieHandler.setDefault( new CookieManager( null, CookiePolicy.ACCEPT_ORIGINAL_SERVER) );
-		if (!applicationRootReference.isParent(reference)) throw 
-			new Exception(String.format("Remote reference %s %s",applicationRootReference,reference));
+
+	public static Object getQueryObject(Reference reference,
+			Reference applicationRootReference, Context context,
+			String cookies, String agent, String referer) throws Exception {
+		CookieHandler.setDefault(new CookieManager(null,
+				CookiePolicy.ACCEPT_ORIGINAL_SERVER));
+		if (!applicationRootReference.isParent(reference)) {
+			logger.log(Level.WARNING, String.format("Remote reference %s %s",
+					applicationRootReference, reference));
+			return null;
+		}
+
 		ObjectInputStream in = null;
 		HttpURLConnection connection = null;
 		try {
-			connection = 
-				ClientResourceWrapper.getHttpURLConnection(reference.toString(),"GET",MediaType.APPLICATION_JAVA_OBJECT.toString(),referer);
+			connection = ClientResourceWrapper.getHttpURLConnection(
+					reference.toString(), "GET",
+					MediaType.APPLICATION_JAVA_OBJECT.toString(), referer);
 			HttpURLConnection.setFollowRedirects(true);
-			if (agent!=null) connection.setRequestProperty("User-Agent", agent);
-			if (cookies!=null)
+			if (agent != null)
+				connection.setRequestProperty("User-Agent", agent);
+			if (cookies != null)
 				connection.setRequestProperty("Cookie", cookies);
-			if (HttpURLConnection.HTTP_OK== connection.getResponseCode()) {
+			if (HttpURLConnection.HTTP_OK == connection.getResponseCode()) {
 				in = new ObjectInputStream(connection.getInputStream());
 				Object object = in.readObject();
 				return object;
@@ -165,9 +197,17 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 		} catch (Exception x) {
 			throw x;
 		} finally {
-			try { if (in!=null) in.close();} catch (Exception x) {}
-			try { if (connection!=null) connection.disconnect();} catch (Exception x) {}
+			try {
+				if (in != null)
+					in.close();
+			} catch (Exception x) {
+			}
+			try {
+				if (connection != null)
+					connection.disconnect();
+			} catch (Exception x) {
+			}
 		}
-	}		
+	}
 
 }
