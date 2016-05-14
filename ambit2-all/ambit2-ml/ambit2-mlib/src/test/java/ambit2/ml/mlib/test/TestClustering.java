@@ -1,33 +1,38 @@
 package ambit2.ml.mlib.test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.mllib.clustering.PowerIterationClustering;
+import org.apache.spark.mllib.clustering.PowerIterationClusteringModel;
 import org.apache.spark.mllib.clustering.StreamingKMeans;
 import org.apache.spark.mllib.linalg.Vector;
-import org.apache.spark.mllib.linalg.Vectors;
+import org.apache.spark.mllib.linalg.distributed.CoordinateMatrix;
+import org.apache.spark.mllib.linalg.distributed.MatrixEntry;
+import org.apache.spark.mllib.linalg.distributed.RowMatrix;
 import org.apache.spark.streaming.Minutes;
 import org.apache.spark.streaming.StreamingContext;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.dstream.ConstantInputDStream;
 import org.junit.Test;
 
+import scala.Tuple3;
+
 /**
  * 
  * @author nina
  * 
  */
-public class TestClustering {
+public class TestClustering extends TestSparkAbstract {
 
-	String dir = "file:///f:/spark";
-	String train = "test10000.hashed.csv";
-	String results = "results.csv";
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6978873485126084985L;
 	@Test
 	public void test() {
 
@@ -46,9 +51,9 @@ public class TestClustering {
 		ConstantInputDStream cis = new ConstantInputDStream(scc.ssc(),
 				data.rdd(), null);
 		// decay=1 use all data
-		//int k = 100;
-		//int k= 86876;
-		int k = 741;
+		// int k = 100;
+		int k = 86876;
+		// int k = 741;
 		StreamingKMeans model = new StreamingKMeans().setDecayFactor(1).setK(k)
 				.setRandomCenters(1024, 0.5, 5L);
 
@@ -62,34 +67,63 @@ public class TestClustering {
 		ConstantInputDStream teststream = new ConstantInputDStream(scc.ssc(),
 				datatest.rdd(), null);
 
-		model.predictOn(teststream).saveAsTextFiles(dir + "/results/results20",
-				"txt");
+		model.predictOn(teststream).saveAsTextFiles(
+				dir + String.format("/results/results%s", k), "txt");
 
 		scc.start();
 		scc.awaitTermination();
 		scc.close();
 
 	}
-}
 
-class MyMapper implements Function<String, Vector> {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4483636401894466192L;
+	@Test
+	public void testPairs() {
 
-	@Override
-	public Vector call(String line) {
-		String[] tokens = line.split(",");
+		SparkConf conf = new SparkConf().setAppName(
+				StreamingKMeans.class.getName()).setMaster("local[2]");
 
-		List<scala.Tuple2<Integer, Double>> items = new ArrayList<scala.Tuple2<Integer, Double>>();
-		// skip ids
-		int size = tokens.length - 2;
-		for (int i = 2; i < tokens.length; ++i) {
-			items.add(new scala.Tuple2<Integer, Double>(i - 2, Double
-					.parseDouble(tokens[i])));
-		}
+		SparkContext ctx = SparkContext.getOrCreate(conf);
+		JavaSparkContext jsc = JavaSparkContext.fromSparkContext(ctx);
 
-		return Vectors.sparse(size, items);
+		String source = "/train";
+		JavaRDD<String> lines = jsc.textFile(dir + source).cache();
+		JavaRDD<Vector> data = lines.map(new MyMapper());
+
+		double[] colMags = new double[1024];
+		for (int i = 0; i < colMags.length; i++)
+			colMags[i] = 1;
+		RowMatrix rows = new RowMatrix(data.rdd());
+		double similarity = 0.5;
+		double gamma = 10 * Math.log(data.count()) / similarity;
+		CoordinateMatrix simmatrix = rows.columnSimilaritiesDIMSUM(colMags,
+				gamma);
+		System.out.println(simmatrix.numRows());
+		JavaRDD<Tuple3<Long, Long, Double>> similarities = simmatrix.entries()
+				.toJavaRDD()
+				.map(new Function<MatrixEntry, Tuple3<Long, Long, Double>>() {
+					public Tuple3<Long, Long, Double> call(MatrixEntry entry) {
+						return new Tuple3(entry.i(), entry.j(), entry.value());
+					}
+				}).cache();
+
+		PowerIterationClustering pic = new PowerIterationClustering();
+		int k = 86877;
+		pic.setK(k);
+		pic.setInitializationMode("random"); // random or degree
+		PowerIterationClusteringModel model = pic.run(similarities);
+
+		String path = String.format("%s/results%s/pic%d/%s", dir, source, k,
+				UUID.randomUUID());
+		model.assignments().saveAsTextFile(path);
+		/*
+		 * for (PowerIterationClustering.Assignment a : model.assignments()
+		 * .toJavaRDD().collect()) { System.out.println(a.id() + "->" +
+		 * a.cluster()); }
+		 */
+		model.save(jsc.sc(), path);
+
+		jsc.close();
+
 	}
 }
+
