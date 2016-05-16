@@ -2700,7 +2700,7 @@ public class TestUtilities {
 		// tu.testSMIRKS("[#6:1]-[#8:2]-[#6:3]>>[#6:1]-[#8:2].[#6:3]=S","NCCCOCC",
 		// ReactionOperation.SingleCopyForEachPos);
 
-		//tu.FlagExplicitHAtoms = true;
+		tu.FlagExplicitHAtoms = true;
 		tu.FlagTargetPreprocessing = true;
 		tu.FlagProductPreprocessing = true;
 		//tu.FlagPrintAtomAttributes = true;
@@ -2717,8 +2717,10 @@ public class TestUtilities {
 		//tu.testSMIRKS("O[C:1]>>N[C:1]", "O/C=C/C");		
 		//tu.testSMIRKS("O[C:1]Cl>>N[C:1]Br", "C[C@](O)(CC)Cl"); 
 		//tu.testSMIRKS("O[C:1]>>N[C:1]", "C[C@H](O)Cl");
-		tu.testSMIRKS("[C:1]=[C:2]>>[C:1].[C:2]", "O/C=C/C");
+		//tu.testSMIRKS("[C:1]=[C:2]>>[C:1].[C:2]", "O/C=C/C");
 		
+		tu.testSMIRKS("[H:6][C:1]([#6:4])([#16;H1v2])[#1,#6:5]>>[H:6][C:1]([H])([#6:4])[#1,#6:5]", 
+				"CN\\C(NCCS)=C\\[N+]([O-])=O");
 		
 		
 		
