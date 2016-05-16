@@ -135,6 +135,7 @@ public class TestIsomorphismTesterStereo extends TestCase
 		assertEquals(2, mappingPosCount);
 	}
 	
+		
 	public void testDBStereo06F() throws Exception {
 		match("N/?C=C/?C", "N/C=C(O)/CC/C=C\\N");
 		assertEquals(true, boolResult);
@@ -143,6 +144,12 @@ public class TestIsomorphismTesterStereo extends TestCase
 	
 	public void testDBStereo06G() throws Exception {
 		match("N/?C=C/C", "N/C=C(O)/CC/C=C/N");
+		assertEquals(true, boolResult);
+		assertEquals(2, mappingPosCount);
+	}
+	
+	public void testDBStereo06H() throws Exception {
+		match("N/?C=C/?C", "N/C=C(O)/CCC=CN");
 		assertEquals(true, boolResult);
 		assertEquals(2, mappingPosCount);
 	}
@@ -207,6 +214,11 @@ public class TestIsomorphismTesterStereo extends TestCase
 		assertEquals(1, mappingPosCount);
 	}
 	
+	public void testExtendedChirality01A() throws Exception {
+		match("NC(Cl)=[C@]=C(C)(O)", "NC(Cl)=[C@@]=C(OC)(C)");
+		assertEquals(true, boolResult);
+		assertEquals(1, mappingPosCount);
+	}
 	
 	
 }
