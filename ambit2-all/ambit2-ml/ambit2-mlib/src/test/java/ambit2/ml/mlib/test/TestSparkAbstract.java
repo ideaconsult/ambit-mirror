@@ -1,10 +1,16 @@
 package ambit2.ml.mlib.test;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
@@ -16,9 +22,6 @@ import org.apache.spark.sql.types.StructType;
 
 import scala.Tuple3;
 import scala.util.MurmurHash;
-import scala.util.hashing.Hashing;
-
-import com.google.common.hash.HashFunction;
 
 public class TestSparkAbstract implements Serializable {
 
@@ -27,7 +30,50 @@ public class TestSparkAbstract implements Serializable {
 	 */
 	private static final long serialVersionUID = 2144147103190243760L;
 	String dir = "file:///f:/spark";
-	protected static StructType schema = getSchema();
+	protected StructType schema = getSchema();
+
+	protected static Logger logger_cli = Logger
+			.getLogger(TestSparkAbstract.class.getName());
+	static final String loggingProperties = "ambit2/ml/mlib/config/logging.properties";
+	static final String log4jProperties = "ambit2/ml/mlib/config/log4j.properties";
+
+	static {
+		logger_cli = Logger.getLogger("ambitcli", "ambit2.ml.mlib.config.msg");
+		Locale.setDefault(Locale.ENGLISH);
+		String dOption = System.getProperty("java.util.logging.config.file");
+		if (dOption == null || "".equals(dOption)) {
+			InputStream in = null;
+			try {
+				in = TestSparkAbstract.class.getClassLoader()
+						.getResourceAsStream(loggingProperties);
+				LogManager.getLogManager().readConfiguration(in);
+
+			} catch (Exception x) {
+				logger_cli.log(Level.WARNING, x.getMessage());
+			} finally {
+				try {
+					in.close();
+				} catch (Exception x) {
+				}
+			}
+		}
+		// now log4j for those who use it
+		InputStream in = null;
+		try {
+			in = TestSparkAbstract.class.getClassLoader().getResourceAsStream(
+					log4jProperties);
+			PropertyConfigurator.configure(in);
+
+		} catch (Exception x) {
+			logger_cli.log(Level.WARNING, x.getMessage());
+		} finally {
+			try {
+				in.close();
+			} catch (Exception x) {
+			}
+		}
+
+	}
 
 	class MyMapper implements Function<String, Vector> {
 		/**
@@ -92,7 +138,7 @@ public class TestSparkAbstract implements Serializable {
 		}
 	}
 
-	protected static StructType getSchema() {
+	protected StructType getSchema() {
 		StructField[] fields = new StructField[3];
 		fields[0] = DataTypes.createStructField("inchi", DataTypes.StringType,
 				false);
