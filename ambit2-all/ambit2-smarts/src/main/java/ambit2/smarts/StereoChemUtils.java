@@ -580,6 +580,55 @@ public class StereoChemUtils
 		return sb.toString();
 	}
 	
+	public static String getAllStereoElementsStatus(IAtomContainer mol, List<IStereoElement> invElements)
+	{
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append(" Normal elements \n");
+		for (IStereoElement element : mol.stereoElements())
+		{
+			if (element instanceof DoubleBondStereochemistry)
+			{
+				int status = checkDoubleBondStereochemistry((DoubleBondStereochemistry) element, mol);			
+				sb.append("    DBStereo status = " + status + "   " 
+						+ doubleBondStereochemistry2String((DoubleBondStereochemistry) element, mol) + "\n");
+				continue;
+			}
+			
+			
+			if (element instanceof TetrahedralChirality)
+			{
+				int status = checkTetrahedralChirality((TetrahedralChirality) element, mol);
+				sb.append("    Chiral atom status = " + status + "   " + 
+						tetrahedralChirality2String((TetrahedralChirality) element, mol) + "\n");
+				continue;
+			}
+			//TODO handle ExtendedTetrahedral stereo elements
+		}
+		sb.append(" Invalidated elements \n");
+		for (IStereoElement element : invElements)
+		{
+			if (element instanceof DoubleBondStereochemistry)
+			{
+				int status = checkDoubleBondStereochemistry((DoubleBondStereochemistry) element, mol);			
+				sb.append("   DBStereo status = " + status + "   " 
+						+ doubleBondStereochemistry2String((DoubleBondStereochemistry) element, mol) + "\n");
+				continue;
+			}
+			
+			
+			if (element instanceof TetrahedralChirality)
+			{
+				int status = checkTetrahedralChirality((TetrahedralChirality) element, mol);
+				sb.append("   Chiral atom status = " + status + "   " + 
+						tetrahedralChirality2String((TetrahedralChirality) element, mol) + "\n");
+				continue;
+			}
+			//TODO handle ExtendedTetrahedral stereo elements
+		}
+		return sb.toString();
+	}
+	
 	static public void setSteroElementsAsProperties(IAtomContainer container){
 
 		for (IStereoElement element : container.stereoElements())
@@ -763,6 +812,9 @@ public class StereoChemUtils
 		}
 		else
 			perAtom = at2;
+		
+		if (dbAtom == null)
+			return dbsc;  //Both atoms are peripheral. No change done
 		
 		IBond bonds[] = dbsc.getBonds();
 		
@@ -1116,6 +1168,8 @@ public class StereoChemUtils
 		
 		return false;
 	}
+	
+	
 	
 	
 }	
