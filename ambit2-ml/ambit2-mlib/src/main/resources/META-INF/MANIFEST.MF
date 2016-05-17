@@ -1,6 +1,6 @@
 Manifest-version: 1.0
 Package: ambit2.ml.mlib
-
+Main-Class: ambit2.ml.mlib.ClusteringApp
 Name: ambit2/ml/mlib/
 Specification-Title: MLIB
 Specification-Version: ${project.version}
