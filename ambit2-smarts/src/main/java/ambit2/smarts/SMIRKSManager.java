@@ -794,6 +794,9 @@ public class SMIRKSManager {
     	//if some later transformation makes them again valid stereo elements
     	List<IStereoElement> invalidatedStereoElements = new ArrayList<IStereoElement>();
     	
+    	
+    	//System.out.println("Initial \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
+    	
     	// Create Non Existing Atoms
     	List<IAtom> newAtoms = new ArrayList<IAtom>();
     	for (int i = 0; i < reaction.productNotMappedAt.size(); i++) {
@@ -850,6 +853,8 @@ public class SMIRKSManager {
     				//Stereo is not handled
     				target.removeAtomAndConnectedElectronContainers(tAt);
     		}
+    		
+    		//System.out.println("Atom change " + (i+1) + "\n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
     	}
 
     	// Bond Transformations
@@ -959,6 +964,8 @@ public class SMIRKSManager {
 
     			// Some other possible cases if needed.
     		}
+    		
+    		//System.out.println("Bond change " + (i+1) + "\n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
 
     	}
     	
@@ -1360,8 +1367,13 @@ public class SMIRKSManager {
 			if (targetAt2 != null)
 				if (StereoChemUtils.contains(element, targetAt2))
 					n++;
+			
 			if (n==0)
+			{	
+				//No change on the element hence it is preserved
+				newElements.add(element);
 				continue;
+			}	
 			
     		if (element instanceof DoubleBondStereochemistry)
 			{
@@ -1505,5 +1517,7 @@ public class SMIRKSManager {
     }
    
     */
+    
+    
 
 }
