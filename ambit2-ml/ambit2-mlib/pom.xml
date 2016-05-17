@@ -24,34 +24,6 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.2</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<manifestEntries>
-										<Main-Class>ambit2.ml.mlib.ClusteringApp</Main-Class>
-										<Build-Number>${buildNumber}</Build-Number>
-										<Package-Vendor>Ideaconsult Ltd.</Package-Vendor>
-										<Package-Version>${project.version}</Package-Version>
-										<Package> ambit2.ml.mlib</Package>
-									</manifestEntries>
-								</transformer>
-							</transformers>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
+		
 	</build>
 </project>
