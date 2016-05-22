@@ -488,8 +488,7 @@ public class SMIRKSReaction
 	void generateStereoTransformation() 
 	{
 		//Preliminary registering product atom/bond indices for stereo elements
-		List<Integer> pDBSteroElAt1 = new ArrayList<Integer>();
-		List<Integer> pDBSteroElAt2 = new ArrayList<Integer>();
+		List<IBond> pDBSteroEl = new ArrayList<IBond>();
 		List<Integer> pChirAtSteroEl = new ArrayList<Integer>();
 		List<Integer> pExtChirSteroEl = new ArrayList<Integer>();
 		
@@ -498,10 +497,7 @@ public class SMIRKSReaction
 			if (element instanceof DoubleBondStereochemistry)
 			{
 				DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry)element;
-				int globalAtomIndex = product.getAtomNumber(dbsc.getStereoBond().getAtom(0));
-				pDBSteroElAt1.add(globalAtomIndex);
-				globalAtomIndex = product.getAtomNumber(dbsc.getStereoBond().getAtom(1));
-				pDBSteroElAt2.add(globalAtomIndex);
+				pDBSteroEl.add(dbsc.getStereoBond());
 				continue;
 			}
 
@@ -522,7 +518,7 @@ public class SMIRKSReaction
 			}
 		}
 		
-		//Register reactant atom/bond indices for stereo elements
+		//Register reactant atom indices for stereo elements
 		for (IStereoElement element : reactant.stereoElements())
 		{
 			if (element instanceof DoubleBondStereochemistry)
@@ -548,6 +544,11 @@ public class SMIRKSReaction
 				reactDBSteroElAt2.add(rAt2Num);
 				prodDBSteroElAt1.add(pAt1Num);
 				prodDBSteroElAt2.add(pAt2Num);
+				
+				//product bond is registered so it is removed from the preliminary reg. list
+				IBond prodBo = product.getBond(product.getAtom(pAt1Num), product.getAtom(pAt2Num));
+				if (prodBo != null)
+					pDBSteroEl.remove(prodBo);
 				
 				continue;
 			}
