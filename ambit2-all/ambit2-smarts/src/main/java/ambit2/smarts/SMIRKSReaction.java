@@ -529,6 +529,7 @@ public class SMIRKSReaction
 				Integer raMapInd1 = (Integer)ra1.getProperty("SmirksMapIndex");
 				if (raMapInd1 == null)
 					continue; //at least one of the reactant bonds atoms is not mapped
+								//stereo transformation is not registered
 				
 				IAtom ra2 = dbsc.getStereoBond().getAtom(1);
 				Integer raMapInd2 = (Integer)ra2.getProperty("SmirksMapIndex");
@@ -559,7 +560,7 @@ public class SMIRKSReaction
 				IAtom ra = thc.getChiralAtom();
 				Integer raMapInd = (Integer)ra.getProperty("SmirksMapIndex");
 				if (raMapInd == null)
-					continue; 
+					continue; //stereo transformation is not registered
 				
 				int pAtNum = getMappedProductAtom(raMapInd);
 				int rAtNum = reactant.getAtomNumber(ra);
@@ -567,7 +568,7 @@ public class SMIRKSReaction
 				prodChirAtSteroEl.add(pAtNum);
 				
 				//product atom is registered so it is removed from the preliminary reg. list
-				prodChirAtSteroEl.remove(pAtNum);
+				pChirAtSteroEl.remove(pAtNum);
 				
 				continue;
 			}
@@ -578,7 +579,7 @@ public class SMIRKSReaction
 				IAtom ra = et.focus();
 				Integer raMapInd = (Integer)ra.getProperty("SmirksMapIndex");
 				if (raMapInd == null)
-					continue; 
+					continue; //stereo transformation is not registered
 				
 				int pAtNum = getMappedProductAtom(raMapInd);
 				int rAtNum = reactant.getAtomNumber(ra);
@@ -586,7 +587,7 @@ public class SMIRKSReaction
 				prodExtChirSteroEl.add(pAtNum);
 				
 				//product atom is registered so it is removed from the preliminary reg. list
-				prodExtChirSteroEl.remove(pAtNum);
+				pExtChirSteroEl.remove(pAtNum);
 				
 				continue;
 			}
@@ -596,8 +597,29 @@ public class SMIRKSReaction
 		//Register product stereo elements that are not mapped to 
 		//a reactant stereo element
 		//These are the left elements from the preliminary registering
+		for (IBond bo: pDBSteroEl)
+		{
+			int pAt1Num = product.getAtomNumber(bo.getAtom(0));
+			int pAt2Num = product.getAtomNumber(bo.getAtom(1));
+			
+			reactDBSteroElAt1.add(null);
+			reactDBSteroElAt2.add(null);
+			prodDBSteroElAt1.add(pAt1Num);
+			prodDBSteroElAt2.add(pAt2Num);
+		}
 		
-		//TODO
+		for (Integer pAt : pChirAtSteroEl)
+		{
+			reactChirAtSteroEl.add(null);
+			prodChirAtSteroEl.add(pAt);
+		}
+		
+		for (Integer pAt : pExtChirSteroEl)
+		{
+			reactExtChirSteroEl.add(null);
+			prodExtChirSteroEl.add(pAt);
+			
+		}
 	}
 	
 		
