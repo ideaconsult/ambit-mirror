@@ -487,12 +487,12 @@ public class SMIRKSReaction
 	
 	void generateStereoTransformation() 
 	{
+		//Preliminary registering product atom/bond indices for stereo elements
 		List<Integer> pDBSteroElAt1 = new ArrayList<Integer>();
 		List<Integer> pDBSteroElAt2 = new ArrayList<Integer>();
 		List<Integer> pChirAtSteroEl = new ArrayList<Integer>();
 		List<Integer> pExtChirSteroEl = new ArrayList<Integer>();
 		
-		//Preliminary registering product atom/bond indices for stereo elements
 		for (IStereoElement element : product.stereoElements())
 		{
 			if (element instanceof DoubleBondStereochemistry)
@@ -528,10 +528,27 @@ public class SMIRKSReaction
 			if (element instanceof DoubleBondStereochemistry)
 			{
 				DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry)element;
-				int globalAtomIndex = product.getAtomNumber(dbsc.getStereoBond().getAtom(0));
-				reactDBSteroElAt1.add(globalAtomIndex);
-				globalAtomIndex = product.getAtomNumber(dbsc.getStereoBond().getAtom(1));
-				reactDBSteroElAt2.add(globalAtomIndex);
+				
+				IAtom ra1 = dbsc.getStereoBond().getAtom(0);
+				Integer raMapInd1 = (Integer)ra1.getProperty("SmirksMapIndex");
+				if (raMapInd1 == null)
+					continue; //at least one of the reactant bonds atoms is not mapped
+				
+				IAtom ra2 = dbsc.getStereoBond().getAtom(1);
+				Integer raMapInd2 = (Integer)ra2.getProperty("SmirksMapIndex");
+				if (raMapInd2 == null)
+					continue; //at least one of the reactant bonds atoms is not mapped
+				
+				int pAt1Num = getMappedProductAtom(raMapInd1);
+				int pAt2Num = getMappedProductAtom(raMapInd2);
+				int rAt1Num = reactant.getAtomNumber(ra1);
+				int rAt2Num = reactant.getAtomNumber(ra2);
+				
+				reactDBSteroElAt1.add(rAt1Num);
+				reactDBSteroElAt2.add(rAt2Num);
+				prodDBSteroElAt1.add(pAt1Num);
+				prodDBSteroElAt2.add(pAt2Num);
+				
 				continue;
 			}
 			
@@ -552,6 +569,12 @@ public class SMIRKSReaction
 			}
 		}
 		
+		
+		//Register product stereo elements that are not mapped to 
+		//a reactant stereo element
+		//These are the left elements from the preliminary registering
+		
+		//TODO
 	}
 	
 		
