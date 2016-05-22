@@ -556,16 +556,38 @@ public class SMIRKSReaction
 			if (element instanceof TetrahedralChirality)
 			{
 				TetrahedralChirality thc = (TetrahedralChirality)element;
-				int globalAtomIndex = reactant.getAtomNumber(thc.getChiralAtom());
-				reactChirAtSteroEl.add(globalAtomIndex);
+				IAtom ra = thc.getChiralAtom();
+				Integer raMapInd = (Integer)ra.getProperty("SmirksMapIndex");
+				if (raMapInd == null)
+					continue; 
+				
+				int pAtNum = getMappedProductAtom(raMapInd);
+				int rAtNum = reactant.getAtomNumber(ra);
+				reactChirAtSteroEl.add(rAtNum);
+				prodChirAtSteroEl.add(pAtNum);
+				
+				//product atom is registered so it is removed from the preliminary reg. list
+				prodChirAtSteroEl.remove(pAtNum);
+				
 				continue;
 			}
 			
 			if (element instanceof ExtendedTetrahedral)
 			{	
 				ExtendedTetrahedral et = (ExtendedTetrahedral)element;
-				int globalAtomIndex = reactant.getAtomNumber(et.focus());
-				reactExtChirSteroEl.add(globalAtomIndex);
+				IAtom ra = et.focus();
+				Integer raMapInd = (Integer)ra.getProperty("SmirksMapIndex");
+				if (raMapInd == null)
+					continue; 
+				
+				int pAtNum = getMappedProductAtom(raMapInd);
+				int rAtNum = reactant.getAtomNumber(ra);
+				reactExtChirSteroEl.add(rAtNum);
+				prodExtChirSteroEl.add(pAtNum);
+				
+				//product atom is registered so it is removed from the preliminary reg. list
+				prodExtChirSteroEl.remove(pAtNum);
+				
 				continue;
 			}
 		}
