@@ -11,6 +11,8 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
+import org.openscience.cdk.stereo.ExtendedTetrahedral;
+import org.openscience.cdk.stereo.TetrahedralChirality;
 
 
 
@@ -74,12 +76,15 @@ public class SMIRKSReaction
 	List<Integer> prodAt2 = new ArrayList<Integer>();
 	List<IBond.Order> prodBo = new ArrayList<IBond.Order>();
 	
-	//Double bond stereo transformation 
-	//The lists contain the global numbers of the bonds associated 
+	//Double bond and chiral atom stereo transformation 
+	//The lists contain the global numbers of the bonds and atoms associated 
 	//to the stereo elements
 	List<Integer> reactDBSteroEl = new ArrayList<Integer>();
 	List<Integer> prodDBSteroEl = new ArrayList<Integer>();
-	
+	List<Integer> reactChirAtSteroEl = new ArrayList<Integer>();
+	List<Integer> prodChirAtSteroEl = new ArrayList<Integer>();
+	List<Integer> reactExtChirSteroEl = new ArrayList<Integer>();
+	List<Integer> prodExtChirSteroEl = new ArrayList<Integer>();
 	
 	protected IChemObjectBuilder builder;
 	protected SmartsToChemObject mSTCO = null;
@@ -478,8 +483,9 @@ public class SMIRKSReaction
 		}
 	}
 	
-	void generateDBStereoTransformation() 
+	void generateStereoTransformation() 
 	{
+		//Register reactant atom/bond indices for stereo elements
 		for (IStereoElement element : reactant.stereoElements())
 		{
 			if (element instanceof DoubleBondStereochemistry)
@@ -487,9 +493,27 @@ public class SMIRKSReaction
 				DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry)element;
 				int globalBondIndex = reactant.getBondNumber(dbsc.getStereoBond());
 				reactDBSteroEl.add(globalBondIndex);
+				continue;
+			}
+			
+			if (element instanceof TetrahedralChirality)
+			{
+				TetrahedralChirality thc = (TetrahedralChirality)element;
+				int globalAtomIndex = reactant.getAtomNumber(thc.getChiralAtom());
+				reactChirAtSteroEl.add(globalAtomIndex);
+				continue;
+			}
+			
+			if (element instanceof ExtendedTetrahedral)
+			{	
+				ExtendedTetrahedral et = (ExtendedTetrahedral)element;
+				int globalAtomIndex = reactant.getAtomNumber(et.focus());
+				reactExtChirSteroEl.add(globalAtomIndex);
+				continue;
 			}
 		}
 		
+		//Register product atom/bond indices for stereo elements
 		for (IStereoElement element : product.stereoElements())
 		{
 			if (element instanceof DoubleBondStereochemistry)
@@ -497,10 +521,29 @@ public class SMIRKSReaction
 				DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry)element;
 				int globalBondIndex = product.getBondNumber(dbsc.getStereoBond());
 				prodDBSteroEl.add(globalBondIndex);
+				continue;
+			}
+			
+			if (element instanceof TetrahedralChirality)
+			{
+				TetrahedralChirality thc = (TetrahedralChirality)element;
+				int globalAtomIndex = product.getAtomNumber(thc.getChiralAtom());
+				prodChirAtSteroEl.add(globalAtomIndex);
+				continue;
+			}
+			
+			if (element instanceof ExtendedTetrahedral)
+			{	
+				ExtendedTetrahedral et = (ExtendedTetrahedral)element;
+				int globalAtomIndex = product.getAtomNumber(et.focus());
+				prodExtChirSteroEl.add(globalAtomIndex);
+				continue;
 			}
 		}
 	}
 	
+		
+	/*
 	void checkDBStereoTransformation() 
 	{
 		//TODO
@@ -510,6 +553,8 @@ public class SMIRKSReaction
 	{
 		//TODO
 	}
+	*/
+	
 	
 	//Helper functions
 	
