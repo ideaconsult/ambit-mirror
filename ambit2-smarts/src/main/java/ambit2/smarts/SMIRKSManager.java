@@ -302,8 +302,8 @@ public class SMIRKSManager {
     	if (reaction.mapErrors.isEmpty())
     		if (FlagApplyStereoTransformation)
     		{	
-    			reaction.generateDBStereoTransformation();
-    			reaction.checkDBStereoTransformation();
+    			reaction.generateStereoTransformation();
+    			//reaction.checkStereoTransformation();
     		}	
 
     	// Check for errors produced by the generation of transformation data
