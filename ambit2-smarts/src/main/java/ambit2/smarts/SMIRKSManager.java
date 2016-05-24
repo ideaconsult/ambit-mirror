@@ -1481,43 +1481,35 @@ public class SMIRKSManager {
     	invalidatedStereoElements.clear();
     	invalidatedStereoElements.addAll(newInvalidEl);
     }
-    
-    
-   
-    
 
-    /*
-    void handleTransformedStereoElements(IAtomContainer target, List<IAtom> rMap, SMIRKSReaction reaction)
+
+    public void applyStereoTransformAtLocation(IAtomContainer target, List<IAtom> rMap, SMIRKSReaction reaction)
     {
-    	for (IStereoElement element : target.stereoElements())
-		{
-			if (element instanceof DoubleBondStereochemistry)
-			{
-				DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry)element;
-				handleDoubleBondStereochemistry(dbsc, target, rMap, reaction);
-				continue;
-			}
-
-			if (element instanceof TetrahedralChirality)
-			{
-				TetrahedralChirality thc = (TetrahedralChirality)element;
-				handleTetrahedralChirality(thc, target, rMap, reaction);
-				continue;
-			}
-
-
-			if (element instanceof ExtendedTetrahedral)
-			{
-				
-				ExtendedTetrahedral etc = (ExtendedTetrahedral)element;
-				handleExtendedTetrahedral(etc, target, rMap, reaction);
-				continue;
-			}
-		}
+    	for (int i = 0; i < reaction.prodDBSteroElAt1.size(); i++)
+    	{
+    		if (reaction.prodDBSteroElAt1.get(i) == null)
+    		{
+    			//Stereo element on product is removed
+    			continue;
+    		}
+    		
+    		//Setting stereo element
+    		IAtom at1 = rMap.get(reaction.prodDBSteroElAt1.get(i));
+    		IAtom at2 = rMap.get(reaction.prodDBSteroElAt2.get(i));
+    		
+    		//TODO
+    	}
+    	
+    	for (int i = 0; i < reaction.reactChirAtSteroEl.size(); i++)
+    	{
+    		//TODO
+    	}
+    	
+    	for (int i = 0; i < reaction.reactExtChirSteroEl.size(); i++)
+    	{
+    		//TODO
+    	}
+    	
     }
-   
-    */
-    
-    
 
 }
