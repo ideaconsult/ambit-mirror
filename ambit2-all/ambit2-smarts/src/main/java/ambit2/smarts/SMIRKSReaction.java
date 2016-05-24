@@ -519,6 +519,7 @@ public class SMIRKSReaction
 		}
 		
 		//Register reactant atom indices for stereo elements
+		//Only those elements are registered which contain a mapped atom
 		for (IStereoElement element : reactant.stereoElements())
 		{
 			if (element instanceof DoubleBondStereochemistry)
