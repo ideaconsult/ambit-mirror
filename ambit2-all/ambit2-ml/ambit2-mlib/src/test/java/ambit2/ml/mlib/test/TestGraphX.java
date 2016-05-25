@@ -38,7 +38,7 @@ public class TestGraphX extends TestSparkAbstract {
 
 	@Test
 	public void testConnectedComponents() throws Exception {
-		String source = "/test";
+		String source = "/train";
 
 		SparkConf conf = new SparkConf().setAppName(
 				StreamingKMeans.class.getName()).setMaster("local[*]");
@@ -52,7 +52,7 @@ public class TestGraphX extends TestSparkAbstract {
 		JavaPairRDD<Tuple3<Long, BitSet, String>, Tuple3<Long, BitSet, String>> pairs = data
 				.cartesian(data);
 
-		final Double threshold = 0.75;
+		final Double threshold = 0.9;
 		JavaRDD<Edge<Double>> similarity = pairs
 				.map(new Function<Tuple2<Tuple3<Long, BitSet, String>, Tuple3<Long, BitSet, String>>, Edge<Double>>() {
 					@Override

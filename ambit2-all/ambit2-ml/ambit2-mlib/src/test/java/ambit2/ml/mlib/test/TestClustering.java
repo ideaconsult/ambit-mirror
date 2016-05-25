@@ -1,129 +1,103 @@
 package ambit2.ml.mlib.test;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.mllib.clustering.PowerIterationClustering;
-import org.apache.spark.mllib.clustering.PowerIterationClusteringModel;
+import org.apache.spark.mllib.clustering.BisectingKMeans;
+import org.apache.spark.mllib.clustering.BisectingKMeansModel;
 import org.apache.spark.mllib.clustering.StreamingKMeans;
 import org.apache.spark.mllib.linalg.Vector;
-import org.apache.spark.mllib.linalg.distributed.CoordinateMatrix;
-import org.apache.spark.mllib.linalg.distributed.MatrixEntry;
-import org.apache.spark.mllib.linalg.distributed.RowMatrix;
-import org.apache.spark.streaming.Minutes;
-import org.apache.spark.streaming.StreamingContext;
-import org.apache.spark.streaming.api.java.JavaStreamingContext;
-import org.apache.spark.streaming.dstream.ConstantInputDStream;
 import org.junit.Test;
 
-import scala.Tuple3;
-
-/**
- * 
- * @author nina
- * 
- */
 public class TestClustering extends TestSparkAbstract {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6978873485126084985L;
-	@Test
-	public void test() {
-
-		SparkConf conf = new SparkConf().setAppName(
-				StreamingKMeans.class.getName()).setMaster("local[2]");
-
-		SparkContext ctx = SparkContext.getOrCreate(conf);
-		JavaSparkContext jsc = JavaSparkContext.fromSparkContext(ctx);
-
-		JavaRDD<String> lines = jsc.textFile(dir + "/train").cache();
-		JavaRDD<Vector> data = lines.map(new MyMapper());
-		// streaming
-		StreamingContext scx = new StreamingContext(ctx, Minutes.apply(1));
-		JavaStreamingContext scc = new JavaStreamingContext(scx);
-
-		ConstantInputDStream cis = new ConstantInputDStream(scc.ssc(),
-				data.rdd(), null);
-		// decay=1 use all data
-		// int k = 100;
-		int k = 86876;
-		// int k = 741;
-		StreamingKMeans model = new StreamingKMeans().setDecayFactor(1).setK(k)
-				.setRandomCenters(1024, 0.5, 5L);
-
-		model.trainOn(cis);
-		double cost = model.latestModel().computeCost(data.rdd());
-		System.out.println(cost);
-		System.out.println(model.latestModel().k());
-
-		JavaRDD<String> test = jsc.textFile(dir + "/train").cache();
-		JavaRDD<Vector> datatest = test.map(new MyMapper());
-		ConstantInputDStream teststream = new ConstantInputDStream(scc.ssc(),
-				datatest.rdd(), null);
-
-		model.predictOn(teststream).saveAsTextFiles(
-				dir + String.format("/results/results%s", k), "txt");
-
-		scc.start();
-		scc.awaitTermination();
-		scc.close();
-
-	}
+	private static final long serialVersionUID = -4494304392075642651L;
 
 	@Test
-	public void testPairs() {
-
-		SparkConf conf = new SparkConf().setAppName(
-				StreamingKMeans.class.getName()).setMaster("local[2]");
-
-		SparkContext ctx = SparkContext.getOrCreate(conf);
-		JavaSparkContext jsc = JavaSparkContext.fromSparkContext(ctx);
+	public void testBisectingKMeans() throws IOException {
 
 		String source = "/train";
-		JavaRDD<String> lines = jsc.textFile(dir + source).cache();
-		JavaRDD<Vector> data = lines.map(new MyMapper());
+		UUID uuid = UUID.randomUUID();
+		String path_method = String.format("%s/results%s/BisectingKMeans",
+				dir_, source);
 
-		double[] colMags = new double[1024];
-		for (int i = 0; i < colMags.length; i++)
-			colMags[i] = 1;
-		RowMatrix rows = new RowMatrix(data.rdd());
-		double similarity = 0.5;
-		double gamma = 10 * Math.log(data.count()) / similarity;
-		CoordinateMatrix simmatrix = rows.columnSimilaritiesDIMSUM(colMags,
-				gamma);
-		System.out.println(simmatrix.numRows());
-		JavaRDD<Tuple3<Long, Long, Double>> similarities = simmatrix.entries()
-				.toJavaRDD()
-				.map(new Function<MatrixEntry, Tuple3<Long, Long, Double>>() {
-					public Tuple3<Long, Long, Double> call(MatrixEntry entry) {
-						return new Tuple3(entry.i(), entry.j(), entry.value());
+		String path = String.format("file:///%s/%s", path_method, uuid);
+
+		File file = new File(path_method, uuid.toString() + ".log");
+		System.out.println(file);
+		file.createNewFile();
+		BufferedWriter w = new BufferedWriter(new OutputStreamWriter(
+				new FileOutputStream(file)));
+		file = new File(path_method, uuid.toString() + "_cluster.txt");
+		file.createNewFile();
+		BufferedWriter clusters = new BufferedWriter(new FileWriter(file));
+		clusters.write(String.format("%s\t%s\t%s\t%s\n", "Number of clusters",
+				"Actual Number of clusters", "Center", "clusterCenter"));
+
+		SparkConf conf = new SparkConf().setAppName(
+				StreamingKMeans.class.getName()).setMaster("local[*]");
+
+		SparkContext ctx = SparkContext.getOrCreate(conf);
+		JavaSparkContext jsc = JavaSparkContext.fromSparkContext(ctx);
+
+		try {
+			JavaRDD<String> lines = jsc.textFile(dir + source).cache();
+			JavaRDD<Vector> data = lines.map(new MyMapper());
+			int maxk = 30; // 86877;
+			// int[] kk = new int[] { 5, 50, 200, 500, 1000, 2000, 5000, 10000,
+			// 15000, 20000, 30000, 40000, 50000, 60000,70000, 80000, 90000,
+			// 100000 };
+			//int[] kk = new int[] { 10000, 100000 };
+			int[] kk = new int[] { 50000 };
+			// int[] kk = new int[] { 10000, 15000, 20000, 30000, 40000, 50000,
+			// 60000,70000, 80000, 90000, 100000 };
+			double cost;
+			int k = 0;
+			for (int j = 0; j < kk.length; j++)
+				try {
+					k = kk[j];
+
+					BisectingKMeans bkm = new BisectingKMeans().setK(k);
+					bkm.setMinDivisibleClusterSize(3);
+					BisectingKMeansModel model = bkm.run(data);
+
+					cost = model.computeCost(data);
+					w.write(String.format("%s\t%s\n", k, cost));
+					w.flush();
+					Vector[] clusterCenters = model.clusterCenters();
+					for (int i = 0; i < clusterCenters.length; i++) {
+						Vector clusterCenter = clusterCenters[i];
+						clusters.write(String.format("%d\t%d\t%d\t%s\n", k,
+								clusterCenters.length, i, clusterCenter));
 					}
-				}).cache();
-
-		PowerIterationClustering pic = new PowerIterationClustering();
-		int k = 86877;
-		pic.setK(k);
-		pic.setInitializationMode("random"); // random or degree
-		PowerIterationClusteringModel model = pic.run(similarities);
-
-		String path = String.format("%s/results%s/pic%d/%s", dir, source, k,
-				UUID.randomUUID());
-		model.assignments().saveAsTextFile(path);
-		/*
-		 * for (PowerIterationClustering.Assignment a : model.assignments()
-		 * .toJavaRDD().collect()) { System.out.println(a.id() + "->" +
-		 * a.cluster()); }
-		 */
-		model.save(jsc.sc(), path);
-
-		jsc.close();
+					clusters.flush();
+					Thread.yield();
+					JavaRDD<Integer> results = model.predict(data);
+					results.saveAsTextFile(String.format("%s/%d", path, k));
+				} catch (Exception x) {
+					logger_cli.log(Level.WARNING,
+							String.format("Error on k=%d", k), x);
+				}
+		} catch (Exception x) {
+			logger_cli.log(Level.WARNING, x.getMessage(), x);
+		} finally {
+			jsc.close();
+			w.close();
+			clusters.close();
+		}
 
 	}
 }
-
