@@ -29,7 +29,9 @@ public class TestSparkAbstract implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 2144147103190243760L;
-	String dir = "file:///f:/spark";
+	static String dir_ = "f:/spark";
+	static String dir = "file:///" + dir_;
+
 	protected StructType schema = getSchema();
 
 	protected static Logger logger_cli = Logger

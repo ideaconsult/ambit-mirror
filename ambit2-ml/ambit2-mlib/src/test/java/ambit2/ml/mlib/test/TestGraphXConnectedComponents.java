@@ -41,7 +41,7 @@ public class TestGraphXConnectedComponents extends TestSparkAbstract {
 
 	@Test
 	public void testConnectedComponents() throws Exception {
-		String source = "/transposed/toy";
+		String source = "/transposed/full";
 
 		SparkConf conf = new SparkConf().setAppName(
 				StreamingKMeans.class.getName()).setMaster("local[*]");
@@ -67,6 +67,8 @@ public class TestGraphXConnectedComponents extends TestSparkAbstract {
 				});
 		RowMatrix rows = new RowMatrix(data.rdd());
 		CoordinateMatrix simmatrix = rows.columnSimilarities(0.75);
+		
+		
 		JavaRDD<Edge<Double>> similarities = simmatrix.entries().toJavaRDD()
 				.map(new Function<MatrixEntry, Edge<Double>>() {
 					public Edge<Double> call(MatrixEntry entry) {
@@ -83,11 +85,10 @@ public class TestGraphXConnectedComponents extends TestSparkAbstract {
 				vd, ed);
 		Graph<Object, Double> cc = ConnectedComponents.run(graph, vd, ed);
 
-		String path = String.format("%s/%s/results/similarity/%s", dir, source,
+		String path = String.format("%s/results%s/%s", dir, source,
 				UUID.randomUUID());
-		path = String.format("%s/%s/results/graphx/%s", dir, source,
-				UUID.randomUUID());
-		cc.triplets().saveAsTextFile(path);
+		
+		cc.vertices().saveAsTextFile(path);
 		jsc.close();
 	}
 
