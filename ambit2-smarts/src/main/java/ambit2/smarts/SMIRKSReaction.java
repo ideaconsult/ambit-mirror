@@ -82,7 +82,7 @@ public class SMIRKSReaction
 	List<StereoDBTransformation> steroDBTransformations = new ArrayList<StereoDBTransformation>();
 	List<StereoChiralAtTransformation> chiralAtTransformations = new ArrayList<StereoChiralAtTransformation>();
 	List<StereoChiralAtTransformation> extChiralTransformations = new ArrayList<StereoChiralAtTransformation>();
-		
+	/*	
 	List<Integer> reactDBSteroElAt1 = new ArrayList<Integer>();
 	List<Integer> reactDBSteroElAt2 = new ArrayList<Integer>();
 	List<Integer> prodDBSteroElAt1 = new ArrayList<Integer>();
@@ -91,6 +91,7 @@ public class SMIRKSReaction
 	List<Integer> prodChirAtSteroEl = new ArrayList<Integer>();
 	List<Integer> reactExtChirSteroEl = new ArrayList<Integer>();
 	List<Integer> prodExtChirSteroEl = new ArrayList<Integer>();
+	*/
 	
 	protected IChemObjectBuilder builder;
 	protected SmartsToChemObject mSTCO = null;
@@ -491,6 +492,38 @@ public class SMIRKSReaction
 	
 	void generateStereoTransformation() 
 	{
+		//Handle stereo db transformation
+		List<IBond> usedProductBonds = new ArrayList<IBond>();
+		DoubleBondStereoInfo dbsi = null;
+		
+		for (IBond bo : reactant.bonds())
+		{
+			dbsi = null;
+			if (bo instanceof DoubleNonAromaticBond)
+			{
+				dbsi = new DoubleBondStereoInfo();
+				//TODO
+			}
+			else
+				if (bo instanceof DoubleBondAromaticityNotSpecified)
+				{
+					dbsi = new DoubleBondStereoInfo();
+					//TODO
+				}
+				else
+					continue;
+			
+			StereoDBTransformation dbTransf = new StereoDBTransformation();
+			//TODO
+		}
+			
+		//Handle chiral atoms and extended chirality
+		//TODO
+	}
+	
+	/*
+	void generateStereoTransformation() 
+	{
 		//Preliminary registering product atom/bond indices for stereo elements
 		List<IBond> pDBSteroEl = new ArrayList<IBond>();
 		List<Integer> pChirAtSteroEl = new ArrayList<Integer>();
@@ -626,6 +659,8 @@ public class SMIRKSReaction
 			
 		}
 	}
+	
+	*/
 	
 		
 	/*
