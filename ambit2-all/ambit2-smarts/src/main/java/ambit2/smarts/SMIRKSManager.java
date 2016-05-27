@@ -1485,6 +1485,7 @@ public class SMIRKSManager {
 
     public void applyStereoTransformAtLocation(IAtomContainer target, List<IAtom> rMap, SMIRKSReaction reaction)
     {
+    	/*
     	for (int i = 0; i < reaction.prodDBSteroElAt1.size(); i++)
     	{
     		if (reaction.prodDBSteroElAt1.get(i) == null)
@@ -1509,6 +1510,7 @@ public class SMIRKSManager {
     	{
     		//TODO
     	}
+    	*/
     	
     }
 
