@@ -79,6 +79,10 @@ public class SMIRKSReaction
 	//Double bond and chiral atom stereo transformation 
 	//The lists contain the global numbers of the atoms associated 
 	//to the stereo elements
+	List<StereoDBTransformation> steroDBTransformations = new ArrayList<StereoDBTransformation>();
+	List<StereoChiralAtTransformation> chiralAtTransformations = new ArrayList<StereoChiralAtTransformation>();
+	List<StereoChiralAtTransformation> extChiralTransformations = new ArrayList<StereoChiralAtTransformation>();
+		
 	List<Integer> reactDBSteroElAt1 = new ArrayList<Integer>();
 	List<Integer> reactDBSteroElAt2 = new ArrayList<Integer>();
 	List<Integer> prodDBSteroElAt1 = new ArrayList<Integer>();
