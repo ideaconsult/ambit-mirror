@@ -534,6 +534,7 @@ public class SMIRKSReaction
 			//TODO store ligand atoms
 			
 			steroDBTransformations.add(dbTransform);
+			usedProductBonds.add(pBo);
 		}
 		
 		//register unused product db stereo bonds
@@ -579,18 +580,40 @@ public class SMIRKSReaction
 				continue; //stereo for reactant atom is unspecified from the expression
 			
 			StereoChiralAtTransformation chAtTransform = new StereoChiralAtTransformation();
+			
+			//Regiter reactant info
 			chAtTransform.reactChiralAtom = i;
 			chAtTransform.reactChirality = rChirality;
 			chAtTransform.reactLigands = new int[rAtExp.stereoLigands.size()];
 			for (int k = 0; k < chAtTransform.reactLigands.length; k++)
 				chAtTransform.reactLigands[k] = reactant.getAtomNumber(rAtExp.stereoLigands.get(k));
 			
+			//TODO handle extended chirality if present
+			
+			//Register product info
 			int pAtNum = getMappedProductAtom(raMapInd);
 			IAtom pAt = product.getAtom(pAtNum);
-			
-			//TODO
+			if (pAt instanceof SmartsAtomExpression)
+			{
+				SmartsAtomExpression pAtExp = (SmartsAtomExpression)pAt;
+				if (pAtExp.stereoLigands != null)
+				{
+					int pChirality = StereoFromSmartsAtomExpression.getStereo(pAtExp);
+					if (pChirality != SmartsConst.ChC_Unspec)
+					{	
+						chAtTransform.prodChiralAtom = pAtNum;
+						chAtTransform.prodChirality = pChirality;
+						chAtTransform.prodLigands = new int[pAtExp.stereoLigands.size()];
+						for (int k = 0; k < chAtTransform.prodLigands.length; k++)
+							chAtTransform.prodLigands[k] = product.getAtomNumber(pAtExp.stereoLigands.get(k));
+						
+						//TODO handle extended chirality if present
+					}	
+				}
+			}
 			
 			chiralAtTransformations.add(chAtTransform);
+			usedProductAtoms.add(pAtNum);
 		}
 		
 		//register unused product chiral atoms / extended chiral atoms
