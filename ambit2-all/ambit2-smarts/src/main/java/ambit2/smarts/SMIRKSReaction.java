@@ -83,7 +83,7 @@ public class SMIRKSReaction
 	//to the stereo elements
 	List<StereoDBTransformation> steroDBTransformations = new ArrayList<StereoDBTransformation>();
 	List<StereoChiralAtTransformation> chiralAtTransformations = new ArrayList<StereoChiralAtTransformation>();
-	List<StereoChiralAtTransformation> extChiralTransformations = new ArrayList<StereoChiralAtTransformation>();
+	
 	/*	
 	List<Integer> reactDBSteroElAt1 = new ArrayList<Integer>();
 	List<Integer> reactDBSteroElAt2 = new ArrayList<Integer>();
@@ -556,12 +556,36 @@ public class SMIRKSReaction
 			
 			steroDBTransformations.add(dbTransform);
 		}
+		
+		//Handle chiral atoms and extended chirality elements
+		List<Integer> usedProductAtoms = new ArrayList<Integer>();
+		
+		for (int i=0; i<reactant.getAtomCount(); i++)
+		{
+			IAtom rAt = reactant.getAtom(i);
+			Integer raMapInd = (Integer)rAt.getProperty("SmirksMapIndex");
+			if (raMapInd == null)
+				continue; //The atom must be mapped
 			
+			if (!(rAt instanceof SmartsAtomExpression))
+				continue;
+			
+			SmartsAtomExpression rAtExp = (SmartsAtomExpression)rAt;
+			if (rAtExp.stereoLigands == null)
+				continue;
+			
+			StereoChiralAtTransformation chAtTransform = new StereoChiralAtTransformation();
+			
+			//TODO
+			
+			chiralAtTransformations.add(chAtTransform);
+		}
 		
-		
-		
-		//Handle chiral atoms and extended chirality
-		//TODO
+		//register unused product chiral atoms / extended chiral atoms
+		for (int i=0; i<product.getAtomCount(); i++)
+		{
+			//TODO
+		}
 	}
 	
 	
@@ -722,12 +746,10 @@ public class SMIRKSReaction
 	/*
 	void checkDBStereoTransformation() 
 	{
-		//TODO
 	}
 	
 	void checkChiralStereoTransformation() 
 	{
-		//TODO
 	}
 	*/
 	
