@@ -568,13 +568,25 @@ public class SMIRKSReaction
 				continue; //The atom must be mapped
 			
 			if (!(rAt instanceof SmartsAtomExpression))
-				continue;
+				continue; //no stereo for the reactant atom
 			
 			SmartsAtomExpression rAtExp = (SmartsAtomExpression)rAt;
 			if (rAtExp.stereoLigands == null)
-				continue;
+				continue; //no stereo for the reactant atom
+			
+			int rChirality = StereoFromSmartsAtomExpression.getStereo(rAtExp);
+			if (rChirality == SmartsConst.ChC_Unspec)
+				continue; //stereo for reactant atom is unspecified from the expression
 			
 			StereoChiralAtTransformation chAtTransform = new StereoChiralAtTransformation();
+			chAtTransform.reactChiralAtom = i;
+			chAtTransform.reactChirality = rChirality;
+			chAtTransform.reactLigands = new int[rAtExp.stereoLigands.size()];
+			for (int k = 0; k < chAtTransform.reactLigands.length; k++)
+				chAtTransform.reactLigands[k] = reactant.getAtomNumber(rAtExp.stereoLigands.get(k));
+			
+			int pAtNum = getMappedProductAtom(raMapInd);
+			IAtom pAt = product.getAtom(pAtNum);
 			
 			//TODO
 			
