@@ -520,7 +520,7 @@ public class SMIRKSReaction
 			dbTransform.reactDBAt1 = reactant.getAtomNumber(ra1);
 			dbTransform.reactDBAt2 = reactant.getAtomNumber(ra2);
 			dbTransform.prodDBAt1 = getMappedProductAtom(raMapInd1);
-			dbTransform.prodDBAt1 = getMappedProductAtom(raMapInd2);
+			dbTransform.prodDBAt2 = getMappedProductAtom(raMapInd2);
 			dbTransform.reactDBStereo = rDBSI.conformation;
 			
 			IAtom pa1 = product.getAtom(dbTransform.prodDBAt1);			
@@ -528,9 +528,8 @@ public class SMIRKSReaction
 						
 			IBond pBo = product.getBond(pa1, pa2);
 			DoubleBondStereoInfo pDBSI = getDoubleBondStereoInfo(pBo);
-			if (dbTransform != null)
+			if (pDBSI != null)
 				dbTransform.prodDBStereo = pDBSI.conformation;
-			
 			 
 			//TODO store ligand atoms
 			
@@ -543,7 +542,19 @@ public class SMIRKSReaction
 			if (usedProductBonds.contains(pBo))
 				continue;
 			
-			//TODO
+			DoubleBondStereoInfo pDBSI = getDoubleBondStereoInfo(pBo);
+			
+			if (pDBSI == null)
+				continue;
+			
+			StereoDBTransformation dbTransform = new StereoDBTransformation();
+			dbTransform.prodDBAt1 = product.getAtomNumber(pBo.getAtom(0));
+			dbTransform.prodDBAt2 = product.getAtomNumber(pBo.getAtom(1));
+			dbTransform.prodDBStereo = pDBSI.conformation;
+			 
+			//TODO store ligand atoms
+			
+			steroDBTransformations.add(dbTransform);
 		}
 			
 		
