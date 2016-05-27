@@ -14,6 +14,8 @@ import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 import org.openscience.cdk.stereo.ExtendedTetrahedral;
 import org.openscience.cdk.stereo.TetrahedralChirality;
 
+import ambit2.smarts.DoubleBondStereoInfo.DBStereo;
+
 
 
 public class SMIRKSReaction 
@@ -490,35 +492,78 @@ public class SMIRKSReaction
 		}
 	}
 	
+	
 	void generateStereoTransformation() 
 	{
 		//Handle stereo db transformation
 		List<IBond> usedProductBonds = new ArrayList<IBond>();
-		DoubleBondStereoInfo dbsi = null;
 		
-		for (IBond bo : reactant.bonds())
+		for (IBond rBo : reactant.bonds())
 		{
-			dbsi = null;
-			if (bo instanceof DoubleNonAromaticBond)
-			{
-				dbsi = new DoubleBondStereoInfo();
-				//TODO
-			}
-			else
-				if (bo instanceof DoubleBondAromaticityNotSpecified)
-				{
-					dbsi = new DoubleBondStereoInfo();
-					//TODO
-				}
-				else
-					continue;
+			DoubleBondStereoInfo rDBSI = getDoubleBondStereoInfo(rBo);
+			if (rDBSI == null)
+				continue;
 			
-			StereoDBTransformation dbTransf = new StereoDBTransformation();
+			IAtom ra1 = rBo.getAtom(0);
+			Integer raMapInd1 = (Integer)ra1.getProperty("SmirksMapIndex");
+			if (raMapInd1 == null)
+				continue; //at least one of the reactant bonds atoms is not mapped
+							//stereo transformation is not registered
+			
+			IAtom ra2 = rBo.getAtom(1);
+			Integer raMapInd2 = (Integer)ra2.getProperty("SmirksMapIndex");
+			if (raMapInd2 == null)
+				continue; //at least one of the reactant bonds atoms is not mapped
+			
+			StereoDBTransformation dbTransform = new StereoDBTransformation();
+			
+			dbTransform.reactDBAt1 = reactant.getAtomNumber(ra1);
+			dbTransform.reactDBAt2 = reactant.getAtomNumber(ra2);
+			dbTransform.prodDBAt1 = getMappedProductAtom(raMapInd1);
+			dbTransform.prodDBAt1 = getMappedProductAtom(raMapInd2);
+			dbTransform.reactDBStereo = rDBSI.conformation;
+			
+			IAtom pa1 = product.getAtom(dbTransform.prodDBAt1);			
+			IAtom pa2 = product.getAtom(dbTransform.prodDBAt2);
+						
+			IBond pBo = product.getBond(pa1, pa2);
+			DoubleBondStereoInfo pDBSI = getDoubleBondStereoInfo(pBo);
+			if (dbTransform != null)
+				dbTransform.prodDBStereo = pDBSI.conformation;
+			
+			 
+			//TODO store ligand atoms
+			
+			steroDBTransformations.add(dbTransform);
+		}
+		
+		//register unused product db stereo bonds
+		for (IBond pBo : product.bonds())
+		{
+			if (usedProductBonds.contains(pBo))
+				continue;
+			
 			//TODO
 		}
 			
+		
+		
+		
 		//Handle chiral atoms and extended chirality
 		//TODO
+	}
+	
+	
+	
+	DoubleBondStereoInfo getDoubleBondStereoInfo(IBond bo)
+	{	
+		if (bo instanceof DoubleNonAromaticBond)
+			return ((DoubleNonAromaticBond)bo).getStereoInfo();
+
+		if (bo instanceof DoubleBondAromaticityNotSpecified)
+			return  ((DoubleNonAromaticBond)bo).getStereoInfo();
+
+		return null;
 	}
 	
 	/*
