@@ -6,6 +6,10 @@ import ambit2.base.data.study.StructureRecordValidator;
 public enum ParticleTypes {
 	NPO_199 {
 		//just nanomaterial
+		@Override
+		public String toString() {
+			return "Nanomaterial";
+		}
 	},
 	NPO_1892 {
 		// Ag
@@ -61,6 +65,10 @@ public enum ParticleTypes {
 		public String getEINECS() {
 			return "936-414-1";
 		}
+		@Override
+		public String toString() {
+			return "MWCNT";
+		}
 	},
 	NPO_112 {
 		// MWNT, not necessarily carbon
@@ -68,6 +76,11 @@ public enum ParticleTypes {
 		public String getAnnotation() {
 			return "NPO_112";
 		}
+		@Override
+		public String toString() {
+			return "MWNT";
+		}
+
 	},
 	NPO_606 {
 		// carbon nanotube
@@ -76,7 +89,10 @@ public enum ParticleTypes {
 			// https://github.com/enanomapper/data.enanomapper.net/issues/5
 			return "[C]";
 		}
-
+		@Override
+		public String toString() {
+			return "Carbon nanotube";
+		}
 		@Override
 		public String getCAS() {
 			return "308068-56-6";
@@ -109,6 +125,10 @@ public enum ParticleTypes {
 		@Override
 		public String getReferenceUUID() {
 			return null;
+		}
+		@Override
+		public String toString() {
+			return "Metal nanoparticle";
 		}
 	},
 	NPO_1550 {
@@ -761,7 +781,10 @@ public enum ParticleTypes {
 		public String getAnnotation() {
 			return "NPO_1862";
 		}
-
+		@Override
+		public String toString() {
+			return "Polymeric core";
+		}
 	},
 	ENM_9000007 {
 		// nanoclay
@@ -769,18 +792,65 @@ public enum ParticleTypes {
 		public String getAnnotation() {
 			return "ENM_9000007";
 		}
+		@Override
+		public String toString() {
+			return "Nano clay";
+		}
 	},
 	NPO_1540 {
 	// metal oxide
+		@Override
+		public String toString() {
+			return "Metal oxide";
+		}
 	},
 	NPO_1541 {
 		//see https://github.com/enanomapper/ontologies/issues/52
 	// metal oxide
+		@Override
+		public String toString() {
+			return "Metal oxide";
+		}
 	},
 	CHEBI_82297 {
 		// carbon black
 		public String getSMILES() {
 			return "[C]";
+		}
+		@Override
+		public String toString() {
+			return "Carbon black";
+		}
+		
+	},
+	CHEBI_33416 {
+		@Override
+		public String toString() {
+			return "Fullerene";
+		}
+	},
+	CHEBI_36973 {
+		@Override
+		public String toString() {
+			return "Graphene";
+		}
+	},
+	CHEBI_46661 {
+		@Override
+		public String toString() {
+			return "Asbestos";
+		}
+	},
+	CHEBI_131191 {
+		@Override
+		public String toString() {
+			return "Glass wool";
+		}
+	},
+	Alloy {
+		@Override
+		public String toString() {
+			return name();
 		}
 	};
 	public String getSMILES() {
@@ -808,4 +878,8 @@ public enum ParticleTypes {
 		return name();
 	}
 
+	@Override
+	public String toString() {
+		return getFormula();
+	}
 }
