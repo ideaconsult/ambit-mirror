@@ -23,9 +23,25 @@ public class StereoFromSmartsAtomExpression
 		List<SmartsAtomExpression> subs = getSubExpressions(a, SmartsConst.LO
 				+ SmartsConst.LO_ANDLO);
 		
+		for (int i = 0; i < subs.size(); i++) 
+		{
+			int subChirality = analyzeSubExpressionsFromLowAnd(a, subs.get(i));
+			
+			if (subChirality != SmartsConst.ChC_Unspec) 
+			{
+				if (chirality == SmartsConst.ChC_Unspec)
+					chirality = subChirality;
+				else 
+				{
+					if (chirality != subChirality) {
+						chirality = SmartsConst.ChC_Unspec; // Chirality is not defined correctly
+						break;
+					}
+				}
+			}
+		}
 		
-		//TODO
-		return SmartsConst.ChC_Unspec;
+		return chirality;
 	}
 	
 	public static List<SmartsAtomExpression> getSubExpressions(
