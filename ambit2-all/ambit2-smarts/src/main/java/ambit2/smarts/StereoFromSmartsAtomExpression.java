@@ -64,11 +64,32 @@ public class StereoFromSmartsAtomExpression
 	public static int analyzeSubExpressionsFromLowAnd(SmartsAtomExpression atExp,
 			SmartsAtomExpression sub) 
 	{
-		//TODO
-		return SmartsConst.ChC_Unspec;
+		// The input sub-expression 'sub' is represented as a sequence of sub-sub
+		// expressions separated by logical 'OR'
+		// Following rule is applied
+		// If at least one sub-sub expression has defined chirality
+		// then all other sub-sub expressions must have the same chirality
+		
+		List<SmartsAtomExpression> sub_subs = getSubExpressions(sub,
+				SmartsConst.LO + SmartsConst.LO_OR);
+		
+		int subChirality[] = new int[sub_subs.size()];
+		for (int i = 0; i < sub_subs.size(); i++) {
+			subChirality[i] = getExpressionAtomChirality(atExp, sub_subs.get(i));
+		}
+		
+		int chirality = subChirality[0];
+		for (int i = 1; i < subChirality.length; i++) {
+			if (chirality != subChirality[i]) {
+				chirality = SmartsConst.ChC_Unspec;
+				break;
+			}
+		}
+		
+		return chirality;
 	}	
 		
-	public int getExpressionAtomChiralitye(/*SmartsAtomExpression atExp,*/ SmartsAtomExpression sub) 
+	public static int getExpressionAtomChirality(SmartsAtomExpression atExp, SmartsAtomExpression sub) 
 	{
 		// 'sub' expression is represented only by HI_AND and NOT operations
 		
