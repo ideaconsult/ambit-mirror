@@ -27,6 +27,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.AtomConfigurator;
+import ambit2.smarts.DoubleBondStereoInfo.DBStereo;
 import ambit2.smarts.SmartsConst.SSM_MODE;
 
 public class SMIRKSManager {
@@ -1487,7 +1488,22 @@ public class SMIRKSManager {
     {
     	for (StereoDBTransformation dbTr : reaction.steroDBTransformations)
     	{
-    		//TODO
+    		switch (dbTr.prodDBStereo)
+    		{
+    		case UNDEFINED:
+    			//Remove stereo element (if left)
+    			
+    			
+    			break;
+    		case OPPOSITE_OR_UNDEFINED:
+    			break;
+    		case TOGETHER_OR_UNDEFINED:
+    			break;	
+    		case OPPOSITE:
+    			break;
+    		case TOGETHER:
+    			break;
+    		}
     	}
     	
     	for (StereoChiralAtTransformation chAtTr : reaction.chiralAtTransformations)
