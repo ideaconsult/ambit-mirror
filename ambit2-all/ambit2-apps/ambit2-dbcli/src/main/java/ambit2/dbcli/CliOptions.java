@@ -8,7 +8,6 @@ import java.io.Writer;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 
 import net.idea.modbcum.i.processors.IProcessor;
 
@@ -38,7 +37,7 @@ public class CliOptions {
 				return "import";
 			}
 		},
-		preprocessing, dataset, split, standardize, fingerprint, help;
+		preprocessing, dataset, split, standardize, fingerprint, simmatrix, help;
 		public String toString() {
 			return name();
 		};

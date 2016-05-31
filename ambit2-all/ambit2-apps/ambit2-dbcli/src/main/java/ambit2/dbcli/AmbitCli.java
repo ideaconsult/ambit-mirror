@@ -102,6 +102,7 @@ import ambit2.dbcli.descriptors.AtomEnvironmentGeneratorApp;
 import ambit2.dbcli.exceptions.InvalidCommand;
 import ambit2.descriptors.processors.BitSetGenerator;
 import ambit2.descriptors.processors.FPTable;
+import ambit2.descriptors.simmatrix.SimilarityMatrix;
 import ambit2.smarts.processors.SMARTSPropertiesGenerator;
 import ambit2.smarts.processors.SMIRKSProcessor;
 import ambit2.tautomers.processor.StructureStandardizer;
@@ -184,6 +185,8 @@ public class AmbitCli {
 			parseCommandStandardize(subcommand, now);
 		} else if (_commandmode.fingerprint.name().equals(command)) {
 			parseCommandFingerprints(subcommand, now);
+		} else if (_commandmode.simmatrix.name().equals(command)) {
+			parseCommandSimilarityMatrix(subcommand, now);
 		}
 		return -1;
 	}
@@ -786,7 +789,14 @@ public class AmbitCli {
 					"Input file not specified! Please use -i {file}");
 		return new File(options.input);
 	}
-
+	
+	public void parseCommandSimilarityMatrix(String subcommand, long now) throws Exception {
+		final File file = getInputFile();
+		SimilarityMatrix matrix = new SimilarityMatrix();
+		matrix.setLogger(logger_cli);
+		matrix.createMatrix(file.getAbsolutePath(), -1, false, 0.75);
+	}
+	
 	public void parseCommandFingerprints(String subcommand, long now)
 			throws Exception {
 		boolean multifile = true;
