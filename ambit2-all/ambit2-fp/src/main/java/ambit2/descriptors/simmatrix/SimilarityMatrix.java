@@ -92,8 +92,6 @@ public class SimilarityMatrix {
 					r++;
 					b.add(dense ? parseLineDense(line) : parseLineSparse(line,
 							r));
-					if ((maxRecord > 0) && (r > maxRecord))
-						break;
 				}
 			} finally {
 				reader.close();
