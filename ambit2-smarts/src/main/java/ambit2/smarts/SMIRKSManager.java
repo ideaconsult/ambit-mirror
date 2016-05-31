@@ -1485,32 +1485,15 @@ public class SMIRKSManager {
 
     public void applyStereoTransformAtLocation(IAtomContainer target, List<IAtom> rMap, SMIRKSReaction reaction)
     {
-    	/*
-    	for (int i = 0; i < reaction.prodDBSteroElAt1.size(); i++)
-    	{
-    		if (reaction.prodDBSteroElAt1.get(i) == null)
-    		{
-    			//Stereo element on product is removed
-    			continue;
-    		}
-    		
-    		//Setting stereo element
-    		IAtom at1 = rMap.get(reaction.prodDBSteroElAt1.get(i));
-    		IAtom at2 = rMap.get(reaction.prodDBSteroElAt2.get(i));
-    		
-    		//TODO
-    	}
-    	
-    	for (int i = 0; i < reaction.reactChirAtSteroEl.size(); i++)
+    	for (StereoDBTransformation dbTr : reaction.steroDBTransformations)
     	{
     		//TODO
     	}
     	
-    	for (int i = 0; i < reaction.reactExtChirSteroEl.size(); i++)
+    	for (StereoChiralAtTransformation chAtTr : reaction.chiralAtTransformations)
     	{
     		//TODO
     	}
-    	*/
     	
     }
 
