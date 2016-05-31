@@ -641,7 +641,30 @@ public class SMIRKSReaction
 		//register unused product chiral atoms / extended chiral atoms
 		for (int i=0; i<product.getAtomCount(); i++)
 		{
-			//TODO
+			if (usedProductAtoms.contains(i))
+				continue;
+			
+			IAtom pAt = product.getAtom(i);
+			if (pAt instanceof SmartsAtomExpression)
+			{
+				StereoChiralAtTransformation chAtTransform = new StereoChiralAtTransformation();
+								
+				SmartsAtomExpression pAtExp = (SmartsAtomExpression)pAt;
+				if (pAtExp.stereoLigands != null)
+				{
+					int pChirality = StereoFromSmartsAtomExpression.getStereo(pAtExp);
+					if (pChirality != SmartsConst.ChC_Unspec)
+					{	
+						chAtTransform.prodChiralAtom = i;
+						chAtTransform.prodChirality = pChirality;
+						chAtTransform.prodLigands = new int[pAtExp.stereoLigands.size()];
+						for (int k = 0; k < chAtTransform.prodLigands.length; k++)
+							chAtTransform.prodLigands[k] = product.getAtomNumber(pAtExp.stereoLigands.get(k));
+						
+						//TODO handle extended chirality if present
+					}	
+				}
+			}
 		}
 	}
 	
