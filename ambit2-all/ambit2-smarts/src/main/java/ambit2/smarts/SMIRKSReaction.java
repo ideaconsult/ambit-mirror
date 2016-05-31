@@ -574,8 +574,19 @@ public class SMIRKSReaction
 			dbTransform.prodDBAt1 = product.getAtomNumber(pBo.getAtom(0));
 			dbTransform.prodDBAt2 = product.getAtomNumber(pBo.getAtom(1));
 			dbTransform.prodDBStereo = pDBSI.conformation;
-			 
-			//TODO store ligand atoms
+					
+			//Set product ligands in the 'right indexing order'
+			IAtom pa1 = product.getAtom(dbTransform.prodDBAt1);
+			if (product.getBond(pa1, pDBSI.ligand1) != null)
+			{
+				dbTransform.prodLigand1 = product.getAtomNumber(pDBSI.ligand1);
+				dbTransform.prodLigand2 = product.getAtomNumber(pDBSI.ligand2);
+			}
+			else
+			{
+				dbTransform.prodLigand1 = product.getAtomNumber(pDBSI.ligand2);
+				dbTransform.prodLigand2 = product.getAtomNumber(pDBSI.ligand1);
+			}
 			
 			steroDBTransformations.add(dbTransform);
 		}
