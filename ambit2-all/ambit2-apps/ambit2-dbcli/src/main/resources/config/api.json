@@ -252,7 +252,19 @@
 						"type": "Double",
 						"value": 0.75,
 						"comment": "Tanimoto similarity threshold"
-					}
+					},
+					":page": {
+						"mandatory": false,
+						"type": "Integer",
+						"value": 0,
+						"comment": "Start page (first page = 0)"
+					},
+					":pagesize": {
+						"mandatory": false,
+						"type": "Integer",
+						"value": 10000,
+						"comment": "Page size (in number of records). Set to -1 to read all records."
+					}					
 				}
 			}
 		},

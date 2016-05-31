@@ -55,8 +55,17 @@ public class SimilarityMatrix {
 		return l;
 	}
 
-	public void createMatrix(String path, int max, boolean dense,
-			double threshold) throws Exception {
+	public long[] createMatrix(String path, boolean dense, double threshold)
+			throws Exception {
+		return createMatrix(path, dense, threshold, 0, -1);
+	}
+
+	public long[] createMatrix(String path, boolean dense, double threshold,
+			int page, int pagesize) throws Exception {
+
+		final int startRecord = pagesize > 0 ? (page * pagesize) : 0;
+		int maxRecord = pagesize > 0 ? ((page + 1) * pagesize) : -1;
+
 		if (logger == null)
 			logger = Logger.getLogger(getClass().getName());
 		List<L> b = new ArrayList<L>();
@@ -73,6 +82,8 @@ public class SimilarityMatrix {
 		double tt[] = new double[] { 0, 0.25, 0.5, 0.75, 0.8, 0.9, 0.95, 1 };
 		long histogram[] = new long[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 		for (File file : files) {
+			if (!file.getPath().endsWith(".csv"))
+				continue;
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			try {
 				String line;
@@ -81,7 +92,7 @@ public class SimilarityMatrix {
 					r++;
 					b.add(dense ? parseLineDense(line) : parseLineSparse(line,
 							r));
-					if ((max > 0) && (r > max))
+					if ((maxRecord > 0) && (r > maxRecord))
 						break;
 				}
 			} finally {
@@ -92,11 +103,24 @@ public class SimilarityMatrix {
 
 			now = System.currentTimeMillis();
 
+			if (startRecord >= b.size())
+				throw new Exception(String.format(
+						"Start record %d > number of records %d", startRecord,
+						b.size()));
+			if (maxRecord > b.size() || (maxRecord < 0)) {
+				maxRecord = b.size();
+				logger.info(String.format(
+						"End record %d set to number of records %d", maxRecord,
+						b.size()));
+			}
+
 			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-					String.format("%s/%s_%s.matrix", path, file.getName(),
-							threshold))));
+					String.format("%s/%s_%s_%d_%d.matrix", path,
+							file.getName(), threshold, (startRecord + 1),
+							maxRecord))));
 			try {
-				for (int i = 0; i < b.size(); i++) {
+
+				for (int i = startRecord; i < maxRecord; i++) {
 					L item1 = b.get(i);
 					for (int j = i + 1; j < b.size(); j++) {
 						L item2 = b.get(j);
@@ -112,11 +136,10 @@ public class SimilarityMatrix {
 						}
 					}
 					if ((i % 5000) == 0) {
-						logger.log(
-								Level.INFO,
-								String.format("%d\t%s msec\tHistogram: %s", i,
-										(System.currentTimeMillis() - now)
-												/ (i + 1), histogram2string(histogram,tt)));
+						logger.log(Level.INFO, String.format(
+								"%d\t%s msec\tHistogram: %s", i,
+								(System.currentTimeMillis() - now) / (i + 1),
+								histogram2string(histogram, tt)));
 					}
 					writer.flush();
 				}
@@ -126,18 +149,19 @@ public class SimilarityMatrix {
 						.format("Similarity matrix threshold>=%f for file %s generated in %s msec.\tHistogram: %s",
 								threshold, file.getName(),
 								System.currentTimeMillis() - now,
-								histogram2string(histogram,tt)));
+								histogram2string(histogram, tt)));
 			}
 		}
+		return histogram;
 	}
-	
-	protected String histogram2string(long histogram[],double tt[]) {
+
+	protected String histogram2string(long histogram[], double tt[]) {
 		StringBuilder bb = new StringBuilder();
 		for (int k = 0; k < histogram.length; k++)
-			bb.append(String.format("%s:%s\t", tt[k],
-					histogram[k]));
+			bb.append(String.format("%s:%s\t", tt[k], histogram[k]));
 		return bb.toString();
 	}
+
 	class L {
 		String key;
 		String id;

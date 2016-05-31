@@ -792,9 +792,11 @@ public class AmbitCli {
 	
 	public void parseCommandSimilarityMatrix(String subcommand, long now) throws Exception {
 		final File file = getInputFile();
+		int page = parsePageParam();
+		int pagesize = parsePageSizeParam();
 		SimilarityMatrix matrix = new SimilarityMatrix();
 		matrix.setLogger(logger_cli);
-		matrix.createMatrix(file.getAbsolutePath(), -1, false, 0.75);
+		matrix.createMatrix(file.getAbsolutePath(),  false, 0.0,page,pagesize);
 	}
 	
 	public void parseCommandFingerprints(String subcommand, long now)
