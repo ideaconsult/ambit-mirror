@@ -166,4 +166,13 @@ public class TestSparkAbstract implements Serializable {
 
 	}
 
+	public static double tanimoto(BitSet bitset1, BitSet bitset2) {
+		double a = bitset1.cardinality();
+		double b = bitset2.cardinality();
+
+		BitSet common = ((BitSet) bitset1.clone());
+		common.and(bitset2);
+		double c = common.cardinality();
+		return c / (a + b - c);
+	}
 }

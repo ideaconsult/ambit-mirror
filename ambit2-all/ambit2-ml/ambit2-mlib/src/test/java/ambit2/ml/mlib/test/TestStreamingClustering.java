@@ -143,11 +143,7 @@ public class TestStreamingClustering extends TestSparkAbstract {
 		String path = String.format("%s/results%s/pic%d/%s", dir, source, k,
 				UUID.randomUUID());
 		model.assignments().saveAsTextFile(path);
-		/*
-		 * for (PowerIterationClustering.Assignment a : model.assignments()
-		 * .toJavaRDD().collect()) { System.out.println(a.id() + "->" +
-		 * a.cluster()); }
-		 */
+
 		model.save(jsc.sc(), path);
 
 		jsc.close();

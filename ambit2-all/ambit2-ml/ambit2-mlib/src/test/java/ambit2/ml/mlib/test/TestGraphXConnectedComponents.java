@@ -67,8 +67,7 @@ public class TestGraphXConnectedComponents extends TestSparkAbstract {
 				});
 		RowMatrix rows = new RowMatrix(data.rdd());
 		CoordinateMatrix simmatrix = rows.columnSimilarities(0.75);
-		
-		
+
 		JavaRDD<Edge<Double>> similarities = simmatrix.entries().toJavaRDD()
 				.map(new Function<MatrixEntry, Edge<Double>>() {
 					public Edge<Double> call(MatrixEntry entry) {
@@ -87,7 +86,7 @@ public class TestGraphXConnectedComponents extends TestSparkAbstract {
 
 		String path = String.format("%s/results%s/%s", dir, source,
 				UUID.randomUUID());
-		
+
 		cc.vertices().saveAsTextFile(path);
 		jsc.close();
 	}
