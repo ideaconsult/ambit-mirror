@@ -84,16 +84,6 @@ public class SMIRKSReaction
 	List<StereoDBTransformation> steroDBTransformations = new ArrayList<StereoDBTransformation>();
 	List<StereoChiralAtTransformation> chiralAtTransformations = new ArrayList<StereoChiralAtTransformation>();
 	
-	/*	
-	List<Integer> reactDBSteroElAt1 = new ArrayList<Integer>();
-	List<Integer> reactDBSteroElAt2 = new ArrayList<Integer>();
-	List<Integer> prodDBSteroElAt1 = new ArrayList<Integer>();
-	List<Integer> prodDBSteroElAt2 = new ArrayList<Integer>();
-	List<Integer> reactChirAtSteroEl = new ArrayList<Integer>();
-	List<Integer> prodChirAtSteroEl = new ArrayList<Integer>();
-	List<Integer> reactExtChirSteroEl = new ArrayList<Integer>();
-	List<Integer> prodExtChirSteroEl = new ArrayList<Integer>();
-	*/
 	
 	protected IChemObjectBuilder builder;
 	protected SmartsToChemObject mSTCO = null;
