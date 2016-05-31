@@ -737,6 +737,14 @@ public class AmbitCli {
 		}
 	}
 
+	protected double parseThresholdParam() {
+		try {
+			return (Double) options.getParam(":threshold");
+		} catch (Exception x) {
+			logger_cli.log(Level.WARNING, x.toString());
+			return 0.75;
+		}
+	}
 	protected String parseStringParam(String paramname, String defautlvalue) {
 		try {
 			return options.getParam(paramname).toString();
@@ -794,9 +802,10 @@ public class AmbitCli {
 		final File file = getInputFile();
 		int page = parsePageParam();
 		int pagesize = parsePageSizeParam();
+		double threshold = parseThresholdParam();
 		SimilarityMatrix matrix = new SimilarityMatrix();
 		matrix.setLogger(logger_cli);
-		matrix.createMatrix(file.getAbsolutePath(),  false, 0.0,page,pagesize);
+		matrix.createMatrix(file.getAbsolutePath(),  false, threshold,page,pagesize);
 	}
 	
 	public void parseCommandFingerprints(String subcommand, long now)
