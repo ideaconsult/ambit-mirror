@@ -74,6 +74,8 @@ Toxtree predictions online
 
 ## News
 
+- [**AMBIT presentation in a ChemicalWatch webinar June 6, 2016**](https://chemicalwatch.com/47309/qsar-guidance-for-2018-reach-registrants)
+
 - [**Cefic launches ‘AMBIT’ chemical safety prediction software**](http://cefic-lri.org/news/cefic-launches-ambit-chemical-safety-prediction-software/)
 
 - [Cefic-LRI presents its AMBIT tool poster during the poster exhibition of New Approach Methodologies in Regulatory Science](http://cefic-lri.org/events/topical-scientific-workshop-new-approach-methodologies-in-regulatory-science/)
@@ -88,7 +90,7 @@ Toxtree predictions online
  
 - **Online** at [https://ambitlri.ideaconsult.net](https://ambitlri.ideaconsult.net)
 
-- [User guilde](ra.html) 
+- [User guide](ra.html) 
 
 The LRI AMBIT-IUCLID tool is loaded with [REACH data](http://echa.europa.eu/view-article/-/journal_content/title/echa-gives-out-registration-data-to-support-development-of-non-test-methods) subject to the legal notice. Substance composition and IUCLID import is supported. The comprehensive search functionality allowing  structure search, substructure search, and similarity search even in databases not designed for, such as IUCLID, in order to find substances appropriate for read-across and category approaches. It also enables the inclusion of impurities (important in real industrial conditions) in substance search requests. User interface for creating read across assessment  and generating reports is available in online and downloadable versions.
 
