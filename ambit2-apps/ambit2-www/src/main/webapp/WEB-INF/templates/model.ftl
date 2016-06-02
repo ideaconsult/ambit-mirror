@@ -90,14 +90,22 @@ $(document)
 	<div id="tabs_models" >
 		<#if modelid??>
 		<div class="row" style="padding:0;" >			
-			<div class="ui-widget-header ui-corner-top">Model at <a href='${ambit_root}/model/${modelid}'>${ambit_root}/model/${modelid}</a></div>
-			<div class="ui-widget-content ui-corner-bottom">
-				<div style="margin:5px;padding:5px;">	
+			<div style="font-weight:bold" >Model at <a href='${ambit_root}/model/${modelid}'>${ambit_root}/model/${modelid}</a></div>
+			<div >
+				<div style="margin:5px;padding:5px;" class="fourteen columns">	
 				<form action="${ambit_root}/model/${modelid}" id="runModel"  method="POST">	
 					<#include "/model_one.ftl">
 				</form>
 				</div>
+					<div class="two columns chelp" style='padding:0;margin:0;'>
+					<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
+					<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
+					</div>
+					<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
+					</div>		
+					</div>
 			</div>
+			
 		<#else>
 
 		<div class="row " style="padding:0;" >

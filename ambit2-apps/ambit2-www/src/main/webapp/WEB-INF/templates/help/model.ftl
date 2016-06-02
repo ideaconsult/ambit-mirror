@@ -17,6 +17,8 @@ What is Model service<a href='#' class='chelp hwhat'>?</a> |
     Dataset or compound URI as in <a href="${ambit_root}/dataset?max=100" target=_blank>Datasets list</a>.
     Either enter/paste the URI, or search for dataset by name, by entering first few letters. The field supports autocomplete
     and will show a list of dataset names, if there is a match. The dataset names are case sensitive! 
+    <br/>
+    Note: this field expects only a dataset or compound URI - not SMILES or other chemical compound identifiers!
   </div>
   <div id="hfeature">
     X, Yobs, Ypred
