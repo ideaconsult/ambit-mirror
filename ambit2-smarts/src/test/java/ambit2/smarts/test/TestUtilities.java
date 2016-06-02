@@ -77,6 +77,7 @@ import ambit2.smarts.SmartsParser;
 import ambit2.smarts.SmartsScreeningKeys;
 import ambit2.smarts.SmartsToChemObject;
 import ambit2.smarts.StereoChemUtils;
+import ambit2.smarts.StereoFromSmartsAtomExpression;
 import ambit2.smarts.StructInfo;
 import ambit2.smarts.StructureSetAnalyzer;
 
@@ -2315,6 +2316,47 @@ public class TestUtilities {
 		}	
 	}
 	
+	int testStereoFromSmartsAtomExpression(String smarts) throws Exception 
+	{
+		System.out.println("Stereo chirality for: " + smarts);
+		IQueryAtomContainer query = sp.parse(smarts);
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals(""))
+		{	
+			System.out.println(errorMsg);
+			return (-1);
+		}
+			
+			
+		for (int i = 0; i < query.getAtomCount(); i++)
+		{
+			IAtom at = query.getAtom(i);
+			if (at instanceof SmartsAtomExpression)
+			{
+				SmartsAtomExpression smae = (SmartsAtomExpression)at;
+				int chir = StereoFromSmartsAtomExpression.getStereo(smae);
+				System.out.println("atom #" + (i+1) + "  " 
+						+ smae.toString() + "  -->" + chiralityToString(chir));
+			}
+		}
+		
+		return 0;
+	}
+	
+	String chiralityToString(int  chir)
+	{
+		switch (chir)
+		{
+		case SmartsConst.ChC_Unspec:
+			return "unspecified";
+		case SmartsConst.ChC_AntiClock:
+			return "@";
+		case SmartsConst.ChC_Clock:
+			return "@@";	
+		}
+		return "xxx";
+	}
+	
 
 	// -------------------------------------------------------------------------------
 
@@ -2719,8 +2761,8 @@ public class TestUtilities {
 		//tu.testSMIRKS("O[C:1]>>N[C:1]", "C[C@H](O)Cl");
 		//tu.testSMIRKS("[C:1]=[C:2]>>[C:1].[C:2]", "O/C=C/C");
 		
-		tu.testSMIRKS("[H:6][C:1]([#6:4])([#16;H1v2])[#1,#6:5]>>[H:6][C:1]([H])([#6:4])[#1,#6:5]", 
-				"CN\\C(NCCS)=C\\[N+]([O-])=O");
+		//tu.testSMIRKS("[H:6][C:1]([#6:4])([#16;H1v2])[#1,#6:5]>>[H:6][C:1]([H])([#6:4])[#1,#6:5]", 
+		//		"CN\\C(NCCS)=C\\[N+]([O-])=O");
 		
 		
 		
@@ -2907,6 +2949,8 @@ public class TestUtilities {
 		//tu.testBinaryCombinations(4);
 		
 		//tu.testStereoOnMoleculeChange();
+		
+		tu.testStereoFromSmartsAtomExpression("CC[C@;C@++](N)(Cl)C");
 
 	}
 
