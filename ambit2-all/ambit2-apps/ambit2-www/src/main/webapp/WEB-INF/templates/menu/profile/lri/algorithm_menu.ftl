@@ -27,7 +27,7 @@
 
 <li ><a href="${ambit_root}/algorithm?type=DescriptorCalculation">Descriptor Calculation</a></li>
 <li ><a href="${ambit_root}/algorithm?type=AppDomain">Applicability domain</a></li>
-
+<#if (ambit_datasetmgr?? && ambit_datasetmgr) || (ambit_admin?? && ambit_admin)>
 <li >
 	<a href="${ambit_root}/algorithm?type=Rules">Super services</a>
 	<ul>
@@ -55,5 +55,6 @@
 		<li ><a href="${ambit_root}/algorithm?type=Expert">Expert</a></li>
 	</ul>
 </li>
+</#if>
 
 </ul>
