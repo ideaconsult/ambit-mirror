@@ -1198,7 +1198,7 @@ public class StereoChemUtils
 		return null;
 	}
 	
-	public static ExtendedTetrahedral getExtendedTetrahedralByChiralCenter(IAtom chirCenter, IAtomContainer container)
+	public static ExtendedTetrahedral findExtendedTetrahedralByChiralCenter(IAtom chirCenter, IAtomContainer container)
 	{
 		for (IStereoElement element : container.stereoElements())
 		{
