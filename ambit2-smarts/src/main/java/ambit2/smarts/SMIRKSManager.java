@@ -1493,31 +1493,62 @@ public class SMIRKSManager {
     	
     	for (StereoDBTransformation dbTr : reaction.steroDBTransformations)
     	{
-    		switch (dbTr.prodDBStereo)
-    		{
-    		case UNDEFINED:
+    		switch (dbTr.prodDBStereo) {
+    		
+    		case UNDEFINED:	{	
     			//Remove stereo element (if left)
-    			//In this case both reactant atoms must be mapped:
-    			IBond pSteroBo = target.getBond(rMap.get(dbTr.reactDBAt1), rMap.get(dbTr.reactDBAt1));
-    			if (pSteroBo != null)
+    			//In this case both reactant atoms must be mapped so the target bond is taken from rMap
+    			IBond tStereoBo = target.getBond(rMap.get(dbTr.reactDBAt1), rMap.get(dbTr.reactDBAt2));
+    			if (tStereoBo != null)
     			{	
     				DoubleBondStereochemistry dbsc = 
-    						StereoChemUtils.findDBStereoElementByStereoBond(pSteroBo, target);
+    						StereoChemUtils.findDBStereoElementByStereoBond(tStereoBo, target);
     				if (dbsc != null)
     					removeList.add(dbsc);
     			}
-    			break;
+    		} break;
     			
     		case OPPOSITE_OR_UNDEFINED:
     			//TODO some special treatment
     			break;
+    			
     		case TOGETHER_OR_UNDEFINED:
     			//TODO some special treatment
-    			break;	
+    			break;
+    			
     		case OPPOSITE:
-    			break;
-    		case TOGETHER:
-    			break;
+    		case TOGETHER: {	
+    			//Getting the target atoms for the db stereo bond
+    			//If atom is mapped (i.e. reactDBAt1/2 != -1) it is taken form rMap otherwise
+    			//it is a newly created product atom
+    			IAtom ta1, ta2;
+    			if (dbTr.reactDBAt1 == -1)
+    				ta1 = getNewProductAtomOnTargetByNumber(dbTr.prodDBAt1,target, rMap, newProdAtoms, reaction);
+    			else
+    				ta1 = rMap.get(dbTr.reactDBAt1); 
+
+    			if (dbTr.reactDBAt2 == -1)
+    				ta2 = getNewProductAtomOnTargetByNumber(dbTr.prodDBAt2,target, rMap, newProdAtoms, reaction);
+    			else
+    				ta2 = rMap.get(dbTr.reactDBAt2);	
+
+    			IBond tStereoBo = target.getBond(ta1, ta2); 
+    			if (tStereoBo != null)
+    			{	
+    				DoubleBondStereochemistry dbsc = 
+    						StereoChemUtils.findDBStereoElementByStereoBond(tStereoBo, target);
+    				if (dbsc != null)
+    				{	
+    					//removeList.add(dbsc);
+    					//TODO
+    				}
+    				else
+    				{
+    					//TODO
+    				}
+    			}
+    		} break;
+    		
     		}
     	}
     	
@@ -1540,6 +1571,19 @@ public class SMIRKSManager {
     		newStereo.add(el);
     	
     	target.setStereoElements(newStereo);
+    }
+    
+    
+    IAtom getNewProductAtomOnTargetByNumber(int prodAtNum, 
+    		IAtomContainer target, 
+    		List<IAtom> rMap, 
+    		List<IAtom> newProdAtoms, 
+    		SMIRKSReaction reaction)
+    {
+    	
+    	//TODO
+    	
+    	return null;
     }
 
 }
