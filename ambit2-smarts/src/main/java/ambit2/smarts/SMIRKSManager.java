@@ -1523,12 +1523,12 @@ public class SMIRKSManager {
     			//it is a newly created product atom
     			IAtom ta1, ta2;
     			if (dbTr.reactDBAt1 == -1)
-    				ta1 = getNewProductAtomOnTargetByNumber(dbTr.prodDBAt1,target, rMap, newProdAtoms, reaction);
+    				ta1 = getNewProductAtomOnTargetByNumber(dbTr.prodDBAt1,target, /*rMap,*/ newProdAtoms, reaction);
     			else
     				ta1 = rMap.get(dbTr.reactDBAt1); 
 
     			if (dbTr.reactDBAt2 == -1)
-    				ta2 = getNewProductAtomOnTargetByNumber(dbTr.prodDBAt2,target, rMap, newProdAtoms, reaction);
+    				ta2 = getNewProductAtomOnTargetByNumber(dbTr.prodDBAt2,target, /*rMap,*/ newProdAtoms, reaction);
     			else
     				ta2 = rMap.get(dbTr.reactDBAt2);	
 
@@ -1576,7 +1576,7 @@ public class SMIRKSManager {
     
     IAtom getNewProductAtomOnTargetByNumber(int prodAtNum, 
     		IAtomContainer target, 
-    		List<IAtom> rMap, 
+    		//List<IAtom> rMap, 
     		List<IAtom> newProdAtoms, 
     		SMIRKSReaction reaction)
     {
