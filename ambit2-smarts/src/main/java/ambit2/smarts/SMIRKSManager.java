@@ -972,7 +972,7 @@ public class SMIRKSManager {
     	
     	
     	//handle stereo transformation defined in the SMIRKS 
-    	//TODO
+    	//applyStereoTransformAtLocation(target, rMap, newAtoms, reaction);
 
     }
 
@@ -1484,7 +1484,7 @@ public class SMIRKSManager {
     }
 
 
-    public void applyStereoTransformAtLocation(IAtomContainer target, List<IAtom> rMap, SMIRKSReaction reaction)
+    public void applyStereoTransformAtLocation(IAtomContainer target, List<IAtom> rMap, List<IAtom> newProdAtoms, SMIRKSReaction reaction)
     {
     	//Stereo transformation will be performed by means of removeList and addList  
     	List<IStereoElement> removeList = new ArrayList<IStereoElement>();
@@ -1497,9 +1497,17 @@ public class SMIRKSManager {
     		{
     		case UNDEFINED:
     			//Remove stereo element (if left)
-    			
-    			
+    			//In this case both reactant atoms must be mapped:
+    			IBond pSteroBo = target.getBond(rMap.get(dbTr.reactDBAt1), rMap.get(dbTr.reactDBAt1));
+    			if (pSteroBo != null)
+    			{	
+    				DoubleBondStereochemistry dbsc = 
+    						StereoChemUtils.findDBStereoElementByStereoBond(pSteroBo, target);
+    				if (dbsc != null)
+    					removeList.add(dbsc);
+    			}
     			break;
+    			
     		case OPPOSITE_OR_UNDEFINED:
     			//TODO some special treatment
     			break;
