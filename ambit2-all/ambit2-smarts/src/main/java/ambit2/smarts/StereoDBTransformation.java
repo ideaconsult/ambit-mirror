@@ -17,5 +17,7 @@ public class StereoDBTransformation
 	public int prodDBAt2 = -1;
 	public int prodLigand1 = -1;
 	public int prodLigand2 = -1;
+	public int prodLigand1ReactMap = -1; //if mapped the reactant partner is not obligatory reactLigand1	
+	public int prodLigand2ReactMap = -1; //if mapped the reactant partner is not obligatory reactLigand2
 	public DBStereo prodDBStereo = DBStereo.UNDEFINED;
 }
