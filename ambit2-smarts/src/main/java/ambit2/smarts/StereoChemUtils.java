@@ -1169,7 +1169,48 @@ public class StereoChemUtils
 		return false;
 	}
 	
+	public static DoubleBondStereochemistry findDBStereoElementByStereoBond(IBond stereoBond, IAtomContainer container)
+	{
+		for (IStereoElement element : container.stereoElements())
+		{
+			if (element instanceof DoubleBondStereochemistry)
+			{
+				DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry)element;
+				if (stereoBond == dbsc.getStereoBond())
+					return dbsc;
+			}
+		}	
+		
+		return null;
+	}
 	
+	public static TetrahedralChirality findTetrahedralChiralityByChiralCenter(IAtom chirCenter, IAtomContainer container)
+	{
+		for (IStereoElement element : container.stereoElements())
+		{
+			if (element instanceof TetrahedralChirality)
+			{
+				TetrahedralChirality thc = (TetrahedralChirality)element;
+				if (chirCenter == thc.getChiralAtom())
+					return thc;
+			}
+		}	
+		return null;
+	}
+	
+	public static ExtendedTetrahedral getExtendedTetrahedralByChiralCenter(IAtom chirCenter, IAtomContainer container)
+	{
+		for (IStereoElement element : container.stereoElements())
+		{
+			if (element instanceof ExtendedTetrahedral)
+			{
+				ExtendedTetrahedral etc = (ExtendedTetrahedral)element;
+				if (chirCenter == etc.focus())
+					return etc;
+			}
+		}	
+		return null;
+	}
 	
 	
 }	
