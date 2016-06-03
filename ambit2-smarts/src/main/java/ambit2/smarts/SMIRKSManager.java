@@ -1486,6 +1486,11 @@ public class SMIRKSManager {
 
     public void applyStereoTransformAtLocation(IAtomContainer target, List<IAtom> rMap, SMIRKSReaction reaction)
     {
+    	//Stereo transformation will be performed by means of removeList and addList  
+    	List<IStereoElement> removeList = new ArrayList<IStereoElement>();
+    	List<IStereoElement> addList = new ArrayList<IStereoElement>();
+    	
+    	
     	for (StereoDBTransformation dbTr : reaction.steroDBTransformations)
     	{
     		switch (dbTr.prodDBStereo)
@@ -1511,6 +1516,20 @@ public class SMIRKSManager {
     		//TODO
     	}
     	
+    	//Set new stereo according to the removeList and addList info
+    	List<IStereoElement> newStereo = new ArrayList<IStereoElement>();
+    	for (IStereoElement el : target.stereoElements())
+    	{
+    		if (removeList.contains(el))
+    			continue;
+    		else
+    			newStereo.add(el);
+    	}
+    	
+    	for (IStereoElement el : addList)
+    		newStereo.add(el);
+    	
+    	target.setStereoElements(newStereo);
     }
 
 }
