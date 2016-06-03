@@ -1501,8 +1501,10 @@ public class SMIRKSManager {
     			
     			break;
     		case OPPOSITE_OR_UNDEFINED:
+    			//TODO some special treatment
     			break;
     		case TOGETHER_OR_UNDEFINED:
+    			//TODO some special treatment
     			break;	
     		case OPPOSITE:
     			break;
