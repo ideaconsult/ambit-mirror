@@ -17,6 +17,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IDoubleBondStereochemistry.Conformation;
 import org.openscience.cdk.interfaces.IStereoElement;
+import org.openscience.cdk.interfaces.ITetrahedralChirality.Stereo;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
@@ -1599,8 +1600,37 @@ public class SMIRKSManager {
     		
     		case SmartsConst.ChC_AntiClock:
     		case SmartsConst.ChC_Clock: {
+    			//Getting the target chiral atom
+    			//If atom is mapped it is taken form rMap otherwise
+    			//it is a newly created product atom
+    			IAtom tChirAt;
+    			if (chirTransf.reactChiralAtom == -1)
+    				tChirAt = getNewProductAtomOnTargetByNumber(chirTransf.prodChiralAtom,target, newProdAtoms, reaction);
+    			else
+    				tChirAt = rMap.get(chirTransf.reactChiralAtom);
     			
-    			//TODO
+    			if (tChirAt != null)
+    			{
+    				//TODO Check for extended chirality + handling
+    				
+    				TetrahedralChirality thc = 
+    						StereoChemUtils.findTetrahedralChiralityByChiralCenter(tChirAt, target);
+    				
+    				if (thc != null)
+    					removeList.add(thc);
+    				
+    				IAtom newLigands[] = new IAtom[chirTransf.prodLigands.length];
+    				
+    				//TODO handle lignads
+    				
+    				Stereo newStereo;
+    				if (chirTransf.prodChirality == SmartsConst.ChC_Clock)
+    					newStereo = Stereo.CLOCKWISE;
+    				else
+    					newStereo = Stereo.ANTI_CLOCKWISE;
+    				TetrahedralChirality newThc =
+    						new TetrahedralChirality(tChirAt, newLigands, newStereo);
+    			}
     		} break;
     		}
     		
