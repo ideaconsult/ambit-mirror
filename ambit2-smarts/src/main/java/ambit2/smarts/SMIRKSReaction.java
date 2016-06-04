@@ -582,16 +582,31 @@ public class SMIRKSReaction
 					
 			//Set product ligands in the 'right indexing order'
 			IAtom pa1 = product.getAtom(dbTransform.prodDBAt1);
+			Integer pLig1MapInd, pLig2MapInd;
 			if (product.getBond(pa1, pDBSI.ligand1) != null)
 			{
 				dbTransform.prodLigand1 = product.getAtomNumber(pDBSI.ligand1);
 				dbTransform.prodLigand2 = product.getAtomNumber(pDBSI.ligand2);
+				pLig1MapInd = (Integer)pDBSI.ligand1.getProperty("SmirksMapIndex");
+				pLig2MapInd = (Integer)pDBSI.ligand2.getProperty("SmirksMapIndex");	
 			}
 			else
 			{
 				dbTransform.prodLigand1 = product.getAtomNumber(pDBSI.ligand2);
 				dbTransform.prodLigand2 = product.getAtomNumber(pDBSI.ligand1);
+				pLig1MapInd = (Integer)pDBSI.ligand2.getProperty("SmirksMapIndex");
+				pLig2MapInd = (Integer)pDBSI.ligand1.getProperty("SmirksMapIndex");
 			}
+			
+			//Set reactant atoms mapped to the product ligands
+			if (pLig1MapInd == null)
+				dbTransform.prodLigand1ReactMap = -1;
+			else
+				dbTransform.prodLigand1ReactMap = getMappedReactantAtom(pLig1MapInd);
+			if (pLig2MapInd == null)
+				dbTransform.prodLigand2ReactMap = -1;
+			else
+				dbTransform.prodLigand2ReactMap = getMappedReactantAtom(pLig2MapInd);
 			
 			steroDBTransformations.add(dbTransform);
 		}
