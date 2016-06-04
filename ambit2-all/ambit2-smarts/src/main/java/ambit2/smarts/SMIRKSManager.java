@@ -15,6 +15,7 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IDoubleBondStereochemistry.Conformation;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -1537,14 +1538,39 @@ public class SMIRKSManager {
     			{	
     				DoubleBondStereochemistry dbsc = 
     						StereoChemUtils.findDBStereoElementByStereoBond(tStereoBo, target);
-    				if (dbsc != null)
-    				{	
-    					//removeList.add(dbsc);
-    					//TODO
-    				}
+    				
+    				//Deleting existing stereo element
+    				if (dbsc != null)    					
+    					removeList.add(dbsc);
+    				
+    				IAtom tLig1, tLig2;
+    				if (dbTr.prodLigand1ReactMap == -1)
+    					tLig1 = getNewProductAtomOnTargetByNumber(dbTr.prodLigand1,target, newProdAtoms, reaction);
     				else
-    				{
-    					//TODO
+    					tLig1 = rMap.get(dbTr.prodLigand1ReactMap);
+    				if (dbTr.prodLigand2ReactMap == -1)
+    					tLig2 = getNewProductAtomOnTargetByNumber(dbTr.prodLigand2,target, newProdAtoms, reaction);
+    				else
+    					tLig2 = rMap.get(dbTr.prodLigand1ReactMap);
+    				
+    				//Creating new double bonds stereo element 
+    				if ((tLig1 != null) && (tLig1 != null))
+    				{	
+    					IBond newBonds[] = new IBond[2];
+    					newBonds[0] = target.getBond(ta1, tLig1);
+    					newBonds[1] = target.getBond(ta2, tLig2);
+    					if ((newBonds[0] != null) && newBonds[1] != null)
+    					{	
+    						Conformation newStereo;
+    						if (dbTr.prodDBStereo == DBStereo.OPPOSITE)
+    							newStereo = Conformation.OPPOSITE;
+    						else
+    							newStereo = Conformation.TOGETHER;
+    						
+    						DoubleBondStereochemistry newDbsc = 
+    							new DoubleBondStereochemistry(tStereoBo, newBonds, newStereo);
+    						addList.add(newDbsc);
+    					}
     				}
     			}
     		} break;
