@@ -657,8 +657,17 @@ public class SMIRKSReaction
 						chAtTransform.prodChiralAtom = pAtNum;
 						chAtTransform.prodChirality = pChirality;
 						chAtTransform.prodLigands = new int[pAtExp.stereoLigands.size()];
+						chAtTransform.prodLigandsReactMap = new int[chAtTransform.prodLigands.length];
 						for (int k = 0; k < chAtTransform.prodLigands.length; k++)
+						{	
 							chAtTransform.prodLigands[k] = product.getAtomNumber(pAtExp.stereoLigands.get(k));
+							//Set reactant atoms mapped to the product ligands
+							Integer pLigMapInd = (Integer)pAtExp.stereoLigands.get(k).getProperty("SmirksMapIndex");
+							if (pLigMapInd == null)
+								chAtTransform.prodLigandsReactMap[k] = -1;
+							else
+								chAtTransform.prodLigandsReactMap[k] = getMappedReactantAtom(pLigMapInd);
+						}
 						
 						//TODO handle extended chirality if present
 					}	
@@ -689,8 +698,17 @@ public class SMIRKSReaction
 						chAtTransform.prodChiralAtom = i;
 						chAtTransform.prodChirality = pChirality;
 						chAtTransform.prodLigands = new int[pAtExp.stereoLigands.size()];
+						chAtTransform.prodLigandsReactMap = new int[chAtTransform.prodLigands.length];
 						for (int k = 0; k < chAtTransform.prodLigands.length; k++)
+						{	
 							chAtTransform.prodLigands[k] = product.getAtomNumber(pAtExp.stereoLigands.get(k));
+							//Set reactant atoms mapped to the product ligands
+							Integer pLigMapInd = (Integer)pAtExp.stereoLigands.get(k).getProperty("SmirksMapIndex");
+							if (pLigMapInd == null)
+								chAtTransform.prodLigandsReactMap[k] = -1;
+							else
+								chAtTransform.prodLigandsReactMap[k] = getMappedReactantAtom(pLigMapInd);
+						}	
 						
 						//TODO handle extended chirality if present
 					}	
