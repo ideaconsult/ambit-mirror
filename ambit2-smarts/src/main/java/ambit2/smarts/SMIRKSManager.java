@@ -1553,7 +1553,7 @@ public class SMIRKSManager {
     				else
     					tLig2 = rMap.get(dbTr.prodLigand1ReactMap);
     				
-    				//Creating new double bonds stereo element 
+    				//Creating new double bond stereo element 
     				if ((tLig1 != null) && (tLig1 != null))
     				{	
     					IBond newBonds[] = new IBond[2];
@@ -1578,8 +1578,32 @@ public class SMIRKSManager {
     		}
     	}
     	
-    	for (StereoChiralAtTransformation chAtTr : reaction.chiralAtTransformations)
+    	for (StereoChiralAtTransformation chirTransf : reaction.chiralAtTransformations)
     	{
+    		switch (chirTransf.prodChirality)
+    		{
+    		case SmartsConst.ChC_Unspec:{
+    			//Remove stereo element (if left)
+    			//In this case chiral center is mapped so the target bond is taken from rMap
+    			IAtom tChirAt = rMap.get(chirTransf.reactChiralAtom);
+    			if (tChirAt != null)
+    			{	
+    				//TODO Check for extended chirality + handling
+    				
+    				TetrahedralChirality thc = 
+    						StereoChemUtils.findTetrahedralChiralityByChiralCenter(tChirAt, target);
+    				if (thc != null)
+    					removeList.add(thc);
+    			}
+    		} break;
+    		
+    		case SmartsConst.ChC_AntiClock:
+    		case SmartsConst.ChC_Clock: {
+    			
+    			//TODO
+    		} break;
+    		}
+    		
     		//TODO
     	}
     	
