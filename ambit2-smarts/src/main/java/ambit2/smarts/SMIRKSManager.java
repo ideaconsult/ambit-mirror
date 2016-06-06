@@ -1546,10 +1546,13 @@ public class SMIRKSManager {
     				
     				IAtom tLig1, tLig2;
     				if (dbTr.prodLigand1ReactMap == -1)
+    					//product ligand is unmapped i.e. it is a newly created atom
     					tLig1 = getNewProductAtomOnTargetByNumber(dbTr.prodLigand1,target, newProdAtoms, reaction);
     				else
     					tLig1 = rMap.get(dbTr.prodLigand1ReactMap);
+    				
     				if (dbTr.prodLigand2ReactMap == -1)
+    					//product ligand is unmapped i.e. it is a newly created atom
     					tLig2 = getNewProductAtomOnTargetByNumber(dbTr.prodLigand2,target, newProdAtoms, reaction);
     				else
     					tLig2 = rMap.get(dbTr.prodLigand1ReactMap);
@@ -1621,7 +1624,15 @@ public class SMIRKSManager {
     				
     				IAtom newLigands[] = new IAtom[chirTransf.prodLigands.length];
     				
-    				//TODO handle lignads
+    				for (int i = 0; i < chirTransf.prodLigands.length; i++)
+    				{
+    					if (chirTransf.prodLigandsReactMap[i] == -1) 
+    						//product ligand is unmapped i.e. it is a newly created
+    						newLigands[i] = getNewProductAtomOnTargetByNumber(chirTransf.prodLigands[i],
+    											target, newProdAtoms, reaction);
+        				else
+        					newLigands[i] = rMap.get(chirTransf.prodLigandsReactMap[i]);
+    				}
     				
     				Stereo newStereo;
     				if (chirTransf.prodChirality == SmartsConst.ChC_Clock)
@@ -1630,11 +1641,12 @@ public class SMIRKSManager {
     					newStereo = Stereo.ANTI_CLOCKWISE;
     				TetrahedralChirality newThc =
     						new TetrahedralChirality(tChirAt, newLigands, newStereo);
+    				
+    				addList.add(newThc);
     			}
     		} break;
     		}
     		
-    		//TODO
     	}
     	
     	//Set new stereo according to the removeList and addList info
