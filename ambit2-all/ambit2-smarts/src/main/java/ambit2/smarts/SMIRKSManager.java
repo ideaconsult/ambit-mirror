@@ -192,6 +192,7 @@ public class SMIRKSManager {
 	
 	protected boolean FlagCheckResultStereo = true;
 	protected boolean FlagApplyStereoTransformation = false;
+	
    
 
 	public SMIRKSManager(IChemObjectBuilder builder) {
@@ -974,7 +975,8 @@ public class SMIRKSManager {
     	
     	
     	//handle stereo transformation defined in the SMIRKS 
-    	//applyStereoTransformAtLocation(target, rMap, newAtoms, reaction);
+    	//if (FlagApplyStereoTransformation)
+    	//	applyStereoTransformAtLocation(target, rMap, newAtoms, reaction);
 
     }
 
