@@ -975,8 +975,8 @@ public class SMIRKSManager {
     	
     	
     	//handle stereo transformation defined in the SMIRKS 
-    	//if (FlagApplyStereoTransformation)
-    	//	applyStereoTransformAtLocation(target, rMap, newAtoms, reaction);
+    	if (FlagApplyStereoTransformation)
+    		applyStereoTransformAtLocation(target, rMap, newAtoms, reaction);
 
     }
 
