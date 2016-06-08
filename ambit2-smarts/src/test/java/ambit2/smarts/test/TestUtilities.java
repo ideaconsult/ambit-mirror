@@ -2742,7 +2742,7 @@ public class TestUtilities {
 		// tu.testSMIRKS("[#6:1]-[#8:2]-[#6:3]>>[#6:1]-[#8:2].[#6:3]=S","NCCCOCC",
 		// ReactionOperation.SingleCopyForEachPos);
 
-		tu.FlagExplicitHAtoms = true;
+		tu.FlagExplicitHAtoms = false;
 		tu.FlagTargetPreprocessing = true;
 		tu.FlagProductPreprocessing = true;
 		//tu.FlagPrintAtomAttributes = true;
@@ -2763,6 +2763,12 @@ public class TestUtilities {
 		
 		//tu.testSMIRKS("[H:6][C:1]([#6:4])([#16;H1v2])[#1,#6:5]>>[H:6][C:1]([H])([#6:4])[#1,#6:5]", 
 		//		"CN\\C(NCCS)=C\\[N+]([O-])=O");
+		
+		//tu.testSMIRKS("[O:3]/[C:1]=[C:2]/[C:4]>>[O:3]/[C:1]=[C:2](C)/[C:4]", "O/C=C/C");
+		
+		//tu.testSMIRKS("[C:1][C@:2]([O:3])([N:4])[Cl:5]>>[C:1][C@@:2]([O:3])([N:4])[Cl:5]", "C[C@](O)(N)Cl");
+		//tu.testSMIRKS("[C:1][C@:2]([O:3])([N:4])[Cl:5]>>[C:1][C@:2]([Cl:5])([N:4])[O:3]", "C[C@](O)(N)Cl");
+		tu.testSMIRKS("[C:1][C@H:2]([O:3])[N:4]>>[C:1][C@@H:2]([O:3])[N:4]", "C[C@H](O)N");
 		
 		
 		
@@ -2950,7 +2956,7 @@ public class TestUtilities {
 		
 		//tu.testStereoOnMoleculeChange();
 		
-		tu.testStereoFromSmartsAtomExpression("CC[C@;C@++](N)(Cl)C");
+		//tu.testStereoFromSmartsAtomExpression("CC[C@;C@++](N)(Cl)C");
 
 	}
 
