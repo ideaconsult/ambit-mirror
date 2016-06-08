@@ -2761,16 +2761,22 @@ public class TestUtilities {
 		//tu.testSMIRKS("O[C:1]>>N[C:1]", "C[C@H](O)Cl");
 		//tu.testSMIRKS("[C:1]=[C:2]>>[C:1].[C:2]", "O/C=C/C");
 		
+		
+		
 		//tu.testSMIRKS("[H:6][C:1]([#6:4])([#16;H1v2])[#1,#6:5]>>[H:6][C:1]([H])([#6:4])[#1,#6:5]", 
 		//		"CN\\C(NCCS)=C\\[N+]([O-])=O");
 		
 		//tu.testSMIRKS("[O:3]/[C:1]=[C:2]/[C:4]>>[O:3]/[C:1]=[C:2](C)/[C:4]", "O/C=C/C");
 		
+		//tu.testSMIRKS("[C:1]N>>[C:1]Cl", "O/C=C(N)/C");  //This one does not need FlagApplyStereoTransformation
+		//tu.testSMIRKS("[C:1]N>>[C:1]Cl", "O/C=C(\\N)C");  //This is not so clear what should happen
+		
 		//tu.testSMIRKS("[C:1][C@:2]([O:3])([N:4])[Cl:5]>>[C:1][C@@:2]([O:3])([N:4])[Cl:5]", "C[C@](O)(N)Cl");
 		//tu.testSMIRKS("[C:1][C@:2]([O:3])([N:4])[Cl:5]>>[C:1][C@:2]([Cl:5])([N:4])[O:3]", "C[C@](O)(N)Cl");
-		tu.testSMIRKS("[C:1][C@H:2]([O:3])[N:4]>>[C:1][C@@H:2]([O:3])[N:4]", "C[C@H](O)N");
+		//tu.testSMIRKS("[C:1][C@H:2]([O:3])[N:4]>>[C:1][C@@H:2]([O:3])[N:4]", "C[C@H](O)N");
+		tu.testSMIRKS("[C:1][C@:2]([O:3])([N:4])Cl>>[C:1][C@@:2]([O:3])([N:4])Br", "C[C@](O)(N)Cl");
 		
-		
+		tu.testSMIRKS("[C:1][C:2]([O:3])([N:4])Cl>>[C:1][C:2]([O:3])([N:4])Br", "C[C@](O)(N)Cl");
 		
 		//tu.testSMIRKS("[#8:1]([H])-[#6:2](-[#6:9](-[#8-:10])=[O:11])=[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]-[#6](-[#8-])=O>>"
 		//		+ "[#8-:10]-[#6:9](=[O:11])-[#6:2](=[O:1])-[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]",
