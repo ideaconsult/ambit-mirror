@@ -885,7 +885,6 @@ public class SmartsHelper {
         
         if (!newStereo.isEmpty())
         	atomContainer.setStereoElements(newStereo);
-
     }
 
 	public static void convertExcplicitHAtomsToImplicit(IAtomContainer mol)

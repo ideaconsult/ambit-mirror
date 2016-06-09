@@ -275,7 +275,10 @@ public class StereoChemUtils
 		for (int i = 0; i < ligands.length; i++)
 		{
 			if (ligands[i] == null)
+			{	
+				//TODO Handle sulfoxides: the lone pair is a ligand represented as null 
 				return 5;
+			}	
 			
 			if (!mol.contains(ligands[i]))
 				return 6;
