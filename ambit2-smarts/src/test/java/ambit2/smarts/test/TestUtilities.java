@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import org.junit.Test;
@@ -26,11 +27,13 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.interfaces.IStereoElement;
+import org.openscience.cdk.interfaces.ITetrahedralChirality;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.io.MDLV2000Writer;
@@ -54,6 +57,8 @@ import org.openscience.cdk.validate.BasicValidator;
 import org.openscience.cdk.validate.CDKValidator;
 import org.openscience.cdk.validate.ValidationReport;
 import org.openscience.cdk.validate.ValidatorEngine;
+
+import com.google.common.collect.Maps;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
@@ -145,8 +150,10 @@ public class TestUtilities {
 				.getInstance(SilentChemObjectBuilder.getInstance());
 		adder.addImplicitHydrogens(mol);
 		if (FlagExplicitHAtoms)
-			AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
-
+			SmartsHelper.convertImplicitToExplicitHydrogens(mol);
+			//AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+			//cdk_convertImplicitToExplicitHydrogens(mol);
+			
 		CDKHueckelAromaticityDetector.detectAromaticity(mol);
 	}
 
@@ -2357,6 +2364,76 @@ public class TestUtilities {
 		return "xxx";
 	}
 	
+	public static void cdk_convertImplicitToExplicitHydrogens(IAtomContainer atomContainer) {
+        List<IAtom> hydrogens = new ArrayList<IAtom>();
+        List<IBond> newBonds = new ArrayList<IBond>();
+
+        // store a single explicit hydrogen of each original neighbor
+        Map<IAtom, IAtom> hNeighbor = Maps.newHashMapWithExpectedSize(atomContainer.getAtomCount());
+
+        for (IAtom atom : atomContainer.atoms()) {
+            if (!atom.getSymbol().equals("H")) {
+                Integer hCount = atom.getImplicitHydrogenCount();
+                if (hCount != null) {
+                    for (int i = 0; i < hCount; i++) {
+
+                        IAtom hydrogen = atom.getBuilder().newInstance(IAtom.class, "H");
+                        hydrogen.setAtomTypeName("H");
+                        hydrogen.setImplicitHydrogenCount(0);
+                        hydrogens.add(hydrogen);
+                        newBonds.add(atom.getBuilder().newInstance(IBond.class, atom, hydrogen,
+                                Order.SINGLE));
+
+                        if (hNeighbor.get(atom) == null) hNeighbor.put(atom, hydrogen);
+
+                    }
+                    atom.setImplicitHydrogenCount(0);
+                }
+            }
+        }
+        for (IAtom atom : hydrogens)
+            atomContainer.addAtom(atom);
+        for (IBond bond : newBonds)
+            atomContainer.addBond(bond);
+
+        // update tetrahedral elements with an implicit part
+        for (IStereoElement se : atomContainer.stereoElements()) {
+            if (se instanceof ITetrahedralChirality) {
+            	
+                ITetrahedralChirality tc = (ITetrahedralChirality) se;
+                System.out.println("Pre: " + StereoChemUtils.tetrahedralChirality2String((TetrahedralChirality)tc, atomContainer));
+
+                IAtom focus = tc.getChiralAtom();
+                IAtom[] neighbors = tc.getLigands();
+                IAtom hydrogen = hNeighbor.get(focus);
+                
+               
+                // in sulfoxide - the implicit part of the tetrahedral centre
+                // is a lone pair
+                if (hydrogen == null) continue;
+
+                for (int i = 0; i < tc.getLigands().length; i++) 
+                {	
+                	System.out.println("neighbors[" + i + "]=" 
+                			+ neighbors[i].getSymbol() + atomContainer.getAtomNumber(neighbors[i]));
+                	if (neighbors[i] == focus) {
+                        neighbors[i] = hydrogen;
+                        break;
+                    }
+                }
+                
+                for (int i = 0; i < tc.getLigands().length; i++) 
+                {	
+                	System.out.println("neighbors[" + i + "]=" 
+                			+ tc.getLigands()[i].getSymbol() + atomContainer.getAtomNumber(tc.getLigands()[i]));
+                }
+                
+                System.out.println("Post: " + StereoChemUtils.tetrahedralChirality2String((TetrahedralChirality)tc, atomContainer));
+            }
+        }
+
+    }
+	
 
 	// -------------------------------------------------------------------------------
 
@@ -2742,10 +2819,10 @@ public class TestUtilities {
 		// tu.testSMIRKS("[#6:1]-[#8:2]-[#6:3]>>[#6:1]-[#8:2].[#6:3]=S","NCCCOCC",
 		// ReactionOperation.SingleCopyForEachPos);
 
-		tu.FlagExplicitHAtoms = false;
+		tu.FlagExplicitHAtoms = true;
 		tu.FlagTargetPreprocessing = true;
 		tu.FlagProductPreprocessing = true;
-		//tu.FlagPrintAtomAttributes = true;
+		tu.FlagPrintAtomAttributes = true;
 		// tu.FlagSSMode = SmartsConst.SSM_NON_IDENTICAL_FIRST;
 		//tu.FlagExplicitHToImplicitOnProductPreProcess = true;
 		
@@ -2762,6 +2839,14 @@ public class TestUtilities {
 		//tu.testSMIRKS("[C:1]=[C:2]>>[C:1].[C:2]", "O/C=C/C");
 		
 		
+		//tu.testSMIRKS("[#6:2][C:1]([#8:4]([H]))([*:5])!@-[#6:3]-[#6:8](=[O:10])-[#6:7](-[#8-:6])=[O:9]>>[#6:3]-[#6:8](=[O:10])-[#6:7](-[#8-:6])=[O:9].[#6:2]-[#6:1](-[*:5])=[O:4]", 
+					//"CN(C)C[C@H]1CCCC[C@]1(O)C(C=C)C(=O)C([O-])=O");
+		//			"CN(C)C[C@]1([H])CCCC[C@]1(O)C(C=C)C(=O)C([O-])=O");
+		
+		tu.testSMIRKS("[C:1]Cl>>[C:1]F", 
+				"ClCN(C)C[C@H]1CCCC[C@]1(O)C(C=C)C(=O)C([O-])=O");
+				//"ClCN(C)C[C@]1([H])CCCC[C@]1(O)C(C=C)C(=O)C([O-])=O");
+	
 		
 		//tu.testSMIRKS("[H:6][C:1]([#6:4])([#16;H1v2])[#1,#6:5]>>[H:6][C:1]([H])([#6:4])[#1,#6:5]", 
 		//		"CN\\C(NCCS)=C\\[N+]([O-])=O");
@@ -2774,9 +2859,8 @@ public class TestUtilities {
 		//tu.testSMIRKS("[C:1][C@:2]([O:3])([N:4])[Cl:5]>>[C:1][C@@:2]([O:3])([N:4])[Cl:5]", "C[C@](O)(N)Cl");
 		//tu.testSMIRKS("[C:1][C@:2]([O:3])([N:4])[Cl:5]>>[C:1][C@:2]([Cl:5])([N:4])[O:3]", "C[C@](O)(N)Cl");
 		//tu.testSMIRKS("[C:1][C@H:2]([O:3])[N:4]>>[C:1][C@@H:2]([O:3])[N:4]", "C[C@H](O)N");
-		tu.testSMIRKS("[C:1][C@:2]([O:3])([N:4])Cl>>[C:1][C@@:2]([O:3])([N:4])Br", "C[C@](O)(N)Cl");
-		
-		tu.testSMIRKS("[C:1][C:2]([O:3])([N:4])Cl>>[C:1][C:2]([O:3])([N:4])Br", "C[C@](O)(N)Cl");
+		//tu.testSMIRKS("[C:1][C@:2]([O:3])([N:4])Cl>>[C:1][C@@:2]([O:3])([N:4])Br", "C[C@](O)(N)Cl");
+		//tu.testSMIRKS("[C:1][C:2]([O:3])([N:4])Cl>>[C:1][C:2]([O:3])([N:4])Br", "C[C@](O)(N)Cl");
 		
 		//tu.testSMIRKS("[#8:1]([H])-[#6:2](-[#6:9](-[#8-:10])=[O:11])=[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]-[#6](-[#8-])=O>>"
 		//		+ "[#8-:10]-[#6:9](=[O:11])-[#6:2](=[O:1])-[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]",
