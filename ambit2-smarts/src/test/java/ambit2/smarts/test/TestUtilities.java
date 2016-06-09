@@ -2824,7 +2824,7 @@ public class TestUtilities {
 		tu.FlagProductPreprocessing = true;
 		tu.FlagPrintAtomAttributes = true;
 		// tu.FlagSSMode = SmartsConst.SSM_NON_IDENTICAL_FIRST;
-		//tu.FlagExplicitHToImplicitOnProductPreProcess = true;
+		tu.FlagExplicitHToImplicitOnProductPreProcess = true;
 		
 		//tu.testCheckStereoElements("C(=O)[C@@]([H])1C(=O)C(C(=O)O1)(F)F");
 		//tu.testCheckStereoElements("C(=O)[C@@H]1C(=O)C(C(=O)O1)(F)F");

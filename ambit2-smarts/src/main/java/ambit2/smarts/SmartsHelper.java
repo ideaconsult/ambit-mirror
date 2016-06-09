@@ -909,6 +909,45 @@ public class SmartsHelper {
 			// System.out.println(bond.getAtom(0).getSymbol() + " ~ " +
 			// bond.getAtom(1).getSymbol() + "  " + implicitHAtomsVector(mol));
 		}
+		
+		
+		// update tetrahedral elements with an explicit H ligand
+        List<IStereoElement> newStereo = new ArrayList<IStereoElement>();
+        for (IStereoElement se : mol.stereoElements()) 
+        {
+            if (se instanceof ITetrahedralChirality) {
+                ITetrahedralChirality tc = (ITetrahedralChirality) se;
+
+                IAtom focus = tc.getChiralAtom();
+                IAtom[] neighbors = tc.getLigands();
+                                
+                boolean FlagH = false;	
+                for (int i = 0; i < tc.getLigands().length; i++) {
+                    
+                	if (neighbors[i].getSymbol().equals("H")) 
+                	{
+                        neighbors[i] = focus;
+                        FlagH = true;
+                        break;
+                    }
+                }
+                
+                if (FlagH)
+                {	
+                	TetrahedralChirality tc1 = new TetrahedralChirality(tc.getChiralAtom(), neighbors, tc.getStereo());
+                	newStereo.add(tc1);
+                }	
+                else	
+                	newStereo.add(se);
+            }
+            else
+            	newStereo.add(se);  //non tetrahedral
+            
+            //TODO handle Extended Tetrahedral Chirality
+        }
+        
+        if (!newStereo.isEmpty())
+        	mol.setStereoElements(newStereo);
 
 		List<IAtom> removeAtoms = new ArrayList<IAtom>();
 
