@@ -817,7 +817,7 @@ public class StereoChemUtils
 			perAtom = at2;
 		
 		if (dbAtom == null)
-			return dbsc;  //Both atoms are peripheral. No change done
+			return dbsc;  //Both atoms are not part of the double bond. No change done
 		
 		IBond bonds[] = dbsc.getBonds();
 		
@@ -829,6 +829,16 @@ public class StereoChemUtils
 		{
 			if (updatedBondOrder == null)
 				return dbsc; //This case should not appear. No change
+			
+			/*
+			//Check for a very rare case 
+			//(most probably this is not needed since 'bo' is a newly created bond 
+			//and it is not among bonds[]):
+			
+			for (int i = 0; i < bonds.length; i++)
+				if (bonds[i] == bo)
+					return dbsc;
+			*/
 			
 			IBond bo = target.getBond(at1, at2);
 			IBond newBonds[] = addBondToLigands(bo, bonds);
@@ -843,6 +853,7 @@ public class StereoChemUtils
 			}
 			
 			//Bond order is changed hence nothing is done to the stereo element
+			//If inappropriate order is set, the final stereo check will clear this stereo element
 			return dbsc;
 		}
 	}
@@ -882,6 +893,7 @@ public class StereoChemUtils
 			}
 			
 			//Bond order is changed hence no change is done to the stereo element
+			//If inappropriate order is set, the final stereo check will clear this stereo element
 			return thc;
 		}
 	}
@@ -1107,9 +1119,9 @@ public class StereoChemUtils
 		if (thc.getLigands().length != 4)
 			return true;
 		
+		//TODO handle sulfoxide cases 
 		if (contains(thc, null))
 			return true;
-		
 		
 		return false;
 	}
