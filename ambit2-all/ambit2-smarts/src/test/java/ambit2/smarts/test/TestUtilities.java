@@ -2822,7 +2822,7 @@ public class TestUtilities {
 		tu.FlagExplicitHAtoms = true;
 		tu.FlagTargetPreprocessing = true;
 		tu.FlagProductPreprocessing = true;
-		tu.FlagPrintAtomAttributes = true;
+		//tu.FlagPrintAtomAttributes = true;
 		// tu.FlagSSMode = SmartsConst.SSM_NON_IDENTICAL_FIRST;
 		tu.FlagExplicitHToImplicitOnProductPreProcess = true;
 		
@@ -2839,14 +2839,13 @@ public class TestUtilities {
 		//tu.testSMIRKS("[C:1]=[C:2]>>[C:1].[C:2]", "O/C=C/C");
 		
 		
-		//tu.testSMIRKS("[#6:2][C:1]([#8:4]([H]))([*:5])!@-[#6:3]-[#6:8](=[O:10])-[#6:7](-[#8-:6])=[O:9]>>[#6:3]-[#6:8](=[O:10])-[#6:7](-[#8-:6])=[O:9].[#6:2]-[#6:1](-[*:5])=[O:4]", 
-					//"CN(C)C[C@H]1CCCC[C@]1(O)C(C=C)C(=O)C([O-])=O");
-		//			"CN(C)C[C@]1([H])CCCC[C@]1(O)C(C=C)C(=O)C([O-])=O");
+		tu.testSMIRKS("[#6:2][C:1]([#8:4]([H]))([*:5])!@-[#6:3]-[#6:8](=[O:10])-[#6:7](-[#8-:6])=[O:9]>>[#6:3]-[#6:8](=[O:10])-[#6:7](-[#8-:6])=[O:9].[#6:2]-[#6:1](-[*:5])=[O:4]", 
+					"CN(C)C[C@H]1CCCC[C@]1(O)C(C=C)C(=O)C([O-])=O");
+					//"CN(C)C[C@]1([H])CCCC[C@]1(O)C(C=C)C(=O)C([O-])=O");
 		
-		tu.testSMIRKS("[C:1]Cl>>[C:1]F", 
-				"ClCN(C)C[C@H]1CCCC[C@]1(O)C(C=C)C(=O)C([O-])=O");
-				//"ClCN(C)C[C@]1([H])CCCC[C@]1(O)C(C=C)C(=O)C([O-])=O");
-	
+		//tu.testSMIRKS("[C:1]Cl>>[C:1]F", 
+		//		"ClCN(C)C[C@H]1CCCC[C@]1(O)C(C=C)C(=O)C([O-])=O");
+		
 		
 		//tu.testSMIRKS("[H:6][C:1]([#6:4])([#16;H1v2])[#1,#6:5]>>[H:6][C:1]([H])([#6:4])[#1,#6:5]", 
 		//		"CN\\C(NCCS)=C\\[N+]([O-])=O");

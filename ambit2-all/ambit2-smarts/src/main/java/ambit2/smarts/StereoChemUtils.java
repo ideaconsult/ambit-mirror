@@ -859,9 +859,12 @@ public class StereoChemUtils
 		if (thc.getChiralAtom() == at1)
 			ligAtom = at2;
 		else
-			ligAtom = at1; 
-		
-		
+			if (thc.getChiralAtom() == at2)
+				ligAtom = at1;
+			else
+				return thc; //neither at1 nor at2 is the chiral center 
+							//hence no change is done to the stereo element
+			
 		if (initialBondOrder == null)
 		{
 			if (updatedBondOrder == null)
@@ -878,7 +881,7 @@ public class StereoChemUtils
 				return new TetrahedralChirality(thc.getChiralAtom(), newLigands, thc.getStereo());
 			}
 			
-			//Bond order is changed hence nothing is done to the stereo element
+			//Bond order is changed hence no change is done to the stereo element
 			return thc;
 		}
 	}
