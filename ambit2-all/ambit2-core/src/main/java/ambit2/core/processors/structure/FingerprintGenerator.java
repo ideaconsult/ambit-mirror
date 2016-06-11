@@ -14,6 +14,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.core.config.AmbitCONSTANTS;
+import ambit2.core.data.MoleculeTools;
 
 /**
  * ** Fingerprint generator processor. Fingerprints are calculated by
@@ -54,7 +55,7 @@ public class FingerprintGenerator<FGenerator extends IFingerprinter> extends
 							.getInstance(SilentChemObjectBuilder.getInstance());
 				c = object.clone();
 				hAdder.addImplicitHydrogens(c);
-				AtomContainerManipulator.convertImplicitToExplicitHydrogens(c);
+				MoleculeTools.convertImplicitToExplicitHydrogens(c);
 
 			} else {
 				if (object.getBondCount() > 1) {

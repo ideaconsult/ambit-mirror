@@ -244,7 +244,7 @@ public class InchiProcessorTest {
 				.addImplicitHydrogens(mol);
 
 		IAtomContainer molH = mol.clone();
-		AtomContainerManipulator.convertImplicitToExplicitHydrogens(molH);
+		MoleculeTools.convertImplicitToExplicitHydrogens(molH);
 
 		InChIGeneratorFactory factory = InChIGeneratorFactory.getInstance();
 
