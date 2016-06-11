@@ -58,8 +58,6 @@ import org.openscience.cdk.validate.CDKValidator;
 import org.openscience.cdk.validate.ValidationReport;
 import org.openscience.cdk.validate.ValidatorEngine;
 
-import com.google.common.collect.Maps;
-
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.smarts.BinaryCombinations;
@@ -85,6 +83,8 @@ import ambit2.smarts.StereoChemUtils;
 import ambit2.smarts.StereoFromSmartsAtomExpression;
 import ambit2.smarts.StructInfo;
 import ambit2.smarts.StructureSetAnalyzer;
+
+import com.google.common.collect.Maps;
 
 public class TestUtilities {
 	enum ReactionOperation {
@@ -150,7 +150,7 @@ public class TestUtilities {
 				.getInstance(SilentChemObjectBuilder.getInstance());
 		adder.addImplicitHydrogens(mol);
 		if (FlagExplicitHAtoms)
-			SmartsHelper.convertImplicitToExplicitHydrogens(mol);
+			MoleculeTools.convertImplicitToExplicitHydrogens(mol);
 			//AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
 			//cdk_convertImplicitToExplicitHydrogens(mol);
 			
@@ -2211,7 +2211,7 @@ public class TestUtilities {
 		System.out.println("    " + SmartsHelper.moleculeToSMILES(mol, true)
 				+ "\n");
 
-		SmartsHelper.convertExcplicitHAtomsToImplicit(mol);
+		MoleculeTools.convertExplicitHAtomsToImplicit(mol);
 		System.out.println("excplicit H --> implicit H");
 		System.out.println(SmartsHelper.getAtomsAttributes(mol));
 		System.out.println(SmartsHelper.getBondAttributes(mol));
