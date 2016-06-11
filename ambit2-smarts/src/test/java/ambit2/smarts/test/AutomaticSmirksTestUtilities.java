@@ -11,6 +11,7 @@ public class AutomaticSmirksTestUtilities
 		task1, task2
 	}
 	
+	public AST_TASK task = AST_TASK.task1;
 	public String endLine = "\r\n";
 	public String outFileName = "";
 	public String inFileName = "";
@@ -118,6 +119,18 @@ public class AutomaticSmirksTestUtilities
 
 	int processLine(String line)
 	{
+		switch (task)
+		{
+		case task1:
+			processLine1(line);
+			break;
+		}
+		return 0;
+	}
+	
+	int processLine1(String line)
+	{
+		
 		return 0;
 	}
 
