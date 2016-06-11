@@ -1281,7 +1281,7 @@ public class SMIRKSManager {
     		CDKHueckelAromaticityDetector.detectAromaticity(mol);
 
     	if (FlagConvertExplicitHToImplicitOnResultProcess)
-    		SmartsHelper.convertExcplicitHAtomsToImplicit(mol);
+    		MoleculeTools.convertExplicitHAtomsToImplicit(mol);
     }
     
     void deleteAtomAndDoStereoTransformation(IAtom tAt, IAtomContainer target, 

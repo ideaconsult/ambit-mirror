@@ -21,6 +21,7 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.data.StructureRecord;
+import ambit2.core.data.MoleculeTools;
 import ambit2.reactions.Reaction;
 import ambit2.reactions.ReactionDataBase;
 import ambit2.rules.conditions.DescriptorValueCondition;
@@ -522,7 +523,7 @@ public class Reactor
 			if (strategy.FlagLogExplicitHToImplicit)
 			{
 				IAtomContainer mol1 = mol.clone();
-				SmartsHelper.convertExcplicitHAtomsToImplicit(mol1);
+				MoleculeTools.convertExplicitHAtomsToImplicit(mol1);
 				smi = SmartsHelper.moleculeToSMILES(mol1, true);
 			}
 			else

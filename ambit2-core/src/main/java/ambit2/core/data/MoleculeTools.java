@@ -10,7 +10,10 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,6 +43,8 @@ import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.interfaces.ISingleElectron;
+import org.openscience.cdk.interfaces.IStereoElement;
+import org.openscience.cdk.interfaces.ITetrahedralChirality;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.PDBReader;
@@ -49,9 +54,12 @@ import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.silent.AtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.stereo.TetrahedralChirality;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+
+import com.google.common.collect.Maps;
 
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.io.IteratingChemObjectReaderWrapper;
@@ -595,5 +603,170 @@ public class MoleculeTools {
 		 * Iterator props = chemObject.getProperties().keySet().iterator();
 		 * while (props.hasNext()) { chemObject.removeProperty(props.next()); }
 		 */
+	}
+
+	/**
+	 * Adds explicit hydrogens (without coordinates) to the IAtomContainer,
+	 * equaling the number of set implicit hydrogens. Tetrahedrals with an
+	 * implicit H now are set correctly.
+	 *
+	 * @param atomContainer
+	 *            the atom container to consider
+	 * @cdk.keyword hydrogens, adding
+	 */
+	public static void convertImplicitToExplicitHydrogens(
+			IAtomContainer atomContainer) {
+		List<IAtom> hydrogens = new ArrayList<IAtom>();
+		List<IBond> newBonds = new ArrayList<IBond>();
+
+		// store a single explicit hydrogen of each original neighbor
+		Map<IAtom, IAtom> hNeighbor = Maps
+				.newHashMapWithExpectedSize(atomContainer.getAtomCount());
+
+		for (IAtom atom : atomContainer.atoms()) {
+			if (!atom.getSymbol().equals("H")) {
+				Integer hCount = atom.getImplicitHydrogenCount();
+				if (hCount != null) {
+					for (int i = 0; i < hCount; i++) {
+
+						IAtom hydrogen = atom.getBuilder().newInstance(
+								IAtom.class, "H");
+						hydrogen.setAtomTypeName("H");
+						hydrogen.setImplicitHydrogenCount(0);
+						hydrogens.add(hydrogen);
+						newBonds.add(atom.getBuilder().newInstance(IBond.class,
+								atom, hydrogen, Order.SINGLE));
+
+						if (hNeighbor.get(atom) == null)
+							hNeighbor.put(atom, hydrogen);
+
+					}
+					atom.setImplicitHydrogenCount(0);
+				}
+			}
+		}
+		for (IAtom atom : hydrogens)
+			atomContainer.addAtom(atom);
+		for (IBond bond : newBonds)
+			atomContainer.addBond(bond);
+
+		// update tetrahedral elements with an implicit part
+		List<IStereoElement> newStereo = new ArrayList<IStereoElement>();
+		for (IStereoElement se : atomContainer.stereoElements()) {
+			if (se instanceof ITetrahedralChirality) {
+				ITetrahedralChirality tc = (ITetrahedralChirality) se;
+
+				IAtom focus = tc.getChiralAtom();
+				IAtom[] neighbors = tc.getLigands();
+				IAtom hydrogen = hNeighbor.get(focus);
+
+				// in sulfoxide - the implicit part of the tetrahedral centre
+				// is a lone pair
+				if (hydrogen == null) {
+					newStereo.add(se);
+					continue;
+				}
+
+				boolean FlagH = false;
+				for (int i = 0; i < tc.getLigands().length; i++) {
+					if (neighbors[i] == focus) {
+						neighbors[i] = hydrogen;
+						FlagH = true;
+						break;
+					}
+				}
+
+				if (FlagH) {
+					TetrahedralChirality tc1 = new TetrahedralChirality(
+							tc.getChiralAtom(), neighbors, tc.getStereo());
+					newStereo.add(tc1);
+				} else
+					newStereo.add(se);
+			} else
+				newStereo.add(se); // non tetrahedral
+
+			// TODO handle Extended Tetrahedral Chirality
+		}
+
+		if (!newStereo.isEmpty())
+			atomContainer.setStereoElements(newStereo);
+	}
+
+	public static void convertExplicitHAtomsToImplicit(IAtomContainer mol)
+			throws Exception {
+		List<IBond> removeBonds = new ArrayList<IBond>();
+
+		for (IBond bond : mol.bonds()) {
+			if (bond.getAtom(0).getSymbol().equals("H")) {
+				if (bond.getAtom(1).getSymbol().equals("H"))
+					removeBonds.add(bond);
+				else {
+					add1ImplicitHAtom(bond.getAtom(1));
+					removeBonds.add(bond);
+				}
+			} else {
+				if (bond.getAtom(1).getSymbol().equals("H")) {
+					add1ImplicitHAtom(bond.getAtom(0));
+					removeBonds.add(bond);
+				}
+			}
+
+			// System.out.println(bond.getAtom(0).getSymbol() + " ~ " +
+			// bond.getAtom(1).getSymbol() + "  " + implicitHAtomsVector(mol));
+		}
+
+		// update tetrahedral elements with an explicit H ligand
+		List<IStereoElement> newStereo = new ArrayList<IStereoElement>();
+		for (IStereoElement se : mol.stereoElements()) {
+			if (se instanceof ITetrahedralChirality) {
+				ITetrahedralChirality tc = (ITetrahedralChirality) se;
+
+				IAtom focus = tc.getChiralAtom();
+				IAtom[] neighbors = tc.getLigands();
+
+				boolean FlagH = false;
+				for (int i = 0; i < tc.getLigands().length; i++) {
+
+					if (neighbors[i].getSymbol().equals("H")) {
+						neighbors[i] = focus;
+						FlagH = true;
+						break;
+					}
+				}
+
+				if (FlagH) {
+					TetrahedralChirality tc1 = new TetrahedralChirality(
+							tc.getChiralAtom(), neighbors, tc.getStereo());
+					newStereo.add(tc1);
+				} else
+					newStereo.add(se);
+			} else
+				newStereo.add(se); // non tetrahedral
+
+			// TODO handle Extended Tetrahedral Chirality
+		}
+
+		if (!newStereo.isEmpty())
+			mol.setStereoElements(newStereo);
+
+		List<IAtom> removeAtoms = new ArrayList<IAtom>();
+
+		for (IAtom atom : mol.atoms()) {
+			if (atom.getSymbol().equals("H"))
+				removeAtoms.add(atom);
+		}
+
+		for (IBond bond : removeBonds)
+			mol.removeBond(bond);
+
+		for (IAtom atom : removeAtoms)
+			mol.removeAtom(atom);
+	}
+
+	public static void add1ImplicitHAtom(IAtom atom) {
+		if (atom.getImplicitHydrogenCount() == CDKConstants.UNSET)
+			atom.setImplicitHydrogenCount(new Integer(1));
+		else
+			atom.setImplicitHydrogenCount(atom.getImplicitHydrogenCount() + 1);
 	}
 }
