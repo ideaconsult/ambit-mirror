@@ -151,7 +151,7 @@ public class TestUtilities {
 		adder.addImplicitHydrogens(mol);
 		if (FlagExplicitHAtoms)
 			MoleculeTools.convertImplicitToExplicitHydrogens(mol);
-			//AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+		
 			//cdk_convertImplicitToExplicitHydrogens(mol);
 			
 		CDKHueckelAromaticityDetector.detectAromaticity(mol);

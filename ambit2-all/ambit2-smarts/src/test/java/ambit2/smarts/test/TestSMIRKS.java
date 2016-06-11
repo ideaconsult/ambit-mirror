@@ -13,7 +13,6 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.io.CDKSourceCodeWriter;
 import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -22,6 +21,7 @@ import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
@@ -42,7 +42,6 @@ public class TestSMIRKS {
 	SmartsParser smartsParser = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
 	SmilesGenerator smigen = new SmilesGenerator();
-	
 
 	/**
 	 * Throws exception if anything is wrong
@@ -112,7 +111,7 @@ public class TestSMIRKS {
 		CDKHydrogenAdder h = CDKHydrogenAdder.getInstance(target.getBuilder());
 		h.addImplicitHydrogens(target);
 		if (explicitH)
-			AtomContainerManipulator.convertImplicitToExplicitHydrogens(target);
+			MoleculeTools.convertImplicitToExplicitHydrogens(target);
 		/*
 		 * CDKSourceCodeWriter w = new CDKSourceCodeWriter(System.err);
 		 * w.write(target); w.close();
@@ -122,7 +121,7 @@ public class TestSMIRKS {
 
 	IAtomContainer applySMIRKSReaction(String smirks, IAtomContainer target)
 			throws Exception {
-		
+
 		smrkMan.setFlagApplyStereoTransformation(FlagApplyStereoTransformation);
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
 		if (!smrkMan.getErrors().equals("")) {
@@ -327,7 +326,6 @@ public class TestSMIRKS {
 
 	}
 
-	
 	public void testYlide_neutralisation() throws Exception {
 		// NN_diethylformamide
 		String smirks = "[*:1][P+,S+,N+:2]([C:3])[C:4]>>[*:1]=[P+,S+,N+:2]([C:3])[C:4]";

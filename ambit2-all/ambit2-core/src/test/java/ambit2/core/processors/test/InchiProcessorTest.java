@@ -31,7 +31,6 @@ package ambit2.core.processors.test;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -55,6 +54,7 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.config.AmbitCONSTANTS;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.io.FileInputState;
 import ambit2.core.processors.structure.AtomConfigurator;
@@ -274,7 +274,7 @@ public class InchiProcessorTest {
 				.addImplicitHydrogens(mol);
 
 		IAtomContainer molH = mol.clone();
-		AtomContainerManipulator.convertImplicitToExplicitHydrogens(molH);
+		MoleculeTools.convertImplicitToExplicitHydrogens(molH);
 
 		InChIGeneratorFactory factory = InChIGeneratorFactory.getInstance();
 

@@ -39,9 +39,9 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.config.Preferences;
+import ambit2.core.data.MoleculeTools;
 
 public class HydrogenAdderProcessor extends AtomConfigurator {
 	protected CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
@@ -68,7 +68,7 @@ public class HydrogenAdderProcessor extends AtomConfigurator {
 					adder.addImplicitHydrogens(mol);
 					logger.fine("Adding implicit hydrogens; atom count " + mol.getAtomCount());
 					if (isAddEexplicitHydrogens()) {
-						AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+						MoleculeTools.convertImplicitToExplicitHydrogens(mol);
 						logger.fine("Convert explicit hydrogens; atom count " + mol.getAtomCount());
 					}
 
@@ -87,7 +87,7 @@ public class HydrogenAdderProcessor extends AtomConfigurator {
 					adder.addImplicitHydrogens(molPart);
 					logger.fine("Adding implicit hydrogens; atom count " + molPart.getAtomCount());
 					if (isAddEexplicitHydrogens()) {
-						AtomContainerManipulator.convertImplicitToExplicitHydrogens(molPart);
+						MoleculeTools.convertImplicitToExplicitHydrogens(molPart);
 						logger.fine("Convert explicit hydrogens; atom count " + molPart.getAtomCount());
 					}
 				}
@@ -104,7 +104,8 @@ public class HydrogenAdderProcessor extends AtomConfigurator {
 	 * @param atomContainer
 	 */
 	public static void convertImplicitToExplicitHydrogens(IAtomContainer atomContainer) {
-		AtomContainerManipulator.convertImplicitToExplicitHydrogens(atomContainer);
+		MoleculeTools.convertImplicitToExplicitHydrogens(atomContainer);
+
 	}
 
 }
