@@ -61,7 +61,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	                	//logger.debug("Adding explicit hydrogens");
 	                	AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 	                    h.addImplicitHydrogens(mol);
-	                    AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+	                    MoleeculeTools.convertImplicitToExplicitHydrogens(mol);
 	          
 	                    //h.addExplicitHydrogensToSatisfyValency((IAtomContainer)mol);
 	                } catch (InvalidSmilesException x ) {

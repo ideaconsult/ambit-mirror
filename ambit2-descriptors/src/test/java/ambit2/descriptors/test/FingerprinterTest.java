@@ -19,6 +19,7 @@ import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.data.StringDescriptorResultType;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.descriptors.fingerprints.EStateFingerprinterWrapper;
@@ -97,7 +98,7 @@ public class FingerprinterTest {
 		CDKHydrogenAdder adder = CDKHydrogenAdder
 				.getInstance(SilentChemObjectBuilder.getInstance());
 		adder.addImplicitHydrogens(mol);
-		AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+		MoleculeTools.convertImplicitToExplicitHydrogens(mol);
 
 		IFingerprinter fp = wrapper.getFingerprinter();
 		BitSet bs = fp.getBitFingerprint(mol).asBitSet();

@@ -1267,7 +1267,7 @@ public class SMIRKSManager {
     		adder.addImplicitHydrogens(mol);
 
     		if (FlagConvertAddedImplicitHToExplicitOnResultProcess)
-    			AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+    			MoleculeTools.convertImplicitToExplicitHydrogens(mol);
     	}
 
     	//The newly added atoms may stay with unset implicit H count 

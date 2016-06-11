@@ -51,6 +51,7 @@ import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
 import ambit2.mopac.DescriptorMopacShell;
@@ -86,7 +87,7 @@ public class Mopac7WriterTest  {
             AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
     		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
             adder.addImplicitHydrogens(mol);
-            AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);            
+            MoleculeTools.convertImplicitToExplicitHydrogens(mol);            
 
             StructureDiagramGenerator g = new StructureDiagramGenerator();
             g.setMolecule(mol,false);

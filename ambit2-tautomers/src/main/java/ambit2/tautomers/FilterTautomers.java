@@ -20,6 +20,7 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.data.Property;
+import ambit2.core.data.MoleculeTools;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
@@ -105,7 +106,7 @@ public class FilterTautomers {
 		FlagApplyDuplicationCheckInChI = flagApplyDuplicationCheckInChI;
 	}
 
-	//protected boolean FlagINCHI_OPTION_FixedH = true;
+	// protected boolean FlagINCHI_OPTION_FixedH = true;
 	protected boolean FlagFilterIncorrectValencySumStructures = true;
 
 	public boolean isFlagFilterIncorrectValencySumStructures() {
@@ -116,9 +117,10 @@ public class FilterTautomers {
 			boolean flagFilterIncorrectValencySumStructures) {
 		FlagFilterIncorrectValencySumStructures = flagFilterIncorrectValencySumStructures;
 	}
-	
-	protected boolean FlagStoreRemovedByFilterTautomers = false;  //by default it is not needed
-	
+
+	protected boolean FlagStoreRemovedByFilterTautomers = false; // by default
+																	// it is not
+																	// needed
 
 	public boolean isFlagStoreRemovedByFilterTautomers() {
 		return FlagStoreRemovedByFilterTautomers;
@@ -128,8 +130,6 @@ public class FilterTautomers {
 			boolean flagStoreRemovedByFilterTautomers) {
 		FlagStoreRemovedByFilterTautomers = flagStoreRemovedByFilterTautomers;
 	}
-
-	
 
 	public TautomerManager tman;
 	public List<IAtomContainer> removedTautomers = new ArrayList<IAtomContainer>();
@@ -145,12 +145,13 @@ public class FilterTautomers {
 	private IsomorphismTester isoTester = new IsomorphismTester();
 
 	protected boolean FlagExcludeWarningTautomers = true;
-	
+
 	public boolean isFlagExcludeWarningTautomers() {
 		return FlagExcludeWarningTautomers;
 	}
 
-	public void setFlagExcludeWarningTautomers(boolean flagExcludeWarningTautomers) {
+	public void setFlagExcludeWarningTautomers(
+			boolean flagExcludeWarningTautomers) {
 		FlagExcludeWarningTautomers = flagExcludeWarningTautomers;
 	}
 
@@ -158,13 +159,12 @@ public class FilterTautomers {
 			throws Exception {
 		getOriginalPositions();
 		// System.out.println("generated " + tautomers.size() + " strctures");
-		if (FlagStoreRemovedByFilterTautomers)
-		{	
+		if (FlagStoreRemovedByFilterTautomers) {
 			removedTautomers.clear();
 			warnFilters.clear();
 			excludeFilters.clear();
-		}	
-		
+		}
+
 		List<IAtomContainer> filteredTautomers = new ArrayList<IAtomContainer>();
 		List<IAtomContainer> uniqueTautomers;
 
@@ -211,8 +211,7 @@ public class FilterTautomers {
 				vExcludF = null;
 
 			if (vExcludF != null) {
-				if (FlagStoreRemovedByFilterTautomers)
-				{	
+				if (FlagStoreRemovedByFilterTautomers) {
 					removedTautomers.add(uniqueTautomers.get(i));
 					warnFilters.add(vWarnF);
 					excludeFilters.add(vWarnF);
@@ -222,8 +221,7 @@ public class FilterTautomers {
 
 			if ((vWarnF != null)) {
 				if (FlagExcludeWarningTautomers) {
-					if (FlagStoreRemovedByFilterTautomers)
-					{
+					if (FlagStoreRemovedByFilterTautomers) {
 						removedTautomers.add(uniqueTautomers.get(i));
 						warnFilters.add(vWarnF);
 						excludeFilters.add(vWarnF);
@@ -273,7 +271,8 @@ public class FilterTautomers {
 		Set<String> tCodes = new TreeSet<String>();
 
 		for (int i = 0; i < tautomers.size(); i++) {
-			String tcode = TautomerStringCode.getCode(tautomers.get(i), false, tman.getCodeStrBondSequence());
+			String tcode = TautomerStringCode.getCode(tautomers.get(i), false,
+					tman.getCodeStrBondSequence());
 			if (!tCodes.contains(tcode)) {
 				tCodes.add(tcode);
 				uniqueTautomers0.add(tautomers.get(i));
@@ -313,7 +312,8 @@ public class FilterTautomers {
 			InChIGenerator ig = igf.getInChIGenerator(clone, options);
 			INCHI_RET returnCode = ig.getReturnStatus();
 			if (INCHI_RET.ERROR == returnCode) {
-				Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ig.getMessage());
+				Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,
+						ig.getMessage());
 			}
 			String inchiKey = ig.getInchiKey();
 
@@ -374,7 +374,7 @@ public class FilterTautomers {
 				.getInstance(SilentChemObjectBuilder.getInstance());
 		adder.addImplicitHydrogens(clone);
 
-		AtomContainerManipulator.convertImplicitToExplicitHydrogens(clone);
+		MoleculeTools.convertImplicitToExplicitHydrogens(clone);
 		return clone;
 
 	}
@@ -555,32 +555,27 @@ public class FilterTautomers {
 
 		return sum;
 	}
-	
-	
-	public boolean checkMolecule(IAtomContainer mol) throws Exception
-	{
-		if (FlagFilterIncorrectValencySumStructures) 
-		{
+
+	public boolean checkMolecule(IAtomContainer mol) throws Exception {
+		if (FlagFilterIncorrectValencySumStructures) {
 			int vsum = getValencySum(mol);
 			if (vsum != tman.originalValencySum)
 				return false;
 		}
-		
-		if (FlagApplyWarningFilter)
-		{
-			List<Integer> vWarnF;			
+
+		if (FlagApplyWarningFilter) {
+			List<Integer> vWarnF;
 			vWarnF = getWarnFilters(mol);
 			if (vWarnF != null)
 				return false;
-		}	
-			
-		if (FlagApplyExcludeFilter)
-		{	
-			List<Integer> vExcludF = getExcludeFilters(mol);
-			if (vExcludF != null) 
-				return false;			
 		}
-		
+
+		if (FlagApplyExcludeFilter) {
+			List<Integer> vExcludF = getExcludeFilters(mol);
+			if (vExcludF != null)
+				return false;
+		}
+
 		return true;
 	}
 

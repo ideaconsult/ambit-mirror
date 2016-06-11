@@ -25,6 +25,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import ambit2.base.data.Property;
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.smiles.SmilesParserWrapper;
@@ -111,7 +112,7 @@ public abstract class MopacShellTest {
 		CDKHydrogenAdder adder = CDKHydrogenAdder
 				.getInstance(SilentChemObjectBuilder.getInstance());
 		adder.addImplicitHydrogens(mol);
-		AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+		MoleculeTools.convertImplicitToExplicitHydrogens(mol);
 
 		UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
 		Assert.assertTrue("Isomorphism check", uit.isIsomorph(mol, newmol));

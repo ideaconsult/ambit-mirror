@@ -24,6 +24,7 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.exceptions.AmbitIOException;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.io.FileInputState;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
@@ -35,7 +36,6 @@ import ambit2.smarts.StereoChemUtils;
 import ambit2.tautomers.CACTVSRanking;
 import ambit2.tautomers.KnowledgeBase;
 import ambit2.tautomers.TautomerConst;
-import ambit2.tautomers.TautomerConst.CanonicTautomerMethod;
 import ambit2.tautomers.TautomerConst.GAT;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerRanking;
@@ -53,7 +53,7 @@ public class TestTautomers {
 	public ChemObjectFactory cof = new ChemObjectFactory(
 			SilentChemObjectBuilder.getInstance());
 	public boolean FlagExplicitHydrogens = false;
-	public StructureStandardizer standardprocessor = new  StructureStandardizer();
+	public StructureStandardizer standardprocessor = new StructureStandardizer();
 
 	public static void main(String[] args) throws Exception {
 		TestTautomers tt = new TestTautomers();
@@ -70,7 +70,7 @@ public class TestTautomers {
 		tt.tman.tautomerFilter.FlagApplySimpleAromaticityRankCorrection = true;
 
 		tt.tman.FlagSetStereoElementsOnTautomerProcess = true;
-		
+
 		tt.tman.FlagNewRuleInstanceSearchOnEnergyRanking = false;
 		tt.tman.FlagCheckDuplicationOnRegistering = true;
 
@@ -86,15 +86,15 @@ public class TestTautomers {
 		tt.tman.getKnowledgeBase().use15ShiftRules(true);
 		tt.tman.getKnowledgeBase().use17ShiftRules(false);
 
-		//tt.tman.maxNumOfBackTracks = 1000;
-		//tt.tman.maxNumOfTautomerRegistrations = 1000;
+		// tt.tman.maxNumOfBackTracks = 1000;
+		// tt.tman.maxNumOfTautomerRegistrations = 1000;
 
 		tt.tman.FlagProcessRemainingStackIncSteps = true;
 		tt.tman.FlagCalculateCACTVSEnergyRank = true;
-		
+
 		tt.tman.FlagRegisterOnlyBestRankTautomers = false;
-		//tt.tman.setCanonicTautomerMethod(CanonicTautomerMethod.CACTVS_RANK_INCHI_KEY);
-		//tt.tman.setCanonicTautomerMethod(CanonicTautomerMethod.ENERGY_RANK_INCHI_KEY);
+		// tt.tman.setCanonicTautomerMethod(CanonicTautomerMethod.CACTVS_RANK_INCHI_KEY);
+		// tt.tman.setCanonicTautomerMethod(CanonicTautomerMethod.ENERGY_RANK_INCHI_KEY);
 
 		// tt.performTestCases();
 
@@ -162,26 +162,24 @@ public class TestTautomers {
 
 		// tt.visualTest("OC=1N=CN=CC=1"); //Kekule aromatic - !!!!
 
-		//tt.tman.FlagEnergyRankingMethod = TautomerConst.ERM_NEW;
+		// tt.tman.FlagEnergyRankingMethod = TautomerConst.ERM_NEW;
 		tt.tman.FlagNewRuleInstanceSearchOnEnergyRanking = false;
 		tt.tman.FlagRegisterOnlyBestRankTautomers = true;
-		//tt.visualTest("[H][C@]12C[C@@]3([H])OC(=O)\\C=C/C=C/C(O[C@H](O)CC(C)CC(=O)OC[C@@]4(C[C@@]([H])(O)[C@H](C)C[C@@]4([H])O1)[C@]3(C)C21CO1)C(C)O");
-		
-		
+		// tt.visualTest("[H][C@]12C[C@@]3([H])OC(=O)\\C=C/C=C/C(O[C@H](O)CC(C)CC(=O)OC[C@@]4(C[C@@]([H])(O)[C@H](C)C[C@@]4([H])O1)[C@]3(C)C21CO1)C(C)O");
+
 		tt.standardprocessor.setGenerateTautomers(true);
-		
+
 		tt.test(
-		//tt.visualTest(		
-		//tt.testStereoInfo(
-		//tt.testStandardizer(	
-				"S1C(N(\\C(=C/2\\C3=C(C(C(C([H])([H])[H])(C([H])([H])[H])[H])"
+		// tt.visualTest(
+		// tt.testStereoInfo(
+		// tt.testStandardizer(
+		"S1C(N(\\C(=C/2\\C3=C(C(C(C([H])([H])[H])(C([H])([H])[H])[H])"
 				+ "=C(O[H])C2=O)C(=C(C(C=4C(=C(C5=C(C4[H])/C(/C(=O)C(O[H])=C5C(C([H])([H])[H])(C([H])([H])[H])[H])"
 				+ "=C(/N(C=6SC(=C(N6)C7=C(C(=C(C(=C7[H])[H])[H])[H])[H])[H])[H])\\[H])[H])C([H])([H])[H])"
 				+ "=C3[H])C([H])([H])[H])[H])\\[H])[H])=NC(=C1[H])C8=C(C(=C(C(=C8[H])[H])[H])[H])[H]");
-		
-		
-		//tt.visualTest("CC1=CC2=C(/C(=C/NC3=NC(=CS3)C4=CC=CC=C4)/C(=O)C(=C2C(C)C)O)C=C1C5=CC\\6=C(C(=C(C(=O)/C6=C\\NC7=NC(=CS7)C8=CC=CC=C8)O)C(C)C)C=C5C");
-		
+
+		// tt.visualTest("CC1=CC2=C(/C(=C/NC3=NC(=CS3)C4=CC=CC=C4)/C(=O)C(=C2C(C)C)O)C=C1C5=CC\\6=C(C(=C(C(=O)/C6=C\\NC7=NC(=CS7)C8=CC=CC=C8)O)C(C)C)C=C5C");
+
 		// tt.visualTest("C1=CN=C(N)NC1(=O)");
 
 		// tt.visualTest("O=C1OC3=CC=CC=C3(C(O)C1C(C=2C=CC=CC=2)CC(=O)C)");
@@ -266,22 +264,22 @@ public class TestTautomers {
 	}
 
 	public void test(String smi) throws Exception {
-		
+
 		System.out.println("Testing: " + smi);
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
 		tman.setStructure(mol);
-		
+
 		// List<IAtomContainer> resultTautomers = tman.generateTautomers();
 
-		List<IAtomContainer> resultTautomers = tman  
+		List<IAtomContainer> resultTautomers = tman
 				.generateTautomersIncrementaly();
-		for (int i = 0; i < resultTautomers.size(); i++)
-		{	
-			System.out.println(StereoChemUtils.getStereoElementsStatus(resultTautomers.get(i)));
+		for (int i = 0; i < resultTautomers.size(); i++) {
+			System.out.println(StereoChemUtils
+					.getStereoElementsStatus(resultTautomers.get(i)));
 			System.out.println("   "
 					+ SmartsHelper.moleculeToSMILES(resultTautomers.get(i),
 							false));
-		}	
+		}
 
 	}
 
@@ -355,10 +353,10 @@ public class TestTautomers {
 		mol = AtomContainerManipulator.removeHydrogens(mol);
 		CDKHydrogenAdder.getInstance(mol.getBuilder())
 				.addImplicitHydrogens(mol);
-		
+
 		if (FlagExplicitHydrogens)
 			HydrogenAdderProcessor.convertImplicitToExplicitHydrogens(mol);
-		
+
 		tman.setStructure(mol);
 		// List<IAtomContainer> resultTautomers = tman.generateTautomers();
 
@@ -383,7 +381,9 @@ public class TestTautomers {
 			if (csRank == null)
 				csRank = new Double(999999);
 
-			System.out.println(TautomerStringCode.getCode(resultTautomers.get(i), false, tman.getCodeStrBondSequence())
+			System.out.println(TautomerStringCode.getCode(
+					resultTautomers.get(i), false,
+					tman.getCodeStrBondSequence())
 					+ "   "
 					+ rank.toString()
 					+ "    "
@@ -491,7 +491,9 @@ public class TestTautomers {
 			if (rank == null)
 				rank = new Double(999999);
 
-			System.out.println(TautomerStringCode.getCode(resultTautomers.get(i), false, tman.getCodeStrBondSequence())
+			System.out.println(TautomerStringCode.getCode(
+					resultTautomers.get(i), false,
+					tman.getCodeStrBondSequence())
 					+ "   "
 					+ rank.toString()
 					+ "   "
@@ -551,7 +553,7 @@ public class TestTautomers {
 		CDKHydrogenAdder adder = CDKHydrogenAdder
 				.getInstance(SilentChemObjectBuilder.getInstance());
 		adder.addImplicitHydrogens(mol);
-		AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+		MoleculeTools.convertImplicitToExplicitHydrogens(mol);
 
 		List<IAtomContainer> resultTautomers = itg.getTautomers(mol);
 
@@ -566,7 +568,8 @@ public class TestTautomers {
 	}
 
 	public static int testCase(String smi, String expectedTautomers[],
-			boolean FlagPrintTautomers, TautomerManager tManager) throws Exception {
+			boolean FlagPrintTautomers, TautomerManager tManager)
+			throws Exception {
 		System.out.println("Testing: " + smi);
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
 		tManager.setStructure(mol);
@@ -957,24 +960,22 @@ public class TestTautomers {
 		FileInputState instate = new FileInputState();
 		return instate.getReader(in, extension);
 	}
-	
-	
-	public void testStandardizer(String smi) throws Exception
-	{
+
+	public void testStandardizer(String smi) throws Exception {
 		System.out.println("Testing: " + smi);
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
-		
-		//System.out.println(StereoChemUtils.getStereoElementsStatus(mol));
-		
-		//System.out.println(SmartsHelper.getAtomsAttributes(mol));
-		
+
+		// System.out.println(StereoChemUtils.getStereoElementsStatus(mol));
+
+		// System.out.println(SmartsHelper.getAtomsAttributes(mol));
+
 		IAtomContainer processed = standardprocessor.process(mol);
-		
-		//System.out.println(StereoChemUtils.getStereoElementsStatus(processed));
-		//System.out.println(SmartsHelper.getAtomsAttributes(processed));		
-		
-		System.out.println("   " + SmartsHelper.moleculeToSMILES(processed,false));
+
+		// System.out.println(StereoChemUtils.getStereoElementsStatus(processed));
+		// System.out.println(SmartsHelper.getAtomsAttributes(processed));
+
+		System.out.println("   "
+				+ SmartsHelper.moleculeToSMILES(processed, false));
 	}
-	
 
 }
