@@ -15,14 +15,19 @@ public class AutomaticSmirksTestUtilities
 	public String endLine = "\r\n";
 	public String outFileName = null;
 	public String inFileName = "";
+	public int maxNumOfProcessLines = 0;
+	public int startLine = 1;
 	
 	public RandomAccessFile outFile = null;
 	int curLine = 0;
+	int curProcessedLine = 0;
 	
 	public static void main(String[] args)
 	{
 		AutomaticSmirksTestUtilities ast = new AutomaticSmirksTestUtilities();
 		ast.inFileName = "/Volumes/Data/Projects/AmbitSMIRKS2016/stereo-errors__.txt";
+		ast.startLine = 20;
+		ast.maxNumOfProcessLines = 10;
 		ast.run();
 	}
 	
@@ -92,6 +97,7 @@ public class AutomaticSmirksTestUtilities
 
 
 			int n = 0;
+			curProcessedLine = 0;
 			while (f.getFilePointer() < length)
 			{	
 				n++;
@@ -100,20 +106,18 @@ public class AutomaticSmirksTestUtilities
 				String line = f.readLine();
 				//System.out.println("line " + n + "  " + line);
 
-				/*
-					if (n < nStartStr)
+				
+				if (n < startLine)
 						continue;
 
-					curProcessedStr++;
+				curProcessedLine++;
 
-					if (nInputStr > 0)
-						if (curProcessedStr > nInputStr) 
+				if (maxNumOfProcessLines > 0)
+						if (curProcessedLine > maxNumOfProcessLines) 
 							break;
-				 */
+				
 
 				processLine(line.trim());
-
-
 			}
 
 
