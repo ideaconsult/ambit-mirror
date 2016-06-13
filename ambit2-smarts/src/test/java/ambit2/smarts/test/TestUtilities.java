@@ -1556,8 +1556,11 @@ public class TestUtilities {
 					true);
 
 			if (res)
+			{	
 				System.out.println("Reaction application: " + targetSmiles
-						+ "  -->  " + transformedSmiles);
+						+ "  -->  " + transformedSmiles + "    abs. smiles res " + 
+						SmilesGenerator.absolute().create(target));
+			}	
 			else
 				System.out.println("Reaction not appicable!");
 			break;
@@ -2839,16 +2842,7 @@ public class TestUtilities {
 		//tu.testSMIRKS("[C:1]=[C:2]>>[C:1].[C:2]", "O/C=C/C");
 		
 		
-		tu.testSMIRKS("[#6:2][C:1]([#8:4]([H]))([*:5])!@-[#6:3]-[#6:8](=[O:10])-[#6:7](-[#8-:6])=[O:9]>>[#6:3]-[#6:8](=[O:10])-[#6:7](-[#8-:6])=[O:9].[#6:2]-[#6:1](-[*:5])=[O:4]", 
-					"CN(C)C[C@H]1CCCC[C@]1(O)C(C=C)C(=O)C([O-])=O");
-					//"CN(C)C[C@]1([H])CCCC[C@]1(O)C(C=C)C(=O)C([O-])=O");
 		
-		//tu.testSMIRKS("[C:1]Cl>>[C:1]F", 
-		//		"ClCN(C)C[C@H]1CCCC[C@]1(O)C(C=C)C(=O)C([O-])=O");
-		
-		
-		//tu.testSMIRKS("[H:6][C:1]([#6:4])([#16;H1v2])[#1,#6:5]>>[H:6][C:1]([H])([#6:4])[#1,#6:5]", 
-		//		"CN\\C(NCCS)=C\\[N+]([O-])=O");
 		
 		//tu.testSMIRKS("[O:3]/[C:1]=[C:2]/[C:4]>>[O:3]/[C:1]=[C:2](C)/[C:4]", "O/C=C/C");
 		
@@ -2861,30 +2855,7 @@ public class TestUtilities {
 		//tu.testSMIRKS("[C:1][C@:2]([O:3])([N:4])Cl>>[C:1][C@@:2]([O:3])([N:4])Br", "C[C@](O)(N)Cl");
 		//tu.testSMIRKS("[C:1][C:2]([O:3])([N:4])Cl>>[C:1][C:2]([O:3])([N:4])Br", "C[C@](O)(N)Cl");
 		
-		//tu.testSMIRKS("[#8:1]([H])-[#6:2](-[#6:9](-[#8-:10])=[O:11])=[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]-[#6](-[#8-])=O>>"
-		//		+ "[#8-:10]-[#6:9](=[O:11])-[#6:2](=[O:1])-[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]",
-		//		"C(=C(/C(=O)[O-])\\Cl)/C=C(\\C(=O)[O-])/O"/*, ReactionOperation.SingleCopyForEachPos*/);
 		
-		
-		//tu.testSMIRKS("[#8-:15]-[#6:1](=[O:16])\\[#6:2]([H])=[#6:3]([H])/[#6:4](=[#6:5]([H])\\[#6:6](-[#8-:8])=[O:7])/S([#8-])(=O)=O>>"
-		//		+ "[#8-:15]-[#6:1](=[O:16])-[#6:2]-[#6:3]-[#6:4](-[#8-])=O.[#6:5]-[#6:6](-[#8-:8])=[O:7]",
-		//		"C(=C/C(=O)[O-])/C(=C\\C(=O)[O-])/S(=O)(=O)[O-]", ReactionOperation.SingleCopyForEachPos);
-		
-		//tu.testSMIRKS("[H][#6:1](-[#6:5])=[O:4]>>[#6:5]-[#6:1](-[#8-])=[O:4]", 
-		//		"C(=O)[C@@H]1C(=O)C(C(=O)O1)(F)F", ReactionOperation.SingleCopyForEachPos);
-		
-		//tu.testSMIRKS("[H][#6:1](-[#6:5])=[O:4]>>[#6:5]-[#6:1](-[#8-])=[O:4]", 
-		//		"C(=O)[C@@]([H])1C(=O)C(C(=O)O1)(F)F", ReactionOperation.SingleCopyForEachPos);
-				
-		//tu.testSMIRKS("[H:6][C:1]([#6:4])([#16;H1v2])[#1,#6:5]>>[H:6][C:1]([H])([#6:4])[#1,#6:5]", 
-		//		"CN\\C(NCCS)=C\\[N+]([O-])=O", ReactionOperation.SingleCopyForEachPos);
-		
-		//tu.testSMIRKS("[H][#6:1](-[#6:5])=[O:4]>>[#6:5]-[#6:1](-[#8-])=[O:4]", "C[N]C(=O)C(=O)C=O");
-		//tu.testSMIRKS("[H:5][C:1]([#6:6])([#1,#9,#17,#35,#53:4])[#9,#17,#35,#53]>>[H:5][C:1]([#6:6])([#8][H])[#1,#9,#17,#35,#53:4]", "C(CN(CCCl)CC(C(=O)O)N)Cl");
-		//tu.testSMIRKS("[#8:7]([H])-[#6:1]([H])-1-[#6:2]=[#6:3]-[#6:4]=[#6:5]-[#6:6]([H])-1-[#8:8]([H])>>[#8:7]([H])-[#6:1]=1-[#6:2]=[#6:3]-[#6:4]=[#6:5]-[#6:6]=1-[#8:8]([H])",
-		//		"C1=C[C@@H]([C@@H](C(=C1)C2=CC=C(C=C2)Cl)O)O" );
-		
-
 		// tu.testSMIRKS("[c:1]1[c:6]([H])[c:5]([H])[c:4][c:3][c:2]1>>[OH1]-[#6:5]([H])-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]([H])-1-[OH1]",
 		// "C1=CC=CC=C1");
 		// tu.testSMIRKS("[c:1]1[c:6][c:5][c:4][c:3][c:2]1>>[OH1]-[#6:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]-1-[OH1]",
@@ -2916,10 +2887,7 @@ public class TestUtilities {
 
 		// tu.testAtomAttribsOnChangingBond();
 
-		// tu.testSMIRKS("[#6:5]1[#6:4]=[#6:3][#6:2]=[#6:1][#6:6]=1>>[OH1]-[#6:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6:6]-1-[OH1]",
-		// "C1=CC=CC=C1");
-		// tu.testSMIRKS("[#6:5]1[#6:4]=[#6:3][#6:2]=[#6:1][#6:6]=1>>[OH1]-[#6:5]-1-[#6:4]-[#6:3]-[#6:2]-[#6:1]-[#6:6]-1-[OH1]",
-		// "C1=CC=CC=C1");
+		
 
 		// tu.testSMIRKS("[H:99][O;X2:1][a:2]>>[H:99].Cl[O;X2:1][a:2]","[H]Oc1ccccc1");
 		// tu.testSMIRKS("[H:99][O;X2:1][a:2]>>[H:99].Cl[O;X2:1][a:2]","[H]OC1=CC=CC=C1");
@@ -2936,7 +2904,7 @@ public class TestUtilities {
 		// tu.testMOL2MOLFile("D:/test-mol-chiral-02.mol",
 		// "D:/test-mol-chiral-02-conv.mol");
 
-		// tu.testSMIRKS("[H:99][O;X2:1][C:2]2=[C:3]C=CC=C2>>C1CCC([O;X2:1]C2=CC=CC=C2)OC1.[H:99]","[H]Oc1ccccc1");
+		//tu.testSMIRKS("[H:99][O;X2:1][C:2]2=[C:3]C=CC=C2>>C1CCC([O;X2:1]C2=CC=CC=C2)OC1.[H:99]","[H]Oc1ccccc1");
 
 		// tu.testPreprocessing("c1ccccc1", true);
 
