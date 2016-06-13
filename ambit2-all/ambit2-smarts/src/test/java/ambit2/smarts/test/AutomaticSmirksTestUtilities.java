@@ -42,13 +42,16 @@ public class AutomaticSmirksTestUtilities
 	public RandomAccessFile outFile = null;
 	int curLine = 0;
 	int curProcessedLine = 0;
+	int nErrors = 0;
+	
+	SmilesParser smilesParser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 	
 	public static void main(String[] args)
 	{
 		AutomaticSmirksTestUtilities ast = new AutomaticSmirksTestUtilities();
 		ast.inFileName = "/Volumes/Data/Projects/AmbitSMIRKS2016/stereo-errors__.txt";
-		ast.startLine = 1;
-		ast.maxNumOfProcessLines = 10;
+		ast.startLine = 2;
+		ast.maxNumOfProcessLines = 20;
 		ast.run();
 	}
 	
@@ -154,25 +157,83 @@ public class AutomaticSmirksTestUtilities
 
 	int processLine(String line)
 	{
+		try{
 		switch (task)
 		{
 		case task1:
 			processLine1(line);
 			break;
 		}
+		}
+		catch (Exception e)
+		{
+			
+		}
 		return 0;
 	}
 	
-	int processLine1(String line)
+	int processLine1(String line) throws Exception
 	{
-		System.out.println("Line" + curLine + "  " + line);
+		System.out.println();
+		System.out.println("Line " + curLine);
+		 
 		Task1LineData t1ld = Task1LineData.parseLine(line);
-		System.out.println("error = " + t1ld.error + " smirks = " + t1ld.smirks);
+		System.out.println("smirks = " + t1ld.smirks);
+		System.out.println("substrate      = " + t1ld.substrate);
+		System.out.println("substrate(kek) = " + t1ld.kekulizedSubstrate);
+		
+		String products[] = t1ld.chemaxonProducts.split(";");
+		String abs_products[] = new String[products.length];
+				
+		System.out.println("chemaxonProducts:"); 
+		for (int i = 0; i < products.length; i++)
+		{
+			IAtomContainer mol = smilesParser.parseSmiles(products[i]);
+			abs_products[i] = SmilesGenerator.absolute().create(mol);
+			System.out.println("  " +  abs_products[i]);
+		}
+		
+		//if (products.length > 1)
+			//System.out.println("Line " + curLine + "  chemaxonProducts = " + t1ld.chemaxonProducts);
+			//System.out.println("Line " + curLine + "  chemaxonProducts = " + products.length);
+					
+		
+		List<String> result = applySmirks(t1ld.smirks, t1ld.kekulizedSubstrate);
+		
+		if (result == null)
+		{
+		}
+		else
+		{
+			int nErr =  0;
+			System.out.println("Result:");
+			for (int i = 0; i < result.size(); i++)
+			{	
+				boolean FlagOK = false;
+				for (int k = 0; k < abs_products.length; k++)
+					if (result.get(i).equals(abs_products[k]))
+					{
+						FlagOK = true;
+						break;
+					}
+				
+				System.out.println("  " + result.get(i) + "   status = " + FlagOK);
+				
+				if (!FlagOK)
+					nErr++;
+			}
+			
+			if (nErr > 0)
+			{
+				nErrors++;
+				System.out.println("Error on line " + curLine);
+			}
+		}
 		
 		return 0;
 	}
 	
-	public static List<String> applySmirks(String smrk, String smi)
+	public List<String> applySmirks(String smrk, String smi)
 	{
 		try
 		{
@@ -192,8 +253,8 @@ public class AutomaticSmirksTestUtilities
 			if (!smrkMan.getErrors().equals(""))
 				throw new RuntimeException("Invalid SMIRKS: " + smrkMan.getErrors());
 
-			IAtomContainer target = new SmilesParser(SilentChemObjectBuilder.getInstance())
-					.parseSmiles(smi);
+			IAtomContainer target = smilesParser.parseSmiles(smi);
+			
 			for (IAtom atom : target.atoms())
 				if (atom.getFlag(CDKConstants.ISAROMATIC))
 					atom.setFlag(CDKConstants.ISAROMATIC, false);
@@ -229,7 +290,7 @@ public class AutomaticSmirksTestUtilities
 		{
 			System.err.println("SMIRKS " + smrk);
 			System.err.println("SMILES " + smi);
-			e.printStackTrace();
+			//e.printStackTrace();
 			return null;
 		}
 	}
