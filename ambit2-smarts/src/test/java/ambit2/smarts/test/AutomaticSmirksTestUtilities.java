@@ -2,7 +2,28 @@ package ambit2.smarts.test;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesParser;
+
+import ambit2.core.data.MoleculeTools;
+import ambit2.smarts.SMIRKSManager;
+import ambit2.smarts.SMIRKSReaction;
+import ambit2.smarts.SmartsConst;
+
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.aromaticity.Aromaticity;
+import org.openscience.cdk.aromaticity.ElectronDonation;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.graph.Cycles;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.smiles.SmilesGenerator;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 
 public class AutomaticSmirksTestUtilities 
@@ -145,8 +166,74 @@ public class AutomaticSmirksTestUtilities
 	int processLine1(String line)
 	{
 		System.out.println("Line" + curLine + "  " + line);
+		Task1LineData t1ld = Task1LineData.parseLine(line);
+		System.out.println("error = " + t1ld.error + " smirks = " + t1ld.smirks);
+		
 		return 0;
 	}
+	
+	public static List<String> applySmirks(String smrk, String smi)
+	{
+		try
+		{
+			SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
+			smrkMan.setFlagSSMode(SmartsConst.SSM_MODE.SSM_NON_IDENTICAL_FIRST);
+			smrkMan.setFlagProcessResultStructures(true);
+			smrkMan.setFlagClearHybridizationBeforeResultProcess(true);
+			smrkMan.setFlagClearImplicitHAtomsBeforeResultProcess(true);
+			smrkMan.setFlagClearAromaticityBeforeResultProcess(true);
+			smrkMan.setFlagAddImplicitHAtomsOnResultProcess(true);
+			smrkMan.setFlagConvertAddedImplicitHToExplicitOnResultProcess(false);
+			smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(true);
+			smrkMan.getSmartsParser().mSupportDoubleBondAromaticityNotSpecified = false;
+			smrkMan.setFlagApplyStereoTransformation(true);
+
+			SMIRKSReaction reaction = smrkMan.parse(smrk);
+			if (!smrkMan.getErrors().equals(""))
+				throw new RuntimeException("Invalid SMIRKS: " + smrkMan.getErrors());
+
+			IAtomContainer target = new SmilesParser(SilentChemObjectBuilder.getInstance())
+					.parseSmiles(smi);
+			for (IAtom atom : target.atoms())
+				if (atom.getFlag(CDKConstants.ISAROMATIC))
+					atom.setFlag(CDKConstants.ISAROMATIC, false);
+			for (IBond bond : target.bonds())
+				if (bond.getFlag(CDKConstants.ISAROMATIC))
+					bond.setFlag(CDKConstants.ISAROMATIC, false);
+			// do not add Hs: https://sourceforge.net/p/cdk/mailman/message/34608714/
+			//			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(target);
+			//			CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
+			//			adder.addImplicitHydrogens(target);
+			MoleculeTools.convertImplicitToExplicitHydrogens(target);
+
+			// for our project, we want to use daylight aromaticity
+			// CDKHueckelAromaticityDetector.detectAromaticity(target);
+			Aromaticity aromaticity = new Aromaticity(ElectronDonation.daylight(),
+					Cycles.or(Cycles.all(), Cycles.edgeShort()));
+			aromaticity.apply(target);
+
+			IAtomContainerSet resSet2 = smrkMan.applyTransformationWithSingleCopyForEachPos(target,
+					null, reaction, SmartsConst.SSM_MODE.SSM_ALL);
+			List<String> result = new ArrayList<String>();
+			if (resSet2 != null)
+				for (int i = 0; i < resSet2.getAtomContainerCount(); i++)
+				{
+					IAtomContainer mol = resSet2.getAtomContainer(i);
+					AtomContainerManipulator.suppressHydrogens(mol);
+					String smiles = SmilesGenerator.absolute().create(mol);
+					result.add(smiles);
+				}
+			return result;
+		}
+		catch (Exception e)
+		{
+			System.err.println("SMIRKS " + smrk);
+			System.err.println("SMILES " + smi);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	
 	static class Task1LineData {
 		public String error = null;
