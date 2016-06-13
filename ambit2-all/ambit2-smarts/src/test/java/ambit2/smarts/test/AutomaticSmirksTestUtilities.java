@@ -26,7 +26,7 @@ public class AutomaticSmirksTestUtilities
 	{
 		AutomaticSmirksTestUtilities ast = new AutomaticSmirksTestUtilities();
 		ast.inFileName = "/Volumes/Data/Projects/AmbitSMIRKS2016/stereo-errors__.txt";
-		ast.startLine = 20;
+		ast.startLine = 1;
 		ast.maxNumOfProcessLines = 10;
 		ast.run();
 	}
@@ -146,6 +146,45 @@ public class AutomaticSmirksTestUtilities
 	{
 		System.out.println("Line" + curLine + "  " + line);
 		return 0;
+	}
+	
+	static class Task1LineData {
+		public String error = null;
+		public String smirksId = null;
+		public String smirks = null;
+		public String substrateId = null;
+		public String substrate = null;
+		public String kekulizedSubstrate = null;
+		public String chemaxonProducts = null;
+		public String ambitProducts = null;
+		public String notIncludedAmbitProduct = null;
+		
+		public static Task1LineData parseLine(String line)
+		{
+			Task1LineData t1ld = new Task1LineData();
+			String tokens[] = line.split("\t");
+			if (tokens.length > 0)
+				t1ld.error = tokens[0];
+			if (tokens.length > 1)
+				t1ld.smirksId = tokens[1];
+			if (tokens.length > 2)
+				t1ld.smirks = tokens[2];
+			if (tokens.length > 3)
+				t1ld.substrateId = tokens[3];
+			if (tokens.length > 4)
+				t1ld.substrate = tokens[4];
+			if (tokens.length > 5)
+				t1ld.kekulizedSubstrate = tokens[5];
+			if (tokens.length > 6)
+				t1ld.chemaxonProducts = tokens[6];
+			if (tokens.length > 7)
+				t1ld.ambitProducts = tokens[7];
+			if (tokens.length > 8)
+				t1ld.notIncludedAmbitProduct = tokens[8];
+			
+			return t1ld;
+		};
+		
 	}
 
 }
