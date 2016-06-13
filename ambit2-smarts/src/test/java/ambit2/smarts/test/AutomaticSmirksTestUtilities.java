@@ -13,7 +13,7 @@ public class AutomaticSmirksTestUtilities
 	
 	public AST_TASK task = AST_TASK.task1;
 	public String endLine = "\r\n";
-	public String outFileName = "";
+	public String outFileName = null;
 	public String inFileName = "";
 	
 	public RandomAccessFile outFile = null;
@@ -22,8 +22,8 @@ public class AutomaticSmirksTestUtilities
 	public static void main(String[] args)
 	{
 		AutomaticSmirksTestUtilities ast = new AutomaticSmirksTestUtilities();
-		
-		
+		ast.inFileName = "/Volumes/Data/Projects/AmbitSMIRKS2016/stereo-errors__.txt";
+		ast.run();
 	}
 	
 	//Input - Output handling 
@@ -61,6 +61,16 @@ public class AutomaticSmirksTestUtilities
 		}
 
 		return(0);
+	}
+	
+	void run()
+	{
+		if (outFileName != null)
+			openOutputFile();
+		
+		iterateInputFile();
+		
+		closeOutputFile();
 	}
 
 	void iterateInputFile()
@@ -130,7 +140,7 @@ public class AutomaticSmirksTestUtilities
 	
 	int processLine1(String line)
 	{
-		
+		System.out.println("Line" + curLine + "  " + line);
 		return 0;
 	}
 
