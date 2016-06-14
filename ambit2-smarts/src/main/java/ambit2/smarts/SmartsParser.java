@@ -1955,6 +1955,15 @@ public class SmartsParser {
 						return (SMARTSBond) bo;
 				if (bo instanceof DoubleBondAromaticityNotSpecified)					
 					return (SMARTSBond) bo;
+				if (bo instanceof SmartsBondExpression)
+				{
+					SmartsToChemObject stco = 
+							new SmartsToChemObject(SilentChemObjectBuilder.getInstance());
+					IBond bondFromExpr = stco.smartsExpressionToBond((SmartsBondExpression)bo);
+					if (bondFromExpr != null)
+						if (bondFromExpr.getOrder() == IBond.Order.DOUBLE)
+							return (SMARTSBond) bo;
+				}
 			}	
 		}
 		return (null);
@@ -2070,6 +2079,14 @@ public class SmartsParser {
 				processedDoubleBonds.add(doubleBond);
 				processedDirBonds.add((SMARTSBond)dirBond2);
 			}
+			else
+				if (doubleBond instanceof SmartsBondExpression)
+				{
+					SmartsBondExpression db = (SmartsBondExpression)doubleBond;
+					db.setStereoInfo(dbsi);
+					processedDoubleBonds.add(doubleBond);
+					processedDirBonds.add((SMARTSBond)dirBond2);
+				}
 		}
 	}
 	

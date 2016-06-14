@@ -957,6 +957,9 @@ public class IsomorphismTester
 		else
 			if (bond instanceof DoubleBondAromaticityNotSpecified)
 				dbsi = ((DoubleBondAromaticityNotSpecified)bond).getStereoInfo();
+			else
+				if (bond instanceof SmartsBondExpression)
+					dbsi =  ((SmartsBondExpression)bond).getStereoInfo();
 		
 		if (dbsi == null)
 			return true; //no stereo check is done;

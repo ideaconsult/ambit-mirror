@@ -38,6 +38,8 @@ import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
  */
 public class SmartsBondExpression extends SMARTSBond {
 
+	private DoubleBondStereoInfo stereoInfo = null;
+	
 	public List<Integer> tokens = new ArrayList<Integer>();
 
 	public SmartsBondExpression(IChemObjectBuilder builder) {
@@ -136,4 +138,12 @@ public class SmartsBondExpression extends SMARTSBond {
 		}
 		return sb.toString();
 	}
+	
+	public DoubleBondStereoInfo getStereoInfo() {
+		return stereoInfo;
+	}
+
+	public void setStereoInfo(DoubleBondStereoInfo stereoInfo) {
+		this.stereoInfo = stereoInfo;
+	};
 }
