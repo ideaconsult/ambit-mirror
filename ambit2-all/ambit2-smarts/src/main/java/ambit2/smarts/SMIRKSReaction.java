@@ -736,10 +736,9 @@ public class SMIRKSReaction
 		if (bo instanceof DoubleBondAromaticityNotSpecified)
 			return  ((DoubleNonAromaticBond)bo).getStereoInfo();
 		
-		//if (bo instanceof SmartsBondExpression)
-			//System.out.println(">>> getDoubleBondStereoInfo for SmartsBondExpression");
+		if (bo instanceof SmartsBondExpression)
+			return  ((SmartsBondExpression)bo).getStereoInfo();
 		
-
 		return null;
 	}
 	

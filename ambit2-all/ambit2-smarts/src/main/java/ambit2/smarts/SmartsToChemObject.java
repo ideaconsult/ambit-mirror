@@ -643,16 +643,16 @@ public class SmartsToChemObject extends
 
 		for (int i = 0; i < subs.size(); i++) {
 			analyzeSubExpressionsFromLowAnd(b, subs.get(i));
-			System.out.print("  sub-expression " + subs.get(i).toString());
-			System.out.println("    mSubBondType = " + mSubBondType
-					+ "  mSubBoAromaticity = " + mSubBoAromaticity);
+			//System.out.print("  sub-expression " + subs.get(i).toString());
+			//System.out.println("    mSubBondType = " + mSubBondType
+			//		+ "  mSubBoAromaticity = " + mSubBoAromaticity);
 
 			if (mSubBondType != -1) {
 				if (boType == -1)
 					boType = mSubBondType;
 				else {
 					if (boType != mSubBondType) {
-						boType = -1; // Atom Type is not defined correctly
+						boType = -1; // Bond Type is not defined correctly
 						break;
 					}
 				}
@@ -675,7 +675,7 @@ public class SmartsToChemObject extends
 
 		}
 
-		System.out.println("boType = " + boType);
+		//System.out.println("boType = " + boType);
 
 		if (boType != -1) {
 			// Atom associated to the bond are not set here

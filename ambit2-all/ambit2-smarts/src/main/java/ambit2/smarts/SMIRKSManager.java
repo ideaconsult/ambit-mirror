@@ -1496,7 +1496,7 @@ public class SMIRKSManager {
     	List<IStereoElement> removeList = new ArrayList<IStereoElement>();
     	List<IStereoElement> addList = new ArrayList<IStereoElement>();
     	
-    	//System.out.println("reaction.steroDBTransformations.size() = " + reaction.steroDBTransformations.size());
+    	//System.out.println("  reaction.steroDBTransformations.size() = " + reaction.steroDBTransformations.size());
     	
     	for (StereoDBTransformation dbTr : reaction.steroDBTransformations)
     	{	
@@ -1569,7 +1569,7 @@ public class SMIRKSManager {
     				//Creating new double bond stereo element 
     				if ((tLig1 != null) && (tLig2 != null))
     				{	
-    					System.out.println("  ** Creating new double bond stereo element ");
+    					//System.out.println("  ** Creating new double bond stereo element ");
     					IBond newBonds[] = new IBond[2];
     					
     					//Setting the ligands in the right order
