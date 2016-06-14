@@ -576,6 +576,15 @@ public class SMIRKSReaction
 				continue;
 			
 			StereoDBTransformation dbTransform = new StereoDBTransformation();
+			//Register reactant atoms if mapped
+			Integer paMapInd1 = (Integer)pBo.getAtom(0).getProperty("SmirksMapIndex");
+			Integer paMapInd2 = (Integer)pBo.getAtom(1).getProperty("SmirksMapIndex");
+			if (paMapInd1 != null)
+				dbTransform.reactDBAt1 = getMappedReactantAtom(paMapInd1);
+			if (paMapInd2 != null)
+				dbTransform.reactDBAt2 = getMappedReactantAtom(paMapInd2);
+			
+			
 			dbTransform.prodDBAt1 = product.getAtomNumber(pBo.getAtom(0));
 			dbTransform.prodDBAt2 = product.getAtomNumber(pBo.getAtom(1));
 			dbTransform.prodDBStereo = pDBSI.conformation;
@@ -726,6 +735,10 @@ public class SMIRKSReaction
 
 		if (bo instanceof DoubleBondAromaticityNotSpecified)
 			return  ((DoubleNonAromaticBond)bo).getStereoInfo();
+		
+		//if (bo instanceof SmartsBondExpression)
+			//System.out.println(">>> getDoubleBondStereoInfo for SmartsBondExpression");
+		
 
 		return null;
 	}
