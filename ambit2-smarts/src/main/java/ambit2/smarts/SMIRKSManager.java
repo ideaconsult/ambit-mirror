@@ -1490,13 +1490,17 @@ public class SMIRKSManager {
 
     public void applyStereoTransformAtLocation(IAtomContainer target, List<IAtom> rMap, List<IAtom> newProdAtoms, SMIRKSReaction reaction)
     {
+    	//System.out.println("**** applyStereoTransformAtLocation");
+    	
     	//Stereo transformation will be performed by means of removeList and addList  
     	List<IStereoElement> removeList = new ArrayList<IStereoElement>();
     	List<IStereoElement> addList = new ArrayList<IStereoElement>();
     	
+    	//System.out.println("reaction.steroDBTransformations.size() = " + reaction.steroDBTransformations.size());
     	
     	for (StereoDBTransformation dbTr : reaction.steroDBTransformations)
-    	{
+    	{	
+    		//System.out.println(dbTr.toString());
     		switch (dbTr.prodDBStereo) {
     		
     		case UNDEFINED:	{	
@@ -1522,6 +1526,7 @@ public class SMIRKSManager {
     			
     		case OPPOSITE:
     		case TOGETHER: {	
+    			//System.out.println("  ** StereoDBTransformation product TOGETHER or OPPOSITE");
     			//Getting the target atoms for the db stereo bond
     			//If atom is mapped (i.e. reactDBAt1/2 != -1) it is taken form rMap otherwise
     			//it is a newly created product atom
@@ -1534,7 +1539,9 @@ public class SMIRKSManager {
     			if (dbTr.reactDBAt2 == -1)
     				ta2 = getNewProductAtomOnTargetByNumber(dbTr.prodDBAt2,target, newProdAtoms, reaction);
     			else
-    				ta2 = rMap.get(dbTr.reactDBAt2);	
+    				ta2 = rMap.get(dbTr.reactDBAt2);
+    			
+    			//System.out.println(" **" + ta1 + "  " + ta2);
 
     			IBond tStereoBo = target.getBond(ta1, ta2); 
     			if (tStereoBo != null)
@@ -1557,14 +1564,27 @@ public class SMIRKSManager {
     					//product ligand is unmapped i.e. it is a newly created atom
     					tLig2 = getNewProductAtomOnTargetByNumber(dbTr.prodLigand2,target, newProdAtoms, reaction);
     				else
-    					tLig2 = rMap.get(dbTr.prodLigand1ReactMap);
+    					tLig2 = rMap.get(dbTr.prodLigand2ReactMap);
     				
     				//Creating new double bond stereo element 
-    				if ((tLig1 != null) && (tLig1 != null))
+    				if ((tLig1 != null) && (tLig2 != null))
     				{	
+    					System.out.println("  ** Creating new double bond stereo element ");
     					IBond newBonds[] = new IBond[2];
-    					newBonds[0] = target.getBond(ta1, tLig1);
-    					newBonds[1] = target.getBond(ta2, tLig2);
+    					
+    					//Setting the ligands in the right order
+    					//Other wise CDKToBeam.addGeometricConfiguration() throws NullPointer Exception
+    					if (ta1 == tStereoBo.getAtom(0))
+    					{	
+    						newBonds[0] = target.getBond(ta1, tLig1);
+    						newBonds[1] = target.getBond(ta2, tLig2);
+    					}
+    					else
+    					{	
+    						newBonds[1] = target.getBond(ta1, tLig1);
+    						newBonds[0] = target.getBond(ta2, tLig2);
+    					}
+    						
     					if ((newBonds[0] != null) && newBonds[1] != null)
     					{	
     						Conformation newStereo;

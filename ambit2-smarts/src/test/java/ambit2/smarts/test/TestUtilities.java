@@ -2844,7 +2844,10 @@ public class TestUtilities {
 		
 		
 		
-		//tu.testSMIRKS("[O:3]/[C:1]=[C:2]/[C:4]>>[O:3]/[C:1]=[C:2](C)/[C:4]", "O/C=C/C");
+		//tu.testSMIRKS("[O:3]/[C:1]=[C:2]/[C:4]>>[O:3]/[C:1]=[C:2](C)/[C:4]", "O/C=C/C");  //exception is thrown
+		tu.testSMIRKS("[O:3][C:1]=[C:2][C:4]>>[O:3]/[C:1]=[C:2]/[C:4]", "O\\C=C/C");
+		tu.testSMIRKS("[O:3][C:1]=[C:2][C:4]>>[O:3]/[C:1]=[C:2]/[C:4]", "OC=CC");
+		
 		
 		//tu.testSMIRKS("[C:1]N>>[C:1]Cl", "O/C=C(N)/C");  //This one does not need FlagApplyStereoTransformation
 		//tu.testSMIRKS("[C:1]N>>[C:1]Cl", "O/C=C(\\N)C");  //This is not so clear what should happen
