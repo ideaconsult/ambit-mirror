@@ -147,10 +147,65 @@ public class TestSMIRKSStereo extends TestCase
 		checkReactionResult(resultProduct, expectedProducts);
 	}
 	
+	public void test102() throws Exception 
+	{
+		String smirks = "O[C:1]>>N[C:1]";
+		String target = "O/C=C/C";
+		String expectedProducts[] = new String[] {"N/C=C/C"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
 	
-			//tu.testSMIRKS("O[C:1]>>N[C:1]", "O/C=C/C");		
-			//tu.testSMIRKS("O[C:1]Cl>>N[C:1]Br", "C[C@](O)(CC)Cl"); 
-			//tu.testSMIRKS("O[C:1]>>N[C:1]", "C[C@H](O)Cl");
-			//tu.testSMIRKS("[C:1]=[C:2]>>[C:1].[C:2]", "O/C=C/C");
+	public void test103() throws Exception 
+	{
+		String smirks = "O[C:1]>>N[C:1]";
+		String target = "C[C@H](O)Cl";
+		String expectedProducts[] = new String[] {"C[C@H](N)Cl"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	public void test103B() throws Exception 
+	{
+		String smirks = "O[C:1]>>N[C:1]";
+		String target = "C[C@H](O)Cl";
+		String expectedProducts[] = new String[] {"C[C@H](N)Cl"};
+		boolean FlagExplicitH = true;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	public void test103C() throws Exception 
+	{
+		String smirks = "O[C:1]>>N[C:1]";
+		String target = "C[C@]([H])(O)Cl";
+		String expectedProducts[] = new String[] {"C[C@H](N)Cl"};
+		boolean FlagExplicitH = true;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	public void test103D() throws Exception 
+	{
+		String smirks = "O[C:1]>>N[C:1]";
+		String target = "C[C@H](O)Cl";
+		String expectedProducts[] = new String[] {"C[C@@H](Cl)N"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	
+			
+	//tu.testSMIRKS("O[C:1]Cl>>N[C:1]Br", "C[C@](O)(CC)Cl"); 
+	
+			
 	
 }
