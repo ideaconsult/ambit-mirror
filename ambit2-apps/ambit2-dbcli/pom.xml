@@ -33,7 +33,7 @@
 			<artifactId>ambit2-fp</artifactId>
 			<version>${ambit.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -47,6 +47,11 @@
 			<classifier>tests</classifier>
 			<type>jar</type>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.4.0</version>
 		</dependency>
 	</dependencies>
 	<licenses>
