@@ -37,7 +37,7 @@ public class CliOptions {
 				return "import";
 			}
 		},
-		preprocessing, dataset, split, standardize, fingerprint, simmatrix, help;
+		preprocessing, dataset, split, standardize, fingerprint, atomenvironments, simmatrix, help;
 		public String toString() {
 			return name();
 		};

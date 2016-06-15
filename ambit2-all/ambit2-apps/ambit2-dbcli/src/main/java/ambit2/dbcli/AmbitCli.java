@@ -171,22 +171,46 @@ public class AmbitCli {
 					new Object[] { "ERROR", x.getMessage() });
 		}
 		long now = System.currentTimeMillis();
-		if ("import".equals(command)) {
+		_commandmode cmd = null;
+		try {
+			cmd = _commandmode.valueOf(command);
+		} catch (Exception x) {
+			if ("import".equals(command))
+				cmd = _commandmode.imports;
+			else
+				return -1;
+		}
+		switch (cmd) {
+		case imports: {
 			parseCommandImport();
-		} else if ("preprocessing".equals(command)) {
+			break;
+		}
+		case preprocessing: {
 			parseCommandPreprocessing();
-		} else if ("dataset".equals(command)) {
+			break;
+		}
+		case dataset: {
 			return parseCommandDataset(now);
-		} else if ("split".equals(command)) {
+		}
+		case split: {
 			return parseCommandSplit(subcommand, now);
-		} else if ("atomenvironments".equals(command)) {
-			return parseCommandAE(subcommand, now);
-		} else if ("standardize".equals(command)) {
+		}
+		case standardize: {
 			parseCommandStandardize(subcommand, now);
-		} else if (_commandmode.fingerprint.name().equals(command)) {
-			parseCommandFingerprints(subcommand, now);
-		} else if (_commandmode.simmatrix.name().equals(command)) {
+			break;
+		}
+		case simmatrix: {
 			parseCommandSimilarityMatrix(subcommand, now);
+			break;
+		}
+		case fingerprint: {
+			parseCommandFingerprints(subcommand, now);
+		}
+		case atomenvironments: {
+			return parseCommandAE(subcommand, now);
+		}
+		default:
+			break;
 		}
 		return -1;
 	}
@@ -745,6 +769,7 @@ public class AmbitCli {
 			return 0.75;
 		}
 	}
+
 	protected String parseStringParam(String paramname, String defautlvalue) {
 		try {
 			return options.getParam(paramname).toString();
@@ -797,17 +822,19 @@ public class AmbitCli {
 					"Input file not specified! Please use -i {file}");
 		return new File(options.input);
 	}
-	
-	public void parseCommandSimilarityMatrix(String subcommand, long now) throws Exception {
+
+	public void parseCommandSimilarityMatrix(String subcommand, long now)
+			throws Exception {
 		final File file = getInputFile();
 		int page = parsePageParam();
 		int pagesize = parsePageSizeParam();
 		double threshold = parseThresholdParam();
 		SimilarityMatrix matrix = new SimilarityMatrix();
 		matrix.setLogger(logger_cli);
-		matrix.createMatrix(file.getAbsolutePath(),  false, threshold,page,pagesize);
+		matrix.createMatrix(file.getAbsolutePath(), false, threshold, page,
+				pagesize);
 	}
-	
+
 	public void parseCommandFingerprints(String subcommand, long now)
 			throws Exception {
 		boolean multifile = true;
@@ -1001,12 +1028,10 @@ public class AmbitCli {
 
 								}
 							} else {
-								logger_cli
-										.log(Level.SEVERE,
-												"MSG_FINGEPRINTGEN",
-												new Object[] {
-														"Empty molecule",
-														getIds(record) });
+								logger_cli.log(Level.SEVERE,
+										"MSG_FINGEPRINTGEN", new Object[] {
+												"Empty molecule",
+												getIds(record) });
 								return record;
 							}
 
@@ -1062,10 +1087,9 @@ public class AmbitCli {
 											.getName() + ".raw", fpraw);
 
 							} catch (Exception x) {
-								//StringWriter w = new StringWriter();
-								//x.printStackTrace(new PrintWriter(w));
-								logger_cli.log(
-										Level.SEVERE,
+								// StringWriter w = new StringWriter();
+								// x.printStackTrace(new PrintWriter(w));
+								logger_cli.log(Level.SEVERE,
 										"MSG_FINGEPRINTGEN",
 										new Object[] { x.getMessage(),
 												getIds(record) });
@@ -1096,20 +1120,17 @@ public class AmbitCli {
 										tags, true);
 								writer.write(processed);
 							} catch (Exception x) {
-								//StringWriter w = new StringWriter();
-								//x.printStackTrace(new PrintWriter(w));
-								logger_cli.log(
-										Level.SEVERE,
+								// StringWriter w = new StringWriter();
+								// x.printStackTrace(new PrintWriter(w));
+								logger_cli.log(Level.SEVERE,
 										"MSG_FINGEPRINTGEN",
 										new Object[] { x.getMessage(),
 												getIds(record) });
 							}
 						else {
-							logger_cli
-									.log(Level.SEVERE,
-											"MSG_FINGEPRINTGEN",
-											new Object[] { "Empty molecule",
-													getIds(record) });
+							logger_cli.log(Level.SEVERE, "MSG_FINGEPRINTGEN",
+									new Object[] { "Empty molecule",
+											getIds(record) });
 						}
 						return record;
 
@@ -1430,7 +1451,8 @@ public class AmbitCli {
 										.log(Level.SEVERE,
 												"MSG_STANDARDIZE",
 												new Object[] {
-														"Empty molecule See the ERROR tag in the output file",getIds(record) });
+														"Empty molecule See the ERROR tag in the output file",
+														getIds(record) });
 								return record;
 							}
 						} catch (Exception x) {
