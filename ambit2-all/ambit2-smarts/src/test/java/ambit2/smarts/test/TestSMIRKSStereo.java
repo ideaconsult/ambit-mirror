@@ -32,7 +32,15 @@ public class TestSMIRKSStereo extends TestCase
 	
 	
 	public TestSMIRKSStereo() {
-		
+		smrkMan.setFlagApplyStereoTransformation(FlagApplyStereoTransformation);
+		smrkMan.setFlagProcessResultStructures(true);
+		smrkMan.setFlagClearHybridizationBeforeResultProcess(true);
+		smrkMan.setFlagClearImplicitHAtomsBeforeResultProcess(true);
+		smrkMan.setFlagClearAromaticityBeforeResultProcess(true);
+		smrkMan.setFlagAddImplicitHAtomsOnResultProcess(true);
+		smrkMan.setFlagConvertAddedImplicitHToExplicitOnResultProcess(false);
+		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(true);
+		smrkMan.getSmartsParser().mSupportDoubleBondAromaticityNotSpecified = false;
 	}
 	
 	public static Test suite() {
@@ -42,7 +50,7 @@ public class TestSMIRKSStereo extends TestCase
 	IAtomContainer applySMIRKSReaction(String smirks, IAtomContainer target)
 			throws Exception {
 
-		smrkMan.setFlagApplyStereoTransformation(FlagApplyStereoTransformation);
+		
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
 		if (!smrkMan.getErrors().equals("")) {
 			throw (new Exception("Smirks Parser errors:\n"
@@ -67,10 +75,7 @@ public class TestSMIRKSStereo extends TestCase
 		h.addImplicitHydrogens(target);
 		if (explicitH)
 			MoleculeTools.convertImplicitToExplicitHydrogens(target);
-		/*
-		 * CDKSourceCodeWriter w = new CDKSourceCodeWriter(System.err);
-		 * w.write(target); w.close();
-		 */
+		
 		return applySMIRKSReaction(smirks, target);
 	}
 	
@@ -103,6 +108,8 @@ public class TestSMIRKSStereo extends TestCase
 		return SmilesGenerator.absolute().create(mol);
 	}
 	
+	//Transformations with SMIRKS containing stereo
+	
 	public void test01A() throws Exception 
 	{
 		String smirks = "[O:3][C:1]=[C:2][C:4]>>[O:3]/[C:1]=[C:2]/[C:4]";
@@ -124,4 +131,26 @@ public class TestSMIRKSStereo extends TestCase
 		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
 		checkReactionResult(resultProduct, expectedProducts);
 	}
+	
+	
+	
+	//Transformation on chemical objects with stereo
+	
+	public void test101() throws Exception 
+	{
+		String smirks = "O[C:1]>>N[C:1]";
+		String target = "C[C@](O)(CC)Cl";
+		String expectedProducts[] = new String[] {"C[C@](N)(CC)Cl"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	
+			//tu.testSMIRKS("O[C:1]>>N[C:1]", "O/C=C/C");		
+			//tu.testSMIRKS("O[C:1]Cl>>N[C:1]Br", "C[C@](O)(CC)Cl"); 
+			//tu.testSMIRKS("O[C:1]>>N[C:1]", "C[C@H](O)Cl");
+			//tu.testSMIRKS("[C:1]=[C:2]>>[C:1].[C:2]", "O/C=C/C");
+	
 }
