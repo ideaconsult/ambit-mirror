@@ -322,9 +322,7 @@ public class TestSMIRKSStereo extends TestCase
 	}
 	
 	public void test106() throws Exception 
-	{
-		//This one is quite rare.
-		//And it is not so clear what should happen but it works! 
+	{	
 		String smirks = "[C:1][C:2]([O:3])([N:4])Cl>>[C:1][C:2]([O:3])([N:4])Br";
 		String target = "C[C@](O)(N)Cl";
 		String expectedProducts[] = new String[] {"C[C@](O)(N)Br"};
@@ -333,6 +331,37 @@ public class TestSMIRKSStereo extends TestCase
 		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
 		checkReactionResult(resultProduct, expectedProducts);
 	}
+	
+	
+	// Additional test cases from kramerlab
+	
+	public void test201() throws Exception 
+	{	
+		//stereoChemNotInserted1_rule4230_u145861()
+		String smirks = "[#8-:11]-[#6:9](=[O:10])-[#6:1]([H])([H])-[c:2]1[c:3]([H])[c:4]([H])[c:5]([H])[c:6]([H])[c:7]([H])1>>[#8-:11]-[#6:9](=[O:10])\\[#6:1]([H])=[#6:2]-1\\[#6:7]([H])([H])-[#6:6]([H])=[#6:5]([H])-[#6:4]([H])=[#6:3]([H])-[#8]-1";
+		String target = "C1=CC=C(C=C1)CC(=O)[O-]";
+		String expectedProducts[] = new String[] {"[O-]C(=O)\\C=C1\\CC=CC=CO1"};
+		boolean FlagExplicitH = true;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	
+	public void test202() throws Exception 
+	{	
+		//stereoChemNotInserted2_rule2844_u114856()
+		String smirks = "[H][C:2]([#6:5]([H])([H])([H]))([#1,#6:4])!@-[#6:1]([H])([H])-[#6:3](-[#8-:8])=[O:6]>>[#6:5]([H])([H])([H])\\[#6:2](-[#1,#6:4])!@=[#6:1]\\[#6:3](-[#8-:8])=[O:6]";
+		String target = "CCC(C)CC(=O)[O-]";
+		String expectedProducts[] = new String[] {"CC\\C(C)=C/C([O-])=O"};
+		boolean FlagExplicitH = true;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	
+	
 	
 	
 }
