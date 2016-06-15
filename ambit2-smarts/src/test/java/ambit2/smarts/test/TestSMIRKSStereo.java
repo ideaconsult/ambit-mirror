@@ -132,9 +132,90 @@ public class TestSMIRKSStereo extends TestCase
 		checkReactionResult(resultProduct, expectedProducts);
 	}
 	
+	public void test02() throws Exception 
+	{
+		String smirks = "[C:1][C@:2]([O:3])([N:4])[Cl:5]>>[C:1][C@@:2]([O:3])([N:4])[Cl:5]";
+		String target = "C[C@](O)(N)Cl";
+		String expectedProducts[] = new String[] {"C[C@@](O)(N)Cl"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	public void test02B() throws Exception 
+	{
+		String smirks = "[C:1][C@:2]([O:3])([N:4])[Cl:5]>>[C:1][C@@:2]([O:3])([N:4])[Cl:5]";
+		String target = "C[C@](O)(N)Cl";
+		String expectedProducts[] = new String[] {"C[C@](N)(O)Cl"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	public void test02C() throws Exception 
+	{
+		String smirks = "[C:1][C@:2]([O:3])([N:4])[Cl:5]>>[C:1][C@:2]([Cl:5])([N:4])[O:3]";
+		String target = "C[C@](O)(N)Cl";
+		String expectedProducts[] = new String[] {"C[C@](Cl)(N)O"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	public void test03() throws Exception 
+	{
+		String smirks = "[C:1][C@H:2]([O:3])[N:4]>>[C:1][C@@H:2]([O:3])[N:4]";
+		String target = "C[C@H](O)N";
+		String expectedProducts[] = new String[] {"C[C@@H](O)N"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	public void test03B() throws Exception 
+	{
+		String smirks = "[C:1][C@H:2]([O:3])[N:4]>>[C:1][C@@H:2]([O:3])[N:4]";
+		String target = "C[C@H](O)N";
+		String expectedProducts[] = new String[] {"C[C@H](N)O"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	public void test03C() throws Exception 
+	{
+		String smirks = "[C:1][C@H:2]([O:3])[N:4]>>[C:1][C@@H:2]([O:3])[N:4]";
+		String target = "C[C@@H](O)N";
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		assertEquals("Exptected reaction " + smirks + " not applicable for " + target, null, resultProduct);
+	}
+	
+	public void test04() throws Exception 
+	{
+		String smirks = "[C:1][C@:2]([O:3])([N:4])Cl>>[C:1][C@@:2]([O:3])([N:4])Br";
+		String target = "C[C@](O)(N)Cl";
+		String expectedProducts[] = new String[] {"C[C@@](O)(N)Br"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
 	
 	
-	//Transformation on chemical objects with stereo
+	
+	
+	
+	
+	
+	
+	//Transformation on chemical objects with stereo elements
 	
 	public void test101() throws Exception 
 	{
@@ -202,10 +283,56 @@ public class TestSMIRKSStereo extends TestCase
 		checkReactionResult(resultProduct, expectedProducts);
 	}
 	
+	/*
+	 * Exception is thrown
+	 * 
+	 * java.lang.IllegalArgumentException: expected two ligand bonds
+	at org.openscience.cdk.stereo.DoubleBondStereochemistry.<init>(DoubleBondStereochemistry.java:53)
+	at ambit2.smarts.StereoChemUtils.bondChange(StereoChemUtils.java:845)
 	
-			
-	//tu.testSMIRKS("O[C:1]Cl>>N[C:1]Br", "C[C@](O)(CC)Cl"); 
+	public void test104() throws Exception 
+	{
+		//This one does not need FlagApplyStereoTransformation
+		
+		String smirks = "[C:1]N>>[C:1]Cl";
+		String target = "O/C=C(N)/C";
+		String expectedProducts[] = new String[] {"O/C=C(Cl)/C"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	*/
 	
-			
+	
+	//tu.testSMIRKS("[C:1]N>>[C:1]Cl", "O/C=C(\\N)C");  //This is not so clear what should happen
+	
+	
+	public void test105() throws Exception 
+	{
+		//This one is quite rare.
+		//And it is not so clear what should happen but it works! 
+		String smirks = "O[C:1]Cl>>N[C:1]Br";
+		String target = "C[C@](O)(CC)Cl";
+		String expectedProducts[] = new String[] {"C[C@](N)(CC)Br"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	public void test106() throws Exception 
+	{
+		//This one is quite rare.
+		//And it is not so clear what should happen but it works! 
+		String smirks = "[C:1][C:2]([O:3])([N:4])Cl>>[C:1][C:2]([O:3])([N:4])Br";
+		String target = "C[C@](O)(N)Cl";
+		String expectedProducts[] = new String[] {"C[C@](O)(N)Br"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
 	
 }
