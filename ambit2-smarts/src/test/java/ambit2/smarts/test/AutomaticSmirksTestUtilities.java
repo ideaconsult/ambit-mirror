@@ -51,7 +51,7 @@ public class AutomaticSmirksTestUtilities
 		AutomaticSmirksTestUtilities ast = new AutomaticSmirksTestUtilities();
 		ast.inFileName = "/Volumes/Data/Projects/AmbitSMIRKS2016/stereo-errors__.txt";
 		ast.startLine = 2;
-		ast.maxNumOfProcessLines = 20;
+		ast.maxNumOfProcessLines = 200;
 		ast.run();
 	}
 	
