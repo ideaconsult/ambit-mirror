@@ -2,6 +2,7 @@ package ambit2.dbcli;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,9 +11,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.ConnectException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -51,6 +54,7 @@ import net.idea.modbcum.p.MasterDetailsProcessor;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 import net.idea.modbcum.q.update.AbstractUpdate;
 
+import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.log4j.PropertyConfigurator;
 import org.codehaus.jackson.JsonNode;
 import org.openscience.cdk.CDKConstants;
@@ -98,6 +102,7 @@ import ambit2.db.update.chemical.UpdateChemical;
 import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
 import ambit2.dbcli.CliOptions._commandmode;
 import ambit2.dbcli.CliOptions._preprocessingoptions;
+import ambit2.dbcli.CliOptions._subcommandmode;
 import ambit2.dbcli.descriptors.AtomEnvironmentGeneratorApp;
 import ambit2.dbcli.exceptions.InvalidCommand;
 import ambit2.descriptors.processors.BitSetGenerator;
@@ -107,6 +112,8 @@ import ambit2.smarts.processors.SMARTSPropertiesGenerator;
 import ambit2.smarts.processors.SMIRKSProcessor;
 import ambit2.tautomers.processor.StructureStandardizer;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
 import com.mysql.jdbc.CommunicationsException;
 
 /**
@@ -208,6 +215,9 @@ public class AmbitCli {
 		}
 		case atomenvironments: {
 			return parseCommandAE(subcommand, now);
+		}
+		case dbmigrate: {
+			parseDBMigrate(subcommand, now);
 		}
 		default:
 			break;
@@ -952,7 +962,8 @@ public class AmbitCli {
 			public void onError(IStructureRecord input, Object output,
 					IBatchStatistics stats, Exception x) {
 				super.onError(input, output, stats, x);
-				logger_cli.log(Level.SEVERE, x.getMessage());
+				logger_cli.log(Level.SEVERE, "MSG_ERR",
+						new Object[] { x.getMessage() });
 			}
 
 			@Override
@@ -1584,6 +1595,64 @@ public class AmbitCli {
 			if (stats != null)
 				logger_cli.log(Level.INFO, "MSG_INFO",
 						new Object[] { stats.toString() });
+		}
+	}
+
+	public void parseDBMigrate(String subcommand, long now) throws Exception {
+		File folder = null;
+		String resource = "ambit2/dbcli/sql/export_substances.sql";
+		_subcommandmode sc = _subcommandmode.get;
+		try {
+			sc = _subcommandmode.valueOf(subcommand);
+			switch (sc) {
+			case get: {
+				resource = "ambit2/dbcli/sql/export_substances.sql";
+				try {
+					folder = new File(options.output);
+				} catch (Exception x) {
+				}
+				break;
+			}
+			case put: {
+				resource = "ambit2/dbcli/sql/import_substances.sql";
+				try {
+					folder = new File(options.input);
+				} catch (Exception x) {
+				}
+				break;
+			}
+			default:
+				throw new Exception("Unsupported subcommand " + subcommand);
+			}
+		} catch (Exception x) {
+			x.printStackTrace();
+			logger_cli.log(Level.SEVERE, "MSG_ERR",
+					new Object[] { x.getMessage() });
+			return;
+		}
+		
+		URL url = Resources.getResource(resource);
+		String text = Resources.toString(url, Charsets.UTF_8);
+		text = text.replace("{TMP}",folder==null?"":(folder.getAbsolutePath().replace("\\","/")+"/"));
+		
+		Connection c = null;
+		BufferedReader reader = null;
+		try {
+			DBConnectionConfigurable<Context> dbc = null;
+			dbc = getConnection(options.getSQLConfig());
+			c = dbc.getConnection();
+			c.setAutoCommit(false);
+
+			ScriptRunner runner = new ScriptRunner(c);
+
+			reader = new BufferedReader(new StringReader(text));
+			runner.runScript(reader);
+		} catch (Exception x) {
+			logger_cli.log(Level.SEVERE, x.getMessage());
+		} finally {
+			if (c != null)
+				c.close();
+
 		}
 	}
 

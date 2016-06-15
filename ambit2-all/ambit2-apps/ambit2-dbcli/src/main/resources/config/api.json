@@ -276,6 +276,17 @@
 				"params": {}
 			}
 		},
+		"dbmigrate": {
+			"name": "dbmigrate",
+			"description": "dbmigrate",
+			"connection": "config/ambit.properties",
+			"get": {
+				"params": {}
+			},
+			"put": {
+				"params": {}
+			}			
+		},		
 		"import": {
 			"name": "import",
 			"description": "Quick import into AMBIT database (No normalisation!). Input file (-i file). The database connection settings are read from -c {file}",

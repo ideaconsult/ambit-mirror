@@ -37,14 +37,14 @@ public class CliOptions {
 				return "import";
 			}
 		},
-		preprocessing, dataset, split, standardize, fingerprint, atomenvironments, simmatrix, help;
+		preprocessing, dataset, split, standardize, fingerprint, atomenvironments, simmatrix, dbmigrate, help;
 		public String toString() {
 			return name();
 		};
 	};
 
 	public enum _subcommandmode {
-		dataset, post, put, get, delete, params, help, json, html
+		dataset, post, get, put, delete, params, help, json, html
 	};
 
 	public enum _fields {
