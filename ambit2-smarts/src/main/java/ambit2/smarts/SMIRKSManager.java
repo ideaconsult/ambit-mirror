@@ -804,7 +804,11 @@ public class SMIRKSManager {
     	//Register initial (empty) stereo changes
     	if (FlagApplyStereoTransformation)
     		for (IStereoElement el: target.stereoElements())
-    			stereoChanges.put(el, new StereoChange());
+    		{	
+    			StereoChange stChange = new StereoChange();
+    			stChange.setStereoElementType(el);
+    			stereoChanges.put(el, stChange);
+    		}	
     	
     	
     	//System.out.println("Initial \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
