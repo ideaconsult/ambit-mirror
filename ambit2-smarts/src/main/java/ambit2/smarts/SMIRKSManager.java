@@ -1,7 +1,9 @@
 package ambit2.smarts;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 
@@ -797,6 +799,7 @@ public class SMIRKSManager {
     	//Some of these elements can be returned back into the molecule stereo element list
     	//if some later transformation makes them again valid stereo elements
     	List<IStereoElement> invalidatedStereoElements = new ArrayList<IStereoElement>();
+    	Map<IStereoElement, StereoChange> stereoChanges = new HashMap<IStereoElement, StereoChange>();
     	
     	
     	//System.out.println("Initial \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
@@ -852,7 +855,7 @@ public class SMIRKSManager {
     			IAtom tAt = rMap.get(i);
     			
     			if (FlagApplyStereoTransformation)
-    				deleteAtomAndDoStereoTransformation(tAt, target, invalidatedStereoElements);
+    				deleteAtomAndDoStereoTransformation(tAt, target, invalidatedStereoElements, stereoChanges);
     			else
     				//Stereo is not handled
     				target.removeAtomAndConnectedElectronContainers(tAt);
@@ -885,7 +888,7 @@ public class SMIRKSManager {
     				//handle stereo on new bond creation
     				if (FlagApplyStereoTransformation)
     					handleStereoOnBondChange(tAt1, tAt2, null, tb.getOrder(),
-    			    		target, invalidatedStereoElements);
+    			    		target, invalidatedStereoElements, stereoChanges);
     			} 
     			else 
     			{
@@ -899,7 +902,7 @@ public class SMIRKSManager {
     					//handle stereo on bond deletion
     					if (FlagApplyStereoTransformation)
         					handleStereoOnBondChange(tAt1, tAt2, tBo.getOrder(), null,
-        			    		target, invalidatedStereoElements);
+        			    		target, invalidatedStereoElements, stereoChanges);
     				}	
     				else 
     				{
@@ -910,7 +913,7 @@ public class SMIRKSManager {
     					//handle stereo on bond order change
     					if (FlagApplyStereoTransformation)
         					handleStereoOnBondChange(tAt1, tAt2, prevBO, tBo.getOrder(),
-        			    		target, invalidatedStereoElements);
+        			    		target, invalidatedStereoElements, stereoChanges);
     				}
     			}
     		} 
@@ -963,7 +966,7 @@ public class SMIRKSManager {
     				if (FlagApplyStereoTransformation)
     					if ((nrAt1 != SmartsConst.SMRK_UNSPEC_ATOM) || (nrAt2 != SmartsConst.SMRK_UNSPEC_ATOM))
     						handleStereoOnBondChange(tAt1, tAt2, null, tb.getOrder(),
-    								target, invalidatedStereoElements);
+    								target, invalidatedStereoElements, stereoChanges);
     			}
 
     			// Some other possible cases if needed.
@@ -1285,7 +1288,7 @@ public class SMIRKSManager {
     }
     
     void deleteAtomAndDoStereoTransformation(IAtom tAt, IAtomContainer target, 
-    		List<IStereoElement> invalidatedStereoElements)
+    		List<IStereoElement> invalidatedStereoElements, Map<IStereoElement, StereoChange> stereoChanges)
     {
     	//Preliminary store the elements that are to be changed by the atom deletion
 		//and hence to be removed from the IAtomContainer object 
@@ -1303,10 +1306,16 @@ public class SMIRKSManager {
 			{
 				if (StereoChemUtils.contains(stEl,tAt))
 				{	
-					IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl);
+					StereoChange stChange = stereoChanges.get(stEl);
+					stereoChanges.remove(stEl);
+					
+					IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl, stChange);
 					//if el = null then the stereo element is for 'total removal'
 					if (el != null) 
+					{	
 						newInvEl.add(el);
+						stereoChanges.put(el, stChange);
+					}	
 				}	
 			}
 			
@@ -1319,10 +1328,14 @@ public class SMIRKSManager {
 		{
 			for (IStereoElement stEl : listSE)
 			{	
-				IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl);
+				StereoChange stChange = new StereoChange();
+				IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl, stChange);
 				//if el = null then the stereo element is for 'total removal'
 				if (el != null)
+				{	
 					invalidatedStereoElements.add(el);
+					stereoChanges.put(el, stChange);
+				}	
 			}
 		}
     }
@@ -1339,7 +1352,8 @@ public class SMIRKSManager {
     	return list;
  	}    
     
-    IStereoElement handleStereoOnAtomDeletion(IAtom deletedAt, IAtomContainer target, IStereoElement element)
+    IStereoElement handleStereoOnAtomDeletion(IAtom deletedAt, IAtomContainer target, 
+    			IStereoElement element, StereoChange stereoChange)
     {
     	if (element instanceof DoubleBondStereochemistry)
     		return StereoChemUtils.deleteAtom(deletedAt, (DoubleBondStereochemistry)element);
@@ -1357,7 +1371,7 @@ public class SMIRKSManager {
     void handleStereoOnBondChange(IAtom targetAt1, IAtom targetAt2,
     		IBond.Order initialBondOrder, IBond.Order updatedBondOrder, 
     		IAtomContainer target, 
-    		List<IStereoElement> invalidatedStereoElements)
+    		List<IStereoElement> invalidatedStereoElements, Map<IStereoElement, StereoChange> stereoChanges)
     {
     	
     	List<IStereoElement> newElements = new ArrayList<IStereoElement>();
