@@ -708,6 +708,14 @@ public class SMIRKSReaction
 						chAtTransform.prodChirality = pChirality;
 						chAtTransform.prodLigands = new int[pAtExp.stereoLigands.size()];
 						chAtTransform.prodLigandsReactMap = new int[chAtTransform.prodLigands.length];
+						
+						//Only reactant Chiral atom index is stored (if it is a mapped atom)
+						//No other stereo info should be present otherwise it should have been 
+						//registered in the previous cycle over reactant chiral atoms.
+						Integer pChAtMapInd = (Integer)pAtExp.getProperty("SmirksMapIndex");
+						if (pChAtMapInd != null)
+							chAtTransform.reactChiralAtom = getMappedReactantAtom(pChAtMapInd);
+						
 						for (int k = 0; k < chAtTransform.prodLigands.length; k++)
 						{	
 							chAtTransform.prodLigands[k] = product.getAtomNumber(pAtExp.stereoLigands.get(k));
