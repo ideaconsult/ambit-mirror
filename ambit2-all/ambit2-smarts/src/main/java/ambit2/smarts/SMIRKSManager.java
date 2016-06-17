@@ -1532,12 +1532,12 @@ public class SMIRKSManager {
     			//it is a newly created product atom
     			IAtom ta1, ta2;
     			if (dbTr.reactDBAt1 == -1)
-    				ta1 = getNewProductAtomOnTargetByNumber(dbTr.prodDBAt1,target, newProdAtoms, reaction);
+    				ta1 = getNewProductAtomOnTargetByNumber(dbTr.prodDBAt1,/*target,*/ newProdAtoms, reaction);
     			else
     				ta1 = rMap.get(dbTr.reactDBAt1); 
 
     			if (dbTr.reactDBAt2 == -1)
-    				ta2 = getNewProductAtomOnTargetByNumber(dbTr.prodDBAt2,target, newProdAtoms, reaction);
+    				ta2 = getNewProductAtomOnTargetByNumber(dbTr.prodDBAt2,/*target,*/ newProdAtoms, reaction);
     			else
     				ta2 = rMap.get(dbTr.reactDBAt2);
     			
@@ -1556,13 +1556,13 @@ public class SMIRKSManager {
     				IAtom tLig1, tLig2;
     				if (dbTr.prodLigand1ReactMap == -1)
     					//product ligand is unmapped i.e. it is a newly created atom
-    					tLig1 = getNewProductAtomOnTargetByNumber(dbTr.prodLigand1,target, newProdAtoms, reaction);
+    					tLig1 = getNewProductAtomOnTargetByNumber(dbTr.prodLigand1,/*target,*/ newProdAtoms, reaction);
     				else
     					tLig1 = rMap.get(dbTr.prodLigand1ReactMap);
     				
     				if (dbTr.prodLigand2ReactMap == -1)
     					//product ligand is unmapped i.e. it is a newly created atom
-    					tLig2 = getNewProductAtomOnTargetByNumber(dbTr.prodLigand2,target, newProdAtoms, reaction);
+    					tLig2 = getNewProductAtomOnTargetByNumber(dbTr.prodLigand2,/*target,*/ newProdAtoms, reaction);
     				else
     					tLig2 = rMap.get(dbTr.prodLigand2ReactMap);
     				
@@ -1630,7 +1630,7 @@ public class SMIRKSManager {
     			//it is a newly created product atom
     			IAtom tChirAt;
     			if (chirTransf.reactChiralAtom == -1)
-    				tChirAt = getNewProductAtomOnTargetByNumber(chirTransf.prodChiralAtom,target, newProdAtoms, reaction);
+    				tChirAt = getNewProductAtomOnTargetByNumber(chirTransf.prodChiralAtom, /*target,*/ newProdAtoms, reaction);
     			else
     				tChirAt = rMap.get(chirTransf.reactChiralAtom);
     			
@@ -1651,7 +1651,7 @@ public class SMIRKSManager {
     					if (chirTransf.prodLigandsReactMap[i] == -1) 
     						//product ligand is unmapped i.e. it is a newly created
     						newLigands[i] = getNewProductAtomOnTargetByNumber(chirTransf.prodLigands[i],
-    											target, newProdAtoms, reaction);
+    											/*target,*/ newProdAtoms, reaction);
         				else
         					newLigands[i] = rMap.get(chirTransf.prodLigandsReactMap[i]);
     				}
@@ -1689,7 +1689,7 @@ public class SMIRKSManager {
     
     
     IAtom getNewProductAtomOnTargetByNumber(int prodAtNum, 
-    		IAtomContainer target, 
+    		//IAtomContainer target, 
     		//List<IAtom> rMap, 
     		List<IAtom> newProdAtoms, 
     		SMIRKSReaction reaction)
