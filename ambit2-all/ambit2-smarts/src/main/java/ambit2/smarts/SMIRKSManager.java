@@ -801,6 +801,11 @@ public class SMIRKSManager {
     	List<IStereoElement> invalidatedStereoElements = new ArrayList<IStereoElement>();
     	Map<IStereoElement, StereoChange> stereoChanges = new HashMap<IStereoElement, StereoChange>();
     	
+    	//Register initial (empty) stereo changes
+    	if (FlagApplyStereoTransformation)
+    		for (IStereoElement el: target.stereoElements())
+    			stereoChanges.put(el, new StereoChange());
+    	
     	
     	//System.out.println("Initial \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
     	
@@ -1328,7 +1333,8 @@ public class SMIRKSManager {
 		{
 			for (IStereoElement stEl : listSE)
 			{	
-				StereoChange stChange = new StereoChange();
+				StereoChange stChange = stereoChanges.get(stEl); 
+				stereoChanges.remove(stEl);
 				IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl, stChange);
 				//if el = null then the stereo element is for 'total removal'
 				if (el != null)
