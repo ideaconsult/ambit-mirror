@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 import org.openscience.cdk.stereo.ExtendedTetrahedral;
@@ -16,10 +17,10 @@ public class StereoChange
 	}
 	
 	public StereoElementType elementType = StereoElementType.UNKNOWN;
-	public List<IAtom> addLigands1 = new ArrayList<IAtom>(); 
-	public List<IAtom> addLigands2 = new ArrayList<IAtom>(); 
+	public List<IBond> addLigands0 = new ArrayList<IBond>(); 
+	public List<IBond> addLigands1 = new ArrayList<IBond>(); 
+	public boolean ligand0Deleted = false;
 	public boolean ligand1Deleted = false;
-	public boolean ligand2Deleted = false;
 	
 	public void setStereoElementType(IStereoElement element)
 	{
