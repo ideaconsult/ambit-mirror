@@ -749,6 +749,9 @@ public class StereoChemUtils
 		
 		return new DoubleBondStereochemistry(dbsc.getStereoBond(), newBonds, dbsc.getStereo());
 	}
+	
+	
+	
 		
 	
 	
@@ -1080,6 +1083,91 @@ public class StereoChemUtils
 			return newLigandBonds;
 		}
 	}
+	
+	//------------- functions that are beased of StereoChange -----------------------
+	
+	
+	public static DoubleBondStereochemistry deleteAtom(IAtom at, DoubleBondStereochemistry dbsc, StereoChange stChange)
+	{
+		if (dbsc.getStereoBond().contains(at))
+			return null; //entire element will be removed since the deleted atom is part of the double bond
+
+		//Stereo element is invalidated: 
+		//bond is 'removed' i.e. replaced with null pointer and stereo change is set
+		IBond bonds[] = dbsc.getBonds();
+
+		if (bonds == null)
+			return dbsc;
+
+		if (bonds.length == 0)
+			return dbsc;
+
+		IBond newBonds[] = deleteBondFromLigands(at, bonds, stChange);
+
+		if (bonds == newBonds)
+			return dbsc; //no change (bond containing the atom is not found among the ligand bonds)
+
+		return new DoubleBondStereochemistry(dbsc.getStereoBond(), newBonds, dbsc.getStereo());
+	}
+	
+	
+	static IBond[] deleteBondFromLigands(IAtom at, IBond ligandBonds[], StereoChange stChange)
+	{
+		int nLigToDelete = -1;
+		if (!stChange.ligand0Deleted)
+		{
+			if (ligandBonds[0].contains(at))
+				nLigToDelete = 0;
+		}
+		else
+			if (!stChange.ligand1Deleted)
+			{
+				if (ligandBonds[1].contains(at))
+					nLigToDelete = 1;
+			}
+
+		if (nLigToDelete == -1)
+			return ligandBonds; //no change (bond containing the atom is not found among the ligand bonds)
+
+		IBond newBonds[] = ligandBonds.clone();
+		newBonds[nLigToDelete] = null;
+
+		if (nLigToDelete == 0)
+		{	
+			if (stChange.addLigands0.isEmpty())
+			{	
+				stChange.ligand0Deleted = true;
+				newBonds[0] = null;
+			}	
+			else
+			{
+				//Transferring the first element of addLigands1
+				newBonds[0] = stChange.addLigands0.get(0);
+				stChange.addLigands0.remove(0);
+			}
+		}	
+		else
+		{	
+			if (stChange.addLigands1.isEmpty())
+			{	
+				stChange.ligand1Deleted = true;
+				newBonds[1] = null;
+			}	
+			else
+			{
+				//Transferring the first element of addLigands1
+				newBonds[1] = stChange.addLigands1.get(0);
+				stChange.addLigands1.remove(0);
+			}
+		}	
+		
+		return newBonds;
+	}
+	
+	
+	
+	
+	
 	
 	public static boolean isInvalidated(DoubleBondStereochemistry dbsc)
 	{
