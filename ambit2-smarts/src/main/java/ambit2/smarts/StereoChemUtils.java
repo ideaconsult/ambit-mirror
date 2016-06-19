@@ -1147,6 +1147,82 @@ public class StereoChemUtils
 		return ligandBonds;
 	}
 	
+	public static DoubleBondStereochemistry bondChange(IAtom at1, IAtom at2,
+		 	IBond.Order initialBondOrder, IBond.Order updatedBondOrder, 
+			IAtomContainer target,
+			DoubleBondStereochemistry dbsc,
+			StereoChange stChange)
+	{
+		if (dbsc.getStereoBond() == null)
+			return dbsc;
+		
+		
+		IAtom dbAtom = null; //the atom that is part of the double bond
+		IAtom perAtom = null; //the peripheral atom
+		
+		if (dbsc.getStereoBond().contains(at1))
+			dbAtom = at1;
+		else
+			perAtom = at1;
+		
+		if (dbsc.getStereoBond().contains(at2))
+		{
+			if (dbAtom == at1)
+			{
+				//both atoms (at1, at2) are part of the double bond
+				if (updatedBondOrder != IBond.Order.DOUBLE)
+					return null; //element is 'totally' removed
+				else
+					return dbsc; //this case should not happen 
+			}
+			else
+				dbAtom = at2;
+		}
+		else
+			perAtom = at2;
+		
+		if (dbAtom == null)
+			return dbsc;  //Both atoms are not part of the double bond. No change done
+		
+		IBond bonds[] = dbsc.getBonds();
+		
+		if (bonds == null)
+			return dbsc;  //stereo element is not valid. No change done
+		
+		
+		if (initialBondOrder == null)
+		{
+			if (updatedBondOrder == null)
+				return dbsc; //This case should not appear. No change
+			
+			/*
+			//Check for a very rare case 
+			//(most probably this is not needed since 'bo' is a newly created bond 
+			//and it is not among bonds[]):
+			
+			for (int i = 0; i < bonds.length; i++)
+				if (bonds[i] == bo)
+					return dbsc;
+			*/
+			
+			IBond bo = target.getBond(at1, at2);
+			IBond newBonds[] = addBondToLigands(bo, dbsc.getStereoBond(), bonds, stChange);
+			return new DoubleBondStereochemistry(dbsc.getStereoBond(), newBonds, dbsc.getStereo());
+		}
+		else
+		{
+			if (updatedBondOrder == null)
+			{
+				IBond newBonds[] = deleteBondFromLigands(perAtom, bonds, stChange);
+				return new DoubleBondStereochemistry(dbsc.getStereoBond(), newBonds, dbsc.getStereo());
+			}
+			
+			//Bond order is changed hence nothing is done to the stereo element
+			//If inappropriate order is set, the final stereo check will clear this stereo element
+			return dbsc;
+		}
+	}
+	
 	
 	public static boolean isInvalidated(DoubleBondStereochemistry dbsc)
 	{
