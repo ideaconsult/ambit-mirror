@@ -1599,7 +1599,7 @@ public class AmbitCli {
 	}
 
 	public void parseDBMigrate(String subcommand, long now) throws Exception {
-		File folder = null;
+		File folder = new File(System.getProperty("java.io.tmpdir"));
 		String resource = "ambit2/dbcli/sql/export_substances.sql";
 		_subcommandmode sc = _subcommandmode.get;
 		try {
@@ -1647,6 +1647,7 @@ public class AmbitCli {
 
 			reader = new BufferedReader(new StringReader(text));
 			runner.runScript(reader);
+			c.commit();
 		} catch (Exception x) {
 			logger_cli.log(Level.SEVERE, x.getMessage());
 		} finally {
