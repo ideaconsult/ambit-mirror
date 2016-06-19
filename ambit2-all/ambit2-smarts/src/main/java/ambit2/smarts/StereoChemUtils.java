@@ -671,61 +671,6 @@ public class StereoChemUtils
 	
 	//---------------Utilities for manipulation(update) of stereo elements------------------
 	
-	/*
-	public static DoubleBondStereochemistry deleteAtom(IAtom at, 
-					//IAtomContainer target, 
-					DoubleBondStereochemistry dbsc)
-	{
-		if (dbsc.getStereoBond().contains(at))
-			return null; //entire element will be removed since the deleted atom is part of the double bond
-		
-		//Stereo element is invalidated (bond is removed)
-		IBond bonds[] = dbsc.getBonds();
-				
-		if (bonds.length == 1)
-		{
-			//The element contains only one single bond and after removal
-    		//it will contain 0 single bonds
-			DoubleBondStereochemistry newDbsc = 
-				new DoubleBondStereochemistry(dbsc.getStereoBond(), new IBond[0], dbsc.getStereo());
-			return newDbsc;
-		}
-		
-		
-		int n = -1;
-		for (int i = 0; i < bonds.length; i++)
-		{
-			if (bonds[i].contains(at))
-			{
-				n = i;
-				break;
-			}
-		}
-		
-		//bond 0 is removed
-		if (n == 0)
-		{
-			IBond newBo[] = new IBond[1];
-			newBo[0] = bonds[1];
-			DoubleBondStereochemistry newDbsc = 
-					new DoubleBondStereochemistry(dbsc.getStereoBond(), newBo, dbsc.getStereo());
-			return newDbsc;
-		}
-		
-		//bond 1 is removed
-		if (n == 1)
-		{
-			IBond newBo[] = new IBond[1];
-			newBo[0] = bonds[0];
-			DoubleBondStereochemistry newDbsc = 
-					new DoubleBondStereochemistry(dbsc.getStereoBond(), newBo, dbsc.getStereo());
-			return newDbsc;
-		}
-		
-		return null;
-	}
-	*/
-	
 	
 	public static DoubleBondStereochemistry deleteAtom(IAtom at, DoubleBondStereochemistry dbsc)
 	{
