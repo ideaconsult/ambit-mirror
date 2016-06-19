@@ -1164,9 +1164,43 @@ public class StereoChemUtils
 		return newBonds;
 	}
 	
-	
-	
-	
+	static IBond[] addBondToLigands(IBond bo, IBond stereoDB, IBond ligandBonds[], StereoChange stChange)
+	{
+		int nLig = -1;
+		if (bo.contains(stereoDB.getAtom(0)))
+			nLig = 0;
+		else
+			if (bo.contains(stereoDB.getAtom(1)))
+				nLig = 1;
+		
+		if (nLig == -1)
+			return ligandBonds;
+		
+		if (nLig == 0)
+		{
+			if (stChange.ligand0Deleted)
+			{
+				IBond newLigandBonds[] = ligandBonds.clone();
+				newLigandBonds[0] = bo;
+				return newLigandBonds;
+			}
+			else
+				stChange.addLigands0.add(bo);
+		}
+		else
+		{
+			if (stChange.ligand1Deleted)
+			{
+				IBond newLigandBonds[] = ligandBonds.clone();
+				newLigandBonds[1] = bo;
+				return newLigandBonds;
+			}
+			else
+				stChange.addLigands1.add(bo);
+		}	
+		
+		return ligandBonds;
+	}
 	
 	
 	public static boolean isInvalidated(DoubleBondStereochemistry dbsc)
