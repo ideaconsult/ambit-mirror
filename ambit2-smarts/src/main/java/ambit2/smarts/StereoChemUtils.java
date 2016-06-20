@@ -682,7 +682,10 @@ public class StereoChemUtils
 	
 	//---------------Utilities for manipulation(update) of stereo elements------------------
 	
+	/*
 	
+	 //this is function version without StereoChange
+	  
 	public static DoubleBondStereochemistry deleteAtom(IAtom at, DoubleBondStereochemistry dbsc)
 	{
 		if (dbsc.getStereoBond().contains(at))
@@ -705,8 +708,7 @@ public class StereoChemUtils
 		
 		return new DoubleBondStereochemistry(dbsc.getStereoBond(), newBonds, dbsc.getStereo());
 	}
-	
-	
+	*/
 	
 		
 	
@@ -742,6 +744,9 @@ public class StereoChemUtils
 	}
 	
 	
+	/*
+	//this is function version without StereoChange
+	  
 	public static DoubleBondStereochemistry bondChange(IAtom at1, IAtom at2,
 		 	IBond.Order initialBondOrder, IBond.Order updatedBondOrder, 
 			IAtomContainer target,
@@ -789,15 +794,15 @@ public class StereoChemUtils
 			if (updatedBondOrder == null)
 				return dbsc; //This case should not appear. No change
 			
-			/*
+			
 			//Check for a very rare case 
 			//(most probably this is not needed since 'bo' is a newly created bond 
 			//and it is not among bonds[]):
 			
-			for (int i = 0; i < bonds.length; i++)
-				if (bonds[i] == bo)
-					return dbsc;
-			*/
+			//for (int i = 0; i < bonds.length; i++)
+			//	if (bonds[i] == bo)
+			//		return dbsc;
+			
 			
 			IBond bo = target.getBond(at1, at2);
 			IBond newBonds[] = addBondToLigands(bo, bonds);
@@ -816,6 +821,7 @@ public class StereoChemUtils
 			return dbsc;
 		}
 	}
+	*/
 	
 	
 	public static TetrahedralChirality bondChange(IAtom at1, IAtom at2,
@@ -899,6 +905,10 @@ public class StereoChemUtils
 		}
 	}
 	
+	/*
+	
+	//this is function version without StereoChange
+	
 	static IBond[] addBondToLigands(IBond bo, IBond ligandBonds[])
 	{
 		int n = -1; //index of the first null ligand bond (if present)		
@@ -929,6 +939,7 @@ public class StereoChemUtils
 			return ligandBonds;
 		}
 	}
+	*/
 	
 	static IAtom[] deleteAtomFromLigands(IAtom at, IAtom ligands[])
 	{
@@ -982,13 +993,10 @@ public class StereoChemUtils
 	}
 	
 	
-	/**
-	 * Deletes the bond that contains atom 'at'
-	 * 
-	 * @param at
-	 * @param ligandBonds
-	 * @return renewed list of ligand bonds
-	 */
+	/*
+	
+	//this is function version without StereoChange
+	
 	static IBond[] deleteBondFromLigands(IAtom at, IBond ligandBonds[])
 	{
 		int n = -1; //the index of bond to be deleted
@@ -1039,6 +1047,8 @@ public class StereoChemUtils
 			return newLigandBonds;
 		}
 	}
+	*/
+	
 	
 	//------------- functions that are beased of StereoChange -----------------------
 	
