@@ -892,6 +892,7 @@ public class SMIRKSManager {
 
     				tb.setAtoms(new IAtom[] { tAt1, tAt2 });
     				tb.setOrder(reaction.prodBo.get(i));
+    				
     				target.addBond(tb);
     				
     				//handle stereo on new bond creation
@@ -906,12 +907,13 @@ public class SMIRKSManager {
     				IBond tBo = target.getBond(tAt1, tAt2);
     				if (reaction.prodBo.get(i) == null)
     				{	
-    					target.removeBond(tBo); // Target bond is deleted
-    					
     					//handle stereo on bond deletion
+    					//stereo is handled before the actual deletion of the bond
     					if (FlagApplyStereoTransformation)
         					handleStereoOnBondChange(tAt1, tAt2, tBo.getOrder(), null,
         			    		target, invalidatedStereoElements, stereoChanges);
+    					
+    					target.removeBond(tBo); // Target bond is deleted
     				}	
     				else 
     				{
@@ -1348,6 +1350,7 @@ public class SMIRKSManager {
 				}	
 			}
 		}
+		
     }
     
     List<IStereoElement> getStereoElementsToBeRemoved (IAtom deletedAt, IAtomContainer target)
@@ -1366,7 +1369,7 @@ public class SMIRKSManager {
     			IStereoElement element, StereoChange stereoChange)
     {
     	if (element instanceof DoubleBondStereochemistry)
-    		return StereoChemUtils.deleteAtom(deletedAt, (DoubleBondStereochemistry)element);
+    		return StereoChemUtils.deleteAtom(deletedAt, (DoubleBondStereochemistry)element, stereoChange);
     	
     	if (element instanceof TetrahedralChirality)
     		return StereoChemUtils.deleteAtom(deletedAt, (TetrahedralChirality)element);
@@ -1405,20 +1408,34 @@ public class SMIRKSManager {
 			}	
 			
     		if (element instanceof DoubleBondStereochemistry)
-			{
+			{		
+    			StereoChange stChange = stereoChanges.get(element);
+				stereoChanges.remove(element);
+				
     			DoubleBondStereochemistry dbsc = 
     					StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
-    							updatedBondOrder, target, (DoubleBondStereochemistry)element);
+    							updatedBondOrder, target, (DoubleBondStereochemistry)element, stChange);
 				
     			if (dbsc == null)
     				continue;
     			
+    			stereoChanges.put(dbsc, stChange);
+    			
+    			//validity check
+    			if (stChange.isValidStereoElement())
+    				newElements.add(dbsc);  //valid
+    			else
+    				newInvalidEl.add(dbsc); //invalid
+    			
+    			
+    			/*
 				//quick validity check
 				if (StereoChemUtils.isInvalidated(dbsc))
 					newInvalidEl.add(dbsc); //invalid
 				else
 					newElements.add(dbsc);  //valid
-				
+				*/
+    			
 				continue;
 			}
 
@@ -1459,22 +1476,39 @@ public class SMIRKSManager {
 				if (StereoChemUtils.contains(element, targetAt2))
 					n++;
 			if (n==0)
+			{	
+				newInvalidEl.add(element);
 				continue;
+			}	
 			
 			if (element instanceof DoubleBondStereochemistry)
 			{
+				StereoChange stChange = stereoChanges.get(element);
+				stereoChanges.remove(element);
+				
 				DoubleBondStereochemistry dbsc = 
 						StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
-								updatedBondOrder, target, (DoubleBondStereochemistry)element);
+								updatedBondOrder, target, (DoubleBondStereochemistry)element, stChange);
 				
 				if (dbsc == null)
-    				continue;
-				
+					continue;
+
+				stereoChanges.put(dbsc, stChange);
+
+				//validity check
+				if (stChange.isValidStereoElement())
+					newElements.add(dbsc);  //valid
+				else
+					newInvalidEl.add(dbsc); //invalid
+
+				/*
 				//quick validity check
 				if (StereoChemUtils.isInvalidated(dbsc))
 					newInvalidEl.add(dbsc);  //invalid
 				else
 					newElements.add(dbsc);  //valid
+				*/
+				
 				
 				continue;
 			}

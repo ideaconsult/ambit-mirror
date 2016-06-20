@@ -1044,8 +1044,8 @@ public class StereoChemUtils
 		if (bonds == null)
 			return dbsc;
 
-		if (bonds.length == 0)
-			return dbsc;
+		//if (bonds.length == 0)  this check not needed
+		//	return dbsc;
 
 		IBond newBonds[] = deleteBondFromLigands(at, bonds, stChange);
 
@@ -1075,7 +1075,6 @@ public class StereoChemUtils
 			return ligandBonds; //no change (bond containing the atom is not found among the ligand bonds)
 
 		IBond newBonds[] = ligandBonds.clone();
-		newBonds[nLigToDelete] = null;
 
 		if (nLigToDelete == 0)
 		{	
@@ -1086,7 +1085,8 @@ public class StereoChemUtils
 			}	
 			else
 			{
-				//Transferring the first element of addLigands1
+				//Atoms is "deleted" but then
+				//Transferring the first element of addLigands0
 				newBonds[0] = stChange.addLigands0.get(0);
 				stChange.addLigands0.remove(0);
 			}
@@ -1100,6 +1100,7 @@ public class StereoChemUtils
 			}	
 			else
 			{
+				//Atoms is "deleted" but then
 				//Transferring the first element of addLigands1
 				newBonds[1] = stChange.addLigands1.get(0);
 				stChange.addLigands1.remove(0);
@@ -1125,8 +1126,10 @@ public class StereoChemUtils
 		{
 			if (stChange.ligand0Deleted)
 			{
+				//when flag ligand0Deleted = true addLigands0 list must be empty
 				IBond newLigandBonds[] = ligandBonds.clone();
 				newLigandBonds[0] = bo;
+				stChange.ligand0Deleted = false;
 				return newLigandBonds;
 			}
 			else
@@ -1136,8 +1139,10 @@ public class StereoChemUtils
 		{
 			if (stChange.ligand1Deleted)
 			{
+				//when flag ligand0Deleted = true addLigands0 list must be empty
 				IBond newLigandBonds[] = ligandBonds.clone();
 				newLigandBonds[1] = bo;
+				stChange.ligand1Deleted = false;
 				return newLigandBonds;
 			}
 			else
