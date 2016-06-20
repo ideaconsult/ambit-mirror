@@ -2822,10 +2822,10 @@ public class TestUtilities {
 		// tu.testSMIRKS("[#6:1]-[#8:2]-[#6:3]>>[#6:1]-[#8:2].[#6:3]=S","NCCCOCC",
 		// ReactionOperation.SingleCopyForEachPos);
 
-		tu.FlagExplicitHAtoms = true;
+		//tu.FlagExplicitHAtoms = true;
 		tu.FlagTargetPreprocessing = true;
 		tu.FlagProductPreprocessing = true;
-		//tu.FlagPrintAtomAttributes = true;
+		tu.FlagPrintAtomAttributes = true;
 		// tu.FlagSSMode = SmartsConst.SSM_NON_IDENTICAL_FIRST;
 		tu.FlagExplicitHToImplicitOnProductPreProcess = true;
 		
@@ -2843,7 +2843,10 @@ public class TestUtilities {
 		
 		//tu.testSmiles2Smiles("O/C(Br)=C(N)/C");
 		
-		tu.testSMIRKS("O[C:1]>>[C:1]", "O/C(N)=C/C");  //The stereo element should not be lost
+		//tu.testSMIRKS("ON(Br)[C:1]>>[C:1]", "ON(Br)/C(Cl)=C/C");  //The stereo element should not be lost
+		//tu.testSMIRKS("ON[C:1]>>[C:1]", "ON/C(Cl)=C/C"); 
+		tu.testSMIRKS("N(Br)[C:1]>>O[C:1]", "N(Br)/C(Cl)=C/C");
+		
 		//tu.testSMIRKS("O[C:1]>>N[C:1]", "O/C=C/C");
 		//tu.testSMIRKS("[O:2][C:1]>>[O:2]=[C:1]", "O/C=C/C");
 		

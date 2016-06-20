@@ -987,11 +987,14 @@ public class SMIRKSManager {
 
     	}
     	
-    	
-    	//handle stereo transformation defined in the SMIRKS 
+    	 
     	if (FlagApplyStereoTransformation)
+    	{	
+    		checkInvalidatedDBStereo(target, invalidatedStereoElements, stereoChanges);
+    		
+    		//handle stereo transformation defined in the SMIRKS
     		applyStereoTransformAtLocation(target, rMap, newAtoms, reaction);
-
+    	}
     }
 
     public IAtomContainer applyTransformationsAtLocationsWithCloning(IAtomContainer target, List<List<IAtom>> rMaps,
@@ -1319,15 +1322,17 @@ public class SMIRKSManager {
 				{	
 					StereoChange stChange = stereoChanges.get(stEl);
 					stereoChanges.remove(stEl);
-					
+					//System.out.println("  ## handleStereoOnAtomDeletion");
 					IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl, stChange);
 					//if el = null then the stereo element is for 'total removal'
 					if (el != null) 
 					{	
 						newInvEl.add(el);
 						stereoChanges.put(el, stChange);
-					}	
-				}	
+					}
+				}
+				else
+					newInvEl.add(stEl); //no change to the invalidated element
 			}
 			
 			invalidatedStereoElements.clear();
@@ -1341,13 +1346,18 @@ public class SMIRKSManager {
 			{	
 				StereoChange stChange = stereoChanges.get(stEl); 
 				stereoChanges.remove(stEl);
+				
+				//System.out.println("  >> handleStereoOnAtomDeletion");
+				//System.out.println("  >> " + StereoChemUtils.stereoElement2String(stEl, target));
+				//System.out.println("  >> StereoChange: " + stChange.toString(target));
+				
 				IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl, stChange);
 				//if el = null then the stereo element is for 'total removal'
 				if (el != null)
 				{	
 					invalidatedStereoElements.add(el);
 					stereoChanges.put(el, stChange);
-				}	
+				}
 			}
 		}
 		
@@ -1417,7 +1427,10 @@ public class SMIRKSManager {
     							updatedBondOrder, target, (DoubleBondStereochemistry)element, stChange);
 				
     			if (dbsc == null)
+    			{	
+    				//System.out.println("  ** bondChange returns null");
     				continue;
+    			}	
     			
     			stereoChanges.put(dbsc, stChange);
     			
@@ -1491,7 +1504,10 @@ public class SMIRKSManager {
 								updatedBondOrder, target, (DoubleBondStereochemistry)element, stChange);
 				
 				if (dbsc == null)
+				{	
+					//System.out.println("  ** bondChange returns null");
 					continue;
+				}	
 
 				stereoChanges.put(dbsc, stChange);
 
@@ -1563,7 +1579,7 @@ public class SMIRKSManager {
 			{
     			DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry) element;
     			StereoChange stChange = stereoChanges.get(element);
-    			DoubleBondStereochemistry restored = restoreDBStereo(target, dbsc, stChange);
+    			DoubleBondStereochemistry restored = StereoChemUtils.restoreDBStereo(target, dbsc, stChange);
     			if (restored != null)
     				restoredElements.add(restored);
 			}
@@ -1579,15 +1595,6 @@ public class SMIRKSManager {
     	}
     }
     
-    public DoubleBondStereochemistry restoreDBStereo(
-    		IAtomContainer target,
-    		DoubleBondStereochemistry dbsc, 
-    		StereoChange stChange)
-    {
-    	//TODO
-    	return null;
-    }
-
 
     public void applyStereoTransformAtLocation(IAtomContainer target, List<IAtom> rMap, List<IAtom> newProdAtoms, SMIRKSReaction reaction)
     {

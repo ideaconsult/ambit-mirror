@@ -7,6 +7,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
+import org.openscience.cdk.interfaces.IDoubleBondStereochemistry.Conformation;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.interfaces.ITetrahedralChirality;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
@@ -370,7 +371,7 @@ public class StereoChemUtils
 			sb.append(" ");
 		}
 		
-		sb.append(dbs.getStereo() + " ");
+		sb.append(dbs.getStereo() + "  ligands: ");
 		IBond bo[] = dbs.getBonds();
 		for (int i = 0; i < bo.length; i++)
 		{	
@@ -379,8 +380,7 @@ public class StereoChemUtils
 				sb.append("null ");
 			else
 			{	
-				if (b.getAtom(0) == stereoBond.getAtom(0) || 
-						b.getAtom(0) == stereoBond.getAtom(1))
+				if (stereoBond.contains(b.getAtom(0)))	
 					sb.append(b.getAtom(1).getSymbol() + mol.getAtomNumber(b.getAtom(1)));
 				else
 					sb.append(b.getAtom(0).getSymbol() + mol.getAtomNumber(b.getAtom(0)));
@@ -515,6 +515,17 @@ public class StereoChemUtils
 		}
 		
 		return sb.toString();
+	}
+	
+	public static String stereoElement2String(IStereoElement element, IAtomContainer mol)
+	{
+		if (element instanceof DoubleBondStereochemistry)
+			return doubleBondStereochemistry2String((DoubleBondStereochemistry) element, mol);
+		if (element instanceof TetrahedralChirality)
+			return tetrahedralChirality2String((TetrahedralChirality) element, mol);
+		if (element instanceof ExtendedTetrahedral)
+			return extendedTetrahedral2String((ExtendedTetrahedral) element, mol);
+		return null;
 	}
 	
 	public static void cloneAndCheckStereo(IAtomContainer cloneMol, IAtomContainer originalMol)
@@ -1033,7 +1044,7 @@ public class StereoChemUtils
 	
 	
 	public static DoubleBondStereochemistry deleteAtom(IAtom at, DoubleBondStereochemistry dbsc, StereoChange stChange)
-	{
+	{	
 		if (dbsc.getStereoBond().contains(at))
 			return null; //entire element will be removed since the deleted atom is part of the double bond
 
@@ -1050,7 +1061,9 @@ public class StereoChemUtils
 		IBond newBonds[] = deleteBondFromLigands(at, bonds, stChange);
 
 		if (bonds == newBonds)
+		{	
 			return dbsc; //no change (bond containing the atom is not found among the ligand bonds)
+		}	
 
 		return new DoubleBondStereochemistry(dbsc.getStereoBond(), newBonds, dbsc.getStereo());
 	}
@@ -1061,16 +1074,18 @@ public class StereoChemUtils
 		int nLigToDelete = -1;
 		if (!stChange.ligand0Deleted)
 		{
+			//System.out.println(" ligand0 bond : " + ligandBonds[0].getAtom(0).getSymbol() + " " + ligandBonds[0].getAtom(1).getSymbol());
 			if (ligandBonds[0].contains(at))
 				nLigToDelete = 0;
 		}
-		else
-			if (!stChange.ligand1Deleted)
-			{
-				if (ligandBonds[1].contains(at))
-					nLigToDelete = 1;
-			}
 
+		if (!stChange.ligand1Deleted)
+		{
+			//System.out.println(" ligand1 bond : " + ligandBonds[1].getAtom(0).getSymbol() + " " + ligandBonds[1].getAtom(1).getSymbol());
+			if (ligandBonds[1].contains(at))
+				nLigToDelete = 1;
+		}
+		
 		if (nLigToDelete == -1)
 			return ligandBonds; //no change (bond containing the atom is not found among the ligand bonds)
 
@@ -1377,6 +1392,59 @@ public class StereoChemUtils
 		}	
 		return null;
 	}
+	
+	public static DoubleBondStereochemistry restoreDBStereo(
+    		IAtomContainer target,
+    		DoubleBondStereochemistry dbsc, 
+    		StereoChange stChange)
+    {	
+		IBond newLigandBonds[] = dbsc.getBonds().clone();
+		boolean FlagInvertStereo = false;
+		
+		if (stChange.ligand0Deleted)
+    	{
+			IAtom at = dbsc.getStereoBond().getAtom(0);
+			//Searching for a neighbor with a single bond
+			for (IBond bo : target.getConnectedBondsList(at))
+			{
+				if (bo.getOrder() == IBond.Order.SINGLE)
+				{
+					newLigandBonds[0] = bo;
+					FlagInvertStereo = !FlagInvertStereo;
+					break;
+				}
+			}
+			
+			if (newLigandBonds[0] == null)
+				return null; //Restoration not possible
+    	}
+		
+		if (stChange.ligand1Deleted)
+    	{
+			IAtom at = dbsc.getStereoBond().getAtom(1);
+			//Searching for a neighbor with a single bond
+			for (IBond bo : target.getConnectedBondsList(at))
+			{
+				if (bo.getOrder() == IBond.Order.SINGLE)
+				{
+					newLigandBonds[1] = bo;
+					FlagInvertStereo = !FlagInvertStereo;
+					break;
+				}
+			}
+			if (newLigandBonds[1] == null)
+				return null; //Restoration not possible
+    	}
+		
+		Conformation stereo;
+		if (FlagInvertStereo)
+			stereo = dbsc.getStereo().invert();
+		else
+			stereo = dbsc.getStereo();
+		
+		return new DoubleBondStereochemistry(dbsc.getStereoBond(), newLigandBonds, stereo);
+    }
+
 	
 	
 }	
