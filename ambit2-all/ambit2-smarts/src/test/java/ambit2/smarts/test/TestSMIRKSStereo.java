@@ -360,8 +360,17 @@ public class TestSMIRKSStereo extends TestCase
 		checkReactionResult(resultProduct, expectedProducts);
 	}
 	
-	
-	
+	public void test203() throws Exception 
+	{	
+		//stereoChemLost_rule3138_u138720()
+		String smirks = "[#8:1]([H])-[#6:2](-[#6:9](-[#8-:10])=[O:11])=[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]-[#6](-[#8-])=O>>[#8-:10]-[#6:9](=[O:11])-[#6:2](=[O:1])-[#6:3](-[#1,#6,#17:12])-[#6:4]=[#6:5]";
+		String target = "C(=C(/C(=O)[O-])\\Cl)/C=C(\\C(=O)[O-])/O";
+		String expectedProducts[] = new String[] {"[O-]C(=O)C(=O)C\\C=C\\Cl"};
+		boolean FlagExplicitH = true;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
 	
 	
 }
