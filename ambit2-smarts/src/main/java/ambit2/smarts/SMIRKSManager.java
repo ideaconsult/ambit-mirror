@@ -1544,6 +1544,49 @@ public class SMIRKSManager {
     	invalidatedStereoElements.clear();
     	invalidatedStereoElements.addAll(newInvalidEl);
     }
+    
+    public void checkInvalidatedDBStereo(IAtomContainer target, 
+    					List<IStereoElement> invalidatedStereoElements, 
+    					Map<IStereoElement, StereoChange> stereoChanges)
+    {
+    	//This check is needed since it is possible that the double stereo element is
+    	//invalid but the stereo information is still present
+    	//This happens when the a ligand atom is deleted (i.e. the element is invalidated)
+    	//but there is another neighbor atom attached to the double bond which can be used 
+    	//to restore the stereo information
+    	
+    	List<IStereoElement> restoredElements = new ArrayList<IStereoElement>();
+    	
+    	for (IStereoElement element : invalidatedStereoElements)
+    	{
+    		if (element instanceof DoubleBondStereochemistry)
+			{
+    			DoubleBondStereochemistry dbsc = (DoubleBondStereochemistry) element;
+    			StereoChange stChange = stereoChanges.get(element);
+    			DoubleBondStereochemistry restored = restoreDBStereo(target, dbsc, stChange);
+    			if (restored != null)
+    				restoredElements.add(restored);
+			}
+    	}
+    	
+    	if (!restoredElements.isEmpty())
+    	{
+    		List<IStereoElement> newStereo = new ArrayList<IStereoElement>();
+    		for (IStereoElement element : target.stereoElements())
+    			newStereo.add(element);
+    		newStereo.addAll(restoredElements);
+    		target.setStereoElements(newStereo);
+    	}
+    }
+    
+    public DoubleBondStereochemistry restoreDBStereo(
+    		IAtomContainer target,
+    		DoubleBondStereochemistry dbsc, 
+    		StereoChange stChange)
+    {
+    	//TODO
+    	return null;
+    }
 
 
     public void applyStereoTransformAtLocation(IAtomContainer target, List<IAtom> rMap, List<IAtom> newProdAtoms, SMIRKSReaction reaction)
