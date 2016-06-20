@@ -2841,12 +2841,15 @@ public class TestUtilities {
 		//tu.testSMIRKS("O[C:1]>>N[C:1]", "C[C@H](O)Cl");
 		//tu.testSMIRKS("[C:1]=[C:2]>>[C:1].[C:2]", "O/C=C/C");
 		
+		//tu.testSmiles2Smiles("O/C(Br)=C(N)/C");
 		
-		
+		tu.testSMIRKS("O[C:1]>>[C:1]", "O/C(N)=C/C");  //The stereo element should not be lost
+		//tu.testSMIRKS("O[C:1]>>N[C:1]", "O/C=C/C");
+		//tu.testSMIRKS("[O:2][C:1]>>[O:2]=[C:1]", "O/C=C/C");
 		
 		//tu.testSMIRKS("[O:3]/[C:1]=[C:2]/[C:4]>>[O:3]/[C:1]=[C:2](C)/[C:4]", "O/C=C/C");  //exception is thrown
-		tu.testSMIRKS("[O:3][C:1]=[C:2][C:4]>>[O:3]/[C:1]=[C:2]/[C:4]", "O\\C=C/C");
-		tu.testSMIRKS("[O:3][C:1]=[C:2][C:4]>>[O:3]/[C:1]=[C:2]/[C:4]", "OC=CC");
+		//tu.testSMIRKS("[O:3][C:1]=[C:2][C:4]>>[O:3]/[C:1]=[C:2]/[C:4]", "O\\C=C/C");
+		//tu.testSMIRKS("[O:3][C:1]=[C:2][C:4]>>[O:3]/[C:1]=[C:2]/[C:4]", "OC=CC");
 		
 		
 		//tu.testSMIRKS("[C:1]N>>[C:1]Cl", "O/C=C(N)/C");  //This one does not need FlagApplyStereoTransformation

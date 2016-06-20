@@ -38,7 +38,11 @@ public class StereoChange
 	
 	public boolean isValidStereoElement()
 	{
-		//TODO
+		if (ligand0Deleted)
+			return false;
+		if (ligand1Deleted)
+			return false;
+		
 		return true;
 	}
 	
