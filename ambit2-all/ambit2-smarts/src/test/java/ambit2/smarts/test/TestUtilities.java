@@ -119,6 +119,7 @@ public class TestUtilities {
 	
 	boolean FlagApplyStereoTransformation = false;
 
+	boolean FlagSingleBondAromaticityNotSpecified = false;
 	boolean FlagDoubleBondAromaticityNotSpecified = false;
 
 	SmartsConst.SSM_MODE FlagSSMode = SmartsConst.SSM_MODE.SSM_NON_OVERLAPPING;
@@ -1508,6 +1509,7 @@ public class TestUtilities {
 		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(this.FlagExplicitHToImplicitOnProductPreProcess);
 		smrkMan.setFlagApplyStereoTransformation(FlagApplyStereoTransformation);
 
+		smrkMan.getSmartsParser().mSupportSingleBondAromaticityNotSpecified = FlagSingleBondAromaticityNotSpecified;
 		smrkMan.getSmartsParser().mSupportDoubleBondAromaticityNotSpecified = FlagDoubleBondAromaticityNotSpecified;
 
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
@@ -1606,6 +1608,7 @@ public class TestUtilities {
 		SMIRKSManager smrkMan = new SMIRKSManager(
 				SilentChemObjectBuilder.getInstance());
 		smrkMan.setFlagSSMode(FlagSSMode);
+		smrkMan.getSmartsParser().mSupportSingleBondAromaticityNotSpecified = FlagSingleBondAromaticityNotSpecified;
 		smrkMan.getSmartsParser().mSupportDoubleBondAromaticityNotSpecified = FlagDoubleBondAromaticityNotSpecified;
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
 		if (!smrkMan.getErrors().equals("")) {

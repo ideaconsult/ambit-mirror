@@ -297,6 +297,7 @@ public class SmartsHelper {
 				newBo = new TripleBondAromaticityNotSpecified(ac.getBuilder());
 			else {
 				if (b.getOrder() == IBond.Order.DOUBLE)
+					//TODO handle aromaticity
 					newBo = new DoubleBondAromaticityNotSpecified(
 							ac.getBuilder());
 				else {
@@ -374,8 +375,14 @@ public class SmartsHelper {
 
 		if (b instanceof SingleNonAromaticBond)
 			return ("-");
+		
+		if (b instanceof SingleBondAromaticityNotSpecified)
+			return ("-");
 
 		if (b instanceof DoubleNonAromaticBond)
+			return ("=");
+		
+		if (b instanceof DoubleBondAromaticityNotSpecified)
 			return ("=");
 
 		//if (b instanceof DoubleStereoBond)

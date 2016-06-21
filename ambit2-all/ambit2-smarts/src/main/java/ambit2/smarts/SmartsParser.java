@@ -81,8 +81,11 @@ public class SmartsParser {
 	public boolean mSupportOpenBabelExtension = true;
 	public boolean mSupportSmirksSyntax = false;
 	
-	// by default "=" is DoubleNonAromatic
+	// by default "=" is DoubleNonAromaticBond
 	public boolean mSupportDoubleBondAromaticityNotSpecified = false; 
+	// by default "-" is SingleNonAromaticBond
+	public boolean mSupportSingleBondAromaticityNotSpecified = false; 
+	
 
 	// Work variables for Component Level Grouping
 	boolean FlagCLG = false;
@@ -391,7 +394,10 @@ public class SmartsParser {
 				curBond = new AnyOrderQueryBond(atom0.getBuilder());
 				break;
 			case SmartsConst.BT_SINGLE:
-				curBond = new SingleNonAromaticBond(atom0.getBuilder());
+				if(mSupportSingleBondAromaticityNotSpecified)
+					curBond = new SingleBondAromaticityNotSpecified(atom0.getBuilder());
+				else
+					curBond = new SingleNonAromaticBond(atom0.getBuilder());
 				break;
 			case SmartsConst.BT_DOUBLE:
 				if (mSupportDoubleBondAromaticityNotSpecified)
@@ -1579,10 +1585,15 @@ public class SmartsParser {
 		return (1);
 	}
 
+	
 	int getBondType(IBond bond) {
 		if (bond instanceof OrderQueryBond)
 			return (getBondType(bond.getOrder()));
 		if (bond instanceof SingleOrAromaticBond)
+			return (1);
+		if (bond instanceof SingleNonAromaticBond)
+			return (1);
+		if (bond instanceof SingleBondAromaticityNotSpecified)
 			return (1);
 		if (bond instanceof DoubleNonAromaticBond)
 			return (2);

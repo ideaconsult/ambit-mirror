@@ -603,6 +603,13 @@ public class SmartsToChemObject extends
 			bond.setOrder(IBond.Order.SINGLE);
 			return (bond);
 		}
+		
+		if (b instanceof SingleBondAromaticityNotSpecified) {
+			IBond bond = MoleculeTools.newBond(SilentChemObjectBuilder
+					.getInstance());
+			bond.setOrder(IBond.Order.SINGLE);
+			return (bond);
+		}
 
 		if (b instanceof DoubleNonAromaticBond) {
 			IBond bond = MoleculeTools.newBond(SilentChemObjectBuilder
