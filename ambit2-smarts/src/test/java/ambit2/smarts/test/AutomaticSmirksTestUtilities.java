@@ -288,6 +288,7 @@ public class AutomaticSmirksTestUtilities
 		}
 		catch (Exception e)
 		{
+			System.err.println(e.getMessage());
 			System.err.println("SMIRKS " + smrk);
 			System.err.println("SMILES " + smi);
 			//e.printStackTrace();

@@ -2611,7 +2611,7 @@ public class TestUtilities {
 		// tu.testStructureAnalysis("I:/Projects/Nina/TOXCST_v3a_320_12Feb2009.sdf");
 		// tu.testScreeningKeys("c1ccccc1NCC","[N;++]CCCCC");
 
-		// tu.testIsomorphismTester("a", "c1ccccc1");
+		//tu.testIsomorphismTester("a", "c1ccccc1");
 		// tu.testIsomorphismTester("cF", "C1=CC=CC=C1F");
 
 		// tu.testIsomorphismTester("CC1CC1", "CC1CC1");
@@ -2844,7 +2844,7 @@ public class TestUtilities {
 		//tu.testSmiles2Smiles("O/C(Br)=C(N)/C");
 		
 		//tu.testSMIRKS("ON(Br)[C:1]>>[C:1]", "ON(Br)/C(Cl)=C/C");  //The stereo element should not be lost
-		tu.testSMIRKS("N[C:1]>>[C:1]", "N/C(Cl)=C/C"); 
+		//tu.testSMIRKS("N[C:1]>>[C:1]", "N/C(Cl)=C/C"); 
 		//tu.testSMIRKS("N(Br)[C:1]>>O[C:1]", "N(Br)/C(Cl)=C/C");
 		
 		//tu.testSMIRKS("O[C:1]>>N[C:1]", "O/C=C/C");
@@ -3015,6 +3015,14 @@ public class TestUtilities {
 		//tu.testSmartsManagerBoolSearch("C[C;!@,@;!@@](Cl)(N)O","C[C](Cl)(N)O");
 		//tu.testSmartsManagerBoolSearch("CC(O)=[C@]=C(Cl)N","CC(O)=[C@]=C(Cl)N");
 		//tu.testSmartsManagerBoolSearch("C[C@H](Cl)N","C[C@@H](N)Cl");
+		
+		tu.testSmartsManagerBoolSearch("[#6]-:[#6]","c1ccccc1");
+		
+		//tu.testIsomorphismAllMappings("[#6]-&:[#6]","c1ccccc1");
+		//tu.testSmartsToQueryToSmarts("[#6][#6]");
+		//tu.testSMARTSBondToIBond("C-:C=C");
+		//tu.printSmartsTokens("[#6]-:[#6]");
+		
 		
 		//tu.testChiralPermutations(new int[] {0,2,1,3}, new int[] {0,1,2,3});
 		

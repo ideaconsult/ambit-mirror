@@ -60,9 +60,12 @@ public class SmartsBondExpression extends SMARTSBond {
 
 	boolean getArgument(int boType, IBond bond) {
 		switch (boType) {
+		case SmartsConst.BT_ANY:
+			return true;
 		case SmartsConst.BT_SINGLE:
-			if ((bond.getOrder() == IBond.Order.SINGLE)
-					&& (!bond.getFlag(CDKConstants.ISAROMATIC)))
+			if (bond.getOrder() == IBond.Order.SINGLE)
+			//if ((bond.getOrder() == IBond.Order.SINGLE)
+			//		&& (!bond.getFlag(CDKConstants.ISAROMATIC)))
 				return (true);
 			break;
 		case SmartsConst.BT_DOUBLE:

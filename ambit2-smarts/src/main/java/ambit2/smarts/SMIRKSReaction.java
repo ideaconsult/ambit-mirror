@@ -742,7 +742,7 @@ public class SMIRKSReaction
 			return ((DoubleNonAromaticBond)bo).getStereoInfo();
 
 		if (bo instanceof DoubleBondAromaticityNotSpecified)
-			return  ((DoubleNonAromaticBond)bo).getStereoInfo();
+			return  ((DoubleBondAromaticityNotSpecified)bo).getStereoInfo();
 		
 		if (bo instanceof SmartsBondExpression)
 			return  ((SmartsBondExpression)bo).getStereoInfo();
