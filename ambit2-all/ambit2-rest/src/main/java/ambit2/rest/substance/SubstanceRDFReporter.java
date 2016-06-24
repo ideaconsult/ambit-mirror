@@ -86,6 +86,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		output.setNsPrefix("sso", "http://semanticscience.org/resource/");
 		output.setNsPrefix("bao", "http://www.bioassayontology.org/bao#");
 		output.setNsPrefix("enm", "http://purl.enanomapper.org/onto/");
+		output.setNsPrefix("npo", "http://purl.bioontology.org/ontology/npo#");
 	}
 
 	@Override
@@ -122,11 +123,31 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 
 				Resource component = getOutput().createResource(
 						compoundReporter.getURI(struct));
-				getOutput().add(
+				if ("HAS_COATING".equals(r.getRelationType())) {
+					getOutput().add(
 						component,
 						RDF.type,
 						getOutput().createResource(
-								String.format("%s/#COMPOUND", TMP_NS)));
+							"http://purl.bioontology.org/ontology/npo#NPO_1367"
+						)
+					);
+				} else if ("HAS_CORE".equals(r.getRelationType())) {
+					getOutput().add(
+						component,
+						RDF.type,
+						getOutput().createResource(
+							"http://purl.bioontology.org/ontology/npo#NPO_1617"
+						)
+					);
+				} else { // default to fiat material entity
+					getOutput().add(
+						component,
+						RDF.type,
+						getOutput().createResource(
+							"http://purl.bioontology.org/ontology/npo#NPO_1597"
+						)
+					);
+				}
 
 				if (r.getRelation().getReal_lowervalue() != null)
 					getOutput().add(
@@ -136,9 +157,12 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 							getOutput().createTypedLiteral(
 									r.getRelation().getReal_lowervalue()));
 
+				// Property parttype = getOutput().createProperty(
+				//		String.format("%s/#%s", TMP_NS, r.getRelationType()
+				//				.name()));
 				Property parttype = getOutput().createProperty(
-						String.format("%s/#%s", TMP_NS, r.getRelationType()
-								.name()));
+					"http://purl.bioontology.org/ontology/npo#has_part "
+				);
 				getOutput().add(substanceResource, parttype, component);
 
 				if (struct.getRecordProperties() != null)
