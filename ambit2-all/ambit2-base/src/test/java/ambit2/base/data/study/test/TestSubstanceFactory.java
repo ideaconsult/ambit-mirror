@@ -32,7 +32,7 @@ public class TestSubstanceFactory {
 		record.setContent("Generated test content");
 		record.setOwnerUUID("owner-uuid-1234567890");
 		record.setSubstanceUUID("record-uuid-1234567890");
-
+		record.setSubstancetype("NPO_1486");
 		// Add measurements
 		ProtocolApplication pa = ProtocolApplicationTestFactory.initpa();
 		pa.setSubstanceUUID(record.getOwnerUUID());
