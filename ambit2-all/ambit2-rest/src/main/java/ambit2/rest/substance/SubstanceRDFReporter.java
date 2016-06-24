@@ -83,7 +83,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		output.setNsPrefix("dc", "http://purl.org/dc/elements/1.1/");
 		output.setNsPrefix("dcterms", "http://purl.org/dc/terms/");
 		output.setNsPrefix("obo", "http://purl.obolibrary.org/obo/");
-		output.setNsPrefix("sio", "http://semanticscience.org/resource/");
+		output.setNsPrefix("sso", "http://semanticscience.org/resource/");
 		output.setNsPrefix("bao", "http://www.bioassayontology.org/bao#");
 		output.setNsPrefix("enm", "http://purl.enanomapper.org/onto/");
 	}
@@ -161,12 +161,40 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 													value.toString()));
 
 					}
-				if (struct.getInchi() != null)
-					getOutput()
-							.add(component, DCTerms.title, struct.getInchi());
-				if (struct.getSmiles() != null)
-					getOutput().add(component, DCTerms.title,
-							struct.getSmiles());
+				if (struct.getInchi() != null) {
+					Resource inchiRes = getOutput().createResource(
+						compoundReporter.getURI(struct) + "/inchi"
+					);
+					Resource inchiType = getOutput().createResource(
+						"http://semanticscience.org/resource/CHEMINF_000113"
+					);
+					Property hasAttribute = getOutput().createProperty(
+						"http://semanticscience.org/resource/CHEMINF_000200"
+					);
+					Property hasValue = getOutput().createProperty(
+						"http://semanticscience.org/resource/SIO_000300"
+					);
+					getOutput().add(component, hasAttribute, inchiRes);
+					getOutput().add(inchiRes, RDF.type, inchiType);
+					getOutput().add(inchiRes, hasValue, struct.getInchi());
+				}
+				if (struct.getSmiles() != null) {
+					Resource smilesRes = getOutput().createResource(
+						compoundReporter.getURI(struct) + "/smiles"
+					);
+					Resource inchiType = getOutput().createResource(
+						"http://semanticscience.org/resource/CHEMINF_000018"
+					);
+					Property hasAttribute = getOutput().createProperty(
+						"http://semanticscience.org/resource/CHEMINF_000200"
+					);
+					Property hasValue = getOutput().createProperty(
+					    "http://semanticscience.org/resource/SIO_000300"
+					);
+					getOutput().add(component, hasAttribute, smilesRes);
+					getOutput().add(smilesRes, RDF.type, inchiType);
+					getOutput().add(smilesRes, hasValue, struct.getSmiles());
+				}
 
 				// r.getRelation()
 				// r.getRelationType().
