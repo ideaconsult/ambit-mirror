@@ -14,13 +14,18 @@ import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.substance.study.SubstanceStudyDetailsProcessor;
+import ambit2.rest.property.PropertyURIReporter;
+import ambit2.rest.structure.CompoundURIReporter;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
@@ -30,6 +35,9 @@ import com.hp.hpl.jena.vocabulary.RDFS;
 public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		extends QueryRDFReporter<SubstanceRecord, Q> {
 	private String base = "http://example.com";
+	protected PropertyURIReporter propertyReporter;
+	protected CompoundURIReporter compoundReporter;
+
 	/**
 	 * 
 	 */
@@ -37,17 +45,20 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 
 	public SubstanceRDFReporter(Request request, MediaType mediaType) {
 		super(request, mediaType, null);
-		if (request != null)
+		if (request != null) {
 			base = request.getRootRef().toString();
+			propertyReporter = new PropertyURIReporter(request);
+			compoundReporter = new CompoundURIReporter(base);
+		}
 		init();
 	}
 
-	public SubstanceRDFReporter(String base, MediaType mediaType) {
-		super(null, mediaType, null);
-		this.base = base;
-		init();
-	}
+	/*
+	 * public SubstanceRDFReporter(String base, MediaType mediaType) {
+	 * super(null, mediaType, null); this.base = base; init(); }
+	 */
 	protected void init() {
+
 		SubstanceStudyDetailsProcessor paReader = new SubstanceStudyDetailsProcessor();
 
 		getProcessors().clear();
@@ -101,6 +112,66 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		if (record.getOwnerName() != null)
 			getOutput().add(sowner, DCTerms.title, record.getOwnerName());
 
+		//plaseholder, change to property 
+		String TMP_NS = "http://TMP.URI";
+
+		if (record.getRelatedStructures() != null)
+			for (CompositionRelation r : record.getRelatedStructures()) {
+				IStructureRecord struct = r.getSecondStructure();
+
+				Resource component = getOutput().createResource(
+						compoundReporter.getURI(struct));
+				getOutput().add(
+						component,
+						RDF.type,
+						getOutput().createResource(
+								String.format("%s/#COMPOUND", TMP_NS)));
+
+				if (r.getRelation().getReal_lowervalue() != null)
+					getOutput().add(
+							component,
+							getOutput().createProperty(
+									String.format("%s/#PURITY", TMP_NS)),
+							getOutput().createTypedLiteral(
+									r.getRelation().getReal_lowervalue()));
+
+				Property parttype = getOutput().createProperty(
+						String.format("%s/#%s", TMP_NS, r.getRelationType()
+								.name()));
+				getOutput().add(substanceResource, parttype, component);
+
+				if (struct.getRecordProperties() != null)
+					for (ambit2.base.data.Property p : struct
+							.getRecordProperties()) {
+						Object value = struct.getRecordProperty(p);
+						Property feature = getOutput().createProperty(
+								propertyReporter.getURI(p));
+						if (value instanceof Number)
+							getOutput().add(
+									component,
+									feature,
+									getOutput().createTypedLiteral(
+											((Number) value).floatValue()));
+						else
+							getOutput()
+									.add(component,
+											feature,
+											getOutput().createLiteral(
+													value.toString()));
+
+					}
+				if (struct.getInchi() != null)
+					getOutput()
+							.add(component, DCTerms.title, struct.getInchi());
+				if (struct.getSmiles() != null)
+					getOutput().add(component, DCTerms.title,
+							struct.getSmiles());
+
+				// r.getRelation()
+				// r.getRelationType().
+
+			}
+
 		if (record.getMeasurements() != null)
 			for (ProtocolApplication<Protocol, String, String, IParams, String> pa : record
 					.getMeasurements()) {
@@ -139,17 +210,15 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 					StringBuilder b = new StringBuilder();
 					b.append(guideline == null ? "" : guideline);
 					b.append(pa.getReference() == null ? "" : pa.getReference());
-					
+
 					Object params = pa.getParameters();
-					if (params!=null) {
+					if (params != null) {
 						if (params instanceof String)
 							b.append(params.toString());
 						else {
-							//todo
+							// todo
 						}
 					}
-					
-		
 
 					HashCode hc = hf.newHasher()
 							.putString(b.toString(), Charsets.UTF_8).hash();

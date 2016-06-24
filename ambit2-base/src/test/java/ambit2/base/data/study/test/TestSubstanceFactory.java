@@ -3,6 +3,7 @@ package ambit2.base.data.study.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
@@ -38,6 +39,7 @@ public class TestSubstanceFactory {
 		record.addMeasurement(pa);
 
 		EffectRecord eff = (EffectRecord) pa.getEffects().get(0);
+		eff.setIdresult(666);
 		IParams par = (IParams) eff.getConditions();
 		par.put("condition1", "value1");
 
@@ -53,9 +55,12 @@ public class TestSubstanceFactory {
 		List<CompositionRelation> list = new ArrayList<CompositionRelation>();
 
 		IStructureRecord s1 = new StructureRecord();
+		s1.setRecordProperty(Property.getCASInstance(), "99-99-9");
+		s1.setIdchemical(100);
+		s1.setIdstructure(101);
 		Proportion p1 = new Proportion();
 		CompositionRelation rel1 = new CompositionRelation(record, s1,
-				STRUCTURE_RELATION.HAS_CONSTITUENT, p1);
+				STRUCTURE_RELATION.HAS_CORE, p1);
 		s1.setFormula("C5H10");
 		s1.setSmiles("CCC=C");
 		s1.setInchi("DUMMYINCHI0001");
@@ -64,9 +69,12 @@ public class TestSubstanceFactory {
 		list.add(rel1);
 
 		IStructureRecord s2 = new StructureRecord();
+		s1.setRecordProperty(Property.getNameInstance(), "DUMMY_NAME");
+		s2.setIdchemical(200);
+		s2.setIdstructure(201);
 		Proportion p2 = new Proportion();
 		CompositionRelation rel2 = new CompositionRelation(record, s2,
-				STRUCTURE_RELATION.HAS_CONSTITUENT, p2);
+				STRUCTURE_RELATION.HAS_COATING, p2);
 		s2.setFormula("C6H12");
 		s2.setSmiles("CCCC=C");
 		s2.setInchi("DUMMYINCHI0002");
