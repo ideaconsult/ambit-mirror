@@ -67,7 +67,13 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 	@Override
 	public void header(Model output, Q query) {
 		super.header(output, query);
+		output.setNsPrefix("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+		output.setNsPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
+		output.setNsPrefix("dc", "http://purl.org/dc/elements/1.1/");
+		output.setNsPrefix("dcterms", "http://purl.org/dc/terms/");
 		output.setNsPrefix("obo", "http://purl.obolibrary.org/obo/");
+		output.setNsPrefix("sio", "http://semanticscience.org/resource/");
+		output.setNsPrefix("bao", "http://www.bioassayontology.org/bao#");
 	}
 
 	@Override
