@@ -24,6 +24,14 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-rest</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>net.idea</groupId>
 			<artifactId>i5z</artifactId>
