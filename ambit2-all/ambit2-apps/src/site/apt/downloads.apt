@@ -3,7 +3,7 @@
  -----
  Nina Jeliazkova
  -----
- 2016/04/14
+ 2016/05/10
  -----
 
 AMBIT Web services 
@@ -15,7 +15,7 @@ AMBIT Web services
    
  [Previous releases] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/}ambit2.war 2.7.4 and before}}
   
- [Development] {{{http://ambit.uni-plovdiv.bg:8083/nexus/#nexus-search;gav~~ambit2-www~3.0.1-SNAPSHOT~war~}ambit2.war 3.0.1-SNAPSHOT}}
+ [Development] {{{http://ambit.uni-plovdiv.bg:8083/nexus/#nexus-search;gav~~ambit2-www~3.0.3-SNAPSHOT~war~}ambit2.war 3.0.3-SNAPSHOT}}
 
  [Custom releases] {{{./enanomapper.html} eNanoMapper prototype database}} 
 
@@ -35,11 +35,11 @@ Standalone applications
 AMBIT modules
 ~~~~~~~~~~
 
- AMBIT consists of multiple {{{http://maven.apache.org/}Maven modules}} with well defined dependencies, which can be used in a stand alone mode or embedded in other applications. 
+ AMBIT consists of multiple {{{http://maven.apache.org/}Maven modules}} which can be used in a stand alone mode or embedded in other applications. 
  
  ambit2-core,db,descriptors,smarts,tautomers,and more-.jar {{{./download_ambitlibs.html}?}}  
  
- [Latest release] {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/3.0.1/}ambit2-*-3.0.1.jar}}
+ [Latest release] {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/3.0.2/}ambit2-*-3.0.2.jar}}
 
  [Previous releases] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/}Download}}
 

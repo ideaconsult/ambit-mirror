@@ -7,5 +7,5 @@ http://ambit.sourceforge.net/downloads.html
 ## Build
 
 ````
-mvn clean buildnumber:create install -DskipTests=rtue
+mvn clean buildnumber:create install -DskipTests=true
 ````
