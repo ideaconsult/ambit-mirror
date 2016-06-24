@@ -85,6 +85,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		output.setNsPrefix("obo", "http://purl.obolibrary.org/obo/");
 		output.setNsPrefix("sio", "http://semanticscience.org/resource/");
 		output.setNsPrefix("bao", "http://www.bioassayontology.org/bao#");
+		output.setNsPrefix("enm", "http://purl.enanomapper.org/onto/");
 	}
 
 	@Override
