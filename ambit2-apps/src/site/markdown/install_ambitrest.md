@@ -1,6 +1,6 @@
 #AMBIT web application install guide 
 
-[Download](./downloads.html) | [Installation guide](install_ambitrest.html) | [Configuration](configure.html) | [Authentication and authorisation](./configureaa.html)
+[Download](./downloads.html) | [Installation guide](install_ambitrest.html) | [Configuration](configure.html) | [Authentication and authorisation](./configureaa.html) | [For developers](./dev.html)
 
 ###Requirements
 

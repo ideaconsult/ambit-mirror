@@ -1,15 +1,20 @@
+#Setting up a development environment 
+
+[Download](./downloads.html) | [Installation guide](install_ambitrest.html) | [Configuration](configure.html) | [Authentication and authorisation](./configureaa.html) | [For developers](./dev.html)
+
+###Requirements
+
+* Java Development Environment ([JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html)). Install Java 7 Standard Edition or newer.
+
+* Apache Maven [https://maven.apache.org/](https://maven.apache.org/) 
+
+* Database server. Install [MySQL 5.6.5](https://dev.mysql.com/doc/relnotes/mysql/5.6/en/) or newer
+
 http://ambit.sourceforge.net
 
 This is multi module maven project.
 
-#Build
-
-Prerequisites for building AMBIT2
-JDK 1.7 or higher 
-MySQL 5.6.5 or higher 
-Maven 3.x
-
-## Build ambit2 libraries:  
+#### Build `ambit2-all`   
 
 Retrieve sources from SVN
 ````
@@ -18,10 +23,9 @@ cd ambit2-all
 mvn package -DskipTests=true
 ````
 
+The build process includes mandatory database tests and may take a while.  Use `-DskipTests=true` option to skip the tests.
 
-### The build process includes mandatory database tests and may take a while.  Use `-DskipTests=true` option to skip the tests.
-
-####Database configuration 
+* Database configuration 
 
 The test database `ambit-test` must exist before the running the tests. Use the following MySQL commands to create and set rights. 
 
@@ -30,8 +34,9 @@ create database `ambit-test` character set utf8;
 GRANT ALL ON `ambit-test`.* TO 'guest'@'localhost' IDENTIFIED BY 'guest';
 ````
 
-The database name and the user are set via Maven profile, e.g. there should be "settings.xml" file in your ".m2" directory with the following minimal configuration:
+* Maven profile
 
+The database name and the user are set via Maven profile, e.g. there should be "settings.xml" file in your ".m2" directory with the following minimal configuration:
 
 ````xml
 <settings xmlns="http://maven.apache.org/POM/4.0.0"
@@ -53,21 +58,23 @@ The database name and the user are set via Maven profile, e.g. there should be "
 	<!-- database user password and name -->
         <ambit.db.user.test>guest</ambit.db.user.test>
         <ambit.db.user.test.password>guest</ambit.db.user.test.password>
-         </properties>
+ 		</properties>        
     </profile>
   </profiles>
 </settings>
 ````
 
-## Build applications - AMBIT REST web services and standalone applications:
+#### Build `ambit2-apps`
+
+AMBIT REST web services and standalone applications:
 
 ````
 cd ambit2-apps
-mvn clean buildnumber:create package -P http -P ambit-release -P aa-enabled -P aa-admin-disabled -P license-in-text-column -DskipTests=true
+mvn clean buildnumber:create package -P http -P ambit-release -P aa-enabled -P aa-admin-disabled  -DskipTests=true
 ````
 See ambit2-all/ambit2-apps/README.txt for options
 
-### Dependencies
+#### Dependencies
 
 * The Toxtree dependeniies are available as Maven artifacts at http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases and 
 http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots
