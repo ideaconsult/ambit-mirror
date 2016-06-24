@@ -21,7 +21,6 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
@@ -71,10 +70,13 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 	public Object processItem(SubstanceRecord record) throws Exception {
 		HashFunction hf = Hashing.murmur3_32();
 
-		Resource bioassayType = RDFTerms.BAO_0000015.getResource(getOutput());
+		Resource bioassayType = RDFTermsSubstance.BAO_0000015
+				.getResource(getOutput());
 
 		String substanceURI = uriReporter.getURI(record);
 		Resource substanceResource = getOutput().createResource(substanceURI);
+		getOutput().add(substanceResource, RDF.type,
+				RDFTermsSubstance.CHEBI_59999.getResource(getOutput()));
 
 		String sownerURI = String.format("%s/owner/%s", base,
 				record.getOwnerUUID());
@@ -101,11 +103,13 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 							.getCategory());
 				} catch (Exception x) {
 				}
-				getOutput().add(
-						assay,
-						RDF.type,
-						assay_type == null ? bioassayType : getOutput()
-								.createResource(assay_type.getOntologyURI()));
+				getOutput().add(assay, RDF.type, bioassayType);
+				if (assay_type != null)
+					getOutput().add(
+							assay,
+							RDF.type,
+							getOutput().createResource(
+									assay_type.getOntologyURI()));
 				if (pa.getProtocol() != null
 						&& pa.getProtocol().getEndpoint() != null)
 					getOutput().add(assay, DC.title,
@@ -128,11 +132,17 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 					String protocolURI = String.format("%s/protocol/%s", base,
 							hc.toString().toUpperCase());
 					Resource protocol = getOutput().createResource(protocolURI);
+					getOutput().add(
+							protocol,
+							RDF.type,
+							RDFTermsSubstance.OBI_0000272
+									.getResource(getOutput()));
 					if (guideline != null)
 						getOutput().add(protocol, DC.title, guideline);
-					getOutput().add(assay,
-							RDFTerms.BAO_0002846.getProperty(getOutput()),
-							protocol);
+					getOutput().add(
+							assay,
+							RDFTermsSubstance.BAO_0002846
+									.getProperty(getOutput()), protocol);
 				}
 
 				/*
@@ -167,11 +177,14 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 						base, pa.getDocumentUUID());
 				Resource measuregroup = getOutput().createResource(
 						measuregroupURI);
+
+				getOutput().add(measuregroup, RDF.type,
+						RDFTermsSubstance.BAO_0000040.getResource(getOutput()));
 				getOutput().add(substanceResource,
-						RDFTerms.BFO_0000056.getProperty(getOutput()),
+						RDFTermsSubstance.BFO_0000056.getProperty(getOutput()),
 						measuregroup);
 				getOutput().add(assay,
-						RDFTerms.BAO_0000209.getProperty(getOutput()),
+						RDFTermsSubstance.BAO_0000209.getProperty(getOutput()),
 						measuregroup);
 				/*
 				 * interpretation result as as separate endpoint group
@@ -182,14 +195,18 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 					Resource endpoint = getOutput().createResource(endpointURI);
 					getOutput().add(
 							endpoint,
-							RDFTerms.has_value.getProperty(getOutput()),
+							RDFTermsSubstance.has_value
+									.getProperty(getOutput()),
 							getOutput().createLiteral(
 									pa.getInterpretationResult()));
-					getOutput().add(measuregroup,
-							RDFTerms.OBI_0000299.getProperty(getOutput()),
-							endpoint);
-					getOutput().add(endpoint,
-							RDFTerms.IAO_0000136.getProperty(getOutput()),
+					getOutput().add(
+							measuregroup,
+							RDFTermsSubstance.OBI_0000299
+									.getProperty(getOutput()), endpoint);
+					getOutput().add(
+							endpoint,
+							RDFTermsSubstance.IAO_0000136
+									.getProperty(getOutput()),
 							substanceResource);
 				}
 				/*
@@ -202,11 +219,19 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 								base, effect.getIdresult());
 						Resource endpoint = getOutput().createResource(
 								endpointURI);
-						getOutput().add(measuregroup,
-								RDFTerms.OBI_0000299.getProperty(getOutput()),
-								endpoint);
-						getOutput().add(endpoint,
-								RDFTerms.IAO_0000136.getProperty(getOutput()),
+						getOutput().add(
+								endpoint,
+								RDF.type,
+								RDFTermsSubstance.BAO_0000179
+										.getResource(getOutput()));
+						getOutput().add(
+								measuregroup,
+								RDFTermsSubstance.OBI_0000299
+										.getProperty(getOutput()), endpoint);
+						getOutput().add(
+								endpoint,
+								RDFTermsSubstance.IAO_0000136
+										.getProperty(getOutput()),
 								substanceResource);
 						if (effect.getEndpoint() != null)
 							getOutput().add(endpoint, RDFS.label,
@@ -219,171 +244,32 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 						 * </pre>
 						 */
 						if (effect.getLoValue() != null)
-							getOutput()
-									.add(endpoint,
-											RDFTerms.has_value
-													.getProperty(getOutput()),
-											getOutput().createTypedLiteral(
-													effect.getLoValue()));
+							getOutput().add(
+									endpoint,
+									RDFTermsSubstance.has_value
+											.getProperty(getOutput()),
+									getOutput().createTypedLiteral(
+											effect.getLoValue()));
 
 						if (effect.getUnit() != null)
-							getOutput().add(endpoint,
-									RDFTerms.has_unit.getProperty(getOutput()),
+							getOutput().add(
+									endpoint,
+									RDFTermsSubstance.has_unit
+											.getProperty(getOutput()),
 									effect.getUnit());
 
 						if (effect.getTextValue() != null
 								&& !"".equals(effect.getTextValue())) {
-							getOutput()
-									.add(endpoint,
-											RDFTerms.has_value
-													.getProperty(getOutput()),
-											getOutput().createTypedLiteral(
-													effect.getTextValue()));
+							getOutput().add(
+									endpoint,
+									RDFTermsSubstance.has_value
+											.getProperty(getOutput()),
+									getOutput().createTypedLiteral(
+											effect.getTextValue()));
 						}
 					}
 			}
 
 		return record;
 	}
-}
-
-enum RDFTerms {
-	/**
-	 * assay
-	 */
-	BAO_0000015 {
-		@Override
-		public String toString() {
-			return "assay";
-		}
-
-		@Override
-		public boolean isProperty() {
-			return false;
-		}
-	},
-	/**
-	 * protocol
-	 */
-	OBI_0000272 {
-		@Override
-		public String toString() {
-			return "protocol";
-		}
-
-		@Override
-		public boolean isProperty() {
-			return false;
-		}
-	},
-	/**
-	 * Property. has assay protocol
-	 */
-	BAO_0002846 {
-		@Override
-		public String toString() {
-			return "has assay protocol";
-		}
-
-	},
-	/**
-	 * Property. participates in at some time
-	 */
-	BFO_0000056 {
-		@Override
-		public String toString() {
-			return "participates in at some time";
-		}
-	},
-	/**
-	 * Property. has specified output
-	 */
-	OBI_0000299 {
-		@Override
-		public String toString() {
-			return "has specified output";
-		}
-	},
-	/**
-	 * Property. is about
-	 */
-	IAO_0000136 {
-		@Override
-		public String toString() {
-			return "is about";
-		}
-	},
-	/**
-	 * Property. has participant at some time
-	 */
-	BFO_0000057 {
-		// todo use for conditions and parameters , e.g. proteins
-		@Override
-		public String toString() {
-			return "has participant at some time";
-		}
-	},
-	/**
-	 * Property. has measure group
-	 */
-	BAO_0000209 {
-		@Override
-		public String toString() {
-			return "has measure group";
-		}
-	},
-	has_value {
-		@Override
-		public String getTerm() {
-			return "has-value";
-		}
-
-		@Override
-		public String getNamespace() {
-			return "http://semanticscience.org/resource/";
-		}
-	},
-	has_unit {
-		@Override
-		public String getTerm() {
-			return "has-unit";
-		}
-
-		@Override
-		public String getNamespace() {
-			return "http://semanticscience.org/resource/";
-		}
-	};
-	public String getNamespace() {
-		return "http://purl.obolibrary.org/obo/";
-	}
-
-	public String getTerm() {
-		return name();
-	}
-
-	public String getURI() {
-		return String.format("%s%s", getNamespace(), getTerm());
-	}
-
-	public boolean isProperty() {
-		return true;
-	};
-
-	public Property getProperty(Model jenaModel) throws Exception {
-		if (isProperty()) {
-			Property p = jenaModel.getProperty(getURI());
-			return p != null ? p : jenaModel.createProperty(getURI());
-		} else
-			throw new Exception("Expected property, found " + getTerm());
-	};
-
-	public Resource getResource(Model jenaModel) throws Exception {
-		if (!isProperty()) {
-			Resource p = jenaModel.getResource(getURI());
-			return p != null ? p : jenaModel.createResource(getURI());
-		} else
-			throw new Exception("Expected resource, found " + getTerm());
-	}
-
 }
