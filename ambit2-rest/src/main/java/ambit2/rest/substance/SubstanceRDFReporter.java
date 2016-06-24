@@ -107,6 +107,11 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		getOutput().add(substanceResource, RDF.type,
 				RDFTermsSubstance.CHEBI_59999.getResource(getOutput()));
 
+		//convert to proper triple
+		if (record.getSubstancetype() != null)
+			getOutput().add(substanceResource, DCTerms.type,
+					record.getSubstancetype());
+
 		String sownerURI = String.format("%s/owner/%s", base,
 				record.getOwnerUUID());
 		Resource sowner = getOutput().createResource(sownerURI);
@@ -114,7 +119,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		if (record.getOwnerName() != null)
 			getOutput().add(sowner, DCTerms.title, record.getOwnerName());
 
-		//plaseholder, change to property 
+		// plaseholder, change to property
 		String TMP_NS = "http://TMP.URI";
 
 		if (record.getRelatedStructures() != null)
@@ -123,32 +128,50 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 
 				Resource component = getOutput().createResource(
 						compoundReporter.getURI(struct));
-				if ("HAS_COATING".equals(r.getRelationType())) {
-					getOutput().add(
-						component,
-						RDF.type,
-						getOutput().createResource(
-							"http://purl.bioontology.org/ontology/npo#NPO_1367"
-						)
-					);
-				} else if ("HAS_CORE".equals(r.getRelationType())) {
-					getOutput().add(
-						component,
-						RDF.type,
-						getOutput().createResource(
-							"http://purl.bioontology.org/ontology/npo#NPO_1617"
-						)
-					);
-				} else { // default to fiat material entity
-					getOutput().add(
-						component,
-						RDF.type,
-						getOutput().createResource(
-							"http://purl.bioontology.org/ontology/npo#NPO_1597"
-						)
-					);
+				switch (r.getRelationType()) {
+				case HAS_COATING: {
+					getOutput()
+							.add(component,
+									RDF.type,
+									getOutput()
+											.createResource(
+													"http://purl.bioontology.org/ontology/npo#NPO_1367"));
+					break;
 				}
+				case HAS_CORE: {
+					getOutput()
+							.add(component,
+									RDF.type,
+									getOutput()
+											.createResource(
+													"http://purl.bioontology.org/ontology/npo#NPO_1617"));
+					break;
+				}
+				case HAS_FUNCTIONALISATION: {
+					// todo, for now rely on fall back
+				}
+				case HAS_CONSTITUENT: {
+					// this should work for normal substances also, not only for
+					// nanomaterials
+				}
+				case HAS_ADDITIVE: {
 
+				}
+				case HAS_IMPURITY: {
+
+				}
+				default: { // default to fiat material entity
+					getOutput()
+							.add(component,
+									RDF.type,
+									getOutput()
+											.createResource(
+													"http://purl.bioontology.org/ontology/npo#NPO_1597"));
+				}
+				}
+				// we'll have to be able to express the quantity of the
+				// component
+				// todo find out which property to use
 				if (r.getRelation().getReal_lowervalue() != null)
 					getOutput().add(
 							component,
@@ -158,11 +181,10 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 									r.getRelation().getReal_lowervalue()));
 
 				// Property parttype = getOutput().createProperty(
-				//		String.format("%s/#%s", TMP_NS, r.getRelationType()
-				//				.name()));
+				// String.format("%s/#%s", TMP_NS, r.getRelationType()
+				// .name()));
 				Property parttype = getOutput().createProperty(
-					"http://purl.bioontology.org/ontology/npo#has_part "
-				);
+						"http://purl.bioontology.org/ontology/npo#has_part ");
 				getOutput().add(substanceResource, parttype, component);
 
 				if (struct.getRecordProperties() != null)
@@ -187,34 +209,30 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 					}
 				if (struct.getInchi() != null) {
 					Resource inchiRes = getOutput().createResource(
-						compoundReporter.getURI(struct) + "/inchi"
-					);
-					Resource inchiType = getOutput().createResource(
-						"http://semanticscience.org/resource/CHEMINF_000113"
-					);
-					Property hasAttribute = getOutput().createProperty(
-						"http://semanticscience.org/resource/CHEMINF_000200"
-					);
+							compoundReporter.getURI(struct) + "/inchi");
+					Resource inchiType = getOutput()
+							.createResource(
+									"http://semanticscience.org/resource/CHEMINF_000113");
+					Property hasAttribute = getOutput()
+							.createProperty(
+									"http://semanticscience.org/resource/CHEMINF_000200");
 					Property hasValue = getOutput().createProperty(
-						"http://semanticscience.org/resource/SIO_000300"
-					);
+							"http://semanticscience.org/resource/SIO_000300");
 					getOutput().add(component, hasAttribute, inchiRes);
 					getOutput().add(inchiRes, RDF.type, inchiType);
 					getOutput().add(inchiRes, hasValue, struct.getInchi());
 				}
 				if (struct.getSmiles() != null) {
 					Resource smilesRes = getOutput().createResource(
-						compoundReporter.getURI(struct) + "/smiles"
-					);
-					Resource inchiType = getOutput().createResource(
-						"http://semanticscience.org/resource/CHEMINF_000018"
-					);
-					Property hasAttribute = getOutput().createProperty(
-						"http://semanticscience.org/resource/CHEMINF_000200"
-					);
+							compoundReporter.getURI(struct) + "/smiles");
+					Resource inchiType = getOutput()
+							.createResource(
+									"http://semanticscience.org/resource/CHEMINF_000018");
+					Property hasAttribute = getOutput()
+							.createProperty(
+									"http://semanticscience.org/resource/CHEMINF_000200");
 					Property hasValue = getOutput().createProperty(
-					    "http://semanticscience.org/resource/SIO_000300"
-					);
+							"http://semanticscience.org/resource/SIO_000300");
 					getOutput().add(component, hasAttribute, smilesRes);
 					getOutput().add(smilesRes, RDF.type, inchiType);
 					getOutput().add(smilesRes, hasValue, struct.getSmiles());
