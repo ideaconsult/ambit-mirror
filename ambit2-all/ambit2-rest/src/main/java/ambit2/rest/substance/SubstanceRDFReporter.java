@@ -39,6 +39,15 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		super(request, mediaType, null);
 		if (request != null)
 			base = request.getRootRef().toString();
+		init();
+	}
+
+	public SubstanceRDFReporter(String base, MediaType mediaType) {
+		super(null, mediaType, null);
+		this.base = base;
+		init();
+	}
+	protected void init() {
 		SubstanceStudyDetailsProcessor paReader = new SubstanceStudyDetailsProcessor();
 
 		getProcessors().clear();
@@ -52,6 +61,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 						return target;
 					};
 				});
+
 	}
 
 	@Override
@@ -123,8 +133,17 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 					StringBuilder b = new StringBuilder();
 					b.append(guideline == null ? "" : guideline);
 					b.append(pa.getReference() == null ? "" : pa.getReference());
-					b.append(pa.getParameters() == null ? "" : pa
-							.getParameters().toString());
+					
+					Object params = pa.getParameters();
+					if (params!=null) {
+						if (params instanceof String)
+							b.append(params.toString());
+						else {
+							//todo
+						}
+					}
+					
+		
 
 					HashCode hc = hf.newHasher()
 							.putString(b.toString(), Charsets.UTF_8).hash();
