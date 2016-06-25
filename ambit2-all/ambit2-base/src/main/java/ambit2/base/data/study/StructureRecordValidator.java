@@ -123,37 +123,41 @@ public class StructureRecordValidator extends
 		}
 
 		if (record.getOwnerUUID() == null) {
-			logger.log(Level.WARNING, "Missing substance owner UUID");
+			log(record, "Missing substance owner UUID");
 			if (fixErrors) {
 				record.setOwnerUUID(generateUUIDfromString(prefix,
 						record.getOwnerName()));
-				logger.log(Level.WARNING, "Generated substance owner UUID");
+				log(record,"Generated substance owner UUID");
 			}
 		}
 
 		return record;
 	}
 
+	protected void log(SubstanceRecord record, String msg) {
+		logger.log(Level.WARNING,
+				String.format("%s\t%s", record.getSubstanceUUID(), msg));
+	}
+
 	public IStructureRecord validate(SubstanceRecord record,
 			ProtocolApplication<Protocol, IParams, String, IParams, String> papp)
 			throws Exception {
 		if (papp.getSubstanceUUID() == null) {
-			logger.log(Level.WARNING,
-					"Missing substance UUID in protocol application!");
+			log(record, "Missing substance UUID in protocol application!");
 			papp.setSubstanceUUID(record.getSubstanceUUID());
 		}
 		if (papp.getDocumentUUID() == null) {
 			logger.log(Level.WARNING, "Missing measurement UUID");
 			if (isFixErrors()) {
 				papp.setDocumentUUID(generateUUIDfromString(prefix, null));
-				logger.log(Level.WARNING, "Generated measurement UUID");
+				log(record, "Generated measurement UUID");
 			}
 		}
 		if (papp.getProtocol() == null)
-			logger.log(Level.WARNING, "Missing protocol");
+			log(record, "Missing protocol");
 		else {
 			if (papp.getProtocol().getCategory() == null) {
-				logger.log(Level.WARNING, "Missing protocol category");
+				log(record, "Missing protocol category");
 				if (isFixErrors()) {
 					papp.getProtocol().setCategory(
 							Protocol._categories.UNKNOWN_TOXICITY_SECTION
@@ -164,7 +168,7 @@ public class StructureRecordValidator extends
 				}
 			}
 			if (papp.getProtocol().getTopCategory() == null) {
-				logger.log(Level.WARNING, "Missing protocol top category");
+				log(record, "Missing protocol top category");
 				if (isFixErrors()) {
 					try {
 						String c = papp.getProtocol().getCategory();
@@ -188,9 +192,9 @@ public class StructureRecordValidator extends
 			}
 		}
 		if (papp.getInterpretationResult() == null)
-			logger.log(Level.WARNING, "Missing interpretation result");
+			log(record, "Missing interpretation result");
 		if (papp.getInterpretationCriteria() == null)
-			logger.log(Level.WARNING, "Missing interpretation criteria");
+			log(record, "Missing interpretation criteria");
 
 		if (papp.getEffects() == null)
 			logger.log(Level.WARNING, "Missing results");
@@ -198,16 +202,16 @@ public class StructureRecordValidator extends
 			for (EffectRecord<String, IParams, String> effect : papp
 					.getEffects()) {
 				if (effect.getEndpoint() == null)
-					logger.log(Level.WARNING, "Missing endpoint name");
+					log(record, "Missing endpoint name");
 				if (effect.getConditions() == null
 						|| effect.getConditions().isEmpty())
-					logger.log(Level.WARNING, "Missing conditions");
+					log(record, "Missing conditions");
 				if (effect.getLoValue() == null && effect.getUpValue() == null
 						&& effect.getTextValue() == null)
-					logger.log(Level.WARNING, "Missing result value");
+					log(record, "Missing result value");
 				if ((effect.getLoValue() != null || effect.getUpValue() != null)
 						&& effect.getUnit() == null)
-					logger.log(Level.WARNING, "Value without units");
+					log(record, "Value without units");
 			}
 		return record;
 	}
@@ -215,12 +219,12 @@ public class StructureRecordValidator extends
 	public IStructureRecord validate(SubstanceRecord record,
 			CompositionRelation rel) throws Exception {
 		if (rel.getCompositionUUID() == null) {
-			logger.log(Level.WARNING, "Missing composition UUID");
+			log(record, "Missing composition UUID");
 			if (isFixErrors()) {
 				String uuid = generateUUIDfromString(prefix,
 						record.getSubstanceUUID());
 				rel.setCompositionUUID(uuid);
-				logger.log(Level.WARNING, "Generated composition UUID");
+				log(record, "Generated composition UUID");
 			}
 		}
 		return record;

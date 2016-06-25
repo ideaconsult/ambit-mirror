@@ -2,7 +2,11 @@ package ambit2.dbsubstance.test;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
 
 import junit.framework.Assert;
@@ -16,7 +20,13 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.IParams;
+import ambit2.base.data.study.Protocol;
+import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.data.study.StructureRecordValidator;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.rest.substance.RDFTermsSubstance;
 import ambit2.rest.substance.SubstanceRDFReporter;
 
@@ -27,6 +37,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 public class Export2RDFTest {
+
 	@Test
 	public void testNanoWiki2RDF() throws Exception {
 		File nanowiki = NanoWikiRDFTest.getNanoWikiFile();
@@ -40,6 +51,57 @@ public class Export2RDFTest {
 		r.setOutput(model);
 
 		NanoWikiRDFReader reader = null;
+		OutputStream writer = null;
+
+		
+		StructureRecordValidator validator = new StructureRecordValidator() {
+			int idresult = 1;
+			int idcompound = 1;
+			Map<String, Integer> smileslookup = new TreeMap<String, Integer>();
+			@Override
+			public IStructureRecord validate(SubstanceRecord record,
+					CompositionRelation rel) throws Exception {
+				/**
+				 * compounds will be assigned ids if imported into database
+				 * and resource url depends on the ids
+				 */
+				if (rel.getSecondStructure().getIdchemical() <= 0) {
+					String smi = rel.getSecondStructure().getSmiles();
+					if (smi != null) {
+						Integer index = smileslookup.get(smi);
+						if (index != null)
+							rel.getSecondStructure().setIdchemical(index);
+						else {
+							smileslookup.put(smi, idcompound);
+							rel.getSecondStructure().setIdchemical(idcompound);
+							idcompound++;
+						}
+					} else {
+						rel.getSecondStructure().setIdchemical(idcompound);
+						idcompound++;
+					}
+				}
+				return super.validate(record, rel);
+			}
+
+			@Override
+			public IStructureRecord validate(
+					SubstanceRecord record,
+					ProtocolApplication<Protocol, IParams, String, IParams, String> papp)
+					throws Exception {
+				/*
+				 * EffectRecords resource URL depends on th eidresult, when
+				 * imported into DB it's automatically assigned, here it's set
+				 * to subsequent numbers
+				 */
+				for (EffectRecord<String, IParams, String> effect : papp
+						.getEffects()) {
+					if (effect.getIdresult() <= 0)
+						effect.setIdresult(idresult++);
+				}
+				return super.validate(record, papp);
+			}
+		};
 		int records = 0;
 		try {
 			reader = new NanoWikiRDFReader(new InputStreamReader(
@@ -47,6 +109,7 @@ public class Export2RDFTest {
 			while (reader.hasNext()) {
 				IStructureRecord record = reader.nextRecord();
 				Assert.assertTrue(record instanceof SubstanceRecord);
+				validator.validate((SubstanceRecord) record);
 				r.processItem((SubstanceRecord) record);
 				records++;
 			}
@@ -71,13 +134,21 @@ public class Export2RDFTest {
 			// endpoint
 			ResIterator endpoints = model.listSubjectsWithProperty(RDF.type,
 					RDFTermsSubstance.BAO_0000179.getResource(model));
-			//doesn't seem right
-			Assert.assertEquals(1, countResources(endpoints));
+			// thanks to the validator result ids are set and we have > 1 entry,
+			// otherwise all endpoints collapse into one
+			Assert.assertEquals(854, countResources(endpoints));
 
+			File output = new File(System.getProperty("java.io.tmpdir") + "/"
+					+ "nanowiki_export.ttl");
+			System.out.println("Exported to " + output.getAbsolutePath());
+			writer = new FileOutputStream(output);
+
+			RDFDataMgr.write(writer, model, RDFFormat.TURTLE);
+			
 		} finally {
 			reader.close();
-			//todo change to write to a file
-			RDFDataMgr.write(System.out, model, RDFFormat.TURTLE);
+			if (writer != null)
+				writer.close();
 
 		}
 	}
@@ -90,6 +161,5 @@ public class Export2RDFTest {
 		}
 		return n;
 	}
-	
-	
+
 }
