@@ -407,6 +407,12 @@ public class SMIRKSReaction
 					continue;
 				}
 				
+				if (pb0.getOrder() == null) //This case comes from AromaticQueryBond
+				{
+					mapErrors.add("A product bond with undefined order: " + SmartsHelper.bondToString(pb));
+					continue;
+				}
+				
 				if (paMapInd2 == null)
 				{	
 					//This is a bond between two unmapped atoms in the product
@@ -416,7 +422,6 @@ public class SMIRKSReaction
 					reactBo.add(null);
 					reactAt1.add(new Integer(SmartsConst.SMRK_UNSPEC_ATOM));
 					reactAt2.add(new Integer(SmartsConst.SMRK_UNSPEC_ATOM));
-					
 				}
 				else
 				{
@@ -441,6 +446,12 @@ public class SMIRKSReaction
 						continue;
 					}
 					
+					if (pb0.getOrder() == null) //This case comes from AromaticQueryBond
+					{
+						mapErrors.add("A product bond with undefined order: " + SmartsHelper.bondToString(pb));
+						continue;
+					}
+					
 					//This is a bond between unmapped atom and mapped atom in the product
 					//at2 is unmapped, at1 is mapped
 					prodBo.add(pb0.getOrder());
@@ -460,6 +471,12 @@ public class SMIRKSReaction
 					if (rbNum == -1)
 					{	
 						if (pb0 == null)
+						{
+							mapErrors.add("A product bond with undefined order: " + SmartsHelper.bondToString(pb));
+							continue;
+						}
+						
+						if (pb0.getOrder() == null) //This case comes from AromaticQueryBond
 						{
 							mapErrors.add("A product bond with undefined order: " + SmartsHelper.bondToString(pb));
 							continue;
