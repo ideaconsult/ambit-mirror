@@ -302,14 +302,26 @@ public class SMIRKSReaction
 						{	
 							if (pb0 == null)
 							{
+								//Two bond expressions. No bond transformation is registered
+								
 								//check pb and rb expressions compatibility
 								//TODO
 							}
 							else
 							{
-								//This is not treated as an error since the product bond order is defined and can be created
-								FlagRegisterTransform = true;
-								prodBo.add(pb0.getOrder());
+								if (pb0.getOrder() == null)
+								{
+									//Reactant bond expression and aromatic product bond. No bond transformation is registered
+									
+									//check pb and rb expressions compatibility
+									//TODO
+								}
+								else
+								{	
+									//This is not treated as an error since the product bond order is defined and can be created
+									FlagRegisterTransform = true;
+									prodBo.add(pb0.getOrder());
+								}	
 							}
 						}
 						else
@@ -321,23 +333,31 @@ public class SMIRKSReaction
 							}
 							else //Both reactant and product bonds have defined orders 
 							{	
-								if (rb instanceof SingleOrAromaticBond) //Special treatment for "single or aromatic" reactant bond
+								if (pb0.getOrder() == null) //This comes from AromaticQueryBond
 								{
-									if (!(pb instanceof SingleOrAromaticBond))
-									{
-										//In this case transformation is registered
-										//For example "-,:" --> "-" would be registered although in some occasions it is not needed 
-										// CC >> C-C is not needed but cc >> C-C is needed.
-										FlagRegisterTransform = true;
-										prodBo.add(pb0.getOrder());
-									}	
+									//No bond transformation is registered 
+									//because the aromaticity of product is determined by after all
+									//bonds transformations are applied
 								}
 								else
-									if (rb0.getOrder() != pb0.getOrder())
+								
+									if (rb instanceof SingleOrAromaticBond) //Special treatment for "single or aromatic" reactant bond
 									{
-										FlagRegisterTransform = true;
-										prodBo.add(pb0.getOrder());
-									}	
+										if (!(pb instanceof SingleOrAromaticBond))
+										{
+											//In this case transformation is registered
+											//For example "-,:" --> "-" would be registered although in some occasions it is not needed 
+											// CC >> C-C is not needed but cc >> C-C is needed.
+											FlagRegisterTransform = true;
+											prodBo.add(pb0.getOrder());
+										}	
+									}
+									else
+										if (rb0.getOrder() != pb0.getOrder())
+										{
+											FlagRegisterTransform = true;
+											prodBo.add(pb0.getOrder());
+										}	
 							}
 						}
 					}	
@@ -353,7 +373,12 @@ public class SMIRKSReaction
 						if (rb0 == null)
 							reactBo.add(IBond.Order.QUADRUPLE);  //Quadruple order is used for the reactant bond with undefined order
 						else
-							reactBo.add(rb0.getOrder());
+						{	
+							if (rb0.getOrder() == null) //this may happen from AromaticQueryBond
+								reactBo.add(IBond.Order.QUADRUPLE);  //Quadruple order is used for the reactant bond with undefined order
+							else	
+								reactBo.add(rb0.getOrder());
+						}	
 					}
 				}
 			}	

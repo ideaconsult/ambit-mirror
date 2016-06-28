@@ -581,7 +581,7 @@ public class SmartsToChemObject extends
 		}
 
 		if (b instanceof AromaticQueryBond) // This case returns a bond with
-											// order null!! - Is this OK ???
+											// order null!! Must be handled carefully!
 		{
 			IBond bond = MoleculeTools.newBond(SilentChemObjectBuilder
 					.getInstance());
