@@ -780,12 +780,14 @@ public class SmartsParser {
 	}
 
 	void parseBondExpression() {
-		// System.out.println("** curChar = " + curChar+"  " +
-		// smarts.charAt(curChar));
+		 //System.out.println("** curChar = " + curChar+"  " +
+		 //smarts.charAt(curChar));
+		 
 		SmartsBondExpression sbe;
 		int lo = -1;
 		int bo = SmartsConst.getBondCharNumber(smarts.charAt(curChar));
-		if (bo != -1) {
+		if (bo != -1) 
+		{
 			curChar++;
 			if (curChar == nChars) {
 				newError(
@@ -796,7 +798,8 @@ public class SmartsParser {
 			curBondType = bo;
 			// Checking for bond types /? \?
 			if (((curBondType == SmartsConst.BT_UP) || (curBondType == SmartsConst.BT_DOWN))
-					&& (smarts.charAt(curChar) == '?')) {
+					&& (smarts.charAt(curChar) == '?')) 
+			{
 				curChar++;
 				if (curChar == nChars) {
 					newError(
@@ -820,7 +823,8 @@ public class SmartsParser {
 			curBond = new SmartsBondExpression(SilentChemObjectBuilder.getInstance());
 			sbe = (SmartsBondExpression) curBond;
 			sbe.tokens.add(new Integer(bo));
-		} else // First symbol from the bond expression is a logical operation
+		} 
+		else // First symbol from the bond expression is a logical operation
 		{
 			lo = SmartsConst.getLogOperationCharNumber(smarts.charAt(curChar));
 			if (lo == SmartsConst.LO_NOT) {
@@ -832,9 +836,16 @@ public class SmartsParser {
 				return;
 			}
 			curChar++;
+			if (curChar == nChars) {
+				newError(
+						"Smarts string ends incorrectly with a bond expression",
+						curChar, "");
+				return;
+			}
 		}
-		// System.out.println("sbe" + sbe.toString());
-
+		//System.out.println("sbe" + sbe.toString());
+		
+		//Setting bo and lo for the first while-cycle iteration
 		bo = SmartsConst.getBondCharNumber(smarts.charAt(curChar));
 		// Checking for bond types /? \?
 		if ((bo == SmartsConst.BT_UP) || (bo == SmartsConst.BT_DOWN)) {
@@ -857,27 +868,41 @@ public class SmartsParser {
 			lo = SmartsConst.getLogOperationCharNumber(smarts.charAt(curChar));
 		else
 			lo = -1;
-
-		while ((bo != -1) || (lo != -1)) {
+		
+		//Handling all the remaining tokens in the bond expression
+		while ((bo != -1) || (lo != -1)) 
+		{
 			int prevToken = ((Integer) sbe.tokens.get(sbe.tokens.size()-1)).intValue();
-			// System.out.println("prevToken = " + prevToken);
-			// System.out.println("sbe" + sbe.toString());
+			//System.out.println("prevToken = " + prevToken);
+			//System.out.println("sbe" + sbe.toString());
 			if (bo != -1) {
-				if (prevToken < SmartsConst.LO) {
-					// Adding default HI_AND(&) /it was OR (,) but it was
-					// wrong!!! /
+				if (prevToken < SmartsConst.LO) 
+				{
+					// Previous token is not a logical operation that is why 
+					// adding default HI_AND (&) before current token
 					sbe.tokens.add(new Integer(SmartsConst.LO
 							+ SmartsConst.LO_AND));
 				}
 				sbe.tokens.add(new Integer(bo));
-			} else {
-				if (prevToken >= SmartsConst.LO) {
+			} 
+			else 
+			{
+				if (prevToken >= SmartsConst.LO) 
+				{
 					if (lo != SmartsConst.LO_NOT) {
 						newError(
 								"Incorrect bond expression - no oprenad between logical operation",
 								curChar + 1, "");
 						return;
 					}
+				}
+				else
+				{
+					//Previous token is not a logical operation that is why 
+					//adding default HI_AND (&) before negation
+					if (lo == SmartsConst.LO_NOT)
+						sbe.tokens.add(new Integer(SmartsConst.LO
+								+ SmartsConst.LO_AND));
 				}
 				sbe.tokens.add(new Integer(SmartsConst.LO + lo));
 			}
@@ -889,6 +914,8 @@ public class SmartsParser {
 						curChar, "");
 				return;
 			}
+			
+			//Setting bo and lo for the next cycle iteration
 			bo = SmartsConst.getBondCharNumber(smarts.charAt(curChar));
 			// Checking for bond types /? \?
 			if ((bo == SmartsConst.BT_UP) || (bo == SmartsConst.BT_DOWN)) {
