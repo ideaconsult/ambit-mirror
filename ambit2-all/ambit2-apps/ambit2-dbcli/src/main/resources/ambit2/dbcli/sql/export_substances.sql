@@ -1,3 +1,7 @@
+-- ---------------------------------------------------------------------------
+-- Exports substances and studies into tab delimited files into {TMP} folder
+-- ---------------------------------------------------------------------------
+
 -- substance table
 SELECT null,prefix,hex(uuid),documentType,format,name,
 publicname,content,substanceType,rs_prefix,hex(rs_uuid),owner_prefix,hex(owner_uuid),owner_name 

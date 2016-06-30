@@ -1,3 +1,8 @@
+-- ---------------------------------------------------------------------------
+-- Import experimental data. 
+-- Note: may take ~hour!
+-- ---------------------------------------------------------------------------
+
 SET unique_checks=0;
 SET foreign_key_checks=0;
 SET autocommit=0;
