@@ -1600,13 +1600,13 @@ public class AmbitCli {
 
 	public void parseDBMigrate(String subcommand, long now) throws Exception {
 		File folder = new File(System.getProperty("java.io.tmpdir"));
-		String resource = "ambit2/dbcli/sql/export_substances.sql";
+		String[] resources = new String[] { "ambit2/dbcli/sql/export_substances.sql" };
 		_subcommandmode sc = _subcommandmode.get;
 		try {
 			sc = _subcommandmode.valueOf(subcommand);
 			switch (sc) {
 			case get: {
-				resource = "ambit2/dbcli/sql/export_substances.sql";
+				resources = new String[] { "ambit2/dbcli/sql/export_substances.sql" };
 				try {
 					folder = new File(options.output);
 				} catch (Exception x) {
@@ -1614,7 +1614,12 @@ public class AmbitCli {
 				break;
 			}
 			case put: {
-				resource = "ambit2/dbcli/sql/import_substances.sql";
+				resources = new String[] {
+						"ambit2/dbcli/sql/import_substances.sql",
+						"ambit2/dbcli/sql/import_experiment.sql",
+						"ambit2/dbcli/sql/import_chemicals.sql",
+						"ambit2/dbcli/sql/import_properties.sql"
+						};
 				try {
 					folder = new File(options.input);
 				} catch (Exception x) {
@@ -1630,30 +1635,33 @@ public class AmbitCli {
 					new Object[] { x.getMessage() });
 			return;
 		}
-		
-		URL url = Resources.getResource(resource);
-		String text = Resources.toString(url, Charsets.UTF_8);
-		text = text.replace("{TMP}",folder==null?"":(folder.getAbsolutePath().replace("\\","/")+"/"));
-		
-		Connection c = null;
-		BufferedReader reader = null;
-		try {
-			DBConnectionConfigurable<Context> dbc = null;
-			dbc = getConnection(options.getSQLConfig());
-			c = dbc.getConnection();
-			c.setAutoCommit(false);
 
-			ScriptRunner runner = new ScriptRunner(c);
+		for (String resource : resources) {
+			URL url = Resources.getResource(resource);
+			String text = Resources.toString(url, Charsets.UTF_8);
+			text = text.replace("{TMP}", folder == null ? "" : (folder
+					.getAbsolutePath().replace("\\", "/") + "/"));
 
-			reader = new BufferedReader(new StringReader(text));
-			runner.runScript(reader);
-			c.commit();
-		} catch (Exception x) {
-			logger_cli.log(Level.SEVERE, x.getMessage());
-		} finally {
-			if (c != null)
-				c.close();
+			Connection c = null;
+			BufferedReader reader = null;
+			try {
+				DBConnectionConfigurable<Context> dbc = null;
+				dbc = getConnection(options.getSQLConfig());
+				c = dbc.getConnection();
+				c.setAutoCommit(false);
 
+				ScriptRunner runner = new ScriptRunner(c);
+				runner.setSendFullScript(false);
+				reader = new BufferedReader(new StringReader(text));
+				runner.runScript(reader);
+				c.commit();
+			} catch (Exception x) {
+				logger_cli.log(Level.SEVERE, x.getMessage());
+			} finally {
+				if (c != null)
+					c.close();
+
+			}
 		}
 	}
 
