@@ -1615,10 +1615,10 @@ public class AmbitCli {
 			}
 			case put: {
 				resources = new String[] {
-						"ambit2/dbcli/sql/import_substances.sql",
-						"ambit2/dbcli/sql/import_experiment.sql",
-						"ambit2/dbcli/sql/import_chemicals.sql",
-						"ambit2/dbcli/sql/import_properties.sql"
+						"ambit2/dbcli/sql/import_substances_01.sql",
+						"ambit2/dbcli/sql/import_experiment_02.sql",
+						"ambit2/dbcli/sql/import_chemicals_03.sql",
+						"ambit2/dbcli/sql/import_properties_04.sql"
 						};
 				try {
 					folder = new File(options.input);

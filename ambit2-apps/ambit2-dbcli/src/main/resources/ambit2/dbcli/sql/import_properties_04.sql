@@ -1,3 +1,11 @@
+-- ---------------------------------------------------------------------------
+-- Import chemicals
+-- ---------------------------------------------------------------------------
+SET unique_checks=0;
+SET foreign_key_checks=0;
+SET autocommit=0;
+SET sql_log_bin=0;
+
 DROP table if exists property_values_tmp;
 
 CREATE TABLE `property_values_tmp` (
@@ -53,10 +61,14 @@ FIELDS TERMINATED BY '\t' OPTIONALLY ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 (@id,idchemical,name,units,comments,text,value,title,url,type) ;
 
+COMMIT;
+
 -- strings
 insert ignore into property_string
 SELECT null,value FROM property_values_tmp
 group by value;
+
+COMMIT;
 
 -- idvalue_string
 -- 1329456 
@@ -66,11 +78,16 @@ idreference,idproperty,idchemicalnew,s.idvalue_string FROM property_values_tmp t
 join property_string s on s.value=t.value
 on duplicate key update idvalue=values(idvalue);
 
+COMMIT;
+
+
 -- catalog_references
 -- 75053 
 insert ignore into catalog_references
 SELECT null,title,url,type FROM property_values_tmp
 group by title;
+
+COMMIT;
 
 -- idreferences
 insert into property_values_tmp
@@ -79,11 +96,15 @@ s.idreference,idproperty,idchemicalnew,idvalue FROM property_values_tmp t
 join catalog_references s on s.title=t.title
 on duplicate key update idreference=values(idreference);
 
+COMMIT;
+
 -- properties
 -- 134922 
 insert ignore into properties
 SELECT null,idreference,name,units,comments,0,"STRING" FROM property_values_tmp
 group by idreference,name;
+
+COMMIT;
 
 -- idproperty
 -- 1329456 
@@ -92,6 +113,8 @@ SELECT id,idchemical,t.name,t.units,t.comments,t.text,value,title,url,type,
 t.idreference,s.idproperty,idchemicalnew,idvalue FROM property_values_tmp t
 join properties s on s.idreference=t.idreference and s.name=t.name
 on duplicate key update idproperty=values(idproperty);
+
+COMMIT;
 
 -- Import without experiments  Completed in 1,812,075 msec ~ 30 min
 
@@ -103,8 +126,16 @@ t.idreference,t.idproperty,s.idchemicalnew as idchemicalnew,idvalue FROM propert
 join substance_relation_chemicals_tmp s on s.idchemical=t.idchemical
 on duplicate key update idchemicalnew=values(idchemicalnew);
 
+COMMIT;
+
 -- and finally the values
 insert ignore into property_values
 SELECT null,idproperty,idstructure,idchemical,"guest","OK",text,idvalue,null,"STRING" FROM 
 property_values_tmp
 join structure using(idchemical);
+
+COMMIT;
+
+SET unique_checks=1;
+SET foreign_key_checks=1;
+SET autocommit=1;
