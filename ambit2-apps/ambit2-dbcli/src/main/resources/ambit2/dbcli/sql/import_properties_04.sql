@@ -119,7 +119,6 @@ COMMIT;
 -- Import without experiments  Completed in 1,812,075 msec ~ 30 min
 
 -- update the idchemicalnew 
-- ~450 sec
 insert into property_values_tmp
 SELECT t.id,t.idchemical,t.name,t.units,t.comments,t.text,value,title,url,type,
 t.idreference,t.idproperty,s.idchemicalnew as idchemicalnew,idvalue FROM property_values_tmp t
