@@ -101,7 +101,6 @@ on duplicate key update idreference=values(idreference);
 COMMIT;
 
 -- properties
--- 134922 
 insert ignore into properties
 SELECT null,idreference,name,units,comments,0,"STRING" FROM property_values_tmp
 group by idreference,name;
@@ -109,7 +108,6 @@ group by idreference,name;
 COMMIT;
 
 -- idproperty
--- 1329456 
 insert into property_values_tmp
 SELECT id,idchemical,t.name,t.units,t.comments,t.text,value,title,url,type,
 t.idreference,s.idproperty,idchemicalnew,idvalue FROM property_values_tmp t
@@ -117,8 +115,6 @@ join properties s on s.idreference=t.idreference and s.name=t.name
 on duplicate key update idproperty=values(idproperty);
 
 COMMIT;
-
--- Import without experiments  Completed in 1,812,075 msec ~ 30 min
 
 -- update the idchemicalnew 
 insert into property_values_tmp
@@ -132,8 +128,8 @@ COMMIT;
 -- and finally the values
 insert into property_values
 SELECT null,idproperty,idstructure,idchemicalnew,"guest","OK",text,idvalue,null,"STRING" FROM 
-property_values_tmp 
-join structure using(idchemical)
+property_values_tmp t
+join structure on structure.idchemical=t.idchemicalnew
 on duplicate key update idvalue_string=values(idvalue_string);
 
 COMMIT;
