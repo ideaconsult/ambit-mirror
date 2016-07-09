@@ -6,6 +6,8 @@ SET foreign_key_checks=0;
 SET autocommit=0;
 SET sql_log_bin=0;
 
+
+-- temp table for properties
 DROP table if exists property_values_tmp;
 
 CREATE TABLE `property_values_tmp` (
@@ -133,6 +135,12 @@ SELECT null,idproperty,idstructure,idchemicalnew,"guest","OK",text,idvalue,null,
 property_values_tmp 
 join structure using(idchemical)
 on duplicate key update idvalue_string=values(idvalue_string);
+
+COMMIT;
+
+-- drop the property and chemicals temp tables
+DROP table if exists property_values_tmp;
+DROP TABLE IF EXISTS `substance_relation_chemicals_tmp`;
 
 COMMIT;
 
