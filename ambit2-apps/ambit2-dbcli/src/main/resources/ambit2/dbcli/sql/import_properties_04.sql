@@ -128,10 +128,11 @@ on duplicate key update idchemicalnew=values(idchemicalnew);
 COMMIT;
 
 -- and finally the values
-insert ignore into property_values
-SELECT null,idproperty,idstructure,idchemical,"guest","OK",text,idvalue,null,"STRING" FROM 
-property_values_tmp
-join structure using(idchemical);
+insert into property_values
+SELECT null,idproperty,idstructure,idchemicalnew,"guest","OK",text,idvalue,null,"STRING" FROM 
+property_values_tmp 
+join structure using(idchemical)
+on duplicate key update idvalue_string=values(idvalue_string);
 
 COMMIT;
 
