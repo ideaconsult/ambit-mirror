@@ -184,7 +184,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 				// String.format("%s/#%s", TMP_NS, r.getRelationType()
 				// .name()));
 				Property parttype = getOutput().createProperty(
-						"http://purl.bioontology.org/ontology/npo#has_part ");
+						"http://purl.bioontology.org/ontology/npo#has_part");
 				getOutput().add(substanceResource, parttype, component);
 
 				if (struct.getRecordProperties() != null)
