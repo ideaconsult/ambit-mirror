@@ -72,9 +72,9 @@ public class CompoundURIReporter<Q extends IQueryRetrieval<IStructureRecord>> ex
     @Override
     public String getURI(String ref, IStructureRecord item) {
 	if ((item.getIdstructure() == -1) || (item.getType().equals(STRUC_TYPE.NA)))
-	    return String.format("%s%s%s/%d", ref, prefix, DataResources.compound_resource, item.getIdchemical());
+	    return String.format("%s%s%s/c%d", ref, prefix, DataResources.compound_resource, item.getIdchemical());
 	else
-	    return String.format("%s%s%s/%d%s/%d", ref, prefix, DataResources.compound_resource, item.getIdchemical(),
+	    return String.format("%s%s%s/c%d%s/%d", ref, prefix, DataResources.compound_resource, item.getIdchemical(),
 	    		DataResources.conformerKey_resource, item.getIdstructure());
 
     }
