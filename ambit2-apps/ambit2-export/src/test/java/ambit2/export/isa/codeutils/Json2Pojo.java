@@ -162,6 +162,7 @@ public class Json2Pojo
 	{	
 		VariableInfo var = new VariableInfo();
 		
+		//handle name
 		if (fieldName.startsWith("@"))
 			var.name =  fieldName.substring(1);
 		else
@@ -169,9 +170,29 @@ public class Json2Pojo
 		
 		System.out.println("  " + var.name);
 		
-		jci.variables.add(var);
-		//TODO
+		//handle variable type
+		JsonNode typeNode = fieldNode.path("type");
+		if (typeNode.isMissingNode())
+		{
+			//TODO handle $ref + recursion
+			System.out.println("    *** type is missing");
+		}
+		else
+		{	
+			String fieldType = extractStringKeyword(fieldNode, "type", true);
+			if (fieldType == null)
+				return ("Incorrect \"type\" for property \"" + fieldName +"\"");
+			if (fieldType.isEmpty())
+				return ("Empty \"type\" for property \"" + fieldName +"\"");
+			
+			var.type = VariableInfo.getTypeFromString(fieldType);
+			if (var.type == null)
+				return ("Incorrect \"type\":\"" + fieldType +  "\" for property \"" + fieldName +"\"");
+			
+		}
 		
+		//TODO
+		jci.variables.add(var);
 		return null;
 	}
 	
