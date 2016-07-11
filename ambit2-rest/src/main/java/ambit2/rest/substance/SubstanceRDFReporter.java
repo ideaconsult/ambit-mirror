@@ -87,6 +87,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		output.setNsPrefix("bao", "http://www.bioassayontology.org/bao#");
 		output.setNsPrefix("enm", "http://purl.enanomapper.org/onto/");
 		output.setNsPrefix("npo", "http://purl.bioontology.org/ontology/npo#");
+		output.setNsPrefix("void", "http://rdfs.org/ns/void#");;
 	}
 
 	@Override
@@ -116,6 +117,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 				record.getOwnerUUID());
 		Resource sowner = getOutput().createResource(sownerURI);
 		getOutput().add(substanceResource, DCTerms.source, sowner);
+		getOutput().add(substanceResource, RDF.type, RDFTermsSubstance.VOID_DATASET.getResource(getOutput()));
 		if (record.getOwnerName() != null)
 			getOutput().add(sowner, DCTerms.title, record.getOwnerName());
 

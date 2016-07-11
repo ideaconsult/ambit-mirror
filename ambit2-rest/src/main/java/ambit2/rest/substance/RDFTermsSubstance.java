@@ -22,6 +22,27 @@ public enum RDFTermsSubstance {
 		}
 	},
 	/**
+	 * VoID terms
+	 */
+	VOID_DATASET {
+		@Override
+		public String toString() {
+			return "dataset";
+		}
+		@Override
+		public boolean isProperty() {
+			return false;
+		}
+		@Override
+		public String getNamespace() {
+			return "http://rdfs.org/ns/void#";
+		}
+		@Override
+		public String getURI() {
+			return getNamespace()+"Dataset";
+		}
+	},
+	/**
 	 * assay
 	 */
 	BAO_0000015 {
