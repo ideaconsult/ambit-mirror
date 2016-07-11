@@ -68,10 +68,11 @@ public class TestCodeUtils
 	}
 	
 	public static void testJsonToPojo() throws Exception 
-	{
+	{	
 		Json2Pojo j2p = new Json2Pojo();
 		j2p.sourceDir = new File("/git-repositories/isa-api/isatools/schemas/isa_model_version_1_0_schemas/core");
 		j2p.targetDir = new File("/temp2/test/test2");
+		System.out.println("Json2Pojo: " + j2p.sourceDir.getAbsolutePath() + " --> " + j2p.targetDir.getAbsolutePath());
 		
 		j2p.run();
 		
