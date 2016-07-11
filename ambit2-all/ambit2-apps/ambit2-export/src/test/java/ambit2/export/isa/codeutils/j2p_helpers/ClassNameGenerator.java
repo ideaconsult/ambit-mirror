@@ -13,14 +13,12 @@ public class ClassNameGenerator
 	public String suffix = "_schema";
 	
 	public boolean FlagHandleTokens = true;
-	public String splitters[] = new String[] {"_", "-"}; 
+	public String splitters[] = new String[] {"_", "-", " ", "."}; 
 	
 	public String additionSuffixForDuplication = "_";
 	
 	
 	//work variables
-	//int numTokens = 0;
-	//int numTokensAll = 0; //Including the empty Tokens
 	List<TokenPars> tokens = new ArrayList<TokenPars>();
 	List<TokenPars> allTokens = new ArrayList<TokenPars>();
 	
@@ -55,7 +53,7 @@ public class ClassNameGenerator
 		return jcName;
 	}
 	
-	private void tokenize(String s)
+	public String[] tokenize(String s)
 	{
 		tokens.clear();
 		allTokens.clear();
@@ -146,6 +144,11 @@ public class ClassNameGenerator
 			}
 		}// of while pos < s.length()
 		
+		String result[] = new String[tokens.size()];
+		for (i = 0; i< tokens.size(); i++)
+			result[i] = s.substring(tokens.get(i).iBegin, tokens.get(i).iEnd);
+		
+		return result;
 	}//End of tokenize
 	
 }

@@ -101,6 +101,7 @@ public class Json2Pojo
 	{	
 		if (FlagResultOnlyToLog)
 		{
+			System.out.println();
 			Set<String> keys = schemaClasses.keySet();
 			for (String key: keys)
 			{
