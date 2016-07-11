@@ -14,6 +14,7 @@ import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.data.substance.ExternalIdentifier;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.substance.study.SubstanceStudyDetailsProcessor;
@@ -30,6 +31,7 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
+import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
@@ -88,7 +90,8 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		output.setNsPrefix("bao", "http://www.bioassayontology.org/bao#");
 		output.setNsPrefix("enm", "http://purl.enanomapper.org/onto/");
 		output.setNsPrefix("npo", "http://purl.bioontology.org/ontology/npo#");
-		output.setNsPrefix("void", "http://rdfs.org/ns/void#");;
+		output.setNsPrefix("void", "http://rdfs.org/ns/void#");
+		output.setNsPrefix("owl", OWL.NS);
 	}
 
 	@Override
@@ -440,6 +443,16 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 											effect.getTextValue()));
 						}
 					}
+			}
+
+		if (record.getExternalids() != null)
+			for (ExternalIdentifier extID : record.getExternalids()) {
+				if ("Same as".equals(extID.getSystemDesignator())) {
+					Resource sameResource = getOutput().createResource(extID.getSystemIdentifier());
+					getOutput().add(
+						substanceResource, OWL.sameAs, sameResource
+					);
+				}
 			}
 
 		return record;
