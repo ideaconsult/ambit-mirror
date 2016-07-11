@@ -1,19 +1,28 @@
 package ambit2.export.isa.codeutils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
+
+import ambit2.export.isa.codeutils.j2p_helpers.JavaClassInfo;
+import ambit2.export.isa.codeutils.j2p_helpers.VariableInfo;
 
 public class Json2Pojo 
 {
 	protected static Logger logger = Logger.getLogger("JSON2POJO");
 	
+	//Configuration variables
 	public File sourceDir = null;
 	public File targetDir = null;
-	public String javaPackage = "default";
-	
+	public String javaPackage = "default";	
 	public boolean FlagEmptyTargetDirBeforeRun = true;
 	
-	
+	//work variables:
+	Map<String, JavaClassInfo> schemaClasses = new HashMap<String, JavaClassInfo>();
+	List<JavaClassInfo> addedClasses = new ArrayList<JavaClassInfo>();
 	
 	
 	public void run() throws Exception
@@ -46,16 +55,43 @@ public class Json2Pojo
 		iterateSourceDir();
 	}
 	
-	public void iterateSourceDir() throws Exception
+	void iterateSourceDir() throws Exception
 	{
 		for (File file : sourceDir.listFiles()) 
-		{
+		{	
+			if (file.isFile())
+			{
+				if (isJsonFile(file))
+					handleJsonSchemaFile(file);
+				continue;
+			}
 			
+			//TODO handle sub-directories if needed
 		}
 	}
 	
 	
-	public static void delete(File f) 
+	void handleJsonSchemaFile(File file) throws Exception
+	{
+		System.out.println("Handling json schema: " + file.getName());
+	}
+	
+	boolean isJsonFile(File file)
+	{
+		String name = file.getName();
+		int dot_pos = name.lastIndexOf(".");
+		if (dot_pos != -1)
+			if (dot_pos < name.length())
+			{	
+				String fileExt = name.substring(dot_pos+1);
+				if (fileExt.equalsIgnoreCase("json"))
+					return true;
+			}
+		return false;
+	}
+	
+	
+	void delete(File f) 
 	{	
 		//recursive deletion of file/directory
 		if (f.isDirectory()) {
@@ -65,6 +101,5 @@ public class Json2Pojo
         }
         f.delete();
     }
-	
 	
 }
