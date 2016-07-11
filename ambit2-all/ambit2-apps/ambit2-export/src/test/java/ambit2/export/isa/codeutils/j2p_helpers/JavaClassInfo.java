@@ -5,7 +5,7 @@ import java.util.List;
 
 public class JavaClassInfo 
 {
-	public StringBuffer code = new StringBuffer();
+	public String javaPackage = "default";
 	public List<VariableInfo> variables = new ArrayList<VariableInfo>();
 	
 }
