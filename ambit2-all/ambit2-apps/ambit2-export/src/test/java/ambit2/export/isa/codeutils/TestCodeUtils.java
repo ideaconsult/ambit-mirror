@@ -16,14 +16,18 @@ public class TestCodeUtils
 		//Automatic generation if java classes from json schemas
 		//------------------------------------------------------
 		//Step 1
-		CodeUtils.clearJsonFileSuffix(new File("/git-repositories/isa-api/isatools/schemas/isa_model_version_1_0_schemas/core"), 
-				new File("/temp2/test/test2"), "_schema");
+		//CodeUtils.clearJsonFileSuffix(new File("/git-repositories/isa-api/isatools/schemas/isa_model_version_1_0_schemas/core"), 
+		//		new File("/temp2/test/test2"), "_schema");
 		
 		//Step 2 pojo
 		
 		//Step 3
 		//javaRename ("D:/Projects/Nina/jsonschema2pojo-0.4.15/target-isa1/ambit2/export/isa/v1_0/objects");
 		//------------------------------------------------------
+		
+		
+		testJsonToPojo();
+		
 	}
 	
 	
@@ -63,7 +67,13 @@ public class TestCodeUtils
 		 */
 	}
 	
-	
+	public static void testJsonToPojo() throws Exception 
+	{
+		Json2Pojo j2p = new Json2Pojo();
+		
+		j2p.run();
+		
+	}
 	
 
 }
