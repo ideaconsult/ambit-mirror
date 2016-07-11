@@ -109,6 +109,8 @@ public class Json2Pojo
 				System.out.println(generateJavaSource(schemaClasses.get(key)));
 				System.out.println();
 			}
+			
+			return;
 		}
 		
 		

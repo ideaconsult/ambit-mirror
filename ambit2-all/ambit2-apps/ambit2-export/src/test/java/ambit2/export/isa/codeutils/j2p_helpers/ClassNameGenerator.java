@@ -6,7 +6,12 @@ public class ClassNameGenerator
 {
 	private Json2Pojo j2p = null;
 	
-	public boolean FlagRemoveSchemaSuffix = true;
+	public boolean FlagRemoveSuffix = true;
+	public String suffix = "_schema";
+	
+	public boolean FlagHandleTokens = true;
+	public char tokenSeparatos[] = new char[] {'_', '-'}; 
+	
 	public String additionSuffixForDuplication = "_";
 	
 	public ClassNameGenerator(Json2Pojo j2p)
@@ -16,14 +21,28 @@ public class ClassNameGenerator
 	
 	public String getJavaClassNameForSchema(String schemaName)
 	{
+		String schemaName0 = schemaName;
+		if (FlagRemoveSuffix)
+		{
+			if (schemaName.endsWith(suffix))
+				schemaName0 = schemaName.substring(0, schemaName.length() - suffix.length());
+		}
+		
+		
 		//TODO
-		return null;
+		return schemaName0;
 	}
 	
 	public String getJavaClassNameForVariable(String varName)
 	{
 		//TODO
 		return null;
+	}
+	
+	String checkForDuplication(String jcName)
+	{
+		//TODO
+		return jcName;
 	}
 	
 }
