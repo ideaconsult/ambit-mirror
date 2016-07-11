@@ -6,6 +6,7 @@ import java.util.List;
 public class JavaClassInfo 
 {
 	public String javaPackage = "default";
+	public String javaClassName = "";
 	public List<VariableInfo> variables = new ArrayList<VariableInfo>();
 	
 }
