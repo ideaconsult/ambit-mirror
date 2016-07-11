@@ -1,12 +1,16 @@
 package ambit2.export.isa.codeutils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
+
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import ambit2.export.isa.codeutils.j2p_helpers.ClassNameGenerator;
 import ambit2.export.isa.codeutils.j2p_helpers.JavaClassInfo;
@@ -95,7 +99,28 @@ public class Json2Pojo
 		jci.javaPackage = javaPackage;
 		jci.javaClassName = jcName;
 		
+		readJsonSchema(file.getAbsolutePath(), jci);
 	}
+	
+	void readJsonSchema (String jsonFileName, JavaClassInfo jci) throws Exception
+	{
+		FileInputStream fin = new FileInputStream(jsonFileName); 
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode rootNode = null;
+		
+		try {
+			rootNode = mapper.readTree(fin);
+		} catch (Exception x) {
+			throw x;
+		} finally {
+			try {fin.close();} catch (Exception x) {}	
+		}
+		
+		//TODO
+		
+	}
+	
+	
 	
 	void generateTargetFiles() throws Exception
 	{	
