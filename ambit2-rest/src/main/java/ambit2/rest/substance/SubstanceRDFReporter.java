@@ -24,6 +24,7 @@ import com.google.common.base.Charsets;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -105,6 +106,10 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 
 		String substanceURI = uriReporter.getURI(record);
 		Resource substanceResource = getOutput().createResource(substanceURI);
+		if (record.getPublicName() != null)
+			getOutput().addLiteral(substanceResource, RDFS.label, getOutput().createLiteral(record.getPublicName()));
+		if (record.getSubstanceName() != null)
+			getOutput().addLiteral(substanceResource, RDFS.label, getOutput().createLiteral(record.getSubstanceName()));
 		getOutput().add(substanceResource, RDF.type,
 				RDFTermsSubstance.CHEBI_59999.getResource(getOutput()));
 
