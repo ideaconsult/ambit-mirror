@@ -35,6 +35,12 @@ public class Json2Pojo
 			throw new Exception("Target is not a directory: " + targetDir.getName());
 		
 		
+		if (FlagEmptyTargetDirBeforeRun)
+		{
+			for (File file : targetDir.listFiles())
+				delete(file);
+		}
+		
 		iterateSourceDir();
 	}
 	
