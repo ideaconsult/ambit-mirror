@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +36,7 @@ public class Json2Pojo
 	//work variables:
 	Map<String, JavaClassInfo> schemaClasses = new HashMap<String, JavaClassInfo>();
 	List<JavaClassInfo> addedClasses = new ArrayList<JavaClassInfo>();
+	String jsonError = null;
 	
 	
 	public void run() throws Exception
@@ -96,6 +98,7 @@ public class Json2Pojo
 		String jcName = classNameGenerator.getJavaClassNameForSchema(schemaName);		
 		JavaClassInfo jci = new  JavaClassInfo();
 		schemaClasses.put(schemaName, jci);
+		jci.schemaName = schemaName;
 		jci.javaPackage = javaPackage;
 		jci.javaClassName = jcName;
 		
@@ -116,11 +119,34 @@ public class Json2Pojo
 			try {fin.close();} catch (Exception x) {}	
 		}
 		
-		//TODO
+		JsonNode node = rootNode.path("type");
+		if (node.isMissingNode())
+		{	
+			logger.info("Field \"type\" is missing for schema: " + jsonFileName);
+		}
+		else
+		{	
+		}
 		
+		//Iterate schema properties
+		JsonNode propNode = rootNode.path("properties");
+		if (propNode.isMissingNode())
+			throw new Exception("Field \"properties\" is missing for schema: " + jsonFileName);
+		
+		Iterator<String> propFields = propNode.getFieldNames();
+		while (propFields.hasNext())
+		{
+			String fieldName = propFields.next();
+			JsonNode fieldNode = propNode.get(fieldName);
+			readProperty(jci, fieldName, fieldNode);
+		}
 	}
 	
-	
+	void readProperty(JavaClassInfo jci, String fieldName, JsonNode fieldNode)
+	{
+		System.out.println("  " + fieldName);
+		//TODO
+	}
 	
 	void generateTargetFiles() throws Exception
 	{	
@@ -182,5 +208,33 @@ public class Json2Pojo
         }
         f.delete();
     }
+	
+	
+	
+	
+	public String extractStringKeyword(JsonNode node, String keyword, boolean isRequired)
+	{
+		jsonError = null;
+		JsonNode keyNode = node.path(keyword);
+		if(keyNode.isMissingNode())
+		{
+			if(isRequired)
+			{	
+				jsonError = "Keyword " + keyword + " is missing!";
+				return null;
+			}
+			return "";
+		}
+		
+		if (keyNode.isTextual())
+		{	
+			return keyNode.asText();
+		}
+		else
+		{	
+			jsonError = "Keyword " + keyword + " is not of type text!";
+			return null;
+		}			
+	}
 	
 }
