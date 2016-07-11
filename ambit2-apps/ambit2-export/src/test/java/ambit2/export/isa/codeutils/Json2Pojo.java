@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import ambit2.export.isa.codeutils.j2p_helpers.ClassNameGenerator;
@@ -20,7 +21,10 @@ public class Json2Pojo
 	public String javaPackage = "default";	
 	
 	public boolean FlagEmptyTargetDirBeforeRun = true;
+	public boolean FlagResultOnlyToLog = false;
+	
 	public String jsonFileExtension = "json";
+	public String endLine = "\n";
 	public ClassNameGenerator classNameGenerator = new ClassNameGenerator(this);
 	
 	
@@ -80,22 +84,51 @@ public class Json2Pojo
 	void handleJsonSchemaFile(File file) throws Exception
 	{
 		System.out.println("Handling json schema: " + file.getName());
-		String schemaName = file.getName().substring(0, file.getName().length() - jsonFileExtension.length());
+		String schemaName = file.getName().substring(0, (file.getName().length() - jsonFileExtension.length()-1));
 		
 		if (schemaName.equals(""))
 			return;  //this should not happen
 		
 		String jcName = classNameGenerator.getJavaClassNameForSchema(schemaName);		
 		JavaClassInfo jci = new  JavaClassInfo();
+		schemaClasses.put(schemaName, jci);
 		jci.javaPackage = javaPackage;
 		jci.javaClassName = jcName;
 		
 	}
 	
 	void generateTargetFiles() throws Exception
-	{
-		//TODO
+	{	
+		if (FlagResultOnlyToLog)
+		{
+			Set<String> keys = schemaClasses.keySet();
+			for (String key: keys)
+			{
+				System.out.println(key);
+				System.out.println("--------------------");
+				System.out.println(generateJavaSource(schemaClasses.get(key)));
+				System.out.println();
+			}
+		}
+		
+		
 	}
+	
+	
+	String generateJavaSource(JavaClassInfo jci)
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("package " + jci.javaPackage + endLine);
+		sb.append(endLine);
+		sb.append("public class " + jci.javaClassName + endLine);
+		sb.append("{" + endLine);
+		
+		
+		sb.append("}" + endLine);
+		
+		return sb.toString();
+	}
+	
 	
 	boolean isJsonFile(File file)
 	{
@@ -110,8 +143,6 @@ public class Json2Pojo
 			}
 		return false;
 	}
-	
-	
 	
 	void delete(File f) 
 	{	
