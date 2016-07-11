@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 
 import ambit2.export.isa.codeutils.j2p_helpers.ClassNameGenerator;
 import ambit2.export.isa.codeutils.j2p_helpers.JavaClassInfo;
-import ambit2.export.isa.codeutils.j2p_helpers.VariableInfo;
 
 public class Json2Pojo 
 {
@@ -26,7 +25,6 @@ public class Json2Pojo
 	
 	
 	//work variables:
-	
 	Map<String, JavaClassInfo> schemaClasses = new HashMap<String, JavaClassInfo>();
 	List<JavaClassInfo> addedClasses = new ArrayList<JavaClassInfo>();
 	
@@ -59,6 +57,8 @@ public class Json2Pojo
 		}
 		
 		iterateSourceDir();
+		
+		generateTargetFiles();
 	}
 	
 	void iterateSourceDir() throws Exception
@@ -80,8 +80,21 @@ public class Json2Pojo
 	void handleJsonSchemaFile(File file) throws Exception
 	{
 		System.out.println("Handling json schema: " + file.getName());
+		String schemaName = file.getName().substring(0, file.getName().length() - jsonFileExtension.length());
 		
+		if (schemaName.equals(""))
+			return;  //this should not happen
 		
+		String jcName = classNameGenerator.getJavaClassNameForSchema(schemaName);		
+		JavaClassInfo jci = new  JavaClassInfo();
+		jci.javaPackage = javaPackage;
+		jci.javaClassName = jcName;
+		
+	}
+	
+	void generateTargetFiles() throws Exception
+	{
+		//TODO
 	}
 	
 	boolean isJsonFile(File file)
@@ -98,11 +111,7 @@ public class Json2Pojo
 		return false;
 	}
 	
-	String getJavaClassNameForSchema()
-	{
-		//TODO
-		return null;
-	}
+	
 	
 	void delete(File f) 
 	{	
