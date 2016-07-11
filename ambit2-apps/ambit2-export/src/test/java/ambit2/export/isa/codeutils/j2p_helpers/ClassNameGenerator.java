@@ -36,9 +36,31 @@ public class ClassNameGenerator
 				schemaName0 = schemaName.substring(0, schemaName.length() - suffix.length());
 		}
 		
+		if (FlagHandleTokens)
+		{
+			String tok[] = tokenize(schemaName0);
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < tok.length; i++)
+			{
+				sb.append(capitalyzeFirstCharAndLowerCaseOtherChars(tok[i]));
+			}
+			return sb.toString();
+		}
 		
-		//TODO
 		return schemaName0;
+		
+	}
+	
+	String capitalyzeFirstCharAndLowerCaseOtherChars(String s)
+	{
+		if (s.length() > 1)
+		{	
+			String s1 = s.substring(0, 1);
+			String s2 = s.substring(1);
+			return s1.toUpperCase()+s2.toLowerCase();
+		}
+		else
+			return s.toUpperCase();
 	}
 	
 	public String getJavaClassNameForVariable(String varName)
