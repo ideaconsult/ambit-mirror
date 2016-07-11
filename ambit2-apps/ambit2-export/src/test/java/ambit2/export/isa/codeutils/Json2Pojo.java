@@ -33,6 +33,10 @@ public class Json2Pojo
 	public String endLine = "\n";
 	public ClassNameGenerator classNameGenerator = new ClassNameGenerator(this);
 	
+	//Preliminary list of class names which are to be added for
+	//variables of type object
+	public Map<String, String> classNameSuggestions = new HashMap<String, String>();
+	
 	
 	//work variables:
 	Map<String, JavaClassInfo> schemaClasses = new HashMap<String, JavaClassInfo>();
