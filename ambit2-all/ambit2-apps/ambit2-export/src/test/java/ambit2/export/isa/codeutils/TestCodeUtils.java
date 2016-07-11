@@ -70,6 +70,7 @@ public class TestCodeUtils
 	public static void testJsonToPojo() throws Exception 
 	{
 		Json2Pojo j2p = new Json2Pojo();
+		j2p.sourceDir = new File("tttt");
 		
 		j2p.run();
 		

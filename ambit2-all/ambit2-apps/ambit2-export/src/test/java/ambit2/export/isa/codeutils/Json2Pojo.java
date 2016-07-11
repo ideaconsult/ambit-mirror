@@ -11,41 +11,52 @@ public class Json2Pojo
 	public File targetDir = null;
 	public String javaPackage = "default";
 	
+	
+	public boolean FlagEmptyTargetDirBeforeRun = true;
+	
 	public void run() throws Exception
 	{
 		if (sourceDir == null)
-		{	
-			logger.info("Source directory is null!");
-			return;
-		}
-		else
-			if (!sourceDir.isDirectory())
-			{
-				logger.info("Source path is not a directory: " + sourceDir);
-				return;
-			}
+			throw new Exception("Source directory is null!");
+		
+		if (!sourceDir.exists())
+			throw new Exception("Source directory does not exists: " + sourceDir.getName());
+	
+		if (!sourceDir.isDirectory())
+			throw new Exception("Source is not a directory: " + sourceDir.getName());
 		
 		if (targetDir == null)
-		{	
-			logger.info("Target directory is null!");
-			return;
-		}
-		else
-			if (!targetDir.isDirectory())
-			{
-				logger.info("Target path is not a directory: " + sourceDir);
-				return;
-			}
+			throw new Exception("Target directory is null!");
+		
+		if (!targetDir.exists())
+			throw new Exception("Target directory does not exists: " + targetDir.getName());
+	
+		if (!targetDir.isDirectory())
+			throw new Exception("Target is not a directory: " + targetDir.getName());
 		
 		
 		iterateSourceDir();
-		
 	}
 	
 	public void iterateSourceDir() throws Exception
 	{
-		//TODO
+		for (File file : sourceDir.listFiles()) 
+		{
+			
+		}
 	}
+	
+	
+	public static void delete(File f) 
+	{	
+		//recursive deletion of file/directory
+		if (f.isDirectory()) {
+            for (File child : f.listFiles()) {
+                delete(child);
+            }
+        }
+        f.delete();
+    }
 	
 	
 }
