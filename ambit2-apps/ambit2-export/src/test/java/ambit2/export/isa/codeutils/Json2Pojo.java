@@ -11,8 +11,10 @@ public class Json2Pojo
 	public File targetDir = null;
 	public String javaPackage = "default";
 	
-	
 	public boolean FlagEmptyTargetDirBeforeRun = true;
+	
+	
+	
 	
 	public void run() throws Exception
 	{
