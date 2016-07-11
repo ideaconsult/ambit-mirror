@@ -117,7 +117,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 				record.getOwnerUUID());
 		Resource sowner = getOutput().createResource(sownerURI);
 		getOutput().add(substanceResource, DCTerms.source, sowner);
-		getOutput().add(substanceResource, RDF.type, RDFTermsSubstance.VOID_DATASET.getResource(getOutput()));
+		getOutput().add(sowner, RDF.type, RDFTermsSubstance.VOID_DATASET.getResource(getOutput()));
 		if (record.getOwnerName() != null)
 			getOutput().add(sowner, DCTerms.title, record.getOwnerName());
 
