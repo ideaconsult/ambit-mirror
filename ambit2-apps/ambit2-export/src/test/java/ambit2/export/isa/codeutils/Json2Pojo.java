@@ -15,6 +15,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import ambit2.export.isa.codeutils.j2p_helpers.ClassNameGenerator;
 import ambit2.export.isa.codeutils.j2p_helpers.JavaClassInfo;
+import ambit2.export.isa.codeutils.j2p_helpers.VariableInfo;
 
 public class Json2Pojo 
 {
@@ -95,6 +96,9 @@ public class Json2Pojo
 		if (schemaName.equals(""))
 			return;  //this should not happen
 		
+		if (schemaClasses.containsKey(schemaName))
+			return; //This schema has already been processed
+		
 		String jcName = classNameGenerator.getJavaClassNameForSchema(schemaName);		
 		JavaClassInfo jci = new  JavaClassInfo();
 		schemaClasses.put(schemaName, jci);
@@ -107,6 +111,9 @@ public class Json2Pojo
 	
 	void readJsonSchema (String jsonFileName, JavaClassInfo jci) throws Exception
 	{
+		//Function is recursive: 
+		//on some ocasions readProperty() calls readJsonSchema()
+		
 		FileInputStream fin = new FileInputStream(jsonFileName); 
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode rootNode = null;
@@ -125,7 +132,8 @@ public class Json2Pojo
 			logger.info("Field \"type\" is missing for schema: " + jsonFileName);
 		}
 		else
-		{	
+		{
+			//handle schema type if needed
 		}
 		
 		//Iterate schema properties
@@ -133,19 +141,38 @@ public class Json2Pojo
 		if (propNode.isMissingNode())
 			throw new Exception("Field \"properties\" is missing for schema: " + jsonFileName);
 		
+		StringBuffer errors = new StringBuffer();
+		
 		Iterator<String> propFields = propNode.getFieldNames();
 		while (propFields.hasNext())
 		{
 			String fieldName = propFields.next();
 			JsonNode fieldNode = propNode.get(fieldName);
-			readProperty(jci, fieldName, fieldNode);
+			String err = readProperty(jci, fieldName, fieldNode);
+			if (err != null)
+				errors.append(err + endLine);
 		}
+		
+		if  (!errors.toString().isEmpty())
+			throw new Exception("Property errors in schema: " + 
+					jci.schemaName + endLine + errors.toString());
 	}
 	
-	void readProperty(JavaClassInfo jci, String fieldName, JsonNode fieldNode)
-	{
-		System.out.println("  " + fieldName);
+	String readProperty(JavaClassInfo jci, String fieldName, JsonNode fieldNode)
+	{	
+		VariableInfo var = new VariableInfo();
+		
+		if (fieldName.startsWith("@"))
+			var.name =  fieldName.substring(1);
+		else
+			var.name = fieldName;
+		
+		System.out.println("  " + var.name);
+		
+		jci.variables.add(var);
 		//TODO
+		
+		return null;
 	}
 	
 	void generateTargetFiles() throws Exception
