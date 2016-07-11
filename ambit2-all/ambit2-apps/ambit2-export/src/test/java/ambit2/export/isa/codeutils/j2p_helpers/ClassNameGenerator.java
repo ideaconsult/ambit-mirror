@@ -69,7 +69,7 @@ public class ClassNameGenerator
 		return null;
 	}
 	
-	String checkForDuplication(String jcName)
+	public String checkForDuplication(String jcName)
 	{
 		//TODO
 		return jcName;
