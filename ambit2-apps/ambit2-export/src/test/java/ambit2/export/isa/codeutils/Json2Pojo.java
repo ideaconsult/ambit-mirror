@@ -6,13 +6,12 @@ import java.util.logging.Logger;
 public class Json2Pojo 
 {
 	protected static Logger logger = Logger.getLogger("JSON2POJO");
+	
 	public File sourceDir = null;
 	public File targetDir = null;
+	public String javaPackage = "default";
 	
-	
-	
-	
-	public void run()
+	public void run() throws Exception
 	{
 		if (sourceDir == null)
 		{	
@@ -38,5 +37,15 @@ public class Json2Pojo
 				return;
 			}
 		
+		
+		iterateSourceDir();
+		
 	}
+	
+	public void iterateSourceDir() throws Exception
+	{
+		//TODO
+	}
+	
+	
 }
