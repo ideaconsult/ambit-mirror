@@ -248,7 +248,9 @@ public class Json2Pojo
 				return ("Incorrect \"type\":\"" + fieldType +  "\" for property \"" + fieldName +"\"");
 		}
 		
-			
+		//Handle string format
+		
+		
 		//TODO handle variables of types: array, object, string
 		
 		//System.out.println(" --> " + var.name + "  " + var.type + "  " + var.objectClass);
@@ -262,7 +264,7 @@ public class Json2Pojo
 		return null;
 	}
 	
-	JavaClassInfo getClassForObjectVarible(JsonNode propNode)
+	JavaClassInfo getClassForObjectVarible(JsonNode propNode, String className)
 	{
 		//TODO
 		return null;
