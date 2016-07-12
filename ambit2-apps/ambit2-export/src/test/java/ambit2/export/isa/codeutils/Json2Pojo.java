@@ -15,6 +15,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import ambit2.export.isa.codeutils.j2p_helpers.ClassNameGenerator;
 import ambit2.export.isa.codeutils.j2p_helpers.JavaClassInfo;
+import ambit2.export.isa.codeutils.j2p_helpers.JavaSourceConfig;
 import ambit2.export.isa.codeutils.j2p_helpers.VariableInfo;
 
 public class Json2Pojo 
@@ -32,7 +33,8 @@ public class Json2Pojo
 	
 	public String jsonFileExtension = "json";
 	public String endLine = "\n";
-	public String indent = "\t";
+	
+	public JavaSourceConfig sourceConfig = new JavaSourceConfig(); 
 	public ClassNameGenerator classNameGenerator = new ClassNameGenerator(this);
 	
 	//Preliminary list of class names which are to be added for
@@ -295,7 +297,7 @@ public class Json2Pojo
 		sb.append("public class " + jci.javaClassName + endLine);
 		sb.append("{" + endLine);
 		for (int i = 0; i < jci.variables.size(); i++)
-			sb.append(indent + jci.variables.get(i).getJavaSource() + endLine);
+			sb.append(sourceConfig.indent + jci.variables.get(i).getJavaSource() + endLine);
 		
 		sb.append("}" + endLine);
 		
