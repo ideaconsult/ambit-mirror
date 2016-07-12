@@ -29,6 +29,7 @@ import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.sparql.vocabulary.FOAF;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.OWL;
@@ -445,12 +446,23 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 					}
 			}
 
+		final Property skosCloseMatch = getOutput().createProperty("http://www.w3.org/2004/02/skos/core#closeMatch");
 		if (record.getExternalids() != null)
 			for (ExternalIdentifier extID : record.getExternalids()) {
 				if ("Same as".equals(extID.getSystemDesignator())) {
 					Resource sameResource = getOutput().createResource(extID.getSystemIdentifier());
 					getOutput().add(
 						substanceResource, OWL.sameAs, sameResource
+					);
+				} else if ("Close match".equals(extID.getSystemDesignator())) {
+					Resource sameResource = getOutput().createResource(extID.getSystemIdentifier());
+					getOutput().add(
+						substanceResource, skosCloseMatch, sameResource
+					);
+				} else if ("HOMEPAGE".equals(extID.getSystemDesignator())) {
+					Resource homepage = getOutput().createResource(extID.getSystemIdentifier());
+					getOutput().add(
+						substanceResource, FOAF.page, homepage
 					);
 				}
 			}
