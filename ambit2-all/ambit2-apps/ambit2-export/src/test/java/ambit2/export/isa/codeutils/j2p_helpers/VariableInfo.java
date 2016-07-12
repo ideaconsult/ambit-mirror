@@ -10,8 +10,22 @@ public class VariableInfo
 	public String name = null;
 	public String objectClass = null; //used only for type OBJECT
 	
+	public String getJavaSource()
+	{
+		switch (type)
+		{
+		case STRING:
+			return "String " + name + ";";
+		case OBJECT:
+			return objectClass + " " + name + ";"; 
+			
+		}
+		return "";
+	}
+	
 	public static Type getTypeFromString(String s)
 	{
+		//System.out.println("getTypeFromString " + s);
 		if (s.equals("string"))
 			return Type.STRING;
 		

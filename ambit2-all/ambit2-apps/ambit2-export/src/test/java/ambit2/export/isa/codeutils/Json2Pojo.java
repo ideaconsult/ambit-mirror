@@ -32,6 +32,7 @@ public class Json2Pojo
 	
 	public String jsonFileExtension = "json";
 	public String endLine = "\n";
+	public String indent = "\t";
 	public ClassNameGenerator classNameGenerator = new ClassNameGenerator(this);
 	
 	//Preliminary list of class names which are to be added for
@@ -185,8 +186,11 @@ public class Json2Pojo
 				if (FlagExceptionOnIncorrectReference)
 					return "Missing reference for field " + var.name;
 				else
+				{	
 					logger.info("Missing reference for field " + var.name + 
 							" in schema " + jci.schemaName);
+					return null; //no error is considered
+				}	
 			}
 			else
 			{
@@ -197,8 +201,11 @@ public class Json2Pojo
 						return "Incorrect reference for field " + var.name + 
 								" : " + jsonError;
 					else
+					{	
 						logger.info("Incorrect reference for field " + var.name + 
 								" in schema " + jci.schemaName + " : " + jsonError);
+						return null; //no error is considered
+					}	
 				}
 				else
 				{	
@@ -208,13 +215,20 @@ public class Json2Pojo
 						if (FlagExceptionOnIncorrectReference)
 							return "Incorrect reference \""+ ref + "\" for field " + var.name;
 						else
+						{	
 							logger.info("Incorrect reference \""+ ref + "\" for field " + var.name + 
 									" in schema " + jci.schemaName);
+							return null; //no error is considered
+						}	
 					}
 					else
 					{
 						//Register new added class
 						//TODO (check for whether it is already registered class
+						
+						//temporary code:
+						var.type = VariableInfo.Type.OBJECT;
+						var.objectClass = "Object";
 					}
 				}
 			}
@@ -235,7 +249,7 @@ public class Json2Pojo
 			
 		//TODO handle variables of types: array, object, string
 		
-		
+		//System.out.println(" --> " + var.name + "  " + var.type + "  " + var.objectClass);
 		jci.variables.add(var);
 		return null;
 	}
@@ -280,7 +294,8 @@ public class Json2Pojo
 		sb.append(endLine);
 		sb.append("public class " + jci.javaClassName + endLine);
 		sb.append("{" + endLine);
-		
+		for (int i = 0; i < jci.variables.size(); i++)
+			sb.append(indent + jci.variables.get(i).getJavaSource() + endLine);
 		
 		sb.append("}" + endLine);
 		
