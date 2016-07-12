@@ -179,10 +179,45 @@ public class Json2Pojo
 		JsonNode typeNode = fieldNode.path("type");
 		if (typeNode.isMissingNode())
 		{
-			
-			//FlagExceptionOnIncorrectReference
-			//TODO handle $ref + recursion
-			System.out.println("    *** type is missing");
+			JsonNode refNode = fieldNode.path("$ref");
+			if (refNode.isMissingNode())
+			{
+				if (FlagExceptionOnIncorrectReference)
+					return "Missing reference for field " + var.name;
+				else
+					logger.info("Missing reference for field " + var.name + 
+							" in schema " + jci.schemaName);
+			}
+			else
+			{
+				String ref = extractStringKeyword(fieldNode, "$ref", true);
+				if (ref == null)
+				{
+					if (FlagExceptionOnIncorrectReference)
+						return "Incorrect reference for field " + var.name + 
+								" : " + jsonError;
+					else
+						logger.info("Incorrect reference for field " + var.name + 
+								" in schema " + jci.schemaName + " : " + jsonError);
+				}
+				else
+				{	
+					JavaClassInfo newClass = handleReference(ref);
+					if (newClass == null)
+					{
+						if (FlagExceptionOnIncorrectReference)
+							return "Incorrect reference \""+ ref + "\" for field " + var.name;
+						else
+							logger.info("Incorrect reference \""+ ref + "\" for field " + var.name + 
+									" in schema " + jci.schemaName);
+					}
+					else
+					{
+						//Register new added class
+						//TODO (check for whether it is already registered class
+					}
+				}
+			}
 		}
 		else
 		{	
