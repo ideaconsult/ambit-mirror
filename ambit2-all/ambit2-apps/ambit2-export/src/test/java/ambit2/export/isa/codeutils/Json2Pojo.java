@@ -27,6 +27,7 @@ public class Json2Pojo
 	public String javaPackage = "default";	
 	
 	public boolean FlagEmptyTargetDirBeforeRun = true;
+	public boolean FlagExceptionOnIncorrectReference = true;
 	public boolean FlagResultOnlyToLog = false;
 	
 	public String jsonFileExtension = "json";
@@ -116,7 +117,7 @@ public class Json2Pojo
 	void readJsonSchema (String jsonFileName, JavaClassInfo jci) throws Exception
 	{
 		//Function is recursive: 
-		//on some ocasions readProperty() calls readJsonSchema()
+		//on some occasions readProperty() may call readJsonSchema()
 		
 		FileInputStream fin = new FileInputStream(jsonFileName); 
 		ObjectMapper mapper = new ObjectMapper();
@@ -178,6 +179,8 @@ public class Json2Pojo
 		JsonNode typeNode = fieldNode.path("type");
 		if (typeNode.isMissingNode())
 		{
+			
+			//FlagExceptionOnIncorrectReference
 			//TODO handle $ref + recursion
 			System.out.println("    *** type is missing");
 		}
@@ -192,11 +195,25 @@ public class Json2Pojo
 			var.type = VariableInfo.getTypeFromString(fieldType);
 			if (var.type == null)
 				return ("Incorrect \"type\":\"" + fieldType +  "\" for property \"" + fieldName +"\"");
-			
 		}
 		
-		//TODO
+			
+		//TODO handle variables of types: array, object, string
+		
+		
 		jci.variables.add(var);
+		return null;
+	}
+	
+	JavaClassInfo handleReference(String ref)
+	{
+		//TODO
+		return null;
+	}
+	
+	JavaClassInfo getClassForObjectVarible(JsonNode propNode)
+	{
+		//TODO
 		return null;
 	}
 	
