@@ -121,8 +121,10 @@ public class Json2Pojo
 	
 	void readJsonSchema (String jsonFileName, JavaClassInfo jci) throws Exception
 	{
-		//Function is recursive: 
-		//on some occasions readProperty() may call readJsonSchema()
+		//Function is recursive. 
+		//recursion ways:
+		//(1) readJsonSchema() -->  readProperty() --> handleReference() --> readJsonSchema()
+		//(2) readJsonSchema() -->  readProperty() --> getClassFromProperties() --> readProperty() ...
 		
 		FileInputStream fin = new FileInputStream(jsonFileName); 
 		ObjectMapper mapper = new ObjectMapper();
