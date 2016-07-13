@@ -255,7 +255,8 @@ public class Json2Pojo
 		{	
 			String format = extractStringKeyword(fieldNode, "format", false);
 			if (format != null)
-				var.stringFormat = StringFormat.URL_FORMAT;
+				if (format.equals("uri"))
+					var.stringFormat = StringFormat.URL_FORMAT;
 		}
 		
 		//TODO handle variables of types: array, object
