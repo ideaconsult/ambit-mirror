@@ -21,7 +21,8 @@ public class VariableInfo
 		switch (type)
 		{
 		case ARRAY:
-			return "List<" + objectClass+"> "+ name + " = new ArrayList<" + objectClass + ">();";
+			return "List<" + objectClass+"> "+ name + 
+					sourceConfig.getArrayInitialization(objectClass) + ";";
 		
 		case BOOLEAN:
 			return "boolean " + name + ";";

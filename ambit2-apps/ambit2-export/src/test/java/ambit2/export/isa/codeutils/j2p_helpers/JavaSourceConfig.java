@@ -59,11 +59,30 @@ public class JavaSourceConfig
 			else
 				return stringInit;	
 			
-			
-			
 		}
 		
 		return VarInit.NO_INIT;
+	}
+	
+	public String getArrayInitialization(String objectClass)
+	{
+		VarInit vInit = getVarInit(VariableInfo.Type.ARRAY);
+		if (vInit == VarInit.EMPTY)
+			return " = new ArrayList<" + objectClass + ">()";
+		
+		if (vInit == VarInit.NULL)
+			return " = null";
+		
+		return "";
+	}
+	
+	public String getBooleanInitialization()
+	{
+		VarInit vInit = getVarInit(VariableInfo.Type.ARRAY);
+		if (vInit == VarInit.EMPTY || vInit == VarInit.NULL)
+			return " = false";
+		
+		return "";
 	}
 	
 }
