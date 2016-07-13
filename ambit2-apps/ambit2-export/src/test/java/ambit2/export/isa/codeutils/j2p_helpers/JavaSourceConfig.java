@@ -1,5 +1,7 @@
 package ambit2.export.isa.codeutils.j2p_helpers;
 
+import java.net.URL;
+
 public class JavaSourceConfig 
 {
 	public static enum VarInit {
@@ -78,9 +80,63 @@ public class JavaSourceConfig
 	
 	public String getBooleanInitialization()
 	{
-		VarInit vInit = getVarInit(VariableInfo.Type.ARRAY);
+		VarInit vInit = getVarInit(VariableInfo.Type.BOOLEAN);
 		if (vInit == VarInit.EMPTY || vInit == VarInit.NULL)
 			return " = false";
+		
+		return "";
+	}
+	
+	public String getIntegerInitialization()
+	{
+		VarInit vInit = getVarInit(VariableInfo.Type.INTEGER);
+		if (vInit == VarInit.EMPTY || vInit == VarInit.NULL)
+			return " = 0";
+		
+		return "";
+	}
+	
+	public String getNumberInitialization()
+	{
+		VarInit vInit = getVarInit(VariableInfo.Type.NUMBER);
+		if (vInit == VarInit.EMPTY || vInit == VarInit.NULL)
+			return " = 0.0";
+		
+		return "";
+	}
+	
+	public String getObjectInitialization(String objectClass)
+	{
+		VarInit vInit = getVarInit(VariableInfo.Type.OBJECT);
+		if (vInit == VarInit.EMPTY)
+			return " = new " + objectClass + "()";
+		
+		if (vInit == VarInit.NULL)
+			return " = null";
+		
+		return "";
+	}
+	
+	public String getStringInitialization()
+	{
+		VarInit vInit = getVarInit(VariableInfo.Type.STRING);
+		if (vInit == VarInit.EMPTY)
+			return " = \"\"";
+		
+		if (vInit == VarInit.NULL)
+			return " = null";
+		
+		return "";
+	}
+	
+	public String getURLInitialization()
+	{	
+		VarInit vInit = getVarInit(VariableInfo.Type.STRING);
+		if (vInit == VarInit.EMPTY)
+			return " = new URL(\"\")";  //TODO check this
+		
+		if (vInit == VarInit.NULL)
+			return " = null";
 		
 		return "";
 	}
