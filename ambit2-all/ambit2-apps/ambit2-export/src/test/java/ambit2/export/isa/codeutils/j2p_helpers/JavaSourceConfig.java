@@ -133,7 +133,7 @@ public class JavaSourceConfig
 	{	
 		VarInit vInit = getVarInit(VariableInfo.Type.STRING);
 		if (vInit == VarInit.EMPTY)
-			return " = new URL(\"\")";  //TODO check this
+			return " = new URL(\"\")";  //check this case!!
 		
 		if (vInit == VarInit.NULL)
 			return " = null";
