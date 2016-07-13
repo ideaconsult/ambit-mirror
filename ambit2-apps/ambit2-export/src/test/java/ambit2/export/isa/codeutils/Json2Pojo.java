@@ -17,6 +17,7 @@ import ambit2.export.isa.codeutils.j2p_helpers.ClassNameGenerator;
 import ambit2.export.isa.codeutils.j2p_helpers.JavaClassInfo;
 import ambit2.export.isa.codeutils.j2p_helpers.JavaSourceConfig;
 import ambit2.export.isa.codeutils.j2p_helpers.VariableInfo;
+import ambit2.export.isa.codeutils.j2p_helpers.VariableInfo.Type;
 
 public class Json2Pojo 
 {
@@ -249,9 +250,14 @@ public class Json2Pojo
 		}
 		
 		//Handle string format
+		if (var.type == Type.STRING )
+		{	
+			String format = extractStringKeyword(fieldNode, "format", false);
+			if (format != null)
+				var.stringFormat = format;
+		}
 		
-		
-		//TODO handle variables of types: array, object, string
+		//TODO handle variables of types: array, object
 		
 		//System.out.println(" --> " + var.name + "  " + var.type + "  " + var.objectClass);
 		jci.variables.add(var);
@@ -286,16 +292,23 @@ public class Json2Pojo
 			
 			return;
 		}
-		
-		
 	}
 	
 	
 	String generateJavaSource(JavaClassInfo jci)
 	{
 		StringBuffer sb = new StringBuffer();
-		sb.append("package " + jci.javaPackage + endLine);
+		sb.append("package " + jci.javaPackage + ";" + endLine);
 		sb.append(endLine);
+		
+		List<String> imports = jci.getNeededImports();
+		if (!imports.isEmpty())
+		{
+			for (String imp : imports)
+				sb.append(imp + endLine);
+			sb.append(endLine);
+		}
+		
 		sb.append("public class " + jci.javaClassName + endLine);
 		sb.append("{" + endLine);
 		for (int i = 0; i < jci.variables.size(); i++)
