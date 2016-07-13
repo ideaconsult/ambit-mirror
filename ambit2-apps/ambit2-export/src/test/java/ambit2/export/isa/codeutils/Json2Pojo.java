@@ -313,7 +313,8 @@ public class Json2Pojo
 		sb.append("public class " + jci.javaClassName + endLine);
 		sb.append("{" + endLine);
 		for (int i = 0; i < jci.variables.size(); i++)
-			sb.append(sourceConfig.indent + jci.variables.get(i).getJavaSource() + endLine);
+			sb.append(sourceConfig.indent + 
+					jci.variables.get(i).getJavaSource(sourceConfig) + endLine);
 		
 		sb.append("}" + endLine);
 		

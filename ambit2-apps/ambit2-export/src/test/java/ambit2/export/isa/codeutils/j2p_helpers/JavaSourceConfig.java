@@ -8,6 +8,7 @@ public class JavaSourceConfig
 	
 	public String indent = "\t";
 	public VarInit init = VarInit.NO_INIT;
+	public String number = "double";
 	
 	//These are specific init options for various variable types
 	//If different from UNSPECIFIED override the default 'init'
@@ -18,7 +19,7 @@ public class JavaSourceConfig
 	public VarInit objectInit = VarInit.UNSPECIFIED;
 	public VarInit stringInit = VarInit.UNSPECIFIED;
 	
-	public VarInit getInit(VariableInfo.Type varType)
+	public VarInit getVarInit(VariableInfo.Type varType)
 	{
 		switch (varType)
 		{
@@ -33,6 +34,32 @@ public class JavaSourceConfig
 				return init;
 			else
 				return booleanInit;
+			
+		case INTEGER:
+			if (integerInit == VarInit.UNSPECIFIED)
+				return init;
+			else
+				return integerInit;
+			
+		case NUMBER:
+			if (numberInit == VarInit.UNSPECIFIED)
+				return init;
+			else
+				return numberInit;	
+		
+		case OBJECT:
+			if (objectInit == VarInit.UNSPECIFIED)
+				return init;
+			else
+				return objectInit;	
+		
+		case STRING:
+			if (stringInit == VarInit.UNSPECIFIED)
+				return init;
+			else
+				return stringInit;	
+			
+			
 			
 		}
 		
