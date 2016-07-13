@@ -272,9 +272,11 @@ public class Json2Pojo
 		return null;
 	}
 	
-	JavaClassInfo getClassForObjectVarible(JsonNode propNode, String className)
+	JavaClassInfo getClassForObjectDefinedByProperties(JsonNode propNode, String className)
 	{
-		//TODO
+		//TODO 
+		//suggestion to move here most of the code from function readProperty()
+		//or to use readProperty() instead of this function
 		return null;
 	}
 	
