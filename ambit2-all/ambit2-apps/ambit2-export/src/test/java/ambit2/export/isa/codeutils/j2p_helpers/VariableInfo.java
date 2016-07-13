@@ -16,12 +16,12 @@ public class VariableInfo
 	public StringFormat stringFormat = StringFormat.UNSPECIFIED;
 	public String objectClass = null; //used only for types ARRAY and OBJECT
 	
-	public String getJavaSource()
+	public String getJavaSource(JavaSourceConfig sourceConfig)
 	{
 		switch (type)
 		{
 		case ARRAY:
-			return "List<" + objectClass+"> = new ArrayList<" + objectClass + ">();";
+			return "List<" + objectClass+"> "+ name + " = new ArrayList<" + objectClass + ">();";
 		
 		case BOOLEAN:
 			return "boolean " + name + ";";
