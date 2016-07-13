@@ -1,9 +1,5 @@
 package ambit2.export.isa.codeutils.j2p_helpers;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import ambit2.export.isa.v1_0.objects.Comment;
 
 public class VariableInfo 
 {
@@ -11,9 +7,13 @@ public class VariableInfo
 		ARRAY, BOOLEAN, INTEGER, NUMBER, NULL, OBJECT, STRING 
 	}
 	
+	public static enum  StringFormat {
+		UNSPECIFIED, URL_FORMAT 
+	}
+	
 	public Type type = null;
 	public String name = null;
-	public String stringFormat = null;
+	public StringFormat stringFormat = StringFormat.UNSPECIFIED;
 	public String objectClass = null; //used only for types ARRAY and OBJECT
 	
 	public String getJavaSource()
@@ -39,7 +39,7 @@ public class VariableInfo
 		{	
 			if (stringFormat != null)
 			{
-				if (stringFormat.equals("uri"))
+				if (stringFormat == StringFormat.URL_FORMAT)
 					return "URL " + name + ";";
 			}
 			return "String " + name + ";";

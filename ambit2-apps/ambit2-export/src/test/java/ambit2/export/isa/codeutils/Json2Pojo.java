@@ -17,6 +17,7 @@ import ambit2.export.isa.codeutils.j2p_helpers.ClassNameGenerator;
 import ambit2.export.isa.codeutils.j2p_helpers.JavaClassInfo;
 import ambit2.export.isa.codeutils.j2p_helpers.JavaSourceConfig;
 import ambit2.export.isa.codeutils.j2p_helpers.VariableInfo;
+import ambit2.export.isa.codeutils.j2p_helpers.VariableInfo.StringFormat;
 import ambit2.export.isa.codeutils.j2p_helpers.VariableInfo.Type;
 
 public class Json2Pojo 
@@ -254,7 +255,7 @@ public class Json2Pojo
 		{	
 			String format = extractStringKeyword(fieldNode, "format", false);
 			if (format != null)
-				var.stringFormat = format;
+				var.stringFormat = StringFormat.URL_FORMAT;
 		}
 		
 		//TODO handle variables of types: array, object
