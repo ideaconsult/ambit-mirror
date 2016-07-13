@@ -13,6 +13,7 @@ public class VariableInfo
 	
 	public Type type = null;
 	public String name = null;
+	public String stringFormat = null;
 	public String objectClass = null; //used only for types ARRAY and OBJECT
 	
 	public String getJavaSource()
@@ -35,7 +36,14 @@ public class VariableInfo
 			return objectClass + " " + name + ";";
 			
 		case STRING:
+		{	
+			if (stringFormat != null)
+			{
+				if (stringFormat.equals("uri"))
+					return "URL " + name + ";";
+			}
 			return "String " + name + ";";
+		}	
 			
 		}
 		return "";
