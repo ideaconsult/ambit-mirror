@@ -272,12 +272,29 @@ public class Json2Pojo
 		return null;
 	}
 	
-	JavaClassInfo getClassForObjectDefinedByProperties(JsonNode propNode, String className)
-	{
-		//TODO 
-		//suggestion to move here most of the code from function readProperty()
-		//or to use readProperty() instead of this function
-		return null;
+	JavaClassInfo getClassFromProperties(JsonNode propNode, 
+										String className,
+										StringBuffer errors) throws Exception 
+	{	
+		JavaClassInfo jci = new  JavaClassInfo();
+		//jci.schemaName is not set
+		jci.javaPackage = javaPackage;
+		jci.javaClassName = className;
+		
+		Iterator<String> propFields = propNode.getFieldNames();
+		while (propFields.hasNext())
+		{
+			String fieldName = propFields.next();
+			JsonNode fieldNode = propNode.get(fieldName);
+			String err = readProperty(jci, fieldName, fieldNode);
+			if (err != null)
+				errors.append(err + endLine);
+		}
+		
+		if  (!errors.toString().isEmpty())
+			return null;
+		
+		return jci;
 	}
 	
 	void generateTargetFiles() throws Exception
