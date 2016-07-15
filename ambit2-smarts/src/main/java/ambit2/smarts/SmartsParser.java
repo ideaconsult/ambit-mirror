@@ -301,7 +301,10 @@ public class SmartsParser {
 								mNeedValencyData = true;
 							else if ((tok.type == SmartsConst.AP_R)
 									|| (tok.type == SmartsConst.AP_r))
+							{
 								mNeedRingData = true;
+								mNeedRingData2 = true;
+							}	
 						}
 					}
 				}
@@ -309,7 +312,7 @@ public class SmartsParser {
 		}
 
 		// Additional check for the flag variables based on the bond list
-		if (mNeedRingData == false) {
+		if (mNeedRingData2 == false) {
 			for (int i = 0; i < container.getBondCount(); i++) {
 				if (container.getBond(i) instanceof SmartsBondExpression) {
 					SmartsBondExpression sb = (SmartsBondExpression) container
@@ -2380,6 +2383,7 @@ public class SmartsParser {
 	
 	
 	public void setSMARTSData(IAtomContainer container) throws Exception {
+		//System.out.println("mNeedRingData = " + mNeedRingData + " mNeedRingData2 = " + mNeedRingData2);
 		prepareTargetForSMARTSSearch(mNeedNeighbourData, mNeedValencyData,
 				mNeedRingData, mNeedRingData2, mNeedExplicitHData,
 				mNeedParentMoleculeData, container);
