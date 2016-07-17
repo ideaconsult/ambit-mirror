@@ -280,8 +280,12 @@ public class Json2Pojo
 					return ("Errors on creating object for "  + fieldName + ": " +
 							sb_err.toString());
 				
+				addJCI.propertyName = fieldName;
+				addJCI.propertySchemaName = jci.schemaName;
+				
 				addedClasses.add(addJCI);
 				var.objectClass = addJCI.javaClassName;
+				
 			}
 			
 			//TODO handle variables of type array
@@ -362,6 +366,19 @@ public class Json2Pojo
 		{
 			for (String imp : imports)
 				sb.append(imp + endLine);
+			sb.append(endLine);
+		}
+		
+		if (jci.propertyName != null)
+		{	
+			sb.append("//class created for property:" + jci.propertyName + endLine);
+			sb.append("//schema: " + jci.propertySchemaName + endLine);
+			sb.append(endLine);
+		}
+		
+		if (!jci.schemaName.isEmpty())
+		{
+			sb.append("//class created from schema: " + jci.schemaName + endLine);
 			sb.append(endLine);
 		}
 		
