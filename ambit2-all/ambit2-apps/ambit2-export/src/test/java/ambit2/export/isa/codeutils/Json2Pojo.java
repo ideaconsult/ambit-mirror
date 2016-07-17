@@ -250,18 +250,23 @@ public class Json2Pojo
 			var.type = VariableInfo.getTypeFromString(fieldType);
 			if (var.type == null)
 				return ("Incorrect \"type\":\"" + fieldType +  "\" for property \"" + fieldName +"\"");
+			
+			//Handle string format
+			if (var.type == Type.STRING )
+			{	
+				String format = extractStringKeyword(fieldNode, "format", false);
+				if (format != null)
+					if (format.equals("uri"))
+						var.stringFormat = StringFormat.URL_FORMAT;
+			}
+			
+			//Handle string format
+			if (var.type == Type.OBJECT )
+			{
+			}
+			
+			//TODO handle variables of types: array, object
 		}
-		
-		//Handle string format
-		if (var.type == Type.STRING )
-		{	
-			String format = extractStringKeyword(fieldNode, "format", false);
-			if (format != null)
-				if (format.equals("uri"))
-					var.stringFormat = StringFormat.URL_FORMAT;
-		}
-		
-		//TODO handle variables of types: array, object
 		
 		//System.out.println(" --> " + var.name + "  " + var.type + "  " + var.objectClass);
 		jci.variables.add(var);
@@ -310,6 +315,15 @@ public class Json2Pojo
 				System.out.println(key);
 				System.out.println("--------------------");
 				System.out.println(generateJavaSource(schemaClasses.get(key)));
+				System.out.println();
+			}
+			
+			
+			for (int i = 0; i < addedClasses.size(); i++)
+			{
+				System.out.println("added class");
+				System.out.println("--------------------");
+				System.out.println(generateJavaSource(addedClasses.get(i)));
 				System.out.println();
 			}
 			
