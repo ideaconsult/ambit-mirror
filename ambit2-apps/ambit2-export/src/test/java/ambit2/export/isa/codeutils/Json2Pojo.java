@@ -227,12 +227,13 @@ public class Json2Pojo
 					}
 					else
 					{
-						//Register new added class
+						//Register new class
 						//TODO (check for whether it is already registered class
 						
 						//temporary code:
 						var.type = VariableInfo.Type.OBJECT;
 						var.objectClass = "Object";
+						//TODO
 					}
 				}
 			}
@@ -254,8 +255,12 @@ public class Json2Pojo
 			{	
 				String format = extractStringKeyword(fieldNode, "format", false);
 				if (format != null)
+				{	
 					if (format.equals("uri"))
 						var.stringFormat = StringFormat.URL_FORMAT;
+					if (format.equals("date-time"))
+						var.stringFormat = StringFormat.DATE_TIME_FORMAT;
+				}
 			}
 			
 			//Handle variable of type
