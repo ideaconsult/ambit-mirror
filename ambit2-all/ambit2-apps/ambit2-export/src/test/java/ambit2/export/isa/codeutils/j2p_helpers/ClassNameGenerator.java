@@ -1,13 +1,19 @@
 package ambit2.export.isa.codeutils.j2p_helpers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ambit2.export.isa.codeutils.Json2Pojo;
 
 public class ClassNameGenerator 
 {
 	private Json2Pojo j2p = null;
+	
+	//Preliminary list of class names which are to be added for
+	//variables of type object
+	public Map<String, String> classNameSuggestions = new HashMap<String, String>();
 	
 	public boolean FlagRemoveSuffix = true;
 	public String suffix = "_schema";
@@ -66,7 +72,9 @@ public class ClassNameGenerator
 	public String getJavaClassNameForVariable(String varName)
 	{
 		//TODO
-		return null;
+		
+		//temporary code:
+		return varName + "_";
 	}
 	
 	public String checkForDuplication(String jcName)

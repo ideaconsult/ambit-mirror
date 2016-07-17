@@ -39,9 +39,7 @@ public class Json2Pojo
 	public JavaSourceConfig sourceConfig = new JavaSourceConfig(); 
 	public ClassNameGenerator classNameGenerator = new ClassNameGenerator(this);
 	
-	//Preliminary list of class names which are to be added for
-	//variables of type object
-	public Map<String, String> classNameSuggestions = new HashMap<String, String>();
+	
 	
 	
 	//work variables:
@@ -260,18 +258,33 @@ public class Json2Pojo
 						var.stringFormat = StringFormat.URL_FORMAT;
 			}
 			
-			//Handle string format
+			//Handle variable of type
 			if (var.type == Type.OBJECT )
 			{
 				JsonNode pNode = fieldNode.path("properties");
 				StringBuffer sb_err = new StringBuffer();
+				String className = classNameGenerator.getJavaClassNameForVariable(fieldName);
+				JavaClassInfo addJCI = null;
+				try{
+					addJCI = getClassFromProperties(pNode, className, sb_err); 
+				}
+				catch(Exception e) {
+					return (e.getMessage() + ": " + sb_err.toString());
+				}
 				
-				//JavaClassInfo addJci = getClassFromProperties(pNode, fieldName, sb_err); 
+				if (sb_err.length() > 0)
+					return ("Errors on creating object for "  + fieldName + ": " +
+							sb_err.toString());
 				
-				//TODO
+				if (addJCI == null)
+					return ("Errors on creating object for "  + fieldName + ": " +
+							sb_err.toString());
+				
+				addedClasses.add(addJCI);
+				var.objectClass = addJCI.javaClassName;
 			}
 			
-			//TODO handle variables of types: array, object
+			//TODO handle variables of type array
 		}
 		
 		//System.out.println(" --> " + var.name + "  " + var.type + "  " + var.objectClass);
