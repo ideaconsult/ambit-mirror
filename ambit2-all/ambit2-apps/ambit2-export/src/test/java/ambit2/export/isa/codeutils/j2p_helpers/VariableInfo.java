@@ -8,7 +8,7 @@ public class VariableInfo
 	}
 	
 	public static enum  StringFormat {
-		UNSPECIFIED, URL_FORMAT 
+		UNSPECIFIED, URL_FORMAT, DATE_TIME_FORMAT
 	}
 	
 	public Type type = null;
