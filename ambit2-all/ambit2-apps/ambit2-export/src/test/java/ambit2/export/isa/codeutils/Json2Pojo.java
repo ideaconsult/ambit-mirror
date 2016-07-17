@@ -263,6 +263,12 @@ public class Json2Pojo
 			//Handle string format
 			if (var.type == Type.OBJECT )
 			{
+				JsonNode pNode = fieldNode.path("properties");
+				StringBuffer sb_err = new StringBuffer();
+				
+				//JavaClassInfo addJci = getClassFromProperties(pNode, fieldName, sb_err); 
+				
+				//TODO
 			}
 			
 			//TODO handle variables of types: array, object
