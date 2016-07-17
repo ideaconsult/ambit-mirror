@@ -11,6 +11,11 @@ public class JavaClassInfo
 	public String schemaName = "";
 	public String javaPackage = "default";
 	public String javaClassName = "";
+	
+	public String propertyName = null;  
+	public String propertySchemaName = null;
+	
+	
 	public List<VariableInfo> variables = new ArrayList<VariableInfo>();
 	
 	public List<String> getNeededImports()
