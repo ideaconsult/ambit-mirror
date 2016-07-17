@@ -187,6 +187,8 @@ public class Json2Pojo
 			JsonNode refNode = fieldNode.path("$ref");
 			if (refNode.isMissingNode())
 			{
+				//TODO check for "anyOf" ...
+				
 				if (FlagExceptionOnIncorrectReference)
 					return "Missing reference for field " + var.name;
 				else
@@ -260,6 +262,8 @@ public class Json2Pojo
 						var.stringFormat = StringFormat.URL_FORMAT;
 					if (format.equals("date-time"))
 						var.stringFormat = StringFormat.DATE_TIME_FORMAT;
+					
+					//email
 				}
 			}
 			
@@ -290,10 +294,65 @@ public class Json2Pojo
 				
 				addedClasses.add(addJCI);
 				var.objectClass = addJCI.javaClassName;
-				
 			}
 			
-			//TODO handle variables of type array
+			//handle variables of type array
+			if (var.type == Type.ARRAY)
+			{
+				//System.out.println("*******");
+				
+				JsonNode itemsNode = fieldNode.path("items");
+				if (itemsNode.isMissingNode())				
+					return "Missing items for field " + var.name;
+				
+				JsonNode refNode = itemsNode.path("$ref");
+				if (refNode.isMissingNode())
+				{
+					//TODO check for "anyOf" ...
+					
+					//TODO
+					//handle properties
+					//System.out.println("^^^^^^^");
+				}
+				else
+				{
+					String ref = extractStringKeyword(itemsNode, "$ref", true);
+					if (ref == null)
+					{	
+						if (FlagExceptionOnIncorrectReference)
+							return "Incorrect reference for items " + var.name + 
+									" : " + jsonError;
+						else
+						{	
+							logger.info("Incorrect reference for items " + var.name + 
+									" in schema " + jci.schemaName + " : " + jsonError);
+							return null; //no error is considered
+						}	
+					}
+					else
+					{	
+						JavaClassInfo newClass = handleReference(ref);
+						//System.out.println("******* handleReference");
+						if (newClass == null)
+						{
+							if (FlagExceptionOnIncorrectReference)
+								return "Incorrect reference \""+ ref + "\" for items " + var.name;
+							else
+							{	
+								logger.info("Incorrect reference \""+ ref + "\" for items " + var.name + 
+										" in schema " + jci.schemaName);
+								return null; //no error is considered
+							}	
+						}
+						else
+						{
+							
+							//TODO
+							var.objectClass = "Object";
+						}
+					}
+				}
+			}
 		}
 		
 		//System.out.println(" --> " + var.name + "  " + var.type + "  " + var.objectClass);
