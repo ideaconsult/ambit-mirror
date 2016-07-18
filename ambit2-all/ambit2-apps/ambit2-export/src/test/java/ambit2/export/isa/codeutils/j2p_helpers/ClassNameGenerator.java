@@ -18,7 +18,7 @@ public class ClassNameGenerator
 	public boolean FlagRemoveSuffix = true;
 	public String suffix = "_schema";
 	
-	public boolean FlagHandleTokens = true;
+	public boolean FlagHandleTokensInSchemaName = true;
 	public String splitters[] = new String[] {"_", "-", " ", "."}; 
 	
 	public String additionSuffixForDuplication = "_";
@@ -42,7 +42,7 @@ public class ClassNameGenerator
 				schemaName0 = schemaName.substring(0, schemaName.length() - suffix.length());
 		}
 		
-		if (FlagHandleTokens)
+		if (FlagHandleTokensInSchemaName)
 		{
 			String tok[] = tokenize(schemaName0);
 			StringBuffer sb = new StringBuffer();
@@ -59,7 +59,7 @@ public class ClassNameGenerator
 	
 	
 	
-	public String getJavaClassNameForVariable(String varName)
+	public String getJavaClassNameForVariable(String varName, boolean flagCleanPlural)
 	{
 		//TODO
 		
