@@ -316,8 +316,8 @@ public class Json2Pojo
 						if (arrayTypeNode.isMissingNode())
 							var.objectClass = "Object";
 						else
-						{
-							String arrayItemType = extractStringKeyword(fieldNode, "type", true);
+						{	
+							String arrayItemType = extractStringKeyword(itemsNode, "type", true);
 							if (arrayItemType == null)
 								return ("Incorrect array item \"type\" for property \"" + fieldName +"\"");
 							if (arrayItemType.isEmpty())
