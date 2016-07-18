@@ -82,6 +82,18 @@ public class Json2Pojo
 	
 	void iterateSourceDir() throws Exception
 	{
+		//preliminary scan to register all basic classes:
+		for (File file : sourceDir.listFiles()) 
+		{	
+			if (file.isFile())
+			{
+				if (isJsonFile(file))
+					registerJsonSchemaClass(file);
+				continue;
+			}
+			//TODO handle sub-directories if needed
+		}
+		
 		for (File file : sourceDir.listFiles()) 
 		{	
 			if (file.isFile())
@@ -90,22 +102,20 @@ public class Json2Pojo
 					handleJsonSchemaFile(file);
 				continue;
 			}
-			
 			//TODO handle sub-directories if needed
 		}
 	}
 	
-	
-	void handleJsonSchemaFile(File file) throws Exception
+	void registerJsonSchemaClass(File file) throws Exception
 	{
-		System.out.println("Handling json schema: " + file.getName());
+		System.out.println("Registering class for json schema: " + file.getName());
 		String schemaName = file.getName().substring(0, (file.getName().length() - jsonFileExtension.length()-1));
 		
 		if (schemaName.equals(""))
 			return;  //this should not happen
 		
 		if (schemaClasses.containsKey(schemaName))
-			return; //This schema has already been processed
+			return; //This schema has already been processed (this should not happen)
 		
 		String jcName = classNameGenerator.getJavaClassNameForSchema(schemaName);		
 		JavaClassInfo jci = new  JavaClassInfo();
@@ -113,9 +123,17 @@ public class Json2Pojo
 		jci.schemaName = schemaName;
 		jci.javaPackage = javaPackage;
 		jci.javaClassName = jcName;
-		
+	}
+	
+	void handleJsonSchemaFile(File file) throws Exception
+	{
+		System.out.println("\nHandling json schema: " + file.getName());
+		String schemaName = file.getName().substring(0, (file.getName().length() - jsonFileExtension.length()-1));
+				
+		JavaClassInfo jci = schemaClasses.get(schemaName);
 		readJsonSchema(file.getAbsolutePath(), jci);
 	}
+	
 	
 	void readJsonSchema (String jsonFileName, JavaClassInfo jci) throws Exception
 	{
