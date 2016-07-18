@@ -48,13 +48,25 @@ public class ClassNameGenerator
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < tok.length; i++)
 			{
-				sb.append(capitalyzeFirstCharAndLowerCaseOtherChars(tok[i]));
+				sb.append(capitalyzeFirstChar(tok[i]));
 			}
 			return sb.toString();
 		}
 		
 		return schemaName0;
 		
+	}
+	
+	String capitalyzeFirstChar(String s)
+	{
+		if (s.length() > 1)
+		{	
+			String s1 = s.substring(0, 1);
+			String s2 = s.substring(1);
+			return s1.toUpperCase()+s2;
+		}
+		else
+			return s.toUpperCase();
 	}
 	
 	String capitalyzeFirstCharAndLowerCaseOtherChars(String s)
