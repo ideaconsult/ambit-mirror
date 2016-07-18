@@ -272,7 +272,7 @@ public class Json2Pojo
 			{
 				JsonNode pNode = fieldNode.path("properties");
 				StringBuffer sb_err = new StringBuffer();
-				String className = classNameGenerator.getJavaClassNameForVariable(fieldName);
+				String className = classNameGenerator.getJavaClassNameForVariable(fieldName, true);
 				JavaClassInfo addJCI = null;
 				try{
 					addJCI = getClassFromProperties(pNode, className, sb_err); 
@@ -332,7 +332,7 @@ public class Json2Pojo
 								//Handle object
 								JsonNode pNode = itemsNode.path("properties");
 								StringBuffer sb_err = new StringBuffer();
-								String className = classNameGenerator.getJavaClassNameForVariable(fieldName);
+								String className = classNameGenerator.getJavaClassNameForVariable(fieldName, true);
 								JavaClassInfo addJCI = null;
 								try{
 									addJCI = getClassFromProperties(pNode, className, sb_err); 
