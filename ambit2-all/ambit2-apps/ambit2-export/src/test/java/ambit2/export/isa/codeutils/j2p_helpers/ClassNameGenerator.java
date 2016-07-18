@@ -54,7 +54,7 @@ public class ClassNameGenerator
 			className = sb.toString();
 		}
 		
-		return checkForDuplication(className);
+		return j2p.checkForDuplication(className);
 		
 	}
 	
@@ -85,14 +85,10 @@ public class ClassNameGenerator
 				className = className.substring(0, className.length()-1);
 		}
 		
-		return checkForDuplication(className);
+		return j2p.checkForDuplication(className);
 	}
 	
-	public String checkForDuplication(String jcName)
-	{
-		//TODO
-		return jcName;
-	}
+	
 	
 	public String[] tokenize(String s)
 	{
