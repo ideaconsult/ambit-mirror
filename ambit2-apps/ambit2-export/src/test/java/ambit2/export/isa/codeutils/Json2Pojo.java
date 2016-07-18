@@ -43,8 +43,8 @@ public class Json2Pojo
 	
 	
 	//work variables:
-	Map<String, JavaClassInfo> schemaClasses = new HashMap<String, JavaClassInfo>();
-	List<JavaClassInfo> addedClasses = new ArrayList<JavaClassInfo>();
+	public Map<String, JavaClassInfo> schemaClasses = new HashMap<String, JavaClassInfo>();
+	public List<JavaClassInfo> addedClasses = new ArrayList<JavaClassInfo>();
 	String jsonError = null;
 	
 	
@@ -488,7 +488,7 @@ public class Json2Pojo
 		
 		if (jci.propertyName != null)
 		{	
-			sb.append("//class created for property:" + jci.propertyName + endLine);
+			sb.append("//class created for property: " + jci.propertyName + endLine);
 			sb.append("//schema: " + jci.propertySchemaName + endLine);
 			sb.append(endLine);
 		}
@@ -562,6 +562,30 @@ public class Json2Pojo
 			jsonError = "Keyword " + keyword + " is not of type text!";
 			return null;
 		}			
+	}
+	
+	public String checkForDuplication(String jcName)
+	{
+		//Recursively adding suffix until unique class name is found
+		for (JavaClassInfo jci : schemaClasses.values())
+		{
+			if (jcName.equals(jci.javaClassName))
+			{	
+				logger.info("---- Duplication for class " + jcName);
+				return checkForDuplication(jcName + classNameGenerator.additionSuffixForDuplication);
+			}	
+		}	
+		
+		for (JavaClassInfo jci : addedClasses)
+		{
+			if (jcName.equals(jci.javaClassName))
+			{	
+				logger.info("---- Duplication for class " + jcName);
+				return checkForDuplication(jcName + classNameGenerator.additionSuffixForDuplication);
+			}	
+		}	
+		
+		return jcName;
 	}
 	
 }
