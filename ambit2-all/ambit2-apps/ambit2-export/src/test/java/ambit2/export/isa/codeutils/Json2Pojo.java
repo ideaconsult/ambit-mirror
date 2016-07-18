@@ -34,6 +34,7 @@ public class Json2Pojo
 	public boolean FlagResultOnlyToLog = false;
 	
 	public String jsonFileExtension = "json";
+	public String refFileExtension = "json#";
 	public String endLine = "\n";
 	
 	public JavaSourceConfig sourceConfig = new JavaSourceConfig(); 
@@ -213,7 +214,7 @@ public class Json2Pojo
 				{	
 					logger.info("Missing reference for field " + var.name + 
 							" in schema " + jci.schemaName);
-					return null; //no error is considered
+					return null; //no error is considered but variable is not registered
 				}	
 			}
 			else
@@ -228,7 +229,7 @@ public class Json2Pojo
 					{	
 						logger.info("Incorrect reference for field " + var.name + 
 								" in schema " + jci.schemaName + " : " + jsonError);
-						return null; //no error is considered
+						return null; //no error is considered but variable is not registered
 					}	
 				}
 				else
@@ -242,7 +243,7 @@ public class Json2Pojo
 						{	
 							logger.info("Incorrect reference \""+ ref + "\" for field " + var.name + 
 									" in schema " + jci.schemaName);
-							return null; //no error is considered
+							return null; //no error is considered but variable is not registered
 						}	
 					}
 					else
@@ -393,14 +394,14 @@ public class Json2Pojo
 						{	
 							logger.info("Incorrect reference for items " + var.name + 
 									" in schema " + jci.schemaName + " : " + jsonError);
-							return null; //no error is considered
+							return null; //no error is considered but variable is not registered
 						}	
 					}
 					else
 					{	
-						JavaClassInfo newClass = getReferenceClass(ref);
+						JavaClassInfo refClass = getReferenceClass(ref);
 						//System.out.println("******* handleReference");
-						if (newClass == null)
+						if (refClass == null)
 						{
 							if (FlagExceptionOnIncorrectReference)
 								return "Incorrect reference \""+ ref + "\" for items " + var.name;
@@ -408,14 +409,12 @@ public class Json2Pojo
 							{	
 								logger.info("Incorrect reference \""+ ref + "\" for items " + var.name + 
 										" in schema " + jci.schemaName);
-								return null; //no error is considered
+								return null; //no error is considered but variable is not registered
 							}	
 						}
 						else
-						{
-							
-							//TODO
-							var.objectClass = "Object";
+						{	
+							var.objectClass = refClass.javaClassName;
 						}
 					}
 				}
@@ -428,9 +427,11 @@ public class Json2Pojo
 	}
 	
 	JavaClassInfo getReferenceClass(String ref)
-	{
-		//TODO
-		return null;
+	{	
+		String schemaName = ref.substring(0, (ref.length() - refFileExtension.length()-1));
+		//System.out.println("  ***** getReferenceClass() " + ref + "  --> " + schemaName + "  --> " + 
+		//			((schemaClasses.get(schemaName)==null)?"null":schemaClasses.get(schemaName).javaClassName));
+		return schemaClasses.get(schemaName);
 	}
 	
 	JavaClassInfo getClassFromProperties(JsonNode propNode, 
