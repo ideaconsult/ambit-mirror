@@ -308,14 +308,67 @@ public class Json2Pojo
 				JsonNode refNode = itemsNode.path("$ref");
 				if (refNode.isMissingNode())
 				{
-					//TODO check for "anyOf" ...
-					
-					//TODO
-					//handle properties
-					//System.out.println("^^^^^^^");
+					//No $ref for array
+					JsonNode anyOfNode = itemsNode.path("anyOf");
+					if (anyOfNode.isMissingNode())
+					{
+						JsonNode arrayTypeNode = itemsNode.path("type");
+						if (arrayTypeNode.isMissingNode())
+							var.objectClass = "Object";
+						else
+						{
+							String arrayItemType = extractStringKeyword(fieldNode, "type", true);
+							if (arrayItemType == null)
+								return ("Incorrect array item \"type\" for property \"" + fieldName +"\"");
+							if (arrayItemType.isEmpty())
+								return ("Empty array item \"type\" for property \"" + fieldName +"\"");
+							
+							VariableInfo.Type tt = VariableInfo.getTypeFromString(arrayItemType);
+							if (tt == null)
+								return ("Incorrect array item \"type\":\"" + arrayItemType +  "\" for property \"" + fieldName +"\"");
+							
+							if (tt == VariableInfo.Type.OBJECT)
+							{
+								//Handle object
+								JsonNode pNode = itemsNode.path("properties");
+								StringBuffer sb_err = new StringBuffer();
+								String className = classNameGenerator.getJavaClassNameForVariable(fieldName);
+								JavaClassInfo addJCI = null;
+								try{
+									addJCI = getClassFromProperties(pNode, className, sb_err); 
+								}
+								catch(Exception e) {
+									return (e.getMessage() + ": " + sb_err.toString());
+								}
+
+								if (sb_err.length() > 0)
+									return ("Errors on creating object for "  + fieldName + ": " +
+											sb_err.toString());
+
+								if (addJCI == null)
+									return ("Errors on creating object for "  + fieldName + ": " +
+											sb_err.toString());
+
+								addJCI.propertyName = fieldName;
+								addJCI.propertySchemaName = jci.schemaName;
+
+								addedClasses.add(addJCI);
+								var.objectClass = addJCI.javaClassName;
+							}
+							else
+								var.objectClass = "Object";  //Object class is used for the other case
+						}
+					}
+					else
+					{
+						//array items is defined as 'anyOf'
+						//Object class is used for the array element
+						var.objectClass = "Object";
+					}
 				}
 				else
 				{
+					//Handle $ref for array
 					String ref = extractStringKeyword(itemsNode, "$ref", true);
 					if (ref == null)
 					{	
