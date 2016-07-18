@@ -19,6 +19,7 @@ public class ClassNameGenerator
 	public String suffix = "_schema";
 	
 	public boolean FlagHandleTokensInSchemaName = true;
+	public boolean FlagHandleTokensInVarName = false;
 	public String splitters[] = new String[] {"_", "-", " ", "."}; 
 	
 	public String additionSuffixForDuplication = "_";
@@ -35,25 +36,25 @@ public class ClassNameGenerator
 	
 	public String getJavaClassNameForSchema(String schemaName)
 	{
-		String schemaName0 = schemaName;
+		String className = schemaName;
 		if (FlagRemoveSuffix)
 		{
 			if (schemaName.endsWith(suffix))
-				schemaName0 = schemaName.substring(0, schemaName.length() - suffix.length());
+				className = schemaName.substring(0, schemaName.length() - suffix.length());
 		}
 		
 		if (FlagHandleTokensInSchemaName)
 		{
-			String tok[] = tokenize(schemaName0);
+			String tok[] = tokenize(className);
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < tok.length; i++)
 			{
 				sb.append(capitalyzeFirstChar(tok[i]));
 			}
-			return sb.toString();
+			className = sb.toString();
 		}
 		
-		return schemaName0;
+		return checkForDuplication(className);
 		
 	}
 	
@@ -61,10 +62,30 @@ public class ClassNameGenerator
 	
 	public String getJavaClassNameForVariable(String varName, boolean flagCleanPlural)
 	{
-		//TODO
+		String className = null;
 		
-		//temporary code:
-		return varName + "_";
+		if (FlagHandleTokensInVarName)
+		{
+			String tok[] = tokenize(varName);
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < tok.length; i++)
+			{
+				sb.append(capitalyzeFirstChar(tok[i]));
+			}
+			className =  sb.toString();
+		}
+		else
+		{
+			className = capitalyzeFirstChar(varName);
+		}
+		
+		if (flagCleanPlural)
+		{
+			if (className.endsWith("s"))
+				className = className.substring(0, className.length()-1);
+		}
+		
+		return checkForDuplication(className);
 	}
 	
 	public String checkForDuplication(String jcName)
