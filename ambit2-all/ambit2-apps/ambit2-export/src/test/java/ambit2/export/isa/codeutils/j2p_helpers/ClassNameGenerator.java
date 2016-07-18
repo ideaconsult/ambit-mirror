@@ -57,29 +57,7 @@ public class ClassNameGenerator
 		
 	}
 	
-	String capitalyzeFirstChar(String s)
-	{
-		if (s.length() > 1)
-		{	
-			String s1 = s.substring(0, 1);
-			String s2 = s.substring(1);
-			return s1.toUpperCase()+s2;
-		}
-		else
-			return s.toUpperCase();
-	}
 	
-	String capitalyzeFirstCharAndLowerCaseOtherChars(String s)
-	{
-		if (s.length() > 1)
-		{	
-			String s1 = s.substring(0, 1);
-			String s2 = s.substring(1);
-			return s1.toUpperCase()+s2.toLowerCase();
-		}
-		else
-			return s.toUpperCase();
-	}
 	
 	public String getJavaClassNameForVariable(String varName)
 	{
@@ -192,6 +170,30 @@ public class ClassNameGenerator
 		
 		return result;
 	}//End of tokenize
+	
+	String capitalyzeFirstChar(String s)
+	{
+		if (s.length() > 1)
+		{	
+			String s1 = s.substring(0, 1);
+			String s2 = s.substring(1);
+			return s1.toUpperCase()+s2;
+		}
+		else
+			return s.toUpperCase();
+	}
+	
+	String capitalyzeFirstCharAndLowerCaseOtherChars(String s)
+	{
+		if (s.length() > 1)
+		{	
+			String s1 = s.substring(0, 1);
+			String s2 = s.substring(1);
+			return s1.toUpperCase()+s2.toLowerCase();
+		}
+		else
+			return s.toUpperCase();
+	}
 	
 }
 
