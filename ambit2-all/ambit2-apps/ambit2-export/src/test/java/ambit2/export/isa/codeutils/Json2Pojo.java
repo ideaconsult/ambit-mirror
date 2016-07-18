@@ -138,9 +138,8 @@ public class Json2Pojo
 	void readJsonSchema (String jsonFileName, JavaClassInfo jci) throws Exception
 	{
 		//Function is recursive. 
-		//recursion ways:
-		//(1) readJsonSchema() -->  readProperty() --> handleReference() --> readJsonSchema()
-		//(2) readJsonSchema() -->  readProperty() --> getClassFromProperties() --> readProperty() ...
+		//possible recursion ways:
+		//readJsonSchema() -->  readProperty() --> getClassFromProperties() --> readProperty() ...
 		
 		FileInputStream fin = new FileInputStream(jsonFileName); 
 		ObjectMapper mapper = new ObjectMapper();
@@ -161,7 +160,8 @@ public class Json2Pojo
 		}
 		else
 		{
-			//handle schema type if needed
+			//handle schema type
+			
 		}
 		
 		//Iterate schema properties
@@ -233,8 +233,8 @@ public class Json2Pojo
 				}
 				else
 				{	
-					JavaClassInfo newClass = handleReference(ref);
-					if (newClass == null)
+					JavaClassInfo refClass = getReferenceClass(ref);
+					if (refClass == null)
 					{
 						if (FlagExceptionOnIncorrectReference)
 							return "Incorrect reference \""+ ref + "\" for field " + var.name;
@@ -247,13 +247,9 @@ public class Json2Pojo
 					}
 					else
 					{
-						//Register new class
-						//TODO (check for whether it is already registered class
-						
-						//temporary code:
+						//Class is already registered
 						var.type = VariableInfo.Type.OBJECT;
-						var.objectClass = "Object";
-						//TODO
+						var.objectClass = refClass.javaClassName;
 					}
 				}
 			}
@@ -402,7 +398,7 @@ public class Json2Pojo
 					}
 					else
 					{	
-						JavaClassInfo newClass = handleReference(ref);
+						JavaClassInfo newClass = getReferenceClass(ref);
 						//System.out.println("******* handleReference");
 						if (newClass == null)
 						{
@@ -431,7 +427,7 @@ public class Json2Pojo
 		return null;
 	}
 	
-	JavaClassInfo handleReference(String ref)
+	JavaClassInfo getReferenceClass(String ref)
 	{
 		//TODO
 		return null;
