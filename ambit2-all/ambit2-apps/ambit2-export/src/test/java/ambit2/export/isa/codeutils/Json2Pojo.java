@@ -287,7 +287,8 @@ public class Json2Pojo
 			{
 				JsonNode pNode = fieldNode.path("properties");
 				StringBuffer sb_err = new StringBuffer();
-				String className = classNameGenerator.getJavaClassNameForVariable(fieldName, true);
+				//plural is not cleaned for variable of type object (flagCleanPlural = false)
+				String className = classNameGenerator.getJavaClassNameForVariable(fieldName, false);  
 				JavaClassInfo addJCI = null;
 				try{
 					addJCI = getClassFromProperties(pNode, className, sb_err); 
@@ -313,9 +314,7 @@ public class Json2Pojo
 			
 			//handle variables of type array
 			if (var.type == Type.ARRAY)
-			{
-				//System.out.println("*******");
-				
+			{	
 				JsonNode itemsNode = fieldNode.path("items");
 				if (itemsNode.isMissingNode())				
 					return "Missing items for field " + var.name;
@@ -400,7 +399,6 @@ public class Json2Pojo
 					else
 					{	
 						JavaClassInfo refClass = getReferenceClass(ref);
-						//System.out.println("******* handleReference");
 						if (refClass == null)
 						{
 							if (FlagExceptionOnIncorrectReference)
