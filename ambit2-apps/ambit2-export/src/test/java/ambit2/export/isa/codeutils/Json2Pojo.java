@@ -206,16 +206,27 @@ public class Json2Pojo
 			JsonNode refNode = fieldNode.path("$ref");
 			if (refNode.isMissingNode())
 			{
-				//TODO check for "anyOf" ...
 				
-				if (FlagExceptionOnIncorrectReference)
-					return "Missing reference for field " + var.name;
+				//No $ref for variable without 'type'
+				//check for "anyOf" ...
+				JsonNode anyOfNode = fieldNode.path("anyOf");
+				if (anyOfNode.isMissingNode())
+				{				
+					if (FlagExceptionOnIncorrectReference)
+						return "Missing reference for field " + var.name;
+					else
+					{	
+						logger.info("Missing reference for field " + var.name + 
+								" in schema " + jci.schemaName);
+						return null; //no error is considered but variable is not registered
+					}
+				}
 				else
-				{	
-					logger.info("Missing reference for field " + var.name + 
-							" in schema " + jci.schemaName);
-					return null; //no error is considered but variable is not registered
-				}	
+				{
+					//"anyOf" is present: variable is set of type Object
+					var.type = VariableInfo.Type.OBJECT;
+					var.objectClass = "Object";
+				}
 			}
 			else
 			{
