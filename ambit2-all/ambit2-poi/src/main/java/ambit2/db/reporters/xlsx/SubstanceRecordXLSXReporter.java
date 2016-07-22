@@ -253,8 +253,8 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 				}
 
 				rowIndex++;
-				substanceIndex++;
 			}
+			substanceIndex++;
 		}
 		return item;
 	}
