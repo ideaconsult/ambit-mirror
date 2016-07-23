@@ -95,8 +95,12 @@ public class SubstanceExportResource<Q extends IQueryRetrieval<SubstanceRecord>,
 		if (jsonpcallback == null)
 			jsonpcallback = getParams().getFirstValue("callback");
 
+		String command = "results";
+		try {
+			if (Boolean.parseBoolean(getParams().getFirstValue("array").toString())) command = null;
+		} catch (Exception x) {}		
 		return new OutputWriterConvertor<SubstanceRecord, Q>(
-				(QueryAbstractReporter<SubstanceRecord, Q, Writer>) new Substance2BucketJsonReporter(),
+				(QueryAbstractReporter<SubstanceRecord, Q, Writer>) new Substance2BucketJsonReporter(command),
 				jsonpcallback == null ? MediaType.APPLICATION_JSON
 						: MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);
 
@@ -113,8 +117,8 @@ class Substance2BucketJsonReporter extends
 	protected Bucket bucket;
 	protected ObjectMapper dx = new ObjectMapper();
 
-	public Substance2BucketJsonReporter() {
-		super();
+	public Substance2BucketJsonReporter(String command) {
+		super(command,null,null);
 		bucket = new Bucket();
 		bucket.setHeader(new String[] { "name", "publicname", "owner_name",
 				"s_uuid", "substanceType", "_childDocuments_" });
