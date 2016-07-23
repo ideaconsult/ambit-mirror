@@ -37,15 +37,16 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 	private static String _params = "{\"params\" : {\":all\" : { \"type\" : \"boolean\", \"value\": %s}, \":s_prefix\" : { \"type\" : \"String\", \"value\": \"%s\"},\":s_uuid\" : { \"type\" : \"String\", \"value\":\"%s\"}	}}";
 
 	public SubstanceStudyFlatQuery(SubstanceRecord record) throws IOException {
-		this((ObjectNode)null);
+		this((ObjectNode) null);
 		String[] uuid = I5Utils.splitI5UUID(record.getSubstanceUUID());
-		JsonNode node = json2params(String.format(_params,"false",uuid[0],uuid[1].replace("-", "").toLowerCase()));
+		JsonNode node = json2params(String.format(_params, "false", uuid[0],
+				uuid[1].replace("-", "").toLowerCase()));
 		if (node != null && node instanceof ObjectNode)
 			setValue((ObjectNode) node);
 	}
 
 	public SubstanceStudyFlatQuery() throws IOException {
-		this(String.format(_params,"true","",""));
+		this(String.format(_params, "true", "", ""));
 	}
 
 	public SubstanceStudyFlatQuery(String json) throws IOException {
@@ -86,13 +87,15 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 		Bucket bucket = super.getObject(rs);
 		bucket.put("s_type", "study");
 		bucket.remove("_childDocuments_");
-		
-		String substanceUUID =  I5Utils.getPrefixedUUID(bucket.get("s_prefix"),bucket.get("s_uuid"));
-		bucket.put("s_uuid",substanceUUID);
+
+		String substanceUUID = I5Utils.getPrefixedUUID(bucket.get("s_prefix"),
+				bucket.get("s_uuid"));
+		bucket.put("s_uuid", substanceUUID);
 		bucket.remove("s_prefix");
-		
-		String documentUUID =  I5Utils.getPrefixedUUID(bucket.get("document_prefix"),bucket.get("document_uuid"));
-		bucket.put("document_uuid",documentUUID);
+
+		String documentUUID = I5Utils.getPrefixedUUID(
+				bucket.get("document_prefix"), bucket.get("document_uuid"));
+		bucket.put("document_uuid", documentUUID);
 		bucket.remove("document_prefix");
 		List<Bucket> _childDocuments_ = new ArrayList<>();
 		final String[] keys = new String[] { "params", "conditions" };
@@ -102,10 +105,10 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 			Bucket pbucket = new Bucket();
 			pbucket.setHeader(bucket.getHeader());
 			pbucket.put("id", bucket.get("id") + "_" + key);
-			bucket.put("s_uuid",substanceUUID);
+			bucket.put("s_uuid", substanceUUID);
 			pbucket.put("document_uuid", documentUUID);
 			pbucket.put("s_type", key);
-			IParams iparams = parseConditions(params);
+			IParams iparams = SubstanceStudyParser.parseConditions(dx, params);
 			pbucket.put(key, iparams);
 
 			_childDocuments_.add(pbucket);
@@ -115,22 +118,8 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 		final String textValueTag = "textValue";
 		Object t = bucket.get(textValueTag);
 		if (t != null && t.toString().startsWith("{")) {
-			IParams proteomics = parseConditions(t.toString());
-			Iterator i = proteomics.keySet().iterator();
-			IParams nonzero = new Params();
-			while (i.hasNext()) {
-				Object p = i.next();
-				try {
-					Value node = (Value) proteomics.get(p);
-					if (node != null && (node.getLoValue() != null)
-							&& (node.getLoValue() instanceof Double)
-							&& ((Double) node.getLoValue()) > 0) {
-						nonzero.put(p, node.getLoValue());
-					}
-				} catch (Exception x) {
-					x.printStackTrace();
-				}
-			}
+			IParams nonzero = SubstanceStudyParser.parseTextValueProteomics(dx,
+					t.toString());
 			bucket.put(textValueTag, nonzero);
 		}
 
@@ -154,22 +143,6 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 
 		bucket.setColumnTypes(columnTypes);
 		bucket.setHeader(header);
-	}
-
-	protected IParams parseConditions(Object json) {
-		if (json != null)
-			try {
-
-				JsonNode conditions = dx.readTree(new StringReader(json
-						.toString()));
-				if (conditions instanceof ObjectNode) {
-					return SubstanceStudyParser
-							.parseParams((ObjectNode) conditions);
-				}
-			} catch (Exception x) {
-				logger.log(Level.FINE, x.getMessage());
-			}
-		return null;
 	}
 
 }

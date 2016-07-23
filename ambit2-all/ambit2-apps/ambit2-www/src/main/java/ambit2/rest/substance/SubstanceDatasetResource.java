@@ -129,9 +129,12 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 					filenamePrefix);
 		} else if (variant.getMediaType().equals(
 				MediaType.APPLICATION_JAVASCRIPT)) {
-			return createJSONReporter(filenamePrefix);
+			String jsonpcallback = getParams().getFirstValue("jsonp");
+			if (jsonpcallback == null)
+				jsonpcallback = getParams().getFirstValue("callback");
+			return createJSONReporter( filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-			return createJSONReporter(filenamePrefix);
+			return createJSONReporter( filenamePrefix);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return createARFFReporter(filenamePrefix);
 		} else if (variant.getMediaType().equals(
@@ -508,6 +511,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 		}, media, filenamePrefix);
 	}
 
+	@Override
 	protected IProcessor<Q, Representation> createJSONReporter(
 			String filenamePrefix) {
 		groupProperties.add(new SubstancePublicName());

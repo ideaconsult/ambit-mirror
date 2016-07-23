@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -38,7 +41,7 @@ import ambit2.core.io.IRawReader;
 
 public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 		implements IRawReader<IStructureRecord>, ICiteable {
-
+	protected static Logger logger = Logger.getLogger(SubstanceStudyParser.class.getName());
 	protected ObjectMapper dx = new ObjectMapper();
 	protected ArrayNode substance;
 	protected ArrayNode study;
@@ -614,5 +617,44 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 		}
 		return effects;
 
+	}
+	
+	public static IParams parseConditions(ObjectMapper dx,Object json) {
+		if (json != null)
+			try {
+
+				JsonNode conditions = dx.readTree(new StringReader(json
+						.toString()));
+				if (conditions instanceof ObjectNode) {
+					return SubstanceStudyParser
+							.parseParams((ObjectNode) conditions);
+				}
+			} catch (Exception x) {
+				logger.log(Level.FINE, x.getMessage());
+			}
+		return null;
+	}
+	
+	public static IParams parseTextValueProteomics(ObjectMapper dx, String t) {
+		IParams nonzero = null;
+		if (t != null && t.startsWith("{")) {
+			IParams proteomics = SubstanceStudyParser.parseConditions(dx,t.toString());
+			Iterator i = proteomics.keySet().iterator();
+			nonzero = new Params();
+			while (i.hasNext()) {
+				Object p = i.next();
+				try {
+					Value node = (Value) proteomics.get(p);
+					if (node != null && (node.getLoValue() != null)
+							&& (node.getLoValue() instanceof Double)
+							&& ((Double) node.getLoValue()) > 0) {
+						nonzero.put(p, node.getLoValue());
+					}
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
+			}
+		}
+		return nonzero;
 	}
 }
