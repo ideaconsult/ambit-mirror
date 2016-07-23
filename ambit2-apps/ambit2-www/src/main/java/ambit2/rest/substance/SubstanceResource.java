@@ -1,6 +1,7 @@
 package ambit2.rest.substance;
 
 import java.awt.Dimension;
+import java.io.Writer;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.modbcum.r.QueryAbstractReporter;
 import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.StringConvertor;
 import net.idea.restnet.db.QueryResource;
@@ -221,23 +223,26 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 			};
 		} else if (variant.getMediaType().equals(
 				MediaType.APPLICATION_JAVASCRIPT)) {
-			String jsonpcallback = getParams().getFirstValue("jsonp");
-			if (jsonpcallback == null)
-				jsonpcallback = getParams().getFirstValue("callback");
-			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(
-					getRequest(), jsonpcallback, bundles, queryRelatedRecord,
-					retrieveStudySummary);
-			return new OutputWriterConvertor<SubstanceRecord, Q>(cmpreporter,
-					MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);
+			return createJSONReporter(filenamePrefix);
 		} else { // json by default
 			// else if
 			// (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-			SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(
-					getRequest(), null, bundles, queryRelatedRecord,
-					retrieveStudySummary);
-			return new OutputWriterConvertor<SubstanceRecord, Q>(cmpreporter,
-					MediaType.APPLICATION_JSON, filenamePrefix);
+			return createJSONReporter(filenamePrefix);
 		}
+	}
+
+	protected IProcessor<Q, Representation> createJSONReporter(
+			String filenamePrefix) {
+		String jsonpcallback = getParams().getFirstValue("jsonp");
+		if (jsonpcallback == null)
+			jsonpcallback = getParams().getFirstValue("callback");
+		SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(
+				getRequest(), jsonpcallback, bundles, queryRelatedRecord,
+				retrieveStudySummary);
+		return new OutputWriterConvertor<SubstanceRecord, Q>(cmpreporter,
+				jsonpcallback == null ? MediaType.APPLICATION_JSON
+						: MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);
+
 	}
 
 	@Override
@@ -329,7 +334,8 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 				List<ProtocolApplication<Protocol, Params, String, Params, String>> protocols = new ArrayList<ProtocolApplication<Protocol, Params, String, Params, String>>();
 				for (String value : form.getValuesArray("category"))
 					try {
-						if (protocols.size()>=maxfacet) break;
+						if (protocols.size() >= maxfacet)
+							break;
 						String[] categories = value.split("\\.");
 						Protocol protocol = new Protocol(null);
 						protocol.setCategory(Protocol._categories.valueOf(

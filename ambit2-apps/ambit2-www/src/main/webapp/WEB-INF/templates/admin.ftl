@@ -77,6 +77,14 @@ $(document)
 				<div class="three columns help"><a href='http://ambit.sourceforge.net/install_ambitrest.html' class='qxternal' target=_blank>Help</a></div>
 				</div>
 
+				<div class='row' style="margin:5px;padding:5px;">
+				<div class="three columns">Export</div>
+				<div class="thirteen columns">
+				<a href='${ambit_root}/admin/export/experiment?array=true'>Export experimental data</a> | 
+				<a href='${ambit_root}/admin/export/substance'>Export substances</a> | 
+				</div>
+				</div>	
+				
 				<div class='row' style="margin:5px;padding:5px;"> 	
 				<div class="three columns">&nbsp;</div>
 				<div class="thirteen columns">

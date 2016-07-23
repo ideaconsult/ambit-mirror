@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import net.idea.modbcum.i.JSONSerializable;
 import ambit2.base.json.JSONUtils;
 
 /**
@@ -104,7 +105,7 @@ public class Params<VALUE> implements IParams<VALUE> {
 			else if (value instanceof IValue)
 				b.append(value.toString());
 			else if (value instanceof IParams)
-				b.append(value.toString());
+				b.append(((JSONSerializable)value).asJSON());
 			else if (value instanceof Number)
 				b.append(JSONUtils.jsonNumber((Number) value));
 			else
