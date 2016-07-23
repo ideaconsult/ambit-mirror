@@ -97,10 +97,14 @@ public class SubstanceExportResource<Q extends IQueryRetrieval<SubstanceRecord>,
 
 		String command = "results";
 		try {
-			if (Boolean.parseBoolean(getParams().getFirstValue("array").toString())) command = null;
-		} catch (Exception x) {}		
+			if (Boolean.parseBoolean(getParams().getFirstValue("array")
+					.toString()))
+				command = null;
+		} catch (Exception x) {
+		}
 		return new OutputWriterConvertor<SubstanceRecord, Q>(
-				(QueryAbstractReporter<SubstanceRecord, Q, Writer>) new Substance2BucketJsonReporter(command),
+				(QueryAbstractReporter<SubstanceRecord, Q, Writer>) new Substance2BucketJsonReporter(
+						command),
 				jsonpcallback == null ? MediaType.APPLICATION_JSON
 						: MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);
 
@@ -118,10 +122,11 @@ class Substance2BucketJsonReporter extends
 	protected ObjectMapper dx = new ObjectMapper();
 
 	public Substance2BucketJsonReporter(String command) {
-		super(command,null,null);
+		super(command, null, null);
 		bucket = new Bucket();
-		bucket.setHeader(new String[] { "name", "publicname", "owner_name",
-				"s_uuid", "substanceType", "_childDocuments_" , "type_s"});
+		bucket.setHeader(new String[] { "id", "name", "publicname",
+				"owner_name", "s_uuid", "substanceType", "_childDocuments_",
+				"type_s" });
 
 		SubstanceStudyDetailsProcessor paReader = new SubstanceStudyDetailsProcessor();
 
@@ -139,12 +144,12 @@ class Substance2BucketJsonReporter extends
 
 	}
 
-	private static final String[] study_header = new String[] {
+	private static final String[] study_header = new String[] { "id",
 			"document_uuid", "type_s", "topcategory", "endpointcategory",
 			"guidance", "endpoint", "effectendpoint", "reference_owner",
 			"reference_year", "reference", "loQualifier", "loValue",
 			"upQualifier", "upValue", "err", "errQualifier", "conditions",
-			"params", "textValue", "interpretation_result","unit" };
+			"params", "textValue", "interpretation_result", "unit", "category" };
 
 	@Override
 	public Bucket transform(SubstanceRecord record) {
@@ -156,6 +161,7 @@ class Substance2BucketJsonReporter extends
 		bucket.put("s_uuid", record.getSubstanceUUID());
 		bucket.put("substanceType", record.getSubstancetype());
 		bucket.put("type_s", "substance");
+		bucket.put("id", record.getSubstanceUUID());
 
 		List<Bucket> _childDocuments_ = new ArrayList<>();
 		bucket.put("_childDocuments_", _childDocuments_);
@@ -185,6 +191,11 @@ class Substance2BucketJsonReporter extends
 								.getTopCategory());
 						study.put("endpointcategory", papp.getProtocol()
 								.getCategory());
+
+						study.put("category", String.format("%s/%s", papp
+								.getProtocol().getTopCategory(), papp
+								.getProtocol().getCategory()));
+
 						study.put("endpoint", papp.getProtocol().getEndpoint());
 						if (!"".equals(papp.getProtocol().getGuideline().get(0)))
 							study.put("guidance", papp.getProtocol()
@@ -224,10 +235,11 @@ class Substance2BucketJsonReporter extends
 							} else
 								study.put(textValueTag, e.getTextValue());
 
+						study.put("id", String.format("%s/%d",
+								papp.getDocumentUUID(), e.getIdresult()));
 						_childDocuments_.add(study);
 					}
 			}
 		return bucket;
 	}
-
 }
