@@ -144,7 +144,7 @@ class Substance2BucketJsonReporter extends
 			"guidance", "endpoint", "effectendpoint", "reference_owner",
 			"reference_year", "reference", "loQualifier", "loValue",
 			"upQualifier", "upValue", "err", "errQualifier", "conditions",
-			"params", "textValue", "interpretation_result" };
+			"params", "textValue", "interpretation_result","unit" };
 
 	@Override
 	public Bucket transform(SubstanceRecord record) {
