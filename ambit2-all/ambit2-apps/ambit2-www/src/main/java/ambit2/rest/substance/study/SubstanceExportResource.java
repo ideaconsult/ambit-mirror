@@ -121,7 +121,7 @@ class Substance2BucketJsonReporter extends
 		super(command,null,null);
 		bucket = new Bucket();
 		bucket.setHeader(new String[] { "name", "publicname", "owner_name",
-				"s_uuid", "substanceType", "_childDocuments_" });
+				"s_uuid", "substanceType", "_childDocuments_" , "type_s"});
 
 		SubstanceStudyDetailsProcessor paReader = new SubstanceStudyDetailsProcessor();
 
@@ -155,6 +155,7 @@ class Substance2BucketJsonReporter extends
 			bucket.put("owner_name", record.getOwnerName());
 		bucket.put("s_uuid", record.getSubstanceUUID());
 		bucket.put("substanceType", record.getSubstancetype());
+		bucket.put("type_s", "substance");
 
 		List<Bucket> _childDocuments_ = new ArrayList<>();
 		bucket.put("_childDocuments_", _childDocuments_);
