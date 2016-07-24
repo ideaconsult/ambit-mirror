@@ -243,7 +243,7 @@ class Substance2BucketJsonReporter extends
 	}
 
 	private static final String[][] study_headers = new String[][] {
-			{ "id", "name", "publicname", "owner_name", "s_uuid",
+			{  "name", "publicname", "owner_name", "s_uuid",
 					"substanceType", "_childDocuments_", "type.s",
 					"ChemicalName.CONSTITUENT", "ChemicalName.ADDITIVE",
 					"ChemicalName.IMPURITY", "ChemicalName.CORE",
