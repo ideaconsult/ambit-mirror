@@ -192,9 +192,6 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 		return new ReadEffectRecordBySubstance();
 	}
 
-	protected void getCompositionProcessors(ProcessorsChain chain) {
-
-	}
 
 	protected NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
 
