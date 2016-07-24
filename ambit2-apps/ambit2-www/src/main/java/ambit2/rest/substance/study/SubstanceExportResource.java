@@ -3,7 +3,10 @@ package ambit2.rest.substance.study;
 import java.io.Writer;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import net.idea.modbcum.i.IParameterizedQuery;
@@ -275,8 +278,8 @@ class Substance2BucketJsonReporter extends
 					"_childDocuments_", "type.s", "ChemicalName.CONSTITUENT",
 					"ChemicalName.ADDITIVE", "ChemicalName.IMPURITY",
 					"ChemicalName.CORE", "ChemicalName.COATING",
-					"ChemicalName.FUNCTIONALISATION",
-					"ChemicalName.DOPING", "content",
+					"ChemicalName.FUNCTIONALISATION", "ChemicalName.DOPING",
+					"content",
 
 					"TradeName.CONSTITUENT", "TradeName.ADDITIVE",
 					"TradeName.IMPURITY", "TradeName.CORE",
@@ -294,7 +297,12 @@ class Substance2BucketJsonReporter extends
 					"IUCLID5_UUID.CONSTITUENT", "IUCLID5_UUID.ADDITIVE",
 					"IUCLID5_UUID.IMPURITY", "IUCLID5_UUID.CORE",
 					"IUCLID5_UUID.COATING", "IUCLID5_UUID.FUNCTIONALISATION",
-					"IUCLID5_UUID.DOPING" },
+					"IUCLID5_UUID.DOPING", 
+			
+					"COMPOSITION.CONSTITUENT", "COMPOSITION.ADDITIVE", "COMPOSITION.IMPURITY",
+					"COMPOSITION.CORE", "COMPOSITION.COATING", "COMPOSITION.FUNCTIONALISATION",
+					"COMPOSITION.DOPING"					
+			 },
 			{ "id", "document_uuid", "type_s", "topcategory",
 					"endpointcategory", "guidance", "endpoint",
 					"effectendpoint", "reference_owner", "reference_year",
@@ -319,10 +327,18 @@ class Substance2BucketJsonReporter extends
 			bucket.clear();
 			bucket.setHeaders(study_headers);
 			substance2Bucket(record, bucket);
-			if (record.getRelatedStructures() != null)
+			if (record.getRelatedStructures() != null) {
+				Map<String, Integer> composition = new Hashtable<String, Integer>();
 				for (CompositionRelation rel : record.getRelatedStructures()) {
-					composition2Bucket(rel, bucket);
+					composition2Bucket(rel, bucket,composition);
 				}
+				Iterator<String> keys = composition.keySet().iterator();
+				while (keys.hasNext()) {
+					String key = keys.next();
+					bucket.put(String.format("COMPOSITION.%s",key), composition.get(key));
+				}
+				
+			}	
 
 			List<Bucket> ids = new ArrayList<Bucket>();
 			if (record.getExternalids() != null)
@@ -437,10 +453,13 @@ class Substance2BucketJsonReporter extends
 			// each substance is one record, effect records are child documents
 			bucket.clear();
 			substance2Bucket(record, bucket);
-			if (record.getRelatedStructures() != null)
+			if (record.getRelatedStructures() != null) {
+				Map<String, Integer> composition = new Hashtable<String, Integer>();
 				for (CompositionRelation rel : record.getRelatedStructures()) {
-					composition2Bucket(rel, bucket);
+					composition2Bucket(rel, bucket,composition);
 				}
+				bucket.put("composition", composition.toString());
+			}	
 
 			List<Bucket> _childDocuments_ = new ArrayList<>();
 			bucket.put("_childDocuments_", _childDocuments_);
@@ -477,15 +496,21 @@ class Substance2BucketJsonReporter extends
 	}
 
 	protected void composition2Bucket(CompositionRelation component,
-			Bucket bucket) {
-		// add chemical identifiers as ChemicalName_TYPECOMPONENT fields
+			Bucket bucket, Map<String, Integer> composition) {
+		String ctype = component.getRelationType().name()
+				.replace("HAS_", "");
+		if (composition.get(ctype) == null)
+			composition.put(ctype, new Integer(1));
+		else
+			composition
+					.put(ctype, ((Integer) composition.get(ctype)) + 1);
+
 		for (Property p : component.getSecondStructure().getRecordProperties()) {
 			String label = String
 					.format("%s.%s",
 							p.getLabel().replace(
 									"http://www.opentox.org/api/1.1#", ""),
-							component.getRelationType().name()
-									.replace("HAS_", ""));
+							ctype);
 			String val = component.getSecondStructure().getRecordProperty(p)
 					.toString().trim();
 			if ("".equals(val))
