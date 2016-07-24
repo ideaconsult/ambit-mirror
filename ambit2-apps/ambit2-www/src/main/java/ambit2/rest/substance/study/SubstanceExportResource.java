@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.idea.modbcum.i.IParameterizedQuery;
 import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.bucket.Bucket;
@@ -200,7 +201,34 @@ public class SubstanceExportResource<Q extends IQueryRetrieval<SubstanceRecord>,
 		};
 		chain.add(idsReader);
 
-		//ReadSubstanceIdentifiers eids= new ReadSubstanceIdentifiers();
+		IQueryRetrieval<ExternalIdentifier> queryP = new ReadSubstanceIdentifiers();
+		MasterDetailsProcessor<SubstanceRecord, ExternalIdentifier, IQueryCondition> substanceIdentifiers = new MasterDetailsProcessor<SubstanceRecord, ExternalIdentifier, IQueryCondition>(
+				queryP) {
+			/**
+							     * 
+							     */
+			private static final long serialVersionUID = 5246468397385927943L;
+
+			@Override
+			protected void configureQuery(
+					SubstanceRecord target,
+					IParameterizedQuery<SubstanceRecord, ExternalIdentifier, IQueryCondition> query)
+					throws AmbitException {
+				query.setFieldname(target);
+			}
+
+			@Override
+			protected SubstanceRecord processDetail(SubstanceRecord target,
+					ExternalIdentifier detail) throws Exception {
+				if (target.getExternalids() == null)
+					target.setExternalids(new ArrayList<ExternalIdentifier>());
+				target.getExternalids().add(detail);
+				return target;
+			}
+		};
+		substanceIdentifiers.setCloseConnection(false);
+		chain.add(substanceIdentifiers);
+
 	}
 }
 
@@ -243,12 +271,12 @@ class Substance2BucketJsonReporter extends
 	}
 
 	private static final String[][] study_headers = new String[][] {
-			{  "name", "publicname", "owner_name", "s_uuid",
-					"substanceType", "_childDocuments_", "type.s",
-					"ChemicalName.CONSTITUENT", "ChemicalName.ADDITIVE",
-					"ChemicalName.IMPURITY", "ChemicalName.CORE",
-					"ChemicalName.COATING", "ChemicalName.FUNCTIONALISATION",
-					"ChemicalName.DOPING",
+			{ "name", "publicname", "owner_name", "s_uuid", "substanceType",
+					"_childDocuments_", "type.s", "ChemicalName.CONSTITUENT",
+					"ChemicalName.ADDITIVE", "ChemicalName.IMPURITY",
+					"ChemicalName.CORE", "ChemicalName.COATING",
+					"ChemicalName.FUNCTIONALISATION",
+					"ChemicalName.DOPING", "content",
 
 					"TradeName.CONSTITUENT", "TradeName.ADDITIVE",
 					"TradeName.IMPURITY", "TradeName.CORE",
@@ -273,7 +301,7 @@ class Substance2BucketJsonReporter extends
 					"reference", "loQualifier", "loValue", "upQualifier",
 					"upValue", "err", "errQualifier", "conditions", "params",
 					"textValue", "interpretation_result", "unit", "category",
-					"idresult" }, { "P-CHEM/PC_GRANULOMETRY_SECTION/SIZE" }
+					"idresult" }, { "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE" }
 
 	};
 
@@ -295,7 +323,30 @@ class Substance2BucketJsonReporter extends
 				for (CompositionRelation rel : record.getRelatedStructures()) {
 					composition2Bucket(rel, bucket);
 				}
-			Bucket ids = externalids2Bucket(record);
+
+			List<Bucket> ids = new ArrayList<Bucket>();
+			if (record.getExternalids() != null)
+				for (ExternalIdentifier id : record.getExternalids()) {
+					// these should not be in external ids in first place
+					if ("Has_Identifier".equals(id.getSystemDesignator()))
+						continue;
+					if ("Composition".equals(id.getSystemDesignator()))
+						continue;
+					if ("DATASET".equals(id.getSystemDesignator()))
+						continue;
+					if ("SOURCE".equals(id.getSystemDesignator()))
+						continue;
+					if ("Coating".equals(id.getSystemDesignator()))
+						continue;
+					if ("COD ID".equals(id.getSystemDesignator())) {
+						bucket.put("content", String.format(
+								"http://www.crystallography.net/cod/%s.html",
+								id.getSystemIdentifier()));
+					}
+					if (id.getSystemIdentifier().startsWith("http"))
+						bucket.put("content", id.getSystemIdentifier());
+					ids.add(externalids2Bucket(id));
+				}
 
 			if (record.getMeasurements() != null)
 				for (ProtocolApplication<Protocol, Object, String, Object, String> papp : record
@@ -315,7 +366,8 @@ class Substance2BucketJsonReporter extends
 							effect.put("_childDocuments_", _childDocuments_);
 
 							if (ids != null)
-								_childDocuments_.add(ids);
+								for (Bucket id : ids)
+									_childDocuments_.add(id);
 
 							protocolapplication2Bucket(papp, effect);
 							protocol2Bucket(papp.getProtocol(), effect);
@@ -333,12 +385,12 @@ class Substance2BucketJsonReporter extends
 								_childDocuments_.add(params);
 							}
 
-							effectrecord2bucket(papp.getProtocol(),e, effect);
+							effectrecord2bucket(papp.getProtocol(), e, effect);
 
 							// "P-CHEM/PC_GRANULOMETRY_SECTION/SIZE"
 							if (summaryMeasurement != null)
-								summarymeasurement2bucket(
-										papp.getProtocol(), e, bucket);
+								summarymeasurement2bucket(papp.getProtocol(),
+										e, bucket);
 
 							// conditions
 							Bucket conditions = new Bucket();
@@ -408,7 +460,7 @@ class Substance2BucketJsonReporter extends
 								.getEffects()) {
 							protocol2Bucket(papp.getProtocol(), study);
 							reference2Bucket(papp, study);
-							effectrecord2bucket(papp.getProtocol(),e, study);
+							effectrecord2bucket(papp.getProtocol(), e, study);
 							condition2bucket(e, study);
 							study.put(
 									"id",
@@ -459,19 +511,17 @@ class Substance2BucketJsonReporter extends
 		bucket.put("substanceType", record.getSubstancetype());
 		bucket.put("type_s", "substance");
 		bucket.put("id", record.getSubstanceUUID());
+
+		bucket.put("content", record.getContent());
 	}
 
-	protected Bucket externalids2Bucket(SubstanceRecord record) {
-		if (record.getExternalids() == null)
-			return null;
+	protected Bucket externalids2Bucket(ExternalIdentifier id) {
 		Bucket ids = new Bucket();
 		ids.setHeader(new String[] { "type_s", "ID", "VALUE" });
-		for (ExternalIdentifier id : record.getExternalids()) {
-			bucket.put("type_s", "externalid");
-			bucket.put("ID", id.getSystemDesignator());
-			bucket.put("VALUE", id.getSystemIdentifier());
-		}
-		return bucket;
+		ids.put("type_s", "externalid");
+		ids.put("ID", id.getSystemDesignator());
+		ids.put("VALUE", id.getSystemIdentifier());
+		return ids;
 	}
 
 	protected void protocolapplication2Bucket(
@@ -526,15 +576,18 @@ class Substance2BucketJsonReporter extends
 
 	protected void summarymeasurement2bucket(Protocol protocol,
 			EffectRecord<String, Object, String> e, Bucket bucket) {
-		if ((e != null) & (e.getEndpoint() != null)
+		if ((e != null)
+				& (e.getEndpoint() != null)
 				&& e.getEndpoint().toUpperCase().indexOf(summaryMeasurement) >= 0) {
 
-			String label = String.format("%s/%s/%s",
-					protocol.getTopCategory(), protocol.getCategory(),summaryMeasurement);
-			String val = String.format("%s%4.3f%s",
-					(e.getLoQualifier() == null || "".equals(e.getLoQualifier())) ? ""
-							: (e.getLoQualifier() + " "), e.getLoValue(), e
-							.getUnit() == null ? "" : e.getUnit());
+			String label = String.format("%s.%s.%s", protocol.getTopCategory(),
+					protocol.getCategory(), summaryMeasurement);
+			String val = String
+					.format("%s%4.1f%s",
+							(e.getLoQualifier() == null || "".equals(e
+									.getLoQualifier())) ? "" : (e
+									.getLoQualifier() + " "), e.getLoValue(), e
+									.getUnit() == null ? "" : e.getUnit());
 			List<String> vals;
 			if (bucket.get(label) == null) {
 				vals = new ArrayList<String>();
@@ -546,8 +599,8 @@ class Substance2BucketJsonReporter extends
 		}
 	}
 
-	protected void effectrecord2bucket(Protocol protocol, EffectRecord<String, Object, String> e,
-			Bucket bucket) {
+	protected void effectrecord2bucket(Protocol protocol,
+			EffectRecord<String, Object, String> e, Bucket bucket) {
 		if (e.getEndpoint() != null)
 			bucket.put("effectendpoint", e.getEndpoint().toUpperCase());
 		bucket.put("unit", e.getUnit());
@@ -595,7 +648,7 @@ class Substance2BucketJsonReporter extends
  */
 class BucketDenormalised<V> extends Bucket<V> {
 	protected List<Bucket> buckets = new ArrayList<>();
-	protected String summaryMeasurement = "P-CHEM/PC_GRANULOMETRY_SECTION/SIZE";
+	protected String summaryMeasurement = "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE";
 
 	@Override
 	public void clear() {
@@ -623,8 +676,7 @@ class BucketDenormalised<V> extends Bucket<V> {
 		StringBuilder b = new StringBuilder();
 		String d = "";
 		for (Bucket bucket : buckets) {
-			bucket.put(summaryMeasurement,
-					get(summaryMeasurement));
+			bucket.put(summaryMeasurement, get(summaryMeasurement));
 			b.append(d);
 			b.append(bucket.asJSON());
 			d = ",\n";
