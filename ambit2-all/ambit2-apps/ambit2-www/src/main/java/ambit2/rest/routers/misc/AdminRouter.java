@@ -59,8 +59,8 @@ public class AdminRouter extends MyRouter {
 		
 		attach(String.format("%s%s",Resources.user,Resources.reset), PwdResetResource.class);		
 		
-		attach("/export/experiment", SubstanceStudyTableResource.class);
-		attach("/export/substance", SubstanceExportResource.class);		
+		attach("/export/legacy", SubstanceStudyTableResource.class);
+		attach("/export/experiment", SubstanceExportResource.class);		
 		
 
 	}

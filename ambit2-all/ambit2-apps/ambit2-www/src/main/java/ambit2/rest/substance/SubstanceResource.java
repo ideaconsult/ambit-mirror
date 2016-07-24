@@ -12,6 +12,7 @@ import net.idea.i5.io.QASettings;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.q.update.AbstractUpdate;
 import net.idea.modbcum.r.QueryAbstractReporter;
 import net.idea.restnet.c.ChemicalMediaType;
@@ -121,6 +122,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 		return "ambit2/rest/config/ambit2.pref";
 	}
 
+	
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
@@ -231,6 +233,12 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 		}
 	}
 
+
+	protected void getCompositionProcessors(ProcessorsChain chain) {
+
+	}
+
+	
 	protected IProcessor<Q, Representation> createJSONReporter(
 			String filenamePrefix) {
 		String jsonpcallback = getParams().getFirstValue("jsonp");
