@@ -39,13 +39,15 @@ public class AdminRouter extends MyRouter {
 		attach(String.format("/%s/{%s}",OpenSSOPoliciesResource.resource,OpenSSOPolicyResource.policyKey),OpenSSOPolicyResource.class);
 		
 		/**
-		 * Fingerprint statistincs
+		 * Fingerprint statistics
 		 */
+		/*
 		Router adminFingerprintRouter = new MyRouter(getContext()); //to browse fingerprints/stats
 		adminFingerprintRouter.attachDefault(FingerprintResource.class);
 		adminFingerprintRouter.attach(String.format("/{%s}",FingerprintResource.resourceKey),FingerprintResource.class);
 		adminFingerprintRouter.attach(String.format("/{%s}%s",FingerprintResource.resourceKey,StructuresByFingerprintResource.resource),StructuresByFingerprintResource.class);
 		attach(FingerprintResource.resource,adminFingerprintRouter);
+		*/
 		/**
 		 * /stats - database statistics
 		 */
