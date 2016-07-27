@@ -13,7 +13,7 @@ public abstract class CSLSRequest<R> extends AbstractSearchRequest<R> {
 	 * 
 	 */
 	private static final long serialVersionUID = -4821305383980518514L;
-	public static final String CSLS_URL = "http://cactus.nci.nih.gov/chemical/structure";
+	public static final String CSLS_URL = "https://cactus.nci.nih.gov/chemical/structure";
 	protected NCISearchProcessor.METHODS representation;
 	public NCISearchProcessor.METHODS getRepresentation() {
 		return representation;
