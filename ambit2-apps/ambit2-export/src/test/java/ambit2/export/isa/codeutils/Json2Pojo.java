@@ -2,6 +2,7 @@ package ambit2.export.isa.codeutils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,6 +33,8 @@ public class Json2Pojo
 	public boolean FlagEmptyTargetDirBeforeRun = true;
 	public boolean FlagExceptionOnIncorrectReference = true;
 	public boolean FlagResultOnlyToLog = false;
+	public boolean FlagLogFileContent = false;
+	
 	
 	public String jsonFileExtension = "json";
 	public String refFileExtension = "json#";
@@ -582,9 +585,35 @@ public class Json2Pojo
         f.delete();
     }
 	
-	void writeFile(String path, String content)
+	void writeFile(String path, String content) throws Exception
 	{
-		//TODO
+		if (FlagLogFileContent)
+		{	
+			System.out.println(path+"\n--------------------------");
+			System.out.println(content);
+		}
+		
+		//Create file writer
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(path);
+			
+		}catch (Exception x) {
+			//in case smth's wrong with the writer file, close it and throw an error
+			try {fw.close(); } catch (Exception xx) {}
+			throw x;
+		} finally { }
+		
+		fw.write(content);
+		fw.flush();
+		
+		//Close file writer
+		try { 
+			fw.close();
+			
+		} catch (Exception x) {
+			logger.info("Error on clossing: " + path + "\n" + x.getMessage());
+		}
 	}
 	
 	
