@@ -133,6 +133,7 @@ public abstract class AbstractMopacShell extends CommandShell<IAtomContainer, IA
 		addExecutable(CommandShell.os_WINDOWSVISTA, "bin/mopac/MOPAC_7.1.exe",null);
 		addExecutable(CommandShell.os_FreeBSD, "/usr/local/mopac/mopac",null);
 		addExecutable(CommandShell.os_LINUX, "/usr/local/mopac/mopac",null);
+		addExecutable(CommandShell.os_LINUX64, "/usr/local/mopac/mopac",null);
 		setInputFile("mol.smi");
 		setOutputFile("rough.sdf");		
 	}	
@@ -172,7 +173,7 @@ public abstract class AbstractMopacShell extends CommandShell<IAtomContainer, IA
 	}
 	
 	protected String getOutFile(int i,String os) {
-		if (os_LINUX.equals(os) || os_FreeBSD.equals(os)) //generates mopac.out from mopac.dat
+		if (os_LINUX.equals(os) || os_LINUX64.equals(os) || os_FreeBSD.equals(os)) //generates mopac.out from mopac.dat
 			return outFiles[i].replace(".dat", "");
 		else return outFiles[i]; //generates mopac.dat.out from mopac.dat
 	}
