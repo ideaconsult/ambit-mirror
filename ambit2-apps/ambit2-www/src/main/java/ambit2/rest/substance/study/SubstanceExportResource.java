@@ -297,12 +297,12 @@ class Substance2BucketJsonReporter extends
 					"IUCLID5_UUID.CONSTITUENT", "IUCLID5_UUID.ADDITIVE",
 					"IUCLID5_UUID.IMPURITY", "IUCLID5_UUID.CORE",
 					"IUCLID5_UUID.COATING", "IUCLID5_UUID.FUNCTIONALISATION",
-					"IUCLID5_UUID.DOPING", 
-			
-					"COMPOSITION.CONSTITUENT", "COMPOSITION.ADDITIVE", "COMPOSITION.IMPURITY",
-					"COMPOSITION.CORE", "COMPOSITION.COATING", "COMPOSITION.FUNCTIONALISATION",
-					"COMPOSITION.DOPING"					
-			 },
+					"IUCLID5_UUID.DOPING",
+
+					"COMPOSITION.CONSTITUENT", "COMPOSITION.ADDITIVE",
+					"COMPOSITION.IMPURITY", "COMPOSITION.CORE",
+					"COMPOSITION.COATING", "COMPOSITION.FUNCTIONALISATION",
+					"COMPOSITION.DOPING" },
 			{ "id", "document_uuid", "type_s", "topcategory",
 					"endpointcategory", "guidance", "endpoint",
 					"effectendpoint", "reference_owner", "reference_year",
@@ -330,15 +330,16 @@ class Substance2BucketJsonReporter extends
 			if (record.getRelatedStructures() != null) {
 				Map<String, Integer> composition = new Hashtable<String, Integer>();
 				for (CompositionRelation rel : record.getRelatedStructures()) {
-					composition2Bucket(rel, bucket,composition);
+					composition2Bucket(rel, bucket, composition);
 				}
 				Iterator<String> keys = composition.keySet().iterator();
 				while (keys.hasNext()) {
 					String key = keys.next();
-					bucket.put(String.format("COMPOSITION.%s",key), composition.get(key));
+					bucket.put(String.format("COMPOSITION.%s", key),
+							composition.get(key));
 				}
-				
-			}	
+
+			}
 
 			List<Bucket> ids = new ArrayList<Bucket>();
 			if (record.getExternalids() != null)
@@ -456,10 +457,10 @@ class Substance2BucketJsonReporter extends
 			if (record.getRelatedStructures() != null) {
 				Map<String, Integer> composition = new Hashtable<String, Integer>();
 				for (CompositionRelation rel : record.getRelatedStructures()) {
-					composition2Bucket(rel, bucket,composition);
+					composition2Bucket(rel, bucket, composition);
 				}
 				bucket.put("composition", composition.toString());
-			}	
+			}
 
 			List<Bucket> _childDocuments_ = new ArrayList<>();
 			bucket.put("_childDocuments_", _childDocuments_);
@@ -497,15 +498,15 @@ class Substance2BucketJsonReporter extends
 
 	protected void composition2Bucket(CompositionRelation component,
 			Bucket bucket, Map<String, Integer> composition) {
-		String ctype = component.getRelationType().name()
-				.replace("HAS_", "");
+		String ctype = component.getRelationType().name().replace("HAS_", "");
 		if (composition.get(ctype) == null)
 			composition.put(ctype, new Integer(1));
 		else
-			composition
-					.put(ctype, ((Integer) composition.get(ctype)) + 1);
+			composition.put(ctype, ((Integer) composition.get(ctype)) + 1);
 
 		for (Property p : component.getSecondStructure().getRecordProperties()) {
+			if (p.getLabel().indexOf("UUID") >= 0)
+				continue;
 			String label = String
 					.format("%s.%s",
 							p.getLabel().replace(
