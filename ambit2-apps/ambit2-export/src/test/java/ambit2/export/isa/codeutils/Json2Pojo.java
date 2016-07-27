@@ -109,7 +109,7 @@ public class Json2Pojo
 	
 	void registerJsonSchemaClass(File file) throws Exception
 	{
-		System.out.println("Registering class for json schema: " + file.getName());
+		//System.out.println("Registering class for json schema: " + file.getName());
 		String schemaName = file.getName().substring(0, (file.getName().length() - jsonFileExtension.length()-1));
 		
 		if (schemaName.equals(""))
@@ -197,7 +197,7 @@ public class Json2Pojo
 		else
 			var.name = fieldName;
 		
-		System.out.println("  " + var.name);
+		//System.out.println("  " + var.name);
 		
 		//handle variable type
 		JsonNode typeNode = fieldNode.path("type");
@@ -493,6 +493,28 @@ public class Json2Pojo
 			
 			return;
 		}
+		
+		else
+		{
+			String file_sep = System.getProperty("file.separator");
+			
+			//Generate files for basic schemas classes
+			Set<String> keys = schemaClasses.keySet();
+			for (String key: keys)
+			{
+				JavaClassInfo jci = schemaClasses.get(key);
+				String newPath = targetDir.getAbsolutePath() + file_sep + jci.javaClassName + ".java";
+				writeFile(newPath, generateJavaSource(jci));
+			}
+			
+			//Generate files for additional classes
+			for (int i = 0; i < addedClasses.size(); i++)
+			{
+				JavaClassInfo jci = addedClasses.get(i);
+				String newPath = targetDir.getAbsolutePath() + file_sep + jci.javaClassName + ".java";
+				writeFile(newPath, generateJavaSource(jci));
+			}
+		}
 	}
 	
 	
@@ -559,6 +581,11 @@ public class Json2Pojo
         }
         f.delete();
     }
+	
+	void writeFile(String path, String content)
+	{
+		//TODO
+	}
 	
 	
 	
