@@ -57,6 +57,14 @@ public class JavaClassInfo
 			imports.add("import java.net.URI;");
 		}
 		
+		if (sourceConfig.FlagJsonAnnotation)
+		{
+			imports.add("import javax.annotation.Generated;");
+			imports.add("import com.fasterxml.jackson.annotation.JsonInclude;");
+			imports.add("import com.fasterxml.jackson.annotation.JsonProperty;");
+			imports.add("import com.fasterxml.jackson.annotation.JsonPropertyOrder;");
+		}
+		
 		return imports;
 	}
 	

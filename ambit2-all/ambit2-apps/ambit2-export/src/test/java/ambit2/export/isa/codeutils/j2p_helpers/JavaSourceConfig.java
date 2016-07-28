@@ -10,10 +10,6 @@ public class JavaSourceConfig
 	
 	public String indent = "\t";
 	public VarInit init = VarInit.NO_INIT;
-	public String number = "double";
-	public boolean FlagHandleURIString = true;
-	
-	
 	//These are specific init options for various variable types
 	//If different from UNSPECIFIED override the default 'init'
 	public VarInit arrayInit = VarInit.UNSPECIFIED;
@@ -22,6 +18,11 @@ public class JavaSourceConfig
 	public VarInit numberInit = VarInit.UNSPECIFIED;
 	public VarInit objectInit = VarInit.UNSPECIFIED;
 	public VarInit stringInit = VarInit.UNSPECIFIED;
+	
+	public String number = "double";
+	public boolean FlagHandleURIString = true;
+	public boolean FlagJsonAnnotation = false;
+	
 	
 	public VarInit getVarInit(VariableInfo.Type varType)
 	{

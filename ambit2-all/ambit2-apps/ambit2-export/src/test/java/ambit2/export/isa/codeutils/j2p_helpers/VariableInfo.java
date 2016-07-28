@@ -13,8 +13,10 @@ public class VariableInfo
 	
 	public Type type = null;
 	public String name = null;
+	public String jsonPropertyName = null;
 	public StringFormat stringFormat = StringFormat.UNSPECIFIED;
 	public String objectClass = null; //used only for types ARRAY and OBJECT
+	
 	
 	public String getJavaSource(JavaSourceConfig sourceConfig)
 	{
