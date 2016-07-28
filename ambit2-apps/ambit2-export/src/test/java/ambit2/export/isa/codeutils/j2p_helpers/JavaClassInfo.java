@@ -18,7 +18,7 @@ public class JavaClassInfo
 	
 	public List<VariableInfo> variables = new ArrayList<VariableInfo>();
 	
-	public List<String> getNeededImports()
+	public List<String> getNeededImports(JavaSourceConfig sourceConfig)
 	{
 		List<String> imports = new ArrayList<String>();
 		
@@ -32,14 +32,19 @@ public class JavaClassInfo
 			}
 		
 		//Check for variable of type ARRAY;
-		boolean FlagURL = false;
-		for (VariableInfo vi: variables)
-			if (vi.type == Type.STRING)
-				if (vi.stringFormat == StringFormat.URL_FORMAT)
-				{
-					FlagURL = true;
-					break;
+		boolean FlagURI = false;
+		if (sourceConfig.FlagHandleURIString)
+		{	
+			for (VariableInfo vi: variables)
+				if (vi.type == Type.STRING)
+				{	
+					if (vi.stringFormat == StringFormat.URI_FORMAT)
+					{
+						FlagURI = true;
+						break;
+					}
 				}
+		}	
 		
 		if (FlagArray)
 		{
@@ -47,9 +52,9 @@ public class JavaClassInfo
 			imports.add("import java.util.List;");
 		}
 		
-		if (FlagURL)
+		if (FlagURI)
 		{
-			imports.add("import java.net.URL;");
+			imports.add("import java.net.URI;");
 		}
 		
 		return imports;
