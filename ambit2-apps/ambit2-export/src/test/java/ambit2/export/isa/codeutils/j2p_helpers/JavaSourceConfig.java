@@ -135,7 +135,8 @@ public class JavaSourceConfig
 	{	
 		VarInit vInit = getVarInit(VariableInfo.Type.STRING);
 		if (vInit == VarInit.EMPTY)
-			return " = new URI(\"\")";  //check this case!!  + exception handling ...
+			//return " = new URI(\"\")";  //check this case!!  + exception handling ...
+			return "";  //URI is not initilized wince it requires exception handling;
 		
 		if (vInit == VarInit.NULL)
 			return " = null";
