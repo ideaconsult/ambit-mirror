@@ -47,7 +47,7 @@ public class VariableInfo
 				if (stringFormat == StringFormat.URI_FORMAT)
 					if (sourceConfig.FlagHandleURIString)
 						return "URI " + name + 
-							sourceConfig.getURLInitialization() + ";";
+							sourceConfig.getURIInitialization() + ";";
 			}
 			return "String " + name + 
 					sourceConfig.getStringInitialization() + ";";
