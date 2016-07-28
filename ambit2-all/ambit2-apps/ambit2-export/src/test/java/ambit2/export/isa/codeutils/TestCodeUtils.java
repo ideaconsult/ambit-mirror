@@ -2,6 +2,8 @@ package ambit2.export.isa.codeutils;
 
 import java.io.File;
 
+import ambit2.export.isa.codeutils.j2p_helpers.JavaSourceConfig.VarInit;
+
 public class TestCodeUtils 
 {
 	public static void main(String[] args) throws Exception
@@ -75,6 +77,8 @@ public class TestCodeUtils
 		j2p.FlagResultOnlyToLog = false;
 		j2p.javaPackage = "ambit2.export.isa.v1_0.objects__";
 		
+		j2p.sourceConfig.init = VarInit.EMPTY;
+		j2p.sourceConfig.arrayInit = VarInit.EMPTY;
 		//j2p.sourceConfig.FlagHandleURIString = false;
 		
 		System.out.println("Json2Pojo: " + j2p.sourceDir.getAbsolutePath() + " --> " + j2p.targetDir.getAbsolutePath());
