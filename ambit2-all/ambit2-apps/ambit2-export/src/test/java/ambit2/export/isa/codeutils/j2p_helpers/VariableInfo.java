@@ -8,7 +8,7 @@ public class VariableInfo
 	}
 	
 	public static enum  StringFormat {
-		UNSPECIFIED, URL_FORMAT, DATE_TIME_FORMAT
+		UNSPECIFIED, URI_FORMAT, DATE_TIME_FORMAT
 	}
 	
 	public Type type = null;
@@ -44,8 +44,9 @@ public class VariableInfo
 		{	
 			if (stringFormat != null)
 			{
-				if (stringFormat == StringFormat.URL_FORMAT)
-					return "URL " + name + 
+				if (stringFormat == StringFormat.URI_FORMAT)
+					if (sourceConfig.FlagHandleURIString)
+						return "URI " + name + 
 							sourceConfig.getURLInitialization() + ";";
 			}
 			return "String " + name + 

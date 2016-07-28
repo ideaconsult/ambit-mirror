@@ -288,7 +288,7 @@ public class Json2Pojo
 				if (format != null)
 				{	
 					if (format.equals("uri"))
-						var.stringFormat = StringFormat.URL_FORMAT;
+						var.stringFormat = StringFormat.URI_FORMAT;
 					if (format.equals("date-time"))
 						var.stringFormat = StringFormat.DATE_TIME_FORMAT;
 					
@@ -527,7 +527,7 @@ public class Json2Pojo
 		sb.append("package " + jci.javaPackage + ";" + endLine);
 		sb.append(endLine);
 		
-		List<String> imports = jci.getNeededImports();
+		List<String> imports = jci.getNeededImports(sourceConfig);
 		if (!imports.isEmpty())
 		{
 			for (String imp : imports)
