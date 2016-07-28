@@ -11,8 +11,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import javax.annotation.Generated;
+
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import ambit2.export.isa.codeutils.j2p_helpers.ClassNameGenerator;
 import ambit2.export.isa.codeutils.j2p_helpers.JavaClassInfo;
@@ -193,6 +199,7 @@ public class Json2Pojo
 	String readProperty(JavaClassInfo jci, String fieldName, JsonNode fieldNode)
 	{	
 		VariableInfo var = new VariableInfo();
+		var.jsonPropertyName = fieldName;
 		
 		//handle name
 		if (fieldName.startsWith("@"))
@@ -548,11 +555,35 @@ public class Json2Pojo
 			sb.append(endLine);
 		}
 		
+		if (sourceConfig.FlagJsonAnnotation)
+		{
+			sb.append("@JsonInclude(JsonInclude.Include.NON_NULL)"  + endLine);
+			sb.append("@Generated(\"ambit.json2pojo\")"  + endLine);
+			sb.append("@JsonPropertyOrder({"  + endLine);
+			for (int i = 0; i < jci.variables.size(); i++)
+			{
+				sb.append(sourceConfig.indent);
+				sb.append("\"" + jci.variables.get(i).jsonPropertyName + "\"");
+				if (i <  (jci.variables.size()-1))
+					sb.append(",");
+				sb.append(endLine);
+			}
+			sb.append("})"  + endLine);
+		}
+		
+		
 		sb.append("public class " + jci.javaClassName + endLine);
 		sb.append("{" + endLine);
+		
 		for (int i = 0; i < jci.variables.size(); i++)
-			sb.append(sourceConfig.indent + 
+		{	
+			if (sourceConfig.FlagJsonAnnotation)
+				sb.append(sourceConfig.indent + 
+					"@JsonProperty(\""  + jci.variables.get(i).jsonPropertyName + "\")"  + endLine);
+			
+			sb.append(sourceConfig.indent + "public " + 
 					jci.variables.get(i).getJavaSource(sourceConfig) + endLine);
+		}	
 		
 		sb.append("}" + endLine);
 		

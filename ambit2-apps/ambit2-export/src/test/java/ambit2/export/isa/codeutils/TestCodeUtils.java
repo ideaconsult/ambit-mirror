@@ -77,9 +77,10 @@ public class TestCodeUtils
 		j2p.FlagResultOnlyToLog = false;
 		j2p.javaPackage = "ambit2.export.isa.v1_0.objects__";
 		
-		j2p.sourceConfig.init = VarInit.EMPTY;
+		j2p.sourceConfig.init = VarInit.NO_INIT;
 		j2p.sourceConfig.arrayInit = VarInit.EMPTY;
 		//j2p.sourceConfig.FlagHandleURIString = false;
+		j2p.sourceConfig.FlagJsonAnnotation = true;
 		
 		System.out.println("Json2Pojo: " + j2p.sourceDir.getAbsolutePath() + " --> " + j2p.targetDir.getAbsolutePath());
 		
