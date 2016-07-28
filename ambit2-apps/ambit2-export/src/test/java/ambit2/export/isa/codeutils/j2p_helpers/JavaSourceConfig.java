@@ -131,11 +131,11 @@ public class JavaSourceConfig
 		return "";
 	}
 	
-	public String getURLInitialization()
+	public String getURIInitialization()
 	{	
 		VarInit vInit = getVarInit(VariableInfo.Type.STRING);
 		if (vInit == VarInit.EMPTY)
-			return " = new URL(\"\")";  //check this case!!
+			return " = new URI(\"\")";  //check this case!!  + exception handling ...
 		
 		if (vInit == VarInit.NULL)
 			return " = null";
