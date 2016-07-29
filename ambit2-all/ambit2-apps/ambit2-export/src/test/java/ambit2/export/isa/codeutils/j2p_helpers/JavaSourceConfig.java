@@ -23,6 +23,9 @@ public class JavaSourceConfig
 	public boolean FlagHandleDateString = true;
 	public boolean FlagJsonAnnotation = false;
 	
+	public boolean FlagUseSchemaTitleAsComment = true;
+	public boolean FlagUseSchemaNameAsComment = false;
+	public boolean FlagUseSchemaDescriptionAsComment = true;
 	
 	public VarInit getVarInit(VariableInfo.Type varType)
 	{
