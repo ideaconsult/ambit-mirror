@@ -148,7 +148,7 @@ public class Json2Pojo
 	void readJsonSchema (String jsonFileName, JavaClassInfo jci) throws Exception
 	{
 		//Function is recursive. 
-		//possible recursion ways:
+		//possible recursion way:
 		//readJsonSchema() -->  readProperty() --> getClassFromProperties() --> readProperty() ...
 		
 		FileInputStream fin = new FileInputStream(jsonFileName); 
@@ -171,8 +171,12 @@ public class Json2Pojo
 		else
 		{
 			//handle schema type
-			
 		}
+		
+		//handle title, name and description
+		jci.field_title = extractStringKeyword(rootNode, "title", true);
+		jci.field_name = extractStringKeyword(rootNode, "name", true);
+		jci.field_description = extractStringKeyword(rootNode, "description", true);
 		
 		//Iterate schema properties
 		JsonNode propNode = rootNode.path("properties");
@@ -548,10 +552,22 @@ public class Json2Pojo
 			sb.append(endLine);
 		}
 		
-		if (!jci.schemaName.isEmpty())
+		//Class initial comment
+		List<String> commentLines = jci.getCommentLinesFromJsonFields(sourceConfig);
+		if (commentLines.isEmpty())
 		{
-			sb.append("//class created from schema: " + jci.schemaName + endLine);
-			sb.append(endLine);
+			if (!jci.schemaName.isEmpty())
+			{
+				sb.append("//class created from schema: " + jci.schemaName + endLine);
+				sb.append(endLine);
+			}
+		}
+		else
+		{
+			sb.append("/**" + endLine);
+			for (String line : commentLines)
+				sb.append(" * " + line + endLine);
+			sb.append("**/" + endLine);
 		}
 		
 		if (sourceConfig.FlagJsonAnnotation)

@@ -15,6 +15,11 @@ public class JavaClassInfo
 	public String propertyName = null;  
 	public String propertySchemaName = null;
 	
+	//info from the json schema fields
+	public String field_type = null;
+	public String field_title = null;
+	public String field_name = null;
+	public String field_description = null;
 	
 	public List<VariableInfo> variables = new ArrayList<VariableInfo>();
 	
@@ -86,6 +91,25 @@ public class JavaClassInfo
 		}
 		
 		return imports;
+	}
+	
+	public List<String> getCommentLinesFromJsonFields(JavaSourceConfig sourceConfig)
+	{
+		List<String> lines = new ArrayList<String>();
+		
+		if (sourceConfig.FlagUseSchemaTitleAsComment)
+			if (field_title != null)
+				lines.add(field_title);
+			
+		if (sourceConfig.FlagUseSchemaNameAsComment)
+			if (field_name != null)
+				lines.add(field_name);	
+		
+		if (sourceConfig.FlagUseSchemaDescriptionAsComment)
+			if (field_description != null)
+				lines.add(field_description);	
+		
+		return lines;
 	}
 	
 }

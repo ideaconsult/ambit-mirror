@@ -81,6 +81,7 @@ public class TestCodeUtils
 		j2p.sourceConfig.arrayInit = VarInit.EMPTY;
 		//j2p.sourceConfig.FlagHandleURIString = false;
 		j2p.sourceConfig.FlagJsonAnnotation = true;
+		//j2p.sourceConfig.FlagUseSchemaNameAsComment = true;
 		
 		System.out.println("Json2Pojo: " + j2p.sourceDir.getAbsolutePath() + " --> " + j2p.targetDir.getAbsolutePath());
 		
