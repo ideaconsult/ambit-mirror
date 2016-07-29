@@ -12,14 +12,14 @@
 	<description>JChemPaint dependency</description>
 	<repositories>
    <repository>
-      <id>ambit-plovdiv</id>
+      <id>nexus-idea</id>
       <url>https://nexus.ideaconsult.net/content/repositories/thirdparty</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
     </repository>
     <repository>
-      <id>ambit-plovdiv-releases</id>
+      <id>nexus-idea-releases</id>
       <url>https://nexus.ideaconsult.net/content/repositories/releases</url>
       <snapshots>
         <enabled>false</enabled>
