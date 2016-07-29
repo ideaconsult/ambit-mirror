@@ -1,5 +1,7 @@
 package ambit2.export.isa.codeutils.j2p_helpers;
 
+import java.util.List;
+
 
 public class VariableInfo 
 {
@@ -16,7 +18,7 @@ public class VariableInfo
 	public String jsonPropertyName = null;
 	public StringFormat stringFormat = StringFormat.UNSPECIFIED;
 	public String objectClass = null; //used only for types ARRAY and OBJECT
-	
+	public List<String> enumList = null;
 	
 	public String getJavaSource(JavaSourceConfig sourceConfig)
 	{
@@ -55,7 +57,6 @@ public class VariableInfo
 					if (sourceConfig.FlagHandleDateString)
 						return "Date " + name + 
 							sourceConfig.getDateInitialization() + ";";
-				
 				
 			}
 			return "String " + name + 

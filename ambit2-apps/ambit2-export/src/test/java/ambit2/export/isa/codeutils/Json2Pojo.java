@@ -304,9 +304,19 @@ public class Json2Pojo
 						var.stringFormat = StringFormat.DATE_TIME_FORMAT;
 					//email
 				}
+				
+				StringBuffer sb_err = new StringBuffer();
+				List<String> eList = getEnumListForStringField(fieldNode, sb_err);
+				if (eList != null)
+					var.enumList = eList;
+				else
+					if (sb_err.length() > 0)
+						return ("Errors in enum for string field "  + fieldName + ": " +
+								sb_err.toString());
+				
 			}
 			
-			//Handle variable of type
+			//Handle variable of type object
 			if (var.type == Type.OBJECT )
 			{
 				JsonNode pNode = fieldNode.path("properties");
@@ -445,6 +455,12 @@ public class Json2Pojo
 		
 		//System.out.println(" --> " + var.name + "  " + var.type + "  " + var.objectClass);
 		jci.variables.add(var);
+		return null;
+	}
+	
+	List<String> getEnumListForStringField(JsonNode fieldNode, StringBuffer errors)
+	{
+		//TODO
 		return null;
 	}
 	

@@ -21,6 +21,7 @@ public class JavaSourceConfig
 	public String number = "double";
 	public boolean FlagHandleURIString = true;
 	public boolean FlagHandleDateString = true;
+	public boolean FlagHandleEnumString = false;
 	public boolean FlagJsonAnnotation = false;
 	
 	public boolean FlagUseSchemaTitleAsComment = true;
