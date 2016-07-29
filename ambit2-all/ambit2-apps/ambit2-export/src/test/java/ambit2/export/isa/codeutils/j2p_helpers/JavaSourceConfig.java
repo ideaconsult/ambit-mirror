@@ -1,6 +1,5 @@
 package ambit2.export.isa.codeutils.j2p_helpers;
 
-import java.net.URL;
 
 public class JavaSourceConfig 
 {
@@ -21,6 +20,7 @@ public class JavaSourceConfig
 	
 	public String number = "double";
 	public boolean FlagHandleURIString = true;
+	public boolean FlagHandleDateString = true;
 	public boolean FlagJsonAnnotation = false;
 	
 	
@@ -138,6 +138,18 @@ public class JavaSourceConfig
 		if (vInit == VarInit.EMPTY)
 			//return " = new URI(\"\")";  //check this case!!  + exception handling ...
 			return "";  //URI is not initilized wince it requires exception handling;
+		
+		if (vInit == VarInit.NULL)
+			return " = null";
+		
+		return "";
+	}
+	
+	public String getDateInitialization()
+	{	
+		VarInit vInit = getVarInit(VariableInfo.Type.STRING);
+		if (vInit == VarInit.EMPTY)
+			return " = new Date()";  
 		
 		if (vInit == VarInit.NULL)
 			return " = null";

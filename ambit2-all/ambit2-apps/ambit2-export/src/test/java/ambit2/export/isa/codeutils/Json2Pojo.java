@@ -298,7 +298,6 @@ public class Json2Pojo
 						var.stringFormat = StringFormat.URI_FORMAT;
 					if (format.equals("date-time"))
 						var.stringFormat = StringFormat.DATE_TIME_FORMAT;
-					
 					//email
 				}
 			}

@@ -31,7 +31,7 @@ public class JavaClassInfo
 				break;
 			}
 		
-		//Check for variable of type ARRAY;
+		//Check for variable of type URI;
 		boolean FlagURI = false;
 		if (sourceConfig.FlagHandleURIString)
 		{	
@@ -41,6 +41,21 @@ public class JavaClassInfo
 					if (vi.stringFormat == StringFormat.URI_FORMAT)
 					{
 						FlagURI = true;
+						break;
+					}
+				}
+		}
+		
+		//Check for variable of type Date;
+		boolean FlagDate = false;
+		if (sourceConfig.FlagHandleDateString)
+		{	
+			for (VariableInfo vi: variables)
+				if (vi.type == Type.STRING)
+				{	
+					if (vi.stringFormat == StringFormat.DATE_TIME_FORMAT)
+					{
+						FlagDate = true;
 						break;
 					}
 				}
@@ -55,6 +70,11 @@ public class JavaClassInfo
 		if (FlagURI)
 		{
 			imports.add("import java.net.URI;");
+		}
+		
+		if (FlagDate)
+		{
+			imports.add("import java.util.Date;");
 		}
 		
 		if (sourceConfig.FlagJsonAnnotation)
