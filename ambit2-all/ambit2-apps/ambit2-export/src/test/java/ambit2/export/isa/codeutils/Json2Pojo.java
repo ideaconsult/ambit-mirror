@@ -310,7 +310,10 @@ public class Json2Pojo
 				if (eList != null)
 				{	
 					if (!eList.isEmpty())
+					{	
 						var.enumList = eList;
+						var.enumName =  classNameGenerator.getJavaEnumNameForEnumVariable(fieldName);
+					}	
 				}	
 				else
 					return ("Errors in 'enum' for string field "  + fieldName + ": " +
@@ -478,6 +481,7 @@ public class Json2Pojo
 			if (node.isTextual())
 			{
 				eList.add(node.asText());
+				//System.out.println("---> " + node.asText());
 			}
 			else
 			{

@@ -19,6 +19,7 @@ public class VariableInfo
 	public StringFormat stringFormat = StringFormat.UNSPECIFIED;
 	public String objectClass = null; //used only for types ARRAY and OBJECT
 	public List<String> enumList = null;
+	public String enumName = null;
 	
 	public String getJavaSource(JavaSourceConfig sourceConfig)
 	{
