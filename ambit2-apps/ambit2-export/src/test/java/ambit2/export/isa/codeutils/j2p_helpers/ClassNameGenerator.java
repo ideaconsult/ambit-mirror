@@ -88,6 +88,28 @@ public class ClassNameGenerator
 		return j2p.checkForDuplication(className);
 	}
 	
+	public String getJavaEnumNameForEnumVariable(String varName)
+	{
+		String enumName = null;
+		
+		if (FlagHandleTokensInVarName)
+		{
+			String tok[] = tokenize(varName);
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < tok.length; i++)
+			{
+				sb.append(capitalyzeFirstChar(tok[i]));
+			}
+			enumName =  sb.toString();
+		}
+		else
+		{
+			enumName = capitalyzeFirstChar(varName);
+		}
+		
+		
+		return enumName;
+	}
 	
 	
 	public String[] tokenize(String s)
