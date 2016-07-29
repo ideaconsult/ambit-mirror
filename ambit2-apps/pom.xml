@@ -15,13 +15,13 @@
 
 		<!-- use the following if you're not using a snapshot version. -->
 		<repository>
-			<id>ambit-plovdiv-releases</id>
+			<id>nexus-idea-releases</id>
 			<name>ambit and toxtree releases</name>
 			<url>https://nexus.ideaconsult.net/content/repositories/releases</url>
 		</repository>
 		<!-- use the following if you ARE using a snapshot version. -->
 		<snapshotRepository>
-			<id>ambit-plovdiv-snapshots</id>
+			<id>nexus-idea-snapshots</id>
 			<name>ambit and toxtree snapshots</name>
 			<url>https://nexus.ideaconsult.net/content/repositories/snapshots</url>
 		</snapshotRepository>

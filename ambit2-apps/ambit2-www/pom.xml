@@ -648,7 +648,7 @@
 	</dependencies>
 	<repositories>
 		<repository>
-			<id>ambit-plovdiv</id>
+			<id>nexus-idea</id>
 			<url>https://nexus.ideaconsult.net//content/repositories/thirdparty</url>
 			<snapshots>
 				<enabled>false</enabled>
