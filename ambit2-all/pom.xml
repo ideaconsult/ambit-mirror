@@ -10,21 +10,21 @@
   <url>http://ambit.sourceforge.net</url>
   <repositories>
     <repository>
-      <id>ambit-plovdiv</id>
+      <id>nexus-idea</id>
       <url>https://nexus.ideaconsult.net/content/repositories/thirdparty</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
     </repository>
     <repository>
-      <id>ambit-plovdiv-releases</id>
+      <id>nexus-idea-releases</id>
       <url>https://nexus.ideaconsult.net/content/repositories/releases</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
     </repository>
     <repository>
-      <id>ambit-plovdiv-snapshots</id>
+      <id>nexus-idea-snapshots</id>
       <url>https://nexus.ideaconsult.net/content/repositories/snapshots</url>
       <snapshots>
         <enabled>true</enabled>
@@ -319,11 +319,11 @@
     <!-- <repository> <id>dev_web_sourceforge</id> <url>scp://web.sourceforge.net/home/groups/a/am/ambit/htdocs/jars</url> 
 			</repository> -->
     <snapshotRepository>
-      <id>ambit-plovdiv-snapshots</id>
+      <id>nexus-idea-snapshots</id>
       <url>https://nexus.ideaconsult.net/content/repositories/snapshots</url>
     </snapshotRepository>
     <repository>
-      <id>ambit-plovdiv-releases</id>
+      <id>nexus-idea-releases</id>
       <url>https://nexus.ideaconsult.net//content/repositories/releases</url>
     </repository>
     <site>
