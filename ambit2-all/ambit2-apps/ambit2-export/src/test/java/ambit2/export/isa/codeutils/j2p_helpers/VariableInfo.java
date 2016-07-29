@@ -68,6 +68,18 @@ public class VariableInfo
 		return "";
 	}
 	
+	public String getEnumJavaSource(JavaSourceConfig sourceConfig, String superClass, String indent)
+	{
+		if (enumName == null)
+			return "";
+		
+		StringBuffer sb = new StringBuffer();
+		
+		//TODO
+		
+		return sb.toString();
+	}
+	
 	public static Type getTypeFromString(String s)
 	{
 		//System.out.println("getTypeFromString " + s);

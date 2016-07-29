@@ -64,7 +64,23 @@ public class JavaClassInfo
 						break;
 					}
 				}
-		}	
+		}
+		
+		//Check for additional json annotations due to 'enum'
+		boolean FlagEnum = false;
+		if (sourceConfig.FlagHandleEnumString)
+		{	
+			for (VariableInfo vi: variables)
+				if (vi.type == Type.STRING)
+				{	
+					if (vi.enumList != null)
+					{
+						FlagEnum = true;
+						break;
+					}
+				}
+		}
+		
 		
 		if (FlagArray)
 		{
@@ -88,6 +104,12 @@ public class JavaClassInfo
 			imports.add("import com.fasterxml.jackson.annotation.JsonInclude;");
 			imports.add("import com.fasterxml.jackson.annotation.JsonProperty;");
 			imports.add("import com.fasterxml.jackson.annotation.JsonPropertyOrder;");
+		}
+		
+		if (FlagEnum)
+		{
+			imports.add("import com.fasterxml.jackson.annotation.JsonCreator;");
+			imports.add("import com.fasterxml.jackson.annotation.JsonValue;");
 		}
 		
 		return imports;
