@@ -22,7 +22,7 @@
 			<!-- JAMA dependency -->
 			<id>UCC-repo-proxy</id>
 			<name>UCC repositories proxy</name>
-			<url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/ucc-repo/</url>
+			<url>https://nexus.ideaconsult.net/content/repositories/ucc-repo/</url>
 		</repository>
 	</repositories>
 	<dependencies>

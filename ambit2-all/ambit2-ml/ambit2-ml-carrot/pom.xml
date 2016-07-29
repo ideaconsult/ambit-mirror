@@ -5,6 +5,6 @@
     <artifactId>ambit2-ml</artifactId>
     <version>3.0.3-SNAPSHOT</version>
   </parent>
-  <groupId>ambit2-ml-carrot</groupId>
+  <groupId>ambit2</groupId>
   <artifactId>ambit2-ml-carrot</artifactId>
 </project>

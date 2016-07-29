@@ -13,14 +13,14 @@
 	<repositories>
    <repository>
       <id>ambit-plovdiv</id>
-      <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty</url>
+      <url>https://nexus.ideaconsult.net/content/repositories/thirdparty</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
     </repository>
     <repository>
       <id>ambit-plovdiv-releases</id>
-      <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+      <url>https://nexus.ideaconsult.net/content/repositories/releases</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>

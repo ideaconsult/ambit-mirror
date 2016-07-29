@@ -17,13 +17,13 @@
 		<repository>
 			<id>ambit-plovdiv-releases</id>
 			<name>ambit and toxtree releases</name>
-			<url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+			<url>https://nexus.ideaconsult.net/content/repositories/releases</url>
 		</repository>
 		<!-- use the following if you ARE using a snapshot version. -->
 		<snapshotRepository>
 			<id>ambit-plovdiv-snapshots</id>
 			<name>ambit and toxtree snapshots</name>
-			<url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots</url>
+			<url>https://nexus.ideaconsult.net/content/repositories/snapshots</url>
 		</snapshotRepository>
 
 	</distributionManagement>
@@ -396,14 +396,14 @@
 	<repositories>
 		<repository>
 			<id>ambit-plovdiv-releases</id>
-			<url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+			<url>https://nexus.ideaconsult.net/content/repositories/releases</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 		<repository>
 			<id>ambit-plovdiv-snapshots</id>
-			<url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots</url>
+			<url>https://nexus.ideaconsult.net/content/repositories/snapshots</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
