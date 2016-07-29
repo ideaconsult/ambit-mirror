@@ -643,7 +643,22 @@ public class Json2Pojo
 			
 			sb.append(sourceConfig.indent + "public " + 
 					jci.variables.get(i).getJavaSource(sourceConfig) + endLine);
-		}	
+		}
+		
+		
+		if (sourceConfig.FlagHandleEnumString)
+		{	
+			for (VariableInfo vi: jci.variables)
+				if (vi.type == Type.STRING)
+				{	
+					if (vi.enumList != null)
+					{
+						String enumSource = vi.getEnumJavaSource(sourceConfig, jci.javaClassName, sourceConfig.indent);
+						sb.append(endLine + enumSource);
+					}
+				}
+		}
+		
 		
 		sb.append("}" + endLine);
 		
