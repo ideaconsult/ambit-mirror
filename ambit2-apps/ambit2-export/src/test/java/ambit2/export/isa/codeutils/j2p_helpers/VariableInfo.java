@@ -50,6 +50,13 @@ public class VariableInfo
 					if (sourceConfig.FlagHandleURIString)
 						return "URI " + name + 
 							sourceConfig.getURIInitialization() + ";";
+				
+				if (stringFormat == StringFormat.DATE_TIME_FORMAT)
+					if (sourceConfig.FlagHandleDateString)
+						return "Date " + name + 
+							sourceConfig.getDateInitialization() + ";";
+				
+				
 			}
 			return "String " + name + 
 					sourceConfig.getStringInitialization() + ";";
