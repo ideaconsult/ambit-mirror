@@ -308,12 +308,13 @@ public class Json2Pojo
 				StringBuffer sb_err = new StringBuffer();
 				List<String> eList = getEnumListForStringField(fieldNode, sb_err);
 				if (eList != null)
-					var.enumList = eList;
+				{	
+					if (!eList.isEmpty())
+						var.enumList = eList;
+				}	
 				else
-					if (sb_err.length() > 0)
-						return ("Errors in enum for string field "  + fieldName + ": " +
-								sb_err.toString());
-				
+					return ("Errors in 'enum' for string field "  + fieldName + ": " +
+							sb_err.toString());
 			}
 			
 			//Handle variable of type object
@@ -460,8 +461,32 @@ public class Json2Pojo
 	
 	List<String> getEnumListForStringField(JsonNode fieldNode, StringBuffer errors)
 	{
-		//TODO
-		return null;
+		List<String> eList = new ArrayList<String>();
+		JsonNode enumNode = fieldNode.path("enum");
+		if(enumNode.isMissingNode())
+			return eList;
+		
+		if (!enumNode.isArray())
+		{
+			errors.append("'enum' field is not an array");
+			return null;
+		}
+		
+		for (int i = 0; i < enumNode.size(); i++)
+		{
+			JsonNode node = enumNode.get(i);
+			if (node.isTextual())
+			{
+				eList.add(node.asText());
+			}
+			else
+			{
+				errors.append("'enum' field element #" + (i+1)  + " is not text");
+				return null;
+			}
+		}
+		
+		return eList;
 	}
 	
 	JavaClassInfo getReferenceClass(String ref)
