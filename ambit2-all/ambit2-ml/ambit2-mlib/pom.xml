@@ -31,4 +31,5 @@
 		</resources>
 
 	</build>
+	<groupId>ambit</groupId>
 </project>
