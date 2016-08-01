@@ -44,7 +44,7 @@ public class Json2Pojo
 	
 	public String jsonFileExtension = "json";
 	public String refFileExtension = "json#";
-	public String endLine = "\n";
+	
 	
 	public JavaSourceConfig sourceConfig = new JavaSourceConfig(); 
 	public ClassNameGenerator classNameGenerator = new ClassNameGenerator(this);
@@ -192,12 +192,12 @@ public class Json2Pojo
 			JsonNode fieldNode = propNode.get(fieldName);
 			String err = readProperty(jci, fieldName, fieldNode);
 			if (err != null)
-				errors.append(err + endLine);
+				errors.append(err + "\n");
 		}
 		
 		if  (!errors.toString().isEmpty())
 			throw new Exception("Property errors in schema: " + 
-					jci.schemaName + endLine + errors.toString());
+					jci.schemaName + "\n" + errors.toString());
 	}
 	
 	String readProperty(JavaClassInfo jci, String fieldName, JsonNode fieldNode)
@@ -313,6 +313,7 @@ public class Json2Pojo
 					{	
 						var.enumList = eList;
 						var.enumName =  classNameGenerator.getJavaEnumNameForEnumVariable(fieldName);
+						var.objectClass = jci.javaClassName;
 					}	
 				}	
 				else
@@ -517,7 +518,7 @@ public class Json2Pojo
 			JsonNode fieldNode = propNode.get(fieldName);
 			String err = readProperty(jci, fieldName, fieldNode);
 			if (err != null)
-				errors.append(err + endLine);
+				errors.append(err + "\n");
 		}
 		
 		if  (!errors.toString().isEmpty())
@@ -578,6 +579,7 @@ public class Json2Pojo
 	
 	String generateJavaSource(JavaClassInfo jci)
 	{
+		String endLine = sourceConfig.endLine;
 		StringBuffer sb = new StringBuffer();
 		sb.append("package " + jci.javaPackage + ";" + endLine);
 		sb.append(endLine);

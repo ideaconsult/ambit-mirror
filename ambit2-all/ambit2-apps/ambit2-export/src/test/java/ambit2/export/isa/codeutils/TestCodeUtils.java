@@ -80,6 +80,7 @@ public class TestCodeUtils
 		j2p.sourceConfig.init = VarInit.NO_INIT;
 		j2p.sourceConfig.arrayInit = VarInit.EMPTY;
 		//j2p.sourceConfig.FlagHandleURIString = false;
+		j2p.sourceConfig.FlagHandleEnumString = true;
 		j2p.sourceConfig.FlagJsonAnnotation = true;
 		//j2p.sourceConfig.FlagUseSchemaNameAsComment = true;
 		
