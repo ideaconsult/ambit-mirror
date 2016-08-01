@@ -9,6 +9,9 @@ public class JavaSourceConfig
 	
 	public String indent = "\t";
 	public String endLine = "\n";
+	
+	public String generatedInfo = "ambit.json2pojo";
+	
 	public VarInit init = VarInit.NO_INIT;
 	//These are specific init options for various variable types
 	//If different from UNSPECIFIED override the default 'init'

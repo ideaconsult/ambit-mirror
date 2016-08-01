@@ -620,7 +620,7 @@ public class Json2Pojo
 		if (sourceConfig.FlagJsonAnnotation)
 		{
 			sb.append("@JsonInclude(JsonInclude.Include.NON_NULL)"  + endLine);
-			sb.append("@Generated(\"ambit.json2pojo\")"  + endLine);
+			sb.append("@Generated(\"" + sourceConfig.generatedInfo + "\")"  + endLine);
 			sb.append("@JsonPropertyOrder({"  + endLine);
 			for (int i = 0; i < jci.variables.size(); i++)
 			{

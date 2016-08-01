@@ -81,6 +81,7 @@ public class VariableInfo
 		
 		StringBuffer sb = new StringBuffer();
 		
+		
 		//TODO
 		
 		return sb.toString();
