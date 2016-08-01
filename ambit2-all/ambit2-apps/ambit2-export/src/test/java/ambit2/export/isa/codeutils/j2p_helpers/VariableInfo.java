@@ -74,16 +74,28 @@ public class VariableInfo
 		return "";
 	}
 	
-	public String getEnumJavaSource(JavaSourceConfig sourceConfig, String superClass, String indent)
+	public String getEnumJavaSource(JavaSourceConfig sourceConfig, String superClass, String indent, ClassNameGenerator cnGen)
 	{
 		if (enumName == null)
 			return "";
 		
 		StringBuffer sb = new StringBuffer();
-		
+		sb.append(indent + "@Generated(\"" + sourceConfig.generatedInfo + "\")"  + sourceConfig.endLine);
+		sb.append(indent + "public static enum " + enumName + " {" + sourceConfig.endLine);
+		for (int i = 0; i < enumList.size(); i++)
+		{	
+			sb.append(indent+indent + cnGen.getJavaEnumElementValue(enumList.get(i)) 
+					+ "(\"" + enumList.get(i) + "\")");
+			if (i == (enumList.size()-1))
+				sb.append(";" + sourceConfig.endLine);
+			else
+				sb.append("," + sourceConfig.endLine);
+		}	
 		
 		//TODO
 		
+		
+		sb.append(indent + "}" + sourceConfig.endLine);
 		return sb.toString();
 	}
 	

@@ -655,7 +655,8 @@ public class Json2Pojo
 				{	
 					if (vi.enumList != null)
 					{
-						String enumSource = vi.getEnumJavaSource(sourceConfig, jci.javaClassName, sourceConfig.indent);
+						String enumSource = vi.getEnumJavaSource(sourceConfig, jci.javaClassName, 
+									sourceConfig.indent, classNameGenerator);
 						sb.append(endLine + enumSource);
 					}
 				}
