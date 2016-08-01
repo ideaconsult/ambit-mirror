@@ -111,6 +111,23 @@ public class ClassNameGenerator
 		return enumName;
 	}
 	
+	public String getJavaEnumElementValue(String element)
+	{
+		String enumValue = null;
+
+
+		String tok[] = tokenize(element);
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < tok.length; i++)
+		{
+			sb.append(tok[i].toUpperCase());
+			if (i < tok.length - 1)
+				sb.append("_");
+		}
+		enumValue =  sb.toString();
+		return enumValue;
+	}
+	
 	
 	public String[] tokenize(String s)
 	{
