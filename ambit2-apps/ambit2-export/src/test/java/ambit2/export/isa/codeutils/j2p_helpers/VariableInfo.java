@@ -17,7 +17,7 @@ public class VariableInfo
 	public String name = null;
 	public String jsonPropertyName = null;
 	public StringFormat stringFormat = StringFormat.UNSPECIFIED;
-	public String objectClass = null; //used only for types ARRAY and OBJECT
+	public String objectClass = null; //used only for types ARRAY, OBJECT and String enum
 	public List<String> enumList = null;
 	public String enumName = null;
 	
@@ -60,6 +60,12 @@ public class VariableInfo
 							sourceConfig.getDateInitialization() + ";";
 				
 			}
+			
+			if (enumName != null)
+				if (sourceConfig.FlagHandleEnumString)
+					return objectClass + "." + enumName + " " + name + ";";
+					
+					
 			return "String " + name + 
 					sourceConfig.getStringInitialization() + ";";
 		}	
