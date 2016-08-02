@@ -1,6 +1,12 @@
 package ambit2.export.isa.codeutils.j2p_helpers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonValue;
+
+import ambit2.export.isa.v1_0.objects.Data;
 
 
 public class VariableInfo 
@@ -84,13 +90,49 @@ public class VariableInfo
 		sb.append(indent + "public static enum " + enumName + " {" + sourceConfig.endLine);
 		for (int i = 0; i < enumList.size(); i++)
 		{	
-			sb.append(indent+indent + cnGen.getJavaEnumElementValue(enumList.get(i)) 
+			sb.append(indent + indent + cnGen.getJavaEnumElementValue(enumList.get(i)) 
 					+ "(\"" + enumList.get(i) + "\")");
 			if (i == (enumList.size()-1))
 				sb.append(";" + sourceConfig.endLine);
 			else
 				sb.append("," + sourceConfig.endLine);
-		}	
+		}
+		sb.append(indent + indent + "private final String value;" + sourceConfig.endLine);
+		sb.append(indent + indent + "private static Map<String, " + objectClass + "." + enumName +
+						"> constants = new HashMap<String, " +  objectClass + "." + enumName + ">();" +
+						sourceConfig.endLine + sourceConfig.endLine);
+		
+		sb.append(indent + indent + "static {" + sourceConfig.endLine);
+		sb.append(indent + indent + indent + "for (" + objectClass + "." + enumName + " c: values()) {" + sourceConfig.endLine);
+		sb.append(indent + indent + indent + indent + "constants.put(c.value, c);" + sourceConfig.endLine);
+		sb.append(indent + indent + indent + "}" + sourceConfig.endLine);
+		sb.append(indent + indent + "}" + sourceConfig.endLine);
+		sb.append(sourceConfig.endLine);
+		
+		sb.append(indent + indent + "private Type(String value) {" + sourceConfig.endLine);
+		sb.append(indent + indent + indent + "this.value = value;" + sourceConfig.endLine);
+		sb.append(indent + indent + "}" + sourceConfig.endLine);
+		sb.append(sourceConfig.endLine);
+		
+		sb.append(indent + indent + "@JsonValue" + sourceConfig.endLine);
+		sb.append(indent + indent + "@Override" + sourceConfig.endLine);
+		sb.append(indent + indent + "public String toString() {" + sourceConfig.endLine);
+		sb.append(indent + indent + indent + "return this.value;" + sourceConfig.endLine);
+		sb.append(indent + indent + "}" + sourceConfig.endLine);
+		sb.append(sourceConfig.endLine);
+		
+		sb.append(indent + indent + "public static " + objectClass + "." + enumName 
+					+ " fromValue(String value) {" + sourceConfig.endLine);
+		sb.append(indent + indent + indent + objectClass + "." + enumName 
+					+ " constant = constants.get(value);" + sourceConfig.endLine);
+		sb.append(indent + indent + indent  + "if (constant == null) {" + sourceConfig.endLine);
+		sb.append(indent + indent + indent + indent + "throw new IllegalArgumentException(value);" + sourceConfig.endLine);
+		sb.append(indent + indent + indent+ "} else {" + sourceConfig.endLine);
+		sb.append(indent + indent + indent + indent + "return constant;" + sourceConfig.endLine);
+		sb.append(indent + indent + indent + "}" + sourceConfig.endLine);
+		sb.append(indent + indent + "}" + sourceConfig.endLine);
+		sb.append(sourceConfig.endLine);
+		
 		
 		//TODO
 		
