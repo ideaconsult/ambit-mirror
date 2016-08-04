@@ -79,6 +79,7 @@ public class TestCodeUtils
 		j2p.javaPackage = "ambit2.export.isa.v1_0.objects";
 		
 		j2p.sourceConfig.endLine = JavaSourceConfig.WINDOWS_ENDLINE;
+		j2p.sourceConfig.indent = "    ";
 		j2p.sourceConfig.init = VarInit.NO_INIT;
 		j2p.sourceConfig.arrayInit = VarInit.EMPTY;
 		//j2p.sourceConfig.FlagHandleURIString = false;
