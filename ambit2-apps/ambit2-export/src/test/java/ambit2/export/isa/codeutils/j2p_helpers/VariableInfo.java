@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import ambit2.export.isa.v1_0.objects.Data;
@@ -121,6 +122,7 @@ public class VariableInfo
 		sb.append(indent + indent + "}" + sourceConfig.endLine);
 		sb.append(sourceConfig.endLine);
 		
+		sb.append(indent + indent + "@JsonCreator" + sourceConfig.endLine);
 		sb.append(indent + indent + "public static " + objectClass + "." + enumName 
 					+ " fromValue(String value) {" + sourceConfig.endLine);
 		sb.append(indent + indent + indent + objectClass + "." + enumName 

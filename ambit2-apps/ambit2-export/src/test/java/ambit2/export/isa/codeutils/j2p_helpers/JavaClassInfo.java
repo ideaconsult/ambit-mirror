@@ -110,6 +110,8 @@ public class JavaClassInfo
 		{
 			imports.add("import com.fasterxml.jackson.annotation.JsonCreator;");
 			imports.add("import com.fasterxml.jackson.annotation.JsonValue;");
+			imports.add("import java.util.Map;");
+			imports.add("import java.util.HashMap;");
 		}
 		
 		return imports;
