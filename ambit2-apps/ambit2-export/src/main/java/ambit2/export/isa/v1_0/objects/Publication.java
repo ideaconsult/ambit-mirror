@@ -1,4 +1,3 @@
-
 package ambit2.export.isa.v1_0.objects;
 
 import java.util.ArrayList;
@@ -8,15 +7,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-
 /**
  * ISA investigation schema
- * <p>
  * JSON-schema representing an investigation in the ISA model
- * 
- */
+**/
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
+@Generated("ambit.json2pojo")
 @JsonPropertyOrder({
     "comments",
     "pubMedID",
@@ -25,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "title",
     "status"
 })
-public class Publication {
-
+public class Publication
+{
     @JsonProperty("comments")
     public List<Comment> comments = new ArrayList<Comment>();
     @JsonProperty("pubMedID")
@@ -37,13 +33,6 @@ public class Publication {
     public String authorList;
     @JsonProperty("title")
     public String title;
-    /**
-     * ISA ontology reference schema
-     * <p>
-     * JSON-schema representing an ontology reference or annotation in the ISA model (for fields that are required to be ontology annotations)
-     * 
-     */
     @JsonProperty("status")
     public OntologyAnnotation status;
-
 }
