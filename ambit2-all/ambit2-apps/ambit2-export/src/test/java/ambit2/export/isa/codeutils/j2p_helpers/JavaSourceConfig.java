@@ -3,6 +3,9 @@ package ambit2.export.isa.codeutils.j2p_helpers;
 
 public class JavaSourceConfig 
 {
+	public static String WINDOWS_ENDLINE = "\r\n";
+	public static String UNIX_ENDLINE = "\n";
+	
 	public static enum VarInit {
 		NO_INIT, EMPTY, NULL, UNSPECIFIED
 	};

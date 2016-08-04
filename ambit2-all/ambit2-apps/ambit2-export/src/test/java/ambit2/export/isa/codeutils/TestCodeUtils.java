@@ -2,6 +2,7 @@ package ambit2.export.isa.codeutils;
 
 import java.io.File;
 
+import ambit2.export.isa.codeutils.j2p_helpers.JavaSourceConfig;
 import ambit2.export.isa.codeutils.j2p_helpers.JavaSourceConfig.VarInit;
 
 public class TestCodeUtils 
@@ -75,8 +76,9 @@ public class TestCodeUtils
 		j2p.sourceDir = new File("/git-repositories/isa-api/isatools/schemas/isa_model_version_1_0_schemas/core");
 		j2p.targetDir = new File("/temp2/test/test2");
 		j2p.FlagResultOnlyToLog = false;
-		j2p.javaPackage = "ambit2.export.isa.v1_0.objects__";
+		j2p.javaPackage = "ambit2.export.isa.v1_0.objects";
 		
+		j2p.sourceConfig.endLine = JavaSourceConfig.WINDOWS_ENDLINE;
 		j2p.sourceConfig.init = VarInit.NO_INIT;
 		j2p.sourceConfig.arrayInit = VarInit.EMPTY;
 		//j2p.sourceConfig.FlagHandleURIString = false;
