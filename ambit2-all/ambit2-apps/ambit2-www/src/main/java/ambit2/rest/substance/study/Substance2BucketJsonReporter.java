@@ -24,7 +24,6 @@ import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.substance.ExternalIdentifier;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.core.io.json.SubstanceStudyParser;
-import ambit2.rest.substance.study.SubstanceExportResource._JSON_MODE;
 
 public class Substance2BucketJsonReporter extends
 		AbstractBucketJsonReporter<SubstanceRecord> {
@@ -35,8 +34,12 @@ public class Substance2BucketJsonReporter extends
 	private static final long serialVersionUID = 8415073915990185959L;
 	protected Bucket bucket;
 	protected ObjectMapper dx = new ObjectMapper();
-	protected _JSON_MODE jsonmode;
+	protected _JSON_MODE jsonmode = _JSON_MODE.experiment;
 	protected String summaryMeasurement = null;
+
+	public enum _JSON_MODE {
+		experiment, substance
+	}
 
 	public Substance2BucketJsonReporter(String command, ProcessorsChain chain,
 			_JSON_MODE jsonmode, String summaryMeasurement) {
@@ -58,8 +61,9 @@ public class Substance2BucketJsonReporter extends
 
 		IProcessor itemp = getProcessors().get(0);
 		getProcessors().clear();
-		for (int i = 0; i < chain.size(); i++)
-			getProcessors().add((IProcessor) chain.get(i));
+		if (chain != null)
+			for (int i = 0; i < chain.size(); i++)
+				getProcessors().add((IProcessor) chain.get(i));
 		getProcessors().add(itemp);
 
 	}
@@ -252,9 +256,37 @@ public class Substance2BucketJsonReporter extends
 				}
 				bucket.put("composition", composition.toString());
 			}
-
+			List<Bucket> ids = new ArrayList<Bucket>();
+			if (record.getExternalids() != null)
+				for (ExternalIdentifier id : record.getExternalids()) {
+					// these should not be in external ids in first place
+					if ("Has_Identifier".equals(id.getSystemDesignator()))
+						continue;
+					if ("Composition".equals(id.getSystemDesignator()))
+						continue;
+					if ("DATASET".equals(id.getSystemDesignator()))
+						continue;
+					if ("SOURCE".equals(id.getSystemDesignator()))
+						continue;
+					if ("Coating".equals(id.getSystemDesignator()))
+						continue;
+					if ("COD ID".equals(id.getSystemDesignator())) {
+						bucket.put("content", String.format(
+								"http://www.crystallography.net/cod/%s.html",
+								id.getSystemIdentifier()));
+					}
+					if (id.getSystemIdentifier().startsWith("http"))
+						bucket.put("content", id.getSystemIdentifier());
+					ids.add(externalids2Bucket(id));
+				}
+			
 			List<Bucket> _childDocuments_ = new ArrayList<>();
 			bucket.put("_childDocuments_", _childDocuments_);
+			
+			if (ids != null)
+				for (Bucket id : ids)
+					_childDocuments_.add(id);
+			
 			if (record.getMeasurements() != null)
 				for (ProtocolApplication<Protocol, Object, String, Object, String> papp : record
 						.getMeasurements()) {
@@ -280,6 +312,7 @@ public class Substance2BucketJsonReporter extends
 											e.getIdresult()));
 							_childDocuments_.add(study);
 						}
+					else _childDocuments_.add(study);
 				}
 		}
 		}
@@ -320,6 +353,7 @@ public class Substance2BucketJsonReporter extends
 	}
 
 	protected void substance2Bucket(SubstanceRecord record, Bucket bucket) {
+		if (record==null) return;
 		bucket.put("name", record.getSubstanceName());
 		bucket.put("publicname", record.getPublicName());
 		if (!"".equals(record.getOwnerName()))

@@ -189,7 +189,7 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 		return structureRecord;
 	}
 
-	private IStructureRecord transform(CSVRecord record) {
+	protected IStructureRecord transform(CSVRecord record) {
 		structureRecord = new StructureRecord();
 		Property[] special_props = new Property[special_header.values().length];
 
