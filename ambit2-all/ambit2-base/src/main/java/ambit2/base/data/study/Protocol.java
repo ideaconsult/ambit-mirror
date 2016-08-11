@@ -2244,7 +2244,6 @@ public class Protocol {
 			}
 
 		},
-
 		CELL_PROLIFERATION {
 			// obo:GO:0008283
 			@Override
@@ -2400,6 +2399,27 @@ public class Protocol {
 				return 1012;
 			}
 
+		},
+		//Immunotoxicity
+		NPO_1339_SECTION {
+			@Override
+			public String getNumber() {
+				return "10.4";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+			
+			@Override
+			public int getSortingOrder() {
+				return 1013;
+			}
+			public String getOntologyURI() {
+				// generic assay by default
+				return "http://purl.obolibrary.org/obo/NPO_1339";
+			}
 		};
 
 		;
