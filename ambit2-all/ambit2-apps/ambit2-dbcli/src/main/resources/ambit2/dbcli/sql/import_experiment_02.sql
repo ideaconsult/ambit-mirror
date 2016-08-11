@@ -6,7 +6,6 @@
 SET unique_checks=0;
 SET foreign_key_checks=0;
 SET autocommit=0;
-SET sql_log_bin=0;
 
 -- substance_experiments table
 LOAD DATA INFILE "{TMP}substance_experiment_table.tsv"
