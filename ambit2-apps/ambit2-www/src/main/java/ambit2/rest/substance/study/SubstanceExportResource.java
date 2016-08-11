@@ -34,6 +34,7 @@ import ambit2.db.substance.ids.ReadSubstanceIdentifiers;
 import ambit2.db.substance.relation.ReadSubstanceComposition;
 import ambit2.db.substance.study.SubstanceStudyDetailsProcessor;
 import ambit2.rest.substance.SubstanceResource;
+import ambit2.rest.substance.study.Substance2BucketJsonReporter._JSON_MODE;
 
 /**
  * /admin/export/substance?media=application%2Fjson
@@ -45,9 +46,6 @@ import ambit2.rest.substance.SubstanceResource;
  */
 public class SubstanceExportResource<Q extends IQueryRetrieval<SubstanceRecord>, T extends SubstanceRecord>
 		extends SubstanceResource<Q, T> {
-	enum _JSON_MODE {
-		experiment, substance
-	}
 
 	protected _JSON_MODE jsonmode = _JSON_MODE.experiment;
 	protected String summaryMeasurement = null;
