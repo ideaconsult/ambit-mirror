@@ -217,7 +217,7 @@ public class AmbitCli {
 			return parseCommandAE(subcommand, now);
 		}
 		case dbmigrate: {
-			parseDBMigrate(subcommand, now);
+			parseDBMigrate(subcommand, now,true);
 		}
 		default:
 			break;
@@ -274,6 +274,7 @@ public class AmbitCli {
 					new Object[] { x.getMessage() });
 			code = -1;
 		} catch (Exception x) {
+			//x.printStackTrace();
 			logger_cli.log(Level.SEVERE, "MSG_ERR",
 					new Object[] { x.getMessage() });
 			code = -1;
@@ -1598,7 +1599,7 @@ public class AmbitCli {
 		}
 	}
 
-	public void parseDBMigrate(String subcommand, long now) throws Exception {
+	public void parseDBMigrate(String subcommand, long now, boolean disablebinlog) throws Exception {
 		File folder = new File(System.getProperty("java.io.tmpdir"));
 		String[] resources = new String[] { "ambit2/dbcli/sql/export_substances.sql" };
 		_subcommandmode sc = _subcommandmode.get;
@@ -1614,12 +1615,19 @@ public class AmbitCli {
 				break;
 			}
 			case put: {
-				resources = new String[] {
-						"ambit2/dbcli/sql/import_substances_01.sql",
-						"ambit2/dbcli/sql/import_experiment_02.sql",
-						"ambit2/dbcli/sql/import_chemicals_03.sql",
-						"ambit2/dbcli/sql/import_properties_04.sql"
-						};
+				if (disablebinlog)
+					resources = new String[] { "ambit2/dbcli/sql/sql_log_bin.sql",
+							"ambit2/dbcli/sql/import_substances_01.sql",
+							"ambit2/dbcli/sql/import_experiment_02.sql",
+							"ambit2/dbcli/sql/import_chemicals_03.sql",
+							"ambit2/dbcli/sql/import_properties_04.sql" 
+							};
+				else
+					resources = new String[] {
+							"ambit2/dbcli/sql/import_substances_01.sql",
+							"ambit2/dbcli/sql/import_experiment_02.sql",
+							"ambit2/dbcli/sql/import_chemicals_03.sql",
+							"ambit2/dbcli/sql/import_properties_04.sql" };
 				try {
 					folder = new File(options.input);
 				} catch (Exception x) {

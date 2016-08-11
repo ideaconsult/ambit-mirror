@@ -4,8 +4,6 @@
 SET unique_checks=0;
 SET foreign_key_checks=0;
 SET autocommit=0;
-SET sql_log_bin=0;
-
 
 -- temp table for properties
 DROP table if exists property_values_tmp;

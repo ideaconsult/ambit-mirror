@@ -284,7 +284,14 @@
 				"params": {}
 			},
 			"put": {
-				"params": {}
+					"params": {
+						":sql_log_bin": {
+							"mandatory": false,
+							"type": "Integer",
+							"value": 0,
+							"comment": "SET sql_log_bin=0 or 1"
+						}	
+					}
 			}			
 		},		
 		"import": {

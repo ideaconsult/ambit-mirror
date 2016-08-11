@@ -150,6 +150,7 @@ public class CliOptions {
 	protected String media = "csv";
 	protected ObjectNode command;
 	protected _subcommandmode subcommand = _subcommandmode.dataset;
+	protected boolean disablebinlog=true;
 
 	public _subcommandmode getSubcommand() {
 		return subcommand;
