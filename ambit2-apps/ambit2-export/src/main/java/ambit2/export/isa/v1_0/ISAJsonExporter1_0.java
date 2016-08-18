@@ -71,6 +71,11 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		setOutputDir(outputDir);
 		setExportJsonConfig(exportConfig);
 	}
+	
+	public ISAJsonExporter1_0(File outputDir, ISAJsonExportConfig cfg) {
+		setOutputDir(outputDir);
+		this.cfg = cfg;
+	}
 
 	public File getExportJsonConfig() {
 		return exportConfig;
@@ -111,8 +116,10 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		if (outputDir == null)
 			logger.info("Null output directory or file! ISA data can be extracted with function getResultAsJson() ");
 
-		if (exportConfig == null) {
-			cfg = ISAJsonExportConfig.getDefaultConfig();
+		if (exportConfig == null) 
+		{
+			if (cfg == null)
+				cfg = ISAJsonExportConfig.getDefaultConfig();
 		} else
 			cfg = ISAJsonExportConfig.loadFromJSON(exportConfig);
 

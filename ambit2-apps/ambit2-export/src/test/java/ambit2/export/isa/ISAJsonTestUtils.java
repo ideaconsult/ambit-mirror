@@ -50,7 +50,13 @@ public class ISAJsonTestUtils {
 			SubstanceEndpointsBundle endpointBundle) throws Exception {
 		ISAJsonExporter1_0 exporter = new ISAJsonExporter1_0(outputDir,
 				exportConfig);
+		
+		exporter.setOutputDir(outputDir);
+		exporter.setExportJsonConfig(exportConfig);
+		
+		
 		exporter.export(endpointBundle, records);
+		
 		System.out.println(exporter.getResultAsJson());
 	}
 
