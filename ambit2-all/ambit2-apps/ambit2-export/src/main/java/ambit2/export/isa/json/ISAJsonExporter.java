@@ -19,9 +19,11 @@ public class ISAJsonExporter implements IISAExport {
 	Iterator<SubstanceRecord> records = null;
 	SubstanceEndpointsBundle endpointBundle = null;
 	File outputDir = null;
-	File exportConfig = null;
+	File exportConfigFile = null;
 	File xmlISAConfig = null;
 
+	public ISAJsonExportConfig exportConfiguration = null;
+	
 	public ISAJsonExporter() {
 	}
 
@@ -46,8 +48,11 @@ public class ISAJsonExporter implements IISAExport {
 	public void export() throws Exception {
 		switch (isaVersion) {
 		case Ver1_0:
-			ISAJsonExporter1_0 jsonExpV1 = new ISAJsonExporter1_0(outputDir,
-					exportConfig);
+			ISAJsonExporter1_0 jsonExpV1;
+			if (exportConfigFile == null)
+				jsonExpV1 = new ISAJsonExporter1_0(outputDir, exportConfiguration);
+			else
+				jsonExpV1 = new ISAJsonExporter1_0(outputDir, exportConfigFile);
 			jsonExpV1.export(endpointBundle, records);
 			break;
 		case Ver2_0:
@@ -56,11 +61,11 @@ public class ISAJsonExporter implements IISAExport {
 	}
 
 	public File getExportJsonConfig() {
-		return exportConfig;
+		return exportConfigFile;
 	}
 
-	public void setExportJsonConfig(File exportConfig) {
-		this.exportConfig = exportConfig;
+	public void setExportJsonConfig(File exportConfigFile) {
+		this.exportConfigFile = exportConfigFile;
 	}
 
 	public File getXmlISAConfig() {
