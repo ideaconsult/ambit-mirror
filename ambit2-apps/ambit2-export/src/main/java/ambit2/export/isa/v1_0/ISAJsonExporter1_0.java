@@ -1,6 +1,7 @@
 package ambit2.export.isa.v1_0;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -390,13 +391,34 @@ public class ISAJsonExporter1_0 implements IISAExport,
 	}
 
 	void saveDataToOutputDir() throws Exception {
-		if (cfg.singleJSONFile) {
-			// ObjectMapper mapper = new ObjectMapper();
-			// String jsonString =
-			// mapper.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
+		if (cfg.singleJSONFile) 
+		{
+			
+			if (outputDir.isDirectory())
+				throw new Exception("Output is a directory for singleJSONFile = true");
+			
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.setSerializationInclusion(Inclusion.NON_EMPTY);
+			String jsonString =
+					mapper.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
+			
+			FileWriter writer = null;
+			
+			try {
+				writer = new FileWriter(outputDir);
+				writer.write(jsonString);
+				writer.flush();
+			}catch (Exception x) {
+				//in case smth's wrong with the writer file, close it and throw an error
+				try {writer.close(); } catch (Exception xx) {}
+				throw x;
+			} finally { }
 
-			// TODO
-		} else {
+			writer.close(); 
+		} 
+		else 
+		{
+			//Multiple json files
 			// TODO
 		}
 
