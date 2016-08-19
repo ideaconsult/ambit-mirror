@@ -79,13 +79,17 @@ public class TestCodeUtils
 		j2p.javaPackage = "ambit2.export.isa.v1_0.objects";
 		
 		j2p.sourceConfig.endLine = JavaSourceConfig.WINDOWS_ENDLINE;
-		j2p.sourceConfig.indent = "    ";
-		j2p.sourceConfig.init = VarInit.NO_INIT;
+		j2p.sourceConfig.indent = "\t";
+		j2p.sourceConfig.init = VarInit.EMPTY;
 		j2p.sourceConfig.arrayInit = VarInit.EMPTY;
 		//j2p.sourceConfig.FlagHandleURIString = false;
 		j2p.sourceConfig.FlagHandleEnumString = true;
 		j2p.sourceConfig.FlagJsonAnnotation = true;
 		//j2p.sourceConfig.FlagUseSchemaNameAsComment = true;
+		
+		j2p.sourceConfig.customClassInit.put("Process", VarInit.NO_INIT);
+		j2p.sourceConfig.customClassInit.put("Protocol", VarInit.NO_INIT);
+		
 		
 		System.out.println("Json2Pojo: " + j2p.sourceDir.getAbsolutePath() + " --> " + j2p.targetDir.getAbsolutePath());
 		
