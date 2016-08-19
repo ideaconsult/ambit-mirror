@@ -1,5 +1,8 @@
 package ambit2.export.isa.codeutils.j2p_helpers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class JavaSourceConfig 
 {
@@ -24,6 +27,9 @@ public class JavaSourceConfig
 	public VarInit numberInit = VarInit.UNSPECIFIED;
 	public VarInit objectInit = VarInit.UNSPECIFIED;
 	public VarInit stringInit = VarInit.UNSPECIFIED;
+	
+	//custom init for list of classes
+	public Map<String,VarInit> customClassInit = new HashMap<String,VarInit>();
 	
 	public String number = "double";
 	public boolean FlagHandleURIString = true;
@@ -122,6 +128,10 @@ public class JavaSourceConfig
 	public String getObjectInitialization(String objectClass)
 	{
 		VarInit vInit = getVarInit(VariableInfo.Type.OBJECT);
+		VarInit customInit = customClassInit.get(objectClass);
+		if (customInit != null)
+				vInit = customInit; 
+		
 		if (vInit == VarInit.EMPTY)
 			return " = new " + objectClass + "()";
 		
