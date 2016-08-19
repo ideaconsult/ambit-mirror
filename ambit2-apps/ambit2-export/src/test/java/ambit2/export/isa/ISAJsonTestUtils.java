@@ -40,7 +40,7 @@ public class ISAJsonTestUtils {
 
 		List<SubstanceRecord> sr = new ArrayList<SubstanceRecord>();
 		sr.add(TestSubstanceFactory.getTestSubstanceRecord());
-		testJsonExport(sr.iterator(), new File("/test-isa.json"), null,
+		testJsonExport(sr.iterator(), new File("/Volumes/Data/test-isa.json"), null,
 				TestSubstanceFactory.getTestSubstanceEndpointsBundle());
 
 	}

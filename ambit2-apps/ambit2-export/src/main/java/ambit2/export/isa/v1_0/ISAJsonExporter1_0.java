@@ -29,6 +29,7 @@ import ambit2.export.isa.json.ISAJsonExporter;
 import ambit2.export.isa.v1_0.objects.Assay;
 import ambit2.export.isa.v1_0.objects.FactorValue;
 import ambit2.export.isa.v1_0.objects.Investigation;
+import ambit2.export.isa.v1_0.objects.Materials_;
 import ambit2.export.isa.v1_0.objects.Process;
 import ambit2.export.isa.v1_0.objects.ProcessParameterValue;
 import ambit2.export.isa.v1_0.objects.Protocol;
@@ -186,6 +187,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		investigation.studies.add(study);
 		study.identifier = "Composition-" + rec.getSubstanceUUID();
 		study.description = "Substance composition";
+		study.materials = new Materials_();
 
 		if (cfg.FlagAllCompositionInOneProcess) {
 			Process process = new Process();
@@ -234,6 +236,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		Study study = new Study();
 		investigation.studies.add(study);
 		study.identifier = pa.getDocumentUUID();
+		study.materials = new Materials_();
 
 		// Handle protocol info
 		Protocol protocol = extractProtocolInfo(pa);
@@ -398,7 +401,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 				throw new Exception("Output is a directory for singleJSONFile = true");
 			
 			ObjectMapper mapper = new ObjectMapper();
-			mapper.setSerializationInclusion(Inclusion.NON_EMPTY);
+			mapper.setSerializationInclusion(Inclusion.NON_NULL);
 			String jsonString =
 					mapper.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
 			
@@ -426,7 +429,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 
 	public String getResultAsJson() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.setSerializationInclusion(Inclusion.NON_EMPTY);
+		mapper.setSerializationInclusion(Inclusion.NON_NULL);
 
 		String jsonString = mapper.writerWithDefaultPrettyPrinter()
 				.writeValueAsString(investigation);
