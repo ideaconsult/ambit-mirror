@@ -2,6 +2,7 @@ package ambit2.export.isa.v1_0;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.net.URI;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -9,8 +10,12 @@ import java.util.logging.Logger;
 
 import net.idea.modbcum.i.reporter.Reporter;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+
+//import org.codehaus.jackson.map.ObjectMapper;
+//import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.SubstanceRecord;
@@ -188,6 +193,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		study.identifier = "Composition-" + rec.getSubstanceUUID();
 		study.description = "Substance composition";
 		study.materials = new Materials_();
+		study.id = new URI("#study/composition");
 
 		if (cfg.FlagAllCompositionInOneProcess) {
 			Process process = new Process();
@@ -231,7 +237,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 
 	}
 
-	void addProtocolApplication(ProtocolApplication pa) throws Exception {
+	void addProtocolApplication(ProtocolApplication pa, String id) throws Exception {
 		// Each protocol application is stored as a separate study
 		Study study = new Study();
 		investigation.studies.add(study);
@@ -241,6 +247,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		// Handle protocol info
 		Protocol protocol = extractProtocolInfo(pa);
 		study.protocols.add(protocol);
+		study.id = new URI("#study/" + id);
 
 		// TODO configurable handling of some ProtocolApplication fields:
 		// companyName, ...
@@ -401,7 +408,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 				throw new Exception("Output is a directory for singleJSONFile = true");
 			
 			ObjectMapper mapper = new ObjectMapper();
-			mapper.setSerializationInclusion(Inclusion.NON_NULL);
+			//mapper.setSerializationInclusion(Inclusion.NON_NULL);
 			String jsonString =
 					mapper.writerWithDefaultPrettyPrinter().writeValueAsString(investigation);
 			
@@ -429,8 +436,10 @@ public class ISAJsonExporter1_0 implements IISAExport,
 
 	public String getResultAsJson() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.setSerializationInclusion(Inclusion.NON_NULL);
-
+		//mapper.setSerializationInclusion(Inclusion.NON_NULL);
+		
+		//mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
+		
 		String jsonString = mapper.writerWithDefaultPrettyPrinter()
 				.writeValueAsString(investigation);
 		return jsonString;
@@ -462,8 +471,9 @@ public class ISAJsonExporter1_0 implements IISAExport,
 			addCompositionAsMaterial(rec);
 
 		if (rec.getMeasurements() != null)
-			for (ProtocolApplication pa : rec.getMeasurements())
-				addProtocolApplication(pa);
+			//for (ProtocolApplication pa : rec.getMeasurements())
+			for (int i = 0; i < rec.getMeasurements().size(); i++)	
+				addProtocolApplication(rec.getMeasurements().get(i),"" + (i+1));
 	}
 
 	@Override
