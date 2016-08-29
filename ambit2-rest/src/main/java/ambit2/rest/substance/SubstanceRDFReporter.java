@@ -118,9 +118,15 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 				RDFTermsSubstance.CHEBI_59999.getResource(getOutput()));
 
 		//convert to proper triple
-		if (record.getSubstancetype() != null)
-			getOutput().add(substanceResource, DCTerms.type,
-					record.getSubstancetype());
+		String substanceType = record.getSubstancetype();
+		if (substanceType != null) {
+			if (substanceType.startsWith("NPO_")) {
+				getOutput().add(
+					substanceResource, DCTerms.type,
+					getOutput().createResource("http://purl.bioontology.org/ontology/npo#" + substanceType)
+				);
+			}
+		}
 
 		String sownerURI = String.format("%s/owner/%s", base,
 				record.getOwnerUUID());
