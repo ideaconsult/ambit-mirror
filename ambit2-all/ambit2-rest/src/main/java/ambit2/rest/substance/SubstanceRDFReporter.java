@@ -226,7 +226,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 					}
 				if (struct.getInchi() != null) {
 					Resource inchiRes = getOutput().createResource(
-							compoundReporter.getURI(struct) + "/inchi");
+							compoundReporter.getURI(struct) + "_inchi");
 					Resource inchiType = getOutput()
 							.createResource(
 									"http://semanticscience.org/resource/CHEMINF_000113");
@@ -241,7 +241,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 				}
 				if (struct.getSmiles() != null) {
 					Resource smilesRes = getOutput().createResource(
-							compoundReporter.getURI(struct) + "/smiles");
+							compoundReporter.getURI(struct) + "_smiles");
 					Resource inchiType = getOutput()
 							.createResource(
 									"http://semanticscience.org/resource/CHEMINF_000018");
