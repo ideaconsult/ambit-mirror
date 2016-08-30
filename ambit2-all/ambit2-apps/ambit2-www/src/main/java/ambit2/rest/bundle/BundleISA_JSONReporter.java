@@ -5,13 +5,14 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
-import net.idea.modbcum.r.QueryReporter;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.reporters.QueryHeaderReporter;
 import ambit2.db.substance.study.SubstanceStudyDetailsProcessor;
 import ambit2.export.isa.v1_0.ISAJsonExporter1_0;
 
@@ -22,8 +23,8 @@ import ambit2.export.isa.v1_0.ISAJsonExporter1_0;
  * 
  * @param <Q>
  */
-public class BundleISA_JSONReporter<Q extends IQueryRetrieval<SubstanceRecord>>
-		extends QueryReporter<SubstanceRecord, Q, OutputStream> {
+public class BundleISA_JSONReporter<Q extends IQueryRetrieval<IStructureRecord>>
+		extends QueryHeaderReporter<Q, OutputStream> {
 
 	/**
 	 * 
@@ -36,19 +37,20 @@ public class BundleISA_JSONReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 			SubstanceEndpointsBundle[] bundles) {
 		super();
 		this.bundles = bundles;
+		
 		SubstanceStudyDetailsProcessor paReader = new SubstanceStudyDetailsProcessor();
 
 		getProcessors().clear();
 		getProcessors().add(paReader);
-		getProcessors().add(
-				new DefaultAmbitProcessor<SubstanceRecord, SubstanceRecord>() {
+		getProcessors()
+				.add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
 					@Override
-					public SubstanceRecord process(SubstanceRecord target)
+					public IStructureRecord process(IStructureRecord target)
 							throws Exception {
 						processItem(target);
 						return target;
 					};
-				});
+				});		
 	}
 
 	@Override
@@ -78,16 +80,16 @@ public class BundleISA_JSONReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 
 	@Override
 	public void header(OutputStream arg0, Q arg1) {
-		SubstanceEndpointsBundle endpointBundle=null;
+		SubstanceEndpointsBundle endpointBundle = null;
 		if (bundles == null || bundles.length == 0) {
 			endpointBundle = new SubstanceEndpointsBundle();
 			endpointBundle.setDescription("Test Bundle description");
 			endpointBundle.setTitle("Test Bundle title");
 		} else {
-			endpointBundle=bundles[0];
+			endpointBundle = bundles[0];
 		}
 		try {
-			exporter = new ISAJsonExporter1_0(null, null);
+			exporter = new ISAJsonExporter1_0();
 			exporter.init(endpointBundle);
 		} catch (Exception x) {
 			logger.log(Level.SEVERE, x.getMessage());
@@ -112,9 +114,13 @@ public class BundleISA_JSONReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 	 * System.out.println(exporter.getResultAsJson());
 	 */
 	@Override
-	public Object processItem(SubstanceRecord record) throws Exception {
+	public Object processItem(IStructureRecord record) throws Exception {
 		if (exporter != null)
-			exporter.process(record);
+			try {
+				exporter.process((SubstanceRecord) record);
+			} catch (Exception x) {
+				logger.log(Level.FINE, x.getMessage());
+			}
 		return record;
 	}
 
