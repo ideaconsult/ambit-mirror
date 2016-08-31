@@ -41,7 +41,7 @@ public class ENanoMapperRDFTest {
 			while (reader.hasNext()) {
 				IStructureRecord record = reader.nextRecord();
 				Assert.assertTrue(record instanceof SubstanceRecord);
-				System.out.println("Substance: " + ((SubstanceRecord) record).getSubstanceName());
+				System.out.println("Substance: " + ((SubstanceRecord) record).toJSON(""));
 				records++;
 			}
 		} finally {
