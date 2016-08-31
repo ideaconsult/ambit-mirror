@@ -93,6 +93,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		output.setNsPrefix("npo", "http://purl.bioontology.org/ontology/npo#");
 		output.setNsPrefix("void", "http://rdfs.org/ns/void#");
 		output.setNsPrefix("owl", OWL.NS);
+		output.setNsPrefix("foaf", "http://xmlns.com/foaf/0.1/");
 	}
 
 	@Override
