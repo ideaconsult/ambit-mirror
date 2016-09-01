@@ -109,6 +109,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		Resource bioassayType = RDFTermsSubstance.BAO_0000015
 				.getResource(getOutput());
 
+		output.setNsPrefix("substance", base + "/substance/");
 		String substanceURI = uriReporter.getURI(record);
 		Resource substanceResource = getOutput().createResource(substanceURI);
 		if (record.getPublicName() != null)
@@ -129,6 +130,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 			}
 		}
 
+		output.setNsPrefix("owner", base + "/owner/");
 		String sownerURI = String.format("%s/owner/%s", base,
 				record.getOwnerUUID());
 		Resource sowner = getOutput().createResource(sownerURI);
@@ -270,6 +272,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 				 * perhaps protocol + reference basis?
 				 */
 
+				output.setNsPrefix("as", base + "/assay/");
 				String assayURI = String.format("%s/assay/%s", base,
 						pa.getDocumentUUID());
 				Resource assay = getOutput().createResource(assayURI);
@@ -312,6 +315,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 					HashCode hc = hf.newHasher()
 							.putString(b.toString(), Charsets.UTF_8).hash();
 
+					output.setNsPrefix("ap", base + "/protocol/");
 					String protocolURI = String.format("%s/protocol/%s", base,
 							hc.toString().toUpperCase());
 					Resource protocol = getOutput().createResource(protocolURI);
@@ -356,6 +360,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 				/*
 				 * each protocol application as one measure group
 				 */
+				output.setNsPrefix("mgroup", base + "/measuregroup/");
 				String measuregroupURI = String.format("%s/measuregroup/%s",
 						base, pa.getDocumentUUID());
 				Resource measuregroup = getOutput().createResource(
@@ -396,6 +401,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 				 * each effect as BAO endpoint
 				 */
 				if (pa.getEffects() != null)
+					output.setNsPrefix("ep", base + "/endpoint/");
 					for (EffectRecord<String, IParams, String> effect : pa
 							.getEffects()) {
 						String endpointURI = String.format("%s/endpoint/ID%d",
