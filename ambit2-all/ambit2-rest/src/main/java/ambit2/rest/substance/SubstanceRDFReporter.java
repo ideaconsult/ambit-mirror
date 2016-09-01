@@ -468,6 +468,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 						substanceResource, OWL.sameAs, sameResource
 					);
 				} else if ("Close match".equals(extID.getSystemDesignator())) {
+					output.setNsPrefix("skos", "http://www.w3.org/2004/02/skos/core#");
 					Resource sameResource = getOutput().createResource(extID.getSystemIdentifier());
 					getOutput().add(
 						substanceResource, skosCloseMatch, sameResource
