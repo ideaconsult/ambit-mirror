@@ -460,6 +460,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 			}
 
 		final Property skosCloseMatch = getOutput().createProperty("http://www.w3.org/2004/02/skos/core#closeMatch");
+		final Property skosRelatedMatch = getOutput().createProperty("http://www.w3.org/2004/02/skos/core#relatedMatch");
 		if (record.getExternalids() != null)
 			for (ExternalIdentifier extID : record.getExternalids()) {
 				if ("Same as".equals(extID.getSystemDesignator())) {
@@ -472,6 +473,17 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 					Resource sameResource = getOutput().createResource(extID.getSystemIdentifier());
 					getOutput().add(
 						substanceResource, skosCloseMatch, sameResource
+					);
+				} else if ("Related match".equals(extID.getSystemDesignator())) {
+					output.setNsPrefix("skos", "http://www.w3.org/2004/02/skos/core#");
+					Resource relatedResource = getOutput().createResource(extID.getSystemIdentifier());
+					getOutput().add(
+						substanceResource, skosRelatedMatch, relatedResource
+					);
+				} else if ("See also".equals(extID.getSystemDesignator())) {
+					Resource seeAlsoResource = getOutput().createResource(extID.getSystemIdentifier());
+					getOutput().add(
+						substanceResource, RDFS.seeAlso, seeAlsoResource
 					);
 				} else if ("HOMEPAGE".equals(extID.getSystemDesignator())) {
 					Resource homepage = getOutput().createResource(extID.getSystemIdentifier());
