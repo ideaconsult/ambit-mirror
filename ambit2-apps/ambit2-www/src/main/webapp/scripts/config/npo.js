@@ -42,8 +42,15 @@ var config_npo = {
                 "iOrder" : -30,
                 "sTitle": "Reference",
                 "mRender" : function(data,type,full) {
-                	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                	//var quri = "?type=citation&search=";
+                	var uri = (data["title"]!=undefined) && (data["title"].startsWith("http"));
+                	if (uri) { 
+                		var sOut = (data["year"]==null || data["year"] == 0)?"URL":data["year"];
+                		return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
+                	} else {
+                		var sOut = (data["year"]==null || data["year"] == 0)?"":("<br/>(" + data["year"] + ")");
+                		return (data["title"] + sOut);
+                	}	
                 }
             }
         },
