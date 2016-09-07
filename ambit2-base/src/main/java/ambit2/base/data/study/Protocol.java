@@ -2403,8 +2403,12 @@ public class Protocol {
 		//Immunotoxicity
 		NPO_1339_SECTION {
 			@Override
+			public String toString() {
+				return "Immunotoxicity";
+			}
+			@Override
 			public String getNumber() {
-				return "10.4";
+				return "NPO_1339"; 
 			}
 
 			@Override
@@ -2417,7 +2421,6 @@ public class Protocol {
 				return 1013;
 			}
 			public String getOntologyURI() {
-				// generic assay by default
 				return "http://purl.obolibrary.org/obo/NPO_1339";
 			}
 		};
