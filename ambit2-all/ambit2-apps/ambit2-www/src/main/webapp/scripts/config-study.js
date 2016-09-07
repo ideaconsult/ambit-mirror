@@ -148,12 +148,26 @@ var config_study = {
 			"protocol" : config_npo["protocol"],
 			"interpretation" : config_npo["interpretation"]	        	
         },
+        "NPO_1339_SECTION" : {
+			"parameters" : config_npo["parameters"],
+			"effects" : config_npo["effects"],
+			"conditions" : config_npo["conditions"],			
+			"protocol" : config_npo["protocol"],
+			"interpretation" : config_npo["interpretation"]	            
+        },
         "BAO_0002168_SECTION" : {
 			"parameters" : config_bao["parameters"],
 			"effects" : config_bao["effects"],
 			"conditions" : config_bao["conditions"],			
 			"protocol" : config_bao["protocol"],
 			"interpretation" : config_bao["interpretation"]	        	
+        },
+        "BAO_0002167_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	          
         },
         "BAO_0002993_SECTION" : {
 			"parameters" : config_bao["parameters"],
