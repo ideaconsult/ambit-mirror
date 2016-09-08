@@ -156,6 +156,8 @@ public class AutomaticTautomerTests
 	String separator2 = "\t";
 	boolean FlagUseOnlyFirstAlgorithm = false;  //essentially if true this makes distribution of the tautomer count for the first algorithm
 	boolean FlagCompareCanonicalTautomer = true;
+	boolean FlagSpearmanFractional = false; 
+	
 	
 	//helpers for tautomer descr/fp stat
 	DescriptorStatShort descrStat0[];
@@ -2127,8 +2129,8 @@ public class AutomaticTautomerTests
 		double measure2 = TautomerAnalysis.calcTautomerRankingMeasure(r2, e);
 		double cc1 = TautomerAnalysis.calcTautomerRankCorrCoeff(r1, e);
 		double cc2 = TautomerAnalysis.calcTautomerRankCorrCoeff(r2, e);
-		double sp_cc1 = TautomerAnalysis.calcTautomerRankSpearmanCorrCoeff(r1, e);
-		double sp_cc2 = TautomerAnalysis.calcTautomerRankSpearmanCorrCoeff(r2, e);
+		double sp_cc1 = TautomerAnalysis.calcTautomerRankSpearmanCorrCoeff(r1, e, FlagSpearmanFractional);
+		double sp_cc2 = TautomerAnalysis.calcTautomerRankSpearmanCorrCoeff(r2, e, FlagSpearmanFractional);
 		
 		String out_line = "" + compNum + compareRanksSeparator +  compSMILES + compareRanksSeparator + n  + compareRanksSeparator 
 				+ measure1 + compareRanksSeparator + measure2 + compareRanksSeparator
