@@ -496,7 +496,7 @@ public class TautomerAnalysis
 		return cov/Math.sqrt(sr*se);
 	}
 	
-	public static double calcTautomerRankSpearmanCorrCoeff(double ranks[], double energies[])
+	public static double calcTautomerRankSpearmanCorrCoeff(double ranks[], double energies[], boolean isFractional)
 	{
 		if (ranks == null)
 			return 0.0;
@@ -510,8 +510,8 @@ public class TautomerAnalysis
 		if (n == 1)
 			return 1.0;
 		
-		double r_ranks[] = getRanks(ranks);
-		double r_energies[] = getRanks(energies);
+		double r_ranks[] = getRanks(ranks, isFractional);
+		double r_energies[] = getRanks(energies, isFractional);
 		double sumdiff = 0.0;
 		
 		for (int i = 0; i < n; i++)
@@ -523,7 +523,7 @@ public class TautomerAnalysis
 		return 1.0 - 6.0 * sumdiff / (n*(n*n-1));
 	}
 	
-	public static double [] getRanks(double values[])
+	public static double [] getRanks(double values[], boolean isFractionalRanking)
 	{
 		int n = values.length;
 		int index[] = new int[n];
@@ -550,18 +550,29 @@ public class TautomerAnalysis
 				}
 			}
 		
-		//Get ranking
+		
 		double ranks[] = new double[n];
-		for (int i = 0; i < n; i++)
+		
+		if (isFractionalRanking)
 		{
-			//value with original index[i] has rank i 
-			ranks[index[i]] = i;
+			//Get fractional ranking
+			
+			//TODO
+		}
+		else
+		{	
+			//Get order ranking
+			for (int i = 0; i < n; i++)
+			{
+				//value with original index[i] has rank i 
+				ranks[index[i]] = i;
+			}
 		}
 			
 		return ranks;
 	}
 	
-	public static double[] correctRanks(int ranks[])
+	static double[] correctIndexRanks(double ranks[])
 	{
 		//Take into account the 
 		//TODO

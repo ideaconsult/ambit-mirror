@@ -13,7 +13,7 @@ public class TestUtils {
 	
 	public static void testRanking(double values[])
 	{
-		double ranks[] = TautomerAnalysis.getRanks(values);
+		double ranks[] = TautomerAnalysis.getRanks(values, false);
 		for (int i = 0; i < ranks.length; i++)
 			System.out.println("  " + values[i] + "   rank = " + ranks[i]);
 	}
