@@ -6,7 +6,7 @@ public class TestUtils {
 
 	public static void main(String[] args) 
 	{
-		testRanking(new double[] {3,6,1,9,3});
+		testRanking(new double[] {2,3,3,0,45,1,3});
 
 	}
 	
