@@ -556,8 +556,35 @@ public class TautomerAnalysis
 		if (isFractionalRanking)
 		{
 			//Get fractional ranking
+			//each element of a sequence of several equal values with indices k, k+1,..., k+s-1
+			//takes a fractional ranking r_fraq = (k + k+1 + ... + k+s-1)/s
 			
-			//TODO
+			int startIndex = 0;
+			double startValue = v[0];
+			double rankSum = 0.0;
+			
+			for (int i = 1; i < n; i++)
+			{
+				if (v[i] == startValue)
+				{
+					rankSum += i;
+				}
+				else
+				{
+					//v[i] != startValue
+					double r_fraq = rankSum / (i-startIndex);
+					for (int k = startIndex; k < i; k++)
+						ranks[index[k]] = r_fraq;
+					startIndex = i;
+					startValue = v[i];
+					rankSum = i;
+				}
+			}
+			
+			//Handle last sequence of values
+			double r_fraq = rankSum / (n-startIndex);
+			for (int k = startIndex; k < n; k++)
+				ranks[index[k]] = r_fraq;
 		}
 		else
 		{	
