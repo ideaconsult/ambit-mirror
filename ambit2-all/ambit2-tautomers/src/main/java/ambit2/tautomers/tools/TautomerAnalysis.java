@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -600,10 +601,11 @@ public class TautomerAnalysis
 		return ranks;
 	}
 	
-	static double[] correctIndexRanks(double ranks[])
+	public static int getNumberOfDistinctValues(double values[])
 	{
-		//Take into account the 
-		//TODO
-		return null;
+		HashSet<Double> set = new HashSet<Double>();
+		for (int i = 0; i < values.length; i++ )
+			set.add(values[i]);
+		return set.size();
 	}
 }

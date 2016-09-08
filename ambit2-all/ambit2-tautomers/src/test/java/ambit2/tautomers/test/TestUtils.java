@@ -36,10 +36,11 @@ public class TestUtils {
 			}
 			
 		
-		System.out.println("Values sorted by ranking:");
+		System.out.println("\nValues sorted by ranking:");
 		for (int i = 0; i < ranks.length; i++)			
 			System.out.println("  " + values[i] + "   rank = " + ranks[i]);
 		
+		System.out.println("\nNumber of distinct values = " + TautomerAnalysis.getNumberOfDistinctValues(values));
 	}
 
 }
