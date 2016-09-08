@@ -661,7 +661,13 @@ public class AutomaticTautomerTests
 			compNum = -1;
 			
 			openOutputFile();
-			String firstLine = "Comp#,SMILES,NumOfTaut,NK-Old,NK-New,CC-Old,CC-New,Spearman-Old, Spearman-New\n";
+			String firstLine = "Comp#" + compareRanksSeparator + "SMILES" + compareRanksSeparator +	"NumOfTaut" + compareRanksSeparator +
+							"NK-Old" + compareRanksSeparator + "NK-New" + compareRanksSeparator +
+							"CC-Old" + compareRanksSeparator + "CC-New" + compareRanksSeparator +
+							"Spearman-Old" + compareRanksSeparator + "Spearman-New" + compareRanksSeparator +
+							"RelDistintRanks-Old" + compareRanksSeparator + "RelDistintRanks-New" + compareRanksSeparator +
+							"RelDisticsMopacEnergies" + endLine;
+			
 			output(firstLine);
 			lineProcessMode = LPM_COMPARE_RANKINGS;
 			iterateInputFile();
@@ -2131,11 +2137,15 @@ public class AutomaticTautomerTests
 		double cc2 = TautomerAnalysis.calcTautomerRankCorrCoeff(r2, e);
 		double sp_cc1 = TautomerAnalysis.calcTautomerRankSpearmanCorrCoeff(r1, e, FlagSpearmanFractional);
 		double sp_cc2 = TautomerAnalysis.calcTautomerRankSpearmanCorrCoeff(r2, e, FlagSpearmanFractional);
+		double rel_distint_r1 = (r1.length == 0) ? 0 : (TautomerAnalysis.getNumberOfDistinctValues(r1) / r1.length); 
+		double rel_distint_r2 = (r2.length == 0) ? 0 : (TautomerAnalysis.getNumberOfDistinctValues(r2) / r2.length);
+		double rel_distint_e  =  (e.length == 0) ? 0 : (TautomerAnalysis.getNumberOfDistinctValues(e) / e.length);
 		
 		String out_line = "" + compNum + compareRanksSeparator +  compSMILES + compareRanksSeparator + n  + compareRanksSeparator 
 				+ measure1 + compareRanksSeparator + measure2 + compareRanksSeparator
 				+ cc1 + compareRanksSeparator + cc2 + compareRanksSeparator 
-				+ sp_cc1 + compareRanksSeparator + sp_cc2;
+				+ sp_cc1 + compareRanksSeparator + sp_cc2 + compareRanksSeparator
+				+ rel_distint_r1 + compareRanksSeparator + rel_distint_r2 + compareRanksSeparator + rel_distint_e;
 		
 		output(out_line + endLine);
 		System.out.println(out_line);
