@@ -510,20 +510,20 @@ public class TautomerAnalysis
 		if (n == 1)
 			return 1.0;
 		
-		int r_ranks[] = getRanks(ranks);
-		int r_energies[] = getRanks(energies);
+		double r_ranks[] = getRanks(ranks);
+		double r_energies[] = getRanks(energies);
 		double sumdiff = 0.0;
 		
 		for (int i = 0; i < n; i++)
 		{
-			int d = r_ranks[i] - r_energies[i]; 
+			double d = r_ranks[i] - r_energies[i]; 
 			sumdiff += d*d;
 		}
 		
 		return 1.0 - 6.0 * sumdiff / (n*(n*n-1));
 	}
 	
-	public static int[] getRanks(double values[])
+	public static double [] getRanks(double values[])
 	{
 		int n = values.length;
 		int index[] = new int[n];
@@ -550,8 +550,8 @@ public class TautomerAnalysis
 				}
 			}
 		
-		//Get rankig
-		int ranks[] = new int[n];
+		//Get ranking
+		double ranks[] = new double[n];
 		for (int i = 0; i < n; i++)
 		{
 			//value with original index[i] has rank i 
