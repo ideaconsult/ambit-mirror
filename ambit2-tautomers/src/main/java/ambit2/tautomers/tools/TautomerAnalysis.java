@@ -558,6 +558,7 @@ public class TautomerAnalysis
 			//Get fractional ranking
 			//each element of a sequence of several equal values with indices k, k+1,..., k+s-1
 			//takes a fractional ranking r_fraq = (k + k+1 + ... + k+s-1)/s
+			//r_fraq is also equal to k+(s-1)/2
 			
 			int startIndex = 0;
 			double startValue = v[0];
