@@ -46,6 +46,14 @@ This feature is introduced since AMBIT 2.5.5.
 
 * IMPORTANT: `ambit_users` database should exist at `ambit.db.host` 
 
+* Note:  If you have renamed ambit2.war and the application URL is e.g. `http://host:port/myservice` instead of `http://host:port/ambit2`
+,please change the content of the `prefix` column in the `ambit_users.policy` table.
+
+````
+use ambit_users;
+update policy set prefix="/myservice";
+````
+
 There is an user management user interface.
 
 The eMail notification settings are introduced since AMBIT 2.5.5. 
