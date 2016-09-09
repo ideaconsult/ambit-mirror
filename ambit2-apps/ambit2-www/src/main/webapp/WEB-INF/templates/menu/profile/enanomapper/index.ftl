@@ -121,21 +121,20 @@ $(document)
 				<div class="three columns remove-bottom">
 					<a href="http://enanomapper.net"><img class='scale-with-grid' border='0' src='${ambit_root}/images/profile/${menu_profile}/logo.png' title='eNanoMapper web site' alt='AMBIT logo'></a>
 				</div>
-				<div class="twelve columns remove-bottom h2">
-					eNanoMapper prototype database 
+				<div class="twelve columns remove-bottom h2">${custom_title!"eNanoMapper prototype database"}
 				</div>
 		
 	</div>
 	
 	<div class="row remove-bottom">
 		<div class="three columns remove-bottom">&nbsp;</div>
-		<div class='twelve columns remove-bottom'><span class="mhelp enmhelp substance">A substance database for nanomaterial safety information</span></div>
+		<div class='twelve columns remove-bottom'><span class="mhelp enmhelp substance">${custom_description!"A substance database for nanomaterial safety information"}</span></div>
 	</div>	
 		
 	<div class="row add-bottom">&nbsp;</div>	
 	
 	<div class="row remove-bottom">
-		<form action="https://search.data.enanomapper.net/" id="searchForm"  method="GET" >	
+		<form action='${service_search!"${ambit_root}/ui/_search"}' id="searchForm"  method="GET" >	
 			<div class="sixteen columns remove-bottom" >
 			<div class="alpha">
 				<div class="remove-bottom h4">

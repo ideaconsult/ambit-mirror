@@ -209,9 +209,15 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 	static final String attachDepict = "attach.depict";
 	static final String attachSubstance = "attach.substance";
+	static final String attachSubstanceOwner = "attach.substanceowner";
 	static final String attachToxmatch = "attach.toxmatch";
 	static final String config_changeLineSeparators = "changeLineSeparators";
 	static final String googleAnalytics = "google.analytics";
+	
+	static final String custom_search = "custom.search";
+	static final String custom_title = "custom.title";
+	static final String custom_description = "custom.description";
+	static final String custom_logo = "custom.logo";
 
 	protected boolean standalone = false;
 	protected boolean openToxAAEnabled = false;
@@ -280,8 +286,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 		setProfile(getMenuProfile());
 
-		setName("AMBIT REST services");
-		setDescription("AMBIT implementation of OpenTox framework");
+		setName(getPropertyWithDefault(custom_title, ambitProperties, "AMBIT"));
+		setDescription(getPropertyWithDefault(custom_title, ambitProperties, "Chemical structures database, properties prediction & machine learning with OpenTox REST web services API"));
 		setOwner("Ideaconsult Ltd.");
 		setAuthor("Ideaconsult Ltd.");
 
@@ -499,10 +505,12 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 						SubstanceResource.substance,
 						createAuthenticatedOpenMethodResource(new SubstanceRouter(
 								getContext())));
-				router.attach(
-						OwnerSubstanceFacetResource.owner,
-						createAuthenticatedOpenMethodResource(new SubstanceOwnerRouter(
-								getContext())));
+
+				if (attachSubstanceOwnerRouter())
+					router.attach(
+							OwnerSubstanceFacetResource.owner,
+							createAuthenticatedOpenMethodResource(new SubstanceOwnerRouter(
+									getContext())));
 			} else {
 				Filter authz = null;
 				if (dbAAEnabled)
@@ -511,7 +519,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 								AMBITConfig.Database.name(), ambitProperties);
 						authz = UserRouter.createBundlePolicyAuthorizer(
 								getContext(), dbname, usersdbname,
-								"ambit2/rest/config/config.prop",getBaseURLDepth());
+								"ambit2/rest/config/config.prop",
+								getBaseURLDepth());
 					} catch (Exception x) {
 
 					}
@@ -803,7 +812,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 								sessionLength);
 				// UserAuthorizer authz = new UserAuthorizer();
 				Filter authz = UserRouter.createPolicyAuthorizer(getContext(),
-						usersdbname, "ambit2/rest/config/config.prop",getBaseURLDepth());
+						usersdbname, "ambit2/rest/config/config.prop",
+						getBaseURLDepth());
 				dbAuth.setNext(authz);
 				authz.setNext(router);
 				return addOriginFilter(dbAuth);
@@ -879,9 +889,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				allowedOrigins);
 		originFilter.setNext(router);
 		/*
-		StringWriter w = new StringWriter();
-		printRoutes(router, "\t", w);
-		 System.out.println(w);
+		 * StringWriter w = new StringWriter(); printRoutes(router, "\t", w);
+		 * System.out.println(w);
 		 */
 
 		return originFilter;
@@ -1573,7 +1582,19 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected synchronized boolean attachSubstanceRouter() {
 		try {
 			String attach = getProperty(attachSubstance, ambitProperties);
-			if (attach!=null && attach.startsWith("${")) return true;
+			if (attach != null && attach.startsWith("${"))
+				return true;
+			return attach == null ? true : Boolean.parseBoolean(attach);
+		} catch (Exception x) {
+			return true;
+		}
+	}
+
+	protected synchronized boolean attachSubstanceOwnerRouter() {
+		try {
+			String attach = getProperty(attachSubstanceOwner, ambitProperties);
+			if (attach != null && attach.startsWith("${"))
+				return true;
 			return attach == null ? true : Boolean.parseBoolean(attach);
 		} catch (Exception x) {
 			return true;
@@ -1588,6 +1609,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			return true;
 		}
 	}
+	
 
 	protected synchronized String getProperty(String name, String config) {
 		try {
@@ -1605,6 +1627,35 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		} catch (Exception x) {
 			return null;
 		}
+	}
+	
+	protected synchronized String getPropertyWithDefault(String name, String config, String defaultValue) {
+		try {
+			String value = getProperty(name, config);
+			if (value==null) return defaultValue;
+			else if (value != null && value.startsWith("${"))
+				return defaultValue;
+			else return value;
+		} catch (Exception x) {
+			return defaultValue;
+		}
+	}
+
+	public synchronized String getCustomTitle() {
+		return getPropertyWithDefault(custom_title, ambitProperties, "AMBIT");
+	}
+	
+	public synchronized String getCustomDescription() {
+		return getPropertyWithDefault(custom_description, ambitProperties, "Chemical structures database, properties prediction & machine learning with OpenTox REST web services API");
+	}
+	public synchronized String getCustomLogo() {
+		return getPropertyWithDefault(custom_logo, ambitProperties, null );
+	}
+	
+	public synchronized String getSearchServiceURI() {
+		String rootUrl = getContext().getParameters().getFirstValue(
+				BASE_URL);
+		return getPropertyWithDefault(custom_search, ambitProperties, rootUrl + "/ui/_search");
 	}
 
 	protected ConcurrentMap<String, char[]> getLocalSecrets() throws Exception {
