@@ -186,6 +186,23 @@ public enum ParticleTypes {
 			return "SiO2";
 		}
 	},
+	NPO_1562 {
+		//a fluorescent silica nanoparticle which has a core-shell structure.
+		@Override
+		public String getSMILES() {
+			return "O=[Si]=O";
+		}
+
+		@Override
+		public String getCAS() {
+			return "7631-86-9";
+		}
+
+		@Override
+		public String getFormula() {
+			return "SiO2";
+		}		
+	},
 	NPO_1486 {
 		// TiO2
 		@Override
