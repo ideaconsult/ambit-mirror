@@ -20,5 +20,8 @@ public enum AMBITConfig {
 	enableEmailVerification,
 	ajaxtimeout,
 	similarityorder,
-	googleAnalytics;
+	googleAnalytics,
+	service_search,
+	custom_title,
+	custom_description
 }

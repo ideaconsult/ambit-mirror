@@ -101,3 +101,10 @@ similarity.order=${similarity.order}
 ############################################################
 # set to 0 if deployed to servlet container root , otherwise to 1
 baseurl.depth=${baseurl.depth}
+############################################################
+# customisations
+custom.title=${custom.title}
+custom.description=${custom.description}
+custom.logo=${custom.logo}
+#URI of the search service to appear on the front page, e.g. https://localhost:8080/ui/_search  
+custom.search=${custom.search}

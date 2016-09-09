@@ -202,7 +202,7 @@ public class UIResource extends FreeMarkerResource {
 		}
 
 	}
-
+	@Override
 	protected Representation getHTMLByTemplate(Variant variant)
 			throws ResourceException {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -230,6 +230,7 @@ public class UIResource extends FreeMarkerResource {
 		setTokenCookies(variant, useSecureCookie(getRequest()));
 		configureTemplateMap(map, getRequest(),
 				(IFreeMarkerApplication) getApplication());
+
 		return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
 	}
 
@@ -243,21 +244,24 @@ public class UIResource extends FreeMarkerResource {
 			map.put(AMBITDBRoles.ambit_modeller.name(), Boolean.FALSE);
 			if (getClientInfo() != null) {
 				if (getClientInfo().getUser() != null)
-					map.put("username", getClientInfo().getUser().getIdentifier());
+					map.put("username", getClientInfo().getUser()
+							.getIdentifier());
 				if (getClientInfo().getRoles() != null) {
 					if (DBRoles.isAdmin(getClientInfo().getRoles()))
 						map.put(AMBITDBRoles.ambit_admin.name(), Boolean.TRUE);
 					if (DBRoles.isDatasetManager(getClientInfo().getRoles()))
-						map.put(AMBITDBRoles.ambit_datasetmgr.name(), Boolean.TRUE);
+						map.put(AMBITDBRoles.ambit_datasetmgr.name(),
+								Boolean.TRUE);
 					if (DBRoles.isModeller(getClientInfo().getRoles()))
-						map.put(AMBITDBRoles.ambit_modeller.name(), Boolean.TRUE);
+						map.put(AMBITDBRoles.ambit_modeller.name(),
+								Boolean.TRUE);
 					if (DBRoles.isUser(getClientInfo().getRoles()))
 						map.put(AMBITDBRoles.ambit_user.name(), Boolean.TRUE);
 				}
 			}
-			
+
 		} catch (Exception x) {
-			
+
 		}
 		try {
 			map.put(AMBITConfig.ajaxtimeout.name(),
@@ -274,6 +278,18 @@ public class UIResource extends FreeMarkerResource {
 		} catch (Exception x) {
 		}
 
+		try {
+			map.put(AMBITConfig.service_search.name(),
+					((AmbitApplication) getApplication()).getSearchServiceURI());
+		} catch (Exception x) {}
+		try {
+			map.put(AMBITConfig.custom_title.name(),
+					((AmbitApplication) getApplication()).getCustomTitle());
+		} catch (Exception x) {}
+		try {
+			map.put(AMBITConfig.custom_description.name(),
+					((AmbitApplication) getApplication()).getCustomDescription());
+		} catch (Exception x) {}
 	}
 
 	protected Integer getIdBundle(Object bundleURI, Request request) {
@@ -478,7 +494,8 @@ public class UIResource extends FreeMarkerResource {
 									new SubstanceURIReporter(getRequest()
 											.getRootRef()),
 									new DatasetURIReporter(getRequest()
-											.getRootRef()), null,getRequest().getResourceRef().toString());
+											.getRootRef()), null, getRequest()
+											.getResourceRef().toString());
 							callable.setClearComposition(clearComposition);
 							callable.setClearMeasurements(clearMeasurements);
 							callable.setQASettings(qa);
