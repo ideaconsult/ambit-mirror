@@ -75,6 +75,7 @@ ambit.profile=${ambit.profile}
 attach.depict=${attach.depict}
 attach.toxmatch=${attach.toxmatch}
 attach.substance=${attach.substance}
+attach.substanceowner=${attach.substanceowner}
 ############################################################
 #OpenPhacts client config
 ops.server_root=${ops.server_root}
