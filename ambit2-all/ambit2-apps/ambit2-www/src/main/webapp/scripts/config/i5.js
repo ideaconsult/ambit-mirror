@@ -583,6 +583,7 @@ var config_i5 = {
 		        },
 		        "TO_REPEATED_ORAL_SECTION": {
 		            "parameters": {
+		            	 "bVisible" : false,
 		                "species": {
 		                	"comment" : "copied to conditions",
 		                    "iOrder": -10,
@@ -596,24 +597,30 @@ var config_i5 = {
 		                    "bVisible" : false
 		                },
 		                "route of administration": {
-		                    "iOrder": -8
+		                    "iOrder": -8,
+		                    "bVisible" : true
 		                },
 		                "doses/concentrations": {
 		                    "sTitle": "Dose/concentrations",
-		                    "iOrder": -7
+		                    "iOrder": -7,
+		                    "bVisible" : true
 		                }
 		            },
 		            "conditions": {
+		            	"bVisible" : false,	
 		                "test type": {
 		                    "iOrder": -9,
-		                    "inMatrix": true
+		                    "inMatrix": true,
+		                    "bVisible" : true
 		                },
 		            	"species": {
 		                    "iOrder": -10,
-		                    "inMatrix": true
+		                    "inMatrix": true,
+		                    "bVisible" : true
 		                },            	
 		                "sex": {
-		                    "iOrder": -4
+		                    "iOrder": -4,
+		                    "bVisible" : true
 		                }
 		            },
 		            "effects": {
