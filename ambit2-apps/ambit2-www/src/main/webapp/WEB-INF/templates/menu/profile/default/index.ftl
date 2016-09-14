@@ -45,9 +45,10 @@ $(document)
 			<div class="fifteen columns remove-bottom" id="query">
 			<div class="alpha">
 				<div class="remove-bottom h2">
-						Welcome to AMBIT 
+						${custom_title!"Welcome to AMBIT"}
 				</div>
-			    <div class='help'>Chemical structures database, properties prediction & machine learning with OpenTox REST web services API</div>			
+			    <div class='help'>${custom_description!"Chemical structures database, properties prediction & machine learning with OpenTox REST web services API"}</div>		
+			    	
 			</div>
 			</div>
 	</div>	
@@ -55,7 +56,7 @@ $(document)
 	<div class="row add-bottom">&nbsp;</div>	
 	
 	<div class="row add-bottom">
-		<form action="${ambit_root}/ui/_search" id="searchForm"  method="GET" >	
+		<form action='${service_search!"${ambit_root}/ui/_search"}' id="searchForm"  method="GET" >
 			<div class="fifteen columns remove-bottom" id="query">
 			<div class="alpha">
 				<div class="remove-bottom h4">
