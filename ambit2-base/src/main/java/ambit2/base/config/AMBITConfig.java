@@ -23,5 +23,6 @@ public enum AMBITConfig {
 	googleAnalytics,
 	service_search,
 	custom_title,
-	custom_description
+	custom_description,
+	custom_query
 }
