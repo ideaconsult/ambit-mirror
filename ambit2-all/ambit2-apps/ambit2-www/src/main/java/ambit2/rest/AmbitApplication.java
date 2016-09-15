@@ -217,7 +217,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String custom_search = "custom.search";
 	static final String custom_title = "custom.title";
 	static final String custom_description = "custom.description";
+	static final String custom_license = "custom.license";
 	static final String custom_logo = "custom.logo";
+	static final String custom_query = "custom.query";
 
 	protected boolean standalone = false;
 	protected boolean openToxAAEnabled = false;
@@ -1650,10 +1652,18 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				"Chemical structures database, properties prediction & machine learning with OpenTox REST web services API");
 	}
 
+	public synchronized String getCustomQuery() {
+		return getPropertyWithDefault(custom_query, ambitProperties, "formaldehyde");
+	}
+	
 	public synchronized String getCustomLogo() {
 		return getPropertyWithDefault(custom_logo, ambitProperties, null);
 	}
 
+	public synchronized String getCustomLicense() {
+		return getPropertyWithDefault(custom_license, ambitProperties, "AMBIT");
+	}
+	
 	public synchronized String getSearchServiceURI() {
 		String rootUrl = getContext().getParameters().getFirstValue(BASE_URL);
 		return getPropertyWithDefault(custom_search, ambitProperties, rootUrl
