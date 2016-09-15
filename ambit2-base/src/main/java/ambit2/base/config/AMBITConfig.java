@@ -24,5 +24,6 @@ public enum AMBITConfig {
 	service_search,
 	custom_title,
 	custom_description,
-	custom_query
+	custom_query,
+	custom_license
 }

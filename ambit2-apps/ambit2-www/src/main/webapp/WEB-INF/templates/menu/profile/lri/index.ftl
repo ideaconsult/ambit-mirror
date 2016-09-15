@@ -36,9 +36,9 @@ $(document)
 			<div class="fifteen columns remove-bottom" id="query">
 			<div class="alpha">
 				<div class="remove-bottom h2">
-						Welcome to AMBIT 
+						${custom_title!"Welcome to AMBIT"} 
 				</div>
-			    <div class='help'>Chemical structures database, properties prediction & machine learning with OpenTox REST web services API</div>			
+			    <div class='help'>${custom_description!"Chemical structures database, properties prediction & machine learning with OpenTox REST web services API"}</div>			
 			</div>
 			</div>
 	</div>	
@@ -46,7 +46,7 @@ $(document)
 	<div class="row add-bottom">&nbsp;</div>	
 	
 	<div class="row add-bottom">
-		<form action="${ambit_root}/ui/_search?option=auto" id="searchForm"  method="GET" >	
+		<form action='${service_search!"${ambit_root}/ui/_search?option=auto"}' id="searchForm"  method="GET" >	
 			<div class="fifteen columns remove-bottom" id="query">
 			<div class="alpha">
 				<div class="remove-bottom h4">
@@ -56,8 +56,8 @@ $(document)
 			</div>
 			</div>
 		<div class='row add-bottom'>
-	
-			<input class='eight columns omega half-bottom' type="text" id='search' value='' name='search'>
+
+			<input class='eight columns omega half-bottom' type="text" id='search' value='${custom_query!""}' name='search'>
 			<input class='three columns omega submit' type='submit' value='Search'>
 		</div>
 
