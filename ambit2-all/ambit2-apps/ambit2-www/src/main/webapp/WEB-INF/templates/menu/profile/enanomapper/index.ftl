@@ -134,7 +134,7 @@ $(document)
 	<div class="row add-bottom">&nbsp;</div>	
 	
 	<div class="row remove-bottom">
-		<form action='${service_search!"${ambit_root}/ui/_search"}' id="searchForm"  method="GET" >	
+		<form action='${service_search!"${ambit_root}/ui/_search?option=auto"}' id="searchForm"  method="GET" >	
 			<div class="sixteen columns remove-bottom" >
 			<div class="alpha">
 				<div class="remove-bottom h4">

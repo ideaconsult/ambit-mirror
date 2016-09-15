@@ -294,6 +294,10 @@ public class UIResource extends FreeMarkerResource {
 			map.put(AMBITConfig.custom_description.name(),
 					((AmbitApplication) getApplication()).getCustomDescription());
 		} catch (Exception x) {}
+		try {
+			map.put(AMBITConfig.custom_license.name(),
+					((AmbitApplication) getApplication()).getCustomLicense());
+		} catch (Exception x) {}
 	}
 
 	protected Integer getIdBundle(Object bundleURI, Request request) {
