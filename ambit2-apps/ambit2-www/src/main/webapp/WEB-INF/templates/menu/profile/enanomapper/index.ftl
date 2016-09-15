@@ -144,7 +144,7 @@ $(document)
 			</div>
 			</div>
 		<div class='row remove-bottom'>
-			<input class='eight columns omega half-bottom' type="text" id='search' value='TiO2' name='search'>
+			<input class='eight columns omega half-bottom' type="text" id='search' value='${custom_query!"TiO2"}' name='search'>
 			<input class='three columns omega submit' type='submit' value='Search'>
 		</div>
 		
