@@ -131,9 +131,9 @@ public class CallableSubstanceImporter<USERID> extends
 			String fileUploadField, String jsonConfigField,
 			Reference applicationRootReference, Context context,
 			SubstanceURIReporter substanceReporter,
-			DatasetURIReporter datasetURIReporter, USERID token,String referer)
+			DatasetURIReporter datasetURIReporter, USERID token, String referer)
 			throws Exception {
-		super(applicationRootReference, null, context, token,referer);
+		super(applicationRootReference, null, context, token, referer);
 		this._fileUploadField = fileUploadField;
 		this._jsonConfigField = jsonConfigField;
 		try {
@@ -148,9 +148,9 @@ public class CallableSubstanceImporter<USERID> extends
 	public CallableSubstanceImporter(File file,
 			Reference applicationRootReference, Context context,
 			SubstanceURIReporter substanceReporter,
-			DatasetURIReporter datasetURIReporter, USERID token,String referer)
+			DatasetURIReporter datasetURIReporter, USERID token, String referer)
 			throws Exception {
-		super(applicationRootReference, null, context, token,referer);
+		super(applicationRootReference, null, context, token, referer);
 		try {
 			processForm(file, null);
 		} catch (Exception x) {
@@ -229,18 +229,18 @@ public class CallableSubstanceImporter<USERID> extends
 					IRawReader<IStructureRecord> reader = null;
 					File file = ((FileInputState) target).getFile();
 					String ext = file.getName().toLowerCase();
-					if (ext.endsWith(FileInputState._FILE_TYPE.I5Z_INDEX.getExtension())) {
+					if (ext.endsWith(FileInputState._FILE_TYPE.I5Z_INDEX
+							.getExtension())) {
 						if (writer instanceof DBSubstanceWriter)
 							if (writer instanceof DBSubstanceWriter) {
 								((DBSubstanceWriter) writer)
 										.setSplitRecord(true);
-								((DBSubstanceWriter) writer)
-								.setI5mode(true);
-							}	
+								((DBSubstanceWriter) writer).setI5mode(true);
+							}
 						reader = new I5ZReader(file);
 						((I5ZReader) reader).setQASettings(getQASettings());
-					} else if (ext
-							.endsWith(FileInputState._FILE_TYPE.CSV_INDEX.getExtension())) {
+					} else if (ext.endsWith(FileInputState._FILE_TYPE.CSV_INDEX
+							.getExtension())) {
 						if (writer instanceof DBSubstanceWriter)
 							((DBSubstanceWriter) writer).setSplitRecord(false);
 						LiteratureEntry reference = new LiteratureEntry(
@@ -251,15 +251,27 @@ public class CallableSubstanceImporter<USERID> extends
 						if (writer instanceof DBSubstanceWriter)
 							((DBSubstanceWriter) writer).setSplitRecord(false);
 						reader = new NanoWikiRDFReader(new InputStreamReader(
-								new FileInputStream(file), "UTF-8"));
-					} else if (FileInputState._FILE_TYPE.XLSX_INDEX.hasExtension(ext) || FileInputState._FILE_TYPE.XLS_INDEX.hasExtension(ext)) {
+								new FileInputStream(file), "UTF-8"), null,
+								"RDF/XML");
+					} else if (ext.endsWith(".ttl")) {
+						if (writer instanceof DBSubstanceWriter)
+							((DBSubstanceWriter) writer).setSplitRecord(false);
+						reader = new NanoWikiRDFReader(new InputStreamReader(
+								new FileInputStream(file), "UTF-8"), null,
+								"TTL");
+					} else if (FileInputState._FILE_TYPE.XLSX_INDEX
+							.hasExtension(ext)
+							|| FileInputState._FILE_TYPE.XLS_INDEX
+									.hasExtension(ext)) {
 						if (configFile == null)
 							throw new AmbitException(
 									"XLSX/XLSX file import requires a JSON configuration file");
 						final StructureRecordValidator validator = new StructureRecordValidator(
 								file.getName(), true);
 						reader = new GenericExcelParser(new FileInputStream(
-								file), configFile,FileInputState._FILE_TYPE.XLSX_INDEX.hasExtension(ext)) {
+								file), configFile,
+								FileInputState._FILE_TYPE.XLSX_INDEX
+										.hasExtension(ext)) {
 							public Object next() {
 								Object record = super.next();
 								try {
@@ -275,11 +287,10 @@ public class CallableSubstanceImporter<USERID> extends
 						if (writer instanceof DBSubstanceWriter) {
 							((DBSubstanceWriter) writer).setSplitRecord(false);
 							/*
-							((DBSubstanceWriter) writer)
-									.setClearComposition(false);
-							((DBSubstanceWriter) writer)
-									.setClearMeasurements(false);
-									*/
+							 * ((DBSubstanceWriter) writer)
+							 * .setClearComposition(false); ((DBSubstanceWriter)
+							 * writer) .setClearMeasurements(false);
+							 */
 						}
 					} else if (ext.endsWith(".json")) {
 						if (writer instanceof DBSubstanceWriter)
