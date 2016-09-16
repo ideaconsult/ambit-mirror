@@ -1,7 +1,6 @@
 package ambit2.rest.substance;
 
 import java.awt.Dimension;
-import java.io.Writer;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.q.update.AbstractUpdate;
-import net.idea.modbcum.r.QueryAbstractReporter;
 import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.StringConvertor;
 import net.idea.restnet.db.QueryResource;
@@ -611,6 +609,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 							if ("".equals(ext) || ext.endsWith(".i5z")
 									|| ext.endsWith(".csv")
 									|| ext.endsWith(".rdf")
+									|| ext.endsWith(".ttl")
 									|| ext.endsWith(".json")
 									|| ext.endsWith(".xlsx")
 									|| ext.endsWith(".xls")) {
