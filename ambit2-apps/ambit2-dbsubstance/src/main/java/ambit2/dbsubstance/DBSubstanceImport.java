@@ -23,6 +23,7 @@ import net.enanomapper.parser.InvalidCommand;
 import net.idea.i5.io.I5Options;
 import net.idea.i5.io.I5ZReader;
 import net.idea.i5.io.QASettings;
+import net.idea.loom.nm.nanowiki.ENanoMapperRDFReader;
 import net.idea.loom.nm.nanowiki.NanoWikiRDFReader;
 import net.idea.modbcum.c.DBConnectionConfigurable;
 import net.idea.modbcum.c.MySQLSingleConnection;
@@ -140,7 +141,7 @@ public class DBSubstanceImport {
 	protected boolean clearComposition = true;
 
 	public enum _parsertype {
-		i5z, xlsx, xls, nanowiki, modnanotox
+		i5z, xlsx, xls, nanowiki, modnanotox, enmrdf
 	}
 
 	public _parsertype getParserType() {
@@ -211,8 +212,9 @@ public class DBSubstanceImport {
 			}
 		return true;
 	}
-	
+
 	protected int maxRefSubstances = -1;
+
 	protected static int getMaxRefSubstances(CommandLine line) {
 		if (line.hasOption('r'))
 			try {
@@ -396,14 +398,20 @@ public class DBSubstanceImport {
 				.withLongOpt("clearMeasurements").withArgName("value")
 				.withDescription("true|false").create("m");
 
-		Option matchStructure = OptionBuilder.hasArg()
-				.withLongOpt("structureMatch").withArgName("value")
-				.withDescription("Match structure by uuid|cas|einecs|smiles|inchi")
+		Option matchStructure = OptionBuilder
+				.hasArg()
+				.withLongOpt("structureMatch")
+				.withArgName("value")
+				.withDescription(
+						"Match structure by uuid|cas|einecs|smiles|inchi")
 				.create("x");
-		
-		Option maxRefSubstances = OptionBuilder.hasArg()
-				.withLongOpt("maxReferenceSubstances").withArgName("value")
-				.withDescription("Maximum reference substances in *.i5z archive")
+
+		Option maxRefSubstances = OptionBuilder
+				.hasArg()
+				.withLongOpt("maxReferenceSubstances")
+				.withArgName("value")
+				.withDescription(
+						"Maximum reference substances in *.i5z archive")
 				.create("r");
 
 		Option isSplitRecord = OptionBuilder.hasArg()
@@ -508,10 +516,15 @@ public class DBSubstanceImport {
 			return new GenericExcelParser(in, jsonConfig, xlsx);
 		} else
 			switch (mode) {
+			case enmrdf:
+				return new ENanoMapperRDFReader(new InputStreamReader(in),
+						"ENM3");
 			case nanowiki:
 				return new NanoWikiRDFReader(new InputStreamReader(in));
 			default:
-				if (jsonConfig==null) throw new FileNotFoundException("JSON config file not specified!");
+				if (jsonConfig == null)
+					throw new FileNotFoundException(
+							"JSON config file not specified!");
 				return new GenericExcelParser(in, jsonConfig, xlsx);
 			}
 	}
@@ -566,7 +579,7 @@ public class DBSubstanceImport {
 			c = dbc.getConnection();
 			c.setAutoCommit(true);
 			I5Options options = new I5Options();
-			
+
 			options.setMaxReferenceStructures(maxRefSubstances);
 			options.setExceptionOnMaxReferenceStructures(false);
 			options.setAllowMultipleSubstances(false);
@@ -575,7 +588,7 @@ public class DBSubstanceImport {
 			qa.setAll();
 			reader.setQASettings(qa);
 
-			matchByKey = keytomatch==null?new CASKey():keytomatch;
+			matchByKey = keytomatch == null ? new CASKey() : keytomatch;
 			return write(reader, c, matchByKey, true, clearMeasurements,
 					clearComposition, null, true);
 		} catch (Exception x) {
@@ -621,7 +634,8 @@ public class DBSubstanceImport {
 								if (val != null && !"".equals(val.toString()))
 									props++;
 							}
-							if ((rel.getContent() == null || "".equals(rel.getContent())) && (props == 0))
+							if ((rel.getContent() == null || "".equals(rel
+									.getContent())) && (props == 0))
 								record.getRelatedStructures().remove(i);
 
 						}
@@ -636,9 +650,8 @@ public class DBSubstanceImport {
 			c = dbc.getConnection();
 			c.setAutoCommit(true);
 
-			
-			return write(parser, c, matchByKey , splitRecord,
-					clearMeasurements, clearComposition, validator,false);
+			return write(parser, c, matchByKey, splitRecord, clearMeasurements,
+					clearComposition, validator, false);
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -705,15 +718,17 @@ public class DBSubstanceImport {
 
 	public int write(IRawReader<IStructureRecord> reader,
 			Connection connection, PropertyKey key, boolean splitRecord,
-			StructureRecordValidator validator,boolean i5mode) throws Exception {
+			StructureRecordValidator validator, boolean i5mode)
+			throws Exception {
 		return write(reader, connection, key, splitRecord, true, true,
-				validator,i5mode);
+				validator, i5mode);
 	}
 
 	public int write(IRawReader<IStructureRecord> reader,
 			Connection connection, IStructureKey key, boolean splitRecord,
 			boolean clearMeasurements, boolean clearComposition,
-			StructureRecordValidator validator, boolean i5mode) throws Exception {
+			StructureRecordValidator validator, boolean i5mode)
+			throws Exception {
 
 		DBSubstanceWriter writer = new DBSubstanceWriter(
 				DBSubstanceWriter.datasetMeta(), new SubstanceRecord(),
@@ -802,13 +817,12 @@ public class DBSubstanceImport {
 
 	protected void cleanReferenceStructure(SubstanceRecord srecord) {
 		if (srecord.getReferenceSubstanceUUID() == null) {
-			logger_cli.log(Level.WARNING,
-					"Missing Reference Substance UUID");
+			logger_cli.log(Level.WARNING, "Missing Reference Substance UUID");
 
 			if (srecord.getReferenceSubstanceUUID() == null)
 				try {
-					ParticleTypes stype = ParticleTypes
-							.valueOf(srecord.getSubstancetype());
+					ParticleTypes stype = ParticleTypes.valueOf(srecord
+							.getSubstancetype());
 					logger_cli.log(Level.WARNING,
 							"Missing Reference Substance UUID");
 					String ref_uuid = stype.getReferenceUUID();
@@ -820,8 +834,9 @@ public class DBSubstanceImport {
 		}
 
 		List<ProtocolApplication> m = srecord.getMeasurements();
-		cleanupEmptyRecords(srecord, m);		
+		cleanupEmptyRecords(srecord, m);
 	}
+
 	protected void cleanupEmptyRecords(SubstanceRecord srecord,
 			List<ProtocolApplication> m) {
 		if (m == null)
