@@ -2825,12 +2825,17 @@ public class TestUtilities {
 		// tu.testSMIRKS("[#6:1]-[#8:2]-[#6:3]>>[#6:1]-[#8:2].[#6:3]=S","NCCCOCC",
 		// ReactionOperation.SingleCopyForEachPos);
 
-		//tu.FlagExplicitHAtoms = true;
+		tu.FlagExplicitHAtoms = true;
 		tu.FlagTargetPreprocessing = true;
 		tu.FlagProductPreprocessing = true;
-		tu.FlagPrintAtomAttributes = true;
+		//tu.FlagPrintAtomAttributes = true;
 		// tu.FlagSSMode = SmartsConst.SSM_NON_IDENTICAL_FIRST;
 		tu.FlagExplicitHToImplicitOnProductPreProcess = true;
+		//tu.FlagPrintTransformationData = true;
+		
+		//tu.FlagClearImplicitHAtomsBeforeProductPreProcess = true;
+		//tu.FlagAddImplicitHAtomsOnProductPreProcess = true;
+		
 		
 		//tu.testCheckStereoElements("C(=O)[C@@]([H])1C(=O)C(C(=O)O1)(F)F");
 		//tu.testCheckStereoElements("C(=O)[C@@H]1C(=O)C(C(=O)O1)(F)F");
@@ -2843,6 +2848,30 @@ public class TestUtilities {
 		//tu.testSMIRKS("O[C:1]Cl>>N[C:1]Br", "C[C@](O)(CC)Cl"); 
 		//tu.testSMIRKS("O[C:1]>>N[C:1]", "C[C@H](O)Cl");
 		//tu.testSMIRKS("[C:1]=[C:2]>>[C:1].[C:2]", "O/C=C/C");
+		
+		//tu.testSMIRKS("[C;A;X4,X3-:1]>>[C-:1]O", "NC");
+		//tu.testSMIRKS("[C;A;X4,X3-:1]>>[C-:1]O", "N[C-]");
+		
+		
+		//tu.testSMIRKS("[#6;A;H2X4:7]!@-[#6;A;H2X4:6]!@-[#8;X2:5][P;X4:4]([#8;X2:2])([#8;A;X2H1,X1-:3])=[O;X1:1]>>"
+		//		+ "[#8;X2:2][P;X4:4]1(=[O;X1:1])[#8;A;X:3][#6;A;H1X4:7]!@-[#6;A;H2X4:6]!@-[#8;X2:5]1", 
+		//		"CCCOP(=O)(O)[O-]");
+		
+		
+		tu.testSMIRKS("[#6;A;H2X4:7]([H:99])([H])!@-[#6;A;H2X4:6]!@-[#8;X2:5][P;X4:4]([#8;X2:2])([#8;A;X2:3][H])=[O;X1:1]>>[#8;X2:2][P;X4:4]1(=[O;X1:1])[#8;A;X:3][#6;A;H1X4:7]([H:99])!@-[#6;A;H2X4:6]!@-[#8;X2:5]1", 
+				"CCCOP(=O)(O)O");
+		
+		tu.testSMIRKS("[#6;A;H2X4:7]([H:99])([H])!@-[#6;A;H2X4:6]!@-[#8;X2:5][P;X4:4]([#8;X2:2])([#8;A;X1-:3])=[O;X1:1]>>[#8;X2:2][P;X4:4]1(=[O;X1:1])[#8;A;X:3][#6;A;H1X4:7]([H:99])!@-[#6;A;H2X4:6]!@-[#8;X2:5]1", 
+				"CCCOP(=O)(O)[O-]");
+		
+		
+		
+		
+		//tu.testSmartsManagerBoolSearch("[#6;A;H2X4]!@-[#6;A;H2X4]!@-[#8;X2][P;X4]([#8;X2])([#8;A;X2H1,X1-])=[O;X1]",
+		//		"CCCOP(=O)(O)[O-]");
+		
+		
+		
 		
 		//tu.testSmiles2Smiles("O/C(Br)=C(N)/C");
 		
@@ -3019,7 +3048,7 @@ public class TestUtilities {
 		//tu.testSmartsManagerBoolSearch("CC(O)=[C@]=C(Cl)N","CC(O)=[C@]=C(Cl)N");
 		//tu.testSmartsManagerBoolSearch("C[C@H](Cl)N","C[C@@H](N)Cl");
 		
-		tu.testSmartsManagerBoolSearch("[#6]-:[#6]","c1ccccc1");
+		//tu.testSmartsManagerBoolSearch("[#6]-:[#6]","c1ccccc1");
 		
 		//tu.testIsomorphismAllMappings("[#6]-&:[#6]","c1ccccc1");
 		//tu.testSmartsToQueryToSmarts("[#6][#6]");

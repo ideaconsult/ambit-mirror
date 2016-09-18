@@ -48,8 +48,14 @@ public class ISAJsonTestUtils {
 	public static void testJsonExport(Iterator<SubstanceRecord> records,
 			File outputDir, File exportConfig,
 			SubstanceEndpointsBundle endpointBundle) throws Exception {
-		ISAJsonExporter1_0 exporter = new ISAJsonExporter1_0(outputDir,
-				exportConfig);
+		
+		//ISAJsonExporter1_0 exporter = new ISAJsonExporter1_0(outputDir,
+		//		exportConfig);
+		
+		ISAJsonExportConfig cfg = ISAJsonExportConfig.getDefaultConfig();
+		cfg.FlagSaveCompositionAsStudy = false;
+		ISAJsonExporter1_0 exporter = new ISAJsonExporter1_0(outputDir, cfg);
+		
 		
 		exporter.setOutputDir(outputDir);
 		exporter.setExportJsonConfig(exportConfig);

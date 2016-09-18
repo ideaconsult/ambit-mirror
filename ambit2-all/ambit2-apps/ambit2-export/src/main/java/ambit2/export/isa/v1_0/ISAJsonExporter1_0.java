@@ -14,6 +14,8 @@ import net.idea.modbcum.i.reporter.Reporter;
 //import org.codehaus.jackson.map.ObjectMapper;
 //import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
+
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -34,6 +36,8 @@ import ambit2.export.isa.json.ISAJsonExporter;
 import ambit2.export.isa.v1_0.objects.Assay;
 import ambit2.export.isa.v1_0.objects.FactorValue;
 import ambit2.export.isa.v1_0.objects.Investigation;
+import ambit2.export.isa.v1_0.objects.Material;
+import ambit2.export.isa.v1_0.objects.Materials;
 import ambit2.export.isa.v1_0.objects.Materials_;
 import ambit2.export.isa.v1_0.objects.Process;
 import ambit2.export.isa.v1_0.objects.ProcessParameterValue;
@@ -243,6 +247,11 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		investigation.studies.add(study);
 		study.identifier = pa.getDocumentUUID();
 		study.materials = new Materials_();
+		
+		Material mat = new Material();
+		mat.name = "Mat1";
+		mat.id = new URI("#material/Mat1");
+		study.materials.otherMaterials.add(mat);
 
 		// Handle protocol info
 		Protocol protocol = extractProtocolInfo(pa);
@@ -339,6 +348,12 @@ public class ISAJsonExporter1_0 implements IISAExport,
 	void addEffectRecord(EffectRecord effect, Study study) {
 		Assay assay = new Assay();
 		study.assays.add(assay);
+		assay.materials = new Materials();
+		
+		Material mat = new Material();
+		mat.name = "Mat1";
+		try {mat.id = new URI("#material/Mat1");} catch (Exception x) {};
+		assay.materials.otherMaterials.add(mat);
 
 		Process process1 = null;
 
