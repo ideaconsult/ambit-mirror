@@ -16,6 +16,7 @@ import net.idea.modbcum.i.reporter.Reporter;
 
 
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -255,6 +256,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 
 		// Handle protocol info
 		Protocol protocol = extractProtocolInfo(pa);
+		protocol.id = new URI("#protocol/" + "study/" + id + "/1");
 		study.protocols.add(protocol);
 		study.id = new URI("#study/" + id);
 
@@ -271,7 +273,9 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		Sample sample = new Sample();
 		process.inputs.add(source);
 		process.outputs.add(sample);
-		process.executesProtocol = protocol;
+		
+		//process.executesProtocol = protocol;
+		process.executesProtocol = (Protocol) ObjectUtils.getIdInstance(protocol, protocol.id);
 
 		/*
 		 * if (!cfg.FlagSaveSourceAndSampleOnlyInProcess) {
