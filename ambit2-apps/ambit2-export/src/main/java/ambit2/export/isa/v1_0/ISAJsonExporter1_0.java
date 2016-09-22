@@ -249,14 +249,17 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		study.identifier = pa.getDocumentUUID();
 		study.materials = new Materials_();
 		
+		/*
 		Material mat = new Material();
 		mat.name = "Mat1";
 		mat.id = new URI("#material/Mat1");
 		study.materials.otherMaterials.add(mat);
+		*/
 
 		// Handle protocol info
 		Protocol protocol = extractProtocolInfo(pa);
-		protocol.id = new URI("#protocol/" + "study/" + id + "/1");
+		String protocolIdSuffix = "study/" + id + "/1";
+		protocol.id = new URI("#protocol/" + protocolIdSuffix);
 		study.protocols.add(protocol);
 		study.id = new URI("#study/" + id);
 
@@ -269,10 +272,20 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		// Create a study process
 		Process process = new Process();
 		study.processSequence.add(process);
+		
 		Source source = new Source();
+		source.name = pa.getSubstanceUUID();
+		source.id = new URI("#source/" + source.name);
+		study.materials.sources.add(source);
+		
 		Sample sample = new Sample();
+		sample.name = source.name + "[" + protocolIdSuffix + "]";
+		sample.id = new URI("#sample/" + sample.name);
+		study.materials.samples.add(sample);
+		
 		process.inputs.add(source);
 		process.outputs.add(sample);
+		
 		
 		//process.executesProtocol = protocol;
 		process.executesProtocol = (Protocol) ObjectUtils.getIdInstance(protocol, protocol.id);
@@ -281,10 +294,8 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		 * if (!cfg.FlagSaveSourceAndSampleOnlyInProcess) {
 		 * //study.sources.add(source); //study.samples.add(sample); }
 		 */
-
-		source.name = pa.getSubstanceUUID();
-		sample.name = source.name + "[" + protocol.name + "]";
-
+		
+		
 		// Handle ProtocolApplication parameters info which is added to the
 		// process and to the protocol objects
 		if (pa.getParameters() != null)
