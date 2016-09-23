@@ -283,11 +283,12 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		sample.id = new URI("#sample/" + sample.name);
 		study.materials.samples.add(sample);
 		
-		process.inputs.add(source);
-		process.outputs.add(sample);
+		//Storing object that contains only source and sample id
+		process.inputs.add((Source) ObjectUtils.getIdInstance(source, source.id));
+		process.outputs.add((Sample) ObjectUtils.getIdInstance(sample, sample.id));
 		
 		
-		//process.executesProtocol = protocol;
+		//Storing object that contains only protocol id
 		process.executesProtocol = (Protocol) ObjectUtils.getIdInstance(protocol, protocol.id);
 
 		/*
