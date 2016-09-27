@@ -2134,6 +2134,32 @@ public class Protocol {
 				return "http://purl.bioontology.org/ontology/npo#NPO_1709";
 			}
 		},
+		ENM_9000011_SECTION {
+			@Override
+			public String toString() {
+				return "Tumor Necrosis Factor assay";
+			}
+
+			@Override
+			public String getNumber() {
+				return "ENM_9000011";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 82190;
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_9000011";
+			}			
+		},
 		BAO_0010001_SECTION {
 
 			@Override
