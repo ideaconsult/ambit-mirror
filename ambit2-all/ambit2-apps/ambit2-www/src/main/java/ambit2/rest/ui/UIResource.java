@@ -287,9 +287,18 @@ public class UIResource extends FreeMarkerResource {
 					((AmbitApplication) getApplication()).getCustomQuery());
 		} catch (Exception x) {}
 		try {
+			map.put(AMBITConfig.custom_structurequery.name(),
+					((AmbitApplication) getApplication()).getCustomStructureQuery());
+		} catch (Exception x) {}
+		
+		try {
 			map.put(AMBITConfig.custom_title.name(),
 					((AmbitApplication) getApplication()).getCustomTitle());
 		} catch (Exception x) {}
+		try {
+			map.put(AMBITConfig.custom_logo.name(),
+					((AmbitApplication) getApplication()).getCustomLogo());
+		} catch (Exception x) {}		
 		try {
 			map.put(AMBITConfig.custom_description.name(),
 					((AmbitApplication) getApplication()).getCustomDescription());

@@ -1,3 +1,12 @@
+<#if custom_logo??>
+<#else>
+	<#if menu_profile??>
+		<#assign custom_logo='${ambit_root}/images/profile/${menu_profile}/logo.png'>	
+	<#else>
+		<#assign custom_logo='${ambit_root}/images/profile/default/logo.png'>
+	</#if>	
+</#if>
+
 
 <!-- banner -->
 <div class="row half-bottom" id="header" style="padding-top:5px">
@@ -7,7 +16,7 @@
 		<#else>
 		<div class="two columns">
 		</#if>
-			<a href="${ambit_root}/ui"><img class='scale-with-grid' border='0' src='${ambit_root}/images/profile/${menu_profile}/logo.png' title='Home' alt='AMBIT logo'></a>
+			<a href="${ambit_root}/ui"><img class='scale-with-grid' border='0' src='${custom_logo}' title='Home' alt="${custom_title!'AMBIT'} logo"></a>
 		</div>
 		
 		<#if menu_profile=='lri'>
@@ -20,7 +29,7 @@
 		</div>
 	<#else>
 		<div class="two columns">
-			<a href="${ambit_root}/ui"><img class='scale-with-grid' border='0' src='${ambit_root}/images/profile/default/logo.png' title='Home' alt='AMBIT logo'></a>
+			<a href="${ambit_root}/ui"><img class='scale-with-grid' border='0' src='${custom_logo}' title='Home' alt="${custom_title!'AMBIT'} logo"></a>
 		</div>
 		<div class="fourteen columns remove-bottom">
 			<#include "/menu/profile/default/smartmenu.ftl">

@@ -220,6 +220,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String custom_license = "custom.license";
 	static final String custom_logo = "custom.logo";
 	static final String custom_query = "custom.query";
+	static final String custom_structurequery = "custom.structurequery";
 
 	protected boolean standalone = false;
 	protected boolean openToxAAEnabled = false;
@@ -1655,6 +1656,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	public synchronized String getCustomQuery() {
 		return getPropertyWithDefault(custom_query, ambitProperties, "formaldehyde");
 	}
+	
+	public synchronized String getCustomStructureQuery() {
+		return getPropertyWithDefault(custom_structurequery, ambitProperties, "formaldehyde");
+	}	
 	
 	public synchronized String getCustomLogo() {
 		return getPropertyWithDefault(custom_logo, ambitProperties, null);

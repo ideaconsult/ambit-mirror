@@ -1,3 +1,7 @@
+<#if custom_structurequery??>
+	<#assign custom_structurequery=custom_structurequery?url('UTF-8')>
+</#if>
+
 <ul id='smartmenu' class="sm sm-mint">
 <li>
 	<a href="${ambit_root}/">Home</a>
@@ -9,7 +13,7 @@
 		<li ><a href="${ambit_root}/substance?type=&search=NM-111&page=0&pagesize=20" title="Search for nanomaterials by identifiers">Search nanomaterials by identifier</a></li>
 		<li ><a href="${ambit_root}/substance?type=citation&search=10.1073&page=0&pagesize=20" title="Search for nanomaterials by paper reference">Search nanomaterials by citation</a></li>
 		<li><a href="${ambit_root}/query/study" title="Search substances by physico-chemical parameters or biological effects">Search nanomaterials by physchem parameters or biological effects</a></li>
-		<li><a href="${ambit_root}/ui/_search?search=SiO2" title="Search nanomaterials by chemical structure of components">Search nanomaterials by composition</a></li>
+		<li><a href="${ambit_root}/ui/_search?search=${custom_structurequery!'SiO2'}" title="Search nanomaterials by chemical structure of components">Search nanomaterials by composition</a></li>
 		<!--
 		<li><a href="${ambit_root}/ontobucket?search=cytotoxicity&type=protocol&qe=true" title="Free text search (experimental)">Free text search</a></li>
 		-->
