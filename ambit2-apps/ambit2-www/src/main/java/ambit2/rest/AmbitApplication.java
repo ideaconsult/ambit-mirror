@@ -1662,7 +1662,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	}	
 	
 	public synchronized String getCustomLogo() {
-		return getPropertyWithDefault(custom_logo, ambitProperties, null);
+		String logo = getPropertyWithDefault(custom_logo, ambitProperties, null);
+		if ("".equals(logo)) logo = null;
+		return logo;
 	}
 
 	public synchronized String getCustomLicense() {
