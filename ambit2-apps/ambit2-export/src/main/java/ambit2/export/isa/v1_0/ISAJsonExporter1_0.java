@@ -361,10 +361,12 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		return protocol;
 	}
 
-	void addEffectRecord(EffectRecord effect, Study study, String assayId) {
+	void addEffectRecord(EffectRecord effect, Study study, String assayId) throws Exception
+	{
 		Assay assay = new Assay();
 		study.assays.add(assay);
 		assay.materials = new Materials();
+		assay.id = new URI("#assay/" + assayId);
 		
 		Material mat = new Material();
 		
@@ -375,12 +377,15 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		*/
 
 		Process process1 = null;
+		int procNum = 1;
 
 		// Process 1 describes the conditions for the measurement (effect
 		// record)
 		// if there are no conditions process 1 is not registered
-		if (effect.getConditions() != null) {
+		if (effect.getConditions() != null) 
+		{	
 			process1 = new Process();
+			process1.id = new URI("#process/assay/" + assayId + "/" + procNum);
 			assay.processSequence.add(process1);
 
 			process1.name = /* effect.getEndpoint() + */"[conditions]";
@@ -391,10 +396,13 @@ public class ISAJsonExporter1_0 implements IISAExport,
 			source1.name = study.identifier;
 			sample1.name = source1.name + "[conditions]";
 			storeConditionsAsFactors(effect, sample1);
+			
+			procNum++;
 		}
 
 		// Process 2 describes the measurement itself (the effect record)
 		Process process2 = new Process();
+		process2.id = new URI("#process/assay/" + assayId + "/" + procNum);
 		assay.processSequence.add(process2);
 		process2.name = effect.getEndpoint() == null ? null : effect
 				.getEndpoint().toString();
