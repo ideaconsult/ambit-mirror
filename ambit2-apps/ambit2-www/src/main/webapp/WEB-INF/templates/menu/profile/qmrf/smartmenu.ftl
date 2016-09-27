@@ -1,6 +1,10 @@
+<#if custom_structurequery??>
+	<#assign custom_structurequery=custom_structurequery?url('UTF-8')>
+</#if>
+
 <ul id='smartmenu' class="sm sm-mint">
 <li>
-	<a href="${ambit_root}/ui/_search" title="Chemical structure search">Search</a>
+	<a href="${ambit_root}/ui/_search?search=${custom_structurequery!''}" title="Chemical structure search">Search</a>
 </li>
 <li>
 	<a href="${ambit_root}/dataset?page=0&pagesize=100" title="Datasets: Chemical structures and properties">Datasets</a>

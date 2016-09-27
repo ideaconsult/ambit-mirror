@@ -111,5 +111,7 @@ custom.logo=${custom.logo}
 custom.search=${custom.search}
 #default query on the front page
 custom.query=${custom.query}
+#default query on the structure search page
+custom.structurequery=${custom.structurequery}
 #license
 custom.license=${custom.license}
