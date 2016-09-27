@@ -330,8 +330,8 @@ public class ISAJsonExporter1_0 implements IISAExport,
 
 		// Handle effects records
 		List<EffectRecord> effects = pa.getEffects();
-		for (EffectRecord eff : effects)
-			addEffectRecord(eff, study);
+		for (int i = 0; i < effects.size(); i++)
+			addEffectRecord(effects.get(i), study, protocolIdSuffix + "/" + (i+1));
 	}
 
 	Protocol extractProtocolInfo(ProtocolApplication pa) {
@@ -361,15 +361,18 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		return protocol;
 	}
 
-	void addEffectRecord(EffectRecord effect, Study study) {
+	void addEffectRecord(EffectRecord effect, Study study, String assayId) {
 		Assay assay = new Assay();
 		study.assays.add(assay);
 		assay.materials = new Materials();
 		
 		Material mat = new Material();
+		
+		/*
 		mat.name = "Mat1";
 		try {mat.id = new URI("#material/Mat1");} catch (Exception x) {};
 		assay.materials.otherMaterials.add(mat);
+		*/
 
 		Process process1 = null;
 
