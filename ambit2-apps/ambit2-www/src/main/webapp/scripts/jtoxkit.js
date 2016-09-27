@@ -563,9 +563,10 @@ window.jT = window.jToxKit = {
       // scan the query parameter for settings
   		var url = self.settings.fullUrl = ccLib.parseURL(document.location);
   		var queryParams = url.params;
-  		if (!queryParams.baseUrl)
-  		  queryParams.baseUrl = self.formBaseUrl(url);
-  		else
+  		
+  		if (!self.settings.baseUrl)
+  		  self.settings.baseUrl = self.formBaseUrl(url);
+  		else if (!!queryParams.baseUrl)
     		queryParams.baseUrl = self.fixBaseUrl(queryParams.baseUrl);
 
       self.settings = self.$.extend(true, self.settings, queryParams); // merge with defaults
@@ -2034,7 +2035,7 @@ cls.prototype.init = function () {
         jT.$('a', el)[0].href = ccLib.addParameter(self.datasetUri, "media=" + encodeURIComponent(expo.type));
         var img = el.getElementsByTagName('img')[0];
         img.alt = img.title = expo.type;
-        img.src = (jT.settings.baseUrl || self.settings.baseUrl) + '/' + expo.icon;
+        img.src = self.settings.baseUrl + '/' + expo.icon;
       }
 
       ccLib.fireCallback(self.settings.onTab, self, divEl, liEl, "Export", isMain);

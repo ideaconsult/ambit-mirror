@@ -81,8 +81,8 @@
 	================================================== -->
     <script src="${ambit_root}/jquery/jquery.smartmenus.min.js" type="text/javascript" language="JavaScript"></script>
     <link rel="stylesheet" href="${ambit_root}/style/sm-core-css.css" type="text/css">
-    <#if menu_profile?? && menu_profile=='enanomapper'>		 
-		<link rel="stylesheet" href="${ambit_root}/style/profile/enanomapper/sm-mint.css" type="text/css">
+    <#if menu_profile?? && (menu_profile=='enanomapper' || menu_profile=='excape')>		 
+		<link rel="stylesheet" href="${ambit_root}/style/profile/${menu_profile}/sm-mint.css" type="text/css">
   	<#else>
   		<link rel="stylesheet" href="${ambit_root}/style/sm-mint.css" type="text/css">
   	</#if>	
