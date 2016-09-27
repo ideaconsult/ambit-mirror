@@ -65,7 +65,7 @@ $(document)
 		.ready(
 				function() {
 						$( "#smartmenu" ).smartmenus();    
-						loadHelpAsTooltip("${ambit_root}","enmindex");
+						loadHelpAsTooltip("${ambit_root}","excapeindex");
 						jQuery("#breadCrumb").hide();
 					    $( document ).tooltip({
       						track: true
@@ -178,8 +178,8 @@ $(document)
 <div id='footer-out' class="sixteen columns">
 	<div id='footer-in'>
 		<div id='footer'>
-			<a class='footerLink ' href='http://www.enanomapper.net'  title='eNanoMapper' target=_blank>eNanoMapper FP7 #604134</a>.
-			<span style="font-size: 0.75em;">This project has received funding from the European Union''s Seventh Framework Programme for research, technological development and demonstration under grant agreement no 604134</span>
+			<a class='footerLink ' href='http://excape-h2020.eu/'  title='ExCAPE' target=_blank>ExCAPE H2020 #671555</a>.
+			<span style="font-size: 0.75em;">This project has received funding from the European Union's Horizon 2020 Research and Innovation programme under Grant Agreement no. 671555</span>
 		</div>
 	</div>
 </div>

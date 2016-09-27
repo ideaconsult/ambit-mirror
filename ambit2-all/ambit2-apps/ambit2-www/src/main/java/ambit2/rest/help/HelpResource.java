@@ -50,7 +50,8 @@ public class HelpResource extends CatalogResource<String>  {
 		bundle,
 		endpoint_search,
 		openam,
-		enmindex
+		enmindex,
+		excapeindex
 	}
 	public HelpResource() {
 		super();
