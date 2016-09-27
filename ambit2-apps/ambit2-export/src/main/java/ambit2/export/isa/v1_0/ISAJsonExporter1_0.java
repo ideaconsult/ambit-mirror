@@ -258,7 +258,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 
 		// Handle protocol info
 		Protocol protocol = extractProtocolInfo(pa);
-		String protocolIdSuffix = "study/" + id + "/1";
+		String protocolIdSuffix = "study/" + id ;
 		protocol.id = new URI("#protocol/" + protocolIdSuffix);
 		study.protocols.add(protocol);
 		study.id = new URI("#study/" + id);
@@ -331,7 +331,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		// Handle effects records
 		List<EffectRecord> effects = pa.getEffects();
 		for (int i = 0; i < effects.size(); i++)
-			addEffectRecord(effects.get(i), study, protocolIdSuffix + "/" + (i+1));
+			addEffectRecord(effects.get(i), study, ""+ (i+1) + "/" + protocolIdSuffix);
 	}
 
 	Protocol extractProtocolInfo(ProtocolApplication pa) {
@@ -368,14 +368,13 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		assay.materials = new Materials();
 		assay.id = new URI("#assay/" + assayId);
 		
-		Material mat = new Material();
-		
 		/*
+		Material mat = new Material();
 		mat.name = "Mat1";
 		try {mat.id = new URI("#material/Mat1");} catch (Exception x) {};
 		assay.materials.otherMaterials.add(mat);
 		*/
-
+		
 		Process process1 = null;
 		int procNum = 1;
 
@@ -385,12 +384,15 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		if (effect.getConditions() != null) 
 		{	
 			process1 = new Process();
-			process1.id = new URI("#process/assay/" + assayId + "/" + procNum);
+			process1.id = new URI("#process/" + procNum + "/assay/" + assayId  );
 			assay.processSequence.add(process1);
 
 			process1.name = /* effect.getEndpoint() + */"[conditions]";
+			
 			Source source1 = new Source();
 			Sample sample1 = new Sample();
+			
+			
 			process1.inputs.add(source1);
 			process1.outputs.add(sample1);
 			source1.name = study.identifier;
@@ -402,7 +404,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 
 		// Process 2 describes the measurement itself (the effect record)
 		Process process2 = new Process();
-		process2.id = new URI("#process/assay/" + assayId + "/" + procNum);
+		process2.id = new URI("#process/" + procNum + "/assay/" + assayId  );
 		assay.processSequence.add(process2);
 		process2.name = effect.getEndpoint() == null ? null : effect
 				.getEndpoint().toString();
