@@ -287,7 +287,6 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		process.inputs.add((Source) ObjectUtils.getIdInstance(source, source.id));
 		process.outputs.add((Sample) ObjectUtils.getIdInstance(sample, sample.id));
 		
-		
 		//Storing object that contains only protocol id
 		process.executesProtocol = (Protocol) ObjectUtils.getIdInstance(protocol, protocol.id);
 
@@ -390,14 +389,20 @@ public class ISAJsonExporter1_0 implements IISAExport,
 			process1.name = /* effect.getEndpoint() + */"[conditions]";
 			
 			Source source1 = new Source();
-			Sample sample1 = new Sample();
-			
-			
-			process1.inputs.add(source1);
-			process1.outputs.add(sample1);
 			source1.name = study.identifier;
+			source1.id = new URI("#source/" + source1.name); //?
+			//study.materials.sources.add(source1); //?
+			
+			Sample sample1 = new Sample();
 			sample1.name = source1.name + "[conditions]";
+			sample1.id = new URI("#sample/" + sample1.name); //?
+			assay.materials.samples.add(sample1);
+			
 			storeConditionsAsFactors(effect, sample1);
+			
+			//Storing object that contains only source and sample id
+			process1.inputs.add((Source) ObjectUtils.getIdInstance(source1, source1.id));
+			process1.outputs.add((Sample) ObjectUtils.getIdInstance(sample1, sample1.id));
 			
 			procNum++;
 		}
@@ -408,6 +413,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		assay.processSequence.add(process2);
 		process2.name = effect.getEndpoint() == null ? null : effect
 				.getEndpoint().toString();
+		
 		Source source2 = new Source();
 		Sample sample2 = new Sample();
 		process2.inputs.add(source2);
