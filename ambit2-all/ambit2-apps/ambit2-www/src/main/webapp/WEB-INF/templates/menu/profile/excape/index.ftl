@@ -144,19 +144,10 @@ $(document)
 			</div>
 			</div>
 		<div class='row remove-bottom'>
-			<input class='eight columns omega half-bottom' type="text" id='search' value='${custom_query!"TiO2"}' name='search'>
+			<input class='eight columns omega half-bottom' type="text" id='search' value='${custom_query!"CCCCCCCCCCCCCC"}' name='search'>
 			<input class='three columns omega submit' type='submit' value='Search'>
 		</div>
 		
-		<div class="sixteen columns add-bottom" >
-				<span style='font-weight:bold;'>Search</span>
-			    <a href="${ambit_root}/substance?type=&search=NM-111&page=0&pagesize=20" title="Search for nanomaterials by identifiers" class="mhelp substancesearch">by identifier</a> | 
-			    <a href="${ambit_root}/query/study" title="Search substances by physico-chemical parameters or biological effects" class="mhelp nanomaterial3">by physchem parameters or biological effects</a> |
-			    <a href="${ambit_root}/ui/_search?search=SiO2" title="Search nanomaterials by chemical structure of components" class="mhelp nanomaterial4">by composition</a> | 
-			    <a href="${ambit_root}/substance?type=citation&search=10.1073&page=0&pagesize=20" title="Search for nanomaterials by paper reference" class="mhelp nanomaterial2">by citation</a> |  
-			    <a href='${ambit_root}/substance' class="mhelp nanomaterial"><span style='font-weight:bold;'>Browse</span></a> |
-				<a href='${ambit_root}/ui/uploadsubstance1' class="mhelp nanomaterial6"><span style='font-weight:bold;'>Upload</span></a>
-		</div>
 		</form>	
    <div>
 

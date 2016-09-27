@@ -36,9 +36,10 @@ $(document)
 			<div class="fifteen columns remove-bottom" id="query">
 			<div class="alpha">
 				<div class="remove-bottom h2">
-						Welcome to AMBIT 
+					<div class="twelve columns remove-bottom h2">${custom_title!"Welcome to AMBIT"}
+						 
 				</div>
-			    <div class='help'>Chemical structures database, properties prediction & machine learning with OpenTox REST web services API</div>			
+			    <div class='help'>${custom_description!"Chemical structures database, properties prediction & machine learning with OpenTox REST web services API"}</div>			
 			</div>
 			</div>
 	</div>	

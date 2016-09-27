@@ -2,6 +2,44 @@
 <head>
 <#include "/header_updated.ftl" >
 
+<style>
+h1, h2, h3 {
+	color: #000000;
+	font-weight: bold; }
+		
+h4, h5, h6 {
+	color: #000000;
+	font-weight: normal; 
+}
+
+.h1, .h2, .h3 {
+	color: #000000;
+	font-weight: bold; }
+		
+.h4, .h5, .h6 {
+	color: #000000;
+	font-weight: normal; }
+	
+	
+.enmhelp {
+	font-size: 0.75em;
+	font-weight: bold italic !important;
+	color: #000000;
+}	
+
+.mhelp {
+}
+
+.mhelp a:link {
+    text-decoration: none;
+}
+
+.mhelp a:visited {
+    text-decoration: none;
+}	
+	
+</style>	
+
 <script type='text/javascript'>
 
 $(document)
@@ -36,10 +74,10 @@ $(document)
 			<div class="twelve columns remove-bottom" id="query">
 			<div class="alpha">
 				<div class="remove-bottom h2">
-					Welcome to AMBIT
+					${custom_title!"Welcome to AMBIT"}
 
 				</div>
-			    <div class='help'>Chemical structures database, properties prediction & machine learning with OpenTox REST web services API</div>			
+			    <div class='enmhelp help'>${custom_description!"Chemical structures database, properties prediction & machine learning with OpenTox REST web services API"}</div>	
 			</div>
 			</div>
 			<div class="four columns remove-bottom h6" style="margin:5px; padding: 5px; background-color: #F5F2EB; box-shadow: 3px 3px 7px #999;" >
