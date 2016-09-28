@@ -55,6 +55,10 @@ public enum RDFTermsSubstance {
 		public boolean isProperty() {
 			return false;
 		}
+		@Override
+		public String getNamespace() {
+			return "http://www.bioassayontology.org/bao#";
+		}
 	},
 	BAO_0000040 {
 		@Override
@@ -65,6 +69,10 @@ public enum RDFTermsSubstance {
 		@Override
 		public boolean isProperty() {
 			return false;
+		}
+		@Override
+		public String getNamespace() {
+			return "http://www.bioassayontology.org/bao#";
 		}
 	},
 	/**
@@ -107,7 +115,10 @@ public enum RDFTermsSubstance {
 		public String toString() {
 			return "has assay protocol";
 		}
-
+		@Override
+		public String getNamespace() {
+			return "http://www.bioassayontology.org/bao#";
+		}
 	},
 	/**
 	 * Property. participates in at some time
@@ -153,6 +164,10 @@ public enum RDFTermsSubstance {
 		@Override
 		public String toString() {
 			return "has measure group";
+		}
+		@Override
+		public String getNamespace() {
+			return "http://www.bioassayontology.org/bao#";
 		}
 	},
 	has_value {

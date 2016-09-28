@@ -201,7 +201,7 @@ public class Protocol {
 			public String getOntologyURI() {
 				// http://purl.obolibrary.org/obo/CHMO_0002119
 				// return "CHMO_0002119";
-				return "http://purl.obolibrary.org/obo/BAO_0002130";
+				return "http://www.bioassayontology.org/bao#BAO_0002130";
 			}
 		},
 		PC_WATER_SOL_SECTION {
@@ -226,7 +226,7 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return "http://purl.obolibrary.org/obo/BAO_0002775";
+				return "http://www.bioassayontology.org/bao#BAO_0002775";
 			}
 		},
 		PC_SOL_ORGANIC_SECTION {
@@ -251,7 +251,7 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return "http://purl.obolibrary.org/obo/BAO_0002135";
+				return "http://www.bioassayontology.org/bao#BAO_0002135";
 			}
 		},
 		PC_NON_SATURATED_PH_SECTION {
@@ -1682,7 +1682,7 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return "http://purl.obolibrary.org/obo/BAO_0003009";
+				return "http://www.bioassayontology.org/bao#BAO_0003009";
 			}
 		},
 		BAO_0002993_SECTION {
@@ -1708,7 +1708,7 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return "http://purl.obolibrary.org/obo/BAO_0002993";
+				return "http://www.bioassayontology.org/bao#BAO_0002993";
 			}
 		},
 		BAO_0002100_SECTION {
@@ -1734,7 +1734,7 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return "http://purl.obolibrary.org/obo/BAO_0002100";
+				return "http://www.bioassayontology.org/bao#BAO_0002100";
 			}
 		},
 		BAO_0002167_SECTION {
@@ -1761,7 +1761,7 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return "http://purl.obolibrary.org/obo/BAO_0002167";
+				return "http://www.bioassayontology.org/bao#BAO_0002167";
 			}
 
 		},
@@ -1789,7 +1789,7 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return "http://purl.obolibrary.org/obo/BAO_0002168";
+				return "http://www.bioassayontology.org/bao#BAO_0002168";
 			}
 
 		},
@@ -1817,7 +1817,7 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return "http://purl.obolibrary.org/obo/BAO_0002189";
+				return "http://www.bioassayontology.org/bao#BAO_0002189";
 			}
 		},
 		BAO_0002084_SECTION {
@@ -1843,7 +1843,7 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return "http://purl.obolibrary.org/obo/BAO_0002084";
+				return "http://www.bioassayontology.org/bao#BAO_0002084";
 			}
 		},
 		BAO_0000451_SECTION {
@@ -1869,7 +1869,7 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return "http://purl.obolibrary.org/obo/BAO_0000451";
+				return "http://www.bioassayontology.org/bao#BAO_0000451";
 			}
 		},
 		BAO_0002733_SECTION {
@@ -1895,7 +1895,7 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return "http://purl.obolibrary.org/obo/BAO_0002733";
+				return "http://www.bioassayontology.org/bao#BAO_0002733";
 			}
 		},
 		CHMO_0000287_SECTION {
@@ -2478,7 +2478,7 @@ public class Protocol {
 
 		public String getOntologyURI() {
 			// generic assay by default
-			return "http://purl.obolibrary.org/obo/BAO_0000015";
+			return "http://www.bioassayontology.org/bao#BAO_0000015";
 		}
 
 	}
