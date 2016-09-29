@@ -12,6 +12,7 @@ import net.idea.modbcum.i.exceptions.NotFoundException;
 import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.RepresentationConvertor;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
+import net.idea.restnet.rdf.ns.OT;
 
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
@@ -146,6 +147,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		if (gp != null) {
 			groupProperties = new Profile();
 			for (String g : gp) {
+				if (!g.startsWith("http://")
+						&& !g.toString().startsWith("https://"))
+					g = String.format("%s%s", OT.NS, g);
 				Property p = new Property(g);
 				p.setEnabled(true);
 				p.setLabel(g);
