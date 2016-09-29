@@ -68,7 +68,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.enanomapper</groupId>
-			<artifactId>nmparser</artifactId>
+			<artifactId>enmexcelparser</artifactId>
 			<version>${nmparser.version}</version>
 		</dependency>
 		<dependency>
