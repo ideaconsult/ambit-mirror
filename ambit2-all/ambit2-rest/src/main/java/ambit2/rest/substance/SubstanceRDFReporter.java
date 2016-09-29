@@ -343,6 +343,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 							.hash();
 					String referenceURI = String.format("%s/reference/%s",
 							base, hc.toString().toUpperCase());
+					output.setNsPrefix("ref", base + "/reference/");
 					Resource reference = getOutput().createResource(
 							referenceURI);
 					getOutput().add(reference, DC.title, pa.getReference());
