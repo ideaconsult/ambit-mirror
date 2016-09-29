@@ -90,7 +90,32 @@
 				              "defaultValue" : null,
 				              "paramType": "query",
 				              "allowMultiple"  : false
-				        },						        
+				        },			
+						{
+							    "name": "sameas",
+							    "description": "Ontology URI to define groups of columns",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "query",
+							    "enum" : [
+							    "",
+							    "These are examples! The prefix 'http://www.opentox.org/api/1.1#' could be omitted.",
+							    "http://www.opentox.org/api/1.1#ChemicalName",
+							    "http://www.opentox.org/api/1.1#CASRN",
+							    "http://www.opentox.org/api/1.1#EINECS",
+							    "http://www.opentox.org/api/1.1#InChIKey_std",
+								"http://www.opentox.org/api/1.1#InChI_AuxInfo_std",
+								"http://www.opentox.org/api/1.1#InChI_std",
+								"http://www.opentox.org/api/1.1#IUCLID5_UUID",
+								"http://www.opentox.org/api/1.1#InChI",
+								"http://www.opentox.org/api/1.1#InChI_AuxInfo",
+								"http://www.opentox.org/api/1.1#InChIKey",							    
+							    "http://www.opentox.org/echaEndpoints.owl#Carcinogenicity",
+							    "http://www.opentox.org/echaEndpoints.owl#Mutagenicity",
+							    "http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow"
+							    ],
+							    "allowMultiple": true
+						},					        			        
 			            <#include "/apidocs/parameters_mol.ftl" >,				            
 						<#include "/apidocs/parameters_page.ftl" >
                     ],
@@ -158,7 +183,32 @@
 				              "defaultValue" : null,
 				              "paramType": "query",
 				              "allowMultiple"  : false
-				        },					            
+				        },			
+						{
+							    "name": "sameas",
+							    "description": "Ontology URI to define groups of columns",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "query",
+							    "enum" : [
+							    "",
+							    "These are examples! The prefix 'http://www.opentox.org/api/1.1#' could be omitted.",
+							    "http://www.opentox.org/api/1.1#ChemicalName",
+							    "http://www.opentox.org/api/1.1#CASRN",
+							    "http://www.opentox.org/api/1.1#EINECS",
+							    "http://www.opentox.org/api/1.1#InChIKey_std",
+								"http://www.opentox.org/api/1.1#InChI_AuxInfo_std",
+								"http://www.opentox.org/api/1.1#InChI_std",
+								"http://www.opentox.org/api/1.1#IUCLID5_UUID",
+								"http://www.opentox.org/api/1.1#InChI",
+								"http://www.opentox.org/api/1.1#InChI_AuxInfo",
+								"http://www.opentox.org/api/1.1#InChIKey",							    
+							    "http://www.opentox.org/echaEndpoints.owl#Carcinogenicity",
+							    "http://www.opentox.org/echaEndpoints.owl#Mutagenicity",
+							    "http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow"
+							    ],
+							    "allowMultiple": true
+						},					        		            
 						<#include "/apidocs/parameters_mol.ftl" >,					            
 						<#include "/apidocs/parameters_page.ftl" >				            			            
                     ],
@@ -218,7 +268,32 @@
 				              "defaultValue" : null,
 				              "paramType": "query",
 				              "allowMultiple"  : false
-				        },					            
+				        },		
+						{
+							    "name": "sameas",
+							    "description": "Ontology URI to define groups of columns",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "query",
+							    "enum" : [
+							    "",
+							    "These are examples! The prefix 'http://www.opentox.org/api/1.1#' could be omitted.",
+							    "http://www.opentox.org/api/1.1#ChemicalName",
+							    "http://www.opentox.org/api/1.1#CASRN",
+							    "http://www.opentox.org/api/1.1#EINECS",
+							    "http://www.opentox.org/api/1.1#InChIKey_std",
+								"http://www.opentox.org/api/1.1#InChI_AuxInfo_std",
+								"http://www.opentox.org/api/1.1#InChI_std",
+								"http://www.opentox.org/api/1.1#IUCLID5_UUID",
+								"http://www.opentox.org/api/1.1#InChI",
+								"http://www.opentox.org/api/1.1#InChI_AuxInfo",
+								"http://www.opentox.org/api/1.1#InChIKey",							    
+							    "http://www.opentox.org/echaEndpoints.owl#Carcinogenicity",
+							    "http://www.opentox.org/echaEndpoints.owl#Mutagenicity",
+							    "http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow"
+							    ],
+							    "allowMultiple": true
+						},					        			            
 						<#include "/apidocs/parameters_mol.ftl" >,		
 						<#include "/apidocs/parameters_page.ftl" >				            			            
                     ],
