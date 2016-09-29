@@ -346,7 +346,15 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 					output.setNsPrefix("ref", base + "/reference/");
 					Resource reference = getOutput().createResource(
 							referenceURI);
-					getOutput().add(reference, DC.title, pa.getReference());
+					String referenceStr = pa.getReference();
+					if (referenceStr.startsWith("http://dx.doi.org/") ||
+						referenceStr.startsWith("http://doi.org/") ||
+						referenceStr.startsWith("https://dx.doi.org/") ||
+						referenceStr.startsWith("https://doi.org/")) {
+						getOutput().add(reference, OWL.sameAs, output.createResource(referenceStr));
+					} else {
+						getOutput().add(reference, DC.title, referenceStr);
+					}
 					getOutput().add(assay, DCTerms.source, reference);
 
 					if (pa.getReferenceOwner() != null
