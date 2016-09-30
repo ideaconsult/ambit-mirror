@@ -5,6 +5,7 @@ import java.util.logging.Level;
 
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.i.facet.IFacet;
 import net.idea.modbcum.p.AbstractDBProcessor;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.ILiteratureEntry._type;
@@ -14,6 +15,8 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.base.facet.BundleRoleFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.relation.composition.CompositionRelation;
@@ -30,6 +33,7 @@ import ambit2.db.substance.study.DeleteEffectRecords;
 import ambit2.db.substance.study.DeleteStudy;
 import ambit2.db.substance.study.UpdateEffectRecords;
 import ambit2.db.substance.study.UpdateSubstanceStudy;
+import ambit2.db.update.bundle.CreateBundle;
 
 /**
  * Writes IUCLID5 substances
@@ -214,6 +218,23 @@ public class DBSubstanceWriter extends
 		}
 	}
 
+	protected void importBundles(SubstanceRecord substance) throws Exception {
+		if (substance.getFacets() != null)
+			for (IFacet facet : substance.getFacets())
+				if (facet instanceof BundleRoleFacet) {
+					SubstanceEndpointsBundle bundle = ((BundleRoleFacet) facet)
+							.getValue();
+
+					if (bundle.getID() == 0) try {
+						CreateBundle cb = new CreateBundle();
+						cb.setObject(bundle);
+						x.process(cb);
+					} catch (Exception xx) {
+						xx.printStackTrace();
+					}
+				}
+	}
+
 	protected void importSubstanceRecord(SubstanceRecord substance)
 			throws Exception {
 		q.setObject(substance);
@@ -273,6 +294,8 @@ public class DBSubstanceWriter extends
 			} catch (Exception x) {
 				logger.log(Level.WARNING, x.getMessage());
 			}
+
+		importBundles(substance);
 	}
 
 	@Override
@@ -297,11 +320,10 @@ public class DBSubstanceWriter extends
 						logger.log(Level.WARNING, x.getMessage());
 					}
 				}
-
 			} else if (record instanceof IStructureRecord) {
 				if (i5mode) {
-					//creates if not there, adds links if already in
-					writer.create(record); 
+					// creates if not there, adds links if already in
+					writer.create(record);
 				} else if (STRUC_TYPE.NA.equals(((IStructureRecord) record)
 						.getType())) {
 					writer.create(record); // with the current settings, if the
