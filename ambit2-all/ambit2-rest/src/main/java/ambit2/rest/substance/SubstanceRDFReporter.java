@@ -127,6 +127,11 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 					substanceResource, DCTerms.type,
 					getOutput().createResource("http://purl.bioontology.org/ontology/npo#" + substanceType)
 				);
+			} else if (substanceType.startsWith("ENM_")) {
+				getOutput().add(
+					substanceResource, DCTerms.type,
+					getOutput().createResource("http://purl.enanomapper.org/onto/" + substanceType)
+				);
 			}
 		}
 
