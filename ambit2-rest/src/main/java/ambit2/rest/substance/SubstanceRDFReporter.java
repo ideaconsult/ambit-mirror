@@ -35,6 +35,7 @@ import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
+import com.hp.hpl.jena.vocabulary.XSD;
 
 public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		extends QueryRDFReporter<SubstanceRecord, Q> {
@@ -250,7 +251,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 				if (struct.getSmiles() != null) {
 					Resource smilesRes = getOutput().createResource(
 							compoundReporter.getURI(struct) + "_smiles");
-					Resource inchiType = getOutput()
+					Resource smilesType = getOutput()
 							.createResource(
 									"http://semanticscience.org/resource/CHEMINF_000018");
 					Property hasAttribute = getOutput()
@@ -259,7 +260,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 					Property hasValue = getOutput().createProperty(
 							"http://semanticscience.org/resource/SIO_000300");
 					getOutput().add(component, hasAttribute, smilesRes);
-					getOutput().add(smilesRes, RDF.type, inchiType);
+					getOutput().add(smilesRes, RDF.type, smilesType);
 					getOutput().add(smilesRes, hasValue, struct.getSmiles());
 				}
 
