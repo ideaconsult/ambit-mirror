@@ -42,7 +42,7 @@ public class CreateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 	
 	public static final String[] create_sql = {
 		"INSERT INTO catalog_references (idreference, title, url) VALUES (null,?,?) on duplicate key update url=values(url)",
-		"INSERT IGNORE INTO bundle (idbundle, name,user_name,idreference,licenseURI,rightsHolder,description,created,bundle_number) SELECT ?,?,?,idreference,?,?,?,now(),unhex(replace(?,'-','')) FROM catalog_references WHERE title=?"
+		"INSERT IGNORE INTO bundle (idbundle, name,user_name,idreference,licenseURI,rightsHolder,maintainer,description,created,bundle_number) SELECT ?,?,?,idreference,?,?,?,now(),unhex(replace(?,'-','')) FROM catalog_references WHERE title=?"
 	};
 
 	public CreateBundle(SubstanceEndpointsBundle dataset) {
@@ -72,6 +72,7 @@ public class CreateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 			params2.add(new QueryParam<String>(String.class, getObject().getUserName()));
 			params2.add(new QueryParam<String>(String.class, truncate(getObject().getLicenseURI(),128)));
 			params2.add(new QueryParam<String>(String.class, truncate(getObject().getrightsHolder(),128)));
+			params2.add(new QueryParam<String>(String.class, truncate(getObject().getMaintainer(),128)));
 			params2.add(new QueryParam<String>(String.class, getObject().getDescription()));
 			if (getObject().getBundle_number()==null) getObject().setBundle_number(UUID.randomUUID());
 			params2.add(new QueryParam<String>(String.class, getObject().getBundle_number().toString()));			

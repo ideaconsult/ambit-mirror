@@ -34,6 +34,7 @@ import ambit2.db.substance.study.DeleteStudy;
 import ambit2.db.substance.study.UpdateEffectRecords;
 import ambit2.db.substance.study.UpdateSubstanceStudy;
 import ambit2.db.update.bundle.CreateBundle;
+import ambit2.db.update.bundle.substance.AddSubstanceToBundle;
 
 /**
  * Writes IUCLID5 substances
@@ -66,8 +67,20 @@ public class DBSubstanceWriter extends
 	private UpdateExecutor x;
 	private DeleteStudy deleteStudy;
 	private DeleteSubstanceRelation deleteComposition;
+	/** bundles **/
+	private AddSubstanceToBundle qbundles;
 	private RepositoryWriter writer;
 	protected boolean clearMeasurements;
+	protected boolean importBundles = false;
+
+	public boolean isImportBundles() {
+		return importBundles;
+	}
+
+	public void setImportBundles(boolean importBundles) {
+		this.importBundles = importBundles;
+	}
+
 	protected PropertyKey componentsMatch = new ReferenceSubstanceUUID();
 
 	public boolean isClearMeasurements() {
@@ -225,12 +238,22 @@ public class DBSubstanceWriter extends
 					SubstanceEndpointsBundle bundle = ((BundleRoleFacet) facet)
 							.getValue();
 
-					if (bundle.getID() == 0) try {
-						CreateBundle cb = new CreateBundle();
-						cb.setObject(bundle);
-						x.process(cb);
+					if (bundle.getID() == 0)
+						try {
+							CreateBundle cb = new CreateBundle();
+							cb.setObject(bundle);
+							x.process(cb);
+						} catch (Exception xx) {
+							logger.log(Level.WARNING, xx.getMessage());
+						}
+					if (qbundles == null)
+						qbundles = new AddSubstanceToBundle();
+					qbundles.setGroup(bundle);
+					qbundles.setObject(substance);
+					try {
+						x.process(qbundles);
 					} catch (Exception xx) {
-						xx.printStackTrace();
+						logger.log(Level.WARNING, xx.getMessage());
 					}
 				}
 	}
@@ -251,11 +274,11 @@ public class DBSubstanceWriter extends
 				deleteComposition.setGroup(importedRecord);
 				x.process(deleteComposition);
 			} catch (Exception x) {
-				x.printStackTrace();
 				logger.log(Level.WARNING, x.getMessage());
 			}
 		if (substance.getRelatedStructures() != null) {
 			for (CompositionRelation rel : substance.getRelatedStructures()) {
+				// TODO !!!!!!!!!!!!!!
 				Object i5uuid = rel.getSecondStructure().getRecordProperty(
 						Property.getI5UUIDInstance());
 				/*
@@ -294,8 +317,8 @@ public class DBSubstanceWriter extends
 			} catch (Exception x) {
 				logger.log(Level.WARNING, x.getMessage());
 			}
-
-		importBundles(substance);
+		if (importBundles)
+			importBundles(substance);
 	}
 
 	@Override

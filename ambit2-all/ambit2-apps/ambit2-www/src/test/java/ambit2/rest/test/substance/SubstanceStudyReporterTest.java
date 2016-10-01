@@ -105,8 +105,8 @@ public class SubstanceStudyReporterTest extends ResourceTest {
 
 	public static void main(String[] args) {
 		Substance2BucketJsonReporter reporter = new Substance2BucketJsonReporter(
-				null, null,
-				Substance2BucketJsonReporter._JSON_MODE.substance, null);
+				null, null, Substance2BucketJsonReporter._JSON_MODE.substance,
+				null);
 		Reader in = null;
 
 		try {
@@ -166,7 +166,8 @@ public class SubstanceStudyReporterTest extends ResourceTest {
 					if (prevrecord == null
 							|| !id.equals(prevrecord.getSubstanceName())) {
 						substance = new SubstanceRecord();
-						substance.setSubstancetype("standardized");
+						substance.setContent(null);
+						//substance.setSubstancetype("standardized");
 						substance.setSubstanceUUID(I5Utils.getPrefixedUUID(
 								"PC", UUID.nameUUIDFromBytes(id.getBytes())));
 						substance.setSubstanceName(id);
@@ -196,24 +197,24 @@ public class SubstanceStudyReporterTest extends ResourceTest {
 						substance.getExternalids().add(eid);
 
 					String assayid = getAssayid(record);
-					Protocol p = new Protocol(String.format("%s:AID%s:%s",
-							externaldb, assayid, externalid));
-					p.setTopCategory("TOX");
-					p.setCategory(I5_ROOT_OBJECTS.UNKNOWN_TOXICITY.name());
-					p.addGuideline(String.format("%s:AID%s", externaldb,
-							assayid));
+					Protocol p = new Protocol(String.format("%s", externalid));
+
+					p.setTopCategory(null);
+					p.setCategory(null);
+					//p.addGuideline(String.format("%s_AID%s", externaldb,assayid));
 					ProtocolApplication<Protocol, IParams, String, IParams, String> papp = new ProtocolApplication<Protocol, IParams, String, IParams, String>(
 							p);
-					papp.setDocumentUUID(I5Utils.getPrefixedUUID("PC",
-							UUID.nameUUIDFromBytes(p.getEndpoint().getBytes())));
+					// papp.setDocumentUUID(I5Utils.getPrefixedUUID("PC",UUID.nameUUIDFromBytes(p.getEndpoint().getBytes())));
+					papp.setDocumentUUID(null);
 					papp.setInterpretationResult(getSummaryActivity(record));
+					papp.setReference(String.format("AID%s", assayid));
+					papp.setReferenceOwner(externaldb);
 					IParams params = new Params();
-					params.put("Target gene", getGeneSymbol(record));
-					params.put("Species", "TaxId:" + getSpecies(record));
-					params.put("OG_GENE", String.format("%s/%s", record.get(9),
-							record.get(8)));
-					params.put("OrthlogGroup", "OG" + getOrthologgroup(record));
-					params.put("Entrez_ID", "entrez:" + record.get(2));
+					params.put("gene", getGeneSymbol(record));
+					params.put("taxid", "TaxId:" + getSpecies(record));
+					//params.put("OG_GENE", String.format("OG%s_%s", record.get(9),	record.get(8)));
+					params.put("og", "OG" + getOrthologgroup(record));
+					params.put("ez", "entrez:" + record.get(2));
 
 					papp.setParameters(params);
 
@@ -227,7 +228,7 @@ public class SubstanceStudyReporterTest extends ResourceTest {
 						papp.addEffect(effect);
 
 					} catch (Exception x) {
-						//x.printStackTrace();
+						// x.printStackTrace();
 					}
 					substance.addMeasurement(papp);
 					return structureRecord;
@@ -241,11 +242,16 @@ public class SubstanceStudyReporterTest extends ResourceTest {
 				if (prevrecord != null && (prevrecord != record)) {
 					reporter.processItem((SubstanceRecord) prevrecord);
 					writer.flush();
-					n++;
 				}
+				n++;
 				prevrecord = record;
 				// System.out.println(((SubstanceRecord)record).toJSON(null));
-				//if (n > 1) 	break;
+				// if (n > 1) break;
+				
+				if ((n % 100000)==0) {
+					System.err.println();
+					System.err.print(n);
+				} else if ((n % 10000)==0) System.err.print(".");
 			}
 			reporter.processItem((SubstanceRecord) prevrecord);
 			reporter.footer(writer, null);

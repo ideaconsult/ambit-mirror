@@ -561,8 +561,10 @@ public class DBSubstanceImport {
 			String ext = inputFile.toString().toLowerCase();
 			if (ext.endsWith(".i5z"))
 				return importI5Z(matchByKey);
+			else if (ext.endsWith(".ttl") || ext.endsWith(".rdf"))
+				return importFile(false,false,true);			
 			else
-				return importFile(isSplitRecord(), ext.endsWith(".xlsx"));
+				return importFile(isSplitRecord(), ext.endsWith(".xlsx"),false);
 
 		}
 	}
@@ -590,7 +592,7 @@ public class DBSubstanceImport {
 
 			matchByKey = keytomatch == null ? new CASKey() : keytomatch;
 			return write(reader, c, matchByKey, true, clearMeasurements,
-					clearComposition, null, true);
+					clearComposition, null, true,false);
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -604,7 +606,7 @@ public class DBSubstanceImport {
 		}
 	}
 
-	protected int importFile(boolean splitRecord, boolean xlsx)
+	protected int importFile(boolean splitRecord, boolean xlsx, boolean importBundles)
 			throws Exception {
 		IRawReader<IStructureRecord> parser = null;
 		Connection c = null;
@@ -651,7 +653,7 @@ public class DBSubstanceImport {
 			c.setAutoCommit(true);
 
 			return write(parser, c, matchByKey, splitRecord, clearMeasurements,
-					clearComposition, validator, false);
+					clearComposition, validator, false,importBundles);
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -718,21 +720,22 @@ public class DBSubstanceImport {
 
 	public int write(IRawReader<IStructureRecord> reader,
 			Connection connection, PropertyKey key, boolean splitRecord,
-			StructureRecordValidator validator, boolean i5mode)
+			StructureRecordValidator validator, boolean i5mode, boolean importBundles)
 			throws Exception {
 		return write(reader, connection, key, splitRecord, true, true,
-				validator, i5mode);
+				validator, i5mode,importBundles);
 	}
 
 	public int write(IRawReader<IStructureRecord> reader,
 			Connection connection, IStructureKey key, boolean splitRecord,
 			boolean clearMeasurements, boolean clearComposition,
-			StructureRecordValidator validator, boolean i5mode)
+			StructureRecordValidator validator, boolean i5mode, boolean importBundles)
 			throws Exception {
 
 		DBSubstanceWriter writer = new DBSubstanceWriter(
 				DBSubstanceWriter.datasetMeta(), new SubstanceRecord(),
 				clearMeasurements, clearComposition, key);
+		writer.setImportBundles(importBundles);
 		writer.setI5mode(i5mode);
 		writer.setSplitRecord(splitRecord);
 		writer.setConnection(connection);

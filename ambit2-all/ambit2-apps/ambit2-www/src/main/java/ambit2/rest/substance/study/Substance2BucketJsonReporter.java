@@ -157,7 +157,7 @@ public class Substance2BucketJsonReporter extends
 					}
 					if (id.getSystemIdentifier().startsWith("http"))
 						bucket.put("content", id.getSystemIdentifier());
-					ids.add(externalids2Bucket(id));
+					//ids.add(externalids2Bucket(id));
 				}
 
 			if (record.getMeasurements() != null)
@@ -279,14 +279,14 @@ public class Substance2BucketJsonReporter extends
 						bucket.put("content", id.getSystemIdentifier());
 					ids.add(externalids2Bucket(id));
 				}
-			
+
 			List<Bucket> _childDocuments_ = new ArrayList<>();
 			bucket.put("_childDocuments_", _childDocuments_);
-			
+
 			if (ids != null)
 				for (Bucket id : ids)
 					_childDocuments_.add(id);
-			
+
 			if (record.getMeasurements() != null)
 				for (ProtocolApplication<Protocol, Object, String, Object, String> papp : record
 						.getMeasurements()) {
@@ -305,14 +305,19 @@ public class Substance2BucketJsonReporter extends
 							reference2Bucket(papp, study);
 							effectrecord2bucket(papp.getProtocol(), e, study);
 							condition2bucket(e, study);
-							study.put(
-									"id",
-									String.format("%s/%d",
-											papp.getDocumentUUID(),
-											e.getIdresult()));
+							if (papp.getDocumentUUID() != null)
+								study.put(
+										"id",
+										String.format("%s/%d",
+												papp.getDocumentUUID(),
+												e.getIdresult()));
 							_childDocuments_.add(study);
 						}
-					else _childDocuments_.add(study);
+					else {
+						protocol2Bucket(papp.getProtocol(), study);
+						reference2Bucket(papp, study);
+						_childDocuments_.add(study);
+					}
 				}
 		}
 		}
@@ -353,14 +358,15 @@ public class Substance2BucketJsonReporter extends
 	}
 
 	protected void substance2Bucket(SubstanceRecord record, Bucket bucket) {
-		if (record==null) return;
+		if (record == null)
+			return;
 		bucket.put("name", record.getSubstanceName());
 		bucket.put("publicname", record.getPublicName());
 		if (!"".equals(record.getOwnerName()))
 			bucket.put("owner_name", record.getOwnerName());
 		bucket.put("s_uuid", record.getSubstanceUUID());
 		bucket.put("substanceType", record.getSubstancetype());
-		bucket.put("type_s", "substance");
+		//bucket.put("type_s", "substance");
 		bucket.put("id", record.getSubstanceUUID());
 
 		bucket.put("content", record.getContent());
@@ -414,13 +420,15 @@ public class Substance2BucketJsonReporter extends
 		bucket.put("topcategory", protocol.getTopCategory());
 		bucket.put("endpointcategory", protocol.getCategory());
 
-		bucket.put(
-				"category",
-				String.format("%s/%s", protocol.getTopCategory(),
-						protocol.getCategory()));
+		if ((protocol.getTopCategory() != null)
+				&& (protocol.getCategory() != null))
+			bucket.put(
+					"category",
+					String.format("%s/%s", protocol.getTopCategory(),
+							protocol.getCategory()));
 
 		bucket.put("endpoint", protocol.getEndpoint().toUpperCase());
-		if (protocol.getGuideline().get(0) != null
+		if (protocol.getGuideline()!=null && protocol.getGuideline().get(0) != null
 				&& !"".equals(protocol.getGuideline().get(0)))
 			bucket.put("guidance", protocol.getGuideline().get(0).toUpperCase());
 	}
