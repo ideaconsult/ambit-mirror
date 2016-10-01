@@ -60,8 +60,7 @@ import ambit2.rest.task.TaskResult;
  * 
  * @param <USERID>
  */
-public class CallableSubstanceImporter<USERID> extends
-		CallableQueryProcessor<FileInputState, IStructureRecord, USERID>
+public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<FileInputState, IStructureRecord, USERID>
 		implements IQASettings {
 	protected SubstanceURIReporter substanceReporter;
 	protected DatasetURIReporter datasetURIReporter;
@@ -127,12 +126,9 @@ public class CallableSubstanceImporter<USERID> extends
 		this.fileDescription = description;
 	}
 
-	public CallableSubstanceImporter(List<FileItem> items,
-			String fileUploadField, String jsonConfigField,
-			Reference applicationRootReference, Context context,
-			SubstanceURIReporter substanceReporter,
-			DatasetURIReporter datasetURIReporter, USERID token, String referer)
-			throws Exception {
+	public CallableSubstanceImporter(List<FileItem> items, String fileUploadField, String jsonConfigField,
+			Reference applicationRootReference, Context context, SubstanceURIReporter substanceReporter,
+			DatasetURIReporter datasetURIReporter, USERID token, String referer) throws Exception {
 		super(applicationRootReference, null, context, token, referer);
 		this._fileUploadField = fileUploadField;
 		this._jsonConfigField = jsonConfigField;
@@ -145,10 +141,8 @@ public class CallableSubstanceImporter<USERID> extends
 
 	}
 
-	public CallableSubstanceImporter(File file,
-			Reference applicationRootReference, Context context,
-			SubstanceURIReporter substanceReporter,
-			DatasetURIReporter datasetURIReporter, USERID token, String referer)
+	public CallableSubstanceImporter(File file, Reference applicationRootReference, Context context,
+			SubstanceURIReporter substanceReporter, DatasetURIReporter datasetURIReporter, USERID token, String referer)
 			throws Exception {
 		super(applicationRootReference, null, context, token, referer);
 		try {
@@ -171,16 +165,14 @@ public class CallableSubstanceImporter<USERID> extends
 	}
 
 	protected void processForm(List<FileItem> items) throws Exception {
-		CallableFileUpload upload = new CallableFileUpload(items, new String[] {
-				_fileUploadField, _jsonConfigField }) {
+		CallableFileUpload upload = new CallableFileUpload(items, new String[] { _fileUploadField, _jsonConfigField }) {
 			@Override
 			public Reference createReference() {
 				return null;
 			}
 
 			@Override
-			protected void processFile(String fieldName, File file,
-					String description) throws Exception {
+			protected void processFile(String fieldName, File file, String description) throws Exception {
 				if (_fileUploadField.equals(fieldName))
 					setFile(file.getName(), file, description);
 				else if (_jsonConfigField.equals(fieldName))
@@ -188,8 +180,8 @@ public class CallableSubstanceImporter<USERID> extends
 			}
 
 			@Override
-			protected void processFile(String fieldName, String originalname,
-					File file, String description) throws Exception {
+			protected void processFile(String fieldName, String originalname, File file, String description)
+					throws Exception {
 				if (_fileUploadField.equals(fieldName))
 					setFile(originalname, file, description);
 				else if (_jsonConfigField.equals(fieldName))
@@ -197,8 +189,7 @@ public class CallableSubstanceImporter<USERID> extends
 			}
 
 			@Override
-			protected void processProperties(
-					Hashtable<String, String> properties) throws Exception {
+			protected void processProperties(Hashtable<String, String> properties) throws Exception {
 			}
 		};
 		upload.call();
@@ -212,72 +203,61 @@ public class CallableSubstanceImporter<USERID> extends
 	}
 
 	@Override
-	protected AbstractBatchProcessor createBatch(FileInputState target)
-			throws Exception {
+	protected AbstractBatchProcessor createBatch(FileInputState target) throws Exception {
 		if (target == null)
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		final BatchDBProcessor<String> batch = new BatchDBProcessor<String>() {
 			/**
-	     * 
-	     */
+			* 
+			*/
 			private static final long serialVersionUID = 5712170806359764006L;
 
 			@Override
-			public Iterator<String> getIterator(IInputState target)
-					throws AmbitException {
+			public Iterator<String> getIterator(IInputState target) throws AmbitException {
 				try {
 					IRawReader<IStructureRecord> reader = null;
 					File file = ((FileInputState) target).getFile();
 					String ext = file.getName().toLowerCase();
-					if (ext.endsWith(FileInputState._FILE_TYPE.I5Z_INDEX
-							.getExtension())) {
+
+					if (ext.endsWith(FileInputState._FILE_TYPE.I5Z_INDEX.getExtension())) {
 						if (writer instanceof DBSubstanceWriter)
 							if (writer instanceof DBSubstanceWriter) {
-								((DBSubstanceWriter) writer)
-										.setSplitRecord(true);
+								((DBSubstanceWriter) writer).setSplitRecord(true);
 								((DBSubstanceWriter) writer).setI5mode(true);
 							}
 						reader = new I5ZReader(file);
 						((I5ZReader) reader).setQASettings(getQASettings());
-					} else if (ext.endsWith(FileInputState._FILE_TYPE.CSV_INDEX
-							.getExtension())) {
+					} else if (ext.endsWith(FileInputState._FILE_TYPE.CSV_INDEX.getExtension())) {
 						if (writer instanceof DBSubstanceWriter)
 							((DBSubstanceWriter) writer).setSplitRecord(false);
-						LiteratureEntry reference = new LiteratureEntry(
-								originalname, originalname);
-						reader = new CSV12SubstanceReader(new CSV12Reader(
-								new FileReader(file), reference, "FCSV-"));
+						LiteratureEntry reference = new LiteratureEntry(originalname, originalname);
+						reader = new CSV12SubstanceReader(new CSV12Reader(new FileReader(file), reference, "FCSV-"));
 					} else if (ext.endsWith(".rdf")) {
 						if (writer instanceof DBSubstanceWriter)
 							((DBSubstanceWriter) writer).setSplitRecord(false);
-						reader = new NanoWikiRDFReader(new InputStreamReader(
-								new FileInputStream(file), "UTF-8"), null,
+						reader = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(file), "UTF-8"), null,
 								"RDF/XML");
+						if (writer instanceof DBSubstanceWriter)
+							((DBSubstanceWriter) writer).setImportBundles(true);
+
 					} else if (ext.endsWith(".ttl")) {
 						if (writer instanceof DBSubstanceWriter)
 							((DBSubstanceWriter) writer).setSplitRecord(false);
-						reader = new NanoWikiRDFReader(new InputStreamReader(
-								new FileInputStream(file), "UTF-8"), null,
+						reader = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(file), "UTF-8"), null,
 								"TTL");
-					} else if (FileInputState._FILE_TYPE.XLSX_INDEX
-							.hasExtension(ext)
-							|| FileInputState._FILE_TYPE.XLS_INDEX
-									.hasExtension(ext)) {
+
+					} else if (FileInputState._FILE_TYPE.XLSX_INDEX.hasExtension(ext)
+							|| FileInputState._FILE_TYPE.XLS_INDEX.hasExtension(ext)) {
 						if (configFile == null)
-							throw new AmbitException(
-									"XLSX/XLSX file import requires a JSON configuration file");
-						final StructureRecordValidator validator = new StructureRecordValidator(
-								file.getName(), true);
-						reader = new GenericExcelParser(new FileInputStream(
-								file), configFile,
-								FileInputState._FILE_TYPE.XLSX_INDEX
-										.hasExtension(ext)) {
+							throw new AmbitException("XLSX/XLSX file import requires a JSON configuration file");
+						final StructureRecordValidator validator = new StructureRecordValidator(file.getName(), true);
+						reader = new GenericExcelParser(new FileInputStream(file), configFile,
+								FileInputState._FILE_TYPE.XLSX_INDEX.hasExtension(ext)) {
 							public Object next() {
 								Object record = super.next();
 								try {
 									if (record instanceof IStructureRecord)
-										record = validator
-												.process((IStructureRecord) record);
+										record = validator.process((IStructureRecord) record);
 								} catch (Exception x) {
 
 								}
@@ -295,15 +275,11 @@ public class CallableSubstanceImporter<USERID> extends
 					} else if (ext.endsWith(".json")) {
 						if (writer instanceof DBSubstanceWriter)
 							((DBSubstanceWriter) writer).setSplitRecord(false);
-						reader = new SubstanceStudyParser(
-								new InputStreamReader(
-										new FileInputStream(file), "UTF-8")) {
-							protected EffectRecord createEffectRecord(
-									Protocol protocol) {
+						reader = new SubstanceStudyParser(new InputStreamReader(new FileInputStream(file), "UTF-8")) {
+							protected EffectRecord createEffectRecord(Protocol protocol) {
 								try {
 									I5_ROOT_OBJECTS category = I5_ROOT_OBJECTS
-											.valueOf(protocol.getCategory()
-													+ "_SECTION");
+											.valueOf(protocol.getCategory() + "_SECTION");
 									return category.createEffectRecord();
 								} catch (Exception x) {
 									return super.createEffectRecord(protocol);
@@ -311,10 +287,8 @@ public class CallableSubstanceImporter<USERID> extends
 							};
 						};
 						if (writer instanceof DBSubstanceWriter) {
-							((DBSubstanceWriter) writer)
-									.setClearComposition(false);
-							((DBSubstanceWriter) writer)
-									.setClearMeasurements(false);
+							((DBSubstanceWriter) writer).setClearComposition(false);
+							((DBSubstanceWriter) writer).setClearMeasurements(false);
 						}
 					} else {
 						throw new AmbitException("Unsupported format " + file);
@@ -322,18 +296,16 @@ public class CallableSubstanceImporter<USERID> extends
 
 					reader.setErrorHandler(new IChemObjectReaderErrorHandler() {
 						@Override
-						public void handleError(String message, int row,
-								int colStart, int colEnd, Exception exception) {
-						}
-
-						@Override
-						public void handleError(String message, int row,
-								int colStart, int colEnd) {
-						}
-
-						@Override
-						public void handleError(String message,
+						public void handleError(String message, int row, int colStart, int colEnd,
 								Exception exception) {
+						}
+
+						@Override
+						public void handleError(String message, int row, int colStart, int colEnd) {
+						}
+
+						@Override
+						public void handleError(String message, Exception exception) {
 						}
 
 						@Override
@@ -353,8 +325,7 @@ public class CallableSubstanceImporter<USERID> extends
 	}
 
 	@Override
-	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors()
-			throws Exception {
+	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors() throws Exception {
 		DBProcessorsChain chain = new DBProcessorsChain();
 		dataset = DBSubstanceWriter.datasetMeta();
 		importedRecord = new SubstanceRecord();
@@ -364,16 +335,13 @@ public class CallableSubstanceImporter<USERID> extends
 	}
 
 	protected AbstractDBProcessor<IStructureRecord, IStructureRecord> createWriter() {
-		return new DBSubstanceWriter(dataset, importedRecord,
-				clearMeasurements, clearComposition);
+		return new DBSubstanceWriter(dataset, importedRecord, clearMeasurements, clearComposition);
 	}
 
 	@Override
-	protected TaskResult createReference(Connection connection)
-			throws Exception {
+	protected TaskResult createReference(Connection connection) throws Exception {
 
-		if ((importedRecord.getIdsubstance() > 0)
-				|| (importedRecord.getSubstanceUUID() != null)) {
+		if ((importedRecord.getIdsubstance() > 0) || (importedRecord.getSubstanceUUID() != null)) {
 
 			try {
 				batch.close();
