@@ -148,12 +148,19 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		// plaseholder, change to property
 		String TMP_NS = "http://TMP.URI";
 
+		int componentNr = 0;
 		if (record.getRelatedStructures() != null)
 			for (CompositionRelation r : record.getRelatedStructures()) {
 				IStructureRecord struct = r.getSecondStructure();
 
 				Resource component = getOutput().createResource(
 						compoundReporter.getURI(struct));
+				if (struct.getIdstructure() == -1) {
+					component = getOutput().createResource(
+						substanceResource.getURI() + "-c" + componentNr
+					);
+					componentNr += 1;
+				}
 				switch (r.getRelationType()) {
 				case HAS_COATING: {
 					getOutput()
@@ -235,7 +242,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 					}
 				if (struct.getInchi() != null) {
 					Resource inchiRes = getOutput().createResource(
-							compoundReporter.getURI(struct) + "_inchi");
+							component.getURI() + "_inchi");
 					Resource inchiType = getOutput()
 							.createResource(
 									"http://semanticscience.org/resource/CHEMINF_000113");
@@ -250,7 +257,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 				}
 				if (struct.getSmiles() != null) {
 					Resource smilesRes = getOutput().createResource(
-							compoundReporter.getURI(struct) + "_smiles");
+							component.getURI() + "_smiles");
 					Resource smilesType = getOutput()
 							.createResource(
 									"http://semanticscience.org/resource/CHEMINF_000018");
