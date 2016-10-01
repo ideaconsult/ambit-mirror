@@ -118,25 +118,25 @@ public class Export2RDFTest {
 			// one substance
 			ResIterator substances = model.listSubjectsWithProperty(RDF.type,
 					RDFTermsSubstance.CHEBI_59999.getResource(model));
-			Assert.assertEquals(403, countResources(substances));
+			Assert.assertEquals(404, countResources(substances));
 			// asssay
 			ResIterator assays = model.listSubjectsWithProperty(RDF.type,
 					RDFTermsSubstance.BAO_0000015.getResource(model));
-			Assert.assertEquals(854, countResources(assays));
+			Assert.assertEquals(867, countResources(assays));
 			// measure groups
 			ResIterator measuregroups = model.listSubjectsWithProperty(
 					RDF.type, RDFTermsSubstance.BAO_0000040.getResource(model));
-			Assert.assertEquals(854, countResources(measuregroups));
+			Assert.assertEquals(867, countResources(measuregroups));
 			// protocols
 			ResIterator protocols = model.listSubjectsWithProperty(RDF.type,
 					RDFTermsSubstance.OBI_0000272.getResource(model));
-			Assert.assertEquals(64, countResources(protocols));
+			Assert.assertEquals(65, countResources(protocols));
 			// endpoint
 			ResIterator endpoints = model.listSubjectsWithProperty(RDF.type,
 					RDFTermsSubstance.BAO_0000179.getResource(model));
 			// thanks to the validator result ids are set and we have > 1 entry,
 			// otherwise all endpoints collapse into one
-			Assert.assertEquals(854, countResources(endpoints));
+			Assert.assertEquals(867, countResources(endpoints));
 
 			File output = new File(System.getProperty("java.io.tmpdir") + "/"
 					+ "nanowiki_export.ttl");
