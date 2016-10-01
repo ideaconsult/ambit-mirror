@@ -454,13 +454,26 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 						 * getOutput().add(endpoint, RDF.type, endpoint type as per BAO, e.g. AC50);
 						 * </pre>
 						 */
-						if (effect.getLoValue() != null)
+						if (effect.getLoValue() != null && effect.getUpValue() != null) {
+							Property statoProp = getOutput().createProperty(
+								"http://purl.obolibrary.org/obo/STATO_0000035"
+							);
+							getOutput().add(
+									endpoint,
+									statoProp,
+									getOutput().createTypedLiteral(
+											effect.getLoValue() + "-" +
+											effect.getUpValue()
+									)
+							);
+						} else if (effect.getLoValue() != null ) {
 							getOutput().add(
 									endpoint,
 									RDFTermsSubstance.has_value
 											.getProperty(getOutput()),
 									getOutput().createTypedLiteral(
 											effect.getLoValue()));
+						}
 
 						if (effect.getUnit() != null)
 							getOutput().add(
