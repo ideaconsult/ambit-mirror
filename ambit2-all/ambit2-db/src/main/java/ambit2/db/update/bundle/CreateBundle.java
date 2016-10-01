@@ -42,7 +42,7 @@ public class CreateBundle extends AbstractObjectUpdate<SubstanceEndpointsBundle>
 	
 	public static final String[] create_sql = {
 		"INSERT INTO catalog_references (idreference, title, url) VALUES (null,?,?) on duplicate key update url=values(url)",
-		"INSERT IGNORE INTO bundle (idbundle, name,user_name,idreference,licenseURI,rightsHolder,maintainer,description,created,bundle_number) SELECT ?,?,?,idreference,?,?,?,now(),unhex(replace(?,'-','')) FROM catalog_references WHERE title=?"
+		"INSERT IGNORE INTO bundle (idbundle, name,user_name,idreference,licenseURI,rightsHolder,maintainer,description,created,bundle_number) SELECT ?,?,?,idreference,?,?,?,?,now(),unhex(replace(?,'-','')) FROM catalog_references WHERE title=?"
 	};
 
 	public CreateBundle(SubstanceEndpointsBundle dataset) {
