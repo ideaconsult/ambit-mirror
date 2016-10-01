@@ -6,6 +6,8 @@ import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.QueryRDFReporter;
 
+import java.util.UUID;
+
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 
@@ -435,6 +437,13 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 							.getEffects()) {
 						String endpointURI = String.format("%s/endpoint/ID%d",
 								base, effect.getIdresult());
+						if (effect.getIdresult() == -1) {
+							endpointURI = String.format("%s/endpoint/ID%s",
+									base, UUID.nameUUIDFromBytes(
+											(substanceResource.getURI() + pa.getDocumentUUID() + effect.hashCode()).getBytes()
+									).toString()
+							);
+						}
 						Resource endpoint = getOutput().createResource(
 								endpointURI);
 						getOutput().add(
