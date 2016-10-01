@@ -559,12 +559,17 @@ public class DBSubstanceImport {
 			return allrecords;
 		} else {
 			String ext = inputFile.toString().toLowerCase();
+			String unzippedext = ext;
+			if (ext.endsWith(".gz")) {
+				int p = ext.length();
+				unzippedext = ext.substring(1,p-3);
+			}
 			if (ext.endsWith(".i5z"))
 				return importI5Z(matchByKey);
-			else if (ext.endsWith(".ttl") || ext.endsWith(".rdf"))
+			else if (unzippedext.endsWith(".ttl") || unzippedext.endsWith(".rdf"))
 				return importFile(false,false,true);			
 			else
-				return importFile(isSplitRecord(), ext.endsWith(".xlsx"),false);
+				return importFile(isSplitRecord(), unzippedext.endsWith(".xlsx"),false);
 
 		}
 	}
