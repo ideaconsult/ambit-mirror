@@ -3,10 +3,6 @@ package ambit2.db.substance.processor;
 import java.sql.Connection;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.exceptions.DbAmbitException;
-import net.idea.modbcum.i.facet.IFacet;
-import net.idea.modbcum.p.AbstractDBProcessor;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
@@ -34,7 +30,12 @@ import ambit2.db.substance.study.DeleteStudy;
 import ambit2.db.substance.study.UpdateEffectRecords;
 import ambit2.db.substance.study.UpdateSubstanceStudy;
 import ambit2.db.update.bundle.CreateBundle;
+import ambit2.db.update.bundle.chemicals.AddAllChemicalsperSubstanceToBundle;
 import ambit2.db.update.bundle.substance.AddSubstanceToBundle;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.i.facet.IFacet;
+import net.idea.modbcum.p.AbstractDBProcessor;
 
 /**
  * Writes IUCLID5 substances
@@ -42,8 +43,7 @@ import ambit2.db.update.bundle.substance.AddSubstanceToBundle;
  * @author nina
  * 
  */
-public class DBSubstanceWriter extends
-		AbstractDBProcessor<IStructureRecord, IStructureRecord> {
+public class DBSubstanceWriter extends AbstractDBProcessor<IStructureRecord, IStructureRecord> {
 	/**
 	 * 
 	 */
@@ -69,6 +69,7 @@ public class DBSubstanceWriter extends
 	private DeleteSubstanceRelation deleteComposition;
 	/** bundles **/
 	private AddSubstanceToBundle qbundles;
+	private AddAllChemicalsperSubstanceToBundle qchembundles;
 	private RepositoryWriter writer;
 	protected boolean clearMeasurements;
 	protected boolean importBundles = false;
@@ -125,15 +126,12 @@ public class DBSubstanceWriter extends
 		return writer.getDataset();
 	}
 
-	public DBSubstanceWriter(SourceDataset dataset,
-			SubstanceRecord importedRecord, boolean clearMeasurements,
+	public DBSubstanceWriter(SourceDataset dataset, SubstanceRecord importedRecord, boolean clearMeasurements,
 			boolean clearComposition) {
-		this(dataset, importedRecord, clearMeasurements, clearComposition,
-				new ReferenceSubstanceUUID());
+		this(dataset, importedRecord, clearMeasurements, clearComposition, new ReferenceSubstanceUUID());
 	}
 
-	public DBSubstanceWriter(SourceDataset dataset,
-			SubstanceRecord importedRecord, boolean clearMeasurements,
+	public DBSubstanceWriter(SourceDataset dataset, SubstanceRecord importedRecord, boolean clearMeasurements,
 			boolean clearComposition, IStructureKey matchByKey) {
 		super();
 		q = new CreateSubstance();
@@ -158,8 +156,7 @@ public class DBSubstanceWriter extends
 	public static SourceDataset datasetMeta() {
 		ILiteratureEntry reference = LiteratureEntry.getI5UUIDReference();
 		reference.setType(_type.Dataset);
-		SourceDataset dataset = new SourceDataset("IUCLID5 .i5z file",
-				reference);
+		SourceDataset dataset = new SourceDataset("IUCLID5 .i5z file", reference);
 		dataset.setLicenseURI(null);
 		dataset.setrightsHolder(null);
 		return dataset;
@@ -185,19 +182,16 @@ public class DBSubstanceWriter extends
 		super.close();
 	}
 
-	protected UpdateSubstanceStudy createSubstanceStudyUpdateQuery(
-			ProtocolApplication papp) throws Exception {
+	protected UpdateSubstanceStudy createSubstanceStudyUpdateQuery(ProtocolApplication papp) throws Exception {
 		return new UpdateSubstanceStudy(importedRecord.getSubstanceUUID(), papp);
 	}
 
-	protected UpdateEffectRecords createEffectRecordUpdateQuery(
-			ProtocolApplication papp, EffectRecord effect) throws Exception {
-		return new UpdateEffectRecords(importedRecord.getSubstanceUUID(), papp,
-				effect);
+	protected UpdateEffectRecords createEffectRecordUpdateQuery(ProtocolApplication papp, EffectRecord effect)
+			throws Exception {
+		return new UpdateEffectRecords(importedRecord.getSubstanceUUID(), papp, effect);
 	}
 
-	protected void importSubstanceMeasurements(SubstanceRecord substance)
-			throws Exception {
+	protected void importSubstanceMeasurements(SubstanceRecord substance) throws Exception {
 		if (substance.getMeasurements() == null)
 			return;
 		for (ProtocolApplication papp : substance.getMeasurements()) {
@@ -218,11 +212,9 @@ public class DBSubstanceWriter extends
 				for (Object effect : papp.getEffects())
 					if (effect instanceof EffectRecord) {
 						if (qeffr == null)
-							qeffr = createEffectRecordUpdateQuery(papp,
-									(EffectRecord) effect);
+							qeffr = createEffectRecordUpdateQuery(papp, (EffectRecord) effect);
 						else {
-							qeffr.setSubstanceUUID(importedRecord
-									.getSubstanceUUID());
+							qeffr.setSubstanceUUID(importedRecord.getSubstanceUUID());
 							qeffr.setGroup(papp);
 							qeffr.setObject((EffectRecord) effect);
 						}
@@ -235,11 +227,12 @@ public class DBSubstanceWriter extends
 		if (substance.getFacets() != null)
 			for (IFacet facet : substance.getFacets())
 				if (facet instanceof BundleRoleFacet) {
-					SubstanceEndpointsBundle bundle = ((BundleRoleFacet) facet)
-							.getValue();
+					SubstanceEndpointsBundle bundle = ((BundleRoleFacet) facet).getValue();
 
 					if (bundle.getID() == 0)
 						try {
+							// UpdateBundle
+							
 							CreateBundle cb = new CreateBundle();
 							cb.setObject(bundle);
 							x.process(cb);
@@ -255,15 +248,35 @@ public class DBSubstanceWriter extends
 					} catch (Exception xx) {
 						logger.log(Level.WARNING, xx.getMessage());
 					}
+					
+					if (qchembundles == null)
+						qchembundles = new AddAllChemicalsperSubstanceToBundle();
+					qchembundles.setGroup(bundle);
+					qchembundles.setObject(substance);
+					try {
+						x.process(qchembundles);
+					} catch (Exception xx) {
+						logger.log(Level.WARNING, xx.getMessage());
+					}
+					
+					
 				}
 	}
 
-	protected void importSubstanceRecord(SubstanceRecord substance)
-			throws Exception {
-		q.setObject(substance);
-		x.process(q);
-		qids.setObject(substance);
-		x.process(qids);
+	protected void importSubstanceRecord(SubstanceRecord substance) throws Exception {
+		try {
+			q.setObject(substance);
+			x.process(q);
+		} catch (Exception x) {
+			x.printStackTrace();
+			throw x;
+		}
+		try {
+			qids.setObject(substance);
+			x.process(qids);
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 		importedRecord.setSubstanceUUID(substance.getSubstanceUUID());
 		importedRecord.setIdsubstance(substance.getIdsubstance());
 
@@ -279,8 +292,7 @@ public class DBSubstanceWriter extends
 		if (substance.getRelatedStructures() != null) {
 			for (CompositionRelation rel : substance.getRelatedStructures()) {
 				// TODO !!!!!!!!!!!!!!
-				Object i5uuid = rel.getSecondStructure().getRecordProperty(
-						Property.getI5UUIDInstance());
+				Object i5uuid = rel.getSecondStructure().getRecordProperty(Property.getI5UUIDInstance());
 				/*
 				 * to work with I5 files we need to match components via
 				 * reference substance UUID (especially if these are empty) but
@@ -303,8 +315,7 @@ public class DBSubstanceWriter extends
 					}
 				}
 
-				rel.getSecondStructure().setRecordProperty(
-						Property.getI5UUIDInstance(), i5uuid);
+				rel.getSecondStructure().setRecordProperty(Property.getI5UUIDInstance(), i5uuid);
 				qr.setCompositionRelation(rel);
 				x.process(qr);
 			}
@@ -322,8 +333,7 @@ public class DBSubstanceWriter extends
 	}
 
 	@Override
-	public IStructureRecord process(IStructureRecord record)
-			throws AmbitException {
+	public IStructureRecord process(IStructureRecord record) throws AmbitException {
 		try {
 			if (record == null)
 				return record;
@@ -347,8 +357,7 @@ public class DBSubstanceWriter extends
 				if (i5mode) {
 					// creates if not there, adds links if already in
 					writer.create(record);
-				} else if (STRUC_TYPE.NA.equals(((IStructureRecord) record)
-						.getType())) {
+				} else if (STRUC_TYPE.NA.equals(((IStructureRecord) record).getType())) {
 					writer.create(record); // with the current settings, if the
 											// structure is already there, it
 											// will be used
