@@ -17,6 +17,7 @@ import net.idea.i5.io.IQASettings;
 import net.idea.i5.io.QASettings;
 import net.idea.loom.nm.csv.CSV12Reader;
 import net.idea.loom.nm.csv.CSV12SubstanceReader;
+import net.idea.loom.nm.nanowiki.ENanoMapperRDFReader;
 import net.idea.loom.nm.nanowiki.NanoWikiRDFReader;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
@@ -243,8 +244,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 					} else if (ext.endsWith(".ttl")) {
 						if (writer instanceof DBSubstanceWriter)
 							((DBSubstanceWriter) writer).setSplitRecord(false);
-						reader = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(file), "UTF-8"), null,
-								"TTL");
+						reader = new ENanoMapperRDFReader(new InputStreamReader(new FileInputStream(file), "UTF-8"), "ENM3");
 
 					} else if (FileInputState._FILE_TYPE.XLSX_INDEX.hasExtension(ext)
 							|| FileInputState._FILE_TYPE.XLS_INDEX.hasExtension(ext)) {
