@@ -79,24 +79,15 @@ public class ENanoMapperRDFTest extends DbUnitTest {
 			ITable table = c.createQueryTable("EXPECTED",
 					"SELECT count(*) as c FROM substance");
 			//
-			Assert.assertEquals(new BigInteger("403"), table.getValue(0, "c"));
+			Assert.assertEquals(new BigInteger("1"), table.getValue(0, "c"));
 
-			/*
-				nanowiki-3
-				- added P-CHEM/TOX props for the three materials from Penny (closes #22)
-				- added more ArrayExpress studies
-				- fixed the unit for materials from Berg2009
-				- added coatings for NM-103 and NM-104 
-
-				This release has 404 materials, 836 properties, 22 assays.
-				*/
 			table = c.createQueryTable("EXPECTED",
 					"SELECT count(*) as c FROM substance_protocolapplication");
-			Assert.assertEquals(new BigInteger("846"), table.getValue(0, "c"));			
+			Assert.assertEquals(new BigInteger("2"), table.getValue(0, "c"));			
 			
 			table = c.createQueryTable("EXPECTED",
 					"SELECT count(*) as c FROM substance_experiment");
-			Assert.assertEquals(new BigInteger("846"), table.getValue(0, "c"));		
+			Assert.assertEquals(new BigInteger("2"), table.getValue(0, "c"));		
 			
 		} finally {
 			c.close();
