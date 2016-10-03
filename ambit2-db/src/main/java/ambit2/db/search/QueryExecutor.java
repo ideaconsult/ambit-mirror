@@ -161,7 +161,7 @@ public class QueryExecutor<Q extends IQueryObject> extends
 		if ((target instanceof IQueryRetrieval)
 				&& !((IQueryRetrieval) target).supportsPaging()) {
 			page = 0;
-			psize = (psize * 100) > 10000 ? 10000 : (psize * 100);
+			psize = (psize * 100) > 100000 ? 100000 : (psize * 100);
 		}
 
 		return (target.getPageSize() > 0 ? String.format(paged_limit, sql,
