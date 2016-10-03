@@ -107,7 +107,7 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>
 		return b.toString();
 	}
 	public void setPageSize(long records) {
-		this.maxRecords = records>0?records:10000;
+		this.maxRecords = records>0?records:100000;
 		
 	}
 	public long getPageSize() {
