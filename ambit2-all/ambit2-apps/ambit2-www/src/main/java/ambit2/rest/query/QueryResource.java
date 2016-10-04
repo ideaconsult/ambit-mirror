@@ -16,24 +16,6 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.IDBProcessor;
-import net.idea.modbcum.i.IQueryObject;
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.exceptions.BatchProcessingException;
-import net.idea.modbcum.i.exceptions.NotFoundException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.reporter.Reporter;
-import net.idea.modbcum.q.update.AbstractUpdate;
-import net.idea.restnet.c.ChemicalMediaType;
-import net.idea.restnet.c.RepresentationConvertor;
-import net.idea.restnet.db.QueryURIReporter;
-import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
-import net.idea.restnet.i.task.ICallableTask;
-import net.idea.restnet.i.task.ITask;
-import net.idea.restnet.i.task.ITaskApplication;
-import net.idea.restnet.i.task.ITaskStorage;
-
 import org.opentox.aa.IOpenToxUser;
 import org.opentox.aa.OpenToxUser;
 import org.opentox.aa.opensso.OpenSSOPolicy;
@@ -70,15 +52,29 @@ import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.rest.task.TaskCreator;
 import ambit2.user.rest.resource.AMBITDBRoles;
 import ambit2.user.rest.resource.DBRoles;
+import net.idea.modbcum.i.IDBProcessor;
+import net.idea.modbcum.i.IQueryObject;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.BatchProcessingException;
+import net.idea.modbcum.i.exceptions.NotFoundException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.reporter.Reporter;
+import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskStorage;
 
 /**
- * Abstract parent class for all resources , which retrieves something from the
+ * Abstract parent class for all resources , which retrieve something from the
  * database
  * 
  * @author nina
- * 
- * @param <Q>
- * @param <T>
  */
 public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Serializable>
 		extends AbstractResource<Q, T, IProcessor<Q, Representation>> {
@@ -92,18 +88,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 	protected boolean dataset_prefixed_compound_uri = false;
 	public final static String query_resource = "/query";
 
-	/**
-	 * TODO http://markmail.org/search/?q=restlet+statusservice+variant#query:
-	 * restlet
-	 * %20statusservice%20variant+page:1+mid:2qrzgzbendopxg5t+state:results an
-	 * alternate design where you would leverage the new RepresentationInfo
-	 * class added to Restlet 2.0 by overriding the
-	 * "ServerResource#getInfo(Variant)" method. This would allow you to support
-	 * content negotiation and conditional processing without having to connect
-	 * to your database. Then, when the "get(Variant)" method calls you back,
-	 * you would connect to your database, throw any exception that occurs and
-	 * return a verified representation.
-	 */
+
 
 	protected int maxRetry = 3;
 	protected boolean headless = false;
@@ -132,14 +117,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 		return getResourceRef(getRequest()).getQueryAsForm();
 	}
 
-	/*
-	 * protected Connection getConnection() throws SQLException , AmbitException
-	 * { Connection connection =
-	 * ((AmbitApplication)getApplication()).getConnection(getRequest()); if
-	 * (connection.isClosed()) connection =
-	 * ((AmbitApplication)getApplication()).getConnection(getRequest()); return
-	 * connection; }
-	 */
+
 	protected Q returnQueryObject() {
 		return queryObject;
 	}
@@ -152,9 +130,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 		try {
 			Object jenaOption = getResourceRef(getRequest()).getQueryAsForm()
 					.getFirstValue("rdfwriter");
-			// if no option ?rdfwriter=jena|stax , then take from properties
-			// rdf.writer
-			// if not defined there, use jena
+
 			rdfwriter = RDF_WRITER.valueOf(jenaOption == null ? defaultWriter
 					: jenaOption.toString().toLowerCase());
 		} catch (Exception x) {
@@ -317,6 +293,10 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 	/**
 	 * POST - create entity based on parameters in http header, creates a new
 	 * entry in the databaseand returns an url to it
+	 * @param entity
+	 * @param entry
+	 * @param updateObject
+	 * @throws ResourceException
 	 */
 	public void executeUpdate(Representation entity, T entry,
 			AbstractUpdate updateObject) throws ResourceException {
@@ -381,6 +361,9 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 	 * POST - create entity based on parameters in the query, creates a new
 	 * entry in the databaseand returns an url to it TODO Refactor to allow
 	 * multiple objects
+
+	 * @param entity
+	 * @throws ResourceException
 	 */
 	public void createNewObject(Representation entity) throws ResourceException {
 		T entry = createObjectFromHeaders(null, entity);
@@ -388,17 +371,6 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 
 	}
 
-	/**
-	 * DELETE - create entity based on parameters in the query, creates a new
-	 * entry in the database and returns an url to it
-	 * 
-	 * public void deleteObject(Representation entity) throws ResourceException
-	 * { Form queryForm = getRequest().getResourceRef().getQueryAsForm(); T
-	 * entry = createObjectFromHeaders(queryForm, entity); executeUpdate(entity,
-	 * entry, createDeleteObject(entry));
-	 * 
-	 * }
-	 */
 
 	protected Representation delete(Variant variant) throws ResourceException {
 		Representation entity = getRequestEntity();
@@ -444,7 +416,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 
 	/**
 	 * Return this object if can't parse source_uri
-	 * 
+	 
 	 * @param uri
 	 * @return
 	 */
@@ -454,6 +426,10 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 
 	/**
 	 * either entity in RDF/XML or ?source_uri=URI
+	 * @param queryForm
+	 * @param entity
+	 * @return
+	 * @throws ResourceException
 	 */
 	protected T createObjectFromHeaders(Form queryForm, Representation entity)
 			throws ResourceException {

@@ -24,10 +24,10 @@ import org.w3c.dom.Document;
 /**
  * Converts resource to DOM representation
  * @author nina
+ * @author nina
  *
  * @param <T>
  * @param <Q>
- * @param <R>
  */
 public class DocumentConvertor<T,Q extends IQueryRetrieval<T>>  
 										extends AbstractObjectConvertor<T,Q,Document>  {

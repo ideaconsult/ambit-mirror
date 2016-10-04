@@ -1,23 +1,11 @@
 package ambit2.rest.aa.opensso.policy;
 
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.exceptions.NotFoundException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.reporter.Reporter;
-import net.idea.restnet.aa.opensso.policy.PolicyHTMLReporter;
-import net.idea.restnet.i.task.ICallableTask;
-import net.idea.restnet.i.task.ITask;
-import net.idea.restnet.i.task.ITaskApplication;
-import net.idea.restnet.i.task.ITaskResult;
-import net.idea.restnet.i.task.ITaskStorage;
 
 import org.opentox.aa.opensso.OpenSSOPolicy;
 import org.opentox.aa.opensso.OpenSSOToken;
@@ -29,7 +17,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.security.User;
@@ -40,14 +27,19 @@ import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.algorithm.CatalogResource;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.FactoryTaskConvertor;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.reporter.Reporter;
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskResult;
+import net.idea.restnet.i.task.ITaskStorage;
 
 /**
- * <pre>
- * /opentoxuser/userid/policy?uri=<uri-to-retrieve-policy-for>
- * </pre>
  * 
  * @author nina
- * 
+ *
  */
 public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 	public static final String resource = "policy";
