@@ -4,16 +4,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.q.conditions.StringCondition;
-import net.idea.modbcum.q.update.AbstractUpdate;
-import net.idea.restnet.c.ChemicalMediaType;
-import net.idea.restnet.c.RepresentationConvertor;
-import net.idea.restnet.db.QueryURIReporter;
-import net.idea.restnet.db.convertors.OutputWriterConvertor;
-import net.idea.restnet.rdf.ns.OT;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -24,6 +14,8 @@ import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
+
+import com.hp.hpl.jena.rdf.model.Resource;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -47,25 +39,18 @@ import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFPropertyIterator;
-
-import com.hp.hpl.jena.rdf.model.Resource;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.q.conditions.StringCondition;
+import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
+import net.idea.restnet.rdf.ns.OT;
 
 /**
- * Feature definition resource http://opentox.org/development/wiki/feature <br>
- * Supported REST operations:
- * <ul>
- * <li>GET /feature/{id} returns text/uri-list or RDF
- * <li>GET /feature?search=<name>&condition=like returns text/uri-list or RDF
- * <li>GET /feature?sameas=<uri-of-sameas-resource> returns text/uri-list or RDF
- * <li>POST /feature feature_uris[]=URI or RDF representation in the content
- * </ul>
- * 
- * <pre>
- * Create a new feature from RDF representation
- * curl -H "Content-type:application/rdf+xml" -X POST -d @feature.rdf http://service.net:8080/feature -v
- * </pre>
- * 
- * @author nina
+
  * 
  */
 public class PropertyResource extends

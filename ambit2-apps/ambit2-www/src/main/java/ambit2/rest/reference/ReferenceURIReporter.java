@@ -12,8 +12,6 @@ import ambit2.rest.OpenTox;
  * Generates URI for {@link ReferenceResource}
  * 
  * @author nina
- * 
- * @param <Q>
  */
 public class ReferenceURIReporter<Q extends IQueryRetrieval<ILiteratureEntry>>
 		extends QueryURIReporter<ILiteratureEntry, Q> {

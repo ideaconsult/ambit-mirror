@@ -25,7 +25,7 @@ import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.algorithm.CatalogResource;
 
 /**
- * OpenSSO & Policy server tested workflows  
+ * OpenSSO and Policy server tested workflows  
  * @author nina
  *
  */

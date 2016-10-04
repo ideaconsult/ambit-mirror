@@ -7,7 +7,7 @@ import ambit2.rest.task.TaskResource;
 
 /**
  * OpenTox tasks /task
- * @return
+ * 
  */
 public class TaskRouter extends MyRouter {
 	public TaskRouter(Context context) {
