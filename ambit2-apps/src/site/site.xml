@@ -79,7 +79,22 @@
 						<body />
 						<sidebar />
 					</sections>
-				</enanomapper>				
+				</enanomapper>		
+				<excape>
+					<bannerRight>
+						<name>ExCAPE</name>
+						<href></href>
+					</bannerRight>
+
+					<breadcrumbs>false</breadcrumbs>
+					<toc>false</toc>
+					<markPageHeader>false</markPageHeader>
+					<sections>
+						<carousel />
+						<body />
+						<sidebar />
+					</sections>
+				</excape>						
 				<home>
 					<shortTitle>AMBIT | Home</shortTitle>
 					<sections>

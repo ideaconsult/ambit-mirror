@@ -163,7 +163,7 @@ Acknowledgements
 
 >[**FP7 eNanoMapper**](http://enanomapper.net)
 
->[**H2020 ExCAPE**](http://cordis.europa.eu/project/rcn/197542_en.html)
+>[**H2020 ExCAPE**](http://excape-h2020.eu/)
 
 Related pages
 
