@@ -28,6 +28,7 @@
 	<div class='row' id='download_substance' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
 		<a href='${ambit_root}/substance/${substanceUUID}/study?media=application/json' id='json' target=_blank><img src='${ambit_root}/images/json64.png' alt='json' title='Download as JSON'></a>
 		<a href='${ambit_root}/substance/${substanceUUID}?media=application%2Fld%2Bjson' id='jsonld' target=_blank><img src='${ambit_root}/images/json-ld.png' alt='json' title='Download as JSON-LD'></a>
+		<a href='${ambit_root}/substance/${substanceUUID}?media=text/n3' id='jsonld' target=_blank><img src='${ambit_root}/images/rdf64.png' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a>
 		<a href='${ambit_root}/substance/${substanceUUID}?media=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet' id='xlsx' target=_blank><img src='${ambit_root}/images/xlsx.png' alt='XLSX' title='Download as XLSX'></a>
 	</div>
 	</#if>

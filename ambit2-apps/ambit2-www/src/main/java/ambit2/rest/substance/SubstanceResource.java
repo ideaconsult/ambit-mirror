@@ -6,23 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.idea.i5.io.IQASettings;
-import net.idea.i5.io.QASettings;
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.processors.ProcessorsChain;
-import net.idea.modbcum.q.update.AbstractUpdate;
-import net.idea.restnet.c.ChemicalMediaType;
-import net.idea.restnet.c.StringConvertor;
-import net.idea.restnet.db.QueryResource;
-import net.idea.restnet.db.QueryURIReporter;
-import net.idea.restnet.db.convertors.OutputWriterConvertor;
-import net.idea.restnet.i.task.ITask;
-import net.idea.restnet.i.task.ITaskApplication;
-import net.idea.restnet.i.task.ITaskStorage;
-import net.idea.restnet.rdf.ns.OT;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.restlet.Context;
@@ -37,6 +20,8 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
+
+import com.hp.hpl.jena.ontology.OntModel;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
@@ -67,13 +52,26 @@ import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RDFJenaConvertor;
-import ambit2.rest.RDFStaXConvertor;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.query.AmbitDBResource;
 import ambit2.rest.task.CallableFileUpload;
 import ambit2.rest.task.FactoryTaskConvertor;
-
-import com.hp.hpl.jena.ontology.OntModel;
+import net.idea.i5.io.IQASettings;
+import net.idea.i5.io.QASettings;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.c.StringConvertor;
+import net.idea.restnet.db.QueryResource;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskStorage;
+import net.idea.restnet.rdf.ns.OT;
 
 /**
  * Substances (in the sense of IUCLID5)
@@ -187,12 +185,9 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 					getRequest().getRootRef().toString(), true, bundles);
 			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
 					MediaType.APPLICATION_EXCEL, filenamePrefix);
-
-		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
-			return new RDFStaXConvertor(new SubstanceBundleStAXReporter(
-					getRequest()), filenamePrefix);
-		} else if (variant.getMediaType().equals(
-				MediaType.APPLICATION_RDF_TURTLE)
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) 
+		//	return new RDFStaXConvertor(new SubstanceBundleStAXReporter(getRequest()), filenamePrefix);
+				|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
 				|| variant.getMediaType().equals(
