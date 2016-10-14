@@ -135,8 +135,7 @@ public class AmbitCli {
 		if (dOption == null || "".equals(dOption)) {
 			InputStream in = null;
 			try {
-				in = AmbitCli.class.getClassLoader().getResourceAsStream(
-						loggingProperties);
+				in = AmbitCli.class.getClassLoader().getResourceAsStream(loggingProperties);
 				LogManager.getLogManager().readConfiguration(in);
 
 			} catch (Exception x) {
@@ -151,8 +150,7 @@ public class AmbitCli {
 		// now log4j for those who use it
 		InputStream in = null;
 		try {
-			in = AmbitCli.class.getClassLoader().getResourceAsStream(
-					log4jProperties);
+			in = AmbitCli.class.getClassLoader().getResourceAsStream(log4jProperties);
 			PropertyConfigurator.configure(in);
 
 		} catch (Exception x) {
@@ -174,8 +172,7 @@ public class AmbitCli {
 		try {
 			inchi_warmup(3);
 		} catch (Exception x) {
-			logger_cli.log(Level.SEVERE, "MSG_INCHI",
-					new Object[] { "ERROR", x.getMessage() });
+			logger_cli.log(Level.SEVERE, "MSG_INCHI", new Object[] { "ERROR", x.getMessage() });
 		}
 		long now = System.currentTimeMillis();
 		_commandmode cmd = null;
@@ -217,7 +214,7 @@ public class AmbitCli {
 			return parseCommandAE(subcommand, now);
 		}
 		case dbmigrate: {
-			parseDBMigrate(subcommand, now,true);
+			parseDBMigrate(subcommand, now, true);
 		}
 		default:
 			break;
@@ -233,63 +230,46 @@ public class AmbitCli {
 			CliOptions options = new CliOptions();
 			if (options.parse(args)) {
 				AmbitCli navigator = new AmbitCli(options);
-				logger_cli.log(
-						Level.INFO,
-						"MSG_INFO_RUNNING",
-						new Object[] {
-								options.getCommand().get("description"),
-								options.getConfigFile() == null ? "" : String
-										.format("-c \"%s\"",
-												options.getConfigFile()),
-								options.input == null ? "" : String.format(
-										"-i \"%s\"", options.input),
-								options.output == null ? "" : String.format(
-										"-o \"%s\"", options.output),
-								options.printParameters(options.getCommand()
-										.get("name").asText(),
-										options.getSubcommand()) });
+				logger_cli.log(Level.INFO, "MSG_INFO_RUNNING", new Object[] { options.getCommand().get("description"),
+						options.getConfigFile() == null ? "" : String.format("-c \"%s\"", options.getConfigFile()),
+						options.input == null ? "" : String.format("-i \"%s\"", options.input),
+						options.output == null ? "" : String.format("-o \"%s\"", options.output),
+						options.printParameters(options.getCommand().get("name").asText(), options.getSubcommand()) });
 				navigator.go(options.getCmd(), options.getSubcommand().name());
 			} else {
 				code = -1;
 			}
 		} catch (ConnectException x) {
-			logger_cli.log(Level.SEVERE, "MSG_CONNECTION_REFUSED",
-					new Object[] { x.getMessage() });
+			logger_cli.log(Level.SEVERE, "MSG_CONNECTION_REFUSED", new Object[] { x.getMessage() });
 			Runtime.getRuntime().runFinalization();
 			code = -1;
 		} catch (CommunicationsException x) {
-			logger_cli.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED",
-					new Object[] { x.getMessage() });
+			logger_cli.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED", new Object[] { x.getMessage() });
 			code = -1;
 		} catch (SQLException x) {
-			logger_cli.log(Level.SEVERE, "MSG_ERR_SQL",
-					new Object[] { x.getMessage() });
+			logger_cli.log(Level.SEVERE, "MSG_ERR_SQL", new Object[] { x.getMessage() });
 			code = -1;
 		} catch (InvalidCommand x) {
-			logger_cli.log(Level.SEVERE, "MSG_INVALIDCOMMAND",
-					new Object[] { x.getMessage() });
+			logger_cli.log(Level.SEVERE, "MSG_INVALIDCOMMAND", new Object[] { x.getMessage() });
 			code = -1;
 		} catch (FileNotFoundException x) {
-			logger_cli.log(Level.SEVERE, "MSG_INVALIDFILE",
-					new Object[] { x.getMessage() });
+			logger_cli.log(Level.SEVERE, "MSG_INVALIDFILE", new Object[] { x.getMessage() });
 			code = -1;
 		} catch (Exception x) {
-			//x.printStackTrace();
-			logger_cli.log(Level.SEVERE, "MSG_ERR",
-					new Object[] { x.getMessage() });
+			// x.printStackTrace();
+			logger_cli.log(Level.SEVERE, "MSG_ERR", new Object[] { x.getMessage() });
 			code = -1;
 		} finally {
 			if (code >= 0)
-				logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED",
-						(System.currentTimeMillis() - now));
+				logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED", (System.currentTimeMillis() - now));
 		}
 
 		Runtime.getRuntime().runFinalization();
 		Runtime.getRuntime().exit(code);
 	}
 
-	protected RepositoryWriter initWriter(RepositoryWriter writer,
-			PropertyKey key, SourceDataset dataset) throws Exception {
+	protected RepositoryWriter initWriter(RepositoryWriter writer, PropertyKey key, SourceDataset dataset)
+			throws Exception {
 
 		try {
 			if (writer != null) {
@@ -319,8 +299,8 @@ public class AmbitCli {
 		return writer;
 	}
 
-	public long write(IRawReader<IStructureRecord> reader, PropertyKey key,
-			SourceDataset dataset, int maxrecords) throws Exception {
+	public long write(IRawReader<IStructureRecord> reader, PropertyKey key, SourceDataset dataset, int maxrecords)
+			throws Exception {
 
 		RepositoryWriter writer = null;
 		long records = 0;
@@ -362,9 +342,8 @@ public class AmbitCli {
 
 				if ((records % 1000) == 0) {
 					now = System.currentTimeMillis();
-					logger_cli.info(String.format(
-							"Records read %d ; %f msec per record\t", records,
-							((now - start) / 1000.0)));
+					logger_cli.info(
+							String.format("Records read %d ; %f msec per record\t", records, ((now - start) / 1000.0)));
 					start = now;
 				}
 				if (maxrecords <= 0 || (records <= maxrecords)) {
@@ -388,18 +367,15 @@ public class AmbitCli {
 		return records;
 	}
 
-	protected DBConnectionConfigurable<Context> getConnection(String configFile)
-			throws SQLException, AmbitException {
+	protected DBConnectionConfigurable<Context> getConnection(String configFile) throws SQLException, AmbitException {
 		try {
 			Context context = initContext();
 			String driver = context.get(Preferences.DRIVERNAME);
 
 			if ((driver != null) && (driver.contains("mysql"))) {
-				MySQLSingleConnection<Context> mc = new MySQLSingleConnection<Context>(
-						context, configFile) {
+				MySQLSingleConnection<Context> mc = new MySQLSingleConnection<Context>(context, configFile) {
 					@Override
-					protected void configurefromContext(LoginInfo li,
-							Context context) {
+					protected void configurefromContext(LoginInfo li, Context context) {
 
 						if (context.get(Preferences.DATABASE) != null)
 							li.setDatabase(context.get(Preferences.DATABASE));
@@ -412,8 +388,7 @@ public class AmbitCli {
 						if (context.get(Preferences.PORT) != null)
 							li.setPort(context.get(Preferences.PORT));
 						if (context.get(Preferences.DRIVERNAME) != null)
-							li.setDriverClassName(context
-									.get(Preferences.DRIVERNAME));
+							li.setDriverClassName(context.get(Preferences.DRIVERNAME));
 					}
 
 					@Override
@@ -432,8 +407,7 @@ public class AmbitCli {
 	}
 
 	protected synchronized Context initContext() throws Exception {
-		if ((options.getConfigFile() == null)
-				&& (options.getSQLConfig() == null))
+		if ((options.getConfigFile() == null) && (options.getSQLConfig() == null))
 			return new Context();
 
 		InputStream in = null;
@@ -442,23 +416,16 @@ public class AmbitCli {
 			if (options.getConfigFile() != null)
 				in = new FileInputStream(options.getConfigFile());
 			else
-				in = getClass().getClassLoader().getResourceAsStream(
-						options.getSQLConfig());
+				in = getClass().getClassLoader().getResourceAsStream(options.getSQLConfig());
 			properties.load(in);
 			Context context = new Context();
-			context.put(Preferences.DATABASE,
-					properties.get(Preferences.DATABASE).toString());
-			context.put(Preferences.USER, properties.get(Preferences.USER)
-					.toString());
-			context.put(Preferences.PASSWORD,
-					properties.get(Preferences.PASSWORD).toString());
-			context.put(Preferences.HOST, properties.get(Preferences.HOST)
-					.toString());
+			context.put(Preferences.DATABASE, properties.get(Preferences.DATABASE).toString());
+			context.put(Preferences.USER, properties.get(Preferences.USER).toString());
+			context.put(Preferences.PASSWORD, properties.get(Preferences.PASSWORD).toString());
+			context.put(Preferences.HOST, properties.get(Preferences.HOST).toString());
 
-			context.put(Preferences.PORT, properties.get(Preferences.PORT)
-					.toString());
-			context.put(Preferences.DRIVERNAME,
-					properties.get(Preferences.DRIVERNAME).toString());
+			context.put(Preferences.PORT, properties.get(Preferences.PORT).toString());
+			context.put(Preferences.DRIVERNAME, properties.get(Preferences.DRIVERNAME).toString());
 			return context;
 
 		} catch (IOException x) {
@@ -481,8 +448,7 @@ public class AmbitCli {
 			t.executeBatch();
 			logger_cli.log(Level.FINE, "MSG_FINE_INDEXDISABLED");
 		} catch (SQLException x) {
-			logger_cli.log(Level.WARNING, "MSG_ERR_INDEX", new Object[] {
-					"disabling", x.getMessage() });
+			logger_cli.log(Level.WARNING, "MSG_ERR_INDEX", new Object[] { "disabling", x.getMessage() });
 
 			throw x;
 		} finally {
@@ -504,8 +470,7 @@ public class AmbitCli {
 			connection.commit();
 			logger_cli.log(Level.FINE, "MSG_FINE_INDEXENABLED");
 		} catch (SQLException x) {
-			logger_cli.log(Level.WARNING, "MSG_ERR_INDEX", new Object[] {
-					"enabling", x.getMessage() });
+			logger_cli.log(Level.WARNING, "MSG_ERR_INDEX", new Object[] { "enabling", x.getMessage() });
 			throw x;
 		} finally {
 			try {
@@ -529,24 +494,21 @@ public class AmbitCli {
 		} catch (Exception x) {
 			throw x;
 		} finally {
-			logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED",
-					(System.currentTimeMillis() - now));
+			logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED", (System.currentTimeMillis() - now));
 			try {
 				if (reader != null)
 					reader.close();
 			} catch (Exception x) {
 			}
 			if (options.output != null) {
-				logger_cli.log(Level.INFO, "MSG_INFO_RESULTSWRITTEN",
-						options.output);
+				logger_cli.log(Level.INFO, "MSG_INFO_RESULTSWRITTEN", options.output);
 			}
 		}
 	}
 
 	protected long parseCommandAE(String subcommand, long now) throws Exception {
 
-		AtomEnvironmentGeneratorApp test = new AtomEnvironmentGeneratorApp(
-				logger_cli);
+		AtomEnvironmentGeneratorApp test = new AtomEnvironmentGeneratorApp(logger_cli);
 		String file = options.input;
 		String outdir = options.output;
 
@@ -646,17 +608,15 @@ public class AmbitCli {
 				throw new Exception("Output folder not specified.");
 			if (file == null)
 				throw new Exception("SDF file not specified.");
-			return test.runAtomTypeMatrixDescriptor(outdir, new File(file),
-					id_tag, activityTag, mergeResultsFile, !generate_csv,
-					!generate_mm, !generate_json, normalize, laplace_smoothing,
-					cost_sensitive, levels_as_namespace);
+			return test.runAtomTypeMatrixDescriptor(outdir, new File(file), id_tag, activityTag, mergeResultsFile,
+					!generate_csv, !generate_mm, !generate_json, normalize, laplace_smoothing, cost_sensitive,
+					levels_as_namespace);
 		} catch (Exception x) {
 			throw x;
 		}
 	}
 
-	protected long parseCommandSplit(String subcommand, long now)
-			throws Exception {
+	protected long parseCommandSplit(String subcommand, long now) throws Exception {
 		RawIteratingSDFReader reader = null;
 		Writer writer = null;
 		long chunksize = 10000;
@@ -675,19 +635,14 @@ public class AmbitCli {
 		try {
 			File file = new File(options.input);
 			File outdir = new File(options.output);
-			logger_cli.log(
-					Level.INFO,
-					"MSG_INFO_COMMAND_SPLIT",
-					new Object[] { file.getAbsoluteFile(), chunksize,
-							outdir.getAbsolutePath() });
+			logger_cli.log(Level.INFO, "MSG_INFO_COMMAND_SPLIT",
+					new Object[] { file.getAbsoluteFile(), chunksize, outdir.getAbsolutePath() });
 
 			if (outdir.exists() && outdir.isDirectory()) {
 				reader = new RawIteratingSDFReader(new FileReader(file));
-				File outfile = new File(outdir, String.format("%d_%s", chunk,
-						file.getName()));
+				File outfile = new File(outdir, String.format("%d_%s", chunk, file.getName()));
 				chunk_started = System.currentTimeMillis();
-				logger_cli.log(Level.INFO, "MSG_INFO_COMMAND_CHUNK",
-						new Object[] { chunk, outfile.getAbsolutePath() });
+				logger_cli.log(Level.INFO, "MSG_INFO_COMMAND_CHUNK", new Object[] { chunk, outfile.getAbsolutePath() });
 				writer = new FileWriter(outfile);
 				int records = 0;
 				while (reader.hasNext()) {
@@ -697,24 +652,16 @@ public class AmbitCli {
 								writer.close();
 						} catch (Exception x) {
 						}
-						logger_cli
-								.log(Level.INFO,
-										"MSG_INFO_COMMAND_CHUNKWRITTEN",
-										new Object[] {
-												chunk,
-												(System.currentTimeMillis() - chunk_started) });
+						logger_cli.log(Level.INFO, "MSG_INFO_COMMAND_CHUNKWRITTEN",
+								new Object[] { chunk, (System.currentTimeMillis() - chunk_started) });
 						chunk++;
-						outfile = new File(outdir, String.format("%d_%s",
-								chunk, file.getName()));
+						outfile = new File(outdir, String.format("%d_%s", chunk, file.getName()));
 						writer = new FileWriter(outfile);
 						records = 0;
 						chunk_started = System.currentTimeMillis();
 
-						logger_cli
-								.log(Level.INFO,
-										"MSG_INFO_COMMAND_CHUNK",
-										new Object[] { chunk,
-												outfile.getAbsolutePath() });
+						logger_cli.log(Level.INFO, "MSG_INFO_COMMAND_CHUNK",
+								new Object[] { chunk, outfile.getAbsolutePath() });
 					}
 					IStructureRecord record = reader.nextRecord();
 					writer.write(record.getContent());
@@ -726,14 +673,11 @@ public class AmbitCli {
 				}
 				return chunk;
 			} else
-				throw new Exception(String.format(
-						"ERROR: %s is not an existing directory.",
-						options.output));
+				throw new Exception(String.format("ERROR: %s is not an existing directory.", options.output));
 		} catch (Exception x) {
 			throw x;
 		} finally {
-			logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED",
-					(System.currentTimeMillis() - now));
+			logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED", (System.currentTimeMillis() - now));
 			try {
 				if (reader != null)
 					reader.close();
@@ -743,13 +687,11 @@ public class AmbitCli {
 				if (writer != null)
 					writer.close();
 				logger_cli.log(Level.INFO, "MSG_INFO_COMMAND_CHUNKWRITTEN",
-						new Object[] { chunk,
-								(System.currentTimeMillis() - chunk_started) });
+						new Object[] { chunk, (System.currentTimeMillis() - chunk_started) });
 			} catch (Exception x) {
 			}
 			if (options.output != null) {
-				logger_cli.log(Level.INFO, "MSG_INFO_RESULTSWRITTEN",
-						options.output);
+				logger_cli.log(Level.INFO, "MSG_INFO_RESULTSWRITTEN", options.output);
 			}
 		}
 	}
@@ -770,6 +712,14 @@ public class AmbitCli {
 			logger_cli.log(Level.WARNING, x.toString());
 			return -1;
 		}
+	}
+
+	protected String parseDelimiterParam() {
+		return parseStringParam(":delimiter", ",");
+	}
+
+	protected boolean parseSparseParam() {
+		return parseBooleanParam(":sparse", true);
 	}
 
 	protected double parseThresholdParam() {
@@ -811,8 +761,7 @@ public class AmbitCli {
 
 	protected boolean parseWriteCountParam() {
 		try {
-			return Boolean.parseBoolean(options.getParam(":write_count")
-					.toString());
+			return Boolean.parseBoolean(options.getParam(":write_count").toString());
 		} catch (Exception x) {
 			return false;
 		}
@@ -820,8 +769,7 @@ public class AmbitCli {
 
 	protected boolean parseWriteRawParam() {
 		try {
-			return Boolean.parseBoolean(options.getParam(":write_raw")
-					.toString());
+			return Boolean.parseBoolean(options.getParam(":write_raw").toString());
 		} catch (Exception x) {
 			return false;
 		}
@@ -829,32 +777,30 @@ public class AmbitCli {
 
 	protected File getInputFile() throws Exception {
 		if (options.input == null)
-			throw new FileNotFoundException(
-					"Input file not specified! Please use -i {file}");
+			throw new FileNotFoundException("Input file not specified! Please use -i {file}");
 		return new File(options.input);
 	}
 
-	public void parseCommandSimilarityMatrix(String subcommand, long now)
-			throws Exception {
+	public void parseCommandSimilarityMatrix(String subcommand, long now) throws Exception {
 		final File file = getInputFile();
 		int page = parsePageParam();
 		int pagesize = parsePageSizeParam();
 		double threshold = parseThresholdParam();
+		boolean sparse = parseSparseParam();
+		String delimiter = parseDelimiterParam();
 		SimilarityMatrix matrix = new SimilarityMatrix();
+		matrix.setDelimiter(delimiter);
 		matrix.setLogger(logger_cli);
-		matrix.createMatrix(file.getAbsolutePath(), false, threshold, page,
-				pagesize);
+		matrix.createMatrix(file.getAbsolutePath(), !sparse, threshold, page, pagesize);
 	}
 
-	public void parseCommandFingerprints(String subcommand, long now)
-			throws Exception {
+	public void parseCommandFingerprints(String subcommand, long now) throws Exception {
 		boolean multifile = true;
 		int page = parsePageParam();
 		int pagesize = parsePageSizeParam();
 		final boolean fp_count = parseWriteCountParam();
 		final boolean fp_raw = parseWriteRawParam();
-		String smiles_header = parseInputTag_Param("smiles",
-				IteratingDelimitedFileReader.defaultSMILESHeader);
+		String smiles_header = parseInputTag_Param("smiles", IteratingDelimitedFileReader.defaultSMILESHeader);
 		String inchi_header = parseInputTag_Param("inchi", "InChI");
 		String inchikey_header = parseInputTag_Param("inchikey", "InChIKey");
 
@@ -862,12 +808,10 @@ public class AmbitCli {
 
 		final String[] tags_to_keep = parsetags_to_keep();
 
-		final String sdf_title = tmpTag == null ? null : tmpTag.toString()
-				.toLowerCase();
+		final String sdf_title = tmpTag == null ? null : tmpTag.toString().toLowerCase();
 
 		final int startRecord = pagesize > 0 ? (page * pagesize + 1) : 1;
-		final int maxRecord = pagesize > 0 ? ((page + 1) * pagesize + 1)
-				: pagesize;
+		final int maxRecord = pagesize > 0 ? ((page + 1) * pagesize + 1) : pagesize;
 
 		final File file = getInputFile();
 		FileInputState input = new FileInputState(file);
@@ -876,12 +820,11 @@ public class AmbitCli {
 		input.setOptionalInChIKeyHeader(inchikey_header);
 
 		if (options.output == null)
-			throw new FileNotFoundException(
-					"Output file not specified. Please use -o {file}");
+			throw new FileNotFoundException("Output file not specified. Please use -o {file}");
 		final File outfile = new File(options.output);
 
-		logger_cli.log(Level.INFO, "MSG_INFO_READINGWRITING", new Object[] {
-				file.getAbsoluteFile(), outfile.getAbsolutePath() });
+		logger_cli.log(Level.INFO, "MSG_INFO_READINGWRITING",
+				new Object[] { file.getAbsoluteFile(), outfile.getAbsolutePath() });
 
 		final List<IFingerprinter> fps = parseFingerprinterParams();
 
@@ -930,41 +873,33 @@ public class AmbitCli {
 		final BatchDBProcessor<IStructureRecord> batch = new BatchDBProcessor<IStructureRecord>() {
 
 			@Override
-			public void onItemRead(IStructureRecord input,
-					IBatchStatistics stats) {
+			public void onItemRead(IStructureRecord input, IBatchStatistics stats) {
 				super.onItemRead(input, stats);
-				if ((maxRecord > 0)
-						&& stats.getRecords(RECORDS_STATS.RECORDS_READ) >= (maxRecord))
+				if ((maxRecord > 0) && stats.getRecords(RECORDS_STATS.RECORDS_READ) >= (maxRecord))
 					cancel();
 			};
 
 			@Override
 			public boolean skip(IStructureRecord input, IBatchStatistics stats) {
 				return (stats.getRecords(RECORDS_STATS.RECORDS_READ) < startRecord)
-						|| ((maxRecord > 0) && (stats
-								.getRecords(RECORDS_STATS.RECORDS_READ) >= maxRecord));
+						|| ((maxRecord > 0) && (stats.getRecords(RECORDS_STATS.RECORDS_READ) >= maxRecord));
 			}
 
 			@Override
-			public void onItemSkipped(IStructureRecord input,
-					IBatchStatistics stats) {
+			public void onItemSkipped(IStructureRecord input, IBatchStatistics stats) {
 				super.onItemSkipped(input, stats);
 				if (stats.isTimeToPrint(getSilentInterval() * 2))
-					propertyChangeSupport.firePropertyChange(
-							PROPERTY_BATCHSTATS, null, stats);
+					propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS, null, stats);
 			}
 
 			@Override
-			public void onItemProcessing(IStructureRecord input, Object output,
-					IBatchStatistics stats) {
+			public void onItemProcessing(IStructureRecord input, Object output, IBatchStatistics stats) {
 			}
 
 			@Override
-			public void onError(IStructureRecord input, Object output,
-					IBatchStatistics stats, Exception x) {
+			public void onError(IStructureRecord input, Object output, IBatchStatistics stats, Exception x) {
 				super.onError(input, output, stats, x);
-				logger_cli.log(Level.SEVERE, "MSG_ERR",
-						new Object[] { x.getMessage() });
+				logger_cli.log(Level.SEVERE, "MSG_ERR", new Object[] { x.getMessage() });
 			}
 
 			@Override
@@ -986,175 +921,142 @@ public class AmbitCli {
 		};
 
 		batch.setProcessorChain(new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>());
-		batch.getProcessorChain()
-				.add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
+		batch.getProcessorChain().add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
 
-					protected MoleculeReader molReader = new MoleculeReader(
-							true, false);
+			protected MoleculeReader molReader = new MoleculeReader(true, false);
 
-					@Override
-					public IStructureRecord process(IStructureRecord record)
-							throws Exception {
+			@Override
+			public IStructureRecord process(IStructureRecord record) throws Exception {
 
-						IAtomContainer mol;
-						IAtomContainer processed = null;
+				IAtomContainer mol;
+				IAtomContainer processed = null;
 
-						try {
-							mol = molReader.process(record);
+				try {
+					mol = molReader.process(record);
 
-							if (mol != null) {
-								for (Property p : record.getRecordProperties()) {
-									Object v = record.getRecordProperty(p);
+					if (mol != null) {
+						for (Property p : record.getRecordProperties()) {
+							Object v = record.getRecordProperty(p);
 
-									String pname = p.getName().replace(
-											"http://www.opentox.org/api/1.1#",
-											"");
+							String pname = p.getName().replace("http://www.opentox.org/api/1.1#", "");
 
-									// initially to get rid of smiles, inchi ,
-									// etc, these are
-									// already parsed
-									if (tags_to_keep != null
-											&& Arrays.binarySearch(
-													tags_to_keep, pname) < 0)
-										continue;
-									else
-										mol.setProperty(p, v);
+							// initially to get rid of smiles, inchi ,
+							// etc, these are
+							// already parsed
+							if (tags_to_keep != null && Arrays.binarySearch(tags_to_keep, pname) < 0)
+								continue;
+							else
+								mol.setProperty(p, v);
+						}
+						if (tags_to_keep != null) {
+							List<String> toRemove = null;
+							Iterator pi = mol.getProperties().keySet().iterator();
+							while (pi.hasNext()) {
+								Object p = pi.next();
+								if (Arrays.binarySearch(tags_to_keep, p.toString()) < 0) {
+									if (toRemove == null)
+										toRemove = new ArrayList<String>();
+									toRemove.add(p.toString());
 								}
-								if (tags_to_keep != null) {
-									List<String> toRemove = null;
-									Iterator pi = mol.getProperties().keySet()
-											.iterator();
-									while (pi.hasNext()) {
-										Object p = pi.next();
-										if (Arrays.binarySearch(tags_to_keep,
-												p.toString()) < 0) {
-											if (toRemove == null)
-												toRemove = new ArrayList<String>();
-											toRemove.add(p.toString());
-										}
 
-									}
-									if (toRemove != null)
-										for (String propertyToRemove : toRemove)
-											mol.removeProperty(propertyToRemove);
-
-								}
-							} else {
-								logger_cli.log(Level.SEVERE,
-										"MSG_FINGEPRINTGEN", new Object[] {
-												"Empty molecule",
-												getIds(record) });
-								return record;
 							}
-
-							AtomContainerManipulator
-									.percieveAtomTypesAndConfigureAtoms(mol);
-
-						} catch (Exception x) {
-
-							logger_cli
-									.log(Level.SEVERE,
-											"MSG_ERR_MOLREAD",
-											new Object[] { getIds(record),
-													x.toString() });
-							return record;
-						} finally {
+							if (toRemove != null)
+								for (String propertyToRemove : toRemove)
+									mol.removeProperty(propertyToRemove);
 
 						}
-						processed = mol;
-
-						for (IFingerprinter fp : fps) {
-							ICountFingerprint cfp = null;
-							try {
-								cfp = fp.getCountFingerprint(processed);
-							} catch (Exception x) {
-								logger.log(Level.FINER, x.getMessage());
-							}
-							IBitFingerprint bfp = null;
-							try {
-								bfp = fp.getBitFingerprint(processed);
-							} catch (Exception x) {
-							}
-							Map<String, Integer> fpraw = null;
-							try {
-								if (fp_raw)
-									fpraw = fp.getRawFingerprint(processed);
-							} catch (Exception x) {
-
-							}
-
-							try {
-								if (cfp != null) {
-									if (fp_count)
-										processed.setProperty(fp.getClass()
-												.getName() + ".count", cfp);
-									processed.setProperty(fp.getClass()
-											.getName(), cfp);
-								}
-								if (bfp != null)
-									processed.setProperty(fp.getClass()
-											.getName() + ".hashed", bfp);
-								if (fpraw != null)
-									processed.setProperty(fp.getClass()
-											.getName() + ".raw", fpraw);
-
-							} catch (Exception x) {
-								// StringWriter w = new StringWriter();
-								// x.printStackTrace(new PrintWriter(w));
-								logger_cli.log(Level.SEVERE,
-										"MSG_FINGEPRINTGEN",
-										new Object[] { x.getMessage(),
-												getIds(record) });
-								if (processed != null)
-									processed.setProperty("ERROR."
-											+ fp.getClass().getName(),
-											x.getMessage());
-							} finally {
-								if (processed != null)
-									processed.addProperties(mol.getProperties());
-							}
-						}
-						if (processed != null)
-							try {
-								if (writesdf && sdf_title != null) {
-
-									for (Entry<Object, Object> p : processed
-											.getProperties().entrySet())
-										if (sdf_title.equals(p.getKey()
-												.toString().toLowerCase())) {
-											processed.setProperty(
-													CDKConstants.TITLE,
-													p.getValue());
-											break;
-										}
-								}
-								StructureStandardizer.renameTags(processed,
-										tags, true);
-								writer.write(processed);
-							} catch (Exception x) {
-								// StringWriter w = new StringWriter();
-								// x.printStackTrace(new PrintWriter(w));
-								logger_cli.log(Level.SEVERE,
-										"MSG_FINGEPRINTGEN",
-										new Object[] { x.getMessage(),
-												getIds(record) });
-							}
-						else {
-							logger_cli.log(Level.SEVERE, "MSG_FINGEPRINTGEN",
-									new Object[] { "Empty molecule",
-											getIds(record) });
-						}
+					} else {
+						logger_cli.log(Level.SEVERE, "MSG_FINGEPRINTGEN",
+								new Object[] { "Empty molecule", getIds(record) });
 						return record;
+					}
+
+					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+
+				} catch (Exception x) {
+
+					logger_cli.log(Level.SEVERE, "MSG_ERR_MOLREAD", new Object[] { getIds(record), x.toString() });
+					return record;
+				} finally {
+
+				}
+				processed = mol;
+
+				for (IFingerprinter fp : fps) {
+					ICountFingerprint cfp = null;
+					try {
+						cfp = fp.getCountFingerprint(processed);
+					} catch (Exception x) {
+						logger.log(Level.FINER, x.getMessage());
+					}
+					IBitFingerprint bfp = null;
+					try {
+						bfp = fp.getBitFingerprint(processed);
+					} catch (Exception x) {
+					}
+					Map<String, Integer> fpraw = null;
+					try {
+						if (fp_raw)
+							fpraw = fp.getRawFingerprint(processed);
+					} catch (Exception x) {
 
 					}
 
-				});
+					try {
+						if (cfp != null) {
+							if (fp_count)
+								processed.setProperty(fp.getClass().getName() + ".count", cfp);
+							processed.setProperty(fp.getClass().getName(), cfp);
+						}
+						if (bfp != null)
+							processed.setProperty(fp.getClass().getName() + ".hashed", bfp);
+						if (fpraw != null)
+							processed.setProperty(fp.getClass().getName() + ".raw", fpraw);
+
+					} catch (Exception x) {
+						// StringWriter w = new StringWriter();
+						// x.printStackTrace(new PrintWriter(w));
+						logger_cli.log(Level.SEVERE, "MSG_FINGEPRINTGEN",
+								new Object[] { x.getMessage(), getIds(record) });
+						if (processed != null)
+							processed.setProperty("ERROR." + fp.getClass().getName(), x.getMessage());
+					} finally {
+						if (processed != null)
+							processed.addProperties(mol.getProperties());
+					}
+				}
+				if (processed != null)
+					try {
+						if (writesdf && sdf_title != null) {
+
+							for (Entry<Object, Object> p : processed.getProperties().entrySet())
+								if (sdf_title.equals(p.getKey().toString().toLowerCase())) {
+									processed.setProperty(CDKConstants.TITLE, p.getValue());
+									break;
+								}
+						}
+						StructureStandardizer.renameTags(processed, tags, true);
+						writer.write(processed);
+					} catch (Exception x) {
+						// StringWriter w = new StringWriter();
+						// x.printStackTrace(new PrintWriter(w));
+						logger_cli.log(Level.SEVERE, "MSG_FINGEPRINTGEN",
+								new Object[] { x.getMessage(), getIds(record) });
+					}
+				else {
+					logger_cli.log(Level.SEVERE, "MSG_FINGEPRINTGEN",
+							new Object[] { "Empty molecule", getIds(record) });
+				}
+				return record;
+
+			}
+
+		});
 		batch.addPropertyChangeListener(new PropertyChangeListener() {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (AbstractBatchProcessor.PROPERTY_BATCHSTATS.equals(evt
-						.getPropertyName()))
+				if (AbstractBatchProcessor.PROPERTY_BATCHSTATS.equals(evt.getPropertyName()))
 					logger_cli.log(Level.INFO, evt.getNewValue().toString());
 			}
 		});
@@ -1208,17 +1110,12 @@ public class AmbitCli {
 					} catch (Exception x) {
 						if (clazz != null)
 							try {
-								Object fingerprinter = clazz
-										.getDeclaredConstructor(
-												IChemObjectBuilder.class)
-										.newInstance(
-												SilentChemObjectBuilder
-														.getInstance());
+								Object fingerprinter = clazz.getDeclaredConstructor(IChemObjectBuilder.class)
+										.newInstance(SilentChemObjectBuilder.getInstance());
 								if (fingerprinter instanceof IFingerprinter)
 									fps.add((IFingerprinter) fingerprinter);
 							} catch (Exception xx) {
-								logger_cli.log(Level.SEVERE, "MSG_ERR_CLASS",
-										new Object[] { fp, x.toString() });
+								logger_cli.log(Level.SEVERE, "MSG_ERR_CLASS", new Object[] { fp, x.toString() });
 							}
 
 					}
@@ -1242,8 +1139,7 @@ public class AmbitCli {
 		String[] fields_to_keep = null;
 		try {
 			Object tag_to_keep = options.getParam(":tag_tokeep");
-			if (tag_to_keep != null
-					&& !"".equals(tag_to_keep.toString().trim()))
+			if (tag_to_keep != null && !"".equals(tag_to_keep.toString().trim()))
 				fields_to_keep = tag_to_keep.toString().split(",");
 			if (fields_to_keep != null && fields_to_keep.length == 0)
 				fields_to_keep = null;
@@ -1259,26 +1155,20 @@ public class AmbitCli {
 		return fields_to_keep;
 	}
 
-	public void parseCommandStandardize(String subcommand, long now)
-			throws Exception {
+	public void parseCommandStandardize(String subcommand, long now) throws Exception {
 		int page = parsePageParam();
 		int pagesize = parsePageSizeParam();
 		Object tmpTag = parseSdfTitleParam();
 
-		String smiles_header = parseInputTag_Param("smiles",
-				IteratingDelimitedFileReader.defaultSMILESHeader);
+		String smiles_header = parseInputTag_Param("smiles", IteratingDelimitedFileReader.defaultSMILESHeader);
 		String inchi_header = parseInputTag_Param("inchi", "InChI");
 		String inchikey_header = parseInputTag_Param("inchikey", "InChIKey");
 
-		final String sdf_title = tmpTag == null ? null : tmpTag.toString()
-				.toLowerCase();
+		final String sdf_title = tmpTag == null ? null : tmpTag.toString().toLowerCase();
 
-		final StructureStandardizer standardprocessor = new StructureStandardizer(
-				logger_cli);
-		standardprocessor
-				.setGenerate2D(parseBooleanParam(":generate2D", false));
-		standardprocessor.setGenerateTautomers(parseBooleanParam(":tautomers",
-				false));
+		final StructureStandardizer standardprocessor = new StructureStandardizer(logger_cli);
+		standardprocessor.setGenerate2D(parseBooleanParam(":generate2D", false));
+		standardprocessor.setGenerateTautomers(parseBooleanParam(":tautomers", false));
 
 		SMIRKSProcessor tmp = null;
 		try {
@@ -1289,8 +1179,7 @@ public class AmbitCli {
 					tmp = new SMIRKSProcessor(smirksConfig, logger_cli);
 					tmp.setEnabled(true);
 				} else
-					logger_cli.log(Level.WARNING,
-							"SMIRKS transformation file not found");
+					logger_cli.log(Level.WARNING, "SMIRKS transformation file not found");
 			}
 		} catch (Exception x) {
 			logger_cli.log(Level.SEVERE, x.getMessage());
@@ -1298,38 +1187,27 @@ public class AmbitCli {
 		}
 		final SMIRKSProcessor smirksProcessor = tmp;
 
-		standardprocessor.setSplitFragments(parseBooleanParam(
-				":splitfragments", false));
-		standardprocessor.setImplicitHydrogens(parseBooleanParam(":implicith",
-				false));
-		standardprocessor
-				.setNeutralise(parseBooleanParam(":neutralise", false));
+		standardprocessor.setSplitFragments(parseBooleanParam(":splitfragments", false));
+		standardprocessor.setImplicitHydrogens(parseBooleanParam(":implicith", false));
+		standardprocessor.setNeutralise(parseBooleanParam(":neutralise", false));
 
 		final String[] tags_to_keep = parsetags_to_keep();
 
 		standardprocessor.setRankTag(parseStringParam(":tag_rank", "RANK"));
 		standardprocessor.setInchiTag(parseStringParam(":tag_inchi", "InChI"));
-		standardprocessor.setInchiKeyTag(parseStringParam(":tag_inchikey",
-				"InChIKey"));
-		standardprocessor
-				.setSMILESTag(parseStringParam(":tag_smiles", "SMILES"));
+		standardprocessor.setInchiKeyTag(parseStringParam(":tag_inchikey", "InChIKey"));
+		standardprocessor.setSMILESTag(parseStringParam(":tag_smiles", "SMILES"));
 
 		standardprocessor.setGenerateInChI(parseBooleanParam(":inchi", true));
 		standardprocessor.setGenerateSMILES(parseBooleanParam(":smiles", true));
-		standardprocessor.setGenerateSMILES_Canonical(parseBooleanParam(
-				":smilescanonical", false));
-		standardprocessor.setGenerateSMILES_Aromatic(parseBooleanParam(
-				":smilesaromatic", false));
-		standardprocessor.setGenerateStereofrom2D(parseBooleanParam(
-				":generatestereofrom2d", false));
-		standardprocessor.setClearIsotopes(parseBooleanParam(
-				":setClearIsotopes", false));
+		standardprocessor.setGenerateSMILES_Canonical(parseBooleanParam(":smilescanonical", false));
+		standardprocessor.setGenerateSMILES_Aromatic(parseBooleanParam(":smilesaromatic", false));
+		standardprocessor.setGenerateStereofrom2D(parseBooleanParam(":generatestereofrom2d", false));
+		standardprocessor.setClearIsotopes(parseBooleanParam(":setClearIsotopes", false));
 
-		final boolean debugatomtypes = parseBooleanParam(":debugatomtypes",
-				false);
+		final boolean debugatomtypes = parseBooleanParam(":debugatomtypes", false);
 		final int startRecord = pagesize > 0 ? (page * pagesize + 1) : 1;
-		final int maxRecord = pagesize > 0 ? ((page + 1) * pagesize + 1)
-				: pagesize;
+		final int maxRecord = pagesize > 0 ? ((page + 1) * pagesize + 1) : pagesize;
 
 		final File file = getInputFile();
 		FileInputState in = new FileInputState(file);
@@ -1338,12 +1216,11 @@ public class AmbitCli {
 		in.setOptionalSMILESHeader(smiles_header);
 
 		if (options.output == null)
-			throw new FileNotFoundException(
-					"Output file not specified. Please use -o {file}");
+			throw new FileNotFoundException("Output file not specified. Please use -o {file}");
 		final File outfile = new File(options.output);
 
-		logger_cli.log(Level.INFO, "MSG_INFO_READINGWRITING", new Object[] {
-				file.getAbsoluteFile(), outfile.getAbsolutePath() });
+		logger_cli.log(Level.INFO, "MSG_INFO_READINGWRITING",
+				new Object[] { file.getAbsoluteFile(), outfile.getAbsolutePath() });
 		FileOutputState out = new FileOutputState(outfile);
 		final IChemObjectWriter writer = out.getWriter();
 		if (writer instanceof FilesWithHeaderWriter)
@@ -1352,38 +1229,31 @@ public class AmbitCli {
 		final BatchDBProcessor<IStructureRecord> batch = new BatchDBProcessor<IStructureRecord>() {
 
 			@Override
-			public void onItemRead(IStructureRecord input,
-					IBatchStatistics stats) {
+			public void onItemRead(IStructureRecord input, IBatchStatistics stats) {
 				super.onItemRead(input, stats);
-				if ((maxRecord > 0)
-						&& stats.getRecords(RECORDS_STATS.RECORDS_READ) >= (maxRecord))
+				if ((maxRecord > 0) && stats.getRecords(RECORDS_STATS.RECORDS_READ) >= (maxRecord))
 					cancel();
 			};
 
 			@Override
 			public boolean skip(IStructureRecord input, IBatchStatistics stats) {
 				return (stats.getRecords(RECORDS_STATS.RECORDS_READ) < startRecord)
-						|| ((maxRecord > 0) && (stats
-								.getRecords(RECORDS_STATS.RECORDS_READ) >= maxRecord));
+						|| ((maxRecord > 0) && (stats.getRecords(RECORDS_STATS.RECORDS_READ) >= maxRecord));
 			}
 
 			@Override
-			public void onItemSkipped(IStructureRecord input,
-					IBatchStatistics stats) {
+			public void onItemSkipped(IStructureRecord input, IBatchStatistics stats) {
 				super.onItemSkipped(input, stats);
 				if (stats.isTimeToPrint(getSilentInterval() * 2))
-					propertyChangeSupport.firePropertyChange(
-							PROPERTY_BATCHSTATS, null, stats);
+					propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS, null, stats);
 			}
 
 			@Override
-			public void onItemProcessing(IStructureRecord input, Object output,
-					IBatchStatistics stats) {
+			public void onItemProcessing(IStructureRecord input, Object output, IBatchStatistics stats) {
 			}
 
 			@Override
-			public void onError(IStructureRecord input, Object output,
-					IBatchStatistics stats, Exception x) {
+			public void onError(IStructureRecord input, Object output, IBatchStatistics stats, Exception x) {
 				super.onError(input, output, stats, x);
 				logger_cli.log(Level.SEVERE, x.getMessage());
 			}
@@ -1406,163 +1276,128 @@ public class AmbitCli {
 
 		};
 		batch.setProcessorChain(new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>());
-		batch.getProcessorChain()
-				.add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
+		batch.getProcessorChain().add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
 
-					protected MoleculeReader molReader = new MoleculeReader(
-							true, false);
+			protected MoleculeReader molReader = new MoleculeReader(true, false);
 
-					@Override
-					public IStructureRecord process(IStructureRecord record)
-							throws Exception {
+			@Override
+			public IStructureRecord process(IStructureRecord record) throws Exception {
 
-						IAtomContainer mol;
-						IAtomContainer processed = null;
+				IAtomContainer mol;
+				IAtomContainer processed = null;
 
-						try {
-							mol = molReader.process(record);
-							if (mol != null) {
-								for (Property p : record.getRecordProperties()) {
-									Object v = record.getRecordProperty(p);
+				try {
+					mol = molReader.process(record);
+					if (mol != null) {
+						for (Property p : record.getRecordProperties()) {
+							Object v = record.getRecordProperty(p);
 
-									// initially to get rid of smiles, inchi ,
-									// etc, these are
-									// already parsed
-									if (tags_to_keep != null
-											&& Arrays.binarySearch(
-													tags_to_keep, p.getName()) < 0)
-										continue;
-									if (p.getName().startsWith(
-											"http://www.opentox.org/api/1.1#"))
-										continue;
-									else
-										mol.setProperty(p, v);
-								}
-								if (tags_to_keep != null) {
-									List<String> toRemove = null;
-									Iterator pi = mol.getProperties().keySet()
-											.iterator();
-									while (pi.hasNext()) {
-										Object p = pi.next();
-										if (Arrays.binarySearch(tags_to_keep,
-												p.toString()) < 0) {
-											if (toRemove == null)
-												toRemove = new ArrayList<String>();
-											toRemove.add(p.toString());
-										}
-
-									}
-									if (toRemove != null)
-										for (String propertyToRemove : toRemove)
-											mol.removeProperty(propertyToRemove);
-
+							// initially to get rid of smiles, inchi ,
+							// etc, these are
+							// already parsed
+							if (tags_to_keep != null && Arrays.binarySearch(tags_to_keep, p.getName()) < 0)
+								continue;
+							if (p.getName().startsWith("http://www.opentox.org/api/1.1#"))
+								continue;
+							else
+								mol.setProperty(p, v);
+						}
+						if (tags_to_keep != null) {
+							List<String> toRemove = null;
+							Iterator pi = mol.getProperties().keySet().iterator();
+							while (pi.hasNext()) {
+								Object p = pi.next();
+								if (Arrays.binarySearch(tags_to_keep, p.toString()) < 0) {
+									if (toRemove == null)
+										toRemove = new ArrayList<String>();
+									toRemove.add(p.toString());
 								}
 
-							} else {
-								logger_cli
-										.log(Level.SEVERE,
-												"MSG_STANDARDIZE",
-												new Object[] {
-														"Empty molecule See the ERROR tag in the output file",
-														getIds(record) });
-								return record;
 							}
-						} catch (Exception x) {
-							logger_cli
-									.log(Level.SEVERE,
-											"MSG_ERR_MOLREAD",
-											new Object[] { getIds(record),
-													x.toString() });
-							return record;
-						} finally {
+							if (toRemove != null)
+								for (String propertyToRemove : toRemove)
+									mol.removeProperty(propertyToRemove);
 
 						}
-						processed = mol;
 
-						// CDK adds these for the first MOL line
-						if (!writesdf) {
-							// if (mol.getProperty(CDKConstants.TITLE) != null)
-							// mol.removeProperty(CDKConstants.TITLE);
-							if (mol.getProperty(CDKConstants.REMARK) != null)
-								mol.removeProperty(CDKConstants.REMARK);
-						}
-						if ((smirksProcessor != null)
-								&& smirksProcessor.isEnabled()) {
-							processed = smirksProcessor.process(processed);
-						}
-
-						try {
-							processed = standardprocessor.process(processed);
-
-						} catch (Exception x) {
-							String err = processed
-									.getProperty(StructureStandardizer.ERROR_TAG);
-							logger_cli.log(Level.SEVERE, x.getMessage(), x);
-							if (processed != null) {
-								err = processed
-										.getProperty(StructureStandardizer.ERROR_TAG);
-								processed.setProperty(
-										StructureStandardizer.ERROR_TAG, String
-												.format("%s %s %s",
-														err == null ? "" : err,
-														x.getClass().getName(),
-														x.getMessage()));
-							}
-						} finally {
-							if (processed != null) {
-								Iterator<Entry<Object, Object>> p = mol
-										.getProperties().entrySet().iterator();
-								// don't overwrite properties from the source
-								// molecule
-								while (p.hasNext()) {
-									Entry<Object, Object> entry = p.next();
-									Object value = processed.getProperty(entry
-											.getKey());
-									if (value == null
-											|| "".equals(value.toString()
-													.trim()))
-										processed.setProperty(entry.getKey(),
-												entry.getValue());
-								}
-							}
-						}
-						if (processed != null)
-							try {
-								if (writesdf && sdf_title != null) {
-
-									for (Entry<Object, Object> p : processed
-											.getProperties().entrySet())
-										if (sdf_title.equals(p.getKey()
-												.toString().toLowerCase())) {
-											processed.setProperty(
-													CDKConstants.TITLE,
-													p.getValue());
-											break;
-										}
-								}
-								if (debugatomtypes) {
-									Object debug = (processed == null) ? null
-											: processed
-													.getProperty("AtomTypes");
-
-									if (debug != null && !"".equals(debug))
-										writer.write(processed);
-								} else
-									writer.write(processed);
-							} catch (Exception x) {
-								logger_cli.log(Level.SEVERE, x.getMessage());
-							}
+					} else {
+						logger_cli.log(Level.SEVERE, "MSG_STANDARDIZE",
+								new Object[] { "Empty molecule See the ERROR tag in the output file", getIds(record) });
 						return record;
-
 					}
+				} catch (Exception x) {
+					logger_cli.log(Level.SEVERE, "MSG_ERR_MOLREAD", new Object[] { getIds(record), x.toString() });
+					return record;
+				} finally {
 
-				});
+				}
+				processed = mol;
+
+				// CDK adds these for the first MOL line
+				if (!writesdf) {
+					// if (mol.getProperty(CDKConstants.TITLE) != null)
+					// mol.removeProperty(CDKConstants.TITLE);
+					if (mol.getProperty(CDKConstants.REMARK) != null)
+						mol.removeProperty(CDKConstants.REMARK);
+				}
+				if ((smirksProcessor != null) && smirksProcessor.isEnabled()) {
+					processed = smirksProcessor.process(processed);
+				}
+
+				try {
+					processed = standardprocessor.process(processed);
+
+				} catch (Exception x) {
+					String err = processed.getProperty(StructureStandardizer.ERROR_TAG);
+					logger_cli.log(Level.SEVERE, x.getMessage(), x);
+					if (processed != null) {
+						err = processed.getProperty(StructureStandardizer.ERROR_TAG);
+						processed.setProperty(StructureStandardizer.ERROR_TAG, String.format("%s %s %s",
+								err == null ? "" : err, x.getClass().getName(), x.getMessage()));
+					}
+				} finally {
+					if (processed != null) {
+						Iterator<Entry<Object, Object>> p = mol.getProperties().entrySet().iterator();
+						// don't overwrite properties from the source
+						// molecule
+						while (p.hasNext()) {
+							Entry<Object, Object> entry = p.next();
+							Object value = processed.getProperty(entry.getKey());
+							if (value == null || "".equals(value.toString().trim()))
+								processed.setProperty(entry.getKey(), entry.getValue());
+						}
+					}
+				}
+				if (processed != null)
+					try {
+						if (writesdf && sdf_title != null) {
+
+							for (Entry<Object, Object> p : processed.getProperties().entrySet())
+								if (sdf_title.equals(p.getKey().toString().toLowerCase())) {
+									processed.setProperty(CDKConstants.TITLE, p.getValue());
+									break;
+								}
+						}
+						if (debugatomtypes) {
+							Object debug = (processed == null) ? null : processed.getProperty("AtomTypes");
+
+							if (debug != null && !"".equals(debug))
+								writer.write(processed);
+						} else
+							writer.write(processed);
+					} catch (Exception x) {
+						logger_cli.log(Level.SEVERE, x.getMessage());
+					}
+				return record;
+
+			}
+
+		});
 		batch.addPropertyChangeListener(new PropertyChangeListener() {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (AbstractBatchProcessor.PROPERTY_BATCHSTATS.equals(evt
-						.getPropertyName()))
+				if (AbstractBatchProcessor.PROPERTY_BATCHSTATS.equals(evt.getPropertyName()))
 					logger_cli.log(Level.INFO, evt.getNewValue().toString());
 			}
 		});
@@ -1581,21 +1416,17 @@ public class AmbitCli {
 		} catch (Exception x) {
 			StringWriter w = new StringWriter();
 			x.printStackTrace(new PrintWriter(w));
-			logger_cli.log(Level.WARNING, "MSG_ERR",
-					new Object[] { x.getMessage() });
-			logger_cli.log(Level.FINE, "MSG_ERR_DEBUG",
-					new Object[] { x.getMessage(), w.toString() });
+			logger_cli.log(Level.WARNING, "MSG_ERR", new Object[] { x.getMessage() });
+			logger_cli.log(Level.FINE, "MSG_ERR_DEBUG", new Object[] { x.getMessage(), w.toString() });
 		} finally {
 			try {
 				if (batch != null)
 					batch.close();
 			} catch (Exception x) {
-				logger_cli.log(Level.WARNING, "MSG_ERR",
-						new Object[] { x.getMessage() });
+				logger_cli.log(Level.WARNING, "MSG_ERR", new Object[] { x.getMessage() });
 			}
 			if (stats != null)
-				logger_cli.log(Level.INFO, "MSG_INFO",
-						new Object[] { stats.toString() });
+				logger_cli.log(Level.INFO, "MSG_INFO", new Object[] { stats.toString() });
 		}
 	}
 
@@ -1617,16 +1448,11 @@ public class AmbitCli {
 			case put: {
 				if (disablebinlog)
 					resources = new String[] { "ambit2/dbcli/sql/sql_log_bin.sql",
-							"ambit2/dbcli/sql/import_substances_01.sql",
-							"ambit2/dbcli/sql/import_experiment_02.sql",
-							"ambit2/dbcli/sql/import_chemicals_03.sql",
-							"ambit2/dbcli/sql/import_properties_04.sql" 
-							};
+							"ambit2/dbcli/sql/import_substances_01.sql", "ambit2/dbcli/sql/import_experiment_02.sql",
+							"ambit2/dbcli/sql/import_chemicals_03.sql", "ambit2/dbcli/sql/import_properties_04.sql" };
 				else
-					resources = new String[] {
-							"ambit2/dbcli/sql/import_substances_01.sql",
-							"ambit2/dbcli/sql/import_experiment_02.sql",
-							"ambit2/dbcli/sql/import_chemicals_03.sql",
+					resources = new String[] { "ambit2/dbcli/sql/import_substances_01.sql",
+							"ambit2/dbcli/sql/import_experiment_02.sql", "ambit2/dbcli/sql/import_chemicals_03.sql",
 							"ambit2/dbcli/sql/import_properties_04.sql" };
 				try {
 					folder = new File(options.input);
@@ -1639,16 +1465,14 @@ public class AmbitCli {
 			}
 		} catch (Exception x) {
 			x.printStackTrace();
-			logger_cli.log(Level.SEVERE, "MSG_ERR",
-					new Object[] { x.getMessage() });
+			logger_cli.log(Level.SEVERE, "MSG_ERR", new Object[] { x.getMessage() });
 			return;
 		}
 
 		for (String resource : resources) {
 			URL url = Resources.getResource(resource);
 			String text = Resources.toString(url, Charsets.UTF_8);
-			text = text.replace("{TMP}", folder == null ? "" : (folder
-					.getAbsolutePath().replace("\\", "/") + "/"));
+			text = text.replace("{TMP}", folder == null ? "" : (folder.getAbsolutePath().replace("\\", "/") + "/"));
 
 			Connection c = null;
 			BufferedReader reader = null;
@@ -1677,16 +1501,14 @@ public class AmbitCli {
 
 		File file = new File(options.input);
 
-		final QuickImportBatchProcessor batch = new QuickImportBatchProcessor(
-				file) {
+		final QuickImportBatchProcessor batch = new QuickImportBatchProcessor(file) {
 			/**
-		     * 
-		     */
+			 * 
+			 */
 			private static final long serialVersionUID = -2617748719057089460L;
 
 			@Override
-			public void onItemRead(IStructureRecord input,
-					IBatchStatistics stats) {
+			public void onItemRead(IStructureRecord input, IBatchStatistics stats) {
 				super.onItemRead(input, stats);
 				if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 10000) == 0)
 					try {
@@ -1698,8 +1520,7 @@ public class AmbitCli {
 			};
 
 			@Override
-			public void onError(IStructureRecord input, Object output,
-					IBatchStatistics stats, Exception x) {
+			public void onError(IStructureRecord input, Object output, IBatchStatistics stats, Exception x) {
 				super.onError(input, output, stats, x);
 				logger_cli.log(Level.SEVERE, x.getMessage());
 			}
@@ -1759,13 +1580,12 @@ public class AmbitCli {
 
 		DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>() {
 			/**
-		     * 
-		     */
+			 * 
+			 */
 			private static final long serialVersionUID = 6777121852891369530L;
 
 			@Override
-			public void onItemRead(IStructureRecord input,
-					IBatchStatistics stats) {
+			public void onItemRead(IStructureRecord input, IBatchStatistics stats) {
 				super.onItemRead(input, stats);
 				if ((stats.getRecords(RECORDS_STATS.RECORDS_READ) % 5000) == 0)
 					try {
@@ -1778,8 +1598,7 @@ public class AmbitCli {
 			};
 
 			@Override
-			public void onError(IStructureRecord input, Object output,
-					IBatchStatistics stats, Exception x) {
+			public void onError(IStructureRecord input, Object output, IBatchStatistics stats, Exception x) {
 				super.onError(input, output, stats, x);
 				logger_cli.log(Level.SEVERE, x.getMessage());
 			}
@@ -1795,13 +1614,12 @@ public class AmbitCli {
 		MasterDetailsProcessor<IStructureRecord, IStructureRecord, IQueryCondition> strucReader = new MasterDetailsProcessor<IStructureRecord, IStructureRecord, IQueryCondition>(
 				queryP) {
 			/**
-		     * 
-		     */
+			 * 
+			 */
 			private static final long serialVersionUID = -5350168222668294207L;
 
 			@Override
-			protected void configureQuery(
-					IStructureRecord target,
+			protected void configureQuery(IStructureRecord target,
 					IParameterizedQuery<IStructureRecord, IStructureRecord, IQueryCondition> query)
 					throws AmbitException {
 				query.setValue(target);
@@ -1809,8 +1627,8 @@ public class AmbitCli {
 			}
 
 			@Override
-			protected IStructureRecord processDetail(IStructureRecord master,
-					IStructureRecord detail) throws Exception {
+			protected IStructureRecord processDetail(IStructureRecord master, IStructureRecord detail)
+					throws Exception {
 
 				master.setContent(detail.getContent());
 				master.setFormat(detail.getFormat());
@@ -1831,44 +1649,38 @@ public class AmbitCli {
 		if (preprocessingOption.contains(FPTable.inchi)) {
 			query = new MissingInChIsQuery("UNKNOWN");
 			updateQuery = new UpdateChemical();
-			batch.getProcessorChain()
-					.add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
-						/**
-			     * 
-			     */
-						private static final long serialVersionUID = -7628269103516836861L;
-						protected transient StructureNormalizer normalizer = new StructureNormalizer();
+			batch.getProcessorChain().add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
+				/**
+				* 
+				*/
+				private static final long serialVersionUID = -7628269103516836861L;
+				protected transient StructureNormalizer normalizer = new StructureNormalizer();
 
-						@Override
-						public IStructureRecord process(IStructureRecord record)
-								throws Exception {
-							try {
-								normalizer.process(record);
-								return record;
-							} catch (Exception x) {
-								record.setType(STRUC_TYPE.NA);
-								return record;
-							}
-						}
-					});
-			batch.getProcessorChain().add(
-					new AbstractUpdateProcessor<Object, IChemical>(OP.CREATE,
-							updateQuery) {
-						/**
-			     * 
-			     */
-						private static final long serialVersionUID = 9019409150445247686L;
+				@Override
+				public IStructureRecord process(IStructureRecord record) throws Exception {
+					try {
+						normalizer.process(record);
+						return record;
+					} catch (Exception x) {
+						record.setType(STRUC_TYPE.NA);
+						return record;
+					}
+				}
+			});
+			batch.getProcessorChain().add(new AbstractUpdateProcessor<Object, IChemical>(OP.CREATE, updateQuery) {
+				/**
+				* 
+				*/
+				private static final long serialVersionUID = 9019409150445247686L;
 
-						@Override
-						protected IChemical execute(Object group,
-								IQueryUpdate<Object, IChemical> query)
-								throws SQLException,
-								OperationNotSupportedException, AmbitException {
-							if (group instanceof IChemical)
-								query.setObject((IChemical) group);
-							return super.execute(group, query);
-						}
-					});
+				@Override
+				protected IChemical execute(Object group, IQueryUpdate<Object, IChemical> query)
+						throws SQLException, OperationNotSupportedException, AmbitException {
+					if (group instanceof IChemical)
+						query.setObject((IChemical) group);
+					return super.execute(group, query);
+				}
+			});
 		} else {
 			// add generators
 			if (preprocessingOption.contains(FPTable.smarts_accelerator)) {
@@ -1878,13 +1690,11 @@ public class AmbitCli {
 			if (preprocessingOption.contains(FPTable.fp1024)) {
 				query = new FingerprintsByStatus(FPTable.fp1024);
 				// updateQuery = new CreateFingerprintChemical(FPTable.fp1024);
-				batch.getProcessorChain().add(
-						new BitSetGenerator(FPTable.fp1024));
+				batch.getProcessorChain().add(new BitSetGenerator(FPTable.fp1024));
 			}
 			if (preprocessingOption.contains(FPTable.sk1024)) {
 				query = new FingerprintsByStatus(FPTable.sk1024);
-				batch.getProcessorChain().add(
-						new BitSetGenerator(FPTable.sk1024));
+				batch.getProcessorChain().add(new BitSetGenerator(FPTable.sk1024));
 			}
 
 			// add writers
@@ -1900,8 +1710,7 @@ public class AmbitCli {
 
 			if (preprocessingOption.contains(FPTable.cf1024)) {
 				query = new FingerprintsByStatus(FPTable.cf1024);
-				batch.getProcessorChain().add(
-						new BitSetGenerator(FPTable.cf1024));
+				batch.getProcessorChain().add(new BitSetGenerator(FPTable.cf1024));
 				batch.getProcessorChain().add(new FP1024Writer(FPTable.cf1024));
 			}
 
@@ -1966,17 +1775,11 @@ public class AmbitCli {
 				p.close();
 				p = null;
 
-				logger_cli
-						.log(Level.INFO,
-								"MSG_INCHI",
-								new Object[] {
-										String.format("loaded in %d msec",
-												System.currentTimeMillis()
-														- now), "" });
+				logger_cli.log(Level.INFO, "MSG_INCHI",
+						new Object[] { String.format("loaded in %d msec", System.currentTimeMillis() - now), "" });
 				return;
 			} catch (Exception x) {
-				logger_cli.log(Level.WARNING, "MSG_INCHI", new Object[] {
-						"load failed at retry ", (retry + 1) });
+				logger_cli.log(Level.WARNING, "MSG_INCHI", new Object[] { "load failed at retry ", (retry + 1) });
 				err = x;
 			}
 		if (err != null)

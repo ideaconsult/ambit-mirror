@@ -247,6 +247,12 @@
 						"value": "true",
 						"comment": "Dense or sparse format"
 					},
+					":delimiter": {
+						"mandatory": false,
+						"type": "String",
+						"value": ",",
+						"comment": "Delimiter character"
+					},					
 					":threshold": {
 						"mandatory": false,
 						"type": "Double",
