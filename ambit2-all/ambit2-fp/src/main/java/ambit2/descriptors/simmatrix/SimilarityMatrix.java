@@ -12,6 +12,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SimilarityMatrix {
+	protected String delimiter = ",";
+	public String getDelimiter() {
+		return delimiter;
+	}
+
+	public void setDelimiter(String delimiter) {
+		this.delimiter = delimiter;
+	}
+
 	protected Logger logger;
 
 	public Logger getLogger() {
@@ -25,22 +34,22 @@ public class SimilarityMatrix {
 	public SimilarityMatrix() {
 	}
 
-	protected L parseLineDense(String line) {
-		String[] tokens = line.split(",");
+	protected L parseLineDense(String line, long record) {
+		String[] tokens = line.split(delimiter);
 		L l = new L();
 		l.setKey(tokens[0]);
-		l.setId(tokens[1]);
+		l.setId(Long.toString(record));
 		BitSet bs = new BitSet();
-		for (int i = 2; i < tokens.length; i++) {
+		for (int i = 1; i < tokens.length; i++) {
 			if ("1".equals(tokens[i]))
-				bs.set(i - 2);
+				bs.set(i - 1);
 		}
 		l.setBs(bs);
 		return l;
 	}
 
 	protected L parseLineSparse(String line, long record) {
-		String[] tokens = line.split(",");
+		String[] tokens = line.split(delimiter);
 		L l = new L();
 		l.setKey(tokens[0]);
 		l.setId(Long.toString(record));
@@ -76,21 +85,26 @@ public class SimilarityMatrix {
 		if (folder.isDirectory())
 			files = folder.listFiles();
 		else {
+			if (!folder.exists()) throw new Exception("File do not exists");
 			files = new File[] { folder };
+			path = folder.getParent();
+			folder = folder.getParentFile();
 		}
 
 		double tt[] = new double[] { 0, 0.25, 0.5, 0.75, 0.8, 0.9, 0.95, 1 };
 		long histogram[] = new long[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 		for (File file : files) {
-			if (!file.getPath().endsWith(".csv"))
+			if (!file.getPath().endsWith(".csv") && !file.getPath().endsWith(".txt") && !file.getPath().endsWith(".tsv") ) {
+				logger.log(Level.WARNING, String.format("%s format not supported.", file.getName()));
 				continue;
+			}	
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			try {
 				String line;
 				int r = 0;
 				while ((line = reader.readLine()) != null) {
 					r++;
-					b.add(dense ? parseLineDense(line) : parseLineSparse(line,
+					b.add(dense ? parseLineDense(line,r) : parseLineSparse(line,
 							r));
 				}
 			} finally {
@@ -119,10 +133,11 @@ public class SimilarityMatrix {
 			try {
 
 				for (int i = startRecord; i < maxRecord; i++) {
-					L item1 = b.get(i);
+					String id1 = b.get(i).getId();
+					BitSet bs1 = b.get(i).getBs();
 					for (int j = i + 1; j < b.size(); j++) {
 						L item2 = b.get(j);
-						double t = tanimoto(item1.getBs(), item2.getBs());
+						double t = tanimoto(bs1, item2.getBs());
 						for (int k = 0; k < tt.length; k++)
 							if (t <= tt[k]) {
 								histogram[k]++;
@@ -130,7 +145,7 @@ public class SimilarityMatrix {
 							}
 						if (t >= threshold) {
 							writer.write(String.format("%s\t%s\t%4.2f\n",
-									item1.getId(), item2.getId(), t));
+									id1, item2.getId(), t));
 						}
 					}
 					if ((i % 5000) == 0) {
