@@ -7,12 +7,17 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SimilarityMatrix {
+	protected Map<Integer, Integer> bitmap = new HashMap<Integer, Integer>();
+
 	protected String delimiter = ",";
+
 	public String getDelimiter() {
 		return delimiter;
 	}
@@ -56,7 +61,16 @@ public class SimilarityMatrix {
 		BitSet bs = new BitSet();
 		for (int i = 1; i < tokens.length; i++)
 			try {
-				bs.set(Integer.parseInt(tokens[i]));
+				int key = Integer.parseInt(tokens[i]);
+				//System.out.println(key);
+				bs.set(Math.abs(key));
+				Integer v = bitmap.get(key);
+				if (v == null) {
+					v = bitmap.size();
+					bitmap.put(key, v);
+				}
+				bs.set(v);
+
 			} catch (Exception x) {
 				logger.log(Level.WARNING, x.getMessage());
 			}
@@ -64,13 +78,11 @@ public class SimilarityMatrix {
 		return l;
 	}
 
-	public long[] createMatrix(String path, boolean dense, double threshold)
-			throws Exception {
+	public long[] createMatrix(String path, boolean dense, double threshold) throws Exception {
 		return createMatrix(path, dense, threshold, 0, -1);
 	}
 
-	public long[] createMatrix(String path, boolean dense, double threshold,
-			int page, int pagesize) throws Exception {
+	public long[] createMatrix(String path, boolean dense, double threshold, int page, int pagesize) throws Exception {
 
 		final int startRecord = pagesize > 0 ? (page * pagesize) : 0;
 		int maxRecord = pagesize > 0 ? ((page + 1) * pagesize) : -1;
@@ -85,7 +97,8 @@ public class SimilarityMatrix {
 		if (folder.isDirectory())
 			files = folder.listFiles();
 		else {
-			if (!folder.exists()) throw new Exception("File do not exists");
+			if (!folder.exists())
+				throw new Exception("File do not exists");
 			files = new File[] { folder };
 			path = folder.getParent();
 			folder = folder.getParentFile();
@@ -94,42 +107,38 @@ public class SimilarityMatrix {
 		double tt[] = new double[] { 0, 0.25, 0.5, 0.75, 0.8, 0.9, 0.95, 1 };
 		long histogram[] = new long[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 		for (File file : files) {
-			if (!file.getPath().endsWith(".csv") && !file.getPath().endsWith(".txt") && !file.getPath().endsWith(".tsv") ) {
+			if (!file.getPath().endsWith(".csv") && !file.getPath().endsWith(".txt")
+					&& !file.getPath().endsWith(".tsv")) {
 				logger.log(Level.WARNING, String.format("%s format not supported.", file.getName()));
 				continue;
-			}	
+			}
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			try {
 				String line;
 				int r = 0;
 				while ((line = reader.readLine()) != null) {
 					r++;
-					b.add(dense ? parseLineDense(line,r) : parseLineSparse(line,
-							r));
+					b.add(dense ? parseLineDense(line, r) : parseLineSparse(line, r));
+					if ((r % 10000) == 0) {
+						logger.log(Level.FINE, String.format("%s\t%s", r, bitmap.size()));
+					}
 				}
 			} finally {
 				reader.close();
 			}
-			logger.info(String.format("File %s read in %s msec.",
-					file.getName(), System.currentTimeMillis() - now));
+			logger.info(String.format("File %s read in %s msec.", file.getName(), System.currentTimeMillis() - now));
 
 			now = System.currentTimeMillis();
 
 			if (startRecord >= b.size())
-				throw new Exception(String.format(
-						"Start record %d > number of records %d", startRecord,
-						b.size()));
+				throw new Exception(String.format("Start record %d > number of records %d", startRecord, b.size()));
 			if (maxRecord > b.size() || (maxRecord < 0)) {
 				maxRecord = b.size();
-				logger.info(String.format(
-						"End record %d set to number of records %d", maxRecord,
-						b.size()));
+				logger.info(String.format("End record %d set to number of records %d", maxRecord, b.size()));
 			}
 
-			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-					String.format("%s/%s_%s_%d_%d.matrix", path,
-							file.getName(), threshold, (startRecord + 1),
-							maxRecord))));
+			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(String.format("%s/%s_%s_%d_%d.matrix",
+					path, file.getName(), threshold, (startRecord + 1), maxRecord))));
 			try {
 
 				for (int i = startRecord; i < maxRecord; i++) {
@@ -144,27 +153,25 @@ public class SimilarityMatrix {
 								break;
 							}
 						if (t >= threshold) {
-							writer.write(String.format("%s\t%s\t%4.2f\n",
-									id1, item2.getId(), t));
+							writer.write(String.format("%s\t%s\t%4.2f\n", id1, item2.getId(), t));
 						}
 					}
 					if ((i % 5000) == 0) {
-						logger.log(Level.INFO, String.format(
-								"%d\t%s msec\tHistogram: %s", i,
-								(System.currentTimeMillis() - now) / (i + 1 - startRecord),
-								histogram2string(histogram, tt)));
+						logger.log(Level.INFO,
+								String.format("%d\t%s msec\tHistogram: %s", i,
+										(System.currentTimeMillis() - now) / (i + 1 - startRecord),
+										histogram2string(histogram, tt)));
 					}
 					writer.flush();
 				}
 			} finally {
 				writer.close();
-				logger.info(String
-						.format("Similarity matrix threshold>=%f for file %s generated in %s msec.\tHistogram: %s",
-								threshold, file.getName(),
-								System.currentTimeMillis() - now,
-								histogram2string(histogram, tt)));
+				logger.info(String.format(
+						"Similarity matrix threshold>=%f for file %s generated in %s msec.\tHistogram: %s", threshold,
+						file.getName(), System.currentTimeMillis() - now, histogram2string(histogram, tt)));
 			}
 		}
+		logger.info(String.format("Number of fingerprints %s", bitmap.size()));
 		return histogram;
 	}
 
