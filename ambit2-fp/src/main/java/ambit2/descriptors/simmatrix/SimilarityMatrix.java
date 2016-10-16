@@ -151,7 +151,7 @@ public class SimilarityMatrix {
 					if ((i % 5000) == 0) {
 						logger.log(Level.INFO, String.format(
 								"%d\t%s msec\tHistogram: %s", i,
-								(System.currentTimeMillis() - now) / (i + 1),
+								(System.currentTimeMillis() - now) / (i + 1 - startRecord),
 								histogram2string(histogram, tt)));
 					}
 					writer.flush();
