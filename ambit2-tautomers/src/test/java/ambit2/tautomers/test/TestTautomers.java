@@ -164,23 +164,25 @@ public class TestTautomers {
 
 		// tt.tman.FlagEnergyRankingMethod = TautomerConst.ERM_NEW;
 		tt.tman.FlagNewRuleInstanceSearchOnEnergyRanking = false;
-		tt.tman.FlagRegisterOnlyBestRankTautomers = true;
+		tt.tman.FlagRegisterOnlyBestRankTautomers = false;
 		// tt.visualTest("[H][C@]12C[C@@]3([H])OC(=O)\\C=C/C=C/C(O[C@H](O)CC(C)CC(=O)OC[C@@]4(C[C@@]([H])(O)[C@H](C)C[C@@]4([H])O1)[C@]3(C)C21CO1)C(C)O");
 
 		tt.standardprocessor.setGenerateTautomers(true);
 
-		tt.test(
-		// tt.visualTest(
+		//tt.test(
+		//tt.visualTest(
 		// tt.testStereoInfo(
 		// tt.testStandardizer(
-		"S1C(N(\\C(=C/2\\C3=C(C(C(C([H])([H])[H])(C([H])([H])[H])[H])"
-				+ "=C(O[H])C2=O)C(=C(C(C=4C(=C(C5=C(C4[H])/C(/C(=O)C(O[H])=C5C(C([H])([H])[H])(C([H])([H])[H])[H])"
-				+ "=C(/N(C=6SC(=C(N6)C7=C(C(=C(C(=C7[H])[H])[H])[H])[H])[H])[H])\\[H])[H])C([H])([H])[H])"
-				+ "=C3[H])C([H])([H])[H])[H])\\[H])[H])=NC(=C1[H])C8=C(C(=C(C(=C8[H])[H])[H])[H])[H]");
+		//"S1C(N(\\C(=C/2\\C3=C(C(C(C([H])([H])[H])(C([H])([H])[H])[H])"
+		//		+ "=C(O[H])C2=O)C(=C(C(C=4C(=C(C5=C(C4[H])/C(/C(=O)C(O[H])=C5C(C([H])([H])[H])(C([H])([H])[H])[H])"
+		//		+ "=C(/N(C=6SC(=C(N6)C7=C(C(=C(C(=C7[H])[H])[H])[H])[H])[H])[H])\\[H])[H])C([H])([H])[H])"
+		//		+ "=C3[H])C([H])([H])[H])[H])\\[H])[H])=NC(=C1[H])C8=C(C(=C(C(=C8[H])[H])[H])[H])[H]");
 
 		// tt.visualTest("CC1=CC2=C(/C(=C/NC3=NC(=CS3)C4=CC=CC=C4)/C(=O)C(=C2C(C)C)O)C=C1C5=CC\\6=C(C(=C(C(=O)/C6=C\\NC7=NC(=CS7)C8=CC=CC=C8)O)C(C)C)C=C5C");
 
-		// tt.visualTest("C1=CN=C(N)NC1(=O)");
+		//tt.visualTest("C1=CN=C(N)NC1(=O)");
+		tt.visualTest("OC(=O)CCC=CN");
+
 
 		// tt.visualTest("O=C1OC3=CC=CC=C3(C(O)C1C(C=2C=CC=CC=2)CC(=O)C)");
 		// tt.visualTest("C3=C(C(C1=C(OC2=C(C1=O)C=CC=C2)O)CC(=O)C)C=CC=C3");
