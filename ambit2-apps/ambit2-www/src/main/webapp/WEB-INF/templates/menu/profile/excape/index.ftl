@@ -98,7 +98,7 @@ $(document)
 			<div id="breadCrumb" class="breadCrumb module remove-bottom h5">
                     <ul>
                         <li>
-                            <a href="${ambit_root}" title="AMBIT Home">Home</a>
+                            <a href="https://sandbox.ideaconsult.net/search/excape/" title="AMBIT Home">Home</a>
                         </li>
                     </ul>
 			</div>
@@ -121,14 +121,14 @@ $(document)
 				<div class="three columns remove-bottom">
 					<a href="http://http://excape-h2020.eu/"><img class='scale-with-grid' border='0' src='${ambit_root}/images/profile/${menu_profile}/logo.png' title='ExCAPE web site' alt='AMBIT logo'></a>
 				</div>
-				<div class="twelve columns remove-bottom h2">${custom_title!"ExCAPE datasets"}
+				<div class="twelve columns remove-bottom h2">${custom_title!"ExcapeDB"}
 				</div>
 		
 	</div>
 	
 	<div class="row remove-bottom">
 		<div class="three columns remove-bottom">&nbsp;</div>
-		<div class='twelve columns remove-bottom'><span class="mhelp enmhelp substance">${custom_description!"PubChem and ChEMBL chemogenomics dataset"}</span></div>
+		<div class='twelve columns remove-bottom'><span class="mhelp enmhelp substance">${custom_description!"ExCAPE chemogenomics database"}</span></div>
 	</div>	
 		
 	<div class="row add-bottom">&nbsp;</div>	
