@@ -622,7 +622,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		if (effect.getEndpoint() == null) return;
 		String endPointLabel = effect.getEndpoint();
 		if ("Spectral counts".equals(endPointLabel)) { // this is a property used for protein coronas
-			output.setNsPrefix("uniprot", "http://rdf.uniprot.org/");
+			output.setNsPrefix("uniprot", "http://purl.uniprot.org/uniprot/");
 			String derivURI = endpoint.getURI() + "D";
 			Resource deriv = getOutput().createResource(derivURI);
 			getOutput().add(deriv, RDF.type, RDFTermsSubstance.BAO_0000179.getResource(getOutput()));
@@ -645,7 +645,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
     						deriv,
     						RDFTermsSubstance.has_value
     								.getProperty(getOutput()),
-    						getOutput().createResource("http://rdf.uniprot.org/" + entry.getKey())
+    						getOutput().createResource("http://purl.uniprot.org/uniprot/" + entry.getKey())
     					);
             		}
             	}
