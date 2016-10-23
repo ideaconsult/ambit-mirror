@@ -515,6 +515,44 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 									getOutput().createTypedLiteral(
 											effect.getTextValue()));
 						}
+						IParams<?> conditions = effect.getConditions();
+						int conditionCounter = 0;
+						if (conditions != null && conditions.size() > 0) {
+							for (Entry<String,?> condition : conditions.entrySet()) {
+								if (condition.getValue() != null && condition.getValue() instanceof IParams) {
+									conditionCounter++;
+									String conditionURI = endpoint.getURI() + "C" + conditionCounter;
+									Resource conditionRes = getOutput().createResource(conditionURI);
+									getOutput().add(conditionRes, RDFS.label, condition.getKey());
+									output.setNsPrefix("amb", "http://purl.enanomapper.net/");
+									getOutput().add(
+										endpoint,
+									    getOutput().createProperty("http://purl.enanomapper.net/has-condition"),
+									    conditionRes
+									);
+									for (Object paramsObj : ((IParams)condition.getValue()).entrySet()) {
+										Entry params = (Entry)paramsObj;
+										if ("loValue".equals(params.getKey())) {
+											getOutput().add(
+												conditionRes,
+												RDFTermsSubstance.has_value.getProperty(getOutput()),
+												params.getValue().toString()
+											);
+										} else if ("unit".equals(params.getKey())) {
+											getOutput().add(
+												conditionRes,
+												RDFTermsSubstance.has_unit.getProperty(getOutput()),
+												params.getValue().toString()
+											);
+										} else {
+											// System.out.println("Condition: " + params.getKey() + " -> " + params.getValue());
+										}
+									}
+								} else {
+									System.out.println("Incomplete conditions: " + condition);
+								}
+							}
+						}
 					}
 			}
 
