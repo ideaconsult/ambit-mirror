@@ -2,6 +2,7 @@ package ambit2.dbsubstance.test;
 
 import java.io.File;
 import java.io.FileReader;
+import java.net.URL;
 import java.sql.Connection;
 
 import junit.framework.Assert;
@@ -17,6 +18,7 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.io.DownloadTool;
 import ambit2.core.io.IRawReader;
 import ambit2.core.io.RawIteratingWrapper;
 import ambit2.core.processors.structure.key.PropertyKey;
@@ -31,9 +33,16 @@ public class ProteinCoronaPaperReaderTest  extends DbUnitTest {
 		try {
 			LiteratureEntry entry = new LiteratureEntry("Protein Corona","http://dx.doi.org/10.1021/nn406018q");
     		entry.setType(_type.Dataset);
-    		
-			CSV12Reader chemObjectReader = new CSV12Reader(new FileReader(
-					new File("D:/src-ideaconsult/Protein_Corona/MergedSheets.csv")),entry,"PRCR-");
+
+    		File baseDir = new File(System.getProperty("java.io.tmpdir"));
+    		File datafile = new File(baseDir, "MergedSheets.csv");
+    		if (!datafile.exists()) {
+    			URL url = new URL(
+    					"https://raw.githubusercontent.com/ideaconsult/Protein_Corona/master/MergedSheets.csv");
+    			DownloadTool.download(url, datafile);
+    		}
+
+			CSV12Reader chemObjectReader = new CSV12Reader(new FileReader(datafile),entry,"PRCR-");
 			reader = new CSV12SubstanceReader(chemObjectReader);
 			int r = 0;
 			while (reader.hasNext()) {
@@ -58,8 +67,15 @@ public class ProteinCoronaPaperReaderTest  extends DbUnitTest {
     		LiteratureEntry entry = new LiteratureEntry("Protein Corona","http://dx.doi.org/10.1021/nn406018q");
     		entry.setType(_type.Dataset);
     		
-    		CSV12Reader chemObjectReader = new CSV12Reader(new FileReader(
-					new File("D:/src-ideaconsult/Protein_Corona_fork/MergedSheets.csv")),entry,"PRCR-");
+    		File baseDir = new File(System.getProperty("java.io.tmpdir"));
+    		File datafile = new File(baseDir, "MergedSheets.csv");
+    		if (!datafile.exists()) {
+    			URL url = new URL(
+    					"https://raw.githubusercontent.com/ideaconsult/Protein_Corona/master/MergedSheets.csv");
+    			DownloadTool.download(url, datafile);
+    		}
+    		
+    		CSV12Reader chemObjectReader = new CSV12Reader(new FileReader(datafile),entry,"PRCR-");
 			parser = new CSV12SubstanceReader(chemObjectReader);
 	        write(parser,c.getConnection(),new ReferenceSubstanceUUID(),false);
 	        
