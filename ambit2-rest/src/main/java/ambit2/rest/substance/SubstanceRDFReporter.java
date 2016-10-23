@@ -1,15 +1,30 @@
 package ambit2.rest.substance;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.p.DefaultAmbitProcessor;
-import net.idea.restnet.c.ResourceDoc;
-import net.idea.restnet.db.QueryURIReporter;
-import net.idea.restnet.db.convertors.QueryRDFReporter;
-
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.util.Map.Entry;
+import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.math.util.MultidimensionalCounter.Iterator;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
+
+import com.google.common.base.Charsets;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.sparql.vocabulary.FOAF;
+import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.DCTerms;
+import com.hp.hpl.jena.vocabulary.OWL;
+import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
@@ -22,22 +37,11 @@ import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.substance.study.SubstanceStudyDetailsProcessor;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.structure.CompoundURIReporter;
-
-import com.google.common.base.Charsets;
-import com.google.common.hash.HashCode;
-import com.google.common.hash.HashFunction;
-import com.google.common.hash.Hashing;
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.sparql.vocabulary.FOAF;
-import com.hp.hpl.jena.vocabulary.DC;
-import com.hp.hpl.jena.vocabulary.DCTerms;
-import com.hp.hpl.jena.vocabulary.OWL;
-import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
-import com.hp.hpl.jena.vocabulary.XSD;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.db.convertors.QueryRDFReporter;
 
 public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		extends QueryRDFReporter<SubstanceRecord, Q> {
@@ -464,6 +468,10 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 							getOutput().add(endpoint, RDFS.label,
 									effect.getEndpoint());
 						/**
+						 * Expand some properties to make the RDF more useful.
+						 */
+						someValuesAreMoreEqual(effect, endpoint, pa, substanceResource, measuregroup);
+						/**
 						 * TODO
 						 * 
 						 * <pre>
@@ -545,5 +553,44 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 			}
 
 		return record;
+	}
+
+	private void someValuesAreMoreEqual(EffectRecord<String, IParams, String> effect,
+			Resource endpoint, ProtocolApplication<Protocol, String, String, IParams, String> pa,
+			Resource substanceResource, Resource measuregroup) throws Exception {
+		if (effect.getEndpoint() == null) return;
+		String endPointLabel = effect.getEndpoint();
+		if ("Spectral counts".equals(endPointLabel)) { // this is a property used for protein coronas
+			output.setNsPrefix("uniprot", "http://rdf.uniprot.org/");
+			String derivURI = endpoint.getURI() + "D";
+			Resource deriv = getOutput().createResource(derivURI);
+			getOutput().add(deriv, RDF.type, RDFTermsSubstance.BAO_0000179.getResource(getOutput()));
+			getOutput().add(measuregroup, RDFTermsSubstance.OBI_0000299.getProperty(getOutput()), deriv);
+			getOutput().add(deriv, RDFTermsSubstance.IAO_0000136.getProperty(getOutput()), substanceResource);
+			getOutput().add(deriv, RDFS.label, "Protein binding");
+			
+			ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = null;
+
+            try {
+            	String json = effect.getTextValue().toString();
+            	root = mapper.readTree(new ByteArrayInputStream(json.getBytes()));
+            	java.util.Iterator<Entry<String,JsonNode>> entries = root.getFields();
+            	while (entries.hasNext()) {
+            		Entry<String,JsonNode> entry = entries.next();
+            		String loValue = entry.getValue().toString(); 
+            		if (loValue.contains(":1")) {
+            			getOutput().add(
+    						deriv,
+    						RDFTermsSubstance.has_value
+    								.getProperty(getOutput()),
+    						getOutput().createResource("http://rdf.uniprot.org/" + entry.getKey())
+    					);
+            		}
+            	}
+             } catch (Exception x) {
+            	throw x;
+            }
+		}
 	}
 }
