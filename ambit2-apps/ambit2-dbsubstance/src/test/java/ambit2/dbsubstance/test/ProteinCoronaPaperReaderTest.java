@@ -87,28 +87,6 @@ public class ProteinCoronaPaperReaderTest  extends DbUnitTest {
 	}
 	
 	
-	@Test
-	public void testWriteLLNAData() throws Exception {
-		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
-        IDatabaseConnection c = getConnection();
-        IRawReader<IStructureRecord> parser = null;
-        try {
-    		//LiteratureEntry entry = new LiteratureEntry("NICEATM LLNA Database","ITS-2 lipid Training and Test Sets Oct 1 2013_format 200514");
-        	LiteratureEntry entry = new LiteratureEntry("ITS-2 lipid Training set","ITS-2 lipid TrainingSets Oct 1 2013_format 200514.csv");
-    		entry.setType(_type.Dataset);
-
-    		CSV12Reader chemObjectReader = new CSV12Reader(new FileReader(
-					new File("D:/src-ideaconsult/LLNA/ITS-2 lipid TrainingSets Oct 1 2013_format 200514.csv")),entry,"LLNA-");
-			parser = new CSV12SubstanceReader(chemObjectReader);
-	        write(parser,c.getConnection(),new ReferenceSubstanceUUID(),false);
-	        
-        } finally {
-        	parser.close();
-        	c.close();
-        }
-        
-	}
-	
 	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key, boolean splitRecord) throws Exception  {
 		
 		ILiteratureEntry reference = LiteratureEntry.getI5UUIDReference();
