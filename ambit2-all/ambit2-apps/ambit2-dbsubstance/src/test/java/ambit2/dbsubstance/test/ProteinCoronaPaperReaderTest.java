@@ -1,16 +1,29 @@
 package ambit2.dbsubstance.test;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URL;
 import java.sql.Connection;
 
 import junit.framework.Assert;
 import net.idea.loom.nm.csv.CSV12Reader;
 import net.idea.loom.nm.csv.CSV12SubstanceReader;
+import net.idea.loom.nm.nanowiki.ENanoMapperRDFReader;
 
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFFormat;
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;
+import org.restlet.Request;
+import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.ILiteratureEntry._type;
@@ -25,6 +38,7 @@ import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
 import ambit2.db.processors.test.DbUnitTest;
 import ambit2.db.substance.processor.DBSubstanceWriter;
+import ambit2.rest.substance.SubstanceRDFReporter;
 
 public class ProteinCoronaPaperReaderTest  extends DbUnitTest {
 	@Test
@@ -85,7 +99,47 @@ public class ProteinCoronaPaperReaderTest  extends DbUnitTest {
         }
         
 	}
-	
+
+	@Test
+	public void testRDFExport() throws Exception {
+		CSV12SubstanceReader reader = null;
+		Request hack = new Request();
+		hack.setRootRef(new Reference("http://localhost/ambit2"));
+		File baseDir = new File(System.getProperty("java.io.tmpdir"));
+		File datafile = new File(baseDir, "MergedSheets.csv");
+		if (!datafile.exists()) {
+			URL url = new URL(
+					"https://raw.githubusercontent.com/ideaconsult/Protein_Corona/master/MergedSheets.csv");
+			DownloadTool.download(url, datafile);
+		}
+		SubstanceRDFReporter r = new SubstanceRDFReporter(hack,
+				MediaType.TEXT_RDF_N3);
+		Model model = ModelFactory.createDefaultModel();
+		r.header(model, null);
+		r.setOutput(model);
+		LiteratureEntry entry = new LiteratureEntry("Protein Corona","http://dx.doi.org/10.1021/nn406018q");
+		entry.setType(_type.Dataset);
+
+		try {
+    		CSV12Reader chemObjectReader = new CSV12Reader(new FileReader(datafile),entry,"PRCR-");
+			reader = new CSV12SubstanceReader(chemObjectReader);
+			while (reader.hasNext()) {
+				IStructureRecord record = reader.nextRecord();
+				Assert.assertTrue(record instanceof SubstanceRecord);
+				r.processItem((SubstanceRecord) record);
+			}
+			r.footer(model, null);
+			File output = new File(System.getProperty("java.io.tmpdir") + "/"
+					+ "protein_export.ttl");
+			System.out.println("Exported to " + output.getAbsolutePath());
+			OutputStream writer = new FileOutputStream(output);
+
+			RDFDataMgr.write(writer, model, RDFFormat.TURTLE);
+		} finally {
+			if (reader != null) reader.close();
+		}
+	}
+
 	
 	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key, boolean splitRecord) throws Exception  {
 		
