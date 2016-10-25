@@ -48,7 +48,11 @@ public class SLNTestUtilities
 		
 		//tu.testSLNIsomorphism("C[rbc=1]","C1CCCC1"); //not working !!!
 		
-		tu.testSLNIsomorphism("C~[type=2]CCCCC~[type=3]C","C=CCCCC#C"); 
+		//tu.testSLNIsomorphism("C~[type=2]CCCCC~[type=3]C","C=CCCCC#C"); 
+		
+		tu.testSLN2SLN("Br[type=Cl|type=I]C(C)CCH3<coord2d=(1,2),(3,4)>");
+		tu.testSLN2SLN("C[1:tt=456]CCCCC@1");
+		
 		
 		
 		//tu.testSLN("C[hac=3]");
