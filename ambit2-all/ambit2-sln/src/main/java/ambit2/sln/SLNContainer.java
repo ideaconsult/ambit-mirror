@@ -6,7 +6,13 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.sln.dictionary.SLNDictionary;
 
-public class SLNContainer extends QueryAtomContainer {
+public class SLNContainer extends QueryAtomContainer 
+{
+	public static enum SLNObjectType {
+		STRUCTURE, ENSAMBLE, QUERY, REACTION 
+	}
+	
+	
 	static final long serialVersionUID = 345274336895563284L;
 
 	private SLNDictionary localDictionary = null;
@@ -14,10 +20,12 @@ public class SLNContainer extends QueryAtomContainer {
 
 	// Flags that determine what types of objects are stored in SLNContainer
 	private boolean IsStructureOnly = false;
+	private SLNObjectType slnObjectType =  SLNObjectType.QUERY;
+		
 
 	private SLNContainerAttributes attributes = new SLNContainerAttributes();
-	private SLNAtomExpression atomExpression = new SLNAtomExpression();
-	private SLNBondExpression bondExpression = new SLNBondExpression();
+	//private SLNAtomExpression atomExpression = new SLNAtomExpression();
+	//private SLNBondExpression bondExpression = new SLNBondExpression();
 
 	public SLNContainer(IChemObjectBuilder builder) {
 		super(builder);
@@ -42,8 +50,8 @@ public class SLNContainer extends QueryAtomContainer {
 		SLNContainer container = new SLNContainer(SilentChemObjectBuilder.getInstance());
 		for (int i = 0; i < container.atomCount; i++) {
 			for (int j = 0; j < container.bondCount; j++) {
-				if (atomExpression != null || bondExpression != null
-						|| attributes != null)
+				if (/*atomExpression != null || bondExpression != null
+						|| */  attributes != null)
 					return false;
 			}
 		}
@@ -65,5 +73,16 @@ public class SLNContainer extends QueryAtomContainer {
 	public void setGlobalDictionary(SLNDictionary dict) {
 		globalDictionary = dict;
 	}
+	
+	public SLNObjectType getSlnObjectType() {
+		return slnObjectType;
+	}
+	
+	public void recognizeSlnObjectType() {
+		//TODO 
+		//may be remove function checkIsStructureOnly()
+	}
+	
+	
 
 }
