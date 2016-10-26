@@ -9,16 +9,21 @@ import ambit2.export.isa.base.ISAConst.DataFileFormat;
 
 public class ExternalDataFileManager 
 {	
+	public static enum StorageMode {
+		DIRECT_FILE_STORAGE, STRING_BUFFER, ARRAY_BUFFER
+	}
+	
 	protected DataFileFormat dataFileFormat = DataFileFormat.TEXT_TAB;
 	protected File outputDir = null;
+	protected ExternalDataFileHeader fileHeader = null;
+	protected StorageMode FlagStorageMode = StorageMode.DIRECT_FILE_STORAGE;
 	
-	protected boolean FlagStoreDataInStringBuffer = false; 
+	protected List<List<String>> array_buffer = new ArrayList<List<String>>();
 	protected StringBuffer buffer = null;
 	protected FileWriter fileWriter = null;
 	
 	protected int currentRecordNum = 1;
 	protected List<String> currentRecord = new ArrayList<String>();
-	protected ExternalDataFileHeader fileHeader = null;
 	
 	public ExternalDataFileManager (File outputDir) throws Exception
 	{		
@@ -60,8 +65,17 @@ public class ExternalDataFileManager
 			if (!FinalizeIfEmpty)
 				return;
 		
-		if (FlagStoreDataInStringBuffer)
+		switch (FlagStorageMode)
 		{
+		case DIRECT_FILE_STORAGE:
+			break;
+			
+		case STRING_BUFFER:
+			break;
+		
+		case ARRAY_BUFFER:
+			break;
+			
 			//TODO
 		}
 		
