@@ -144,7 +144,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 														// (mapped) into
 														// investigation object
 		setExternalDataFile();
-		extDataManager = new ExternalDataFileManager(extDataFile);
+		extDataManager = new ExternalDataFileManager(extDataFile, ISAConst.DataFileFormat.TEXT_TAB);
 		ontologyManager = new OntologyManager1_0();
 
 		handleBundle(endpointBundle);
