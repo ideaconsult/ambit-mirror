@@ -21,24 +21,28 @@ public class ExternalDataFileManager
 	protected List<List<Object>> arrayBuffer = new ArrayList<List<Object>>();
 	protected StringBuffer strBuffer = null;
 	protected FileWriter fileWriter = null;
+	protected String splitter = "\t";
 	
 	protected int currentRecordNum = 1;
 	protected List<Object> currentRecord = new ArrayList<Object>();
 	
-	public ExternalDataFileManager (File outputDir) throws Exception
+	public ExternalDataFileManager (File outputDir, DataFileFormat dataFileFormat) throws Exception
 	{		
 		this.outputDir = outputDir;
+		this.dataFileFormat = dataFileFormat;
 		init();
-	}	
-	
+	}
+		
 	void init () throws Exception
 	{
 		currentRecord.clear();
-		if (outputDir != null)
-		{
+		
+		if (outputDir == null)
+			throw new Exception("Output file/dir is null!");
+		
 			fileWriter = createWriter(outputDir);
 			//TODO set file header
-		}
+		
 	}
 	
 	public File getOutputDir() {
