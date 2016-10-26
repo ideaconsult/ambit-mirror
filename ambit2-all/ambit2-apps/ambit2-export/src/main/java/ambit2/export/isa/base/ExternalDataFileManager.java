@@ -16,7 +16,7 @@ public class ExternalDataFileManager
 	protected DataFileFormat dataFileFormat = DataFileFormat.TEXT_TAB;
 	protected File outputDir = null;
 	protected ExternalDataFileHeader fileHeader = null;
-	protected StorageMode FlagStorageMode = StorageMode.DIRECT_FILE_STORAGE;
+	protected StorageMode storageMode = StorageMode.DIRECT_FILE_STORAGE;
 	
 	protected List<List<Object>> arrayBuffer = new ArrayList<List<Object>>();
 	protected StringBuffer strBuffer = null;
@@ -39,6 +39,38 @@ public class ExternalDataFileManager
 			fileWriter = createWriter(outputDir);
 			//TODO set file header
 		}
+	}
+	
+	public File getOutputDir() {
+		return outputDir;
+	}
+
+	public void setOutputDir(File outputDir) {
+		this.outputDir = outputDir;
+	}
+
+	public ExternalDataFileHeader getFileHeader() {
+		return fileHeader;
+	}
+
+	public void setFileHeader(ExternalDataFileHeader fileHeader) {
+		this.fileHeader = fileHeader;
+	}
+	
+	public DataFileFormat getDataFileFormat() {
+		return dataFileFormat;
+	}
+
+	public void setDataFileFormat(DataFileFormat dataFileFormat) {
+		this.dataFileFormat = dataFileFormat;
+	}
+	
+	public StorageMode getStorageMode() {
+		return storageMode;
+	}
+
+	public void setStorageMode(StorageMode storageMode) {
+		this.storageMode = storageMode;
 	}
 	
 	
@@ -67,9 +99,13 @@ public class ExternalDataFileManager
 			if (!FinalizeIfEmpty)
 				return;
 		
-		switch (FlagStorageMode)
+		switch (storageMode)
 		{
 		case DIRECT_FILE_STORAGE:
+			if (fileWriter != null)
+			{
+				//TODO
+			}
 			break;
 			
 		case STRING_BUFFER:
@@ -80,12 +116,6 @@ public class ExternalDataFileManager
 			
 			//TODO
 		}
-		
-		if (fileWriter != null)
-		{
-			//TODO
-		}
-		
 		currentRecord.clear();
 	}
 	
@@ -97,13 +127,6 @@ public class ExternalDataFileManager
 		return null;
 	}
 	
-	public DataFileFormat getDataFileFormat() {
-		return dataFileFormat;
-	}
-
-	public void setDataFileFormat(DataFileFormat dataFileFormat) {
-		this.dataFileFormat = dataFileFormat;
-	}
 	
 	public void saveBufferAsFile(File file) throws Exception
 	{
