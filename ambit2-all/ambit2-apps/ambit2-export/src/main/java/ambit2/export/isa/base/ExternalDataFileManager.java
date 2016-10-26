@@ -18,8 +18,8 @@ public class ExternalDataFileManager
 	protected ExternalDataFileHeader fileHeader = null;
 	protected StorageMode FlagStorageMode = StorageMode.DIRECT_FILE_STORAGE;
 	
-	protected List<List<Object>> array_buffer = new ArrayList<List<Object>>();
-	protected StringBuffer buffer = null;
+	protected List<List<Object>> arrayBuffer = new ArrayList<List<Object>>();
+	protected StringBuffer strBuffer = null;
 	protected FileWriter fileWriter = null;
 	
 	protected int currentRecordNum = 1;
@@ -92,8 +92,8 @@ public class ExternalDataFileManager
 	
 	public String getDataStringBuffer()
 	{
-		if (buffer != null)
-			return buffer.toString();
+		if (strBuffer != null)
+			return strBuffer.toString();
 		return null;
 	}
 	
