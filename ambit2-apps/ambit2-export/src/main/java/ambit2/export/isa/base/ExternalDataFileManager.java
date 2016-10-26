@@ -32,6 +32,16 @@ public class ExternalDataFileManager
 		this.dataFileFormat = dataFileFormat;
 		init();
 	}
+	
+	public ExternalDataFileManager (File outputDir, 
+								DataFileFormat dataFileFormat, 
+								ExternalDataFileHeader fileHeader) throws Exception
+	{		
+		this.outputDir = outputDir;
+		this.dataFileFormat = dataFileFormat;
+		this.fileHeader = fileHeader;
+		init();
+	}
 		
 	void init () throws Exception
 	{
@@ -40,8 +50,9 @@ public class ExternalDataFileManager
 		if (outputDir == null)
 			throw new Exception("Output file/dir is null!");
 		
-			fileWriter = createWriter(outputDir);
-			//TODO set file header
+		fileWriter = createWriter(outputDir);
+		//Set file header
+		
 		
 	}
 	
@@ -49,24 +60,12 @@ public class ExternalDataFileManager
 		return outputDir;
 	}
 
-	public void setOutputDir(File outputDir) {
-		this.outputDir = outputDir;
-	}
-
 	public ExternalDataFileHeader getFileHeader() {
 		return fileHeader;
-	}
-
-	public void setFileHeader(ExternalDataFileHeader fileHeader) {
-		this.fileHeader = fileHeader;
 	}
 	
 	public DataFileFormat getDataFileFormat() {
 		return dataFileFormat;
-	}
-
-	public void setDataFileFormat(DataFileFormat dataFileFormat) {
-		this.dataFileFormat = dataFileFormat;
 	}
 	
 	public StorageMode getStorageMode() {
@@ -76,8 +75,6 @@ public class ExternalDataFileManager
 	public void setStorageMode(StorageMode storageMode) {
 		this.storageMode = storageMode;
 	}
-	
-	
 	
 	public void close() throws Exception
 	{
