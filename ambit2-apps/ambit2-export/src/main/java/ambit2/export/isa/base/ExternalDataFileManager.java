@@ -18,12 +18,12 @@ public class ExternalDataFileManager
 	protected ExternalDataFileHeader fileHeader = null;
 	protected StorageMode FlagStorageMode = StorageMode.DIRECT_FILE_STORAGE;
 	
-	protected List<List<String>> array_buffer = new ArrayList<List<String>>();
+	protected List<List<Object>> array_buffer = new ArrayList<List<Object>>();
 	protected StringBuffer buffer = null;
 	protected FileWriter fileWriter = null;
 	
 	protected int currentRecordNum = 1;
-	protected List<String> currentRecord = new ArrayList<String>();
+	protected List<Object> currentRecord = new ArrayList<Object>();
 	
 	public ExternalDataFileManager (File outputDir) throws Exception
 	{		
@@ -40,6 +40,8 @@ public class ExternalDataFileManager
 			//TODO set file header
 		}
 	}
+	
+	
 	
 	public void close() throws Exception
 	{
