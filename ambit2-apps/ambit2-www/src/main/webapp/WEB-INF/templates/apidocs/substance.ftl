@@ -6,6 +6,8 @@
         "image/png",
         "application/x-javascript",
         "application/ld+json",
+        "application/rdf+xml",
+        "text/n3",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ],		
     "resourcePath": "/substance",
