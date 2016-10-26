@@ -2,7 +2,7 @@ package ambit2.export.isa.base;
 
 public class ExternalDataFileLocation 
 {
-	public static final String splitter = ","; 
+	public static final String splitter = "/"; 
 	
 	public String fileName = null;
 	public int recordIndex = 0;  
