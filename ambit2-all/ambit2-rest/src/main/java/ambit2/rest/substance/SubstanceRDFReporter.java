@@ -3,6 +3,7 @@ package ambit2.rest.substance;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.util.Map.Entry;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -501,11 +502,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 						}
 
 						if (effect.getUnit() != null)
-							getOutput().add(
-									endpoint,
-									RDFTermsSubstance.has_unit
-											.getProperty(getOutput()),
-									effect.getUnit());
+							outputUnit(endpoint, effect.getUnit());
 
 						if (effect.getTextValue() != null
 								&& !"".equals(effect.getTextValue())) {
@@ -542,11 +539,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 											);
 										}
 										if (value.getUnits() != null) {
-											getOutput().add(
-												conditionRes,
-												RDFTermsSubstance.has_unit.getProperty(getOutput()),
-												value.getUnits()
-											);
+											outputUnit(conditionRes, value.getUnits());
 										}
 									} else if (condition.getValue() instanceof IParams) {
 										for (Object paramsObj : ((IParams)condition.getValue()).entrySet()) {
@@ -614,6 +607,36 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 			}
 
 		return record;
+	}
+
+	/* This list can be replaced by using jQUDT, a library that uses the QUDT
+	 * ontology and returns URIs based on the unit label.
+	 */
+	@SuppressWarnings({ "rawtypes", "serial", "unchecked" })
+	private static Map<String,String> units = new HashMap(){{
+		put("%", "http://qudt.org/schema/qudt#floatPercentage");
+		put("µg/mL", "http://www.openphacts.org/units/MicrogramPerMilliliter");
+		put("ug/ml", "http://www.openphacts.org/units/MicrogramPerMilliliter");
+		put("μM", "http://www.openphacts.org/units/Micromolar");
+		put("Å", "http://qudt.org/vocab/unit#Angstrom");
+		put("h", "http://qudt.org/vocab/unit#Hour");
+		put("°C", "http://qudt.org/vocab/unit#DegreeCelsius");
+		put("Celsius", "http://qudt.org/vocab/unit#DegreeCelsius");
+		put("um", "http://dbpedia.org/resource/Micrometer");
+	}};
+
+	private void outputUnit(Resource endpoint, String unit) throws Exception {
+		getOutput().add(endpoint, RDFTermsSubstance.has_unit.getProperty(getOutput()), unit);
+		output.setNsPrefix("qudt", "http://qudt.org/schema/qudt#");
+		output.setNsPrefix("ops", "http://FIXME/");
+		output.setNsPrefix("opsUnit", "http://www.openphacts.org/units/");
+		Property opsHasUnit = getOutput().createProperty("http://FIXME/standardisedUnit");
+		if (units.containsKey(unit)) {
+			getOutput().add(
+				endpoint, opsHasUnit,
+				getOutput().createResource(units.get(unit))
+			);
+		}
 	}
 
 	private void someValuesAreMoreEqual(EffectRecord<String, IParams, String> effect,
