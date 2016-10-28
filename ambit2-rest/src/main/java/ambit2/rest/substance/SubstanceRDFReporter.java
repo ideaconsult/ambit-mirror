@@ -624,6 +624,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 	private void outputUnit(Resource endpoint, String unit) throws Exception {
 		getOutput().add(endpoint, RDFTermsSubstance.has_unit.getProperty(getOutput()), unit);
 		output.setNsPrefix("qudt", "http://qudt.org/schema/qudt#");
+		output.setNsPrefix("unit", "http://qudt.org/vocab/unit#");
 		output.setNsPrefix("ops", "http://FIXME/");
 		output.setNsPrefix("opsUnit", "http://www.openphacts.org/units/");
 		Property opsHasUnit = getOutput().createProperty("http://FIXME/standardisedUnit");
