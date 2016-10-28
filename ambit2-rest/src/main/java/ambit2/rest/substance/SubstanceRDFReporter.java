@@ -551,11 +551,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 													params.getValue().toString()
 												);
 											} else if ("unit".equals(params.getKey())) {
-												getOutput().add(
-													conditionRes,
-													RDFTermsSubstance.has_unit.getProperty(getOutput()),
-													params.getValue().toString()
-												);
+												outputUnit(conditionRes, params.getValue().toString());
 											} else {
 												// System.out.println("Condition: " + params.getKey() + " -> " + params.getValue());
 											}
