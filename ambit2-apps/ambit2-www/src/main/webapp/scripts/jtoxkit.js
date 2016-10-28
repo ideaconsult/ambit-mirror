@@ -3283,7 +3283,12 @@ var jToxSubstance = (function () {
     for (var i = 0;i < data.length;++i) {
       if (i > 0)
         html += '<br/>';
-      html += data[i].type + '&nbsp;=&nbsp;' + data[i].id;
+      var id = data[i].id;
+      try {
+      if (id.startsWith("http")) id = "<a href='"+id+"' target=_blank class='qxternal'>"+id+"</a>";
+      } catch (err) {}  
+              
+      html += data[i].type + '&nbsp;=&nbsp;' + id;
     }
     return html;
   };
