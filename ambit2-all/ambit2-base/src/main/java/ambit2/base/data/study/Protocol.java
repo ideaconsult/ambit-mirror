@@ -1279,7 +1279,7 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				// return "NPO_1967 NPO_1968";
-				return "http://purl.bioontology.org/ontology/npo/NPO_1967";
+				return "http://purl.bioontology.org/ontology/npo#NPO_1967";
 			}
 		},
 		CRYSTALLINE_PHASE_SECTION {
@@ -1304,7 +1304,7 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return "http://purl.bioontology.org/ontology/npo/NPO_1512";
+				return "http://purl.bioontology.org/ontology/npo#NPO_1512";
 			}
 		},
 		CRYSTALLITE_AND_GRAIN_SIZE_SECTION {
@@ -1350,7 +1350,7 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				// return "NPO_274 NPO_1365";
-				return "http://purl.bioontology.org/ontology/npo/NPO_274";
+				return "http://purl.bioontology.org/ontology/npo#NPO_274";
 			}
 		},
 		SPECIFIC_SURFACE_AREA_SECTION {
@@ -1375,7 +1375,7 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return "http://purl.bioontology.org/ontology/npo/NPO_1235";
+				return "http://purl.bioontology.org/ontology/npo#NPO_1235";
 			}
 		},
 		ZETA_POTENTIAL_SECTION {
@@ -1400,7 +1400,7 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return "http://purl.bioontology.org/ontology/npo/NPO_1302";
+				return "http://purl.bioontology.org/ontology/npo#NPO_1302";
 			}
 		},
 		SURFACE_CHEMISTRY_SECTION {
