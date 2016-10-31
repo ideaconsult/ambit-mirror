@@ -2160,6 +2160,132 @@ public class Protocol {
 				return "http://purl.enanomapper.org/onto/ENM_9000011";
 			}			
 		},
+		ENM_9000100_SECTION {
+			@Override
+			public String toString() {
+				return "Boiling Point";
+			}
+
+			@Override
+			public String getNumber() {
+				return "ENM_9000100";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_9000100";
+			}			
+		},
+		ENM_9000111_SECTION {
+			@Override
+			public String toString() {
+				return "Particle Size Distribution D11";
+			}
+
+			@Override
+			public String getNumber() {
+				return "ENM_9000111";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_9000111";
+			}			
+		},
+		ENM_9000112_SECTION {
+			@Override
+			public String toString() {
+				return "Particle Size Distribution D12";
+			}
+
+			@Override
+			public String getNumber() {
+				return "ENM_9000112";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_9000112";
+			}			
+		},
+		ENM_9000127_SECTION {
+			@Override
+			public String toString() {
+				return "Particle Size Distribution D27";
+			}
+
+			@Override
+			public String getNumber() {
+				return "ENM_9000127";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_9000127";
+			}			
+		},
+		ENM_9000177_SECTION {
+			@Override
+			public String toString() {
+				return "Particle Size Distribution D77";
+			}
+
+			@Override
+			public String getNumber() {
+				return "ENM_9000177";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_9000177";
+			}			
+		},
+		ENM_9000195_SECTION {
+			@Override
+			public String toString() {
+				return "Particle Size Distribution D95";
+			}
+
+			@Override
+			public String getNumber() {
+				return "ENM_9000195";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_9000195";
+			}			
+		},
 		BAO_0010001_SECTION {
 
 			@Override
@@ -2216,6 +2342,117 @@ public class Protocol {
 			}			
 		},
 
+		NPO_1699_SECTION {
+
+			@Override
+			public String toString() {
+				return "Particle Size Distribution";
+			}
+
+			@Override
+			public String getNumber() {
+				return "NPO_1699";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.bioontology.org/ontology/npo#NPO_1699";
+			}			
+		},
+		NPO_1914_SECTION {
+
+			@Override
+			public String toString() {
+				return "Hydrodynamic Particle Size";
+			}
+
+			@Override
+			public String getNumber() {
+				return "NPO_1914";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.bioontology.org/ontology/npo#NPO_1914";
+			}			
+		},
+		NPO_1694_SECTION {
+
+			@Override
+			public String toString() {
+				return "Particle Size";
+			}
+
+			@Override
+			public String getNumber() {
+				return "NPO_1694";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.bioontology.org/ontology/npo#NPO_1694";
+			}			
+		},
+		NPO_1539_SECTION {
+
+			@Override
+			public String toString() {
+				return "Particle Diameter";
+			}
+
+			@Override
+			public String getNumber() {
+				return "NPO_1539";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.bioontology.org/ontology/npo#NPO_1539";
+			}			
+		},
+		PATO_0000921_SECTION {
+
+			@Override
+			public String toString() {
+				return "Particle Width";
+			}
+
+			@Override
+			public String getNumber() {
+				return "PATO_0000921";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/PATO_0000921";
+			}			
+		},
+		
 		// Toxcast - BAO
 		CELL_CYCLE {
 			// obo:GO:0007049
