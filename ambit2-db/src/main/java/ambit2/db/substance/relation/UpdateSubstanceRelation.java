@@ -136,17 +136,18 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 
 		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
 		params1.add(new QueryParam<String>(String.class, getRelation().name()));
-		if (getMetric().getFunction()!=null && getMetric().getFunction().length()>45)
-			params1.add(new QueryParam<String>(String.class, getMetric().getFunction().substring(0,44)));
-		else params1.add(new QueryParam<String>(String.class, getMetric().getFunction()));
-		params1.add(new QueryParam<String>(String.class, getMetric().getReal_lower()));
-		params1.add(new QueryParam<Double>(Double.class, getMetric().getReal_lowervalue()));
-		params1.add(new QueryParam<String>(String.class, getMetric().getReal_upper()));
-		params1.add(new QueryParam<Double>(Double.class, getMetric().getReal_uppervalue()));
-		params1.add(new QueryParam<String>(String.class, getMetric().getReal_unit()));
-		params1.add(new QueryParam<String>(String.class, getMetric().getTypical()));
-		params1.add(new QueryParam<Double>(Double.class, getMetric().getTypical_value()));
-		params1.add(new QueryParam<String>(String.class, getMetric().getTypical_unit()));
+		
+		if (getMetric()!=null && getMetric().getFunction()!=null && getMetric().getFunction().length()>45)
+			params1.add(new QueryParam<String>(String.class, getMetric()==null?null:getMetric().getFunction().substring(0,44)));
+		else params1.add(new QueryParam<String>(String.class, getMetric()==null?null:getMetric().getFunction()));
+		params1.add(new QueryParam<String>(String.class, getMetric()==null?null:getMetric().getReal_lower()));
+		params1.add(new QueryParam<Double>(Double.class, getMetric()==null?null:getMetric().getReal_lowervalue()));
+		params1.add(new QueryParam<String>(String.class, getMetric()==null?null:getMetric().getReal_upper()));
+		params1.add(new QueryParam<Double>(Double.class, getMetric()==null?null:getMetric().getReal_uppervalue()));
+		params1.add(new QueryParam<String>(String.class, getMetric()==null?null:getMetric().getReal_unit()));
+		params1.add(new QueryParam<String>(String.class, getMetric()==null?null:getMetric().getTypical()));
+		params1.add(new QueryParam<Double>(Double.class, getMetric()==null?null:getMetric().getTypical_value()));
+		params1.add(new QueryParam<String>(String.class, getMetric()==null?null:getMetric().getTypical_unit()));
 		
 		o_uuid = getObject().getRecordProperty(Property.getI5UUIDInstance());
 		String[] uuid = {null,o_uuid==null?null:o_uuid.toString()};
