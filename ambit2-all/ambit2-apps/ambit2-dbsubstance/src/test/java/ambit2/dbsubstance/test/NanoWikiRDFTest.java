@@ -43,9 +43,9 @@ public class NanoWikiRDFTest extends DbUnitTest {
 
 	public static File getNanoWikiFile() throws Exception {
 		File baseDir = new File(System.getProperty("java.io.tmpdir"));
-		File file = new File(baseDir, "nanowiki3.rdf.gz");
+		File file = new File(baseDir, "nanowiki4.rdf.gz");
 		if (!file.exists()) {
-			URL url = new URL("https://ndownloader.figshare.com/files/5228257");
+			URL url = new URL("https://ndownloader.figshare.com/files/6780819");
 			DownloadTool.download(url, file);
 		}
 		return file;
