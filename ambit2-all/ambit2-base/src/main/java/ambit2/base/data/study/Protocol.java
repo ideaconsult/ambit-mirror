@@ -2386,6 +2386,28 @@ public class Protocol {
 				return "http://purl.bioontology.org/ontology/npo#NPO_1914";
 			}			
 		},
+		NPO_1204_SECTION {
+
+			@Override
+			public String toString() {
+				return "Isoelectric Point";
+			}
+
+			@Override
+			public String getNumber() {
+				return "NPO_1204";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.bioontology.org/ontology/npo#NPO_1204";
+			}			
+		},
 		NPO_1694_SECTION {
 
 			@Override
