@@ -485,7 +485,7 @@ public class CompositionRelation extends AbstractRelation<STRUCTURE_RELATION, Pr
 				CompositionRelation.jsonFeature.compositionUUID.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getCompositionUUID())),
 				CompositionRelation.jsonFeature.compositionName.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getName())),
 				CompositionRelation.jsonFeature.relation.jsonname(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getRelationType().name())),
-				CompositionRelation.jsonFeature.proportion.jsonname(),getRelation().toJSON(),
+				CompositionRelation.jsonFeature.proportion.jsonname(),getRelation()==null?"{}":getRelation().toJSON(),
 				CompositionRelation.jsonFeature.hidden.jsonname(),isHidden()
 				);
 	}
