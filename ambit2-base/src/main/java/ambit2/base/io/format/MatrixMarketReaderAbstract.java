@@ -10,7 +10,7 @@ import net.idea.modbcum.i.processors.IProcessor;
 
 public abstract class MatrixMarketReaderAbstract<T, V> {
 
-	public void readMatrixMarket(Path pathmatrix,int maxrecords, IProcessor<T, T> processor) throws Exception {
+	public void readMM(Path pathmatrix, int maxrecords, IProcessor<T, T> processor) throws Exception {
 
 		long nrows = -1;
 		long ncols = -1;
@@ -23,7 +23,7 @@ public abstract class MatrixMarketReaderAbstract<T, V> {
 			reader = Files.newBufferedReader(pathmatrix, StandardCharsets.UTF_8);
 			String line = null;
 			int r = 0;
-
+			int ndoc = 0;
 			boolean sparse = true;
 			while ((line = reader.readLine()) != null) {
 				r++;
@@ -60,26 +60,33 @@ public abstract class MatrixMarketReaderAbstract<T, V> {
 						value = null;
 					}
 					if (currentrow != row || doc == null) {
+						ndoc++;
 						if (doc != null) {
 							recordReady(doc);
-							processor.process(doc);
-						}	
+							if (processor != null)
+								processor.process(doc);
+						}
 
 						b = new StringBuilder();
 						currentrow = row;
+						if ((maxrecords > 0) && (ndoc > maxrecords)) {
+							doc = null;
+							break;
+						}
 						doc = createRecord(row);
 					}
 					addField(doc, row, col, value);
 				}
 
-				if ((maxrecords > 0) && (r > maxrecords))
-					break;
 			}
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			recordReady(doc);
-			processor.process(doc);
+			if (doc != null) {
+				recordReady(doc);
+				if (processor != null)
+					processor.process(doc);
+			}
 			try {
 				reader.close();
 			} catch (IOException e) {
@@ -93,12 +100,12 @@ public abstract class MatrixMarketReaderAbstract<T, V> {
 		return line.contains("coordinate");
 	}
 
-	abstract T createRecord(int id);
+	protected abstract T createRecord(int id);
 
-	abstract void addField(T doc, int row, int col, V value);
+	protected abstract void addField(T doc, int row, int col, V value);
 
-	abstract V parseValue(String token) throws Exception;
+	protected abstract V parseValue(String token) throws Exception;
 
-	abstract void recordReady(T record);
+	protected abstract void recordReady(T record);
 
 }
