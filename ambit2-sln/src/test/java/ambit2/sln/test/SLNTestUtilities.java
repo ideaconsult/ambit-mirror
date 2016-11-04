@@ -45,7 +45,10 @@ public class SLNTestUtilities
 		//tu.testSLNIsomorphism("C[tbo=4]","NNS");
 		//tu.testSLNIsomorphism("C[src=3]","C1CCC1CC2CC2");		
 		//tu.testSLNIsomorphism("C[tac=2]","C#C");
-		tu.testSLNIsomorphism("Any=C","C=N");
+		//tu.testSLNIsomorphism("Any=C","C=N");
+		
+		//tu.testSLNIsomorphism("C[1]CC@1C", "C1CC1");  //EmptyStackException !!! 
+		
 		
 		//tu.testSLNIsomorphism("C[rbc=1]","C1CCCC1"); //not working !!!
 		
