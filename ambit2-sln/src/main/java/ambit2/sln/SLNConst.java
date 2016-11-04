@@ -572,7 +572,7 @@ public class SLNConst
 
 	public static final String elSymbols[] =
 		{
-		"",                                                  
+		"Any",  //atom type 0 is considered as any atom.                                                  
 		"H","He","Li","Be","B",
 		"C","N","O","F","Ne",         
 		"Na","Mg","Al","Si","P",
