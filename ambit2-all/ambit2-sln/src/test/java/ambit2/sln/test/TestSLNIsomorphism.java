@@ -52,6 +52,12 @@ public class TestSLNIsomorphism extends TestCase
 		//slnMatch("C[1]CCN@1", "C1CCN1", true); //does not match
 		slnMatch("CCCC", "C1CCC1", true);
 		slnMatch("CCCN", "CCCCC", false);
+		slnMatch("AnyN", "CCCCN", true);
+		slnMatch("AnyN", "CCCC=N", false);
+		slnMatch("Any=N", "CCCC=N", true);
+		slnMatch("Any=Any-C", "CCCC=N", true);
+		slnMatch("N=Any-Any", "CCCC=N", true);
+		slnMatch("N=Any-Any=Any", "CCCC=N", false);
 		
 	}
 	
