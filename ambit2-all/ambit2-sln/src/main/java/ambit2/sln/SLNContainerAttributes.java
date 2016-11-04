@@ -114,6 +114,7 @@ public class SLNContainerAttributes
 			if (sb.length() > 1)
 				sb.append(";");
 			Map.Entry<String,String> entry = iterator.next();
+			//TODO handle comparison operation
 			sb.append(entry.getKey() + "=" + entry.getValue());
 			
 		}	
