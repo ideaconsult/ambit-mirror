@@ -533,6 +533,26 @@ public class SLNConst
 		}
 	}
 	 */
+	
+	//Comparison operation
+	public static final int CO_EQUALS = 0; // =
+	public static final int CO_LESS_THAN = 1; // <
+	public static final int CO_LESS_OR_EQUALS = 2; // <=
+	public static final int CO_GREATER_THAN = 3; // >
+	public static final int CO_GREATER_OR_EQUALS = 4; // >=
+	public static final int CO_DIFFERS = 5; // <> or !=
+	
+	public static int SLNStringToComparisonOperation(String type)
+	{
+		//TODO
+		return -1;
+	}
+	
+	public static String ComparisonOperationToSLNString(int compOp)
+	{
+		//TODO
+		return "";
+	}
 
 	//Matrix with the operation priorities {pij}
 	//p[i][j] < 0 means that priority(i) < priority(j)
