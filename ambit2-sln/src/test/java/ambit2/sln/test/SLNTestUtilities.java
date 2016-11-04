@@ -50,10 +50,10 @@ public class SLNTestUtilities
 		
 		//tu.testSLNIsomorphism("C~[type=2]CCCCC~[type=3]C","C=CCCCC#C"); 
 		
-		tu.testSLN2SLN("Br[type=Cl|type=I]C(C)CCH3<coord2d=(1,2),(3,4)>");
-		tu.testSLN2SLN("C[1:tt=456]CCCCC@1");
+		//tu.testSLN2SLN("Br[type=Cl|type=I]C(C)CCH3<coord2d=(1,2),(3,4)>");
+		//tu.testSLN2SLN("C[1:tt=456]CCCCC@1");
 		
-		
+		tu.testSLN2SLN("CC[n<3;fcharge=2]");
 		
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");

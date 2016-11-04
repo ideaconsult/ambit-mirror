@@ -3,15 +3,15 @@ package ambit2.sln;
 
 public class SLNExpressionToken 
 {
-	public int type;
+	public int type; //The type is for SLN standard attibutes
 	public String attrName = null;  //This is used for user defined attributes
+	public int compasionOperation = SLNConst.CO_EQUALS;
 	public int param = 0;
 	public double doubleParam = 0;
 	public String stringParam = null; //This is used for some types of attributes and user defined attributes 
 
 
 	//Various constructors for different token types
-
 
 	public SLNExpressionToken(int type)
 	{
