@@ -126,7 +126,8 @@ public class SLNParser {
 			if (container.getLocalDictionary() != null) {
 				atomType = SLNConst.LocalDictOffseet;
 			} else {
-				for (int i = 1; i < SLNConst.elSymbols.length; i++)
+				//index 0 is included for "Any" atom support
+				for (int i = 0; i < SLNConst.elSymbols.length; i++)
 					if (atomName.equals(SLNConst.elSymbols[i]))
 						atomType = i;
 			}
