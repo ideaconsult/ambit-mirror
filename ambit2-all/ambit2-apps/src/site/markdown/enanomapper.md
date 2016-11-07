@@ -48,9 +48,12 @@ Free text search on eNanoMapper and cananoLab databases
 is part of the computational infrastructure for toxicological data management
  of engineered nanomaterials, developed within the [EU FP7 eNanoMapper](http://www.enanomapper.net) project. 
  
+* [NEW] [User friendly data entry templates](http://ambit.sourceforge.net/enanomapper/templates)
+ 
 * Provides support for upload, search and retrieval of nanomaterials and experimental data through a REST web services [API](http://enanomapper.github.io/API/) and a web browser interface. 
  
 * Implemented by a customized version of [AMBIT](./index.html) web services. 
+
 
 ## [Download and install](./enanomapper_install.html)
 
