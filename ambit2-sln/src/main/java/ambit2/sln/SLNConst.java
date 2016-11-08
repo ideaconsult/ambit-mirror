@@ -542,15 +542,23 @@ public class SLNConst
 	public static final int CO_GREATER_OR_EQUALS = 4; // >=
 	public static final int CO_DIFFERS = 5; // <> or !=
 	
-	public static int SLNStringToComparisonOperation(String type)
+	public static int SLNStringToComparisonOperation(String compOpStr)
 	{
+		if (compOpStr.equals("="))
+			return CO_EQUALS;
 		//TODO
 		return -1;
 	}
 	
 	public static String ComparisonOperationToSLNString(int compOp)
 	{
-		//TODO
+		switch (compOp)
+		{
+		case CO_EQUALS:
+			return "=";
+			//TODO
+		}
+		
 		return "";
 	}
 
