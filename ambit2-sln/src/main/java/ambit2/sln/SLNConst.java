@@ -550,7 +550,7 @@ public class SLNConst
 		return -1;
 	}
 	
-	public static String ComparisonOperationToSLNString(int compOp)
+	public static String comparisonOperationToSLNString(int compOp)
 	{
 		switch (compOp)
 		{

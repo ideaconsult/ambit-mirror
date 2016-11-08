@@ -83,13 +83,16 @@ public class SLNExpressionToken
 		switch (type)
 		{
 		case SLNConst.A_ATTR_charge:			
-			return SLNConst.atomAttributeToSLNString(type)  + "=" + param;
+			return SLNConst.atomAttributeToSLNString(type)  
+					+ SLNConst.comparisonOperationToSLNString(compasionOperation) + param;
 
 		case SLNConst.A_ATTR_I:			
-			return SLNConst.atomAttributeToSLNString(type)  + "=" + param;	
+			return SLNConst.atomAttributeToSLNString(type)  
+					+ SLNConst.comparisonOperationToSLNString(compasionOperation) + param;
 
 		case SLNConst.A_ATTR_fcharge:			
-			return SLNConst.atomAttributeToSLNString(type) + "=" + doubleParam;
+			return SLNConst.atomAttributeToSLNString(type) 
+					+ SLNConst.comparisonOperationToSLNString(compasionOperation) + doubleParam;
 
 		case SLNConst.A_ATTR_s:			
 			return SLNConst.atomAttributeToSLNString(type) + "=" + SLNConst.atomStereoChemAttrToSLNString(param);
