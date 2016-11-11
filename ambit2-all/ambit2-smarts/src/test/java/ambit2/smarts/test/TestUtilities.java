@@ -105,6 +105,7 @@ public class TestUtilities {
 	static ChemObjectToSmiles cots = new ChemObjectToSmiles();
 
 	boolean FlagClearAromaticityBeforePreProcess = true;
+	boolean FlagCheckAromaticityOnTargetPreProcess = true;
 	boolean FlagTargetPreprocessing = false;
 	boolean FlagExplicitHAtoms = false;
 	boolean FlagPrintAtomAttributes = false;
@@ -154,8 +155,9 @@ public class TestUtilities {
 			MoleculeTools.convertImplicitToExplicitHydrogens(mol);
 		
 			//cdk_convertImplicitToExplicitHydrogens(mol);
-			
-		CDKHueckelAromaticityDetector.detectAromaticity(mol);
+		
+		if (FlagCheckAromaticityOnTargetPreProcess)	
+			CDKHueckelAromaticityDetector.detectAromaticity(mol);
 	}
 
 	public void preProcessProduct(IAtomContainer mol) throws Exception {
@@ -2828,7 +2830,7 @@ public class TestUtilities {
 		tu.FlagExplicitHAtoms = true;
 		tu.FlagTargetPreprocessing = true;
 		tu.FlagProductPreprocessing = true;
-		//tu.FlagPrintAtomAttributes = true;
+		tu.FlagPrintAtomAttributes = true;
 		// tu.FlagSSMode = SmartsConst.SSM_NON_IDENTICAL_FIRST;
 		tu.FlagExplicitHToImplicitOnProductPreProcess = true;
 		//tu.FlagPrintTransformationData = true;
@@ -2865,19 +2867,27 @@ public class TestUtilities {
 		//		"CCCOP(=O)(O)[O-]");
 		
 		
-		//bug #107 - fixed (but also needed a SMIRKS correction
+		//bug #107 - fixed (but also needed a SMIRKS correction)
 		//tu.testSMIRKS("[c:1]1[c:6]([H])[c:5]([H])[c:4][c:3][c:2]1>>[#8]([H])-[#6@H:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6@H:6]-1-[#8]([H])",				
 		//		"Clc1ccccc1"); //This one is not good: exdplicit H atoms of reactant side and implicit H atoms on the product chiral atoms
-		tu.testSMIRKS("[c:1]1[c:6]([H])[c:5]([H])[c:4][c:3][c:2]1>>[#8]([H])-[#6@:5]([H])-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6@:6]([H])-1-[#8]([H])",				
-				"Clc1ccccc1");  
+		//tu.testSMIRKS("[c:1]1[c:6]([H])[c:5]([H])[c:4][c:3][c:2]1>>[#8]([H])-[#6@:5]([H])-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6@:6]([H])-1-[#8]([H])",				
+		//		"Clc1ccccc1");  
 		
+		//bug #106
+		tu.FlagClearAromaticityBeforePreProcess = true;
+		tu.FlagCheckAromaticityOnTargetPreProcess = true;
+		tu.FlagSSMode = SmartsConst.SSM_MODE.SSM_NON_IDENTICAL;
+		tu.testSMIRKS("[H][c:1]1[c:7][c:10][c:9][#6,#7;a:8][c:2]1[H]>>[#8]-[c:1]1[c:7][c:10][c:9][#6,#7;a:8][c:2]1-[#8]",
+				"O=c1ccc2ccc3ccc(=O)c4ccc1c2c34", ReactionOperation.APPLY);
+		
+		tu.testIsomorphismPositions("c1ccc[#6,#7;a]c1", "O=c1ccc2ccc3ccc(=O)c4ccc1c2c34");
 		
 		//tu.testSmartsManagerBoolSearch("[#6;A;H2X4]!@-[#6;A;H2X4]!@-[#8;X2][P;X4]([#8;X2])([#8;A;X2H1,X1-])=[O;X1]",
 		//		"CCCOP(=O)(O)[O-]");
 		
 		//tu.testSmiles2Smiles("O/C(Br)=C(N)/C");
 		
-		//tu.testSMIRKS("ON(Br)[C:1]>>[C:1]", "ON(Br)/C(Cl)=C/C");  //The stereo element should not be lost
+		//tu.testSMIRKS("ON(Br)[C:1]>>[C:1]", "ON(Br)/C(Cl)=C/C");  //Fixed - the stereo element is not be lost anymore
 		//tu.testSMIRKS("N[C:1]>>[C:1]", "N/C(Cl)=C/C"); 
 		//tu.testSMIRKS("N(Br)[C:1]>>O[C:1]", "N(Br)/C(Cl)=C/C");
 		
