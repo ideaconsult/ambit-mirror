@@ -2858,20 +2858,22 @@ public class TestUtilities {
 		//		"CCCOP(=O)(O)[O-]");
 		
 		
-		tu.testSMIRKS("[#6;A;H2X4:7]([H:99])([H])!@-[#6;A;H2X4:6]!@-[#8;X2:5][P;X4:4]([#8;X2:2])([#8;A;X2:3][H])=[O;X1:1]>>[#8;X2:2][P;X4:4]1(=[O;X1:1])[#8;A;X:3][#6;A;H1X4:7]([H:99])!@-[#6;A;H2X4:6]!@-[#8;X2:5]1", 
-				"CCCOP(=O)(O)O");
+		//tu.testSMIRKS("[#6;A;H2X4:7]([H:99])([H])!@-[#6;A;H2X4:6]!@-[#8;X2:5][P;X4:4]([#8;X2:2])([#8;A;X2:3][H])=[O;X1:1]>>[#8;X2:2][P;X4:4]1(=[O;X1:1])[#8;A;X:3][#6;A;H1X4:7]([H:99])!@-[#6;A;H2X4:6]!@-[#8;X2:5]1", 
+		//		"CCCOP(=O)(O)O");
 		
-		tu.testSMIRKS("[#6;A;H2X4:7]([H:99])([H])!@-[#6;A;H2X4:6]!@-[#8;X2:5][P;X4:4]([#8;X2:2])([#8;A;X1-:3])=[O;X1:1]>>[#8;X2:2][P;X4:4]1(=[O;X1:1])[#8;A;X:3][#6;A;H1X4:7]([H:99])!@-[#6;A;H2X4:6]!@-[#8;X2:5]1", 
-				"CCCOP(=O)(O)[O-]");
+		//tu.testSMIRKS("[#6;A;H2X4:7]([H:99])([H])!@-[#6;A;H2X4:6]!@-[#8;X2:5][P;X4:4]([#8;X2:2])([#8;A;X1-:3])=[O;X1:1]>>[#8;X2:2][P;X4:4]1(=[O;X1:1])[#8;A;X:3][#6;A;H1X4:7]([H:99])!@-[#6;A;H2X4:6]!@-[#8;X2:5]1", 
+		//		"CCCOP(=O)(O)[O-]");
 		
 		
+		//bug #107 - fixed (but also needed a SMIRKS correction
+		//tu.testSMIRKS("[c:1]1[c:6]([H])[c:5]([H])[c:4][c:3][c:2]1>>[#8]([H])-[#6@H:5]-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6@H:6]-1-[#8]([H])",				
+		//		"Clc1ccccc1"); //This one is not good: exdplicit H atoms of reactant side and implicit H atoms on the product chiral atoms
+		tu.testSMIRKS("[c:1]1[c:6]([H])[c:5]([H])[c:4][c:3][c:2]1>>[#8]([H])-[#6@:5]([H])-1-[#6:4]=[#6:3]-[#6:2]=[#6:1]-[#6@:6]([H])-1-[#8]([H])",				
+				"Clc1ccccc1");  
 		
 		
 		//tu.testSmartsManagerBoolSearch("[#6;A;H2X4]!@-[#6;A;H2X4]!@-[#8;X2][P;X4]([#8;X2])([#8;A;X2H1,X1-])=[O;X1]",
 		//		"CCCOP(=O)(O)[O-]");
-		
-		
-		
 		
 		//tu.testSmiles2Smiles("O/C(Br)=C(N)/C");
 		

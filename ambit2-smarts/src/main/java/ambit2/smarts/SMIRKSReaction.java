@@ -743,7 +743,7 @@ public class SMIRKSReaction
 				SmartsAtomExpression pAtExp = (SmartsAtomExpression)pAt;
 				if (pAtExp.stereoLigands != null)
 				{
-					int pChirality = StereoFromSmartsAtomExpression.getStereo(pAtExp);
+					int pChirality = StereoFromSmartsAtomExpression.getStereo(pAtExp);					
 					if (pChirality != SmartsConst.ChC_Unspec)
 					{	
 						chAtTransform.prodChiralAtom = i;
@@ -770,7 +770,10 @@ public class SMIRKSReaction
 						}	
 						
 						//TODO handle extended chirality if present
-					}	
+						
+						chiralAtTransformations.add(chAtTransform);
+					}
+					
 				}
 			}
 		}

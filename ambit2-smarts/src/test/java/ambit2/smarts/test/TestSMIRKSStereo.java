@@ -332,6 +332,53 @@ public class TestSMIRKSStereo extends TestCase
 		checkReactionResult(resultProduct, expectedProducts);
 	}
 	
+		
+	//Generation of new stereo info (new stereo elements) of product side
+	
+	public void test150() throws Exception 
+	{	
+		String smirks = "[C:1][C:2]([N:3])([O:4])[Cl:5]>>[C:1][C@:2]([N:3])([O:4])[Cl:5]";
+		String target = "CCC(N)(O)Cl";
+		String expectedProducts[] = new String[] {"CC[C@](N)(O)Cl"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	public void test151() throws Exception 
+	{	
+		String smirks = "[C:1][C@:2]([N:3])([O:4])[Cl:5]>>[C:1][C:2]([N:3])([O:4])[Cl:5]";
+		String target = "CC[C@](N)(O)Cl";
+		String expectedProducts[] = new String[] {"CCC(N)(O)Cl"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	public void test152() throws Exception 
+	{	
+		String smirks = "[C:1][C:2]=[C:3][C:4]>>[C:1]/[C:2]=[C:3]/[C:4]";
+		String target = "CCC=CC";
+		String expectedProducts[] = new String[] {"CC/C=C/C"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
+	public void test153() throws Exception 
+	{	
+		String smirks = "[C:1]/[C:2]=[C:3]/[C:4]>>[C:1][C:2]=[C:3][C:4]";
+		String target = "CC/C=C/C";
+		String expectedProducts[] = new String[] {"CCC=CC"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+	
 	
 	// Additional test cases from kramerlab
 	
