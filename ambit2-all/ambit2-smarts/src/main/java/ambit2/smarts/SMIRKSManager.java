@@ -1712,6 +1712,8 @@ public class SMIRKSManager {
     		}
     	}
     	
+    	//System.out.println("  reaction.chiralAtTransformations.size() = " + reaction.chiralAtTransformations.size());
+    	
     	for (StereoChiralAtTransformation chirTransf : reaction.chiralAtTransformations)
     	{
     		switch (chirTransf.prodChirality)
