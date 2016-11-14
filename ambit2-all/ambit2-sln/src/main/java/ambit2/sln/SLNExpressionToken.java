@@ -5,7 +5,7 @@ public class SLNExpressionToken
 {
 	public int type; //The type is for SLN standard attibutes
 	public String attrName = null;  //This is used for user defined attributes
-	public int compasionOperation = SLNConst.CO_EQUALS;
+	public int comparisonOperation = SLNConst.CO_EQUALS;
 	public int param = 0;
 	public double doubleParam = 0;
 	public String stringParam = null; //This is used for some types of attributes and user defined attributes 
@@ -84,107 +84,107 @@ public class SLNExpressionToken
 		{
 		case SLNConst.A_ATTR_charge:			
 			return SLNConst.atomAttributeToSLNString(type)  
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation) 
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation) 
 					+ param;
 
 		case SLNConst.A_ATTR_I:			
 			return SLNConst.atomAttributeToSLNString(type)  
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation) 
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation) 
 					+ param;
 
 		case SLNConst.A_ATTR_fcharge:			
 			return SLNConst.atomAttributeToSLNString(type) 
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation) 
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation) 
 					+ doubleParam;
 
 		case SLNConst.A_ATTR_s:			
 			return SLNConst.atomAttributeToSLNString(type)
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ SLNConst.atomStereoChemAttrToSLNString(param);
 
 		case SLNConst.A_ATTR_spin:			
 			return SLNConst.atomAttributeToSLNString(type)
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ SLNConst.atomSpinAttrToSLNString(param);	
 			
 		case SLNConst.QA_ATTR_mapNum:			
 			return SLNConst.atomAttributeToSLNString(type)
-					+SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;	
 			
 		case SLNConst.QA_ATTR_c:
 			return SLNConst.atomAttributeToSLNString(type) 
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ SLNConst.coverageQueryAttributeToSLNString(param);
 			
 		case SLNConst.QA_ATTR_f:
 			return SLNConst.atomAttributeToSLNString(type)
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;
 			
 		case SLNConst.QA_ATTR_is:
 			return SLNConst.atomAttributeToSLNString(type)
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;
 			
 		case SLNConst.QA_ATTR_n:
 			return SLNConst.atomAttributeToSLNString(type)
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;
 			
 		case SLNConst.QA_ATTR_not:
 			return SLNConst.atomAttributeToSLNString(type)
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;
 			
 		case SLNConst.QA_ATTR_r:
 			return SLNConst.atomAttributeToSLNString(type)
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;
 			
 		case SLNConst.QA_ATTR_v:
 			return SLNConst.atomAttributeToSLNString(type)
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;
 			
 		case SLNConst.QA_ATTR_hac:
 			return SLNConst.atomAttributeToSLNString(type) 
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;
 			
 		case SLNConst.QA_ATTR_hc:
 			return SLNConst.atomAttributeToSLNString(type) 
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;
 			
 		case SLNConst.QA_ATTR_htc:
 			return SLNConst.atomAttributeToSLNString(type)
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;
 			
 		case SLNConst.QA_ATTR_mw:
 			return SLNConst.atomAttributeToSLNString(type)
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ doubleParam;
 			
 		case SLNConst.QA_ATTR_ntc:
 			return SLNConst.atomAttributeToSLNString(type)
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;
 			
 		case SLNConst.QA_ATTR_tac:
 			return SLNConst.atomAttributeToSLNString(type)
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;
 			
 		case SLNConst.QA_ATTR_tbo:
 			return SLNConst.atomAttributeToSLNString(type) 
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;
 			
 		case SLNConst.QA_ATTR_src:
 			return SLNConst.atomAttributeToSLNString(type) 
-					+ SLNConst.comparisonOperationToSLNString(compasionOperation)
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;
 			
 
