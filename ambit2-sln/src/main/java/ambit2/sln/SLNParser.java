@@ -293,12 +293,20 @@ public class SLNParser {
 					else
 						break;
 				}
-
+								
+				//Read comparison operation
+				int comparisonOperation = SLNConst.CO_EQUALS;
 				String attrName = atomExpr.substring(startPos, pos);
-				if (pos < atomExpr.length()) {
-					if (atomExpr.charAt(pos) == '=')
+				if (pos < atomExpr.length()) 
+				{					
+					if (atomExpr.charAt(pos) == '=')						
+					{	
+						//comparisonOperation = SLNConst.CO_EQUALS --> already set
 						pos++;
-					else {
+					}	
+					//TODO handle other comparison operations
+					else 
+					{
 						// Register attribute without value (it is allowed by
 						// the SLN syntax
 						SLNExpressionToken newToken = analyzeAtomAttribute(
@@ -315,7 +323,7 @@ public class SLNParser {
 					return;
 				}
 
-				// Read attribute value (after '=')
+				// Read attribute value (after comparson operation: '=', "<",...)
 				startPos = pos;
 				while (pos < atomExpr.length()) {
 					if (Character.isLetter(atomExpr.charAt(pos))
@@ -334,6 +342,7 @@ public class SLNParser {
 				// Register attribute with a value
 				SLNExpressionToken newToken = analyzeAtomAttribute(attrName,
 						attrValue);
+				newToken.comparisonOperation = comparisonOperation; 
 				curAtExp.tokens.add(newToken);
 
 				continue;
