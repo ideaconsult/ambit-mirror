@@ -546,7 +546,16 @@ public class SLNConst
 	{
 		if (compOpStr.equals("="))
 			return CO_EQUALS;
-		//TODO
+		if (compOpStr.equals("<"))
+			return CO_LESS_THAN;
+		if (compOpStr.equals("<="))
+			return CO_LESS_OR_EQUALS;
+		if (compOpStr.equals(">"))
+			return CO_GREATER_THAN;
+		if (compOpStr.equals(">="))
+			return CO_GREATER_OR_EQUALS;
+		if (compOpStr.equals("<>") || compOpStr.equals("!="))
+			return CO_DIFFERS;
 		return -1;
 	}
 	
@@ -556,7 +565,16 @@ public class SLNConst
 		{
 		case CO_EQUALS:
 			return "=";
-			//TODO
+		case CO_LESS_THAN:
+			return "<";
+		case CO_LESS_OR_EQUALS:
+			return "<=";
+		case CO_GREATER_THAN:
+			return ">";
+		case CO_GREATER_OR_EQUALS:
+			return ">=";
+		case CO_DIFFERS:
+			return "!=";
 		}
 		
 		return "";
