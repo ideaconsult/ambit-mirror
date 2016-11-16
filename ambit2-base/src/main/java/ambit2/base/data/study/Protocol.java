@@ -2474,7 +2474,27 @@ public class Protocol {
 				return "http://purl.obolibrary.org/obo/PATO_0000921";
 			}			
 		},
-		
+		ENM_0000044_SECTION {
+			@Override
+			public String toString() {
+				return "Barrier integrity";
+			}
+
+			@Override
+			public String getNumber() {
+				return "ENM_0000044";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000044";
+			}			
+		},
 		// Toxcast - BAO
 		CELL_CYCLE {
 			// obo:GO:0007049

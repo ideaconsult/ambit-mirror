@@ -148,6 +148,13 @@ var config_study = {
 			"protocol" : config_npo["protocol"],
 			"interpretation" : config_npo["interpretation"]        	
         },
+        "ENM_0000044_SECTION" : {
+			"parameters" : config_npo["parameters"],
+			"effects" : config_npo["effects"],
+			"conditions" : config_npo["conditions"],			
+			"protocol" : config_npo["protocol"],
+			"interpretation" : config_npo["interpretation"]        	
+        },
         "NPO_1773_SECTION" : {
 			"parameters" : config_npo["parameters"],
 			"effects" : config_npo["effects"],
