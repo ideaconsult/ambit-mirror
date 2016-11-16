@@ -171,11 +171,11 @@ var config_bao = {
                 "inMatrix" : true,
             },
             "result": {
-            	
             	"iOrder": -8,
                 "bVisible": true,
-                "inMatrix" : true,
-            }          
+                "inMatrix" : true
+            }  
+            
         },
         "conditions": {
         	"bVisible": false,
