@@ -3,7 +3,7 @@
 </#if>
 
 <ul id='smartmenu' class="sm sm-mint">
-<li><a href="${ambit_root}" title="Home">Home</a></li>
+<li><a href="https://sandbox.ideaconsult.net/search/excape/" title="Home">Home</a></li>
 <li><a href="#" title="Search">Search</a>
 <ul>
 <li><a href="${ambit_root}/ui/_search?search=${custom_structurequery!'phenol'}" title="Chemical structure search">Structure search</a></li>

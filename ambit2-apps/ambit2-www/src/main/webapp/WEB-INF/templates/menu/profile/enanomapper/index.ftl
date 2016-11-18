@@ -119,7 +119,11 @@ $(document)
 	<div class="row remove-bottom">
 		
 				<div class="three columns remove-bottom">
+					<#if custom_logo??>
+					<a href="http://enanomapper.net"><img class='scale-with-grid' border='0' src='${custom_logo}' title='eNanoMapper web site' alt='AMBIT logo'></a>
+					<#else>
 					<a href="http://enanomapper.net"><img class='scale-with-grid' border='0' src='${ambit_root}/images/profile/${menu_profile}/logo.png' title='eNanoMapper web site' alt='AMBIT logo'></a>
+					</#if>
 				</div>
 				<div class="twelve columns remove-bottom h2">${custom_title!"eNanoMapper prototype database"}
 				</div>
