@@ -2219,6 +2219,78 @@ function defineProtocolApplicationSummaryTable(root, url, selector) {
 	return oTable;
 }
 
+function defineDataAvailabilityTable(root, url, selector) {
+	var oTable = $(selector)
+			.dataTable(
+					{
+						"sAjaxDataProp" : "facet",
+						"bProcessing" : true,
+						"bServerSide" : false,
+						"bStateSave" : false,
+						"aoColumnDefs" : [
+								{
+									"mData" : "substance",
+									"asSorting" : [ "asc", "desc" ],
+									"aTargets" : [ 0 ],
+									"bSearchable" : true,
+									"bUseRendered" : false,
+									"bSortable" : true,
+									"fnRender" : function(o, val) {
+										var sOut = val;
+										return "<a href='" + o.aData["subcategoryuri"]
+												+ "' title='" + o.aData["subcategoryuri"] + " target=_substance "
+												+ "'>" + sOut + "</a>";
+									}
+								},
+								{
+									"mData" : "subcategory",
+									"asSorting" : [ "asc", "desc" ],
+									"aTargets" : [ 1 ],
+									"bSearchable" : true,
+									"bUseRendered" : false,
+									"bSortable" : true,
+									"fnRender" : function(o, val) {
+										return val;
+									}
+								},
+								{
+									"mData" : "value",
+									"asSorting" : [ "asc", "desc" ],
+									"aTargets" : [ 2 ],
+									"bSearchable" : true,
+									"bUseRendered" : false,
+									"bSortable" : true,
+									"fnRender" : function(o, val) {
+										return val;
+									}
+								}, 
+								{
+									"mDataProp" : "count",
+									"asSorting" : [ "asc", "desc" ],
+									"aTargets" : [ 3 ],
+									"sWidth" : "10%",
+									"bSearchable" : true,
+									"bSortable" : true
+								} ],
+						"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
+						"bJQueryUI" : true,
+						"bPaginate" : true,
+						"sPaginationType" : "full_numbers",
+						"sPaginate" : ".dataTables_paginate _paging",
+						"bDeferRender" : true,
+						"bSearchable" : true,
+						"sAjaxSource" : url,
+						"oLanguage" : {
+							"sSearch" : "Filter:",
+							"sProcessing" : "<img src='" + root
+									+ "/images/24x24_ambit.gif' border='0'>",
+							"sLoadingRecords" : "No records found."
+						}
+					});
+	return oTable;
+}
+
+
 function defineSubstanceOwnerTable(root, url, selector) {
 	var oTable = $(selector)
 			.dataTable(

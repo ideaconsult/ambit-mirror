@@ -97,6 +97,15 @@ public class StatisticsResource<FACET extends IFacet<String>, Q extends QueryCou
 				return "facets/protocol_applications_summary.ftl";
 			}
 		},
+		data_availability {
+			@Override
+			public String getURL() {
+				return "/substance";
+			}
+			public String getTemplateName() {
+				return "facets/data_availability.ftl";
+			}
+		},
 		interpretation_result {
 			@Override
 			public String getURL() {
@@ -215,6 +224,15 @@ public class StatisticsResource<FACET extends IFacet<String>, Q extends QueryCou
 				Integer idbundle = getIdBundle(bundleURI, request);
 				q.setBundle(new SubstanceEndpointsBundle(idbundle));
 			}
+			q.setFieldname(getParams().getFirstValue("topcategory"));
+			q.setValue(getParams().getFirstValue("category"));
+			return (Q) q;
+		}
+		case data_availability: {
+			QueryCountProtocolApplications q = new QueryCountProtocolApplications(
+					mode.getURL(),
+					QueryCountProtocolApplications._mode_related.data_availability);
+			q.setPageSize(2000);
 			q.setFieldname(getParams().getFirstValue("topcategory"));
 			q.setValue(getParams().getFirstValue("category"));
 			return (Q) q;
