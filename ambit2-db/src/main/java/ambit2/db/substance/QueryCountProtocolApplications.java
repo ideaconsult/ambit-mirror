@@ -5,12 +5,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.substance.study.facet.ProtocolApplicationSummaryFacet;
 import ambit2.db.substance.study.facet.SubstanceByCategoryFacet;
+import ambit2.db.substance.study.facet.SubstanceDataAvailabilityFacet;
 import ambit2.db.update.dataset.QueryCount;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 
 public class QueryCountProtocolApplications<F extends SubstanceByCategoryFacet>
 		extends QueryCount<F> {
@@ -21,7 +22,7 @@ public class QueryCountProtocolApplications<F extends SubstanceByCategoryFacet>
 	private static final long serialVersionUID = -6001454887114379950L;
 
 	public enum _mode_related {
-		endpoints, substances, detail
+		endpoints, substances, detail,data_availability
 	}
 
 	public _mode_related mode = _mode_related.endpoints;
@@ -67,6 +68,8 @@ public class QueryCountProtocolApplications<F extends SubstanceByCategoryFacet>
 	private static final String sql_bundle_bysubstances =			
 			"select p.topcategory,count(*),p.endpointcategory,-1 from substance_protocolapplication p join bundle_substance using(substance_prefix,substance_uuid)\n"+
 			"where %s idbundle=? group by p.topcategory,p.endpointcategory";
+	
+	private static final String sql_dataavailability = "SELECT topcategory,count(*),endpointcategory,-1,substance_prefix,hex(substance_uuid) as uuid FROM substance_protocolapplication group by substance_prefix,substance_uuid,topcategory,endpointcategory order by substance_prefix,substance_uuid,topcategory,endpointcategory";
 	/*
 	 * select p.topcategory,p.endpointcategory,count(*) from
 	 * substance_protocolapplication p, bundle_endpoints b where
@@ -81,6 +84,9 @@ public class QueryCountProtocolApplications<F extends SubstanceByCategoryFacet>
 	public String getSQL() throws AmbitException {
 		StringBuilder b = new StringBuilder();
 		switch (mode) {
+		case data_availability: {
+			return sql_dataavailability;
+		}
 		case detail: {
 			String d = "";
 			if (getFieldname() != null) {
@@ -145,6 +151,10 @@ public class QueryCountProtocolApplications<F extends SubstanceByCategoryFacet>
 		F facet;
 	
 		switch (mode) {
+		case data_availability: {
+			facet = (F) new SubstanceDataAvailabilityFacet(facetURL);
+			break;
+		}
 		case detail: {
 			facet = (F) new ProtocolApplicationSummaryFacet(facetURL);
 			break;
@@ -200,14 +210,23 @@ public class QueryCountProtocolApplications<F extends SubstanceByCategoryFacet>
 			facet.setSubstancesCount(rs.getInt(4));
 
 			switch (mode) {
+			case data_availability: {
+				try {
+					SubstanceDataAvailabilityFacet ps = (SubstanceDataAvailabilityFacet) facet;
+					ps.setSubstanceID(rs.getString("substance_prefix"),rs.getString("uuid"));
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
+				break;
+			}
 			case detail:
 				try {
 					ProtocolApplicationSummaryFacet ps = (ProtocolApplicationSummaryFacet) facet;
 					ps.setInterpretation_result(rs.getString("interpretation_result"));
 					ps.setGuidance(rs.getString("guidance"));
-					break;
 				} catch (Exception x) {
 				}
+				break;
 			}
 			return facet;
 		} catch (SQLException x) {
