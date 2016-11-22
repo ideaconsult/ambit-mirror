@@ -358,6 +358,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 		IParams newprm = new Params();
 		for (Object key : prm.keySet()) {
 			Object value = prm.get(key);
+			if (value==null) continue;
 			if (value instanceof Value) {
 				Value v = (Value) value;
 				Object unit = v.getUnits();
