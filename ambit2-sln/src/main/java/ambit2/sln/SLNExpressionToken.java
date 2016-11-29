@@ -188,8 +188,15 @@ public class SLNExpressionToken
 					+ param;
 			
 
-		case SLNConst.A_ATTR_USER_DEFINED:			
-			return attrName + "=" + stringParam;
+		case SLNConst.A_ATTR_USER_DEFINED:
+		{	
+			if (comparisonOperation == SLNConst.CO_NO_COMPARISON)
+				return attrName;
+			else			
+				return attrName 
+						+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
+						+ stringParam;
+		}	
 		
 		}
 		return "attrib=undef";

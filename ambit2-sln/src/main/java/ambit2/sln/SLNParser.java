@@ -295,29 +295,40 @@ public class SLNParser {
 				}
 								
 				//Read comparison operation
-				int comparisonOperation = SLNConst.CO_EQUALS;
+				int comparisonOperation = SLNConst.CO_NO_COMPARISON;				
 				String attrName = atomExpr.substring(startPos, pos);
 				if (pos < atomExpr.length()) 
 				{					
 					if (atomExpr.charAt(pos) == '=')						
 					{	
-						//comparisonOperation = SLNConst.CO_EQUALS --> already set
+						comparisonOperation = SLNConst.CO_EQUALS;
 						pos++;
 					}	
-					//TODO handle other comparison operations
-					else 
-					{
-						// Register attribute without value (it is allowed by
-						// the SLN syntax
-						SLNExpressionToken newToken = analyzeAtomAttribute(
-								attrName, null);
-						curAtExp.tokens.add(newToken);
-						continue;
+					else if (atomExpr.charAt(pos) == '<')						
+					{	
+						comparisonOperation = SLNConst.CO_LESS_THAN;
+						pos++;
+						if (pos < atomExpr.length())
+							if (atomExpr.charAt(pos) == '=')
+							{
+								comparisonOperation = SLNConst.CO_LESS_OR_EQUALS;
+								pos++;
+							}
 					}
 				}
 
-				if (pos >= atomExpr.length()) {
-					// '=' is found but the end of atom expression is reached.
+				if (pos >= atomExpr.length()) 
+				{
+					//The end of atom expression is reached.
+					if (comparisonOperation == SLNConst.CO_NO_COMPARISON)
+					{
+						SLNExpressionToken newToken = analyzeAtomAttribute(
+								attrName, null);
+						newToken.comparisonOperation = comparisonOperation; 
+						curAtExp.tokens.add(newToken);
+						continue;
+					}
+					
 					newError("Missing value for attribute " + attrName + " ",
 							curChar, "");
 					return;
@@ -342,9 +353,12 @@ public class SLNParser {
 				// Register attribute with a value
 				SLNExpressionToken newToken = analyzeAtomAttribute(attrName,
 						attrValue);
-				newToken.comparisonOperation = comparisonOperation; 
-				curAtExp.tokens.add(newToken);
-
+				
+				if (newToken != null)
+				{	
+					newToken.comparisonOperation = comparisonOperation; 
+					curAtExp.tokens.add(newToken);
+				}
 				continue;
 			}
 
