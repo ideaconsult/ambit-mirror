@@ -541,6 +541,7 @@ public class SLNConst
 	public static final int CO_GREATER_THAN = 3; // >
 	public static final int CO_GREATER_OR_EQUALS = 4; // >=
 	public static final int CO_DIFFERS = 5; // <> or !=
+	public static final int CO_NO_COMPARISON = 100;
 	
 	public static int SLNStringToComparisonOperation(String compOpStr)
 	{
