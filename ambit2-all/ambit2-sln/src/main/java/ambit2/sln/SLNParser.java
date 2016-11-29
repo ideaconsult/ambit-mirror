@@ -309,16 +309,53 @@ public class SLNParser {
 						comparisonOperation = SLNConst.CO_LESS_THAN;
 						pos++;
 						if (pos < atomExpr.length())
+						{	
 							if (atomExpr.charAt(pos) == '=')
 							{
 								comparisonOperation = SLNConst.CO_LESS_OR_EQUALS;
 								pos++;
 							}
+							else if (atomExpr.charAt(pos) == '>')
+							{
+								comparisonOperation = SLNConst.CO_DIFFERS;
+								pos++;
+							}	
+						}	
+					}
+					else if (atomExpr.charAt(pos) == '>')
+					{
+						comparisonOperation = SLNConst.CO_GREATER_THAN;
+						pos++;
+						if (pos < atomExpr.length())
+							if (atomExpr.charAt(pos) == '=')
+							{
+								comparisonOperation = SLNConst.CO_GREATER_OR_EQUALS;
+								pos++;
+							}
+					}
+					else if (atomExpr.charAt(pos) == '!') 
+					{
+						//Handle '!=' differs comparison operation
+						pos++;
+						if (pos < atomExpr.length())
+						{
+							if (atomExpr.charAt(pos) == '=')
+							{	
+								comparisonOperation = SLNConst.CO_DIFFERS;
+								pos++;
+							}
+							else 
+							{
+								newError("Incorrect comparison operation for attribute " + attrName + " ",
+									curChar, "");
+								return;
+							}	
+						}
 					}
 				}
 
 				if (pos >= atomExpr.length()) 
-				{
+				{	
 					//The end of atom expression is reached.
 					if (comparisonOperation == SLNConst.CO_NO_COMPARISON)
 					{
@@ -714,7 +751,14 @@ public class SLNParser {
 				}
 			}
 		}
+		
 		// By default it is an user defined attribute
+		if (value != null)
+			if (value.equals(""))
+			{	
+				newError("Missing value for user defined attribute " + name, curChar, "");
+				return null;
+			}	
 		SLNExpressionToken token = new SLNExpressionToken(name, value);
 		return token;
 	}
