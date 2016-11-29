@@ -2874,13 +2874,26 @@ public class TestUtilities {
 		//		"Clc1ccccc1");  
 		
 		//bug #106
-		tu.FlagClearAromaticityBeforePreProcess = true;
-		tu.FlagCheckAromaticityOnTargetPreProcess = true;
-		tu.FlagSSMode = SmartsConst.SSM_MODE.SSM_NON_IDENTICAL;
-		tu.testSMIRKS("[H][c:1]1[c:7][c:10][c:9][#6,#7;a:8][c:2]1[H]>>[#8]-[c:1]1[c:7][c:10][c:9][#6,#7;a:8][c:2]1-[#8]",
-				"O=c1ccc2ccc3ccc(=O)c4ccc1c2c34", ReactionOperation.APPLY);
+		//tu.FlagClearAromaticityBeforePreProcess = true;
+		//tu.FlagCheckAromaticityOnTargetPreProcess = true;
+		//tu.FlagSSMode = SmartsConst.SSM_MODE.SSM_ALL;
+		//tu.testSMIRKS("[H][c:1]1[c:7][c:10][c:9][#6,#7;a:8][c:2]1[H]>>[#8]-[c:1]1[c:7][c:10][c:9][#6,#7;a:8][c:2]1-[#8]",
+		//		"O=c1ccc2ccc3ccc(=O)c4ccc1c2c34", ReactionOperation.SingleCopyForEachPos);
 		
-		tu.testIsomorphismPositions("c1ccc[#6,#7;a]c1", "O=c1ccc2ccc3ccc(=O)c4ccc1c2c34");
+		//tu.testIsomorphismPositions("c1ccc[#6,#7;a]c1", "O=c1ccc2ccc3ccc(=O)c4ccc1c2c34");
+		
+		//bug #109 
+		//Solution (1)implicit H atoms or (2) use [#6;D3,D4H1;R0:1] which is equivalent to [#6;D3H0,D3H1,D4H1;R0:1]
+		//Sol.(1)
+		tu.FlagExplicitHAtoms = false;
+		//tu.testSMIRKS("[#8:4]-,=[#6;D3R0:1](-[#6:2])!@-[#6:3]-[#6:8](=[O:10])-[#6:7](-[#8-:6])=[O:9]>>"
+		//		+ "[#6:3]-[#6:8](=[O:10])-[#6:7](-[#8-:6])=[O:9].[#6:2]-[#6:1](-[#8-])=[O:4]",
+		//		"OC(CCl)CC(=O)C([O-])=O");
+		//Sol.(2)
+		//tu.testSMIRKS("[#8:4]-,=[#6;D3H0,D3H1,D4H1;R0:1](-[#6:2])!@-[#6:3]-[#6:8](=[O:10])-[#6:7](-[#8-:6])=[O:9]>>"
+		//		+ "[#6:3]-[#6:8](=[O:10])-[#6:7](-[#8-:6])=[O:9].[#6:2]-[#6:1](-[#8-])=[O:4]",
+		//		"OC(CCl)CC(=O)C([O-])=O");
+				
 		
 		//tu.testSmartsManagerBoolSearch("[#6;A;H2X4]!@-[#6;A;H2X4]!@-[#8;X2][P;X4]([#8;X2])([#8;A;X2H1,X1-])=[O;X1]",
 		//		"CCCOP(=O)(O)[O-]");
