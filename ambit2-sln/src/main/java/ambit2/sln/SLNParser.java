@@ -532,7 +532,6 @@ public class SLNParser {
 			SLNExpressionToken token = new SLNExpressionToken(
 					SLNConst.A_ATTR_spin, param);
 			return token;
-
 		}
 
 		// Handle query atom attribute mapNum
@@ -550,19 +549,20 @@ public class SLNParser {
 
 		// Handle query atom attribute "convered"- c
 		if (name.equals("c")) {
-			if (extractError.equals("")) {
-				int c = SLNConst.SLNStringToCoverageQueryAttr(value);
-				if (c == -1) {
-					newError("Incorrect coverage value " + value, curChar, "");
-					return null;
-				}
-				SLNExpressionToken token = new SLNExpressionToken(
-						SLNConst.QA_ATTR_c, c);
-				return token;
-			} else {
+			if (value == null)
+			{
+				newError("Missing value for attribute c",
+						curChar, "");
+				return null;
+			}
+			int c = SLNConst.SLNStringToCoverageQueryAttr(value);
+			if (c == -1) {
 				newError("Incorrect coverage value " + value, curChar, "");
 				return null;
 			}
+			SLNExpressionToken token = new SLNExpressionToken(
+					SLNConst.QA_ATTR_c, c);
+			return token;
 		}
 
 		// Handle query atom attribute f- filled valences
