@@ -499,38 +499,40 @@ public class SLNParser {
 
 		// Handle stereo-chemistry atom attribute s
 		if (name.equals("s")) {
-			if (extractError.equals("")) {
-				int param = SLNConst.SLNStringToAtomStereoChemAttr(value);
-				if (param == -1) {
-					newError("Incorrect stereo-chemistry value " + value,
-							curChar, "");
-					return null;
-				}
-				SLNExpressionToken token = new SLNExpressionToken(
-						SLNConst.A_ATTR_s, param);
-				return token;
-			} else {
-				newError("Incorrect stereo-chemistry value " + value, curChar,
-						"");
+			if (value == null)
+			{
+				newError("Missing stereo-chemistry value ",
+						curChar, "");
 				return null;
 			}
+			int param = SLNConst.SLNStringToAtomStereoChemAttr(value);
+			if (param == -1) {
+				newError("Incorrect stereo-chemistry value " + value,
+						curChar, "");
+				return null;
+			}
+			SLNExpressionToken token = new SLNExpressionToken(
+					SLNConst.A_ATTR_s, param);
+			return token;
 		}
 
 		// Handle atom attribute spin
 		if (name.equals("spin")) {
-			if (extractError.equals("")) {
-				int param = SLNConst.SLNStringToSpinAttr(value);
-				if (param == -1) {
-					newError("Incorrect spin value " + value, curChar, "");
-					return null;
-				}
-				SLNExpressionToken token = new SLNExpressionToken(
-						SLNConst.A_ATTR_spin, param);
-				return token;
-			} else {
+			if (value == null)
+			{
+				newError("Missing value for attribute spin",
+						curChar, "");
+				return null;
+			}
+			int param = SLNConst.SLNStringToSpinAttr(value);
+			if (param == -1) {
 				newError("Incorrect spin value " + value, curChar, "");
 				return null;
 			}
+			SLNExpressionToken token = new SLNExpressionToken(
+					SLNConst.A_ATTR_spin, param);
+			return token;
+
 		}
 
 		// Handle query atom attribute mapNum
