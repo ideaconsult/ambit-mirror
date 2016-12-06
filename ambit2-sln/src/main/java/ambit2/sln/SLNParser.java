@@ -646,80 +646,71 @@ public class SLNParser {
 
 		// Handle atom attribute heavy atom count
 		if (name.equals("hac")) {
+			int hac = extractInteger(value);
 			if (extractError.equals("")) {
-				int hac = extractInteger(value);
-				if (extractError.equals("")) {
-					SLNExpressionToken token = new SLNExpressionToken(
-							SLNConst.QA_ATTR_hac, hac);
-					return token;
-				} else {
-					newError("Incorrect heavy atom count value " + value,
-							curChar, "");
-					return null;
-				}
+				SLNExpressionToken token = new SLNExpressionToken(
+						SLNConst.QA_ATTR_hac, hac);
+				return token;
+			} else {
+				newError("Incorrect heavy atom count (hac) value " + value,
+						curChar, "");
+				return null;
 			}
 		}
 
 		// Handle atom attribute hydrogen count
 		if (name.equals("hc")) {
+			int hc = extractInteger(value);
 			if (extractError.equals("")) {
-				int hc = extractInteger(value);
-				if (extractError.equals("")) {
-					SLNExpressionToken token = new SLNExpressionToken(
-							SLNConst.QA_ATTR_hc, hc);
-					return token;
-				} else {
-					newError("Incorrect hydrogen count value " + value,
-							curChar, "");
-					return null;
-				}
+				SLNExpressionToken token = new SLNExpressionToken(
+						SLNConst.QA_ATTR_hc, hc);
+				return token;
+			} else {
+				newError("Incorrect hydrogen count (hc) value " + value,
+						curChar, "");
+				return null;
 			}
 		}
 
 		// Handle atom attribute hetero atom count
 		if (name.equals("htc")) {
+			int htc = extractInteger(value);
 			if (extractError.equals("")) {
-				int htc = extractInteger(value);
-				if (extractError.equals("")) {
-					SLNExpressionToken token = new SLNExpressionToken(
-							SLNConst.QA_ATTR_htc, htc);
-					return token;
-				} else {
-					newError("Incorrect hetero atom count value " + value,
-							curChar, "");
-					return null;
-				}
-			}
+				SLNExpressionToken token = new SLNExpressionToken(
+						SLNConst.QA_ATTR_htc, htc);
+				return token;
+			} else {
+				newError("Incorrect hetero atom count (htc) value " + value,
+						curChar, "");
+				return null;
+			}			
 		}
 
 		// Handle query atom attribute molecular weight attribute
+		//TODO check -this attribute is not logical for atom
 		if (name.equals("mw")) {
+			double mw = extractDouble(value);
 			if (extractError.equals("")) {
-				double mw = extractDouble(value);
-				if (extractError.equals("")) {
-					SLNExpressionToken token = new SLNExpressionToken(
-							SLNConst.QA_ATTR_mw, mw);
-					return token;
-				} else {
-					newError("Incorrect molecular weight value " + value,
-							curChar, "");
-					return null;
-				}
+				SLNExpressionToken token = new SLNExpressionToken(
+						SLNConst.QA_ATTR_mw, mw);
+				return token;
+			} else {
+				newError("Incorrect molecular weight value " + value,
+						curChar, "");
+				return null;
 			}
 		}
 
 		// Handle query atom attribute ntc - number of nonterminal atoms
 		if (name.equals("ntc")) {
+			int ntc = extractInteger(value);
 			if (extractError.equals("")) {
-				int ntc = extractInteger(value);
-				if (extractError.equals("")) {
-					SLNExpressionToken token = new SLNExpressionToken(
-							SLNConst.QA_ATTR_ntc, ntc);
-					return token;
-				} else {
-					newError("Incorrect ntc value " + value, curChar, "");
-					return null;
-				}
+				SLNExpressionToken token = new SLNExpressionToken(
+						SLNConst.QA_ATTR_ntc, ntc);
+				return token;
+			} else {
+				newError("Incorrect ntc value " + value, curChar, "");
+				return null;
 			}
 		}
 
