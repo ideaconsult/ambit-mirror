@@ -314,28 +314,69 @@
 			}
 		},
 		"PC_UNKNOWN_SECTION": {
+			"parameters": {
+				"dispersion protocol": {
+					"titleInMatrix": false,
+					"sTitle": "Dispersion protocol",
+					"inMatrix": true,
+					"iOrder": -12,
+					"bVisible": true
+				}
+			},
 			"effects": {
 				"endpoint": {
 					"inMatrix": true,
-					"bVisible": true
+					"iOrder": -10
 				},
 				"result": {
-					"inMatrix": true
+					"inMatrix": true,
+					"iOrder": -5
+				},
+				"errorValue": {
+					"inMatrix": true,
+					"iOrder": -4,
+					"bVisible": true
+				},
+				"text": {
+					"bVisible": false
+				}
+			},
+			"conditions": {
+				"data_gathering_instruments": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Instrument",
+					"iOrder": -6
+				}
+			},
+			"protocol": {
+				"citation": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Reference",
+					"iOrder": -20
+				},
+				"owner": {
+					"inMatrix": true,
+					"bVisible": true,
+					"iOrder": -1,
+					"sTitle": "Owner"
+				},
+				"guideline": {
+					"inMatrix": true,
+					"iOrder": -3,
+					"sTitle": "Guideline"
 				}
 			},
 			"interpretation": {
 				"result": {
-					"bVisible": true,
-					"inMatrix": true
-				}
-			},
-			"protocol": {
-				"guideline": {
-					"bVisible": true,
-					"inMatrix": true
+					"bVisible": false
+				},
+				"criteria": {
+					"bVisible": false
 				}
 			}
-		},
+		},		
 		"TO_ACUTE_ORAL_SECTION": {
 			"parameters": {
 				"species": {
@@ -3063,35 +3104,97 @@
 			}
 		},
 		"UNKNOWN_TOXICITY_SECTION": {
+			"parameters": {
+				"e.method": {
+					"titleInMatrix": false,
+					"sTitle": "Method",
+					"inMatrix": true,
+					"iOrder": -15,
+					"bVisible": true
+
+				},
+				"e.cell_type": {
+					"titleInMatrix": false,
+					"sTitle": "Cell type",
+					"inMatrix": true,
+					"iOrder": -14,
+					"bVisible": true
+				},
+				"e.exposure_time": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure time",
+					"inMatrix": true,
+					"iOrder": -13,
+					"bVisible": true
+				},
+				"medium": {
+					"titleInMatrix": false,
+					"sTitle": "Medium",
+					"inMatrix": true,
+					"iOrder": -12,
+					"bVisible": true
+				}
+			},
 			"effects": {
 				"endpoint": {
-					"bVisible": true,
-					"inMatrix": true
-				},
-				"text": {
-					"bVisible": true,
-					"inMatrix": true
+					"inMatrix": true,
+					"iOrder": -10
 				},
 				"result": {
+					"inMatrix": true,
+					"iOrder": -5
+				},
+				"errorValue": {
+					"inMatrix": true,
+					"iOrder": -4,
+					"bVisible": true
+				},
+				"text": {
+					"bVisible": false
+				}
+			},
+			"conditions": {
+				"concentration": {
+					"inMatrix": true,
 					"bVisible": true,
-					"inMatrix": true
+					"sTitle": "Concentration",
+					"iOrder": -6
+				},
+				"replicate": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Replicate",
+					"iOrder": -7
+				}
+			},
+			"protocol": {
+				"citation": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Reference",
+					"iOrder": -20
+				},
+				"owner": {
+					"inMatrix": true,
+					"bVisible": true,
+					"iOrder": -1,
+					"sTitle": "Owner"
+				},
+				"guideline": {
+					"inMatrix": true,
+					"iOrder": -3,
+					"sTitle": "Guideline"
 				}
 			},
 			"interpretation": {
 				"result": {
-					"bVisible": true,
-					"inMatrix": true
+					"bVisible": false
 				},
 				"criteria": {
 					"bVisible": false
 				}
-			},
-			"protocol": {
-				"guideline": {
-					"inMatrix": true
-				}
 			}
-		},
+		},		
 		"UNKNOWN_TOXICITY_SECTION_SUMMARY": {
 			"effects": {
 				"text": {
@@ -3262,6 +3365,98 @@
 				}
 			}
 		},
+		"ENM_0000044_SECTION": {
+			"parameters": {
+				"e.method": {
+					"titleInMatrix": false,
+					"sTitle": "Method",
+					"inMatrix": true,
+					"iOrder": -15,
+					"bVisible": true
+
+				},
+				"e.cell_type": {
+					"titleInMatrix": false,
+					"sTitle": "Cell type",
+					"inMatrix": true,
+					"iOrder": -14,
+					"bVisible": true
+				},
+				"e.exposure_time": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure time",
+					"inMatrix": true,
+					"iOrder": -13,
+					"bVisible": true
+				},
+				"medium": {
+					"titleInMatrix": false,
+					"sTitle": "Medium",
+					"inMatrix": true,
+					"iOrder": -12,
+					"bVisible": true
+				}
+			},
+			"effects": {
+				"endpoint": {
+					"inMatrix": true,
+					"iOrder": -10
+				},
+				"result": {
+					"inMatrix": true,
+					"iOrder": -5
+				},
+				"errorValue": {
+					"inMatrix": true,
+					"iOrder": -4,
+					"bVisible": true
+				},
+				"text": {
+					"bVisible": false
+				}
+			},
+			"conditions": {
+				"concentration": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Concentration",
+					"iOrder": -6
+				},
+				"replicate": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Replicate",
+					"iOrder": -7
+				}
+			},
+			"protocol": {
+				"citation": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Reference",
+					"iOrder": -20
+				},
+				"owner": {
+					"inMatrix": true,
+					"bVisible": true,
+					"iOrder": -1,
+					"sTitle": "Owner"
+				},
+				"guideline": {
+					"inMatrix": true,
+					"iOrder": -3,
+					"sTitle": "Guideline"
+				}
+			},
+			"interpretation": {
+				"result": {
+					"bVisible": false
+				},
+				"criteria": {
+					"bVisible": false
+				}
+			}
+		},		
 		"NPO_1911_SECTION": {
 			"effects": {
 				"endpoint": {
@@ -3329,25 +3524,75 @@
 			}
 		},
 		"BAO_0003009_SECTION": {
+			"parameters": {
+				"e.method": {
+					"titleInMatrix": false,
+					"sTitle": "Method",
+					"inMatrix": true,
+					"iOrder": -15,
+					"bVisible": true
+
+				},
+				"e.cell_type": {
+					"titleInMatrix": false,
+					"sTitle": "Cell type",
+					"inMatrix": true,
+					"iOrder": -14,
+					"bVisible": true
+				},
+				"e.exposure_time": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure time",
+					"inMatrix": true,
+					"iOrder": -13,
+					"bVisible": true
+				},
+				"medium": {
+					"titleInMatrix": false,
+					"sTitle": "Medium",
+					"inMatrix": true,
+					"iOrder": -12,
+					"bVisible": true
+				}
+			},
 			"effects": {
 				"endpoint": {
 					"inMatrix": true,
-					"iOrder": -7
+					"iOrder": -10
 				},
 				"result": {
 					"inMatrix": true,
 					"iOrder": -5
 				},
+				"errorValue": {
+					"inMatrix": true,
+					"iOrder": -4,
+					"bVisible": true
+				},
 				"text": {
 					"bVisible": false
+				}
+			},
+			"conditions": {
+				"concentration": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Concentration",
+					"iOrder": -6
+				},
+				"replicate": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Replicate",
+					"iOrder": -7
 				}
 			},
 			"protocol": {
 				"citation": {
 					"inMatrix": true,
 					"bVisible": true,
-					"iOrder": -30,
-					"sTitle": "Reference"
+					"sTitle": "Reference",
+					"iOrder": -20
 				},
 				"owner": {
 					"inMatrix": true,
@@ -3363,15 +3608,105 @@
 			},
 			"interpretation": {
 				"result": {
-					"bVisible": true,
-					"sTitle": "Result (text)",
-					"inMatrix": true
+					"bVisible": false
 				},
 				"criteria": {
 					"bVisible": false
 				}
 			}
 		},
+		"NPO_1339_SECTION": {
+			"parameters": {
+				"e.method": {
+					"titleInMatrix": false,
+					"sTitle": "Method",
+					"inMatrix": true,
+					"iOrder": -15,
+					"bVisible": true
+
+				},
+				"e.cell_type": {
+					"titleInMatrix": false,
+					"sTitle": "Cell type",
+					"inMatrix": true,
+					"iOrder": -14,
+					"bVisible": true
+				},
+				"e.exposure_time": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure time",
+					"inMatrix": true,
+					"iOrder": -13,
+					"bVisible": true
+				},
+				"medium": {
+					"titleInMatrix": false,
+					"sTitle": "Medium",
+					"inMatrix": true,
+					"iOrder": -12,
+					"bVisible": true
+				}
+			},
+			"effects": {
+				"endpoint": {
+					"inMatrix": true,
+					"iOrder": -10
+				},
+				"result": {
+					"inMatrix": true,
+					"iOrder": -5
+				},
+				"errorValue": {
+					"inMatrix": true,
+					"iOrder": -4,
+					"bVisible": true
+				},
+				"text": {
+					"bVisible": false
+				}
+			},
+			"conditions": {
+				"concentration": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Concentration",
+					"iOrder": -6
+				},
+				"replicate": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Replicate",
+					"iOrder": -7
+				}
+			},
+			"protocol": {
+				"citation": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Reference",
+					"iOrder": -20
+				},
+				"owner": {
+					"inMatrix": true,
+					"bVisible": true,
+					"iOrder": -1,
+					"sTitle": "Owner"
+				},
+				"guideline": {
+					"inMatrix": true,
+					"iOrder": -3,
+					"sTitle": "Guideline"
+				}
+			},
+			"interpretation": {
+				"result": {
+					"bVisible": false
+				},
+				"criteria": {
+					"bVisible": false
+				}
+			}
+		},		
 		"NPO_1709_SECTION": {
 			"effects": {
 				"endpoint": {
@@ -3422,26 +3757,68 @@
 				}
 			}
 		},
-		"BAO_0002167": {
+		"BAO_0002167_SECTION": {
+			"parameters": {
+				"e.method": {
+					"titleInMatrix": false,
+					"sTitle": "Method",
+					"inMatrix": true,
+					"iOrder": -15,
+					"bVisible": true
+
+				},
+				"e.cell_type": {
+					"titleInMatrix": false,
+					"sTitle": "Cell type",
+					"inMatrix": true,
+					"iOrder": -14,
+					"bVisible": true
+				},
+				"e.exposure_time": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure time",
+					"inMatrix": true,
+					"iOrder": -13,
+					"bVisible": true
+				},
+				"medium": {
+					"titleInMatrix": false,
+					"sTitle": "Medium",
+					"inMatrix": true,
+					"iOrder": -12,
+					"bVisible": true
+				}
+			},
 			"effects": {
 				"endpoint": {
 					"inMatrix": true,
-					"iOrder": -7
+					"iOrder": -10
 				},
 				"result": {
 					"inMatrix": true,
 					"iOrder": -5
+				},
+				"errorValue": {
+					"inMatrix": true,
+					"iOrder": -4,
+					"bVisible": true
 				},
 				"text": {
 					"bVisible": false
 				}
 			},
 			"conditions": {
-				"doses/concentrations": {
+				"concentration": {
 					"inMatrix": true,
 					"bVisible": true,
 					"sTitle": "Concentration",
 					"iOrder": -6
+				},
+				"replicate": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Replicate",
+					"iOrder": -7
 				}
 			},
 			"protocol": {
@@ -3449,7 +3826,99 @@
 					"inMatrix": true,
 					"bVisible": true,
 					"sTitle": "Reference",
+					"iOrder": -20
+				},
+				"owner": {
+					"inMatrix": true,
+					"bVisible": true,
+					"iOrder": -1,
+					"sTitle": "Owner"
+				},
+				"guideline": {
+					"inMatrix": true,
+					"iOrder": -3,
+					"sTitle": "Guideline"
+				}
+			},
+			"interpretation": {
+				"result": {
+					"bVisible": false
+				},
+				"criteria": {
+					"bVisible": false
+				}
+			}
+		},
+		"BAO_0002168_SECTION": {
+			"parameters": {
+				"e.method": {
+					"titleInMatrix": false,
+					"sTitle": "Method",
+					"inMatrix": true,
+					"iOrder": -15,
+					"bVisible": true
+
+				},
+				"e.cell_type": {
+					"titleInMatrix": false,
+					"sTitle": "Cell type",
+					"inMatrix": true,
+					"iOrder": -14,
+					"bVisible": true
+				},
+				"e.exposure_time": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure time",
+					"inMatrix": true,
+					"iOrder": -13,
+					"bVisible": true
+				},
+				"medium": {
+					"titleInMatrix": false,
+					"sTitle": "Medium",
+					"inMatrix": true,
+					"iOrder": -12,
+					"bVisible": true
+				}
+			},
+			"effects": {
+				"endpoint": {
+					"inMatrix": true,
 					"iOrder": -10
+				},
+				"result": {
+					"inMatrix": true,
+					"iOrder": -5
+				},
+				"errorValue": {
+					"inMatrix": true,
+					"iOrder": -4,
+					"bVisible": true
+				},
+				"text": {
+					"bVisible": false
+				}
+			},
+			"conditions": {
+				"concentration": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Concentration",
+					"iOrder": -6
+				},
+				"replicate": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Replicate",
+					"iOrder": -7
+				}
+			},
+			"protocol": {
+				"citation": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Reference",
+					"iOrder": -20
 				},
 				"owner": {
 					"inMatrix": true,
@@ -3593,7 +4062,6 @@
 			"interpretation": {
 				"result": {
 					"sTitle": "Hazard prediction",
-					"iOrder": -4,
 					"inMatrix": false,
 					"bVisible": true,
 					"iOrder": -14
