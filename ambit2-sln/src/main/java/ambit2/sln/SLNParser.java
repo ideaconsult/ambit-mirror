@@ -104,7 +104,7 @@ public class SLNParser {
 			if (Character.isUpperCase(sln.charAt(curChar)))
 				parseAtom();
 			else
-				parseSpecialSymbol();
+				parseSpecialSymbol();  //handle bonds, ring closures, molecule attributes etc.
 		}
 
 		// Treat unclosed brackets
@@ -151,7 +151,9 @@ public class SLNParser {
 				curChar++;
 				if (curChar < nChars)
 					if (Character.isDigit(sln.charAt(curChar)))
-						nH = getInteger();
+						nH = getIntegerFromSequence(100);
+				if (nH < -1)
+					errors.add(new SLNParserError(sln, "Incorrect number of H atoms", curChar,""));
 				newAtom.numHAtom = nH;
 				ReadHAtoms = true;
 			}
@@ -186,7 +188,9 @@ public class SLNParser {
 					curChar++;
 					if (curChar < nChars)
 						if (Character.isDigit(sln.charAt(curChar)))
-							nH = getInteger();
+							nH = getIntegerFromSequence(9);
+					if (nH == -1)
+						errors.add(new SLNParserError(sln, "Incorrect number of H atoms", curChar,""));
 					newAtom.numHAtom = nH;
 				}
 			}
@@ -765,21 +769,30 @@ public class SLNParser {
 		return token;
 	}
 
-	int getInteger() {
-		// TODO to protect against very large integers
-
+	int getIntegerFromSequence(int maxValue) 
+	{
 		if (!Character.isDigit(sln.charAt(curChar)))
 			return (-1);
 
 		int n = 0;
+		boolean FlagMaxValueErr = false;
 		while (curChar < nChars) {
 			char ch = sln.charAt(curChar);
-			if (Character.isDigit(ch)) {
-				n = 10 * n + Character.getNumericValue(ch);
+			if (Character.isDigit(ch)) 
+			{
+				if (!FlagMaxValueErr)
+				{	
+					n = 10 * n + Character.getNumericValue(ch);
+					if (n > maxValue)
+						FlagMaxValueErr = true;
+				}
 				curChar++;
 			} else
 				break;
 		}
+		if 	(FlagMaxValueErr)
+			return -2;
+		
 		return (n);
 	}
 
@@ -919,6 +932,11 @@ public class SLNParser {
 				analyzeBondExpression(bondExpression);
 				curBond.bondExpression = curBondExp;
 			}
+		
+		//TODO extractBondExpression()
+		
+		
+		//TODO analyzeBondExpression()
 	}
 
 	String extractBondExpression() {
