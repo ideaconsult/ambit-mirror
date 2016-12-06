@@ -716,47 +716,41 @@ public class SLNParser {
 
 		// Handle query atom attribute src - the smallest ring count
 		if (name.equals("src")) {
+			int src = extractInteger(value);
 			if (extractError.equals("")) {
-				int src = extractInteger(value);
-				if (extractError.equals("")) {
-					SLNExpressionToken token = new SLNExpressionToken(
-							SLNConst.QA_ATTR_src, src);
-					return token;
-				} else {
-					newError("Incorrect src value " + value, curChar, "");
-					return null;
-				}
+				SLNExpressionToken token = new SLNExpressionToken(
+						SLNConst.QA_ATTR_src, src);
+				return token;
+			} else {
+				newError("Incorrect src value " + value, curChar, "");
+				return null;
 			}
 		}
 
 		// Handle query atom attribute tac - total number of atoms attached to
 		// the qualified atom
 		if (name.equals("tac")) {
+			int tac = extractInteger(value);
 			if (extractError.equals("")) {
-				int tac = extractInteger(value);
-				if (extractError.equals("")) {
-					SLNExpressionToken token = new SLNExpressionToken(
-							SLNConst.QA_ATTR_tac, tac);
-					return token;
-				} else {
-					newError("Incorrect tac value " + value, curChar, "");
-					return null;
-				}
+				SLNExpressionToken token = new SLNExpressionToken(
+						SLNConst.QA_ATTR_tac, tac);
+				return token;
+			} else {
+				newError("Incorrect tac value " + value, curChar, "");
+				return null;
 			}
 		}
 
 		// Handle query atom attribute tbo - total bond order of an atom
 		if (name.equals("tbo")) {
+			int tbo = extractInteger(value);
 			if (extractError.equals("")) {
-				int tbo = extractInteger(value);
-				if (extractError.equals("")) {
-					SLNExpressionToken token = new SLNExpressionToken(
-							SLNConst.QA_ATTR_tbo, tbo);
-					return token;
-				} else {
-					newError("Incorrect tbo value " + value, curChar, "");
-					return null;
-				}
+				SLNExpressionToken token = new SLNExpressionToken(
+						SLNConst.QA_ATTR_tbo, tbo);
+				return token;
+			} else {
+				newError("Incorrect tbo value " + value, curChar, "");
+				return null;
 			}
 		}
 		
