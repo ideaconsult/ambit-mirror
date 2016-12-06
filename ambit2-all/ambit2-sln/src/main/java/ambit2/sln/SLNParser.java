@@ -359,16 +359,31 @@ public class SLNParser {
 					//The end of atom expression is reached.
 					if (comparisonOperation == SLNConst.CO_NO_COMPARISON)
 					{
-						SLNExpressionToken newToken = analyzeAtomAttribute(
-								attrName, null);
-						newToken.comparisonOperation = comparisonOperation; 
-						curAtExp.tokens.add(newToken);
+						SLNExpressionToken newToken = analyzeAtomAttribute(attrName, null);
+						if (newToken != null)
+						{
+							newToken.comparisonOperation = comparisonOperation;
+							curAtExp.tokens.add(newToken);
+						}	
 						continue;
 					}
 					
 					newError("Missing value for attribute " + attrName + " ",
 							curChar, "");
 					return;
+				}
+				
+				//Check for the case "NO_COMPARISON"
+				//This is used for 
+				if (comparisonOperation == SLNConst.CO_NO_COMPARISON)
+				{
+					SLNExpressionToken newToken = analyzeAtomAttribute(attrName, null);
+					if (newToken != null)
+					{	
+						newToken.comparisonOperation = comparisonOperation; 
+						curAtExp.tokens.add(newToken);
+					}	
+					continue;
 				}
 
 				// Read attribute value (after comparson operation: '=', "<",...)
