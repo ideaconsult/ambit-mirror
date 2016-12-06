@@ -25,6 +25,7 @@ import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.Protocol._categories;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.study.ReliabilityParams._r_flags;
+import ambit2.base.data.study.Value;
 import ambit2.base.data.substance.SubstanceProperty;
 import ambit2.core.io.json.SubstanceStudyParser;
 
@@ -40,11 +41,7 @@ public class StudyFormatter {
 		dx = new ObjectMapper();
 		InputStream in = null;
 		try {
-			in = this
-					.getClass()
-					.getClassLoader()
-					.getResourceAsStream(
-							"ambit2/base/data/study/config-study.js");
+			in = this.getClass().getClassLoader().getResourceAsStream("ambit2/base/data/study/config-study.js");
 			JsonNode dxRoot = dx.readTree(in);
 			columns = dxRoot.get("columns");
 		} catch (Exception x) {
@@ -58,8 +55,7 @@ public class StudyFormatter {
 		}
 	}
 
-	public String format(SubstanceProperty property, Object value)
-			throws Exception {
+	public String format(SubstanceProperty property, Object value) throws Exception {
 		if (value == null)
 			return null;
 		if (value instanceof MultiValue)
@@ -70,11 +66,9 @@ public class StudyFormatter {
 			return format(property, value.toString());
 	}
 
-	public String format(SubstanceProperty property, String value)
-			throws Exception {
+	public String format(SubstanceProperty property, String value) throws Exception {
 
-		ObjectNode column = (ObjectNode) columns.get(property
-				.getEndpointcategory());
+		ObjectNode column = (ObjectNode) columns.get(property.getEndpointcategory());
 		if (column == null)
 			column = (ObjectNode) columns.get("SUPPORTING_INFO_SECTION");
 
@@ -91,17 +85,14 @@ public class StudyFormatter {
 			}
 		} else {
 
-			if ("TO_GENETIC_IN_VITRO_SECTION".equals(property
-					.getEndpointcategory())
-					|| "TO_GENETIC_IN_VIVO_SECTION".equals(property
-							.getEndpointcategory())) {
+			if ("TO_GENETIC_IN_VITRO_SECTION".equals(property.getEndpointcategory())
+					|| "TO_GENETIC_IN_VIVO_SECTION".equals(property.getEndpointcategory())) {
 				ObjectNode config = getResultConfig(column);
 				ObjectNode tconfig = getTextResultConfig(column);
 				ObjectNode iconfig = getInterpretationResultConfig(column);
 				if (inMatrix(config) || inMatrix(tconfig) || inMatrix(iconfig))
 					b.append(value);
-			} else if ("TO_BIODEG_WATER_SCREEN_SECTION".equals(property
-					.getEndpointcategory())) {
+			} else if ("TO_BIODEG_WATER_SCREEN_SECTION".equals(property.getEndpointcategory())) {
 				if (!"interpretation_result".equals(property.getName())) {
 					b.append(property.getName());
 					b.append(" =");
@@ -134,10 +125,9 @@ public class StudyFormatter {
 					if (inMatrix(config)) {
 						b.append(value);
 					} else {
-						throw new Exception(
-								String.format(
-										"%s: Found property name 'interpretation_result' , configured as not 'inMatrix'",
-										property.getEndpointcategory()));
+						throw new Exception(String.format(
+								"%s: Found property name 'interpretation_result' , configured as not 'inMatrix'",
+								property.getEndpointcategory()));
 					}
 				} else {
 					config = getResultConfig(column);
@@ -169,22 +159,17 @@ public class StudyFormatter {
 		return b.toString();
 	}
 
-	protected void formatParams(StringBuilder b, ObjectNode conditions,
-			PropertyAnnotations pannotations) {
+	protected void formatParams(StringBuilder b, ObjectNode conditions, PropertyAnnotations pannotations) {
 		boolean hasConditions = false;
 		if (conditions != null)
 			for (PropertyAnnotation pa : pannotations) {
 				ObjectNode condition = conditions == null ? null
-						: (ObjectNode) conditions.get(pa.getPredicate()
-								.toString().toLowerCase());
-				JsonNode conditionInMatrix = condition == null ? null
-						: condition.get("inMatrix");
+						: (ObjectNode) conditions.get(pa.getPredicate().toString().toLowerCase());
+				JsonNode conditionInMatrix = condition == null ? null : condition.get("inMatrix");
 
-				JsonNode titleInMatrix = condition == null ? null : condition
-						.get("titleInMatrix");
+				JsonNode titleInMatrix = condition == null ? null : condition.get("titleInMatrix");
 
-				if (conditionInMatrix != null
-						&& conditionInMatrix.asBoolean(false)) {
+				if (conditionInMatrix != null && conditionInMatrix.asBoolean(false)) {
 					if (!hasConditions)
 						b.append(" (");
 					else
@@ -224,8 +209,7 @@ public class StudyFormatter {
 	}
 
 	public ObjectNode getInterpretationConfig(ObjectNode column) {
-		return column == null ? null : (ObjectNode) column
-				.get("interpretation");
+		return column == null ? null : (ObjectNode) column.get("interpretation");
 	}
 
 	public ObjectNode getInterpretationResultConfig(ObjectNode column) {
@@ -240,38 +224,32 @@ public class StudyFormatter {
 
 	public ObjectNode getGuidelineConfig(ObjectNode column) {
 		ObjectNode protocolConfig = getProtocolConfig(column);
-		return protocolConfig == null ? null : (ObjectNode) protocolConfig
-				.get("guideline");
+		return protocolConfig == null ? null : (ObjectNode) protocolConfig.get("guideline");
 	}
 
 	public ObjectNode getCitationConfig(ObjectNode column) {
 		ObjectNode protocolConfig = getProtocolConfig(column);
-		return protocolConfig == null ? null : (ObjectNode) protocolConfig
-				.get("citation");
+		return protocolConfig == null ? null : (ObjectNode) protocolConfig.get("citation");
 	}
 
 	public ObjectNode getOwnerConfig(ObjectNode column) {
 		ObjectNode protocolConfig = getProtocolConfig(column);
-		return protocolConfig == null ? null : (ObjectNode) protocolConfig
-				.get("owner");
+		return protocolConfig == null ? null : (ObjectNode) protocolConfig.get("owner");
 	}
 
 	public ObjectNode getEndpointConfig(ObjectNode column) {
 		ObjectNode effectConfig = getEffectsConfig(column);
-		return effectConfig == null ? null : (ObjectNode) effectConfig
-				.get("endpoint");
+		return effectConfig == null ? null : (ObjectNode) effectConfig.get("endpoint");
 	}
 
 	public ObjectNode getResultConfig(ObjectNode column) {
 		ObjectNode effectConfig = getEffectsConfig(column);
-		return effectConfig == null ? null : (ObjectNode) effectConfig
-				.get("result");
+		return effectConfig == null ? null : (ObjectNode) effectConfig.get("result");
 	}
 
 	public ObjectNode getTextResultConfig(ObjectNode column) {
 		ObjectNode effectConfig = getEffectsConfig(column);
-		return effectConfig == null ? null : (ObjectNode) effectConfig
-				.get("text");
+		return effectConfig == null ? null : (ObjectNode) effectConfig.get("text");
 	}
 
 	public boolean inMatrix(ObjectNode config) {
@@ -308,13 +286,11 @@ public class StudyFormatter {
 			return _MAX_COL;
 	}
 
-	public String format(SubstanceProperty property, IValue value)
-			throws Exception {
+	public String format(SubstanceProperty property, IValue value) throws Exception {
 		return format(property, value.toHumanReadable());
 	}
 
-	public String format(SubstanceProperty property, MultiValue<IValue> value)
-			throws Exception {
+	public String format(SubstanceProperty property, MultiValue<IValue> value) throws Exception {
 		StringBuilder b = new StringBuilder();
 		for (int i = 0; i < ((MultiValue) value).size(); i++) {
 			if (i > 0)
@@ -324,17 +300,14 @@ public class StudyFormatter {
 		return b.toString();
 	}
 
-	protected void assignTitle(ObjectNode config, ObjectNode defaultConfig,
-			String value) {
+	protected void assignTitle(ObjectNode config, ObjectNode defaultConfig, String value) {
 		if (config.get("sTitle") == null) {
-			JsonNode title = defaultConfig == null ? null : defaultConfig
-					.get("sTitle");
+			JsonNode title = defaultConfig == null ? null : defaultConfig.get("sTitle");
 			config.put("sTitle", title == null ? value : title.asText());
 		}
 	}
 
-	public void formatCategoryHeader(String category, IStudyPrinter printer)
-			throws Exception {
+	public void formatCategoryHeader(String category, IStudyPrinter printer) throws Exception {
 		ObjectNode defaultColumn = (ObjectNode) columns.get("_");
 
 		ObjectNode column = (ObjectNode) columns.get(category);
@@ -358,15 +331,13 @@ public class StudyFormatter {
 		config = getInterpretationResultConfig(column);
 		if (isVisible(config)) {
 			ordered.add(config);
-			assignTitle(config, getInterpretationResultConfig(defaultColumn),
-					"Interpretation result");
+			assignTitle(config, getInterpretationResultConfig(defaultColumn), "Interpretation result");
 		}
 
 		config = getInterpretationResultCriteria(column);
 		if (isVisible(config)) {
 			ordered.add(config);
-			assignTitle(config, getInterpretationResultCriteria(defaultColumn),
-					"Interpretation criteria");
+			assignTitle(config, getInterpretationResultCriteria(defaultColumn), "Interpretation criteria");
 		}
 
 		config = getOwnerConfig(column);
@@ -445,8 +416,7 @@ public class StudyFormatter {
 			config = getTextResultConfig(defaultColumn);
 		if (isVisible(config)) {
 			ordered.add(config);
-			assignTitle(config, getTextResultConfig(defaultColumn),
-					"Text value");
+			assignTitle(config, getTextResultConfig(defaultColumn), "Text value");
 		}
 		/**
 		 * Now sort all these
@@ -462,22 +432,19 @@ public class StudyFormatter {
 			ordered.get(i).put("iColumn", i + 1);
 			if (printer != null) {
 				JsonNode title = ordered.get(i).get("sTitle");
-				printer.printHeader(0, (i + 1), (i + 1), title == null ? "??"
-						: title.asText());
+				printer.printHeader(0, (i + 1), (i + 1), title == null ? "??" : title.asText());
 			}
 		}
 
 	}
 
-	public void format(
-			final ProtocolApplication<Protocol, String, String, IParams, String> pa,
-			IStudyPrinter printer) throws Exception {
+	public int format(final ProtocolApplication<Protocol, String, String, Object, String> pa, IStudyPrinter printer)
+			throws Exception {
 
 		_r_flags flag = null;
 		try {
 			for (_r_flags rf : _r_flags.values())
-				if (rf.toString().equals(
-						pa.getReliability().getStudyResultType().toString())) {
+				if (rf.toString().equals(pa.getReliability().getStudyResultType().toString())) {
 					flag = rf;
 					break;
 				}
@@ -485,16 +452,15 @@ public class StudyFormatter {
 		} catch (Exception x) {
 		}
 
-		ObjectNode column = (ObjectNode) columns.get(pa.getProtocol()
-				.getCategory());
+		ObjectNode column = (ObjectNode) columns.get(pa.getProtocol().getCategory());
 		// defaultColumn
 		// TODO default column
 
 		ObjectNode config = getGuidelineConfig(column);
 		if (isVisible(config))
 			try {
-				printer.print(0, getColumn(config), getOrder(config), pa
-						.getProtocol().getGuideline().get(0), false, flag);
+				printer.print(0, getColumn(config), getOrder(config), pa.getProtocol().getGuideline().get(0), false,
+						flag);
 			} catch (Exception x) {
 				logger.log(Level.WARNING, x.getMessage());
 			}
@@ -503,26 +469,22 @@ public class StudyFormatter {
 
 		if (isVisible(config))
 			try {
-				printer.print(0, getColumn(config), getOrder(config),
-						pa.getReferenceYear(), false, flag);
+				printer.print(0, getColumn(config), getOrder(config), pa.getReferenceYear(), false, flag);
 			} catch (Exception x) {
 				logger.log(Level.WARNING, x.getMessage());
 			}
 
 		config = getOwnerConfig(column);
 		if (isVisible(config))
-			printer.print(0, getColumn(config), getOrder(config),
-					pa.getReferenceOwner(), false, flag);
+			printer.print(0, getColumn(config), getOrder(config), pa.getReferenceOwner(), false, flag);
 
 		config = getInterpretationResultConfig(column);
 		if (isVisible(config)) {
-			printer.print(0, getColumn(config), getOrder(config),
-					pa.getInterpretationResult(), true, flag);
+			printer.print(0, getColumn(config), getOrder(config), pa.getInterpretationResult(), true, flag);
 		}
 		config = getInterpretationResultCriteria(column);
 		if (isVisible(config)) {
-			printer.print(0, getColumn(config), getOrder(config),
-					pa.getInterpretationCriteria(), false, flag);
+			printer.print(0, getColumn(config), getOrder(config), pa.getInterpretationCriteria(), false, flag);
 		}
 
 		/**
@@ -531,32 +493,11 @@ public class StudyFormatter {
 
 		try {
 
-			JsonNode conditions = mapper.readTree(new StringReader(pa
-					.getParameters()));
+			JsonNode conditions = mapper.readTree(new StringReader(pa.getParameters()));
 			if (conditions instanceof ObjectNode) {
-				IParams params = SubstanceStudyParser
-						.parseParams((ObjectNode) conditions);
-
-				config = getParametersConfig(column);
-
-				Iterator<Map.Entry> iFields = params.entrySet().iterator();
-				while (iFields.hasNext())
-					try {
-						Map.Entry entry = iFields.next();
-						Object field = entry.getKey();
-						ObjectNode param = (ObjectNode) config.get(field
-								.toString().toLowerCase());
-						if (isVisible(param)) {
-							String value = entry.getValue().toString();
-							printer.print(0, getColumn(param), getOrder(param),
-									value, false, flag);
-						}
-					} catch (Exception x) {
-					} finally {
-
-					}
+				IParams params = SubstanceStudyParser.parseParams((ObjectNode) conditions);
+				printConditions(0, params, getParametersConfig(column), printer, flag);
 			}
-
 		} catch (Exception x) {
 		}
 		/**
@@ -564,34 +505,71 @@ public class StudyFormatter {
 		 */
 		int row = 0;
 		if (pa.getEffects() != null)
-			for (EffectRecord<String, IParams, String> effect : pa.getEffects()) {
+			for (EffectRecord<String, Object, String> effect : pa.getEffects()) {
+
+				if (effect.getConditions() != null) {
+					IParams params = SubstanceStudyParser.parseConditions(dx,effect.getConditions().toString());
+					printConditions(row,params, getConditionsConfig(column), printer, flag);
+				}	
+
 				config = getEndpointConfig(column);
 				if (isVisible(config))
-					printer.print(row, getColumn(config), getOrder(config),
-							effect.getEndpoint(), false, flag);
+					printer.print(row, getColumn(config), getOrder(config), effect.getEndpoint(), false, flag);
 
 				config = getResultConfig(column);
 				if (isVisible(config))
-					printer.print(row, getColumn(config), getOrder(config),
-							String.format(
-									"%s%s %s%s %s",
-									effect.getLoQualifier() == null ? ""
-											: effect.getLoQualifier(),
-									effect.getLoValue() == null ? "" : effect
-											.getLoValue(),
-									effect.getUpQualifier() == null ? ""
-											: effect.getUpQualifier(),
-									effect.getUpValue() == null ? "" : effect
-											.getUpValue(),
-									effect.getUnit() == null ? "" : effect
-											.getUnit()), true, flag);
+					printer.print(row, getColumn(config), getOrder(config), formatValue(effect), true, flag);
 
 				config = getTextResultConfig(column);
 				if ((effect.getTextValue() != null) && isVisible(config))
-					printer.print(row, getColumn(config), getOrder(config),
-							effect.getTextValue().toString(), true, flag);
+					printer.print(row, getColumn(config), getOrder(config), effect.getTextValue().toString(), true,
+							flag);
 				row++;
 			}
+		return row+1;
+	}
 
+	protected String formatValue(Value effect) {
+		return String.format("%s%s %s%s %s", effect.getLoQualifier() == null ? "" : effect.getLoQualifier(),
+				effect.getLoValue() == null ? "" : effect.getLoValue(),
+				effect.getUpQualifier() == null ? "" : effect.getUpQualifier(),
+				effect.getUpValue() == null ? "" : effect.getUpValue(),
+				effect.getUnits() == null ? "" : effect.getUnits());
+	}
+
+	protected String formatValue(EffectRecord<String, Object, String> effect) {
+		return String.format("%s%s %s%s%s %s", effect.getLoQualifier() == null ? "" : effect.getLoQualifier(),
+				effect.getLoValue() == null ? "" : effect.getLoValue(),
+				effect.getUpQualifier() == null ? "" : effect.getUpQualifier(),
+				effect.getUpValue() == null ? "" : effect.getUpValue(),
+				effect.getErrorValue() == null ? "" : String.format(" [%s %s]", effect.getErrQualifier() == null ? ""
+						: effect.getErrQualifier(), effect.getErrorValue()),
+				effect.getUnit() == null ? "" : effect.getUnit());
+
+	}
+
+	protected void printConditions(int row, IParams params, ObjectNode config, IStudyPrinter printer, _r_flags flag) {
+
+		try {
+
+			Iterator<Map.Entry> iFields = params.entrySet().iterator();
+			while (iFields.hasNext())
+				try {
+					Map.Entry entry = iFields.next();
+					Object field = entry.getKey();
+					ObjectNode param = (ObjectNode) config.get(field.toString().toLowerCase());
+					if (isVisible(param)) {
+						Object v = entry.getValue();
+
+						String value = v instanceof Value ? (formatValue((Value) v)) : v.toString();
+						printer.print(row, getColumn(param), getOrder(param), value, false, flag);
+					}
+				} catch (Exception x) {
+				} finally {
+
+				}
+
+		} catch (Exception x) {
+		}
 	}
 }

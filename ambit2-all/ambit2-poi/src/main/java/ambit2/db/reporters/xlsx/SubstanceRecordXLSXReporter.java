@@ -209,7 +209,7 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 							}
 						});
 				String current_category = null;
-				for (ProtocolApplication<Protocol, String, String, IParams, String> pa : record
+				for (ProtocolApplication<Protocol, String, String, Object, String> pa : record
 						.getMeasurements()) {
 
 					String caption_category;
@@ -247,9 +247,9 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 					cell.setCellType(Cell.CELL_TYPE_STRING);
 					cell.setCellValue(pa.getDocumentUUID());
 
-					formatter.format(pa, this);
+					rowIndex += formatter.format(pa, this);
 
-					rowIndex++;
+					//rowIndex++;
 				}
 
 				rowIndex++;
