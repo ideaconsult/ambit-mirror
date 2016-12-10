@@ -320,10 +320,10 @@ public class InchiProcessorTest {
 		System.out.println(gen2.getReturnStatus());
 		System.out.println(gen2.getMessage());
 
-		System.out.println(gen1.getInchi());
-		System.out.println(gen1.getInchiKey());
-		System.out.println(gen2.getInchi());
-		System.out.println(gen2.getInchiKey());
+		Assert.assertEquals("InChI=1/C2H6N2S/c1-2-3-4-5/h2H2,1H3,(H,3,5)/f/h3H", gen1.getInchi());
+		Assert.assertEquals("HLBPZSLHBUKVDX-TULZNQERNA-N",gen1.getInchiKey());
+		Assert.assertEquals("InChI=1/C2H6N2S/c1-2-3-4-5/h2H2,1H3,(H,3,5)/f/h5H",gen2.getInchi());
+		Assert.assertEquals("HLBPZSLHBUKVDX-JSWHHWTPNA-N", gen2.getInchiKey());
 		Assert.assertTrue(!gen1.getInchi().equals(gen2.getInchi()));
 		Assert.assertTrue(!gen1.getInchiKey().equals(gen2.getInchiKey()));
 	}
