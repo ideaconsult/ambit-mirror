@@ -55,7 +55,7 @@ public class SmirksProcessorTest {
 				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 				mol = p.process(mol);
 				logger.log(Level.INFO, String.format("%s\t%s", t.getName(),mol.getProperties()));
-				Assert.assertTrue((int)mol.getProperty("Transformed")>0);
+				Assert.assertNotNull(String.format("%s\t%s", t.getName(),t.getExample()),mol.getProperty("Transformed"));
 				Assert.assertTrue((int)mol.getProperty("Transformed")>0);
 				Assert.assertEquals(1, (int)mol.getProperty("T."+t.getName()));
 				Assert.assertEquals("[]",mol.getProperty("AtomTypes.added").toString());
