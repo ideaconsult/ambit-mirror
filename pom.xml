@@ -543,7 +543,7 @@
 			since ambit 2.4.7-SNAPSHOT -->
 		<!-- cdk 1.5.10 @ maven central since ambit 3.0.0 -->
 		<!-- cdk 1.5.11 @ maven central since ambit 3.0.0 Sep 2015 -->
-		<cdk.version>1.5.13</cdk.version>
+		<cdk.version>1.5.14</cdk.version>
 		<restnet.version>1.1.3-SNAPSHOT</restnet.version>
 		<modbcum.version>1.0.9-SNAPSHOT</modbcum.version>
 		<dbunit.version>2.5.1</dbunit.version>

@@ -248,7 +248,7 @@
 			"NAME": "[C.plus.planar]",
 			"CLASS": "uncharge",
 			"SMIRKS": "[C+;X3:1]>>[C:1]",
-			"example": "CCN(CC)[c+]1sc2C(Oc3ccc(Br)cc3c2s1)c4ccc(Cl)cc4",
+			"example_error_with_cdk1.5.14": "CCN(CC)[c+]1sc2C(Oc3ccc(Br)cc3c2s1)c4ccc(Cl)cc4",
 			"comment": "to be verified",
 			"USE": true,
 			"order" : 17,			
