@@ -144,7 +144,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		if (record.getOwnerName() != null)
 			getOutput().add(sowner, DCTerms.title, record.getOwnerName());
 
-		// plaseholder, change to property
+		// placeholder, change to property
 		String TMP_NS = "http://TMP.URI";
 
 		int componentNr = 0;
