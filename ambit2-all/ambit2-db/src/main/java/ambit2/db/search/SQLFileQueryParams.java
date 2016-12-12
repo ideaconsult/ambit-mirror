@@ -10,13 +10,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import net.idea.modbcum.i.IJSONQueryParams;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import net.idea.modbcum.q.query.SQLFileQuery;
-
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ObjectNode;
 
 public class SQLFileQueryParams extends SQLFileQuery<ObjectNode> implements
 		IJSONQueryParams {
@@ -68,7 +68,7 @@ public class SQLFileQueryParams extends SQLFileQuery<ObjectNode> implements
 		if (params == null)
 			return null;
 
-		Iterator<Entry<String, JsonNode>> i = params.getFields();
+		Iterator<Entry<String, JsonNode>> i = params.fields();
 		while (i.hasNext()) {
 			Entry<String, JsonNode> param = i.next();
 			pnames.add(param);

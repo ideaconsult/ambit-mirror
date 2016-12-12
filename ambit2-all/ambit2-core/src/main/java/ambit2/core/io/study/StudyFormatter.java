@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.PropertyAnnotations;
@@ -362,7 +362,7 @@ public class StudyFormatter {
 		config = getParametersConfig(column);
 		if (config == null)
 			config = getParametersConfig(defaultColumn);
-		Iterator<String> iFields = config.getFieldNames();
+		Iterator<String> iFields = config.fieldNames();
 		while (iFields.hasNext())
 			try {
 				String field = iFields.next();
@@ -381,7 +381,7 @@ public class StudyFormatter {
 		config = getConditionsConfig(column);
 		if (config == null)
 			config = getConditionsConfig(defaultColumn);
-		iFields = config.getFieldNames();
+		iFields = config.fieldNames();
 		while (iFields.hasNext())
 			try {
 				String field = iFields.next();

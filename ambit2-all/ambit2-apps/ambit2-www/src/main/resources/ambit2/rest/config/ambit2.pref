@@ -107,6 +107,7 @@ baseurl.depth=${baseurl.depth}
 custom.title=${custom.title}
 custom.description=${custom.description}
 custom.logo=${custom.logo}
+custom.color=${custom.color}
 #URI of the search service to appear on the front page, e.g. https://localhost:8080/ui/_search  
 custom.search=${custom.search}
 #default query on the front page

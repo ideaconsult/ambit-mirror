@@ -3,11 +3,8 @@ package ambit2.rest.bundle;
 import java.io.OutputStream;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.p.DefaultAmbitProcessor;
-
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
@@ -15,6 +12,8 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.reporters.QueryHeaderReporter;
 import ambit2.db.substance.study.SubstanceStudyDetailsProcessor;
 import ambit2.export.isa.v1_0.ISAJsonExporter1_0;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 /**
  * Uses{@link ISAJsonExporter1_0}
@@ -63,7 +62,7 @@ public class BundleISA_JSONReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		if (exporter != null)
 			try {
 				ObjectMapper mapper = new ObjectMapper();
-				mapper.setSerializationInclusion(Inclusion.NON_EMPTY);
+				mapper.setSerializationInclusion(Include.NON_EMPTY);
 				mapper.writerWithDefaultPrettyPrinter().writeValue(getOutput(),
 						exporter.getOutput());
 			} catch (Exception x) {

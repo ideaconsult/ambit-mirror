@@ -13,13 +13,14 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.node.ObjectNode;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.SubstanceRecord;
@@ -138,7 +139,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 				JsonNode papps = study.get(index);
 				try {
 					record.setSubstanceUUID(papps.get("owner").get("substance")
-							.get("uuid").getTextValue());
+							.get("uuid").textValue());
 				} catch (Exception x) {
 					x.printStackTrace();
 				}
@@ -208,20 +209,20 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 			return null;
 		SubstanceRecord record = new SubstanceRecord();
 		record.setSubstanceName(node.get(
-				SubstanceRecord.jsonSubstance.name.name()).getTextValue());
+				SubstanceRecord.jsonSubstance.name.name()).textValue());
 		record.setSubstanceUUID(node.get(
-				SubstanceRecord.jsonSubstance.i5uuid.name()).getTextValue());
+				SubstanceRecord.jsonSubstance.i5uuid.name()).textValue());
 		record.setOwnerName(node.get(
-				SubstanceRecord.jsonSubstance.ownerName.name()).getTextValue());
+				SubstanceRecord.jsonSubstance.ownerName.name()).textValue());
 		record.setOwnerUUID(node.get(
-				SubstanceRecord.jsonSubstance.ownerUUID.name()).getTextValue());
+				SubstanceRecord.jsonSubstance.ownerUUID.name()).textValue());
 		record.setPublicName(node.get(
-				SubstanceRecord.jsonSubstance.publicname.name()).getTextValue());
+				SubstanceRecord.jsonSubstance.publicname.name()).textValue());
 		record.setSubstancetype(node.get(
 				SubstanceRecord.jsonSubstance.substanceType.name())
-				.getTextValue());
+				.textValue());
 		record.setFormat(node.get(SubstanceRecord.jsonSubstance.format.name())
-				.getTextValue());
+				.textValue());
 		JsonNode subnode = node
 				.get(SubstanceRecord.jsonSubstance.externalIdentifiers.name());
 		if (subnode instanceof ArrayNode) {
@@ -231,8 +232,8 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 			for (int i = 0; i < ids.size(); i++) {
 				if (ids.get(i) instanceof ObjectNode) {
 					extids.add(new ExternalIdentifier(((ObjectNode) ids.get(i))
-							.get("type").getTextValue(), ((ObjectNode) ids
-							.get(i)).get("id").getTextValue()));
+							.get("type").textValue(), ((ObjectNode) ids
+							.get(i)).get("id").textValue()));
 				}
 			}
 		}
@@ -240,7 +241,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 				.name());
 		if (subnode != null) {
 			record.setReferenceSubstanceUUID(subnode.get(
-					SubstanceRecord.jsonSubstance.i5uuid.name()).getTextValue());
+					SubstanceRecord.jsonSubstance.i5uuid.name()).textValue());
 		}
 		return record;
 	}
@@ -313,7 +314,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 			pa = new ProtocolApplication(protocol);
 			JsonNode docuuid = node
 					.get(ProtocolApplication._fields.uuid.name());
-			pa.setDocumentUUID(docuuid == null ? null : docuuid.getTextValue());
+			pa.setDocumentUUID(docuuid == null ? null : docuuid.textValue());
 			parseOwner((ObjectNode) node.get(ProtocolApplication._fields.owner
 					.name()), pa);
 			parseStudyReference(
@@ -365,17 +366,17 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 		}
 		jn = node.get(_FIELDS_RELIABILITY.r_purposeFlag.name());
 		try {
-			reliability.setPurposeFlag(jn.getTextValue());
+			reliability.setPurposeFlag(jn.textValue());
 		} catch (Exception x) {
 		}
 		jn = node.get(_FIELDS_RELIABILITY.r_studyResultType.name());
 		try {
-			reliability.setStudyResultType(jn.getTextValue());
+			reliability.setStudyResultType(jn.textValue());
 		} catch (Exception x) {
 		}
 		jn = node.get(_FIELDS_RELIABILITY.r_value.name());
 		try {
-			reliability.setValue(jn.getTextValue());
+			reliability.setValue(jn.textValue());
 		} catch (Exception x) {
 		}
 		record.setReliability(reliability);
@@ -386,13 +387,13 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 		if (node == null)
 			return;
 		JsonNode jn = node.get("title");
-		record.setReference(jn.getTextValue());
+		record.setReference(jn.textValue());
 		jn = node.get("owner");
 		if (jn != null)
-			record.setReferenceOwner(jn.getTextValue());
+			record.setReferenceOwner(jn.textValue());
 		jn = node.get("year");
 		if (jn != null)
-			record.setReferenceYear(jn.getTextValue());
+			record.setReferenceYear(jn.textValue());
 	}
 
 	protected void parseCompany(ObjectNode node, ProtocolApplication record) {
@@ -400,10 +401,10 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 			return;
 		JsonNode jn = node.get(ProtocolApplication._fields.uuid.name());
 		if (jn != null)
-			record.setCompanyUUID(jn.getTextValue());
+			record.setCompanyUUID(jn.textValue());
 		jn = node.get(ProtocolApplication._fields.name.name());
 		if (jn != null)
-			record.setCompanyName(jn.getTextValue());
+			record.setCompanyName(jn.textValue());
 	}
 
 	public void parseOwner(ObjectNode node, ProtocolApplication record) {
@@ -421,7 +422,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 			return;
 		JsonNode jn = node.get(ProtocolApplication._fields.uuid.name());
 		if (jn != null) {
-			record.setSubstanceUUID(jn.getTextValue());
+			record.setSubstanceUUID(jn.textValue());
 		}
 	}
 
@@ -431,7 +432,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 			return;
 		JsonNode jn = node.get(ProtocolApplication._fields.result.name());
 		if (jn != null) {
-			record.setInterpretationResult(jn.getTextValue());
+			record.setInterpretationResult(jn.textValue());
 		}
 	}
 
@@ -441,7 +442,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 			return;
 		JsonNode jn = node.get(ProtocolApplication._fields.criteria.name());
 		if (jn != null) {
-			record.setInterpretationCriteria(jn.getTextValue());
+			record.setInterpretationCriteria(jn.textValue());
 		}
 	}
 
@@ -456,7 +457,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 		if (node == null)
 			return null;
 		IParams params = new Params();
-		Iterator<Entry<String, JsonNode>> i = node.getFields();
+		Iterator<Entry<String, JsonNode>> i = node.fields();
 		while (i.hasNext()) {
 			Entry<String, JsonNode> val = i.next();
 			JsonNode value = val.getValue();
@@ -470,39 +471,39 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 				rvalue.setUnits(null);
 
 				JsonNode jn = range.get(EffectRecord._fields.textValue.name());
-				if (jn != null && !"".equals(jn.getTextValue()))
-					params.put(val.getKey(), jn.getTextValue());
+				if (jn != null && !"".equals(jn.textValue()))
+					params.put(val.getKey(), jn.textValue());
 				else {
 					jn = range.get(EffectRecord._fields.loQualifier.name());
 					if (jn != null) {
-						if (!"".equals(jn.getTextValue()))
-							rvalue.setLoQualifier(jn.getTextValue());
+						if (!"".equals(jn.textValue()))
+							rvalue.setLoQualifier(jn.textValue());
 					}
 					jn = range.get(EffectRecord._fields.loValue.name());
-					if (jn != null && !"".equals(jn.getTextValue()))
+					if (jn != null && !"".equals(jn.textValue()))
 						rvalue.setLoValue(jn.asDouble());
 
 					jn = range.get(EffectRecord._fields.upQualifier.name());
 
 					if (jn != null) {
-						if (!"".equals(jn.getTextValue()))
-							rvalue.setUpQualifier(jn.getTextValue());
+						if (!"".equals(jn.textValue()))
+							rvalue.setUpQualifier(jn.textValue());
 					}
 					jn = range.get(EffectRecord._fields.upValue.name());
-					if (jn != null && !"".equals(jn.getTextValue()))
+					if (jn != null && !"".equals(jn.textValue()))
 						rvalue.setUpValue(jn.asDouble());
 
 					jn = range.get(EffectRecord._fields.unit.name());
-					if (jn != null && !"".equals(jn.getTextValue())
-							&& !"null".equals(jn.getTextValue())) {
-						rvalue.setUnits(jn.getTextValue());
+					if (jn != null && !"".equals(jn.textValue())
+							&& !"null".equals(jn.textValue())) {
+						rvalue.setUnits(jn.textValue());
 					}
 
 					params.put(val.getKey(), rvalue);
 
 				}
 			} else
-				params.put(val.getKey(), value.getTextValue());
+				params.put(val.getKey(), value.textValue());
 		}
 		return params;
 	}
@@ -512,20 +513,20 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 			return null;
 		JsonNode endpointnode = node.get(Protocol._fields.endpoint.name());
 		Protocol p = new Protocol(endpointnode == null ? null
-				: endpointnode.getTextValue());
+				: endpointnode.textValue());
 		JsonNode jn = node.get(Protocol._fields.topcategory.name());
-		if (jn != null && !"".equals(jn.getTextValue())
-				&& !"null".equals(jn.getTextValue()))
-			p.setTopCategory(jn.getTextValue());
+		if (jn != null && !"".equals(jn.textValue())
+				&& !"null".equals(jn.textValue()))
+			p.setTopCategory(jn.textValue());
 		jn = node.get(Protocol._fields.category.name()).get("code");
-		if (jn != null && !"".equals(jn.getTextValue())
-				&& !"null".equals(jn.getTextValue()))
-			p.setCategory(jn.getTextValue());
+		if (jn != null && !"".equals(jn.textValue())
+				&& !"null".equals(jn.textValue()))
+			p.setCategory(jn.textValue());
 		ArrayNode guidance = (ArrayNode) node.get(Protocol._fields.guideline
 				.name());
 		if (guidance != null)
 			for (int i = 0; i < guidance.size(); i++) {
-				p.addGuideline(guidance.get(i).getTextValue());
+				p.addGuideline(guidance.get(i).textValue());
 			}
 		return p;
 	}
@@ -542,7 +543,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 			EffectRecord record = createEffectRecord(protocol);
 			JsonNode jn = node.get(i).get(EffectRecord._fields.endpoint.name());
 			if (jn != null)
-				record.setEndpoint(jn.getTextValue());
+				record.setEndpoint(jn.textValue());
 			record.setConditions(parseParams((ObjectNode) node.get(i).get(
 					EffectRecord._fields.conditions.name())));
 			parseResult(
@@ -559,30 +560,30 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 			return;
 		JsonNode jn = node.get(EffectRecord._fields.loQualifier.name());
 		if (jn != null) {
-			if (!"".equals(jn.getTextValue()))
-				record.setLoQualifier(jn.getTextValue());
+			if (!"".equals(jn.textValue()))
+				record.setLoQualifier(jn.textValue());
 		}
 		jn = node.get(EffectRecord._fields.loValue.name());
-		if (jn != null && !"".equals(jn.getTextValue()))
+		if (jn != null && !"".equals(jn.textValue()))
 			record.setLoValue(jn.asDouble());
 		jn = node.get(EffectRecord._fields.upQualifier.name());
 		if (jn != null) {
-			if (!"".equals(jn.getTextValue()))
-				record.setUpQualifier(jn.getTextValue());
+			if (!"".equals(jn.textValue()))
+				record.setUpQualifier(jn.textValue());
 		}
 		jn = node.get(EffectRecord._fields.upValue.name());
-		if (jn != null && !"".equals(jn.getTextValue()))
+		if (jn != null && !"".equals(jn.textValue()))
 			record.setUpValue(jn.asDouble());
 
 		jn = node.get(EffectRecord._fields.unit.name());
-		if (jn != null && !"".equals(jn.getTextValue())
-				&& !"null".equals(jn.getTextValue())) {
-			record.setUnit(jn.getTextValue());
+		if (jn != null && !"".equals(jn.textValue())
+				&& !"null".equals(jn.textValue())) {
+			record.setUnit(jn.textValue());
 		}
 		jn = node.get(EffectRecord._fields.textValue.name());
-		if (jn != null && !"".equals(jn.getTextValue())
-				&& !"null".equals(jn.getTextValue())) {
-			record.setTextValue(jn.getTextValue());
+		if (jn != null && !"".equals(jn.textValue())
+				&& !"null".equals(jn.textValue())) {
+			record.setTextValue(jn.textValue());
 		}
 
 	}
@@ -600,7 +601,7 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 			record.setDeleted(jn.asBoolean(true));
 		jn = node.get(ValueAnnotated._fields.remarks.name());
 		if (jn != null)
-			record.setRemark(jn.getTextValue());
+			record.setRemark(jn.textValue());
 	}
 
 	public List<ValueAnnotated> parseValuesAnnotated(ArrayNode node,

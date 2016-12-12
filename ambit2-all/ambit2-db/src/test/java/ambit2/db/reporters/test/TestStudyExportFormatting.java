@@ -4,9 +4,10 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ObjectNode;
 import org.junit.Test;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.IParams;
@@ -30,7 +31,7 @@ public class TestStudyExportFormatting {
 		if (conditionsConfig == null) {
 			logger.log(Level.FINE, String.format("%s : missing conditions config", c.name()));
 		} else {
-			Iterator<String> names = conditionsConfig.getFieldNames();
+			Iterator<String> names = conditionsConfig.fieldNames();
 			while (names.hasNext()) {
 				String name = names.next();
 				JsonNode node = conditionsConfig.get(name);
@@ -46,7 +47,7 @@ public class TestStudyExportFormatting {
 		if (paramsConfig == null) {
 			logger.log(Level.FINE, String.format("%s : missing parameters config", c.name()));
 		} else {
-			Iterator<String> names = paramsConfig.getFieldNames();
+			Iterator<String> names = paramsConfig.fieldNames();
 			while (names.hasNext()) {
 				String name = names.next();
 				JsonNode node = paramsConfig.get(name);

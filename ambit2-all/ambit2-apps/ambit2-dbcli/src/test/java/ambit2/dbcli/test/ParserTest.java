@@ -113,8 +113,10 @@ public class ParserTest {
 			System.out.print('\t');
 		}
 		System.out.println();
-		for (IStereoElement se : m.stereoElements())
+		for (IStereoElement se : m.stereoElements()) {
+
 			System.out.println(se.getClass().getName());
+		}	
 		System.out.println();
 	}
 }

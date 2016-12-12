@@ -7,11 +7,11 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
@@ -537,7 +537,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 			try {
 				String json = effect.getTextValue().toString();
 				root = mapper.readTree(new ByteArrayInputStream(json.getBytes()));
-				java.util.Iterator<Entry<String, JsonNode>> entries = root.getFields();
+				java.util.Iterator<Entry<String, JsonNode>> entries = root.fields();
 				while (entries.hasNext()) {
 					Entry<String, JsonNode> entry = entries.next();
 					String loValue = entry.getValue().toString();

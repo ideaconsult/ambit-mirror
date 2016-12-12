@@ -5,18 +5,18 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jniinchi.INCHI_OPTION;
-
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtomContainer;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.rules.json.JSONParsingUtils;
 import ambit2.rules.json.JSONParsingUtils.STRUCTURE_RECORD_INPUT_INFO;
 import ambit2.smarts.SmartsHelper;
+import net.sf.jniinchi.INCHI_OPTION;
 
 public class ReactorStrategy 
 {

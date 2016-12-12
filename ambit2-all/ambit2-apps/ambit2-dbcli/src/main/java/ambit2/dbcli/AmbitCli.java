@@ -36,27 +36,8 @@ import java.util.logging.Logger;
 
 import javax.naming.OperationNotSupportedException;
 
-import net.idea.modbcum.c.DBConnectionConfigurable;
-import net.idea.modbcum.c.MySQLSingleConnection;
-import net.idea.modbcum.i.IParameterizedQuery;
-import net.idea.modbcum.i.IQueryCondition;
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.LoginInfo;
-import net.idea.modbcum.i.batch.IBatchStatistics;
-import net.idea.modbcum.i.batch.IBatchStatistics.RECORDS_STATS;
-import net.idea.modbcum.i.config.Preferences;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.processors.ProcessorsChain;
-import net.idea.modbcum.i.query.IQueryUpdate;
-import net.idea.modbcum.p.DefaultAmbitProcessor;
-import net.idea.modbcum.p.MasterDetailsProcessor;
-import net.idea.modbcum.p.batch.AbstractBatchProcessor;
-import net.idea.modbcum.q.update.AbstractUpdate;
-
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.log4j.PropertyConfigurator;
-import org.codehaus.jackson.JsonNode;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.fingerprint.IBitFingerprint;
 import org.openscience.cdk.fingerprint.ICountFingerprint;
@@ -68,6 +49,11 @@ import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
+import com.mysql.jdbc.CommunicationsException;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -111,10 +97,23 @@ import ambit2.descriptors.simmatrix.SimilarityMatrix;
 import ambit2.smarts.processors.SMARTSPropertiesGenerator;
 import ambit2.smarts.processors.SMIRKSProcessor;
 import ambit2.tautomers.processor.StructureStandardizer;
-
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
-import com.mysql.jdbc.CommunicationsException;
+import net.idea.modbcum.c.DBConnectionConfigurable;
+import net.idea.modbcum.c.MySQLSingleConnection;
+import net.idea.modbcum.i.IParameterizedQuery;
+import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.LoginInfo;
+import net.idea.modbcum.i.batch.IBatchStatistics;
+import net.idea.modbcum.i.batch.IBatchStatistics.RECORDS_STATS;
+import net.idea.modbcum.i.config.Preferences;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.i.query.IQueryUpdate;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.idea.modbcum.p.MasterDetailsProcessor;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
+import net.idea.modbcum.q.update.AbstractUpdate;
 
 /**
  * 
@@ -625,7 +624,7 @@ public class AmbitCli {
 		try {
 			JsonNode scommand = scmd.get("params");
 			JsonNode chunkNode = scommand.get(":chunk");
-			chunksize = Long.parseLong(chunkNode.get("value").getTextValue());
+			chunksize = Long.parseLong(chunkNode.get("value").textValue());
 		} catch (Exception x) {
 			logger_cli.log(Level.WARNING, x.getMessage(), x);
 		}

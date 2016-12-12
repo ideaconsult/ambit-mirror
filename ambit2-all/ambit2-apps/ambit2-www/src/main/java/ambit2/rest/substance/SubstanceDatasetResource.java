@@ -9,27 +9,16 @@ import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import net.idea.i5.io.I5_ROOT_OBJECTS;
-import net.idea.modbcum.i.IQueryCondition;
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.processors.ProcessorsChain;
-import net.idea.modbcum.p.MasterDetailsProcessor;
-import net.idea.modbcum.r.QueryAbstractReporter;
-import net.idea.restnet.c.ChemicalMediaType;
-import net.idea.restnet.db.QueryURIReporter;
-import net.idea.restnet.db.convertors.OutputWriterConvertor;
-
 import org.apache.poi.ss.usermodel.Cell;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ObjectNode;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
@@ -65,6 +54,16 @@ import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.structure.CompoundJSONReporter;
 import ambit2.rest.substance.owner.SubstanceByOwnerResource;
+import net.idea.i5.io.I5_ROOT_OBJECTS;
+import net.idea.modbcum.i.IQueryCondition;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.p.MasterDetailsProcessor;
+import net.idea.modbcum.r.QueryAbstractReporter;
+import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>>
 		extends SubstanceByOwnerResource<Q> {
@@ -239,7 +238,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 										: guideline.size() == 0 ? null
 												: guideline.get(0));
 
-						Iterator<Entry<String, JsonNode>> i = node.getFields();
+						Iterator<Entry<String, JsonNode>> i = node.fields();
 						while (i.hasNext()) {
 							Entry<String, JsonNode> val = i.next();
 
@@ -271,7 +270,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 								key.setClazz(Number.class);
 							} else {
 								master.setRecordProperty(key, val.getValue()
-										.getTextValue());
+										.textValue());
 								key.setClazz(String.class);
 							}
 						}

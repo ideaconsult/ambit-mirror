@@ -5,9 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.idea.modbcum.i.processors.IProcessor;
-
-import org.codehaus.jackson.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
@@ -23,6 +21,7 @@ import ambit2.base.data.study.ReliabilityParams._r_flags;
 import ambit2.base.data.study.Value;
 import ambit2.base.data.study.ValueAnnotated;
 import ambit2.base.data.substance.SubstanceProperty;
+import net.idea.modbcum.i.processors.IProcessor;
 
 public class ProtocolEffectRecord2SubstanceProperty
 		implements

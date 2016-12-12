@@ -3,8 +3,8 @@ package ambit2.export.isa.json;
 import java.io.File;
 import java.io.FileInputStream;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ambit2.export.isa.ISAExportConfig;
 import ambit2.rules.json.JSONParsingUtils;
