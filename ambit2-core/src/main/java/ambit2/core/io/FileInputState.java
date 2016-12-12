@@ -61,8 +61,7 @@ public class FileInputState extends FileState implements IInputState {
 	}
 
 	public void setOptionalSMILESHeader(String optionalSMILESHeader) {
-		this.optionalSMILESHeader = optionalSMILESHeader == null ? null
-				: optionalSMILESHeader.toUpperCase();
+		this.optionalSMILESHeader = optionalSMILESHeader == null ? null : optionalSMILESHeader.toUpperCase();
 	}
 
 	public FileInputState() {
@@ -99,14 +98,13 @@ public class FileInputState extends FileState implements IInputState {
 		return getReader(file, null);
 	}
 
-	public static IIteratingChemObjectReader getReader(InputStream stream,
-			String ext) throws AmbitIOException, CDKException {
+	public static IIteratingChemObjectReader getReader(InputStream stream, String ext)
+			throws AmbitIOException, CDKException {
 		return getReader(stream, ext, null);
 	}
 
-	public static IIteratingChemObjectReader getReader(File file,
-			IChemFormat format) throws AmbitIOException, CDKException,
-			FileNotFoundException {
+	public static IIteratingChemObjectReader getReader(File file, IChemFormat format)
+			throws AmbitIOException, CDKException, FileNotFoundException {
 		if (file.getName().endsWith(_FILE_TYPE.I5Z_INDEX.getExtension())) {
 			return getI5ZReader(file);
 		} else if (file.getName().endsWith(_FILE_TYPE.I5D_INDEX.getExtension())) {
@@ -146,8 +144,7 @@ public class FileInputState extends FileState implements IInputState {
 	 * @throws AmbitIOException
 	 * @throws CDKException
 	 */
-	public static IIteratingChemObjectReader getI5DReader(InputStream in)
-			throws AmbitIOException, CDKException {
+	public static IIteratingChemObjectReader getI5DReader(InputStream in) throws AmbitIOException, CDKException {
 		try {
 			Class clazz = Class.forName("net.idea.i5.io.I5DReader");
 			Constructor constructor = clazz.getConstructor(InputStream.class);
@@ -168,9 +165,8 @@ public class FileInputState extends FileState implements IInputState {
 		}
 	}
 
-	public static IRawReader<IStructureRecord> getRawReader(InputStream stream,
-			String extension, IChemFormat format) throws CDKException,
-			AmbitIOException {
+	public static IRawReader<IStructureRecord> getRawReader(InputStream stream, String extension, IChemFormat format)
+			throws CDKException, AmbitIOException {
 		String ext = extension.toLowerCase();
 		if (_FILE_TYPE.SDF_INDEX.hasExtension(ext)) {
 			return new RawIteratingSDFReader(new InputStreamReader(stream));
@@ -179,8 +175,7 @@ public class FileInputState extends FileState implements IInputState {
 		} else if (_FILE_TYPE.CSV_INDEX.hasExtension(ext)) {
 			try {
 				if ((format != null) && (format instanceof DelimitedFileFormat))
-					return new RawIteratingCSVReader(stream,
-							(DelimitedFileFormat) format);
+					return new RawIteratingCSVReader(stream, (DelimitedFileFormat) format);
 				else
 					return new RawIteratingCSVReader(stream, CSVFormat.EXCEL);
 			} catch (CDKException x) {
@@ -188,15 +183,12 @@ public class FileInputState extends FileState implements IInputState {
 			} catch (Exception x) {
 				throw new AmbitIOException(x);
 			}
-		} else if (_FILE_TYPE.TXT_INDEX.hasExtension(ext)
-				|| _FILE_TYPE.TSV_INDEX.hasExtension(ext)) {
+		} else if (_FILE_TYPE.TXT_INDEX.hasExtension(ext) || _FILE_TYPE.TSV_INDEX.hasExtension(ext)) {
 			try {
 				if ((format != null) && (format instanceof DelimitedFileFormat))
-					return new RawIteratingCSVReader(stream,
-							(DelimitedFileFormat) format);
+					return new RawIteratingCSVReader(stream, (DelimitedFileFormat) format);
 				else
-					return new RawIteratingCSVReader(stream,
-							CSVFormat.TDF.withCommentMarker('#'));
+					return new RawIteratingCSVReader(stream, CSVFormat.TDF.withCommentMarker('#'));
 			} catch (CDKException x) {
 				throw x;
 			} catch (Exception x) {
@@ -206,42 +198,40 @@ public class FileInputState extends FileState implements IInputState {
 			throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT + ext);
 	}
 
-	public static IIteratingChemObjectReader getReader(InputStream stream,
-			String extension, IChemFormat format) throws AmbitIOException,
-			CDKException {
+	public static IIteratingChemObjectReader getReader(InputStream stream, String extension, IChemFormat format)
+			throws AmbitIOException, CDKException {
 		String ext = extension.toLowerCase();
 		if (_FILE_TYPE.SDF_INDEX.hasExtension(ext)) {
-			return new InteractiveIteratingMDLReader(stream,
-					SilentChemObjectBuilder.getInstance(), true);
+			return new InteractiveIteratingMDLReader(stream, SilentChemObjectBuilder.getInstance(), true);
 		} else if (_FILE_TYPE.SMI_INDEX.hasExtension(ext)) {
-			return new IteratingSMILESReader(stream,
-					SilentChemObjectBuilder.getInstance());
+			return new IteratingSMILESReader(stream, SilentChemObjectBuilder.getInstance());
 		} else if (_FILE_TYPE.CSV_INDEX.hasExtension(ext)) {
 			try {
 				IteratingDelimitedFileReader reader = null;
 				if ((format != null) && (format instanceof DelimitedFileFormat))
-					reader = new IteratingDelimitedFileReader(stream,
-							(DelimitedFileFormat) format);
+					reader = new IteratingDelimitedFileReader(stream, (DelimitedFileFormat) format);
 				else
-					reader = new IteratingDelimitedFileReader(stream,
-							new DelimitedFileFormat(",", '"'));
+					reader = new IteratingDelimitedFileReader(stream, new DelimitedFileFormat(",", '"'));
 				return reader;
 			} catch (Exception x) {
 				throw new AmbitIOException(x);
 			}
-		} else if (_FILE_TYPE.TXT_INDEX.hasExtension(ext)
-				|| _FILE_TYPE.TSV_INDEX.hasExtension(ext)) {
+		} else if (_FILE_TYPE.TXT_INDEX.hasExtension(ext) || _FILE_TYPE.TSV_INDEX.hasExtension(ext)) {
 			try {
+				IteratingDelimitedFileReader reader = null;
 				if ((format != null) && (format instanceof DelimitedFileFormat)) {
 					DelimitedFileFormat df = (DelimitedFileFormat) format;
-					if (df.fieldDelimiter.equals("\t")
-							&& (df.textDelimiter == '"'))
-						return new ToxcastAssayReader(stream);
-					else
-						return new IteratingDelimitedFileReader(stream,
-								(DelimitedFileFormat) format);
+					if (df.fieldDelimiter.equals("\t") && (df.textDelimiter == '"'))
+						reader = new IteratingDelimitedFileReader(stream, df);
+					/*
+					 * return new ToxcastAssayReader(stream); else return new
+					 * IteratingDelimitedFileReader(stream,
+					 * (DelimitedFileFormat) format);
+					 */
 				} else
-					return new ToxcastAssayReader(stream);
+					reader = new IteratingDelimitedFileReader(stream, new DelimitedFileFormat("\t", '"'));
+				// return new ToxcastAssayReader(stream);
+				return reader;
 			} catch (Exception x) {
 				throw new AmbitIOException(x);
 			}
@@ -258,25 +248,21 @@ public class FileInputState extends FileState implements IInputState {
 			return new IteratingChemObjectReaderWrapper(new HINReader(stream));
 		} else if (_FILE_TYPE.PDB_INDEX.hasExtension(ext)) {
 			return new RawIteratingPDBReader(new InputStreamReader(stream));
-		} else if ((ext.toLowerCase().indexOf("euras") >= 0)
-				&& (ext.endsWith(_FILE_TYPE.XLS_INDEX.getExtension()))) {
+		} else if ((ext.toLowerCase().indexOf("euras") >= 0) && (ext.endsWith(_FILE_TYPE.XLS_INDEX.getExtension()))) {
 			try {
-				return createReaderByReflection(
-						"ambit2.core.io.bcf.EurasBCFReader", stream);
+				return createReaderByReflection("ambit2.core.io.bcf.EurasBCFReader", stream);
 			} catch (Exception x) {
 				throw new AmbitIOException(x);
 			}
 		} else if (ext.endsWith(_FILE_TYPE.XLS_INDEX.getExtension())) {
 			try {
-				return createXLSXReaderByReflection(
-						"ambit2.core.io.IteratingXLSReader", stream, 0, true);
+				return createXLSXReaderByReflection("ambit2.core.io.IteratingXLSReader", stream, 0, true);
 			} catch (Exception x) {
 				throw new AmbitIOException(x);
 			}
 		} else if (ext.endsWith(_FILE_TYPE.XLSX_INDEX.getExtension())) {
 			try {
-				return createXLSXReaderByReflection(
-						"ambit2.core.io.IteratingXLSReader", stream, 0, false);
+				return createXLSXReaderByReflection("ambit2.core.io.IteratingXLSReader", stream, 0, false);
 			} catch (Exception x) {
 				throw new AmbitIOException(x);
 			}
@@ -295,9 +281,7 @@ public class FileInputState extends FileState implements IInputState {
 		} else if (ext.endsWith(_FILE_TYPE.NANOCMLx_INDEX.getExtension())
 				|| ext.endsWith(_FILE_TYPE.NANOCMLd_INDEX.getExtension()))
 			try {
-				return createReaderByReflection(
-						"net.idea.ambit2.rest.nano.NanoCMLIteratingReader",
-						stream);
+				return createReaderByReflection("net.idea.ambit2.rest.nano.NanoCMLIteratingReader", stream);
 			} catch (Exception x) {
 				throw new AmbitIOException(x);
 			}
@@ -305,25 +289,19 @@ public class FileInputState extends FileState implements IInputState {
 			throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT + ext);
 	}
 
-	private static IIteratingChemObjectReader createXLSXReaderByReflection(
-			String className, InputStream stream, int sheetIndex, boolean hssf)
-			throws Exception {
-		Class clazz = FileInputState.class.getClassLoader()
-				.loadClass(className);
+	private static IIteratingChemObjectReader createXLSXReaderByReflection(String className, InputStream stream,
+			int sheetIndex, boolean hssf) throws Exception {
+		Class clazz = FileInputState.class.getClassLoader().loadClass(className);
 		Constructor<? extends Runnable> constructor = clazz
-				.getConstructor(new Class[] { InputStream.class, Integer.class,
-						Boolean.class });
-		Object o = constructor.newInstance(new Object[] { stream, sheetIndex,
-				hssf });
+				.getConstructor(new Class[] { InputStream.class, Integer.class, Boolean.class });
+		Object o = constructor.newInstance(new Object[] { stream, sheetIndex, hssf });
 		return (DefaultIteratingChemObjectReader) o;
 	}
 
-	private static IIteratingChemObjectReader createReaderByReflection(
-			String className, InputStream stream) throws Exception {
-		Class clazz = FileInputState.class.getClassLoader()
-				.loadClass(className);
-		Constructor<? extends Runnable> constructor = clazz
-				.getConstructor(InputStream.class);
+	private static IIteratingChemObjectReader createReaderByReflection(String className, InputStream stream)
+			throws Exception {
+		Class clazz = FileInputState.class.getClassLoader().loadClass(className);
+		Constructor<? extends Runnable> constructor = clazz.getConstructor(InputStream.class);
 		Object o = constructor.newInstance(stream);
 		return (DefaultIteratingChemObjectReader) o;
 	}

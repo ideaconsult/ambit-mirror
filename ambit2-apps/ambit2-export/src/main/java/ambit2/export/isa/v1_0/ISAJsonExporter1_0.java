@@ -8,17 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import net.idea.modbcum.i.reporter.Reporter;
-
-
-//import org.codehaus.jackson.map.ObjectMapper;
-//import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
-
-
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.SubstanceRecord;
@@ -37,7 +27,6 @@ import ambit2.export.isa.json.ISAJsonExporter;
 import ambit2.export.isa.v1_0.objects.Assay;
 import ambit2.export.isa.v1_0.objects.FactorValue;
 import ambit2.export.isa.v1_0.objects.Investigation;
-import ambit2.export.isa.v1_0.objects.Material;
 import ambit2.export.isa.v1_0.objects.Materials;
 import ambit2.export.isa.v1_0.objects.Materials_;
 import ambit2.export.isa.v1_0.objects.Process;
@@ -48,6 +37,7 @@ import ambit2.export.isa.v1_0.objects.Publication;
 import ambit2.export.isa.v1_0.objects.Sample;
 import ambit2.export.isa.v1_0.objects.Source;
 import ambit2.export.isa.v1_0.objects.Study;
+import net.idea.modbcum.i.reporter.Reporter;
 
 public class ISAJsonExporter1_0 implements IISAExport,
 		Reporter<SubstanceRecord, Investigation> {

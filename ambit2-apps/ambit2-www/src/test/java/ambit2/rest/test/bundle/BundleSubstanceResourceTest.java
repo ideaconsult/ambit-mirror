@@ -4,21 +4,20 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import junit.framework.Assert;
-
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 import ambit2.export.isa.v1_0.objects.Investigation;
 import ambit2.export.isa.v1_0.objects.Study;
 import ambit2.rest.bundle.BundleSubstanceResource;
 import ambit2.rest.test.ProtectedResourceTest;
-
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import junit.framework.Assert;
 
 public class BundleSubstanceResourceTest extends ProtectedResourceTest {
 	protected String dbFile = "descriptors-datasets.xml";

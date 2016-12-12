@@ -1,30 +1,24 @@
 package ambit2.db.substance.study;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 
-import net.idea.modbcum.i.bucket.Bucket;
-import net.idea.modbcum.i.exceptions.AmbitException;
-
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.IParams;
-import ambit2.base.data.study.Params;
-import ambit2.base.data.study.Value;
 import ambit2.core.io.json.SubstanceStudyParser;
 import ambit2.db.search.SQLFileQueryParams;
+import net.idea.modbcum.i.bucket.Bucket;
+import net.idea.modbcum.i.exceptions.AmbitException;
 
 public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 

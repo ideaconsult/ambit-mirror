@@ -10,16 +10,7 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.logging.Level;
 
-import junit.framework.Assert;
-import net.idea.opentox.cli.OTClient;
-import net.idea.opentox.cli.id.IIdentifier;
-import net.idea.opentox.cli.id.Identifier;
-import net.idea.opentox.cli.structure.Compound;
-import net.idea.opentox.cli.structure.CompoundClient;
-import net.idea.restnet.c.task.ClientResourceWrapper;
-
 import org.apache.http.HttpStatus;
-import org.codehaus.jackson.JsonNode;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.BeforeClass;
@@ -39,6 +30,13 @@ import ambit2.rest.legacy.OTModel;
 import ambit2.rest.legacy.OTRemoteTask;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.test.ResourceTest;
+import junit.framework.Assert;
+import net.idea.opentox.cli.OTClient;
+import net.idea.opentox.cli.id.IIdentifier;
+import net.idea.opentox.cli.id.Identifier;
+import net.idea.opentox.cli.structure.Compound;
+import net.idea.opentox.cli.structure.CompoundClient;
+import net.idea.restnet.c.task.ClientResourceWrapper;
 
 public class AlgorithmResourceTest extends ResourceTest {
     @BeforeClass

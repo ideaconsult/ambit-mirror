@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectWriter;
-import org.codehaus.jackson.map.ser.FilterProvider;
-import org.codehaus.jackson.schema.JsonSchema;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.test.TestSubstanceFactory;

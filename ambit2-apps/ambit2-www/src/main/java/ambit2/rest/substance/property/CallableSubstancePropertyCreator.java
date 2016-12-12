@@ -4,17 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringReader;
 
-import net.idea.restnet.c.task.CallableProtectedTask;
-import net.idea.restnet.i.task.TaskResult;
-
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ObjectNode;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.study.IParams;
@@ -26,6 +24,8 @@ import ambit2.core.io.json.SubstanceStudyParser;
 import ambit2.core.io.study.ProtocolEffectRecord2SubstanceProperty;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.RDFPropertyIterator;
+import net.idea.restnet.c.task.CallableProtectedTask;
+import net.idea.restnet.i.task.TaskResult;
 
 public class CallableSubstancePropertyCreator<USERID> extends CallableProtectedTask<USERID> {
 	protected SubstanceProperty property;

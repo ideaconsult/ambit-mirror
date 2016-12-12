@@ -1,12 +1,6 @@
 package ambit2.rest.test.bundle;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
-import junit.framework.Assert;
-
-import org.codehaus.jackson.JsonNode;
 import org.junit.Test;
 import org.restlet.data.MediaType;
 

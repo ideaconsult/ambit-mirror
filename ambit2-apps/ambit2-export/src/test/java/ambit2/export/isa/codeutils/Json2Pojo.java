@@ -11,14 +11,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.annotation.Generated;
-
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ambit2.export.isa.codeutils.j2p_helpers.ClassNameGenerator;
 import ambit2.export.isa.codeutils.j2p_helpers.JavaClassInfo;
@@ -185,7 +179,7 @@ public class Json2Pojo
 		
 		StringBuffer errors = new StringBuffer();
 		
-		Iterator<String> propFields = propNode.getFieldNames();
+		Iterator<String> propFields = propNode.fieldNames();
 		while (propFields.hasNext())
 		{
 			String fieldName = propFields.next();
@@ -511,7 +505,7 @@ public class Json2Pojo
 		jci.javaPackage = javaPackage;
 		jci.javaClassName = className;
 		
-		Iterator<String> propFields = propNode.getFieldNames();
+		Iterator<String> propFields = propNode.fieldNames();
 		while (propFields.hasNext())
 		{
 			String fieldName = propFields.next();

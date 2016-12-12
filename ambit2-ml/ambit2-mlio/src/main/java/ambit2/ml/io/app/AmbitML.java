@@ -23,19 +23,17 @@ import ambit2.ml.io.OutputVW_LDA;
 
 public class AmbitML {
 
-	public void convert(String folder, String file, Set<out_formats> of,int columnid,
-			int maxrecords) throws Exception {
+	public void convert(String folder, String file, Set<out_formats> of, int columnid, int maxrecords)
+			throws Exception {
 		long now = System.currentTimeMillis();
 		if (of.isEmpty())
 			of.add(out_formats.vw);
 		FileReader reader = new FileReader(new File(folder, file));
 
-		CSVFormat format = CSVFormat.DEFAULT.withDelimiter(',')
-				.withAllowMissingColumnNames();
+		CSVFormat format = CSVFormat.DEFAULT.withDelimiter(',').withAllowMissingColumnNames();
 		CSVParser parser = null;
 
-		IMLOutput[] writers = new IMLOutput[] {
-				new OutputARFF(folder, file, of.contains(out_formats.arff)),
+		IMLOutput[] writers = new IMLOutput[] { new OutputARFF(folder, file, of.contains(out_formats.arff)),
 				new OutputVW(folder, file, of.contains(out_formats.vw)),
 				new OutputVW_LDA(folder, file, of.contains(out_formats.vw_lda)) };
 		// writers
@@ -53,7 +51,7 @@ public class AmbitML {
 					System.out.println(record.getRecordNumber());
 
 				for (IMLOutput writer : writers) {
-					writer.print(record,columnid);
+					writer.print(record, columnid);
 				}
 				if ((maxrecords > 0) && record.getRecordNumber() > maxrecords)
 					break;
@@ -68,7 +66,7 @@ public class AmbitML {
 				} catch (Exception xx) {
 				}
 			System.out.print("Completed in ");
-			System.out.print(System.currentTimeMillis()-now);
+			System.out.print(System.currentTimeMillis() - now);
 			System.out.println("msec.");
 		}
 	}
@@ -90,26 +88,21 @@ public class AmbitML {
 
 	public static void main(String[] args) {
 		Options options = new Options();
-		Option command = Option.builder("f").hasArgs().longOpt("folder")
-				.desc("Input file folder").hasArgs().argName("foldername")
-				.build();
+		Option command = Option.builder("f").hasArgs().longOpt("folder").desc("Input file folder").hasArgs()
+				.argName("foldername").build();
 		options.addOption(command);
-		command = Option.builder("i").hasArgs().longOpt("inputfile")
-				.desc("Input file name").argName("filename").required().build();
+		command = Option.builder("i").hasArgs().longOpt("inputfile").desc("Input file name").argName("filename")
+				.required().build();
 		options.addOption(command);
 		command = Option.builder("o").longOpt("output format")
-				.desc("Output formats (comma delimited list) : arff,vw,vw_lda")
-				.hasArgs().argName("format").build();
+				.desc("Output formats (comma delimited list) : arff,vw,vw_lda").hasArgs().argName("format").build();
 		options.addOption(command);
-		command = Option.builder("s").longOpt("pagesize")
-				.desc("max number of records to read").hasArgs()
+		command = Option.builder("s").longOpt("pagesize").desc("max number of records to read").hasArgs()
 				.argName("number").build();
 		options.addOption(command);
-		command = Option
-				.builder("d")
-				.longOpt("identifier")
-				.desc("The index of column containing an identifier, zero based. Default 0")
-				.hasArgs().argName("column").build();
+		command = Option.builder("d").longOpt("identifier")
+				.desc("The index of column containing an identifier, zero based. Default 0").hasArgs().argName("column")
+				.build();
 		options.addOption(command);
 		command = Option.builder().argName("h").longOpt("help").build();
 		options.addOption(command);

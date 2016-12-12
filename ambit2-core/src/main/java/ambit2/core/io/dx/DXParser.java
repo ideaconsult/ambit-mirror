@@ -7,12 +7,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.p.DefaultAmbitProcessor;
-
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
@@ -20,6 +17,8 @@ import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.interfaces.IStructureRecord;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 public class DXParser extends DefaultAmbitProcessor<IStructureRecord, IStructureRecord> {
 	/**
@@ -67,10 +66,10 @@ public class DXParser extends DefaultAmbitProcessor<IStructureRecord, IStructure
 			in = this.getClass().getClassLoader().getResourceAsStream("ambit2/core/io/dx/dx.json");
 			dxRoot = dx.readTree(in);
 			JsonNode likelihood = dxRoot.get(json_fields.likelihood.name());
-			Iterator<Entry<String,JsonNode>> fields = likelihood.getFields();
+			Iterator<Entry<String,JsonNode>> fields = likelihood.fields();
 			while (fields.hasNext()) {
 				Entry<String,JsonNode> field = fields.next();
-				String category = field.getValue().get(json_fields.category.name()).getTextValue();
+				String category = field.getValue().get(json_fields.category.name()).textValue();
 				PropertyAnnotation a = new PropertyAnnotation();
 				a.setType("^^"+category);
 				a.setPredicate("acceptValue");
@@ -86,7 +85,7 @@ public class DXParser extends DefaultAmbitProcessor<IStructureRecord, IStructure
 	}
 	protected void cleanPropertyRefs() {
 		JsonNode strucProperty = dxRoot.get(json_fields.StructureProperties.name());
-		Iterator<Entry<String,JsonNode>> fields =strucProperty.getFields();
+		Iterator<Entry<String,JsonNode>> fields =strucProperty.fields();
 		while (fields.hasNext()) {
 			Entry<String,JsonNode> field = fields.next();
 			try {((ObjectNode)field.getValue()).remove(json_fields.reference.name());} catch (Exception x) {}
@@ -105,7 +104,7 @@ public class DXParser extends DefaultAmbitProcessor<IStructureRecord, IStructure
 			if (strucProperty!=null) {
 				JsonNode propertyRef = strucProperty.get(json_fields.referenceFor.name());
 				if (propertyRef!=null) {
-					JsonNode prop = dxRoot.get(json_fields.StructureProperties.name()).get(propertyRef.getTextValue());
+					JsonNode prop = dxRoot.get(json_fields.StructureProperties.name()).get(propertyRef.textValue());
 					if (prop !=null && (prop instanceof ObjectNode))
 						((ObjectNode) prop).put(json_fields.reference.name(),value.toString());
 				}
@@ -113,9 +112,9 @@ public class DXParser extends DefaultAmbitProcessor<IStructureRecord, IStructure
 			}
 			JsonNode reportProperty = dxRoot.get(json_fields.Report.name()).get(p.getName());
 			if (reportProperty==null) continue; 	
-			if (reportProperty.get("import").getBooleanValue()) 
+			if (reportProperty.get("import").asBoolean()) 
 				try {
-					importas ias = importas.valueOf(reportProperty.get("importas").getTextValue());
+					importas ias = importas.valueOf(reportProperty.get("importas").textValue());
 					switch (ias) {
 					case reference: {
 						reference = LiteratureEntry.getDXReference(value.toString());
@@ -142,11 +141,11 @@ public class DXParser extends DefaultAmbitProcessor<IStructureRecord, IStructure
 				if (strucProperty.get(json_fields.referenceFor.name())!=null) continue;
 				if (strucProperty.get(json_fields.reference.name())!=null) {
 					try {
-					propReference = LiteratureEntry.getDXReference(strucProperty.get(json_fields.reference.name()).getTextValue());
+					propReference = LiteratureEntry.getDXReference(strucProperty.get(json_fields.reference.name()).textValue());
 					} catch (Exception x) {}
 				}
 				if (strucProperty.get(json_fields.ot.name())!=null) try {
-					p.setLabel(strucProperty.get(json_fields.ot.name()).getTextValue());
+					p.setLabel(strucProperty.get(json_fields.ot.name()).textValue());
 				} catch (Exception x) {}
 				p.setReference(propReference);
 				properties.put(p,value);
@@ -191,9 +190,9 @@ public class DXParser extends DefaultAmbitProcessor<IStructureRecord, IStructure
 			}
 			if (superEndpoint != null) {
 				PropertyAnnotation a = new PropertyAnnotation();
-				a.setPredicate("DX Superendpoint");	a.setObject(superEndpoint.getTextValue()); pa.add(a);
+				a.setPredicate("DX Superendpoint");	a.setObject(superEndpoint.textValue()); pa.add(a);
 				try {
-					ontology = dxRoot.get(json_fields.endpoints.name()).get(superEndpoint.getTextValue()).get(json_fields.ot.name());
+					ontology = dxRoot.get(json_fields.endpoints.name()).get(superEndpoint.textValue()).get(json_fields.ot.name());
 				} catch (Exception x) { 
 					logger.log(Level.WARNING,x.getClass().getName() + " " + superEndpoint);
 				}
@@ -208,7 +207,7 @@ public class DXParser extends DefaultAmbitProcessor<IStructureRecord, IStructure
 				}
 			}
 			if (ontology!=null) 
-				property.setLabel(ontology.getTextValue());
+				property.setLabel(ontology.textValue());
 			for (PropertyAnnotation a : categories) pa.add(a);
 			property.setAnnotations(pa);
 			

@@ -3,9 +3,10 @@ package ambit2.reactions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.JsonNode;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import ambit2.rules.conditions.DescriptorValueCondition;
 import ambit2.rules.conditions.ICondition;

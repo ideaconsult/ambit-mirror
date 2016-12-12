@@ -10,14 +10,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.node.ObjectNode;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ambit2.core.processors.AbstractStructureProcessor;
 import ambit2.smarts.SMIRKSManager;
@@ -288,7 +289,7 @@ public class SMIRKSProcessor extends AbstractStructureProcessor {
 			transformation.setSMIRKS(smirks);
 
 			try {
-				transformation.setEnabled(node.get("USE").getBooleanValue());
+				transformation.setEnabled(node.get("USE").asBoolean());
 			} catch (Exception x) {
 			}
 

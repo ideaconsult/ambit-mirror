@@ -2,11 +2,11 @@ package ambit2.export.isa;
 
 import java.util.logging.Logger;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
+import ambit2.export.isa.base.ISAConst.DataFileFormat;
 import ambit2.export.isa.base.ISAConst.ISAFormat;
 import ambit2.export.isa.base.ISAConst.ISAVersion;
-import ambit2.export.isa.base.ISAConst.DataFileFormat;
 import ambit2.export.isa.base.ISALocation;
 
 

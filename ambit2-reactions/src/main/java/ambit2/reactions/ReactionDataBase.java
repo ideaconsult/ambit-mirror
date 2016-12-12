@@ -2,12 +2,13 @@ package ambit2.reactions;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ambit2.smarts.SMIRKSManager;
 
@@ -30,11 +31,12 @@ public class ReactionDataBase
 	
 	public void loadReactionsFromJSON(File jsonFile, boolean FlagCleanDB) throws Exception
 	{
-		FileInputStream fin = new FileInputStream(jsonFile); 
+		InputStream fin = new FileInputStream(jsonFile); 
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode root = null;
 		
 		try {
+			
 			root = mapper.readTree(fin);
 		} catch (Exception x) {
 			throw x;

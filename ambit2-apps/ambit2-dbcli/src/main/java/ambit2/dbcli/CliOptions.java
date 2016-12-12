@@ -9,8 +9,6 @@ import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import net.idea.modbcum.i.processors.IProcessor;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -18,16 +16,18 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectWriter;
-import org.codehaus.jackson.node.ObjectNode;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.dbcli.exceptions.InvalidCommand;
 import ambit2.descriptors.processors.FPTable;
+import net.idea.modbcum.i.processors.IProcessor;
 
 public class CliOptions {
 	public enum _commandmode {
@@ -235,7 +235,7 @@ public class CliOptions {
 						writer.write("<body>");
 						ObjectNode commands = (ObjectNode) api.get("commands");
 						writer.write("<a id='commands'>&nbsp;</a>");
-						Iterator<String> i = commands.getFieldNames();
+						Iterator<String> i = commands.fieldNames();
 						while (i.hasNext()) {
 							String key = i.next();
 							writer.write("<a href='#" + key + "'>" + key
@@ -243,7 +243,7 @@ public class CliOptions {
 						}
 						writer.write("<br/>");
 						if ("help".equals(cmd)) {
-							i = commands.getFieldNames();
+							i = commands.fieldNames();
 							while (i.hasNext()) {
 								String key = i.next();
 								printCommand2html(key,
@@ -268,17 +268,17 @@ public class CliOptions {
 							Writer writer = new OutputStreamWriter(System.out);
 							ObjectNode commands = (ObjectNode) api
 									.get("commands");
-							Iterator<String> i = commands.getFieldNames();
+							Iterator<String> i = commands.fieldNames();
 							writer.write("ambitcli -a {command} -m {subcommand} -d {options}\n\t(use -m help to list subcommands and options per command)\n\n");
 							while (i.hasNext()) {
 								writer.write("\n");
 								String key = i.next();
 								writer.write("-a ");
 								writer.write(commands.get(key).get("name")
-										.getTextValue());
+										.textValue());
 								writer.write("\t");
 								writer.write(commands.get(key)
-										.get("description").getTextValue());
+										.get("description").textValue());
 								writer.write("\n");
 
 								for (_subcommandmode subcommand : _subcommandmode
@@ -299,7 +299,7 @@ public class CliOptions {
 											+ subcommand.name());
 									if (params != null) {
 										Iterator<String> n = params
-												.getFieldNames();
+												.fieldNames();
 										String d = "?";
 										while (n.hasNext()) {
 											String param = n.next();
@@ -378,7 +378,7 @@ public class CliOptions {
 		b.append(" -m ");
 		b.append(subcommand);
 		b.append("\n");
-		Iterator<Entry<String, JsonNode>> i = params.getFields();
+		Iterator<Entry<String, JsonNode>> i = params.fields();
 		while (i.hasNext()) {
 			Entry<String, JsonNode> entry = i.next();
 			b.append(entry.getKey().replace(":", " -d "));
@@ -493,11 +493,11 @@ public class CliOptions {
 							.get(subcommand.name()).get(_fields.params.name())
 							.get(":" + params[i]);
 					if (param != null) {
-						if ("Integer".equals(param.get("type").getTextValue()))
+						if ("Integer".equals(param.get("type").textValue()))
 							param.put(_fields.value.name(),
 									Integer.parseInt(params[i + 1]));
 						else if ("Boolean".equals(param.get("type")
-								.getTextValue()))
+								.textValue()))
 							param.put(_fields.value.name(),
 									Boolean.parseBoolean(params[i + 1]));
 						else
@@ -528,7 +528,7 @@ public class CliOptions {
 			throw new InvalidCommand("(Not specified)");
 		try {
 			return command.get(subcommand.name()).get(_fields.sql.name())
-					.getTextValue();
+					.textValue();
 		} catch (Exception x) {
 			throw x;
 		}
@@ -538,7 +538,7 @@ public class CliOptions {
 		if (command == null)
 			throw new InvalidCommand("(Not specified)");
 		try {
-			return command.get(_fields.connection.name()).getTextValue();
+			return command.get(_fields.connection.name()).textValue();
 		} catch (Exception x) {
 			throw x;
 		}
@@ -672,7 +672,7 @@ public class CliOptions {
 				StringBuilder example = new StringBuilder();
 
 				if (params != null) {
-					Iterator<String> i = params.getFieldNames();
+					Iterator<String> i = params.fieldNames();
 					while (i.hasNext()) {
 						String key = i.next();
 						example.append(" -d " + key.replace(":", "") + "="
@@ -748,7 +748,7 @@ public class CliOptions {
 					.hasArgs().numberOfArgs(params != null ? params.size() : 0);
 
 			if (params != null) {
-				Iterator<String> i = params.getFieldNames();
+				Iterator<String> i = params.fieldNames();
 				while (i.hasNext()) {
 					String key = i.next();
 
@@ -819,7 +819,7 @@ public class CliOptions {
 				out.write(example.toString());
 
 				if (params != null) {
-					Iterator<String> i = params.getFieldNames();
+					Iterator<String> i = params.fieldNames();
 					while (i.hasNext()) {
 						String key = i.next();
 						out.write(" -d " + key.replace(":", "") + "={"
@@ -845,7 +845,7 @@ public class CliOptions {
 
 				if (params != null) {
 					String d = "?";
-					Iterator<String> i = params.getFieldNames();
+					Iterator<String> i = params.fieldNames();
 					while (i.hasNext()) {
 						String key = i.next();
 						out.write(d + key.replace(":", "") + "={"
@@ -949,14 +949,14 @@ public class CliOptions {
 			JsonNode scommand = scmd.get("params");
 			JsonNode chunkNode = scommand.get(name);
 			JsonNode n = chunkNode.get("value");
-			if ("Boolean".equals(chunkNode.get("type").getTextValue())) {
-				return n.isNull() ? null : n.getBooleanValue();
-			} else if ("Integer".equals(chunkNode.get("type").getTextValue())) {
-				return n.isNull() ? null : n.getIntValue();
-			} else if ("Double".equals(chunkNode.get("type").getTextValue())) {
+			if ("Boolean".equals(chunkNode.get("type").textValue())) {
+				return n.isNull() ? null : n.booleanValue();
+			} else if ("Integer".equals(chunkNode.get("type").textValue())) {
+				return n.isNull() ? null : n.intValue();
+			} else if ("Double".equals(chunkNode.get("type").textValue())) {
 				return n.isNull() ? null : n.asDouble();
 			} else
-				return n.isNull() ? null : n.getTextValue();
+				return n.isNull() ? null : n.textValue();
 		} catch (Exception x) {
 			return null;
 		}

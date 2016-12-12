@@ -18,17 +18,18 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import net.idea.restnet.c.task.ClientResourceWrapper;
-import net.idea.restnet.rdf.ns.OT;
-
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ArrayNode;
 import org.junit.Test;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.vocabulary.DC;
 
 import ambit2.rest.legacy.OTAlgorithm;
 import ambit2.rest.legacy.OTDataset;
@@ -36,10 +37,8 @@ import ambit2.rest.legacy.OTDatasets;
 import ambit2.rest.legacy.OTFeature;
 import ambit2.rest.legacy.OTFeatures;
 import ambit2.rest.test.ProtectedResourceTest;
-
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.vocabulary.DC;
+import net.idea.restnet.c.task.ClientResourceWrapper;
+import net.idea.restnet.rdf.ns.OT;
 
 public class DatasetComparisonTest extends  ProtectedResourceTest  {
 	ObjectMapper mapper = new ObjectMapper();
@@ -480,7 +479,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 					
 					try {
 						JsonNode node  = mapper.readTree(in);
-						return ((ArrayNode)node.get("facet")).get(0).get("count").getIntValue();
+						return ((ArrayNode)node.get("facet")).get(0).get("count").intValue();
 						
 					} catch (Exception x) {
 						throw x;
