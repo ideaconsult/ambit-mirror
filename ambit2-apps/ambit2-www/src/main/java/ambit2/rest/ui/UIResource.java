@@ -138,6 +138,13 @@ public class UIResource extends FreeMarkerResource {
 			public String getTemplateName() {
 				return "ra/bundles";
 			}
+		},
+		datatemplate {
+
+			@Override
+			public boolean enablePOST() {
+				return true;
+			}
 		};
 		public String getTemplateName() {
 			return name();
