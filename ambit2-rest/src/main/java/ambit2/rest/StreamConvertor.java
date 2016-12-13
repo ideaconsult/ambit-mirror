@@ -30,7 +30,7 @@ public class StreamConvertor<T, Q, R extends Reporter<Q, OutputStream>>
 	}
 
 	@Override
-	public Representation process(Q query) throws Exception {
+	public Representation process(final Q query) throws Exception {
 		try {
 			Representation rep = new OutputRepresentation(mediaType) {
 				@Override
