@@ -9,17 +9,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.reporter.Reporter;
-import net.idea.restnet.c.ChemicalMediaType;
-import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
-import net.idea.restnet.i.task.ICallableTask;
-import net.idea.restnet.i.task.ITask;
-import net.idea.restnet.i.task.ITaskApplication;
-import net.idea.restnet.i.task.ITaskResult;
-import net.idea.restnet.i.task.ITaskStorage;
-
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -32,13 +21,23 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.config.AMBITConfig;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.OpenTox;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.user.rest.resource.AMBITDBRoles;
 import ambit2.user.rest.resource.DBRoles;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.reporter.Reporter;
+import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.c.StringConvertor;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskResult;
+import net.idea.restnet.i.task.ITaskStorage;
 
 /**
  * Algorithms as per http://opentox.org/development/wiki/Algorithms

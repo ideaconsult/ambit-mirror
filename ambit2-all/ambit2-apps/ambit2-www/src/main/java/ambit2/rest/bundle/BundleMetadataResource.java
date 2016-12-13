@@ -6,16 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.restnet.c.ChemicalMediaType;
-import net.idea.restnet.c.task.CallableProtectedTask;
-import net.idea.restnet.db.DBConnection;
-import net.idea.restnet.db.QueryURIReporter;
-import net.idea.restnet.db.convertors.OutputWriterConvertor;
-import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
-
 import org.apache.commons.fileupload.FileItem;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -37,13 +27,22 @@ import ambit2.db.update.bundle.UpdateBundle._published_status;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.RDFJenaConvertor;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.MetadataRDFReporter;
 import ambit2.rest.dataset.MetadatasetJSONReporter;
 import ambit2.rest.dataset.MetadatasetURIReporter;
 import ambit2.rest.query.AmbitDBResource;
 import ambit2.user.bundle.ReadBundleByPolicy;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.c.StringConvertor;
+import net.idea.restnet.c.task.CallableProtectedTask;
+import net.idea.restnet.db.DBConnection;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 public class BundleMetadataResource
 		extends

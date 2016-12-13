@@ -8,21 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.reporter.Reporter;
-import net.idea.restnet.c.ResourceDoc;
-import net.idea.restnet.c.html.HTMLBeauty;
-import net.idea.restnet.c.resource.CatalogResource;
-import net.idea.restnet.c.task.FactoryTaskConvertor;
-import net.idea.restnet.db.DBConnection;
-import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
-import net.idea.restnet.i.task.ICallableTask;
-import net.idea.restnet.i.task.ITaskStorage;
-import net.idea.restnet.rdf.FactoryTaskConvertorRDF;
-import net.idea.restnet.user.DBUser;
-import net.idea.restnet.user.resource.UserURIReporter;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -38,6 +23,20 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.config.AMBITConfig;
 import ambit2.user.rest.AMBITCallableUserCreator;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.reporter.Reporter;
+import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.c.html.HTMLBeauty;
+import net.idea.restnet.c.resource.CatalogResource;
+import net.idea.restnet.c.task.FactoryTaskConvertor;
+import net.idea.restnet.db.DBConnection;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITaskStorage;
+import net.idea.restnet.rdf.FactoryTaskConvertorRDF;
+import net.idea.restnet.user.DBUser;
+import net.idea.restnet.user.resource.UserURIReporter;
 
 public class RegistrationResource extends CatalogResource<DBUser> {
 	protected List<DBUser> dummyuser = new ArrayList<DBUser>();
@@ -96,6 +95,7 @@ public class RegistrationResource extends CatalogResource<DBUser> {
 		}
 		map.put(AMBITConfig.creator.name(), "IdeaConsult Ltd.");
 		map.put(AMBITConfig.ambit_root.name(), getRequest().getRootRef());
+
 
 	}
 

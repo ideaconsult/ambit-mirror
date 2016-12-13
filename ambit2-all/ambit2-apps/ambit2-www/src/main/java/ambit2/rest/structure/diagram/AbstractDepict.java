@@ -9,9 +9,6 @@ import java.io.Writer;
 
 import javax.imageio.ImageIO;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.r.AbstractReporter;
-
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -27,9 +24,11 @@ import org.restlet.resource.ResourceException;
 import ambit2.rendering.CompoundImageTools.Mode2D;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ProtectedResource;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource.QueryType;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.r.AbstractReporter;
+import net.idea.restnet.c.StringConvertor;
 
 /**
  * Returns PNG given a smiles
