@@ -24,12 +24,6 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import net.idea.restnet.aa.local.UserLoginPOSTResource;
-import net.idea.restnet.aa.local.UserLogoutPOSTResource;
-import net.idea.restnet.c.ChemicalMediaType;
-import net.idea.restnet.i.task.ICallableTask;
-import net.idea.restnet.i.task.ITaskResult;
-
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -144,6 +138,7 @@ import ambit2.rest.substance.SubstanceResource;
 import ambit2.rest.substance.owner.OwnerSubstanceFacetResource;
 import ambit2.rest.substance.property.SubstanceCategoryProperty;
 import ambit2.rest.substance.property.SubstancePropertyResource;
+import ambit2.rest.substance.templates.InputTemplatesResource;
 import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
@@ -168,6 +163,11 @@ import ambit2.user.rest.resource.PwdForgottenResource;
 import ambit2.user.rest.resource.RegistrationConfirmResource;
 import ambit2.user.rest.resource.RegistrationResource;
 import ambit2.user.rest.resource.Resources;
+import net.idea.restnet.aa.local.UserLoginPOSTResource;
+import net.idea.restnet.aa.local.UserLogoutPOSTResource;
+import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITaskResult;
 
 /**
  * AMBIT implementation of OpenTox REST services as described in
@@ -657,7 +657,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			router.attach(String.format("%s/{%s}", DepictionResource.resource,
 					DepictionResource.resourceKey), DepictionResource.class);
 		}
-		// router.attach("/name2structure", Name2StructureResource.class);
+		router.attach("/datatemplate", InputTemplatesResource.class);
 
 		/**
 		 * Images, styles, favicons, applets
