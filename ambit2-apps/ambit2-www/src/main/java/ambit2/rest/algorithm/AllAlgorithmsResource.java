@@ -7,13 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.restnet.c.ChemicalMediaType;
-import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
-import net.idea.restnet.i.task.ICallableTask;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -30,7 +23,6 @@ import ambit2.core.data.model.AlgorithmType;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.data.model.Parameter;
 import ambit2.rest.OpenTox;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.ExpertModelBuilder;
 import ambit2.rest.model.predictor.DescriptorPredictor;
@@ -52,6 +44,13 @@ import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
 import ambit2.rest.task.dbpreprocessing.CallableFixPreferredStructure;
 import ambit2.rest.task.tautomers.TautomersModelBuilder;
 import ambit2.rest.task.weka.CallableWekaModelCreator;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.c.StringConvertor;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.task.ICallableTask;
 
 public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 

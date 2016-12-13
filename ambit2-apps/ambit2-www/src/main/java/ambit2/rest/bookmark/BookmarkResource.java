@@ -1,12 +1,5 @@
 package ambit2.rest.bookmark;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.q.update.AbstractUpdate;
-import net.idea.restnet.c.RepresentationConvertor;
-import net.idea.restnet.db.QueryURIReporter;
-import net.idea.restnet.db.convertors.OutputWriterConvertor;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -19,21 +12,25 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import com.hp.hpl.jena.vocabulary.DC;
+
 import ambit2.base.data.Bookmark;
 import ambit2.db.update.bookmark.CreateBookmark;
 import ambit2.db.update.bookmark.DeleteBookmark;
 import ambit2.db.update.bookmark.ReadBookmark;
 import ambit2.db.update.bookmark.UpdateBookmark;
-import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.RDFJenaConvertor;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.Annotea;
 import ambit2.rest.rdf.RDFBookmarkIterator;
 import ambit2.rest.rdf.RDFObjectIterator;
-
-import com.hp.hpl.jena.vocabulary.DC;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.c.StringConvertor;
+import net.idea.restnet.db.QueryURIReporter;
 
 public class BookmarkResource extends QueryResource<ReadBookmark, Bookmark> {
 

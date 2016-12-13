@@ -6,14 +6,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.exceptions.NotFoundException;
-import net.idea.restnet.c.ChemicalMediaType;
-import net.idea.restnet.c.RepresentationConvertor;
-import net.idea.restnet.db.convertors.OutputWriterConvertor;
-import net.idea.restnet.rdf.ns.OT;
-
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
@@ -37,7 +29,6 @@ import org.restlet.engine.util.Base64;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
@@ -63,13 +54,21 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.PDFConvertor;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RDFStaXConvertor;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFF3ColResourceReporter;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.dataset.DatasetRDFStaxReporter;
 import ambit2.rest.structure.CompoundJSONReporter;
 import ambit2.rest.structure.ConformerURIReporter;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.NotFoundException;
+import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.c.StringConvertor;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
+import net.idea.restnet.rdf.ns.OT;
+import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
 
 /**
  * Abstract parent class for all resources that retrieve compounds/conformers

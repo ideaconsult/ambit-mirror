@@ -15,11 +15,11 @@ import ambit2.db.processors.DbCreateDatabase;
 import ambit2.db.version.AmbitDBVersion;
 import ambit2.db.version.DBVersionQuery;
 import ambit2.rest.DBConnection;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
 import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.c.StringConvertor;
 
 /**
  * Reports version of the database used. The database name is defined at compile

@@ -5,16 +5,6 @@ import java.sql.Connection;
 import java.util.Map;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.exceptions.BatchProcessingException;
-import net.idea.modbcum.i.exceptions.NotFoundException;
-import net.idea.modbcum.q.conditions.StringCondition;
-import net.idea.restnet.c.ChemicalMediaType;
-import net.idea.restnet.c.RepresentationConvertor;
-import net.idea.restnet.db.QueryURIReporter;
-import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -38,7 +28,6 @@ import ambit2.rest.DBConnection;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.RDFJenaConvertor;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.algorithm.MLResources;
 import ambit2.rest.model.predictor.AbstractStructureProcessor;
 import ambit2.rest.model.predictor.DescriptorPredictor;
@@ -59,6 +48,16 @@ import ambit2.rest.task.tautomers.CallableTautomersGenerator;
 import ambit2.rest.task.tautomers.TautomersGenerator;
 import ambit2.rest.task.weka.CallableWekaPredictor;
 import ambit2.rest.task.weka.FilteredWekaPredictor;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.BatchProcessingException;
+import net.idea.modbcum.i.exceptions.NotFoundException;
+import net.idea.modbcum.q.conditions.StringCondition;
+import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.c.StringConvertor;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 /**
  * Model as in http://opentox.org/development/wiki/Model Supported REST

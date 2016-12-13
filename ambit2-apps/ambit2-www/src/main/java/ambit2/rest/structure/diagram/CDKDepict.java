@@ -5,12 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Writer;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.r.AbstractReporter;
-
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.renderer.selection.IChemObjectSelection;
-import org.openscience.cdk.renderer.selection.SingleSelection;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.Request;
@@ -26,13 +21,12 @@ import org.restlet.resource.ResourceException;
 import ambit2.core.data.MoleculeTools;
 import ambit2.rendering.CompoundImageTools;
 import ambit2.rendering.CompoundImageTools.Mode2D;
-import ambit2.rendering.IAtomContainerHighlights;
 import ambit2.rest.AmbitResource;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource.QueryType;
-import ambit2.smarts.query.ISmartsPattern;
-import ambit2.smarts.query.SmartsPatternAmbit;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.r.AbstractReporter;
+import net.idea.restnet.c.StringConvertor;
 
 /**
  * 2D depiction based on CDK

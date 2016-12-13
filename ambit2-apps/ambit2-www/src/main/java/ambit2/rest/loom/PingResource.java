@@ -5,16 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.idea.i5.cli.I5LightClient;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.reporter.Reporter;
-import net.idea.restnet.i.task.ITask;
-import net.idea.restnet.i.task.ITaskResult;
-import net.idea.restnet.i.task.Task;
-import net.idea.restnet.i.task.TaskResult;
-import net.idea.restnet.i.task.TaskStatus;
-
 import org.apache.poi.ss.formula.functions.T;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -28,9 +18,18 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.DBConnection;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.algorithm.CatalogResource;
 import ambit2.rest.reporters.CatalogURIReporter;
+import net.idea.i5.cli.I5LightClient;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.reporter.Reporter;
+import net.idea.restnet.c.StringConvertor;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskResult;
+import net.idea.restnet.i.task.Task;
+import net.idea.restnet.i.task.TaskResult;
+import net.idea.restnet.i.task.TaskStatus;
 
 public class PingResource extends CatalogResource<ITask<ITaskResult, String>> {
 	ITask<ITaskResult, String> task = null;

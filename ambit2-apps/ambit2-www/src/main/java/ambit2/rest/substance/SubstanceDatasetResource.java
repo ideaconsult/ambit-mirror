@@ -48,7 +48,6 @@ import ambit2.db.substance.study.ReadEffectRecordBySubstance;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RDFStaXConvertor;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFF3ColResourceReporter;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
@@ -62,6 +61,7 @@ import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.p.MasterDetailsProcessor;
 import net.idea.modbcum.r.QueryAbstractReporter;
 import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.c.StringConvertor;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
 

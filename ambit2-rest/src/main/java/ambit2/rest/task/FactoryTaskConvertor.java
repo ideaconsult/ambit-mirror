@@ -4,12 +4,6 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.UUID;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.reporter.Reporter;
-import net.idea.restnet.c.ResourceDoc;
-import net.idea.restnet.i.task.ITaskStorage;
-
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.MediaType;
@@ -20,9 +14,14 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.DisplayMode;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.reporters.TaskRDFReporter;
 import ambit2.rest.reporters.TaskURIReporter;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.reporter.Reporter;
+import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.c.StringConvertor;
+import net.idea.restnet.i.task.ITaskStorage;
 
 public class FactoryTaskConvertor<USERID> extends net.idea.restnet.c.task.FactoryTaskConvertor<USERID> {
 

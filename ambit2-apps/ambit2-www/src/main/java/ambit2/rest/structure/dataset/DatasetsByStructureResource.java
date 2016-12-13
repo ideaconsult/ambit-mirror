@@ -1,12 +1,5 @@
 package ambit2.rest.structure.dataset;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.r.QueryReporter;
-import net.idea.restnet.c.ChemicalMediaType;
-import net.idea.restnet.db.convertors.OutputWriterConvertor;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -17,6 +10,8 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import com.hp.hpl.jena.ontology.OntModel;
+
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
@@ -24,13 +19,17 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.rest.OpenTox;
 import ambit2.rest.RDFJenaConvertor;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.MetadataRDFReporter;
 import ambit2.rest.dataset.MetadatasetJSONReporter;
 import ambit2.rest.query.QueryResource;
-
-import com.hp.hpl.jena.ontology.OntModel;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.c.StringConvertor;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 public class DatasetsByStructureResource extends
 		QueryResource<IQueryRetrieval<SourceDataset>, SourceDataset> {

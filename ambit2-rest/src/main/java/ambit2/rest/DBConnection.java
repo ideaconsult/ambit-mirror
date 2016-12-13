@@ -9,13 +9,12 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import net.idea.modbcum.c.DatasourceFactory;
-import net.idea.modbcum.i.exceptions.AmbitException;
-
 import org.restlet.Context;
 
 import ambit2.base.config.Preferences;
 import ambit2.db.LoginInfo;
+import net.idea.modbcum.c.DatasourceFactory;
+import net.idea.modbcum.i.exceptions.AmbitException;
 
 public class DBConnection {
     protected static Properties properties = null;

@@ -1,9 +1,5 @@
 package ambit2.rest.bookmark;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -17,8 +13,11 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Bookmark;
 import ambit2.db.update.bookmark.ReadAnnotation;
 import ambit2.rest.RDFJenaConvertor;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.c.StringConvertor;
 
 public class OntoBucketResource extends QueryResource<ReadAnnotation, Bookmark> {
 	@Override

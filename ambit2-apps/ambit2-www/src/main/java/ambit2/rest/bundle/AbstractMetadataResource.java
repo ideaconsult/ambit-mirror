@@ -1,13 +1,5 @@
 package ambit2.rest.bundle;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.q.update.AbstractUpdate;
-import net.idea.restnet.c.ChemicalMediaType;
-import net.idea.restnet.c.RepresentationConvertor;
-import net.idea.restnet.db.QueryURIReporter;
-import net.idea.restnet.db.convertors.OutputWriterConvertor;
-
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -18,13 +10,20 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.rest.RDFJenaConvertor;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.MetadataRDFReporter;
 import ambit2.rest.dataset.MetadatasetJSONReporter;
 import ambit2.rest.dataset.MetadatasetURIReporter;
 import ambit2.rest.query.QueryResource;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.c.StringConvertor;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 abstract public class AbstractMetadataResource<M extends ISourceDataset>
 		extends QueryResource<IQueryRetrieval<M>, M> {

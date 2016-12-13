@@ -1,10 +1,5 @@
 package ambit2.rest.similarity.space;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.restnet.db.convertors.OutputWriterConvertor;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -21,8 +16,12 @@ import ambit2.base.data.SourceDataset;
 import ambit2.db.simiparity.space.QMap;
 import ambit2.db.simiparity.space.QueryQMap;
 import ambit2.rest.OpenTox;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.c.StringConvertor;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 public class QMapResource extends QueryResource<IQueryRetrieval<QMap>, QMap> {
     public final static String qmap = "/qmap";

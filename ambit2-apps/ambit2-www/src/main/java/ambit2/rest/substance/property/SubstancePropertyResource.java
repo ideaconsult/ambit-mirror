@@ -2,13 +2,6 @@ package ambit2.rest.substance.property;
 
 import java.io.File;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.restnet.c.RepresentationConvertor;
-import net.idea.restnet.c.task.CallableProtectedTask;
-import net.idea.restnet.db.QueryURIReporter;
-import net.idea.restnet.db.convertors.OutputWriterConvertor;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -27,11 +20,17 @@ import ambit2.base.data.Property;
 import ambit2.base.data.substance.SubstanceProperty;
 import ambit2.db.substance.study.ReadSubstanceProperty;
 import ambit2.rest.RDFJenaConvertor;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyJSONReporter;
 import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.AmbitDBResource;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.c.StringConvertor;
+import net.idea.restnet.c.task.CallableProtectedTask;
+import net.idea.restnet.db.QueryURIReporter;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
 
 /**
  * Substance property - serialization as in /feature 
