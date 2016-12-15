@@ -141,6 +141,13 @@ var config_study = {
 			"protocol" : config_npo["protocol"],
 			"interpretation" : config_npo["interpretation"]	
         },
+        "NPO_1911_SECTION" : {
+			"parameters" : config_npo["parameters"],
+			"effects" : config_npo["effects"],
+			"conditions" : config_npo["conditions"],			
+			"protocol" : config_npo["protocol"],
+			"interpretation" : config_npo["interpretation"]	
+        },
         "ENM_9000011_SECTION" : {
 			"parameters" : config_npo["parameters"],
 			"effects" : config_npo["effects"],
@@ -148,6 +155,13 @@ var config_study = {
 			"protocol" : config_npo["protocol"],
 			"interpretation" : config_npo["interpretation"]        	
         },
+        "ENM_9000013_SECTION" : {
+			"parameters" : config_npo["parameters"],
+			"effects" : config_npo["effects"],
+			"conditions" : config_npo["conditions"],			
+			"protocol" : config_npo["protocol"],
+			"interpretation" : config_npo["interpretation"]        	
+        },        
         "ENM_0000044_SECTION" : {
 			"parameters" : config_npo["parameters"],
 			"effects" : config_npo["effects"],
