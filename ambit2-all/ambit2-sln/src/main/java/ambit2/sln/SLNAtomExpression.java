@@ -42,7 +42,8 @@ public class SLNAtomExpression
 			if (atom.getFormalCharge() != null)
 				charge = atom.getFormalCharge();
 			
-			if (charge == tok.param)
+			//if (charge == tok.param)
+			if (SLNConst.compare(charge, tok.param, tok.comparisonOperation))
 				return(true);
 			else
 				return(false);

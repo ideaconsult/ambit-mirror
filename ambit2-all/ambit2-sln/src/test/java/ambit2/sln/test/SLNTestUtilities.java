@@ -41,7 +41,7 @@ public class SLNTestUtilities
 		//tu.testSLN2SLN("CC[s=R]H(O)CC[s=S]H(O)N");
 		//tu.testSLN2SLN("CCH4[aaa<=123;tttt=23;bbb;aaaa;s=R;spin=t;c=y;hac=2;tbo=1](O)CCH(O)N");
 		
-		tu.testSLNIsomorphism("N[charge=+1]","CC(C)CCN");
+		tu.testSLNIsomorphism("N[charge>=0]","CC(C)CC[N-]");
 		//tu.testSLNIsomorphism("C[hc=0]","CC(C)CCC");
 		//tu.testSLNIsomorphism("C[tbo=4]","NNS");
 		//tu.testSLNIsomorphism("C[src=3]","C1CCC1CC2CC2");		
