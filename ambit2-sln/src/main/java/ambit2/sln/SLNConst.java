@@ -580,6 +580,47 @@ public class SLNConst
 		
 		return "";
 	}
+	
+	public static boolean compare(int v1, int v2, int compOp)
+	{
+		switch (compOp)
+		{
+		case CO_EQUALS:
+			return (v1 == v2);
+		case CO_LESS_THAN:
+			return (v1 < v2);
+		case CO_LESS_OR_EQUALS:
+			return (v1 <= v2);
+		case CO_GREATER_THAN:
+			return (v1 > v2);
+		case CO_GREATER_OR_EQUALS:
+			return (v1 >= v2);
+		case CO_DIFFERS:
+			return (v1 != v2);
+		}
+		return false;
+	}
+	
+	public static boolean compare(double v1, double v2, int compOp)
+	{
+		switch (compOp)
+		{
+		case CO_EQUALS:
+			return (v1 == v2);
+		case CO_LESS_THAN:
+			return (v1 < v2);
+		case CO_LESS_OR_EQUALS:
+			return (v1 <= v2);
+		case CO_GREATER_THAN:
+			return (v1 > v2);
+		case CO_GREATER_OR_EQUALS:
+			return (v1 >= v2);
+		case CO_DIFFERS:
+			return (v1 != v2);
+		}
+		return false;
+	}
+	
 
 	//Matrix with the operation priorities {pij}
 	//p[i][j] < 0 means that priority(i) < priority(j)
