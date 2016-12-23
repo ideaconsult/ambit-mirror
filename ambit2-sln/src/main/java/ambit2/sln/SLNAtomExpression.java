@@ -37,17 +37,28 @@ public class SLNAtomExpression
 	{
 		switch (tok.type)
 		{
-		case SLNConst.A_ATTR_charge:
-			if (atom.getFormalCharge() == tok.param)
+		case SLNConst.A_ATTR_charge:{
+			int charge = 0;
+			if (atom.getFormalCharge() != null)
+				charge = atom.getFormalCharge();
+			
+			if (charge == tok.param)
 				return(true);
 			else
 				return(false);
+		}	
 
 		case SLNConst.A_ATTR_fcharge:
-			if (atom.getCharge() == tok.doubleParam)
+		{	
+			double fcharge = 0.0;
+			if (atom.getCharge() != null)
+				fcharge = atom.getCharge();
+			
+			if (fcharge == tok.doubleParam)
 				return(true);
 			else
 				return(false);
+		}	
 
 		case SLNConst.A_ATTR_I:    		
 			//When atom mass is unspecified false is returned
