@@ -10,6 +10,8 @@ import java.util.Set;
 
 public class SLNContainerAttributes
 {	
+	//TODO handle brackets within expression
+	
 	public HashMap<String,String> userDefiendAttr = new HashMap<String,String>();
 
 	public String name = null;

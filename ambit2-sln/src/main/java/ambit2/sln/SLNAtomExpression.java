@@ -14,6 +14,7 @@ public class SLNAtomExpression
 {
 	public int atomID = -1;
 	public ArrayList<SLNExpressionToken> tokens = new ArrayList<SLNExpressionToken>(); 
+	//TODO handle brackets within expression
 
 	public boolean matches(IAtom atom) 
 	{	

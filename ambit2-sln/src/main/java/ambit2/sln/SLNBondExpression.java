@@ -7,8 +7,8 @@ import org.openscience.cdk.interfaces.IBond;
 
 public class SLNBondExpression 
 {
-
-	public ArrayList<SLNExpressionToken> tokens = new ArrayList<SLNExpressionToken>(); 
+	public ArrayList<SLNExpressionToken> tokens = new ArrayList<SLNExpressionToken>();
+	//TODO handle brackets within expression
 
 	public boolean matches(IBond bond) 
 	{
