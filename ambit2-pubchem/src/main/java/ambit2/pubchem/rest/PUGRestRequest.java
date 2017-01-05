@@ -12,7 +12,7 @@ public abstract class PUGRestRequest<R> extends AbstractSearchRequest<R> {
 	 * 
 	 */
 	private static final long serialVersionUID = -4821305383980518514L;
-	public static final String PUGREST_URL = "http://pubchem.ncbi.nlm.nih.gov/rest/pug/";
+	public static final String PUGREST_URL = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/";
 	public static final String PUGREST_COMPOUND_URL = String.format("%scompound/", PUGREST_URL);
 
 	public enum COMPOUND_DOMAIN_INPUT {

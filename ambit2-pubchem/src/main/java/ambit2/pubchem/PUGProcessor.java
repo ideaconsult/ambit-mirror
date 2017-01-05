@@ -84,7 +84,7 @@ public class PUGProcessor extends DefaultAmbitProcessor<List<IStructureRecord>,L
 	 */
 	private static final long serialVersionUID = 4410271093960202855L;
 	public final static String PUBCHEM_CID = "CID";
-	protected static String pugURL = "http://pubchem.ncbi.nlm.nih.gov/pug/pug.cgi?tool="+PUGProcessor.class.getName();
+	protected static String pugURL = "https://pubchem.ncbi.nlm.nih.gov/pug/pug.cgi?tool="+PUGProcessor.class.getName();
 	protected QuerySupport<List<IStructureRecord>,List<IStructureRecord>> support = new QuerySupport<List<IStructureRecord>,List<IStructureRecord>>();
 	protected final static String PCT_attribute_value="value";
 	protected final static String[] PCT_status = {"unknown","success","server-error","hit-limit","time-limit","input-error","data-error","stopped","running","queued"};
