@@ -208,12 +208,14 @@ public class AmbitCli {
 		}
 		case fingerprint: {
 			parseCommandFingerprints(subcommand, now);
+			break;
 		}
 		case atomenvironments: {
 			return parseCommandAE(subcommand, now);
 		}
 		case dbmigrate: {
 			parseDBMigrate(subcommand, now, true);
+			break;
 		}
 		default:
 			break;
