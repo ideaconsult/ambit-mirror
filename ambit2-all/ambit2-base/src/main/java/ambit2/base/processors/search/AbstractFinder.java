@@ -91,7 +91,7 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 			}
 			@Override
 			public String getURI() {
-				return "http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/%s/SDF";
+				return "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/%s/SDF";
 			}
 		},
 		PUBCHEM_CID {
@@ -101,7 +101,7 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 			}
 			@Override
 			public String getURI() {
-				return "http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/%s/SDF";
+				return "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/%s/SDF";
 			}
 		},		
 		PUBCHEM_SID {
@@ -111,7 +111,7 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 			}
 			@Override
 			public String getURI() {
-				return "http://pubchem.ncbi.nlm.nih.gov/rest/pug/substance/sid/%s/SDF";
+				return "https://pubchem.ncbi.nlm.nih.gov/rest/pug/substance/sid/%s/SDF";
 			}
 		},				
 		PUBCHEM_INCHIKEY {
@@ -121,7 +121,7 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 			}
 			@Override
 			public String getURI() {
-				return "http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/inchikey/%s/SDF";
+				return "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/inchikey/%s/SDF";
 			}
 		},		
 		NAME2STRUCTURE {
