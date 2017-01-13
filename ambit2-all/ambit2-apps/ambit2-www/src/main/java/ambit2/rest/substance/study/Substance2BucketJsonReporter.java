@@ -419,7 +419,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 		for (Property p : component.getSecondStructure().getRecordProperties()) {
 			if (p.getLabel().indexOf("UUID") >= 0)
 				continue;
-			String label = String.format("%s", p.getLabel().replace("http://www.opentox.org/api/1.1#", ""));
+			String label = String.format("%s_s", p.getLabel().replace("http://www.opentox.org/api/1.1#", ""));
 			String val = component.getSecondStructure().getRecordProperty(p).toString().trim();
 			if ("".equals(val))
 				continue;
