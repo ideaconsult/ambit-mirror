@@ -94,9 +94,9 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			{ "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE" }
 
 	};
-	private static final String header_summary_results = "SUMMARY.RESULTS_hs";
-	private static final String header_summary_refs = "SUMMARY.REFS_hs";
-	private static final String header_summary_refowner = "SUMMARY.REFOWNERS_hs";
+	private static final String header_summary_results = "SUMMARY.RESULTS_hss";
+	private static final String header_summary_refs = "SUMMARY.REFS_hss";
+	private static final String header_summary_refowner = "SUMMARY.REFOWNERS_hss";
 	private final String[][] study_headers_combined = new String[][] { { "id", "name_s", "publicname_s", "owner_name_s",
 			"substanceType_s", "s_uuid_s", "name_hs", "publicname_hs", "owner_name_hs", "substanceType_hs", "s_uuid_hs",
 			"_childDocuments_", "type_s", "component", "ChemicalName_s", "TradeName_s", "CASRN_s", "EINECS_s",
@@ -605,9 +605,13 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	protected void iparams2bucket(IParams params, Bucket bucket, String key, String prefix) {
 		bucket.put(key, params);
 	}
+	/**
 
+	 * @return
+	 */
 	protected String getSummaryLabel() {
-		return String.format("SUMMARY.%s_hs", summaryMeasurement);
+		
+		return String.format("SUMMARY.%s_hss", summaryMeasurement);
 	}
 
 }
