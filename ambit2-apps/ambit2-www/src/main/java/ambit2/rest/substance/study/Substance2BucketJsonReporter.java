@@ -94,14 +94,17 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			{ "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE" }
 
 	};
-	private final String[][] study_headers_combined = new String[][] {
-			{ "id", "name_s", "publicname_s", "owner_name_s", "substanceType_s", "s_uuid_s", "name_hs", "publicname_hs",
-					"owner_name_hs", "substanceType_hs", "s_uuid_hs", "_childDocuments_", "type_s", "component",
-					"ChemicalName_s", "TradeName_s", "CASRN_s", "EINECS_s", "IUCLID5_UUID_s", "COMPOSITION_s",
-					"SMILES_s", "document_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s", "endpoint_s",
-					"effectendpoint_s", "reference_owner_s", "reference_year_s", "reference_s", "loQualifier_s",
-					"loValue_d", "upQualifier_s", "upValue_d", "err_d", "errQualifier_s", "conditions_s", "params",
-					"textValue_s", "interpretation_result_s", "unit_s", "category_s", "idresult", "" } };
+	private static final String header_summary_results = "SUMMARY.RESULTS_hs";
+	private static final String header_summary_refs = "SUMMARY.REFS_hs";
+	private static final String header_summary_refowner = "SUMMARY.REFOWNERS_hs";
+	private final String[][] study_headers_combined = new String[][] { { "id", "name_s", "publicname_s", "owner_name_s",
+			"substanceType_s", "s_uuid_s", "name_hs", "publicname_hs", "owner_name_hs", "substanceType_hs", "s_uuid_hs",
+			"_childDocuments_", "type_s", "component", "ChemicalName_s", "TradeName_s", "CASRN_s", "EINECS_s",
+			"IUCLID5_UUID_s", "COMPOSITION_s", "SMILES_s", "document_uuid_s", "topcategory_s", "endpointcategory_s",
+			"guidance_s", "endpoint_s", "effectendpoint_s", "reference_owner_s", "reference_year_s", "reference_s",
+			"loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d", "errQualifier_s", "conditions_s",
+			"params", "textValue_s", "interpretation_result_s", "unit_s", "category_s", "idresult",
+			header_summary_results, header_summary_refs, header_summary_refowner, "" } };
 
 	@Override
 	public void setConnection(Connection conn) throws DbAmbitException {
@@ -228,7 +231,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			// each substance is one record, effect records are child documents
 			bucket.clear();
 			bucket.setHeaders(study_headers_combined);
-			bucket.getHeader()[study_headers_combined.length-1]=getSummaryLabel();
+			bucket.getHeader()[study_headers_combined.length - 1] = getSummaryLabel();
 			substance2Bucket(record, bucket, true, "_hs");
 
 			List<Bucket> _childDocuments_ = new ArrayList<>();
@@ -266,8 +269,20 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					// _childDocuments_.add(bids);
 				}
 
+			List<String> summary_papp = null;
+			List<String> summary_refs = null;
+			List<String> summary_owners = null;
+
 			if (record.getMeasurements() != null) {
+				summary_papp = new ArrayList<String>();
+				summary_refs = new ArrayList<String>();
 				for (ProtocolApplication<Protocol, Object, String, Object, String> papp : record.getMeasurements()) {
+
+					String label = String.format("%s.%s", papp.getProtocol().getTopCategory(),
+							papp.getProtocol().getCategory());
+					gatherSummary(bucket, header_summary_results, label, summary_papp);
+					gatherSummary(bucket, header_summary_refs, papp.getReference(), summary_refs);
+					gatherSummary(bucket, header_summary_refowner, papp.getReferenceOwner(), summary_owners);
 
 					IParams prm = null;
 					if (papp.getParameters() != null) {
@@ -345,32 +360,57 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			}
 
 			bucket.put("_childDocuments_", _childDocuments_);
+
 			/*
 			 * if (ids != null) for (Bucket id : ids) _childDocuments_.add(id);
 			 */
-
+			/*
+			 * if (summary_papp != null) { Iterator<String> keys =
+			 * summary_papp.keySet().iterator(); while (keys.hasNext()) { String
+			 * key = keys.next(); bucket.put(String.format("RESULTS.%s_hs",
+			 * key), summary_papp.get(key)); } } if (summary_refs != null) {
+			 * Iterator<String> keys = summary_refs.keySet().iterator(); while
+			 * (keys.hasNext()) { String key = keys.next();
+			 * bucket.put(String.format("REFS.%s_hs", key),
+			 * summary_refs.get(key)); } }
+			 */
 		}
 		}
 
 		return bucket;
 	}
 
+	protected void gatherSummary(Bucket bucket, String key, String value, List<String> values) {
+		if (value == null)
+			return;
+		if (values == null) {
+			values = new ArrayList<String>();
+			values.add(value);
+		} else {
+			if (!values.contains(value))
+				values.add(value);
+		}
+		bucket.put(key, values);
+	}
+
 	protected IParams solarize(IParams prm) {
 		IParams newprm = new Params();
 		for (Object key : prm.keySet()) {
 			Object value = prm.get(key);
-			if (value==null) continue;
+			if (value == null)
+				continue;
 			if (value instanceof Value) {
 				Value v = (Value) value;
 				Object unit = v.getUnits();
 				value = v.getLoValue();
-				newprm.put(String.format("%s%s_s", key.toString(),unit==null?"":("_"+unit)), value);
+				newprm.put(String.format("%s%s_s", key.toString(), unit == null ? "" : ("_" + unit)), value);
 			} else
 				newprm.put(key.toString() + "_s", value.toString());
 
 		}
 		return newprm;
 	}
+
 	protected void composition2Bucket(CompositionRelation component, Bucket bucket, Map<String, Integer> composition,
 			boolean suffix) {
 		String ctype = component.getRelationType().name().replace("HAS_", "");
@@ -496,7 +536,9 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	protected void summarymeasurement2bucket(Protocol protocol, EffectRecord<String, Object, String> e, Bucket bucket) {
 		if ((e != null) & (e.getEndpoint() != null) && e.getEndpoint().toUpperCase().indexOf(summaryMeasurement) >= 0) {
 
-			//String label = String.format("SUMMARY.%s.%s.%s_s", protocol.getTopCategory(), protocol.getCategory(),e.getEndpoint());
+			// String label = String.format("SUMMARY.%s.%s.%s_s",
+			// protocol.getTopCategory(),
+			// protocol.getCategory(),e.getEndpoint());
 			String label = getSummaryLabel();
 			String val = String.format("%s%4.1f %s",
 					(e.getLoQualifier() == null || "".equals(e.getLoQualifier())) ? "" : (e.getLoQualifier() + " "),
@@ -563,10 +605,11 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	protected void iparams2bucket(IParams params, Bucket bucket, String key, String prefix) {
 		bucket.put(key, params);
 	}
-	
+
 	protected String getSummaryLabel() {
-		return String.format("SUMMARY.%s_ss",summaryMeasurement);
+		return String.format("SUMMARY.%s_hs", summaryMeasurement);
 	}
+
 }
 
 /**
