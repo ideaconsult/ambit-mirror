@@ -641,6 +641,26 @@ public class SLNConst
 		}
 		return false;
 	}
+	
+	public static boolean compareIgnoreCase(String v1, String v2, int compOp)
+	{
+		switch(compOp)
+		{
+		case CO_EQUALS:
+			return (v1.equalsIgnoreCase(v2));
+		case CO_LESS_THAN:
+			return (v1.compareToIgnoreCase(v2) < 0);
+		case CO_LESS_OR_EQUALS:
+			return (v1.compareToIgnoreCase(v2) <= 0);
+		case CO_GREATER_THAN:
+			return (v1.compareToIgnoreCase(v2) > 0);
+		case CO_GREATER_OR_EQUALS:
+			return (v1.compareToIgnoreCase(v2) >= 0);
+		case CO_DIFFERS:
+			return (!v1.equalsIgnoreCase(v2));
+		}
+		return false;
+	}
 
 	//Matrix with the operation priorities {pij}
 	//p[i][j] < 0 means that priority(i) < priority(j)
