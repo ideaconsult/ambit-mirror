@@ -39,7 +39,16 @@ public class Data
     public static enum Type {
         RAW_DATA_FILE("Raw Data File"),
         DERIVED_DATA_FILE("Derived Data File"),
-        IMAGE_FILE("Image File");
+        IMAGE_FILE("Image File"),
+        ACQUISITION_PARAMETER_DATA_FILE("Acquisition Parameter Data File"),
+        DERIVED_SPECTRAL_DATA_FILE("Derived Spectral Data File"),
+        PROTEIN_ASSIGNMENT_FILE("Protein Assignment File"),
+        RAW_SPECTRAL_DATA_FILE("Raw Spectral Data File"),
+        PEPTIDE_ASSIGNMENT_FILE("Peptide Assignment File"),
+        ARRAY_DATA_FILE("Array Data File"),
+        DERIVED_ARRAY_DATA_FILE("Derived Array Data File"),
+        POST_TRANSLATIONAL_MODIFICATION_ASSIGNMENT_FILE("Post Translational Modification Assignment File"),
+        DERIVED_ARRAY_DATA_MATRIX_FILE("Derived Array Data Matrix File");
         private final String value;
         private static Map<String, Data.Type> constants = new HashMap<String, Data.Type>();
 
