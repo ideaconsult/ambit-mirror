@@ -57,5 +57,5 @@ public class Investigation
     public List<Comment> comments = new ArrayList<Comment>();
     
     //Material extension
-    public List<McmMaterial> mcmMaterials = null;
+    public McmMaterial mcmMaterial = null;
 }
