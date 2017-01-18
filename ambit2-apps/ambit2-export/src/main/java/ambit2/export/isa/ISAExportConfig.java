@@ -34,7 +34,7 @@ public class ISAExportConfig
 	
 	//Content export flags
 	public boolean FlagSaveCompositionAsStudy = true;
-	public boolean FlagSaveCompositionAsMaterial = false;
+	public boolean FlagSaveCompositionAsExtensionMaterial = false;
 	//public boolean FlagSaveSourceAndSampleOnlyInProcess = true;
 	public boolean FlagAllCompositionInOneProcess = true;
 	
