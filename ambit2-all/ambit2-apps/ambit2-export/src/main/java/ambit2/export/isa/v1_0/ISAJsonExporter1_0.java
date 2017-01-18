@@ -227,7 +227,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 
 	}
 
-	void addCompositionAsMaterial(SubstanceRecord rec) throws Exception {
+	void addCompositionAsExtensionMaterial(SubstanceRecord rec) throws Exception {
 		// TODO
 
 	}
@@ -507,8 +507,8 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		if (cfg.FlagSaveCompositionAsStudy)
 			addCompositionAsStudy(rec);
 
-		if (cfg.FlagSaveCompositionAsMaterial)
-			addCompositionAsMaterial(rec);
+		if (cfg.FlagSaveCompositionAsExtensionMaterial)
+			addCompositionAsExtensionMaterial(rec);
 
 		if (rec.getMeasurements() != null)
 			//for (ProtocolApplication pa : rec.getMeasurements())
