@@ -40,7 +40,7 @@ public class ISAJsonTestUtils {
 
 		List<SubstanceRecord> sr = new ArrayList<SubstanceRecord>();
 		sr.add(TestSubstanceFactory.getTestSubstanceRecord());
-		testJsonExport(sr.iterator(), new File("/Volumes/Data/test-isa.json"), null,
+		testJsonExport(sr.iterator(), new File("/Volumes/Data/test-isa.json"), (File)null,
 				TestSubstanceFactory.getTestSubstanceEndpointsBundle());
 
 	}
@@ -49,22 +49,29 @@ public class ISAJsonTestUtils {
 			File outputDir, File exportConfig,
 			SubstanceEndpointsBundle endpointBundle) throws Exception {
 		
-		//ISAJsonExporter1_0 exporter = new ISAJsonExporter1_0(outputDir,
-		//		exportConfig);
-		
 		ISAJsonExportConfig cfg = ISAJsonExportConfig.getDefaultConfig();
 		cfg.FlagSaveCompositionAsStudy = false;
 		ISAJsonExporter1_0 exporter = new ISAJsonExporter1_0(outputDir, cfg);
 		
-		
 		exporter.setOutputDir(outputDir);
 		exporter.setExportJsonConfig(exportConfig);
 		
-		
 		exporter.export(endpointBundle, records);
-		
 		System.out.println(exporter.getResultAsJson());
 	}
+	
+	
+	public static void testJsonExport(Iterator<SubstanceRecord> records,
+			File outputDir, ISAJsonExportConfig cfg,
+			SubstanceEndpointsBundle endpointBundle) throws Exception {
+		
+		ISAJsonExporter1_0 exporter = new ISAJsonExporter1_0(outputDir, cfg);
+		exporter.setOutputDir(outputDir);
+		
+		exporter.export(endpointBundle, records);
+		System.out.println(exporter.getResultAsJson());
+	}
+	
 
 	public static void testISAJsonExportConfig(String jsonFileName)
 			throws Exception {
