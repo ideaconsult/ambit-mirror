@@ -55,4 +55,7 @@ public class Investigation
     public List<Study> studies = new ArrayList<Study>();
     @JsonProperty("comments")
     public List<Comment> comments = new ArrayList<Comment>();
+    
+    //Material extension
+    public List<McmMaterial> mcmMaterials = null;
 }
