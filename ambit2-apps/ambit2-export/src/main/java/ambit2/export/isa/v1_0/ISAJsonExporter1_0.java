@@ -3,6 +3,7 @@ package ambit2.export.isa.v1_0;
 import java.io.File;
 import java.io.FileWriter;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +30,7 @@ import ambit2.export.isa.v1_0.objects.FactorValue;
 import ambit2.export.isa.v1_0.objects.Investigation;
 import ambit2.export.isa.v1_0.objects.Materials;
 import ambit2.export.isa.v1_0.objects.Materials_;
+import ambit2.export.isa.v1_0.objects.McmMaterial;
 import ambit2.export.isa.v1_0.objects.Process;
 import ambit2.export.isa.v1_0.objects.ProcessParameterValue;
 import ambit2.export.isa.v1_0.objects.Protocol;
@@ -227,8 +229,23 @@ public class ISAJsonExporter1_0 implements IISAExport,
 
 	}
 
-	void addCompositionAsExtensionMaterial(SubstanceRecord rec) throws Exception {
-		// TODO
+	void addCompositionAsExtensionMaterial(SubstanceRecord rec) throws Exception 
+	{
+		List<CompositionRelation> compRelList = rec.getRelatedStructures();
+		if (compRelList == null)
+			return;
+	
+		investigation.mcmMaterial = new McmMaterial();
+		
+		
+		for (int i = 0; i < compRelList.size(); i++) 
+		{	
+			String preff = "Comp" + (i + 1) + ".";
+			CompositionRelation comRel = compRelList.get(i);
+			
+			//TODO
+		}
+		
 
 	}
 
