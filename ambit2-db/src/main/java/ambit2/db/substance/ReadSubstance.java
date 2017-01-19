@@ -18,7 +18,7 @@ public class ReadSubstance  extends AbstractReadSubstance<CompositionRelation,Su
 	 * 
 	 */
 	private static final long serialVersionUID = -3661558183996204387L;
-	private static String sql = "select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid,owner_name from substance\n";
+
 	private static String  q_idsubstance = "idsubstance=?";
 	private static String  q_uuid = "prefix=? and uuid=unhex(?)";
 	protected boolean retrieveComposition = false;

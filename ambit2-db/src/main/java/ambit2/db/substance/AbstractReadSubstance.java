@@ -19,7 +19,8 @@ public abstract class AbstractReadSubstance<F, T> extends
 	 * 
 	 */
 	private static final long serialVersionUID = 8441610930610137578L;
-
+	protected static String sql = "select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid,owner_name from substance\n";
+	
 	protected enum _sqlids {
 		idsubstance, prefix, huuid, documentType, format, name, publicname, content, substanceType, rs_prefix, rs_huuid, owner_prefix, owner_huuid, owner_name;
 		public int getIndex() {
