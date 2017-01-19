@@ -26,6 +26,7 @@ import ambit2.export.isa.base.ISAConst.ISAVersion;
 import ambit2.export.isa.json.ISAJsonExportConfig;
 import ambit2.export.isa.json.ISAJsonExporter;
 import ambit2.export.isa.v1_0.objects.Assay;
+import ambit2.export.isa.v1_0.objects.Constituent;
 import ambit2.export.isa.v1_0.objects.FactorValue;
 import ambit2.export.isa.v1_0.objects.Investigation;
 import ambit2.export.isa.v1_0.objects.Materials;
@@ -237,15 +238,16 @@ public class ISAJsonExporter1_0 implements IISAExport,
 	
 		investigation.mcmMaterial = new McmMaterial();
 		
-		
 		for (int i = 0; i < compRelList.size(); i++) 
 		{	
 			String preff = "Comp" + (i + 1) + ".";
 			CompositionRelation comRel = compRelList.get(i);
-			
+			Constituent constit = new Constituent();
+			investigation.mcmMaterial.constituents.add(constit);
+			constit.id = new URI("#constituent/" + (i+1));
 			//TODO
 		}
-		
+	
 
 	}
 
