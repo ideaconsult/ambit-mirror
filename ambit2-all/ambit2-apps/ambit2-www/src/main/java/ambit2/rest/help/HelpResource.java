@@ -51,7 +51,8 @@ public class HelpResource extends CatalogResource<String>  {
 		endpoint_search,
 		openam,
 		enmindex,
-		excapeindex
+		excapeindex,
+		datatemplate
 	}
 	public HelpResource() {
 		super();
