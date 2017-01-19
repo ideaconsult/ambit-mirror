@@ -27,7 +27,8 @@ import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.r.AbstractReporter;
 
 public class InputTemplatesResource extends CatalogResource<TemplateMakerSettings> {
-
+	protected String filename = "datatemplate";
+	
 	public InputTemplatesResource() {
 		super();
 		setHtmlbyTemplate(true);
@@ -61,6 +62,7 @@ public class InputTemplatesResource extends CatalogResource<TemplateMakerSetting
 		ts.setEndpointname(endpoint);
 		ts.setAssayname(assayname);
 		q.add(ts);
+		filename = String.format("datatemplate_%s_%s", endpoint.replaceAll(".xlsx",""), assayname.replaceAll(" ", "_"));
 		return q.iterator();
 	}
 
@@ -69,12 +71,12 @@ public class InputTemplatesResource extends CatalogResource<TemplateMakerSetting
 			throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.APPLICATION_MSOFFICE_XLSX)) {
 			TemplateReporter reporter = new TemplateReporter();
-			return new StreamConvertor(reporter, MediaType.APPLICATION_MSOFFICE_XLSX, "xlsx");
+			return new StreamConvertor(reporter, MediaType.APPLICATION_MSOFFICE_XLSX, filename);
 
 		}
 		throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
 	}
-
+	
 }
 
 class TemplateReporter extends AbstractReporter<Iterator<TemplateMakerSettings>, OutputStream> {
@@ -104,6 +106,10 @@ class TemplateReporter extends AbstractReporter<Iterator<TemplateMakerSettings>,
 			break;
 		}
 		return output;
+	}
+	@Override
+	public String getFileExtension() {
+		return "xlsx";
 	}
 
 }
