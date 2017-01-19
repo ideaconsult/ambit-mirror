@@ -11,6 +11,7 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -30,6 +31,11 @@ public class InputTemplatesResource extends CatalogResource<TemplateMakerSetting
 	public InputTemplatesResource() {
 		super();
 		setHtmlbyTemplate(true);
+
+	}
+	@Override
+	public String getTemplateName() {
+		return "template_placeholder.ftl";
 	}
 
 	@Override
@@ -66,7 +72,7 @@ public class InputTemplatesResource extends CatalogResource<TemplateMakerSetting
 			return new StreamConvertor(reporter, MediaType.APPLICATION_MSOFFICE_XLSX, "xlsx");
 
 		}
-		return null;
+		throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
 	}
 
 }
