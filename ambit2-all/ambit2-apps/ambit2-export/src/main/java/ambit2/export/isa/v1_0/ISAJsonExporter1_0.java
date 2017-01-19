@@ -17,6 +17,7 @@ import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.export.isa.IISAExport;
 import ambit2.export.isa.base.ExternalDataFileManager;
@@ -29,6 +30,7 @@ import ambit2.export.isa.v1_0.objects.Assay;
 import ambit2.export.isa.v1_0.objects.Constituent;
 import ambit2.export.isa.v1_0.objects.FactorValue;
 import ambit2.export.isa.v1_0.objects.Investigation;
+import ambit2.export.isa.v1_0.objects.Linkage;
 import ambit2.export.isa.v1_0.objects.Materials;
 import ambit2.export.isa.v1_0.objects.Materials_;
 import ambit2.export.isa.v1_0.objects.McmMaterial;
@@ -240,15 +242,29 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		
 		for (int i = 0; i < compRelList.size(); i++) 
 		{	
-			String preff = "Comp" + (i + 1) + ".";
 			CompositionRelation comRel = compRelList.get(i);
 			Constituent constit = new Constituent();
 			investigation.mcmMaterial.constituents.add(constit);
 			constit.id = new URI("#constituent/" + (i+1));
+			String name = extractName(comRel);
+			if (name != null)
+				constit.name = name;
+			constit.role = "role" + (i+1);
+			Linkage linkage = new Linkage();
+			
+			//STRUCTURE_RELATION.;
 			//TODO
 		}
+	}
 	
-
+	String extractName(CompositionRelation comRel)
+	{
+		if (comRel.getName() != null)
+			return comRel.getName();
+		if (comRel.getSmiles() != null)
+			return comRel.getSmiles();
+		//TODO
+		return null;
 	}
 
 	void addProtocolApplication(ProtocolApplication pa, String id) throws Exception {
