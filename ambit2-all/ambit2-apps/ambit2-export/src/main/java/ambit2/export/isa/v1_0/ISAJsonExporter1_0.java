@@ -31,6 +31,7 @@ import ambit2.export.isa.v1_0.objects.Constituent;
 import ambit2.export.isa.v1_0.objects.FactorValue;
 import ambit2.export.isa.v1_0.objects.Investigation;
 import ambit2.export.isa.v1_0.objects.Linkage;
+import ambit2.export.isa.v1_0.objects.MaterialAttributeValue;
 import ambit2.export.isa.v1_0.objects.Materials;
 import ambit2.export.isa.v1_0.objects.Materials_;
 import ambit2.export.isa.v1_0.objects.McmMaterial;
@@ -251,7 +252,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 			if (name != null)
 				constit.name = name;
 			
-			String role = getRole(comRel);
+			String role = getRole(comRel, rec);
 			if (role != null)
 				constit.role = role;
 			
@@ -259,12 +260,15 @@ public class ISAJsonExporter1_0 implements IISAExport,
 			if (linkages != null)
 				constit.linkages.addAll(linkages);
 			
-			//TODO
+			List<MaterialAttributeValue> characteristics = getConstituentCharacteristics(comRel);
+			if (characteristics != null)
+				constit.characteristics.addAll(characteristics);
 		}
 	}
 	
 	String extractName(CompositionRelation comRel)
 	{
+		//All these fields are taken from comRel.getSecondStructure()
 		if (comRel.getName() != null)
 			return comRel.getName();
 		if (comRel.getSmiles() != null)
@@ -281,17 +285,30 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		return null;
 	}
 	
-	String getRole(CompositionRelation comRel)
+	String getRole(CompositionRelation comRel, SubstanceRecord rec)
 	{
-		//STRUCTURE_RELATION.;
+		STRUCTURE_RELATION str_relation = comRel.getRelationType();
+		if (str_relation == null)
+			return null;
 		
-		//TODO
-		return "role";
+		String sr = str_relation.toString();
+		if (sr.startsWith("HAS_"))
+			return sr.substring(4);
+		
+		//Handle case sr.endsWith("_OF") - currently not needed!
+		return null;
 	}
 	
+	List<MaterialAttributeValue> getConstituentCharacteristics(CompositionRelation comRel)
+	{
+		//TODO
+		return null;
+	}
 	
 	List<Linkage> getLinkages(CompositionRelation comRel)
 	{	
+		//Currently the linkage info is not supported directly in 
+		//Ambit data model
 		//TODO
 		return null;
 	}
