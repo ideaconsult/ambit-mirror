@@ -30,6 +30,7 @@
 		<a href='${ambit_root}/substance/${substanceUUID}?media=application%2Fld%2Bjson' id='jsonld' target=_blank><img src='${ambit_root}/images/json-ld.png' alt='json' title='Download as JSON-LD'></a>
 		<a href='${ambit_root}/substance/${substanceUUID}?media=text/n3' id='jsonld' target=_blank><img src='${ambit_root}/images/rdf64.png' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a>
 		<a href='${ambit_root}/substance/${substanceUUID}?media=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet' id='xlsx' target=_blank><img src='${ambit_root}/images/xlsx.png' alt='XLSX' title='Download as XLSX'></a>
+		<a href='${ambit_root}/substance/${substanceUUID}?media=application%2Fisa%2Bjson' id='isajson' target=_blank><img src='${ambit_root}/images/isa.png' alt='ISA-JSON' title='Download as ISA-JSON'></a>
 	</div>
 	</#if>
 

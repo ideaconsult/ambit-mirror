@@ -47,11 +47,13 @@ import ambit2.db.substance.ReadSubstanceByOwner;
 import ambit2.db.substance.ReadSubstanceByStudy;
 import ambit2.db.substance.ReadSubstanceByType;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundleCompounds;
+import ambit2.export.isa.base.ISAConst;
 import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RDFJenaConvertor;
+import ambit2.rest.bundle.BundleISA_JSONReporter;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.query.AmbitDBResource;
 import ambit2.rest.task.CallableFileUpload;
@@ -63,6 +65,7 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.q.update.AbstractUpdate;
+import net.idea.modbcum.r.QueryReporter;
 import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.StringConvertor;
 import net.idea.restnet.db.QueryResource;
@@ -82,6 +85,7 @@ import net.idea.restnet.rdf.ns.OT;
  */
 public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T extends SubstanceRecord>
 		extends AmbitDBResource<Q, SubstanceRecord> {
+	public static MediaType ISAJSON = new MediaType(ISAConst.ISAFormat.JSON.getMediaType());
 	public final static String substance = OpenTox.URI.substance.getURI();
 	public final static String idsubstance = OpenTox.URI.substance.getKey();
 	public final static String substanceID = OpenTox.URI.substance
@@ -125,10 +129,15 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 		customizeVariants(new MediaType[] { MediaType.TEXT_HTML,
 				MediaType.TEXT_URI_LIST, MediaType.APPLICATION_JSON,
 				ChemicalMediaType.APPLICATION_JSONLD,
+				MediaType.APPLICATION_RDF_TURTLE, 
+				MediaType.APPLICATION_RDF_XML,
+				MediaType.APPLICATION_RDF_TURTLE, MediaType.TEXT_RDF_N3,
+				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JAVA_OBJECT,
 				MediaType.APPLICATION_JAVASCRIPT, MediaType.IMAGE_PNG,
 				MediaType.APPLICATION_EXCEL,
-				MediaType.APPLICATION_MSOFFICE_XLSX });
+				MediaType.APPLICATION_MSOFFICE_XLSX,
+				ISAJSON});
 
 	}
 
@@ -216,16 +225,23 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 					}
 				}
 			};
+
+		} else if (variant.getMediaType().equals(ISAJSON)) {
+			return new OutputStreamConvertor<SubstanceRecord, Q>(
+					createISAReporter(getRequest()),
+					MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);			
 		} else if (variant.getMediaType().equals(
 				MediaType.APPLICATION_JAVASCRIPT)) {
 			return createJSONReporter(filenamePrefix);
-		} else { // json by default
-			// else if
-			// (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+		} else  // json by default
 			return createJSONReporter(filenamePrefix);
-		}
+		
 	}
 
+	protected QueryReporter createISAReporter(Request request) {
+		return new BundleISA_JSONReporter(getRequest().getRootRef().toString(), bundles);
+
+	}
 
 	protected void getCompositionProcessors(ProcessorsChain chain) {
 

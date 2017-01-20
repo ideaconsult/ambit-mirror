@@ -2,24 +2,25 @@ package ambit2.db.search;
 
 import java.util.logging.Logger;
 
+import ambit2.base.config.Preferences;
 import net.idea.modbcum.i.IParameterizedQuery;
 import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryObject;
 import net.idea.modbcum.i.exceptions.AmbitException;
-import ambit2.base.config.Preferences;
 
 /**
  * Abstract class for a query.
+ * 
  * <pre>
  * F: field to search for
  * T: value to search for
  * C: condition (implements {@link IQueryCondition})
  * </pre>
- * @author Nina Jeliazkova nina@acad.bg
- * <b>Modified</b> Aug 10, 2008
+ * 
+ * @author Nina Jeliazkova nina@acad.bg <b>Modified</b> Aug 10, 2008
  */
-public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  
-								implements IQueryObject<ResultType>,IParameterizedQuery<F,T,C>{
+public abstract class AbstractQuery<F, T, C extends IQueryCondition, ResultType>
+		implements IQueryObject<ResultType>, IParameterizedQuery<F, T, C> {
 	/**
 	 * 
 	 */
@@ -30,7 +31,7 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>
 	protected C condition;
 	protected boolean selected;
 	protected String name;
-	protected Integer id=-1;
+	protected Integer id = -1;
 	protected long maxRecords = 10000;
 	protected int page = 0;
 
@@ -40,9 +41,9 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>
 			setPageSize(Integer.parseInt(Preferences.getProperty(Preferences.MAXRECORDS)));
 		} catch (Exception x) {
 			setPageSize(1000);
-		}	
+		}
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -90,44 +91,59 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
+
 	public boolean test(T object) throws AmbitException {
 		throw new AmbitException("Not implemented");
 	}
+
 	@Override
 	public String toString() {
-		if ((getFieldname()==null) && (getValue()==null)) return getClass().getName();
+		if ((getFieldname() == null) && (getValue() == null))
+			return getClass().getName();
 		StringBuilder b = new StringBuilder();
-		if (getFieldname()==null) b.append("Property");
-		else b.append(getFieldname());
+		if (getFieldname() == null)
+			b.append(getClass().getName());
+		else
+			b.append(getFieldname());
 		b.append(' ');
-		b.append(getCondition()==null?"":getCondition());
+		b.append(getCondition() == null ? "" : getCondition());
 		b.append(' ');
-		if (getValue() != null) 
-			b.append(getValue());
+		b.append(stringify(getValue()));
 		return b.toString();
 	}
-	public void setPageSize(long records) {
-		this.maxRecords = records>0?records:100000;
-		
+
+	protected String stringify(T value) {
+		return getValue() == null ? "" : getValue().toString();
 	}
+
+	public void setPageSize(long records) {
+		this.maxRecords = records > 0 ? records : 100000;
+
+	}
+
 	public long getPageSize() {
 		return maxRecords;
 	}
+
 	public int getPage() {
 		return page;
 	}
+
 	public void setPage(int page) {
 		this.page = page;
 	}
+
 	public String getKey() {
 		return null;
 	}
+
 	public String getCategory() {
 		return null;
 	}
+
 	@Override
 	public boolean supportsPaging() {
 		return true;
 	}
-	
+
 }

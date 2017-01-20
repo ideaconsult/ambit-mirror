@@ -82,8 +82,8 @@ public class BundleISA_JSONReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		SubstanceEndpointsBundle endpointBundle = null;
 		if (bundles == null || bundles.length == 0) {
 			endpointBundle = new SubstanceEndpointsBundle();
-			endpointBundle.setDescription("Test Bundle description");
-			endpointBundle.setTitle("Test Bundle title");
+			endpointBundle.setDescription(arg1.toString());
+			endpointBundle.setTitle("Query results");
 		} else {
 			endpointBundle = bundles[0];
 		}

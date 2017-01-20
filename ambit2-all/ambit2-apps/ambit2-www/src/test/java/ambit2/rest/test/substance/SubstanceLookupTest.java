@@ -2,7 +2,6 @@ package ambit2.rest.test.substance;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 
 import org.junit.Test;
 import org.restlet.Response;
@@ -31,40 +30,64 @@ public class SubstanceLookupTest extends ResourceTest {
 	}
 
 	@Test
-	public void testGet_UUIDS() throws Exception {
+	public void testGet_UUIDS_JSON() throws Exception {
 		String q = String.format("http://localhost:%d/query%s/study/uuid?search=%s", port, SubstanceLookup.resource,
 				Reference.encode(testUUID));
 		testGet(q, MediaType.APPLICATION_JSON);
 	}
 
 	@Test
+	public void testGet_UUIDS_ISA() throws Exception {
+		String q = String.format("http://localhost:%d/query%s/study/uuid?search=%s", port, SubstanceLookup.resource,
+				Reference.encode(testUUID));
+		testGet(q, new MediaType("application/isa+json"));
+	}
+
+	@Test
+	public void testGet_UUIDS_N3() throws Exception {
+		String q = String.format("http://localhost:%d/query%s/study/uuid?search=%s", port, SubstanceLookup.resource,
+				Reference.encode(testUUID));
+		testGet(q, MediaType.TEXT_RDF_N3);
+	}
+	@Override
+	public boolean verifyResponseISAJSON(String uri, MediaType media, InputStream in)
+			throws Exception {
+		return true;
+	}
+	@Override
+	public boolean verifyResponseRDFN3(String uri, MediaType media, InputStream in) throws Exception {
+		return true;
+	}
+	@Test
 	public void testPost_UUIDS() throws Exception {
 		String q = String.format("http://localhost:%d/query%s/study/uuid", port, SubstanceLookup.resource);
 		Form form = new Form();
 		form.add("search", testUUID);
 		Response r = testPost(q, MediaType.APPLICATION_JSON, form);
-		//System.out.println(r.getEntityAsText());
-		//verifyResponseJSON(q, MediaType.APPLICATION_JSON, new StringReader(r.getEntityAsText()));
+		// System.out.println(r.getEntityAsText());
+		// verifyResponseJSON(q, MediaType.APPLICATION_JSON, new
+		// StringReader(r.getEntityAsText()));
 	}
 
 	@Override
 	public boolean verifyResponseJSON(String uri, MediaType media, InputStream in) throws Exception {
-		return verifyResponseJSON(uri,media,new InputStreamReader(in,"UTF-8"));
+		return verifyResponseJSON(uri, media, new InputStreamReader(in, "UTF-8"));
 	}
 
 	public boolean verifyResponseJSON(String uri, MediaType media, InputStreamReader reader) throws Exception {
-		//JsonNode node = parseResponseJSON(uri, media, in);
+		// JsonNode node = parseResponseJSON(uri, media, in);
 		SubstanceStudyParser p = new SubstanceStudyParser(reader);
-		int i=0;
+		int i = 0;
 		while (p.hasNext()) {
 			Object o = p.next();
 			Assert.assertTrue(o instanceof SubstanceRecord);
-			Assert.assertEquals(testUUID,  ((SubstanceRecord)o).getSubstanceUUID());
+			Assert.assertEquals(testUUID, ((SubstanceRecord) o).getSubstanceUUID());
 			System.out.println(o);
 			i++;
 		}
-		return i==1;
+		return i == 1;
 	}
+
 	@Override
 	public void testGetJavaObject() throws Exception {
 	}

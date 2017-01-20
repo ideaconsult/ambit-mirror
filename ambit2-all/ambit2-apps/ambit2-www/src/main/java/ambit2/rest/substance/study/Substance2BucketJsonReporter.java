@@ -97,9 +97,12 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	private static final String header_summary_results = "SUMMARY.RESULTS_hss";
 	private static final String header_summary_refs = "SUMMARY.REFS_hss";
 	private static final String header_summary_refowner = "SUMMARY.REFOWNERS_hss";
+	
+	private static final String header_component = "component_s";
+	
 	private final String[][] study_headers_combined = new String[][] { { "id", "name_s", "publicname_s", "owner_name_s",
 			"substanceType_s", "s_uuid_s", "name_hs", "publicname_hs", "owner_name_hs", "substanceType_hs", "s_uuid_hs",
-			"_childDocuments_", "type_s", "component", "ChemicalName_s", "TradeName_s", "CASRN_s", "EINECS_s",
+			"_childDocuments_", "type_s", header_component, "ChemicalName_s", "TradeName_s", "CASRN_s", "EINECS_s",
 			"IUCLID5_UUID_s", "COMPOSITION_s", "SMILES_s", "document_uuid_s", "topcategory_s", "endpointcategory_s",
 			"guidance_s", "endpoint_s", "effectendpoint_s", "reference_owner_s", "reference_year_s", "reference_s",
 			"loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d", "errQualifier_s", "conditions_s",
@@ -446,7 +449,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 		bcomposition.put("type_s", "composition");
 
 		String ctype = component.getRelationType().name().replace("HAS_", "");
-		bcomposition.put("component", ctype);
+		bcomposition.put(header_component, ctype);
 		bcomposition.put("COMPOSITION", component.getName());
 		if (component.getSecondStructure().getSmiles() != null)
 			bcomposition.put("SMILES", component.getSecondStructure().getSmiles());

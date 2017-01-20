@@ -117,5 +117,9 @@ public class ReadSubstance  extends AbstractReadSubstance<CompositionRelation,Su
 	protected SubstanceRecord getRecord() {
 		return (getValue()==null)?new SubstanceRecord():getValue();
 	}
+	@Override
+	protected String stringify(SubstanceRecord value) {
+		return value.getSubstanceUUID();
+	}
 
 }

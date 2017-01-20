@@ -78,6 +78,8 @@
 	
 	<a href='#' id='rdfxml'><img src='${ambit_root}/images/rdf64.png' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a>
 	<a href='#' id='jsonld'><img src='${ambit_root}/images/json-ld.png' alt='JSON-LD' title='Download as JSON-LD'></a>
+	<a href='#' id='isajson'><img src='${ambit_root}/images/isa.png' alt='ISA-JSON' title='Download as ISA-JSON'></a>
+	
 	</div>
 	
 	<div id="tabs_search">
