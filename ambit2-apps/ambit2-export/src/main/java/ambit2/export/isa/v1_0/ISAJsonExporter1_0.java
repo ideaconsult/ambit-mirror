@@ -246,13 +246,19 @@ public class ISAJsonExporter1_0 implements IISAExport,
 			Constituent constit = new Constituent();
 			investigation.mcmMaterial.constituents.add(constit);
 			constit.id = new URI("#constituent/" + (i+1));
+			
 			String name = extractName(comRel);
 			if (name != null)
 				constit.name = name;
-			constit.role = "role" + (i+1);
-			Linkage linkage = new Linkage();
 			
-			//STRUCTURE_RELATION.;
+			String role = getRole(comRel);
+			if (role != null)
+				constit.role = role;
+			
+			List<Linkage> linkages = getLinkages(comRel);
+			if (linkages != null)
+				constit.linkages.addAll(linkages);
+			
 			//TODO
 		}
 	}
@@ -263,6 +269,21 @@ public class ISAJsonExporter1_0 implements IISAExport,
 			return comRel.getName();
 		if (comRel.getSmiles() != null)
 			return comRel.getSmiles();
+		//TODO
+		return null;
+	}
+	
+	String getRole(CompositionRelation comRel)
+	{
+		//STRUCTURE_RELATION.;
+		
+		//TODO
+		return "role";
+	}
+	
+	
+	List<Linkage> getLinkages(CompositionRelation comRel)
+	{	
 		//TODO
 		return null;
 	}
