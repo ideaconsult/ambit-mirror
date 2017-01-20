@@ -269,7 +269,15 @@ public class ISAJsonExporter1_0 implements IISAExport,
 			return comRel.getName();
 		if (comRel.getSmiles() != null)
 			return comRel.getSmiles();
-		//TODO
+		if (comRel.getFormula() != null)
+			return comRel.getFormula();
+		if (comRel.getContent() != null)
+			return comRel.getContent();
+		if (comRel.getInchiKey() != null)
+			return comRel.getInchiKey();
+		if (comRel.getInchi() != null)
+			return comRel.getInchi();
+		
 		return null;
 	}
 	
