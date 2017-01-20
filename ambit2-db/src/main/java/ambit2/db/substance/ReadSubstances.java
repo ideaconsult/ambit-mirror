@@ -11,6 +11,7 @@ import net.idea.modbcum.i.query.QueryParam;
 
 /**
  * Retrieve set of substances given array of substance UUIDs
+ * 
  * @author nina
  *
  */
@@ -21,13 +22,16 @@ public class ReadSubstances extends AbstractReadSubstance<CompositionRelation, S
 	 */
 	private static final long serialVersionUID = 6355365745488149195L;
 	protected SubstanceRecord record;
+
 	public ReadSubstances() {
 		this(null);
 	}
+
 	public ReadSubstances(String[] uuids) {
 		setValue(uuids);
 		record = new SubstanceRecord();
 	}
+
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
@@ -47,7 +51,7 @@ public class ReadSubstances extends AbstractReadSubstance<CompositionRelation, S
 			b.append(sql);
 			b.append("where uuid in (");
 			String delimiter = "";
-			for (int i=0; i < getValue().length; i++) {
+			for (int i = 0; i < getValue().length; i++) {
 				b.append(delimiter);
 				b.append("unhex(?) ");
 				delimiter = ",";
@@ -60,8 +64,12 @@ public class ReadSubstances extends AbstractReadSubstance<CompositionRelation, S
 
 	@Override
 	protected SubstanceRecord getRecord() {
-
 		return record;
+	}
+
+	@Override
+	protected String stringify(String[] value) {
+		return value==null?"":String.format("Substance UUIDs (%d)", value.length);
 	}
 
 }

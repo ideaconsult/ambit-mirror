@@ -3,9 +3,11 @@
     "produces": [
         "application/json",
         "text/csv",
-        "text/plain",
+        "text/n3",
+        "application/rdf+xml",
         "application/ld+json",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/isa+json"
     ],		
     "resourcePath": "/query",
 	"apis": [
@@ -116,7 +118,7 @@
                     "parameters": [
 			            {
 			              "name": "search",
-			              "description": "Substance UUID",
+			              "description": "Substance UUIDs, space delimited",
 			              "required": true,
 			              "type": "string",
 			              "paramType": "form",
