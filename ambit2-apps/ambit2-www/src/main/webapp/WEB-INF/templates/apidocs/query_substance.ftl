@@ -77,7 +77,7 @@
                 {
                     "method": "GET",
                     "summary": "Search substances by set of UUID",
-                    "notes": "Search substances by set of UUID",
+                    "notes": "Search substances by set of UUID (space delimited)",
                     "type": "Substance",
                     "nickname": "searchByUUID",
                      <#include "/apidocs/authz.ftl" >
@@ -103,6 +103,38 @@
                 }
             ]
      	},     	
+     	{
+            "path": "/query/substance/study/uuid",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Search substances by set of UUID",
+                    "notes": "Search substances by set of UUID (space delimited)",
+                    "type": "Substance",
+                    "nickname": "searchByUUID",
+                     <#include "/apidocs/authz.ftl" >
+                    "parameters": [
+			            {
+			              "name": "search",
+			              "description": "Substance UUID",
+			              "required": true,
+			              "type": "string",
+			              "paramType": "form",
+			              "allowMultiple"  : false
+			            },				            
+						<#include "/apidocs/parameters_page.ftl" >
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Substance not found"
+                        },
+						<#include "/apidocs/error_aa.ftl" >,
+						<#include "/apidocs/error_500.ftl" >                            
+                    ]
+                }
+            ]
+     	},     	     	
      	{
             "path": "/query/substance/study/protocol/{term}",
             "operations": [

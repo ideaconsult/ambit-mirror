@@ -1,12 +1,15 @@
 package ambit2.rest.substance;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
+import org.restlet.data.Method;
+import org.restlet.data.Parameter;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -35,6 +38,9 @@ import net.idea.restnet.db.QueryResource;
 
 public class SubstanceLookup<Q extends IQueryRetrieval<SubstanceRecord>, T extends SubstanceRecord>
 		extends SubstanceResource<Q, T> {
+	public static String resource = "/substance";
+	protected Form params;
+
 	protected enum _query_type {
 		related, reference, facet, study
 	};
@@ -54,7 +60,7 @@ public class SubstanceLookup<Q extends IQueryRetrieval<SubstanceRecord>, T exten
 
 	@Override
 	protected Representation post(Representation entity, Variant variant) throws ResourceException {
-		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+		return getRepresentation(variant);
 	}
 
 	@Override
@@ -92,7 +98,7 @@ public class SubstanceLookup<Q extends IQueryRetrieval<SubstanceRecord>, T exten
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Form form = getParams();
 		try {
 
 			Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(form);
@@ -318,8 +324,8 @@ public class SubstanceLookup<Q extends IQueryRetrieval<SubstanceRecord>, T exten
 			}
 			case uuid: {
 				try {
-					//just in case remove brackets
-					String[] uuids = search.replace("(","").replace(")","").trim().split(" ");
+					// just in case remove brackets
+					String[] uuids = search.replace("(", "").replace(")", "").trim().split(" ");
 					return (Q) new ReadSubstances(uuids);
 				} catch (Exception x) {
 
@@ -332,5 +338,25 @@ public class SubstanceLookup<Q extends IQueryRetrieval<SubstanceRecord>, T exten
 		}
 		}
 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+	}
+
+	protected Form getParams() {
+		if (params == null)
+			if (Method.GET.equals(getRequest().getMethod())) {
+				params = getResourceRef(getRequest()).getQueryAsForm();
+				Iterator<Parameter> p = params.iterator();
+				while (p.hasNext()) {
+					Parameter param = p.next();
+					String value = param.getValue();
+					if (value == null)
+						continue;
+					if (value.contains("script") || value.contains(">") || value.contains("<"))
+						param.setValue("");
+				}
+			}
+			// if POST, the form should be already initialized
+			else
+				params = getRequest().getEntityAsForm();
+		return params;
 	}
 }
