@@ -4,7 +4,7 @@
 		<li><a href='http://ambit.sourceforge.net/enanomapper_usage.html' target='guide'>Search by composition</a></li>
 		<li><a href='http://ambit.sourceforge.net/enanomapper_usage_substance.html' target='guide'>Search by phys chem or biological effects</a></li>
 		<li><a href='http://ambit.sourceforge.net/enanomapper.html' target='guide'>Downloads and Installation</a></li>
-		
+		<li><a href='http://ambit.sf.net/enanomapper/templates' target='data entry templates'>Data entry templates</a></li>
 		</ul>
 	</li>
 	<li><a href='https://github.com/enanomapper/data.enanomapper.net/issues' target='report' title='Found an error? Report here'>Submit an issue <img src='${ambit_root}/images/profile/enanomapper/enm_api_24.png'></a></li>	
