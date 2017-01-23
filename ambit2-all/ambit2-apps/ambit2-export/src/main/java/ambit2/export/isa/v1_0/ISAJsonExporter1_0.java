@@ -303,11 +303,93 @@ public class ISAJsonExporter1_0 implements IISAExport,
 	
 	List<MaterialAttributeValue> getConstituentCharacteristics(CompositionRelation comRel)
 	{			
-		//STRUC_TYPE str_type  = comRel.getType();
-		Proportion prop = comRel.getRelation();
+		List<MaterialAttributeValue> chList = new ArrayList<MaterialAttributeValue>();
 		
+		if (cfg.FlagExportFormulaAsConstituentCharacteristics)
+		{
+			String s = comRel.getFormula();
+			if (s != null)
+			{
+				MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "Chemical Formula", null);
+				chList.add(mav);
+			}
+		}
+		
+		if (cfg.FlagExportSmilesAsConstituentCharacteristics)
+		{
+			String s = comRel.getSmiles();
+			if (s != null)
+			{
+				MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "SMILES", null);
+				chList.add(mav);
+			}
+		}
+		
+		if (cfg.FlagExportInchiAsConstituentCharacteristics)
+		{
+			String s = comRel.getInchi();
+			if (s != null)
+			{
+				MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "InChI", null);
+				chList.add(mav);
+			}
+		}
+		
+		if (cfg.FlagExportInchiKeyAsConstituentCharacteristics)
+		{
+			String s = comRel.getInchiKey();
+			if (s != null)
+			{
+				MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "InChI Key", null);
+				chList.add(mav);
+			}
+		}
+		
+		if (cfg.FlagExportStrucTypeAsConstituentCharacteristics)
+		{
+			STRUC_TYPE str_type  = comRel.getType();
+			if (str_type != null)
+			{
+				String s = null;
+				switch (str_type)
+				{
+				case D1:
+					s = "1D";
+					break;				
+				case D2noH:
+				case D2withH:
+					s = "2D";
+					break;
+				case D3noH:
+				case D3withH:
+					s = "3D";
+					break;
+				case MARKUSH:
+					s = "Markush";
+					break;
+				case NANO:
+					s = "Nano material";
+					break;
+				case PDB:
+					s = "PDB";
+					break;
+				}
+				
+				if (s != null)
+				{	
+					MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "Structure Type", null);
+					chList.add(mav);
+				}	
+			}
+		}
+		
+		Proportion prop = comRel.getRelation();
 		//TODO
-		return null;
+		
+		if (chList.isEmpty())
+			return null;
+		else
+			return chList; 
 	}
 	
 	List<Linkage> getLinkages(CompositionRelation comRel)
