@@ -17,8 +17,10 @@ import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
+import ambit2.base.relation.composition.Proportion;
 import ambit2.export.isa.IISAExport;
 import ambit2.export.isa.base.ExternalDataFileManager;
 import ambit2.export.isa.base.ISAConst;
@@ -300,7 +302,10 @@ public class ISAJsonExporter1_0 implements IISAExport,
 	}
 	
 	List<MaterialAttributeValue> getConstituentCharacteristics(CompositionRelation comRel)
-	{
+	{			
+		//STRUC_TYPE str_type  = comRel.getType();
+		Proportion prop = comRel.getRelation();
+		
 		//TODO
 		return null;
 	}
