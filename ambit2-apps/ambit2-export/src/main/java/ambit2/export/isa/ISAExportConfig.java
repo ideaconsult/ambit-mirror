@@ -40,6 +40,15 @@ public class ISAExportConfig
 	
 	public boolean FlagDescriptionAdditiveContent = true;  //If true the content is summed from various possible data sources
 	
+	public boolean FlagExportFormulaAsConstituentCharacteristics = true;
+	public boolean FlagExportSmilesAsConstituentCharacteristics = true;
+	public boolean FlagExportContentAsConstituentCharacteristics = true;
+	public boolean FlagExportInchiAsConstituentCharacteristics = true;
+	public boolean FlagExportInchiKeyAsConstituentCharacteristics = true;
+	public boolean FlagExportRelationAsConstituentCharacteristics = true;
+	public boolean FlagExportStrucTypeAsConstituentCharacteristics = false;
+	
+	
 	
 	
 	public void parseJSONConfig(JsonNode rootNode) throws Exception
