@@ -310,7 +310,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 			String s = comRel.getFormula();
 			if (s != null)
 			{
-				MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "Chemical Formula", null);
+				MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "Chemical Formula", null, null);
 				chList.add(mav);
 			}
 		}
@@ -320,7 +320,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 			String s = comRel.getSmiles();
 			if (s != null)
 			{
-				MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "SMILES", null);
+				MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "SMILES", null, null);
 				chList.add(mav);
 			}
 		}
@@ -330,7 +330,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 			String s = comRel.getInchi();
 			if (s != null)
 			{
-				MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "InChI", null);
+				MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "InChI", null, null);
 				chList.add(mav);
 			}
 		}
@@ -340,7 +340,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 			String s = comRel.getInchiKey();
 			if (s != null)
 			{
-				MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "InChI Key", null);
+				MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "InChI Key", null, null);
 				chList.add(mav);
 			}
 		}
@@ -377,7 +377,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 				
 				if (s != null)
 				{	
-					MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "Structure Type", null);
+					MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(s, "Structure Type", null, null);
 					chList.add(mav);
 				}	
 			}
@@ -391,8 +391,8 @@ public class ISAJsonExporter1_0 implements IISAExport,
 				Double loVal = prop.getReal_lowervalue();
 				if (loVal != null)
 				{	
-					//String unit = prop.getReal_unit();
-					MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(loVal, "Constituent proportion", null);
+					String unit = prop.getReal_unit();
+					MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(loVal, "Constituent proportion", null, unit);
 					chList.add(mav);
 				}	
 			}
