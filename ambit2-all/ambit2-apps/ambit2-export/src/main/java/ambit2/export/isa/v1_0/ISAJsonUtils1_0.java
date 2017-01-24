@@ -33,12 +33,17 @@ public class ISAJsonUtils1_0
 		return c;
 	};
 	
-	public static MaterialAttributeValue getMaterialAttributeValue(Object value, String attribute, URI id)
+	public static MaterialAttributeValue getMaterialAttributeValue(Object value, String attribute, URI id, String unit)
 	{
 		MaterialAttributeValue mav = new MaterialAttributeValue();
 		mav.value = value;
 		if (id != null)
 			mav.id = id;
+		if (unit != null)
+		{	
+			mav.unit = new OntologyAnnotation();
+			mav.unit.annotationValue = unit;
+		}	
 		if (attribute != null)
 		{	
 			MaterialAttribute ma = new MaterialAttribute();
