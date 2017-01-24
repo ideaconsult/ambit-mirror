@@ -383,8 +383,21 @@ public class ISAJsonExporter1_0 implements IISAExport,
 			}
 		}
 		
-		Proportion prop = comRel.getRelation();
-		//TODO
+		if (cfg.FlagExportRelationAsConstituentCharacteristics)
+		{
+			Proportion prop = comRel.getRelation();
+			if (prop != null)
+			{
+				Double loVal = prop.getReal_lowervalue();
+				if (loVal != null)
+				{	
+					//String unit = prop.getReal_unit();
+					MaterialAttributeValue mav = ISAJsonUtils1_0.getMaterialAttributeValue(loVal, "Constituent proportion", null);
+					chList.add(mav);
+				}	
+			}
+		}
+		
 		
 		if (chList.isEmpty())
 			return null;
