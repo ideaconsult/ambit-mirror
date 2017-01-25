@@ -106,7 +106,7 @@ public class SubstanceStudyReporterTest extends ResourceTest {
 	public static void main(String[] args) {
 		Substance2BucketJsonReporter reporter = new Substance2BucketJsonReporter(
 				null, null, Substance2BucketJsonReporter._JSON_MODE.substance,
-				null);
+				null,null);
 		Reader in = null;
 
 		try {
