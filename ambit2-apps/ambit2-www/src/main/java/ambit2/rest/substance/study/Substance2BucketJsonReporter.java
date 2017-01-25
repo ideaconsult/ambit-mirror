@@ -36,16 +36,18 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	protected ObjectMapper dx = new ObjectMapper();
 	protected _JSON_MODE jsonmode = _JSON_MODE.experiment;
 	protected String summaryMeasurement = null;
+	protected String dbTag = "ENM";
 
 	public enum _JSON_MODE {
 		experiment, substance
 	}
 
 	public Substance2BucketJsonReporter(String command, ProcessorsChain chain, _JSON_MODE jsonmode,
-			String summaryMeasurement) {
+			String summaryMeasurement, String dbTag) {
 		super(command, null, null);
 		this.summaryMeasurement = summaryMeasurement;
 		this.jsonmode = jsonmode;
+		this.dbTag = dbTag;
 		// new IProcessor[] { new SubstanceStudyDetailsProcessor() });
 		switch (jsonmode) {
 		case experiment: {
@@ -71,7 +73,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	private static final String[][] study_headers = new String[][] {
 			{ "name", "publicname", "owner_name", "s_uuid", "substanceType", "_childDocuments_", "type_s",
 					"ChemicalName.CONSTITUENT", "ChemicalName.ADDITIVE", "ChemicalName.IMPURITY", "ChemicalName.CORE",
-					"ChemicalName.COATING", "ChemicalName.FUNCTIONALISATION", "ChemicalName.DOPING", "content",
+					"ChemicalName.COATING", "ChemicalName.FUNCTIONALISATION", "ChemicalName.DOPING", "content_hss",
 
 					"TradeName.CONSTITUENT", "TradeName.ADDITIVE", "TradeName.IMPURITY", "TradeName.CORE",
 					"TradeName.COATING", "TradeName.FUNCTIONALISATION", "TradeName.DOPING",
@@ -97,17 +99,19 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	private static final String header_summary_results = "SUMMARY.RESULTS_hss";
 	private static final String header_summary_refs = "SUMMARY.REFS_hss";
 	private static final String header_summary_refowner = "SUMMARY.REFOWNERS_hss";
-	
+	private static final String header_dbtag = "dbtag_hss";
+
 	private static final String header_component = "component_s";
-	
+
 	private final String[][] study_headers_combined = new String[][] { { "id", "name_s", "publicname_s", "owner_name_s",
-			"substanceType_s", "s_uuid_s", "name_hs", "publicname_hs", "owner_name_hs", "substanceType_hs", "s_uuid_hs",
-			"_childDocuments_", "type_s", header_component, "ChemicalName_s", "TradeName_s", "CASRN_s", "EINECS_s",
-			"IUCLID5_UUID_s", "COMPOSITION_s", "SMILES_s", "document_uuid_s", "topcategory_s", "endpointcategory_s",
-			"guidance_s", "endpoint_s", "effectendpoint_s", "reference_owner_s", "reference_year_s", "reference_s",
-			"loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d", "errQualifier_s", "conditions_s",
-			"params", "textValue_s", "interpretation_result_s", "unit_s", "category_s", "idresult",
-			header_summary_results, header_summary_refs, header_summary_refowner, "" } };
+			"content_hss", header_dbtag, "substanceType_s", "s_uuid_s", "name_hs", "publicname_hs", "owner_name_hs",
+			"substanceType_hs", "s_uuid_hs", "_childDocuments_", "type_s", header_component, "ChemicalName_s",
+			"TradeName_s", "CASRN_s", "EINECS_s", "IUCLID5_UUID_s", "COMPOSITION_s", "SMILES_s", "document_uuid_s",
+			"topcategory_s", "endpointcategory_s", "guidance_s", "endpoint_s", "effectendpoint_s", "reference_owner_s",
+			"reference_year_s", "reference_s", "loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d",
+			"errQualifier_s", "conditions_s", "effectid_hs", "params", "textValue_s", "interpretation_result_s",
+			"unit_s", "category_s", "idresult", header_summary_results, header_summary_refs, header_summary_refowner,
+			"" } };
 
 	@Override
 	public void setConnection(Connection conn) throws DbAmbitException {
@@ -137,7 +141,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			}
 
 			List<Bucket> ids = new ArrayList<Bucket>();
-			if (record.getExternalids() != null)
+			if (record.getExternalids() != null) {
+				List<String> xids = new ArrayList<String>();
 				for (ExternalIdentifier id : record.getExternalids()) {
 					// these should not be in external ids in first place
 					if ("Has_Identifier".equals(id.getSystemDesignator()))
@@ -151,13 +156,13 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					if ("Coating".equals(id.getSystemDesignator()))
 						continue;
 					if ("COD ID".equals(id.getSystemDesignator())) {
-						bucket.put("content",
-								String.format("http://www.crystallography.net/cod/%s.html", id.getSystemIdentifier()));
-					}
-					if (id.getSystemIdentifier().startsWith("http"))
-						bucket.put("content", id.getSystemIdentifier());
+						xids.add(String.format("http://www.crystallography.net/cod/%s.html", id.getSystemIdentifier()));
+					} else if (id.getSystemIdentifier().startsWith("http"))
+						xids.add(id.getSystemIdentifier());
 					// ids.add(externalids2Bucket(id));
 				}
+				bucket.put("content_hss", xids);
+			}
 
 			if (record.getMeasurements() != null)
 				for (ProtocolApplication<Protocol, Object, String, Object, String> papp : record.getMeasurements()) {
@@ -219,6 +224,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 							if (papp.getParameters() != null) {
 								params2Bucket(papp, params, "params", null);
 								params.put("document_uuid", papp.getDocumentUUID());
+
 							}
 							_childDocuments_.add(params);
 						}
@@ -245,11 +251,13 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					CompositionRelation rel = record.getRelatedStructures().get(r);
 					Bucket bcomposition = composition2Buckets(record, rel, suffix);
 					bcomposition.put("id", String.format("%s/c/%d", record.getSubstanceUUID(), (r + 1)));
+					bcomposition.put("s_uuid_hs", record.getSubstanceUUID());
 					_childDocuments_.add(bcomposition);
 				}
 			}
 
-			if (record.getExternalids() != null)
+			if (record.getExternalids() != null) {
+				List<String> xids = new ArrayList<String>();
 				for (ExternalIdentifier id : record.getExternalids()) {
 					// these should not be in external ids in first place
 					if ("Has_Identifier".equals(id.getSystemDesignator()))
@@ -263,14 +271,13 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					if ("Coating".equals(id.getSystemDesignator()))
 						continue;
 					if ("COD ID".equals(id.getSystemDesignator())) {
-						bucket.put("content",
-								String.format("http://www.crystallography.net/cod/%s.html", id.getSystemIdentifier()));
-					}
-					if (id.getSystemIdentifier().startsWith("http"))
-						bucket.put("content", id.getSystemIdentifier());
-					Bucket bids = externalids2Bucket(id);
-					// _childDocuments_.add(bids);
+						xids.add(String.format("http://www.crystallography.net/cod/%s.html", id.getSystemIdentifier()));
+					} else if (id.getSystemIdentifier().startsWith("http"))
+						xids.add(id.getSystemIdentifier());
+					// ids.add(externalids2Bucket(id));
 				}
+				bucket.put("content_hss", xids);
+			}
 
 			List<String> summary_papp = null;
 			List<String> summary_refs = null;
@@ -298,11 +305,14 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 
 					if (papp.getEffects() != null)
 						for (EffectRecord<String, Object, String> e : papp.getEffects()) {
+							String effectid = String.format("%s/%d",
+									papp.getDocumentUUID() == null ? "P" : papp.getDocumentUUID(), e.getIdresult());
 							List<IParams> _childParams_ = new ArrayList<IParams>();
 
 							if (prm.size() > 0) {
 								prm.put("type_s", "params");
 								prm.put("id", String.format("%s/%d/prm", papp.getDocumentUUID(), e.getIdresult()));
+								prm.put("document_uuid_s", papp.getDocumentUUID());
 								_childParams_.add(prm);
 							}
 							if (summaryMeasurement != null)
@@ -327,14 +337,19 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 									prmc = SubstanceStudyParser.parseConditions(dx, e.getConditions().toString());
 								if (prmc.size() > 0) {
 									prmc = solarize(prmc);
-									prmc.put("type_s", "conditions");
-									prmc.put("id", String.format("%s/%d/cn", papp.getDocumentUUID(), e.getIdresult()));
-									_childParams_.add(prmc);
+									if (prmc.size() > 0) {
+										prmc.put("type_s", "conditions");
+										prmc.put("id",
+												String.format("%s/%d/cn", papp.getDocumentUUID(), e.getIdresult()));
+										prmc.put("document_uuid_s", papp.getDocumentUUID());
+										prmc.put("effectid_hs", effectid);
+										_childParams_.add(prmc);
+									}
 								}
 							}
 
 							if (papp.getDocumentUUID() != null)
-								study.put("id", String.format("%s/%d", papp.getDocumentUUID(), e.getIdresult()));
+								study.put("id", effectid);
 							_childDocuments_.add(study);
 							study.put("_childDocuments_", _childParams_);
 
@@ -363,7 +378,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			}
 
 			bucket.put("_childDocuments_", _childDocuments_);
-
+			bucket.put(header_dbtag, dbTag);
 			/*
 			 * if (ids != null) for (Bucket id : ids) _childDocuments_.add(id);
 			 */
@@ -398,6 +413,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 
 	protected IParams solarize(IParams prm) {
 		IParams newprm = new Params();
+		if (prm!=null)
 		for (Object key : prm.keySet()) {
 			Object value = prm.get(key);
 			if (value == null)
@@ -452,13 +468,13 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 		bcomposition.put(header_component, ctype);
 		bcomposition.put("COMPOSITION", component.getName());
 		if (component.getSecondStructure().getSmiles() != null)
-			bcomposition.put("SMILES", component.getSecondStructure().getSmiles());
+			bcomposition.put("SMILES_s", component.getSecondStructure().getSmiles());
 
 		if (component.getSecondStructure().getInchi() != null)
-			bcomposition.put("InChI", component.getSecondStructure().getInchi());
+			bcomposition.put("InChI_s", component.getSecondStructure().getInchi());
 
 		if (component.getSecondStructure().getInchiKey() != null)
-			bcomposition.put("InChIKey", component.getSecondStructure().getInchiKey());
+			bcomposition.put("InChIKey_s", component.getSecondStructure().getInchiKey());
 
 		for (Property p : component.getSecondStructure().getRecordProperties()) {
 			if (p.getLabel().indexOf("UUID") >= 0)
@@ -490,7 +506,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 		bucket.put("type_s", "substance");
 		bucket.put("id", record.getSubstanceUUID());
 
-		bucket.put(ns("content", hasSuffix, suffix), record.getContent());
+		// bucket.put(ns("content", hasSuffix, suffix), record.getContent());
 	}
 
 	protected Bucket externalids2Bucket(ExternalIdentifier id) {
@@ -578,8 +594,9 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			if (e.getTextValue().toString().startsWith("{")) {
 				IParams nonzero = SubstanceStudyParser.parseTextValueProteomics(dx, e.getTextValue().toString());
 				bucket.put(catchall4search, nonzero);
-			} else
+			} else {
 				bucket.put(catchall4search, e.getTextValue());
+			}	
 
 	}
 
@@ -608,12 +625,13 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	protected void iparams2bucket(IParams params, Bucket bucket, String key, String prefix) {
 		bucket.put(key, params);
 	}
-	/**
 
+	/**
+	 * 
 	 * @return
 	 */
 	protected String getSummaryLabel() {
-		
+
 		return String.format("SUMMARY.%s_hss", summaryMeasurement);
 	}
 

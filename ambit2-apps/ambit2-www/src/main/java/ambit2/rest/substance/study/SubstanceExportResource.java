@@ -49,6 +49,7 @@ public class SubstanceExportResource<Q extends IQueryRetrieval<SubstanceRecord>,
 
 	protected _JSON_MODE jsonmode = _JSON_MODE.experiment;
 	protected String summaryMeasurement = null;
+	protected String dbTag = "ENM";
 
 	@Override
 	public String getTemplateName() {
@@ -70,6 +71,12 @@ public class SubstanceExportResource<Q extends IQueryRetrieval<SubstanceRecord>,
 		} catch (Exception x) {
 			summaryMeasurement = null;
 		}
+		try {
+			dbTag = form.getFirstValue("dbtag")
+					.toUpperCase();
+		} catch (Exception x) {
+			dbTag = "ENM";
+		}		
 		return super.createQuery(context, request, response);
 	}
 
@@ -126,7 +133,7 @@ public class SubstanceExportResource<Q extends IQueryRetrieval<SubstanceRecord>,
 		getCompositionProcessors(chain);
 		return new OutputWriterConvertor<SubstanceRecord, Q>(
 				(QueryAbstractReporter<SubstanceRecord, Q, Writer>) new Substance2BucketJsonReporter(
-						command, chain, jsonmode, summaryMeasurement),
+						command, chain, jsonmode, summaryMeasurement, dbTag),
 				jsonpcallback == null ? MediaType.APPLICATION_JSON
 						: MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);
 
