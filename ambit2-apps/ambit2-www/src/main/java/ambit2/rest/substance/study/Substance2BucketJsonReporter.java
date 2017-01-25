@@ -272,6 +272,9 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 						continue;
 					if ("COD ID".equals(id.getSystemDesignator())) {
 						xids.add(String.format("http://www.crystallography.net/cod/%s.html", id.getSystemIdentifier()));
+					} else if (id.getSystemIdentifier().indexOf("{cananohome}") >= 0) {
+						xids.add(id.getSystemIdentifier().replace("{cananohome}",
+								"https://cananolab.nci.nih.gov/caNanoLab/#"));
 					} else if (id.getSystemIdentifier().startsWith("http"))
 						xids.add(id.getSystemIdentifier());
 					// ids.add(externalids2Bucket(id));
@@ -413,20 +416,20 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 
 	protected IParams solarize(IParams prm) {
 		IParams newprm = new Params();
-		if (prm!=null)
-		for (Object key : prm.keySet()) {
-			Object value = prm.get(key);
-			if (value == null)
-				continue;
-			if (value instanceof Value) {
-				Value v = (Value) value;
-				Object unit = v.getUnits();
-				value = v.getLoValue();
-				newprm.put(String.format("%s%s_s", key.toString(), unit == null ? "" : ("_" + unit)), value);
-			} else
-				newprm.put(key.toString() + "_s", value.toString());
+		if (prm != null)
+			for (Object key : prm.keySet()) {
+				Object value = prm.get(key);
+				if (value == null)
+					continue;
+				if (value instanceof Value) {
+					Value v = (Value) value;
+					Object unit = v.getUnits();
+					value = v.getLoValue();
+					newprm.put(String.format("%s%s_s", key.toString(), unit == null ? "" : ("_" + unit)), value);
+				} else
+					newprm.put(key.toString() + "_s", value.toString());
 
-		}
+			}
 		return newprm;
 	}
 
@@ -546,7 +549,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			bucket.put(ns("category", suffix, "_ancestor_path"),
 					String.format("%s/%s", protocol.getTopCategory(), protocol.getCategory()));
 
-		bucket.put(ns("endpoint", suffix, "_s"), protocol.getEndpoint().toUpperCase());
+		if (protocol.getEndpoint() != null)
+			bucket.put(ns("endpoint", suffix, "_s"), protocol.getEndpoint().toUpperCase());
 		if (protocol.getGuideline() != null && protocol.getGuideline().get(0) != null
 				&& !"".equals(protocol.getGuideline().get(0)))
 			bucket.put(ns("guidance", suffix, "_s"), protocol.getGuideline().get(0).toUpperCase());
@@ -596,7 +600,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 				bucket.put(catchall4search, nonzero);
 			} else {
 				bucket.put(catchall4search, e.getTextValue());
-			}	
+			}
 
 	}
 
