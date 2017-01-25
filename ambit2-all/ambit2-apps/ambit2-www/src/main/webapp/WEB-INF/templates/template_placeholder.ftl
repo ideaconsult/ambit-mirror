@@ -33,7 +33,7 @@ $(document).ready(function() {
 									+ '</select> templates.'
 						}
 						});
-	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/datatemplate" title="Templates">Data templates</a></li>');
+	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/datatemplate" title="Templates">Data entry templates</a></li>');
 	jQuery("#breadCrumb").jBreadCrumb();
 	downloadForm("${ambit_request}");
 	loadHelp("${ambit_root}","datatemplate");
@@ -169,8 +169,6 @@ $(document).ready(function() {
 		<div class="two columns remove-bottom" style="padding:0;" >
 
 		<!-- help-->		
-		Generates XLSX templates for data entry.  Help TBD
-		
 		<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
 		<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
 		</div>

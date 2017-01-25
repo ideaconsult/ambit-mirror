@@ -45,7 +45,7 @@ $(document)
 		<label class='eight columns alpha'>&nbsp;</label>
 		<div class='three columns omega'>&nbsp;</div>
 		<div class='five columns omega'>
-			<a title='AMBIT registration' target=_blank href='${ambit_root}/register' class='h5' >Create an AMBIT account</a>
+			<a title='AMBIT registration' target=_blank href='${ambit_root}/register' class='h5' >Create an account</a>
 		</div>		
 		</div>
 		
