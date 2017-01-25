@@ -1,4 +1,4 @@
-<div class='helptitle' style='font-weight:bold;'>AMBIT Registration</div>
+<div class='helptitle' style='font-weight:bold;'>User registration</div>
 <div class='helpcontent'>
 Upon registration you will receive a confirmation email with a link to AMBIT to complete your registration.
 The link will be valid for 48h. 

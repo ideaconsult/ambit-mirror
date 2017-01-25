@@ -103,7 +103,7 @@ jQuery(document).ready(function()
 		================================================== -->
 		<div class="eleven columns add-bottom" style="padding:0;" >	
 		
-		<div class='ui-widget-header ui-corner-top'>&nbsp;AMBIT Registration</div>
+		<div class='ui-widget-header ui-corner-top'>&nbsp;${custom_title!"AMBIT"} Registration</div>
 	    <div class='ui-widget-content ui-corner-bottom'>	
 				
 			<div style="margin:5px;padding:5px;">	

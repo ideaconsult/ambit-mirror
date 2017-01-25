@@ -13,7 +13,8 @@
         "text/x-arff",
         "text/x-arff-3col",
         "application/ld+json",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"        
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/isa+json"        
     ],		
     "resourcePath": "/bundle",
 	"apis": [

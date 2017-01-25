@@ -1,6 +1,6 @@
 <div class='helptitle' style='font-weight:bold;'>AMBIT Log in</div>
 <div class='helpcontent'>
-Please enter your AMBIT credentials. If you do not have an AMBIT user, please use the <a href="${ambit_root}/register">Create AMBIT user</a> link.
+Please enter your ${custom_title!"AMBIT"} credentials. If you do not have an AMBIT user, please use the <a href="${ambit_root}/register">Create an account</a> link.
 </div>
 
 <div id="keys" style="display:none;">
