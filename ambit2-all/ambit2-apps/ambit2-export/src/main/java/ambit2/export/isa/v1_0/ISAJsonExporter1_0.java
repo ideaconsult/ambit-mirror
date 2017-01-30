@@ -149,8 +149,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		isaMapper.setTargetDataObject(investigation); // The data is put
 														// (mapped) into
 														// investigation object
-		initExternalDataFile();
-		//extDataManager = new ExternalDataFileManager(extDataFile, ISAConst.DataFileFormat.TEXT_TAB);
+		initExternalDataFile();		
 		ontologyManager = new OntologyManager1_0();
 
 		handleBundle(endpointBundle);
@@ -168,11 +167,15 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		}
 
 		saveDataToOutputDir();
+		
+		if (extDataManager != null)
+			extDataManager.close();
 	}
 	
 	void initExternalDataFile() throws Exception
 	{
-		//extDataManager = new ExternalDataFileManager(extDataFile, ISAConst.DataFileFormat.TEXT_TAB);
+		if (externalDataFile != null)
+			extDataManager = new ExternalDataFileManager(externalDataFile, ISAConst.DataFileFormat.TEXT_TAB);
 	}	
 
 	void handleBundle(SubstanceEndpointsBundle endpointBundle) throws Exception {

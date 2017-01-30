@@ -62,7 +62,7 @@ public class ISAJsonTestUtils {
 	
 	
 	public static void testJsonExport(Iterator<SubstanceRecord> records,
-			File outputDir, ISAJsonExportConfig cfg,
+			File outputDir, ISAJsonExportConfig cfg, File externalDataFile,
 			SubstanceEndpointsBundle endpointBundle) throws Exception {
 		
 		ISAJsonExporter1_0 exporter = new ISAJsonExporter1_0(outputDir, cfg);
