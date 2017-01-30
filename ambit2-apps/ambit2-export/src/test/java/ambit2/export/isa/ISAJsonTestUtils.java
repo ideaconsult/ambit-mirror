@@ -67,6 +67,7 @@ public class ISAJsonTestUtils {
 		
 		ISAJsonExporter1_0 exporter = new ISAJsonExporter1_0(outputDir, cfg);
 		exporter.setOutputDir(outputDir);
+		exporter.setExternalDataFile(externalDataFile);
 		
 		exporter.export(endpointBundle, records);
 		System.out.println(exporter.getResultAsJson());
