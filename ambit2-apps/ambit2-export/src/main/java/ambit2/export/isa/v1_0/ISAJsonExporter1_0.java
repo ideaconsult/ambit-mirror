@@ -63,7 +63,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 	private File outputDir = null;
 	private File exportConfig = null;
 	private File xmlISAConfig = null;
-	private File extDataFile = null;
+	private File externalDataFile = null;
 	private ExternalDataFileManager extDataManager = null;
 	private OntologyManager1_0 ontologyManager = null;
 
@@ -106,6 +106,14 @@ public class ISAJsonExporter1_0 implements IISAExport,
 	public File getOutputDir() {
 		return outputDir;
 	}
+	
+	public void setExternalDataFile(File externalDataFile){
+		this.externalDataFile = externalDataFile; 
+	}
+	
+	public File getExternalDataFile() {
+		return externalDataFile; 
+	}
 
 	public void setOutputDir(File outputDir) {
 		this.outputDir = outputDir;
@@ -141,7 +149,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		isaMapper.setTargetDataObject(investigation); // The data is put
 														// (mapped) into
 														// investigation object
-		setExternalDataFile();
+		initExternalDataFile();
 		//extDataManager = new ExternalDataFileManager(extDataFile, ISAConst.DataFileFormat.TEXT_TAB);
 		ontologyManager = new OntologyManager1_0();
 
@@ -161,10 +169,11 @@ public class ISAJsonExporter1_0 implements IISAExport,
 
 		saveDataToOutputDir();
 	}
-
-	void setExternalDataFile() throws Exception {
-		// TODO
-	}
+	
+	void initExternalDataFile() throws Exception
+	{
+		//extDataManager = new ExternalDataFileManager(extDataFile, ISAConst.DataFileFormat.TEXT_TAB);
+	}	
 
 	void handleBundle(SubstanceEndpointsBundle endpointBundle) throws Exception {
 		if (endpointBundle == null)
