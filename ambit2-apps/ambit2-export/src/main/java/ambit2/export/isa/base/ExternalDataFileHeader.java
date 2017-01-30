@@ -10,7 +10,8 @@ public class ExternalDataFileHeader
 	public static ExternalDataFileHeader getDeafultExternalDataFileHeader()
 	{
 		ExternalDataFileHeader edfh = new ExternalDataFileHeader();
-		edfh.fieldNames.add("RecordNumber");
+		edfh.fieldNames.add("Record_Number");
+		edfh.fieldNames.add("ISA_Location");
 		edfh.fieldNames.add("Data");
 		return edfh;
 	}

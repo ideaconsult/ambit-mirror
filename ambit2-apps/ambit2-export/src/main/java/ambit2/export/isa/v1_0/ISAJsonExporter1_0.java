@@ -22,6 +22,7 @@ import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.base.relation.composition.Proportion;
 import ambit2.export.isa.IISAExport;
+import ambit2.export.isa.base.ExternalDataFileHeader;
 import ambit2.export.isa.base.ExternalDataFileManager;
 import ambit2.export.isa.base.ISAConst;
 import ambit2.export.isa.base.ISAConst.ISAFormat;
@@ -175,7 +176,11 @@ public class ISAJsonExporter1_0 implements IISAExport,
 	void initExternalDataFile() throws Exception
 	{
 		if (externalDataFile != null)
+		{	
 			extDataManager = new ExternalDataFileManager(externalDataFile, ISAConst.DataFileFormat.TEXT_TAB);
+			if (cfg.FlagUsedDeafultExtDataFileHeader)
+				extDataManager.setFileHeader(ExternalDataFileHeader.getDeafultExternalDataFileHeader());
+		}	
 	}	
 
 	void handleBundle(SubstanceEndpointsBundle endpointBundle) throws Exception {
