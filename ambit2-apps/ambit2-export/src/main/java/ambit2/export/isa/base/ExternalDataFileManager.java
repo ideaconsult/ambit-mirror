@@ -51,9 +51,12 @@ public class ExternalDataFileManager
 			throw new Exception("Output file/dir is null!");
 		
 		fileWriter = createWriter(outputDir);
-		//Set file header
 		
-		
+		initFileHeader();
+	}
+	
+	void initFileHeader() throws Exception {
+		//TODO
 	}
 	
 	public File getOutputDir() {
