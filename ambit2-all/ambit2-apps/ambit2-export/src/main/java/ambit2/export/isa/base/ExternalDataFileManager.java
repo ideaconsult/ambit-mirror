@@ -67,6 +67,10 @@ public class ExternalDataFileManager
 		return fileHeader;
 	}
 	
+	public void setFileHeader(ExternalDataFileHeader fileHeader) {
+		this.fileHeader = fileHeader;
+	}
+	
 	public DataFileFormat getDataFileFormat() {
 		return dataFileFormat;
 	}

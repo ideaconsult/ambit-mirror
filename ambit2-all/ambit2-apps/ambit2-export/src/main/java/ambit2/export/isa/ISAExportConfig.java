@@ -48,6 +48,7 @@ public class ISAExportConfig
 	public boolean FlagExportRelationAsConstituentCharacteristics = true;
 	public boolean FlagExportStrucTypeAsConstituentCharacteristics = false;
 	
+	public boolean FlagUsedDeafultExtDataFileHeader = true;
 	
 	
 	
