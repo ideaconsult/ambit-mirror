@@ -96,12 +96,12 @@ public class ExternalDataFileManager
 		return null;
 	}
 	
-	public void finalizeRecord()
+	public void finalizeRecord() throws Exception
 	{
 		finalizeRecord(false);
 	}
 	
-	public void finalizeRecord(boolean FinalizeIfEmpty)
+	public void finalizeRecord(boolean FinalizeIfEmpty) throws Exception
 	{
 		if (currentRecord.isEmpty())
 			if (!FinalizeIfEmpty)
@@ -110,23 +110,33 @@ public class ExternalDataFileManager
 		switch (storageMode)
 		{
 		case DIRECT_FILE_STORAGE:
-			if (fileWriter != null)
-			{
-				//TODO
-			}
+			finalizeRecordInFile();
 			break;
 			
 		case STRING_BUFFER:
+			for (int i = 0; i < currentRecord.size(); i++)
+			{	
+				strBuffer.append(currentRecord.get(i).toString());
+				if (i < currentRecord.size()-1)
+					strBuffer.append(splitter);
+			}
 			break;
 		
 		case ARRAY_BUFFER:
+			arrayBuffer.add(currentRecord);
 			break;
-			
-			//TODO
 		}
 		currentRecord.clear();
 	}
 	
+	public void finalizeRecordInFile() throws Exception
+	{
+		if (fileWriter != null)
+		{	
+			fileWriter.write("test--");
+			//TODO
+		}
+	}
 	
 	public String getDataStringBuffer()
 	{
