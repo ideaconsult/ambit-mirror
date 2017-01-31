@@ -52,8 +52,8 @@ public class ExternalDataFileManager
 			throw new Exception("Output file/dir is null!");
 		
 		fileWriter = createWriter(outputDir);
-		
 		initFileHeader();
+		//storeData("test1");  finalizeRecord(); storeData("test2");  finalizeRecord();
 	}
 	
 	void initFileHeader() throws Exception {
@@ -91,10 +91,20 @@ public class ExternalDataFileManager
 			closeWriter(fileWriter);
 	}
 	
+	public void simpleStoreData(Object obj)
+	{
+		//Just store data
+		currentRecord.add(obj);
+	}
+	
 	public ExternalDataFileLocation storeData(Object obj)
 	{
-		//TODO
-		return null;
+		currentRecord.add(obj);
+		ExternalDataFileLocation edfl = new ExternalDataFileLocation();
+		edfl.fileName = "";
+		edfl.recordIndex = currentRecordNum;
+		edfl.elementIndex = currentRecord.size();
+		return edfl;
 	}
 	
 	public void finalizeRecord() throws Exception
@@ -127,7 +137,14 @@ public class ExternalDataFileManager
 			arrayBuffer.add(currentRecord);
 			break;
 		}
+		
 		currentRecord.clear();
+		nextRecordNum();
+	}
+	
+	void nextRecordNum()
+	{
+		currentRecordNum++;
 	}
 	
 	public void finalizeRecordInFile() throws Exception
