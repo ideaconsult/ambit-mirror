@@ -22,6 +22,7 @@ public class ExternalDataFileManager
 	protected StringBuffer strBuffer = null;
 	protected FileWriter fileWriter = null;
 	protected String splitter = "\t";
+	protected String endLine = System.getProperty("line.separator");
 	
 	protected int currentRecordNum = 1;
 	protected List<Object> currentRecord = new ArrayList<Object>();
@@ -133,8 +134,16 @@ public class ExternalDataFileManager
 	{
 		if (fileWriter != null)
 		{	
-			fileWriter.write("test--");
-			//TODO
+			StringBuffer s = new StringBuffer();
+			for (int i = 0; i < currentRecord.size(); i++)
+			{	
+				s.append(currentRecord.get(i).toString());
+				if (i < currentRecord.size()-1)
+					s.append(splitter);
+			}
+			s.append(endLine);
+			fileWriter.write(s.toString());
+			fileWriter.flush();
 		}
 	}
 	
