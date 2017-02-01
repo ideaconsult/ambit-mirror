@@ -87,6 +87,12 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		setOutputDir(outputDir);
 		this.cfg = cfg;
 	}
+	
+	public ISAJsonExporter1_0(File outputDir, ISAJsonExportConfig cfg, File extDataFile) {
+		setOutputDir(outputDir);
+		setExternalDataFile(extDataFile);
+		this.cfg = cfg;
+	}
 
 	public File getExportJsonConfig() {
 		return exportConfig;
@@ -177,7 +183,7 @@ public class ISAJsonExporter1_0 implements IISAExport,
 	{
 		if (externalDataFile != null)
 		{	
-			extDataManager = new ExternalDataFileManager(externalDataFile, ISAConst.DataFileFormat.TEXT_TAB);
+			extDataManager = new ExternalDataFileManager(externalDataFile, cfg.extDataFileType);
 			if (cfg.FlagUsedDeafultExtDataFileHeader)
 				extDataManager.setFileHeader(ExternalDataFileHeader.getDeafultExternalDataFileHeader());
 		}	

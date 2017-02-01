@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import ambit2.export.isa.base.ISAConst.DataFileFormat;
 import ambit2.export.isa.base.ISAConst.ISAFormat;
 import ambit2.export.isa.base.ISAConst.ISAVersion;
+import ambit2.export.isa.base.ISAConst;
 import ambit2.export.isa.base.ISALocation;
 
 
@@ -49,6 +50,7 @@ public class ISAExportConfig
 	public boolean FlagExportStrucTypeAsConstituentCharacteristics = false;
 	
 	public boolean FlagUsedDeafultExtDataFileHeader = true;
+	public ISAConst.DataFileFormat extDataFileType = ISAConst.DataFileFormat.TEXT_TAB;
 	
 	
 	
