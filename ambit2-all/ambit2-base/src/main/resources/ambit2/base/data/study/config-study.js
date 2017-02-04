@@ -3968,7 +3968,7 @@
 				}
 			},
 			"conditions": {
-				"concentrations": {
+				"concentration": {
 					"inMatrix": true,
 					"bVisible": true,
 					"sTitle": "Concentration",
