@@ -3715,19 +3715,31 @@
 				},
 				"result": {
 					"inMatrix": true,
-					"iOrder": -5
+					"iOrder": -3
 				},
 				"text": {
 					"bVisible": false
 				}
 			},
 			"conditions": {
-				"doses/concentrations": {
+				"concentration": {
 					"inMatrix": true,
 					"bVisible": true,
 					"sTitle": "Concentration",
 					"iOrder": -6
-				}
+				},
+				"time point": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Time Point",
+					"iOrder": -5
+				},
+				"replicate": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Replicate",
+					"iOrder": -4
+				}				
 			},
 			"protocol": {
 				"citation": {
@@ -3744,7 +3756,7 @@
 				},
 				"guideline": {
 					"inMatrix": true,
-					"iOrder": -3,
+					"iOrder": -2,
 					"sTitle": "Guideline"
 				}
 			},
@@ -3945,7 +3957,7 @@
 			"effects": {
 				"endpoint": {
 					"inMatrix": true,
-					"iOrder": -7
+					"iOrder": -3
 				},
 				"result": {
 					"inMatrix": true,
@@ -3956,11 +3968,23 @@
 				}
 			},
 			"conditions": {
-				"doses/concentrations": {
+				"concentrations": {
 					"inMatrix": true,
 					"bVisible": true,
 					"sTitle": "Concentration",
 					"iOrder": -6
+				},
+				"time point": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Time Point",
+					"iOrder": -5
+				},
+				"replicate": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Replicate",
+					"iOrder": -4
 				}
 			},
 			"protocol": {
@@ -3978,7 +4002,7 @@
 				},
 				"guideline": {
 					"inMatrix": true,
-					"iOrder": -3,
+					"iOrder": -2,
 					"sTitle": "Guideline"
 				}
 			},
