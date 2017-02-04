@@ -417,7 +417,7 @@ public class TestStudyExportFormatting {
 					break;
 				}
 				case NPO_1709_SECTION: {
-					Assert.assertEquals("endpoint =textValue [Guideline] (doses/concentrations=  20  UNIT)", result);
+					Assert.assertEquals("endpoint =textValue [Guideline] (concentration=  20  UNIT ,replicate=  20  UNIT ,time point=  20  UNIT)",result); 
 					break;
 				}
 				case NPO_1911_SECTION: {
@@ -840,8 +840,7 @@ public class TestStudyExportFormatting {
 					break;
 				}
 				case NPO_1709_SECTION: {
-					Assert.assertEquals("endpoint =ca. 3.14  mg [Guideline] (doses/concentrations=  20  UNIT)", result);
-					break;
+					Assert.assertEquals("endpoint =ca. 3.14  mg [Guideline] (concentration=  20  UNIT ,replicate=  20  UNIT ,time point=  20  UNIT)",result); break; 
 				}
 				case NPO_1911_SECTION: {
 					Assert.assertEquals("endpoint =ca. 3.14  mg", result);
