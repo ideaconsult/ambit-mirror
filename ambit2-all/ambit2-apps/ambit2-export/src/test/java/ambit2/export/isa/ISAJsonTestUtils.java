@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 
 import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.study.test.TestSubstanceFactory;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.export.isa.base.ISALocation;
@@ -141,6 +143,35 @@ public class ISAJsonTestUtils {
 
 		// ObjectWriter.withSchema(FormatSchema schema)
 
+	}
+	
+	public static void addTestEffectRecords(ProtocolApplication pa)
+	{
+		EffectRecord eff0 = new EffectRecord();
+		eff0.setLoValue(345);
+		eff0.setLoQualifier("<=");
+		eff0.setUnit("nm");
+		pa.addEffect(eff0);
+		
+		eff0 = new EffectRecord();
+		eff0.setUpValue(123.4);
+		eff0.setUpQualifier(">");
+		eff0.setErrorValue(11.1);
+		eff0.setErrQualifier("~");
+		eff0.setUnit("nm");
+		pa.addEffect(eff0);
+		
+		eff0 = new EffectRecord();
+		eff0.setUpValue(333);
+		eff0.setUpQualifier("mean");
+		eff0.setErrorValue(11.1);
+		eff0.setErrQualifier("sd");
+		eff0.setUnit("nm");
+		pa.addEffect(eff0);
+		
+		eff0 = new EffectRecord();
+		eff0.setTextValue("NA");
+		pa.addEffect(eff0);
 	}
 
 	static class TestClass01 {
