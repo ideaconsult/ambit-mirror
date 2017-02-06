@@ -623,10 +623,29 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		}
 
 		// Store data to external data file
-		// String identifier =
-		// extDataManager.storeData(effect.getTextValue()).getLocationAsIdentifier();
-
-		// TODO
+		if (extDataManager != null)
+		{	
+			String extIdentifier = storeEffectValueToExternalFile(effect);
+			if (extIdentifier != null)
+				sample2.id = new URI(extIdentifier);
+		}
+		
+	}
+	
+	String storeEffectValueToExternalFile(EffectRecord effect) throws Exception
+	{
+		String locId = null;
+		if (effect.getLoValue() != null)
+			locId = extDataManager.storeData(effect.getLoValue()).getLocationAsIdentifier();
+		
+		if (effect.getUnit() != null)
+			extDataManager.storeData(effect.getUnit());
+		
+		//TODO
+		
+		//extDataManager.storeData(effect.getTextValue()).getLocationAsIdentifier();
+		extDataManager.finalizeRecord();
+		return locId;
 	}
 
 	void storeConditionsAsFactors(EffectRecord effect, Sample sample) {

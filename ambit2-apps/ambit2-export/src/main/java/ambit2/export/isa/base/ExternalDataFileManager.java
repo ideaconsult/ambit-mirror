@@ -171,7 +171,9 @@ public class ExternalDataFileManager
 			StringBuffer s = new StringBuffer();
 			for (int i = 0; i < currentRecord.size(); i++)
 			{	
-				s.append(currentRecord.get(i).toString());
+				Object o = currentRecord.get(i);
+				if (o != null)
+					s.append(o.toString());
 				if (i < currentRecord.size()-1)
 					s.append(splitter);
 			}
