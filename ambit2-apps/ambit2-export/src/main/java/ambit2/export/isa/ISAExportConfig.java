@@ -49,7 +49,8 @@ public class ISAExportConfig
 	public boolean FlagExportRelationAsConstituentCharacteristics = true;
 	public boolean FlagExportStrucTypeAsConstituentCharacteristics = false;
 	
-	public boolean FlagUsedDeafultExtDataFileHeader = true;
+	public boolean FlagUseDeafultExtDataFileHeader = true;
+	public boolean FlagUseAbsolutePathForExternalDataFileLocation = false;
 	public ISAConst.DataFileFormat extDataFileType = ISAConst.DataFileFormat.TEXT_TAB;
 	
 	

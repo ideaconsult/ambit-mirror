@@ -20,9 +20,12 @@ public class ExternalDataFileManager
 	
 	protected List<List<Object>> arrayBuffer = new ArrayList<List<Object>>();
 	protected StringBuffer strBuffer = null;
+	
 	protected FileWriter fileWriter = null;
 	protected String splitter = "\t";
 	protected String endLine = System.getProperty("line.separator");
+	
+	protected boolean FlagUseAbsolutePathForFileLocation = false;
 	
 	protected int currentRecordNum = 1;
 	protected List<Object> currentRecord = new ArrayList<Object>();
@@ -84,6 +87,15 @@ public class ExternalDataFileManager
 		this.storageMode = storageMode;
 	}
 	
+	public boolean isFlagUseAbsolutePathForFileLocation() {
+		return FlagUseAbsolutePathForFileLocation;
+	}
+
+	public void setFlagUseAbsolutePathForFileLocation(
+			boolean flagUseAbsolutePathForFileLocation) {
+		FlagUseAbsolutePathForFileLocation = flagUseAbsolutePathForFileLocation;
+	}
+	
 	public void close() throws Exception
 	{
 		finalizeRecord();
@@ -101,9 +113,14 @@ public class ExternalDataFileManager
 	{
 		currentRecord.add(obj);
 		ExternalDataFileLocation edfl = new ExternalDataFileLocation();
-		edfl.fileName = "";
+		if (FlagUseAbsolutePathForFileLocation)
+			edfl.fileName = outputDir.getAbsolutePath();
+		else
+			edfl.fileName = outputDir.getName();
+		
 		edfl.recordIndex = currentRecordNum;
 		edfl.elementIndex = currentRecord.size();
+		//System.out.println(edfl.getLocationAsIdentifier());
 		return edfl;
 	}
 	
