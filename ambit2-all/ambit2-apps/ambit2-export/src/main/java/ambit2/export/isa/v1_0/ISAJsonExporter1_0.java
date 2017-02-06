@@ -184,8 +184,10 @@ public class ISAJsonExporter1_0 implements IISAExport,
 		if (externalDataFile != null)
 		{	
 			extDataManager = new ExternalDataFileManager(externalDataFile, cfg.extDataFileType);
-			if (cfg.FlagUsedDeafultExtDataFileHeader)
+			if (cfg.FlagUseDeafultExtDataFileHeader)
 				extDataManager.setFileHeader(ExternalDataFileHeader.getDeafultExternalDataFileHeader());
+			
+			extDataManager.setFlagUseAbsolutePathForFileLocation(cfg.FlagUseAbsolutePathForExternalDataFileLocation);
 		}	
 	}	
 
