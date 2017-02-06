@@ -635,15 +635,57 @@ public class ISAJsonExporter1_0 implements IISAExport,
 	String storeEffectValueToExternalFile(EffectRecord effect) throws Exception
 	{
 		String locId = null;
-		if (effect.getLoValue() != null)
-			locId = extDataManager.storeData(effect.getLoValue()).getLocationAsIdentifier();
+		Object value = null;
+		Object error = "";
 		
+		if (effect.getLoValue() != null)
+		{	
+			if (effect.getUpValue() != null)
+				value = "" + effect.getLoValue() + "," + effect.getUpValue();
+			else
+			{
+				if (effect.getLoQualifier() != null)
+					value = "" + effect.getLoQualifier() + " " + effect.getLoValue();
+				else
+					value = effect.getLoValue();
+			}
+		}
+		else
+			if (effect.getUpValue() != null)
+			{
+				if (effect.getUpQualifier() != null)
+					value = "" + effect.getUpQualifier() + " " + effect.getUpValue();
+				else
+					value = effect.getUpValue();
+			}
+			else
+				if (effect.getTextValue() != null)
+				{
+					value = effect.getTextValue();
+				}
+				else
+					return null; //no value stored
+				
+		
+		locId = extDataManager.storeData(value).getRecordLocationAsIdentifier();
+		
+		
+		//Store error
+		if (effect.getErrorValue() != null)
+		{
+			if (effect.getErrQualifier() != null)
+				error = "" + effect.getErrQualifier() + " " + effect.getErrorValue();
+			else
+				error = effect.getErrorValue();
+		}
+		extDataManager.storeData(error);
+
+		//Store unit
 		if (effect.getUnit() != null)
 			extDataManager.storeData(effect.getUnit());
-		
-		//TODO
-		
-		//extDataManager.storeData(effect.getTextValue()).getLocationAsIdentifier();
+		else
+			extDataManager.storeData("");
+			
 		extDataManager.finalizeRecord();
 		return locId;
 	}

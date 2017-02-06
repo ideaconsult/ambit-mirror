@@ -13,4 +13,9 @@ public class ExternalDataFileLocation
 	{
 		return "" + fileName + splitter + recordIndex + splitter + elementIndex;
 	}
+	
+	public String getRecordLocationAsIdentifier()
+	{
+		return "" + fileName + splitter + recordIndex;
+	}
 }
