@@ -124,6 +124,16 @@ public class ExternalDataFileManager
 		return edfl;
 	}
 	
+	public void storeRecordNum(String prefix)
+	{
+		Object obj;
+		if (prefix != null)
+			obj = prefix + currentRecordNum;
+		else
+			obj = currentRecordNum;
+		currentRecord.add(obj);
+	}
+	
 	public void finalizeRecord() throws Exception
 	{
 		finalizeRecord(false);
