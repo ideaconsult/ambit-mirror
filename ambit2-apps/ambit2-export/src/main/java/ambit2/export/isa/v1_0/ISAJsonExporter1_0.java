@@ -666,10 +666,9 @@ public class ISAJsonExporter1_0 implements IISAExport,
 				else
 					return null; //no value stored
 				
-		
+		extDataManager.storeRecordNum("#");
 		locId = extDataManager.storeData(value).getRecordLocationAsIdentifier();
-		
-		
+				
 		//Store error
 		if (effect.getErrorValue() != null)
 		{
