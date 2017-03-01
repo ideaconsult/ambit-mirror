@@ -148,6 +148,13 @@ var config_study = {
 			"protocol" : config_npo["protocol"],
 			"interpretation" : config_npo["interpretation"]	
         },
+        "ENM_8000223_SECTION" : {
+        	"parameters" : config_npo["parameters"],
+			"effects" : config_npo["effects"],
+			"conditions" : config_npo["conditions"],			
+			"protocol" : config_npo["protocol"],
+			"interpretation" : config_npo["interpretation"]        	
+        },
         "ENM_9000011_SECTION" : {
 			"parameters" : config_npo["parameters"],
 			"effects" : config_npo["effects"],
@@ -183,12 +190,12 @@ var config_study = {
 			"protocol" : config_npo["protocol"],
 			"interpretation" : config_npo["interpretation"]	            
         },
-        "BAO_0002168_SECTION" : {
+        "BAO_0002189_SECTION" : {
 			"parameters" : config_bao["parameters"],
 			"effects" : config_bao["effects"],
 			"conditions" : config_bao["conditions"],			
 			"protocol" : config_bao["protocol"],
-			"interpretation" : config_bao["interpretation"]	        	
+			"interpretation" : config_bao["interpretation"]	            	
         },
         "BAO_0002167_SECTION" : {
 			"parameters" : config_bao["parameters"],
@@ -196,6 +203,20 @@ var config_study = {
 			"conditions" : config_bao["conditions"],			
 			"protocol" : config_bao["protocol"],
 			"interpretation" : config_bao["interpretation"]	          
+        },
+        "ENM_0000037_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	          
+        },        
+        "BAO_0002189" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	         	
         },
         "BAO_0002993_SECTION" : {
 			"parameters" : config_bao["parameters"],
@@ -806,7 +827,13 @@ var config_study = {
 			"conditions" : config_bao["conditions"],			
 			"protocol" : config_bao["protocol"],
 			"interpretation" : config_bao["interpretation"]	
-
+        },
+        "ENM_0000068_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	        	
         },
         "BAO_0002084_SECTION" : {
 			"parameters" : config_bao["parameters"],
