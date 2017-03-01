@@ -1659,6 +1659,32 @@ public class Protocol {
 				return "TOX";
 			}
 		},
+		ENM_0000068_SECTION {
+			@Override
+			public String toString() {
+				return "Cell Viability";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 83009;
+			}
+
+			@Override
+			public String getNumber() {
+				return "ENM_0000068";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://www.bioassayontology.org/bao#ENM_0000068";
+			}			
+		},
 		BAO_0003009_SECTION {
 			@Override
 			public String toString() {
@@ -1764,6 +1790,33 @@ public class Protocol {
 				return "http://www.bioassayontology.org/bao#BAO_0002167";
 			}
 
+		},
+		ENM_0000037_SECTION {
+			// to be merged with I5 category
+			@Override
+			public String toString() {
+				return "Oxidative Stress";
+			}
+
+			@Override
+			public String getNumber() {
+				return "ENM_0000037";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 82168;
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://www.bioassayontology.org/bao#ENM_0000037";
+			}			
 		},
 		BAO_0002168_SECTION {
 			// to be merged with I5 category
@@ -2133,6 +2186,59 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://purl.bioontology.org/ontology/npo#NPO_1709";
 			}
+		},
+
+		ENM_8000223_SECTION {
+			@Override
+			public String toString() {
+				return "Aerosol characterisation";
+			}
+
+			@Override
+			public String getNumber() {
+				return "ENM_8000223";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 82190;
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_8000223";
+			}			
+		},		
+		ENM_0000069_SECTION {
+			@Override
+			public String toString() {
+				return "Air Liquid Interface";
+			}
+
+			@Override
+			public String getNumber() {
+				return "ENM_9000011";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 82190;
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000069";
+			}			
 		},
 		
 		ENM_9000011_SECTION {

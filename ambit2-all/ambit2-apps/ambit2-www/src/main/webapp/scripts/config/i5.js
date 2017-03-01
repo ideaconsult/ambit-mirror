@@ -853,6 +853,7 @@ var config_i5 = {
 		        },
 		        "TO_GENETIC_IN_VIVO_SECTION": {
 		            "parameters": {
+		            	"bVisible": false,
 		                "type of study": {
 		                	"comment" : "copied to conditions",
 		                    "iOrder": -8,
@@ -873,6 +874,7 @@ var config_i5 = {
 		                }
 		            },
 		            "conditions": {
+		            	"bVisible": false,
 		                "type of study": {
 		                    "iOrder": -8,
 		                    "sTitle": "Study type",
@@ -887,15 +889,16 @@ var config_i5 = {
 		            },
 		            "effects": {
 		                "endpoint": {
-		                    "bVisible": false
+		                    "bVisible": true,
+		                    "iOrder": -3
 		                },
 		                "result": {
-		                    "bVisible": false,
-		                    "sTitle": "Genotoxicity",
+		                    "bVisible": true,
+		                    "sTitle": "Result",
 		                    "iOrder": -3
 		                },
 		                "text": {
-		                    "sTitle": "Genotoxicity",
+		                    "sTitle": "Result",
 		                    "bVisible": true,
 		                    "iOrder": -3
 		                }
