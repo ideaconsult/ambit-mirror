@@ -24,7 +24,11 @@ var config_bao = {
                  		sOut += "<li>" + title + ": ";
                  		try {
                  			if (v.loValue == undefined) sOut += v;
-                 			else sOut += v.loValue + " " + v.unit;
+                 			else {
+                 				sOut += v.loValue;
+                 				if (v.unit != undefined) 
+                 					sOut += " " + v.unit;
+                 			}
                  		} catch (err) {
                  			sOut += v;
                  		}
@@ -34,6 +38,9 @@ var config_bao = {
                  	return sOut;
                 }
             },
+            "reliability" : {
+            	"bVisible": false
+            },            
             "uuid" : {
              	 "bVisible": false
             },           

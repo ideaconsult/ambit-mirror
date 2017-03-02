@@ -1538,6 +1538,57 @@ public class Protocol {
 				return "P-CHEM";
 			}
 		},
+		ENM_0000081_SECTION {
+			@Override
+			public String toString() {
+				return "Batch Dispersion quality";
+			}
+
+			@Override
+			public String getNumber() {
+				return "ENM_0000081";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 4360;
+			}
+
+			public String getTopCategory() {
+				return "P-CHEM";
+			}	
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000081";
+			}
+		},
+		BAO_0002189_SECTION {
+			// to be merged with I5 category
+			@Override
+			public String toString() {
+				return "Toxicity Assay";
+			}
+
+			@Override
+			public String getNumber() {
+				return "BAO_0002189";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 82189;
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://www.bioassayontology.org/bao#BAO_0002189";
+			}
+		},		
 		UNKNOWN_TOXICITY_SECTION {
 			@Override
 			public String toString() {
@@ -1546,7 +1597,7 @@ public class Protocol {
 
 			@Override
 			public String getNumber() {
-				return "7.99";
+				return "BAO_0002189";
 			}
 
 			@Override
@@ -1556,6 +1607,10 @@ public class Protocol {
 
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://www.bioassayontology.org/bao#BAO_0002189";
 			}
 		},
 		SUPPORTING_INFO_SECTION {
@@ -1791,6 +1846,7 @@ public class Protocol {
 			}
 
 		},
+
 		ENM_0000037_SECTION {
 			// to be merged with I5 category
 			@Override
@@ -1845,33 +1901,6 @@ public class Protocol {
 				return "http://www.bioassayontology.org/bao#BAO_0002168";
 			}
 
-		},
-		BAO_0002189_SECTION {
-			// to be merged with I5 category
-			@Override
-			public String toString() {
-				return "Toxicity Assay";
-			}
-
-			@Override
-			public String getNumber() {
-				return "BAO_0002189";
-			}
-
-			@Override
-			public String getTopCategory() {
-				return "TOX";
-			}
-
-			@Override
-			public int getSortingOrder() {
-				return 82189;
-			}
-
-			@Override
-			public String getOntologyURI() {
-				return "http://www.bioassayontology.org/bao#BAO_0002189";
-			}
 		},
 		BAO_0002084_SECTION {
 			@Override

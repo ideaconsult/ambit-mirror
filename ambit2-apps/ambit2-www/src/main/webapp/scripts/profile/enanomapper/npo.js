@@ -23,8 +23,13 @@ var config_npo = {
                  		if ((v === undefined) || (v == null) || ("-" == v)) return "";                 		
                  		sOut += "<li>" + title + ": ";
                  		try {
+
                  			if (v.loValue == undefined) sOut += v;
-                 			else sOut += v.loValue + " " + v.unit;
+                 			else {
+                 				sOut += v.loValue;
+                 				if (v.unit != undefined) 
+                 					sOut += " " + v.unit;
+                 			}                 			
                  		} catch (err) {
                  			sOut += v;
                  		}
@@ -34,6 +39,9 @@ var config_npo = {
                  	return sOut;
                 }
             },
+            "reliability" : {
+            	"bVisible": false
+            },            
             "uuid" : {
              	 "bVisible": false
             },                
@@ -42,12 +50,13 @@ var config_npo = {
                 "iOrder" : -30,
                 "sTitle": "Reference",
                 "mRender" : function(data,type,full) {
-                	//var quri = "?type=citation&search=";
+                	//
                 	var uri = (data["title"]!=undefined) && (data["title"].startsWith("http"));
                 	if (uri) { 
                 		var sOut = (data["year"]==null || data["year"] == 0)?"URL":data["year"];
                 		return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
                 	} else {
+                		//var quri = "?type=citation&search=";
                 		var sOut = (data["year"]==null || data["year"] == 0)?"":("<br/>(" + data["year"] + ")");
                 		return (data["title"] + sOut);
                 	}	

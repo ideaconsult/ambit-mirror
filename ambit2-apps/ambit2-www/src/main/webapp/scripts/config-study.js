@@ -204,6 +204,13 @@ var config_study = {
 			"protocol" : config_bao["protocol"],
 			"interpretation" : config_bao["interpretation"]	          
         },
+        "ENM_0000081_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],			
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]	          
+        },
         "ENM_0000037_SECTION" : {
 			"parameters" : config_bao["parameters"],
 			"effects" : config_bao["effects"],
@@ -317,91 +324,9 @@ var config_study = {
 			"interpretation" : config_bao["interpretation"]	
 
         },
-        "ASPECT_RATIO_SHAPE_SECTION": {
-			"parameters" : config_bao["parameters"],
-			"effects" : config_bao["effects"],
-			"conditions" : config_bao["conditions"],			
-			"protocol" : config_bao["protocol"],
-		       "interpretation": {
-		            "result": {
-		                "inMatrix" : true,
-		                "bVisible": true
-		            },
-		            "criteria": {
-		                "bVisible": true
-		            }
-		        }	
-        },
-        "I5_ASPECT_RATIO_SHAPE_SECTION": {
-        	 "parameters": {
-                 "type of method": {
-                     "iOrder": -22
-                 },
-                 "method details": {
-                     "iOrder": -11,
-                     "bVisible": false
-                 },
-                 "sampling": {
-                     "iOrder": -9,
-                     "bVisible": false
-                 },
-                 "data_gathering_instruments": {
-                     "sTitle": "Instruments",
-                     "iOrder": -8,
-                     "bVisible": false
-                 }
-             },
-             "conditions": {
-                 "shape_descriptive": {
-                     "sTitle": "Shape",
-                     "iOrder": -19,
-                     "inMatrix" : true
-                 },
-                 "x": {
-                     "iOrder": -16,
-                     "inMatrix" : true
-                 },
-                 "y": {
-                     "iOrder": -15,
-                     "inMatrix" : true
-                 },
-                 "z": {
-                     "iOrder": -14,
-                     "inMatrix" : true                    
-                 }
-             },
-             "effects": {
-                 "endpoint": {
-                     "iOrder": -20,
-                     "inMatrix" : true
-                 },
-                 "result": {
-                     "iOrder": -18,
-                     "inMatrix" : true
-                 }
-             },
-            "protocol": {
-                "guideline": {
-                    "iOrder": -10,
-                    "inMatrix" : true
-                },
-                "citation": {
-                    "bVisible": true,
-                    "sTitle": "Reference",
-                    "iOrder": -11,
-                    "mRender" : function(data,type,full) {
-                    	var sOut = (data["year"]==null || data["year"] == 0)?"DOI":data["year"];
-                    	return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
-                    }
-                }
-            },
-            "interpretation": {
-                "result": {
-                    "sTitle": "Conclusions",
-                    "bVisible": false
-                }
-            }
-        },
+        "ASPECT_RATIO_SHAPE_SECTION": 
+        	config_i5["ASPECT_RATIO_SHAPE_SECTION"]
+        ,        
         "ZETA_POTENTIAL_SECTION": {
 			"parameters" : config_bao["parameters"],
 			"effects" : config_bao["effects"],
