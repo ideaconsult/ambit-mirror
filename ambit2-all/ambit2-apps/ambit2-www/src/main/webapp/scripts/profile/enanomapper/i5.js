@@ -364,7 +364,6 @@ var config_i5 = {
 	    			"conditions" : config_bao["conditions"],			
 	    			"protocol" : config_bao["protocol"],
 	    			"interpretation" : config_bao["interpretation"]	  
-
 		        },
 		        "ZETA_POTENTIAL_SECTION": {
 	    			"parameters" : config_bao["parameters"],
