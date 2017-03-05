@@ -64,6 +64,7 @@ import net.idea.restnet.c.ChemicalMediaType;
 import net.idea.restnet.c.StringConvertor;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>>
 		extends SubstanceByOwnerResource<Q> {
@@ -470,9 +471,11 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 		if (jsonpcallback == null)
 			jsonpcallback = getParams().getFirstValue("callback");
 
+		String configResource = String.format("config-%s.js",((IFreeMarkerApplication) getApplication()).getProfile());
+		
 		return new OutputStreamConvertor(new StructureRecordXLSXReporter(
 				getRequest().getRootRef().toString(), hssf, getTemplate(),
-				getGroupProperties(), getBundles(), null, true) {
+				getGroupProperties(), getBundles(), null, true, configResource) {
 			@Override
 			protected void configurePropertyProcessors() {
 				getCompositionProcessors(getProcessors());

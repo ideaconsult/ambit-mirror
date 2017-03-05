@@ -82,7 +82,7 @@ public class StructureRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 	public StructureRecordXLSXReporter(String baseRef, boolean hssf,
 			Template template, Profile groupedProperties,
 			SubstanceEndpointsBundle[] bundles, String urlPrefix,
-			boolean includeMol) {
+			boolean includeMol,String configResource) {
 		super(baseRef, hssf, template, groupedProperties, bundles, urlPrefix,
 				includeMol);
 
@@ -93,7 +93,7 @@ public class StructureRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 		component = new ProcessorStructureRetrieval(q);
 
 		imageReporter = new ImageReporter<Q>("image", "png", d);
-		formatter = new StudyFormatter();
+		formatter = new StudyFormatter(configResource);
 
 		style = workbook.createCellStyle();
 		style.setWrapText(true);

@@ -37,11 +37,16 @@ public class StudyFormatter {
 	protected ObjectMapper mapper = new ObjectMapper();
 
 	public StudyFormatter() {
+		this("config-study.js");
+	}
+	public StudyFormatter(String configFile) {
 		super();
 		dx = new ObjectMapper();
 		InputStream in = null;
 		try {
-			in = this.getClass().getClassLoader().getResourceAsStream("ambit2/base/data/study/config-study.js");
+			in = this.getClass().getClassLoader().getResourceAsStream("ambit2/base/data/study/" + (configFile==null?"config-study.js":configFile));
+			if (in==null)
+				in = this.getClass().getClassLoader().getResourceAsStream("ambit2/base/data/study/config-study.js");
 			JsonNode dxRoot = dx.readTree(in);
 			columns = dxRoot.get("columns");
 		} catch (Exception x) {

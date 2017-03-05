@@ -673,130 +673,246 @@
 		},
 		"TO_REPEATED_ORAL_SECTION": {
 			"parameters": {
-				"species": {
-					"comment": "copied to conditions",
-					"iOrder": -10,
-					"inMatrix": false,
-					"bVisible": false
+				"dispersion protocol" : {
+					"bVisible": true,
+					"iOrder": -26
 				},
-				"test type": {
-					"comment": "copied to conditions",
-					"iOrder": -9,
-					"inMatrix": false,
-					"bVisible": false
-				},
-				"route of administration": {
-					"iOrder": -8
-				},
-				"doses/concentrations": {
-					"sTitle": "Dose/concentrations",
-					"iOrder": -7
-				}
-			},
-			"conditions": {
-				"test type": {
-					"iOrder": -9,
+				"e.method": {
 					"titleInMatrix": false,
-					"inMatrix": true
+					"sTitle": "Method",
+					"inMatrix": true,
+					"iOrder": -25,
+					"bVisible": true
+
 				},
-				"species": {
-					"iOrder": -10,
+				"e.animal_model": {
 					"titleInMatrix": false,
-					"inMatrix": true
+					"sTitle": "Animal model",
+					"inMatrix": true,
+					"iOrder": -24,
+					"bVisible": true
 				},
-				"sex": {
-					"iOrder": -4
-				}
+				"e.organ": {
+					"titleInMatrix": false,
+					"sTitle": "Organ",
+					"inMatrix": true,
+					"iOrder": -23,
+					"bVisible": true
+				},				
+				"e.exposure_method": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure method",
+					"inMatrix": true,
+					"iOrder": -22,
+					"bVisible": true
+				},
+				"e.exposure_route": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure route",
+					"inMatrix": true,
+					"iOrder": -21,
+					"bVisible": true
+				},				
+				"e.exposure_time": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure time",
+					"inMatrix": true,
+					"iOrder": -20,
+					"bVisible": true
+				},
+				"medium": {
+					"titleInMatrix": false,
+					"sTitle": "Medium",
+					"inMatrix": true,
+					"iOrder": -19,
+					"bVisible": true
+				},
+				"vial": {
+					"bVisible": true,
+					"iOrder": -18
+				}					
 			},
 			"effects": {
 				"endpoint": {
-					"iOrder": -6,
-					"inMatrix": true
+					"inMatrix": true,
+					"iOrder": -10
 				},
 				"result": {
-					"sTitle": "Value",
-					"iOrder": -5,
-					"inMatrix": true
+					"inMatrix": true,
+					"iOrder": -5
+				},
+				"errorValue": {
+					"inMatrix": true,
+					"iOrder": -4,
+					"bVisible": true
+				},
+				"text": {
+					"bVisible": false
+				}
+			},
+			"conditions": {
+				"concentration": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Concentration",
+					"iOrder": -6
+				},
+				"replicate": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Replicate",
+					"iOrder": -7
 				}
 			},
 			"protocol": {
-				"guideline": {
-					"iOrder": -3
-				},
 				"citation": {
+					"inMatrix": true,
 					"bVisible": true,
-					"iOrder": 10
+					"sTitle": "Reference",
+					"iOrder": -20
+				},
+				"owner": {
+					"inMatrix": true,
+					"bVisible": true,
+					"iOrder": -1,
+					"sTitle": "Owner"
+				},
+				"guideline": {
+					"inMatrix": true,
+					"iOrder": -3,
+					"sTitle": "Protocol"
 				}
 			},
 			"interpretation": {
 				"result": {
 					"bVisible": false
+				},
+				"criteria": {
+					"bVisible": false
 				}
 			}
-		},
+		},				
 		"TO_REPEATED_INHAL_SECTION": {
 			"parameters": {
-				"species": {
-					"comment": "copied to conditions",
-					"iOrder": -10,
-					"inMatrix": false,
-					"bVisible": false
+				"dispersion protocol" : {
+					"bVisible": true,
+					"iOrder": -26
 				},
-				"test type": {
-					"comment": "copied to conditions",
-					"iOrder": -9,
-					"inMatrix": false,
-					"bVisible": false
-				},
-				"route of administration": {
-					"iOrder": -8
-				},
-				"doses/concentrations": {
-					"sTitle": "Dose/concentrations",
-					"iOrder": -7
-				}
-			},
-			"conditions": {
-				"test type": {
-					"iOrder": -9,
+				"e.method": {
 					"titleInMatrix": false,
-					"inMatrix": true
+					"sTitle": "Method",
+					"inMatrix": true,
+					"iOrder": -25,
+					"bVisible": true
+
 				},
-				"species": {
-					"iOrder": -10,
+				"e.animal_model": {
 					"titleInMatrix": false,
-					"inMatrix": true
+					"sTitle": "Animal model",
+					"inMatrix": true,
+					"iOrder": -24,
+					"bVisible": true
 				},
-				"sex": {
-					"iOrder": -4
-				}
+				"e.organ": {
+					"titleInMatrix": false,
+					"sTitle": "Organ",
+					"inMatrix": true,
+					"iOrder": -23,
+					"bVisible": true
+				},				
+				"e.exposure_method": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure method",
+					"inMatrix": true,
+					"iOrder": -22,
+					"bVisible": true
+				},
+				"e.exposure_route": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure route",
+					"inMatrix": true,
+					"iOrder": -21,
+					"bVisible": true
+				},				
+				"e.exposure_time": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure time",
+					"inMatrix": true,
+					"iOrder": -20,
+					"bVisible": true
+				},
+				"medium": {
+					"titleInMatrix": false,
+					"sTitle": "Medium",
+					"inMatrix": true,
+					"iOrder": -19,
+					"bVisible": true
+				},
+				"vial": {
+					"bVisible": true,
+					"iOrder": -18
+				}					
 			},
 			"effects": {
 				"endpoint": {
-					"iOrder": -6,
-					"inMatrix": true
+					"inMatrix": true,
+					"iOrder": -10
 				},
 				"result": {
-					"sTitle": "Value",
-					"iOrder": -5,
-					"inMatrix": true
+					"inMatrix": true,
+					"iOrder": -5
+				},
+				"errorValue": {
+					"inMatrix": true,
+					"iOrder": -4,
+					"bVisible": true
+				},
+				"text": {
+					"bVisible": false
+				}
+			},
+			"conditions": {
+				"concentration": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Concentration",
+					"iOrder": -6
+				},
+				"replicate": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Replicate",
+					"iOrder": -7
 				}
 			},
 			"protocol": {
-				"guideline": {
-					"iOrder": -3
-				},
 				"citation": {
+					"inMatrix": true,
 					"bVisible": true,
-					"iOrder": 10
+					"sTitle": "Reference",
+					"iOrder": -20
+				},
+				"owner": {
+					"inMatrix": true,
+					"bVisible": true,
+					"iOrder": -1,
+					"sTitle": "Owner"
+				},
+				"guideline": {
+					"inMatrix": true,
+					"iOrder": -3,
+					"sTitle": "Protocol"
 				}
 			},
 			"interpretation": {
 				"result": {
 					"bVisible": false
+				},
+				"criteria": {
+					"bVisible": false
 				}
 			}
-		},
+		},				
 		"TO_REPEATED_DERMAL_SECTION": {
 			"parameters": {
 				"species": {
@@ -866,154 +982,212 @@
 		},
 		"TO_GENETIC_IN_VITRO_SECTION": {
 			"parameters": {
-				"type of genotoxicity": {
-					"iOrder": -9,
-					"sTitle": "Genotoxicity type"
+				"dispersion protocol" : {
+					"bVisible": true,
+					"iOrder": -26
 				},
-				"type of study": {
-					"comment": "copied to conditions",
-					"iOrder": -8,
-					"sTitle": "Study type",
-					"inMatrix": false,
-					"bVisible": false
-				},
-				"metabolic activation system": {
-					"iOrder": -7,
-					"bVisible": true
-				},
-				"target gene": {
-					"iOrder": -6
-				}
-			},
-			"conditions": {
-				"type of study": {
-					"iOrder": -8,
-					"sTitle": "Study type",
-					"inMatrix": true,
+				"e.method": {
 					"titleInMatrix": false,
+					"sTitle": "Method",
+					"inMatrix": true,
+					"iOrder": -15,
+					"bVisible": true
+
+				},
+				"e.cell_type": {
+					"titleInMatrix": false,
+					"sTitle": "Cell type",
+					"inMatrix": true,
+					"iOrder": -14,
 					"bVisible": true
 				},
-				"metabolic activation system": {
-					"iOrder": -4,
-					"sTitle": "Metabolic activation"
+				"e.exposure_time": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure time",
+					"inMatrix": true,
+					"iOrder": -13,
+					"bVisible": true
 				},
-				"metabolic activation": {
-					"iOrder": -4
+				"medium": {
+					"titleInMatrix": false,
+					"sTitle": "Medium",
+					"inMatrix": true,
+					"iOrder": -12,
+					"bVisible": true
 				},
-				"species": {
-					"iOrder": -5,
-					"sTitle": "Species/strain"
-				}
+				"vial": {
+					"bVisible": true,
+					"iOrder": -23
+				}					
 			},
 			"effects": {
 				"endpoint": {
-					"bVisible": false
+					"inMatrix": true,
+					"iOrder": -10
 				},
 				"result": {
-					"bVisible": false,
-					"sTitle": "Genotoxicity",
-					"iOrder": -3
-				},
-				"text": {
-					"sTitle": "Genotoxicity",
-					"bVisible": true,
-					"iOrder": -3
-				}
-			},
-			"protocol": {
-				"guideline": {
-					"iOrder": -1,
-					"inMatrix": true
-				},
-				"citation": {
-					"bVisible": true,
-					"iOrder": 10
-				}
-			},
-			"interpretation": {
-				"result": {
-					"sTitle": "Interpretation of the result",
-					"bVisible": true,
-					"iOrder": -2,
-					"inMatrix": true
-				},
-				"criteria": {
-					"bVisible": false
-				}
-			}
-		},
-		"TO_GENETIC_IN_VIVO_SECTION": {
-			"parameters": {
-				"type of study": {
-					"comment": "copied to conditions",
-					"iOrder": -8,
-					"sTitle": "Study type",
-					"inMatrix": false,
-					"bVisible": false
-				},
-				"type of genotoxicity": {
-					"iOrder": -9,
-					"sTitle": "Genotoxicity type"
-				},
-				"route of administration": {
-					"iOrder": -7,
-					"bVisible": true
-				},
-				"species": {
-					"iOrder": -6
-				}
-			},
-			"conditions": {
-				"type of study": {
-					"iOrder": -8,
-					"sTitle": "Study type",
-					"titleInMatrix": false,
-					"inMatrix": true
-				},
-				"sex": {
+					"inMatrix": true,
 					"iOrder": -5
 				},
-				"toxicity": {
-					"iOrder": -4
-				}
-			},
-			"effects": {
-				"endpoint": {
-					"bVisible": false
-				},
-				"result": {
-					"bVisible": false,
-					"sTitle": "Genotoxicity",
-					"iOrder": -3
+				"errorValue": {
+					"inMatrix": true,
+					"iOrder": -4,
+					"bVisible": true
 				},
 				"text": {
-					"sTitle": "Genotoxicity",
+					"bVisible": false
+				}
+			},
+			"conditions": {
+				"concentration": {
+					"inMatrix": true,
 					"bVisible": true,
-					"iOrder": -3
+					"sTitle": "Concentration",
+					"iOrder": -6
+				},
+				"replicate": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Replicate",
+					"iOrder": -7
 				}
 			},
 			"protocol": {
-				"guideline": {
-					"iOrder": -1,
-					"inMatrix": true
-				},
 				"citation": {
+					"inMatrix": true,
 					"bVisible": true,
-					"iOrder": 10
+					"sTitle": "Reference",
+					"iOrder": -20
+				},
+				"owner": {
+					"inMatrix": true,
+					"bVisible": true,
+					"iOrder": -1,
+					"sTitle": "Owner"
+				},
+				"guideline": {
+					"inMatrix": true,
+					"iOrder": -3,
+					"sTitle": "Protocol"
 				}
 			},
 			"interpretation": {
 				"result": {
-					"sTitle": "Interpretation of the result",
-					"bVisible": true,
-					"iOrder": -2,
-					"inMatrix": true
+					"bVisible": false
 				},
 				"criteria": {
 					"bVisible": false
 				}
 			}
-		},
+		},		
+		
+		"TO_GENETIC_IN_VIVO_SECTION": {
+			"parameters": {
+				"dispersion protocol" : {
+					"bVisible": true,
+					"iOrder": -26
+				},
+				"e.method": {
+					"titleInMatrix": false,
+					"sTitle": "Method",
+					"inMatrix": true,
+					"iOrder": -25,
+					"bVisible": true
+
+				},
+				"e.animal_model": {
+					"titleInMatrix": false,
+					"sTitle": "Animal model",
+					"inMatrix": true,
+					"iOrder": -24,
+					"bVisible": true
+				},
+				"e.exposure_method": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure method",
+					"inMatrix": true,
+					"iOrder": -23,
+					"bVisible": true
+				},				
+				"e.exposure_time": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure time",
+					"inMatrix": true,
+					"iOrder": -22,
+					"bVisible": true
+				},
+				"medium": {
+					"titleInMatrix": false,
+					"sTitle": "Medium",
+					"inMatrix": true,
+					"iOrder": -21,
+					"bVisible": true
+				},
+				"vial": {
+					"bVisible": true,
+					"iOrder": -20
+				}					
+			},
+			"effects": {
+				"endpoint": {
+					"inMatrix": true,
+					"iOrder": -10
+				},
+				"result": {
+					"inMatrix": true,
+					"iOrder": -5
+				},
+				"errorValue": {
+					"inMatrix": true,
+					"iOrder": -4,
+					"bVisible": true
+				},
+				"text": {
+					"bVisible": false
+				}
+			},
+			"conditions": {
+				"concentration": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Concentration",
+					"iOrder": -6
+				},
+				"replicate": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Replicate",
+					"iOrder": -7
+				}
+			},
+			"protocol": {
+				"citation": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Reference",
+					"iOrder": -20
+				},
+				"owner": {
+					"inMatrix": true,
+					"bVisible": true,
+					"iOrder": -1,
+					"sTitle": "Owner"
+				},
+				"guideline": {
+					"inMatrix": true,
+					"iOrder": -3,
+					"sTitle": "Protocol"
+				}
+			},
+			"interpretation": {
+				"result": {
+					"bVisible": false
+				},
+				"criteria": {
+					"bVisible": false
+				}
+			}
+		},				
 		"TO_CARCINOGENICITY_SECTION": {
 			"parameters": {
 				"species": {
@@ -1632,48 +1806,101 @@
 		},
 		"EC_DAPHNIATOX_SECTION": {
 			"parameters": {
-				"test medium": {
-					"iOrder": -8
+				"dispersion protocol" : {
+					"bVisible": true,
+					"iOrder": -26
 				},
-				"test organism": {
-					"iOrder": -7,
-					"sTitle": "Organism"
-				}
-			},
-			"conditions": {
-				"exposure": {
-					"iOrder": -5,
-					"titleInMatrix": true,
-					"inMatrix": true
+				"e.method": {
+					"titleInMatrix": false,
+					"sTitle": "Method",
+					"inMatrix": true,
+					"iOrder": -25,
+					"bVisible": true
+
 				},
-				"effect": {
-					"iOrder": -2
+				"e.animal_model": {
+					"titleInMatrix": false,
+					"sTitle": "Animal model",
+					"inMatrix": true,
+					"iOrder": -24,
+					"bVisible": true
 				},
-				"measured concentration": {
-					"iOrder": -6,
-					"sTitle": "Meas. Conc."
+				"e.exposure_time": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure time",
+					"inMatrix": true,
+					"iOrder": -23,
+					"bVisible": true
 				},
-				"based on": {
-					"iOrder": -1
-				}
+				"e.exposure_method": {
+					"titleInMatrix": false,
+					"sTitle": "Exposure method",
+					"inMatrix": true,
+					"iOrder": -22,
+					"bVisible": true
+				},				
+				"medium": {
+					"titleInMatrix": false,
+					"sTitle": "Medium",
+					"inMatrix": true,
+					"iOrder": -21,
+					"bVisible": true
+				}				
 			},
 			"effects": {
 				"endpoint": {
-					"iOrder": -4,
-					"inMatrix": true
+					"inMatrix": true,
+					"iOrder": -10
 				},
 				"result": {
-					"sTitle": "",
 					"inMatrix": true,
-					"iOrder": -3
+					"iOrder": -5
+				},
+				"errorValue": {
+					"inMatrix": true,
+					"iOrder": -4,
+					"bVisible": true
+				},
+				"text": {
+					"bVisible": false
+				}
+			},
+			"conditions": {
+				"concentration": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Concentration",
+					"iOrder": -6
+				}
+			},
+			"protocol": {
+				"citation": {
+					"inMatrix": true,
+					"bVisible": true,
+					"sTitle": "Reference",
+					"iOrder": -20
+				},
+				"owner": {
+					"inMatrix": true,
+					"bVisible": true,
+					"iOrder": -1,
+					"sTitle": "Owner"
+				},
+				"guideline": {
+					"inMatrix": true,
+					"iOrder": -3,
+					"sTitle": "Guideline"
 				}
 			},
 			"interpretation": {
 				"result": {
 					"bVisible": false
+				},
+				"criteria": {
+					"bVisible": false
 				}
 			}
-		},
+		},				
 		"EC_CHRONDAPHNIATOX_SECTION": {
 			"parameters": {
 				"test medium": {
@@ -2181,221 +2408,33 @@
 		},
 		"ZETA_POTENTIAL_SECTION": {
 			"parameters": {
-				"type of method": {
+				"dispersion protocol" : {
+					"bVisible": true,
+					"iOrder": -26
+				},
+				"medium": {
+					"bVisible": true,
+					"iOrder": -25
+				},
+				"vial": {
+					"bVisible": true,
+					"iOrder": -23
+				},
+				"t.instrument model": {
+					"sTitle": "Instrument",
+					"bVisible": true,
+					"iOrder": -24
+				},
+				"t.cell model" : {
+					"sTitle": "Cell model",
+					"bVisible": true,
 					"iOrder": -22
-				},
-				"method details": {
-					"iOrder": -10,
-					"bVisible": false
-				},
-				"sampling": {
-					"iOrder": -8,
-					"bVisible": false
-				},
-				"data_gathering_instruments": {
-					"sTitle": "Instruments",
-					"iOrder": -7,
-					"bVisible": false
-				},
-				"testmat_form": {
-					"sTitle": "Test Material Form",
-					"bVisible": true,
-					"iOrder": -21
 				}
 			},
 			"conditions": {
-				"medium": {
-					"sTitle": "Medium",
-					"iOrder": -15,
-					"bVisible": true,
-					"titleInMatrix": true,
-					"inMatrix": true
-				},
-				"n": {
-					"iOrder": -17
-				},
 				"ph": {
-					"iOrder": -16,
-					"titleInMatrix": true,
-					"inMatrix": true
-				},
-				"remark": {
-					"sTitle": "Remarks",
-					"iOrder": -19
-				}
-			},
-			"effects": {
-				"endpoint": {
-					"iOrder": -21,
-					"inMatrix": true
-				},
-				"result": {
-					"iOrder": -20,
-					"inMatrix": true
-				}
-			},
-			"protocol": {
-				"guideline": {
-					"iOrder": -9,
-					"inMatrix": true
-				},
-				"citation": {
-					"bVisible": true,
-					"sTitle": "Reference",
-					"iOrder": -11
-				}
-			},
-			"interpretation": {
-				"result": {
-					"sTitle": "Conclusions",
-					"iOrder": -10,
-					"bVisible": false
-				}
-			}
-		},
-		"SURFACE_CHEMISTRY_SECTION": {
-			"parameters": {
-				"type of method": {
-					"iOrder": -25
-				},
-				"method details": {
-					"iOrder": -11,
-					"bVisible": false
-				},
-				"sampling": {
-					"sTitle": "Sampling",
-					"iOrder": -9,
-					"bVisible": false
-				},
-				"functionalization": {
-					"bVisible": false
-				},
-				"coating": {
-					"bVisible": false
-				},
-				"data_gathering_instruments": {
-					"sTitle": "Instruments",
-					"iOrder": -8,
-					"bVisible": false
-				}
-			},
-			"conditions": {
-				"type": {
-					"sTitle": "",
-					"iOrder": -23
-				},
-				"description": {
-					"sTitle": "Type",
-					"iOrder": -22,
-					"titleInMatrix": true,
-					"inMatrix": true
-				},
-				"coating_description": {
-					"sTitle": "Coating description",
-					"iOrder": -21,
-					"bVisible": false,
-					"titleInMatrix": true,
-					"inMatrix": true
-				},
-				"remark": {
-					"sTitle": "Remarks",
+					"sTitle": "pH",
 					"iOrder": -15,
-					"bVisible": false
-				},
-				"element_or_group": {
-					"sTitle": "Element / Func. group",
-					"iOrder": -19,
-					"bVisible": false,
-					"titleInMatrix": true,
-					"inMatrix": true
-				}
-			},
-			"effects": {
-				"endpoint": {
-					"iOrder": -20,
-					"bVisible": false
-				},
-				"result": {
-					"sTitle": "Fraction",
-					"iOrder": -18,
-					"inMatrix": true
-				},
-				"text": {
-					"sTitle": "Element / Func. group",
-					"iOrder": -19,
-					"bVisible": true,
-					"inMatrix": true
-				}
-			},
-			"protocol": {
-				"guideline": {
-					"iOrder": -10,
-					"inMatrix": true
-				},
-				"citation": {
-					"bVisible": true,
-					"iOrder": -11,
-					"sTitle": "Reference"
-				},
-				"owner": {
-					"inMatrix": true,
-					"bVisible": true,
-					"iOrder": -9,
-					"sTitle": "Owner"
-				}
-			},
-			"interpretation": {
-				"result": {
-					"sTitle": "Conclusions",
-					"bVisible": false
-				},
-				"criteria": {
-					"sTitle": "Coating / Functionalisation",
-					"bVisible": true,
-					"iOrder": -24
-				}
-			}
-		},
-		"PC_GRANULOMETRY_SECTION": {
-			"parameters": {
-				"type of method": {
-					"iOrder": -25
-				},
-				"distribution_type": {
-					"sTitle": "Distribution type",
-					"iOrder": -23
-				},
-				"testmat_form": {
-					"sTitle": "Test Material Form",
-					"bVisible": false,
-					"iOrder": -24
-				}
-			},
-			"conditions": {
-				"seq_num": {
-					"sTitle": "Passage num.",
-					"iOrder": -22,
-					"bVisible": false
-				},
-				"medium": {
-					"sTitle": "Medium",
-					"iOrder": -14,
-					"bVisible": true,
-					"titleInMatrix": true,
-					"inMatrix": true
-				},
-				"remark": {
-					"sTitle": "Remark",
-					"iOrder": -15,
-					"bVisible": false
-				},
-				"n": {
-					"iOrder": -16
-				},
-				"phraseother_percentile": {
-					"bVisible": false
-				},
-				"std_dev": {
 					"bVisible": false
 				}
 			},
@@ -2413,6 +2452,152 @@
 			},
 			"protocol": {
 				"guideline": {
+					"sTitle" : "Protocol",
+					"iOrder": -9,
+					"inMatrix": true
+				},
+				"citation": {
+					"bVisible": true,
+					"sTitle": "Reference",
+					"iOrder": -11
+				},
+				"uuid": {
+					"bVisible": false
+				},
+				"owner": {
+					"inMatrix": true,
+					"bVisible": true,
+					"iOrder": -9,
+					"sTitle": "Owner"
+				}
+			},
+			"interpretation": {
+				"result": {
+					"sTitle": "Conclusions",
+					"bVisible": false
+				},
+				"criteria": {
+					"bVisible": false
+				}
+			}
+		},		
+		"SURFACE_CHEMISTRY_SECTION": {
+			"parameters": {
+				"dispersion protocol" : {
+					"bVisible": true,
+					"iOrder": -26
+				},
+				"medium": {
+					"bVisible": true,
+					"iOrder": -25
+				},
+				"vial": {
+					"bVisible": true,
+					"iOrder": -23
+				},
+				"t.instrument model": {
+					"sTitle": "Instrument",
+					"bVisible": true,
+					"iOrder": -24
+				}
+			},
+			"conditions": {
+				"size_measurement_type": {
+					"sTitle": "Measurement type",
+					"iOrder": -15,
+					"bVisible": false
+				}
+			},
+			"effects": {
+				"endpoint": {
+					"iOrder": -20,
+					"bVisible": true,
+					"inMatrix": true
+				},
+				"result": {
+					"sTitle": "Value",
+					"iOrder": -18,
+					"inMatrix": true
+				}
+			},
+			"protocol": {
+				"guideline": {
+					"sTitle" : "Protocol",
+					"iOrder": -9,
+					"inMatrix": true
+				},
+				"citation": {
+					"bVisible": true,
+					"sTitle": "Reference",
+					"iOrder": -11
+				},
+				"uuid": {
+					"bVisible": false
+				},
+				"owner": {
+					"inMatrix": true,
+					"bVisible": true,
+					"iOrder": -9,
+					"sTitle": "Owner"
+				}
+			},
+			"interpretation": {
+				"result": {
+					"sTitle": "Conclusions",
+					"bVisible": false
+				},
+				"criteria": {
+					"bVisible": false
+				}
+			}
+		},		
+		"PC_GRANULOMETRY_SECTION": {
+			"parameters": {
+				"dispersion protocol" : {
+					"bVisible": true,
+					"iOrder": -26
+				},
+				"medium": {
+					"bVisible": true,
+					"iOrder": -25
+				},
+				"vial": {
+					"bVisible": true,
+					"iOrder": -23
+				},
+				"t.instrument model": {
+					"sTitle": "Instrument",
+					"bVisible": true,
+					"iOrder": -24
+				},
+				"t.cell model" : {
+					"sTitle": "Cell model",
+					"bVisible": true,
+					"iOrder": -22
+				}
+			},
+			"conditions": {
+				"size_measurement_type": {
+					"sTitle": "Measurement type",
+					"iOrder": -15,
+					"bVisible": false
+				}
+			},
+			"effects": {
+				"endpoint": {
+					"iOrder": -20,
+					"bVisible": true,
+					"inMatrix": true
+				},
+				"result": {
+					"sTitle": "Value",
+					"iOrder": -18,
+					"inMatrix": true
+				}
+			},
+			"protocol": {
+				"guideline": {
+					"sTitle" : "Protocol",
 					"iOrder": -9,
 					"inMatrix": true
 				},
@@ -2441,6 +2626,156 @@
 				}
 			}
 		},
+		"ENM_0000081_SECTION": {
+			"parameters": {
+				"dispersion protocol" : {
+					"bVisible": true,
+					"iOrder": -26
+				},
+				"medium": {
+					"bVisible": true,
+					"iOrder": -25
+				},
+				"t.instrument model": {
+					"sTitle": "Instrument",
+					"bVisible": true,
+					"iOrder": -24
+				},
+				"t.PDI" : {
+					"sTitle": "PDI",
+					"bVisible": true,
+					"iOrder": -22
+				},
+				"vial": {
+					"bVisible": true,
+					"iOrder": -23
+				}
+			},
+			"conditions": {
+			},
+			"effects": {
+				"endpoint": {
+					"iOrder": -20,
+					"bVisible": true,
+					"inMatrix": true
+				},
+				"result": {
+					"sTitle": "Value",
+					"iOrder": -18,
+					"inMatrix": true
+				}
+			},
+			"protocol": {
+				"guideline": {
+					"sTitle" : "Protocol",
+					"iOrder": -9,
+					"inMatrix": true
+				},
+				"citation": {
+					"bVisible": true,
+					"sTitle": "Reference",
+					"iOrder": -11
+				},
+				"uuid": {
+					"bVisible": false
+				},
+				"owner": {
+					"inMatrix": true,
+					"bVisible": true,
+					"iOrder": -9,
+					"sTitle": "Owner"
+				}
+			},
+			"interpretation": {
+				"result": {
+					"sTitle": "Conclusions",
+					"bVisible": false
+				},
+				"criteria": {
+					"bVisible": false
+				}
+			}
+		},		
+		"ENM_8000223_SECTION": {
+			"parameters": {
+				"dispersion protocol" : {
+					"bVisible": true,
+					"iOrder": -26
+				},
+				"medium": {
+					"bVisible": true,
+					"iOrder": -25
+				},
+				"t.aerosolisation instrument": {
+					"sTitle": "Instrument",
+					"bVisible": true,
+					"iOrder": -24
+				},
+				"t.aerosolisation assay " : {
+					"sTitle": "assay",
+					"bVisible": true,
+					"iOrder": -23
+				},
+				"t.aerosolisation method" : {
+					"sTitle": "method",
+					"bVisible": true,
+					"iOrder": -22
+				},
+				"vial": {
+					"bVisible": true,
+					"iOrder": -21
+				}				
+			},
+			"conditions": {
+				"replicate": {
+					"sTitle": "Replicate",
+					"iOrder": -15,
+					"bVisible": false
+				}
+			},
+			"effects": {
+				"endpoint": {
+					"iOrder": -20,
+					"bVisible": true,
+					"inMatrix": true
+				},
+				"result": {
+					"sTitle": "Value",
+					"iOrder": -18,
+					"inMatrix": true
+				}
+			},
+			"protocol": {
+				"guideline": {
+					"sTitle" : "Protocol",
+					"iOrder": -9,
+					"inMatrix": true
+				},
+				"citation": {
+					"bVisible": true,
+					"sTitle": "Reference",
+					"iOrder": -11
+				},
+				"uuid": {
+					"bVisible": false
+				},
+				"owner": {
+					"inMatrix": true,
+					"bVisible": true,
+					"iOrder": -9,
+					"sTitle": "Owner"
+				}
+			},
+			"interpretation": {
+				"result": {
+					"sTitle": "Conclusions",
+					"bVisible": false
+				},
+				"criteria": {
+					"bVisible": false
+				}
+			}
+		},		
 		"CRYSTALLITE_AND_GRAIN_SIZE_SECTION": {
 			"parameters": {
 				"type of method": {
@@ -2520,52 +2855,56 @@
 		},
 		"DUSTINESS_SECTION": {
 			"parameters": {
-				"type of method": {
-					"iOrder": -23,
-					"sTitle": "Method type"
-				},
-				"method details": {
-					"iOrder": -22,
-					"bVisible": false
-				},
-				"sampling": {
-					"sTitle": "Sampling",
-					"iOrder": -21,
-					"bVisible": false
-				},
-				"data_gathering_instruments": {
-					"sTitle": "Instruments",
-					"iOrder": -20,
-					"bVisible": false
-				},
-				"testmat_form": {
-					"sTitle": "Test Material Form",
+				"dispersion protocol" : {
 					"bVisible": true,
-					"iOrder": -19
+					"iOrder": -26
+				},
+				"medium": {
+					"bVisible": true,
+					"iOrder": -25
+				},
+				"vial": {
+					"bVisible": true,
+					"iOrder": -23
+				},
+				"t.instrument model": {
+					"sTitle": "Instrument",
+					"bVisible": true,
+					"iOrder": -24
 				}
 			},
-			"conditions": {},
+			"conditions": {
+				"size_measurement_type": {
+					"sTitle": "Measurement type",
+					"iOrder": -15,
+					"bVisible": false
+				}
+			},
 			"effects": {
 				"endpoint": {
-					"iOrder": -17,
-					"bVisible": false,
+					"iOrder": -20,
+					"bVisible": true,
 					"inMatrix": true
 				},
 				"result": {
-					"sTitle": "Dustiness index",
-					"iOrder": -16,
+					"sTitle": "Value",
+					"iOrder": -18,
 					"inMatrix": true
 				}
 			},
 			"protocol": {
 				"guideline": {
-					"iOrder": -10,
+					"sTitle" : "Protocol",
+					"iOrder": -9,
 					"inMatrix": true
 				},
 				"citation": {
 					"bVisible": true,
 					"sTitle": "Reference",
 					"iOrder": -11
+				},
+				"uuid": {
+					"bVisible": false
 				},
 				"owner": {
 					"inMatrix": true,
@@ -2583,7 +2922,7 @@
 					"bVisible": false
 				}
 			}
-		},
+		},		
 		"POROSITY_SECTION": {
 			"parameters": {
 				"type of method": {
@@ -2651,57 +2990,56 @@
 		},
 		"SPECIFIC_SURFACE_AREA_SECTION": {
 			"parameters": {
-				"type of method": {
-					"iOrder": -23,
-					"sTitle": "Method type"
-				},
-				"method details": {
-					"iOrder": -22,
-					"bVisible": false
-				},
-				"sampling": {
-					"sTitle": "Sampling",
-					"iOrder": -21,
-					"bVisible": false
-				},
-				"data_gathering_instruments": {
-					"sTitle": "Instruments",
-					"iOrder": -20,
-					"bVisible": false
-				},
-				"testmat_form": {
-					"sTitle": "Test Material Form",
+				"dispersion protocol" : {
 					"bVisible": true,
-					"iOrder": -19
+					"iOrder": -26
+				},
+				"medium": {
+					"bVisible": true,
+					"iOrder": -25
+				},
+				"vial": {
+					"bVisible": true,
+					"iOrder": -23
+				},
+				"t.instrument model": {
+					"sTitle": "Instrument",
+					"bVisible": true,
+					"iOrder": -24
+				},
+				"t.cell model" : {
+					"sTitle": "Cell model",
+					"bVisible": true,
+					"iOrder": -22
 				}
 			},
 			"conditions": {
-				"remark": {
-					"sTitle": "Remarks",
-					"iOrder": -14
-				}
 			},
 			"effects": {
 				"endpoint": {
-					"iOrder": -17,
-					"bVisible": false,
+					"iOrder": -20,
+					"bVisible": true,
 					"inMatrix": true
 				},
 				"result": {
-					"sTitle": "Specific Surface Area",
-					"iOrder": -16,
+					"sTitle": "Value",
+					"iOrder": -18,
 					"inMatrix": true
 				}
 			},
 			"protocol": {
 				"guideline": {
-					"iOrder": -10,
+					"sTitle" : "Protocol",
+					"iOrder": -9,
 					"inMatrix": true
 				},
 				"citation": {
 					"bVisible": true,
-					"iOrder": -11,
-					"sTitle": "Reference"
+					"sTitle": "Reference",
+					"iOrder": -11
+				},
+				"uuid": {
+					"bVisible": false
 				},
 				"owner": {
 					"inMatrix": true,
@@ -2720,6 +3058,7 @@
 				}
 			}
 		},
+		
 		"POUR_DENSITY_SECTION": {
 			"parameters": {
 				"type of method": {
@@ -3343,30 +3682,13 @@
 				}
 			}
 		},
-		"CELL_VIABILITY_ASSAY_SECTION": {
-			"effects": {
-				"text": {
-					"bVisible": true
-				}
-			}
-		},
-		"PROTEIN_SMALLMOLECULE_INTERACTION_SECTION": {
-			"effects": {
-				"text": {
-					"bVisible": true
-				}
-			}
-		},
-		"TRANSCRIPTION_PROFILING": {
-			"effects": {
-				"text": {
-					"bVisible": true,
-					"sTitle": "File"
-				}
-			}
-		},
 		"ENM_0000044_SECTION": {
 			"parameters": {
+				"dispersion protocol" : {
+					"bVisible": true,
+					"iOrder": -26
+				},
+			
 				"e.method": {
 					"titleInMatrix": false,
 					"sTitle": "Method",
@@ -3459,6 +3781,10 @@
 		},		
 		"ENM_0000037_SECTION": {
 			"parameters": {
+				"dispersion protocol" : {
+					"bVisible": true,
+					"iOrder": -26
+				},
 				"e.method": {
 					"titleInMatrix": false,
 					"sTitle": "Method",
@@ -3551,6 +3877,10 @@
 		},		
 		"ENM_0000068_SECTION": {
 			"parameters": {
+				"dispersion protocol" : {
+					"bVisible": true,
+					"iOrder": -26
+				},
 				"e.method": {
 					"titleInMatrix": false,
 					"sTitle": "Method",
@@ -3801,6 +4131,10 @@
 		},
 		"NPO_1339_SECTION": {
 			"parameters": {
+				"dispersion protocol" : {
+					"bVisible": true,
+					"iOrder": -26
+				},
 				"e.method": {
 					"titleInMatrix": false,
 					"sTitle": "Method",
