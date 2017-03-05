@@ -227,6 +227,8 @@ CREATE TABLE `substance_experiment` (
   `err` double DEFAULT NULL,
   `substance_prefix` varchar(6) DEFAULT NULL,
   `substance_uuid` varbinary(16) DEFAULT NULL,
+  `resulttype` enum('RAW','DOSERESPONSE','AGGREGATED','NOTSPECIFIED') DEFAULT 'NOTSPECIFIED',
+  `resultgroup` int(11) DEFAULT NULL,
   PRIMARY KEY (`idresult`),
   KEY `document_id` (`document_uuid`,`document_prefix`),
   KEY `endpoint` (`endpoint`),
@@ -235,7 +237,8 @@ CREATE TABLE `substance_experiment` (
   KEY `category-x` (`topcategory`,`endpointcategory`,`endpoint`,`endpointhash`),
   KEY `substance-x` (`substance_prefix`,`substance_uuid`),
   CONSTRAINT `document-x` FOREIGN KEY (`document_prefix`, `document_uuid`) REFERENCES `substance_protocolapplication` (`document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
 
 -- -----------------------------------------------------
 -- A collection of substances and endpoints 
