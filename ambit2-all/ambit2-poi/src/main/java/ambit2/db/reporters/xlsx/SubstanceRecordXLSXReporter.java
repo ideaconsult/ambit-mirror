@@ -5,9 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.p.DefaultAmbitProcessor;
-
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -18,7 +15,6 @@ import org.apache.poi.ss.usermodel.Row;
 import ambit2.base.data.Profile;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
-import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.study.ReliabilityParams._r_flags;
@@ -27,6 +23,8 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.study.IStudyPrinter;
 import ambit2.core.io.study.StudyFormatter;
 import ambit2.db.substance.study.SubstanceStudyDetailsProcessor;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		extends AbstractXLSXReporter<Q> implements IStudyPrinter {
@@ -37,13 +35,14 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 	private static final long serialVersionUID = 3258781396076442458L;
 	protected int rowIndex = 0;
 	protected int substanceIndex = 0;
-	protected StudyFormatter formatter = new StudyFormatter();
+	protected StudyFormatter formatter;
 	protected CellStyle sectionStyle, hstyle, tableStyle;
 	protected Font blackFont, blueFont, redFont;
 
 	public SubstanceRecordXLSXReporter(String baseRef, boolean hssf,
-			SubstanceEndpointsBundle[] bundles) {
+			SubstanceEndpointsBundle[] bundles, String configResource) {
 		this(baseRef, hssf, null, null, bundles, null);
+		formatter = new StudyFormatter(configResource);
 
 	}
 

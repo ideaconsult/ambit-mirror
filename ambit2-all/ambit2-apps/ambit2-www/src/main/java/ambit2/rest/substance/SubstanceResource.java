@@ -71,6 +71,7 @@ import net.idea.restnet.c.StringConvertor;
 import net.idea.restnet.db.QueryResource;
 import net.idea.restnet.db.QueryURIReporter;
 import net.idea.restnet.db.convertors.OutputWriterConvertor;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 import net.idea.restnet.i.task.ITask;
 import net.idea.restnet.i.task.ITaskApplication;
 import net.idea.restnet.i.task.ITaskStorage;
@@ -146,6 +147,9 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 			throws AmbitException, ResourceException {
 		/* workaround for clients not being able to set accept headers */
 		Form acceptform = getResourceRef(getRequest()).getQueryAsForm();
+		
+		String configResource = String.format("config-%s.js",((IFreeMarkerApplication) getApplication()).getProfile());
+		
 		try {
 			retrieveStudySummary = Boolean.parseBoolean(acceptform
 					.getFirstValue("studysummary"));
@@ -185,13 +189,13 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 		} else if (variant.getMediaType().equals(
 				MediaType.APPLICATION_MSOFFICE_XLSX)) {
 			SubstanceRecordXLSXReporter xlsxreporter = new SubstanceRecordXLSXReporter(
-					getRequest().getRootRef().toString(), false, bundles);
+					getRequest().getRootRef().toString(), false, bundles, configResource);
 			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
 					MediaType.APPLICATION_MSOFFICE_XLSX, filenamePrefix);
 
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_EXCEL)) {
 			SubstanceRecordXLSXReporter xlsxreporter = new SubstanceRecordXLSXReporter(
-					getRequest().getRootRef().toString(), true, bundles);
+					getRequest().getRootRef().toString(), true, bundles, configResource);
 			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
 					MediaType.APPLICATION_EXCEL, filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) 

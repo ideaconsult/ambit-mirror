@@ -3,16 +3,6 @@ package ambit2.rest.bundle;
 import java.awt.Dimension;
 import java.sql.Connection;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.r.QueryReporter;
-import net.idea.restnet.c.ChemicalMediaType;
-import net.idea.restnet.c.task.CallableProtectedTask;
-import net.idea.restnet.db.DBConnection;
-import net.idea.restnet.db.convertors.OutputWriterConvertor;
-import net.idea.restnet.rdf.ns.OT;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -24,6 +14,8 @@ import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
+
+import com.hp.hpl.jena.ontology.OntModel;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
@@ -40,8 +32,16 @@ import ambit2.rest.substance.SubstanceCSVReporter;
 import ambit2.rest.substance.SubstanceJSONReporter;
 import ambit2.rest.substance.SubstanceRDFReporter;
 import ambit2.rest.substance.SubstanceURIReporter;
-
-import com.hp.hpl.jena.ontology.OntModel;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.r.QueryReporter;
+import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.c.task.CallableProtectedTask;
+import net.idea.restnet.db.DBConnection;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.rdf.ns.OT;
 
 /**
  * Substances per /bundle/{id}
@@ -286,8 +286,10 @@ public class BundleSubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>>
 	}
 
 	protected QueryReporter createXLSXReporter(Request request, boolean hssf) {
+		
+		String configResource = String.format("config-%s.js",((IFreeMarkerApplication) getApplication()).getProfile());
 		return new SubstanceRecordXLSXReporter(request.getRootRef().toString(),
-				hssf, bundles);
+				hssf, bundles, configResource);
 
 	}
 
