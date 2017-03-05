@@ -191,6 +191,7 @@ CREATE TABLE `substance_protocolapplication` (
   `isUsedforMSDS` tinyint(1) DEFAULT NULL,
   `purposeFlag` varchar(32) DEFAULT NULL,
   `studyResultType` varchar(128) DEFAULT NULL COMMENT 'experimental result\nestimated by calculation\nread-across\n(Q)SAR',
+  `investigation_uuid` varbinary(16) DEFAULT NULL COMMENT 'groups protocol applications into investigations',
   PRIMARY KEY (`document_prefix`,`document_uuid`),
   KEY `substance` (`substance_prefix`,`substance_uuid`),
   KEY `endpoint` (`endpoint`),
@@ -968,23 +969,7 @@ END $
 
 DELIMITER ;
 
--- -----------------------------------------------------
--- Trigger to add property entry to template_def 
--- -----------------------------------------------------
-DELIMITER $
 
-CREATE DEFINER = CURRENT_USER TRIGGER insert_property_tuple AFTER INSERT ON property_tuples
- FOR EACH ROW BEGIN
-    INSERT IGNORE INTO template_def (idtemplate,idproperty,`order`) (
-    SELECT idtemplate,idproperty,idproperty FROM
-      (SELECT idtemplate FROM src_dataset join tuples using(id_srcdataset) WHERE idtuple=NEW.idtuple) a
-      JOIN
-      (SELECT idproperty from property_values WHERE id=NEW.id) b
-    ) ;
- END $
- 
-DELIMITER ;
- 
 -- -----------------------------------------------------
 -- Table `struc_dataset` structures per dataset
 -- -----------------------------------------------------
@@ -1502,7 +1487,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (8,15,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (9,0,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
