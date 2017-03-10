@@ -2,6 +2,8 @@ package ambit2.sln;
 
 import java.util.ArrayList;
 
+import org.openscience.cdk.Atom;
+import org.openscience.cdk.AtomType;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 
@@ -41,8 +43,7 @@ public class SLNAtomExpression
 			int charge = 0;
 			if (atom.getFormalCharge() != null)
 				charge = atom.getFormalCharge();
-			
-			//if (charge == tok.param)
+		
 			if (SLNConst.compare(charge, tok.param, tok.comparisonOperation))
 				return(true);
 			else
@@ -51,11 +52,12 @@ public class SLNAtomExpression
 
 		case SLNConst.A_ATTR_fcharge:
 		{	
-			double fcharge = 0.0;
-			if (atom.getCharge() != null)
-				fcharge = atom.getCharge();
-			
-			if (fcharge == tok.doubleParam)
+			//floating point charge (this is not formal charge)
+			//When charge is unspecified false is returned
+			if (atom.getCharge() == null)
+				return false;
+				
+			if(SLNConst.compare(atom.getCharge(), tok.doubleParam, tok.comparisonOperation))
 				return(true);
 			else
 				return(false);
@@ -64,11 +66,9 @@ public class SLNAtomExpression
 		case SLNConst.A_ATTR_I:    		
 			//When atom mass is unspecified false is returned
 			if (atom.getMassNumber()== null) 
-				return(false); 
-			if (atom.getMassNumber()== 0) 
-				return(false); 
+				return(false);
 
-			if (atom.getMassNumber()== tok.param)
+			if (SLNConst.compare(atom.getMassNumber(), tok.param, tok.comparisonOperation))
 				return(true);
 			else
 				return(false);
@@ -102,8 +102,16 @@ public class SLNAtomExpression
 			//TODO covered
 
 		case SLNConst.QA_ATTR_f:
-			//TODO atom is filled
-
+			//filled valences
+			/*
+			System.out.println("   atom.getValency()=" + atom.getValency() + "  atom.getBondOrderSum()=" + atom.getBondOrderSum());
+			if (atom.getValency() != null)
+				if (atom.getBondOrderSum() != null)
+					if (atom.getValency().doubleValue() == atom.getBondOrderSum())
+						return (true);
+			*/
+			return (false);
+			
 		case SLNConst.QA_ATTR_is:
 			//TODO  atom in a query must match
 
