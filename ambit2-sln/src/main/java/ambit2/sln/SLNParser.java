@@ -571,12 +571,14 @@ public class SLNParser {
 
 		// Handle query atom attribute f- filled valences
 		if (name.equals("f")) {
-			int f = extractInteger(value);
-			if (extractError.equals("")) {
+			if (value == null)
+			{
 				SLNExpressionToken token = new SLNExpressionToken(
-						SLNConst.QA_ATTR_f, f);
+						SLNConst.QA_ATTR_f, "");
 				return token;
-			} else {
+			} 
+			else 
+			{
 				newError("Incorrect f value " + value, curChar, "");
 				return null;
 			}
