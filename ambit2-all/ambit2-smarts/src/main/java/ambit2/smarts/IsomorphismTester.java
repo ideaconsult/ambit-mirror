@@ -53,19 +53,19 @@ import ambit2.smarts.DoubleBondStereoInfo.DBStereo;
  */
 public class IsomorphismTester 
 {
-	boolean FlagCheckStereoElements = false; 
+	protected boolean FlagCheckStereoElements = false; 
 	
-	IQueryAtomContainer query;
-	IAtomContainer target;
-	boolean isomorphismFound;
-	boolean FlagStoreIsomorphismNode = false;
-	List<Node> isomorphismNodes = new ArrayList<Node>(); 
-	Stack<Node> stack = new Stack<Node>();
-	List<IAtom> targetAt = new ArrayList<IAtom>(); //a work container
-	List<QuerySequenceElement> sequence = new ArrayList<QuerySequenceElement>();
-	List<IQueryAtom> sequencedAtoms = new ArrayList<IQueryAtom>();
-	List<IQueryAtom> sequencedBondAt1 = new ArrayList<IQueryAtom>();
-	List<IQueryAtom> sequencedBondAt2 = new ArrayList<IQueryAtom>();
+	protected IQueryAtomContainer query;
+	protected IAtomContainer target;
+	protected boolean isomorphismFound;
+	protected boolean FlagStoreIsomorphismNode = false;
+	protected List<Node> isomorphismNodes = new ArrayList<Node>(); 
+	protected Stack<Node> stack = new Stack<Node>();
+	protected List<IAtom> targetAt = new ArrayList<IAtom>(); //a work container
+	protected List<QuerySequenceElement> sequence = new ArrayList<QuerySequenceElement>();
+	protected List<IQueryAtom> sequencedAtoms = new ArrayList<IQueryAtom>();
+	protected List<IQueryAtom> sequencedBondAt1 = new ArrayList<IQueryAtom>();
+	protected List<IQueryAtom> sequencedBondAt2 = new ArrayList<IQueryAtom>();
 	
 	public boolean isFlagCheckStereoElements() {
 		return FlagCheckStereoElements;
