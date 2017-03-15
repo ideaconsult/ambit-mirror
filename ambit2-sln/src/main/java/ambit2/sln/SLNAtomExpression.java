@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomType;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.ChemObject;
+import org.openscience.cdk.Element;
+import org.openscience.cdk.Isotope;
 import org.openscience.cdk.interfaces.IAtom;
 
 import ambit2.smarts.CMLUtilities;
@@ -103,13 +106,15 @@ public class SLNAtomExpression
 
 		case SLNConst.QA_ATTR_f:
 			//filled valences
-			/*
-			System.out.println("   atom.getValency()=" + atom.getValency() + "  atom.getBondOrderSum()=" + atom.getBondOrderSum());
+			//atom.getValency() gives the filled valences
+			//atom.getBondOrderSum() gives the theoretically possible valences ??
+			
+			//System.out.println("   atom.getValency()=" + atom.getValency() + "  atom.getBondOrderSum()=" + atom.getBondOrderSum());
 			if (atom.getValency() != null)
 				if (atom.getBondOrderSum() != null)
 					if (atom.getValency().doubleValue() == atom.getBondOrderSum())
 						return (true);
-			*/
+			
 			return (false);
 			
 		case SLNConst.QA_ATTR_is:
