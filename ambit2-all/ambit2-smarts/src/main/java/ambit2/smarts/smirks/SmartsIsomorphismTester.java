@@ -8,7 +8,7 @@ import ambit2.smarts.IsomorphismTester;
 public class SmartsIsomorphismTester extends IsomorphismTester
 {
 	protected IQueryAtomContainer smartsTarget;
-	
+	protected SmartsMatch smartsMatch = new SmartsMatch();
 	
 	boolean singleAtomSmartsIsomorphism()
 	{	
@@ -16,8 +16,7 @@ public class SmartsIsomorphismTester extends IsomorphismTester
 		isomorphismFound = false;
 		for (int i = 0; i < smartsTarget.getAtomCount(); i++)
 		{	
-			//TODO
-			//if (qa.matches(smartsTarget.getAtom(i)))
+			if (smartsMatch.match(qa, smartsTarget.getAtom(i)))
 			{	
 				isomorphismFound = true;
 				break;
