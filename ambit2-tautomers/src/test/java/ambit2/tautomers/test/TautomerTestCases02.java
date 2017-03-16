@@ -31,6 +31,7 @@ public class TautomerTestCases02 extends TestCase {
 		tman.FlagProcessRemainingStackIncSteps = true;
 		tman.FlagCalculateCACTVSEnergyRank = false;
 		tman.FlagRegisterOnlyBestRankTautomers = false;
+		tman.FlagAddImplicitHAtomsOnTautomerProcess = false; //default value is true but probably it is not needed. 
 		tman.setCanonicTautomerMethod(CanonicTautomerMethod.CACTVS_RANK_INCHI_KEY);
 		
 		tman.tautomerFilter.setFlagApplyWarningFilter(true);
