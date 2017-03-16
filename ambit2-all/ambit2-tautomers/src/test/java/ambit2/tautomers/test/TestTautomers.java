@@ -168,6 +168,7 @@ public class TestTautomers {
 		// tt.visualTest("[H][C@]12C[C@@]3([H])OC(=O)\\C=C/C=C/C(O[C@H](O)CC(C)CC(=O)OC[C@@]4(C[C@@]([H])(O)[C@H](C)C[C@@]4([H])O1)[C@]3(C)C21CO1)C(C)O");
 
 		tt.standardprocessor.setGenerateTautomers(true);
+		
 
 		//tt.test(
 		//tt.visualTest(

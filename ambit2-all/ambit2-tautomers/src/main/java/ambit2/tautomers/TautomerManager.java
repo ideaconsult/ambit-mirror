@@ -91,6 +91,7 @@ public class TautomerManager {
 																// be true
 	public boolean FlagGenerateStereoBasedOn2D = false;
 	public boolean FlagSetStereoElementsOnTautomerProcess = true;
+	public boolean FlagAddImplicitHAtomsOnTautomerProcess = true;
 	public boolean FlagStopGenerationOnReachingRuleSelectorLimit = false; // Typically
 																			// this
 																			// flag
@@ -376,7 +377,8 @@ public class TautomerManager {
 		if (FlagRegisterOnlyBestRankTautomers) {
 			if (tautomerFilter.checkMolecule(newTautomer)) {
 				processTautomer(newTautomer, originalMolecule,
-						FlagSetStereoElementsOnTautomerProcess, FlagGenerateStereoBasedOn2D);
+						FlagSetStereoElementsOnTautomerProcess, FlagGenerateStereoBasedOn2D, 
+						FlagAddImplicitHAtomsOnTautomerProcess);
 				registerBestRankTautomer(newTautomer);
 			}
 			return false; // In this case false is return
@@ -395,13 +397,15 @@ public class TautomerManager {
 				resultTatomerStringCodes.add(newCode);
 				resultTautomers.add(newTautomer);
 				processTautomer(newTautomer, originalMolecule,
-						FlagSetStereoElementsOnTautomerProcess, FlagGenerateStereoBasedOn2D);
+						FlagSetStereoElementsOnTautomerProcess, FlagGenerateStereoBasedOn2D,
+						FlagAddImplicitHAtomsOnTautomerProcess);
 				return true;
 			} else
 				return false;
 		} else {
 			resultTautomers.add(newTautomer);
-			processTautomer(newTautomer, originalMolecule, FlagSetStereoElementsOnTautomerProcess, FlagGenerateStereoBasedOn2D);
+			processTautomer(newTautomer, originalMolecule, FlagSetStereoElementsOnTautomerProcess, 
+						FlagGenerateStereoBasedOn2D, FlagAddImplicitHAtomsOnTautomerProcess);
 			return true;
 		}
 	}
@@ -537,7 +541,7 @@ public class TautomerManager {
 		IAtomContainer newTautomer = molecule.clone();
 
 		if (FlagRegisterOnlyBestRankTautomers) {
-			processTautomer(newTautomer, originalMolecule, FlagSetStereoElementsOnTautomerProcess, FlagGenerateStereoBasedOn2D);
+			processTautomer(newTautomer, originalMolecule, FlagSetStereoElementsOnTautomerProcess, FlagGenerateStereoBasedOn2D, FlagAddImplicitHAtomsOnTautomerProcess);
 			registerBestRankTautomer(newTautomer);
 			return;
 		}
@@ -737,7 +741,8 @@ public class TautomerManager {
 	
 	public static void processTautomer(IAtomContainer tautomer, IAtomContainer originalMol, 
 					boolean FlagSetStereo, 
-					boolean FlagGenerateStereoFrom2D) throws Exception 
+					boolean FlagGenerateStereoFrom2D,
+					boolean FlagAddImplicitHAtoms) throws Exception 
 	{
 		if (tautomer == null)
 			return;
@@ -754,9 +759,13 @@ public class TautomerManager {
 		}
 
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(tautomer);
-		CDKHydrogenAdder adder = CDKHydrogenAdder
-				.getInstance(SilentChemObjectBuilder.getInstance());
-		adder.addImplicitHydrogens(tautomer);
+		
+		if (FlagAddImplicitHAtoms)
+		{	
+			CDKHydrogenAdder adder = CDKHydrogenAdder
+					.getInstance(SilentChemObjectBuilder.getInstance());
+			adder.addImplicitHydrogens(tautomer);
+		}	
 		// AtomContainerManipulator.convertImplicitToExplicitHydrogens(ac);
 
 		CDKHueckelAromaticityDetector.detectAromaticity(tautomer);
