@@ -126,7 +126,9 @@ public class SLNAtomExpression
 			return false;
 
 		case SLNConst.QA_ATTR_n:
-			//TODO not-covered flag
+			//not-covered flag.
+			//It should be used not as a query attribute but as
+			//an attribute for property definition
 			return false;
 			
 		case SLNConst.QA_ATTR_not:

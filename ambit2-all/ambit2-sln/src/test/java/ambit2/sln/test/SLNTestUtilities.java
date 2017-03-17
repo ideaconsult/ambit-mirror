@@ -40,9 +40,9 @@ public class SLNTestUtilities
 		//tu.testSLN2SLN("CH2=CHCH2C[1]:CH:C[2]OCH2OC(@2):C(OCH3):CH:(@1)");
 		//tu.testSLN2SLN("CC[s=R]H(O)CC[s=S]H(O)N");
 		//tu.testSLN2SLN("CCH4[aaa<=123;tttt=23;bbb;aaaa;s=R;spin=t;c=y;hac=2;tbo=1](O)CCH(O)N");
-		tu.testSLN2SLN("C-[type=#]C");
+		//tu.testSLN2SLN("C-[type=#]C");
 		
-		
+		tu.testSLNIsomorphism("N[f]","CCCCC");
 		//tu.testSLNIsomorphism("N[fcharge<0]","CC(C)CC[N-]");
 		//tu.testSLNIsomorphism("C[c=o1]","N[CH2]N");
 		//tu.testSLNIsomorphism("C[hc=0]","CC(C)CCC");
@@ -50,6 +50,7 @@ public class SLNTestUtilities
 		//tu.testSLNIsomorphism("C[src=3]","C1CCC1CC2CC2");		
 		//tu.testSLNIsomorphism("C[tac=2]","C#C");
 		//tu.testSLNIsomorphism("Any=C","C=N");
+		
 		
 		//tu.testSLNIsomorphism("C[1]CC@1C", "C1CC1");  //EmptyStackException !!! 
 		
