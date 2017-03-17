@@ -312,6 +312,7 @@ public class SLNConst
 	public static final int QA_COVERED_n = 0; // atom must not have been matched previously
 	public static final int QA_COVERED_o = 1; // atom's coverage flags are ignored
 	public static final int QA_COVERED_y = 2; // atom must be covered by previous search
+	public static final String CoveredAtomProperty = "SLN_COVERED";
 
 	public static String coverageQueryAttributeToSLNString(int attr)
 	{

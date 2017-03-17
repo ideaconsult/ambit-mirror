@@ -1010,13 +1010,32 @@ public class SLNParser {
 
 				// Read attribute value (after '=')
 				startPos = pos;
-				while (pos < bondExpr.length()) {
+				while (pos < bondExpr.length()) 
+				{
 					if (Character.isLetter(bondExpr.charAt(pos))
 							|| Character.isDigit(bondExpr.charAt(pos))
 							|| (bondExpr.charAt(pos) == '*'))
 						pos++;
 					else
+					{	
+						if (attrName.equals("type"))
+						{
+							switch (bondExpr.charAt(pos))
+							{
+								case '-':
+								case '=':
+								case '#':
+								case ':':	
+								{	
+									pos++;
+									continue;
+								}
+								default:
+									break;
+							}
+						}
 						break;
+					}	
 				}
 
 				String attrValue = bondExpr.substring(startPos, pos);
@@ -1076,8 +1095,11 @@ public class SLNParser {
 			if (extractError.equals("")) {
 				int btype = -1;
 
-				if (value.equals("~"))
-					btype = SLNConst.B_TYPE_ANY;
+				// This is not allowed by the SLN standard for an attribute value
+				// '~' can be specified directly as any bond
+				//if (value.equals("~"))   
+				//	btype = SLNConst.B_TYPE_ANY;
+				
 				if (value.equals("1") || value.equals("-"))
 					btype = SLNConst.B_TYPE_1;
 				if (value.equals("2") || value.equals("="))
