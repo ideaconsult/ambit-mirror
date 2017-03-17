@@ -97,12 +97,16 @@ public class SLNAtomExpression
 
 		case SLNConst.A_ATTR_spin:
 			//TODO
+			return false;
 
 		case SLNConst.QA_ATTR_mapNum:
-			//TODO map number to an atom
+			//Atom map number used in reaction.
+			//Nothing is done therefore return true
+			return true;
 
 		case SLNConst.QA_ATTR_c:
-			//TODO covered
+			//TODO
+			return false;
 
 		case SLNConst.QA_ATTR_f:
 			//filled valences
@@ -118,16 +122,20 @@ public class SLNAtomExpression
 			return (false);
 			
 		case SLNConst.QA_ATTR_is:
-			//TODO  atom in a query must match
+			//TODO  "is" attribute may define a sort of recursive SLN
+			return false;
 
 		case SLNConst.QA_ATTR_n:
-			//TODO atom that matches a query atom from being covered
-
+			//TODO not-covered flag
+			return false;
+			
 		case SLNConst.QA_ATTR_not:
-			//TODO atom in a query must not match
+			//TODO "not" attribute may define a sort of recursive SLN
+			return false;
 
 		case SLNConst.QA_ATTR_v:
 			//TODO Markush and macro atom valence
+			return false;
 
 		case SLNConst.QA_ATTR_r:
 			if (atom.getFlag(CDKConstants.ISINRING))
