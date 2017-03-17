@@ -2521,7 +2521,8 @@ public class SmartsParser {
 			boolean rData2) {
 		IRingSet ringSet = Cycles.sssr(container).toRingSet();
 		IRingSet atomRings;
-
+		//RingData is an array with the sizes of the rings
+		//which this atom participates in
 		if (rData) {
 			for (int i = 0; i < container.getAtomCount(); i++) {
 				IAtom atom = container.getAtom(i);
@@ -2538,6 +2539,8 @@ public class SmartsParser {
 			}
 		} // end of ringData
 
+		//RingData2 is an array with the indices of the rings
+		//which this atom participates in
 		if (rData2) {
 			for (int i = 0; i < container.getAtomCount(); i++) {
 				IAtom atom = container.getAtom(i);
