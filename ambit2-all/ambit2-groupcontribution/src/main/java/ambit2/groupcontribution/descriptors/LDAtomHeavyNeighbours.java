@@ -1,42 +1,42 @@
 package ambit2.groupcontribution.descriptors;
 
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
-public class LDAtomHybridization implements ILocalDescriptor
-{
+public class LDAtomHeavyNeighbours implements ILocalDescriptor{
+
 	private boolean FlagUsed = true;
 	
 	@Override
 	public int calcForAtom(IAtom atom, IAtomContainer mol) {
-		return atom.getHybridization().ordinal();
+		return 0;
 	}
 
 	@Override
 	public String getDesignation(int value) {
-		return "Hyb" + value;
+		return "HeN" + value;
 	}
 
 	@Override
 	public String getShortName() {
-		return "Hyb";
+		return "HeN";
 	}
 
 	@Override
 	public String getName() {
-		return "AtomHybridization";
+		return "AtomHeavyNeighbours";
 	}
 
 	@Override
 	public String getInfo() {
-		return "Atom Hybridization";
+		return "Atom Heavy Neighbours";
 	}
 
 	@Override
 	public Type getType() {
 		return Type.PREDEFINED;
 	}
-	
+
 	@Override
 	public boolean isUsed() {
 		return FlagUsed;
@@ -45,6 +45,10 @@ public class LDAtomHybridization implements ILocalDescriptor
 	@Override
 	public void setIsUsed(boolean used) {
 		FlagUsed = used;
+	}
+	
+	public void hCount(){
+		//int  	
 	}
 
 }
