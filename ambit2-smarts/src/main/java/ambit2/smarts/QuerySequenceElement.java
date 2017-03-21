@@ -40,11 +40,11 @@ public class QuerySequenceElement
 	//(1) an atom with a part of its first topological layer or
 	//(2) a bond between two atoms which has already been sequenced  
 	//For the second case center == null and atoms.lenght = 2 and bonds.lenght = 1
-	IQueryAtom center;	
-	IQueryAtom atoms[];	
-	IQueryBond bonds[];	
-	int atomNums[];
-	int centerNum;
+	public IQueryAtom center;	
+	public IQueryAtom atoms[];	
+	public IQueryBond bonds[];	
+	public int atomNums[];
+	public int centerNum;
 	
 	public void setAtomNums(IQueryAtomContainer container)
 	{
