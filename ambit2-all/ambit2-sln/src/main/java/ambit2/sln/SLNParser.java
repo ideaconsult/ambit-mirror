@@ -597,12 +597,11 @@ public class SLNParser {
 			}
 		}
 
-		// Handle query atom attribute n - noncovering
+		// Handle query atom attribute n - noncovering flag
 		if (name.equals("n")) {
-			int n = extractInteger(value);
-			if (extractError.equals("")) {
+			if (value == null) {
 				SLNExpressionToken token = new SLNExpressionToken(
-						SLNConst.QA_ATTR_n, n);
+						SLNConst.QA_ATTR_n, "");
 				return token;
 			} else {
 				newError("Incorrect n value " + value, curChar, "");
@@ -624,17 +623,17 @@ public class SLNParser {
 		}
 
 		// Handle query atom attribute r
-		if (name.equals("r")) {
-			int r = extractInteger(value);
-			if (extractError.equals("")) {
-				SLNExpressionToken token = new SLNExpressionToken(
-						SLNConst.QA_ATTR_r, r);
-				return token;
-			} else {
-				newError("Incorrect r value " + value, curChar, "");
-				return null;
-			}
-		}
+        if (name.equals("r")) {
+            if (value == null) {
+                SLNExpressionToken token = new SLNExpressionToken(
+                        SLNConst.QA_ATTR_r, "");
+                return token;
+            } else {
+                newError("Incorrect r value " + value, curChar, "");
+                return null;
+            }
+        }
+
 
 		// Handle query atom attribute v - Markush and macro atom valence
 		// information
