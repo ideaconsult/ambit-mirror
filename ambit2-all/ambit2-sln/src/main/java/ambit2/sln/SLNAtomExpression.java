@@ -105,9 +105,22 @@ public class SLNAtomExpression
 			return true;
 
 		case SLNConst.QA_ATTR_c:
-			//TODO
-			return false;
-
+			Object covered = atom.getProperty("COVERED");
+			if (covered == null)
+			{
+				if (tok.param == SLNConst.QA_COVERED_n || tok.param == SLNConst.QA_COVERED_o)
+					return true;
+				else
+					return false;
+			}
+			else
+			{
+				if (tok.param == SLNConst.QA_COVERED_y || tok.param == SLNConst.QA_COVERED_o)
+					return true;
+				else
+					return false;
+			}
+			
 		case SLNConst.QA_ATTR_f:
 			//filled valences
 			//atom.getValency() gives the filled valences
