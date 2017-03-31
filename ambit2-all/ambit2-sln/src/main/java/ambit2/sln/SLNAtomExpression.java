@@ -153,7 +153,8 @@ public class SLNAtomExpression
 			return false;
 
 		case SLNConst.QA_ATTR_r:
-			if (atom.getFlag(CDKConstants.ISINRING))
+			int atomRings[] = (int[])atom.getProperty(CMLUtilities.RingData);
+			if (atomRings != null)			
 				return(true);
 			else
 				return(false);
@@ -210,8 +211,8 @@ public class SLNAtomExpression
 			//TODO number of nonterminal atoms
 
 		case SLNConst.QA_ATTR_rbc:    		 
-			int atomRings[] = (int[])atom.getProperty(CMLUtilities.RingData);
-			return(match_rbc(atomRings, tok.param, atom));
+			int atomRings1[] = (int[])atom.getProperty(CMLUtilities.RingData);
+			return(match_rbc(atomRings1, tok.param, atom));
 
 		case SLNConst.QA_ATTR_src:    		 
 			int atomRings2[] = (int[])atom.getProperty(CMLUtilities.RingData);    		
