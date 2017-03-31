@@ -40,9 +40,11 @@ public class SLNTestUtilities
 		//tu.testSLN2SLN("CH2=CHCH2C[1]:CH:C[2]OCH2OC(@2):C(OCH3):CH:(@1)");
 		//tu.testSLN2SLN("CC[s=R]H(O)CC[s=S]H(O)N");
 		//tu.testSLN2SLN("CCH4[aaa<=123;tttt=23;bbb;aaaa;s=R;spin=t;c=y;hac=2;tbo=1](O)CCH(O)N");
-		//tu.testSLN2SLN("C-[type=#]C");
 		
-		tu.testSLNIsomorphism("C[r]N","C1CCCC1CCCCN");
+		
+		tu.testSLN2SLN("C-[type=#]C<aa=3;p=456>CCC<>");
+		
+		//tu.testSLNIsomorphism("C[r]N","C1CCCC1CCCCN");
 		//tu.testSLNIsomorphism("N[fcharge<0]","CC(C)CC[N-]");
 		//tu.testSLNIsomorphism("C[c=o1]","N[CH2]N");
 		//tu.testSLNIsomorphism("C[hc=0]","CC(C)CCC");
