@@ -175,6 +175,14 @@ public class SMIRKSManager {
 		FlagApplyStereoTransformation = flagApplyStereoTransformation;
 		isoTester.FlagCheckStereoElements = FlagApplyStereoTransformation;  
 	}
+	
+	public boolean isFlagHAtomsTransformation() {
+		return FlagHAtomsTransformation;
+	}
+
+	public void setFlagHAtomsTransformation(boolean flagHAtomsTransformation) {
+		FlagHAtomsTransformation = flagHAtomsTransformation;
+	}
 
 	protected boolean FlagFilterEquivalentMappings = false;
 
@@ -193,15 +201,17 @@ public class SMIRKSManager {
 	protected boolean FlagConvertExplicitHToImplicitOnResultProcess = false; 
 	
 	protected boolean FlagCheckResultStereo = true;
-	protected boolean FlagApplyStereoTransformation = false;
+	protected boolean FlagApplyStereoTransformation = false;	
+	protected boolean FlagHAtomsTransformation = false;
 	
    
+	
 
 	public SMIRKSManager(IChemObjectBuilder builder) {
-	parser.setComponentLevelGrouping(true);
-	parser.mSupportSmirksSyntax = true;
-	stco = new SmartsToChemObject(builder);
-    }
+		parser.setComponentLevelGrouping(true);
+		parser.mSupportSmirksSyntax = true;
+		stco = new SmartsToChemObject(builder);
+	}
 
     public static SMIRKSManager getDefaultSMIRKSManager() {
     	if (defaultSMIRKSManager == null)
