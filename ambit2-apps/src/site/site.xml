@@ -25,7 +25,7 @@
 			<highlightJs>true</highlightJs>
 			<smoothScroll>true</smoothScroll>
 			<highlightJsTheme>github</highlightJsTheme>
-
+			<skinAttribution>false</skinAttribution>
 			<brand>
 				<name><![CDATA[   
       <img src='images/ambit-logo.png'>
