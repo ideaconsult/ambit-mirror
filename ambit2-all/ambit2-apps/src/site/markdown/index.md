@@ -74,11 +74,11 @@ Toxtree predictions online
 
 ## News
 
-- AMBIT-LRI Hands-On Training June 16, 2017, Helsinki, Finland at CAAT Academy 17 "Read-Across Case-studies" [registration open](https://www.caat-academy.org/)
+- **AMBIT-LRI Hands-On Training** June 16, 2017, Helsinki, Finland at [CAAT Academy 17 Tools for Read-Across](https://www.caat-academy.org/)
 
-- [**AMBIT presentation in a ChemicalWatch webinar June 6, 2016**](https://chemicalwatch.com/47309/qsar-guidance-for-2018-reach-registrants)
+- [AMBIT presentation in a ChemicalWatch webinar 06/06/2016](https://chemicalwatch.com/47309/qsar-guidance-for-2018-reach-registrants)
 
-- [**Cefic launches ‘AMBIT’ chemical safety prediction software**](http://cefic-lri.org/news/cefic-launches-ambit-chemical-safety-prediction-software/)
+- [Cefic launches ‘AMBIT’ chemical safety prediction software](http://cefic-lri.org/news/cefic-launches-ambit-chemical-safety-prediction-software/)
 
 - [Cefic-LRI presents its AMBIT tool poster during the poster exhibition of New Approach Methodologies in Regulatory Science](http://cefic-lri.org/events/topical-scientific-workshop-new-approach-methodologies-in-regulatory-science/)
 
@@ -104,13 +104,13 @@ The LRI AMBIT-IUCLID tool is loaded with [REACH data](http://echa.europa.eu/view
 
 -  LRI Workshop on AMBIT and READ-ACROSS [**Video and slides**](http://cefic-lri.org/events/lri-workshop-on-ambit-and-read-across/)
 
-### eNanoMapper database
+### Nanomaterials database
 
-- AMBIT supports nanomaterials - see [eNanoMapper database](./enanomapper.html) for download and access 
+- AMBIT supports nanomaterials [[10.3762/bjnano.6.165](http://dx.doi.org/10.3762/bjnano.6.165)] - see [eNanoMapper database](./enanomapper.html) for download and access 
 
-- Search eNanoMapper database:  <form action="http://search.data.enanomapper.net" method="GET"><input type="text" id="search" name="search" value="nanotube"/><input type='submit' value='Search'/></form>
+- Search [eNanoMapper database](http://search.data.enanomapper.net?search=nanotube)
 
-- [Jeliazkova N. et al., "The eNanoMapper database for nanomaterial safety information," Beilstein J. Nanotechnol., vol. 6, pp. 1609–1634, Jul. 2015.](http://dx.doi.org/10.3762/bjnano.6.165)
+- Search [NANoREG](http://www.nanoreg.eu/) - eNanoMapper database:  <form action="http://search.data.enanomapper.net/nanoreg" method="GET"><input type="text" id="search" name="search" value="TiO2"/><input type='submit' value='Search'/></form>
  
  
 ---
