@@ -106,12 +106,13 @@ The LRI AMBIT-IUCLID tool is loaded with [REACH data](http://echa.europa.eu/view
 
 ### Nanomaterials database
 
-- AMBIT supports nanomaterials [[10.3762/bjnano.6.165](http://dx.doi.org/10.3762/bjnano.6.165)] - see [eNanoMapper database](./enanomapper.html) for download and access 
+- AMBIT supports nanomaterials [[10.3762/bjnano.6.165](http://dx.doi.org/10.3762/bjnano.6.165)] 
 
 - Search [eNanoMapper database](http://search.data.enanomapper.net?search=nanotube)
 
 - Search [NANoREG](http://www.nanoreg.eu/) - eNanoMapper database:  <form action="http://search.data.enanomapper.net/nanoreg" method="GET"><input type="text" id="search" name="search" value="TiO2"/><input type='submit' value='Search'/></form>
- 
+
+- Customized [AMBIT download](./enanomapper.html) for eNanoMapper database
  
 ---
  
