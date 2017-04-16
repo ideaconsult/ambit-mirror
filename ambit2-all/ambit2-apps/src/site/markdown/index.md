@@ -74,6 +74,8 @@ Toxtree predictions online
 
 ## News
 
+- AMBIT-LRI Hands-On Training June 16, 2017, Helsinki, Finland at CAAT Academy 17 "Read-Across Case-studies" [registration open](https://www.caat-academy.org/)
+
 - [**AMBIT presentation in a ChemicalWatch webinar June 6, 2016**](https://chemicalwatch.com/47309/qsar-guidance-for-2018-reach-registrants)
 
 - [**Cefic launches ‘AMBIT’ chemical safety prediction software**](http://cefic-lri.org/news/cefic-launches-ambit-chemical-safety-prediction-software/)
