@@ -142,16 +142,24 @@ public class HAtomManager
 				// Handling atom primitives.
 				// When given primitive defines H-atoms it must not be
 				// negated
+				//If more than H<n> primitive is present more than once, the last one takes precedence
+				//(if there is contradiction this smarts expression will not be matched anyway)
 				switch (seTok.type) {
 		
 				case SmartsConst.AP_H:
-					if (seTok.param > 0)
+					if (seTok.param >= 0)
 						if (!FlagNot)
 							expHAtoms = seTok.param;
 					break;
 				
 				case SmartsConst.AP_Recursive:
-					//TODO
+					int ha = getRecursiveExpressionHAtoms(atExp,
+							seTok.param);
+					//if (ha == -2)
+					//	return -2;  ???
+					if (ha >= 0)
+						if (!FlagNot)
+							expHAtoms = ha;
 					break;
 					
 				// All other token types do not effect function result
@@ -161,4 +169,16 @@ public class HAtomManager
 
 		return (expHAtoms);
 	}
+	
+	static int getRecursiveExpressionHAtoms(SmartsAtomExpression atExp, int n) 
+	{
+		IAtom a0 = atExp.recSmartsContainers.get(n).getAtom(0);
+		if (a0 instanceof SmartsAtomExpression)
+		{
+			//recursion here: getHAtoms() calls getRecursiveExpressionHAtoms()
+			return getHAtoms((SmartsAtomExpression) a0);
+		}
+		return -1;
+	}	
+		
 }
