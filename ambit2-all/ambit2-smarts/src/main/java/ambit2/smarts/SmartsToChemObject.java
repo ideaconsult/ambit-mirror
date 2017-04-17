@@ -383,7 +383,7 @@ public class SmartsToChemObject extends
 		return (null);
 	}
 
-	public List<SmartsAtomExpression> getSubExpressions(
+	public static List<SmartsAtomExpression> getSubExpressions(
 			SmartsAtomExpression a, int separator) {
 		List<SmartsAtomExpression> v = new ArrayList<SmartsAtomExpression>();
 		SmartsAtomExpression sub = new SmartsAtomExpression(
