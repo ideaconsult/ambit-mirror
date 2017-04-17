@@ -67,8 +67,8 @@ public class SMIRKSReaction
 	//Atom transformation is designated for the mapped atoms
 	List<Integer> reactantAtCharge = new ArrayList<Integer>();
 	List<Integer> productAtCharge = new ArrayList<Integer>();
-	//List<Integer> reactantAtChirality
-	//List<Integer> productAtChirality	
+	List<Integer> reactantHAtoms = new ArrayList<Integer>();
+	List<Integer> productHAtoms = new ArrayList<Integer>();	
 	
 	//Bond transformation
 	List<Integer> reactAt1 = new ArrayList<Integer>();
@@ -522,6 +522,11 @@ public class SMIRKSReaction
 			else
 				productAtCharge.add(a.getFormalCharge());
 		}
+	}
+	
+	void generateHAtomTransformation()
+	{
+		//TODO
 	}
 	
 	
