@@ -2,7 +2,10 @@ package ambit2.smarts.smirks;
 
 import java.util.List;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
 import ambit2.smarts.SmartsAtomExpression;
 import ambit2.smarts.SmartsConst;
@@ -16,11 +19,9 @@ public class HAtomManager
 	 * @param a
 	 * @return 0,1,2,3,4,... if specified correctly
 	 *         -1 if not specified anywhere 
-	 *         -2 if not specified correctly
+	 *         -2 if there is inconsistency in H atoms definition
 	 */
-	
-	
-	public static int getHAtomsParameter(SmartsAtomExpression a) 
+	public static int getHAtoms(SmartsAtomExpression a) 
 	{
 		// In order to extract the number H primitive value a SmartsAtomExpresion
 		// following rules are applied:
@@ -32,17 +33,34 @@ public class HAtomManager
 		// or if two or more expressions define H<n> 
 		// they must be the same
 		
-		int pHAtoms = -1;
+		int hAtoms = -1;
 
 		List<SmartsAtomExpression> subs = SmartsToChemObject.getSubExpressions(a, SmartsConst.LO
 				+ SmartsConst.LO_ANDLO);
 		
-		//TODO
-		return pHAtoms;
-
+		for (int i = 0; i < subs.size(); i++) 
+		{
+			int ha = analyzeSubExpressionsHAtomsFromLowAnd(a, subs.get(i));
+			
+			if (ha == -2)
+				return -2; //H atoms are not defined correctly
+			
+			if (ha != -1) 
+			{
+				if (hAtoms == -1)
+					hAtoms = ha;
+				else 
+				{
+					if (hAtoms != ha) 
+						return -2; //H atoms are not defined correctly
+				}
+			}
+		}
+					
+		return hAtoms;
 	}
 	
-	public int analyzeSubExpressionsHAtomsFromLowAnd(SmartsAtomExpression atExp,
+	static int analyzeSubExpressionsHAtomsFromLowAnd(SmartsAtomExpression atExp,
 			SmartsAtomExpression sub) 
 	{
 		// The sub expression sub is represented as a sequence of sub-sub
@@ -80,7 +98,7 @@ public class HAtomManager
 	}
 		
 	
-	public int getExpressionHAtoms(SmartsAtomExpression atExp,
+	static int getExpressionHAtoms(SmartsAtomExpression atExp,
 			SmartsAtomExpression sub) 
 	{
 		// 'sub' expression is represented only by HI_AND and NOT operations
