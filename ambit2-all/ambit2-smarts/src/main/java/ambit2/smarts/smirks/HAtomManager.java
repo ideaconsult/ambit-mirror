@@ -6,6 +6,7 @@ import org.openscience.cdk.interfaces.IAtom;
 
 import ambit2.smarts.SmartsAtomExpression;
 import ambit2.smarts.SmartsConst;
+import ambit2.smarts.SmartsExpressionToken;
 import ambit2.smarts.SmartsToChemObject;
 
 public class HAtomManager 
@@ -40,4 +41,68 @@ public class HAtomManager
 		return pHAtoms;
 
 	}	
+	
+	public int getExpressionHAtoms(SmartsAtomExpression atExp,
+			SmartsAtomExpression sub) 
+	{
+		// 'sub' expression is represented only by HI_AND and NOT operations
+		
+		// Getting the positions of HI_AND tokens
+		int pos[] = new int[sub.tokens.size() + 2];
+		pos[0] = -1;
+		int n = 0;
+		for (int i = 0; i < sub.tokens.size(); i++) {
+			if (sub.tokens.get(i).type == SmartsConst.LO + SmartsConst.LO_AND) {
+				n++;
+				pos[n] = i;
+			}
+		}
+
+		n++;
+		pos[n] = sub.tokens.size();
+
+		int expHAtoms = -1;
+		boolean FlagNot;
+		SmartsExpressionToken seTok;
+
+		// using 1-based indexing for 'pos' array.
+		// pos[0] = -1 and pos[n] = sub.tokens.size() have special use for both
+		// ends of the token sequence
+		for (int i = 1; i <= n; i++) {
+			// Handling the tokens between pos[i-1] and pos[i]
+			FlagNot = false;
+			for (int k = pos[i - 1] + 1; k < pos[i]; k++) {
+				seTok = sub.tokens.get(k);
+				if (seTok.isLogicalOperation()) {
+					if (seTok.getLogOperation() == SmartsConst.LO_NOT)
+						FlagNot = !FlagNot;
+
+					if (seTok.getLogOperation() == SmartsConst.LO_AND)
+						FlagNot = false; // 'Not' flag is reseted
+
+					continue;
+				}
+
+				// Handling atom primitives.
+				// When given primitive defines H-atoms it must not be
+				// negated
+				switch (seTok.type) {
+		
+				case SmartsConst.AP_H:
+					if (seTok.param > 0)
+						if (!FlagNot)
+							expHAtoms = seTok.param;
+					break;
+				
+				case SmartsConst.AP_Recursive:
+					//TODO
+					break;
+					
+				// All other token types do not effect function result
+				}
+			}
+		}
+
+		return (expHAtoms);
+	}
 }
