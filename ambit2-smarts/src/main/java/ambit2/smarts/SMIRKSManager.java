@@ -314,13 +314,21 @@ public class SMIRKSManager {
 
     	reaction.generateTransformationData();
     	
-    	//Handle stereo transformation
+    	
     	if (reaction.mapErrors.isEmpty())
+    	{	
+    		//Handle stereo transformation
     		if (FlagApplyStereoTransformation)
     		{	
     			reaction.generateStereoTransformation();
     			//reaction.checkStereoTransformation();
-    		}	
+    		}
+    		
+    		//Handle H atom transformation
+    		if (FlagHAtomsTransformation)
+    			reaction.generateHAtomTransformation();
+    		
+    	}	
 
     	// Check for errors produced by the generation of transformation data
     	if (reaction.mapErrors.size() > 0) {
