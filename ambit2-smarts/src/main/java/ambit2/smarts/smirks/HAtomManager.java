@@ -40,7 +40,45 @@ public class HAtomManager
 		//TODO
 		return pHAtoms;
 
-	}	
+	}
+	
+	public int analyzeSubExpressionsHAtomsFromLowAnd(SmartsAtomExpression atExp,
+			SmartsAtomExpression sub) 
+	{
+		// The sub expression sub is represented as a sequence of sub-sub
+		// expressions
+		// separated by logical 'OR'
+		// Following rule is applied
+		// If at least one sub-sub expression has a defined H atoms
+		// then all other sub-subs must have the same type
+		
+		List<SmartsAtomExpression> sub_subs = SmartsToChemObject.getSubExpressions(sub,
+				SmartsConst.LO + SmartsConst.LO_OR);
+		
+		int subHAtoms[] = new int[sub_subs.size()];
+		for (int i = 0; i < sub_subs.size(); i++) 
+			subHAtoms[i] = getExpressionHAtoms(atExp, sub_subs.get(i));
+		
+
+		int hAtoms = subHAtoms[0];
+		for (int i = 1; i < subHAtoms.length; i++)
+			if (subHAtoms[i] >= 0) 	
+			{
+				if (hAtoms == -1)
+					hAtoms = subHAtoms[i];
+				else
+				{	
+					if (hAtoms != subHAtoms[i]) 
+					{
+						hAtoms = -2;
+						break;
+					}
+				}
+			}
+		
+		return hAtoms;
+	}
+		
 	
 	public int getExpressionHAtoms(SmartsAtomExpression atExp,
 			SmartsAtomExpression sub) 
