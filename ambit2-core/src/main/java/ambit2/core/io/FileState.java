@@ -178,6 +178,26 @@ public class FileState implements IInputOutputState {
 				return false;
 			}
 		},
+		I6D_INDEX {
+			@Override
+			public String getDescription() {
+				return "IUCLID6 xml (*.i6d)";
+			}
+			@Override
+			public boolean supportsOutput() {
+				return false;
+			}
+		},		
+		I6Z_INDEX {
+			@Override
+			public String getDescription() {
+				return "IUCLID6 archive (*.i6z)";
+			}
+			@Override
+			public boolean supportsOutput() {
+				return false;
+			}
+		},		
 		NANOCMLx_INDEX {
 			@Override
 			public String getExtension() {
