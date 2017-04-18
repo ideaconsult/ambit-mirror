@@ -83,6 +83,7 @@ import ambit2.smarts.StereoChemUtils;
 import ambit2.smarts.StereoFromSmartsAtomExpression;
 import ambit2.smarts.StructInfo;
 import ambit2.smarts.StructureSetAnalyzer;
+import ambit2.smarts.smirks.HAtomManager;
 
 import com.google.common.collect.Maps;
 
@@ -2358,6 +2359,33 @@ public class TestUtilities {
 		return 0;
 	}
 	
+	int testHAtomsManager(String smarts) throws Exception 
+	{
+		System.out.println("H atoms for: " + smarts);
+		IQueryAtomContainer query = sp.parse(smarts);
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals(""))
+		{	
+			System.out.println(errorMsg);
+			return (-1);
+		}
+			
+			
+		for (int i = 0; i < query.getAtomCount(); i++)
+		{
+			IAtom at = query.getAtom(i);
+			if (at instanceof SmartsAtomExpression)
+			{
+				SmartsAtomExpression smae = (SmartsAtomExpression)at;
+				int ha = HAtomManager.getHAtoms(smae);
+				System.out.println("atom #" + (i+1) + "  " 
+						+ smae.toString() + "  --> " + ha );
+			}
+		}
+		
+		return 0;
+	}
+	
 	String chiralityToString(int  chir)
 	{
 		switch (chir)
@@ -3088,6 +3116,8 @@ public class TestUtilities {
 		//tu.testStereoOnMoleculeChange();
 		
 		//tu.testStereoFromSmartsAtomExpression("CC[C@;C@++](N)(Cl)C");
+		
+		tu.testHAtomsManager("[C+;C;+H3,++H3,--CH3][C;+]");
 
 	}
 
