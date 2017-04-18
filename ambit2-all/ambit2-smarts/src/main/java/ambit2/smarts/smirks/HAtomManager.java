@@ -19,7 +19,7 @@ public class HAtomManager
 	 * @param a
 	 * @return 0,1,2,3,4,... if specified correctly
 	 *         -1 if not specified anywhere 
-	 *         -2 if there is inconsistency in H atoms definition
+	 *         -2 if H atoms are defined ambiguously
 	 */
 	public static int getHAtoms(SmartsAtomExpression a) 
 	{
@@ -43,7 +43,7 @@ public class HAtomManager
 			int ha = analyzeSubExpressionsHAtomsFromLowAnd(a, subs.get(i));
 			
 			if (ha == -2)
-				return -2; //H atoms are not defined correctly
+				return -2; //H atoms are not defined unambiguously
 			
 			if (ha != -1) 
 			{
@@ -52,7 +52,7 @@ public class HAtomManager
 				else 
 				{
 					if (hAtoms != ha) 
-						return -2; //H atoms are not defined correctly
+						return -2;  //H atoms are not defined unambiguously
 				}
 			}
 		}
@@ -78,11 +78,12 @@ public class HAtomManager
 			subHAtoms[i] = getExpressionHAtoms(atExp, sub_subs.get(i));
 		
 
-		int hAtoms = subHAtoms[0];
-		for (int i = 1; i < subHAtoms.length; i++)
+		int hAtoms = -100;
+		boolean FlagUnspecified = false;		
+		for (int i = 0; i < subHAtoms.length; i++)
 			if (subHAtoms[i] >= 0) 	
 			{
-				if (hAtoms == -1)
+				if (hAtoms == -100)
 					hAtoms = subHAtoms[i];
 				else
 				{	
@@ -93,6 +94,18 @@ public class HAtomManager
 					}
 				}
 			}
+			else
+				FlagUnspecified = true;
+		
+		if (hAtoms == -100)
+			return -1;
+		
+		if (hAtoms != -2)
+			//if there is at least one unspecified token
+			//the final result is unspecified (-1) 
+			//since logical separator is OR
+			if (FlagUnspecified) 
+				return -1;
 		
 		return hAtoms;
 	}
