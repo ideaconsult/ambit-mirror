@@ -77,24 +77,10 @@ public class SLNAtomExpression
 				return(false);
 
 		case SLNConst.A_ATTR_s:
-			//It is assumed that PLUS is R and MINUS is S
-			if (tok.param == SLNConst.A_STEREO_R || tok.param == SLNConst.A_STEREO_N || tok.param == SLNConst.A_STEREO_D ||
-				 tok.param == SLNConst.A_STEREO_RE || tok.param == SLNConst.A_STEREO_NE || tok.param == SLNConst.A_STEREO_DE ||
-				 tok.param == SLNConst.A_STEREO_R_ || tok.param == SLNConst.A_STEREO_N_ || tok.param == SLNConst.A_STEREO_D_ ||
-				 tok.param == SLNConst.A_STEREO_RM || tok.param == SLNConst.A_STEREO_NM || tok.param == SLNConst.A_STEREO_DM)
-			{
-				if (atom.getStereoParity() == CDKConstants.STEREO_ATOM_PARITY_PLUS);
-					return(true);
-			}
-			if (tok.param == SLNConst.A_STEREO_S || tok.param == SLNConst.A_STEREO_I || tok.param == SLNConst.A_STEREO_L ||
-					 tok.param == SLNConst.A_STEREO_SE || tok.param == SLNConst.A_STEREO_IE || tok.param == SLNConst.A_STEREO_LE ||
-					 tok.param == SLNConst.A_STEREO_S_ || tok.param == SLNConst.A_STEREO_I_ || tok.param == SLNConst.A_STEREO_L_ ||
-					 tok.param == SLNConst.A_STEREO_SM || tok.param == SLNConst.A_STEREO_IM || tok.param == SLNConst.A_STEREO_LM)
-			{
-				if (atom.getStereoParity() == CDKConstants.STEREO_ATOM_PARITY_MINUS)
-					return (true);
-			}
-
+			//TODO get targetStereo
+			int targetStereo = SLNConst.A_STEREO_U; //temporary code
+			return match_stereo(tok.param, targetStereo);
+			
 		case SLNConst.A_ATTR_spin:
 			//TODO
 			return false;
@@ -297,6 +283,35 @@ public class SLNAtomExpression
 			}
 		}
 	}
+	
+	boolean match_stereo(int param, int targetStereo)
+    {
+		if (param == SLNConst.A_STEREO_R || param == SLNConst.A_STEREO_N || param == SLNConst.A_STEREO_D ||
+				param == SLNConst.A_STEREO_RE || param == SLNConst.A_STEREO_NE || param == SLNConst.A_STEREO_DE ||
+				param == SLNConst.A_STEREO_R_ || param == SLNConst.A_STEREO_N_ || param == SLNConst.A_STEREO_D_ ||
+				param == SLNConst.A_STEREO_RM || param == SLNConst.A_STEREO_NM || param == SLNConst.A_STEREO_DM)
+		{
+			if (targetStereo == SLNConst.A_STEREO_R)
+				return true;
+			else
+				return false;
+		}
+
+		if (param == SLNConst.A_STEREO_S || param == SLNConst.A_STEREO_I || param == SLNConst.A_STEREO_L ||
+				param == SLNConst.A_STEREO_SE || param == SLNConst.A_STEREO_IE || param == SLNConst.A_STEREO_LE ||
+				param == SLNConst.A_STEREO_S_ || param == SLNConst.A_STEREO_I_ || param == SLNConst.A_STEREO_L_ ||
+				param == SLNConst.A_STEREO_SM || param == SLNConst.A_STEREO_IM || param == SLNConst.A_STEREO_LM)
+		{
+			if (targetStereo == SLNConst.A_STEREO_L)
+				return true;
+			else
+				return false;
+		}
+		
+		return false;
+    }
+
+
 
 
 	boolean commonRingBond(int atomRingData1[], int atomRingData2[])
