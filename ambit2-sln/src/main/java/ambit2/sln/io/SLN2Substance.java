@@ -8,6 +8,9 @@ import ambit2.sln.SLNContainerSet;
 
 public class SLN2Substance 
 {
+	//Conversion flags
+	public boolean FlagProportionToSLN = true;
+	
 	public List<CompositionRelation> slnToSubstanceComposition(SLNContainerSet slnContSet)
 	{
 		//TODO
