@@ -32,6 +32,7 @@ import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.smarts.DoubleBondStereoInfo.DBStereo;
+import ambit2.smarts.SmartsConst.HandleHAtoms;
 import ambit2.smarts.SmartsConst.SSM_MODE;
 
 public class SMIRKSManager {
@@ -183,6 +184,15 @@ public class SMIRKSManager {
 	public void setFlagHAtomsTransformation(boolean flagHAtomsTransformation) {
 		FlagHAtomsTransformation = flagHAtomsTransformation;
 	}
+	
+	public HandleHAtoms getFlagHAtomsTransformationMode() {
+		return FlagHAtomsTransformationMode;
+	}
+
+	public void setFlagHAtomsTransformationMode(
+			HandleHAtoms flagHAtomsTransformationMode) {
+		FlagHAtomsTransformationMode = flagHAtomsTransformationMode;
+	}
 
 	protected boolean FlagFilterEquivalentMappings = false;
 
@@ -203,9 +213,9 @@ public class SMIRKSManager {
 	protected boolean FlagCheckResultStereo = true;
 	protected boolean FlagApplyStereoTransformation = false;	
 	protected boolean FlagHAtomsTransformation = false;
-	
+	protected HandleHAtoms FlagHAtomsTransformationMode = HandleHAtoms.IMPLICIT; 
    
-	
+		
 
 	public SMIRKSManager(IChemObjectBuilder builder) {
 		parser.setComponentLevelGrouping(true);
@@ -1830,7 +1840,7 @@ public class SMIRKSManager {
     		int pAtNum = reaction.productNotMappedAt.get(i).intValue();
     		Integer ha = reaction.productHAtoms.get(pAtNum);
     		if (ha >= 0)
-    			setAtomHNeighbours(newProdAtoms.get(i), target,ha);
+    			setAtomHNeighbours(newProdAtoms.get(i), target, ha, FlagHAtomsTransformationMode);
     	}
     	
     	//Handle 'SMIRKS' mapped atoms
@@ -1846,7 +1856,7 @@ public class SMIRKSManager {
     			if (ha >= 0)
     			{	
     				IAtom tAt = rMap.get(i);
-    				setAtomHNeighbours(tAt, target, ha);
+    				setAtomHNeighbours(tAt, target, ha, FlagHAtomsTransformationMode);
     			}	
     		} 
     		else {
@@ -1855,9 +1865,71 @@ public class SMIRKSManager {
     	}
     }
     
-    public void setAtomHNeighbours(IAtom atom, IAtomContainer target, int numH)
+    public void setAtomHNeighbours(IAtom atom, IAtomContainer target, int numH, HandleHAtoms hTransformMode)
+    {
+    	//For all transformation modes both implicit and explicit H atoms are taken into account
+    	Integer hc_im = atom.getImplicitHydrogenCount();
+    	if (hc_im == null)
+    		hc_im = 0;
+    	Integer hc_ex = (Integer) atom.getProperty(CMLUtilities.ExplicitH); //This flag is set
+    	if (hc_ex == null)
+    		hc_ex = 0;
+    	
+    	int totalH = hc_im + hc_ex;
+    	
+    	if (numH == (totalH))
+    		return; //The current H atom count is exactly numH
+    	
+    	if (numH > totalH)
+    	{
+    		//Adding H Atoms
+    		int hDiff = numH - totalH;
+    		switch (hTransformMode)
+    		{
+    		case IMPLICIT:
+    			hc_im = hc_im + hDiff;
+    			atom.setImplicitHydrogenCount(hc_im);
+    			break;
+    		case EXPLICIT:
+    			addExplcitHNeighbours(atom, target, hDiff);
+    			break;
+    		}
+    	}
+    	else //numH < totalH
+    	{	
+    		//Removing H Atoms
+    		int hDiff = totalH - numH;
+    		switch (hTransformMode)
+    		{
+    		case IMPLICIT:
+    			if (hc_im >= hDiff)
+    			{	
+    				hc_im = hc_im - hDiff;
+    				atom.setImplicitHydrogenCount(hc_im);
+    			}
+    			else
+    			{
+    				atom.setImplicitHydrogenCount(0);
+    				//Additionally removing explicit H atoms
+    				removeExplcitHNeighbours(atom, target, hDiff-hc_im);
+    			}
+    			break;
+    		case EXPLICIT:
+    			//TODO
+    			break;
+    		}
+    	}
+    }
+    
+    public void addExplcitHNeighbours(IAtom atom, IAtomContainer target, int numH)
     {
     	//TODO
+    }
+    
+    public int removeExplcitHNeighbours(IAtom atom, IAtomContainer target, int numH)
+    {
+    	//TODO
+    	return 0;
     }
     
     
