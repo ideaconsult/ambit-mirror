@@ -1013,6 +1013,12 @@ public class SMIRKSManager {
     		//handle stereo transformation defined in the SMIRKS
     		applyStereoTransformAtLocation(target, rMap, newAtoms, reaction);
     	}
+    	
+    	if (FlagHAtomsTransformation)
+    	{	
+    		//handle H atom transformation
+    		applyHAtomTransformAtLocation(target, rMap, newAtoms, reaction);
+    	}	
     }
 
     public IAtomContainer applyTransformationsAtLocationsWithCloning(IAtomContainer target, List<List<IAtom>> rMaps,
@@ -1814,6 +1820,28 @@ public class SMIRKSManager {
     	
     	target.setStereoElements(newStereo);
     }
+    
+    
+    public void applyHAtomTransformAtLocation(IAtomContainer target, List<IAtom> rMap, List<IAtom> newProdAtoms, SMIRKSReaction reaction)
+    {
+    	//Handle H-atoms for newly created atoms
+    	for (int i = 0; i < reaction.productNotMappedAt.size(); i++) 
+    	{
+    		int pAtNum = reaction.productNotMappedAt.get(i).intValue();
+    		Integer ha = reaction.productHAtoms.get(pAtNum);
+    		if (ha >= 0)
+    			setAtomHNeighbours(newProdAtoms.get(i), target,ha);
+    	}
+    	
+    	//TODO
+    	
+    }
+    
+    public void setAtomHNeighbours(IAtom atom, IAtomContainer target, int numH)
+    {
+    	//TODO
+    }
+    
     
     
     IAtom getNewProductAtomOnTargetByNumber(int prodAtNum, 
