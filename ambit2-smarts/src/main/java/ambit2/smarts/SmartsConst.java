@@ -246,4 +246,8 @@ public class SmartsConst
 		}
 		return "";
 	}
+	
+	public static enum HandleHAtoms {
+		IMPLICIT, EXPLICIT
+	}
 }
