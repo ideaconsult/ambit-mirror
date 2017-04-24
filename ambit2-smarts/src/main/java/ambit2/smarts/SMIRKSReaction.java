@@ -15,6 +15,7 @@ import org.openscience.cdk.stereo.ExtendedTetrahedral;
 import org.openscience.cdk.stereo.TetrahedralChirality;
 
 import ambit2.smarts.DoubleBondStereoInfo.DBStereo;
+import ambit2.smarts.smirks.HAtomManager;
 
 
 
@@ -526,7 +527,15 @@ public class SMIRKSReaction
 	
 	void generateHAtomTransformation()
 	{
-		//TODO
+		//Store the product atoms H-atom info
+		for (int i = 0; i < product.getAtomCount(); i++)
+		{
+			IAtom a = product.getAtom(i);
+			if (a instanceof SmartsAtomExpression)
+				productHAtoms.add(HAtomManager.getHAtoms((SmartsAtomExpression)a));
+			else
+				productHAtoms.add(new Integer(-1));
+		}
 	}
 	
 	
