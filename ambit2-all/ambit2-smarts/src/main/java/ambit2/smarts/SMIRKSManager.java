@@ -1833,8 +1833,26 @@ public class SMIRKSManager {
     			setAtomHNeighbours(newProdAtoms.get(i), target,ha);
     	}
     	
-    	//TODO
-    	
+    	//Handle 'SMIRKS' mapped atoms
+    	for (int i = 0; i < reaction.reactant.getAtomCount(); i++) 
+    	{
+    		IAtom rAt = reaction.reactant.getAtom(i);
+    		Integer raMapInd = (Integer) rAt.getProperty("SmirksMapIndex");
+    		if (raMapInd != null) 
+    		{
+    			//Atoms is mapped
+    			int pAtNum = reaction.getMappedProductAtom(raMapInd);
+    			Integer ha = reaction.productHAtoms.get(pAtNum);
+    			if (ha >= 0)
+    			{	
+    				IAtom tAt = rMap.get(i);
+    				setAtomHNeighbours(tAt, target, ha);
+    			}	
+    		} 
+    		else {
+    			// Atom was deleted - nothing is done
+    		}
+    	}
     }
     
     public void setAtomHNeighbours(IAtom atom, IAtomContainer target, int numH)
