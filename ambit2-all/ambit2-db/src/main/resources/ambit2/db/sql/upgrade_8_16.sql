@@ -12,7 +12,7 @@ BEGIN
   DELETE from qsasheader 
   where topcategory=v_topcategory and endpointcategory=v_endpointcategory and guidance=v_guidance and reference=v_reference and threshold_sim=simthreshold;
   insert into qsasheader 
-  values (null,0,simthreshold,-,0,now(),v_topcategory,v_endpointcategory,v_guidance,v_reference,null);
+  values (null,0,simthreshold,null,0,now(),v_topcategory,v_endpointcategory,v_guidance,v_reference,null);
 
   set @idsasmap = LAST_INSERT_ID();
   set @laplacek = ifnull(laplacek,1E-7);
