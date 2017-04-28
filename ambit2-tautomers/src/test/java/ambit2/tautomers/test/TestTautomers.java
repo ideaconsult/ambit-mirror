@@ -184,8 +184,12 @@ public class TestTautomers {
 		//tt.visualTest("C1=CN=C(N)NC1(=O)");
 		
 		tt.tman.FlagAddImplicitHAtomsOnTautomerProcess = false;
-		tt.visualTest("BrC1=CC=C(C=C1)S(=O)(=O)CC1=CC=C(O1)C(=O)N1CCOCC1");
-		
+		//tt.visualTest("BrC1=CC=C(C=C1)S(=O)(=O)CC1=CC=C(O1)C(=O)N1CCOCC1");
+		//tt.visualTest("ClC=1C=C(C2=NN(C(=C2C3=CC=C(N(O)=O)C=C3)C(=O)N4C(OCC4)=O)C5=CC=CC=C5)C=CC1");
+		//tt.visualTest("O(C=1C(NC(=O)C=NN#N)=CC(OC)=CC1)C");
+		//tt.visualTest("COC1=CC(=C(C=C1)OC)NC(=O)CN=[N+]=[N-]");
+		tt.visualTest("COC1=CC(=C(C=C1)OC)NC(=O)CN=N#N");
+		               
 		//tt.visualTest("OC(=O)CCC=CN");
 
 		// tt.visualTest("O=C1OC3=CC=CC=C3(C(O)C1C(C=2C=CC=CC=2)CC(=O)C)");
