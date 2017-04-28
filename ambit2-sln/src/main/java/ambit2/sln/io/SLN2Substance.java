@@ -1,5 +1,6 @@
 package ambit2.sln.io;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.relation.composition.CompositionRelation;
@@ -13,8 +14,18 @@ public class SLN2Substance
 	
 	public List<CompositionRelation> slnToSubstanceComposition(SLNContainerSet slnContSet)
 	{
-		//TODO
-		return null;
+		if (slnContSet == null)
+			return null;
+		
+		List<CompositionRelation> composition = new ArrayList<CompositionRelation>();
+		for (int i = 0; i < slnContSet.containers.size(); i++)
+		{
+			SLNContainer slnContainer = slnContSet.containers.get(i);
+			CompositionRelation compRel = slnToCompositionRelation(slnContainer);
+			composition.add(compRel);
+		}
+		
+		return composition;
 	}
 	
 	public SLNContainerSet substanceCompositionToSln(List<CompositionRelation> composition)
