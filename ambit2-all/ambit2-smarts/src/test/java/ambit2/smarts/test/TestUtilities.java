@@ -84,6 +84,7 @@ import ambit2.smarts.StereoFromSmartsAtomExpression;
 import ambit2.smarts.StructInfo;
 import ambit2.smarts.StructureSetAnalyzer;
 import ambit2.smarts.smirks.HAtomManager;
+import ambit2.smarts.smirks.Transformations;
 
 import com.google.common.collect.Maps;
 
@@ -2470,6 +2471,35 @@ public class TestUtilities {
 
     }
 	
+	public void testFixSHValence7(String smiles) throws Exception {
+		System.out.println("Fixing SH Valence 7: \n" + smiles);
+		
+		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(smiles);
+		
+		if (FlagTargetPreprocessing)
+			preProcess(target);
+		
+		if (FlagPrintAtomAttributes) {
+			System.out.println("Atom attributes:\n"
+					+ SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Bond attributes:\n"
+					+ SmartsHelper.getBondAttributes(target));
+		}
+
+		//SmilesGenerator smiGen = SmilesGenerator.absolute();  
+		//SmilesGenerator smiGen = SmilesGenerator.generic(); //no stereo
+		//SmilesGenerator smiGen = SmilesGenerator.unique();  //no stereo
+		SmilesGenerator smiGen = SmilesGenerator.isomeric(); //This mode preserves the stereo and 
+		
+		Transformations.fixSHValence7Atoms(target);	
+		//Transformations.process(target);
+		
+		String res = smiGen.create(target);
+		System.out.println(smiles);
+		System.out.println(res);
+		
+	}
+	
 
 	// -------------------------------------------------------------------------------
 
@@ -3117,7 +3147,12 @@ public class TestUtilities {
 		
 		//tu.testStereoFromSmartsAtomExpression("CC[C@;C@++](N)(Cl)C");
 		
-		tu.testHAtomsManager("[C+;C;+H3,++H3,--CH3][C;+]");
+		//tu.testHAtomsManager("[C+;C;+H3,++H3,--CH3][C;+]");
+		
+		tu.FlagPrintAtomAttributes = false;
+		tu.testFixSHValence7("[SH](=O)(=O)(C)C");
+		//tu.testFixSHValence7("[SH]=1(O)(=O)C=2C(O)=C3C=C4[C@@]5(CCCC=6C5=C(OC6)C(=O)C4=CC3=C(O)C2N=CC1)C");
+		//tu.testFixSHValence7("C1=CC=CC=C1N(C=[SH](O)(O)=O)C");
 
 	}
 
