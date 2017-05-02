@@ -83,6 +83,7 @@ import ambit2.smarts.StereoChemUtils;
 import ambit2.smarts.StereoFromSmartsAtomExpression;
 import ambit2.smarts.StructInfo;
 import ambit2.smarts.StructureSetAnalyzer;
+import ambit2.smarts.SmartsConst.HandleHAtoms;
 import ambit2.smarts.smirks.HAtomManager;
 import ambit2.smarts.smirks.Transformations;
 
@@ -121,6 +122,8 @@ public class TestUtilities {
 	boolean FlagExplicitHToImplicitOnProductPreProcess = false;
 	
 	boolean FlagApplyStereoTransformation = false;
+	boolean FlagHAtomsTransformation = false;
+	HandleHAtoms FlagHAtomsTransformationMode = HandleHAtoms.IMPLICIT; 
 
 	boolean FlagSingleBondAromaticityNotSpecified = false;
 	boolean FlagDoubleBondAromaticityNotSpecified = false;
@@ -1512,6 +1515,8 @@ public class TestUtilities {
 		smrkMan.setFlagConvertAddedImplicitHToExplicitOnResultProcess(this.FlagImplicitHToExplicitOnProductPreProcess);
 		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(this.FlagExplicitHToImplicitOnProductPreProcess);
 		smrkMan.setFlagApplyStereoTransformation(FlagApplyStereoTransformation);
+		smrkMan.setFlagHAtomsTransformation(FlagHAtomsTransformation);
+		smrkMan.setFlagHAtomsTransformationMode(FlagHAtomsTransformationMode);
 
 		smrkMan.getSmartsParser().mSupportSingleBondAromaticityNotSpecified = FlagSingleBondAromaticityNotSpecified;
 		smrkMan.getSmartsParser().mSupportDoubleBondAromaticityNotSpecified = FlagDoubleBondAromaticityNotSpecified;
@@ -2885,16 +2890,21 @@ public class TestUtilities {
 		// tu.testSMIRKS("[#6:1]-[#8:2]-[#6:3]>>[#6:1]-[#8:2].[#6:3]=S","NCCCOCC",
 		// ReactionOperation.SingleCopyForEachPos);
 
-		tu.FlagExplicitHAtoms = true;
+		tu.FlagExplicitHAtoms = false;
 		tu.FlagTargetPreprocessing = true;
 		tu.FlagProductPreprocessing = true;
-		tu.FlagPrintAtomAttributes = true;
+		tu.FlagPrintAtomAttributes = false;
 		// tu.FlagSSMode = SmartsConst.SSM_NON_IDENTICAL_FIRST;
 		tu.FlagExplicitHToImplicitOnProductPreProcess = true;
 		//tu.FlagPrintTransformationData = true;
+		tu.FlagHAtomsTransformation = true;
+		tu.FlagHAtomsTransformationMode = HandleHAtoms.IMPLICIT;
 		
 		//tu.FlagClearImplicitHAtomsBeforeProductPreProcess = true;
 		//tu.FlagAddImplicitHAtomsOnProductPreProcess = true;
+		
+		//tu.testSMIRKS("O[C:1]>>[NH2][C:1]","CCO");
+		tu.testSMIRKS("[CH3:1]>>[CH2:1][OH]","CCN");
 		
 		
 		//tu.testCheckStereoElements("C(=O)[C@@]([H])1C(=O)C(C(=O)O1)(F)F");
@@ -3149,8 +3159,8 @@ public class TestUtilities {
 		
 		//tu.testHAtomsManager("[C+;C;+H3,++H3,--CH3][C;+]");
 		
-		tu.FlagPrintAtomAttributes = false;
-		tu.testFixSHValence7("[SH](=O)(=O)(C)C");
+		//tu.FlagPrintAtomAttributes = false;
+		//tu.testFixSHValence7("[SH](=O)(=O)(C)C");
 		//tu.testFixSHValence7("[SH]=1(O)(=O)C=2C(O)=C3C=C4[C@@]5(CCCC=6C5=C(OC6)C(=O)C4=CC3=C(O)C2N=CC1)C");
 		//tu.testFixSHValence7("C1=CC=CC=C1N(C=[SH](O)(O)=O)C");
 
