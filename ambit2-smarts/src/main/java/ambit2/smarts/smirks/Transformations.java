@@ -8,6 +8,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.core.data.MoleculeTools;
 import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.SmartsConst.HandleHAtoms;
 
@@ -94,13 +95,44 @@ public class Transformations
     
     public static void addExplcitHNeighbours(IAtom atom, IAtomContainer target, int numH)
     {
-    	//TODO
+    	for (int i = 0; i < numH; i++)
+    	{
+    		IAtom ha = MoleculeTools.newAtom(target.getBuilder()); 
+    		ha.setSymbol("H");
+    		target.addAtom(ha);
+    		IBond b = MoleculeTools.newBond(target.getBuilder());
+			b.setAtoms(new IAtom[] { atom, ha });
+			b.setOrder(IBond.Order.SINGLE);
+			target.addBond(b);
+    	}
     }
     
     public static int removeExplcitHNeighbours(IAtom atom, IAtomContainer target, int numH)
     {
-    	//TODO
-    	return 0;
+    	List<IBond> boList = target.getConnectedBondsList(atom);
+		int nRemovedHAtoms = 0;
+		for (IBond bo: boList)
+		{	
+			if (nRemovedHAtoms >= numH)
+				break;
+			
+			IAtom ha = null;
+			if (bo.getAtom(0).getSymbol().equals("H"))
+				ha = bo.getAtom(0);
+			else
+			{	
+				if (bo.getAtom(1).getSymbol().equals("H"))
+					ha = bo.getAtom(1);
+				else
+					continue;
+			}
+			
+			target.removeBond(bo);
+			target.removeAtom(ha);
+			nRemovedHAtoms++;
+		}
+		
+    	return nRemovedHAtoms;
     }
 	
 	public static void process(IAtomContainer mol) throws Exception
