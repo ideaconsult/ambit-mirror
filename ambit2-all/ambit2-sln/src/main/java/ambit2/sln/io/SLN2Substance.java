@@ -8,6 +8,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
+import ambit2.base.relation.composition.Proportion;
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNContainerSet;
 
@@ -23,7 +24,9 @@ public class SLN2Substance
 	public boolean FlagContent = true;
 	public boolean FlagProperties = true;
 	public boolean FlagStrType = true;
-	public boolean FlagFacets = true;	
+	public boolean FlagFacets = true;
+	public boolean FlagRelationMetric = true;
+	public boolean FlagRelationType = true;
 	/*
 	public boolean FlagReference = false;
 	public boolean FlagSelected = false;
@@ -37,8 +40,8 @@ public class SLN2Substance
 	public String proportion_SLNAttr = "proportion";
 	public String compositionUUID_SLNAttr = "compositionUUID";
 	public String name_SLNAttr = "name";
-	public String relation_SLNAttr = "relationMetric";
-	public String relationType_SLNAttr = "relationType";
+	public String relationMetric_SLNAttr = "proportion";  //the field name in class CompositionRelation is "relation"
+	public String relationType_SLNAttr = "role";
 	
 	//Conversion attribute names for Structure Record fields
 	public String inchiKey_SLNAttr = "inchiKey";
@@ -83,17 +86,34 @@ public class SLN2Substance
 	public CompositionRelation slnContainerToCompositionRelation(SLNContainer slnContainer)
 	{
 		IStructureRecord structure = slnContainerToStructureRecord(slnContainer);
-		CompositionRelation comRel = new CompositionRelation(null, structure, null, null);
+		CompositionRelation compRel = new CompositionRelation(null, structure, null, null);
 		
 		if (FlagCompositionUUID)
 		{
 			String attr = slnContainer.getAttributes().userDefiendAttr.get(compositionUUID_SLNAttr);
 			if (attr != null)
-				comRel.setCompositionUUID(attr);
+				compRel.setCompositionUUID(attr);
+		}
+		
+		if (FlagRelationMetric)
+		{
+			String attr = slnContainer.getAttributes().userDefiendAttr.get(relationMetric_SLNAttr);
+			if (attr != null)
+			{
+				try
+				{
+					Proportion prop = SLNIOHelpers.proportionFromString(attr);
+					compRel.setRelation(prop);
+				}
+				catch (Exception e)	
+				{
+					//Handle error
+				}
+			}
 		}
 		
 		//TODO
-		return comRel;
+		return compRel;
 	}
 	
 	public SLNContainer compositionRelationToSLNContainer(CompositionRelation compRel)
@@ -110,6 +130,26 @@ public class SLN2Substance
 			if (attr != null)
 				container.getAttributes().userDefiendAttr.put(compositionUUID_SLNAttr, attr);
 		}
+		
+		if (FlagRelationMetric)
+		{
+			Proportion prop = compRel.getRelation();
+			if (prop != null)
+			{	
+				try
+				{
+					String attr = SLNIOHelpers.proportionToString(prop);
+					if (attr != null)
+						container.getAttributes().userDefiendAttr.put(relationMetric_SLNAttr, attr);
+				}
+				catch (Exception e)	
+				{
+					//Handle error
+				}
+			}
+			
+		}
+		
 		return container;
 	}
 	
