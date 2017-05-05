@@ -3,6 +3,8 @@ package ambit2.sln.io;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
@@ -96,8 +98,19 @@ public class SLN2Substance
 	
 	public SLNContainer compositionRelationToSLNContainer(CompositionRelation compRel)
 	{
-		//TODO
-		return null;
+		SLNContainer container;
+		if (compRel.getSecondStructure() != null)
+			container = structureRecordToSLNContainer(compRel.getSecondStructure());
+		else
+			container = new SLNContainer(SilentChemObjectBuilder.getInstance());
+		
+		if (FlagCompositionUUID)
+		{
+			String attr = compRel.getCompositionUUID();
+			if (attr != null)
+				container.getAttributes().userDefiendAttr.put(compositionUUID_SLNAttr, attr);
+		}
+		return container;
 	}
 	
 	public IStructureRecord slnContainerToStructureRecord(SLNContainer slnContainer)
