@@ -64,7 +64,7 @@ public class SLN2Substance
 		for (int i = 0; i < slnContSet.containers.size(); i++)
 		{
 			SLNContainer slnContainer = slnContSet.containers.get(i);
-			CompositionRelation compRel = slnToCompositionRelation(slnContainer);
+			CompositionRelation compRel = slnContainerToCompositionRelation(slnContainer);
 			composition.add(compRel);
 		}
 		
@@ -78,9 +78,9 @@ public class SLN2Substance
 	}
 	
 	
-	public CompositionRelation slnToCompositionRelation(SLNContainer slnContainer)
+	public CompositionRelation slnContainerToCompositionRelation(SLNContainer slnContainer)
 	{
-		IStructureRecord structure = slnToStructureRecord(slnContainer);
+		IStructureRecord structure = slnContainerToStructureRecord(slnContainer);
 		CompositionRelation comRel = new CompositionRelation(null, structure, null, null);
 		
 		if (FlagCompositionUUID)
@@ -94,20 +94,20 @@ public class SLN2Substance
 		return comRel;
 	}
 	
-	public SLNContainer compositionRelationToSLN(CompositionRelation compRel)
+	public SLNContainer compositionRelationToSLNContainer(CompositionRelation compRel)
 	{
 		//TODO
 		return null;
 	}
 	
-	public IStructureRecord slnToStructureRecord(SLNContainer slnContainer)
+	public IStructureRecord slnContainerToStructureRecord(SLNContainer slnContainer)
 	{
 		IStructureRecord structure = new StructureRecord();
 		//TODO
 		return structure;
 	}
 	
-	public SLNContainer structureRecordToSLN(IStructureRecord structure)
+	public SLNContainer structureRecordToSLNContainer(IStructureRecord structure)
 	{
 		//TODO
 		return null;
