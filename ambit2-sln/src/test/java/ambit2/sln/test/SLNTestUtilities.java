@@ -2,9 +2,11 @@ package ambit2.sln.test;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
 import ambit2.sln.SLNParser;
+import ambit2.sln.io.SLN2Substance;
 import ambit2.sln.search.SLNSearchManager;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
@@ -124,5 +126,22 @@ public class SLNTestUtilities
 		System.out.println("SLN Isomorphism: " + sln  + "  in  " + smiles + 
 				"   " + isoTester.hasIsomorphism(mol));
 	}
+	
+	public void testSLN2CompositionRelation(String sln)
+	{
+		SLNContainer container = slnParser.parse(sln);
+		if (!slnParser.getErrorMessages().equals(""))
+		{
+			System.out.println("Original sln:    " + sln); 
+			System.out.println("SLN Parser errors:\n" + slnParser.getErrorMessages());			
+			return;
+		}
+		
+		SLN2Substance sln2sub = new SLN2Substance();
+		CompositionRelation compRel = sln2sub.slnContainerToCompositionRelation(container);
+		//TODO
+	}
+	
+	
 	
 }
