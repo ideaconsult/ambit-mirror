@@ -10,22 +10,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import net.enanomapper.parser.GenericExcelParser;
-import net.idea.i5.io.I5ZReader;
-import net.idea.i5.io.I5_ROOT_OBJECTS;
-import net.idea.i5.io.IQASettings;
-import net.idea.i5.io.QASettings;
-import net.idea.loom.nm.csv.CSV12Reader;
-import net.idea.loom.nm.csv.CSV12SubstanceReader;
-import net.idea.loom.nm.nanowiki.ENanoMapperRDFReader;
-import net.idea.loom.nm.nanowiki.NanoWikiRDFReader;
-import net.idea.modbcum.i.batch.IBatchStatistics;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.processors.ProcessorsChain;
-import net.idea.modbcum.p.AbstractDBProcessor;
-import net.idea.modbcum.p.batch.AbstractBatchProcessor;
-
 import org.apache.commons.fileupload.FileItem;
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
 import org.restlet.Context;
@@ -54,6 +38,22 @@ import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.task.CallableFileUpload;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.TaskResult;
+import net.enanomapper.parser.GenericExcelParser;
+import net.idea.i5.io.I5ZReader;
+import net.idea.i5.io.I5_ROOT_OBJECTS;
+import net.idea.i5.io.IQASettings;
+import net.idea.i5.io.QASettings;
+import net.idea.i6.io.I6ZReader;
+import net.idea.loom.nm.csv.CSV12Reader;
+import net.idea.loom.nm.csv.CSV12SubstanceReader;
+import net.idea.loom.nm.nanowiki.ENanoMapperRDFReader;
+import net.idea.loom.nm.nanowiki.NanoWikiRDFReader;
+import net.idea.modbcum.i.batch.IBatchStatistics;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.p.AbstractDBProcessor;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 /**
  * 
@@ -228,6 +228,14 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 							}
 						reader = new I5ZReader(file);
 						((I5ZReader) reader).setQASettings(getQASettings());
+					} else if (ext.endsWith(FileInputState._FILE_TYPE.I6Z_INDEX.getExtension())) {
+						if (writer instanceof DBSubstanceWriter)
+							if (writer instanceof DBSubstanceWriter) {
+								((DBSubstanceWriter) writer).setSplitRecord(true);
+								((DBSubstanceWriter) writer).setI5mode(true);
+							}
+						reader = new I6ZReader(file);
+						((I6ZReader) reader).setQASettings(getQASettings());
 					} else if (ext.endsWith(FileInputState._FILE_TYPE.CSV_INDEX.getExtension())) {
 						if (writer instanceof DBSubstanceWriter)
 							((DBSubstanceWriter) writer).setSplitRecord(false);
@@ -244,7 +252,8 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 					} else if (ext.endsWith(".ttl")) {
 						if (writer instanceof DBSubstanceWriter)
 							((DBSubstanceWriter) writer).setSplitRecord(false);
-						reader = new ENanoMapperRDFReader(new InputStreamReader(new FileInputStream(file), "UTF-8"), "ENM3");
+						reader = new ENanoMapperRDFReader(new InputStreamReader(new FileInputStream(file), "UTF-8"),
+								"ENM3");
 
 					} else if (FileInputState._FILE_TYPE.XLSX_INDEX.hasExtension(ext)
 							|| FileInputState._FILE_TYPE.XLS_INDEX.hasExtension(ext)) {

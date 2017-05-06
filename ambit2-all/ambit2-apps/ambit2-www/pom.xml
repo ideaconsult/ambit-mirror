@@ -9,7 +9,7 @@
 	<parent>
 		<artifactId>ambit2-apps</artifactId>
 		<groupId>ambit</groupId>
-		<version>3.0.3-SNAPSHOT</version>
+		<version>3.1.0-SNAPSHOT</version>
 	</parent>
 	<distributionManagement>
 		<site>
@@ -526,6 +526,12 @@
 			<artifactId>loom-nm</artifactId>
 			<version>${net.idea.loom.version}</version>
 			<type>jar</type>
+			<exclusions>
+				<exclusion>
+					<groupId>net.idea</groupId>
+					<artifactId>iuclid_5_common</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>net.enanomapper</groupId>
@@ -695,7 +701,7 @@
 					<failOnError>false</failOnError>
 				</configuration>
 			</plugin>
-		
+
 		</plugins>
 	</reporting>
 	<properties>

@@ -18,18 +18,6 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
-import net.enanomapper.parser.GenericExcelParser;
-import net.enanomapper.parser.InvalidCommand;
-import net.idea.i5.io.I5Options;
-import net.idea.i5.io.I5ZReader;
-import net.idea.i5.io.QASettings;
-import net.idea.loom.nm.nanowiki.ENanoMapperRDFReader;
-import net.idea.loom.nm.nanowiki.NanoWikiRDFReader;
-import net.idea.modbcum.c.DBConnectionConfigurable;
-import net.idea.modbcum.c.MySQLSingleConnection;
-import net.idea.modbcum.i.config.Preferences;
-import net.idea.modbcum.i.exceptions.AmbitException;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -38,6 +26,8 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.PropertyConfigurator;
+
+import com.mysql.jdbc.CommunicationsException;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
@@ -58,12 +48,22 @@ import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.substance.processor.DBSubstanceWriter;
-
-import com.mysql.jdbc.CommunicationsException;
+import net.enanomapper.parser.GenericExcelParser;
+import net.enanomapper.parser.InvalidCommand;
+import net.idea.i5.io.I5Options;
+import net.idea.i5.io.I5ZReader;
+import net.idea.i5.io.IZReader;
+import net.idea.i5.io.QASettings;
+import net.idea.i6.io.I6ZReader;
+import net.idea.loom.nm.nanowiki.ENanoMapperRDFReader;
+import net.idea.loom.nm.nanowiki.NanoWikiRDFReader;
+import net.idea.modbcum.c.DBConnectionConfigurable;
+import net.idea.modbcum.c.MySQLSingleConnection;
+import net.idea.modbcum.i.config.Preferences;
+import net.idea.modbcum.i.exceptions.AmbitException;
 
 public class DBSubstanceImport {
-	protected static Logger logger_cli = Logger
-			.getLogger(DBSubstanceImport.class.getName());
+	protected static Logger logger_cli = Logger.getLogger(DBSubstanceImport.class.getName());
 	static final String loggingProperties = "ambit2/dbsubstance/logging.properties";
 	static final String log4jProperties = "ambit2/dbsubstance/log4j.properties";
 
@@ -74,8 +74,7 @@ public class DBSubstanceImport {
 		if (dOption == null || "".equals(dOption)) {
 			InputStream in = null;
 			try {
-				in = DBSubstanceImport.class.getClassLoader()
-						.getResourceAsStream(loggingProperties);
+				in = DBSubstanceImport.class.getClassLoader().getResourceAsStream(loggingProperties);
 				LogManager.getLogManager().readConfiguration(in);
 
 			} catch (Exception x) {
@@ -90,8 +89,7 @@ public class DBSubstanceImport {
 		// now log4j for those who use it
 		InputStream in = null;
 		try {
-			in = DBSubstanceImport.class.getClassLoader().getResourceAsStream(
-					log4jProperties);
+			in = DBSubstanceImport.class.getClassLoader().getResourceAsStream(log4jProperties);
 			PropertyConfigurator.configure(in);
 
 		} catch (Exception x) {
@@ -141,7 +139,7 @@ public class DBSubstanceImport {
 	protected boolean clearComposition = true;
 
 	public enum _parsertype {
-		i5z, xlsx, xls, nanowiki, modnanotox, enmrdf
+		i5z,i6z, xlsx, xls, nanowiki, modnanotox, enmrdf
 	}
 
 	public _parsertype getParserType() {
@@ -173,8 +171,7 @@ public class DBSubstanceImport {
 	protected File outputFile;
 	protected File jsonConfig;
 
-	protected static _parsertype getParserType(CommandLine line)
-			throws Exception {
+	protected static _parsertype getParserType(CommandLine line) throws Exception {
 		if (line.hasOption('p'))
 			try {
 				return _parsertype.valueOf(line.getOptionValue('p'));
@@ -185,8 +182,7 @@ public class DBSubstanceImport {
 			return null;
 	}
 
-	protected static _mode_matchstructure getStructureMatchMode(CommandLine line)
-			throws Exception {
+	protected static _mode_matchstructure getStructureMatchMode(CommandLine line) throws Exception {
 		if (line.hasOption('x'))
 			try {
 				return _mode_matchstructure.valueOf(line.getOptionValue('x'));
@@ -250,8 +246,7 @@ public class DBSubstanceImport {
 		return true;
 	}
 
-	protected static File getJSONConfig(CommandLine line)
-			throws FileNotFoundException {
+	protected static File getJSONConfig(CommandLine line) throws FileNotFoundException {
 		if (line.hasOption('j')) {
 			File file = new File(line.getOptionValue('j'));
 			if (!file.exists())
@@ -262,8 +257,7 @@ public class DBSubstanceImport {
 			return null;
 	}
 
-	protected static File getInput(CommandLine line)
-			throws FileNotFoundException {
+	protected static File getInput(CommandLine line) throws FileNotFoundException {
 		if (line.hasOption('i')) {
 			File file = new File(line.getOptionValue('i'));
 			if (!file.exists())
@@ -290,8 +284,7 @@ public class DBSubstanceImport {
 		}
 		if (config == null) {
 			this.configFile = null;
-			logger_cli.log(Level.WARNING,
-					"Config file not specified or do not exist!");
+			logger_cli.log(Level.WARNING, "Config file not specified or do not exist!");
 
 		}
 	}
@@ -308,29 +301,24 @@ public class DBSubstanceImport {
 				code = -1;
 
 		} catch (ConnectException x) {
-			logger_cli.log(Level.SEVERE, "MSG_CONNECTION_REFUSED",
-					new Object[] { x.getMessage() });
+			logger_cli.log(Level.SEVERE, "MSG_CONNECTION_REFUSED", new Object[] { x.getMessage() });
 			Runtime.getRuntime().runFinalization();
 			code = -1;
 		} catch (CommunicationsException x) {
-			logger_cli.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED",
-					new Object[] { x.getMessage() });
+			logger_cli.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED", new Object[] { x.getMessage() });
 			code = -1;
 		} catch (SQLException x) {
-			logger_cli.log(Level.SEVERE, "MSG_ERR_SQL",
-					new Object[] { x.getMessage() });
+			logger_cli.log(Level.SEVERE, "MSG_ERR_SQL", new Object[] { x.getMessage() });
 			code = -1;
 		} catch (InvalidCommand x) {
-			logger_cli.log(Level.SEVERE, "MSG_INVALIDCOMMAND",
-					new Object[] { x.getMessage() });
+			logger_cli.log(Level.SEVERE, "MSG_INVALIDCOMMAND", new Object[] { x.getMessage() });
 			code = -1;
 		} catch (Exception x) {
 			logger_cli.log(Level.SEVERE, "MSG_ERR", new Object[] { x });
 			code = -1;
 		} finally {
 			if (code >= 0)
-				logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED",
-						(System.currentTimeMillis() - now));
+				logger_cli.log(Level.INFO, "MSG_INFO_COMPLETED", (System.currentTimeMillis() - now));
 		}
 	}
 
@@ -374,56 +362,38 @@ public class DBSubstanceImport {
 
 	protected Options createOptions() {
 		Options options = new Options();
-		Option input = OptionBuilder.hasArg().withLongOpt("input")
-				.withArgName("file").withDescription("Input file or folder")
-				.create("i");
+		Option input = OptionBuilder.hasArg().withLongOpt("input").withArgName("file")
+				.withDescription("Input file or folder").create("i");
 
-		Option jsonConfig = OptionBuilder.hasArg().withLongOpt("json")
-				.withArgName("file").withDescription("JSON config file")
-				.create("j");
+		Option jsonConfig = OptionBuilder.hasArg().withLongOpt("json").withArgName("file")
+				.withDescription("JSON config file").create("j");
 
-		Option output = OptionBuilder.hasArg().withLongOpt("output")
-				.withArgName("file").withDescription("Output file").create("o");
+		Option output = OptionBuilder.hasArg().withLongOpt("output").withArgName("file").withDescription("Output file")
+				.create("o");
 
-		Option config = OptionBuilder.hasArg().withLongOpt("config")
-				.withArgName("file")
-				.withDescription("Config file (DB connection parameters)")
-				.create("c");
+		Option config = OptionBuilder.hasArg().withLongOpt("config").withArgName("file")
+				.withDescription("Config file (DB connection parameters)").create("c");
 
-		Option clearComposition = OptionBuilder.hasArg()
-				.withLongOpt("clearComposition").withArgName("value")
+		Option clearComposition = OptionBuilder.hasArg().withLongOpt("clearComposition").withArgName("value")
 				.withDescription("true|false").create("t");
 
-		Option clearMeasurement = OptionBuilder.hasArg()
-				.withLongOpt("clearMeasurements").withArgName("value")
+		Option clearMeasurement = OptionBuilder.hasArg().withLongOpt("clearMeasurements").withArgName("value")
 				.withDescription("true|false").create("m");
 
-		Option matchStructure = OptionBuilder
-				.hasArg()
-				.withLongOpt("structureMatch")
-				.withArgName("value")
-				.withDescription(
-						"Match structure by uuid|cas|einecs|smiles|inchi")
-				.create("x");
+		Option matchStructure = OptionBuilder.hasArg().withLongOpt("structureMatch").withArgName("value")
+				.withDescription("Match structure by uuid|cas|einecs|smiles|inchi").create("x");
 
-		Option maxRefSubstances = OptionBuilder
-				.hasArg()
-				.withLongOpt("maxReferenceSubstances")
-				.withArgName("value")
-				.withDescription(
-						"Maximum reference substances in *.i5z archive")
-				.create("r");
+		Option maxRefSubstances = OptionBuilder.hasArg().withLongOpt("maxReferenceSubstances").withArgName("value")
+				.withDescription("Maximum reference substances in *.i5z archive").create("r");
 
-		Option isSplitRecord = OptionBuilder.hasArg()
-				.withLongOpt("isSplitRecord").withArgName("value")
+		Option isSplitRecord = OptionBuilder.hasArg().withLongOpt("isSplitRecord").withArgName("value")
 				.withDescription("true|false").create("s");
 
 		/*
 		 * Option gzip = OptionBuilder.hasArg().withLongOpt("gzipped")
 		 * .withDescription("Gzipped file").create("z");
 		 */
-		Option help = OptionBuilder.withLongOpt("help")
-				.withDescription("This help").create("h");
+		Option help = OptionBuilder.withLongOpt("help").withDescription("This help").create("h");
 
 		options.addOption(input);
 		options.addOption(jsonConfig);
@@ -451,8 +421,7 @@ public class DBSubstanceImport {
 		}
 		;
 		return OptionBuilder.hasArg().withLongOpt("parser").withArgName("type")
-				.withDescription("File parser mode : " + b.toString())
-				.create("p");
+				.withDescription("File parser mode : " + b.toString()).create("p");
 	}
 
 	public boolean parse(String[] args) throws Exception {
@@ -474,8 +443,7 @@ public class DBSubstanceImport {
 
 			if ("xslx".equals(getParserType()))
 				if (jsonConfig == null)
-					throw new Exception(
-							"Missing JSON config file, mandatory for importing XLSX!");
+					throw new Exception("Missing JSON config file, mandatory for importing XLSX!");
 
 			outputFile = getOutput(line);
 
@@ -501,8 +469,7 @@ public class DBSubstanceImport {
 		}
 	}
 
-	protected IRawReader<IStructureRecord> createParser(InputStream stream,
-			boolean xlsx) throws Exception {
+	protected IRawReader<IStructureRecord> createParser(InputStream stream, boolean xlsx) throws Exception {
 		_parsertype mode = getParserType();
 		InputStream in = null;
 		if (gzipped)
@@ -510,29 +477,25 @@ public class DBSubstanceImport {
 		else
 			in = stream;
 		if (mode == null) {
-			logger_cli.log(Level.INFO, "MSG_IMPORT", new Object[] {
-					"parser type not specified, assuming",
-					xlsx ? "xlsx" : "xls" });
+			logger_cli.log(Level.INFO, "MSG_IMPORT",
+					new Object[] { "parser type not specified, assuming", xlsx ? "xlsx" : "xls" });
 			return new GenericExcelParser(in, jsonConfig, xlsx);
 		} else
 			switch (mode) {
 			case enmrdf:
-				return new ENanoMapperRDFReader(new InputStreamReader(in),
-						"ENM3");
+				return new ENanoMapperRDFReader(new InputStreamReader(in), "ENM3");
 			case nanowiki:
 				return new NanoWikiRDFReader(new InputStreamReader(in));
 			default:
 				if (jsonConfig == null)
-					throw new FileNotFoundException(
-							"JSON config file not specified!");
+					throw new FileNotFoundException("JSON config file not specified!");
 				return new GenericExcelParser(in, jsonConfig, xlsx);
 			}
 	}
 
 	protected int importFile() throws Exception {
 		if (inputFile.isDirectory()) {
-			logger_cli.log(Level.INFO, "MSG_IMPORT", new Object[] { "folder",
-					inputFile.getAbsolutePath() });
+			logger_cli.log(Level.INFO, "MSG_IMPORT", new Object[] { "folder", inputFile.getAbsolutePath() });
 			File[] allFiles = inputFile.listFiles();
 			long started = System.currentTimeMillis();
 			int allrecords = 0;
@@ -542,18 +505,12 @@ public class DBSubstanceImport {
 				try {
 					allrecords += importFile();
 				} catch (Exception x) {
-					logger_cli.log(Level.INFO, "MSG_ERR",
-							new Object[] { x.getMessage() });
+					logger_cli.log(Level.INFO, "MSG_ERR", new Object[] { x.getMessage() });
 				} finally {
 					long now = System.currentTimeMillis();
 					logger_cli.log(Level.INFO, "MSG_INFO_RECORDS",
-							new Object[] {
-									(i + 1),
-									(double) (now - started)
-											/ ((double) (i + 1)),
-									allrecords,
-									(double) (now - started)
-											/ ((double) allrecords) });
+							new Object[] { (i + 1), (double) (now - started) / ((double) (i + 1)), allrecords,
+									(double) (now - started) / ((double) allrecords) });
 				}
 			}
 			return allrecords;
@@ -562,22 +519,24 @@ public class DBSubstanceImport {
 			String unzippedext = ext;
 			if (ext.endsWith(".gz")) {
 				int p = ext.length();
-				unzippedext = ext.substring(1,p-3);
+				unzippedext = ext.substring(1, p - 3);
 			}
 			if (ext.endsWith(".i5z"))
-				return importI5Z(matchByKey);
+				return importI5Z(matchByKey, false);
+			else if (ext.endsWith(".i6z"))
+				return importI5Z(matchByKey, true);
 			else if (unzippedext.endsWith(".ttl") || unzippedext.endsWith(".rdf"))
-				return importFile(false,false,true);			
+				return importFile(false, false, true);
 			else
-				return importFile(isSplitRecord(), unzippedext.endsWith(".xlsx"),false);
+				return importFile(isSplitRecord(), unzippedext.endsWith(".xlsx"), false);
 
 		}
 	}
 
-	protected int importI5Z(IStructureKey keytomatch) throws Exception {
-		logger_cli.log(Level.INFO, "MSG_IMPORT", new Object[] { "i5z",
-				inputFile.getAbsolutePath() });
-		I5ZReader reader = null;
+	protected int importI5Z(IStructureKey keytomatch, boolean i6) throws Exception {
+		logger_cli.log(Level.INFO, "MSG_IMPORT",
+				new Object[] { String.format("i%sz", i6 ? "6" : "5"), inputFile.getAbsolutePath() });
+		IZReader reader = null;
 		Connection c = null;
 		try {
 
@@ -590,14 +549,16 @@ public class DBSubstanceImport {
 			options.setMaxReferenceStructures(maxRefSubstances);
 			options.setExceptionOnMaxReferenceStructures(false);
 			options.setAllowMultipleSubstances(false);
-			reader = new I5ZReader<>(inputFile, options);
+			if (i6)
+				reader = new I6ZReader<>(inputFile, options);
+			else
+				reader = new I5ZReader<>(inputFile, options);
 			QASettings qa = new QASettings(false);
 			qa.setAll();
 			reader.setQASettings(qa);
 
 			matchByKey = keytomatch == null ? new CASKey() : keytomatch;
-			return write(reader, c, matchByKey, true, clearMeasurements,
-					clearComposition, null, true,false);
+			return write(reader, c, matchByKey, true, clearMeasurements, clearComposition, null, true, false);
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -611,38 +572,30 @@ public class DBSubstanceImport {
 		}
 	}
 
-	protected int importFile(boolean splitRecord, boolean xlsx, boolean importBundles)
-			throws Exception {
+	protected int importFile(boolean splitRecord, boolean xlsx, boolean importBundles) throws Exception {
 		IRawReader<IStructureRecord> parser = null;
 		Connection c = null;
 		try {
 			FileInputStream fin = new FileInputStream(inputFile);
 
 			parser = createParser(fin, xlsx);
-			logger_cli.log(Level.INFO, "MSG_IMPORT", new Object[] {
-					parser.getClass().getName(), inputFile.getAbsolutePath() });
+			logger_cli.log(Level.INFO, "MSG_IMPORT",
+					new Object[] { parser.getClass().getName(), inputFile.getAbsolutePath() });
 
-			StructureRecordValidator validator = new StructureRecordValidator(
-					inputFile.getName(), true) {
+			StructureRecordValidator validator = new StructureRecordValidator(inputFile.getName(), true) {
 				@Override
-				public IStructureRecord validate(SubstanceRecord record)
-						throws Exception {
-					if (record.getRelatedStructures() != null
-							&& !record.getRelatedStructures().isEmpty()) {
+				public IStructureRecord validate(SubstanceRecord record) throws Exception {
+					if (record.getRelatedStructures() != null && !record.getRelatedStructures().isEmpty()) {
 
 						for (int i = record.getRelatedStructures().size() - 1; i >= 0; i--) {
-							CompositionRelation rel = record
-									.getRelatedStructures().get(i);
+							CompositionRelation rel = record.getRelatedStructures().get(i);
 							int props = 0;
-							for (Property p : rel.getSecondStructure()
-									.getRecordProperties()) {
-								Object val = rel.getSecondStructure()
-										.getRecordProperty(p);
+							for (Property p : rel.getSecondStructure().getRecordProperties()) {
+								Object val = rel.getSecondStructure().getRecordProperty(p);
 								if (val != null && !"".equals(val.toString()))
 									props++;
 							}
-							if ((rel.getContent() == null || "".equals(rel
-									.getContent())) && (props == 0))
+							if ((rel.getContent() == null || "".equals(rel.getContent())) && (props == 0))
 								record.getRelatedStructures().remove(i);
 
 						}
@@ -657,8 +610,8 @@ public class DBSubstanceImport {
 			c = dbc.getConnection();
 			c.setAutoCommit(true);
 
-			return write(parser, c, matchByKey, splitRecord, clearMeasurements,
-					clearComposition, validator, false,importBundles);
+			return write(parser, c, matchByKey, splitRecord, clearMeasurements, clearComposition, validator, false,
+					importBundles);
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -671,8 +624,7 @@ public class DBSubstanceImport {
 		}
 	}
 
-	protected DBConnectionConfigurable<Context> getConnection(String configFile)
-			throws SQLException, AmbitException {
+	protected DBConnectionConfigurable<Context> getConnection(String configFile) throws SQLException, AmbitException {
 		try {
 			Context context = initContext();
 			String driver = context.get(Preferences.DRIVERNAME);
@@ -698,19 +650,13 @@ public class DBSubstanceImport {
 
 			properties.load(in);
 			Context context = new Context();
-			context.put(Preferences.DATABASE,
-					properties.get(Preferences.DATABASE).toString());
-			context.put(Preferences.USER, properties.get(Preferences.USER)
-					.toString());
-			context.put(Preferences.PASSWORD,
-					properties.get(Preferences.PASSWORD).toString());
-			context.put(Preferences.HOST, properties.get(Preferences.HOST)
-					.toString());
+			context.put(Preferences.DATABASE, properties.get(Preferences.DATABASE).toString());
+			context.put(Preferences.USER, properties.get(Preferences.USER).toString());
+			context.put(Preferences.PASSWORD, properties.get(Preferences.PASSWORD).toString());
+			context.put(Preferences.HOST, properties.get(Preferences.HOST).toString());
 
-			context.put(Preferences.PORT, properties.get(Preferences.PORT)
-					.toString());
-			context.put(Preferences.DRIVERNAME,
-					properties.get(Preferences.DRIVERNAME).toString());
+			context.put(Preferences.PORT, properties.get(Preferences.PORT).toString());
+			context.put(Preferences.DRIVERNAME, properties.get(Preferences.DRIVERNAME).toString());
 			return context;
 
 		} catch (IOException x) {
@@ -723,22 +669,16 @@ public class DBSubstanceImport {
 		}
 	}
 
-	public int write(IRawReader<IStructureRecord> reader,
-			Connection connection, PropertyKey key, boolean splitRecord,
-			StructureRecordValidator validator, boolean i5mode, boolean importBundles)
-			throws Exception {
-		return write(reader, connection, key, splitRecord, true, true,
-				validator, i5mode,importBundles);
+	public int write(IRawReader<IStructureRecord> reader, Connection connection, PropertyKey key, boolean splitRecord,
+			StructureRecordValidator validator, boolean i5mode, boolean importBundles) throws Exception {
+		return write(reader, connection, key, splitRecord, true, true, validator, i5mode, importBundles);
 	}
 
-	public int write(IRawReader<IStructureRecord> reader,
-			Connection connection, IStructureKey key, boolean splitRecord,
-			boolean clearMeasurements, boolean clearComposition,
-			StructureRecordValidator validator, boolean i5mode, boolean importBundles)
-			throws Exception {
+	public int write(IRawReader<IStructureRecord> reader, Connection connection, IStructureKey key, boolean splitRecord,
+			boolean clearMeasurements, boolean clearComposition, StructureRecordValidator validator, boolean i5mode,
+			boolean importBundles) throws Exception {
 
-		DBSubstanceWriter writer = new DBSubstanceWriter(
-				DBSubstanceWriter.datasetMeta(), new SubstanceRecord(),
+		DBSubstanceWriter writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(), new SubstanceRecord(),
 				clearMeasurements, clearComposition, key);
 		writer.setImportBundles(importBundles);
 		writer.setI5mode(i5mode);
@@ -763,8 +703,7 @@ public class DBSubstanceImport {
 			x.printStackTrace();
 		} finally {
 			writer.close();
-			logger_cli
-					.log(Level.INFO, "MSG_IMPORTED", new Object[] { records });
+			logger_cli.log(Level.INFO, "MSG_IMPORTED", new Object[] { records });
 		}
 		return records;
 	}
@@ -773,8 +712,7 @@ public class DBSubstanceImport {
 
 	}
 
-	protected void validate(StructureRecordValidator validator,
-			IStructureRecord record) throws Exception {
+	protected void validate(StructureRecordValidator validator, IStructureRecord record) throws Exception {
 		if (validator != null) {
 			if (record instanceof SubstanceRecord) {
 				_parsertype mode = getParserType();
@@ -829,10 +767,8 @@ public class DBSubstanceImport {
 
 			if (srecord.getReferenceSubstanceUUID() == null)
 				try {
-					ParticleTypes stype = ParticleTypes.valueOf(srecord
-							.getSubstancetype());
-					logger_cli.log(Level.WARNING,
-							"Missing Reference Substance UUID");
+					ParticleTypes stype = ParticleTypes.valueOf(srecord.getSubstancetype());
+					logger_cli.log(Level.WARNING, "Missing Reference Substance UUID");
 					String ref_uuid = stype.getReferenceUUID();
 					if (ref_uuid != null)
 						srecord.setReferenceSubstanceUUID(ref_uuid);
@@ -845,62 +781,37 @@ public class DBSubstanceImport {
 		cleanupEmptyRecords(srecord, m);
 	}
 
-	protected void cleanupEmptyRecords(SubstanceRecord srecord,
-			List<ProtocolApplication> m) {
+	protected void cleanupEmptyRecords(SubstanceRecord srecord, List<ProtocolApplication> m) {
 		if (m == null)
 			return;
 		for (int i = m.size() - 1; i >= 0; i--) {
-			ProtocolApplication<Protocol, IParams, String, IParams, String> papp = m
-					.get(i);
+			ProtocolApplication<Protocol, IParams, String, IParams, String> papp = m.get(i);
 			boolean empty = true;
 			if (papp.getEffects() != null) {
-				for (EffectRecord<String, IParams, String> effect : papp
-						.getEffects()) {
-					if (effect.getLoValue() != null
-							|| effect.getUpValue() != null)
+				for (EffectRecord<String, IParams, String> effect : papp.getEffects()) {
+					if (effect.getLoValue() != null || effect.getUpValue() != null)
 						effect.setTextValue(null);
 				}
 
-				List<EffectRecord<String, IParams, String>> effects = papp
-						.getEffects();
+				List<EffectRecord<String, IParams, String>> effects = papp.getEffects();
 				for (int j = effects.size() - 1; j >= 0; j--) {
 					if (!effects.get(j).isEmpty()) {
 						empty = false;
 					} else {
-						logger_cli
-								.log(Level.WARNING,
-										String.format(
-												"Remove empty effect record\t%s\t%s\t%s\t%s\t%s [%s]",
-												srecord.getSubstanceName(),
-												srecord.getPublicName(), papp
-														.getProtocol()
-														.getTopCategory(), papp
-														.getProtocol()
-														.getCategory(), papp
-														.getProtocol()
-														.getEndpoint(), papp
-														.getEffects().get(j)
-														.getErrQualifier()));
+						logger_cli.log(Level.WARNING,
+								String.format("Remove empty effect record\t%s\t%s\t%s\t%s\t%s [%s]",
+										srecord.getSubstanceName(), srecord.getPublicName(),
+										papp.getProtocol().getTopCategory(), papp.getProtocol().getCategory(),
+										papp.getProtocol().getEndpoint(), papp.getEffects().get(j).getErrQualifier()));
 						papp.getEffects().remove(j);
 					}
 				}
 
-				if (empty
-						&& ((papp.getInterpretationResult() == null) || ""
-								.equals(papp.getInterpretationResult()))) {
+				if (empty && ((papp.getInterpretationResult() == null) || "".equals(papp.getInterpretationResult()))) {
 					m.remove(i);
-					logger_cli
-							.log(Level.WARNING,
-									String.format(
-											"Remove empty protocol application\t%s\t%s\t%s\t%s",
-											srecord.getSubstanceName(), srecord
-													.getPublicName(), papp
-													.getProtocol()
-													.getTopCategory(), papp
-													.getProtocol()
-													.getCategory(), papp
-													.getProtocol()
-													.getEndpoint()));
+					logger_cli.log(Level.WARNING, String.format("Remove empty protocol application\t%s\t%s\t%s\t%s",
+							srecord.getSubstanceName(), srecord.getPublicName(), papp.getProtocol().getTopCategory(),
+							papp.getProtocol().getCategory(), papp.getProtocol().getEndpoint()));
 				}
 			}
 		}
