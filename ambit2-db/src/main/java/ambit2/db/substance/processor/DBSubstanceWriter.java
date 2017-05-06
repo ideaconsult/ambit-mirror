@@ -232,7 +232,7 @@ public class DBSubstanceWriter extends AbstractDBProcessor<IStructureRecord, ISt
 					if (bundle.getID() == 0)
 						try {
 							// UpdateBundle
-							
+
 							CreateBundle cb = new CreateBundle();
 							cb.setObject(bundle);
 							x.process(cb);
@@ -248,7 +248,7 @@ public class DBSubstanceWriter extends AbstractDBProcessor<IStructureRecord, ISt
 					} catch (Exception xx) {
 						logger.log(Level.WARNING, xx.getMessage());
 					}
-					
+
 					if (qchembundles == null)
 						qchembundles = new AddAllChemicalsperSubstanceToBundle();
 					qchembundles.setGroup(bundle);
@@ -258,8 +258,7 @@ public class DBSubstanceWriter extends AbstractDBProcessor<IStructureRecord, ISt
 					} catch (Exception xx) {
 						logger.log(Level.WARNING, xx.getMessage());
 					}
-					
-					
+
 				}
 	}
 
@@ -340,10 +339,14 @@ public class DBSubstanceWriter extends AbstractDBProcessor<IStructureRecord, ISt
 			if (record instanceof SubstanceRecord) {
 				SubstanceRecord substance = (SubstanceRecord) record;
 				if (isSplitRecord()) {
-					if (substance.getMeasurements() != null)
-						importSubstanceMeasurements(substance);
-					else
-						importSubstanceRecord(substance);
+					try {
+						if (substance.getMeasurements() != null)
+							importSubstanceMeasurements(substance);
+						else
+							importSubstanceRecord(substance);
+					} catch (Exception x) {
+						logger.log(Level.WARNING, x.getMessage());
+					}
 				} else {
 					try {
 						importSubstanceRecord(substance);
@@ -368,7 +371,9 @@ public class DBSubstanceWriter extends AbstractDBProcessor<IStructureRecord, ISt
 				}
 			}
 			return record;
-		} catch (AmbitException x) {
+		} catch (
+
+		AmbitException x) {
 			throw x;
 		} catch (Exception x) {
 			logger.log(Level.FINE, x.getMessage());

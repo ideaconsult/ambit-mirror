@@ -621,7 +621,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 										}
 						} else {
 							String ext = file.getName().toLowerCase().trim();
-							if ("".equals(ext) || ext.endsWith(".i5z")
+							if ("".equals(ext) || ext.endsWith(".i5z") || ext.endsWith(".i6z")
 									|| ext.endsWith(".csv")
 									|| ext.endsWith(".rdf")
 									|| ext.endsWith(".ttl")

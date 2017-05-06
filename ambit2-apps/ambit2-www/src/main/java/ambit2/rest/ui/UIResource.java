@@ -6,11 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import net.idea.i5.io.IQASettings;
-import net.idea.i5.io.QASettings;
-import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
-import net.idea.restnet.i.task.ITaskResult;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -42,6 +37,10 @@ import ambit2.rest.substance.SubstanceURIReporter;
 import ambit2.rest.task.CallableFileUpload;
 import ambit2.user.rest.resource.AMBITDBRoles;
 import ambit2.user.rest.resource.DBRoles;
+import net.idea.i5.io.IQASettings;
+import net.idea.i5.io.QASettings;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.task.ITaskResult;
 
 public class UIResource extends FreeMarkerResource {
 	private static Logger logger = Logger.getLogger(UIResource.class.getName());
@@ -497,7 +496,7 @@ public class UIResource extends FreeMarkerResource {
 					json.append(",\n\"size\":");
 					json.append(file.getSize());
 					String ext = file.getName().toLowerCase();
-					if (ext.endsWith(".i5z") || ext.endsWith(".csv") 
+					if (ext.endsWith(".i5z") || ext.endsWith(".i6z") || ext.endsWith(".csv") 
 							|| ext.endsWith(".rdf") || ext.endsWith(".ttl") || ext.endsWith(".json")) {
 						String img = "i5z.png";
 						if (ext.endsWith(".csv"))
@@ -510,6 +509,8 @@ public class UIResource extends FreeMarkerResource {
 							img = "rdf64.png";						
 						else if (ext.endsWith(".json"))
 							img = "json64.png";
+						else if (ext.endsWith(".i6z"))
+							img = "i6z.png";
 						try {
 							List<FileItem> item = new ArrayList<FileItem>();
 							item.add(file);

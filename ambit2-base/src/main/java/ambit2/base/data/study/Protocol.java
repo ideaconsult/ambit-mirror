@@ -126,6 +126,32 @@ public class Protocol {
 				return "http://semanticscience.org/resource/CHEMINF_000257";
 			}
 		},
+		PC_DENSITY_SECTION {
+			@Override
+			public String toString() {
+				return "Density";
+			}
+
+			@Override
+			public String getNumber() {
+				return "4.4";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 4040;
+			}
+
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000084";
+			}
+			
+		},		
 		PC_GRANULOMETRY_SECTION {
 			@Override
 			public String toString() {
