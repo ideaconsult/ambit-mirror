@@ -91,17 +91,6 @@ public class ModelResourceTest extends ResourceTest {
 				Reference.encode(String.format("%s/predicted", getTestURI()))));
 	}
 
-	@Test
-	public void testPostForeignCompound() throws Exception {
-		Form headers = new Form();
-		String dataset = "http://ambit.uni-plovdiv.bg:8080/ambit2/compound/1";
-		headers.add(OpenTox.params.dataset_uri.toString(), dataset);
-
-		testAsyncTask(getTestURI(), headers, Status.SUCCESS_OK, String.format(
-				"%s?feature_uris[]=%s", dataset,
-				Reference.encode(String.format("%s/predicted", getTestURI()))));
-		Assert.fail("Results are not written if the compound is not in the local database");
-	}
 
 	@Test
 	public void testPostCompound() throws Exception {

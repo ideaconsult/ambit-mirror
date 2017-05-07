@@ -69,17 +69,13 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 	protected Hashtable<Reference,OTRemoteTask> algorithms = new Hashtable<Reference, OTRemoteTask>(); 
 	protected Form featuresQuery = new Form();
 	protected String referer;
-	/*
-	 * dataset_service=http://ambit.uni-plovdiv.bg:8080/ambit2/dataset
-	 * curl -X POST -d "dataset_uri=http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R4666" http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/BCUTDescriptor 
-	curl -X POST -d "dataset_uri=http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/194" -d "prediction_feature=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/12236" http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_kNN_6 -v
-	 */
+	
 	public CallableDatasetCreator(Form form, Reference applicationRoot, Reference datasetService,
 			String referer) throws ResourceException {
 		super();
 		this.referer = referer;
 		this.applicationRoot = applicationRoot; 
-		//datasetService = new Reference(String.format("%s%s",applicationRoot.toString(),OpenTox.URI.dataset.getURI()));
+
 		this.datasetService=datasetService;
 		if (OpenTox.params.dataset_uri.getFirstValue(form)==null) 
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty dataset_uri!");

@@ -76,30 +76,6 @@ public class OTRemoteModelTest extends ResourceTest {
 
 	}	
 	@Test
-	/**
-	 * 
-1) model  (MLR)
-http://opentox.ntua.gr:3003/model/195
-training dataset
-http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R7798
-prediction feature
-http://ambit.uni-plovdiv.bg:8080/ambit2/feature/255510
-	 */
-	public void testModelVarsNTUA() throws Exception {
-		
-		OTModel model = OTSuperModel.model("http://opentox.ntua.gr:3003/model/195","test").
-					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port));
-		
-		OTFeatures features = model.load().getIndependentVariables();
-		Assert.assertEquals(4,features.size());
-
-		OTDataset result  = model.process(OTDataset.dataset(String.format("http://194.141.0.136:%d/dataset/1", port)).
-					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port)));
-		
-		System.out.println(result.getUri());
-
-	}	
-	@Test
 	public void testModelVarsEos() throws Exception {
 
 		OTModel model = OTSuperModel.model("http://apps.ideaconsult.net:8080/ambit2/model/33","test").

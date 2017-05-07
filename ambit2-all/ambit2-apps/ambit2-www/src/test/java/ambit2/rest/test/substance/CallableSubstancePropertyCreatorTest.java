@@ -74,7 +74,7 @@ public class CallableSubstancePropertyCreatorTest extends DbUnitTest {
 	v.setLoValue(7.0);
 	p.put("Sampling time", v);
 	form.add("conditions", p.toString());
-	Assert.assertEquals("{\"Sampling time\":{\"loValue\":7.0,\"unit\":\"d\"}}", p.toString());
+	Assert.assertEquals("{\"Sampling time\":{\"loValue\":7,\"unit\":\"d\"}}", p.toString());
 
 	try {
 	    PropertyURIReporter reporter = new PropertyURIReporter(new Reference("http://localhost:8081/ambit2"));
