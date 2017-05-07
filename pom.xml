@@ -306,6 +306,7 @@
 		<module>ambit2-dbui</module>
 		<module>ambit2-descriptors</module>
 		<module>ambit2-dragon</module>
+		<module>ambit2-export</module>
 		<module>ambit2-groupcontribution</module>
 		<module>ambit2-jchempaint</module>
 		<module>ambit2-markush</module>
