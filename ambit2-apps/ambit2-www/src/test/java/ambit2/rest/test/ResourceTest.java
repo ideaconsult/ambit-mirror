@@ -70,8 +70,7 @@ public abstract class ResourceTest extends DbUnitTest {
 		context.getParameters().add(Preferences.HOST, getHost());
 		context.getParameters().add(AmbitApplication.WARMUP_ENABLED, "false");
 		context.getParameters().add(AmbitApplication.LOCAL_AA_ENABLED, "false");
-		context.getParameters().add(AmbitApplication.OPENTOX_AA_ENABLED,
-				"false");
+		context.getParameters().add(AmbitApplication.OPENTOX_AA_ENABLED, "false");
 
 		// Create a component
 		component = new AmbitComponent(context);
@@ -99,41 +98,33 @@ public abstract class ResourceTest extends DbUnitTest {
 		testGet(uri, media, Status.SUCCESS_OK);
 	}
 
-	public Response testPost(String uri, MediaType media, Form queryForm)
-			throws Exception {
-		return testPost(uri, media,
-				queryForm == null ? null : queryForm.getWebRepresentation());
+	public Response testPost(String uri, MediaType media, Form queryForm) throws Exception {
+		return testPost(uri, media, queryForm == null ? null : queryForm.getWebRepresentation());
 	}
 
-	public Response testPost(String uri, MediaType media, String inputEntity)
-			throws Exception {
-		return testPost(uri, media,
-				new StringRepresentation(inputEntity, media));
+	public Response testPost(String uri, MediaType media, String inputEntity) throws Exception {
+		return testPost(uri, media, new StringRepresentation(inputEntity, media));
 	}
 
-	public Response testPut(String uri, MediaType media,
-			Representation inputEntity) throws Exception {
+	public Response testPut(String uri, MediaType media, Representation inputEntity) throws Exception {
 		return testUpdate(uri, media, inputEntity, Method.PUT);
 	}
 
-	public Response testPost(String uri, MediaType media,
-			Representation inputEntity) throws Exception {
+	public Response testPost(String uri, MediaType media, Representation inputEntity) throws Exception {
 		return testUpdate(uri, media, inputEntity, Method.POST);
 	}
 
-	public Response testDelete(String uri, MediaType media,
-			Representation inputEntity) throws Exception {
+	public Response testDelete(String uri, MediaType media, Representation inputEntity) throws Exception {
 		return testUpdate(uri, media, inputEntity, Method.DELETE);
 	}
 
-	public Response testUpdate(String uri, MediaType media,
-			Representation inputEntity, Method method) throws Exception {
+	public Response testUpdate(String uri, MediaType media, Representation inputEntity, Method method)
+			throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
 		addToken2Header(request);
 		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;
-		ChallengeResponse authentication = new ChallengeResponse(scheme,
-				"guest", "guest");
+		ChallengeResponse authentication = new ChallengeResponse(scheme, "guest", "guest");
 		request.setChallengeResponse(authentication);
 
 		request.setResourceRef(uri);
@@ -145,13 +136,11 @@ public abstract class ResourceTest extends DbUnitTest {
 		// else request.setEntity(inputEntity,media);
 		else
 			request.setEntity(inputEntity);
-		request.getClientInfo().getAcceptedMediaTypes()
-				.add(new Preference<MediaType>(media));
+		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(media));
 		return client.handle(request);
 	}
 
-	protected void testAsyncPoll(Reference ref, MediaType media,
-			Representation rep, Method method, Reference expected)
+	protected void testAsyncPoll(Reference ref, MediaType media, Representation rep, Method method, Reference expected)
 			throws Exception {
 		OTRemoteTask task = new OTRemoteTask(ref, media, rep, method);
 
@@ -169,10 +158,8 @@ public abstract class ResourceTest extends DbUnitTest {
 
 	}
 
-	public Reference testAsyncTask(String uri, Form form, Status expected,
-			String uriExpected) throws Exception {
-		OTRemoteTask task = new OTRemoteTask(new Reference(uri),
-				MediaType.TEXT_URI_LIST, form.getWebRepresentation(),
+	public Reference testAsyncTask(String uri, Form form, Status expected, String uriExpected) throws Exception {
+		OTRemoteTask task = new OTRemoteTask(new Reference(uri), MediaType.TEXT_URI_LIST, form.getWebRepresentation(),
 				Method.POST);
 		if (task.isERROR())
 			throw task.getError();
@@ -183,7 +170,7 @@ public abstract class ResourceTest extends DbUnitTest {
 		}
 		Assert.assertEquals(expected, task.getStatus());
 		if (task.getStatus().equals(Status.SUCCESS_OK)) {
-			if (task.getResult() != null)
+			if (task.getResult() != null && uriExpected != null)
 				Assert.assertEquals(uriExpected, task.getResult().toString());
 		} else if (task.getError() != null)
 			throw task.getError();
@@ -226,21 +213,16 @@ public abstract class ResourceTest extends DbUnitTest {
 	 */
 	protected void addToken2Header(Request request) {
 		if ((ssoToken != null) && (ssoToken.getToken() != null)) {
-			Object extraHeaders = request.getAttributes().get(
-					"org.restlet.http.headers");
+			Object extraHeaders = request.getAttributes().get("org.restlet.http.headers");
 			if (extraHeaders == null)
 				extraHeaders = new Form();
-			((Form) extraHeaders).add(OpenSSOCookie.CookieName,
-					ssoToken.getToken());
-			request.getAttributes().put("org.restlet.http.headers",
-					extraHeaders);
+			((Form) extraHeaders).add(OpenSSOCookie.CookieName, ssoToken.getToken());
+			request.getAttributes().put("org.restlet.http.headers", extraHeaders);
 		}
 	}
 
-	public void testGet(String uri, MediaType media, Status expectedStatus)
-			throws Exception {
-		HttpURLConnection uc = ClientResourceWrapper.getHttpURLConnection(uri,
-				"GET", media.toString(), "test");
+	public void testGet(String uri, MediaType media, Status expectedStatus) throws Exception {
+		HttpURLConnection uc = ClientResourceWrapper.getHttpURLConnection(uri, "GET", media.toString(), "test");
 		HttpURLConnection.setFollowRedirects(true);
 		Assert.assertEquals(expectedStatus.getCode(), uc.getResponseCode());
 		InputStream in = null;
@@ -257,18 +239,15 @@ public abstract class ResourceTest extends DbUnitTest {
 		}
 	}
 
-	public Response xtestGet(String uri, MediaType media, Status expectedStatus)
-			throws Exception {
+	public Response xtestGet(String uri, MediaType media, Status expectedStatus) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
 		addToken2Header(request);
 		request.setResourceRef(uri);
 		request.setMethod(Method.GET);
-		request.getClientInfo().getAcceptedMediaTypes()
-				.add(new Preference<MediaType>(media));
+		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(media));
 		Response response = client.handle(request);
-		Assert.assertEquals(expectedStatus.getCode(), response.getStatus()
-				.getCode());
+		Assert.assertEquals(expectedStatus.getCode(), response.getStatus().getCode());
 		if (expectedStatus.equals(Status.SUCCESS_OK)) {
 			Assert.assertTrue(response.isEntityAvailable());
 			InputStream in = response.getEntity().getStream();
@@ -280,12 +259,10 @@ public abstract class ResourceTest extends DbUnitTest {
 
 	@Test
 	public void testGetJavaObject() throws Exception {
-		testGetJavaObject(getTestURI(), MediaType.APPLICATION_JAVA_OBJECT,
-				org.restlet.data.Status.SUCCESS_OK);
+		testGetJavaObject(getTestURI(), MediaType.APPLICATION_JAVA_OBJECT, org.restlet.data.Status.SUCCESS_OK);
 	}
 
-	public void testGetJavaObject(String uri, MediaType media,
-			Status expectedStatus) throws Exception {
+	public void testGetJavaObject(String uri, MediaType media, Status expectedStatus) throws Exception {
 		ClientResourceWrapper resource = new ClientResourceWrapper(uri);
 		resource.setMethod(Method.GET);
 		resource.get(media);
@@ -295,24 +272,20 @@ public abstract class ResourceTest extends DbUnitTest {
 		}
 	}
 
-	public Object verifyResponseJavaObject(String uri, MediaType media,
-			Representation rep) throws Exception {
-		ObjectRepresentation<Serializable> repObject = new ObjectRepresentation<Serializable>(
-				rep);
+	public Object verifyResponseJavaObject(String uri, MediaType media, Representation rep) throws Exception {
+		ObjectRepresentation<Serializable> repObject = new ObjectRepresentation<Serializable>(rep);
 		Serializable object = repObject.getObject();
 		Assert.assertNotNull(object);
 		return object;
 
 	}
 
-	public void testGetRepresentation(String uri, MediaType media)
-			throws Exception {
+	public void testGetRepresentation(String uri, MediaType media) throws Exception {
 		ClientResourceWrapper client = new ClientResourceWrapper(uri);
 		Assert.assertTrue(verifyRepresentation(uri, media, client.get(media)));
 	}
 
-	public boolean verifyRepresentation(String uri, MediaType media,
-			Representation representation) throws Exception {
+	public boolean verifyRepresentation(String uri, MediaType media, Representation representation) throws Exception {
 		throw new Exception("Not implemented");
 	}
 
@@ -322,8 +295,7 @@ public abstract class ResourceTest extends DbUnitTest {
 		addToken2Header(request);
 		request.setResourceRef(uri);
 		request.setMethod(Method.GET);
-		request.getClientInfo().getAcceptedMediaTypes()
-				.add(new Preference<MediaType>(media));
+		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(media));
 		Response response = client.handle(request);
 		return response.getStatus();
 	}
@@ -332,105 +304,88 @@ public abstract class ResourceTest extends DbUnitTest {
 		return null;
 	}
 
-	public boolean verifyResponsePDF(String uri, MediaType media, InputStream in)
-			throws Exception {
+	public boolean verifyResponsePDF(String uri, MediaType media, InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
 
-	public boolean verifyResponseHTML(String uri, MediaType media,
-			InputStream in) throws Exception {
+	public boolean verifyResponseHTML(String uri, MediaType media, InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
-	public JsonNode parseResponseJSON(String uri, MediaType media,
-			InputStream in) throws Exception {
+
+	public JsonNode parseResponseJSON(String uri, MediaType media, InputStream in) throws Exception {
 		ObjectMapper m = new ObjectMapper();
 		return m.readTree(in);
 	}
-	public boolean verifyResponseJSON(String uri, MediaType media,
-			InputStream in) throws Exception {
+
+	public boolean verifyResponseJSON(String uri, MediaType media, InputStream in) throws Exception {
 		JsonNode node = parseResponseJSON(uri, media, in);
-		return node!=null;
+		return node != null;
 	}
 
 	/*
 	 * public boolean verifyResponseXML(String uri, MediaType media,InputStream
 	 * in) throws Exception { throw new Exception("Not implemented"); }
 	 */
-	public boolean verifyResponseCML(String uri, MediaType media, InputStream in)
-			throws Exception {
+	public boolean verifyResponseCML(String uri, MediaType media, InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
 
-	public boolean verifyResponseMOL(String uri, MediaType media, InputStream in)
-			throws Exception {
+	public boolean verifyResponseMOL(String uri, MediaType media, InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
 
-	public boolean verifyResponseSDF(String uri, MediaType media, InputStream in)
-			throws Exception {
+	public boolean verifyResponseSDF(String uri, MediaType media, InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
 
-	public boolean verifyResponseSMILES(String uri, MediaType media,
-			InputStream in) throws Exception {
+	public boolean verifyResponseSMILES(String uri, MediaType media, InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
 
-	public boolean verifyResponseInChI(String uri, MediaType media,
-			InputStream in) throws Exception {
+	public boolean verifyResponseInChI(String uri, MediaType media, InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
 
-	public boolean verifyResponsePNG(String uri, MediaType media, InputStream in)
-			throws Exception {
+	public boolean verifyResponsePNG(String uri, MediaType media, InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
 
-	public boolean verifyResponseURI(String uri, MediaType media, InputStream in)
-			throws Exception {
+	public boolean verifyResponseURI(String uri, MediaType media, InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
 
-	public boolean verifyResponseRDFN3(String uri, MediaType media,
-			InputStream in) throws Exception {
+	public boolean verifyResponseRDFN3(String uri, MediaType media, InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
 
-	public boolean verifyResponseTXT(String uri, MediaType media, InputStream in)
-			throws Exception {
+	public boolean verifyResponseTXT(String uri, MediaType media, InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
 
-	public boolean verifyResponseCSV(String uri, MediaType media, InputStream in)
-			throws Exception {
+	public boolean verifyResponseCSV(String uri, MediaType media, InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
 
-	public Instances verifyResponseARFF(String uri, MediaType media,
-			InputStream in) throws Exception {
+	public Instances verifyResponseARFF(String uri, MediaType media, InputStream in) throws Exception {
 		return new Instances(new InputStreamReader(in));
 	}
 
-	public Instances verifyResponseARFF3Col(String uri, MediaType media,
-			InputStream in) throws Exception {
+	public Instances verifyResponseARFF3Col(String uri, MediaType media, InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
 
-	public boolean verifyResponseISAJSON(String uri, MediaType media, InputStream in)
-			throws Exception {
+	public boolean verifyResponseISAJSON(String uri, MediaType media, InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}
 
-	public OntModel verifyResponseRDFXML(String uri, MediaType media,
-			InputStream in) throws Exception {
+	public OntModel verifyResponseRDFXML(String uri, MediaType media, InputStream in) throws Exception {
 		OntModel model = OT.createModel();
 		model.read(in, null);
 		Assert.assertTrue(model.size() > 0);
 		return model;
 	}
 
-	public OntModel verifyResponseRDFTurtle(String uri, MediaType media,
-			InputStream in) throws Exception {
+	public OntModel verifyResponseRDFTurtle(String uri, MediaType media, InputStream in) throws Exception {
 		OntModel model = OT.createModel();
 		model.read(in, null, "TURTLE");
 		Assert.assertTrue(model.size() > 0);
@@ -440,8 +395,7 @@ public abstract class ResourceTest extends DbUnitTest {
 		// "RDF/XML-ABBREV" is a synonym for "RDF/XML".
 	}
 
-	public boolean verifyResponse(String uri, MediaType media, InputStream in)
-			throws Exception {
+	public boolean verifyResponse(String uri, MediaType media, InputStream in) throws Exception {
 		if (MediaType.APPLICATION_PDF.equals(media))
 			return verifyResponsePDF(uri, media, in);
 		else if (BundleSubstanceResource.ISAJSON.equals(media))
@@ -501,8 +455,7 @@ public abstract class ResourceTest extends DbUnitTest {
 		return null;
 	}
 
-	protected JsonNode parseJSON(ObjectMapper mapper, InputStreamReader reader)
-			throws Exception {
+	protected JsonNode parseJSON(ObjectMapper mapper, InputStreamReader reader) throws Exception {
 		try {
 			return mapper.readTree(reader);
 		} catch (Exception x) {
