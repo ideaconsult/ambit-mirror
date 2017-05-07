@@ -27,6 +27,7 @@ import javax.vecmath.Vector2d;
 import net.idea.modbcum.i.exceptions.AmbitException;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.aromaticity.Kekulization;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.geometry.GeometryTools;
@@ -59,7 +60,6 @@ import org.openscience.cdk.renderer.selection.IncrementalSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.silent.AtomContainerSet;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.SaturationChecker;
 import org.openscience.cdk.tools.SmilesValencyChecker;
@@ -99,7 +99,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights,
 		kekule {
 			@Override
 			public String toString() {
-				return FixBondOrdersTool.class.getName();
+				return Kekulization.class.getName();
 			}
 
 			@Override
@@ -434,9 +434,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights,
 				rings = false;
 				try {
 					// AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(molecule);
-					FixBondOrdersTool dbt = new FixBondOrdersTool();
-					molecule = dbt
-							.kekuliseAromaticRings((IAtomContainer) molecule);
+					Kekulization.kekulize((IAtomContainer) molecule);
 				} catch (Exception x) {
 					logger.log(Level.WARNING, mode2d.name(), x);
 				}

@@ -9,10 +9,10 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.aromaticity.Kekulization;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.io.SDFWriter;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.restlet.data.Reference;
@@ -46,7 +46,7 @@ public class TautomersGenerator extends
 	protected transient StructureTypeProcessor stype = new StructureTypeProcessor();
 	protected transient MoleculeReader reader = new MoleculeReader();
 	protected RepositoryWriter writer;
-	protected FixBondOrdersTool kekulizer = new FixBondOrdersTool();
+
 	protected UpdateStructureRelation updateStrucRelationQuery = new UpdateStructureRelation();
 
 	public TautomersGenerator(Reference applicationRootReference,
@@ -117,7 +117,7 @@ public class TautomersGenerator extends
 						break;
 					}
 				if (aromatic && (mol instanceof IAtomContainer))
-					mol = kekulizer.kekuliseAromaticRings( mol);
+					Kekulization.kekulize(mol);
 
 				// implicit H count is NULL if read from InChI ...
 				mol = AtomContainerManipulator.removeHydrogens(mol);
@@ -160,8 +160,7 @@ public class TautomersGenerator extends
 								break;
 							}
 						if (aromatic)
-							tautomer = kekulizer
-									.kekuliseAromaticRings(tautomer);
+							Kekulization.kekulize(tautomer);
 
 						StringWriter w = new StringWriter();
 						SDFWriter molwriter = new SDFWriter(w);

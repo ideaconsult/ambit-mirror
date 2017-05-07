@@ -5,12 +5,11 @@ import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openscience.cdk.aromaticity.Kekulization;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.base.config.Preferences;
@@ -21,7 +20,6 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	protected static Logger logger = Logger.getLogger(SmilesParserWrapper.class.getName());
 	protected OpenBabelShell babel = null;
 	protected SmilesParser cdkParser = null;
-	protected FixBondOrdersTool  dbt;
 	public enum SMILES_PARSER {
 	    CDK, OPENBABEL 
 	}
@@ -35,7 +33,6 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	protected SmilesParserWrapper(SMILES_PARSER mode) {
 		super();
 		setParser(mode);
-		dbt = new FixBondOrdersTool();
 		//this is major source of memory leaks ... should be done in a different way
 		//Preferences.getPropertyChangeSupport().addPropertyChangeListener(Preferences.SMILESPARSER, this);
 	}
@@ -71,7 +68,8 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	                }
 	                */				
 				try {
-					return dbt.kekuliseAromaticRings(mol);
+					Kekulization.kekulize(mol);
+					return mol;
 				} catch (CDKException xx) {
 					logger.log(Level.WARNING,smiles,xx);
 					return mol;
@@ -85,7 +83,8 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 			if (cdkParser == null) cdkParser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 			IAtomContainer mol = cdkParser.parseSmiles(smiles);
 			try {
-				return dbt.kekuliseAromaticRings(mol);
+				Kekulization.kekulize(mol);
+				return mol;
 				//return mol;
 			} catch (Exception xx) {
 				logger.log(Level.WARNING,smiles,xx);
@@ -125,7 +124,6 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	}
 	@Override
 	protected void finalize() throws Throwable {
-		dbt = null;
 		babel = null;
 		cdkParser = null;
 		super.finalize();

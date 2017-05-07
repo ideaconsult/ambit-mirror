@@ -32,17 +32,13 @@ package ambit2.core.processors;
 import java.io.StringWriter;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.p.DefaultAmbitProcessor;
-import net.sf.jniinchi.INCHI_RET;
-
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.aromaticity.Kekulization;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.io.SDFWriter;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
@@ -55,6 +51,9 @@ import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.core.processors.structure.key.InchiPropertyKey;
 import ambit2.core.processors.structure.key.SmilesKey;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.sf.jniinchi.INCHI_RET;
 
 public class StructureNormalizer extends
 		DefaultAmbitProcessor<IStructureRecord, IStructureRecord> {
@@ -67,7 +66,6 @@ public class StructureNormalizer extends
 	protected transient InchiPropertyKey inchiKey;
 	protected transient StructureTypeProcessor strucType;
 	protected transient InchiProcessor inchiProcessor;
-	protected transient FixBondOrdersTool fbt = new FixBondOrdersTool();
 	protected transient Structure2DBuilder builder = null;
 	protected DXParser dxParser = null;
 
@@ -166,11 +164,9 @@ public class StructureNormalizer extends
 							try {
 								// inchi can't process aromatic bonds...
 								kekulized = (IAtomContainer) molecule.clone();
-								// and kekulizer needs atom typing
-								AtomContainerManipulator
-										.percieveAtomTypesAndConfigureAtoms(kekulized);
-								kekulized = fbt
-										.kekuliseAromaticRings((IAtomContainer) kekulized);
+								// the new kekulizer probably do not needs atom typing
+								//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(kekulized);
+								Kekulization.kekulize(kekulized);
 								for (IBond bond : kekulized.bonds())
 									bond.setFlag(CDKConstants.ISAROMATIC, false);
 							} catch (Exception x) {

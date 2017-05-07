@@ -48,7 +48,7 @@ public class TestSmartsFingerprinter extends TestCase {
 				BitSet bs2 = sfp.getFingerprint(query);
 
 				assertEquals("Different BitsSet for " + smiles[i],
-						bs1.toString(), bs2.toString());
+						bs1, bs2);
 			} catch (Exception e) {
 				System.out.println(e.toString());
 			}

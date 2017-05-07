@@ -23,7 +23,6 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -49,7 +48,6 @@ import ambit2.tautomers.processor.TautomerProcessor;
  * 
  */
 public class TestTautomersFromSDF {
-	FixBondOrdersTool kekulizer = new FixBondOrdersTool();
 	protected TautomerManager tman = new TautomerManager();
 	protected SmilesGenerator g = SmilesGenerator.unique();
 	protected InchiProcessor inchip = null;
