@@ -57,6 +57,11 @@ CDK descriptors, listed at http://qsar.sourceforge.net/dicts/qsar-descriptors/in
 			<scope>compile</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.openscience.cdk</groupId>
+			<artifactId>cdk-signature</artifactId>
+			<version>${cdk.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<pluginManagement>
