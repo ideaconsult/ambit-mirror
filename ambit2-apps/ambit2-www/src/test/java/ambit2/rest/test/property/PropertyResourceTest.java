@@ -359,16 +359,11 @@ public class PropertyResourceTest extends ResourceTest {
 		Assert.assertEquals(response.getLocationRef().toString(),
 				"http://localhost:8181/feature/7");
 
-		// weird nondeterministic error in ambit.uni-plovdiv.bg
 		for (int i = 0; i < 100; i++) {
 			response = testPost(String.format("http://localhost:%d%s", port,
 					PropertyResource.featuredef),
-			// String.format("http://localhost:8080/ambit2-www%s",PropertyResource.featuredef),
-			// String.format("http://ambit.uni-plovdiv.bg:8080/ambit2%s",PropertyResource.featuredef),
 					MediaType.APPLICATION_RDF_XML, writer.toString());
-			// System.out.println(response.getStatus());
 			Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
-			// Assert.assertEquals(response.getLocationRef().toString(),"http://localhost:8181/feature/http%3A%2F%2Fother.com%2Ffeature%2F200Default");
 
 		}
 		IDatabaseConnection c = getConnection();

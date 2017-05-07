@@ -45,12 +45,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 	
 	@Test
 	public void test() throws Exception {
-		/*
-		datasetsIntersectionHTML(
-				"https://ambit.uni-plovdiv.bg:8443/ambit2/dataset?max=100",
-				"https://ambit.uni-plovdiv.bg:8443/ambit2/dataset?max=100",
-				"https://ambit.uni-plovdiv.bg:8443/ambit2");
-				*/
+
 		datasetsIntersectionHTML(
 				"http://localhost:8080/ambit2/dataset?max=100",
 				"http://localhost:8080/ambit2/dataset?max=100",
@@ -165,50 +160,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 					}
 				});
 	}
-	/*
-	public void datasetsIntersection(String uri1,String uri2) throws Exception {
-		
-		FileWriter w = new FileWriter("dataset_compare.txt");
-		int count=0;
-		try {
-			OTDatasets datasets = new OTDatasets();
-			datasets.read(uri1);
-			ClientResourceWrapper.setTokenFactory(this);
-			String intersection = "https://ambit.uni-plovdiv.bg:8443/ambit2/admin/stats/dataset_intersection?dataset_uri=%s&dataset_uri=%s";
-			String chemnumber = "https://ambit.uni-plovdiv.bg:8443/ambit2/admin/stats/chemicals_in_dataset?dataset_uri=%s";
-
-			w.write("Dataset");
-			for (int i=0; i < datasets.size(); i++) {
-				w.write(String.format(",%s",datasets.getItem(i).getUri()));
-			}
-			w.write("\n");
-			for (int i=0; i < datasets.size(); i++) {
-				OTDataset d1 = datasets.getItem(i);
-				w.write(String.format("%s",d1.getUri()));
-				for (int j=0; j < datasets.size(); j++) {
-					String number = "";
-					if (i==j) {
-						String uri = String.format(chemnumber, URLEncoder.encode(d1.getUri().toString()));
-						number = read(uri);
-					} else {
-						OTDataset d2 = datasets.getItem(j);	
-					
-						String uri = String.format(intersection, URLEncoder.encode(d1.getUri().toString()), URLEncoder.encode(d2.getUri().toString()));
-						number = read(uri);
-					}
-					w.write(String.format(",%s",number));
-				}
-				w.write("\n");
-				w.flush();
-			}
-
-		} catch (Exception x) {
-			throw x;
-		} finally {
-			w.close();
-		}
-	}
-	*/
+	
     public void datasetsIntersectionHTML(String uri1,String uri2, String prefix) throws Exception {
     	int prefixlen = 21;
 		FileWriter w = new FileWriter("dataset_compare.html");

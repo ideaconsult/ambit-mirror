@@ -129,17 +129,6 @@ public class ProtectedModelBuilder extends ProtectedResourceTest {
 		*/
 		
 	}	
-	
-	@Test
-	public void testClassifier() throws Exception {
-		System.setProperty("javax.net.ssl.trustStore",  "C:\\Program Files\\Java\\jre6\\lib\\security\\ambit-plovdiv");
 
-		ClientResourceWrapper.setTokenFactory(this);
-			
-		OTAlgorithm algorithm = OTAlgorithm.algorithm("https://ambit.uni-plovdiv.bg:8443/ambit2/algorithm/J48","test");
-		OTModel model = algorithm.process(OTDataset.dataset("https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/R401577?feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/R401577/feature&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/26221&max=5000"), 
-					          OTFeature.feature("https://ambit.uni-plovdiv.bg:8443/ambit2/feature/26221","test"));
-		logger.info("Model built: " + model);
-	}	
 	
 }
