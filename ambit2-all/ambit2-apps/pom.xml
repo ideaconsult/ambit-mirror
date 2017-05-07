@@ -349,6 +349,7 @@
 			<comments>GPL</comments>
 		</license>
 	</licenses>
+	
 	<reporting>
 		<plugins>
 			<plugin>
@@ -380,7 +381,9 @@
 		<module>ambit2-dbsubstance</module>
 		<!-- <module>ambit2-dbisatab</module> -->
 		<module>ambit2-dbcli</module>
+		<!--
 		<module>ambit2-export</module>
+		-->
 	</modules>
 	<dependencies>
 		<!-- Ambit -->
