@@ -41,31 +41,23 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 	}
 
 	@Override
-	public IBitFingerprint getBitFingerprint(IAtomContainer arg0)
-			throws CDKException {
-		return new BitSetFingerprint(getBitSet(arg0));
+	public IBitFingerprint getBitFingerprint(IAtomContainer arg0) throws CDKException {
+		return new BitSetFingerprint(getFingerprint(arg0));
 	}
 
 	@Override
-	public ICountFingerprint getCountFingerprint(IAtomContainer arg0)
-			throws CDKException {
+	public ICountFingerprint getCountFingerprint(IAtomContainer arg0) throws CDKException {
 		return null;
 	}
 
 	@Override
-	public Map<String, Integer> getRawFingerprint(IAtomContainer arg0)
-			throws CDKException {
+	public Map<String, Integer> getRawFingerprint(IAtomContainer arg0) throws CDKException {
 		return null;
 	}
-
-	/**
-	 * Calculate 881 bit Pubchem fingerprint for a molecule.
-	 * <p/>
-	 * See <a href=
-	 * "ftp://ftp.ncbi.nlm.nih.gov/pubchem/specifications/pubchem_fingerprints.txt"
-	 * >here</a> for a description of each bit position.
-	 */
-	public BitSet getBitSet(IAtomContainer atomContainer) throws CDKException {
+	/** CDK 1.5.15
+	@Override
+	*/
+	public BitSet getFingerprint(IAtomContainer atomContainer) throws CDKException {
 		generateFp(atomContainer);
 		BitSet fp = new BitSet(FP_SIZE);
 		for (int i = 0; i < FP_SIZE; i++) {
@@ -151,8 +143,7 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 		private int countHeteroInRing(IAtomContainer ring) {
 			int c = 0;
 			for (IAtom ringAtom : ring.atoms()) {
-				if (!ringAtom.getSymbol().equals("C")
-						&& !ringAtom.getSymbol().equals("H"))
+				if (!ringAtom.getSymbol().equals("C") && !ringAtom.getSymbol().equals("H"))
 					c++;
 			}
 			return c;
@@ -196,8 +187,7 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 		public int countSaturatedOrAromaticNitrogenContainingRing(int size) {
 			int c = 0;
 			for (IAtomContainer ring : ringSet.atomContainers()) {
-				if (ring.getAtomCount() == size
-						&& (isRingSaturated(ring) || isAromaticRing(ring))
+				if (ring.getAtomCount() == size && (isRingSaturated(ring) || isAromaticRing(ring))
 						&& countNitrogenInRing(ring) > 0)
 					++c;
 			}
@@ -207,8 +197,7 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 		public int countSaturatedOrAromaticHeteroContainingRing(int size) {
 			int c = 0;
 			for (IAtomContainer ring : ringSet.atomContainers()) {
-				if (ring.getAtomCount() == size
-						&& (isRingSaturated(ring) || isAromaticRing(ring))
+				if (ring.getAtomCount() == size && (isRingSaturated(ring) || isAromaticRing(ring))
 						&& countHeteroInRing(ring) > 0)
 					++c;
 			}
@@ -218,8 +207,8 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 		public int countUnsaturatedCarbonOnlyRing(int size) {
 			int c = 0;
 			for (IAtomContainer ring : ringSet.atomContainers()) {
-				if (ring.getAtomCount() == size && isRingUnsaturated(ring)
-						&& !isAromaticRing(ring) && isCarbonOnlyRing(ring))
+				if (ring.getAtomCount() == size && isRingUnsaturated(ring) && !isAromaticRing(ring)
+						&& isCarbonOnlyRing(ring))
 					++c;
 			}
 			return c;
@@ -228,8 +217,7 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 		public int countUnsaturatedNitrogenContainingRing(int size) {
 			int c = 0;
 			for (IAtomContainer ring : ringSet.atomContainers()) {
-				if (ring.getAtomCount() == size && isRingUnsaturated(ring)
-						&& !isAromaticRing(ring)
+				if (ring.getAtomCount() == size && isRingUnsaturated(ring) && !isAromaticRing(ring)
 						&& countNitrogenInRing(ring) > 0)
 					++c;
 			}
@@ -239,8 +227,8 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 		public int countUnsaturatedHeteroContainingRing(int size) {
 			int c = 0;
 			for (IAtomContainer ring : ringSet.atomContainers()) {
-				if (ring.getAtomCount() == size && isRingUnsaturated(ring)
-						&& !isAromaticRing(ring) && countHeteroInRing(ring) > 0)
+				if (ring.getAtomCount() == size && isRingUnsaturated(ring) && !isAromaticRing(ring)
+						&& countHeteroInRing(ring) > 0)
 					++c;
 			}
 			return c;
@@ -304,14 +292,12 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 	public static BitSet decode(String enc) {
 		byte[] fp = base64Decode(enc);
 		if (fp.length < 4) {
-			throw new IllegalArgumentException(
-					"Input is not a proper PubChem base64 encoded fingerprint");
+			throw new IllegalArgumentException("Input is not a proper PubChem base64 encoded fingerprint");
 		}
 
 		int len = (fp[0] << 24) | (fp[1] << 16) | (fp[2] << 8) | (fp[3] & 0xff);
 		if (len != FP_SIZE) {
-			throw new IllegalArgumentException(
-					"Input is not a proper PubChem base64 encoded fingerprint");
+			throw new IllegalArgumentException("Input is not a proper PubChem base64 encoded fingerprint");
 		}
 
 		PubChemFingerprinterAmbitSmarts pc = new PubChemFingerprinterAmbitSmarts();
@@ -341,8 +327,7 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 		return base64Encode(pack);
 	}
 
-	private static String BASE64_LUT = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-			+ "abcdefghijklmnopqrstuvwxyz0123456789+/=";
+	private static String BASE64_LUT = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz0123456789+/=";
 
 	// based on NCBI C implementation
 	private static String base64Encode(byte[] data) {
@@ -413,18 +398,14 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 		return b64;
 	}
 
-	static final int BITCOUNT[] = { 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
-			3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 1, 2, 2, 3,
-			2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4,
-			4, 5, 4, 5, 5, 6, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
-			2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 2, 3, 3, 4, 3, 4,
-			4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6,
-			5, 6, 6, 7, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3,
-			3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 2, 3, 3, 4, 3, 4, 4, 5,
-			3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6,
-			6, 7, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5,
-			4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5,
-			5, 6, 5, 6, 6, 7, 4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8 };
+	static final int BITCOUNT[] = { 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4,
+			3, 4, 4, 5, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+			1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 2, 3, 3, 4,
+			3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 1, 2, 2, 3, 2, 3, 3, 4,
+			2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5,
+			4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+			3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 4, 5, 5, 6,
+			5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8 };
 
 	static final int MASK[] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
 
@@ -791,8 +772,7 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 	 * (two phenyl fragments and the 10-membered envelope), while biphenyl will
 	 * yield a count of only two ESSR rings.
 	 */
-	private static void countRings(byte[] fp, IAtomContainer mol)
-			throws Intractable {
+	private static void countRings(byte[] fp, IAtomContainer mol) throws Intractable {
 		CountRings cr = new CountRings(mol);
 		int b;
 
@@ -1262,8 +1242,7 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 			fp[b >> 3] |= MASK[b % 8];
 	}
 
-	private void countSubstructures(byte[] fp, IAtomContainer mol)
-			throws CDKException {
+	private void countSubstructures(byte[] fp, IAtomContainer mol) throws CDKException {
 		CountSubstructures cs = new CountSubstructures(mol);
 		int b;
 
@@ -3155,5 +3134,11 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 		if (cs.countSubstructure("Br[#6]1[#6](Br)[#6][#6][#6]1") > 0)
 			fp[b >> 3] |= MASK[b % 8];
 	}
-
+	/** CDK 1.5.15
+	@Override
+	public String getVersionDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	*/
 }

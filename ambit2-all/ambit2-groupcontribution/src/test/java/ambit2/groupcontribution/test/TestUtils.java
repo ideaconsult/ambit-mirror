@@ -5,12 +5,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
-import ambit2.groupcontribution.descriptors.LDAtomFormalCharge;
-import ambit2.groupcontribution.descriptors.LDAtomHybridization;
-import ambit2.groupcontribution.descriptors.LDAtomHeavyNeighbours;
-import ambit2.groupcontribution.descriptors.LDAtomSymbol;
-import ambit2.groupcontribution.descriptors.LDAtomValency;
-import ambit2.groupcontribution.descriptors.LDHNum;
 import ambit2.groupcontribution.utils.MoleculeUtils;
 import ambit2.smarts.SmartsHelper;
 

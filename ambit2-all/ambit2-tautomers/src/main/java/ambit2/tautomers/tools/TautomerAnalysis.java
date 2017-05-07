@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.aromaticity.Kekulization;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -19,7 +20,6 @@ import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -34,7 +34,6 @@ import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerUtils;
 import ambit2.tautomers.TautomerUtils.TautomerPair;
-import ambit2.tautomers.tools.TautomerAnalysis;
 
 
 
@@ -60,7 +59,7 @@ public class TautomerAnalysis
 	
 	//Work variables
 	protected TautomerManager tman = new TautomerManager();
-	protected FixBondOrdersTool kekulizer = new FixBondOrdersTool();
+
 	protected MoleculeFilter molecularFilter = null;
 	protected int records_read = 0;
 	protected int records_processed = 0;
@@ -148,7 +147,7 @@ public class TautomerAnalysis
 						boolean aromatic = false;
 						for (IBond bond : molecule.bonds()) if (bond.getFlag(CDKConstants.ISAROMATIC)) {aromatic = true; break;}
 						if (aromatic)
-							molecule = kekulizer.kekuliseAromaticRings((IAtomContainer)molecule);
+							Kekulization.kekulize(molecule);
 					} catch (Exception x) {
 						logger.log(Level.WARNING, String.format("[Record %d] Error %s\t%s", records_read, file.getAbsoluteFile(), x.getMessage()));
 					}

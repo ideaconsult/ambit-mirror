@@ -10,6 +10,7 @@ import net.idea.modbcum.q.conditions.StringCondition.STRING_CONDITION;
 import net.sf.jniinchi.INCHI_RET;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.aromaticity.Kekulization;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGenerator;
@@ -18,7 +19,6 @@ import org.openscience.cdk.index.CASNumber;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -465,8 +465,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 
     public String[] atomcontainer2inchi(IAtomContainer c, String origin) throws ResourceException {
 	try {
-	    FixBondOrdersTool fbt = new FixBondOrdersTool();
-	    c = fbt.kekuliseAromaticRings((IAtomContainer) c);
+	    Kekulization.kekulize(c);
 	    // inchi can't process aromatic bonds...
 	    for (IBond bond : c.bonds())
 		bond.setFlag(CDKConstants.ISAROMATIC, false);
@@ -567,15 +566,4 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
     }
 
 
-    /*
-     * @Override protected void processNotFound(NotFoundException x, int retry)
-     * throws Exception { if (retry>0) super.processNotFound(x, retry); else if
-     * (searchType == null) { //not cas, smiles, einecs, inchi, ambitid, just
-     * plain text Name2StructureProcessor processor = new
-     * Name2StructureProcessor(); IAtomContainer atomcontainer =
-     * processor.process(text); QueryExactStructure q = new
-     * QueryExactStructure(); q.setChemicalsOnly(true);
-     * q.setValue(atomcontainer); queryObject = q; } else
-     * super.processNotFound(x, retry); }
-     */
 }

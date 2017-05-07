@@ -3,10 +3,8 @@ package ambit2.loom.descriptors;
 import java.io.InputStream;
 import java.util.Properties;
 
-import net.idea.ops.cli.OPSClient;
-import net.sf.jniinchi.INCHI_RET;
-
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.aromaticity.Kekulization;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -17,15 +15,16 @@ import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.data.Property;
 import ambit2.core.processors.structure.InchiProcessor;
+import net.idea.ops.cli.OPSClient;
+import net.sf.jniinchi.INCHI_RET;
 
 public class OPSCountsByCompound implements IMolecularDescriptor {
 	protected OPSClient cli;
-	protected transient FixBondOrdersTool fbt = new FixBondOrdersTool();
+
 	protected InchiProcessor processor;
 	protected static final String[] names = new String[] { "OPSPathwayCount",
 			"OPSPharmacologyCount" };
@@ -82,7 +81,7 @@ public class OPSCountsByCompound implements IMolecularDescriptor {
 						// and kekulizer needs atom typing
 						AtomContainerManipulator
 								.percieveAtomTypesAndConfigureAtoms(kekulized);
-						kekulized = fbt.kekuliseAromaticRings(kekulized);
+						Kekulization.kekulize(kekulized);
 						for (IBond bond : kekulized.bonds())
 							bond.setFlag(CDKConstants.ISAROMATIC, false);
 					} catch (Exception x) {

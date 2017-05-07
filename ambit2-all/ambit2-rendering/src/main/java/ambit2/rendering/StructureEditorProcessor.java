@@ -6,12 +6,12 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.aromaticity.Kekulization;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.silent.AtomContainerSet;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.interfaces.IStructureRecord;
@@ -88,8 +88,8 @@ public class StructureEditorProcessor extends DefaultAmbitProcessor<IStructureRe
 					break;					
 				case dearomatize :
 					if (mol!=null) {
-						FixBondOrdersTool fbt = new FixBondOrdersTool();
-						mol = fbt.kekuliseAromaticRings((IAtomContainer)mol);
+
+						Kekulization.kekulize(mol);
 						for (IBond bond : mol.bonds()) bond.setFlag(CDKConstants.ISAROMATIC,false);
 					}	
 					break;

@@ -32,29 +32,29 @@ package ambit2.core.test;
 import java.io.InputStream;
 import java.io.StringReader;
 
-import junit.framework.Assert;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.aromaticity.Kekulization;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.cdk.io.iterator.IteratingSDFReader;
+
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.test.io.RawIteratingWrapperTest;
+import junit.framework.Assert;
 
 public class SmilesTest {
 
@@ -155,27 +155,7 @@ public class SmilesTest {
 		return m;
 	}
 
-	/*
-	 * the 7 -ring aromatic smiles is not quite correct
-	 * 
-	 * @Test public void testAromaticityRing7() throws Exception { SmilesParser
-	 * parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
-	 * IAtomContainer mol = parser.parseSmiles("c1cccccc1"); for (IAtom atom :
-	 * mol.atoms()) Assert.assertTrue(atom.getFlag(CDKConstants.ISAROMATIC)); }
-	 * 
-	 * @Test public void testAromaticityRing7a() throws Exception { SmilesParser
-	 * parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
-	 * IAtomContainer mol = parser.parseSmiles("c1cccccc1");
-	 * //AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol); //for
-	 * (IAtom atom : mol.atoms())
-	 * Assert.assertTrue(atom.getFlag(CDKConstants.HYBRIDIZATION_SP2));
-	 * FixBondOrdersTool d = new FixBondOrdersTool(); mol =
-	 * d.kekuliseAromaticRings(mol); int doubleBonds = 0; for (IBond bond:
-	 * mol.bonds()) if (IBond.Order.DOUBLE.equals(bond.getOrder()))
-	 * doubleBonds++;
-	 * 
-	 * Assert.assertTrue(doubleBonds>0); }
-	 */
+	
 
 	@Test
 	public void testAromaticityRing6() throws Exception {
@@ -185,8 +165,7 @@ public class SmilesTest {
 		for (IAtom atom : mol.atoms())
 			Assert.assertTrue(atom.getFlag(CDKConstants.ISAROMATIC));
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-		FixBondOrdersTool d = new FixBondOrdersTool();
-		mol = d.kekuliseAromaticRings(mol);
+		Kekulization.kekulize(mol);
 		int doubleBonds = 0;
 		for (IBond bond : mol.bonds())
 			if (IBond.Order.DOUBLE.equals(bond.getOrder()))
