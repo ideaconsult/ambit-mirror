@@ -9,7 +9,8 @@
 	"REACTIONS": [{
 			"NAME": "Nitro group uncharged -> charged",
 			"CLASS": "charger",
-			"SMIRKS": "[*:1][N:2](=[O:3])=[O:4]>>[*:1][N+:2](=[O:3])[O-:4]",
+			"SMIRKS_old": "[*:1][N:2](=[O:3])=[O:4]>>[*:1][N+:2](=[O:3])[O-:4]",
+			"SMIRKS": "[ND3h0:2](=[OD1h0:3])=[OD1h0:4]>>[N+:2](=[O:3])-[O-:4]",
 			"USE": false,
 			"precondition": {
 				"atom": [
