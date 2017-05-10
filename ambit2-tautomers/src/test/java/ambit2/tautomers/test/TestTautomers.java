@@ -188,7 +188,8 @@ public class TestTautomers {
 		//tt.visualTest("ClC=1C=C(C2=NN(C(=C2C3=CC=C(N(O)=O)C=C3)C(=O)N4C(OCC4)=O)C5=CC=CC=C5)C=CC1");
 		//tt.visualTest("O(C=1C(NC(=O)C=NN#N)=CC(OC)=CC1)C");
 		//tt.visualTest("COC1=CC(=C(C=C1)OC)NC(=O)CN=[N+]=[N-]");
-		tt.visualTest("COC1=CC(=C(C=C1)OC)NC(=O)CN=N#N");
+		//tt.visualTest("COC1=CC(=C(C=C1)OC)NC(=O)CN=N#N");
+		tt.visualTest("CC1CN(CC(O1)C)C2=NC3=CC=CC=C3N=C2C(C#N)S(=O)(=O)C4=CC=CC(=C4)C");
 		               
 		//tt.visualTest("OC(=O)CCC=CN");
 
