@@ -27,7 +27,8 @@ public class PredefinedKnowledgeBase
 		"$$NAME=S=NS                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#16]=[#7][#16] [#16][#7]=[#16] $$GROUP_POS=3,1 $$INFO= S=NS",
 		"$$NAME=N=SC                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#7]=[#16][#6] [#7][#16]=[#6]   $$GROUP_POS=3,1 $$INFO= N=SC",
 		"$$NAME=O=SC                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8]=[#16][#6] [#8][#16]=[#6]   $$GROUP_POS=3,1 $$INFO= O=SC",
-		//"$$NAME=O=SC/sulfonic_excluded   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8]=[#16][#6;!$(S(=O)=O)] [#8][#16]=[#6;!$(S(=O)[OH])]   $$GROUP_POS=3,1 $$INFO= O=SC",
+		//currently recursive smarts is not supported in tautomer rules
+		//"$$NAME=O=SC/sulfonic_excluded   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8]=[#16;!$(S(=O)=O)][#6] [#8][#16;!$(S(=O)[OH])]=[#6]   $$GROUP_POS=3,1 $$INFO= O=SC",
 		
 		"$$NAME=1.5_shift              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8,#7,#16]=[#6][#6]=[#6][#6] [#8,#7,#16][#6]=[#6][#6]=[#6]  " +
 																												 "$$GROUP_POS=5,1  $$INFO=",
