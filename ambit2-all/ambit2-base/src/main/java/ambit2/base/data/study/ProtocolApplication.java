@@ -100,7 +100,14 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT>
 	protected String substanceUUID;
 	protected String companyUUID;
 	protected String documentUUID;
+	protected String investigationUUID;
 
+	public String getInvestigationUUID() {
+		return investigationUUID;
+	}
+	public void setInvestigationUUID(String investigationUUID) {
+		this.investigationUUID = investigationUUID;
+	}
 	@Override
     public int hashCode() {
 		return Objects.hashCode(getSubstanceUUID(),getProtocol(),reference,getParameters(),getInterpretationResult(),getInterpretationCriteria(),getEffects(),getReliability());
