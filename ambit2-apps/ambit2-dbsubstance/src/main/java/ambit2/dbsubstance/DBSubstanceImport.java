@@ -572,7 +572,7 @@ public class DBSubstanceImport {
 		}
 	}
 
-	protected int importFile(boolean splitRecord, boolean xlsx, boolean importBundles) throws Exception {
+	protected int importFile(boolean splitRecord,final boolean xlsx, boolean importBundles) throws Exception {
 		IRawReader<IStructureRecord> parser = null;
 		Connection c = null;
 		try {
@@ -585,6 +585,8 @@ public class DBSubstanceImport {
 			StructureRecordValidator validator = new StructureRecordValidator(inputFile.getName(), true) {
 				@Override
 				public IStructureRecord validate(SubstanceRecord record) throws Exception {
+					record.setContent(inputFile.getName());
+					record.setFormat(xlsx?"xlsx":"xls");
 					if (record.getRelatedStructures() != null && !record.getRelatedStructures().isEmpty()) {
 
 						for (int i = record.getRelatedStructures().size() - 1; i >= 0; i--) {
