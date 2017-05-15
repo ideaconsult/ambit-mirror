@@ -267,14 +267,14 @@ public class DBSubstanceWriter extends AbstractDBProcessor<IStructureRecord, ISt
 			q.setObject(substance);
 			x.process(q);
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,q.getClass().getName(),x);
 			throw x;
 		}
 		try {
 			qids.setObject(substance);
 			x.process(qids);
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,qids.getClass().getName(),x);
 		}
 		importedRecord.setSubstanceUUID(substance.getSubstanceUUID());
 		importedRecord.setIdsubstance(substance.getIdsubstance());
