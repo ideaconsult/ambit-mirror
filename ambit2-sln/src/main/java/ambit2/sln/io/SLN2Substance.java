@@ -78,8 +78,14 @@ public class SLN2Substance
 	
 	public SLNContainerSet substanceCompositionToSln(List<CompositionRelation> composition)
 	{
-		//TODO
-		return null;
+		SLNContainerSet slnContSet = new SLNContainerSet();
+		for (int i = 0; i < composition.size(); i++)
+		{
+			CompositionRelation compRel = composition.get(i);
+			SLNContainer slnContainer = compositionRelationToSLNContainer(compRel);
+			slnContSet.containers.add(slnContainer);
+		}
+		return slnContSet;
 	}
 	
 	
