@@ -1,29 +1,4 @@
 <#if substanceUUID??>
-	<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-		<a href="${ambit_root}/ui/_dataset?dataset_uri=${ambit_root}/substance/${substanceUUID}/structure" title='Chemical structures for this substance'>Show structures</a>
-	</div>
-<!--
-<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-	<a href="${ambit_root}/substance/${substanceUUID}/composition" title='Substance composition'>Show composition</a>
-</div>
--->
-	<#if username??>
-		<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; font-style:bold;'>
-			Remove substance
-		</div>
-		<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; font-style:bold;'>
-		
-			<a href='#' onClick='deleteSubstance("${ambit_root}/substance/${substanceUUID}","${substanceUUID}","#statusSelector")'>
-			<span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;' title=></span>&nbsp;${substanceUUID}</a>
-			<br/><span class='msg' id='statusSelector'></span>		
-		</div>
-	</#if>
-	
-	<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
-		
-		<a href="${ambit_root}/substance/${substanceUUID}" title='Chemical structures for this substance'>Show substance</a>
-	</div>
-	
 	<#if menu_profile?? && menu_profile=='enanomapper'>		        
 	<div class='row' id='download_substance' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
 		<a href='${ambit_root}/substance/${substanceUUID}/study?media=application/json' id='json' target=_blank><img src='${ambit_root}/images/json64.png' alt='json' title='Download as JSON'></a>
@@ -33,6 +8,34 @@
 		<a href='${ambit_root}/substance/${substanceUUID}?media=application%2Fisa%2Bjson' id='isajson' target=_blank><img src='${ambit_root}/images/isa.png' alt='ISA-JSON' title='Download as ISA-JSON'></a>
 	</div>
 	</#if>
+
+	<div class='row' style='margin: 0px; padding: 0.1em; font-size: 1em; ' >
+		<a href="${ambit_root}/ui/_dataset?dataset_uri=${ambit_root}/substance/${substanceUUID}/structure" title='Chemical structures for this substance'>Structures</a>
+	</div>
+<!--
+<div class='row' style='margin: 0px; padding: 0.1em; font-size: 1em; ' >
+	<a href="${ambit_root}/substance/${substanceUUID}/composition" title='Substance composition'>Show composition</a>
+</div>
+-->
+	<#if username??>
+		<div class='row' style='margin: 0px; padding: 0.1em; font-size: 1em; ' >
+			Remove substance
+		</div>
+		<div class='row' style='margin: 0px; padding: 0.1em; font-size: 1em; ' >
+		
+			<a href='#' onClick='deleteSubstance("${ambit_root}/substance/${substanceUUID}","${substanceUUID}","#statusSelector")'>
+			<span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;' title=></span>&nbsp;${substanceUUID}</a>
+			<br/><span class='msg' id='statusSelector'></span>		
+		</div>
+	</#if>
+	
+	<!--
+	<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
+		
+		<a href="${ambit_root}/substance/${substanceUUID}" title='Chemical structures for this substance'>Show substance</a>
+	</div>
+	-->
+	
 
 <#else>
 	
