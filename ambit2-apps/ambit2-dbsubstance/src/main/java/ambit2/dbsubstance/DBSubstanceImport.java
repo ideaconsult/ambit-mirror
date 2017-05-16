@@ -66,6 +66,15 @@ public class DBSubstanceImport {
 	protected static Logger logger_cli = Logger.getLogger(DBSubstanceImport.class.getName());
 	static final String loggingProperties = "ambit2/dbsubstance/logging.properties";
 	static final String log4jProperties = "ambit2/dbsubstance/log4j.properties";
+	protected String prefix = "XLSX";
+
+	public String getPrefix() {
+		return prefix;
+	}
+
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
 
 	static {
 		logger_cli = Logger.getLogger("ambitcli", "ambit2.dbsubstance.msg");
@@ -139,7 +148,7 @@ public class DBSubstanceImport {
 	protected boolean clearComposition = true;
 
 	public enum _parsertype {
-		i5z,i6z, xlsx, xls, nanowiki, modnanotox, enmrdf
+		i5z, i6z, xlsx, xls, nanowiki, modnanotox, enmrdf
 	}
 
 	public _parsertype getParserType() {
@@ -244,6 +253,16 @@ public class DBSubstanceImport {
 			} catch (Exception x) {
 			}
 		return true;
+	}
+
+	protected static String getPrefix(CommandLine line) throws FileNotFoundException {
+		String prefix = "XLSX";
+		if (line.hasOption('e')) {
+			String p = line.getOptionValue('e');
+			if (p != null && (p.trim().length() == 4))
+				prefix = p.trim().toUpperCase();
+		}
+		return prefix;
 	}
 
 	protected static File getJSONConfig(CommandLine line) throws FileNotFoundException {
@@ -374,6 +393,9 @@ public class DBSubstanceImport {
 		Option config = OptionBuilder.hasArg().withLongOpt("config").withArgName("file")
 				.withDescription("Config file (DB connection parameters)").create("c");
 
+		Option prefix = OptionBuilder.hasArg().withLongOpt("prefix").withArgName("4-letter-string")
+				.withDescription("UUID prefix, default 'XLSX'").create("e");
+
 		Option clearComposition = OptionBuilder.hasArg().withLongOpt("clearComposition").withArgName("value")
 				.withDescription("true|false").create("t");
 
@@ -405,6 +427,7 @@ public class DBSubstanceImport {
 		options.addOption(matchStructure);
 		options.addOption(isSplitRecord);
 		options.addOption(maxRefSubstances);
+		options.addOption(prefix);
 
 		options.addOption(help);
 
@@ -444,7 +467,8 @@ public class DBSubstanceImport {
 			if ("xslx".equals(getParserType()))
 				if (jsonConfig == null)
 					throw new Exception("Missing JSON config file, mandatory for importing XLSX!");
-
+			
+			setPrefix(getPrefix(line));
 			outputFile = getOutput(line);
 
 			String config = getConfig(line);
@@ -489,7 +513,7 @@ public class DBSubstanceImport {
 			default:
 				if (jsonConfig == null)
 					throw new FileNotFoundException("JSON config file not specified!");
-				return new GenericExcelParser(in, jsonConfig, xlsx);
+				return new GenericExcelParser(in, jsonConfig, xlsx, prefix);
 			}
 	}
 
@@ -572,7 +596,7 @@ public class DBSubstanceImport {
 		}
 	}
 
-	protected int importFile(boolean splitRecord,final boolean xlsx, boolean importBundles) throws Exception {
+	protected int importFile(boolean splitRecord, final boolean xlsx, boolean importBundles) throws Exception {
 		IRawReader<IStructureRecord> parser = null;
 		Connection c = null;
 		try {
@@ -582,11 +606,11 @@ public class DBSubstanceImport {
 			logger_cli.log(Level.INFO, "MSG_IMPORT",
 					new Object[] { parser.getClass().getName(), inputFile.getAbsolutePath() });
 
-			StructureRecordValidator validator = new StructureRecordValidator(inputFile.getName(), true) {
+			StructureRecordValidator validator = new StructureRecordValidator(inputFile.getName(), true,getPrefix()) {
 				@Override
 				public IStructureRecord validate(SubstanceRecord record) throws Exception {
 					record.setContent(inputFile.getName());
-					record.setFormat(xlsx?"xlsx":"xls");
+					record.setFormat(xlsx ? "xlsx" : "xls");
 					if (record.getRelatedStructures() != null && !record.getRelatedStructures().isEmpty()) {
 
 						for (int i = record.getRelatedStructures().size() - 1; i >= 0; i--) {

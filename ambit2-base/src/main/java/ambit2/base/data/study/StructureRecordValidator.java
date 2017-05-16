@@ -37,13 +37,14 @@ public class StructureRecordValidator extends
 	}
 
 	public StructureRecordValidator() {
-		this(UUID.randomUUID().toString(), false);
+		this(UUID.randomUUID().toString(), false, "XLSX");
 	}
 
-	public StructureRecordValidator(String filename, boolean fixErrors) {
+	public StructureRecordValidator(String filename, boolean fixErrors, String prefix) {
 		super();
 		setFilename(filename);
 		setFixErrors(fixErrors);
+		setPrefix(prefix);
 	}
 
 	public boolean isFixErrors() {
