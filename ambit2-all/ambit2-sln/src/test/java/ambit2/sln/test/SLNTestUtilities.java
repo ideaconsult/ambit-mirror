@@ -54,7 +54,7 @@ public class SLNTestUtilities
 		//tu.testSLNIsomorphism("C[src=3]","C1CCC1CC2CC2");		
 		//tu.testSLNIsomorphism("C[tac=2]","C#C");
 		//tu.testSLNIsomorphism("Any=C","C=N");
-		tu.testSLNIsomorphism("N[charge=+1](=O)(O[charge=-1])","[N+](=O)[O-]");
+		//tu.testSLNIsomorphism("N[charge=+1](=O)(O[charge=-1])","[N+](=O)[O-]");
 		
 		//tu.testSLNIsomorphism("C[1]CC@1C", "C1CC1");  //EmptyStackException !!! 
 		
@@ -70,6 +70,8 @@ public class SLNTestUtilities
 		
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
+		
+		tu.testSLN2CompositionRelation("CCCC<compositionUUID=id-0001;name=test>");
 	}
 	
 	public void testSLN(String sln)
@@ -129,6 +131,7 @@ public class SLNTestUtilities
 	
 	public void testSLN2CompositionRelation(String sln)
 	{
+		System.out.println("SLN:  " + sln); 
 		SLNContainer container = slnParser.parse(sln);
 		if (!slnParser.getErrorMessages().equals(""))
 		{
@@ -139,7 +142,22 @@ public class SLNTestUtilities
 		
 		SLN2Substance sln2sub = new SLN2Substance();
 		CompositionRelation compRel = sln2sub.slnContainerToCompositionRelation(container);
-		//TODO
+		System.out.println("Composition Relation:");
+		System.out.println(compositionRelationToString(compRel));
+	}
+	
+	public String compositionRelationToString(CompositionRelation rel) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("  Content : \"" + rel.getContent() + "\"\n");
+		sb.append("  Format : \"" + rel.getFormat() + "\"\n");
+		sb.append("  Smiles : \"" + rel.getSmiles() + "\"\n");
+		sb.append("  Formula : \"" + rel.getFormula() + "\"\n");
+		sb.append("  Inchi : \"" + rel.getInchi() + "\"\n");
+		sb.append("  InchiKey : \"" + rel.getInchiKey() + "\"\n");
+		sb.append("  CompositionUUID : \"" + rel.getCompositionUUID() + "\"\n");
+		sb.append("  Name : \"" + rel.getName() + "\"\n");
+		
+		return sb.toString();
 	}
 	
 	
