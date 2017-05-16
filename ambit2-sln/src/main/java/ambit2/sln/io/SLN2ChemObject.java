@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
+import ambit2.sln.SLNAtom;
+import ambit2.sln.SLNBond;
 import ambit2.sln.SLNContainer;
 import ambit2.smarts.SMIRKSReaction;
 
@@ -13,6 +17,9 @@ public class SLN2ChemObject
 {
 	private List<String> conversionErrors = new ArrayList<String>();
 	private List<String> conversionWarnings = new ArrayList<String>();
+	
+	private String currentConversionError = null;
+	private String currentConversionWarning = null;
 
 	public List<String> getConversionErrors() {
 		return conversionErrors;
@@ -20,6 +27,11 @@ public class SLN2ChemObject
 	
 	public List<String> getConversionWarnings() {
 		return conversionWarnings;
+	}
+	
+	public void clearAllErrorsAndWarnings(){
+		conversionErrors.clear();
+		conversionWarnings.clear();
 	}
 	
 	public String getAllErrors()
@@ -70,4 +82,37 @@ public class SLN2ChemObject
 		//TODO
 		return null;
 	}
+	
+	public SLNAtom atomToSLNAtom(IAtom atom)
+	{
+		currentConversionError = null;
+		currentConversionWarning = null;
+		//TODO
+		return null;
+	}
+	
+	public SLNBond bondToSLNBond(IBond bond)
+	{
+		currentConversionError = null;
+		currentConversionWarning = null;
+		//TODO
+		return null;
+	}
+	
+	public IAtom slnAtomToAtom(SLNAtom slnAt)
+	{
+		currentConversionError = null;
+		currentConversionWarning = null;
+		//TODO
+		return null;
+	}
+	
+	public IBond slnBondToBond(SLNBond slnBo)
+	{
+		currentConversionError = null;
+		currentConversionWarning = null;
+		//TODO
+		return null;
+	}
+	
 }
