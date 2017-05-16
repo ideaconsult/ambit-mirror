@@ -60,6 +60,32 @@ public class SLN2Substance
 	public String id_srcdataset_SLNAttr = "id_srcdataset";
 	*/
 	
+	private List<String> conversionErrors = new ArrayList<String>();
+	private List<String> conversionWarnings = new ArrayList<String>();
+	
+	
+	public List<String> getConversionErrors() {
+		return conversionErrors;
+	}
+	
+	public List<String> getConversionWarnings() {
+		return conversionWarnings;
+	}
+	
+	public void clearAllErrorsAndWarnings(){
+		conversionErrors.clear();
+		conversionWarnings.clear();
+	}
+	
+	public String getAllErrors()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < conversionErrors.size(); i++)
+			sb.append(conversionErrors.get(i) + "\n");
+		return sb.toString();
+	}
+	
+	
 	public List<CompositionRelation> slnToSubstanceComposition(SLNContainerSet slnContSet)
 	{
 		if (slnContSet == null)
