@@ -259,7 +259,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 							|| FileInputState._FILE_TYPE.XLS_INDEX.hasExtension(ext)) {
 						if (configFile == null)
 							throw new AmbitException("XLSX/XLSX file import requires a JSON configuration file");
-						final StructureRecordValidator validator = new StructureRecordValidator(file.getName(), true);
+						final StructureRecordValidator validator = new StructureRecordValidator(file.getName(), true,"XLSX");
 						reader = new GenericExcelParser(new FileInputStream(file), configFile,
 								FileInputState._FILE_TYPE.XLSX_INDEX.hasExtension(ext)) {
 							public Object next() {
