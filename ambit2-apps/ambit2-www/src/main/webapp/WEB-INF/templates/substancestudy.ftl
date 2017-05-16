@@ -30,7 +30,7 @@
 	$(document).ready(function() {
 		<#if menu_profile?? && menu_profile=='enanomapper'>		        
 	     	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/substance" title="Nanomaterials">Search nanomaterials by identifiers</a></li>');
-	     	loadHelp("${ambit_root}","nanomaterial");
+	     	//loadHelp("${ambit_root}","nanomaterial");
 	 		$("#_searchdiv").html("<form class='remove-bottom' action='${ambit_root}/substance'><input type='radio' checked name='type' id='type_name' value='name' title='Name (starting with a string)'>Name <input type='radio' name='type' id='type_' value=''  title='Experiment reference, e.g. DOI'>External identifier <input type='radio' name='type' id='type_citation' checked value='citation'>Experiment reference <input name='search' class='search' value='' id='search'> <input type='submit' value='Search'></form>");
 	 		$("#header_substance").text("Nanomaterials");
 	 	<#else>
@@ -72,7 +72,7 @@
 <!-- banner -->
 <#include "/banner_crumbs.ftl">
 
-<div class="fourteen columns remove-bottom" style="padding:0;" >
+<div class="fifteen columns remove-bottom" style="padding:0;" >
 
 
 		<!-- Page Content
@@ -88,14 +88,16 @@
 
 </div>
 
-<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<!-- help-->		
+<div class="one column" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+<!-- help-->
+<!--
 <div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
 <div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
 </div>
+
 <div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
 </div>
-
+-->
 <#include "/searchmenu/menu_substance.ftl">
 
 </div>
