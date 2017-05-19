@@ -439,11 +439,11 @@ class Citation {
 	}
 
 	public void setOwner(String owner) {
-		this.owner = owner;
+		this.owner = owner==null?null:owner.trim();
 	}
 
 	public Citation(String title) {
-		this.title = title;
+		setTitle(title);
 	}
 
 	public Citation(String title, String year) {
@@ -469,7 +469,7 @@ class Citation {
 	}
 
 	public void setTitle(String title) {
-		this.title = title;
+		this.title = title==null?null:title.trim();
 	}
 
 	public String toString() {
