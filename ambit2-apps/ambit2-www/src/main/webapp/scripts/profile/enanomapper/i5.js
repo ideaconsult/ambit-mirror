@@ -428,6 +428,15 @@ var config_i5 = {
 	    			"interpretation" : config_bao["interpretation"]	  
 
 		        },
+		        "PC_DENSITY_SECTION": {
+	    			"parameters" : config_bao["parameters"],
+	    			"effects" : config_bao["effects"],
+	    			"conditions" : config_bao["conditions"],			
+	    			"protocol" : config_bao["protocol"],
+	    			"interpretation" : config_bao["interpretation"]	  
+
+		        },
+		        
 		        "POUR_DENSITY_SECTION": {
 	    			"parameters" : config_bao["parameters"],
 	    			"effects" : config_bao["effects"],
