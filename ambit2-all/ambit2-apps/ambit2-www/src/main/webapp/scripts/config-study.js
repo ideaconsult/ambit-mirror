@@ -61,6 +61,7 @@ var config_study = {
                 }
             }
         },
+        "PC_DENSITY_SECTION": config_i5["PC_DENSITY_SECTION"],
         "PC_MELTING_SECTION": config_i5["PC_MELTING_SECTION"],
         "PC_BOILING_SECTION":  config_i5["PC_BOILING_SECTION"],
         "PC_VAPOUR_SECTION": config_i5["PC_VAPOUR_SECTION"],
