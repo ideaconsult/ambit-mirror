@@ -8,7 +8,7 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui-datasetcomparison.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js.js'></script>
-<script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.6.min.js'></script>
 
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
 

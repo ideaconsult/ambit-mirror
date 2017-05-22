@@ -12,7 +12,7 @@
   <script src="${ambit_root}/scripts/ra/i5enums.js"></script>
 
   <script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js'></script>
-  <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
+  <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.6.min.js'></script>
   <script type='text/javascript'  src="${ambit_root}/jquery/jquery.tokenize.js"></script>
   <script type='text/javascript' src='${ambit_root}/scripts/jBox.js'></script>
 
