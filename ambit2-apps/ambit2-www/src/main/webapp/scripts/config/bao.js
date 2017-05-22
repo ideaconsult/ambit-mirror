@@ -168,7 +168,7 @@ var config_bao = {
             "endpoint": {
             	"iOrder": -9,
                 "bVisible": true,
-                "inMatrix" : true,
+                "inMatrix" : true
             },
             "result": {
             	"iOrder": -8,

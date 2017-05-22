@@ -113,7 +113,7 @@ var config_npo = {
             "endpoint": {
             	"iOrder": -9,
                 "bVisible": true,
-                "inMatrix" : true,
+                "inMatrix" : true
             },
             "result": {
             	"iOrder": -8,
