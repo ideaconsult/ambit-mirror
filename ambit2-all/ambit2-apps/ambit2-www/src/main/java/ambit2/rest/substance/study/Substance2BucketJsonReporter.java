@@ -70,25 +70,25 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 
 	}
 
-	private static final String[][] study_headers = new String[][] {
-			{ "name", "publicname", "owner_name", "s_uuid", "substanceType", "_childDocuments_", "type_s",
-					"ChemicalName.CONSTITUENT", "ChemicalName.ADDITIVE", "ChemicalName.IMPURITY", "ChemicalName.CORE",
-					"ChemicalName.COATING", "ChemicalName.FUNCTIONALISATION", "ChemicalName.DOPING", "content_hss",
+	private static final String[][] study_headers = new String[][] { { "name", "publicname", "owner_name", "s_uuid",
+			"substanceType", "_childDocuments_", "type_s", "nmcode_hs", "nmcode_s", "ChemicalName.CONSTITUENT",
+			"ChemicalName.ADDITIVE", "ChemicalName.IMPURITY", "ChemicalName.CORE", "ChemicalName.COATING",
+			"ChemicalName.FUNCTIONALISATION", "ChemicalName.DOPING", "content_hss",
 
-					"TradeName.CONSTITUENT", "TradeName.ADDITIVE", "TradeName.IMPURITY", "TradeName.CORE",
-					"TradeName.COATING", "TradeName.FUNCTIONALISATION", "TradeName.DOPING",
+			"TradeName.CONSTITUENT", "TradeName.ADDITIVE", "TradeName.IMPURITY", "TradeName.CORE", "TradeName.COATING",
+			"TradeName.FUNCTIONALISATION", "TradeName.DOPING",
 
-					"CASRN.CONSTITUENT", "CASRN.ADDITIVE", "CASRN.IMPURITY", "CASRN.CORE", "CASRN.COATING",
-					"CASRN.FUNCTIONALISATION", "CASRN.DOPING",
+			"CASRN.CONSTITUENT", "CASRN.ADDITIVE", "CASRN.IMPURITY", "CASRN.CORE", "CASRN.COATING",
+			"CASRN.FUNCTIONALISATION", "CASRN.DOPING",
 
-					"EINECS.CONSTITUENT", "EINECS.ADDITIVE", "EINECS.IMPURITY", "EINECS.CORE", "EINECS.COATING",
-					"EINECS.FUNCTIONALISATION", "EINECS.DOPING",
+			"EINECS.CONSTITUENT", "EINECS.ADDITIVE", "EINECS.IMPURITY", "EINECS.CORE", "EINECS.COATING",
+			"EINECS.FUNCTIONALISATION", "EINECS.DOPING",
 
-					"IUCLID5_UUID.CONSTITUENT", "IUCLID5_UUID.ADDITIVE", "IUCLID5_UUID.IMPURITY", "IUCLID5_UUID.CORE",
-					"IUCLID5_UUID.COATING", "IUCLID5_UUID.FUNCTIONALISATION", "IUCLID5_UUID.DOPING",
+			"IUCLID5_UUID.CONSTITUENT", "IUCLID5_UUID.ADDITIVE", "IUCLID5_UUID.IMPURITY", "IUCLID5_UUID.CORE",
+			"IUCLID5_UUID.COATING", "IUCLID5_UUID.FUNCTIONALISATION", "IUCLID5_UUID.DOPING",
 
-					"COMPOSITION.CONSTITUENT", "COMPOSITION.ADDITIVE", "COMPOSITION.IMPURITY", "COMPOSITION.CORE",
-					"COMPOSITION.COATING", "COMPOSITION.FUNCTIONALISATION", "COMPOSITION.DOPING" },
+			"COMPOSITION.CONSTITUENT", "COMPOSITION.ADDITIVE", "COMPOSITION.IMPURITY", "COMPOSITION.CORE",
+			"COMPOSITION.COATING", "COMPOSITION.FUNCTIONALISATION", "COMPOSITION.DOPING" },
 			{ "id", "document_uuid", "type_s", "topcategory", "endpointcategory", "guidance", "endpoint",
 					"effectendpoint", "reference_owner", "reference_year", "reference", "loQualifier", "loValue",
 					"upQualifier", "upValue", "err", "errQualifier", "conditions", "params", "textValue",
@@ -110,8 +110,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			"topcategory_s", "endpointcategory_s", "guidance_s", "endpoint_s", "effectendpoint_s", "reference_owner_s",
 			"reference_year_s", "reference_s", "loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d",
 			"errQualifier_s", "conditions_s", "effectid_hs", "params", "textValue_s", "interpretation_result_s",
-			"unit_s", "category_s", "idresult", header_summary_results, header_summary_refs, header_summary_refowner,
-			"" } };
+			"unit_s", "category_s", "idresult", "nmcode_hs", "nmcode_s", header_summary_results, header_summary_refs,
+			header_summary_refowner, "" } };
 
 	@Override
 	public void setConnection(Connection conn) throws DbAmbitException {
@@ -139,10 +139,12 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 				}
 
 			}
+			String nmcode = null;
 
 			List<Bucket> ids = new ArrayList<Bucket>();
 			if (record.getExternalids() != null) {
 				List<String> xids = new ArrayList<String>();
+
 				for (ExternalIdentifier id : record.getExternalids()) {
 					// these should not be in external ids in first place
 					if ("Has_Identifier".equals(id.getSystemDesignator()))
@@ -159,6 +161,10 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 						xids.add(String.format("http://www.crystallography.net/cod/%s.html", id.getSystemIdentifier()));
 					} else if (id.getSystemIdentifier().startsWith("http"))
 						xids.add(id.getSystemIdentifier());
+					else if ("NM code".equals(id.getSystemDesignator())) {
+						nmcode = id.getSystemIdentifier();
+						bucket.put("nmcode_s", nmcode);
+					}
 					// ids.add(externalids2Bucket(id));
 				}
 				bucket.put("content_hss", xids);
@@ -255,7 +261,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					_childDocuments_.add(bcomposition);
 				}
 			}
-
+			String nmcode = null;
 			if (record.getExternalids() != null) {
 				List<String> xids = new ArrayList<String>();
 				for (ExternalIdentifier id : record.getExternalids()) {
@@ -277,6 +283,11 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 								"https://cananolab.nci.nih.gov/caNanoLab/#"));
 					} else if (id.getSystemIdentifier().startsWith("http"))
 						xids.add(id.getSystemIdentifier());
+					else if ("NM code".equals(id.getSystemDesignator())) {
+						nmcode = id.getSystemIdentifier();
+						bucket.put("nmcode_s", nmcode);
+					}
+
 					// ids.add(externalids2Bucket(id));
 				}
 				bucket.put("content_hss", xids);
@@ -508,6 +519,13 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 		bucket.put(ns("substanceType", hasSuffix, suffix), record.getSubstancetype());
 		bucket.put("type_s", "substance");
 		bucket.put("id", record.getSubstanceUUID());
+
+		if (record.getExternalids() != null) {
+			for (ExternalIdentifier id : record.getExternalids())
+				if ("NM code".equals(id.getSystemDesignator())) {
+					bucket.put(ns("nmcode", hasSuffix, suffix), id.getSystemIdentifier());
+				}
+		}
 
 		// bucket.put(ns("content", hasSuffix, suffix), record.getContent());
 	}
