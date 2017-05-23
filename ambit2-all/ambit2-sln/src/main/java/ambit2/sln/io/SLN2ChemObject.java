@@ -1,7 +1,9 @@
 package ambit2.sln.io;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
@@ -49,8 +51,28 @@ public class SLN2ChemObject
 	
 	public SLNContainer atomContainerToSLNContainer(AtomContainer container)
 	{
-		//TODO
-		return null;
+		SLNContainer slnContainer = new SLNContainer(null);
+
+		Map<IAtom, IAtom> convertedAtoms = new HashMap<IAtom, IAtom>();
+		for (int i = 0; i < container.getAtomCount(); i++)
+		{
+			IAtom atom = container.getAtom(i);
+			SLNAtom slnAtom = atomToSLNAtom(atom);
+			slnContainer.addAtom(slnAtom);
+			convertedAtoms.put(atom, slnAtom);
+		}
+
+		for (int i = 0; i < container.getBondCount(); i++)
+		{
+			IBond bond = container.getBond(i);
+			IBond slnBond = bondToSLNBond(bond);
+			IAtom newAtoms[] = new IAtom[2];
+			newAtoms[0] = convertedAtoms.get(bond.getAtom(0));
+			newAtoms[1] = convertedAtoms.get(bond.getAtom(1));
+			slnBond.setAtoms(newAtoms);
+		}
+
+		return slnContainer;
 	}
 	
 	public AtomContainer  slnContainerToAtomContainer(SLNContainer container)
@@ -91,6 +113,10 @@ public class SLN2ChemObject
 		return null;
 	}
 	
+	/*
+	 * Convert only the bond type/expression info
+	 * connected atoms info is not handled 
+	 */
 	public SLNBond bondToSLNBond(IBond bond)
 	{
 		currentConversionError = null;
@@ -107,6 +133,10 @@ public class SLN2ChemObject
 		return null;
 	}
 	
+	/*
+	 * Convert only the bond type/expression info
+	 * connected atoms info is not handled 
+	 */
 	public IBond slnBondToBond(SLNBond slnBo)
 	{
 		currentConversionError = null;
