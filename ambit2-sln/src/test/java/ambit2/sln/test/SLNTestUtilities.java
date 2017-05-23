@@ -2,6 +2,9 @@ package ambit2.sln.test;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.base.data.Property;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
@@ -156,8 +159,26 @@ public class SLNTestUtilities
 		sb.append("  InchiKey : \"" + rel.getInchiKey() + "\"\n");
 		sb.append("  CompositionUUID : \"" + rel.getCompositionUUID() + "\"\n");
 		sb.append("  Name : \"" + rel.getName() + "\"\n");
+		sb.append("  RelationType : \"" + (rel.getRelationType()==null?"null":rel.getRelationType().name()) + "\"\n");
+		sb.append("  Proportion : \"" + (rel.getRelation()==null?"null":rel.getRelation().toJSON()) + "\"\n");
+		sb.append("  Properties : \n");
+		Iterable<Property> properties = rel.getRecordProperties();
+		if (properties != null)
+			for (Property p : properties)
+			{	
+				sb.append("     " + p.toString() + "\n");
+			}	
 		
 		return sb.toString();
+	}
+	
+	public CompositionRelation getCompositionRelationFromString(String relString, String separator) 
+	{
+		IStructureRecord structure = new StructureRecord();
+		//TODO
+		CompositionRelation rel = new CompositionRelation(null, structure, null, null);
+		return rel;
+		
 	}
 	
 	
