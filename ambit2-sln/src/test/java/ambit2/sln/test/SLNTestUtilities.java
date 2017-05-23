@@ -175,10 +175,39 @@ public class SLNTestUtilities
 	public CompositionRelation getCompositionRelationFromString(String relString, String separator) 
 	{
 		IStructureRecord structure = new StructureRecord();
-		//TODO
 		CompositionRelation rel = new CompositionRelation(null, structure, null, null);
-		return rel;
+		String tokens[] = relString.split(separator);
+		for (String s : tokens)
+		{
+			String s_toks[] = s.split(":");
+			if (s_toks.length == 2)
+			{
+				String sectionName = s_toks[0].trim();
+				String value = s_toks[1].trim();
+				if (sectionName.equals("Content"))
+					rel.setContent(value);
+				else if (sectionName.equals("Format"))
+					rel.setFormat(value);
+				else if (sectionName.equals("Formula"))
+					rel.setFormula(value);
+				else if (sectionName.equals("Inchi"))
+					rel.setInchi(value);
+				else if (sectionName.equals("InchiKey"))
+					rel.setInchiKey(value);
+				else if (sectionName.equals("CompositionUUID"))
+					rel.setCompositionUUID(value);
+				else if (sectionName.equals("Name"))
+					rel.setName(value);
+				else if (sectionName.equals("Format"))
+					rel.setFormat(value);
+				else if (sectionName.equals("Format"))
+					rel.setFormat(value);
+				else if (sectionName.equals("Format"))
+					rel.setFormat(value);
+			}
+		}
 		
+		return rel;		
 	}
 	
 	
