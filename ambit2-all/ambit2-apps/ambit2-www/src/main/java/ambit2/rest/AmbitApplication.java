@@ -110,6 +110,7 @@ import ambit2.rest.routers.misc.AdminRouter;
 import ambit2.rest.routers.misc.BookmarksRouter;
 import ambit2.rest.routers.misc.ChartRouter;
 import ambit2.rest.routers.misc.DepictDemoRouter;
+import ambit2.rest.routers.misc.ProxyRouter;
 import ambit2.rest.routers.misc.UIRouter;
 import ambit2.rest.routers.opentox.AlgorithmRouter;
 import ambit2.rest.routers.opentox.BundleRouter;
@@ -179,8 +180,7 @@ import net.idea.restnet.i.task.ITaskResult;
 public class AmbitApplication extends FreeMarkerApplication<String> {
 	public static final String BASE_URL = "BASE_URL";
 	protected boolean insecure = true;
-	protected Logger logger = Logger
-			.getLogger(AmbitApplication.class.getName());
+	protected Logger logger = Logger.getLogger(AmbitApplication.class.getName());
 	protected Hashtable<String, Properties> properties = new Hashtable<String, Properties>();
 	public static final String OPENTOX_AA_ENABLED = "aa.enabled";
 	public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
@@ -213,6 +213,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String attachToxmatch = "attach.toxmatch";
 	static final String config_changeLineSeparators = "changeLineSeparators";
 	static final String googleAnalytics = "google.analytics";
+	
 
 	static final String custom_search = "custom.search";
 	static final String custom_title = "custom.title";
@@ -221,7 +222,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String custom_logo = "custom.logo";
 	static final String custom_query = "custom.query";
 	static final String custom_structurequery = "custom.structurequery";
-
+	static final String solr_url = "solr.url";
+	
 	protected boolean standalone = false;
 	protected boolean openToxAAEnabled = false;
 	protected boolean localAAEnabled = false;
@@ -290,27 +292,20 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		setProfile(getMenuProfile());
 
 		setName(getPropertyWithDefault(custom_title, ambitProperties, "AMBIT"));
-		setDescription(getPropertyWithDefault(
-				custom_title,
-				ambitProperties,
+		setDescription(getPropertyWithDefault(custom_title, ambitProperties,
 				"Chemical structures database, properties prediction & machine learning with OpenTox REST web services API"));
 		setOwner("Ideaconsult Ltd.");
 		setAuthor("Ideaconsult Ltd.");
 
 		InputStream in = null;
 		try {
-			URL url = getClass().getClassLoader()
-					.getResource(loggingProperties);
+			URL url = getClass().getClassLoader().getResource(loggingProperties);
 			System.setProperty("java.util.logging.config.file", url.getFile());
 			in = new FileInputStream(new File(url.getFile()));
 			LogManager.getLogManager().readConfiguration(in);
-			logger.log(
-					Level.INFO,
-					String.format("Logging configuration loaded from %s",
-							url.getFile()));
+			logger.log(Level.INFO, String.format("Logging configuration loaded from %s", url.getFile()));
 		} catch (Exception x) {
-			System.err
-					.println("logging configuration failed " + x.getMessage());
+			System.err.println("logging configuration failed " + x.getMessage());
 		} finally {
 			try {
 				if (in != null)
@@ -318,8 +313,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			} catch (Exception x) {
 			}
 		}
-		setStatusService(new FreeMarkerStatusService(this,
-				getStatusReportLevel()));
+		setStatusService(new FreeMarkerStatusService(this, getStatusReportLevel()));
 		setTunnelService(new TunnelService(true, true) {
 			@Override
 			public Filter createInboundFilter(Context context) {
@@ -332,16 +326,11 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		Preferences.setProperty(Preferences.MAXRECORDS, "0");
 
 		getMetadataService().setEnabled(true);
-		getMetadataService().addExtension("sdf",
-				ChemicalMediaType.CHEMICAL_MDLSDF, true);
-		getMetadataService().addExtension("mol",
-				ChemicalMediaType.CHEMICAL_MDLMOL, true);
-		getMetadataService().addExtension("inchi",
-				ChemicalMediaType.CHEMICAL_INCHI, true);
-		getMetadataService().addExtension("cml",
-				ChemicalMediaType.CHEMICAL_CML, true);
-		getMetadataService().addExtension("smiles",
-				ChemicalMediaType.CHEMICAL_SMILES, true);
+		getMetadataService().addExtension("sdf", ChemicalMediaType.CHEMICAL_MDLSDF, true);
+		getMetadataService().addExtension("mol", ChemicalMediaType.CHEMICAL_MDLMOL, true);
+		getMetadataService().addExtension("inchi", ChemicalMediaType.CHEMICAL_INCHI, true);
+		getMetadataService().addExtension("cml", ChemicalMediaType.CHEMICAL_CML, true);
+		getMetadataService().addExtension("smiles", ChemicalMediaType.CHEMICAL_SMILES, true);
 
 	}
 
@@ -352,21 +341,18 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		SimpleGuards guard = isSimpleGuardEnabled();
 
 		if (!standalone && warmupEnabled) // only servlets are lazy
-			addTask("warmup", new WarmupTask("warmup", openToxAAEnabled),
-					new Reference("riap://component"), "guest");
+			addTask("warmup", new WarmupTask("warmup", openToxAAEnabled), new Reference("riap://component"), "guest");
 
 		if (guard != null) {
-			logger.log(Level.INFO, String.format(
-					"Property %s set, %s guard enabled.", GUARD_ENABLED, guard));
+			logger.log(Level.INFO, String.format("Property %s set, %s guard enabled.", GUARD_ENABLED, guard));
 			String[] allowed = getGuardListAllowed();
 			StringBuilder b = new StringBuilder();
 			for (String ip : allowed) {
 				b.append(ip);
 				b.append(" ");
 			}
-			logger.log(Level.INFO, String.format(
-					"Property %s set, %s list allowed %s", GUARD_LIST, guard,
-					b.toString()));
+			logger.log(Level.INFO,
+					String.format("Property %s set, %s list allowed %s", GUARD_LIST, guard, b.toString()));
 			SimpleGuard theguard = guard.getGuard(allowed, logger);
 			theguard.setNext(root);
 			return theguard;
@@ -382,20 +368,16 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	public Restlet initInboundRoot() {
 		initFreeMarkerConfiguration();
 
-		String usersdbname = getProperty(AMBITConfig.Database.name(),
-				configProperties);
+		String usersdbname = getProperty(AMBITConfig.Database.name(), configProperties);
 		if (usersdbname == null)
 			usersdbname = "ambit_users";
-		getContext().getParameters().add(AMBITConfig.users_dbname.name(),
-				usersdbname);
+		getContext().getParameters().add(AMBITConfig.users_dbname.name(), usersdbname);
 
 		Router router = new MyRouter(this.getContext()) {
 			public void handle(Request request, Response response) {
 				// to use within riap calls
-				String rootUrl = getContext().getParameters().getFirstValue(
-						BASE_URL);
-				if ((rootUrl == null)
-						&& request.getRootRef().toString().startsWith("http")) {
+				String rootUrl = getContext().getParameters().getFirstValue(BASE_URL);
+				if ((rootUrl == null) && request.getRootRef().toString().startsWith("http")) {
 					rootUrl = request.getRootRef().toString();
 					getContext().getParameters().set(BASE_URL, rootUrl, true);
 				}
@@ -408,8 +390,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		/**
 		 * Points to the Ontology service /sparqlendpoint
 		 */
-		router.attach(SPARQLPointerResource.resource,
-				SPARQLPointerResource.class);
+		router.attach(SPARQLPointerResource.resource, SPARQLPointerResource.class);
 
 		/**
 		 * * /admin Various admin tasks, like database creation
@@ -417,28 +398,23 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 		Restlet adminRouter = createAdminRouter();
 		if (openToxAAEnabled) {
-			router.attach(
-					String.format("/%s", AdminResource.resource),
-					protectAdminResource() ? createProtectedResource(
-							adminRouter, "admin") : adminRouter);
-		} else
 			router.attach(String.format("/%s", AdminResource.resource),
-					adminRouter);
+					protectAdminResource() ? createProtectedResource(adminRouter, "admin") : adminRouter);
+		} else
+			router.attach(String.format("/%s", AdminResource.resource), adminRouter);
 
 		/** /policy - used for testing only */
-		router.attach(String.format("/%s", PolicyResource.resource),
-				PolicyResource.class);
+		router.attach(String.format("/%s", PolicyResource.resource), PolicyResource.class);
 
 		/** /feature */
 		FeaturesRouter featuresRouter = new FeaturesRouter(getContext());
 
 		if (openToxAAEnabled) {
 			if (protectFeatureResource())
-				router.attach(PropertyResource.featuredef,
-						createProtectedResource(featuresRouter, "feature"));
+				router.attach(PropertyResource.featuredef, createProtectedResource(featuresRouter, "feature"));
 			else {
-				Filter cauthN = new OpenSSOAuthenticator(getContext(), false,
-						"opentox.org", new OpenSSOVerifierSetUser(false));
+				Filter cauthN = new OpenSSOAuthenticator(getContext(), false, "opentox.org",
+						new OpenSSOVerifierSetUser(false));
 				cauthN.setNext(featuresRouter);
 				router.attach(PropertyResource.featuredef, cauthN);
 			}
@@ -446,8 +422,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			router.attach(PropertyResource.featuredef, featuresRouter);
 
 		/** filter */
-		router.attach(FilteredDatasetResource.resource,
-				FilteredDatasetResource.class);
+		router.attach(FilteredDatasetResource.resource, FilteredDatasetResource.class);
 
 		/** Similarity search TODO: move it under /algorithm */
 		Router similarityRouter = createSimilaritySearchRouter();
@@ -455,15 +430,13 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		/** SMARTS search. TODO: move it under /algorithm */
 		Router smartsRouter = createSMARTSSearchRouter();
 		/** /compound */
-		CompoundsRouter compoundRouter = new CompoundsRouter(getContext(),
-				featuresRouter, smartsRouter);
+		CompoundsRouter compoundRouter = new CompoundsRouter(getContext(), featuresRouter, smartsRouter);
 		if (openToxAAEnabled) {
 			if (protectCompoundResource())
-				router.attach(DataResources.compound_resource,
-						createProtectedResource(compoundRouter, "compound"));
+				router.attach(DataResources.compound_resource, createProtectedResource(compoundRouter, "compound"));
 			else {
-				Filter cauthN = new OpenSSOAuthenticator(getContext(), false,
-						"opentox.org", new OpenSSOVerifierSetUser(false));
+				Filter cauthN = new OpenSSOAuthenticator(getContext(), false, "opentox.org",
+						new OpenSSOVerifierSetUser(false));
 				cauthN.setNext(compoundRouter);
 				router.attach(DataResources.compound_resource, cauthN);
 			}
@@ -476,20 +449,16 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		allDatasetsRouter.attachDefault(DatasetsResource.class);
 
 		if (openToxAAEnabled)
-			router.attach(DatasetsResource.datasets,
-					createProtectedResource(allDatasetsRouter, "datasets"));
+			router.attach(DatasetsResource.datasets, createProtectedResource(allDatasetsRouter, "datasets"));
 		else
 			router.attach(DatasetsResource.datasets, allDatasetsRouter);
 
 		// can reuse CompoundRouter from above
-		CompoundInDatasetRouter cmpdRouter = new CompoundInDatasetRouter(
-				getContext(), featuresRouter, smartsRouter);
-		Router datasetRouter = new DatasetsRouter(getContext(), cmpdRouter,
-				smartsRouter, similarityRouter);
+		CompoundInDatasetRouter cmpdRouter = new CompoundInDatasetRouter(getContext(), featuresRouter, smartsRouter);
+		Router datasetRouter = new DatasetsRouter(getContext(), cmpdRouter, smartsRouter, similarityRouter);
 
 		if (openToxAAEnabled)
-			router.attach(DatasetResource.dataset,
-					createProtectedResource(datasetRouter, "dataset"));
+			router.attach(DatasetResource.dataset, createProtectedResource(datasetRouter, "dataset"));
 		else
 			router.attach(DatasetResource.dataset, datasetRouter);
 
@@ -500,60 +469,50 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			if (openToxAAEnabled) {
 
 				router.attach(Resources.bundle,
-						createAuthenticatedOpenMethodResource(new BundleRouter(
-								getContext(), null)));
+						createAuthenticatedOpenMethodResource(new BundleRouter(getContext(), null)));
 
 				router.attach(Resources.collection_bundledrafts,
-						createProtectedResource(new CollectionsRouter(
-								getContext(), null)));
+						createProtectedResource(new CollectionsRouter(getContext(), null)));
 
-				router.attach(
-						SubstanceResource.substance,
-						createAuthenticatedOpenMethodResource(new SubstanceRouter(
-								getContext())));
+				router.attach(SubstanceResource.substance,
+						createAuthenticatedOpenMethodResource(new SubstanceRouter(getContext())));
 
 				if (attachSubstanceOwnerRouter())
-					router.attach(
-							OwnerSubstanceFacetResource.owner,
-							createAuthenticatedOpenMethodResource(new SubstanceOwnerRouter(
-									getContext())));
+					router.attach(OwnerSubstanceFacetResource.owner,
+							createAuthenticatedOpenMethodResource(new SubstanceOwnerRouter(getContext())));
+
+				if (getSolrURI()!=null)
+					router.attach(Resources.proxy, createProtectedResource(new ProxyRouter(getContext()), null));
+
 			} else {
 				Filter authz = null;
 				if (dbAAEnabled)
 					try {
-						String dbname = getProperty(
-								AMBITConfig.Database.name(), ambitProperties);
-						authz = UserRouter.createBundlePolicyAuthorizer(
-								getContext(), dbname, usersdbname,
-								"ambit2/rest/config/config.prop",
-								getBaseURLDepth());
+						String dbname = getProperty(AMBITConfig.Database.name(), ambitProperties);
+						authz = UserRouter.createBundlePolicyAuthorizer(getContext(), dbname, usersdbname,
+								"ambit2/rest/config/config.prop", getBaseURLDepth());
 					} catch (Exception x) {
 
 					}
-				router.attach(Resources.bundle, new BundleRouter(getContext(),
-						authz));
-				router.attach(Resources.collection_bundledrafts,
-						new CollectionsRouter(getContext(), null));
-				router.attach(SubstanceResource.substance, new SubstanceRouter(
-						getContext()));
+				router.attach(Resources.bundle, new BundleRouter(getContext(), authz));
+				router.attach(Resources.collection_bundledrafts, new CollectionsRouter(getContext(), null));
+				router.attach(SubstanceResource.substance, new SubstanceRouter(getContext()));
 				if (attachSubstanceOwnerRouter())
-					router.attach(OwnerSubstanceFacetResource.owner,
-							new SubstanceOwnerRouter(getContext()));
+					router.attach(OwnerSubstanceFacetResource.owner, new SubstanceOwnerRouter(getContext()));
+
+				if (getSolrURI()!=null)
+					router.attach(Resources.proxy, createProtectedResource(new ProxyRouter(getContext()), null));
 			}
 
-			router.attach(SubstancePropertyResource.substanceproperty,
+			router.attach(SubstancePropertyResource.substanceproperty, SubstancePropertyResource.class);
+			router.attach(
+					String.format("%s/{%s}/{%s}/{%s}/{%s}", SubstancePropertyResource.substanceproperty,
+							SubstancePropertyResource.topcategory, SubstancePropertyResource.endpointcategory,
+							SubstancePropertyResource.endpoint, SubstancePropertyResource.substancepropertyid),
 					SubstancePropertyResource.class);
-			router.attach(String.format("%s/{%s}/{%s}/{%s}/{%s}",
-					SubstancePropertyResource.substanceproperty,
-					SubstancePropertyResource.topcategory,
-					SubstancePropertyResource.endpointcategory,
-					SubstancePropertyResource.endpoint,
-					SubstancePropertyResource.substancepropertyid),
-					SubstancePropertyResource.class);
-			router.attach(String.format("%s/{%s}/{%s}",
-					SubstancePropertyResource.substanceproperty,
-					SubstancePropertyResource.topcategory,
-					SubstancePropertyResource.endpointcategory),
+			router.attach(
+					String.format("%s/{%s}/{%s}", SubstancePropertyResource.substanceproperty,
+							SubstancePropertyResource.topcategory, SubstancePropertyResource.endpointcategory),
 					SubstanceCategoryProperty.class);
 
 		}
@@ -561,45 +520,34 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		if (attachToxmatchRouter()) {
 			router.attach(QMapSpaceResource.resource, QMapSpaceResource.class);
 			router.attach(QMapResource.qmap, QMapResource.class);
-			router.attach(String.format("%s/{%s}/metadata", QMapResource.qmap,
-					QMapResource.qmapKey), QMapResource.class);
-			router.attach(String.format("%s/{%s}", QMapResource.qmap,
-					QMapResource.qmapKey), QMapDatasetResource.class);
+			router.attach(String.format("%s/{%s}/metadata", QMapResource.qmap, QMapResource.qmapKey),
+					QMapResource.class);
+			router.attach(String.format("%s/{%s}", QMapResource.qmap, QMapResource.qmapKey), QMapDatasetResource.class);
 		}
 
 		// collections
 		MyRouter collectionRouter = new MyRouter(getContext());
-		collectionRouter.attach(String.format("/{%s}/{%s}",
-				CollectionStructureResource.folderKey,
-				CollectionStructureResource.datasetKey),
-				CollectionStructureResource.class);
+		collectionRouter.attach(String.format("/{%s}/{%s}", CollectionStructureResource.folderKey,
+				CollectionStructureResource.datasetKey), CollectionStructureResource.class);
 		if (openToxAAEnabled) {
 			router.attach(CollectionStructureResource.collection,
 					createProtectedResource(collectionRouter, "collection"));
 		} else
-			router.attach(CollectionStructureResource.collection,
-					collectionRouter);
+			router.attach(CollectionStructureResource.collection, collectionRouter);
 
 		if (openToxAAEnabled) {
 			/** /algorithm */
-			router.attach(MLResources.algorithm,
-					createAuthenticatedOpenResource(new AlgorithmRouter(
-							getContext())));
+			router.attach(MLResources.algorithm, createAuthenticatedOpenResource(new AlgorithmRouter(getContext())));
 			/** /model */
-			router.attach(MLResources.model_resource,
-					createAuthenticatedOpenResource(new ModelRouter(
-							getContext())));
+			router.attach(MLResources.model_resource, createAuthenticatedOpenResource(new ModelRouter(getContext())));
 			/** /task */
 			router.attach(TaskResource.resource, new TaskRouter(getContext()));
-			router.attach("/ui", createAuthenticatedOpenResource(new UIRouter(
-					getContext())));
+			router.attach("/ui", createAuthenticatedOpenResource(new UIRouter(getContext())));
 		} else {
 			/** /algorithm */
-			router.attach(MLResources.algorithm, new AlgorithmRouter(
-					getContext()));
+			router.attach(MLResources.algorithm, new AlgorithmRouter(getContext()));
 			/** /model */
-			router.attach(MLResources.model_resource, new ModelRouter(
-					getContext()));
+			router.attach(MLResources.model_resource, new ModelRouter(getContext()));
 			/** /task */
 			router.attach(TaskResource.resource, new TaskRouter(getContext()));
 			router.attach("/ui", new UIRouter(getContext()));
@@ -612,21 +560,18 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 */
 		Router queryRouter = createQueryRouter();
 		if (openToxAAEnabled) {
-			router.attach(QueryResource.query_resource,
-					createAuthenticatedOpenResource(queryRouter));
+			router.attach(QueryResource.query_resource, createAuthenticatedOpenResource(queryRouter));
 		} else
 			router.attach(QueryResource.query_resource, queryRouter);
 		queryRouter.attach(SmartsQueryResource.resource, smartsRouter);
 		queryRouter.attach(SimilarityResource.resource, similarityRouter);
-		queryRouter.attach(ExactStructureQueryResource.resource,
-				ExactStructureQueryResource.class);
+		queryRouter.attach(ExactStructureQueryResource.resource, ExactStructureQueryResource.class);
 
 		/**
 		 * /query/relation/dataset/has_tautomer?dataset_uri=
 		 * /query/relation/compound/has_tautomer?dataset_uri=
 		 */
-		queryRouter.attach(QueryStructureRelationResource.resource,
-				createRelationsRouter());
+		queryRouter.attach(QueryStructureRelationResource.resource, createRelationsRouter());
 
 		/**
 		 * API extensions from this point on
@@ -636,8 +581,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 * Dataset reporting /report Practically same as /dataset , but allows
 		 * POST , so that long URIs with features could be send
 		 */
-		router.attach(ReportDatasetResource.resource,
-				ReportDatasetResource.class);
+		router.attach(ReportDatasetResource.resource, ReportDatasetResource.class);
 		/** /bookmark */
 		router.attach(BookmarkResource.resource, createBookmarksRouter());
 		/** /ontobucket */
@@ -654,8 +598,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			router.attach("/demo", depict);
 
 			router.attach(DepictionResource.resource, DepictionResource.class);
-			router.attach(String.format("%s/{%s}", DepictionResource.resource,
-					DepictionResource.resourceKey), DepictionResource.class);
+			router.attach(String.format("%s/{%s}", DepictionResource.resource, DepictionResource.resourceKey),
+					DepictionResource.class);
 		}
 		router.attach("/datatemplate", InputTemplatesResource.class);
 
@@ -677,24 +621,21 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			final TrustManager tm;
 
 			tm = new X509TrustManager() {
-				public void checkClientTrusted(X509Certificate[] chain,
-						String authType) throws CertificateException {
+				public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 				}
 
 				public X509Certificate[] getAcceptedIssuers() {
 					return null;
 				}
 
-				public void checkServerTrusted(X509Certificate[] chain,
-						String authType) throws CertificateException {
+				public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 					// This will never throw an exception.
 					// This doesn't check anything at all: it's insecure.
 				}
 			};
 
 			final SSLContext sslContext = SSLContext.getInstance("SSL");
-			sslContext.init(null, new TrustManager[] { tm },
-					new java.security.SecureRandom());
+			sslContext.init(null, new TrustManager[] { tm }, new java.security.SecureRandom());
 
 			SslContextFactory factory = new SslContextFactory() {
 				public void init(Series<Parameter> parameters) {
@@ -705,16 +646,13 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				}
 			};
 			getContext().getAttributes().put("sslContextFactory", factory);
-			HttpsURLConnection.setDefaultSSLSocketFactory(sslContext
-					.getSocketFactory());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 
-			HttpsURLConnection
-					.setDefaultHostnameVerifier(new HostnameVerifier() {
-						public boolean verify(String urlHostName,
-								SSLSession session) {
-							return true;
-						}
-					});
+			HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+				public boolean verify(String urlHostName, SSLSession session) {
+					return true;
+				}
+			});
 
 		} catch (Exception x) {
 			logger.log(Level.WARNING, x.getMessage(), x);
@@ -723,104 +661,76 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		if (!isOpenToxAAEnabled()) {
 
 			if (isDBAAEnabled()) {
-				String secret = getProperty(AMBITConfig.secret.name(),
-						configProperties);
+				String secret = getProperty(AMBITConfig.secret.name(), configProperties);
 				long sessionLength = 1000 * 60 * 45L; // 45 min in milliseconds
 				try {
-					sessionLength = Long
-							.parseLong(getProperty(
-									AMBITConfig.sessiontimeout.name(),
-									configProperties));
+					sessionLength = Long.parseLong(getProperty(AMBITConfig.sessiontimeout.name(), configProperties));
 				} catch (Exception x) {
 				}
 
 				router.attach("/", AMBITLoginFormResource.class);
 				router.attach("", AMBITLoginFormResource.class);
 
-				logger.log(Level.INFO, String.format(
-						"Property %s set, DB AA enabled.", DB_AA_ENABLED));
+				logger.log(Level.INFO, String.format("Property %s set, DB AA enabled.", DB_AA_ENABLED));
 
 				/*
 				 * /login
 				 */
-				router.attach(ambit2.user.rest.resource.Resources.login,
-						AMBITLoginFormResource.class);
+				router.attach(ambit2.user.rest.resource.Resources.login, AMBITLoginFormResource.class);
 				/*
 				 * /myaccount /myaccount/reset /user/{id}
 				 */
 
-				OrganisationRouter org_router = new OrganisationRouter(
-						getContext());
+				OrganisationRouter org_router = new OrganisationRouter(getContext());
 				ProjectRouter projectRouter = new ProjectRouter(getContext());
 				router.attach(Resources.project, projectRouter);
 				router.attach(Resources.organisation, org_router);
 
 				MyRouter myAccountRouter = new MyRouter(getContext());
 				myAccountRouter.attachDefault(MyAccountResource.class);
-				myAccountRouter.attach(
-						ambit2.user.rest.resource.Resources.reset,
-						MyAccountPwdResetResource.class);
-				myAccountRouter.attach(Resources.bundle,
-						MyBundlesResource.class);
+				myAccountRouter.attach(ambit2.user.rest.resource.Resources.reset, MyAccountPwdResetResource.class);
+				myAccountRouter.attach(Resources.bundle, MyBundlesResource.class);
 
 				myAccountRouter.attach("/users", UserByURIResource.class);
 
-				router.attach(ambit2.user.rest.resource.Resources.myaccount,
-						myAccountRouter);
+				router.attach(ambit2.user.rest.resource.Resources.myaccount, myAccountRouter);
 				router.attach(ambit2.user.rest.resource.Resources.user,
 						new UserRouter(getContext(), org_router, projectRouter));
-				router.attach(ambit2.user.rest.resource.Resources.register,
-						RegistrationResource.class);
-				router.attach(String.format("%s%s",
-						ambit2.user.rest.resource.Resources.register,
-						ambit2.user.rest.resource.Resources.confirm),
-						RegistrationConfirmResource.class);
-				router.attach(String.format("%s%s",
-						ambit2.user.rest.resource.Resources.register,
-						ambit2.user.rest.resource.Resources.notify),
-						AMBITRegistrationNotifyResource.class);
+				router.attach(ambit2.user.rest.resource.Resources.register, RegistrationResource.class);
+				router.attach(String.format("%s%s", ambit2.user.rest.resource.Resources.register,
+						ambit2.user.rest.resource.Resources.confirm), RegistrationConfirmResource.class);
+				router.attach(String.format("%s%s", ambit2.user.rest.resource.Resources.register,
+						ambit2.user.rest.resource.Resources.notify), AMBITRegistrationNotifyResource.class);
 
 				/*
 				 * /forgotten /forgotten/confirm /forgotten/notify
 				 * /forgotten/failed
 				 */
-				router.attach(ambit2.user.rest.resource.Resources.forgotten,
-						PwdForgottenResource.class);
-				router.attach(String.format("%s%s",
-						ambit2.user.rest.resource.Resources.forgotten,
-						ambit2.user.rest.resource.Resources.confirm),
-						PwdForgottenConfirmResource.class);
-				router.attach(String.format("%s%s",
-						ambit2.user.rest.resource.Resources.forgotten,
-						ambit2.user.rest.resource.Resources.notify),
-						PwdForgottenNotifyResource.class);
-				router.attach(String.format("%s%s",
-						ambit2.user.rest.resource.Resources.forgotten,
-						ambit2.user.rest.resource.Resources.failed),
-						PwdForgottenFailedResource.class);
+				router.attach(ambit2.user.rest.resource.Resources.forgotten, PwdForgottenResource.class);
+				router.attach(String.format("%s%s", ambit2.user.rest.resource.Resources.forgotten,
+						ambit2.user.rest.resource.Resources.confirm), PwdForgottenConfirmResource.class);
+				router.attach(String.format("%s%s", ambit2.user.rest.resource.Resources.forgotten,
+						ambit2.user.rest.resource.Resources.notify), PwdForgottenNotifyResource.class);
+				router.attach(String.format("%s%s", ambit2.user.rest.resource.Resources.forgotten,
+						ambit2.user.rest.resource.Resources.failed), PwdForgottenFailedResource.class);
 
 				Router protectedRouter = new MyRouter(getContext());
 				// protectedRouter.attach("/roles",
 				// AMBITLoginFormResource.class);
-				protectedRouter.attach(
-						String.format("/%s", UserLoginPOSTResource.resource),
+				protectedRouter.attach(String.format("/%s", UserLoginPOSTResource.resource),
 						AMBITLoginPOSTResource.class);
-				protectedRouter.attach(
-						String.format("/%s", UserLogoutPOSTResource.resource),
+				protectedRouter.attach(String.format("/%s", UserLogoutPOSTResource.resource),
 						AMBITLogoutPOSTResource.class);
 				// protectedRouter.attach(NotificationResource.resourceKey,
 				// NotificationResource.class);
 
 				router.attach("/provider", protectedRouter);
 
-				Filter dbAuth = UserRouter
-						.createCookieAuthenticator(getContext(), usersdbname,
-								"ambit2/rest/config/config.prop", secret,
-								sessionLength);
+				Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname,
+						"ambit2/rest/config/config.prop", secret, sessionLength);
 				// UserAuthorizer authz = new UserAuthorizer();
-				Filter authz = UserRouter.createPolicyAuthorizer(getContext(),
-						usersdbname, "ambit2/rest/config/config.prop",
-						getBaseURLDepth());
+				Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname,
+						"ambit2/rest/config/config.prop", getBaseURLDepth());
 				dbAuth.setNext(authz);
 				authz.setNext(router);
 				return addOriginFilter(dbAuth);
@@ -830,37 +740,28 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				router.attach("/", UIResource.class);
 				router.attach("", UIResource.class);
 
-				router.attach(ambit2.user.rest.resource.Resources.login,
-						UIBasicResource.class);
-				router.attach(ambit2.user.rest.resource.Resources.myaccount,
-						UIBasicResource.class);
+				router.attach(ambit2.user.rest.resource.Resources.login, UIBasicResource.class);
+				router.attach(ambit2.user.rest.resource.Resources.myaccount, UIBasicResource.class);
 				router.attach("/provider/signout", UIBasicResource.class);
 
-				logger.log(Level.INFO, String.format(
-						"Property %s set, local AA enabled.", LOCAL_AA_ENABLED));
+				logger.log(Level.INFO, String.format("Property %s set, local AA enabled.", LOCAL_AA_ENABLED));
 
 				// for testing purposes only!
-				router.attach(ambit2.user.rest.resource.Resources.myaccount
-						+ "/users", DummyUserByURIResource.class);
+				router.attach(ambit2.user.rest.resource.Resources.myaccount + "/users", DummyUserByURIResource.class);
 
 				return addOriginFilter(getBasicAuthFilter(router));
 			} else {
 				router.attach("/", UIResource.class);
 				router.attach("", UIResource.class);
 
-				router.attach(ambit2.user.rest.resource.Resources.login,
-						UINoAAResource.class);
-				router.attach(ambit2.user.rest.resource.Resources.myaccount,
-						UINoAAResource.class);
+				router.attach(ambit2.user.rest.resource.Resources.login, UINoAAResource.class);
+				router.attach(ambit2.user.rest.resource.Resources.myaccount, UINoAAResource.class);
 				router.attach("/provider/signout", UINoAAResource.class);
 
 				// for testing purposes only!
-				router.attach(ambit2.user.rest.resource.Resources.myaccount
-						+ "/users", DummyUserByURIResource.class);
+				router.attach(ambit2.user.rest.resource.Resources.myaccount + "/users", DummyUserByURIResource.class);
 
-				getLogger()
-						.warning(
-								"Warning: No AA protection! All resources are open for GET, POST, PUT and DELETE!");
+				getLogger().warning("Warning: No AA protection! All resources are open for GET, POST, PUT and DELETE!");
 			}
 
 		} else {
@@ -892,8 +793,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected Restlet addOriginFilter(Restlet router) {
 		String allowedOrigins = getAllowedOrigins();
 		getLogger().info("CORS: Origin filter attached:\t" + allowedOrigins);
-		OriginFilter originFilter = new OriginFilter(getContext(),
-				allowedOrigins);
+		OriginFilter originFilter = new OriginFilter(getContext(), allowedOrigins);
 		originFilter.setNext(router);
 		/*
 		 * StringWriter w = new StringWriter(); printRoutes(router, "\t", w);
@@ -904,8 +804,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	}
 
 	protected Filter getBasicAuthFilter(Router router) {
-		ChallengeAuthenticator basicAuth = new ChallengeAuthenticator(
-				getContext(), ChallengeScheme.HTTP_BASIC, "ambit2");
+		ChallengeAuthenticator basicAuth = new ChallengeAuthenticator(getContext(), ChallengeScheme.HTTP_BASIC,
+				"ambit2");
 		// get from config file
 		ConcurrentMap<String, char[]> localSecrets = null;
 		try {
@@ -918,15 +818,13 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			@Override
 			public int verify(Request request, Response response) {
 				int result = super.verify(request, response);
-				return Method.GET.equals(request.getMethod()) ? RESULT_VALID
-						: result;
+				return Method.GET.equals(request.getMethod()) ? RESULT_VALID : result;
 			}
 		});
 		basicAuth.setEnroler(new Enroler() {
 			@Override
 			public void enrole(ClientInfo clientInfo) {
-				if (clientInfo.getUser() != null
-						&& clientInfo.isAuthenticated()) {
+				if (clientInfo.getUser() != null && clientInfo.isAuthenticated()) {
 					// clientInfo.getRoles().add(UPDATE_ALLOWED);
 					clientInfo.getRoles().add(DBRoles.adminRole);
 					clientInfo.getRoles().add(DBRoles.datasetManager);
@@ -943,8 +841,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	}
 
 	protected Restlet createOpenSSOLoginRouter() {
-		Filter userAuthn = new OpenSSOAuthenticator(getContext(), true,
-				"opentox.org", new OpenSSOVerifierSetUser(false));
+		Filter userAuthn = new OpenSSOAuthenticator(getContext(), true, "opentox.org",
+				new OpenSSOVerifierSetUser(false));
 		userAuthn.setNext(OpenSSOUserResource.class);
 		return userAuthn;
 	}
@@ -954,8 +852,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	}
 
 	protected Restlet createProtectedResource(Restlet router, String prefix) {
-		Filter authN = new OpenSSOAuthenticator(getContext(), false,
-				"opentox.org", new OpenSSOVerifierSetUser(false));
+		Filter authN = new OpenSSOAuthenticator(getContext(), false, "opentox.org", new OpenSSOVerifierSetUser(false));
 		OpenSSOAuthorizer authZ = new OpenSSOAuthorizer();
 		authZ.setPrefix(prefix);
 		authN.setNext(authZ);
@@ -966,31 +863,26 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected Router createSimilaritySearchRouter() {
 		Router similarity = new MyRouter(getContext());
 		similarity.attachDefault(SimilarityResource.class);
-		similarity.attach(SimilarityMatrixResource.resource,
-				SimilarityMatrixResource.class);
-		similarity.attach(ChemicalSpaceResource.resource,
-				ChemicalSpaceResource.class);
+		similarity.attach(SimilarityMatrixResource.resource, SimilarityMatrixResource.class);
+		similarity.attach(ChemicalSpaceResource.resource, ChemicalSpaceResource.class);
 		return similarity;
 	}
 
 	protected Router createSMARTSSearchRouter() {
 		Router smartsRouter = new MyRouter(getContext());
 		smartsRouter.attachDefault(SmartsQueryResource.class);
-		smartsRouter.attach(SmartsQueryResource.resourceID,
-				SmartsQueryResource.class);
+		smartsRouter.attach(SmartsQueryResource.resourceID, SmartsQueryResource.class);
 		return smartsRouter;
 	}
 
 	protected Router createRelationsRouter() {
 		Router relationsRouter = new MyRouter(getContext());
 		relationsRouter.attachDefault(QueryStructureRelationResource.class);
-		relationsRouter.attach(String.format("%s%s",
-				OpenTox.URI.dataset.getURI(),
-				QueryStructureRelationResource.resourceID),
+		relationsRouter.attach(
+				String.format("%s%s", OpenTox.URI.dataset.getURI(), QueryStructureRelationResource.resourceID),
 				QueryStructureRelationResource.class);
-		relationsRouter.attach(String.format("%s%s",
-				OpenTox.URI.compound.getURI(),
-				QueryStructureRelationResource.resourceID),
+		relationsRouter.attach(
+				String.format("%s%s", OpenTox.URI.compound.getURI(), QueryStructureRelationResource.resourceID),
 				QueryTautomersResource.class);
 		return relationsRouter;
 	}
@@ -1008,45 +900,33 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		/**
 		 * Quality labels
 		 */
-		queryRouter.attach(QLabelQueryResource.resource,
-				QLabelQueryResource.class);
-		queryRouter.attach(StrucTypeQueryResource.resource,
-				StrucTypeQueryResource.class);
+		queryRouter.attach(QLabelQueryResource.resource, QLabelQueryResource.class);
+		queryRouter.attach(StrucTypeQueryResource.resource, StrucTypeQueryResource.class);
 
-		queryRouter.attach(ConsensusLabelQueryResource.resource,
-				ConsensusLabelQueryResource.class);
+		queryRouter.attach(ConsensusLabelQueryResource.resource, ConsensusLabelQueryResource.class);
 
-		queryRouter.attach(DatasetStructureQualityStatsResource.resource,
-				DatasetStructureQualityStatsResource.class);
-		queryRouter.attach(DatasetChemicalsQualityStatsResource.resource,
-				DatasetChemicalsQualityStatsResource.class);
-		queryRouter.attach(DatasetStrucTypeStatsResource.resource,
-				DatasetStrucTypeStatsResource.class);
+		queryRouter.attach(DatasetStructureQualityStatsResource.resource, DatasetStructureQualityStatsResource.class);
+		queryRouter.attach(DatasetChemicalsQualityStatsResource.resource, DatasetChemicalsQualityStatsResource.class);
+		queryRouter.attach(DatasetStrucTypeStatsResource.resource, DatasetStrucTypeStatsResource.class);
 
-		queryRouter.attach(StudySearchResource.resource,
-				StudySearchResource.class);
+		queryRouter.attach(StudySearchResource.resource, StudySearchResource.class);
 
 		/**
 		 * Missing features /missingValues - there is /filter now, may be this
 		 * is redundant ?
 		 */
-		queryRouter.attach(MissingFeatureValuesResource.resource,
-				MissingFeatureValuesResource.class);
+		queryRouter.attach(MissingFeatureValuesResource.resource, MissingFeatureValuesResource.class);
 
 		/**
 		 * Facets
 		 */
 		queryRouter.attach(CompoundsByPropertyValueInDatasetResource.resource,
 				CompoundsByPropertyValueInDatasetResource.class);
-		queryRouter.attach(DatasetsByEndpoint.resource,
-				DatasetsByEndpoint.class);
-		queryRouter.attach(DatasetsByNamePrefixResource.resource,
-				DatasetsByNamePrefixResource.class);
+		queryRouter.attach(DatasetsByEndpoint.resource, DatasetsByEndpoint.class);
+		queryRouter.attach(DatasetsByNamePrefixResource.resource, DatasetsByNamePrefixResource.class);
 
-		queryRouter.attach(ExperimentsSearchResource.resource,
-				ExperimentsSearchResource.class);
-		queryRouter.attach(InterpretationResultSearchResource.resource,
-				InterpretationResultSearchResource.class);
+		queryRouter.attach(ExperimentsSearchResource.resource, ExperimentsSearchResource.class);
+		queryRouter.attach(InterpretationResultSearchResource.resource, InterpretationResultSearchResource.class);
 
 		/**
 		 * PubChem query
@@ -1063,8 +943,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		queryRouter.attach(CSLSResource.resource, cir);
 		cir.attachDefault(CSLSResource.class);
 		cir.attach(CSLSResource.resourceID, CSLSResource.class);
-		cir.attach(CSLSResource.resourceID + CSLSResource.representationID,
-				CSLSResource.class);
+		cir.attach(CSLSResource.resourceID + CSLSResource.representationID, CSLSResource.class);
 
 		/**
 		 * ChEBI query
@@ -1081,8 +960,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		queryRouter.attach(CompoundLookup.resource, lookup);
 		lookup.attachDefault(CompoundLookup.class);
 		lookup.attach(CompoundLookup.resourceID, CompoundLookup.class);
-		lookup.attach(CompoundLookup.resourceID
-				+ CompoundLookup.representationID, CompoundLookup.class);
+		lookup.attach(CompoundLookup.resourceID + CompoundLookup.representationID, CompoundLookup.class);
 
 		Router slookup = new MyRouter(getContext());
 		queryRouter.attach(OpenTox.URI.substance.getURI(), slookup);
@@ -1101,16 +979,15 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	 * @return
 	 */
 	protected Restlet createAuthenticatedOpenResource(Router router) {
-		Filter algAuthn = new OpenSSOAuthenticator(getContext(), false,
-				"opentox.org", new OpenSSOVerifierSetUser(false));
+		Filter algAuthn = new OpenSSOAuthenticator(getContext(), false, "opentox.org",
+				new OpenSSOVerifierSetUser(false));
 
 		algAuthn.setNext(router);
 		return algAuthn;
 	}
 
 	protected Restlet createAuthenticatedOpenMethodResource(Router router) {
-		Filter authN = new OpenSSOAuthenticator(getContext(), false,
-				"opentox.org", new OpenSSOVerifierSetUser(false));
+		Filter authN = new OpenSSOAuthenticator(getContext(), false, "opentox.org", new OpenSSOVerifierSetUser(false));
 		OpenSSOAuthorizer authZ = new OpenSSOMethodAuthorizer() {
 			@Override
 			protected boolean authorize(Request request, Response response) {
@@ -1132,14 +1009,12 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		return new TaskStorage<String>(getName(), getLogger()) {
 
 			@Override
-			protected Task<ITaskResult, String> createTask(String user,
-					ICallableTask callable) {
+			protected Task<ITaskResult, String> createTask(String user, ICallableTask callable) {
 
-				return new PolicyProtectedTask(user,
-						!(callable instanceof CallablePolicyCreator)) {
+				return new PolicyProtectedTask(user, !(callable instanceof CallablePolicyCreator)) {
 					/**
-				     * 
-				     */
+					 * 
+					 */
 					private static final long serialVersionUID = -12811434343484170L;
 
 					@Override
@@ -1160,8 +1035,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected Restlet createBookmarksRouter() {
 		BookmarksRouter bookmarkRouter = new BookmarksRouter(getContext());
 
-		Filter bookmarkAuth = new OpenSSOAuthenticator(getContext(), false,
-				"opentox.org");
+		Filter bookmarkAuth = new OpenSSOAuthenticator(getContext(), false, "opentox.org");
 		Filter bookmarkAuthz = new BookmarksAuthorizer();
 		bookmarkAuth.setNext(bookmarkAuthz);
 		bookmarkAuthz.setNext(bookmarkRouter);
@@ -1322,15 +1196,12 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 	}
 
-	public static Component boot(String mysqluser, String mysqlpwd, int httpport)
-			throws Exception {
-		return boot(mysqluser, mysqlpwd, "ambit2", "localhost", "3306",
-				httpport);
+	public static Component boot(String mysqluser, String mysqlpwd, int httpport) throws Exception {
+		return boot(mysqluser, mysqlpwd, "ambit2", "localhost", "3306", httpport);
 	}
 
-	public static Component boot(String mysqluser, String mysqlpwd,
-			String mysqlDatabase, String mysqlHost, String mysqlport,
-			int httpport) throws Exception {
+	public static Component boot(String mysqluser, String mysqlpwd, String mysqlDatabase, String mysqlHost,
+			String mysqlport, int httpport) throws Exception {
 
 		Context context = new Context();
 		if (mysqlDatabase != null)
@@ -1345,11 +1216,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			context.getParameters().add(Preferences.HOST, mysqlHost);
 
 		Component component = new AmbitComponent(context, true);
-		final Server server = component.getServers().add(Protocol.HTTP,
-				httpport);
+		final Server server = component.getServers().add(Protocol.HTTP, httpport);
 		Logger logger = Logger.getLogger(AmbitApplication.class.getName());
-		logger.log(Level.INFO,
-				String.format("Server started on port %d", server.getPort()));
+		logger.log(Level.INFO, String.format("Server started on port %d", server.getPort()));
 
 		component.start();
 		return component;
@@ -1361,8 +1230,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		logger.log(Level.INFO, "Server stopped");
 	}
 
-	public static String printRoutes(Restlet re, String delimiter,
-			StringWriter b) {
+	public static String printRoutes(Restlet re, String delimiter, StringWriter b) {
 
 		while (re != null) {
 
@@ -1383,8 +1251,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 					b.append(r.getTemplate().getPattern());
 					b.append('\t');
 					b.append(r.getTemplate().getVariableNames().toString());
-					printRoutes(r.getNext(), '\t' + delimiter
-							+ r.getTemplate().getPattern(), b);
+					printRoutes(r.getNext(), '\t' + delimiter + r.getTemplate().getPattern(), b);
 				}
 
 				break;
@@ -1459,9 +1326,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 	protected synchronized boolean getEnableEmailVerificationOption() {
 		try {
-			String order = getProperty(
-					AMBITConfig.enableEmailVerification.name(),
-					configProperties);
+			String order = getProperty(AMBITConfig.enableEmailVerification.name(), configProperties);
 			return order == null ? true : Boolean.parseBoolean(order);
 		} catch (Exception x) {
 			return true;
@@ -1508,8 +1373,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			String v1 = getProperty(version, ambitProperties);
 			String v2 = getProperty(version_build, ambitProperties);
 			String v3 = getProperty(version_timestamp, ambitProperties);
-			return String.format("%s r%s built %s", v1, v2,
-					new Date(Long.parseLong(v3)));
+			return String.format("%s r%s built %s", v1, v2, new Date(Long.parseLong(v3)));
 		} catch (Exception x) {
 			return "Unknown";
 		}
@@ -1578,27 +1442,26 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	}
 
 	protected synchronized boolean attachDepictRouter() {
-		return getBooleanPropertyWithDefault(attachDepict, ambitProperties,
-				true);
+		return getBooleanPropertyWithDefault(attachDepict, ambitProperties, true);
 	}
 
 	protected synchronized boolean attachSubstanceRouter() {
-		return getBooleanPropertyWithDefault(attachSubstance, ambitProperties,
-				true);
+		return getBooleanPropertyWithDefault(attachSubstance, ambitProperties, true);
+	}
+
+	protected synchronized String getSolrURI() {
+		return getPropertyWithDefault(solr_url, ambitProperties, null);
 	}
 
 	protected synchronized boolean attachSubstanceOwnerRouter() {
-		return getBooleanPropertyWithDefault(attachSubstanceOwner,
-				ambitProperties, true);
+		return getBooleanPropertyWithDefault(attachSubstanceOwner, ambitProperties, true);
 	}
 
 	protected synchronized boolean attachToxmatchRouter() {
-		return getBooleanPropertyWithDefault(attachToxmatch, ambitProperties,
-				true);
+		return getBooleanPropertyWithDefault(attachToxmatch, ambitProperties, true);
 	}
 
-	protected synchronized boolean getBooleanPropertyWithDefault(String name,
-			String config, boolean defaultValue) {
+	protected synchronized boolean getBooleanPropertyWithDefault(String name, String config, boolean defaultValue) {
 		try {
 			String attach = getProperty(name, config);
 			if (attach != null && attach.startsWith("${"))
@@ -1614,8 +1477,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			Properties p = properties.get(config);
 			if (p == null) {
 				p = new Properties();
-				InputStream in = this.getClass().getClassLoader()
-						.getResourceAsStream(config);
+				InputStream in = this.getClass().getClassLoader().getResourceAsStream(config);
 				p.load(in);
 				in.close();
 				properties.put(config, p);
@@ -1627,8 +1489,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		}
 	}
 
-	protected synchronized String getPropertyWithDefault(String name,
-			String config, String defaultValue) {
+	protected synchronized String getPropertyWithDefault(String name, String config, String defaultValue) {
 		try {
 			String value = getProperty(name, config);
 			if (value == null)
@@ -1647,51 +1508,44 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	}
 
 	public synchronized String getCustomDescription() {
-		return getPropertyWithDefault(
-				custom_description,
-				ambitProperties,
+		return getPropertyWithDefault(custom_description, ambitProperties,
 				"Chemical structures database, properties prediction & machine learning with OpenTox REST web services API");
 	}
 
 	public synchronized String getCustomQuery() {
 		return getPropertyWithDefault(custom_query, ambitProperties, "formaldehyde");
 	}
-	
+
 	public synchronized String getCustomStructureQuery() {
 		return getPropertyWithDefault(custom_structurequery, ambitProperties, "formaldehyde");
-	}	
-	
+	}
+
 	public synchronized String getCustomLogo() {
 		String logo = getPropertyWithDefault(custom_logo, ambitProperties, null);
-		if ("".equals(logo)) logo = null;
+		if ("".equals(logo))
+			logo = null;
 		return logo;
 	}
 
 	public synchronized String getCustomLicense() {
 		return getPropertyWithDefault(custom_license, ambitProperties, "AMBIT");
 	}
-	
+
 	public synchronized String getSearchServiceURI() {
 		String rootUrl = getContext().getParameters().getFirstValue(BASE_URL);
-		return getPropertyWithDefault(custom_search, ambitProperties, rootUrl
-				+ "/ui/_search");
+		return getPropertyWithDefault(custom_search, ambitProperties, rootUrl + "/ui/_search");
 	}
 
 	protected ConcurrentMap<String, char[]> getLocalSecrets() throws Exception {
 
 		String identifier = getProperty(identifierKey, configProperties);
 		String pass = getProperty(identifierPass, configProperties);
-		if ((identifier == null) || "".equals(identifier)
-				|| identifier.indexOf("${") > -1)
+		if ((identifier == null) || "".equals(identifier) || identifier.indexOf("${") > -1)
 			throw new Exception(
-					String.format(
-							"Property %s not set. The web application will be READ ONLY!",
-							identifierKey));
+					String.format("Property %s not set. The web application will be READ ONLY!", identifierKey));
 		if ((pass == null) || "".equals(pass) || pass.indexOf("${") > -1)
 			throw new Exception(
-					String.format(
-							"Property %s not set. The web application will be READ ONLY!",
-							identifierKey));
+					String.format("Property %s not set. The web application will be READ ONLY!", identifierKey));
 		ConcurrentMap<String, char[]> localSecrets = new ConcurrentHashMap<String, char[]>();
 		localSecrets.put(identifier, pass.toCharArray());
 		return localSecrets;
@@ -1706,15 +1560,11 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected FreeMarkerStatusService.REPORT_LEVEL getStatusReportLevel() {
 		try {
 			FreeMarkerStatusService.REPORT_LEVEL aa = FreeMarkerStatusService.REPORT_LEVEL
-					.valueOf(getProperty(FreeMarkerStatusService.report_level,
-							ambitProperties));
-			if ((getContext() != null)
-					&& (getContext().getParameters() != null)
-					&& (getContext().getParameters()
-							.getFirstValue(FreeMarkerStatusService.report_level)) != null)
-				aa = FreeMarkerStatusService.REPORT_LEVEL.valueOf(getContext()
-						.getParameters().getFirstValue(
-								FreeMarkerStatusService.report_level));
+					.valueOf(getProperty(FreeMarkerStatusService.report_level, ambitProperties));
+			if ((getContext() != null) && (getContext().getParameters() != null)
+					&& (getContext().getParameters().getFirstValue(FreeMarkerStatusService.report_level)) != null)
+				aa = FreeMarkerStatusService.REPORT_LEVEL
+						.valueOf(getContext().getParameters().getFirstValue(FreeMarkerStatusService.report_level));
 			return aa;
 		} catch (Exception x) {
 		}
@@ -1723,8 +1573,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 	protected boolean getConfigChangeLineSeparator() {
 		try {
-			String attach = getProperty(config_changeLineSeparators,
-					ambitProperties);
+			String attach = getProperty(config_changeLineSeparators, ambitProperties);
 			return attach == null ? null : Boolean.parseBoolean(attach);
 		} catch (Exception x) {
 			return false;
