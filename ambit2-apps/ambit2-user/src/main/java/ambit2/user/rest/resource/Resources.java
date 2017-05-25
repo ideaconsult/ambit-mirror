@@ -33,6 +33,7 @@ public class Resources {
 	public static final String collection = "/dir";
 	public static final String collection_bundledrafts = String.format("%s/bd",collection);
 	public static final String help = "/help";
+	public static final String proxy = "/proxy";
 
 	
 	public final static String AMBIT_LOCAL_USER="aa.local.admin.name";
