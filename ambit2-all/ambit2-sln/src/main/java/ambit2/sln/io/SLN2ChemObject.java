@@ -15,6 +15,13 @@ import ambit2.sln.SLNBond;
 import ambit2.sln.SLNContainer;
 import ambit2.smarts.SMIRKSReaction;
 
+/**
+ * 
+ * @author nick
+ * Conversion of SLNContainer to chemical objects represented 
+ * on top of CDK (AtomContainer, QueryAtomContainer)
+ */
+
 public class SLN2ChemObject 
 {
 	private List<String> conversionErrors = new ArrayList<String>();

@@ -2,7 +2,11 @@ package ambit2.sln.io;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * 
+ * @author nick
+ * Conversion from SLN notation to SMILES/SMARTS/SMIRKS notations
+ */
 public class SLN2SMARTS 
 {	
 	private List<String> conversionErrors = new ArrayList<String>();
