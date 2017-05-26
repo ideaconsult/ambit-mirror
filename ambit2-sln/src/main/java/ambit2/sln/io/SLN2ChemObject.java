@@ -63,7 +63,7 @@ public class SLN2ChemObject
 	{
 		SLNContainer slnContainer = new SLNContainer(null);
 
-		Map<IAtom, IAtom> convertedAtoms = new HashMap<IAtom, IAtom>();
+		Map<IAtom, SLNAtom> convertedAtoms = new HashMap<IAtom, SLNAtom>();
 		for (int i = 0; i < container.getAtomCount(); i++)
 		{
 			IAtom atom = container.getAtom(i);
@@ -76,7 +76,7 @@ public class SLN2ChemObject
 		{
 			IBond bond = container.getBond(i);
 			SLNBond slnBond = bondToSLNBond(bond);
-			IAtom newAtoms[] = new IAtom[2];
+			SLNAtom newAtoms[] = new SLNAtom[2];
 			newAtoms[0] = convertedAtoms.get(bond.getAtom(0));
 			newAtoms[1] = convertedAtoms.get(bond.getAtom(1));
 			slnBond.setAtoms(newAtoms);
@@ -86,10 +86,32 @@ public class SLN2ChemObject
 		return slnContainer;
 	}
 	
-	public IAtomContainer  slnContainerToAtomContainer(SLNContainer container)
+	public IAtomContainer  slnContainerToAtomContainer(SLNContainer slnContainer)
 	{
-		//TODO
-		return null;
+		 IAtomContainer container = new AtomContainer();
+		 
+		 Map<SLNAtom, IAtom> convertedAtoms = new HashMap<SLNAtom, IAtom>();
+
+		 for (int i = 0; i < slnContainer.getAtomCount(); i++)
+		 {
+			 SLNAtom slnAtom = (SLNAtom) slnContainer.getAtom(i);
+			 IAtom atom = slnAtomToAtom(slnAtom);
+			 container.addAtom(atom);
+			 convertedAtoms.put(slnAtom, atom);
+		 }
+
+		 for (int i = 0; i < slnContainer.getBondCount(); i++)
+		 {
+			 SLNBond slnBbond = (SLNBond) container.getBond(i);
+			 IBond bond = slnBondToBond(slnBbond);
+			 IAtom newAtoms[] = new IAtom[2];
+			 newAtoms[0] = convertedAtoms.get(slnBbond.getAtom(0));
+			 newAtoms[1] = convertedAtoms.get(slnBbond.getAtom(1));
+			 bond.setAtoms(newAtoms);
+			 container.addBond(bond);
+		 }
+
+		 return container;
 	}
 	
 	public IQueryAtomContainer slnContainerToQueryAtomContainer(SLNContainer container)
