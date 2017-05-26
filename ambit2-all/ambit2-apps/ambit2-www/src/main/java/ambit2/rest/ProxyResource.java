@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.message.BasicNameValuePair;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -22,6 +23,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.rest.wrapper.WrappedService;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
 import net.idea.modbcum.i.processors.IProcessor;
@@ -42,24 +44,30 @@ public class ProxyResource<T> extends AbstractResource<List<NameValuePair>, T, R
 
 	};
 
+	public static final String resourcekey = "handler";
+	protected WrappedService<UsernamePasswordCredentials> solrService;
+
+	public ProxyResource() {
+		super();
+		solrService = ((AmbitApplication) getApplication()).getSolrService();
+	}
+
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		customizeVariants(
 				new MediaType[] { MediaType.APPLICATION_JSON, MediaType.APPLICATION_JAVASCRIPT, MediaType.IMAGE_PNG });
 	}
 
-	protected supported_media media = supported_media.json;
+	// protected supported_media media = supported_media.json;
 
 	@Override
 	public RemoteStreamConvertor createConvertor(Variant variant) throws AmbitException, ResourceException {
-		return new RemoteStreamConvertor(getQueryService(), queryObject, getRequest().getMethod(),
-				media.getMediaType());
+		return new RemoteStreamConvertor(solrService, queryObject, getRequest().getMethod(), variant.getMediaType());
 	}
 
 	public RemoteStreamConvertor createConvertor(Representation entity, Variant variant)
 			throws AmbitException, ResourceException {
-		return new RemoteStreamConvertor(getQueryService(), queryObject, getRequest().getMethod(),
-				media.getMediaType());
+		return new RemoteStreamConvertor(solrService, queryObject, getRequest().getMethod(), variant.getMediaType());
 	}
 
 	@Override
@@ -67,9 +75,10 @@ public class ProxyResource<T> extends AbstractResource<List<NameValuePair>, T, R
 			throws ResourceException {
 		try {
 			try {
-				media = supported_media.valueOf(request.getAttributes().get("media").toString());
+				Object handler = request.getAttributes().get(resourcekey);
+				solrService.setHandler(handler.toString());
 			} catch (Exception x) {
-				media = supported_media.json;
+				solrService.setHandler(null);
 			}
 			if (Method.GET.equals(request.getMethod()))
 				return form2nvp(new Form(request.getResourceRef().getQuery()));
@@ -98,6 +107,7 @@ public class ProxyResource<T> extends AbstractResource<List<NameValuePair>, T, R
 
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
+		/*
 		Form headers = (Form) getResponse().getAttributes().get("org.restlet.http.headers");
 		if (headers == null) {
 			headers = new Form();
@@ -106,6 +116,7 @@ public class ProxyResource<T> extends AbstractResource<List<NameValuePair>, T, R
 		headers.removeAll("X-Frame-Options");
 		headers.add("X-Frame-Options", "SAMEORIGIN");
 		getResponse().getCacheDirectives().add(CacheDirective.proxyMustRevalidate());
+		*/
 		ServerInfo si = getResponse().getServerInfo();
 		si.setAgent(getApplication().getName());
 		getResponse().setServerInfo(si);
@@ -114,11 +125,12 @@ public class ProxyResource<T> extends AbstractResource<List<NameValuePair>, T, R
 
 	@Override
 	protected Representation get() throws ResourceException {
-		return get(new Variant(media.getMediaType()));
+		return get(new Variant(MediaType.APPLICATION_JSON));
 	}
 
 	@Override
 	protected Representation post(Representation entity, Variant variant) throws ResourceException {
+		/*
 		Form headers = (Form) getResponse().getAttributes().get("org.restlet.http.headers");
 		if (headers == null) {
 			headers = new Form();
@@ -127,6 +139,7 @@ public class ProxyResource<T> extends AbstractResource<List<NameValuePair>, T, R
 		headers.removeAll("X-Frame-Options");
 		headers.add("X-Frame-Options", "SAMEORIGIN");
 		getResponse().getCacheDirectives().add(CacheDirective.proxyMustRevalidate());
+		*/
 		ServerInfo si = getResponse().getServerInfo();
 		si.setAgent(getApplication().getName());
 		getResponse().setServerInfo(si);
@@ -135,7 +148,7 @@ public class ProxyResource<T> extends AbstractResource<List<NameValuePair>, T, R
 
 	@Override
 	protected Representation post(Representation entity) throws ResourceException {
-		return post(entity, new Variant(media.getMediaType()));
+		return post(entity, new Variant(MediaType.APPLICATION_JSON));
 	}
 
 	protected Representation proxy(Representation entity, Variant variant) throws ResourceException {
@@ -191,7 +204,4 @@ public class ProxyResource<T> extends AbstractResource<List<NameValuePair>, T, R
 		}
 	}
 
-	protected String getQueryService() {
-		return ((AmbitApplication) getApplication()).getSolrURI();
-	}
 }

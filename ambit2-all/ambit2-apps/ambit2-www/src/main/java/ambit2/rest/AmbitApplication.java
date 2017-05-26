@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URI;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -24,6 +25,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -147,6 +149,7 @@ import ambit2.rest.task.TaskStorage;
 import ambit2.rest.task.WarmupTask;
 import ambit2.rest.ui.APIdocsResource;
 import ambit2.rest.ui.UIResource;
+import ambit2.rest.wrapper.WrappedService;
 import ambit2.user.aa.AMBITLoginFormResource;
 import ambit2.user.aa.AMBITLoginPOSTResource;
 import ambit2.user.aa.AMBITLogoutPOSTResource;
@@ -213,7 +216,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String attachToxmatch = "attach.toxmatch";
 	static final String config_changeLineSeparators = "changeLineSeparators";
 	static final String googleAnalytics = "google.analytics";
-	
 
 	static final String custom_search = "custom.search";
 	static final String custom_title = "custom.title";
@@ -223,7 +225,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String custom_query = "custom.query";
 	static final String custom_structurequery = "custom.structurequery";
 	static final String solr_url = "solr.url";
-	
+	static final String solr_basic_user = "solr.basic.user";
+	static final String solr_basic_password = "solr.basic.password";
+
 	protected boolean standalone = false;
 	protected boolean openToxAAEnabled = false;
 	protected boolean localAAEnabled = false;
@@ -481,7 +485,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 					router.attach(OwnerSubstanceFacetResource.owner,
 							createAuthenticatedOpenMethodResource(new SubstanceOwnerRouter(getContext())));
 
-				if (getSolrURI()!=null)
+				if (getSolrService() != null)
 					router.attach(Resources.proxy, createProtectedResource(new ProxyRouter(getContext()), null));
 
 			} else {
@@ -500,7 +504,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				if (attachSubstanceOwnerRouter())
 					router.attach(OwnerSubstanceFacetResource.owner, new SubstanceOwnerRouter(getContext()));
 
-				if (getSolrURI()!=null)
+				if (getSolrService() != null)
 					router.attach(Resources.proxy, createProtectedResource(new ProxyRouter(getContext()), null));
 			}
 
@@ -1449,8 +1453,15 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		return getBooleanPropertyWithDefault(attachSubstance, ambitProperties, true);
 	}
 
-	protected synchronized String getSolrURI() {
-		return getPropertyWithDefault(solr_url, ambitProperties, null);
+	protected synchronized WrappedService<UsernamePasswordCredentials> getSolrService() {
+		try {
+			WrappedService<UsernamePasswordCredentials> solr = new WrappedService<>();
+			solr.setURI(new URI(getPropertyWithDefault(solr_url, ambitProperties, null)));
+			solr.setCredentials(new UsernamePasswordCredentials(getPropertyWithDefault(solr_basic_user, ambitProperties, null),getPropertyWithDefault(solr_basic_password, ambitProperties, null)));
+			return solr;
+		} catch (Exception x) {
+			return null;
+		}
 	}
 
 	protected synchronized boolean attachSubstanceOwnerRouter() {

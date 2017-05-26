@@ -11,7 +11,7 @@ public class ProxyRouter extends MyRouter {
 	public ProxyRouter(Context context) {
 		super(context);
 		attachDefault(ProxyResource.class);
-		attach(String.format("%s/{media}", Resources.proxy), ProxyResource.class);
+		attach(String.format("/{%s}", ProxyResource.resourcekey), ProxyResource.class);
 	}
 
 }

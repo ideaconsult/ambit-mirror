@@ -118,3 +118,5 @@ custom.structurequery=${custom.structurequery}
 custom.license=${custom.license}
 #############################################################
 solr.url=${solr.url}
+solr.basic.user=${solr.basic.user}
+solr.basic.password=${solr.basic.password}
