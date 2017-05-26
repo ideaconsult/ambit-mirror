@@ -6,23 +6,27 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
-import org.restlet.data.Status;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.io.DownloadTool;
+import ambit2.rest.wrapper.WrappedService;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 public class RemoteStreamConvertor extends DefaultAmbitProcessor<List<NameValuePair>, Representation> {
@@ -30,14 +34,15 @@ public class RemoteStreamConvertor extends DefaultAmbitProcessor<List<NameValueP
 	 * 
 	 */
 	private static final long serialVersionUID = 4450496053693119759L;
-	private String queryurl = "http://localhost";
+	private WrappedService<UsernamePasswordCredentials> query;
 	private MediaType media = MediaType.APPLICATION_JSON;
 	protected List<NameValuePair> form = null;
 	protected Method method = Method.GET;
 
-	public RemoteStreamConvertor(String queryurl, List<NameValuePair> form, Method method, MediaType media) {
+	public RemoteStreamConvertor(WrappedService<UsernamePasswordCredentials> query, List<NameValuePair> form,
+			Method method, MediaType media) {
 		super();
-		this.queryurl = queryurl;
+		this.query = query;
 		this.media = media;
 		this.method = method;
 		this.form = form;
@@ -51,19 +56,23 @@ public class RemoteStreamConvertor extends DefaultAmbitProcessor<List<NameValueP
 			@Override
 			public void write(OutputStream stream) throws IOException {
 
-				CloseableHttpClient httpclient = HttpClients.createDefault();
+				final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+				credentialsProvider.setCredentials(AuthScope.ANY, query.getCredentials());
+				CloseableHttpClient httpclient = HttpClientBuilder.create()
+						.setDefaultCredentialsProvider(credentialsProvider).build();
+
 				HttpRequestBase httprequest;
 				// try {
 				if (Method.GET.equals(method)) {
 					try {
-						URIBuilder ub = new URIBuilder(queryurl).addParameters(form);
+						URIBuilder ub = new URIBuilder(query.getService()).addParameters(form);
 						httprequest = new HttpGet(ub.build());
 					} catch (URISyntaxException x) {
 						throw new IOException(x);
 					}
 
 				} else if (Method.POST.equals(method)) {
-					httprequest = new HttpPost(queryurl);
+					httprequest = new HttpPost(query.getService());
 					((HttpPost) httprequest).setEntity(new UrlEncodedFormEntity(form));
 				} else
 					throw new IOException("Unsupported method");
@@ -73,7 +82,7 @@ public class RemoteStreamConvertor extends DefaultAmbitProcessor<List<NameValueP
 						DownloadTool.download(response1.getEntity().getContent(), stream);
 					else
 						throw new ResourceException(response1.getStatusLine().getStatusCode());
-					
+
 				} catch (Exception x) {
 					Throwable ex = x;
 					while (ex != null) {
