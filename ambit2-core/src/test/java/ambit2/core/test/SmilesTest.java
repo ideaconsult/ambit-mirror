@@ -65,6 +65,18 @@ public class SmilesTest {
 	@After
 	public void tearDown() throws Exception {
 	}
+	@Test
+	public void testS7() throws Exception {
+		String smi = "BrC1=CC=C([SH](O)(=O)=CC=2OC(C(=O)N3CCOCC3)=CC2)C=C1";
+		SmilesParser parser = new SmilesParser(
+				SilentChemObjectBuilder.getInstance());
+	
+		IAtomContainer mol = parser.parseSmiles(smi);
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		for (IAtom a : mol.atoms()) {
+			System.out.println(a.getAtomTypeName());
+		}
+	}
 
 	// String[] smiles = {"NCCO","OCCN"};
 	@Test
