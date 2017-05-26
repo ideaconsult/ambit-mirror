@@ -17,6 +17,13 @@ import ambit2.base.json.JSONUtils;
 	}
 </pre>
  */
+/**
+ * TODO extend with a field to store the location of where the value came from
+ * make it an interface here IDataLocation and implementation in the export package
+ * @author nina
+ *
+ * @param <VALUE>
+ */
 public class Value<VALUE> implements IValue<VALUE, String, String> {
 	protected String units;
 	protected VALUE loValue;
