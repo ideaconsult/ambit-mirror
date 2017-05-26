@@ -147,7 +147,7 @@ public class SLN2ChemObject
 	}
 	
 	/*
-	 * Convert only the bond type/expression info
+	 * Converts only the bond type/expression info
 	 * connected atoms info is not handled 
 	 */
 	public SLNBond bondToSLNBond(IBond bond)
@@ -167,7 +167,7 @@ public class SLN2ChemObject
 	}
 	
 	/*
-	 * Convert only the bond type/expression info
+	 * Converts only the bond type/expression info
 	 * connected atoms info is not handled 
 	 */
 	public IBond slnBondToBond(SLNBond slnBo)
@@ -185,7 +185,11 @@ public class SLN2ChemObject
         //TODO
         return null;
     }
-
+	
+	/*
+	 * Converts only the bond type/expression info
+	 * connected atoms info is not handled 
+	 */
     public SLNBond queryBondToSLNBond(IQueryBond queryBond)
     {
         currentConversionError = null;
@@ -202,6 +206,10 @@ public class SLN2ChemObject
         return null;
     }
 
+    /*
+	 * Converts only the bond type/expression info
+	 * connected atoms info is not handled 
+	 */
     public IQueryBond slnBondToQueryBond(SLNBond slnBo)
     {
         currentConversionError = null;
