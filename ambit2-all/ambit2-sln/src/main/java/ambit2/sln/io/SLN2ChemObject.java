@@ -7,8 +7,11 @@ import java.util.Map;
 
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 
 import ambit2.sln.SLNAtom;
 import ambit2.sln.SLNBond;
@@ -56,7 +59,7 @@ public class SLN2ChemObject
 		return null;
 	}
 	
-	public SLNContainer atomContainerToSLNContainer(AtomContainer container)
+	public SLNContainer atomContainerToSLNContainer(IAtomContainer container)
 	{
 		SLNContainer slnContainer = new SLNContainer(null);
 
@@ -72,17 +75,18 @@ public class SLN2ChemObject
 		for (int i = 0; i < container.getBondCount(); i++)
 		{
 			IBond bond = container.getBond(i);
-			IBond slnBond = bondToSLNBond(bond);
+			SLNBond slnBond = bondToSLNBond(bond);
 			IAtom newAtoms[] = new IAtom[2];
 			newAtoms[0] = convertedAtoms.get(bond.getAtom(0));
 			newAtoms[1] = convertedAtoms.get(bond.getAtom(1));
 			slnBond.setAtoms(newAtoms);
+			slnContainer.addBond(slnBond);
 		}
 
 		return slnContainer;
 	}
 	
-	public AtomContainer  slnContainerToAtomContainer(SLNContainer container)
+	public IAtomContainer  slnContainerToAtomContainer(SLNContainer container)
 	{
 		//TODO
 		return null;
@@ -151,5 +155,38 @@ public class SLN2ChemObject
 		//TODO
 		return null;
 	}
+	
+	public SLNAtom queryAtomToSLNAtom(IQueryAtom queryAtom)
+    {
+        currentConversionError = null;
+        currentConversionWarning = null;
+        //TODO
+        return null;
+    }
+
+    public SLNBond queryBondToSLNBond(IQueryBond queryBond)
+    {
+        currentConversionError = null;
+        currentConversionWarning = null;
+        //TODO
+        return null;
+    }
+
+    public IQueryAtom slnAtomToQueryAtom(SLNAtom slnAt)
+    {
+        currentConversionError = null;
+        currentConversionWarning = null;
+        //TODO
+        return null;
+    }
+
+    public IQueryBond slnBondToQueryBond(SLNBond slnBo)
+    {
+        currentConversionError = null;
+        currentConversionWarning = null;
+        //TODO
+        return null;
+    }
+
 	
 }
