@@ -68,6 +68,13 @@ public class SLN2ChemObject
 		{
 			IAtom atom = container.getAtom(i);
 			SLNAtom slnAtom = atomToSLNAtom(atom);
+			if (currentConversionWarning != null)
+				conversionWarnings.add(currentConversionWarning + " for atom: " + (i+1));
+			if (slnAtom == null)
+			{
+				conversionErrors.add(currentConversionError + " for atom: " + (i+1));
+				continue;
+			}
 			slnContainer.addAtom(slnAtom);
 			convertedAtoms.put(atom, slnAtom);
 		}
@@ -76,9 +83,18 @@ public class SLN2ChemObject
 		{
 			IBond bond = container.getBond(i);
 			SLNBond slnBond = bondToSLNBond(bond);
+			if (currentConversionWarning != null)
+				conversionWarnings.add(currentConversionWarning + " for bond: " + (i+1));
+			if (slnBond == null)
+			{
+				conversionErrors.add(currentConversionError + " for bond: " + (i+1));
+				continue;
+			}
 			SLNAtom newAtoms[] = new SLNAtom[2];
 			newAtoms[0] = convertedAtoms.get(bond.getAtom(0));
 			newAtoms[1] = convertedAtoms.get(bond.getAtom(1));
+			if (newAtoms[0] == null || newAtoms[1] == null)
+				continue; //one of the atoms is not converted
 			slnBond.setAtoms(newAtoms);
 			slnContainer.addBond(slnBond);
 		}
@@ -96,6 +112,13 @@ public class SLN2ChemObject
 		 {
 			 SLNAtom slnAtom = (SLNAtom) slnContainer.getAtom(i);
 			 IAtom atom = slnAtomToAtom(slnAtom);
+			 if (currentConversionWarning != null)
+				 conversionWarnings.add(currentConversionWarning + " for atom: " + (i+1));
+			 if (atom == null)
+			 {
+				 conversionErrors.add(currentConversionError + " for atom: " + (i+1));
+				 continue;
+			 }
 			 container.addAtom(atom);
 			 convertedAtoms.put(slnAtom, atom);
 		 }
@@ -104,9 +127,18 @@ public class SLN2ChemObject
 		 {
 			 SLNBond slnBbond = (SLNBond) container.getBond(i);
 			 IBond bond = slnBondToBond(slnBbond);
+			 if (currentConversionWarning != null)
+				 conversionWarnings.add(currentConversionWarning + " for bond: " + (i+1));
+			 if (bond == null)
+			 {
+				 conversionErrors.add(currentConversionError + " for bond: " + (i+1));
+				 continue;
+			 }
 			 IAtom newAtoms[] = new IAtom[2];
 			 newAtoms[0] = convertedAtoms.get(slnBbond.getAtom(0));
 			 newAtoms[1] = convertedAtoms.get(slnBbond.getAtom(1));
+			 if (newAtoms[0] == null || newAtoms[1] == null)
+				continue; //one of the atoms is not converted
 			 bond.setAtoms(newAtoms);
 			 container.addBond(bond);
 		 }
