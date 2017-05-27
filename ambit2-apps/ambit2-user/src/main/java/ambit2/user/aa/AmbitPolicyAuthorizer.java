@@ -168,22 +168,8 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 				return true;
 			}
 		},
-		proxy {
-			@Override
-			int getMaxLevel() {
-				return 3;
-			}
-			@Override
-			boolean expectPolicies4IndividualResource() {
-				return true;
-			}
-			@Override
-			boolean isProtected(Method method) {
-				return true;
-			}
-			
-		},
-		model, substance, dir {
+
+		model, substance, dir, solr {
 			@Override
 			int getMaxLevel() {
 				return 3;
