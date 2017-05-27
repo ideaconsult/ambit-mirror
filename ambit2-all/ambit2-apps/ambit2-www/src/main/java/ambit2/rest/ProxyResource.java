@@ -1,25 +1,16 @@
 package ambit2.rest;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
-import org.apache.http.NameValuePair;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.message.BasicNameValuePair;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
-import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
-import org.restlet.data.Parameter;
 import org.restlet.data.ServerInfo;
 import org.restlet.data.Status;
-import org.restlet.representation.InputRepresentation;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -27,7 +18,6 @@ import org.restlet.resource.ResourceException;
 
 import com.google.common.io.ByteStreams;
 
-import ambit2.core.data.model.Algorithm.requires;
 import ambit2.rest.wrapper.WrappedService;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
@@ -67,18 +57,19 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 
 	@Override
 	public RemoteStreamConvertor createConvertor(Variant variant) throws AmbitException, ResourceException {
-		return createConvertor(getRequestEntity(),variant);
+		return createConvertor(getRequestEntity(), variant);
 	}
 
 	public RemoteStreamConvertor createConvertor(Representation entity, Variant variant)
 			throws AmbitException, ResourceException {
-		return new RemoteStreamConvertor(solrService, queryObject,  entity==null?null:entity.getMediaType(),getRequest().getMethod(), variant.getMediaType());
+		return new RemoteStreamConvertor(solrService, queryObject, entity == null ? null : entity.getMediaType(),
+				getRequest().getMethod(), variant.getMediaType());
 	}
 
 	@Override
 	protected ByteArrayOutputStream createQuery(Context context, Request request, Response response)
 			throws ResourceException {
-		
+
 		try {
 			try {
 				Object handler = request.getAttributes().get(resourcekey);
@@ -86,9 +77,9 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 			} catch (Exception x) {
 				solrService.setHandler(null);
 			}
-			
+
 			solrService.setQuery(request.getResourceRef().getQuery());
-			
+
 			ByteArrayOutputStream bout = null;
 			if (!Method.GET.equals(request.getMethod())) {
 				bout = new ByteArrayOutputStream();
@@ -101,7 +92,6 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 	}
-
 
 	@Override
 	protected Representation processAndGenerateTask(Method method, Representation entity, Variant variant,
@@ -167,39 +157,34 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 				else
 					throw new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
 			}
-			if (queryObject != null) {
-				IProcessor<ByteArrayOutputStream, Representation> convertor = null;
 
-				try {
-					getResponse().setStatus(response_status);
-					convertor = createConvertor(entity, variant);
-					Representation r = convertor.process(queryObject);
+			IProcessor<ByteArrayOutputStream, Representation> convertor = null;
 
-					return r;
-				} catch (NotFoundException x) {
-					Representation r = processNotFound(x, variant);
-					return r;
+			try {
+				getResponse().setStatus(response_status);
+				convertor = createConvertor(entity, variant);
+				Representation r = convertor.process(queryObject);
 
-				} catch (RResourceException x) {
-					getResponse().setStatus(x.getStatus());
-					return x.getRepresentation();
+				return r;
+			} catch (NotFoundException x) {
+				Representation r = processNotFound(x, variant);
+				return r;
 
-				} catch (ResourceException x) {
-					getResponse().setStatus(x.getStatus());
-					return null;
-				} catch (Exception x) {
+			} catch (RResourceException x) {
+				getResponse().setStatus(x.getStatus());
+				return x.getRepresentation();
 
-					getResponse().setStatus(Status.SERVER_ERROR_INTERNAL, x);
-					return null;
-				} finally {
-
-				}
-
-			} else {
-				getResponse().setStatus(response_status == null ? Status.CLIENT_ERROR_BAD_REQUEST : response_status,
-						error);
+			} catch (ResourceException x) {
+				getResponse().setStatus(x.getStatus());
 				return null;
+			} catch (Exception x) {
+
+				getResponse().setStatus(Status.SERVER_ERROR_INTERNAL, x);
+				return null;
+			} finally {
+
 			}
+
 		} catch (Exception x) {
 			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL, x);
 			return null;
