@@ -505,7 +505,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 					router.attach(OwnerSubstanceFacetResource.owner, new SubstanceOwnerRouter(getContext()));
 
 				if (getSolrService() != null)
-					router.attach(Resources.proxy, createProtectedResource(new ProxyRouter(getContext()), null));
+					router.attach(Resources.proxy, new ProxyRouter(getContext()));
 			}
 
 			router.attach(SubstancePropertyResource.substanceproperty, SubstancePropertyResource.class);
@@ -1457,10 +1457,12 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		try {
 			WrappedService<UsernamePasswordCredentials> solr = new WrappedService<>();
 			solr.setURI(new URI(getPropertyWithDefault(solr_url, ambitProperties, null)));
-			solr.setCredentials(new UsernamePasswordCredentials(getPropertyWithDefault(solr_basic_user, ambitProperties, null),getPropertyWithDefault(solr_basic_password, ambitProperties, null)));
+			solr.setCredentials(
+					new UsernamePasswordCredentials(getPropertyWithDefault(solr_basic_user, ambitProperties, null),
+							getPropertyWithDefault(solr_basic_password, ambitProperties, null)));
 			return solr;
 		} catch (Exception x) {
-			logger.log(Level.WARNING,x.getMessage());
+			logger.log(Level.WARNING, x.getMessage());
 			return null;
 		}
 	}
