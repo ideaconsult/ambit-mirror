@@ -1460,6 +1460,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			solr.setCredentials(new UsernamePasswordCredentials(getPropertyWithDefault(solr_basic_user, ambitProperties, null),getPropertyWithDefault(solr_basic_password, ambitProperties, null)));
 			return solr;
 		} catch (Exception x) {
+			logger.log(Level.WARNING,x.getMessage());
 			return null;
 		}
 	}
