@@ -6,6 +6,15 @@ import org.apache.http.auth.Credentials;
 
 public class WrappedService<C extends Credentials> {
 	protected String handler;
+	protected String query;
+
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(String query) {
+		this.query = query;
+	}
 
 	public String getHandler() {
 		return handler;
@@ -35,8 +44,17 @@ public class WrappedService<C extends Credentials> {
 	}
 
 	public URI getService() {
+		StringBuilder b = new StringBuilder();
 		try {
-			return getHandler() == null ? getURI() : new URI(String.format("%s%s", getURI().toString(), getHandler()));
+			b.append(getURI());
+			if (getHandler() != null)
+				b.append(getHandler());
+			if (getQuery() != null) {
+				b.append("?");
+				b.append(getQuery());
+			}
+
+			return new URI(b.toString());
 		} catch (Exception x) {
 			x.printStackTrace();
 			return getURI();
