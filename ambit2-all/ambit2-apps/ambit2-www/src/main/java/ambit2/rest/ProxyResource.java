@@ -45,8 +45,14 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 	public ProxyResource() {
 		super();
 		solrService = ((AmbitApplication) getApplication()).getSolrService();
+		setHtmlbyTemplate(true);
 	}
 
+	@Override
+	public String getTemplateName() {
+		return "jsonplaceholder.ftl";
+	}
+	
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		customizeVariants(
