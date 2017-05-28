@@ -120,3 +120,4 @@ custom.license=${custom.license}
 solr.url=${solr.url}
 solr.basic.user=${solr.basic.user}
 solr.basic.password=${solr.basic.password}
+solr.filter=${solr.filter}
