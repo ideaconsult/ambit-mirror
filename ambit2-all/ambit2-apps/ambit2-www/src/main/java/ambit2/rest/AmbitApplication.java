@@ -227,6 +227,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String solr_url = "solr.url";
 	static final String solr_basic_user = "solr.basic.user";
 	static final String solr_basic_password = "solr.basic.password";
+	static final String solr_filter = "solr.filter";
 
 	protected boolean standalone = false;
 	protected boolean openToxAAEnabled = false;
@@ -467,6 +468,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			router.attach(DatasetResource.dataset, datasetRouter);
 
 		if (attachSubstanceRouter()) {
+			WrappedService solrService = getSolrService();
+
 			/**
 			 * /property/{id}
 			 */
@@ -485,8 +488,13 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 					router.attach(OwnerSubstanceFacetResource.owner,
 							createAuthenticatedOpenMethodResource(new SubstanceOwnerRouter(getContext())));
 
-				if (getSolrService() != null)
-					router.attach(Resources.proxy, createProtectedResource(new ProxyRouter(getContext()), null));
+				if (solrService != null) {
+					if (DB_AA_ENABLED.equals(solrService.getFilterConfig())) {
+						router.attach(Resources.proxy,
+								createDBProtectedResource(usersdbname, new ProxyRouter(getContext()), null));
+					} else
+						router.attach(Resources.proxy, createProtectedResource(new ProxyRouter(getContext()), null));
+				}
 
 			} else {
 				Filter authz = null;
@@ -504,7 +512,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				if (attachSubstanceOwnerRouter())
 					router.attach(OwnerSubstanceFacetResource.owner, new SubstanceOwnerRouter(getContext()));
 
-				if (getSolrService() != null)
+				if (solrService != null)
 					router.attach(Resources.proxy, new ProxyRouter(getContext()));
 			}
 
@@ -853,6 +861,24 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 	protected Restlet createProtectedResource(Restlet router) {
 		return createProtectedResource(router, null);
+	}
+
+	protected Restlet createDBProtectedResource(String usersdbname, Restlet router, String prefix) {
+		String secret = getProperty(AMBITConfig.secret.name(), configProperties);
+		long sessionLength = 1000 * 60 * 45L; // 45 min in milliseconds
+		try {
+			sessionLength = Long.parseLong(getProperty(AMBITConfig.sessiontimeout.name(), configProperties));
+		} catch (Exception x) {
+		}
+
+		Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname,
+				"ambit2/rest/config/config.prop", secret, sessionLength);
+		// UserAuthorizer authz = new UserAuthorizer();
+		Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname, "ambit2/rest/config/config.prop",
+				getBaseURLDepth());
+		dbAuth.setNext(authz);
+		authz.setNext(router);
+		return dbAuth;
 	}
 
 	protected Restlet createProtectedResource(Restlet router, String prefix) {
@@ -1460,6 +1486,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			solr.setCredentials(
 					new UsernamePasswordCredentials(getPropertyWithDefault(solr_basic_user, ambitProperties, null),
 							getPropertyWithDefault(solr_basic_password, ambitProperties, null)));
+			solr.setFilterConfig(getPropertyWithDefault(solr_filter, ambitProperties, null));
 			return solr;
 		} catch (Exception x) {
 			logger.log(Level.WARNING, x.getMessage());

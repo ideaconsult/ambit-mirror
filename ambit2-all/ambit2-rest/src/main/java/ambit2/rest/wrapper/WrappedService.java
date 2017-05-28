@@ -7,6 +7,15 @@ import org.apache.http.auth.Credentials;
 public class WrappedService<C extends Credentials> {
 	protected String handler;
 	protected String query;
+	protected String filterConfig;
+
+	public String getFilterConfig() {
+		return filterConfig;
+	}
+
+	public void setFilterConfig(String filterConfig) {
+		this.filterConfig = filterConfig;
+	}
 
 	public String getQuery() {
 		return query;
