@@ -11,6 +11,7 @@ import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -224,9 +225,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String custom_logo = "custom.logo";
 	static final String custom_query = "custom.query";
 	static final String custom_structurequery = "custom.structurequery";
-	static final String solr_url = "solr.url";
-	static final String solr_basic_user = "solr.basic.user";
-	static final String solr_basic_password = "solr.basic.password";
+	static final String solr_service = "solr.service.%d";
+	static final String solr_url = "solr.url.%d";
+	static final String solr_basic_user = "solr.basic.user.%d";
+	static final String solr_basic_password = "solr.basic.password.%d";
 	static final String solr_filter = "solr.filter";
 
 	protected boolean standalone = false;
@@ -468,7 +470,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			router.attach(DatasetResource.dataset, datasetRouter);
 
 		if (attachSubstanceRouter()) {
-			WrappedService solrService = getSolrService();
+			Map<String, WrappedService<UsernamePasswordCredentials>> solrServices = getSolrServices();
 
 			/**
 			 * /property/{id}
@@ -488,13 +490,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 					router.attach(OwnerSubstanceFacetResource.owner,
 							createAuthenticatedOpenMethodResource(new SubstanceOwnerRouter(getContext())));
 
-				if (solrService != null) {
-					if (DB_AA_ENABLED.equals(solrService.getFilterConfig())) {
-						router.attach(Resources.proxy,
-								createDBProtectedResource(usersdbname, new ProxyRouter(getContext()), null));
-					} else
-						router.attach(Resources.proxy, createProtectedResource(new ProxyRouter(getContext()), null));
-				}
+				router.attach(Resources.proxy, createProtectedResource(new ProxyRouter(getContext()), null));
 
 			} else {
 				Filter authz = null;
@@ -512,7 +508,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				if (attachSubstanceOwnerRouter())
 					router.attach(OwnerSubstanceFacetResource.owner, new SubstanceOwnerRouter(getContext()));
 
-				if (solrService != null)
+				if (solrServices != null)
 					router.attach(Resources.proxy, new ProxyRouter(getContext()));
 			}
 
@@ -1479,15 +1475,28 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		return getBooleanPropertyWithDefault(attachSubstance, ambitProperties, true);
 	}
 
-	protected synchronized WrappedService<UsernamePasswordCredentials> getSolrService() {
+	protected synchronized Map<String, WrappedService<UsernamePasswordCredentials>> getSolrServices() {
 		try {
-			WrappedService<UsernamePasswordCredentials> solr = new WrappedService<>();
-			solr.setURI(new URI(getPropertyWithDefault(solr_url, ambitProperties, null)));
-			solr.setCredentials(
-					new UsernamePasswordCredentials(getPropertyWithDefault(solr_basic_user, ambitProperties, null),
-							getPropertyWithDefault(solr_basic_password, ambitProperties, null)));
-			solr.setFilterConfig(getPropertyWithDefault(solr_filter, ambitProperties, null));
-			return solr;
+			Map<String, WrappedService<UsernamePasswordCredentials>> services = null;
+
+			for (int i = 1; i < 10; i++) {
+				String name = getPropertyWithDefault(String.format(solr_service, i), ambitProperties, null);
+				if (name == null)
+					continue;
+				if (services == null)
+					services = new Hashtable<String, WrappedService<UsernamePasswordCredentials>>();
+
+				WrappedService<UsernamePasswordCredentials> solr = new WrappedService<>();
+				solr.setName(name);
+				solr.setURI(new URI(getPropertyWithDefault(String.format(solr_url,i), ambitProperties, null)));
+				solr.setCredentials(
+						new UsernamePasswordCredentials(getPropertyWithDefault(String.format(solr_basic_user,i), ambitProperties, null),
+								getPropertyWithDefault(String.format(solr_basic_password,i), ambitProperties, null)));
+				solr.setFilterConfig(getPropertyWithDefault(solr_filter, ambitProperties, null));
+				services.put(name, solr);
+			}
+
+			return services;
 		} catch (Exception x) {
 			logger.log(Level.WARNING, x.getMessage());
 			return null;

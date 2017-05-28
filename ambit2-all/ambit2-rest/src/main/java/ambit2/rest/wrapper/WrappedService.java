@@ -8,6 +8,15 @@ public class WrappedService<C extends Credentials> {
 	protected String handler;
 	protected String query;
 	protected String filterConfig;
+	protected String name;
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getFilterConfig() {
 		return filterConfig;
