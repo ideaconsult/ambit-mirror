@@ -2,6 +2,7 @@ package ambit2.rest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+import java.util.Map;
 
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.restlet.Context;
@@ -40,11 +41,13 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 	};
 
 	public static final String resourcekey = "handler";
+	public static final String servicekey = "servicekey";
+	protected Map<String, WrappedService<UsernamePasswordCredentials>> solrServices;
 	protected WrappedService<UsernamePasswordCredentials> solrService;
 
 	public ProxyResource() {
 		super();
-		solrService = ((AmbitApplication) getApplication()).getSolrService();
+		solrServices = ((AmbitApplication) getApplication()).getSolrServices();
 		setHtmlbyTemplate(true);
 	}
 
@@ -52,7 +55,7 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 	public String getTemplateName() {
 		return "jsonplaceholder.ftl";
 	}
-	
+
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		customizeVariants(
@@ -77,6 +80,14 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 			throws ResourceException {
 
 		try {
+			try {
+				Object key = request.getAttributes().get(servicekey);
+				solrService = solrServices.get(key.toString());
+			} catch (Exception x) {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}
+			if (solrService == null)
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			try {
 				Object handler = request.getAttributes().get(resourcekey);
 				solrService.setHandler(handler.toString());

@@ -84,7 +84,8 @@ public class RemoteStreamConvertor extends DefaultAmbitProcessor<ByteArrayOutput
 						DownloadTool.download(response1.getEntity().getContent(), stream);
 					else
 						throw new ResourceException(response1.getStatusLine().getStatusCode());
-
+				} catch (ResourceException x) {
+					throw x;
 				} catch (Exception x) {
 					Throwable ex = x;
 					while (ex != null) {
