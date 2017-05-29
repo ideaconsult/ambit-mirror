@@ -42,7 +42,7 @@ public class MyAccountResource<T> extends UserDBResource<T> {
 
 		try {
 			search_name = "username";
-			search_value = getClientInfo().getUser().getIdentifier();
+			search_value = (getClientInfo()==null || getClientInfo().getUser()==null)?null:getClientInfo().getUser().getIdentifier();
 		} catch (Exception x) {
 			search_value = null;
 			x.printStackTrace();
