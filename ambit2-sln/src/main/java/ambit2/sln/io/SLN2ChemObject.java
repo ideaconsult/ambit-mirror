@@ -208,7 +208,7 @@ public class SLN2ChemObject
 		currentConversionWarning = null;
 		if (bond == null)
 		{	
-			currentConversionError = "Atom is null";
+			currentConversionError = "Bond is null";
 			return null;
 		}	
 		SLNBond slnBo = new SLNBond(builder);
