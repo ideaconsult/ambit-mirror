@@ -9,12 +9,15 @@ import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.sln.SLNAtom;
 import ambit2.sln.SLNBond;
+import ambit2.sln.SLNConst;
 import ambit2.sln.SLNContainer;
 import ambit2.smarts.SMIRKSReaction;
 
@@ -27,6 +30,8 @@ import ambit2.smarts.SMIRKSReaction;
 
 public class SLN2ChemObject 
 {
+	private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+	
 	private List<String> conversionErrors = new ArrayList<String>();
 	private List<String> conversionWarnings = new ArrayList<String>();
 	
@@ -174,8 +179,23 @@ public class SLN2ChemObject
 	{
 		currentConversionError = null;
 		currentConversionWarning = null;
-		//TODO
-		return null;
+		if (atom == null)
+		{	
+			currentConversionError = "Atom is null";
+			return null;
+		}	
+		SLNAtom slnAt = new SLNAtom(builder);
+		String atomName = atom.getSymbol();
+		for (int i = 0; i < SLNConst.elSymbols.length; i++)
+			if (atomName.equals(SLNConst.elSymbols[i]))
+			{	
+				slnAt.atomType = i;
+				break;
+			}	
+		slnAt.atomName = atomName;
+		//TODO handle H atoms
+		
+		return slnAt;
 	}
 	
 	/*
@@ -186,8 +206,14 @@ public class SLN2ChemObject
 	{
 		currentConversionError = null;
 		currentConversionWarning = null;
-		//TODO
-		return null;
+		if (bond == null)
+		{	
+			currentConversionError = "Atom is null";
+			return null;
+		}	
+		SLNBond slnBo = new SLNBond(builder);
+		slnBo.bondType = bond.getOrder().ordinal() + 1;
+		return slnBo;
 	}
 	
 	public IAtom slnAtomToAtom(SLNAtom slnAt)
