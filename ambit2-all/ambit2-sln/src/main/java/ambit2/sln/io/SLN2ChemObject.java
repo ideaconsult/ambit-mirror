@@ -70,7 +70,7 @@ public class SLN2ChemObject
 
 		Map<IAtom, SLNAtom> convertedAtoms = new HashMap<IAtom, SLNAtom>();
 		for (int i = 0; i < container.getAtomCount(); i++)
-		{
+		{	
 			IAtom atom = container.getAtom(i);
 			SLNAtom slnAtom = atomToSLNAtom(atom);
 			if (currentConversionWarning != null)
