@@ -9,8 +9,8 @@ public class SLNBond extends SMARTSBond {
 		super(builder);
 	}
 
-	int bondType = 0;
-	SLNBondExpression bondExpression = null;
+	public int bondType = 0;
+	public SLNBondExpression bondExpression = null;
 
 	public boolean matches(IBond bond) {
 		// 1. Matching the bond type

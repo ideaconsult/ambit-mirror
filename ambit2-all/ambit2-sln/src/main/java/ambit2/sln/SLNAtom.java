@@ -16,11 +16,11 @@ public class SLNAtom extends SMARTSAtom {
 		super(builder);
 	}
 
-	int atomType = 0;
-	String atomName = null;
-	int atomID = -1;
-	int numHAtom = 0;
-	SLNAtomExpression atomExpression = null;
+	public int atomType = 0;
+	public String atomName = null;
+	public int atomID = -1;
+	public int numHAtom = 0;
+	public SLNAtomExpression atomExpression = null;
 
 	public boolean matches(IAtom atom) {
 
