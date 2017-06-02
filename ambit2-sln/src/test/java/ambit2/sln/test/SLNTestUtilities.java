@@ -74,7 +74,10 @@ public class SLNTestUtilities
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
 		
-		tu.testSLN2CompositionRelation("CCCC<compositionUUID=id-0001;name=test>");
+		//tu.testSLN2CompositionRelation("CCCC<compositionUUID=id-0001;name=test>");
+		
+		//tu.testCompositionRelation2SLN("Smiles : NC(C)CO, Name : Test, CompositionUUID : 123456");
+		tu.testCompositionRelation2SLN("CompositionUUID : 123456");
 	}
 	
 	public void testSLN(String sln)
@@ -149,6 +152,20 @@ public class SLNTestUtilities
 		System.out.println(compositionRelationToString(compRel));
 	}
 	
+	public void testCompositionRelation2SLN(String compRelString)
+	{
+		System.out.println("Input CompRel:  " + compRelString); 
+		CompositionRelation compRel = getCompositionRelationFromString(compRelString, ",");
+		System.out.println("Composition Relation:");
+		System.out.println(compositionRelationToString(compRel));
+		
+		SLN2Substance sln2sub = new SLN2Substance();
+		SLNContainer slnCont = sln2sub.compositionRelationToSLNContainer(compRel);
+		System.out.println("Error: " + sln2sub.getAllErrors());
+		System.out.println("Ouput  sln: " + slnHelper.toSLN(slnCont));
+		
+	}
+	
 	public String compositionRelationToString(CompositionRelation rel) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("  Content : \"" + rel.getContent() + "\"\n");
@@ -198,8 +215,8 @@ public class SLNTestUtilities
 					rel.setCompositionUUID(value);
 				else if (sectionName.equals("Name"))
 					rel.setName(value);
-				else if (sectionName.equals("Format"))
-					rel.setFormat(value);
+				else if (sectionName.equals("Smiles"))
+					rel.setSmiles(value);
 				else if (sectionName.equals("Format"))
 					rel.setFormat(value);
 				else if (sectionName.equals("Format"))

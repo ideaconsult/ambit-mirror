@@ -128,6 +128,12 @@ public class SLNHelper
 	
 	public String toSLN(SLNContainer container)
 	{	
+		if (container.getAtomCount() == 0)
+		{
+			String attr = container.getAttributes().toString();
+			return attr;
+		}
+		
 		determineFirstSheres(container);
 		nodes.clear();
 		ringClosures.clear();

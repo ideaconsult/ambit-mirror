@@ -3,6 +3,7 @@ package ambit2.sln.io;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.data.StructureRecord;
@@ -11,6 +12,7 @@ import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.base.relation.composition.Proportion;
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNContainerSet;
+import ambit2.smarts.SmartsHelper;
 
 public class SLN2Substance 
 {
@@ -62,6 +64,7 @@ public class SLN2Substance
 	
 	private List<String> conversionErrors = new ArrayList<String>();
 	private List<String> conversionWarnings = new ArrayList<String>();
+	SLN2ChemObject sln2ChemObject = new SLN2ChemObject();
 	
 	
 	public List<String> getConversionErrors() {
@@ -194,8 +197,37 @@ public class SLN2Substance
 	
 	public SLNContainer structureRecordToSLNContainer(IStructureRecord structure)
 	{
+		if (structure == null)
+			return null;
+		
+		SLNContainer slnContainer = null; 
+		
+		if (structure.getSmiles() != null)
+		{
+			IAtomContainer container = null;
+			try{
+				container = SmartsHelper.getMoleculeFromSmiles(structure.getSmiles());
+			}
+			catch(Exception e)
+			{
+				conversionErrors.add("Incorrect SMILES: " + e.getMessage());
+			}
+			
+			if (container != null)
+			{	
+				slnContainer = sln2ChemObject.atomContainerToSLNContainer(container);
+				conversionErrors.addAll(sln2ChemObject.getConversionErrors());
+				conversionWarnings.addAll(sln2ChemObject.getConversionWarnings());
+			}
+		}
+		
 		//TODO
-		return null;
+		
+		
+		if (slnContainer == null)
+			slnContainer = new SLNContainer(SilentChemObjectBuilder.getInstance());
+		
+		return slnContainer;
 	}
 	
 	
