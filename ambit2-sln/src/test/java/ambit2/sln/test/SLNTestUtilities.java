@@ -23,6 +23,7 @@ public class SLNTestUtilities
 	static SLNHelper slnHelper = new SLNHelper();
 	static SLNSearchManager man = new SLNSearchManager();
 	static IsomorphismTester isoTester = new IsomorphismTester();
+	static SLN2Substance sln2sub = new SLN2Substance();
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -74,10 +75,11 @@ public class SLNTestUtilities
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
 		
-		//tu.testSLN2CompositionRelation("CCCC<compositionUUID=id-0001;name=test>");
+		tu.sln2sub.FlagAddImplicitHAtomsOnSLNAtomConversion = true;
+		tu.testSLN2CompositionRelation("CCCC<compositionUUID=id-0001;name=test>");
 		
 		//tu.testCompositionRelation2SLN("Smiles : NC(C)CO, Name : Test, CompositionUUID : 123456");
-		tu.testCompositionRelation2SLN("CompositionUUID : 123456");
+		//tu.testCompositionRelation2SLN("CompositionUUID : 123456");
 	}
 	
 	public void testSLN(String sln)
@@ -146,8 +148,9 @@ public class SLNTestUtilities
 			return;
 		}
 		
-		SLN2Substance sln2sub = new SLN2Substance();
+		
 		CompositionRelation compRel = sln2sub.slnContainerToCompositionRelation(container);
+		System.out.println("Error: " + sln2sub.getAllErrors());
 		System.out.println("Composition Relation:");
 		System.out.println(compositionRelationToString(compRel));
 	}
@@ -159,7 +162,6 @@ public class SLNTestUtilities
 		System.out.println("Composition Relation:");
 		System.out.println(compositionRelationToString(compRel));
 		
-		SLN2Substance sln2sub = new SLN2Substance();
 		SLNContainer slnCont = sln2sub.compositionRelationToSLNContainer(compRel);
 		System.out.println("Error: " + sln2sub.getAllErrors());
 		System.out.println("Ouput  sln: " + slnHelper.toSLN(slnCont));

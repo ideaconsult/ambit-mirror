@@ -234,6 +234,7 @@ public class SLN2ChemObject
         	{	
         		IAtom atom = new Atom();
         		atom.setSymbol(SLNConst.elSymbols[slnAt.atomType]);
+        		atom.setImplicitHydrogenCount(0);
         		//TODO handle H atoms, charge, isotope
         		return atom;
         	}
