@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.Bond;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -220,8 +222,32 @@ public class SLN2ChemObject
 	{
 		currentConversionError = null;
 		currentConversionWarning = null;
-		//TODO
-		return null;
+		if (slnAt == null)
+        {
+            currentConversionError = "SNLAtom is null";
+            return null;
+        }
+        
+        if ((slnAt.atomType > 0)  && (slnAt.atomType < SLNConst.GlobDictOffseet))
+        {
+        	if (slnAt.atomType < SLNConst.elSymbols.length)
+        	{	
+        		IAtom atom = new Atom();
+        		atom.setSymbol(SLNConst.elSymbols[slnAt.atomType]);
+        		//TODO handle H atoms, charge, isotope
+        		return atom;
+        	}
+        	else
+        	{
+        		currentConversionError = "SNLAtom type is incorrect: " + slnAt.atomType;
+            	return null;
+        	}
+        }
+        else
+        {
+        	currentConversionError = "SNLAtom type is not defined";
+        	return null;
+        }  
 	}
 	
 	/*
@@ -232,8 +258,34 @@ public class SLN2ChemObject
 	{
 		currentConversionError = null;
 		currentConversionWarning = null;
-		//TODO
-		return null;
+		if (slnBo == null)
+        {
+            currentConversionError = "Bond is null";
+            return null;
+        }
+		
+		if (slnBo.bondType != 0)
+		{
+			IBond bond = new Bond();
+			switch (slnBo.bondType)
+			{
+			case 1:
+				bond.setOrder(IBond.Order.SINGLE);
+				break;
+			case 2:
+				bond.setOrder(IBond.Order.DOUBLE);
+				break;
+			case 3:
+				bond.setOrder(IBond.Order.TRIPLE);
+				break;	
+			}
+			return bond;
+		}
+		else
+		{		
+			currentConversionError = "Bond type is not defined";
+			return null;
+		}	
 	}
 	
 	public SLNAtom queryAtomToSLNAtom(IQueryAtom queryAtom)
