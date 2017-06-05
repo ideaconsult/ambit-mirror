@@ -76,7 +76,7 @@ public class SLNTestUtilities
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
 		
 		tu.sln2sub.FlagAddImplicitHAtomsOnSLNAtomConversion = true;
-		tu.testSLN2CompositionRelation("CCCC<compositionUUID=id-0001;name=test>");
+		tu.testSLN2CompositionRelation("CCC=C<compositionUUID=id-0001;name=test>");
 		
 		//tu.testCompositionRelation2SLN("Smiles : NC(C)CO, Name : Test, CompositionUUID : 123456");
 		//tu.testCompositionRelation2SLN("CompositionUUID : 123456");
@@ -150,8 +150,8 @@ public class SLNTestUtilities
 		
 		
 		CompositionRelation compRel = sln2sub.slnContainerToCompositionRelation(container);
-		System.out.println("Error: " + sln2sub.getAllErrors());
-		System.out.println("Composition Relation:");
+		System.out.println("Errors:\n" + sln2sub.getAllErrors());
+		System.out.println("Result Composition Relation:");
 		System.out.println(compositionRelationToString(compRel));
 	}
 	
@@ -163,8 +163,8 @@ public class SLNTestUtilities
 		System.out.println(compositionRelationToString(compRel));
 		
 		SLNContainer slnCont = sln2sub.compositionRelationToSLNContainer(compRel);
-		System.out.println("Error: " + sln2sub.getAllErrors());
-		System.out.println("Ouput  sln: " + slnHelper.toSLN(slnCont));
+		System.out.println("Errors:\n" + sln2sub.getAllErrors());
+		System.out.println("Result SLN: " + slnHelper.toSLN(slnCont));
 		
 	}
 	
