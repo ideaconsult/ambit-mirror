@@ -38,6 +38,7 @@ public class SLN2Substance
 	public boolean FlagIdstructure = false;
 	*/
 	
+	
 	//Conversion attribute names for CompositionRelation fields
 	public String proportion_SLNAttr = "proportion";
 	public String compositionUUID_SLNAttr = "compositionUUID";
@@ -62,9 +63,11 @@ public class SLN2Substance
 	public String id_srcdataset_SLNAttr = "id_srcdataset";
 	*/
 	
+	public boolean FlagAddImplicitHAtomsOnSLNAtomConversion = false;
+	
 	private List<String> conversionErrors = new ArrayList<String>();
 	private List<String> conversionWarnings = new ArrayList<String>();
-	SLN2ChemObject sln2ChemObject = new SLN2ChemObject();
+	public SLN2ChemObject sln2ChemObject = new SLN2ChemObject();
 	
 	
 	public List<String> getConversionErrors() {
@@ -190,8 +193,33 @@ public class SLN2Substance
 	
 	public IStructureRecord slnContainerToStructureRecord(SLNContainer slnContainer)
 	{
+		if (slnContainer == null)
+			return null;
+		
+		IAtomContainer container = sln2ChemObject.slnContainerToAtomContainer(slnContainer);
+		try{
+			SmartsHelper.preProcessStructure(container, true, FlagAddImplicitHAtomsOnSLNAtomConversion);
+		}
+		catch(Exception e)
+		{
+			conversionErrors.add("SSMILES generation error: " + e.getMessage());
+		}
+		conversionErrors.addAll(sln2ChemObject.getConversionErrors());
+		conversionWarnings.addAll(sln2ChemObject.getConversionWarnings());
+		
 		IStructureRecord structure = new StructureRecord();
-		//TODO
+		if (FlagSmiles)
+		{
+			try{
+				String smiles = SmartsHelper.moleculeToSMILES(container, true);
+				structure.setSmiles(smiles);
+			}
+			catch(Exception e)
+			{
+				conversionErrors.add("SMILES generation error: " + e.getMessage());
+			}
+		}
+		
 		return structure;
 	}
 	
