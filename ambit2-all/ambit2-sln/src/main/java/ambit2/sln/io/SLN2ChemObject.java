@@ -132,7 +132,7 @@ public class SLN2ChemObject
 
 		 for (int i = 0; i < slnContainer.getBondCount(); i++)
 		 {
-			 SLNBond slnBbond = (SLNBond) container.getBond(i);
+			 SLNBond slnBbond = (SLNBond) slnContainer.getBond(i);
 			 IBond bond = slnBondToBond(slnBbond);
 			 if (currentConversionWarning != null)
 				 conversionWarnings.add(currentConversionWarning + " for bond: " + (i+1));
