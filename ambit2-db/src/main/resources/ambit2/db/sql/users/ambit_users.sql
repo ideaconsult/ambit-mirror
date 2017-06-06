@@ -192,7 +192,7 @@ CREATE TABLE `version_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
-insert into version_users (idmajor,idminor,comment) values (2,5,"AMBITDB users");
+insert into version_users (idmajor,idminor,comment) values (2,6,"AMBITDB users");
 
 -- -----------------------------------------------------
 -- Default users
@@ -236,3 +236,24 @@ insert ignore into policy values(null,"ambit_user","/ambit2","/dataset",1,1,0,0,
 insert ignore into policy values(null,"ambit_user","/ambit2","/algorithm",1,1,0,0,0);
 insert ignore into policy values(null,"ambit_user","/ambit2","/model",1,1,0,0,0);
 insert ignore into policy values(null,"ambit_user","/ambit2","/substance",1,1,0,0,0);
+
+DROP PROCEDURE IF EXISTS `deleteUser`;
+DELIMITER $$
+
+CREATE PROCEDURE deleteUser(IN uname VARCHAR(16))
+LANGUAGE SQL
+READS SQL DATA 
+CONTAINS SQL
+
+BEGIN
+
+delete FROM user_registration where user_name=uname;
+delete FROM user_roles where user_name=uname;
+delete FROM users where user_name=uname;
+delete o FROM user_organisation o, user u where o.iduser=u.iduser and username=uname;
+delete o FROM user_project o, user u where o.iduser=u.iduser and username=uname;
+delete FROM user where username=uname;
+
+END $$
+DELIMITER; 
+;
