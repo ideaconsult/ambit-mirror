@@ -8,7 +8,7 @@ var config_bao = {
                 "mRender" : function(data,type,full) {
                 	var sOut = "";
                  	try {
-                 		sOut += data[0];
+                 		sOut += ("<span style='font-weight:bold;'>"  + data[0] + "</span>");
                  	} catch (err) {}	
                  	sOut += "<br/>";
                  	sOut += "<br/><ul>";
