@@ -9,6 +9,7 @@ import org.junit.Test;
 import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Params;
+import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.Value;
 
 import com.google.common.base.Charsets;
@@ -123,5 +124,12 @@ public class EffectRecordTest {
 				uuid.toString());
 
 	}
-
+	@Test
+	public void test() {
+		for (Protocol._categories c : Protocol._categories.values() ) {
+			if (c.toString().toLowerCase().indexOf("assay")>=0) continue;
+			
+			System.out.println(String.format("// comment\t%s\n{\"PROTOCOL_TOP_CATEGORY\"=\"%s\",\t\"PROTOCOL_CATEGORY_CODE\":\"%s\"}\t",c.toString(),c.getTopCategory(),c.name()));
+		}
+	}
 }

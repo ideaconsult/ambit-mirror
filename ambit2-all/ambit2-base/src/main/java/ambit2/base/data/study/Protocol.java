@@ -1282,6 +1282,57 @@ public class Protocol {
 				return "http://purl.enanomapper.org/onto/ENM_0000008";
 			}
 		},
+		PC_THERMAL_STABILITY_SECTION {
+			@Override
+			public String toString() {
+				return "Stability (thermal)";
+			}
+
+			@Override
+			public String getNumber() {
+				return "4.19";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 4190;
+			}
+
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return null;
+			}
+		},
+		RADICAL_FORMATION_POTENTIAL_SECTION  {
+			@Override
+			public String toString() {
+				return "Radical formation potential";
+			}
+
+			@Override
+			public String getNumber() {
+				//TBD
+				return "4.28.12";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 42812;
+			}
+
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return null;
+			}			
+		},
 		AGGLOMERATION_AGGREGATION_SECTION {
 			@Override
 			public String toString() {
