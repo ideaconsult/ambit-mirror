@@ -285,12 +285,12 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 						xids.add(id.getSystemIdentifier());
 					else if ("NM code".equals(id.getSystemDesignator())) {
 						nmcode = id.getSystemIdentifier();
-						bucket.put("nmcode_s", nmcode);
 					}
 
 					// ids.add(externalids2Bucket(id));
 				}
 				bucket.put("content_hss", xids);
+
 			}
 
 			List<String> summary_papp = null;
