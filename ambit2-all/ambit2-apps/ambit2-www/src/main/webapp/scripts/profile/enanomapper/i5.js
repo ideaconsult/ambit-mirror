@@ -532,13 +532,14 @@ var config_i5 = {
 				"inMatrix" : true
 			},
 			"result" : {
+				"sTitle" : "Result",
 				"iOrder" : -8,
 				"bVisible" : true,
 				"inMatrix" : true
 			},
 			"text" : {
 				"sTitle" : "Result",
-				"iOrder" : -7,
+				"iOrder" : -8,
 				"bVisible" : true,
 				"inMatrix" : true
 			}

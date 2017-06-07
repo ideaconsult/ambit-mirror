@@ -1,6 +1,7 @@
 package ambit2.base.data.substance;
 
 import ambit2.base.data.study.StructureRecordValidator;
+import ambit2.base.relation.STRUCTURE_RELATION;
 
 //TODO proper ontology lookup
 public enum ParticleTypes {
@@ -27,6 +28,14 @@ public enum ParticleTypes {
 		public String getFormula() {
 			return "Ag";
 		}
+		@Override
+		public String getName() {
+			return "Silver";
+		}
+		@Override
+		public STRUCTURE_RELATION getDefaultRole() {
+			return STRUCTURE_RELATION.HAS_CORE;
+		}
 	},
 	NPO_401 {
 		// Ag
@@ -43,6 +52,14 @@ public enum ParticleTypes {
 		@Override
 		public String getFormula() {
 			return "Au";
+		}
+		@Override
+		public String getName() {
+			return "Gold";
+		}
+		@Override
+		public STRUCTURE_RELATION getDefaultRole() {
+			return STRUCTURE_RELATION.HAS_CORE;
 		}
 	},
 	NPO_354 {
@@ -164,10 +181,14 @@ public enum ParticleTypes {
 		public String getFormula() {
 			return "Fe3O4";
 		}
+		
 	},
 	NPO_1559 {
 	// PLGA-PEO
-
+		@Override
+		public String getName() {
+			return "PLGA-PEO";
+		}
 	},
 	NPO_1373 {
 		// SiO2
@@ -185,6 +206,7 @@ public enum ParticleTypes {
 		public String getFormula() {
 			return "SiO2";
 		}
+	
 	},
 	NPO_1562 {
 		//a fluorescent silica nanoparticle which has a core-shell structure.
@@ -202,6 +224,11 @@ public enum ParticleTypes {
 		public String getFormula() {
 			return "SiO2";
 		}		
+		@Override
+		public STRUCTURE_RELATION getDefaultRole() {
+			return STRUCTURE_RELATION.HAS_CORE;
+		}
+	
 	},
 	NPO_1486 {
 		// TiO2
@@ -213,6 +240,14 @@ public enum ParticleTypes {
 		@Override
 		public String getFormula() {
 			return "TiO2";
+		}
+		@Override
+		public STRUCTURE_RELATION getDefaultRole() {
+			return STRUCTURE_RELATION.HAS_CORE;
+		}
+		@Override
+		public String getName() {
+			return "Titanium dioxide";
 		}
 	},
 
@@ -252,6 +287,10 @@ public enum ParticleTypes {
 		public String getFormula() {
 			return "ZnO";
 		}
+		@Override
+		public String getName() {
+			return "Zinc oxide";
+		}
 	},
 	NPO_Fe {
 		@Override
@@ -272,6 +311,10 @@ public enum ParticleTypes {
 		@Override
 		public String getCAS() {
 			return "7439-89-6";
+		}
+		@Override
+		public String getName() {
+			return "Iron";
 		}
 	},
 	NPO_NiO2 {
@@ -870,6 +913,12 @@ public enum ParticleTypes {
 			return name();
 		}
 	};
+	public String getName() {
+		return null;
+	}
+	public STRUCTURE_RELATION getDefaultRole() {
+		return STRUCTURE_RELATION.HAS_CONSTITUENT;
+	}
 	public String getSMILES() {
 		return null;
 	}

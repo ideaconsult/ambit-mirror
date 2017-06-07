@@ -96,7 +96,7 @@ public class StructureRecordValidator extends
 				validate(record, rel);
 				switch (rel.getRelationType()) {
 				case HAS_CONSTITUENT: {
-					Object tvo = rel.getRelation() == null ? 0 : rel
+					Object tvo = (rel.getRelation() == null || rel.getRelation().getTypical_value()==null) ? 0 : rel
 							.getRelation().getTypical_value();
 					double tv = 0;
 					if (tvo != null)
