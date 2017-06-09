@@ -128,6 +128,15 @@ public class DBSubstanceImport {
 	}
 
 	protected boolean clearMeasurements = true;
+	protected boolean addDefaultComposition = false;
+
+	public boolean isAddDefaultComposition() {
+		return addDefaultComposition;
+	}
+
+	public void setAddDefaultComposition(boolean addDefaultComposition) {
+		this.addDefaultComposition = addDefaultComposition;
+	}
 
 	public boolean isClearMeasurements() {
 		return clearMeasurements;
@@ -218,6 +227,14 @@ public class DBSubstanceImport {
 		return true;
 	}
 
+	protected static boolean addDefaultComposition(CommandLine line) {
+		if (line.hasOption('d'))
+			try {
+				return Boolean.parseBoolean(line.getOptionValue('d'));
+			} catch (Exception x) {
+			}
+		return false;
+	}
 	protected int maxRefSubstances = -1;
 
 	protected static int getMaxRefSubstances(CommandLine line) {
@@ -410,6 +427,9 @@ public class DBSubstanceImport {
 
 		Option isSplitRecord = OptionBuilder.hasArg().withLongOpt("isSplitRecord").withArgName("value")
 				.withDescription("true|false").create("s");
+		
+		Option addDefaultComposition = OptionBuilder.hasArg().withLongOpt("defaultcomposition").withArgName("value")
+				.withDescription("true|false").create("d");
 
 		/*
 		 * Option gzip = OptionBuilder.hasArg().withLongOpt("gzipped")
@@ -428,6 +448,7 @@ public class DBSubstanceImport {
 		options.addOption(isSplitRecord);
 		options.addOption(maxRefSubstances);
 		options.addOption(prefix);
+		options.addOption(addDefaultComposition);
 
 		options.addOption(help);
 
@@ -479,6 +500,7 @@ public class DBSubstanceImport {
 			setClearComposition(isClearComposition(line));
 			setClearMeasurements(isClearMeasurements(line));
 			setSplitRecord(isSplitRecord(line));
+			setAddDefaultComposition(addDefaultComposition(line));
 			maxRefSubstances = getMaxRefSubstances(line);
 			if (line.hasOption("h")) {
 				printHelp(options, null);
