@@ -132,6 +132,7 @@ public class SmartsHelper {
 			IAtom at = container.getAtom(i);
 			sb.append("  #" + i + "  ");
 			sb.append(at.getSymbol());
+			sb.append("(" + at.getAtomicNumber() + ")");
 			Integer explHInt = (Integer) at.getProperty(CMLUtilities.ExplicitH);
 			int explHAt = 0;
 			if (explHInt != null)
