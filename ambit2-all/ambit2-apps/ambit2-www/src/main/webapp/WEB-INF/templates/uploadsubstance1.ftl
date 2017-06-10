@@ -86,6 +86,7 @@ $(document)
 				<br/>	
 				<select multiple id="studyresulttype" name="studyresulttype" size='5'></select>
 	    	</div>
+<!--	    	
 			<div class='four columns omega remove-bottom'>
 				<label style="float: left; margin-left: .1em;" for="testmaterial">Test material</label>
 				<a href="javascript:void(0)" onclick="_i5.selections.testmaterial.highQuality()" ><span style="float: left; margin-left: .1em;" class="ui-icon ui-icon-flag"></span></a>
@@ -94,6 +95,7 @@ $(document)
 				<br/>	
 				<select multiple id="testmaterial" name="testmaterial" size='3'></select>
 	    	</div>
+-->	    	
 
 	    </div>
 		<div class='row remove-bottom'>
