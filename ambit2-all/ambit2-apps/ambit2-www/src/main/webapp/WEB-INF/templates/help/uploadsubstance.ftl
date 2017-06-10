@@ -10,35 +10,56 @@ Substance import options:
 
 <div id="keys" style="display:none;">
   <ul>
-    <li><a href="#i5z">.i5z file</a></li>
+    <li><a href="#i5z">IUCLID file</a></li>
     <li><a href="#nmparser">Configurable Excel templates</a></li>
-    <li><a href="#reliability">Reliability</a></li>
-    <li><a href="#studypurpose">Study purpose</a></li>
-    <li><a href="#robuststudy">Robust study</a></li>
-    <li><a href="#resulttype">Result type</a></li>
-    <li><a href="#referencetype">Reference type</a></li>
-    <li><a href="#quality">quality</a></li>
-    <li><a href="#clear">clear</a></li>
-    <li><a href="#server">server</a></li>
-    <li><a href="#multiupload">multiple</a></li>
-    <li><a href="#singleupload">single</a></li>
+    <li><a href="#reliability">Import filter: Reliability</a></li>
+    <li><a href="#studypurpose">Import filter: Study purpose</a></li>
+    <li><a href="#robuststudy">Import filter: Robust study</a></li>
+    <li><a href="#resulttype">Import filter: Study result type</a></li>
+    <li><a href="#referencetype">Import filter: Reference type</a></li>
+    <li><a href="#quality">Import filters</a></li>
+    <li><a href="#clear">Import mode</a></li>
+    <li><a href="#server">Web services</a></li>
+    <li><a href="#multiupload">File upload</a></li>
+    <li><a href="#singleupload">File upload</a></li>
   </ul>
   <div id="i5z">
   	<a href='http://en.wikipedia.org/wiki/IUCLID' class='qxternal' target=_blank>IUCLID</a> imports files in the .i5z and .i6z format. 
-  	I5Z stands for "IUCLID 5 Zip", as the file uses Zip file compression.
+  	.i5z stands for "IUCLID 5 Zip", as the file uses Zip file compression. .i6z stands for "IUCLID 6 Zip",
   	<br/>
   	<ul>
     <li>*.i5z : IUCLID 5.4, IUCLID 5.5, IUCLID 5.6 </li>
     <li>*.i6z : IUCLID 6 </li>
     </ul>
   </div>
-    
+  <div id="multiupload">
+  	Upload of multiple files in supported formats : IUCLDI5 (.i5z), IUCLID6 (.i6z), Excel + JSON,  W3C RDF.
+  </div>
+  <div id="singleupload">
+  	Upload of single file in  supported formats IUCLDI5 (.i5z), IUCLID6 (.i6z), Excel + JSON,  W3C RDF. 
+  </div>
+  <div id="server">
+  	Import from IUCLID5 web services. 
+  	<br/>
+  	IUCLID6 web servcies support is under development.
+  </div>
   <div id="nmparser">
-    Excel templates with JSON configuration. <a href='https://github.com/enanomapper/nmdataparser'>More details</a>
+    Excel spreadsheets can be imported with the help of an additional JSON configuration file, specifying the mapping between the spreadsheet content and the database internal model. 
+    <a href='https://github.com/enanomapper/nmdataparser'>More details</a>
   </div>  
-  
+  <div id="quality">
+  	If checked, imports only high quality study records, according to the selected criteria. This option is only valdi fro IUCLID files! 
+  </div>
+  <div id="clear">
+  The two checkboxes control whether the composition records and study records for the substances being imported will be cleared, if already in the database. 
+  Each substance entry in the database is assigned a unique identifier in the form of a UUID. 
+  If the input file is IUCLID (*.i5z or *.i6z), the identifiers are the IUCLID generated UUIDs already present in these files.
+  If the input file is a spreadsheet, the JSON configuration defines which field to be used as an identifier and uses the field itself or generates UUID from the specified field 
+  </div>
+
   <div id="reliability">
-  	  Only import substances, with studies assigned the selected Klimish code:
+  	  If "Import only high quality study records" is checked, imports 
+  	  only substances, with studies assigned the selected Klimish code:
 	  <ul>
 	  <li>1 (reliable without restriction)</li>
 	  <li>2 (reliable with restrictions)</li>
@@ -49,7 +70,8 @@ Substance import options:
 	  </ul>
   </div>        
   <div id="studypurpose">
-  	  Only import substances, with studies assigned the selected study purpose:
+  	If "Import only high quality study records" is checked, imports
+  	  pnly substances, with studies assigned the selected study purpose:
 	  <ul>
 	  <li>K: key study</li>
 	  <li>S: supporting study</li>
@@ -59,10 +81,12 @@ Substance import options:
 	  </ul>  
   </div>
   <div id="robuststudy">
-  Only import substances, with studies assigned the robust study flag Yes or No.
+  If "Import only high quality study records" is checked, imports
+  only substances, with studies assigned the robust study flag Yes or No.
   </div>  
   <div id="resulttype">
-  Only import substances, with studies assigned the selected result type:
+  If "Import only high quality study records" is checked imports
+  only substances, with studies assigned the selected result type:
 	  <ul>
 	  <li>experimental result</li>
 	  <li>experimental study planned</li>
