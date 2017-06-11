@@ -22,8 +22,13 @@
         </li>
         <li><a href="#substancesearch">Search criteria</a>
         </li>
+        <li><a href="#what">What</a>
+        </li>
+    
     </ul>
-
+    <div id="what">
+    ???
+    </div>
     <div id="_substance">
 	Chemical substance, a material with a definite chemical composition <a href='http://echa.europa.eu/documents/10162/13643/nutshell_guidance_substance_en.pdf' class='qxternal' target='_blank' title='Identification and naming of substances under REACH and CLP'>[REACH guide]</a>.
 	The chemical structures are assigned to constituents, not to the substances.

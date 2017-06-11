@@ -28,19 +28,19 @@
 	<script type='text/javascript'>
 	
 	$(document).ready(function() {
+		loadHelp("${ambit_root}","study");
 		<#if menu_profile?? && menu_profile=='enanomapper'>		        
 	     	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/substance" title="Nanomaterials">Search nanomaterials by identifiers</a></li>');
 	     	//loadHelp("${ambit_root}","nanomaterial");
 	 		$("#_searchdiv").html("<form class='remove-bottom' action='${ambit_root}/substance'><input type='radio' checked name='type' id='type_name' value='name' title='Name (starting with a string)'>Name <input type='radio' name='type' id='type_' value=''  title='Experiment reference, e.g. DOI'>External identifier <input type='radio' name='type' id='type_citation' checked value='citation'>Experiment reference <input name='search' class='search' value='' id='search'> <input type='submit' value='Search'></form>");
 	 		$("#header_substance").text("Nanomaterials");
 	 	<#else>
+			$('#helplink').hide();
     		<#if menu_profile?? && menu_profile=='lri'>
 	    		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/substance" title="Substances: Mono-constituent, multiconstituent, additives, impurities.">Search substances by identifiers</a></li>');
-	    		loadHelp("${ambit_root}","substance");
 	    		$("#_searchdiv").html("<form class='remove-bottom' action='${ambit_root}/substance'><input type='radio' checked name='type' id='type_name' value='name' title='Name (starting with a string)'>Name <input type='radio' name='type' id='type_uuid' value='uuid'>UUID <input type='radio' name='type' id='type_regexp'  value='regexp'>Name (regexp) <input type='radio' name='type' id='type_' value=''>External identifier <input name='search' class='search' value='' id='search'> <input type='submit' value='Search'></form>");
     		<#else>
         		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/substance" title="Substances: Mono-constituent, multiconstituent, additives, impurities.">Search substances by identifiers</a></li>');
-        		loadHelp("${ambit_root}","substance");
         		$("#_searchdiv").html("<form class='remove-bottom' action='${ambit_root}/substance'><input type='radio' checked name='type' id='type_name' value='name' title='Name (starting with a string)'>Name <input type='radio' name='type' id='type_like' value='like'>Name (pattern matching) <input type='radio' name='type' id='type_regexp'  value='regexp'>Name (regexp) <input name='search' class='search' value='' id='search'> <input type='submit' value='Search'></form>");
     		</#if>
         </#if>
@@ -72,7 +72,7 @@
 <!-- banner -->
 <#include "/banner_crumbs.ftl">
 
-<div class="fifteen columns remove-bottom" style="padding:0;" >
+<div class="sixteen columns remove-bottom" style="padding:0;" >
 
 
 		<!-- Page Content
@@ -88,17 +88,17 @@
 
 </div>
 
-<div class="one column" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<!-- help-->
+<hr/>
+<div class="sixteen columns remove-bottom" style="padding:0;" >
+
 <!--
 <div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
 <div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
 </div>
-
-<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
+<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>
 </div>
 -->
-<#include "/searchmenu/menu_substance.ftl">
+<#include "/searchmenu/menu_study.ftl">
 
 </div>
 

@@ -53,7 +53,8 @@ public class HelpResource extends CatalogResource<String>  {
 		enmindex,
 		excapeindex,
 		datatemplate,
-		uploadsubstance
+		uploadsubstance,
+		study
 	}
 	public HelpResource() {
 		super();
