@@ -15,7 +15,7 @@ AMBIT Web services
    
  [Previous releases] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/}ambit2.war 2.7.4 and before}}
   
- [Development] {{{http://ambit.uni-plovdiv.bg:8083/nexus/#nexus-search;gav~~ambit2-www~3.0.3-SNAPSHOT~war~}ambit2.war 3.0.3-SNAPSHOT}}
+ [Development] {{{http://ambit.uni-plovdiv.bg:8083/nexus/#nexus-search;gav~~ambit2-www~3.1.0-SNAPSHOT~war~}ambit2.war 3.1.0-SNAPSHOT}}
 
  [Custom releases] {{{./enanomapper.html} eNanoMapper prototype database}} 
 
