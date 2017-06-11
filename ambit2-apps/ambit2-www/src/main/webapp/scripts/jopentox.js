@@ -89,7 +89,7 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 		switch (request.status) {
 			case 200:
 				if (dResult!=null) {
-					dResult.innerHTML = getResponseTitle(request,"Ready. Results available. ");
+					dResult.innerHTML = getResponseTitle(request,"Ready. Click to access the result(s).");
 					dResult.href = wrapDatasetURI(request.responseText);
 					dResult.style.display = 'inline';
 					dResult.target = null;
@@ -115,7 +115,7 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 			case 202:
 				if (dResult!=null) {
 					dResult.target = null;
-					dResult.innerHTML =  getResponseTitle(request,"Waiting for results ...");
+					dResult.innerHTML =  getResponseTitle(request,"Please wait for the task to complete ...");
 					dResult.href = request.responseText;
 				}
 				var taskTimer = window.setTimeout(function() {
@@ -251,7 +251,7 @@ function defineTaskTable(root,url) {
 				  "sWidth" : "50%",
 				  "fnRender" : function(o,val) {
 					  	if (o.aData["status"]=='Completed') {
-					  		return val + "<a href='"+o.aData["result"]+"'>Ready. Results available.</a>";
+					  		return val + "<a href='"+o.aData["result"]+"'>Ready. Click to access the result(s).</a>";
 					  	} else if (o.aData["status"]=='Error') {
 					  		return val + o.aData["error"];
 

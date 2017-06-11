@@ -1,6 +1,15 @@
 <ul>
+	<li> <a href="#">User guide</a>
+		<ul>
+		<li><a href='http://ambit.sourceforge.net/intro.html' target='guide'>Introduction</a></li>
+		<li><a href='http://ambit.sourceforge.net/usage.html' target='guide'>Search by chemical structure</a></li>
+		<li><a href='http://ambit.sourceforge.net/usage_substance.html' target='guide'>Search by phys chem or biological effects</a></li>
+		<li><a href='http://ambit.sourceforge.net/install_ambitrest.html.html' target='guide'>Downloads and Installation</a></li>
+		</ul>
+	</li>	
 	<li><a href='http://ambit.sourceforge.net/support.html' target='report' title='Found an error? Report here'>Submit an issue <img src='${ambit_root}/images/profile/lri/logo.png' width='203' height='24'></a></li>
-	<li><a href="#">OpenTox API</a>
+	
+	<li><a href="#">For developers</a>
 	<ul>
 		<li><a href='${ambit_root}/api-docs' target=_blank title="API documentation in Swagger JSON format">API Documentation</a></li>
 		<li><a href='http://ideaconsult.github.io/examples-ambit/apidocs/' class="qxternal" target=_blank title="API documentation via swagger-ui">API Documentation (public services)</a></li>

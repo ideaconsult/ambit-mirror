@@ -21,6 +21,8 @@
 		<li class='topLinks'>
 			<a class='topLinks login' title='Log in' href='${ambit_root}/login'>Log in</a>
 		</li>						
-		</#if>			
+		</#if>
+		<li  class='topLinks'><a href='#' id='helplink' style='display:none;' class='chelp what'>What is on this page?</a></li>
 	</ul>
+	
 </#escape>

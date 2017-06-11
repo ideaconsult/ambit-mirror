@@ -34,22 +34,22 @@ $(document)
 <body>
 
 
-<div class="container" style="margin:0;padding:0;">
+<div class="container" style="margin:10;padding:10;">
 
 
 <#include "/banner_crumbs.ftl">
 
-<div class="one column remove-bottom" style="padding:0;" >&nbsp;
+<div class="one column remove-bottom" style="padding:10;" >&nbsp;
 </div>
 	
-<div class="thirteen columns remove-bottom" style="padding:0;" >
+<div class="thirteen columns remove-bottom" style="padding:10;" >
 
 
 		<!-- Page Content
 		================================================== -->
-		<div class="row" style="padding:0;" >			
+		<div class="row" style="padding:10;margin:10;" >			
 			<div class="ui-widget-header ui-corner-top"><a href='#' id='taskref'>Job</a> started <span id=task_started></span> &nbsp;</div>
-			<div class="ui-widget-content ui-corner-bottom">
+			<div class="ui-widget-content ui-corner-bottom" style="padding:10;margin:10;">
 			<span id=task_status>
 			</span>
 			<p>Name:&nbsp;<strong id=task_name></strong></p>
