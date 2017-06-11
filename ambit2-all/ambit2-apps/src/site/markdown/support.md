@@ -1,17 +1,15 @@
-##Online support 
+## AMBIT LRI Read Across tool
 
-* [Post a comment](http://sourceforge.net/projects/ambit/forums)
-	   
-* [Report a bug](https://sourceforge.net/p/ambit/bugs) 
-	   
-* [Suggest a new feature](https://sourceforge.net/p/ambit/feature-requests/)
-	   	
-* [Subscribe/Send an email to AMBIT users mailing list](https://lists.sourceforge.net/lists/listinfo/ambit-users)
-	   	
-* [Join the development](https://lists.sourceforge.net/lists/listinfo/ambit-developers)
+![logo](images/ambit_lri.png "AMBIT LRI logo")
 
+* is online at [https://ambitlri.ideaconsult.net](https://ambitlri.ideaconsult.net)    
 
- 
+* Submit issue to the [public issue tracker at Sourceforge](https://sourceforge.net/p/ambit/bugs)
+
+* Submit issue to the [private issue tracker](https://phabricator.ideaconsult.net/)
+
+* or contact [IdeaConsult Ltd.](http://www.ideaconsult.net) *support @ ideaconsult.net*
+
 ##Targeted users support
 
 * contact [IdeaConsult Ltd.](http://www.ideaconsult.net) *support @ ideaconsult.net*
@@ -26,17 +24,17 @@
 		
 * Request custom installation and database content
 
+##Online support 
 
-
-##LRI Read Across tool
-
-* Online at [https://ambitlri.ideaconsult.net](https://ambitlri.ideaconsult.net)    
+* [Post a comment](http://sourceforge.net/projects/ambit/forums)
 	   
-* [**Submit feedback**](https://docs.google.com/forms/d/1hhKCBTeBTqvfQxW3g2vc_ShNk29hof_WDHtt-cimjGQ/viewform) (no login needed)
+* [Report a bug](https://sourceforge.net/p/ambit/bugs) 
 	   
-![logo](images/ambit_lri.png "AMBIT LRI logo")
-
-
+* [Suggest a new feature](https://sourceforge.net/p/ambit/feature-requests/)
+	   	
+* [Subscribe/Send an email to AMBIT users mailing list](https://lists.sourceforge.net/lists/listinfo/ambit-users)
+	   	
+* [Join the development](https://lists.sourceforge.net/lists/listinfo/ambit-developers)
 
 ##Social
 

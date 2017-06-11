@@ -74,17 +74,19 @@ Toxtree predictions online
 
 ## News
 
+- **AMBIT-LRI Hands-On Training** Sept 29, 2017, Brussels at [CEFIC](http://cefic-lri.org/). 
+
 - **AMBIT-LRI Hands-On Training** June 16, 2017, Helsinki, Finland at [CAAT Academy 17 Tools for Read-Across](https://www.caat-academy.org/)
 
-- [AMBIT presentation in a ChemicalWatch webinar 06/06/2016](https://chemicalwatch.com/47309/qsar-guidance-for-2018-reach-registrants)
+- ChemicalWatch: [CEFIC AMBIT software tool reaching users around the globe (20.04.2017)](https://chemicalwatch.com/crmhub/55337/cefics-ambit-software-tool-reaching-users-around-the-globe) ;  [Webinar (06.06.2016)](https://chemicalwatch.com/47309/qsar-guidance-for-2018-reach-registrants)
 
-- [Cefic launches ‘AMBIT’ chemical safety prediction software](http://cefic-lri.org/news/cefic-launches-ambit-chemical-safety-prediction-software/)
+- [Cefic launches **AMBIT** chemical safety prediction software](http://cefic-lri.org/news/cefic-launches-ambit-chemical-safety-prediction-software/)
 
 - [Cefic-LRI presents its AMBIT tool poster during the poster exhibition of New Approach Methodologies in Regulatory Science](http://cefic-lri.org/events/topical-scientific-workshop-new-approach-methodologies-in-regulatory-science/)
 
 - [ECHA gives out registration data to support development of non-test methods](http://echa.europa.eu/view-article/-/journal_content/title/echa-gives-out-registration-data-to-support-development-of-non-test-methods)
 
-- Upcoming [AMBIT workshops](http://cefic-lri.org/lri_toolbox/ambit/) 
+- [More on AMBIT LRI tool](http://cefic-lri.org/lri_toolbox/ambit/) 
 
 [Cefic](http://cefic-lri.org/), the European chemical industry council, has launched its new [AMBIT](http://cefic-lri.org/lri_toolbox/ambit/) chemical safety prediction tool, an open source software programme for companies to enable them to enhance their chemical safety compliance efforts.
 
