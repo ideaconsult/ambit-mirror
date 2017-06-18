@@ -1,6 +1,9 @@
 package ambit2.rest;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -19,6 +22,7 @@ import org.restlet.resource.ResourceException;
 
 import com.google.common.io.ByteStreams;
 
+import ambit2.rest.study.BucketJson2CSVConvertor;
 import ambit2.rest.wrapper.WrappedService;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.NotFoundException;
@@ -44,6 +48,7 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 	public static final String servicekey = "servicekey";
 	protected Map<String, WrappedService<UsernamePasswordCredentials>> solrServices;
 	protected WrappedService<UsernamePasswordCredentials> solrService;
+	protected boolean json2tsv = false;
 
 	public ProxyResource() {
 		super();
@@ -58,8 +63,8 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		customizeVariants(
-				new MediaType[] { MediaType.APPLICATION_JSON, MediaType.APPLICATION_JAVASCRIPT, MediaType.IMAGE_PNG });
+		customizeVariants(new MediaType[] { MediaType.APPLICATION_JSON, MediaType.APPLICATION_JAVASCRIPT,
+				MediaType.IMAGE_PNG, MediaType.TEXT_CSV, MediaType.TEXT_TSV });
 	}
 
 	// protected supported_media media = supported_media.json;
@@ -72,7 +77,21 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 	public RemoteStreamConvertor createConvertor(Representation entity, Variant variant)
 			throws AmbitException, ResourceException {
 		return new RemoteStreamConvertor(solrService, queryObject, entity == null ? null : entity.getMediaType(),
-				getRequest().getMethod(), variant.getMediaType());
+				getRequest().getMethod(), variant.getMediaType()) {
+			@Override
+			protected void processStream(InputStream in, OutputStream stream) throws IOException {
+				if (json2tsv) {
+					BucketJson2CSVConvertor bj = new BucketJson2CSVConvertor();
+					bj.setOut(stream);
+					try {
+						bj.process(in);
+					} catch (Exception x) {
+						x.printStackTrace();
+					}
+				} else
+					super.processStream(in, stream);
+			}
+		};
 	}
 
 	@Override
@@ -93,6 +112,13 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 				solrService.setHandler(handler.toString());
 			} catch (Exception x) {
 				solrService.setHandler(null);
+			}
+			try {
+				String prm = request.getResourceRef().getQueryAsForm().getFirstValue("json2tsv");
+				if (prm != null)
+					json2tsv = Boolean.parseBoolean(prm);
+			} catch (Exception x) {
+				json2tsv = false;
 			}
 
 			solrService.setQuery(request.getResourceRef().getQuery());

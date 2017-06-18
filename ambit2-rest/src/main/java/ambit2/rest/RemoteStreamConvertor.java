@@ -2,6 +2,7 @@ package ambit2.rest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 
@@ -49,6 +50,10 @@ public class RemoteStreamConvertor extends DefaultAmbitProcessor<ByteArrayOutput
 		this.entityType = entityType;
 	}
 
+	protected void processStream(InputStream in, OutputStream stream) throws IOException {
+		DownloadTool.download(in, stream);
+	}
+
 	@Override
 	public Representation process(final ByteArrayOutputStream form) throws Exception {
 		// we don't want to proxy everything ;)
@@ -81,7 +86,7 @@ public class RemoteStreamConvertor extends DefaultAmbitProcessor<ByteArrayOutput
 
 				try (CloseableHttpResponse response1 = httpclient.execute(httprequest)) {
 					if (200 == response1.getStatusLine().getStatusCode())
-						DownloadTool.download(response1.getEntity().getContent(), stream);
+						processStream(response1.getEntity().getContent(), stream);
 					else
 						throw new ResourceException(response1.getStatusLine().getStatusCode());
 				} catch (ResourceException x) {
