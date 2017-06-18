@@ -11,6 +11,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.ServerInfo;
@@ -64,7 +65,7 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		customizeVariants(new MediaType[] { MediaType.APPLICATION_JSON, MediaType.APPLICATION_JAVASCRIPT,
-				MediaType.IMAGE_PNG, MediaType.TEXT_CSV, MediaType.TEXT_TSV });
+				MediaType.IMAGE_PNG, MediaType.TEXT_CSV, MediaType.TEXT_TSV, MediaType.TEXT_XML });
 	}
 
 	// protected supported_media media = supported_media.json;
@@ -77,7 +78,17 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 	public RemoteStreamConvertor createConvertor(Representation entity, Variant variant)
 			throws AmbitException, ResourceException {
 		return new RemoteStreamConvertor(solrService, queryObject, entity == null ? null : entity.getMediaType(),
-				getRequest().getMethod(), variant.getMediaType()) {
+				getRequest().getMethod(), (json2tsv) ? MediaType.TEXT_TSV : variant.getMediaType()) {
+			@Override
+			public String getFileExtension() {
+				return json2tsv ? "txt" : super.getFileExtension();
+			}
+
+			@Override
+			public String getFileNamePrefix() {
+				return json2tsv ? "study" : super.getFileNamePrefix();
+			}
+
 			@Override
 			protected void processStream(InputStream in, OutputStream stream) throws IOException {
 				if (json2tsv) {
@@ -86,8 +97,9 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 					try {
 						bj.process(in);
 					} catch (Exception x) {
-						x.printStackTrace();
+						//x.printStackTrace();
 					}
+
 				} else
 					super.processStream(in, stream);
 			}
@@ -113,15 +125,18 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 			} catch (Exception x) {
 				solrService.setHandler(null);
 			}
+			Form query = request.getResourceRef().getQueryAsForm();
 			try {
-				String prm = request.getResourceRef().getQueryAsForm().getFirstValue("json2tsv");
-				if (prm != null)
+				String prm = query.getFirstValue("json2tsv");
+				if (prm != null) {
 					json2tsv = Boolean.parseBoolean(prm);
+					query.remove("json2tsv");
+				}
 			} catch (Exception x) {
 				json2tsv = false;
 			}
 
-			solrService.setQuery(request.getResourceRef().getQuery());
+			solrService.setQuery(query.encode());
 
 			ByteArrayOutputStream bout = null;
 			if (!Method.GET.equals(request.getMethod())) {
@@ -207,7 +222,6 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 				getResponse().setStatus(response_status);
 				convertor = createConvertor(entity, variant);
 				Representation r = convertor.process(queryObject);
-
 				return r;
 			} catch (NotFoundException x) {
 				Representation r = processNotFound(x, variant);

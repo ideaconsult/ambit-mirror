@@ -30,12 +30,12 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 	public BucketJson2CSVConvertor() {
 		this(new String[] { "dbtag_hss", "name_hs", "publicname_hs", "owner_name_hs", "substanceType_hs",
 				"substance_uuid" },
-				new String[] { "document_uuid_s", "Dispersion protocol_s", "MEDIUM_s", "Vial_s" },
+				new String[] { "document_uuid_s", "Dispersion protocol_s", "MEDIUM_s", "MEDIUM.composition_s", "MEDIUM.ph_s","MEDIUM.temperature_Celsius_s","MEDIUM.ionic_strength_m_s","Vial_s" ,"E.sop_reference_s", "E.method_s", "E.cell_type_s", "E.exposure_time_hour_s"},
 				new String[] { "s_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s", "effectendpoint_s",
 						"reference_owner_s", "reference_year_s", "reference_s", "loQualifier_s", "loValue_d",
 						"upQualifier_s", "upValue_d", "unit_s", "err_d", "errQualifier_s", "textValue_s" },
-				new String[] { "DATA_GATHERING_INSTRUMENTS_s", "size_measurement_s", "size_measurement_type_s",
-						"E.method_s", "E.cell_type_s", "E.exposure_time_hour_s" });
+				new String[] { "DATA_GATHERING_INSTRUMENTS_s", "size_measurement_s", "size_measurement_type_s","replicates_s","concentration_s","No. samples_s"
+						 });
 	}
 
 	public BucketJson2CSVConvertor(String[] header, String[] paramHeaders, String[] studyHeaders,
@@ -64,7 +64,7 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 
 	protected void printHeaders(String[] headers) throws Exception {
 		for (String header : headers) {
-			out.write(header.getBytes());
+			out.write(header.replace("_s","").getBytes());
 			out.write("\t".getBytes());
 		}
 	}
@@ -105,8 +105,8 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 			while (fields.hasNext()) {
 				Entry<String, JsonNode> field = fields.next();
 				String docuuid = field.getKey();
-				JsonNode pdoc = docuuid == null ? null : params.get(docuuid);
-				JsonNode cdoc = docuuid == null ? null : conditions.get(docuuid);
+				JsonNode pdoc = docuuid == null ? null : params == null ? null : params.get(docuuid);
+				JsonNode cdoc = docuuid == null ? null : conditions == null ? null : conditions.get(docuuid);
 				printValues(headers, doc);
 				printValues(studyHeaders, field.getValue());
 				printValues(paramHeaders, pdoc);
@@ -127,11 +127,12 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 
 	protected Map<String, JsonNode> lookup(ArrayNode subdocs, String type_s) {
 		Map<String, JsonNode> map = new TreeMap<String, JsonNode>();
-		for (JsonNode doc : subdocs)
-			if (type_s.equals(doc.get("type_s").asText())) {
-				String docuuid = doc.get("document_uuid_s").asText();
-				map.put(docuuid, doc);
-			}
+		if (subdocs != null)
+			for (JsonNode doc : subdocs)
+				if (type_s.equals(doc.get("type_s").asText())) {
+					String docuuid = doc.get("document_uuid_s").asText();
+					map.put(docuuid, doc);
+				}
 		return map;
 	}
 }
