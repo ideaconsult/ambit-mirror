@@ -30,7 +30,7 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 	public BucketJson2CSVConvertor() {
 		this(new String[] { "dbtag_hss", "name_hs", "publicname_hs", "owner_name_hs", "substanceType_hs",
 				"substance_uuid" },
-				new String[] { "document_uuid_s", "Dispersion protocol_s", "MEDIUM_s", "MEDIUM.composition_s", "MEDIUM.ph_s","MEDIUM.temperature_Celsius_s","MEDIUM.ionic_strength_m_s","Vial_s" ,"E.sop_reference_s", "E.method_s", "E.cell_type_s", "E.exposure_time_hour_s"},
+				new String[] { "document_uuid_s", "Dispersion protocol_s", "MEDIUM_s", "MEDIUM.composition_s", "MEDIUM.ph_s","MEDIUM.temperature_Celsius_s","MEDIUM.ionic_strength_m_s","Vial_s" ,"E.sop_reference_s", "E.method_s", "E.cell_type_s", "E.exposure_time_hour_s","Dose_s"},
 				new String[] { "s_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s", "effectendpoint_s",
 						"reference_owner_s", "reference_year_s", "reference_s", "loQualifier_s", "loValue_d",
 						"upQualifier_s", "upValue_d", "unit_s", "err_d", "errQualifier_s", "textValue_s" },
