@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -48,13 +49,21 @@ public class RemoteStreamConvertor extends DefaultAmbitProcessor<ByteArrayOutput
 		this.method = method;
 		this.entity = entity;
 		this.entityType = entityType;
+
+		if (MediaType.TEXT_XML.equals(media))
+			setFileExtension("xml");
+		else if (MediaType.TEXT_TSV.equals(media))
+			setFileExtension("txt");
+		else
+			setFileExtension(null);
+		setFileNamePrefix(String.format("%s_%s", query.getName(),UUID.randomUUID()));
 	}
 
 	protected void processStream(InputStream in, OutputStream stream) throws IOException {
 		DownloadTool.download(in, stream);
 	}
 
-	@Override
+	@Override 
 	public Representation process(final ByteArrayOutputStream form) throws Exception {
 		// we don't want to proxy everything ;)
 
@@ -111,8 +120,34 @@ public class RemoteStreamConvertor extends DefaultAmbitProcessor<ByteArrayOutput
 				}
 			}
 		};
-		// setDisposition(rep);
+		setDisposition(rep);
 		return rep;
 	}
 
+	protected void setDisposition(Representation rep) {
+		if (getFileExtension() != null) {
+			rep.setDownloadable(true);
+			rep.setDownloadName(
+					String.format("%s.%s", fileNamePrefix == null ? "download" : fileNamePrefix, getFileExtension()));
+		}
+	}
+
+	protected String fileNamePrefix = null;
+	protected String fileExtension = null;
+
+	public String getFileExtension() {
+		return fileExtension;
+	}
+
+	public void setFileExtension(String fileExtension) {
+		this.fileExtension = fileExtension;
+	}
+
+	public String getFileNamePrefix() {
+		return fileNamePrefix;
+	}
+
+	public void setFileNamePrefix(String fileNamePrefix) {
+		this.fileNamePrefix = fileNamePrefix;
+	}
 }

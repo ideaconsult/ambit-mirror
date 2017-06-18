@@ -132,4 +132,9 @@ solr.service.3=${solr.service.3}
 solr.url.3=${solr.url.3}
 solr.basic.user.3=${solr.basic.user.3}
 solr.basic.password.3=${solr.basic.password.3}
+#4
+solr.service.4=${solr.service.4}
+solr.url.4=${solr.url.4}
+solr.basic.user.4=${solr.basic.user.4}
+solr.basic.password.4=${solr.basic.password.4}
 solr.filter=${solr.filter}
