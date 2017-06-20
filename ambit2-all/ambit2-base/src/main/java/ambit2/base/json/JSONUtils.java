@@ -3,6 +3,8 @@ package ambit2.base.json;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -12,6 +14,13 @@ import java.util.Locale;
  * 
  */
 public class JSONUtils {
+	private static final ThreadLocal<SimpleDateFormat> datef = new ThreadLocal<SimpleDateFormat>(){
+		@Override
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("dd/MM/yyyy");
+		}
+	};
+
 	private static final ThreadLocal<NumberFormat> nf = new ThreadLocal<NumberFormat>() {
 		@Override
 		protected NumberFormat initialValue() {
@@ -105,6 +114,13 @@ public class JSONUtils {
 			return null;
 		else
 			return nf.get().format(value);
+	}
+	
+	public static String jsonDate(Date value) {
+		if (value == null)
+			return null;
+		else
+			return datef.get().format(value);
 	}
 
 }

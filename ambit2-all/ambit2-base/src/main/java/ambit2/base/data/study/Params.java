@@ -1,13 +1,14 @@
 package ambit2.base.data.study;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import net.idea.modbcum.i.JSONSerializable;
 import ambit2.base.json.JSONUtils;
+import net.idea.modbcum.i.JSONSerializable;
 
 /**
  * 
@@ -108,6 +109,8 @@ public class Params<VALUE> implements IParams<VALUE> {
 				b.append(((JSONSerializable)value).asJSON());
 			else if (value instanceof Number)
 				b.append(JSONUtils.jsonNumber((Number) value));
+			else if (value instanceof Date)
+				b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(JSONUtils.jsonDate((Date) value))));
 			else
 				b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(value
 						.toString())));
