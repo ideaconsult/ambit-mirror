@@ -200,9 +200,9 @@ CREATE TABLE `substance_protocolapplication` (
   KEY `reference-x` (`reference`(255)),
   KEY `topcategory` (`topcategory`,`endpointcategory`,`interpretation_result`),
   KEY `xse` (`substance_prefix`,`substance_uuid`,`topcategory`,`endpointcategory`,`interpretation_result`),
+  KEY `xinvestication` (`investigation_uuid`),
   CONSTRAINT `substance-x` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 -- -----------------------------------------------------
 -- Table `substance_experiment`
 -- this is intentionally denormalized table
@@ -356,6 +356,7 @@ CREATE TABLE `bundle_substance_protocolapplication` (
   `copied` tinyint(4) DEFAULT '0',
   `deleted` tinyint(4) DEFAULT '0',
   `remarks` varchar(45) DEFAULT NULL,
+  `investigation_uuid` varbinary(16) DEFAULT NULL COMMENT 'groups protocol applications into investigations',
   PRIMARY KEY (`idbundle`,`document_prefix`,`document_uuid`),
   KEY `bsubstance` (`substance_prefix`,`substance_uuid`),
   KEY `bendpoint` (`endpoint`),
@@ -365,8 +366,8 @@ CREATE TABLE `bundle_substance_protocolapplication` (
   KEY `btopcategory` (`topcategory`,`endpointcategory`,`interpretation_result`),
   KEY `bxse` (`substance_prefix`,`substance_uuid`,`topcategory`,`endpointcategory`),
   KEY `idbundle_idx` (`idbundle`),
-  CONSTRAINT `idbundle` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `bsubstance-p` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT `bsubstance-p` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON UPDATE CASCADE,
+  CONSTRAINT `idbundle` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
@@ -440,6 +441,7 @@ CREATE TABLE `bundle_final_protocolapplication` (
   `copied` tinyint(4) DEFAULT '0',
   `deleted` tinyint(4) DEFAULT '0',
   `remarks` varchar(45) DEFAULT NULL,
+  `investigation_uuid` varbinary(16) DEFAULT NULL COMMENT 'groups protocol applications into investigations',
   PRIMARY KEY (`idbundle`,`document_prefix`,`document_uuid`),
   KEY `fsubstance` (`substance_prefix`,`substance_uuid`),
   KEY `fendpoint` (`endpoint`),
@@ -1490,7 +1492,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (9,0,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (9,1,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

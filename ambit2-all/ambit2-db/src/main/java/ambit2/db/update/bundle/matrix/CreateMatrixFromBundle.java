@@ -24,7 +24,7 @@ public class CreateMatrixFromBundle extends AbstractObjectUpdate<SubstanceEndpoi
     private static String _insert_papp = "insert into bundle_substance_protocolapplication SELECT e.idbundle,document_prefix,document_uuid,\n"
 	    + "p.topcategory,p.endpointcategory,endpoint,guidance,p.substance_prefix,p.substance_uuid,params,\n"
 	    + "interpretation_result,interpretation_criteria,reference,reference_year,reference_owner,updated,\n"
-	    + "reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType,1,0,null \n"
+	    + "reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType,1,0,null,investigation_uuid \n"
 	    + "FROM substance_protocolapplication p join bundle_endpoints e join bundle_substance s\n"
 	    + "where e.idbundle=s.idbundle and e.idbundle=?\n"
 	    + "and s.substance_prefix = p.substance_prefix and p.substance_uuid=s.substance_uuid\n"
@@ -39,7 +39,7 @@ public class CreateMatrixFromBundle extends AbstractObjectUpdate<SubstanceEndpoi
     private static String final_papp = "insert into bundle_final_protocolapplication SELECT p.idbundle,document_prefix,document_uuid,\n"
 	    + "p.topcategory,p.endpointcategory,endpoint,guidance,p.substance_prefix,p.substance_uuid,params,\n"
 	    + "interpretation_result,interpretation_criteria,reference,reference_year,reference_owner,now(),\n"
-	    + "reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType,copied,deleted,remarks\n"
+	    + "reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType,copied,deleted,remarks,investigation_uuid\n"
 	    + "from bundle_substance_protocolapplication p where idbundle=?";
     private static String final_exp = "insert into bundle_final_experiment SELECT e.idbundle,null,document_prefix,document_uuid,e.topcategory,e.endpointcategory,e.endpointhash,endpoint,\n"
 	    + "conditions,unit,loQualifier,loValue,upQualifier,upvalue,textvalue,errQualifier,err,e.substance_prefix,e.substance_uuid,copied,deleted,remarks\n"

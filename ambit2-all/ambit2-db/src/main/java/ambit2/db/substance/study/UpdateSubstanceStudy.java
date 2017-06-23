@@ -48,14 +48,14 @@ public class UpdateSubstanceStudy
 	private static final String[] create_sql = {
 			"INSERT INTO substance_protocolapplication (document_prefix,document_uuid,topcategory,endpointcategory,endpoint,guidance,"
 					+ "substance_prefix,substance_uuid,params,interpretation_result,interpretation_criteria,reference,reference_year,reference_owner,"
-					+ "reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType)\n"
-					+ "values(?,unhex(replace(?,'-','')),?,?,?,?,?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,?,?) on duplicate key update\n"
+					+ "reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType,investigation_uuid)\n"
+					+ "values(?,unhex(replace(?,'-','')),?,?,?,?,?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,?,?,unhex(replace(?,'-',''))) on duplicate key update\n"
 					+ "substance_prefix=values(substance_prefix),substance_uuid=values(substance_uuid),topcategory=values(topcategory),\n"
 					+ "endpointcategory=values(endpointcategory),endpoint=values(endpoint),guidance=values(guidance),params=values(params),"
 					+ "interpretation_result=values(interpretation_result),interpretation_criteria=values(interpretation_criteria),"
 					+ "reference=values(reference),reference_year=values(reference_year),reference_owner=values(reference_owner),reliability=values(reliability),"
 					+ "isRobustStudy=values(isRobustStudy),isUsedforClassification=values(isUsedforClassification),"
-					+ "isUsedforClassification=values(isUsedforClassification),purposeFlag=values(purposeFlag),studyResultType=values(studyResultType)" };
+					+ "isUsedforClassification=values(isUsedforClassification),purposeFlag=values(purposeFlag),studyResultType=values(studyResultType),investigation_uuid=values(investigation_uuid)" };
 
 	public UpdateSubstanceStudy(String substanceuuid,
 			ProtocolApplication<Protocol, IParams, String, IParams, String> papp) {
@@ -199,6 +199,11 @@ public class UpdateSubstanceStudy
 		} catch (Exception x) {
 			params1.add(new QueryParam<String>(String.class, null));
 		}
+		//investigation uuid ; if null then use document_uuid
+		String iuuid = getObject().getInvestigationUUID()==null?cmp_uuid[1]:getObject().getInvestigationUUID().toString();
+		params1.add(new QueryParam<String>(String.class, iuuid));
+
+			
 	}
 
 }

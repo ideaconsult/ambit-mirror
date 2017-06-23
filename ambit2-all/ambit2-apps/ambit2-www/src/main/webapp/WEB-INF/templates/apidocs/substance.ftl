@@ -430,6 +430,14 @@
 								    "paramType": "query",
 								    "allowMultiple": false
 								},
+								{
+								    "name": "investigation_uuid",
+								    "description": "Investigation UUID, a code to link different studies",
+								    "required": false,
+								    "type": "string",
+								    "paramType": "query",
+								    "allowMultiple": false
+								},								
 								<#include "/apidocs/parameters_page.ftl" >			            
 			            ],
 			            "responseMessages": [

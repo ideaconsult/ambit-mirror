@@ -3,10 +3,11 @@ package ambit2.base.data.study;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import ambit2.base.json.JSONUtils;
+import java.util.UUID;
 
 import com.google.common.base.Objects;
+
+import ambit2.base.json.JSONUtils;
 
 /**
  * 
@@ -80,10 +81,9 @@ import com.google.common.base.Objects;
  *         }
  *     ]
  * }
- * </pre>
+ *            </pre>
  */
-public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT>
-		implements Serializable {
+public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT> implements Serializable {
 
 	/**
 	 * 
@@ -100,18 +100,33 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT>
 	protected String substanceUUID;
 	protected String companyUUID;
 	protected String documentUUID;
-	protected String investigationUUID;
+	protected UUID investigationUUID;
 
-	public String getInvestigationUUID() {
+	public UUID getInvestigationUUID() {
 		return investigationUUID;
 	}
+
 	public void setInvestigationUUID(String investigationUUID) {
+		if (investigationUUID == null)
+			this.investigationUUID = null;
+		else
+			try {
+				this.investigationUUID = UUID.fromString(investigationUUID);
+			} catch (Exception x) {
+				this.investigationUUID = UUID.nameUUIDFromBytes(investigationUUID.getBytes());
+			}
+	}
+
+	public void setInvestigationUUID(UUID investigationUUID) {
 		this.investigationUUID = investigationUUID;
 	}
+
 	@Override
-    public int hashCode() {
-		return Objects.hashCode(getSubstanceUUID(),getProtocol(),reference,getParameters(),getInterpretationResult(),getInterpretationCriteria(),getEffects(),getReliability());
-    }	
+	public int hashCode() {
+		return Objects.hashCode(getSubstanceUUID(), getProtocol(), reference, getParameters(),
+				getInterpretationResult(), getInterpretationCriteria(), getEffects(), getReliability());
+	}
+
 	/**
 	 * <pre>
 	 *  "reliability": {}
@@ -158,6 +173,7 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT>
 	public void setSubstanceUUID(String substanceUUID) {
 		this.substanceUUID = substanceUUID;
 	}
+
 	/**
 	 * <pre>
 	 * "interpretation": {}
@@ -180,13 +196,12 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT>
 	}
 
 	public static enum _fields {
-		uuid, owner, company, name, substance, referencesubstanceuuid, protocol, citation, parameters, effects, interpretation, result, criteria, reliability
+		uuid, owner, company, name, substance, referencesubstanceuuid, protocol, citation, parameters, effects, interpretation, result, criteria, reliability, investigation_uuid
 	}
 
 	public ProtocolApplication(PROTOCOL protocol) {
 		setProtocol(protocol);
 	}
-
 
 	/**
 	 * in ProtocolApplication JSON:
@@ -216,7 +231,8 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT>
 	/**
 	 * <pre>
 	 *   "protocol": { ... }
-	 * </pre> 
+	 * </pre>
+	 * 
 	 * <pre>
 	 *  	"protocol": {
 	 *         "topcategory": "TOX",
@@ -241,6 +257,7 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT>
 	public void setProtocol(PROTOCOL protocol) {
 		this.protocol = protocol;
 	}
+
 	/**
 	 * <pre>
 	 * "parameters": {}
@@ -296,6 +313,7 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT>
 			this.reference = new Citation("", "");
 		this.reference.setOwner(owner);
 	}
+
 	/**
 	 * <pre>
 	 *  "effects": []
@@ -305,8 +323,7 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT>
 		return effects;
 	}
 
-	public void setEffects(
-			List<EffectRecord<ENDPOINT, CONDITIONS, UNIT>> effects) {
+	public void setEffects(List<EffectRecord<ENDPOINT, CONDITIONS, UNIT>> effects) {
 		this.effects = effects;
 	}
 
@@ -334,91 +351,84 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT>
 		b.append("{\n");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.uuid.name())));
 		b.append(":\t");
-		b.append(getDocumentUUID() == null ? null : JSONUtils
-				.jsonQuote(JSONUtils.jsonEscape(getDocumentUUID().toString())));
+		b.append(getDocumentUUID() == null ? null
+				: JSONUtils.jsonQuote(JSONUtils.jsonEscape(getDocumentUUID().toString())));
 		b.append(",\n");
+
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.investigation_uuid.name())));
+		b.append(":\t");
+		b.append(getInvestigationUUID() == null ? null
+				: JSONUtils.jsonQuote(JSONUtils.jsonEscape(getInvestigationUUID().toString())));
+		b.append(",\n");
+
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.owner.name())));
 		b.append(":\t{\n\t");
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.substance
-				.name())));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.substance.name())));
 		b.append(":\t{");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.uuid.name())));
 		b.append(":\t");
-		b.append(getSubstanceUUID() == null ? null : JSONUtils
-				.jsonQuote(JSONUtils.jsonEscape(getSubstanceUUID().toString())));
+		b.append(getSubstanceUUID() == null ? null
+				: JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubstanceUUID().toString())));
 		if (getReferenceSubstanceUUID() != null) {
 			b.append(",");
-			b.append(JSONUtils.jsonQuote(JSONUtils
-					.jsonEscape(_fields.referencesubstanceuuid.name())));
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.referencesubstanceuuid.name())));
 			b.append(":\t");
-			b.append(getSubstanceUUID() == null ? null : JSONUtils
-					.jsonQuote(JSONUtils.jsonEscape(getReferenceSubstanceUUID()
-							.toString())));
+			b.append(getSubstanceUUID() == null ? null
+					: JSONUtils.jsonQuote(JSONUtils.jsonEscape(getReferenceSubstanceUUID().toString())));
 		}
 		b.append("},\n");
 
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.company
-				.name())));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.company.name())));
 		b.append(":\t{");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.uuid.name())));
 		b.append(":\t");
-		b.append(getCompanyUUID() == null ? null : JSONUtils
-				.jsonQuote(JSONUtils.jsonEscape(getCompanyUUID().toString())));
+		b.append(getCompanyUUID() == null ? null
+				: JSONUtils.jsonQuote(JSONUtils.jsonEscape(getCompanyUUID().toString())));
 
 		b.append(",");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.name.name())));
 		b.append(":\t");
-		b.append(getCompanyName() == null ? null : JSONUtils
-				.jsonQuote(JSONUtils.jsonEscape(getCompanyName())));
+		b.append(getCompanyName() == null ? null : JSONUtils.jsonQuote(JSONUtils.jsonEscape(getCompanyName())));
 
 		b.append("}\n");
 
 		b.append("\n\t},\n");
 
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.citation
-				.name())));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.citation.name())));
 		b.append(":\t");
 		b.append((this.reference == null) ? "null" : this.reference.toString());
 		b.append(",\n\t");
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.protocol
-				.name())));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.protocol.name())));
 		b.append(":\t");
 		b.append(protocol == null ? null : protocol.toString());
 		b.append(",\n");
 		// params
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.parameters
-				.name())));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.parameters.name())));
 		b.append(":\t");
 		b.append(getParameters() == null ? "{}" : getParameters().toString());
 		b.append(",\n");
 		// reliability
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.reliability
-				.name())));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.reliability.name())));
 		b.append(":\t");
 		b.append(getReliability().toString());
 		b.append(",\n");
 		// result
-		b.append(JSONUtils.jsonQuote(JSONUtils
-				.jsonEscape(_fields.interpretation.name())));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.interpretation.name())));
 		b.append(":\t{\n\t");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.result.name())));
 		b.append(":\t");
-		b.append(JSONUtils.jsonQuote(JSONUtils
-				.jsonEscape(getInterpretationResult())));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getInterpretationResult())));
 		if (getInterpretationCriteria() != null) {
 			b.append(",");
-			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.criteria
-					.name())));
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.criteria.name())));
 			b.append(":\t");
-			b.append(JSONUtils.jsonQuote(JSONUtils
-					.jsonEscape(getInterpretationCriteria())));
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getInterpretationCriteria())));
 		}
 		b.append("\n\t},\n");
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.effects
-				.name())));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.effects.name())));
 		b.append(":\t");
-		b.append(((getEffects() == null) || (getEffects().size() == 0)) ? "[{\"endpoint\": \"\",\"conditions\": {},  \"result\": {  }}]"
-				: getEffects().toString());
+		b.append(((getEffects() == null) || (getEffects().size() == 0))
+				? "[{\"endpoint\": \"\",\"conditions\": {},  \"result\": {  }}]" : getEffects().toString());
 
 		b.append("\n}");
 		return b.toString();
@@ -431,15 +441,16 @@ class Citation {
 	String owner;
 
 	@Override
-    public int hashCode() {
-		return Objects.hashCode(title,year,owner);
-    }	
+	public int hashCode() {
+		return Objects.hashCode(title, year, owner);
+	}
+
 	public String getOwner() {
 		return owner;
 	}
 
 	public void setOwner(String owner) {
-		this.owner = owner==null?null:owner.trim();
+		this.owner = owner == null ? null : owner.trim();
 	}
 
 	public Citation(String title) {
@@ -469,7 +480,7 @@ class Citation {
 	}
 
 	public void setTitle(String title) {
-		this.title = title==null?null:title.trim();
+		this.title = title == null ? null : title.trim();
 	}
 
 	public String toString() {
@@ -477,18 +488,15 @@ class Citation {
 		b.append("{");
 		b.append("\"title\"");
 		b.append(":\t");
-		b.append(getTitle() == null ? null : JSONUtils.jsonQuote(JSONUtils
-				.jsonEscape(getTitle())));
+		b.append(getTitle() == null ? null : JSONUtils.jsonQuote(JSONUtils.jsonEscape(getTitle())));
 		b.append(",\t");
 		b.append("\"year\"");
 		b.append(":\t");
-		b.append(getYear() == null ? null : JSONUtils.jsonQuote(JSONUtils
-				.jsonEscape(getYear())));
+		b.append(getYear() == null ? null : JSONUtils.jsonQuote(JSONUtils.jsonEscape(getYear())));
 		b.append(",\t");
 		b.append("\"owner\"");
 		b.append(":\t");
-		b.append(getOwner() == null ? null : JSONUtils.jsonQuote(JSONUtils
-				.jsonEscape(getOwner())));
+		b.append(getOwner() == null ? null : JSONUtils.jsonQuote(JSONUtils.jsonEscape(getOwner())));
 		b.append("}");
 		return b.toString();
 	}
