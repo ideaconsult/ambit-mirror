@@ -3297,11 +3297,13 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 		"loValue" : "value",
 		"upQualifier" : "<, <=",
 		"upValue" : "value",
-		"errQualifier" : "uncertaintyType",
-		"textValue" : "text",
+		"errQualifier" : "Uncertainty Type",
+		"err" : "Uncertainty",
+		"textValue" : "text value",
 		"s_uuid" : "Substance UUID",
 		"owner_name" : "Supplier",
-		"document_uuid" : "Study identifier"
+		"document_uuid" : "Study identifier",
+
 	};
 
 	var coldefs = [];
@@ -3325,29 +3327,54 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 				+ val + "</a>";
 	}
 	var linkrender_s = function(o, val) {
-		return "<a href='" + root
-				+ "/investigation?type=bysubstance&search=" + val + "'>"
-				+ val + "</a>";
+		return "<a href='" + root + "/investigation?type=bysubstance&search="
+				+ val + "'>" + val + "</a>";
 	}
-	
+	var linkrender_category = function(o, val) {
+		v = ontlookup[val];
+		v = (v === undefined || v == null) ? val : v;
+		return "<a href='" + root + "/investigation?type=bystudytype&search="
+				+ val + "'>" + v + "</a>";
+	}
+	var linkrender_reference = function(o, val) {
+		v = ontlookup[val];
+		v = (v === undefined || v == null) ? val : v;
+		return "<a href='" + root + "/investigation?type=bycitation&search="
+				+ val + "'>" + v + "</a>";
+	}
+	var linkrender_refowner = function(o, val) {
+		v = ontlookup[val];
+		v = (v === undefined || v == null) ? val : v;
+		return "<a href='" + root + "/investigation?type=byprovider&search="
+				+ val + "'>" + v + "</a>";
+	}	
+	var fnlist = {
+		"investigation" : linkrender_i,
+		"s_uuid" : linkrender_s,
+		"substanceType" : ontrender,
+		"endpointcategory" : linkrender_category,
+		"reference" : linkrender_reference,
+		"referenceowner" : linkrender_refowner
+	};
 
-	$.each(col, function(key, value) {
+	$
+			.each(
+					col,
+					function(key, value) {
 
-		var fn = (value == "investigation") ? linkrender_i
-				: (value == "s_uuid") ? linkrender_s
-						: ((value == "endpointcategory")
-								|| (value == "substanceType")) ? ontrender
-								: render;
-		coldefs.push({
-			"sTitle" : headers[value] == null ? value : headers[value],
-			"mDataProp" : value,
-			"aTargets" : [ key ],
-			"sDefaultContent" : "",
-			"bSearchable" : true,
-			"bSortable" : true,
-			"fnRender" : fn
-		});
-	});
+						var fn = fnlist[value];
+						
+						coldefs.push({
+							"sTitle" : headers[value] == null ? value
+									: headers[value],
+							"mDataProp" : value,
+							"aTargets" : [ key ],
+							"sDefaultContent" : "",
+							"bSearchable" : true,
+							"bSortable" : true,
+							"fnRender" : fn
+						});
+					});
 
 	return $(selector)
 			.dataTable(

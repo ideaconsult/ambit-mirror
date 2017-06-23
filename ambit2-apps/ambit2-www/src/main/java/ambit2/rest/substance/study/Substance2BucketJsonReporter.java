@@ -37,6 +37,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	protected _JSON_MODE jsonmode = _JSON_MODE.experiment;
 	protected String summaryMeasurement = null;
 	protected String dbTag = "ENM";
+	protected boolean searchfriendly = true;
 
 	public enum _JSON_MODE {
 		experiment, substance
@@ -327,6 +328,13 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 								prm.put("type_s", "params");
 								prm.put("id", String.format("%s/%d/prm", papp.getDocumentUUID(), e.getIdresult()));
 								prm.put("document_uuid_s", papp.getDocumentUUID());
+								if (searchfriendly) {
+									prm.put("topcategory_s", papp.getProtocol().getTopCategory());
+									prm.put("endpointcategory_s", papp.getProtocol().getCategory());
+									if (papp.getProtocol().getGuideline() != null
+											&& !papp.getProtocol().getGuideline().isEmpty())
+										prm.put("guidance_s", papp.getProtocol().getGuideline().get(0));
+								}
 								_childParams_.add(prm);
 							}
 							if (summaryMeasurement != null)
@@ -357,6 +365,13 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 												String.format("%s/%d/cn", papp.getDocumentUUID(), e.getIdresult()));
 										prmc.put("document_uuid_s", papp.getDocumentUUID());
 										prmc.put("effectid_hs", effectid);
+										if (searchfriendly) {
+											prmc.put("topcategory_s", papp.getProtocol().getTopCategory());
+											prmc.put("endpointcategory_s", papp.getProtocol().getCategory());
+											if (papp.getProtocol().getGuideline() != null
+													&& !papp.getProtocol().getGuideline().isEmpty())
+												prmc.put("guidance_s", papp.getProtocol().getGuideline().get(0));
+										}
 										_childParams_.add(prmc);
 									}
 								}
