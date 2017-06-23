@@ -128,6 +128,15 @@ public class DBSubstanceImport {
 	}
 
 	protected boolean clearMeasurements = true;
+	protected boolean keepEffectRecords = false;
+	public boolean isKeepEffectRecords() {
+		return keepEffectRecords;
+	}
+
+	public void setKeepEffectRecords(boolean keepEffectRecords) {
+		this.keepEffectRecords = keepEffectRecords;
+	}
+
 	protected boolean addDefaultComposition = false;
 
 	public boolean isAddDefaultComposition() {
@@ -145,6 +154,7 @@ public class DBSubstanceImport {
 	public void setClearMeasurements(boolean clearMeasurements) {
 		this.clearMeasurements = clearMeasurements;
 	}
+	
 
 	public boolean isClearComposition() {
 		return clearComposition;
@@ -225,6 +235,16 @@ public class DBSubstanceImport {
 			} catch (Exception x) {
 			}
 		return true;
+	}
+	
+
+	protected static boolean isKeepEffectRecords(CommandLine line) {
+		if (line.hasOption('k'))
+			try {
+				return Boolean.parseBoolean(line.getOptionValue('k'));
+			} catch (Exception x) {
+			}
+		return false;
 	}
 
 	protected static boolean addDefaultComposition(CommandLine line) {
@@ -414,10 +434,13 @@ public class DBSubstanceImport {
 				.withDescription("UUID prefix, default 'XLSX'").create("e");
 
 		Option clearComposition = OptionBuilder.hasArg().withLongOpt("clearComposition").withArgName("value")
-				.withDescription("true|false").create("t");
+				.withDescription("Remove composition for the substance being imported true|false").create("t");
 
 		Option clearMeasurement = OptionBuilder.hasArg().withLongOpt("clearMeasurements").withArgName("value")
-				.withDescription("true|false").create("m");
+				.withDescription("Remove measurements for the substance being imported true|false").create("m");
+		
+		Option keepEffectRecords = OptionBuilder.hasArg().withLongOpt("keepEffectRecords").withArgName("value")
+				.withDescription("Keep effect records when adding effects with the same protocol applciation UUID (true|false), default false").create("k");		
 
 		Option matchStructure = OptionBuilder.hasArg().withLongOpt("structureMatch").withArgName("value")
 				.withDescription("Match structure by uuid|cas|einecs|smiles|inchi").create("x");
@@ -444,6 +467,7 @@ public class DBSubstanceImport {
 		options.addOption(createParserTypeOption());
 		options.addOption(clearComposition);
 		options.addOption(clearMeasurement);
+		options.addOption(keepEffectRecords);
 		options.addOption(matchStructure);
 		options.addOption(isSplitRecord);
 		options.addOption(maxRefSubstances);
@@ -499,6 +523,7 @@ public class DBSubstanceImport {
 
 			setClearComposition(isClearComposition(line));
 			setClearMeasurements(isClearMeasurements(line));
+			setKeepEffectRecords(isKeepEffectRecords(line));
 			setSplitRecord(isSplitRecord(line));
 			setAddDefaultComposition(addDefaultComposition(line));
 			maxRefSubstances = getMaxRefSubstances(line);
@@ -734,6 +759,7 @@ public class DBSubstanceImport {
 		writer.setConnection(connection);
 		writer.setClearComposition(clearComposition);
 		writer.setClearMeasurements(clearMeasurements);
+		writer.setKeepEffectRecordsForDocUUID(keepEffectRecords);
 		writer.open();
 		int records = 0;
 		try {
