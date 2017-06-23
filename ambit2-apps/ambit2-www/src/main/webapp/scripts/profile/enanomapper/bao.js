@@ -76,7 +76,9 @@ var config_bao = {
 				if (iuuid === undefined || (iuuid== null)) 
 					return sOut;
 				else {
-					return sOut + "<br/><br/>" + jT.ui.shortenedData("<span class='chelp' title='Related experiments'> " + iuuid + "</a>", "Related experiments, press to copy the UUID in the clipboard", iuuid);  	
+					//http://localhost:9090/ambit2/investigation?search=AE64FC3B22A4317393629CCE1FF622AE&type=byinvestigation
+					console.log(window.jt);
+					return sOut + "<br/><br/>" + jT.ui.shortenedData("<a href='../../investigation?type=byinvestigation&search="+iuuid+"' class='chelp' title='Related experiments'> " + iuuid + "</a>", "Related experiments, press to copy the UUID in the clipboard", iuuid);  	
 
 				}
 			}

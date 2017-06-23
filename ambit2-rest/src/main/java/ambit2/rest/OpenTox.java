@@ -93,7 +93,7 @@ public class OpenTox {
 				return ids;
 			}
 		},
-		qmap, substance, substanceowner, composition, study, effect;
+		qmap, substance, substanceowner, composition, study, effect, investigation;
 		public String getURI() {
 			return String.format("/%s", toString());
 		}

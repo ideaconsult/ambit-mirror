@@ -113,6 +113,7 @@ import ambit2.rest.routers.misc.AdminRouter;
 import ambit2.rest.routers.misc.BookmarksRouter;
 import ambit2.rest.routers.misc.ChartRouter;
 import ambit2.rest.routers.misc.DepictDemoRouter;
+import ambit2.rest.routers.misc.InvestigationRouter;
 import ambit2.rest.routers.misc.ProxyRouter;
 import ambit2.rest.routers.misc.UIRouter;
 import ambit2.rest.routers.opentox.AlgorithmRouter;
@@ -142,6 +143,7 @@ import ambit2.rest.substance.SubstanceResource;
 import ambit2.rest.substance.owner.OwnerSubstanceFacetResource;
 import ambit2.rest.substance.property.SubstanceCategoryProperty;
 import ambit2.rest.substance.property.SubstancePropertyResource;
+import ambit2.rest.substance.study.SubstanceStudyTableResource;
 import ambit2.rest.substance.templates.InputTemplatesResource;
 import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.Task;
@@ -213,6 +215,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 	static final String attachDepict = "attach.depict";
 	static final String attachSubstance = "attach.substance";
+	static final String attachInvestigation = "attach.investigation";
 	static final String attachSubstanceOwner = "attach.substanceowner";
 	static final String attachToxmatch = "attach.toxmatch";
 	static final String config_changeLineSeparators = "changeLineSeparators";
@@ -490,6 +493,11 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 					router.attach(OwnerSubstanceFacetResource.owner,
 							createAuthenticatedOpenMethodResource(new SubstanceOwnerRouter(getContext())));
 
+				if (attachInvestigationRouter()) {
+					router.attach(SubstanceStudyTableResource.investigation,
+							createAuthenticatedOpenMethodResource(new InvestigationRouter(getContext())));
+				}
+
 				router.attach(Resources.proxy, createProtectedResource(new ProxyRouter(getContext()), null));
 
 			} else {
@@ -507,6 +515,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				router.attach(SubstanceResource.substance, new SubstanceRouter(getContext()));
 				if (attachSubstanceOwnerRouter())
 					router.attach(OwnerSubstanceFacetResource.owner, new SubstanceOwnerRouter(getContext()));
+
+				if (attachInvestigationRouter()) {
+					router.attach(SubstanceStudyTableResource.investigation, new InvestigationRouter(getContext()));
+				}
 
 				if (solrServices != null)
 					router.attach(Resources.proxy, new ProxyRouter(getContext()));
@@ -803,10 +815,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		getLogger().info("CORS: Origin filter attached:\t" + allowedOrigins);
 		OriginFilter originFilter = new OriginFilter(getContext(), allowedOrigins);
 		originFilter.setNext(router);
-		/*
-		 * StringWriter w = new StringWriter(); printRoutes(router, "\t", w);
-		 * System.out.println(w);
-		 */
+
+		// StringWriter w = new StringWriter(); printRoutes(router, "\t", w);
+		// System.out.println(w);
 
 		return originFilter;
 	}
@@ -1475,6 +1486,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		return getBooleanPropertyWithDefault(attachSubstance, ambitProperties, true);
 	}
 
+	protected synchronized boolean attachInvestigationRouter() {
+		return getBooleanPropertyWithDefault(attachInvestigation, ambitProperties, false);
+	}
+
 	protected synchronized Map<String, WrappedService<UsernamePasswordCredentials>> getSolrServices() {
 		try {
 			Map<String, WrappedService<UsernamePasswordCredentials>> services = null;
@@ -1488,10 +1503,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 				WrappedService<UsernamePasswordCredentials> solr = new WrappedService<>();
 				solr.setName(name);
-				solr.setURI(new URI(getPropertyWithDefault(String.format(solr_url,i), ambitProperties, null)));
-				solr.setCredentials(
-						new UsernamePasswordCredentials(getPropertyWithDefault(String.format(solr_basic_user,i), ambitProperties, null),
-								getPropertyWithDefault(String.format(solr_basic_password,i), ambitProperties, null)));
+				solr.setURI(new URI(getPropertyWithDefault(String.format(solr_url, i), ambitProperties, null)));
+				solr.setCredentials(new UsernamePasswordCredentials(
+						getPropertyWithDefault(String.format(solr_basic_user, i), ambitProperties, null),
+						getPropertyWithDefault(String.format(solr_basic_password, i), ambitProperties, null)));
 				solr.setFilterConfig(getPropertyWithDefault(solr_filter, ambitProperties, null));
 				services.put(name, solr);
 			}

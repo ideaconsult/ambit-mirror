@@ -2,16 +2,21 @@ package ambit2.db.search.substance.test;
 
 import java.sql.ResultSet;
 
+import org.dbunit.database.IDatabaseConnection;
+import org.junit.Test;
+
 import junit.framework.Assert;
 import net.idea.modbcum.i.bucket.Bucket;
+import ambit2.base.data.I5Utils;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.ProtocolApplication;
 import ambit2.db.search.test.QueryTest;
 import ambit2.db.substance.study.SubstanceStudyFlatQuery;
 
 public class SubstanceStudyFlatQueryTest extends
 		QueryTest<SubstanceStudyFlatQuery> {
-
+	private static final String test_investigation="AE64FC3B22A4317393629CCE1FF622AE";
 	@Override
 	protected SubstanceStudyFlatQuery createQuery() throws Exception {
 		//String json = "{\"params\" : {\":all\" : { \"type\" : \"boolean\", \"value\": false}, \":s_prefix\" : { \"type\" : \"String\", \"value\": \"IUC4\"},\":s_uuid\" : { \"type\" : \"String\", \"value\":\"EFDB21BBE79F3286A988B6F6944D3734\"}	}}";
@@ -22,6 +27,10 @@ public class SubstanceStudyFlatQueryTest extends
 
 	@Override
 	protected void verify(SubstanceStudyFlatQuery query, ResultSet rs)
+			throws Exception {
+		browse(query,rs,4);
+	}
+	protected void browse(SubstanceStudyFlatQuery query, ResultSet rs, int countexpected)
 			throws Exception {
 		int count = 0;
 		while (rs.next()) {
@@ -59,13 +68,46 @@ public class SubstanceStudyFlatQueryTest extends
 					continue;
 				if ("content".equals(header))
 					continue;
+				if ("investigation".equals(header)) {
+					if (record.get(header)!=null)
+						Assert.assertEquals(test_investigation, record.get(header));
+					continue;
+				}
+					
 				if (EffectRecord._fields.unit.name().equals(header))
 					continue;
 				Assert.assertNotNull(header, record.get(header));
 			}
 			count++;
 		}
-		Assert.assertEquals(4, count);
+		Assert.assertEquals(countexpected, count);
 	}
 
+
+	
+	@Test
+	public void testSelectByInvestigation() throws Exception {
+		setUpDatabaseFromResource(getDbFile());
+		IDatabaseConnection c = getConnection();
+		ResultSet rs = null;
+		try {
+			//String json = "{\"params\" : {\":all\" : { \"type\" : \"boolean\", \"value\": false}, \":s_prefix\" : { \"type\" : \"String\", \"value\": \"IUC4\"},\":s_uuid\" : { \"type\" : \"String\", \"value\":\"EFDB21BBE79F3286A988B6F6944D3734\"}	}}";
+
+			ProtocolApplication papp = new ProtocolApplication(null);
+			String uuid = I5Utils.addDashes(test_investigation).toLowerCase();
+			papp.setInvestigationUUID(test_investigation);
+			
+			Assert.assertEquals(uuid, papp.getInvestigationUUID().toString());
+			SubstanceStudyFlatQuery q = new SubstanceStudyFlatQuery(papp);
+			
+			executor.setConnection(c.getConnection());
+			executor.open();
+			rs = executor.process(q); 
+			Assert.assertNotNull(rs);
+			browse(q,rs,2);
+		} finally {
+			if (rs != null) rs.close();
+			c.close();
+		}
+	}
 }

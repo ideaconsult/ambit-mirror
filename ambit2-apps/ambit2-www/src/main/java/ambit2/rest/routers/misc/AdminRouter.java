@@ -60,8 +60,7 @@ public class AdminRouter extends MyRouter {
 		attach(String.format("%s/{%s}",Resources.restpolicy,AmbitRESTPolicyResource.resourceid),AmbitRESTPolicyResource.class);
 		
 		attach(String.format("%s%s",Resources.user,Resources.reset), PwdResetResource.class);		
-		
-		attach("/export/legacy", SubstanceStudyTableResource.class);
+
 		attach("/export/experiment", SubstanceExportResource.class);		
 		
 
