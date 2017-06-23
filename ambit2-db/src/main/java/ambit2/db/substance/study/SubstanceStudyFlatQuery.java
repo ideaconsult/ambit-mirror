@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.IParams;
+import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.core.io.json.SubstanceStudyParser;
 import ambit2.db.search.SQLFileQueryParams;
@@ -29,7 +30,7 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 	private static final long serialVersionUID = 5304176321951306089L;
 	protected ObjectMapper dx = new ObjectMapper();
 	private static String _params = "{\"params\" : {\":all\" : { \"type\" : \"boolean\", \"value\": %s}, \":s_prefix\" : { \"type\" : \"String\", \"value\": \"%s\"},\":s_uuid\" : { \"type\" : \"String\", \"value\":\"%s\"}	}}";
-	private static String _params_i = "{\"params\" : {\":i_uuid\" : { \"type\" : \"String\", \"value\":\"%s\"}	}}";
+	private static String _params_i = "{\"params\" : {\":%s\" : { \"type\" : \"String\", \"value\":\"%s\"}	}}";
 
 	public enum _QUERY_TYPE {
 		all {
@@ -47,24 +48,59 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 					return String.format(_params, "false", params[0], params[1].replace("-", "").toLowerCase());
 			}
 		},
-		byinvestigation {
+		bystudytype {
 			@Override
-			public String queryParams(String... params) {
-				if (params == null || params.length < 1)
-					return null;
-				else
-					return String.format(_params_i, params[0]);
+			public String getField() {
+				return "endpointcategory";
+			}
+			@Override
+			public String getSQL() {
+				return "ambit2/db/q/substance_study_byendpointcategory.sql";
+			}
+		},
+		bycitation {
+			@Override
+			public String getSQL() {
+				return "ambit2/db/q/substance_study_byreference.sql";
+			}
+			@Override
+			public String getField() {
+				return "reference";
 			}
 
+
+		},
+		byprovider {
+			@Override
+			public String getSQL() {
+				return "ambit2/db/q/substance_study_byreferenceowner.sql";
+			}
+
+			@Override
+			public String getField() {
+				return "reference_owner";
+			}
+		},
+		byinvestigation {
+			@Override
+			public String getField() {
+				return "i_uuid";
+			}
 			@Override
 			public String getSQL() {
 				return "ambit2/db/q/substance_study_byinvestigation.sql";
 			}
 
 		};
+		public String getField() {
+			return null;
+		}
 
 		public String queryParams(String... params) {
-			return String.format(_params, "false", "", "");
+			if (params == null || params.length < 1)
+				return null;
+			else
+				return String.format(_params_i, getField(), params[0]);
 		}
 
 		public String getSQL() {
@@ -81,7 +117,14 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 		if (node != null && node instanceof ObjectNode)
 			setValue((ObjectNode) node);
 	}
-
+	public SubstanceStudyFlatQuery(Protocol papp) throws IOException {
+		this(_QUERY_TYPE.bystudytype);
+		if (papp.getCategory() == null)
+			throw new IOException("No id");
+		JsonNode node = json2params(_QUERY_TYPE.byinvestigation.queryParams(papp.getCategory().toString()));
+		if (node != null && node instanceof ObjectNode)
+			setValue((ObjectNode) node);
+	}
 	public SubstanceStudyFlatQuery(ProtocolApplication papp) throws IOException {
 		this(_QUERY_TYPE.byinvestigation);
 		if (papp.getInvestigationUUID() == null)
@@ -95,6 +138,9 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 		this(_QUERY_TYPE.all);
 	}
 
+	public SubstanceStudyFlatQuery(_QUERY_TYPE queryType,String... params) throws IOException {
+		this(queryType.getSQL(), queryType.queryParams(params));
+	}
 	public SubstanceStudyFlatQuery(_QUERY_TYPE queryType) throws IOException {
 		this(queryType.getSQL(), queryType.queryParams());
 	}
