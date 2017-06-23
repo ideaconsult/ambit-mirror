@@ -11,6 +11,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.db.substance.study.SubstanceStudyFlatQuery;
 import ambit2.db.substance.study.SubstanceStudyFlatQuery._QUERY_TYPE;
@@ -103,6 +104,20 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>> exte
 				ProtocolApplication papp = new ProtocolApplication(null);
 				papp.setInvestigationUUID(search);
 				q = new SubstanceStudyFlatQuery(papp);
+				break;
+			}
+			case byprovider: {
+				q = new SubstanceStudyFlatQuery(qtype,search);
+				break;
+			}
+			case bycitation: {
+				q = new SubstanceStudyFlatQuery(qtype,search);
+				break;
+			}
+			case bystudytype: {
+				Protocol p = new Protocol(null);
+				p.setCategory(search);
+				q = new SubstanceStudyFlatQuery(p);
 				break;
 			}
 			case bysubstance: {

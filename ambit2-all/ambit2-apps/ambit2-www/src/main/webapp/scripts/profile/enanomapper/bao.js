@@ -47,6 +47,9 @@ var config_bao = {
 				return sOut;
 			}
 		},
+		"owner" : {
+			"sTitle" : "Provided by"
+		},
 		"reliability" : {
 			"bVisible" : false
 		},
@@ -73,12 +76,21 @@ var config_bao = {
 					sOut = (data["title"] + sOut);
 				}
 				iuuid = full["investigation_uuid"];
-				if (iuuid === undefined || (iuuid== null)) 
+				if (iuuid === undefined || (iuuid == null))
 					return sOut;
 				else {
-					//http://localhost:9090/ambit2/investigation?search=AE64FC3B22A4317393629CCE1FF622AE&type=byinvestigation
+					// http://localhost:9090/ambit2/investigation?search=AE64FC3B22A4317393629CCE1FF622AE&type=byinvestigation
 					console.log(window.jt);
-					return sOut + "<br/><br/>" + jT.ui.shortenedData("<a href='../../investigation?type=byinvestigation&search="+iuuid+"' class='chelp' title='Related experiments'> " + iuuid + "</a>", "Related experiments, press to copy the UUID in the clipboard", iuuid);  	
+					return sOut
+							+ "<br/><br/>"
+							+ jT.ui
+									.shortenedData(
+											"<a href='../../investigation?type=byinvestigation&search="
+													+ iuuid
+													+ "' class='chelp' title='Related experiments'> "
+													+ iuuid + "</a>",
+											"Related experiments, press to copy the UUID in the clipboard",
+											iuuid);
 
 				}
 			}
