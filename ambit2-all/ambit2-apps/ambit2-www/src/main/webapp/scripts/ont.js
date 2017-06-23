@@ -3231,7 +3231,7 @@ var ontlookup = {
  	"ENM_0000030": "reproductive toxicity",
  	"ENM_0000050": "developmental toxicity",
  	"NPO_1339": "immunotoxicity",
- 	"NPO_1339_SECTION": "immunotoxicity",
+ 	"NPO_1339_SECTION": "Immunotoxicity",
  	"NPO_1340": "cytotoxicity",
  	"NPO_1341": "drug toxicity",
  	"NPO_1887": "hydrophilic coat",
@@ -6132,7 +6132,7 @@ var ontlookup = {
  	"OBI_0001585": "cytometric bead array assay of epitope specific interleukin-7 production by T cells",
  	"OBI_0001804": "ELISPOT assay of epitope specific interleukin-7 production by T cells",
  	"OBI_0001592": "purified MHC direct binding assay measuring half maximal effective concentration (EC50) [nM] using fluorescence detection",
- 	"OBI_0001604": "purified MHC direct binding assay measuring 50% dissociation of binding temperature (Tm) [ï¿½C] using fluorescence detection",
+ 	"OBI_0001604": "purified MHC direct binding assay measuring 50% dissociation of binding temperature (Tm) [°C] using fluorescence detection",
  	"OBI_0001531": "purified MHC direct binding assay measuring half life of binding datum [min] using fluorescence detection",
  	"OBI_0001541": "purified MHC direct binding assay measuring binding on rate measurement datum (kon) [nM^-1 s^-1] using fluorescence detection",
  	"OBI_0001569": "purified MHC direct binding assay measuring binding off rate measurement datum (koff) [s^-1] using fluorescence detection",
@@ -6762,7 +6762,6 @@ var ontlookup = {
  	"BAO_0002168_SECTION": "Oxidative Stress Assay",
  	"BAO_0002189_SECTION": "Toxicity Assay",
  	"BAO_0010001_SECTION": "cell viability ATP quantitation assay",
- 	"ENM_0000081_SECTION" : "Batch Dispersion Quality",
  	"NPO_1709_SECTION": "LDH release assay",
  	"NPO_1911_SECTION": "MTT Assay",
  	"CELL_CYCLE_SECTION": "CELL CYCLE",
@@ -6805,5 +6804,10 @@ var ontlookup = {
   "CHEBI_78897" : "trypan blue",
   "CHEBI_8806" : "Resazurin",
   "ENM_0000044_SECTION" : "Barrier integrity",
-  "CHEBI_133326" : "barium sulfate"
+  "CHEBI_133326" : "barium sulfate",
+  "ENM_0000081_SECTION" : "Batch Dispersion quality",
+	"ENM_8000223_SECTION" : "Aerosol characterisation",
+	"ENM_0000037_SECTION" : "Oxidative Stress",
+	"ENM_0000044_SECTION" : "Barrier integrity",
+	"ENM_0000068_SECTION" : "Cell Viability"
  }		
