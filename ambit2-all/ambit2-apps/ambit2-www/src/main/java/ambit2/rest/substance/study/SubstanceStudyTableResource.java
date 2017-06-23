@@ -29,7 +29,7 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>> exte
 
 	@Override
 	public String getTemplateName() {
-		return "jsonplaceholder.ftl";
+		return "investigation.ftl";
 	}
 
 	@Override
