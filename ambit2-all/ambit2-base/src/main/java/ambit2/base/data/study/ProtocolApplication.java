@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import com.google.common.base.Objects;
 
+import ambit2.base.data.I5Utils;
 import ambit2.base.json.JSONUtils;
 
 /**
@@ -111,7 +112,10 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT> i
 			this.investigationUUID = null;
 		else
 			try {
-				this.investigationUUID = UUID.fromString(investigationUUID);
+				if (investigationUUID.indexOf("-") <= 0)
+					this.investigationUUID = UUID.fromString(I5Utils.addDashes(investigationUUID).toLowerCase());
+				else
+					this.investigationUUID = UUID.fromString(investigationUUID);
 			} catch (Exception x) {
 				this.investigationUUID = UUID.nameUUIDFromBytes(investigationUUID.getBytes());
 			}

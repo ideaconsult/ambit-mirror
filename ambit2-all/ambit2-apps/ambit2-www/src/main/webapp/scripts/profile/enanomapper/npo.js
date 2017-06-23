@@ -78,8 +78,8 @@ var config_npo = {
 				if (iuuid === undefined || (iuuid== null)) 
 					return sOut;
 				else {
-					return sOut + "<br/><br/>" + jT.ui.shortenedData("<span class='chelp' title='Related experiments'> " + iuuid + "</a>", "Related experiments, press to copy the UUID in the clipboard", iuuid);  
-					//return sOut + "<span>" + full["investigation_uuid"] + "</span>"
+
+					return sOut + "<br/><br/>" + jT.ui.shortenedData("<a href='#' class='chelp' title='Related experiments'> " + iuuid + "</a>", "Related experiments, press to copy the UUID in the clipboard", iuuid);
 				}				
 			}
 		}

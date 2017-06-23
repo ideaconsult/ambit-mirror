@@ -7,10 +7,10 @@
 
 <script type='text/javascript'>
 $(document).ready(function() {
-	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/property" title="Property">Properties</a></li>');
+	jQuery("#breadCrumb ul").append('<li><a href="${ambit_request}" title="">Request</a></li>');
 	jQuery("#breadCrumb").jBreadCrumb();
 	downloadForm("${ambit_request}");
-	loadHelp("${ambit_root}","feature");
+	//loadHelp("${ambit_root}","feature");
 });
 </script>
 </head>
@@ -24,6 +24,7 @@ $(document).ready(function() {
 
 	<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
 	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
+	<a href='#' id='csv' target=_blank><img src='${ambit_root}/images/csv64.png' alt='csv' title='Download as CSV'></a>
 	<a href='#' id='xlsx' target=_blank><img src='${ambit_root}/images/xlsx.png' alt='xlsx' title='Download as XLSX'></a>
 	</div>
 
@@ -45,7 +46,7 @@ $(document).ready(function() {
 		<div class="three columns remove-bottom" style="padding:0;" >
 
 		<!-- help-->		
-		Retrieves JSON representation of an empty effect record, with placeholders for the required condition fields.
+		Retrieves representation of the requested object in supported formats.
 		
 		<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
 		<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		

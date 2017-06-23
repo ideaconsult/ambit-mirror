@@ -1,13 +1,5 @@
 package ambit2.rest.substance.study;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.bucket.Bucket;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.restnet.db.convertors.OutputWriterConvertor;
-import net.idea.restnet.db.reporter.BucketCSVReporter;
-import net.idea.restnet.db.reporter.BucketJSONReporter;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -18,11 +10,22 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.study.ProtocolApplication;
 import ambit2.db.substance.study.SubstanceStudyFlatQuery;
+import ambit2.db.substance.study.SubstanceStudyFlatQuery._QUERY_TYPE;
+import ambit2.rest.OpenTox;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.bucket.Bucket;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.db.convertors.OutputWriterConvertor;
+import net.idea.restnet.db.reporter.BucketCSVReporter;
+import net.idea.restnet.db.reporter.BucketJSONReporter;
 
-public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>>
-		extends AmbitDBQueryResource<Q, Bucket> {
+public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>> extends AmbitDBQueryResource<Q, Bucket> {
+	public final static String investigation = OpenTox.URI.investigation.getURI();
 
 	@Override
 	public String getTemplateName() {
@@ -32,8 +35,8 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>>
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		customizeVariants(new MediaType[] { MediaType.TEXT_HTML,
-				MediaType.APPLICATION_JSON, MediaType.APPLICATION_JAVA_OBJECT });
+		customizeVariants(
+				new MediaType[] { MediaType.TEXT_HTML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JAVA_OBJECT });
 	}
 
 	public SubstanceStudyTableResource() {
@@ -42,8 +45,7 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>>
 	}
 
 	@Override
-	public IProcessor<Q, Representation> createConvertor(Variant variant)
-			throws AmbitException, ResourceException {
+	public IProcessor<Q, Representation> createConvertor(Variant variant) throws AmbitException, ResourceException {
 
 		/* workaround for clients not being able to set accept headers */
 		Form acceptform = getResourceRef(getRequest()).getQueryAsForm();
@@ -56,16 +58,13 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>>
 		if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			BucketCSVReporter cmpreporter = new BucketCSVReporter();
 			return new OutputWriterConvertor(cmpreporter, MediaType.TEXT_CSV);
-		} else if (variant.getMediaType().equals(
-				MediaType.APPLICATION_JAVASCRIPT)) {
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback == null)
 				jsonpcallback = getParams().getFirstValue("callback");
-			return new OutputWriterConvertor(createJSONReporter(),
-					MediaType.APPLICATION_JAVASCRIPT);
+			return new OutputWriterConvertor(createJSONReporter(), MediaType.APPLICATION_JAVASCRIPT);
 		} else { // json by default
-			return new OutputWriterConvertor(createJSONReporter(),
-					MediaType.APPLICATION_JSON, filenamePrefix);
+			return new OutputWriterConvertor(createJSONReporter(), MediaType.APPLICATION_JSON, filenamePrefix);
 		}
 
 	}
@@ -73,30 +72,67 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>>
 	protected BucketJSONReporter createJSONReporter() {
 		String command = "results";
 		try {
-			if (Boolean.parseBoolean(getParams().getFirstValue("array").toString())) command = null;
-		} catch (Exception x) {}
-		return  new BucketJSONReporter(command,null,null);
-	}
-	@Override
-	protected Q createQuery(Context context, Request request, Response response)
-			throws ResourceException {
-		try {
-			return (Q) new SubstanceStudyFlatQuery();
+			if (Boolean.parseBoolean(getParams().getFirstValue("array").toString()))
+				command = null;
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					x.getMessage(), x);
+		}
+		return new BucketJSONReporter(command, null, null);
+	}
+
+	@Override
+	protected Q createQuery(Context context, Request request, Response response) throws ResourceException {
+		try {
+			SubstanceStudyFlatQuery q = null;
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			String search = null;
+			try {
+				search = form.getFirstValue("search");
+				if (search == null)
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			} catch (Exception x) {
+			}
+			_QUERY_TYPE qtype = _QUERY_TYPE.bysubstance;
+			try {
+				qtype = _QUERY_TYPE.valueOf(form.getFirstValue("type"));
+			} catch (Exception x) {
+				qtype = null;
+			}
+			if (qtype==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			switch (qtype) {
+			case byinvestigation: {
+				ProtocolApplication papp = new ProtocolApplication(null);
+				papp.setInvestigationUUID(search);
+				q = new SubstanceStudyFlatQuery(papp);
+				break;
+			}
+			case bysubstance: {
+				SubstanceRecord record = new SubstanceRecord();
+				record.setSubstanceUUID(search);
+				q = new SubstanceStudyFlatQuery(record);
+				break;
+			}
+			default: {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}
+			}
+			return (Q) q;
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x.getMessage(), x);
 		}
 	}
-	
+
 	@Override
 	protected String getExtension(MediaType mediaType) {
 
 		if (MediaType.APPLICATION_JSON.equals(mediaType))
 			return ".json";
-		else	
+		else
 			return super.getExtension(mediaType);
 
 	}
+
 	@Override
 	public String getConfigFile() {
 		return "ambit2/rest/config/ambit2.pref";
