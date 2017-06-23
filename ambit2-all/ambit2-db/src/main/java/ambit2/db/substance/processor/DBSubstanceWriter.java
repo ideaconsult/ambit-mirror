@@ -73,6 +73,16 @@ public class DBSubstanceWriter extends AbstractDBProcessor<IStructureRecord, ISt
 	private RepositoryWriter writer;
 	protected boolean clearMeasurements;
 	protected boolean importBundles = false;
+	protected boolean keepEffectRecordsForDocUUID = false;
+
+
+	public boolean isKeepEffectRecordsForDocUUID() {
+		return keepEffectRecordsForDocUUID;
+	}
+
+	public void setKeepEffectRecordsForDocUUID(boolean keepEffectRecordsForDocUUID) {
+		this.keepEffectRecordsForDocUUID = keepEffectRecordsForDocUUID;
+	}
 
 	public boolean isImportBundles() {
 		return importBundles;
@@ -202,11 +212,13 @@ public class DBSubstanceWriter extends AbstractDBProcessor<IStructureRecord, ISt
 				qss.setObject(papp);
 			}
 			x.process(qss);
-			// delete effects records for this document, if any
-			if (deffr == null)
-				deffr = new DeleteEffectRecords();
-			deffr.setGroup(papp);
-			x.process(deffr);
+			if (!keepEffectRecordsForDocUUID) {
+				// delete effects records for this document, if any
+				if (deffr == null)
+					deffr = new DeleteEffectRecords();
+				deffr.setGroup(papp);
+				x.process(deffr);
+			} //else sometimes we want to add effects for the same docuuid ...
 			// and add the new ones
 			if (papp.getEffects() != null)
 				for (Object effect : papp.getEffects())
@@ -267,14 +279,14 @@ public class DBSubstanceWriter extends AbstractDBProcessor<IStructureRecord, ISt
 			q.setObject(substance);
 			x.process(q);
 		} catch (Exception x) {
-			logger.log(Level.WARNING,q.getClass().getName(),x);
+			logger.log(Level.WARNING, q.getClass().getName(), x);
 			throw x;
 		}
 		try {
 			qids.setObject(substance);
 			x.process(qids);
 		} catch (Exception x) {
-			logger.log(Level.WARNING,qids.getClass().getName(),x);
+			logger.log(Level.WARNING, qids.getClass().getName(), x);
 		}
 		importedRecord.setSubstanceUUID(substance.getSubstanceUUID());
 		importedRecord.setIdsubstance(substance.getIdsubstance());
