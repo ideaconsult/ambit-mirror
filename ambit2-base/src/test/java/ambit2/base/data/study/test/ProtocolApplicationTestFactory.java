@@ -42,6 +42,7 @@ public class ProtocolApplicationTestFactory {
 		record.setEndpoint("log Pow");
 		record.setLoValue(0.35);
 		papp.addEffect(record);
+		papp.setInvestigationUUID("2f64ab27-abcd-abcd-abcd-4f0274fd6633");
 		return papp;
 	}
 

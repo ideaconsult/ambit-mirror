@@ -58,20 +58,26 @@ var config_bao = {
 			"iOrder" : -30,
 			"sTitle" : "Reference",
 			"mRender" : function(data, type, full) {
-
-				// var quri = "?type=citation&search=";
+				var sOut = "";
 				var uri = (data["title"] != undefined)
 						&& (data["title"].startsWith("http"));
 				if (uri) {
-					var sOut = (data["year"] == null || data["year"] == 0) ? "URL"
+					sOut = (data["year"] == null || data["year"] == 0) ? "URL"
 							: data["year"];
-					return "<a href='" + data["title"] + "' title='"
+					sOut = "<a href='" + data["title"] + "' title='"
 							+ data["title"] + "' target='_doi' >" + sOut
 							+ "</a>";
 				} else {
-					var sOut = (data["year"] == null || data["year"] == 0) ? ""
+					sOut = (data["year"] == null || data["year"] == 0) ? ""
 							: ("<br/>(" + data["year"] + ")");
-					return (data["title"] + sOut);
+					sOut = (data["title"] + sOut);
+				}
+				iuuid = full["investigation_uuid"];
+				if (iuuid === undefined || (iuuid== null)) 
+					return sOut;
+				else {
+					return sOut + "<br/><br/>" + jT.ui.shortenedData("<span class='chelp' title='Related experiments'> " + iuuid + "</a>", "Related experiments, press to copy the UUID in the clipboard", iuuid);  	
+
 				}
 			}
 		}

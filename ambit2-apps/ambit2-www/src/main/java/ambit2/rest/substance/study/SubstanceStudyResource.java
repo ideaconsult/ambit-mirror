@@ -88,13 +88,15 @@ public class SubstanceStudyResource<Q extends IQueryRetrieval<ProtocolApplicatio
 				String category = form.getFirstValue("category");
 				String property = form.getFirstValue("property");
 				String property_uri = form.getFirstValue("property_uri");
+				String investigation_uuid = form.getFirstValue("investigation");
 				ReadSubstanceStudy q = new ReadSubstanceStudy();
 				q.setFieldname(substanceUUID);
-				if (topCategory!=null || category!=null || property != null || property_uri!=null) {
+				if (topCategory!=null || category!=null || property != null || property_uri!=null || investigation_uuid!=null) {
 					Protocol p = new ambit2.base.data.study.Protocol("");
 					p.setTopCategory(topCategory);
 					p.setCategory(category);
 					ProtocolApplication papp = new ProtocolApplication(p);
+					papp.setInvestigationUUID(investigation_uuid);
 					if (property_uri!=null) try {
 						//not nice REST style, but easiest to parse the URI
 						//not nice REST style, but easiest to parse the URI
