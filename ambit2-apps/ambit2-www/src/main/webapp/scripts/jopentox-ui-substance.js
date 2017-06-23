@@ -638,5 +638,6 @@ var substance = {
 				}
 
 				return oTable;			
-		}		
+		}
+		
 }

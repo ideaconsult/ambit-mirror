@@ -2220,76 +2220,73 @@ function defineProtocolApplicationSummaryTable(root, url, selector) {
 }
 
 function defineDataAvailabilityTable(root, url, selector) {
-	var oTable = $(selector)
-			.dataTable(
-					{
-						"sAjaxDataProp" : "facet",
-						"bProcessing" : true,
-						"bServerSide" : false,
-						"bStateSave" : false,
-						"aoColumnDefs" : [
-								{
-									"mData" : "substance",
-									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 0 ],
-									"bSearchable" : true,
-									"bUseRendered" : false,
-									"bSortable" : true,
-									"fnRender" : function(o, val) {
-										var sOut = val;
-										return "<a href='" + o.aData["subcategoryuri"]
-												+ "' title='" + o.aData["subcategoryuri"] + " target=_substance "
-												+ "'>" + sOut + "</a>";
-									}
-								},
-								{
-									"mData" : "subcategory",
-									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 1 ],
-									"bSearchable" : true,
-									"bUseRendered" : false,
-									"bSortable" : true,
-									"fnRender" : function(o, val) {
-										return val;
-									}
-								},
-								{
-									"mData" : "value",
-									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 2 ],
-									"bSearchable" : true,
-									"bUseRendered" : false,
-									"bSortable" : true,
-									"fnRender" : function(o, val) {
-										return val;
-									}
-								}, 
-								{
-									"mDataProp" : "count",
-									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 3 ],
-									"sWidth" : "10%",
-									"bSearchable" : true,
-									"bSortable" : true
-								} ],
-						"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
-						"bJQueryUI" : true,
-						"bPaginate" : true,
-						"sPaginationType" : "full_numbers",
-						"sPaginate" : ".dataTables_paginate _paging",
-						"bDeferRender" : true,
-						"bSearchable" : true,
-						"sAjaxSource" : url,
-						"oLanguage" : {
-							"sSearch" : "Filter:",
-							"sProcessing" : "<img src='" + root
-									+ "/images/24x24_ambit.gif' border='0'>",
-							"sLoadingRecords" : "No records found."
-						}
-					});
+	var oTable = $(selector).dataTable(
+			{
+				"sAjaxDataProp" : "facet",
+				"bProcessing" : true,
+				"bServerSide" : false,
+				"bStateSave" : false,
+				"aoColumnDefs" : [
+						{
+							"mData" : "substance",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 0 ],
+							"bSearchable" : true,
+							"bUseRendered" : false,
+							"bSortable" : true,
+							"fnRender" : function(o, val) {
+								var sOut = val;
+								return "<a href='" + o.aData["subcategoryuri"]
+										+ "' title='"
+										+ o.aData["subcategoryuri"]
+										+ " target=_substance " + "'>" + sOut
+										+ "</a>";
+							}
+						}, {
+							"mData" : "subcategory",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 1 ],
+							"bSearchable" : true,
+							"bUseRendered" : false,
+							"bSortable" : true,
+							"fnRender" : function(o, val) {
+								return val;
+							}
+						}, {
+							"mData" : "value",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 2 ],
+							"bSearchable" : true,
+							"bUseRendered" : false,
+							"bSortable" : true,
+							"fnRender" : function(o, val) {
+								return val;
+							}
+						}, {
+							"mDataProp" : "count",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 3 ],
+							"sWidth" : "10%",
+							"bSearchable" : true,
+							"bSortable" : true
+						} ],
+				"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
+				"bJQueryUI" : true,
+				"bPaginate" : true,
+				"sPaginationType" : "full_numbers",
+				"sPaginate" : ".dataTables_paginate _paging",
+				"bDeferRender" : true,
+				"bSearchable" : true,
+				"sAjaxSource" : url,
+				"oLanguage" : {
+					"sSearch" : "Filter:",
+					"sProcessing" : "<img src='" + root
+							+ "/images/24x24_ambit.gif' border='0'>",
+					"sLoadingRecords" : "No records found."
+				}
+			});
 	return oTable;
 }
-
 
 function defineSubstanceOwnerTable(root, url, selector) {
 	var oTable = $(selector)
@@ -3121,7 +3118,7 @@ function formatDownloadURI(bundle_URI, root, download, prefix) {
 
 function bundleFormatDetails(oTable, nTr, root, export_substances,
 		export_chemicals, export_dataset, export_report) {
-	return bundleFormatDetails(Table, nTr, root, true, true, true, true,false);
+	return bundleFormatDetails(Table, nTr, root, true, true, true, true, false);
 }
 function bundleFormatDetails(oTable, nTr, root, export_substances,
 		export_chemicals, export_dataset, export_report, export_property) {
@@ -3145,19 +3142,16 @@ function bundleFormatDetails(oTable, nTr, root, export_substances,
 				alt : "CSV",
 				title : 'Download as CSV (Comma delimited file)',
 				mime : 'text/csv'
-			}
-			];
-	var report_isa = [
-	            report[0],report[1],       
-	  			
-	  			 {
-	  				id : "ISA-JSON",
-	  				img : "isa.png",
-	  				alt : "ISA",
-	  				title : 'Download as ISA-JSON',
-	  				mime : 'application/isa+json'
-	  			}
-	  			];	
+			} ];
+	var report_isa = [ report[0], report[1],
+
+	{
+		id : "ISA-JSON",
+		img : "isa.png",
+		alt : "ISA",
+		title : 'Download as ISA-JSON',
+		mime : 'application/isa+json'
+	} ];
 	var semantic = [ {
 		id : "json",
 		img : "json64.png",
@@ -3241,7 +3235,7 @@ function bundleFormatDetails(oTable, nTr, root, export_substances,
 		sOut += "</td><td>";
 		sOut += "</td></tr>";
 	}
-	
+
 	if (export_report) {
 		sOut += "<tr><th width='32px'/><th width='20%' align='left'>Report</th><td>";
 		var reporturi = root + "/ui/assessment_report?bundle_uri="
@@ -3268,7 +3262,8 @@ function loadBundleSummary(bundle) {
 		success : function(data, status, xhr) {
 			$.each(data.facet, function(index, entry) {
 				try {
-					$("#" + entry.value + "_" + bundle.id).text("("+entry.count+")");
+					$("#" + entry.value + "_" + bundle.id).text(
+							"(" + entry.count + ")");
 				} catch (err) {
 				}
 			});
@@ -3280,4 +3275,110 @@ function loadBundleSummary(bundle) {
 		complete : function(xhr, status) {
 		}
 	});
+}
+
+function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
+
+	var col = [ 'substanceType', 'name', 'publicname', 'investigation',
+			'reference', 'reference_owner', 'reference_year', 'topcategory',
+			'endpointcategory', 'guidance', 'effectendpoint', 'unit',
+			'loQualifier', 'loValue', 'upQualifier', 'upValue', 'errQualifier',
+			'err', 'textValue', 's_uuid', 'document_uuid', 'owner_name' ];
+
+	var headers = {
+		"substanceType" : "Material Type",
+		"topcategory" : "Module",
+		"endpointcategory" : "Study type",
+		"guidance" : "Protocol",
+		"reference_owner" : "Study provider",
+		"reference_year" : "Study year",
+		"effectendpoint" : "endpoint",
+		"loQualifier" : "=, >= ,>",
+		"loValue" : "value",
+		"upQualifier" : "<, <=",
+		"upValue" : "value",
+		"errQualifier" : "uncertaintyType",
+		"textValue" : "text",
+		"s_uuid" : "Substance UUID",
+		"owner_name" : "Supplier",
+		"document_uuid" : "Study identifier"
+	};
+
+	var coldefs = [];
+
+	// "substanceType","endpointcategory"
+	var render = function(o, val) {
+		return (val === undefined || val == null) ? "" : val;
+	}
+	var ontrender = function(o, val) {
+		try {
+			v = ontlookup[val];
+			v = (v === undefined || v == null) ? val : v;
+			return v;
+		} catch (err) {
+			return val;
+		}
+	}
+	var linkrender_i = function(o, val) {
+		return "<a href='" + root
+				+ "/investigation?type=byinvestigation&search=" + val + "'>"
+				+ val + "</a>";
+	}
+	var linkrender_s = function(o, val) {
+		return "<a href='" + root
+				+ "/investigation?type=bysubstance&search=" + val + "'>"
+				+ val + "</a>";
+	}
+	
+
+	$.each(col, function(key, value) {
+
+		var fn = (value == "investigation") ? linkrender_i
+				: (value == "s_uuid") ? linkrender_s
+						: ((value == "endpointcategory")
+								|| (value == "substanceType")) ? ontrender
+								: render;
+		coldefs.push({
+			"sTitle" : headers[value] == null ? value : headers[value],
+			"mDataProp" : value,
+			"aTargets" : [ key ],
+			"sDefaultContent" : "",
+			"bSearchable" : true,
+			"bSortable" : true,
+			"fnRender" : fn
+		});
+	});
+
+	return $(selector)
+			.dataTable(
+					{
+						"sAjaxDataProp" : "results",
+						"sAjaxSource" : url,
+						"sSearch" : "Filter:",
+						"bJQueryUI" : jQueryUI,
+						"bSearchable" : true,
+						"bProcessing" : true,
+						"sDom" : dom == null ? '<"help remove-bottom"i><"help"p>Trt<"help"lf>'
+								: dom,
+						"bPaginate" : true,
+						// "sPaginationType" : "full_numbers",
+						// "sPaginate" : ".dataTables_paginate _paging",
+						"oLanguage" : {
+							"sProcessing" : "<img src='" + root
+									+ "/images/24x24_ambit.gif' border='0'>",
+							"sLoadingRecords" : "No results found.",
+							"sZeroRecords" : "No results found.",
+							"sEmptyTable" : "No results available.",
+							"sInfo" : "Showing _TOTAL_ results(s) (_START_ to _END_)",
+							"sLengthMenu" : 'Display <select>'
+									+ '<option value="10">10</option>'
+									+ '<option value="20">20</option>'
+									+ '<option value="50">50</option>'
+									+ '<option value="100">100</option>'
+									+ '<option value="-1">all</option>'
+									+ '</select> results.'
+						},
+						"aoColumnDefs" : coldefs
+
+					});
 }
