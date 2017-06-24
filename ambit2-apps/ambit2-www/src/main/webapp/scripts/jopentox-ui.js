@@ -3322,9 +3322,7 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 		}
 	}
 	var linkrender_i = function(o, val) {
-		return "<a href='" + root
-				+ "/investigation?type=byinvestigation&search=" + val + "'>"
-				+ val + "</a>";
+		return "<a href='" + root+ "/investigation?type=byinvestigation&search=" + val + "'>" + val + "</a>";
 	}
 	var linkrender_s = function(o, val) {
 		return "<a href='" + root + "/investigation?type=bysubstance&search="
@@ -3354,7 +3352,7 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 		"substanceType" : ontrender,
 		"endpointcategory" : linkrender_category,
 		"reference" : linkrender_reference,
-		"referenceowner" : linkrender_refowner
+		"reference_owner" : linkrender_refowner
 	};
 
 	$
