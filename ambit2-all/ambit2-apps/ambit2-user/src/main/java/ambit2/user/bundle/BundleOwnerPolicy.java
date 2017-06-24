@@ -14,7 +14,7 @@ public class BundleOwnerPolicy extends PolicyQuery {
 	 */
 	private static final long serialVersionUID = 761328793726648871L;
 	// if searching by bundle id
-	private static final String sql_byintid = "select ?,hex(bundle_number),1 from %s.bundle where idbundle=? and user_name=?";
+	private static final String sql_byintid = "select ?,hex(bundle_number),1 from `%s`.bundle where idbundle=? and user_name=?";
 	protected String ambitdbname;
 
 	public BundleOwnerPolicy(String ambitdbname) {

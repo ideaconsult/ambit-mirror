@@ -21,7 +21,7 @@ public class BundlePolicyQuery extends PolicyQuery {
 	//if searching by bundle_number
 	private static final String sql_byhexnumber = "select prefix,resource,sum(m%s) from %spolicy_bundle join %suser_roles using(role_name) where user_name=? and prefix=? and resource=unhex(?) and m%s=1 group by prefix,resource\n";
 	//if searching by bundle id
-	private static final String sql_byintid = "select prefix,hex(resource),sum(m%s) from %spolicy_bundle join %suser_roles using(role_name) where user_name=? and prefix=? and m%s=1 and resource in (select bundle_number from %s.bundle where idbundle=?) group by prefix,resource";
+	private static final String sql_byintid = "select prefix,hex(resource),sum(m%s) from %spolicy_bundle join %suser_roles using(role_name) where user_name=? and prefix=? and m%s=1 and resource in (select bundle_number from `%s`.bundle where idbundle=?) group by prefix,resource";
 	protected String ambitdbname;
 	
 	public BundlePolicyQuery(String ambitdbname) {
