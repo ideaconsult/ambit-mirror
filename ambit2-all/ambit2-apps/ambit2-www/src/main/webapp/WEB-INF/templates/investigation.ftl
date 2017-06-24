@@ -4,7 +4,7 @@
 <script type='text/javascript' src='${ambit_root}/scripts/ont.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
-
+<script type='text/javascript' src='${ambit_root}/jquery/purl.js'></script>
 
 <script type='text/javascript'>
 $(document).ready(function() {
@@ -13,6 +13,18 @@ $(document).ready(function() {
 	downloadForm("${ambit_request}");
 	//loadHelp("${ambit_root}","feature");
 	var oTable = defineInvestigationTable("${ambit_root}","${ambit_request_json}","#investigation",false,"<Fif>rtp");
+	
+	$("#_searchdiv").html("<form class='remove-bottom' action='${ambit_root}/investigation'><input type='radio' checked name='type' id='type_byinvestigation' value='byinvestigation' title='Investigation UUID'>Investigation<input type='radio' name='type' id='type_byprovider' value='byprovider'>Data provider <input type='radio' name='type' id='type_bycitation'  value='bycitation'>Reference <input type='radio' name='type' id='type_bystudytype'  value='bystudytype'>Study type <input name='search' class='search' value='' id='search'> <input type='submit' value='Search'></form>");
+	
+	var purl = $.url();
+		$('.search').attr('value',purl.param('search')===undefined?'':purl.param('search'));
+		
+		var typeToSelect = purl.param('type')===undefined?'':purl.param('type');
+	
+        $("#selecttype option").each(function (a, b) {
+	          if ($(this).val() == typeToSelect ) $(this).attr("selected", "selected");
+	    });
+        $("#type_"+typeToSelect).prop("checked", true);
 
 });
 </script>
@@ -24,7 +36,7 @@ $(document).ready(function() {
 <#include "/banner_crumbs.ftl">
 
 	<div class="row" style="margin:20;padding:10;" >
-			<table id='investigation'  class='fourteen columns jtox-substance' cellpadding='0' border='0' width='90%' cellspacing='0' style="margin:20;padding:10;"  ></table>
+			<table id='investigation'  class='fourteen columns ' cellpadding='0' border='0' width='90%' cellspacing='0' style="margin:20;padding:10;"  ></table>
 	</div>	
 			
 

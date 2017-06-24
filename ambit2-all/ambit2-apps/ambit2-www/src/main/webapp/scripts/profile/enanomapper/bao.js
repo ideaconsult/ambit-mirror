@@ -79,8 +79,6 @@ var config_bao = {
 				if (iuuid === undefined || (iuuid == null))
 					return sOut;
 				else {
-					// http://localhost:9090/ambit2/investigation?search=AE64FC3B22A4317393629CCE1FF622AE&type=byinvestigation
-					console.log(window.jt);
 					return sOut
 							+ "<br/><br/>"
 							+ jT.ui
