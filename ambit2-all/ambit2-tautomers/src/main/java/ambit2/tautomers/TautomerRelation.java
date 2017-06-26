@@ -12,5 +12,11 @@ public class TautomerRelation
 	public List<List<Integer>> instanceAtomIndices = new ArrayList<List<Integer>>();
 	public List<Rule> rules = new ArrayList<Rule>();
 	public List<Integer> ruleStatesTautomer1 = new ArrayList<Integer>();
-	public List<Integer> ruleStatesTautomer2 = new ArrayList<Integer>();		
+	public List<Integer> ruleStatesTautomer2 = new ArrayList<Integer>();
+	
+	public String toString()
+	{
+		//TODO
+		return "";
+	}
 }
