@@ -40,6 +40,7 @@ public class TautomerManager {
 	List<Rule> generatedRules = new ArrayList<Rule>();
 	List<IAtomContainer> resultTautomers;
 	List<String> resultTatomerStringCodes = new ArrayList<String>();
+	TautomerRelationGraph resultTautomerRelationGraph = null;
 	double bestRank = 0.0;
 	List<String> errors = new ArrayList<String>();
 	int numOfRegistrations = 0;
@@ -61,6 +62,7 @@ public class TautomerManager {
 																	// ranking
 																	// method
 
+	public boolean FlagGenerateTautomerRelationGraph = false;
 	public boolean FlagSwitchToCombinatorialOnReachingRuleLimit = true;
 	public boolean FlagRecurseBackResultTautomers = false;
 	public boolean FlagCalculateCACTVSEnergyRank = false;
@@ -137,6 +139,10 @@ public class TautomerManager {
 
 	public void setRuleSelector(RuleSelector ruleSelector) {
 		this.ruleSelector = ruleSelector;
+	}
+	
+	public TautomerRelationGraph getTautomerRelationGraph() {
+		return resultTautomerRelationGraph;
 	}
 
 	/**
@@ -239,7 +245,10 @@ public class TautomerManager {
 		numOfRegistrations = 0;
 		resultTautomers = new ArrayList<IAtomContainer>();
 		resultTatomerStringCodes.clear();
-
+		
+		if (FlagGenerateTautomerRelationGraph)
+			resultTautomerRelationGraph = new TautomerRelationGraph();
+			
 		searchAllRulePositions();
 
 		if (extendedRuleInstances.isEmpty()) {

@@ -338,6 +338,9 @@ public class RuleManager {
 				//processing of the tautomer structure is done here. It must be before rank calculation				
 				boolean Fl_calc = tman.registerTautomer(newTautomer);  //processing of the tautomer structure is done here. It must be before rank calculation
 				
+				if (tman.FlagGenerateTautomerRelationGraph)
+					addTautomerToRelationGraph(incStep, newTautomer);
+				
 				if (Fl_calc)
 				{	
 					double rank = calculateRank(incStep, newTautomer);
@@ -370,6 +373,9 @@ public class RuleManager {
 				
 				//processing of the tautomer structure is done here. It must be before rank calculation
 				boolean Fl_calc = tman.registerTautomer(newTautomer); 
+				
+				if (tman.FlagGenerateTautomerRelationGraph)
+					addTautomerToRelationGraph(incStep, newTautomer);
 				
 				if (Fl_calc)
 				{	
@@ -1027,6 +1033,17 @@ public class RuleManager {
 		
 		return(null);
 	}
+	
+	void addTautomerToRelationGraph(TautomerIncrementStep incStep, IAtomContainer newTautomer)
+	{
+		//New tautomer is a clone
+		tman.resultTautomerRelationGraph.tautomers.add(newTautomer);
+		
+		//TODO
+		//add relation info
+		//use/create  a work container with all previously used TautomerIncrementStep
+	}
+	
 	
 	
 		
