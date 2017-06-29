@@ -3,11 +3,6 @@ package ambit2.rest.dataset.filtered;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.facet.IFacet;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -23,6 +18,7 @@ import ambit2.db.substance.QueryCountBundles;
 import ambit2.db.substance.QueryCountEndpoints;
 import ambit2.db.substance.QueryCountInterpretationResults;
 import ambit2.db.substance.QueryCountProtocolApplications;
+import ambit2.db.substance.QueryCountSubstanceTypes;
 import ambit2.db.substance.QueryCountSubstances;
 import ambit2.db.update.dataset.QueryCount;
 import ambit2.db.update.dataset.QueryCountChemicalInDataset;
@@ -33,6 +29,10 @@ import ambit2.db.update.dataset.QueryCountValues;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.facet.AmbitFacetResource;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.facet.IFacet;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 public class StatisticsResource<FACET extends IFacet<String>, Q extends QueryCount<FACET>>
 		extends AmbitFacetResource<FACET, Q> {
@@ -119,6 +119,12 @@ public class StatisticsResource<FACET extends IFacet<String>, Q extends QueryCou
 				return "/bundle";
 			}
 			
+		},
+		substancetypes {
+			@Override
+			public String getURL() {
+				return "/substancetype";
+			}
 		};
 
 		public String getURL() {
@@ -204,6 +210,9 @@ public class StatisticsResource<FACET extends IFacet<String>, Q extends QueryCou
 		}
 		case substances: {
 			return (Q) new QueryCountSubstances(mode.getURL());
+		}
+		case substancetypes: {
+			return (Q) new QueryCountSubstanceTypes(mode.getURL());
 		}
 		case experiment_endpoints: {
 			QueryCountEndpoints q = new QueryCountEndpoints(mode.getURL());

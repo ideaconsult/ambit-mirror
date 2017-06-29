@@ -11,8 +11,32 @@
     ],		
     "resourcePath": "/query",
 	"apis": [
-	{
-            "path": "/query/study",
+				{
+            "path": "/query/substancestudy",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Substance types summary",
+                    "notes": "Statistics",
+                    "type": "Facet",
+                    "nickname": "getSubstanceTypeSummary",
+                     <#include "/apidocs/authz.ftl" >
+                    "parameters": [
+						<#include "/apidocs/parameters_page.ftl" >
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Not found"
+                        },
+						<#include "/apidocs/error_aa.ftl" >,
+						<#include "/apidocs/error_500.ftl" >                            
+                    ]
+                }
+            ]
+     	}, 	
+			{
+			"path": "/query/study",
             "operations": [
                 {
                     "method": "GET",
