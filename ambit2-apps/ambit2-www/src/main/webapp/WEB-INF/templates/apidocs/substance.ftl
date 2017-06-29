@@ -45,6 +45,7 @@
 							    "allowMultiple": false,
 							    "defaultValue": "name",
 							    "enum" : [
+							       "substancetype",	
 							       "name",
 							       "like",
 							       "regexp",
