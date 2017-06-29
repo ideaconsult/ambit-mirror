@@ -85,6 +85,7 @@ import ambit2.rest.dataset.filtered.ExperimentsSearchResource;
 import ambit2.rest.dataset.filtered.FilteredDatasetResource;
 import ambit2.rest.dataset.filtered.InterpretationResultSearchResource;
 import ambit2.rest.dataset.filtered.StudySearchResource;
+import ambit2.rest.dataset.filtered.SubstanceTypeSearchResource;
 import ambit2.rest.facet.CompoundsByPropertyValueInDatasetResource;
 import ambit2.rest.facet.DatasetChemicalsQualityStatsResource;
 import ambit2.rest.facet.DatasetStrucTypeStatsResource;
@@ -1006,6 +1007,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		slookup.attach("/{type}/{subtype}", SubstanceLookup.class);
 		slookup.attach("/{type}/{subtype}/{subsubtype}", SubstanceLookup.class);
 
+		queryRouter.attach(SubstanceTypeSearchResource.resource, SubstanceTypeSearchResource.class);
+		
 		return queryRouter;
 	}
 
