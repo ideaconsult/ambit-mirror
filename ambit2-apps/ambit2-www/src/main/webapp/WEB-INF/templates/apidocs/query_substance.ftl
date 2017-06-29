@@ -12,7 +12,7 @@
     "resourcePath": "/query",
 	"apis": [
 				{
-            "path": "/query/substancestudy",
+            "path": "/query/substancetype",
             "operations": [
                 {
                     "method": "GET",
