@@ -1,13 +1,7 @@
 Manifest-version: 1.0
-Package: ambit2.reactions
 
-Name: ambit2/reactions/
-Specification-Title: Reactions
-Specification-Version: ${project.version}
-Specification-Vendor: Ideaconsult LTD
+Name: ambit2.reactions
+Package-Title: ambit2.reactions
 Implementation-Title: ambit2.reactions
 Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
 Implementation-Vendor: Ideaconsult Ltd.
-Package-Title: ambit2.reactions
-Package-Version: ${project.version}
-Package-Vendor: Ideaconsult Ltd.
