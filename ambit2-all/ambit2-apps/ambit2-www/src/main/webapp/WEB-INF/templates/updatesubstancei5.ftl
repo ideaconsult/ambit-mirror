@@ -73,7 +73,7 @@
 
                                 <div class='row remove-bottom'>
                                 <input type="hidden" id='iuclidversion' value='i5' name='iuclidversion' size="0">
-                                    <label class='three columns alpha' for="option">Select substance</label><a href='#' class='chelp server'>?</a>
+                                    <label class='three columns alpha' for="option">Select substance</label><a href='#' class='chelp server5'>?</a>
                                     <select class='four columns alpha half-bottom' name='option' id='option'>
 		
 			<option title='by UUID' value='UUID' selected>by UUID</option>
