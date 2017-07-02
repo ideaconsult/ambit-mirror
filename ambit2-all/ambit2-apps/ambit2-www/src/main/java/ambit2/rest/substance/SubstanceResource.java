@@ -35,6 +35,7 @@ import ambit2.base.processors.ProcessorException;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.processors.CallableSubstanceI5Query;
+import ambit2.db.processors.CallableSubstanceI5Query._iuclidversion;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.xlsx.SubstanceRecordXLSXReporter;
 import ambit2.db.substance.DeleteSubstance;
@@ -685,7 +686,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 						new DatasetURIReporter(getRequest().getRootRef()),
 						token, getRequest().getResourceRef().toString());
 				ITask<Reference, Object> task = ((ITaskApplication) getApplication())
-						.addTask("Retrieve substance from IUCLID5 server",
+						.addTask("Retrieve substance from IUCLID server",
 								callable, getRequest().getRootRef(), token);
 
 				ITaskStorage storage = ((ITaskApplication) getApplication())

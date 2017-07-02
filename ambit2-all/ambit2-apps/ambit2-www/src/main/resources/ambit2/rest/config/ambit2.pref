@@ -91,6 +91,14 @@ i5.user=${i5.user}
 i5.pass=${i5.pass}
 #target url for iuclid5 services 
 i5.server=${i5.server}
+################################
+# IUCLID6 client config
+#username for iuclid6 
+i6.user=${i6.user}
+#password for iuclid6 
+i6.pass=${i6.pass}
+#target url for iuclid6 services 
+i6.server=${i6.server}
 ############################################################
 #google.analytics code (UA-XXXX-Y) if not set GA will be disabled
 google.analytics=${google.analytics}
