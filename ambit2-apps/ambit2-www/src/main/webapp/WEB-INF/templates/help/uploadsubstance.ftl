@@ -5,6 +5,7 @@ Substance import options:
 <li><a href="${ambit_root}/ui/uploadsubstance" title="Multiple IUCLID files upload">Multiple files upload</a><a href='#' class='chelp multiupload'>?</a></li>
 <li><a href="${ambit_root}/ui/uploadsubstance1" title="Single IUCLID file upload">Single file upload</a><a href='#' class='chelp singleupload'>?</a></li>
 <li><a href="${ambit_root}/ui/updatesubstancei5" title="Retrieve substance(s) from IUCLID5 server">Retrieve substance(s) from IUCLID5 server</a><a href='#' class='chelp server'>?</a></li>
+<li><a href="${ambit_root}/ui/updatesubstancei6" title="Retrieve substance(s) from IUCLID6 server">Retrieve substance(s) from IUCLID6 server</a><a href='#' class='chelp server'>?</a></li>
 </ul>	
 </div>
 
@@ -39,9 +40,8 @@ Substance import options:
   	Upload of single file in  supported formats IUCLDI5 (.i5z), IUCLID6 (.i6z), Excel + JSON,  W3C RDF. 
   </div>
   <div id="server">
-  	Import from IUCLID5 web services. 
+  	Import from IUCLID5 SOAP web services or IUCLID6 REST web services.
   	<br/>
-  	IUCLID6 web servcies support is under development.
   </div>
   <div id="nmparser">
     Excel spreadsheets can be imported with the help of an additional JSON configuration file, specifying the mapping between the spreadsheet content and the database internal model. 

@@ -60,7 +60,7 @@ public class UIResource extends FreeMarkerResource {
 				return true;
 			}
 		},
-		uploadsubstance1, updatesubstancei5, predict, login {
+		uploadsubstance1, updatesubstancei5,updatesubstancei6, predict, login {
 			@Override
 			public void setCacheHeaders(Response response) {
 				response.getCacheDirectives().add(CacheDirective.noCache());
