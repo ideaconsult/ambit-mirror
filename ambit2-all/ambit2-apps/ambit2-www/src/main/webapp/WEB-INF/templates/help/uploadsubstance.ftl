@@ -4,8 +4,8 @@ Substance import options:
 <ul>	
 <li><a href="${ambit_root}/ui/uploadsubstance" title="Multiple IUCLID files upload">Multiple files upload</a><a href='#' class='chelp multiupload'>?</a></li>
 <li><a href="${ambit_root}/ui/uploadsubstance1" title="Single IUCLID file upload">Single file upload</a><a href='#' class='chelp singleupload'>?</a></li>
-<li><a href="${ambit_root}/ui/updatesubstancei5" title="Retrieve substance(s) from IUCLID5 server">Retrieve substance(s) from IUCLID5 server</a><a href='#' class='chelp server'>?</a></li>
-<li><a href="${ambit_root}/ui/updatesubstancei6" title="Retrieve substance(s) from IUCLID6 server">Retrieve substance(s) from IUCLID6 server</a><a href='#' class='chelp server'>?</a></li>
+<li><a href="${ambit_root}/ui/updatesubstancei5" title="Retrieve substance(s) from IUCLID5 server">Retrieve substance(s) from IUCLID5 server</a><a href='#' class='chelp server5'>?</a></li>
+<li><a href="${ambit_root}/ui/updatesubstancei6" title="Retrieve substance(s) from IUCLID6 server">Retrieve substance(s) from IUCLID6 server</a><a href='#' class='chelp server6'>?</a></li>
 </ul>	
 </div>
 
@@ -21,6 +21,8 @@ Substance import options:
     <li><a href="#quality">Import filters</a></li>
     <li><a href="#clear">Import mode</a></li>
     <li><a href="#server">Web services</a></li>
+    <li><a href="#server5">Import from IUCLID5 SOAP web services</a></li>
+    <li><a href="#server6">Import from IUCLID6 REST services</a></li>
     <li><a href="#multiupload">File upload</a></li>
     <li><a href="#singleupload">File upload</a></li>
   </ul>
@@ -40,12 +42,29 @@ Substance import options:
   	Upload of single file in  supported formats IUCLDI5 (.i5z), IUCLID6 (.i6z), Excel + JSON,  W3C RDF. 
   </div>
   <div id="server">
-  	Import from IUCLID5 SOAP web services or IUCLID6 REST web services.
+  	Sends a request to verify if the IUCLID(5 or 6) server is accessible. The server URL and credentials have to be <a href='http://ambit.sourceforge.net/configure.html' class='qxternal'>configured</a> at AMBIT server side.
   	<br/>
   </div>
+  <div id="server5">
+  	Provide substance UUID or External Identifier. The substance(s) will be retrieved from the IUCLID5 server and imported in AMBIT.
+	<br/>
+	IUCLID5 is no <a href='https://iuclid6.echa.europa.eu/archive-iuclid-5' class='qxternal'>longer supported by ECHA</a>.
+	<br/>
+	AMBIT provides support for both IUCLID5 and IUCLID6 services. The server URL and credentials have to be <a href='http://ambit.sourceforge.net/configure.html' class='qxternal'>configured</a> at AMBIT server side.		
+	<br/>
+  </div>
+  <div id="server6">
+  	Provide substance UUID or External Identifier. The substance(s) will be retrieved from the IUCLID5 server and imported in AMBIT.
+  	<br/>
+  	<a href='https://iuclid6.echa.europa.eu/' class='qxternal'><b>IUCLID</b></a> (International Uniform ChemicaL Information Database) is a software application to record, store, maintain and exchange data on intrinsic and hazard properties of chemical substances.
+ 	IUCLID6 is the current version.
+ 	<br/>
+ 	AMBIT provides support for both IUCLID5 and IUCLID6 services. The server URL and credentials have to be <a href='http://ambit.sourceforge.net/configure.html' class='qxternal'>configured</a> at AMBIT server side.
+	<br/>
+	</div>  
   <div id="nmparser">
     Excel spreadsheets can be imported with the help of an additional JSON configuration file, specifying the mapping between the spreadsheet content and the database internal model. 
-    <a href='https://github.com/enanomapper/nmdataparser'>More details</a>
+    <a href='https://github.com/enanomapper/nmdataparser' class='qxternal'>More details</a>
   </div>  
   <div id="quality">
   	If checked, imports only high quality study records, according to the selected criteria. This option is only valdi fro IUCLID files! 
