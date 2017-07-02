@@ -21,6 +21,7 @@ import ambit2.rest.DBConnection;
 import ambit2.rest.algorithm.CatalogResource;
 import ambit2.rest.reporters.CatalogURIReporter;
 import net.idea.i5.cli.I5LightClient;
+import net.idea.i6.cli.I6LightClient;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.reporter.Reporter;
@@ -39,7 +40,7 @@ public class PingResource extends CatalogResource<ITask<ITaskResult, String>> {
 	protected String pass = null;
 
 	enum _supportedresource {
-		i5
+		i5, i6
 	}
 
 	public PingResource() {
@@ -65,13 +66,12 @@ public class PingResource extends CatalogResource<ITask<ITaskResult, String>> {
 	}
 
 	@Override
-	protected Iterator<ITask<ITaskResult, String>> createQuery(Context context,
-			Request request, Response response) throws ResourceException {
+	protected Iterator<ITask<ITaskResult, String>> createQuery(Context context, Request request, Response response)
+			throws ResourceException {
 		if (tasks.size() == 0) {
 			_supportedresource restype;
 			try {
-				restype = _supportedresource.valueOf(request.getAttributes()
-						.get(LoomResource.resourceType).toString());
+				restype = _supportedresource.valueOf(request.getAttributes().get(LoomResource.resourceType).toString());
 			} catch (Exception x) {
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			}
@@ -95,8 +95,17 @@ public class PingResource extends CatalogResource<ITask<ITaskResult, String>> {
 				pass = null;
 			}
 			try {
-				// ok, only i5 supported for now, so don't bother
-				tasks.add(pingI5(request.getResourceRef(), context));
+				switch (restype) {
+				case i5 : {
+					tasks.add(pingI5(request.getResourceRef(), context));
+					break;
+				}
+				case i6: {
+					tasks.add(pingI6(request.getResourceRef(), context));
+					break;
+				}
+				}
+				
 			} catch (ResourceException x) {
 				throw x;
 			} catch (Exception x) {
@@ -107,17 +116,16 @@ public class PingResource extends CatalogResource<ITask<ITaskResult, String>> {
 	}
 
 	@Override
-	public IProcessor<Iterator<ITask<ITaskResult, String>>, Representation> createConvertor(
-			Variant variant) throws AmbitException, ResourceException {
+	public IProcessor<Iterator<ITask<ITaskResult, String>>, Representation> createConvertor(Variant variant)
+			throws AmbitException, ResourceException {
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new StringConvertor(createHTMLReporter(),
-					MediaType.TEXT_HTML);
+			return new StringConvertor(createHTMLReporter(), MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			Reporter reporter = new CatalogURIReporter<ITask>() {
 				/**
-			     * 
-			     */
+				 * 
+				 */
 				private static final long serialVersionUID = -8184545519930067423L;
 				protected String comma = null;
 
@@ -168,13 +176,48 @@ public class PingResource extends CatalogResource<ITask<ITaskResult, String>> {
 
 		} else
 			// html
-			return new StringConvertor(createHTMLReporter(),
-					MediaType.TEXT_HTML);
+			return new StringConvertor(createHTMLReporter(), MediaType.TEXT_HTML);
 
 	}
 
-	protected ITask<ITaskResult, String> pingI5(Reference uri, Context context)
-			throws ResourceException {
+	// http://localhost:8080/iuclid6-ext/api/ext/v1/query/iuclid6/bySubstance
+	protected ITask<ITaskResult, String> pingI6(Reference uri, Context context) throws ResourceException {
+		ITask<ITaskResult, String> task;
+		DBConnection dbc = new DBConnection(context);
+		I6LightClient cli = null;
+		long now = System.currentTimeMillis();
+		if (server == null)
+			server = dbc.getProperty("i6.server");
+		if (user == null)
+			user = dbc.getProperty("i6.user");
+		if (pass == null)
+			pass = dbc.getProperty("i6.pass");
+		task = new Task<ITaskResult, String>(user);
+		task.setName("Ping " + server);
+		task.setStatus(TaskStatus.Running);
+		task.setUri(new TaskResult(uri.toString(), false));
+		try {
+			cli = new I6LightClient(server);
+			if (cli.ping(user, pass)) {
+				task.setStatus(TaskStatus.Completed);
+			} else {
+				task.setStatus(TaskStatus.Error);
+				task.setError(new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED));
+			}
+		} catch (Exception x) {
+			task.setError(new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x.getMessage()));
+			task.setStatus(TaskStatus.Error);
+		} finally {
+			try {
+				cli.logout();
+			} catch (Exception x) {
+			}
+		}
+		task.setTimeCompleted(System.currentTimeMillis());
+		return task;
+	}
+
+	protected ITask<ITaskResult, String> pingI5(Reference uri, Context context) throws ResourceException {
 		ITask<ITaskResult, String> task;
 		DBConnection dbc = new DBConnection(context);
 		I5LightClient cli = null;
@@ -195,12 +238,10 @@ public class PingResource extends CatalogResource<ITask<ITaskResult, String>> {
 				task.setStatus(TaskStatus.Completed);
 			} else {
 				task.setStatus(TaskStatus.Error);
-				task.setError(new ResourceException(
-						Status.CLIENT_ERROR_UNAUTHORIZED));
+				task.setError(new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED));
 			}
 		} catch (Exception x) {
-			task.setError(new ResourceException(
-					Status.CLIENT_ERROR_BAD_REQUEST, x.getMessage()));
+			task.setError(new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x.getMessage()));
 			task.setStatus(TaskStatus.Error);
 		} finally {
 			try {

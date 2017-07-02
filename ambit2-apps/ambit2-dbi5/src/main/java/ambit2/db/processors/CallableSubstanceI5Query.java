@@ -40,7 +40,9 @@ import net.idea.i5.io.IQASettings;
 import net.idea.i5.io.IZReader;
 import net.idea.i5.io.QASettings;
 import net.idea.i6.cli.I6LightClient;
+import net.idea.i6.cli.I6Query;
 import net.idea.i6.io.I6ZReader;
+import net.idea.iuclid.cli.AbstractPredefinedQuery;
 import net.idea.iuclid.cli.Container;
 import net.idea.iuclid.cli.IContainerClient;
 import net.idea.iuclid.cli.IQueryToolClient;
@@ -98,6 +100,11 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 				reader.setErrorHandler(errhandler);
 				return reader;
 			}
+
+			@Override
+			public AbstractPredefinedQuery createQuery(String value) {
+				return new PredefinedQuery();
+			}
 		},
 		i6 {
 			@Override
@@ -112,6 +119,20 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 				return reader;
 			}
 
+			@Override
+			public AbstractPredefinedQuery createQuery(String value) {
+				return new I6Query(value);
+			}
+
+			@Override
+			public String formatQueryUUID(String substanceUUID) {
+				int x = substanceUUID.indexOf("/");
+				if (x < 0)
+					return substanceUUID;
+				else
+					return substanceUUID.substring(0, x);
+			}
+
 		};
 		abstract IUCLIDLightClient createClient(String server);
 
@@ -122,6 +143,8 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 		public String formatQueryUUID(String substanceUUID) {
 			return substanceUUID;
 		}
+
+		public abstract AbstractPredefinedQuery createQuery(String value);
 
 		public abstract IZReader getReader(File file, IChemObjectReaderErrorHandler errhandler) throws AmbitIOException;
 
@@ -342,11 +365,11 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 					pass = dbc.getProperty(iuclidversion.getProperty(".pass"));
 
 				try {
-					i5 = new I5LightClient(server);
+					i5 = iuclidversion.createClient(server);
 					if (i5.login(user, pass)) {
 						IQueryToolClient cli = i5.getQueryToolClient();
 
-						List<IIdentifiableResource<IIdentifier>> queryResults = cli.executeQuery(new PredefinedQuery(),
+						List<IIdentifiableResource<IIdentifier>> queryResults = cli.executeQuery(iuclidversion.createQuery(extIDValue),
 								extIDType, extIDValue);
 
 						if (queryResults != null && queryResults.size() > 0) {
@@ -365,7 +388,7 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 								try {
 									localLogger.log(Level.FINE, item.getResourceIdentifier().toString());
 									List<IIdentifiableResource<IIdentifier>> container = ccli
-											.get(item.getResourceIdentifier());
+											.get(new Identifier(iuclidversion.formatQueryUUID(item.getResourceIdentifier().toString())));
 									processContainer(container, writer, server);
 
 									imported++;
@@ -403,8 +426,8 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 						}
 					} else
 						throw new ImportSubstanceException(
-								new Status(Status.SERVER_ERROR_BAD_GATEWAY, "IUCLID5 server login failed"),
-								"IUCLID5 server login failed [" + server + "].");
+								new Status(Status.SERVER_ERROR_BAD_GATEWAY, "IUCLID server login failed"),
+								"IUCLID server login failed [" + server + "].");
 				} catch (ResourceException x) {
 					throw x;
 				} catch (Exception x) {
