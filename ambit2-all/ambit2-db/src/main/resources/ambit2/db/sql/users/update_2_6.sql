@@ -16,8 +16,8 @@ delete o FROM user_project o, user u where o.iduser=u.iduser and username=uname;
 delete FROM user where username=uname;
 
 END $$
-DELIMITER; 
-;
+
+DELIMITER ; $$
 
 drop view ulist;
 create view  ulist as
