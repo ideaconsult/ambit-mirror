@@ -167,7 +167,7 @@ public class DBSubstanceImport {
 	protected boolean clearComposition = true;
 
 	public enum _parsertype {
-		i5z, i6z, xlsx, xls, nanowiki, modnanotox, enmrdf
+		i5z, i6z, xlsx, xls, nanowiki, modnanotox, enmrdf, coseu
 	}
 
 	public _parsertype getParserType() {
