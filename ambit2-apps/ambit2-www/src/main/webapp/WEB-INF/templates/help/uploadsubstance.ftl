@@ -46,7 +46,7 @@ Substance import options:
   	<br/>
   </div>
   <div id="server5">
-  	Provide substance UUID or External Identifier. The substance(s) will be retrieved from the IUCLID5 server and imported in AMBIT.
+  	Provide substance UUID or External Identifier. The substance(s) will be retrieved from the IUCLID5 server and imported intp AMBIT.
 	<br/>
 	IUCLID5 is no <a href='https://iuclid6.echa.europa.eu/archive-iuclid-5' class='qxternal'>longer supported by ECHA</a>.
 	<br/>
@@ -54,7 +54,7 @@ Substance import options:
 	<br/>
   </div>
   <div id="server6">
-  	Provide substance UUID or External Identifier. The substance(s) will be retrieved from the IUCLID5 server and imported in AMBIT.
+  	Provide substance UUID or External Identifier. The substance(s) will be retrieved from the IUCLID6 server and imported into AMBIT.
   	<br/>
   	<a href='https://iuclid6.echa.europa.eu/' class='qxternal'><b>IUCLID</b></a> (International Uniform ChemicaL Information Database) is a software application to record, store, maintain and exchange data on intrinsic and hazard properties of chemical substances.
  	IUCLID6 is the current version.
