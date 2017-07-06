@@ -819,6 +819,13 @@ public class DBSubstanceImport {
 						validator.process((IStructureRecord) record);
 						break;
 					}
+					default : {
+						cleanReferenceStructure(srecord);
+						List<ProtocolApplication> m = srecord.getMeasurements();
+						cleanupEmptyRecords(srecord, m);
+						validator.process((IStructureRecord) record);
+						break;
+					}
 					}
 			}
 
