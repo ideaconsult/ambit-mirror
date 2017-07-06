@@ -54,7 +54,8 @@ public class TestTautomers {
 			SilentChemObjectBuilder.getInstance());
 	public boolean FlagExplicitHydrogens = false;
 	public StructureStandardizer standardprocessor = new StructureStandardizer();
-
+	public boolean FlagPrintMoleculeToSmilesExeptions = false;
+	
 	public static void main(String[] args) throws Exception {
 		TestTautomers tt = new TestTautomers();
 		tt.tman.setEnergyRanking(new EnergyRanking()); // This is done here in
@@ -289,7 +290,7 @@ public class TestTautomers {
 			System.out.println(StereoChemUtils
 					.getStereoElementsStatus(resultTautomers.get(i)));
 			System.out.println("   "
-					+ SmartsHelper.moleculeToSMILES(resultTautomers.get(i),
+					+ moleculeToSMILES(resultTautomers.get(i),
 							false));
 		}
 
@@ -343,7 +344,7 @@ public class TestTautomers {
 					+ "   CS_RANK = "
 					+ csRank.toString()
 					+ "   "
-					+ SmartsHelper.moleculeToSMILES(resultTautomers.get(i),
+					+ moleculeToSMILES(resultTautomers.get(i),
 							false));
 			v.add(resultTautomers.get(i));
 		}
@@ -403,7 +404,7 @@ public class TestTautomers {
 					+ "%    CS_RANK = "
 					+ csRank.toString()
 					+ "    "
-					+ SmartsHelper.moleculeToSMILES(resultTautomers.get(i),
+					+ moleculeToSMILES(resultTautomers.get(i),
 							false));
 			v.add(resultTautomers.get(i));
 		}
@@ -466,7 +467,7 @@ public class TestTautomers {
 					+ "   CS_RANK = "
 					+ csRank.toString()
 					+ "   "
-					+ SmartsHelper.moleculeToSMILES(resultTautomers.get(i),
+					+ moleculeToSMILES(resultTautomers.get(i),
 							false));
 			v.add(resultTautomers.get(i));
 		}
@@ -988,6 +989,22 @@ public class TestTautomers {
 
 		System.out.println("   "
 				+ SmartsHelper.moleculeToSMILES(processed, false));
+	}
+	
+	
+	String moleculeToSMILES(IAtomContainer mol, boolean useAromaticityFlag)
+	{
+		String smi = null;
+		try 
+		{
+			smi = SmartsHelper.moleculeToSMILES(mol, false);
+		}	
+		catch (Exception e)
+		{
+			if (FlagPrintMoleculeToSmilesExeptions)
+				System.out.println(e.getMessage());
+		}
+		return smi;
 	}
 
 }
