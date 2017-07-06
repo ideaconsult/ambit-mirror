@@ -1002,7 +1002,10 @@ public class TestTautomers {
 		catch (Exception e)
 		{
 			if (FlagPrintMoleculeToSmilesExeptions)
+			{	
 				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}	
 		}
 		return smi;
 	}
