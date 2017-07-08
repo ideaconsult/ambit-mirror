@@ -57,6 +57,7 @@
 							       "studyResultType",
 							       "isRobustStudy",
 							       "citation",
+							       "citationowner",
 							       "topcategory",
 							       "endpointcategory",
 							       "params",
