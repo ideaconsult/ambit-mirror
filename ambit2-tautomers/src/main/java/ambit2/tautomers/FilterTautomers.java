@@ -13,6 +13,7 @@ import net.sf.jniinchi.INCHI_RET;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -130,6 +131,18 @@ public class FilterTautomers {
 			boolean flagStoreRemovedByFilterTautomers) {
 		FlagStoreRemovedByFilterTautomers = flagStoreRemovedByFilterTautomers;
 	}
+	
+	protected boolean FlagFilterIncorrectHAtomsStructures = false;
+
+	public boolean isFlagFilterIncorrectHAtomsStructures() {
+		return FlagFilterIncorrectHAtomsStructures;
+	}
+
+	public void setFlagFilterIncorrectHAtomsStructures(
+			boolean flagFilterIncorrectHAtomsStructures) {
+		FlagFilterIncorrectHAtomsStructures = flagFilterIncorrectHAtomsStructures;
+	}
+
 
 	public TautomerManager tman;
 	public List<IAtomContainer> removedTautomers = new ArrayList<IAtomContainer>();
@@ -183,7 +196,12 @@ public class FilterTautomers {
 			List<IAtomContainer> tempTautomers = filterIncorrectValencySumStructs(uniqueTautomers);
 			uniqueTautomers = tempTautomers;
 		}
-
+		
+		if (FlagFilterIncorrectHAtomsStructures) {
+			List<IAtomContainer> tempTautomers =  filterIncorrectHAtomsStructs(uniqueTautomers);
+			uniqueTautomers = tempTautomers;
+		}
+		
 		/*
 		 * //Pre-processing is done here for (int i = 0; i <
 		 * uniqueTautomers.size(); i++) { try{
@@ -347,6 +365,31 @@ public class FilterTautomers {
 
 		return (filtered);
 	}
+	
+	List<IAtomContainer> filterIncorrectHAtomsStructs(List<IAtomContainer> tautomers) 
+	{
+		List<IAtomContainer> okTautomers = new ArrayList<IAtomContainer>();
+		for (int i = 0; i < tautomers.size(); i++) {
+			IAtomContainer t = tautomers.get(i);
+			if (checkHAtoms(t))
+				okTautomers.add(t);
+		}
+		return okTautomers;
+	}
+
+	boolean checkHAtoms(IAtomContainer target)
+	{
+		for (IAtom a : target.atoms())
+		{
+			Integer hAtoms = a.getImplicitHydrogenCount();
+			if (hAtoms != null)
+				if (hAtoms < 0)
+					return false;
+		}
+
+		return true;
+	}
+
 
 	boolean checkIsomorphismEquivalence(IAtomContainer target,
 			List<IAtomContainer> structs) {
