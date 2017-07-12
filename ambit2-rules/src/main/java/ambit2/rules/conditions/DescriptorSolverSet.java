@@ -6,6 +6,7 @@ import java.util.List;
 public class DescriptorSolverSet implements IDescriptorSolver
 {
 	protected List<IDescriptorSolver> solvers = new ArrayList<IDescriptorSolver>();
+	protected List<String> allDescriptorList = null;
 	
 	public DescriptorSolverSet () {
 	}
@@ -28,20 +29,35 @@ public class DescriptorSolverSet implements IDescriptorSolver
 
 	@Override
 	public List<String> getDescriptorList() {
-		// TODO Auto-generated method stub
-		return null;
+		if (allDescriptorList == null)
+			createAllDescriptorList();
+		return allDescriptorList;
 	}
 
 	@Override
 	public boolean isDescriptorSupported(String descrName) {
-		// TODO Auto-generated method stub
+		for (IDescriptorSolver solver : solvers) 
+		{	
+			if (solver.isDescriptorSupported(descrName))
+				return true;
+		}	
 		return false;
 	}
 
 	@Override
 	public Object calculateDescriptor(String descrName, Object target) {
-		// TODO Auto-generated method stub
+		for (IDescriptorSolver solver : solvers) 
+		{	
+			if (solver.isDescriptorSupported(descrName))
+				return solver.calculateDescriptor(descrName, target);
+		}
 		return null;
 	}
-
+	
+	void createAllDescriptorList()
+	{
+		List<String> allDescriptorList = new ArrayList<String>();
+		for (IDescriptorSolver solver : solvers) 
+			allDescriptorList.addAll(solver.getDescriptorList());
+	}
 }
