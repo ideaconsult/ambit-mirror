@@ -41,7 +41,7 @@ public class ReactionTestUtils
 		
 		//testReactor("CC", "D:/Projects/Nina/Reactions/metabolism-reactions.json"); //!!!!!!!!!
 		
-		testReactor("CC", "/Volumes/Data/Projects/reactor-config1.json"); 
+		testReactor("C", "/Volumes/Data/Projects/reactor-config1.json"); 
 		
 		
 	}

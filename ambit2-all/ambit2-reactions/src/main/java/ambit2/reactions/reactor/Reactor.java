@@ -24,8 +24,10 @@ import ambit2.base.data.StructureRecord;
 import ambit2.core.data.MoleculeTools;
 import ambit2.reactions.Reaction;
 import ambit2.reactions.ReactionDataBase;
+import ambit2.rules.conditions.DescriptorSolverSet;
 import ambit2.rules.conditions.DescriptorValueCondition;
 import ambit2.rules.conditions.ICondition;
+import ambit2.rules.conditions.IDescriptorSolver;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SmartsHelper;
 
@@ -42,7 +44,8 @@ public class Reactor
 	protected TreeSet<String> nodeHashCodes = new TreeSet<String>();
 	protected InChIGeneratorFactory igf = null;
 	List<INCHI_OPTION> igf_options = null;
-	protected ReactorDescriptorSolver descriptoSolver = new ReactorDescriptorSolver();
+	
+	protected IDescriptorSolver descriptoSolver = null;
 	
 
 	//Status variables
@@ -52,6 +55,7 @@ public class Reactor
 	public Reactor() throws Exception
 	{
 		setupInchiGenerator();
+		setupDescriptoSolver();
 		setupLogger(logger);
 	}
 	
@@ -65,6 +69,15 @@ public class Reactor
 		igf_options.add(INCHI_OPTION.FixSp3Bug);
 		
 		igf = InChIGeneratorFactory.getInstance();
+	}
+	
+	protected void setupDescriptoSolver()
+	{
+		DescriptorSolverSet solverSet = new DescriptorSolverSet();
+		IDescriptorSolver rds = new ReactorDescriptorSolver();
+		solverSet.addSolver(rds);
+		
+		descriptoSolver = solverSet;
 	}
 	
 	
@@ -97,7 +110,7 @@ public class Reactor
 		this.strategy = strategy;
 	}
 	
-	public ReactorDescriptorSolver getDescriptoSolver() {
+	public IDescriptorSolver getDescriptoSolver() {
 		return descriptoSolver;
 	}
 	
