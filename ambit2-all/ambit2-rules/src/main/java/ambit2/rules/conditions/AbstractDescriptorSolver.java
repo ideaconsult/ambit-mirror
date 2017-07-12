@@ -5,7 +5,7 @@ import java.util.List;
 
 public abstract class AbstractDescriptorSolver implements IDescriptorSolver 
 {
-	protected ArrayList<String> descriptorList = new ArrayList<String>();
+	protected List<String> descriptorList = new ArrayList<String>();
 	
 	@Override
 	public List<String> getDescriptorList() {
