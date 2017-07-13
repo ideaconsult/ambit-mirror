@@ -25,8 +25,7 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.processors.CASProcessor;
 
-public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends
-		IteratingFilesWithHeaderReader<COLUMN> {
+public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends IteratingFilesWithHeaderReader<COLUMN> {
 
 	protected String commentChar = "#";
 
@@ -52,16 +51,14 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends
 
 	protected CASProcessor casTransformer = new CASProcessor();
 
-	public IteratingDelimitedFileReaderComplexHeader(Reader in)
-			throws CDKException {
+	public IteratingDelimitedFileReaderComplexHeader(Reader in) throws CDKException {
 		this(in, new DelimitedFileFormat()); // default format
 	}
 
 	/**
 		 * 
 		 */
-	public IteratingDelimitedFileReaderComplexHeader(Reader in,
-			DelimitedFileFormat format) throws CDKException {
+	public IteratingDelimitedFileReaderComplexHeader(Reader in, DelimitedFileFormat format) throws CDKException {
 		super();
 		this.format = format;
 		setReader(in);
@@ -82,18 +79,15 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends
 
 	@Override
 	protected LiteratureEntry getReference() {
-		return LiteratureEntry.getInstance(getClass().getName(), getClass()
-				.getName());
+		return LiteratureEntry.getInstance(getClass().getName(), getClass().getName());
 	}
 
-	public IteratingDelimitedFileReaderComplexHeader(InputStream in)
-			throws UnsupportedEncodingException, CDKException {
+	public IteratingDelimitedFileReaderComplexHeader(InputStream in) throws UnsupportedEncodingException, CDKException {
 		this(new InputStreamReader(in, "UTF-8"));
 	}
 
-	public IteratingDelimitedFileReaderComplexHeader(InputStream in,
-			DelimitedFileFormat format) throws UnsupportedEncodingException,
-			CDKException {
+	public IteratingDelimitedFileReaderComplexHeader(InputStream in, DelimitedFileFormat format)
+			throws UnsupportedEncodingException, CDKException {
 		this(new InputStreamReader(in, "UTF-8"), format);
 	}
 
@@ -117,11 +111,11 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends
 	 */
 	public boolean hasNext() {
 		if (isHeaderEmpty()) {
-			fireIOSettingQuestion(new StringIOSetting("", Importance.MEDIUM,
-					Property.IO_QUESTION.IO_START.toString(), ""));
+			fireIOSettingQuestion(
+					new StringIOSetting("", Importance.MEDIUM, Property.IO_QUESTION.IO_START.toString(), ""));
 			processHeader(input);
-			fireIOSettingQuestion(new StringIOSetting("", Importance.MEDIUM,
-					Property.IO_QUESTION.IO_STOP.toString(), ""));
+			fireIOSettingQuestion(
+					new StringIOSetting("", Importance.MEDIUM, Property.IO_QUESTION.IO_STOP.toString(), ""));
 		}
 
 		if (!nextAvailableIsKnown) {
@@ -136,14 +130,10 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends
 					if (inchiIndex >= 0)
 						try {
 							if (inchiFactory == null)
-								inchiFactory = InChIGeneratorFactory
-										.getInstance();
+								inchiFactory = InChIGeneratorFactory.getInstance();
 
-							InChIToStructure c = inchiFactory
-									.getInChIToStructure(values[inchiIndex]
-											.toString(),
-											SilentChemObjectBuilder
-													.getInstance());
+							InChIToStructure c = inchiFactory.getInChIToStructure(values[inchiIndex].toString(),
+									SilentChemObjectBuilder.getInstance());
 							nextMolecule = c.getAtomContainer();
 
 						} catch (Exception x) {
@@ -153,34 +143,24 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends
 					if ((nextMolecule == null) && (smilesIndex >= 0)) {
 						try {
 							if (values[smilesIndex] == null) {
-								nextMolecule = SilentChemObjectBuilder
-										.getInstance().newInstance(
-												IAtomContainer.class);
+								nextMolecule = SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class);
 							} else
-								nextMolecule = sp
-										.parseSmiles(values[smilesIndex]
-												.toString());
-						} catch (InvalidSmilesException
-								| ArrayIndexOutOfBoundsException x) {
+								nextMolecule = sp.parseSmiles(values[smilesIndex].toString());
+						} catch (InvalidSmilesException | ArrayIndexOutOfBoundsException x) {
 							// do not want to break if a record is faulty
 							logger.fine("Empty molecule!");
-							nextMolecule = SilentChemObjectBuilder
-									.getInstance().newInstance(
-											IAtomContainer.class); // just
-																	// create
-							nextMolecule
-									.setProperty("SMILES", "Invalid SMILES");
+							nextMolecule = SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class); // just
+																													// create
+							nextMolecule.setProperty("SMILES", "Invalid SMILES");
 						}
 					}
 
 					if (nextMolecule == null)
-						nextMolecule = SilentChemObjectBuilder.getInstance()
-								.newInstance(IAtomContainer.class);
+						nextMolecule = SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class);
 
 					for (int i = 0; i < values.length; i++)
 						if (values[i] != null) {
-							String cas = casTransformer.process(values[i]
-									.toString());
+							String cas = casTransformer.process(values[i].toString());
 							if (CASProcessor.isValidFormat(cas)) {
 								// if (getHeaderColumn(i) instanceof Property)
 								// getHeaderColumn(i).setLabel(Property.CAS);
@@ -189,8 +169,7 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends
 							// else if
 							// (EINECS.isValidFormat(values[i].toString()))
 							// getHeaderColumn(i).setLabel(Property.EC);
-							nextMolecule.setProperty(getHeaderColumn(i),
-									values[i].toString().trim());
+							nextMolecule.setProperty(getHeaderColumn(i), values[i].toString().trim());
 						} else
 							nextMolecule.removeProperty(getHeaderColumn(i));
 
@@ -203,8 +182,7 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends
 					hasNext = false;
 				}
 			} catch (Exception exception) {
-				logger.log(Level.SEVERE, "Error while reading next molecule: ",
-						exception);
+				logger.log(Level.SEVERE, "Error while reading next molecule: ", exception);
 				hasNext = true;
 			}
 			if (!hasNext)
@@ -264,8 +242,7 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends
 				processComment(line);
 				line = in.readLine();
 			}
-			StringTokenizer st = new StringTokenizer(line, new String(
-					format.getFieldDelimiter()));
+			StringTokenizer st = new StringTokenizer(line, new String(format.getFieldDelimiter()));
 			while (st.hasMoreTokens()) {
 				addHeaderColumn(st.nextToken().trim());
 			}
@@ -277,8 +254,7 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends
 					smilesIndex = i;
 					break;
 				}
-				if ((smilesIndex < 0)
-						&& smiHeader.equals(getOptionalSMILESHeader())) {
+				if ((smilesIndex < 0) && smiHeader.equals(getOptionalSMILESHeader())) {
 					smilesIndex = i;
 					break;
 				}
@@ -314,8 +290,7 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends
 		if (values != null)
 			for (int i = 0; i < values.length; i++)
 				values[i] = null;
-		QuotedTokenizer st = new QuotedTokenizer(line, format
-				.getFieldDelimiter().charAt(0));
+		QuotedTokenizer st = new QuotedTokenizer(line, format.getFieldDelimiter().charAt(0));
 		int fieldIndex = 0;
 		while (st.hasMoreTokens()) {
 			if (fieldIndex >= values.length)
@@ -350,5 +325,10 @@ public abstract class IteratingDelimitedFileReaderComplexHeader<COLUMN> extends
 
 	@Override
 	protected abstract COLUMN createPropertyByColumnName(String name);
+
+	protected void skipLines(int numlines) throws IOException {
+		for (int i = 0; i < numlines; i++)
+			input.readLine();
+	}
 
 }
