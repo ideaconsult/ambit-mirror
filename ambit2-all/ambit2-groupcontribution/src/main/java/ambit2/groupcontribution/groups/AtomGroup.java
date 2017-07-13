@@ -1,7 +1,7 @@
 package ambit2.groupcontribution.groups;
 
 
-public class AtomGroup implements IGroup 
+public class AtomGroup extends ValueTransformedGroup 
 {	
 	private String atomDesignation = "";
 	private double contribution = 0.0;

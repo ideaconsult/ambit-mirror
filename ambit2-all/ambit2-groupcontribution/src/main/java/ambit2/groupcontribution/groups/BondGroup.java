@@ -1,6 +1,6 @@
 package ambit2.groupcontribution.groups;
 
-public class BondGroup implements IGroup 
+public class BondGroup extends ValueTransformedGroup 
 {
 
 	@Override

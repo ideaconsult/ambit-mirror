@@ -19,6 +19,7 @@ public class GroupContributionModel
 	private String modelName = "";
 	private ArrayList<ILocalDescriptor> localDescriptors = new ArrayList<ILocalDescriptor>();	
 	private ArrayList<ICorrectionFactor> correctionFactors = new ArrayList<ICorrectionFactor>();
+	//TODO add group rules and LocalDescriptor rules
 	private Map<String,IGroup> groups = new HashMap<String,IGroup>();
 	private Type modelType = Type.ATOMIC;
 	

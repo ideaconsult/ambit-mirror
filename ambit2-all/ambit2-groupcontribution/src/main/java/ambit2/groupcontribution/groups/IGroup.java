@@ -1,5 +1,6 @@
 package ambit2.groupcontribution.groups;
 
+import ambit2.groupcontribution.transformations.IValueTransformation;
 
 public interface IGroup 
 {
@@ -18,6 +19,8 @@ public interface IGroup
 	   
 	public double getContribution();
 	public void setContribution(double contribution);
+	public IValueTransformation getValueTransformation();
+	public void setValueTransformation(IValueTransformation transformation);
 	public String getDesignation();	
 	public GroupInfo getInfo();
 	public IGroupSet getGroupSet();
