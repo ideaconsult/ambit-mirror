@@ -1,0 +1,8 @@
+#Path to OpenBabel executable http://openbabel.org
+OBABEL_HOME=${OBABEL_HOME}
+#Path to Dragon6 executable http://www.talete.mi.it/products/dragon_description.htm 
+DRAGON_HOME=${DRAGON_HOME}
+#Path to balloon executable http://users.abo.fi/mivainio/balloon/ 
+BALLOON_HOME=${BALLOON_HOME}
+#Path to Vega jar executable  
+VEGA_HOME=${VEGA_HOME}

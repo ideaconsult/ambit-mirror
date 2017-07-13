@@ -29,31 +29,33 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ambit2.base.io.DownloadTool;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
-import ambit2.base.io.DownloadTool;
 
 /**
  * A wrapper for an external executable (OS dependent). The executable and
  * supporting files should be available as a resource in a jar file. When
  * requested, the files are copied under user home directory and executed from
  * there. <br>
- * To change this behaviour, override {@link #getExecutable(String, String)}. <br>
+ * To change this behaviour, override {@link #getExecutable(String, String)}.
+ * <br>
  * OS names expected: "Mac OS","Windows","AIX","Linux","HP-UX","Solaris"
  * 
  * @author nina
  * 
  */
-public abstract class CommandShell<INPUT, OUTPUT> implements
-		IProcessor<INPUT, OUTPUT> {
+public abstract class CommandShell<INPUT, OUTPUT> implements IProcessor<INPUT, OUTPUT> {
 	/**
 	 * 
 	 */
@@ -68,7 +70,7 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 	public static final String os_FreeBSD = "FreeBSD";
 	private final static String msgEmptyMolecule = "Empty molecule after %s processing";
 	protected String workFolder;
-	
+
 	public String getWorkFolder() {
 		return workFolder;
 	}
@@ -90,7 +92,6 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 
 	protected boolean enabled = true;
 	protected int exitCode = 0;
-	
 
 	public long getID() {
 		// TODO Auto-generated method stub
@@ -123,14 +124,11 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 
 	}
 
-	public String addExecutable(String executable, String[] morefiles)
-			throws ShellException {
-		return addExecutable(System.getProperty("os.name"), executable,
-				morefiles);
+	public String addExecutable(String executable, String[] morefiles) throws ShellException {
+		return addExecutable(System.getProperty("os.name"), executable, morefiles);
 	}
 
-	public String addExecutable(String osname, String executable,
-			String[] morefiles) throws ShellException {
+	public String addExecutable(String osname, String executable, String[] morefiles) throws ShellException {
 		// File file = new File(executable);
 		// if (!file.exists()) throw new
 		// ShellException(this,file.getAbsoluteFile() + " not found!");
@@ -138,34 +136,28 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 		return executable;
 	}
 
-	public String addExecutableMac(String executable, String[] morefiles)
-			throws ShellException {
+	public String addExecutableMac(String executable, String[] morefiles) throws ShellException {
 		return addExecutable(os_MAC, executable, morefiles);
 	}
 
-	public String addExecutableWin(String executable, String[] morefiles)
-			throws ShellException {
+	public String addExecutableWin(String executable, String[] morefiles) throws ShellException {
 		addExecutable(os_WINDOWSVISTA, executable, morefiles);
 		return addExecutable(os_WINDOWS, executable, morefiles);
 	}
 
-	public String addExecutableLinux(String executable, String[] morefiles)
-			throws ShellException {
+	public String addExecutableLinux(String executable, String[] morefiles) throws ShellException {
 		return addExecutable(os_LINUX, executable, morefiles);
 	}
 
-	public String addExecutableLinux64(String executable, String[] morefiles)
-			throws ShellException {
+	public String addExecutableLinux64(String executable, String[] morefiles) throws ShellException {
 		return addExecutable(os_LINUX64, executable, morefiles);
 	}
 
-	public String addExecutableFreeBSD(String executable, String[] morefiles)
-			throws ShellException {
+	public String addExecutableFreeBSD(String executable, String[] morefiles) throws ShellException {
 		return addExecutable(os_FreeBSD, executable, morefiles);
 	}
 
-	public synchronized String getExecutable(String osname, String osarch)
-			throws Exception {
+	public synchronized String getExecutable(String osname, String osarch) throws Exception {
 
 		// ambit2/
 		boolean runChmod = osname.startsWith(os_LINUX);
@@ -192,14 +184,9 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 				// trying chmod +x
 				if (runChmod)
 					try {
-						Runtime.getRuntime().exec(
-								String.format("chmod +x %s",
-										file.getAbsolutePath()));
+						Runtime.getRuntime().exec(String.format("chmod +x %s", file.getAbsolutePath()));
 					} catch (Exception x) {
-						logger.log(
-								Level.WARNING,
-								"Error when executing chmod on "
-										+ file.getAbsolutePath(), x);
+						logger.log(Level.WARNING, "Error when executing chmod on " + file.getAbsolutePath(), x);
 					}
 			}
 			if (command.getAdditionalFiles() != null)
@@ -237,8 +224,7 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 				} catch (IOException x) {
 					throw new ShellException(this, "Not found");
 				} catch (Exception x) {
-					throw new ShellException(this, "Not supported for "
-							+ osName);
+					throw new ShellException(this, "Not supported for " + osName);
 				}
 		}
 		throw new ShellException(this, "Not supported for " + osName);
@@ -268,19 +254,16 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 	 *         to the executable
 	 * @throws ShellException
 	 */
-	protected synchronized List<String> prepareInput(String path, INPUT mol)
-			throws ShellException {
+	protected synchronized List<String> prepareInput(String path, INPUT mol) throws ShellException {
 		return null;
 	}
 
 	/**
 	 * Does nothing, override with smth meaningfull
 	 */
-	protected abstract OUTPUT parseOutput(String path, INPUT mol)
-			throws ShellException;
+	protected abstract OUTPUT parseOutput(String path, INPUT mol) throws ShellException;
 
-	protected OUTPUT parseOutput(String path, INPUT mol, int exitVal)
-			throws ShellException {
+	protected OUTPUT parseOutput(String path, INPUT mol, int exitVal) throws ShellException {
 		if (exitCodeOK(exitVal))
 			return parseOutput(path, mol);
 		else
@@ -298,17 +281,14 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 	}
 
 	protected String getHomeDir(File file) {
-		return System.getProperty("java.io.tmpdir") + "/.ambit2/"
-				+ getWorkFolder();
+		return System.getProperty("java.io.tmpdir") + "/.ambit2/" + getWorkFolder();
 	}
 
-	protected synchronized INPUT transform_input(INPUT input)
-			throws AmbitException {
+	protected synchronized INPUT transform_input(INPUT input) throws AmbitException {
 		return input;
 	}
 
-	protected synchronized OUTPUT runShell(INPUT input, String execString)
-			throws ShellException {
+	protected synchronized OUTPUT runShell(INPUT input, String execString) throws ShellException {
 		try {
 			setExitCode(0);
 			File file = new File(execString);
@@ -332,10 +312,8 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 
 			if (!runAsync) {
 				builder.redirectErrorStream(true);
-				logger.fine("<" + toString() + " filename=\"" + execString
-						+ "\">");
-				logger.log(Level.FINE, "<environ>" + environ.toString()
-						+ "</environ>");
+				logger.fine("<" + toString() + " filename=\"" + execString + "\">");
+				logger.log(Level.FINE, "<environ>" + environ.toString() + "</environ>");
 				long now = System.currentTimeMillis();
 				final Process process = builder.start();
 				InputStream is = process.getInputStream();
@@ -344,10 +322,8 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 
 				setExitCode(process.waitFor());
 				logger.fine("</wait>");
-				logger.fine("<exitcode value=\""
-						+ Integer.toString(getExitCode()) + "\">");
-				logger.fine("<elapsed_time units=\"ms\">"
-						+ Long.toString(System.currentTimeMillis() - now)
+				logger.fine("<exitcode value=\"" + Integer.toString(getExitCode()) + "\">");
+				logger.fine("<elapsed_time units=\"ms\">" + Long.toString(System.currentTimeMillis() - now)
 						+ "</elapsed_time>");
 				logger.fine("</" + toString() + ">");
 
@@ -357,8 +333,7 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 					newmol = parseOutput(path, mol);
 					logger.fine("</parse>");
 				} else {
-					logger.severe("<error>" + Integer.toString(getExitCode())
-							+ "</error>");
+					logger.severe("<error>" + Integer.toString(getExitCode()) + "</error>");
 					newmol = parseOutput(path, mol, getExitCode());
 				}
 				return newmol;
@@ -458,5 +433,26 @@ public abstract class CommandShell<INPUT, OUTPUT> implements
 
 	@Override
 	public void close() throws Exception {
+	}
+
+	public synchronized String getHomeFromConfig(String propertiesResource, String propertyHome) throws ShellException {
+		try {
+			Properties properties = new Properties();
+			URL uri = getClass().getClassLoader().getResource(propertiesResource);
+			try (InputStream in = uri.openStream()) {
+				if (in == null)
+					throw new ShellException(null, String.format("Can't find %s", uri.toString()));
+				properties.load(in);
+			}
+			String wheredragonlives = properties.getProperty(propertyHome);
+			if (wheredragonlives == null)
+				throw new ShellException(null, String.format("Can't find where %s is located. No property %s in %s",
+						toString(), propertyHome, uri.toString()));
+			return wheredragonlives;
+		} catch (ShellException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ShellException(null, x);
+		}
 	}
 }
