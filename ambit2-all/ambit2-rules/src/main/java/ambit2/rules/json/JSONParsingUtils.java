@@ -124,9 +124,13 @@ public class JSONParsingUtils
 		{	
 			return keyNode.asDouble();
 		}
+		if (keyNode.isInt())		
+		{
+			return (double)keyNode.asInt();
+		}
 		else
 		{	
-			throw (new Exception ( "Keyword " + keyword + " is not of type Double!"));
+			throw (new Exception ( "Keyword " + keyword + " is not of type Double or Integer!"));
 		}			
 	}
 	

@@ -25,7 +25,8 @@ public class ConditionJsonParser
 		if (errors.toString().isEmpty())
 		{	
 			IValue val = new Value();
-			//TODO set value
+			val.setValue(descrValue);
+			val.setRelation(relation);
 			IDescriptorValueCondition dvc = new DescriptorValueCondition(val, null, descrName);
 			return dvc;
 		}
