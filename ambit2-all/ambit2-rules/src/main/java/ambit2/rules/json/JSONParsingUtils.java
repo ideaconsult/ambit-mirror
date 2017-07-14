@@ -193,6 +193,15 @@ public class JSONParsingUtils
 	
 	public static Object[] extractArrayKeyword(JsonNode node, String keyword, boolean isRequired) throws Exception
 	{
+		return extractArrayKeyword(node, keyword, isRequired, false);
+	}
+	
+	
+	public static Object[] extractArrayKeyword(JsonNode node,
+			String keyword, 
+			boolean isRequired, 
+			boolean extractJsonObjectsAsNodes) throws Exception
+	{
 		JsonNode keyNode = node.path(keyword);
 		if(keyNode.isMissingNode())
 		{
@@ -207,8 +216,7 @@ public class JSONParsingUtils
 			int n = keyNode.size();
 			Object objects[] = new Object[n];
 			for (int i = 0; i < n; i++)
-				objects[i] =  extractObject(keyNode.get(i));
-			
+					objects[i] =  extractObject(keyNode.get(i), extractJsonObjectsAsNodes);
 			return objects;
 		}
 		else
@@ -217,12 +225,18 @@ public class JSONParsingUtils
 		}
 	} 
 	
+	public static Object extractObject (JsonNode node)
+	{
+		 return extractObject (node, false);
+	}
+	
+	
 	/**
 	 * 
 	 * @param node
 	 * @return
 	 */
-	public static Object extractObject (JsonNode node)
+	public static Object extractObject (JsonNode node, boolean extractJsonObjectsAsNode)
 	{
 		if (node.isTextual())
 		{
@@ -244,6 +258,10 @@ public class JSONParsingUtils
 		}
 		
 		//TODO - eventually add array object extraction
+		
+		if (node.isObject())
+			if (extractJsonObjectsAsNode)
+				return node;
 		
 		return null;
 	}

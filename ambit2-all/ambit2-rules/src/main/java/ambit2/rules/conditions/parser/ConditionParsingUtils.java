@@ -2,6 +2,7 @@ package ambit2.rules.conditions.parser;
 
 import ambit2.rules.conditions.DescriptorValueCondition;
 import ambit2.rules.conditions.ICondition;
+import ambit2.rules.conditions.IDescriptorValueCondition;
 import ambit2.rules.conditions.value.IValue.Relation;
 import ambit2.rules.conditions.value.Value;
 
@@ -15,7 +16,7 @@ public class ConditionParsingUtils
 	 * @return
 	 * @throws Exception
 	 */	
-	public static DescriptorValueCondition getDescriptorValueConditionFromToken(String token) throws Exception 
+	public static IDescriptorValueCondition getDescriptorValueConditionFromToken(String token) throws Exception 
 	{
 		if (token == null)
 			throw new Exception("null token");
