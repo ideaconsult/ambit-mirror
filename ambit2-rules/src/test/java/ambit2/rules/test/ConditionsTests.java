@@ -7,6 +7,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import ambit2.rules.conditions.DescriptorValueCondition;
+import ambit2.rules.conditions.IDescriptorValueCondition;
 import ambit2.rules.conditions.ValueCondition;
 import ambit2.rules.conditions.parser.ConditionParsingUtils;
 import ambit2.rules.conditions.value.Value;
@@ -26,7 +27,7 @@ public class ConditionsTests {
 
 	void checkDescriptorValueCondition(String descrCondString,
 			DescriptorSolver0 solver0, boolean expectedResult) throws Exception {
-		DescriptorValueCondition dvc = ConditionParsingUtils
+		IDescriptorValueCondition dvc = ConditionParsingUtils
 				.getDescriptorValueConditionFromToken(descrCondString);
 		dvc.setDescriptorSolver(solver0);
 		System.out.println(dvc.toString());

@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import ambit2.rules.conditions.DescriptorValueCondition;
 import ambit2.rules.conditions.ICondition;
+import ambit2.rules.conditions.IDescriptorValueCondition;
+import ambit2.rules.conditions.parser.ConditionJsonParser;
 import ambit2.rules.conditions.parser.ConditionParsingUtils;
 import ambit2.rules.json.JSONParsingUtils;
 import ambit2.smarts.SMIRKSManager;
@@ -116,7 +118,7 @@ public class Reaction
 		reaction.smirks = JSONParsingUtils.extractStringKeyword(node, "SMIRKS", true);
 		reaction.reactionClass = JSONParsingUtils.extractStringKeyword(node, "CLASS", false);
 		
-		Object obj[] = JSONParsingUtils.extractArrayKeyword(node, "USE_CONDITIONS", false);
+		Object obj[] = JSONParsingUtils.extractArrayKeyword(node, "USE_CONDITIONS", false, true);
 		if (obj != null)
 		{	
 			List<ICondition> conditions = new ArrayList<ICondition>();
@@ -131,7 +133,15 @@ public class Reaction
 					 conditions.add(condition);
 				}
 				else
-					throw new Exception("Incorrect USE_CONDITIONS["+(i+1)+"]. It is not a string! " + obj[i] );
+				{	
+					if (obj[i] instanceof JsonNode)
+					{
+						IDescriptorValueCondition dvc = ConditionJsonParser.getDescriptorValueCondition((JsonNode)obj[i]);
+						 conditions.add(dvc);
+					}
+					else
+						throw new Exception("Incorrect USE_CONDITIONS["+(i+1)+"]. It is not a string! " + obj[i] );
+				}	
 			}
 			
 			reaction.setConditions(conditions);
@@ -143,7 +153,7 @@ public class Reaction
 	
 	public static ICondition getConditionFromString(String condStr) throws Exception
 	{
-		DescriptorValueCondition dvc= ConditionParsingUtils.getDescriptorValueConditionFromToken(condStr);
+		IDescriptorValueCondition dvc= ConditionParsingUtils.getDescriptorValueConditionFromToken(condStr);
 		return dvc;
 	}
 	
