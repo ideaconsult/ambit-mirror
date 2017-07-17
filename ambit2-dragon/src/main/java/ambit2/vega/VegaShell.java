@@ -171,8 +171,10 @@ public class VegaShell extends AbstractDescriptorShell {
 
 		String homeDir = getHomeDir(null);
 		File dir = new File(homeDir);
-		if (!dir.exists())
+		if (!dir.exists()) {
+			logger.log(Level.INFO, String.format("%s do not exist, mkdir",dir.getAbsolutePath()));
 			dir.mkdirs();
+		}	
 
 		String molfile = String.format("%s%s%s", homeDir, File.separator, inFile[1]);
 		String predfile = String.format("%s%s%s", homeDir, File.separator, outFile[0]);
