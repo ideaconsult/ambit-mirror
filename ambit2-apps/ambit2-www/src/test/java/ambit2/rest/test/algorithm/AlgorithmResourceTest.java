@@ -1266,34 +1266,14 @@ public class AlgorithmResourceTest extends ResourceTest {
 		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port, "1")));
 		logger.info(dataset.toString());
 
-		/*
-		IDatabaseConnection c = getConnection();
-		ITable table = c.createQueryTable("EXPECTED",
-				"SELECT count(*) c,group_concat(distinct(status)) s FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: In vitro mutagenicity (Ames test) alerts by ISS' where idstructure=100211 group by idstructure,`status`");
-		Assert.assertEquals(1, table.getRowCount());
-		Assert.assertEquals("ERROR", table.getValue(0, "s"));
-		Assert.assertEquals(new BigInteger("6") , table.getValue(0, "c"));
+		
+		c = getConnection();
 		table = c.createQueryTable("EXPECTED",
-				"SELECT count(*) c,group_concat(distinct(status)) s  FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: In vitro mutagenicity (Ames test) alerts by ISS' where idstructure!=100211 group by `status` order by `status`");
-		Assert.assertEquals(2, table.getRowCount());
-		Assert.assertEquals("OK", table.getValue(0, "s"));
-		Assert.assertEquals(new BigInteger("18"), table.getValue(0, "c"));
-		// the explanation field
-		Assert.assertEquals("TRUNCATED", table.getValue(1, "s"));
-		Assert.assertEquals(new BigInteger("3"), table.getValue(1, "c"));
-
-		table = c.createQueryTable("p",
-				"SELECT count(*) c,predicate,object FROM property_annotation join properties using(idproperty) group by object order by object");
-		Assert.assertEquals(2, table.getRowCount());
-		Assert.assertEquals("acceptValue", table.getValue(0, "predicate"));
-		Assert.assertEquals("acceptValue", table.getValue(1, "predicate"));
-		Assert.assertEquals("NO", table.getValue(0, "object"));
-		Assert.assertEquals("YES", table.getValue(1, "object"));
-		Assert.assertEquals(new BigInteger("6"), table.getValue(0, "c"));
-		Assert.assertEquals(new BigInteger("6"), table.getValue(1, "c"));
-
+				"SELECT * FROM values_all join catalog_references using(idreference) where url regexp '^VEGA'");
+		Assert.assertEquals(16, table.getRowCount());
+		
 		c.close();
-		*/
+		
 
 	}
 }
