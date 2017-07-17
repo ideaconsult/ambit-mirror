@@ -8,7 +8,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import org.apache.commons.io.IOUtils;
@@ -16,6 +20,12 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.SMILESWriter;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ambit2.base.data.ILiteratureEntry;
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
 import ambit2.core.data.MoleculeTools;
@@ -35,10 +45,63 @@ public class VegaShell extends AbstractDescriptorShell {
 	 * 
 	 */
 	private static final long serialVersionUID = -4109994330375555731L;
+	private static Map<String, Property> properties;
+
+	public static Map<String, Property> getProperties() {
+		return properties;
+	}
+
+	static {
+		try {
+			properties = loadProperties();
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage());
+		}
+	}
 
 	public VegaShell() throws ShellException {
 		super();
-		// descriptors = new DragonDescriptorDictionary();
+
+	}
+
+	protected static synchronized Map<String, Property> loadProperties() {
+		Map<String, Property> properties = new HashMap<String, Property>();
+		try (InputStream in = VegaShell.class.getClassLoader().getResourceAsStream("ambit2/vega/properties.json")) {
+			ObjectMapper m = new ObjectMapper();
+			JsonNode root = m.readTree(in);
+			Iterator<Map.Entry<String, JsonNode>> pi = root.get("features").fields();
+			String version =  "https://www.vegahub.eu/";
+			try {
+				version = root.get("models").get("core").asText();
+			} catch (Exception x) {
+			}
+			while (pi.hasNext()) {
+				Map.Entry<String, JsonNode> p = pi.next();
+
+				JsonNode disabled = p.getValue().get("disabled");
+				if (disabled != null && disabled.asBoolean())
+					continue;
+
+				String creator = p.getValue().get("creator").asText();
+				try {
+					creator = root.get("models").get(creator).asText();
+				} catch (Exception x) {
+				}
+				ILiteratureEntry ref = LiteratureEntry.getInstance(creator,version);
+				// String name = p.getValue().get("title").asText();
+				String name = p.getKey();
+				String units = p.getValue().get("units").asText();
+				String label = p.getValue().get("sameAs").asText();
+				Property property = new Property(name, units, ref);
+				property.setLabel(label);
+				property.setEnabled(true);
+				properties.put(p.getKey(), property);
+			}
+
+		} catch (Exception x) {
+
+		}
+		return properties;
 	}
 
 	public static final String JAVA_EXE = "java";
@@ -151,7 +214,8 @@ public class VegaShell extends AbstractDescriptorShell {
 					public void setReader(Reader reader) throws CDKException {
 						super.setReader(reader);
 						try {
-							skipLines(35);
+							// skipLines(35); //for all models
+							skipLines(13);
 						} catch (Exception x) {
 							logger.log(Level.WARNING, x.getMessage());
 						}
@@ -159,8 +223,14 @@ public class VegaShell extends AbstractDescriptorShell {
 				};
 				while (re.hasNext()) {
 					IAtomContainer m = (IAtomContainer) re.next();
-
-					mol.setProperties(m.getProperties());
+					for (Entry<Object, Object> e : m.getProperties().entrySet()) {
+						if ("-".equals(e.getValue()))
+							continue;
+						Property p = properties.get(e.getKey().toString().replaceAll("\"", ""));
+						if (p == null)
+							continue;
+						mol.setProperty(p, e.getValue());
+					}
 					break;
 				}
 				re.close();
@@ -185,5 +255,11 @@ public class VegaShell extends AbstractDescriptorShell {
 	@Override
 	public synchronized IAtomContainer process(IAtomContainer target) throws AmbitException {
 		return super.process(target);
+	}
+
+	public List<Property> createProperties() throws AmbitException {
+		List<Property> p = new ArrayList<Property>();
+		p.addAll(getProperties().values());
+		return p;
 	}
 }

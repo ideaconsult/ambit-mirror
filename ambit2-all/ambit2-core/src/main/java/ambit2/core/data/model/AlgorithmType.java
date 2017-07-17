@@ -20,6 +20,12 @@ public enum AlgorithmType {
 		UnSupervised,
 		FeatureSelection,
 		DescriptorCalculation,
+		ExternalModels {
+			@Override
+			public String getTitle() {
+				return "External models";
+			}
+		},
 		Rules {
 			@Override
 			public String getTitle() {

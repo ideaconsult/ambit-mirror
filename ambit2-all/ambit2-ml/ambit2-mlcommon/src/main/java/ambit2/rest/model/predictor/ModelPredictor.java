@@ -8,15 +8,10 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.StringReader;
 import java.util.Iterator;
 import java.util.logging.Level;
-
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.exceptions.DbAmbitException;
-import net.idea.modbcum.p.AbstractDBProcessor;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.data.Form;
@@ -26,13 +21,11 @@ import org.restlet.engine.util.Base64;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
-import weka.core.Instances;
-import weka.filters.Filter;
-import weka.filters.unsupervised.attribute.Remove;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.IStructureDiagramHighlights;
+import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.core.data.model.IEvaluation.EVType;
 import ambit2.core.data.model.ModelQueryResults;
 import ambit2.model.evaluation.EvaluationStats;
@@ -40,6 +33,12 @@ import ambit2.rendering.CompoundImageTools;
 import ambit2.rest.OpenTox;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.DbAmbitException;
+import net.idea.modbcum.p.AbstractDBProcessor;
+import weka.core.Instances;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Remove;
 
 /**
  * Abstract class for all predictive models TODO - refactor to avoid weka
@@ -49,9 +48,8 @@ import ambit2.rest.property.PropertyURIReporter;
  * 
  * @param <NativeTypeItem>
  */
-public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
-		AbstractDBProcessor<NativeTypeItem, IStructureRecord> implements
-		IStructureDiagramHighlights {
+public abstract class ModelPredictor<Predictor, NativeTypeItem>
+		extends AbstractDBProcessor<NativeTypeItem, IStructureRecord> implements IStructureDiagramHighlights {
 	/**
 	 * 
 	 */
@@ -91,7 +89,12 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 		this.structureRequired = structureRequired;
 	}
 
-	protected Predictor predictor;
+	private Predictor predictor;
+	public Predictor getPredictor() {
+		return predictor;
+	}
+
+
 	protected int classIndex;
 	protected Instances header;
 	protected Filter filter;
@@ -122,10 +125,8 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 
 	protected IStructureRecord record = new StructureRecord();
 
-	public ModelPredictor(Reference applicationRootReference,
-			ModelQueryResults model, ModelURIReporter modelReporter,
-			PropertyURIReporter propertyReporter, String[] targetURI)
-			throws ResourceException {
+	public ModelPredictor(Reference applicationRootReference, ModelQueryResults model, ModelURIReporter modelReporter,
+			PropertyURIReporter propertyReporter, String[] targetURI) throws ResourceException {
 		super();
 		this.applicationRootReference = applicationRootReference;
 		this.model = model;
@@ -133,10 +134,8 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 		this.targetURI = targetURI;
 		this.modelReporter = modelReporter;
 		this.propertyReporter = propertyReporter;
-		compoundURITemplate = OpenTox.URI.compound
-				.getTemplate(applicationRootReference);
-		conformerURITemplate = OpenTox.URI.conformer
-				.getTemplate(applicationRootReference);
+		compoundURITemplate = OpenTox.URI.compound.getTemplate(applicationRootReference);
+		conformerURITemplate = OpenTox.URI.conformer.getTemplate(applicationRootReference);
 		// read properties
 		// createProfileFromReference(new
 		// Reference(modelReporter.getURI(model)+"/dependent"),null,model.getDependent());
@@ -170,15 +169,13 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 
-	protected void extractRecordID(NativeTypeItem target, String url,
-			IStructureRecord record) throws AmbitException {
+	protected void extractRecordID(NativeTypeItem target, String url, IStructureRecord record) throws AmbitException {
 		String cleanURI = OpenTox.removeDatasetFragment(url);
 		Object id = OpenTox.URI.compound.getId(cleanURI, compoundURITemplate);
 		if (id != null)
 			record.setIdchemical((Integer) id);
 		else {
-			Object[] ids = OpenTox.URI.conformer.getIds(cleanURI,
-					conformerURITemplate);
+			Object[] ids = OpenTox.URI.conformer.getIds(cleanURI, conformerURITemplate);
 			if (ids[0] != null)
 				record.setIdchemical((Integer) ids[0]);
 			if (ids[1] != null)
@@ -186,25 +183,32 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 		}
 	}
 
-	public Predictor createPredictor(ModelQueryResults model)
-			throws ResourceException {
+	public Predictor createPredictor(ModelQueryResults model) throws ResourceException {
 		this.model = model;
-		ObjectInputStream ois = null;
 		try {
 			Form form = new Form(model.getContent());
+			Object o = null;
+			Object modeltype = form.getFirstValue("objecttype");
+			try (ObjectInputStream ois = new ObjectInputStream(
+					new ByteArrayInputStream(Base64.decode(form.getFirstValue("model"))))) {
+				o = ois.readObject();
 
-			InputStream in = new ByteArrayInputStream(Base64.decode(form
-					.getFirstValue("model")));
-			ois = new ObjectInputStream(in);
-			Object o = ois.readObject();
-			if (o == null)
-				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,
-						String.format("Error when reading model %s",
-								model.getName()));
-			if (!isSupported(o))
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-						String.format("Wrong model type %s %s",
-								model.getName(), o.getClass().getName()));
+				if (o == null)
+					throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,
+							String.format("Error when reading model %s", model.getName()));
+
+				if (modeltype != null && AlgorithmFormat.JAVA_CLASS.name().equals(modeltype))
+					try {
+						o = Class.forName(o.toString()).newInstance();
+					} catch (Exception x) {
+						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+								String.format("Wrong model type %s %s", model.getName(), o.getClass().getName()));
+					}
+
+				if (!isSupported(o))
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+							String.format("Wrong model type %s %s", model.getName(), o.getClass().getName()));
+			}
 
 			for (EVType evt : EVType.values()) {
 				String[] evals = form.getValuesArray(evt.name());
@@ -215,8 +219,7 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 			}
 			header = getHeader(form);
 			classIndex = getClassIndex(form);
-			if ((header != null) && (classIndex >= 0)
-					&& (classIndex < header.numAttributes()))
+			if ((header != null) && (classIndex >= 0) && (classIndex < header.numAttributes()))
 				header.setClassIndex(classIndex);
 			if (header != null) {
 				String[] options = new String[2];
@@ -235,22 +238,15 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 		} catch (ResourceException x) {
 			throw x;
 		} catch (NumberFormatException x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					x.getMessage(), x);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x.getMessage(), x);
 		} catch (IOException x) {
-			throw new ResourceException(
-					Status.SERVER_ERROR_SERVICE_UNAVAILABLE, x.getMessage(), x);
+			throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE, x.getMessage(), x);
 		} catch (ClassNotFoundException x) {
-			throw new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE,
-					x.getMessage(), x);
+			throw new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, x.getMessage(), x);
 		} catch (Exception x) {
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,
-					x.getMessage(), x);
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x.getMessage(), x);
 		} finally {
-			try {
-				ois.close();
-			} catch (Exception x) {
-			}
+
 		}
 	}
 
@@ -272,13 +268,11 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 	 * catch (Exception x) {} try {jenaModel.close(); } catch (Exception x) {} }
 	 * return profile; }
 	 */
-	public abstract String getCompoundURL(NativeTypeItem target)
-			throws AmbitException;
+	public abstract String getCompoundURL(NativeTypeItem target) throws AmbitException;
 
 	public abstract Object predict(NativeTypeItem target) throws AmbitException;
 
-	public IStructureRecord process(NativeTypeItem target)
-			throws AmbitException {
+	public IStructureRecord process(NativeTypeItem target) throws AmbitException {
 		record.clear();
 		extractRecordID(target, getCompoundURL(target), record);
 		try {
@@ -286,7 +280,8 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 			assignResults(record, value);
 		} catch (Exception x) {
 			try {
-				logger.log(Level.WARNING, String.format("%s\t%s\t%s",x.getMessage(),target.toString(),model.toString()));
+				logger.log(Level.WARNING,
+						String.format("%s\t%s\t%s", x.getMessage(), target.toString(), model.toString()));
 				assignResults(record, x.getMessage());
 			} catch (Exception xx) {
 			}
@@ -294,8 +289,7 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 		return record;
 	}
 
-	public void assignResults(IStructureRecord record, Object value)
-			throws AmbitException {
+	public void assignResults(IStructureRecord record, Object value) throws AmbitException {
 		Iterator<Property> predicted = model.getPredicted().getProperties(true);
 		int count = 0;
 		while (predicted.hasNext()) {
@@ -323,17 +317,15 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 			int i = 0;
 			while (it.hasNext()) {
 				Property p = it.next();
-				b.append(String.format("%s%s=%s", delimiter,
-						OpenTox.params.feature_uris.toString(),
+				b.append(String.format("%s%s=%s", delimiter, OpenTox.params.feature_uris.toString(),
 						Reference.encode(propertyReporter.getURI(p))));
 				delimiter = "&";
 				i++;
 			}
 			return b.toString();
 		} else {
-			return String.format("%s=%s", OpenTox.params.feature_uris
-					.toString(), Reference.encode(String.format("%s/predicted",
-					getModelReporter().getURI(getModel()))));
+			return String.format("%s=%s", OpenTox.params.feature_uris.toString(),
+					Reference.encode(String.format("%s/predicted", getModelReporter().getURI(getModel()))));
 		}
 
 	}
@@ -342,13 +334,11 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 		return getImage(mol, null, imageSize.width, imageSize.height, false);
 	}
 
-	public BufferedImage getImage(IAtomContainer mol, String ruleID, int width,
-			int height, boolean atomnumbers) throws AmbitException {
+	public BufferedImage getImage(IAtomContainer mol, String ruleID, int width, int height, boolean atomnumbers)
+			throws AmbitException {
 		if (predictor instanceof IStructureDiagramHighlights)
-			return ((IStructureDiagramHighlights) predictor).getImage(mol,
-					ruleID, width, height, atomnumbers);
-		throw new AmbitException(String.format(
-				"%s Hilighting alerts in structure diagram not supported!",
+			return ((IStructureDiagramHighlights) predictor).getImage(mol, ruleID, width, height, atomnumbers);
+		throw new AmbitException(String.format("%s Hilighting alerts in structure diagram not supported!",
 				predictor == null ? "" : predictor.toString()));
 	}
 
@@ -356,9 +346,9 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 	public String toString() {
 
 		StringBuilder b = new StringBuilder();
-		b.append(String.format("Structures required\t%s\n",
-				structureRequired ? "YES" : "NO"));
-		// b.append(String.format("Descriptors required\t%s\n",valuesRequired?"YES":"NO"));
+		b.append(String.format("Structures required\t%s\n", structureRequired ? "YES" : "NO"));
+		// b.append(String.format("Descriptors
+		// required\t%s\n",valuesRequired?"YES":"NO"));
 
 		b.append("-- Data header --\n");
 		b.append(header == null ? "" : header.toString());
@@ -374,8 +364,7 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 			b.append(predictor.toString());
 		}
 		b.append("\n-- Evaluation --\n");
-		b.append(model.getEvaluation() == null ? "N/A\n" : model
-				.getEvaluation().toString());
+		b.append(model.getEvaluation() == null ? "N/A\n" : model.getEvaluation().toString());
 
 		return b.toString();
 
@@ -387,16 +376,13 @@ public abstract class ModelPredictor<Predictor, NativeTypeItem> extends
 		return writeMessages(msg, width, height);
 	}
 
-	protected BufferedImage writeMessages(String[] msg, int width, int height)
-			throws AmbitException {
-		BufferedImage buffer = new BufferedImage(width, height,
-				BufferedImage.TYPE_INT_ARGB);
+	protected BufferedImage writeMessages(String[] msg, int width, int height) throws AmbitException {
+		BufferedImage buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = buffer.createGraphics();
 		g.setColor(CompoundImageTools.whiteTransparent);
 		g.fillRect(0, 0, width, height);
 		RenderingHints rh = g.getRenderingHints();
-		rh.put(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
+		rh.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.addRenderingHints(rh);
 		g.setColor(new Color(81, 99, 115));
 		int h = (int) (height * 14 / 75); // looks nice at size 14 h=75

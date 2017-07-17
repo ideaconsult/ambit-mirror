@@ -75,7 +75,7 @@ public class Structure2DProcessor extends
 						return target;
 					IAtomContainerSet molecules = new AtomContainerSet();
 					newmol = MoleculeTools.newAtomContainer(mol.getBuilder());
-					predictor.generate2D(mol, true, molecules);
+					getPredictor().generate2D(mol, true, molecules);
 					for (int i = 0; i < molecules.getAtomContainerCount(); i++)
 						newmol.add(molecules.getAtomContainer(i));
 				}
@@ -105,8 +105,8 @@ public class Structure2DProcessor extends
 		b.append(String.format("Structures required\t%s\n",
 				structureRequired ? "YES" : "NO"));
 
-		if (predictor != null) {
-			b.append(predictor.toString());
+		if (getPredictor() != null) {
+			b.append(getPredictor().toString());
 		}
 		return b.toString();
 

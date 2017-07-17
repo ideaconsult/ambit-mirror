@@ -131,6 +131,8 @@ public class FingerprintsModelBuilder extends ModelBuilder<List<BitSet>,Algorith
 	}
 	
 	protected void serializeModel(Object predictor, List<BitSet> newInstances, ModelQueryResults m) throws IOException {
+		
+		
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
 		 // serialize model

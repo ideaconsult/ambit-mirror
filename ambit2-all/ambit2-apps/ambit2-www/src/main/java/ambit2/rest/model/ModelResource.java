@@ -32,6 +32,7 @@ import ambit2.rest.algorithm.MLResources;
 import ambit2.rest.model.predictor.AbstractStructureProcessor;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.model.predictor.ExpertModelpredictor;
+import ambit2.rest.model.predictor.ExternalModelPredictor;
 import ambit2.rest.model.predictor.FingerprintsPredictor;
 import ambit2.rest.model.predictor.ModelPredictor;
 import ambit2.rest.model.predictor.NumericADPredictor;
@@ -67,9 +68,7 @@ import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
  * @author nina
  * 
  */
-public class ModelResource
-		extends
-		ProcessingResource<IQueryRetrieval<ModelQueryResults>, ModelQueryResults> {
+public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQueryResults>, ModelQueryResults> {
 
 	protected DisplayMode _dmode = DisplayMode.table;
 
@@ -107,51 +106,42 @@ public class ModelResource
 	}
 
 	@Override
-	protected IQueryRetrieval<ModelQueryResults> createQuery(Context context,
-			Request request, Response response) throws ResourceException {
+	protected IQueryRetrieval<ModelQueryResults> createQuery(Context context, Request request, Response response)
+			throws ResourceException {
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
-		AbstractModelQuery query = getModelQuery(getModelID(getRequest()
-				.getAttributes().get(MLResources.model_resourcekey)), form);
+		AbstractModelQuery query = getModelQuery(
+				getModelID(getRequest().getAttributes().get(MLResources.model_resourcekey)), form);
 
 		return query;
 	}
 
 	@Override
-	public RepresentationConvertor createConvertor(Variant variant)
-			throws AmbitException, ResourceException {
+	public RepresentationConvertor createConvertor(Variant variant) throws AmbitException, ResourceException {
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor(
-					new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
-							getRequest()), MediaType.TEXT_URI_LIST);
+			return new StringConvertor(new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+					MediaType.TEXT_URI_LIST);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
-			return new StringConvertor(
-					new ModelTextReporter<IQueryRetrieval<ModelQueryResults>>(
-							getRequest()), MediaType.TEXT_PLAIN);
+			return new StringConvertor(new ModelTextReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+					MediaType.TEXT_PLAIN);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-			return new StringConvertor(
-					new ModelJSONReporter<IQueryRetrieval<ModelQueryResults>>(
-							getRequest(), null), MediaType.APPLICATION_JSON);
-		} else if (variant.getMediaType().equals(
-				MediaType.APPLICATION_JAVASCRIPT)) {
+			return new StringConvertor(new ModelJSONReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(), null),
+					MediaType.APPLICATION_JSON);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			Form params = getParams();
 			String jsonpcallback = params.getFirstValue("jsonp");
 			if (jsonpcallback == null)
 				jsonpcallback = params.getFirstValue("callback");
 			return new StringConvertor(
-					new ModelJSONReporter<IQueryRetrieval<ModelQueryResults>>(
-							getRequest(), jsonpcallback),
+					new ModelJSONReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(), jsonpcallback),
 					MediaType.APPLICATION_JAVASCRIPT);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)
-				|| variant.getMediaType().equals(
-						MediaType.APPLICATION_RDF_TURTLE)
+				|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
-				|| variant.getMediaType().equals(
-						ChemicalMediaType.APPLICATION_JSONLD)) {
+				|| variant.getMediaType().equals(ChemicalMediaType.APPLICATION_JSONLD)) {
 			return new RDFJenaConvertor<ModelQueryResults, IQueryRetrieval<ModelQueryResults>>(
-					new ModelRDFReporter<IQueryRetrieval<ModelQueryResults>>(
-							getRequest(), variant.getMediaType()),
+					new ModelRDFReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(), variant.getMediaType()),
 					variant.getMediaType(), filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)
 				|| variant.getMediaType().equals(MediaType.IMAGE_BMP)
@@ -172,25 +162,21 @@ public class ModelResource
 			}
 
 			return new ImageConvertor<ModelQueryResults, IQueryRetrieval<ModelQueryResults>>(
-					new ModelImageReporter(getRequest(), getResourceRef(
-							getRequest()).getQueryAsForm(), d),
+					new ModelImageReporter(getRequest(), getResourceRef(getRequest()).getQueryAsForm(), d),
 					variant.getMediaType());
 		} else
 			// html
-			return new StringConvertor(
-					new ModelJSONReporter<IQueryRetrieval<ModelQueryResults>>(
-							getRequest(), null), MediaType.APPLICATION_JSON);
+			return new StringConvertor(new ModelJSONReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(), null),
+					MediaType.APPLICATION_JSON);
 	}
 
 	@Override
 	protected QueryURIReporter<ModelQueryResults, IQueryRetrieval<ModelQueryResults>> getURUReporter(
 			Request baseReference) throws ResourceException {
-		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
-				getRequest());
+		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest());
 	}
 
-	protected void readVariables(ModelQueryResults model)
-			throws ResourceException {
+	protected void readVariables(ModelQueryResults model) throws ResourceException {
 
 		ModelTemplates query = new ModelTemplates();
 		query.setFieldname(model);
@@ -202,8 +188,7 @@ public class ModelResource
 			connection = dbc.getConnection();
 
 			query.setValue("dependent");
-			reporter = new QueryTemplateReporter<ModelTemplates>(
-					model.getDependent());
+			reporter = new QueryTemplateReporter<ModelTemplates>(model.getDependent());
 			reporter.setCloseConnection(false);
 			reporter.setConnection(connection);
 			// dependent
@@ -263,37 +248,34 @@ public class ModelResource
 	}
 
 	@Override
-	protected CallableQueryProcessor createCallable(Form form,
-			ModelQueryResults model) throws ResourceException {
+	protected CallableQueryProcessor createCallable(Form form, ModelQueryResults model) throws ResourceException {
 
 		try {
 			readVariables(model);
 			String token = getToken();
 
-			final ModelPredictor thepredictor = ModelResource.getPredictor(
-					model, getRequest());
+			final ModelPredictor thepredictor = ModelResource.getPredictor(model, getRequest());
 
-			if (model.getContentMediaType().equals(
-					AlgorithmFormat.WWW_FORM.getMediaType())) {
+			if (model.getContentMediaType().equals(AlgorithmFormat.WWW_FORM.getMediaType())) {
 
-				return new CallableModelPredictor<IStructureRecord, ExpertModelpredictor, String>(
-						form, getRequest().getRootRef(), getContext(),
-						(ExpertModelpredictor) thepredictor, token,
-						getRequest().getResourceRef().toString()) {
-					@Override
-					protected void processForm(
-							Reference applicationRootReference, Form form) {
-						super.processForm(applicationRootReference, form);
-						((ExpertModelpredictor) thepredictor).setValue(form
-								.getFirstValue("value"));
+				if (thepredictor instanceof ExpertModelpredictor)
+					return new CallableModelPredictor<IStructureRecord, ExpertModelpredictor, String>(form,
+							getRequest().getRootRef(), getContext(), (ExpertModelpredictor) thepredictor, token,
+							getRequest().getResourceRef().toString()) {
+						@Override
+						protected void processForm(Reference applicationRootReference, Form form) {
+							super.processForm(applicationRootReference, form);
+							((ExpertModelpredictor) thepredictor).setValue(form.getFirstValue("value"));
+						};
 					};
-				};
-			} else if (model.getContentMediaType().equals(
-					AlgorithmFormat.WEKA.getMediaType())) {
+				else
+					return new CallableModelPredictor<IStructureRecord, ModelPredictor, String>(form,
+							getRequest().getRootRef(), getContext(), thepredictor, token,
+							getRequest().getResourceRef().toString());
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType())) {
 				return // reads Instances, instead of IStructureRecord
-				new CallableWekaPredictor<Object, String>(form, getRequest()
-						.getRootRef(), getContext(), thepredictor, token,
-						getRequest().getResourceRef().toString());
+				new CallableWekaPredictor<Object, String>(form, getRequest().getRootRef(), getContext(), thepredictor,
+						token, getRequest().getResourceRef().toString());
 				/*
 				 * } else if (model.getContentMediaType().equals(
 				 * 
@@ -302,90 +284,61 @@ public class ModelResource
 				 * getContext(), (WafflesPredictor) thepredictor,
 				 * token,getRequest().getResourceRef().toString());
 				 */
-			} else if (model.getContentMediaType().equals(
-					AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
 
 				if (model.getPredictors().size() == 0) { // hack for structure
 															// based AD
 					if (thepredictor instanceof FingerprintsPredictor)
-						return new CallableModelPredictor<IStructureRecord, FingerprintsPredictor, String>(
-								form, getRequest().getRootRef(), getContext(),
-								(FingerprintsPredictor) thepredictor, token,
-								getRequest().getResourceRef().toString()) {
-
-						};
+						return new CallableModelPredictor<IStructureRecord, FingerprintsPredictor, String>(form,
+								getRequest().getRootRef(), getContext(), (FingerprintsPredictor) thepredictor, token,
+								getRequest().getResourceRef().toString());
 					else
-						throw new ResourceException(
-								Status.CLIENT_ERROR_BAD_REQUEST, String.format(
-										"Not supported %s", thepredictor
-												.getClass().getName()));
+						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+								String.format("Not supported %s", thepredictor.getClass().getName()));
 				} else {
-					return new CallableModelPredictor(form, getRequest()
-							.getRootRef(), getContext(), thepredictor, token,
-							getRequest().getResourceRef().toString()) {
-
-					};
+					return new CallableModelPredictor(form, getRequest().getRootRef(), getContext(), thepredictor,
+							token, getRequest().getResourceRef().toString());
 					/*
 					 * return new CallableWekaPredictor<DataCoverage>( //reads
 					 * Instances, instead of IStructureRecord form,
 					 * getRequest().getRootRef(), getContext(), predictor) ;
 					 */
 				}
-			} else if (model.getContentMediaType().equals(
-					AlgorithmFormat.Structure2D.getMediaType())) {
-				return new CallableStructureOptimizer(form, getRequest()
-						.getRootRef(), getContext(),
-						(Structure2DProcessor) thepredictor, token,
-						getRequest().getResourceRef().toString());
-			} else if (model.getContentMediaType().equals(
-					AlgorithmFormat.MOPAC.getMediaType())) {
-				return new CallableStructureOptimizer(form, getRequest()
-						.getRootRef(), getContext(),
-						(StructureProcessor) thepredictor, token, getRequest()
-								.getResourceRef().toString());
-			} else if (model.getContentMediaType().equals(
-					AlgorithmFormat.TAUTOMERS.getMediaType())) {
-				return new CallableTautomersGenerator(form, getRequest()
-						.getRootRef(), getContext(),
-						(TautomersGenerator) thepredictor, token, getRequest()
-								.getResourceRef().toString());
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.Structure2D.getMediaType())) {
+				return new CallableStructureOptimizer(form, getRequest().getRootRef(), getContext(),
+						(Structure2DProcessor) thepredictor, token, getRequest().getResourceRef().toString());
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.MOPAC.getMediaType())) {
+				return new CallableStructureOptimizer(form, getRequest().getRootRef(), getContext(),
+						(StructureProcessor) thepredictor, token, getRequest().getResourceRef().toString());
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.TAUTOMERS.getMediaType())) {
+				return new CallableTautomersGenerator(form, getRequest().getRootRef(), getContext(),
+						(TautomersGenerator) thepredictor, token, getRequest().getResourceRef().toString());
 
-			} else if (model.getContentMediaType().equals(
-					AlgorithmFormat.JAVA_CLASS.getMediaType())) {
-				return new CallableDescriptorCalculator(form, getRequest()
-						.getRootRef(), getContext(),
-						(DescriptorPredictor) thepredictor, token, getRequest()
-								.getResourceRef().toString());
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
+				return new CallableDescriptorCalculator(form, getRequest().getRootRef(), getContext(),
+						(DescriptorPredictor) thepredictor, token, getRequest().getResourceRef().toString());
 			} else
-				throw new ResourceException(
-						Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,
-						model.getContentMediaType());
+				throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE, model.getContentMediaType());
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,
-					x.getMessage(), x);
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x.getMessage(), x);
 		} finally {
 
 		}
 	}
 
-	protected AbstractModelQuery getModelQuery(Object idmodel, Form form)
-			throws ResourceException {
+	protected AbstractModelQuery getModelQuery(Object idmodel, Form form) throws ResourceException {
 		_dmode = DisplayMode.singleitem;
 		AbstractModelQuery query = null;
 		ModelQueryResults model_query = null;
-		String algorithm = form
-				.getFirstValue(AbstractModelQuery._models_criteria.algorithm
-						.name());
+		String algorithm = form.getFirstValue(AbstractModelQuery._models_criteria.algorithm.name());
 		if (algorithm != null) {
 			model_query = new ModelQueryResults();
 			model_query.setCreator(null);
 			model_query.setAlgorithm(algorithm);
 		}
-		String dataset = form
-				.getFirstValue(AbstractModelQuery._models_criteria.dataset
-						.name());
+		String dataset = form.getFirstValue(AbstractModelQuery._models_criteria.dataset.name());
 		if (dataset != null) {
 			if (model_query == null) {
 				model_query = new ModelQueryResults();
@@ -393,9 +346,7 @@ public class ModelResource
 			}
 			model_query.setTrainingInstances(dataset);
 		}
-		String creator = form
-				.getFirstValue(AbstractModelQuery._models_criteria.creator
-						.name());
+		String creator = form.getFirstValue(AbstractModelQuery._models_criteria.creator.name());
 		if (creator != null) {
 			if (model_query == null) {
 				model_query = new ModelQueryResults();
@@ -403,9 +354,7 @@ public class ModelResource
 			model_query.setCreator(creator);
 		}
 
-		String endpoint = form
-				.getFirstValue(AbstractModelQuery._models_criteria.endpoint
-						.name());
+		String endpoint = form.getFirstValue(AbstractModelQuery._models_criteria.endpoint.name());
 		if (endpoint != null) {
 			if (model_query == null) {
 				model_query = new ModelQueryResults();
@@ -425,8 +374,7 @@ public class ModelResource
 			if (name != null) {
 				query.setFieldname(name.trim());
 				if (condition == null)
-					query.setCondition(StringCondition
-							.getInstance(StringCondition.C_STARTS_WITH));
+					query.setCondition(StringCondition.getInstance(StringCondition.C_STARTS_WITH));
 			}
 
 			if (idmodel == null) {
@@ -456,34 +404,26 @@ public class ModelResource
 	}
 
 	@Override
-	protected Representation post(Representation entity, Variant variant)
-			throws ResourceException {
+	protected Representation post(Representation entity, Variant variant) throws ResourceException {
 
 		return super.post(entity, variant);
 	}
 
 	@Override
-	public void configureTemplateMap(Map<String, Object> map, Request request,
-			IFreeMarkerApplication app) {
+	public void configureTemplateMap(Map<String, Object> map, Request request, IFreeMarkerApplication app) {
 		super.configureTemplateMap(map, request, app);
-		Object modelid = getRequest().getAttributes().get(
-				MLResources.model_resourcekey);
+		Object modelid = getRequest().getAttributes().get(MLResources.model_resourcekey);
 		if (modelid != null)
 			map.put("modelid", modelid.toString());
 	}
 
-	public static ModelPredictor getPredictor(ModelQueryResults model,
-			Request request) throws ResourceException {
+	public static ModelPredictor getPredictor(ModelQueryResults model, Request request) throws ResourceException {
 
 		try {
 
-			if (model.getContentMediaType().equals(
-					AlgorithmFormat.WEKA.getMediaType())) {
-				return new FilteredWekaPredictor(
-						request.getRootRef(),
-						model,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
-								request));
+			if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType())) {
+				return new FilteredWekaPredictor(request.getRootRef(), model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request));
 				/*
 				 * } else if (model.getContentMediaType().equals(
 				 * AlgorithmFormat.WAFFLES_JSON.getMediaType())) { return new
@@ -491,33 +431,22 @@ public class ModelResource
 				 * ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
 				 * request));
 				 */
-			} else if (model.getContentMediaType().equals(
-					AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
 				if (model.getPredictors().size() == 0) { // hack for structure
 															// based AD
-					return new FingerprintsPredictor(
-							request.getRootRef(),
-							model,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
-									request), null, null);
+					return new FingerprintsPredictor(request.getRootRef(), model,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request), null, null);
 
 				} else {
-					return new NumericADPredictor(
-							request.getRootRef(),
-							model,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
-									request), new PropertyURIReporter(request),
-							null);
+					return new NumericADPredictor(request.getRootRef(), model,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
+							new PropertyURIReporter(request), null);
 
 				}
-			} else if (model.getContentMediaType().equals(
-					AlgorithmFormat.PREFERRED_STRUC.getMediaType())) {
-				return new AbstractStructureProcessor(
-						request.getRootRef(),
-						model,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
-								request), new PropertyURIReporter(request),
-						null) {
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.PREFERRED_STRUC.getMediaType())) {
+				return new AbstractStructureProcessor(request.getRootRef(), model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
+						new PropertyURIReporter(request), null) {
 
 					@Override
 					public boolean isStructureRequired() {
@@ -525,66 +454,45 @@ public class ModelResource
 					}
 
 				};
-			} else if (model.getContentMediaType().equals(
-					AlgorithmFormat.Structure2D.getMediaType())) {
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.Structure2D.getMediaType())) {
 
-				return new Structure2DProcessor(
-						request.getRootRef(),
-						model,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
-								request), new PropertyURIReporter(request),
-						null);
-			} else if (model.getContentMediaType().equals(
-					AlgorithmFormat.MOPAC.getMediaType())) {
+				return new Structure2DProcessor(request.getRootRef(), model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
+						new PropertyURIReporter(request), null);
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.MOPAC.getMediaType())) {
 
-				return new StructureProcessor(
-						request.getRootRef(),
-						model,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
-								request), new PropertyURIReporter(request),
-						null);
-			} else if (model.getContentMediaType().equals(
-					AlgorithmFormat.TAUTOMERS.getMediaType())) {
+				return new StructureProcessor(request.getRootRef(), model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
+						new PropertyURIReporter(request), null);
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.TAUTOMERS.getMediaType())) {
 
-				return new TautomersGenerator(
-						request.getRootRef(),
-						model,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
-								request), new PropertyURIReporter(request),
-						null);
-			} else if (model.getContentMediaType().equals(
-					AlgorithmFormat.JAVA_CLASS.getMediaType())) {
+				return new TautomersGenerator(request.getRootRef(), model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
+						new PropertyURIReporter(request), null);
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
 
-				return new DescriptorPredictor(
-						request.getRootRef(),
-						model,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
-								request), new PropertyURIReporter(request),
-						null);
-			} else if (model.getContentMediaType().equals(
-					AlgorithmFormat.WWW_FORM.getMediaType())) {
+				return new DescriptorPredictor(request.getRootRef(), model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
+						new PropertyURIReporter(request), null);
+
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.WWW_FORM.getMediaType())) {
 				if (model.getContent().equals("expert"))
-					return new ExpertModelpredictor(
-							request.getRootRef(),
-							model,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(
-									request), new PropertyURIReporter(request),
-							null
+					return new ExpertModelpredictor(request.getRootRef(), model,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
+							new PropertyURIReporter(request), null
 
 					);
 				else
-					throw new ResourceException(
-							Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,
-							model.getContentMediaType());
+					return new ExternalModelPredictor(request.getRootRef(), model,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
+							new PropertyURIReporter(request), null);
+
 			} else
-				throw new ResourceException(
-						Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,
-						model.getContentMediaType());
+				throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE, model.getContentMediaType());
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,
-					x.getMessage(), x);
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x.getMessage(), x);
 		} finally {
 
 		}

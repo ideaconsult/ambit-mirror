@@ -40,18 +40,19 @@ public class AlgorithmsPile {
 			Algorithm<String> alg = new Algorithm<String>(d[1].toString());
 			alg.setType((String[]) d[4]);
 			alg.setFormat(alg.hasType(AlgorithmType.Expert) ? AlgorithmFormat.WWW_FORM
-					: alg.hasType(AlgorithmType.SMSD) ? AlgorithmFormat.WWW_FORM
-							: alg.hasType(AlgorithmType.Structure2D.toString()) ? AlgorithmFormat.Structure2D
-									: alg.hasType(AlgorithmType.Structure.toString()) ? AlgorithmFormat.MOPAC
-											: alg.hasType(AlgorithmType.Rules.toString())
-													|| alg.hasType(AlgorithmType.Fingerprints.toString())
-															? AlgorithmFormat.JAVA_CLASS
-															: alg.hasType(AlgorithmType.AppDomain.toString())
-																	? AlgorithmFormat.COVERAGE_SERIALIZED
-																	: (d[2] != null) && d[2].toString()
-																			.startsWith("ambit2.waffles.")
-																					? AlgorithmFormat.WAFFLES_JSON
-																					: AlgorithmFormat.WEKA);
+					: alg.hasType(AlgorithmType.ExternalModels) ? AlgorithmFormat.WWW_FORM
+							: alg.hasType(AlgorithmType.SMSD) ? AlgorithmFormat.WWW_FORM
+									: alg.hasType(AlgorithmType.Structure2D.toString()) ? AlgorithmFormat.Structure2D
+											: alg.hasType(AlgorithmType.Structure.toString()) ? AlgorithmFormat.MOPAC
+													: alg.hasType(AlgorithmType.Rules.toString())
+															|| alg.hasType(AlgorithmType.Fingerprints.toString())
+																	? AlgorithmFormat.JAVA_CLASS
+																	: alg.hasType(AlgorithmType.AppDomain.toString())
+																			? AlgorithmFormat.COVERAGE_SERIALIZED
+																			: (d[2] != null) && d[2].toString()
+																					.startsWith("ambit2.waffles.")
+																							? AlgorithmFormat.WAFFLES_JSON
+																							: AlgorithmFormat.WEKA);
 
 			alg.setId(d[0].toString());
 			alg.setName(d[1].toString());
@@ -165,6 +166,11 @@ public class AlgorithmsPile {
 					} else
 						algs[i][c] = node == null ? null : node.asText(null);
 				}
+				/*
+				 * JsonNode disabled = nodes.get(i).get("disabled"); if
+				 * (disabled != null && disabled.asBoolean()) { algs[i][0] =
+				 * null; }
+				 */
 			} catch (Exception x) {
 				Logger.getGlobal().log(Level.SEVERE, x.getMessage(), x);
 			}
