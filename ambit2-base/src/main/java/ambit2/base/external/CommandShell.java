@@ -445,9 +445,11 @@ public abstract class CommandShell<INPUT, OUTPUT> implements IProcessor<INPUT, O
 				properties.load(in);
 			}
 			String wheredragonlives = properties.getProperty(propertyHome);
-			if (wheredragonlives == null)
-				throw new ShellException(null, String.format("Can't find where %s is located. No property %s in %s",
+			if (wheredragonlives == null) {
+				logger.log(Level.SEVERE, String.format("Can't find where %s is located. No property %s in %s",
 						toString(), propertyHome, uri.toString()));
+				throw new ShellException(null, String.format("Can't find where %s is located.", toString()));
+			}
 			return wheredragonlives;
 		} catch (ShellException x) {
 			throw x;
