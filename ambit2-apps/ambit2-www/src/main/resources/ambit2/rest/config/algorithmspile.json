@@ -1458,5 +1458,19 @@
 	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
 	"endpoint": null,
 	"requires": "structure",
-	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#OPSCOUNT"
-}]
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#OPSCOUNT",
+	"disabled" : true
+}
+, {
+	"id": "vega",
+	"name": "VEGA models",
+	"class": "ambit2.vega.ExternalModelVega",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Learning","http://www.opentox.org/algorithmTypes.owl#Supervised","http://www.opentox.org/algorithmTypes.owl#ExternalModels"],
+	"endpoint": null,
+	"requires": "structure",
+	"format" : "EXTERNAL",
+	"implementationof": "https://www.vegahub.eu/"
+}
+
+]

@@ -1,0 +1,394 @@
+{
+	"models": {
+		"core": "VEGA (calculation core version: 1.2.5)",
+		"muta_caesar": "Mutagenicity (Ames test) model (CAESAR) (version 2.1.13)",
+		"carc_caesar": "Carcinogenicity model (CAESAR) (version 2.1.9)",
+		"devtox_caesar": "Developmental Toxicity model (CAESAR) (version 2.1.7)",
+		"rba_irfmn": "Estrogen Receptor Relative Binding Affinity model (IRFMN) (version 1.0.1)",
+		"skin_caesar": "Skin Sensitization model (CAESAR) (version 2.1.6)",
+		"fathead_epa": "Fathead Minnow LC50 96h (EPA) (version 1.0.7)",
+		"daphnia_epa": "Daphnia Magna LC50 48h (EPA) (version 1.0.7)",
+		"bcf_caesar": "BCF model (CAESAR) (version 2.1.14)",
+		"rb_irfmn": "Ready Biodegradability model (IRFMN) (version 1.0.9)",
+		"logp_meylan": "LogP model (Meylan/Kowwin) (version 1.1.4)"
+	},
+	"features": {
+		"/feature/MolWeightUser+input": {
+			"type": "Feature",
+			"title": "MolWeight",
+			"units": "A",
+			"isNominal": false,
+			"isNumeric": false,
+			"isMultiValue": false,
+			"sameAs": null,
+			"isModelPredictionFeature": false,
+			"creator": "http://toxtree.sourceforge.net",
+			"order": 0,
+			"source": {
+				"URI": "null/dataset/User+input",
+				"type": "Dataset"
+			},
+			"annotation": [
+			],
+			"disabled": true
+		},
+		"Mutagenicity (Ames test) model (CAESAR) - assessment": {
+			"title": "Mutagenicity (Ames test) model (CAESAR)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#Mutagenicity",
+			"isNumeric": false,
+			"creator": "muta_caesar",
+			"disabled": true
+		},
+		"Mutagenicity (Ames test) model (CAESAR) - prediction": {
+			"title": "Mutagenicity (Ames test) model (CAESAR)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#Mutagenicity",
+			"isNumeric": false,
+			"creator": "muta_caesar"
+		},
+		"Mutagenicity (Ames test) model (CAESAR) - Reliability": {
+			"title": "Mutagenicity (Ames test) model (CAESAR) [Reliability]",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": false,
+			"creator": "muta_caesar"
+		},
+		"Mutagenicity (Ames test) model (CAESAR) - ADI": {
+			"title": "Mutagenicity (Ames test) model (CAESAR)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": true,
+			"creator": "muta_caesar"
+		},
+		"Mutagenicity (Ames test) model (CAESAR) - experimental value": {
+			"title": "Mutagenicity (Ames test) model (CAESAR)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#Mutagenicity",
+			"isNumeric": false,
+			"creator": "muta_caesar"
+		},
+		"Carcinogenicity model (CAESAR) - assessment": {
+			"title": "Carcinogenicity model (CAESAR)",
+			"units": "",
+			"sameAs": "assessment",
+			"isNumeric": false,
+			"creator": "carc_caesar",
+			"disabled": true
+		},
+		"Carcinogenicity model (CAESAR) - Reliability": {
+			"title": "Carcinogenicity model (CAESAR) [Reliability]",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": false,
+			"creator": "carc_caesar"
+		},
+		"Carcinogenicity model (CAESAR) - experimental value": {
+			"title": "Carcinogenicity model (CAESAR)",
+			"units": "",
+			"sameAs": "experimentalvalue",
+			"isNumeric": false,
+			"creator": "carc_caesar"
+		},
+		"Carcinogenicity model (CAESAR) - prediction": {
+			"title": "Carcinogenicity model (CAESAR)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#Carcinogenicity",
+			"isNumeric": false,
+			"creator": "carc_caesar"
+		},
+		"Carcinogenicity model (CAESAR) - ADI": {
+			"title": "Carcinogenicity model (CAESAR)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": true,
+			"creator": "carc_caesar"
+		},
+		"Developmental Toxicity model (CAESAR) - assessment": {
+			"title": "Developmental Toxicity model (CAESAR)",
+			"units": "",
+			"sameAs": "assessment",
+			"isNumeric": false,
+			"creator": "devtox_caesar",
+			"disabled": true
+		},
+		"Developmental Toxicity model (CAESAR) - Reliability": {
+			"title": "Developmental Toxicity model (CAESAR) [Reliability]",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": false,
+			"creator": "devtox_caesar"
+		},
+		"Developmental Toxicity model (CAESAR) - experimental value": {
+			"title": "Developmental Toxicity model (CAESAR)",
+			"units": "",
+			"sameAs": "experimentalvalue",
+			"isNumeric": false,
+			"creator": "devtox_caesar"
+		},
+		"Developmental Toxicity model (CAESAR) - prediction": {
+			"title": "Developmental Toxicity model (CAESAR)",
+			"units": "",
+			"sameAs": "prediction",
+			"isNumeric": false,
+			"creator": "devtox_caesar"
+		},
+		"Developmental Toxicity model (CAESAR) - ADI": {
+			"title": "Developmental Toxicity model (CAESAR)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": true,
+			"creator": "devtox_caesar"
+		},
+		"Estrogen Receptor Relative Binding Affinity model (IRFMN) - assessment": {
+			"title": "Estrogen Receptor Relative Binding Affinity model (IRFMN)",
+			"units": "",
+			"sameAs": "assessment",
+			"isNumeric": false,
+			"creator": "rba_irfmn",
+			"disabled": true
+		},
+		"Estrogen Receptor Relative Binding Affinity model (IRFMN) - Reliability": {
+			"title": "Estrogen Receptor Relative Binding Affinity model (IRFMN) [Reliability]",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": false,
+			"creator": "rba_irfmn"
+		},
+		"Estrogen Receptor Relative Binding Affinity model (IRFMN) - experimental value": {
+			"title": "Estrogen Receptor Relative Binding Affinity model (IRFMN)",
+			"units": "",
+			"sameAs": "experimentalvalue",
+			"isNumeric": false,
+			"creator": "rba_irfmn"
+		},
+		"Estrogen Receptor Relative Binding Affinity model (IRFMN) - prediction": {
+			"title": "Estrogen Receptor Relative Binding Affinity model (IRFMN)",
+			"units": "",
+			"sameAs": "prediction",
+			"isNumeric": false,
+			"creator": "rba_irfmn"
+		},
+		"Estrogen Receptor Relative Binding Affinity model (IRFMN) - ADI": {
+			"title": "Estrogen Receptor Relative Binding Affinity model (IRFMN)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": true,
+			"creator": "rba_irfmn"
+		},
+		"Skin Sensitization model (CAESAR) - assessment": {
+			"title": "Skin Sensitization model (CAESAR)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#SkinSensitisation",
+			"isNumeric": false,
+			"creator": "skin_caesar",
+			"disabled": true
+		},
+		"Skin Sensitization model (CAESAR) - Reliability": {
+			"title": "Skin Sensitization model (CAESAR) [Reliability]",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": false,
+			"creator": "skin_caesar"
+		},
+		"Skin Sensitization model (CAESAR) - experimental value": {
+			"title": "Skin Sensitization model (CAESAR)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#SkinSensitisation",
+			"isNumeric": false,
+			"creator": "skin_caesar"
+		},
+		"Skin Sensitization model (CAESAR) - prediction": {
+			"title": "Skin Sensitization model (CAESAR)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#SkinSensitisation",
+			"isNumeric": false,
+			"creator": "skin_caesar"
+		},
+		"Skin Sensitization model (CAESAR) - ADI": {
+			"title": "Skin Sensitization model (CAESAR)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": true,
+			"creator": "skin_caesar"
+		},
+		"Fathead Minnow LC50 96h (EPA) - assessment": {
+			"title": "Fathead Minnow LC50 96h (EPA)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#Acute_toxicity_to_fish_lethality",
+			"isNumeric": false,
+			"creator": "fathead_epa",
+			"disabled": true
+		},
+		"Fathead Minnow LC50 96h (EPA) - Reliability": {
+			"title": "Fathead Minnow LC50 96h (EPA) [Reliability]",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": false,
+			"creator": "fathead_epa"
+		},
+		"Fathead Minnow LC50 96h (EPA) - experimental value": {
+			"title": "Fathead Minnow LC50 96h (EPA)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#Acute_toxicity_to_fish_lethality",
+			"isNumeric": false,
+			"creator": "fathead_epa"
+		},
+		"Fathead Minnow LC50 96h (EPA) - prediction [-log(mol/l)]": {
+			"title": "Fathead Minnow LC50 96h (EPA)",
+			"units": "log(mol/l)",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#Acute_toxicity_to_fish_lethality",
+			"isNumeric": false,
+			"creator": "fathead_epa"
+		},
+		"Fathead Minnow LC50 96h (EPA) - ADI": {
+			"title": "Fathead Minnow LC50 96h (EPA)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": true,
+			"creator": "fathead_epa"
+		},
+		"Daphnia Magna LC50 48h (EPA) - assessment": {
+			"title": "Daphnia Magna LC50 48h (EPA)",
+			"units": "",
+			"sameAs": "assessment",
+			"isNumeric": false,
+			"creator": "daphnia_epa",
+			"disabled": true
+		},
+		"Daphnia Magna LC50 48h (EPA) - Reliability": {
+			"title": "Daphnia Magna LC50 48h (EPA) [Reliability]",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": false,
+			"creator": "daphnia_epa"
+		},
+		"Daphnia Magna LC50 48h (EPA) - experimental value": {
+			"title": "Daphnia Magna LC50 48h (EPA)",
+			"units": "",
+			"sameAs": "experimentalvalue",
+			"isNumeric": false,
+			"creator": "daphnia_epa"
+		},
+		"Daphnia Magna LC50 48h (EPA) - prediction [-log(mol/l)]": {
+			"title": "Daphnia Magna LC50 48h (EPA)",
+			"units": "log(mol/l)",
+			"sameAs": "prediction",
+			"isNumeric": true,
+			"creator": "daphnia_epa"
+		},
+		"Daphnia Magna LC50 48h (EPA) - ADI": {
+			"title": "Daphnia Magna LC50 48h (EPA)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": true,
+			"creator": "daphnia_epa"
+		},
+		"BCF model (CAESAR) - assessment": {
+			"title": "BCF model (CAESAR)",
+			"units": "",
+			"sameAs": "assessment",
+			"isNumeric": false,
+			"creator": "bcf_caesar",
+			"disabled": true
+		},
+		"BCF model (CAESAR) - Reliability": {
+			"title": "BCF model (CAESAR) [Reliability]",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": false,
+			"creator": "bcf_caesar"
+		},
+		"BCF model (CAESAR) - experimental value": {
+			"title": "BCF model (CAESAR)",
+			"units": "",
+			"sameAs": "experimentalvalue",
+			"isNumeric": false,
+			"creator": "bcf_caesar"
+		},
+		"BCF model (CAESAR) - prediction [log(L/kg)]": {
+			"title": "BCF model (CAESAR)",
+			"units": "log(L/kg)",
+			"sameAs": "prediction",
+			"isNumeric": true,
+			"creator": "bcf_caesar"
+		},
+		"BCF model (CAESAR) - ADI": {
+			"title": "BCF model (CAESAR)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": false,
+			"creator": "bcf_caesar"
+		},
+		"Ready Biodegradability model (IRFMN) - assessment": {
+			"title": "Ready Biodegradability model (IRFMN)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#PersistenceBiodegradation",
+			"isNumeric": false,
+			"creator": "rb_irfmn",
+			"disabled": true
+		},
+		"Ready Biodegradability model (IRFMN) - Reliability": {
+			"title": "Ready Biodegradability model (IRFMN) [Reliability]",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"creator": "rb_irfmn"
+		},
+		"Ready Biodegradability model (IRFMN) - experimental value": {
+			"title": "Ready Biodegradability model (IRFMN)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#PersistenceBiodegradation",
+			"isNumeric": false,
+			"creator": "rb_irfmn"
+		},
+		"Ready Biodegradability model (IRFMN) - prediction": {
+			"title": "Ready Biodegradability model (IRFMN)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#PersistenceBiodegradation",
+			"creator": "rb_irfmn"
+		},
+		"Ready Biodegradability model (IRFMN) - ADI": {
+			"title": "Ready Biodegradability model (IRFMN)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": false,
+			"creator": "rb_irfmn"
+		},
+		"LogP model (Meylan/Kowwin) - assessment": {
+			"title": "LogP model (Meylan/Kowwin)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",
+			"isNumeric": false,
+			"creator": "logp_meylan",
+			"disabled": true
+		},
+		"LogP model (Meylan/Kowwin) - Reliability": {
+			"title": "LogP model (Meylan/Kowwin) [Reliability]",
+			"units": "",
+			"sameAs": "http://www.opentox.org/api/1.1#ConfidenceFeature",
+			"isNumeric": false,
+			"creator": "logp_meylan"
+		},
+		"LogP model (Meylan/Kowwin) - experimental value": {
+			"title": "LogP model (Meylan/Kowwin)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",
+			"isNumeric": true,
+			"creator": "logp_meylan"
+		},
+		"LogP model (Meylan/Kowwin) - prediction": {
+			"title": "LogP model (Meylan/Kowwin)",
+			"units": "",
+			"sameAs": "http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",
+			"isNumeric": true,
+			"creator": "logp_meylan"
+		},
+		"LogP model (Meylan/Kowwin) - ADI": {
+			"title": "LogP model (Meylan/Kowwin)",
+			"units": "",
+			"sameAs": "ADI",
+			"isNumeric": true,
+			"creator": "logp_meylan"
+		}
+	}
+}

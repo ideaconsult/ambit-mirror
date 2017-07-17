@@ -54,7 +54,6 @@ public class AlgorithmResourceTest extends ResourceTest {
 		return String.format("http://localhost:%d/algorithm", port);
 	}
 
-	
 	@Test
 	public void testRDFXML() throws Exception {
 		testGet(getTestURI(), MediaType.APPLICATION_RDF_XML);
@@ -460,9 +459,8 @@ public class AlgorithmResourceTest extends ResourceTest {
 	public void testGenerateInChI() throws Exception {
 		Form headers = new Form();
 		headers.add("dataset_uri", String.format("http://localhost:%d/dataset/1", port));
-		Reference ref = testAsyncTask(String.format("http://localhost:%d/algorithm/ambit2.descriptors.InChI", port), headers,
-				Status.SUCCESS_OK, null
-				);
+		Reference ref = testAsyncTask(String.format("http://localhost:%d/algorithm/ambit2.descriptors.InChI", port),
+				headers, Status.SUCCESS_OK, null);
 		String modeluri = getModelURI("InChI", port, true);
 		Assert.assertEquals(modeluri, ref.toString());
 		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
@@ -577,18 +575,16 @@ public class AlgorithmResourceTest extends ResourceTest {
 
 	}
 
-	
 	@Test
 	public void testLocalRegressionDescriptors() throws Exception {
 		Form headers = new Form();
 		headers.add("dataset_uri", String.format("http://localhost:%d/dataset/1", port));
 		Reference dataset = testAsyncTask(String.format(
 				"http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor", port),
-				headers, Status.SUCCESS_OK,null);
+				headers, Status.SUCCESS_OK, null);
 		String xlogpuri = String.format("http://localhost:%d/dataset/1?feature_uris[]=%s", port,
 				Reference.encode(getModelURI("XLogP", port, false)));
 		Assert.assertEquals(xlogpuri, dataset.toString());
-
 
 		headers.removeAll(OpenTox.params.dataset_uri.toString());
 		dataset.addQueryParameter(OpenTox.params.feature_uris.toString(),
@@ -604,8 +600,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 
 		headers = new Form();
 		headers.add(OpenTox.params.dataset_uri.toString(), dataset.toString());
-		testAsyncTask(xlogpuri,
-				headers, Status.SUCCESS_OK,null);
+		testAsyncTask(xlogpuri, headers, Status.SUCCESS_OK, null);
 
 		IDatabaseConnection c = getConnection();
 		ITable table = c.createQueryTable("EXPECTED", "SELECT * from properties where name='Property 2'");
@@ -671,14 +666,13 @@ public class AlgorithmResourceTest extends ResourceTest {
 	public void testRanges() throws Exception {
 		Form headers = new Form();
 		headers.add(OpenTox.params.dataset_uri.toString(), String.format("http://localhost:%d/dataset/1", port));
-		Reference ref = testAsyncTask(String.format("http://localhost:%d/algorithm/pcaRanges", port), headers, Status.SUCCESS_OK,
-				null);
+		Reference ref = testAsyncTask(String.format("http://localhost:%d/algorithm/pcaRanges", port), headers,
+				Status.SUCCESS_OK, null);
 
 		String modeluri = getModelURI("range", port, true);
 		Assert.assertEquals(modeluri, ref.toString());
-		ref = testAsyncTask(modeluri,  headers, Status.SUCCESS_OK,
-				String.format("http://localhost:%d/dataset/1%s", port,
-						String.format("%s", "?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+		ref = testAsyncTask(modeluri, headers, Status.SUCCESS_OK, String.format("http://localhost:%d/dataset/1%s", port,
+				String.format("%s", "?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
 	}
 
@@ -1246,5 +1240,60 @@ public class AlgorithmResourceTest extends ResourceTest {
 		for (int i = 0; i < 2; i++)
 			Assert.assertEquals(new BigInteger("1"), table.getValue(i, "c"));
 		c.close();
+	}
+
+	@Test
+	public void testVEGA() throws Exception {
+		// exception will be thrown on unknown atom type will, and error value
+		// stored in the db
+		Preferences.setProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES, Boolean.TRUE.toString());
+		Form headers = new Form();
+
+		Reference ref = testAsyncTask(String.format("http://localhost:%d/algorithm/vega", port), headers,
+				Status.SUCCESS_OK, null);
+		System.out.println(ref);
+		String modeluri = getModelURI("VEGA models", port, true);
+		Assert.assertEquals(modeluri, ref.toString());
+
+		String sql = "SELECT models.name,models.idmodel,algorithm,mediatype,parameters,properties.name,properties.units,properties.comments FROM models "+ 		
+		"join template_def on predicted=idtemplate join properties using(idproperty) where models.name=\"VEGA models\"order by properties.name";
+		IDatabaseConnection c = getConnection();
+		ITable table = c.createQueryTable("EXPECTED",sql);
+		Assert.assertEquals(40, table.getRowCount());
+		c.close();
+		
+		OTModel model = OTModel.model(modeluri, "test");
+		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port, "1")));
+		logger.info(dataset.toString());
+
+		/*
+		IDatabaseConnection c = getConnection();
+		ITable table = c.createQueryTable("EXPECTED",
+				"SELECT count(*) c,group_concat(distinct(status)) s FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: In vitro mutagenicity (Ames test) alerts by ISS' where idstructure=100211 group by idstructure,`status`");
+		Assert.assertEquals(1, table.getRowCount());
+		Assert.assertEquals("ERROR", table.getValue(0, "s"));
+		Assert.assertEquals(new BigInteger("6") , table.getValue(0, "c"));
+		table = c.createQueryTable("EXPECTED",
+				"SELECT count(*) c,group_concat(distinct(status)) s  FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: In vitro mutagenicity (Ames test) alerts by ISS' where idstructure!=100211 group by `status` order by `status`");
+		Assert.assertEquals(2, table.getRowCount());
+		Assert.assertEquals("OK", table.getValue(0, "s"));
+		Assert.assertEquals(new BigInteger("18"), table.getValue(0, "c"));
+		// the explanation field
+		Assert.assertEquals("TRUNCATED", table.getValue(1, "s"));
+		Assert.assertEquals(new BigInteger("3"), table.getValue(1, "c"));
+
+		table = c.createQueryTable("p",
+				"SELECT count(*) c,predicate,object FROM property_annotation join properties using(idproperty) group by object order by object");
+		Assert.assertEquals(2, table.getRowCount());
+		Assert.assertEquals("acceptValue", table.getValue(0, "predicate"));
+		Assert.assertEquals("acceptValue", table.getValue(1, "predicate"));
+		Assert.assertEquals("NO", table.getValue(0, "object"));
+		Assert.assertEquals("YES", table.getValue(1, "object"));
+		Assert.assertEquals(new BigInteger("6"), table.getValue(0, "c"));
+		Assert.assertEquals(new BigInteger("6"), table.getValue(1, "c"));
+
+		c.close();
+		*/
+
 	}
 }

@@ -115,6 +115,16 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 			public String getImage() {
 				return "images/benzene_16.jpg";
 			}
+		},
+		EXTERNAL {
+			@Override
+			public String getMediaType() {
+				return "application/external";
+			}
+			@Override
+			public String getImage() {
+				return "images/benzene_16.jpg";
+			}
 		};
 		public abstract String getMediaType();
 		public String getImage() {

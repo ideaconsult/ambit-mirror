@@ -1,6 +1,7 @@
 package ambit2.tautomers.test;
 
 import org.junit.Test;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -59,7 +60,11 @@ public class TestTautomersProcessor {
 			for (IBond b : smol.bonds()) {
 				Assert.assertNotSame(IBond.Order.UNSET, b.getOrder());
 			}
-			System.out.println(String.format("%s\t-->\t%s", smi, g.create(smol)));
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			for (IAtom atom : mol.atoms())
+				if (atom.getAtomTypeName().indexOf("S")>=0)
+					System.out.print(atom.getAtomTypeName()+"\t");
+			System.out.println(String.format("\n%s\t-->\t%s", smi, g.create(smol)));
 			Assert.assertFalse(smol.getProperties().get("http://www.opentox.org/api/1.1#InChI").toString()
 					.startsWith("InChI=1S/"));
 		}

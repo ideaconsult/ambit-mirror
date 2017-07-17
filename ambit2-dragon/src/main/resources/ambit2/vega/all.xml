@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<vega>
+  <input>
+    <type>FileSMI</type>
+    <source>%s</source>
+  </input>
+  <models>
+    <model>muta_caesar</model>
+    <!--  QSAR classification model for Mutagenicity (from CAESAR project) ver.2.1.13
+-->
+    <model>muta_sarpy</model>
+    <!--  QSAR classification model for Mutagenicity (SarPy/IRFMN) ver.1.0.7
+-->
+    <model>muta_iss</model>
+    <!--  Classification model for Mutagenicity (Ames test) based on Benigni-Bossa (Istituto Superiore di Sanita) rule set ver.1.0.2
+-->
+    <model>muta_knn</model>
+    <!--  KNN (Read-Across) model for Mutagenicity (Ames test) ver.1.0.0
+-->
+    <model>carc_caesar</model>
+    <!--  QSAR classification model for Carcinogenicity (from CAESAR project) ver.2.1.9
+-->
+    <model>carc_iss</model>
+    <!--  Classification model for Carcinogenicity based on Benigni-Bossa (Istituto Superiore di Sanita) rule set ver.1.0.2
+-->
+    <model>carc_antares</model>
+    <!--  QSAR classification model for Carcinogenicity (IRFMN/Antares) based on the Antares dataset ver.1.0.0
+-->
+    <model>carc_isscan</model>
+    <!--  QSAR classification model for Carcinogenicity (IRFMN/ISSCAN-CGX) based on the ISSCAN-CGX dataset ver.1.0.0
+-->
+    <model>devtox_caesar</model>
+    <!--  QSAR classification model for Developmental Toxicity (from CAESAR project) ver.2.1.7
+-->
+    <model>devtox_pg</model>
+    <!--  Virtual compound library for Developmental/Reproductive (developed by Procter And Gamble) ver.1.0.0
+-->
+    <model>rba_irfmn</model>
+    <!--  Classification model for Estrogen Receptor Relative Binding Affinity (IRFMN) ver.1.0.1
+-->
+    <model>rba_cerapp</model>
+    <!--  Classification model for Estrogen Receptor-mediated effect (IRFMN/CERAPP). ver.1.0.0
+-->
+    <model>skin_caesar</model>
+    <!--  QSAR classification model for Skin sensitization (from CAESAR project) ver.2.1.6
+-->
+    <model>hepa_irfmn</model>
+    <!--  QSAR classification model for Hepatotoxicity (IRFMN) ver.1.0.0
+-->
+    <model>fish_irfmn</model>
+    <!--  QSAR classification model for fish acute (LC50) toxicity ver.1.0.2
+-->
+    <model>fish_knn</model>
+    <!--  KNN (Read-Across) model for fish acute (LC50) toxicity ver.1.0.0
+-->
+    <model>fish_nic</model>
+    <!--  QSAR quantitative model for fish acute toxicity (by NIC) ver.1.0.0
+-->
+    <model>fathead_epa</model>
+    <!--  QSAR model for Fathead Minnow LC50 96h (from EPA T.E.S.T software) ver.1.0.7
+-->
+    <model>daphnia_epa</model>
+    <!--  QSAR model for Daphnia Magna LC50 48h (from EPA T.E.S.T software) ver.1.0.7
+-->
+    <model>daphnia_demetra</model>
+    <!--  Acute toxicity for Water Flea (Daphnia Magna) for pesticides: LC50 48-hours exposure ver.1.0.4
+-->
+    <model>bee_knn</model>
+    <!--  KNN model for bee contact and oral acute toxicity ver.1.0.0
+-->
+    <model>bcf_caesar</model>
+    <!--  QSAR regression model for fish BCF (from CAESAR project) ver.2.1.14
+-->
+    <model>bcf_meyla</model>
+    <!--  QSAR regression model for fish BCF (based on Meylan model) ver.1.0.3
+-->
+    <model>bcf_knn</model>
+    <!--  KNN (Read-Across) model for fish BCF ver.1.1.0
+-->
+    <model>km_arnot</model>
+    <!--  kM/Half-Life (days) model based on Arnot work (and implemented in EPI Suite software in the BCFBAF module). ver.1.0.0
+-->
+    <model>rb_irfmn</model>
+    <!--  QSAR classification model for Ready Biodegradability ver.1.0.9
+-->
+    <model>p_sed_irfmn</model>
+    <!--  Persistence (sediment) model ver.1.0.0
+-->
+    <model>p_soil_irfmn</model>
+    <!--  Persistence (soil) model ver.1.0.0
+-->
+    <model>p_water_irfmn</model>
+    <!--  Persistence (water) model ver.1.0.0
+-->
+    <model>logp_meylan</model>
+    <!--  LogP model based on Meylan work (and implemented in EPI Suite software as KowWin). ver.1.1.4
+-->
+    <model>logp_mlogp</model>
+    <!--  LogP model based on MLogP descriptor. ver.1.0.0
+-->
+    <model>logp_alogp</model>
+    <!--  LogP model based on ALogP descriptor. ver.1.0.0 -->
+  </models>
+  <output>
+  <!-- 
+    <multipleTXT>out</multipleTXT>
+    -->
+    <singleTXT>%s</singleTXT>
+  </output>
+</vega>

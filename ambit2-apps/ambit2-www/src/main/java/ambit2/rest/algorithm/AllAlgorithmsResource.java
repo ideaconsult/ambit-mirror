@@ -204,6 +204,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			throws ResourceException {
 		if (model.hasType(AlgorithmType.Rules))
 			return null;
+		if (model.hasType(AlgorithmType.ExternalModels))
+			return null;
 		if (model.hasType(AlgorithmType.Fingerprints))
 			return null;
 		if (model.hasType(AlgorithmType.Mockup))
@@ -274,7 +276,12 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 
 			} else if (algorithm.hasType(AlgorithmType.Mockup)) {
 				return new CallableMockup<String>(form, token);
-			} else if (algorithm.hasType(AlgorithmType.Rules))
+			} else if (algorithm.hasType(AlgorithmType.ExternalModels))
+				return new CallableSimpleModelCreator(form, getRequest()
+						.getRootRef(), getContext(), algorithm, modelReporter,
+						algReporter, false, token, getRequest()
+								.getResourceRef().toString());
+			else if (algorithm.hasType(AlgorithmType.Rules))
 				return new CallableSimpleModelCreator(form, getRequest()
 						.getRootRef(), getContext(), algorithm, modelReporter,
 						algReporter, false, token, getRequest()

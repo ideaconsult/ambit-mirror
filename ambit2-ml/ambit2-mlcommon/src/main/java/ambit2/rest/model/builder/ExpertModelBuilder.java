@@ -59,7 +59,7 @@ public class  ExpertModelBuilder extends SimpleModelBuilder {
 		return String.format("%s_%s", userName,datasetURI);
 	}
 	@Override
-	protected String getMediaType() throws AmbitException {
+	protected String getMediaType(Algorithm algorithm) throws AmbitException {
 		return MediaType.APPLICATION_WWW_FORM.toString();
 	}
 	@Override

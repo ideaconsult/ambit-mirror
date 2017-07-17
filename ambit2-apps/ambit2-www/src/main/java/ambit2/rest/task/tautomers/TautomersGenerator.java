@@ -125,8 +125,8 @@ public class TautomersGenerator extends
 						.addImplicitHydrogens(mol);
 
 				List<IAtomContainer> resultTautomers = null;
-				predictor.setStructure(mol);
-				resultTautomers = predictor.generateTautomersIncrementaly();
+				getPredictor().setStructure(mol);
+				resultTautomers = getPredictor().generateTautomersIncrementaly();
 				double bestRank = 0;
 
 				IStructureRecord newrecord = new StructureRecord();

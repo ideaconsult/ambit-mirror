@@ -27,25 +27,26 @@ public class AlgorithmPileTest {
 			// as defined originally by code
 			output.write(AlgorithmsPile.toJSON(algorithms));
 		}
-		
+
 		Object[][] o = AlgorithmsPile.getAlgorithms();
 		Assert.assertEquals(algorithms.length, o.length);
 		for (int i = 0; i < o.length; i++) {
 			Assert.assertEquals(algorithms[i][0].toString(), algorithms[i].length, o[i].length);
-			//System.out.println(String.format("%s\t%s", algorithms[i][0], o[i][4]));
+			// System.out.println(String.format("%s\t%s", algorithms[i][0],
+			// o[i][4]));
 
 			for (int j = 0; j < o[i].length; j++) {
 				String title = String.format("%s %s", algorithms[i][0], j);
 				if (algorithms[i][j] == null)
-					Assert.assertNull(title,o[i][j]);
+					Assert.assertNull(title, o[i][j]);
 				else if (algorithms[i][j].getClass().isArray()) {
 					Assert.assertTrue(o[i][j].getClass().isArray());
 					Object[] expected = (Object[]) algorithms[i][j];
 					Object[] actual = (Object[]) o[i][j];
 					Assert.assertEquals(title, expected.length, actual.length);
-					for (int k=0; k < actual.length; k++)
+					for (int k = 0; k < actual.length; k++)
 						Assert.assertEquals(expected[k], actual[k]);
-						
+
 				} else {
 					Assert.assertEquals(Integer.toString(j), algorithms[i][j].getClass().getName(),
 							o[i][j].getClass().getName());
@@ -54,7 +55,7 @@ public class AlgorithmPileTest {
 			}
 		}
 
-		//System.out.println(f.getAbsolutePath());
+		// System.out.println(f.getAbsolutePath());
 		f = File.createTempFile("alg_", ".json");
 		f.deleteOnExit();
 		try (Writer output = new FileWriter(f)) {
@@ -65,7 +66,7 @@ public class AlgorithmPileTest {
 			output.write("\n]");
 		}
 
-		//System.out.println(f.getAbsolutePath());
+		// System.out.println(f.getAbsolutePath());
 	}
 
 	private static final LiteratureEntry toxTreeReference = new LiteratureEntry("User input",
@@ -777,7 +778,12 @@ public class AlgorithmPileTest {
 			{ "ambit2.rest.algorithm.descriptors.OPSCountsWrapper", "Number of pathways and assays in OpenPhacts",
 					"ambit2.rest.algorithm.descriptors.OPSCountsWrapper", null,
 					new String[] { AlgorithmType.DescriptorCalculation.toString() }, null, Algorithm.requires.structure,
-					"http://ambit.sourceforge.net/descriptors.owl#OPSCOUNT" }
+					"http://ambit.sourceforge.net/descriptors.owl#OPSCOUNT" },
+			{ "vega", "VEGA models", "ambit2.vega.ExternalModelVega", null,
+					new String[] { "http://www.opentox.org/algorithmTypes.owl#Learning",
+							"http://www.opentox.org/algorithmTypes.owl#Supervised",
+							"http://www.opentox.org/algorithmTypes.owl#ExternalModels" },
+					null, Algorithm.requires.structure, "https://www.vegahub.eu/" }
 
 			/**
 			 * 

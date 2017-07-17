@@ -99,8 +99,8 @@ public class DescriptorPredictor<C extends AbstractDBProcessor<IStructureRecord,
 		StringBuilder b = new StringBuilder();
 		b.append(String.format("Structures required\t%s\n",structureRequired?"YES":"NO"));
 
-		if (predictor != null) {
-			b.append(predictor.toString());
+		if (getPredictor() != null) {
+			b.append(getPredictor().toString());
 		}
 		return b.toString();
 				

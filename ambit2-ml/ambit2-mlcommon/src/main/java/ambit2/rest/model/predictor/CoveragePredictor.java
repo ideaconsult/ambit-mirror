@@ -32,14 +32,14 @@ public abstract class CoveragePredictor<Input, T> extends ModelPredictor<DataCov
     @Override
     public Object predict(Input target) throws AmbitException {
 	double[] d = null;
-	if (predictor instanceof DataCoverage) {
-	    d = ((DataCoverage) predictor).predict(transform(target));
+	if (getPredictor() instanceof DataCoverage) {
+	    d = ((DataCoverage) getPredictor()).predict(transform(target));
 	} else
-	    throw new AmbitException("Not supported " + predictor.getClass().getName());
+	    throw new AmbitException("Not supported " + getPredictor().getClass().getName());
 
 	if (d == null)
 	    throw new AmbitException();
-	return new double[] { d[0], predictor.getDomain(d[0]) };
+	return new double[] { d[0], getPredictor().getDomain(d[0]) };
     }
 
     public void assignResults(IStructureRecord record, Object value) throws AmbitException {
