@@ -2,7 +2,7 @@ package ambit2.rules.conditions;
 
 import ambit2.rules.conditions.value.IValue;
 
-public class DescriptorValueCondition implements IDescriptorValueCondition 
+public class DescriptorValueCondition implements IDescriptorValueCondition, INeedsDescriptorSolver
 {
 	private IValue value = null;
 	private IDescriptorSolver solver = null;
