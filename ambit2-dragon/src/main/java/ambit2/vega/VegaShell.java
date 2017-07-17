@@ -118,7 +118,10 @@ public class VegaShell extends AbstractDescriptorShell {
 
 	@Override
 	protected String getHome() throws ShellException {
-		return System.getenv(VEGA_HOME);
+		String home = System.getenv(VEGA_HOME);
+		if (home == null)
+			home = getHomeFromConfig("ambit2/rest/config/ambit2.pref", VegaShell.VEGA_HOME);
+		return home;
 	}
 
 	@Override
@@ -146,7 +149,7 @@ public class VegaShell extends AbstractDescriptorShell {
 		if (!exe.exists() && !winexe.exists()) {
 			logger.log(Level.FINE, String.format("%s does not exist! Have you set %s environment variable?",
 					exe.getAbsolutePath(), JAVA_HOME));
-			//assume there is path set
+			// assume there is path set
 			exe = new File(JAVA_EXE);
 			winexe = new File(String.format("%s.exe", JAVA_EXE));
 		}
