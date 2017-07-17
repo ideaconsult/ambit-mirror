@@ -28,6 +28,7 @@ import ambit2.rules.conditions.DescriptorSolverSet;
 import ambit2.rules.conditions.DescriptorValueCondition;
 import ambit2.rules.conditions.ICondition;
 import ambit2.rules.conditions.IDescriptorSolver;
+import ambit2.rules.conditions.INeedsDescriptorSolver;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SmartsHelper;
 
@@ -45,7 +46,7 @@ public class Reactor
 	protected InChIGeneratorFactory igf = null;
 	List<INCHI_OPTION> igf_options = null;
 	
-	protected IDescriptorSolver descriptoSolver = null;
+	protected IDescriptorSolver descriptorSolver = null;
 	
 
 	//Status variables
@@ -76,8 +77,7 @@ public class Reactor
 		DescriptorSolverSet solverSet = new DescriptorSolverSet();
 		IDescriptorSolver rds = new ReactorDescriptorSolver();
 		solverSet.addSolver(rds);
-		
-		descriptoSolver = solverSet;
+		descriptorSolver = solverSet;
 	}
 	
 	
@@ -111,7 +111,7 @@ public class Reactor
 	}
 	
 	public IDescriptorSolver getDescriptoSolver() {
-		return descriptoSolver;
+		return descriptorSolver;
 	}
 	
 	protected void setDescriptoSolverForReactDB()
@@ -122,8 +122,8 @@ public class Reactor
 				for (ICondition cond : reaction.getConditions())
 				{
 					//System.out.println("---- seting solver for " + cond.toString());
-					if (cond instanceof DescriptorValueCondition)
-						((DescriptorValueCondition)cond).setDescriptorSolver(descriptoSolver);
+					if (cond instanceof INeedsDescriptorSolver)
+						((DescriptorValueCondition)cond).setDescriptorSolver(descriptorSolver);
 				}	
 		}	
 	}
