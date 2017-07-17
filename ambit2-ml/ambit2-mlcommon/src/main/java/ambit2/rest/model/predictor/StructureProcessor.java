@@ -75,7 +75,7 @@ public class StructureProcessor extends
 		try {
 			IAtomContainer mol = reader.process(target);
 			if (mol != null) {
-				IAtomContainer newmol = predictor.process(mol);
+				IAtomContainer newmol = getPredictor().process(mol);
 				if (newmol != null) {
 					StringWriter sw = new StringWriter();
 					SDFWriter writer = new SDFWriter(sw);
@@ -111,8 +111,8 @@ public class StructureProcessor extends
 		b.append(String.format("Structures required\t%s\n",
 				structureRequired ? "YES" : "NO"));
 
-		if (predictor != null) {
-			b.append(predictor.toString());
+		if (getPredictor() != null) {
+			b.append(getPredictor().toString());
 		}
 		return b.toString();
 
