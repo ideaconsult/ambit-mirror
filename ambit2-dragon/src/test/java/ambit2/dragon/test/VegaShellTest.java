@@ -12,19 +12,9 @@ public class VegaShellTest {
 
 	@Test
 	public void testVegaShell() throws Exception {
-		VegaShell shell = new VegaShell() {
-			protected String getHome() throws ambit2.base.external.ShellException {
-				String home = super.getHome();
-				Assert.assertNotNull(home);
-				return home;
-			};
-		};
+		//VegaShell shell = new VegaShell("ambit2/dragon/test/test.pref");
+		VegaShell shell = new VegaShell(null);
 
-		String home = shell.getHomeFromConfig("ambit2/dragon/test/test.pref", VegaShell.VEGA_HOME);
-		System.out.println(home);
-
-		// shell.setDescriptors(new String[] { "MW", "MLOGP", "Constitutional
-		// indices" });
 		try (IIteratingChemObjectReader reader = FileInputState.getReader(
 				getClass().getClassLoader().getResourceAsStream("ambit2/dragon/test/structure.sdf"), "structure.sdf")) {
 

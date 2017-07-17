@@ -45,26 +45,59 @@ public class VegaShell extends AbstractDescriptorShell {
 	 * 
 	 */
 	private static final long serialVersionUID = -4109994330375555731L;
-	private static Map<String, Property> properties;
+	private Map<String, Property> properties;
+	protected String config;
 
-	public static Map<String, Property> getProperties() {
-		return properties;
+	protected String getConfig() {
+		return config;
 	}
 
-	static {
-		try {
-			properties = loadProperties();
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage());
-		}
+	protected void setConfig(String config) {
+		this.config = config;
 	}
 
 	public VegaShell() throws ShellException {
-		super();
-
+		this("ambit2/rest/config/ambit2.pref");
 	}
 
-	protected static synchronized Map<String, Property> loadProperties() {
+	public VegaShell(String config) throws ShellException {
+		super();
+		this.config = config;
+		try {
+			properties = loadProperties();
+			
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage());
+		}
+		inFile = new String[] { "script.xml", "vega_input.smi" };
+		outFile = new String[] { "results.txt" };
+
+		String java_bin = System.getenv(JAVA_HOME);
+		if (java_bin != null) {
+			java_bin = String.format("%s/bin", java_bin);
+		} else {
+			java_bin = getHomeFromConfig(config, VegaShell.JAVA_BIN);
+		}
+		File exe = new File(String.format("%s/%s", java_bin, JAVA_EXE));
+		File winexe = new File(String.format("%s/%s.exe", java_bin, JAVA_EXE));
+
+		if (!exe.exists() && !winexe.exists()) {
+			logger.log(Level.FINE,
+					String.format("%s does not exist! Have you set %s environment variable  or %s configuration?",
+							exe.getAbsolutePath(), JAVA_HOME, JAVA_BIN));
+			throw new ShellException(this, "Can't run " + getClass().getName());
+		}
+		addExecutable(CommandShell.os_WINDOWS, winexe.getAbsolutePath(), null);
+		addExecutable(CommandShell.os_WINDOWS7, winexe.getAbsolutePath(), null);
+		addExecutable(CommandShell.os_WINDOWSVISTA, winexe.getAbsolutePath(), null);
+		addExecutable(CommandShell.os_FreeBSD, exe.getAbsolutePath(), null);
+		addExecutable(CommandShell.os_LINUX, exe.getAbsolutePath(), null);
+		addExecutable(CommandShell.os_LINUX64, exe.getAbsolutePath(), null);
+		setInputFile(String.format("%s/%s", getHomeDir(null), inFile[1]));
+		setOutputFile(String.format("%s/%s", getHome(), outFile[0]));		
+	}
+
+	protected synchronized Map<String, Property> loadProperties() {
 		Map<String, Property> properties = new HashMap<String, Property>();
 		try (InputStream in = VegaShell.class.getClassLoader().getResourceAsStream("ambit2/vega/properties.json")) {
 			ObjectMapper m = new ObjectMapper();
@@ -107,9 +140,14 @@ public class VegaShell extends AbstractDescriptorShell {
 	public static final String JAVA_EXE = "java";
 	public static final String VEGA_HOME = "VEGA_HOME";
 	public static final String JAVA_HOME = "JAVA_HOME";
+	public static final String JAVA_BIN = "JAVA_BIN";
 
 	protected String[] inFile;
 	protected String[] outFile;
+
+	public Map<String, Property> getProperties() {
+		return properties;
+	}
 
 	@Override
 	protected String getHomeDir(File file) {
@@ -119,8 +157,8 @@ public class VegaShell extends AbstractDescriptorShell {
 	@Override
 	protected String getHome() throws ShellException {
 		String home = System.getenv(VEGA_HOME);
-		if (home == null)
-			home = getHomeFromConfig("ambit2/rest/config/ambit2.pref", VegaShell.VEGA_HOME);
+		if (home == null && config!=null)
+			home = getHomeFromConfig(config, VegaShell.VEGA_HOME);
 		return home;
 	}
 
@@ -138,29 +176,7 @@ public class VegaShell extends AbstractDescriptorShell {
 
 	@Override
 	protected void initialize() throws ShellException {
-		super.initialize();
-
-		inFile = new String[] { "script.xml", "vega_input.smi" };
-		outFile = new String[] { "results.txt" };
-
-		File exe = new File(String.format("%s/bin/%s", System.getenv(JAVA_HOME), JAVA_EXE));
-		File winexe = new File(String.format("%s/bin/%s.exe", System.getenv(JAVA_HOME), JAVA_EXE));
-
-		if (!exe.exists() && !winexe.exists()) {
-			logger.log(Level.FINE, String.format("%s does not exist! Have you set %s environment variable?",
-					exe.getAbsolutePath(), JAVA_HOME));
-			// assume there is path set
-			exe = new File(JAVA_EXE);
-			winexe = new File(String.format("%s.exe", JAVA_EXE));
-		}
-		addExecutable(CommandShell.os_WINDOWS, winexe.getAbsolutePath(), null);
-		addExecutable(CommandShell.os_WINDOWS7, winexe.getAbsolutePath(), null);
-		addExecutable(CommandShell.os_WINDOWSVISTA, winexe.getAbsolutePath(), null);
-		addExecutable(CommandShell.os_FreeBSD, exe.getAbsolutePath(), null);
-		addExecutable(CommandShell.os_LINUX, exe.getAbsolutePath(), null);
-		addExecutable(CommandShell.os_LINUX64, exe.getAbsolutePath(), null);
-		setInputFile(String.format("%s/%s", getHomeDir(null), inFile[1]));
-		setOutputFile(String.format("%s/%s", getHome(), outFile[0]));
+		
 	}
 
 	@Override
@@ -172,9 +188,9 @@ public class VegaShell extends AbstractDescriptorShell {
 		String homeDir = getHomeDir(null);
 		File dir = new File(homeDir);
 		if (!dir.exists()) {
-			logger.log(Level.INFO, String.format("%s do not exist, mkdir",dir.getAbsolutePath()));
+			logger.log(Level.INFO, String.format("%s do not exist, mkdir", dir.getAbsolutePath()));
 			dir.mkdirs();
-		}	
+		}
 
 		String molfile = String.format("%s%s%s", homeDir, File.separator, inFile[1]);
 		String predfile = String.format("%s%s%s", homeDir, File.separator, outFile[0]);
