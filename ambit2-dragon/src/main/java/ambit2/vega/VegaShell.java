@@ -70,7 +70,7 @@ public class VegaShell extends AbstractDescriptorShell {
 			ObjectMapper m = new ObjectMapper();
 			JsonNode root = m.readTree(in);
 			Iterator<Map.Entry<String, JsonNode>> pi = root.get("features").fields();
-			String version =  "https://www.vegahub.eu/";
+			String version = "https://www.vegahub.eu/";
 			try {
 				version = root.get("models").get("core").asText();
 			} catch (Exception x) {
@@ -87,7 +87,7 @@ public class VegaShell extends AbstractDescriptorShell {
 					creator = root.get("models").get(creator).asText();
 				} catch (Exception x) {
 				}
-				ILiteratureEntry ref = LiteratureEntry.getInstance(creator,version);
+				ILiteratureEntry ref = LiteratureEntry.getInstance(creator, version);
 				// String name = p.getValue().get("title").asText();
 				String name = p.getKey();
 				String units = p.getValue().get("units").asText();
@@ -144,8 +144,11 @@ public class VegaShell extends AbstractDescriptorShell {
 		File winexe = new File(String.format("%s/bin/%s.exe", System.getenv(JAVA_HOME), JAVA_EXE));
 
 		if (!exe.exists() && !winexe.exists()) {
-			throw new ShellException(this, String.format("%s does not exist! Have you set %s environment variable?",
+			logger.log(Level.FINE, String.format("%s does not exist! Have you set %s environment variable?",
 					exe.getAbsolutePath(), JAVA_HOME));
+			//assume there is path set
+			exe = new File(JAVA_EXE);
+			winexe = new File(String.format("%s.exe", JAVA_EXE));
 		}
 		addExecutable(CommandShell.os_WINDOWS, winexe.getAbsolutePath(), null);
 		addExecutable(CommandShell.os_WINDOWS7, winexe.getAbsolutePath(), null);
