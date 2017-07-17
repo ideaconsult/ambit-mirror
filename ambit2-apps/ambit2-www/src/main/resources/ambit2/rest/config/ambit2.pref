@@ -42,6 +42,8 @@ dataset.members.prefix=${dataset.members.prefix}
 OBABEL_HOME=${OBABEL_HOME}
 #Path to Dragon6 executable http://www.talete.mi.it/products/dragon_description.htm 
 DRAGON_HOME=${DRAGON_HOME}
+#Path to Vega jar executable https://www.vegahub.eu/  
+VEGA_HOME=${VEGA_HOME}
 #Path to balloon executable http://users.abo.fi/mivainio/balloon/ 
 BALLOON_HOME=${BALLOON_HOME}
 #Add a column with the license in CSV and TXT files
@@ -148,3 +150,4 @@ solr.url.4=${solr.url.4}
 solr.basic.user.4=${solr.basic.user.4}
 solr.basic.password.4=${solr.basic.password.4}
 solr.filter=${solr.filter}
+##############################################################
