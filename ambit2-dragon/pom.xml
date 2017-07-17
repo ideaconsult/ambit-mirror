@@ -15,7 +15,18 @@
 			<artifactId>ambit2-core</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>
-			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-descriptors</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-mlcommon</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openscience.cdk</groupId>
