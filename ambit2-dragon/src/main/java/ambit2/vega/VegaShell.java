@@ -82,10 +82,10 @@ public class VegaShell extends AbstractDescriptorShell {
 		File winexe = new File(String.format("%s/%s.exe", java_bin, JAVA_EXE));
 
 		if (!exe.exists() && !winexe.exists()) {
-			logger.log(Level.FINE,
+			logger.log(Level.SEVERE,
 					String.format("%s does not exist! Have you set %s environment variable  or %s configuration?",
 							exe.getAbsolutePath(), JAVA_HOME, JAVA_BIN));
-			throw new ShellException(this, "Can't run " + getClass().getName());
+			throw new ShellException(this, String.format("%s not found; %s initialisation failed",exe.getName(), getClass().getName()));
 		}
 		addExecutable(CommandShell.os_WINDOWS, winexe.getAbsolutePath(), null);
 		addExecutable(CommandShell.os_WINDOWS7, winexe.getAbsolutePath(), null);
