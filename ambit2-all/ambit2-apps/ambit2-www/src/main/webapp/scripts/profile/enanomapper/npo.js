@@ -61,7 +61,7 @@ var config_npo = {
 			"mRender" : function(data, type, full) {
 				var sOut = "";
 				var uri = (data["title"] != undefined)
-						&& (data["title"].startsWith("http"));
+						&& (data["title"].indexOf("http")==0);
 				if (uri) {
 					sOut = (data["year"] == null || data["year"] == 0) ? "URL"
 							: data["year"];
