@@ -3285,7 +3285,7 @@ var jToxSubstance = (function () {
         html += '<br/>';
       var id = data[i].id;
       try {
-      if (id.startsWith("http")) id = "<a href='"+id+"' target=_blank class='qxternal'>"+id+"</a>";
+      if (id.indexOf("http")==0) id = "<a href='"+id+"' target=_blank class='qxternal'>"+id+"</a>";
       } catch (err) {}  
               
       html += data[i].type + '&nbsp;=&nbsp;' + id;

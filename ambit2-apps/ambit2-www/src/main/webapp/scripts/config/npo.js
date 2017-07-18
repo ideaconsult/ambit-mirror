@@ -43,7 +43,7 @@ var config_npo = {
                 "sTitle": "Reference",
                 "mRender" : function(data,type,full) {
                 	//var quri = "?type=citation&search=";
-                	var uri = (data["title"]!=undefined) && (data["title"].startsWith("http"));
+                	var uri = (data["title"]!=undefined) && (data["title"].indexOf("http")==0);
                 	if (uri) { 
                 		var sOut = (data["year"]==null || data["year"] == 0)?"URL":data["year"];
                 		return "<a href='" + data["title"] + "' title='" + data["title"] + "' target='_doi' >"+sOut+"</a>";
