@@ -52,7 +52,15 @@ public class ReadSubstanceByStudy  extends AbstractReadSubstance<_studysearchmod
 			String getDefaultSearchValue() {
 				return null;
 			}
-		},		
+		},
+		citationowner {
+
+			@Override
+			String getDefaultSearchValue() {
+				return null;
+			}
+			
+		},
 		params {
 			@Override
 			String getDefaultSearchValue() {
@@ -60,6 +68,7 @@ public class ReadSubstanceByStudy  extends AbstractReadSubstance<_studysearchmod
 			}
 		};
 		abstract String getDefaultSearchValue();
+		;
 	}
 	private static String sql_bycitation =
 		"select substance.idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid,owner_name "+ 
@@ -67,6 +76,13 @@ public class ReadSubstanceByStudy  extends AbstractReadSubstance<_studysearchmod
 		" (select idsubstance from `substance` `s` join `substance_protocolapplication` `p` "+
 		"on((`s`.`prefix` = `p`.`substance_prefix`) and (`s`.`uuid` = `p`.`substance_uuid`)) "+
 		"where reference regexp ? )";
+	
+	private static String sql_bycitationowner =
+			"select substance.idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid,owner_name "+ 
+			"from substance where idsubstance in " +
+			" (select idsubstance from `substance` `s` join `substance_protocolapplication` `p` "+
+			"on((`s`.`prefix` = `p`.`substance_prefix`) and (`s`.`uuid` = `p`.`substance_uuid`)) "+
+			"where reference_owner = ? )";
 	
 	private static String sql_byguideline =
 		"select substance.idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid,owner_name "+ 
@@ -123,6 +139,9 @@ public class ReadSubstanceByStudy  extends AbstractReadSubstance<_studysearchmod
 		switch (getFieldname()) {
 		case citation: {
 			return sql_bycitation;
+		}
+		case citationowner: {
+			return sql_bycitationowner;
 		}
 		case guideline: {
 			return sql_byguideline;
