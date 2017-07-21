@@ -1492,7 +1492,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (9,1,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (9,2,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
@@ -2080,6 +2080,7 @@ DROP FUNCTION IF EXISTS `tanimotoChemicals`;
 
 DELIMITER $$
 CREATE FUNCTION `tanimotoChemicals`(chemical1_id INT, chemical2_id INT) RETURNS double
+READS SQL DATA
 BEGIN
 
   DECLARE tanimoto DOUBLE DEFAULT 0;
@@ -2108,6 +2109,7 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `getPropertyMax`;
 DELIMITER $$
 CREATE FUNCTION `getPropertyMax`(property_id INT, dataset_id INT) RETURNS double
+READS SQL DATA
 BEGIN
 
     DECLARE range_max REAL;
@@ -2127,6 +2129,7 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `getPropertyMin`;
 DELIMITER $$
 CREATE FUNCTION `getPropertyMin`(property_id INT, dataset_id INT) RETURNS double
+READS SQL DATA
 BEGIN
 
     DECLARE range_min REAL;
@@ -2146,6 +2149,7 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `getBinnedRange`;
 DELIMITER $$
 CREATE FUNCTION `getBinnedRange`(property_id INT, dataset_id INT, maxPoints INT) RETURNS text CHARSET utf8 COLLATE utf8_bin
+READS SQL DATA
 BEGIN
     DECLARE no_more_rows BOOLEAN;
     DECLARE number DOUBLE;
@@ -2207,6 +2211,7 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `recordsInPropertyRange`;
 DELIMITER $$
 CREATE FUNCTION `recordsInPropertyRange`(property_id INT,dataset_id INT,minProperty DOUBLE, maxProperty DOUBLE) RETURNS INT
+READS SQL DATA
 BEGIN
     DECLARE entries REAL;
     select count(*) into entries from property_values
@@ -2407,6 +2412,7 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `tanimotoCell`;
 DELIMITER $$
 CREATE FUNCTION `tanimotoCell`(property_id INT, dataset_id INT, min1 DOUBLE, max1 DOUBLE, min2 DOUBLE, max2 DOUBLE) RETURNS double
+READS SQL DATA
 BEGIN
   DECLARE tanimoto DOUBLE DEFAULT 0;
   select
@@ -2449,6 +2455,7 @@ CREATE FUNCTION `tanimotoG2`(property_id INT, dataset_id INT,
                               min2 DOUBLE, max2 DOUBLE,
                               method INT,
                               threshold_sim DOUBLE,threshold_dact DOUBLE) RETURNS double
+                              READS SQL DATA
 BEGIN
 
   DECLARE no_more_rows BOOLEAN DEFAULT FALSE;
@@ -2584,6 +2591,7 @@ CREATE FUNCTION `tanimotoG2row`(property_id INT, dataset_id INT,
                               min1 DOUBLE, max1 DOUBLE,
                               method INT,
                               threshold_sim DOUBLE,threshold_dact DOUBLE) RETURNS double
+                              READS SQL DATA
 BEGIN
 
   DECLARE no_more_rows BOOLEAN DEFAULT FALSE;
@@ -2677,6 +2685,7 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `tanimotoSet`;
 DELIMITER $$
 CREATE FUNCTION `tanimotoSet`(query_id INT, metric1 INT, metric2 INT) RETURNS double
+READS SQL DATA
 BEGIN
 
   DECLARE tanimoto DOUBLE DEFAULT 0;
