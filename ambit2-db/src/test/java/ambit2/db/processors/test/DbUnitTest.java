@@ -41,8 +41,6 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import junit.framework.Assert;
-
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -55,18 +53,27 @@ import org.junit.Before;
 import ambit2.base.data.StringBean;
 import ambit2.db.DBVersion;
 import ambit2.db.processors.DbCreateDatabase;
+import junit.framework.Assert;
 
 public abstract class DbUnitTest {
-	protected static Logger logger = Logger.getLogger(DbUnitTest.class
-			.getName());
+	boolean noAccessToProcedureBodies = true;
+
+	public boolean isNoAccessToProcedureBodies() {
+		return noAccessToProcedureBodies;
+	}
+
+	public void setNoAccessToProcedureBodies(boolean noAccessToProcedureBodies) {
+		this.noAccessToProcedureBodies = noAccessToProcedureBodies;
+	}
+
+	protected static Logger logger = Logger.getLogger(DbUnitTest.class.getName());
 	protected Properties properties;
 
 	protected void loadProperties() {
 		try {
 			if (properties == null) {
 				properties = new Properties();
-				InputStream in = this.getClass().getClassLoader()
-						.getResourceAsStream("ambit2/db/conf/ambit2.pref");
+				InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/conf/ambit2.pref");
 				properties.load(in);
 				in.close();
 			}
@@ -88,8 +95,7 @@ public abstract class DbUnitTest {
 	protected String getHost() {
 		loadProperties();
 		String p = properties.getProperty("Host");
-		return p == null ? "localhost"
-				: ("${ambit.db.host}".equals(p)) ? "localhost" : p;
+		return p == null ? "localhost" : ("${ambit.db.host}".equals(p)) ? "localhost" : p;
 	}
 
 	protected String getDatabase() {
@@ -113,8 +119,7 @@ public abstract class DbUnitTest {
 	protected String getPWD() {
 		loadProperties();
 		String p = properties.getProperty("database.user.test.password");
-		return (p == null) || ("${ambit.db.user.test.password}".equals(p)) ? "guest"
-				: p;
+		return (p == null) || ("${ambit.db.user.test.password}".equals(p)) ? "guest" : p;
 	}
 
 	@Before
@@ -122,31 +127,25 @@ public abstract class DbUnitTest {
 		boolean dbExists = false;
 		IDatabaseConnection c = null;
 		try {
-			c = getConnection(getHost(), getDatabase(), getPort(), getUser(),
-					getPWD());
+			c = getConnection(getHost(), getDatabase(), getPort(), getUser(), getPWD());
 			c.getConnection().setAutoCommit(false);
-			dbExists = DbCreateDatabase.dbExists(c.getConnection(),
-					getDatabase());
+			dbExists = DbCreateDatabase.dbExists(c.getConnection(), getDatabase());
 			if (dbExists) {
 				String version = null;
 				try {
-					version = DbCreateDatabase.getDbVersion(c.getConnection(),
-							getDatabase());
+					version = DbCreateDatabase.getDbVersion(c.getConnection(), getDatabase());
 				} catch (Exception x) {
 					version = null;
 				}
-				String expected = String.format("%s.%s",
-						DBVersion.AMBITDB_VERSION_MAJOR,
+				String expected = String.format("%s.%s", DBVersion.AMBITDB_VERSION_MAJOR,
 						DBVersion.AMBITDB_VERSION_MINOR);
 				if (!expected.equals(version)) {
-					logger.log(Level.INFO,String.format("ambit DB version:\tExpected %s\tFound %s",expected,version));
-					List<String> tables = DbCreateDatabase.tablesExists(
-							c.getConnection(), getDatabase());
-					DbCreateDatabase.dropTables(c.getConnection(),
-							getDatabase(), tables);
+					logger.log(Level.INFO,
+							String.format("ambit DB version:\tExpected %s\tFound %s", expected, version));
+					List<String> tables = DbCreateDatabase.tablesExists(c.getConnection(), getDatabase());
+					DbCreateDatabase.dropTables(c.getConnection(), getDatabase(), tables);
 					c.getConnection().commit();
-					DbCreateDatabase db = new DbCreateDatabase(getUser(),
-							getPWD());
+					DbCreateDatabase db = new DbCreateDatabase(getUser(), getPWD());
 					db.setUseExistingDatabase(true);
 					db.setConnection(c.getConnection());
 					db.create(new StringBean(getDatabase()));
@@ -161,42 +160,35 @@ public abstract class DbUnitTest {
 		}
 
 		if (!dbExists) {
-			throw new Exception(
-					String.format(
-							"Database %s does not exist. Please create before running these tests.",
-							getDatabase()));
+			throw new Exception(String.format("Database %s does not exist. Please create before running these tests.",
+					getDatabase()));
 		}
 
 	}
 
-	protected IDatabaseConnection getConnection(String host, String db,
-			String port, String user, String pass) throws Exception {
+	protected IDatabaseConnection getConnection(String host, String db, String port, String user, String pass)
+			throws Exception {
 		return getConnection(host, db, port, user, pass, false);
 	}
 
-	protected IDatabaseConnection getConnection(String host, String db,
-			String port, String user, String pass, boolean debug)
-			throws Exception {
+	protected IDatabaseConnection getConnection(String host, String db, String port, String user, String pass,
+			boolean debug) throws Exception {
 		String debugConnection = "&useUsageAdvisor=true&dontTrackOpenResources=false";
+		String noAccessToProcedureBodiesQ = noAccessToProcedureBodies ? "&noAccessToProcedureBodies=true" : "";
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection jdbcConnection = DriverManager
-				.getConnection(
-						String.format(
-								"jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8&profileSQL=%s%s",
-								host, port, db, Boolean
-										.toString(isProfileSQL()),
-								(debug ? debugConnection : "")), user, pass);
+		Connection jdbcConnection = DriverManager.getConnection(String.format(
+				"jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8&profileSQL=%s%s%s",
+				host, port, db, Boolean.toString(isProfileSQL()), (debug ? debugConnection : ""),
+				noAccessToProcedureBodiesQ), user, pass);
 		// SET NAMES utf8
 		IDatabaseConnection c = new DatabaseConnection(jdbcConnection);
 		DatabaseConfig dbConfig = c.getConfig();
 
-		dbConfig.setProperty(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS,
-				Boolean.TRUE);
-		dbConfig.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
-				new MySqlDataTypeFactory());
+		dbConfig.setProperty(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS, Boolean.TRUE);
+		dbConfig.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
 		/*
-		 * dbConn.getConfig().setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER
-		 * , new MySqlMetadataHandler());
+		 * dbConn.getConfig().setProperty(DatabaseConfig.
+		 * PROPERTY_METADATA_HANDLER , new MySqlMetadataHandler());
 		 */
 		return c;
 
@@ -207,34 +199,30 @@ public abstract class DbUnitTest {
 	}
 
 	protected IDatabaseConnection getConnection(boolean debug) throws Exception {
-		return getConnection(getHost(), getDatabase(), getPort(), getUser(),
-				getPWD(), debug);
+		return getConnection(getHost(), getDatabase(), getPort(), getUser(), getPWD(), debug);
 	}
 
 	protected IDatabaseConnection getConnection() throws Exception {
-		return getConnection(getHost(), getDatabase(), getPort(), getUser(),
-				getPWD());
+		return getConnection(getHost(), getDatabase(), getPort(), getUser(), getPWD());
 	}
 
 	public void setUpDatabaseFromResource(String resource) throws Exception {
 		InputStream xmlfile = getClass().getClassLoader().getResourceAsStream(resource);
-		Assert.assertNotNull(resource,xmlfile);
+		Assert.assertNotNull(resource, xmlfile);
 		setUpDatabase(xmlfile);
 	}
+
 	public void setUpDatabase(InputStream xmlfile) throws Exception {
 		// This ensures all tables as defined in the schema are cleaned up, and
 		// is a single place to modify if a schema changes
-		InputStream in = getClass().getClassLoader().getResourceAsStream(
-				"ambit2/db/processors/test/tables.xml");
+		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/test/tables.xml");
 		initDB(in, DatabaseOperation.DELETE_ALL, true);
 		// This will import only records, defined in the xmlfile
 		initDB(xmlfile, DatabaseOperation.INSERT, false);
 	}
 
-	private void initDB(InputStream xmlin, DatabaseOperation op, boolean admin)
-			throws Exception {
-		IDatabaseConnection connection = admin ? getConnection(getHost(),
-				getDatabase(), getPort(), getUser(), getPWD())
+	private void initDB(InputStream xmlin, DatabaseOperation op, boolean admin) throws Exception {
+		IDatabaseConnection connection = admin ? getConnection(getHost(), getDatabase(), getPort(), getUser(), getPWD())
 				: getConnection();
 		FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
 		builder.setCaseSensitiveTableNames(false);
@@ -252,8 +240,7 @@ public abstract class DbUnitTest {
 		}
 	}
 
-	public static List<String> tablesExists(Connection connection, String dbname)
-			throws Exception {
+	public static List<String> tablesExists(Connection connection, String dbname) throws Exception {
 		int tables = 0;
 		ResultSet rs = null;
 		Statement st = null;
