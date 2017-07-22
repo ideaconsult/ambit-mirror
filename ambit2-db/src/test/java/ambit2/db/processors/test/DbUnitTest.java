@@ -139,6 +139,7 @@ public abstract class DbUnitTest {
 						DBVersion.AMBITDB_VERSION_MAJOR,
 						DBVersion.AMBITDB_VERSION_MINOR);
 				if (!expected.equals(version)) {
+					logger.log(Level.INFO,String.format("ambit DB version:\tExpected %s\tFound %s",expected,version));
 					List<String> tables = DbCreateDatabase.tablesExists(
 							c.getConnection(), getDatabase());
 					DbCreateDatabase.dropTables(c.getConnection(),
