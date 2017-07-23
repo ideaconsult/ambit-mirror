@@ -116,7 +116,13 @@ public enum STRUCTURE_RELATION {
 		public STRUCTURE_RELATION inverseOf() {
 			return CONSTITUENT_OF;
 		}
-	};	
+	},
+	HAS_MONOMER,
+	HAS_ACTIVEINGREDIENT,
+	PART_OF,
+	PART_OF_GROUP_ASSESSMENT,
+	NOTPART_OF_GROUP_ASSESSMENT
+	;	
 	public STRUCTURE_RELATION inverseOf() {
 		return null;
 	}
