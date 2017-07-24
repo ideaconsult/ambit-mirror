@@ -429,6 +429,6 @@
   </profiles>
   <ciManagement>
     <system>Jenkins</system>
-    <url>https://jenkins.uni-plovdiv.net</url>
+    <url>https://jenkins.ideaconsult.net</url>
   </ciManagement>
 </project>
