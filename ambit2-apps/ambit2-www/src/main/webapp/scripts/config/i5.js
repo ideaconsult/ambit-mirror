@@ -1682,6 +1682,11 @@ var config_i5 = {
 		}
 	},
 	"EC_DAPHNIATOX_SECTION" : {
+		"protocol" : {
+			"citation" : {
+				"bVisible" : true
+			}
+		},
 		"parameters" : {
 			"bVisible" : false,
 			"test medium" : {
@@ -3036,6 +3041,113 @@ var config_i5 = {
 			"result" : {
 				"sTitle" : "Conclusions",
 				"iOrder" : -10,
+				"bVisible" : false
+			},
+			"criteria" : {
+				"bVisible" : false
+			}
+		}
+	},
+	"RISKASSESSMENT_SECTION" : {
+		"protocol" : {
+			"guideline" : {
+				"sTitle" : "Protocol",
+				"iOrder" : -20,
+				"inMatrix" : true,
+				"bVisible" : true,
+				"mRender" : function(data, type, full) {
+					var sOut = "";
+					try {
+						sOut += data[0];
+					} catch (err) {
+					}
+					sOut += "<br/>";
+					sOut += "<br/><ul>";
+					$
+							.each(full.parameters,
+									function(k, v) {
+
+										var title = k;
+										try {
+											title = config_bao.parameters[k
+													.toLowerCase()]["sTitle"];
+
+											if (title === undefined)
+												title = k;
+										} catch (err) {
+										}
+										if ((v === undefined) || (v == null)
+												|| ("-" == v))
+											return "";
+										sOut += "<li>" + title + ": ";
+										try {
+											if (v.loValue == undefined)
+												sOut += v;
+											else
+												sOut += v.loValue + " " + v.unit;
+										} catch (err) {
+											sOut += v;
+										}
+										"</li>";
+									});
+					sOut += "</ul>";
+					return sOut;
+				}
+			},
+			"uuid" : {
+				"bVisible" : false
+			},
+			"owner" : {
+				"bVisible" : false
+			},			
+			"citation" : {
+				"bVisible" : true,
+				"iOrder" : 30,
+				"sTitle" : "Reference",
+				"mRender" : function(data, type, full) {
+
+					var uri = (data["title"] != undefined)
+							&& (data["title"].indexOf("http")==0);
+					if (uri) {
+						var sOut = (data["year"] == null || data["year"] == 0) ? full["citation"]["owner"]
+								: data["year"];
+						return "<a href='" + data["title"] + "' title='"
+								+ data["title"] + "' target='_doi' >" + sOut
+								+ "</a>";
+					} else {
+						var sOut = (data["year"] == null || data["year"] == 0) ? ""
+								: ("<br/>(" + data["year"] + ")");
+						return (data["title"] + sOut);
+					}
+				}
+			},
+			"reliability" : {
+				"bVisible" : false
+			}
+		},
+	
+
+		"parameters" : {
+			"bVisible" : false
+		},
+		"conditions" : {
+			"bVisible" : true
+			
+		},
+		"effects" : {
+			"endpoint" : {
+				"sTitle" : "Risk assessment",
+				"iOrder" : -6,
+				"inMatrix" : true
+			},
+			"result" : {
+				"sTitle" : "Risk value",
+				"iOrder" : -5,
+				"inMatrix" : true
+			}
+		},
+		"interpretation" : {
+			"result" : {
 				"bVisible" : false
 			},
 			"criteria" : {

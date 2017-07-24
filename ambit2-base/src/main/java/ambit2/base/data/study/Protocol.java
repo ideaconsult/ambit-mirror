@@ -1690,6 +1690,30 @@ public class Protocol {
 				return "http://www.bioassayontology.org/bao#BAO_0002189";
 			}
 		},
+		RISKASSESSMENT_SECTION {
+			@Override
+			public String toString() {
+				return "Risk assessment";
+			}
+
+			@Override
+			public String getNumber() {
+				return "MESH_D018570";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 9999;
+			}
+
+			public String getTopCategory() {
+				return "TOX";
+			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.bioontology.org/ontology/MESH/D018570";
+			}
+		},		
 		SUPPORTING_INFO_SECTION {
 			@Override
 			public String toString() {
