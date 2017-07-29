@@ -167,7 +167,13 @@ var config_npo = {
 			"iOrder" : -5,
 			"bVisible" : true,
 			"inMatrix" : false
-		}
+		},
+		"material" : {
+			"iOrder" : -5,
+			"bVisible" : true,
+			"inMatrix" : true,
+			"sTitle" : "Treatment"
+		}	
 	},
 	"interpretation" : {
 		"result" : {

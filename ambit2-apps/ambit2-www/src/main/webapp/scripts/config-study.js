@@ -190,11 +190,11 @@ var config_study = {
 			"interpretation" : config_npo["interpretation"]
 		},
 		"ENM_0000044_SECTION" : {
-			"parameters" : config_npo["parameters"],
-			"effects" : config_npo["effects"],
-			"conditions" : config_npo["conditions"],
-			"protocol" : config_npo["protocol"],
-			"interpretation" : config_npo["interpretation"]
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]
 		},
 		"NPO_1773_SECTION" : {
 			"parameters" : config_npo["parameters"],
