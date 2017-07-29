@@ -801,6 +801,9 @@ public class DBSubstanceImport {
 					case i5z: {
 						break;
 					}
+					case i6z: {
+						break;
+					}
 					case xlsx: {
 						cleanReferenceStructure(srecord);
 						List<ProtocolApplication> m = srecord.getMeasurements();
