@@ -2389,7 +2389,8 @@ var config_i5 = {
 			"description" : {
 				"sTitle" : "Type",
 				"iOrder" : -22,
-				"inMatrix" : true
+				"inMatrix" : true,
+				"bVisible" : true
 			},
 			"coating_description" : {
 				"sTitle" : "Coating description",

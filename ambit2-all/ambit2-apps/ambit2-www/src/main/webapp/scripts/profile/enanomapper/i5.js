@@ -61,7 +61,24 @@ var config_i5 = {
 	},
 	"PC_WATER_SOL_SECTION" : {
 		"parameters" : config_bao["parameters"],
-		"effects" : config_bao["effects"],
+		"effects" : {
+			"endpoint" : {
+				"iOrder" : -9,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"result" : {
+				"iOrder" : -8,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"text" : {
+				"iOrder" : -7,
+				"bVisible" : true,
+				"sTitle" : "Result"
+			}
+
+		},
 		"conditions" : config_bao["conditions"],
 		"protocol" : config_bao["protocol"],
 		"interpretation" : config_bao["interpretation"]

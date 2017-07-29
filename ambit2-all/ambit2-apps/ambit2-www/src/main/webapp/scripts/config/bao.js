@@ -211,6 +211,12 @@ var config_bao = {
 	},
 	"conditions" : {
 		"bVisible" : false,
+		"material" : {
+			"iOrder" : -5,
+			"bVisible" : true,
+			"inMatrix" : true,
+			"sTitle" : "Material"
+		},	
 		"concentration" : {
 			"iOrder" : -7,
 			"bVisible" : true,
@@ -221,6 +227,11 @@ var config_bao = {
 			"bVisible" : true,
 			"inMatrix" : true
 		},
+		"exposure_time" : {
+			"iOrder" : -6,
+			"bVisible" : true,
+			"inMatrix" : true
+		},		
 		"replicate" : {
 			"iOrder" : -5,
 			"bVisible" : true,

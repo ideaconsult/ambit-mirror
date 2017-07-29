@@ -237,18 +237,31 @@ var config_bao = {
 		"concentration" : {
 			"iOrder" : -7,
 			"bVisible" : true,
-			"inMatrix" : true
+			"inMatrix" : true,
+			"sTitle" : "Concentration"
 		},
 		"time point" : {
 			"iOrder" : -6,
 			"bVisible" : true,
 			"inMatrix" : true
 		},
+		"exposure_time" : {
+			"iOrder" : -4,
+			"bVisible" : true,
+			"inMatrix" : true,
+			"sTitle" : "Exposure time"
+		},
 		"replicate" : {
 			"iOrder" : -5,
 			"bVisible" : true,
 			"inMatrix" : false
 		},
+		"material" : {
+			"iOrder" : -5,
+			"bVisible" : true,
+			"inMatrix" : true,
+			"sTitle" : "Treatment"
+		},		
 		"ph" : {
 			"bVisible" : true
 		},
