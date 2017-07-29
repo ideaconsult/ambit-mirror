@@ -8,16 +8,11 @@ import java.net.HttpURLConnection;
 import java.sql.Connection;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.batch.IBatchStatistics;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.processors.ProcessorsChain;
-import net.idea.modbcum.p.batch.AbstractBatchProcessor;
-import net.idea.restnet.c.task.ClientResourceWrapper;
-
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.resource.ResourceException;
 
 import ambit2.db.DbReaderStructure;
 import ambit2.db.search.structure.AbstractStructureQuery;
@@ -26,9 +21,13 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFStructuresReader;
 import ambit2.rest.legacy.OTDataset;
 import ambit2.rest.legacy.OTFeature;
+import net.idea.modbcum.i.batch.IBatchStatistics;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
+import net.idea.restnet.c.task.ClientResourceWrapper;
 
-public abstract class CallableQueryProcessor<Target, Result, USERID> extends
-		CallableProtectedTask<USERID> {
+public abstract class CallableQueryProcessor<Target, Result, USERID> extends CallableProtectedTask<USERID> {
 	protected AbstractBatchProcessor batch;
 	protected Target target;
 	protected Reference sourceReference;
@@ -36,13 +35,12 @@ public abstract class CallableQueryProcessor<Target, Result, USERID> extends
 	protected Context context;
 	protected String referer;
 
-	public CallableQueryProcessor(Form form, Context context, USERID token,
-			String referer) {
+	public CallableQueryProcessor(Form form, Context context, USERID token, String referer) {
 		this(null, form, context, token, referer);
 	}
 
-	public CallableQueryProcessor(Reference applicationRootReference,
-			Form form, Context context, USERID token, String referer) {
+	public CallableQueryProcessor(Reference applicationRootReference, Form form, Context context, USERID token,
+			String referer) {
 		super(token);
 		processForm(applicationRootReference, form);
 		this.context = context;
@@ -67,8 +65,7 @@ public abstract class CallableQueryProcessor<Target, Result, USERID> extends
 			} catch (Exception x) {
 
 			}
-		this.sourceReference = dataset == null ? null : new Reference(dataset
-				.toString().trim());
+		this.sourceReference = dataset == null ? null : new Reference(dataset.toString().trim());
 	}
 
 	@Override
@@ -136,8 +133,7 @@ public abstract class CallableQueryProcessor<Target, Result, USERID> extends
 		return batch.process(target);
 	}
 
-	protected AbstractBatchProcessor createBatch(Target target)
-			throws Exception {
+	protected AbstractBatchProcessor createBatch(Target target) throws Exception {
 		if (target == null)
 			throw new Exception("");
 		if (target instanceof AbstractStructureQuery) {
@@ -148,60 +144,57 @@ public abstract class CallableQueryProcessor<Target, Result, USERID> extends
 			return new RDFStructuresReader(target.toString(), referer);
 	}
 
-	protected abstract Target createTarget(Reference reference)
-			throws Exception;
+	protected abstract Target createTarget(Reference reference) throws Exception;
 
-	protected abstract TaskResult createReference(Connection connection)
-			throws Exception;
+	protected abstract TaskResult createReference(Connection connection) throws Exception;
 
-	protected abstract ProcessorsChain<Result, IBatchStatistics, IProcessor> createProcessors()
-			throws Exception;
+	protected abstract ProcessorsChain<Result, IBatchStatistics, IProcessor> createProcessors() throws Exception;
 
 	// protected abstract QueryURIReporter createURIReporter(Request request);
 
-	public static Object getQueryObject(Reference reference,
-			Reference applicationRootReference, Context context, String referer)
-			throws Exception {
-		return getQueryObject(reference, applicationRootReference, context,
-				null, null, referer);
+	public static Object getQueryObject(Reference reference, Reference applicationRootReference, Context context,
+			String referer) throws Exception {
+		return getQueryObject(reference, applicationRootReference, context, null, null, referer);
 	}
 
-	public static Object getQueryObject(Reference reference,
-			Reference applicationRootReference, Context context,
+	public static Object getQueryObject(Reference reference, Reference applicationRootReference, Context context,
 			String cookies, String agent, String referer) throws Exception {
-		CookieHandler.setDefault(new CookieManager(null,
-				CookiePolicy.ACCEPT_ORIGINAL_SERVER));
-		if (!applicationRootReference.isParent(reference)) {
-			logger.log(Level.WARNING, String.format("Remote reference %s %s",
-					applicationRootReference, reference));
+		CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ORIGINAL_SERVER));
+		Reference ref = reference.clone();
+		ref.setQuery("");
+		if (!applicationRootReference.isParent(ref)) {
+			logger.log(Level.WARNING, String.format("Remote reference %s %s", applicationRootReference, ref));
 			return null;
 		}
 
-		ObjectInputStream in = null;
 		HttpURLConnection connection = null;
 		try {
-			connection = ClientResourceWrapper.getHttpURLConnection(
-					reference.toString(), "GET",
+			connection = ClientResourceWrapper.getHttpURLConnection(reference.toString(), "GET",
 					MediaType.APPLICATION_JAVA_OBJECT.toString(), referer);
 			HttpURLConnection.setFollowRedirects(true);
 			if (agent != null)
 				connection.setRequestProperty("User-Agent", agent);
 			if (cookies != null)
 				connection.setRequestProperty("Cookie", cookies);
-			if (HttpURLConnection.HTTP_OK == connection.getResponseCode()) {
-				in = new ObjectInputStream(connection.getInputStream());
-				Object object = in.readObject();
-				return object;
+			switch (connection.getResponseCode()) {
+			case HttpURLConnection.HTTP_OK: {
+				try (ObjectInputStream in = new ObjectInputStream(connection.getInputStream())) {
+					Object object = in.readObject();
+					return object;
+				}
 			}
+			case HttpURLConnection.HTTP_FORBIDDEN: {
+				throw new ResourceException(connection.getResponseCode());
+			}
+			case HttpURLConnection.HTTP_UNAUTHORIZED: {
+				throw new ResourceException(connection.getResponseCode());
+			}
+			}
+
 			return reference;
 		} catch (Exception x) {
 			throw x;
 		} finally {
-			try {
-				if (in != null)
-					in.close();
-			} catch (Exception x) {
-			}
 			try {
 				if (connection != null)
 					connection.disconnect();
