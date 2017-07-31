@@ -2,6 +2,7 @@
 <head>
 <#include "/header_updated.ftl" >
 
+<script type='text/javascript' src='${ambit_root}/scripts/ont.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 
@@ -31,7 +32,7 @@ $(document).ready(function() {
 <div id="tabs" class="fifteen columns remove-bottom"  style="padding:0;">
 <ul>
 <li><a href="#tabs_substance" id="header_substance">Hit list</a></li>
-<li><a href="#download_results">Download</a></li>
+<li><a href="#download">Download</a></li>
 <li><a href="#tabs_help">Help</a></li>
 </ul>
 	<div id='tabs_help'>
@@ -41,7 +42,7 @@ $(document).ready(function() {
 		<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
 		</div>	
 	</div>
-	<div id='download_results' >  <!-- tabs_download -->
+	<div id='download' >  <!-- tabs_download -->
 		<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json64.png' alt='json' title='Download as JSON'></a>
 		<a href='#' id='csv' target=_blank><img src='${ambit_root}/images/csv64.png' alt='CSV' title='Download as CSV'></a>
 	
@@ -53,12 +54,16 @@ $(document).ready(function() {
 		<table id='facet' class='jtoxkit' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 		<thead>	
 		<tr>
-		<th >Substance</th>
-		<th>Subcategory</th>
-		<th>endpoint</th>
-		<th >Number of entries</th>
-
-		
+		<th>Substance ID</th>
+		<th>Substance name</th>
+		<th>Substance type</th>
+		<th>Category</th>
+		<th>Endpoint</th>
+		<th>Study providers</th>
+		<th>Protocols</th>
+		<th>References</th>		
+		<th>Number of entries</th>
+		<th>Project</th>
 		</tr>
 		</thead>
 		<tbody></tbody>

@@ -2243,9 +2243,31 @@ function defineDataAvailabilityTable(root, url, selector) {
 										+ "</a>";
 							}
 						}, {
+							"mData" : "publicname",
+							"aTargets" : [ 1 ],
+							"bSearchable" : true,
+							"bUseRendered" : false,
+							"bSortable" : true
+						}, {
+							"mData" : "substancetype",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 2 ],
+							"bSearchable" : true,
+							"bUseRendered" : false,
+							"bSortable" : true,
+							"fnRender" : function(o, val) {
+								try {
+									v = ontlookup[val];
+									v = (v === undefined || v == null) ? val : v;
+									return v;
+								} catch (err) {
+									return val;
+								}
+							}
+						}, {
 							"mData" : "subcategory",
 							"asSorting" : [ "asc", "desc" ],
-							"aTargets" : [ 1 ],
+							"aTargets" : [ 3 ],
 							"bSearchable" : true,
 							"bUseRendered" : false,
 							"bSortable" : true,
@@ -2255,21 +2277,52 @@ function defineDataAvailabilityTable(root, url, selector) {
 						}, {
 							"mData" : "value",
 							"asSorting" : [ "asc", "desc" ],
-							"aTargets" : [ 2 ],
+							"aTargets" : [ 4 ],
 							"bSearchable" : true,
 							"bUseRendered" : false,
 							"bSortable" : true,
 							"fnRender" : function(o, val) {
 								return val;
 							}
+						},  {
+							"mDataProp" : "provider",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 5 ],
+
+							"bSearchable" : true,
+							"bSortable" : true
 						}, {
+							"mDataProp" : "protocol",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 6 ],
+							"bSearchable" : true,
+							"bSortable" : true
+						},
+						  {
+							"mDataProp" : "reference",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 7 ],
+
+							"bSearchable" : true,
+							"bSortable" : true
+						},						
+						{
 							"mDataProp" : "count",
 							"asSorting" : [ "asc", "desc" ],
-							"aTargets" : [ 3 ],
+							"aTargets" : [ 8 ],
 							"sWidth" : "10%",
 							"bSearchable" : true,
 							"bSortable" : true
-						} ],
+						},
+						{
+							"mDataProp" : "substance_owner",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 9 ],
+							"bSearchable" : true,
+							"bSortable" : true
+						}						
+
+				],
 				"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
 				"bJQueryUI" : true,
 				"bPaginate" : true,
@@ -3322,7 +3375,9 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 		}
 	}
 	var linkrender_i = function(o, val) {
-		return "<a href='" + root+ "/investigation?type=byinvestigation&search=" + val + "'>" + val + "</a>";
+		return "<a href='" + root
+				+ "/investigation?type=byinvestigation&search=" + val + "'>"
+				+ val + "</a>";
 	}
 	var linkrender_s = function(o, val) {
 		return "<a href='" + root + "/investigation?type=bysubstance&search="
@@ -3345,7 +3400,7 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 		v = (v === undefined || v == null) ? val : v;
 		return "<a href='" + root + "/investigation?type=byprovider&search="
 				+ val + "'>" + v + "</a>";
-	}	
+	}
 	var fnlist = {
 		"investigation" : linkrender_i,
 		"s_uuid" : linkrender_s,
@@ -3355,24 +3410,20 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 		"reference_owner" : linkrender_refowner
 	};
 
-	$
-			.each(
-					col,
-					function(key, value) {
+	$.each(col, function(key, value) {
 
-						var fn = fnlist[value];
-						
-						coldefs.push({
-							"sTitle" : headers[value] == null ? value
-									: headers[value],
-							"mDataProp" : value,
-							"aTargets" : [ key ],
-							"sDefaultContent" : "",
-							"bSearchable" : true,
-							"bSortable" : true,
-							"fnRender" : fn
-						});
-					});
+		var fn = fnlist[value];
+
+		coldefs.push({
+			"sTitle" : headers[value] == null ? value : headers[value],
+			"mDataProp" : value,
+			"aTargets" : [ key ],
+			"sDefaultContent" : "",
+			"bSearchable" : true,
+			"bSortable" : true,
+			"fnRender" : fn
+		});
+	});
 
 	return $(selector)
 			.dataTable(

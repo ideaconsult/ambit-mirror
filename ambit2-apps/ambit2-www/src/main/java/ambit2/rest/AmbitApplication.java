@@ -81,6 +81,7 @@ import ambit2.rest.dataset.CollectionStructureResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.MissingFeatureValuesResource;
+import ambit2.rest.dataset.filtered.DataAvailabilityResource;
 import ambit2.rest.dataset.filtered.ExperimentsSearchResource;
 import ambit2.rest.dataset.filtered.FilteredDatasetResource;
 import ambit2.rest.dataset.filtered.InterpretationResultSearchResource;
@@ -1008,6 +1009,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		slookup.attach("/{type}/{subtype}/{subsubtype}", SubstanceLookup.class);
 
 		queryRouter.attach(SubstanceTypeSearchResource.resource, SubstanceTypeSearchResource.class);
+		queryRouter.attach(DataAvailabilityResource.resource, DataAvailabilityResource.class);
 		
 		return queryRouter;
 	}
