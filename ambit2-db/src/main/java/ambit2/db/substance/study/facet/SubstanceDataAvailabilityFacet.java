@@ -59,8 +59,8 @@ public class SubstanceDataAvailabilityFacet extends SubstanceByCategoryFacet {
 				JSONUtils.jsonQuote(JSONUtils.jsonEscape(papp.getReferenceOwner())),
 				JSONUtils.jsonQuote(JSONUtils.jsonEscape(papp.getProtocol().getGuideline()==null || papp.getProtocol().getGuideline().size()==0?"":papp.getProtocol().getGuideline().get(0))),
 				JSONUtils.jsonQuote(JSONUtils.jsonEscape(record.getPublicName())),
-				JSONUtils.jsonQuote(JSONUtils.jsonEscape(record.getSubstanceUUID())),
 				JSONUtils.jsonQuote(JSONUtils.jsonEscape(record.getSubstancetype())),
+				JSONUtils.jsonQuote(JSONUtils.jsonEscape(record.getSubstanceUUID())),
 				JSONUtils.jsonQuote(JSONUtils.jsonEscape(record.getOwnerName()))
 				);
 	}
