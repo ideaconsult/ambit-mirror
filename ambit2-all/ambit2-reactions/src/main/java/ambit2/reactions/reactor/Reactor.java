@@ -128,8 +128,34 @@ public class Reactor
 		}	
 	}
 	
+	public int initializeReactor (IAtomContainer target)
+	{
+		if (target == null)
+			return 1;		
+		if (reactionDataBase == null)
+			return 2;		
+		if (reactionDataBase.reactions == null)
+			return 3;		
+		if (reactionDataBase.reactions.isEmpty())
+			return 4;
+		
+		reactorResult = new ReactorResult();
+		reactorNodes.clear();
+		nodeHashCodes.clear();
+		
+		generateInitialNodes(target);
+		
+		
+		return 0;
+	}
+	
 	public ReactorResult react(IAtomContainer target) throws Exception
 	{	
+		int initRes = initializeReactor(target);
+		if (initRes != 0)
+			return null;
+		
+		/*
 		if (target == null)
 			return null;		
 		if (reactionDataBase == null)
@@ -144,6 +170,8 @@ public class Reactor
 		nodeHashCodes.clear();
 		
 		generateInitialNodes(target);
+		*/
+		
 		
 		//Iterate stack
 		while (!reactorNodes.isEmpty() &&  checkStrategy())  
