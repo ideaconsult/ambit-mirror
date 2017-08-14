@@ -124,6 +124,7 @@ public class TestUtilities {
 	boolean FlagApplyStereoTransformation = false;
 	boolean FlagHAtomsTransformation = false;
 	HandleHAtoms FlagHAtomsTransformationMode = HandleHAtoms.IMPLICIT; 
+	boolean FlagAromaticityTransformation = false;
 
 	boolean FlagSingleBondAromaticityNotSpecified = false;
 	boolean FlagDoubleBondAromaticityNotSpecified = false;
@@ -1517,6 +1518,7 @@ public class TestUtilities {
 		smrkMan.setFlagApplyStereoTransformation(FlagApplyStereoTransformation);
 		smrkMan.setFlagHAtomsTransformation(FlagHAtomsTransformation);
 		smrkMan.setFlagHAtomsTransformationMode(FlagHAtomsTransformationMode);
+		smrkMan.setFlagAromaticityTransformation(FlagAromaticityTransformation);
 
 		smrkMan.getSmartsParser().mSupportSingleBondAromaticityNotSpecified = FlagSingleBondAromaticityNotSpecified;
 		smrkMan.getSmartsParser().mSupportDoubleBondAromaticityNotSpecified = FlagDoubleBondAromaticityNotSpecified;
@@ -2904,7 +2906,14 @@ public class TestUtilities {
 		//tu.FlagAddImplicitHAtomsOnProductPreProcess = true;
 		
 		//tu.testSMIRKS("O[C:1]>>[NH2][C:1]","CCO");
-		tu.testSMIRKS("[CH3:1]>>[CH2:1][OH]","CCN");
+		//tu.testSMIRKS("[CH3:1]>>[CH2:1][OH]","CCN");
+		
+		tu.FlagAromaticityTransformation = true;
+		tu.FlagCheckAromaticityOnTargetPreProcess = false;
+		tu.FlagClearAromaticityBeforePreProcess = false;
+		tu.testSMIRKS("[C:1]1[C:2][C:3][C:4][C:5][C:6]1>>[cH:1]1[cH:2][cH:3][cH:4][cH:5][cH:6]1",
+				"C1CCCCC1");
+		
 		
 		
 		//tu.testCheckStereoElements("C(=O)[C@@]([H])1C(=O)C(C(=O)O1)(F)F");
