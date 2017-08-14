@@ -1040,7 +1040,12 @@ public class SMIRKSManager {
     	{	
     		//handle H atom transformation
     		applyHAtomTransformAtLocation(target, rMap, newAtoms, reaction);
-    	}	
+    	}
+    	
+    	if (FlagAromaticityTransformation)
+    	{
+    		applyAromaticityTransformAtLocation(target, rMap, newAtoms, reaction);
+    	}
     }
 
     public IAtomContainer applyTransformationsAtLocationsWithCloning(IAtomContainer target, List<List<IAtom>> rMaps,
@@ -1854,7 +1859,7 @@ public class SMIRKSManager {
     		if (ha >= 0)
     			Transformations.setAtomHNeighbours(newProdAtoms.get(i), target, ha, FlagHAtomsTransformationMode);
     	}
-    	
+
     	//Handle 'SMIRKS' mapped atoms
     	for (int i = 0; i < reaction.reactant.getAtomCount(); i++) 
     	{
@@ -1874,6 +1879,41 @@ public class SMIRKSManager {
     		else {
     			// Atom was deleted - nothing is done
     		}
+    	}
+    }
+
+    public void applyAromaticityTransformAtLocation(IAtomContainer target, List<IAtom> rMap, List<IAtom> newProdAtoms, SMIRKSReaction reaction)
+    {
+    	//Newly created atoms (non mapped product atoms) 
+    	//have aromaticity set by class SmartsTiChemObj
+    	
+    	//Handle 'SMIRKS' mapped atoms
+    	for (int i = 0; i < reaction.reactant.getAtomCount(); i++) 
+    	{
+    		IAtom rAt = reaction.reactant.getAtom(i);
+    		Integer raMapInd = (Integer) rAt.getProperty("SmirksMapIndex");
+    		if (raMapInd != null) 
+    		{
+    			//Atoms is mapped
+    			int pAtNum = reaction.getMappedProductAtom(raMapInd);
+    			Boolean b = reaction.productAromaticity.get(pAtNum);
+    			System.out.println(" raMapInd = " + raMapInd + "  arom = " + b);
+    			if (b != null)
+    			{	
+    				IAtom tAt = rMap.get(i);
+    				tAt.setFlag(CDKConstants.ISAROMATIC, b);
+    			}	
+    		} 
+    		else {
+    			// Atom was deleted - nothing is done
+    		}
+    		
+    		for (IBond bo : target.bonds())
+    		{
+    			//TODO add check for atoms beeing in the same ring
+    			if (bo.getAtom(0).isAromatic() && bo.getAtom(1).isAromatic())
+    				bo.setFlag(CDKConstants.ISAROMATIC, true);
+    		}	
     	}
     }
     
