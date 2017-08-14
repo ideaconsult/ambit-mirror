@@ -194,6 +194,15 @@ public class SMIRKSManager {
 			HandleHAtoms flagHAtomsTransformationMode) {
 		FlagHAtomsTransformationMode = flagHAtomsTransformationMode;
 	}
+	
+	public boolean isFlagAromaticityTransformation() {
+		return FlagAromaticityTransformation;
+	}
+
+	public void setFlagAromaticityTransformation(
+			boolean flagAromaticityTransformation) {
+		FlagAromaticityTransformation = flagAromaticityTransformation;
+	}
 
 	protected boolean FlagFilterEquivalentMappings = false;
 
@@ -215,8 +224,10 @@ public class SMIRKSManager {
 	protected boolean FlagApplyStereoTransformation = false;	
 	protected boolean FlagHAtomsTransformation = false;
 	protected HandleHAtoms FlagHAtomsTransformationMode = HandleHAtoms.IMPLICIT; 
-   
+	protected boolean FlagAromaticityTransformation = false;
 		
+
+	
 
 	public SMIRKSManager(IChemObjectBuilder builder) {
 		parser.setComponentLevelGrouping(true);
@@ -323,7 +334,7 @@ public class SMIRKSManager {
     		return (reaction);
     	}
 
-    	reaction.generateTransformationData();
+    	reaction.generateTransformationData(FlagAromaticityTransformation);
     	
     	
     	if (reaction.mapErrors.isEmpty())
