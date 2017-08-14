@@ -3,6 +3,7 @@ package ambit2.smarts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -70,6 +71,8 @@ public class SMIRKSReaction
 	List<Integer> productAtCharge = new ArrayList<Integer>();
 	List<Integer> reactantHAtoms = new ArrayList<Integer>();
 	List<Integer> productHAtoms = new ArrayList<Integer>();	
+	List<Boolean> reactantAromaticity = new ArrayList<Boolean>();
+	List<Boolean> productAromaticity = new ArrayList<Boolean>();
 	
 	//Bond transformation
 	List<Integer> reactAt1 = new ArrayList<Integer>();
@@ -245,15 +248,14 @@ public class SMIRKSReaction
 	}
 	
 	
-	void generateTransformationData()
+	void generateTransformationData(boolean aromaticityTransform)
 	{
 		SmartsToChemObject stco = new SmartsToChemObject(builder);
 		
 		//Atom Transformation. Different atom properties are handled
-		generateChargeTransformation();
+		generateAtomTransformation(aromaticityTransform);
 		
-		//TODO - other atom properties transformation: chirality, isotops, (??? eventually implicit H atoms and aromaticity special treatment)
-		
+		//TODO - other atom properties transformation: isotops, 
 		
 		//Bond Transformation
 		for (int i = 0; i < reactant.getBondCount(); i++)
@@ -499,7 +501,7 @@ public class SMIRKSReaction
 	}
 	
 	
-	void generateChargeTransformation()
+	void generateAtomTransformation(boolean aromaticityTransform)
 	{
 		SmartsToChemObject stco = new SmartsToChemObject(builder);
 		
@@ -512,6 +514,17 @@ public class SMIRKSReaction
 				reactantAtCharge.add(null);
 			else
 				reactantAtCharge.add(a.getFormalCharge());
+			
+			if (aromaticityTransform)
+			{
+				if (a == null)
+					reactantAromaticity.add(null);
+				else
+				{	
+					Boolean b = a.getFlag(CDKConstants.ISAROMATIC);
+					reactantAromaticity.add(b);
+				}
+			}
 		}
 		
 		
@@ -522,6 +535,17 @@ public class SMIRKSReaction
 				productAtCharge.add(null);
 			else
 				productAtCharge.add(a.getFormalCharge());
+			
+			if (aromaticityTransform)
+			{
+				if (a == null)
+					productAromaticity.add(null);
+				else
+				{	
+					Boolean b = a.getFlag(CDKConstants.ISAROMATIC);
+					productAromaticity.add(b);
+				}
+			}
 		}
 	}
 	
