@@ -507,8 +507,208 @@ public class SmartsIsomorphismTester
 	
 	void generateNodes(Node node)
 	{
+		QuerySequenceElement el = sequence.get(node.sequenceElNum);
+		
+		if (el.atoms.length == 1)
+		{
+			for(int i = 0; i < targetAt.size(); i++)
+			{
+				if (smartsMatch.match(el.atoms[0], targetAt.get(i)))
+				if(	matchBond(node, el, 0, targetAt.get(i)))
+				{
+					Node newNode = node.cloneNode();
+					newNode.atoms[el.atomNums[0]] = targetAt.get(i);
+					newNode.sequenceElNum = node.sequenceElNum+1;
+					//stack.push(newNode);
+					if (newNode.sequenceElNum == sequence.size())
+					{	
+						//The node is not added in the stack if the end of the sequence is reached
+						boolean FlagOK = true;
+						
+						//if (FlagCheckStereoElements)
+						//	FlagOK = checkStereoMatching(newNode);
+						
+						if (FlagOK)
+						{
+							isomorphismFound = true;
+							if (FlagStoreIsomorphismNode)
+								isomorphismNodes.add(newNode);
+						}
+					}
+					else
+						stack.push(newNode);
+				}
+			}
+			return;
+		}
+		
+		if (el.atoms.length == 2)
+		{
+			for(int i = 0; i < targetAt.size(); i++)			
+				if (smartsMatch.match(el.atoms[0], targetAt.get(i)))	
+				if(	matchBond(node, el, 0, targetAt.get(i)))
+					for(int j = 0; j < targetAt.size(); j++)						
+						if (i != j)
+							if (smartsMatch.match(el.atoms[1], targetAt.get(j)))
+							if(	matchBond(node, el, 1, targetAt.get(j)))	
+							{
+								Node newNode = node.cloneNode();
+								newNode.atoms[el.atomNums[0]] = targetAt.get(i);
+								newNode.atoms[el.atomNums[1]] = targetAt.get(j);
+								newNode.sequenceElNum = node.sequenceElNum+1;
+								//stack.push(newNode);
+								if (newNode.sequenceElNum == sequence.size())
+								{	
+									//The node is not added in the stack if the end of the sequence is reached
+									boolean FlagOK = true;
+									
+									//if (FlagCheckStereoElements)
+									//	FlagOK = checkStereoMatching(newNode);
+									
+									if (FlagOK)
+									{	
+										isomorphismFound = true;
+										if (FlagStoreIsomorphismNode)
+											isomorphismNodes.add(newNode);
+									}
+								}
+								else
+									stack.push(newNode);
+							}					
+			return;
+		}
+		
+		if (el.atoms.length == 3)
+		{
+			for(int i = 0; i < targetAt.size(); i++)			
+				if (smartsMatch.match(el.atoms[0], targetAt.get(i)))
+				if(	matchBond(node, el, 0, targetAt.get(i)))	
+					for(int j = 0; j < targetAt.size(); j++)						
+						if (i != j)
+							if (smartsMatch.match(el.atoms[1], targetAt.get(j)))
+								if(	matchBond(node, el, 1, targetAt.get(j)))	
+								for(int k = 0; k < targetAt.size(); k++)
+									if ((k != i) && (k != j))
+										if (smartsMatch.match(el.atoms[2], targetAt.get(k)))
+										if(	matchBond(node, el, 2, targetAt.get(k)))	
+										{
+											Node newNode = node.cloneNode();
+											newNode.atoms[el.atomNums[0]] = targetAt.get(i);
+											newNode.atoms[el.atomNums[1]] = targetAt.get(j);
+											newNode.atoms[el.atomNums[2]] = targetAt.get(k);
+											newNode.sequenceElNum = node.sequenceElNum+1;
+											//stack.push(newNode);
+											if (newNode.sequenceElNum == sequence.size())
+											{	
+												//The node is not added in the stack if the end of the sequence is reached
+												boolean FlagOK = true;
+												
+												//if (FlagCheckStereoElements)
+												//	FlagOK = checkStereoMatching(newNode);
+												
+												if (FlagOK)
+												{	
+													isomorphismFound = true;
+													if (FlagStoreIsomorphismNode)
+														isomorphismNodes.add(newNode);
+												}
+											}	
+											else
+												stack.push(newNode);
+										}
+			return;
+		}
+		
+		//This case should be very rare (el.atoms.length >= 4)
+				
+		//a stack which is used for obtaining all
+		//possible mappings between el.atoms and targetAt
+		//The stack element is an array t[], where t[k] means that 
+		//el.atoms[k] is mapped against atom targetAt(t[k])
+		//t[t.length-1] is used as a work variable which describes how many 
+		//elements of the t array are mapped
+		Stack<int[]> st = new Stack<int[]>();
+				
+		//System.out.println("el.atoms.length = " + el.atoms.length );
+		
+		//Stack initialization
+		for(int i = 0; i < targetAt.size(); i++)
+		{
+			if (smartsMatch.match(el.atoms[0], targetAt.get(i)))
+			if(	matchBond(node, el, 0, targetAt.get(i)))	
+			{
+				int t[] = new int[el.atoms.length+1];
+				t[t.length-1] = 1;
+				t[0] = i;				
+				st.push(t);
+			}
+		}
+		
+		while (!st.isEmpty())
+		{
+			int t[] = st.pop();
+			int n = t[t.length-1];
+			
+			if (n == t.length-1)  //This condition means all atoms are matched
+			{
+				//new node 
+				Node newNode = node.cloneNode();
+				for(int k = 0; k < t.length-1; k++)
+					newNode.atoms[el.atomNums[k]] = targetAt.get(t[k]);				
+				newNode.sequenceElNum = node.sequenceElNum+1;
+				//stack.push(newNode);
+				if (newNode.sequenceElNum == sequence.size())
+				{	
+					//The node is not added in the stack if the end of the sequence is reached
+					boolean FlagOK = true;
+					
+					//if (FlagCheckStereoElements)
+					//	FlagOK = checkStereoMatching(newNode);
+					
+					if (FlagOK)
+					{	
+						isomorphismFound = true;
+						if (FlagStoreIsomorphismNode)
+							isomorphismNodes.add(newNode);
+					}
+				}
+				else
+					stack.push(newNode);
+				continue;
+			}
+			
+			for(int i = 0; i < targetAt.size(); i++)
+			{
+				//Check whether i is among first elements of t
+				boolean Flag = true;
+				for (int k = 0; k < n; k++)
+					if ( i == t[k]) 
+					{
+						Flag = false;
+						break;
+					}
+				
+				if (Flag)
+					if (smartsMatch.match(el.atoms[n], targetAt.get(i)))
+					if(	matchBond(node, el, n, targetAt.get(i)))	
+					{	
+						//new stack element
+						int tnew[] = new int[el.atoms.length+1];
+						for(int k = 0; k < n; k++)
+							tnew[k] = t[k];
+						tnew[n] = i;
+						tnew[t.length-1] = n+1;
+						st.push(tnew);
+					}
+			}
+		}
 		
 	}
 	
+	boolean matchBond(Node node, QuerySequenceElement el, int qAtNum, IAtom taAt)
+	{
+		IBond taBo = target.getBond(taAt, node.atoms[el.centerNum]);
+		return(smartsMatch.match(el.bonds[qAtNum], taBo));
+	}
 	
 }
