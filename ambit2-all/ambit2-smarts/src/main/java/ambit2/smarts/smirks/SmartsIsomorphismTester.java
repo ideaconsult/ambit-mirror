@@ -375,6 +375,56 @@ public class SmartsIsomorphismTester
 		return (v);
 	}
 	
+	/**
+	 * If no isomorphism is found the result is empty vector
+	 * @param container
+	 * @return
+	 */
+	public List<List<IAtom>> getAllIsomorphismMappings(IQueryAtomContainer container)
+	{
+		if (query == null) return null;
+		target = container;	
+		FlagStoreIsomorphismNode = true;
+		isomorphismNodes.clear();
+		List<List<IAtom>> result = new ArrayList<List<IAtom>>(); 
+		
+		
+		if (query.getAtomCount() == 1)
+		{	
+			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);			
+			for (int i = 0; i < target.getAtomCount(); i++)
+			{	
+				if (smartsMatch.match(qa, target.getAtom(i)))
+				{	
+					List<IAtom> v = new ArrayList<IAtom>();
+					v.add(target.getAtom(i));
+					result.add(v);
+				}	
+			}
+			return result;
+		}	
+				
+		
+		TopLayer.setAtomTopLayers(target, TopLayer.TLProp);
+		executeSequence(false);
+		
+		if (isomorphismFound)
+		{	
+			//Getting the data from the all stored Nodes
+			for (int k = 0; k < isomorphismNodes.size(); k++)
+			{	
+				Node node = isomorphismNodes.get(k);
+				List<IAtom> v = new ArrayList<IAtom>();
+				for (int i = 0; i < node.atoms.length; i++)
+					v.add(node.atoms[i]);
+				result.add(v);
+			}
+		}
+		return result;		
+	}
+	
+	//TODO add other modes of mapping
+	
 	boolean singleAtomIsomorphism()
 	{	
 		SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);
@@ -710,5 +760,7 @@ public class SmartsIsomorphismTester
 		IBond taBo = target.getBond(taAt, node.atoms[el.centerNum]);
 		return(smartsMatch.match(el.bonds[qAtNum], taBo));
 	}
+	
+	//TODO add checkStereoMatching() ...
 	
 }
