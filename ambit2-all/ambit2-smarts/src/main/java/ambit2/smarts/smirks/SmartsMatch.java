@@ -19,6 +19,8 @@ public class SmartsMatch
 	
 	public MatchMode mode = MatchMode.GENERIC;
 	public AttributeComparison compareAtomSymbol = AttributeComparison.EXACT_WHEN_DEFINED;
+	public AttributeComparison compareAromaticity = AttributeComparison.EXACT_WHEN_DEFINED;
+	public AttributeComparison compareIsotope = AttributeComparison.EXACT_WHEN_DEFINED;
 	public AttributeComparison compareHAtoms = AttributeComparison.EXACT_WHEN_DEFINED;
 	public AttributeComparison compareCharge = AttributeComparison.EXACT_WHEN_DEFINED;
 	public AttributeComparison compareBondOrder = AttributeComparison.EXACT_WHEN_DEFINED;
