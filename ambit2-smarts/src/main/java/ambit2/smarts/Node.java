@@ -38,8 +38,8 @@ public class Node
 	
 	//Node parent = null;
 	//IAtom center;
-	int sequenceElNum;	
-	IAtom atoms[]; 
+	public int sequenceElNum;	
+	public IAtom atoms[]; 
 		
 	public Node()
 	{	
