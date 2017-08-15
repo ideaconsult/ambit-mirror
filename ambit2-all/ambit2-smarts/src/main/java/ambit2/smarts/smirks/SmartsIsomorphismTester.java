@@ -6,6 +6,7 @@ import java.util.Stack;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
@@ -21,7 +22,7 @@ public class SmartsIsomorphismTester
 	protected boolean FlagCheckStereoElements = false; 
 	
 	protected IQueryAtomContainer query;
-	protected IAtomContainer target;
+	protected IQueryAtomContainer target;
 	protected boolean isomorphismFound;
 	protected boolean FlagStoreIsomorphismNode = false;
 	protected List<Node> isomorphismNodes = new ArrayList<Node>(); 
@@ -73,7 +74,7 @@ public class SmartsIsomorphismTester
 		IQueryAtom firstAtom;
 		QuerySequenceElement seqEl;
 		TopLayer topLayer;
-		//List<IQueryAtom> curAddedAtoms = new List<IQueryAtom>();  
+		
 		int n;
 		
 		if (firstAt == null)
@@ -242,4 +243,272 @@ public class SmartsIsomorphismTester
 		}
 		return(isomorphismFound);
 	}
+	
+	public boolean hasIsomorphism(IQueryAtomContainer container)
+	{	
+		target = container;	
+		FlagStoreIsomorphismNode = false;
+		isomorphismNodes.clear();
+		
+		if (query.getAtomCount() == 1)
+			return(singleAtomIsomorphism());
+		
+		TopLayer.setAtomTopLayers(target, TopLayer.TLProp);
+		executeSequence(true);
+		return(isomorphismFound);
+	}
+	
+	public List<Integer> getIsomorphismPositions(IQueryAtomContainer container)
+	{	
+		target = container;	
+		FlagStoreIsomorphismNode = false;
+		isomorphismNodes.clear();
+		
+		List<Integer> v = new ArrayList<Integer>(); 
+		if (query.getAtomCount() == 1)
+		{	
+			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);			
+			for (int i = 0; i < target.getAtomCount(); i++)
+			{	
+				if (qa.matches(target.getAtom(i)))
+					v.add(new Integer(i));
+			}	
+			return(v);
+		}	
+				
+		TopLayer.setAtomTopLayers(target, TopLayer.TLProp);
+		for (int i = 0; i < target.getAtomCount(); i++)
+		{	
+			executeSequenceAtPos(i);
+			if (isomorphismFound)
+				v.add(new Integer(i));
+		}
+		return(v);
+	}
+	
+	public boolean checkIsomorphismAtPosition(IQueryAtomContainer container, int atomNum)
+	{
+		if ((atomNum < 0) || (atomNum >= container.getAtomCount()))
+			return false;
+		
+		target = container;	
+		FlagStoreIsomorphismNode = false;
+		isomorphismNodes.clear();
+		
+		if (query.getAtomCount() == 1)
+		{
+			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);
+			return qa.matches(target.getAtom(atomNum));
+		}
+			
+			
+		TopLayer.setAtomTopLayers(target, TopLayer.TLProp);
+		
+		executeSequenceAtPos(atomNum);
+			if (isomorphismFound)
+				return true;
+			
+		return false;
+	}
+	
+	/**
+	 * This function returns null if no isomorphism is found
+	 * @param container
+	 * @return
+	 */
+	public List<IAtom> getIsomorphismMapping(IQueryAtomContainer container)
+	{
+		if (query == null) return null;
+		target = container;	
+		FlagStoreIsomorphismNode = true;
+		isomorphismNodes.clear();
+		
+		if (query.getAtomCount() == 1)
+		{	
+			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);			
+			for (int i = 0; i < target.getAtomCount(); i++)
+			{	
+				if (qa.matches(target.getAtom(i)))
+				{	
+					List<IAtom> v = new ArrayList<IAtom>();
+					v.add(target.getAtom(i));
+					return(v);
+				}	
+			}
+			return null;
+		}	
+				
+		
+		TopLayer.setAtomTopLayers(target, TopLayer.TLProp);
+		executeSequence(true);
+		
+		if (isomorphismFound)
+		{	
+			//Getting the data from the Node
+			Node node = isomorphismNodes.get(0);
+			List<IAtom> v = new ArrayList<IAtom>();
+			for (int i = 0; i < node.atoms.length; i++)
+				v.add(node.atoms[i]);
+			
+			return (v);
+		}
+		else
+			return (null);
+	}
+	
+	public List<IBond> generateBondMapping(IQueryAtomContainer container, List<IAtom> atomMapping)
+	{
+		if (query == null) 
+			return null;
+		
+		List<IBond> v  = new ArrayList<IBond>();
+		for (int i = 0; i < query.getBondCount(); i++)
+		{
+			IAtom qa0 = query.getBond(i).getAtom(0);
+			IAtom qa1 = query.getBond(i).getAtom(1);
+			IAtom a0 = atomMapping.get(query.getAtomNumber(qa0));
+			IAtom a1 = atomMapping.get(query.getAtomNumber(qa1));
+			
+			v.add(container.getBond(a0,a1));
+		}
+		
+		return (v);
+	}
+	
+	boolean singleAtomIsomorphism()
+	{	
+		SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);
+		isomorphismFound = false;
+		for (int i = 0; i < target.getAtomCount(); i++)
+		{	
+			if (smartsMatch.match(qa, target.getAtom(i)))
+			{	
+				isomorphismFound = true;
+				break;
+			}
+		}	
+		return(isomorphismFound);
+	}
+	
+	void executeSequence(boolean stopAtFirstMapping)
+	{	
+		isomorphismFound = false;
+		stack.clear();
+				
+		//Initial nodes
+		QuerySequenceElement el = sequence.get(0);		
+		for(int k = 0; k < target.getAtomCount(); k++)
+		{
+			IAtom at = target.getAtom(k);			
+			if(smartsMatch.match(el.center, at))       // if(el.center.matches(at))
+			{	
+				Node node = new Node();
+				node.sequenceElNum = 0; 
+				node.nullifyAtoms(query.getAtomCount());
+				node.atoms[el.centerNum] = at;
+				stack.push(node);
+			}	
+		}
+		
+		//Expanding the tree of all possible mappings
+		if (stopAtFirstMapping)
+		{	 
+			while (!stack.isEmpty())
+			{
+				expandNode(stack.pop());
+				if (isomorphismFound)
+					break;
+			}
+		}
+		else
+		{	 
+			while (!stack.isEmpty())
+				expandNode(stack.pop());
+		}
+		
+	}
+	
+	void executeSequenceAtPos(int pos)
+	{	
+		isomorphismFound = false;
+		stack.clear();
+				
+		//Initial node
+		QuerySequenceElement el = sequence.get(0);
+		IAtom at = target.getAtom(pos);	
+		if(smartsMatch.match(el.center, at))       // if(el.center.matches(at))
+		{	
+			Node node = new Node();
+			node.sequenceElNum = 0; 
+			node.nullifyAtoms(query.getAtomCount());
+			node.atoms[el.centerNum] = at;
+			stack.push(node);
+		}	
+		
+		//Expanding the tree of all possible mappings 
+		while (!stack.isEmpty())
+		{
+			expandNode(stack.pop());
+			if (isomorphismFound)
+				break;
+		}
+	}
+	
+	void expandNode(Node node)
+	{	
+		//System.out.println(node.toString(target));		
+		QuerySequenceElement el = sequence.get(node.sequenceElNum);
+		
+		if (el.center == null) //This node describers a bond that closes a ring
+		{
+			//Checking whether this bond is present in the target
+			IAtom tAt0 = node.atoms[query.getAtomNumber(el.atoms[0])]; 
+			IAtom tAt1 = node.atoms[query.getAtomNumber(el.atoms[1])];
+			IBond tBo = target.getBond(tAt0,tAt1);
+			if (tBo != null)
+				if (el.bonds[0].matches(tBo))
+				{
+					node.sequenceElNum++;
+					//stack.push(node); 
+					if (node.sequenceElNum == sequence.size())
+					{	
+						//The node is not added in the stack if the end of the sequence is reached
+						boolean FlagOK = true;
+						//if (FlagCheckStereoElements)
+							//FlagOK = checkStereoMatching(node);
+						
+						if (FlagOK)
+						{	
+							isomorphismFound = true;
+							if (FlagStoreIsomorphismNode)
+								isomorphismNodes.add(node);
+						}
+					}
+					else
+						stack.push(node); 
+				}	
+		}
+		else
+		{
+			targetAt.clear();
+			IAtom tAt = node.atoms[el.centerNum];
+			List<IAtom> conAt = target.getConnectedAtomsList(tAt);
+			for (int i = 0; i < conAt.size(); i++)
+			{
+				if (!containsAtom(node.atoms,conAt.get(i)))
+					targetAt.add(conAt.get(i));
+			}
+			
+			if (el.atoms.length <= targetAt.size())			
+				generateNodes(node);
+		}
+	}
+	
+	
+	void generateNodes(Node node)
+	{
+		
+	}
+	
+	
 }
