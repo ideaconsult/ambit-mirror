@@ -13,6 +13,7 @@ import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 
 import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.MappingUtils;
 import ambit2.smarts.Node;
 import ambit2.smarts.QuerySequenceElement;
 import ambit2.smarts.TopLayer;
@@ -423,7 +424,19 @@ public class SmartsIsomorphismTester
 		return result;		
 	}
 	
-	//TODO add other modes of mapping
+	public List<List<IAtom>> getNonIdenticalMappings(IQueryAtomContainer container)
+	{	
+		List<List<IAtom>> allMaps = getAllIsomorphismMappings(container);
+		return MappingUtils.getNonIdenticalMappings(allMaps);
+	}
+	
+	public List<List<IAtom>> getNonOverlappingMappings(IQueryAtomContainer container)
+	{
+		List<List<IAtom>> allMaps = getAllIsomorphismMappings(container);
+		return MappingUtils.getNonOverlappingMappings(allMaps);
+	}	
+	
+	//for getOverlappedMappingClusters() use  MappingUtils 
 	
 	boolean singleAtomIsomorphism()
 	{	
