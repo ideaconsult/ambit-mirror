@@ -270,7 +270,7 @@ public class SmartsIsomorphismTester
 			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);			
 			for (int i = 0; i < target.getAtomCount(); i++)
 			{	
-				if (qa.matches(target.getAtom(i)))
+				if (smartsMatch.match(qa, target.getAtom(i)))
 					v.add(new Integer(i));
 			}	
 			return(v);
@@ -298,7 +298,7 @@ public class SmartsIsomorphismTester
 		if (query.getAtomCount() == 1)
 		{
 			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);
-			return qa.matches(target.getAtom(atomNum));
+			return smartsMatch.match(qa, target.getAtom(atomNum));
 		}
 			
 			
@@ -328,7 +328,7 @@ public class SmartsIsomorphismTester
 			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);			
 			for (int i = 0; i < target.getAtomCount(); i++)
 			{	
-				if (qa.matches(target.getAtom(i)))
+				if (smartsMatch.match(qa, target.getAtom(i)))
 				{	
 					List<IAtom> v = new ArrayList<IAtom>();
 					v.add(target.getAtom(i));
@@ -400,7 +400,7 @@ public class SmartsIsomorphismTester
 		for(int k = 0; k < target.getAtomCount(); k++)
 		{
 			IAtom at = target.getAtom(k);			
-			if(smartsMatch.match(el.center, at))       // if(el.center.matches(at))
+			if(smartsMatch.match(el.center, at))      
 			{	
 				Node node = new Node();
 				node.sequenceElNum = 0; 
@@ -436,7 +436,7 @@ public class SmartsIsomorphismTester
 		//Initial node
 		QuerySequenceElement el = sequence.get(0);
 		IAtom at = target.getAtom(pos);	
-		if(smartsMatch.match(el.center, at))       // if(el.center.matches(at))
+		if(smartsMatch.match(el.center, at))       
 		{	
 			Node node = new Node();
 			node.sequenceElNum = 0; 
@@ -466,7 +466,7 @@ public class SmartsIsomorphismTester
 			IAtom tAt1 = node.atoms[query.getAtomNumber(el.atoms[1])];
 			IBond tBo = target.getBond(tAt0,tAt1);
 			if (tBo != null)
-				if (el.bonds[0].matches(tBo))
+				if (smartsMatch.match(el.bonds[0], tBo))
 				{
 					node.sequenceElNum++;
 					//stack.push(node); 
