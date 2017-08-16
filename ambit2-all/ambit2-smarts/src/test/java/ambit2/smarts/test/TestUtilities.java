@@ -85,6 +85,7 @@ import ambit2.smarts.StructInfo;
 import ambit2.smarts.StructureSetAnalyzer;
 import ambit2.smarts.SmartsConst.HandleHAtoms;
 import ambit2.smarts.smirks.HAtomManager;
+import ambit2.smarts.smirks.SmartsIsomorphismTester;
 import ambit2.smarts.smirks.Transformations;
 
 import com.google.common.collect.Maps;
@@ -103,6 +104,7 @@ public class TestUtilities {
 	static SmartsManager man = new SmartsManager(
 			SilentChemObjectBuilder.getInstance());
 	static IsomorphismTester isoTester = new IsomorphismTester();
+	static SmartsIsomorphismTester smartsIsoTester = new SmartsIsomorphismTester();	
 	static SmartsToChemObject smToChemObj = new SmartsToChemObject(
 			SilentChemObjectBuilder.getInstance());
 	static ChemObjectToSmiles cots = new ChemObjectToSmiles();
@@ -543,6 +545,14 @@ public class TestUtilities {
 			sb.append(" " + mol.getBondNumber(v.get(i)));
 		return (sb.toString());
 	}
+	
+	public String getSmartsBondMapping(IQueryAtomContainer mol, List<IAtom> amap) {
+		List<IBond> v = smartsIsoTester.generateBondMapping(mol, amap);
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < v.size(); i++)
+			sb.append(" " + mol.getBondNumber(v.get(i)));
+		return (sb.toString());
+	}
 
 	public void testIsomorphismMapping(String smarts, String smiles)
 			throws Exception {
@@ -601,6 +611,96 @@ public class TestUtilities {
 			System.out.println("    bond mapping: " + getBondMapping(mol, map));
 		}
 	}
+	
+	public void testSmartsIsomorphism(String querySmarts, String targetSmarts)
+			throws Exception 
+	{
+		IQueryAtomContainer query = sp.parse(querySmarts);
+		//sp.setNeededDataFlags(); //shoild not be needed for smarts isomorphism
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals("")) {
+			System.out.println("Smarts Parser errors:\n" + errorMsg);
+			return;
+		}
+		
+		IQueryAtomContainer target = sp.parse(targetSmarts);		
+		errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals("")) {
+			System.out.println("Smarts Parser errors:\n" + errorMsg);
+			return;
+		}		
+		
+		smartsIsoTester.setQuery(query);
+		boolean res = smartsIsoTester.hasIsomorphism(target);
+		System.out.println("SmartsIsomorphismTester: " + querySmarts + "  in  " + targetSmarts
+				+ "   " + res);			
+	}
+	
+	public void testSmartsIsomorphismPositions(String querySmarts, String targetSmarts)
+			throws Exception 
+	{
+		IQueryAtomContainer query = sp.parse(querySmarts);
+		//sp.setNeededDataFlags(); //shoild not be needed for smarts isomorphism
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals("")) {
+			System.out.println("Smarts Parser errors:\n" + errorMsg);
+			return;
+		}
+		
+		IQueryAtomContainer target = sp.parse(targetSmarts);		
+		errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals("")) {
+			System.out.println("Smarts Parser errors:\n" + errorMsg);
+			return;
+		}	
+		
+		smartsIsoTester.setQuery(query);
+		
+		List<Integer> pos = smartsIsoTester.getIsomorphismPositions(target);
+		System.out.println("Smarts Isomorphism Positions: " + querySmarts + "  in  "
+				+ targetSmarts);
+		for (int i = 0; i < pos.size(); i++)
+			System.out.print("  " + pos.get(i).intValue());
+		System.out.println();
+	}
+	
+	public void testSmartsIsomorphismAllMappings(String querySmarts, String targetSmarts)
+			throws Exception 
+	{
+		IQueryAtomContainer query = sp.parse(querySmarts);
+		//sp.setNeededDataFlags(); //shoild not be needed for smarts isomorphism
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals("")) {
+			System.out.println("Smarts Parser errors:\n" + errorMsg);
+			return;
+		}
+		
+		IQueryAtomContainer target = sp.parse(targetSmarts);		
+		errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals("")) {
+			System.out.println("Smarts Parser errors:\n" + errorMsg);
+			return;
+		}
+		
+		smartsIsoTester.setQuery(query);
+		
+		List<List<IAtom>> allmaps = smartsIsoTester.getAllIsomorphismMappings(target);
+		System.out
+				.println("Isomorphism Mapping: " + querySmarts + "  in  " + targetSmarts);
+		for (int i = 0; i < allmaps.size(); i++) 
+		{
+			List<IAtom> map = allmaps.get(i);
+			for (int j = 0; j < map.size(); j++) {
+				IAtom a = map.get(j);
+				int n = target.getAtomNumber(a);
+				System.out.print("  " + n);
+			}
+			System.out.println("    bond mapping: " + getSmartsBondMapping(target, map));
+		}
+		
+	}
+	
+	
 
 	public void testAtomSequencingFromFile(String fname) {
 		int nError = 0;
@@ -2911,8 +3011,8 @@ public class TestUtilities {
 		tu.FlagAromaticityTransformation = true;
 		tu.FlagCheckAromaticityOnTargetPreProcess = false;
 		tu.FlagClearAromaticityBeforePreProcess = false;
-		tu.testSMIRKS("[C:1]1[C:2][C:3][C:4][C:5][C:6]1>>[cH:1]1[cH:2][cH:3][cH:4][cH:5][cH:6]1",
-				"C1CCCCC1");
+		//tu.testSMIRKS("[C:1]1[C:2][C:3][C:4][C:5][C:6]1>>[cH:1]1[cH:2][cH:3][cH:4][cH:5][cH:6]1",
+		//		"C1CCCCC1");
 		
 		
 		
@@ -3172,7 +3272,12 @@ public class TestUtilities {
 		//tu.testFixSHValence7("[SH](=O)(=O)(C)C");
 		//tu.testFixSHValence7("[SH]=1(O)(=O)C=2C(O)=C3C=C4[C@@]5(CCCC=6C5=C(OC6)C(=O)C4=CC3=C(O)C2N=CC1)C");
 		//tu.testFixSHValence7("C1=CC=CC=C1N(C=[SH](O)(O)=O)C");
-
+		
+		tu.testSmartsIsomorphism("C~C*", "*C~CCC");
+		tu.testSmartsIsomorphismPositions("*C~C", "*C~CCC~C*");
+		tu.testSmartsIsomorphismAllMappings("*C~C", "*C~CCC~C*");
+		tu.testSmartsIsomorphismAllMappings("*C~C", "C~C*C~CCC~C*");
+		
 	}
 
 }
