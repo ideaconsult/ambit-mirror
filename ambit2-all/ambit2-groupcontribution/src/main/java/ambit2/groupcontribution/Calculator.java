@@ -2,6 +2,7 @@ package ambit2.groupcontribution;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -100,7 +101,7 @@ public class Calculator
 	public static Map<ICorrectionFactor,Integer> getCorrectionFactorsCount(IAtomContainer mol, GroupContributionModel model)
 	{
 		Map<ICorrectionFactor,Integer> corrFactors = new HashMap<ICorrectionFactor,Integer>();
-		ArrayList<ICorrectionFactor> modelCorrFactors = model.getCorrectionFactors();
+		List<ICorrectionFactor> modelCorrFactors = model.getCorrectionFactors();
 		for (ICorrectionFactor factor : modelCorrFactors)
 		{
 			int count = factor.calculateFor(mol);
