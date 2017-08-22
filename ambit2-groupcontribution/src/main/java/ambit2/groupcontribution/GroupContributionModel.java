@@ -2,10 +2,12 @@ package ambit2.groupcontribution;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
+import ambit2.groupcontribution.descriptors.LDAtomSymbol;
 import ambit2.groupcontribution.groups.IGroup;
 
 
@@ -17,8 +19,8 @@ public class GroupContributionModel
 	
 	
 	private String modelName = "";
-	private ArrayList<ILocalDescriptor> localDescriptors = new ArrayList<ILocalDescriptor>();	
-	private ArrayList<ICorrectionFactor> correctionFactors = new ArrayList<ICorrectionFactor>();
+	private List<ILocalDescriptor> localDescriptors = new ArrayList<ILocalDescriptor>();	
+	private List<ICorrectionFactor> correctionFactors = new ArrayList<ICorrectionFactor>();
 	//TODO add group rules and LocalDescriptor rules
 	private Map<String,IGroup> groups = new HashMap<String,IGroup>();
 	private Type modelType = Type.ATOMIC;
@@ -34,11 +36,11 @@ public class GroupContributionModel
 		this.modelName = modelName;
 	}
 
-	public ArrayList<ILocalDescriptor> getLocalDescriptors() {
+	public List<ILocalDescriptor> getLocalDescriptors() {
 		return localDescriptors;
 	}
 
-	public void setLocalDescriptors(ArrayList<ILocalDescriptor> localDescriptors) {
+	public void setLocalDescriptors(List<ILocalDescriptor> localDescriptors) {
 		this.localDescriptors = localDescriptors;
 	}
 	
@@ -47,11 +49,11 @@ public class GroupContributionModel
 		localDescriptors.add(localDescr);
 	}
 
-	public ArrayList<ICorrectionFactor> getCorrectionFactors() {
+	public List<ICorrectionFactor> getCorrectionFactors() {
 		return correctionFactors;
 	}
 
-	public void setCorrectionFactors(ArrayList<ICorrectionFactor> correctionFactors) {
+	public void setCorrectionFactors(List<ICorrectionFactor> correctionFactors) {
 		this.correctionFactors = correctionFactors;
 	}
 	
@@ -82,4 +84,25 @@ public class GroupContributionModel
 	public void setModelType(Type modelType) {
 		this.modelType = modelType;
 	}
+	
+	public String getAtomDesignation(int descriptors[])
+	{
+		if (descriptors.length != localDescriptors.size())
+			return null;
+		
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < descriptors.length; i++)
+			sb.append(getDescriptorDesignation(
+					localDescriptors.get(i),	descriptors[i]) );
+		
+		return sb.toString();
+	}
+	
+	String getDescriptorDesignation(ILocalDescriptor desc, int value)
+	{
+		if (desc instanceof LDAtomSymbol)
+			return desc.getDesignation(value);
+		return "" + value;
+	}
+	
 }
