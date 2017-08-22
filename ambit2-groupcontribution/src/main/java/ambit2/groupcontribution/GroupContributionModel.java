@@ -70,6 +70,10 @@ public class GroupContributionModel
 		this.groups = groups;
 	}
 	
+	public void clearGroups() {
+		groups.clear();
+	}
+	
 	public void addGroup(IGroup group)
 	{
 		String key = group.getDesignation();
@@ -103,6 +107,21 @@ public class GroupContributionModel
 		if (desc instanceof LDAtomSymbol)
 			return desc.getDesignation(value);
 		return "" + value;
+	}
+	
+	public String getAtomDesignationVerbose(int descriptors[])
+	{
+		if (descriptors.length != localDescriptors.size())
+			return null;
+		
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < descriptors.length; i++)
+		{	
+			//TODO
+		}
+		
+		return sb.toString();
+
 	}
 	
 }
