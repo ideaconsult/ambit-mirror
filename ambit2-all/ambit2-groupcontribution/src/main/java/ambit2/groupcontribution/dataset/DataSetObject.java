@@ -5,11 +5,14 @@ import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.groupcontribution.fragmentation.Fragmentation;
+
 public class DataSetObject 
 {
 	public IAtomContainer molecule = null;
 	public Map<String, Object> properties = new HashMap<String, Object>();
 	public String endpointProperty = "endpoint";
+	public Fragmentation fragmentation = null;
 	
 	
 	public Double getEndpintValue()
