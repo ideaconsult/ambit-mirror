@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,10 +34,11 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 	private static final long serialVersionUID = -4805381027500815039L;
 	protected ObjectMapper dx = new ObjectMapper();
 	protected OutputStream out;
-	protected String[] headers;
-	protected String[] paramHeaders;
-	protected String[] studyHeaders;
-	protected String[] conditionHeaders;
+	protected List<String> headers;
+	protected List<String> paramHeaders;
+	protected List<String> studyHeaders;
+	protected List<String> conditionHeaders;
+	protected List<String> moreHeaders;
 	protected static ResourceBundle labels = ResourceBundle.getBundle("rest/study/bucketexport", Locale.ENGLISH,
 			BucketJson2CSVConvertor.class.getClassLoader());
 
@@ -47,25 +51,26 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 				new String[] { "s_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s", "reference_owner_s",
 						"reference_year_s", "reference_s", "effectendpoint_s", "loQualifier_s", "loValue_d",
 						"upQualifier_s", "upValue_d", "unit_s", "err_d", "errQualifier_s", "textValue_s" },
-				new String[] { "DATA_GATHERING_INSTRUMENTS_s", "size_measurement_s", "size_measurement_type_s",
-						"replicates_s", "concentration_s", "No. samples_s" });
+				new String[] { 	"replicates_s", "concentration_s" });
 
 	}
 
 	public BucketJson2CSVConvertor(String[] header, String[] paramHeaders, String[] studyHeaders,
 			String[] conditionHeaders) {
-		this.headers = header;
-		this.paramHeaders = paramHeaders;
-		this.studyHeaders = studyHeaders;
-		this.conditionHeaders = conditionHeaders;
+		this.headers = Arrays.asList(header);
+		this.paramHeaders = Arrays.asList(paramHeaders);
+		this.studyHeaders = Arrays.asList(studyHeaders);
+		this.conditionHeaders = Arrays.asList(conditionHeaders);
+		this.moreHeaders = new ArrayList<String>();
+
 	}
 
-	public String[] getHeaders() {
+	public List<String> getHeaders() {
 		return headers;
 	}
 
 	public void setHeaders(String[] headers) {
-		this.headers = headers;
+		this.headers = Arrays.asList(headers);
 	}
 
 	public OutputStream getOut() {
@@ -76,7 +81,7 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 		this.out = out;
 	}
 
-	protected void printHeaders(OutputStream out, String[] headers) throws Exception {
+	protected void printHeaders(OutputStream out, List<String> headers) throws Exception {
 		for (String header : headers) {
 			String h = header;
 			try {
@@ -89,30 +94,54 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 		}
 	}
 
-	protected void printValues(OutputStream out, String[] headers, JsonNode doc) throws IOException {
-		for (String header : headers) {
-			JsonNode dnode = doc == null ? null : doc.get(header);
-			if (dnode == null)
-				;
-			else if (dnode instanceof ArrayNode) {
-				ArrayNode aNode = (ArrayNode) dnode;
-				for (int i = 0; i < aNode.size(); i++) {
-					if (i > 0)
-						out.write(" ".getBytes());
-					out.write(aNode.get(i).asText().getBytes(StandardCharsets.UTF_8));
+	protected void printValues(OutputStream out, List<String> headers, JsonNode[] docs) throws IOException {
+		printValues(out, headers, docs, false);
+	}
+
+	private static final String[] _dontadd = new String[] { "effectid_hs", "id", "type_s" };
+
+	protected void printValues(OutputStream out, List<String> headers, JsonNode[] docs, boolean extend)
+			throws IOException {
+
+		if (extend)
+			for (JsonNode doc : docs) {
+				Iterator<String> i = doc.fieldNames();
+				while (i.hasNext()) {
+					String key = i.next();
+					if (Arrays.binarySearch(_dontadd, key) < 0 && !headers.contains(key) && !moreHeaders.contains(key))
+						moreHeaders.add(key);
 				}
-			} else {
-				String value = dnode.asText();
-				if ("endpointcategory_s".equals(header))
-					try {
-						value = Protocol._categories.valueOf(value).toString();
-					} catch (Exception x) {
-						x.printStackTrace();
+			}
+
+		for (String header : headers) {
+			String d = "";
+			for (JsonNode doc : docs) {
+				JsonNode dnode = doc == null ? null : doc.get(header);
+				if (dnode == null)
+					continue;
+				out.write(d.getBytes());
+				if (dnode instanceof ArrayNode) {
+					ArrayNode aNode = (ArrayNode) dnode;
+					for (int i = 0; i < aNode.size(); i++) {
+						if (i > 0)
+							out.write(" ".getBytes());
+						out.write(aNode.get(i).asText().getBytes(StandardCharsets.UTF_8));
 					}
-				out.write(value.getBytes(StandardCharsets.UTF_8));
+				} else {
+					String value = dnode.asText();
+					if ("endpointcategory_s".equals(header))
+						try {
+							value = Protocol._categories.valueOf(value).toString();
+						} catch (Exception x) {
+							x.printStackTrace();
+						}
+					out.write(value.getBytes(StandardCharsets.UTF_8));
+				}
+				d = " ";
 			}
 			out.write("\t".getBytes());
 		}
+
 	}
 
 	@Override
@@ -135,10 +164,12 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 					String docuuid = field.getKey();
 					JsonNode pdoc = docuuid == null ? null : params == null ? null : params.get(docuuid);
 					JsonNode cdoc = docuuid == null ? null : conditions == null ? null : conditions.get(docuuid);
-					printValues(fout, headers, doc);
-					printValues(fout, studyHeaders, field.getValue());
-					printValues(fout, paramHeaders, pdoc);
-					printValues(fout, conditionHeaders, cdoc);
+					printValues(fout, headers, new JsonNode[] { doc });
+					printValues(fout, studyHeaders, new JsonNode[] { field.getValue() });
+					printValues(fout, paramHeaders, new JsonNode[] { pdoc }, true);
+					printValues(fout, conditionHeaders, new JsonNode[] { cdoc }, true);
+
+					printValues(fout, moreHeaders, new JsonNode[] { pdoc, cdoc });
 					fout.write("\r\n".getBytes());
 				}
 			}
@@ -148,6 +179,7 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 			printHeaders(out, studyHeaders);
 			printHeaders(out, paramHeaders);
 			printHeaders(out, conditionHeaders);
+			printHeaders(out, moreHeaders);
 			out.write("\r\n".getBytes());
 			IOUtils.copy(fin, out);
 		}
