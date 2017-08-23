@@ -161,15 +161,18 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 				JsonNode node = dx.readTree(rin);
 				ArrayNode docs = (ArrayNode) node.get("response").get("docs");
 				for (JsonNode doc : docs) {
-					Map<String, JsonNode> params = lookup((ArrayNode) doc.get("_childDocuments_"), "params");
-					Map<String, JsonNode> study = lookup((ArrayNode) doc.get("_childDocuments_"), "study");
-					Map<String, JsonNode> conditions = lookup((ArrayNode) doc.get("_childDocuments_"), "conditions");
+					
+					Map<String, JsonNode> params = lookup((ArrayNode) doc.get("_childDocuments_"), "params","document_uuid_s");
+					Map<String, JsonNode> study = lookup((ArrayNode) doc.get("_childDocuments_"), "study","id");
+					Map<String, JsonNode> conditions = lookup((ArrayNode) doc.get("_childDocuments_"), "conditions","id");
 
 					Iterator<Entry<String, JsonNode>> fields = study.entrySet().iterator();
 					while (fields.hasNext()) {
 						Entry<String, JsonNode> field = fields.next();
+						String docuuid = field.getValue().get("document_uuid_s").asText();
+						JsonNode pdoc = docuuid == null ? null : params == null ? null : params.get(docuuid);
+						
 						String id = field.getKey();
-						JsonNode pdoc = id == null ? null : params == null ? null : params.get(id);
 						JsonNode cdoc = id == null ? null : conditions == null ? null : conditions.get(id);
 						printValues(fout, headers, new JsonNode[] { doc });
 						printValues(fout, studyHeaders, new JsonNode[] { field.getValue() });
@@ -195,13 +198,13 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 		return out;
 	}
 
-	protected Map<String, JsonNode> lookup(ArrayNode subdocs, String type_s) {
+	protected Map<String, JsonNode> lookup(ArrayNode subdocs, String type_s, String key) {
 		Map<String, JsonNode> map = new TreeMap<String, JsonNode>();
 		if (subdocs != null)
 			for (JsonNode doc : subdocs)
 				if (type_s.equals(doc.get("type_s").asText())) {
 					//docuuid is same for effect records ...
-					String docuuid = doc.get("id").asText().replace("/cn", "").replaceAll("/prm","");
+					String docuuid = doc.get(key).asText().replace("/cn", "");
 					map.put(docuuid, doc);
 				}
 		return map;
