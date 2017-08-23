@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -46,12 +47,14 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 		this(new String[] { "dbtag_hss", "name_hs", "publicname_hs", "owner_name_hs", "substanceType_hs",
 				"substance_uuid" },
 				new String[] { "document_uuid_s", "Dispersion protocol_s", "MEDIUM_s", "MEDIUM.composition_s",
-						"MEDIUM.ph_s", "MEDIUM.temperature_Celsius_s", "MEDIUM.ionictrength_m_s", "MEDIUM.ionictrength_mM_s","MEDIUM.CO2_concentration_m","MEDIUM.O2_concentration_%v/v", "Vial_s",
-						"E.sop_reference_s", "E.method_s", "E.cell_type_s", "E.exposure_time_hour_s", "Dose_s" },
+						"MEDIUM.ph_s", "MEDIUM.temperature_Celsius_s", "MEDIUM.ionictrength_m_s",
+						"MEDIUM.ionictrength_mM_s", "MEDIUM.CO2_concentration_m", "MEDIUM.O2_concentration_%v/v",
+						"Vial_s", "E.sop_reference_s", "E.method_s", "E.cell_type_s", "E.exposure_time_hour_s",
+						"Dose_s" },
 				new String[] { "s_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s", "reference_owner_s",
 						"reference_year_s", "reference_s", "effectendpoint_s", "loQualifier_s", "loValue_d",
 						"upQualifier_s", "upValue_d", "unit_s", "err_d", "errQualifier_s", "textValue_s" },
-				new String[] { 	"replicate_s", "material_s" });
+				new String[] { "replicate_s", "material_s" });
 
 	}
 
@@ -98,7 +101,8 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 		printValues(out, headers, docs, false);
 	}
 
-	private static final String[] _dontadd = new String[] { "effectid_hs", "id", "type_s","topcategory_s","endpointcategory_s","guidance_s" };
+	private static final String[] _dontadd = new String[] { "effectid_hs", "id", "type_s", "topcategory_s",
+			"endpointcategory_s", "guidance_s" };
 
 	protected void printValues(OutputStream out, List<String> headers, JsonNode[] docs, boolean extend)
 			throws IOException {
@@ -109,7 +113,7 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 				while (i.hasNext()) {
 					String key = i.next();
 					if (Arrays.binarySearch(_dontadd, key) < 0 && !headers.contains(key) && !moreHeaders.contains(key))
-						moreHeaders.add(key);
+					moreHeaders.add(key);
 				}
 			}
 
@@ -150,27 +154,28 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 		File tmpfile = File.createTempFile("export", ".csv");
 		tmpfile.deleteOnExit();
 		try (FileOutputStream fout = new FileOutputStream(tmpfile)) {
+			try (InputStreamReader rin = new InputStreamReader(in, StandardCharsets.UTF_8)) {
+				JsonNode node = dx.readTree(rin);
+				ArrayNode docs = (ArrayNode) node.get("response").get("docs");
+				for (JsonNode doc : docs) {
+					Map<String, JsonNode> params = lookup((ArrayNode) doc.get("_childDocuments_"), "params");
+					Map<String, JsonNode> study = lookup((ArrayNode) doc.get("_childDocuments_"), "study");
+					Map<String, JsonNode> conditions = lookup((ArrayNode) doc.get("_childDocuments_"), "conditions");
 
-			JsonNode node = dx.readTree(in);
-			ArrayNode docs = (ArrayNode) node.get("response").get("docs");
-			for (JsonNode doc : docs) {
-				Map<String, JsonNode> params = lookup((ArrayNode) doc.get("_childDocuments_"), "params");
-				Map<String, JsonNode> study = lookup((ArrayNode) doc.get("_childDocuments_"), "study");
-				Map<String, JsonNode> conditions = lookup((ArrayNode) doc.get("_childDocuments_"), "conditions");
+					Iterator<Entry<String, JsonNode>> fields = study.entrySet().iterator();
+					while (fields.hasNext()) {
+						Entry<String, JsonNode> field = fields.next();
+						String docuuid = field.getKey();
+						JsonNode pdoc = docuuid == null ? null : params == null ? null : params.get(docuuid);
+						JsonNode cdoc = docuuid == null ? null : conditions == null ? null : conditions.get(docuuid);
+						printValues(fout, headers, new JsonNode[] { doc });
+						printValues(fout, studyHeaders, new JsonNode[] { field.getValue() });
+						printValues(fout, paramHeaders, new JsonNode[] { pdoc }, true);
+						printValues(fout, conditionHeaders, new JsonNode[] { cdoc }, true);
 
-				Iterator<Entry<String, JsonNode>> fields = study.entrySet().iterator();
-				while (fields.hasNext()) {
-					Entry<String, JsonNode> field = fields.next();
-					String docuuid = field.getKey();
-					JsonNode pdoc = docuuid == null ? null : params == null ? null : params.get(docuuid);
-					JsonNode cdoc = docuuid == null ? null : conditions == null ? null : conditions.get(docuuid);
-					printValues(fout, headers, new JsonNode[] { doc });
-					printValues(fout, studyHeaders, new JsonNode[] { field.getValue() });
-					printValues(fout, paramHeaders, new JsonNode[] { pdoc }, true);
-					printValues(fout, conditionHeaders, new JsonNode[] { cdoc }, true);
-
-					printValues(fout, moreHeaders, new JsonNode[] { pdoc, cdoc });
-					fout.write("\r\n".getBytes());
+						printValues(fout, moreHeaders, new JsonNode[] { pdoc, cdoc });
+						fout.write("\r\n".getBytes());
+					}
 				}
 			}
 		}
