@@ -168,9 +168,9 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 					Iterator<Entry<String, JsonNode>> fields = study.entrySet().iterator();
 					while (fields.hasNext()) {
 						Entry<String, JsonNode> field = fields.next();
-						String docuuid = field.getKey();
-						JsonNode pdoc = docuuid == null ? null : params == null ? null : params.get(docuuid);
-						JsonNode cdoc = docuuid == null ? null : conditions == null ? null : conditions.get(docuuid);
+						String id = field.getKey();
+						JsonNode pdoc = id == null ? null : params == null ? null : params.get(id);
+						JsonNode cdoc = id == null ? null : conditions == null ? null : conditions.get(id);
 						printValues(fout, headers, new JsonNode[] { doc });
 						printValues(fout, studyHeaders, new JsonNode[] { field.getValue() });
 						printValues(fout, paramHeaders, new JsonNode[] { pdoc }, true);
@@ -200,7 +200,8 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 		if (subdocs != null)
 			for (JsonNode doc : subdocs)
 				if (type_s.equals(doc.get("type_s").asText())) {
-					String docuuid = doc.get("document_uuid_s").asText();
+					//docuuid is same for effect records ...
+					String docuuid = doc.get("id").asText().replace("/cn", "").replaceAll("/prm","");
 					map.put(docuuid, doc);
 				}
 		return map;
