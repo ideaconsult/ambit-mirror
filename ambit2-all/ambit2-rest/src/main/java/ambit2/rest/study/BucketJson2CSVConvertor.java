@@ -108,14 +108,17 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 			throws IOException {
 
 		if (extend)
-			for (JsonNode doc : docs) {
-				Iterator<String> i = doc.fieldNames();
-				while (i.hasNext()) {
-					String key = i.next();
-					if (Arrays.binarySearch(_dontadd, key) < 0 && !headers.contains(key) && !moreHeaders.contains(key))
-					moreHeaders.add(key);
+			for (JsonNode doc : docs)
+				if (doc != null) {
+
+					Iterator<String> i = doc.fieldNames();
+					while (i.hasNext()) {
+						String key = i.next();
+						if (Arrays.binarySearch(_dontadd, key) < 0 && !headers.contains(key)
+								&& !moreHeaders.contains(key))
+							moreHeaders.add(key);
+					}
 				}
-			}
 
 		for (String header : headers) {
 			String d = "";
