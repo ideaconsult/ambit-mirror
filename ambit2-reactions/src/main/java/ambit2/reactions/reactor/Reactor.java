@@ -189,6 +189,21 @@ public class Reactor
 		return reactorResult;
 	}
 	
+	public List<ReactorNode> reactNext(int numNodes) throws Exception
+	{	
+		List<ReactorNode> nodes = new ArrayList<ReactorNode>();
+		//Iterate number of nodes from the stack stack
+		int n = 0;
+		while (!reactorNodes.isEmpty() &&  checkStrategy() && (n < numNodes) )  
+		{	
+			ReactorNode node = reactorNodes.pop();
+			nodes.add(node);
+			processNode(node);
+			n++;
+		}
+		
+		return nodes;
+	}
 	
 	void generateInitialNodes(IAtomContainer mol)
 	{	
