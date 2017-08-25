@@ -118,8 +118,12 @@ public class ReactionTestUtils
 			System.out.println(ts.get(i));
 	}
 	
-			
 	public static void testReactor(String smiles, String reactionDBFile) throws Exception
+	{
+		testReactor(smiles, reactionDBFile, 0);
+	}
+			
+	public static void testReactor(String smiles, String reactionDBFile, int reactorStepSize) throws Exception
 	{
 		System.out.println("Setting reactor and reaction database...");
 		Reactor reactor = new Reactor();
@@ -176,7 +180,14 @@ public class ReactionTestUtils
 		System.out.println("Reactor on target: " + smiles);
 		System.out.println();
 		
-		ReactorResult result = reactor.react(mol);
+		if (reactorStepSize <= 0)
+		{	
+			ReactorResult result = reactor.react(mol);
+		}	
+		else
+		{
+			
+		}
 		
 	}
 }
