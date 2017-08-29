@@ -32,6 +32,11 @@ public class ReactionSearch
 		errors.clear();
 	}
 	
+	public List<String> getErrors()
+	{
+		return errors;
+	}
+	
 	public void setQuerySmarts(String querySmarts) {
 		this.querySmarts = querySmarts;
 		query = parser.parse(querySmarts);
@@ -52,20 +57,24 @@ public class ReactionSearch
 	public void setQuerySmirks(String querySmirks) {
 		this.querySmirks = querySmirks;
 		
-		//TODO
-	}
-	
-	boolean matchComponent(IAtomContainer comp)
-	{
-		//TODO
-		return false;
+		queryReaction = smirksMan.parse(querySmirks);
+		String parse_error = smirksMan.getErrors();
+		if (!parse_error.equals(""))
+			errors.add(parse_error);
 	}
 	
 	
 	boolean matchReaction(String targetSmirks)
 	{
-		//TODO
-		return false;
+		SMIRKSReaction targetReaction = smirksMan.parse(targetSmirks);
+		String parse_error = smirksMan.getErrors();
+		if (!parse_error.equals(""))
+		{
+			errors.add("Target Smirks parsing errors: " + parse_error);
+			return false;
+		}	
+		
+		return matchReaction(targetReaction);
 	}
 	
 	boolean matchReaction(SMIRKSReaction targetReaction)
@@ -74,7 +83,13 @@ public class ReactionSearch
 		return false;
 	}
 	
-	boolean matchReaction(List<IAtomContainer> reactants, List<IAtomContainer> product)
+	boolean matchReaction(List<IAtomContainer> targetReactants, List<IAtomContainer> targetProducts)
+	{
+		//TODO
+		return false;
+	}
+	
+	boolean matchComponent(IAtomContainer comp)
 	{
 		//TODO
 		return false;
