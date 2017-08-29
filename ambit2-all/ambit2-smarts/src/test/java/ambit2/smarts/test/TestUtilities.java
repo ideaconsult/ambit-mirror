@@ -3274,6 +3274,8 @@ public class TestUtilities {
 		//tu.testFixSHValence7("C1=CC=CC=C1N(C=[SH](O)(O)=O)C");
 		
 		tu.testSmartsIsomorphism("C~C*", "*C~CCC");
+		tu.testSmartsIsomorphism("C~C[F,Cl;!R]", "[F,Cl;!R]C~CCC");
+		tu.testSmartsIsomorphism("C-,=*", "*-,=CCCC");
 		tu.testSmartsIsomorphismPositions("*C~C", "*C~CCC~C*");
 		tu.testSmartsIsomorphismAllMappings("*C~C", "*C~CCC~C*");
 		tu.testSmartsIsomorphismAllMappings("*C~C", "C~C*C~CCC~C*");

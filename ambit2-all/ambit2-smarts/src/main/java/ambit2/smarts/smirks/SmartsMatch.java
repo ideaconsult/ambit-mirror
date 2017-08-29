@@ -27,6 +27,7 @@ import ambit2.smarts.SingleNonAromaticBond;
 import ambit2.smarts.SingleOrAromaticBond;
 import ambit2.smarts.SmartsAtomExpression;
 import ambit2.smarts.SmartsBondExpression;
+import ambit2.smarts.SmartsExpressionToken;
 
 public class SmartsMatch 
 {
@@ -156,6 +157,16 @@ public class SmartsMatch
 	
 	boolean matchSmartsAtomExpression (SmartsAtomExpression qa, IAtom ta)
 	{
+		switch (mode)
+		{
+		case EXACT:
+			if (ta instanceof SmartsAtomExpression)
+			{
+				return exactMatch(qa, (SmartsAtomExpression) ta);
+			}
+			break;
+		}
+		
 		//TODO
 		return false;
 	}
@@ -206,6 +217,16 @@ public class SmartsMatch
 	
 	boolean matchSmartsBondExpression(SmartsBondExpression qb, IBond tb)
 	{
+		switch (mode)
+		{
+		case EXACT:
+			if (tb instanceof SmartsBondExpression)
+			{
+				return exactMatch(qb, (SmartsBondExpression) tb);
+			}
+			break;
+		}
+		
 		//TODO
 		return false;
 	}
@@ -340,6 +361,38 @@ public class SmartsMatch
 		
 		//TODO
 		return false;
+	}
+	
+	boolean exactMatch(SmartsAtomExpression qa, SmartsAtomExpression ta)
+	{
+		if (qa.tokens.size() != ta.tokens.size())
+			return false;
+		
+		for (int i = 0; i < qa.tokens.size(); i++)
+		{
+			SmartsExpressionToken qaTok = qa.tokens.get(i);
+			SmartsExpressionToken taTok = ta.tokens.get(i);
+			if (qaTok.type != taTok.type)
+				return false;
+			if (qaTok.param != taTok.param)
+				return false;			
+		}
+		
+		return true;
+	}
+	
+	boolean exactMatch(SmartsBondExpression qb, SmartsBondExpression tb)
+	{
+		if (qb.tokens.size() != tb.tokens.size())
+			return false;
+		
+		for (int i = 0; i < qb.tokens.size(); i++)
+		{
+			if (qb.tokens.get(i).intValue() != tb.tokens.get(i).intValue())
+				return false;
+		}
+		
+		return true;
 	}
 	
 }
