@@ -85,6 +85,7 @@ import ambit2.smarts.StructInfo;
 import ambit2.smarts.StructureSetAnalyzer;
 import ambit2.smarts.SmartsConst.HandleHAtoms;
 import ambit2.smarts.smirks.HAtomManager;
+import ambit2.smarts.smirks.ReactionSearch;
 import ambit2.smarts.smirks.SmartsIsomorphismTester;
 import ambit2.smarts.smirks.Transformations;
 
@@ -108,6 +109,7 @@ public class TestUtilities {
 	static SmartsToChemObject smToChemObj = new SmartsToChemObject(
 			SilentChemObjectBuilder.getInstance());
 	static ChemObjectToSmiles cots = new ChemObjectToSmiles();
+	static ReactionSearch reactSearch = new  ReactionSearch();
 
 	boolean FlagClearAromaticityBeforePreProcess = true;
 	boolean FlagCheckAromaticityOnTargetPreProcess = true;
@@ -698,6 +700,14 @@ public class TestUtilities {
 			System.out.println("    bond mapping: " + getSmartsBondMapping(target, map));
 		}
 		
+	}
+	
+	public void testReactionSearch(String querySmirks, String targetSmirks)
+			throws Exception 
+	{
+		reactSearch.setQuerySmirks(querySmirks);
+		boolean res = reactSearch.matchReaction(targetSmirks);
+		System.out.println("Matching " + querySmirks + " against " + targetSmirks + " ---> " + res);
 	}
 	
 	
@@ -3273,12 +3283,14 @@ public class TestUtilities {
 		//tu.testFixSHValence7("[SH]=1(O)(=O)C=2C(O)=C3C=C4[C@@]5(CCCC=6C5=C(OC6)C(=O)C4=CC3=C(O)C2N=CC1)C");
 		//tu.testFixSHValence7("C1=CC=CC=C1N(C=[SH](O)(O)=O)C");
 		
-		tu.testSmartsIsomorphism("C~C*", "*C~CCC");
-		tu.testSmartsIsomorphism("C~C[F,Cl;!R]", "[F,Cl;!R]C~CCC");
-		tu.testSmartsIsomorphism("C-,=*", "*-,=CCCC");
-		tu.testSmartsIsomorphismPositions("*C~C", "*C~CCC~C*");
-		tu.testSmartsIsomorphismAllMappings("*C~C", "*C~CCC~C*");
-		tu.testSmartsIsomorphismAllMappings("*C~C", "C~C*C~CCC~C*");
+		//tu.testSmartsIsomorphism("C~C*", "*C~CCC");
+		//tu.testSmartsIsomorphism("C~C[F,Cl;!R]", "[F,Cl;!R]C~CCC");
+		//tu.testSmartsIsomorphism("C-,=*", "*-,=CCCC");
+		//tu.testSmartsIsomorphismPositions("*C~C", "*C~CCC~C*");
+		//tu.testSmartsIsomorphismAllMappings("*C~C", "*C~CCC~C*");
+		//tu.testSmartsIsomorphismAllMappings("*C~C", "C~C*C~CCC~C*");
+		tu.testSmartsIsomorphism("C=*", "CC=*");
+		tu.testReactionSearch("CC>>C=*", "CCC>>CC=*");
 		
 	}
 

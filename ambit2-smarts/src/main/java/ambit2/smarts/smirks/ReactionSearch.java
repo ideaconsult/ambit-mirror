@@ -14,6 +14,9 @@ import ambit2.smarts.SmartsParser;
 
 public class ReactionSearch 
 {
+	public boolean FlagCheckReactionMapping = false;
+	public boolean FlagAgentMatch = false;
+	
 	SmartsParser parser = new SmartsParser();
 	SMIRKSManager smirksMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	SmartsIsomorphismTester smartsIsoTester = new SmartsIsomorphismTester();
@@ -64,7 +67,7 @@ public class ReactionSearch
 	}
 	
 	
-	boolean matchReaction(String targetSmirks)
+	public boolean matchReaction(String targetSmirks)
 	{
 		SMIRKSReaction targetReaction = smirksMan.parse(targetSmirks);
 		String parse_error = smirksMan.getErrors();
@@ -77,21 +80,69 @@ public class ReactionSearch
 		return matchReaction(targetReaction);
 	}
 	
-	boolean matchReaction(SMIRKSReaction targetReaction)
+	public boolean matchReaction(SMIRKSReaction targetReaction)
+	{
+		//Match reactants
+		if (queryReaction.reactants.size() != targetReaction.reactants.size())
+			return false;
+		
+		if (queryReaction.reactants.size() == 1)
+		{
+			smartsIsoTester.setQuery(queryReaction.reactants.get(0));
+			boolean res = smartsIsoTester.hasIsomorphism(targetReaction.reactants.get(0));
+			if (!res)
+				return false;
+		}
+		else
+		{
+			//TODO
+		}
+		
+			
+		//Match products	
+		if (queryReaction.products.size() != targetReaction.products.size())
+			return false;
+		
+		if (queryReaction.products.size() == 1)
+		{
+			smartsIsoTester.setQuery(queryReaction.products.get(0));
+			boolean res = smartsIsoTester.hasIsomorphism(targetReaction.products.get(0));
+			if (!res)
+				return false;
+		}
+		else
+		{
+			//TODO
+		}
+		
+		//Match Agents
+		if (FlagAgentMatch)
+		{	
+			//TODO
+		}	
+		
+		//Check reaction mapping
+		if (FlagCheckReactionMapping)
+		{	
+			//TODO
+		}	
+		
+		return true;
+	}
+	
+	public boolean matchReaction(List<IAtomContainer> targetReactants, List<IAtomContainer> targetProducts)
 	{
 		//TODO
 		return false;
 	}
 	
-	boolean matchReaction(List<IAtomContainer> targetReactants, List<IAtomContainer> targetProducts)
-	{
-		//TODO
-		return false;
-	}
-	
+	/*
 	boolean matchComponent(IAtomContainer comp)
 	{
 		//TODO
 		return false;
 	}
+	*/
+	
+	
 }
