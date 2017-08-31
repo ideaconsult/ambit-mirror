@@ -705,8 +705,11 @@ public class TestUtilities {
 	public void testReactionSearch(String querySmirks, String targetSmirks)
 			throws Exception 
 	{
+		reactSearch.reset();
 		reactSearch.setQuerySmirks(querySmirks);
 		boolean res = reactSearch.matchReaction(targetSmirks);
+		if (!reactSearch.getErrors().isEmpty())
+			System.out.println(reactSearch.getAllErrorsAsString());
 		System.out.println("Matching " + querySmirks + " against " + targetSmirks + " ---> " + res);
 	}
 	
@@ -3290,7 +3293,9 @@ public class TestUtilities {
 		//tu.testSmartsIsomorphismAllMappings("*C~C", "*C~CCC~C*");
 		//tu.testSmartsIsomorphismAllMappings("*C~C", "C~C*C~CCC~C*");
 		tu.testSmartsIsomorphism("C=*", "CC=*");
-		tu.testReactionSearch("CC>>C=*", "CCC>>CC=*");
+		tu.testReactionSearch("CC>>C=C", "CCC>>CC=C");
+		tu.testReactionSearch("CC[*:1]>>C=C[*:1]", "CCC[*:1]>>CC=C[*:1]");
+		tu.testReactionSearch("CC*>>C=C*", "CCC*>>CC=C*");
 		
 	}
 
