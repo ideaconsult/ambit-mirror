@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.groupcontribution.dataset.DataSet;
+import ambit2.groupcontribution.fragmentation.Fragmentation;
 
 /**
  * 
@@ -66,6 +67,16 @@ public class Learner
 	
 	public void train()
 	{
+		Fragmentation.makeFragmentation(trainDataSet, model);
+		
+		makeInitialMatrixes();
+		
+		fragmentColumnStatistics();
+		
+		makeFinalMatricies();
+		
+		makeModel();
+		
 		//TODO
 	}
 	
@@ -73,5 +84,28 @@ public class Learner
 	{
 		//TODO
 	}
+	
+	void makeInitialMatrixes()
+	{
+		//TODO
+	}
+	
+	void fragmentColumnStatistics()
+	{
+		//TODO
+	}
+	
+	void makeFinalMatricies()
+	{
+		//TODO
+	}
+	
+	void makeModel()
+	{
+		//TODO
+	}
+	
+	
+	
 	
 }

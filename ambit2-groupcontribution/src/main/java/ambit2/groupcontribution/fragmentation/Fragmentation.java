@@ -12,6 +12,7 @@ import ambit2.groupcontribution.dataset.DataSetObject;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.groups.AtomGroup;
 import ambit2.groupcontribution.groups.IGroup;
+import ambit2.groupcontribution.utils.math.MatrixDouble;
 
 public class Fragmentation 
 {
@@ -68,6 +69,13 @@ public class Fragmentation
 			fragmentation.addGroup(designation);
 			gcm.addGroup(group);
 		}
+		
+	}
+	
+	public static MatrixDouble generateFragmentationMatrix(DataSet dataset, GroupContributionModel gcm)
+	{
+		//TODO
+		return null;
 	}
 	
 	
