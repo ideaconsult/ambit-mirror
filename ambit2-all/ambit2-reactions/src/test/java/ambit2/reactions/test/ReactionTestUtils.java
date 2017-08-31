@@ -13,6 +13,7 @@ import ambit2.reactions.Reaction;
 import ambit2.reactions.ReactionDataBase;
 import ambit2.reactions.io.ReactionReadUtils;
 import ambit2.reactions.reactor.Reactor;
+import ambit2.reactions.reactor.ReactorNode;
 import ambit2.reactions.reactor.ReactorResult;
 import ambit2.reactions.reactor.ReactorStrategy;
 import ambit2.reactions.sets.ReactionData;
@@ -39,7 +40,7 @@ public class ReactionTestUtils
 		
 		//testReactor("C1CCC1CCC", "D:/Projects/Nina/Reactions/reactions.json");
 		
-		testReactor("CC", "D:/Projects/Nina/Reactions/metabolism-reactions.json"); //!!!!!!!!!
+		testReactor("CC", "D:/Projects/Nina/Reactions/metabolism-reactions.json", 10); //!!!!!!!!!
 		
 		//testReactor("C", "/Volumes/Data/Projects/reactor-config1.json"); 
 		
@@ -186,6 +187,15 @@ public class ReactionTestUtils
 		}	
 		else
 		{
+			reactor.initializeReactor(mol);
+			List<ReactorNode> nodes = reactor.reactNext(reactorStepSize);
+			System.out.println("Handled " + nodes.size() + " nodes");
+			
+			while (!nodes.isEmpty())
+			{
+				nodes = reactor.reactNext(reactorStepSize);
+				System.out.println("Handled " + nodes.size() + " nodes");
+			}
 			
 		}
 		

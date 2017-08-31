@@ -194,7 +194,7 @@ public class Reactor
 		List<ReactorNode> nodes = new ArrayList<ReactorNode>();
 		//Iterate number of nodes from the stack stack
 		int n = 0;
-		while (!reactorNodes.isEmpty() &&  checkStrategy() && (n < numNodes) )  
+		while (!reactorNodes.isEmpty() && checkStrategy() && (n < numNodes) )  
 		{	
 			ReactorNode node = reactorNodes.pop();
 			nodes.add(node);
