@@ -40,6 +40,14 @@ public class ReactionSearch
 		return errors;
 	}
 	
+	public String getAllErrorsAsString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < errors.size(); i++)
+			sb.append(errors.get(i) + "\n");
+		return sb.toString();
+	}
+	
 	public void setQuerySmarts(String querySmarts) {
 		this.querySmarts = querySmarts;
 		query = parser.parse(querySmarts);
@@ -63,7 +71,7 @@ public class ReactionSearch
 		queryReaction = smirksMan.parse(querySmirks);
 		String parse_error = smirksMan.getErrors();
 		if (!parse_error.equals(""))
-			errors.add(parse_error);
+			errors.add("Query Smirks parsing errors: " + parse_error);
 	}
 	
 	
