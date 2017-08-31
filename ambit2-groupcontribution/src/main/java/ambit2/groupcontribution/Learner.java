@@ -1,5 +1,8 @@
 package ambit2.groupcontribution;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ambit2.groupcontribution.dataset.DataSet;
 
 /**
@@ -16,6 +19,26 @@ public class Learner
 	private GroupContributionModel model = null;
 	private DataSet trainDataSet = null;
 	private DataSet externalDataSet = null;
+	
+	private List<String> errors = new ArrayList<String>();
+	
+	public void reset()
+	{
+		errors.clear();
+	}
+	
+	public List<String> getErrors()
+	{
+		return errors;
+	}
+	
+	public String getAllErrorsAsString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < errors.size(); i++)
+			sb.append(errors.get(i) + "\n");
+		return sb.toString();
+	}
 
 	public GroupContributionModel getModel() {
 		return model;
