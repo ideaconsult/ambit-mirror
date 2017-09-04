@@ -74,9 +74,45 @@ public class Fragmentation
 	
 	public static MatrixDouble generateFragmentationMatrix(DataSet dataset, GroupContributionModel gcm)
 	{
-		//TODO
-		return null;
+		int m = dataset.dataObjects.size();
+		int n = gcm.getGroups().keySet().size();
+		String groups[] = gcm.getGroups().keySet().toArray(new String[n]);
+		
+		MatrixDouble A = new MatrixDouble(m,n);
+		for (int i = 0; i < m; i++)
+		{
+			DataSetObject dso = dataset.dataObjects.get(i);
+			for (int j = 0; j < n; j++)
+			{
+				Integer iObj = dso.fragmentation.groupFrequencies.get(groups[j]);
+				if (iObj == null)
+					A.el[i][j] = 0.0;
+				else
+					A.el[i][j] = iObj.doubleValue();
+			}
+		}
+		
+		return A;
 	}
+	
+	public static MatrixDouble generatePropertyMatrix(DataSet dataset, String property) throws Exception
+	{
+		int m = dataset.dataObjects.size();
+		MatrixDouble b = new MatrixDouble(m,1);
+		for (int i = 0; i < m; i++)
+		{
+			DataSetObject dso = dataset.dataObjects.get(i);
+			Double d = dso.getEndpointValue(property);
+			if (d == null)
+				throw new Exception("Property "+ property + " of object #" + (i+1) +
+						" is not double value or not defined!");
+			b.el[i][0] = d;
+		}
+		
+		return b;
+	}
+	
+	
 	
 	
 }
