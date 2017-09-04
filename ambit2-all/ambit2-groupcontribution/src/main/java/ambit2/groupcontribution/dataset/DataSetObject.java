@@ -45,4 +45,18 @@ public class DataSetObject
 		return null;
 	}
 	
+	public String getPropertiesAsString()
+	{
+		StringBuffer sb = new StringBuffer();
+		Map<Object, Object> props = molecule.getProperties();
+		for (Object key: props.keySet())
+		{
+			Object val = props.get(key);
+			if (val != null)
+				sb.append(key.toString() + ":" + val + " ");
+		}
+				
+		return sb.toString();
+	}
+	
 }

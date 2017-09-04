@@ -1,5 +1,6 @@
 package ambit2.groupcontribution.test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -18,9 +19,9 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.descriptors.constitutional.AtomCountHybridizationDescriptor;
 import ambit2.descriptors.constitutional.AverageMolecularWeightDescriptor;
-
 import ambit2.groupcontribution.Calculator;
 import ambit2.groupcontribution.GroupContributionModel;
+import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LDAtomHybridization;
 import ambit2.groupcontribution.descriptors.LDAtomSymbol;
@@ -46,8 +47,10 @@ public class TestUtils2
 		
 		//testGroupCount("CC(C)CNCN", model);
 		
-		testDescriptor(new AverageMolecularWeightDescriptor(), "[C][C][C]");
-		testDescriptor(new AverageMolecularWeightDescriptor(), "CCC");
+		//testDescriptor(new AverageMolecularWeightDescriptor(), "[C][C][C]");
+		//testDescriptor(new AverageMolecularWeightDescriptor(), "CCC");
+		
+		testDataSet("/test-dataset.txt");
 	}
 	
 	public static void testGroupCount(String smiles, GroupContributionModel model) throws Exception
@@ -107,5 +110,19 @@ public class TestUtils2
 		}
 
 		return d;
+	}
+	
+	public static void testDataSet(String fileName) throws Exception
+	{
+		File f = new File (fileName);
+		DataSet dataSet = new DataSet(f);
+		
+		for (int i = 0; i < dataSet.dataObjects.size(); i++)
+		{
+			IAtomContainer mol = dataSet.dataObjects.get(i).molecule;
+			System.out.println("  " + (i+1) + "  " + 
+					SmartsHelper.moleculeToSMILES(mol, true) + "  " + 
+					dataSet.dataObjects.get(i).getPropertiesAsString());
+		}
 	}
 }
