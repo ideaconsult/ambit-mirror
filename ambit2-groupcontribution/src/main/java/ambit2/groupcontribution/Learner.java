@@ -74,6 +74,8 @@ public class Learner
 	public void train()
 	{
 		Fragmentation.makeFragmentation(trainDataSet, model);
+		System.out.println("Groups:");
+		System.out.println(model.getGroupsAsString());
 		
 		makeInitialMatrixes();
 		
