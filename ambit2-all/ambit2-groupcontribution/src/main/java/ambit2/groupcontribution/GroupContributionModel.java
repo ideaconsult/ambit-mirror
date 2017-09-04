@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
+import ambit2.groupcontribution.dataset.DataSetObject;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LDAtomSymbol;
 import ambit2.groupcontribution.groups.IGroup;
+import ambit2.groupcontribution.utils.math.MatrixDouble;
 
 
 public class GroupContributionModel 
@@ -132,4 +134,19 @@ public class GroupContributionModel
 		return sb.toString();
 
 	}	
+	
+	public String getGroupsAsString()
+	{
+		StringBuffer sb = new StringBuffer();
+		int n = groups.keySet().size();
+		String groupsStr[] = groups.keySet().toArray(new String[n]);
+		
+		for (int i = 0; i < n; i++)
+		{
+			System.out.println("  " + (i+1) + "  " + groupsStr[i]);
+		}
+
+		
+		return sb.toString();
+	}
 }

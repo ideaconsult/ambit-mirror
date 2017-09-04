@@ -1,6 +1,7 @@
 package ambit2.groupcontribution.cli;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -10,8 +11,12 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 
+import ambit2.groupcontribution.GCMParser;
 import ambit2.groupcontribution.GroupContributionModel;
+import ambit2.groupcontribution.Learner;
 import ambit2.groupcontribution.dataset.DataSet;
+import ambit2.groupcontribution.descriptors.ILocalDescriptor;
+import ambit2.groupcontribution.fragmentation.Fragmentation;
 
 
 
@@ -217,28 +222,51 @@ public class GroupContributionCli
 	
 	protected int runGCM() throws Exception
 	{	
-		if (trainSetFile == null)
-			throw new Exception("Training set file not assigned! Use -t command line option.");
 				
 		if (gcmConfigFile == null)
 		{	
-			//throw new Exception("Configuration file not assigned! Use -c command line option.");
-			System.out.println("Configuration file not assigned.");
+			System.out.println("Configuration file not assigned. Getting data from command line options");
+			
+			if (trainSetFile == null)
+				throw new Exception("Training set file not assigned! Use -t command line option.");
+			
+			if (trainSetFile != null) 
+				System.out.println("train set file: " + trainSetFile);
+			if (gcmConfigFile != null)
+				System.out.println("gcm config: " + gcmConfigFile);
+			if (localDescriptors != null)
+				System.out.println("Local descriptors: " + localDescriptors);
+			if (targetProperty != null)
+				System.out.println("Target property: " + targetProperty);
 		}
-		
-		if (trainSetFile != null) 
-			System.out.println("train set file: " + trainSetFile);
-		if (gcmConfigFile != null)
-			System.out.println("gcm config: " + gcmConfigFile);
-		if (localDescriptors != null)
-			System.out.println("Local descriptors: " + localDescriptors);
-		if (targetProperty != null)
-			System.out.println("Target property: " + targetProperty);
+		else
+		{
+			
+		}
 		
 		
 		DataSet trainDataSet = new DataSet(new File(trainSetFile));
 		
 		GroupContributionModel gcm = new GroupContributionModel();
+		gcm.setTargetEndpoint(targetProperty);
+		
+		GCMParser gcmParser = new GCMParser();
+		
+		List<ILocalDescriptor> locDescriptors = gcmParser.getLocalDescriptorsFromString(localDescriptors);
+		if (!gcmParser.getErrors().isEmpty())
+		{
+			System.out.println("Errors:\n" + gcmParser.getAllErrorsAsString());
+			return -1;
+		}
+		else
+			gcm.setLocalDescriptors(locDescriptors);
+		
+		//Fragmentation.makeFragmentation(trainDataSet, gcm);
+		
+		Learner learner = new Learner();
+		learner.setModel(gcm);
+		learner.setTrainDataSet(trainDataSet);
+		learner.train();
 		
 		
 		return 0;
