@@ -1,5 +1,7 @@
 package ambit2.groupcontribution.cli;
 
+import java.io.File;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -7,6 +9,9 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
+
+import ambit2.groupcontribution.GroupContributionModel;
+import ambit2.groupcontribution.dataset.DataSet;
 
 
 
@@ -16,6 +21,13 @@ public class GroupContributionCli
 	
 	public String trainSetFile = null;
 	public String gcmConfigFile = null;
+	public String localDescriptors = null;
+	public String targetProperty = null;
+	
+	public static void main(String[] args) {
+		GroupContributionCli gcCli = new GroupContributionCli();
+		gcCli.run(args);
+	}
 	
 	protected static Options createOptions() {
 		Options options = new Options();
@@ -48,6 +60,52 @@ public class GroupContributionCli
 				return "c";
 			}
 		},
+		
+		train {
+			@Override
+			public String getArgName() {
+				return "train";
+			}
+			@Override
+			public String getDescription() {
+				return "Training data set";
+			}
+			@Override
+			public String getShortName() {
+				return "t";
+			}
+		},
+		
+		local_descriptors {
+			@Override
+			public String getArgName() {
+				return "local-descriptors";
+			}
+			@Override
+			public String getDescription() {
+				return "Local atoms descriptors";
+			}
+			@Override
+			public String getShortName() {
+				return "l";
+			}
+		},
+		
+		property {
+			@Override
+			public String getArgName() {
+				return "property";
+			}
+			@Override
+			public String getDescription() {
+				return "Target property";
+			}
+			@Override
+			public String getShortName() {
+				return "p";
+			}
+		},
+		
 		
 		help {
 			@Override
@@ -95,10 +153,28 @@ public class GroupContributionCli
 		if (argument != null)
 			argument = argument.trim();
 		switch (option) {
+		case train: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			trainSetFile = argument;
+			break;
+		}
 		case config: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
 			gcmConfigFile = argument;
+			break;
+		}
+		case local_descriptors: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			localDescriptors = argument;
+			break;
+		}
+		case property: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			targetProperty = argument;
 			break;
 		}
 		}
@@ -126,7 +202,9 @@ public class GroupContributionCli
 			return runGCM();	
 
 		} catch (Exception x ) {
-			printHelp(options,x.getMessage());
+			System.out.println("**********" + x.getMessage());
+			x.printStackTrace();
+			//printHelp(options,x.getMessage());
 			return -1;
 		} finally {
 			try { 
@@ -138,14 +216,30 @@ public class GroupContributionCli
 	}
 	
 	protected int runGCM() throws Exception
-	{
+	{	
 		if (trainSetFile == null)
 			throw new Exception("Training set file not assigned! Use -t command line option.");
+				
 		if (gcmConfigFile == null)
-			throw new Exception("Configuration file not assigned! Use -c command line option.");
+		{	
+			//throw new Exception("Configuration file not assigned! Use -c command line option.");
+			System.out.println("Configuration file not assigned.");
+		}
 		
-		System.out.println("train set file: " + trainSetFile);
-		System.out.println("gcm config: " + gcmConfigFile);
+		if (trainSetFile != null) 
+			System.out.println("train set file: " + trainSetFile);
+		if (gcmConfigFile != null)
+			System.out.println("gcm config: " + gcmConfigFile);
+		if (localDescriptors != null)
+			System.out.println("Local descriptors: " + localDescriptors);
+		if (targetProperty != null)
+			System.out.println("Target property: " + targetProperty);
+		
+		
+		DataSet trainDataSet = new DataSet(new File(trainSetFile));
+		
+		GroupContributionModel gcm = new GroupContributionModel();
+		
 		
 		return 0;
 	}	
