@@ -24,6 +24,7 @@ public class GroupContributionModel
 	//TODO add group rules and LocalDescriptor rules
 	private Map<String,IGroup> groups = new HashMap<String,IGroup>();
 	private Type modelType = Type.ATOMIC;
+	private String targetEndpoint = null;
 	
 	
 	public String getModelName()
@@ -89,6 +90,14 @@ public class GroupContributionModel
 		this.modelType = modelType;
 	}
 	
+	public String getTargetEndpoint() {
+		return targetEndpoint;
+	}
+
+	public void setTargetEndpoint(String targetEndpoint) {
+		this.targetEndpoint = targetEndpoint;
+	}
+	
 	public String getAtomDesignation(int descriptors[])
 	{
 		if (descriptors.length != localDescriptors.size())
@@ -122,6 +131,5 @@ public class GroupContributionModel
 		
 		return sb.toString();
 
-	}
-	
+	}	
 }
