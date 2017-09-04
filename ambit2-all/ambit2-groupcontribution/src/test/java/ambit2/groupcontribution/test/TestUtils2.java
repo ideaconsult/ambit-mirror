@@ -2,6 +2,7 @@ package ambit2.groupcontribution.test;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -19,7 +20,9 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.descriptors.constitutional.AtomCountHybridizationDescriptor;
 import ambit2.descriptors.constitutional.AverageMolecularWeightDescriptor;
+import ambit2.descriptors.test.Descriptors3DTest;
 import ambit2.groupcontribution.Calculator;
+import ambit2.groupcontribution.GCMParser;
 import ambit2.groupcontribution.GroupContributionModel;
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
@@ -33,6 +36,8 @@ import junit.framework.Assert;
 
 public class TestUtils2 
 {
+	public static GCMParser gcmParser = new GCMParser();
+	
 	public static void main(String[] args) throws Exception
 	{
 		//Set a model
@@ -50,7 +55,9 @@ public class TestUtils2
 		//testDescriptor(new AverageMolecularWeightDescriptor(), "[C][C][C]");
 		//testDescriptor(new AverageMolecularWeightDescriptor(), "CCC");
 		
-		testDataSet("/test-dataset.txt");
+		//testDataSet("/test-dataset.txt");
+		
+		testLocalDescriptorsParsing("FC,HeN,A,H,Val");
 	}
 	
 	public static void testGroupCount(String smiles, GroupContributionModel model) throws Exception
@@ -124,5 +131,17 @@ public class TestUtils2
 					SmartsHelper.moleculeToSMILES(mol, true) + "  " + 
 					dataSet.dataObjects.get(i).getPropertiesAsString());
 		}
+	}
+	
+	public static void testLocalDescriptorsParsing(String locDescr) throws Exception
+	{
+		System.out.println("Parsing " + locDescr);
+		List<ILocalDescriptor> descriptors = gcmParser.getLocalDescriptorsFromString(locDescr);
+		if (!gcmParser.getErrors().isEmpty())
+			System.out.println("Errors:\n" + gcmParser.getAllErrorsAsString());
+		
+		for (int i = 0; i < descriptors.size(); i++)
+			System.out.println(descriptors.get(i).getShortName() + " " + descriptors.get(i).getName());
+		
 	}
 }
