@@ -20,6 +20,17 @@ public class DataSetObject
 		Object o = molecule.getProperty(endpointProperty);
 		if (o != null)
 		{	
+			if (o instanceof String)
+			{
+				try {
+					double d = Double.parseDouble((String)o);
+					return new Double(d);
+				}
+				catch(Exception e) {
+					return null;
+				}	
+			}
+			
 			if (o instanceof Double)
 				return (Double) o;
 			

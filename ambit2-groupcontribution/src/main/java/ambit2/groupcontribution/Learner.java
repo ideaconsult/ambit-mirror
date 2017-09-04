@@ -71,21 +71,39 @@ public class Learner
 		this.externalDataSet = externalDataSet;
 	}
 	
-	public void train()
+	public int train()
 	{
 		Fragmentation.makeFragmentation(trainDataSet, model);
+		if (!errors.isEmpty())
+			return 1;
 		System.out.println("Groups:");
 		System.out.println(model.getGroupsAsString());
 		
 		makeInitialMatrixes();
+		if (!errors.isEmpty())
+			return 2;
+		
+		System.out.println("Matrix A0");
+		System.out.println(A0.toString(3,0));
+		System.out.println("Matrix b0");
+		System.out.println(b0.toString(3,0));
 		
 		fragmentColumnStatistics();
+		if (!errors.isEmpty())
+			return 3;
 		
 		makeFinalMatricies();
+		if (!errors.isEmpty())
+			return 4;
 		
 		makeModel();
+		if (!errors.isEmpty())
+			return 5;
 		
-		//TODO
+		System.out.println("Matrix x");
+		System.out.println(x.toString(9,4));
+		
+		return 0;
 	}
 	
 	public void validate()

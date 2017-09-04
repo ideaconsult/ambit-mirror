@@ -266,8 +266,10 @@ public class GroupContributionCli
 		Learner learner = new Learner();
 		learner.setModel(gcm);
 		learner.setTrainDataSet(trainDataSet);
-		learner.train();
 		
+		int res = learner.train();
+		if (res != 0)
+			System.out.println(learner.getAllErrorsAsString());
 		
 		return 0;
 	}	
