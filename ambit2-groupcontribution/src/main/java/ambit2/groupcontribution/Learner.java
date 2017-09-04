@@ -5,6 +5,8 @@ import java.util.List;
 
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
+import ambit2.groupcontribution.utils.math.MathUtilities;
+import ambit2.groupcontribution.utils.math.MatrixDouble;
 
 /**
  * 
@@ -22,6 +24,10 @@ public class Learner
 	private DataSet externalDataSet = null;
 	
 	private List<String> errors = new ArrayList<String>();
+	private double epsilon = 1.0e-15;
+	
+	//Work matrices
+	MatrixDouble A, A0, b, b0, modeled_b, C, invC, x;
 	
 	public void reset()
 	{
@@ -87,7 +93,15 @@ public class Learner
 	
 	void makeInitialMatrixes()
 	{
-		//TODO
+		A0 = Fragmentation.generateFragmentationMatrix(trainDataSet, model);
+		try
+		{
+			b0 = Fragmentation.generatePropertyMatrix(trainDataSet, model.getTargetEndpoint());
+		}
+		catch(Exception e)
+		{
+			errors.add("Error while generating target endpoint column-matrix" + e.getMessage());
+		}
 	}
 	
 	void fragmentColumnStatistics()
@@ -97,15 +111,31 @@ public class Learner
 	
 	void makeFinalMatricies()
 	{
+		A=A0;
+		b=b0;
 		//TODO
 	}
 	
-	void makeModel()
+	int  makeModel()
 	{
-		//TODO
+		//Calculating of matrix C = A'A
+		C=MathUtilities.Multiply(A.transposed(), A);
+
+		//Calculating of invC and output matrix x
+		invC = C.inverse(epsilon);
+
+		if (invC != null)
+		{
+			MatrixDouble invC_A_transposed =  MathUtilities.Multiply(invC, A.transposed());
+			x = MathUtilities.Multiply(invC_A_transposed , b);
+		}
+		else
+		{
+			errors.add("There is linear dependency in the data !!! "+
+					"The model can not be built!");
+			return(-1);
+		}		
+		return(0);
 	}
-	
-	
-	
 	
 }
