@@ -21,7 +21,9 @@ public class MatrixDouble
 		"       ",
 		"        ",
 		"         ",
-		"          "
+		"          ",
+		"           ",
+		"            "
 	};
 		
 	public double [][] el;

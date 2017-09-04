@@ -56,8 +56,10 @@ public class TestUtils2
 		//testDescriptor(new AverageMolecularWeightDescriptor(), "CCC");
 		
 		//testDataSet("/test-dataset.txt");
+		testDataSet("/Volumes/Data/test-dataset.csv");
 		
-		testLocalDescriptorsParsing("FC,HeN,A,H,Val");
+		
+		//testLocalDescriptorsParsing("FC,HeN,A,H,Val");
 	}
 	
 	public static void testGroupCount(String smiles, GroupContributionModel model) throws Exception
