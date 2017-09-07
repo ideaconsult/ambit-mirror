@@ -18,9 +18,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
-import ambit2.descriptors.constitutional.AtomCountHybridizationDescriptor;
-import ambit2.descriptors.constitutional.AverageMolecularWeightDescriptor;
-import ambit2.descriptors.test.Descriptors3DTest;
+
 import ambit2.groupcontribution.Calculator;
 import ambit2.groupcontribution.GCMParser;
 import ambit2.groupcontribution.GroupContributionModel;
@@ -31,7 +29,6 @@ import ambit2.groupcontribution.descriptors.LDAtomSymbol;
 import ambit2.groupcontribution.descriptors.LDAtomValency;
 import ambit2.groupcontribution.descriptors.LDHNum;
 import ambit2.smarts.SmartsHelper;
-import junit.framework.Assert;
 
 
 public class TestUtils2 
