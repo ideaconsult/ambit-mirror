@@ -28,8 +28,8 @@
 				"URI": "null/dataset/User+input",
 				"type": "Dataset"
 			},
-			"annotation": [
-			],
+			"annotation": {
+			},
 			"disabled": true
 		},
 		"Mutagenicity (Ames test) model (CAESAR) - assessment": {
@@ -45,7 +45,11 @@
 			"units": "",
 			"sameAs": "http://www.opentox.org/echaEndpoints.owl#Mutagenicity",
 			"isNumeric": false,
-			"creator": "muta_caesar"
+			"creator": "muta_caesar",
+			"annotation": {
+				"NON-Mutagenic": "NontoxicCategory",
+				"Mutagenic": "ToxicCategory"
+			}
 		},
 		"Mutagenicity (Ames test) model (CAESAR) - Reliability": {
 			"title": "Mutagenicity (Ames test) model (CAESAR) [Reliability]",
@@ -95,7 +99,11 @@
 			"units": "",
 			"sameAs": "http://www.opentox.org/echaEndpoints.owl#Carcinogenicity",
 			"isNumeric": false,
-			"creator": "carc_caesar"
+			"creator": "carc_caesar",
+			"annotation": {
+				"NON-Carcinogen": "NontoxicCategory",
+				"Carcinogen": "ToxicCategory"
+			}
 		},
 		"Carcinogenicity model (CAESAR) - ADI": {
 			"title": "Carcinogenicity model (CAESAR)",
@@ -131,7 +139,11 @@
 			"units": "",
 			"sameAs": "prediction",
 			"isNumeric": false,
-			"creator": "devtox_caesar"
+			"creator": "devtox_caesar",
+			"annotation": {
+				"NON-Toxicant": "NontoxicCategory",
+				"Toxicant": "ToxicCategory"
+			}
 		},
 		"Developmental Toxicity model (CAESAR) - ADI": {
 			"title": "Developmental Toxicity model (CAESAR)",
@@ -167,7 +179,11 @@
 			"units": "",
 			"sameAs": "prediction",
 			"isNumeric": false,
-			"creator": "rba_irfmn"
+			"creator": "rba_irfmn",
+			"annotation": {
+				"Inactive": "NontoxicCategory",
+				"Active": "ToxicCategory"
+			}
 		},
 		"Estrogen Receptor Relative Binding Affinity model (IRFMN) - ADI": {
 			"title": "Estrogen Receptor Relative Binding Affinity model (IRFMN)",
@@ -203,7 +219,11 @@
 			"units": "",
 			"sameAs": "http://www.opentox.org/echaEndpoints.owl#SkinSensitisation",
 			"isNumeric": false,
-			"creator": "skin_caesar"
+			"creator": "skin_caesar",
+			"annotation": {
+				"NON-Sensitizer": "NonoxicCategory",
+				"Sensitizer": "ToxicCategory"
+			}
 		},
 		"Skin Sensitization model (CAESAR) - ADI": {
 			"title": "Skin Sensitization model (CAESAR)",
@@ -345,7 +365,13 @@
 			"title": "Ready Biodegradability model (IRFMN)",
 			"units": "",
 			"sameAs": "http://www.opentox.org/echaEndpoints.owl#PersistenceBiodegradation",
-			"creator": "rb_irfmn"
+			"creator": "rb_irfmn",
+			"annotation": {
+				"Possible Readily Biodegradable": "NontoxicCategory",
+				"Readily Biodegradable": "NontoxicCategory",
+				"Not classifiable": "InconclusiveCategory",
+				"NON Readily Biodegradable": "ToxicCategory"
+			}
 		},
 		"Ready Biodegradability model (IRFMN) - ADI": {
 			"title": "Ready Biodegradability model (IRFMN)",
