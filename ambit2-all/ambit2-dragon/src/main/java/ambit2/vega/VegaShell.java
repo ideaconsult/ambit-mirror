@@ -115,17 +115,20 @@ public class VegaShell extends AbstractDescriptorShell {
 				if (disabled != null && disabled.asBoolean())
 					continue;
 
-				String creator = p.getValue().get("creator").asText();
+				String model = p.getValue().get("creator").asText();
+				
 				try {
-					creator = root.get("models").get(creator).asText();
+					version = "VEGA "+ root.get("models").get(model).asText();
 				} catch (Exception x) {
 				}
-				ILiteratureEntry ref = LiteratureEntry.getInstance(creator, version);
+				ILiteratureEntry ref = LiteratureEntry.getInstance(model, version);
+				
 				// String name = p.getValue().get("title").asText();
 				String name = p.getKey();
 				String units = p.getValue().get("units").asText();
 				String label = p.getValue().get("sameAs").asText();
 				Property property = new Property(name, units, ref);
+				
 				property.setLabel(label);
 				property.setEnabled(true);
 				properties.put(p.getKey(), property);
