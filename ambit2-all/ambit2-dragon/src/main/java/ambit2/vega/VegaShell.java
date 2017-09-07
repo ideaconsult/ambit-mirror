@@ -146,7 +146,7 @@ public class VegaShell extends AbstractDescriptorShell {
 						PropertyAnnotation a = new PropertyAnnotation();
 						a.setObject(key);
 						a.setPredicate("acceptValue");
-						a.setType("^^" + annotation.get(key).toString());
+						a.setType("^^" + annotation.get(key).asText());
 						pa.add(a);
 					}
 				}
