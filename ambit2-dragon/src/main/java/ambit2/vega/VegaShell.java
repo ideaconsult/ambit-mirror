@@ -26,6 +26,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
+import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
 import ambit2.core.data.MoleculeTools;
@@ -65,7 +67,7 @@ public class VegaShell extends AbstractDescriptorShell {
 		this.config = config;
 		try {
 			properties = loadProperties();
-			
+
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage());
 		}
@@ -85,7 +87,8 @@ public class VegaShell extends AbstractDescriptorShell {
 			logger.log(Level.SEVERE,
 					String.format("%s does not exist! Have you set %s environment variable  or %s configuration?",
 							exe.getAbsolutePath(), JAVA_HOME, JAVA_BIN));
-			throw new ShellException(this, String.format("%s not found; %s initialisation failed",exe.getName(), getClass().getName()));
+			throw new ShellException(this,
+					String.format("%s not found; %s initialisation failed", exe.getName(), getClass().getName()));
 		}
 		addExecutable(CommandShell.os_WINDOWS, winexe.getAbsolutePath(), null);
 		addExecutable(CommandShell.os_WINDOWS7, winexe.getAbsolutePath(), null);
@@ -94,7 +97,7 @@ public class VegaShell extends AbstractDescriptorShell {
 		addExecutable(CommandShell.os_LINUX, exe.getAbsolutePath(), null);
 		addExecutable(CommandShell.os_LINUX64, exe.getAbsolutePath(), null);
 		setInputFile(String.format("%s/%s", getHomeDir(null), inFile[1]));
-		setOutputFile(String.format("%s/%s", getHome(), outFile[0]));		
+		setOutputFile(String.format("%s/%s", getHome(), outFile[0]));
 	}
 
 	protected synchronized Map<String, Property> loadProperties() {
@@ -116,22 +119,37 @@ public class VegaShell extends AbstractDescriptorShell {
 					continue;
 
 				String model = p.getValue().get("creator").asText();
-				
+
 				try {
-					version = "VEGA "+ root.get("models").get(model).asText();
+					version = "VEGA " + root.get("models").get(model).asText();
 				} catch (Exception x) {
 				}
 				ILiteratureEntry ref = LiteratureEntry.getInstance(model, version);
-				
+
 				// String name = p.getValue().get("title").asText();
 				String name = p.getKey();
 				String units = p.getValue().get("units").asText();
 				String label = p.getValue().get("sameAs").asText();
 				Property property = new Property(name, units, ref);
-				
+
 				property.setLabel(label);
 				property.setEnabled(true);
 				properties.put(p.getKey(), property);
+
+				JsonNode annotation = p.getValue().get("annotation");
+				if (annotation != null) {
+					PropertyAnnotations pa = new PropertyAnnotations();
+					property.setAnnotations(pa);
+					Iterator<String> keys = annotation.fieldNames();
+					while (keys.hasNext()) {
+						String key = keys.next();
+						PropertyAnnotation a = new PropertyAnnotation();
+						a.setObject(key);
+						a.setPredicate("acceptValue");
+						a.setType("^^" + annotation.get(key).toString());
+						pa.add(a);
+					}
+				}
 			}
 
 		} catch (Exception x) {
@@ -160,7 +178,7 @@ public class VegaShell extends AbstractDescriptorShell {
 	@Override
 	protected String getHome() throws ShellException {
 		String home = System.getenv(VEGA_HOME);
-		if (home == null && config!=null)
+		if (home == null && config != null)
 			home = getHomeFromConfig(config, VegaShell.VEGA_HOME);
 		return home;
 	}
@@ -179,7 +197,7 @@ public class VegaShell extends AbstractDescriptorShell {
 
 	@Override
 	protected void initialize() throws ShellException {
-		
+
 	}
 
 	@Override
