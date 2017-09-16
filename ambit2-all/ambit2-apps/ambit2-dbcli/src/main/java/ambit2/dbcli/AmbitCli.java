@@ -39,6 +39,7 @@ import javax.naming.OperationNotSupportedException;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.log4j.PropertyConfigurator;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.fingerprint.CircularFingerprinter;
 import org.openscience.cdk.fingerprint.IBitFingerprint;
 import org.openscience.cdk.fingerprint.ICountFingerprint;
 import org.openscience.cdk.fingerprint.IFingerprinter;
@@ -1124,7 +1125,7 @@ public class AmbitCli {
 		} catch (Exception x) {
 		}
 		if (fps.size() == 0) {
-			fps.add(new org.openscience.cdk.fingerprint.CircularFingerprinter());
+			fps.add(new org.openscience.cdk.fingerprint.CircularFingerprinter(CircularFingerprinter.CLASS_FCFP6,2048));
 			// fps.add(new AtomEnvironentMatrix());
 		}
 		StringBuilder b = new StringBuilder();
