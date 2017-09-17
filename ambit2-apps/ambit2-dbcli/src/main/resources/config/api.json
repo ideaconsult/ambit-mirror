@@ -1,6 +1,5 @@
 {
 	"commands": {
-
 		"split": {
 			"name": "split",
 			"description": "Splits an SDF into chunks of predefined size (-i inputfile -o outputfile).",
@@ -179,6 +178,18 @@
 						"value": "CircularFingerprinter,PubchemFingerprinter,MACCSFingerprinter",
 						"comment": "Comma delimited list of class names implementing org.openscience.cdk.fingerprint.IFingerprinter, e.g. KlekotaRothFingerprinter. If not fully qualified will prepend 'org.openscience.cdk.fingerprint.'"
 					},
+					":fplen": {
+						"mandatory": false,
+						"type": "int",
+						"value": "2048",
+						"comment": "hashed fingerprint length"
+					},
+					":fptype": {
+						"mandatory": false,
+						"type": "String",
+						"value": "CLASS_FCFP6",
+						"comment": "e.g. CircularFingerprinter.CLASS_ECFP0-6"
+					},
 					":page": {
 						"mandatory": false,
 						"type": "Integer",
@@ -252,7 +263,7 @@
 						"type": "String",
 						"value": ",",
 						"comment": "Delimiter character"
-					},					
+					},
 					":threshold": {
 						"mandatory": false,
 						"type": "Double",
@@ -270,7 +281,7 @@
 						"type": "Integer",
 						"value": 10000,
 						"comment": "Page size (in number of records). Set to -1 to read all records."
-					}					
+					}
 				}
 			}
 		},
@@ -279,7 +290,8 @@
 			"description": "Dataset import into AMBIT database (with normalisation). The database connection settings are read from -c {file}.",
 			"connection": "config/ambit.properties",
 			"post": {
-				"params": {}
+				"params": {
+				}
 			}
 		},
 		"dbmigrate": {
@@ -287,25 +299,27 @@
 			"description": "dbmigrate",
 			"connection": "config/ambit.properties",
 			"get": {
-				"params": {}
+				"params": {
+				}
 			},
 			"put": {
-					"params": {
-						":sql_log_bin": {
-							"mandatory": false,
-							"type": "Integer",
-							"value": 0,
-							"comment": "SET sql_log_bin=0 or 1"
-						}	
+				"params": {
+					":sql_log_bin": {
+						"mandatory": false,
+						"type": "Integer",
+						"value": 0,
+						"comment": "SET sql_log_bin=0 or 1"
 					}
-			}			
-		},		
+				}
+			}
+		},
 		"import": {
 			"name": "import",
 			"description": "Quick import into AMBIT database (No normalisation!). Input file (-i file). The database connection settings are read from -c {file}",
 			"connection": "config/ambit.properties",
 			"post": {
-				"params": {}
+				"params": {
+				}
 			}
 		},
 		"preprocessing": {
