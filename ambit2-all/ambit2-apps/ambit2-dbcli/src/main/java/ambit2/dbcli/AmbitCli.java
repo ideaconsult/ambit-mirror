@@ -1092,10 +1092,79 @@ public class AmbitCli {
 		}
 	}
 
+	private enum _fptype {
+		CLASS_ECFP0 {
+			@Override
+			public int getCode() {
+				return 1;
+			}
+		},
+		CLASS_ECFP2 {
+			@Override
+			public int getCode() {
+				return 2;
+			}
+		},
+		CLASS_ECFP4 {
+			@Override
+			public int getCode() {
+				return 4;
+			}
+		},
+		CLASS_ECFP6 {
+			@Override
+			public int getCode() {
+				return 4;
+			}
+		},
+		CLASS_FCFP0 {
+			@Override
+			public int getCode() {
+				return 5;
+			}
+		},
+		CLASS_FCFP2 {
+			@Override
+			public int getCode() {
+				return 6;
+			}
+		},
+		CLASS_FCFP4 {
+			@Override
+			public int getCode() {
+				return 7;
+			}
+		},
+		CLASS_FCFP6 {
+			@Override
+			public int getCode() {
+				return 8;
+			}
+		};
+		public abstract int getCode();
+	}
+
 	protected List<IFingerprinter> parseFingerprinterParams() {
 		final List<IFingerprinter> fps = new ArrayList<IFingerprinter>();
+		int fplen = 1024;
+		int fptype = CircularFingerprinter.CLASS_ECFP6;
 		try {
-			Object o = options.getParam(":fpclass");
+
+			Object o = options.getParam(":fplen");
+			try {
+				if (o != null)
+					fplen = Integer.parseInt(o.toString());
+			} catch (Exception x) {
+			}
+
+			o = options.getParam(":fptype");
+			try {
+				if (o != null)
+					fptype = _fptype.valueOf(o.toString()).getCode();
+			} catch (Exception x) {
+			}
+
+			o = options.getParam(":fpclass");
 			if (o != null) {
 				String[] fpclass = o.toString().split(",");
 				Class clazz = null;
@@ -1106,7 +1175,12 @@ public class AmbitCli {
 						else
 							fp = fp.trim();
 						clazz = Class.forName(fp);
-						Object fingerprinter = clazz.newInstance();
+						Object fingerprinter = null;
+						if (clazz.equals(CircularFingerprinter.class)) {
+							fingerprinter = new CircularFingerprinter(fptype,fplen);
+						} else {
+							fingerprinter = clazz.newInstance();
+						}
 						if (fingerprinter instanceof IFingerprinter)
 							fps.add((IFingerprinter) fingerprinter);
 					} catch (Exception x) {
@@ -1114,6 +1188,7 @@ public class AmbitCli {
 							try {
 								Object fingerprinter = clazz.getDeclaredConstructor(IChemObjectBuilder.class)
 										.newInstance(SilentChemObjectBuilder.getInstance());
+
 								if (fingerprinter instanceof IFingerprinter)
 									fps.add((IFingerprinter) fingerprinter);
 							} catch (Exception xx) {
@@ -1125,7 +1200,7 @@ public class AmbitCli {
 		} catch (Exception x) {
 		}
 		if (fps.size() == 0) {
-			fps.add(new org.openscience.cdk.fingerprint.CircularFingerprinter(CircularFingerprinter.CLASS_FCFP6,2048));
+			fps.add(new org.openscience.cdk.fingerprint.CircularFingerprinter(fptype, fplen));
 			// fps.add(new AtomEnvironentMatrix());
 		}
 		StringBuilder b = new StringBuilder();
