@@ -29,8 +29,6 @@
 
 package ambit2.similarity.measure;
 
-import ambit2.similarity.knn.NearestNeighborsSearch;
-
 /**
  * Encapsulates object and its calculated distance. See {@link NearestNeighborsSearch}.
  * @author Nina Jeliazkova nina@acad.bg

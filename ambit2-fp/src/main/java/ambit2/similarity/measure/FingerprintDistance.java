@@ -56,6 +56,7 @@ public class FingerprintDistance implements IDistanceFunction<BitSet> {
         one_and_two.and(bitset2);
         float _common_bit_count = one_and_two.cardinality();
         return _common_bit_count/(_bitset1_cardinality + _bitset2_cardinality - _common_bit_count);
+   
     }    
     @Override
     public String toString() {
