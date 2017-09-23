@@ -54,7 +54,7 @@ public abstract class SimilarityMatrix<T> {
 
 	protected abstract L parseLineDense(String line, long record) throws Exception;
 
-	public long[] createMatrix(String path, boolean dense, double threshold) throws Exception {
+	public long[] createMatrix(String path, boolean dense, float threshold) throws Exception {
 		return createMatrix(path, dense, threshold, 0, -1);
 	}
 
@@ -62,7 +62,7 @@ public abstract class SimilarityMatrix<T> {
 		return "%s\t%s\t%4.2f\n";
 	}
 
-	public long[] createMatrix(String path, boolean dense, double threshold, int page, int pagesize) throws Exception {
+	public long[] createMatrix(String path, boolean dense, float threshold, int page, int pagesize) throws Exception {
 		if (distance == null)
 			throw new Exception("Distance not defined");
 		final int startRecord = pagesize > 0 ? (page * pagesize) : 0;
@@ -84,7 +84,7 @@ public abstract class SimilarityMatrix<T> {
 			path = folder.getParent();
 			folder = folder.getParentFile();
 		}
-
+		double max = Double.NEGATIVE_INFINITY;
 		double tt[] = new double[] { 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, Double.POSITIVE_INFINITY };
 		long histogram[] = new long[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		for (File file : files) {
@@ -130,6 +130,8 @@ public abstract class SimilarityMatrix<T> {
 					for (int j = i + 1; j < b.size(); j++) {
 						L item2 = b.get(j);
 						float t = distance.getDistance(bs1, item2.getValue());
+						if (t > max)
+							max = t;
 						for (int k = 0; k < tt.length; k++)
 							if (t <= tt[k]) {
 								histogram[k]++;
@@ -151,20 +153,23 @@ public abstract class SimilarityMatrix<T> {
 			} finally {
 				writer.close();
 				logger.info(String.format(
-						"Similarity matrix threshold>=%f for file %s generated in %s msec.\tHistogram: %s", threshold,
-						file.getName(), System.currentTimeMillis() - now, histogram2string(histogram, tt)));
+						"Similarity matrix threshold %s %f for file %s generated in %s msec.\t%s\nmax=%e\tHistogram: %s",
+						accept(threshold+1,threshold)?">=":"<=",threshold, file.getName(), System.currentTimeMillis() - now, getDistance().toString(),max,
+						histogram2string(histogram, tt)));
 			}
 		}
 		logger.info(String.format("Number of fingerprints %s", bitmap.size()));
 		return histogram;
 	}
 
-	protected abstract boolean accept(float t, double threshold);
+	protected abstract boolean accept(float t, float threshold);
 
-	protected String histogram2string(long histogram[], double tt[]) {
+	public static String histogram2string(long histogram[], double tt[]) {
 		StringBuilder bb = new StringBuilder();
-		for (int k = 0; k < histogram.length; k++)
-			bb.append(String.format("%s:%s\t", tt[k], histogram[k]));
+		for (int i = 0; i < histogram.length - 1; i++)
+			bb.append(String.format("%3.1f:%s\t", i * 0.1, histogram[i]));
+		bb.append(String.format(">1:%s\t", histogram[histogram.length - 1]));
+
 		return bb.toString();
 	}
 
