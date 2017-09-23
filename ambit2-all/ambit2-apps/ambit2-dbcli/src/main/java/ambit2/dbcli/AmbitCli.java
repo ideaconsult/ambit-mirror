@@ -95,6 +95,8 @@ import ambit2.dbcli.exceptions.InvalidCommand;
 import ambit2.descriptors.processors.BitSetGenerator;
 import ambit2.descriptors.processors.FPTable;
 import ambit2.descriptors.simmatrix.SimilarityMatrix;
+import ambit2.descriptors.simmatrix.SimilarityMatrixBitset;
+import ambit2.descriptors.simmatrix.SimilarityMatrixDouble;
 import ambit2.smarts.processors.SMARTSPropertiesGenerator;
 import ambit2.smarts.processors.SMIRKSProcessor;
 import ambit2.tautomers.processor.StructureStandardizer;
@@ -724,6 +726,10 @@ public class AmbitCli {
 		return parseBooleanParam(":sparse", true);
 	}
 
+	protected boolean parseBitsetParam() {
+		return parseBooleanParam(":bitset", true);
+	}
+
 	protected double parseThresholdParam() {
 		try {
 			return (Double) options.getParam(":threshold");
@@ -789,8 +795,10 @@ public class AmbitCli {
 		int pagesize = parsePageSizeParam();
 		double threshold = parseThresholdParam();
 		boolean sparse = parseSparseParam();
+		boolean bitset = parseBitsetParam();
 		String delimiter = parseDelimiterParam();
-		SimilarityMatrix matrix = new SimilarityMatrix();
+
+		SimilarityMatrix matrix = bitset ? new SimilarityMatrixBitset() : new SimilarityMatrixDouble();
 		matrix.setDelimiter(delimiter);
 		matrix.setLogger(logger_cli);
 		matrix.createMatrix(file.getAbsolutePath(), !sparse, threshold, page, pagesize);
@@ -1177,7 +1185,7 @@ public class AmbitCli {
 						clazz = Class.forName(fp);
 						Object fingerprinter = null;
 						if (clazz.equals(CircularFingerprinter.class)) {
-							fingerprinter = new CircularFingerprinter(fptype,fplen);
+							fingerprinter = new CircularFingerprinter(fptype, fplen);
 						} else {
 							fingerprinter = clazz.newInstance();
 						}

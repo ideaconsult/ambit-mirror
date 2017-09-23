@@ -6,11 +6,11 @@
 		<artifactId>ambit2-all</artifactId>
 		<version>3.1.0-SNAPSHOT</version>
 	</parent>
-  <artifactId>ambit2-fp</artifactId>
-  <name>ambit2-fp</name>
-  <description>Fingerprints</description>
-  <dependencies>
-  <dependency>
+	<artifactId>ambit2-fp</artifactId>
+	<name>ambit2-fp</name>
+	<description>Fingerprints</description>
+	<dependencies>
+		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-smarts</artifactId>
 			<version>${project.version}</version>
@@ -26,5 +26,19 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-  </dependencies>
+	</dependencies>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<configuration>
+						<skip>false</skip>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
 </project>

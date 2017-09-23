@@ -258,6 +258,12 @@
 						"value": "true",
 						"comment": "Dense or sparse format"
 					},
+					":bitset": {
+						"mandatory": false,
+						"type": "Boolean",
+						"value": "true",
+						"comment": "Bitset or real valued array"
+					},
 					":delimiter": {
 						"mandatory": false,
 						"type": "String",

@@ -6,15 +6,25 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SimilarityMatrix {
+import ambit2.similarity.measure.IDistanceFunction;
+
+public abstract class SimilarityMatrix<T> {
 	protected Map<Integer, Integer> bitmap = new HashMap<Integer, Integer>();
+	protected IDistanceFunction<T> distance;
+
+	public IDistanceFunction<T> getDistance() {
+		return distance;
+	}
+
+	public void setDistance(IDistanceFunction<T> distance) {
+		this.distance = distance;
+	}
 
 	protected String delimiter = ",";
 
@@ -37,53 +47,24 @@ public class SimilarityMatrix {
 	}
 
 	public SimilarityMatrix() {
+		super();
 	}
 
-	protected L parseLineDense(String line, long record) {
-		String[] tokens = line.split(delimiter);
-		L l = new L();
-		l.setKey(tokens[0]);
-		l.setId(Long.toString(record));
-		BitSet bs = new BitSet();
-		for (int i = 1; i < tokens.length; i++) {
-			if ("1".equals(tokens[i]))
-				bs.set(i - 1);
-		}
-		l.setBs(bs);
-		return l;
-	}
+	protected abstract L parseLineSparse(String line, long record) throws Exception;
 
-	protected L parseLineSparse(String line, long record) {
-		String[] tokens = line.split(delimiter);
-		L l = new L();
-		l.setKey(tokens[0]);
-		l.setId(Long.toString(record));
-		BitSet bs = new BitSet();
-		for (int i = 1; i < tokens.length; i++)
-			try {
-				int key = Integer.parseInt(tokens[i]);
-				//System.out.println(key);
-				bs.set(Math.abs(key));
-				Integer v = bitmap.get(key);
-				if (v == null) {
-					v = bitmap.size();
-					bitmap.put(key, v);
-				}
-				bs.set(v);
-
-			} catch (Exception x) {
-				logger.log(Level.WARNING, x.getMessage());
-			}
-		l.setBs(bs);
-		return l;
-	}
+	protected abstract L parseLineDense(String line, long record) throws Exception;
 
 	public long[] createMatrix(String path, boolean dense, double threshold) throws Exception {
 		return createMatrix(path, dense, threshold, 0, -1);
 	}
 
-	public long[] createMatrix(String path, boolean dense, double threshold, int page, int pagesize) throws Exception {
+	protected String getSimMatrixFormat() {
+		return "%s\t%s\t%4.2f\n";
+	}
 
+	public long[] createMatrix(String path, boolean dense, double threshold, int page, int pagesize) throws Exception {
+		if (distance == null)
+			throw new Exception("Distance not defined");
 		final int startRecord = pagesize > 0 ? (page * pagesize) : 0;
 		int maxRecord = pagesize > 0 ? ((page + 1) * pagesize) : -1;
 
@@ -104,8 +85,8 @@ public class SimilarityMatrix {
 			folder = folder.getParentFile();
 		}
 
-		double tt[] = new double[] { 0, 0.25, 0.5, 0.75, 0.8, 0.9, 0.95, 1 };
-		long histogram[] = new long[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+		double tt[] = new double[] { 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, Double.POSITIVE_INFINITY };
+		long histogram[] = new long[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		for (File file : files) {
 			if (!file.getPath().endsWith(".csv") && !file.getPath().endsWith(".txt")
 					&& !file.getPath().endsWith(".tsv")) {
@@ -118,7 +99,9 @@ public class SimilarityMatrix {
 				int r = 0;
 				while ((line = reader.readLine()) != null) {
 					r++;
-					b.add(dense ? parseLineDense(line, r) : parseLineSparse(line, r));
+					L value = dense ? parseLineDense(line, r) : parseLineSparse(line, r);
+
+					b.add(value);
 					if ((r % 10000) == 0) {
 						logger.log(Level.FINE, String.format("%s\t%s", r, bitmap.size()));
 					}
@@ -143,17 +126,18 @@ public class SimilarityMatrix {
 
 				for (int i = startRecord; i < maxRecord; i++) {
 					String id1 = b.get(i).getId();
-					BitSet bs1 = b.get(i).getBs();
+					T bs1 = b.get(i).getValue();
 					for (int j = i + 1; j < b.size(); j++) {
 						L item2 = b.get(j);
-						double t = tanimoto(bs1, item2.getBs());
+						float t = distance.getDistance(bs1, item2.getValue());
 						for (int k = 0; k < tt.length; k++)
 							if (t <= tt[k]) {
 								histogram[k]++;
 								break;
 							}
-						if (t >= threshold) {
-							writer.write(String.format("%s\t%s\t%4.2f\n", id1, item2.getId(), t));
+						if (accept(t, threshold)) {
+							// if (t >= threshold) {
+							writer.write(String.format(getSimMatrixFormat(), id1, item2.getId(), t));
 						}
 					}
 					if ((i % 5000) == 0) {
@@ -175,6 +159,8 @@ public class SimilarityMatrix {
 		return histogram;
 	}
 
+	protected abstract boolean accept(float t, double threshold);
+
 	protected String histogram2string(long histogram[], double tt[]) {
 		StringBuilder bb = new StringBuilder();
 		for (int k = 0; k < histogram.length; k++)
@@ -185,7 +171,15 @@ public class SimilarityMatrix {
 	class L {
 		String key;
 		String id;
-		BitSet bs;
+		T value;
+
+		public T getValue() {
+			return value;
+		}
+
+		public void setValue(T value) {
+			this.value = value;
+		}
 
 		public String getKey() {
 			return key;
@@ -203,22 +197,6 @@ public class SimilarityMatrix {
 			this.id = id;
 		}
 
-		public BitSet getBs() {
-			return bs;
-		}
-
-		public void setBs(BitSet bs) {
-			this.bs = bs;
-		}
 	}
 
-	protected static double tanimoto(BitSet bitset1, BitSet bitset2) {
-		double a = bitset1.cardinality();
-		double b = bitset2.cardinality();
-
-		BitSet common = ((BitSet) bitset1.clone());
-		common.and(bitset2);
-		double c = common.cardinality();
-		return c / (a + b - c);
-	}
 }
