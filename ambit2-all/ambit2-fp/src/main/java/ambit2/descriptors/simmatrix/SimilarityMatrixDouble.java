@@ -29,7 +29,7 @@ public class SimilarityMatrixDouble extends SimilarityMatrix<double[]> {
 	}
 
 	@Override
-	protected boolean accept(float t, double threshold) {
+	protected boolean accept(float t, float threshold) {
 		return (t <= threshold);
 	}
 

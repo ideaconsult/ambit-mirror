@@ -12,7 +12,7 @@ public class SimilarityMatrixBitset extends SimilarityMatrix<BitSet> {
 	}
 
 	@Override
-	protected boolean accept(float t, double threshold) {
+	protected boolean accept(float t, float threshold) {
 		return (t >= threshold);
 	}
 

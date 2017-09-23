@@ -730,12 +730,12 @@ public class AmbitCli {
 		return parseBooleanParam(":bitset", true);
 	}
 
-	protected double parseThresholdParam() {
+	protected float parseThresholdParam() {
 		try {
-			return (Double) options.getParam(":threshold");
+			return (Float) options.getParam(":threshold");
 		} catch (Exception x) {
 			logger_cli.log(Level.WARNING, x.toString());
-			return 0.75;
+			return 0.75f;
 		}
 	}
 
@@ -793,7 +793,7 @@ public class AmbitCli {
 		final File file = getInputFile();
 		int page = parsePageParam();
 		int pagesize = parsePageSizeParam();
-		double threshold = parseThresholdParam();
+		float threshold = parseThresholdParam();
 		boolean sparse = parseSparseParam();
 		boolean bitset = parseBitsetParam();
 		String delimiter = parseDelimiterParam();
