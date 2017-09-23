@@ -732,7 +732,8 @@ public class AmbitCli {
 
 	protected float parseThresholdParam() {
 		try {
-			return (Float) options.getParam(":threshold");
+			Object n = options.getParam(":threshold");
+			return ((Double)n).floatValue();
 		} catch (Exception x) {
 			logger_cli.log(Level.WARNING, x.toString());
 			return 0.75f;
