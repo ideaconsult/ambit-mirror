@@ -143,7 +143,7 @@ var ccLib = {
     }
   },
 
-  getJsonValue: function (json, field){
+  getJsonValue: function (json, field) {
     var value = json[field];
     if (value === undefined && field != null) {
       try {
@@ -154,6 +154,38 @@ var ccLib = {
       }
     }
     return value;
+  },
+  
+  findIndex: function (arr, obj) {
+    if (arr.findIndex !== undefined)
+      return arr.findIndex(obj);
+    else if (typeof obj !== "function")
+      return arr.indexOf(obj);
+      
+    for (var i = 0;i < arr.length; ++i)
+      if (!!obj.call(arr[i], arr[i], i))
+        return i;
+      
+    return -1;
+  },
+   
+  // traverse any given tree, calling `pre` function before diggin in and `post` - after.
+  // the output of pre determines how the digging is going to happen, if
+  //  - is false - the digging further is interrupted;
+  //  - is true or null/undefined - it uses node's `children` property for digging in
+  //  - is something something - that value is used as a children array for digging in.
+  traverseTree: function (tree, pre, post) {
+    var arr = !!pre ? pre(tree) : true;
+  
+    if (arr === false) return;
+    else if (arr === true || !arr) arr = tree.children;
+      
+    if (!!arr && !!arr.length)
+      for (var i = 0;i < arr.length; ++i)
+        this.traverseTree(arr[i], pre, post);
+    
+    if (!!post) 
+      post(tree);
   },
 
   // given a root DOM element and an JSON object it fills all (sub)element of the tree
@@ -290,6 +322,25 @@ var ccLib = {
     for (var i in pars)
       format = format.replace('{' + i + '}', pars[i]);
     return format;
+  },
+
+  // Present a number in a brief format, adding 'k' or 'm', if needed.
+  briefNumber: function (num, prec) {
+    var suf = "",
+        prec = prec || 10;
+    
+    if (num >= 900000)
+      num /= 1000000, suf = "m";
+    else if (num >= 900)
+      num /= 1000, suf = "k";
+    else
+      prec = 0;
+      
+    if (prec <= 0)
+      return num;
+      
+    num = Math.round(num * prec) / prec;
+    return "" + num + suf;
   },
 
   trim: function(obj) {
@@ -432,11 +483,12 @@ function formatLink(str) {
 
 /* jtoxkit.js - The main jToxKit service routines
  *
- * Copyright 2012-2014, IDEAconsult Ltd. http://www.ideaconsult.net/
+ * Copyright 2012-2016, IDEAconsult Ltd. http://www.ideaconsult.net/
  * Created by Ivan Georgiev
 **/
 
 window.jT = window.jToxKit = {
+  version: "1.0.0", // jToxKit version. The file suffix/git tag will be extracted from here!
 	templateRoot: null,
 
 	callId: 0,
@@ -469,6 +521,7 @@ window.jT = window.jToxKit = {
 	// form the "default" baseUrl if no other is supplied
 	formBaseUrl: function(url) {
   	var burl = !!url.host ? url.protocol + "://" + url.host + (url.port.length > 0 ? ":" + url.port : '') + '/' + url.segments[0] : null;
+  	console.log("Deduced base URL: " + burl + " (from: " + url.source + ")");
     return burl;
 	},
 
@@ -1242,7 +1295,7 @@ window.jT.ui = {
 
     return str;
   },
-
+  
   bindControls: function (kit, handlers) {
     var pane = jT.$('.jtox-controls', kit.rootElement)[0];
     if (kit.settings.showControls) {
@@ -2750,7 +2803,7 @@ cls.prototype.init = function () {
       var feat = jT.$.extend({}, features[fId]);
       feat.value = entry.values[fId];
       if (!!feat.title) {
-        if (ccLib.fireCallback(callback, null, feat, fId) !== false) {
+        if (ccLib.fireCallback(callback, null, feat, fId, data.length) !== false) {
           if (!feat.value)
             feat.value = '-';
           data.push(feat);
@@ -2971,7 +3024,7 @@ var jToxModel = (function () {
     sDom: "<Fif>rt",          // merged to dataTable's settings, when created
     loadOnInit: false,        // whether to make a (blank) request upon loading
     oLanguage: null,          // merged to dataTable's settings, when created
-    /* algorithmNeedle */
+    /* algorithmFilter */
     /* modelUri */
     configuration: {
       columns : {
@@ -3018,7 +3071,7 @@ var jToxModel = (function () {
     }
 
     // finally, wait a bit for everyone to get initialized and make a call, if asked to
-    if (self.settings.modelUri != null || self.settings.algorithmNeedle != null || self.settings.loadOnInit)
+    if (self.settings.modelUri != null || self.settings.algorithmFilter != null || self.settings.loadOnInit)
       self.query();
   };
 
@@ -3176,7 +3229,7 @@ var jToxModel = (function () {
 
   cls.prototype.query = function (uri) {
     if (this.settings.algorithms)
-      this.listAlgorithms(this.settings.algorithmNeedle = (uri || this.settings.algorithmNeedle));
+      this.listAlgorithms(this.settings.algorithmFilter = (uri || this.settings.algorithmFilter));
     else
       this.listModels(this.settings.modelUri = (uri || this.settings.modelUri));
   };
@@ -3285,7 +3338,7 @@ var jToxSubstance = (function () {
         html += '<br/>';
       var id = data[i].id;
       try {
-      if (id.indexOf("http")==0) id = "<a href='"+id+"' target=_blank class='qxternal'>"+id+"</a>";
+      if (id.startsWith("http")) id = "<a href='"+id+"' target=_blank class='qxternal'>"+id+"</a>";
       } catch (err) {}  
               
       html += data[i].type + '&nbsp;=&nbsp;' + id;

@@ -1,0 +1,267 @@
+html, body {
+  width: 100%;
+  height: 100%;  
+}
+
+body>div.jtox-toolkit {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+#sidebar {
+  position: fixed;
+	background-color: #fafafa;
+	border: 1px solid #ccc;
+  width: 40px;
+  top: 80px;
+  left: -25px;
+	bottom: 0px;
+	z-index: 100;
+	padding: 0px 5px 0px 8px;
+	border-radius: 7px;
+	box-shadow: 3px 3px 7px #999;
+}
+
+#sidebar .side-title {
+  min-width: 400px;
+  float: right;
+  transform-origin: 100% 100%;
+  -webkit-transform-origin: 100% 100%;
+  -moz-transform-origin: 100% 100%;
+  -o-transform-origin: 100% 100%;
+  -ms-transform-origin: 100% 100%;
+	transform: rotate(270deg);
+  -webkit-transform: rotate(270deg);
+  -moz-transform: rotate(270deg);   
+  -o-transform: rotate(270deg);  	
+  -ms-transform: rotate(270deg);  	
+}
+
+#sidebar .side-title>div {
+  display: inline-block;
+  width: 49%;
+  text-align: center;
+  border-radius: 7px;
+}
+
+.ketcher {
+  margin-left: 45px;
+}
+
+#sidebar .side-title>div:hover,
+#sidebar .side-title>div.pressed {
+  background: #e6e6e6;
+}
+
+#tt-bigpane {
+  position: relative;
+  width: 100%;
+  margin: 0px;
+  box-sizing: border-box;
+  padding-left: 45px;
+  padding-right: 5px;
+  padding-top: 20px;
+  overflow: scroll;
+}
+
+#tt-bigpane>div {
+  height: 100%;
+}
+
+.counter-field {
+  font-size: 110%;
+  margin-bottom: 5px;
+}
+
+#tt-models-panel {
+  width: 59%;
+  height: 100%;
+  display: inline-block;
+  margin: 0px;
+  vertical-align: top;
+  position: relative;
+}
+
+#tt-models-panel .selections {
+  float: right;
+  vertical-align: top;
+  font-size: 90%;
+}
+
+#tt-models-panel .jtox-toolkit {
+  overflow: scroll;
+}
+
+#tt-models-panel .content .tt-explanation {
+  margin: 5px;
+  padding: 5px;
+  background: #fefefe;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+}
+
+#tt-models-panel span.answer {
+  font-weight: bold;
+}
+
+#tt-models-panel span.answer.Yes {
+  color: #7d2020;
+}
+
+#tt-models-panel span.answer.No {
+ color: #0c7908;
+}
+
+div.tt-algorithm div.jtox-inline.command-buttons {
+  margin-right: 20px;
+  vertical-align: top;
+  position: absolute;
+  right: 10px;  
+}
+
+div.tt-algorithm div.tt-classification {
+  margin-left: 5px;
+  margin-top: 5px;
+  text-align: center;
+}
+
+#tt-browser-panel {
+  position: relative;
+  width: 40%;
+  height: 100%;
+  display: inline-block;
+  margin: 0px;
+  vertical-align: top;
+  overflow: hidden;
+}
+
+#tt-diagram {
+  text-align: center;
+  overflow: hidden;
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+}
+
+#tt-diagram img {
+  min-height: 250px;
+  min-width: 250px;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+}
+
+#tt-browser-panel .tt-controls {
+  vertical-align: bottom;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+
+#tt-features {
+  position: relative;
+}
+
+#tt-features .list {
+  overflow: scroll;
+  box-sizing: border-box;
+  font-size: 90%;
+  padding: 0px 5px 0px 5px;
+}
+
+#tt-features .tt-feature {
+  width: 100%;
+  white-space: nowrap;
+}
+
+#tt-features .tt-feature.separator {
+  width: 100%;
+  border-bottom: 1px dashed #999;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+.tt-name {
+  display: inline-block;
+  width: 40%;
+  box-sizing: border-box;
+  padding: 2px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: auto;
+}
+
+.tt-value {
+  padding: 2px 0px 2px 5px;
+  border-left: 1px solid #999;
+  white-space: nowrap;
+  display: inline-block;
+  overflow: visible;
+  position: relative;
+}
+
+#tt-table {
+  font-size: 90%;
+}
+
+#tt-table table td.calculated button,
+#tt-table table td.calculated .tt-class .ui-icon {
+  display: none;  
+}
+
+.toxtree-models .class-result {
+	width: 100%;
+	margin-bottom: 10px;
+	display:none;
+	vertical-align: top;
+}
+
+.toxtree-models .predicted .class-result {
+	display: inherit;
+}
+
+div.tt-class  {
+	display: inline-block;
+	text-align: center;
+	border: solid 1px #333;
+	border-radius: 5px;
+	opacity: 0.6;
+	margin-top: 1px;
+	padding: 0px 5px 0px 5px;
+	width: 95%;
+	color: #000;
+	font-size: 90%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+div.tt-class.active {
+	opacity: 1.0;
+	font-weight: bold;
+}
+
+div.tt-class span.ui-icon {
+  display: none;
+  float: right;
+}
+
+div.tt-class.active span.ui-icon {
+  display: inline-block;
+}
+
+div.tt-class.toxic {
+	background-color: #e24b4b;
+}
+
+div.tt-class.nontoxic {
+	background-color:#49cb5b;
+}
+
+div.tt-class.inconclusive {
+	background-color: #d0e81a;
+}
+
+div.tt-class.unknown {
+	background-color: #aaaaaa;
+}
