@@ -37,4 +37,8 @@ public class SimilarityMatrixDouble extends SimilarityMatrix<double[]> {
 	protected L parseLineSparse(String line, long record) throws Exception {
 		throw new Exception("Sparse format not supported");
 	}
+	@Override
+	public String toString() {
+		return "Euclidean";
+	}
 }

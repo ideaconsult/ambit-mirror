@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.tdunning.math.stats.TDigest;
+
 import ambit2.similarity.measure.IDistanceFunction;
 
 public abstract class SimilarityMatrix<T> {
@@ -54,7 +56,7 @@ public abstract class SimilarityMatrix<T> {
 
 	protected abstract L parseLineDense(String line, long record) throws Exception;
 
-	public long[] createMatrix(String path, boolean dense, float threshold) throws Exception {
+	public TDigest createMatrix(String path, boolean dense, float threshold) throws Exception {
 		return createMatrix(path, dense, threshold, 0, -1);
 	}
 
@@ -62,7 +64,7 @@ public abstract class SimilarityMatrix<T> {
 		return "%s\t%s\t%4.2f\n";
 	}
 
-	public long[] createMatrix(String path, boolean dense, float threshold, int page, int pagesize) throws Exception {
+	public TDigest createMatrix(String path, boolean dense, float threshold, int page, int pagesize) throws Exception {
 		if (distance == null)
 			throw new Exception("Distance not defined");
 		final int startRecord = pagesize > 0 ? (page * pagesize) : 0;
@@ -84,9 +86,7 @@ public abstract class SimilarityMatrix<T> {
 			path = folder.getParent();
 			folder = folder.getParentFile();
 		}
-		double max = Double.NEGATIVE_INFINITY;
-		double tt[] = new double[] { 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, Double.POSITIVE_INFINITY };
-		long histogram[] = new long[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		final TDigest tdigest = TDigest.createDigest(1000);
 		for (File file : files) {
 			if (!file.getPath().endsWith(".csv") && !file.getPath().endsWith(".txt")
 					&& !file.getPath().endsWith(".tsv")) {
@@ -119,10 +119,9 @@ public abstract class SimilarityMatrix<T> {
 				maxRecord = b.size();
 				logger.info(String.format("End record %d set to number of records %d", maxRecord, b.size()));
 			}
-
-			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(String.format("%s/%s_%s_%d_%d.matrix",
-					path, file.getName(), threshold, (startRecord + 1), maxRecord))));
-			try {
+			try (BufferedWriter writer = new BufferedWriter(
+					new FileWriter(new File(String.format("%s/%s_%s_%d_%d_%s.matrix", path, file.getName(), threshold,
+							(startRecord + 1), maxRecord, toString()))))) {
 
 				for (int i = startRecord; i < maxRecord; i++) {
 					String id1 = b.get(i).getId();
@@ -130,45 +129,82 @@ public abstract class SimilarityMatrix<T> {
 					for (int j = i + 1; j < b.size(); j++) {
 						L item2 = b.get(j);
 						float t = distance.getDistance(bs1, item2.getValue());
-						if (t > max)
-							max = t;
-						for (int k = 0; k < tt.length; k++)
-							if (t <= tt[k]) {
-								histogram[k]++;
-								break;
-							}
+						tdigest.add(t);
+
 						if (accept(t, threshold)) {
 							// if (t >= threshold) {
 							writer.write(String.format(getSimMatrixFormat(), id1, item2.getId(), t));
 						}
 					}
-					if ((i % 5000) == 0) {
-						logger.log(Level.INFO,
-								String.format("%d\t%s msec\tHistogram: %s", i,
-										(System.currentTimeMillis() - now) / (i + 1 - startRecord),
-										histogram2string(histogram, tt)));
+					if ((i % 10000) == 0) {
+						logger.log(Level.INFO, String.format("%d\t%s msec\tHistogram: %s", i,
+								(System.currentTimeMillis() - now) / (i + 1 - startRecord), histogram2string(tdigest)));
 					}
 					writer.flush();
 				}
 			} finally {
-				writer.close();
 				logger.info(String.format(
-						"Similarity matrix threshold %s %f for file %s generated in %s msec.\t%s\nmax=%e\tHistogram: %s",
-						accept(threshold+1,threshold)?">=":"<=",threshold, file.getName(), System.currentTimeMillis() - now, getDistance().toString(),max,
-						histogram2string(histogram, tt)));
+						"Similarity matrix threshold %s %f for file %s generated in %s msec.\t%s\nQuantiles: %s",
+						accept(threshold + 1, threshold) ? ">=" : "<=", threshold, file.getName(),
+						System.currentTimeMillis() - now, getDistance().toString(), histogram2string(tdigest)));
+			}
+
+			try (BufferedWriter writer = new BufferedWriter(
+					new FileWriter(new File(String.format("%s/%s_%s_%d_%d_%s.quantiles", path, file.getName(),
+							threshold, (startRecord + 1), maxRecord, toString()))))) {
+				writer.write(histogram2string(tdigest, 100, false, false));
+			}
+
+			try (BufferedWriter writer = new BufferedWriter(
+					new FileWriter(new File(String.format("%s/%s_%s_%d_%d_%s.histogram", path, file.getName(),
+							threshold, (startRecord + 1), maxRecord, toString()))))) {
+				writer.write(histogram2string(tdigest, 20, false, true));
 			}
 		}
 		logger.info(String.format("Number of fingerprints %s", bitmap.size()));
-		return histogram;
+
+		return tdigest;
 	}
 
 	protected abstract boolean accept(float t, float threshold);
 
-	public static String histogram2string(long histogram[], double tt[]) {
+	public static String histogram2string(TDigest tdigest) {
+		return histogram2string(tdigest, 2, false, false);
+	}
+
+	/**
+	 * 
+	 * @param tdigest
+	 * @param n
+	 * @param bounds
+	 *            print bounds
+	 * @param histogram
+	 *            true ; quantiles : false
+	 * @return
+	 */
+	public static String histogram2string(TDigest tdigest, int n, boolean bounds, boolean histogram) {
 		StringBuilder bb = new StringBuilder();
-		for (int i = 0; i < histogram.length - 1; i++)
-			bb.append(String.format("%3.1f:%s\t", i * 0.1, histogram[i]));
-		bb.append(String.format(">1:%s\t", histogram[histogram.length - 1]));
+		if (bounds)
+			bb.append(String.format("\n[Min,Max]:\t[%e , %e]\n", tdigest.getMin(), tdigest.getMax()));
+
+		if (histogram) {
+			bb.append("x\tfraction\n");
+			double step = (tdigest.getMax() - tdigest.getMin()) / n;
+			for (int i = 1; i <= n; i++) {
+				double x1 = tdigest.getMin() + (i - 1) * step;
+				double x2 = tdigest.getMin() + i * step;
+				bb.append(String.format("%e\t%e\n", x2, tdigest.cdf(x2) - tdigest.cdf(x1)));
+			}
+		} else {
+			bb.append("#\tquantile\tcdf\n");
+
+			for (int i = 0; i <= n; i++) {
+				double q = (double) i / (double) n;
+				double q2 = tdigest.quantile(q);
+				bb.append(String.format("%d.\t%e\t%e\n", i + 1, q, q2));
+
+			}
+		}
 
 		return bb.toString();
 	}

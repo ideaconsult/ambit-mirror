@@ -56,4 +56,8 @@ public class SimilarityMatrixBitset extends SimilarityMatrix<BitSet> {
 		return l;
 	}
 
+	@Override
+	public String toString() {
+		return "Tanimoto";
+	}
 }
