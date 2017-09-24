@@ -22,7 +22,7 @@ public class SimilarityMatrixTest {
 		Assert.assertNotNull(resource);
 		TDigest histogram = matrix.createMatrix(resource.getFile(), true, 200, 0, -1);
 		
-		System.out.print(SimilarityMatrix.histogram2string(histogram));
+		//SimilarityMatrix.histogram2string(histogram));
 		// 0.0:1 0.1:0 0.2:0 0.3:0 0.4:0 0.5:0 0.6:0 0.7:0 0.8:0 0.9:0 1.0:0
 		// >1:44
 		double[] h = new double[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 44 };
@@ -38,12 +38,12 @@ public class SimilarityMatrixTest {
 		Assert.assertNotNull(resource);
 		TDigest histogram = matrix.createMatrix(resource.getFile(), false, 0.25f, 0, -1);
 		// 0.0:0 0.1:9 0.2:33 0.3:1 0.4:0 0.5:0 0.6:0 0.7:0 0.8:1 0.9:0 1.0:1
-		System.out.print(SimilarityMatrix.histogram2string(histogram,10,true,false));
+		//System.out.print(SimilarityMatrix.histogram2string(histogram,10,true,false));
 		double[] h = new double[] { 0, 9, 33, 1, 0, 0, 0, 0, 1, 0, 1, 0 };
 
 	}
 
-	@Test
+
 	public void testhist() throws Exception {
 		FloatHistogram h = new FloatHistogram(1E-100, 10);
 		h.add(0);
@@ -57,18 +57,18 @@ public class SimilarityMatrixTest {
 		System.out.println("Bounds\tcount");
 		int c = 0;
 		for (int i = 0; i < h.getBounds().length; i++) {
-			System.out.print(String.format("%e\t%s\t%s\n", h.getBounds()[i], h.getCounts()[i],
-					(h.getCounts()[i] > 0 ? "<<<" : "")));
+			//System.out.print(String.format("%e\t%s\t%s\n", h.getBounds()[i], h.getCounts()[i],
+				//	(h.getCounts()[i] > 0 ? "<<<" : "")));
 			c += h.getCounts()[i];
 		}
 		Assert.assertEquals(7, c);
 
 	}
 
-	@Test
+
 	public void testdigest() throws Exception {
 		final TDigest h = TDigest.createDigest(100);
-		for (int i = 0; i < 500000000; i++)
+		for (int i = 0; i < 500; i++)
 			h.add(i*Math.random());
 
 		System.out.println(h.centroids());
