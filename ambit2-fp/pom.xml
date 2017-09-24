@@ -26,6 +26,11 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.tdunning</groupId>
+			<artifactId>t-digest</artifactId>
+			<version>3.2</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<pluginManagement>
