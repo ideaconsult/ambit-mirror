@@ -6,7 +6,7 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.6.min.js'></script>
-<script type='text/javascript' src='${ambit_root}/scripts/es6-shim.min.js"></script>
+<script type='text/javascript' src='${ambit_root}/scripts/es6-shim.min.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
 <script type='text/javascript' src='${ambit_root}/jquery/purl.js'></script>
 
