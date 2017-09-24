@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -87,7 +88,10 @@ public abstract class SimilarityMatrix<T> {
 			folder = folder.getParentFile();
 		}
 		final TDigest tdigest = TDigest.createDigest(1000);
+
 		for (File file : files) {
+			String statsfile = String.format("%s/%s_%s_%d_%d_%s", path, file.getName(), threshold, (startRecord + 1),
+					maxRecord, toString());
 			if (!file.getPath().endsWith(".csv") && !file.getPath().endsWith(".txt")
 					&& !file.getPath().endsWith(".tsv")) {
 				logger.log(Level.WARNING, String.format("%s format not supported.", file.getName()));
@@ -136,9 +140,12 @@ public abstract class SimilarityMatrix<T> {
 							writer.write(String.format(getSimMatrixFormat(), id1, item2.getId(), t));
 						}
 					}
-					if ((i % 10000) == 0) {
+					if ((i % 1000) == 0) {
 						logger.log(Level.INFO, String.format("%d\t%s msec\tHistogram: %s", i,
 								(System.currentTimeMillis() - now) / (i + 1 - startRecord), histogram2string(tdigest)));
+					}
+					if ((i % 10000) == 0) {
+						histogram2file(tdigest, statsfile + ".quantiles", statsfile + ".histogram");
 					}
 					writer.flush();
 				}
@@ -149,27 +156,32 @@ public abstract class SimilarityMatrix<T> {
 						System.currentTimeMillis() - now, getDistance().toString(), histogram2string(tdigest)));
 			}
 
-			try (BufferedWriter writer = new BufferedWriter(
-					new FileWriter(new File(String.format("%s/%s_%s_%d_%d_%s.quantiles", path, file.getName(),
-							threshold, (startRecord + 1), maxRecord, toString()))))) {
-				writer.write(histogram2string(tdigest, 100, false, false));
-			}
-
-			try (BufferedWriter writer = new BufferedWriter(
-					new FileWriter(new File(String.format("%s/%s_%s_%d_%d_%s.histogram", path, file.getName(),
-							threshold, (startRecord + 1), maxRecord, toString()))))) {
-				writer.write(histogram2string(tdigest, 20, false, true));
-			}
+			histogram2file(tdigest, statsfile + ".quantiles", statsfile + ".histogram");
 		}
-		logger.info(String.format("Number of fingerprints %s", bitmap.size()));
+		if (bitmap.size() > 0)
+			logger.info(String.format("Number of fingerprints %s", bitmap.size()));
 
 		return tdigest;
+	}
+
+	protected void histogram2file(TDigest tdigest, String file_quantiles, String file_histogram) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(file_quantiles)))) {
+			writer.write(histogram2string(tdigest, 100, false, false));
+		} catch (IOException x) {
+			logger.warning(x.getMessage());
+		}
+
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(file_histogram)))) {
+			writer.write(histogram2string(tdigest, 20, false, true));
+		} catch (IOException x) {
+			logger.warning(x.getMessage());
+		}
 	}
 
 	protected abstract boolean accept(float t, float threshold);
 
 	public static String histogram2string(TDigest tdigest) {
-		return histogram2string(tdigest, 2, false, false);
+		return histogram2string(tdigest, 4, false, false);
 	}
 
 	/**
