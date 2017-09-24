@@ -49,10 +49,10 @@
         </div>
         <div id="tt-models-panel">
           <div class="cc-fixed">
-            <div class="title jtox-inline"><span class="counter-field">Toxtree modules (0/0)</span></div>
+            <div class="title jtox-inline"><span class="counter-field">VEGA models (0/0)</span></div>
             <div class="jtox-inline selections"><a href="#" class="select-unselect" title="(Un)select all algorithms" data-other="unselect">select</a>&nbsp;<a href="#" class="expand-collapse" title="Expand/collapse all algorithm panes" data-other="collapse">expand</a>&nbsp;<a href="#" class="run-selected" title="Run predictions for all selected algorithms">run</a>&nbsp;<a href="#" class="show-hide" data-other="show" title="Hide/show unselected algorithms">hide</a></div>
           </div>
-          <div class="jtox-toolkit jtox-widget cc-flex size-full" data-kit="model" data-algorithms="true" data-no-interface="true" data-on-loaded="onAlgoLoaded" data-algorithm-filter="ToxTree"></div>
+          <div class="jtox-toolkit jtox-widget cc-flex size-full" data-kit="model" data-algorithms="true" data-no-interface="true" data-on-loaded="onAlgoLoaded" data-algorithm-filter="VEGA" data-multi-models="true"></div>
         </div>
         <div id="tt-table" class="jtox-toolkit jtox-panel" data-kit="compound" data-configuration="config_model" data-manual-init="true" data-pre-details="onTableDetails" data-show-tabs="false" data-on-loaded="onDataLoaded" data-selection-handler="checked"></div>
       </div>

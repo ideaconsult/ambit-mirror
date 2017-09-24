@@ -108,7 +108,7 @@ public class UIResource extends FreeMarkerResource {
 				return true;
 			};
 		},
-		toxtree, taskpage {
+		toxtree, taskpage, vega {
 			@Override
 			public void setCacheHeaders(Response response) {
 				response.getCacheDirectives().add(CacheDirective.noCache());
