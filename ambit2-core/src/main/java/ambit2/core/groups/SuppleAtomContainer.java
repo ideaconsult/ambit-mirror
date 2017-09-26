@@ -76,6 +76,26 @@ public class SuppleAtomContainer extends ChemObject implements IAtomContainer, I
 		super();
 		init();
 	}
+	/** CDK 1.5.15
+	@Override
+	public int indexOf(IAtom arg0) {
+		return atoms.indexOf(arg0);
+	}
+	
+	@Override
+	public int indexOf(IBond arg0) {
+		return bonds.indexOf(arg0);
+	}
+	@Override
+	public int indexOf(ISingleElectron arg0) {
+		return lonePairs.indexOf(arg0);
+	}
+	@Override
+	public int indexOf(ILonePair arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	*/
 
 	protected void init() {
 		atoms = new FilteredList<IAtom>();
@@ -841,5 +861,5 @@ public class SuppleAtomContainer extends ChemObject implements IAtomContainer, I
 	public boolean isEmpty() {
 		return (atoms == null || atoms.size() == 0);
 	}
-
+	
 }

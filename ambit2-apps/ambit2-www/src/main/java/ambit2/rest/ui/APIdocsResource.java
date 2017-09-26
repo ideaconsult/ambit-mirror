@@ -84,7 +84,7 @@ public class APIdocsResource extends FreeMarkerResource {
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 		setFrameOptions("SAMEORIGIN");
-		OpenSSOCookie.setCookieSetting(this.getResponse().getCookieSettings(),getToken(),
+		OpenSSOCookie.setCookieSetting(this.getResponse().getCookieSettings(),getToken()==null?null:getToken().toString(),
 						useSecureCookie(getRequest()));
 		return getHTMLByTemplate(variant);
 	}

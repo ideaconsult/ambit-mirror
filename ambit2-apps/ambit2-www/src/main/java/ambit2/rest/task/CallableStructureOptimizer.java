@@ -3,6 +3,7 @@ package ambit2.rest.task;
 import net.idea.modbcum.i.processors.IProcessor;
 
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
@@ -15,8 +16,8 @@ public class CallableStructureOptimizer<USERID> extends
 		CallableModelPredictor<IStructureRecord, AbstractStructureProcessor, USERID> {
 
 	public CallableStructureOptimizer(Form form, Reference appReference, Context context,
-			AbstractStructureProcessor predictor, USERID token,String referer) {
-		super(form, appReference, context, predictor, token,referer);
+			AbstractStructureProcessor predictor, USERID token,String referer, ClientInfo clientinfo) {
+		super(form, appReference, context, predictor, token,referer,clientinfo);
 
 	}
 

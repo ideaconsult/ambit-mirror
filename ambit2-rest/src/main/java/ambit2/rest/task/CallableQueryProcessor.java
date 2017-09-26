@@ -9,10 +9,13 @@ import java.sql.Connection;
 import java.util.logging.Level;
 
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
+import org.restlet.data.Cookie;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
+import org.restlet.util.Series;
 
 import ambit2.db.DbReaderStructure;
 import ambit2.db.search.structure.AbstractStructureQuery;
@@ -34,17 +37,32 @@ public abstract class CallableQueryProcessor<Target, Result, USERID> extends Cal
 	// protected AmbitApplication application;
 	protected Context context;
 	protected String referer;
+	protected String agent;
 
-	public CallableQueryProcessor(Form form, Context context, USERID token, String referer) {
-		this(null, form, context, token, referer);
+	public CallableQueryProcessor(Form form, Context context, USERID token, String referer, ClientInfo clientinfo) {
+		this(null, form, context, token, referer,clientinfo);
 	}
 
 	public CallableQueryProcessor(Reference applicationRootReference, Form form, Context context, USERID token,
-			String referer) {
+			String referer,ClientInfo clientinfo) {
 		super(token);
 		processForm(applicationRootReference, form);
 		this.context = context;
 		this.referer = referer;
+		this.agent=clientinfo==null?null:clientinfo.getAgent();
+
+	}
+	
+	public String getCookies() {
+		if (getToken() instanceof Cookie) {
+			Cookie cookie = (Cookie) getToken();
+			return String.format("%s=%s", cookie.getName(),cookie.getValue());
+		}
+		return null;
+	}
+
+	public String getAgent() {
+		return agent;
 	}
 
 	protected void processForm(Reference applicationRootReference, Form form) {
@@ -151,10 +169,26 @@ public abstract class CallableQueryProcessor<Target, Result, USERID> extends Cal
 	protected abstract ProcessorsChain<Result, IBatchStatistics, IProcessor> createProcessors() throws Exception;
 
 	// protected abstract QueryURIReporter createURIReporter(Request request);
-
+	/*
+	 * public static Object getQueryObjectNoCookies(Reference reference,
+	 * Reference applicationRootReference, Context context, String referer)
+	 * throws Exception { return getQueryObject(reference,
+	 * applicationRootReference, context, null, null, referer); }
+	 */
 	public static Object getQueryObject(Reference reference, Reference applicationRootReference, Context context,
-			String referer) throws Exception {
-		return getQueryObject(reference, applicationRootReference, context, null, null, referer);
+			Series<Cookie> cookies, String agent, String referer) throws Exception {
+		StringBuilder cookiestring = null;
+		if (cookies != null)
+			for (Cookie cookie : cookies) {
+				if (cookiestring == null)
+					cookiestring = new StringBuilder();
+				else
+					cookiestring.append(";");
+				cookiestring.append(cookie.getName());
+				cookiestring.append("=");
+				cookiestring.append(cookie.getValue());
+			}
+		return getQueryObject(reference, applicationRootReference, context, cookiestring.toString(), agent, referer);
 	}
 
 	public static Object getQueryObject(Reference reference, Reference applicationRootReference, Context context,

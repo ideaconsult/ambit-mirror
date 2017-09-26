@@ -7,6 +7,7 @@ import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
@@ -23,16 +24,16 @@ public class CallableSimpleModelCreator<Result, USERID> extends
     protected Object mopac_commands;
 
     public CallableSimpleModelCreator(Form form, Context context, Algorithm algorithm, boolean hidden,
-	    ModelBuilder<Object, Algorithm, ModelQueryResults> builder, USERID token,String referer) {
-	super(form, context, algorithm, builder, token,referer);
+	    ModelBuilder<Object, Algorithm, ModelQueryResults> builder, USERID token,String referer, ClientInfo clientInfo) {
+	super(form, context, algorithm, builder, token,referer,clientInfo);
 
     }
 
     public CallableSimpleModelCreator(Form form, Reference applicationRootReference, Context context,
 	    Algorithm algorithm, ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
-	    AlgorithmURIReporter alg_reporter, boolean hidden, USERID token,String referer) {
+	    AlgorithmURIReporter alg_reporter, boolean hidden, USERID token,String referer, ClientInfo clientInfo) {
 	super(form, context, algorithm,
-		new SimpleModelBuilder(applicationRootReference, reporter, alg_reporter, hidden,referer), token,referer);
+		new SimpleModelBuilder(applicationRootReference, reporter, alg_reporter, hidden,referer), token,referer,clientInfo);
     }
 
     @Override

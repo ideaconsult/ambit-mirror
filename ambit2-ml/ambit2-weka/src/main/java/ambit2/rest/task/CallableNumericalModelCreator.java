@@ -6,16 +6,11 @@ import java.net.HttpURLConnection;
 import java.sql.Connection;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.p.batch.AbstractBatchProcessor;
-import net.idea.restnet.c.ChemicalMediaType;
-import net.idea.restnet.c.task.ClientResourceWrapper;
-
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
-import weka.core.Instances;
 import Jama.Matrix;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.ModelQueryResults;
@@ -25,23 +20,26 @@ import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.CoverageModelBuilder;
 import ambit2.rest.model.task.CallableModelCreator;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
+import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.c.task.ClientResourceWrapper;
+import weka.core.Instances;
 
-public class CallableNumericalModelCreator<USERID> extends
-		CallableModelCreator<Instances, Matrix, CoverageModelBuilder, USERID> {
+public class CallableNumericalModelCreator<USERID>
+		extends CallableModelCreator<Instances, Matrix, CoverageModelBuilder, USERID> {
 
-	public CallableNumericalModelCreator(Form form,
-			Reference applicationRootReference, Context context,
-			Algorithm algorithm,
-			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
-			AlgorithmURIReporter alg_reporter, USERID token, String referer) {
+	public CallableNumericalModelCreator(Form form, Reference applicationRootReference, Context context,
+			Algorithm algorithm, ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
+			AlgorithmURIReporter alg_reporter, USERID token, String referer, ClientInfo clientInfo) {
 
-		super(form, context, algorithm, new CoverageModelBuilder(
-				applicationRootReference, reporter, alg_reporter,
-				OpenTox.params.target.getValuesArray(form),
-				OpenTox.params.parameters.getValuesArray(form),
-				OpenTox.params.confidenceOf.getFirstValue(form) == null ? null
-						: OpenTox.params.confidenceOf.getFirstValue(form)
-								.toString(), referer), token, referer);
+		super(form, context, algorithm,
+				new CoverageModelBuilder(applicationRootReference, reporter, alg_reporter,
+						OpenTox.params.target.getValuesArray(form), OpenTox.params.parameters.getValuesArray(form),
+						OpenTox.params.confidenceOf.getFirstValue(form) == null ? null
+								: OpenTox.params.confidenceOf.getFirstValue(form).toString(),
+						referer),
+				token, referer, clientInfo);
 	}
 
 	@Override
@@ -52,8 +50,7 @@ public class CallableNumericalModelCreator<USERID> extends
 
 			try {
 				target = createTarget(sourceReference);
-				builder.setTrainingData((target instanceof Instances) ? (Instances) target
-						: null);
+				builder.setTrainingData((target instanceof Instances) ? (Instances) target : null);
 			} catch (Exception x) {
 				target = sourceReference;
 			}
@@ -75,8 +72,7 @@ public class CallableNumericalModelCreator<USERID> extends
 	}
 
 	@Override
-	protected AbstractBatchProcessor createBatch(Object target)
-			throws Exception {
+	protected AbstractBatchProcessor createBatch(Object target) throws Exception {
 		return null;
 	}
 
@@ -85,12 +81,10 @@ public class CallableNumericalModelCreator<USERID> extends
 		BufferedReader reader = null;
 		HttpURLConnection client = null;
 		try {
-			client = ClientResourceWrapper.getHttpURLConnection(reference
-					.toString(), "GET", ChemicalMediaType.WEKA_ARFF.toString(),
-					getClass().getName());
+			client = ClientResourceWrapper.getHttpURLConnection(reference.toString(), "GET",
+					ChemicalMediaType.WEKA_ARFF.toString(), getClass().getName());
 			HttpURLConnection.setFollowRedirects(true);
-			reader = new BufferedReader(new InputStreamReader(
-					client.getInputStream()));
+			reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			return new Instances(reader);
 		} catch (Exception x) {
 			x.printStackTrace();
@@ -116,8 +110,7 @@ public class CallableNumericalModelCreator<USERID> extends
 	@Override
 	protected ModelQueryResults createModel() throws Exception {
 		ModelQueryResults model = super.createModel();
-		if ((model != null) && (model.getTrainingInstances() == null)
-				&& (sourceReference != null))
+		if ((model != null) && (model.getTrainingInstances() == null) && (sourceReference != null))
 			model.setTrainingInstances(sourceReference.toString());
 		return model;
 	}

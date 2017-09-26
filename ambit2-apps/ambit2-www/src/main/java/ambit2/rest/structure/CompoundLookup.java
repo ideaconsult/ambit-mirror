@@ -212,7 +212,9 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		if (url == null)
 		    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "No search parameter!");
 		Object q = CallableQueryProcessor.getQueryObject(new Reference(url), getRequest().getRootRef(),
-			getApplication().getContext(),getRequest().getResourceRef().toString());
+			getApplication().getContext(), 
+			getCookies(),getAgent(),
+			getRequest().getResourceRef().toString());
 		if (q == null) {
 		    throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,
 			    "TODO: retrieve compounds from foreign urls");

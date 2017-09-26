@@ -10,6 +10,7 @@ import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
 
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -53,9 +54,9 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 			Reference applicationRootReference, 
 			Context context,
 			IStoredQuery storedQuery,
-			USERID token,String referer
+			USERID token,String referer, ClientInfo clientInfo
 			) throws ResourceException {
-		super(form, context,token,referer);
+		super(form, context,token,referer,clientInfo);
 		this.applicationRootReference = applicationRootReference;
 		datasets = form.getValuesArray(OpenTox.params.dataset_uri.toString());
 		features = form.getValuesArray(OpenTox.params.feature_uris.toString());
@@ -111,7 +112,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 		final String msg = "Error when trying to copy the dataset at %s. Is this OpenTox dataset URI?";
 		Object query = null;
 		try {
-			query = getQueryObject(uri, applicationRootReference,context,referer);
+			query = getQueryObject(uri, applicationRootReference,context,getCookies(),getAgent(),referer);
 		} catch (ResourceException x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format(msg,uri),x);
 		} catch (Exception x) {
@@ -188,7 +189,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
-		return getQueryObject(reference, applicationRootReference,context,referer);
+		return getQueryObject(reference, applicationRootReference,context,getCookies(),getAgent(),referer);
 	}
 
 }

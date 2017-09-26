@@ -1,11 +1,5 @@
 package ambit2.rest;
 
-import net.idea.restnet.c.BotsGuard;
-import net.idea.restnet.c.task.ClientResourceWrapper;
-import net.idea.restnet.i.aa.IAuthToken;
-import net.idea.restnet.i.aa.OpenSSOCookie;
-import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
-
 import org.owasp.encoder.Encode;
 import org.restlet.Request;
 import org.restlet.data.CacheDirective;
@@ -19,8 +13,13 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-public abstract class ProtectedResource extends ServerResource implements
-		IAuthToken {
+import net.idea.restnet.c.BotsGuard;
+import net.idea.restnet.c.task.ClientResourceWrapper;
+import net.idea.restnet.i.aa.IAuthToken;
+import net.idea.restnet.i.aa.OpenSSOCookie;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+
+public abstract class ProtectedResource extends ServerResource implements IAuthToken {
 
 	@Override
 	protected void doInit() throws ResourceException {
@@ -41,20 +40,23 @@ public abstract class ProtectedResource extends ServerResource implements
 		super.doRelease();
 	}
 
-	protected String getTokenFromCookies(Request request) {
+	protected Object getTokenFromCookies(Request request) {
 		for (Cookie cookie : request.getCookies()) {
 			if (OpenSSOCookie.CookieName.equals(cookie.getName()))
 				return cookie.getValue();
+			else if ("ambitdb".equals(cookie.getName()))
+				return cookie;
 		}
 		return null;
 	}
 
 	@Override
-	public String getToken() {
-		String token = getHeaderValue("subjectid");
+	public Object getToken() {
+		Object token = getHeaderValue("subjectid");
 
 		if (token == null)
 			token = getTokenFromCookies(getRequest());
+
 		return token == null ? null : token;
 
 	}
@@ -69,8 +71,7 @@ public abstract class ProtectedResource extends ServerResource implements
 
 	private String getHeaderValue(String tag) {
 		try {
-			Form headers = (Form) getRequest().getAttributes().get(
-					"org.restlet.http.headers");
+			Form headers = (Form) getRequest().getAttributes().get("org.restlet.http.headers");
 			if (headers == null)
 				return null;
 			return headers.getFirstValue(tag);
@@ -92,18 +93,16 @@ public abstract class ProtectedResource extends ServerResource implements
 	protected void setTokenCookies(Variant variant, boolean secure) {
 
 		if (((IFreeMarkerApplication) getApplication()).isSendTokenAsCookie()) {
-			OpenSSOCookie.setCookieSetting(this.getResponse().getCookieSettings(),getToken(),
-							useSecureCookie(getRequest()));
+			OpenSSOCookie.setCookieSetting(this.getResponse().getCookieSettings(),
+					getToken() == null ? null : getToken().toString(), useSecureCookie(getRequest()));
 		}
 	}
 
 	protected void setFrameOptions(String value) {
-		Form headers = (Form) getResponse().getAttributes().get(
-				"org.restlet.http.headers");
+		Form headers = (Form) getResponse().getAttributes().get("org.restlet.http.headers");
 		if (headers == null) {
 			headers = new Form();
-			getResponse().getAttributes().put("org.restlet.http.headers",
-					headers);
+			getResponse().getAttributes().put("org.restlet.http.headers", headers);
 		}
 		headers.removeAll("X-Frame-Options");
 		headers.add("X-Frame-Options", value);
@@ -129,5 +128,9 @@ public abstract class ProtectedResource extends ServerResource implements
 
 	protected Reference cleanedResourceRef(Reference ref) {
 		return new Reference(Encode.forJavaScriptSource(ref.toString()));
+	}
+
+	protected String getAgent() {
+		return getRequest().getClientInfo() == null ? null : getRequest().getClientInfo().getAgent();
 	}
 }

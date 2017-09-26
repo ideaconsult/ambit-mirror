@@ -7,6 +7,7 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -48,14 +49,14 @@ public class CallableWekaModelCreator<USERID> extends CallableModelCreator<Insta
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 			AlgorithmURIReporter alg_reporter,
-			USERID token,String referer) {
+			USERID token,String referer,ClientInfo clientinfo) {
 		super(form, context,algorithm,
 				new FilteredWekaModelBuilder(applicationRootReference,
 						reporter,
 						alg_reporter,
 						OpenTox.params.target.getValuesArray(form),
 						OpenTox.params.parameters.getValuesArray(form),referer),
-			token,referer);
+			token,referer,clientinfo);
 	}
 
 	@Override

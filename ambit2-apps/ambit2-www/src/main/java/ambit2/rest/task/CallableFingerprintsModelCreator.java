@@ -12,6 +12,7 @@ import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
@@ -34,7 +35,7 @@ public class CallableFingerprintsModelCreator<USERID> extends CallableStructures
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 			AlgorithmURIReporter alg_reporter,
-			USERID token,String referer) {
+			USERID token,String referer, ClientInfo clientInfo) {
 
 		super(form,
 				applicationRootReference,
@@ -48,7 +49,7 @@ public class CallableFingerprintsModelCreator<USERID> extends CallableStructures
 						OpenTox.params.parameters.getValuesArray(form),
 						OpenTox.params.confidenceOf.getFirstValue(form)==null?null:OpenTox.params.confidenceOf.getFirstValue(form).toString(),referer
 				),
-				token,referer);
+				token,referer,clientInfo);
 	
 	}	
 

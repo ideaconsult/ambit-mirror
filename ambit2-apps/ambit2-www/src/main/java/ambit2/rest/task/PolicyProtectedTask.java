@@ -12,7 +12,7 @@ import org.restlet.data.Reference;
 
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 
-public class PolicyProtectedTask extends Task<ITaskResult, String> {
+public class PolicyProtectedTask extends Task<ITaskResult, Object> {
 	/**
 	 * 
 	 */
@@ -24,7 +24,7 @@ public class PolicyProtectedTask extends Task<ITaskResult, String> {
 	 * @param autocreatePolicy  Used to avoid creating policy for the policy itself by 
 	 * POST /admin/policy
 	 */
-	public PolicyProtectedTask(String user, boolean autocreatePolicy) {
+	public PolicyProtectedTask(Object user, boolean autocreatePolicy) {
 		super(user);	
 		this.autocreatePolicy = autocreatePolicy;
 	}
@@ -55,7 +55,7 @@ public class PolicyProtectedTask extends Task<ITaskResult, String> {
 				
 			}  else { //policy for the user only
 				OpenSSOToken ssoToken = new OpenSSOToken(config.getOpenSSOService());
-				ssoToken.setToken(getUserid());
+				ssoToken.setToken(getUserid()==null?null:getUserid().toString());
 				Hashtable<String, String> results = new Hashtable<String, String>();
 				ssoToken.getAttributes(new String[] {"uid"}, results);
 				OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());

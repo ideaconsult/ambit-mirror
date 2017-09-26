@@ -4,12 +4,9 @@ import java.sql.Connection;
 import java.util.Hashtable;
 import java.util.Iterator;
 
-import net.idea.modbcum.i.batch.IBatchStatistics;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.processors.ProcessorsChain;
-
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 
 import ambit2.base.data.Property;
@@ -26,13 +23,19 @@ import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.model.builder.ModelBuilder;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.TaskResult;
+import net.idea.modbcum.i.batch.IBatchStatistics;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
 
-public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilder<DATA,Algorithm,ModelQueryResults>,USERID>  extends	CallableQueryProcessor<Object, Item,USERID> {
+public abstract class CallableModelCreator<DATA, Item, Builder extends ModelBuilder<DATA, Algorithm, ModelQueryResults>, USERID>
+		extends CallableQueryProcessor<Object, Item, USERID> {
 	protected Algorithm algorithm;
-	protected Builder builder; 
+	protected Builder builder;
+
 	public Builder getBuilder() {
 		return builder;
 	}
+
 	public void setBuilder(Builder builder) {
 		this.builder = builder;
 	}
@@ -40,61 +43,62 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 	protected ModelQueryResults model;
 	protected boolean newModel = true;
 	protected CreatePropertyAnnotation annotationsWriter;
-	
+
 	public ModelQueryResults getModel() {
 		return model;
 	}
-	public CallableModelCreator(
-			Form form,
-			Context context,
-			Algorithm algorithm,
-			Builder builder,
-			USERID token,String referer) {
-		super(form, context,token,referer);
+
+	public CallableModelCreator(Form form, Context context, Algorithm algorithm, Builder builder, USERID token,
+			String referer, ClientInfo clientinfo) {
+		super(form, context, token, referer, clientinfo);
 		this.algorithm = algorithm;
 		setBuilder(builder);
-		
+
 	}
-	
+
 	protected void writeAnnotations(Template properties, UpdateExecutor exec) throws Exception {
-		
+
 		Iterator<Property> i = properties.getProperties(true);
 		while (i.hasNext()) {
 			Property property = i.next();
-	    	if (property.getAnnotations()!=null) try {
-	    		if (annotationsWriter==null) annotationsWriter=new CreatePropertyAnnotation();
-	    		annotationsWriter.setGroup(property);
+			if (property.getAnnotations() != null)
+				try {
+					if (annotationsWriter == null)
+						annotationsWriter = new CreatePropertyAnnotation();
+					annotationsWriter.setGroup(property);
 
-	    		for (PropertyAnnotation a:property.getAnnotations()) {
-	    			if (a.getObject() instanceof Property) {
-	    				//COULD be done via sql generating the URI, given existing property name and reference
-	    				Property linkedProperty = (Property) a.getObject();
-	    				if (linkedProperty.getId()<=0) {
-	    			    	//propertyWriter.setObject(linkedProperty);
-	    			    	//exec.process(propertyWriter);
-	    					//TODO
-	    				}
-	    				if (linkedProperty.getId()>0) {
-	    					PropertyAnnotation<String> pa = new PropertyAnnotation<String>();
-	    					pa.setPredicate(a.getPredicate());
-	    					pa.setType(a.getType());
-	    					pa.setIdproperty(property.getId());
-	    					pa.setObject(String.format("/feature/%d",linkedProperty.getId()));
-			    			annotationsWriter.setObject(pa);
-			    			exec.process(annotationsWriter);
-	    				}
-		    		} else {
-		    			annotationsWriter.setObject(a);
-		    			exec.process(annotationsWriter);
-	    			}
-		    	}
+					for (PropertyAnnotation a : property.getAnnotations()) {
+						if (a.getObject() instanceof Property) {
+							// COULD be done via sql generating the URI, given
+							// existing property name and reference
+							Property linkedProperty = (Property) a.getObject();
+							if (linkedProperty.getId() <= 0) {
+								// propertyWriter.setObject(linkedProperty);
+								// exec.process(propertyWriter);
+								// TODO
+							}
+							if (linkedProperty.getId() > 0) {
+								PropertyAnnotation<String> pa = new PropertyAnnotation<String>();
+								pa.setPredicate(a.getPredicate());
+								pa.setType(a.getType());
+								pa.setIdproperty(property.getId());
+								pa.setObject(String.format("/feature/%d", linkedProperty.getId()));
+								annotationsWriter.setObject(pa);
+								exec.process(annotationsWriter);
+							}
+						} else {
+							annotationsWriter.setObject(a);
+							exec.process(annotationsWriter);
+						}
+					}
 
-	    	} catch (Exception x) {
-	    		//do smth
-		    		throw x;
-		    }
+				} catch (Exception x) {
+					// do smth
+					throw x;
+				}
 		}
 	}
+
 	/**
 	 * Writes the model into database and returns a reference
 	 */
@@ -103,16 +107,16 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 		UpdateExecutor x = new UpdateExecutor();
 		try {
 			model = createModel();
-			
+
 			CreateModel update = new CreateModel(model);
-			
+
 			x.setConnection(connection);
 			Integer i = (Integer) x.process(update);
-			
+
 			writeAnnotations(model.getPredicted(), x);
-			
-			newModel = i>0;
-			if ((model.getId()==null) || (model.getId()<0)) {
+
+			newModel = i > 0;
+			if ((model.getId() == null) || (model.getId() < 0)) {
 				ReadModel q = new ReadModel();
 				q.setFieldname(model.getName());
 				QueryExecutor<ReadModel> exec = new QueryExecutor<ReadModel>();
@@ -128,41 +132,54 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
-					try {rs.close(); rs = null;} catch (Exception xx) { }
-					try {exec.closeResults(null); exec = null;} catch (Exception xx) { }
+					try {
+						rs.close();
+						rs = null;
+					} catch (Exception xx) {
+					}
+					try {
+						exec.closeResults(null);
+						exec = null;
+					} catch (Exception xx) {
+					}
 				}
-				
+
 			}
-			return new TaskResult(builder.getModelReporter().getURI(model),newModel);
+			return new TaskResult(builder.getModelReporter().getURI(model), newModel);
 		} catch (Exception e) {
 			Context.getCurrentLogger().severe(e.getMessage());
 			throw e;
 		} finally {
-			try {x.close();} catch (Exception xx){}
+			try {
+				x.close();
+			} catch (Exception xx) {
+			}
 		}
 	}
-	
+
 	protected String getUser() throws Exception {
-		if (getToken()==null) return "guest";
+		if (getToken() == null)
+			return "guest";
 		OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
-		ssoToken.setToken(getToken());
-		Hashtable<String,String> results = new Hashtable<String, String>();
-		ssoToken.getAttributes(new String[] {"uid"}, results);
+		ssoToken.setToken(getToken() == null ? null : getToken().toString());
+		Hashtable<String, String> results = new Hashtable<String, String>();
+		ssoToken.getAttributes(new String[] { "uid" }, results);
 		return results.get("uid");
 	}
+
 	protected ModelQueryResults createModel() throws Exception {
 		ModelQueryResults model = builder.process(algorithm);
-		if (model != null) try {
-			model.setCreator(getUser());
-		} catch (Exception x) {
-			model.setCreator(x.getMessage());
-		}
+		if (model != null)
+			try {
+				model.setCreator(getUser());
+			} catch (Exception x) {
+				model.setCreator(x.getMessage());
+			}
 		return model;
 	}
-	
+
 	@Override
-	protected ProcessorsChain<Item, IBatchStatistics, IProcessor> createProcessors()
-			throws Exception {
+	protected ProcessorsChain<Item, IBatchStatistics, IProcessor> createProcessors() throws Exception {
 		return null;
-	}	
+	}
 }

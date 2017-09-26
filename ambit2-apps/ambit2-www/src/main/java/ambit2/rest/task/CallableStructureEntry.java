@@ -3,13 +3,8 @@ package ambit2.rest.task;
 import java.sql.Connection;
 import java.util.List;
 
-import net.idea.modbcum.i.batch.IBatchStatistics;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.processors.ProcessorsChain;
-import net.idea.modbcum.p.batch.AbstractBatchProcessor;
-
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -28,6 +23,11 @@ import ambit2.db.processors.RepositoryWriter;
 import ambit2.rest.OpenTox;
 import ambit2.rest.structure.CompoundURIReporter;
 import ambit2.rest.task.dbpreprocessing.CallableDBProcessing;
+import net.idea.modbcum.i.batch.IBatchStatistics;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID> {
 	protected IStructureRecord record;
@@ -35,7 +35,7 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 	protected boolean propertyOnly = false;
 	private Template compoundURITemplate;
 	private Template conformerURITemplate;
-	
+
 	public boolean isPropertyOnly() {
 		return propertyOnly;
 	}
@@ -43,22 +43,21 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 	public void setPropertyOnly(boolean propertyOnly) {
 		this.propertyOnly = propertyOnly;
 	}
-	
-	public CallableStructureEntry(Form form,
-			Reference applicationRootReference,
-			IStructureRecord record,
-			 Context context,
-			Algorithm algorithm, USERID token,String referer) {
-		super(form, applicationRootReference, context, algorithm, token,referer);
+
+	public CallableStructureEntry(Form form, Reference applicationRootReference, IStructureRecord record,
+			Context context, Algorithm algorithm, USERID token, String referer, ClientInfo clientinfo) {
+		super(form, applicationRootReference, context, algorithm, token, referer,clientinfo);
 		cmpreporter = new CompoundURIReporter(applicationRootReference);
-		//overwrite the compound_uri parameter
-		if (record.getIdchemical()>0) {
+		// overwrite the compound_uri parameter
+		if (record.getIdchemical() > 0) {
 			this.record.setIdchemical(record.getIdchemical());
 			this.record.setIdstructure(record.getIdstructure());
 		}
 	}
+
 	private static String customidname = "customidname";
 	private static String customid = "customid";
+
 	@Override
 	protected void processForm(Reference applicationRootReference, Form form) {
 		compoundURITemplate = OpenTox.URI.compound.getTemplate(applicationRootReference);
@@ -66,104 +65,116 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 		record = new StructureRecord();
 		record.setFormat(null);
 		record.setContent(null);
-		String[] tags = new String[] {
-				Property.opentox_CAS,Property.opentox_EC,
-				Property.opentox_Name,Property.opentox_TradeName,Property.opentox_IupacName,
-				Property.opentox_SMILES,
-				Property.opentox_InChI,Property.opentox_InChIKey,
-				Property.opentox_InChI_std,Property.opentox_InChIKey_std,
-				Property.opentox_IUCLID5_UUID,
-				"compound_uri"
-				};
+		String[] tags = new String[] { Property.opentox_CAS, Property.opentox_EC, Property.opentox_Name,
+				Property.opentox_TradeName, Property.opentox_IupacName, Property.opentox_SMILES, Property.opentox_InChI,
+				Property.opentox_InChIKey, Property.opentox_InChI_std, Property.opentox_InChIKey_std,
+				Property.opentox_IUCLID5_UUID, "compound_uri" };
 		for (String tag : tags) {
-			String localtag = tag.replace("http://www.opentox.org/api/1.1#","");
+			String localtag = tag.replace("http://www.opentox.org/api/1.1#", "");
 			String value = form.getFirstValue(localtag);
-			if (value==null) continue;
+			if (value == null)
+				continue;
 			value = value.trim();
-			if ("".equals(value)) continue;
-			if (Property.opentox_CAS.equals(tag)) record.setRecordProperty(Property.getCASInstance(), value);
-			else if (Property.opentox_EC.equals(tag)) record.setRecordProperty(Property.getEINECSInstance(), value);
-			else if (Property.opentox_Name.equals(tag)) record.setRecordProperty(Property.getNameInstance(), value);
-			else if (Property.opentox_TradeName.equals(tag)) record.setRecordProperty(Property.getNameInstance(), value);
-			else if (Property.opentox_IupacName.equals(tag)) record.setRecordProperty(Property.getNameInstance(), value);
-			else if (Property.opentox_IUCLID5_UUID.equals(tag)) record.setRecordProperty(Property.getI5UUIDInstance(), value);
-			else if (Property.opentox_SMILES.equals(tag)) {record.setSmiles(value);}
-			else if (Property.opentox_InChI_std.equals(tag)) record.setInchi(value);
-			else if (Property.opentox_InChI.equals(tag)) record.setInchi(value);
-			else if (Property.opentox_InChIKey.equals(tag)) record.setInchiKey(value);
-			else if (Property.opentox_InChIKey_std.equals(tag)) record.setInchiKey(value);
-			else if ("compound_uri".equals(tag)) try {
-				extractRecordID(value,record);
-			} catch (Exception x) {logger.warning(tag + x.getMessage());}
+			if ("".equals(value))
+				continue;
+			if (Property.opentox_CAS.equals(tag))
+				record.setRecordProperty(Property.getCASInstance(), value);
+			else if (Property.opentox_EC.equals(tag))
+				record.setRecordProperty(Property.getEINECSInstance(), value);
+			else if (Property.opentox_Name.equals(tag))
+				record.setRecordProperty(Property.getNameInstance(), value);
+			else if (Property.opentox_TradeName.equals(tag))
+				record.setRecordProperty(Property.getNameInstance(), value);
+			else if (Property.opentox_IupacName.equals(tag))
+				record.setRecordProperty(Property.getNameInstance(), value);
+			else if (Property.opentox_IUCLID5_UUID.equals(tag))
+				record.setRecordProperty(Property.getI5UUIDInstance(), value);
+			else if (Property.opentox_SMILES.equals(tag)) {
+				record.setSmiles(value);
+			} else if (Property.opentox_InChI_std.equals(tag))
+				record.setInchi(value);
+			else if (Property.opentox_InChI.equals(tag))
+				record.setInchi(value);
+			else if (Property.opentox_InChIKey.equals(tag))
+				record.setInchiKey(value);
+			else if (Property.opentox_InChIKey_std.equals(tag))
+				record.setInchiKey(value);
+			else if ("compound_uri".equals(tag))
+				try {
+					extractRecordID(value, record);
+				} catch (Exception x) {
+					logger.warning(tag + x.getMessage());
+				}
 		}
 		String molfile = form.getFirstValue("molfile");
-		if (molfile!=null) {
+		if (molfile != null) {
 			record.setFormat("SDF");
 			record.setContent(molfile);
-		} else if (record.getInchi()!=null) {
+		} else if (record.getInchi() != null) {
 			record.setContent(record.getInchi());
 			record.setFormat(MOL_TYPE.INC.name());
 		}
-		
-		
+
 		String id = form.getFirstValue(customidname);
-		if ((id!=null) && !"".equals(id.trim())) {
+		if ((id != null) && !"".equals(id.trim())) {
 			String value = form.getFirstValue(customid);
-			if ((value!=null) && !"".equals(value.trim())) {
+			if ((value != null) && !"".equals(value.trim())) {
 				record.setRecordProperty(Property.getInstance(id, LiteratureEntry.getInstance()), value);
 			}
 		}
 	}
-	
-	protected void extractRecordID(String url,IStructureRecord record) throws AmbitException {
+
+	protected void extractRecordID(String url, IStructureRecord record) throws AmbitException {
 		String cleanURI = OpenTox.removeDatasetFragment(url);
 		Object id = OpenTox.URI.compound.getId(cleanURI, compoundURITemplate);
-		if (id != null) record.setIdchemical((Integer)id);
+		if (id != null)
+			record.setIdchemical((Integer) id);
 		else {
 			Object[] ids = OpenTox.URI.conformer.getIds(cleanURI, conformerURITemplate);
-			if (ids[0]!=null) record.setIdchemical((Integer)ids[0]);
-			if (ids[1]!=null) record.setIdstructure((Integer)ids[1]);
+			if (ids[0] != null)
+				record.setIdchemical((Integer) ids[0]);
+			if (ids[1] != null)
+				record.setIdstructure((Integer) ids[1]);
 		}
-	}	
+	}
 
 	@Override
-	protected AbstractBatchProcessor createBatch(Object target)
-			throws Exception {
-		return null;
-	}
-	
-	
-	@Override
-	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors()
-			throws Exception {
+	protected AbstractBatchProcessor createBatch(Object target) throws Exception {
 		return null;
 	}
 
 	@Override
-	protected TaskResult createReference(Connection connection)	throws Exception {
+	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors() throws Exception {
+		return null;
+	}
+
+	@Override
+	protected TaskResult createReference(Connection connection) throws Exception {
 		final RepositoryWriter writer = new RepositoryWriter();
 		writer.setUseExistingStructure(isPropertyOnly());
 		writer.setPropertyKey(new CASKey());
 		SourceDataset dataset;
 		if (isPropertyOnly()) {
-			dataset = new SourceDataset("Properties registration",LiteratureEntry.getInstance());	
+			dataset = new SourceDataset("Properties registration", LiteratureEntry.getInstance());
 		} else
-			dataset = new SourceDataset("Chemical structure registration",LiteratureEntry.getInstance());
-		
+			dataset = new SourceDataset("Chemical structure registration", LiteratureEntry.getInstance());
+
 		dataset.setStars(6);
 		writer.setDataset(dataset);
 		writer.setConnection(connection);
 		writer.setCloseConnection(true);
 		try {
 			List<IStructureRecord> records = writer.write(record);
-			for (IStructureRecord result: records) {
-				//what about policies
+			for (IStructureRecord result : records) {
+				// what about policies
 				if (isPropertyOnly()) {
 					return new TaskResult(String.format("%s?feature_uris[]=%s/dataset/Properties+registration/feature",
-							cmpreporter.getURI(result),applicationRootReference),false);
+							cmpreporter.getURI(result), applicationRootReference), false);
 				} else {
-					return new TaskResult(String.format("%s?feature_uris[]=%s/dataset/Chemical+structure+registration/feature",
-							cmpreporter.getURI(result),applicationRootReference),false);
+					return new TaskResult(
+							String.format("%s?feature_uris[]=%s/dataset/Chemical+structure+registration/feature",
+									cmpreporter.getURI(result), applicationRootReference),
+							false);
 				}
 			}
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);

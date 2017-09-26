@@ -641,7 +641,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 							getContext(), new SubstanceURIReporter(getRequest()
 									.getRootRef()), new DatasetURIReporter(
 									getRequest().getRootRef()), token,
-							getRequest().getResourceRef().toString());
+							getRequest().getResourceRef().toString(),getClientInfo());
 					callable.setClearComposition(clearComposition);
 					callable.setClearMeasurements(clearMeasurements);
 					callable.setQASettings(qa);
@@ -684,7 +684,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 						getRootRef(), form, getContext(),
 						new SubstanceURIReporter(getRequest().getRootRef()),
 						new DatasetURIReporter(getRequest().getRootRef()),
-						token, getRequest().getResourceRef().toString());
+						token, getRequest().getResourceRef().toString(),getClientInfo());
 				ITask<Reference, Object> task = ((ITaskApplication) getApplication())
 						.addTask("Retrieve substance from IUCLID server",
 								callable, getRequest().getRootRef(), token);

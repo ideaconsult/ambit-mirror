@@ -56,8 +56,8 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 	}
 
 	@Override
-	protected Iterator<Policy> createQuery(Context context, Request request,
-			Response response) throws ResourceException {
+	protected Iterator<Policy> createQuery(Context context, Request request, Response response)
+			throws ResourceException {
 
 		if (policiesList != null)
 			return policiesList.iterator();
@@ -67,7 +67,9 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 		final String uri = form.getFirstValue(search_param);
 		if (uri == null)
 			return policiesList.iterator(); // throw new
-											// ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Parameter missing: ?search=<uri-to-retrieve-policy-for>");
+											// ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Parameter
+											// missing:
+											// ?search=<uri-to-retrieve-policy-for>");
 
 		User user = request.getClientInfo().getUser();
 		if (user == null) {
@@ -75,7 +77,7 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 			((OpenSSOUser) user).setUseSecureCookie(useSecureCookie(request));
 		}
 		if (user instanceof OpenSSOUser) {
-			String token = getToken();
+			Object token = getToken();
 			if (token == null)
 				throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
 
@@ -86,9 +88,9 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 				config = OpenSSOServicesConfig.getInstance();
 				policyService = config.getPolicyService();
 				OpenSSOPolicy policy = new OpenSSOPolicy(policyService);
-				OpenSSOToken ssotoken = new OpenSSOToken(
-						config.getOpenSSOService());
-				ssotoken.setToken(token);
+				OpenSSOToken ssotoken = new OpenSSOToken(config.getOpenSSOService());
+				if (token != null)
+					ssotoken.setToken(token.toString());
 				policy.getURIOwner(ssotoken, uri, (OpenSSOUser) user, policies);
 				if (policies.size() == 0) {
 					return new Iterator<Policy>() {
@@ -121,8 +123,7 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 			} catch (ResourceException x) {
 				throw x;
 			} catch (Exception x) {
-				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
-						policyService, x);
+				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY, policyService, x);
 			}
 
 		} else
@@ -130,32 +131,27 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 	}
 
 	@Override
-	public IProcessor<Iterator<Policy>, Representation> createConvertor(
-			Variant variant) throws AmbitException, ResourceException {
+	public IProcessor<Iterator<Policy>, Representation> createConvertor(Variant variant)
+			throws AmbitException, ResourceException {
 
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new StringConvertor(createHTMLReporter(),
-					MediaType.TEXT_HTML);
+			return new StringConvertor(createHTMLReporter(), MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			PolicyJSONReporter r = new PolicyJSONReporter(getRequest(), null);
 			return new StringConvertor(r, MediaType.APPLICATION_JSON);
-		} else if (variant.getMediaType().equals(
-				MediaType.APPLICATION_JAVASCRIPT)) {
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			Form params = getResourceRef(getRequest()).getQueryAsForm();
 			String jsonpcallback = params.getFirstValue("jsonp");
 			if (jsonpcallback == null)
 				jsonpcallback = params.getFirstValue("callback");
-			PolicyJSONReporter r = new PolicyJSONReporter(getRequest(),
-					jsonpcallback);
+			PolicyJSONReporter r = new PolicyJSONReporter(getRequest(), jsonpcallback);
 			return new StringConvertor(r, MediaType.APPLICATION_JAVASCRIPT);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor(new PolicyURIReporter(getRequest()),
-					MediaType.TEXT_URI_LIST);
+			return new StringConvertor(new PolicyURIReporter(getRequest()), MediaType.TEXT_URI_LIST);
 
 		} else
 			// html
-			return new StringConvertor(createHTMLReporter(),
-					MediaType.TEXT_HTML);
+			return new StringConvertor(createHTMLReporter(), MediaType.TEXT_HTML);
 
 	}
 
@@ -164,10 +160,8 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 	 * "type=group|user" -d "get=on" -d "post=on"
 	 */
 	@Override
-	protected ICallableTask createCallable(Form form, Policy item)
-			throws ResourceException {
-		return new CallablePolicyCreator<String>(form, getToken(), getRequest()
-				.getRootRef());
+	protected ICallableTask createCallable(Form form, Policy item) throws ResourceException {
+		return new CallablePolicyCreator(form, getToken(), getRequest().getRootRef());
 	}
 
 	protected Reporter createHTMLReporter() {
@@ -175,52 +169,42 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 	}
 
 	@Override
-	protected Reference getSourceReference(Form form, Policy model)
-			throws ResourceException {
+	protected Reference getSourceReference(Form form, Policy model) throws ResourceException {
 
 		return null;
 	}
 
 	@Override
-	protected Representation post(Representation entity, Variant variant)
-			throws ResourceException {
+	protected Representation post(Representation entity, Variant variant) throws ResourceException {
 		synchronized (this) {
 			ArrayList<UUID> tasks = new ArrayList<UUID>();
 
 			try {
-				Form form = entity.isAvailable() ? new Form(entity)
-						: new Form();
+				Form form = entity.isAvailable() ? new Form(entity) : new Form();
 
 				ICallableTask callable = createCallable(form, null);
-				ITask<ITaskResult, String> task = ((ITaskApplication) getApplication())
-						.addTask(String.format("Create policy"), callable,
-								getRequest().getRootRef(),
-								callable instanceof CallablePOST, getToken());
+				ITask<ITaskResult, String> task = ((ITaskApplication) getApplication()).addTask(
+						String.format("Create policy"), callable, getRequest().getRootRef(),
+						callable instanceof CallablePOST, getToken());
 				task.update();
-				setStatus(task.isDone() ? Status.SUCCESS_OK
-						: Status.SUCCESS_ACCEPTED);
+				setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
 				tasks.add(task.getUuid());
 
 			} catch (ResourceException x) {
 				throw x;
 			} catch (Exception x) {
-				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,
-						x.getMessage(), x);
+				throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x.getMessage(), x);
 			}
 			if (tasks.size() == 0)
 				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			else {
 
-				ITaskStorage storage = ((ITaskApplication) getApplication())
-						.getTaskStorage();
-				FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(
-						storage);
+				ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
+				FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 				if (tasks.size() == 1)
-					return tc.createTaskRepresentation(tasks.get(0), variant,
-							getRequest(), getResponse(), null);
+					return tc.createTaskRepresentation(tasks.get(0), variant, getRequest(), getResponse(), null);
 				else
-					return tc.createTaskRepresentation(tasks.iterator(),
-							variant, getRequest(), getResponse(), null);
+					return tc.createTaskRepresentation(tasks.iterator(), variant, getRequest(), getResponse(), null);
 			}
 		}
 	}

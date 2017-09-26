@@ -81,7 +81,7 @@ public class PolicyResource extends CatalogResource<String>{
 			topics.clear();
 		
 			getValues(getResourceRef(getRequest()).getQueryAsForm());
-			ssoToken.setToken(getToken());
+			ssoToken.setToken(getToken()==null?null:getToken().toString());
 	
 			try {
 				if (authenticate()) {

@@ -6,6 +6,7 @@ import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
 
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
@@ -20,8 +21,8 @@ import ambit2.rest.model.predictor.AbstractStructureProcessor;
 public class CallableFixPreferredStructure<USERID> extends CallableDBProcessing<USERID> {
 
     public CallableFixPreferredStructure(Form form, Reference applicationRootReference, Context context,
-	    Algorithm algorithm, USERID token,String referer) {
-	super(form, applicationRootReference, context, algorithm, token,referer);
+	    Algorithm algorithm, USERID token,String referer,ClientInfo clientinfo) {
+	super(form, applicationRootReference, context, algorithm, token,referer,clientinfo);
     }
 
     /*

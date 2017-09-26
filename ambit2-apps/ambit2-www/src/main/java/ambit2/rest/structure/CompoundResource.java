@@ -90,8 +90,7 @@ import net.idea.restnet.i.task.ITaskStorage;
  * 
  * @author nina
  */
-public class CompoundResource extends
-		StructureQueryResource<IQueryRetrieval<IStructureRecord>> {
+public class CompoundResource extends StructureQueryResource<IQueryRetrieval<IStructureRecord>> {
 	protected FileUpload upload;
 
 	protected boolean chemicalsOnly = true;
@@ -105,8 +104,7 @@ public class CompoundResource extends
 	@Override
 	public String getTemplateName() {
 		// TODO Auto-generated method stub
-		return DisplayMode.singleitem.equals(_dmode) ? "compound.ftl"
-				: "_compound.ftl";
+		return DisplayMode.singleitem.equals(_dmode) ? "compound.ftl" : "_compound.ftl";
 	}
 
 	@Override
@@ -123,8 +121,7 @@ public class CompoundResource extends
 	}
 
 	@Override
-	protected String getDefaultTemplateURI(Context context, Request request,
-			Response response) {
+	protected String getDefaultTemplateURI(Context context, Request request, Response response) {
 		/*
 		 * Object id =
 		 * request.getAttributes().get(OpenTox.URI.compound.getKey()); if (id !=
@@ -158,7 +155,7 @@ public class CompoundResource extends
 				getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND, x);
 				return null;
 			} catch (ResourceException x) {
-				getResponse().setStatus(x.getStatus(),x);
+				getResponse().setStatus(x.getStatus(), x);
 				return null;
 			} catch (Exception x) {
 				getResponse().setStatus(Status.SERVER_ERROR_INTERNAL, x);
@@ -169,12 +166,10 @@ public class CompoundResource extends
 	}
 
 	@Override
-	public RepresentationConvertor createConvertor(Variant variant)
-			throws AmbitException, ResourceException {
+	public RepresentationConvertor createConvertor(Variant variant) throws AmbitException, ResourceException {
 		/* workaround for clients not being able to set accept headers */
 		if (!variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
-			setTemplate(createTemplate(getContext(), getRequest(),
-					getResponse()));
+			setTemplate(createTemplate(getContext(), getRequest(), getResponse()));
 			setGroupProperties(getContext(), getRequest(), getResponse());
 		}
 		Form acceptform = getResourceRef(getRequest()).getQueryAsForm();
@@ -183,42 +178,33 @@ public class CompoundResource extends
 			variant.setMediaType(new MediaType(media));
 		}
 		String filenamePrefix = getRequest().getResourceRef().getPath();
-		if ((queryObject == null)
-				&& !(variant.getMediaType().equals(MediaType.TEXT_HTML)))
+		if ((queryObject == null) && !(variant.getMediaType().equals(MediaType.TEXT_HTML)))
 			throw new NotFoundException();
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_CML))
 			// return new DocumentConvertor<IStructureRecord,
 			// QueryStructureByID>(new
 			// StructureReporter((getRequest()==null)?null:getRequest().getRootRef()));
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CMLReporter<QueryStructureByID>(),
-					ChemicalMediaType.CHEMICAL_CML, filenamePrefix);
-		else if (variant.getMediaType().equals(
-				ChemicalMediaType.CHEMICAL_MDLSDF)) {
+					new CMLReporter<QueryStructureByID>(), ChemicalMediaType.CHEMICAL_CML, filenamePrefix);
+		else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SDFReporter<QueryStructureByID>(getTemplate(),
-							getGroupProperties(), changeLineSeparators),
+					new SDFReporter<QueryStructureByID>(getTemplate(), getGroupProperties(), changeLineSeparators),
 					ChemicalMediaType.CHEMICAL_MDLSDF, filenamePrefix);
-		} else if (variant.getMediaType().equals(
-				ChemicalMediaType.CHEMICAL_MDLMOL)) {
+		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLMOL)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SDFReporter<QueryStructureByID>(new Template(),
-							getGroupProperties(), true, changeLineSeparators),
+					new SDFReporter<QueryStructureByID>(new Template(), getGroupProperties(), true,
+							changeLineSeparators),
 					ChemicalMediaType.CHEMICAL_MDLMOL, filenamePrefix);
-		} else if (variant.getMediaType().equals(
-				ChemicalMediaType.CHEMICAL_SMILES)) {
+		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_SMILES)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SmilesReporter<QueryStructureByID>(),
-					ChemicalMediaType.CHEMICAL_SMILES, filenamePrefix);
-		} else if (variant.getMediaType().equals(
-				ChemicalMediaType.CHEMICAL_INCHI)) {
+					new SmilesReporter<QueryStructureByID>(), ChemicalMediaType.CHEMICAL_SMILES, filenamePrefix);
+		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_INCHI)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SmilesReporter<QueryStructureByID>(false, Mode.InChI,
-							getTemplate()), ChemicalMediaType.CHEMICAL_INCHI,
-					filenamePrefix);
+					new SmilesReporter<QueryStructureByID>(false, Mode.InChI, getTemplate()),
+					ChemicalMediaType.CHEMICAL_INCHI, filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
-			return new StringConvertor(new SmilesReporter<QueryStructureByID>(
-					true, getTemplate()), MediaType.TEXT_PLAIN);
+			return new StringConvertor(new SmilesReporter<QueryStructureByID>(true, getTemplate()),
+					MediaType.TEXT_PLAIN);
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)
 				|| variant.getMediaType().equals(MediaType.IMAGE_BMP)
 				|| variant.getMediaType().equals(MediaType.IMAGE_JPEG)
@@ -229,92 +215,72 @@ public class CompoundResource extends
 			return createImageStringConvertor(variant);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID, PDFReporter<QueryStructureByID>>(
-					new PDFReporter<QueryStructureByID>(getTemplate(),
-							getGroupProperties()));
+					new PDFReporter<QueryStructureByID>(getTemplate(), getGroupProperties()));
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			QueryURIReporter r = (QueryURIReporter) getURIReporter();
-			return new StringConvertor(r, MediaType.TEXT_URI_LIST,
-					filenamePrefix);
+			return new StringConvertor(r, MediaType.TEXT_URI_LIST, filenamePrefix);
 
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFFResourceReporter(getTemplate(),
-							getGroupProperties(), getRequest(), getRequest()
-									.getRootRef().toString()
-									+ getCompoundInDatasetPrefix()),
+					new ARFFResourceReporter(getTemplate(), getGroupProperties(), getRequest(),
+							getRequest().getRootRef().toString() + getCompoundInDatasetPrefix()),
 					ChemicalMediaType.WEKA_ARFF, filenamePrefix);
-		} else if (variant.getMediaType().equals(
-				ChemicalMediaType.THREECOL_ARFF)) {
+		} else if (variant.getMediaType().equals(ChemicalMediaType.THREECOL_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFF3ColResourceReporter(getTemplate(),
-							getGroupProperties(), getRequest(), getRequest()
-									.getRootRef().toString()
-									+ getCompoundInDatasetPrefix()),
+					new ARFF3ColResourceReporter(getTemplate(), getGroupProperties(), getRequest(),
+							getRequest().getRootRef().toString() + getCompoundInDatasetPrefix()),
 					ChemicalMediaType.THREECOL_ARFF, filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(
-					getTemplate(), getGroupProperties(), folders, bundles,
-					getRequest(), getRequest().getRootRef().toString()
-							+ getCompoundInDatasetPrefix(), includeMol, null);
-			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					cmpreporter, MediaType.APPLICATION_JSON, filenamePrefix);
+			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(getTemplate(), getGroupProperties(), folders,
+					bundles, getRequest(), getRequest().getRootRef().toString() + getCompoundInDatasetPrefix(),
+					includeMol, null);
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(cmpreporter,
+					MediaType.APPLICATION_JSON, filenamePrefix);
 
-		} else if (variant.getMediaType().equals(
-				MediaType.APPLICATION_JAVASCRIPT)) {
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback == null)
 				jsonpcallback = getParams().getFirstValue("callback");
-			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(
-					getTemplate(), getGroupProperties(), folders, bundles,
-					getRequest(), getRequest().getRootRef().toString()
-							+ getCompoundInDatasetPrefix(), includeMol,
-					jsonpcallback);
-			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					cmpreporter, MediaType.APPLICATION_JAVASCRIPT,
-					filenamePrefix);
+			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(getTemplate(), getGroupProperties(), folders,
+					bundles, getRequest(), getRequest().getRootRef().toString() + getCompoundInDatasetPrefix(),
+					includeMol, jsonpcallback);
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(cmpreporter,
+					MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);
 
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CSVReporter(getRequest().getRootRef().toString(),
-							getTemplate(), getGroupProperties(), getRequest()
-									.getRootRef().toString()
-									+ getCompoundInDatasetPrefix()),
+					new CSVReporter(getRequest().getRootRef().toString(), getTemplate(), getGroupProperties(),
+							getRequest().getRootRef().toString() + getCompoundInDatasetPrefix()),
 					MediaType.TEXT_CSV, filenamePrefix);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.NANO_CML)) {
 			// return new DocumentConvertor<IStructureRecord,
 			// QueryStructureByID>(new
 			// StructureReporter((getRequest()==null)?null:getRequest().getRootRef()));
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CMLReporter<QueryStructureByID>(),
-					ChemicalMediaType.NANO_CML, filenamePrefix);
+					new CMLReporter<QueryStructureByID>(), ChemicalMediaType.NANO_CML, filenamePrefix);
 
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)
-				|| variant.getMediaType().equals(
-						MediaType.APPLICATION_RDF_TURTLE)
+				|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
-				|| variant.getMediaType()
-						.equals(MediaType.APPLICATION_RDF_TRIG)
-				|| variant.getMediaType()
-						.equals(MediaType.APPLICATION_RDF_TRIX)) {
+				|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG)
+				|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)) {
 			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-					new DatasetRDFReporter(getCompoundInDatasetPrefix(),
-							getRequest(), variant.getMediaType(),
+					new DatasetRDFReporter(getCompoundInDatasetPrefix(), getRequest(), variant.getMediaType(),
 							getTemplate(), getGroupProperties()),
 					variant.getMediaType(), filenamePrefix);
 		} else {
-			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(
-					getTemplate(), getGroupProperties(), folders, bundles,
-					getRequest(), getRequest().getRootRef().toString()
-							+ getCompoundInDatasetPrefix(), includeMol, null);
-			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					cmpreporter, MediaType.APPLICATION_JSON, filenamePrefix);
+			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(getTemplate(), getGroupProperties(), folders,
+					bundles, getRequest(), getRequest().getRootRef().toString() + getCompoundInDatasetPrefix(),
+					includeMol, null);
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(cmpreporter,
+					MediaType.APPLICATION_JSON, filenamePrefix);
 		}
 
 	}
 
-	protected ImageConvertor<IStructureRecord, QueryStructureByID> createImageConvertor(
-			Variant variant) throws ResourceException {
+	protected ImageConvertor<IStructureRecord, QueryStructureByID> createImageConvertor(Variant variant)
+			throws ResourceException {
 
 		Dimension d = new Dimension(250, 250);
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
@@ -327,14 +293,11 @@ public class CompoundResource extends
 			d.height = Integer.parseInt(form.getFirstValue("h").toString());
 		} catch (Exception x) {
 		}
-		return new ImageConvertor<IStructureRecord, QueryStructureByID>(
-				new ImageReporter<QueryStructureByID>(variant.getMediaType()
-						.getMainType(), variant.getMediaType().getSubType(), d),
-				variant.getMediaType());
+		return new ImageConvertor<IStructureRecord, QueryStructureByID>(new ImageReporter<QueryStructureByID>(
+				variant.getMediaType().getMainType(), variant.getMediaType().getSubType(), d), variant.getMediaType());
 	}
 
-	protected StringConvertor createImageStringConvertor(Variant variant)
-			throws ResourceException {
+	protected StringConvertor createImageStringConvertor(Variant variant) throws ResourceException {
 		String jsonpcallback = getParams().getFirstValue("jsonp");
 		if (jsonpcallback == null)
 			jsonpcallback = getParams().getFirstValue("callback");
@@ -349,20 +312,16 @@ public class CompoundResource extends
 			d.height = Integer.parseInt(form.getFirstValue("h").toString());
 		} catch (Exception x) {
 		}
-		return new StringConvertor(new ImageAreaReporter<QueryStructureByID>(
-				variant.getMediaType().getMainType(), variant.getMediaType()
-						.getSubType(), d, jsonpcallback),
-				variant.getMediaType());
+		return new StringConvertor(new ImageAreaReporter<QueryStructureByID>(variant.getMediaType().getMainType(),
+				variant.getMediaType().getSubType(), d, jsonpcallback), variant.getMediaType());
 	}
 
 	protected QueryURIReporter getURIReporter() {
-		return new CompoundURIReporter<QueryStructureByID>(
-				getCompoundInDatasetPrefix(), getRequest(), false);
+		return new CompoundURIReporter<QueryStructureByID>(getCompoundInDatasetPrefix(), getRequest(), false);
 	}
 
-	protected IQueryRetrieval<IStructureRecord> createSingleQuery(
-			String property, String cond, String key, boolean chemicalsOnly,
-			boolean byAlias, boolean caseSens) {
+	protected IQueryRetrieval<IStructureRecord> createSingleQuery(String property, String cond, String key,
+			boolean chemicalsOnly, boolean byAlias, boolean caseSens) {
 		AbstractStructureQuery query;
 
 		try {
@@ -376,35 +335,22 @@ public class CompoundResource extends
 			q_by_name.setCaseSensitive(caseSens);
 			q_by_name.setRetrieveProperties(true);
 			q_by_name.setSearchByAlias(byAlias);
-			q_by_name.setNameCondition(StringCondition
-					.getInstance(StringCondition.C_EQ));
+			q_by_name.setNameCondition(StringCondition.getInstance(StringCondition.C_EQ));
 			q_by_name.setChemicalsOnly(chemicalsOnly);
 			// q_by_name.setChemicalsOnly(true);
-			StringCondition condition = StringCondition
-					.getInstance(StringCondition.C_EQ);
+			StringCondition condition = StringCondition.getInstance(StringCondition.C_EQ);
 			try {
-				condition = (cond == null) || ("".equals(cond)) ? StringCondition
-						.getInstance(StringCondition.C_EQ) : StringCondition
-						.getInstance(cond);
+				condition = (cond == null) || ("".equals(cond)) ? StringCondition.getInstance(StringCondition.C_EQ)
+						: StringCondition.getInstance(cond);
 			} catch (Exception xx) {
 				condition = StringCondition.getInstance(StringCondition.C_EQ);
 			} finally {
 				q_by_name.setCondition(condition);
-				q_by_name
-						.setValue(String.format(
-								"%s%s",
-								Reference.decode(key.toString()),
-								condition.toString().equals(
-										StringCondition.C_LIKE) ? "%" : ""));
+				q_by_name.setValue(String.format("%s%s", Reference.decode(key.toString()),
+						condition.toString().equals(StringCondition.C_LIKE) ? "%" : ""));
 				if ((property != null) && (!"".equals(property)))
-					q_by_name
-							.setFieldname(new Property(
-									String.format(
-											"%s%s",
-											property,
-											condition.toString().equals(
-													StringCondition.C_LIKE) ? "%"
-													: ""), null));
+					q_by_name.setFieldname(new Property(String.format("%s%s", property,
+							condition.toString().equals(StringCondition.C_LIKE) ? "%" : ""), null));
 			}
 			query = q_by_name;
 		}
@@ -412,8 +358,8 @@ public class CompoundResource extends
 	}
 
 	@Override
-	protected IQueryRetrieval<IStructureRecord> createQuery(Context context,
-			Request request, Response response) throws ResourceException {
+	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request, Response response)
+			throws ResourceException {
 		media = getMediaParameter(request);
 		Object key = null;
 		try {
@@ -441,11 +387,9 @@ public class CompoundResource extends
 			if (key == null) {
 				boolean byAlias = true;
 				String condition = form.getFirstValue(QueryResource.condition);
-				String casesens = form
-						.getFirstValue(QueryResource.caseSensitive);
+				String casesens = form.getFirstValue(QueryResource.caseSensitive);
 				String[] keys = form.getValuesArray(QueryResource.search_param);
-				String[] properties = form.getValuesArray(OpenTox.params.sameas
-						.toString());
+				String[] properties = form.getValuesArray(OpenTox.params.sameas.toString());
 				if ((properties == null) || (properties.length == 0)) {
 					properties = form.getValuesArray(QueryResource.property);
 					condition = (condition == null) ? "=" : condition;
@@ -454,8 +398,7 @@ public class CompoundResource extends
 					condition = (condition == null) ? "=" : condition;
 
 				if (keys != null) {
-					_dmode = defaultMode == null ? DisplayMode.table
-							: defaultMode;
+					_dmode = defaultMode == null ? DisplayMode.table : defaultMode;
 					/*
 					 * QueryCombinedStructure qcombined = new
 					 * QueryCombinedStructure();
@@ -469,32 +412,22 @@ public class CompoundResource extends
 						String theKey = Reference.decode(keys[i].trim());
 						String property = null;
 						try {
-							property = ((properties == null)
-									|| (i >= properties.length) || (properties[i] == null)) ? ""
-									: Reference.decode(properties[i].trim());
+							property = ((properties == null) || (i >= properties.length) || (properties[i] == null))
+									? "" : Reference.decode(properties[i].trim());
 						} catch (Exception x) {
 
 							property = null;
 						}
-						casesens = CASProcessor.isValidFormat(theKey) ? "true"
-								: casesens;
-						casesens = EINECS.isValidFormat(theKey) ? "true"
-								: casesens;
-						casesens = theKey.startsWith(AmbitCONSTANTS.INCHI) ? "true"
-								: casesens;
-						casesens = theKey.startsWith("AuxInfo=") ? "true"
-								: casesens;
+						casesens = CASProcessor.isValidFormat(theKey) ? "true" : casesens;
+						casesens = EINECS.isValidFormat(theKey) ? "true" : casesens;
+						casesens = theKey.startsWith(AmbitCONSTANTS.INCHI) ? "true" : casesens;
+						casesens = theKey.startsWith("AuxInfo=") ? "true" : casesens;
 
 						// check for smiles will be more time consuming, skip
 						// for now
-						IQueryRetrieval<IStructureRecord> q = createSingleQuery(
-								property,
-								condition,
-								theKey,
-								chemicalsOnly,
-								byAlias,
-								casesens == null ? false : "true"
-										.equals(casesens.toLowerCase()));
+						IQueryRetrieval<IStructureRecord> q = createSingleQuery(property, condition, theKey,
+								chemicalsOnly, byAlias,
+								casesens == null ? false : "true".equals(casesens.toLowerCase()));
 						// keys.length==1);
 						query = q;
 						break;
@@ -508,8 +441,7 @@ public class CompoundResource extends
 			} else {
 				try {
 					IStructureRecord record = new StructureRecord();
-					record.setIdchemical(Integer.parseInt(Reference.decode(key
-							.toString())));
+					record.setIdchemical(Integer.parseInt(Reference.decode(key.toString())));
 					return createQueryByID(record);
 				} catch (NumberFormatException x) {
 					String inchikey = key.toString().trim();
@@ -520,15 +452,12 @@ public class CompoundResource extends
 						q.setValue(inchikey.trim());
 						return q;
 					}
-					throw new ResourceException(
-							Status.CLIENT_ERROR_BAD_REQUEST,
-							"Invalid resource id", x);
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid resource id", x);
 				}
 			}
 
 		} catch (Exception x) {
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,
-					x.getMessage(), x);
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x.getMessage(), x);
 		}
 
 	}
@@ -550,14 +479,12 @@ public class CompoundResource extends
 	 * getResponse().getEntity(); }
 	 */
 	@Override
-	protected RDFObjectIterator<IStructureRecord> createObjectIterator(
-			Representation entity) throws ResourceException {
+	protected RDFObjectIterator<IStructureRecord> createObjectIterator(Representation entity) throws ResourceException {
 		return new RDFStructuresIterator(entity, entity.getMediaType());
 	}
 
 	@Override
-	protected AbstractUpdate createUpdateObject(IStructureRecord entry)
-			throws ResourceException {
+	protected AbstractUpdate createUpdateObject(IStructureRecord entry) throws ResourceException {
 		return super.createUpdateObject(entry);
 	}
 
@@ -575,14 +502,11 @@ public class CompoundResource extends
 	}
 
 	@Override
-	protected AbstractUpdate createDeleteObject(IStructureRecord record)
-			throws ResourceException {
+	protected AbstractUpdate createDeleteObject(IStructureRecord record) throws ResourceException {
 		record = record == null ? new StructureRecord() : record;
-		Object key = getRequest().getAttributes().get(
-				OpenTox.URI.compound.getKey());
+		Object key = getRequest().getAttributes().get(OpenTox.URI.compound.getKey());
 		try {
-			record.setIdchemical(Integer.parseInt(Reference.decode(key
-					.toString())));
+			record.setIdchemical(Integer.parseInt(Reference.decode(key.toString())));
 			if (record.getIdchemical() <= 0)
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			else {
@@ -605,8 +529,7 @@ public class CompoundResource extends
 			executeUpdate(entity, null, createDeleteObject(null));
 			return getResponseEntity();
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN,
-					x.getMessage(), x);
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, x.getMessage(), x);
 		}
 	}
 
@@ -621,34 +544,24 @@ public class CompoundResource extends
 	 * POST as in the dataset resource
 	 */
 	@Override
-	protected Representation post(Representation entity, Variant variant)
-			throws ResourceException {
+	protected Representation post(Representation entity, Variant variant) throws ResourceException {
 
 		if ((entity == null) || !entity.isAvailable())
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					"Empty content");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty content");
 
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
-			String token = getToken();
-			CallableStructureEntry callable = new CallableStructureEntry<String>(
-					new Form(entity), getRootRef(), getRecord(), getContext(),
-					null, token,getRequest().getResourceRef().toString());
+			Object token = getToken();
+			CallableStructureEntry callable = new CallableStructureEntry(new Form(entity), getRootRef(), getRecord(),
+					getContext(), null, token, getRequest().getResourceRef().toString(),getClientInfo());
 			callable.setPropertyOnly(false);
-			ITask<Reference, Object> task = ((ITaskApplication) getApplication())
-					.addTask("New structure from web form", callable,
-							getRequest().getRootRef(), token);
+			ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("New structure from web form",
+					callable, getRequest().getRootRef(), token);
 
-			ITaskStorage storage = ((ITaskApplication) getApplication())
-					.getTaskStorage();
-			FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(
-					storage);
+			ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
+			FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 			task.update();
-			getResponse()
-					.setStatus(
-							task.isDone() ? Status.SUCCESS_OK
-									: Status.SUCCESS_ACCEPTED);
-			return tc.createTaskRepresentation(task.getUuid(), variant,
-					getRequest(), getResponse(), null);
+			getResponse().setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
+			return tc.createTaskRepresentation(task.getUuid(), variant, getRequest(), getResponse(), null);
 
 			/*
 			 * Form form = new Form(entity); String cmpname =
@@ -693,11 +606,10 @@ public class CompoundResource extends
 			 * (uri.startsWith(CSLSRequest.CSLS_URL)) { source =
 			 * CSLSRequest.CSLS_URL; name = "CIR"; uri = name; }
 			 * 
-			 * if
-			 * (uri.startsWith(String.format("%s/query%s",getRequest().getRootRef
-			 * (),CSLSResource.resource))) { source = CSLSRequest.CSLS_URL;name
-			 * = "Chemical Identifier Resolver (CIR)"; uri = "CIR"; } if
-			 * (uri.startsWith
+			 * if (uri.startsWith(String.format("%s/query%s",getRequest().
+			 * getRootRef (),CSLSResource.resource))) { source =
+			 * CSLSRequest.CSLS_URL;name = "Chemical Identifier Resolver (CIR)";
+			 * uri = "CIR"; } if (uri.startsWith
 			 * (String.format("%s/query/pubchem",getRequest().getRootRef()))) {
 			 * source = "http://www.ncbi.nlm.nih.gov/entrez/eutils"; name =
 			 * "PUBCHEM"; uri = "PUBCHEM"; }
@@ -710,28 +622,24 @@ public class CompoundResource extends
 			 * Representation r = upload.upload(representation,
 			 * variant,true,false, getToken() ); return r; //return
 			 * copyDatasetToQueryResultsTable(new Form(entity),true); //throw
-			 * new
-			 * ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,entity
-			 * .getMediaType().toString());
+			 * new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,
+			 * entity .getMediaType().toString());
 			 */
 		} else {
 			if (upload == null)
 				upload = createFileUpload();
 			upload.setDataset(new SourceDataset("User uploaded",
-					LiteratureEntry.getInstance("User uploaded",
-							getResourceRef(getRequest()).toString())));
+					LiteratureEntry.getInstance("User uploaded", getResourceRef(getRequest()).toString())));
 
-			return upload.upload(entity, variant, true, false, getToken(),getRequest().getResourceRef().toString());
+			return upload.upload(entity, variant, true, false, getToken(), getRequest().getResourceRef().toString(),getClientInfo());
 		}
 	}
 
 	protected IStructureRecord getRecord() {
-		Object key = getRequest().getAttributes().get(
-				OpenTox.URI.compound.getKey());
+		Object key = getRequest().getAttributes().get(OpenTox.URI.compound.getKey());
 		IStructureRecord record = new StructureRecord();
 		if (key != null)
-			record.setIdchemical(Integer.parseInt(Reference.decode(key
-					.toString())));
+			record.setIdchemical(Integer.parseInt(Reference.decode(key.toString())));
 		return record;
 	}
 
@@ -739,43 +647,32 @@ public class CompoundResource extends
 	 * POST as in the dataset resource
 	 */
 	@Override
-	protected Representation put(Representation entity, Variant variant)
-			throws ResourceException {
+	protected Representation put(Representation entity, Variant variant) throws ResourceException {
 
 		if ((entity == null) || !entity.isAvailable())
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					"Empty content");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty content");
 
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
-			String token = getToken();
-			CallableStructureEntry callable = new CallableStructureEntry<String>(
-					new Form(entity), getRootRef(), getRecord(), getContext(),
-					null, token,getRequest().getResourceRef().toString());
+			Object token = getToken();
+			CallableStructureEntry callable = new CallableStructureEntry(new Form(entity), getRootRef(),
+					getRecord(), getContext(), null, token, getRequest().getResourceRef().toString(),getClientInfo());
 			callable.setPropertyOnly(true);
-			ITask<Reference, Object> task = ((ITaskApplication) getApplication())
-					.addTask("Properties from web form", callable, getRequest()
-							.getRootRef(), token);
+			ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("Properties from web form",
+					callable, getRequest().getRootRef(), token);
 
-			ITaskStorage storage = ((ITaskApplication) getApplication())
-					.getTaskStorage();
-			FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(
-					storage);
+			ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
+			FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 			task.update();
-			getResponse()
-					.setStatus(
-							task.isDone() ? Status.SUCCESS_OK
-									: Status.SUCCESS_ACCEPTED);
-			return tc.createTaskRepresentation(task.getUuid(), variant,
-					getRequest(), getResponse(), null);
+			getResponse().setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
+			return tc.createTaskRepresentation(task.getUuid(), variant, getRequest(), getResponse(), null);
 
 		} else {
 			if (upload == null)
 				upload = createFileUpload();
 			upload.setDataset(new SourceDataset("User uploaded",
-					LiteratureEntry.getInstance("User uploaded",
-							getResourceRef(getRequest()).toString())));
+					LiteratureEntry.getInstance("User uploaded", getResourceRef(getRequest()).toString())));
 
-			return upload.upload(entity, variant, true, true, getToken(),getRequest().getResourceRef().toString());
+			return upload.upload(entity, variant, true, true, getToken(), getRequest().getResourceRef().toString(),getClientInfo());
 		}
 	}
 
@@ -790,15 +687,12 @@ public class CompoundResource extends
 	}
 
 	@Override
-	public void configureTemplateMap(Map<String, Object> map, Request request,
-			IFreeMarkerApplication app) {
+	public void configureTemplateMap(Map<String, Object> map, Request request, IFreeMarkerApplication app) {
 		super.configureTemplateMap(map, request, app);
-		Object key = getRequest().getAttributes().get(
-				OpenTox.URI.compound.getKey());
+		Object key = getRequest().getAttributes().get(OpenTox.URI.compound.getKey());
 		if (key != null)
 			map.put("cmpid", key.toString());
-		Object idconformer = getRequest().getAttributes().get(
-				DataResources.idconformer_resource);
+		Object idconformer = getRequest().getAttributes().get(DataResources.idconformer_resource);
 		if (idconformer != null)
 			map.put("strucid", idconformer.toString());
 	}
