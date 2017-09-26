@@ -29,80 +29,100 @@ package ambit2.db.update.bundle.chemicals;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.query.QueryParam;
-import net.idea.modbcum.q.update.AbstractUpdate;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
+import net.idea.modbcum.q.update.AbstractUpdate;
 
 public class AddChemicalToBundle extends AbstractUpdate<SubstanceEndpointsBundle, IStructureRecord> {
-    private static final String[] update_sql = { "insert into bundle_chemicals values (?,?,now(),?,?) on duplicate key update tag=values(tag),remarks=values(remarks)" };
+	private static final String[] update_sql = {
+			"insert into bundle_chemicals values (?,?,now(),?,?) on duplicate key update tag=values(tag),remarks=values(remarks)" };
+	private static final String[] update_sql_tagonly = {
+			"insert into bundle_chemicals (idbundle,idchemical,created,tag) values (?,?,now(),?) on duplicate key update tag=values(tag)" };
+	private static final String[] update_sql_remarksonly = {
+			"insert into bundle_chemicals (idbundle,idchemical,created,remarks) values (?,?,now(),?) on duplicate key update remarks=values(remarks)" };
 
-    // private ILiteratureEntry reference = null;
-    public AddChemicalToBundle(SubstanceEndpointsBundle bundle, IStructureRecord dataset) {
-	this(dataset);
-	setGroup(bundle);
-    }
-
-    public AddChemicalToBundle(IStructureRecord dataset) {
-	super(dataset);
-    }
-
-    public AddChemicalToBundle() {
-	this(null);
-    }
-
-    @Override
-    public List<QueryParam> getParameters(int index) throws AmbitException {
-	List<QueryParam> params = new ArrayList<QueryParam>();
-
-	if (getGroup() == null || getGroup().getID() <= 0)
-	    throw new AmbitException("Bundle not defined");
-	if (getObject() == null)
-	    throw new AmbitException("Chemical not defined");
-
-	params.add(new QueryParam<Integer>(Integer.class, getGroup().getID()));
-
-	if (getObject().getIdchemical() > 0) {
-	    params.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
-	} else
-	    throw new AmbitException("Chemical not defined");
-
-	Object tag = null;
-	Object remarks = null;
-	ILiteratureEntry reference = LiteratureEntry.getBundleReference(getGroup());
-	for (Property property : getObject().getRecordProperties()) {
-	    if ("tag".equals(property.getName()) && property.getReference().equals(reference)) {
-		tag = getObject().getRecordProperty(property);
-	    } else if ("remarks".equals(property.getName()) && property.getReference().equals(reference)) {
-		remarks = getObject().getRecordProperty(property);
-	    }
+	// private ILiteratureEntry reference = null;
+	public AddChemicalToBundle(SubstanceEndpointsBundle bundle, IStructureRecord dataset) {
+		this(dataset);
+		setGroup(bundle);
 	}
-	params.add(new QueryParam<String>(String.class, tag == null ? null : tag.toString()));
-	params.add(new QueryParam<String>(String.class, remarks == null ? null : remarks.toString()));
-	return params;
 
-    }
-
-    @Override
-    public String[] getSQL() throws AmbitException {
-
-	if (getGroup() == null || getGroup().getID() <= 0)
-	    throw new AmbitException("Bundle not defined");
-	if (getObject() == null)
-	    throw new AmbitException("Chemical not defined");
-
-	if (getObject().getIdchemical() > 0) {
-	    return update_sql;
+	public AddChemicalToBundle(IStructureRecord dataset) {
+		super(dataset);
 	}
-	throw new AmbitException("Chemical not defined");
-    }
 
-    public void setID(int index, int id) {
+	public AddChemicalToBundle() {
+		this(null);
+	}
 
-    }
+	@Override
+	public List<QueryParam> getParameters(int index) throws AmbitException {
+		List<QueryParam> params = new ArrayList<QueryParam>();
+
+		if (getGroup() == null || getGroup().getID() <= 0)
+			throw new AmbitException("Bundle not defined");
+		if (getObject() == null)
+			throw new AmbitException("Chemical not defined");
+
+		params.add(new QueryParam<Integer>(Integer.class, getGroup().getID()));
+
+		if (getObject().getIdchemical() > 0) {
+			params.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
+		} else
+			throw new AmbitException("Chemical not defined");
+
+		Object tag = null;
+		Object remarks = null;
+		ILiteratureEntry reference = LiteratureEntry.getBundleReference(getGroup());
+		for (Property property : getObject().getRecordProperties()) {
+			if ("tag".equals(property.getName()) && property.getReference().equals(reference)) {
+				tag = getObject().getRecordProperty(property);
+			} else if ("remarks".equals(property.getName()) && property.getReference().equals(reference)) {
+				remarks = getObject().getRecordProperty(property);
+			}
+		}
+
+		if (tag != null)
+			params.add(new QueryParam<String>(String.class, tag == null ? null : tag.toString()));
+		if (remarks != null)
+			params.add(new QueryParam<String>(String.class, remarks == null ? null : remarks.toString()));
+		return params;
+
+	}
+
+	@Override
+	public String[] getSQL() throws AmbitException {
+
+		if (getGroup() == null || getGroup().getID() <= 0)
+			throw new AmbitException("Bundle not defined");
+		if (getObject() == null)
+			throw new AmbitException("Chemical not defined");
+
+		if (getObject().getIdchemical() > 0) {
+
+			Object tag = null;
+			Object remarks = null;
+			ILiteratureEntry reference = LiteratureEntry.getBundleReference(getGroup());
+			for (Property property : getObject().getRecordProperties()) {
+				if ("tag".equals(property.getName()) && property.getReference().equals(reference)) {
+					tag = getObject().getRecordProperty(property);
+				} else if ("remarks".equals(property.getName()) && property.getReference().equals(reference)) {
+					remarks = getObject().getRecordProperty(property);
+				}
+			}
+			
+			return remarks != null ? (tag!=null?update_sql:update_sql_remarksonly): (update_sql_tagonly);
+		}
+		throw new AmbitException("Chemical not defined");
+	}
+
+	public void setID(int index, int id) {
+
+	}
 
 }
