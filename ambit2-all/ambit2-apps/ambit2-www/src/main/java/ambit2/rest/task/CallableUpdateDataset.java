@@ -9,6 +9,7 @@ import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -46,9 +47,9 @@ public class CallableUpdateDataset<USERID> extends	CallableQueryProcessor<Object
 			Context context,
 			SourceDataset dataset,
 			DatasetURIReporter<IQueryRetrieval<ISourceDataset>,ISourceDataset> datasetUriReporter,
-			USERID token,String referer
+			USERID token,String referer, ClientInfo clientInfo
 			) throws ResourceException {
-		super(form, context,token,referer);
+		super(form, context,token,referer,clientInfo);
 		this.applicationRootReference = applicationRootReference;
 		compounds = form.getValuesArray(OpenTox.params.compound_uris.toString());
 
@@ -82,7 +83,7 @@ public class CallableUpdateDataset<USERID> extends	CallableQueryProcessor<Object
 
 	protected Object createTarget(Reference reference) throws Exception {
 		
-		return reference==null?compounds:getQueryObject(reference, applicationRootReference,context,referer);
+		return reference==null?compounds:getQueryObject(reference, applicationRootReference,context,getCookies(),getAgent(),referer);
 	}
 	@Override
 	protected AbstractBatchProcessor createBatch(Object target)

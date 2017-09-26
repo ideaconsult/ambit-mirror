@@ -4,13 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
 
-import net.idea.modbcum.i.batch.IBatchStatistics;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.processors.ProcessorsChain;
-import net.idea.modbcum.p.batch.AbstractBatchProcessor;
-
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
@@ -52,39 +47,45 @@ import ambit2.search.chemidplus.ChemIdPlusRequest;
 import ambit2.search.csls.CSLSStringRequest;
 import ambit2.search.opentox.OpenToxRequest;
 import ambit2.search.tbwiki.TBWikiFinder;
+import net.idea.modbcum.i.batch.IBatchStatistics;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 /**
- * http://chem.sis.nlm.nih.gov/molfiles/0000050000.mol chemidplus
- *  cas bez tireta i dopqlnen do 10 znaka s prefix ot nuli
+ * http://chem.sis.nlm.nih.gov/molfiles/0000050000.mol chemidplus cas bez tireta
+ * i dopqlnen do 10 znaka s prefix ot nuli
+ * 
  * @author nina
  *
  * @param <USERID>
  */
-public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
-
+public class CallableFinder<USERID> extends CallableDBProcessing<USERID> {
 
 	protected Template profile;
-	protected AbstractFinder.SITE searchSite ;
+	protected AbstractFinder.SITE searchSite;
 	protected AbstractFinder.MODE mode;
-	
-	public CallableFinder(Form form,
-			Reference applicationRootReference,Context context,
-			Algorithm algorithm,USERID token,String referer) {
-		super(form,applicationRootReference,context,algorithm,token,referer);
+
+	public CallableFinder(Form form, Reference applicationRootReference, Context context, Algorithm algorithm,
+			USERID token, String referer, ClientInfo clientinfo) {
+		super(form, applicationRootReference, context, algorithm, token, referer, clientinfo);
 	}
+
 	@Override
-	protected void processForm(Reference applicationRootReference,Form form) {
+	protected void processForm(Reference applicationRootReference, Form form) {
 		this.applicationRootReference = applicationRootReference;
-		//mode
+		// mode
 		Object modeParam = form.getFirstValue("mode");
 		try {
 			if (modeParam != null)
 				this.mode = MODE.valueOf(modeParam.toString().toLowerCase());
-			else this.mode = MODE.emptyonly;
+			else
+				this.mode = MODE.emptyonly;
 		} catch (Exception x) {
 			this.mode = MODE.emptyonly;
 		}
-		//search
+		// search
 		Object search = form.getFirstValue("search");
 		try {
 			if (search != null)
@@ -94,126 +95,123 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 		} catch (Exception x) {
 			searchSite = SITE.CIR;
 		}
-		//dataset
+		// dataset
 		Object dataset = OpenTox.params.dataset_uri.getFirstValue(form);
 		//
 		String[] xvars = OpenTox.params.feature_uris.getValuesArray(form);
-		if (xvars != null) try {
-			profile = new Template();
-			
-			OTDataset ds = OTDataset.dataset(dataset.toString());
-			for (String xvar :xvars) {
-				String[] xx = xvar.split("\n");
-				for (String x : xx )
-					if (!x.trim().equals("")) {
-						ds = ds.addColumns(OTFeature.feature(x,referer));
-						Property key = createPropertyFromReference(x,null);
-						key.setEnabled(true);
-						profile.add(key);
-					}
+		if (xvars != null)
+			try {
+				profile = new Template();
+
+				OTDataset ds = OTDataset.dataset(dataset.toString());
+				for (String xvar : xvars) {
+					String[] xx = xvar.split("\n");
+					for (String x : xx)
+						if (!x.trim().equals("")) {
+							ds = ds.addColumns(OTFeature.feature(x, referer));
+							Property key = createPropertyFromReference(x, null);
+							key.setEnabled(true);
+							profile.add(key);
+						}
+				}
+				dataset = ds.getUri().toString();
+
+			} catch (Exception x) {
+
 			}
-			dataset =  ds.getUri().toString();
 
-		} catch (Exception x) {
-			
-		}
-
-		this.sourceReference = dataset==null?null:new Reference(dataset.toString().trim());
+		this.sourceReference = dataset == null ? null : new Reference(dataset.toString().trim());
 	}
-	
-	@Override
-	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors()
-			throws Exception {
-		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
-			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
 
-		RetrieveStructure r = new RetrieveStructure(false); //exactly our structure, nothing else
+	@Override
+	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors() throws Exception {
+		ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> p = new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>();
+
+		RetrieveStructure r = new RetrieveStructure(false); // exactly our
+															// structure,
+															// nothing else
 		r.setPageSize(1);
 		r.setPage(0);
 		p.add(new ProcessorStructureRetrieval(r));
 
-		IProcessor<IStructureRecord,IStructureRecord> valuesReader = getValuesReader();
-		if (valuesReader!=null) p.add(valuesReader);
-		
-		IProcessor<String,String> request;
+		IProcessor<IStructureRecord, IStructureRecord> valuesReader = getValuesReader();
+		if (valuesReader != null)
+			p.add(valuesReader);
+
+		IProcessor<String, String> request;
 		LiteratureEntry le;
 
 		switch (searchSite) {
 		case PUBCHEM_CID: {
-			p.add(new PubChemRestFinder(profile,mode,COMPOUND_DOMAIN_INPUT.cid));
-			le =  new LiteratureEntry(PUGRestRequest.PUGREST_URL,PUGRestRequest.PUGREST_COMPOUND_URL);
+			p.add(new PubChemRestFinder(profile, mode, COMPOUND_DOMAIN_INPUT.cid));
+			le = new LiteratureEntry(PUGRestRequest.PUGREST_URL, PUGRestRequest.PUGREST_COMPOUND_URL);
 			break;
 		}
 		case PUBCHEM_SID: {
-			p.add(new PubChemRestFinder(profile,mode,COMPOUND_DOMAIN_INPUT.sid));
-			le =  new LiteratureEntry(PUGRestRequest.PUGREST_URL,PUGRestRequest.PUGREST_COMPOUND_URL);
+			p.add(new PubChemRestFinder(profile, mode, COMPOUND_DOMAIN_INPUT.sid));
+			le = new LiteratureEntry(PUGRestRequest.PUGREST_URL, PUGRestRequest.PUGREST_COMPOUND_URL);
 			break;
-		}		
+		}
 		case PUBCHEM_NAME: {
-			p.add(new PubChemRestFinder(profile,mode,COMPOUND_DOMAIN_INPUT.name));
-			le =  new LiteratureEntry(PUGRestRequest.PUGREST_URL,PUGRestRequest.PUGREST_COMPOUND_URL);
+			p.add(new PubChemRestFinder(profile, mode, COMPOUND_DOMAIN_INPUT.name));
+			le = new LiteratureEntry(PUGRestRequest.PUGREST_URL, PUGRestRequest.PUGREST_COMPOUND_URL);
 			break;
-			
+
 		}
 		case PUBCHEM_INCHIKEY: {
-			p.add(new PubChemRestFinder(profile,mode,COMPOUND_DOMAIN_INPUT.inchikey));
-			le =  new LiteratureEntry(PUGRestRequest.PUGREST_URL,PUGRestRequest.PUGREST_COMPOUND_URL);
+			p.add(new PubChemRestFinder(profile, mode, COMPOUND_DOMAIN_INPUT.inchikey));
+			le = new LiteratureEntry(PUGRestRequest.PUGREST_URL, PUGRestRequest.PUGREST_COMPOUND_URL);
 			break;
-			
+
 		}
 		/*
-		case PUBCHEM: {
-			p.add(new PubchemFinder(profile,mode));
-			le =  new LiteratureEntry("PubChem",EntrezSearchProcessor.entrezURL);
-			break;
-		}
-		*/
+		 * case PUBCHEM: { p.add(new PubchemFinder(profile,mode)); le = new
+		 * LiteratureEntry("PubChem",EntrezSearchProcessor.entrezURL); break; }
+		 */
 		case OPENTOX: {
 			request = new OpenToxRequest(searchSite.getURI());
-			p.add(new AllSourcesFinder(profile,request,mode));
-			le =  new LiteratureEntry(request.toString(),request.toString());
+			p.add(new AllSourcesFinder(profile, request, mode));
+			le = new LiteratureEntry(request.toString(), request.toString());
 			break;
-		}		
+		}
 		case NAME2STRUCTURE: {
-			p.add(new Name2StructureFinder(profile,mode));
-			le =  new LiteratureEntry(searchSite.getTitle(),searchSite.getURI());
+			p.add(new Name2StructureFinder(profile, mode));
+			le = new LiteratureEntry(searchSite.getTitle(), searchSite.getURI());
 			break;
 		}
 		case CHEBI: {
-			p.add(new ChebiFinder(profile,mode));
-			le =  new LiteratureEntry("ChEBI","http://www.ebi.ac.uk/chebi");
+			p.add(new ChebiFinder(profile, mode));
+			le = new LiteratureEntry("ChEBI", "http://www.ebi.ac.uk/chebi");
 			break;
 		}
 		/*
-		case CHEMBL: {
-			p.add(new ChemBLFinder(profile,mode));
-			le =  new LiteratureEntry(searchSite.name(),"https://www.ebi.ac.uk/chemblws");
-			break;
-		}	
-		*/	
+		 * case CHEMBL: { p.add(new ChemBLFinder(profile,mode)); le = new
+		 * LiteratureEntry(searchSite.name(),"https://www.ebi.ac.uk/chemblws");
+		 * break; }
+		 */
 		case CHEMIDPLUS: {
 			request = new ChemIdPlusRequest();
-			p.add(new AllSourcesFinder(profile,request,mode));
-			le =  new LiteratureEntry(request.toString(),request.toString());
+			p.add(new AllSourcesFinder(profile, request, mode));
+			le = new LiteratureEntry(request.toString(), request.toString());
 			break;
 		}
 		case TBWIKI: {
 			mode = MODE.propertyonly;
-			le =  new LiteratureEntry("TBWIKI","http://wiki.toxbank.net/wiki/Special:SPARQLEndpoint");
-			p.add(new TBWikiFinder(profile,le));
+			le = new LiteratureEntry("TBWIKI", "http://wiki.toxbank.net/wiki/Special:SPARQLEndpoint");
+			p.add(new TBWikiFinder(profile, le));
 			break;
-		}		
-		default : {
+		}
+		default: {
 			request = new CSLSStringRequest();
-			p.add(new AllSourcesFinder(profile,request,mode));
-			le =  new LiteratureEntry(request.toString(),request.toString());
+			p.add(new AllSourcesFinder(profile, request, mode));
+			le = new LiteratureEntry(request.toString(), request.toString());
 			break;
 		}
 		}
-		//don't duplicate if there is already a hit
-		SourceDataset dataset = new SourceDataset(searchSite.toString(),le);
+		// don't duplicate if there is already a hit
+		SourceDataset dataset = new SourceDataset(searchSite.toString(), le);
 		dataset = getDataset(dataset);
-		
+
 		QueryStructureByID q = new QueryStructureByID();
 		q.setChemicalsOnly(true);
 		q.setFieldname(dataset);
@@ -221,33 +219,34 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 		q.setPage(0);
 		p.add(new ProcessorStructureRetrieval(q) {
 			/**
-		     * 
-		     */
-		    private static final long serialVersionUID = 621841537224691538L;
+			 * 
+			 */
+			private static final long serialVersionUID = 621841537224691538L;
 
 			@Override
-			public IStructureRecord process(IStructureRecord target)
-					throws AmbitException {
-				if (target==null) return null;
-				if (((QueryStructureByID)getQuery()).getFieldname().getID()>=0) {
+			public IStructureRecord process(IStructureRecord target) throws AmbitException {
+				if (target == null)
+					return null;
+				if (((QueryStructureByID) getQuery()).getFieldname().getID() >= 0) {
 					IStructureRecord record = super.process(target);
 					target.setIdchemical(record.getIdchemical());
 					target.setIdstructure(record.getIdstructure());
 					return target;
-				} else return target;
+				} else
+					return target;
 			}
-		});		
+		});
 
-	RepositoryWriter writer = new RepositoryWriter() {
+		RepositoryWriter writer = new RepositoryWriter() {
 			/**
-		     * 
-		     */
-		    private static final long serialVersionUID = 7175414487857418817L;
+			 * 
+			 */
+			private static final long serialVersionUID = 7175414487857418817L;
 
 			@Override
-			public List<IStructureRecord> process(IStructureRecord target)
-					throws AmbitException {
-				if (target == null) return null;
+			public List<IStructureRecord> process(IStructureRecord target) throws AmbitException {
+				if (target == null)
+					return null;
 				return super.process(target);
 			}
 		};
@@ -255,15 +254,15 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 			writer.setPropertyKey(new NoneKey());
 			writer.setUseExistingStructure(true);
 			writer.setOperation(OP.CREATE);
-		} else 		
+		} else
 			writer.setOperation(OP.UPDATE);
 		writer.setDataset(dataset);
 		p.add(writer);
 		return p;
 	}
-	
+
 	protected SourceDataset getDataset(SourceDataset dataset) {
-		
+
 		QueryExecutor exec = new QueryExecutor();
 		Connection connection = null;
 		try {
@@ -278,58 +277,76 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 			while (rs.next()) {
 				dataset = q.getObject(rs);
 			}
-			try {exec.closeResults(rs);} catch (Exception x) {};
+			try {
+				exec.closeResults(rs);
+			} catch (Exception x) {
+			}
+			;
 		} catch (Exception x) {
-			//if failed will return the original dataset
+			// if failed will return the original dataset
 		} finally {
-			try {exec.close();} catch (Exception x) {};
-			try {connection.close();} catch (Exception x) {};
+			try {
+				exec.close();
+			} catch (Exception x) {
+			}
+			;
+			try {
+				connection.close();
+			} catch (Exception x) {
+			}
+			;
 		}
 		return dataset;
 	}
 
-	
 	@Override
-	protected AbstractBatchProcessor createBatch(Object target)
-			throws Exception {
-		if (target == null) throw new Exception("");
+	protected AbstractBatchProcessor createBatch(Object target) throws Exception {
+		if (target == null)
+			throw new Exception("");
 		if (target instanceof AbstractStructureQuery) {
 			DbReaderStructure reader = new DbReaderStructure();
 			reader.setHandlePrescreen(true);
 			return reader;
 		} else
-			return new RDFStructuresReader(target.toString(),referer);
+			return new RDFStructuresReader(target.toString(), referer);
 	}
+
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
-		if (profile.size()==0) throw new Exception("No columns to search!");
+		if (profile.size() == 0)
+			throw new Exception("No columns to search!");
 		return super.createTarget(reference);
 	}
+
 	protected Property createPropertyFromReference(String attribute, LiteratureEntry le) {
 		RDFPropertyIterator reader = null;
 		try {
-			reader = new RDFPropertyIterator(new Reference(attribute),referer);
+			reader = new RDFPropertyIterator(new Reference(attribute), referer);
 			reader.setBaseReference(applicationRootReference);
 			while (reader.hasNext()) {
 				return reader.next();
 			}
-			return null;	
+			return null;
 		} catch (Exception x) {
-			return new Property(attribute.toString(),le);
+			return new Property(attribute.toString(), le);
 		} finally {
-			try {reader.close(); } catch (Exception x) {}
+			try {
+				reader.close();
+			} catch (Exception x) {
+			}
 		}
-	}	
-	
-	protected IProcessor<IStructureRecord,IStructureRecord> getValuesReader() {
-		if  (profile.size()>0) {
-			ValuesReader readProfile = new ValuesReader(null);  //no reader necessary
+	}
+
+	protected IProcessor<IStructureRecord, IStructureRecord> getValuesReader() {
+		if (profile.size() > 0) {
+			ValuesReader readProfile = new ValuesReader(null); // no reader
+																// necessary
 			RetrieveProfile propertyQuery = new RetrieveProfile(QueryMode.idproperty);
 			propertyQuery.setValue(profile);
 			readProfile.setProfile(profile);
 			readProfile.setPropertyQuery(propertyQuery);
 			return readProfile;
-		} else return null;
+		} else
+			return null;
 	}
 }
-

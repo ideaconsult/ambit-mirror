@@ -33,7 +33,7 @@ public class CallableDomainCreatorTest extends ResourceTest {
 				alg, 
 				uriReporter,
 				new AlgorithmURIReporter(null),
-				null,"test");
+				null,"test",null);
 		TaskResult ref = c.call();
 	}
 	@Override

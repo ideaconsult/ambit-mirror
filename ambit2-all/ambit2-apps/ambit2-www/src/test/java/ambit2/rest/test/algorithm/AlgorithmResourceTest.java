@@ -1249,7 +1249,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Preferences.setProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES, Boolean.TRUE.toString());
 		Form headers = new Form();
 
-		Reference ref = testAsyncTask(String.format("http://localhost:%d/algorithm/vega", port), headers,
+		Reference ref = testAsyncTask(String.format("http://localhost:%d/algorithm/vega#muta_caesar", port), headers,
 				Status.SUCCESS_OK, null);
 		System.out.println(ref);
 		String modeluri = getModelURI("VEGA models", port, true);

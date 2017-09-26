@@ -1,6 +1,7 @@
 package ambit2.descriptors;
 
 import java.io.InputStream;
+import java.util.BitSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -21,7 +22,10 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.core.data.HashIntDescriptorResult;
 
-public class AtomEnvironentMatrix implements IFingerprinter {
+// ambit2.descriptors.AtomEnvironentMatrix
+public class AtomEnvironentMatrix implements IFingerprinter
+// TODO , ICountFingerprint 
+	{
 	protected String factoryResource = "org/openscience/cdk/dict/data/sybyl-atom-types.owl";
 
 	// protected String factoryResource =
@@ -392,4 +396,15 @@ public class AtomEnvironentMatrix implements IFingerprinter {
 	public int getSize() {
 		return descriptorNames == null ? 0 : descriptorNames.length;
 	}
+	/** CDK 1.5.15
+	@Override
+	public BitSet getFingerprint(IAtomContainer container) throws CDKException {
+		return doCalculation(container).getBitFingerprint(container).asBitSet();
+	}
+
+	@Override
+	public String getVersionDescription() {
+		return null;
+	}
+	*/
 }

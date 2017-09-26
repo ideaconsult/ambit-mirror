@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.commons.fileupload.FileItem;
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -129,8 +130,8 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 
 	public CallableSubstanceImporter(List<FileItem> items, String fileUploadField, String jsonConfigField,
 			Reference applicationRootReference, Context context, SubstanceURIReporter substanceReporter,
-			DatasetURIReporter datasetURIReporter, USERID token, String referer) throws Exception {
-		super(applicationRootReference, null, context, token, referer);
+			DatasetURIReporter datasetURIReporter, USERID token, String referer, ClientInfo clientinfo) throws Exception {
+		super(applicationRootReference, null, context, token, referer,clientinfo);
 		this._fileUploadField = fileUploadField;
 		this._jsonConfigField = jsonConfigField;
 		try {
@@ -143,9 +144,9 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 	}
 
 	public CallableSubstanceImporter(File file, Reference applicationRootReference, Context context,
-			SubstanceURIReporter substanceReporter, DatasetURIReporter datasetURIReporter, USERID token, String referer)
+			SubstanceURIReporter substanceReporter, DatasetURIReporter datasetURIReporter, USERID token, String referer, ClientInfo clientinfo)
 			throws Exception {
-		super(applicationRootReference, null, context, token, referer);
+		super(applicationRootReference, null, context, token, referer, clientinfo);
 		try {
 			processForm(file, null);
 		} catch (Exception x) {

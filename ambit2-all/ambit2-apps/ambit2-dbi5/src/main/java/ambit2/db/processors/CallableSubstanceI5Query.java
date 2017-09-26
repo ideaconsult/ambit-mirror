@@ -13,6 +13,7 @@ import java.util.logging.StreamHandler;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -172,8 +173,8 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 
 	public CallableSubstanceI5Query(Reference applicationRootReference, Form form, Context context,
 			SubstanceURIReporter substanceReporter, DatasetURIReporter datasetURIReporter, USERID token,
-			String referer) {
-		super(form, context, token, referer);
+			String referer, ClientInfo clientinfo) {
+		super(form, context, token, referer,clientinfo);
 		sourceReference = applicationRootReference;
 	}
 

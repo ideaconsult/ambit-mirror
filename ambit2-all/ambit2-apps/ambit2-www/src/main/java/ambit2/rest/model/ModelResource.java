@@ -252,16 +252,16 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 
 		try {
 			readVariables(model);
-			String token = getToken();
+			Object token = getToken();
 
 			final ModelPredictor thepredictor = ModelResource.getPredictor(model, getRequest());
 
 			if (model.getContentMediaType().equals(AlgorithmFormat.WWW_FORM.getMediaType())) {
 
 				if (thepredictor instanceof ExpertModelpredictor)
-					return new CallableModelPredictor<IStructureRecord, ExpertModelpredictor, String>(form,
+					return new CallableModelPredictor<IStructureRecord, ExpertModelpredictor, Object>(form,
 							getRequest().getRootRef(), getContext(), (ExpertModelpredictor) thepredictor, token,
-							getRequest().getResourceRef().toString()) {
+							getRequest().getResourceRef().toString(),getClientInfo()) {
 						@Override
 						protected void processForm(Reference applicationRootReference, Form form) {
 							super.processForm(applicationRootReference, form);
@@ -269,13 +269,13 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 						};
 					};
 				else
-					return new CallableModelPredictor<IStructureRecord, ModelPredictor, String>(form,
+					return new CallableModelPredictor<IStructureRecord, ModelPredictor, Object>(form,
 							getRequest().getRootRef(), getContext(), thepredictor, token,
-							getRequest().getResourceRef().toString());
+							getRequest().getResourceRef().toString(),getClientInfo());
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType())) {
 				return // reads Instances, instead of IStructureRecord
-				new CallableWekaPredictor<Object, String>(form, getRequest().getRootRef(), getContext(), thepredictor,
-						token, getRequest().getResourceRef().toString());
+				new CallableWekaPredictor<Object, Object>(form, getRequest().getRootRef(), getContext(), thepredictor,
+						token, getRequest().getResourceRef().toString(),getClientInfo());
 				/*
 				 * } else if (model.getContentMediaType().equals(
 				 * 
@@ -289,15 +289,15 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 				if (model.getPredictors().size() == 0) { // hack for structure
 															// based AD
 					if (thepredictor instanceof FingerprintsPredictor)
-						return new CallableModelPredictor<IStructureRecord, FingerprintsPredictor, String>(form,
+						return new CallableModelPredictor<IStructureRecord, FingerprintsPredictor, Object>(form,
 								getRequest().getRootRef(), getContext(), (FingerprintsPredictor) thepredictor, token,
-								getRequest().getResourceRef().toString());
+								getRequest().getResourceRef().toString(),getClientInfo());
 					else
 						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
 								String.format("Not supported %s", thepredictor.getClass().getName()));
 				} else {
 					return new CallableModelPredictor(form, getRequest().getRootRef(), getContext(), thepredictor,
-							token, getRequest().getResourceRef().toString());
+							token, getRequest().getResourceRef().toString(),getClientInfo());
 					/*
 					 * return new CallableWekaPredictor<DataCoverage>( //reads
 					 * Instances, instead of IStructureRecord form,
@@ -306,17 +306,17 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 				}
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.Structure2D.getMediaType())) {
 				return new CallableStructureOptimizer(form, getRequest().getRootRef(), getContext(),
-						(Structure2DProcessor) thepredictor, token, getRequest().getResourceRef().toString());
+						(Structure2DProcessor) thepredictor, token, getRequest().getResourceRef().toString(),getClientInfo());
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.MOPAC.getMediaType())) {
 				return new CallableStructureOptimizer(form, getRequest().getRootRef(), getContext(),
-						(StructureProcessor) thepredictor, token, getRequest().getResourceRef().toString());
+						(StructureProcessor) thepredictor, token, getRequest().getResourceRef().toString(),getClientInfo());
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.TAUTOMERS.getMediaType())) {
 				return new CallableTautomersGenerator(form, getRequest().getRootRef(), getContext(),
-						(TautomersGenerator) thepredictor, token, getRequest().getResourceRef().toString());
+						(TautomersGenerator) thepredictor, token, getRequest().getResourceRef().toString(),getClientInfo());
 
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
 				return new CallableDescriptorCalculator(form, getRequest().getRootRef(), getContext(),
-						(DescriptorPredictor) thepredictor, token, getRequest().getResourceRef().toString());
+						(DescriptorPredictor) thepredictor, token, getRequest().getResourceRef().toString(),getClientInfo());
 			} else
 				throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE, model.getContentMediaType());
 		} catch (ResourceException x) {

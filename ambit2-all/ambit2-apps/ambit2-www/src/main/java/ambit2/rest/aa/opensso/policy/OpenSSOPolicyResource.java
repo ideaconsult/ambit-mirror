@@ -37,13 +37,12 @@ public class OpenSSOPolicyResource extends CatalogResource<Policy> {
 	public final static String policyKey = "policyKey";
 
 	@Override
-	protected Iterator<Policy> createQuery(Context context, Request request,
-			Response response) throws ResourceException {
+	protected Iterator<Policy> createQuery(Context context, Request request, Response response)
+			throws ResourceException {
 
 		Object policyId = request.getAttributes().get(policyKey);
 		if (policyId == null)
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					"Policy identifier missing");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Policy identifier missing");
 
 		User user = request.getClientInfo().getUser();
 		if (user == null) {
@@ -51,7 +50,7 @@ public class OpenSSOPolicyResource extends CatalogResource<Policy> {
 			((OpenSSOUser) user).setUseSecureCookie(useSecureCookie(request));
 		}
 		if (user instanceof OpenSSOUser) {
-			String token = getToken();
+			Object token = getToken();
 			if (token == null)
 				throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
 
@@ -59,13 +58,12 @@ public class OpenSSOPolicyResource extends CatalogResource<Policy> {
 			Hashtable<String, String> policies = new Hashtable<String, String>();
 			try {
 
-				OpenSSOServicesConfig config = OpenSSOServicesConfig
-						.getInstance();
+				OpenSSOServicesConfig config = OpenSSOServicesConfig.getInstance();
 				policyService = config.getPolicyService();
 				OpenSSOPolicy policy = new OpenSSOPolicy(policyService);
-				OpenSSOToken ssotoken = new OpenSSOToken(
-						config.getOpenSSOService());
-				ssotoken.setToken(token);
+				OpenSSOToken ssotoken = new OpenSSOToken(config.getOpenSSOService());
+				if (token != null)
+					ssotoken.setToken(token.toString());
 				policy.listPolicy(ssotoken, policyId.toString(), policies);
 				if (policies.size() == 0)
 					throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
@@ -85,8 +83,7 @@ public class OpenSSOPolicyResource extends CatalogResource<Policy> {
 			} catch (ResourceException x) {
 				throw x;
 			} catch (Exception x) {
-				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
-						policyService, x);
+				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY, policyService, x);
 			}
 
 		} else
@@ -94,14 +91,12 @@ public class OpenSSOPolicyResource extends CatalogResource<Policy> {
 	}
 
 	@Override
-	protected Representation post(Representation entity)
-			throws ResourceException {
+	protected Representation post(Representation entity) throws ResourceException {
 		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 	}
 
 	@Override
-	protected Representation put(Representation representation)
-			throws ResourceException {
+	protected Representation put(Representation representation) throws ResourceException {
 		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 	}
 
@@ -109,11 +104,10 @@ public class OpenSSOPolicyResource extends CatalogResource<Policy> {
 	protected Representation delete(Variant variant) throws ResourceException {
 		Object policyId = getRequest().getAttributes().get(policyKey);
 		if (policyId == null)
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					"Policy identifier missing");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Policy identifier missing");
 		User user = getRequest().getClientInfo().getUser();
 		if (user instanceof OpenSSOUser) {
-			String token = getToken();
+			Object token = getToken();
 			if (token == null)
 				throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
 
@@ -121,28 +115,21 @@ public class OpenSSOPolicyResource extends CatalogResource<Policy> {
 			Hashtable<String, String> policies = new Hashtable<String, String>();
 			try {
 
-				OpenSSOServicesConfig config = OpenSSOServicesConfig
-						.getInstance();
+				OpenSSOServicesConfig config = OpenSSOServicesConfig.getInstance();
 				policyService = config.getPolicyService();
 				OpenSSOPolicy policy = new OpenSSOPolicy(policyService);
-				OpenSSOToken ssotoken = new OpenSSOToken(
-						config.getOpenSSOService());
-				ssotoken.setToken(token);
-				int httpcode = policy.deletePolicy(ssotoken,
-						policyId.toString());
+				OpenSSOToken ssotoken = new OpenSSOToken(config.getOpenSSOService());
+				ssotoken.setToken(token == null ? null : token.toString());
+				int httpcode = policy.deletePolicy(ssotoken, policyId.toString());
 				if (httpcode == 200)
-					return new StringRepresentation("Policy deleted",
-							MediaType.TEXT_PLAIN);
+					return new StringRepresentation("Policy deleted", MediaType.TEXT_PLAIN);
 				else
-					throw new ResourceException(
-							Status.SERVER_ERROR_BAD_GATEWAY,
-							config.getPolicyService());
+					throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY, config.getPolicyService());
 
 			} catch (ResourceException x) {
 				throw x;
 			} catch (Exception x) {
-				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
-						policyService, x);
+				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY, policyService, x);
 			}
 
 		} else
@@ -150,12 +137,11 @@ public class OpenSSOPolicyResource extends CatalogResource<Policy> {
 	}
 
 	@Override
-	public IProcessor<Iterator<Policy>, Representation> createConvertor(
-			Variant variant) throws AmbitException, ResourceException {
+	public IProcessor<Iterator<Policy>, Representation> createConvertor(Variant variant)
+			throws AmbitException, ResourceException {
 
 		// if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		return new StringConvertor(new PolicyURIReporter(getRequest()),
-				MediaType.TEXT_URI_LIST);
+		return new StringConvertor(new PolicyURIReporter(getRequest()), MediaType.TEXT_URI_LIST);
 
 	}
 

@@ -16,6 +16,7 @@ import org.restlet.Application;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -100,10 +101,10 @@ public class FileUpload<USERID> {
     /**
      * Creates new entry in query table and adds structures into query_results
      */
-    protected Representation copyDatasetToQueryResultsTable(Form form, USERID token, boolean clearPreviousContent,String referer)
+    protected Representation copyDatasetToQueryResultsTable(Form form, USERID token, boolean clearPreviousContent,String referer, ClientInfo clientInfo)
 	    throws ResourceException {
 	CallableQueryResultsCreator callable = new CallableQueryResultsCreator(form, getRequest().getRootRef(),
-		getContext(), null, token,referer);
+		getContext(), null, token,referer,clientInfo);
 	callable.setClearPreviousContent(clearPreviousContent);
 	try {
 	    getResponse().setLocationRef(callable.call().getReference());
@@ -122,7 +123,7 @@ public class FileUpload<USERID> {
     }
 
     public Representation upload(Representation entity, Variant variant, boolean newEntry, boolean propertyOnly,
-	    USERID token,String referer) throws ResourceException {
+	    USERID token,String referer, ClientInfo clientInfo) throws ResourceException {
 
 	if ((entity == null) || !entity.isAvailable())
 	    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty content");
@@ -130,7 +131,7 @@ public class FileUpload<USERID> {
 	if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
 	    boolean clearPreviousContent = !propertyOnly; // propertyOnly POST:
 							  // false, PUT : true
-	    return copyDatasetToQueryResultsTable(new Form(entity), token, clearPreviousContent,referer);
+	    return copyDatasetToQueryResultsTable(new Form(entity), token, clearPreviousContent,referer,clientInfo);
 	} else if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(), true)) {
 	    DiskFileItemFactory factory = new DiskFileItemFactory();
 	    // factory.setSizeThreshold(100);
@@ -183,7 +184,7 @@ public class FileUpload<USERID> {
 			connection, reporter, compoundReporter, firstCompoundOnly, token);
 
 		callable.setPropertyOnly(propertyOnly);
-		ITask<ITaskResult, String> task = ((AmbitApplication) getApplication())
+		ITask<ITaskResult, Object> task = ((AmbitApplication) getApplication())
 			.addTask(
 
 			String.format("File import %s [%d]", entity.getDownloadName() == null ? entity.getMediaType()

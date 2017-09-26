@@ -3,12 +3,6 @@ package ambit2.rest;
 import java.io.Serializable;
 import java.util.List;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.exceptions.BatchProcessingException;
-import net.idea.modbcum.i.exceptions.NotFoundException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.restnet.i.aa.OpenSSOCookie;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -22,6 +16,11 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.rest.exception.RResourceException;
 import ambit2.rest.freemarker.FreeMarkerResource;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.exceptions.BatchProcessingException;
+import net.idea.modbcum.i.exceptions.NotFoundException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.restnet.i.aa.OpenSSOCookie;
 
 /**
  * Abstract class for resources
@@ -68,11 +67,9 @@ public abstract class AbstractResource<Q, T extends Serializable, P extends IPro
 			getVariants().add(new Variant(m));
 	}
 
-	public abstract P createConvertor(Variant variant) throws AmbitException,
-			ResourceException;
+	public abstract P createConvertor(Variant variant) throws AmbitException, ResourceException;
 
-	protected abstract Q createQuery(Context context, Request request,
-			Response response) throws ResourceException;
+	protected abstract Q createQuery(Context context, Request request, Response response) throws ResourceException;
 
 	@Override
 	public List<Variant> getVariants() {
@@ -84,7 +81,7 @@ public abstract class AbstractResource<Q, T extends Serializable, P extends IPro
 	protected Representation get(Variant variant) throws ResourceException {
 		setFrameOptions("SAMEORIGIN");
 
-		OpenSSOCookie.setCookieSetting(this.getResponse().getCookieSettings(), getToken(),useSecureCookie(getRequest()));
+		OpenSSOCookie.setCookieSetting(this.getResponse().getCookieSettings(), getToken()==null?null:getToken().toString(),useSecureCookie(getRequest()));
 		
 		if (isHtmlbyTemplate()
 				&& MediaType.TEXT_HTML.equals(variant.getMediaType())) {
@@ -93,21 +90,16 @@ public abstract class AbstractResource<Q, T extends Serializable, P extends IPro
 			return getRepresentation(variant);
 	}
 
-	protected Representation getRepresentation(Variant variant)
-			throws ResourceException {
+	protected Representation getRepresentation(Variant variant) throws ResourceException {
 		try {
 			setTokenCookies(variant, useSecureCookie(getRequest()));
 			setStatus(Status.SUCCESS_OK);
 
-			if (MediaType.APPLICATION_JAVA_OBJECT
-					.equals(variant.getMediaType())) {
-				if ((queryObject != null)
-						&& (queryObject instanceof Serializable))
-					return new ObjectRepresentation((Serializable) queryObject,
-							MediaType.APPLICATION_JAVA_OBJECT);
+			if (MediaType.APPLICATION_JAVA_OBJECT.equals(variant.getMediaType())) {
+				if ((queryObject != null) && (queryObject instanceof Serializable))
+					return new ObjectRepresentation((Serializable) queryObject, MediaType.APPLICATION_JAVA_OBJECT);
 				else
-					throw new ResourceException(
-							Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+					throw new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
 			}
 			if (queryObject != null) {
 				IProcessor<Q, Representation> convertor = null;
@@ -124,12 +116,10 @@ public abstract class AbstractResource<Q, T extends Serializable, P extends IPro
 					return r;
 				} catch (BatchProcessingException x) {
 					if (x.getCause() instanceof NotFoundException) {
-						Representation r = processNotFound(
-								(NotFoundException) x.getCause(), variant);
+						Representation r = processNotFound((NotFoundException) x.getCause(), variant);
 						return r;
 					} else {
-						getResponse()
-								.setStatus(Status.SERVER_ERROR_INTERNAL, x);
+						getResponse().setStatus(Status.SERVER_ERROR_INTERNAL, x);
 						return null;
 					}
 				} catch (RResourceException x) {
@@ -148,10 +138,8 @@ public abstract class AbstractResource<Q, T extends Serializable, P extends IPro
 				}
 
 			} else {
-				getResponse()
-						.setStatus(
-								response_status == null ? Status.CLIENT_ERROR_BAD_REQUEST
-										: response_status, error);
+				getResponse().setStatus(response_status == null ? Status.CLIENT_ERROR_BAD_REQUEST : response_status,
+						error);
 				return null;
 			}
 		} catch (Exception x) {
@@ -160,8 +148,7 @@ public abstract class AbstractResource<Q, T extends Serializable, P extends IPro
 		}
 	}
 
-	protected Representation processNotFound(NotFoundException x,
-			Variant variant) throws Exception {
+	protected Representation processNotFound(NotFoundException x, Variant variant) throws Exception {
 
 		throw new NotFoundException(x.getMessage());
 
@@ -177,14 +164,13 @@ public abstract class AbstractResource<Q, T extends Serializable, P extends IPro
 	 * @return
 	 * @throws ResourceException
 	 */
-	protected String getParameter(Form requestHeaders, String paramName,
-			String description, boolean mandatory) throws ResourceException {
+	protected String getParameter(Form requestHeaders, String paramName, String description, boolean mandatory)
+			throws ResourceException {
 		Object o = requestHeaders.getFirstValue(paramName);
 		if (o == null)
 			if (mandatory)
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-						String.format("Parameter %s [%s] is mandatory!",
-								paramName, description));
+						String.format("Parameter %s [%s] is mandatory!", paramName, description));
 			else
 				return null;
 		else
@@ -200,14 +186,12 @@ public abstract class AbstractResource<Q, T extends Serializable, P extends IPro
 	 * @return
 	 * @throws ResourceException
 	 */
-	protected String getParameter(Form requestHeaders, String paramName,
-			String description) throws ResourceException {
+	protected String getParameter(Form requestHeaders, String paramName, String description) throws ResourceException {
 		return getParameter(requestHeaders, paramName, description, false);
 	}
 
 	@Override
-	protected Representation post(Representation entity, Variant variant)
-			throws ResourceException {
+	protected Representation post(Representation entity, Variant variant) throws ResourceException {
 		return post(entity);
 	}
 

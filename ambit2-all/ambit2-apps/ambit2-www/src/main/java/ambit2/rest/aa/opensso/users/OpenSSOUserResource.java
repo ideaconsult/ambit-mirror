@@ -40,8 +40,8 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 	}
 
 	@Override
-	protected Iterator<OpenSSOUser> createQuery(Context context,
-			Request request, Response response) throws ResourceException {
+	protected Iterator<OpenSSOUser> createQuery(Context context, Request request, Response response)
+			throws ResourceException {
 
 		User user = request.getClientInfo().getUser();
 		if (user == null) {
@@ -61,16 +61,15 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 			if ((user == null) || (((OpenSSOUser) user).getToken() == null))
 				super.setTokenCookies(variant, secure);
 			else {
-				OpenSSOCookie.setCookieSetting(this.getResponse()
-						.getCookieSettings(), getToken(),
-						useSecureCookie(getRequest()));
+				OpenSSOCookie.setCookieSetting(this.getResponse().getCookieSettings(),
+						getToken() == null ? null : getToken().toString(), useSecureCookie(getRequest()));
 			}
 		}
 	}
 
 	@Override
-	public IProcessor<Iterator<OpenSSOUser>, Representation> createConvertor(
-			Variant variant) throws AmbitException, ResourceException {
+	public IProcessor<Iterator<OpenSSOUser>, Representation> createConvertor(Variant variant)
+			throws AmbitException, ResourceException {
 
 		// if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(new OpenSSOUsersURIReporter(getRequest()) {
@@ -92,15 +91,12 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 	}
 
 	@Override
-	protected Representation post(Representation entity, Variant variant)
-			throws ResourceException {
-		if ((entity != null)
-				&& MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
+	protected Representation post(Representation entity, Variant variant) throws ResourceException {
+		if ((entity != null) && MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
 			Form form = new Form(entity);
 
 			try {
-				OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig
-						.getInstance().getOpenSSOService());
+				OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
 				String username = form.getFirstValue("user");
 				String pass = form.getFirstValue("password");
 				String redirect = form.getFirstValue("targetUri", true);
@@ -110,15 +106,13 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 					user.setToken(ssoToken.getToken());
 					getRequest().getClientInfo().setUser(user);
 					user.setIdentifier(username);
-					OpenSSOCookie.setCookieSetting(this.getResponse()
-							.getCookieSettings(), ssoToken.getToken(),
+					OpenSSOCookie.setCookieSetting(this.getResponse().getCookieSettings(), ssoToken.getToken(),
 							useSecureCookie(getRequest()));
 
 					if (redirect != null)
 						this.getResponse().redirectSeeOther(redirect);
 					else
-						this.getResponse().redirectSeeOther(
-								String.format("%s", getRequest().getRootRef()));
+						this.getResponse().redirectSeeOther(String.format("%s", getRequest().getRootRef()));
 					return null;
 					/*
 					 * queryObject = createQuery(getContext(), getRequest(),
@@ -128,35 +122,29 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 					 */
 				} else {
 					getRequest().getClientInfo().setUser(null);
-					this.getResponse().getCookieSettings()
-							.removeAll(OpenSSOCookie.CookieName);
-					queryObject = createQuery(getContext(), getRequest(),
-							getResponse());
+					this.getResponse().getCookieSettings().removeAll(OpenSSOCookie.CookieName);
+					queryObject = createQuery(getContext(), getRequest(), getResponse());
 
 					return get(variant);
 				}
 
 			} catch (Exception x) {
-				throw new ResourceException(new Status(
-						Status.SERVER_ERROR_BAD_GATEWAY, x));
+				throw new ResourceException(new Status(Status.SERVER_ERROR_BAD_GATEWAY, x));
 			}
 		} else
-			throw new ResourceException(
-					Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
+			throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
 
 	}
 
 	@Override
 	protected Representation delete() throws ResourceException {
-		String token = getToken();
+		Object token = getToken();
 		if (token != null)
 			try {
-				OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig
-						.getInstance().getOpenSSOService());
+				OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
 				if (ssoToken.logout()) {
 					getRequest().getClientInfo().setUser(null);
-					this.getResponse().getCookieSettings()
-							.removeAll(OpenSSOCookie.CookieName);
+					this.getResponse().getCookieSettings().removeAll(OpenSSOCookie.CookieName);
 				}
 			} catch (Exception x) {
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY, x);
@@ -169,16 +157,15 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 	 */
 	@Override
 	protected Representation delete(Variant variant) throws ResourceException {
-		String token = getToken();
+		Object token = getToken();
 		if (token != null)
 			try {
-				OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig
-						.getInstance().getOpenSSOService());
-				ssoToken.setToken(token);
+				OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
+				if (token != null)
+					ssoToken.setToken(token.toString());
 				if (ssoToken.logout()) {
 					getRequest().getClientInfo().setUser(null);
-					this.getResponse().getCookieSettings()
-							.removeAll(OpenSSOCookie.CookieName);
+					this.getResponse().getCookieSettings().removeAll(OpenSSOCookie.CookieName);
 				}
 			} catch (Exception x) {
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY, x);
@@ -193,8 +180,7 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 		boolean yes = super.useSecureCookie(request);
 		if (yes)
 			try {
-				return ((OpenSSOUser) request.getClientInfo().getUser())
-						.isUseSecureCookie();
+				return ((OpenSSOUser) request.getClientInfo().getUser()).isUseSecureCookie();
 			} catch (Exception x) {
 				return yes;
 			}
@@ -203,27 +189,23 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser> {
 	}
 
 	@Override
-	public void configureTemplateMap(Map<String, Object> map, Request request,
-			IFreeMarkerApplication app) {
+	public void configureTemplateMap(Map<String, Object> map, Request request, IFreeMarkerApplication app) {
 		super.configureTemplateMap(map, request, app);
 		if (getClientInfo().getUser() != null) {
 			// map.put("username", getClientInfo().getUser().getIdentifier());
 			try {
-				map.put("openam_token", ((OpenSSOUser) getClientInfo()
-						.getUser()).getToken());
+				map.put("openam_token", ((OpenSSOUser) getClientInfo().getUser()).getToken());
 			} catch (Exception x) {
 				map.remove("openam_token");
 			}
 		}
 		try {
-			map.put("openam_service", OpenSSOServicesConfig.getInstance()
-					.getOpenSSOService());
+			map.put("openam_service", OpenSSOServicesConfig.getInstance().getOpenSSOService());
 		} catch (Exception x) {
 			map.remove("openam_service");
 		}
 		map.put(AMBITConfig.creator.name(), "IdeaConsult Ltd.");
-		map.put(AMBITConfig.ambit_root.name(), getRequest().getRootRef()
-				.toString());
+		map.put(AMBITConfig.ambit_root.name(), getRequest().getRootRef().toString());
 		map.put(AMBITConfig.ambit_version_short.name(), app.getVersionShort());
 		map.put(AMBITConfig.ambit_version_short.name(), app.getVersionLong());
 		map.put(AMBITConfig.googleAnalytics.name(), app.getGACode());

@@ -80,7 +80,7 @@ public class CallablePolicyCreator<USERID> extends CallableProtectedTask<USERID>
 		Hashtable<String, String> policies = new Hashtable<String, String>();
 		try {
 			OpenSSOToken ssotoken = new OpenSSOToken(config.getOpenSSOService());
-			ssotoken.setToken(getToken());
+			ssotoken.setToken(getToken()==null?null:getToken().toString());
 			int allowed = 0;
 			for (boolean method : methods) allowed += method?1:0;
 			String[] m = new String[allowed];

@@ -2,13 +2,8 @@ package ambit2.rest.task.dbpreprocessing;
 
 import java.sql.Connection;
 
-import net.idea.modbcum.i.batch.IBatchStatistics;
-import net.idea.modbcum.i.batch.IBatchStatistics.RECORDS_STATS;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.processors.ProcessorsChain;
-import net.idea.modbcum.p.batch.AbstractBatchProcessor;
-
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -37,6 +32,11 @@ import ambit2.descriptors.processors.BitSetGenerator;
 import ambit2.descriptors.processors.FPTable;
 import ambit2.rest.task.TaskResult;
 import ambit2.smarts.processors.SMARTSPropertiesGenerator;
+import net.idea.modbcum.i.batch.IBatchStatistics;
+import net.idea.modbcum.i.batch.IBatchStatistics.RECORDS_STATS;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 /**
  * Dataset fingerprints
@@ -44,8 +44,7 @@ import ambit2.smarts.processors.SMARTSPropertiesGenerator;
  * @author nina
  * 
  */
-public class CallableFingerprintsCalculator<USERID> extends
-		CallableDBProcessing<USERID> {
+public class CallableFingerprintsCalculator<USERID> extends CallableDBProcessing<USERID> {
 	protected FPTable fingerprintsType = FPTable.fp1024;
 	protected String label;
 
@@ -57,16 +56,13 @@ public class CallableFingerprintsCalculator<USERID> extends
 		this.fingerprintsType = fingerprintsType;
 	}
 
-	public CallableFingerprintsCalculator(Form form,
-			Reference applicationRootReference, Context context,
-			Algorithm algorithm, USERID token,String referer) throws ResourceException {
-		super(form, applicationRootReference, context, algorithm, token,referer);
+	public CallableFingerprintsCalculator(Form form, Reference applicationRootReference, Context context,
+			Algorithm algorithm, USERID token, String referer, ClientInfo clientinfo) throws ResourceException {
+		super(form, applicationRootReference, context, algorithm, token, referer, clientinfo);
 		try {
-			setFingerprintsType(FPTable.valueOf(algorithm.getContent()
-					.toString()));
+			setFingerprintsType(FPTable.valueOf(algorithm.getContent().toString()));
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					algorithm.getContent().toString(), x);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, algorithm.getContent().toString(), x);
 		}
 
 	}
@@ -80,8 +76,7 @@ public class CallableFingerprintsCalculator<USERID> extends
 	protected long batchSize = 10000;
 
 	@Override
-	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors()
-			throws Exception {
+	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors() throws Exception {
 		ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> p = new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>();
 		RetrieveStructure r = new RetrieveStructure(true);
 		r.setPageSize(1);
@@ -115,22 +110,19 @@ public class CallableFingerprintsCalculator<USERID> extends
 			break;
 		}
 		/*
-		case atomenvironments: {
-			p.add(new AtomEnvironmentGenerator());
-			p.add(new AtomEnvironmentWriter());
-			break;
-		}
-		*/
+		 * case atomenvironments: { p.add(new AtomEnvironmentGenerator());
+		 * p.add(new AtomEnvironmentWriter()); break; }
+		 */
 		case atomenvironments: {
 			p.add(new AtomEnvironmentMatrixGenerator());
 			p.add(new AtomEnvironmentMatrixWriter());
 			break;
-		}				
+		}
 		case aematrix: {
 			p.add(new AtomEnvironmentMatrixGenerator());
 			p.add(new AtomEnvironmentMatrixWriter());
 			break;
-		}		
+		}
 		case inchi: {
 			p.add(new StructureNormalizer());
 			p.add(new InChIChemicalsWriter());
@@ -149,20 +141,18 @@ public class CallableFingerprintsCalculator<USERID> extends
 		if (reference != null)
 			if (applicationRootReference.isParent(reference)) {
 				try {
-					Object q = getQueryObject(reference,
-							applicationRootReference, context,referer);
+					Object q = getQueryObject(reference, applicationRootReference, context, getCookies(), getAgent(),
+							referer);
 					return q == null ? reference : q;
 				} catch (Exception x) {
 					return reference;
 				}
 			} else
-				throw new Exception(
-						"Remote URI not supported, this is for housekeeping the database only!");
+				throw new Exception("Remote URI not supported, this is for housekeeping the database only!");
 		else {
 			switch (getFingerprintsType()) {
 			case inchi: {
-				MissingInChIsQuery q = new MissingInChIsQuery(
-						label == null ? "ERROR" : label);
+				MissingInChIsQuery q = new MissingInChIsQuery(label == null ? "ERROR" : label);
 				q.setPageSize(batchSize);
 				q.setPage(0);
 				return q;
@@ -170,8 +160,7 @@ public class CallableFingerprintsCalculator<USERID> extends
 			default: {
 				// can have combined query with a dataset query if dataset_uri
 				// is present
-				MissingFingerprintsQuery q = new MissingFingerprintsQuery(
-						getFingerprintsType());
+				MissingFingerprintsQuery q = new MissingFingerprintsQuery(getFingerprintsType());
 				q.setPageSize(batchSize);
 				q.setPage(0);
 				return q;
@@ -180,12 +169,10 @@ public class CallableFingerprintsCalculator<USERID> extends
 		}
 	}
 
-	protected AbstractBatchProcessor createBatch(Object target)
-			throws Exception {
+	protected AbstractBatchProcessor createBatch(Object target) throws Exception {
 
 		if (target instanceof AbstractStructureQuery) {
-			DbReaderStructure reader = new DbReaderStructure(
-					getFingerprintsType().equals(FPTable.inchi));
+			DbReaderStructure reader = new DbReaderStructure(getFingerprintsType().equals(FPTable.inchi));
 			reader.setHandlePrescreen(true);
 			return reader;
 		} else
@@ -212,10 +199,8 @@ public class CallableFingerprintsCalculator<USERID> extends
 	}
 
 	@Override
-	protected TaskResult createReference(Connection connection)
-			throws Exception {
-		TaskResult result = sourceReference == null ? null : new TaskResult(
-				sourceReference.toString(), false);
+	protected TaskResult createReference(Connection connection) throws Exception {
+		TaskResult result = sourceReference == null ? null : new TaskResult(sourceReference.toString(), false);
 		switch (getFingerprintsType()) {
 		case fp1024: {
 			return result;
@@ -236,18 +221,15 @@ public class CallableFingerprintsCalculator<USERID> extends
 			return result;
 		}
 		default: {
-			throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,
-					getFingerprintsType().toString());
+			throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED, getFingerprintsType().toString());
 		}
 		}
 	}
 
-	protected TaskResult structureQuality(Connection connection)
-			throws Exception {
+	protected TaskResult structureQuality(Connection connection) throws Exception {
 		try {
 			CreateQLabelPair q = new CreateQLabelPair();
-			AbstractUpdateProcessor<AmbitUser, String> p = new AbstractUpdateProcessor<AmbitUser, String>(
-					OP.CREATE, q);
+			AbstractUpdateProcessor<AmbitUser, String> p = new AbstractUpdateProcessor<AmbitUser, String>(OP.CREATE, q);
 			p.setConnection(connection);
 			p.setCloseConnection(true);
 			p.process(null);

@@ -1,5 +1,6 @@
 package ambit2.core.data;
 
+import java.util.BitSet;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -18,7 +19,16 @@ public class HashIntDescriptorResult extends HashDescriptorResult<Integer>
 	private static final long serialVersionUID = -8497822347752458361L;
 	protected int maxLevels = -1;
 	public String factory;
-
+/** CDK 1.5.15
+	@Override
+	public BitSet getFingerprint(IAtomContainer arg0) throws CDKException {
+		throw new CDKException("not implemented yet");
+	}
+	@Override
+	public String getVersionDescription() {
+		return null;
+	}
+*/	
 	public String getFactory() {
 		return factory;
 	}

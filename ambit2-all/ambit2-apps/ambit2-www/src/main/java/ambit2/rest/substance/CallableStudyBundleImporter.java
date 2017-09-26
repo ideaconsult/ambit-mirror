@@ -8,6 +8,7 @@ import net.idea.modbcum.p.AbstractDBProcessor;
 
 import org.apache.commons.fileupload.FileItem;
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
@@ -47,29 +48,29 @@ public class CallableStudyBundleImporter<USERID> extends
 			String fileUploadField, String jsonConfigField,
 			Reference applicationRootReference, Context context,
 			SubstanceURIReporter substanceReporter,
-			DatasetURIReporter datasetURIReporter, USERID token,String referer)
+			DatasetURIReporter datasetURIReporter, USERID token,String referer, ClientInfo clientInfo)
 			throws Exception {
 		super(items, fileUploadField, jsonConfigField,
 				applicationRootReference, context, substanceReporter,
-				datasetURIReporter, token,referer);
+				datasetURIReporter, token,referer,clientInfo);
 	}
 
 	public CallableStudyBundleImporter(File file,
 			Reference applicationRootReference, Context context,
 			SubstanceURIReporter substanceReporter,
-			DatasetURIReporter datasetURIReporter, USERID token,String referer)
+			DatasetURIReporter datasetURIReporter, USERID token,String referer, ClientInfo clientInfo)
 			throws Exception {
 		this(_mode.studyimport, file, applicationRootReference, context,
-				substanceReporter, datasetURIReporter, token,referer);
+				substanceReporter, datasetURIReporter, token,referer,clientInfo);
 	}
 
 	public CallableStudyBundleImporter(_mode mode, File file,
 			Reference applicationRootReference, Context context,
 			SubstanceURIReporter substanceReporter,
-			DatasetURIReporter datasetURIReporter, USERID token,String referer)
+			DatasetURIReporter datasetURIReporter, USERID token,String referer, ClientInfo clientInfo)
 			throws Exception {
 		super(file, applicationRootReference, context, substanceReporter,
-				datasetURIReporter, token,referer);
+				datasetURIReporter, token,referer,clientInfo);
 		setMode(mode);
 	}
 

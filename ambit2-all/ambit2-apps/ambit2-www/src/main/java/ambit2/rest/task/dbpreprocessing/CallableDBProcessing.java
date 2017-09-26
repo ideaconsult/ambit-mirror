@@ -3,6 +3,7 @@ package ambit2.rest.task.dbpreprocessing;
 import java.sql.Connection;
 
 import org.restlet.Context;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
@@ -11,28 +12,27 @@ import ambit2.core.data.model.Algorithm;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.TaskResult;
 
-public abstract class CallableDBProcessing<USERID> extends	CallableQueryProcessor<Object, IStructureRecord,USERID>  { 
+public abstract class CallableDBProcessing<USERID> extends CallableQueryProcessor<Object, IStructureRecord, USERID> {
 	protected Reference applicationRootReference;
-	public CallableDBProcessing(Form form,
-			Reference applicationRootReference,Context context,
-			Algorithm algorithm,USERID token,String referer) {
-		super(applicationRootReference,form,context,token,referer);
+
+	public CallableDBProcessing(Form form, Reference applicationRootReference, Context context, Algorithm algorithm,
+			USERID token, String referer, ClientInfo clientinfo) {
+		super(applicationRootReference, form, context, token, referer, clientinfo);
 		this.applicationRootReference = applicationRootReference;
 	}
-	
+
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
 		try {
-			Object q = getQueryObject(reference, applicationRootReference,context,referer);
-			return q==null?reference:q;
+			Object q = getQueryObject(reference, applicationRootReference, context, getCookies(), getAgent(), referer);
+			return q == null ? reference : q;
 		} catch (Exception x) {
 			return reference;
 		}
 	}
-	
+
 	@Override
-	protected TaskResult createReference(Connection connection)
-			throws Exception {
-		return new TaskResult(sourceReference.toString(),false);
+	protected TaskResult createReference(Connection connection) throws Exception {
+		return new TaskResult(sourceReference.toString(), false);
 	}
 }

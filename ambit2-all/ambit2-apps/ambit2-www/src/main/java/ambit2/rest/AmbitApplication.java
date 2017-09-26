@@ -185,7 +185,7 @@ import net.idea.restnet.i.task.ITaskResult;
  * @author nina
  */
 
-public class AmbitApplication extends FreeMarkerApplication<String> {
+public class AmbitApplication extends FreeMarkerApplication<Object> {
 	public static final String BASE_URL = "BASE_URL";
 	protected boolean insecure = true;
 	protected Logger logger = Logger.getLogger(AmbitApplication.class.getName());
@@ -1010,7 +1010,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 		queryRouter.attach(SubstanceTypeSearchResource.resource, SubstanceTypeSearchResource.class);
 		queryRouter.attach(DataAvailabilityResource.resource, DataAvailabilityResource.class);
-		
+
 		return queryRouter;
 	}
 
@@ -1047,11 +1047,11 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		return authN;
 	}
 
-	protected TaskStorage<String> createTaskStorage() {
-		return new TaskStorage<String>(getName(), getLogger()) {
+	protected TaskStorage<Object> createTaskStorage() {
+		return new TaskStorage<Object>(getName(), getLogger()) {
 
 			@Override
-			protected Task<ITaskResult, String> createTask(String user, ICallableTask callable) {
+			protected Task<ITaskResult, Object> createTask(Object user, ICallableTask callable) {
 
 				return new PolicyProtectedTask(user, !(callable instanceof CallablePolicyCreator)) {
 					/**

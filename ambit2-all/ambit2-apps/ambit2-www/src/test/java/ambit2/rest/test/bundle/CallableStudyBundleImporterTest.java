@@ -66,7 +66,7 @@ public class CallableStudyBundleImporterTest extends DbUnitTest {
 					.getResource("matrixvalue_delete.json").getFile());
 			CallableStudyBundleImporter callable = new CallableStudyBundleImporter(
 					_mode.matrixvaluedelete, file, rootref, null, reporter,
-					dreporter, null, ref);
+					dreporter, null, ref,null);
 			TaskResult task = callable.call();
 			ITable table = c1
 					.createQueryTable(
