@@ -46,7 +46,7 @@ $(document)
 	<div class="row add-bottom">&nbsp;</div>	
 	
 	<div class="row add-bottom">
-		<form action='${service_search!"${ambit_root}/ui/_search?option=auto"}' id="searchForm"  method="GET" >	
+		<form action='${ambit_root}/ui/_search?option=auto}' id="searchForm"  method="GET" >	
 			<div class="fifteen columns remove-bottom" id="query">
 			<div class="alpha">
 				<div class="remove-bottom h4">
@@ -66,7 +66,10 @@ $(document)
 			    <div class='chelp'>Advanced: 
 			    <a href='${ambit_root}/ui/_search'>Structure search</a> |
 			    <a href='${ambit_root}/substance'>Search substances by identifiers</a> |
-			    <a href='${ambit_root}/query/study'>Search substances by endpoint data</a> 
+			    <a href='${ambit_root}/query/study'>Search substances by endpoint data</a>
+			    <#if service_search??>
+			    | <a href='${service_search}'>Free text search</a>
+			    </#if>
 			    
 			    </div>			
 		</div>
