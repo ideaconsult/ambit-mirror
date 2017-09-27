@@ -23,7 +23,7 @@ AMBIT Modules {modules}
 
 	{{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/}Downloads at Sourceforge.net}}
 	
-    {{{http://ambit.uni-plovdiv.bg:8083/nexus/#nexus-search;gav~ambit~~~jar~}Maven artifacts search}}
+    {{{https://nexus.ideaconsult.net#nexus-search;gav~ambit~~~jar~}Maven artifacts search}}
 	
 	More details about ({{{./AMBIT2-LIBS/apidocs}javadoc}}, code examples) at {{{https://github.com/ideaconsult/examples-ambit}GitHub}}. 
 
@@ -33,7 +33,7 @@ AMBIT Applications {applications}
 	
 	{{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/}Downloads at Sourceforge.net}}
 	
-	{{{http://ambit.uni-plovdiv.bg:8083/nexus/#nexus-search;gav~ambit~~~war~}Maven artifacts search}}
+	{{{https://nexus.ideaconsult.net#nexus-search;gav~ambit~~~war~}Maven artifacts search}}
 	
 
 Toxtree dependencies
@@ -60,12 +60,12 @@ AMBIT modules license
 </dependency>
 +---------------------------------
 
-		{{{http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases/ambit/}Release repository}} 
+		{{{https://nexus.ideaconsult.net/content/repositories/releases/ambit/}Release repository}} 
 		
 +---------------------------------
    <repository>
-        <id>ambit-plovdiv-releases</id>
-        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+        <id>ambit-releases</id>
+        <url>https://nexus.ideaconsult.net/content/repositories/releases</url>
     </repository>
 +--------------------------------- 	
 
@@ -79,12 +79,12 @@ AMBIT modules license
 </dependency>
 +---------------------------------   
 
-		{{{http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases/ambit/}Snapshots Repository}}
+		{{{https://nexus.ideaconsult.net/content/repositories/releases/ambit/}Snapshots Repository}}
 		
 +---------------------------------
    <repository>
-        <id>ambit-plovdiv-releases</id>
-        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots</url>
+        <id>ambit-releases</id>
+        <url>https://nexus.ideaconsult.net/content/repositories/snapshots</url>
     </repository>
 +--------------------------------- 	
 

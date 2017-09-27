@@ -76,8 +76,8 @@ See ambit2-all/ambit2-apps/README.txt for options
 
 #### Dependencies
 
-* The Toxtree dependeniies are available as Maven artifacts at http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases and 
-http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots
+* The Toxtree dependeniies are available as Maven artifacts at https://nexus.ideaconsult.net/content/repositories/releases and 
+https://nexus.ideaconsult.net/content/repositories/snapshots/
 
 * Optionally, to build Toxtree version on your own, get the source 
 
