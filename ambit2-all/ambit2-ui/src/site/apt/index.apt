@@ -29,7 +29,7 @@ AMBIT {modules}
 	
 *{{{http://maven.apache.org/}Maven}} artifacts 
    		
-   		{{{http://ambit.uni-plovdiv.bg:8083/nexus/index.html#nexus-search;quick~ambit2-ui }ambit2-ui}} all versions
+   		{{{https://nexus.ideaconsult.net/#nexus-search;quick~ambit2-ui }ambit2-ui}} all versions
    			
    		Artifacts
    		
