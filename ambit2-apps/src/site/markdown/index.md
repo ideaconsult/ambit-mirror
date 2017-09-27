@@ -74,9 +74,11 @@ Toxtree predictions online
 
 ## News
 
-- **AMBIT-LRI Hands-On Training** Sept 29, 2017, Brussels at [CEFIC](http://cefic-lri.org/). 
+- **AMBIT-LRI Hands-On Training** Oct 5-6, Brussels, Belgium at [CAAT Academy In Silico Tools in Chemicals Hazard Assessments](https://www.eventbrite.com/e/in-silico-tools-in-chemicals-hazard-assessments-tickets-32083001120)
 
-- **AMBIT-LRI Hands-On Training** June 16, 2017, Helsinki, Finland at [CAAT Academy 17 Tools for Read-Across](https://www.caat-academy.org/)
+- **AMBIT-LRI Hands-On Training** Sept 29, 2017, Brussels at CEFIC [Registration](http://cefic-lri.org/news/cefic-lri-organizes-training-on-ambit2)
+
+- AMBIT-LRI Hands-On Training June 16, 2017, Helsinki, Finland at [CAAT Academy 17 Tools for Read-Across](https://www.caat-academy.org/)
 
 - ChemicalWatch: [CEFIC AMBIT software tool reaching users around the globe (20.04.2017)](https://chemicalwatch.com/crmhub/55337/cefics-ambit-software-tool-reaching-users-around-the-globe) ;  [Webinar (06.06.2016)](https://chemicalwatch.com/47309/qsar-guidance-for-2018-reach-registrants)
 

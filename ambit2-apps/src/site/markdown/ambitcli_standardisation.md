@@ -14,7 +14,7 @@ Chemical structure standardization. Available since AMBIT 3.0.0.
 
 * Pre-release <a href="https://www.ideaconsult.net/downloads/ambitcli/ambitcli-3.0.1-20151130.jar">ambitcli-3.0.1-20151130.jar</a> | <a href="https://www.ideaconsult.net/downloads/ambitcli/ambitcli-3.0.1-20160205.jar">ambitcli-3.0.1-20160205.jar (build:7259 1454688887571)</a>
 
-* Development <a href="http://ambit.uni-plovdiv.bg:8083/nexus/#nexus-search;gav~~ambit2-dbcli~~jar~">Maven repository</a>
+* Development <a href="https://nexus.ideaconsult.net#nexus-search;gav~~ambit2-dbcli~~jar~">Maven repository</a>
 
 
 ## Usage

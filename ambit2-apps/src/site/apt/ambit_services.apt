@@ -7,12 +7,10 @@
 
 AMBIT implementation of OpenTox REST API
 
-  Two instances of AMBIT REST web services are maintained at {{{http://www.ideaconsult.net}IdeaConsult Ltd}}: 
+  Multiple instances of AMBIT REST web services are maintained at {{{http://www.ideaconsult.net}IdeaConsult Ltd}}: 
   
   [Production] {{{https://apps.ideaconsult.net/ambit2}https://apps.ideaconsult.net/ambit2}}
   
-  [Test] {{{https://ambit.uni-plovdiv.bg:8443/ambit2}https://ambit.uni-plovdiv.bg:8443/ambit2}}
-
   []
   
 *{{{./download_ambitrest.apt}AMBIT REST Web services}} implement following OpenTox API 
@@ -113,5 +111,4 @@ AMBIT implementation of OpenTox REST API
    * {{{./api_ontology.html}Ontology service API}}
   
      ** {{{https://apps.ideaconsult.net/ontology}Ontology service}}
-     
-     ** {{{https://ambit.uni-plovdiv.bg:8443/ontology}Ontology service}}
+
