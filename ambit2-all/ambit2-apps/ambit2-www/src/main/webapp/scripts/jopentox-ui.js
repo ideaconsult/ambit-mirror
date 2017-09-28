@@ -1047,11 +1047,7 @@ function defineDatasetsTable(root, url, deleteVisible, openamlink) {
 												+ "/ui/toxtree?type=URL&search="
 												+ encodeURIComponent(o.aData.URI)
 												+ "' title='Run Toxtree predictions'>Toxtree</a>";
-										sOut += " or <a href='"
-											+ root
-											+ "/ui/vega?type=URL&search="
-											+ encodeURIComponent(o.aData.URI)
-											+ "' title='Run VEGA models'>VEGA</a> predictions";
+				
 										sOut += "<br/><a href='"
 												+ root
 												+ "/model?dataset="
