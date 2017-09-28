@@ -298,6 +298,40 @@ public class VegaShell extends AbstractDescriptorShell {
 	}
 
 	@Override
+	public synchronized IAtomContainer runShell(IAtomContainer mol) throws ShellException {
+		File[] in = new File[] { new File(String.format("%s%s%s", getHomeDir(null), File.separator, inFile[0])),
+				new File(String.format("%s%s%s", getHomeDir(null), File.separator, inFile[1])) };
+		File out = new File(String.format("%s%s%s", getHomeDir(null), File.separator, outFile[0]));
+		if (in[0].exists() || in[1].exists() || out.exists())
+			throw new ShellException(this, "VEGA already running, please try later");
+		try {
+			IAtomContainer newmol = super.runShell(mol);
+			return newmol;
+		} catch (ShellException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ShellException(this, x);
+		} finally {
+			try {
+				if (in[0].exists())
+					in[0].delete();
+			} catch (Exception x) {
+			}
+			try {
+				if (in[1].exists())
+					in[1].delete();
+			} catch (Exception x) {
+			}
+			try {
+				if (out.exists())
+					out.delete();
+			} catch (Exception x) {
+			}
+		}
+
+	}
+
+	@Override
 	public synchronized IAtomContainer process(IAtomContainer target) throws AmbitException {
 		return super.process(target);
 	}
