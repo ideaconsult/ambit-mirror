@@ -13,13 +13,10 @@ import java.util.logging.Logger;
 
 import javax.vecmath.Vector2d;
 
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.p.DefaultAmbitProcessor;
-import net.sf.jniinchi.INCHI_OPTION;
-
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
@@ -36,9 +33,11 @@ import ambit2.core.processors.IsotopesProcessor;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.smarts.processors.NeutraliseProcessor;
 import ambit2.tautomers.TautomerConst;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
+import net.sf.jniinchi.INCHI_OPTION;
 
-public class StructureStandardizer extends
-		DefaultAmbitProcessor<IAtomContainer, IAtomContainer> {
+public class StructureStandardizer extends DefaultAmbitProcessor<IAtomContainer, IAtomContainer> {
 	/**
 	 * 
 	 */
@@ -167,8 +166,7 @@ public class StructureStandardizer extends
 	protected transient IsotopesProcessor isotopesProcessor = null;
 	protected transient StructureDiagramGenerator sdg = new StructureDiagramGenerator();
 
-	protected transient CDKHydrogenAdder hadder = CDKHydrogenAdder
-			.getInstance(SilentChemObjectBuilder.getInstance());
+	protected transient CDKHydrogenAdder hadder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 	protected transient InChIGeneratorFactory igf = null;
 	protected transient SmilesGenerator smiles_generator;
 
@@ -211,16 +209,14 @@ public class StructureStandardizer extends
 				if (neutraliser == null)
 					neutraliser = new NeutraliseProcessor(logger);
 				processed = neutraliser.process(processed);
-				fragments.setAtomtypeasproperties(neutraliser
-						.isAtomtypeasproperties());
+				fragments.setAtomtypeasproperties(neutraliser.isAtomtypeasproperties());
 				fragments.setSparseproperties(neutraliser.isSparseproperties());
 			}
 			if (splitFragments && (processed != null))
 				processed = fragments.process(processed);
 
 			if (processed != null) {
-				if (generate2D
-						&& (StructureTypeProcessor.has2DCoordinates(processed) <= 1)) {
+				if (generate2D && (StructureTypeProcessor.has2DCoordinates(processed) <= 1)) {
 					sdg.setMolecule(processed, false);
 					sdg.generateCoordinates(new Vector2d(0, 1));
 					processed = sdg.getMolecule();
@@ -232,20 +228,6 @@ public class StructureStandardizer extends
 					}
 					processed = isotopesProcessor.process(processed);
 				}
-				if (implicitHydrogens)
-					try {
-						processed = AtomContainerManipulator
-								.suppressHydrogens(processed);
-					} catch (Exception x) {
-						if (processed != null) {
-							err = processed.getProperty(ERROR_TAG);
-							processed.setProperty(ERROR_TAG, String.format(
-									"%s %s %s", err == null ? "" : err, x
-											.getClass().getName(), x
-											.getMessage()));
-						}
-					}
-
 				int newse = 0;
 				int oldse = 0;
 
@@ -256,36 +238,42 @@ public class StructureStandardizer extends
 					} catch (Exception x) {
 						StringWriter w = new StringWriter();
 						x.printStackTrace(new PrintWriter(w));
-						logger.log(Level.WARNING, "MSG_TAUTOMERGEN",
-								new Object[] { x, w.toString() });
+						logger.log(Level.WARNING, "MSG_TAUTOMERGEN", new Object[] { x, w.toString() });
 						err = processed.getProperty(ERROR_TAG);
-						processed.setProperty(ERROR_TAG, String.format(
-								"Tautomer %s %s %s", err == null ? "" : err, x
-										.getClass().getName(), x.getMessage()));
+						processed.setProperty(ERROR_TAG, String.format("Tautomer %s %s %s", err == null ? "" : err,
+								x.getClass().getName(), x.getMessage()));
 					}
+				
+				if (implicitHydrogens)
+					try {
+						processed = AtomContainerManipulator.suppressHydrogens(processed);
+
+					} catch (Exception x) {
+						if (processed != null) {
+							err = processed.getProperty(ERROR_TAG);
+							processed.setProperty(ERROR_TAG, String.format("%s %s %s", err == null ? "" : err,
+									x.getClass().getName(), x.getMessage()));
+						}
+					}
+				
 				if (generateStereofrom2D)
 					try {
-						StereoElementFactory stereo = StereoElementFactory
-								.using2DCoordinates(processed);
+						StereoElementFactory stereo = StereoElementFactory.using2DCoordinates(processed);
 						for (IStereoElement se : processed.stereoElements())
 							oldse++;
-						List<IStereoElement> stereoElements = stereo
-								.createAll();
+						List<IStereoElement> stereoElements = stereo.createAll();
 						for (IStereoElement se : stereoElements) {
 							newse++;
 						}
 						if ((oldse > 0) && (newse > 0))
 							processed.setProperty(stereo.getClass().getName(),
-									String.format("StereoElements %s --> %s",
-											oldse, newse));
+									String.format("StereoElements %s --> %s", oldse, newse));
 						processed.setStereoElements(stereoElements);
 					} catch (Exception x) {
 						if (processed != null) {
 							err = processed.getProperty(ERROR_TAG);
-							processed.setProperty(ERROR_TAG, String.format(
-									"%s %s %s", err == null ? "" : err, x
-											.getClass().getName(), x
-											.getMessage()));
+							processed.setProperty(ERROR_TAG, String.format("%s %s %s", err == null ? "" : err,
+									x.getClass().getName(), x.getMessage()));
 						}
 					}
 				if (generateInChI) {
@@ -294,47 +282,29 @@ public class StructureStandardizer extends
 							if (igf == null)
 								igf = InChIGeneratorFactory.getInstance();
 
-							InChIGenerator gen = igf
-									.getInChIGenerator(
-											processed,
-											generateTautomers ? tautomers.tautomerManager.tautomerFilter
-													.getInchiOptions()
-													: options);
+							InChIGenerator gen = igf.getInChIGenerator(processed, generateTautomers
+									? tautomers.tautomerManager.tautomerFilter.getInchiOptions() : options);
 							switch (gen.getReturnStatus()) {
 							case OKAY: {
-								processed.setProperty(Property.opentox_InChI,
-										gen.getInchi());
-								processed.setProperty(
-										Property.opentox_InChIKey,
-										gen.getInchiKey());
+								processed.setProperty(Property.opentox_InChI, gen.getInchi());
+								processed.setProperty(Property.opentox_InChIKey, gen.getInchiKey());
 								break;
 							}
 							case WARNING: {
-								processed.setProperty(Property.opentox_InChI,
-										gen.getInchi());
-								processed.setProperty(
-										Property.opentox_InChIKey,
-										gen.getInchiKey());
+								processed.setProperty(Property.opentox_InChI, gen.getInchi());
+								processed.setProperty(Property.opentox_InChIKey, gen.getInchiKey());
 								logger.log(Level.FINE, "MSG_INCHIGEN",
-										new Object[] { gen.getReturnStatus(),
-												gen.getMessage() });
+										new Object[] { gen.getReturnStatus(), gen.getMessage() });
 								break;
 							}
 							default: {
-								processed.setProperty(Property.opentox_InChI,
-										"");
-								processed.setProperty(
-										Property.opentox_InChIKey, "");
+								processed.setProperty(Property.opentox_InChI, "");
+								processed.setProperty(Property.opentox_InChIKey, "");
 								err = processed.getProperty(ERROR_TAG);
-								processed.setProperty(ERROR_TAG,
-										String.format(
-												"InChI Generation %s %s %s",
-												err == null ? "" : err,
-												gen.getReturnStatus(),
-												gen.getMessage()));
+								processed.setProperty(ERROR_TAG, String.format("InChI Generation %s %s %s",
+										err == null ? "" : err, gen.getReturnStatus(), gen.getMessage()));
 								logger.log(Level.WARNING, "MSG_INCHIGEN",
-										new Object[] { gen.getReturnStatus(),
-												gen.getMessage() });
+										new Object[] { gen.getReturnStatus(), gen.getMessage() });
 								break;
 							}
 							}
@@ -343,42 +313,29 @@ public class StructureStandardizer extends
 						} catch (Exception x) {
 							StringWriter w = new StringWriter();
 							x.printStackTrace(new PrintWriter(w));
-							logger.log(Level.WARNING, "MSG_INCHIGEN",
-									new Object[] { x, w.toString() });
+							logger.log(Level.WARNING, "MSG_INCHIGEN", new Object[] { x, w.toString() });
 							err = processed.getProperty(ERROR_TAG);
-							processed.setProperty(ERROR_TAG, String.format(
-									"InChI Generation %s %s %s",
-									err == null ? "" : err, x.getClass()
-											.getName(), x.getMessage()));
+							processed.setProperty(ERROR_TAG, String.format("InChI Generation %s %s %s",
+									err == null ? "" : err, x.getClass().getName(), x.getMessage()));
 						}
 				}
 
 				if (getSmilesGenerator() != null) {
 					Property p_smiles = Property.getSMILESInstance();
 					try {
-						processed.setProperty(p_smiles, getSmilesGenerator()
-								.create(processed));
+						processed.setProperty(p_smiles, getSmilesGenerator().create(processed));
 					} catch (Exception x) {
 						StringWriter w = new StringWriter();
 						x.printStackTrace(new PrintWriter(w));
-						logger.log(
-								Level.WARNING,
-								"MSG_SMILESGEN",
-								new Object[] {
-										x,
-										processed
-												.getProperty(Property.opentox_InChIKey) });
-						logger.log(Level.FINE, "MSG_SMILESGEN", new Object[] {
-								x, w.toString() });
+						logger.log(Level.WARNING, "MSG_SMILESGEN",
+								new Object[] { x, processed.getProperty(Property.opentox_InChIKey) });
+						logger.log(Level.FINE, "MSG_SMILESGEN", new Object[] { x, w.toString() });
 						String inchi_err = "";
 						if (processed.getProperty(p_smiles) == null)
 							try {
-								Object inchi = processed
-										.getProperty(Property.opentox_InChI);
-								String last_resort_smiles = inchi == null ? ""
-										: InChI2SMILES(inchi.toString());
-								processed.setProperty(p_smiles,
-										last_resort_smiles);
+								Object inchi = processed.getProperty(Property.opentox_InChI);
+								String last_resort_smiles = inchi == null ? "" : InChI2SMILES(inchi.toString());
+								processed.setProperty(p_smiles, last_resort_smiles);
 								inchi_err = "SMILES generated from InChI as fallback";
 							} catch (Exception xx) {
 								inchi_err = x.getMessage();
@@ -386,8 +343,7 @@ public class StructureStandardizer extends
 							}
 
 						err = processed.getProperty(ERROR_TAG);
-						String msg = String.format("%s %s %s %s",
-								err == null ? "" : err, x.getClass().getName(),
+						String msg = String.format("%s %s %s %s", err == null ? "" : err, x.getClass().getName(),
 								x.getMessage(), inchi_err);
 						processed.setProperty(ERROR_TAG, msg);
 						logger.log(Level.WARNING, msg);
@@ -395,20 +351,17 @@ public class StructureStandardizer extends
 				}
 				renameTags(processed, tags);
 			} else {
-				logger.log(Level.WARNING, "Null molecule after processing",
-						mol.getProperties());
+				logger.log(Level.WARNING, "Null molecule after processing", mol.getProperties());
 			}
 
 		} catch (Exception x) {
-			logger.log(Level.SEVERE, x.getMessage() + " "
-					+ mol.getProperties().toString(), x);
+			logger.log(Level.SEVERE, x.getMessage() + " " + mol.getProperties().toString(), x);
 			x.printStackTrace();
 		} finally {
 			// System.out.println(processed.getProperties());
 
 			if (mol != null && processed != null) {
-				Iterator<Entry<Object, Object>> p = mol.getProperties()
-						.entrySet().iterator();
+				Iterator<Entry<Object, Object>> p = mol.getProperties().entrySet().iterator();
 				// don't overwrite properties from the source
 				// molecule
 				while (p.hasNext()) {
@@ -425,13 +378,11 @@ public class StructureStandardizer extends
 
 	}
 
-	public static void renameTags(IAtomContainer processed,
-			Map<Object, Property> tags) {
+	public static void renameTags(IAtomContainer processed, Map<Object, Property> tags) {
 		renameTags(processed, tags, false);
 	}
 
-	public static void renameTags(IAtomContainer processed,
-			Map<Object, Property> tags, boolean removeIfDisabled) {
+	public static void renameTags(IAtomContainer processed, Map<Object, Property> tags, boolean removeIfDisabled) {
 		Iterator<Map.Entry<Object, Property>> i = tags.entrySet().iterator();
 		while (i.hasNext()) {
 			Map.Entry<Object, Property> entry = i.next();
@@ -442,8 +393,7 @@ public class StructureStandardizer extends
 					entry.getValue().setOrder(((Property) tag).getOrder());
 				}
 				processed.removeProperty(tag);
-				boolean add = (entry.getValue() instanceof Property) ? ((Property) entry
-						.getValue()).isEnabled() : true;
+				boolean add = (entry.getValue() instanceof Property) ? ((Property) entry.getValue()).isEnabled() : true;
 
 				if (removeIfDisabled && !add)
 					;
@@ -475,8 +425,7 @@ public class StructureStandardizer extends
 	}
 
 	public void setRankTag(String tag) {
-		Property newtag = Property.getInstance(tag,
-				TautomerProcessor.class.getName());
+		Property newtag = Property.getInstance(tag, TautomerProcessor.class.getName());
 		newtag.setName(tag);
 		tags.put(TautomerConst.CACTVS_ENERGY_RANK, newtag);
 		tags.put(TautomerConst.TAUTOMER_RANK, newtag);
@@ -495,8 +444,7 @@ public class StructureStandardizer extends
 			if (igf == null)
 				igf = InChIGeneratorFactory.getInstance();
 
-			InChIToStructure c = igf.getInChIToStructure(inchi,
-					SilentChemObjectBuilder.getInstance());
+			InChIToStructure c = igf.getInChIToStructure(inchi, SilentChemObjectBuilder.getInstance());
 
 			IAtomContainer a = c.getAtomContainer();
 			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(a);
