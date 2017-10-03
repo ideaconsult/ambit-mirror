@@ -114,6 +114,8 @@ public class TautomerManager {
 		knowledgeBase.activateChlorineRules(knowledgeBase.FlagUseChlorineRules);
 
 		ruleSelector = RuleSelector.getDefaultSelectorRandom();
+		//#T37
+		getKnowledgeBase().activateRule("O=SC", false);
 	}
 
 	public void setStructure(IAtomContainer str) throws Exception {
