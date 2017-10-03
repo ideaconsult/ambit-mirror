@@ -28,12 +28,19 @@ public class TestTautomersProcessor {
 	}
 
 	@Test
+	public void testH() throws Exception {
+
+		String[] smiles = new String[] { "CNc1cccc2NC(=O)C(=C(N)c12)c3nc4cc(ccc4[nH]3)N5CCN(C)CC5" };
+		testSmiles(smiles);
+	}
+
+	@Test
 	public void test7() throws Exception {
 
 		String[] smiles = new String[] { "CC1CN(CC(O1)C)C2=NC3=CC=CC=C3N=C2C(C#N)S(=O)(=O)C4=CC=CC(=C4)C" };
 		testSmiles(smiles);
 	}
-	
+
 	public void testSmiles(String[] smiles) throws Exception {
 		SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());
 
@@ -62,8 +69,8 @@ public class TestTautomersProcessor {
 			}
 			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 			for (IAtom atom : mol.atoms())
-				if (atom.getAtomTypeName().indexOf("S")>=0)
-					System.out.print(atom.getAtomTypeName()+"\t");
+				if (atom.getAtomTypeName().indexOf("S") >= 0)
+					System.out.print(atom.getAtomTypeName() + "\t");
 			System.out.println(String.format("\n%s\t-->\t%s", smi, g.create(smol)));
 			Assert.assertFalse(smol.getProperties().get("http://www.opentox.org/api/1.1#InChI").toString()
 					.startsWith("InChI=1S/"));
