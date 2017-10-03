@@ -37,14 +37,14 @@ public class StandardisationTest {
 		String out = String.format("%s/output_smi.txt", System.getProperty("java.io.tmpdir"));
 		System.out.println(out);
 		String[] args = new String[] { "-a", "standardize", "-i", in.getFile(), "-m", "post", "-o", out, 
-				"-d","splitfragments=true",
+				//"-d","splitfragments=true",
 				"-d","smiles=true",
 				"-d","smilescanonical=false",
-				"-d","implicith=true", 
-				"-d", "inchi=true", 
+				//"-d","implicith=true", 
+				//"-d", "inchi=true", 
 				"-d", "tautomers=true", 
 				"-d","tag_tokeep=cdk:Title",
-				"-d","neutralise=true" 
+				//"-d","neutralise=true" 
 				};
 		CliOptions options = new CliOptions();
 		if (options.parse(args))
@@ -52,7 +52,7 @@ public class StandardisationTest {
 				AmbitCli cli = new AmbitCli(options);
 				cli.go(options.getCmd(), options.getSubcommand().name());
 			} finally {
-				(new File(out)).delete();
+				//(new File(out)).delete();
 			}
 	}
 	
