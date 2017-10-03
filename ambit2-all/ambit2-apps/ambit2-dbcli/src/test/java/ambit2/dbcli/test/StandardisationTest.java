@@ -27,6 +27,7 @@ public class StandardisationTest {
 			} finally {
 				(new File(out)).delete();
 			}
+	}
 
 	
 	@Test
