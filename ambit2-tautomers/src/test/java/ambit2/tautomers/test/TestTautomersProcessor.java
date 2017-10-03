@@ -1,5 +1,8 @@
 package ambit2.tautomers.test;
 
+import java.util.List;
+import java.util.logging.Logger;
+
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -9,6 +12,7 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.processor.StructureStandardizer;
 import ambit2.tautomers.processor.TautomerProcessor;
 import junit.framework.Assert;
@@ -29,9 +33,50 @@ public class TestTautomersProcessor {
 
 	@Test
 	public void testH() throws Exception {
+		TautomerProcessor tm = new TautomerProcessor(Logger.getAnonymousLogger());
 
-		String[] smiles = new String[] { "CNc1cccc2NC(=O)C(=C(N)c12)c3nc4cc(ccc4[nH]3)N5CCN(C)CC5" };
-		testSmiles(smiles);
+		String[] smiles = new String[] { "C1=CC=C2NC(C(C3=NC4=C(C=CC(=C4)N5CCN(CC5)C)N3)=C(C2=C1NC)N)=O"
+				// "CNc1cccc2NC(=O)C(=C(N)c12)c3nc4cc(ccc4[nH]3)N5CCN(C)CC5"
+		};
+		for (String s : smiles) {
+			SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
+			IAtomContainer mol = p.parseSmiles(s);
+			// IAtomContainer t = tm.process(mol);
+			// System.out.println(SmilesGenerator.isomeric().create(t));
+
+			TautomerManager tautomerManager = new TautomerManager();
+			tautomerManager.tautomerFilter.setFlagApplyDuplicationCheckIsomorphism(false);
+			tautomerManager.tautomerFilter.setFlagApplyDuplicationCheckInChI(true);
+			tautomerManager.FlagCalculateCACTVSEnergyRank = true;
+			tautomerManager.FlagRegisterOnlyBestRankTautomers = true;
+			tautomerManager.FlagSetStereoElementsOnTautomerProcess = true;
+			/**
+			 * solves https://github.com/cdk/cdk/issues/279
+			 */
+			tautomerManager.FlagAddImplicitHAtomsOnTautomerProcess = false;
+			//tautomerManager.getKnowledgeBase().use17ShiftRules(false);
+			//tautomerManager.f
+			
+			tautomerManager.setStructure(mol);
+			
+
+			List<IAtomContainer> resultTautomers = tautomerManager.generateTautomersIncrementaly();
+			System.out.println(resultTautomers.size());
+			for (int i = 0; i < resultTautomers.size(); i++) {
+				IAtomContainer a = resultTautomers.get(i);
+				String ss = null;
+				try {
+					ss = SmilesGenerator.isomeric().create(a);
+				} catch (Exception x) {
+					ss=x.getMessage();
+				} finally {
+					System.out.println(String.format("%d. %s", i + 1, ss));
+				}
+			}
+		}
+
+		// testSmiles(smiles);
+
 	}
 
 	@Test
@@ -47,15 +92,18 @@ public class TestTautomersProcessor {
 		st.setGenerateTautomers(true);
 		st.setGenerateInChI(true);
 		st.setGenerateSMILES_Canonical(true);
-		st.setImplicitHydrogens(true);
-		st.setNeutralise(true);
-		st.setSplitFragments(true);
+		st.setImplicitHydrogens(false);
+		st.setNeutralise(false);
+		st.setSplitFragments(false);
 
-		st.setClearIsotopes(true);
+		st.setClearIsotopes(false);
 		SmilesGenerator g = SmilesGenerator.absolute();
 		for (String smi : smiles) {
 			IAtomContainer mol = sp.parseSmiles(smi);
 			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+
+			for (IAtom atom : mol.atoms())
+				System.out.println(atom.getImplicitHydrogenCount());
 			/*
 			 * IAtomContainer tautomer = p.process(mol); for (IBond b :
 			 * tautomer.bonds()) { Assert.assertNotSame(IBond.Order.UNSET,

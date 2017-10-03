@@ -4,18 +4,17 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.p.DefaultAmbitProcessor;
-
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
 
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
-public class TautomerProcessor extends
-		DefaultAmbitProcessor<IAtomContainer, IAtomContainer> {
+public class TautomerProcessor extends DefaultAmbitProcessor<IAtomContainer, IAtomContainer> {
 	protected TautomerManager tautomerManager = new TautomerManager();
 	protected IProcessor<IAtomContainer, IAtomContainer> callback = null;
 
@@ -31,8 +30,7 @@ public class TautomerProcessor extends
 		super();
 		if (logger != null)
 			this.logger = logger;
-		tautomerManager.tautomerFilter
-				.setFlagApplyDuplicationCheckIsomorphism(false);
+		tautomerManager.tautomerFilter.setFlagApplyDuplicationCheckIsomorphism(false);
 		tautomerManager.tautomerFilter.setFlagApplyDuplicationCheckInChI(true);
 		tautomerManager.FlagCalculateCACTVSEnergyRank = true;
 		tautomerManager.FlagRegisterOnlyBestRankTautomers = true;
@@ -76,17 +74,23 @@ public class TautomerProcessor extends
 				break;
 			}
 		if (!applicable) {
-			// no tautomers could be generated, but we still need a property 
+			// no tautomers could be generated, but we still need a property
 			mol.setProperty(TautomerConst.TAUTOMER_RANK, Double.NaN);
 			return mol;
 		}
 
 		tautomerManager.setStructure(mol);
 		IAtomContainer best = null;
-		List<IAtomContainer> resultTautomers = tautomerManager
-				.generateTautomersIncrementaly();
+		List<IAtomContainer> resultTautomers = tautomerManager.generateTautomersIncrementaly();
 		if (tautomerManager.FlagRegisterOnlyBestRankTautomers) {
 			best = tautomerManager.getCanonicTautomer(resultTautomers);
+			if (best != null)
+				for (IAtom a : best.atoms())
+					if (a.getImplicitHydrogenCount() < 0) {
+						best = null;
+						break;
+					}
+
 			best = best == null ? mol : best;
 			if (best.getProperty(TautomerConst.TAUTOMER_RANK) == null
 					&& best.getProperty(TautomerConst.CACTVS_ENERGY_RANK) == null)
@@ -101,25 +105,20 @@ public class TautomerProcessor extends
 					if (callback != null)
 						callback.process(tautomer);
 
-					Object rank_property = tautomer
-							.getProperty(TautomerConst.CACTVS_ENERGY_RANK);
+					Object rank_property = tautomer.getProperty(TautomerConst.CACTVS_ENERGY_RANK);
 					double rank;
 					if (rank_property == null) {
 						// original struc or switched to CACTVS ranking
-						rank_property = tautomer
-								.getProperty(TautomerConst.TAUTOMER_RANK);
+						rank_property = tautomer.getProperty(TautomerConst.TAUTOMER_RANK);
 
 						if (rank_property == null) {
-							tautomer.setProperty(TautomerConst.TAUTOMER_RANK,
-									null);
-							logger.log(Level.FINE,
-									"NO RANK @ " + tautomer.getProperties());
+							tautomer.setProperty(TautomerConst.TAUTOMER_RANK, null);
+							logger.log(Level.FINE, "NO RANK @ " + tautomer.getProperties());
 							continue;
 						}
 					}
-					rank = (rank_property instanceof Double) ? ((Double) rank_property)
-							.doubleValue() : Double.parseDouble(rank_property
-							.toString());
+					rank = (rank_property instanceof Double) ? ((Double) rank_property).doubleValue()
+							: Double.parseDouble(rank_property.toString());
 					/**
 					 * The rank is energy based, lower rank is better
 					 */

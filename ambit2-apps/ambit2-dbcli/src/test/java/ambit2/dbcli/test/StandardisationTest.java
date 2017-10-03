@@ -37,7 +37,7 @@ public class StandardisationTest {
 		String out = String.format("%s/output_smi.txt", System.getProperty("java.io.tmpdir"));
 		System.out.println(out);
 		String[] args = new String[] { "-a", "standardize", "-i", in.getFile(), "-m", "post", "-o", out, 
-				//"-d","splitfragments=true",
+				"-d","splitfragments=true",
 				"-d","smiles=true",
 				"-d","smilescanonical=false",
 				//"-d","implicith=true", 
