@@ -1,3 +1,4 @@
 SMILES	cdk:Title
 O1C(C2=C(C=3N(C(=O)N(C3C(=C2[H])[H])[H])[H])[H])=C(C(=O)C4=C1C(O[H])=C(O[H])C(=C4[H])[H])[H]	9815161
 [I-].[I-].[I-].C[N+]1=CC=C(C=C1)C=2C=3C=CC(N3)=C(C4=CC=CC(=C4)[N+](=O)[O-])C5=CC=C(N5)C(C6=CC=[N+](C)C=C6)=C7C=CC(=N7)C(=C8C=CC2N8)C9=CC=[N+](C)C=C9.Cl	CHEMBL1204019
+CNc1cccc2NC(=O)C(=C(N)c12)c3nc4cc(ccc4[nH]3)N5CCN(C)CC5	CHEMBL496762
