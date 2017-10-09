@@ -13,16 +13,17 @@
 <li >
 	<a href="${ambit_root}/query/relation" title="Structure relations">Structure relations</a>
 </li>
-<li >
-	<a href="${ambit_root}/demo/reaction?search=c1ccccc1" title="Apply SMIRKS reaction to a structure">Ambit SMIRKS: Reactions</a>
-</li>
-
-<li >
-	<a href="${ambit_root}/demo/pairwise?search=O%28C%29c1cc2c%28ncnc2Nc2cc%28C%29c%28NC%28OCC%29%3DO%29cc2%29cc1OC&search=Clc1cc%28Nc2ncnc3c2cc%28OC%29c%28OC%29c3%29ccc1NC%28OCC%29%3DO" title="Calculate Tanimoto distance between two compounds">Pairwise similarity</a>
-</li>
 -->
 <li ><a href="${ambit_root}/ui/toxtree" title="Toxtree web release">Toxtree: run predictions</a></li>
 <li ><a href="${ambit_root}/ui/vega" title="VEGA models">VEGA models: run predictions</a></li>
+
+<li >
+	<a href="${ambit_root}/demo/reaction?search=c1ccccc1" title="Apply SMIRKS reaction to a structure">Ambit SMIRKS: Reactions</a>
+</li>
+<li >
+	<a href="${ambit_root}/demo/pairwise?search=O%28C%29c1cc2c%28ncnc2Nc2cc%28C%29c%28NC%28OCC%29%3DO%29cc2%29cc1OC&search=Clc1cc%28Nc2ncnc3c2cc%28OC%29c%28OC%29c3%29ccc1NC%28OCC%29%3DO" title="Calculate Tanimoto distance between two compounds">Pairwise similarity</a>
+</li>
+
 <!--
 <li ><a href="${ambit_root}/qmap" title="Browse Quantitative Structure-Activity-Similarity Maps (QMaps)">Toxmatch: Chemical landscape analysis</a></li>
 -->
