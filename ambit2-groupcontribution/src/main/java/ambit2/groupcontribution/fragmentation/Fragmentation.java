@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.groupcontribution.GroupContributionModel;
 import ambit2.groupcontribution.dataset.DataSet;
@@ -69,7 +70,35 @@ public class Fragmentation
 			fragmentation.addGroup(designation);
 			gcm.addGroup(group);
 		}
+	}
+	
+	public static void makeBondBasedFragmenation (DataSetObject dso, GroupContributionModel gcm)
+	{
+		Fragmentation fragmentation = new Fragmentation(); 
+		dso.fragmentation = fragmentation;
+		List<ILocalDescriptor> locDescr = gcm.getLocalDescriptors();
 		
+		
+		//TODO
+		
+	}
+	
+	public static Map<IAtom, int[]> calcAtomLocalDescriptors(IAtomContainer molecule, 
+												List<ILocalDescriptor> locDescr)
+	{
+		Map<IAtom, int[]> descr = new HashMap<IAtom, int[]>();
+		
+		for (IAtom atom : molecule.atoms())
+		{
+			int descriptors[] = new int[locDescr.size()];
+			for (int i = 0; i < locDescr.size(); i++)
+			{	
+				int value = locDescr.get(i).calcForAtom(atom, molecule);
+				descriptors[i] = value;
+			}
+			descr.put(atom, descriptors);
+		}
+		return descr;
 	}
 	
 	public static MatrixDouble generateFragmentationMatrix(DataSet dataset, GroupContributionModel gcm)
