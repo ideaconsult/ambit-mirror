@@ -28,6 +28,9 @@ public class Learner
 	
 	//Work matrices
 	MatrixDouble A, A0, b, b0, modeled_b, C, invC, x;
+	int fragColumnStatistics[];
+	List<Integer> excludedColumns = new ArrayList<Integer>();
+	List<Integer> usedColumns = new ArrayList<Integer>();
 	
 	public void reset()
 	{
@@ -73,6 +76,8 @@ public class Learner
 	
 	public int train()
 	{
+		initVariables();
+		
 		Fragmentation.makeFragmentation(trainDataSet, model);
 		if (!errors.isEmpty())
 			return 1;
@@ -106,10 +111,16 @@ public class Learner
 		return 0;
 	}
 	
-	public void validate()
+	void validate()
 	{
 		//TODO
 	}
+	
+	public void initVariables()
+	{	
+		excludedColumns.clear();
+		usedColumns.clear();
+	}	
 	
 	void makeInitialMatrixes()
 	{
@@ -126,13 +137,71 @@ public class Learner
 	
 	void fragmentColumnStatistics()
 	{
-		//TODO
+		//Calculating Column statistics
+		int n0 = A0.nColumns;
+		int m = A0.nRows;
+		fragColumnStatistics = new int[n0];
+		for(int j = 0; j < n0; j++)
+			fragColumnStatistics[j] = 0;
+
+		for(int i = 0; i < m; i++)
+			for(int j = 0; j < n0; j++)
+			{
+				if (A0.el[i][j]>0)
+					fragColumnStatistics[j]++;
+			}
 	}
 	
 	void makeFinalMatricies()
 	{
-		A=A0;
+		Double threshold = model.getColStatPercentageThreshold();
+		
+		if (threshold == null)
+		{	
+			A=A0;
+			b=b0;
+			return;
+		}
+		
+		int n0 = A0.nColumns;
+		int m = A0.nRows;
+		
+		for(int j = 0; j < n0; j++)
+		{	
+			if (((double)fragColumnStatistics[j]/m) < threshold)
+            		excludedColumns.add(j);
+            else
+            		usedColumns.add(j);
+		}
+		
+		//Determining the dimensions of matrixes:  A, C, x
+		int n = usedColumns.size();		
+		
+		//if (useExternalDescriptors)
+		//	n = n + model.descriptorNames.size();
+
+		if (n==0)
+		{
+			errors.add("No fragments left after filtration!");
+			return;
+		}
+		
 		b=b0;
+		A = new MatrixDouble(m,n);
+		//C = new MatrixDouble(n,n);
+		//invC = new MatrixDouble(n,n);
+		//x = new MatrixDouble(n,1);
+
+		int col;
+
+		//Filling matrix A and modFragCodeIndex 
+		for(int j = 0; j < usedColumns.size(); j++)
+		{
+			col = usedColumns.get(j);
+			A.copyColumnFrom(j,A0,col);
+			//modFragCodeIndex.put(indexFragCode.get(usedColumns.get(j)),new Integer(j));
+		}
+
 		//TODO
 	}
 	
