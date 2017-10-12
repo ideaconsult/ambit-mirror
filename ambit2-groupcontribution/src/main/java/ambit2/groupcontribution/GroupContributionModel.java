@@ -32,6 +32,7 @@ public class GroupContributionModel
 	private Map<String,IGroup> groups = new HashMap<String,IGroup>();
 	private Type modelType = Type.ATOMIC;
 	private String targetEndpoint = null;
+	private Double colStatPercentageThreshold = null;
 	
 	
 	public String getModelName()
@@ -105,6 +106,14 @@ public class GroupContributionModel
 		this.targetEndpoint = targetEndpoint;
 	}
 	
+	public Double getColStatPercentageThreshold() {
+		return colStatPercentageThreshold;
+	}
+
+	public void setColStatPercentageThreshold(Double colStatPercentageThreshold) {
+		this.colStatPercentageThreshold = colStatPercentageThreshold;
+	}
+	
 	public String getAtomDesignation(int descriptors[])
 	{
 		if (descriptors.length != localDescriptors.size())
@@ -124,6 +133,8 @@ public class GroupContributionModel
 			return desc.getDesignation(value);
 		return "" + value;
 	}
+	
+	
 	
 	public String getAtomDesignationVerbose(int descriptors[])
 	{
@@ -154,4 +165,6 @@ public class GroupContributionModel
 		
 		return sb.toString();
 	}
+
+	
 }
