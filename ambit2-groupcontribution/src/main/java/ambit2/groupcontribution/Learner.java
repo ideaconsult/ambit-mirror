@@ -32,6 +32,8 @@ public class Learner
 	List<Integer> excludedColumns = new ArrayList<Integer>();
 	List<Integer> usedColumns = new ArrayList<Integer>();
 	
+	
+	
 	public void reset()
 	{
 		errors.clear();
@@ -76,22 +78,55 @@ public class Learner
 	
 	public int train()
 	{
+		GCMReportConfig repCfg = model.getReportConfig();
+		
 		initVariables();
 		
 		Fragmentation.makeFragmentation(trainDataSet, model);
 		if (!errors.isEmpty())
 			return 1;
-		System.out.println("Groups:");
-		System.out.println(model.getGroupsAsString());
+		
+		if (repCfg.reportGroups)
+		{	
+			String s = model.getGroupsAsString();
+			if (repCfg.FlagConsoleOutput)
+			{	
+				System.out.println("Groups:");
+				System.out.println(s);
+			}
+			if (repCfg.FlagBufferOutput)
+			{	
+				model.addToReport("Groups:\n");
+				model.addToReport(s);
+				model.addToReport("\n");
+			}
+		}
 		
 		makeInitialMatrixes();
 		if (!errors.isEmpty())
 			return 2;
 		
-		System.out.println("Matrix A0");
-		System.out.println(A0.toString(3,0));
-		System.out.println("Matrix b0");
-		System.out.println(b0.toString(3,0));
+		if (repCfg.reportGroups)
+		{
+			if (repCfg.FlagConsoleOutput)
+			{
+				System.out.println("Matrix A0");
+				System.out.println(A0.toString(3,0));
+				System.out.println("Matrix b0");
+				System.out.println(b0.toString(3,3));
+			}
+			if (repCfg.FlagBufferOutput)
+			{
+				model.addToReport("Matrix A0\n");
+				model.addToReport(A0.toString(3,0));
+				model.addToReport("\n");
+				model.addToReport("Matrix b0\n");
+				model.addToReport(b0.toString(3,3));
+				model.addToReport("\n");
+			}
+
+			
+		}
 		
 		fragmentColumnStatistics();
 		if (!errors.isEmpty())
