@@ -10,14 +10,14 @@ import ambit2.groupcontribution.fragmentation.Fragmentation;
 public class DataSetObject 
 {
 	public IAtomContainer molecule = null;
-	public Map<String, Object> externalProperties = new HashMap<String, Object>();
+	//public Map<String, Object> externalProperties = new HashMap<String, Object>();
 	public Fragmentation fragmentation = null;
 	
 	
-	public Double getEndpointValue(String endpointProperty)
+	public Double getPropertyDoubleValue(String property)
 	{
 		//Internal molecule properties take precedence over external ones
-		Object o = molecule.getProperty(endpointProperty);
+		Object o = molecule.getProperty(property);
 		if (o != null)
 		{	
 			if (o instanceof String)
@@ -41,6 +41,7 @@ public class DataSetObject
 				return ((Boolean)o) ? 1.0 : 0.0;
 		}
 		
+		/*
 		o = externalProperties.get(endpointProperty);
 		if (o != null)
 		{	
@@ -52,7 +53,8 @@ public class DataSetObject
 			
 			if (o instanceof Boolean)
 				return ((Boolean)o) ? 1.0 : 0.0;
-		}	
+		}
+		*/	
 		return null;
 	}
 	

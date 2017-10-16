@@ -131,7 +131,7 @@ public class Fragmentation
 		for (int i = 0; i < m; i++)
 		{
 			DataSetObject dso = dataset.dataObjects.get(i);
-			Double d = dso.getEndpointValue(property);
+			Double d = dso.getPropertyDoubleValue(property);
 			if (d == null)
 				throw new Exception("Property "+ property + " of object #" + (i+1) +
 						" is not double value or not defined!");
