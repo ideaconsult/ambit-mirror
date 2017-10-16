@@ -169,7 +169,8 @@ public class GroupContributionModel
 		
 		for (int i = 0; i < n; i++)
 		{
-			System.out.println("  " + (i+1) + "  " + groupsStr[i]);
+			//System.out.println("  " + (i+1) + "  " + groupsStr[i]);
+			sb.append("  " + (i+1) + "  " + groupsStr[i] + "\n");
 		}
 
 		

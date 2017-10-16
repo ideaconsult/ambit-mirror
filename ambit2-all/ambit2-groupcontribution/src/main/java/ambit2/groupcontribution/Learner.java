@@ -87,46 +87,11 @@ public class Learner
 			return 1;
 		
 		if (repCfg.reportGroups)
-		{	
-			String s = model.getGroupsAsString();
-			if (repCfg.FlagConsoleOutput)
-			{	
-				System.out.println("Groups:");
-				System.out.println(s);
-			}
-			if (repCfg.FlagBufferOutput)
-			{	
-				model.addToReport("Groups:\n");
-				model.addToReport(s);
-				model.addToReport("\n");
-			}
-		}
+			reportGroups();
 		
 		makeInitialMatrixes();
 		if (!errors.isEmpty())
 			return 2;
-		
-		if (repCfg.reportGroups)
-		{
-			if (repCfg.FlagConsoleOutput)
-			{
-				System.out.println("Matrix A0");
-				System.out.println(A0.toString(3,0));
-				System.out.println("Matrix b0");
-				System.out.println(b0.toString(3,3));
-			}
-			if (repCfg.FlagBufferOutput)
-			{
-				model.addToReport("Matrix A0\n");
-				model.addToReport(A0.toString(3,0));
-				model.addToReport("\n");
-				model.addToReport("Matrix b0\n");
-				model.addToReport(b0.toString(3,3));
-				model.addToReport("\n");
-			}
-
-			
-		}
 		
 		fragmentColumnStatistics();
 		if (!errors.isEmpty())
@@ -135,6 +100,9 @@ public class Learner
 		makeFinalMatricies();
 		if (!errors.isEmpty())
 			return 4;
+		
+		if (repCfg.reportMatrices)
+			reportMatrices();
 		
 		makeModel();
 		if (!errors.isEmpty())
@@ -262,6 +230,45 @@ public class Learner
 		return(0);
 	}
 	
+	//----------- report utils-------------
 	
+	void reportGroups()
+	{
+		GCMReportConfig repCfg = model.getReportConfig();
+		
+		String grps = model.getGroupsAsString();
+		if (repCfg.FlagConsoleOutput)
+		{	
+			System.out.println("Groups:");
+			System.out.println(grps);
+		}
+		if (repCfg.FlagBufferOutput)
+		{	
+			model.addToReport("Groups:\n");
+			model.addToReport(grps);
+			model.addToReport("\n");
+		}
+	}
 	
+	void reportMatrices()
+	{
+		GCMReportConfig repCfg = model.getReportConfig();
+		
+		if (repCfg.FlagConsoleOutput)
+		{
+			System.out.println("Matrix A0");
+			System.out.println(A0.toString(3,0));
+			System.out.println("Matrix b0");
+			System.out.println(b0.toString(3,3));
+		}
+		if (repCfg.FlagBufferOutput)
+		{
+			model.addToReport("Matrix A0\n");
+			model.addToReport(A0.toString(3,0));
+			model.addToReport("\n");
+			model.addToReport("Matrix b0\n");
+			model.addToReport(b0.toString(3,3));
+			model.addToReport("\n");
+		}
+	}
 }
