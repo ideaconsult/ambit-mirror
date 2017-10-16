@@ -33,7 +33,8 @@ public class GroupContributionModel
 	private Type modelType = Type.ATOMIC;
 	private String targetEndpoint = null;
 	private Double colStatPercentageThreshold = null;
-	
+	private GCMReportConfig reportConfig = new GCMReportConfig(); 	
+	private StringBuffer report = new StringBuffer(); 
 	
 	public String getModelName()
 	{
@@ -114,6 +115,15 @@ public class GroupContributionModel
 		this.colStatPercentageThreshold = colStatPercentageThreshold;
 	}
 	
+	public GCMReportConfig getReportConfig() {
+		return reportConfig;
+	}
+
+	public void setReportConfig(GCMReportConfig reportConfig) {
+		this.reportConfig = reportConfig;
+	}
+
+	
 	public String getAtomDesignation(int descriptors[])
 	{
 		if (descriptors.length != localDescriptors.size())
@@ -165,6 +175,15 @@ public class GroupContributionModel
 		
 		return sb.toString();
 	}
-
+	
+	public void addToReport(String info)
+	{
+		report.append(info);
+	}
+	
+	public String getReport()
+	{
+		return report.toString();
+	}	
 	
 }

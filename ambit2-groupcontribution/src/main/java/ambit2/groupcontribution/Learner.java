@@ -227,4 +227,6 @@ public class Learner
 		return(0);
 	}
 	
+	
+	
 }
