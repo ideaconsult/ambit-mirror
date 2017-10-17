@@ -2,9 +2,12 @@ package ambit2.groupcontribution;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
+import ambit2.groupcontribution.groups.IGroup;
 import ambit2.groupcontribution.utils.math.MathUtilities;
 import ambit2.groupcontribution.utils.math.MatrixDouble;
 
@@ -108,8 +111,10 @@ public class Learner
 		if (!errors.isEmpty())
 			return 5;
 		
-		System.out.println("Matrix x");
-		System.out.println(x.toString(9,4));
+		if (repCfg.reportContributions)
+			reportContributions();
+		//System.out.println("Matrix x");
+		//System.out.println(x.toString(9,4));
 		
 		return 0;
 	}
@@ -220,6 +225,16 @@ public class Learner
 		{
 			MatrixDouble invC_A_transposed =  MathUtilities.Multiply(invC, A.transposed());
 			x = MathUtilities.Multiply(invC_A_transposed , b);
+			
+			//Set group contributions
+			Map<String,IGroup> groups = model.getGroups();
+			int n = groups.keySet().size();
+			String groupsStr[] = groups.keySet().toArray(new String[n]);
+			for (int i = 0; i < n; i++)
+			{
+				IGroup g = groups.get(groupsStr[i]);
+				g.setContribution(x.el[i][0]);
+			}
 		}
 		else
 		{
@@ -258,17 +273,47 @@ public class Learner
 		{
 			System.out.println("Matrix A0");
 			System.out.println(A0.toString(3,0));
+			System.out.println("Matrix A");
+			System.out.println(A.toString(3,0));
 			System.out.println("Matrix b0");
 			System.out.println(b0.toString(3,3));
 		}
 		if (repCfg.FlagBufferOutput)
 		{
 			model.addToReport("Matrix A0\n");
-			model.addToReport(A0.toString(3,0));
-			model.addToReport("\n");
+			model.addToReport(A0.toString(3,0) + "\n");			
+			model.addToReport("Matrix A\n");
+			model.addToReport(A.toString(3,0) + "\n");			
 			model.addToReport("Matrix b0\n");
-			model.addToReport(b0.toString(3,3));
-			model.addToReport("\n");
+			model.addToReport(b0.toString(3,3) + "\n");
+		}
+	}
+	
+	void reportContributions()
+	{
+		GCMReportConfig repCfg = model.getReportConfig();
+		Map<String,IGroup> groups = model.getGroups();
+		
+		if (repCfg.FlagConsoleOutput)
+		{
+			System.out.println("Group contibutions:");
+			Set<String> keys = groups.keySet();
+			for (String key : keys)
+			{
+				IGroup g = groups.get(key);
+				System.out.println("\t" + key + "\t" + g.getContribution());
+			}
+		}
+		
+		if (repCfg.FlagBufferOutput)
+		{
+			model.addToReport("Group contibutions:\n");
+			Set<String> keys = groups.keySet();
+			for (String key : keys)
+			{
+				IGroup g = groups.get(key);
+				model.addToReport("\t" + key + "\t" + g.getContribution() + "\n");
+			}
 		}
 	}
 }
