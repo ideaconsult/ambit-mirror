@@ -1,6 +1,7 @@
 package ambit2.groupcontribution;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,9 +33,12 @@ public class Learner
 	//Work matrices
 	MatrixDouble A, A0, b, b0, modeled_b, C, invC, x;
 	int fragColumnStatistics[];
-	List<Integer> excludedColumns = new ArrayList<Integer>();
-	List<Integer> usedColumns = new ArrayList<Integer>();
 	
+	List<Integer> excludedGroupColumns = new ArrayList<Integer>();
+	List<Integer> usedGroupColumns = new ArrayList<Integer>();
+	String initialColumnGroups[] = null;
+	//Map<Integer,String> indexGroupMap = new HashMap<Integer,String>();
+	//Map<String,Integer> groupIndexMap = new HashMap<String,Integer>();
 	
 	
 	public void reset()
@@ -126,13 +130,19 @@ public class Learner
 	
 	public void initVariables()
 	{	
-		excludedColumns.clear();
-		usedColumns.clear();
+		excludedGroupColumns.clear();
+		usedGroupColumns.clear();
 	}	
 	
 	void makeInitialMatrixes()
 	{
 		A0 = Fragmentation.generateFragmentationMatrix(trainDataSet, model);
+		
+		//Setting initialColumnGroups
+		Map<String,IGroup> groups = model.getGroups();
+		int n = groups.keySet().size();
+		initialColumnGroups = groups.keySet().toArray(new String[n]);
+		
 		try
 		{
 			b0 = Fragmentation.generatePropertyMatrix(trainDataSet, model.getTargetEndpoint());
@@ -177,13 +187,13 @@ public class Learner
 		for(int j = 0; j < n0; j++)
 		{	
 			if (((double)fragColumnStatistics[j]/m) < threshold)
-            		excludedColumns.add(j);
+            		excludedGroupColumns.add(j);
             else
-            		usedColumns.add(j);
+            		usedGroupColumns.add(j);
 		}
 		
 		//Determining the dimensions of matrixes:  A, C, x
-		int n = usedColumns.size();		
+		int n = usedGroupColumns.size();		
 		
 		//if (useExternalDescriptors)
 		//	n = n + model.descriptorNames.size();
@@ -202,12 +212,11 @@ public class Learner
 
 		int col;
 
-		//Filling matrix A and modFragCodeIndex 
-		for(int j = 0; j < usedColumns.size(); j++)
+		//Filling matrix A  
+		for(int j = 0; j < usedGroupColumns.size(); j++)
 		{
-			col = usedColumns.get(j);
+			col = usedGroupColumns.get(j);
 			A.copyColumnFrom(j,A0,col);
-			//modFragCodeIndex.put(indexFragCode.get(usedColumns.get(j)),new Integer(j));
 		}
 
 		//TODO
@@ -228,12 +237,13 @@ public class Learner
 			
 			//Set group contributions
 			Map<String,IGroup> groups = model.getGroups();
-			int n = groups.keySet().size();
-			String groupsStr[] = groups.keySet().toArray(new String[n]);
-			for (int i = 0; i < n; i++)
+			for (int i = 0; i < usedGroupColumns.size(); i++)
 			{
-				IGroup g = groups.get(groupsStr[i]);
+				int col = usedGroupColumns.get(i);
+				String key = initialColumnGroups[col];
+				IGroup g = groups.get(key);
 				g.setContribution(x.el[i][0]);
+				g.setMissing(false);
 			}
 		}
 		else
@@ -301,7 +311,8 @@ public class Learner
 			for (String key : keys)
 			{
 				IGroup g = groups.get(key);
-				System.out.println("\t" + key + "\t" + g.getContribution());
+				System.out.println("\t" + key + "\t" 
+						+ g.getContribution() + (g.isMissing()?"  missing":""));
 			}
 		}
 		
@@ -312,7 +323,8 @@ public class Learner
 			for (String key : keys)
 			{
 				IGroup g = groups.get(key);
-				model.addToReport("\t" + key + "\t" + g.getContribution() + "\n");
+				model.addToReport("\t" + key + "\t" 
+						+ g.getContribution() + (g.isMissing()?"  missing":"") + "\n");
 			}
 		}
 	}

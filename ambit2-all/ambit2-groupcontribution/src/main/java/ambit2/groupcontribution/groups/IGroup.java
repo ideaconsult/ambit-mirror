@@ -25,5 +25,7 @@ public interface IGroup
 	public GroupInfo getInfo();
 	public IGroupSet getGroupSet();
 	public Type getType();
+	public boolean isMissing();
+	public void setMissing(boolean missing);
 	//public ArrayList<GroupInstance> getInstances();
 }
