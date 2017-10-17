@@ -14,6 +14,7 @@ import org.apache.commons.cli.PosixParser;
 import ambit2.groupcontribution.GCMParser;
 import ambit2.groupcontribution.GroupContributionModel;
 import ambit2.groupcontribution.Learner;
+import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
@@ -27,6 +28,7 @@ public class GroupContributionCli
 	public String trainSetFile = null;
 	public String gcmConfigFile = null;
 	public String localDescriptors = null;
+	public String globalDescriptors = null;
 	public String targetProperty = null;
 	
 	public static void main(String[] args) {
@@ -93,6 +95,21 @@ public class GroupContributionCli
 			@Override
 			public String getShortName() {
 				return "l";
+			}
+		},
+		
+		descriptors {
+			@Override
+			public String getArgName() {
+				return "descriptors";
+			}
+			@Override
+			public String getDescription() {
+				return "Global descriptors";
+			}
+			@Override
+			public String getShortName() {
+				return "d";
 			}
 		},
 		
@@ -176,6 +193,12 @@ public class GroupContributionCli
 			localDescriptors = argument;
 			break;
 		}
+		case descriptors: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			globalDescriptors = argument;
+			break;
+		}
 		case property: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
@@ -236,12 +259,14 @@ public class GroupContributionCli
 				System.out.println("gcm config: " + gcmConfigFile);
 			if (localDescriptors != null)
 				System.out.println("Local descriptors: " + localDescriptors);
+			if (globalDescriptors != null)
+				System.out.println("Global descriptors: " + globalDescriptors);
 			if (targetProperty != null)
 				System.out.println("Target property: " + targetProperty);
 		}
 		else
 		{
-			
+			//TODO handle config file
 		}
 		
 		
@@ -260,6 +285,22 @@ public class GroupContributionCli
 		}
 		else
 			gcm.setLocalDescriptors(locDescriptors);
+		
+		if (globalDescriptors != null)
+		{
+			List<DescriptorInfo> globDescriptors = gcmParser.getGlobalDescriptorsFromString(globalDescriptors);
+			if (!gcmParser.getErrors().isEmpty())
+			{
+				System.out.println("Errors:\n" + gcmParser.getAllErrorsAsString());
+				return -1;
+			}
+			else
+			{
+				if (!globDescriptors.isEmpty())
+					gcm.setDescriptors(globDescriptors);
+			}
+		}
+			
 		
 		//Fragmentation.makeFragmentation(trainDataSet, gcm);
 		
