@@ -30,6 +30,7 @@ public class GroupContributionCli
 	public String localDescriptors = null;
 	public String globalDescriptors = null;
 	public String targetProperty = null;
+	public Double threshold = null;
 	
 	public static void main(String[] args) {
 		GroupContributionCli gcCli = new GroupContributionCli();
@@ -128,6 +129,21 @@ public class GroupContributionCli
 			}
 		},
 		
+		threshold {
+			@Override
+			public String getArgName() {
+				return "value in [0,1]";
+			}
+			@Override
+			public String getDescription() {
+				return "Column filtration threshold";
+			}
+			@Override
+			public String getShortName() {
+				return "r";
+			}
+		},
+		
 		
 		help {
 			@Override
@@ -205,6 +221,17 @@ public class GroupContributionCli
 			targetProperty = argument;
 			break;
 		}
+		case threshold: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			try {
+				threshold = Double.parseDouble(argument);
+			}
+			catch (Exception e) {
+				throw new Exception ("Incorrect threshold value: " + argument);
+			}
+			break;
+		}
 		}
 	}
 	
@@ -261,6 +288,8 @@ public class GroupContributionCli
 				System.out.println("Local descriptors: " + localDescriptors);
 			if (globalDescriptors != null)
 				System.out.println("Global descriptors: " + globalDescriptors);
+			if (threshold != null)
+				System.out.println("Column filtration threshold: " + threshold);
 			if (targetProperty != null)
 				System.out.println("Target property: " + targetProperty);
 		}
@@ -300,6 +329,9 @@ public class GroupContributionCli
 					gcm.setDescriptors(globDescriptors);
 			}
 		}
+		
+		if (threshold != null)
+			gcm.setColStatPercentageThreshold(threshold);
 			
 		
 		//Fragmentation.makeFragmentation(trainDataSet, gcm);
