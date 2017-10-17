@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.dataset.DataSetObject;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
@@ -27,8 +28,8 @@ public class GroupContributionModel
 	private List<ILocalDescriptor> localDescriptors = new ArrayList<ILocalDescriptor>();	
 	private List<ICorrectionFactor> correctionFactors = new ArrayList<ICorrectionFactor>();
 	private List<GroupType> customGroups = new ArrayList<GroupType>();	
+	private 	List<DescriptorInfo> descriptors = new ArrayList<DescriptorInfo>();
 	
-	//TODO add group rules and LocalDescriptor rules
 	private Map<String,IGroup> groups = new HashMap<String,IGroup>();
 	private Type modelType = Type.ATOMIC;
 	private String targetEndpoint = null;
@@ -36,6 +37,8 @@ public class GroupContributionModel
 	private GCMReportConfig reportConfig = new GCMReportConfig(); 	
 	private StringBuffer report = new StringBuffer(); 
 	private GCMTestConfig testConfig = new GCMTestConfig(); 
+	
+	//TODO add group rules and LocalDescriptor rules
 	
 	public String getModelName()
 	{
@@ -130,7 +133,21 @@ public class GroupContributionModel
 
 	public void setTestConfig(GCMTestConfig testConfig) {
 		this.testConfig = testConfig;
-	}	
+	}
+	
+	public List<DescriptorInfo> getDescriptors() {
+		return descriptors;
+	}
+
+	public void setDescriptors(List<DescriptorInfo> descriptors) {
+		this.descriptors = descriptors;
+	}
+	
+	public void addDescriptor(String descrName) {
+		DescriptorInfo di = new DescriptorInfo();
+		di.setName(descrName);
+		descriptors.add(di);
+	}
 	
 	public String getAtomDesignation(int descriptors[])
 	{
@@ -193,7 +210,7 @@ public class GroupContributionModel
 	public String getReport()
 	{
 		return report.toString();
-	}
+	}	
 
 	
 	
