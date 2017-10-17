@@ -3,6 +3,7 @@ package ambit2.groupcontribution;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LocalDescriptorManager;
 
@@ -82,6 +83,39 @@ public class GCMParser
 		
 		errors.add("Unknown local descriptor: " + descrStr);
 		return null;
+	}
+	
+	public List<DescriptorInfo> getGlobalDescriptorsFromString(String globDescr)
+	{
+		return getGlobalDescriptorsFromString(globDescr, ",");
+	}
+	
+	public List<DescriptorInfo> getGlobalDescriptorsFromString(String globDescr, String separator)
+	{
+		errors.clear();
+		List<DescriptorInfo> descriptors = new ArrayList<DescriptorInfo>();
+		String tokens[] = globDescr.split(separator);
+		for (int i = 0; i < tokens.length; i++ )
+		{
+			String tok;
+			if (FlagTrimTokens)
+				tok = tokens[i].trim();
+			else
+				tok = tokens[i];
+						
+			if (tok.equals(""))
+			{	
+				if (!FlagOmitEmptyTokens)
+					errors.add("Emtpy global descriptor string");
+				continue;
+			}			
+			
+			DescriptorInfo di = new DescriptorInfo();
+			di.setName(tok);
+			descriptors.add(di);
+		}
+		
+		return descriptors;
 	}
 	
 	

@@ -28,7 +28,7 @@ public class GroupContributionModel
 	private List<ILocalDescriptor> localDescriptors = new ArrayList<ILocalDescriptor>();	
 	private List<ICorrectionFactor> correctionFactors = new ArrayList<ICorrectionFactor>();
 	private List<GroupType> customGroups = new ArrayList<GroupType>();	
-	private 	List<DescriptorInfo> descriptors = new ArrayList<DescriptorInfo>();
+	private 	List<DescriptorInfo> descriptors = null;
 	
 	private Map<String,IGroup> groups = new HashMap<String,IGroup>();
 	private Type modelType = Type.ATOMIC;
@@ -143,11 +143,13 @@ public class GroupContributionModel
 		this.descriptors = descriptors;
 	}
 	
+	/*
 	public void addDescriptor(String descrName) {
 		DescriptorInfo di = new DescriptorInfo();
 		di.setName(descrName);
 		descriptors.add(di);
 	}
+	*/
 	
 	public String getAtomDesignation(int descriptors[])
 	{
