@@ -35,6 +35,7 @@ public class GroupContributionModel
 	private Double colStatPercentageThreshold = null;
 	private GCMReportConfig reportConfig = new GCMReportConfig(); 	
 	private StringBuffer report = new StringBuffer(); 
+	private GCMTestConfig testConfig = new GCMTestConfig(); 
 	
 	public String getModelName()
 	{
@@ -122,7 +123,14 @@ public class GroupContributionModel
 	public void setReportConfig(GCMReportConfig reportConfig) {
 		this.reportConfig = reportConfig;
 	}
+	
+	public GCMTestConfig getTestConfig() {
+		return testConfig;
+	}
 
+	public void setTestConfig(GCMTestConfig testConfig) {
+		this.testConfig = testConfig;
+	}	
 	
 	public String getAtomDesignation(int descriptors[])
 	{
@@ -185,6 +193,8 @@ public class GroupContributionModel
 	public String getReport()
 	{
 		return report.toString();
-	}	
+	}
+
+	
 	
 }

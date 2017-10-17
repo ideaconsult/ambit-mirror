@@ -2,12 +2,12 @@ package ambit2.groupcontribution;
 
 public class GCMReportConfig 
 {
-	boolean FlagConsoleOutput = true;
-	boolean FlagBufferOutput = false;
+	public boolean FlagConsoleOutput = true;
+	public boolean FlagBufferOutput = false;
 	
-	boolean reportGeneralInputInfo = true;
-	boolean reportGroups = true;
-	boolean reportMatrices = true;
-	boolean reportContributions = true;
+	public boolean reportGeneralInputInfo = true;
+	public boolean reportGroups = true;
+	public boolean reportMatrices = true;
+	public boolean reportContributions = true;
 	
 }
