@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
 import ambit2.groupcontribution.groups.IGroup;
@@ -30,12 +31,28 @@ public class Learner
 	private List<String> errors = new ArrayList<String>();
 	private double epsilon = 1.0e-15;
 	
-	//Work matrices
-	MatrixDouble A, A0, b, b0, modeled_b, C, invC, x;
+	//Work matrices: 
+	//A0 - initial fragment frequencies, D0/D - initial final descriptors 
+	//A - final matrix for modeling combining all info
+	//b0/b - target property matrix
+	MatrixDouble A = null;
+	MatrixDouble A0 = null;
+	MatrixDouble D0 = null;
+	MatrixDouble D = null;
+	MatrixDouble b = null;
+	MatrixDouble b0 = null;
+	MatrixDouble modeled_b = null;
+	MatrixDouble C = null;
+	MatrixDouble invC = null;
+	MatrixDouble x = null;
+	
 	int fragColumnStatistics[];
 	
 	List<Integer> excludedGroupColumns = new ArrayList<Integer>();
 	List<Integer> usedGroupColumns = new ArrayList<Integer>();
+	List<Integer> excludedDescriptors = new ArrayList<Integer>();
+	List<Integer> usedDescriptors = new ArrayList<Integer>();
+	
 	String initialColumnGroups[] = null;
 	//Map<Integer,String> indexGroupMap = new HashMap<Integer,String>();
 	//Map<String,Integer> groupIndexMap = new HashMap<String,Integer>();
@@ -137,12 +154,12 @@ public class Learner
 	void makeInitialMatrixes()
 	{
 		A0 = Fragmentation.generateFragmentationMatrix(trainDataSet, model);
-		
+						
 		//Setting initialColumnGroups
 		Map<String,IGroup> groups = model.getGroups();
 		int n = groups.keySet().size();
 		initialColumnGroups = groups.keySet().toArray(new String[n]);
-		
+				
 		try
 		{
 			b0 = Fragmentation.generatePropertyMatrix(trainDataSet, model.getTargetEndpoint());
@@ -150,6 +167,22 @@ public class Learner
 		catch(Exception e)
 		{
 			errors.add("Error while generating target endpoint column-matrix" + e.getMessage());
+		}
+		
+		if (model.getDescriptors() != null)
+		{	
+			List<String> descriptors = new ArrayList<String>();
+			List<DescriptorInfo> diList = model.getDescriptors();
+			for (int i = 0; i < model.getDescriptors().size(); i++)
+				descriptors.add(diList.get(i).getName());
+			try
+			{
+				D0 = Fragmentation.generateMultiplePropertyMatrix(trainDataSet, descriptors);
+			}
+			catch(Exception e)
+			{
+				errors.add("Error while generating descriptor matrix " + e.getMessage());
+			}
 		}
 	}
 	
@@ -195,28 +228,38 @@ public class Learner
 		//Determining the dimensions of matrixes:  A, C, x
 		int n = usedGroupColumns.size();		
 		
-		//if (useExternalDescriptors)
-		//	n = n + model.descriptorNames.size();
+		if (D0 != null)
+		{	
+			D = D0; 	
+			//TODO filter D0 
+			for (int i = 0; i < D.nColumns; i++)
+				usedDescriptors.add(i);
+			n = n +D.nColumns; 
+		}	
 
 		if (n==0)
 		{
-			errors.add("No fragments left after filtration!");
+			errors.add("No fragments/descriptors left after filtration!");
 			return;
 		}
 		
 		b=b0;
 		A = new MatrixDouble(m,n);
-		//C = new MatrixDouble(n,n);
-		//invC = new MatrixDouble(n,n);
-		//x = new MatrixDouble(n,1);
-
-		int col;
-
+		
+		
 		//Filling matrix A  
+		int col;
 		for(int j = 0; j < usedGroupColumns.size(); j++)
 		{
 			col = usedGroupColumns.get(j);
 			A.copyColumnFrom(j,A0,col);
+		}
+		
+		if (D != null)		
+		{
+			int nGroupColumns = usedGroupColumns.size();
+			for (int j = 0; j < D.nColumns; j++)
+				A.copyColumnFrom(nGroupColumns + j, D, j);
 		}
 
 		//TODO
@@ -244,6 +287,16 @@ public class Learner
 				IGroup g = groups.get(key);
 				g.setContribution(x.el[i][0]);
 				g.setMissing(false);
+			}
+			
+			//Set descriptor contributions
+			int offset = usedGroupColumns.size();
+			List<DescriptorInfo> diList = model.getDescriptors();
+			for (int i = 0; i < usedDescriptors.size(); i++)
+			{
+				int dIndex = usedDescriptors.get(i);
+				DescriptorInfo di = diList.get(dIndex);
+				di.setContribution(x.el[offset+i][0]);
 			}
 		}
 		else
@@ -283,6 +336,9 @@ public class Learner
 		{
 			System.out.println("Matrix A0");
 			System.out.println(A0.toString(3,0));
+			System.out.println("Matrix D0");
+			if (D0 != null)
+				System.out.println(D0.toString(3,3));			
 			System.out.println("Matrix A");
 			System.out.println(A.toString(3,0));
 			System.out.println("Matrix b0");
@@ -291,7 +347,10 @@ public class Learner
 		if (repCfg.FlagBufferOutput)
 		{
 			model.addToReport("Matrix A0\n");
-			model.addToReport(A0.toString(3,0) + "\n");			
+			model.addToReport(A0.toString(3,0) + "\n");	
+			if (D0 != null)
+				model.addToReport("Matrix D0\n");
+			model.addToReport(D0.toString(3,3) + "\n");	
 			model.addToReport("Matrix A\n");
 			model.addToReport(A.toString(3,0) + "\n");			
 			model.addToReport("Matrix b0\n");
@@ -314,6 +373,17 @@ public class Learner
 				System.out.println("\t" + key + "\t" 
 						+ g.getContribution() + (g.isMissing()?"  missing":""));
 			}
+			
+			List<DescriptorInfo> diList = model.getDescriptors();
+			if (diList != null)
+			{	
+				System.out.println("Descriptor contibutions:");
+				for (int i = 0; i < diList.size(); i++)
+				{	
+					System.out.println("\t" + diList.get(i).getName() + "\t" 
+							+ diList.get(i).getContribution());
+				}
+			}	
 		}
 		
 		if (repCfg.FlagBufferOutput)
@@ -325,6 +395,17 @@ public class Learner
 				IGroup g = groups.get(key);
 				model.addToReport("\t" + key + "\t" 
 						+ g.getContribution() + (g.isMissing()?"  missing":"") + "\n");
+			}
+			
+			List<DescriptorInfo> diList = model.getDescriptors();
+			if (diList != null)
+			{	
+				model.addToReport("Descriptor contibutions:\n");
+				for (int i = 0; i < diList.size(); i++)
+				{	
+					model.addToReport("\t" + diList.get(i).getName() + "\t" 
+							+ diList.get(i).getContribution() + "\n");
+				}
 			}
 		}
 	}
