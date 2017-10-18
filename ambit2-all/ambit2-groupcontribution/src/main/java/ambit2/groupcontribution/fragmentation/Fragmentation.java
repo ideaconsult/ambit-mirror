@@ -141,6 +141,27 @@ public class Fragmentation
 		return b;
 	}
 	
+	public static MatrixDouble generateMultiplePropertyMatrix(DataSet dataset, List<String> properties) throws Exception
+	{
+		int m = dataset.dataObjects.size();
+		int n = properties.size();
+		MatrixDouble b = new MatrixDouble(m,1);
+		for (int i = 0; i < m; i++)
+		{
+			DataSetObject dso = dataset.dataObjects.get(i);
+			for (int k = 0; k < n; k++)
+			{	
+				Double d = dso.getPropertyDoubleValue(properties.get(k));
+				if (d == null)
+					throw new Exception("Property "+ properties.get(k) + " of object #" + (i+1) +
+							" is not double value or not defined!");
+				b.el[i][k] = d;
+			}
+		}
+		
+		return b;
+	}
+	
 	
 	
 	
