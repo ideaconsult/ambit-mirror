@@ -145,7 +145,7 @@ public class Fragmentation
 	{
 		int m = dataset.dataObjects.size();
 		int n = properties.size();
-		MatrixDouble b = new MatrixDouble(m,1);
+		MatrixDouble b = new MatrixDouble(m,n);
 		for (int i = 0; i < m; i++)
 		{
 			DataSetObject dso = dataset.dataObjects.get(i);
