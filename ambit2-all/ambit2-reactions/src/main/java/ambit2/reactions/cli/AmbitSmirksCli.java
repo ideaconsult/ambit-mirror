@@ -12,7 +12,11 @@ import org.apache.commons.cli.PosixParser;
 public class AmbitSmirksCli 
 {
 	private static final String title = "Ambit SMIRKS CLI";
-	public String smilesArg = null;
+	public String inputArg = null;
+	public String smirksArg = null;
+	public String modeArg = null;
+	
+	
 
 	public static void main(String[] args) 
 	{
@@ -49,6 +53,21 @@ public class AmbitSmirksCli
 			@Override
 			public String getShortName() {
 				return "i";
+			}
+		},
+		
+		mode {
+			@Override
+			public String getArgName() {
+				return "mode";
+			}
+			@Override
+			public String getDescription() {
+				return "Match mode: all, non-overlapping, non-identical";
+			}
+			@Override
+			public String getShortName() {
+				return "m";
 			}
 		},
 
@@ -116,7 +135,19 @@ public class AmbitSmirksCli
 		case input: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
-			smilesArg = argument;
+			inputArg = argument;
+			break;
+		}
+		case smirks: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			smirksArg = argument;
+			break;
+		}
+		case mode: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			modeArg = argument;
 			break;
 		}
 		}
