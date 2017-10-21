@@ -22,18 +22,33 @@ public class AmbitSmirksCli
 
 	enum _option {
 
-		smiles {
+		smirks {
+			@Override
+			public String getArgName() {
+				return "smirk";
+			}
+			@Override
+			public String getDescription() {
+				return "SMIRKS notation";
+			}
+			@Override
+			public String getShortName() {
+				return "s";
+			}
+		},
+		
+		input {
 			@Override
 			public String getArgName() {
 				return "smiles";
 			}
 			@Override
 			public String getDescription() {
-				return "Target molecule smiles";
+				return "Input target molecule smiles";
 			}
 			@Override
 			public String getShortName() {
-				return "s";
+				return "i";
 			}
 		},
 
@@ -98,7 +113,7 @@ public class AmbitSmirksCli
 		if (argument != null)
 			argument = argument.trim();
 		switch (option) {
-		case smiles: {
+		case input: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
 			smilesArg = argument;
