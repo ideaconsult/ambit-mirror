@@ -41,6 +41,9 @@ public class Fragmentation
 			case ATOMIC:
 				makeAtomicFragmenation(dso, gcm);
 				break;
+			case BOND_BASED:
+				makeBondBasedFragmenation(dso, gcm);
+				break;
 			}
 			
 			//TODO handle correction factors
