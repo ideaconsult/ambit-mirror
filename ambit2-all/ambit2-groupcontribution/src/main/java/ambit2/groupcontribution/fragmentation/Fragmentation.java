@@ -6,12 +6,14 @@ import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 
 import ambit2.groupcontribution.GroupContributionModel;
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.dataset.DataSetObject;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.groups.AtomGroup;
+import ambit2.groupcontribution.groups.BondGroup;
 import ambit2.groupcontribution.groups.IGroup;
 import ambit2.groupcontribution.utils.math.MatrixDouble;
 
@@ -80,9 +82,33 @@ public class Fragmentation
 		Fragmentation fragmentation = new Fragmentation(); 
 		dso.fragmentation = fragmentation;
 		List<ILocalDescriptor> locDescr = gcm.getLocalDescriptors();
+		Map<IAtom, int[]> atomLocDescr = calcAtomLocalDescriptors(dso.molecule, locDescr);
 		
-		
-		//TODO
+		for (IBond bo : dso.molecule.bonds())
+		{
+			int d0[] = atomLocDescr.get(bo.getAtom(0));
+			int d1[] = atomLocDescr.get(bo.getAtom(1));
+			String des0 = gcm.getAtomDesignation(d0);
+			String des1 = gcm.getAtomDesignation(d1);
+			
+			String boType = "-";
+			if (bo.getOrder() == IBond.Order.DOUBLE)
+				boType = "=";
+			else
+				if (bo.getOrder() == IBond.Order.TRIPLE)
+					boType = "#";
+			
+			String designation;
+			if (des0.compareTo(des1) < 0)
+				designation = des0 + boType + des1;
+			else
+				designation = des1 + boType + des0;
+			
+			IGroup group = new BondGroup();
+			((BondGroup)group).setBondDesignation(designation);
+			fragmentation.addGroup(designation);
+			gcm.addGroup(group);
+		}
 		
 	}
 	
