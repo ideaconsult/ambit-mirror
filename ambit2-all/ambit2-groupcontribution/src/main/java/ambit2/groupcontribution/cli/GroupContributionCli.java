@@ -31,6 +31,7 @@ public class GroupContributionCli
 	public String globalDescriptors = null;
 	public String targetProperty = null;
 	public Double threshold = null;
+	public String gcmType = null;
 	
 	public static void main(String[] args) {
 		GroupContributionCli gcCli = new GroupContributionCli();
@@ -144,6 +145,21 @@ public class GroupContributionCli
 			}
 		},
 		
+		model {
+			@Override
+			public String getArgName() {
+				return "model type";
+			}
+			@Override
+			public String getDescription() {
+				return "Group contribution model type: atomic, bond_based, ...";
+			}
+			@Override
+			public String getShortName() {
+				return "m";
+			}
+		},
+		
 		
 		help {
 			@Override
@@ -232,6 +248,12 @@ public class GroupContributionCli
 			}
 			break;
 		}
+		case model: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			gcmType = argument;
+			break;
+		}
 		}
 	}
 	
@@ -292,6 +314,7 @@ public class GroupContributionCli
 				System.out.println("Column filtration threshold: " + threshold);
 			if (targetProperty != null)
 				System.out.println("Target property: " + targetProperty);
+				
 		}
 		else
 		{
@@ -303,6 +326,13 @@ public class GroupContributionCli
 		
 		GroupContributionModel gcm = new GroupContributionModel();
 		gcm.setTargetEndpoint(targetProperty);
+		if (gcmType != null)
+		{
+			GroupContributionModel.Type type = getModelType(gcmType);
+			if (type != null)
+				gcm.setModelType(type);
+		}
+		System.out.println("GCM type : " + gcm.getModelType().toString());
 		
 		GCMParser gcmParser = new GCMParser();
 		
@@ -346,4 +376,14 @@ public class GroupContributionCli
 		
 		return 0;
 	}	
+	
+	GroupContributionModel.Type getModelType(String s)
+	{
+		if (s.equalsIgnoreCase("atomic"))
+			return GroupContributionModel.Type.ATOMIC;
+		if (s.equalsIgnoreCase("bond_based"))
+			return GroupContributionModel.Type.BOND_BASED;
+		//...		
+		return null;
+	}
 }
