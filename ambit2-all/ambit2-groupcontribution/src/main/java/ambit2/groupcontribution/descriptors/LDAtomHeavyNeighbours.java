@@ -3,13 +3,15 @@ package ambit2.groupcontribution.descriptors;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.groupcontribution.utils.MoleculeUtils;
+
 public class LDAtomHeavyNeighbours implements ILocalDescriptor{
 
 	private boolean FlagUsed = true;
 	
 	@Override
 	public int calcForAtom(IAtom atom, IAtomContainer mol) {
-		return 0;
+		return atom.getFormalNeighbourCount() - MoleculeUtils.getHCount(atom, mol);
 	}
 
 	@Override
@@ -45,10 +47,6 @@ public class LDAtomHeavyNeighbours implements ILocalDescriptor{
 	@Override
 	public void setIsUsed(boolean used) {
 		FlagUsed = used;
-	}
-	
-	public void hCount(){
-		//int  	
 	}
 
 }
