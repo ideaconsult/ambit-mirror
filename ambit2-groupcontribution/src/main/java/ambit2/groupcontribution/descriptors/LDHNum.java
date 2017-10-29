@@ -3,14 +3,15 @@ package ambit2.groupcontribution.descriptors;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.groupcontribution.utils.MoleculeUtils;
 
 public class LDHNum implements ILocalDescriptor
 {	
 	private boolean FlagUsed = true;
 	
 	@Override
-	public int calcForAtom(IAtom atom, IAtomContainer mol) {		
-		return atom.getImplicitHydrogenCount();
+	public int calcForAtom(IAtom atom, IAtomContainer mol) {
+		return MoleculeUtils.getHCount(atom, mol);
 	}
 
 	@Override
