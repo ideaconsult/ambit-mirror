@@ -249,7 +249,7 @@
 			"NAME": "[C.plus.planar]",
 			"CLASS": "uncharge",
 			"SMIRKS": "[C+;X3:1]>>[C:1]",
-			"example_error_with_cdk1.5.14": "CCN(CC)[c+]1sc2C(Oc3ccc(Br)cc3c2s1)c4ccc(Cl)cc4",
+			"example_error_with_k1.5.14": "CCN(CC)[c+]1sc2C(Oc3ccc(Br)cc3c2s1)c4ccc(Cl)cc4",
 			"comment": "to be verified",
 			"USE": true,
 			"order": 17,
@@ -457,6 +457,7 @@
 					"Kr"
 				]
 			}
+
 		}, {
 			"NAME": "Ra",
 			"CLASS": "metals",
@@ -553,6 +554,136 @@
 			"precondition": {
 				"atom": [
 					"Ge"
+				]
+			}
+		},
+		{
+			"NAME": "In",
+			"CLASS": "metals",
+			"SMIRKS": "[In]>>",
+			"example": "CC[In]",
+			"USE": true,
+			"order": 39,
+			"precondition": {
+				"atom": [
+					"In"
+				]
+			}
+		},
+		{
+			"NAME": "Cu",
+			"CLASS": "metals",
+			"SMIRKS": "[Cu]>>",
+			"example": "CC[Cu]",
+			"USE": true,
+			"order": 39,
+			"precondition": {
+				"atom": [
+					"Cu"
+				]
+			}
+		},
+		{
+			"NAME": "Co",
+			"CLASS": "metals",
+			"SMIRKS": "[Co]>>",
+			"example": "CC[Co]",
+			"USE": true,
+			"order": 39,
+			"precondition": {
+				"atom": [
+					"Co"
+				]
+			}
+		},
+		{
+			"NAME": "Cd",
+			"CLASS": "metals",
+			"SMIRKS": "[Cd]>>",
+			"example": "CC[Cd]",
+			"USE": true,
+			"order": 39,
+			"precondition": {
+				"atom": [
+					"Cd"
+				]
+			}
+		},
+		{
+			"NAME": "Mo",
+			"CLASS": "metals",
+			"SMIRKS": "[Mo]>>",
+			"example": "CC[Mo]",
+			"USE": true,
+			"order": 39,
+			"precondition": {
+				"atom": [
+					"Mo"
+				]
+			}
+		},
+		{
+			"NAME": "Mn",
+			"CLASS": "metals",
+			"SMIRKS": "[Mn]>>",
+			"example": "CC[Mn]",
+			"USE": true,
+			"order": 39,
+			"precondition": {
+				"atom": [
+					"Mn"
+				]
+			}
+		},
+		{
+			"NAME": "Ni",
+			"CLASS": "metals",
+			"SMIRKS": "[Ni]>>",
+			"example": "CC[Ni]",
+			"USE": true,
+			"order": 39,
+			"precondition": {
+				"atom": [
+					"Ni"
+				]
+			}
+		},
+		{
+			"NAME": "Pt",
+			"CLASS": "metals",
+			"SMIRKS": "[Pt]>>",
+			"example": "CC[Pt]",
+			"USE": true,
+			"order": 39,
+			"precondition": {
+				"atom": [
+					"Pt"
+				]
+			}
+		},
+		{
+			"NAME": "Cr",
+			"CLASS": "metals",
+			"SMIRKS": "[Cr]>>",
+			"example": "CC[Cr]",
+			"USE": true,
+			"order": 39,
+			"precondition": {
+				"atom": [
+					"Cr"
+				]
+			}
+		},
+		{
+			"NAME": "Bi",
+			"CLASS": "metals",
+			"SMIRKS": "[Bi]>>",
+			"example": "O=[Bi].Cl",
+			"USE": true,
+			"order": 39,
+			"precondition": {
+				"atom": [
+					"Bi"
 				]
 			}
 		},
