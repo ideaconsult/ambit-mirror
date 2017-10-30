@@ -574,7 +574,7 @@
 			"NAME": "Cu",
 			"CLASS": "metals",
 			"SMIRKS": "[Cu]>>",
-			"example": "CC[Cu]",
+			"example": "[Cu]=N(O)=C(C(=NO)C)C",
 			"USE": true,
 			"order": 39,
 			"precondition": {
@@ -587,7 +587,7 @@
 			"NAME": "Co",
 			"CLASS": "metals",
 			"SMIRKS": "[Co]>>",
-			"example": "CC[Co]",
+			"example": "[Co]=N(O)=C(C(=NO)C)C",
 			"USE": true,
 			"order": 39,
 			"precondition": {
@@ -600,7 +600,7 @@
 			"NAME": "Cd",
 			"CLASS": "metals",
 			"SMIRKS": "[Cd]>>",
-			"example": "CC[Cd]",
+			"example": "[Cd]=O",
 			"USE": true,
 			"order": 39,
 			"precondition": {
@@ -613,7 +613,7 @@
 			"NAME": "Mo",
 			"CLASS": "metals",
 			"SMIRKS": "[Mo]>>",
-			"example": "CC[Mo]",
+			"example": "[Mo](=O)(=O)=O",
 			"USE": true,
 			"order": 39,
 			"precondition": {
@@ -639,7 +639,7 @@
 			"NAME": "Ni",
 			"CLASS": "metals",
 			"SMIRKS": "[Ni]>>",
-			"example": "CC[Ni]",
+			"example": "[Ni](Cl)Cl",
 			"USE": true,
 			"order": 39,
 			"precondition": {
@@ -652,7 +652,7 @@
 			"NAME": "Pt",
 			"CLASS": "metals",
 			"SMIRKS": "[Pt]>>",
-			"example": "CC[Pt]",
+			"example": "[Pt](Cl)Cl",
 			"USE": true,
 			"order": 39,
 			"precondition": {
@@ -665,7 +665,7 @@
 			"NAME": "Cr",
 			"CLASS": "metals",
 			"SMIRKS": "[Cr]>>",
-			"example": "CC[Cr]",
+			"example": "[Cr](O)(O)(=O)=O",
 			"USE": true,
 			"order": 39,
 			"precondition": {
