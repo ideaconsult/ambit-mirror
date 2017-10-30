@@ -15,7 +15,7 @@ public class AmbitSmirksCli
 	public String inputArg = null;
 	public String smirksArg = null;
 	public String modeArg = null;
-	
+	public String cloneArg = null;
 	
 
 	public static void main(String[] args) 
@@ -68,6 +68,23 @@ public class AmbitSmirksCli
 			@Override
 			public String getShortName() {
 				return "m";
+			}
+		},
+		
+		copy {
+			@Override
+			public String getArgName() {
+				return "true/false";
+			}
+			@Override
+			public String getDescription() {
+				return "Determines wether each reaction site "
+						+ "transformation is applied on a new molecule copy. "
+						+ "Default value is true.";
+			}
+			@Override
+			public String getShortName() {
+				return "c";
 			}
 		},
 
@@ -156,6 +173,9 @@ public class AmbitSmirksCli
 	public int run(String[] args) 
 	{
 		Options options = createOptions();
+		
+		printHelp(options, null);
+		
 		final CommandLineParser parser = new PosixParser();
 		try {
 			CommandLine line = parser.parse( options, args,false );
