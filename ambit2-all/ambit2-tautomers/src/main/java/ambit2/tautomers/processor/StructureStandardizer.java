@@ -16,7 +16,6 @@ import javax.vecmath.Vector2d;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
@@ -27,6 +26,7 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.data.Property;
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.FragmentProcessor;
 import ambit2.core.processors.IsotopesProcessor;
@@ -201,7 +201,12 @@ public class StructureStandardizer extends DefaultAmbitProcessor<IAtomContainer,
 	@Override
 	public IAtomContainer process(IAtomContainer mol) throws Exception {
 		IAtomContainer processed = mol;
+
 		try {
+			if (processed.getAtomCount() == 0) {
+				processed.setProperty(ERROR_TAG, "Empty structure");
+				throw new EmptyMoleculeException();
+			}
 			String err = processed.getProperty(ERROR_TAG);
 			if (err == null)
 				processed.setProperty(ERROR_TAG, "");
@@ -243,7 +248,7 @@ public class StructureStandardizer extends DefaultAmbitProcessor<IAtomContainer,
 						processed.setProperty(ERROR_TAG, String.format("Tautomer %s %s %s", err == null ? "" : err,
 								x.getClass().getName(), x.getMessage()));
 					}
-				
+
 				if (implicitHydrogens)
 					try {
 						processed = AtomContainerManipulator.suppressHydrogens(processed);
@@ -255,7 +260,7 @@ public class StructureStandardizer extends DefaultAmbitProcessor<IAtomContainer,
 									x.getClass().getName(), x.getMessage()));
 						}
 					}
-				
+
 				if (generateStereofrom2D)
 					try {
 						StereoElementFactory stereo = StereoElementFactory.using2DCoordinates(processed);
@@ -353,10 +358,14 @@ public class StructureStandardizer extends DefaultAmbitProcessor<IAtomContainer,
 			} else {
 				logger.log(Level.WARNING, "Null molecule after processing", mol.getProperties());
 			}
-
+		} catch (EmptyMoleculeException x) {
+			processed.setProperty(Property.opentox_InChI, "");
+			processed.setProperty(Property.opentox_InChIKey, "");
+			logger.log(Level.SEVERE, x.getMessage() + " " + mol.getProperties().toString(), x);
 		} catch (Exception x) {
 			logger.log(Level.SEVERE, x.getMessage() + " " + mol.getProperties().toString(), x);
 			x.printStackTrace();
+
 		} finally {
 			// System.out.println(processed.getProperties());
 
