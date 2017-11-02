@@ -17,7 +17,7 @@ import ambit2.smarts.SMIRKSReaction;
 import ambit2.smarts.SmartsConst;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsConst.HandleHAtoms;
-import ambit2.smarts.test.TestUtilities.ReactionOperation;
+
 
 
 public class AmbitSmirksCli 
@@ -221,7 +221,7 @@ public class AmbitSmirksCli
 	{
 		options = createOptions();
 		
-		printHelp(options, null);
+		//printHelp(options, null);
 		
 		final CommandLineParser parser = new PosixParser();
 		try {
