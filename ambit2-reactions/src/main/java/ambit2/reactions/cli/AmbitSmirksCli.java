@@ -7,15 +7,62 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesGenerator;
+
+import ambit2.smarts.SMIRKSManager;
+import ambit2.smarts.SMIRKSReaction;
+import ambit2.smarts.SmartsConst;
+import ambit2.smarts.SmartsHelper;
+import ambit2.smarts.SmartsConst.HandleHAtoms;
+import ambit2.smarts.test.TestUtilities.ReactionOperation;
 
 
 public class AmbitSmirksCli 
 {
+	enum ReactionOperation {
+		APPLY, CombinedOverlappedPos, SingleCopyForEachPos
+	}
+	
 	private static final String title = "Ambit SMIRKS CLI";
+	
+	Options options = null;
+	
 	public String inputArg = null;
 	public String smirksArg = null;
 	public String modeArg = null;
 	public String cloneArg = null;
+	
+	ReactionOperation FlagReactionOperation = ReactionOperation.APPLY;
+	
+	SmartsConst.SSM_MODE FlagSSMode = SmartsConst.SSM_MODE.SSM_NON_OVERLAPPING;
+	SmartsConst.SSM_MODE FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_MODE.SSM_NON_IDENTICAL;
+	
+	boolean FlagClearAromaticityBeforePreProcess = true;
+	boolean FlagCheckAromaticityOnTargetPreProcess = true;
+	boolean FlagTargetPreprocessing = false;
+	boolean FlagExplicitHAtoms = false;
+	boolean FlagPrintAtomAttributes = false;
+	boolean FlagPrintTransformationData = false;
+	
+	boolean FlagProductPreprocessing = true;
+	boolean FlagClearImplicitHAtomsBeforeProductPreProcess = false;
+	boolean FlagClearHybridizationOnProductPreProcess = true;
+	boolean FlagAddImplicitHAtomsOnProductPreProcess = false;
+	boolean FlagImplicitHToExplicitOnProductPreProcess = false;
+	boolean FlagExplicitHToImplicitOnProductPreProcess = false;
+	
+	boolean FlagSingleBondAromaticityNotSpecified = false;
+	boolean FlagDoubleBondAromaticityNotSpecified = false;
+	
+	boolean FlagApplyStereoTransformation = false;
+	boolean FlagHAtomsTransformation = false;
+	HandleHAtoms FlagHAtomsTransformationMode = HandleHAtoms.IMPLICIT; 
+	boolean FlagAromaticityTransformation = false;
+
+	
 	
 
 	public static void main(String[] args) 
@@ -172,7 +219,7 @@ public class AmbitSmirksCli
 	
 	public int run(String[] args) 
 	{
-		Options options = createOptions();
+		options = createOptions();
 		
 		printHelp(options, null);
 		
@@ -210,6 +257,124 @@ public class AmbitSmirksCli
 	
 	protected int runSmirks() throws Exception
 	{	
+		SMIRKSManager smrkMan = new SMIRKSManager(
+				SilentChemObjectBuilder.getInstance());
+		smrkMan.setFlagSSMode(FlagSSMode);
+		
+		// Product processing flags
+		smrkMan.setFlagProcessResultStructures(FlagProductPreprocessing);
+		smrkMan.setFlagClearHybridizationBeforeResultProcess(FlagClearHybridizationOnProductPreProcess);
+		smrkMan.setFlagClearImplicitHAtomsBeforeResultProcess(FlagClearImplicitHAtomsBeforeProductPreProcess);
+		smrkMan.setFlagClearAromaticityBeforeResultProcess(FlagClearAromaticityBeforePreProcess);
+		smrkMan.setFlagAddImplicitHAtomsOnResultProcess(this.FlagAddImplicitHAtomsOnProductPreProcess);
+		smrkMan.setFlagConvertAddedImplicitHToExplicitOnResultProcess(this.FlagImplicitHToExplicitOnProductPreProcess);
+		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(this.FlagExplicitHToImplicitOnProductPreProcess);
+		smrkMan.setFlagApplyStereoTransformation(FlagApplyStereoTransformation);
+		smrkMan.setFlagHAtomsTransformation(FlagHAtomsTransformation);
+		smrkMan.setFlagHAtomsTransformationMode(FlagHAtomsTransformationMode);
+		smrkMan.setFlagAromaticityTransformation(FlagAromaticityTransformation);
+
+		smrkMan.getSmartsParser().mSupportSingleBondAromaticityNotSpecified = FlagSingleBondAromaticityNotSpecified;
+		smrkMan.getSmartsParser().mSupportDoubleBondAromaticityNotSpecified = FlagDoubleBondAromaticityNotSpecified;
+
+		if (smirksArg == null)
+		{
+			System.out.println("Smirks arument is not set!");
+			return -1;
+		}
+		
+		SMIRKSReaction reaction = smrkMan.parse(smirksArg);
+		if (!smrkMan.getErrors().equals("")) {
+			System.out.println(smrkMan.getErrors());
+			return -2;
+		}
+
+		if (FlagPrintTransformationData)
+			System.out.println(reaction.transformationDataToString());
+
+		if (inputArg == null)
+		{	
+			System.out.println("Input arument is not set!");
+			return -3;
+		}	
+
+		IAtomContainer target = SmartsHelper
+				.getMoleculeFromSmiles(inputArg);
+
+		/*
+		if (FlagTargetPreprocessing)
+			preProcess(target);
+		*/	
+
+		if (FlagPrintAtomAttributes) {
+			System.out.println("Target (reactant):");
+			System.out.println("Reactant atom attributes:\n"
+					+ SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Reactant bond attributes:\n"
+					+ SmartsHelper.getBondAttributes(target));
+		}
+
+		switch (FlagReactionOperation) {
+		case APPLY:
+			boolean res = smrkMan.applyTransformation(target, reaction);
+
+			if (FlagPrintAtomAttributes) {
+				System.out.println("Product:");
+				System.out.println("Product atom attributes:\n"
+						+ SmartsHelper.getAtomsAttributes(target));
+				System.out.println("Product bond attributes:\n"
+						+ SmartsHelper.getBondAttributes(target));
+			}
+
+			System.out.println("    "
+					+ SmartsHelper.moleculeToSMILES(target, true));
+
+			String transformedSmiles = SmartsHelper.moleculeToSMILES(target,
+					true);
+
+			if (res)
+			{	
+				System.out.println("Reaction application: " + inputArg
+						+ "  -->  " + transformedSmiles + "    abs. smiles res " + 
+						SmilesGenerator.absolute().create(target));
+			}	
+			else
+				System.out.println("Reaction not appicable!");
+			break;
+
+		case CombinedOverlappedPos:
+			IAtomContainerSet resSet = smrkMan
+			.applyTransformationWithCombinedOverlappedPos(target, null,
+					reaction);
+			if (resSet == null)
+				System.out.println("Reaction not appicable!");
+			else {
+				System.out
+				.println("Reaction application With Combined Overlapped Positions: ");
+				for (int i = 0; i < resSet.getAtomContainerCount(); i++)
+					System.out.println(SmartsHelper.moleculeToSMILES(
+							resSet.getAtomContainer(i), true));
+			}
+			break;
+
+		case SingleCopyForEachPos:
+			IAtomContainerSet resSet2 = smrkMan
+			.applyTransformationWithSingleCopyForEachPos(target, null,
+					reaction, FlagSSModeForSingleCopyForEachPos);
+			if (resSet2 == null)
+				System.out.println("Reaction not appicable!");
+			else {
+				System.out
+				.println("Reaction application With Single Copy For Each Position: ");
+				for (int i = 0; i < resSet2.getAtomContainerCount(); i++)
+					System.out.println(SmartsHelper.moleculeToSMILES(
+							resSet2.getAtomContainer(i), true));
+			}
+			break;
+		}
+
+		System.out.println();
+
 		//TODO
 		return 0;
 	}
