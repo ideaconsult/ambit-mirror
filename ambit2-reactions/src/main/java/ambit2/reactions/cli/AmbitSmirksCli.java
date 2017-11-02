@@ -33,7 +33,7 @@ public class AmbitSmirksCli
 	public String inputArg = null;
 	public String smirksArg = null;
 	public String modeArg = null;
-	public String cloneArg = null;
+	public String applyArg = null;
 
 	ReactionApplication FlagReactionApplication = ReactionApplication.Target;
 
@@ -125,10 +125,10 @@ public class AmbitSmirksCli
 			}
 			@Override
 			public String getDescription() {
-				return "Determines how raction transformation is applied:"
-						+ "\n'target' - transformations for all positions are applied on the target molecule (default);"
-						+ "\n'copy' - single copy each reaction position; "
-						+ "\n'comb' - combinations are generated for all overlapped positions";
+				return "Determines how raction transformation is applied: "
+						+ "'target' - transformations for all positions are applied on the target molecule (default); "
+						+ "'copy' - single copy each reaction position; "
+						+ "'comb' - combinations are generated for all overlapped positions.";
 			}
 			@Override
 			public String getShortName() {
@@ -215,6 +215,12 @@ public class AmbitSmirksCli
 			modeArg = argument;
 			break;
 		}
+		case apply: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			applyArg = argument;
+			break;
+		}
 		}
 	}
 
@@ -242,7 +248,6 @@ public class AmbitSmirksCli
 			if (res != 0)
 			{
 				System.out.println();
-				printHelp(options, null);
 			}	
 			return res;
 
@@ -271,9 +276,9 @@ public class AmbitSmirksCli
 		smrkMan.setFlagClearHybridizationBeforeResultProcess(FlagClearHybridizationOnProductPreProcess);
 		smrkMan.setFlagClearImplicitHAtomsBeforeResultProcess(FlagClearImplicitHAtomsBeforeProductPreProcess);
 		smrkMan.setFlagClearAromaticityBeforeResultProcess(FlagClearAromaticityBeforePreProcess);
-		smrkMan.setFlagAddImplicitHAtomsOnResultProcess(this.FlagAddImplicitHAtomsOnProductPreProcess);
-		smrkMan.setFlagConvertAddedImplicitHToExplicitOnResultProcess(this.FlagImplicitHToExplicitOnProductPreProcess);
-		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(this.FlagExplicitHToImplicitOnProductPreProcess);
+		smrkMan.setFlagAddImplicitHAtomsOnResultProcess(FlagAddImplicitHAtomsOnProductPreProcess);
+		smrkMan.setFlagConvertAddedImplicitHToExplicitOnResultProcess(FlagImplicitHToExplicitOnProductPreProcess);
+		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(FlagExplicitHToImplicitOnProductPreProcess);
 		smrkMan.setFlagApplyStereoTransformation(FlagApplyStereoTransformation);
 		smrkMan.setFlagHAtomsTransformation(FlagHAtomsTransformation);
 		smrkMan.setFlagHAtomsTransformationMode(FlagHAtomsTransformationMode);
@@ -284,13 +289,14 @@ public class AmbitSmirksCli
 		
 		if (smirksArg == null)
 		{
-			System.out.println("Smirks arument is not set!");
+			System.out.println("Smirks arument is not set!\n");
+			printHelp(options, null);
 			return -1;
 		}
 
 		SMIRKSReaction reaction = smrkMan.parse(smirksArg);
 		if (!smrkMan.getErrors().equals("")) {
-			System.out.println(smrkMan.getErrors());
+			System.out.println("Smirks parsing errors for smirks: " + smirksArg +"\n" +  smrkMan.getErrors());
 			return -2;
 		}
 
@@ -299,7 +305,8 @@ public class AmbitSmirksCli
 
 		if (inputArg == null)
 		{	
-			System.out.println("Input arument is not set!");
+			System.out.println("Input arument is not set!\n");
+			printHelp(options, null);
 			return -3;
 		}	
 
@@ -319,7 +326,7 @@ public class AmbitSmirksCli
 			System.out.println("Input structure error: null structure");
 			return -4;
 		}
-
+		
 		/*
 		if (FlagTargetPreprocessing)
 			preProcess(target);
