@@ -38,7 +38,7 @@ public class AmbitSmirksCli
 	ReactionApplication FlagReactionApplication = ReactionApplication.Target;
 
 	SmartsConst.SSM_MODE FlagSSMode = SmartsConst.SSM_MODE.SSM_NON_OVERLAPPING;
-	SmartsConst.SSM_MODE FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_MODE.SSM_NON_IDENTICAL;
+	//SmartsConst.SSM_MODE FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_MODE.SSM_NON_IDENTICAL;
 
 	boolean FlagClearAromaticityBeforePreProcess = true;
 	boolean FlagCheckAromaticityOnTargetPreProcess = true;
@@ -281,7 +281,7 @@ public class AmbitSmirksCli
 
 		smrkMan.getSmartsParser().mSupportSingleBondAromaticityNotSpecified = FlagSingleBondAromaticityNotSpecified;
 		smrkMan.getSmartsParser().mSupportDoubleBondAromaticityNotSpecified = FlagDoubleBondAromaticityNotSpecified;
-
+		
 		if (smirksArg == null)
 		{
 			System.out.println("Smirks arument is not set!");
@@ -303,8 +303,22 @@ public class AmbitSmirksCli
 			return -3;
 		}	
 
-		IAtomContainer target = SmartsHelper
-				.getMoleculeFromSmiles(inputArg);
+		IAtomContainer target = null;
+		try
+		{
+			target = getMoleculeFromInput(inputArg);
+		}
+		catch (Exception x)
+		{
+			System.out.println("Input structure error: " + x.getMessage());
+			return -4;
+		}
+		
+		if (target == null)
+		{
+			System.out.println("Input structure error: null structure");
+			return -4;
+		}
 
 		/*
 		if (FlagTargetPreprocessing)
@@ -319,20 +333,12 @@ public class AmbitSmirksCli
 					+ SmartsHelper.getBondAttributes(target));
 		}
 
+		System.out.println("    "
+				+ SmartsHelper.moleculeToSMILES(target, true));
+
 		switch (FlagReactionApplication) {
 		case Target:
 			boolean res = smrkMan.applyTransformation(target, reaction);
-
-			if (FlagPrintAtomAttributes) {
-				System.out.println("Product:");
-				System.out.println("Product atom attributes:\n"
-						+ SmartsHelper.getAtomsAttributes(target));
-				System.out.println("Product bond attributes:\n"
-						+ SmartsHelper.getBondAttributes(target));
-			}
-
-			System.out.println("    "
-					+ SmartsHelper.moleculeToSMILES(target, true));
 
 			String transformedSmiles = SmartsHelper.moleculeToSMILES(target,
 					true);
@@ -363,9 +369,8 @@ public class AmbitSmirksCli
 			break;
 
 		case SingleCopyForEachPos:
-			IAtomContainerSet resSet2 = smrkMan
-			.applyTransformationWithSingleCopyForEachPos(target, null,
-					reaction, FlagSSModeForSingleCopyForEachPos);
+			IAtomContainerSet resSet2 = 
+				smrkMan.applyTransformationWithSingleCopyForEachPos(target, null, reaction, FlagSSMode);
 			if (resSet2 == null)
 				System.out.println("Reaction not appicable!");
 			else {
@@ -382,6 +387,14 @@ public class AmbitSmirksCli
 
 		//TODO
 		return 0;
+	}
+	
+	IAtomContainer getMoleculeFromInput(String inputStr) throws Exception
+	{	
+		//Handle input as SMILES
+		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(inputArg);
+		
+		return target;
 	}
 
 
