@@ -22,48 +22,48 @@ import ambit2.smarts.SmartsConst.HandleHAtoms;
 
 public class AmbitSmirksCli 
 {
-	enum ReactionOperation {
-		APPLY, CombinedOverlappedPos, SingleCopyForEachPos
+	enum ReactionApplication {
+		Target, CombinedOverlappedPos, SingleCopyForEachPos
 	}
 	
 	private static final String title = "Ambit SMIRKS CLI";
-	
+
 	Options options = null;
-	
+
 	public String inputArg = null;
 	public String smirksArg = null;
 	public String modeArg = null;
 	public String cloneArg = null;
-	
-	ReactionOperation FlagReactionOperation = ReactionOperation.APPLY;
-	
+
+	ReactionApplication FlagReactionApplication = ReactionApplication.Target;
+
 	SmartsConst.SSM_MODE FlagSSMode = SmartsConst.SSM_MODE.SSM_NON_OVERLAPPING;
 	SmartsConst.SSM_MODE FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_MODE.SSM_NON_IDENTICAL;
-	
+
 	boolean FlagClearAromaticityBeforePreProcess = true;
 	boolean FlagCheckAromaticityOnTargetPreProcess = true;
 	boolean FlagTargetPreprocessing = false;
 	boolean FlagExplicitHAtoms = false;
 	boolean FlagPrintAtomAttributes = false;
 	boolean FlagPrintTransformationData = false;
-	
+
 	boolean FlagProductPreprocessing = true;
 	boolean FlagClearImplicitHAtomsBeforeProductPreProcess = false;
 	boolean FlagClearHybridizationOnProductPreProcess = true;
 	boolean FlagAddImplicitHAtomsOnProductPreProcess = false;
 	boolean FlagImplicitHToExplicitOnProductPreProcess = false;
 	boolean FlagExplicitHToImplicitOnProductPreProcess = false;
-	
+
 	boolean FlagSingleBondAromaticityNotSpecified = false;
 	boolean FlagDoubleBondAromaticityNotSpecified = false;
-	
+
 	boolean FlagApplyStereoTransformation = false;
 	boolean FlagHAtomsTransformation = false;
 	HandleHAtoms FlagHAtomsTransformationMode = HandleHAtoms.IMPLICIT; 
 	boolean FlagAromaticityTransformation = false;
 
-	
-	
+
+
 
 	public static void main(String[] args) 
 	{
@@ -87,7 +87,7 @@ public class AmbitSmirksCli
 				return "s";
 			}
 		},
-		
+
 		input {
 			@Override
 			public String getArgName() {
@@ -102,7 +102,7 @@ public class AmbitSmirksCli
 				return "i";
 			}
 		},
-		
+
 		mode {
 			@Override
 			public String getArgName() {
@@ -110,28 +110,29 @@ public class AmbitSmirksCli
 			}
 			@Override
 			public String getDescription() {
-				return "Match mode: all, non-overlapping, non-identical";
+				return "Match mode: all, non-overlapping, non-identical, single";
 			}
 			@Override
 			public String getShortName() {
 				return "m";
 			}
 		},
-		
-		copy {
+
+		apply {
 			@Override
 			public String getArgName() {
-				return "true/false";
+				return "result molecule";
 			}
 			@Override
 			public String getDescription() {
-				return "Determines wether each reaction site "
-						+ "transformation is applied on a new molecule copy. "
-						+ "Default value is true.";
+				return "Determines how raction transformation is applied:"
+						+ "\n'target' - transformations for all positions are applied on the target molecule (default);"
+						+ "\n'copy' - single copy each reaction position; "
+						+ "\n'comb' - combinations are generated for all overlapped positions";
 			}
 			@Override
 			public String getShortName() {
-				return "c";
+				return "a";
 			}
 		},
 
@@ -191,7 +192,7 @@ public class AmbitSmirksCli
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp( AmbitSmirksCli.class.getName(), options );
 	}
-	
+
 	public void setOption(_option option, String argument) throws Exception {
 		if (argument != null)
 			argument = argument.trim();
@@ -216,13 +217,11 @@ public class AmbitSmirksCli
 		}
 		}
 	}
-	
+
 	public int run(String[] args) 
 	{
 		options = createOptions();
-		
-		//printHelp(options, null);
-		
+
 		final CommandLineParser parser = new PosixParser();
 		try {
 			CommandLine line = parser.parse( options, args,false );
@@ -239,7 +238,13 @@ public class AmbitSmirksCli
 					return -1;
 				}
 
-			return runSmirks();	
+			int res = runSmirks();
+			if (res != 0)
+			{
+				System.out.println();
+				printHelp(options, null);
+			}	
+			return res;
 
 		} catch (Exception x ) {
 			System.out.println(x.getMessage());
@@ -254,13 +259,13 @@ public class AmbitSmirksCli
 			}
 		}
 	}
-	
+
 	protected int runSmirks() throws Exception
 	{	
 		SMIRKSManager smrkMan = new SMIRKSManager(
 				SilentChemObjectBuilder.getInstance());
 		smrkMan.setFlagSSMode(FlagSSMode);
-		
+
 		// Product processing flags
 		smrkMan.setFlagProcessResultStructures(FlagProductPreprocessing);
 		smrkMan.setFlagClearHybridizationBeforeResultProcess(FlagClearHybridizationOnProductPreProcess);
@@ -282,7 +287,7 @@ public class AmbitSmirksCli
 			System.out.println("Smirks arument is not set!");
 			return -1;
 		}
-		
+
 		SMIRKSReaction reaction = smrkMan.parse(smirksArg);
 		if (!smrkMan.getErrors().equals("")) {
 			System.out.println(smrkMan.getErrors());
@@ -304,7 +309,7 @@ public class AmbitSmirksCli
 		/*
 		if (FlagTargetPreprocessing)
 			preProcess(target);
-		*/	
+		 */	
 
 		if (FlagPrintAtomAttributes) {
 			System.out.println("Target (reactant):");
@@ -314,8 +319,8 @@ public class AmbitSmirksCli
 					+ SmartsHelper.getBondAttributes(target));
 		}
 
-		switch (FlagReactionOperation) {
-		case APPLY:
+		switch (FlagReactionApplication) {
+		case Target:
 			boolean res = smrkMan.applyTransformation(target, reaction);
 
 			if (FlagPrintAtomAttributes) {
