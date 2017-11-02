@@ -35,8 +35,8 @@ public class AmbitSmirksCli
 	public String modeArg = null;
 	public String applyArg = null;
 
+	SMIRKSManager smrkMan = null;
 	ReactionApplication FlagReactionApplication = ReactionApplication.Target;
-
 	SmartsConst.SSM_MODE FlagSSMode = SmartsConst.SSM_MODE.SSM_NON_OVERLAPPING;
 	//SmartsConst.SSM_MODE FlagSSModeForSingleCopyForEachPos = SmartsConst.SSM_MODE.SSM_NON_IDENTICAL;
 
@@ -267,25 +267,12 @@ public class AmbitSmirksCli
 
 	protected int runSmirks() throws Exception
 	{	
-		SMIRKSManager smrkMan = new SMIRKSManager(
-				SilentChemObjectBuilder.getInstance());
-		smrkMan.setFlagSSMode(FlagSSMode);
-
+		smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
+		
 		// Product processing flags
-		smrkMan.setFlagProcessResultStructures(FlagProductPreprocessing);
-		smrkMan.setFlagClearHybridizationBeforeResultProcess(FlagClearHybridizationOnProductPreProcess);
-		smrkMan.setFlagClearImplicitHAtomsBeforeResultProcess(FlagClearImplicitHAtomsBeforeProductPreProcess);
-		smrkMan.setFlagClearAromaticityBeforeResultProcess(FlagClearAromaticityBeforePreProcess);
-		smrkMan.setFlagAddImplicitHAtomsOnResultProcess(FlagAddImplicitHAtomsOnProductPreProcess);
-		smrkMan.setFlagConvertAddedImplicitHToExplicitOnResultProcess(FlagImplicitHToExplicitOnProductPreProcess);
-		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(FlagExplicitHToImplicitOnProductPreProcess);
-		smrkMan.setFlagApplyStereoTransformation(FlagApplyStereoTransformation);
-		smrkMan.setFlagHAtomsTransformation(FlagHAtomsTransformation);
-		smrkMan.setFlagHAtomsTransformationMode(FlagHAtomsTransformationMode);
-		smrkMan.setFlagAromaticityTransformation(FlagAromaticityTransformation);
-
 		smrkMan.getSmartsParser().mSupportSingleBondAromaticityNotSpecified = FlagSingleBondAromaticityNotSpecified;
 		smrkMan.getSmartsParser().mSupportDoubleBondAromaticityNotSpecified = FlagDoubleBondAromaticityNotSpecified;
+				
 		
 		if (smirksArg == null)
 		{
@@ -326,6 +313,76 @@ public class AmbitSmirksCli
 			System.out.println("Input structure error: null structure");
 			return -4;
 		}
+		
+		if (setMode() != 0)
+		{
+			System.out.println("Incorrect mode: " + modeArg + "\n");
+			printHelp(options, null);
+			return -5;
+		}
+		
+		applyReaction(reaction, target);
+		
+
+
+		//TODO
+		return 0;
+	}
+	
+	IAtomContainer getMoleculeFromInput(String inputStr) throws Exception
+	{	
+		//Handle input as SMILES
+		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(inputArg);
+		
+		return target;
+	}
+	
+	int setMode()
+	{
+		if (modeArg == null)
+			return 0;
+		
+		if (modeArg.equalsIgnoreCase("all"))
+		{	
+			FlagSSMode = SmartsConst.SSM_MODE.SSM_ALL;
+			return 0;
+		}	
+					
+		if (modeArg.equalsIgnoreCase("non-overlapping"))
+		{	
+			FlagSSMode = SmartsConst.SSM_MODE.SSM_NON_OVERLAPPING;
+			return 0;
+		}	
+		
+		if (modeArg.equalsIgnoreCase("non-identical"))
+		{	
+			FlagSSMode = SmartsConst.SSM_MODE.SSM_NON_IDENTICAL;
+			return 0;
+		}	
+		
+		if (modeArg.equalsIgnoreCase("single"))
+		{	
+			FlagSSMode = SmartsConst.SSM_MODE.SSM_NON_IDENTICAL_FIRST;
+			return 0;
+		}	
+		
+		return -1;
+	}
+	
+	void applyReaction(SMIRKSReaction reaction, IAtomContainer target) throws Exception
+	{
+		smrkMan.setFlagSSMode(FlagSSMode);
+		smrkMan.setFlagProcessResultStructures(FlagProductPreprocessing);
+		smrkMan.setFlagClearHybridizationBeforeResultProcess(FlagClearHybridizationOnProductPreProcess);
+		smrkMan.setFlagClearImplicitHAtomsBeforeResultProcess(FlagClearImplicitHAtomsBeforeProductPreProcess);
+		smrkMan.setFlagClearAromaticityBeforeResultProcess(FlagClearAromaticityBeforePreProcess);
+		smrkMan.setFlagAddImplicitHAtomsOnResultProcess(FlagAddImplicitHAtomsOnProductPreProcess);
+		smrkMan.setFlagConvertAddedImplicitHToExplicitOnResultProcess(FlagImplicitHToExplicitOnProductPreProcess);
+		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(FlagExplicitHToImplicitOnProductPreProcess);
+		smrkMan.setFlagApplyStereoTransformation(FlagApplyStereoTransformation);
+		smrkMan.setFlagHAtomsTransformation(FlagHAtomsTransformation);
+		smrkMan.setFlagHAtomsTransformationMode(FlagHAtomsTransformationMode);
+		smrkMan.setFlagAromaticityTransformation(FlagAromaticityTransformation);
 		
 		/*
 		if (FlagTargetPreprocessing)
@@ -391,17 +448,6 @@ public class AmbitSmirksCli
 		}
 
 		System.out.println();
-
-		//TODO
-		return 0;
-	}
-	
-	IAtomContainer getMoleculeFromInput(String inputStr) throws Exception
-	{	
-		//Handle input as SMILES
-		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(inputArg);
-		
-		return target;
 	}
 
 
