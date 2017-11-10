@@ -9,23 +9,16 @@ import ambit2.tautomers.RuleInstance;
 
 public class TautomerRegion 
 {
-	boolean useRegion = false;
-	boolean useCustomRegions = false;
-	boolean tautomerizeNitorGroup = false;
+	boolean useRegion = false;	
+	boolean tautomerizeNitroGroup = false;
 	boolean tautomerizeAromaticSystems = true;
+	boolean useCustomRegions = false;
 	
 	List<Integer> regionAtomIndices = null;
 	List<Integer> excludeAtomIndices = new ArrayList<Integer>();
 	
 	
-	public List<Integer> getExcludeAtomIndices() {
-		return excludeAtomIndices;
-	}
-
-	public void setExcludeAtomIndices(List<Integer> excludeAtomIndices) {
-		this.excludeAtomIndices = excludeAtomIndices;
-	}
-
+	
 	public boolean useRegion() {
 		return useRegion;
 	}
@@ -56,13 +49,13 @@ public class TautomerRegion
 	}
 
 
-	public boolean isTautomerizeNitorGroup() {
-		return tautomerizeNitorGroup;
+	public boolean isTautomerizeNitroGroup() {
+		return tautomerizeNitroGroup;
 	}
 
 
-	public void setTautomerizeNitorGroup(boolean tautomerizeNitorGroup) {
-		this.tautomerizeNitorGroup = tautomerizeNitorGroup;
+	public void setTautomerizeNitroGroup(boolean tautomerizeNitroGroup) {
+		this.tautomerizeNitroGroup = tautomerizeNitroGroup;
 	}
 
 
@@ -83,6 +76,14 @@ public class TautomerRegion
 
 	public void setRegionAtomIndices(List<Integer> regionAtomIndices) {
 		this.regionAtomIndices = regionAtomIndices;
-	}	
+	}
+	
+	public List<Integer> getExcludeAtomIndices() {
+		return excludeAtomIndices;
+	}
+
+	public void setExcludeAtomIndices(List<Integer> excludeAtomIndices) {
+		this.excludeAtomIndices = excludeAtomIndices;
+	}
 	
 }
