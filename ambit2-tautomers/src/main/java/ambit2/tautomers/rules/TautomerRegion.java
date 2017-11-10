@@ -14,8 +14,18 @@ public class TautomerRegion
 	boolean tautomerizeNitorGroup = false;
 	boolean tautomerizeAromaticSystems = true;
 	
-	List<Integer> regionAtomIndices = new ArrayList<Integer>();
+	List<Integer> regionAtomIndices = null;
+	List<Integer> excludeAtomIndices = new ArrayList<Integer>();
 	
+	
+	public List<Integer> getExcludeAtomIndices() {
+		return excludeAtomIndices;
+	}
+
+	public void setExcludeAtomIndices(List<Integer> excludeAtomIndices) {
+		this.excludeAtomIndices = excludeAtomIndices;
+	}
+
 	public boolean useRegion() {
 		return useRegion;
 	}
