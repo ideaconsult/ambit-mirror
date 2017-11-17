@@ -431,7 +431,22 @@ public class MatrixDouble
 		}
 
 		return(s.toString());
-	}	
+	}
+	
+	public MatrixDouble makeMatrixFromRows(int rowIndices[])
+	{
+		if (rowIndices == null)
+			return null;
+		
+		if (rowIndices.length == 0)
+			return null;
+		
+		MatrixDouble result = new MatrixDouble(rowIndices.length, this.nColumns);
+		for (int i = 0; i < rowIndices.length; ++i)
+			result.copyRowFrom(i, this, rowIndices[i]);
+		
+		return result;
+	}
 	
 }
 
