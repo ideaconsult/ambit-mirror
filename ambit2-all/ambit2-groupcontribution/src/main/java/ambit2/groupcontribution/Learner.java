@@ -12,6 +12,7 @@ import ambit2.groupcontribution.fragmentation.Fragmentation;
 import ambit2.groupcontribution.groups.IGroup;
 import ambit2.groupcontribution.utils.math.MathUtilities;
 import ambit2.groupcontribution.utils.math.MatrixDouble;
+import ambit2.groupcontribution.utils.math.ValidationConfig;
 
 /**
  * 
@@ -137,15 +138,9 @@ public class Learner
 		//System.out.println("Matrix x");
 		//System.out.println(x.toString(9,4));
 		
-		validate();
-		
 		return 0;
 	}
 	
-	void validate()
-	{
-		//TODO
-	}
 	
 	public void initVariables()
 	{	
@@ -262,9 +257,7 @@ public class Learner
 			int nGroupColumns = usedGroupColumns.size();
 			for (int j = 0; j < D.nColumns; j++)
 				A.copyColumnFrom(nGroupColumns + j, D, j);
-		}
-
-		//TODO
+		}		
 	}
 	
 	int  makeModel()
@@ -310,11 +303,53 @@ public class Learner
 		return(0);
 	}
 	
-	int  makePartialModel()
+	double modelValue(int objNum, MatrixDouble matrix_A, MatrixDouble matrix_x)
 	{
-		
+		double res = 0.0;
+		for (int i = 0; i < matrix_x.nRows; i++)
+			res += matrix_A.el[objNum][i] * matrix_x.el[i][0];
+		return(res);
+	}
+	
+	int  makePartialModel(MatrixDouble matrix_A0, MatrixDouble matrix_b)
+	{
+		//TODO
 		return 0;
 	}
+	
+	public void validate()
+	{
+		GCMReportConfig repCfg = model.getReportConfig();
+		int n = A.nRows;
+		ValidationConfig validation = model.getValidationConfig(); 
+		
+		if (validation.selfTest)
+		{
+			if (repCfg.FlagConsoleOutput)
+				System.out.println("Self test validation:");
+			if (repCfg.FlagBufferOutput)
+				model.addToReport("Self test validation:\n");
+			
+			MatrixDouble modeled_b = new MatrixDouble(n,1);
+			
+			for (int i = 0; i < n; i++)
+			{	
+				modeled_b.el[i][0] = modelValue(i, A,x);
+				if (repCfg.FlagConsoleOutput)
+				{
+					System.out.println("#" + (i+1) + "   " + b.el[i][0] + "   " + modeled_b.el[i][0]);
+				}
+				
+			}
+			
+			//TODO
+			
+		}
+		
+		//TODO cross validation, single one out, bootstrap, y-scrambling, ...
+	}
+	
+	
 	//----------- report utils-------------
 	
 	void reportGroups()
