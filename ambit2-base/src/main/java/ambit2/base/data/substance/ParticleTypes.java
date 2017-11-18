@@ -208,6 +208,27 @@ public enum ParticleTypes {
 		}
 	
 	},
+	//silica np
+	CHEBI_50828 {
+		@Override
+		public String getSMILES() {
+			return "O=[Si]=O";
+		}
+
+		@Override
+		public String getCAS() {
+			return "7631-86-9";
+		}
+
+		@Override
+		public String getFormula() {
+			return "SiO2";
+		}		
+		@Override
+		public STRUCTURE_RELATION getDefaultRole() {
+			return STRUCTURE_RELATION.HAS_CORE;
+		}
+	},
 	NPO_1562 {
 		//a fluorescent silica nanoparticle which has a core-shell structure.
 		@Override
