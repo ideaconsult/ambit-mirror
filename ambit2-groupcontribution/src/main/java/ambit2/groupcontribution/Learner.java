@@ -137,6 +137,8 @@ public class Learner
 		//System.out.println("Matrix x");
 		//System.out.println(x.toString(9,4));
 		
+		validate();
+		
 		return 0;
 	}
 	
@@ -308,6 +310,11 @@ public class Learner
 		return(0);
 	}
 	
+	int  makePartialModel()
+	{
+		
+		return 0;
+	}
 	//----------- report utils-------------
 	
 	void reportGroups()

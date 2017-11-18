@@ -12,6 +12,7 @@ import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LDAtomSymbol;
 import ambit2.groupcontribution.groups.IGroup;
 import ambit2.groupcontribution.utils.math.MatrixDouble;
+import ambit2.groupcontribution.utils.math.ValidationConfig;
 
 
 public class GroupContributionModel 
@@ -36,7 +37,8 @@ public class GroupContributionModel
 	private Double colStatPercentageThreshold = null;
 	private GCMReportConfig reportConfig = new GCMReportConfig(); 	
 	private StringBuffer report = new StringBuffer(); 
-	private GCMTestConfig testConfig = new GCMTestConfig(); 
+	private ValidationConfig validationConfig = new ValidationConfig(); 
+	
 	
 	//TODO add group rules and LocalDescriptor rules
 	
@@ -127,14 +129,6 @@ public class GroupContributionModel
 		this.reportConfig = reportConfig;
 	}
 	
-	public GCMTestConfig getTestConfig() {
-		return testConfig;
-	}
-
-	public void setTestConfig(GCMTestConfig testConfig) {
-		this.testConfig = testConfig;
-	}
-	
 	public List<DescriptorInfo> getDescriptors() {
 		return descriptors;
 	}
@@ -212,6 +206,14 @@ public class GroupContributionModel
 	public String getReport()
 	{
 		return report.toString();
+	}
+
+	public ValidationConfig getValidationConfig() {
+		return validationConfig;
+	}
+
+	public void setValidationConfig(ValidationConfig validationConfig) {
+		this.validationConfig = validationConfig;
 	}	
 
 	
