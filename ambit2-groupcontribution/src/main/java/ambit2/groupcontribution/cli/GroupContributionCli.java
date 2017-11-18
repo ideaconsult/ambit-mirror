@@ -374,6 +374,10 @@ public class GroupContributionCli
 		if (res != 0)
 			System.out.println(learner.getAllErrorsAsString());
 		
+		
+		System.out.println();
+		learner.validate();
+		
 		return 0;
 	}	
 	
