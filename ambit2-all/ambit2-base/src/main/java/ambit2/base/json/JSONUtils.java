@@ -25,6 +25,7 @@ public class JSONUtils {
 		@Override
 		protected NumberFormat initialValue() {
 			NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
+			nf.setMaximumFractionDigits(4);
 			nf.setGroupingUsed(false);
 			return nf;
 		}

@@ -1304,9 +1304,10 @@ public class Protocol {
 
 			@Override
 			public String getOntologyURI() {
-				return null;
+				return "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C54072";
 			}
 		},
+			
 		RADICAL_FORMATION_POTENTIAL_SECTION  {
 			@Override
 			public String toString() {
@@ -2991,7 +2992,32 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/NPO_1339";
 			}
-		};
+	
+		},
+		IMPURITY_SECTION {
+			@Override
+			public String toString() {
+				return "Impurities";
+			}
+			@Override
+			public String getNumber() {
+				return ""; 
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+			
+			@Override
+			public int getSortingOrder() {
+				return 1013;
+			}
+			public String getOntologyURI() {
+				return null;
+			}
+	
+		};		
 
 		;
 		public String getTopCategory() {
