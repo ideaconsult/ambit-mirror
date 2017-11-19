@@ -11,6 +11,7 @@ import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
 import ambit2.groupcontribution.groups.IGroup;
+import ambit2.groupcontribution.utils.math.CrossValidation;
 import ambit2.groupcontribution.utils.math.MathUtilities;
 import ambit2.groupcontribution.utils.math.MathUtils;
 import ambit2.groupcontribution.utils.math.MatrixDouble;
@@ -318,10 +319,23 @@ public class Learner
 		return(res);
 	}
 	
-	int  makePartialModel(MatrixDouble matrix_A0, MatrixDouble matrix_b)
+	MatrixDouble  makePartialModel(MatrixDouble matrix_A, MatrixDouble matrix_b)
 	{
-		//TODO
-		return 0;
+		//Calculating of matrix C = A'A
+		MatrixDouble mC=MathUtilities.Multiply(matrix_A.transposed(), matrix_A);
+
+		//Calculating of invC and output matrix x
+		MatrixDouble inv_mC = mC.inverse(epsilon);
+
+		if (inv_mC != null)
+		{
+			MatrixDouble invC_A_transposed =  
+					MathUtilities.Multiply(inv_mC, matrix_A.transposed());
+			MatrixDouble matrix_x = MathUtilities.Multiply(invC_A_transposed , matrix_b);
+			return matrix_x;
+		}
+		
+		return null;
 	}
 	
 	public void validate()
@@ -334,6 +348,8 @@ public class Learner
 		if (validation.yScramblingIterations > 0)
 			performYScrambling(validation.yScramblingIterations);
 		
+		//if (validation.leaveOneOutValidation)
+		//	performLOOValidation();
 		
 		//TODO cross validation, single one out, bootstrap, y-scrambling, ...
 	}
@@ -425,6 +441,73 @@ public class Learner
 			System.out.print(out_s);
 		if (repCfg.FlagBufferOutput)
 			model.addToReport(out_s);
+	}
+	
+	public void performLOOValidation()
+	{	
+		System.out.println("LOO Validation  /Leave-One-Out/ ");
+		System.out.println("-----------------------------------");
+		
+		DecimalFormat df = new DecimalFormat(" ##0.000;-##0.000");
+		List<Double> modVals = new ArrayList<Double>();
+		List<Double> expVals = new ArrayList<Double>();
+		int m = A.nRows;
+		int n = A.nColumns;
+		
+		double model_value;
+		double diff;
+		
+		int testObjIndices[] = new int[1];
+		
+		for (int i = 0; i < m; i ++)
+		{
+			testObjIndices[0] = i;  //the i-th object is excluded
+			MatrixDouble matr[] = CrossValidation.makeValidationMatrices(testObjIndices, A, b);
+			MatrixDouble mA = matr[0];
+			MatrixDouble mb = matr[1];
+			
+			MatrixDouble matrix_x = makePartialModel(mA, mb);
+			if (matrix_x == null)
+			{
+				System.out.println("Validation #"+i+" SINGULARITY");
+				continue;
+			}
+						
+			//Calculate model for the excluded object i
+			model_value = 0;
+			for (int k = 0; k < n; k++)
+				model_value += A.el[i][k] * matrix_x.el[k][0];
+			
+			diff = model_value - b.el[i][0];
+			//registerError(diff,i);
+			modVals.add(new Double(model_value));
+			expVals.add(new Double(b.el[i][0]));
+			
+			System.out.println("Validation #" + i
+					+ df.format(b.el[i][0]) + "  "+ df.format(model_value)
+					+ "      diff = " + df.format(diff) + "  ");
+		}
+			
+		
+		double rmsError = Statistics.rmsDifference(expVals, modVals);
+		double corCoeff = Statistics.corrleationCoefficient(expVals, modVals);
+		double concordCorCoeff = Statistics.getConcordanceCorrelationCoefficient(expVals, modVals);
+		
+		MatrixDouble model_b0 = new MatrixDouble(modVals);
+		MatrixDouble exp_b0 = new MatrixDouble(expVals);  //This matrix is recreated instead of using b0 because some rows might be missing because of singularity
+		double Q2_LOO = Statistics.getR2(exp_b0, model_b0);
+		
+		
+		/*
+		System.out.println("LOO Statistics");
+		IOConsole.println("  RMS Error "+df.format(rmsError));
+		//IOConsole.println("  R   = "+df.format(corCoeff));
+		IOConsole.println("  R^2  = "+df.format(corCoeff*corCoeff)  + "   (clasical)");
+		IOConsole.println("  Rc^2 = "+df.format(corCoeff*corCoeff)  + "   (concordance cor. coef.)");
+		IOConsole.println("  Q^2  = "+df.format(Q2_LOO)  );
+		//IOConsole.println("  " + (corCoeff*corCoeff) + "   " + Q2_LOO);  //- this line is just for comparison
+		System.out.println();
+		*/
 	}
 	
 	
