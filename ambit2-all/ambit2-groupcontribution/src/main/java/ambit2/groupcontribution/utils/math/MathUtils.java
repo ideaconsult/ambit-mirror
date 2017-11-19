@@ -7,6 +7,11 @@ import java.util.Random;
 public class MathUtils 
 {
 	private Random random;
+	
+	public MathUtils()
+	{
+		initialize();
+	}
 		
 	public void initialize()
 	{

@@ -12,6 +12,7 @@ import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
 import ambit2.groupcontribution.groups.IGroup;
 import ambit2.groupcontribution.utils.math.MathUtilities;
+import ambit2.groupcontribution.utils.math.MathUtils;
 import ambit2.groupcontribution.utils.math.MatrixDouble;
 import ambit2.groupcontribution.utils.math.Statistics;
 import ambit2.groupcontribution.utils.math.ValidationConfig;
@@ -62,6 +63,7 @@ public class Learner
 	//Map<Integer,String> indexGroupMap = new HashMap<Integer,String>();
 	//Map<String,Integer> groupIndexMap = new HashMap<String,Integer>();
 	
+	MathUtils mathUtils = new MathUtils();
 	
 	public void reset()
 	{
@@ -324,17 +326,32 @@ public class Learner
 	
 	public void validate()
 	{
+		ValidationConfig validation = model.getValidationConfig(); 
+		
+		if (validation.selfTest)
+			performSelfTest(validation);
+		
+		if (validation.yScramblingIterations > 0)
+			performYScrambling(validation.yScramblingIterations);
+		
+		
+		//TODO cross validation, single one out, bootstrap, y-scrambling, ...
+	}
+	
+	public void performSelfTest(ValidationConfig validation)
+	{
 		DecimalFormat df = new DecimalFormat(" ##0.000;-##0.000");
 		GCMReportConfig repCfg = model.getReportConfig();
 		int n = A.nRows;
-		ValidationConfig validation = model.getValidationConfig(); 
 		
 		if (validation.selfTest)
 		{
 			if (repCfg.FlagConsoleOutput)
-				System.out.println("Self test validation:");
+				System.out.println("Self test validation:" + endline 
+						+ "----------------------------");
 			if (repCfg.FlagBufferOutput)
-				model.addToReport("Self test validation:" + endline);
+				model.addToReport("Self test validation:" + endline
+						+ "----------------------------" + endline);
 			
 			MatrixDouble modeled_b = new MatrixDouble(n,1);
 			String out_s;
@@ -358,17 +375,56 @@ public class Learner
 			double rmse = Statistics.rmsDifference(b, modeled_b);
 			out_s = "r^2  = " + df.format(r2) + endline +
 					"R^2  = " + df.format(R2) + "  (1-RSS/TSS)" + endline +
-					"RMSE = " + df.format(rmse) + endline;
+					"RMSE = " + df.format(rmse) + endline + endline;
 			if (repCfg.FlagConsoleOutput)
 				System.out.print(out_s);
 			if (repCfg.FlagBufferOutput)
 				model.addToReport(out_s);
+		}
+	}
+	
+	public void performYScrambling(int numIterations)
+	{	
+		GCMReportConfig repCfg = model.getReportConfig();
+		if (repCfg.FlagConsoleOutput)
+			System.out.println("Y-scrambling validation:" + endline 
+					+ "----------------------------");
+		if (repCfg.FlagBufferOutput)
+			model.addToReport("Y-scrambling validation:" + endline
+					+ "----------------------------" + endline);
+		
+		
+		double r2Values[] = new double [numIterations];
+		int m = A.nRows;
+		MatrixDouble b_scrambled = new MatrixDouble(m,1);
+		MatrixDouble model_b_scrambled = new MatrixDouble(m,1);
+		MatrixDouble invC_A_transposed =  MathUtilities.Multiply(invC, A.transposed());
+		
+		for (int i = 0; i < numIterations; i++)
+		{	
+			//Scrambling the experimental values
+			int p[] = mathUtils.getRandomPermutation(m);
+			for (int k = 0; k < m; k++)
+				b_scrambled.el[k][0] = b.el[p[k]][0]; 
 			
-			//TODO
+			//Making scrambled model			
+			MatrixDouble x_scrambled = MathUtilities.Multiply(invC_A_transposed, b_scrambled);
+			for (int k = 0; k < m; k++)
+				model_b_scrambled.el[k][0] = modelValue(k, A, x_scrambled);
 			
+			double R2 = Statistics.getR2(b_scrambled, model_b_scrambled); 
+			r2Values[i] = R2;
+			//System.out.println("iteration #" + i + "  " + R2);
 		}
 		
-		//TODO cross validation, single one out, bootstrap, y-scrambling, ...
+		double R2_mean = Statistics.mean(r2Values);
+		String out_s = "R^2_YS_average = " + R2_mean 
+				+ "    (" + numIterations + " scramblings)" 
+				+ endline + endline;
+		if (repCfg.FlagConsoleOutput)
+			System.out.print(out_s);
+		if (repCfg.FlagBufferOutput)
+			model.addToReport(out_s);
 	}
 	
 	
