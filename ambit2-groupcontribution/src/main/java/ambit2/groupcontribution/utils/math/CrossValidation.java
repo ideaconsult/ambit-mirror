@@ -8,7 +8,7 @@ public class CrossValidation
 		NONE, RANDOM, RANDOM_VALUE_DISTRIBUTION
 	}
 	
-	public boolean isLeaveOneOut = true;
+	//public boolean isLeaveOneOut = true;
 	public int numFolds = 5;
 	public ObjectSelection selection = ObjectSelection.RANDOM;
 	public int numCycles = 1;
@@ -20,7 +20,7 @@ public class CrossValidation
 	public CrossValidation(int numFolds)
 	{	
 		this.numFolds = numFolds;
-		isLeaveOneOut = false;
+		//isLeaveOneOut = false;
 	}
 	
 	public CrossValidation(int numFolds, int numCycles, ObjectSelection selection)
@@ -28,7 +28,7 @@ public class CrossValidation
 		this.numFolds = numFolds;
 		this.numCycles = numCycles;
 		this.selection = selection;
-		isLeaveOneOut = false;
+		//isLeaveOneOut = false;
 	}
 	
 	public static MatrixDouble[] makeValidationMatrices(int[] testObjIndices, 
@@ -59,8 +59,8 @@ public class CrossValidation
 		}
 		
 		MatrixDouble matrices[] = new MatrixDouble[2];
-		matrices[0] = A;
-		matrices[1] = b;
+		matrices[0] = mA;
+		matrices[1] = mb;
 		return matrices;
 	}
 	
