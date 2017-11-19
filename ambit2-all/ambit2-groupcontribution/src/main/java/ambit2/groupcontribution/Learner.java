@@ -1,5 +1,6 @@
 package ambit2.groupcontribution;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import ambit2.groupcontribution.fragmentation.Fragmentation;
 import ambit2.groupcontribution.groups.IGroup;
 import ambit2.groupcontribution.utils.math.MathUtilities;
 import ambit2.groupcontribution.utils.math.MatrixDouble;
+import ambit2.groupcontribution.utils.math.Statistics;
 import ambit2.groupcontribution.utils.math.ValidationConfig;
 
 /**
@@ -28,9 +30,10 @@ public class Learner
 	private GroupContributionModel model = null;
 	private DataSet trainDataSet = null;
 	private DataSet externalDataSet = null;
-	
+		
 	private List<String> errors = new ArrayList<String>();
 	private double epsilon = 1.0e-15;
+	private String endline = "\n";
 	
 	//Work matrices: 
 	//A0 - initial fragment frequencies, D0/D - initial final descriptors 
@@ -46,7 +49,8 @@ public class Learner
 	MatrixDouble C = null;
 	MatrixDouble invC = null;
 	MatrixDouble x = null;
-	
+	MatrixDouble x_sd = null;
+		
 	int fragColumnStatistics[];
 	
 	List<Integer> excludedGroupColumns = new ArrayList<Integer>();
@@ -135,8 +139,7 @@ public class Learner
 		
 		if (repCfg.reportContributions)
 			reportContributions();
-		//System.out.println("Matrix x");
-		//System.out.println(x.toString(9,4));
+		
 		
 		return 0;
 	}
@@ -231,7 +234,7 @@ public class Learner
 			//TODO filter D0 
 			for (int i = 0; i < D.nColumns; i++)
 				usedDescriptors.add(i);
-			n = n +D.nColumns; 
+			n = n + D.nColumns; 
 		}	
 
 		if (n==0)
@@ -272,6 +275,8 @@ public class Learner
 		{
 			MatrixDouble invC_A_transposed =  MathUtilities.Multiply(invC, A.transposed());
 			x = MathUtilities.Multiply(invC_A_transposed , b);
+			
+			//TODO calculate x_sd
 			
 			//Set group contributions
 			Map<String,IGroup> groups = model.getGroups();
@@ -319,6 +324,7 @@ public class Learner
 	
 	public void validate()
 	{
+		DecimalFormat df = new DecimalFormat(" ##0.000;-##0.000");
 		GCMReportConfig repCfg = model.getReportConfig();
 		int n = A.nRows;
 		ValidationConfig validation = model.getValidationConfig(); 
@@ -328,19 +334,35 @@ public class Learner
 			if (repCfg.FlagConsoleOutput)
 				System.out.println("Self test validation:");
 			if (repCfg.FlagBufferOutput)
-				model.addToReport("Self test validation:\n");
+				model.addToReport("Self test validation:" + endline);
 			
 			MatrixDouble modeled_b = new MatrixDouble(n,1);
-			
+			String out_s;
 			for (int i = 0; i < n; i++)
 			{	
 				modeled_b.el[i][0] = modelValue(i, A,x);
-				if (repCfg.FlagConsoleOutput)
-				{
-					System.out.println("#" + (i+1) + "   " + b.el[i][0] + "   " + modeled_b.el[i][0]);
-				}
+				double diff = modeled_b.el[i][0] - b.el[i][0];
+				out_s = "#" + (i+1) + "   " 
+						+ df.format(b.el[i][0]) + " " + df.format(modeled_b.el[i][0])
+						+ "  diff = " + df.format(diff) + endline;
 				
+				if (repCfg.FlagConsoleOutput)
+					System.out.print(out_s);
+				if (repCfg.FlagBufferOutput)
+					model.addToReport(out_s);
 			}
+			
+			double r = Statistics.corrleationCoefficient(b, modeled_b);
+			double r2 = r*r;
+			double R2 = Statistics.getR2(b, modeled_b);
+			double rmse = Statistics.rmsDifference(b, modeled_b);
+			out_s = "r^2  = " + df.format(r2) + endline +
+					"R^2  = " + df.format(R2) + "  (1-RSS/TSS)" + endline +
+					"RMSE = " + df.format(rmse) + endline;
+			if (repCfg.FlagConsoleOutput)
+				System.out.print(out_s);
+			if (repCfg.FlagBufferOutput)
+				model.addToReport(out_s);
 			
 			//TODO
 			
