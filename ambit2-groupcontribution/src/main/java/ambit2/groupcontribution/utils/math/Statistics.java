@@ -49,16 +49,7 @@ public class Statistics
 	{
 		if ((m1.nRows != m2.nRows)||(m1.nColumns != m2.nColumns))
 		{	
-			/*throw( 
-					new 
-					{class DimensionsNotEqualException extends Exception 
-						{ 
-						public DimensionsNotEqualException(String msg)
-							super(msg);
-						}
-					}  
-					);
-			*/		
+			
 		}
 		
 		double res = 0;
@@ -87,7 +78,7 @@ public class Statistics
 	{
 		if (v1.size() != v2.size())
 		{	
-			//Expection
+			//...
 		}
 		
 		double res = 0;
@@ -115,7 +106,7 @@ public class Statistics
 	}
 	
 	
-	public static double rmsDifference(MatrixDouble m1, MatrixDouble m2)
+	public static double rmsError(MatrixDouble m1, MatrixDouble m2)
 	{
 		if ((m1.nRows != m2.nRows)||(m1.nColumns != m2.nColumns))
 		{
@@ -131,7 +122,6 @@ public class Statistics
 		if ((m1.nRows > 0)&&(m1.nColumns > 0))
 			res = Math.sqrt(res /(m1.nRows*m1.nColumns));
 		
-		
 		return(res);
 	}
 	
@@ -141,7 +131,7 @@ public class Statistics
 		
 		if ((m1.nRows != m2.nRows)||(m1.nColumns != m2.nColumns))
 		{
-			//...
+			return -1; //Incorrect sizes
 		}
 		
 		double res = 0;
@@ -157,11 +147,11 @@ public class Statistics
 		return(res);
 	}
 	
-	public static double rmsDifference(List<Double> v1, List<Double> v2)
+	public static double rmsError(List<Double> v1, List<Double> v2)
 	{
 		if (v1.size() != v2.size())
 		{
-			//... Expection
+			return -1; // Incorrect sizes
 		}
 		
 		double res = 0;
@@ -171,12 +161,53 @@ public class Statistics
 		{	
 			d1 = v1.get(i);
 			d2 = v2.get(i);
-			
 			res +=(d1-d2)*(d1-d2);
 		}	
 		
 		if (v1.size() > 0)
 			res = Math.sqrt(res / v1.size());
+		
+		return(res);
+	}
+	
+	public static double meanAbsoluteError(MatrixDouble m1, MatrixDouble m2)
+	{
+		if ((m1.nRows != m2.nRows)||(m1.nColumns != m2.nColumns))
+		{
+			//...
+		}
+		
+		double res = 0;
+		
+		for (int i = 0; i < m1.nRows; i++)
+			for (int j = 0; j < m1.nColumns; j++)
+				res +=Math.abs(m1.el[i][j]-m2.el[i][j]);
+		
+		if ((m1.nRows > 0)&&(m1.nColumns > 0))
+			res = res /(m1.nRows*m1.nColumns);
+		
+		return(res);
+	}
+	
+	public static double meanAbsoluteError(List<Double> v1, List<Double> v2)
+	{
+		if (v1.size() != v2.size())
+		{
+			return -1; // Incorrect sizes
+		}
+		
+		double res = 0;
+		double d1, d2;
+		
+		for (int i = 0; i < v1.size(); i++)			
+		{	
+			d1 = v1.get(i);
+			d2 = v2.get(i);
+			res += Math.abs(d1-d2);
+		}	
+		
+		if (v1.size() > 0)
+			res = res / v1.size();
 		
 		return(res);
 	}

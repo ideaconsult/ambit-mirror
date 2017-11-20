@@ -387,10 +387,13 @@ public class Learner
 			double r = Statistics.corrleationCoefficient(b, modeled_b);
 			double r2 = r*r;
 			double R2 = Statistics.getR2(b, modeled_b);
-			double rmse = Statistics.rmsDifference(b, modeled_b);
+			double rmse = Statistics.rmsError(b, modeled_b);
+			double mae = Statistics.meanAbsoluteError(b, modeled_b);
+			
 			out_s = "r^2  = " + df.format(r2) + "  (PPMC)" + endline +
 					"R^2  = " + df.format(R2) + "  (1-RSS/TSS)" + endline +
-					"RMSE = " + df.format(rmse) + endline + endline;
+					"RMSE = " + df.format(rmse) + endline + 
+					"MAE  = " + df.format(mae) + endline + endline;
 			if (repCfg.FlagConsoleOutput)
 				System.out.print(out_s);
 			if (repCfg.FlagBufferOutput)
@@ -499,7 +502,8 @@ public class Learner
 			}
 		}	
 		
-		double rmsError = Statistics.rmsDifference(expVals, modVals);
+		double rmsError = Statistics.rmsError(expVals, modVals);
+		double mae = Statistics.meanAbsoluteError(expVals, modVals);
 		double corCoeff = Statistics.corrleationCoefficient(expVals, modVals);
 		double concordCorCoeff = Statistics.getConcordanceCorrelationCoefficient(expVals, modVals);
 		
@@ -508,7 +512,8 @@ public class Learner
 		double Q2_LOO = Statistics.getR2(exp_b0, model_b0);
 		
 		
-		out_s =	"RMS Error "+df.format(rmsError) + endline
+		out_s =	"RMSE = "+df.format(rmsError) + endline
+				+ "MAE = "+df.format(mae) + endline
 				+ "R^2  = "+df.format(corCoeff*corCoeff)  + "   (PPMC)" + endline
 				+ "Rc^2 = "+df.format(concordCorCoeff*concordCorCoeff)  + "   (concordance cor. coef.)" + endline
 				+ "Q^2  = "+df.format(Q2_LOO) + endline + endline;
