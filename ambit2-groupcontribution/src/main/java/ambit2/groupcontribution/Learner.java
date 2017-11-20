@@ -2,7 +2,6 @@ package ambit2.groupcontribution;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,9 +10,9 @@ import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
 import ambit2.groupcontribution.groups.IGroup;
+import ambit2.groupcontribution.utils.math.ArrayUtils;
 import ambit2.groupcontribution.utils.math.CrossValidation;
 import ambit2.groupcontribution.utils.math.MathUtilities;
-import ambit2.groupcontribution.utils.math.MathUtils;
 import ambit2.groupcontribution.utils.math.MatrixDouble;
 import ambit2.groupcontribution.utils.math.Statistics;
 import ambit2.groupcontribution.utils.math.ValidationConfig;
@@ -64,7 +63,7 @@ public class Learner
 	//Map<Integer,String> indexGroupMap = new HashMap<Integer,String>();
 	//Map<String,Integer> groupIndexMap = new HashMap<String,Integer>();
 	
-	MathUtils mathUtils = new MathUtils();
+	ArrayUtils arrayUtils = new ArrayUtils();
 	
 	public void reset()
 	{
@@ -389,7 +388,7 @@ public class Learner
 			double r2 = r*r;
 			double R2 = Statistics.getR2(b, modeled_b);
 			double rmse = Statistics.rmsDifference(b, modeled_b);
-			out_s = "r^2  = " + df.format(r2) + endline +
+			out_s = "r^2  = " + df.format(r2) + "  (PPMC)" + endline +
 					"R^2  = " + df.format(R2) + "  (1-RSS/TSS)" + endline +
 					"RMSE = " + df.format(rmse) + endline + endline;
 			if (repCfg.FlagConsoleOutput)
@@ -419,7 +418,7 @@ public class Learner
 		for (int i = 0; i < numIterations; i++)
 		{	
 			//Scrambling the experimental values
-			int p[] = mathUtils.getRandomPermutation(m);
+			int p[] = arrayUtils.getRandomPermutation(m);
 			for (int k = 0; k < m; k++)
 				b_scrambled.el[k][0] = b.el[p[k]][0]; 
 			
@@ -510,7 +509,7 @@ public class Learner
 		
 		
 		out_s =	"RMS Error "+df.format(rmsError) + endline
-				+ "R^2  = "+df.format(corCoeff*corCoeff)  + "   (clasical)" + endline
+				+ "R^2  = "+df.format(corCoeff*corCoeff)  + "   (PPMC)" + endline
 				+ "Rc^2 = "+df.format(concordCorCoeff*concordCorCoeff)  + "   (concordance cor. coef.)" + endline
 				+ "Q^2  = "+df.format(Q2_LOO) + endline + endline;
 		

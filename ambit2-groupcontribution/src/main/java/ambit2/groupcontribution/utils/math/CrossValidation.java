@@ -50,7 +50,7 @@ public class CrossValidation
 		int curIndex = 0;
 		for (int i = 0; i < m; ++i)
 		{
-			if (MathUtils.firstIndexOf(i, testObjIndices) == -1)
+			if (ArrayUtils.firstIndexOf(i, testObjIndices) == -1)
 			{
 				mA.copyRowFrom(curIndex,A,i);
 				mb.el[curIndex][0] = b.el[i][0];
