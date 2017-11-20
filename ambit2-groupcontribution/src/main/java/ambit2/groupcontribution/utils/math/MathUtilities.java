@@ -24,7 +24,8 @@ public class MathUtilities
 		int NN = m1.nColumns;
 		int KK = m2.nColumns;
 
-		if (NN != m2.nRows); //m1.n_columns m2.n_rows
+		if (NN != m2.nRows)
+			return null; //m1.n_columns and m2.n_rows must be equal
 
 		MatrixDouble result = new MatrixDouble(MM,KK); //setMatrixSizes(result,MM,KK);
 

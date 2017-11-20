@@ -445,8 +445,14 @@ public class Learner
 	
 	public void performLOOValidation()
 	{	
-		System.out.println("LOO Validation  /Leave-One-Out/ ");
-		System.out.println("-----------------------------------");
+		GCMReportConfig repCfg = model.getReportConfig();
+		
+		String out_s = "LOO Validation  /Leave-One-Out/ " + endline 
+						+ "-----------------------------------" + endline;
+		if (repCfg.FlagConsoleOutput)
+			System.out.print(out_s);
+		if (repCfg.FlagBufferOutput)
+			model.addToReport(out_s);
 		
 		DecimalFormat df = new DecimalFormat(" ##0.000;-##0.000");
 		List<Double> modVals = new ArrayList<Double>();
@@ -483,11 +489,16 @@ public class Learner
 			modVals.add(new Double(model_value));
 			expVals.add(new Double(b.el[i][0]));
 			
-			System.out.println("Validation #" + i
-					+ df.format(b.el[i][0]) + "  "+ df.format(model_value)
-					+ "      diff = " + df.format(diff) + "  ");
-		}
-			
+			if (model.getValidationConfig().verboseReport)
+			{	
+				out_s = "LOO #" + i + df.format(b.el[i][0]) + "  "+ df.format(model_value)
+					+ "      diff = " + df.format(diff) + endline;
+				if (repCfg.FlagConsoleOutput)
+					System.out.print(out_s);
+				if (repCfg.FlagBufferOutput)
+					model.addToReport(out_s);
+			}
+		}	
 		
 		double rmsError = Statistics.rmsDifference(expVals, modVals);
 		double corCoeff = Statistics.corrleationCoefficient(expVals, modVals);
@@ -498,16 +509,15 @@ public class Learner
 		double Q2_LOO = Statistics.getR2(exp_b0, model_b0);
 		
 		
-		/*
-		System.out.println("LOO Statistics");
-		IOConsole.println("  RMS Error "+df.format(rmsError));
-		//IOConsole.println("  R   = "+df.format(corCoeff));
-		IOConsole.println("  R^2  = "+df.format(corCoeff*corCoeff)  + "   (clasical)");
-		IOConsole.println("  Rc^2 = "+df.format(corCoeff*corCoeff)  + "   (concordance cor. coef.)");
-		IOConsole.println("  Q^2  = "+df.format(Q2_LOO)  );
-		//IOConsole.println("  " + (corCoeff*corCoeff) + "   " + Q2_LOO);  //- this line is just for comparison
-		System.out.println();
-		*/
+		out_s =	"RMS Error "+df.format(rmsError) + endline
+				+ "R^2  = "+df.format(corCoeff*corCoeff)  + "   (clasical)" + endline
+				+ "Rc^2 = "+df.format(concordCorCoeff*concordCorCoeff)  + "   (concordance cor. coef.)" + endline
+				+ "Q^2  = "+df.format(Q2_LOO) + endline + endline;
+		
+		if (repCfg.FlagConsoleOutput)
+			System.out.print(out_s);
+		if (repCfg.FlagBufferOutput)
+			model.addToReport(out_s);
 	}
 	
 	
