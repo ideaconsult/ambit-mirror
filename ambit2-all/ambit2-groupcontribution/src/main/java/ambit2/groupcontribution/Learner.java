@@ -358,7 +358,7 @@ public class Learner
 		if (validation.crossValidation != null)
 			performCrossValidation(validation.crossValidation);
 		
-		//TODO cross validation, bootstrap, external test
+		//TODO bootstrap, external test
 	}
 	
 	public void performSelfTest(ValidationConfig validation)
@@ -482,7 +482,7 @@ public class Learner
 		for (int i = 0; i < m; i ++)
 		{
 			testObjIndices[0] = i;  //the i-th object is excluded
-			MatrixDouble matr[] = CrossValidation.makeValidationModelMatrices(testObjIndices, A, b);
+			MatrixDouble matr[] = CrossValidation.makeValidationModelMatrices(testObjIndices, A, b, null);
 			MatrixDouble mA = matr[0];
 			MatrixDouble mb = matr[1];
 			
@@ -548,13 +548,34 @@ public class Learner
 			model.addToReport(out_s);
 		
 		for (int cycle = 0; cycle < cv.numCycles; cycle++)
+		{	
+			double params[] = crossValidation(cv.numFolds);
+		}	
+	}	
+	
+	double[] crossValidation(int nFolds)
+	{
+		int m = A0.nRows;
+		int p[] = arrayUtils.getRandomPermutation(m);
+		int fsize = m / nFolds;
+		
+		for (int k = 0; k<nFolds; k++)
 		{
+			//fold: indices m1,...,m2-1
+			int m1 = k * fsize;
+			int m2 = (k+1) * fsize;
+			if (m2 >= m)
+				m2 = m;
+			int testObjIndices[] = new int[m2-m1];
+			for (int i=m1; i<m2; i++)
+				testObjIndices[i-m1] = p[i];
+			
+			//MatrixDouble mod_matr[] = CrossValidation
 			
 		}
 		
-		
-	}	
-	
+		return null;
+	}
 	
 	//----------- report utils-------------
 	
