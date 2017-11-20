@@ -18,6 +18,8 @@ import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
+import ambit2.groupcontribution.utils.math.CrossValidation;
+import ambit2.groupcontribution.utils.math.ValidationConfig;
 
 
 
@@ -32,6 +34,8 @@ public class GroupContributionCli
 	public String targetProperty = null;
 	public Double threshold = null;
 	public String gcmType = null;
+	public String validation = null;
+	
 	
 	public static void main(String[] args) {
 		GroupContributionCli gcCli = new GroupContributionCli();
@@ -160,6 +164,21 @@ public class GroupContributionCli
 			}
 		},
 		
+		validation {
+			@Override
+			public String getArgName() {
+				return "validation";
+			}
+			@Override
+			public String getDescription() {
+				return "Validation specification: <self>,<LOO>,<YS-n>,<CV-n<-m>>,<vebose>,<boot-n>,<external>";
+			}
+			@Override
+			public String getShortName() {
+				return "v";
+			}
+		},
+		
 		
 		help {
 			@Override
@@ -254,6 +273,12 @@ public class GroupContributionCli
 			gcmType = argument;
 			break;
 		}
+		case validation: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			validation = argument;
+			break;
+		}
 		}
 	}
 	
@@ -314,6 +339,8 @@ public class GroupContributionCli
 				System.out.println("Column filtration threshold: " + threshold);
 			if (targetProperty != null)
 				System.out.println("Target property: " + targetProperty);
+			if (validation != null)
+				System.out.println("Validation: " + validation);
 				
 		}
 		else
@@ -363,6 +390,13 @@ public class GroupContributionCli
 		if (threshold != null)
 			gcm.setColStatPercentageThreshold(threshold);
 			
+		if (validation != null)
+		{
+			ValidationConfig valCfg = getValidationConfigFromString(validation);
+			if (valCfg == null)
+				return -2;
+			gcm.setValidationConfig(valCfg);
+		}
 		
 		//Fragmentation.makeFragmentation(trainDataSet, gcm);
 		
@@ -389,5 +423,115 @@ public class GroupContributionCli
 			return GroupContributionModel.Type.BOND_BASED;
 		//...		
 		return null;
+	}
+	
+	ValidationConfig getValidationConfigFromString(String v)
+	{
+		ValidationConfig valCfg = new ValidationConfig();
+		valCfg.reset();
+		int nErrors = 0;
+		StringBuffer errors = new StringBuffer();
+		String tokens[] = v.split(",");
+		for (int i = 0; i < tokens.length; i++)
+		{
+			if (tokens[i].equalsIgnoreCase("self"))
+			{
+				valCfg.selfTest = true;
+				continue;
+			}
+			
+			if (tokens[i].equalsIgnoreCase("loo"))
+			{
+				valCfg.leaveOneOutValidation = true;
+				continue;
+			}
+			
+			if (tokens[i].equalsIgnoreCase("verbose"))
+			{
+				valCfg.verboseReport = true;
+				continue;
+			}
+			
+			if (tokens[i].toLowerCase().startsWith("ys"))
+			{
+				String t[] = tokens[i].split("-");
+				if (t.length == 2)
+				{
+					try {
+						int nYSIter = Integer.parseInt(t[1]);
+						valCfg.yScramblingIterations = nYSIter;
+						continue;
+					}
+					catch (Exception e)
+					{	
+					}
+				}
+				errors.append("Incorrect Y-scrambling (YS) valiadation: " + tokens[i] + "\n");
+				nErrors++;
+				continue;
+			}
+			
+			if (tokens[i].toLowerCase().startsWith("boot"))
+			{
+				String t[] = tokens[i].split("-");
+				if (t.length == 2)
+				{
+					try {
+						int nBSIter = Integer.parseInt(t[1]);
+						valCfg.bootStrapIterations = nBSIter;
+						continue;
+					}
+					catch (Exception e)
+					{	
+					}
+				}
+				errors.append("Incorrect Bootstrap (boot) valiadation: " + tokens[i] + "\n");
+				nErrors++;
+				continue;
+			}
+			
+			if (tokens[i].toLowerCase().startsWith("cv"))
+			{
+				CrossValidation cv = new CrossValidation();
+				String t[] = tokens[i].split("-");
+				if (t.length == 2 || t.length == 3)
+				{
+					try {
+						int nFolds = Integer.parseInt(t[1]);
+						cv.numFolds = nFolds;
+					}
+					catch (Exception e)
+					{	
+					}
+					if (t.length == 3)
+					{
+						try {
+							int nCycles = Integer.parseInt(t[2]);
+							cv.numCycles = nCycles;
+						}
+						catch (Exception e)
+						{	
+						}
+					}
+					valCfg.crossValidation = cv;
+					continue;
+				}
+				
+				errors.append("Incorrect Cross Valication (CV): " + tokens[i] + "\n");
+				nErrors++;
+				continue;
+			}
+			
+			errors.append("Unknow validation method: " + tokens[i] + "\n");
+			nErrors++;
+		}
+		
+		if (nErrors > 0)
+		{	
+			System.out.println("Validation specification errors:\n" + errors.toString());
+			return null;
+		}	
+		
+		return valCfg;
 	}
 }

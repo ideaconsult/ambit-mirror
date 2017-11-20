@@ -347,8 +347,8 @@ public class Learner
 		if (validation.yScramblingIterations > 0)
 			performYScrambling(validation.yScramblingIterations);
 		
-		//if (validation.leaveOneOutValidation)
-		//	performLOOValidation();
+		if (validation.leaveOneOutValidation)
+			performLOOValidation();
 		
 		//TODO cross validation, single one out, bootstrap, y-scrambling, ...
 	}
@@ -373,15 +373,19 @@ public class Learner
 			for (int i = 0; i < n; i++)
 			{	
 				modeled_b.el[i][0] = modelValue(i, A,x);
-				double diff = modeled_b.el[i][0] - b.el[i][0];
-				out_s = "#" + (i+1) + "   " 
-						+ df.format(b.el[i][0]) + " " + df.format(modeled_b.el[i][0])
-						+ "  diff = " + df.format(diff) + endline;
 				
-				if (repCfg.FlagConsoleOutput)
-					System.out.print(out_s);
-				if (repCfg.FlagBufferOutput)
-					model.addToReport(out_s);
+				if (validation.verboseReport)
+				{	
+					double diff = modeled_b.el[i][0] - b.el[i][0];
+					out_s = "#" + (i+1) + "   " 
+							+ df.format(b.el[i][0]) + " " + df.format(modeled_b.el[i][0])
+							+ "  diff = " + df.format(diff) + endline;
+
+					if (repCfg.FlagConsoleOutput)
+						System.out.print(out_s);
+					if (repCfg.FlagBufferOutput)
+						model.addToReport(out_s);
+				}
 			}
 			
 			double r = Statistics.corrleationCoefficient(b, modeled_b);
