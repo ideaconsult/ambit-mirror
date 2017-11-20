@@ -31,16 +31,14 @@ public class CrossValidation
 		//isLeaveOneOut = false;
 	}
 	
-	public static MatrixDouble[] makeValidationMatrices(int[] testObjIndices, 
+	public static MatrixDouble[] makeValidationModelMatrices(int[] testObjIndices, 
 				MatrixDouble A, MatrixDouble b)
 	{
 		//The indices of the objects from the validation set
 		//These objects are excluded from the training original set
 		int size = testObjIndices.length;
 		if (size == 0)
-		{	
 			return null;
-		}
 		
 		int m = A.nRows;
 		int n = A.nColumns;
@@ -61,6 +59,28 @@ public class CrossValidation
 		MatrixDouble matrices[] = new MatrixDouble[2];
 		matrices[0] = mA;
 		matrices[1] = mb;
+		return matrices;
+	}
+	
+	public static MatrixDouble[] makeValidationTestMatrices(int[] testObjIndices, 
+			MatrixDouble A, MatrixDouble b)
+	{
+		int m = testObjIndices.length;
+		int n = A.nColumns;
+		if (m == 0)
+			return null;
+
+		MatrixDouble tA = new MatrixDouble(m, n);
+		MatrixDouble tb = new MatrixDouble(m, 1);			
+		for (int i = 0; i < m; i++)
+		{
+			tA.copyRowFrom(i,A,testObjIndices[i]);
+			tb.el[i][0] = b.el[testObjIndices[i]][0];
+		}
+
+		MatrixDouble matrices[] = new MatrixDouble[2];
+		matrices[0] = tA;
+		matrices[1] = tb;
 		return matrices;
 	}
 	
