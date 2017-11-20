@@ -8,9 +8,7 @@ A [command line Java application](download_ambitcli.html) used for processing ch
 
 * <a href="http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/">All releases</a>
 
-* Pre-release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.0.2">ambitcli-3.0.2-{buildnumber}.jar</a> 
-
-* Pre-release <a href="https://www.ideaconsult.net/downloads/ambitcli/ambitcli-3.0.1-20151130.jar">ambitcli-3.0.1-20151130.jar</a> | <a href="https://www.ideaconsult.net/downloads/ambitcli/ambitcli-3.0.1-20160205.jar">ambitcli-3.0.1-20160205.jar (build:7259 1454688887571)</a>
+* Pre-release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.1.0/">ambitcli-3.1.0-{buildnumber}.jar</a> 
 
 * Development <a href="https://nexus.ideaconsult.net/#nexus-search;gav~~ambit2-dbcli~~jar~">Maven repository</a>
 
