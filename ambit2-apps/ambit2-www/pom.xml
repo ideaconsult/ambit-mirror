@@ -539,6 +539,11 @@
 			<version>${nmparser.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>net.enanomapper</groupId>
+			<artifactId>enmtemplates</artifactId>
+			<version>${nmparser.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-user</artifactId>
 			<version>${ambit.version}</version>
