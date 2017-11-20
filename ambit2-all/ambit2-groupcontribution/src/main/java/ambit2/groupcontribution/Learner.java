@@ -318,6 +318,11 @@ public class Learner
 		return(res);
 	}
 	
+	void makePartialMatrices()
+	{
+		
+	}
+	
 	MatrixDouble  makePartialModel(MatrixDouble matrix_A, MatrixDouble matrix_b)
 	{
 		//Calculating of matrix C = A'A
@@ -350,7 +355,10 @@ public class Learner
 		if (validation.leaveOneOutValidation)
 			performLOOValidation();
 		
-		//TODO cross validation, single one out, bootstrap, y-scrambling, ...
+		if (validation.crossValidation != null)
+			performCrossValidation(validation.crossValidation);
+		
+		//TODO cross validation, bootstrap, external test
 	}
 	
 	public void performSelfTest(ValidationConfig validation)
@@ -474,7 +482,7 @@ public class Learner
 		for (int i = 0; i < m; i ++)
 		{
 			testObjIndices[0] = i;  //the i-th object is excluded
-			MatrixDouble matr[] = CrossValidation.makeValidationMatrices(testObjIndices, A, b);
+			MatrixDouble matr[] = CrossValidation.makeValidationModelMatrices(testObjIndices, A, b);
 			MatrixDouble mA = matr[0];
 			MatrixDouble mb = matr[1];
 			
@@ -527,6 +535,25 @@ public class Learner
 		if (repCfg.FlagBufferOutput)
 			model.addToReport(out_s);
 	}
+	
+	public void performCrossValidation(CrossValidation cv)
+	{	
+		GCMReportConfig repCfg = model.getReportConfig();
+		
+		String out_s = "Cross validation " + endline 
+						+ "-----------------------------------" + endline;
+		if (repCfg.FlagConsoleOutput)
+			System.out.print(out_s);
+		if (repCfg.FlagBufferOutput)
+			model.addToReport(out_s);
+		
+		for (int cycle = 0; cycle < cv.numCycles; cycle++)
+		{
+			
+		}
+		
+		
+	}	
 	
 	
 	//----------- report utils-------------
