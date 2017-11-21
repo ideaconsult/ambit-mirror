@@ -11,13 +11,13 @@ public class TautomerRegion
 {
 	boolean useRegion = false;	
 	boolean tautomerizeNitroGroup = false;
+	boolean tautomerizeNitroGroupPartially = false;
+	boolean tautomerizeNitroxides = false;	
 	boolean tautomerizeAromaticSystems = true;
 	boolean useCustomRegions = false;
 	
-	List<Integer> regionAtomIndices = null;
+	List<Integer> includeAtomIndices = null;
 	List<Integer> excludeAtomIndices = new ArrayList<Integer>();
-	
-	
 	
 	public boolean useRegion() {
 		return useRegion;
@@ -27,15 +27,28 @@ public class TautomerRegion
 		this.useRegion = useRegion;
 	}
 	
-	public boolean isRuleInstanceInRegion(RuleInstance ruleInst, IAtomContainer mol)
-	{
-		//TODO
-		return true;
+	public boolean isTautomerizeNitroGroupPartially() {
+		return tautomerizeNitroGroupPartially;
 	}
-	
-	public void calculateRegion(IAtomContainer mol)
-	{
-		//TODO
+
+	public void setTautomerizeNitroGroupPartially(boolean tautomerizeNitroGroupPartially) {
+		this.tautomerizeNitroGroupPartially = tautomerizeNitroGroupPartially;
+	}
+
+	public boolean isTautomerizeNitroxides() {
+		return tautomerizeNitroxides;
+	}
+
+	public void setTautomerizeNitroxides(boolean tautomerizeNitroxides) {
+		this.tautomerizeNitroxides = tautomerizeNitroxides;
+	}
+
+	public List<Integer> getIncludeAtomIndices() {
+		return includeAtomIndices;
+	}
+
+	public void setIncludeAtomIndices(List<Integer> includeAtomIndices) {
+		this.includeAtomIndices = includeAtomIndices;
 	}
 	
 
@@ -67,16 +80,6 @@ public class TautomerRegion
 	public void setTautomerizeAromaticSystems(boolean tautomerizeAromaticSystems) {
 		this.tautomerizeAromaticSystems = tautomerizeAromaticSystems;
 	}
-
-
-	public List<Integer> getRegionAtomIndices() {
-		return regionAtomIndices;
-	}
-
-
-	public void setRegionAtomIndices(List<Integer> regionAtomIndices) {
-		this.regionAtomIndices = regionAtomIndices;
-	}
 	
 	public List<Integer> getExcludeAtomIndices() {
 		return excludeAtomIndices;
@@ -84,6 +87,17 @@ public class TautomerRegion
 
 	public void setExcludeAtomIndices(List<Integer> excludeAtomIndices) {
 		this.excludeAtomIndices = excludeAtomIndices;
+	}
+	
+	public boolean isRuleInstanceInRegion(RuleInstance ruleInst, IAtomContainer mol)
+	{
+		//TODO
+		return true;
+	}
+	
+	public void calculateRegion(IAtomContainer mol)
+	{
+		//TODO
 	}
 	
 }
