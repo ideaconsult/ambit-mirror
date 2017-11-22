@@ -13,8 +13,8 @@ public class TautomerRegion
 	boolean tautomerizeNitroGroup = false;
 	boolean tautomerizeNitroGroupPartially = false;
 	boolean tautomerizeNitroxides = false;	
-	boolean tautomerizeAromaticSystems = true;
-	boolean useCustomRegions = false;
+	boolean tautomerizeAromaticSystems = true;	
+	List<String> customExcludeRegionSmarts = new ArrayList<String>();
 	
 	List<Integer> includeAtomIndices = null;
 	List<Integer> excludeAtomIndices = new ArrayList<Integer>();
@@ -51,17 +51,7 @@ public class TautomerRegion
 		this.includeAtomIndices = includeAtomIndices;
 	}
 	
-
-	public boolean isUseCustomRegions() {
-		return useCustomRegions;
-	}
-
-
-	public void setUseCustomRegions(boolean useCustomRegions) {
-		this.useCustomRegions = useCustomRegions;
-	}
-
-
+	
 	public boolean isTautomerizeNitroGroup() {
 		return tautomerizeNitroGroup;
 	}
@@ -79,6 +69,14 @@ public class TautomerRegion
 
 	public void setTautomerizeAromaticSystems(boolean tautomerizeAromaticSystems) {
 		this.tautomerizeAromaticSystems = tautomerizeAromaticSystems;
+	}
+	
+	public List<String> getCustomExcludeRegionSmarts() {
+		return customExcludeRegionSmarts;
+	}
+
+	public void setCustomExcludeRegionSmarts(List<String> customExcludeRegionSmarts) {
+		this.customExcludeRegionSmarts = customExcludeRegionSmarts;
 	}
 	
 	public List<Integer> getExcludeAtomIndices() {
