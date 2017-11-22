@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
+import ambit2.smarts.SmartsParser;
 import ambit2.tautomers.RuleInstance;
+import ambit2.tautomers.RuleStateFlags;
 
 public class TautomerRegion 
 {
@@ -16,9 +19,12 @@ public class TautomerRegion
 	boolean tautomerizeAromaticSystems = true;	
 	List<String> customExcludeRegionSmarts = new ArrayList<String>();
 	
+	List<CustomTautomerRegion> customExcludeRegions = new ArrayList<CustomTautomerRegion>();
 	List<Integer> includeAtomIndices = null;
 	List<Integer> excludeAtomIndices = new ArrayList<Integer>();
+	List<String> errors = new ArrayList<String>();
 	
+		
 	public boolean useRegion() {
 		return useRegion;
 	}
@@ -77,6 +83,7 @@ public class TautomerRegion
 
 	public void setCustomExcludeRegionSmarts(List<String> customExcludeRegionSmarts) {
 		this.customExcludeRegionSmarts = customExcludeRegionSmarts;
+		setCustomExcludeRegions();
 	}
 	
 	public List<Integer> getExcludeAtomIndices() {
@@ -85,6 +92,42 @@ public class TautomerRegion
 
 	public void setExcludeAtomIndices(List<Integer> excludeAtomIndices) {
 		this.excludeAtomIndices = excludeAtomIndices;
+	}
+	
+	void setCustomExcludeRegions()
+	{
+		customExcludeRegions.clear();
+		
+		SmartsParser sp = new SmartsParser();
+		sp.mSupportDoubleBondAromaticityNotSpecified = true;
+		
+		for (int i = 0; i<customExcludeRegionSmarts.size(); i++)
+		{
+			IQueryAtomContainer q = sp.parse(customExcludeRegionSmarts.get(i));			
+			String errorMsg = sp.getErrorMessages();
+			if (!errorMsg.equals(""))
+			{	
+				errors.add(errorMsg);
+			}
+			else
+			{	
+				sp.setNeededDataFlags();	
+				RuleStateFlags flags = new RuleStateFlags();
+				flags.hasRecursiveSmarts = sp.hasRecursiveSmarts;
+				flags.mNeedExplicitHData = sp.needExplicitHData();
+				flags.mNeedNeighbourData = sp.needNeighbourData();
+				flags.mNeedParentMoleculeData = sp.needParentMoleculeData();
+				flags.mNeedRingData = sp.needRingData();
+				flags.mNeedRingData2 = sp.needRingData2();
+				flags.mNeedValenceData = sp.needValencyData();
+				
+				CustomTautomerRegion ctr = new CustomTautomerRegion();
+				ctr.flags = flags;
+				ctr.query = q;
+				ctr.smarts = customExcludeRegionSmarts.get(i);
+				customExcludeRegions.add(ctr);
+			}
+		}
 	}
 	
 	public boolean isRuleInstanceInRegion(RuleInstance ruleInst, IAtomContainer mol)
