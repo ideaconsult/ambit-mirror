@@ -3,6 +3,7 @@ package ambit2.tautomers.rules;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
@@ -132,7 +133,27 @@ public class TautomerRegion
 	
 	public boolean isRuleInstanceInRegion(RuleInstance ruleInst, IAtomContainer mol)
 	{
-		//TODO
+		//Include mode takes precedence over exclude mode
+		if (includeAtomIndices != null)
+		{
+			for (IAtom at : ruleInst.atoms)
+			{	
+				int atInd = mol.getAtomNumber(at);
+				if (includeAtomIndices.contains(atInd))
+					continue;
+				else
+					return false; //rule instance atom is not within include list
+			}
+			return true;
+		}
+		
+		//Handle exclude atoms region
+		for (int i = 0; i < excludeAtomIndices.size(); i++)
+		{
+			IAtom exclAt = mol.getAtom(excludeAtomIndices.get(i));
+			if (ruleInst.atoms.contains(exclAt))
+				return false; //rule instance contains an 'exclude' atom
+		}
 		return true;
 	}
 	
