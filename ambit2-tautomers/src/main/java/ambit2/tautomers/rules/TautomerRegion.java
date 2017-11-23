@@ -3,6 +3,7 @@ package ambit2.tautomers.rules;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
@@ -14,10 +15,10 @@ import ambit2.tautomers.RuleStateFlags;
 public class TautomerRegion 
 {
 	boolean useRegion = false;	
-	boolean excludeNitroGroup = true;
+	boolean excludeNitroGroup = false;
 	boolean excludeNitroGroupPartially = true;
-	boolean excludeNitroxides = true;	
-	boolean excludeAromaticSystems = true;	
+	boolean excludeNitroxides = false;	
+	boolean excludeAromaticSystems = false;	
 	List<String> customExcludeRegionSmarts = new ArrayList<String>();
 	
 	List<CustomTautomerRegion> customExcludeRegions = new ArrayList<CustomTautomerRegion>();
@@ -190,6 +191,18 @@ public class TautomerRegion
 		{
 			List<IAtom[]> pos = CustomTautomerRegion.getNitroxidePositions(target);
 			addToExcludeRegion(pos, target);
+		}
+		
+		if (excludeAromaticSystems)
+		{
+			int n = target.getAtomCount();
+			for (int i = 0; i < n; i++)
+			{
+				IAtom atom = target.getAtom(i);
+				if (atom.getFlag(CDKConstants.ISAROMATIC))
+					if (!isIndexInList(i, excludeAtomIndices))
+						excludeAtomIndices.add(i);
+			}	
 		}
 		
 		//TODO
