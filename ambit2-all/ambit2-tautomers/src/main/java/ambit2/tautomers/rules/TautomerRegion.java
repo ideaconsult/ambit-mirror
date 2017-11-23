@@ -21,7 +21,7 @@ public class TautomerRegion
 	List<String> customExcludeRegionSmarts = new ArrayList<String>();
 	
 	List<CustomTautomerRegion> customExcludeRegions = new ArrayList<CustomTautomerRegion>();
-	List<Integer> includeAtomIndices = null;
+	//List<Integer> includeAtomIndices = null;
 	List<Integer> excludeAtomIndices = new ArrayList<Integer>();
 	List<String> errors = new ArrayList<String>();
 	
@@ -50,6 +50,7 @@ public class TautomerRegion
 		this.tautomerizeNitroxides = tautomerizeNitroxides;
 	}
 
+	/*
 	public List<Integer> getIncludeAtomIndices() {
 		return includeAtomIndices;
 	}
@@ -57,7 +58,7 @@ public class TautomerRegion
 	public void setIncludeAtomIndices(List<Integer> includeAtomIndices) {
 		this.includeAtomIndices = includeAtomIndices;
 	}
-	
+	*/
 	
 	public boolean isTautomerizeNitroGroup() {
 		return tautomerizeNitroGroup;
@@ -133,6 +134,7 @@ public class TautomerRegion
 	
 	public boolean isRuleInstanceInRegion(RuleInstance ruleInst, IAtomContainer mol)
 	{
+		/*
 		//Include mode takes precedence over exclude mode
 		if (includeAtomIndices != null)
 		{
@@ -146,6 +148,7 @@ public class TautomerRegion
 			}
 			return true;
 		}
+		*/
 		
 		//Handle exclude atoms region
 		for (int i = 0; i < excludeAtomIndices.size(); i++)
@@ -157,9 +160,45 @@ public class TautomerRegion
 		return true;
 	}
 	
-	public void calculateRegion(IAtomContainer mol)
+	public void calculateRegion(IAtomContainer target)
 	{
+		excludeAtomIndices.clear();
+		
+		if (tautomerizeNitroGroup)
+		{
+			List<IAtom[]> pos = CustomTautomerRegion.getNitroGroupPositions(target);
+			for (int i = 0; i < pos.size(); i++)
+			{
+				IAtom[] atoms = pos.get(i);
+				for (int k = 0; k < atoms.length; k++)
+				{
+					int atNum = target.getAtomNumber(atoms[k]);
+					if (atNum == -1)
+						continue;
+					else
+					{	
+						if (!isIndexInList(atNum, excludeAtomIndices))
+							excludeAtomIndices.add(atNum);
+					}	
+				}
+					
+			}
+		}
+		else
+			if (tautomerizeNitroGroupPartially)
+			{
+				//TODO
+			}
+				
 		//TODO
+	}
+	
+	boolean isIndexInList(int index, List<Integer> list)
+	{
+		for (Integer i : list )
+			if (index == i.intValue())
+				return true;
+		return false;
 	}
 	
 }
