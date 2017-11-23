@@ -166,31 +166,50 @@ public class TautomerRegion
 		
 		if (tautomerizeNitroGroup)
 		{
+			//Flag tautomerizeNitroGroup takes precedence 
+			//over flag tautomerizeNitroGroupPartially
 			List<IAtom[]> pos = CustomTautomerRegion.getNitroGroupPositions(target);
-			for (int i = 0; i < pos.size(); i++)
-			{
-				IAtom[] atoms = pos.get(i);
-				for (int k = 0; k < atoms.length; k++)
-				{
-					int atNum = target.getAtomNumber(atoms[k]);
-					if (atNum == -1)
-						continue;
-					else
-					{	
-						if (!isIndexInList(atNum, excludeAtomIndices))
-							excludeAtomIndices.add(atNum);
-					}	
-				}
-					
-			}
+			addToExcludeRegion(pos, target);
 		}
 		else
 			if (tautomerizeNitroGroupPartially)
 			{
-				//TODO
+				List<IAtom[]> pos = CustomTautomerRegion.getNitroGroupPositions(target);
+				for (int i = 0; i < pos.size(); i++)
+				{
+					IAtom[] atoms = pos.get(i);
+					for (int k = 0; k < atoms.length; k++)
+					{
+						//only one of the double bonds is allowed to tautomerized						
+						//TODO	
+					}	
+				}
 			}
-				
+		
+		if (tautomerizeNitroxides)
+		{
+			List<IAtom[]> pos = CustomTautomerRegion.getNitroxidePositions(target);
+			addToExcludeRegion(pos, target);
+		}
+		
 		//TODO
+	}
+	
+	void addToExcludeRegion(List<IAtom[]> groupPositions, IAtomContainer target)
+	{	
+		for (int i = 0; i < groupPositions.size(); i++)
+		{
+			IAtom[] atoms = groupPositions.get(i);
+			for (int k = 0; k < atoms.length; k++)
+			{
+				int atNum = target.getAtomNumber(atoms[k]);
+				if (atNum != -1)
+				{	
+					if (!isIndexInList(atNum, excludeAtomIndices))
+						excludeAtomIndices.add(atNum);
+				}	
+			}	
+		}
 	}
 	
 	boolean isIndexInList(int index, List<Integer> list)
