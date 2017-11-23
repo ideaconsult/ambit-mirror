@@ -28,7 +28,7 @@ public class TautomerRegion
 	
 		
 	public boolean useRegion() {
-		return useRegion;
+		return useRegion;	
 	}
 
 	public void setUseRegion(boolean useRegion) {
