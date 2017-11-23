@@ -38,10 +38,11 @@ public class CustomTautomerRegion
 				IAtom a0 = tl.atoms.get(i);
 				if (a0.getSymbol().equals("O"))
 				{	
-					if ((at.getFormalCharge() == 0) && (a0.getFormalCharge() == 0) 
+					if ( ((at.getFormalCharge() == 0) || (at.getFormalCharge() == +1)) 
+							&& (a0.getFormalCharge() == 0) 
 							&& (tl.bonds.get(i).getOrder() ==IBond.Order.DOUBLE))
 					{
-						//N=O
+						//N=O or [N+]=O
 						nOAtoms++;
 						atoms[nOAtoms] = a0;
 					}

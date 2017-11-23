@@ -80,7 +80,20 @@ public class TestTautomerRegion extends TestCase
 		List<int[]> expectedPos = new ArrayList<int[]>();
 		int res;
 		
+		
 		smiles = "CCCCN(=O)=O";
+		expectedPos.clear();
+		expectedPos.add(new int[] {4,5,6});
+		res = checkNitroGroupPositions(smiles, expectedPos);
+		assertEquals("Nitro group positions for " + smiles, expectedPos.size(), res);
+		
+		smiles = "O=NCCCCN(=O)=O";
+		expectedPos.clear();
+		expectedPos.add(new int[] {6,7,8});
+		res = checkNitroGroupPositions(smiles, expectedPos);
+		assertEquals("Nitro group positions for " + smiles, expectedPos.size(), res);
+		
+		smiles = "CCCC[N+](=O)[O-]";
 		expectedPos.clear();
 		expectedPos.add(new int[] {4,5,6});
 		res = checkNitroGroupPositions(smiles, expectedPos);
