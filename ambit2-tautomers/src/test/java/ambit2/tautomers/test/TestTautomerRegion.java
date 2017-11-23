@@ -35,6 +35,33 @@ public class TestTautomerRegion extends TestCase
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		TopLayer.setAtomTopLayers(mol, TopLayer.TLProp);
 		List<IAtom[]> positions =  CustomTautomerRegion.getNitroGroupPositions(mol);
+		
+		if (positions.size() == 0 && expectedAtIndices.size() == 0)
+			return -1; //special case
+		
+		int nMatchedPositions = 0;
+		for (IAtom[] pos: positions)
+		{
+			int atInd[] = getAtomIndices(pos, mol);
+			for (int[] expAtInd : expectedAtIndices)			
+				if (checkEqualIndices(atInd, expAtInd))
+				{
+					nMatchedPositions++;
+					break;
+				}
+		}
+		return nMatchedPositions;
+	}
+	
+	int checkNitroxidePositions(String smiles, List<int[]> expectedAtIndices) throws Exception
+	{
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		TopLayer.setAtomTopLayers(mol, TopLayer.TLProp);
+		List<IAtom[]> positions =  CustomTautomerRegion.getNitroxidePositions(mol);
+		
+		if (positions.size() == 0 && expectedAtIndices.size() == 0)
+			return -1; //special case
+		
 		int nMatchedPositions = 0;
 		for (IAtom[] pos: positions)
 		{
@@ -80,6 +107,15 @@ public class TestTautomerRegion extends TestCase
 		List<int[]> expectedPos = new ArrayList<int[]>();
 		int res;
 		
+		smiles = "CCCCN([O-])=O"; //Incorrect nitro group: expecting -1
+		expectedPos.clear();
+		res = checkNitroGroupPositions(smiles, expectedPos);
+		assertEquals("Nitro group positions for " + smiles, -1, res);
+		
+		smiles = "CCCCN"; //No nitro groups: expecting -1
+		expectedPos.clear();
+		res = checkNitroGroupPositions(smiles, expectedPos);
+		assertEquals("Nitro group positions for " + smiles, -1, res);
 		
 		smiles = "CCCCN(=O)=O";
 		expectedPos.clear();
@@ -96,6 +132,13 @@ public class TestTautomerRegion extends TestCase
 		smiles = "CCCC[N+](=O)[O-]";
 		expectedPos.clear();
 		expectedPos.add(new int[] {4,5,6});
+		res = checkNitroGroupPositions(smiles, expectedPos);
+		assertEquals("Nitro group positions for " + smiles, expectedPos.size(), res);
+		
+		smiles = "O=N(=O)CCCC[N+](=O)[O-]";
+		expectedPos.clear();
+		expectedPos.add(new int[] {0,1,2});
+		expectedPos.add(new int[] {7,8,9});
 		res = checkNitroGroupPositions(smiles, expectedPos);
 		assertEquals("Nitro group positions for " + smiles, expectedPos.size(), res);
 		
