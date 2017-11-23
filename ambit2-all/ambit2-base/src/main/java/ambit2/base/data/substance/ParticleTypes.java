@@ -62,6 +62,30 @@ public enum ParticleTypes {
 			return STRUCTURE_RELATION.HAS_CORE;
 		}
 	},
+	NPO_943 {
+		public String getSMILES() {
+			return "[C]";
+		}
+
+		@Override
+		public String getAnnotation() {
+			return "NPO_943";
+		}
+
+		@Override
+		public String getCAS() {
+			return "308068-56-6";
+		}
+
+		@Override
+		public String getEINECS() {
+			return "936-414-1";
+		}
+		@Override
+		public String toString() {
+			return "SWCNT";
+		}
+	},
 	NPO_354 {
 		// MWCNT same cas as CNT
 		public String getSMILES() {
