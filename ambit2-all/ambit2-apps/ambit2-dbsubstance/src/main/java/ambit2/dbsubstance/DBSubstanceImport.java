@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -67,6 +68,15 @@ public class DBSubstanceImport {
 	static final String loggingProperties = "ambit2/dbsubstance/logging.properties";
 	static final String log4jProperties = "ambit2/dbsubstance/log4j.properties";
 	protected String prefix = "XLSX";
+	protected Date updated = null;
+
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
+	}
 
 	public String getPrefix() {
 		return prefix;
@@ -255,6 +265,16 @@ public class DBSubstanceImport {
 			}
 		return false;
 	}
+	
+	protected static Date timestamp_release(CommandLine line) {
+		if (line.hasOption('a'))
+			try {
+				return ProtocolApplication.dateformatter.parse(line.getOptionValue('a').toString());
+			} catch (Exception x) {
+			}
+		return null;
+	}
+	
 	protected int maxRefSubstances = -1;
 
 	protected static int getMaxRefSubstances(CommandLine line) {
@@ -453,6 +473,9 @@ public class DBSubstanceImport {
 		
 		Option addDefaultComposition = OptionBuilder.hasArg().withLongOpt("defaultcomposition").withArgName("value")
 				.withDescription("true|false").create("d");
+		
+		Option timestamp_release = OptionBuilder.hasArg().withLongOpt("timestamp_release").withArgName("value")
+				.withDescription("Timestamp, default null").create("a");
 
 		/*
 		 * Option gzip = OptionBuilder.hasArg().withLongOpt("gzipped")
@@ -473,6 +496,7 @@ public class DBSubstanceImport {
 		options.addOption(maxRefSubstances);
 		options.addOption(prefix);
 		options.addOption(addDefaultComposition);
+		options.addOption(timestamp_release);
 
 		options.addOption(help);
 
@@ -526,6 +550,8 @@ public class DBSubstanceImport {
 			setKeepEffectRecords(isKeepEffectRecords(line));
 			setSplitRecord(isSplitRecord(line));
 			setAddDefaultComposition(addDefaultComposition(line));
+			setUpdated(timestamp_release(line));
+			
 			maxRefSubstances = getMaxRefSubstances(line);
 			if (line.hasOption("h")) {
 				printHelp(options, null);
@@ -652,7 +678,7 @@ public class DBSubstanceImport {
 			parser = createParser(fin, xlsx);
 			logger_cli.log(Level.INFO, "MSG_IMPORT",
 					new Object[] { parser.getClass().getName(), inputFile.getAbsolutePath() });
-
+			
 			StructureRecordValidator validator = new StructureRecordValidator(inputFile.getName(), true,getPrefix()) {
 				@Override
 				public IStructureRecord validate(SubstanceRecord record) throws Exception {
@@ -673,6 +699,9 @@ public class DBSubstanceImport {
 
 						}
 
+					}
+					for (ProtocolApplication papp : record.getMeasurements()) {
+						papp.setUpdated(getUpdated());
 					}
 					return super.validate(record);
 				}
