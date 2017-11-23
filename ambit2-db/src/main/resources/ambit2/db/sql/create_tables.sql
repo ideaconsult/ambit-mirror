@@ -1993,6 +1993,7 @@ DELIMITER ;
 -- -----------------------------------------------------
 -- experiment overview
 -- -----------------------------------------------------
+DROP VIEW IF EXISTS `experiments_overview`;
 create view experiments_overview as
 select  p.topcategory,count(*),"protocol",guidance,params from substance_protocolapplication p 
 group by guidance
