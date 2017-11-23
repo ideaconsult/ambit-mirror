@@ -14,10 +14,10 @@ import ambit2.tautomers.RuleStateFlags;
 public class TautomerRegion 
 {
 	boolean useRegion = false;	
-	boolean tautomerizeNitroGroup = false;
-	boolean tautomerizeNitroGroupPartially = false;
-	boolean tautomerizeNitroxides = false;	
-	boolean tautomerizeAromaticSystems = true;	
+	boolean excludeNitroGroup = true;
+	boolean excludeNitroGroupPartially = true;
+	boolean excludeNitroxides = true;	
+	boolean excludeAromaticSystems = true;	
 	List<String> customExcludeRegionSmarts = new ArrayList<String>();
 	
 	List<CustomTautomerRegion> customExcludeRegions = new ArrayList<CustomTautomerRegion>();
@@ -34,20 +34,20 @@ public class TautomerRegion
 		this.useRegion = useRegion;
 	}
 	
-	public boolean isTautomerizeNitroGroupPartially() {
-		return tautomerizeNitroGroupPartially;
+	public boolean isexcludeNitroGroupPartially() {
+		return excludeNitroGroupPartially;
 	}
 
-	public void setTautomerizeNitroGroupPartially(boolean tautomerizeNitroGroupPartially) {
-		this.tautomerizeNitroGroupPartially = tautomerizeNitroGroupPartially;
+	public void setExcludeNitroGroupPartially(boolean excludeNitroGroupPartially) {
+		this.excludeNitroGroupPartially = excludeNitroGroupPartially;
 	}
 
-	public boolean isTautomerizeNitroxides() {
-		return tautomerizeNitroxides;
+	public boolean isExcludeNitroxides() {
+		return excludeNitroxides;
 	}
 
-	public void setTautomerizeNitroxides(boolean tautomerizeNitroxides) {
-		this.tautomerizeNitroxides = tautomerizeNitroxides;
+	public void setExcludeNitroxides(boolean excludeNitroxides) {
+		this.excludeNitroxides = excludeNitroxides;
 	}
 
 	/*
@@ -60,30 +60,30 @@ public class TautomerRegion
 	}
 	*/
 	
-	public boolean isTautomerizeNitroGroup() {
-		return tautomerizeNitroGroup;
+	public boolean isExcludeNitroGroup() {
+		return excludeNitroGroup;
 	}
 
 
-	public void setTautomerizeNitroGroup(boolean tautomerizeNitroGroup) {
-		this.tautomerizeNitroGroup = tautomerizeNitroGroup;
+	public void setExcludeNitroGroup(boolean excludeNitroGroup) {
+		this.excludeNitroGroup = excludeNitroGroup;
 	}
 
 
-	public boolean isTautomerizeAromaticSystems() {
-		return tautomerizeAromaticSystems;
+	public boolean isExcludeAromaticSystems() {
+		return excludeAromaticSystems;
 	}
 
 
-	public void setTautomerizeAromaticSystems(boolean tautomerizeAromaticSystems) {
-		this.tautomerizeAromaticSystems = tautomerizeAromaticSystems;
+	public void setExcludeAromaticSystems(boolean excludeAromaticSystems) {
+		this.excludeAromaticSystems = excludeAromaticSystems;
 	}
 	
 	public List<String> getCustomExcludeRegionSmarts() {
 		return customExcludeRegionSmarts;
 	}
 
-	public void setCustomExcludeRegionSmarts(List<String> customExcludeRegionSmarts) {
+	public void setCustomExcludeRegionsSmarts(List<String> customExcludeRegionSmarts) {
 		this.customExcludeRegionSmarts = customExcludeRegionSmarts;
 		setCustomExcludeRegions();
 	}
@@ -164,15 +164,15 @@ public class TautomerRegion
 	{
 		excludeAtomIndices.clear();
 		
-		if (tautomerizeNitroGroup)
+		if (excludeNitroGroup)
 		{
-			//Flag tautomerizeNitroGroup takes precedence 
-			//over flag tautomerizeNitroGroupPartially
+			//Flag excludeNitroGroup takes precedence 
+			//over flag excludeNitroGroupPartially
 			List<IAtom[]> pos = CustomTautomerRegion.getNitroGroupPositions(target);
 			addToExcludeRegion(pos, target);
 		}
 		else
-			if (tautomerizeNitroGroupPartially)
+			if (excludeNitroGroupPartially)
 			{
 				List<IAtom[]> pos = CustomTautomerRegion.getNitroGroupPositions(target);
 				for (int i = 0; i < pos.size(); i++)
@@ -186,7 +186,7 @@ public class TautomerRegion
 				}
 			}
 		
-		if (tautomerizeNitroxides)
+		if (excludeNitroxides)
 		{
 			List<IAtom[]> pos = CustomTautomerRegion.getNitroxidePositions(target);
 			addToExcludeRegion(pos, target);
