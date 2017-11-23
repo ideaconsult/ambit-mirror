@@ -77,9 +77,9 @@ var config_bao = {
 				}
 				iuuid = full["investigation_uuid"];
 				if (iuuid === undefined || (iuuid == null))
-					return sOut;
+					;
 				else {
-					return sOut
+					sOut +=
 							+ "<br/><br/>"
 							+ jT.ui
 									.shortenedData(
@@ -91,6 +91,12 @@ var config_bao = {
 											iuuid);
 
 				}
+				
+				try {
+					if (full["reliability"]["r_value"] != undefined)
+						sOut += "<br/><span class='chelp' style='color:#FF0000;' title='curation comment'>" + full["reliability"]["r_value"] + "</span>"
+					} catch (err) {}
+				return sOut;	
 			}
 		}
 	},
