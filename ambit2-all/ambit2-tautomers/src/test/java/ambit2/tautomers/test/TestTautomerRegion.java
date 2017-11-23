@@ -1,5 +1,6 @@
 package ambit2.tautomers.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -7,7 +8,10 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.LoggingTool;
 
+import ambit2.smarts.SmartsFlags;
 import ambit2.smarts.SmartsHelper;
+import ambit2.smarts.SmartsParser;
+import ambit2.smarts.TopLayer;
 import ambit2.tautomers.rules.CustomTautomerRegion;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -16,11 +20,10 @@ import junit.framework.TestSuite;
 public class TestTautomerRegion extends TestCase
 {
 	public LoggingTool logger;
-	//SmartsHelper helper = new SmartsHelper(SilentChemObjectBuilder.getInstance());
 	
 	public TestTautomerRegion()
 	{
-		logger = new LoggingTool(this);
+		logger = new LoggingTool(this);		
 	}
 	
 	public static Test suite() {
@@ -30,6 +33,7 @@ public class TestTautomerRegion extends TestCase
 	int checkNitroGroupPositions(String smiles, List<int[]> expectedAtIndices) throws Exception
 	{
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		TopLayer.setAtomTopLayers(mol, TopLayer.TLProp);
 		List<IAtom[]> positions =  CustomTautomerRegion.getNitroGroupPositions(mol);
 		int nMatchedPositions = 0;
 		for (IAtom[] pos: positions)
@@ -70,9 +74,18 @@ public class TestTautomerRegion extends TestCase
 		return (nMatches == pos1.length);
 	}
 	
-	public void test0()
+	public void testNitroGroups() throws Exception
 	{
-		//TODO  
+		String smiles;
+		List<int[]> expectedPos = new ArrayList<int[]>();
+		int res;
+		
+		smiles = "CCCCN(=O)=O";
+		expectedPos.clear();
+		expectedPos.add(new int[] {4,5,6});
+		res = checkNitroGroupPositions(smiles, expectedPos);
+		assertEquals("Nitro group positions for " + smiles, expectedPos.size(), res);
+		
 	}
 	
 }
