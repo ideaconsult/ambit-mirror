@@ -101,6 +101,7 @@ public class TestTautomerRegion extends TestCase
 		return (nMatches == pos1.length);
 	}
 	
+	
 	public void testNitroGroups() throws Exception
 	{
 		String smiles;
@@ -144,4 +145,48 @@ public class TestTautomerRegion extends TestCase
 		
 	}
 	
+	public void testNitroxides() throws Exception
+	{
+		String smiles;
+		List<int[]> expectedPos = new ArrayList<int[]>();
+		int res;
+		
+		smiles = "CCCCN"; //Incorrect nitro group: expecting -1
+		expectedPos.clear();
+		res = checkNitroxidePositions(smiles, expectedPos);
+		assertEquals("Nitroxide positions for " + smiles, -1, res);
+		
+		smiles = "CCCCN=O";
+		expectedPos.clear();
+		expectedPos.add(new int[] {4,5});
+		res = checkNitroxidePositions(smiles, expectedPos);
+		assertEquals("Nitrooxide positions for " + smiles, expectedPos.size(), res);
+		
+		smiles = "CCCC[N+][O-]";
+		expectedPos.clear();
+		expectedPos.add(new int[] {4,5});
+		res = checkNitroxidePositions(smiles, expectedPos);
+		assertEquals("Nitrooxide positions for " + smiles, expectedPos.size(), res);
+		
+		smiles = "O=NCCCC[N+][O-]";
+		expectedPos.clear();
+		expectedPos.add(new int[] {0,1});
+		expectedPos.add(new int[] {6,7});
+		res = checkNitroxidePositions(smiles, expectedPos);
+		assertEquals("Nitrooxide positions for " + smiles, expectedPos.size(), res);
+		
+		//only one nitroxide is expected (nitro group is not considered as a nitroxide)
+		smiles = "O=N(=O)CCCC[N+][O-]"; 
+		expectedPos.clear();
+		expectedPos.add(new int[] {7,8});
+		res = checkNitroxidePositions(smiles, expectedPos);
+		assertEquals("Nitrooxide positions for " + smiles, expectedPos.size(), res);
+		
+		//no nitroxide is expected (nitro group is not considered as a nitroxide)
+		smiles = "O=N(=O)CCCC[N+](=O)[O-]"; 
+		expectedPos.clear();
+		res = checkNitroxidePositions(smiles, expectedPos);
+		assertEquals("Nitrooxide positions for " + smiles, -1, res);
+		
+	}
 }

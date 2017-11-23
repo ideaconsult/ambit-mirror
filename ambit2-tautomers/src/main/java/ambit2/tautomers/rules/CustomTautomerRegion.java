@@ -75,15 +75,14 @@ public class CustomTautomerRegion
 				continue;
 			
 			TopLayer tl = (TopLayer)at.getProperty(TopLayer.TLProp);
-			if (tl.atoms.size() < 1)
+			if (tl.atoms.size() != 2)
 				continue;
 			
 			for (int i = 0; i < tl.atoms.size(); i++)
 			{
 				IAtom a0 = tl.atoms.get(i);
 				if (a0.getSymbol().equals("O"))
-				{
-					
+				{					
 					if ((at.getFormalCharge() == 0) && (a0.getFormalCharge() == 0) 
 							&& (tl.bonds.get(i).getOrder() ==IBond.Order.DOUBLE))
 					{
