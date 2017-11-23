@@ -1,10 +1,12 @@
 package ambit2.rest.substance.study;
 
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,7 +40,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	protected String summaryMeasurement = null;
 	protected String dbTag = "ENM";
 	protected boolean searchfriendly = true;
-
+	public static final SimpleDateFormat dateformatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 	public enum _JSON_MODE {
 		experiment, substance
 	}
@@ -93,7 +95,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			{ "id", "document_uuid", "type_s", "topcategory", "endpointcategory", "guidance", "endpoint",
 					"effectendpoint", "reference_owner", "reference_year", "reference", "loQualifier", "loValue",
 					"upQualifier", "upValue", "err", "errQualifier", "conditions", "params", "textValue",
-					"interpretation_result", "unit", "category", "idresult" },
+					"interpretation_result", "unit", "category", "idresult","updated" },
 			{ "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE" }
 
 	};
@@ -111,7 +113,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			"topcategory_s", "endpointcategory_s", "guidance_s", "endpoint_s", "effectendpoint_s", "reference_owner_s",
 			"reference_year_s", "reference_s", "loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d",
 			"errQualifier_s", "conditions_s", "effectid_hs", "params", "textValue_s", "interpretation_result_s",
-			"unit_s", "category_s", "idresult", "nmcode_hs", "nmcode_s", header_summary_results, header_summary_refs,
+			"unit_s", "category_s", "idresult", "nmcode_hs", "nmcode_s","updated_s", header_summary_results, header_summary_refs,
 			header_summary_refowner, "" } };
 
 	@Override
@@ -317,6 +319,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 							prm = SubstanceStudyParser.parseConditions(dx, papp.getParameters().toString());
 					}
 					prm = solarize(prm);
+					Object cell = prm.get("E.cell_type_s");
+					Object method = prm.get("E.method_s");
 
 					if (papp.getEffects() != null)
 						for (EffectRecord<String, Object, String> e : papp.getEffects()) {
@@ -334,6 +338,10 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 									if (papp.getProtocol().getGuideline() != null
 											&& !papp.getProtocol().getGuideline().isEmpty())
 										prm.put("guidance_s", papp.getProtocol().getGuideline().get(0));
+									if (cell!=null)
+										prm.put("E.cell_type_s", cell.toString());
+									if (method!=null)
+										prm.put("E.method_s", method.toString());
 								}
 								_childParams_.add(prm);
 							}
@@ -371,6 +379,10 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 											if (papp.getProtocol().getGuideline() != null
 													&& !papp.getProtocol().getGuideline().isEmpty())
 												prmc.put("guidance_s", papp.getProtocol().getGuideline().get(0));
+											if (cell!=null)
+												prm.put("E.cell_type_s", cell.toString());
+											if (method!=null)
+												prm.put("E.method_s", method.toString());
 										}
 										_childParams_.add(prmc);
 									}
@@ -558,6 +570,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			Bucket bucket, boolean suffix) {
 		bucket.put(ns("document_uuid", suffix, "_s"), papp.getDocumentUUID());
 		bucket.put("type_s", "study");
+		if (papp.getUpdated()!=null)
+		bucket.put("updated_s", dateformatter.format(papp.getUpdated()));
 		if (papp.getInterpretationResult() != null && !"".equals(papp.getInterpretationResult()))
 			bucket.put(ns("interpretation_result", suffix, "_s"), papp.getInterpretationResult().toUpperCase());
 	}

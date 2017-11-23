@@ -1,7 +1,6 @@
 package ambit2.base.data.study;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -109,7 +108,7 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT> i
 	protected Date updated = null;
 
 	public static final SimpleDateFormat dateformatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-	
+
 	public Date getUpdated() {
 		return updated;
 	}
@@ -215,7 +214,7 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT> i
 	}
 
 	public static enum _fields {
-		uuid, owner, company, name, substance, referencesubstanceuuid, protocol, citation, parameters, effects, interpretation, result, criteria, reliability, investigation_uuid
+		uuid, owner, company, name, substance, referencesubstanceuuid, protocol, citation, parameters, effects, interpretation, result, criteria, reliability, investigation_uuid, updated
 	}
 
 	public ProtocolApplication(PROTOCOL protocol) {
@@ -417,6 +416,15 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT> i
 		b.append(":\t");
 		b.append((this.reference == null) ? "null" : this.reference.toString());
 		b.append(",\n\t");
+
+		// updated
+		if (this.updated != null) {
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.updated.name())));
+			b.append(":\t");
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(dateformatter.format(getUpdated()))));
+			b.append(",\n\t");
+		}
+
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.protocol.name())));
 		b.append(":\t");
 		b.append(protocol == null ? null : protocol.toString());
@@ -445,6 +453,7 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT> i
 		}
 		b.append("\n\t},\n");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.effects.name())));
+
 		b.append(":\t");
 		b.append(((getEffects() == null) || (getEffects().size() == 0))
 				? "[{\"endpoint\": \"\",\"conditions\": {},  \"result\": {  }}]" : getEffects().toString());
