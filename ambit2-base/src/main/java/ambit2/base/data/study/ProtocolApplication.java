@@ -1,8 +1,12 @@
 package ambit2.base.data.study;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import com.google.common.base.Objects;
@@ -102,6 +106,17 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT> i
 	protected String companyUUID;
 	protected String documentUUID;
 	protected UUID investigationUUID;
+	protected Date updated = null;
+
+	public static final SimpleDateFormat dateformatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+	
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
+	}
 
 	public UUID getInvestigationUUID() {
 		return investigationUUID;
