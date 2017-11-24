@@ -63,7 +63,7 @@ var config_bao = {
 			"mRender" : function(data, type, full) {
 				var sOut = "";
 				var uri = (data["title"] != undefined)
-						&& (data["title"].indexOf("http")==0);
+						&& (data["title"].indexOf("http")>=0);
 				if (uri) {
 					sOut = (data["year"] == null || data["year"] == 0) ? "URL"
 							: data["year"];
@@ -75,12 +75,14 @@ var config_bao = {
 							: ("<br/>(" + data["year"] + ")");
 					sOut = (data["title"] + sOut);
 				}
+				
 				iuuid = full["investigation_uuid"];
+				
 				if (iuuid === undefined || (iuuid == null))
 					;
 				else {
 					sOut +=
-							+ "<br/><br/>"
+							"<br/><br/>"
 							+ jT.ui
 									.shortenedData(
 											"<a href='../../investigation?type=byinvestigation&search="
@@ -89,12 +91,14 @@ var config_bao = {
 													+ iuuid + "</a>",
 											"Related experiments, press to copy the UUID in the clipboard",
 											iuuid);
+					
 
 				}
 				
 				try {
 					if (full["reliability"]["r_value"] != undefined)
 						sOut += "<br/><span class='chelp' style='color:#FF0000;' title='curation comment'>" + full["reliability"]["r_value"] + "</span>"
+						
 					} catch (err) {}
 				return sOut;	
 			}
@@ -257,6 +261,12 @@ var config_bao = {
 			"inMatrix" : true,
 			"sTitle" : "Exposure time"
 		},
+		"E.exposure_time" : {
+			"iOrder" : -4,
+			"bVisible" : true,
+			"inMatrix" : true,
+			"sTitle" : "Exposure time"
+		},		
 		"replicate" : {
 			"iOrder" : -5,
 			"bVisible" : true,
