@@ -40,7 +40,12 @@ public class TopLayer
 	public static final String  TLProp = "TL";
 	public List<IAtom> atoms = new ArrayList<IAtom>();
 	public List<IBond> bonds = new ArrayList<IBond>();
-			
+	
+	static public void setAtomTopLayers(IAtomContainer container)
+	{
+		setAtomTopLayers(container, TLProp);
+	}
+	
 	static public void setAtomTopLayers(IAtomContainer container, Object propObj)
 	{	
 		int nAtom =  container.getAtomCount();
