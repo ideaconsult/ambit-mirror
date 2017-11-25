@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2005-2008  
+Copyright (C) 2005-2017  
 
 Contact: nina@acad.bg
 
@@ -26,7 +26,7 @@ package ambit2.db;
 
 public interface DBVersion {
 	int AMBITDB_VERSION_MAJOR = 9;
-	int AMBITDB_VERSION_MINOR = 3;
+	int AMBITDB_VERSION_MINOR = 2;
 	int getMajor();
 	int getMinor();
 	
