@@ -217,4 +217,26 @@ public class TestTautomerRegion extends TestCase
 		assertEquals("Nitrooxide positions for " + smiles, -1, res);
 		
 	}
+	
+	public void testTautomerRegion() throws Exception
+	{
+		String smiles;
+		TautomerRegion tautoReg = new TautomerRegion();
+		int expectedExclInd[]; 
+		boolean res;
+		
+		//Only nitro groups are excluded		
+		tautoReg.setExcludeNitroGroup(true);
+		
+		smiles = "CCCCN(=O)=O";
+		expectedExclInd = new int[] {4,5,6};
+		res = checkTautomerExcludeRegion( tautoReg, smiles, expectedExclInd);
+		assertEquals("Exclude tautomer region for " + smiles, true, res);
+		
+		smiles = "O=NCCCC[N+](=O)[O-]";
+		expectedExclInd = new int[] {6,7,8};
+		res = checkTautomerExcludeRegion( tautoReg, smiles, expectedExclInd);
+		assertEquals("Exclude tautomer region for " + smiles, true, res);
+		
+	}
 }
