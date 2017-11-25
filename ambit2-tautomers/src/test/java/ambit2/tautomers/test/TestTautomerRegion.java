@@ -13,6 +13,7 @@ import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
 import ambit2.smarts.TopLayer;
 import ambit2.tautomers.rules.CustomTautomerRegion;
+import ambit2.tautomers.rules.TautomerRegion;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -33,7 +34,7 @@ public class TestTautomerRegion extends TestCase
 	int checkNitroGroupPositions(String smiles, List<int[]> expectedAtIndices) throws Exception
 	{
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
-		TopLayer.setAtomTopLayers(mol, TopLayer.TLProp);
+		TopLayer.setAtomTopLayers(mol);
 		List<IAtom[]> positions =  CustomTautomerRegion.getNitroGroupPositions(mol);
 		
 		if (positions.size() == 0 && expectedAtIndices.size() == 0)
@@ -56,7 +57,7 @@ public class TestTautomerRegion extends TestCase
 	int checkNitroxidePositions(String smiles, List<int[]> expectedAtIndices) throws Exception
 	{
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
-		TopLayer.setAtomTopLayers(mol, TopLayer.TLProp);
+		TopLayer.setAtomTopLayers(mol);
 		List<IAtom[]> positions =  CustomTautomerRegion.getNitroxidePositions(mol);
 		
 		if (positions.size() == 0 && expectedAtIndices.size() == 0)
@@ -74,6 +75,15 @@ public class TestTautomerRegion extends TestCase
 				}
 		}
 		return nMatchedPositions;
+	}
+	
+	boolean checkTautomerExcludeRegion(TautomerRegion tautoReg, String smiles, int[] expectedExcludeIndices) throws Exception
+	{
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		TopLayer.setAtomTopLayers(mol);
+		tautoReg.calculateRegion(mol);
+		List<Integer> excludeIndices = tautoReg.getExcludeAtomIndices();
+		return checkEqualIndices(expectedExcludeIndices, excludeIndices);
 	}
 		
 	int[] getAtomIndices(IAtom atoms[], IAtomContainer mol)
@@ -93,6 +103,24 @@ public class TestTautomerRegion extends TestCase
 		{
 			for (int k = 0; k < pos2.length; k++)
 				if (pos1[i] == pos2[k])
+				{
+					nMatches++;
+					continue;
+				}
+		}
+		return (nMatches == pos1.length);
+	}
+	
+	boolean checkEqualIndices(int pos1[], List<Integer> pos2)
+	{
+		if (pos1.length != pos2.size())
+			return false;
+		
+		int nMatches = 0;
+		for (int i = 0; i < pos1.length; i++)
+		{
+			for (int k = 0; k < pos2.size(); k++)
+				if (pos1[i] == pos2.get(k).intValue())
 				{
 					nMatches++;
 					continue;
