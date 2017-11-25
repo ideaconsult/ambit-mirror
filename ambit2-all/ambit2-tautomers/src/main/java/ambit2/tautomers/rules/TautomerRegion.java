@@ -16,7 +16,7 @@ public class TautomerRegion
 {
 	boolean useRegion = false;	
 	boolean excludeNitroGroup = false;
-	boolean excludeNitroGroupPartially = true;
+	boolean excludeNitroGroupPartially = false;
 	boolean excludeNitroxides = false;	
 	boolean excludeAromaticSystems = false;	
 	List<String> customExcludeRegionSmarts = new ArrayList<String>();
@@ -29,6 +29,19 @@ public class TautomerRegion
 		
 	public boolean useRegion() {
 		return useRegion;	
+	}
+	
+	public void nullifyRegion()
+	{
+		excludeNitroGroup = false;
+		excludeNitroGroupPartially = false;
+		excludeNitroxides = false;	
+		excludeAromaticSystems = false;
+		
+		customExcludeRegionSmarts.clear();
+		customExcludeRegions.clear();
+		excludeAtomIndices.clear();
+		errors.clear();
 	}
 
 	public void setUseRegion(boolean useRegion) {
