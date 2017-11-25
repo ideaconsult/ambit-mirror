@@ -35,5 +35,3 @@ FROM substance s join substance_protocolapplication p on uuid=substance_uuid
 join substance_experiment e using(document_uuid)  group by cell
 ;
 
-
-insert into version (idmajor,idminor,comment) values (9,3,"AMBIT2 schema - experiment overview");
