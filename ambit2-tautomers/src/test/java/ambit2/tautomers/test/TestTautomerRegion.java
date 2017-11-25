@@ -225,7 +225,7 @@ public class TestTautomerRegion extends TestCase
 		int expectedExclInd[]; 
 		boolean res;
 		
-		//Only nitro groups are excluded		
+		//(1) Only nitro groups are excluded		
 		tautoReg.setExcludeNitroGroup(true);
 		
 		smiles = "CCCCN(=O)=O";
@@ -235,6 +235,44 @@ public class TestTautomerRegion extends TestCase
 		
 		smiles = "O=NCCCC[N+](=O)[O-]";
 		expectedExclInd = new int[] {6,7,8};
+		res = checkTautomerExcludeRegion( tautoReg, smiles, expectedExclInd);
+		assertEquals("Exclude tautomer region for " + smiles, true, res);
+		
+		
+		//(2) Nitro groups and nitroxides are excluded	
+		tautoReg.setExcludeNitroxides(true);
+		
+		smiles = "CCCCN(=O)=O";
+		expectedExclInd = new int[] {4,5,6};
+		res = checkTautomerExcludeRegion( tautoReg, smiles, expectedExclInd);
+		assertEquals("Exclude tautomer region for " + smiles, true, res);
+		
+		smiles = "O=NCCCC[N+](=O)[O-]";
+		expectedExclInd = new int[] {0,1,6,7,8};
+		res = checkTautomerExcludeRegion( tautoReg, smiles, expectedExclInd);
+		assertEquals("Exclude tautomer region for " + smiles, true, res);
+		
+		smiles = "c1ccccc1CCN(=O)=O";
+		expectedExclInd = new int[] {8,9,10};
+		res = checkTautomerExcludeRegion( tautoReg, smiles, expectedExclInd);
+		assertEquals("Exclude tautomer region for " + smiles, true, res);
+		
+		
+		//(3) Nitro groups, nitroxides and aromatic systems are excluded	
+		tautoReg.setExcludeAromaticSystems(true);
+		
+		smiles = "CCCCN(=O)=O";
+		expectedExclInd = new int[] {4,5,6};
+		res = checkTautomerExcludeRegion( tautoReg, smiles, expectedExclInd);
+		assertEquals("Exclude tautomer region for " + smiles, true, res);
+		
+		smiles = "c1ccccc1CCN(=O)=O";
+		expectedExclInd = new int[] {0,1,2,3,4,5,8,9,10};
+		res = checkTautomerExcludeRegion( tautoReg, smiles, expectedExclInd);
+		assertEquals("Exclude tautomer region for " + smiles, true, res);
+		
+		smiles = "c1ccccc1CCN=O";
+		expectedExclInd = new int[] {0,1,2,3,4,5,8,9};
 		res = checkTautomerExcludeRegion( tautoReg, smiles, expectedExclInd);
 		assertEquals("Exclude tautomer region for " + smiles, true, res);
 		
