@@ -23,6 +23,7 @@ import ambit2.tautomers.TautomerConst.CanonicTautomerMethod;
 import ambit2.tautomers.ranking.CanonicTautomer;
 import ambit2.tautomers.ranking.EnergyRanking;
 import ambit2.tautomers.ranking.TautomerStringCode;
+import ambit2.tautomers.rules.TautomerRegion;
 
 public class TautomerManager {
 
@@ -51,6 +52,7 @@ public class TautomerManager {
 	private int codeStrBondSequence[] = null;
 
 	public FilterTautomers tautomerFilter = new FilterTautomers(this);
+	public TautomerRegion tautomerRegion = new TautomerRegion();
 	int originalValencySum;
 
 	public int FlagEnergyRankingMethod = TautomerConst.ERM_OLD;
@@ -122,7 +124,10 @@ public class TautomerManager {
 		molecule = str;
 		originalMolecule = str;
 		originalValencySum = FilterTautomers.getValencySum(str);
-
+		
+		//if (tautomerRegion.useRegion())		
+		//	tautomerRegion.calculateRegion(originalMolecule);
+		
 		molecule = (IAtomContainer) originalMolecule.clone();
 		status = TautomerConst.STATUS_SET_STRUCTURE;
 		codeStrBondSequence = TautomerStringCode.getBondIndexSequence(molecule);
@@ -498,7 +503,19 @@ public class TautomerManager {
 					List<IRuleInstance> instances = knowledgeBase.rules.get(i)
 							.applyRule(molecule);
 					if ((instances != null) && (instances.size() > 0))
-						extendedRuleInstances.addAll(instances);
+					{	
+						/*
+						if (tautomerRegion.useRegion())
+						{
+							//Only rule instances that comply the tautomer region are added
+							for (IRuleInstance ruleInst : instances)
+								if (tautomerRegion.isRuleInstanceInRegion(ruleInst, molecule))
+									extendedRuleInstances.add(ruleInst);
+						}
+						else
+						*/
+							extendedRuleInstances.addAll(instances);
+					}	
 				} catch (Exception x) {
 					logger.log(Level.WARNING, knowledgeBase.rules.get(i).name,
 							x);
