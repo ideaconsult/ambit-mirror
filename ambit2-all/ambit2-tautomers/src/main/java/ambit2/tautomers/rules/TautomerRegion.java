@@ -9,7 +9,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
 import ambit2.smarts.SmartsParser;
-import ambit2.tautomers.RuleInstance;
+import ambit2.tautomers.IRuleInstance;
 import ambit2.tautomers.RuleStateFlags;
 
 public class TautomerRegion 
@@ -146,7 +146,7 @@ public class TautomerRegion
 		}
 	}
 	
-	public boolean isRuleInstanceInRegion(RuleInstance ruleInst, IAtomContainer mol)
+	public boolean isRuleInstanceInRegion(IRuleInstance ruleInst, IAtomContainer mol)
 	{
 		/*
 		//Include mode takes precedence over exclude mode
@@ -168,7 +168,7 @@ public class TautomerRegion
 		for (int i = 0; i < excludeAtomIndices.size(); i++)
 		{
 			IAtom exclAt = mol.getAtom(excludeAtomIndices.get(i));
-			if (ruleInst.atoms.contains(exclAt))
+			if (ruleInst.getAtoms().contains(exclAt))
 				return false; //rule instance contains an 'exclude' atom
 		}
 		return true;
