@@ -113,7 +113,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			"topcategory_s", "endpointcategory_s", "guidance_s", "endpoint_s", "effectendpoint_s", "reference_owner_s",
 			"reference_year_s", "reference_s", "loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d",
 			"errQualifier_s", "conditions_s", "effectid_hs", "params", "textValue_s", "interpretation_result_s",
-			"unit_s", "category_s", "idresult", "nmcode_hs", "nmcode_s","updated_s", header_summary_results, header_summary_refs,
+			"unit_s", "category_s", "idresult", "nmcode_hs", "nmcode_s","updated_s","E.method_s", "E.cell_type_s", header_summary_results, header_summary_refs,
 			header_summary_refowner, "" } };
 
 	@Override
@@ -322,6 +322,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					Object cell = prm.get("E.cell_type_s");
 					Object method = prm.get("E.method_s");
 
+		
 					if (papp.getEffects() != null)
 						for (EffectRecord<String, Object, String> e : papp.getEffects()) {
 							String effectid = String.format("%s/%d",
@@ -338,10 +339,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 									if (papp.getProtocol().getGuideline() != null
 											&& !papp.getProtocol().getGuideline().isEmpty())
 										prm.put("guidance_s", papp.getProtocol().getGuideline().get(0));
-									if (cell!=null)
-										prm.put("E.cell_type_s", cell.toString());
-									if (method!=null)
-										prm.put("E.method_s", method.toString());
+									
 								}
 								_childParams_.add(prm);
 							}
@@ -353,6 +351,11 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 							substance2Bucket(record, study, suffix);
 							study.remove("id");
 							protocolapplication2Bucket(papp, study, suffix);
+							if (cell!=null)
+								study.put("E.cell_type_s", cell.toString());
+							if (method!=null)
+								study.put("E.method_s", method.toString());
+														
 							study.setHeader(study_headers_combined[0]);
 
 							protocol2Bucket(papp.getProtocol(), study, suffix);
@@ -379,10 +382,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 											if (papp.getProtocol().getGuideline() != null
 													&& !papp.getProtocol().getGuideline().isEmpty())
 												prmc.put("guidance_s", papp.getProtocol().getGuideline().get(0));
-											if (cell!=null)
-												prm.put("E.cell_type_s", cell.toString());
-											if (method!=null)
-												prm.put("E.method_s", method.toString());
+						
 										}
 										_childParams_.add(prmc);
 									}
@@ -407,6 +407,10 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 						Bucket study = new Bucket();
 						substance2Bucket(record, study, suffix);
 						protocolapplication2Bucket(papp, study, suffix);
+						if (cell!=null)
+							study.put("E.cell_type_s", cell.toString());
+						if (method!=null)
+							study.put("E.method_s", method.toString());						
 						study.setHeader(study_headers_combined[0]);
 
 						protocol2Bucket(papp.getProtocol(), study, suffix);
