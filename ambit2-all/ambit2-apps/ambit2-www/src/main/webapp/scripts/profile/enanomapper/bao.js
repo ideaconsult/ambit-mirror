@@ -16,7 +16,6 @@ var config_bao = {
 				$
 						.each(full.parameters,
 								function(k, v) {
-
 									var title = k;
 									try {
 										title = config_bao.parameters[k
@@ -29,6 +28,7 @@ var config_bao = {
 									if ((v === undefined) || (v == null)
 											|| ("-" == v))
 										return "";
+
 									sOut += "<li>" + title + ": ";
 									try {
 										if (v.loValue == undefined)
@@ -39,7 +39,16 @@ var config_bao = {
 												sOut += " " + v.unit;
 										}
 									} catch (err) {
-										sOut += v;
+
+										var uri = v.indexOf("http")>=0;
+										
+										if (uri)
+											sOut = "<a href='" + v + "' title='"
+											+ v + "' target='_doi' >link</a>";
+										else	
+											sOut += v;
+										
+										
 									}
 									"</li>";
 								});
