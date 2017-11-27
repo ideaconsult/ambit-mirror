@@ -19,6 +19,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.StereoChemUtils;
+import ambit2.smarts.TopLayer;
 import ambit2.tautomers.TautomerConst.CanonicTautomerMethod;
 import ambit2.tautomers.ranking.CanonicTautomer;
 import ambit2.tautomers.ranking.EnergyRanking;
@@ -125,8 +126,11 @@ public class TautomerManager {
 		originalMolecule = str;
 		originalValencySum = FilterTautomers.getValencySum(str);
 		
-		if (tautomerRegion.useRegion())		
+		if (tautomerRegion.useRegion())
+		{	
+			TopLayer.setAtomTopLayers(originalMolecule);
 			tautomerRegion.calculateRegion(originalMolecule);
+		}	
 		
 		molecule = (IAtomContainer) originalMolecule.clone();
 		status = TautomerConst.STATUS_SET_STRUCTURE;
