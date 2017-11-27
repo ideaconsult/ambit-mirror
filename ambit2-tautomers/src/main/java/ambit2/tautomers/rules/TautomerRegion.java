@@ -8,6 +8,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
+import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsParser;
 import ambit2.tautomers.IRuleInstance;
 import ambit2.tautomers.RuleStateFlags;
@@ -25,6 +26,7 @@ public class TautomerRegion
 	//List<Integer> includeAtomIndices = null;
 	List<Integer> excludeAtomIndices = new ArrayList<Integer>();
 	List<String> errors = new ArrayList<String>();
+	IsomorphismTester isoTester = null;
 	
 		
 	public boolean useRegion() {
@@ -144,6 +146,10 @@ public class TautomerRegion
 				customExcludeRegions.add(ctr);
 			}
 		}
+		
+		//isoTester is set when custom smarts regions are used
+		if (isoTester == null)
+			isoTester = new IsomorphismTester();
 	}
 	
 	public boolean isRuleInstanceInRegion(IRuleInstance ruleInst, IAtomContainer mol)
@@ -183,7 +189,7 @@ public class TautomerRegion
 			//Flag excludeNitroGroup takes precedence 
 			//over flag excludeNitroGroupPartially
 			List<IAtom[]> pos = CustomTautomerRegion.getNitroGroupPositions(target);
-			addToExcludeRegion(pos, target);
+			addPositionsToExcludeRegion(pos, target);
 		}
 		else
 			if (excludeNitroGroupPartially)
@@ -203,7 +209,7 @@ public class TautomerRegion
 		if (excludeNitroxides)
 		{
 			List<IAtom[]> pos = CustomTautomerRegion.getNitroxidePositions(target);
-			addToExcludeRegion(pos, target);
+			addPositionsToExcludeRegion(pos, target);
 		}
 		
 		if (excludeAromaticSystems)
@@ -218,10 +224,51 @@ public class TautomerRegion
 			}	
 		}
 		
-		//TODO
+		if (!customExcludeRegions.isEmpty())		
+			for (int i = 0; i < customExcludeRegions.size(); i++)
+			{
+				try
+				{
+					List<List<IAtom>> maps = calcCustomRegionMaps(customExcludeRegions.get(i), target);
+					addMapsToExcludeRegion(maps, target);
+				}
+				catch(Exception e)
+				{}
+			}
 	}
 	
-	void addToExcludeRegion(List<IAtom[]> groupPositions, IAtomContainer target)
+	List<List<IAtom>> calcCustomRegionMaps(CustomTautomerRegion customReg, IAtomContainer target) throws Exception
+	{				
+		SmartsParser.prepareTargetForSMARTSSearch(
+				customReg.flags.mNeedNeighbourData, 
+				customReg.flags.mNeedValenceData, 
+				customReg.flags.mNeedRingData, 
+				customReg.flags.mNeedRingData2, 
+				customReg.flags.mNeedExplicitHData , 
+				customReg.flags.mNeedParentMoleculeData, target);	
+
+		isoTester.setQuery(customReg.query);
+		List<List<IAtom>> maps = isoTester.getAllIsomorphismMappings(target);
+		return maps;
+	}
+	
+	void addMapsToExcludeRegion(List<List<IAtom>> maps, IAtomContainer target)
+	{			
+		for (List<IAtom> map : maps)
+		{	
+			for (IAtom at: map)
+			{
+				int atNum = target.getAtomNumber(at);
+				if (atNum != -1)
+				{	
+					if (!isIndexInList(atNum, excludeAtomIndices))
+						excludeAtomIndices.add(atNum);
+				}	
+			}	
+		}
+	}
+	
+	void addPositionsToExcludeRegion(List<IAtom[]> groupPositions, IAtomContainer target)
 	{	
 		for (int i = 0; i < groupPositions.size(); i++)
 		{
