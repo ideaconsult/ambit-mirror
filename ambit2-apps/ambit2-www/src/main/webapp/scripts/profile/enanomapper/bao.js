@@ -14,7 +14,8 @@ var config_bao = {
 				sOut += "<br/>";
 				sOut += "<br/><ul>";
 				$
-						.each(full.parameters,
+						.each(
+								full.parameters,
 								function(k, v) {
 									var title = k;
 									try {
@@ -29,30 +30,37 @@ var config_bao = {
 											|| ("-" == v))
 										return "";
 
-									sOut += "<li>" + title + ": ";
+									sOut += "<li>";
+									if (k.indexOf("E.") == 0) {
+										sOut += ("<span style='font-weight:bold;'>"
+												+ title + "</span>");
+									} else
+										sOut += title;
+
+									sOut += ": ";
 									try {
-										if (v.loValue == undefined)
-											sOut += v;
-										else {
+										if (v.loValue == undefined) {
+											var uri = v.indexOf("http") >= 0;
+
+											if (uri) {
+												sOut += "<a href='"
+														+ v
+														+ "' target='_doi' >link</a>";
+											} else
+												sOut += v;
+										} else {
 											sOut += v.loValue;
 											if (v.unit != undefined)
 												sOut += " " + v.unit;
 										}
 									} catch (err) {
+										sOut += v;
 
-										var uri = v.indexOf("http")>=0;
-										
-										if (uri)
-											sOut = "<a href='" + v + "' title='"
-											+ v + "' target='_doi' >link</a>";
-										else	
-											sOut += v;
-										
-										
 									}
-									"</li>";
+									sOut += "</li>";
 								});
 				sOut += "</ul>";
+
 				return sOut;
 			}
 		},
@@ -72,7 +80,7 @@ var config_bao = {
 			"mRender" : function(data, type, full) {
 				var sOut = "";
 				var uri = (data["title"] != undefined)
-						&& (data["title"].indexOf("http")>=0);
+						&& (data["title"].indexOf("http") >= 0);
 				if (uri) {
 					sOut = (data["year"] == null || data["year"] == 0) ? "URL"
 							: data["year"];
@@ -84,14 +92,13 @@ var config_bao = {
 							: ("<br/>(" + data["year"] + ")");
 					sOut = (data["title"] + sOut);
 				}
-				
+
 				iuuid = full["investigation_uuid"];
-				
+
 				if (iuuid === undefined || (iuuid == null))
 					;
 				else {
-					sOut +=
-							"<br/><br/>"
+					sOut += "<br/><br/>"
 							+ jT.ui
 									.shortenedData(
 											"<a href='../../investigation?type=byinvestigation&search="
@@ -100,16 +107,17 @@ var config_bao = {
 													+ iuuid + "</a>",
 											"Related experiments, press to copy the UUID in the clipboard",
 											iuuid);
-					
 
 				}
-				
+
 				try {
 					if (full["reliability"]["r_value"] != undefined)
-						sOut += "<br/><span class='chelp' style='color:#FF0000;' title='curation comment'>" + full["reliability"]["r_value"] + "</span>"
-						
-					} catch (err) {}
-				return sOut;	
+						sOut += "<br/><span class='chelp' style='color:#FF0000;' title='curation comment'>"
+								+ full["reliability"]["r_value"] + "</span>"
+
+				} catch (err) {
+				}
+				return sOut;
 			}
 		}
 	},
@@ -236,6 +244,36 @@ var config_bao = {
 		},
 		"seeding" : {
 			"bVisible" : false
+		},
+		"e.method" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "Method"
+		},
+		"e.sop_reference" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "SOP reference"
+		},
+		"e.cell_type" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "Cell type"
+		},
+		"e.organ" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "organ"
+		},
+		"e.animal_model" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "Species"
+		},
+		"e.exposure_time" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "Exposure time"
 		}
 	},
 	"effects" : {
@@ -275,7 +313,7 @@ var config_bao = {
 			"bVisible" : true,
 			"inMatrix" : true,
 			"sTitle" : "Exposure time"
-		},		
+		},
 		"replicate" : {
 			"iOrder" : -5,
 			"bVisible" : true,
@@ -286,7 +324,7 @@ var config_bao = {
 			"bVisible" : true,
 			"inMatrix" : true,
 			"sTitle" : "Treatment"
-		},		
+		},
 		"ph" : {
 			"bVisible" : true
 		},

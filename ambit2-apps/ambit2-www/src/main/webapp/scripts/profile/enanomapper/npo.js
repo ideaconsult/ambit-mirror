@@ -14,9 +14,9 @@ var config_npo = {
 				sOut += "<br/>";
 				sOut += "<br/><ul>";
 				$
-						.each(full.parameters,
+						.each(
+								full.parameters,
 								function(k, v) {
-
 									var title = k;
 									try {
 										title = config_bao.parameters[k
@@ -29,22 +29,38 @@ var config_npo = {
 									if ((v === undefined) || (v == null)
 											|| ("-" == v))
 										return "";
-									sOut += "<li>" + title + ": ";
-									try {
 
-										if (v.loValue == undefined)
-											sOut += v;
-										else {
+									sOut += "<li>";
+									if (k.indexOf("E.") == 0) {
+										sOut += ("<span style='font-weight:bold;'>"
+												+ title + "</span>");
+									} else
+										sOut += title;
+
+									sOut += ": ";
+									try {
+										if (v.loValue == undefined) {
+											var uri = v.indexOf("http") >= 0;
+
+											if (uri) {
+												sOut += "<a href='"
+														+ v
+														+ "' target='_doi' >link</a>";
+											} else
+												sOut += v;
+										} else {
 											sOut += v.loValue;
 											if (v.unit != undefined)
 												sOut += " " + v.unit;
 										}
 									} catch (err) {
 										sOut += v;
+
 									}
-									"</li>";
+									sOut += "</li>";
 								});
 				sOut += "</ul>";
+
 				return sOut;
 			}
 		},
@@ -61,7 +77,7 @@ var config_npo = {
 			"mRender" : function(data, type, full) {
 				var sOut = "";
 				var uri = (data["title"] != undefined)
-						&& (data["title"].indexOf("http")==0);
+						&& (data["title"].indexOf("http") == 0);
 				if (uri) {
 					sOut = (data["year"] == null || data["year"] == 0) ? "URL"
 							: data["year"];
@@ -75,12 +91,19 @@ var config_npo = {
 					sOut = (data["title"] + sOut);
 				}
 				iuuid = full["investigation_uuid"];
-				if (iuuid === undefined || (iuuid== null)) 
+				if (iuuid === undefined || (iuuid == null))
 					return sOut;
 				else {
 
-					return sOut + "<br/><br/>" + jT.ui.shortenedData("<a href='#' class='chelp' title='Related experiments'> " + iuuid + "</a>", "Related experiments, press to copy the UUID in the clipboard", iuuid);
-				}				
+					return sOut
+							+ "<br/><br/>"
+							+ jT.ui
+									.shortenedData(
+											"<a href='#' class='chelp' title='Related experiments'> "
+													+ iuuid + "</a>",
+											"Related experiments, press to copy the UUID in the clipboard",
+											iuuid);
+				}
 			}
 		}
 	},
@@ -137,6 +160,36 @@ var config_npo = {
 			"sTitle" : "Dispersion protocol",
 			"iOrder" : -22,
 			"bVisible" : false
+		},
+		"e.method" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "Method"
+		},
+		"e.sop_reference" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "SOP reference"
+		},
+		"e.cell_type" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "Cell type"
+		},
+		"e.organ" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "organ"
+		},
+		"e.animal_model" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "Species"
+		},
+		"e.exposure_time" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "Exposure time"
 		}
 	},
 	"effects" : {
@@ -173,7 +226,7 @@ var config_npo = {
 			"bVisible" : true,
 			"inMatrix" : true,
 			"sTitle" : "Treatment"
-		}	
+		}
 	},
 	"interpretation" : {
 		"result" : {
