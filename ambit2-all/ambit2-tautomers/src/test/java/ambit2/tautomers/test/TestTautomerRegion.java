@@ -297,15 +297,43 @@ public class TestTautomerRegion extends TestCase
 							"O=CCCCC=NO", "OC=CCCC=NO", "O=CCCC=CNO", "OC=CCC=CNO",}, FlagPrintTautomers, tman);		
 		Assert.assertEquals(0, res);
 	}
-	
-public void test_TautomerRegionGeneration_02() throws Exception {
-		
+
+	public void test_TautomerRegionGeneration_02() throws Exception {
+
 		//Exclude nitroxides region testing
 		tman.tautomerRegion.setUseRegion(true);
 		tman.tautomerRegion.setExcludeNitroxides(true);
-		
+
 		int res = TestTautomers.testCase("O=CCCCN=O", 
 				new String[] { "O=CCCCN=O", "OC=CCCN=O" }, FlagPrintTautomers, tman);		
 		Assert.assertEquals(0, res);
+		
+		//Exclude nitroxides groups alternatively by deactivating rule nitroso/oxime
+		tman.tautomerRegion.setUseRegion(false);
+		tman.getKnowledgeBase().activateRule("nitroso/oxime", false);
+		res = TestTautomers.testCase("O=CCCCN=O", 
+				new String[] { "O=CCCCN=O", "OC=CCCN=O" }, FlagPrintTautomers, tman);		
+		Assert.assertEquals(0, res);
+		
+	}
+	
+	public void test_TautomerRegionGeneration_03() throws Exception {
+
+		//Exclude nitro groups testing
+		tman.tautomerRegion.setUseRegion(true);
+		tman.tautomerRegion.setExcludeNitroGroup(true);
+
+		int res = TestTautomers.testCase("O=CCCCN(=O)=O", 
+				new String[] { "O=CCCCN(=O)=O", "OC=CCCN(=O)=O" }, FlagPrintTautomers, tman);		
+		Assert.assertEquals(0, res);
+		
+		//Exclude nitro groups alternatively by deactivating rule nitroso/oxime
+		tman.tautomerRegion.setUseRegion(false);
+		tman.getKnowledgeBase().activateRule("nitroso/oxime", false);
+		
+		res = TestTautomers.testCase("O=CCCCN(=O)=O", 
+				new String[] { "O=CCCCN(=O)=O", "OC=CCCN(=O)=O" }, FlagPrintTautomers, tman);		
+		Assert.assertEquals(0, res);
+		
 	}
 }
