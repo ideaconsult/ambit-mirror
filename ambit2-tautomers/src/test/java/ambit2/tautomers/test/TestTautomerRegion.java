@@ -285,6 +285,8 @@ public class TestTautomerRegion extends TestCase
 	
 		
 	public void test_TautomerRegionGeneration_01() throws Exception {
+		
+		//Empty region testing
 		tman.tautomerRegion.setUseRegion(true);
 		int res = TestTautomers.testCase("OC1=CC=CC=C1",
 				new String[] { "Oc1=cc=cc=c1", "O=C1C=CC=CC1", "O=C1C=CCC=C1" }, FlagPrintTautomers, tman);

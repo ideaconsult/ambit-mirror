@@ -125,8 +125,8 @@ public class TautomerManager {
 		originalMolecule = str;
 		originalValencySum = FilterTautomers.getValencySum(str);
 		
-		//if (tautomerRegion.useRegion())		
-		//	tautomerRegion.calculateRegion(originalMolecule);
+		if (tautomerRegion.useRegion())		
+			tautomerRegion.calculateRegion(originalMolecule);
 		
 		molecule = (IAtomContainer) originalMolecule.clone();
 		status = TautomerConst.STATUS_SET_STRUCTURE;
@@ -504,7 +504,7 @@ public class TautomerManager {
 							.applyRule(molecule);
 					if ((instances != null) && (instances.size() > 0))
 					{	
-						/*
+						
 						if (tautomerRegion.useRegion())
 						{
 							//Only rule instances that comply the tautomer region are added
@@ -513,7 +513,6 @@ public class TautomerManager {
 									extendedRuleInstances.add(ruleInst);
 						}
 						else
-						*/
 							extendedRuleInstances.addAll(instances);
 					}	
 				} catch (Exception x) {
