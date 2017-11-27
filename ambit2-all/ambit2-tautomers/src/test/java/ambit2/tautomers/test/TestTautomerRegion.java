@@ -287,10 +287,25 @@ public class TestTautomerRegion extends TestCase
 	public void test_TautomerRegionGeneration_01() throws Exception {
 		
 		//Empty region testing
-		tman.tautomerRegion.setUseRegion(true);
+		tman.tautomerRegion.setUseRegion(true);		
 		int res = TestTautomers.testCase("OC1=CC=CC=C1",
 				new String[] { "Oc1=cc=cc=c1", "O=C1C=CC=CC1", "O=C1C=CCC=C1" }, FlagPrintTautomers, tman);
-
+		Assert.assertEquals(0, res);
+		
+		res = TestTautomers.testCase("O=CCCCCN=O", 
+				new String[] { "O=CCCCCN=O", "OC=CCCCN=O", 
+							"O=CCCCC=NO", "OC=CCCC=NO", "O=CCCC=CNO", "OC=CCC=CNO",}, FlagPrintTautomers, tman);		
+		Assert.assertEquals(0, res);
+	}
+	
+public void test_TautomerRegionGeneration_02() throws Exception {
+		
+		//Exclude nitroxides region testing
+		tman.tautomerRegion.setUseRegion(true);
+		tman.tautomerRegion.setExcludeNitroxides(true);
+		
+		int res = TestTautomers.testCase("O=CCCCN=O", 
+				new String[] { "O=CCCCN=O", "OC=CCCN=O" }, FlagPrintTautomers, tman);		
 		Assert.assertEquals(0, res);
 	}
 }
