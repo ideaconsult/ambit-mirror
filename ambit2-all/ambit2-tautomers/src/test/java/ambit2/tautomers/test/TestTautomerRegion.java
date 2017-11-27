@@ -336,4 +336,25 @@ public class TestTautomerRegion extends TestCase
 		Assert.assertEquals(0, res);
 		
 	}
+	
+	public void test_TautomerRegionGeneration_04() throws Exception {
+
+		//Exclude custom regions
+		tman.tautomerRegion.setUseRegion(true);
+		List<String> regionSmarts = new ArrayList<String>();
+		regionSmarts.add("N=O");
+		tman.tautomerRegion.setCustomExcludeRegionsSmarts(regionSmarts);
+
+		int res = TestTautomers.testCase("O=CCCCN(=O)=O", 
+				new String[] { "O=CCCCN(=O)=O", "OC=CCCN(=O)=O" }, FlagPrintTautomers, tman);		
+		Assert.assertEquals(0, res);
+				
+		regionSmarts.clear();
+		regionSmarts.add("C[Br,Cl,F]");
+		tman.tautomerRegion.setCustomExcludeRegionsSmarts(regionSmarts);
+
+		res = TestTautomers.testCase("O=CCC(Cl)C=O", 
+				new String[] { "O=CCC(Cl)C=O", "OC=CC(Cl)C=O" }, FlagPrintTautomers, tman);		
+		Assert.assertEquals(0, res);
+	}
 }
