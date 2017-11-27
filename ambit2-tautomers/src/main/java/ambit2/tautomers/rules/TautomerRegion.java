@@ -246,7 +246,7 @@ public class TautomerRegion
 				customReg.flags.mNeedRingData2, 
 				customReg.flags.mNeedExplicitHData , 
 				customReg.flags.mNeedParentMoleculeData, target);	
-
+		
 		isoTester.setQuery(customReg.query);
 		List<List<IAtom>> maps = isoTester.getAllIsomorphismMappings(target);
 		return maps;
