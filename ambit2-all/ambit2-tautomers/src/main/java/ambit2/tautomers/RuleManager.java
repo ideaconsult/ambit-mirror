@@ -537,11 +537,11 @@ public class RuleManager {
 			for (int k = 0; k < instances.size(); k++)
 			{	
 				RuleInstance genRI = (RuleInstance)instances.get(k);
-				/*
+				
 				if (tman.tautomerRegion.useRegion())
 					if (!tman.tautomerRegion.isRuleInstanceInRegion(genRI, mol))
 						continue;
-				*/
+				
 				newInstances.add(genRI);
 				//System.out.println("   ++genRI (" +k+")" + genRI.debugInfo(incStep.struct));
 			}	
