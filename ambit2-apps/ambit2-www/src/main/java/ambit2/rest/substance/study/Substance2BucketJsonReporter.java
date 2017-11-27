@@ -382,7 +382,10 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 											if (papp.getProtocol().getGuideline() != null
 													&& !papp.getProtocol().getGuideline().isEmpty())
 												prmc.put("guidance_s", papp.getProtocol().getGuideline().get(0));
-						
+											if (cell!=null)
+												prmc.put("E.cell_type_s", cell.toString());
+											if (method!=null)
+												prmc.put("E.method_s", method.toString());
 										}
 										_childParams_.add(prmc);
 									}
