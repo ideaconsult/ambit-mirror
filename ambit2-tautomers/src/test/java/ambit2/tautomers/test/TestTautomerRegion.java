@@ -12,8 +12,10 @@ import ambit2.smarts.SmartsFlags;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
 import ambit2.smarts.TopLayer;
+import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.rules.CustomTautomerRegion;
 import ambit2.tautomers.rules.TautomerRegion;
+import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -21,10 +23,13 @@ import junit.framework.TestSuite;
 public class TestTautomerRegion extends TestCase
 {
 	public LoggingTool logger;
+	public TautomerManager tman = null;
+	public boolean FlagPrintTautomers = false;
 	
 	public TestTautomerRegion()
 	{
 		logger = new LoggingTool(this);		
+		tman = AbstractTautomerTest.getDefaultTautomerManager();
 	}
 	
 	public static Test suite() {
@@ -276,5 +281,14 @@ public class TestTautomerRegion extends TestCase
 		res = checkTautomerExcludeRegion( tautoReg, smiles, expectedExclInd);
 		assertEquals("Exclude tautomer region for " + smiles, true, res);
 		
+	}
+	
+		
+	public void test_TautomerRegionGeneration_01() throws Exception {
+		tman.tautomerRegion.setUseRegion(true);
+		int res = TestTautomers.testCase("OC1=CC=CC=C1",
+				new String[] { "Oc1=cc=cc=c1", "O=C1C=CC=CC1", "O=C1C=CCC=C1" }, FlagPrintTautomers, tman);
+
+		Assert.assertEquals(0, res);
 	}
 }

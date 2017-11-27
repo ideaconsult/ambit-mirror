@@ -15,6 +15,10 @@ public class AbstractTautomerTest {
 	}
 
 	protected TautomerManager getTautomerManager() {
+		return getDefaultTautomerManager();		
+	}
+	
+	public static TautomerManager getDefaultTautomerManager() {
 		TautomerManager tman = new TautomerManager();
 
 		tman.getKnowledgeBase().activateChlorineRules(false);
