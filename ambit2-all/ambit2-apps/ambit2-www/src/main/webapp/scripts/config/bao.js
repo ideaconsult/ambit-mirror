@@ -14,9 +14,9 @@ var config_bao = {
 				sOut += "<br/>";
 				sOut += "<br/><ul>";
 				$
-						.each(full.parameters,
+						.each(
+								full.parameters,
 								function(k, v) {
-
 									var title = k;
 									try {
 										title = config_bao.parameters[k
@@ -29,18 +29,38 @@ var config_bao = {
 									if ((v === undefined) || (v == null)
 											|| ("-" == v))
 										return "";
-									sOut += "<li>" + title + ": ";
+
+									sOut += "<li>";
+									if (k.indexOf("E.") == 0) {
+										sOut += ("<span style='font-weight:bold;'>"
+												+ title + "</span>");
+									} else
+										sOut += title;
+
+									sOut += ": ";
 									try {
-										if (v.loValue == undefined)
-											sOut += v;
-										else
-											sOut += v.loValue + " " + v.unit;
+										if (v.loValue == undefined) {
+											var uri = v.indexOf("http") >= 0;
+
+											if (uri) {
+												sOut += "<a href='"
+														+ v
+														+ "' target='_doi' >link</a>";
+											} else
+												sOut += v;
+										} else {
+											sOut += v.loValue;
+											if (v.unit != undefined)
+												sOut += " " + v.unit;
+										}
 									} catch (err) {
 										sOut += v;
+
 									}
-									"</li>";
+									sOut += "</li>";
 								});
 				sOut += "</ul>";
+
 				return sOut;
 			}
 		},
@@ -55,7 +75,7 @@ var config_bao = {
 
 				// var quri = "?type=citation&search=";
 				var uri = (data["title"] != undefined)
-						&& (data["title"].indexOf("http")==0);
+						&& (data["title"].indexOf("http") == 0);
 				if (uri) {
 					var sOut = (data["year"] == null || data["year"] == 0) ? "URL"
 							: data["year"];
@@ -194,6 +214,36 @@ var config_bao = {
 		},
 		"seeding" : {
 			"bVisible" : false
+		},
+		"e.method" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "Method"
+		},
+		"e.sop_reference" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "SOP reference"
+		},
+		"e.cell_type" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "Cell type"
+		},
+		"e.organ" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "organ"
+		},
+		"e.animal_model" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "Species"
+		},
+		"e.exposure_time" : {
+			"bVisible" : false,
+			"inMatrix" : true,
+			"sTitle" : "Exposure time"
 		}
 	},
 	"effects" : {
@@ -216,7 +266,7 @@ var config_bao = {
 			"bVisible" : true,
 			"inMatrix" : true,
 			"sTitle" : "Material"
-		},	
+		},
 		"concentration" : {
 			"iOrder" : -7,
 			"bVisible" : true,
@@ -231,7 +281,7 @@ var config_bao = {
 			"iOrder" : -6,
 			"bVisible" : true,
 			"inMatrix" : true
-		},		
+		},
 		"replicate" : {
 			"iOrder" : -5,
 			"bVisible" : true,
