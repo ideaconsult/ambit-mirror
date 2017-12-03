@@ -111,5 +111,44 @@ public class CustomTautomerRegion
 		return pos;
 	}
 	
+	public static List<IAtom[]> getSulfonylGroupPositions(IAtomContainer target)
+	{
+		List<IAtom[]> pos = new ArrayList<IAtom[]>();
+		for (IAtom at : target.atoms())
+		{
+			if (!at.getSymbol().equals("S"))
+				continue;
+			
+			TopLayer tl = (TopLayer)at.getProperty(TopLayer.TLProp);
+			if (tl.atoms.size() < 4)
+				continue;
+			
+			int nOAtoms = 0;
+			IAtom atoms[] = new IAtom[3];
+			atoms[0] = at;
+			
+			for (int i = 0; i < tl.atoms.size(); i++)
+			{
+				IAtom a0 = tl.atoms.get(i);
+				if (a0.getSymbol().equals("O"))
+				{	
+					if (tl.bonds.get(i).getOrder() ==IBond.Order.DOUBLE)
+					{
+						//S=O
+						nOAtoms++;
+						atoms[nOAtoms] = a0;
+					}
+				}
+				
+				if (nOAtoms == 2)
+					break;
+			}
+			if (nOAtoms == 2)
+				pos.add(atoms);
+		}
+		
+		return pos;
+	}
+	
 		
 }
