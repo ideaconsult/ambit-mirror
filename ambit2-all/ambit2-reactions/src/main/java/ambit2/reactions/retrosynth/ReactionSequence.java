@@ -3,9 +3,11 @@ package ambit2.reactions.retrosynth;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import ambit2.reactions.Reaction;
 import ambit2.reactions.ReactionDataBase;
 import ambit2.smarts.SMIRKSManager;
 
@@ -23,6 +25,16 @@ public class ReactionSequence
 	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	List<ReactionSequenceStep> steps = new ArrayList<ReactionSequenceStep>(); 
 	
+	public List<List<IAtom>> getReactionMappings(Reaction reaction)
+	{
+		//TODO
+		return null;
+	}
+	
+	public void applyReaction(Reaction reaction, List<IAtom> reactionMap)
+	{
+		//TODO
+	}
 	
 	
 	public ReactionDataBase getReactDB() {
