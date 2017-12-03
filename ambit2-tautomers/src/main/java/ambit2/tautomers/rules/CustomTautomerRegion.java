@@ -150,5 +150,81 @@ public class CustomTautomerRegion
 		return pos;
 	}
 	
+	public static List<IAtom[]> getAzideGroupPositions(IAtomContainer target)
+	{
+		List<IAtom[]> pos = new ArrayList<IAtom[]>();
+		for (IAtom at : target.atoms())
+		{
+			//Checking for N=[N+]=[N-] or N=N#N   
+			if (!at.getSymbol().equals("N"))
+				continue;
+			
+			TopLayer tl = (TopLayer)at.getProperty(TopLayer.TLProp);
+			if (tl.atoms.size() !=2)
+				continue;
+			
+			IAtom a0 = tl.atoms.get(0);
+			if (!a0.getSymbol().equals("N"))
+				continue;
+			
+			IAtom a1 = tl.atoms.get(1);
+			if (!a1.getSymbol().equals("N"))
+				continue;
+			
+			boolean flagAzide = false;
+			
+			if (at.getFormalCharge() == +1)
+			{
+				//N=[N+]=[N-]
+				if (	(a0.getFormalCharge() == 0) &&
+					(tl.bonds.get(0).getOrder() ==IBond.Order.DOUBLE) &&
+					(a1.getFormalCharge() == -1) &&
+					(tl.bonds.get(1).getOrder() ==IBond.Order.DOUBLE))
+				{
+					flagAzide = true;
+				}
+				else
+					if (	(a0.getFormalCharge() == -1) &&
+						(tl.bonds.get(0).getOrder() ==IBond.Order.DOUBLE) &&
+						(a1.getFormalCharge() == 0) &&
+						(tl.bonds.get(1).getOrder() ==IBond.Order.DOUBLE))
+					{
+						flagAzide = true;
+					}
+			}
+			
+			if (at.getFormalCharge() == 0)
+			{
+				//N=N#N 
+				if (	(a0.getFormalCharge() == 0) &&
+					(tl.bonds.get(0).getOrder() ==IBond.Order.DOUBLE) &&
+					(a1.getFormalCharge() == 0) &&
+					(tl.bonds.get(1).getOrder() ==IBond.Order.TRIPLE))
+				{
+					flagAzide = true;
+				}
+				else
+					if (	(a0.getFormalCharge() == 0) &&
+						(tl.bonds.get(0).getOrder() ==IBond.Order.TRIPLE) &&
+						(a1.getFormalCharge() == 0) &&
+						(tl.bonds.get(1).getOrder() ==IBond.Order.DOUBLE))
+					{
+						flagAzide = true;
+					}
+			}	
+			
+			if (flagAzide)
+			{	
+				IAtom atoms[] = new IAtom[3];
+				atoms[0] = at;
+				atoms[1] = a0;
+				atoms[2] = a1;
+				pos.add(atoms);
+			}
+		}
+		
+		return pos;
+	}
+	
 		
 }
