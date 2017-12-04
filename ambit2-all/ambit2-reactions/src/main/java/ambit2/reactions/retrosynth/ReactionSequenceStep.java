@@ -12,7 +12,7 @@ public class ReactionSequenceStep
 	IAtomContainer inputMolecule = null;
 	IAtomContainer outputMolecule = null;
 	Reaction reaction = null;
-	List<IAtom> reactionMap = null;
+	List<IAtom> reactionInstance = null;
 		
 	public IAtomContainer getInputMolecule() {
 		return inputMolecule;
@@ -32,10 +32,10 @@ public class ReactionSequenceStep
 	public void setReaction(Reaction reaction) {
 		this.reaction = reaction;
 	}
-	public List<IAtom> getReactionMap() {
-		return reactionMap;
+	public List<IAtom> getReactionInstance() {
+		return reactionInstance;
 	}
-	public void setReactionMap(List<IAtom> reactionMap) {
-		this.reactionMap = reactionMap;
+	public void setReactionInstance(List<IAtom> reactionInstance) {
+		this.reactionInstance = reactionInstance;
 	}	
 }
