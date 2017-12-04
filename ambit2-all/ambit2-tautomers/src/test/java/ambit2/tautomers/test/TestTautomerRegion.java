@@ -36,12 +36,8 @@ public class TestTautomerRegion extends TestCase
 		return new TestSuite(TestTautomerRegion.class);
 	}
 	
-	int checkNitroGroupPositions(String smiles, List<int[]> expectedAtIndices) throws Exception
+	int checkPositions(List<IAtom[]> positions, List<int[]> expectedAtIndices, IAtomContainer mol)
 	{
-		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
-		TopLayer.setAtomTopLayers(mol);
-		List<IAtom[]> positions =  CustomTautomerRegion.getNitroGroupPositions(mol);
-		
 		if (positions.size() == 0 && expectedAtIndices.size() == 0)
 			return -1; //special case
 		
@@ -59,28 +55,30 @@ public class TestTautomerRegion extends TestCase
 		return nMatchedPositions;
 	}
 	
+	int checkNitroGroupPositions(String smiles, List<int[]> expectedAtIndices) throws Exception
+	{
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		TopLayer.setAtomTopLayers(mol);
+		List<IAtom[]> positions =  CustomTautomerRegion.getNitroGroupPositions(mol);
+		return checkPositions(positions, expectedAtIndices, mol);
+	}
+	
 	int checkNitroxidePositions(String smiles, List<int[]> expectedAtIndices) throws Exception
 	{
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		TopLayer.setAtomTopLayers(mol);
-		List<IAtom[]> positions =  CustomTautomerRegion.getNitroxidePositions(mol);
-		
-		if (positions.size() == 0 && expectedAtIndices.size() == 0)
-			return -1; //special case
-		
-		int nMatchedPositions = 0;
-		for (IAtom[] pos: positions)
-		{
-			int atInd[] = getAtomIndices(pos, mol);
-			for (int[] expAtInd : expectedAtIndices)			
-				if (checkEqualIndices(atInd, expAtInd))
-				{
-					nMatchedPositions++;
-					break;
-				}
-		}
-		return nMatchedPositions;
+		List<IAtom[]> positions =  CustomTautomerRegion.getNitroxidePositions(mol);		
+		return checkPositions(positions, expectedAtIndices, mol);
 	}
+	
+	int checkSulfonylGroupPositions(String smiles, List<int[]> expectedAtIndices) throws Exception
+	{
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		TopLayer.setAtomTopLayers(mol);
+		List<IAtom[]> positions =  CustomTautomerRegion.getSulfonylGroupPositions(mol);		
+		return checkPositions(positions, expectedAtIndices, mol);
+	}
+	
 	
 	boolean checkTautomerExcludeRegion(TautomerRegion tautoReg, String smiles, int[] expectedExcludeIndices) throws Exception
 	{
@@ -222,6 +220,31 @@ public class TestTautomerRegion extends TestCase
 		assertEquals("Nitrooxide positions for " + smiles, -1, res);
 		
 	}
+	
+	public void testSulfonylGroups() throws Exception
+	{
+		String smiles;
+		List<int[]> expectedPos = new ArrayList<int[]>();
+		int res;
+		
+		smiles = "CCCCS(C)=O"; //No sulfonyl groups
+		expectedPos.clear();		
+		res = checkSulfonylGroupPositions(smiles, expectedPos);
+		assertEquals("Sulfonyl positions for " + smiles, -1, res);
+		
+		smiles = "CCCCS(C)(=O)=O";
+		expectedPos.clear();
+		expectedPos.add(new int[] {4,6,7});
+		res = checkSulfonylGroupPositions(smiles, expectedPos);
+		assertEquals("Sulfonyl positions for " + smiles, expectedPos.size(), res);
+		
+		smiles = "O=S(C)(=O)CCCCS(C)(=O)=O";
+		expectedPos.clear();
+		expectedPos.add(new int[] {0,1,3});
+		expectedPos.add(new int[] {8,10,11});		
+		res = checkSulfonylGroupPositions(smiles, expectedPos);
+		assertEquals("Sulfonyl positions for " + smiles, expectedPos.size(), res);
+	}	
 	
 	public void testTautomerRegion() throws Exception
 	{
