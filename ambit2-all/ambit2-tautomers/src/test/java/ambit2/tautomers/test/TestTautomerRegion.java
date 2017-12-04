@@ -79,6 +79,14 @@ public class TestTautomerRegion extends TestCase
 		return checkPositions(positions, expectedAtIndices, mol);
 	}
 	
+	int checkAzideGroupPositions(String smiles, List<int[]> expectedAtIndices) throws Exception
+	{
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		TopLayer.setAtomTopLayers(mol);
+		List<IAtom[]> positions =  CustomTautomerRegion.getAzideGroupPositions(mol);		
+		return checkPositions(positions, expectedAtIndices, mol);
+	}
+	
 	
 	boolean checkTautomerExcludeRegion(TautomerRegion tautoReg, String smiles, int[] expectedExcludeIndices) throws Exception
 	{
@@ -244,6 +252,43 @@ public class TestTautomerRegion extends TestCase
 		expectedPos.add(new int[] {8,10,11});		
 		res = checkSulfonylGroupPositions(smiles, expectedPos);
 		assertEquals("Sulfonyl positions for " + smiles, expectedPos.size(), res);
+	}
+	
+	public void testAzideGroups() throws Exception
+	{
+		String smiles;
+		List<int[]> expectedPos = new ArrayList<int[]>();
+		int res;
+		
+		smiles = "CCCCN=N"; //No azide groups
+		expectedPos.clear();		
+		res = checkAzideGroupPositions(smiles, expectedPos);
+		assertEquals("Sulfonyl positions for " + smiles, -1, res);
+		
+		smiles = "CCCCN=N#N";
+		expectedPos.clear();
+		expectedPos.add(new int[] {4,5,6});
+		res = checkAzideGroupPositions(smiles, expectedPos);
+		assertEquals("Sulfonyl positions for " + smiles, expectedPos.size(), res);
+		
+		smiles = "O=CCCCN=[N+]=[N-]";
+		expectedPos.clear();
+		expectedPos.add(new int[] {5,6,7});
+		res = checkAzideGroupPositions(smiles, expectedPos);
+		assertEquals("Sulfonyl positions for " + smiles, expectedPos.size(), res);
+				
+		smiles = "N#N=NCCCCN=[N+]=[N-]";
+		expectedPos.clear();
+		expectedPos.add(new int[] {0,1,2});
+		expectedPos.add(new int[] {7,8,9});
+		res = checkAzideGroupPositions(smiles, expectedPos);
+		assertEquals("Sulfonyl positions for " + smiles, expectedPos.size(), res);
+		
+		smiles = "N=N=NCCCCN=[N+]=[N-]"; //Only one azide group is expected
+		expectedPos.clear();		
+		expectedPos.add(new int[] {7,8,9});
+		res = checkAzideGroupPositions(smiles, expectedPos);
+		assertEquals("Sulfonyl positions for " + smiles, expectedPos.size(), res);	
 	}	
 	
 	public void testTautomerRegion() throws Exception
