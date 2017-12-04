@@ -27,9 +27,12 @@ public class ReactionSequence
 	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	List<ReactionSequenceStep> steps = new ArrayList<ReactionSequenceStep>(); 
 	
+	/*
+	 * Function is applied for the input molecule from the last step 
+	 */
 	public Map<Reaction,List<List<IAtom>>> generateAllReactionInstances()
 	{
-		IAtomContainer mol = steps.get(steps.size()-1).inputMolecule;
+		IAtomContainer mol = steps.get(steps.size()-1).getInputMolecule();
 		Map<Reaction,List<List<IAtom>>> maps = new HashMap<Reaction,List<List<IAtom>>>();
 		for (Reaction reaction: reactDB.reactions)
 		{	
@@ -41,9 +44,20 @@ public class ReactionSequence
 		return maps;
 	}
 	
-	public void applyReaction(Reaction reaction, List<IAtom> reactionMap)
+	/*
+	 * Function is applied for the input molecule from the last step 
+	 * new step is registered
+	 */
+	public void applyReaction(Reaction reaction, List<IAtom> reactionInstance) throws Exception
 	{
-		//TODO
+		ReactionSequenceStep lastStep = steps.get(steps.size()-1);
+		IAtomContainer products = 
+				reaction.applyAtInstance(lastStep.getInputMolecule(), reactionInstance, smrkMan, true);
+		lastStep.setOutputMolecule(products);
+		IAtomContainer nextInputMol = getProductMoleculeForNextStep(products);
+		ReactionSequenceStep nextStep = new ReactionSequenceStep();
+		nextStep.setInputMolecule(nextInputMol);
+		steps.add(nextStep);
 	}
 	
 		
@@ -73,5 +87,11 @@ public class ReactionSequence
 		ReactionSequenceStep step = new ReactionSequenceStep();
 		step.inputMolecule = target;	
 		steps.add(step);
+	}
+	
+	IAtomContainer getProductMoleculeForNextStep(IAtomContainer products)
+	{
+		//TODO
+		return null;
 	}
 }
