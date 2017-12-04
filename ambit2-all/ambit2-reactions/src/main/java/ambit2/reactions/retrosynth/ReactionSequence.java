@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.reactions.Reaction;
@@ -48,13 +50,13 @@ public class ReactionSequence
 	 * Function is applied for the input molecule from the last step 
 	 * new step is registered
 	 */
-	public void applyReaction(Reaction reaction, List<IAtom> reactionInstance) throws Exception
+	public void generatedNextStepWithMaxProduct(Reaction reaction, List<IAtom> reactionInstance) throws Exception
 	{
 		ReactionSequenceStep lastStep = steps.get(steps.size()-1);
 		IAtomContainer products = 
 				reaction.applyAtInstance(lastStep.getInputMolecule(), reactionInstance, smrkMan, true);
-		lastStep.setOutputMolecule(products);
-		IAtomContainer nextInputMol = getProductMoleculeForNextStep(products);
+		lastStep.setOutputMolecule(products);		
+		IAtomContainer nextInputMol = getMaxProductFragment(products);
 		ReactionSequenceStep nextStep = new ReactionSequenceStep();
 		nextStep.setInputMolecule(nextInputMol);
 		steps.add(nextStep);
@@ -89,9 +91,17 @@ public class ReactionSequence
 		steps.add(step);
 	}
 	
-	IAtomContainer getProductMoleculeForNextStep(IAtomContainer products)
+	IAtomContainer getMaxProductFragment(IAtomContainer products)
 	{
-		//TODO
-		return null;
+		int maxSize = -1;
+		IAtomContainer maxFrag = null;
+		IAtomContainerSet productFrags = ConnectivityChecker.partitionIntoMolecules(products);
+		for (IAtomContainer frag : productFrags.atomContainers())
+			if (maxSize < frag.getAtomCount())
+			{
+				maxFrag = frag;
+				maxSize = frag.getAtomCount();
+			}
+		return maxFrag;
 	}
 }
