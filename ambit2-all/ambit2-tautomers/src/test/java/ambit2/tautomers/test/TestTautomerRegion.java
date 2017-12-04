@@ -349,6 +349,25 @@ public class TestTautomerRegion extends TestCase
 		res = checkTautomerExcludeRegion( tautoReg, smiles, expectedExclInd);
 		assertEquals("Exclude tautomer region for " + smiles, true, res);
 		
+		//(4) Nitro groups, nitroxides, aromatic systems, sulfonyl and azide groups are excluded	
+		tautoReg.setExcludeSulfonylGroups(true);
+		tautoReg.setExcludeAzideGroups(true);
+		
+		smiles = "O=NCCCc1ccccc1CCS(C)(=O)=O";
+		expectedExclInd = new int[] {0,1,5,6,7,8,9,10,13,15,16};
+		res = checkTautomerExcludeRegion( tautoReg, smiles, expectedExclInd);
+		assertEquals("Exclude tautomer region for " + smiles, true, res);
+		
+		smiles = "N#N=NCCCCS(C)(=O)=O";
+		expectedExclInd = new int[] {0,1,2,7,9,10};
+		res = checkTautomerExcludeRegion( tautoReg, smiles, expectedExclInd);
+		assertEquals("Exclude tautomer region for " + smiles, true, res);
+		
+		smiles = "[N-]=[N+]=NCCCC[N+][O-]";
+		expectedExclInd = new int[] {0,1,2,7,8};
+		res = checkTautomerExcludeRegion( tautoReg, smiles, expectedExclInd);
+		assertEquals("Exclude tautomer region for " + smiles, true, res);
+		
 	}
 	
 		

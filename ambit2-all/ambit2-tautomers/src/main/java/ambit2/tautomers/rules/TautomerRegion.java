@@ -18,7 +18,9 @@ public class TautomerRegion
 	boolean useRegion = false;	
 	boolean excludeNitroGroup = false;
 	boolean excludeNitroGroupPartially = false;
-	boolean excludeNitroxides = false;	
+	boolean excludeNitroxides = false;
+	boolean excludeSulfonylGroups = false;
+	boolean excludeAzideGroups = false;
 	boolean excludeAromaticSystems = false;	
 	List<String> customExcludeRegionSmarts = new ArrayList<String>();
 	
@@ -85,6 +87,22 @@ public class TautomerRegion
 		this.excludeNitroGroup = excludeNitroGroup;
 	}
 
+
+	public boolean isExcludeSulfonylGroups() {
+		return excludeSulfonylGroups;
+	}
+
+	public void setExcludeSulfonylGroups(boolean excludeSulfonylGroups) {
+		this.excludeSulfonylGroups = excludeSulfonylGroups;
+	}
+
+	public boolean isExcludeAzideGroups() {
+		return excludeAzideGroups;
+	}
+
+	public void setExcludeAzideGroups(boolean excludeAzideGroups) {
+		this.excludeAzideGroups = excludeAzideGroups;
+	}
 
 	public boolean isExcludeAromaticSystems() {
 		return excludeAromaticSystems;
@@ -209,6 +227,18 @@ public class TautomerRegion
 		if (excludeNitroxides)
 		{
 			List<IAtom[]> pos = CustomTautomerRegion.getNitroxidePositions(target);
+			addPositionsToExcludeRegion(pos, target);
+		}
+		
+		if (excludeSulfonylGroups)
+		{
+			List<IAtom[]> pos = CustomTautomerRegion.getSulfonylGroupPositions(target);
+			addPositionsToExcludeRegion(pos, target);
+		}
+		
+		if (excludeAzideGroups)
+		{
+			List<IAtom[]> pos = CustomTautomerRegion.getAzideGroupPositions(target);
 			addPositionsToExcludeRegion(pos, target);
 		}
 		
