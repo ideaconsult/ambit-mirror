@@ -1,7 +1,9 @@
 package ambit2.reactions.retrosynth;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -25,10 +27,18 @@ public class ReactionSequence
 	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	List<ReactionSequenceStep> steps = new ArrayList<ReactionSequenceStep>(); 
 	
-	public List<List<IAtom>> getReactionMappings(Reaction reaction)
+	public Map<Reaction,List<List<IAtom>>> generateAllReactionInstances()
 	{
-		//TODO
-		return null;
+		IAtomContainer mol = steps.get(steps.size()-1).inputMolecule;
+		Map<Reaction,List<List<IAtom>>> maps = new HashMap<Reaction,List<List<IAtom>>>();
+		for (Reaction reaction: reactDB.reactions)
+		{	
+			List<List<IAtom>> instances = reaction.findReactionInstances(mol, smrkMan);
+			if (instances != null)
+				if (!instances.isEmpty())
+					maps.put(reaction, instances);
+		}	
+		return maps;
 	}
 	
 	public void applyReaction(Reaction reaction, List<IAtom> reactionMap)
@@ -36,7 +46,7 @@ public class ReactionSequence
 		//TODO
 	}
 	
-	
+		
 	public ReactionDataBase getReactDB() {
 		return reactDB;
 	}
@@ -59,7 +69,9 @@ public class ReactionSequence
 	void initilize()
 	{
 		steps.clear();
+		//Adding first step
 		ReactionSequenceStep step = new ReactionSequenceStep();
-		step.inputMolecule = target;		
+		step.inputMolecule = target;	
+		steps.add(step);
 	}
 }
