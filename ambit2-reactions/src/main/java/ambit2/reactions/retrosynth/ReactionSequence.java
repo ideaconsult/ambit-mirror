@@ -19,7 +19,8 @@ import ambit2.smarts.SMIRKSManager;
  * 
  * @author nick
  *
- * This is a helper for retro-synthesis driven by user interaction  
+ * This is sequence of reactions represented in tree data structure
+ * and it represents a partucula solution of the retro-synthesis problem   
  */
 
 public class ReactionSequence 
@@ -28,6 +29,9 @@ public class ReactionSequence
 	IAtomContainer target = null;
 	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	List<ReactionSequenceStep> steps = new ArrayList<ReactionSequenceStep>(); 
+	List<ReactionSequenceLevel> levels = new ArrayList<ReactionSequenceLevel>(); 
+	//TODO make functionality level based (not step based)
+	
 	
 	/*
 	 * Function is applied for the input molecule from the last step 
