@@ -40,6 +40,17 @@ public class TautomerProcessor extends DefaultAmbitProcessor<IAtomContainer, IAt
 		 */
 		tautomerManager.FlagAddImplicitHAtomsOnTautomerProcess = false;
 		// tautomerManager.FlagGenerateStereoBasedOn2D
+		/**
+		 *  Fix for broken structures https://phabricator.ideaconsult.net/T282
+		 */
+		tautomerManager.tautomerRegion.setUseRegion(true);
+		tautomerManager.tautomerRegion.setExcludeSulfonylGroups(true);
+		tautomerManager.tautomerRegion.setExcludeNitroGroup(true);
+		tautomerManager.tautomerRegion.setExcludeNitroxides(true);
+		
+		tautomerManager.tautomerRegion.setExcludeAzideGroups(true);
+		// the best tautomers is most likely the aromatic one (lowest energy)
+		tautomerManager.tautomerRegion.setExcludeAromaticSystems(true); 
 	}
 
 	public TautomerManager getTautomerManager() {
