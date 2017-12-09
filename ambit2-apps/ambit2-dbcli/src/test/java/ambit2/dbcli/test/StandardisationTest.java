@@ -12,6 +12,24 @@ import junit.framework.Assert;
 public class StandardisationTest {
 
 	@Test
+	public void test_xv5_nitro() throws Exception {
+		URL in = getClass().getClassLoader().getResource("ambit2/dbcli/test/xv5.txt");
+		Assert.assertNotNull(in);
+		String out = String.format("%s/xv5_std.txt", System.getProperty("java.io.tmpdir"));
+		System.out.println(out);
+		String[] args = new String[] { "-a", "standardize", "-i", in.getFile(), "-m", "post", "-o", out, "-d",
+				"smiles=true", "-d", "inchi=false", "-d", "tautomers=true", "-d" ,"neutralise=true", "-d","tag_tokeep=ID" };
+		CliOptions options = new CliOptions();
+		if (options.parse(args))
+			try {
+				AmbitCli cli = new AmbitCli(options);
+				cli.go(options.getCmd(), options.getSubcommand().name());
+			} finally {
+				//(new File(out)).delete();
+			}
+	}
+
+	@Test
 	public void test9815161() throws Exception {
 		URL in = getClass().getClassLoader().getResource("ambit2/dbcli/test/pubchem9815161.sdf");
 		Assert.assertNotNull(in);
