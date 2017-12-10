@@ -13,7 +13,6 @@ $(document)
 		.ready(
 				function() {
 					jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/depict" title="Depiction">Depict</a> </li>');
-					jQuery("#breadCrumb").jBreadCrumb();
 					loadHelp("${ambit_root}","depict");
 					
 					<#assign _smiles='${(depict_smiles)!""}'>
@@ -29,7 +28,7 @@ $(document)
 					$("#_searchdiv").html("<form action='#'><b>SMILES or InChI</b> <input name='search' value='${_smiles}' id='search'> <b>SMARTS (optional)</b> <input name='smarts' id='smarts' value='${_smarts}'> <input type='submit' value='Search'></form>");
 					</#if>
 					
-					
+					jQuery("#breadCrumb").jBreadCrumb();
 				});
 </script>
 
